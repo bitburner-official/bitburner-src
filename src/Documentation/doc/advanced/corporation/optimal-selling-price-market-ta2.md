@@ -36,17 +36,20 @@ Calculation of material and product is pretty similar, so I'll call them "item" 
 `MaxSalesVolume` is the product of 7 multipliers:
 
 - Item multiplier:
-  - Material: $ItemMultiplier = MaterialQuality + 0.001$
-  - Product: $ItemMultiplier = 0.5\ast(ProductEffectiveRating)^{0.65}$
+  - Material:
+    $$ItemMultiplier = MaterialQuality + 0.001$$
+  - Product:
+    $$ItemMultiplier = 0.5\ast(ProductEffectiveRating)^{0.65}$$
 - Business factor:
+  - `BusinessProduction = 1 + office.employeeProductionByJob["Business"]`
 
-$$BusinessProduction = 1 + office.employeeProductionByJob["Business"]$$
-
-$${BusinessFactor = (BusinessProduction)}^{0.26} + \left( \frac{BusinessProduction}{1000} \right)$$
+$${BusinessFactor = (BusinessProduction)}^{0.26} + \left({BusinessProduction}\ast{0.001}\right)$$
 
 - Advert factor:
-  - $AwarenessFactor = (Awareness + 1)^{IndustryAdvertisingFactor}$
-  - $PopularityFactor = (Popularity + 1)^{IndustryAdvertisingFactor}$
+
+$$AwarenessFactor = (Awareness + 1)^{IndustryAdvertisingFactor}$$
+
+$$PopularityFactor = (Popularity + 1)^{IndustryAdvertisingFactor}$$
 
 $$RatioFactor = \begin{cases}Max(0.01,\frac{Popularity + 0.001}{Awareness}), & Awareness \neq 0 \newline 0.01, & Awareness = 0 \end{cases}$$
 
@@ -54,21 +57,18 @@ $$AdvertFactor = (AwarenessFactor\ast PopularityFactor\ast RatioFactor)^{0.85}$$
 
 - Market factor:
 
-$$MarketFactor = Max\left( 0.1,\frac{Demand\ast(100 - Competition)}{100} \right)$$
+$$MarketFactor = Max\left(0.1,{Demand\ast(100 - Competition)}\ast{0.01}\right)$$
 
 - Corporation's upgrade bonus: `SalesBots` bonus.
 - Division's research bonus: this is always 1. Currently there is not any research that increases the sales bonus.
 - `MarkupMultiplier`: initialize with 1.
-
   - `SellingPrice` is the selling price that you set.
   - With materials, if we set `SellingPrice` to 0, `MarkupMultiplier` is $10^{12}$ (check the formula below). Extremely high `MarkupMultiplier` means that we can sell all units, regardless of other factors. This is the fastest way to discard materials.
   - If `(SellingPrice > MarketPrice + MarkupLimit)`:
-
-  $$MarkupMultiplier = \left( \frac{MarkupLimit}{SellingPrice - MarketPrice} \right)^{2}$$
-
+    $$MarkupMultiplier = \left(\frac{MarkupLimit}{SellingPrice - MarketPrice}\right)^{2}$$
   - If item is material and `SellingPrice` is less than `MarketPrice`:
 
-$$MarkupMultiplier = \begin{cases}\frac{MarketPrice}{SellingPrice}, & SellingPrice > 0 \land SellingPrice < MarketPrice \newline 10^{12}, & SellingPrice \leq 0 \end{cases} $$
+$$MarkupMultiplier = \begin{cases}\frac{MarketPrice}{SellingPrice}, & SellingPrice > 0 \land SellingPrice < MarketPrice \newline 10^{12}, & SellingPrice \leq 0 \end{cases}$$
 
 ## Optimal selling price
 
@@ -88,15 +88,15 @@ $$MaxSalesVolume = ExpectedSalesVolume$$
 
 ≡
 
-$$M\ast\left( \frac{MarkupLimit}{SellingPrice - MarketPrice} \right)^{2} = ExpectedSalesVolume$$
+$$M\ast\left(\frac{MarkupLimit}{SellingPrice - MarketPrice}\right)^{2} = ExpectedSalesVolume$$
 
 ≡
 
-$$\frac{MarkupLimit}{SellingPrice - MarketPrice} = \sqrt{\left( \frac{ExpectedSalesVolume}{M} \right)}$$
+$$\frac{MarkupLimit}{SellingPrice - MarketPrice} = \sqrt{\frac{ExpectedSalesVolume}{M}}$$
 
 ≡
 
-$$SellingPrice = \frac{MarkupLimit}{\sqrt{\frac{ExpectedSalesVolume}{M}}} + MarketPrice$$
+$$SellingPrice = \frac{MarkupLimit\ast\sqrt{M}}{\sqrt{ExpectedSalesVolume}} + MarketPrice$$
 
 In order to use this formula, we need `MarkupLimit`. With product, we need `ProductMarkup` to calculate `MarkupLimit`, but `ProductMarkup` is inaccessible via NS API. We have two solutions:
 

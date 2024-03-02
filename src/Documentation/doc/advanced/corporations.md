@@ -1,4 +1,10 @@
-# Corporations
+# Corporation
+
+Corporation is an interesting feature of Bitburner. It's the most profitable feature in the game, and it's so overpowered that many BitNodes tend to apply a penalty modifier. However, it's extremely complex and opaque for newbies. There are too many mechanisms that are intertwined with each other, so it's very easy to make a mistake, and that mistake can cripple your corporation. This documentation explains all the mechanisms that you need to know to build a successful corporation.
+
+The documentation is a bit long and intimidating at first glance, but you don't need to read all the sections below at once. I recommend that you read the first 4 sections. They are the most important sections for newbies. After that, you can read the following sections at your leisure.
+
+## Contents
 
 - [Basic gameplay and term](./corporation/basic-gameplay-and-term.md)
   - Basic gameplay
@@ -23,7 +29,6 @@
   - Division production multiplier
   - Optimizer
   - Solution
-    - Non-linear constrained optimization library
     - Lagrange multiplier method
   - Proof
   - Handle low storage space
@@ -71,7 +76,6 @@
   - Import and export
   - Use mathematical library
     - Ceres Solver
-    - ALGLIB
   - Noodles trick
   - "sudo.Assist" research
   - Dummy division

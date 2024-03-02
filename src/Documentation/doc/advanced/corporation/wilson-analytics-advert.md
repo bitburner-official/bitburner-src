@@ -30,7 +30,7 @@ $$AdvertMultiplier = WilsonUpgradeBenefit\ast ResearchAdvertisingMultiplier$$
 
 $$Awareness = (Awareness + 3\ast AdvertMultiplier)\ast(1.005*AdvertMultiplier)$$
 
-$$Popularity = (Popularity + AdvertMultiplier)\ast(1 + \frac{Random(1,3)}{200})\ast AdvertMultiplier$$
+$$Popularity = (Popularity + AdvertMultiplier)\ast(1 + {Random(1,3)}\ast{0.005})\ast AdvertMultiplier$$
 
 ## Advice
 

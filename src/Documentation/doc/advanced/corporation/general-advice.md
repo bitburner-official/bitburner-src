@@ -79,7 +79,7 @@ Wilson and Advert are extremely important, they are the main factors that make p
 
 [Product](./product.md) is the center of round 3+.
 
-Product's rating is limited to product's effective rating by quality of input materials. You must make sure that support divisions produce enough high-quality materials for product division. For material divisions, increasing RP is the best way to improve the quality in early rounds. However, in round 3+, the most important factor is EngineerProduction, so you must prioritize the "Engineer" job over other jobs. It's especially true for Agriculture due to its mediocre ScienceFactor. Check this [section](./quality.md) for details. On the other hand, it's fine to invest minimally in support divisions, as long as they produce enough high-quality materials.
+Product's rating is limited to product's effective rating by quality of input materials. You must make sure that support divisions produce enough high-quality materials for product division. For material divisions, increasing RP is the best way to improve the quality in early rounds. However, in round 3+, the most important factor is `EngineerProduction`, so you must prioritize the "Engineer" job over other jobs. It's especially true for Agriculture due to its mediocre `ScienceFactor`. Check this [section](./quality.md) for details. On the other hand, it's fine to invest minimally in support divisions, as long as they produce enough high-quality materials.
 
 RP is important for product's rating. Do not deplete RP pool, especially right before completing new product.
 

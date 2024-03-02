@@ -2,20 +2,30 @@
 
 ## Overview
 
-Product industry is much better than material industry in late phases because you can sell product at ridiculously high price.
+The product industry is much better than the material industry in the late phases because we can sell products at ridiculously high prices.
 
-You need to continuously develop new product. New product is almost always better than old products and generate much more profit.
+Market-TA2 automatically sets the optimal prices for products. Check this [section](./optimal-selling-price-market-ta2.md) to see how to implement a custom Market-TA2 script. Implementing a custom Market-TA2 script is the best optimization in round 3+.
 
-Product's markup and effective rating are extremely important because they are part of [MaxSalesVolume](./optimal-selling-price-market-ta2.md)'s calculation.
+Products need to be developed before being produced. We can put multiple products in the development queue, but only one product can be developed at a time.
 
-Product's effective rating is based on product's rating and input material's quality. Check this [section](./quality.md) to see how input material's quality affects product's rating and effective rating. This is why you need a support division that produces high-quality material for the product division.
+There is a limit on how many products a division can have. The default limit is 3. There are 2 researches that increase that limit. However, those researches are nearly useless because, in most cases, there is no point in increasing the maximum number of products. Check this [section](./unlocks-upgrade-research.md) for details. When we reach the limit, we need to discontinue a product before developing a new one.
 
-Product's markup and rating are based on:
+We need to continuously develop new products. New products are almost always better than the old ones and generate much more profit.
+
+The product's markup and effective rating are extremely important because they are part of [MaxSalesVolume](./optimal-selling-price-market-ta2.md)'s calculation.
+
+The product's effective rating is based on the product's rating and the input material's quality. Check this [section](./quality.md) to see how input material's quality affects the product's rating and effective rating. This is why we need a support division that produces high-quality material for the product division.
+
+The product's markup and rating are based on:
 
 - `CreationJobFactors[JobName]`. More about this in the next part.
-- RP. This is why you should stock up on RP.
-- `ResearchFactor`. It is industry's `scienceFactor`.
-- Design investment and advertising investment. These two investments are not too important because their exponents in the formulas are very low. It's fine to use only 1% of current funds for them.
+- RP. This is why we should stock up on RP.
+- `ResearchFactor`. It is the industry's `scienceFactor`.
+- Design investment and advertising investment. Game UI shows them as "Design investment" and "Marketing investment". These two investments are not too important because their exponents in the formulas are very low. It's fine to use only 1% of current funds for them.
+
+Office's upgrade and employee stats' upgrades are very important for products because they increase employee production. High employee production means high CreationJobFactors and RP. Those upgrades and products create a powerful loop: More upgrades → Better product → Higher profit → More upgrades.
+
+Office setup is important to efficiently develop new products. Check this [section](./general-advice.md) for advice on how to set up the office.
 
 ## Formula
 
@@ -43,7 +53,7 @@ $$DevelopmentProgress = DevelopmentProgress + Progress$$
 
 - `CreationJobFactors[JobName]`:
 
-$$CreationJobFactors\lbrack JobName\rbrack = CreationJobFactors\lbrack JobName\rbrack + \frac{\lbrace EmployeeJob\rbrace Prod\ast Progress}{100}$$
+$$CreationJobFactors\lbrack JobName\rbrack = CreationJobFactors\lbrack JobName\rbrack + {\lbrace EmployeeJob\rbrace Prod\ast Progress}\ast{0.01}$$
 
 &nbsp;  
 When `DevelopmentProgress` reaches 100, product is finished.
@@ -76,11 +86,11 @@ $$BusinessRatio = \frac{E}{TotalCreationJobFactors}$$
 
 - Design investment multiplier:
 
-$$DesignInvestMult = 1 + \frac{(DesignInvestment)^{0.1}}{100}$$
+$$DesignInvestMult = 1 + {(DesignInvestment)^{0.1}}\ast{0.01}$$
 
 - Science multiplier:
 
-$$ScienceMult = 1 + \frac{(RP)^{ResearchFactor}}{800}$$
+$$ScienceMult = 1 + {(RP)^{ResearchFactor}}\ast{0.00125}$$
 
 - Balance multiplier:
 
@@ -126,7 +136,7 @@ $$ProductRating = \sum_{i = 1}^{6}{{ProductStat}_i\ast{StatCoefficient}_i}$$
 
 - Advertising investment multiplier:
 
-$$AdvertInvestMult = 1 + \frac{(AdvertisingInvestment)^{0.1}}{100}$$
+$$AdvertInvestMult = 1 + {(AdvertisingInvestment)^{0.1}}\ast{0.01}$$
 
 - Business-Management ratio:
 

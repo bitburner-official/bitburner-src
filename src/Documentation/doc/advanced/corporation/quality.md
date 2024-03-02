@@ -16,23 +16,34 @@ Purchased material is low-quality. Its quality is always 1.
 
 When you import/export your materials between different divisions, you can see quality of some input materials constantly change. Quality is high after EXPORT state, but it reduces after PURCHASE state. Qualities of the materials in warehouse are recalculated in these 2 states.
 
-- Formulas:
-  - In PURCHASE state: $Quality = \frac{Quality\ast CurrentQuantity + BuyAmount}{CurrentQuantity + BuyAmount}$
-    - Our material's quality is "diluted" by low-quality purchased material (quality 1).
-  - In EXPORT state: $Quality = \frac{Quality\ast CurrentQuantity + ImportQuality\ast ImportAmount}{CurrentQuantity + ImportAmount}$
-- This means that the production capability of support division should be balanced. The `ImportAmount` (the number of material units that support division exports) does not need to equal the required number of input material units, but it should also not be too small.
+In PURCHASE state, material's quality is "diluted" by low-quality purchased material (quality 1).
 
-PRODUCTION state uses the "diluted" quality value to calculate `AvgInputQuality` because that state is right after PURCHASE state.
+$$Quality = \frac{Quality\ast CurrentQuantity + BuyAmount}{CurrentQuantity + BuyAmount}$$
+
+In PRODUCTION state, the "diluted" quality value is used for calculating `AvgInputQuality`.
+
+In EXPORT state:
+
+$$Quality = \frac{Quality\ast CurrentQuantity + ImportQuality\ast ImportAmount}{CurrentQuantity + ImportAmount}$$
+
+The production capability of support division should be balanced. The `ImportAmount` (the number of material units that the support division exports) does not need to equal the required number of input material units, but it should also not be too small.
 
 ## Material
 
 `MaxOutputQuality` is sum of 3 values:
 
 - Engineer summand:
-  - $EngineerProduction = office.employeeProductionByJob["Engineer"]$
-  - $EngineerSummand = \frac{EngineerProduction}{90}$
-- Research point summand: $ResearchPointSummand = (RP)^{IndustryScienceFactor}$
-- AI Cores summand: if there is AI Cores in the warehouse: $AICoresSummand = \frac{(AICoresQuantity)^{IndustryAICoreFactor}}{1000}$
+  - `EngineerProduction = office.employeeProductionByJob["Engineer"]`
+
+$$EngineerSummand = \frac{EngineerProduction}{90}$$
+
+- Research point summand:
+
+$$ResearchPointSummand = (RP)^{IndustryScienceFactor}$$
+
+- AI Cores summand (if there is AI Cores in the warehouse):
+
+$$AICoresSummand = AICoresQuantity^{IndustryAICoreFactor}\ast{0.001}$$
 
 Output quality:
 

@@ -65,11 +65,11 @@ They start dropping when your office's number of employees is greater than or eq
 
 PerfMult is a multiplier that increases/decreases energy/morale.
 
-- $InternMultiplier = 0.002\ast Min\left( \frac{1}{9},\frac{InternEmployees}{TotalEmployees} - \frac{1}{9} \right)\ast 9$
-- If $(CorpFunds > 0) \vee (DivisionLastCycleRevenue > DivisionLastCycleExpenses)$, then: $PenaltyMultiplier = 0$
-- If $(CorpFunds < 0) \land (DivisionLastCycleRevenue < DivisionLastCycleExpenses)$, then: $PenaltyMultiplier = 0.001$
-- If $TotalEmployees < 9$, then: $PerfMult = 1.002$
-- If $TotalEmployees \geq 9$, then: $PerfMult = 1 + InternMultiplier - PenaltyMultiplier$
+$$InternMultiplier = 0.002\ast Min\left(\frac{1}{9},\frac{InternEmployees}{TotalEmployees}-\frac{1}{9}\right)\ast 9$$
+
+$$PenaltyMultiplier = \begin{cases}0, & (CorpFunds > 0) \vee (DivisionLastCycleRevenue > DivisionLastCycleExpenses) \newline 0.001, & (CorpFunds < 0) \land (DivisionLastCycleRevenue < DivisionLastCycleExpenses)\end{cases}$$
+
+$$PerfMult = \begin{cases}1.002, & TotalEmployees < 9 \newline 1 + InternMultiplier - PenaltyMultiplier, & TotalEmployees \geq 9\end{cases}$$
 
 Buying tea gives a flat +2 to energy. It costs 500e3 per employee.
 

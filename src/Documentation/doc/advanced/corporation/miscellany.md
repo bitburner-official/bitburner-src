@@ -48,7 +48,7 @@ The optimal export string is `(IPROD+IINV/10)\*(-1)`. For example: export "Chemi
   - IINV = 700
 - "Export" is expressed by number of units per second, so we want to export:
 
-$$\left(100-\frac{700}{10}\right)\equiv\left(-100+\frac{700}{10}\right)\ast(-1)\equiv\left(IPROD+\frac{IINV}{10}\right)\ast(-1)$$
+$$\left(100-\frac{700}{10}\right)=\left(-100+\frac{700}{10}\right)\ast(-1)=\left(IPROD+\frac{IINV}{10}\right)\ast(-1)$$
 
 Export route is FIFO. You can remove an export route by using `cancelExportMaterial` NS API.
 
@@ -87,39 +87,6 @@ Quick test for case 2 shows that the accuracy is pretty good:
   - Engineer: 29664.894610028987
   - Management: 40463.933544920386
   - Operations: 25759.025643594476
-
-### ALGLIB
-
-Quote from <https://www.alglib.net/>
-
-> ALGLIB is a cross-platform numerical analysis and data processing library. It supports five programming languages (C++, C#, Java, Python, Delphi) and several operating systems (Windows and POSIX, including Linux). ALGLIB features include:
->
-> - Data analysis (classification/regression, statistics)
-> - Optimization and nonlinear solvers
-> - Interpolation and linear/nonlinear least-squares fitting
-> - Linear algebra (direct algorithms, EVD/SVD), direct and iterative linear solvers
-> - Fast Fourier Transform and many other algorithms
-
-JavaScript port: <https://github.com/Pterodactylus/Alglib.js>
-
-We can use it to find the approximation of optimal quantities of boost materials.
-
-The solution that we get when using this library is not really good. It has lower accuracy and run much slower than Ceres Solver.
-
-Run them with S = 5250:
-
-- Optimal solution:
-  - [10518.092105263155, 11742.32456140351, 528368.4210526316, 1703.6184210526312]
-- Ceres Solver:
-  - [10518.092105294003, 11742.324561437803, 528368.4210509873, 1703.6184210587894]
-- ALGLIB:
-  - [10517.862063548288, 11740.824106170172, 528402.7972848249, 1703.500721701672]
-
-Run them 200 times:
-
-- Optimal solution:0.3-0.5 ms
-- Ceres Solver: 380-400 ms
-- ALGLIB: 32000-34000 ms
 
 ## Noodles trick
 

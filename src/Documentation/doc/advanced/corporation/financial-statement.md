@@ -115,7 +115,9 @@ If your corporation is self-funded and you sell CEO position, you only need 50b 
 
 `TargetSharePrice`:
 
-$$TargetSharePrice = \frac{CorporationValuation*\left( 0.5 + \sqrt{\frac{OwnedShares}{TotalShares}} \right)}{TotalShares}$$
+$$OwnershipPercentage = \frac{OwnedShares}{TotalShares}$$
+
+$$TargetSharePrice = \frac{CorporationValuation*\left(0.5+\sqrt{OwnershipPercentage}\right)}{TotalShares}$$
 
 When corporation goes public, the initial share price is `TargetSharePrice`.
 
@@ -129,16 +131,27 @@ Issue new shares:
 
 - Maximum number of new shares is 20% of total shares.
 - The number of new shares issued must be a multiple of 10 million.
-- New share price: $NewSharePrice = \frac{CorporationValuation\ast\left(0.5 + \sqrt{\frac{OwnedShares}{TotalShares + NewShares}}\right)}{TotalShares}$
-- Profit: $Profit = \frac{NewShares\ast(SharePrice + NewSharePrice)}{2}$
+- New share price:
+
+$$NewOwnershipPercentage = \frac{OwnedShares}{TotalShares+NewShares}$$
+
+$$NewSharePrice = \frac{CorporationValuation\ast\left(0.5+\sqrt{NewOwnershipPercentage}\right)}{TotalShares}$$
+
+- Profit:
+
+$$Profit = {NewShares\ast(SharePrice + NewSharePrice)}\ast{0.5}$$
+
 - Profit is added to corporation's funds.
 - `DefaultCooldown` is 4 hours.
-- Cooldown: $Cooldown = DefaultCooldown\ast\frac{TotalShares}{10^{9}}$
+- Cooldown: $$Cooldown = DefaultCooldown\ast\frac{TotalShares}{10^{9}}$$
 - Part of the new shares are added to `InvestorShares`. The remaining ones are added to `IssuedShares`.
-  - `MaxPrivateShares`: $MaxPrivateShares = \frac{NewShares}{2}\ast\frac{InvestorShares}{TotalShares}$
+  - `MaxPrivateShares`:
+    $$MaxPrivateShares = {NewShares}\ast{0.5}\ast\frac{InvestorShares}{TotalShares}$$
   - `PrivateShares` is randomized between 0 and `MaxPrivateShares`, rounded to nearest 10 million.
-  - `InvestorShares`: $InvestorShares = InvestorShares + PrivateShares$
-  - `IssuedShares`: $IssuedShares = IssuedShares + NewShares - PrivateShares$
+  - `InvestorShares`:
+    $$InvestorShares = InvestorShares + PrivateShares$$
+  - `IssuedShares`:
+    $$IssuedShares = IssuedShares + NewShares - PrivateShares$$
 
 Sell shares:
 
@@ -158,6 +171,9 @@ Sold/bought back shares are processed in multiple "iterations".
 
 - Number of shares processed each iteration is shareSalesUntilPriceUpdate. Default value is $10^6$.
 - Share price is recalculated each iteration.
-  - $TargetSharePrice = \frac{CorporationValuation\ast\left(0.5 + \sqrt{\frac{OwnedShares - ProcessedShares}{TotalShares}}\right)}{TotalShares}$
+
+$$OwnershipPercentage = \frac{OwnedShares - ProcessedShares}{TotalShares}$$
+
+$$TargetSharePrice = \frac{CorporationValuation\ast\left(0.5 + \sqrt{OwnershipPercentage}\right)}{TotalShares}$$
 
 $$SharePrice = \begin{cases} SharePrice\ast 1.005, SharePrice \leq TargetSharePrice \newline SharePrice\ast 0.995, SharePrice > TargetSharePrice\end{cases}$$

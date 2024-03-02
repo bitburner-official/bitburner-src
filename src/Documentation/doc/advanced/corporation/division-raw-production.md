@@ -21,9 +21,9 @@ For example, with Agriculture, if `RawProduction` is 1000, we need 500 units of 
 
 - Office multiplier:
   - Employee production in 3 jobs (Operations, Engineer, Management) and their sum:
-    - $OperationsProd = office.employeeProductionByJob.Operations$
-    - $EngineerProd = office.employeeProductionByJob.Engineer$
-    - $ManagementProd = office.employeeProductionByJob.Management$
+    - `OperationsProd = office.employeeProductionByJob.Operations`
+    - `EngineerProd = office.employeeProductionByJob.Engineer`
+    - `ManagementProd = office.employeeProductionByJob.Management`
     - $TotalEmployeesProd = OperationsProd + EngineerProd + ManagementProd$
   - Management factor:
     $$ManagementFactor = 1 + \frac{ManagementProd}{1.2\ast TotalEmployeesProd}$$
@@ -36,5 +36,5 @@ For example, with Agriculture, if `RawProduction` is 1000, we need 500 units of 
   - If output is product:
     $$OfficeMultiplier = 0.5\ast BalancingMultiplier\ast EmployeeProductionMultiplier$$
 - Division production multiplier: see previous [section](./boost-material.md).
-- Upgrade multiplier: multiplier from Smart Factories.
-- Research multiplier: multiplier from researches.
+- Upgrade multiplier: multiplier from [Smart Factories](./unlocks-upgrade-research.md).
+- Research multiplier: multiplier from [researches](./unlocks-upgrade-research.md).
