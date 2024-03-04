@@ -30,22 +30,21 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
   /** Functions as an API check and also returns the charityORG object */
   const getCharity = function (ctx: NetscriptContext): CharityORG {
-    if (!Player.charityORG)
-      throw helpers.makeRuntimeErrorMsg(ctx, "Must not have created a charity yet!", "API ACCESS");
+    if (!Player.charityORG) throw helpers.errorMessage(ctx, "Must not have created a charity yet!", "API ACCESS");
     return Player.charityORG;
   };
 
   const getCharityVolunteer = function (ctx: NetscriptContext, name: string): CharityVolunteer {
     const charityORG = getCharity(ctx);
     for (const member of charityORG.volunteers) if (member.name === name) return member;
-    throw helpers.makeRuntimeErrorMsg(ctx, `Invalid volunteer: '${name}'`);
+    throw helpers.errorMessage(ctx, `Invalid volunteer: '${name}'`);
   };
 
   const getCharityTask = function (ctx: NetscriptContext, name: string): CharityVolunteerTask {
     const task = CharityVolunteerTasks[name];
     const task2 = CharityEventTasks[name];
     if (!task && !task2) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid task: '${name}'`);
+      throw helpers.errorMessage(ctx, `Invalid task: '${name}'`);
     }
     return task ? task : task2;
   };
@@ -182,13 +181,13 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       const newName = helpers.string(ctx, "newName", _newName);
       const member = charityORG.volunteers.find((m) => m.name === memberName);
       if (!memberName) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid memberName: "" (empty string)`);
+        throw helpers.errorMessage(ctx, `Invalid memberName: "" (empty string)`);
       }
       if (!newName) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid newName: "" (empty string)`);
+        throw helpers.errorMessage(ctx, `Invalid newName: "" (empty string)`);
       }
       if (newName === memberName) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `newName and memberName must be different, but both were: ${newName}`);
+        throw helpers.errorMessage(ctx, `newName and memberName must be different, but both were: ${newName}`);
       }
       if (!member) {
         helpers.log(ctx, () => `Failed to rename member: No member exists with memberName: ${memberName}`);
@@ -371,7 +370,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       getCharity(ctx);
       const equipment = CharityVolunteerUpgrades[equipName];
       if (!equipment) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid equipment: ${equipName}`);
+        throw helpers.errorMessage(ctx, `Invalid equipment: ${equipName}`);
       }
       const typecheck: EquipmentStats = equipment.mults;
       return Object.assign({}, typecheck);
@@ -432,7 +431,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
         case "lucky coins": {
           //Cannot convert a lucky coin
           if (Player.sourceFileLvl(15) < 2 && Player.bitNodeN !== 15) {
-            throw helpers.makeRuntimeErrorMsg(
+            throw helpers.errorMessage(
               ctx,
               `You do not have access to buying quantom tickets!  Get SF 15.2 in order to unlock outside of BN 15.`,
             );
@@ -618,7 +617,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
     getRarity: (ctx) => (_event) => {
       const charityORG = getCharity(ctx);
       if (Player.sourceFileLvl(15) < 3 && Player.bitNodeN !== 15) {
-        throw helpers.makeRuntimeErrorMsg(
+        throw helpers.errorMessage(
           ctx,
           `You do not have access to getRarity yet!  Get SF 15.3 in order to unlock outside of BN 15.`,
         );

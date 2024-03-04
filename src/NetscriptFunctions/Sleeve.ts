@@ -68,7 +68,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
       const charityType = helpers.string(ctx, "charityType", _charityType);
       if (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15) {
-        throw helpers.makeRuntimeErrorMsg(
+        throw helpers.errorMessage(
           ctx,
           `You do not have access to Charitable Acts yet!  Get SF 15.1 in order to unlock outside of BN 15.`,
         );

@@ -38,7 +38,7 @@ import { resolveFilePath, FilePath } from "../Paths/FilePath";
 import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
-import { basicErrorMessage, errorMessage, log } from "./ErrorMessages";
+import { basicErrorMessage, errorMessage } from "./ErrorMessages";
 import { assertString, debugType } from "./TypeAssertion";
 
 export const helpers = {

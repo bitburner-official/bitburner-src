@@ -1055,7 +1055,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     performCharity: (ctx) => (_charityType, _focus) => {
       helpers.checkSingularityAccess(ctx);
       if (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15) {
-        throw helpers.makeRuntimeErrorMsg(
+        throw helpers.errorMessage(
           ctx,
           `You do not have access to Charitable Acts yet!  Get SF 15.1 in order to unlock outside of BN 15.`,
         );
@@ -1069,7 +1069,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // If input isn't a charityType, use search using roughname.
       const charity = findCharity(charityType);
-      if (charity == null) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid charity: '${charityType}'`);
+      if (charity == null) throw helpers.errorMessage(ctx, `Invalid charity: '${charityType}'`);
 
       helpers.log(ctx, () => `Attempting to commit ${charity.type}...`);
       const charityTime = charity.commit(1, ctx.workerScript);
@@ -1085,7 +1085,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     getCharityChance: (ctx) => (_charityType) => {
       helpers.checkSingularityAccess(ctx);
       if (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15) {
-        throw helpers.makeRuntimeErrorMsg(
+        throw helpers.errorMessage(
           ctx,
           `You do not have access to Charitable Acts yet!  Get SF 15.1 in order to unlock outside of BN 15.`,
         );
@@ -1094,14 +1094,14 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // If input isn't a charityType, use search using roughname.
       const charity = findCharity(charityType);
-      if (charity == null) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid charity: '${charityType}'`);
+      if (charity == null) throw helpers.errorMessage(ctx, `Invalid charity: '${charityType}'`);
 
       return charity.successRate(Player);
     },
     getCharityStats: (ctx) => (_charityType) => {
       helpers.checkSingularityAccess(ctx);
       if (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15) {
-        throw helpers.makeRuntimeErrorMsg(
+        throw helpers.errorMessage(
           ctx,
           `You do not have access to Charitable Acts yet!  Get SF 15.1 in order to unlock outside of BN 15.`,
         );
@@ -1110,7 +1110,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // If input isn't a charityType, use search using roughname.
       const charity = findCharity(charityType);
-      if (charity == null) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid charity: '${charityType}'`);
+      if (charity == null) throw helpers.errorMessage(ctx, `Invalid charity: '${charityType}'`);
 
       const charityStatsWithMultipliers = calculateCharityWorkStats(Player, charity);
 
