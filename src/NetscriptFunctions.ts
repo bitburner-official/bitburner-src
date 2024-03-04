@@ -1763,6 +1763,7 @@ export const ns: InternalAPI<NSFull> = {
     ctx.workerScript.print(wrapUserNode(value));
   },
   flags: Flags,
+  heart: { break: () => () => Player.karma },
   ...NetscriptExtra(),
 };
 
