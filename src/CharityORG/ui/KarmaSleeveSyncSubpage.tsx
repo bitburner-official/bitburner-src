@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Context } from "./Context";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -70,7 +69,7 @@ export function KarmaSleeveSyncSubpage(): React.ReactElement {
   };
 
   return (
-    <Context.CharityORG.Provider value={charityORG}>
+    <span>
       <Box display="flex">
         <Typography>
           <br></br>Choose your Sleeve:
@@ -87,7 +86,7 @@ export function KarmaSleeveSyncSubpage(): React.ReactElement {
       </span>
       <br></br>
       <Typography>Karma:</Typography>
-      <Box display="flex" alignItems="center">
+      <Box display="grid" alignItems="center">
         <TextField
           type="number"
           style={{
@@ -102,17 +101,6 @@ export function KarmaSleeveSyncSubpage(): React.ReactElement {
         </Typography>
       </Box>
       <Button onClick={() => purchaseSync()}>Purchase Sync</Button>
-    </Context.CharityORG.Provider>
+    </span>
   );
-
-  //<>
-  //  <Box display="flex">
-  //    <Typography>Charties have the ability to spend their Karma on various things.  This is your entry point into that realm.  Purchases are not cheap, but they can be powerful.<br></br>
-  //    Select what you would like to spend your Karma on:</Typography>
-  // </Box>
-  // {value === 0 && <ManagementSubpage />}
-  // {value === 1 && <EquipmentsSubpage />}
-  // {value === 2 && <KarmaSubpage />}
-  //</>
-  //);
 }

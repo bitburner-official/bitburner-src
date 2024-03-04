@@ -17,6 +17,7 @@ interface CharityGenBannerInfo
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [banner](./bitburner.charitygenbannerinfo.banner.md) |  | [Multipliers](./bitburner.multipliers.md) |  |
+|  [embezzlement](./bitburner.charitygenbannerinfo.embezzlement.md) |  | number |  |
 |  [lucky](./bitburner.charitygenbannerinfo.lucky.md) |  | number |  |
 |  [totalPower](./bitburner.charitygenbannerinfo.totalpower.md) |  | number |  |
 

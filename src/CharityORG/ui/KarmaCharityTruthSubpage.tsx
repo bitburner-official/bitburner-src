@@ -9,10 +9,12 @@ import { AugmentationName } from "@enums";
 import { KarmaAvailable } from "./KarmaAvailable";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { CharityORGConstants } from "../data/Constants";
+import { formatNumber } from "../../ui/formatNumber";
 
 /** React Component for the popup that manages Karma spending */
 export function KarmaCharityTruthSubpage(): React.ReactElement {
   const [spend, setSpend] = React.useState(0);
+  const cost = CharityORGConstants.CharityLearnTruthCost * currentNodeMults.CharityORGLearnTruth;
 
   function updateSpend(e: React.ChangeEvent<HTMLInputElement>): void {
     const spendVal = Number.parseInt(e.currentTarget.value);
@@ -25,7 +27,6 @@ export function KarmaCharityTruthSubpage(): React.ReactElement {
   }
   function purchaseTruth(): void {
     if (spend > Player.karma) return;
-    const cost = CharityORGConstants.CharityLearnTruthCost * currentNodeMults.CharityORGLearnTruth;
     if (Player.hasAugmentation(AugmentationName.TheRedPill, false)) {
       dialogBoxCreate("You can already learn the truth...");
     } else if (spend < cost) {
@@ -50,7 +51,8 @@ export function KarmaCharityTruthSubpage(): React.ReactElement {
           placeholder={String(spend)}
         />
         <Typography>
-          For ?? karma you can learn the truth from your charity. We will only charge what's needed...<br></br>
+          For {formatNumber(cost)} karma you can learn the truth from your charity. We will only charge what's needed...
+          <br></br>
           <KarmaAvailable />
         </Typography>
       </Box>

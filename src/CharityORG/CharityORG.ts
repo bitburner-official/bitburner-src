@@ -293,14 +293,14 @@ export class CharityORG {
         moneyGainPerCycle *
           CharityORGConstants.charityEmbezzleMoneyTaken *
           currentNodeMults.CharityORGEmbezzleStrength *
-          this.embezzle_aug,
+          (1 + this.embezzle_aug),
         "charityORG",
       );
       this.embezzleGainRate =
         moneyGainPerCycle *
         CharityORGConstants.charityEmbezzleMoneyTaken *
         currentNodeMults.CharityORGEmbezzleStrength *
-        this.embezzle_aug;
+        (1 + this.embezzle_aug);
     } else this.embezzleGainRate = 0;
     this.moneySpendRate = moneySpendPerCycle;
     this.spent -= moneySpendPerCycle;

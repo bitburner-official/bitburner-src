@@ -234,7 +234,7 @@ export const charityVolunteerUpgradesMetadata: ICharityVolunteerUpgradeMetadata[
   {
     cost: 1e9,
     mults: { def: 1.09 },
-    name: "Judo",
+    name: "Drunken Boxing",
     upgType: UpgradeType.SelfDefence,
   },
   {

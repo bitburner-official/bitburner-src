@@ -44,5 +44,6 @@ type CharityAugmentationAreas =
   | "bladeburner_success_chance"
   | "lucky"
   | "augmentation_money"
-  | "augmentaion_rep";
+  | "augmentaion_rep"
+  | "embezzlement";
 ```

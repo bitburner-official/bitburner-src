@@ -158,7 +158,7 @@ export function ItemsBannerSubpage(): React.ReactElement {
           <br></br>
           {charityORG.luck !== 0 && <Typography variant="body1">lucky: {formatNumber(charityORG.luck)}</Typography>}
           {charityORG.embezzle_aug !== 1 && (
-            <Typography variant="body1">embezzlement: {formatNumber(charityORG.embezzle_aug)}</Typography>
+            <Typography variant="body1">embezzlement: {f(charityORG.embezzle_aug)}</Typography>
           )}
           {Object.entries(charityORG.charityAugment)
             .filter((fl) => fl[1] !== 1)

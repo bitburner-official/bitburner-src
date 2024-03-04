@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Context } from "./Context";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -70,7 +69,7 @@ export function KarmaSleeveReduceShockSubpage(): React.ReactElement {
   };
 
   return (
-    <Context.CharityORG.Provider value={charityORG}>
+    <span>
       <Box display="flex">
         <Typography>
           <br></br>Choose your Sleeve:
@@ -102,6 +101,6 @@ export function KarmaSleeveReduceShockSubpage(): React.ReactElement {
         </Typography>
       </Box>
       <Button onClick={() => purchaseReduceShock()}>Purchase Shock Reduction</Button>
-    </Context.CharityORG.Provider>
+    </span>
   );
 }
