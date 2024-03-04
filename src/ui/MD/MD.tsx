@@ -5,6 +5,8 @@ import remarkGfm from "remark-gfm";
 import { h1, h2, h3, h4, h5, h6, li, Td, Th, table, tr, Blockquote, p } from "./components";
 import { code, Pre } from "./code";
 import { A } from "./a";
+import remarkMath from "remark-math";
+import rehypeMathjax from "rehype-mathjax/svg";
 
 export function MD(props: { md: string }): React.ReactElement {
   return (
@@ -29,7 +31,8 @@ export function MD(props: { md: string }): React.ReactElement {
         blockquote: Blockquote,
         a: A,
       }}
-      remarkPlugins={[remarkGfm]}
+      remarkPlugins={[remarkGfm, remarkMath]}
+      rehypePlugins={[rehypeMathjax]}
     >
       {props.md}
     </ReactMarkdown>
