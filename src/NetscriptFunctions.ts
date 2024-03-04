@@ -1683,6 +1683,7 @@ export const ns: InternalAPI<NSFull> = {
       jobs: structuredClone(Player.jobs),
       factions: Player.factions.slice(),
       entropy: Player.entropy,
+      karma: Player.karma,
     };
     setDeprecatedProperties(data, {
       playtimeSinceLastAug: {

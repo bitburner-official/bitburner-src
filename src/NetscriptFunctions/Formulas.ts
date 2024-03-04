@@ -108,6 +108,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       jobs: {},
       factions: [],
       entropy: 0,
+      karma: 0,
     }),
     mockPerson: () => (): IPerson => ({
       hp: { current: 0, max: 0 },
