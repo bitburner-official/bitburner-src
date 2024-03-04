@@ -41,6 +41,7 @@ export async function main(ns) {
 |  [go](./bitburner.ns.go.md) | <code>readonly</code> | [Go](./bitburner.go.md) | Namespace for Go functions. |
 |  [grafting](./bitburner.ns.grafting.md) | <code>readonly</code> | [Grafting](./bitburner.grafting.md) | Namespace for grafting functions. Contains spoilers. |
 |  [hacknet](./bitburner.ns.hacknet.md) | <code>readonly</code> | [Hacknet](./bitburner.hacknet.md) | Namespace for hacknet functions. Some of this API contains spoilers. |
+|  [heart](./bitburner.ns.heart.md) | <code>readonly</code> | { break(): number; } |  |
 |  [infiltration](./bitburner.ns.infiltration.md) | <code>readonly</code> | [Infiltration](./bitburner.infiltration.md) | Namespace for infiltration functions. |
 |  [pid](./bitburner.ns.pid.md) | <code>readonly</code> | number | The current script's PID |
 |  [singularity](./bitburner.ns.singularity.md) | <code>readonly</code> | [Singularity](./bitburner.singularity.md) | Namespace for singularity functions. Contains spoilers. |
