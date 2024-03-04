@@ -140,16 +140,16 @@ export function KarmaSleeveAugmentsSubpage(): React.ReactElement {
         .filter((mult) => {
           return mult[1] > 1 || mult[1] < 1 ? true : false;
         })
-        .map((m) => m[0] + ": " + m[1]),
+        .map((m) => " " + m[0] + ": " + m[1]),
     );
     const unlocks = String(
       Object.entries(Augmentations)
         .filter((aug) => {
           return aug[1].prereqs.includes(props.upg.name);
         })
-        .map((aug) => "\n" + aug[0]),
+        .map((aug) => " " + aug[0]),
     );
-    const unlocksstr = unlocks.length > 0 ? "\nUnlocks: " + unlocks : "";
+    const unlocksstr = unlocks.length > 0 ? "Unlocks: " + unlocks : "";
 
     return (
       <span>
