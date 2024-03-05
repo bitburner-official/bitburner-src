@@ -68,7 +68,7 @@ export function resolveFilePath(path: string, base = "" as FilePath | Directory)
 }
 
 /** Remove the file part from an absolute path (FilePath or DirectoryPath - no modification is done for a DirectoryPath) */
-function getBaseDirectory(path: FilePath | Directory): Directory {
+export function getBaseDirectory(path: FilePath | Directory): Directory {
   return path.replace(/[^/]+\.[^/]+$/, "") as Directory;
 }
 /** Combine an absolute DirectoryPath and FilePath to create a new FilePath */
