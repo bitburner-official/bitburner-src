@@ -79,7 +79,7 @@ export class WorkerScript {
   hostname: string;
 
   /**Map of functions called when the script ends. */
-  atExit: Map<string, (() => void) | undefined> = new Map();
+  atExit: Map<string, () => void> = new Map();
 
   constructor(runningScriptObj: RunningScript, pid: number, nsFuncsGenerator?: (ws: WorkerScript) => NSFull) {
     this.name = runningScriptObj.filename;
