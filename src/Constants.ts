@@ -200,7 +200,7 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.0 dev - Changelog last updated 26 Feb 2024
+## v2.6.0 dev - Changelog last updated 5 Mar 2024
 
 ### MAJOR ADDITIONS
 
@@ -211,12 +211,16 @@ export const CONSTANTS: {
 
 - (Bladeburner) ns.bladeburner.getSkillUpgradeCost now returns infinity if requesting a cost above the maximum skill level (@Semanual)
 - (CodingContract) Fixed an issue where ns.codingcontract.getData was leaking internal arrays when contract data was a 2-d array (@LJNeon)
+- (CodingContract) ns.codingcontract.createDummyContract now returns the filename of the created contract (@Spartelfant)
 - (Gang) Added ns.gang.getInstallResult for determining the effect an augmentation install will have on gang member ascension multipliers (@LJNeon)
 - (Go) Added the ns.go API, which allows interaction with the new IPvGO mechanic. While this is in development, the API may undergo changes (@ficocelliguy)
+- (Hashnet) Fixed a bug that allowed spending negative hashes (@yichizhng)
 - (Ports) Added ns.nextPortWrite, which allows waiting for the next write to a port without creating a port handle object (@LJNeon)
 - (Ports) Ports now support all clonable data (@LJNeon)
 - (Singularity) Add type information for ns.singularity.getCurrentWork return value (@Semanual)
 - (Stanek) Fix ns.stanek.acceptGift which was not working in 2.5.2 (@jjclark1982)
+- ns.getPlayer now also provides the player's karma. ns.heart.break is no longer a hidden function (@LJNeon)
+- ns.atExit can be provided a string id as a second parameter, to set multiple atExit callbacks for the same script (@shyguy1412)
 - Improved the efficiency and accuracy of growth formulas (@d0sboots)
 - ns.formatNumber now throws an error if specifying a suffixStart less than 1000 (@TheAimMan)
 - HGWOptions now accepts a non-integer number of threads (@Caldwell-74)
@@ -235,6 +239,7 @@ export const CONSTANTS: {
 - (Hashnet) Hash upgrade descriptions use proper number formatting options (@Snarling)
 - (Hacknet) Hacknet display shows a dynamic amount of columns based on screen width (@shyguy1412)
 - (Infiltration) Changed how the CheatCodeGame is displayed (@alutman, @Snarling)
+- (Infiltration) If currently performing faction work, UI defaults to trading info for rep with that faction (@LJNeon)
 - (Sleeve) If intelligence is unlocked, sleeve intelligence is shown in the UI (@Caldwell-74)
 - (Stockmarket) Changed color of stocks increasing in value (@Semanual)
 - (Terminal) Improved scroll behavior on the Terminal (@Snarling)
@@ -249,6 +254,7 @@ export const CONSTANTS: {
 
 - (CodingContract) Improve parsing of player input for arrays in coding contracts (@rocket3989)
 - (Corporation) Fix an incorrect demand range for Minerals (@catloversg)
+- (Corporation) Added ingame documentation (@catloversg)
 - (Corporation) Divisions impact on corporation valuation is now based on number of offices and warehouses (@catloversg)
 - (Corporation) Improve performance of calculations (@catloversg)
 - (Bladeburner) Band-aid fix Blops count and action stopping (@Caldwell-74)
@@ -261,6 +267,8 @@ export const CONSTANTS: {
 - (ScriptEditor) Links from "ls" are now tied to that host, instead of your connected machine (@LJNeon)
 - (ScriptEditor) Script "models" in the script editor are now properly disposed (@Caldwell-74)
 - (Terminal) Add --ram-override flag to the run command (@LJNeon)
+- (Terminal) Fix incorrect help text for rm command (@LJNeon)
+- Add a helper for clamping numbers to an allowable range, and use this for player skill formulas (@Caldwell-74)
 - Protect against renaming servers to invalid names (@LJNeon)
 - All running scripts are killed upon entering the BitVerse (@LJNeon)
 - Scripts with the "temporary" flag set do not populate the Recently Killed script list on script death (@TheAimMan)
