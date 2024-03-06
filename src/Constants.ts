@@ -75,9 +75,9 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.6.0dev",
-  isDevBranch: true,
-  VersionNumber: 37,
+  VersionString: "2.6.0",
+  isDevBranch: false,
+  VersionNumber: 38,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -200,7 +200,7 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.0 dev - Changelog last updated 5 Mar 2024
+## v2.6.0 - IPvGO: 5 Mar 2024
 
 ### MAJOR ADDITIONS
 
@@ -224,7 +224,7 @@ export const CONSTANTS: {
 - Improved the efficiency and accuracy of growth formulas (@d0sboots)
 - ns.formatNumber now throws an error if specifying a suffixStart less than 1000 (@TheAimMan)
 - HGWOptions now accepts a non-integer number of threads (@Caldwell-74)
-- Fixed outdated docs for ns.spawn() (adeilt)
+- Fixed outdated docs for ns.spawn() (@adeilt)
 - Fixed ns.serverExists returning incorrect value for an endgame server (@cigarmemr)
 - Refactored weaken effect calculation (@Caldwell-74)
 
@@ -272,7 +272,7 @@ export const CONSTANTS: {
 - Protect against renaming servers to invalid names (@LJNeon)
 - All running scripts are killed upon entering the BitVerse (@LJNeon)
 - Scripts with the "temporary" flag set do not populate the Recently Killed script list on script death (@TheAimMan)
- - Fix an issue with offline income for scripts (@Caldwell-74)
+- Fix an issue with offline income for scripts (@Caldwell-74)
 - Various "nextUpdate" promises are not tracked internally as a single promise instead of an array of promises (@Caldwell-74, @LJNeon)
 - Fix inconsistent importing of the arg library (@catloversg)
 - Clarify some information in the CONTRIBUTING.md file (@deansvendsen)
