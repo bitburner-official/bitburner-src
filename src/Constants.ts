@@ -272,7 +272,7 @@ export const CONSTANTS: {
 - Protect against renaming servers to invalid names (@LJNeon)
 - All running scripts are killed upon entering the BitVerse (@LJNeon)
 - Scripts with the "temporary" flag set do not populate the Recently Killed script list on script death (@TheAimMan)
- - Fix an issue with offline income for scripts (@Caldwell-74)
+- Fix an issue with offline income for scripts (@Caldwell-74)
 - Various "nextUpdate" promises are not tracked internally as a single promise instead of an array of promises (@Caldwell-74, @LJNeon)
 - Fix inconsistent importing of the arg library (@catloversg)
 - Clarify some information in the CONTRIBUTING.md file (@deansvendsen)
