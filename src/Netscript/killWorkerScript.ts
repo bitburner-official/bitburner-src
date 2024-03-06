@@ -55,12 +55,12 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
       handleUnknownError(e, ws, "Error running atExit function.\n\n");
     }
   }
-  
+
   if (ws.env.stopFlag) {
     // If atExit() kills the script, we'll already be stopped, don't stop again.
     return;
   }
-  
+
   ws.env.stopFlag = true;
   removeWorkerScript(ws);
 }
