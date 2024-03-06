@@ -105,7 +105,10 @@ test.each([
     // await script death.
     const ws = workerScripts.get(pid);
     expect(ws).toBeDefined();
-    const result = await Promise.race([alerted, new Promise((resolve) => (ws.atExit = resolve))]);
+    const result = await Promise.race([
+      alerted,
+      new Promise<void>((resolve) => (ws!.atExit = new Map([["default", resolve]]))),
+    ]);
     // If an error alert was thrown, we catch it here.
     expect(result).not.toBeDefined();
     expect(runningScript.logs).toEqual(expectedLog);

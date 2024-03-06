@@ -42,20 +42,25 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   if (ws.delay) clearTimeout(ws.delay);
   ws.delayReject?.(new ScriptDeath(ws));
   ws.env.runningFn = "";
+  const atExit = ws.atExit;
+  //Calling ns.exit inside ns.atExit can lead to recursion
+  //so the map must be cleared before looping
+  ws.atExit = new Map();
 
-  if (typeof ws.atExit === "function") {
+  for (const key of atExit.keys()) {
     try {
-      const atExit = ws.atExit;
-      ws.atExit = undefined;
-      atExit();
+      const callback = atExit.get(key);
+      if (typeof callback == "function") callback();
     } catch (e: unknown) {
       handleUnknownError(e, ws, "Error running atExit function.\n\n");
     }
-    if (ws.env.stopFlag) {
-      // If atExit() kills the script, we'll already be stopped, don't stop again.
-      return;
-    }
   }
+
+  if (ws.env.stopFlag) {
+    // If atExit() kills the script, we'll already be stopped, don't stop again.
+    return;
+  }
+
   ws.env.stopFlag = true;
   removeWorkerScript(ws);
 }
