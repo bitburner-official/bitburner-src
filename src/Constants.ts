@@ -207,6 +207,10 @@ export const CONSTANTS: {
 - A new minigame IPvGO, based on the game Go. Visit DefComm in New Tokyo or the CIA in Sector-12 for access. Documentation for the mechanic is available ingame under "How to Play" once the mechanic is available. (@ficocelliguy)
 - A new BitNode has been added which focuses on the IPvGO mechanic (@ficocelliguy)
 
+### HOTFIXES
+
+- 6 Mar 2024: Fixed an issue that could result in invalid Go board states (@ficocelliguy)
+
 ### API
 
 - (Bladeburner) ns.bladeburner.getSkillUpgradeCost now returns infinity if requesting a cost above the maximum skill level (@Semanual)
