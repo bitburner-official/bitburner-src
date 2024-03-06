@@ -26,7 +26,7 @@ function makeModel(hostname: string, filename: string, code: string) {
     scheme: "file",
     path: `${hostname}/${filename}`,
   });
-  const language = filename.endsWith(".txt") ? "plaintext" : "javascript";
+  const language = filename.endsWith(".txt") ? "plaintext" : filename.endsWith(".json") ? "json" : "javascript";
   //if somehow a model already exist return it
   return editor.getModel(uri) ?? editor.createModel(code, language, uri);
 }

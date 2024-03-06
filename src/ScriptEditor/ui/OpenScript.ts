@@ -1,6 +1,7 @@
 import type { ContentFilePath } from "../../Paths/ContentFile";
 import { editor, Position } from "monaco-editor";
 import { makeModel } from "./utils";
+import { hasTextExtension } from "../../Paths/TextFilePath";
 
 type ITextModel = editor.ITextModel;
 
@@ -21,7 +22,7 @@ export class OpenScript {
     this.hostname = hostname;
     this.lastPosition = lastPosition;
     this.model = model;
-    this.isTxt = path.endsWith(".txt");
+    this.isTxt = hasTextExtension(path);
   }
 
   regenerateModel(): void {
