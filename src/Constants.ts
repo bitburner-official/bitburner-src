@@ -224,7 +224,7 @@ export const CONSTANTS: {
 - Improved the efficiency and accuracy of growth formulas (@d0sboots)
 - ns.formatNumber now throws an error if specifying a suffixStart less than 1000 (@TheAimMan)
 - HGWOptions now accepts a non-integer number of threads (@Caldwell-74)
-- Fixed outdated docs for ns.spawn() (adeilt)
+- Fixed outdated docs for ns.spawn() (@adeilt)
 - Fixed ns.serverExists returning incorrect value for an endgame server (@cigarmemr)
 - Refactored weaken effect calculation (@Caldwell-74)
 
