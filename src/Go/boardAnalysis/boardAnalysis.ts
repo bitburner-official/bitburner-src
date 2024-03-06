@@ -480,7 +480,7 @@ export function findAllCapturedChains(chainList: PointState[][], playerWhoMoved:
   const opposingPlayer = playerWhoMoved === GoColor.white ? GoColor.black : GoColor.white;
   const enemyChainsToCapture = findCapturedChainOfColor(chainList, opposingPlayer);
 
-  if (enemyChainsToCapture?.length) {
+  if (enemyChainsToCapture.length) {
     return enemyChainsToCapture;
   }
 
