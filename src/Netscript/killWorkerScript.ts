@@ -47,12 +47,11 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   //so the map must be cleared before looping
   ws.atExit = new Map();
 
-  for (const key of atExit.keys()) {
+  for (const [id, callback] of atExit) {
     try {
-      const callback = atExit.get(key);
-      if (typeof callback == "function") callback();
+      callback();
     } catch (e: unknown) {
-      handleUnknownError(e, ws, "Error running atExit function.\n\n");
+      handleUnknownError(e, ws, `Error running atExit function with id ${id}.\n\n`);
     }
   }
 
