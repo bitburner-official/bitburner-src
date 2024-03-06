@@ -35,6 +35,7 @@ import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { GetServer } from "../../Server/AllServers";
 import { ArcadeRoot } from "../../Arcade/ui/ArcadeRoot";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
+import { playerHasDiscoveredGo } from "../../Go/effects/effect";
 
 interface SpecialLocationProps {
   loc: Location;
@@ -333,13 +334,15 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     }
     case LocationName.Sector12CIA:
     case LocationName.NewTokyoDefComm: {
-      return (
+      return playerHasDiscoveredGo() ? (
         <>
           <br />
           <br />
           <br />
           <Button onClick={() => Router.toPage(Page.Go)}>IPvGO Subnet Takeover</Button>
         </>
+      ) : (
+        <></>
       );
     }
     default:
