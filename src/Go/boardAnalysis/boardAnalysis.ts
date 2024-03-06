@@ -485,7 +485,7 @@ export function findAllCapturedChains(chainList: PointState[][], playerWhoMoved:
   }
 
   const friendlyChainsToCapture = findCapturedChainOfColor(chainList, playerWhoMoved);
-  if (friendlyChainsToCapture) {
+  if (friendlyChainsToCapture.length) {
     return friendlyChainsToCapture;
   }
 }
