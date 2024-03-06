@@ -75,9 +75,9 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.6.0dev",
-  isDevBranch: true,
-  VersionNumber: 37,
+  VersionString: "2.6.0",
+  isDevBranch: false,
+  VersionNumber: 38,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -200,7 +200,7 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.0 dev - Changelog last updated 5 Mar 2024
+## v2.6.0 - IPvGO: 5 Mar 2024
 
 ### MAJOR ADDITIONS
 
