@@ -6431,7 +6431,7 @@ export interface NS {
    *
    * @remarks RAM cost: 0.1 GB
    * @param host - Hostname of target server.
-   * @returns The number of open ports required to successfully run NUKE.exe on the specified server.
+   * @returns The number of open ports required to successfully run NUKE.exe on the specified server, or undefined if the server has no openable ports.
    */
   getServerNumPortsRequired(host: string): number | undefined;
 

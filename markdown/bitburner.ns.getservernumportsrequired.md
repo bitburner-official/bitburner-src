@@ -22,7 +22,7 @@ getServerNumPortsRequired(host: string): number | undefined;
 
 number \| undefined
 
-The number of open ports required to successfully run NUKE.exe on the specified server.
+The number of open ports required to successfully run NUKE.exe on the specified server, or undefined if the server has no openable ports.
 
 ## Remarks
 
