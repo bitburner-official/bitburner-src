@@ -150,11 +150,10 @@ export class Gang {
       (Player.mults.faction_rep * respectGainsTotal * favorMult) / GangConstants.GangRespectToReputationRatio;
 
     if (this.wanted !== 1 || wantedLevelGainPerCycle >= 0) {
-      const oldWanted = this.wanted;
-      const baseWanted = oldWanted + wantedLevelGainPerCycle * numCycles;
+      const newWanted = this.wanted + wantedLevelGainPerCycle * numCycles;
       // Ensure that even members with poor stats can effectively lower wanted level
-      this.wanted = baseWanted * (1 - justice * 0.001);
-      this.wantedGainRate -= baseWanted - this.wanted;
+      this.wanted = newWanted * (1 - justice * 0.001);
+      this.wantedGainRate -= newWanted - this.wanted;
       // Prevent overflow
       if (this.wanted < 1 || (wantedLevelGainPerCycle <= 0 && this.wanted > oldWanted)) this.wanted = 1;
     }
