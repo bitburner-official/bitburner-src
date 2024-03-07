@@ -81,7 +81,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
     },
     createDummyContract: (ctx) => (_type) => {
       const type = helpers.string(ctx, "type", _type);
-      generateDummyContract(type);
+      return generateDummyContract(type);
     },
     getContractTypes: () => () => codingContractTypesMetadata.map((c) => c.name),
   };
