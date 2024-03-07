@@ -153,13 +153,10 @@ export class Gang {
       const oldWanted = this.wanted;
       const baseWanted = oldWanted + wantedLevelGainPerCycle * numCycles;
       // Ensure that even members with poor stats can effectively lower wanted level
-      const newWanted = baseWanted * (1 - justice * 0.001);
-      this.wantedGainRate -= baseWanted - newWanted;
+      this.wanted = baseWanted * (1 - justice * 0.001);
+      this.wantedGainRate -= baseWanted - this.wanted;
       // Prevent overflow
-      if (wantedLevelGainPerCycle <= 0 && newWanted > oldWanted) newWanted = 1;
-
-      this.wanted = newWanted;
-      if (this.wanted < 1) this.wanted = 1;
+      if (this.wanted < 1 || (wantedLevelGainPerCycle <= 0 && this.wanted > oldWanted)) this.wanted = 1;
     }
     Player.gainMoney(moneyGainPerCycle * numCycles, "gang");
   }
