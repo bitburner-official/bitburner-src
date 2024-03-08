@@ -152,7 +152,7 @@ export class Gang {
     if (this.wanted !== 1 || wantedLevelGainPerCycle >= 0) {
       const oldWanted = this.wanted;
       const newWanted = oldWanted + wantedLevelGainPerCycle * numCycles;
-      // Ensure that even members with poor stats can effectively lower wanted level
+      // Allows recovery when wanted / respect ratio is too high
       this.wanted = newWanted * (1 - justice * 0.001);
       this.wantedGainRate -= newWanted - this.wanted;
       // Prevent overflow
