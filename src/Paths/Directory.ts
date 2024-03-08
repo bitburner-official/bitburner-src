@@ -24,8 +24,8 @@ export const root = "" as Directory;
  * |: Invalid because it might have a use in the terminal in the future.
  * #: Invalid because it might have a use in the terminal in the future.
  * (quote marks): Invalid to avoid conflict with quote marks used in the terminal.
- * (space): Invalid to avoid confusion with terminal command separator */
-const invalidCharacters = ["/", "*", "?", "[", "]", "!", "\\", "~", "|", "#", '"', "'", " "];
+ * (whitespace): Invalid to avoid confusion with terminal command separator */
+const invalidCharacters = ["/", "*", "?", "[", "]", "!", "\\", "~", "|", "#", '"', "'", "\\s"];
 
 /** A valid character is any character that is not one of the invalid characters */
 export const oneValidCharacter = `[^${escapeRegExp(invalidCharacters.join(""))}]`;
