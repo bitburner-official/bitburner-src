@@ -39,6 +39,7 @@ import { Terminal } from "./Terminal";
 import { getRecordValues } from "./Types/Record";
 import { ExportMaterial } from "./Corporation/Actions";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
+import { ServerName } from "./Types/strings";
 import { ContentFilePath, ContentFile, ContentFileMap } from "./Paths/ContentFile";
 
 /* SaveObject.js
