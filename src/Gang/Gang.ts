@@ -149,15 +149,14 @@ export class Gang {
     gangFaction.playerReputation +=
       (Player.mults.faction_rep * respectGainsTotal * favorMult) / GangConstants.GangRespectToReputationRatio;
 
-    if (!(this.wanted === 1 && wantedLevelGainPerCycle < 0)) {
+    if (this.wanted !== 1 || wantedLevelGainPerCycle >= 0) {
       const oldWanted = this.wanted;
-      let newWanted = oldWanted + wantedLevelGainPerCycle * numCycles;
-      newWanted = newWanted * (1 - justice * 0.001); // safeguard
+      const newWanted = oldWanted + wantedLevelGainPerCycle * numCycles;
+      // Allows recovery when wanted / respect ratio is too high
+      this.wanted = newWanted * (1 - justice * 0.001);
+      this.wantedGainRate -= newWanted - this.wanted;
       // Prevent overflow
-      if (wantedLevelGainPerCycle <= 0 && newWanted > oldWanted) newWanted = 1;
-
-      this.wanted = newWanted;
-      if (this.wanted < 1) this.wanted = 1;
+      if (this.wanted < 1 || (wantedLevelGainPerCycle <= 0 && this.wanted > oldWanted)) this.wanted = 1;
     }
     Player.gainMoney(moneyGainPerCycle * numCycles, "gang");
   }
