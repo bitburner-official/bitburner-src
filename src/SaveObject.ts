@@ -39,8 +39,10 @@ import { Terminal } from "./Terminal";
 import { getRecordValues } from "./Types/Record";
 import { ExportMaterial } from "./Corporation/Actions";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
-import { getFileParts } from "./Paths/FilePath";
-import type { ScriptFilePath } from "./Paths/ScriptFilePath";
+import { Script } from "./Script/Script";
+import { TextFile } from "./TextFile";
+import type { FilePath } from "./Paths/FilePath";
+import type { ServerName } from "./Types/strings";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -74,11 +76,6 @@ export interface ImportPlayerData {
   bitNodeLevel: number;
   sourceFiles: number;
   exploits: number;
-}
-
-interface RenamedFileData {
-  filename: ScriptFilePath;
-  servers: number;
 }
 
 class BitburnerSaveObject {
@@ -727,38 +724,38 @@ Error: ${e}`);
     loadGo(JSON.stringify(freshSaveData));
   }
   if (ver <= 38) {
-    function fixFilename<T: Script | TextFile>(hostname: ServerName, file: T, files: Map<FilePath, T>): void {
-      let filename = file.filename.replace(whitespace, "-");
-      // avoid filename conflicts
-      if (files.has(filename)) {
-        const [path, ext] = filename.split(".");
-        let i = 1;
-        do {
-          filename = `${path}-${i++}.${ext}`;
-        } while (files.has(filename));
-      }
-      console.warn(`Renamed "${file.filename}" to "${filename}" on ${hostname}.`);
-      files.delete(file.filename);
-      file.filename = filename;
-      files.set(file.filename, file);
-    }
-    // All whitespace except for spaces were allowed in filenames
-    const whitespace = /\s+/g;
+    // All whitespace except for spaces was allowed in filenames
     let found = false;
     for (const server of GetAllServers()) {
       for (const script of server.scripts.values()) {
-        if (!whitespace.test(script.filename)) continue;
-        fixFilename(server.hostname, script, server.scripts);
+        if (!/\s/.test(script.filename)) continue;
+        removeWhitespaceFromFilename(server.hostname, script, server.scripts);
         found = true;
       }
       for (const textFile of server.textFiles.values()) {
-        if (!whitespace.test(textFile.filename)) continue;
-        fixFilename(server.hostname, textFile, server.textFiles);
+        if (!/\s/.test(textFile.filename)) continue;
+        removeWhitespaceFromFilename(server.hostname, textFile, server.textFiles);
         found = true;
       }
     }
     if (found) Terminal.error("Filenames with whitespace found and corrected, see console for details.");
   }
+}
+
+function removeWhitespaceFromFilename<T: Script | TextFile>(hostname: ServerName, file: T, files: Map<FilePath, T>): void {
+  let filename = file.filename.replace(/\s+/g, "-") as FilePath;
+  // avoid filename conflicts
+  if (files.has(filename)) {
+    const [path, ext] = filename.split(".");
+    let i = 1;
+    do {
+      filename = `${path}-${i++}.${ext}` as FilePath;
+    } while (files.has(filename));
+  }
+  console.warn(`Renamed "${file.filename}" to "${filename}" on ${hostname}.`);
+  files.delete(file.filename);
+  file.filename = filename;
+  files.set(file.filename, file);
 }
 
 function loadGame(saveString: string): boolean {
