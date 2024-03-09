@@ -7,6 +7,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { KEY } from "../../utils/helpers/keyCodes";
 import { FactionName } from "@enums";
+import { AllGangFactionInfo } from "../../Gang/data/FactionInfo";
+import { GangConstants } from "../../Gang/data/Constants";
 
 interface IProps {
   open: boolean;
@@ -16,24 +18,8 @@ interface IProps {
 
 /** React Component for the popup used to create a new gang. */
 export function CreateGangModal(props: IProps): React.ReactElement {
-  const combatGangText =
-    props.facName +
-    " is a COMBAT gang and its members will have different tasks than in HACKING gangs. " +
-    "Compared to hacking gangs, progression with a combat gang can be more difficult as territory management " +
-    "is more important. However, well-managed combat gangs can progress faster than hacking ones.";
-
-  const hackingGangText =
-    props.facName +
-    " is a HACKING gang and its members will have different tasks than in COMBAT gangs. " +
-    "Compared to combat gangs, progression with a hacking gang is slower but more straightforward as territory warfare " +
-    "is not as important.";
-
-  function isHacking(): boolean {
-    return [FactionName.NiteSec, FactionName.TheBlackHand].includes(props.facName);
-  }
-
   function createGang(): void {
-    Player.startGang(props.facName, isHacking());
+    Player.startGang(props.facName);
     props.onClose();
     Router.toPage(Page.Gang);
   }
@@ -52,10 +38,11 @@ export function CreateGangModal(props: IProps): React.ReactElement {
         It will also reset your reputation with {props.facName}.
         <br />
         <br />
-        {isHacking() ? hackingGangText : combatGangText}
+        This gang will have a maximum of {AllGangFactionInfo[props.facName].numEnforcers} enforcers and {AllGangFactionInfo[props.facName].numHackers} hackers.
+        All gangs are limited to a maximum of {GangConstants.MaximumGangMembers} total gang members.
         <br />
         <br />
-        Other than hacking vs combat and name, there are no differences between gangs.
+        Other than name and enforcer/hacker maximum, there are no differences between gangs.
       </Typography>
       <Button onClick={createGang} onKeyUp={onKeyUp} autoFocus>
         Create Gang

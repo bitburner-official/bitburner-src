@@ -25,6 +25,7 @@ interface IMults {
 
 export class GangMember {
   name: string;
+  isEnforcer: boolean;
   task = "Unassigned";
 
   earnedRespect = 0;
@@ -60,8 +61,9 @@ export class GangMember {
   upgrades: string[] = []; // Names of upgrades
   augmentations: string[] = []; // Names of augmentations only
 
-  constructor(name = "") {
+  constructor(name = "", isEnforcer = true) {
     this.name = name;
+    this.isEnforcer = isEnforcer;
   }
 
   calculateSkill(exp: number, mult = 1): number {
@@ -83,6 +85,11 @@ export class GangMember {
 
   calculatePower(): number {
     return (this.hack + this.str + this.def + this.dex + this.agi + this.cha) / 95;
+  }
+
+  getTerritoryPowerGain(): number {
+    const task = this.getTask();
+    return task.territoryPower * (this.hack + this.str + this.def + this.dex + this.agi + this.cha) / 95;
   }
 
   assignToTask(taskName: string): boolean {

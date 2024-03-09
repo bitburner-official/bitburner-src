@@ -16,7 +16,7 @@ export function GangMemberCard(props: IProps): React.ReactElement {
   return (
     <Box component={Paper} sx={{ width: "auto" }}>
       <Box sx={{ m: 1 }}>
-        <ListItemText primary={<b>{props.member.name}</b>} />
+        <ListItemText primary={<b>{props.member.name + " (" + (props.member.isEnforcer ? "enforcer" : "hacker") + ")"}</b>} />
         <GangMemberCardContent member={props.member} />
       </Box>
     </Box>

@@ -82,8 +82,7 @@ export function General({ parentRerender }: { parentRerender: () => void }): Rea
 
   // Gang functions
   const startGang = () => {
-    const isHacking = gangFaction === FactionName.NiteSec || gangFaction === FactionName.TheBlackHand;
-    Player.startGang(gangFaction, isHacking);
+    Player.startGang(gangFaction);
     parentRerender();
   };
   const stopGang = () => {

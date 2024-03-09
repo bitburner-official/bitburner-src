@@ -43,8 +43,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       if (Player.gang) return false;
       if (!Player.factions.includes(faction)) return false;
 
-      const isHacking = faction === FactionName.NiteSec || faction === FactionName.TheBlackHand;
-      Player.startGang(faction, isHacking);
+      Player.startGang(faction);
       return true;
     },
     inGang: () => () => {
@@ -84,7 +83,6 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       return {
         faction: gang.facName,
-        isHacking: gang.isHackingGang,
         moneyGainRate: gang.moneyGainRate,
         power: gang.getPower(),
         respect: gang.respect,
@@ -170,10 +168,11 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       return gang.respectForNextRecruit();
     },
-    recruitMember: (ctx) => (_memberName) => {
+    recruitMember: (ctx) => (_memberName, _isEnforcer) => {
       const memberName = helpers.string(ctx, "memberName", _memberName);
+      const isEnforcer = !!_isEnforcer;
       const gang = getGang(ctx);
-      const recruited = gang.recruitMember(memberName);
+      const recruited = gang.recruitMember(memberName, isEnforcer);
       if (memberName === "") {
         ctx.workerScript.log("gang.recruitMember", () => `Failed to recruit Gang Member. Name must be provided.`);
         return false;
@@ -199,7 +198,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const taskName = helpers.string(ctx, "taskName", _taskName);
       const gang = getGang(ctx);
       const member = getGangMember(ctx, memberName);
-      if (!gang.getAllTaskNames().includes(taskName)) {
+      if (!gang.getAllTaskNames(member.isEnforcer).includes(taskName)) {
         ctx.workerScript.log(
           "gang.setMemberTask",
           () =>
@@ -315,8 +314,8 @@ export function NetscriptGang(): InternalAPI<IGang> {
         throw helpers.makeRuntimeErrorMsg(ctx, `Invalid gang: ${otherGang}`);
       }
 
-      const playerPower = AllGangs[gang.facName].power;
-      const otherPower = AllGangs[otherGang].power;
+      const playerPower = AllGangs[gang.facName].territoryPower;
+      const otherPower = AllGangs[otherGang].territoryPower;
 
       return playerPower / (otherPower + playerPower);
     },

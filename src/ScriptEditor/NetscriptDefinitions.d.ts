@@ -769,8 +769,6 @@ interface BladeburnerCurAction {
 interface GangGenInfo {
   /** Name of faction that the gang belongs to ("Slum Snakes", etc.) */
   faction: string;
-  /** Indicating whether or not it's a hacking gang */
-  isHacking: boolean;
   /** Money earned per game cycle */
   moneyGainRate: number;
   /** Gang's power for territory warfare */
@@ -798,7 +796,7 @@ interface GangGenInfo {
 /** @public */
 interface GangOtherInfoObject {
   /** Gang power */
-  power: number;
+  territoryPower: number;
   /** Gang territory, in decimal form */
   territory: number;
 }
@@ -818,9 +816,9 @@ interface GangTaskStats {
   /** Task Description */
   desc: string;
   /** Is a task of a hacking gang */
-  isHacking: boolean;
+  allowHackers: boolean;
   /** Is a task of a combat gang */
-  isCombat: boolean;
+  allowEnforcers: boolean;
   /** Base respect earned */
   baseRespect: number;
   /** Base wanted earned */
@@ -3608,9 +3606,10 @@ export interface Gang {
    * * There already exists a member with the specified name
    *
    * @param name - Name of member to recruit.
+   * @param isEnforcer - True if recruiting an enforcer, false if hacker.
    * @returns True if the member was successfully recruited, false otherwise.
    */
-  recruitMember(name: string): boolean;
+  recruitMember(name: string, isEnforcer: boolean): boolean;
 
   /**
    * List member task names.

@@ -16,9 +16,8 @@ export function ManagementSubpage(): React.ReactElement {
         <br />
         If a gang member is not earning much money or respect, the task you assigned might be too difficult. Consider
         assigning an easier task, or training them. Tasks closer to the top of the dropdown list are generally easier.
-        Alternatively, low production might be a sign that your wanted level is too high. Consider doing{" "}
-        {gang.isHackingGang ? "Ethical Hacking or " : ""}
-        Vigilante Justice to lower your wanted level.
+        Alternatively, low production might be a sign that your wanted level is too high. Consider doing
+        Ethical Hacking or Vigilante Justice to lower your wanted level.
         <br />
         <br />
         Installing Augmentations does NOT reset progress with your Gang. Furthermore, after installing Augmentations,
