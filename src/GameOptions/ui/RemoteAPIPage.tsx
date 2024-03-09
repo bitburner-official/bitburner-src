@@ -7,10 +7,16 @@ import { isRemoteFileApiConnectionLive, newRemoteFileApiConnection } from "../..
 
 export const RemoteAPIPage = (): React.ReactElement => {
   const [remoteFileApiPort, setRemoteFileApiPort] = useState(Settings.RemoteFileApiPort);
+  const [remoteFileApiAddress, setRemoteFileApiAddress] = useState(Settings.RemoteFileApiAddress);
 
   function handleRemoteFileApiPortChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setRemoteFileApiPort(Number(event.target.value));
     Settings.RemoteFileApiPort = Number(event.target.value);
+  }
+
+  function handleRemoteFileApiAddressChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    setRemoteFileApiAddress(String(event.target.value));
+    Settings.RemoteFileApiAddress = String(event.target.value);
   }
 
   return (
@@ -31,7 +37,27 @@ export const RemoteAPIPage = (): React.ReactElement => {
       <Tooltip
         title={
           <Typography>
-            This port number is used to connect to a Remote API port, please ensure that it matches with your Remote API
+            This address is used to connect to a Remote API, please ensure that it matches with your Remote API address.
+            Default localhost.
+          </Typography>
+        }
+      >
+        <TextField
+          key={"remoteAPIAddress"}
+          InputProps={{
+            startAdornment: <Typography>Address:&nbsp;</Typography>,
+          }}
+          value={remoteFileApiAddress}
+          onChange={handleRemoteFileApiAddressChange}
+          placeholder="localhost"
+          size={"medium"}
+        />
+      </Tooltip>
+      <br />
+      <Tooltip
+        title={
+          <Typography>
+            This port number is used to connect to a Remote API, please ensure that it matches with your Remote API
             server port. Set to 0 to disable the feature.
           </Typography>
         }
@@ -44,13 +70,15 @@ export const RemoteAPIPage = (): React.ReactElement => {
                 Port:&nbsp;
               </Typography>
             ),
-            endAdornment: <Button onClick={newRemoteFileApiConnection}>Connect</Button>,
           }}
           value={remoteFileApiPort}
           onChange={handleRemoteFileApiPortChange}
           placeholder="12525"
+          size={"medium"}
         />
       </Tooltip>
+      <br />
+      <Button onClick={newRemoteFileApiConnection}>Connect</Button>
     </GameOptionsPage>
   );
 };

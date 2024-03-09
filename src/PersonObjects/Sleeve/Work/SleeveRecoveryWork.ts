@@ -18,7 +18,7 @@ export class SleeveRecoveryWork extends SleeveWorkClass {
   }
 
   APICopy() {
-    return { type: SleeveWorkType.RECOVERY as "RECOVERY" };
+    return { type: SleeveWorkType.RECOVERY as const };
   }
 
   /** Serialize the current object to a JSON save state. */

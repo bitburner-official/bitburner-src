@@ -1781,7 +1781,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info: "Penta-dynamo-neurovascular-valve inserted in the carpal ligament, enhances dexterity.",
-      stats: "This augmentation makes the Cheat Code minigame easier by allowing the opposite character.",
+      stats: "This augmentation makes the Cheat Code minigame easier by showing what character will come next.",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },

@@ -1,3 +1,4 @@
+import type { PromisePair } from "../Types/Promises";
 import { AugmentationName, CityName, FactionName } from "@enums";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { ActionIdentifier } from "./ActionIdentifier";
@@ -42,8 +43,7 @@ export interface BlackOpsAttempt {
   isAvailable?: boolean;
   action?: BlackOperation;
 }
-
-export const BladeburnerResolvers: ((msProcessed: number) => void)[] = [];
+export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
 export class Bladeburner {
   numHosp = 0;
@@ -109,12 +109,23 @@ export class Bladeburner {
     this.stamina = this.maxStamina;
     this.create();
   }
+  /*
+    just a quick fix for the broken implementation
+    BlackOperations are only initialized on game load with a count of 1
+    and are not reset on BitNode change or dev menu reset of bladeburner
+  */
+  resetBlackOps(): void {
+    for (const [blackopName, blackop] of Object.entries(BlackOperations)) {
+      blackop.count = Number(!this.blackops[blackopName]);
+    }
+  }
 
   getCurrentCity(): City {
     return this.cities[this.city];
   }
 
   calculateStaminaPenalty(): number {
+    if (this.stamina === this.maxStamina) return 1;
     return Math.min(1, this.stamina / (0.5 * this.maxStamina));
   }
 
@@ -1998,6 +2009,8 @@ export class Bladeburner {
   process(): void {
     // Edge race condition when the engine checks the processing counters and attempts to route before the router is initialized.
     if (!Router.isInitialized) return;
+    //safety measure this needs to be removed in a bigger refactor
+    this.resetBlackOps();
 
     // If the Player starts doing some other actions, set action to idle and alert
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true) && Player.currentWork) {
@@ -2085,9 +2098,11 @@ export class Bladeburner {
         }
       }
 
-      // Handle "nextUpdate" resolvers after this update
-      for (const resolve of BladeburnerResolvers.splice(0)) {
-        resolve(seconds * 1000);
+      // Handle "nextUpdate" resolver after this update
+      if (BladeburnerPromise.resolve) {
+        BladeburnerPromise.resolve(seconds * 1000);
+        BladeburnerPromise.resolve = null;
+        BladeburnerPromise.promise = null;
       }
     }
   }
@@ -2164,6 +2179,7 @@ export class Bladeburner {
 
     try {
       this.startAction(actionId);
+      if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
       workerScript.log(
         "bladeburner.startAction",
         () => `Starting bladeburner action with type '${type}' and name '${name}'`,
@@ -2299,11 +2315,13 @@ export class Bladeburner {
     }
 
     const skill = Skills[skillName];
-    if (this.skills[skillName] == null) {
-      return skill.calculateCost(0, count);
-    } else {
-      return skill.calculateCost(this.skills[skillName], count);
+    const currentLevel = this.skills[skillName] ?? 0;
+
+    if (skill.maxLvl !== 0 && currentLevel + count > skill.maxLvl) {
+      return Infinity;
     }
+
+    return skill.calculateCost(currentLevel, count);
   }
 
   upgradeSkillNetscriptFn(skillName: string, count: number, workerScript: WorkerScript): boolean {

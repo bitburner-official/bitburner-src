@@ -35,6 +35,11 @@ export interface ITheme {
   backgroundprimary: string;
   backgroundsecondary: string;
   button: string;
+  maplocation: string;
+  bnlvl0: string;
+  bnlvl1: string;
+  bnlvl2: string;
+  bnlvl3: string;
 }
 
 export interface IPredefinedTheme {

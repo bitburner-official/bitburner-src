@@ -50,6 +50,7 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [getDarkwebPrograms()](./bitburner.singularity.getdarkwebprograms.md) | Get a list of programs offered on the dark web. |
 |  [getFactionFavor(faction)](./bitburner.singularity.getfactionfavor.md) | Get faction favor. |
 |  [getFactionFavorGain(faction)](./bitburner.singularity.getfactionfavorgain.md) | Get faction favor gain. |
+|  [getFactionInviteRequirements(faction)](./bitburner.singularity.getfactioninviterequirements.md) | List conditions for being invited to a faction. |
 |  [getFactionRep(faction)](./bitburner.singularity.getfactionrep.md) | Get faction reputation. |
 |  [getOwnedAugmentations(purchased)](./bitburner.singularity.getownedaugmentations.md) | Get a list of owned augmentation. |
 |  [getOwnedSourceFiles()](./bitburner.singularity.getownedsourcefiles.md) | Get a list of acquired Source-Files. |

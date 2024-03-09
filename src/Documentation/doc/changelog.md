@@ -1,5 +1,140 @@
 # Changelog
 
+## v2.6.0 - IPvGO: 5 Mar 2024
+
+### MAJOR ADDITIONS
+
+- A new minigame IPvGO, based on the game Go. Visit DefComm in New Tokyo or the CIA in Sector-12 for access. Documentation for the mechanic is available ingame under "How to Play" once the mechanic is available. (@ficocelliguy)
+- A new BitNode has been added which focuses on the IPvGO mechanic (@ficocelliguy)
+
+### HOTFIXES
+
+- 6 Mar 2024: Fixed an issue that could result in invalid Go board states (@ficocelliguy)
+
+### API
+
+- (Bladeburner) ns.bladeburner.getSkillUpgradeCost now returns infinity if requesting a cost above the maximum skill level (@Semanual)
+- (CodingContract) Fixed an issue where ns.codingcontract.getData was leaking internal arrays when contract data was a 2-d array (@LJNeon)
+- (CodingContract) ns.codingcontract.createDummyContract now returns the filename of the created contract (@Spartelfant)
+- (Gang) Added ns.gang.getInstallResult for determining the effect an augmentation install will have on gang member ascension multipliers (@LJNeon)
+- (Go) Added the ns.go API, which allows interaction with the new IPvGO mechanic. While this is in development, the API may undergo changes (@ficocelliguy)
+- (Hashnet) Fixed a bug that allowed spending negative hashes (@yichizhng)
+- (Ports) Added ns.nextPortWrite, which allows waiting for the next write to a port without creating a port handle object (@LJNeon)
+- (Ports) Ports now support all clonable data (@LJNeon)
+- (Singularity) Add type information for ns.singularity.getCurrentWork return value (@Semanual)
+- (Stanek) Fix ns.stanek.acceptGift which was not working in 2.5.2 (@jjclark1982)
+- ns.getPlayer now also provides the player's karma. ns.heart.break is no longer a hidden function (@LJNeon)
+- ns.atExit can be provided a string id as a second parameter, to set multiple atExit callbacks for the same script (@shyguy1412)
+- Improved the efficiency and accuracy of growth formulas (@d0sboots)
+- ns.formatNumber now throws an error if specifying a suffixStart less than 1000 (@TheAimMan)
+- HGWOptions now accepts a non-integer number of threads (@Caldwell-74)
+- Fixed outdated docs for ns.spawn() (@adeilt)
+- Fixed ns.serverExists returning incorrect value for an endgame server (@cigarmemr)
+- Refactored weaken effect calculation (@Caldwell-74)
+
+### UI
+
+- (Augmentations) Fixed some missing description text for Hacknet multipliers (@jjclark1982)
+- (Corporation) Align columns correctly in warehouse breakdown table (@jjclark1982)
+- (Corporation) Several typo fixes in Corporation modals (@cigarmemr)
+- (Documentation) Ingame documentation now displays line breaks inside tables correctly (@Snarling)
+- (Documentation) Added a documentation page for converting .script to .js (@LJNeon, @jjclark1982, @Snarling)
+- (Documentation) Script editor doc button points to correct docs (@LJNeon)
+- (Hashnet) Hash upgrade descriptions use proper number formatting options (@Snarling)
+- (Hacknet) Hacknet display shows a dynamic amount of columns based on screen width (@shyguy1412)
+- (Infiltration) Changed how the CheatCodeGame is displayed (@alutman, @Snarling)
+- (Infiltration) If currently performing faction work, UI defaults to trading info for rep with that faction (@LJNeon)
+- (Sleeve) If intelligence is unlocked, sleeve intelligence is shown in the UI (@Caldwell-74)
+- (Stockmarket) Changed color of stocks increasing in value (@Semanual)
+- (Terminal) Improved scroll behavior on the Terminal (@Snarling)
+- (Theme) Added 3 new theme elements to properly support light themes (@adeilt)
+- Added a tail render interval setting, changing how frequently tail windows redraw their contents (@Caldwell-74)
+- Reorganization of some content and sorting of scripts on the Active Scripts page (@Snarling, @TheAimMan)
+- "Disable Text Effects" option also disables the corrupted text display (@draughtnyan)
+- fl1ght.exe now displays the related requirements in a more readable way (@TheAimMan, @LJNeon)
+- Miscellaneous wording fixes (@cigarmemr)
+
+### MISC
+
+- (CodingContract) Improve parsing of player input for arrays in coding contracts (@rocket3989)
+- (Corporation) Fix an incorrect demand range for Minerals (@catloversg)
+- (Corporation) Added ingame documentation (@catloversg)
+- (Corporation) Divisions impact on corporation valuation is now based on number of offices and warehouses (@catloversg)
+- (Corporation) Improve performance of calculations (@catloversg)
+- (Bladeburner) Band-aid fix Blops count and action stopping (@Caldwell-74)
+- (Gang) Add separate money tracking for gang expenses (@deansvendsen)
+- (Ports) Port objects no longer track a separate promise for every use of nextWrite (@Snarling)
+- (Ports) Fixed a crashing bug related to the changes above (@Jman420)
+- (RemoteAPI) Remote API can be targeted to a remote device instead of the default of localhost (@Specker)
+- (RemoteAPI) Added a getAllServers method (@shyguy1412)
+- (ScriptEditor) When importing from other files that are also open in the editor, type information is now available in the IDE (@shyguy1412)
+- (ScriptEditor) Links from "ls" are now tied to that host, instead of your connected machine (@LJNeon)
+- (ScriptEditor) Script "models" in the script editor are now properly disposed (@Caldwell-74)
+- (Terminal) Add --ram-override flag to the run command (@LJNeon)
+- (Terminal) Fix incorrect help text for rm command (@LJNeon)
+- Add a helper for clamping numbers to an allowable range, and use this for player skill formulas (@Caldwell-74)
+- Protect against renaming servers to invalid names (@LJNeon)
+- All running scripts are killed upon entering the BitVerse (@LJNeon)
+- Scripts with the "temporary" flag set do not populate the Recently Killed script list on script death (@TheAimMan)
+- Fix an issue with offline income for scripts (@Caldwell-74)
+- Various "nextUpdate" promises are not tracked internally as a single promise instead of an array of promises (@Caldwell-74, @LJNeon)
+- Fix inconsistent importing of the arg library (@catloversg)
+- Clarify some information in the CONTRIBUTING.md file (@deansvendsen)
+- Internal changes to method used for cloning objects (@LJNeon)
+- Rearrange some internal constants (@Caldwell-74)
+- b1t_flum3.exe can be ran in "quick" mode (@TheAimMan)
+- Nerf noodle bar (various)
+- Nerf noodle bar moar (@Caldwell-74)
+
+## v2.5.2 - 26 December 2023
+
+### API
+
+- Added limit of 1e9 for additionalMsec property of HGWOptions (@d0sboots)
+- ns.share effect is now boosted by host server core count (@TheAimMan)
+- Fix a bug with HGWOptions that caused the default value to be 1 thread even for scripts running multiple threads (@DJMatch3000)
+- (Singularity) ns.singularity.applyToCompany now returns the JobName if a job was obtained, or null otherwise - previously was boolean (@jjclark1982)
+- (Singularity) ns.singularity.getCurrentWork now requires access to the singularity API (@TheAimMan)
+- (Singularity) Added ns.singularity.getFactionInviteRequirements (@jjclark1982)
+- (Stanek) ns.stanek.chargeFragment is now boosted by host server core count (@TheAimMan)
+
+### BUGFIX
+
+- (Bladeburner) Operation team size modal now handles keyboard submission correctly (@Snarling)
+- (Corporation) Fixed an issue with Warehouse size being out of sync following prduct sale (@Kelenius)
+- (Factions) Fixed some display order issues, and possible multiple entries for a faction (@jjclark1982)
+- (Factions) Fixed an issue with certain factions not becoming "known" when joining them (@jjclark1982)
+- (Grafting) Entropy now has the correct negative effect on hacknet multipliers (@TheAimMan)
+- (Hashnet) Fixed an issue where the SF9.3 reward server had an incorrect number of cores (@cigarmemr)
+- (Terminal) Fixed a bug with script autocompletion when the script is inside a subdirectory (@draughtnyan)
+
+### MISC
+
+- Added basic protection for certain global values that could cause a recovery screen if reassigned (@Snarling)
+- Fixed conditions for an easter egg message (@cigarmemr)
+- (Bitverse) Changed listed difficulty for BN3 to "hard"
+- (CodingContract) Reduce incidence of $0 coding contract rewards in circumstances where the reward would be $0 (@trambelus)
+- (Corporation) Added better accounting of funds transactions (@jjclark1982)
+- (Corporation) Remove cooldown on starting over corporation, but maintain remaining cooldown for selling shares (@jjclark1982)
+- (Corporation) Removed some legacy code that was not doing anything (@catloversg)
+- (DevMenu) Added the ability to add/remove sleeves from the dev menu (@Sphyxis, @Snarling)
+- (Docs) Fixed various typos in documentation (@tdpeuter)
+- (Factions) Added a documentation page for faction join requirements (@jjclark1982)
+- (Formulas) Added clarification for the unit of time returned by hackTime, growTime, and weakenTime functions (@d0sboots)
+- (Ports) Promises from port.nextWrite resolve in the same order they were created, instead of reverse order (@LJNeon)
+- (Sleeve) Add task counters for Crime and Bladeburner tasks (@TheAimMan)
+- (Stock) Add some randomization to timing for stockmarket forecast change events (@Caldwell-74)
+- (Terminal) Added the --all option for unalias, to allow removing all aliases (@Sphyxis)
+- Nerf noodle bar (various contributors)
+
+### UI
+
+- Message for buying TOR router no longer implies the need to connect to darkweb (@Kelenius)
+- (Company) Rework of the job location details (@jjclark1982)
+- (Company) Added previous/next buttons for job location if the player has multiple jobs (@Kelenius)
+- (Factions) Only show warning about enemy factions for factions with enemies (@jjclark1982)
+- (Stanek) Improved the display of the Stanek grid (@Kelenius)
+
 ## v2.5.1 - 30 November 2023 Update
 
 ### NOTES

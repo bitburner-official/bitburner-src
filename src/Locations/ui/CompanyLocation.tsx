@@ -4,15 +4,10 @@
  * This subcomponent renders all of the buttons for applying to jobs at a company
  */
 import React, { useState } from "react";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
-
-import { ApplyToJobButton } from "./ApplyToJobButton";
+import { Paper, Box, Tooltip, Button, Typography } from "@mui/material";
 
 import { Locations } from "../Locations";
-import { CompanyName, JobName, JobField } from "@enums";
+import { CompanyName } from "@enums";
 
 import { Companies } from "../../Company/Companies";
 import { CompanyPositions } from "../../Company/CompanyPositions";
@@ -26,6 +21,9 @@ import { QuitJobModal } from "../../Company/ui/QuitJobModal";
 import { CompanyWork } from "../../Work/CompanyWork";
 import { useRerender } from "../../ui/React/hooks";
 import { companyNameAsLocationName } from "../../Company/utils";
+import { JobSummary } from "../../Company/ui/JobSummary";
+import { StatsTable } from "../../ui/React/StatsTable";
+import { JobListings } from "../../Company/ui/JobListings";
 
 interface IProps {
   companyName: CompanyName;
@@ -51,102 +49,14 @@ export function CompanyLocation(props: IProps): React.ReactElement {
 
   /** Name of company position that player holds, if applicable */
   const jobTitle = Player.jobs[props.companyName] ? Player.jobs[props.companyName] : null;
+  const hasMoreJobs = Object.keys(Player.jobs).length > 1;
 
   /**
-   * CompanyPosition object for the job that the player holds at this company
-   * (if he has one)
+   * CompanyPosition object for the job that the player holds at this company, if applicable
    */
-  const companyPosition = jobTitle ? CompanyPositions[jobTitle] : null;
+  const currentPosition = jobTitle ? CompanyPositions[jobTitle] : null;
 
   Player.location = companyNameAsLocationName(props.companyName);
-
-  function applyForAgentJob(e: React.MouseEvent<HTMLElement>): void {
-    if (!e.isTrusted) {
-      return;
-    }
-    Player.applyForAgentJob();
-    rerender();
-  }
-
-  function applyForBusinessConsultantJob(e: React.MouseEvent<HTMLElement>): void {
-    if (!e.isTrusted) {
-      return;
-    }
-    Player.applyForBusinessConsultantJob();
-    rerender();
-  }
-
-  function applyForBusinessJob(e: React.MouseEvent<HTMLElement>): void {
-    if (!e.isTrusted) {
-      return;
-    }
-    Player.applyForBusinessJob();
-    rerender();
-  }
-
-  function applyForEmployeeJob(e: React.MouseEvent<HTMLElement>): void {
-    if (!e.isTrusted) {
-      return;
-    }
-    Player.applyForEmployeeJob();
-    rerender();
-  }
-
-  function applyForItJob(e: React.MouseEvent<HTMLElement>): void {
-    if (!e.isTrusted) {
-      return;
-    }
-    Player.applyForItJob();
-    rerender();
-  }
-
-  function applyForPartTimeEmployeeJob(e: React.MouseEvent<HTMLElement>): void {
-    if (!e.isTrusted) {
-      return;
-    }
-    Player.applyForPartTimeEmployeeJob();
-    rerender();
-  }
-
-  function applyForPartTimeWaiterJob(e: React.MouseEvent<HTMLElement>): void {
-    if (!e.isTrusted) {
-      return;
-    }
-    Player.applyForPartTimeWaiterJob();
-    rerender();
-  }
-
-  function applyForSecurityJob(e: React.MouseEvent<HTMLElement>): void {
-    if (!e.isTrusted) {
-      return;
-    }
-    Player.applyForSecurityJob();
-    rerender();
-  }
-
-  function applyForSoftwareConsultantJob(e: React.MouseEvent<HTMLElement>): void {
-    if (!e.isTrusted) {
-      return;
-    }
-    Player.applyForSoftwareConsultantJob();
-    rerender();
-  }
-
-  function applyForSoftwareJob(e: React.MouseEvent<HTMLElement>): void {
-    if (!e.isTrusted) {
-      return;
-    }
-    Player.applyForSoftwareJob();
-    rerender();
-  }
-
-  function applyForWaiterJob(e: React.MouseEvent<HTMLElement>): void {
-    if (!e.isTrusted) {
-      return;
-    }
-    Player.applyForWaiterJob();
-    rerender();
-  }
 
   function startInfiltration(e: React.MouseEvent<HTMLElement>): void {
     if (!e.isTrusted) {
@@ -163,8 +73,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
       return;
     }
 
-    const pos = companyPosition;
-    if (pos) {
+    if (currentPosition) {
       Player.startWork(
         new CompanyWork({
           singularity: false,
@@ -176,50 +85,70 @@ export function CompanyLocation(props: IProps): React.ReactElement {
     }
   }
 
-  const isEmployedHere = jobTitle != null;
+  function switchLoc(num: number): void {
+    let targetNum = Object.keys(Player.jobs).findIndex((x) => x == props.companyName);
+    if (targetNum === -1) return;
+    targetNum += num;
+    if (targetNum >= Object.keys(Player.jobs).length) {
+      targetNum = 0;
+    } else if (targetNum < 0) {
+      targetNum = Object.keys(Player.jobs).length - 1;
+    }
+    Router.toPage(Page.Job, { location: Locations[Object.keys(Player.jobs)[targetNum]] });
+  }
+
+  const isEmployedHere = currentPosition != null;
   const favorGain = company.getFavorGain();
 
   return (
     <>
-      {isEmployedHere && (
-        <>
-          <Typography>Job Title: {jobTitle}</Typography>
-          <Typography>-------------------------</Typography>
-          <Box display="flex">
-            <Tooltip
-              title={
-                <>
-                  You will have <Favor favor={company.favor + favorGain} /> company favor upon resetting after
-                  installing Augmentations
-                </>
-              }
-            >
-              <Typography>
-                Company reputation: <Reputation reputation={company.playerReputation} />
-              </Typography>
-            </Tooltip>
+      <Box sx={{ display: "grid", width: "fit-content", minWidth: "25em" }}>
+        {isEmployedHere && hasMoreJobs && (
+          <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+            <Button onClick={() => switchLoc(-1)}>Previous Job</Button>
+            <Button onClick={() => switchLoc(1)}>Next Job</Button>
           </Box>
-          <Typography>-------------------------</Typography>
-          <Box display="flex">
-            <Tooltip
-              title={
-                <>
-                  Company favor increases the rate at which you earn reputation for this company by 1% per favor.
-                  Company favor is gained whenever you reset after installing Augmentations. The amount of favor you
-                  gain depends on how much reputation you have with the company.
-                </>
-              }
-            >
-              <Typography>
-                Company Favor: <Favor favor={company.favor} />
-              </Typography>
-            </Tooltip>
-          </Box>
-          <Typography>-------------------------</Typography>
-          <br />
-        </>
-      )}
-      <Box sx={{ display: "grid", width: "fit-content" }}>
+        )}
+        {isEmployedHere && (
+          <Paper sx={{ p: "0.5em 1em", mt: 2, mb: 2 }}>
+            <JobSummary company={company} position={currentPosition} />
+            <StatsTable
+              wide
+              rows={[
+                [
+                  <Tooltip
+                    key="repLabel"
+                    title={
+                      <>
+                        You will have <Favor favor={company.favor + favorGain} /> company favor upon resetting after
+                        installing Augmentations
+                      </>
+                    }
+                  >
+                    <Typography>Total reputation:</Typography>
+                  </Tooltip>,
+                  <Reputation key="rep" reputation={company.playerReputation} />,
+                ],
+                [
+                  <Tooltip
+                    key="favorLabel"
+                    title={
+                      <>
+                        Company favor increases the rate at which you earn reputation for this company by 1% per favor.
+                        Company favor is gained whenever you reset after installing Augmentations. The amount of favor
+                        you gain depends on how much reputation you have with the company.
+                      </>
+                    }
+                  >
+                    <Typography>Company favor:</Typography>
+                  </Tooltip>,
+                  <Favor key="favor" favor={company.favor} />,
+                ],
+              ]}
+            />
+          </Paper>
+        )}
+
         {isEmployedHere && (
           <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
             <Button onClick={work}>Work</Button>
@@ -233,94 +162,9 @@ export function CompanyLocation(props: IProps): React.ReactElement {
             />
           </Box>
         )}
-        {company.hasAgentPositions() && (
-          <ApplyToJobButton
-            company={company}
-            entryPosType={CompanyPositions[JobName.agent0]}
-            onClick={applyForAgentJob}
-            text={"Apply for " + JobField.agent + " Job"}
-          />
-        )}
-        {company.hasBusinessConsultantPositions() && (
-          <ApplyToJobButton
-            company={company}
-            entryPosType={CompanyPositions[JobName.businessConsult0]}
-            onClick={applyForBusinessConsultantJob}
-            text={"Apply for " + JobField.businessConsultant + " Job"}
-          />
-        )}
-        {company.hasBusinessPositions() && (
-          <ApplyToJobButton
-            company={company}
-            entryPosType={CompanyPositions[JobName.business0]}
-            onClick={applyForBusinessJob}
-            text={"Apply for " + JobField.business + " Job"}
-          />
-        )}
-        {company.hasEmployeePositions() && (
-          <ApplyToJobButton
-            company={company}
-            entryPosType={CompanyPositions[JobName.employee]}
-            onClick={applyForEmployeeJob}
-            text={"Apply to be an " + JobField.employee}
-          />
-        )}
-        {company.hasEmployeePositions() && (
-          <ApplyToJobButton
-            company={company}
-            entryPosType={CompanyPositions[JobName.employeePT]}
-            onClick={applyForPartTimeEmployeeJob}
-            text={"Apply to be a " + JobField.partTimeEmployee}
-          />
-        )}
-        {company.hasITPositions() && (
-          <ApplyToJobButton
-            company={company}
-            entryPosType={CompanyPositions[JobName.IT0]}
-            onClick={applyForItJob}
-            text={"Apply for " + JobField.it + " Job"}
-          />
-        )}
-        {company.hasSecurityPositions() && (
-          <ApplyToJobButton
-            company={company}
-            entryPosType={CompanyPositions[JobName.security0]}
-            onClick={applyForSecurityJob}
-            text={"Apply for " + JobField.security + " Job"}
-          />
-        )}
-        {company.hasSoftwareConsultantPositions() && (
-          <ApplyToJobButton
-            company={company}
-            entryPosType={CompanyPositions[JobName.softwareConsult0]}
-            onClick={applyForSoftwareConsultantJob}
-            text={"Apply for " + JobField.softwareConsultant + " Job"}
-          />
-        )}
-        {company.hasSoftwarePositions() && (
-          <ApplyToJobButton
-            company={company}
-            entryPosType={CompanyPositions[JobName.software0]}
-            onClick={applyForSoftwareJob}
-            text={"Apply for " + JobField.software + " Job"}
-          />
-        )}
-        {company.hasWaiterPositions() && (
-          <ApplyToJobButton
-            company={company}
-            entryPosType={CompanyPositions[JobName.waiter]}
-            onClick={applyForWaiterJob}
-            text={"Apply to be a " + JobField.waiter}
-          />
-        )}
-        {company.hasWaiterPositions() && (
-          <ApplyToJobButton
-            company={company}
-            entryPosType={CompanyPositions[JobName.waiterPT]}
-            onClick={applyForPartTimeWaiterJob}
-            text={"Apply to be a " + JobField.partTimeWaiter}
-          />
-        )}
+
+        {company.companyPositions.size > 0 && <JobListings company={company} currentPosition={currentPosition} />}
+
         {location.infiltrationData != null && <Button onClick={startInfiltration}>Infiltrate Company</Button>}
       </Box>
     </>

@@ -38,6 +38,7 @@ import { Corporation } from "./Corporation/Corporation";
 import { Terminal } from "./Terminal";
 import { getRecordValues } from "./Types/Record";
 import { ExportMaterial } from "./Corporation/Actions";
+import { getGoSave, loadGo } from "./Go/SaveLoad";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -86,6 +87,7 @@ class BitburnerSaveObject {
   AllGangsSave = "";
   LastExportBonus = "0";
   StaneksGiftSave = "";
+  GoSave = "";
 
   getSaveString(forceExcludeRunningScripts = false): string {
     this.PlayerSave = JSON.stringify(Player);
@@ -105,6 +107,7 @@ class BitburnerSaveObject {
     this.VersionSave = JSON.stringify(CONSTANTS.VersionNumber);
     this.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
     this.StaneksGiftSave = JSON.stringify(staneksGift);
+    this.GoSave = JSON.stringify(getGoSave());
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
 
@@ -704,6 +707,18 @@ Error: ${e}`);
       }
     }
   }
+  v2_60: if (ver < 38 && "go" in Player) {
+    const goData = Player.go;
+    // Remove outdated savedata
+    delete Player.go;
+    // Attempt to load back in at least the stats object. The current game will not be loaded.
+    if (!goData || typeof goData !== "object") break v2_60;
+    const stats = "status" in goData ? goData.status : "stats" in goData ? goData.stats : null;
+    if (!stats || typeof stats !== "object") break v2_60;
+    const freshSaveData = getGoSave();
+    Object.assign(freshSaveData.stats, stats);
+    loadGo(JSON.stringify(freshSaveData));
+  }
 }
 
 function loadGame(saveString: string): boolean {
@@ -717,6 +732,7 @@ function loadGame(saveString: string): boolean {
   loadAllServers(saveObj.AllServersSave);
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave, Player);
+  loadGo(saveObj.GoSave);
 
   if (Object.hasOwn(saveObj, "StaneksGiftSave")) {
     loadStaneksGift(saveObj.StaneksGiftSave);

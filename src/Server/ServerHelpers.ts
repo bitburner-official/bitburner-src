@@ -1,10 +1,9 @@
 import { GetServer, createUniqueRandomIp, ipExists } from "./AllServers";
 import { Server, IConstructorParams } from "./Server";
 import { BaseServer } from "./BaseServer";
-import { calculateServerGrowth } from "./formulas/grow";
-
+import { calculateServerGrowth, calculateServerGrowthLog } from "./formulas/grow";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { CONSTANTS } from "../Constants";
+import { ServerConstants } from "./data/Constants";
 import { Player } from "@player";
 import { CompletedProgramName, LiteratureName } from "@enums";
 import { Person as IPerson } from "@nsdefs";
@@ -52,24 +51,7 @@ export function safelyCreateUniqueServer(params: IConstructorParams): Server {
  */
 export function numCycleForGrowth(server: IServer, growth: number, cores = 1): number {
   if (!server.serverGrowth) return Infinity;
-  const hackDifficulty = server.hackDifficulty ?? 100;
-  let ajdGrowthRate = 1 + (CONSTANTS.ServerBaseGrowthRate - 1) / hackDifficulty;
-  if (ajdGrowthRate > CONSTANTS.ServerMaxGrowthRate) {
-    ajdGrowthRate = CONSTANTS.ServerMaxGrowthRate;
-  }
-
-  const serverGrowthPercentage = server.serverGrowth / 100;
-
-  const coreBonus = getCoreBonus(cores);
-  const cycles =
-    Math.log(growth) /
-    (Math.log(ajdGrowthRate) *
-      Player.mults.hacking_grow *
-      serverGrowthPercentage *
-      currentNodeMults.ServerGrowthRate *
-      coreBonus);
-
-  return cycles;
+  return Math.log(growth) / calculateServerGrowthLog(server, 1, Player, cores);
 }
 
 /**
@@ -91,130 +73,106 @@ export function numCycleForGrowthCorrected(
 ): number {
   if (!server.serverGrowth) return Infinity;
   const moneyMax = server.moneyMax ?? 1;
-  const hackDifficulty = server.hackDifficulty ?? 100;
 
   if (startMoney < 0) startMoney = 0; // servers "can't" have less than 0 dollars on them
   if (targetMoney > moneyMax) targetMoney = moneyMax; // can't grow a server to more than its moneyMax
   if (targetMoney <= startMoney) return 0; // no growth --> no threads
 
-  // exponential base adjusted by security
-  const adjGrowthRate = 1 + (CONSTANTS.ServerBaseGrowthRate - 1) / hackDifficulty;
-  const exponentialBase = Math.min(adjGrowthRate, CONSTANTS.ServerMaxGrowthRate); // cap growth rate
-
-  // total of all grow thread multipliers
-  const serverGrowthPercentage = server.serverGrowth / 100.0;
-  const coreMultiplier = getCoreBonus(cores);
-  const threadMultiplier =
-    serverGrowthPercentage * person.mults.hacking_grow * coreMultiplier * currentNodeMults.ServerGrowthRate;
-
+  const k = calculateServerGrowthLog(server, 1, person, cores);
   /* To understand what is done below we need to do some math. I hope the explanation is clear enough.
    * First of, the names will be shortened for ease of manipulation:
-   * n:= targetMoney (n for new), o:= startMoney (o for old), b:= exponentialBase, t:= threadMultiplier, c:= cycles/threads
-   * c is what we are trying to compute.
+   * n:= targetMoney (n for new), o:= startMoney (o for old), k:= calculateServerGrowthLog, x:= threads
+   * x is what we are trying to compute.
    *
-   * After growing, the money on a server is n = (o + c) * b^(c*t)
-   * c appears in an exponent and outside it, this is usually solved using the productLog/lambert's W special function
-   * this function will be noted W in the following
-   * The idea behind lambert's W function is W(x)*exp(W(x)) = x, or in other words, solving for y, y*exp(y) = x, as a function of x
-   * This function is provided in some advanced math library but we will compute it ourself here.
+   * After growing, the money on a server is n = (o + x) * exp(k*x)
+   * x appears in an exponent and outside it, this is usually solved using the productLog/lambert's W special function,
+   * but it turns out that due to floating-point range issues this approach is *useless* to us, so it will be ignored.
    *
-   * Let's get back to solving the equation. It cannot be rewrote using W immediately because the base of the exponentiation is b
-   * b^(c*t) = exp(ln(b)*c*t) (this is how a^b is defined on reals, it matches the definition on integers)
-   * so n = (o + c) * exp(ln(b)*c*t) , W still cannot be used directly. We want to eliminate the other terms in 'o + c' and 'ln(b)*c*t'.
-   *
-   * A change of variable will do. The idea is to add an equation introducing a new variable (w here) in the form c = f(w) (for some f)
-   * With this equation we will eliminate all references to c, then solve for w and plug the result in the new equation to get c.
-   * The change of variable performed here should get rid of the unwanted terms mentioned above, c = w/(ln(b)*t) - o should help.
-   * This change of variable is allowed because whatever the value of c is, there is a value of w such that this equation holds:
-   * w = (c + o)*ln(b)*t  (see how we used the terms we wanted to eliminate in order to build this variable change)
-   *
-   * We get n = (o + w/(ln(b)*t) - o) * exp(ln(b)*(w/(ln(b)*t) - o)*t) [ = w/(ln(b)*t) * exp(w - ln(b)*o*t) ]
-   * The change of variable exposed exp(w - o*ln(b)*t), we can rewrite that with exp(a - b) = exp(a)/exp(b) to isolate 'w*exp(w)'
-   * n = w/(ln(b)*t) * exp(w)/exp(ln(b)*o*t) [ = w*exp(w) / (ln(b) * t * b^(o*t)) ]
-   * Almost there, we just need to cancel the denominator on the right side of the equation:
-   * n * ln(b) * t * b^(o*t) = w*exp(w), Thus w = W(n * ln(b) * t * b^(o*t))
-   * Finally we invert the variable change: c = W(n * ln(b) * t * b^(o*t))/(ln(b)*t) - o
-   *
-   * There is still an issue left: b^(o*t) doesn't fit inside a double precision float
-   * because the typical amount of money on servers is around 10^6~10^9
-   * We need to get an approximation of W without computing the power when o is huge
-   * Thankfully an approximation giving ~30% error uses log immediately so we will use
-   * W(n * ln(b) * t * b^(o*t)) ~= log(n * ln(b) * t * b^(o*t)) = log(n * ln(b) * t) + log(exp(ln(b) * o * t))
-   * = log(n * ln(b) * t) + ln(b) * o * t
-   * (thanks to Drak for the grow formula, f4113nb34st and Wolfram Alpha for the rewrite, dwRchyngqxs for the explanation)
-   */
-  const x = threadMultiplier * Math.log(exponentialBase);
-  const y = startMoney * x + Math.log(targetMoney * x);
-  /* Code for the approximation of lambert's W function is adapted from
-   * https://git.savannah.gnu.org/cgit/gsl.git/tree/specfunc/lambert.c
-   * using the articles [1] https://doi.org/10.1007/BF02124750 (algorithm above)
-   * and [2] https://doi.org/10.1145/361952.361970 (initial approximation when x < 2.5)
-   */
-  let w;
-  if (y < Math.log(2.5)) {
-    /* exp(y) can be safely computed without overflow.
-     * The relative error on the result is better when exp(y) < 2.5
-     * using Padé rational fraction approximation [2](5)
-     */
-    const ey = Math.exp(y);
-    w = (ey + (4 / 3) * ey * ey) / (1 + (7 / 3) * ey + (5 / 6) * ey * ey);
-  } else {
-    /* obtain initial approximation from rough asymptotic [1](4.18)
-     * w = y [- log y when 0 <= y]
-     */
-    w = y;
-    if (y > 0) w -= Math.log(y);
-  }
-  let cycles = w / x - startMoney;
-
-  /* Iterative refinement, the goal is to correct c until |(o + c) * b^(c*t) - n| < 1
-   * or the correction on the approximation is less than 1
-   * The Newton-Raphson method will be used, this method is a classic to find roots of functions
-   * (given f, find c such that f(c) = 0).
+   * Instead, we proceed directly to Newton-Raphson iteration. We first rewrite the equation in
+   * log-form, since iterating it this way has faster convergence: log(n) = log(o+x) + k*x.
+   * Now our goal is to find the zero of f(x) = log((o+x)/n) + k*x.
+   * (Due to the shape of the function, there will be a single zero.)
    *
    * The idea of this method is to take the horizontal position at which the horizontal axis
    * intersects with of the tangent of the function's curve as the next approximation.
    * It is equivalent to treating the curve as a line (it is called a first order approximation)
-   * If the current approximation is c then the new approximated value is c - f(c)/f'(c)
+   * If the current approximation is x then the new approximated value is x - f(x)/f'(x)
    * (where f' is the derivative of f).
    *
-   * In our case f(c) = (o + c) * b^(c*t) - n, f'(c) = d((o + c) * b^(c*t) - n)/dc
-   * = (ln(b)*t * (c + o) + 1) * b^(c*t)
-   * And the update step is c[new] = c[old] - ((o + c) * b^(c*t) - n)/((ln(b)*t * (o + c) + 1) * b^(c*t))
+   * In our case f(x) = log((o+x)/n) + k*x, f'(x) = d(log((o+x)/n) + k*x)/dx
+   *                                              = 1/(o + x) + k
+   * And the update step is x[new] = x - (log((o+x)/n) + k*x)/(1/(o+x) + k)
+   * We can simplify this by bringing the first term up into the fraction:
+   * = (x * (1/(o+x) + k) - log((o+x)/n) - k*x) / (1/(o+x) + k)
+   * = (x/(o+x) - log((o+x)/n)) / (1/(o+x) + k)    [multiplying top and bottom by (o+x)]
+   * = (x - (o+x)*log((o+x)/n)) / (1 + (o+x)*k)
    *
-   * The main question to ask when using this method is "does it converges?"
+   * The main question to ask when using this method is "does it converge?"
    * (are the approximations getting better?), if it does then it does quickly.
-   * DOES IT CONVERGES? In the present case it does. The reason why doesn't help explaining the algorithm.
-   * If you are interested then check out the wikipedia page.
+   * Since the derivative is always positive but also strictly decreasing, convergence is guaranteed.
+   * This also provides the useful knowledge that any x which starts *greater* than the solution will
+   * undershoot across to the left, while values *smaller* than the zero will continue to find
+   * closer approximations that are still smaller than the final value.
+   *
+   * Of great importance for reducing the number of iterations is starting with a good initial
+   * guess. We use a very simple starting condition: x_0 = n - o. We *know* this will always overshot
+   * the target, usually by a vast amount. But we can run it manually through one Newton iteration
+   * to get a better start with nice properties:
+   * x_1 = ((n - o) - (n - o + o)*log((n-o+o)/n)) / (1 + (n-o+o)*k)
+   *     = ((n - o) - n * log(n/n)) / (1 + n*k)
+   *     = ((n - o) - n * 0) / (1 + n*k)
+   *     = (n - o) / (1 + n*k)
+   * We can do the same procedure with the exponential form of Newton's method, starting from x_0 = 0.
+   * This gives x_1 = (n - o) / (1 + o*k), (full derivation omitted) which will be an overestimate.
+   * We use a weighted average of the denominators to get the final guess:
+   *   x = (n - o) / (1 + (1/16*n + 15/16*o)*k)
+   * The reason for this particular weighting is subtle; it is exactly representable and holds up
+   * well under a wide variety of conditions, making it likely that the we start within 1 thread of
+   * correct. It particularly bounds the worst-case to 3 iterations, and gives a very wide swatch
+   * where 2 iterations is good enough.
+   *
+   * The accuracy of the initial guess is good for many inputs - often one iteration
+   * is sufficient. This means the overall cost is two logs (counting the one in calculateServerGrowthLog),
+   * possibly one exp, 5 divisions, and a handful of basic arithmetic.
    */
-  let bt = exponentialBase ** threadMultiplier;
-  if (bt == Infinity) bt = 1e300;
-  let corr = Infinity;
-  // Two sided error because we do not want to get stuck if the error stays on the wrong side
+  const guess = (targetMoney - startMoney) / (1 + (targetMoney * (1 / 16) + startMoney * (15 / 16)) * k);
+  let x = guess;
+  let diff;
   do {
-    // c should be above 0 so Halley's method can't be used, we have to stick to Newton-Raphson
-    let bct = bt ** cycles;
-    if (bct == Infinity) bct = 1e300;
-    const opc = startMoney + cycles;
-    let diff = opc * bct - targetMoney;
-    if (diff == Infinity) diff = 1e300;
-    corr = diff / (opc * x + 1.0) / bct;
-    cycles -= corr;
-  } while (Math.abs(corr) >= 1);
-  /* c is now within +/- 1 of the exact result.
-   * We want the ceiling of the exact result, so the floor if the approximation is above,
-   * the ceiling if the approximation is in the same unit as the exact result,
-   * and the ceiling + 1 if the approximation is below.
+    const ox = startMoney + x;
+    // Have to use division instead of multiplication by inverse, because
+    // if targetMoney is MIN_VALUE then inverting gives Infinity
+    const newx = (x - ox * Math.log(ox / targetMoney)) / (1 + ox * k);
+    diff = newx - x;
+    x = newx;
+  } while (diff < -1 || diff > 1);
+  /* If we see a diff of 1 or less we know all future diffs will be smaller, and the rate of
+   * convergence means the *sum* of the diffs will be less than 1.
+
+   * In most cases, our result here will be ceil(x).
    */
-  const fca = Math.floor(cycles);
-  if (targetMoney <= (startMoney + fca) * Math.pow(exponentialBase, fca * threadMultiplier)) {
-    return fca;
+  const ccycle = Math.ceil(x);
+  if (ccycle - x > 0.999999) {
+    // Rounding-error path: It's possible that we slightly overshot the integer value due to
+    // rounding error, and more specifically precision issues with log and the size difference of
+    // startMoney vs. x. See if a smaller integer works. Most of the time, x was not close enough
+    // that we need to try.
+    const fcycle = ccycle - 1;
+    if (targetMoney <= (startMoney + fcycle) * Math.exp(k * fcycle)) {
+      return fcycle;
+    }
   }
-  const cca = Math.ceil(cycles);
-  if (targetMoney <= (startMoney + cca) * Math.pow(exponentialBase, cca * threadMultiplier)) {
-    return cca;
+  if (ccycle >= x + ((diff <= 0 ? -diff : diff) + 0.000001)) {
+    // Fast-path: We know the true value is somewhere in the range [x, x + |diff|] but the next
+    // greatest integer is past this. Since we have to round up grows anyway, we can return this
+    // with no more calculation. We need some slop due to rounding errors - we can't fast-path
+    // a value that is too small.
+    return ccycle;
   }
-  return cca + 1;
+  if (targetMoney <= (startMoney + ccycle) * Math.exp(k * ccycle)) {
+    return ccycle;
+  }
+  return ccycle + 1;
 }
 
 //Applied server growth for a single server. Returns the percentage growth
@@ -226,7 +184,7 @@ export function processSingleServerGrowth(server: Server, threads: number, cores
   }
 
   const oldMoneyAvailable = server.moneyAvailable;
-  server.moneyAvailable += 1 * threads; // It can be grown even if it has no money
+  server.moneyAvailable += threads; // It can be grown even if it has no money
   server.moneyAvailable *= serverGrowth;
 
   // in case of data corruption
@@ -244,7 +202,7 @@ export function processSingleServerGrowth(server: Server, threads: number, cores
     let usedCycles = numCycleForGrowthCorrected(server, server.moneyAvailable, oldMoneyAvailable, cores);
     // Growing increases server security twice as much as hacking
     usedCycles = Math.min(Math.max(0, Math.ceil(usedCycles)), threads);
-    server.fortify(2 * CONSTANTS.ServerFortifyAmount * usedCycles);
+    server.fortify(2 * ServerConstants.ServerFortifyAmount * usedCycles);
   }
   return server.moneyAvailable / oldMoneyAvailable;
 }
@@ -299,4 +257,9 @@ export function isBackdoorInstalled(server: BaseServer): boolean {
 export function getCoreBonus(cores = 1): number {
   const coreBonus = 1 + (cores - 1) / 16;
   return coreBonus;
+}
+
+export function getWeakenEffect(threads: number, cores: number): number {
+  const coreBonus = getCoreBonus(cores);
+  return ServerConstants.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
 }

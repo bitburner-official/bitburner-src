@@ -1,5 +1,5 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import { Infiltration as NetscriptInfiltation, InfiltrationLocation } from "@nsdefs";
+import { Infiltration as NetscriptInfiltation, InfiltrationLocation, ILocation } from "@nsdefs";
 import { FactionName, LocationName } from "@enums";
 import { Location } from "../Locations/Location";
 import { Locations } from "../Locations/Locations";
@@ -21,15 +21,15 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
 
   const calculateInfiltrationData = (ctx: NetscriptContext, locationName: LocationName): InfiltrationLocation => {
     const location = Locations[locationName];
-    if (location === undefined) throw helpers.makeRuntimeErrorMsg(ctx, `Location '${location}' does not exists.`);
+    if (location === undefined) throw helpers.errorMessage(ctx, `Location '${location}' does not exists.`);
     if (location.infiltrationData === undefined)
-      throw helpers.makeRuntimeErrorMsg(ctx, `Location '${location}' does not provide infiltrations.`);
+      throw helpers.errorMessage(ctx, `Location '${location}' does not provide infiltrations.`);
     const startingSecurityLevel = location.infiltrationData.startingSecurityLevel;
     const difficulty = calculateDifficulty(startingSecurityLevel);
     const reward = calculateReward(startingSecurityLevel);
     const maxLevel = location.infiltrationData.maxClearanceLevel;
     return {
-      location: JSON.parse(JSON.stringify(location)),
+      location: structuredClone(location) as ILocation,
       reward: {
         tradeRep: calculateTradeInformationRepReward(reward, maxLevel, startingSecurityLevel),
         sellCash: calculateSellInformationCashReward(reward, maxLevel, startingSecurityLevel),

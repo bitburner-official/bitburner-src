@@ -36,6 +36,7 @@ import {
   processSingleServerGrowth,
   safelyCreateUniqueServer,
   getCoreBonus,
+  getWeakenEffect,
 } from "./Server/ServerHelpers";
 import {
   getPurchasedServerUpgradeCost,
@@ -66,6 +67,7 @@ import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions"
 import { LogBoxEvents, LogBoxCloserEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { NetscriptGang } from "./NetscriptFunctions/Gang";
+import { NetscriptGo } from "./NetscriptFunctions/Go";
 import { NetscriptSleeve } from "./NetscriptFunctions/Sleeve";
 import { NetscriptExtra } from "./NetscriptFunctions/Extra";
 import { NetscriptHacknet } from "./NetscriptFunctions/Hacknet";
@@ -94,9 +96,9 @@ import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
-import { cloneDeep, escapeRegExp } from "lodash";
+import { escapeRegExp } from "lodash";
 import numeral from "numeral";
-import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort } from "./NetscriptPort";
+import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
 import { FilePath, resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
@@ -105,6 +107,8 @@ import { hasContractExtension } from "./Paths/ContractFilePath";
 import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
+import { ServerConstants } from "./Server/data/Constants";
+import { assertFunction } from "./Netscript/TypeAssertion";
 
 export const enums: NSEnums = {
   CityName,
@@ -126,6 +130,7 @@ export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums
 export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
   gang: NetscriptGang(),
+  go: NetscriptGo(),
   bladeburner: NetscriptBladeburner(),
   codingcontract: NetscriptCodingContract(),
   sleeve: NetscriptSleeve(),
@@ -169,7 +174,7 @@ export const ns: InternalAPI<NSFull> = {
       return -1;
     }
     if (isNaN(hackAmount)) {
-      throw helpers.makeRuntimeErrorMsg(
+      throw helpers.errorMessage(
         ctx,
         `Invalid hackAmount argument passed into hackAnalyzeThreads: ${hackAmount}. Must be numeric.`,
       );
@@ -218,7 +223,7 @@ export const ns: InternalAPI<NSFull> = {
       }
     }
 
-    return CONSTANTS.ServerFortifyAmount * threads;
+    return ServerConstants.ServerFortifyAmount * threads;
   },
   hackAnalyzeChance: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -265,7 +270,7 @@ export const ns: InternalAPI<NSFull> = {
     // No root access or skill level too low
     const canHack = netscriptCanGrow(server);
     if (!canHack.res) {
-      throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
+      throw helpers.errorMessage(ctx, canHack.msg || "");
     }
 
     const growTime = calculateGrowTime(server, Player) + additionalMsec / 1000.0;
@@ -314,11 +319,11 @@ export const ns: InternalAPI<NSFull> = {
         return 0;
       }
       if (mult < 1 || !isFinite(mult)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: multiplier must be finite and >= 1, is ${mult}.`);
+        throw helpers.errorMessage(ctx, `Invalid argument: multiplier must be finite and >= 1, is ${mult}.`);
       }
       // TODO 2.3: Add assertion function for positive integer, there are a lot of places everywhere that can use this
       if (!Number.isInteger(cores) || cores < 1) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Cores should be a positive integer. Cores provided: ${cores}`);
+        throw helpers.errorMessage(ctx, `Cores should be a positive integer. Cores provided: ${cores}`);
       }
 
       return numCycleForGrowth(server, mult, cores);
@@ -344,7 +349,7 @@ export const ns: InternalAPI<NSFull> = {
         threads = Math.min(threads, maxThreadsNeeded);
       }
 
-      return 2 * CONSTANTS.ServerFortifyAmount * threads;
+      return 2 * ServerConstants.ServerFortifyAmount * threads;
     },
   weaken: (ctx) => async (_hostname, opts?) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -359,7 +364,7 @@ export const ns: InternalAPI<NSFull> = {
     // No root access or skill level too low
     const canHack = netscriptCanWeaken(server);
     if (!canHack.res) {
-      throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
+      throw helpers.errorMessage(ctx, canHack.msg || "");
     }
 
     const weakenTime = calculateWeakenTime(server, Player) + additionalMsec / 1000.0;
@@ -377,9 +382,7 @@ export const ns: InternalAPI<NSFull> = {
         helpers.log(ctx, () => "Server is null, did it die?");
         return Promise.resolve(0);
       }
-      const cores = host.cpuCores;
-      const coreBonus = getCoreBonus(cores);
-      const weakenAmt = CONSTANTS.ServerWeakenAmount * threads * coreBonus;
+      const weakenAmt = getWeakenEffect(threads, host.cpuCores);
       server.weaken(weakenAmt);
       ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
       const expGain = calculateHackingExpGain(server, Player) * threads;
@@ -393,7 +396,7 @@ export const ns: InternalAPI<NSFull> = {
       ctx.workerScript.scriptRef.onlineExpGained += expGain;
       Player.gainHackingExp(expGain);
       // Account for hidden multiplier in Server.weaken()
-      return Promise.resolve(weakenAmt * currentNodeMults.ServerWeakenRate);
+      return Promise.resolve(weakenAmt);
     });
   },
   weakenAnalyze:
@@ -401,8 +404,7 @@ export const ns: InternalAPI<NSFull> = {
     (_threads, _cores = 1) => {
       const threads = helpers.number(ctx, "threads", _threads);
       const cores = helpers.number(ctx, "cores", _cores);
-      const coreBonus = getCoreBonus(cores);
-      return CONSTANTS.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
+      return getWeakenEffect(threads, cores);
     },
   share: (ctx) => () => {
     const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
@@ -423,7 +425,7 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (...args) => {
       if (args.length === 0) {
-        throw helpers.makeRuntimeErrorMsg(ctx, "Takes at least 1 argument.");
+        throw helpers.errorMessage(ctx, "Takes at least 1 argument.");
       }
       ctx.workerScript.print(helpers.argsToString(args));
     },
@@ -432,7 +434,7 @@ export const ns: InternalAPI<NSFull> = {
     (_format, ...args) => {
       const format = helpers.string(ctx, "format", _format);
       if (typeof format !== "string") {
-        throw helpers.makeRuntimeErrorMsg(ctx, "First argument must be string for the format.");
+        throw helpers.errorMessage(ctx, "First argument must be string for the format.");
       }
       ctx.workerScript.print(vsprintf(format, args));
     },
@@ -440,7 +442,7 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (...args) => {
       if (args.length === 0) {
-        throw helpers.makeRuntimeErrorMsg(ctx, "Takes at least 1 argument.");
+        throw helpers.errorMessage(ctx, "Takes at least 1 argument.");
       }
       const str = helpers.argsToString(args);
       if (str.startsWith("ERROR") || str.startsWith("FAIL")) {
@@ -496,7 +498,7 @@ export const ns: InternalAPI<NSFull> = {
       }
       helpers.log(ctx, () => `Disabled logging for all functions`);
     } else if (possibleLogs[fn] === undefined) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: ${fn}.`);
+      throw helpers.errorMessage(ctx, `Invalid argument: ${fn}.`);
     } else {
       ctx.workerScript.disableLogs[fn] = true;
       helpers.log(ctx, () => `Disabled logging for ${fn}`);
@@ -510,7 +512,7 @@ export const ns: InternalAPI<NSFull> = {
       }
       helpers.log(ctx, () => `Enabled logging for all functions`);
     } else if (possibleLogs[fn] === undefined) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: ${fn}.`);
+      throw helpers.errorMessage(ctx, `Invalid argument: ${fn}.`);
     }
     delete ctx.workerScript.disableLogs[fn];
     helpers.log(ctx, () => `Enabled logging for ${fn}`);
@@ -518,7 +520,7 @@ export const ns: InternalAPI<NSFull> = {
   isLogEnabled: (ctx) => (_fn) => {
     const fn = helpers.string(ctx, "fn", _fn);
     if (possibleLogs[fn] === undefined) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid argument: ${fn}.`);
+      throw helpers.errorMessage(ctx, `Invalid argument: ${fn}.`);
     }
     return !ctx.workerScript.disableLogs[fn];
   },
@@ -604,10 +606,10 @@ export const ns: InternalAPI<NSFull> = {
       return true;
     }
     if (!Player.hasProgram(CompletedProgramName.nuke)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the NUKE.exe virus!");
+      throw helpers.errorMessage(ctx, "You do not have the NUKE.exe virus!");
     }
     if (server.openPortCount < server.numOpenPortsRequired) {
-      throw helpers.makeRuntimeErrorMsg(ctx, "Not enough ports opened to use NUKE.exe virus.");
+      throw helpers.errorMessage(ctx, "Not enough ports opened to use NUKE.exe virus.");
     }
     server.hasAdminRights = true;
     helpers.log(ctx, () => `Executed NUKE.exe virus on '${server.hostname}' to gain root access.`);
@@ -621,7 +623,7 @@ export const ns: InternalAPI<NSFull> = {
       return false;
     }
     if (!Player.hasProgram(CompletedProgramName.bruteSsh)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the BruteSSH.exe program!");
+      throw helpers.errorMessage(ctx, "You do not have the BruteSSH.exe program!");
     }
     if (!server.sshPortOpen) {
       helpers.log(ctx, () => `Executed BruteSSH.exe on '${server.hostname}' to open SSH port (22).`);
@@ -640,7 +642,7 @@ export const ns: InternalAPI<NSFull> = {
       return false;
     }
     if (!Player.hasProgram(CompletedProgramName.ftpCrack)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the FTPCrack.exe program!");
+      throw helpers.errorMessage(ctx, "You do not have the FTPCrack.exe program!");
     }
     if (!server.ftpPortOpen) {
       helpers.log(ctx, () => `Executed FTPCrack.exe on '${server.hostname}' to open FTP port (21).`);
@@ -659,7 +661,7 @@ export const ns: InternalAPI<NSFull> = {
       return false;
     }
     if (!Player.hasProgram(CompletedProgramName.relaySmtp)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the relaySMTP.exe program!");
+      throw helpers.errorMessage(ctx, "You do not have the relaySMTP.exe program!");
     }
     if (!server.smtpPortOpen) {
       helpers.log(ctx, () => `Executed relaySMTP.exe on '${server.hostname}' to open SMTP port (25).`);
@@ -678,7 +680,7 @@ export const ns: InternalAPI<NSFull> = {
       return false;
     }
     if (!Player.hasProgram(CompletedProgramName.httpWorm)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the HTTPWorm.exe program!");
+      throw helpers.errorMessage(ctx, "You do not have the HTTPWorm.exe program!");
     }
     if (!server.httpPortOpen) {
       helpers.log(ctx, () => `Executed HTTPWorm.exe on '${server.hostname}' to open HTTP port (80).`);
@@ -697,7 +699,7 @@ export const ns: InternalAPI<NSFull> = {
       return false;
     }
     if (!Player.hasProgram(CompletedProgramName.sqlInject)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, "You do not have the SQLInject.exe program!");
+      throw helpers.errorMessage(ctx, "You do not have the SQLInject.exe program!");
     }
     if (!server.sqlPortOpen) {
       helpers.log(ctx, () => `Executed SQLInject.exe on '${server.hostname}' to open SQL port (1433).`);
@@ -737,7 +739,7 @@ export const ns: InternalAPI<NSFull> = {
       setTimeout(() => {
         const scriptServer = GetServer(ctx.workerScript.hostname);
         if (scriptServer == null) {
-          throw helpers.makeRuntimeErrorMsg(ctx, "Could not find server. This is a bug. Report to dev");
+          throw helpers.errorMessage(ctx, "Could not find server. This is a bug. Report to dev");
         }
 
         return runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
@@ -761,7 +763,7 @@ export const ns: InternalAPI<NSFull> = {
       } else {
         // Kill by filename/hostname
         if (scriptID === undefined) {
-          throw helpers.makeRuntimeErrorMsg(ctx, "Usage: kill(scriptname, server, [arg1], [arg2]...)");
+          throw helpers.errorMessage(ctx, "Usage: kill(scriptname, server, [arg1], [arg2]...)");
         }
 
         const byPid = helpers.getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
@@ -836,7 +838,7 @@ export const ns: InternalAPI<NSFull> = {
         continue;
       }
       if (!path.endsWith(".lit")) {
-        throw helpers.makeRuntimeErrorMsg(ctx, "Only works for scripts, .lit and .txt files.");
+        throw helpers.errorMessage(ctx, "Only works for scripts, .lit and .txt files.");
       }
       lits.push(path);
     }
@@ -953,10 +955,10 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_n = Player.bitNodeN, _lvl = Player.sourceFileLvl(Player.bitNodeN) + 1) => {
       if (Player.sourceFileLvl(5) <= 0 && Player.bitNodeN !== 5)
-        throw helpers.makeRuntimeErrorMsg(ctx, "Requires Source-File 5 to run.");
+        throw helpers.errorMessage(ctx, "Requires Source-File 5 to run.");
       const n = Math.round(helpers.number(ctx, "n", _n));
       const lvl = Math.round(helpers.number(ctx, "lvl", _lvl));
-      if (n < 1 || n > 13) throw new Error("n must be between 1 and 13");
+      if (n < 1 || n > 14) throw new Error("n must be between 1 and 14");
       if (lvl < 1) throw new Error("lvl must be >= 1");
 
       return Object.assign({}, getBitNodeMultipliers(n, lvl));
@@ -1114,7 +1116,8 @@ export const ns: InternalAPI<NSFull> = {
   },
   serverExists: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
-    return GetServer(hostname) !== null;
+    const server = GetServer(hostname);
+    return server !== null && (server.serversOnNetwork.length > 0 || server.hostname === "home");
   },
   fileExists: (ctx) => (_filename, _hostname) => {
     const filename = helpers.string(ctx, "filename", _filename);
@@ -1163,6 +1166,10 @@ export const ns: InternalAPI<NSFull> = {
     hostnameStr = hostnameStr.replace(/\s+/g, "");
     if (hostnameStr == "") {
       helpers.log(ctx, () => `Invalid argument: hostname='${hostnameStr}'`);
+      return "";
+    }
+    if (hostnameStr.startsWith("hacknet-node-") || hostnameStr.startsWith("hacknet-server-")) {
+      helpers.log(ctx, () => `Invalid argument: hostname='${hostnameStr}' is a reserved hostname.`);
       return "";
     }
 
@@ -1324,12 +1331,6 @@ export const ns: InternalAPI<NSFull> = {
   },
   writePort: (ctx) => (_portNumber, data) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);
-    if (typeof data !== "string" && typeof data !== "number") {
-      throw helpers.makeRuntimeErrorMsg(
-        ctx,
-        `Trying to write invalid data to a port: only strings and numbers are valid.`,
-      );
-    }
     return writePort(portNumber, data);
   },
   write: (ctx) => (_filename, _data, _mode) => {
@@ -1350,7 +1351,7 @@ export const ns: InternalAPI<NSFull> = {
       return;
     }
     if (!hasTextExtension(filepath)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `File path should be a text file or script. ${filepath} is invalid.`);
+      throw helpers.errorMessage(ctx, `File path should be a text file or script. ${filepath} is invalid.`);
     }
     if (mode === "w") {
       server.writeToTextFile(filepath, data);
@@ -1362,13 +1363,11 @@ export const ns: InternalAPI<NSFull> = {
   },
   tryWritePort: (ctx) => (_portNumber, data) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);
-    if (typeof data !== "string" && typeof data !== "number") {
-      throw helpers.makeRuntimeErrorMsg(
-        ctx,
-        `Trying to write invalid data to a port: only strings and numbers are valid.`,
-      );
-    }
     return tryWritePort(portNumber, data);
+  },
+  nextPortWrite: (ctx) => (_portNumber) => {
+    const portNumber = helpers.portNumber(ctx, _portNumber);
+    return nextPortWrite(portNumber);
   },
   readPort: (ctx) => (_portNumber) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);
@@ -1387,11 +1386,11 @@ export const ns: InternalAPI<NSFull> = {
   clear: (ctx) => (_file) => {
     const path = helpers.filePath(ctx, "file", _file);
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid file path or extension: ${_file}`);
+      throw helpers.errorMessage(ctx, `Invalid file path or extension: ${_file}`);
     }
     const server = ctx.workerScript.getServer();
     const file = server.getContentFile(path);
-    if (!file) throw helpers.makeRuntimeErrorMsg(ctx, `${path} does not exist on ${server.hostname}`);
+    if (!file) throw helpers.errorMessage(ctx, `${path} does not exist on ${server.hostname}`);
     // The content setter handles invalidating script modules where applicable.
     file.content = "";
   },
@@ -1605,23 +1604,23 @@ export const ns: InternalAPI<NSFull> = {
     _options ??= options;
     const txt = helpers.string(ctx, "txt", _txt);
     assert(_options, objectAssert, (type) =>
-      helpers.makeRuntimeErrorMsg(ctx, `Invalid type for options: ${type}. Should be object.`, "TYPE"),
+      helpers.errorMessage(ctx, `Invalid type for options: ${type}. Should be object.`, "TYPE"),
     );
     if (_options.type !== undefined) {
       assert(_options.type, stringAssert, (type) =>
-        helpers.makeRuntimeErrorMsg(ctx, `Invalid type for options.type: ${type}. Should be string.`, "TYPE"),
+        helpers.errorMessage(ctx, `Invalid type for options.type: ${type}. Should be string.`, "TYPE"),
       );
       options.type = _options.type;
       const validTypes = ["boolean", "text", "select"];
       if (!["boolean", "text", "select"].includes(options.type)) {
-        throw helpers.makeRuntimeErrorMsg(
+        throw helpers.errorMessage(
           ctx,
           `Invalid value for options.type: ${options.type}. Must be one of ${validTypes.join(", ")}.`,
         );
       }
       if (options.type === "select") {
         assert(_options.choices, arrayAssert, (type) =>
-          helpers.makeRuntimeErrorMsg(
+          helpers.errorMessage(
             ctx,
             `Invalid type for options.choices: ${type}. If options.type is "select", options.choices must be an array.`,
             "TYPE",
@@ -1672,19 +1671,20 @@ export const ns: InternalAPI<NSFull> = {
   getPlayer: () => () => {
     const data = {
       // Person
-      hp: cloneDeep(Player.hp),
-      skills: cloneDeep(Player.skills),
-      exp: cloneDeep(Player.exp),
-      mults: cloneDeep(Player.mults),
+      hp: structuredClone(Player.hp),
+      skills: structuredClone(Player.skills),
+      exp: structuredClone(Player.exp),
+      mults: structuredClone(Player.mults),
       city: Player.city,
       // Player-specific
       numPeopleKilled: Player.numPeopleKilled,
       money: Player.money,
       location: Player.location,
       totalPlaytime: Player.totalPlaytime,
-      jobs: cloneDeep(Player.jobs),
+      jobs: structuredClone(Player.jobs),
       factions: Player.factions.slice(),
       entropy: Player.entropy,
+      karma: Player.karma,
     };
     setDeprecatedProperties(data, {
       playtimeSinceLastAug: {
@@ -1709,13 +1709,10 @@ export const ns: InternalAPI<NSFull> = {
     sinceInstall: Object.assign({}, Player.moneySourceA),
     sinceStart: Object.assign({}, Player.moneySourceB),
   }),
-  atExit: (ctx) => (f) => {
-    if (typeof f !== "function") {
-      throw helpers.makeRuntimeErrorMsg(ctx, "argument should be function");
-    }
-    ctx.workerScript.atExit = () => {
-      f();
-    }; // Wrap the user function to prevent WorkerScript leaking as 'this'
+  atExit: (ctx) => (callback, _id) => {
+    const id = _id ? helpers.string(ctx, "id", _id) : "default";
+    assertFunction(ctx, "callback", callback);
+    ctx.workerScript.atExit.set(id, callback);
   },
   mv: (ctx) => (_host, _source, _destination) => {
     const hostname = helpers.string(ctx, "host", _host);
@@ -1727,7 +1724,7 @@ export const ns: InternalAPI<NSFull> = {
       (!hasTextExtension(sourcePath) && !hasScriptExtension(sourcePath)) ||
       (!hasTextExtension(destinationPath) && !hasScriptExtension(destinationPath))
     ) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `'mv' can only be used on scripts and text files (.txt)`);
+      throw helpers.errorMessage(ctx, `'mv' can only be used on scripts and text files (.txt)`);
     }
     if (sourcePath === destinationPath) {
       helpers.log(ctx, () => "WARNING: Did nothing, source and destination paths were the same.");
@@ -1735,7 +1732,7 @@ export const ns: InternalAPI<NSFull> = {
     }
     const sourceContentFile = server.getContentFile(sourcePath);
     if (!sourceContentFile) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Source text file ${sourcePath} does not exist on ${hostname}`);
+      throw helpers.errorMessage(ctx, `Source text file ${sourcePath} does not exist on ${hostname}`);
     }
     const success = sourceContentFile.deleteFromServer(server);
     if (success) {
@@ -1764,6 +1761,7 @@ export const ns: InternalAPI<NSFull> = {
     ctx.workerScript.print(wrapUserNode(value));
   },
   flags: Flags,
+  heart: { break: () => () => Player.karma },
   ...NetscriptExtra(),
 };
 

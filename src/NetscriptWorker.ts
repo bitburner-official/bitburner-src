@@ -32,7 +32,8 @@ import { simple as walksimple } from "acorn-walk";
 import { parseCommand } from "./Terminal/Parser";
 import { Terminal } from "./Terminal";
 import { ScriptArg } from "@nsdefs";
-import { handleUnknownError, CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/NetscriptHelpers";
+import { CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/NetscriptHelpers";
+import { handleUnknownError } from "./Netscript/ErrorMessages";
 import { resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
 import { root } from "./Paths/Directory";
 

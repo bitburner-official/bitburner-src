@@ -28,7 +28,7 @@ export class SleeveInfiltrateWork extends SleeveWorkClass {
 
   APICopy() {
     return {
-      type: SleeveWorkType.INFILTRATE as "INFILTRATE",
+      type: SleeveWorkType.INFILTRATE as const,
       cyclesWorked: this.cyclesWorked,
       cyclesNeeded: this.cyclesNeeded(),
     };

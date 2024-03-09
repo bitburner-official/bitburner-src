@@ -136,8 +136,9 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     function onClick() {
       const code = server.scripts.get(fullPath)?.content ?? "";
       const files = new Map<ContentFilePath, string>();
+      const options = { hostname: server.hostname };
       files.set(fullPath, code);
-      Router.toPage(Page.ScriptEditor, { files });
+      Router.toPage(Page.ScriptEditor, { files, options });
     }
     return (
       <span>

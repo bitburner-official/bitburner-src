@@ -101,7 +101,7 @@ export function formatPercent(n: number, fractionalDigits = 2, multStart = 1e6) 
   if (nAbs * 100 === Infinity) return n < 0 ? "-∞%" : "∞%";
 
   // Mult form. There are probably some areas in the game this wouldn't make sense, but they hopefully won't ever have huge %.
-  if (nAbs >= multStart) return "x" + formatNumber(n, fractionalDigits, 0);
+  if (nAbs >= multStart) return "x" + formatNumber(n, fractionalDigits);
 
   return getFormatter(fractionalDigits, percentFormats, { style: "percent" }).format(n);
 }
@@ -113,8 +113,11 @@ export function formatNumber(n: number, fractionalDigits = 3, suffixStart = 1000
 
   // Special handling for Infinities
   if (nAbs === Infinity) return n < 0 ? "-∞" : "∞";
+  if (suffixStart < 1000) {
+    throw new Error("suffixStart must be greater than or equal to 1000");
+  }
 
-  // Early return for non-suffix
+  // Early return for non-suffix or if number and suffix are 0
   if (nAbs < suffixStart) {
     if (isInteger) return basicFormatter.format(n);
     return getFormatter(fractionalDigits).format(n);

@@ -49,7 +49,7 @@ If the player does not currently have enough money to purchase a server, the `if
 Since the script doesn't have `sleep()` and value `i` will not change without the `if` being true, this will crash the game.
 Adding a `sleep()` that is always reached would prevent the crash.
 
-## Blackscreen
+## Black screen
 
 If the game window becomes a black screen without the game itself crashing, this is caused by the game running too many concurrent scripts (the game runs on a browser and each tab can only use so much ram until it crashes).
 Depending on which scripts are running and your hardware, this number can vary between 50000 to 100000 instances (in version 2.0.2. In prior versions this number was about 1/5th of that).

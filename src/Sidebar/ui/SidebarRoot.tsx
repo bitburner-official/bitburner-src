@@ -39,6 +39,7 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"; // Achievements
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PublicIcon from "@mui/icons-material/Public";
 import LiveHelpIcon from "@mui/icons-material/LiveHelp";
+import BorderInnerSharp from "@mui/icons-material/BorderInnerSharp";
 
 import { Router } from "../../ui/GameRoot";
 import { Page, isSimplePage } from "../../ui/Router";
@@ -55,6 +56,7 @@ import { InvitationsSeen } from "../../Faction/ui/FactionsRoot";
 import { hash } from "../../hash/hash";
 import { Locations } from "../../Locations/Locations";
 import { useRerender } from "../../ui/React/hooks";
+import { playerHasDiscoveredGo } from "../../Go/effects/effect";
 
 const RotatedDoubleArrowIcon = React.forwardRef(function RotatedDoubleArrowIcon(
   props: { color: "primary" | "secondary" | "error" },
@@ -158,12 +160,13 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   const canStockMarket = Player.hasWseAccount;
   const canBladeburner = !!Player.bladeburner;
   const canStaneksGift = Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1);
+  const canIPvGO = playerHasDiscoveredGo();
 
   const clickPage = useCallback(
     (page: Page) => {
       if (page === Page.Job) {
         Router.toPage(page, { location: Locations[Object.keys(Player.jobs)[0]] });
-      } else if (page == Page.ScriptEditor) {
+      } else if (page == Page.ScriptEditor || page == Page.Documentation) {
         Router.toPage(page, {});
       } else if (isSimplePage(page)) {
         Router.toPage(page);
@@ -350,6 +353,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canBladeburner && { key_: Page.Bladeburner, icon: FormatBoldIcon },
             canCorporation && { key_: Page.Corporation, icon: BusinessIcon },
             canGang && { key_: Page.Gang, icon: SportsMmaIcon },
+            canIPvGO && { key_: Page.Go, icon: BorderInnerSharp },
           ]}
         />
         <Divider />

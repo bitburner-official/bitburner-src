@@ -1,9 +1,9 @@
 {
   "name": "bitburner",
-  "version": "2.5.2",
+  "version": "2.6.1",
   "description": "A cyberpunk-themed programming incremental game",
   "main": "main.js",
-  "author": "Daniel Xie, Olivier Gagnon, et al.",
+  "author": "Daniel Xie, hydroflame, et al.",
   "mac": {
     "icon": "./public/icons/mac/icon.icns",
     "category": "public.app-category.games"

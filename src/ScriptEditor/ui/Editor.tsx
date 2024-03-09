@@ -42,7 +42,7 @@ export function Editor({ onMount, onChange }: EditorProps) {
     // Unmounting
     return () => {
       subscription.current?.dispose();
-      editorRef.current?.getModel()?.dispose();
+      monaco.editor.getModels().forEach((model) => model.dispose());
       editorRef.current?.dispose();
     };
     // this eslint ignore instruction can potentially cause unobvious bugs

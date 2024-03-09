@@ -20,8 +20,7 @@ import { CodingContractRewardType, ICodingContractReward } from "../../CodingCon
 import { Company } from "../../Company/Company";
 import { Companies } from "../../Company/Companies";
 import { getNextCompanyPositionHelper } from "../../Company/GetNextCompanyPosition";
-import { getJobRequirementText } from "../../Company/GetJobRequirementText";
-import { CompanyPositions } from "../../Company/CompanyPositions";
+import { getJobRequirements, getJobRequirementText } from "../../Company/GetJobRequirements";
 import { CompanyPosition } from "../../Company/CompanyPosition";
 import { CONSTANTS } from "../../Constants";
 import { Exploit } from "../../Exploits/Exploit";
@@ -51,7 +50,7 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { achievements } from "../../Achievements/Achievements";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
-import { getEnumHelper, isMember } from "../../utils/EnumHelper";
+import { isMember } from "../../utils/EnumHelper";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -273,26 +272,34 @@ export function hospitalize(this: PlayerObject): number {
   return cost;
 }
 
-/********* Company job application **********/
-//Determines the job that the Player should get (if any) at the current company
-//The 'sing' argument designates whether or not this is being called from
-//the applyToCompany() Netscript Singularity function
-export function applyForJob(this: PlayerObject, entryPosType: CompanyPosition, sing = false): boolean {
-  const companyName = getEnumHelper("CompanyName").getMember(this.location);
-  if (!companyName) return false;
-  const company = Companies[companyName]; //Company being applied to
-  let pos = entryPosType;
+/**
+ * Company job application. Determines the job that the Player should get (if any) at the given company.
+ * @param this The player instance
+ * @param company The company being applied to
+ * @param position A specific position
+ * @param sing Whether this is being called from the applyToCompany() Netscript Singularity function
+ * @returns The name of the Job received (if any). May be higher or lower than the job applied to.
+ */
+export function applyForJob(
+  this: PlayerObject,
+  company: Company,
+  position: CompanyPosition,
+  sing = false,
+): JobName | null {
+  if (!company) return null;
 
+  // Start searching the job track from the provided point (which may not be the entry position)
+  let pos = position;
   if (!this.isQualified(company, pos)) {
     if (!sing) {
-      dialogBoxCreate("Unfortunately, you do not qualify for this position\n" + getJobRequirementText(company, pos));
+      dialogBoxCreate(`Unfortunately, you do not qualify for this position.\n${getJobRequirementText(company, pos)}`);
     }
-    return false;
+    return null;
   }
 
   if (!company.hasPosition(pos)) {
-    console.error(`Company ${company.name} does not have position ${pos}. Player.applyToCompany() failed`);
-    return false;
+    console.error(`Company ${company.name} does not have position ${pos}. Player.applyToCompany() failed.`);
+    return null;
   }
 
   let nextPos = getNextCompanyPositionHelper(pos);
@@ -305,59 +312,53 @@ export function applyForJob(this: PlayerObject, entryPosType: CompanyPosition, s
   if (this.jobs[company.name] === pos.name) {
     if (!sing) {
       const nextPos = getNextCompanyPositionHelper(pos);
-      if (nextPos == null || !company.hasPosition(nextPos)) {
-        dialogBoxCreate("You are already at the highest position for your field! No promotion available");
+      if (nextPos == null) {
+        dialogBoxCreate(`You are already ${pos.name}! No promotion available`);
+      } else if (!company.hasPosition(nextPos)) {
+        dialogBoxCreate(
+          `You already have the highest ${pos.field} position available at ${company.name}! No promotion available`,
+        );
       } else {
-        const reqText = getJobRequirementText(company, nextPos);
-        dialogBoxCreate("Unfortunately, you do not qualify for a promotion\n" + reqText);
+        dialogBoxCreate(
+          `Unfortunately, you do not qualify for a promotion.\n${getJobRequirementText(company, nextPos)}`,
+        );
       }
     }
-    return false;
+    return null;
   }
 
   this.jobs[company.name] = pos.name;
 
   if (!sing) {
-    dialogBoxCreate(`Congratulations! You were offered a new job at ${company.name} for position ${pos.name}!`);
+    dialogBoxCreate(`${pos.hiredText} at ${company.name}!`);
   }
-  return true;
+  return pos.name;
 }
 
-//Returns your next position at a company given the field (software, business, etc.)
+/**
+ * Get a job position that the player can apply for.
+ * @param this The player instance
+ * @param company The Company being applied to
+ * @param entryPosType Job field (Software, Business, etc)
+ * @returns The highest job the player can apply for at this company, if any
+ */
 export function getNextCompanyPosition(
   this: PlayerObject,
   company: Company,
   entryPosType: CompanyPosition,
 ): CompanyPosition | null {
-  const currCompany = Companies[company.name];
-
-  //Not employed at this company, so return the entry position
-  if (currCompany == null || currCompany.name != company.name) {
-    return entryPosType;
+  let pos: CompanyPosition | null = entryPosType;
+  let nextPos = getNextCompanyPositionHelper(pos);
+  // Find the highest-level job in this category that the player is currently able to apply for.
+  while (nextPos && company.hasPosition(nextPos) && this.isQualified(company, nextPos)) {
+    pos = nextPos;
+    nextPos = getNextCompanyPositionHelper(pos);
   }
-
-  //If the entry pos type and the player's current position have the same type,
-  //return the player's "nextCompanyPosition". Otherwise return the entryposType
-  //Employed at this company, so just return the next position if it exists.
-  const currentPositionName = this.jobs[company.name];
-  if (!currentPositionName) return entryPosType;
-  const currentPosition = CompanyPositions[currentPositionName];
-  if (
-    (currentPosition.isSoftwareJob() && entryPosType.isSoftwareJob()) ||
-    (currentPosition.isITJob() && entryPosType.isITJob()) ||
-    (currentPosition.isBusinessJob() && entryPosType.isBusinessJob()) ||
-    (currentPosition.isSecurityEngineerJob() && entryPosType.isSecurityEngineerJob()) ||
-    (currentPosition.isNetworkEngineerJob() && entryPosType.isNetworkEngineerJob()) ||
-    (currentPosition.isSecurityJob() && entryPosType.isSecurityJob()) ||
-    (currentPosition.isAgentJob() && entryPosType.isAgentJob()) ||
-    (currentPosition.isSoftwareConsultantJob() && entryPosType.isSoftwareConsultantJob()) ||
-    (currentPosition.isBusinessConsultantJob() && entryPosType.isBusinessConsultantJob()) ||
-    (currentPosition.isPartTimeJob() && entryPosType.isPartTimeJob())
-  ) {
-    return getNextCompanyPositionHelper(currentPosition);
+  // If the player already has this position, return the one after that (if any).
+  if (this.jobs[company.name] == pos.name) {
+    pos = nextPos;
   }
-
-  return entryPosType;
+  return pos;
 }
 
 export function quitJob(this: PlayerObject, company: CompanyName): void {
@@ -382,192 +383,10 @@ export function hasJob(this: PlayerObject): boolean {
   return Boolean(Object.keys(this.jobs).length);
 }
 
-export function applyForSoftwareJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[JobName.software0], sing);
-}
-
-export function applyForSoftwareConsultantJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[JobName.softwareConsult0], sing);
-}
-
-export function applyForItJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[JobName.IT0], sing);
-}
-
-export function applyForSecurityEngineerJob(this: PlayerObject, sing = false): boolean {
-  const companyName = getEnumHelper("CompanyName").getMember(this.location);
-  if (!companyName) return false;
-  const company = Companies[companyName];
-  if (this.isQualified(company, CompanyPositions[JobName.securityEng])) {
-    return this.applyForJob(CompanyPositions[JobName.securityEng], sing);
-  } else {
-    if (!sing) {
-      dialogBoxCreate("Unfortunately, you do not qualify for this position");
-    }
-    return false;
-  }
-}
-
-export function applyForNetworkEngineerJob(this: PlayerObject, sing = false): boolean {
-  const companyName = getEnumHelper("CompanyName").getMember(this.location);
-  if (!companyName) return false;
-  const company = Companies[companyName];
-  if (this.isQualified(company, CompanyPositions[JobName.networkEng0])) {
-    const pos = CompanyPositions[JobName.networkEng0];
-    return this.applyForJob(pos, sing);
-  } else {
-    if (!sing) {
-      dialogBoxCreate("Unfortunately, you do not qualify for this position");
-    }
-    return false;
-  }
-}
-
-export function applyForBusinessJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[JobName.business0], sing);
-}
-
-export function applyForBusinessConsultantJob(this: PlayerObject, sing = false): boolean {
-  return this.applyForJob(CompanyPositions[JobName.businessConsult0], sing);
-}
-
-export function applyForSecurityJob(this: PlayerObject, sing = false): boolean {
-  // TODO Police Jobs
-  // Indexing starts at 2 because 0 is for police officer
-  return this.applyForJob(CompanyPositions[JobName.security0], sing);
-}
-
-export function applyForAgentJob(this: PlayerObject, sing = false): boolean {
-  const companyName = getEnumHelper("CompanyName").getMember(this.location);
-  if (!companyName) return false;
-  const company = Companies[companyName];
-  if (this.isQualified(company, CompanyPositions[JobName.agent0])) {
-    const pos = CompanyPositions[JobName.agent0];
-    return this.applyForJob(pos, sing);
-  } else {
-    if (!sing) {
-      dialogBoxCreate("Unfortunately, you do not qualify for this position");
-    }
-    return false;
-  }
-}
-
-export function applyForEmployeeJob(this: PlayerObject, sing = false): boolean {
-  const companyName = getEnumHelper("CompanyName").getMember(this.location);
-  if (!companyName) return false;
-  const company = Companies[companyName];
-  const position = JobName.employee;
-  // Check if this company has the position
-  if (!company.hasPosition(position)) {
-    return false;
-  }
-  if (this.isQualified(company, CompanyPositions[position])) {
-    this.jobs[company.name] = position;
-
-    if (!sing) {
-      dialogBoxCreate("Congratulations, you are now employed at " + this.location);
-    }
-
-    return true;
-  } else {
-    if (!sing) {
-      dialogBoxCreate("Unfortunately, you do not qualify for this position");
-    }
-
-    return false;
-  }
-}
-
-export function applyForPartTimeEmployeeJob(this: PlayerObject, sing = false): boolean {
-  const companyName = getEnumHelper("CompanyName").getMember(this.location);
-  if (!companyName) return false;
-  const company = Companies[companyName];
-  const position = JobName.employeePT;
-  // Check if this company has the position
-  if (!company.hasPosition(position)) {
-    return false;
-  }
-  if (this.isQualified(company, CompanyPositions[position])) {
-    this.jobs[company.name] = position;
-    if (!sing) {
-      dialogBoxCreate("Congratulations, you are now employed part-time at " + this.location);
-    }
-
-    return true;
-  } else {
-    if (!sing) {
-      dialogBoxCreate("Unfortunately, you do not qualify for this position");
-    }
-
-    return false;
-  }
-}
-
-export function applyForWaiterJob(this: PlayerObject, sing = false): boolean {
-  const companyName = getEnumHelper("CompanyName").getMember(this.location);
-  if (!companyName) return false;
-  const company = Companies[companyName];
-  const position = JobName.waiter;
-  // Check if this company has the position
-  if (!company.hasPosition(position)) {
-    return false;
-  }
-  if (this.isQualified(company, CompanyPositions[position])) {
-    this.jobs[company.name] = position;
-    if (!sing) {
-      dialogBoxCreate("Congratulations, you are now employed as a waiter at " + this.location);
-    }
-    return true;
-  } else {
-    if (!sing) {
-      dialogBoxCreate("Unfortunately, you do not qualify for this position");
-    }
-    return false;
-  }
-}
-
-export function applyForPartTimeWaiterJob(this: PlayerObject, sing = false): boolean {
-  const companyName = getEnumHelper("CompanyName").getMember(this.location);
-  if (!companyName) return false;
-  const company = Companies[companyName];
-  const position = JobName.waiterPT;
-  // Check if this company has the position
-  if (!company.hasPosition(position)) {
-    return false;
-  }
-  if (this.isQualified(company, CompanyPositions[position])) {
-    this.jobs[company.name] = position;
-    if (!sing) {
-      dialogBoxCreate("Congratulations, you are now employed as a part-time waiter at " + this.location);
-    }
-    return true;
-  } else {
-    if (!sing) {
-      dialogBoxCreate("Unfortunately, you do not qualify for this position");
-    }
-    return false;
-  }
-}
-
 //Checks if the Player is qualified for a certain position
 export function isQualified(this: PlayerObject, company: Company, position: CompanyPosition): boolean {
-  const offset = company.jobStatReqOffset;
-  const reqHacking = position.requiredHacking > 0 ? position.requiredHacking + offset : 0;
-  const reqStrength = position.requiredStrength > 0 ? position.requiredStrength + offset : 0;
-  const reqDefense = position.requiredDefense > 0 ? position.requiredDefense + offset : 0;
-  const reqDexterity = position.requiredDexterity > 0 ? position.requiredDexterity + offset : 0;
-  const reqAgility = position.requiredDexterity > 0 ? position.requiredDexterity + offset : 0;
-  const reqCharisma = position.requiredCharisma > 0 ? position.requiredCharisma + offset : 0;
-
-  return (
-    this.skills.hacking >= reqHacking &&
-    this.skills.strength >= reqStrength &&
-    this.skills.defense >= reqDefense &&
-    this.skills.dexterity >= reqDexterity &&
-    this.skills.agility >= reqAgility &&
-    this.skills.charisma >= reqCharisma &&
-    company.playerReputation >= position.requiredReputation
-  );
+  const reqs = getJobRequirements(company, position);
+  return reqs.every((req) => req.isSatisfied(this));
 }
 
 /********** Reapplying Augmentations and Source File ***********/
@@ -620,10 +439,10 @@ export function checkForFactionInvitations(this: PlayerObject): Faction[] {
     if (faction.alreadyInvited) continue;
     // Handle invites
     const { inviteReqs, rumorReqs } = faction.getInfo();
-    if (inviteReqs.every((req) => req.isSatisfied(this))) invitedFactions.push(faction);
+    if (inviteReqs.isSatisfied(this)) invitedFactions.push(faction);
     // Handle rumors
     if (this.factionRumors.has(faction.name)) continue;
-    if (rumorReqs.every((req) => req.isSatisfied(this))) this.receiveRumor(faction.name);
+    if (rumorReqs.isSatisfied(this)) this.receiveRumor(faction.name);
   }
   return invitedFactions;
 }

@@ -24,6 +24,7 @@ import { InvitationsSeen } from "./Faction/ui/FactionsRoot";
 import { CONSTANTS } from "./Constants";
 import { LogBoxClearEvents } from "./ui/React/LogBoxManager";
 import { initCircadianModulator } from "./Augmentation/Augmentations";
+import { Go } from "./Go/Go";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string) {
@@ -46,6 +47,7 @@ export function prestigeAugmentation(): void {
   }
 
   Player.prestigeAugmentation();
+  Go.prestigeAugmentation();
 
   // Delete all Worker Scripts objects
   prestigeWorkerScripts();
@@ -110,14 +112,14 @@ export function prestigeAugmentation(): void {
   if (gang) {
     const faction = Factions[gang.facName];
     if (faction) joinFaction(faction);
-    const penalty = 0.95;
     for (const m of gang.members) {
-      m.hack_asc_points *= penalty;
-      m.str_asc_points *= penalty;
-      m.def_asc_points *= penalty;
-      m.dex_asc_points *= penalty;
-      m.agi_asc_points *= penalty;
-      m.cha_asc_points *= penalty;
+      const results = m.getPostInstallPoints();
+      m.hack_asc_points = results.hack;
+      m.str_asc_points = results.str;
+      m.def_asc_points = results.def;
+      m.dex_asc_points = results.dex;
+      m.agi_asc_points = results.agi;
+      m.cha_asc_points = results.cha;
     }
   }
 
@@ -178,6 +180,8 @@ export function prestigeSourceFile(isFlume: boolean): void {
   initBitNodeMultipliers();
 
   Player.prestigeSourceFile();
+  Go.prestigeSourceFile();
+
   prestigeWorkerScripts(); // Delete all Worker Scripts objects
 
   const homeComp = Player.getHomeComputer();
@@ -267,8 +271,8 @@ export function prestigeSourceFile(isFlume: boolean): void {
     );
   }
 
-  // BitNode 12: Digital Carbon
-  if (Player.bitNodeN === 12 && Player.sourceFileLvl(10) > 100) {
+  // BitNode 12: The Recursion
+  if (Player.bitNodeN === 12 && Player.sourceFileLvl(12) > 100) {
     delayedDialog("Saynt_Garmo is watching you");
   }
 

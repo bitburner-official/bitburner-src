@@ -19,6 +19,7 @@ export enum SimplePage {
   DevMenu = "Dev",
   Factions = "Factions",
   Gang = "Gang",
+  Go = "IPvGO Subnet",
   Hacknet = "Hacknet",
   Milestones = "Milestones",
   Options = "Options",
@@ -28,7 +29,6 @@ export enum SimplePage {
   StockMarket = "Stock Market",
   Terminal = "Terminal",
   Travel = "Travel",
-  Documentation = "Documentation",
   Work = "Work",
   BladeburnerCinematic = "Bladeburner Cinematic",
   Loading = "Loading",
@@ -47,6 +47,7 @@ export enum ComplexPage {
   ScriptEditor = "Script Editor",
   Location = "Location",
   ImportSave = "Import Save",
+  Documentation = "Documentation",
 }
 
 // Using the same name as both type and object to mimic enum-like behavior.
@@ -70,6 +71,8 @@ export type PageContext<T extends Page> = T extends ComplexPage.BitVerse
   ? { location: Location }
   : T extends ComplexPage.ImportSave
   ? { base64Save: string; automatic?: boolean }
+  : T extends ComplexPage.Documentation
+  ? { docPage?: string }
   : never;
 
 export type PageWithContext =
@@ -81,10 +84,12 @@ export type PageWithContext =
   | ({ page: ComplexPage.ScriptEditor } & PageContext<ComplexPage.ScriptEditor>)
   | ({ page: ComplexPage.Location } & PageContext<ComplexPage.Location>)
   | ({ page: ComplexPage.ImportSave } & PageContext<ComplexPage.ImportSave>)
+  | ({ page: ComplexPage.Documentation } & PageContext<ComplexPage.Documentation>)
   | { page: SimplePage };
 
 export interface ScriptEditorRouteOptions {
-  vim: boolean;
+  vim?: boolean;
+  hostname?: string;
 }
 
 /** The router keeps track of player navigation/routing within the game. */

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
+import { MoneyRate } from "../../../ui/React/MoneyRate";
+import { StatsTable } from "../../../ui/React/StatsTable";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
@@ -34,7 +36,7 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
     props.onClose();
     dialogBoxCreate(
       <Typography>
-        Sold <b>{divisionToSell.name}</b> for <Money money={soldPrice} />, you now have space for
+        Sold <b>{divisionToSell.name}</b> for <Money money={soldPrice} />, you now have space for{" "}
         {corp.maxDivisions - corp.divisions.size} more divisions.
       </Typography>,
     );
@@ -56,12 +58,20 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
           ))}
         </Select>
         <Typography>Division {divisionToSell.name} has:</Typography>
-        <Typography>
-          Profit: <Money money={(divisionToSell.lastCycleRevenue - divisionToSell.lastCycleExpenses) / 10} /> / sec{" "}
-        </Typography>
-        <Typography>Cities:{getRecordKeys(divisionToSell.offices).length}</Typography>
-        <Typography>Warehouses:{getRecordKeys(divisionToSell.warehouses).length}</Typography>
-        {divisionToSell.makesProducts ?? <Typography>Products: {divisionToSell.products.size}</Typography>}
+        <StatsTable
+          rows={[
+            [
+              "Profit:",
+              <MoneyRate
+                key="profit"
+                money={(divisionToSell.lastCycleRevenue - divisionToSell.lastCycleExpenses) / 10}
+              />,
+            ],
+            ["Cities:", getRecordKeys(divisionToSell.offices).length],
+            ["Warehouses:", getRecordKeys(divisionToSell.warehouses).length],
+            divisionToSell.makesProducts ? ["Products:", divisionToSell.products.size] : [],
+          ]}
+        />
         <br />
         <Typography>
           Sell price: <Money money={price} />

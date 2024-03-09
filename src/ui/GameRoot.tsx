@@ -13,6 +13,7 @@ import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutori
 import { ITutorialEvents } from "./InteractiveTutorial/ITutorialEvents";
 
 import { prestigeAugmentation } from "../Prestige";
+import { prestigeWorkerScripts } from "../NetscriptWorker";
 import { dialogBoxCreate } from "./React/DialogBox";
 import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
@@ -50,7 +51,6 @@ import { StaneksGiftRoot } from "../CotMG/ui/StaneksGiftRoot";
 import { staneksGift } from "../CotMG/Helper";
 import { CharacterOverview } from "./React/CharacterOverview";
 import { BladeburnerCinematic } from "../Bladeburner/ui/BladeburnerCinematic";
-import { workerScripts } from "../Netscript/WorkerScripts";
 import { Unclickable } from "../Exploits/Unclickable";
 import { Snackbar, SnackbarProvider } from "./React/Snackbar";
 import { LogBoxManager } from "./React/LogBoxManager";
@@ -71,6 +71,7 @@ import { V2Modal } from "../utils/V2Modal";
 import { MathJaxContext } from "better-react-mathjax";
 import { useRerender } from "./React/hooks";
 import { HistoryProvider } from "./React/Documentation";
+import { GoRoot } from "../Go/ui/GoRoot";
 
 const htmlLocation = location;
 
@@ -167,6 +168,7 @@ export function GameRoot(): React.ReactElement {
           Player.gotoLocation(LocationName.TravelAgency);
           break;
         case Page.BitVerse:
+          prestigeWorkerScripts();
           calculateAchievements();
           break;
       }
@@ -244,14 +246,14 @@ export function GameRoot(): React.ReactElement {
       mainPage = (
         <ScriptEditorRoot
           files={pageWithContext.files ?? new Map()}
-          hostname={Player.getCurrentServer().hostname}
+          hostname={pageWithContext.options?.hostname ?? Player.getCurrentServer().hostname}
           vim={!!pageWithContext.options?.vim}
         />
       );
       break;
     }
     case Page.ActiveScripts: {
-      mainPage = <ActiveScriptsRoot workerScripts={workerScripts} />;
+      mainPage = <ActiveScriptsRoot />;
       break;
     }
     case Page.Hacknet: {
@@ -279,7 +281,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.Documentation: {
-      mainPage = <DocumentationRoot />;
+      mainPage = <DocumentationRoot docPage={pageWithContext.docPage} />;
       break;
     }
     case Page.DevMenu: {
@@ -352,6 +354,10 @@ export function GameRoot(): React.ReactElement {
           }}
         />
       );
+      break;
+    }
+    case Page.Go: {
+      mainPage = <GoRoot />;
       break;
     }
     case Page.Achievements: {

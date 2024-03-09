@@ -26,6 +26,8 @@
 
 ## Advanced Mechanics
 
+- [Hacking Algorithms](programming/hackingalgorithms.md)
+- [IPvGO](programming/go_algorithms.md)
 - [BitNodes](advanced/bitnodes.md)
 - [BladeBurners](advanced/bladeburners.md)
 - [Corporations](advanced/corporations.md)
@@ -49,5 +51,6 @@
 
 ## Migration
 
-- [v1.0.0 script migration guide](migrations/v1.md)
-- [v2.0.0 script migration guide](migrations/v2.md)
+- [Bitburner v1.0.0 script migration guide](migrations/v1.md)
+- [Bitburner v2.0.0 script migration guide](migrations/v2.md)
+- [Netscript 2 migration guide (.script to .js)](migrations/ns2.md)

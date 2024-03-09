@@ -181,7 +181,7 @@ const singularity = {
   getCompanyRep: SF4Cost(RamCostConstants.SingularityFn2 / 3),
   getCompanyFavor: SF4Cost(RamCostConstants.SingularityFn2 / 3),
   getCompanyFavorGain: SF4Cost(RamCostConstants.SingularityFn2 / 4),
-  // Temporarily removed for API improvements getFactionInviteRequirements: SF4Cost(RamCostConstants.SingularityFn2),
+  getFactionInviteRequirements: SF4Cost(RamCostConstants.SingularityFn2),
   checkFactionInvitations: SF4Cost(RamCostConstants.SingularityFn2),
   joinFaction: SF4Cost(RamCostConstants.SingularityFn2),
   workForFaction: SF4Cost(RamCostConstants.SingularityFn2),
@@ -237,10 +237,33 @@ const gang = {
   purchaseEquipment: RamCostConstants.GangApiBase,
   ascendMember: RamCostConstants.GangApiBase,
   getAscensionResult: RamCostConstants.GangApiBase / 2,
+  getInstallResult: RamCostConstants.GangApiBase / 2,
   setTerritoryWarfare: RamCostConstants.GangApiBase / 2,
   getChanceToWinClash: RamCostConstants.GangApiBase,
   getBonusTime: 0,
   nextUpdate: RamCostConstants.CycleTiming,
+} as const;
+
+// Go API
+const go = {
+  makeMove: 4,
+  passTurn: 0,
+  getBoardState: 4,
+  getOpponent: 0,
+  resetBoardState: 0,
+  analysis: {
+    getValidMoves: 8,
+    getChains: 16,
+    getLiberties: 16,
+    getControlledEmptyNodes: 16,
+  },
+  cheat: {
+    getCheatSuccessChance: 1,
+    removeRouter: 8,
+    playTwoMoves: 8,
+    repairOfflineNode: 8,
+    destroyNode: 8,
+  },
 } as const;
 
 // Bladeburner API
@@ -434,6 +457,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   stock,
   singularity,
   gang,
+  go,
   bladeburner,
   infiltration,
   codingcontract,
@@ -521,6 +545,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   peek: 0,
   clear: 0,
   writePort: 0,
+  nextPortWrite: 0,
   readPort: 0,
   getPortHandle: 0,
   rm: RamCostConstants.ReadWrite,

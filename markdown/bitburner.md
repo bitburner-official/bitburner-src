@@ -28,22 +28,34 @@
 |  [ActiveFragment](./bitburner.activefragment.md) |  |
 |  [AugmentPair](./bitburner.augmentpair.md) | Return value of [getSleevePurchasableAugs](./bitburner.sleeve.getsleevepurchasableaugs.md) |
 |  [AutocompleteData](./bitburner.autocompletedata.md) | Used for autocompletion |
+|  [BackdoorRequirement](./bitburner.backdoorrequirement.md) | Player must have installed a backdoor on this server. |
 |  [BasicHGWOptions](./bitburner.basichgwoptions.md) | Options to affect the behavior of [hack](./bitburner.ns.hack.md)<!-- -->, [grow](./bitburner.ns.grow.md)<!-- -->, and [weaken](./bitburner.ns.weaken.md)<!-- -->. |
 |  [BitNodeMultipliers](./bitburner.bitnodemultipliers.md) | All multipliers affecting the difficulty of the current challenge. |
+|  [BitNodeRequirement](./bitburner.bitnoderequirement.md) | Player must be located in this BitNode. |
 |  [Bladeburner](./bitburner.bladeburner.md) | Bladeburner API |
 |  [BladeburnerCurAction](./bitburner.bladeburnercuraction.md) | Bladeburner current action. |
+|  [BladeburnerRankRequirement](./bitburner.bladeburnerrankrequirement.md) | Player must have at least this rank in the Bladeburner Division. |
+|  [CityRequirement](./bitburner.cityrequirement.md) | Player must be located in this city. |
 |  [CodingContract](./bitburner.codingcontract.md) | Coding Contract API |
 |  [CompanyPositionInfo](./bitburner.companypositioninfo.md) | Company position requirements and salary. |
+|  [CompanyReputationRequirement](./bitburner.companyreputationrequirement.md) | Player must have at least this much reputation with this company. |
+|  [CompanyWorkTask](./bitburner.companyworktask.md) | Company Work |
 |  [CorpConstants](./bitburner.corpconstants.md) | Corporation related constants |
 |  [CorpIndustryData](./bitburner.corpindustrydata.md) | Data for an individual industry |
 |  [CorpMaterialConstantData](./bitburner.corpmaterialconstantdata.md) | Corporation material information |
 |  [Corporation](./bitburner.corporation.md) | Corporation API |
 |  [CorporationInfo](./bitburner.corporationinfo.md) | General info about a corporation |
 |  [CorpProductData](./bitburner.corpproductdata.md) | Product rating information |
+|  [CreateProgramWorkTask](./bitburner.createprogramworktask.md) | Create Program |
 |  [CrimeStats](./bitburner.crimestats.md) | Data representing the internal values of a crime. |
+|  [CrimeTask](./bitburner.crimetask.md) | Crime |
 |  [Division](./bitburner.division.md) | Corporation division |
+|  [EmployedByRequirement](./bitburner.employedbyrequirement.md) | Player must be working for this company. |
 |  [EquipmentStats](./bitburner.equipmentstats.md) | Object representing data representing a gang member equipment. |
+|  [EveryRequirement](./bitburner.everyrequirement.md) | All sub-conditions must be satisfied. |
 |  [Export](./bitburner.export.md) | Export order for a material |
+|  [FactionWorkTask](./bitburner.factionworktask.md) | Faction Work |
+|  [FileRequirement](./bitburner.filerequirement.md) | Player must have a specific Literature or Message file on their home computer. |
 |  [Formulas](./bitburner.formulas.md) | Formulas API |
 |  [Fragment](./bitburner.fragment.md) |  |
 |  [GameInfo](./bitburner.gameinfo.md) | Game Information |
@@ -52,17 +64,23 @@
 |  [GangGenInfo](./bitburner.ganggeninfo.md) | Gang general info. |
 |  [GangMemberAscension](./bitburner.gangmemberascension.md) |  |
 |  [GangMemberInfo](./bitburner.gangmemberinfo.md) |  |
+|  [GangMemberInstall](./bitburner.gangmemberinstall.md) |  |
 |  [GangOtherInfo](./bitburner.gangotherinfo.md) |  |
 |  [GangOtherInfoObject](./bitburner.gangotherinfoobject.md) |  |
 |  [GangTaskStats](./bitburner.gangtaskstats.md) | Object representing data representing a gang member task. |
 |  [GangTerritory](./bitburner.gangterritory.md) |  |
+|  [Go](./bitburner.go.md) | IPvGO api |
 |  [Grafting](./bitburner.grafting.md) | Grafting API |
+|  [GraftingTask](./bitburner.graftingtask.md) | Faction Work |
 |  [HackingFormulas](./bitburner.hackingformulas.md) | Hacking formulas |
 |  [HackingMultipliers](./bitburner.hackingmultipliers.md) | Hack related multipliers. |
 |  [Hacknet](./bitburner.hacknet.md) | Hacknet API |
+|  [HacknetCoresRequirement](./bitburner.hacknetcoresrequirement.md) | Player's Hacknet devices must have at least this many total cores. |
+|  [HacknetLevelsRequirement](./bitburner.hacknetlevelsrequirement.md) | Player's Hacknet devices must have at least this many total levels. |
 |  [HacknetMultipliers](./bitburner.hacknetmultipliers.md) | Hacknet related multipliers. |
 |  [HacknetNodeConstants](./bitburner.hacknetnodeconstants.md) | Hacknet node related constants |
 |  [HacknetNodesFormulas](./bitburner.hacknetnodesformulas.md) | Hacknet Node formulas |
+|  [HacknetRAMRequirement](./bitburner.hacknetramrequirement.md) | Player's Hacknet devices must have at least this much total RAM. |
 |  [HacknetServerConstants](./bitburner.hacknetserverconstants.md) | Hacknet server related constants |
 |  [HacknetServersFormulas](./bitburner.hacknetserversformulas.md) | Hacknet Server formulas |
 |  [HP](./bitburner.hp.md) |  |
@@ -73,15 +91,23 @@
 |  [InfiltrationReward](./bitburner.infiltrationreward.md) |  |
 |  [InvestmentOffer](./bitburner.investmentoffer.md) | Corporation investment offer |
 |  [IStyleSettings](./bitburner.istylesettings.md) | Interface Styles |
+|  [JobTitleRequirement](./bitburner.jobtitlerequirement.md) | Player must have this job title at some company. |
+|  [KarmaRequiremennt](./bitburner.karmarequiremennt.md) | Player must have less than this much karma. |
+|  [LocationRequirement](./bitburner.locationrequirement.md) | Player must be at this location within a city. |
 |  [Material](./bitburner.material.md) | Material in a warehouse |
+|  [MoneyRequirement](./bitburner.moneyrequirement.md) | Player must have at least this much money. |
 |  [MoneySource](./bitburner.moneysource.md) |  |
 |  [MoneySources](./bitburner.moneysources.md) |  |
 |  [Multipliers](./bitburner.multipliers.md) |  |
 |  [NetscriptPort](./bitburner.netscriptport.md) | Object representing a port. A port is a serialized queue. |
 |  [NodeStats](./bitburner.nodestats.md) | Object representing all the values related to a hacknet node. |
+|  [NotRequirement](./bitburner.notrequirement.md) | The sub-condition must not be satisfied. |
 |  [NS](./bitburner.ns.md) | Collection of all functions passed to scripts |
+|  [NumAugmentationsRequirement](./bitburner.numaugmentationsrequirement.md) | Player must have at least this many augmentations installed (if positive). Player must have no augmentations installed (if zero). |
+|  [NumInfiltrationsRequirement](./bitburner.numinfiltrationsrequirement.md) | Player must have completed this many infiltrations. |
 |  [Office](./bitburner.office.md) | Office for a division in a city. |
 |  [OfficeAPI](./bitburner.officeapi.md) | Corporation Office API |
+|  [PeopleKilledRequirement](./bitburner.peoplekilledrequirement.md) | Player must have killed at least this many people. |
 |  [Person](./bitburner.person.md) |  |
 |  [Player](./bitburner.player.md) |  |
 |  [ProcessInfo](./bitburner.processinfo.md) | A single process on a server. |
@@ -94,16 +120,20 @@
 |  [RunOptions](./bitburner.runoptions.md) |  |
 |  [Server](./bitburner.server.md) | A server. Not all servers have all of these properties - optional properties are missing on certain servers. |
 |  [Singularity](./bitburner.singularity.md) | Singularity API |
+|  [SkillRequirement](./bitburner.skillrequirement.md) | Player must have each listed skill at least this level. |
 |  [Skills](./bitburner.skills.md) |  |
 |  [SkillsFormulas](./bitburner.skillsformulas.md) | Skills formulas |
 |  [Sleeve](./bitburner.sleeve.md) | Sleeve API |
 |  [SleevePerson](./bitburner.sleeveperson.md) |  |
+|  [SomeRequirement](./bitburner.somerequirement.md) | At least one sub-condition must be satisfied. |
 |  [SourceFileLvl](./bitburner.sourcefilelvl.md) |  |
+|  [SourceFileRequirement](./bitburner.sourcefilerequirement.md) | Player must have this Source File. |
 |  [SpawnOptions](./bitburner.spawnoptions.md) |  |
 |  [Stanek](./bitburner.stanek.md) | Stanek's Gift API. |
 |  [StockMarketConstants](./bitburner.stockmarketconstants.md) | Constants used for the stockmarket game mechanic. |
 |  [StockOrder](./bitburner.stockorder.md) | <p>Return value of [getOrders](./bitburner.tix.getorders.md)</p><p>Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md)</p> |
 |  [StockOrderObject](./bitburner.stockorderobject.md) | Value in map of [StockOrder](./bitburner.stockorder.md) |
+|  [StudyTask](./bitburner.studytask.md) | Study |
 |  [TailProperties](./bitburner.tailproperties.md) |  |
 |  [TIX](./bitburner.tix.md) | Stock market API |
 |  [UserInterface](./bitburner.userinterface.md) | User Interface API. |
@@ -127,8 +157,9 @@
 |  [CorpUnlockName](./bitburner.corpunlockname.md) |  |
 |  [CorpUpgradeName](./bitburner.corpupgradename.md) |  |
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
+|  [GoOpponent](./bitburner.goopponent.md) |  |
 |  [NSEnums](./bitburner.nsenums.md) |  |
-|  [PortData](./bitburner.portdata.md) |  |
+|  [PlayerRequirement](./bitburner.playerrequirement.md) | Structured interface to requirements for joining a faction or company. For fields with numerical value &gt; 0, the player must have at least this value. For fields with numerical value &lt;<!-- -->= 0, the player must have at most this value. For "not", the sub-condition must be failed instead of passed. For "someCondition", at least one sub-condition must be passed. |
 |  [ReactNode](./bitburner.reactnode.md) | <p>A stand-in for the real React.ReactNode. A [ReactElement](./bitburner.reactelement.md) is rendered dynamically with React. number and string are displayed directly. boolean, null, and undefined are ignored and not rendered. An array of ReactNodes will display all members of that array sequentially.</p><p>Use React.createElement to make the ReactElement type, see [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation.</p> |
 |  [ScriptArg](./bitburner.scriptarg.md) |  |
 |  [SleeveBladeburnerTask](./bitburner.sleevebladeburnertask.md) |  |
@@ -141,4 +172,5 @@
 |  [SleeveSupportTask](./bitburner.sleevesupporttask.md) |  |
 |  [SleeveSynchroTask](./bitburner.sleevesynchrotask.md) |  |
 |  [SleeveTask](./bitburner.sleevetask.md) | Object representing a sleeve current task. |
+|  [Task](./bitburner.task.md) | Task |
 

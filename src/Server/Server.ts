@@ -141,7 +141,7 @@ export class Server extends BaseServer {
 
   /** Lowers the server's security level (difficulty) by the specified amount) */
   weaken(amt: number): void {
-    this.hackDifficulty -= amt * currentNodeMults.ServerWeakenRate;
+    this.hackDifficulty -= amt;
     this.capDifficulty();
   }
 

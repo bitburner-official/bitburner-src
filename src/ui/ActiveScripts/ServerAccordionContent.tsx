@@ -1,47 +1,56 @@
+// TODO: Probably roll this into the ServerAccordion component, no real need for a separate component
+
 import React, { useState } from "react";
 import { WorkerScript } from "../../Netscript/WorkerScript";
 import { WorkerScriptAccordion } from "./WorkerScriptAccordion";
-import List from "@mui/material/List";
-import TablePagination from "@mui/material/TablePagination";
-import { TablePaginationActionsAll } from "../React/TablePaginationActionsAll";
+import { IconButton, List, Typography } from "@mui/material";
 import { Settings } from "../../Settings/Settings";
+import { FirstPage, KeyboardArrowLeft, KeyboardArrowRight, LastPage } from "@mui/icons-material";
 
-interface IProps {
-  workerScripts: WorkerScript[];
+interface ServerActiveScriptsProps {
+  scripts: WorkerScript[];
 }
 
-export function ServerAccordionContent(props: IProps): React.ReactElement {
+export function ServerAccordionContent({ scripts }: ServerActiveScriptsProps): React.ReactElement {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(Settings.ActiveScriptsScriptPageSize);
-  const handleChangePage = (event: unknown, newPage: number): void => {
-    setPage(newPage);
-  };
+  if (scripts.length === 0) {
+    console.error(`Attempted to display a server in active scripts when there were no matching scripts to show`);
+    return <></>;
+  }
+  const scriptsPerPage = Settings.ActiveScriptsScriptPageSize;
+  const lastPage = Math.ceil(scripts.length / scriptsPerPage) - 1;
+  function changePage(n: number) {
+    if (!Number.isInteger(n) || n > lastPage || n < 0) return;
+    setPage(n);
+  }
+  if (page > lastPage) changePage(lastPage);
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    Settings.ActiveScriptsScriptPageSize = parseInt(event.target.value, 10);
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  const firstScriptNumber = page * scriptsPerPage + 1;
+  const lastScriptNumber = Math.min((page + 1) * scriptsPerPage, scripts.length);
 
   return (
     <>
-      {props.workerScripts.length > 10 ? (
-        <TablePagination
-          rowsPerPageOptions={[10, 15, 20, 100]}
-          component="div"
-          count={props.workerScripts.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          ActionsComponent={TablePaginationActionsAll}
-        />
-      ) : (
-        ""
-      )}
+      <div style={{ width: "100%", display: "flex", alignItems: "center" }}>
+        <Typography
+          component="span"
+          marginRight="auto"
+        >{`Displaying scripts ${firstScriptNumber}-${lastScriptNumber} of ${scripts.length}`}</Typography>
+        <IconButton onClick={() => changePage(0)} disabled={page === 0}>
+          <FirstPage />
+        </IconButton>
+        <IconButton onClick={() => changePage(page - 1)} disabled={page === 0}>
+          <KeyboardArrowLeft />
+        </IconButton>
+        <IconButton onClick={() => changePage(page + 1)} disabled={page === lastPage}>
+          <KeyboardArrowRight />
+        </IconButton>
+        <IconButton onClick={() => changePage(lastPage)} disabled={page === lastPage}>
+          <LastPage />
+        </IconButton>
+      </div>
       <List dense disablePadding>
-        {props.workerScripts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((ws) => (
-          <WorkerScriptAccordion key={`${ws.pid}`} workerScript={ws} />
+        {scripts.slice(page * scriptsPerPage, page * scriptsPerPage + scriptsPerPage).map((ws) => (
+          <WorkerScriptAccordion key={ws.pid} workerScript={ws} />
         ))}
       </List>
     </>

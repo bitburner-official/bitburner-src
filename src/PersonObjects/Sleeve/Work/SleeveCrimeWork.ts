@@ -55,7 +55,7 @@ export class SleeveCrimeWork extends SleeveWorkClass {
 
   APICopy() {
     return {
-      type: SleeveWorkType.CRIME as "CRIME",
+      type: SleeveWorkType.CRIME as const,
       crimeType: this.crimeType,
       tasksCompleted: this.tasksCompleted,
       cyclesWorked: this.cyclesWorked,

@@ -38,8 +38,10 @@ export async function main(ns) {
 |  [enums](./bitburner.ns.enums.md) |  | [NSEnums](./bitburner.nsenums.md) |  |
 |  [formulas](./bitburner.ns.formulas.md) | <code>readonly</code> | [Formulas](./bitburner.formulas.md) | Namespace for formulas functions. |
 |  [gang](./bitburner.ns.gang.md) | <code>readonly</code> | [Gang](./bitburner.gang.md) | Namespace for gang functions. Contains spoilers. |
+|  [go](./bitburner.ns.go.md) | <code>readonly</code> | [Go](./bitburner.go.md) | Namespace for Go functions. |
 |  [grafting](./bitburner.ns.grafting.md) | <code>readonly</code> | [Grafting](./bitburner.grafting.md) | Namespace for grafting functions. Contains spoilers. |
 |  [hacknet](./bitburner.ns.hacknet.md) | <code>readonly</code> | [Hacknet](./bitburner.hacknet.md) | Namespace for hacknet functions. Some of this API contains spoilers. |
+|  [heart](./bitburner.ns.heart.md) | <code>readonly</code> | { break(): number; } |  |
 |  [infiltration](./bitburner.ns.infiltration.md) | <code>readonly</code> | [Infiltration](./bitburner.infiltration.md) | Namespace for infiltration functions. |
 |  [pid](./bitburner.ns.pid.md) | <code>readonly</code> | number | The current script's PID |
 |  [singularity](./bitburner.ns.singularity.md) | <code>readonly</code> | [Singularity](./bitburner.singularity.md) | Namespace for singularity functions. Contains spoilers. |
@@ -54,7 +56,7 @@ export async function main(ns) {
 |  --- | --- |
 |  [alert(msg)](./bitburner.ns.alert.md) | Open up a message box. |
 |  [asleep(millis)](./bitburner.ns.asleep.md) | Suspends the script for n milliseconds. Doesn't block with concurrent calls. |
-|  [atExit(f)](./bitburner.ns.atexit.md) | Add callback function when the script dies |
+|  [atExit(f, id)](./bitburner.ns.atexit.md) | Add callback function when the script dies |
 |  [brutessh(host)](./bitburner.ns.brutessh.md) | Runs BruteSSH.exe on a server. |
 |  [clear(handle)](./bitburner.ns.clear.md) | Clear data from a file. |
 |  [clearLog()](./bitburner.ns.clearlog.md) | Clears the script’s logs. |
@@ -131,6 +133,7 @@ export async function main(ns) {
 |  [ls(host, substring)](./bitburner.ns.ls.md) | List files on a server. |
 |  [moveTail(x, y, pid)](./bitburner.ns.movetail.md) | Move a tail window. |
 |  [mv(host, source, destination)](./bitburner.ns.mv.md) | Move a file on the target server. |
+|  [nextPortWrite(port)](./bitburner.ns.nextportwrite.md) | Listen for a port write. |
 |  [nFormat(n, format)](./bitburner.ns.nformat.md) | Format a number using the numeral library. This function is deprecated and will be removed in 2.4. |
 |  [nuke(host)](./bitburner.ns.nuke.md) | Runs NUKE.exe on a server. |
 |  [peek(portNumber)](./bitburner.ns.peek.md) | Get a copy of the data from a port without popping it. |

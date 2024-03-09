@@ -56,42 +56,6 @@ export class Company {
     return this.companyPositions.has(typeof pos === "string" ? pos : pos.name);
   }
 
-  hasAgentPositions(): boolean {
-    return this.companyPositions.has(JobName.agent0);
-  }
-
-  hasBusinessConsultantPositions(): boolean {
-    return this.companyPositions.has(JobName.businessConsult0);
-  }
-
-  hasBusinessPositions(): boolean {
-    return this.companyPositions.has(JobName.business0);
-  }
-
-  hasEmployeePositions(): boolean {
-    return this.companyPositions.has(JobName.employee);
-  }
-
-  hasITPositions(): boolean {
-    return this.companyPositions.has(JobName.IT0);
-  }
-
-  hasSecurityPositions(): boolean {
-    return this.companyPositions.has(JobName.security0);
-  }
-
-  hasSoftwareConsultantPositions(): boolean {
-    return this.companyPositions.has(JobName.softwareConsult0);
-  }
-
-  hasSoftwarePositions(): boolean {
-    return this.companyPositions.has(JobName.software0);
-  }
-
-  hasWaiterPositions(): boolean {
-    return this.companyPositions.has(JobName.waiter);
-  }
-
   prestigeAugmentation(): void {
     if (this.favor == null) this.favor = 0;
     this.favor += this.getFavorGain();
@@ -121,7 +85,7 @@ export class Company {
     return Generic_fromJSON(Company, value.data, Company.includedKeys);
   }
 
-  // Only these 3 keys are relevant to the save file
+  // Only these 2 keys are relevant to the save file
   static includedKeys = ["favor", "playerReputation"] as const;
 }
 

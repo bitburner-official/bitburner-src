@@ -28,7 +28,7 @@ export const A = (props: React.PropsWithChildren<{ href?: string }>): React.Reac
           cursor: "pointer",
         }}
       >
-        <CorruptableText content={props.children + ""} />
+        <CorruptableText content={props.children + ""} spoiler={true} />
       </span>
     );
   return (

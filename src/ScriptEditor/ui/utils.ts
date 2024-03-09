@@ -1,5 +1,5 @@
 import { GetServer } from "../../Server/AllServers";
-
+import { editor, Uri } from "monaco-editor";
 import { OpenScript } from "./OpenScript";
 
 function getServerCode(scripts: OpenScript[], index: number): string | null {
@@ -21,5 +21,14 @@ function reorder(list: unknown[], startIndex: number, endIndex: number): void {
   const [removed] = list.splice(startIndex, 1);
   list.splice(endIndex, 0, removed);
 }
+function makeModel(hostname: string, filename: string, code: string) {
+  const uri = Uri.from({
+    scheme: "file",
+    path: `${hostname}/${filename}`,
+  });
+  const language = filename.endsWith(".txt") ? "plaintext" : filename.endsWith(".json") ? "json" : "javascript";
+  //if somehow a model already exist return it
+  return editor.getModel(uri) ?? editor.createModel(code, language, uri);
+}
 
-export { getServerCode, dirty, reorder };
+export { getServerCode, dirty, reorder, makeModel };

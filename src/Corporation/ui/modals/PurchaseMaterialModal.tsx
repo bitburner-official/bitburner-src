@@ -144,7 +144,7 @@ export function PurchaseMaterialModal(props: IProps): React.ReactElement {
       <Typography>
         Enter the amount of {props.mat.name} you would like to purchase per second. This material's cost changes
         constantly.
-        {props.disablePurchaseLimit ? "Note: Purchase amount is disabled as smart supply is enabled" : ""}
+        {props.disablePurchaseLimit ? " Note: Purchase amount is disabled as smart supply is enabled" : ""}
       </Typography>
       <TextField
         value={buyAmt}

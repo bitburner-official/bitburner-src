@@ -43,14 +43,16 @@ export function NewDivision(corporation: Corporation, industry: IndustryType, na
         type: industry,
       }),
     );
+    corporation.numberOfOfficesAndWarehouses += 2;
   }
 }
 
 export function removeDivision(corporation: Corporation, name: string): number {
   const division = corporation.divisions.get(name);
   if (!division) throw new Error("There is no division called " + name);
-  const price = division.calculateRecoupableValue();
   corporation.divisions.delete(name);
+  corporation.numberOfOfficesAndWarehouses -= getRecordValues(division.offices).length;
+  corporation.numberOfOfficesAndWarehouses -= getRecordValues(division.warehouses).length;
 
   // We also need to remove any exports that were pointing to the old division
   for (const otherDivision of corporation.divisions.values()) {
@@ -63,6 +65,7 @@ export function removeDivision(corporation: Corporation, name: string): number {
       }
     }
   }
+  const price = division.calculateRecoupableValue();
   corporation.gainFunds(price, "division");
   return price;
 }
@@ -74,11 +77,12 @@ export function purchaseOffice(corporation: Corporation, division: Division, cit
   if (division.offices[city]) {
     throw new Error(`You have already expanded into ${city} for ${division.name}`);
   }
-  corporation.loseFunds(corpConstants.officeInitialCost, "office");
+  corporation.loseFunds(corpConstants.officeInitialCost, "division");
   division.offices[city] = new OfficeSpace({
     city: city,
     size: corpConstants.officeInitialSize,
   });
+  ++corporation.numberOfOfficesAndWarehouses;
 }
 
 export function IssueDividends(corporation: Corporation, rate: number): void {
@@ -391,12 +395,13 @@ export function ThrowParty(corp: Corporation, office: OfficeSpace, costPerEmploy
 export function purchaseWarehouse(corp: Corporation, division: Division, city: CityName): void {
   if (corp.funds < corpConstants.warehouseInitialCost) return;
   if (division.warehouses[city]) return;
-  corp.loseFunds(corpConstants.warehouseInitialCost, "warehouse");
+  corp.loseFunds(corpConstants.warehouseInitialCost, "division");
   division.warehouses[city] = new Warehouse({
     division: division,
     loc: city,
     size: corpConstants.warehouseInitialSize,
   });
+  ++corp.numberOfOfficesAndWarehouses;
 }
 
 export function UpgradeWarehouseCost(warehouse: Warehouse, amt: number): number {

@@ -31,5 +31,5 @@ RAM cost: 4 GB
 
 This function returns the number of skill points needed to upgrade the specified skill the specified number of times.
 
-The function returns -1 if an invalid skill name is passed in.
+The function returns -1 if an invalid skill name is passed in, and Infinity if the count overflows the maximum level.
 

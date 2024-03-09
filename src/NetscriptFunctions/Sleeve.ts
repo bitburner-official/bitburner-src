@@ -10,14 +10,13 @@ import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBlad
 import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyWork";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { cloneDeep } from "lodash";
 import { getAugCost } from "../Augmentation/AugmentationHelpers";
 import { Factions } from "../Faction/Factions";
 
 export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
   const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
     if (Player.bitNodeN !== 10 && !Player.sourceFileLvl(10)) {
-      throw helpers.makeRuntimeErrorMsg(
+      throw helpers.errorMessage(
         ctx,
         "You do not currently have access to the Sleeve API. This is either because you are not in BitNode-10 or because you do not have Source-File 10",
       );
@@ -28,7 +27,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
     if (sleeveNumber >= Player.sleeves.length || sleeveNumber < 0) {
       const msg = `Invalid sleeve number: ${sleeveNumber}`;
       helpers.log(ctx, () => msg);
-      throw helpers.makeRuntimeErrorMsg(ctx, msg);
+      throw helpers.errorMessage(ctx, msg);
     }
   };
 
@@ -92,7 +91,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
         }
         const other = Player.sleeves[i];
         if (isSleeveCompanyWork(other.currentWork) && other.currentWork.companyName === companyName) {
-          throw helpers.makeRuntimeErrorMsg(
+          throw helpers.errorMessage(
             ctx,
             `Sleeve ${sleeveNumber} cannot work for company ${companyName} because Sleeve ${i} is already working for them.`,
           );
@@ -109,7 +108,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       checkSleeveNumber(ctx, sleeveNumber);
 
       if (!Factions[factionName].isMember) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Cannot work for faction ${factionName} without being a member.`);
+        throw helpers.errorMessage(ctx, `Cannot work for faction ${factionName} without being a member.`);
       }
 
       // Cannot work at the same faction that another sleeve is working at
@@ -119,7 +118,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
         }
         const other = Player.sleeves[i];
         if (isSleeveFactionWork(other.currentWork) && other.currentWork.factionName === factionName) {
-          throw helpers.makeRuntimeErrorMsg(
+          throw helpers.errorMessage(
             ctx,
             `Sleeve ${sleeveNumber} cannot work for faction ${factionName} because Sleeve ${i} is already working for them.`,
           );
@@ -127,7 +126,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       }
 
       if (Player.gang && Player.gang.facName == factionName) {
-        throw helpers.makeRuntimeErrorMsg(
+        throw helpers.errorMessage(
           ctx,
           `Sleeve ${sleeveNumber} cannot work for faction ${factionName} because you have started a gang with them.`,
         );
@@ -161,10 +160,10 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       const sl = Player.sleeves[sleeveNumber];
 
       const data = {
-        hp: cloneDeep(sl.hp),
-        skills: cloneDeep(sl.skills),
-        exp: cloneDeep(sl.exp),
-        mults: cloneDeep(sl.mults),
+        hp: structuredClone(sl.hp),
+        skills: structuredClone(sl.skills),
+        exp: structuredClone(sl.exp),
+        mults: structuredClone(sl.mults),
         city: sl.city,
         shock: sl.shock,
         sync: sl.sync,
@@ -209,12 +208,12 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       checkSleeveNumber(ctx, sleeveNumber);
 
       if (Player.sleeves[sleeveNumber].shock > 0) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Sleeve shock too high: Sleeve ${sleeveNumber}`);
+        throw helpers.errorMessage(ctx, `Sleeve shock too high: Sleeve ${sleeveNumber}`);
       }
 
       const aug = Augmentations[augName];
       if (!aug) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid aug: ${augName}`);
+        throw helpers.errorMessage(ctx, `Invalid aug: ${augName}`);
       }
 
       return Player.sleeves[sleeveNumber].tryBuyAugmentation(aug);
@@ -251,7 +250,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
           }
           const other = Player.sleeves[i];
           if (isSleeveBladeburnerWork(other.currentWork) && other.currentWork.actionName === contract) {
-            throw helpers.makeRuntimeErrorMsg(
+            throw helpers.errorMessage(
               ctx,
               `Sleeve ${sleeveNumber} cannot take on contracts because Sleeve ${i} is already performing that action.`,
             );

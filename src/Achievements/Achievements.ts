@@ -30,6 +30,7 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { workerScripts } from "../Netscript/WorkerScripts";
 
 import { getRecordValues } from "../Types/Record";
+import { ServerConstants } from "../Server/data/Constants";
 
 // Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
 const achievementData = (<AchievementDataJson>(<unknown>data)).achievements;
@@ -232,7 +233,7 @@ export const achievements: Record<string, Achievement> = {
   MAX_RAM: {
     ...achievementData.MAX_RAM,
     Icon: "maxram",
-    Condition: () => Player.getHomeComputer().maxRam === CONSTANTS.HomeComputerMaxRam,
+    Condition: () => Player.getHomeComputer().maxRam === ServerConstants.HomeComputerMaxRam,
   },
   MAX_CORES: {
     ...achievementData.MAX_CORES,

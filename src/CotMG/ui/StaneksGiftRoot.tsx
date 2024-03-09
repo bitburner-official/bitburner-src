@@ -62,7 +62,7 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
                   for the fragment to gain stat boosts, it must be charged. The other kind of fragments are known as
                   Booster Fragments, which take up 5 tiles of the grid. There is no shortage of Booster Fragments, and
                   it is virtually impossible to run out of them. While not providing any direct stat increases to their
-                  user, Stat Fragments increase the efficacy of adjacent Stat Fragments by 10%, and do not need to be
+                  user, Booster Fragments increase the efficacy of adjacent Stat Fragments by 10%, and do not need to be
                   charged.
                 </Typography>
                 <br />

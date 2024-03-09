@@ -477,7 +477,10 @@ describe("Stock Market Tests", function () {
           const initValue = initialValues[stock.symbol];
           expect(initValue.price).not.toEqual(stock.price);
           if (initValue.otlkMag === stock.otlkMag && initValue.b === stock.b) {
-            throw new Error("expected either price or otlkMag to be different");
+            throw new Error(
+              "expected either price or otlkMag to be different: " +
+                `stock: ${stockName} otlkMag: ${stock.otlkMag} b: ${stock.b}`,
+            );
           }
         }
       });

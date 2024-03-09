@@ -3,7 +3,7 @@ import type { Action } from "../Bladeburner/Action";
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
 import { Player } from "@player";
-import { Bladeburner, BladeburnerResolvers } from "../Bladeburner/Bladeburner";
+import { Bladeburner, BladeburnerPromise } from "../Bladeburner/Bladeburner";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { BlackOperation } from "../Bladeburner/BlackOperation";
 import { helpers } from "../Netscript/NetscriptHelpers";
@@ -17,11 +17,11 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const getBladeburner = function (ctx: NetscriptContext): Bladeburner {
     const apiAccess = Player.bitNodeN === 7 || Player.sourceFileLvl(7) > 0;
     if (!apiAccess) {
-      throw helpers.makeRuntimeErrorMsg(ctx, "You have not unlocked the bladeburner API.", "API ACCESS");
+      throw helpers.errorMessage(ctx, "You have not unlocked the bladeburner API.", "API ACCESS");
     }
     const bladeburner = Player.bladeburner;
     if (!bladeburner)
-      throw helpers.makeRuntimeErrorMsg(ctx, "You must be a member of the Bladeburner division to use this API.");
+      throw helpers.errorMessage(ctx, "You must be a member of the Bladeburner division to use this API.");
     return bladeburner;
   };
 
@@ -30,11 +30,11 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     if (bladeburner === null) throw new Error("Must have joined bladeburner");
     const actionId = bladeburner.getActionIdFromTypeAndName(type, name);
     if (!actionId) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid action type='${type}', name='${name}'`);
+      throw helpers.errorMessage(ctx, `Invalid action type='${type}', name='${name}'`);
     }
     const actionObj = bladeburner.getActionObject(actionId);
     if (!actionObj) {
-      throw helpers.makeRuntimeErrorMsg(ctx, `Invalid action type='${type}', name='${name}'`);
+      throw helpers.errorMessage(ctx, `Invalid action type='${type}', name='${name}'`);
     }
 
     return actionObj;
@@ -80,7 +80,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       try {
         return bladeburner.startActionNetscriptFn(type, name, ctx.workerScript);
       } catch (e: unknown) {
-        throw helpers.makeRuntimeErrorMsg(ctx, String(e));
+        throw helpers.errorMessage(ctx, String(e));
       }
     },
     stopBladeburnerAction: (ctx) => () => {
@@ -105,7 +105,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
           return time;
         }
       } catch (e: unknown) {
-        throw helpers.makeRuntimeErrorMsg(ctx, String(e));
+        throw helpers.errorMessage(ctx, String(e));
       }
     },
     getActionCurrentTime: (ctx) => () => {
@@ -116,7 +116,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
           1000;
         return timecomputed;
       } catch (e: unknown) {
-        throw helpers.makeRuntimeErrorMsg(ctx, String(e));
+        throw helpers.errorMessage(ctx, String(e));
       }
     },
     getActionEstimatedSuccessChance: (ctx) => (_type, _name) => {
@@ -133,7 +133,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
           return chance;
         }
       } catch (e: unknown) {
-        throw helpers.makeRuntimeErrorMsg(ctx, String(e));
+        throw helpers.errorMessage(ctx, String(e));
       }
     },
     getActionRepGain: (ctx) => (_type, _name, _level) => {
@@ -152,7 +152,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       try {
         return bladeburner.getActionCountRemainingNetscriptFn(type, name, ctx.workerScript);
       } catch (e: unknown) {
-        throw helpers.makeRuntimeErrorMsg(ctx, String(e));
+        throw helpers.errorMessage(ctx, String(e));
       }
     },
     getActionMaxLevel: (ctx) => (_type, _name) => {
@@ -202,7 +202,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         checkBladeburnerAccess(ctx);
         const action = getBladeburnerActionObject(ctx, type, name);
         if (level < 1 || level > action.maxLevel) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `Level must be between 1 and ${action.maxLevel}, is ${level}`);
+          throw helpers.errorMessage(ctx, `Level must be between 1 and ${action.maxLevel}, is ${level}`);
         }
         action.level = level;
       },
@@ -220,7 +220,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       try {
         return bladeburner.getSkillLevelNetscriptFn(skillName, ctx.workerScript);
       } catch (e: unknown) {
-        throw helpers.makeRuntimeErrorMsg(ctx, String(e));
+        throw helpers.errorMessage(ctx, String(e));
       }
     },
     getSkillUpgradeCost:
@@ -232,7 +232,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         try {
           return bladeburner.getSkillUpgradeCostNetscriptFn(skillName, count, ctx.workerScript);
         } catch (e: unknown) {
-          throw helpers.makeRuntimeErrorMsg(ctx, String(e));
+          throw helpers.errorMessage(ctx, String(e));
         }
       },
     upgradeSkill:
@@ -244,7 +244,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         try {
           return bladeburner.upgradeSkillNetscriptFn(skillName, count, ctx.workerScript);
         } catch (e: unknown) {
-          throw helpers.makeRuntimeErrorMsg(ctx, String(e));
+          throw helpers.errorMessage(ctx, String(e));
         }
       },
     getTeamSize: (ctx) => (_type, _name) => {
@@ -254,7 +254,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       try {
         return bladeburner.getTeamSizeNetscriptFn(type, name, ctx.workerScript);
       } catch (e: unknown) {
-        throw helpers.makeRuntimeErrorMsg(ctx, String(e));
+        throw helpers.errorMessage(ctx, String(e));
       }
     },
     setTeamSize: (ctx) => (_type, _name, _size) => {
@@ -265,7 +265,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       try {
         return bladeburner.setTeamSizeNetscriptFn(type, name, size, ctx.workerScript);
       } catch (e: unknown) {
-        throw helpers.makeRuntimeErrorMsg(ctx, String(e));
+        throw helpers.errorMessage(ctx, String(e));
       }
     },
     getCityEstimatedPopulation: (ctx) => (_cityName) => {
@@ -329,8 +329,11 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       const bladeburner = getBladeburner(ctx);
       return Math.round(bladeburner.storedCycles / 5) * 1000;
     },
-    nextUpdate: () => () => {
-      return new Promise<number>((res) => BladeburnerResolvers.push(res));
+    nextUpdate: (ctx) => () => {
+      checkBladeburnerAccess(ctx);
+      if (!BladeburnerPromise.promise)
+        BladeburnerPromise.promise = new Promise<number>((res) => (BladeburnerPromise.resolve = res));
+      return BladeburnerPromise.promise;
     },
   };
 }

@@ -1,5 +1,5 @@
 Below are some of the stats that will increase with play and reset during augmentation installs as you progress through the game.
-Your stats can be found in the Overview panel, the Stats subpage of the sidemenu, or with API methods like `ns.getPlayer()`.
+Your stats can be found in the Overview panel, the Stats subpage of the side menu, or with API methods like `ns.getPlayer()`.
 
 ## Hack Skill
 

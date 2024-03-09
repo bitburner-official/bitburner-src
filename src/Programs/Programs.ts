@@ -11,6 +11,8 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { BitFlumeEvent } from "../BitNode/ui/BitFlumeModal";
 import { calculateHackingTime, calculateGrowTime, calculateWeakenTime } from "../Hacking";
 import { CompletedProgramName, FactionName } from "@enums";
+import { Router } from "../ui/GameRoot";
+import { Page } from "../ui/Router";
 
 function requireHackingLevel(lvl: number) {
   return function () {
@@ -278,8 +280,14 @@ export const Programs: Record<CompletedProgramName, Program> = {
       req: bitFlumeRequirements(),
       time: CONSTANTS.MillisecondsPerFiveMinutes / 20,
     },
-    run: (): void => {
-      BitFlumeEvent.emit();
+    run: (args: string[]): void => {
+      if (args.length == 1) {
+        if (args[0] == "-q") {
+          Router.toPage(Page.BitVerse, { flume: true, quick: true });
+        }
+      } else {
+        BitFlumeEvent.emit();
+      }
     },
   }),
   [CompletedProgramName.flight]: new Program({
@@ -288,11 +296,23 @@ export const Programs: Record<CompletedProgramName, Program> = {
     run: (): void => {
       const numAugReq = currentNodeMults.DaedalusAugsRequirement;
       const fulfilled =
-        Player.augmentations.length >= numAugReq && Player.money > 1e11 && Player.skills.hacking >= 2500;
+        Player.augmentations.length >= numAugReq && Player.money >= 1e11 && Player.skills.hacking >= 2500;
       if (!fulfilled) {
-        Terminal.print(`Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
-        Terminal.print(`Money: ${formatMoney(Player.money)} / $100b`);
-        Terminal.print(`Hacking skill: ${Player.skills.hacking} / 2500`);
+        if (Player.augmentations.length >= numAugReq) {
+          Terminal.print(`[x] Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
+        } else {
+          Terminal.print(`[ ] Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
+        }
+        if (Player.money >= 1e11) {
+          Terminal.print(`[x] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`);
+        } else {
+          Terminal.print(`[ ] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`);
+        }
+        if (Player.skills.hacking >= 2500) {
+          Terminal.print(`[x] Hacking skill: ${Player.skills.hacking} / 2500`);
+        } else {
+          Terminal.print(`[ ] Hacking skill: ${Player.skills.hacking} / 2500`);
+        }
         return;
       }
 

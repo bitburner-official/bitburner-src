@@ -16,7 +16,7 @@ import * as generalMethods from "./PlayerObjectGeneralMethods";
 import * as serverMethods from "./PlayerObjectServerMethods";
 import * as workMethods from "./PlayerObjectWorkMethods";
 
-import { setPlayer } from "../../Player";
+import { setPlayer } from "@player";
 import { CompanyName, FactionName, JobName, LocationName } from "@enums";
 import { HashManager } from "../../Hacknet/HashManager";
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
@@ -79,19 +79,6 @@ export class PlayerObject extends Person implements IPlayer {
   startWork = workMethods.startWork;
   processWork = workMethods.processWork;
   finishWork = workMethods.finishWork;
-  applyForSoftwareJob = generalMethods.applyForSoftwareJob;
-  applyForSoftwareConsultantJob = generalMethods.applyForSoftwareConsultantJob;
-  applyForItJob = generalMethods.applyForItJob;
-  applyForSecurityEngineerJob = generalMethods.applyForSecurityEngineerJob;
-  applyForNetworkEngineerJob = generalMethods.applyForNetworkEngineerJob;
-  applyForBusinessJob = generalMethods.applyForBusinessJob;
-  applyForBusinessConsultantJob = generalMethods.applyForBusinessConsultantJob;
-  applyForSecurityJob = generalMethods.applyForSecurityJob;
-  applyForAgentJob = generalMethods.applyForAgentJob;
-  applyForEmployeeJob = generalMethods.applyForEmployeeJob;
-  applyForPartTimeEmployeeJob = generalMethods.applyForPartTimeEmployeeJob;
-  applyForWaiterJob = generalMethods.applyForWaiterJob;
-  applyForPartTimeWaiterJob = generalMethods.applyForPartTimeWaiterJob;
   applyForJob = generalMethods.applyForJob;
   canAccessBladeburner = bladeburnerMethods.canAccessBladeburner;
   canAccessCorporation = corporationMethods.canAccessCorporation;

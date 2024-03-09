@@ -22,6 +22,7 @@ import { purchaseWarehouse } from "../Actions";
 import { useCorporation, useDivision } from "./Context";
 import { gameCyclesPerCorpStateCycle } from "../data/Constants";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
+import { StatsTable } from "../../ui/React/StatsTable";
 
 interface WarehouseProps {
   corp: Corporation;
@@ -95,25 +96,21 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
     }
   }
 
-  const breakdownItems: string[] = [];
+  const breakdownItems: string[][] = [];
   for (const matName of corpConstants.materialNames) {
     const mat = props.warehouse.materials[matName];
     if (mat.stored === 0) continue;
-    breakdownItems.push(`${matName}: ${formatMaterialSize(mat.stored * MaterialInfo[matName].size)}`);
+    breakdownItems.push([`${matName}:`, `${formatMaterialSize(mat.stored * MaterialInfo[matName].size)}`]);
   }
 
   for (const [prodName, product] of division.products) {
-    breakdownItems.push(
-      `${prodName}: ${formatMaterialSize(product.cityData[props.currentCity].stored * product.size)}`,
-    );
+    breakdownItems.push([
+      `${prodName}:`,
+      `${formatMaterialSize(product.cityData[props.currentCity].stored * product.size)}`,
+    ]);
   }
 
-  let breakdown;
-  if (breakdownItems.length > 0) {
-    breakdown = breakdownItems.map((item, i) => <p key={i}>{item}</p>);
-  } else {
-    breakdown = <>No items in storage.</>;
-  }
+  const breakdown = breakdownItems.length > 0 ? <StatsTable rows={breakdownItems} /> : <>No items in storage.</>;
 
   return (
     <Paper>

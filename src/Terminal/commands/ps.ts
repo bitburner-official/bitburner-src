@@ -1,7 +1,7 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { matchScriptPathUnanchored } from "../../utils/helpers/scriptKey";
-import * as libarg from "arg";
+import libarg from "arg";
 
 export function ps(args: (string | number | boolean)[], server: BaseServer): void {
   let flags;

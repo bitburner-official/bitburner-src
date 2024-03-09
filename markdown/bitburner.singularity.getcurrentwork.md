@@ -9,11 +9,11 @@ Get the current work the player is doing.
 **Signature:**
 
 ```typescript
-getCurrentWork(): any | null;
+getCurrentWork(): Task | null;
 ```
 **Returns:**
 
-any \| null
+[Task](./bitburner.task.md) \| null
 
 - An object representing the current work. Fields depend on the kind of work.
 

@@ -25,9 +25,6 @@ interface Skills {
 type CodingContractData = any;
 
 /** @public */
-type PortData = string | number;
-
-/** @public */
 type ScriptArg = string | number | boolean;
 
 /** @public */
@@ -51,6 +48,7 @@ interface Player extends Person {
   factions: string[];
   totalPlaytime: number;
   location: string;
+  karma: number;
 }
 
 /** @public */
@@ -89,6 +87,7 @@ interface MoneySource {
   corporation: number;
   crime: number;
   gang: number;
+  gang_expenses: number;
   hacking: number;
   hacknet: number;
   hacknet_expenses: number;
@@ -344,7 +343,9 @@ interface CrimeStats {
  */
 interface BasicHGWOptions {
   /** Number of threads to use for this function.
-   * Must be less than or equal to the number of threads the script is running with. */
+   * Must be less than or equal to the number of threads the script is running with.
+   * Accepts positive non integer values.
+   */
   threads?: number;
   /** Set to true this action will affect the stock market. */
   stock?: boolean;
@@ -960,6 +961,22 @@ interface GangMemberInfo {
 }
 
 /** @public */
+interface GangMemberInstall {
+  /** Factor by which the hacking ascension multiplier was decreased (newMult / oldMult) */
+  hack: number;
+  /** Factor by which the strength ascension multiplier was decreased (newMult / oldMult) */
+  str: number;
+  /** Factor by which the defense ascension multiplier was decreased (newMult / oldMult) */
+  def: number;
+  /** Factor by which the dexterity ascension multiplier was decreased (newMult / oldMult) */
+  dex: number;
+  /** Factor by which the agility ascension multiplier was decreased (newMult / oldMult) */
+  agi: number;
+  /** Factor by which the charisma ascension multiplier was decreased (newMult / oldMult) */
+  cha: number;
+}
+
+/** @public */
 interface GangMemberAscension {
   /** Amount of respect lost from ascending */
   respect: number;
@@ -1039,6 +1056,9 @@ export type SleeveTask =
   | SleeveSupportTask
   | SleeveSynchroTask;
 
+/** @public */
+type GoOpponent = "Netburners" | "Slum Snakes" | "The Black Hand" | "Tetrads" | "Daedalus" | "Illuminati";
+
 /** Object representing a port. A port is a serialized queue.
  * @public */
 export interface NetscriptPort {
@@ -1046,20 +1066,23 @@ export interface NetscriptPort {
    * @remarks
    * RAM cost: 0 GB
    *
-   * @returns The data popped off the queue if it was full. */
-  write(value: string | number): PortData | null;
+   * @param value - Data to write, it's cloned with structuredClone().
+   * @returns The data popped off the queue if it was full.
+   */
+  write(value: any): any;
 
   /**
    * Attempt to write data to the port.
    * @remarks
    * RAM cost: 0 GB
    *
+   * @param value - Data to write, it's cloned with structuredClone().
    * @returns True if the data was added to the port, false if the port was full
    */
-  tryWrite(value: string | number): boolean;
+  tryWrite(value: any): boolean;
 
   /**
-   * Sleeps until the port is written to.
+   * Waits until the port is written to.
    * @remarks
    * RAM cost: 0 GB
    */
@@ -1074,7 +1097,7 @@ export interface NetscriptPort {
    * If the port is empty, then the string “NULL PORT DATA” will be returned.
    * @returns the data read.
    */
-  read(): PortData;
+  read(): any;
 
   /**
    * Retrieve the first element from the port without removing it.
@@ -1086,7 +1109,7 @@ export interface NetscriptPort {
    * the port is empty, the string “NULL PORT DATA” will be returned.
    * @returns the data read
    */
-  peek(): PortData;
+  peek(): any;
 
   /**
    * Check if the port is full.
@@ -1575,6 +1598,87 @@ export interface TIX {
 }
 
 /**
+ * Study
+ * @remarks
+ * An object representing the current study task
+ * @public
+ */
+export interface StudyTask {
+  type: "CLASS";
+  cyclesWorked: number;
+  classType: string;
+  location: string;
+}
+/**
+ * Company Work
+ * @remarks
+ * An object representing the current work for a company
+ * @public
+ */
+export interface CompanyWorkTask {
+  type: "COMPANY";
+  cyclesWorked: number;
+  companyName: CompanyName;
+}
+
+/**
+ * Create Program
+ * @remarks
+ * An object representing the status of the program being created
+ * @public
+ */
+export interface CreateProgramWorkTask {
+  type: "CREATE_PROGRAM";
+  cyclesWorked: number;
+  programName: string;
+}
+
+/**
+ * Crime
+ * @remarks
+ * An object representing the crime being commited
+ * @public
+ */
+export interface CrimeTask {
+  type: "CRIME";
+  cyclesWorked: number;
+  crimeType: CrimeType;
+}
+
+/**
+ * Faction Work
+ * @remarks
+ * An object representing the current work for a faction
+ * @public
+ */
+export interface FactionWorkTask {
+  type: "FACTION";
+  cyclesWorked: number;
+  factionWorkType: FactionWorkType;
+  factionName: string;
+}
+
+/**
+ * Faction Work
+ * @remarks
+ * An object representing the current grafting status
+ * @public
+ */
+export interface GraftingTask {
+  type: "GRAFTING";
+  cyclesWorked: number;
+  augmentation: string;
+}
+
+/**
+ * Task
+ * @remarks
+ * Represents any task, such as studying, working for a faction etc.
+ * @public
+ */
+export type Task = StudyTask | CompanyWorkTask | CreateProgramWorkTask | CrimeTask | FactionWorkTask | GraftingTask;
+
+/**
  * Singularity API
  * @remarks
  * This API requires Source-File 4 to use. The RAM cost of all these functions is multiplied by 16/4/1 based on
@@ -1891,7 +1995,7 @@ export interface Singularity {
    * @param field - Field to which you want to apply.
    * @returns True if the player successfully get a job/promotion, and false otherwise.
    */
-  applyToCompany(companyName: CompanyName | `${CompanyName}`, field: JobField | `${JobField}`): boolean;
+  applyToCompany(companyName: CompanyName | `${CompanyName}`, field: JobField | `${JobField}`): JobName | null;
 
   /**
    * Get company reputation.
@@ -1935,29 +2039,39 @@ export interface Singularity {
    */
   getCompanyFavorGain(companyName: CompanyName | `${CompanyName}`): number;
 
-  /* Experimental function temporarily removed, likely to undergo changes in next patch to make return value more programming-friendly
+  /**
    * List conditions for being invited to a faction.
    * @remarks
    * RAM cost: 3 GB * 16/4/1
    *
-   * @param faction - Name of the faction.
-   * @returns Array of strings describing conditions for receiving an invitation to the faction.
+   * @param faction - Name of the faction
+   * @returns Array of PlayerRequirement objects which must all be fulfilled to receive an invitation.
    *
    * @example
    * ```js
    * ns.singularity.getFactionInviteRequirements("The Syndicate")
    * [
-   *   "Located in Aevum or Sector-12",
-   *   "Not working for the Central Intelligence Agency",
-   *   "Not working for the National Security Agency",
-   *   "-90 karma",
-   *   "Have $10.000m",
-   *   "Hacking level 200",
-   *   "All combat skills level 200"
+   *   { "type": "someCondition", "conditions": [
+   *       { "type": "city", "city": "Aevum" },
+   *       { "type": "city", "city": "Sector-12" }
+   *     ]
+   *   },
+   *   { "type": "not", "condition": {
+   *       "type": "employedBy", "company": "Central Intelligence Agency"
+   *     }
+   *   },
+   *   { "type": "not", "condition": {
+   *       "type": "employedBy", "company": "National Security Agency"
+   *     }
+   *   },
+   *   { "type": "money", "money": 10000000 },
+   *   { "type": "skills", "skills": { "hacking": 200 } },
+   *   { "type": "skills", "skills": { "strength": 200, "defense": 200, "dexterity": 200, "agility": 200 } },
+   *   { "type": "karma", "karma": -90 }
    * ]
    * ```
-  getFactionInviteRequirements(faction: string): string[];
-  */
+   */
+  getFactionInviteRequirements(faction: string): PlayerRequirement[];
 
   /**
    * List all current faction invitations.
@@ -2472,7 +2586,7 @@ export interface Singularity {
    *
    * @returns - An object representing the current work. Fields depend on the kind of work.
    */
-  getCurrentWork(): any | null;
+  getCurrentWork(): Task | null;
 }
 
 /**
@@ -3160,7 +3274,7 @@ export interface Bladeburner {
    *
    * This function returns the number of skill points needed to upgrade the specified skill the specified number of times.
    *
-   * The function returns -1 if an invalid skill name is passed in.
+   * The function returns -1 if an invalid skill name is passed in, and Infinity if the count overflows the maximum level.
    *
    * @param skillName - Name of skill. Case-sensitive and must be an exact match.
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
@@ -3462,8 +3576,9 @@ export interface CodingContract {
    * Generate a dummy contract on the home computer with no reward. Used to test various algorithms.
    *
    * @param type - Type of contract to generate
+   * @returns Filename of the contract.
    */
-  createDummyContract(type: string): void;
+  createDummyContract(type: string): string;
 
   /**
    * List all contract types.
@@ -3735,6 +3850,18 @@ export interface Gang {
   getAscensionResult(memberName: string): GangMemberAscension | undefined;
 
   /**
+   * Get the effect of an install on ascension multipliers without installing.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get {@link GangMemberInstall} effects on ascension multipliers for a gang member after installing without performing the install.
+   *
+   * @param memberName - Name of member.
+   * @returns Object with info about the install results on ascension multipliers, or undefined if ascension is not possible.
+   */
+  getInstallResult(memberName: string): GangMemberInstall | undefined;
+
+  /**
    * Enable/Disable territory clashes.
    * @remarks
    * RAM cost: 2 GB
@@ -3793,6 +3920,313 @@ export interface Gang {
    * ```
    */
   nextUpdate(): Promise<number>;
+}
+
+/**
+ * IPvGO api
+ * @public
+ */
+export interface Go {
+  /**
+   *  Make a move on the IPvGO subnet gameboard, and await the opponent's response.
+   *  x:0 y:0 represents the bottom-left corner of the board in the UI.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+   */
+  makeMove(
+    x: number,
+    y: number,
+  ): Promise<{
+    type: "invalid" | "move" | "pass" | "gameOver";
+    x: number;
+    y: number;
+    success: boolean;
+  }>;
+
+  /**
+   * Pass the player's turn rather than making a move, and await the opponent's response. This ends the game if the opponent
+   *   passed on the previous turn, or if the opponent passes on their following turn.
+   *
+   * This can also be used if you pick up the game in a state where the opponent needs to play next. For example: if BitBurner was
+   * closed while waiting for the opponent to make a move, you may need to call passTurn() to get them to play their move on game start.
+   *
+   * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   */
+  passTurn(): Promise<{
+    type: "invalid" | "move" | "pass" | "gameOver";
+    x: number;
+    y: number;
+    success: boolean;
+  }>;
+
+  /**
+   * Retrieves a simplified version of the board state. "X" represents black pieces, "O" white, and "." empty points.
+   * "#" are dead nodes that are not part of the subnet. (They are not territory nor open nodes.)
+   *
+   * For example, a 5x5 board might look like this:
+```
+   [
+      "XX.O.",
+      "X..OO",
+      ".XO..",
+      "XXO.#",
+      ".XO.#",
+   ]
+```
+   *
+   * Each string represents a vertical column on the board, and each character in the string represents a point.
+   *
+   * Traditional notation for Go is e.g. "B,1" referring to second ("B") column, first rank. This is the equivalent of index [1][0].
+   *
+   * Note that the [0][0] point is shown on the bottom-left on the visual board (as is traditional), and each
+   * string represents a vertical column on the board. In other words, the printed example above can be understood to
+   * be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   */
+  getBoardState(): string[];
+
+  /**
+   * Returns the name of the opponent faction in the current subnet.
+   */
+  getOpponent(): GoOpponent | "No AI" | "????????????";
+
+  /**
+   * Gets new IPvGO subnet with the specified size owned by the listed faction, ready for the player to make a move.
+   * This will reset your win streak if the current game is not complete and you have already made moves.
+   *
+   *
+   * Note that some factions will have a few routers on the subnet at this state.
+   *
+   * opponent is "Netburners" or "Slum Snakes" or "The Black Hand" or "Daedalus" or "Illuminati",
+   *
+   * @returns a simplified version of the board state as an array of strings representing the board columns. See ns.Go.getBoardState() for full details
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   */
+  resetBoardState(opponent: GoOpponent, boardSize: 5 | 7 | 9 | 13): string[] | undefined;
+
+  /**
+   * Tools to analyze the IPvGO subnet.
+   */
+  analysis: {
+    /**
+     * Shows if each point on the board is a valid move for the player.
+     *
+     * The true/false validity of each move can be retrieved via the X and Y coordinates of the move.
+```
+     const validMoves = ns.go.analysis.getValidMoves();
+
+     const moveIsValid = validMoves[x][y];
+```
+     *
+     * Note that the [0][0] point is shown on the bottom-left on the visual board (as is traditional), and each
+     * string represents a vertical column on the board. In other words, the printed example above can be understood to
+     * be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.
+     *
+     * @remarks
+     * RAM cost: 8 GB
+     * (This is intentionally expensive; you can derive this info from just getBoardState() )
+     */
+    getValidMoves(): boolean[][];
+
+    /**
+     * Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points
+     * are also given chain IDs to represent continuous empty space. Dead nodes are given the value `null.`
+     *
+     * The data from getChains() can be used with the data from getBoardState() to see which player (or empty) each chain is
+     *
+     * For example, a 5x5 board might look like this. There is a large chain #1 on the left side, smaller chains
+     * 2 and 3 on the right, and a large chain 0 taking up the center of the board.
+     *
+```
+      [
+        [   0,0,0,3,4],
+        [   1,0,0,3,3],
+        [   1,1,0,0,0],
+        [null,1,0,2,2],
+        [null,1,0,2,5],
+      ]
+```
+     * @remarks
+     * RAM cost: 16 GB
+     * (This is intentionally expensive; you can derive this info from just getBoardState() )
+     *
+     */
+    getChains(): (number | null)[][];
+
+    /**
+     * Returns a number for each point, representing how many open nodes its network/chain is connected to.
+     * Empty nodes and dead nodes are shown as -1 liberties.
+     *
+     * For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one
+     * in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!
+     *
+```
+     [
+        [-1, 5,-1,-1, 2],
+        [ 5, 5,-1,-1,-1],
+        [-1,-1, 4,-1,-1],
+        [ 3,-1,-1, 3, 1],
+        [ 3,-1,-1, 3, 1],
+     ]
+```
+     *
+     * @remarks
+     * RAM cost: 16 GB
+     * (This is intentionally expensive; you can derive this info from just getBoardState() )
+     */
+    getLiberties(): number[][];
+
+    /**
+     * Returns 'X', 'O', or '?' for each empty point to indicate which player controls that empty point.
+     * If no single player fully encircles the empty space, it is shown as contested with '?'.
+     * "#" are dead nodes that are not part of the subnet.
+     *
+     * Filled points of any color are indicated with '.'
+     *
+     * In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center:
+```
+  [
+     "OO..?",
+     "OO.?.",
+     "O.?.X",
+     ".?.XX",
+     "?..X#",
+  ]
+```
+     *
+     * @remarks
+     * RAM cost: 16 GB
+     * (This is intentionally expensive; you can derive this info from just getBoardState() )
+     */
+    getControlledEmptyNodes(): string[];
+  };
+
+  /**
+   * Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Bitnode 14.2 to use.
+   */
+  cheat: {
+    /**
+     * Returns your chance of successfully playing one of the special moves in the ns.go.cheat API.
+     * Scales with your crime success rate stat. Caps at 80%.
+     *
+     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
+     * small (~10%) chance you will instantly be ejected from the subnet.
+     *
+     * @remarks
+     * RAM cost: 1 GB
+     * Requires Bitnode 14.2 to use
+     */
+    getCheatSuccessChance(): number;
+    /**
+     * Attempts to remove an existing router, leaving an empty node behind.
+     *
+     * Success chance can be seen via ns.go.getCheatSuccessChance()
+     *
+     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
+     * small (~10%) chance you will instantly be ejected from the subnet.
+     *
+     * @remarks
+     * RAM cost: 8 GB
+     * Requires Bitnode 14.2 to use
+     *
+     * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+     */
+    removeRouter(
+      x: number,
+      y: number,
+    ): Promise<{
+      type: "invalid" | "move" | "pass" | "gameOver";
+      x: number;
+      y: number;
+      success: boolean;
+    }>;
+    /**
+     * Attempts to place two routers at once on empty nodes. Note that this ignores other move restrictions, so you can
+     * suicide your own routers if they have no access to empty ports and do not capture any enemy routers.
+     *
+     * Success chance can be seen via ns.go.getCheatSuccessChance()
+     *
+     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
+     * small (~10%) chance you will instantly be ejected from the subnet.
+     *
+     * @remarks
+     * RAM cost: 8 GB
+     * Requires Bitnode 14.2 to use
+     *
+     * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+     */
+    playTwoMoves(
+      x1: number,
+      y1: number,
+      x2: number,
+      y2: number,
+    ): Promise<{
+      type: "invalid" | "move" | "pass" | "gameOver";
+      x: number;
+      y: number;
+      success: boolean;
+    }>;
+
+    /**
+     * Attempts to repair an offline node, leaving an empty playable node behind.
+     *
+     * Success chance can be seen via ns.go.getCheatSuccessChance()
+     *
+     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
+     * small (~10%) chance you will instantly be ejected from the subnet.
+     *
+     * @remarks
+     * RAM cost: 8 GB
+     * Requires Bitnode 14.2 to use
+     *
+     * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+     */
+    repairOfflineNode(
+      x: number,
+      y: number,
+    ): Promise<{
+      type: "invalid" | "move" | "pass" | "gameOver";
+      x: number;
+      y: number;
+      success: boolean;
+    }>;
+
+    /**
+     * Attempts to destroy an empty node, leaving an offline dead space that does not count as territory or
+     * provide open node access to adjacent routers.
+     *
+     * Success chance can be seen via ns.go.getCheatSuccessChance()
+     *
+     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
+     * small (~10%) chance you will instantly be ejected from the subnet.
+     *
+     * @remarks
+     * RAM cost: 8 GB
+     * Requires Bitnode 14.2 to use
+     *
+     * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+     */
+    destroyNode(
+      x: number,
+      y: number,
+    ): Promise<{
+      type: "invalid" | "move" | "pass" | "gameOver";
+      x: number;
+      y: number;
+      success: boolean;
+    }>;
+  };
 }
 
 /**
@@ -4762,6 +5196,12 @@ export interface NS {
   readonly gang: Gang;
 
   /**
+   * Namespace for Go functions.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly go: Go;
+
+  /**
    * Namespace for sleeve functions. Contains spoilers.
    * @remarks RAM cost: 0 GB
    */
@@ -5072,6 +5512,15 @@ export interface NS {
    * @returns The security increase.
    */
   growthAnalyzeSecurity(threads: number, hostname?: string, cores?: number): number;
+
+  readonly heart: {
+    /**
+     * Get your current karma.
+     * @remarks
+     * RAM cost: 0 GB
+     */
+    break(): number;
+  };
 
   /**
    * Suspends the script for n milliseconds.
@@ -5643,10 +6092,10 @@ export interface NS {
    * @example
    * ```js
    * //The following example will execute the script ‘foo.js’ with 10 threads, in 500 milliseconds and the arguments ‘foodnstuff’ and 90:
-   * ns.spawn('foo.js', 10, 500, 'foodnstuff', 90);
+   * ns.spawn('foo.js', {threads: 10, spawnDelay: 500}, 'foodnstuff', 90);
    * ```
    * @param script - Filename of script to execute.
-   * @param threadOrOptions - Either an integer number of threads for new script, or a {@link SpawnOptions} object. Threads defaults to 1.
+   * @param threadOrOptions - Either an integer number of threads for new script, or a {@link SpawnOptions} object. Threads defaults to 1 and spawnDelay defaults to 10,000 ms.
    * @param args - Additional arguments to pass into the new script that is being run.
    */
   spawn(script: string, threadOrOptions?: number | SpawnOptions, ...args: (string | number | boolean)[]): void;
@@ -6231,10 +6680,21 @@ export interface NS {
    * Otherwise, the data will be written normally.
    *
    * @param portNumber - Port to attempt to write to. Must be a positive integer.
-   * @param data - Data to write.
+   * @param data - Data to write, it's cloned with structuredClone().
    * @returns True if the data is successfully written to the port, and false otherwise.
    */
-  tryWritePort(portNumber: number, data: string | number): boolean;
+  tryWritePort(portNumber: number, data: any): boolean;
+
+  /**
+   * Listen for a port write.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Sleeps until the port is written to.
+   *
+   * @param port - Port to listen for a write on. Must be a positive integer.
+   */
+  nextPortWrite(port: number): Promise<void>;
 
   /**
    * Read content of a file.
@@ -6263,7 +6723,7 @@ export interface NS {
    * @param portNumber - Port to peek. Must be a positive integer.
    * @returns Data in the specified port.
    */
-  peek(portNumber: number): PortData;
+  peek(portNumber: number): any;
 
   /**
    * Clear data from a file.
@@ -6294,10 +6754,10 @@ export interface NS {
    *
    * Write data to the given Netscript port.
    * @param portNumber - Port to write to. Must be a positive integer.
-   * @param data - Data to write.
+   * @param data - Data to write, it's cloned with structuredClone().
    * @returns The data popped off the queue if it was full, or null if it was not full.
    */
-  writePort(portNumber: number, data: string | number): PortData | null;
+  writePort(portNumber: number, data: any): any;
   /**
    * Read data from a port.
    * @remarks
@@ -6309,7 +6769,7 @@ export interface NS {
    * @param portNumber - Port to read from. Must be a positive integer.
    * @returns The data read.
    */
-  readPort(portNumber: number): PortData;
+  readPort(portNumber: number): any;
 
   /**
    * Get all data on a port.
@@ -6785,7 +7245,7 @@ export interface NS {
    *
    * Add callback to be executed when the script dies.
    */
-  atExit(f: () => void): void;
+  atExit(f: () => void, id?: string): void;
 
   /**
    * Move a file on the target server.
@@ -8144,3 +8604,215 @@ interface AutocompleteData {
   txts: string[];
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
 }
+
+/**
+ * Player must have at least this much money.
+ * @public
+ */
+interface MoneyRequirement {
+  type: "money";
+  money: number;
+}
+/**
+ * Player must have each listed skill at least this level.
+ * @public
+ */
+interface SkillRequirement {
+  type: "skills";
+  skills: Partial<Skills>;
+}
+/**
+ * Player must have less than this much karma.
+ * @public
+ */
+interface KarmaRequiremennt {
+  type: "karma";
+  karma: number;
+}
+/**
+ * Player must have killed at least this many people.
+ * @public
+ */
+interface PeopleKilledRequirement {
+  type: "numPeopleKilled";
+  numPeopleKilled: number;
+}
+/**
+ * Player must have a specific Literature or Message file on their home computer.
+ * @public
+ */
+interface FileRequirement {
+  type: "file";
+  file: string;
+}
+/**
+ * Player must have at least this many augmentations installed (if positive).
+ * Player must have no augmentations installed (if zero).
+ * @public
+ */
+interface NumAugmentationsRequirement {
+  type: "numAugmentations";
+  numAugmentations: number;
+}
+/**
+ * Player must be working for this company.
+ * @public
+ */
+interface EmployedByRequirement {
+  type: "employedBy";
+  company: CompanyName;
+}
+/**
+ * Player must have at least this much reputation with this company.
+ * @public
+ */
+interface CompanyReputationRequirement {
+  type: "companyReputation";
+  company: CompanyName;
+  reputation: number;
+}
+/**
+ * Player must have this job title at some company.
+ * @public
+ */
+interface JobTitleRequirement {
+  type: "jobTitle";
+  jobTitle: JobName;
+}
+/**
+ * Player must be located in this city.
+ * @public
+ */
+interface CityRequirement {
+  type: "city";
+  city: CityName;
+}
+/**
+ * Player must be at this location within a city.
+ * @public
+ */
+interface LocationRequirement {
+  type: "location";
+  location: LocationName;
+}
+/**
+ * Player must have installed a backdoor on this server.
+ * @public
+ */
+interface BackdoorRequirement {
+  type: "backdoorInstalled";
+  server: string;
+}
+/**
+ * Player's Hacknet devices must have at least this much total RAM.
+ * @public
+ */
+interface HacknetRAMRequirement {
+  type: "hacknetRAM";
+  hacknetRAM: number;
+}
+/**
+ * Player's Hacknet devices must have at least this many total cores.
+ * @public
+ */
+interface HacknetCoresRequirement {
+  type: "hacknetCores";
+  hacknetCores: number;
+}
+/**
+ * Player's Hacknet devices must have at least this many total levels.
+ * @public
+ */
+interface HacknetLevelsRequirement {
+  type: "hacknetLevels";
+  hacknetLevels: number;
+}
+/**
+ * Player must be located in this BitNode.
+ * @public
+ */
+interface BitNodeRequirement {
+  type: "bitNodeN";
+  bitNodeN: number;
+}
+/**
+ * Player must have this Source File.
+ * @public
+ */
+interface SourceFileRequirement {
+  type: "sourceFile";
+  sourceFile: number;
+}
+/**
+ * Player must have at least this rank in the Bladeburner Division.
+ * @public
+ */
+interface BladeburnerRankRequirement {
+  type: "bladeburnerRank";
+  bladeburnerRank: number;
+}
+/**
+ * Player must have completed this many infiltrations.
+ * @public
+ */
+interface NumInfiltrationsRequirement {
+  type: "numInfiltrations";
+  numInfiltrations: number;
+}
+/**
+ * The sub-condition must not be satisfied.
+ * @public
+ */
+interface NotRequirement {
+  type: "not";
+  condition: PlayerRequirement;
+}
+/**
+ * At least one sub-condition must be satisfied.
+ * @public
+ */
+interface SomeRequirement {
+  type: "someCondition";
+  conditions: PlayerRequirement[];
+}
+/**
+ * All sub-conditions must be satisfied.
+ * @public
+ */
+interface EveryRequirement {
+  type: "everyCondition";
+  conditions: PlayerRequirement[];
+}
+
+/**
+ * Structured interface to requirements for joining a faction or company.
+ * For fields with numerical value \> 0, the player must have at least this value.
+ * For fields with numerical value \<= 0, the player must have at most this value.
+ * For "not", the sub-condition must be failed instead of passed.
+ * For "someCondition", at least one sub-condition must be passed.
+ * @public
+ * @returns - An object representing one requirement.
+ */
+export type PlayerRequirement =
+  | MoneyRequirement
+  | SkillRequirement
+  | KarmaRequiremennt
+  | PeopleKilledRequirement
+  | FileRequirement
+  | NumAugmentationsRequirement
+  | EmployedByRequirement
+  | CompanyReputationRequirement
+  | JobTitleRequirement
+  | CityRequirement
+  | LocationRequirement
+  | BackdoorRequirement
+  | HacknetRAMRequirement
+  | HacknetCoresRequirement
+  | HacknetLevelsRequirement
+  | BitNodeRequirement
+  | SourceFileRequirement
+  | BladeburnerRankRequirement
+  | NumInfiltrationsRequirement
+  | NotRequirement
+  | SomeRequirement
+  | EveryRequirement;

@@ -7,7 +7,8 @@ import { CONSTANTS } from "../Constants";
 import { hash } from "../hash/hash";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { Terminal } from "../../src/Terminal";
-import { helpers, makeRuntimeErrorMsg } from "../Netscript/NetscriptHelpers";
+import { helpers } from "../Netscript/NetscriptHelpers";
+import { errorMessage } from "../Netscript/ErrorMessages";
 
 /** Will probably remove the below function in favor of a different approach to object type assertion.
  *  This method cannot be used to handle optional properties. */
@@ -18,7 +19,7 @@ export function assertObjectType<T extends object>(
   desiredObject: T,
 ): asserts obj is T {
   if (typeof obj !== "object" || obj === null) {
-    throw makeRuntimeErrorMsg(
+    throw errorMessage(
       ctx,
       `Type ${obj === null ? "null" : typeof obj} provided for ${name}. Must be an object.`,
       "TYPE",
@@ -26,15 +27,11 @@ export function assertObjectType<T extends object>(
   }
   for (const [key, val] of Object.entries(desiredObject)) {
     if (!Object.hasOwn(obj, key)) {
-      throw makeRuntimeErrorMsg(
-        ctx,
-        `Object provided for argument ${name} is missing required property ${key}.`,
-        "TYPE",
-      );
+      throw errorMessage(ctx, `Object provided for argument ${name} is missing required property ${key}.`, "TYPE");
     }
     const objVal = (obj as Record<string, unknown>)[key];
     if (typeof val !== typeof objVal) {
-      throw makeRuntimeErrorMsg(
+      throw errorMessage(
         ctx,
         `Incorrect type ${typeof objVal} provided for property ${key} on ${name} argument. Should be type ${typeof val}.`,
         "TYPE",

@@ -22,7 +22,7 @@ import { PromptEvent } from "../../ui/React/PromptManager";
 
 import { useRerender } from "../../ui/React/hooks";
 
-import { dirty, getServerCode } from "./utils";
+import { dirty, getServerCode, makeModel } from "./utils";
 import { OpenScript } from "./OpenScript";
 import { Tabs } from "./Tabs";
 import { Toolbar } from "./Toolbar";
@@ -191,7 +191,7 @@ function Root(props: IProps): React.ReactElement {
           code,
           props.hostname,
           new monaco.Position(0, 0),
-          monaco.editor.createModel(code, filename.endsWith(".txt") ? "plaintext" : "javascript"),
+          makeModel(props.hostname, filename, code),
         );
         openScripts.push(newScript);
         currentScript = newScript;
@@ -267,12 +267,12 @@ function Root(props: IProps): React.ReactElement {
             // Save changes
             closingScript.code = savedScriptCode;
             saveScript(closingScript);
-            Router.toPage(Page.Terminal);
           }
         },
       });
     }
-
+    //unmounting the editor will dispose all, doesnt hurt to dispose on close aswell
+    closingScript.model.dispose();
     openScripts.splice(index, 1);
     if (openScripts.length === 0) {
       currentScript = null;

@@ -3,6 +3,7 @@
  * Add police clashes
  * balance point to keep them from running out of control
  */
+import type { PromisePair } from "../Types/Promises";
 
 import { Factions } from "../Faction/Factions";
 
@@ -26,7 +27,7 @@ import { FactionName } from "@enums";
 import { CONSTANTS } from "../Constants";
 import { AllGangFactionInfo } from "./data/FactionInfo";
 
-export const GangResolvers: ((msProcessed: number) => void)[] = [];
+export const GangPromise: PromisePair<number> = { promise: null, resolve: null };
 
 export class Gang {
   facName: FactionName;
@@ -102,9 +103,11 @@ export class Gang {
       console.error(`Exception caught when processing Gang: ${e}`);
     }
 
-    // Handle "nextUpdate" resolvers after this update
-    for (const resolve of GangResolvers.splice(0)) {
-      resolve(cycles * CONSTANTS.MilliPerCycle);
+    // Handle "nextUpdate" resolver after this update
+    if (GangPromise.resolve) {
+      GangPromise.resolve(cycles * CONSTANTS.MilliPerCycle);
+      GangPromise.resolve = null;
+      GangPromise.promise = null;
     }
   }
 
@@ -142,15 +145,14 @@ export class Gang {
     gangFaction.playerReputation +=
       (Player.mults.faction_rep * respectGainsTotal * favorMult) / GangConstants.GangRespectToReputationRatio;
 
-    if (!(this.wanted === 1 && wantedLevelGainPerCycle < 0)) {
+    if (this.wanted !== 1 || wantedLevelGainPerCycle >= 0) {
       const oldWanted = this.wanted;
-      let newWanted = oldWanted + wantedLevelGainPerCycle * numCycles;
-      newWanted = newWanted * (1 - justice * 0.001); // safeguard
+      const newWanted = oldWanted + wantedLevelGainPerCycle * numCycles;
+      // Allows recovery when wanted / respect ratio is too high
+      this.wanted = newWanted * (1 - justice * 0.001);
+      this.wantedGainRate -= newWanted - this.wanted;
       // Prevent overflow
-      if (wantedLevelGainPerCycle <= 0 && newWanted > oldWanted) newWanted = 1;
-
-      this.wanted = newWanted;
-      if (this.wanted < 1) this.wanted = 1;
+      if (this.wanted < 1 || (wantedLevelGainPerCycle <= 0 && this.wanted > oldWanted)) this.wanted = 1;
     }
     Player.gainMoney(moneyGainPerCycle * numCycles, "gang");
   }

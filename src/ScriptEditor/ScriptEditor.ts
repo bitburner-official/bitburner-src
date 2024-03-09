@@ -60,6 +60,12 @@ export class ScriptEditor {
     const source = (libSource + "").replace(/export /g, "");
     monaco.languages.typescript.javascriptDefaults.addExtraLib(source, "netscript.d.ts");
     monaco.languages.typescript.typescriptDefaults.addExtraLib(source, "netscript.d.ts");
+    monaco.languages.json.jsonDefaults.setModeConfiguration({
+      ...monaco.languages.json.jsonDefaults.modeConfiguration,
+      //completion should be disabled because the
+      //json language server tries to load a schema by default
+      completionItems: false,
+    });
     // Load themes
     loadThemes(monaco.editor.defineTheme);
     sanitizeTheme(Settings.EditorTheme);

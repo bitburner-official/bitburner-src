@@ -548,6 +548,29 @@ exports[`Check Save File Continuity FactionsSave continuity 1`] = `
 }
 `;
 
+exports[`Check Save File Continuity GoSave continuity 1`] = `
+{
+  "currentGame": {
+    "ai": "Netburners",
+    "board": [
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+    ],
+    "cheatCount": 0,
+    "passCount": 0,
+    "previousBoard": null,
+    "previousPlayer": "White",
+  },
+  "previousGame": null,
+  "stats": {},
+}
+`;
+
 exports[`Check Save File Continuity PlayerSave continuity 1`] = `
 {
   "ctor": "PlayerObject",
@@ -1235,7 +1258,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "lastSave": 0,
     "lastUpdate": 1687611703623,
     "location": "Travel Agency",
-    "money": 1113,
+    "money": 1151,
     "moneySourceA": {
       "ctor": "MoneySourceTracker",
       "data": {
@@ -1247,6 +1270,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "corporation": 0,
         "crime": 0,
         "gang": 0,
+        "gang_expenses": 0,
         "hacking": 0,
         "hacknet": 0,
         "hacknet_expenses": 0,
@@ -1271,6 +1295,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "corporation": 0,
         "crime": 0,
         "gang": 0,
+        "gang_expenses": 0,
         "hacking": 0,
         "hacknet": 0,
         "hacknet_expenses": 0,

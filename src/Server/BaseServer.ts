@@ -122,6 +122,7 @@ export abstract class BaseServer implements IServer {
   openPortCount?: number;
   requiredHackingSkill?: number;
   serverGrowth?: number;
+  isHacknetServer?: boolean;
 
   constructor(params: IConstructorParams = { hostname: "", ip: createRandomIp() }) {
     this.ip = params.ip ? params.ip : createRandomIp();
@@ -367,6 +368,6 @@ export abstract class BaseServer implements IServer {
 
   // Customize a prune list for a subclass.
   static getIncludedKeys<T extends BaseServer>(ctor: new () => T): readonly (keyof T)[] {
-    return getKeyList(ctor, { removedKeys: ["runningScriptMap", "savedScripts", "ramUsed"] });
+    return getKeyList(ctor, { removedKeys: ["runningScriptMap", "savedScripts", "ramUsed", "isHacknetServer"] });
   }
 }

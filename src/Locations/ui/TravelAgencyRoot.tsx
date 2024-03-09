@@ -58,7 +58,7 @@ export function TravelAgencyRoot(): React.ReactElement {
       <Typography variant="h4">Travel Agency</Typography>
       <Box mx={2}>
         <Typography>
-          From here, you can travel to any other city! A ticket costs{" "}
+          From {Player.city}, you can travel to any other city! A ticket costs{" "}
           <Money money={CONSTANTS.TravelCost} forPurchase={true} />.
         </Typography>
         {Settings.DisableASCIIArt ? (

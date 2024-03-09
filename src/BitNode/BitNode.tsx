@@ -445,6 +445,41 @@ export function initBitNodes() {
       </>
     ),
   );
+  BitNodes.BitNode14 = new BitNode(
+    14,
+    1,
+    "IPvGO Subnet Takeover",
+    "Territory exists only in the 'net",
+    (
+      <>
+        In late 2070, the .org bubble burst, and most of the newly-implemented IPvGO 'net collapsed overnight. Since
+        then, various factions have been fighting over small subnets to control their computational power. These subnets
+        are very valuable in the right hands, if you can wrest them from their current owners. You will be opposed by
+        the other factions, but you can overcome them with careful choices. Prevent their attempts to destroy your
+        networks by controlling the open space in the 'net!
+        <br />
+        <br />
+        Destroying this BitNode will give you Source-File 14, or if you already have this Source-File it will upgrade
+        its level up to a maximum of 3. This Source-File grants the following benefits:
+        <br />
+        <br />
+        Level 1: 25% increased stat multipliers from Node Power
+        <br />
+        Level 2: Permanently unlocks the go.cheat API
+        <br />
+        Level 3: 25% increased success rate for the go.cheat API
+        <br />
+        <br />
+        This Source-File also increases the maximum favor you can gain for each faction from IPvGO by:
+        <br />
+        Level 1: +10
+        <br />
+        Level 2: +20
+        <br />
+        Level 3: +40
+      </>
+    ),
+  );
 }
 
 export const defaultMultipliers = new BitNodeMultipliers();
@@ -907,6 +942,49 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         StaneksGiftExtraSize: 1,
 
         WorldDaemonDifficulty: 3,
+      });
+    }
+    case 14: {
+      return new BitNodeMultipliers({
+        GoPower: 4,
+
+        HackingLevelMultiplier: 0.4,
+        HackingSpeedMultiplier: 0.3,
+
+        ServerMaxMoney: 0.7,
+        ServerStartingMoney: 0.5,
+        ServerStartingSecurity: 1.5,
+
+        CrimeMoney: 0.75,
+        CrimeSuccessRate: 0.4,
+        HacknetNodeMoney: 0.25,
+        ScriptHackMoney: 0.3,
+
+        StrengthLevelMultiplier: 0.5,
+        DexterityLevelMultiplier: 0.5,
+        AgilityLevelMultiplier: 0.5,
+
+        AugmentationMoneyCost: 1.5,
+
+        InfiltrationMoney: 0.75,
+
+        FactionWorkRepGain: 0.2,
+        CompanyWorkRepGain: 0.2,
+
+        CorporationValuation: 0.4,
+        CorporationSoftcap: 0.9,
+        CorporationDivisions: 0.8,
+
+        BladeburnerRank: 0.6,
+        BladeburnerSkillCost: 2,
+
+        GangSoftcap: 0.7,
+        GangUniqueAugs: 0.4,
+
+        StaneksGiftPowerMultiplier: 0.5,
+        StaneksGiftExtraSize: -1,
+
+        WorldDaemonDifficulty: 5,
       });
     }
     default: {

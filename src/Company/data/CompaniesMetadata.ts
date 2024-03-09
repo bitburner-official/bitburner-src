@@ -1,14 +1,15 @@
 import { CompanyCtorParams } from "../Company";
 
-import { CompanyName, JobName, FactionName } from "@enums";
+import { CompanyName, FactionName, JobName } from "@enums";
 import {
-  agentJobs,
+  softwareJobs,
   businessJobs,
-  itJobs,
-  netEngJobs,
   securityJobs,
   softwareConsultJobs,
-  softwareJobs,
+  netEngJobs,
+  itJobs,
+  agentJobs,
+  businessConsultJobs,
 } from "./JobTracks";
 
 export function getCompaniesMetadata(): Record<CompanyName, CompanyCtorParams> {
@@ -107,14 +108,14 @@ export function getCompaniesMetadata(): Record<CompanyName, CompanyCtorParams> {
     },
     [CompanyName.DefComm]: {
       name: CompanyName.DefComm,
-      companyPositions: [JobName.business5, ...allTechJobs, ...softwareConsultJobs],
+      companyPositions: [JobName.business5, ...allTechJobs, ...softwareConsultJobs, ...businessConsultJobs],
       expMultiplier: 1.75,
       salaryMultiplier: 1.75,
       jobStatReqOffset: 199,
     },
     [CompanyName.HeliosLabs]: {
       name: CompanyName.HeliosLabs,
-      companyPositions: [JobName.business5, ...allTechJobs, ...softwareConsultJobs],
+      companyPositions: [JobName.business5, ...allTechJobs, ...softwareConsultJobs, ...businessConsultJobs],
       expMultiplier: 1.8,
       salaryMultiplier: 1.8,
       jobStatReqOffset: 199,
@@ -149,28 +150,28 @@ export function getCompaniesMetadata(): Record<CompanyName, CompanyCtorParams> {
     },
     [CompanyName.AeroCorp]: {
       name: CompanyName.AeroCorp,
-      companyPositions: [JobName.business3, JobName.business5, ...allTechJobs, ...securityJobs],
+      companyPositions: [JobName.business3, JobName.business5, ...allTechJobs, ...securityJobs, ...businessConsultJobs],
       expMultiplier: 1.7,
       salaryMultiplier: 1.7,
       jobStatReqOffset: 199,
     },
     [CompanyName.OmniaCybersystems]: {
       name: CompanyName.OmniaCybersystems,
-      companyPositions: [JobName.business3, JobName.business5, ...allTechJobs, ...securityJobs],
+      companyPositions: [JobName.business3, JobName.business5, ...allTechJobs, ...securityJobs, ...businessConsultJobs],
       expMultiplier: 1.7,
       salaryMultiplier: 1.7,
       jobStatReqOffset: 199,
     },
     [CompanyName.SolarisSpaceSystems]: {
       name: CompanyName.SolarisSpaceSystems,
-      companyPositions: [JobName.business3, JobName.business5, ...allTechJobs, ...securityJobs],
+      companyPositions: [JobName.business3, JobName.business5, ...allTechJobs, ...securityJobs, ...businessConsultJobs],
       expMultiplier: 1.7,
       salaryMultiplier: 1.7,
       jobStatReqOffset: 199,
     },
     [CompanyName.DeltaOne]: {
       name: CompanyName.DeltaOne,
-      companyPositions: [JobName.business3, JobName.business5, ...allTechJobs, ...securityJobs],
+      companyPositions: [JobName.business3, JobName.business5, ...allTechJobs, ...securityJobs, ...businessConsultJobs],
       expMultiplier: 1.6,
       salaryMultiplier: 1.6,
       jobStatReqOffset: 199,

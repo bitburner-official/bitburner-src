@@ -136,7 +136,7 @@ export const calculateCompanyWorkStats = (
 
   const jobPerformance = companyPosition.calculateJobPerformance(worker);
 
-  gains.reputation = jobPerformance * worker.mults.company_rep * favorMult;
+  gains.reputation = jobPerformance * worker.mults.company_rep * favorMult * currentNodeMults.CompanyWorkRepGain;
 
   return gains;
 };

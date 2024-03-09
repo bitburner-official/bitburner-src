@@ -12,9 +12,6 @@ import { longestCommonStart } from "../../utils/StringHelperFunctions";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    textfield: {
-      margin: theme.spacing(0),
-    },
     input: {
       backgroundColor: theme.colors.backgroundprimary,
     },
@@ -24,14 +21,10 @@ const useStyles = makeStyles((theme: Theme) =>
     preformatted: {
       margin: theme.spacing(0),
     },
-    list: {
-      padding: theme.spacing(0),
-      height: "100%",
-    },
     absolute: {
       margin: theme.spacing(0),
       position: "absolute",
-      bottom: "5px",
+      bottom: "12px",
       opacity: "0.75",
       maxWidth: "100%",
       whiteSpace: "pre",
@@ -419,7 +412,7 @@ export function TerminalInput(): React.ReactElement {
         disabled={Terminal.action !== null}
         autoComplete="off"
         value={value}
-        classes={{ root: classes.textfield }}
+        classes={{ root: classes.preformatted }}
         onChange={handleValueChange}
         inputRef={terminalInput}
         InputProps={{

@@ -3,7 +3,7 @@ import { Player } from "@player";
 import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
 import { RunningScript } from "./RunningScript";
-import { processSingleServerGrowth } from "../Server/ServerHelpers";
+import { getWeakenEffect, processSingleServerGrowth } from "../Server/ServerHelpers";
 import { GetServer } from "../Server/AllServers";
 import { formatPercent } from "../ui/formatNumber";
 import { workerScripts } from "../Netscript/WorkerScripts";
@@ -55,7 +55,7 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
   Player.gainHackingExp(expGain);
 
   const moneyGain =
-    (runningScript.onlineMoneyMade / runningScript.onlineRunningTime) * timePassed * CONSTANTS.OfflineHackingIncome;
+    (runningScript.onlineMoneyMade / Player.playtimeSinceLastAug) * timePassed * CONSTANTS.OfflineHackingIncome;
   // money is given to player during engine load
   Player.scriptProdSinceLastAug += moneyGain;
 
@@ -82,8 +82,8 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
         ((0.5 * runningScript.dataMap[hostname][3]) / runningScript.onlineRunningTime) * timePassed,
       );
       runningScript.log(`Called weaken() on ${serv.hostname} ${timesWeakened} times while offline`);
-      const coreBonus = 1 + (host.cpuCores - 1) / 16;
-      serv.weaken(CONSTANTS.ServerWeakenAmount * timesWeakened * coreBonus);
+      const weakenAmount = getWeakenEffect(runningScript.threads, host.cpuCores);
+      serv.weaken(weakenAmount * timesWeakened);
     }
   }
 }

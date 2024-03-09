@@ -7,7 +7,7 @@ import { HelpTexts } from "./HelpText";
 import { compile } from "../NetscriptJSEvaluator";
 import { Flags } from "../NetscriptFunctions/Flags";
 import { AutocompleteData } from "@nsdefs";
-import * as libarg from "arg";
+import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
 
@@ -312,7 +312,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     }
     if (!loadedModule || !loadedModule.autocomplete) return; // Doesn't have an autocomplete function.
 
-    const runArgs = { "--tail": Boolean, "-t": Number };
+    const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
     const flags = libarg(runArgs, {
       permissive: true,
       argv: command.slice(2),

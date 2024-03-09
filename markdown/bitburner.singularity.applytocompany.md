@@ -9,7 +9,7 @@ Apply for a job at a company.
 **Signature:**
 
 ```typescript
-applyToCompany(companyName: CompanyName | `${CompanyName}`, field: JobField | `${JobField}`): boolean;
+applyToCompany(companyName: CompanyName | `${CompanyName}`, field: JobField | `${JobField}`): JobName | null;
 ```
 
 ## Parameters
@@ -21,7 +21,7 @@ applyToCompany(companyName: CompanyName | `${CompanyName}`, field: JobField | `$
 
 **Returns:**
 
-boolean
+[JobName](./bitburner.jobname.md) \| null
 
 True if the player successfully get a job/promotion, and false otherwise.
 

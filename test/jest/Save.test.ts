@@ -3,7 +3,8 @@ import "../../src/Player";
 import { loadAllServers, saveAllServers } from "../../src/Server/AllServers";
 import { loadAllRunningScripts } from "../../src/NetscriptWorker";
 import { Settings } from "../../src/Settings/Settings";
-
+import { Player, setPlayer } from "../../src/Player";
+import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
 jest.useFakeTimers();
 
 // Direct tests of loading and saving.
@@ -151,6 +152,9 @@ test("load/saveAllServers", () => {
   // Feed a JSON object through loadAllServers/saveAllServers.
   // The object is a pruned set of servers that was extracted from a real (dev) game.
   jest.setSystemTime(123456789000);
+
+  setPlayer(new PlayerObject());
+  Player.playtimeSinceLastAug = 123456;
   loadStandardServers();
 
   // Re-stringify with indenting for nicer diffs
