@@ -28,3 +28,10 @@ export function loadCompanies(saveString: string): void {
     if (typeof loadedFavor === "number" && loadedFavor > 0) company.favor = loadedFavor;
   }
 }
+
+export function getCompaniesSave(): Record<CompanyName, { favor: number; playerReputation: number }> {
+  return createEnumKeyedRecord(CompanyName, (name) => ({
+    favor: Companies[name].favor,
+    playerReputation: Companies[name].playerReputation,
+  }));
+}

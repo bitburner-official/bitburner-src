@@ -1,7 +1,7 @@
 import { Skills } from "@nsdefs";
 
 import { loadAliases, loadGlobalAliases, Aliases, GlobalAliases } from "./Alias";
-import { Companies, loadCompanies } from "./Company/Companies";
+import { getCompaniesSave, loadCompanies } from "./Company/Companies";
 import { CONSTANTS } from "./Constants";
 import { Factions, loadFactions } from "./Faction/Factions";
 import { loadAllGangs, AllGangs } from "./Gang/AllGangs";
@@ -98,7 +98,7 @@ class BitburnerSaveObject {
     this.AllServersSave = saveAllServers();
     Settings.ExcludeRunningScriptsFromSave = originalExcludeSetting;
 
-    this.CompaniesSave = JSON.stringify(Companies);
+    this.CompaniesSave = JSON.stringify(getCompaniesSave());
     this.FactionsSave = JSON.stringify(Factions);
     this.AliasesSave = JSON.stringify(Object.fromEntries(Aliases.entries()));
     this.GlobalAliasesSave = JSON.stringify(Object.fromEntries(GlobalAliases.entries()));

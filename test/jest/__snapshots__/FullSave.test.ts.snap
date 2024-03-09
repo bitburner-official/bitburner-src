@@ -3,270 +3,156 @@
 exports[`Check Save File Continuity CompaniesSave continuity 1`] = `
 {
   "AeroCorp": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Aevum Police Headquarters": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Alpha Enterprises": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Bachman & Associates": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Blade Industries": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Carmichael Security": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Central Intelligence Agency": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Clarke Incorporated": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "CompuTek": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "DefComm": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "DeltaOne": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "ECorp": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "FoodNStuff": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Four Sigma": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Fulcrum Technologies": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Galactic Cybersystems": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Global Pharmaceuticals": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Helios Labs": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Icarus Microsystems": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Joe's Guns": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "KuaiGong International": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "LexoCorp": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "MegaCorp": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "NWO": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "National Security Agency": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "NetLink Technologies": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Noodle Bar": {
-    "ctor": "Company",
-    "data": {
-      "favor": 100,
-      "playerReputation": 100000,
-    },
+    "favor": 100,
+    "playerReputation": 100000,
   },
   "Nova Medical": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Omega Software": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "OmniTek Incorporated": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Omnia Cybersystems": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Rho Construction": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Solaris Space Systems": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Storm Technologies": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "SysCore Securities": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Universal Energy": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "VitaLife": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
   "Watchdog Security": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 0,
+    "playerReputation": 0,
   },
 }
 `;
