@@ -4,7 +4,7 @@ import { FactionName, FactionDiscovery } from "@enums";
 import { Faction } from "./Faction";
 
 import { Reviver, assertLoadingType } from "../utils/JSONReviver";
-import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
+import { PartialRecord, createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { getEnumHelper } from "../utils/EnumHelper";
 
@@ -59,14 +59,15 @@ export function loadFactions(saveString: string, player: PlayerObject): void {
   }
 }
 
-// discovery is a non-default value often enough that we'll just always save all factions
-export function getFactionsSave(): Record<FactionName, SavegameFaction> {
-  return createEnumKeyedRecord(FactionName, (factionName) => {
-    const { favor, playerReputation, discovery } = Factions[factionName];
-    return {
-      favor: favor || undefined,
-      playerReputation: playerReputation || undefined,
-      discovery: discovery !== FactionDiscovery.unknown ? discovery : undefined,
-    };
-  });
+export function getFactionsSave(): PartialRecord<FactionName, SavegameFaction> {
+  const save: PartialRecord<FactionName, SavegameFaction> = {};
+  for (const factionName of getEnumHelper("FactionName").valueArray) {
+    const faction = Factions[factionName];
+    const discovery = faction.discovery === FactionDiscovery.unknown ? undefined : faction.discovery;
+    const { favor, playerReputation } = faction;
+    if (discovery || favor || playerReputation) {
+      save[factionName] = { favor: favor || undefined, playerReputation: playerReputation || undefined, discovery };
+    }
+  }
+  return save;
 }

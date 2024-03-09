@@ -11,49 +11,18 @@ exports[`Check Save File Continuity CompaniesSave continuity 1`] = `
 
 exports[`Check Save File Continuity FactionsSave continuity 1`] = `
 {
-  "Aevum": {},
-  "Bachman & Associates": {},
-  "BitRunners": {},
-  "Blade Industries": {},
   "Bladeburners": {
     "discovery": "known",
     "playerReputation": 4000,
   },
-  "Chongqing": {},
-  "Church of the Machine God": {},
-  "Clarke Incorporated": {},
   "CyberSec": {
     "discovery": "known",
     "favor": 20,
     "playerReputation": 1000000,
   },
-  "Daedalus": {},
-  "ECorp": {},
-  "Four Sigma": {},
-  "Fulcrum Secret Technologies": {},
-  "Illuminati": {},
-  "Ishima": {},
-  "KuaiGong International": {},
-  "MegaCorp": {},
-  "NWO": {},
-  "Netburners": {},
-  "New Tokyo": {},
-  "NiteSec": {},
-  "OmniTek Incorporated": {},
-  "Sector-12": {},
-  "Shadows of Anarchy": {},
-  "Silhouette": {},
   "Slum Snakes": {
     "discovery": "known",
   },
-  "Speakers for the Dead": {},
-  "Tetrads": {},
-  "The Black Hand": {},
-  "The Covenant": {},
-  "The Dark Army": {},
-  "The Syndicate": {},
-  "Tian Di Hui": {},
-  "Volhaven": {},
 }
 `;
 
