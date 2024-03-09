@@ -59,6 +59,7 @@ export function loadFactions(saveString: string, player: PlayerObject): void {
   }
 }
 
+// discovery is a non-default value often enough that we'll just always save all factions
 export function getFactionsSave(): Record<FactionName, SavegameFaction> {
   return createEnumKeyedRecord(FactionName, (factionName) => {
     const { favor, playerReputation, discovery } = Factions[factionName];

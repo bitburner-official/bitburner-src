@@ -3,7 +3,7 @@ import { getCompaniesMetadata } from "./data/CompaniesMetadata";
 import { Company } from "./Company";
 import { Reviver, assertLoadingType } from "../utils/JSONReviver";
 import { CompanyName } from "./Enums";
-import { createEnumKeyedRecord } from "../Types/Record";
+import { PartialRecord, createEnumKeyedRecord } from "../Types/Record";
 import { getEnumHelper } from "../utils/EnumHelper";
 
 export const Companies: Record<CompanyName, Company> = (() => {
@@ -31,9 +31,12 @@ export function loadCompanies(saveString: string): void {
   }
 }
 
-export function getCompaniesSave(): Record<CompanyName, SavegameCompany> {
-  return createEnumKeyedRecord(CompanyName, (companyName) => {
+// Most companies are usually at default values, so we'll only save the companies with non-default data
+export function getCompaniesSave(): PartialRecord<CompanyName, SavegameCompany> {
+  const save: PartialRecord<CompanyName, SavegameCompany> = {};
+  for (const companyName of getEnumHelper("CompanyName").valueArray) {
     const { favor, playerReputation } = Companies[companyName];
-    return { favor, playerReputation };
-  });
+    if (favor || playerReputation) save[companyName] = { favor, playerReputation };
+  }
+  return save;
 }
