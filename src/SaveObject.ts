@@ -749,7 +749,7 @@ function removeWhitespace(hostname: ServerName, file: ContentFile, files: Conten
     const ext = filename.slice(idx);
     let i = 1;
     do {
-      filename = `${path}-${i++}.${ext}` as ContentFilePath;
+      filename = `${path}-${i++}${ext}` as ContentFilePath;
     } while (files.has(filename));
   }
   console.warn(`Renamed "${file.filename}" to "${filename}" on ${hostname}.`);
