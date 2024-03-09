@@ -18,6 +18,8 @@ for (const aug of getRecordValues(Augmentations)) {
   }
 }
 
+type SavegameFaction = { playerReputation: number; favor: number; discovery: FactionDiscovery };
+
 export function loadFactions(saveString: string, player: PlayerObject): void {
   const loadedFactions = JSON.parse(saveString, Reviver) as unknown;
   // This loading method allows invalid data in player save, but just ignores anything invalid
@@ -28,7 +30,7 @@ export function loadFactions(saveString: string, player: PlayerObject): void {
     if (!loadedFaction) continue;
     const faction = Factions[loadedFactionName];
     if (typeof loadedFaction !== "object") continue;
-    assertLoadingType<Faction>(loadedFaction);
+    assertLoadingType<SavegameFaction>(loadedFaction);
     const { playerReputation: loadedRep, favor: loadedFavor, discovery: loadedDiscovery } = loadedFaction;
     if (typeof loadedRep === "number" && loadedRep > 0) faction.playerReputation = loadedRep;
     if (typeof loadedFavor === "number" && loadedFavor > 0) faction.favor = loadedFavor;
@@ -55,4 +57,11 @@ export function loadFactions(saveString: string, player: PlayerObject): void {
     Factions[invitedFaction].alreadyInvited = true;
     Factions[invitedFaction].discovery = FactionDiscovery.known;
   }
+}
+
+export function getFactionsSave(): Record<FactionName, SavegameFaction> {
+  return createEnumKeyedRecord(FactionName, (factionName) => {
+    const { favor, playerReputation, discovery } = Factions[factionName];
+    return { favor, playerReputation, discovery };
+  });
 }

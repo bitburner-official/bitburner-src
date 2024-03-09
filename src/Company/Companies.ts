@@ -11,6 +11,8 @@ export const Companies: Record<CompanyName, Company> = (() => {
   return createEnumKeyedRecord(CompanyName, (name) => new Company(metadata[name]));
 })();
 
+type SavegameCompany = { favor: number; playerReputation: number };
+
 // Used to load Companies map from a save
 export function loadCompanies(saveString: string): void {
   const loadedCompanies = JSON.parse(saveString, Reviver) as unknown;
@@ -22,16 +24,16 @@ export function loadCompanies(saveString: string): void {
     if (!loadedCompany) continue;
     if (typeof loadedCompany !== "object") continue;
     const company = Companies[loadedCompanyName];
-    assertLoadingType<Company>(loadedCompany);
+    assertLoadingType<SavegameCompany>(loadedCompany);
     const { playerReputation: loadedRep, favor: loadedFavor } = loadedCompany;
     if (typeof loadedRep === "number" && loadedRep > 0) company.playerReputation = loadedRep;
     if (typeof loadedFavor === "number" && loadedFavor > 0) company.favor = loadedFavor;
   }
 }
 
-export function getCompaniesSave(): Record<CompanyName, { favor: number; playerReputation: number }> {
-  return createEnumKeyedRecord(CompanyName, (name) => ({
-    favor: Companies[name].favor,
-    playerReputation: Companies[name].playerReputation,
-  }));
+export function getCompaniesSave(): Record<CompanyName, SavegameCompany> {
+  return createEnumKeyedRecord(CompanyName, (companyName) => {
+    const { favor, playerReputation } = Companies[companyName];
+    return { favor, playerReputation };
+  });
 }

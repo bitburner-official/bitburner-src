@@ -3,7 +3,7 @@ import { Skills } from "@nsdefs";
 import { loadAliases, loadGlobalAliases, Aliases, GlobalAliases } from "./Alias";
 import { getCompaniesSave, loadCompanies } from "./Company/Companies";
 import { CONSTANTS } from "./Constants";
-import { Factions, loadFactions } from "./Faction/Factions";
+import { getFactionsSave, loadFactions } from "./Faction/Factions";
 import { loadAllGangs, AllGangs } from "./Gang/AllGangs";
 import { Player, setPlayer, loadPlayer } from "./Player";
 import {
@@ -26,11 +26,10 @@ import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { Reviver, constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "./utils/JSONReviver";
 import { save } from "./db";
 import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
-import { AugmentationName, FactionName, LocationName, ToastVariant } from "@enums";
+import { AugmentationName, LocationName, ToastVariant } from "@enums";
 import { PlayerOwnedAugmentation } from "./Augmentation/PlayerOwnedAugmentation";
 import { pushGameSaved } from "./Electron";
 import { defaultMonacoTheme } from "./ScriptEditor/ui/themes";
-import { Faction } from "./Faction/Faction";
 import { safelyCreateUniqueServer } from "./Server/ServerHelpers";
 import { SpecialServers } from "./Server/data/SpecialServers";
 import { v2APIBreak } from "./utils/v2APIBreak";
@@ -99,7 +98,7 @@ class BitburnerSaveObject {
     Settings.ExcludeRunningScriptsFromSave = originalExcludeSetting;
 
     this.CompaniesSave = JSON.stringify(getCompaniesSave());
-    this.FactionsSave = JSON.stringify(Factions);
+    this.FactionsSave = JSON.stringify(getFactionsSave());
     this.AliasesSave = JSON.stringify(Object.fromEntries(Aliases.entries()));
     this.GlobalAliasesSave = JSON.stringify(Object.fromEntries(GlobalAliases.entries()));
     this.StockMarketSave = JSON.stringify(StockMarket);
@@ -382,7 +381,6 @@ function evaluateVersionCompatibility(ver: string | number): void {
   }
   //Fix contract names
   if (ver < 16) {
-    Factions[FactionName.ShadowsOfAnarchy] = new Faction(FactionName.ShadowsOfAnarchy);
     //Iterate over all contracts on all servers
     for (const server of GetAllServers()) {
       for (const contract of server.contracts) {
