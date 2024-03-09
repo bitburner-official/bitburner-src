@@ -18,7 +18,7 @@ for (const aug of getRecordValues(Augmentations)) {
   }
 }
 
-type SavegameFaction = { playerReputation: number; favor: number; discovery: FactionDiscovery };
+type SavegameFaction = { playerReputation?: number; favor?: number; discovery?: FactionDiscovery };
 
 export function loadFactions(saveString: string, player: PlayerObject): void {
   const loadedFactions = JSON.parse(saveString, Reviver) as unknown;
@@ -63,6 +63,10 @@ export function loadFactions(saveString: string, player: PlayerObject): void {
 export function getFactionsSave(): Record<FactionName, SavegameFaction> {
   return createEnumKeyedRecord(FactionName, (factionName) => {
     const { favor, playerReputation, discovery } = Factions[factionName];
-    return { favor, playerReputation, discovery };
+    return {
+      favor: favor || undefined,
+      playerReputation: playerReputation || undefined,
+      discovery: discovery !== FactionDiscovery.unknown ? discovery : undefined,
+    };
   });
 }

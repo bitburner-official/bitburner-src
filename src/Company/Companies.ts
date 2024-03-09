@@ -11,7 +11,7 @@ export const Companies: Record<CompanyName, Company> = (() => {
   return createEnumKeyedRecord(CompanyName, (name) => new Company(metadata[name]));
 })();
 
-type SavegameCompany = { favor: number; playerReputation: number };
+type SavegameCompany = { favor?: number; playerReputation?: number };
 
 // Used to load Companies map from a save
 export function loadCompanies(saveString: string): void {
@@ -36,7 +36,9 @@ export function getCompaniesSave(): PartialRecord<CompanyName, SavegameCompany> 
   const save: PartialRecord<CompanyName, SavegameCompany> = {};
   for (const companyName of getEnumHelper("CompanyName").valueArray) {
     const { favor, playerReputation } = Companies[companyName];
-    if (favor || playerReputation) save[companyName] = { favor, playerReputation };
+    if (favor || playerReputation) {
+      save[companyName] = { favor: favor || undefined, playerReputation: playerReputation || undefined };
+    }
   }
   return save;
 }

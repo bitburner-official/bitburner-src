@@ -11,176 +11,49 @@ exports[`Check Save File Continuity CompaniesSave continuity 1`] = `
 
 exports[`Check Save File Continuity FactionsSave continuity 1`] = `
 {
-  "Aevum": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Bachman & Associates": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "BitRunners": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Blade Industries": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
+  "Aevum": {},
+  "Bachman & Associates": {},
+  "BitRunners": {},
+  "Blade Industries": {},
   "Bladeburners": {
     "discovery": "known",
-    "favor": 0,
     "playerReputation": 4000,
   },
-  "Chongqing": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Church of the Machine God": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Clarke Incorporated": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
+  "Chongqing": {},
+  "Church of the Machine God": {},
+  "Clarke Incorporated": {},
   "CyberSec": {
     "discovery": "known",
     "favor": 20,
     "playerReputation": 1000000,
   },
-  "Daedalus": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "ECorp": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Four Sigma": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Fulcrum Secret Technologies": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Illuminati": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Ishima": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "KuaiGong International": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "MegaCorp": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "NWO": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Netburners": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "New Tokyo": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "NiteSec": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "OmniTek Incorporated": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Sector-12": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Shadows of Anarchy": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Silhouette": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
+  "Daedalus": {},
+  "ECorp": {},
+  "Four Sigma": {},
+  "Fulcrum Secret Technologies": {},
+  "Illuminati": {},
+  "Ishima": {},
+  "KuaiGong International": {},
+  "MegaCorp": {},
+  "NWO": {},
+  "Netburners": {},
+  "New Tokyo": {},
+  "NiteSec": {},
+  "OmniTek Incorporated": {},
+  "Sector-12": {},
+  "Shadows of Anarchy": {},
+  "Silhouette": {},
   "Slum Snakes": {
     "discovery": "known",
-    "favor": 0,
-    "playerReputation": 0,
   },
-  "Speakers for the Dead": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Tetrads": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "The Black Hand": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "The Covenant": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "The Dark Army": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "The Syndicate": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Tian Di Hui": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
-  "Volhaven": {
-    "discovery": "unknown",
-    "favor": 0,
-    "playerReputation": 0,
-  },
+  "Speakers for the Dead": {},
+  "Tetrads": {},
+  "The Black Hand": {},
+  "The Covenant": {},
+  "The Dark Army": {},
+  "The Syndicate": {},
+  "Tian Di Hui": {},
+  "Volhaven": {},
 }
 `;
 
