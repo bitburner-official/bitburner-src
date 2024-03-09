@@ -5689,6 +5689,8 @@ export interface NS {
    *
    * Logging can be disabled for all functions by passing `ALL` as the argument.
    *
+   * For specific interfaces, use the form "namespace.functionName". (e.g. "ui.setTheme")
+   *
    * @param fn - Name of function for which to disable logging.
    */
   disableLog(fn: string): void;
