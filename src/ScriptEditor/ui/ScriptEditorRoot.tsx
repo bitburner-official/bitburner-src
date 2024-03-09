@@ -22,7 +22,7 @@ import { PromptEvent } from "../../ui/React/PromptManager";
 
 import { useRerender } from "../../ui/React/hooks";
 
-import { dirty, getServerCode, makeModel } from "./utils";
+import { dirty, getServerCode } from "./utils";
 import { OpenScript } from "./OpenScript";
 import { Tabs } from "./Tabs";
 import { Toolbar } from "./Toolbar";
@@ -30,6 +30,7 @@ import { NoOpenScripts } from "./NoOpenScripts";
 import { ScriptEditorContextProvider, useScriptEditorContext } from "./ScriptEditorContext";
 import { useVimEditor } from "./useVimEditor";
 import { useCallback } from "react";
+import { makeModel } from "../Model";
 
 interface IProps {
   // Map of filename -> code
@@ -152,6 +153,15 @@ function Root(props: IProps): React.ReactElement {
     debouncedCodeParsing(newCode);
   };
 
+  function openNewScript(script: OpenScript) {
+    //Models must be unique per script, so its a good way to make sure if script is already open
+    if (openScripts.some((s) => s.model == script.model)) return;
+    openScripts.push(script);
+    parseCode(script.code);
+    currentScript = script;
+    rerender();
+  }
+
   // When the editor is mounted
   function onMount(editor: IStandaloneCodeEditor): void {
     // Required when switching between site navigation (e.g. from Script Editor -> Terminal and back)
@@ -271,8 +281,7 @@ function Root(props: IProps): React.ReactElement {
         },
       });
     }
-    //unmounting the editor will dispose all, doesnt hurt to dispose on close aswell
-    closingScript.model.dispose();
+
     openScripts.splice(index, 1);
     if (openScripts.length === 0) {
       currentScript = null;
@@ -390,7 +399,7 @@ function Root(props: IProps): React.ReactElement {
           onTabUpdate={onTabUpdate}
         />
         <div style={{ flex: "0 0 5px" }} />
-        <Editor onMount={onMount} onChange={updateCode} />
+        <Editor openScript={openNewScript} onMount={onMount} onChange={updateCode} />
 
         {VimStatus}
 

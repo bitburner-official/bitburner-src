@@ -23,7 +23,10 @@ import { getKeyList } from "../utils/helpers/getKeyList";
 import lodash from "lodash";
 import { Settings } from "../Settings/Settings";
 
+import monaco from "monaco-editor";
+
 import type { ScriptKey } from "../utils/helpers/scriptKey";
+import { getModel, makeModel } from "../ScriptEditor/Model";
 
 interface IConstructorParams {
   adminRights?: boolean;
@@ -180,6 +183,9 @@ export abstract class BaseServer implements IServer {
       const textFile = this.textFiles.get(path);
       if (!textFile) return { res: false, msg: `Text file ${path} not found.` };
       this.textFiles.delete(path);
+      //dispose of editor model
+      const model = getModel(this.hostname, path);
+      if (model) model.dispose();
       return { res: true };
     }
     if (hasScriptExtension(path)) {
@@ -188,6 +194,9 @@ export abstract class BaseServer implements IServer {
       if (this.isRunning(path)) return { res: false, msg: "Cannot delete a script that is currently running!" };
       script.invalidateModule();
       this.scripts.delete(path);
+      //dispose of editor model
+      const model = getModel(this.hostname, path);
+      if (model) model.dispose();
       return { res: true };
     }
     if (hasProgramExtension(path)) {
@@ -246,46 +255,55 @@ export abstract class BaseServer implements IServer {
     this.programs.push(program);
   }
 
+  writeToScriptFile(path: ScriptFilePath, content: string) {
+    return this.#writeContentToFile(path, content, this.scripts, Script);
+  }
+
+  writeToTextFile(path: TextFilePath, content: string) {
+    return this.#writeContentToFile(path, content, this.textFiles, TextFile);
+  }
+
   /**
-   * Write to a script file
+   * Write to a Script or TextFile
    * Overwrites existing files. Creates new files if the script does not exist.
    */
-  writeToScriptFile(filename: ScriptFilePath, code: string): writeResult {
-    // Check if the script already exists, and overwrite it if it does
-    const script = this.scripts.get(filename);
-    if (script) {
-      // content setter handles module invalidation
-      script.content = code;
-      return { overwritten: true };
-    }
-
-    // Otherwise, create a new script
-    const newScript = new Script(filename, code, this.hostname);
-    this.scripts.set(filename, newScript);
-    return { overwritten: false };
-  }
-
-  // Write to a text file
-  // Overwrites existing files. Creates new files if the text file does not exist
-  writeToTextFile(textPath: TextFilePath, txt: string): writeResult {
-    // Check if the text file already exists, and overwrite if it does
-    const existingFile = this.textFiles.get(textPath);
-    // overWrite if already exists
-    if (existingFile) {
-      existingFile.text = txt;
-      return { overwritten: true };
-    }
-
-    // Otherwise create a new text file
-    const newFile = new TextFile(textPath, txt);
-    this.textFiles.set(textPath, newFile);
-    return { overwritten: false };
-  }
-
-  /** Write to a Script or TextFile */
   writeToContentFile(path: ContentFilePath, content: string): writeResult {
-    if (hasTextExtension(path)) return this.writeToTextFile(path, content);
+    const isTextFile = hasTextExtension(path);
+    if (isTextFile) return this.writeToTextFile(path, content);
     return this.writeToScriptFile(path, content);
+  }
+
+  #writeContentToFile<T extends ContentFilePath>(
+    path: T,
+    content: string,
+    files: Map<string, ContentFile>,
+    ContentFile: new (path: T, content: string, host?: string) => ContentFile,
+  ) {
+    const existingFile = files.get(path);
+
+    //Try to get the editor model
+    const model = getModel(this.hostname, path);
+
+    //If model exists and there are no unsaved changes, update
+    if (model && existingFile?.content == model.getValue()) model.setValue(content);
+
+    // Check if the file already exists, and overwrite if it does
+    if (existingFile) {
+      existingFile.content = content;
+      return { overwritten: true };
+    }
+
+    // create new file
+    //We know path must be the right path
+    const newFile = new ContentFile(path, content, this.hostname);
+    files.set(path, newFile);
+
+    //if editor is open, create model for new file
+    if (monaco.editor?.getModels().length) {
+      makeModel(this.hostname, path, content);
+    }
+
+    return { overwritten: false };
   }
 
   // Serialize the current object to a JSON save state
