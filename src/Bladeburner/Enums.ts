@@ -1,12 +1,30 @@
 export enum BladeActionType {
-  general = "General Action",
-  contract = "Contract",
-  operation = "Operation",
-  blackOp = "Black Operation",
+  general = "General",
+  contract = "Contracts",
+  operation = "Operations",
+  blackOp = "Black Operations",
 }
-export enum BladeGeneralActionName {}
-export enum BladeContractName {}
-export enum BladeOperationName {}
+export enum BladeGeneralActionName {
+  training = "Training",
+  fieldAnalysis = "Field Analysis",
+  recruitment = "Recruitment",
+  diplomacy = "Diplomacy",
+  hyperbolicRegen = "Hyperbolic Regeneration Chamber",
+  inciteViolence = "Incite Violence",
+}
+export enum BladeContractName {
+  tracking = "Tracking",
+  bountyHunter = "Bounty Hunter",
+  retirement = "Retirement",
+}
+export enum BladeOperationName {
+  investigation = "Investigation",
+  undercover = "Undercover Operation",
+  sting = "Sting Operation",
+  raid = "Raid",
+  stealthRetirement = "Stealth Retirement Operation",
+  assassination = "Assassination",
+}
 export enum BladeBlackOpName {
   OperationTyphoon = "Operation Typhoon",
   OperationZero = "Operation Zero",
@@ -31,4 +49,19 @@ export enum BladeBlackOpName {
   OperationDaedalus = "Operation Daedalus",
 }
 
-export enum BladeSkillName {}
+export enum BladeSkillName {
+  bladesIntuition = "Blade's Intuition",
+  cloak = "Cloak",
+  marksman = "Marksman",
+  weaponProficiency = "Weapon Proficiency",
+  shortCircuit = "Short-Circuit",
+  digitalObserver = "Digital Observer",
+  tracer = "Tracer",
+  overclock = "Overclock",
+  reaper = "Reaper",
+  evasiveSystem = "Evasive System",
+  datamancer = "Datamancer",
+  cybersEdge = "Cyber's Edge",
+  handsOfMidas = "Hands of Midas",
+  hyperdrive = "Hyperdrive",
+}
