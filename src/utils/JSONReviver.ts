@@ -30,20 +30,12 @@ export function Reviver(_key: string, value: unknown): any {
   if (!ctor) {
     // Known missing constructors with special handling.
     switch (value.ctor) {
-      case "AllServersMap":
-        console.warn("Converting AllServersMap for v0.43.1");
-        return value.data;
-      case "Industry":
-        console.warn("Converting a corp from pre-2.3");
-        return value.data; // Will immediately be overwritten by v2.3 save migration code
-      case "Employee":
-        console.warn("Converting a corp from pre-2.2");
-        return value.data; // Will immediately be overwritten by v2.3 save migration code
-      case "Company":
-        console.warn("Converting a company from pre-2.6.1");
-        return value.data;
-      case "Faction":
-        console.warn("Converting a faction from pre-2.6.1");
+      case "AllServersMap": // Reviver removed in v0.43.1
+      case "Industry": // No longer part of save data since v2.3.0
+      case "Employee": // Entire object removed from game in v2.2.0 (employees abstracted)
+      case "Company": // Reviver removed in v2.6.1
+      case "Faction": // Reviver removed in v2.6.1
+        console.warn(`Legacy load type ${value.ctor} converted to expected format while loading.`);
         return value.data;
     }
     // Missing constructor with no special handling. Throw error.
