@@ -26,3 +26,7 @@ export const debugType = (v: unknown): string => {
 export function assertString(ctx: NetscriptContext, argName: string, v: unknown): asserts v is string {
   if (typeof v !== "string") throw errorMessage(ctx, `${argName} expected to be a string. ${debugType(v)}`, "TYPE");
 }
+
+export function assertFunction(ctx: NetscriptContext, argName: string, v: unknown): asserts v is () => void {
+  if (typeof v !== "function") throw errorMessage(ctx, `${argName} expected to be a function ${debugType(v)}`, "TYPE");
+}

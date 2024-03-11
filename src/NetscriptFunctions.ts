@@ -108,6 +108,7 @@ import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
 import { ServerConstants } from "./Server/data/Constants";
+import { assertFunction } from "./Netscript/TypeAssertion";
 
 export const enums: NSEnums = {
   CityName,
@@ -1683,6 +1684,7 @@ export const ns: InternalAPI<NSFull> = {
       jobs: structuredClone(Player.jobs),
       factions: Player.factions.slice(),
       entropy: Player.entropy,
+      karma: Player.karma,
     };
     setDeprecatedProperties(data, {
       playtimeSinceLastAug: {
@@ -1707,13 +1709,10 @@ export const ns: InternalAPI<NSFull> = {
     sinceInstall: Object.assign({}, Player.moneySourceA),
     sinceStart: Object.assign({}, Player.moneySourceB),
   }),
-  atExit: (ctx) => (f) => {
-    if (typeof f !== "function") {
-      throw helpers.errorMessage(ctx, "argument should be function");
-    }
-    ctx.workerScript.atExit = () => {
-      f();
-    }; // Wrap the user function to prevent WorkerScript leaking as 'this'
+  atExit: (ctx) => (callback, _id) => {
+    const id = _id ? helpers.string(ctx, "id", _id) : "default";
+    assertFunction(ctx, "callback", callback);
+    ctx.workerScript.atExit.set(id, callback);
   },
   mv: (ctx) => (_host, _source, _destination) => {
     const hostname = helpers.string(ctx, "host", _host);
@@ -1762,6 +1761,7 @@ export const ns: InternalAPI<NSFull> = {
     ctx.workerScript.print(wrapUserNode(value));
   },
   flags: Flags,
+  heart: { break: () => () => Player.karma },
   ...NetscriptExtra(),
 };
 

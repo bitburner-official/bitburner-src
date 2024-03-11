@@ -361,7 +361,7 @@ export const HelpTexts: Record<string, string[]> = {
   rm: [
     "Usage: rm [file name]",
     " ",
-    "Removes the specified file from the current server. A file can be a script, a program, or a message file. ",
+    "Removes the specified file from the current server. This command doesn't work for message (.msg) files.",
     " ",
     "WARNING: This is permanent and cannot be undone",
     " ",

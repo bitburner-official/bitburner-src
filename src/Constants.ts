@@ -75,9 +75,9 @@ export const CONSTANTS: {
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
-  VersionString: "2.6.0dev",
+  VersionString: "2.6.1dev",
   isDevBranch: true,
-  VersionNumber: 37,
+  VersionNumber: 38,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -200,78 +200,25 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.0 dev - Changelog last updated 26 Feb 2024
+## v2.6.1 dev - last updated 11 Mar 2024
 
-### MAJOR ADDITIONS
-
-- A new minigame IPvGO, based on the game Go. Visit DefComm in New Tokyo or the CIA in Sector-12 for access. Documentation for the mechanic is available ingame under "How to Play" once the mechanic is available. (@ficocelliguy)
-- A new BitNode has been added which focuses on the IPvGO mechanic (@ficocelliguy)
+See 2.6.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.0/src/Documentation/doc/changelog.md
 
 ### API
 
-- (Bladeburner) ns.bladeburner.getSkillUpgradeCost now returns infinity if requesting a cost above the maximum skill level (@Semanual)
-- (CodingContract) Fixed an issue where ns.codingcontract.getData was leaking internal arrays when contract data was a 2-d array (@LJNeon)
-- (Gang) Added ns.gang.getInstallResult for determining the effect an augmentation install will have on gang member ascension multipliers (@LJNeon)
-- (Go) Added the ns.go API, which allows interaction with the new IPvGO mechanic. While this is in development, the API may undergo changes (@ficocelliguy)
-- (Ports) Added ns.nextPortWrite, which allows waiting for the next write to a port without creating a port handle object (@LJNeon)
-- (Ports) Ports now support all clonable data (@LJNeon)
-- (Singularity) Add type information for ns.singularity.getCurrentWork return value (@Semanual)
-- (Stanek) Fix ns.stanek.acceptGift which was not working in 2.5.2 (@jjclark1982)
-- Improved the efficiency and accuracy of growth formulas (@d0sboots)
-- ns.formatNumber now throws an error if specifying a suffixStart less than 1000 (@TheAimMan)
-- HGWOptions now accepts a non-integer number of threads (@Caldwell-74)
-- Fixed outdated docs for ns.spawn() (adeilt)
-- Fixed ns.serverExists returning incorrect value for an endgame server (@cigarmemr)
-- Refactored weaken effect calculation (@Caldwell-74)
+- (Go) Fix a bug that allowed facing secret opponent early (@ficoccelliguy)
 
 ### UI
 
-- (Augmentations) Fixed some missing description text for Hacknet multipliers (@jjclark1982)
-- (Corporation) Align columns correctly in warehouse breakdown table (@jjclark1982)
-- (Corporation) Several typo fixes in Corporation modals (@cigarmemr)
-- (Documentation) Ingame documentation now displays line breaks inside tables correctly (@Snarling)
-- (Documentation) Added a documentation page for converting .script to .js (@LJNeon, @jjclark1982, @Snarling)
-- (Documentation) Script editor doc button points to correct docs (@LJNeon)
-- (Hashnet) Hash upgrade descriptions use proper number formatting options (@Snarling)
-- (Hacknet) Hacknet display shows a dynamic amount of columns based on screen width (@shyguy1412)
-- (Infiltration) Changed how the CheatCodeGame is displayed (@alutman, @Snarling)
-- (Sleeve) If intelligence is unlocked, sleeve intelligence is shown in the UI (@Caldwell-74)
-- (Stockmarket) Changed color of stocks increasing in value (@Semanual)
-- (Terminal) Improved scroll behavior on the Terminal (@Snarling)
-- (Theme) Added 3 new theme elements to properly support light themes (@adeilt)
-- Added a tail render interval setting, changing how frequently tail windows redraw their contents (@Caldwell-74)
-- Reorganization of some content and sorting of scripts on the Active Scripts page (@Snarling, @TheAimMan)
-- "Disable Text Effects" option also disables the corrupted text display (@draughtnyan)
-- fl1ght.exe now displays the related requirements in a more readable way (@TheAimMan, @LJNeon)
-- Miscellaneous wording fixes (@cigarmemr)
+- (Gang) Fix inaccurate display of wanted reduction rate when performing "justice" tasks (@LJNeon)
+- (Go) Fix an incorrect displayed max favor on Go history page (@ficocelliguy)
+- Fixed a display issue on the bitverse page (@LJNeon)
 
 ### MISC
 
-- (CodingContract) Improve parsing of player input for arrays in coding contracts (@rocket3989)
-- (Corporation) Fix an incorrect demand range for Minerals (@catloversg)
-- (Corporation) Divisions impact on corporation valuation is now based on number of offices and warehouses (@catloversg)
-- (Corporation) Improve performance of calculations (@catloversg)
-- (Bladeburner) Band-aid fix Blops count and action stopping (@Caldwell-74)
-- (Gang) Add separate money tracking for gang expenses (@deansvendsen)
-- (Ports) Port objects no longer track a separate promise for every use of nextWrite (@Snarling)
-- (Ports) Fixed a crashing bug related to the changes above (@Jman420)
-- (RemoteAPI) Remote API can be targeted to a remote device instead of the default of localhost (@Specker)
-- (RemoteAPI) Added a getAllServers method (@shyguy1412)
-- (ScriptEditor) When importing from other files that are also open in the editor, type information is now available in the IDE (@shyguy1412)
-- (ScriptEditor) Links from "ls" are now tied to that host, instead of your connected machine (@LJNeon)
-- (ScriptEditor) Script "models" in the script editor are now properly disposed (@Caldwell-74)
-- (Terminal) Add --ram-override flag to the run command (@LJNeon)
-- Protect against renaming servers to invalid names (@LJNeon)
-- All running scripts are killed upon entering the BitVerse (@LJNeon)
-- Scripts with the "temporary" flag set do not populate the Recently Killed script list on script death (@TheAimMan)
- - Fix an issue with offline income for scripts (@Caldwell-74)
-- Various "nextUpdate" promises are not tracked internally as a single promise instead of an array of promises (@Caldwell-74, @LJNeon)
-- Fix inconsistent importing of the arg library (@catloversg)
-- Clarify some information in the CONTRIBUTING.md file (@deansvendsen)
-- Internal changes to method used for cloning objects (@LJNeon)
-- Rearrange some internal constants (@Caldwell-74)
-- b1t_flum3.exe can be ran in "quick" mode (@TheAimMan)
-- Nerf noodle bar (various)
-- Nerf noodle bar moar (@Caldwell-74)
+- Miscellaneous documentation fixes (@adeilt, @User670)
+- Allow .json files (@shyguy1412)
+- Remove some unnecessary data from save file (@Snarling)
+- Nerf noodle bar (various contributors)
 `,
 };

@@ -1,5 +1,5 @@
 import { setPlayer } from "@player";
-import { GoOpponent, GoColor, GoPlayType } from "@enums";
+import { GoColor, GoOpponent, GoPlayType } from "@enums";
 import { Go } from "../../../src/Go/Go";
 import { boardStateFromSimpleBoard, simpleBoardFromBoard } from "../../../src/Go/boardAnalysis/boardAnalysis";
 import {
@@ -87,19 +87,17 @@ describe("Netscript Go API unit tests", () => {
       expect(Go.currentGame.board.length).toEqual(9);
       expect(Go.currentGame.ai).toEqual(GoOpponent.SlumSnakes);
     });
-    /* This typechecking is now done prior to calling resetBoardState (it's checked in the ns function via getEnumHelper("GoOpponent".nsGetMember()))
     it("should throw an error if an invalid opponent is requested", () => {
       const board = ["OXX..", ".....", ".....", ".....", "..###"];
-      Go.boardState = getBoardFromSimplifiedBoardState(board);
+      Go.currentGame = boardStateFromSimpleBoard(board);
       const mockError = jest.fn();
 
-      resetBoardState(mockError, "fake opponent", 9);
+      resetBoardState(mockError, GoOpponent.w0r1d_d43m0n, 9);
 
       expect(mockError).toHaveBeenCalledWith(
-        "Invalid opponent requested (fake opponent), valid options are Netburners, Slum Snakes, The Black Hand, Tetrads, Daedalus, Illuminati",
+        `Invalid opponent requested (${GoOpponent.w0r1d_d43m0n}), this opponent has not yet been discovered`,
       );
     });
-*/
     it("should throw an error if an invalid size is requested", () => {
       const board = ["OXX..", ".....", ".....", ".....", "..###"];
       Go.currentGame = boardStateFromSimpleBoard(board);
@@ -107,7 +105,7 @@ describe("Netscript Go API unit tests", () => {
 
       resetBoardState(mockError, GoOpponent.TheBlackHand, 31337);
 
-      expect(mockError).toHaveBeenCalledWith("Invalid subnet size requested (31337, size must be 5, 7, 9, or 13");
+      expect(mockError).toHaveBeenCalledWith("Invalid subnet size requested (31337), size must be 5, 7, 9, or 13");
     });
   });
 

@@ -7,7 +7,7 @@ export type TextFilePath = FilePath & WithTextExtension;
 
 /** Check extension only */
 export function hasTextExtension(path: string): path is WithTextExtension {
-  return path.endsWith(".txt");
+  return path.endsWith(".txt") || path.endsWith(".json");
 }
 
 /** Sanitize a player input, resolve any relative paths, and for imports add the correct extension if missing */

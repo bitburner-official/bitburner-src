@@ -1,8 +1,6 @@
 import { AugmentationName, FactionName, FactionDiscovery } from "@enums";
 import { FactionInfo, FactionInfos } from "./FactionInfo";
 import { favorToRep, repToFavor } from "./formulas/favor";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { getKeyList } from "../utils/helpers/getKeyList";
 
 export class Faction {
   /**
@@ -32,7 +30,7 @@ export class Faction {
   /** Amount of reputation player has with this faction */
   playerReputation = 0;
 
-  constructor(name = FactionName.Sector12) {
+  constructor(name: FactionName) {
     this.name = name;
   }
 
@@ -77,20 +75,4 @@ export class Faction {
     const newFavor = repToFavor(totalRep);
     return newFavor - this.favor;
   }
-
-  static savedKeys = getKeyList(Faction, {
-    removedKeys: ["augmentations", "name", "alreadyInvited", "isBanned", "isMember"],
-  });
-
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Faction", this, Faction.savedKeys);
-  }
-
-  /** Initializes a Faction object from a JSON save state. */
-  static fromJSON(value: IReviverValue): Faction {
-    return Generic_fromJSON(Faction, value.data, Faction.savedKeys);
-  }
 }
-
-constructorsForReviver.Faction = Faction;

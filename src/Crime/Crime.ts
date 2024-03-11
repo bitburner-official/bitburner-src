@@ -38,7 +38,7 @@ export class Crime {
   // How many people die as a result of this crime
   kills: number;
 
-  // How much money is given by the
+  // How much money is given by the crime
   money: number;
 
   // Name of crime as it appears on work screen: "You are attempting..."

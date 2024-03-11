@@ -1,7 +1,7 @@
 import type { BoardState, Play } from "../Types";
 
 import { Player } from "@player";
-import { GoColor, GoPlayType, GoValidity, GoOpponent } from "@enums";
+import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
 import { Go, GoEvents } from "../Go";
 import { getMove, sleep } from "../boardAnalysis/goAI";
 import { getNewBoardState, makeMove, passTurn, updateCaptures, updateChains } from "../boardState/boardState";
@@ -177,7 +177,12 @@ function logEndGame(logger: (s: string) => void) {
  */
 export function resetBoardState(error: (s: string) => void, opponent: GoOpponent, boardSize: number) {
   if (![5, 7, 9, 13].includes(boardSize)) {
-    error(`Invalid subnet size requested (${boardSize}, size must be 5, 7, 9, or 13`);
+    error(`Invalid subnet size requested (${boardSize}), size must be 5, 7, 9, or 13`);
+    return;
+  }
+
+  if (opponent === GoOpponent.w0r1d_d43m0n && !Player.hasAugmentation(AugmentationName.TheRedPill, true)) {
+    error(`Invalid opponent requested (${opponent}), this opponent has not yet been discovered`);
     return;
   }
 
