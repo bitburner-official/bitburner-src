@@ -383,8 +383,10 @@ export const pointStyle = makeStyles((theme: Theme) => {
   });
 });
 
-export const boardStyles = makeStyles((theme: Theme) =>
-  createStyles({
+export const boardStyles = makeStyles((theme: Theme) => {
+  const goWhite = colorIsDark(`${theme.colors.white}`) ? "#C3C3C3" : theme.colors.white;
+  const goBackground = colorIsDark(`${theme.colors.backgroundprimary}`) ? "transparent" : "darkgray";
+  return createStyles({
     tab: {
       paddingTop: 0,
       paddingBottom: 0,
@@ -429,6 +431,7 @@ export const boardStyles = makeStyles((theme: Theme) =>
       width: "100%",
       height: "100%",
       position: "relative",
+      background: goBackground,
     },
     traditional: {
       backgroundColor: "#ca973e",
@@ -529,7 +532,7 @@ export const boardStyles = makeStyles((theme: Theme) =>
     background: {
       position: "absolute",
       opacity: 0.09,
-      color: "${goWhite}",
+      color: goWhite,
       fontFamily: "monospace",
       fontSize: "calc(min(.65vh - 2px, 0.65vw - 2px))",
       whiteSpace: "pre",
@@ -583,14 +586,15 @@ export const boardStyles = makeStyles((theme: Theme) =>
     centeredText: {
       textAlign: "center",
     },
-  }),
-);
+  });
+});
 
 function colorIsDark(color: string): boolean {
-  const hexMatch = color.match(/([\da-f]{2})([\da-f]{2})([\da-f]{2})/i) ?? [];
-  const r = parseInt(hexMatch[1], 16);
-  const g = parseInt(hexMatch[2], 16);
-  const b = parseInt(hexMatch[3], 16);
+  const hexMatch = color.match(/#([\da-f]{2})([\da-f]{2})([\da-f]{2})/i);
+  const shortHexMatch = color.match(/#([\da-f])([\da-f])([\da-f])$/i) ?? [];
+  const r = parseInt(hexMatch?.[1] ?? `${shortHexMatch[1]}0`, 16);
+  const g = parseInt(hexMatch?.[2] ?? `${shortHexMatch[1]}0`, 16);
+  const b = parseInt(hexMatch?.[3] ?? `${shortHexMatch[1]}0`, 16);
 
   // HSP equation from http://alienryderflex.com/hsp.html
   return Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b)) < 127.5;
