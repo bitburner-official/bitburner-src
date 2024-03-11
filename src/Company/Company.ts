@@ -65,10 +65,16 @@ export class Company {
   }
 
   getFavorGain(): number {
-    if (this.favor == null) this.favor = 0;
-    const storedRep = Math.max(0, favorToRep(this.favor));
+    const storedFavor = Math.max(0, this.favor || 0);
+    const storedRep = Math.max(0, favorToRep(storedFavor));
     const totalRep = storedRep + this.playerReputation;
-    const newFavor = repToFavor(totalRep);
-    return newFavor - this.favor;
+    if (totalRep <= Number.MAX_VALUE) {
+      const newFavor = repToFavor(totalRep);
+      return newFavor - storedFavor;
+    }
+    else {
+      // Above effectively-infinite favor levels, support gaining up to the max amount each prestige.
+      return repToFavor(this.playerReputation);
+    }
   }
 }
