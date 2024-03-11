@@ -1,7 +1,7 @@
-import {setPlayer} from "@player";
-import {GoColor, GoOpponent, GoPlayType} from "@enums";
-import {Go} from "../../../src/Go/Go";
-import {boardStateFromSimpleBoard, simpleBoardFromBoard} from "../../../src/Go/boardAnalysis/boardAnalysis";
+import { setPlayer } from "@player";
+import { GoColor, GoOpponent, GoPlayType } from "@enums";
+import { Go } from "../../../src/Go/Go";
+import { boardStateFromSimpleBoard, simpleBoardFromBoard } from "../../../src/Go/boardAnalysis/boardAnalysis";
 import {
   cheatPlayTwoMoves,
   cheatRemoveRouter,
@@ -15,9 +15,9 @@ import {
   makePlayerMove,
   resetBoardState,
 } from "../../../src/Go/effects/netscriptGoImplementation";
-import {PlayerObject} from "../../../src/PersonObjects/Player/PlayerObject";
+import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 import "../../../src/Faction/Factions";
-import {getNewBoardState} from "../../../src/Go/boardState/boardState";
+import { getNewBoardState } from "../../../src/Go/boardState/boardState";
 
 jest.mock("../../../src/Faction/Factions", () => ({
   Factions: {},
