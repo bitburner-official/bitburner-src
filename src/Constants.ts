@@ -200,8 +200,25 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.1 dev - last updated 5 Mar 2024
+## v2.6.1 dev - last updated 11 Mar 2024
 
-No changes since v2.6.0 release. See 2.6.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.0/src/Documentation/doc/changelog.md
+See 2.6.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.0/src/Documentation/doc/changelog.md
+
+### API
+
+- (Go) Fix a bug that allowed facing secret opponent early (@ficoccelliguy)
+
+### UI
+
+- (Gang) Fix inaccurate display of wanted reduction rate when performing "justice" tasks (@LJNeon)
+- (Go) Fix an incorrect displayed max favor on Go history page (@ficocelliguy)
+- Fixed a display issue on the bitverse page (@LJNeon)
+
+### MISC
+
+- Miscellaneous documentation fixes (@adeilt, @User670)
+- Allow .json files (@shyguy1412)
+- Remove some unnecessary data from save file (@Snarling)
+- Nerf noodle bar (various contributors)
 `,
 };
