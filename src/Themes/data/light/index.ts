@@ -28,7 +28,7 @@ export const Theme: IPredefinedTheme = {
     infodark: "#30689C",
     welllight: "#f9f9f9",
     well: "#eaeaea",
-    white: "#F7F7F7",
+    white: "#000000",
     black: "#F7F7F7",
     hp: "#BF5C41",
     money: "#E1B121",
