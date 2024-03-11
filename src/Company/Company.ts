@@ -3,8 +3,6 @@ import type { CompanyPosition } from "./CompanyPosition";
 import { CompanyName, JobName, FactionName } from "@enums";
 import { favorToRep, repToFavor } from "../Faction/formulas/favor";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-
 export interface CompanyCtorParams {
   name: CompanyName;
   info?: string;
@@ -41,8 +39,7 @@ export class Company {
   playerReputation = 0;
   favor = 0;
 
-  constructor(p?: CompanyCtorParams) {
-    if (!p) return;
+  constructor(p: CompanyCtorParams) {
     this.name = p.name;
     if (p.info) this.info = p.info;
     p.companyPositions.forEach((jobName) => this.companyPositions.add(jobName));
@@ -74,19 +71,4 @@ export class Company {
     const newFavor = repToFavor(totalRep);
     return newFavor - this.favor;
   }
-
-  /** Serialize the current object to a JSON save state. */
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Company", this, Company.includedKeys);
-  }
-
-  /** Initializes a Company from a JSON save state. */
-  static fromJSON(value: IReviverValue): Company {
-    return Generic_fromJSON(Company, value.data, Company.includedKeys);
-  }
-
-  // Only these 2 keys are relevant to the save file
-  static includedKeys = ["favor", "playerReputation"] as const;
 }
-
-constructorsForReviver.Company = Company;
