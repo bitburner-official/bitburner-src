@@ -2,8 +2,10 @@ import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
 
-export const pointStyle = makeStyles((theme: Theme) =>
-  createStyles({
+export const pointStyle = makeStyles((theme: Theme) => {
+  const goWhite = colorIsDark(`${theme.colors.white}`) ? "#C3C3C3" : theme.colors.white;
+  const goBlack = colorIsDark(`${theme.colors.black}`) ? theme.colors.black : "#0A0B0B";
+  return createStyles({
     hover: {},
     valid: {},
     priorPoint: {},
@@ -13,17 +15,17 @@ export const pointStyle = makeStyles((theme: Theme) =>
       width: "100%",
 
       "&$hover$valid:hover $innerPoint": {
-        outlineColor: "#C3C3C3",
+        outlineColor: goWhite,
       },
       "&$hover$priorPoint $innerPoint": {
-        outlineColor: "#C3C3C3",
+        outlineColor: goWhite,
       },
       "&$hover$priorPoint $priorStoneTrad$blackPoint": {
-        outlineColor: "#C3C3C3",
+        outlineColor: goWhite,
         display: "block",
       },
       "&$hover$priorPoint $priorStoneTrad$whitePoint": {
-        outlineColor: "#0A0B0B",
+        outlineColor: goBlack,
         display: "block",
       },
       "&$hover:hover $coordinates": {
@@ -64,13 +66,13 @@ export const pointStyle = makeStyles((theme: Theme) =>
       },
       "& $broken": {
         backgroundImage: "none",
-        backgroundColor: "#0A0B0B",
+        backgroundColor: goBlack,
       },
       "& $tradStone": {
         display: "block",
       },
       "& $liberty": {
-        backgroundColor: "#0A0B0B",
+        backgroundColor: goBlack,
         transition: "none",
         "&:not($northLiberty):not($southLiberty):not($eastLiberty):not($westLiberty)": {
           width: 0,
@@ -142,7 +144,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
         left: "15%",
       },
       "& $blackPoint ~ $coordinates": {
-        color: "#C3C3C3",
+        color: goWhite,
       },
     },
     fiveByFive: {
@@ -237,7 +239,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
         margin: 0,
 
         "&:before": {
-          backgroundColor: "#0A0B0B",
+          backgroundColor: goBlack,
           backgroundImage: `linear-gradient(145deg, transparent, #000 65%), radial-gradient(calc(min(150px, 11vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
         },
       },
@@ -280,7 +282,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
       width: "10%",
       height: "10%",
       margin: "45%",
-      backgroundColor: "#C3C3C3",
+      backgroundColor: goWhite,
       position: "relative",
     },
     filledPoint: {
@@ -301,8 +303,8 @@ export const pointStyle = makeStyles((theme: Theme) =>
       width: "70%",
       height: "70%",
       margin: "15%",
-      backgroundColor: "#0A0B0B",
-      outlineColor: "#C3C3C3",
+      backgroundColor: goBlack,
+      outlineColor: goWhite,
     },
     fadeLoopAnimation: {
       animation: `$fadeLoop 800ms ${theme.transitions.easing.easeInOut} infinite alternate`,
@@ -355,7 +357,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
       left: "0",
     },
     coordinates: {
-      color: "#C3C3C3",
+      color: goWhite,
       fontFamily: `"Lucida Console", "Lucida Sans Unicode", "Fira Mono", Consolas, "Courier New", Courier, monospace, "Times New Roman"`,
       fontSize: "calc(min(1.3vw, 12px))",
       display: "none",
@@ -378,8 +380,8 @@ export const pointStyle = makeStyles((theme: Theme) =>
       position: "absolute",
       zIndex: "10",
     },
-  }),
-);
+  });
+});
 
 export const boardStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -527,7 +529,7 @@ export const boardStyles = makeStyles((theme: Theme) =>
     background: {
       position: "absolute",
       opacity: 0.09,
-      color: "#C3C3C3",
+      color: "#FFF",
       fontFamily: "monospace",
       fontSize: "calc(min(.65vh - 2px, 0.65vw - 2px))",
       whiteSpace: "pre",
@@ -583,3 +585,13 @@ export const boardStyles = makeStyles((theme: Theme) =>
     },
   }),
 );
+
+function colorIsDark(color: string): boolean {
+  const hexMatch = color.match(/([\da-f]{2})([\da-f]{2})([\da-f]{2})/i) ?? [];
+  const r = parseInt(hexMatch[1], 16);
+  const g = parseInt(hexMatch[2], 16);
+  const b = parseInt(hexMatch[3], 16);
+
+  // HSP equation from http://alienryderflex.com/hsp.html
+  return Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b)) < 127.5;
+}
