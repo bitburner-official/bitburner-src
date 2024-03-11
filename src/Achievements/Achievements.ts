@@ -1,6 +1,6 @@
 import {
   AugmentationName,
-  BlackOperationName,
+  BladeBlackOpName,
   CityName,
   CompletedProgramName,
   CorpUnlockName,
@@ -65,7 +65,7 @@ function bitNodeFinishedState(): boolean {
   const wd = GetServer(SpecialServers.WorldDaemon);
   if (!(wd instanceof Server)) return false;
   if (wd.backdoorInstalled) return true;
-  return Player.bladeburner !== null && BlackOperationName.OperationDaedalus in Player.bladeburner.blackops;
+  return Player.bladeburner !== null && BladeBlackOpName.OperationDaedalus in Player.bladeburner.blackops;
 }
 
 function hasAccessToSF(bn: number): boolean {

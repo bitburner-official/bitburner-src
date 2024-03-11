@@ -3,7 +3,7 @@ import type { Singularity as ISingularity, Task as ITask } from "@nsdefs";
 import { Player } from "@player";
 import {
   AugmentationName,
-  BlackOperationName,
+  BladeBlackOpName,
   CityName,
   FactionName,
   FactionWorkType,
@@ -1122,7 +1122,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       };
       const bladeburnerRequirements = () => {
         if (!Player.bladeburner) return false;
-        return Player.bladeburner.blackops[BlackOperationName.OperationDaedalus];
+        return Player.bladeburner.blackops[BladeBlackOpName.OperationDaedalus];
       };
 
       if (!hackingRequirements() && !bladeburnerRequirements()) {

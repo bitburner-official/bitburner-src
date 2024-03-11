@@ -1,39 +1,39 @@
 import React from "react";
-import { BlackOperationName, CityName, FactionName } from "@enums";
+import { BladeBlackOpName, CityName, FactionName } from "@enums";
 
 interface IBlackOp {
   desc: JSX.Element;
 }
 
 export const BlackOperations: Record<string, IBlackOp | undefined> = {
-  [BlackOperationName.OperationTyphoon]: {
+  [BladeBlackOpName.OperationTyphoon]: {
     desc: (
       <>
         Obadiah Zenyatta is the leader of a RedWater PMC. It has long been known among the intelligence community that
         Zenyatta, along with the rest of the PMC, is a Synthoid.
         <br />
         <br />
-        The goal of {BlackOperationName.OperationTyphoon} is to find and eliminate Zenyatta and RedWater by any means
+        The goal of {BladeBlackOpName.OperationTyphoon} is to find and eliminate Zenyatta and RedWater by any means
         necessary. After the task is completed, the actions must be covered up from the general public.
       </>
     ),
   },
 
-  [BlackOperationName.OperationZero]: {
+  [BladeBlackOpName.OperationZero]: {
     desc: (
       <>
         AeroCorp is one of the world's largest defense contractors. Its leader, Steve Watataki, is thought to be a
         supporter of Synthoid rights. He must be removed.
         <br />
         <br />
-        The goal of {BlackOperationName.OperationZero} is to covertly infiltrate AeroCorp and uncover any incriminating
+        The goal of {BladeBlackOpName.OperationZero} is to covertly infiltrate AeroCorp and uncover any incriminating
         evidence or information against Watataki that will cause him to be removed from his position at AeroCorp.
         Incriminating evidence can be fabricated as a last resort. Be warned that AeroCorp has some of the most advanced
         security measures in the world.
       </>
     ),
   },
-  [BlackOperationName.OperationX]: {
+  [BladeBlackOpName.OperationX]: {
     desc: (
       <>
         We have recently discovered an underground publication group called Samizdat. Even though most of their
@@ -48,7 +48,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationTitan]: {
+  [BladeBlackOpName.OperationTitan]: {
     desc: (
       <>
         Several months ago Titan Laboratories' Bioengineering department was infiltrated by Synthoids. As far as we
@@ -63,7 +63,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationAres]: {
+  [BladeBlackOpName.OperationAres]: {
     desc: (
       <>
         One of our undercover agents, Agent Carter, has informed us of a massive weapons deal going down in Dubai
@@ -75,7 +75,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationArchangel]: {
+  [BladeBlackOpName.OperationArchangel]: {
     desc: (
       <>
         Our analysts have discovered that the popular Red Rabbit brothel in Amsterdam is run and 'staffed' by MK-VI
@@ -88,7 +88,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationJuggernaut]: {
+  [BladeBlackOpName.OperationJuggernaut]: {
     desc: (
       <>
         The CIA has just encountered a new security threat. A new criminal group, lead by a shadowy operative who calls
@@ -102,7 +102,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationRedDragon]: {
+  [BladeBlackOpName.OperationRedDragon]: {
     desc: (
       <>
         The {FactionName.Tetrads} criminal organization is suspected of reverse-engineering the MK-VI Synthoid design.
@@ -115,7 +115,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationK]: {
+  [BladeBlackOpName.OperationK]: {
     desc: (
       <>
         CODE RED SITUATION. Our intelligence tells us that VitaLife has discovered a new android cloning technology.
@@ -131,21 +131,21 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationDeckard]: {
+  [BladeBlackOpName.OperationDeckard]: {
     desc: (
       <>
         Despite your success in eliminating VitaLife's new android-replicating technology in{" "}
-        {BlackOperationName.OperationK}, we've discovered that a small group of MK-VI Synthoids were able to make off
-        with the schematics and design of the technology before the Operation. It is almost a certainty that these
-        Synthoids are some of the rogue MK-VI ones from the Synthoid Uprising.
+        {BladeBlackOpName.OperationK}, we've discovered that a small group of MK-VI Synthoids were able to make off with
+        the schematics and design of the technology before the Operation. It is almost a certainty that these Synthoids
+        are some of the rogue MK-VI ones from the Synthoid Uprising.
         <br />
         <br />
-        The goal of {BlackOperationName.OperationDeckard} is to hunt down these Synthoids and retire them. I don't need
-        to tell you how critical this mission is.
+        The goal of {BladeBlackOpName.OperationDeckard} is to hunt down these Synthoids and retire them. I don't need to
+        tell you how critical this mission is.
       </>
     ),
   },
-  [BlackOperationName.OperationTyrell]: {
+  [BladeBlackOpName.OperationTyrell]: {
     desc: (
       <>
         A week ago {FactionName.BladeIndustries} reported a small break-in at one of their {CityName.Aevum} Augmentation
@@ -158,10 +158,10 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationWallace]: {
+  [BladeBlackOpName.OperationWallace]: {
     desc: (
       <>
-        Based on information gathered from {BlackOperationName.OperationTyrell}, we've discovered that{" "}
+        Based on information gathered from {BladeBlackOpName.OperationTyrell}, we've discovered that{" "}
         {FactionName.TheDarkArmy} was well aware that there were Synthoids amongst their ranks. Even worse, we believe
         that {FactionName.TheDarkArmy} is working together with other criminal organizations such as{" "}
         {FactionName.TheSyndicate} and that they are planning some sort of large-scale takeover of multiple major
@@ -170,12 +170,12 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
         <br />
         <br />
         The best way to deal with this is to prevent it before it even happens. The goal of{" "}
-        {BlackOperationName.OperationWallace} is to destroy {FactionName.TheDarkArmy} and Syndicate factions in{" "}
+        {BladeBlackOpName.OperationWallace} is to destroy {FactionName.TheDarkArmy} and Syndicate factions in{" "}
         {CityName.Aevum} immediately. Leave no survivors.
       </>
     ),
   },
-  [BlackOperationName.OperationShoulderOfOrion]: {
+  [BladeBlackOpName.OperationShoulderOfOrion]: {
     desc: (
       <>
         China's Solaris Space Systems is secretly launching the first manned spacecraft in over a decade using
@@ -188,7 +188,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationHyron]: {
+  [BladeBlackOpName.OperationHyron]: {
     desc: (
       <>
         Our intelligence tells us that {FactionName.FulcrumSecretTechnologies} is developing a quantum supercomputer
@@ -206,7 +206,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationMorpheus]: {
+  [BladeBlackOpName.OperationMorpheus]: {
     desc: (
       <>
         DreamSense Technologies is an advertising company that uses special technology to transmit their ads into the
@@ -219,7 +219,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationIonStorm]: {
+  [BladeBlackOpName.OperationIonStorm]: {
     desc: (
       <>
         Our analysts have uncovered a gathering of MK-VI Synthoids that have taken up residence in the{" "}
@@ -232,7 +232,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationAnnihilus]: {
+  [BladeBlackOpName.OperationAnnihilus]: {
     desc: (
       <>
         Our superiors have ordered us to eradicate everything and everyone in an underground facility located in{" "}
@@ -242,7 +242,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationUltron]: {
+  [BladeBlackOpName.OperationUltron]: {
     desc: (
       <>
         {FactionName.OmniTekIncorporated}, the original designer and manufacturer of Synthoids, has notified us of a
@@ -264,7 +264,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationCenturion]: {
+  [BladeBlackOpName.OperationCenturion]: {
     desc: (
       <>
         {"D)@#)($M)C0293c40($*)@#D0JUMP3Rm0C<*@#)*$)#02c94830c(#$*D)"}
@@ -282,7 +282,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationVindictus]: {
+  [BladeBlackOpName.OperationVindictus]: {
     desc: (
       <>
         {"D)@#)($M)C0293c40($*)@#D0JUMP3Rm0C<*@#)*$)#02c94830c(#$*D)"}
@@ -296,7 +296,7 @@ export const BlackOperations: Record<string, IBlackOp | undefined> = {
       </>
     ),
   },
-  [BlackOperationName.OperationDaedalus]: {
+  [BladeBlackOpName.OperationDaedalus]: {
     desc: <> Yesterday we obeyed kings and bent our neck to emperors. Today we kneel only to truth.</>,
   },
 };

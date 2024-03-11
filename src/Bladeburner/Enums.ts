@@ -1,4 +1,13 @@
-export enum BlackOperationName {
+export enum BladeActionType {
+  general = "General Action",
+  contract = "Contract",
+  operation = "Operation",
+  blackOp = "Black Operation",
+}
+export enum BladeGeneralActionName {}
+export enum BladeContractName {}
+export enum BladeOperationName {}
+export enum BladeBlackOpName {
   OperationTyphoon = "Operation Typhoon",
   OperationZero = "Operation Zero",
   OperationX = "Operation X",
@@ -21,3 +30,5 @@ export enum BlackOperationName {
   OperationVindictus = "Operation Vindictus",
   OperationDaedalus = "Operation Daedalus",
 }
+
+export enum BladeSkillName {}
