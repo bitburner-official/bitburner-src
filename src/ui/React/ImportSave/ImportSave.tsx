@@ -123,7 +123,7 @@ export const ImportSave = (props: { importString: string; automatic: boolean }):
   useEffect(() => {
     async function fetchData(): Promise<void> {
       const dataBeingImported = await saveObject.getImportDataFromString(props.importString);
-      const dataCurrentlyInGame = await saveObject.getImportDataFromString(saveObject.getSaveString(true));
+      const dataCurrentlyInGame = await saveObject.getImportDataFromString(await saveObject.getSaveString(true));
 
       setImportData(dataBeingImported);
       setCurrentData(dataCurrentlyInGame);

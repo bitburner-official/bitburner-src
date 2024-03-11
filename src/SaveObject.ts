@@ -88,7 +88,7 @@ class BitburnerSaveObject {
   StaneksGiftSave = "";
   GoSave = "";
 
-  getSaveString(forceExcludeRunningScripts = false): string {
+  async getSaveString(forceExcludeRunningScripts = false): Promise<string> {
     this.PlayerSave = JSON.stringify(Player);
 
     // For the servers save, overwrite the ExcludeRunningScripts setting if forced
@@ -110,35 +110,33 @@ class BitburnerSaveObject {
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
 
-    const saveString = btoa(unescape(encodeURIComponent(JSON.stringify(this))));
-    return saveString;
+    let CompressedSave = await compress(JSON.stringify(this));
+
+    const saveString = bytesToBase64(CompressedSave);
+    return `{"CompressedSave": "${saveString}"}`;
   }
 
-  saveGame(emitToastEvent = true): Promise<void> {
+  async saveGame(emitToastEvent = true): Promise<void> {
     const savedOn = new Date().getTime();
     Player.lastSave = savedOn;
-    const saveString = this.getSaveString();
-    return new Promise((resolve, reject) => {
-      save(saveString)
-        .then(() => {
-          const saveData: SaveData = {
-            playerIdentifier: Player.identifier,
-            fileName: this.getSaveFileName(),
-            save: saveString,
-            savedOn,
-          };
-          pushGameSaved(saveData);
+    const saveString = await this.getSaveString();
+    try {
+      await save(saveString);
+      const saveData: SaveData = {
+        playerIdentifier: Player.identifier,
+        fileName: this.getSaveFileName(),
+        save: saveString,
+        savedOn,
+      };
+      pushGameSaved(saveData);
 
-          if (emitToastEvent) {
-            SnackbarEvents.emit("Game Saved!", ToastVariant.INFO, 2000);
-          }
-          return resolve();
-        })
-        .catch((err) => {
-          console.error(err);
-          return reject();
-        });
-    });
+      if (emitToastEvent) {
+        SnackbarEvents.emit("Game Saved!", ToastVariant.INFO, 2000);
+      }
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   }
 
   getSaveFileName(isRecovery = false): string {
@@ -150,8 +148,8 @@ class BitburnerSaveObject {
     return filename;
   }
 
-  exportGame(): void {
-    const saveString = this.getSaveString();
+  async exportGame(): Promise<void> {
+    const saveString = await this.getSaveString();
     const filename = this.getSaveFileName();
     download(filename, saveString);
   }
@@ -190,24 +188,32 @@ class BitburnerSaveObject {
 
   async getImportDataFromString(base64Save: string): Promise<ImportData> {
     if (!base64Save || base64Save === "") throw new Error("Invalid import string");
-
-    let newSave;
-    try {
-      newSave = window.atob(base64Save);
-      newSave = newSave.trim();
-    } catch (error) {
-      console.error(error); // We'll handle below
-    }
-
-    if (!newSave || newSave === "") {
-      return Promise.reject(new Error("Save game had not content or was not base64 encoded"));
-    }
-
     let parsedSave;
-    try {
-      parsedSave = JSON.parse(newSave);
-    } catch (error) {
-      console.error(error); // We'll handle below
+    if (base64Save.startsWith('{"CompressedSave": ')) {
+      try {
+        let { CompressedSave } = JSON.parse(base64Save);
+        parsedSave = JSON.parse(await decompress(base64ToBytes(CompressedSave)));
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      let newSave;
+      try {
+        newSave = window.atob(base64Save);
+        newSave = newSave.trim();
+      } catch (error) {
+        console.error(error); // We'll handle below
+      }
+
+      if (!newSave || newSave === "") {
+        return Promise.reject(new Error("Save game had not content or was not base64 encoded"));
+      }
+
+      try {
+        parsedSave = JSON.parse(newSave);
+      } catch (error) {
+        console.error(error); // We'll handle below
+      }
     }
 
     if (!parsedSave || parsedSave.ctor !== "BitburnerSaveObject" || !parsedSave.data) {
@@ -719,10 +725,20 @@ Error: ${e}`);
   }
 }
 
-function loadGame(saveString: string): boolean {
+async function loadGame(saveString: string): Promise<boolean> {
   createScamUpdateText();
   if (!saveString) return false;
-  saveString = decodeURIComponent(escape(atob(saveString)));
+  if (saveString.startsWith('{"CompressedSave": ')) {
+    try {
+      let { CompressedSave } = JSON.parse(saveString);
+      saveString = await decompress(base64ToBytes(CompressedSave));
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  } else {
+    saveString = decodeURIComponent(escape(atob(saveString)));
+  }
 
   const saveObj = JSON.parse(saveString, Reviver);
 
@@ -862,6 +878,71 @@ function download(filename: string, content: string): void {
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
   }, 0);
+}
+
+async function compress(str: string): Promise<Uint8Array> {
+  // Convert the string to a byte stream.
+  const stream = new Blob([str]).stream();
+
+  // Create a compressed stream.
+  const compressedStream = stream.pipeThrough(new CompressionStream("gzip"));
+
+  // Read all the bytes from this stream.
+  const chunks = [];
+  const reader = compressedStream.getReader();
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  return await concatUint8Arrays(chunks);
+}
+
+async function decompress(compressedBytes: Uint8Array): Promise<string> {
+  // Convert the bytes to a stream.
+  const stream = new Blob([compressedBytes]).stream();
+
+  // Create a decompressed stream.
+  const decompressedStream = stream.pipeThrough(new DecompressionStream("gzip"));
+
+  // Read all the bytes from this stream.
+  const chunks = [];
+  const reader = decompressedStream.getReader();
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  const stringBytes = await concatUint8Arrays(chunks);
+
+  // Convert the bytes to a string.
+  return new TextDecoder().decode(stringBytes);
+}
+
+async function concatUint8Arrays(uint8arrays: Uint8Array[]): Promise<Uint8Array> {
+  const blob = new Blob(uint8arrays);
+  const buffer = await blob.arrayBuffer();
+  return new Uint8Array(buffer);
+}
+
+// This is not the most efficient implementation;
+// See https://developer.mozilla.org/en-US/docs/Glossary/Base64
+function base64ToBytes(base64: string): Uint8Array {
+  const binString = atob(base64);
+  return Uint8Array.from(binString, (m) => m.codePointAt(0) ?? 0);
+}
+
+function bytesToBase64(bytes: Uint8Array): string {
+  const binString = Array.from(bytes, (byte) => String.fromCodePoint(byte)).join("");
+  return btoa(binString);
 }
 
 constructorsForReviver.BitburnerSaveObject = BitburnerSaveObject;

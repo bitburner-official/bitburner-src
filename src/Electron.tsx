@@ -28,7 +28,7 @@ declare global {
       triggerSave: () => Promise<void>;
       triggerGameExport: () => void;
       triggerScriptsExport: () => void;
-      getSaveData: () => { save: string; fileName: string };
+      getSaveData: () => Promise<{ save: string; fileName: string }>;
       getSaveInfo: (base64Save: string) => Promise<ImportPlayerData | undefined>;
       pushSaveData: (base64Save: string, automatic?: boolean) => void;
     };
@@ -132,9 +132,9 @@ function initSaveFunctions(): void {
       }
     },
     triggerScriptsExport: (): void => exportScripts("*", Player.getHomeComputer()),
-    getSaveData: (): { save: string; fileName: string } => {
+    getSaveData: async (): Promise<{ save: string; fileName: string }> => {
       return {
-        save: saveObject.getSaveString(),
+        save: await saveObject.getSaveString(),
         fileName: saveObject.getSaveFileName(),
       };
     },
