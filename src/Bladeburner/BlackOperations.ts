@@ -1,10 +1,8 @@
 import { BlackOperation } from "./BlackOperation";
 import { BladeBlackOpName } from "@enums";
 
-export const BlackOperations: Record<string, BlackOperation> = {};
-
-(function () {
-  BlackOperations[BladeBlackOpName.OperationTyphoon] = new BlackOperation({
+export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
+  [BladeBlackOpName.OperationTyphoon]: new BlackOperation({
     name: BladeBlackOpName.OperationTyphoon,
     baseDifficulty: 2000,
     reqdRank: 2.5e3,
@@ -30,8 +28,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationZero] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationZero]: new BlackOperation({
     name: BladeBlackOpName.OperationZero,
     baseDifficulty: 2500,
     reqdRank: 5e3,
@@ -57,8 +55,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isStealth: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationX] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationX]: new BlackOperation({
     name: BladeBlackOpName.OperationX,
     baseDifficulty: 3000,
     reqdRank: 7.5e3,
@@ -84,8 +82,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationTitan] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationTitan]: new BlackOperation({
     name: BladeBlackOpName.OperationTitan,
     baseDifficulty: 4000,
     reqdRank: 10e3,
@@ -111,8 +109,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationAres] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationAres]: new BlackOperation({
     name: BladeBlackOpName.OperationAres,
     baseDifficulty: 5000,
     reqdRank: 12.5e3,
@@ -138,8 +136,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationArchangel] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationArchangel]: new BlackOperation({
     name: BladeBlackOpName.OperationArchangel,
     baseDifficulty: 7500,
     reqdRank: 15e3,
@@ -165,8 +163,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationJuggernaut] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationJuggernaut]: new BlackOperation({
     name: BladeBlackOpName.OperationJuggernaut,
     baseDifficulty: 10e3,
     reqdRank: 20e3,
@@ -192,8 +190,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationRedDragon] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationRedDragon]: new BlackOperation({
     name: BladeBlackOpName.OperationRedDragon,
     baseDifficulty: 12.5e3,
     reqdRank: 25e3,
@@ -219,8 +217,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationK] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationK]: new BlackOperation({
     name: BladeBlackOpName.OperationK,
     baseDifficulty: 15e3,
     reqdRank: 30e3,
@@ -246,8 +244,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationDeckard] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationDeckard]: new BlackOperation({
     name: BladeBlackOpName.OperationDeckard,
     baseDifficulty: 20e3,
     reqdRank: 40e3,
@@ -273,8 +271,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationTyrell] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationTyrell]: new BlackOperation({
     name: BladeBlackOpName.OperationTyrell,
     baseDifficulty: 25e3,
     reqdRank: 50e3,
@@ -300,8 +298,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationWallace] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationWallace]: new BlackOperation({
     name: BladeBlackOpName.OperationWallace,
     baseDifficulty: 30e3,
     reqdRank: 75e3,
@@ -327,8 +325,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationShoulderOfOrion] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationShoulderOfOrion]: new BlackOperation({
     name: BladeBlackOpName.OperationShoulderOfOrion,
     baseDifficulty: 35e3,
     reqdRank: 100e3,
@@ -354,8 +352,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isStealth: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationHyron] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationHyron]: new BlackOperation({
     name: BladeBlackOpName.OperationHyron,
     baseDifficulty: 40e3,
     reqdRank: 125e3,
@@ -381,8 +379,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationMorpheus] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationMorpheus]: new BlackOperation({
     name: BladeBlackOpName.OperationMorpheus,
     baseDifficulty: 45e3,
     reqdRank: 150e3,
@@ -408,8 +406,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isStealth: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationIonStorm] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationIonStorm]: new BlackOperation({
     name: BladeBlackOpName.OperationIonStorm,
     baseDifficulty: 50e3,
     reqdRank: 175e3,
@@ -435,8 +433,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationAnnihilus] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationAnnihilus]: new BlackOperation({
     name: BladeBlackOpName.OperationAnnihilus,
     baseDifficulty: 55e3,
     reqdRank: 200e3,
@@ -462,8 +460,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationUltron] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationUltron]: new BlackOperation({
     name: BladeBlackOpName.OperationUltron,
     baseDifficulty: 60e3,
     reqdRank: 250e3,
@@ -489,8 +487,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       int: 0.75,
     },
     isKill: true,
-  });
-  BlackOperations[BladeBlackOpName.OperationCenturion] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationCenturion]: new BlackOperation({
     name: BladeBlackOpName.OperationCenturion,
     baseDifficulty: 70e3,
     reqdRank: 300e3,
@@ -515,8 +513,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       cha: 0,
       int: 0.75,
     },
-  });
-  BlackOperations[BladeBlackOpName.OperationVindictus] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationVindictus]: new BlackOperation({
     name: BladeBlackOpName.OperationVindictus,
     baseDifficulty: 75e3,
     reqdRank: 350e3,
@@ -541,8 +539,8 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       cha: 0,
       int: 0.75,
     },
-  });
-  BlackOperations[BladeBlackOpName.OperationDaedalus] = new BlackOperation({
+  }),
+  [BladeBlackOpName.OperationDaedalus]: new BlackOperation({
     name: BladeBlackOpName.OperationDaedalus,
     baseDifficulty: 80e3,
     reqdRank: 400e3,
@@ -567,5 +565,5 @@ export const BlackOperations: Record<string, BlackOperation> = {};
       cha: 0,
       int: 0.75,
     },
-  });
-})();
+  }),
+};

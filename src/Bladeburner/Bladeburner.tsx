@@ -1,5 +1,5 @@
 import type { PromisePair } from "../Types/Promises";
-import { AugmentationName, CityName, FactionName } from "@enums";
+import { AugmentationName, BladeBlackOpName, CityName, FactionName } from "@enums";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { ActionIdentifier } from "./ActionIdentifier";
 import { ActionTypes } from "./data/ActionTypes";
@@ -36,7 +36,7 @@ import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfil
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { getEnumHelper } from "../utils/EnumHelper";
-import { createEnumKeyedRecord } from "../Types/Record";
+import { PartialRecord, createEnumKeyedRecord } from "../Types/Record";
 
 export interface BlackOpsAttempt {
   error?: string;
@@ -81,7 +81,7 @@ export class Bladeburner {
   stamina = 0;
   contracts: Record<string, Contract> = {};
   operations: Record<string, Operation> = {};
-  blackops: Record<string, boolean> = {};
+  blackops: PartialRecord<BladeBlackOpName, boolean> = {};
   logging = {
     general: true,
     contracts: true,
@@ -108,16 +108,8 @@ export class Bladeburner {
     this.calculateMaxStamina();
     this.stamina = this.maxStamina;
     this.create();
-  }
-  /*
-    just a quick fix for the broken implementation
-    BlackOperations are only initialized on game load with a count of 1
-    and are not reset on BitNode change or dev menu reset of bladeburner
-  */
-  resetBlackOps(): void {
-    for (const [blackopName, blackop] of Object.entries(BlackOperations)) {
-      blackop.count = Number(!this.blackops[blackopName]);
-    }
+    // Reset number of black ops available
+    for (const blackOpName of getEnumHelper("BladeBlackOpName").valueArray) BlackOperations[blackOpName].count = 1;
   }
 
   getCurrentCity(): City {
@@ -131,12 +123,7 @@ export class Bladeburner {
 
   // Todo, deduplicate this functionality
   getNextBlackOp(): { name: string; rank: number } | null {
-    let blackops: BlackOperation[] = [];
-    for (const blackopName of Object.keys(BlackOperations)) {
-      if (Object.hasOwn(BlackOperations, blackopName)) {
-        blackops.push(BlackOperations[blackopName]);
-      }
-    }
+    let blackops = Object.values(BlackOperations);
     blackops.sort(function (a, b) {
       return a.reqdRank - b.reqdRank;
     });
@@ -157,6 +144,11 @@ export class Bladeburner {
   }
 
   canAttemptBlackOp(actionId: ActionIdentifier): BlackOpsAttempt {
+    // temporary TODO address this later in typesafety PR. If we're calling this it should already be typechecked.
+    if (!getEnumHelper("BladeBlackOpName").isMember(actionId.name)) {
+      throw new Error("Invalid call to canAttemptBlackOp");
+    }
+
     // Safety measure - don't repeat BlackOps that are already done
     if (this.blackops[actionId.name] != null) {
       return { error: "Tried to start a Black Operation that had already been completed" };
@@ -171,22 +163,17 @@ export class Bladeburner {
     }
 
     // Can't start a BlackOp if you haven't done the one before it
-    const blackops = [];
-    for (const nm of Object.keys(BlackOperations)) {
-      if (Object.hasOwn(BlackOperations, nm)) {
-        blackops.push(nm);
-      }
-    }
-    blackops.sort(function (a, b) {
+    const blackOpNames = Object.values(BladeBlackOpName);
+    blackOpNames.sort(function (a, b) {
       return BlackOperations[a].reqdRank - BlackOperations[b].reqdRank; // Sort black ops in intended order
     });
 
-    const i = blackops.indexOf(actionId.name);
+    const i = blackOpNames.indexOf(actionId.name);
     if (i === -1) {
       return { error: `Invalid Black Op: '${name}'` };
     }
 
-    if (i > 0 && this.blackops[blackops[i - 1]] == null) {
+    if (i > 0 && this.blackops[blackOpNames[i - 1]] == null) {
       return { error: `Preceding Black Op must be completed before starting '${actionId.name}'.` };
     }
 
@@ -470,13 +457,13 @@ export class Bladeburner {
       case "blackop":
       case "black operations":
       case "black operation":
-        if (BlackOperations[name] != null) {
-          this.action.type = ActionTypes.BlackOperation;
-          this.action.name = name;
-          this.startAction(this.action);
-        } else {
+        if (!getEnumHelper("BladeBlackOpName").isMember(name)) {
           this.postToConsole("Invalid BlackOp name specified: " + args[2]);
+          return;
         }
+        this.action.type = ActionTypes.BlackOperation;
+        this.action.name = name;
+        this.startAction(this.action);
         break;
       default:
         this.postToConsole("Invalid action/event type specified: " + args[1]);
@@ -1247,6 +1234,7 @@ export class Bladeburner {
         return this.operations[actionId.name];
       case ActionTypes.BlackOp:
       case ActionTypes.BlackOperation:
+        if (!getEnumHelper("BladeBlackOpName").isMember(actionId.name)) return null;
         return BlackOperations[actionId.name];
       case ActionTypes.Training:
         return GeneralActions.Training;
@@ -2009,8 +1997,6 @@ export class Bladeburner {
   process(): void {
     // Edge race condition when the engine checks the processing counters and attempts to route before the router is initialized.
     if (!Router.isInitialized) return;
-    //safety measure this needs to be removed in a bigger refactor
-    this.resetBlackOps();
 
     // If the Player starts doing some other actions, set action to idle and alert
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true) && Player.currentWork) {
@@ -2273,14 +2259,9 @@ export class Bladeburner {
     switch (actionId.type) {
       case ActionTypes.Contract:
       case ActionTypes.Operation:
-        return Math.floor(actionObj.count);
       case ActionTypes.BlackOp:
       case ActionTypes.BlackOperation:
-        if (this.blackops[name] != null) {
-          return 0;
-        } else {
-          return 1;
-        }
+        return Math.floor(actionObj.count);
       case ActionTypes.Training:
       case ActionTypes.Recruitment:
       case ActionTypes["Field Analysis"]:
@@ -2447,7 +2428,12 @@ export class Bladeburner {
 
   /** Initializes a Bladeburner object from a JSON save state. */
   static fromJSON(value: IReviverValue): Bladeburner {
-    return Generic_fromJSON(Bladeburner, value.data);
+    const bladeburner = Generic_fromJSON(Bladeburner, value.data);
+    // Update the static Actions objects based on info from the save file
+    for (const blackOpName of getEnumHelper("BladeBlackOpName").valueArray) {
+      if (bladeburner.blackops[blackOpName]) BlackOperations[blackOpName].count = 0;
+    }
+    return bladeburner;
   }
 }
 

@@ -9,12 +9,7 @@ interface IProps {
 }
 
 export function BlackOpList(props: IProps): React.ReactElement {
-  let blackops: BlackOperation[] = [];
-  for (const blackopName of Object.keys(BlackOperations)) {
-    if (Object.hasOwn(BlackOperations, blackopName)) {
-      blackops.push(BlackOperations[blackopName]);
-    }
-  }
+  let blackops = Object.values(BlackOperations);
   blackops.sort(function (a, b) {
     return a.reqdRank - b.reqdRank;
   });
