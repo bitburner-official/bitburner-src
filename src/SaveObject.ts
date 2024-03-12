@@ -110,7 +110,7 @@ class BitburnerSaveObject {
     this.GoSave = JSON.stringify(getGoSave());
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
-    if (CompressionStream in window) {
+    if ("CompressionStream" in window) {
       // jest is missing streams
       const CompressedSave = await compress(JSON.stringify(this));
       const saveString = bytesToBase64(CompressedSave);
