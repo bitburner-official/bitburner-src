@@ -1,5 +1,4 @@
 import { Skills } from "@nsdefs";
-import { Readable } from "stream";
 
 import { loadAliases, loadGlobalAliases, Aliases, GlobalAliases } from "./Alias";
 import { getCompaniesSave, loadCompanies } from "./Company/Companies";
@@ -887,13 +886,13 @@ function download(filename: string, content: string): void {
 }
 
 async function compress(str: string): Promise<Uint8Array> {
-  const stream = new Readable([str]);
+  const stream = new Blob([str]).stream();
   const compressedStream = stream.pipeThrough(new CompressionStream("gzip"));
   const chunks = [];
   const reader = compressedStream.getReader();
   try {
     let done = false; // to make lint shut up
-    while (done) {
+    while (!done) {
       const v = await reader.read();
       if ((done = v.done)) break;
       chunks.push(v.value);
@@ -905,13 +904,13 @@ async function compress(str: string): Promise<Uint8Array> {
 }
 
 async function decompress(compressedBytes: Uint8Array): Promise<string> {
-  const stream = new Readable([compressedBytes]);
+  const stream = new Blob([compressedBytes]).stream();
   const decompressedStream = stream.pipeThrough(new DecompressionStream("gzip"));
   const chunks = [];
   const reader = decompressedStream.getReader();
   try {
     let done = false;
-    while (done) {
+    while (!done) {
       const v = await reader.read();
       if ((done = v.done)) break;
       chunks.push(v.value);
