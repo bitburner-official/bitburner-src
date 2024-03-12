@@ -63,7 +63,7 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
                   Booster Fragments, which take up 5 tiles of the grid. There is no shortage of Booster Fragments, and
                   it is virtually impossible to run out of them. While not providing any direct stat increases to their
                   user, Booster Fragments increase the efficacy of adjacent Stat Fragments by 10%, and do not need to be
-                  charged.
+                  charged. Multiple Booster Fragments can affect the same Stat Fragment.
                 </Typography>
                 <br />
 
