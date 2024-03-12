@@ -1,4 +1,5 @@
 import { Skills } from "@nsdefs";
+import { Readable } from "stream";
 
 import { loadAliases, loadGlobalAliases, Aliases, GlobalAliases } from "./Alias";
 import { getCompaniesSave, loadCompanies } from "./Company/Companies";
@@ -109,11 +110,16 @@ class BitburnerSaveObject {
     this.GoSave = JSON.stringify(getGoSave());
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
+    if (CompressionStream in window) {
+      // jest is missing streams
+      const CompressedSave = await compress(JSON.stringify(this));
+      const saveString = bytesToBase64(CompressedSave);
+      return `{"CompressedSave": "${saveString}"}`;
+    }
 
-    let CompressedSave = await compress(JSON.stringify(this));
-
-    const saveString = bytesToBase64(CompressedSave);
-    return `{"CompressedSave": "${saveString}"}`;
+    // Fall back to old style save
+    const saveString = btoa(unescape(encodeURIComponent(JSON.stringify(this))));
+    return saveString;
   }
 
   async saveGame(emitToastEvent = true): Promise<void> {
@@ -191,7 +197,7 @@ class BitburnerSaveObject {
     let parsedSave;
     if (base64Save.startsWith('{"CompressedSave": ')) {
       try {
-        let { CompressedSave } = JSON.parse(base64Save);
+        const { CompressedSave } = JSON.parse(base64Save);
         parsedSave = JSON.parse(await decompress(base64ToBytes(CompressedSave)));
       } catch (error) {
         console.error(error);
@@ -730,7 +736,7 @@ async function loadGame(saveString: string): Promise<boolean> {
   if (!saveString) return false;
   if (saveString.startsWith('{"CompressedSave": ')) {
     try {
-      let { CompressedSave } = JSON.parse(saveString);
+      const { CompressedSave } = JSON.parse(saveString);
       saveString = await decompress(base64ToBytes(CompressedSave));
     } catch (error) {
       console.error(error);
@@ -881,20 +887,16 @@ function download(filename: string, content: string): void {
 }
 
 async function compress(str: string): Promise<Uint8Array> {
-  // Convert the string to a byte stream.
-  const stream = new Blob([str]).stream();
-
-  // Create a compressed stream.
+  const stream = new Readable([str]);
   const compressedStream = stream.pipeThrough(new CompressionStream("gzip"));
-
-  // Read all the bytes from this stream.
   const chunks = [];
   const reader = compressedStream.getReader();
   try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      chunks.push(value);
+    let done = false; // to make lint shut up
+    while (done) {
+      const v = await reader.read();
+      if ((done = v.done)) break;
+      chunks.push(v.value);
     }
   } finally {
     reader.releaseLock();
@@ -903,20 +905,16 @@ async function compress(str: string): Promise<Uint8Array> {
 }
 
 async function decompress(compressedBytes: Uint8Array): Promise<string> {
-  // Convert the bytes to a stream.
-  const stream = new Blob([compressedBytes]).stream();
-
-  // Create a decompressed stream.
+  const stream = new Readable([compressedBytes]);
   const decompressedStream = stream.pipeThrough(new DecompressionStream("gzip"));
-
-  // Read all the bytes from this stream.
   const chunks = [];
   const reader = decompressedStream.getReader();
   try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      chunks.push(value);
+    let done = false;
+    while (done) {
+      const v = await reader.read();
+      if ((done = v.done)) break;
+      chunks.push(v.value);
     }
   } finally {
     reader.releaseLock();

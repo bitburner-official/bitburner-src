@@ -184,7 +184,10 @@ module.exports = (env, argv) => {
         "@enums": path.resolve(__dirname, "src/Enums"),
         "@nsdefs": path.resolve(__dirname, "src/ScriptEditor/NetscriptDefinitions.d.ts"),
       },
-      fallback: { crypto: false },
+      fallback: {
+        crypto: false,
+        stream: require.resolve("stream-browserify"),
+      },
     },
     stats: statsConfig,
   };

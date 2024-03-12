@@ -32,7 +32,7 @@ export function LoadingScreen(): React.ReactElement {
 
   useEffect(() => {
     async function doLoad(): Promise<void> {
-      let saveString = await load();
+      const saveString = await load();
       try {
         await Engine.load(saveString);
         pushGameReady();
