@@ -21,11 +21,11 @@ interface CharityEventGenData
 |  [cyclesNeeded](./bitburner.charityeventgendata.cyclesneeded.md) |  | number |  |
 |  [cyclesTillDeath](./bitburner.charityeventgendata.cyclestilldeath.md) |  | number |  |
 |  [cyclesTillRemoved](./bitburner.charityeventgendata.cyclestillremoved.md) |  | number |  |
-|  [deathEffects](./bitburner.charityeventgendata.deatheffects.md) |  | [deathEffect](./bitburner.deatheffect.md)<!-- -->\[\] |  |
+|  [deathEffects](./bitburner.charityeventgendata.deatheffects.md) |  | [DeathEffect](./bitburner.deatheffect.md)<!-- -->\[\] |  |
 |  [desc](./bitburner.charityeventgendata.desc.md) |  | string |  |
 |  [hasTimer](./bitburner.charityeventgendata.hastimer.md) |  | boolean |  |
-|  [modifiers](./bitburner.charityeventgendata.modifiers.md) |  | [modifiers](./bitburner.modifiers.md)<!-- -->\[\] |  |
+|  [modifiers](./bitburner.charityeventgendata.modifiers.md) |  | [Modifier](./bitburner.modifier.md)<!-- -->\[\] |  |
 |  [name](./bitburner.charityeventgendata.name.md) |  | string |  |
-|  [short\_name](./bitburner.charityeventgendata.short_name.md) |  | string |  |
+|  [shortName](./bitburner.charityeventgendata.shortname.md) |  | string |  |
 |  [task](./bitburner.charityeventgendata.task.md) |  | [CharityTaskStats](./bitburner.charitytaskstats.md) |  |
 

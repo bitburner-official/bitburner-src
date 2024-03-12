@@ -16,6 +16,6 @@ interface CharityBannerFragmentInfo
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [effect](./bitburner.charitybannerfragmentinfo.effect.md) |  | [CharityAugmentationAreas](./bitburner.charityaugmentationareas.md) |  |
+|  [effect](./bitburner.charitybannerfragmentinfo.effect.md) |  | [CharityAugmentationArea](./bitburner.charityaugmentationarea.md) |  |
 |  [strength](./bitburner.charitybannerfragmentinfo.strength.md) |  | number |  |
 

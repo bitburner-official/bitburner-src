@@ -77,7 +77,7 @@ export const charityVolunteerTasksMetadata: ICharityVolunteerTaskMetadata[] = [
   },
   {
     desc: "Assign this volunteer to spead the word of the charity, though all means at their disposal.<br><br>Raises visibility, earnes prestige and karma - Spends money",
-    name: "Spead the Word",
+    name: "Spread the Word",
     short_name: "Spead the Word",
     isSpending: true,
     params: {

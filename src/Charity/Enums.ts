@@ -5,7 +5,7 @@ export enum CharityType {
   workAtSoupKitchen = "Work at a soup kitchen",
   reportDrugDeal = "Report drug deal",
   payItForward = "Pay it forward",
-  patroleTheStreets = "Patrole the streets",
+  patrolTheStreets = "Patrol the streets",
   giveBack = "Give back",
   takeKnife = "Take a knife",
   holdFundRaiser = "Hold a fund raiser",

@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-modifiers: modifiers[];
+modifiers: Modifier[];
 ```

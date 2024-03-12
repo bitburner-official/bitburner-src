@@ -26,7 +26,7 @@ export class Modifier {
   }
 }
 
-export enum AugmentationAreas {
+export enum AugmentationArea {
   hacking = "hacking",
   strength = "strength",
   defense = "defense",
@@ -66,9 +66,9 @@ export enum AugmentationAreas {
 }
 
 class BannerFragment {
-  effect: AugmentationAreas;
+  effect: AugmentationArea;
   strength: number;
-  constructor(effect: AugmentationAreas, strength: number) {
+  constructor(effect: AugmentationArea, strength: number) {
     this.effect = effect;
     this.strength = strength;
   }
@@ -78,13 +78,13 @@ export class BannerPiece {
   effects: BannerFragment[];
   totalPower: number;
   name: string;
-  short_name: string;
+  shortName: string;
 
-  constructor(name: string, short_name: string) {
+  constructor(name: string, shortName: string) {
     this.effects = [];
     this.totalPower = 0;
     this.name = name;
-    this.short_name = short_name;
+    this.shortName = shortName;
   }
 }
 enum DeathEffectTypes {
@@ -116,7 +116,7 @@ class DeathEffect {
 
 export class CharityEvent {
   name: string;
-  short_name: string;
+  shortName: string;
   desc: string;
   hasTimer: boolean;
   isBeneficial: boolean;
@@ -133,7 +133,7 @@ export class CharityEvent {
 
   constructor(name = "My Charity Event", isBeneficial = true, hasTimer = true, rarity = 1) {
     this.name = name;
-    this.short_name = "";
+    this.shortName = "";
     this.desc = "";
     this.hasTimer = hasTimer;
     this.isBeneficial = isBeneficial;
@@ -181,8 +181,8 @@ export class CharityEvent {
       if (Player.charityORG === null) throw new Error("Charity should not be null");
       return Player.charityORG;
     })();
-    if (!this.isBeneficial) charityORG.addMessage("Failed: " + this.short_name);
-    else charityORG.addMessage("Failed to complete: " + this.short_name);
+    if (!this.isBeneficial) charityORG.addMessage("Failed: " + this.shortName);
+    else charityORG.addMessage("Failed to complete: " + this.shortName);
     //Process death effects and add messages for them
     let deathMsg = "";
     for (const effect of this.deathEffects) {
@@ -381,7 +381,7 @@ export class CharityEvent {
       if (Player.charityORG === null) throw new Error("Charity should not be null");
       return Player.charityORG;
     })();
-    charityORG.addMessage("Completed: " + this.short_name);
+    charityORG.addMessage("Completed: " + this.shortName);
     //Process prize winnings and add messages for them
     if (this.rarity <= 10 || this.prizeLevel <= 10) return;
 
@@ -637,10 +637,10 @@ export class CharityEvent {
       const goodname = goodentities[Math.floor(Math.random() * goodentities.length)];
       const goodact = fundacts[Math.floor(Math.random() * fundacts.length)];
       this.name = goodname + " " + goodact + " - " + num;
-      this.short_name = goodname + " " + goodact;
+      this.shortName = goodname + " " + goodact;
       this.taskObject.name = this.name;
-      this.taskObject.short_name = this.short_name;
-      this.desc = this.short_name;
+      this.taskObject.short_name = this.shortName;
+      this.desc = this.shortName;
       this.taskObject.desc = this.desc;
     } else {
       switch (this.isBeneficial) {
@@ -652,9 +652,9 @@ export class CharityEvent {
           const goodhword = helpwords[Math.floor(Math.random() * helpwords.length)];
           const goodact = activity[Math.floor(Math.random() * activity.length)];
           this.name = goodhword + " " + goodname + " - " + num;
-          this.short_name = goodhword + " " + goodname;
+          this.shortName = goodhword + " " + goodname;
           this.taskObject.name = this.name;
-          this.taskObject.short_name = this.short_name;
+          this.taskObject.short_name = this.shortName;
           this.desc = goodhword + " " + goodname + " " + goodact;
           this.taskObject.desc = this.desc;
           break;
@@ -663,10 +663,10 @@ export class CharityEvent {
           const badname = evilentities[Math.floor(Math.random() * evilentities.length)];
           const badhword = hurtwords[Math.floor(Math.random() * hurtwords.length)];
           this.name = badhword + " " + badname + " - " + num;
-          this.short_name = badhword + " " + badname;
+          this.shortName = badhword + " " + badname;
           this.taskObject.name = this.name;
-          this.taskObject.short_name = this.short_name;
-          this.desc = this.short_name;
+          this.taskObject.short_name = this.shortName;
+          this.desc = this.shortName;
           this.taskObject.desc = this.desc;
           break;
         }
@@ -903,7 +903,7 @@ export class CharityEvent {
     for (let i = 0; i < length; i++) id += valid[Math.floor(Math.random() * valid.length)];
     return id;
   }
-  addBannerEffect(BannerPiece: BannerPiece, Area: AugmentationAreas, Str: number, TotalStr: number): void {
+  addBannerEffect(BannerPiece: BannerPiece, Area: AugmentationArea, Str: number, TotalStr: number): void {
     let found = false;
     for (const piece of BannerPiece.effects) {
       if (Area === piece.effect) {
@@ -928,7 +928,7 @@ export class CharityEvent {
     const bannerNum = this.bannerCount();
     const basicTypes = ["Basic", "Pebbles", "Strong", "Assorted", "Aggressive"];
     const premTypes = ["TheOne", "TroiAmis", "DoubleHelix", "Clover"];
-    const augareas = Object.values(AugmentationAreas);
+    const augareas = Object.values(AugmentationArea);
     const type =
       Math.random() > 0.9
         ? premTypes[Math.floor(Math.random() * premTypes.length)]
@@ -938,11 +938,11 @@ export class CharityEvent {
       type // All basic types add up to 2x str.
     ) {
       case "Basic": {
-        const t1BasicEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationAreas).length)];
+        const t1BasicEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationArea).length)];
         const t1BasicStr = this.getBannerStr(str, t1BasicEffect);
         this.addBannerEffect(bannerPiece, t1BasicEffect, t1BasicStr, str);
         for (let i = 0; i < 3; i++) {
-          const t2BasicEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationAreas).length)];
+          const t2BasicEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationArea).length)];
           const t2BasicStr = this.getBannerStr(str / 3, t2BasicEffect);
           this.addBannerEffect(bannerPiece, t2BasicEffect, t2BasicStr, str / 3);
         }
@@ -950,18 +950,18 @@ export class CharityEvent {
       }
       case "Pebbles": {
         for (let i = 0; i < 20; i++) {
-          const t2PebblesEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationAreas).length)];
+          const t2PebblesEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationArea).length)];
           const t2PebblesStr = this.getBannerStr(str / 10, t2PebblesEffect);
           this.addBannerEffect(bannerPiece, t2PebblesEffect, t2PebblesStr, str / 10);
         }
         break;
       }
       case "Strong": {
-        const t1StrongEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationAreas).length)];
+        const t1StrongEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationArea).length)];
         const t1StrongStr = this.getBannerStr(str * 1.5, t1StrongEffect);
         this.addBannerEffect(bannerPiece, t1StrongEffect, t1StrongStr, str * 1.5);
         for (let i = 0; i < 2; i++) {
-          const t2StrongEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationAreas).length)];
+          const t2StrongEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationArea).length)];
           const t2StrongStr = this.getBannerStr(str / 4, t2StrongEffect);
           this.addBannerEffect(bannerPiece, t2StrongEffect, t2StrongStr, str / 4);
         }
@@ -969,7 +969,7 @@ export class CharityEvent {
       }
       case "Assorted": {
         for (let i = 0; i < 10; i++) {
-          const t2AssortedEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationAreas).length)];
+          const t2AssortedEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationArea).length)];
           const t2AssortedStr = this.getBannerStr(str / 5, t2AssortedEffect);
           this.addBannerEffect(bannerPiece, t2AssortedEffect, t2AssortedStr, str / 5);
         }
@@ -977,7 +977,7 @@ export class CharityEvent {
       }
       case "Aggressive": {
         for (let i = 0; i < 2; i++) {
-          const t2AggressiveEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationAreas).length)];
+          const t2AggressiveEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationArea).length)];
           const t2AggressiveStr = this.getBannerStr(str, t2AggressiveEffect);
           this.addBannerEffect(bannerPiece, t2AggressiveEffect, t2AggressiveStr, str);
         }
@@ -985,14 +985,14 @@ export class CharityEvent {
       }
       case "TheOne": {
         // All prem types are up to 3x str
-        const t1TheOneEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationAreas).length)];
+        const t1TheOneEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationArea).length)];
         const t1TheOneStr = this.getBannerStr(str * 3, t1TheOneEffect);
         this.addBannerEffect(bannerPiece, t1TheOneEffect, t1TheOneStr, str * 3);
         break;
       }
       case "TroiAmis": {
         for (let i = 0; i < 3; i++) {
-          const t2TroiAmisEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationAreas).length)];
+          const t2TroiAmisEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationArea).length)];
           const t2TroiAmisStr = this.getBannerStr(str, t2TroiAmisEffect);
           this.addBannerEffect(bannerPiece, t2TroiAmisEffect, t2TroiAmisStr, str);
         }
@@ -1000,7 +1000,7 @@ export class CharityEvent {
       }
       case "DoubleHelix": {
         for (let i = 0; i < 2; i++) {
-          const t1DoubleHelixEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationAreas).length)];
+          const t1DoubleHelixEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationArea).length)];
           const t1DoubleHelixStr = this.getBannerStr(str * 1.5, t1DoubleHelixEffect);
           this.addBannerEffect(bannerPiece, t1DoubleHelixEffect, t1DoubleHelixStr, str * 1.5);
         }
@@ -1008,7 +1008,7 @@ export class CharityEvent {
       }
       case "Clover": {
         for (let i = 0; i < 4; i++) {
-          const t1CloverEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationAreas).length)];
+          const t1CloverEffect = augareas[Math.floor(Math.random() * Object.values(AugmentationArea).length)];
           const t1CloverStr = this.getBannerStr((str * 3) / 4, t1CloverEffect);
           this.addBannerEffect(bannerPiece, t1CloverEffect, t1CloverStr, (str * 3) / 4);
         }
@@ -1017,62 +1017,62 @@ export class CharityEvent {
       default:
         return;
     }
-    bannerPiece.short_name = type + ":" + formatNumber(bannerPiece.totalPower);
+    bannerPiece.shortName = type + ":" + formatNumber(bannerPiece.totalPower);
     charityORG.bannerPiecesStore.push(bannerPiece);
-    charityORG.addItemMessage("Found a Banner Piece: " + bannerPiece.short_name);
+    charityORG.addItemMessage("Found a Banner Piece: " + bannerPiece.shortName);
   }
-  getBannerStr(str: number, eff: AugmentationAreas): number {
+  getBannerStr(str: number, eff: AugmentationArea): number {
     const fuzzy = Math.random() * 0.1 + 0.95;
     str /= 100;
     switch (eff) {
-      case AugmentationAreas.lucky:
+      case AugmentationArea.lucky:
         return str * 6000 * fuzzy;
-      case AugmentationAreas.embezzlement:
+      case AugmentationArea.embezzlement:
         return str * 10 * Math.max(Math.log2(str * 100), 1) * fuzzy;
-      case AugmentationAreas.hacking:
-      case AugmentationAreas.strength:
-      case AugmentationAreas.defense:
-      case AugmentationAreas.dexterity:
-      case AugmentationAreas.agility:
-      case AugmentationAreas.charisma:
+      case AugmentationArea.hacking:
+      case AugmentationArea.strength:
+      case AugmentationArea.defense:
+      case AugmentationArea.dexterity:
+      case AugmentationArea.agility:
+      case AugmentationArea.charisma:
         return str * 3 * fuzzy;
-      case AugmentationAreas.hacking_exp:
-      case AugmentationAreas.strength_exp:
-      case AugmentationAreas.defense_exp:
-      case AugmentationAreas.dexterity_exp:
-      case AugmentationAreas.agility_exp:
-      case AugmentationAreas.charisma_exp:
+      case AugmentationArea.hacking_exp:
+      case AugmentationArea.strength_exp:
+      case AugmentationArea.defense_exp:
+      case AugmentationArea.dexterity_exp:
+      case AugmentationArea.agility_exp:
+      case AugmentationArea.charisma_exp:
         return str * 30 * fuzzy;
-      case AugmentationAreas.hacking_chance:
-      case AugmentationAreas.hacking_speed:
-      case AugmentationAreas.hacking_money:
-      case AugmentationAreas.hacking_grow:
+      case AugmentationArea.hacking_chance:
+      case AugmentationArea.hacking_speed:
+      case AugmentationArea.hacking_money:
+      case AugmentationArea.hacking_grow:
         return str * 2 * fuzzy;
-      case AugmentationAreas.company_rep:
-      case AugmentationAreas.faction_rep:
+      case AugmentationArea.company_rep:
+      case AugmentationArea.faction_rep:
         return str * 25 * fuzzy;
-      case AugmentationAreas.crime_money:
-      case AugmentationAreas.work_money:
-      case AugmentationAreas.charity_money:
+      case AugmentationArea.crime_money:
+      case AugmentationArea.work_money:
+      case AugmentationArea.charity_money:
         return str * 30 * fuzzy;
-      case AugmentationAreas.crime_success:
-      case AugmentationAreas.charity_success:
+      case AugmentationArea.crime_success:
+      case AugmentationArea.charity_success:
         return str * 10 * fuzzy;
-      case AugmentationAreas.hacknet_node_money:
+      case AugmentationArea.hacknet_node_money:
         return str * 30 * fuzzy;
-      case AugmentationAreas.hacknet_node_purchase_cost:
-      case AugmentationAreas.hacknet_node_ram_cost:
-      case AugmentationAreas.hacknet_node_core_cost:
-      case AugmentationAreas.hacknet_node_level_cost:
+      case AugmentationArea.hacknet_node_purchase_cost:
+      case AugmentationArea.hacknet_node_ram_cost:
+      case AugmentationArea.hacknet_node_core_cost:
+      case AugmentationArea.hacknet_node_level_cost:
         return str * -1.5 * fuzzy;
-      case AugmentationAreas.bladeburner_max_stamina:
-      case AugmentationAreas.bladeburner_stamina_gain:
-      case AugmentationAreas.bladeburner_analysis:
+      case AugmentationArea.bladeburner_max_stamina:
+      case AugmentationArea.bladeburner_stamina_gain:
+      case AugmentationArea.bladeburner_analysis:
         return str * 15 * fuzzy;
-      case AugmentationAreas.bladeburner_success_chance:
+      case AugmentationArea.bladeburner_success_chance:
         return str * 1.5 * fuzzy;
-      case AugmentationAreas.augmentation_money:
-      case AugmentationAreas.augmentation_rep:
+      case AugmentationArea.augmentation_money:
+      case AugmentationArea.augmentation_rep:
         return str * -1.5 * fuzzy;
       default:
         return str * fuzzy;

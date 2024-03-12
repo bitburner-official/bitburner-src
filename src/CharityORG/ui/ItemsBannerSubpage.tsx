@@ -27,7 +27,7 @@ export function ItemsBannerSubpage(): React.ReactElement {
     if (piece === undefined) return;
     const index = charityORG.bannerPieces.indexOf(piece);
     charityORG.bannerPieces.splice(index, 1);
-    charityORG.addItemUseMessage("Destroyed banner piece: " + piece.short_name);
+    charityORG.addItemUseMessage("Destroyed banner piece: " + piece.shortName);
     setCurrentBanner("");
     charityORG.resetBanner();
     rerender();
@@ -44,7 +44,7 @@ export function ItemsBannerSubpage(): React.ReactElement {
     if (piece === undefined) return;
     const index = charityORG.bannerPiecesStore.indexOf(piece);
     charityORG.bannerPiecesStore.splice(index, 1);
-    charityORG.addItemUseMessage("Destroyed stored banner piece: " + piece.short_name);
+    charityORG.addItemUseMessage("Destroyed stored banner piece: " + piece.shortName);
     setPendingBanner("");
     rerender();
   }
@@ -61,7 +61,7 @@ export function ItemsBannerSubpage(): React.ReactElement {
     const index = charityORG.bannerPieces.indexOf(piece);
     charityORG.bannerPieces.splice(index, 1);
     charityORG.bannerPiecesStore.push(piece);
-    charityORG.addItemUseMessage("Lucky removed banner piece: " + piece.short_name);
+    charityORG.addItemUseMessage("Lucky removed banner piece: " + piece.shortName);
     charityORG.luckyCoin--;
     setCurrentBanner("");
     charityORG.resetBanner();
@@ -74,7 +74,7 @@ export function ItemsBannerSubpage(): React.ReactElement {
     const index = charityORG.bannerPiecesStore.indexOf(piece);
     charityORG.bannerPiecesStore.splice(index, 1);
     charityORG.bannerPieces.push(piece);
-    charityORG.addItemUseMessage("Activated banner piece: " + piece.short_name);
+    charityORG.addItemUseMessage("Activated banner piece: " + piece.shortName);
     setPendingBanner("");
     charityORG.resetBanner();
     rerender();
@@ -104,7 +104,7 @@ export function ItemsBannerSubpage(): React.ReactElement {
                 onClick={() => setCurrentBanner(k.name)}
                 selected={currentBanner === k.name}
               >
-                <Typography>{k.short_name}</Typography>
+                <Typography>{k.shortName}</Typography>
               </ListItemButton>
             ))}
           </Box>
@@ -134,7 +134,7 @@ export function ItemsBannerSubpage(): React.ReactElement {
               >
                 <Typography>
                   {i + 1 + "-"}
-                  {k.short_name}
+                  {k.shortName}
                 </Typography>
               </ListItemButton>
             ))}

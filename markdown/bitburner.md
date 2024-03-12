@@ -69,7 +69,7 @@
 |  [CreateProgramWorkTask](./bitburner.createprogramworktask.md) | Create Program |
 |  [CrimeStats](./bitburner.crimestats.md) | Data representing the internal values of a crime. |
 |  [CrimeTask](./bitburner.crimetask.md) | Crime |
-|  [deathEffect](./bitburner.deatheffect.md) | Charity death effect data. |
+|  [DeathEffect](./bitburner.deatheffect.md) | Charity death effect data. |
 |  [Division](./bitburner.division.md) | Corporation division |
 |  [EmployedByRequirement](./bitburner.employedbyrequirement.md) | Player must be working for this company. |
 |  [EqStats](./bitburner.eqstats.md) | Object representing data representing a charity volunteers equipment. |
@@ -118,7 +118,7 @@
 |  [LocationRequirement](./bitburner.locationrequirement.md) | Player must be at this location within a city. |
 |  [Lottery](./bitburner.lottery.md) | Lottery API |
 |  [Material](./bitburner.material.md) | Material in a warehouse |
-|  [modifiers](./bitburner.modifiers.md) | Charity modifiers data. |
+|  [Modifier](./bitburner.modifier.md) | Charity modifiers data. |
 |  [MoneyRequirement](./bitburner.moneyrequirement.md) | Player must have at least this much money. |
 |  [MoneySource](./bitburner.moneysource.md) |  |
 |  [MoneySources](./bitburner.moneysources.md) |  |
@@ -172,7 +172,7 @@
 
 |  Type Alias | Description |
 |  --- | --- |
-|  [CharityAugmentationAreas](./bitburner.charityaugmentationareas.md) | Charity Augmentation Areas. |
+|  [CharityAugmentationArea](./bitburner.charityaugmentationarea.md) | Charity Augmentation Areas. |
 |  [CharityModifyAreas](./bitburner.charitymodifyareas.md) |  |
 |  [CodingContractData](./bitburner.codingcontractdata.md) | Coding contract data will differ depending on coding contract. |
 |  [CorpEmployeePosition](./bitburner.corpemployeeposition.md) |  |

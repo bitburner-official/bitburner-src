@@ -31,7 +31,7 @@ export function EventSubpage(): React.ReactElement {
     const index = charityORG.currentEvents.indexOf(event);
     charityORG.currentEvents.splice(index, 1);
 
-    charityORG.addMessage("Abandoned: " + event.short_name);
+    charityORG.addMessage("Abandoned: " + event.shortName);
     setCurrentCategory("");
     event.processDeath();
     charityORG.processNewEvents(0);
@@ -43,7 +43,7 @@ export function EventSubpage(): React.ReactElement {
     charityORG.waitingEvents.splice(index, 1);
     event.cyclesElapsed = 0;
     charityORG.currentEvents.push(event);
-    charityORG.addMessage("Accepted: " + event.short_name);
+    charityORG.addMessage("Accepted: " + event.shortName);
     setPendingCategory("");
     charityORG.processNewEvents(0);
   }
@@ -53,7 +53,7 @@ export function EventSubpage(): React.ReactElement {
     if (event === undefined) return;
     const index = charityORG.currentEvents.indexOf(event);
     charityORG.currentEvents.splice(index, 1);
-    charityORG.addItemUseMessage("Lucky Cancelled: " + event.short_name);
+    charityORG.addItemUseMessage("Lucky Cancelled: " + event.shortName);
     charityORG.luckyCoin--;
     setCurrentCategory("");
     event.processRemoval();
@@ -65,7 +65,7 @@ export function EventSubpage(): React.ReactElement {
     if (event === undefined) return;
     const index = charityORG.currentEvents.indexOf(event);
     charityORG.currentEvents.splice(index, 1);
-    charityORG.addItemUseMessage("Lucky Cancelled: " + event.short_name);
+    charityORG.addItemUseMessage("Lucky Cancelled: " + event.shortName);
     charityORG.luckyCoin--;
     setAttackCategory("");
     event.processRemoval();
@@ -119,7 +119,7 @@ export function EventSubpage(): React.ReactElement {
                 >
                   <Typography>
                     {i + 1 + "-"}
-                    {k.short_name.substring(0, 50)}
+                    {k.shortName.substring(0, 50)}
                   </Typography>
                 </ListItemButton>
               ))}
@@ -149,7 +149,7 @@ export function EventSubpage(): React.ReactElement {
               >
                 <Typography>
                   {i + 1 + "-"}
-                  {k.short_name.substring(0, 50)}
+                  {k.shortName.substring(0, 50)}
                 </Typography>
               </ListItemButton>
             ))}
@@ -179,7 +179,7 @@ export function EventSubpage(): React.ReactElement {
                 >
                   <Typography>
                     {i + 1 + "-"}
-                    {k.short_name.substring(0, 50)}
+                    {k.shortName.substring(0, 50)}
                   </Typography>
                 </ListItemButton>
               ))}

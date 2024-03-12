@@ -4,7 +4,7 @@ import { CharityType } from "@enums";
 
 export const Charities: Record<CharityType, Charity> = {
   [CharityType.stopRobery]: new Charity(
-    "to stop a robery",
+    "to stop a robbery",
     "Attempt to stop an armed robbery on a high-end store",
     CharityType.stopRobery,
     60e3, // Time
@@ -153,10 +153,10 @@ export const Charities: Record<CharityType, Charity> = {
     },
   ),
 
-  [CharityType.patroleTheStreets]: new Charity(
+  [CharityType.patrolTheStreets]: new Charity(
     "to patrol the streets",
     "Attempt to patrol the streets to stop anything unwarranted from happening",
-    CharityType.patroleTheStreets,
+    CharityType.patrolTheStreets,
     120e3,
     3.6e3,
     5,

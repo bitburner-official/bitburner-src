@@ -24,7 +24,7 @@ export function findCharity(roughName: string): Charity | null {
   else if (roughName.includes("report") && roughName.includes("drug")) return Charities[CharityType.reportDrugDeal];
   else if (roughName.includes("pay") && roughName.includes("forward")) return Charities[CharityType.payItForward];
   else if (roughName.includes("patrol") && roughName.includes("streets"))
-    return Charities[CharityType.patroleTheStreets];
+    return Charities[CharityType.patrolTheStreets];
   else if (roughName.includes("give") && roughName.includes("back")) return Charities[CharityType.giveBack];
   else if (roughName.includes("take") && roughName.includes("knife")) return Charities[CharityType.takeKnife];
   else if (roughName.includes("hold") && roughName.includes("fund") && roughName.includes("raiser"))

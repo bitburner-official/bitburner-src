@@ -18,6 +18,6 @@ interface CharityBannerPieceInfo
 |  --- | --- | --- | --- |
 |  [effects](./bitburner.charitybannerpieceinfo.effects.md) |  | [CharityBannerFragmentInfo](./bitburner.charitybannerfragmentinfo.md)<!-- -->\[\] |  |
 |  [name](./bitburner.charitybannerpieceinfo.name.md) |  | string |  |
-|  [short\_name](./bitburner.charitybannerpieceinfo.short_name.md) |  | string |  |
+|  [shortName](./bitburner.charitybannerpieceinfo.shortname.md) |  | string |  |
 |  [totalPower](./bitburner.charitybannerpieceinfo.totalpower.md) |  | number |  |
 

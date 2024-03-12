@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-deathEffects: deathEffect[];
+deathEffects: DeathEffect[];
 ```

@@ -83,7 +83,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       for (const event of charityORG.waitingEvents) {
         const record = {
           name: event.name,
-          short_name: event.short_name,
+          shortName: event.shortName,
           desc: event.desc,
           task: event.taskObject,
           hasTimer: event.hasTimer,
@@ -105,7 +105,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       for (const event of charityORG.currentEvents.filter((f) => f.isBeneficial)) {
         const record = {
           name: event.name,
-          short_name: event.short_name,
+          shortName: event.shortName,
           desc: event.desc,
           task: event.taskObject,
           hasTimer: event.hasTimer,
@@ -127,7 +127,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       for (const event of charityORG.currentEvents.filter((f) => !f.isBeneficial)) {
         const record = {
           name: event.name,
-          short_name: event.short_name,
+          shortName: event.shortName,
           desc: event.desc,
           task: event.taskObject,
           hasTimer: event.hasTimer,
@@ -152,7 +152,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       charityORG.waitingEvents.splice(index, 1);
       event.cyclesElapsed = 0;
       charityORG.currentEvents.push(event);
-      charityORG.addMessage("Accepted: " + event.short_name);
+      charityORG.addMessage("Accepted: " + event.shortName);
       charityORG.processNewEvents(0);
       return true;
     },
@@ -163,7 +163,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       if (event === undefined) return false;
       const index = charityORG.currentEvents.indexOf(event);
       charityORG.currentEvents.splice(index, 1);
-      charityORG.addMessage("Abandoned: " + event.short_name);
+      charityORG.addMessage("Abandoned: " + event.shortName);
       charityORG.processNewEvents(0);
       event.processDeath();
       return true;
@@ -582,7 +582,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       charityORG.currentEvents.filter((f) => f === event);
       charityORG.waitingEvents.filter((f) => f === event);
       charityORG.luckyCoin--;
-      charityORG.addItemUseMessage("Lucky Cancelled: " + event.short_name);
+      charityORG.addItemUseMessage("Lucky Cancelled: " + event.shortName);
       event.processRemoval();
       charityORG.processNewEvents(0);
       return true;
@@ -692,7 +692,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       const index = charityORG.bannerPiecesStore.indexOf(piece);
       charityORG.bannerPiecesStore.splice(index, 1);
       charityORG.bannerPieces.push(piece);
-      charityORG.addItemUseMessage("Activated banner piece: " + piece.short_name);
+      charityORG.addItemUseMessage("Activated banner piece: " + piece.shortName);
       charityORG.resetBanner();
       return true;
     },
@@ -705,7 +705,7 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       const index = charityORG.bannerPieces.indexOf(piece);
       charityORG.bannerPieces.splice(index, 1);
       charityORG.bannerPiecesStore.push(piece);
-      charityORG.addItemUseMessage("Lucky removed banner piece: " + piece.short_name);
+      charityORG.addItemUseMessage("Lucky removed banner piece: " + piece.shortName);
       charityORG.luckyCoin--;
       charityORG.resetBanner();
       return true;
@@ -718,13 +718,13 @@ export function NetscriptCharityORG(): InternalAPI<ICharityORG> {
       if (piece1 !== undefined) {
         const index = charityORG.bannerPieces.indexOf(piece1);
         charityORG.bannerPieces.splice(index, 1);
-        charityORG.addItemUseMessage("Destroyed banner piece: " + piece1.short_name);
+        charityORG.addItemUseMessage("Destroyed banner piece: " + piece1.shortName);
         charityORG.resetBanner();
         return true;
       } else if (piece2 !== undefined) {
         const index = charityORG.bannerPiecesStore.indexOf(piece2);
         charityORG.bannerPiecesStore.splice(index, 1);
-        charityORG.addItemUseMessage("Destroyed stored banner piece: " + piece2.short_name);
+        charityORG.addItemUseMessage("Destroyed stored banner piece: " + piece2.shortName);
         return true;
       } else return false;
     },

@@ -19,7 +19,7 @@ declare enum CharityType
 |  helpPolice | <code>&quot;Help Police&quot;</code> |  |
 |  holdFundRaiser | <code>&quot;Hold a fund raiser&quot;</code> |  |
 |  hugSomeoneInNeed | <code>&quot;Hug someone in need&quot;</code> |  |
-|  patroleTheStreets | <code>&quot;Patrole the streets&quot;</code> |  |
+|  patrolTheStreets | <code>&quot;Patrol the streets&quot;</code> |  |
 |  payItForward | <code>&quot;Pay it forward&quot;</code> |  |
 |  reportDrugDeal | <code>&quot;Report drug deal&quot;</code> |  |
 |  stopRobery | <code>&quot;Stop a Robery&quot;</code> |  |

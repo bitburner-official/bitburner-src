@@ -12,7 +12,7 @@ export function BannerCard(banner: BannerPiece | undefined): React.ReactElement 
   return (
     <>
       <Box display="grid" width="99%">
-        <Typography>{banner.short_name}</Typography>
+        <Typography>{banner.shortName}</Typography>
         <Typography>Total Power: {formatNumber(banner.totalPower)}</Typography>
         {banner.effects.map((n, i) =>
           n.effect === "lucky" ? (

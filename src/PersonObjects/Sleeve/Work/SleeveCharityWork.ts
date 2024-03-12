@@ -16,6 +16,7 @@ export const isSleeveCharityWork = (w: SleeveWorkClass | null): w is SleeveChari
 export class SleeveCharityWork extends SleeveWorkClass {
   type: SleeveWorkType.CHARITY = SleeveWorkType.CHARITY;
   charityType: CharityType;
+  tasksCompleted = 0;
   cyclesWorked = 0;
   constructor(charityType?: CharityType) {
     super();
@@ -47,6 +48,7 @@ export class SleeveCharityWork extends SleeveWorkClass {
         Player.numPeopleSaved += charity.saves;
       } else gains.money = 0;
       applySleeveGains(sleeve, gains, success ? 1 : 0.25);
+      this.tasksCompleted++;
       this.cyclesWorked -= this.cyclesNeeded();
     }
   }
@@ -55,6 +57,7 @@ export class SleeveCharityWork extends SleeveWorkClass {
     return {
       type: SleeveWorkType.CHARITY as "CHARITY",
       charityType: this.charityType,
+      tasksCompleted: this.tasksCompleted,
       cyclesWorked: this.cyclesWorked,
       cyclesNeeded: this.cyclesNeeded(),
     };

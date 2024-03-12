@@ -7,7 +7,7 @@ import { Factions } from "../Faction/Factions";
 import { CharityORGConstants } from "./data/Constants";
 import { CharityVolunteer } from "./CharityVolunteer";
 import { CharityVolunteerTask } from "./CharityVolunteerTask";
-import { CharityEvent, ModifyAreas, BannerPiece, AugmentationAreas } from "./CharityEvent";
+import { CharityEvent, ModifyAreas, BannerPiece, AugmentationArea } from "./CharityEvent";
 import { CharityVolunteerUpgrade } from "./CharityVolunteerUpgrade";
 import { CharityVolunteerTasks } from "./CharityVolunteerTasks";
 import { IAscensionResult } from "./IAscensionResult";
@@ -589,120 +589,120 @@ export class CharityORG {
 
       for (const effect of piece.effects) {
         switch (effect.effect) {
-          case AugmentationAreas.lucky:
+          case AugmentationArea.lucky:
             this.luck += effect.strength;
             break;
-          case AugmentationAreas.embezzlement:
+          case AugmentationArea.embezzlement:
             this.embezzle_aug += effect.strength;
             break;
-          case AugmentationAreas.hacking:
+          case AugmentationArea.hacking:
             this.charityAugment.hacking += effect.strength;
             break;
-          case AugmentationAreas.strength:
+          case AugmentationArea.strength:
             this.charityAugment.strength += effect.strength;
             break;
-          case AugmentationAreas.defense:
+          case AugmentationArea.defense:
             this.charityAugment.defense += effect.strength;
             break;
-          case AugmentationAreas.dexterity:
+          case AugmentationArea.dexterity:
             this.charityAugment.dexterity += effect.strength;
             break;
-          case AugmentationAreas.agility:
+          case AugmentationArea.agility:
             this.charityAugment.agility += effect.strength;
             break;
-          case AugmentationAreas.charisma:
+          case AugmentationArea.charisma:
             this.charityAugment.charisma += effect.strength;
             break;
-          case AugmentationAreas.hacking_exp:
+          case AugmentationArea.hacking_exp:
             this.charityAugment.hacking_exp += effect.strength;
             break;
-          case AugmentationAreas.strength_exp:
+          case AugmentationArea.strength_exp:
             this.charityAugment.strength_exp += effect.strength;
             break;
-          case AugmentationAreas.defense_exp:
+          case AugmentationArea.defense_exp:
             this.charityAugment.defense_exp += effect.strength;
             break;
-          case AugmentationAreas.dexterity_exp:
+          case AugmentationArea.dexterity_exp:
             this.charityAugment.dexterity_exp += effect.strength;
             break;
-          case AugmentationAreas.agility_exp:
+          case AugmentationArea.agility_exp:
             this.charityAugment.agility_exp += effect.strength;
             break;
-          case AugmentationAreas.charisma_exp:
+          case AugmentationArea.charisma_exp:
             this.charityAugment.charisma_exp += effect.strength;
             break;
-          case AugmentationAreas.hacking_chance:
+          case AugmentationArea.hacking_chance:
             this.charityAugment.hacking_chance += effect.strength;
             break;
-          case AugmentationAreas.hacking_speed:
+          case AugmentationArea.hacking_speed:
             this.charityAugment.hacking_speed += effect.strength;
             break;
-          case AugmentationAreas.hacking_money:
+          case AugmentationArea.hacking_money:
             this.charityAugment.hacking_money += effect.strength;
             break;
-          case AugmentationAreas.hacking_grow:
+          case AugmentationArea.hacking_grow:
             this.charityAugment.hacking_grow += effect.strength;
             break;
-          case AugmentationAreas.company_rep:
+          case AugmentationArea.company_rep:
             this.charityAugment.company_rep += effect.strength;
             break;
-          case AugmentationAreas.faction_rep:
+          case AugmentationArea.faction_rep:
             this.charityAugment.faction_rep += effect.strength;
             break;
-          case AugmentationAreas.crime_money:
+          case AugmentationArea.crime_money:
             this.charityAugment.crime_money += effect.strength;
             break;
-          case AugmentationAreas.crime_success:
+          case AugmentationArea.crime_success:
             this.charityAugment.crime_success += effect.strength;
             break;
-          case AugmentationAreas.charity_money:
+          case AugmentationArea.charity_money:
             this.charityAugment.charity_money += effect.strength;
             break;
-          case AugmentationAreas.charity_success:
+          case AugmentationArea.charity_success:
             this.charityAugment.charity_success += effect.strength;
             break;
-          case AugmentationAreas.work_money:
+          case AugmentationArea.work_money:
             this.charityAugment.work_money += effect.strength;
             break;
-          case AugmentationAreas.hacknet_node_money:
+          case AugmentationArea.hacknet_node_money:
             this.charityAugment.hacknet_node_money += effect.strength;
             break;
-          case AugmentationAreas.hacknet_node_purchase_cost:
+          case AugmentationArea.hacknet_node_purchase_cost:
             this.charityAugment.hacknet_node_purchase_cost += effect.strength;
             this.charityAugment.hacknet_node_purchase_cost = Math.max(
               this.charityAugment.hacknet_node_purchase_cost,
               0.0005,
             );
             break;
-          case AugmentationAreas.hacknet_node_ram_cost:
+          case AugmentationArea.hacknet_node_ram_cost:
             this.charityAugment.hacknet_node_ram_cost += effect.strength;
             this.charityAugment.hacknet_node_ram_cost = Math.max(this.charityAugment.hacknet_node_ram_cost, 0.5);
             break;
-          case AugmentationAreas.hacknet_node_core_cost:
+          case AugmentationArea.hacknet_node_core_cost:
             this.charityAugment.hacknet_node_core_cost += effect.strength;
             this.charityAugment.hacknet_node_core_cost = Math.max(this.charityAugment.hacknet_node_core_cost, 0.5);
             break;
-          case AugmentationAreas.hacknet_node_level_cost:
+          case AugmentationArea.hacknet_node_level_cost:
             this.charityAugment.hacknet_node_level_cost += effect.strength;
             this.charityAugment.hacknet_node_level_cost = Math.max(this.charityAugment.hacknet_node_level_cost, 0.5);
             break;
-          case AugmentationAreas.bladeburner_max_stamina:
+          case AugmentationArea.bladeburner_max_stamina:
             this.charityAugment.bladeburner_max_stamina += effect.strength;
             break;
-          case AugmentationAreas.bladeburner_stamina_gain:
+          case AugmentationArea.bladeburner_stamina_gain:
             this.charityAugment.bladeburner_stamina_gain += effect.strength;
             break;
-          case AugmentationAreas.bladeburner_analysis:
+          case AugmentationArea.bladeburner_analysis:
             this.charityAugment.bladeburner_analysis += effect.strength;
             break;
-          case AugmentationAreas.bladeburner_success_chance:
+          case AugmentationArea.bladeburner_success_chance:
             this.charityAugment.bladeburner_success_chance += effect.strength;
             break;
-          case AugmentationAreas.augmentation_money:
+          case AugmentationArea.augmentation_money:
             this.charityAugment.augmentation_money += effect.strength;
             this.charityAugment.augmentation_money = Math.max(this.charityAugment.augmentation_money, 0.5);
             break;
-          case AugmentationAreas.augmentation_rep:
+          case AugmentationArea.augmentation_rep:
             this.charityAugment.augmentation_rep += effect.strength;
             this.charityAugment.augmentation_rep = Math.max(this.charityAugment.augmentation_rep, 0.5);
             break;

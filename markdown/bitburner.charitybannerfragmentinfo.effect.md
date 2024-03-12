@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-effect: CharityAugmentationAreas;
+effect: CharityAugmentationArea;
 ```

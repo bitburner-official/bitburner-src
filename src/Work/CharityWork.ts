@@ -26,6 +26,7 @@ export class CharityWork extends Work {
     super(WorkType.CHARITY, params?.singularity ?? true);
     this.charityType = params?.charityType ?? CharityType.stopRobery;
     this.unitCompleted = 0;
+    this.cyclesWorked = 0;
   }
 
   getCharity(): Charity {
