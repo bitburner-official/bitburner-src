@@ -1,5 +1,5 @@
+import type { BladeBlackOpName } from "@enums";
 import { Operation, IOperationParams } from "./Operation";
-import { BladeBlackOpName } from "./Enums";
 
 export class BlackOperation extends Operation {
   name: BladeBlackOpName;
