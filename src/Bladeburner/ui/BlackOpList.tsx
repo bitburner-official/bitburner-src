@@ -28,7 +28,7 @@ export function BlackOpList(props: IProps): React.ReactElement {
   return (
     <>
       {blackops.map((blackop: BlackOperation) => (
-        <BlackOpElem key={blackop.name} bladeburner={props.bladeburner} action={blackop} />
+        <BlackOpElem key={blackop.name} bladeburner={props.bladeburner} blackOp={blackop} />
       ))}
     </>
   );

@@ -3,10 +3,14 @@ import { BladeBlackOpName } from "./Enums";
 
 export class BlackOperation extends Operation {
   name: BladeBlackOpName;
-  constructor(params: IOperationParams & { name: BladeBlackOpName }) {
+  // TODO temporary - desc will be moved higher up in the class hierarchy after further changes in this PR
+  desc: string;
+  constructor(params: IOperationParams & { name: BladeBlackOpName; desc: string }) {
     super(params);
     this.name = params.name;
     this.count = 1;
+    // TODO temporary - this will be moved higher up in the class hierarchy after further changes in this PR
+    this.desc = params.desc;
   }
 
   // To be implemented by subtypes
