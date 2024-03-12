@@ -226,8 +226,10 @@ const gang = {
   canRecruitMember: RamCostConstants.GangApiBase / 4,
   getRecruitsAvailable: RamCostConstants.GangApiBase / 4,
   respectForNextRecruit: RamCostConstants.GangApiBase / 4,
+  getMemberTypeCount: RamCostConstants.GangApiBase / 4,
   recruitMember: RamCostConstants.GangApiBase / 2,
   getTaskNames: RamCostConstants.GangApiBase / 4,
+  getMemberTaskNames: RamCostConstants.GangApiBase / 4,
   getTaskStats: RamCostConstants.GangApiBase / 4,
   setMemberTask: RamCostConstants.GangApiBase / 2,
   getEquipmentNames: RamCostConstants.GangApiBase / 4,
@@ -240,6 +242,7 @@ const gang = {
   getInstallResult: RamCostConstants.GangApiBase / 2,
   setTerritoryWarfare: RamCostConstants.GangApiBase / 2,
   getChanceToWinClash: RamCostConstants.GangApiBase,
+  executeMember: RamCostConstants.GangApiBase / 4,
   getBonusTime: 0,
   nextUpdate: RamCostConstants.CycleTiming,
 } as const;

@@ -38,7 +38,7 @@ export function RecruitButton(props: IProps): React.ReactElement {
           Can recruit {recruitsAvailable} more gang member{recruitsAvailable === 1 ? "" : "s"}
         </Typography>
       </Box>
-      <RecruitModal open={open} onClose={() => setOpen(false)} onRecruit={props.onRecruit} />
+      <RecruitModal open={open} onClose={() => setOpen(false)} onRecruit={props.onRecruit} enforcerOK={gang.getRecruitTypeAvailable(true) > 0} hackerOK={gang.getRecruitTypeAvailable(false) > 0} />
     </>
   );
 }

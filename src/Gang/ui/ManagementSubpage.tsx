@@ -3,6 +3,8 @@ import { GangStats } from "./GangStats";
 import { GangMemberList } from "./GangMemberList";
 import { useGang } from "./Context";
 import { Typography } from "@mui/material";
+import { AllGangFactionInfo } from "../data/FactionInfo";
+import { GangConstants } from "../data/Constants";
 
 /** React Component for the subpage that manages gang members, the main page. */
 export function ManagementSubpage(): React.ReactElement {
@@ -13,6 +15,10 @@ export function ManagementSubpage(): React.ReactElement {
         {gang.facName} (your Gang)
       </Typography>
       <Typography>
+        Max enfocers: {AllGangFactionInfo[gang.facName].numEnforcers}.
+        Max hackers: {AllGangFactionInfo[gang.facName].numHackers}.
+        Max gang members: {GangConstants.MaximumGangMembers}.
+        <br />
         <br />
         If a gang member is not earning much money or respect, the task you assigned might be too difficult. Consider
         assigning an easier task, or training them. Tasks closer to the top of the dropdown list are generally easier.

@@ -148,6 +148,8 @@ export function NetscriptGang(): InternalAPI<IGang> {
         agi_asc_points: member.agi_asc_points,
         cha_asc_points: member.cha_asc_points,
 
+        isEnforcer: member.isEnforcer,
+
         upgrades: member.upgrades.slice(),
         augmentations: member.augmentations.slice(),
 
@@ -168,7 +170,15 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       return gang.respectForNextRecruit();
     },
+    getMemberTypeCount: (ctx) => (_isEnfocer) => {
+      const gang = getGang(ctx);
+      const isEnfocer = !!_isEnfocer;
+      return gang.members.filter(x => x.isEnforcer == isEnfocer).length;
+    },
     recruitMember: (ctx) => (_memberName, _isEnforcer) => {
+      if (_isEnforcer === null || _isEnforcer === undefined) {
+        throw helpers.errorMessage(ctx, `Member type not set.`);
+      }
       const memberName = helpers.string(ctx, "memberName", _memberName);
       const isEnforcer = !!_isEnforcer;
       const gang = getGang(ctx);
@@ -182,7 +192,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       } else {
         ctx.workerScript.log(
           "gang.recruitMember",
-          () => `Failed to recruit Gang Member '${memberName}'. Name already used.`,
+          () => `Failed to recruit Gang Member '${memberName}'. Name already used or over the maximum amount.`,
         );
         return recruited;
       }
@@ -190,7 +200,13 @@ export function NetscriptGang(): InternalAPI<IGang> {
     getTaskNames: (ctx) => () => {
       const gang = getGang(ctx);
       const tasks = gang.getAllTaskNames();
-      tasks.unshift("Unassigned");
+      return tasks;
+    },
+    getMemberTaskNames: (ctx) => (_memberName) => {
+      const gang = getGang(ctx);
+      const memberName = helpers.string(ctx, "memberName", _memberName);
+      const member = getGangMember(ctx, memberName);
+      const tasks = gang.getAllTaskNames(member.isEnforcer);
       return tasks;
     },
     setMemberTask: (ctx) => (_memberName, _taskName) => {
@@ -334,6 +350,14 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const otherPower = AllGangs[otherGang].territoryPower;
 
       return playerPower / (otherPower + playerPower);
+    },
+    executeMember: (ctx) => (_memberName) => {
+      const memberName = helpers.string(ctx, "memberName", _memberName);
+      const gang = getGang(ctx);
+      const member = gang.members.find(x => x.name === memberName);
+      if (!member) return false;
+      gang.killMember(member, true);
+      return true;
     },
     getBonusTime: (ctx) => () => {
       const gang = getGang(ctx);

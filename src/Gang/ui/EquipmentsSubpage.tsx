@@ -84,6 +84,7 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
   const armorUpgrades = filterUpgrades(props.member.upgrades, UpgradeType.Armor);
   const vehicleUpgrades = filterUpgrades(props.member.upgrades, UpgradeType.Vehicle);
   const rootkitUpgrades = filterUpgrades(props.member.upgrades, UpgradeType.Rootkit);
+  const equipUpgrades = filterUpgrades(props.member.augmentations, UpgradeType.Equipment);
   const augUpgrades = filterUpgrades(props.member.augmentations, UpgradeType.Augmentation);
 
   const categories: Record<string, (GangMemberUpgrade[] | UpgradeType)[]> = {
@@ -91,6 +92,7 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
     Armor: [armorUpgrades, UpgradeType.Armor],
     Vehicles: [vehicleUpgrades, UpgradeType.Vehicle],
     Rootkits: [rootkitUpgrades, UpgradeType.Rootkit],
+    Equipment: [equipUpgrades, UpgradeType.Equipment],
     Augmentations: [augUpgrades, UpgradeType.Augmentation],
   };
 

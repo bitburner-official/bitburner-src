@@ -947,6 +947,9 @@ interface GangMemberInfo {
   /** Total Charisma Ascension points accumulated */
   cha_asc_points: number;
 
+  /** Whether the member is an enforcer or a hacker */
+  isEnforcer: boolean;
+
   /** List of all non-Augmentation Equipment owned by gang member */
   upgrades: string[];
   /** List of all Augmentations currently installed on gang member */
@@ -3709,6 +3712,17 @@ export interface Gang {
    * Returns `Infinity` if you have reached the gang size limit.
    */
   respectForNextRecruit(): number;
+
+  /**
+   * Count how many gang members are of the specified type.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @param isEnforcer - True if you want to count enforcers, false if you want to count hackers.
+   * @returns The number of gang members of specified type.
+   */
+  getMemberTypeCount(isEnforcer: boolean): number;
+
   /**
    * Recruit a new gang member.
    * @remarks
@@ -3727,15 +3741,27 @@ export interface Gang {
   recruitMember(name: string, isEnforcer: boolean): boolean;
 
   /**
-   * List member task names.
+   * List gang task names.
    * @remarks
    * RAM cost: 1 GB
    *
    * Get the name of all valid tasks that Gang members can be assigned to.
+   * Includes both enforcer and hacker tasks.
    *
    * @returns All valid tasks that Gang members can be assigned to.
    */
   getTaskNames(): string[];
+
+  /**
+   * List member task names.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Get the name of all valid tasks that the specified Gang Member can be assigned to.
+   *
+   * @returns All valid tasks that Gang Member can be assigned to.
+   */
+  getMemberTaskNames(memberName: string): string[];
 
   /**
    * Set gang member to task.
@@ -3883,6 +3909,18 @@ export interface Gang {
    * @returns Chance you have to win a clash with the specified gang.
    */
   getChanceToWinClash(gangName: string): number;
+
+  /**
+   * Kills a gang member.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Has the same effect as dying in a clash, reducing respect. Only useful to replace them with a different type.
+   *
+   * @param memberName - Name of member.
+   * @returns True if successful, false otherwise.
+   */
+  executeMember(memberName: string): boolean;
 
   /**
    * Get bonus time.

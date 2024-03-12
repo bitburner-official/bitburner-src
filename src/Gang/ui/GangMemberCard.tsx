@@ -1,4 +1,5 @@
 import React from "react";
+import { Settings } from "../../Settings/Settings";
 import { GangMember } from "../GangMember";
 import { GangMemberCardContent } from "./GangMemberCardContent";
 
@@ -16,7 +17,7 @@ export function GangMemberCard(props: IProps): React.ReactElement {
   return (
     <Box component={Paper} sx={{ width: "auto" }}>
       <Box sx={{ m: 1 }}>
-        <ListItemText primary={<b>{props.member.name + " (" + (props.member.isEnforcer ? "enforcer" : "hacker") + ")"}</b>} />
+        <ListItemText primary={<span style={{fontWeight: "bold", color: props.member.isEnforcer ? Settings.theme.combat : Settings.theme.hack}}>{props.member.name + " (" + (props.member.isEnforcer ? "enforcer" : "hacker") + ")"}</span>} />
         <GangMemberCardContent member={props.member} />
       </Box>
     </Box>

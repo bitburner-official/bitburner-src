@@ -9,6 +9,8 @@ import { KEY } from "../../utils/helpers/keyCodes";
 
 interface IRecruitPopupProps {
   open: boolean;
+  enforcerOK: boolean;
+  hackerOK: boolean;
   onClose: () => void;
   onRecruit: () => void;
 }
@@ -17,13 +19,19 @@ interface IRecruitPopupProps {
 export function RecruitModal(props: IRecruitPopupProps): React.ReactElement {
   const gang = useGang();
   const [name, setName] = useState("");
+  const [isEnfocer, setType] = useState(true);
+
+  const canSwitchType = props.enforcerOK && props.hackerOK;
+  if (!props.enforcerOK) {
+    setType(false);
+  }
 
   const disabled = name === "" || !gang.canRecruitMember();
   function recruit(): void {
     if (disabled) return;
     // At this point, the only way this can fail is if you already
     // have a gang member with the same name
-    if (!gang.recruitMember(name, true) && name !== "") {
+    if (!gang.recruitMember(name, isEnfocer) && name !== "") {
       dialogBoxCreate("You already have a gang member with this name!");
       return;
     }
@@ -41,9 +49,13 @@ export function RecruitModal(props: IRecruitPopupProps): React.ReactElement {
     setName(event.target.value);
   }
 
+  function switchType(): void {
+    setType(!isEnfocer);
+  }
+
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>Enter a name for your new Gang Member:</Typography>
+      <Typography>Enter a name for your new <Button disabled={!canSwitchType} onClick={switchType}>{isEnfocer ? "Enforcer" : "Hacker"}</Button>:</Typography>
       <br />
       <TextField
         autoFocus

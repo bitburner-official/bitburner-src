@@ -314,13 +314,16 @@ export class Gang {
     return Math.floor(Math.log(this.respect) / Math.log(recruitCostBase)) + numFreeMembers - this.members.length; //else
   }
 
+  getRecruitTypeAvailable(isEnforcer: boolean): number {
+    const max = isEnforcer ? AllGangFactionInfo[this.facName].numEnforcers : AllGangFactionInfo[this.facName].numHackers;
+    return max - this.members.filter(m => m.isEnforcer === isEnforcer).length;
+  }
+
   recruitMember(name: string, isEnforcer: boolean): boolean {
     name = String(name);
-    if (name === "" || !this.canRecruitMember()) return false;
+    if (name === "" || isEnforcer === null || !this.canRecruitMember()) return false;
 
-    const sameType = this.members.filter(m => m.isEnforcer == isEnforcer);
-    const maxType = isEnforcer ? AllGangFactionInfo[this.facName].numEnforcers : AllGangFactionInfo[this.facName].numHackers;
-    if (sameType.length >= maxType) return false;
+    if (this.getRecruitTypeAvailable(isEnforcer) <= 0) return false;
 
     // Check for already-existing names
     const sameNames = this.members.filter((m) => m.name === name);
@@ -356,7 +359,7 @@ export class Gang {
     return totalPower;
   }
 
-  killMember(member: GangMember): void {
+  killMember(member: GangMember, suppressMessage = false): void {
     // Player loses a percentage of total respect, plus whatever respect that member has earned
     const totalRespect = this.respect;
     const lostRespect = 0.05 * totalRespect + member.earnedRespect;
@@ -370,7 +373,7 @@ export class Gang {
     }
 
     // Notify of death
-    if (this.notifyMemberDeath) {
+    if (this.notifyMemberDeath && !suppressMessage) {
       dialogBoxCreate(`${member.name} was killed in a gang clash! You lost ${lostRespect} respect`);
     }
   }

@@ -54,7 +54,7 @@ export const gangMemberUpgradesMetadata: IGangMemberUpgradeMetadata[] = [
   {
     cost: 50e6,
     mults: { str: 1.1, def: 1.1, agi: 1.1 },
-    name: "P90C",
+    name: "Banshee SMG",
     upgType: UpgradeType.Weapon,
   },
   {
@@ -72,7 +72,7 @@ export const gangMemberUpgradesMetadata: IGangMemberUpgradeMetadata[] = [
   {
     cost: 150e6,
     mults: { str: 1.25, def: 1.25 },
-    name: "M15A10 Assault Rifle",
+    name: "HoloHavoc Assault Rifle",
     upgType: UpgradeType.Weapon,
   },
   {
@@ -108,7 +108,7 @@ export const gangMemberUpgradesMetadata: IGangMemberUpgradeMetadata[] = [
   {
     cost: 3e6,
     mults: { dex: 1.04, agi: 1.04, cha: 1.04 },
-    name: "{} V20",
+    name: "Gritmobile Macho V20",
     upgType: UpgradeType.Vehicle,
   },
   {
@@ -120,13 +120,13 @@ export const gangMemberUpgradesMetadata: IGangMemberUpgradeMetadata[] = [
   {
     cost: 18e6,
     mults: { dex: 1.12, agi: 1.12, cha: 1.12 },
-    name: "{} S9001",
+    name: "ST-2000 Tactical SUV",
     upgType: UpgradeType.Vehicle,
   },
   {
     cost: 30e6,
     mults: { dex: 1.16, agi: 1.16, cha: 1.16 },
-    name: "White {}",
+    name: "NeonLux Seraph",
     upgType: UpgradeType.Vehicle,
   },
   {
@@ -142,12 +142,6 @@ export const gangMemberUpgradesMetadata: IGangMemberUpgradeMetadata[] = [
     upgType: UpgradeType.Rootkit,
   },
   {
-    cost: 75e6,
-    mults: { hack: 1.3 },
-    name: "Demon Rootkit",
-    upgType: UpgradeType.Rootkit,
-  },
-  {
     cost: 40e6,
     mults: { hack: 1.24 },
     name: "Hmap Node",
@@ -156,7 +150,19 @@ export const gangMemberUpgradesMetadata: IGangMemberUpgradeMetadata[] = [
   {
     cost: 75e6,
     mults: { hack: 1.3 },
+    name: "Demon Rootkit",
+    upgType: UpgradeType.Rootkit,
+  },
+  {
+    cost: 75e6,
+    mults: { hack: 1.3 },
     name: "Jack the Ripper",
+    upgType: UpgradeType.Rootkit,
+  },
+  {
+    cost: 100e6,
+    mults: { hack: 1.5 },
+    name: "Abyssal Pulse Rootkit",
     upgType: UpgradeType.Rootkit,
   },
   {
@@ -233,6 +239,12 @@ export const gangMemberUpgradesMetadata: IGangMemberUpgradeMetadata[] = [
   },
   {
     cost: 1e6,
+    mults: { dex: 1.05 },
+    name: "Mechanical Toolkit",
+    upgType: UpgradeType.Equipment,
+  },
+  {
+    cost: 1e6,
     mults: { hack: 1.05 },
     name: "Multitool",
     upgType: UpgradeType.Equipment,
@@ -240,7 +252,19 @@ export const gangMemberUpgradesMetadata: IGangMemberUpgradeMetadata[] = [
   {
     cost: 25e6,
     mults: { def: 1.05 },
-    name: "Basic Medkit",
+    name: "Medkit",
     upgType: UpgradeType.Equipment,
   },
+  {
+    cost: 75e6,
+    mults: { hack: 1.1, def: 1.1 },
+    name: "DataScrambler",
+    upgType: UpgradeType.Equipment,
+  },
+  {
+    cost: 100e6,
+    mults: { hack: 1.2, cha: 1.2 },
+    name: "Holomask",
+    upgType: UpgradeType.Equipment,
+  }
 ];
