@@ -86,7 +86,6 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "automateEnabled": false,
         "automateThreshHigh": 0,
         "automateThreshLow": 0,
-        "blackops": {},
         "cities": {
           "Aevum": {
             "ctor": "City",
@@ -288,6 +287,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "maxRank": 2000,
         "maxStamina": 1,
         "moneyLost": 0,
+        "numBlackOpsComplete": 0,
         "numHosp": 0,
         "operations": {
           "Assassination": {
