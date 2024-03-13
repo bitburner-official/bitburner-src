@@ -81,7 +81,7 @@ function getMenu(window) {
               defaultPath: defaultPath,
               buttonLabel: "Load",
               filters: [
-                { name: "Game Saves", extensions: ["json", "json.gz", "txt"] },
+                { name: "Game Saves", extensions: ["save", "json", "json.gz", "txt"] },
                 { name: "All", extensions: ["*"] },
               ],
               properties: ["openFile", "dontAddToRecent"],

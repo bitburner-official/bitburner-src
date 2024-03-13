@@ -24,7 +24,6 @@
     "arg": "^5.0.2",
     "bcryptjs": "^2.4.3",
     "better-react-mathjax": "^2.0.3",
-    "buffer": "^6.0.3",
     "clsx": "^1.2.1",
     "date-fns": "^2.30.0",
     "escodegen": "^2.1.0",

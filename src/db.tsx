@@ -1,3 +1,5 @@
+import { SaveData } from "./types";
+
 function getDB(): Promise<IDBObjectStore> {
   return new Promise((resolve, reject) => {
     if (!window.indexedDB) {
@@ -32,30 +34,30 @@ function getDB(): Promise<IDBObjectStore> {
   });
 }
 
-export function load(): Promise<string> {
+export function load(): Promise<SaveData> {
   return new Promise((resolve, reject) => {
     getDB()
       .then((db) => {
-        return new Promise<string>((resolve, reject) => {
-          const request: IDBRequest<string> = db.get("save");
-          request.onerror = function (this: IDBRequest<string>, ev: Event) {
-            reject("Error in Database request to get savestring: " + ev);
+        return new Promise<SaveData>((resolve, reject) => {
+          const request: IDBRequest<SaveData> = db.get("save");
+          request.onerror = function (this: IDBRequest<SaveData>, ev: Event) {
+            reject("Error in Database request to get save data: " + ev);
           };
 
-          request.onsuccess = function (this: IDBRequest<string>) {
+          request.onsuccess = function (this: IDBRequest<SaveData>) {
             resolve(this.result);
           };
-        }).then((saveString) => resolve(saveString));
+        }).then((saveData) => resolve(saveData));
       })
       .catch((r) => reject(r));
   });
 }
 
-export function save(saveString: string): Promise<void> {
+export function save(saveData: SaveData): Promise<void> {
   return getDB().then((db) => {
     return new Promise<void>((resolve, reject) => {
-      // We'll save to both localstorage and indexedDb
-      const request = db.put(saveString, "save");
+      // We'll save to IndexedDB
+      const request = db.put(saveData, "save");
 
       request.onerror = function (e) {
         reject("Error saving game to IndexedDB: " + e);

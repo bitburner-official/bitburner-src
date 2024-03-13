@@ -369,7 +369,7 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.ImportSave: {
-      mainPage = <ImportSave importString={pageWithContext.base64Save} automatic={!!pageWithContext.automatic} />;
+      mainPage = <ImportSave saveData={pageWithContext.saveData} automatic={!!pageWithContext.automatic} />;
       withSidebar = false;
       withPopups = false;
       bypassGame = true;

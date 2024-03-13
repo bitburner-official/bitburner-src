@@ -12,6 +12,7 @@ import { ToastVariant } from "@enums";
 import { Upload } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
+import { isBinaryFormat } from "../../../electron/saveDataBinaryFormat";
 
 export function SaveFileDev(): React.ReactElement {
   const importInput = useRef<HTMLInputElement>(null);
@@ -22,8 +23,14 @@ export function SaveFileDev(): React.ReactElement {
 
   async function onImport(event: React.ChangeEvent<HTMLInputElement>): Promise<void> {
     try {
-      const base64Save = await saveObject.getImportStringFromFile(event.target.files);
-      const save = atob(base64Save);
+      const saveData = await saveObject.getSaveDataFromFile(event.target.files);
+      // TODO Support binary format. This is low priority because this entire feature (SaveFileDev) is not fully
+      // implemented. "doRestore" does nothing.
+      if (isBinaryFormat(saveData)) {
+        SnackbarEvents.emit("We currently do not support binary format", ToastVariant.ERROR, 5000);
+        return;
+      }
+      const save = decodeURIComponent(escape(atob(saveData as string)));
       setSaveFile(save);
     } catch (e: unknown) {
       SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);

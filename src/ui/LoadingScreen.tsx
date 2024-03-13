@@ -33,9 +33,9 @@ export function LoadingScreen(): React.ReactElement {
   useEffect(() => {
     async function doLoad(): Promise<void> {
       await load()
-        .then((saveString) => {
+        .then(async (saveData) => {
           try {
-            Engine.load(saveString);
+            await Engine.load(saveData);
           } catch (err: unknown) {
             ActivateRecoveryMode();
             setLoaded(true);
@@ -45,9 +45,9 @@ export function LoadingScreen(): React.ReactElement {
           pushGameReady();
           setLoaded(true);
         })
-        .catch((reason) => {
+        .catch(async (reason) => {
           console.error(reason);
-          Engine.load("");
+          await Engine.load("");
           setLoaded(true);
         });
     }

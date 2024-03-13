@@ -38,20 +38,27 @@ import { Terminal } from "./Terminal";
 import { getRecordValues } from "./Types/Record";
 import { ExportMaterial } from "./Corporation/Actions";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
+import { SaveData } from "./types";
+import { decodeSaveData, encodeJsonSaveString } from "./utils/saveDataUtils";
+import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
  */
 
-export interface SaveData {
+/**
+ * This interface is only used for transferring game data to electron-related code, so I rename it from SaveData to
+ * ElectronGameData.
+ */
+export interface ElectronGameData {
   playerIdentifier: string;
   fileName: string;
-  save: string;
+  save: SaveData;
   savedOn: number;
 }
 
 export interface ImportData {
-  base64: string;
+  saveData: SaveData;
   playerData?: ImportPlayerData;
 }
 
@@ -88,7 +95,7 @@ class BitburnerSaveObject {
   StaneksGiftSave = "";
   GoSave = "";
 
-  getSaveString(forceExcludeRunningScripts = false): string {
+  async getSaveData(forceExcludeRunningScripts = false): Promise<SaveData> {
     this.PlayerSave = JSON.stringify(Player);
 
     // For the servers save, overwrite the ExcludeRunningScripts setting if forced
@@ -110,97 +117,82 @@ class BitburnerSaveObject {
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
 
-    const saveString = btoa(unescape(encodeURIComponent(JSON.stringify(this))));
-    return saveString;
+    return await encodeJsonSaveString(JSON.stringify(this), Settings.CompressSaveData);
   }
 
-  saveGame(emitToastEvent = true): Promise<void> {
+  async saveGame(emitToastEvent = true): Promise<void> {
     const savedOn = new Date().getTime();
     Player.lastSave = savedOn;
-    const saveString = this.getSaveString();
-    return new Promise((resolve, reject) => {
-      save(saveString)
-        .then(() => {
-          const saveData: SaveData = {
-            playerIdentifier: Player.identifier,
-            fileName: this.getSaveFileName(),
-            save: saveString,
-            savedOn,
-          };
-          pushGameSaved(saveData);
+    const saveData = await this.getSaveData();
+    save(saveData)
+      .then(() => {
+        const electronGameData: ElectronGameData = {
+          playerIdentifier: Player.identifier,
+          fileName: this.getSaveFileName(),
+          save: saveData,
+          savedOn,
+        };
+        pushGameSaved(electronGameData);
 
-          if (emitToastEvent) {
-            SnackbarEvents.emit("Game Saved!", ToastVariant.INFO, 2000);
-          }
-          return resolve();
-        })
-        .catch((err) => {
-          console.error(err);
-          return reject();
-        });
-    });
+        if (emitToastEvent) {
+          SnackbarEvents.emit("Game Saved!", ToastVariant.INFO, 2000);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   getSaveFileName(isRecovery = false): string {
     // Save file name is based on current timestamp and BitNode
     const epochTime = Math.round(Date.now() / 1000);
     const bn = Player.bitNodeN;
-    let filename = `bitburnerSave_${epochTime}_BN${bn}x${Player.sourceFileLvl(bn) + 1}.json`;
+    const extension = Settings.CompressSaveData ? "save" : "json";
+    let filename = `bitburnerSave_${epochTime}_BN${bn}x${Player.sourceFileLvl(bn) + 1}.${extension}`;
     if (isRecovery) filename = "RECOVERY" + filename;
     return filename;
   }
 
-  exportGame(): void {
-    const saveString = this.getSaveString();
+  async exportGame(): Promise<void> {
+    const saveData = await this.getSaveData();
     const filename = this.getSaveFileName();
-    download(filename, saveString);
+    download(filename, saveData);
   }
 
-  importGame(base64Save: string, reload = true): Promise<void> {
-    if (!base64Save || base64Save === "") throw new Error("Invalid import string");
-    return save(base64Save).then(() => {
+  async importGame(saveData: SaveData, reload = true): Promise<void> {
+    if (!saveData || saveData === "" || saveData.length === 0) throw new Error("Invalid import string");
+    return save(saveData).then(() => {
       if (reload) setTimeout(() => location.reload(), 1000);
       return Promise.resolve();
     });
   }
 
-  getImportStringFromFile(files: FileList | null): Promise<string> {
+  async getSaveDataFromFile(files: FileList | null): Promise<SaveData> {
     if (files === null) return Promise.reject(new Error("No file selected"));
     const file = files[0];
     if (!file) return Promise.reject(new Error("Invalid file selected"));
 
-    const reader = new FileReader();
-    const promise = new Promise<string>((resolve, reject) => {
-      reader.onload = function (this: FileReader, e: ProgressEvent<FileReader>) {
-        const target = e.target;
-        if (target === null) {
-          return reject(new Error("Error importing file"));
-        }
-        const result = target.result;
-        if (typeof result !== "string") {
-          return reject(new Error("FileReader event was not type string"));
-        }
-        const contents = result;
-        resolve(contents);
-      };
-    });
-    reader.readAsText(file);
-    return promise;
+    const rawData = new Uint8Array(await file.arrayBuffer());
+    if (isBinaryFormat(rawData)) {
+      return rawData;
+    } else {
+      return new TextDecoder().decode(rawData);
+    }
   }
 
-  async getImportDataFromString(base64Save: string): Promise<ImportData> {
-    if (!base64Save || base64Save === "") throw new Error("Invalid import string");
+  async getImportDataFromSaveData(saveData: SaveData): Promise<ImportData> {
+    if (!saveData || saveData === "" || saveData.length === 0) throw new Error("Invalid save data");
 
     let newSave;
     try {
-      newSave = window.atob(base64Save);
+      newSave = await decodeSaveData(saveData);
       newSave = newSave.trim();
     } catch (error) {
       console.error(error); // We'll handle below
     }
 
     if (!newSave || newSave === "") {
-      return Promise.reject(new Error("Save game had not content or was not base64 encoded"));
+      return Promise.reject(new Error("Save game is invalid"));
     }
 
     let parsedSave;
@@ -215,7 +207,7 @@ class BitburnerSaveObject {
     }
 
     const data: ImportData = {
-      base64: base64Save,
+      saveData: saveData,
     };
 
     const importedPlayer = loadPlayer(parsedSave.data.PlayerSave);
@@ -719,12 +711,12 @@ Error: ${e}`);
   }
 }
 
-function loadGame(saveString: string): boolean {
+async function loadGame(saveData: SaveData): Promise<boolean> {
   createScamUpdateText();
-  if (!saveString) return false;
-  saveString = decodeURIComponent(escape(atob(saveString)));
+  if (!saveData) return false;
+  const jsonSaveString = await decodeSaveData(saveData);
 
-  const saveObj = JSON.parse(saveString, Reviver);
+  const saveObj = JSON.parse(jsonSaveString, Reviver);
 
   setPlayer(loadPlayer(saveObj.PlayerSave));
   loadAllServers(saveObj.AllServersSave);
@@ -849,7 +841,7 @@ function createBetaUpdateText() {
   );
 }
 
-function download(filename: string, content: string): void {
+function download(filename: string, content: SaveData): void {
   const file = new Blob([content], { type: "text/plain" });
 
   const a = document.createElement("a"),

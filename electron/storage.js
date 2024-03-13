@@ -11,6 +11,7 @@ const greenworks = require("./greenworks");
 const log = require("electron-log");
 const flatten = require("lodash/flatten");
 const Store = require("electron-store");
+const { magicBytes, binaryFormatVersionByte, isBinaryFormat } = require("./saveDataBinaryFormat");
 const store = new Store();
 
 // https://stackoverflow.com/a/69418940
@@ -172,7 +173,7 @@ async function backupSteamDataToDisk(currentPlayerId) {
   }
 }
 
-async function pushGameSaveToSteamCloud(base64save, currentPlayerId) {
+async function pushGameSaveToSteamCloud(saveData, currentPlayerId) {
   if (!isCloudEnabled) return Promise.reject("Steam Cloud is not Enabled");
 
   try {
@@ -183,12 +184,29 @@ async function pushGameSaveToSteamCloud(base64save, currentPlayerId) {
 
   const steamSaveName = `${currentPlayerId}.json.gz`;
 
-  // Let's decode the base64 string so GZIP is more efficient.
-  const buffer = Buffer.from(base64save, "base64");
-  const compressedBuffer = await gzip(buffer);
+  let compressedBuffer;
+  if (isBinaryFormat(saveData)) {
+    // saveData is in binary format. We only need to remove magic bytes and binary format version byte.
+    compressedBuffer = saveData.subarray(magicBytes.length + 1);
+  } else {
+    // saveData is in base64 format.
+    // Let's decode the base64 string so GZIP is more efficient.
+    const buffer = Buffer.from(saveData, "base64");
+    compressedBuffer = await gzip(buffer);
+  }
+
+  /**
+   * compressedBuffer is encoded in base64 and pushed to Steam Cloud as a text file.
+   * The comment below was added in the original commit which added support for Steam Cloud & local file system
+   * (d386528627a285c055243739efb47902c5559f3a). The reason which "we can't use utf8" is that encoding in UTF-8 (with
+   * buffer.toString("utf8")) is not the proper way to convert binary data to string. Quote from buffer's documentation:
+   * "If encoding is 'utf8' and a byte sequence in the input is not valid UTF-8, then each invalid byte is replaced with
+   * the replacement character U+FFFD.". The proper way to do it is to use String.fromCharCode or String.fromCodePoint.
+   * I won't implement it and reuse the old code here for backward compatibility.
+   */
   // We can't use utf8 for some reason, steamworks is unhappy.
   const content = compressedBuffer.toString("base64");
-  log.debug(`Uncompressed: ${base64save.length} bytes`);
+  log.debug(`Uncompressed: ${saveData.length} bytes`);
   log.debug(`Compressed: ${content.length} bytes`);
   log.debug(`Saving to Steam Cloud as ${steamSaveName}`);
 
@@ -199,19 +217,31 @@ async function pushGameSaveToSteamCloud(base64save, currentPlayerId) {
   }
 }
 
+/**
+ * This function processes the save file in Steam Cloud and returns the save data in the base64 format. I don't change
+ * it to use the binary format, so there is no change in the logic of processing Steam Cloud save file.
+ */
 async function getSteamCloudSaveString() {
   if (!isCloudEnabled()) return Promise.reject("Steam Cloud is not Enabled");
   log.debug(`Fetching Save in Steam Cloud`);
   const cloudString = await getCloudFile();
-  const gzippedBase64Buffer = Buffer.from(cloudString, "base64");
-  const uncompressedBuffer = await gunzip(gzippedBase64Buffer);
+  // Decode cloudString to get compressedBuffer back.
+  const compressedBuffer = Buffer.from(cloudString, "base64");
+  // uncompressedBuffer is the binary form of the json save string.
+  const uncompressedBuffer = await gunzip(compressedBuffer);
+  // Encode it in base64.
   const content = uncompressedBuffer.toString("base64");
   log.debug(`Compressed: ${cloudString.length} bytes`);
   log.debug(`Uncompressed: ${content.length} bytes`);
   return content;
 }
 
-async function saveGameToDisk(window, saveData) {
+/**
+ * The save file is either:
+ * - Text file: json save string
+ * - Gzip file: gzip version of the json save string
+ */
+async function saveGameToDisk(window, electronGameData) {
   const currentFolder = await getSaveFolder(window);
   let saveFolderSizeBytes = await getFolderSizeInBytes(currentFolder);
   const maxFolderSizeBytes = store.get("autosave-quota", 1e8); // 100Mb per playerIndentifier
@@ -222,18 +252,27 @@ async function saveGameToDisk(window, saveData) {
     `Remaining: ${remainingSpaceBytes} bytes (${((saveFolderSizeBytes / maxFolderSizeBytes) * 100).toFixed(2)}% used)`,
   );
   const shouldCompress = isSaveCompressionEnabled();
-  const fileName = saveData.fileName;
-  const file = path.join(currentFolder, fileName + (shouldCompress ? ".gz" : ""));
+  let fileName = electronGameData.fileName;
+  // .save is the extension of the binary format. We change it to .json because this method save either json save string
+  // or the gzip version of that one.
+  if (fileName.endsWith(".save")) {
+    fileName = `${fileName.substring(0, fileName.length - 5)}.json`;
+  }
+  let saveData = electronGameData.save;
+  const file = path.join(currentFolder, fileName + (shouldCompress || isBinaryFormat(saveData) ? ".gz" : ""));
   try {
-    let saveContent = saveData.save;
-    if (shouldCompress) {
+    if (isBinaryFormat(saveData)) {
+      // saveData is in the binary format. We only need to remove the magic bytes and the binary format version byte.
+      saveData = saveData.subarray(magicBytes.length + 1);
+    } else if (shouldCompress) {
+      // saveData is in the base64 format.
       // Let's decode the base64 string so GZIP is more efficient.
-      const buffer = Buffer.from(saveContent, "base64").toString("utf8");
-      saveContent = await gzip(buffer);
+      const buffer = Buffer.from(saveData, "base64").toString("utf8");
+      saveData = await gzip(buffer);
     }
-    await fs.writeFile(file, saveContent, "utf8");
+    await fs.writeFile(file, saveData, "utf8");
     log.debug(`Saved Game to '${file}'`);
-    log.debug(`Save Size: ${saveContent.length} bytes`);
+    log.debug(`Save Size: ${saveData.length} bytes`);
   } catch (error) {
     log.error(error);
   }
@@ -277,11 +316,17 @@ async function loadFileFromDisk(path) {
   const buffer = await fs.readFile(path);
   let content;
   if (path.endsWith(".gz")) {
-    const uncompressedBuffer = await gunzip(buffer);
-    content = uncompressedBuffer.toString("base64");
-    log.debug(`Uncompressed file content (new size: ${content.length} bytes)`);
+    // Our codebase supports decompression with the binary format now. We only need to prepend the magic bytes and the
+    // binary format version byte.
+    content = new Uint8Array([...magicBytes, binaryFormatVersionByte, ...buffer]);
   } else {
-    content = buffer.toString("utf8");
+    if (isBinaryFormat(buffer)) {
+      // Save file is in the binary format.
+      content = buffer;
+    } else {
+      // Save file is in the base64 format.
+      content = buffer.toString("utf8");
+    }
     log.debug(`Loaded file with ${content.length} bytes`);
   }
   return content;

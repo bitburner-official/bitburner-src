@@ -43,6 +43,7 @@ import React from "react";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
 import { SnackbarEvents } from "./ui/React/Snackbar";
+import { SaveData } from "./types";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
@@ -66,7 +67,7 @@ const Engine: {
   };
   decrementAllCounters: (numCycles?: number) => void;
   checkCounters: () => void;
-  load: (saveString: string) => void;
+  load: (saveData: SaveData) => Promise<void>;
   start: () => void;
 } = {
   // Time variables (milliseconds unix epoch time)
@@ -218,7 +219,7 @@ const Engine: {
     }
   },
 
-  load: function (saveString) {
+  load: async function (saveData) {
     startExploits();
     setupUncaughtPromiseHandler();
     // Source files must be initialized early because save-game translation in
@@ -226,7 +227,7 @@ const Engine: {
     initSourceFiles();
     // Load game from save or create new game
 
-    if (loadGame(saveString)) {
+    if (await loadGame(saveData)) {
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
       if (Player.hasWseAccount) {
