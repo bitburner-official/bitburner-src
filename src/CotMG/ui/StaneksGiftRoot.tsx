@@ -172,7 +172,7 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
                   function finishes executing, the fragment's charge levels will be raised by an amount corresponding to
                   the number of threads that were used. Note that it is generally more effective to charge a fragment
                   a few times with many threads than to charge it many times with few threads, so there is a benefit to
-                  distributing charging jobs across multiple scripts. As a Stat Fragment's charge level is increased, its
+                  combining charging jobs into fewer scripts. As a Stat Fragment's charge level is increased, its
                   bonuses will increase, but there will be diminishing returns. As such, it is generally most efficient
                   to charge all of the placed fragments equally. The charge level of a fragment will not decrease over
                   time, but it will be reset to 0 upon removing it from the board or installing augmentations.
