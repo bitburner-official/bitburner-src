@@ -1,34 +1,20 @@
 import React from "react";
-import { BlackOperations } from "../BlackOperations";
+import { blackOpsArray } from "../BlackOperations";
 import { BlackOperation } from "../BlackOperation";
 import { BlackOpElem } from "./BlackOpElem";
 import { Bladeburner } from "../Bladeburner";
 
-interface IProps {
+interface BlackOpListProps {
   bladeburner: Bladeburner;
 }
 
-export function BlackOpList(props: IProps): React.ReactElement {
-  let blackops = Object.values(BlackOperations);
-  blackops.sort(function (a, b) {
-    return a.reqdRank - b.reqdRank;
-  });
-
-  blackops = blackops.filter(
-    (blackop: BlackOperation, i: number) =>
-      !(
-        props.bladeburner.blackops[blackops[i].name] == null &&
-        i !== 0 &&
-        props.bladeburner.blackops[blackops[i - 1].name] == null
-      ),
-  );
-
-  blackops = blackops.reverse();
+export function BlackOpList({ bladeburner }: BlackOpListProps): React.ReactElement {
+  const blackOps = blackOpsArray.slice(0, bladeburner.numBlackOpsComplete + 1);
 
   return (
     <>
-      {blackops.map((blackop: BlackOperation) => (
-        <BlackOpElem key={blackop.name} bladeburner={props.bladeburner} blackOp={blackop} />
+      {blackOps.map((blackOp: BlackOperation) => (
+        <BlackOpElem key={blackOp.name} bladeburner={bladeburner} blackOp={blackOp} />
       ))}
     </>
   );

@@ -23,10 +23,17 @@ import { SnackbarEvents } from "./ui/React/Snackbar";
 import * as ExportBonus from "./ExportBonus";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
-import { Reviver, constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "./utils/JSONReviver";
+import {
+  Reviver,
+  constructorsForReviver,
+  Generic_toJSON,
+  Generic_fromJSON,
+  IReviverValue,
+  assertLoadingType,
+} from "./utils/JSONReviver";
 import { save } from "./db";
 import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
-import { AugmentationName, LocationName, ToastVariant } from "@enums";
+import { AugmentationName, BladeBlackOpName, LocationName, ToastVariant } from "@enums";
 import { PlayerOwnedAugmentation } from "./Augmentation/PlayerOwnedAugmentation";
 import { pushGameSaved } from "./Electron";
 import { defaultMonacoTheme } from "./ScriptEditor/ui/themes";
@@ -38,6 +45,7 @@ import { Terminal } from "./Terminal";
 import { getRecordValues } from "./Types/Record";
 import { ExportMaterial } from "./Corporation/Actions";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
+import { blackOpsArray } from "./Bladeburner/BlackOperations";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -716,6 +724,19 @@ Error: ${e}`);
     const freshSaveData = getGoSave();
     Object.assign(freshSaveData.stats, stats);
     loadGo(JSON.stringify(freshSaveData));
+  }
+  // 2.6.1
+  if (ver < 39) {
+    // Remove blackops record from bladeburner - replaced by numBlackOpsCompleted
+    const blade = Player.bladeburner;
+    if (blade && "blackops" in blade && blade.blackops && typeof blade.blackops === "object") {
+      assertLoadingType<Record<BladeBlackOpName, boolean>>(blade.blackops);
+      for (const blackOp of blackOpsArray) {
+        const name = blackOp.name;
+        if (blade.blackops[name]) blade.numBlackOpsComplete = blackOp.id + 1;
+      }
+      delete blade.blackops;
+    }
   }
 }
 

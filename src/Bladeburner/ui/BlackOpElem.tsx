@@ -22,7 +22,7 @@ interface BlackOpElemProps {
 
 export function BlackOpElem({ bladeburner, blackOp }: BlackOpElemProps): React.ReactElement {
   const rerender = useRerender();
-  const isCompleted = bladeburner.blackops[blackOp.name] != null;
+  const isCompleted = bladeburner.numBlackOpsComplete > blackOp.id;
   if (isCompleted) {
     return (
       <Paper sx={{ my: 1, p: 1 }}>

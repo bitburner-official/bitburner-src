@@ -1,12 +1,4 @@
-import {
-  AugmentationName,
-  BladeBlackOpName,
-  CityName,
-  CompletedProgramName,
-  CorpUnlockName,
-  FactionName,
-  IndustryType,
-} from "@enums";
+import { AugmentationName, CityName, CompletedProgramName, CorpUnlockName, FactionName, IndustryType } from "@enums";
 import { SkillNames } from "../Bladeburner/data/SkillNames";
 import { Skills } from "../Bladeburner/Skills";
 import { CONSTANTS } from "../Constants";
@@ -31,6 +23,7 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 
 import { getRecordValues } from "../Types/Record";
 import { ServerConstants } from "../Server/data/Constants";
+import { blackOpsArray } from "../Bladeburner/BlackOperations";
 
 // Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
 const achievementData = (<AchievementDataJson>(<unknown>data)).achievements;
@@ -65,7 +58,7 @@ function bitNodeFinishedState(): boolean {
   const wd = GetServer(SpecialServers.WorldDaemon);
   if (!(wd instanceof Server)) return false;
   if (wd.backdoorInstalled) return true;
-  return Player.bladeburner !== null && BladeBlackOpName.OperationDaedalus in Player.bladeburner.blackops;
+  return Player.bladeburner !== null && Player.bladeburner.numBlackOpsComplete >= blackOpsArray.length;
 }
 
 function hasAccessToSF(bn: number): boolean {

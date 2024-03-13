@@ -1,17 +1,18 @@
 import * as React from "react";
 import { Button, Typography } from "@mui/material";
-import { BladeBlackOpName, FactionName } from "@enums";
+import { FactionName } from "@enums";
 import { BlackOpList } from "./BlackOpList";
 import { Bladeburner } from "../Bladeburner";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { CorruptableText } from "../../ui/React/CorruptableText";
+import { blackOpsArray } from "../BlackOperations";
 
-interface IProps {
+interface BlackOpPageProps {
   bladeburner: Bladeburner;
 }
 
-export function BlackOpPage(props: IProps): React.ReactElement {
+export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactElement {
   return (
     <>
       <Typography>
@@ -28,12 +29,12 @@ export function BlackOpPage(props: IProps): React.ReactElement {
         Like normal operations, you may use a team for Black Ops. Failing a black op will incur heavy HP and rank
         losses.
       </Typography>
-      {props.bladeburner.blackops[BladeBlackOpName.OperationDaedalus] ? (
+      {bladeburner.numBlackOpsComplete >= blackOpsArray.length ? (
         <Button sx={{ my: 1, p: 1 }} onClick={() => Router.toPage(Page.BitVerse, { flume: false, quick: false })}>
           <CorruptableText content="Destroy w0rld_d34mon" spoiler={false}></CorruptableText>
         </Button>
       ) : (
-        <BlackOpList bladeburner={props.bladeburner} />
+        <BlackOpList bladeburner={bladeburner} />
       )}
     </>
   );

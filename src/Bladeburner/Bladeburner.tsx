@@ -4,7 +4,7 @@ import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue
 import { ActionIdentifier } from "./ActionIdentifier";
 import { ActionTypes } from "./data/ActionTypes";
 import { Growths } from "./data/Growths";
-import { BlackOperations } from "./BlackOperations";
+import { BlackOperations, blackOpsArray } from "./BlackOperations";
 import { BlackOperation } from "./BlackOperation";
 import { Operation } from "./Operation";
 import { Contract } from "./Contract";
@@ -36,7 +36,7 @@ import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfil
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { getEnumHelper } from "../utils/EnumHelper";
-import { PartialRecord, createEnumKeyedRecord } from "../Types/Record";
+import { createEnumKeyedRecord } from "../Types/Record";
 
 export interface BlackOpsAttempt {
   error?: string;
@@ -81,7 +81,7 @@ export class Bladeburner {
   stamina = 0;
   contracts: Record<string, Contract> = {};
   operations: Record<string, Operation> = {};
-  blackops: PartialRecord<BladeBlackOpName, boolean> = {};
+  numBlackOpsComplete = 0;
   logging = {
     general: true,
     contracts: true,
@@ -109,7 +109,7 @@ export class Bladeburner {
     this.stamina = this.maxStamina;
     this.create();
     // Reset number of black ops available
-    for (const blackOpName of getEnumHelper("BladeBlackOpName").valueArray) BlackOperations[blackOpName].count = 1;
+    for (const blackOp of blackOpsArray) blackOp.count = 1;
   }
 
   getCurrentCity(): City {
@@ -122,25 +122,10 @@ export class Bladeburner {
   }
 
   // Todo, deduplicate this functionality
-  getNextBlackOp(): { name: string; rank: number } | null {
-    let blackops = Object.values(BlackOperations);
-    blackops.sort(function (a, b) {
-      return a.reqdRank - b.reqdRank;
-    });
-
-    blackops = blackops.filter(
-      (blackop: BlackOperation, i: number) =>
-        !(this.blackops[blackops[i].name] == null && i !== 0 && this.blackops[blackops[i - 1].name] == null),
-    );
-
-    blackops = blackops.reverse();
-    const actionID = this.getActionIdFromTypeAndName("Black Op", "Operation Daedalus");
-
-    return blackops[0].name === "Operation Daedalus" &&
-      actionID !== null &&
-      !this.canAttemptBlackOp(actionID).isAvailable
-      ? null
-      : { name: blackops[0].name, rank: blackops[0].reqdRank };
+  getNextBlackOp(): { name: BladeBlackOpName; rank: number } | null {
+    if (this.numBlackOpsComplete === blackOpsArray.length) return null;
+    const blackOp = blackOpsArray[this.numBlackOpsComplete];
+    return { name: blackOp.name, rank: blackOp.reqdRank };
   }
 
   canAttemptBlackOp(actionId: ActionIdentifier): BlackOpsAttempt {
@@ -149,35 +134,22 @@ export class Bladeburner {
       throw new Error("Invalid call to canAttemptBlackOp");
     }
 
-    // Safety measure - don't repeat BlackOps that are already done
-    if (this.blackops[actionId.name] != null) {
+    const blackOp = BlackOperations[actionId.name];
+    // Don't repeat BlackOps that are already done
+    if (this.numBlackOpsComplete > blackOp.id) {
       return { error: "Tried to start a Black Operation that had already been completed" };
     }
 
-    const action = this.getActionObject(actionId);
-    if (!(action instanceof BlackOperation)) throw new Error(`Action should be BlackOperation but isn't`);
-    if (action == null) throw new Error("Failed to get BlackOperation object for: " + actionId.name);
-
-    if (action.reqdRank > this.rank) {
+    if (blackOp.reqdRank > this.rank) {
       return { error: "Tried to start a Black Operation without the rank requirement" };
     }
 
     // Can't start a BlackOp if you haven't done the one before it
-    const blackOpNames = Object.values(BladeBlackOpName);
-    blackOpNames.sort(function (a, b) {
-      return BlackOperations[a].reqdRank - BlackOperations[b].reqdRank; // Sort black ops in intended order
-    });
-
-    const i = blackOpNames.indexOf(actionId.name);
-    if (i === -1) {
-      return { error: `Invalid Black Op: '${name}'` };
+    if (this.numBlackOpsComplete < blackOp.id) {
+      return { error: `Preceding Black Op must be completed before starting '${blackOp.name}'.` };
     }
 
-    if (i > 0 && this.blackops[blackOpNames[i - 1]] == null) {
-      return { error: `Preceding Black Op must be completed before starting '${actionId.name}'.` };
-    }
-
-    return { isAvailable: true, action };
+    return { isAvailable: true, action: blackOp };
   }
 
   /** This function is only for the player. Sleeves use their own functions to perform blade work.
@@ -362,12 +334,10 @@ export class Bladeburner {
       case "black ops":
       case "blackop":
       case "blackops":
+        if (!getEnumHelper("BladeBlackOpName").isMember(name)) return null;
         action.type = ActionTypes.BlackOp;
-        if (Object.hasOwn(BlackOperations, name)) {
-          action.name = name;
-          return action;
-        }
-        return null;
+        action.name = name;
+        return action;
       case "general":
       case "general action":
       case "gen":
@@ -1380,102 +1350,94 @@ export class Bladeburner {
       }
       case ActionTypes.BlackOp:
       case ActionTypes.BlackOperation: {
-        try {
-          const action = this.getActionObject(actionIdent);
-          if (action == null || !(action instanceof BlackOperation)) {
-            throw new Error("Failed to get BlackOperation Object for: " + actionIdent.name);
+        // Temporary typecheck, will be removed later in PR TODO make Action identifiers typesafe
+        if (!getEnumHelper("BladeBlackOpName").isMember(actionIdent.name)) {
+          exceptionAlert(new Error(`Failed to get BlackOperation for ${actionIdent.name}`));
+          return retValue;
+        }
+        const blackOp = BlackOperations[actionIdent.name];
+
+        const difficulty = blackOp.getDifficulty();
+        const difficultyMultiplier =
+          Math.pow(difficulty, BladeburnerConstants.DiffMultExponentialFactor) +
+          difficulty / BladeburnerConstants.DiffMultLinearFactor;
+
+        // Stamina loss is based on difficulty
+        this.stamina -= BladeburnerConstants.BaseStaminaLoss * difficultyMultiplier;
+        if (this.stamina < 0) {
+          this.stamina = 0;
+        }
+
+        // Team loss variables
+        const teamCount = blackOp.teamCount;
+        let teamLossMax;
+
+        if (blackOp.attempt(this, person)) {
+          retValue = this.getActionStats(blackOp, person, true);
+          blackOp.count = 0;
+          this.numBlackOpsComplete++;
+          let rankGain = 0;
+          if (blackOp.rankGain) {
+            rankGain = addOffset(blackOp.rankGain * currentNodeMults.BladeburnerRank, 10);
+            this.changeRank(person, rankGain);
           }
-          const difficulty = action.getDifficulty();
-          const difficultyMultiplier =
-            Math.pow(difficulty, BladeburnerConstants.DiffMultExponentialFactor) +
-            difficulty / BladeburnerConstants.DiffMultLinearFactor;
+          teamLossMax = Math.ceil(teamCount / 2);
 
-          // Stamina loss is based on difficulty
-          this.stamina -= BladeburnerConstants.BaseStaminaLoss * difficultyMultiplier;
-          if (this.stamina < 0) {
-            this.stamina = 0;
+          if (this.logging.blackops) {
+            this.log(
+              `${person.whoAmI()}: ${blackOp.name} successful! Gained ${formatNumberNoSuffix(rankGain, 1)} rank`,
+            );
           }
-
-          // Team loss variables
-          const teamCount = action.teamCount;
-          let teamLossMax;
-
-          if (action.attempt(this, person)) {
-            retValue = this.getActionStats(action, person, true);
-            action.count = 0;
-            this.blackops[action.name] = true;
-            let rankGain = 0;
-            if (action.rankGain) {
-              rankGain = addOffset(action.rankGain * currentNodeMults.BladeburnerRank, 10);
-              this.changeRank(person, rankGain);
-            }
-            teamLossMax = Math.ceil(teamCount / 2);
-
-            if (this.logging.blackops) {
-              this.log(
-                `${person.whoAmI()}: ` +
-                  action.name +
-                  " successful! Gained " +
-                  formatNumberNoSuffix(rankGain, 1) +
-                  " rank",
-              );
-            }
-          } else {
-            retValue = this.getActionStats(action, person, false);
-            let rankLoss = 0;
-            let damage = 0;
-            if (action.rankLoss) {
-              rankLoss = addOffset(action.rankLoss, 10);
-              this.changeRank(person, -1 * rankLoss);
-            }
-            if (action.hpLoss) {
-              damage = action.hpLoss * difficultyMultiplier;
-              damage = Math.ceil(addOffset(damage, 10));
-              const cost = calculateHospitalizationCost(damage);
-              if (person.takeDamage(damage)) {
-                ++this.numHosp;
-                this.moneyLost += cost;
-              }
-            }
-            teamLossMax = Math.floor(teamCount);
-
-            if (this.logging.blackops) {
-              this.log(
-                `${person.whoAmI()}: ` +
-                  action.name +
-                  " failed! Lost " +
-                  formatNumberNoSuffix(rankLoss, 1) +
-                  " rank and took " +
-                  formatNumberNoSuffix(damage, 0) +
-                  " damage",
-              );
+        } else {
+          retValue = this.getActionStats(blackOp, person, false);
+          let rankLoss = 0;
+          let damage = 0;
+          if (blackOp.rankLoss) {
+            rankLoss = addOffset(blackOp.rankLoss, 10);
+            this.changeRank(person, -1 * rankLoss);
+          }
+          if (blackOp.hpLoss) {
+            damage = blackOp.hpLoss * difficultyMultiplier;
+            damage = Math.ceil(addOffset(damage, 10));
+            const cost = calculateHospitalizationCost(damage);
+            if (person.takeDamage(damage)) {
+              ++this.numHosp;
+              this.moneyLost += cost;
             }
           }
+          teamLossMax = Math.floor(teamCount);
 
-          this.resetAction(); // Stop regardless of success or fail
-
-          // Calculate team losses
-          if (teamCount >= 1) {
-            const losses = getRandomInt(1, teamLossMax);
-            this.teamSize -= losses;
-            if (this.teamSize < this.sleeveSize) {
-              const sup = Player.sleeves.filter((x) => isSleeveSupportWork(x.currentWork));
-              for (let i = 0; i > this.teamSize - this.sleeveSize; i--) {
-                const r = Math.floor(Math.random() * sup.length);
-                sup[r].takeDamage(sup[r].hp.max);
-                sup.splice(r, 1);
-              }
-              this.teamSize += this.sleeveSize;
-            }
-            this.teamLost += losses;
-            if (this.logging.blackops) {
-              this.log(
-                `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(losses, 0)} team members during ${action.name}`,
-              );
-            }
+          if (this.logging.blackops) {
+            this.log(
+              `${person.whoAmI()}: ${blackOp.name} failed! Lost ${formatNumberNoSuffix(
+                rankLoss,
+                1,
+              )} rank and took ${formatNumberNoSuffix(damage, 0)} damage`,
+            );
           }
-        } catch (e: unknown) {
-          exceptionAlert(String(e));
+        }
+
+        this.resetAction(); // Stop regardless of success or fail
+
+        // Calculate team losses
+        if (teamCount >= 1) {
+          const losses = getRandomInt(1, teamLossMax);
+          this.teamSize -= losses;
+          if (this.teamSize < this.sleeveSize) {
+            const sup = Player.sleeves.filter((x) => isSleeveSupportWork(x.currentWork));
+            for (let i = 0; i > this.teamSize - this.sleeveSize; i--) {
+              const r = Math.floor(Math.random() * sup.length);
+              sup[r].takeDamage(sup[r].hp.max);
+              sup.splice(r, 1);
+            }
+            this.teamSize += this.sleeveSize;
+          }
+          this.teamLost += losses;
+          if (this.logging.blackops) {
+            this.log(
+              `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(losses, 0)} team members during ${blackOp.name}`,
+            );
+          }
         }
         break;
       }
@@ -2134,10 +2096,6 @@ export class Bladeburner {
     return Object.keys(this.operations);
   }
 
-  getBlackOpNamesNetscriptFn(): string[] {
-    return Object.keys(BlackOperations);
-  }
-
   getGeneralActionNamesNetscriptFn(): string[] {
     return Object.keys(GeneralActions);
   }
@@ -2430,9 +2388,7 @@ export class Bladeburner {
   static fromJSON(value: IReviverValue): Bladeburner {
     const bladeburner = Generic_fromJSON(Bladeburner, value.data);
     // Update the static Actions objects based on info from the save file
-    for (const blackOpName of getEnumHelper("BladeBlackOpName").valueArray) {
-      if (bladeburner.blackops[blackOpName]) BlackOperations[blackOpName].count = 0;
-    }
+    for (let i = 0; i < bladeburner.numBlackOpsComplete; i++) blackOpsArray[i].count = 0;
     return bladeburner;
   }
 }

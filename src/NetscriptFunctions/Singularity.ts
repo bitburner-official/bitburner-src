@@ -3,7 +3,6 @@ import type { Singularity as ISingularity, Task as ITask } from "@nsdefs";
 import { Player } from "@player";
 import {
   AugmentationName,
-  BladeBlackOpName,
   CityName,
   FactionName,
   FactionWorkType,
@@ -57,6 +56,7 @@ import { root } from "../Paths/Directory";
 import { getRecordEntries } from "../Types/Record";
 import { JobTracks } from "../Company/data/JobTracks";
 import { ServerConstants } from "../Server/data/Constants";
+import { blackOpsArray } from "../Bladeburner/BlackOperations";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -1122,7 +1122,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       };
       const bladeburnerRequirements = () => {
         if (!Player.bladeburner) return false;
-        return Player.bladeburner.blackops[BladeBlackOpName.OperationDaedalus];
+        return Player.bladeburner.numBlackOpsComplete >= blackOpsArray.length;
       };
 
       if (!hackingRequirements() && !bladeburnerRequirements()) {

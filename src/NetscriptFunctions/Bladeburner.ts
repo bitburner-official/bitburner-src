@@ -3,6 +3,7 @@ import type { Action } from "../Bladeburner/Action";
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
 import { Player } from "@player";
+import { BladeBlackOpName } from "@enums";
 import { Bladeburner, BladeburnerPromise } from "../Bladeburner/Bladeburner";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { BlackOperation } from "../Bladeburner/BlackOperation";
@@ -51,8 +52,8 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       return bladeburner.getOperationNamesNetscriptFn();
     },
     getBlackOpNames: (ctx) => () => {
-      const bladeburner = getBladeburner(ctx);
-      return bladeburner.getBlackOpNamesNetscriptFn();
+      getBladeburner(ctx);
+      return Object.values(BladeBlackOpName);
     },
     getNextBlackOp: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
