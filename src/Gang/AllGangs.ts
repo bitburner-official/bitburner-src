@@ -2,7 +2,7 @@ import { FactionName } from "@enums";
 import { Reviver } from "../utils/JSONReviver";
 
 interface GangTerritory {
-  territoryPower: number;
+  power: number;
   territory: number;
 }
 
@@ -11,31 +11,31 @@ export let AllGangs: Record<string, GangTerritory> = defaultGangs();
 function defaultGangs(): Record<string, GangTerritory> {
   return {
     [FactionName.SlumSnakes]: {
-      territoryPower: 1,
+      power: 1,
       territory: 1 / 7,
     },
     [FactionName.Tetrads]: {
-      territoryPower: 1,
+      power: 1,
       territory: 1 / 7,
     },
     [FactionName.TheSyndicate]: {
-      territoryPower: 1,
+      power: 1,
       territory: 1 / 7,
     },
     [FactionName.TheDarkArmy]: {
-      territoryPower: 1,
+      power: 1,
       territory: 1 / 7,
     },
     [FactionName.SpeakersForTheDead]: {
-      territoryPower: 1,
+      power: 1,
       territory: 1 / 7,
     },
     [FactionName.NiteSec]: {
-      territoryPower: 1,
+      power: 1,
       territory: 1 / 7,
     },
     [FactionName.TheBlackHand]: {
-      territoryPower: 1,
+      power: 1,
       territory: 1 / 7,
     },
   }

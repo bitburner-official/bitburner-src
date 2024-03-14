@@ -346,8 +346,8 @@ export function NetscriptGang(): InternalAPI<IGang> {
         throw helpers.errorMessage(ctx, `Invalid gang: ${otherGang}`);
       }
 
-      const playerPower = AllGangs[gang.facName].territoryPower;
-      const otherPower = AllGangs[otherGang].territoryPower;
+      const playerPower = AllGangs[gang.facName].power;
+      const otherPower = AllGangs[otherGang].power;
 
       return playerPower / (otherPower + playerPower);
     },

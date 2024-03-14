@@ -85,12 +85,8 @@ export class GangMember {
   }
 
   calculatePower(): number {
-    return (this.hack + this.str + this.def + this.dex + this.agi + this.cha) / 95;
-  }
-
-  getTerritoryPowerGain(): number {
     const task = this.getTask();
-    return task.territoryPower * (this.hack + this.str + this.def + this.dex + this.agi + this.cha) / 95;
+    return task.territoryPower * (this.hack + this.str + this.def + this.dex + this.agi + this.cha) * 0.015 / 95;
   }
 
   assignToTask(taskName: string): boolean {

@@ -797,7 +797,7 @@ interface GangGenInfo {
 /** @public */
 interface GangOtherInfoObject {
   /** Gang power */
-  territoryPower: number;
+  power: number;
   /** Gang territory, in decimal form */
   territory: number;
 }

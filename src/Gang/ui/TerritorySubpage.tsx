@@ -76,7 +76,7 @@ export function TerritorySubpage(): React.ReactElement {
         />
         <Typography>
           <b>Territory Clash Chance:</b> {formatPercent(gang.territoryClashChance, 3)} <br />
-          <b>Power:</b> {formatNumberNoSuffix(AllGangs[gang.facName].territoryPower, 3)} <br />
+          <b>Power:</b> {formatNumberNoSuffix(AllGangs[gang.facName].power, 3)} <br />
           <b>Territory:</b> {formatTerritory(AllGangs[gang.facName].territory)}% <br />
         </Typography>
       </Box>
@@ -113,8 +113,8 @@ interface ITerritoryProps {
 
 function OtherGangTerritory(props: ITerritoryProps): React.ReactElement {
   const gang = useGang();
-  const playerPower = AllGangs[gang.facName].territoryPower;
-  const power = AllGangs[props.name].territoryPower;
+  const playerPower = AllGangs[gang.facName].power;
+  const power = AllGangs[props.name].power;
   const clashVictoryChance = playerPower / (power + playerPower);
   const territory = AllGangs[props.name].territory;
   const opacity = territory ? 1 : 0.75;

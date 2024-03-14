@@ -76,7 +76,7 @@ export class Gang {
   }
 
   getPower(): number {
-    return AllGangs[this.facName].territoryPower;
+    return AllGangs[this.facName].power;
   }
 
   getTerritory(): number {
@@ -175,17 +175,17 @@ export class Gang {
     for (const name of Object.keys(AllGangs)) {
       if (Object.hasOwn(AllGangs, name)) {
         if (name == gangName) {
-          AllGangs[name].territoryPower += this.getTerritoryPowerGains();
+          AllGangs[name].power += this.calculatePower();
         } else {
           // All NPC gangs get random power gains
           const gainRoll = Math.random();
           if (gainRoll < 0.5) {
             // Multiplicative gain (50% chance)
             // This is capped per cycle, to prevent it from getting out of control
-            AllGangs[name].territoryPower += Math.min(0.85, AllGangs[name].territoryPower * 0.005);
+            AllGangs[name].power += Math.min(0.85, AllGangs[name].power * 0.005);
           } else {
             // Additive gain (50% chance)
-            AllGangs[name].territoryPower += 0.75 * gainRoll * AllGangs[name].territory * AllGangFactionInfo[name].territoryPowerMultiplier;
+            AllGangs[name].power += 0.75 * gainRoll * AllGangs[name].territory * AllGangFactionInfo[name].territoryPowerMultiplier;
           }
         }
       }
@@ -218,8 +218,8 @@ export class Gang {
           if (!(Math.random() < this.territoryClashChance)) continue;
         }
 
-        const thisPwr = AllGangs[thisGang].territoryPower;
-        const otherPwr = AllGangs[otherGang].territoryPower;
+        const thisPwr = AllGangs[thisGang].power;
+        const otherPwr = AllGangs[otherGang].power;
         const thisChance = thisPwr / (thisPwr + otherPwr);
 
         if (Math.random() < thisChance) {
@@ -229,11 +229,11 @@ export class Gang {
           AllGangs[otherGang].territory -= territoryGain;
           if (thisGang === gangName) {
             this.clash(true); // Player won
-            AllGangs[otherGang].territoryPower *= 1 / 1.01;
+            AllGangs[otherGang].power *= 1 / 1.01;
           } else if (otherGang === gangName) {
             this.clash(false); // Player lost
           } else {
-            AllGangs[otherGang].territoryPower *= 1 / 1.01;
+            AllGangs[otherGang].power *= 1 / 1.01;
           }
         } else {
           if (AllGangs[thisGang].territory <= 0) return;
@@ -244,9 +244,9 @@ export class Gang {
             this.clash(false); // Player lost
           } else if (otherGang === gangName) {
             this.clash(true); // Player won
-            AllGangs[thisGang].territoryPower *= 1 / 1.01;
+            AllGangs[thisGang].power *= 1 / 1.01;
           } else {
-            AllGangs[thisGang].territoryPower *= 1 / 1.01;
+            AllGangs[thisGang].power *= 1 / 1.01;
           }
         }
 
@@ -272,7 +272,7 @@ export class Gang {
     let baseDeathChance = 0.01;
     if (won) baseDeathChance /= 2;
     // If the clash was lost, the player loses a small percentage of power
-    else AllGangs[this.facName].territoryPower *= 1 / 1.008;
+    else AllGangs[this.facName].power *= 1 / 1.008;
 
     // Deaths can only occur during X% of clashes
     if (Math.random() < 0.65) return;
@@ -343,20 +343,9 @@ export class Gang {
   calculatePower(): number {
     let memberTotal = 0;
     for (let i = 0; i < this.members.length; ++i) {
-      if (this.members[i].task !== "Territory Warfare") continue;
       memberTotal += this.members[i].calculatePower();
     }
-    return 0.015 * Math.max(0.002, this.getTerritory()) * memberTotal;
-  }
-
-  getTerritoryPowerGains(): number {
-    let totalPower = 0;
-
-    for (let member of this.members) {
-      totalPower += member.getTerritoryPowerGain();
-    }
-
-    return totalPower;
+    return Math.max(0.002, this.getTerritory()) * memberTotal;
   }
 
   killMember(member: GangMember, suppressMessage = false): void {
