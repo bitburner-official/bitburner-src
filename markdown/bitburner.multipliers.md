@@ -17,12 +17,16 @@ interface Multipliers
 |  --- | --- | --- | --- |
 |  [agility\_exp](./bitburner.multipliers.agility_exp.md) |  | number | Multiplier to agility experience gain rate |
 |  [agility](./bitburner.multipliers.agility.md) |  | number | Multiplier to agility skill |
+|  [augmentation\_money](./bitburner.multipliers.augmentation_money.md) |  | number | Multiplier to effective cost of Augmentations |
+|  [augmentation\_rep](./bitburner.multipliers.augmentation_rep.md) |  | number | Multiplier to reputation cost of Augmentations |
 |  [bladeburner\_analysis](./bitburner.multipliers.bladeburner_analysis.md) |  | number | Multiplier to effectiveness in Bladeburner Field Analysis |
 |  [bladeburner\_max\_stamina](./bitburner.multipliers.bladeburner_max_stamina.md) |  | number | Multiplier to Bladeburner max stamina |
 |  [bladeburner\_stamina\_gain](./bitburner.multipliers.bladeburner_stamina_gain.md) |  | number | Multiplier to Bladeburner stamina gain rate |
 |  [bladeburner\_success\_chance](./bitburner.multipliers.bladeburner_success_chance.md) |  | number | Multiplier to success chance in Bladeburner contracts/operations |
 |  [charisma\_exp](./bitburner.multipliers.charisma_exp.md) |  | number | Multiplier to charisma experience gain rate |
 |  [charisma](./bitburner.multipliers.charisma.md) |  | number | Multiplier to charisma skill |
+|  [charity\_money](./bitburner.multipliers.charity_money.md) |  | number | Multiplier to amount of money gained from charities |
+|  [charity\_success](./bitburner.multipliers.charity_success.md) |  | number | Multiplier to charity success rate |
 |  [company\_rep](./bitburner.multipliers.company_rep.md) |  | number | Multiplier to amount of reputation gained when working |
 |  [crime\_money](./bitburner.multipliers.crime_money.md) |  | number | Multiplier to amount of money gained from crimes |
 |  [crime\_success](./bitburner.multipliers.crime_success.md) |  | number | Multiplier to crime success rate |

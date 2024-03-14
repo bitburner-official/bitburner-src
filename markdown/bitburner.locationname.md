@@ -54,6 +54,7 @@ declare enum LocationName
 |  Sector12IcarusMicrosystems | <code>&quot;Icarus Microsystems&quot;</code> |  |
 |  Sector12IronGym | <code>&quot;Iron Gym&quot;</code> |  |
 |  Sector12JoesGuns | <code>&quot;Joe's Guns&quot;</code> |  |
+|  Sector12LotteryStore | <code>&quot;Lottery Store&quot;</code> |  |
 |  Sector12MegaCorp | <code>&quot;MegaCorp&quot;</code> |  |
 |  Sector12NSA | <code>&quot;National Security Agency&quot;</code> |  |
 |  Sector12PowerhouseGym | <code>&quot;Powerhouse Gym&quot;</code> |  |

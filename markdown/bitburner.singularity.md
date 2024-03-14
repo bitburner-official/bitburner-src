@@ -37,6 +37,8 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [getAugmentationRepReq(augName)](./bitburner.singularity.getaugmentationrepreq.md) | Get reputation requirement of an augmentation. |
 |  [getAugmentationsFromFaction(faction)](./bitburner.singularity.getaugmentationsfromfaction.md) | Get a list of augmentation available from a faction. |
 |  [getAugmentationStats(name)](./bitburner.singularity.getaugmentationstats.md) | Get the stats of an augmentation. |
+|  [getCharityChance(charity)](./bitburner.singularity.getcharitychance.md) | Get chance to successfully perform a charitable action. |
+|  [getCharityStats(charity)](./bitburner.singularity.getcharitystats.md) | Get stats related to a charity. |
 |  [getCompanyFavor(companyName)](./bitburner.singularity.getcompanyfavor.md) | Get company favor. |
 |  [getCompanyFavorGain(companyName)](./bitburner.singularity.getcompanyfavorgain.md) | Get company favor gain. |
 |  [getCompanyPositionInfo(companyName, positionName)](./bitburner.singularity.getcompanypositioninfo.md) | Get Requirements for Company Position. |
@@ -65,6 +67,7 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [isFocused()](./bitburner.singularity.isfocused.md) | Check if the player is focused. |
 |  [joinFaction(faction)](./bitburner.singularity.joinfaction.md) | Join a faction. |
 |  [manualHack()](./bitburner.singularity.manualhack.md) | Run the hack command in the terminal. |
+|  [performCharity(charity, focus)](./bitburner.singularity.performcharity.md) | Perform a charitable act. |
 |  [purchaseAugmentation(faction, augmentation)](./bitburner.singularity.purchaseaugmentation.md) | Purchase an augmentation |
 |  [purchaseProgram(programName)](./bitburner.singularity.purchaseprogram.md) | Purchase a program from the dark web. |
 |  [purchaseTor()](./bitburner.singularity.purchasetor.md) | Purchase the TOR router. |

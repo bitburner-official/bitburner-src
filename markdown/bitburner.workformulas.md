@@ -16,6 +16,8 @@ interface WorkFormulas
 
 |  Method | Description |
 |  --- | --- |
+|  [charityGains(person, charityType)](./bitburner.workformulas.charitygains.md) |  |
+|  [charitySuccessChance(person, charityType)](./bitburner.workformulas.charitysuccesschance.md) |  |
 |  [companyGains(person, companyName, workType, favor)](./bitburner.workformulas.companygains.md) |  |
 |  [crimeGains(person, crimeType)](./bitburner.workformulas.crimegains.md) |  |
 |  [crimeSuccessChance(person, crimeType)](./bitburner.workformulas.crimesuccesschance.md) |  |
