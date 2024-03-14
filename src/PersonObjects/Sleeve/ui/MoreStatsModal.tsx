@@ -62,6 +62,8 @@ export function MoreStatsModal(props: IProps): React.ReactElement {
           [<>Salary multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.work_money)],
           [<>Crime Money multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.crime_money)],
           [<>Crime Success multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.crime_success)],
+          [<>Charity Money multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.charity_money)],
+          [<>Charity Success multiplier:&nbsp;</>, formatPercent(props.sleeve.mults.charity_success)],
         ]}
         title="Multipliers:"
       />

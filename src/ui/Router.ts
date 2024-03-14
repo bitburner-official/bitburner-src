@@ -15,6 +15,8 @@ export enum SimplePage {
   Bladeburner = "Bladeburner",
   City = "City",
   Corporation = "Corporation",
+  CharityORG = "CharityORG",
+  LotteryStoreLocationInside = "Lottery Store Inside",
   CreateProgram = "Create Program",
   DevMenu = "Dev",
   Factions = "Factions",

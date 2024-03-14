@@ -35,6 +35,7 @@ export enum LocationName {
   Sector12PowerhouseGym = "Powerhouse Gym",
   Sector12RothmanUniversity = "Rothman University",
   Sector12UniversalEnergy = "Universal Energy",
+  Sector12LotteryStore = "Lottery Store",
 
   NewTokyoDefComm = "DefComm",
   NewTokyoGlobalPharmaceuticals = "Global Pharmaceuticals",
@@ -86,4 +87,5 @@ export enum LocationType {
   TravelAgency = "Travel Agency",
   University = "University",
   Casino = "Casino",
+  LotteryStore = "Lottery Store",
 }

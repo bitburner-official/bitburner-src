@@ -40,6 +40,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PublicIcon from "@mui/icons-material/Public";
 import LiveHelpIcon from "@mui/icons-material/LiveHelp";
 import BorderInnerSharp from "@mui/icons-material/BorderInnerSharp";
+import VolunteerActivismSharp from "@mui/icons-material/VolunteerActivismSharp"; // CharityORG
 
 import { Router } from "../../ui/GameRoot";
 import { Page, isSimplePage } from "../../ui/Router";
@@ -156,6 +157,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
 
   const canCorporation = !!Player.corporation;
   const canGang = !!Player.gang;
+  const canCharityORG = !!Player.charityORG;
   const canJob = Object.values(Player.jobs).length > 0;
   const canStockMarket = Player.hasWseAccount;
   const canBladeburner = !!Player.bladeburner;
@@ -353,6 +355,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canBladeburner && { key_: Page.Bladeburner, icon: FormatBoldIcon },
             canCorporation && { key_: Page.Corporation, icon: BusinessIcon },
             canGang && { key_: Page.Gang, icon: SportsMmaIcon },
+            canCharityORG && { key_: Page.CharityORG, icon: VolunteerActivismSharp },
             canIPvGO && { key_: Page.Go, icon: BorderInnerSharp },
           ]}
         />

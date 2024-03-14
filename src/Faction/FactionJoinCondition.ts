@@ -141,6 +141,18 @@ export const haveMoney = (n: number): PlayerCondition => ({
   },
 });
 
+export const haveCharity = (): PlayerCondition => ({
+  toString(): string {
+    return `Have a Charity`;
+  },
+  toJSON(): KarmaRequiremennt {
+    return { type: "karma", karma: 5400 };
+  },
+  isSatisfied(p: PlayerObject): boolean {
+    return p.charityORG ? true : false;
+  },
+});
+
 export const haveSkill = (skill: keyof Skills, n: number): PlayerCondition => ({
   toString(): string {
     return `${capitalize(skill)} level ${n}`;

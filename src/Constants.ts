@@ -25,8 +25,10 @@ export const CONSTANTS: {
   TorRouterCost: number;
   HospitalCostPerHp: number;
   IntelligenceCrimeWeight: number;
+  IntelligenceCharityWeight: number;
   IntelligenceInfiltrationWeight: number;
   IntelligenceCrimeBaseExpGain: number;
+  IntelligenceCharityBaseExpGain: number;
   IntelligenceProgramBaseExpGain: number;
   IntelligenceGraftBaseExpGain: number;
   IntelligenceTerminalHackBaseExpGain: number;
@@ -121,8 +123,10 @@ export const CONSTANTS: {
 
   // Intelligence-related constants
   IntelligenceCrimeWeight: 0.025, // Weight for how much int affects crime success rates
+  IntelligenceCharityWeight: 0.025, // Weight for how much int affects charity success rates
   IntelligenceInfiltrationWeight: 0.1, // Weight for how much int affects infiltration success rates
   IntelligenceCrimeBaseExpGain: 0.05,
+  IntelligenceCharityBaseExpGain: 0.05,
   IntelligenceProgramBaseExpGain: 0.1, // Program required hack level divided by this to determine int exp gain
   IntelligenceGraftBaseExpGain: 0.05,
   IntelligenceTerminalHackBaseExpGain: 200, // Hacking exp divided by this to determine int exp gain

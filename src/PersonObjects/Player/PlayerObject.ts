@@ -2,6 +2,7 @@ import type { Player as IPlayer } from "@nsdefs";
 import type { PlayerAchievement } from "../../Achievements/Achievements";
 import type { Bladeburner } from "../../Bladeburner/Bladeburner";
 import type { Corporation } from "../../Corporation/Corporation";
+import type { CharityORG } from "../../CharityORG/CharityORG";
 import type { Exploit } from "../../Exploits/Exploit";
 import type { Gang } from "../../Gang/Gang";
 import type { HacknetNode } from "../../Hacknet/HacknetNode";
@@ -11,6 +12,8 @@ import type { Work } from "../../Work/Work";
 import * as augmentationMethods from "./PlayerObjectAugmentationMethods";
 import * as bladeburnerMethods from "./PlayerObjectBladeburnerMethods";
 import * as corporationMethods from "./PlayerObjectCorporationMethods";
+import * as charityMethods from "./PlayerObjectCharityMethods";
+import { TicketRecord } from "../../Lottery/LotteryStoreLocationInside";
 import * as gangMethods from "./PlayerObjectGangMethods";
 import * as generalMethods from "./PlayerObjectGeneralMethods";
 import * as serverMethods from "./PlayerObjectServerMethods";
@@ -28,11 +31,13 @@ import { CONSTANTS } from "../../Constants";
 import { Person } from "../Person";
 import { isMember } from "../../utils/EnumHelper";
 import { PartialRecord } from "../../Types/Record";
+import { Server } from "../../Server/Server";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
   bitNodeN = 1; //current bitnode
   corporation: Corporation | null = null;
+  charityORG: CharityORG | null = null;
   gang: Gang | null = null;
   bladeburner: Bladeburner | null = null;
   currentServer = "";
@@ -40,6 +45,7 @@ export class PlayerObject extends Person implements IPlayer {
   factionInvitations: FactionName[] = [];
   factionRumors = new JSONSet<FactionName>();
   hacknetNodes: (HacknetNode | string)[] = []; // HacknetNode object or hostname of Hacknet Server
+  charityNodes: Server[] = []; // Charity server objects, to be rechecked on every load and prestige.
   has4SData = false;
   has4SDataTixApi = false;
   hashManager = new HashManager();
@@ -48,6 +54,7 @@ export class PlayerObject extends Person implements IPlayer {
   jobs: PartialRecord<CompanyName, JobName> = {};
   karma = 0;
   numPeopleKilled = 0;
+  numPeopleSaved = 0;
   location = LocationName.TravelAgency;
   money = 1000 + CONSTANTS.Donations;
   moneySourceA = new MoneySourceTracker();
@@ -68,7 +75,8 @@ export class PlayerObject extends Person implements IPlayer {
   lastUpdate = 0;
   lastSave = 0;
   totalPlaytime = 0;
-
+  lotteryTickets: TicketRecord[] = [];
+  quantomTickets = 0;
   currentWork: Work | null = null;
   focus = false;
 
@@ -82,6 +90,7 @@ export class PlayerObject extends Person implements IPlayer {
   applyForJob = generalMethods.applyForJob;
   canAccessBladeburner = bladeburnerMethods.canAccessBladeburner;
   canAccessCorporation = corporationMethods.canAccessCorporation;
+  canAccessCharity = charityMethods.canAccessCharity;
   canAccessGang = gangMethods.canAccessGang;
   canAccessGrafting = generalMethods.canAccessGrafting;
   canAfford = generalMethods.canAfford;
@@ -107,6 +116,7 @@ export class PlayerObject extends Person implements IPlayer {
   setMoney = generalMethods.setMoney;
   startBladeburner = bladeburnerMethods.startBladeburner;
   startCorporation = corporationMethods.startCorporation;
+  startCharity = charityMethods.startCharity;
   startFocusing = generalMethods.startFocusing;
   startGang = gangMethods.startGang;
   takeDamage = generalMethods.takeDamage;
@@ -114,6 +124,7 @@ export class PlayerObject extends Person implements IPlayer {
   giveExploit = generalMethods.giveExploit;
   giveAchievement = generalMethods.giveAchievement;
   getCasinoWinnings = generalMethods.getCasinoWinnings;
+  getLotteryWinnings = generalMethods.getLotteryWinnings;
   quitJob = generalMethods.quitJob;
   hasJob = generalMethods.hasJob;
   createHacknetServer = serverMethods.createHacknetServer;

@@ -480,6 +480,56 @@ export function initBitNodes() {
       </>
     ),
   );
+  BitNodes.BitNode15 = new BitNode(
+    15,
+    2,
+    "Please help us!",
+    "The downfall of greed",
+    (
+      <>
+        Greed has taken it's tole. Countless Corporations have come and gone - stripping the people of their wealth.
+        Gangs, once sparce and powerful, are now plentiful but fractured. Information, once horded and protected, has
+        been found and is now easily accessible. The people are in need and flock to mother Stanek is droves. This is a
+        desperate time in which change is innevitable.
+        <br />
+        <br />
+        The people have had enough and are starting to fight back. Many have started to establish their own charity or
+        are volunteering their time to work at one. These are teamed by the worlds top experts on sleeves and some of
+        the best scientific researchers of our time. Even getting your hands on their leftover tech would be a major
+        boon.
+        <br />
+        Sector-12 City Hall currently has a list of abandoned charities that are ready for you to take over.
+        <br />
+        <br />
+        Destroying this BitNode will give you Source-File 15, or if you already have this Source-File it will upgrade
+        its level up to a maximum of 3. Source-File also increases the player's charity money gains and success rates.
+        Money Gains:
+        <br />
+        <br />
+        Level 1: 1000%
+        <br />
+        Level 2: 10000%
+        <br />
+        <br />
+        Success Rates:
+        <br />
+        <br />
+        Level 1: 6%
+        <br />
+        Level 2: 7%
+        <br />
+        Level 3: 8%
+        <br />
+        <br />
+        Level 2 will permanently unlock the ability to buy quantom tickets in all bitnodes.
+        <br />
+        Level 3 will permanently unlock the ability to get charity event rarity in all bitnodes.
+        <br />
+        Level 3 will also reduce all reputation requirements for Augmentations by 5%.
+        <br />
+      </>
+    ),
+  );
 }
 
 export const defaultMultipliers = new BitNodeMultipliers();
@@ -985,6 +1035,49 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         StaneksGiftExtraSize: -1,
 
         WorldDaemonDifficulty: 5,
+      });
+    }
+    case 15: {
+      return new BitNodeMultipliers({
+        AugmentationMoneyCost: 2,
+        AugmentationRepCost: 2.5,
+        BladeburnerRank: 0.1,
+        CodingContractMoney: 2,
+        CompanyWorkMoney: 2,
+        CorporationValuation: 0.1,
+        CrimeMoney: 0.5,
+        CrimeSuccessRate: 0.5,
+        CharityMoney: 8,
+        CharitySuccessRate: 1.5,
+        CharityORGSoftcap: 3,
+        CharityORGEventStrength: 3,
+        CharityORGEmbezzleStrength: 2,
+        DaedalusAugsRequirement: 40,
+        FourSigmaMarketDataApiCost: 2,
+        FourSigmaMarketDataCost: 2,
+        GangSoftcap: 0.5,
+        GangUniqueAugs: 0.4,
+        HacknetNodeMoney: 1.5,
+        InfiltrationMoney: 0,
+        InfiltrationRep: 0,
+        ManualHackMoney: 0.1,
+        PurchasedServerCost: 2,
+        PurchasedServerSoftcap: 2,
+        PurchasedServerLimit: 0.3,
+        PurchasedServerMaxRam: 0.5,
+        ScriptHackMoney: 0.1,
+        ScriptHackMoneyGain: 0.1,
+        ServerGrowthRate: 0.3,
+        HackExpGain: 0.4,
+        ServerMaxMoney: 0.2,
+        ServerStartingMoney: 0.2,
+        ServerStartingSecurity: 4,
+        ServerWeakenRate: 0.2,
+        StaneksGiftPowerMultiplier: 1.2,
+        StaneksGiftExtraSize: 3,
+        WorldDaemonDifficulty: 5,
+        CorporationSoftcap: 0.1,
+        CorporationDivisions: 0.1,
       });
     }
     default: {

@@ -256,4 +256,37 @@ export function initSourceFiles() {
       </>
     ),
   );
+  SourceFiles.SourceFile15 = new SourceFile(
+    15,
+    (
+      <>
+        This Source-File increases both Charity Success chance and Charity Money gain. Success Chance:
+        <br />
+        <br />
+        Money Gains:
+        <br />
+        <br />
+        Level 1: 1000%
+        <br />
+        Level 2: 10000%
+        <br />
+        <br />
+        Success Rates:
+        <br />
+        <br />
+        Level 1: 6%
+        <br />
+        Level 2: 7%
+        <br />
+        Level 3: 8%
+        <br />
+        <br />
+        Level 2 will permanently unlock the ability to buy quantom tickets in all bitnodes.
+        <br />
+        Level 3 will permanently unlock the ability to get charity event rarity in all bitnodes.
+        <br />
+        Level 3 will also reduce all reputation requirements for Augmentations by 5%.
+      </>
+    ),
+  );
 }

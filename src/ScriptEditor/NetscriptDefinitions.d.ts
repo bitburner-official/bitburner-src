@@ -43,6 +43,7 @@ interface Person {
 interface Player extends Person {
   money: number;
   numPeopleKilled: number;
+  numPeopleSaved: number;
   entropy: number;
   jobs: Partial<Record<CompanyName, JobName>>;
   factions: string[];
@@ -86,6 +87,8 @@ interface MoneySource {
   codingcontract: number;
   corporation: number;
   crime: number;
+  charity: number;
+  charityORG: number;
   gang: number;
   gang_expenses: number;
   hacking: number;
@@ -150,6 +153,10 @@ interface Multipliers {
   crime_money: number;
   /** Multiplier to crime success rate */
   crime_success: number;
+  /** Multiplier to amount of money gained from charities */
+  charity_money: number;
+  /** Multiplier to charity success rate */
+  charity_success: number;
   /** Multiplier to amount of money gained from working */
   work_money: number;
   /** Multiplier to amount of money produced by Hacknet Nodes */
@@ -170,6 +177,10 @@ interface Multipliers {
   bladeburner_analysis: number;
   /** Multiplier to success chance in Bladeburner contracts/operations */
   bladeburner_success_chance: number;
+  /** Multiplier to effective cost of Augmentations */
+  augmentation_money: number;
+  /** Multiplier to reputation cost of Augmentations */
+  augmentation_rep: number;
 }
 
 /** @public */
@@ -334,6 +345,51 @@ interface CrimeStats {
   /** charisma exp gained from crime */
   charisma_exp: number;
   /** intelligence exp gained from crime */
+  intelligence_exp: number;
+}
+
+/**
+ * Data representing the internal values of a charity.
+ * @public
+ */
+interface CharityStats {
+  /** Number representing the difficulty of the charity. Used for success chance calculations */
+  difficulty: number;
+  /** Amount of karma gained for successfully performing this charity */
+  karma: number;
+  /** How many people die as a result of this charity */
+  saves: number;
+  /** How much money is given */
+  money: number;
+  /** Milliseconds it takes to attempt the charity */
+  time: number;
+  /** Description of the charity activity */
+  type: string;
+  /** hacking level impact on success change of the charity */
+  hacking_success_weight: number;
+  /** strength level impact on success change of the charity */
+  strength_success_weight: number;
+  /** defense level impact on success change of the charity */
+  defense_success_weight: number;
+  /** dexterity level impact on success change of the charity */
+  dexterity_success_weight: number;
+  /** agility level impact on success change of the charity */
+  agility_success_weight: number;
+  /** charisma level impact on success change of the charity */
+  charisma_success_weight: number;
+  /** hacking exp gained from charity */
+  hacking_exp: number;
+  /** strength exp gained from charity */
+  strength_exp: number;
+  /** defense exp gained from charity */
+  defense_exp: number;
+  /** dexterity exp gained from charity */
+  dexterity_exp: number;
+  /** agility exp gained from charity */
+  agility_exp: number;
+  /** charisma exp gained from charity */
+  charisma_exp: number;
+  /** intelligence exp gained from charity */
   intelligence_exp: number;
 }
 
@@ -649,6 +705,16 @@ interface BitNodeMultipliers {
   CrimeExpGain: number;
   /** Influences the base money gained when the player commits a crime. */
   CrimeMoney: number;
+  /** Influences the base experience gained for each ability when the player performs a charity. */
+  CharityExpGain: number;
+  /** Influences the base money gained when the player performs a charity. */
+  CharityMoney: number;
+  /** Percentage of unique augs that the charityORG has. */
+  CharityORGUniqueAugs: number;
+  /** Reduces charity earning. */
+  CharityORGSoftcap: number;
+  /** Reduces charity event power, reduces the strength of all completed events and their associated rewards (Banners, Money, Bank, etc). Lowers all effects included in Softcap as well. */
+  CharityORGEventStrength: number;
   /** Influences how many Augmentations you need in order to get invited to the Daedalus faction */
   DaedalusAugsRequirement: number;
   /** Influences how quickly the player's defense level (not exp) scales */
@@ -996,6 +1062,387 @@ interface GangMemberAscension {
   cha: number;
 }
 
+/**
+ * Charity Event General Data.
+ * @public
+ */
+interface CharityEventGenData {
+  name: string;
+  shortName: string;
+  desc: string;
+  task: CharityTaskStats;
+  hasTimer: boolean;
+  cyclesCompleted: number;
+  cyclesElapsed: number;
+  cyclesNeeded: number;
+  cyclesTillDeath: number;
+  cyclesTillRemoved: number;
+  deathEffects: DeathEffect[];
+  modifiers: Modifier[];
+}
+
+/**
+ * Charity modifiers data.
+ * @public
+ */
+interface Modifier {
+  area: string;
+  strength: number;
+}
+
+/**
+ * Charity death effect data.
+ * @public
+ */
+interface DeathEffect {
+  type: DeathEffectTypes;
+  strength: number;
+}
+
+/**
+ * Charity death effects.
+ * @public
+ */
+declare enum DeathEffectTypes {
+  visibility_boost = "visibility_boost",
+  visibility_drain = "visibility_drain",
+  terror_boost = "terror_boost",
+  terror_drain = "terror_drain",
+  attack_boost = "attack_boost",
+  attack_stop = "attack_stop",
+  task_boost = "task_boost",
+  task_drain = "task_drain",
+  bank = "bank",
+  karma = "karma",
+  death = "death",
+  prestige = "prestige",
+  bonus_time = "bonus_time",
+  money = "money",
+  random_event = "random_event",
+}
+
+/**
+ * Charity Task Info.
+ * @public
+ */
+interface CharityTaskStats {
+  /** Task name */
+  name: string;
+  /** Task Description */
+  desc: string;
+  /** Is a task of a hacking gang */
+  isSpending: boolean;
+  /** Base Prestige earned */
+  basePrestige: number;
+  /** Base Terror earned */
+  baseTerror: number;
+  /** Base Visibility earned */
+  baseVisibility: number;
+  /** Base money earned */
+  baseMoneyGain: number;
+  /** Base money spend */
+  baseMoneySpend: number;
+  /** Base karma earned */
+  baseKarmaGain: number;
+  /** Hacking skill impact on task scaling */
+  hackWeight: number;
+  /** Strength skill impact on task scaling */
+  strWeight: number;
+  /** Defense skill impact on task scaling */
+  defWeight: number;
+  /** Dexterity skill impact on task scaling */
+  dexWeight: number;
+  /** Agility skill impact on task scaling */
+  agiWeight: number;
+  /** Charisma skill impact on task scaling */
+  chaWeight: number;
+  /** Number representing the difficulty of the task */
+  difficulty: number;
+}
+
+/**
+ * Charity General Info.
+ * @public
+ */
+interface CharityGenInfo {
+  name: string;
+  seedFunded: boolean;
+  bank: number;
+  spent: number;
+  visibility: number;
+  terror: number;
+  prestige: number;
+  moneyGainRate: number;
+  moneySpendRate: number;
+  karmaGainRate: number;
+  prestigeGainRate: number;
+  visibilityGainRate: number;
+  terrorGainRate: number;
+  cycles: number;
+}
+
+/** @public */
+interface CharityVolunteerInfo {
+  /** Name of the gang member */
+  name: string;
+  /** Currently assigned task */
+  task: string;
+  /** Amount of Respect earned by member since they last Ascended */
+  earnedPrestige: number;
+
+  /** Hack skill level */
+  hack: number;
+  /** Strength skill level */
+  str: number;
+  /** Defense skill level */
+  def: number;
+  /** Dexterity skill level */
+  dex: number;
+  /** Agility skill level */
+  agi: number;
+  /** Charisma skill level */
+  cha: number;
+
+  /** Current hack experience */
+  hack_exp: number;
+  /** Current strength experience */
+  str_exp: number;
+  /** Current defense experience */
+  def_exp: number;
+  /** Current dexterity experience */
+  dex_exp: number;
+  /** Current agility experience */
+  agi_exp: number;
+  /** Current charisma experience */
+  cha_exp: number;
+
+  /** Hack multiplier from equipment */
+  hack_mult: number;
+  /** Strength multiplier from equipment */
+  str_mult: number;
+  /** Defense multiplier from equipment */
+  def_mult: number;
+  /** Dexterity multiplier from equipment */
+  dex_mult: number;
+  /** Agility multiplier from equipment */
+  agi_mult: number;
+  /** Charisma multiplier from equipment */
+  cha_mult: number;
+
+  /** Hack multiplier from ascensions */
+  hack_asc_mult: number;
+  /** Strength multiplier from ascensions */
+  str_asc_mult: number;
+  /** Defense multiplier from ascensions */
+  def_asc_mult: number;
+  /** Dexterity multiplier from ascensions */
+  dex_asc_mult: number;
+  /** Agility multiplier from ascensions */
+  agi_asc_mult: number;
+  /** Charisma multiplier from ascensions */
+  cha_asc_mult: number;
+
+  /** Total Hack Ascension points accumulated */
+  hack_asc_points: number;
+  /** Total Strength Ascension points accumulated */
+  str_asc_points: number;
+  /** Total Defense Ascension points accumulated */
+  def_asc_points: number;
+  /** Total Dexterity Ascension points accumulated */
+  dex_asc_points: number;
+  /** Total Agility Ascension points accumulated */
+  agi_asc_points: number;
+  /** Total Charisma Ascension points accumulated */
+  cha_asc_points: number;
+
+  /** List of all non-Augmentation Equipment owned by gang member */
+  upgrades: string[];
+
+  prestigeGain: number;
+  karmaGain: number;
+  moneyGain: number;
+  moneySpend: number;
+  visibilityGain: number;
+  terrorGain: number;
+}
+
+/**
+ * Object representing data representing a charity volunteers equipment.
+ * @public
+ */
+interface EqStats {
+  /** Strength multiplier */
+  str?: number;
+  /** Defense multiplier */
+  def?: number;
+  /** Dexterity multiplier */
+  dex?: number;
+  /** Agility multiplier */
+  agi?: number;
+  /** Charisma multiplier */
+  cha?: number;
+  /** Hacking multiplier */
+  hack?: number;
+}
+
+/** @public */
+interface CharityVolunteerAscension {
+  /** Amount of respect lost from ascending */
+  prestige: number;
+  /** Factor by which the hacking ascension multiplier was increased (newMult / oldMult) */
+  hack: number;
+  /** Factor by which the strength ascension multiplier was increased (newMult / oldMult) */
+  str: number;
+  /** Factor by which the defense ascension multiplier was increased (newMult / oldMult) */
+  def: number;
+  /** Factor by which the dexterity ascension multiplier was increased (newMult / oldMult) */
+  dex: number;
+  /** Factor by which the agility ascension multiplier was increased (newMult / oldMult) */
+  agi: number;
+  /** Factor by which the charisma ascension multiplier was increased (newMult / oldMult) */
+  cha: number;
+}
+
+/**
+ * Charity Item data.
+ * @public
+ */
+interface CharityGenItemInfo {
+  luckyCoin: number;
+  ascensionToken: number;
+  decoyJuice: number;
+  javaJuice: number;
+  ticketStub: number;
+}
+
+/**
+ * Charity Messages.
+ * @public
+ */
+interface CharityGenMessage {
+  message: string;
+  timeStamp: number;
+}
+
+/**
+ * Charity Message Info.
+ * @public
+ */
+interface CharityGenMessageInfo {
+  messages: CharityGenMessage[];
+  itemMessages: CharityGenMessage[];
+  itemUseMessages: CharityGenMessage[];
+  karmaMessages: CharityGenMessage[];
+}
+
+/**
+ * Charity Banner Info.
+ * @public
+ */
+interface CharityGenBannerInfo {
+  lucky: number;
+  embezzlement: number;
+  totalPower: number;
+  banner: Multipliers;
+}
+
+/**
+ * Charity Banner Piece.
+ * @public
+ */
+interface CharityBannerPieceInfo {
+  effects: CharityBannerFragmentInfo[];
+  totalPower: number;
+  name: string;
+  shortName: string;
+}
+
+/**
+ * Charity Banner Fragment.
+ * @public
+ */
+interface CharityBannerFragmentInfo {
+  effect: CharityAugmentationArea;
+  strength: number;
+}
+
+/**
+ * Charity Augmentation Areas.
+ * @public
+ */
+type CharityAugmentationArea =
+  | "hacking"
+  | "strength"
+  | "defense"
+  | "dexterity"
+  | "agility"
+  | "charisma"
+  | "hacking_exp"
+  | "strength_exp"
+  | "defense_exp"
+  | "dexterity_exp"
+  | "agility_exp"
+  | "charisma_exp"
+  | "hacking_chance"
+  | "hacking_speed"
+  | "hacking_money"
+  | "hacking_grow"
+  | "company_rep"
+  | "faction_rep"
+  | "crime_money"
+  | "crime_success"
+  | "charity_money"
+  | "charity_success"
+  | "work_money"
+  | "hacknet_node_money"
+  | "hacknet_node_purchase_cost"
+  | "hacknet_node_ram_cost"
+  | "hacknet_node_core_cost"
+  | "hacknet_node_level_cost"
+  | "bladeburner_max_stamina"
+  | "bladeburner_stamina_gain"
+  | "bladeburner_analysis"
+  | "bladeburner_success_chance"
+  | "lucky"
+  | "augmentation_money"
+  | "augmentaion_rep"
+  | "embezzlement";
+
+/** @public */
+type CharityModifyAreas =
+  | "money_gain"
+  | "money_spend"
+  | "karma_gain"
+  | "prestige_gain"
+  | "visibility_gain"
+  | "terror_gain";
+
+/**
+ * Charity Effects Modifier Info.
+ * @public
+ */
+interface CharityEffectModifier {
+  area: CharityModifyAreas;
+  strength: number;
+}
+
+/**
+ * Charity Effects Info.
+ * @public
+ */
+interface CharityGenEffectsInfo {
+  modifiers: CharityEffectModifier[];
+  visBooster: number;
+  visDrain: number;
+  terrorBooster: number;
+  terrorDrain: number;
+  stopAttacks: number;
+  fastAttacks: number;
+  fastTasks: number;
+  slowTasks: number;
+  random: number;
+}
+
 /** @public */
 type SleeveBladeburnerTask = {
   type: "BLADEBURNER";
@@ -1027,6 +1474,14 @@ type SleeveCrimeTask = {
 };
 
 /** @public */
+type SleeveCharityTask = {
+  type: "CHARITY";
+  charityType: CharityType | `${CharityType}`;
+  cyclesWorked: number;
+  cyclesNeeded: number;
+};
+
+/** @public */
 type SleeveFactionTask = {
   type: "FACTION";
   factionWorkType: FactionWorkType | `${FactionWorkType}`;
@@ -1052,6 +1507,7 @@ export type SleeveTask =
   | SleeveClassTask
   | SleeveCompanyTask
   | SleeveCrimeTask
+  | SleeveCharityTask
   | SleeveFactionTask
   | SleeveInfiltrateTask
   | SleeveRecoveryTask
@@ -1648,6 +2104,18 @@ export interface CrimeTask {
 }
 
 /**
+ * Charity
+ * @remarks
+ * An object representing the charity being performed
+ * @public
+ */
+export interface CharityTask {
+  type: "CHARITY";
+  cyclesWorked: number;
+  charityType: CharityType;
+}
+
+/**
  * Faction Work
  * @remarks
  * An object representing the current work for a faction
@@ -1678,7 +2146,14 @@ export interface GraftingTask {
  * Represents any task, such as studying, working for a faction etc.
  * @public
  */
-export type Task = StudyTask | CompanyWorkTask | CreateProgramWorkTask | CrimeTask | FactionWorkTask | GraftingTask;
+export type Task =
+  | StudyTask
+  | CompanyWorkTask
+  | CreateProgramWorkTask
+  | CrimeTask
+  | CharityTask
+  | FactionWorkTask
+  | GraftingTask;
 
 /**
  * Singularity API
@@ -2269,6 +2744,54 @@ export interface Singularity {
    * @returns The stats of the crime.
    */
   getCrimeStats(crime: CrimeType | `${CrimeType}`): CrimeStats;
+
+  /**
+   * Perform a charitable act.
+   * @remarks
+   * RAM cost: 5 GB * 16/4/1
+   *
+   *
+   * This function is used to automatically attempt to perform charitable acts.
+   * If you are already in the middle of some ‘working’ action (such
+   * as working for a company or training at a gym), then running this
+   * function will automatically cancel that action and give you your
+   * earnings.
+   *
+   * This function returns the number of milliseconds it takes to attempt the
+   * specified charity (e.g. It takes 60 seconds to attempt the ‘Stop a Robery’ charity,
+   * so running `performCharity('Stop a Robery')` will return 60,000).
+   *
+   * @param charity - Name of charity to attempt.
+   * @param focus - Acquire player focus on this charity. Optional. Defaults to true.
+   * @returns The number of milliseconds it takes to attempt the specified charity.
+   */
+  performCharity(charity: CharityType | `${CharityType}`, focus?: boolean): number;
+
+  /**
+   * Get chance to successfully perform a charitable action.
+   * @remarks
+   * RAM cost: 5 GB * 16/4/1
+   *
+   *
+   * This function returns your chance of success at performing the specified charitable action.
+   *
+   * @param charity - Name of charity.
+   * @returns Chance of success at performing the specified charity.
+   */
+  getCharityChance(charity: CharityType | `${CharityType}`): number;
+
+  /**
+   * Get stats related to a charity.
+   * @remarks
+   * RAM cost: 5 GB * 16/4/1
+   *
+   *
+   * Returns the stats of the charity.
+   *
+   * @param charity - Name of charity.
+   * @returns The stats of the charity.
+   */
+  getCharityStats(charity: CharityType | `${CharityType}`): CharityStats;
 
   /**
    * Get a list of owned augmentation.
@@ -3924,6 +4447,522 @@ export interface Gang {
 }
 
 /**
+ * CharityORG API
+ * @remarks
+ * If you are not in BitNode-15, then you must have Source-File 15 in order to use this API.
+ * @public
+ */
+export interface CharityORG {
+  /**
+   * Create a charityORG.
+   * @remarks
+   * RAM cost: 1GB
+   *
+   * Create a charityORG with the specified Name.
+   * @returns True if the charity was created, false otherwise.
+   */
+  createCharity(name: string, seed: boolean): boolean;
+
+  /**
+   * Check or enable/dissable embezzlements.
+   * @remarks
+   * RAM cost: 1GB
+   *
+   * If no state is specified, will return the current state.
+   * If a state is specified, will change to that state and return the changed state.
+   * @param state - Set to this state, or if left empty returns current state.
+   * @returns True if embezzlements are on, false if off
+   */
+  embezzlements(state?: boolean): boolean;
+
+  /**
+   * Accept an event.
+   * @remarks
+   * RAM cost: 8GB
+   *
+   * @param name - Name of event.
+   * @returns True if you accepted the event.
+   */
+  acceptEvent(name: string): boolean;
+
+  /**
+   * Abandon an event.
+   * @remarks
+   * RAM cost: 16GB
+   *
+   * @param name - Name of event.
+   * @returns True if you abandoned the event.
+   */
+  abandonEvent(name: string): boolean;
+
+  /**
+   * Get all pending events.
+   * @remarks
+   * RAM cost: 16GB
+   *
+   * @returns An array of all pending events.
+   */
+  getPendingEvents(): CharityEventGenData[];
+
+  /**
+   * Get all current events.
+   * @remarks
+   * RAM cost: 16GB
+   *
+   * @returns An array of all current events.
+   */
+  getCurrentEvents(): CharityEventGenData[];
+
+  /**
+   * Get all attack events.
+   * @remarks
+   * RAM cost: 16GB
+   *
+   * @returns An array of all attack events.
+   */
+  getAttackEvents(): CharityEventGenData[];
+
+  /**
+   * Check if you have a charityORG.
+   * @remarks
+   * RAM cost: 1GB
+   * @returns True if you have a charityORG, false otherwise.
+   */
+  hasCharity(): boolean;
+
+  /**
+   * List all charityORG volunteer names.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Get the names of all charityORG volunteers
+   *
+   * @returns Names of all charityORG volunteers.
+   */
+  getVolunteerNames(): string[];
+
+  /**
+   * Rename a charity volunteer to a new unique name.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Rename a charity volunteer to the new name, if it's unique.
+   * @param memberName - Name of the volunteer to change.
+   * @param newName - New name for that volunteer.
+   * @returns True if successful, and false if not.
+   */
+  renameVolunteer(memberName: string, newName: string): boolean;
+
+  /**
+   * Get information about your charityORG.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get general information about your charityORG.
+   *
+   * @returns Object containing general information about the charityORG.
+   */
+  getCharityInfo(): CharityGenInfo;
+
+  /**
+   * Get information about a specific volunteer.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get stat and equipment-related information about a volunteer
+   *
+   * @param name - Name of volunteer.
+   * @returns Object containing stat and equipment-related information about a volunteer.
+   */
+  getVolunteerInfo(name: string): CharityVolunteerInfo;
+
+  /**
+   * Check if you can recruit a new charity volunteer.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Returns a boolean indicating whether a volunteer can currently be recruited.
+   *
+   * Once you have successfully created a charityORG by using the function
+   * {@link CharityORG.createCharity | createCharity}, you can immediately recruit a small
+   * number of volunteers. After you have recruited the the first few
+   * volunteers, you will require prestige to recruite more. The more volunteers you have,
+   * the more prestige you require. If your charityORG has the maximum number of
+   * volunteers, this will always return false.
+   *
+   * @returns True if a volunteer can currently be recruited, false otherwise.
+   */
+  canRecruitVolunteer(): boolean;
+
+  /**
+   * Check the amount of Prestige needed for your next charity volunteer.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @returns The static number value of Prestige needed for the next
+   * volunteer, with consideration to your current size.
+   * Returns `Infinity` if you have reached the charityORG size limit.
+   */
+  prestigeForNextVolunteer(): number;
+
+  /**
+   * Recruit a new charity volunteer.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Attempt to recruit a new charity volunteer.
+   *
+   * Possible reasons for failure:
+   * * Cannot currently recruit a new volunteer
+   * * There already exists a volunteer with the specified name
+   *
+   * @param name - Name of volunteer to recruit.
+   * @returns True if the volunteer was successfully recruited, false otherwise.
+   */
+  recruitVolunteer(name: string): boolean;
+
+  /**
+   * List all valid tasks.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Get the names of all valid tasks that charity volunteers can be assigned to.
+   *
+   * @returns All valid tasks that charity volunteers can be assigned to.
+   */
+  getVolunteerTasks(): string[];
+
+  /**
+   * Set a charity volunteer to task.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Attempts to assign the specified volunteer to the specified task.
+   * If an invalid task is specified, the volunteer will be set to idle (“Unassigned”).
+   *
+   * @param memberName - Name of charity volunteer to assign.
+   * @param taskName - Task to assign.
+   * @returns True if the charity volunteer was successfully assigned to the task, false otherwise.
+   */
+  setVolunteerTask(memberName: string, taskName: string): boolean;
+
+  /**
+   * Get stats of a task.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Get the stats of a volunteer task stats.
+   *
+   * @param name -  Name of the task.
+   * @returns Detailed stats of a task.
+   */
+  getVolunteerTaskStats(name: string): CharityTaskStats;
+
+  /**
+   * List equipment names.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Get the name of all possible equipment/upgrades you can purchase for your volunteer.
+   *
+   * @returns Names of all Equipment.
+   */
+  getEqNames(): string[];
+
+  /**
+   * Get cost of equipment.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get the amount of money it takes to purchase a piece of Equipment.
+   * If an invalid pice of Equipment is specified, this function will return Infinity.
+   *
+   * @param equipName - Name of equipment.
+   * @returns Cost to purchase the specified Equipment (number). Infinity for invalid arguments
+   */
+  getEqCost(equipName: string): number;
+
+  /**
+   * Get type of an equipment.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get the specified equipment type.
+   *
+   * @param equipName - Name of equipment.
+   * @returns Type of the equipment.
+   */
+  getEqType(equipName: string): string;
+
+  /**
+   * Get stats of an equipment.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get the specified equipment stats.
+   *
+   * @param equipName - Name of equipment.
+   * @returns A dictionary containing the stats of the equipment.
+   */
+  getEqStats(equipName: string): EqStats;
+
+  /**
+   * Purchase an equipment for a charity volunteer.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Attempt to purchase the specified Equipment for the specified charity volunteer.
+   *
+   * @param memberName - Name ofcharity volunteer to purchase the equipment for.
+   * @param equipName - Name of Equipment to purchase.
+   * @returns True if the equipment was successfully purchased. False otherwise
+   */
+  purchaseEq(memberName: string, equipName: string): boolean;
+
+  /**
+   * Ascend a charity volunteer.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Ascend the specified charity volunteer.
+   *
+   * @param memberName - Name of charity volunteer to ascend.
+   * @returns Object with info about the ascension results, or undefined if ascension did not occur.
+   */
+  ascendVolunteer(memberName: string): CharityVolunteerAscension | undefined;
+
+  /**
+   * Get the result of an ascension without ascending.
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * Get a {@link CharityVolunteerAscension} result for ascending acharity volunteer without performing the ascension.
+   *
+   * @param memberName - Name ofcharity volunteer.
+   * @returns Object with info about the ascension results, or undefined if ascension is not possible.
+   */
+  getAscResult(memberName: string): CharityVolunteerAscension | undefined;
+
+  /**
+   * Get bonus time.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Returns the amount of accumulated “bonus time” (milliseconds) for the charityORG mechanic.
+   *
+   * “Bonus time” is accumulated when the game is offline or if the game is inactive in the browser.
+   *
+   * “Bonus time” makes the game progress faster, up to 5x the normal speed.
+   *
+   * @returns Bonus time for the charityORG mechanic in milliseconds.
+   */
+  getCharityBonusTime(): number;
+
+  /**
+   * Use an item
+   * @remarks
+   * RAM cost: 8 GB
+   *
+   * Use an item or convert a lucky coin into an item.
+   *
+   * @param item - Name of item
+   * @param spend - Total to spend
+   * @param convert - Optional:  Defaults to False.  True to convert spend worth of lucky coins into this item
+   *
+   * @returns True if successful, False if not.
+   */
+  useItem(item: string, spend: number, convert: boolean = false): boolean;
+
+  /**
+   * Performs a lucky cancel
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Performs a lucky cancel on an event if you are able to.  Costs 1 Lucky Coin and requires that a valid event name.
+   * Events cancelled in this way do not activate their death effects.
+   *
+   * @param Event_Name - Name of Event
+   * @returns True if successful, False if not.
+   */
+  luckyCancel(Event_Name: string): boolean;
+
+  /**
+   * Performs a lucky reset
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Performs a lucky reset if you are able to.  Costs 1 Lucky Coin and requires that there be no current events.
+   *
+   * @returns True if successful, False if not.
+   */
+  luckyReset(): boolean;
+
+  /**
+   * Get event rarity.
+   * @remarks
+   * RAM cost: 32 GB
+   *
+   * Returns the rarity of the event.  You need to give it an event name to check.  Returns -1 if the name given has no event
+   * (ex: beg)
+   *
+   * @param Event_Name - Name of Event
+   * @returns An events rarity
+   */
+  getRarity(Event_Name: string): number;
+
+  /**
+   * Get item list.
+   * @remarks
+   * RAM cost: 8 GB
+   *
+   * Returns the list of all current items
+   *
+   * @returns An object containing all items and their amounts
+   */
+  getItems(): CharityGenItemInfo;
+
+  /**
+   * Get messages.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Returns all the messges that the charityORG has stored.
+   *
+   * @returns An object containing all messages
+   */
+  getMessages(): CharityGenMessageInfo;
+
+  /**
+   * Get charity banner.
+   * @remarks
+   * RAM cost: 16 GB
+   *
+   * Returns all charity banner information
+   *
+   * @returns An object containing all charity banner info
+   */
+  getCharityBanner(): CharityGenBannerInfo;
+
+  /**
+   * Get stored pieces.
+   * @remarks
+   * RAM cost: 16 GB
+   *
+   * Returns all stored banner pieces
+   *
+   * @returns An object containing all stored banner pieces
+   */
+  getStoredPieces(): CharityBannerPieceInfo[];
+
+  /**
+   * Get active pieces.
+   * @remarks
+   * RAM cost: 16 GB
+   *
+   * Returns all active banner pieces
+   *
+   * @returns An object containing all active banner pieces
+   */
+  getActivePieces(): CharityBannerPieceInfo[];
+
+  /**
+   * Activates a stored piece
+   * @remarks
+   * RAM cost: 8 GB
+   *
+   * Activates the stored banner piece.  Must have at least 1 spot open.
+   *
+   * @param name - The name of the banner piece to activate
+   * @returns True if the piece was activated, False if not.
+   */
+  activatePiece(name): boolean;
+
+  /**
+   * Lucky Removes an active piece
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Removes an active piece and places it back into the storage container.
+   * Must have a lucky coin to do so.
+   *
+   * @param name - The name of the banner piece to remove
+   * @returns True if the piece was removed, False if not.
+   */
+  luckyRemove(name): boolean;
+
+  /**
+   * Destroys an active piece
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Destroys an active piece to make room for another.
+   *
+   * @param name - The name of the banner piece to destroy
+   * @returns True if the piece was destroyed, False if not.
+   */
+  destroyPiece(name): boolean;
+
+  /**
+   * Get master effects list.
+   * @remarks
+   * RAM cost: 16 GB
+   *
+   * Returns the master list of effect modifiers and all effect timers
+   *
+   * @returns An object containing all effect modifiers and effect timers
+   */
+  getEffects(): CharityGenEffectsInfo;
+
+  /**
+   * Spend Karma.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Spend your karma on anything you like.
+   *
+   * “Bonus time” is accumulated when the game is offline or if the game is inactive in the browser.
+   *
+   * @param opt1 - Type of boost - 'boost charity', 'sleeves', 'time'
+   * @param opt2 - Name of Secondary option - 'bank', 'overclock', etc
+   * @param spendOn - Amount of karma to spend, name of Augment or "list" to get a list back of available augments
+   * @param opt3 - Optional unless needed.  Chosen sleeve.  Can be 'all' for all sleeves
+   *
+   * @returns true if karma was spent, false if not
+   *
+   * @example
+   * ```js
+   * ns.charityORG.spendKarma("Boost Charity", "Bank", 555)
+   * ns.charityORG.spendKarma("Sleeves", "Overclock", 200, 0)
+   * ns.charityORG.spendKarma("Sleeves", "Overclock", 200, "all")
+   * ns.charityORG.spendKarma("Sleeves", "Augments", "list", 2)
+   * ns.charityORG.spendKarma("Time", "Time Gate", 1000)
+   * ```
+   */
+  spendKarma(opt1: string, opt2: string, spendOn: number | string, opt3?: string | number): boolean | string[];
+
+  /**
+   * Sleeps until the next charityORG update has happened.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * The amount of real time spent asleep between updates can vary due to "bonus time".
+   *
+   * @returns Promise that resolves to the number of milliseconds of charityORG time
+   * that were processed in the previous update (200 - 1000 ms).
+   *
+   * @example
+   * ```js
+   * while (true) {
+   *   const duration = await ns.charityORG.nextUpdate();
+   *   ns.print(`CharityORG completed ${ns.tFormat(duration)} of activity.`);
+   *   ns.print(`Bonus time remaining: ${ns.tFormat(ns.charityORG.getBonusTime())}`);
+   * }
+   * ```
+   */
+  nextUpdate(): Promise<number>;
+}
+
+/**
  * IPvGO api
  * @public
  */
@@ -4332,6 +5371,29 @@ export interface Sleeve {
   setToCommitCrime(sleeveNumber: number, crimeType: CrimeType | `${CrimeType}`): boolean;
 
   /**
+   * Set a sleeve to perform a charitable act.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Return a boolean indicating whether or not this action was set successfully (false if an invalid action is specified).
+   *
+   * @example
+   * ```ts
+   * // Assigns the first sleeve to Help Police.
+   * ns.sleeve.setToPerformCharity(0, "help police");
+   *
+   * // Assigns the second sleeve to Give Back, using enum
+   * const charities = ns.enums.CharityType;
+   * ns.sleeve.setToPerformCharity(1, charities.giveBack)
+   * ```
+   *
+   * @param sleeveNumber - Index of the sleeve to start performing a charitable act. Sleeves are numbered starting from 0.
+   * @param charityType - Name of the charity.
+   * @returns True if this action was set successfully, false otherwise.
+   */
+  setToPerformCharity(sleeveNumber: number, charityType: CharityType | `${CharityType}`): boolean;
+
+  /**
    * Set a sleeve to work for a faction.
    * @remarks
    * RAM cost: 4 GB
@@ -4532,6 +5594,169 @@ export interface Grafting {
   graftAugmentation(augName: string, focus?: boolean): boolean;
 }
 
+/** @public */
+interface TicketRecord {
+  Type: string;
+  Numbers: number[];
+  Wager: number;
+  Option: GameOptions;
+}
+/** @public */
+declare enum GameOptions {
+  None = "none",
+  Straight = "straight",
+  Box = "box",
+  StraightBox = "straightbox",
+}
+
+/**
+ * Lottery API
+ * @remarks
+ * Interact with the lottery store by API
+ * @public
+ */
+export interface Lottery {
+  /**
+   * Retrieves your tickets.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   *
+   * @returns An array of your current tickets
+   */
+  getTickets(): TicketRecord[];
+
+  /**
+   * Buy a Pick 2 ticket
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param wager - The bet you will be placing.  Between 1-500
+   * @param numbers - An array of numbers that you are selecting.
+   *
+   * @example
+   * ```ts
+   * // Buy a Pick 2 ticket.
+   * ns.lotto.buyPick2Ticket(500, [0,3]);
+   *
+   * // Purchase a pick2 ticket that you specify, and one with a random number selection
+   * ```
+   *
+   * @returns True if the ticket was purchased, or false if it was not.
+   */
+  buyPick2Ticket(wager: number, numbers: number[]): boolean;
+
+  /**
+   * Buy a Pick 3 ticket
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param wager - The bet you will be placing.  Between 1-500
+   * @param option - Option for the bet. box, straight or straight/box
+   * @param numbers - An array of numbers that you are selecting.
+   *
+   * @example
+   * ```ts
+   * // Buy a Pick 3 ticket.
+   * ns.lotto.buyPick3Ticket(500, "box", [0,3,0]);
+   * ns.lotto.buyPick3Ticket(500, "straight", [1,1,1]);
+   * ns.lotto.buyPick3Ticket(500, "straight/box", [1,2,3]);
+   *
+   * // Purchase a pick3 ticket as box, straight and straight/box, and one at random.
+   * ```
+   *
+   * @returns True if the ticket was purchased, or false if it was not.
+   */
+  buyPick3Ticket(wager: number, options: string, numbers: number[]): boolean;
+
+  /**
+   * Buy a Pick 4 ticket
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param wager - The bet you will be placing.  Between 1-500
+   * @param option - Option for the bet. box or straight
+   * @param numbers - An array of numbers that you are selecting.
+   *
+   * @example
+   * ```ts
+   * // Buy a Pick 3 ticket.
+   * ns.lotto.buyPick4Ticket(500, "box", [0,3,0,3]);
+   * ns.lotto.buyPick4Ticket(500, "straight", [1,1,1,2]);
+   *
+   * // Purchase a pick4 ticket as box, straight, and one at random.
+   * ```
+   *
+   * @returns True if the ticket was purchased, or false if it was not.
+   */
+  buyPick4Ticket(wager: number, options: string, numbers: number[]): boolean;
+
+  /**
+   * Buy a Lotto 6/49 ticket
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param wager - The bet you will be placing.  Between 1-500
+   * @param numbers - An array of numbers that you are selecting.
+   *
+   * @example
+   * ```ts
+   * // Buy a Lotto 6/49 ticket.
+   * ns.lotto.buyL649Ticket(500, [2,12,15,22,27,42]);
+   *
+   * // Purchase a lotto 6/49 ticket and one at random.
+   * ```
+   *
+   * @returns True if the ticket was purchased, or false if it was not.
+   */
+  buyL649Ticket(wager: number, numbers: number[]): boolean;
+
+  /**
+   * Buy a Keno ticket
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param wager - The bet you will be placing.  Between 1-500
+   * @param numbers - An array of numbers that you are selecting.
+   *
+   * @example
+   * ```ts
+   * // Buy a Keno ticket.
+   * ns.lotto.buyKenoTicket(500, [2,12,15,22,27,42,45,8,55,66]);
+   * ns.lotto.buyKenoTicket(500, [2,12,15,22,27]);
+   *
+   * // Purchase a lotto 6/49 ticket and one at random.
+   * ```
+   *
+   * @returns True if the ticket was purchased, or false if it was not.
+   */
+  buyKenoTicket(wager: number, numbers: number[]): boolean;
+
+  /**
+   * Buy's a Random ticket
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param wager - The bet you will be placing.  Between 1-500
+   *
+   * @example
+   * ```ts
+   * // Buy a Random ticket.
+   * ns.lotto.buyRandomTicket(Wager, ?Type, ?Option)
+   * ns.lotto.buyRandomTicket(500);
+   * ns.lotto.buyRandomTicket(500, "l649");
+   * ns.lotto.buyRandomTicket(500, "pick3", "box");
+   *
+   * // Purchase a completely random ticket, selected from all available types and options.
+   * // Types are pick2, pick3, pick4, l649, keno
+   * // Options are: pick2 = straight,  pick3 = straight, box, straightbox,  pick4 = straight, box
+   * ```
+   *
+   * @returns True if the ticket was purchased, or false if it was not.
+   */
+  buyRandomTicket(wager: number, type?: string, option?: string): boolean;
+}
+
 /**
  * Skills formulas
  * @public
@@ -4574,6 +5799,9 @@ interface WorkFormulas {
   crimeSuccessChance(person: Person, crimeType: CrimeType | `${CrimeType}`): number;
   /** @returns The WorkStats gained when completing one instance of the specified crime. */
   crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
+  charitySuccessChance(person: Person, charityType: CharityType | `${CharityType}`): number;
+  /** @returns The WorkStats gained when completing one instance of the specified charity. */
+  charityGains(person: Person, charityType: CharityType | `${CharityType}`): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by taking the specified gym class. */
   gymGains(person: Person, gymType: GymType | `${GymType}`, locationName: string): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by taking the specified university class. */
@@ -4866,6 +6094,80 @@ interface GangFormulas {
 }
 
 /**
+ * Charity formulas
+ * @public
+ */
+interface CharityFormulas {
+  /**
+   * Calculate prestige per tick.
+   * @param charity - Charity info
+   * @param member - Volunteer info
+   * @param task - Task info
+   * @returns The calculated prestige gain.
+   */
+  prestigeGain(charity: CharityGenInfo, member: CharityVolunteerInfo, task: CharityTaskStats): number;
+
+  /**
+   * Calculate karma per tick.
+   * @param charity - Charity info
+   * @param member - Volunteer info
+   * @param task - Task info
+   * @returns The calculated karma gain.
+   */
+  karmaGain(charity: CharityGenInfo, member: CharityVolunteerInfo, task: CharityTaskStats): number;
+
+  /**
+   * Calculate money gained per tick.
+   * @param charity - Charity info
+   * @param member - Volunteer info
+   * @param task - Task info
+   * @returns The calculated money gained.
+   */
+  moneyGain(charity: CharityGenInfo, member: CharityVolunteerInfo, task: CharityTaskStats): number;
+
+  /**
+   * Calculate money spent per tick.
+   * @param charity - Charity info
+   * @param member - Volunteer info
+   * @param task - Task info
+   * @returns The calculated money spent.
+   */
+  moneySpend(charity: CharityGenInfo, member: CharityVolunteerInfo, task: CharityTaskStats): number;
+
+  /**
+   * Calculate visibility gained per tick.
+   * @param charity - Charity info
+   * @param member - Volunteer info
+   * @param task - Task info
+   * @returns The calculated money gained.
+   */
+  visibilityGain(charity: CharityGenInfo, member: CharityVolunteerInfo, task: CharityTaskStats): number;
+
+  /**
+   * Calculate terror gained per tick.
+   * @param charity - Charity info
+   * @param member - Volunteer info
+   * @param task - Task info
+   * @returns The calculated money gained.
+   */
+  terrorGain(charity: CharityGenInfo, member: CharityVolunteerInfo, task: CharityTaskStats): number;
+
+  /**
+   * Calculate ascension point gain.
+   * @param exp - Experience point before ascension.
+   * @returns The calculated ascension point gain.
+   */
+  ascensionPointsGainCharity(exp: number): number;
+
+  /**
+   * Calculate ascension mult.
+   * @param points - Amount of ascension points.
+   * @returns The calculated ascension mult.
+   */
+  ascensionMultiplierCharity(points: number): number;
+}
+
+/**
  * Formulas API
  * @remarks
  * You need Formulas.exe on your home computer to use this API.
@@ -4887,6 +6189,8 @@ export interface Formulas {
   hacknetServers: HacknetServersFormulas;
   /** Gang formulas */
   gang: GangFormulas;
+  /** Charityformulas */
+  charityORG: CharityFormulas;
   /** Work formulas */
   work: WorkFormulas;
 }
@@ -5197,6 +6501,12 @@ export interface NS {
   readonly gang: Gang;
 
   /**
+   * Namespace for charityORG functions. Contains spoilers.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly charityORG: CharityORG;
+
+  /**
    * Namespace for Go functions.
    * @remarks RAM cost: 0 GB
    */
@@ -5255,6 +6565,12 @@ export interface NS {
    * @remarks RAM cost: 0 GB
    */
   readonly grafting: Grafting;
+
+  /**
+   * Namespace for lottery functions.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly lottery: Lottery;
 
   /**
    * Arguments passed into the script.
@@ -7373,6 +8689,20 @@ declare enum CrimeType {
 }
 
 /** @public */
+declare enum CharityType {
+  stopRobery = "Stop a Robery",
+  hugSomeoneInNeed = "Hug someone in need",
+  helpPolice = "Help Police",
+  workAtSoupKitchen = "Work at a soup kitchen",
+  reportDrugDeal = "Report drug deal",
+  payItForward = "Pay it forward",
+  patrolTheStreets = "Patrol the streets",
+  giveBack = "Give back",
+  takeKnife = "Take a knife",
+  holdFundRaiser = "Hold a fund raiser",
+}
+
+/** @public */
 declare enum FactionWorkType {
   hacking = "hacking",
   field = "field",
@@ -7535,6 +8865,7 @@ declare enum LocationName {
   Sector12PowerhouseGym = "Powerhouse Gym",
   Sector12RothmanUniversity = "Rothman University",
   Sector12UniversalEnergy = "Universal Energy",
+  Sector12LotteryStore = "Lottery Store",
 
   NewTokyoDefComm = "DefComm",
   NewTokyoGlobalPharmaceuticals = "Global Pharmaceuticals",
@@ -7612,6 +8943,7 @@ declare enum CompanyName {
 export type NSEnums = {
   CityName: typeof CityName;
   CrimeType: typeof CrimeType;
+  CharityType: typeof CharityType;
   FactionWorkType: typeof FactionWorkType;
   GymType: typeof GymType;
   JobName: typeof JobName;

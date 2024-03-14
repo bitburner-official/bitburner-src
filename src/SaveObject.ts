@@ -1,5 +1,4 @@
 import { Skills } from "@nsdefs";
-
 import { loadAliases, loadGlobalAliases, Aliases, GlobalAliases } from "./Alias";
 import { getCompaniesSave, loadCompanies } from "./Company/Companies";
 import { CONSTANTS } from "./Constants";
@@ -84,6 +83,7 @@ class BitburnerSaveObject {
   SettingsSave = "";
   VersionSave = "";
   AllGangsSave = "";
+  //CharityORGSave = "";
   LastExportBonus = "0";
   StaneksGiftSave = "";
   GoSave = "";
@@ -484,6 +484,8 @@ function evaluateVersionCompatibility(ver: string | number): void {
       "faction_rep_mult",
       "crime_money_mult",
       "crime_success_mult",
+      "charity_money_mult",
+      "charity_success_mult",
       "work_money_mult",
       "hacknet_node_money_mult",
       "hacknet_node_purchase_cost_mult",
@@ -531,12 +533,15 @@ function evaluateVersionCompatibility(ver: string | number): void {
       "timeWorkedGraftAugmentation",
       "className",
       "crimeType",
+      "charityType",
       "timeWorked",
       "timeWorkedCreateProgram",
       "timeNeededToCompleteWork",
       "factionWorkType",
       "committingCrimeThruSingFn",
       "singFnCrimeWorkerScript",
+      //"committingCharityThruSingFn",
+      //"singFnCharityWorkerScript",
       "hacking",
       "max_hp",
       "strength",
@@ -585,6 +590,8 @@ function evaluateVersionCompatibility(ver: string | number): void {
       "faction_rep_mult",
       "crime_money_mult",
       "crime_success_mult",
+      "charity_money_mult",
+      "charity_success_mult",
       "work_money_mult",
       "hacknet_node_money_mult",
       "hacknet_node_purchase_cost_mult",
@@ -597,6 +604,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
       "bladeburner_success_chance_mult",
       "className",
       "crimeType",
+      "charityType",
       "currentTask",
       "currentTaskLocation",
       "currentTaskMaxTime",
@@ -794,6 +802,7 @@ function loadGame(saveString: string): boolean {
       console.error("ERROR: Failed to parse AllGangsSave: " + e);
     }
   }
+
   if (Object.hasOwn(saveObj, "VersionSave")) {
     try {
       const ver = JSON.parse(saveObj.VersionSave, Reviver);

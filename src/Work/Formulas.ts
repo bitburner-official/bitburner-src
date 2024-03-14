@@ -1,5 +1,6 @@
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Crime } from "../Crime/Crime";
+import { Charity } from "../Charity/Charity";
 import { newWorkStats, scaleWorkStats, WorkStats, multWorkStats } from "./WorkStats";
 import { Person as IPerson } from "@nsdefs";
 import { CONSTANTS } from "../Constants";
@@ -58,6 +59,29 @@ export function calculateCrimeWorkStats(person: IPerson, crime: Crime): WorkStat
       person.mults.crime_money * currentNodeMults.CrimeMoney,
     ),
     currentNodeMults.CrimeExpGain,
+    false,
+  );
+  return gains;
+}
+
+export function calculateCharityWorkStats(person: IPerson, charity: Charity): WorkStats {
+  const gains = scaleWorkStats(
+    multWorkStats(
+      //Todo: rework charity and workstats interfaces to use the same naming convention for exp values, then we can just make a workStats directly from a charity.
+      newWorkStats({
+        money: charity.money,
+        hackExp: charity.hacking_exp,
+        strExp: charity.strength_exp,
+        defExp: charity.defense_exp,
+        dexExp: charity.dexterity_exp,
+        agiExp: charity.agility_exp,
+        chaExp: charity.charisma_exp,
+        intExp: charity.intelligence_exp,
+      }),
+      person.mults,
+      person.mults.charity_money * currentNodeMults.CharityMoney,
+    ),
+    currentNodeMults.CharityExpGain,
     false,
   );
   return gains;

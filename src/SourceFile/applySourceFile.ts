@@ -39,6 +39,8 @@ export function applySourceFile(bn: number, lvl: number): void {
       Player.mults.faction_rep *= incMult;
       Player.mults.crime_money *= incMult;
       Player.mults.crime_success *= incMult;
+      Player.mults.charity_money *= incMult;
+      Player.mults.charity_success *= incMult;
       Player.mults.hacknet_node_money *= incMult;
       Player.mults.hacknet_node_purchase_cost *= decMult;
       Player.mults.hacknet_node_ram_cost *= decMult;
@@ -159,6 +161,7 @@ export function applySourceFile(bn: number, lvl: number): void {
       const incMult = 1 + mult / 100;
       Player.mults.work_money *= incMult;
       Player.mults.company_rep *= incMult;
+      Player.mults.augmentation_money *= [1, 0.96, 0.94, 0.93][Player.sourceFileLvl(11)];
       break;
     }
     case 12: // The Recursion
@@ -170,6 +173,15 @@ export function applySourceFile(bn: number, lvl: number): void {
     case 14: // IPvGO
       // Grands increased buffs and favor limit from IPvGO
       break;
+    case 15: {
+      // Charity
+      const moneyMult = lvl >= 2 ? 100 : lvl === 1 ? 10 : 1;
+      const successMult = 1 + lvl * 0.01 + 0.05; // 1: .06, 2: .7, 3: .8
+      Player.mults.charity_money *= moneyMult;
+      Player.mults.charity_success *= successMult;
+      Player.mults.augmentation_rep *= [1, 1, 1, 0.95][Player.sourceFileLvl(15)];
+      break;
+    }
     default:
       console.error(`Invalid source file number: ${bn}`);
       break;

@@ -40,6 +40,8 @@ export interface AugmentationCtorParams {
   faction_rep?: number;
   crime_money?: number;
   crime_success?: number;
+  charity_money?: number;
+  charity_success?: number;
   work_money?: number;
   hacknet_node_money?: number;
   hacknet_node_purchase_cost?: number;
@@ -50,6 +52,8 @@ export interface AugmentationCtorParams {
   bladeburner_stamina_gain?: number;
   bladeburner_analysis?: number;
   bladeburner_success_chance?: number;
+  augmentation_money?: number;
+  augmentation_rep?: number;
 
   startingMoney?: number;
   programs?: CompletedProgramName[];
@@ -136,6 +140,8 @@ function generateStatsDescription(mults: Multipliers, programs?: string[], start
 
   if (mults.crime_money !== 1) desc += `\n+${f(mults.crime_money - 1)} crime money`;
   if (mults.crime_success !== 1) desc += `\n+${f(mults.crime_success - 1)} crime success rate`;
+  if (mults.charity_money !== 1) desc += `\n+${f(mults.charity_money - 1)} charity money`;
+  if (mults.charity_success !== 1) desc += `\n+${f(mults.charity_success - 1)} charity success rate`;
   if (mults.work_money !== 1) desc += `\n+${f(mults.work_money - 1)} work money`;
 
   // Hacknet: costs are negative
@@ -164,6 +170,14 @@ function generateStatsDescription(mults: Multipliers, programs?: string[], start
   if (mults.bladeburner_success_chance !== 1) {
     desc += `\n+${f(mults.bladeburner_success_chance - 1)} Bladeburner Contracts and Operations success chance`;
   }
+  // Augmentation: info is negative
+  if (mults.augmentation_money !== 1) {
+    desc += `\n-${f(-(mults.augmentation_money - 1))} Augmentation money cost`;
+  }
+  if (mults.augmentation_rep !== 1) {
+    desc += `\n-${f(-(mults.augmentation_rep - 1))} Augmentation rep cost`;
+  }
+
   if (startingMoney) desc += `\nStart with ${startingMoney} after installing Augmentations.`;
   if (programs) desc += `\nStart with ${programs.join(" and ")} after installing Augmentations.`;
   return desc;

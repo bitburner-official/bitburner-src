@@ -20,6 +20,7 @@ export enum FragmentType {
   Rep,
   WorkMoney,
   Crime,
+  Charity,
   Bladeburner,
 
   // utility fragments.
@@ -72,6 +73,9 @@ export function Effect(tpe: FragmentType): string {
     }
     case FragmentType.Crime: {
       return "+x% crime money";
+    }
+    case FragmentType.Charity: {
+      return "+x% charity money";
     }
     case FragmentType.Bladeburner: {
       return "+x% all bladeburner stats";

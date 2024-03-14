@@ -1,6 +1,6 @@
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { CrimeType, FactionWorkType } from "@enums";
+import { CrimeType, CharityType, FactionWorkType } from "@enums";
 import { CONSTANTS } from "../../../Constants";
 import { Player } from "@player";
 import { formatPercent, formatInt } from "../../../ui/formatNumber";
@@ -12,6 +12,7 @@ import { EarningsElement, StatsElement } from "./StatsElement";
 import { TaskSelector } from "./TaskSelector";
 import { TravelModal } from "./TravelModal";
 import { findCrime } from "../../../Crime/CrimeHelpers";
+import { findCharity } from "../../../Charity/CharityHelpers";
 import { SleeveWorkType } from "../Work/Work";
 import { getEnumHelper } from "../../../utils/EnumHelper";
 
@@ -42,6 +43,14 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
           crime.successRate(sleeve),
         )}).\n\nTasks Completed: ${formatInt(work.tasksCompleted)} 
 		\n` + `Progress: ${formatPercent(progress)}`
+      );
+    }
+    case SleeveWorkType.CHARITY: {
+      const charity = work.getCharity();
+      return (
+        `This sleeve is currently attempting ${charity.workName} (Success Rate: ${formatPercent(
+          charity.successRate(sleeve),
+        )}).\n\n` + `Progress: ${formatPercent(progress)}`
       );
     }
     case SleeveWorkType.FACTION: {
@@ -89,6 +98,9 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
       case "Commit Crime":
         props.sleeve.commitCrime(findCrime(abc[1])?.type ?? CrimeType.shoplift);
         break;
+      case "Perform Charity":
+        props.sleeve.performCharity(findCharity(abc[1])?.type ?? CharityType.stopRobery);
+        break;
       case "Take University Course":
         props.sleeve.takeUniversityCourse(abc[2], abc[1]);
         break;
@@ -116,6 +128,7 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
     switch (work.type) {
       case SleeveWorkType.BLADEBURNER:
       case SleeveWorkType.CRIME:
+      case SleeveWorkType.CHARITY:
       case SleeveWorkType.INFILTRATE:
         progress = work.cyclesWorked / work.cyclesNeeded(props.sleeve);
         percentBar = <ProgressBar variant="determinate" value={progress * 100} color="primary" />;

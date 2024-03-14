@@ -168,5 +168,35 @@ export const getFactionAugmentationsFiltered = (faction: Faction): AugmentationN
     return augs.map((a) => a.name);
   }
 
+  if (faction.name === "Charity") {
+    let augs = Object.values(Augmentations);
+
+    // Remove special augs
+    augs = augs.filter((a) => !a.isSpecial && a.name !== AugmentationName.CongruityImplant);
+
+    if (Player.bitNodeN === 15) {
+      // TRP is available by default for Charities in BN 15
+      augs.push(Augmentations[AugmentationName.TheRedPill]);
+    }
+
+    const rng = SFC32RNG(`BN${Player.bitNodeN}.${Player.sourceFileLvl(Player.bitNodeN)}`);
+    // Remove faction-unique augs that don't belong to this faction
+    const uniqueFilter = (a: Augmentation): boolean => {
+      // Keep all the non-unique one
+      if (a.factions.length > 1) {
+        return true;
+      }
+      // Keep all the ones that this faction has anyway.
+      if (faction.augmentations.includes(a.name)) {
+        return true;
+      }
+
+      return rng() >= 1 - currentNodeMults.CharityORGUniqueAugs;
+    };
+    augs = augs.filter(uniqueFilter);
+
+    return augs.map((a) => a.name);
+  }
+
   return faction.augmentations.slice();
 };

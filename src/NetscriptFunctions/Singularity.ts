@@ -19,6 +19,7 @@ import { CONSTANTS } from "../Constants";
 import { RunningScript } from "../Script/RunningScript";
 import { calculateAchievements } from "../Achievements/Achievements";
 import { findCrime } from "../Crime/CrimeHelpers";
+import { findCharity } from "../Charity/CharityHelpers";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { DarkWebItems } from "../DarkWeb/DarkWebItems";
 import { Router } from "../ui/GameRoot";
@@ -49,6 +50,7 @@ import { CompanyWork } from "../Work/CompanyWork";
 import { canGetBonus, onExport } from "../ExportBonus";
 import { saveObject } from "../SaveObject";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
+import { calculateCharityWorkStats } from "../Work/Formulas";
 import { findEnumMember } from "../utils/helpers/enum";
 import { Engine } from "../engine";
 import { getEnumHelper } from "../utils/EnumHelper";
@@ -1048,6 +1050,80 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         agility_exp: crimeStatsWithMultipliers.agiExp,
         charisma_exp: crimeStatsWithMultipliers.chaExp,
         intelligence_exp: crimeStatsWithMultipliers.intExp,
+      });
+    },
+    performCharity: (ctx) => (_charityType, _focus) => {
+      helpers.checkSingularityAccess(ctx);
+      if (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15) {
+        throw helpers.errorMessage(
+          ctx,
+          `You do not have access to Charitable Acts yet!  Get SF 15.1 in order to unlock outside of BN 15.`,
+        );
+      }
+      const charityType = helpers.string(ctx, "charityType", _charityType);
+      const focus = _focus === undefined ? true : !!_focus;
+      const wasFocusing = Player.focus;
+
+      if (Player.currentWork !== null) Player.finishWork(true);
+      Player.gotoLocation(LocationName.Slums);
+
+      // If input isn't a charityType, use search using roughname.
+      const charity = findCharity(charityType);
+      if (charity == null) throw helpers.errorMessage(ctx, `Invalid charity: '${charityType}'`);
+
+      helpers.log(ctx, () => `Attempting to commit ${charity.type}...`);
+      const charityTime = charity.commit(1, ctx.workerScript);
+      if (focus) {
+        Player.startFocusing();
+        Router.toPage(Page.Work);
+      } else if (wasFocusing) {
+        Player.stopFocusing();
+        Router.toPage(Page.Terminal);
+      }
+      return charityTime;
+    },
+    getCharityChance: (ctx) => (_charityType) => {
+      helpers.checkSingularityAccess(ctx);
+      if (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15) {
+        throw helpers.errorMessage(
+          ctx,
+          `You do not have access to Charitable Acts yet!  Get SF 15.1 in order to unlock outside of BN 15.`,
+        );
+      }
+      const charityType = helpers.string(ctx, "charityType", _charityType);
+
+      // If input isn't a charityType, use search using roughname.
+      const charity = findCharity(charityType);
+      if (charity == null) throw helpers.errorMessage(ctx, `Invalid charity: '${charityType}'`);
+
+      return charity.successRate(Player);
+    },
+    getCharityStats: (ctx) => (_charityType) => {
+      helpers.checkSingularityAccess(ctx);
+      if (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15) {
+        throw helpers.errorMessage(
+          ctx,
+          `You do not have access to Charitable Acts yet!  Get SF 15.1 in order to unlock outside of BN 15.`,
+        );
+      }
+      const charityType = helpers.string(ctx, "charityType", _charityType);
+
+      // If input isn't a charityType, use search using roughname.
+      const charity = findCharity(charityType);
+      if (charity == null) throw helpers.errorMessage(ctx, `Invalid charity: '${charityType}'`);
+
+      const charityStatsWithMultipliers = calculateCharityWorkStats(Player, charity);
+
+      return Object.assign({}, charity, {
+        money: charityStatsWithMultipliers.money,
+        reputation: charityStatsWithMultipliers.reputation,
+        hacking_exp: charityStatsWithMultipliers.hackExp,
+        strength_exp: charityStatsWithMultipliers.strExp,
+        defense_exp: charityStatsWithMultipliers.defExp,
+        dexterity_exp: charityStatsWithMultipliers.dexExp,
+        agility_exp: charityStatsWithMultipliers.agiExp,
+        charisma_exp: charityStatsWithMultipliers.chaExp,
+        intelligence_exp: charityStatsWithMultipliers.intExp,
       });
     },
     getDarkwebPrograms: (ctx) => () => {

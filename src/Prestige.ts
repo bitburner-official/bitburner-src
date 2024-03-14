@@ -10,7 +10,13 @@ import { Player } from "@player";
 import { recentScripts } from "./Netscript/RecentScripts";
 import { resetPidCounter } from "./Netscript/Pid";
 
-import { GetServer, AddToAllServers, initForeignServers, prestigeAllServers } from "./Server/AllServers";
+import {
+  GetServer,
+  AddToAllServers,
+  initForeignServers,
+  prestigeAllServers,
+  createUniqueRandomIp,
+} from "./Server/AllServers";
 import { prestigeHomeComputer } from "./Server/ServerHelpers";
 import { SpecialServers } from "./Server/data/SpecialServers";
 import { deleteStockMarket, initStockMarket } from "./StockMarket/StockMarket";
@@ -24,6 +30,7 @@ import { InvitationsSeen } from "./Faction/ui/FactionsRoot";
 import { CONSTANTS } from "./Constants";
 import { LogBoxClearEvents } from "./ui/React/LogBoxManager";
 import { initCircadianModulator } from "./Augmentation/Augmentations";
+import { buyRandomTicket } from "./Lottery/Lotto";
 import { Go } from "./Go/Go";
 
 const BitNode8StartingMoney = 250e6;
@@ -123,6 +130,11 @@ export function prestigeAugmentation(): void {
     }
   }
 
+  // Charities
+  if (Player.charityORG) {
+    joinFaction(Factions.Charity);
+  }
+
   // BitNode 3: Corporatocracy
   if (Player.bitNodeN === 3) {
     // Easiest way to comply with type constraint, instead of revalidating the enum member's file path
@@ -165,6 +177,21 @@ export function prestigeAugmentation(): void {
     if (Player.augmentations.some((a) => a.name !== AugmentationName.NeuroFluxGovernor)) {
       Factions[FactionName.ChurchOfTheMachineGod].isBanned = true;
     }
+  }
+
+  // Charity Servers
+  if (Player.charityNodes.length > 0) {
+    for (const cNode of Player.charityNodes) {
+      cNode.ip = createUniqueRandomIp();
+      AddToAllServers(cNode);
+      Player.getHomeComputer().serversOnNetwork.push(cNode.hostname);
+      cNode.serversOnNetwork.push(Player.getHomeComputer().hostname);
+    }
+  }
+  Player.lotteryTickets.length = 0;
+  // Quantom Tickets
+  if (Player.quantomTickets > 0) {
+    for (let i = 0; i < Player.quantomTickets; i++) buyRandomTicket();
   }
 
   // Hear rumors after all invites/bans
@@ -280,6 +307,11 @@ export function prestigeSourceFile(isFlume: boolean): void {
     delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`);
   }
 
+  // BitNode 15: Charity
+  if (Player.bitNodeN === 15) {
+    delayedDialog(`Sector-12 city hall needs your help.`);
+  }
+
   // Reset Stock market, gang, and corporation
   if (Player.hasWseAccount) {
     initStockMarket();
@@ -307,6 +339,21 @@ export function prestigeSourceFile(isFlume: boolean): void {
     Player.money = CONSTANTS.TravelCost;
   }
   staneksGift.prestigeSourceFile();
+
+  // Charity Servers
+  if (Player.charityNodes.length > 0) {
+    for (const cNode of Player.charityNodes) {
+      cNode.ip = createUniqueRandomIp();
+      AddToAllServers(cNode);
+      Player.getHomeComputer().serversOnNetwork.push(cNode.hostname);
+      cNode.serversOnNetwork.push(Player.getHomeComputer().hostname);
+    }
+  }
+  Player.lotteryTickets.length = 0;
+  // Quantom Tickets
+  if (Player.quantomTickets > 0) {
+    for (let i = 0; i < Player.quantomTickets; i++) buyRandomTicket();
+  }
 
   // Gain int exp
   if (Player.sourceFileLvl(5) !== 0 && !isFlume) Player.gainIntelligenceExp(300);

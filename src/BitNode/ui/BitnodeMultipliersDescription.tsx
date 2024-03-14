@@ -52,12 +52,14 @@ export const BitNodeMultipliersDisplay = ({ n, level }: IProps): React.ReactElem
       <PurchasedServersMults n={n} mults={mults} />
       <StockMults n={n} mults={mults} />
       <CrimeMults n={n} mults={mults} />
+      <CharityMults n={n} mults={mults} />
       <InfiltrationMults n={n} mults={mults} />
       <CompanyMults n={n} mults={mults} />
       <GangMults n={n} mults={mults} />
       <CorporationMults n={n} mults={mults} />
       <BladeburnerMults n={n} mults={mults} />
       <StanekMults n={n} mults={mults} />
+      <CharityORGMults n={n} mults={mults} />
       <GoMults n={n} mults={mults} />
     </Box>
   );
@@ -185,6 +187,23 @@ function CrimeMults({ mults }: IMultsProps): React.ReactElement {
   };
 
   return <BNMultTable sectionName="Crime" rowData={rows} mults={mults} />;
+}
+
+function CharityMults({ mults }: IMultsProps): React.ReactElement {
+  const rows: IBNMultRows = {
+    CharityExpGain: {
+      name: "Charity Exp",
+      color: Settings.theme.combat,
+      content: String(mults.CharityExpGain),
+    },
+    CharityMoney: {
+      name: "Charity Money",
+      color: Settings.theme.combat,
+      content: String(mults.CharityMoney),
+    },
+  };
+
+  return <BNMultTable sectionName="Charity" rowData={rows} mults={mults} />;
 }
 
 function SkillMults({ mults }: IMultsProps): React.ReactElement {
@@ -325,6 +344,27 @@ function GangMults({ mults }: IMultsProps): React.ReactElement {
   };
 
   return <BNMultTable sectionName="Gang" rowData={rows} mults={mults} />;
+}
+
+function CharityORGMults({ mults }: IMultsProps): React.ReactElement {
+  if (Player.bitNodeN !== 15 && Player.sourceFileLvl(15) <= 0) return <></>;
+
+  const rows: IBNMultRows = {
+    CharityORGSoftcap: {
+      name: "Charity Softcap",
+      content: mults.CharityORGSoftcap.toFixed(3),
+    },
+    CharityORGUniqueAugs: {
+      name: "Unique Augmentations",
+      content: mults.CharityORGUniqueAugs.toFixed(3),
+    },
+    CharityORGEventStrength: {
+      name: "Charity Event Strength",
+      content: mults.CharityORGEventStrength.toFixed(3),
+    },
+  };
+
+  return <BNMultTable sectionName="CharityORG" rowData={rows} mults={mults} />;
 }
 
 function CorporationMults({ mults }: IMultsProps): React.ReactElement {

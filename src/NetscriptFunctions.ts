@@ -17,6 +17,7 @@ import {
   CityName,
   CompletedProgramName,
   CrimeType,
+  CharityType,
   FactionWorkType,
   GymType,
   JobName,
@@ -67,6 +68,7 @@ import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions"
 import { LogBoxEvents, LogBoxCloserEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { NetscriptGang } from "./NetscriptFunctions/Gang";
+import { NetscriptCharityORG } from "./NetscriptFunctions/CharityORG";
 import { NetscriptGo } from "./NetscriptFunctions/Go";
 import { NetscriptSleeve } from "./NetscriptFunctions/Sleeve";
 import { NetscriptExtra } from "./NetscriptFunctions/Extra";
@@ -80,6 +82,7 @@ import { NetscriptCorporation } from "./NetscriptFunctions/Corporation";
 import { NetscriptFormulas } from "./NetscriptFunctions/Formulas";
 import { NetscriptStockMarket } from "./NetscriptFunctions/StockMarket";
 import { NetscriptGrafting } from "./NetscriptFunctions/Grafting";
+import { NetscriptLottery } from "./NetscriptFunctions/Lottery";
 import { NS, RecentScript, ProcessInfo, NSEnums } from "@nsdefs";
 import { NetscriptSingularity } from "./NetscriptFunctions/Singularity";
 
@@ -113,6 +116,7 @@ import { assertFunction } from "./Netscript/TypeAssertion";
 export const enums: NSEnums = {
   CityName,
   CrimeType,
+  CharityType,
   FactionWorkType,
   GymType,
   JobName,
@@ -130,6 +134,7 @@ export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums
 export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
   gang: NetscriptGang(),
+  charityORG: NetscriptCharityORG(),
   go: NetscriptGo(),
   bladeburner: NetscriptBladeburner(),
   codingcontract: NetscriptCodingContract(),
@@ -142,6 +147,7 @@ export const ns: InternalAPI<NSFull> = {
   stock: NetscriptStockMarket(),
   grafting: NetscriptGrafting(),
   hacknet: NetscriptHacknet(),
+  lottery: NetscriptLottery(),
   sprintf: () => sprintf,
   vsprintf: () => vsprintf,
   scan: (ctx) => (_hostname) => {
@@ -958,7 +964,7 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.errorMessage(ctx, "Requires Source-File 5 to run.");
       const n = Math.round(helpers.number(ctx, "n", _n));
       const lvl = Math.round(helpers.number(ctx, "lvl", _lvl));
-      if (n < 1 || n > 14) throw new Error("n must be between 1 and 14");
+      if (n < 1 || n > 15) throw new Error("n must be between 1 and 14");
       if (lvl < 1) throw new Error("lvl must be >= 1");
 
       return Object.assign({}, getBitNodeMultipliers(n, lvl));
@@ -1678,6 +1684,7 @@ export const ns: InternalAPI<NSFull> = {
       city: Player.city,
       // Player-specific
       numPeopleKilled: Player.numPeopleKilled,
+      numPeopleSaved: Player.numPeopleSaved,
       money: Player.money,
       location: Player.location,
       totalPlaytime: Player.totalPlaytime,

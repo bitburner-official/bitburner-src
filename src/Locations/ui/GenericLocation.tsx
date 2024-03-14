@@ -17,6 +17,7 @@ import { TechVendorLocation } from "./TechVendorLocation";
 import { TravelAgencyRoot } from "./TravelAgencyRoot";
 import { UniversityLocation } from "./UniversityLocation";
 import { CasinoLocation } from "./CasinoLocation";
+import { LotteryStoreLocation } from "./LotteryStoreLocation";
 
 import { Location } from "../Location";
 import { LocationType } from "@enums";
@@ -80,6 +81,10 @@ export function GenericLocation({ loc }: IProps): React.ReactElement {
 
     if (loc.types.includes(LocationType.Casino)) {
       content.push(<CasinoLocation key="CasinoLocation" />);
+    }
+
+    if (loc.types.includes(LocationType.LotteryStore)) {
+      content.push(<LotteryStoreLocation key="LotteryStoreLocation" />);
     }
 
     return content;

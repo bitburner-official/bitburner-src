@@ -148,6 +148,12 @@ function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
     if (src.crime) {
       parts.push([`Crimes:`, <Money key="crime" money={src.crime} />]);
     }
+    if (src.charity) {
+      parts.push([`Charities:`, <Money key="charity" money={src.charity} />]);
+    }
+    if (src.charityORG) {
+      parts.push([`CharityORG:`, <Money key="charityORG" money={src.charityORG} />]);
+    }
     if (src.gang) {
       parts.push([`Gang:`, <Money key="gang" money={src.gang} />]);
     }
@@ -165,6 +171,9 @@ function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
     }
     if (src.hospitalization) {
       parts.push([`Hospitalization:`, <Money key="hospital" money={src.hospitalization} />]);
+    }
+    if (src.lottery) {
+      parts.push([`Lottery:`, <Money key="lottery" money={src.lottery} />]);
     }
     if (src.infiltration) {
       parts.push([`Infiltration:`, <Money key="infiltration" money={src.infiltration} />]);
@@ -533,6 +542,38 @@ export function CharacterStats(): React.ReactElement {
                 },
               ]}
               color={Settings.theme.combat}
+            />
+            <MultiplierTable
+              rows={[
+                {
+                  mult: "Charity Success Chance",
+                  value: Player.mults.charity_success,
+                  effValue: Player.mults.charity_success * currentNodeMults.CharitySuccessRate,
+                },
+                {
+                  mult: "Charity Money",
+                  value: Player.mults.charity_money,
+                  effValue: Player.mults.charity_money * currentNodeMults.CharityMoney,
+                  color: Settings.theme.money,
+                },
+              ]}
+              color={Settings.theme.combat}
+            />
+            <MultiplierTable
+              rows={[
+                {
+                  mult: "Augmentation Reputation Cost",
+                  value: Player.mults.augmentation_rep,
+                  effValue: Player.mults.augmentation_rep * currentNodeMults.AugmentationRepCost,
+                },
+                {
+                  mult: "Augmentation Money Cost",
+                  value: Player.mults.augmentation_money,
+                  effValue: Player.mults.augmentation_money * currentNodeMults.AugmentationMoneyCost,
+                  color: Settings.theme.money,
+                },
+              ]}
+              color={Settings.theme.primary}
             />
             {Player.canAccessBladeburner() && currentNodeMults.BladeburnerRank > 0 && (
               <MultiplierTable

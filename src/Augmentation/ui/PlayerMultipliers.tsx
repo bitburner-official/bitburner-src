@@ -252,6 +252,19 @@ export function PlayerMultipliers(): React.ReactElement {
       bnMult: currentNodeMults.CrimeMoney,
       color: Settings.theme.money,
     },
+    {
+      mult: "Charity Success Chance",
+      current: Player.mults.charity_success,
+      augmented: Player.mults.charity_success * mults.charity_success,
+      color: Settings.theme.combat,
+    },
+    {
+      mult: "Charity Money",
+      current: Player.mults.charity_money,
+      augmented: Player.mults.charity_money * mults.charity_money,
+      bnMult: currentNodeMults.CharityMoney,
+      color: Settings.theme.money,
+    },
   ];
 
   if (Player.canAccessBladeburner() && currentNodeMults.BladeburnerRank > 0) {

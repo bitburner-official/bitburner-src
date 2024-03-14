@@ -46,6 +46,8 @@ export function findPurchasableAugs(this: Sleeve): Augmentation[] {
       "faction_rep",
       "crime_money",
       "crime_success",
+      "charity_money",
+      "charity_success",
       "work_money",
     ];
     for (const mult of validMults) {

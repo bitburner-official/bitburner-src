@@ -11,6 +11,7 @@ import {
 } from "@enums";
 
 import type { PlayerObject } from "./PlayerObject";
+import { mergeMultipliers } from "../../PersonObjects/Multipliers";
 import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
@@ -146,6 +147,7 @@ export function prestigeSourceFile(this: PlayerObject): void {
 
   this.gang = null;
   resetGangs();
+  this.charityORG = null;
   this.corporation = null;
   this.bladeburner = null;
 
@@ -406,6 +408,10 @@ export function reapplyAllAugmentations(this: PlayerObject, resetMultipliers = t
     }
     applyAugmentation(playerAug, true);
   }
+  //Do we have a charityORG?  If so, apply it's multipliers.
+  if (this.charityORG !== null) {
+    this.mults = mergeMultipliers(this.mults, this.charityORG.charityAugment);
+  }
 
   this.updateSkillLevels();
 }
@@ -571,6 +577,10 @@ export function giveAchievement(this: PlayerObject, achievementId: string): void
 
 export function getCasinoWinnings(this: PlayerObject): number {
   return this.moneySourceA.casino;
+}
+
+export function getLotteryWinnings(this: PlayerObject): number {
+  return this.moneySourceA.lottery;
 }
 
 export function canAccessCotMG(this: PlayerObject): boolean {

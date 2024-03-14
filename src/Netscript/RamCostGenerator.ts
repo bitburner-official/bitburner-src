@@ -63,6 +63,8 @@ export const RamCostConstants = {
 
   GangApiBase: 4,
 
+  CharityApiBase: 4,
+
   BladeburnerApiBase: 4,
 
   StanekWidth: 0.4,
@@ -193,6 +195,9 @@ const singularity = {
   commitCrime: SF4Cost(RamCostConstants.SingularityFn3),
   getCrimeChance: SF4Cost(RamCostConstants.SingularityFn3),
   getCrimeStats: SF4Cost(RamCostConstants.SingularityFn3),
+  performCharity: SF4Cost(RamCostConstants.SingularityFn3),
+  getCharityChance: SF4Cost(RamCostConstants.SingularityFn3),
+  getCharityStats: SF4Cost(RamCostConstants.SingularityFn3),
   getOwnedAugmentations: SF4Cost(RamCostConstants.SingularityFn3),
   getOwnedSourceFiles: SF4Cost(RamCostConstants.SingularityFn3),
   getAugmentationFactions: SF4Cost(RamCostConstants.SingularityFn3),
@@ -241,6 +246,51 @@ const gang = {
   setTerritoryWarfare: RamCostConstants.GangApiBase / 2,
   getChanceToWinClash: RamCostConstants.GangApiBase,
   getBonusTime: 0,
+  nextUpdate: RamCostConstants.CycleTiming,
+} as const;
+
+// Charity API
+const charityORG = {
+  createCharity: RamCostConstants.CharityApiBase / 4,
+  embezzlements: RamCostConstants.CharityApiBase / 4,
+  acceptEvent: RamCostConstants.CharityApiBase * 2,
+  abandonEvent: RamCostConstants.CharityApiBase * 4,
+  getPendingEvents: RamCostConstants.CharityApiBase * 4,
+  getCurrentEvents: RamCostConstants.CharityApiBase * 4,
+  getAttackEvents: RamCostConstants.CharityApiBase * 4,
+  hasCharity: RamCostConstants.CharityApiBase / 4,
+  getVolunteerNames: RamCostConstants.CharityApiBase / 4,
+  renameVolunteer: 0,
+  getCharityInfo: RamCostConstants.CharityApiBase / 2,
+  getVolunteerInfo: RamCostConstants.CharityApiBase / 2,
+  canRecruitVolunteer: RamCostConstants.CharityApiBase / 4,
+  prestigeForNextVolunteer: RamCostConstants.CharityApiBase / 4,
+  recruitVolunteer: RamCostConstants.CharityApiBase / 2,
+  getVolunteerTasks: RamCostConstants.CharityApiBase / 4,
+  getVolunteerTaskStats: RamCostConstants.CharityApiBase / 4,
+  setVolunteerTask: RamCostConstants.CharityApiBase / 2,
+  getEqNames: RamCostConstants.CharityApiBase / 4,
+  getEqCost: RamCostConstants.CharityApiBase / 2,
+  getEqType: RamCostConstants.CharityApiBase / 2,
+  getEqStats: RamCostConstants.CharityApiBase / 2,
+  purchaseEq: RamCostConstants.CharityApiBase,
+  ascendVolunteer: RamCostConstants.CharityApiBase,
+  getAscResult: RamCostConstants.CharityApiBase / 2,
+  getCharityBonusTime: 0,
+  useItem: RamCostConstants.CharityApiBase * 2,
+  luckyCancel: RamCostConstants.CharityApiBase,
+  luckyReset: RamCostConstants.CharityApiBase,
+  getRarity: RamCostConstants.CharityApiBase * 8,
+  getItems: RamCostConstants.CharityApiBase * 2,
+  getEffects: RamCostConstants.CharityApiBase * 4,
+  getMessages: RamCostConstants.CharityApiBase,
+  getCharityBanner: RamCostConstants.CharityApiBase * 4,
+  getStoredPieces: RamCostConstants.CharityApiBase * 4,
+  getActivePieces: RamCostConstants.CharityApiBase * 4,
+  activatePiece: RamCostConstants.CharityApiBase * 2,
+  luckyRemove: 0,
+  destroyPiece: 0,
+  spendKarma: RamCostConstants.CharityApiBase * 4,
   nextUpdate: RamCostConstants.CycleTiming,
 } as const;
 
@@ -332,6 +382,7 @@ const sleeve = {
   setToShockRecovery: RamCostConstants.SleeveBase,
   setToSynchronize: RamCostConstants.SleeveBase,
   setToCommitCrime: RamCostConstants.SleeveBase,
+  setToPerformCharity: RamCostConstants.SleeveBase,
   setToUniversityCourse: RamCostConstants.SleeveBase,
   travel: RamCostConstants.SleeveBase,
   setToCompanyWork: RamCostConstants.SleeveBase,
@@ -381,6 +432,17 @@ const grafting = {
   getAugmentationGraftTime: 3.75,
   getGraftableAugmentations: 5,
   graftAugmentation: 7.5,
+} as const;
+
+// Grafting API
+const lottery = {
+  getTickets: 0.1,
+  buyPick2Ticket: 0.1,
+  buyPick3Ticket: 0.1,
+  buyPick4Ticket: 0.1,
+  buyL649Ticket: 0.1,
+  buyKenoTicket: 0.1,
+  buyRandomTicket: 0.1,
 } as const;
 
 const corporation = {
@@ -457,6 +519,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   stock,
   singularity,
   gang,
+  charityORG,
   go,
   bladeburner,
   infiltration,
@@ -465,7 +528,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   stanek,
   ui,
   grafting,
-
+  lottery,
   sprintf: 0,
   vsprintf: 0,
   scan: RamCostConstants.Scan,
@@ -642,9 +705,21 @@ export const RamCosts: RamCostTree<NSFull> = {
       ascensionPointsGain: 0,
       ascensionMultiplier: 0,
     },
+    charityORG: {
+      prestigeGain: 0,
+      karmaGain: 0,
+      moneyGain: 0,
+      moneySpend: 0,
+      visibilityGain: 0,
+      terrorGain: 0,
+      ascensionPointsGainCharity: 0,
+      ascensionMultiplierCharity: 0,
+    },
     work: {
       crimeSuccessChance: 0,
       crimeGains: 0,
+      charitySuccessChance: 0,
+      charityGains: 0,
       gymGains: 0,
       universityGains: 0,
       factionGains: 0,

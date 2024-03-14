@@ -4,6 +4,7 @@ import type { Sleeve as NetscriptSleeve } from "@nsdefs";
 import { Player } from "@player";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { findCrime } from "../Crime/CrimeHelpers";
+import { findCharity } from "../Charity/CharityHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
@@ -62,6 +63,21 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       const crime = findCrime(crimeType);
       if (crime == null) return false;
       return Player.sleeves[sleeveNumber].commitCrime(crime.type);
+    },
+    setToPerformCharity: (ctx) => (_sleeveNumber, _charityType) => {
+      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const charityType = helpers.string(ctx, "charityType", _charityType);
+      if (Player.sourceFileLvl(15) < 1 && Player.bitNodeN !== 15) {
+        throw helpers.errorMessage(
+          ctx,
+          `You do not have access to Charitable Acts yet!  Get SF 15.1 in order to unlock outside of BN 15.`,
+        );
+      }
+      checkSleeveAPIAccess(ctx);
+      checkSleeveNumber(ctx, sleeveNumber);
+      const charity = findCharity(charityType);
+      if (charity == null) return false;
+      return Player.sleeves[sleeveNumber].performCharity(charity.type);
     },
     setToUniversityCourse: (ctx) => (_sleeveNumber, _universityName, _className) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);

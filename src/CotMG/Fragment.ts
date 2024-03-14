@@ -246,6 +246,16 @@ export function FragmentById(id: number): Fragment | null {
   );
   Fragments.push(
     new Fragment(
+      29, // id
+      Shapes.L,
+      FragmentType.Charity, // type
+      2, // power
+      1, // limit
+      Effect(FragmentType.Charity),
+    ),
+  );
+  Fragments.push(
+    new Fragment(
       30, // id
       Shapes.S,
       FragmentType.Bladeburner, // type

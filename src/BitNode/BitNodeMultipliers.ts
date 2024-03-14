@@ -48,8 +48,32 @@ export class BitNodeMultipliers {
   /** Influences the base money gained when the player commits a crime. */
   CrimeMoney = 1;
 
+  /** Influences the base experience gained for each ability when the player commits a charity. */
+  CharityExpGain = 1;
+
+  /** Influences the base money gained when the player commits a charity. */
+  CharityMoney = 1;
+
+  /** Percentage of unique augs that the charityORG has. */
+  CharityORGUniqueAugs = 1;
+
+  /** Charity earning. */
+  CharityORGSoftcap = 1;
+
+  /** Reduces charity event power, reduces the strength of all completed events and their associated rewards (Banners, Money, Bank, etc). Lowers all effects included in Softcap as well. */
+  CharityORGEventStrength = 1;
+
+  /** Alters how much money is embezzled. 5% increments */
+  CharityORGEmbezzleStrength = 1;
+
+  /** Alters how much learning the truth costs.  Base is 10m Karma */
+  CharityORGLearnTruth = 1;
+
   /** influences the success chance of committing crimes */
   CrimeSuccessRate = 1;
+
+  /** influences the success chance of performing ccharities */
+  CharitySuccessRate = 1;
 
   /** Influences how many Augmentations you need in order to get invited to the Daedalus faction */
   DaedalusAugsRequirement = 30;

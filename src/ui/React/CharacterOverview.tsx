@@ -36,6 +36,7 @@ import { isFactionWork } from "../../Work/FactionWork";
 import { ReputationRate } from "./ReputationRate";
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isCrimeWork } from "../../Work/CrimeWork";
+import { isCharityWork } from "../../Work/CharityWork";
 import { ActionIdentifier } from "../../Bladeburner/ActionIdentifier";
 import { Skills } from "../../PersonObjects/Skills";
 import { calculateSkillProgress } from "../../PersonObjects/formulas/skill";
@@ -346,6 +347,14 @@ function Work(): React.ReactElement {
 
     details = <>{Player.currentWork.crimeType}</>;
     header = <>You are attempting to {Player.currentWork.crimeType}</>;
+    innerText = <>{perc.toFixed(2)}%</>;
+  }
+  if (isCharityWork(Player.currentWork)) {
+    const charity = Player.currentWork.getCharity();
+    const perc = (Player.currentWork.unitCompleted / charity.time) * 100;
+
+    details = <>{Player.currentWork.charityType}</>;
+    header = <>You are attempting to {Player.currentWork.charityType}</>;
     innerText = <>{perc.toFixed(2)}%</>;
   }
   if (isClassWork(Player.currentWork)) {

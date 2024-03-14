@@ -25,6 +25,7 @@ import { AugmentationsRoot } from "../Augmentation/ui/AugmentationsRoot";
 import { DevMenuRoot } from "../DevMenu";
 import { BladeburnerRoot } from "../Bladeburner/ui/BladeburnerRoot";
 import { GangRoot } from "../Gang/ui/GangRoot";
+import { CharityORGRoot } from "../CharityORG/ui/CharityORGRoot";
 import { CorporationRoot } from "../Corporation/ui/CorporationRoot";
 import { InfiltrationRoot } from "../Infiltration/ui/InfiltrationRoot";
 import { GraftingRoot } from "../PersonObjects/Grafting/ui/GraftingRoot";
@@ -51,6 +52,7 @@ import { StaneksGiftRoot } from "../CotMG/ui/StaneksGiftRoot";
 import { staneksGift } from "../CotMG/Helper";
 import { CharacterOverview } from "./React/CharacterOverview";
 import { BladeburnerCinematic } from "../Bladeburner/ui/BladeburnerCinematic";
+import { LotteryStoreLocationInside } from "../Lottery/LotteryStoreLocationInside";
 import { Unclickable } from "../Exploits/Unclickable";
 import { Snackbar, SnackbarProvider } from "./React/Snackbar";
 import { LogBoxManager } from "./React/LogBoxManager";
@@ -238,6 +240,10 @@ export function GameRoot(): React.ReactElement {
       mainPage = <StaneksGiftRoot staneksGift={staneksGift} />;
       break;
     }
+    case Page.LotteryStoreLocationInside: {
+      mainPage = <LotteryStoreLocationInside />;
+      break;
+    }
     case Page.Stats: {
       mainPage = <CharacterStats />;
       break;
@@ -290,6 +296,10 @@ export function GameRoot(): React.ReactElement {
     }
     case Page.Gang: {
       mainPage = <GangRoot />;
+      break;
+    }
+    case Page.CharityORG: {
+      mainPage = <CharityORGRoot />;
       break;
     }
     case Page.Corporation: {

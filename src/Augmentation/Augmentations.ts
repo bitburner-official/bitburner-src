@@ -1133,6 +1133,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 1.01 + donationBonus,
       crime_money: 1.01 + donationBonus,
       crime_success: 1.01 + donationBonus,
+      charity_money: 1.01 + donationBonus,
+      charity_success: 1.01 + donationBonus,
       hacknet_node_money: 1.01 + donationBonus,
       hacknet_node_purchase_cost: 1 / (1.01 + donationBonus),
       hacknet_node_ram_cost: 1 / (1.01 + donationBonus),
@@ -1141,9 +1143,12 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       work_money: 1.01 + donationBonus,
       factions: Object.values(FactionName).filter(
         (factionName) =>
-          ![FactionName.ShadowsOfAnarchy, FactionName.Bladeburners, FactionName.ChurchOfTheMachineGod].includes(
-            factionName,
-          ),
+          ![
+            FactionName.ShadowsOfAnarchy,
+            FactionName.Bladeburners,
+            FactionName.Charity,
+            FactionName.ChurchOfTheMachineGod,
+          ].includes(factionName),
       ),
     },
     [AugmentationName.Neurolink]: {
@@ -1541,6 +1546,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 0.9,
       crime_money: 0.9,
       crime_success: 0.9,
+      charity_money: 0.9,
+      charity_success: 0.9,
       hacknet_node_money: 0.9,
       hacknet_node_purchase_cost: 1.1,
       hacknet_node_ram_cost: 1.1,
@@ -1579,6 +1586,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 0.95 / 0.9,
       crime_money: 0.95 / 0.9,
       crime_success: 0.95 / 0.9,
+      charity_money: 0.95 / 0.9,
+      charity_success: 0.95 / 0.9,
       hacknet_node_money: 0.95 / 0.9,
       hacknet_node_purchase_cost: 1.05 / 1.1,
       hacknet_node_ram_cost: 1.05 / 1.1,
@@ -1618,6 +1627,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 1 / 0.95,
       crime_money: 1 / 0.95,
       crime_success: 1 / 0.95,
+      charity_money: 1 / 0.95,
+      charity_success: 1 / 0.95,
       hacknet_node_money: 1 / 0.95,
       hacknet_node_purchase_cost: 1 / 1.05,
       hacknet_node_ram_cost: 1 / 1.05,

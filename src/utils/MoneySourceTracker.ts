@@ -11,6 +11,8 @@ export class MoneySourceTracker {
   codingcontract = 0;
   corporation = 0;
   crime = 0;
+  charity = 0;
+  charityORG = 0;
   gang = 0;
   gang_expenses = 0;
   hacking = 0;
@@ -18,6 +20,7 @@ export class MoneySourceTracker {
   hacknet_expenses = 0;
   hospitalization = 0;
   infiltration = 0;
+  lottery = 0;
   sleeves = 0;
   stock = 0;
   total = 0;

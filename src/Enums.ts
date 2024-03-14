@@ -5,6 +5,7 @@ export * from "./Bladeburner/Enums";
 export * from "./Company/Enums";
 export * from "./Corporation/Enums";
 export * from "./Crime/Enums";
+export * from "./Charity/Enums";
 export * from "./Faction/Enums";
 export * from "./Go/Enums";
 export * from "./Literature/Enums";
