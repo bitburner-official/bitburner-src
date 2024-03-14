@@ -3990,15 +3990,16 @@ export interface Go {
    * "#" are dead nodes that are not part of the subnet. (They are not territory nor open nodes.)
    *
    * For example, a 5x5 board might look like this:
-```
-   [
-      "XX.O.",
-      "X..OO",
-      ".XO..",
-      "XXO.#",
-      ".XO.#",
-   ]
-```
+   *
+   *  <pre lang="javascript">
+   *    [
+   *       "XX.O.",
+   *       "X..OO",
+   *       ".XO..",
+   *       "XXO.#",
+   *       ".XO.#",
+   *    ]
+   * </pre>
    *
    * Each string represents a vertical column on the board, and each character in the string represents a point.
    *
@@ -4060,11 +4061,9 @@ export interface Go {
      * Shows if each point on the board is a valid move for the player.
      *
      * The true/false validity of each move can be retrieved via the X and Y coordinates of the move.
-```
-     const validMoves = ns.go.analysis.getValidMoves();
-
-     const moveIsValid = validMoves[x][y];
-```
+     *      `const validMoves = ns.go.analysis.getValidMoves();`
+     *
+     *      `const moveIsValid = validMoves[x][y];`
      *
      * Note that the [0][0] point is shown on the bottom-left on the visual board (as is traditional), and each
      * string represents a vertical column on the board. In other words, the printed example above can be understood to
@@ -4084,16 +4083,15 @@ export interface Go {
      *
      * For example, a 5x5 board might look like this. There is a large chain #1 on the left side, smaller chains
      * 2 and 3 on the right, and a large chain 0 taking up the center of the board.
-     *
-```
-      [
-        [   0,0,0,3,4],
-        [   1,0,0,3,3],
-        [   1,1,0,0,0],
-        [null,1,0,2,2],
-        [null,1,0,2,5],
-      ]
-```
+     * <pre lang="javascript">
+     *       [
+     *         [   0,0,0,3,4],
+     *         [   1,0,0,3,3],
+     *         [   1,1,0,0,0],
+     *         [null,1,0,2,2],
+     *         [null,1,0,2,5],
+     *       ]
+     * </pre>
      * @remarks
      * RAM cost: 16 GB
      * (This is intentionally expensive; you can derive this info from just getBoardState() )
@@ -4108,15 +4106,15 @@ export interface Go {
      * For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one
      * in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!
      *
-```
-     [
-        [-1, 5,-1,-1, 2],
-        [ 5, 5,-1,-1,-1],
-        [-1,-1, 4,-1,-1],
-        [ 3,-1,-1, 3, 1],
-        [ 3,-1,-1, 3, 1],
-     ]
-```
+     * <pre lang="javascript">
+     *      [
+     *         [-1, 5,-1,-1, 2],
+     *         [ 5, 5,-1,-1,-1],
+     *         [-1,-1, 4,-1,-1],
+     *         [ 3,-1,-1, 3, 1],
+     *         [ 3,-1,-1, 3, 1],
+     *      ]
+     * </pre>
      *
      * @remarks
      * RAM cost: 16 GB
@@ -4132,15 +4130,16 @@ export interface Go {
      * Filled points of any color are indicated with '.'
      *
      * In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center:
-```
-  [
-     "OO..?",
-     "OO.?.",
-     "O.?.X",
-     ".?.XX",
-     "?..X#",
-  ]
-```
+     *
+     * <pre lang="javascript">
+     *   [
+     *      "OO..?",
+     *      "OO.?.",
+     *      "O.?.X",
+     *      ".?.XX",
+     *      "?..X#",
+     *   ]
+     * </pre>
      *
      * @remarks
      * RAM cost: 16 GB
