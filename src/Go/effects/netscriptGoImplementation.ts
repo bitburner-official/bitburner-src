@@ -75,7 +75,7 @@ export function validateMove(error: (s: string) => void, x: number, y: number, m
     error(`The point ${x},${y} does not have a router on it, so you cannot clear this point with removeRouter().`);
   }
   if (point && check.requireOfflineNode) {
-    error(`The node ${x},${y} is not offline, so you cannot repair the node. (Attempted to repairOfflineNode)`);
+    error(`The node ${x},${y} is not offline, so you cannot repair the node.`);
   }
 }
 
