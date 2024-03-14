@@ -124,23 +124,18 @@ class BitburnerSaveObject {
     const savedOn = new Date().getTime();
     Player.lastSave = savedOn;
     const saveData = await this.getSaveData();
-    save(saveData)
-      .then(() => {
-        const electronGameData: ElectronGameData = {
-          playerIdentifier: Player.identifier,
-          fileName: this.getSaveFileName(),
-          save: saveData,
-          savedOn,
-        };
-        pushGameSaved(electronGameData);
+    await save(saveData);
+    const electronGameData: ElectronGameData = {
+      playerIdentifier: Player.identifier,
+      fileName: this.getSaveFileName(),
+      save: saveData,
+      savedOn,
+    };
+    pushGameSaved(electronGameData);
 
-        if (emitToastEvent) {
-          SnackbarEvents.emit("Game Saved!", ToastVariant.INFO, 2000);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    if (emitToastEvent) {
+      SnackbarEvents.emit("Game Saved!", ToastVariant.INFO, 2000);
+    }
   }
 
   getSaveFileName(isRecovery = false): string {
@@ -160,11 +155,13 @@ class BitburnerSaveObject {
   }
 
   async importGame(saveData: SaveData, reload = true): Promise<void> {
-    if (!saveData || saveData === "" || saveData.length === 0) throw new Error("Invalid import string");
-    return save(saveData).then(() => {
-      if (reload) setTimeout(() => location.reload(), 1000);
-      return Promise.resolve();
-    });
+    if (!saveData || saveData.length === 0) {
+      throw new Error("Invalid import string");
+    }
+    await save(saveData);
+    if (reload) {
+      setTimeout(() => location.reload(), 1000);
+    }
   }
 
   async getSaveDataFromFile(files: FileList | null): Promise<SaveData> {
@@ -181,28 +178,27 @@ class BitburnerSaveObject {
   }
 
   async getImportDataFromSaveData(saveData: SaveData): Promise<ImportData> {
-    if (!saveData || saveData === "" || saveData.length === 0) throw new Error("Invalid save data");
+    if (!saveData || saveData.length === 0) throw new Error("Invalid save data");
 
-    let newSave;
+    let decodedSaveData;
     try {
-      newSave = await decodeSaveData(saveData);
-      newSave = newSave.trim();
+      decodedSaveData = await decodeSaveData(saveData);
     } catch (error) {
       console.error(error); // We'll handle below
     }
 
-    if (!newSave || newSave === "") {
+    if (!decodedSaveData || decodedSaveData === "") {
       return Promise.reject(new Error("Save game is invalid"));
     }
 
-    let parsedSave;
+    let parsedSaveData;
     try {
-      parsedSave = JSON.parse(newSave);
+      parsedSaveData = JSON.parse(decodedSaveData);
     } catch (error) {
       console.error(error); // We'll handle below
     }
 
-    if (!parsedSave || parsedSave.ctor !== "BitburnerSaveObject" || !parsedSave.data) {
+    if (!parsedSaveData || parsedSaveData.ctor !== "BitburnerSaveObject" || !parsedSaveData.data) {
       return Promise.reject(new Error("Save game did not seem valid"));
     }
 
@@ -210,7 +206,7 @@ class BitburnerSaveObject {
       saveData: saveData,
     };
 
-    const importedPlayer = loadPlayer(parsedSave.data.PlayerSave);
+    const importedPlayer = loadPlayer(parsedSaveData.data.PlayerSave);
 
     const playerData: ImportPlayerData = {
       identifier: importedPlayer.identifier,
