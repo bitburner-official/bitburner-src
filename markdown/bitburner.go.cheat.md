@@ -16,8 +16,8 @@ cheat: {
       y: number,
     ): Promise<{
       type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
+      x: number | null;
+      y: number | null;
       success: boolean;
     }>;
     playTwoMoves(
@@ -27,8 +27,8 @@ cheat: {
       y2: number,
     ): Promise<{
       type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
+      x: number | null;
+      y: number | null;
       success: boolean;
     }>;
 
@@ -37,8 +37,8 @@ cheat: {
       y: number,
     ): Promise<{
       type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
+      x: number | null;
+      y: number | null;
       success: boolean;
     }>;
 
@@ -47,8 +47,8 @@ cheat: {
       y: number,
     ): Promise<{
       type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
+      x: number | null;
+      y: number | null;
       success: boolean;
     }>;
   };

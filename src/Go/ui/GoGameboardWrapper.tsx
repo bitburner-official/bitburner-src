@@ -3,11 +3,10 @@ import type { BoardState } from "../Types";
 import React, { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 
-import { GoOpponent, GoColor, GoPlayType, GoValidity, ToastVariant } from "@enums";
+import { GoOpponent, GoColor, GoValidity, ToastVariant, GoPlayType } from "@enums";
 import { Go, GoEvents } from "../Go";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { getNewBoardState, getStateCopy, makeMove, passTurn, updateCaptures } from "../boardState/boardState";
-import { getMove } from "../boardAnalysis/goAI";
 import { bitverseArt, weiArt } from "../boardState/asciiArt";
 import { getScore, resetWinstreak } from "../boardAnalysis/scoring";
 import { evaluateIfMoveIsValid, getAllValidMoves, boardFromSimpleBoard } from "../boardAnalysis/boardAnalysis";
@@ -19,6 +18,7 @@ import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 import { CorruptableText } from "../../ui/React/CorruptableText";
+import { getAIMove } from "../effects/netscriptGoImplementation";
 
 interface GoGameboardWrapperProps {
   showInstructions: () => void;
@@ -36,8 +36,7 @@ interface GoGameboardWrapperProps {
 export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps): React.ReactElement {
   const rerender = useRerender();
   useEffect(() => {
-    const unsubscribe = GoEvents.subscribe(rerender);
-    return unsubscribe;
+    return GoEvents.subscribe(rerender);
   }, [rerender]);
 
   const boardState = Go.currentGame;
@@ -116,10 +115,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
   async function takeAiTurn(boardState: BoardState) {
     setWaitingOnAI(true);
-    const move = await getMove(boardState, GoColor.white, opponent);
-
-    // If a new game has started while this async code ran, just drop it
-    if (boardState !== Go.currentGame) return;
+    const move = await getAIMove(boardState);
 
     if (move.type === GoPlayType.pass) {
       SnackbarEvents.emit(`The opponent passes their turn; It is now your turn to move.`, ToastVariant.WARNING, 4000);
@@ -131,10 +127,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
       setScoreOpen(true);
       return;
     }
-
-    const didUpdateBoard = makeMove(boardState, move.x, move.y, GoColor.white);
-
-    if (didUpdateBoard) setWaitingOnAI(false);
+    setWaitingOnAI(false);
   }
 
   function newSubnet() {
@@ -150,7 +143,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
       resetWinstreak(boardState.ai, false);
     }
 
-    Go.currentGame = getNewBoardState(newBoardSize, newOpponent, false);
+    Go.currentGame = getNewBoardState(newBoardSize, newOpponent, true);
     rerender();
   }
 

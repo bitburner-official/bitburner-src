@@ -1,7 +1,7 @@
 import type { Board, BoardState, PointState } from "../Types";
 
 import { Player } from "@player";
-import { GoOpponent, GoColor } from "@enums";
+import { GoOpponent, GoColor, GoPlayType } from "@enums";
 import { newOpponentStats } from "../Constants";
 import { getAllChains, getPlayerNeighbors } from "./boardAnalysis";
 import { getKomi } from "./goAI";
@@ -46,6 +46,13 @@ export function endGoGame(boardState: BoardState) {
   if (boardState.previousPlayer === null) {
     return;
   }
+  Go.nextTurn = Promise.resolve({
+    type: GoPlayType.gameOver,
+    x: null,
+    y: null,
+    success: true,
+  });
+
   boardState.previousPlayer = null;
   const statusToUpdate = getOpponentStats(boardState.ai);
   statusToUpdate.favor = statusToUpdate.favor ?? 0;

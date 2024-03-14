@@ -8,6 +8,7 @@ import {
   cheatRepairOfflineNode,
   getChains,
   getControlledEmptyNodes,
+  getGameState,
   getLiberties,
   getValidMoves,
   handlePassTurn,
@@ -72,6 +73,24 @@ describe("Netscript Go API unit tests", () => {
       const result = simpleBoardFromBoard(boardState.board);
 
       expect(result).toEqual(board);
+    });
+  });
+
+  describe("getGameState() tests", () => {
+    it("should correctly retrieve the current game state", async () => {
+      const board = ["OXX..", ".....", ".....", "...XX", "...X."];
+      const boardState = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.black);
+      boardState.previousBoard = ["OX..", ".....", ".....", "...XX", "...X."];
+      Go.currentGame = boardState;
+
+      const result = getGameState();
+
+      expect(result).toEqual({
+        currentPlayer: GoColor.white,
+        whiteScore: 6.5,
+        blackScore: 6,
+        previousMove: [0, 2],
+      });
     });
   });
 

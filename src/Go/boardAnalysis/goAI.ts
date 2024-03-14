@@ -96,14 +96,14 @@ function handleNoMoveFound(boardState: BoardState, player: GoColor) {
   if (remainingTerritory > 0 && boardState.passCount < 2) {
     return {
       type: GoPlayType.pass,
-      x: -1,
-      y: -1,
+      x: null,
+      y: null,
     };
   } else {
     return {
       type: GoPlayType.gameOver,
-      x: -1,
-      y: -1,
+      x: null,
+      y: null,
     };
   }
 }

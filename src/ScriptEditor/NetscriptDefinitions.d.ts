@@ -1058,9 +1058,6 @@ export type SleeveTask =
   | SleeveSupportTask
   | SleeveSynchroTask;
 
-/** @public */
-type GoOpponent = "Netburners" | "Slum Snakes" | "The Black Hand" | "Tetrads" | "Daedalus" | "Illuminati";
-
 /** Object representing a port. A port is a serialized queue.
  * @public */
 export interface NetscriptPort {
@@ -3923,6 +3920,9 @@ export interface Gang {
   nextUpdate(): Promise<number>;
 }
 
+/** @public */
+type GoOpponent = "Netburners" | "Slum Snakes" | "The Black Hand" | "Tetrads" | "Daedalus" | "Illuminati";
+
 /**
  * IPvGO api
  * @public
@@ -3942,8 +3942,8 @@ export interface Go {
     y: number,
   ): Promise<{
     type: "invalid" | "move" | "pass" | "gameOver";
-    x: number;
-    y: number;
+    x: number | null;
+    y: number | null;
     success: boolean;
   }>;
 
@@ -3962,8 +3962,26 @@ export interface Go {
    */
   passTurn(): Promise<{
     type: "invalid" | "move" | "pass" | "gameOver";
-    x: number;
-    y: number;
+    x: number | null;
+    y: number | null;
+    success: boolean;
+  }>;
+
+  /**
+   *  Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable.
+   *  x:0 y:0 represents the bottom-left corner of the board in the UI.
+   *
+   * @param logOpponentMove optional, if false prevents logging opponent move
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @returns a promise that contains if your last move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+   */
+  opponentNextTurn(logOpponentMove: boolean = true): Promise<{
+    type: "invalid" | "move" | "pass" | "gameOver";
+    x: number | null;
+    y: number | null;
     success: boolean;
   }>;
 
@@ -3994,6 +4012,24 @@ export interface Go {
    * RAM cost: 4 GB
    */
   getBoardState(): string[];
+
+  /**
+   * Returns the color of the current player, or 'None' if the game is over.
+   * @returns "White" | "Black" | "None"
+   */
+  getCurrentPlayer(): "White" | "Black" | "None";
+
+  /**
+   * Gets the status of the current game.
+   * Shows the current player, current score, and the previous move coordinates.
+   * Previous move coordinates will be [-1, -1] for a pass, or if there are no prior moves.
+   */
+  getGameState(): {
+    currentPlayer: "White" | "Black" | "None";
+    whiteScore: number;
+    blackScore: number;
+    previousMove: [number, number] | null;
+  };
 
   /**
    * Returns the name of the opponent faction in the current subnet.
@@ -4148,8 +4184,8 @@ export interface Go {
       y: number,
     ): Promise<{
       type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
+      x: number | null;
+      y: number | null;
       success: boolean;
     }>;
     /**
@@ -4174,8 +4210,8 @@ export interface Go {
       y2: number,
     ): Promise<{
       type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
+      x: number | null;
+      y: number | null;
       success: boolean;
     }>;
 
@@ -4198,8 +4234,8 @@ export interface Go {
       y: number,
     ): Promise<{
       type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
+      x: number | null;
+      y: number | null;
       success: boolean;
     }>;
 
@@ -4223,8 +4259,8 @@ export interface Go {
       y: number,
     ): Promise<{
       type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
+      x: number | null;
+      y: number | null;
       success: boolean;
     }>;
   };
