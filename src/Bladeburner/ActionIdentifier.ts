@@ -1,26 +1,34 @@
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import {
+  BladeActionType,
+  BladeBlackOpName,
+  BladeContractName,
+  BladeGeneralActionName,
+  BladeOperationName,
+} from "@enums";
+import { getEnumHelper } from "../utils/EnumHelper";
+import { assertLoadingType } from "../utils/JSONReviver";
 
-interface IParams {
-  name?: string;
-  type?: number;
+export type ActionIdentifier =
+  | { type: BladeActionType.blackOp; name: BladeBlackOpName }
+  | { type: BladeActionType.contract; name: BladeContractName }
+  | { type: BladeActionType.operation; name: BladeOperationName }
+  | { type: BladeActionType.general; name: BladeGeneralActionName };
+
+/** Returns null if the identifier is not valid */
+export function loadActionIdentifier(identifier: unknown): ActionIdentifier | null {
+  if (!identifier || typeof identifier !== "object") return null;
+  assertLoadingType<ActionIdentifier>(identifier);
+  if (getEnumHelper("BladeBlackOpName").isMember(identifier.name)) {
+    return { type: BladeActionType.blackOp, name: identifier.name };
+  }
+  if (getEnumHelper("BladeContractName").isMember(identifier.name)) {
+    return { type: BladeActionType.contract, name: identifier.name };
+  }
+  if (getEnumHelper("BladeOperationName").isMember(identifier.name)) {
+    return { type: BladeActionType.operation, name: identifier.name };
+  }
+  if (getEnumHelper("BladeGeneralActionName").isMember(identifier.name)) {
+    return { type: BladeActionType.general, name: identifier.name };
+  }
+  return null;
 }
-
-export class ActionIdentifier {
-  name = "";
-  type = -1;
-
-  constructor(params: IParams = {}) {
-    if (params.name) this.name = params.name;
-    if (params.type) this.type = params.type;
-  }
-
-  toJSON(): IReviverValue {
-    return Generic_toJSON("ActionIdentifier", this);
-  }
-
-  static fromJSON(value: IReviverValue): ActionIdentifier {
-    return Generic_fromJSON(ActionIdentifier, value.data);
-  }
-}
-
-constructorsForReviver.ActionIdentifier = ActionIdentifier;

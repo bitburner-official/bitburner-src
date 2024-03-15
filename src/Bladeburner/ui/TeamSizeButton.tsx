@@ -1,11 +1,13 @@
+import type { BlackOperation } from "../BlackOperation";
+import type { Operation } from "../Operation";
+
 import React, { useState } from "react";
-import { Operation } from "../Operation";
 import { Bladeburner } from "../Bladeburner";
 import { TeamSizeModal } from "./TeamSizeModal";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import Button from "@mui/material/Button";
 interface IProps {
-  action: Operation;
+  action: Operation | BlackOperation;
   bladeburner: Bladeburner;
 }
 export function TeamSizeButton(props: IProps): React.ReactElement {

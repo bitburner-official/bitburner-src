@@ -59,30 +59,12 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "bladeburner": {
       "ctor": "Bladeburner",
       "data": {
-        "action": {
-          "ctor": "ActionIdentifier",
-          "data": {
-            "name": "",
-            "type": 1,
-          },
-        },
+        "action": null,
         "actionTimeCurrent": 0,
         "actionTimeOverflow": 0,
         "actionTimeToComplete": 0,
-        "automateActionHigh": {
-          "ctor": "ActionIdentifier",
-          "data": {
-            "name": "",
-            "type": 1,
-          },
-        },
-        "automateActionLow": {
-          "ctor": "ActionIdentifier",
-          "data": {
-            "name": "",
-            "type": 1,
-          },
-        },
+        "automateActionHigh": null,
+        "automateActionLow": null,
         "automateEnabled": false,
         "automateThreshHigh": 0,
         "automateThreshLow": 0,

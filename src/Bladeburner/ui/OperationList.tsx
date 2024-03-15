@@ -12,7 +12,7 @@ export function OperationList(props: IProps): React.ReactElement {
   return (
     <>
       {names.map((name: string) => (
-        <OperationElem key={name} bladeburner={props.bladeburner} action={operations[name]} />
+        <OperationElem key={name} bladeburner={props.bladeburner} operation={operations[name]} />
       ))}
     </>
   );

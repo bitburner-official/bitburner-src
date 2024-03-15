@@ -3,7 +3,13 @@ import type { Action } from "../Bladeburner/Action";
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
 import { Player } from "@player";
-import { BladeBlackOpName } from "@enums";
+import {
+  BladeBlackOpName,
+  BladeContractName,
+  BladeGeneralActionName,
+  BladeOperationName,
+  BladeSkillName,
+} from "@enums";
 import { Bladeburner, BladeburnerPromise } from "../Bladeburner/Bladeburner";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { BlackOperation } from "../Bladeburner/BlackOperation";
@@ -44,12 +50,12 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   return {
     inBladeburner: () => () => !!Player.bladeburner,
     getContractNames: (ctx) => () => {
-      const bladeburner = getBladeburner(ctx);
-      return bladeburner.getContractNamesNetscriptFn();
+      getBladeburner(ctx);
+      return Object.values(BladeContractName);
     },
     getOperationNames: (ctx) => () => {
-      const bladeburner = getBladeburner(ctx);
-      return bladeburner.getOperationNamesNetscriptFn();
+      getBladeburner(ctx);
+      return Object.values(BladeOperationName);
     },
     getBlackOpNames: (ctx) => () => {
       getBladeburner(ctx);
@@ -67,12 +73,12 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       return action.reqdRank;
     },
     getGeneralActionNames: (ctx) => () => {
-      const bladeburner = getBladeburner(ctx);
-      return bladeburner.getGeneralActionNamesNetscriptFn();
+      getBladeburner(ctx);
+      return Object.values(BladeGeneralActionName);
     },
     getSkillNames: (ctx) => () => {
-      const bladeburner = getBladeburner(ctx);
-      return bladeburner.getSkillNamesNetscriptFn();
+      getBladeburner(ctx);
+      return Object.values(BladeSkillName);
     },
     startAction: (ctx) => (_type, _name) => {
       const type = helpers.string(ctx, "type", _type);
@@ -90,7 +96,9 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     getCurrentAction: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
-      return bladeburner.getTypeAndNameFromActionId(bladeburner.action);
+      // Temporary bad return type to not be an API break (idle should just return null)
+      if (!bladeburner.action) return { type: "Idle", name: "Idle" };
+      return { ...bladeburner.action };
     },
     getActionTime: (ctx) => (_type, _name) => {
       const type = helpers.string(ctx, "type", _type);

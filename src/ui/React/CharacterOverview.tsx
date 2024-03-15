@@ -240,10 +240,9 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
   );
 }
 
-function ActionText(props: { action: ActionIdentifier }): React.ReactElement {
+function ActionText({ action }: { action: ActionIdentifier }): React.ReactElement {
   const bladeburner = Player.bladeburner;
   if (!bladeburner) return <></>;
-  const action = bladeburner.getTypeAndNameFromActionId(props.action);
   return (
     <Typography>
       {action.type}: {action.name}
@@ -262,9 +261,7 @@ function BladeburnerText(): React.ReactElement {
   const action = Player.bladeburner?.action;
   return useMemo(
     () =>
-      //Action type 1 is Idle, see ActionTypes.ts
-      //TODO 2.3: Revamp typing in bladeburner
-      !action || action.type === 1 ? (
+      !action ? (
         <></>
       ) : (
         <>

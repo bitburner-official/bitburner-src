@@ -1,18 +1,28 @@
-import type { BladeBlackOpName } from "@enums";
-import { Operation, IOperationParams } from "./Operation";
+import { BladeBlackOpName } from "@enums";
+import { Action, IActionParams } from "./Action";
+import { operationSkillSuccessBonus, operationTeamSuccessBonus } from "./Operation";
 
-export class BlackOperation extends Operation {
+interface BlackOpParams {
+  name: BladeBlackOpName;
+  reqdRank: number;
+  desc: string;
+  id: number;
+}
+
+export class BlackOperation extends Action {
   name: BladeBlackOpName;
   id: number;
-  // TODO temporary - desc will be moved higher up in the class hierarchy after further changes in this PR
+  // TODO temporary - desc will be moved to action constructor after further changes in this PR
   desc: string;
-  constructor(params: IOperationParams & { name: BladeBlackOpName; desc: string; id: number }) {
+  reqdRank: number;
+  teamCount = 0;
+  constructor(params: IActionParams & BlackOpParams) {
     super(params);
     this.name = params.name;
     this.count = 1;
-    /** This blackOp's index in the ordered array */
+    this.reqdRank = params.reqdRank;
     this.id = params.id;
-    // TODO temporary - this will be moved higher up in the class hierarchy after further changes in this PR
+    // TODO temporary - this will be moved to action constructor after further changes in this PR
     this.desc = params.desc;
   }
 
@@ -28,4 +38,6 @@ export class BlackOperation extends Operation {
   getChaosDifficultyBonus(/*inst: Bladeburner, params: ISuccessChanceParams*/): number {
     return 1;
   }
+  getTeamSuccessBonus = operationTeamSuccessBonus;
+  getActionTypeSkillSuccessBonus = operationSkillSuccessBonus;
 }

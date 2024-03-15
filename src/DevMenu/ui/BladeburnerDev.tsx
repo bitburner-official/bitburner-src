@@ -19,6 +19,7 @@ import { CityName } from "@enums";
 import { Skills as AllSkills } from "../../Bladeburner/Skills";
 import { SkillNames } from "../../Bladeburner/data/SkillNames";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 const bigNumber = 1e27;
 
@@ -117,6 +118,7 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
   const AllOperations = bladeburner.operations;
   const [operationTarget, setOperation] = useState(AllOperations.Investigation.name);
   function setOperationDropdown(event: SelectChangeEvent): void {
+    if (!getEnumHelper("BladeOperationName").isMember(event.target.value)) return;
     setOperation(event.target.value);
   }
   const modifyOperationLevel = (modifier: number) => (levelchange: number) => {

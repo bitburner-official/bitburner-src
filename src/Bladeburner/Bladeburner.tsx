@@ -1,8 +1,16 @@
 import type { PromisePair } from "../Types/Promises";
-import { AugmentationName, BladeBlackOpName, CityName, FactionName } from "@enums";
+import {
+  AugmentationName,
+  BladeActionType,
+  BladeBlackOpName,
+  BladeContractName,
+  BladeGeneralActionName,
+  BladeOperationName,
+  CityName,
+  FactionName,
+} from "@enums";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { ActionIdentifier } from "./ActionIdentifier";
-import { ActionTypes } from "./data/ActionTypes";
 import { Growths } from "./data/Growths";
 import { BlackOperations, blackOpsArray } from "./BlackOperations";
 import { BlackOperation } from "./BlackOperation";
@@ -67,9 +75,7 @@ export class Bladeburner {
   actionTimeCurrent = 0;
   actionTimeOverflow = 0;
 
-  action: ActionIdentifier = new ActionIdentifier({
-    type: ActionTypes.Idle,
-  });
+  action: ActionIdentifier | null = null;
 
   cities = createEnumKeyedRecord(CityName, (name) => new City(name));
   city = CityName.Sector12;
@@ -90,13 +96,9 @@ export class Bladeburner {
     events: true,
   };
   automateEnabled = false;
-  automateActionHigh: ActionIdentifier = new ActionIdentifier({
-    type: ActionTypes.Idle,
-  });
+  automateActionHigh: ActionIdentifier | null = null;
   automateThreshHigh = 0;
-  automateActionLow: ActionIdentifier = new ActionIdentifier({
-    type: ActionTypes.Idle,
-  });
+  automateActionLow: ActionIdentifier | null = null;
   automateThreshLow = 0;
   consoleHistory: string[] = [];
   consoleLogs: string[] = ["Bladeburner Console", "Type 'help' to see console commands"];
@@ -128,20 +130,15 @@ export class Bladeburner {
     return { name: blackOp.name, rank: blackOp.reqdRank };
   }
 
-  canAttemptBlackOp(actionId: ActionIdentifier): BlackOpsAttempt {
-    // temporary TODO address this later in typesafety PR. If we're calling this it should already be typechecked.
-    if (!getEnumHelper("BladeBlackOpName").isMember(actionId.name)) {
-      throw new Error("Invalid call to canAttemptBlackOp");
-    }
-
-    const blackOp = BlackOperations[actionId.name];
+  canAttemptBlackOp(blackOpName: BladeBlackOpName): BlackOpsAttempt {
+    const blackOp = BlackOperations[blackOpName];
     // Don't repeat BlackOps that are already done
     if (this.numBlackOpsComplete > blackOp.id) {
       return { error: "Tried to start a Black Operation that had already been completed" };
     }
 
     if (blackOp.reqdRank > this.rank) {
-      return { error: "Tried to start a Black Operation without the rank requirement" };
+      return { error: "Tried to start a Black Operation without meeting the rank requirement" };
     }
 
     // Can't start a BlackOp if you haven't done the one before it
@@ -154,17 +151,17 @@ export class Bladeburner {
 
   /** This function is only for the player. Sleeves use their own functions to perform blade work.
    *  Todo: partial unification of player and sleeve methods? */
-  startAction(actionId: ActionIdentifier): void {
-    if (actionId == null) return;
+  startAction(actionId: ActionIdentifier | null): void {
+    if (actionId == null) {
+      return this.resetAction();
+    }
     this.action = actionId;
     this.actionTimeCurrent = 0;
     switch (actionId.type) {
-      case ActionTypes.Idle:
-        this.actionTimeToComplete = 0;
-        break;
-      case ActionTypes.Contract:
+      case BladeActionType.contract:
         try {
-          const action = this.getActionObject(actionId);
+          const action = this.contracts[actionId.name];
+          // Temp, remove once this is fully typesafe (contracts are still string-keyed)
           if (action == null) {
             throw new Error("Failed to get Contract Object for: " + actionId.name);
           }
@@ -176,9 +173,10 @@ export class Bladeburner {
           exceptionAlert(e);
         }
         break;
-      case ActionTypes.Operation: {
+      case BladeActionType.operation:
         try {
-          const action = this.getActionObject(actionId);
+          const action = this.operations[actionId.name];
+          // Temp, remove once this is fully typesafe (operations are still string-keyed)
           if (action == null) {
             throw new Error("Failed to get Operation Object for: " + actionId.name);
           }
@@ -193,11 +191,9 @@ export class Bladeburner {
           exceptionAlert(e);
         }
         break;
-      }
-      case ActionTypes.BlackOp:
-      case ActionTypes.BlackOperation: {
+      case BladeActionType.blackOp:
         try {
-          const testBlackOp = this.canAttemptBlackOp(actionId);
+          const testBlackOp = this.canAttemptBlackOp(actionId.name);
           if (!testBlackOp.isAvailable) {
             this.resetAction();
             this.log(`Error: ${testBlackOp.error}`);
@@ -211,22 +207,28 @@ export class Bladeburner {
           exceptionAlert(e);
         }
         break;
+      case BladeActionType.general: {
+        switch (actionId.name) {
+          case BladeGeneralActionName.recruitment:
+            this.actionTimeToComplete = this.getRecruitmentTime(Player);
+            return;
+          case BladeGeneralActionName.training:
+          case BladeGeneralActionName.fieldAnalysis:
+            this.actionTimeToComplete = 30;
+            return;
+          case BladeGeneralActionName.diplomacy:
+          case BladeGeneralActionName.hyperbolicRegen:
+          case BladeGeneralActionName.inciteViolence:
+            this.actionTimeToComplete = 60;
+            return;
+        }
+        // Typecheck ensures it is impossible to reach this code
+        const __check: never = actionId;
+        break;
       }
-      case ActionTypes.Recruitment:
-        this.actionTimeToComplete = this.getRecruitmentTime(Player);
-        break;
-      case ActionTypes.Training:
-      case ActionTypes.FieldAnalysis:
-      case ActionTypes["Field Analysis"]:
-        this.actionTimeToComplete = 30;
-        break;
-      case ActionTypes.Diplomacy:
-      case ActionTypes["Hyperbolic Regeneration Chamber"]:
-      case ActionTypes["Incite Violence"]:
-        this.actionTimeToComplete = 60;
-        break;
-      default:
-        throw new Error("Invalid Action Type in bladeburner.startAction(): " + actionId.type);
+      default: {
+        const __check: never = actionId;
+      }
     }
   }
 
@@ -279,7 +281,7 @@ export class Bladeburner {
   }
 
   resetAction(): void {
-    this.action = new ActionIdentifier({ type: ActionTypes.Idle });
+    this.action = null;
     this.actionTimeCurrent = 0;
     this.actionTimeToComplete = 0;
   }
@@ -300,33 +302,22 @@ export class Bladeburner {
     this.storedCycles += numCycles;
   }
 
+  // until 3.0.0 this converts some incorrect inputs to their correct identifiers
   getActionIdFromTypeAndName(type = "", name = ""): ActionIdentifier | null {
-    if (type === "" || name === "") {
-      return null;
-    }
-    const action = new ActionIdentifier();
+    if (!type || !name) return null;
     const convertedType = type.toLowerCase().trim();
-    const convertedName = name.toLowerCase().trim();
     switch (convertedType) {
       case "contract":
       case "contracts":
       case "contr":
-        action.type = ActionTypes.Contract;
-        if (Object.hasOwn(this.contracts, name)) {
-          action.name = name;
-          return action;
-        }
-        return null;
+        if (!getEnumHelper("BladeContractName").isMember(name)) return null;
+        return { type: BladeActionType.contract, name };
       case "operation":
       case "operations":
       case "op":
       case "ops":
-        action.type = ActionTypes.Operation;
-        if (Object.hasOwn(this.operations, name)) {
-          action.name = name;
-          return action;
-        }
-        return null;
+        if (!getEnumHelper("BladeOperationName").isMember(name)) return null;
+        return { type: BladeActionType.operation, name };
       case "blackoperation":
       case "black operation":
       case "black operations":
@@ -335,52 +326,18 @@ export class Bladeburner {
       case "blackop":
       case "blackops":
         if (!getEnumHelper("BladeBlackOpName").isMember(name)) return null;
-        action.type = ActionTypes.BlackOp;
-        action.name = name;
-        return action;
+        return { type: BladeActionType.blackOp, name };
       case "general":
       case "general action":
-      case "gen":
-        break;
+      case "gen": {
+        // Todo: remove fuzzy matching (3.0.0?)
+        const actionName = getEnumHelper("BladeGeneralActionName").getMember(name, { fuzzy: true });
+        if (!actionName) return null;
+        return { type: BladeActionType.general, name: actionName };
+      }
       default:
         return null;
     }
-
-    if (convertedType.startsWith("gen")) {
-      switch (convertedName) {
-        case "training":
-          action.type = ActionTypes.Training;
-          action.name = "Training";
-          break;
-        case "recruitment":
-        case "recruit":
-          action.type = ActionTypes.Recruitment;
-          action.name = "Recruitment";
-          break;
-        case "field analysis":
-        case "fieldanalysis":
-          action.type = ActionTypes["Field Analysis"];
-          action.name = "Field Analysis";
-          break;
-        case "diplomacy":
-          action.type = ActionTypes.Diplomacy;
-          action.name = "Diplomacy";
-          break;
-        case "hyperbolic regeneration chamber":
-          action.type = ActionTypes["Hyperbolic Regeneration Chamber"];
-          action.name = "Hyperbolic Regeneration Chamber";
-          break;
-        case "incite violence":
-          action.type = ActionTypes["Incite Violence"];
-          action.name = "Incite Violence";
-          break;
-        default:
-          return null;
-      }
-      return action;
-    }
-
-    return null;
   }
 
   executeStartConsoleCommand(args: string[]): void {
@@ -389,57 +346,14 @@ export class Bladeburner {
       this.postToConsole("Use 'help start' for more info");
       return;
     }
+    const type = args[1];
     const name = args[2];
-    switch (args[1].toLowerCase()) {
-      case "general":
-      case "gen":
-        if (GeneralActions[name] != null) {
-          this.action.type = ActionTypes[name];
-          this.action.name = name;
-          this.startAction(this.action);
-        } else {
-          this.postToConsole("Invalid action name specified: " + args[2]);
-        }
-        break;
-      case "contract":
-      case "contracts":
-        if (this.contracts[name] != null) {
-          this.action.type = ActionTypes.Contract;
-          this.action.name = name;
-          this.startAction(this.action);
-        } else {
-          this.postToConsole("Invalid contract name specified: " + args[2]);
-        }
-        break;
-      case "ops":
-      case "op":
-      case "operations":
-      case "operation":
-        if (this.operations[name] != null) {
-          this.action.type = ActionTypes.Operation;
-          this.action.name = name;
-          this.startAction(this.action);
-        } else {
-          this.postToConsole("Invalid Operation name specified: " + args[2]);
-        }
-        break;
-      case "blackops":
-      case "blackop":
-      case "black operations":
-      case "black operation":
-        if (!getEnumHelper("BladeBlackOpName").isMember(name)) {
-          this.postToConsole("Invalid BlackOp name specified: " + args[2]);
-          return;
-        }
-        this.action.type = ActionTypes.BlackOperation;
-        this.action.name = name;
-        this.startAction(this.action);
-        break;
-      default:
-        this.postToConsole("Invalid action/event type specified: " + args[1]);
-        this.postToConsole("Examples of valid action/event identifiers are: [general, contract, op, blackop]");
-        break;
+    const actionId = this.getActionIdFromTypeAndName(type, name);
+    if (!actionId) {
+      this.postToConsole(`Invalid action type / name specified: type: ${type}, name: ${name}`);
+      return;
     }
+    this.startAction(actionId);
   }
 
   executeSkillConsoleCommand(args: string[]): void {
@@ -664,12 +578,12 @@ export class Bladeburner {
           "When your stamina drops to " +
             formatNumberNoSuffix(this.automateThreshLow, 0) +
             ", you will automatically switch to " +
-            this.automateActionLow.name +
+            (this.automateActionLow?.name ?? "Idle") +
             ". When your stamina recovers to " +
             formatNumberNoSuffix(this.automateThreshHigh, 0) +
             ", you will automatically " +
             "switch to " +
-            this.automateActionHigh.name +
+            (this.automateActionHigh?.name ?? "Idle") +
             ".",
         );
       } else if (flag.toLowerCase().includes("en")) {
@@ -689,83 +603,67 @@ export class Bladeburner {
 
     // Set variables
     if (args.length === 4) {
-      const variable = args[1].toLowerCase(); // allows Action Type to be with or without capitalization.
-      const val = args[2];
+      const type = args[1].toLowerCase(); // allows Action Type to be with or without capitalization.
+      const name = args[2];
 
       let highLow = false; // True for high, false for low
       if (args[3].toLowerCase().includes("hi")) {
         highLow = true;
       }
 
-      switch (variable) {
+      let actionId: ActionIdentifier;
+      switch (type) {
+        case "stamina":
+          // For stamina, the "name" variable is actually the stamina threshold
+          if (isNaN(parseFloat(name))) {
+            this.postToConsole("Invalid value specified for stamina threshold (must be numeric): " + name);
+          } else {
+            if (highLow) {
+              this.automateThreshHigh = Number(name);
+            } else {
+              this.automateThreshLow = Number(name);
+            }
+            this.log("Automate (" + (highLow ? "HIGH" : "LOW") + ") stamina threshold set to " + name);
+          }
+          return;
         case "general":
-        case "gen":
-          if (GeneralActions[val] != null) {
-            const action = new ActionIdentifier({
-              type: ActionTypes[val],
-              name: val,
-            });
-            if (highLow) {
-              this.automateActionHigh = action;
-            } else {
-              this.automateActionLow = action;
-            }
-            this.log("Automate (" + (highLow ? "HIGH" : "LOW") + ") action set to " + val);
-          } else {
-            this.postToConsole("Invalid action name specified: " + val);
+        case "gen": {
+          if (!getEnumHelper("BladeGeneralActionName").isMember(name)) {
+            this.postToConsole("Invalid General Action name specified: " + name);
+            return;
           }
+          actionId = { type: BladeActionType.general, name };
           break;
+        }
         case "contract":
-        case "contracts":
-          if (this.contracts[val] != null) {
-            const action = new ActionIdentifier({
-              type: ActionTypes.Contract,
-              name: val,
-            });
-            if (highLow) {
-              this.automateActionHigh = action;
-            } else {
-              this.automateActionLow = action;
-            }
-            this.log("Automate (" + (highLow ? "HIGH" : "LOW") + ") action set to " + val);
-          } else {
-            this.postToConsole("Invalid contract name specified: " + val);
+        case "contracts": {
+          if (!getEnumHelper("BladeContractName").isMember(name)) {
+            this.postToConsole("Invalid Contract name specified: " + name);
+            return;
           }
+          actionId = { type: BladeActionType.contract, name };
           break;
+        }
         case "ops":
         case "op":
         case "operations":
         case "operation":
-          if (this.operations[val] != null) {
-            const action = new ActionIdentifier({
-              type: ActionTypes.Operation,
-              name: val,
-            });
-            if (highLow) {
-              this.automateActionHigh = action;
-            } else {
-              this.automateActionLow = action;
-            }
-            this.log("Automate (" + (highLow ? "HIGH" : "LOW") + ") action set to " + val);
-          } else {
-            this.postToConsole("Invalid Operation name specified: " + val);
+          if (!getEnumHelper("BladeOperationName").isMember(name)) {
+            this.postToConsole("Invalid Operation name specified: " + name);
+            return;
           }
-          break;
-        case "stamina":
-          if (isNaN(parseFloat(val))) {
-            this.postToConsole("Invalid value specified for stamina threshold (must be numeric): " + val);
-          } else {
-            if (highLow) {
-              this.automateThreshHigh = Number(val);
-            } else {
-              this.automateThreshLow = Number(val);
-            }
-            this.log("Automate (" + (highLow ? "HIGH" : "LOW") + ") stamina threshold set to " + val);
-          }
+          actionId = { type: BladeActionType.operation, name };
           break;
         default:
-          break;
+          this.postToConsole("Invalid use of automate command.");
+          return;
       }
+      if (highLow) {
+        this.automateActionHigh = actionId;
+      } else {
+        this.automateActionLow = actionId;
+      }
+      this.log("Automate (" + (highLow ? "HIGH" : "LOW") + ") action set to " + name);
 
       return;
     }
@@ -786,7 +684,7 @@ export class Bladeburner {
         // Double quotes or Single quotes
         const endQuote = command.indexOf(c, i + 1);
         if (endQuote !== -1 && (endQuote === command.length - 1 || command.charAt(endQuote + 1) === KEY.SPACE)) {
-          args.push(command.substr(i + 1, endQuote - i - 1));
+          args.push(command.substring(i + 1, endQuote - i - 1));
           if (endQuote === command.length - 1) {
             start = i = endQuote + 1;
           } else {
@@ -795,13 +693,13 @@ export class Bladeburner {
           continue;
         }
       } else if (c === KEY.SPACE) {
-        args.push(command.substr(start, i - start));
+        args.push(command.substring(start, i - start));
         start = i + 1;
       }
       ++i;
     }
     if (start !== i) {
-      args.push(command.substr(start, i - start));
+      args.push(command.substring(start, i - start));
     }
     return args;
   }
@@ -1097,24 +995,16 @@ export class Bladeburner {
   }
 
   completeOperation(success: boolean): void {
-    if (this.action.type !== ActionTypes.Operation) {
+    if (this.action?.type !== BladeActionType.operation) {
       throw new Error("completeOperation() called even though current action is not an Operation");
     }
     const action = this.getActionObject(this.action);
-    if (action == null) {
-      throw new Error("Failed to get Contract/Operation Object for: " + this.action.name);
-    }
 
     // Calculate team losses
     const teamCount = action.teamCount;
     if (teamCount >= 1) {
-      let max;
-      if (success) {
-        max = Math.ceil(teamCount / 2);
-      } else {
-        max = Math.floor(teamCount);
-      }
-      const losses = getRandomInt(0, max);
+      const maxLosses = success ? Math.ceil(teamCount / 2) : Math.floor(teamCount);
+      const losses = getRandomInt(0, maxLosses);
       this.teamSize -= losses;
       if (this.teamSize < this.sleeveSize) {
         const sup = Player.sleeves.filter((x) => isSleeveSupportWork(x.currentWork));
@@ -1133,21 +1023,21 @@ export class Bladeburner {
 
     const city = this.getCurrentCity();
     switch (action.name) {
-      case "Investigation":
+      case BladeOperationName.investigation:
         if (success) {
           city.improvePopulationEstimateByPercentage(0.4 * this.skillMultipliers.successChanceEstimate);
         } else {
           this.triggerPotentialMigration(this.city, 0.1);
         }
         break;
-      case "Undercover Operation":
+      case BladeOperationName.undercover:
         if (success) {
           city.improvePopulationEstimateByPercentage(0.8 * this.skillMultipliers.successChanceEstimate);
         } else {
           this.triggerPotentialMigration(this.city, 0.15);
         }
         break;
-      case "Sting Operation":
+      case BladeOperationName.sting:
         if (success) {
           city.changePopulationByPercentage(-0.1, {
             changeEstEqually: true,
@@ -1156,7 +1046,7 @@ export class Bladeburner {
         }
         city.changeChaosByCount(0.1);
         break;
-      case "Raid":
+      case BladeOperationName.raid:
         if (success) {
           city.changePopulationByPercentage(-1, {
             changeEstEqually: true,
@@ -1172,7 +1062,7 @@ export class Bladeburner {
         }
         city.changeChaosByPercentage(getRandomInt(1, 5));
         break;
-      case "Stealth Retirement Operation":
+      case BladeOperationName.stealthRetirement:
         if (success) {
           city.changePopulationByPercentage(-0.5, {
             changeEstEqually: true,
@@ -1181,7 +1071,7 @@ export class Bladeburner {
         }
         city.changeChaosByPercentage(getRandomInt(-3, -1));
         break;
-      case "Assassination":
+      case BladeOperationName.assassination:
         if (success) {
           city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
         }
@@ -1192,58 +1082,51 @@ export class Bladeburner {
     }
   }
 
-  getActionObject(actionId: ActionIdentifier): Action | null {
+  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.blackOp }): BlackOperation;
+  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.operation }): Operation;
+  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.contract }): Contract;
+  // Todo: add specific type for general actions?
+  getActionObject(actionId: ActionIdentifier): Action;
+  getActionObject(actionId: ActionIdentifier): Action {
     /**
      * Given an ActionIdentifier object, returns the corresponding
      * GeneralAction, Contract, Operation, or BlackOperation object
      */
     switch (actionId.type) {
-      case ActionTypes.Contract:
+      case BladeActionType.contract:
         return this.contracts[actionId.name];
-      case ActionTypes.Operation:
+      case BladeActionType.operation:
         return this.operations[actionId.name];
-      case ActionTypes.BlackOp:
-      case ActionTypes.BlackOperation:
-        if (!getEnumHelper("BladeBlackOpName").isMember(actionId.name)) return null;
+      case BladeActionType.blackOp:
         return BlackOperations[actionId.name];
-      case ActionTypes.Training:
-        return GeneralActions.Training;
-      case ActionTypes["Field Analysis"]:
-        return GeneralActions["Field Analysis"];
-      case ActionTypes.Recruitment:
-        return GeneralActions.Recruitment;
-      case ActionTypes.Diplomacy:
-        return GeneralActions.Diplomacy;
-      case ActionTypes["Hyperbolic Regeneration Chamber"]:
-        return GeneralActions["Hyperbolic Regeneration Chamber"];
-      case ActionTypes["Incite Violence"]:
-        return GeneralActions["Incite Violence"];
-      default:
-        return null;
+      case BladeActionType.general:
+        return GeneralActions[actionId.name];
     }
   }
 
   completeContract(success: boolean, actionIdent: ActionIdentifier): void {
-    if (actionIdent.type !== ActionTypes.Contract) {
+    if (actionIdent.type !== BladeActionType.contract) {
       throw new Error("completeContract() called even though current action is not a Contract");
     }
     const city = this.getCurrentCity();
     if (success) {
       switch (actionIdent.name) {
-        case "Tracking":
+        case BladeContractName.tracking:
           // Increase estimate accuracy by a relatively small amount
           city.improvePopulationEstimateByCount(getRandomInt(100, 1e3) * this.skillMultipliers.successChanceEstimate);
           break;
-        case "Bounty Hunter":
+        case BladeContractName.bountyHunter:
           city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
           city.changeChaosByCount(0.02);
           break;
-        case "Retirement":
+        case BladeContractName.retirement:
           city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
           city.changeChaosByCount(0.04);
           break;
-        default:
-          throw new Error("Invalid Action name in completeContract: " + actionIdent.name);
+        default: {
+          // Typecheck verifies that the above switch statement is exhaustive
+          const __a: never = actionIdent;
+        }
       }
     }
   }
@@ -1251,10 +1134,10 @@ export class Bladeburner {
   completeAction(person: Person, actionIdent: ActionIdentifier, isPlayer = true): WorkStats {
     let retValue = newWorkStats();
     switch (actionIdent.type) {
-      case ActionTypes.Contract:
-      case ActionTypes.Operation: {
+      case BladeActionType.contract:
+      case BladeActionType.operation: {
         try {
-          const isOperation = actionIdent.type === ActionTypes.Operation;
+          const isOperation = actionIdent.type === BladeActionType.operation;
           const action = this.getActionObject(actionIdent);
           if (action == null) {
             throw new Error("Failed to get Contract/Operation Object for: " + actionIdent.name);
@@ -1348,13 +1231,7 @@ export class Bladeburner {
         }
         break;
       }
-      case ActionTypes.BlackOp:
-      case ActionTypes.BlackOperation: {
-        // Temporary typecheck, will be removed later in PR TODO make Action identifiers typesafe
-        if (!getEnumHelper("BladeBlackOpName").isMember(actionIdent.name)) {
-          exceptionAlert(new Error(`Failed to get BlackOperation for ${actionIdent.name}`));
-          return retValue;
-        }
+      case BladeActionType.blackOp: {
         const blackOp = BlackOperations[actionIdent.name];
 
         const difficulty = blackOp.getDifficulty();
@@ -1441,147 +1318,157 @@ export class Bladeburner {
         }
         break;
       }
-      case ActionTypes.Training: {
-        this.stamina -= 0.5 * BladeburnerConstants.BaseStaminaLoss;
-        const strExpGain = 30 * person.mults.strength_exp,
-          defExpGain = 30 * person.mults.defense_exp,
-          dexExpGain = 30 * person.mults.dexterity_exp,
-          agiExpGain = 30 * person.mults.agility_exp,
-          staminaGain = 0.04 * this.skillMultipliers.stamina;
-        retValue.strExp = strExpGain;
-        retValue.defExp = defExpGain;
-        retValue.dexExp = dexExpGain;
-        retValue.agiExp = agiExpGain;
-        this.staminaBonus += staminaGain;
-        if (this.logging.general) {
-          this.log(
-            `${person.whoAmI()}: ` +
-              "Training completed. Gained: " +
-              formatExp(strExpGain) +
-              " str exp, " +
-              formatExp(defExpGain) +
-              " def exp, " +
-              formatExp(dexExpGain) +
-              " dex exp, " +
-              formatExp(agiExpGain) +
-              " agi exp, " +
-              formatBigNumber(staminaGain) +
-              " max stamina",
-          );
-        }
-        break;
-      }
-      case ActionTypes.FieldAnalysis:
-      case ActionTypes["Field Analysis"]: {
-        // Does not use stamina. Effectiveness depends on hacking, int, and cha
-        let eff =
-          0.04 * Math.pow(person.skills.hacking, 0.3) +
-          0.04 * Math.pow(person.skills.intelligence, 0.9) +
-          0.02 * Math.pow(person.skills.charisma, 0.3);
-        eff *= person.mults.bladeburner_analysis;
-        if (isNaN(eff) || eff < 0) {
-          throw new Error("Field Analysis Effectiveness calculated to be NaN or negative");
-        }
-        const hackingExpGain = 20 * person.mults.hacking_exp;
-        const charismaExpGain = 20 * person.mults.charisma_exp;
-        const rankGain = 0.1 * currentNodeMults.BladeburnerRank;
-        retValue.hackExp = hackingExpGain;
-        retValue.chaExp = charismaExpGain;
-        retValue.intExp = BladeburnerConstants.BaseIntGain;
-        this.changeRank(person, rankGain);
-        this.getCurrentCity().improvePopulationEstimateByPercentage(eff * this.skillMultipliers.successChanceEstimate);
-        if (this.logging.general) {
-          this.log(
-            `${person.whoAmI()}: ` +
-              `Field analysis completed. Gained ${formatBigNumber(rankGain)} rank, ` +
-              `${formatExp(hackingExpGain)} hacking exp, and ` +
-              `${formatExp(charismaExpGain)} charisma exp`,
-          );
-        }
-        break;
-      }
-      case ActionTypes.Recruitment: {
-        const successChance = this.getRecruitmentSuccessChance(person);
-        const recruitTime = this.getRecruitmentTime(person) * 1000;
-        if (Math.random() < successChance) {
-          const expGain = 2 * BladeburnerConstants.BaseStatGain * recruitTime;
-          retValue.chaExp = expGain;
-          ++this.teamSize;
-          if (this.logging.general) {
-            this.log(
-              `${person.whoAmI()}: ` +
-                "Successfully recruited a team member! Gained " +
-                formatExp(expGain) +
-                " charisma exp",
-            );
+      case BladeActionType.general:
+        switch (actionIdent.name) {
+          case BladeGeneralActionName.training: {
+            this.stamina -= 0.5 * BladeburnerConstants.BaseStaminaLoss;
+            const strExpGain = 30 * person.mults.strength_exp,
+              defExpGain = 30 * person.mults.defense_exp,
+              dexExpGain = 30 * person.mults.dexterity_exp,
+              agiExpGain = 30 * person.mults.agility_exp,
+              staminaGain = 0.04 * this.skillMultipliers.stamina;
+            retValue.strExp = strExpGain;
+            retValue.defExp = defExpGain;
+            retValue.dexExp = dexExpGain;
+            retValue.agiExp = agiExpGain;
+            this.staminaBonus += staminaGain;
+            if (this.logging.general) {
+              this.log(
+                `${person.whoAmI()}: ` +
+                  "Training completed. Gained: " +
+                  formatExp(strExpGain) +
+                  " str exp, " +
+                  formatExp(defExpGain) +
+                  " def exp, " +
+                  formatExp(dexExpGain) +
+                  " dex exp, " +
+                  formatExp(agiExpGain) +
+                  " agi exp, " +
+                  formatBigNumber(staminaGain) +
+                  " max stamina",
+              );
+            }
+            break;
           }
-        } else {
-          const expGain = BladeburnerConstants.BaseStatGain * recruitTime;
-          retValue.chaExp = expGain;
-          if (this.logging.general) {
-            this.log(
-              `${person.whoAmI()}: ` +
-                "Failed to recruit a team member. Gained " +
-                formatExp(expGain) +
-                " charisma exp",
+          case BladeGeneralActionName.fieldAnalysis: {
+            // Does not use stamina. Effectiveness depends on hacking, int, and cha
+            let eff =
+              0.04 * Math.pow(person.skills.hacking, 0.3) +
+              0.04 * Math.pow(person.skills.intelligence, 0.9) +
+              0.02 * Math.pow(person.skills.charisma, 0.3);
+            eff *= person.mults.bladeburner_analysis;
+            if (isNaN(eff) || eff < 0) {
+              throw new Error("Field Analysis Effectiveness calculated to be NaN or negative");
+            }
+            const hackingExpGain = 20 * person.mults.hacking_exp;
+            const charismaExpGain = 20 * person.mults.charisma_exp;
+            const rankGain = 0.1 * currentNodeMults.BladeburnerRank;
+            retValue.hackExp = hackingExpGain;
+            retValue.chaExp = charismaExpGain;
+            retValue.intExp = BladeburnerConstants.BaseIntGain;
+            this.changeRank(person, rankGain);
+            this.getCurrentCity().improvePopulationEstimateByPercentage(
+              eff * this.skillMultipliers.successChanceEstimate,
             );
+            if (this.logging.general) {
+              this.log(
+                `${person.whoAmI()}: ` +
+                  `Field analysis completed. Gained ${formatBigNumber(rankGain)} rank, ` +
+                  `${formatExp(hackingExpGain)} hacking exp, and ` +
+                  `${formatExp(charismaExpGain)} charisma exp`,
+              );
+            }
+            break;
           }
-        }
-        break;
-      }
-      case ActionTypes.Diplomacy: {
-        const eff = this.getDiplomacyEffectiveness(person);
-        this.getCurrentCity().chaos *= eff;
-        if (this.getCurrentCity().chaos < 0) {
-          this.getCurrentCity().chaos = 0;
-        }
-        if (this.logging.general) {
-          this.log(
-            `${person.whoAmI()}: Diplomacy completed. Chaos levels in the current city fell by ${formatPercent(
-              1 - eff,
-            )}`,
-          );
-        }
-        break;
-      }
-      case ActionTypes["Hyperbolic Regeneration Chamber"]: {
-        person.regenerateHp(BladeburnerConstants.HrcHpGain);
+          case BladeGeneralActionName.recruitment: {
+            const successChance = this.getRecruitmentSuccessChance(person);
+            const recruitTime = this.getRecruitmentTime(person) * 1000;
+            if (Math.random() < successChance) {
+              const expGain = 2 * BladeburnerConstants.BaseStatGain * recruitTime;
+              retValue.chaExp = expGain;
+              ++this.teamSize;
+              if (this.logging.general) {
+                this.log(
+                  `${person.whoAmI()}: ` +
+                    "Successfully recruited a team member! Gained " +
+                    formatExp(expGain) +
+                    " charisma exp",
+                );
+              }
+            } else {
+              const expGain = BladeburnerConstants.BaseStatGain * recruitTime;
+              retValue.chaExp = expGain;
+              if (this.logging.general) {
+                this.log(
+                  `${person.whoAmI()}: ` +
+                    "Failed to recruit a team member. Gained " +
+                    formatExp(expGain) +
+                    " charisma exp",
+                );
+              }
+            }
+            break;
+          }
+          case BladeGeneralActionName.diplomacy: {
+            const eff = this.getDiplomacyEffectiveness(person);
+            this.getCurrentCity().chaos *= eff;
+            if (this.getCurrentCity().chaos < 0) {
+              this.getCurrentCity().chaos = 0;
+            }
+            if (this.logging.general) {
+              this.log(
+                `${person.whoAmI()}: Diplomacy completed. Chaos levels in the current city fell by ${formatPercent(
+                  1 - eff,
+                )}`,
+              );
+            }
+            break;
+          }
+          case BladeGeneralActionName.hyperbolicRegen: {
+            person.regenerateHp(BladeburnerConstants.HrcHpGain);
 
-        const staminaGain = this.maxStamina * (BladeburnerConstants.HrcStaminaGain / 100);
-        this.stamina = Math.min(this.maxStamina, this.stamina + staminaGain);
-        if (this.logging.general) {
-          this.log(
-            `${person.whoAmI()}: Rested in Hyperbolic Regeneration Chamber. Restored ${
-              BladeburnerConstants.HrcHpGain
-            } HP and gained ${formatStamina(staminaGain)} stamina`,
-          );
+            const staminaGain = this.maxStamina * (BladeburnerConstants.HrcStaminaGain / 100);
+            this.stamina = Math.min(this.maxStamina, this.stamina + staminaGain);
+            if (this.logging.general) {
+              this.log(
+                `${person.whoAmI()}: Rested in Hyperbolic Regeneration Chamber. Restored ${
+                  BladeburnerConstants.HrcHpGain
+                } HP and gained ${formatStamina(staminaGain)} stamina`,
+              );
+            }
+            break;
+          }
+          case BladeGeneralActionName.inciteViolence: {
+            for (const contract of Object.keys(this.contracts)) {
+              const growthF = Growths[contract];
+              if (!growthF) throw new Error("trying to generate count for action that doesn't exist? " + contract);
+              this.contracts[contract].count += (60 * 3 * growthF()) / BladeburnerConstants.ActionCountGrowthPeriod;
+            }
+            for (const operation of Object.keys(this.operations)) {
+              const growthF = Growths[operation];
+              if (!growthF) throw new Error("trying to generate count for action that doesn't exist? " + operation);
+              this.operations[operation].count += (60 * 3 * growthF()) / BladeburnerConstants.ActionCountGrowthPeriod;
+            }
+            if (this.logging.general) {
+              this.log(`${person.whoAmI()}: Incited violence in the synthoid communities.`);
+            }
+            for (const cityName of Object.values(CityName)) {
+              const city = this.cities[cityName];
+              city.chaos += 10;
+              city.chaos += city.chaos / (Math.log(city.chaos) / Math.log(10));
+            }
+            break;
+          }
+          default: {
+            // Verify general actions switch statement is exhaustive
+            const __a: never = actionIdent;
+          }
         }
         break;
+      default: {
+        // Verify type switch statement is exhaustive
+        const __a: never = actionIdent;
       }
-      case ActionTypes["Incite Violence"]: {
-        for (const contract of Object.keys(this.contracts)) {
-          const growthF = Growths[contract];
-          if (!growthF) throw new Error("trying to generate count for action that doesn't exist? " + contract);
-          this.contracts[contract].count += (60 * 3 * growthF()) / BladeburnerConstants.ActionCountGrowthPeriod;
-        }
-        for (const operation of Object.keys(this.operations)) {
-          const growthF = Growths[operation];
-          if (!growthF) throw new Error("trying to generate count for action that doesn't exist? " + operation);
-          this.operations[operation].count += (60 * 3 * growthF()) / BladeburnerConstants.ActionCountGrowthPeriod;
-        }
-        if (this.logging.general) {
-          this.log(`${person.whoAmI()}: Incited violence in the synthoid communities.`);
-        }
-        for (const cityName of Object.values(CityName)) {
-          const city = this.cities[cityName];
-          city.chaos += 10;
-          city.chaos += city.chaos / (Math.log(city.chaos) / Math.log(10));
-        }
-        break;
-      }
-      default:
-        console.error(`Bladeburner.completeAction() called for invalid action: ${actionIdent.type}`);
-        break;
     }
     return retValue;
   }
@@ -1631,15 +1518,12 @@ export class Bladeburner {
   }
 
   processAction(seconds: number): void {
-    if (this.action.type === ActionTypes.Idle) return;
+    if (!this.action) return; // Idle
     if (this.actionTimeToComplete <= 0) {
       throw new Error(`Invalid actionTimeToComplete value: ${this.actionTimeToComplete}, type; ${this.action.type}`);
     }
-    if (!this.action) {
-      throw new Error("Bladeburner.action is not an ActionIdentifier Object");
-    }
     //Check to see if action is a contract, and then to verify a sleeve didn't finish it first
-    if (this.action.type === 2) {
+    if (this.action.type === BladeActionType.contract) {
       const remainingActions = this.contracts[this.action.name].count;
       if (remainingActions < 1) {
         return this.resetAction();
@@ -1651,14 +1535,11 @@ export class Bladeburner {
     this.actionTimeOverflow = 0;
     if (this.actionTimeCurrent >= this.actionTimeToComplete) {
       this.actionTimeOverflow = this.actionTimeCurrent - this.actionTimeToComplete;
-      const action = this.getActionObject(this.action);
       const retValue = this.completeAction(Player, this.action);
       Player.gainMoney(retValue.money, "bladeburner");
       Player.gainStats(retValue);
       // Operation Daedalus
-      if (action == null) {
-        throw new Error("Failed to get BlackOperation Object for: " + this.action.name);
-      } else if (this.action.type != ActionTypes.BlackOperation && this.action.type != ActionTypes.BlackOp) {
+      if (this.action.type != BladeActionType.blackOp) {
         this.startAction(this.action); // Repeat action
       }
     }
@@ -1688,8 +1569,8 @@ export class Bladeburner {
   }
 
   create(): void {
-    this.contracts.Tracking = new Contract({
-      name: "Tracking",
+    this.contracts[BladeContractName.tracking] = new Contract({
+      name: BladeContractName.tracking,
       baseDifficulty: 125,
       difficultyFac: 1.02,
       rewardFac: 1.041,
@@ -1716,8 +1597,8 @@ export class Bladeburner {
       },
       isStealth: true,
     });
-    this.contracts["Bounty Hunter"] = new Contract({
-      name: "Bounty Hunter",
+    this.contracts[BladeContractName.bountyHunter] = new Contract({
+      name: BladeContractName.bountyHunter,
       baseDifficulty: 250,
       difficultyFac: 1.04,
       rewardFac: 1.085,
@@ -1744,8 +1625,8 @@ export class Bladeburner {
       },
       isKill: true,
     });
-    this.contracts.Retirement = new Contract({
-      name: "Retirement",
+    this.contracts[BladeContractName.retirement] = new Contract({
+      name: BladeContractName.retirement,
       baseDifficulty: 200,
       difficultyFac: 1.03,
       rewardFac: 1.065,
@@ -1773,8 +1654,8 @@ export class Bladeburner {
       isKill: true,
     });
 
-    this.operations.Investigation = new Operation({
-      name: "Investigation",
+    this.operations[BladeOperationName.investigation] = new Operation({
+      name: BladeOperationName.investigation,
       baseDifficulty: 400,
       difficultyFac: 1.03,
       rewardFac: 1.07,
@@ -1802,8 +1683,8 @@ export class Bladeburner {
       },
       isStealth: true,
     });
-    this.operations["Undercover Operation"] = new Operation({
-      name: "Undercover Operation",
+    this.operations[BladeOperationName.undercover] = new Operation({
+      name: BladeOperationName.undercover,
       baseDifficulty: 500,
       difficultyFac: 1.04,
       rewardFac: 1.09,
@@ -1832,8 +1713,8 @@ export class Bladeburner {
       },
       isStealth: true,
     });
-    this.operations["Sting Operation"] = new Operation({
-      name: "Sting Operation",
+    this.operations[BladeOperationName.sting] = new Operation({
+      name: BladeOperationName.sting,
       baseDifficulty: 650,
       difficultyFac: 1.04,
       rewardFac: 1.095,
@@ -1862,8 +1743,8 @@ export class Bladeburner {
       },
       isStealth: true,
     });
-    this.operations.Raid = new Operation({
-      name: "Raid",
+    this.operations[BladeOperationName.raid] = new Operation({
+      name: BladeOperationName.raid,
       baseDifficulty: 800,
       difficultyFac: 1.045,
       rewardFac: 1.1,
@@ -1892,8 +1773,8 @@ export class Bladeburner {
       },
       isKill: true,
     });
-    this.operations["Stealth Retirement Operation"] = new Operation({
-      name: "Stealth Retirement Operation",
+    this.operations[BladeOperationName.stealthRetirement] = new Operation({
+      name: BladeOperationName.stealthRetirement,
       baseDifficulty: 1000,
       difficultyFac: 1.05,
       rewardFac: 1.11,
@@ -1923,8 +1804,8 @@ export class Bladeburner {
       isStealth: true,
       isKill: true,
     });
-    this.operations.Assassination = new Operation({
-      name: "Assassination",
+    this.operations[BladeOperationName.assassination] = new Operation({
+      name: BladeOperationName.assassination,
       baseDifficulty: 1500,
       difficultyFac: 1.06,
       rewardFac: 1.14,
@@ -1962,7 +1843,7 @@ export class Bladeburner {
 
     // If the Player starts doing some other actions, set action to idle and alert
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true) && Player.currentWork) {
-      if (this.action.type !== ActionTypes.Idle) {
+      if (this.action) {
         let msg = "Your Bladeburner action was cancelled because you started doing something else.";
         if (this.automateEnabled) {
           msg += `\n\nYour automation was disabled as well. You will have to re-enable it through the Bladeburner console`;
@@ -2027,22 +1908,10 @@ export class Bladeburner {
       // Automation
       if (this.automateEnabled) {
         // Note: Do NOT set this.action = this.automateActionHigh/Low since it creates a reference
-        if (this.stamina <= this.automateThreshLow) {
-          if (this.action.name !== this.automateActionLow.name || this.action.type !== this.automateActionLow.type) {
-            this.action = new ActionIdentifier({
-              type: this.automateActionLow.type,
-              name: this.automateActionLow.name,
-            });
-            this.startAction(this.action);
-          }
-        } else if (this.stamina >= this.automateThreshHigh) {
-          if (this.action.name !== this.automateActionHigh.name || this.action.type !== this.automateActionHigh.type) {
-            this.action = new ActionIdentifier({
-              type: this.automateActionHigh.type,
-              name: this.automateActionHigh.name,
-            });
-            this.startAction(this.action);
-          }
+        if (this.stamina <= this.automateThreshLow && this.action?.name !== this.automateActionLow?.name) {
+          this.startAction(this.automateActionLow);
+        } else if (this.stamina >= this.automateThreshHigh && this.action?.name !== this.automateActionHigh?.name) {
+          this.startAction(this.automateActionHigh);
         }
       }
 
@@ -2055,55 +1924,6 @@ export class Bladeburner {
     }
   }
 
-  getTypeAndNameFromActionId(actionId: ActionIdentifier): {
-    type: string;
-    name: string;
-  } {
-    const res = { type: "", name: "" };
-    const types = Object.keys(ActionTypes);
-    for (let i = 0; i < types.length; ++i) {
-      if (actionId.type === ActionTypes[types[i]]) {
-        res.type = types[i];
-        break;
-      }
-    }
-    const gen = [
-      "Training",
-      "Recruitment",
-      "FieldAnalysis",
-      "Field Analysis",
-      "Diplomacy",
-      "Hyperbolic Regeneration Chamber",
-      "Incite Violence",
-    ];
-    if (gen.includes(res.type)) {
-      res.type = "General";
-    }
-
-    if (res.type == null) {
-      res.type = "Idle";
-    }
-
-    res.name = actionId.name != null ? actionId.name : "Idle";
-    return res;
-  }
-
-  getContractNamesNetscriptFn(): string[] {
-    return Object.keys(this.contracts);
-  }
-
-  getOperationNamesNetscriptFn(): string[] {
-    return Object.keys(this.operations);
-  }
-
-  getGeneralActionNamesNetscriptFn(): string[] {
-    return Object.keys(GeneralActions);
-  }
-
-  getSkillNamesNetscriptFn(): string[] {
-    return Object.keys(Skills);
-  }
-
   startActionNetscriptFn(type: string, name: string, workerScript: WorkerScript): boolean {
     const errorLogText = `Invalid action: type='${type}' name='${name}'`;
     const actionId = this.getActionIdFromTypeAndName(type, name);
@@ -2113,8 +1933,8 @@ export class Bladeburner {
     }
 
     // Special logic for Black Ops
-    if (actionId.type === ActionTypes.BlackOp) {
-      const canRunOp = this.canAttemptBlackOp(actionId);
+    if (actionId.type === BladeActionType.blackOp) {
+      const canRunOp = this.canAttemptBlackOp(actionId.name);
       if (!canRunOp.isAvailable) {
         workerScript.log("bladeburner.startAction", () => canRunOp.error + "");
         return false;
@@ -2139,98 +1959,71 @@ export class Bladeburner {
 
   getActionTimeNetscriptFn(person: Person, type: string, name: string): number | string {
     const actionId = this.getActionIdFromTypeAndName(type, name);
-    if (actionId == null) {
-      return "bladeburner.getActionTime";
-    }
+    if (!actionId) return "bladeburner.getActionTime";
 
     const actionObj = this.getActionObject(actionId);
-    if (actionObj == null) {
-      return "bladeburner.getActionTime";
-    }
     switch (actionId.type) {
-      case ActionTypes.Contract:
-      case ActionTypes.Operation:
-      case ActionTypes.BlackOp:
-      case ActionTypes.BlackOperation:
+      case BladeActionType.contract:
+      case BladeActionType.operation:
+      case BladeActionType.blackOp:
         return actionObj.getActionTime(this, person) * 1000;
-      case ActionTypes.Training:
-      case ActionTypes["Field Analysis"]:
-      case ActionTypes.FieldAnalysis:
-        return 30000;
-      case ActionTypes.Recruitment:
-        return this.getRecruitmentTime(person) * 1000;
-      case ActionTypes.Diplomacy:
-      case ActionTypes["Hyperbolic Regeneration Chamber"]:
-      case ActionTypes["Incite Violence"]:
-        return 60000;
-      default:
-        return "bladeburner.getActionTime";
+      case BladeActionType.general:
+        switch (actionId.name) {
+          case BladeGeneralActionName.training:
+          case BladeGeneralActionName.fieldAnalysis:
+            return 30000;
+          case BladeGeneralActionName.recruitment:
+            return this.getRecruitmentTime(person) * 1000;
+          case BladeGeneralActionName.diplomacy:
+          case BladeGeneralActionName.hyperbolicRegen:
+          case BladeGeneralActionName.inciteViolence:
+            return 60000;
+        }
     }
   }
 
   getActionEstimatedSuccessChanceNetscriptFn(person: Person, type: string, name: string): [number, number] | string {
     const actionId = this.getActionIdFromTypeAndName(type, name);
-    if (actionId == null) {
-      return "bladeburner.getActionEstimatedSuccessChance";
-    }
+    if (!actionId) return "bladeburner.getActionEstimatedSuccessChance";
 
     const actionObj = this.getActionObject(actionId);
-    if (actionObj == null) {
-      return "bladeburner.getActionEstimatedSuccessChance";
-    }
     switch (actionId.type) {
-      case ActionTypes.Contract:
-      case ActionTypes.Operation:
-      case ActionTypes.BlackOp:
-      case ActionTypes.BlackOperation:
+      case BladeActionType.contract:
+      case BladeActionType.operation:
+      case BladeActionType.blackOp:
         return actionObj.getEstSuccessChance(this, person);
-      case ActionTypes.Training:
-      case ActionTypes["Field Analysis"]:
-      case ActionTypes.FieldAnalysis:
-      case ActionTypes.Diplomacy:
-      case ActionTypes["Hyperbolic Regeneration Chamber"]:
-      case ActionTypes["Incite Violence"]:
-        return [1, 1];
-      case ActionTypes.Recruitment: {
-        const recChance = this.getRecruitmentSuccessChance(person);
-        return [recChance, recChance];
-      }
-      default:
-        return "bladeburner.getActionEstimatedSuccessChance";
+      case BladeActionType.general:
+        switch (actionId.name) {
+          case BladeGeneralActionName.training:
+          case BladeGeneralActionName.fieldAnalysis:
+          case BladeGeneralActionName.diplomacy:
+          case BladeGeneralActionName.hyperbolicRegen:
+          case BladeGeneralActionName.inciteViolence:
+            return [1, 1];
+          case BladeGeneralActionName.recruitment: {
+            const recruitChance = this.getRecruitmentSuccessChance(person);
+            return [recruitChance, recruitChance];
+          }
+        }
     }
   }
 
   getActionCountRemainingNetscriptFn(type: string, name: string, workerScript: WorkerScript): number {
     const errorLogText = `Invalid action: type='${type}' name='${name}'`;
     const actionId = this.getActionIdFromTypeAndName(type, name);
-    if (actionId == null) {
+    if (!actionId) {
       workerScript.log("bladeburner.getActionCountRemaining", () => errorLogText);
       return -1;
     }
 
     const actionObj = this.getActionObject(actionId);
-    if (actionObj == null) {
-      workerScript.log("bladeburner.getActionCountRemaining", () => errorLogText);
-      return -1;
-    }
-
     switch (actionId.type) {
-      case ActionTypes.Contract:
-      case ActionTypes.Operation:
-      case ActionTypes.BlackOp:
-      case ActionTypes.BlackOperation:
-        return Math.floor(actionObj.count);
-      case ActionTypes.Training:
-      case ActionTypes.Recruitment:
-      case ActionTypes["Field Analysis"]:
-      case ActionTypes.FieldAnalysis:
-      case ActionTypes.Diplomacy:
-      case ActionTypes["Hyperbolic Regeneration Chamber"]:
-      case ActionTypes["Incite Violence"]:
+      case BladeActionType.blackOp:
+      case BladeActionType.contract:
+      case BladeActionType.operation:
+        return actionObj.count;
+      case BladeActionType.general:
         return Infinity;
-      default:
-        workerScript.log("bladeburner.getActionCountRemaining", () => errorLogText);
-        return -1;
     }
   }
 
@@ -2310,16 +2103,7 @@ export class Bladeburner {
     }
 
     const actionObj = this.getActionObject(actionId);
-    if (actionObj == null) {
-      workerScript.log("bladeburner.getTeamSize", () => errorLogText);
-      return -1;
-    }
-
-    if (
-      actionId.type === ActionTypes.Operation ||
-      actionId.type === ActionTypes.BlackOp ||
-      actionId.type === ActionTypes.BlackOperation
-    ) {
+    if (actionId.type === BladeActionType.operation || actionId.type === BladeActionType.blackOp) {
       return actionObj.teamCount;
     } else {
       return 0;
@@ -2334,11 +2118,7 @@ export class Bladeburner {
       return -1;
     }
 
-    if (
-      actionId.type !== ActionTypes.Operation &&
-      actionId.type !== ActionTypes.BlackOp &&
-      actionId.type !== ActionTypes.BlackOperation
-    ) {
+    if (actionId.type !== BladeActionType.operation && actionId.type !== BladeActionType.blackOp) {
       workerScript.log("bladeburner.setTeamSize", () => "Only valid for 'Operations' and 'BlackOps'");
       return -1;
     }

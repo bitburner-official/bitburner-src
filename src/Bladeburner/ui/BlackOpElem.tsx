@@ -2,9 +2,9 @@ import React from "react";
 
 import { Paper, Typography } from "@mui/material";
 import { Player } from "@player";
+import { BladeActionType } from "@enums";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { ActionTypes } from "../data/ActionTypes";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { TeamSizeButton } from "./TeamSizeButton";
 import { Bladeburner } from "../Bladeburner";
@@ -31,7 +31,7 @@ export function BlackOpElem({ bladeburner, blackOp }: BlackOpElemProps): React.R
     );
   }
 
-  const isActive = bladeburner.action.type === ActionTypes.BlackOperation && blackOp.name === bladeburner.action.name;
+  const isActive = bladeburner.action?.name === blackOp.name;
   const actionTime = blackOp.getActionTime(bladeburner, Player);
   const hasReqdRank = bladeburner.rank >= blackOp.reqdRank;
   const computedActionTimeCurrent = Math.min(
@@ -62,8 +62,7 @@ export function BlackOpElem({ bladeburner, blackOp }: BlackOpElemProps): React.R
 
           <StartButton
             bladeburner={bladeburner}
-            type={ActionTypes.BlackOperation}
-            name={blackOp.name}
+            actionId={{ type: BladeActionType.blackOp, name: blackOp.name }}
             rerender={rerender}
           />
           <TeamSizeButton action={blackOp} bladeburner={bladeburner} />

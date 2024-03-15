@@ -1,37 +1,32 @@
+import { BladeOperationName } from "@enums";
+import type { BlackOperation } from "./BlackOperation";
 import { Bladeburner } from "./Bladeburner";
 import { BladeburnerConstants } from "./data/Constants";
 import { Action, IActionParams } from "./Action";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
-export interface IOperationParams extends IActionParams {
+export interface OperationParams extends IActionParams {
+  name: BladeOperationName;
   reqdRank?: number;
   teamCount?: number;
 }
 
 export class Operation extends Action {
+  name = BladeOperationName.investigation;
   reqdRank = 100;
   teamCount = 0;
 
-  constructor(params: IOperationParams | null = null) {
+  constructor(params: OperationParams | null = null) {
     super(params);
-    if (params && params.reqdRank) this.reqdRank = params.reqdRank;
-    if (params && params.teamCount) this.teamCount = params.teamCount;
+    if (!params) return;
+    this.name = params.name;
+    if (params.reqdRank) this.reqdRank = params.reqdRank;
+    if (params.teamCount) this.teamCount = params.teamCount;
   }
 
-  // For actions that have teams. To be implemented by subtypes.
-  getTeamSuccessBonus(inst: Bladeburner): number {
-    if (this.teamCount && this.teamCount > 0) {
-      this.teamCount = Math.min(this.teamCount, inst.teamSize);
-      const teamMultiplier = Math.pow(this.teamCount, 0.05);
-      return teamMultiplier;
-    }
-
-    return 1;
-  }
-
-  getActionTypeSkillSuccessBonus(inst: Bladeburner): number {
-    return inst.skillMultipliers.successChanceOperation;
-  }
+  // These functions are shared between operations and blackops, so they are defined outside of Operation
+  getTeamSuccessBonus = operationTeamSuccessBonus;
+  getActionTypeSkillSuccessBonus = operationSkillSuccessBonus;
 
   getChaosDifficultyBonus(inst: Bladeburner /*, params: ISuccessChanceParams*/): number {
     const city = inst.getCurrentCity();
@@ -54,3 +49,15 @@ export class Operation extends Action {
 }
 
 constructorsForReviver.Operation = Operation;
+
+// shared member functions for Operation and BlackOperation
+export const operationSkillSuccessBonus = (inst: Bladeburner) => inst.skillMultipliers.successChanceOperation;
+export function operationTeamSuccessBonus(this: Operation | BlackOperation, inst: Bladeburner) {
+  if (this.teamCount && this.teamCount > 0) {
+    this.teamCount = Math.min(this.teamCount, inst.teamSize);
+    const teamMultiplier = Math.pow(this.teamCount, 0.05);
+    return teamMultiplier;
+  }
+
+  return 1;
+}

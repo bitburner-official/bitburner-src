@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Sleeve } from "../Sleeve";
 import { Player } from "@player";
 import { Crimes } from "../../../Crime/Crimes";
-import { CityName, FactionName, FactionWorkType, GymType, LocationName } from "@enums";
+import { BladeContractName, CityName, FactionName, FactionWorkType, GymType, LocationName } from "@enums";
 import { Factions } from "../../../Faction/Factions";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -90,12 +90,12 @@ function possibleFactions(sleeve: Sleeve): string[] {
   });
 }
 
-function possibleContracts(sleeve: Sleeve): string[] {
+function possibleContracts(sleeve: Sleeve): BladeContractName[] | ["------"] {
   const bb = Player.bladeburner;
   if (bb === null) {
     return ["------"];
   }
-  let contracts = bb.getContractNamesNetscriptFn();
+  let contracts = Object.values(BladeContractName);
   for (const otherSleeve of Player.sleeves) {
     if (sleeve === otherSleeve) {
       continue;
@@ -104,9 +104,6 @@ function possibleContracts(sleeve: Sleeve): string[] {
       const w = otherSleeve.currentWork;
       contracts = contracts.filter((x) => x != w.actionName);
     }
-  }
-  if (contracts.length === 0) {
-    return ["------"];
   }
   return contracts;
 }
