@@ -41,28 +41,28 @@ export function Effect(tpe: FragmentType): string {
       return "+x% grow() power";
     }
     case FragmentType.Hacking: {
-      return "+x% hacking skill";
+      return "+x% hacking experience and skill level";
     }
     case FragmentType.Strength: {
-      return "+x% strength skill";
+      return "+x% strength experience and skill level";
     }
     case FragmentType.Defense: {
-      return "+x% defense skill";
+      return "+x% defense experience and skill level";
     }
     case FragmentType.Dexterity: {
-      return "+x% dexterity skill";
+      return "+x% dexterity experience and skill level";
     }
     case FragmentType.Agility: {
-      return "+x% agility skill";
+      return "+x% agility experience and skill level";
     }
     case FragmentType.Charisma: {
-      return "+x% charisma skill";
+      return "+x% charisma experience and skill level";
     }
     case FragmentType.HacknetMoney: {
       return "+x% hacknet production";
     }
     case FragmentType.HacknetCost: {
-      return "-x% cheaper hacknet cost";
+      return "-x% cheaper hacknet costs";
     }
     case FragmentType.Rep: {
       return "+x% reputation from factions and companies";
@@ -71,7 +71,7 @@ export function Effect(tpe: FragmentType): string {
       return "+x% work money";
     }
     case FragmentType.Crime: {
-      return "+x% crime money";
+      return "+x% crime money and success chance";
     }
     case FragmentType.Bladeburner: {
       return "+x% all bladeburner stats";
