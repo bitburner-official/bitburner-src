@@ -142,7 +142,14 @@ class BitburnerSaveObject {
     // Save file name is based on current timestamp and BitNode
     const epochTime = Math.round(Date.now() / 1000);
     const bn = Player.bitNodeN;
-    const extension = Settings.CompressSaveData ? "save" : "json";
+    /**
+     * Old behavior: save file uses .json extension. Save data is json save string in base64 format.
+     *
+     * New behavior:
+     * - Enable compression: save file uses .json.gz extension. Save data is json save string in binary format.
+     * - Disable compression: save file uses .save extension. Save data is json save string in base64 format.
+     */
+    const extension = Settings.CompressSaveData ? "json.gz" : "save";
     let filename = `bitburnerSave_${epochTime}_BN${bn}x${Player.sourceFileLvl(bn) + 1}.${extension}`;
     if (isRecovery) filename = "RECOVERY" + filename;
     return filename;

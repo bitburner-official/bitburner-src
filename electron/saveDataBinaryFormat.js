@@ -1,6 +1,4 @@
-const magicBytes = [0];
-
-const binaryFormatVersionByte = 0;
+const magicBytes = [0x1f, 0x8b];
 
 function isBinaryFormat(rawData) {
   for (let i = 0; i < magicBytes.length; ++i) {
@@ -11,4 +9,4 @@ function isBinaryFormat(rawData) {
   return true;
 }
 
-module.exports = { magicBytes, binaryFormatVersionByte, isBinaryFormat };
+module.exports = { isBinaryFormat };

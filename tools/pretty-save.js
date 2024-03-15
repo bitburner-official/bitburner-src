@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require("fs").promises;
 const path = require("path");
-const { magicBytes, isBinaryFormat } = require("../electron/saveDataBinaryFormat");
+const { isBinaryFormat } = require("../electron/saveDataBinaryFormat");
 
 async function getSave(file) {
   const data = await fs.readFile(file);
 
   let jsonSaveString;
   if (isBinaryFormat(data)) {
-    const decompressedReadableStream = new Blob([data.subarray(magicBytes.length + 1)])
-      .stream()
-      .pipeThrough(new DecompressionStream("gzip"));
+    const decompressedReadableStream = new Blob([data]).stream().pipeThrough(new DecompressionStream("gzip"));
     jsonSaveString = await new Response(decompressedReadableStream).text();
   } else {
     jsonSaveString = decodeURIComponent(escape(atob(data)));
