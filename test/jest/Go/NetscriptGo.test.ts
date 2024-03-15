@@ -38,9 +38,7 @@ describe("Netscript Go API unit tests", () => {
 
       await makePlayerMove(mockLogger, mockError, 0, 0).catch((_) => _);
 
-      expect(mockError).toHaveBeenCalledWith(
-        "ERROR: Invalid move: That node is already occupied by a piece. (Played 0 0)  ",
-      );
+      expect(mockError).toHaveBeenCalledWith("Invalid move: 0 0. That node is already occupied by a piece.");
     });
 
     it("should update the board with valid player moves", async () => {
