@@ -13,10 +13,9 @@ makeMove(
     x: number,
     y: number,
   ): Promise<{
-    type: "invalid" | "move" | "pass" | "gameOver";
+    type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
-    success: boolean;
   }>;
 ```
 
@@ -29,7 +28,7 @@ makeMove(
 
 **Returns:**
 
-Promise&lt;{ type: "invalid" \| "move" \| "pass" \| "gameOver"; x: number \| null; y: number \| null; success: boolean; }&gt;
+Promise&lt;{ type: "move" \| "pass" \| "gameOver"; x: number \| null; y: number \| null; }&gt;
 
 a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
 

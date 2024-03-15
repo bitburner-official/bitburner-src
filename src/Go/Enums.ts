@@ -27,7 +27,6 @@ export enum GoValidity {
 }
 
 export enum GoPlayType {
-  invalid = "invalid",
   move = "move",
   pass = "pass",
   gameOver = "gameOver",

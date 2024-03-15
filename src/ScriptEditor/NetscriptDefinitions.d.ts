@@ -3941,10 +3941,9 @@ export interface Go {
     x: number,
     y: number,
   ): Promise<{
-    type: "invalid" | "move" | "pass" | "gameOver";
+    type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
-    success: boolean;
   }>;
 
   /**
@@ -3961,10 +3960,9 @@ export interface Go {
    *
    */
   passTurn(): Promise<{
-    type: "invalid" | "move" | "pass" | "gameOver";
+    type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
-    success: boolean;
   }>;
 
   /**
@@ -3979,10 +3977,9 @@ export interface Go {
    * @returns a promise that contains if your last move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    */
   opponentNextTurn(logOpponentMove: boolean = true): Promise<{
-    type: "invalid" | "move" | "pass" | "gameOver";
+    type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
-    success: boolean;
   }>;
 
   /**
@@ -4182,10 +4179,9 @@ export interface Go {
       x: number,
       y: number,
     ): Promise<{
-      type: "invalid" | "move" | "pass" | "gameOver";
+      type: "move" | "pass" | "gameOver";
       x: number | null;
       y: number | null;
-      success: boolean;
     }>;
     /**
      * Attempts to place two routers at once on empty nodes. Note that this ignores other move restrictions, so you can
@@ -4208,10 +4204,9 @@ export interface Go {
       x2: number,
       y2: number,
     ): Promise<{
-      type: "invalid" | "move" | "pass" | "gameOver";
+      type: "move" | "pass" | "gameOver";
       x: number | null;
       y: number | null;
-      success: boolean;
     }>;
 
     /**
@@ -4232,10 +4227,9 @@ export interface Go {
       x: number,
       y: number,
     ): Promise<{
-      type: "invalid" | "move" | "pass" | "gameOver";
+      type: "move" | "pass" | "gameOver";
       x: number | null;
       y: number | null;
-      success: boolean;
     }>;
 
     /**
@@ -4257,10 +4251,9 @@ export interface Go {
       x: number,
       y: number,
     ): Promise<{
-      type: "invalid" | "move" | "pass" | "gameOver";
+      type: "move" | "pass" | "gameOver";
       x: number | null;
       y: number | null;
-      success: boolean;
     }>;
   };
 }

@@ -116,7 +116,7 @@ export async function makePlayerMove(logger: (s: string) => void, error: (s: str
   const moveWasMade = makeMove(boardState, x, y, GoColor.black);
 
   if (validity !== GoValidity.valid || !moveWasMade) {
-    errorOnInvalidMove(error, validity, `(Played ${x} ${y})`);
+    error(`Invalid move: ${x} ${y}. ${validity}.`);
   }
 
   GoEvents.emit();
@@ -135,7 +135,6 @@ export async function getOpponentNextMove(logOpponentMove = true, logger: (s: st
       Go.currentGame.previousPlayer === null ? GoPlayType.gameOver : previousMove ? GoPlayType.move : GoPlayType.pass;
 
     Go.nextTurn = Promise.resolve({
-      success: false,
       type,
       x: previousMove?.[0] ?? null,
       y: previousMove?.[1] ?? null,
@@ -160,42 +159,22 @@ export async function getOpponentNextMove(logOpponentMove = true, logger: (s: st
 }
 
 /**
-  Throw an error on invalid move, and provide some feedback as to what happened and why.
- */
-function errorOnInvalidMove(error: (s: string) => void, validity: GoValidity, moveString: string) {
-  error(
-    `ERROR: Invalid move: ${validity}. ${moveString}  ${
-      validity === GoValidity.notYourTurn
-        ? "Do you have multiple scripts running, or did you forget to await makeMove() or opponentNextTurn()?"
-        : ""
-    }${
-      validity === GoValidity.noSuicide
-        ? "That point has no neighboring empty nodes, and is not connected to a network with access to empty nodes."
-        : ""
-    }${
-      validity === GoValidity.boardRepeated
-        ? "That move would repeat the previous board state, which is illegal as it leads to infinite loops."
-        : ""
-    }`,
-  );
-}
-
-/**
  * Retrieves a move from the current faction in response to the player's move
  */
-export async function getAIMove(boardState: BoardState, success = true): Promise<Play> {
+export async function getAIMove(boardState: BoardState): Promise<Play> {
   let resolve: (value: Play) => void;
   Go.nextTurn = new Promise<Play>((res) => {
     resolve = res;
   });
 
   getMove(boardState, GoColor.white, Go.currentGame.ai).then(async (result) => {
-    // If a new game has started while this async code ran, drop it
-    if (boardState !== Go.currentGame) {
-      return resolve({ ...result, success: false });
+    if (result.type === GoPlayType.pass) {
+      passTurn(Go.currentGame, GoColor.white);
     }
-    if (result.type !== GoPlayType.move || result.x === null || result.y === null) {
-      return resolve({ ...result, success });
+
+    // If there is no move to apply, simply return the result
+    if (boardState !== Go.currentGame || result.type !== GoPlayType.move || result.x === null || result.y === null) {
+      return resolve(result);
     }
 
     await sleep(400);
@@ -206,12 +185,12 @@ export async function getAIMove(boardState: BoardState, success = true): Promise
       boardState.previousPlayer = GoColor.white;
       console.error(`Invalid AI move attempted: ${result.x}, ${result.y}. This should not happen.`);
       GoEvents.emit();
-      return resolve({ ...result, success: false });
+      return resolve(result);
     }
 
     await sleep(300);
     GoEvents.emit();
-    resolve({ ...result, success });
+    resolve(result);
   });
   return Go.nextTurn;
 }
@@ -390,13 +369,6 @@ export function checkCheatApiAccess(error: (s: string) => void): void {
   }
 }
 
-export const invalidMoveResponse: Play = {
-  success: false,
-  type: GoPlayType.invalid,
-  x: null,
-  y: null,
-};
-
 /**
  * Determines if the attempted cheat move is successful. If so, applies the cheat via the callback, and gets the opponent's response.
  *
@@ -415,7 +387,7 @@ export async function determineCheatSuccess(
     callback();
     state.cheatCount++;
     GoEvents.emit();
-    return getAIMove(state, true);
+    return getAIMove(state);
   }
   // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly losing
   else if (state.cheatCount && (ejectRngOverride ?? rng.random()) < 0.1) {
@@ -425,7 +397,6 @@ export async function determineCheatSuccess(
       type: GoPlayType.gameOver,
       x: null,
       y: null,
-      success: false,
     };
   }
   // If the cheat fails, your turn is skipped
@@ -433,7 +404,7 @@ export async function determineCheatSuccess(
     logger(`Cheat failed. Your turn has been skipped.`);
     passTurn(state, GoColor.black, false);
     state.cheatCount++;
-    return getAIMove(state, false);
+    return getAIMove(state);
   }
 }
 

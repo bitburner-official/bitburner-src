@@ -12,7 +12,6 @@ import {
   getLiberties,
   getValidMoves,
   handlePassTurn,
-  invalidMoveResponse,
   makePlayerMove,
   resetBoardState,
   validateMove,
@@ -51,9 +50,8 @@ describe("Netscript Go API unit tests", () => {
       const mockLogger = jest.fn();
       const mockError = jest.fn();
 
-      const result = await makePlayerMove(mockLogger, mockError, 1, 0);
+      await makePlayerMove(mockLogger, mockError, 1, 0);
 
-      expect(result.success).toEqual(true);
       expect(mockLogger).toHaveBeenCalledWith("Go move played: 1, 0");
       expect(boardState.board[1]?.[0]?.color).toEqual(GoColor.black);
       expect(boardState.board[0]?.[0]?.color).toEqual(GoColor.empty);
@@ -66,7 +64,6 @@ describe("Netscript Go API unit tests", () => {
 
       const result = await handlePassTurn(mockLogger);
 
-      expect(result.success).toEqual(true);
       expect(result.type).toEqual(GoPlayType.move);
     });
   });
@@ -210,9 +207,8 @@ describe("Netscript Go API unit tests", () => {
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockLogger = jest.fn();
 
-      const result = await cheatPlayTwoMoves(mockLogger, 4, 3, 3, 4, 0, 0);
+      await cheatPlayTwoMoves(mockLogger, 4, 3, 3, 4, 0, 0);
       expect(mockLogger).toHaveBeenCalledWith("Cheat successful. Two go moves played: 4,3 and 3,4");
-      expect(result.success).toEqual(true);
       expect(Go.currentGame.board[4]?.[3]?.color).toEqual(GoColor.black);
       expect(Go.currentGame.board[3]?.[4]?.color).toEqual(GoColor.black);
       expect(Go.currentGame.board[4]?.[4]?.color).toEqual(GoColor.empty);
@@ -223,9 +219,8 @@ describe("Netscript Go API unit tests", () => {
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockLogger = jest.fn();
 
-      const result = await cheatPlayTwoMoves(mockLogger, 4, 3, 3, 4, 2, 1);
+      await cheatPlayTwoMoves(mockLogger, 4, 3, 3, 4, 2, 1);
       expect(mockLogger).toHaveBeenCalledWith("Cheat failed. Your turn has been skipped.");
-      expect(result.success).toEqual(false);
       expect(Go.currentGame.board[4]?.[3]?.color).toEqual(GoColor.empty);
       expect(Go.currentGame.board[3]?.[4]?.color).toEqual(GoColor.empty);
       expect(Go.currentGame.board[4]?.[4]?.color).toEqual(GoColor.white);
@@ -237,9 +232,8 @@ describe("Netscript Go API unit tests", () => {
       Go.currentGame.cheatCount = 1;
       const mockLogger = jest.fn();
 
-      const result = await cheatPlayTwoMoves(mockLogger, 4, 3, 3, 4, 1, 0);
+      await cheatPlayTwoMoves(mockLogger, 4, 3, 3, 4, 1, 0);
       expect(mockLogger).toHaveBeenCalledWith("Cheat failed! You have been ejected from the subnet.");
-      expect(result.success).toEqual(false);
       expect(Go.currentGame.previousBoard).toEqual(null);
     });
   });
@@ -264,9 +258,8 @@ describe("Netscript Go API unit tests", () => {
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockLogger = jest.fn();
 
-      const result = await cheatRemoveRouter(mockLogger, 0, 0, 0, 0);
+      await cheatRemoveRouter(mockLogger, 0, 0, 0, 0);
 
-      expect(result.success).toEqual(true);
       expect(mockLogger).toHaveBeenCalledWith("Cheat successful. The point 0,0 was cleared.");
       expect(Go.currentGame.board[0][0]?.color).toEqual(GoColor.empty);
     });
@@ -277,9 +270,8 @@ describe("Netscript Go API unit tests", () => {
       Go.currentGame.cheatCount = 1;
       const mockLogger = jest.fn();
 
-      const result = await cheatRemoveRouter(mockLogger, 0, 0, 1, 0);
+      await cheatRemoveRouter(mockLogger, 0, 0, 1, 0);
       expect(mockLogger).toHaveBeenCalledWith("Cheat failed! You have been ejected from the subnet.");
-      expect(result.success).toEqual(false);
       expect(Go.currentGame.previousBoard).toEqual(null);
     });
   });
@@ -304,9 +296,8 @@ describe("Netscript Go API unit tests", () => {
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockLogger = jest.fn();
 
-      const result = await cheatRepairOfflineNode(mockLogger, 4, 4, 0, 0);
+      await cheatRepairOfflineNode(mockLogger, 4, 4, 0, 0);
       expect(mockLogger).toHaveBeenCalledWith("Cheat successful. The point 4,4 was repaired.");
-      expect(result.success).toEqual(true);
       expect(Go.currentGame.board[4]?.[4]?.color).toEqual(GoColor.empty);
     });
   });
