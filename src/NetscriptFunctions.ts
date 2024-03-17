@@ -1,4 +1,3 @@
-import $ from "jquery";
 import { vsprintf, sprintf } from "sprintf-js";
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "./Constants";
@@ -1647,22 +1646,26 @@ export const ns: InternalAPI<NSFull> = {
       return Promise.resolve(false);
     }
     return new Promise(function (resolve) {
-      $.get(
-        url,
-        function (data) {
-          const res = server.writeToContentFile(target, data);
-          if (res.overwritten) {
-            helpers.log(ctx, () => `Successfully retrieved content and overwrote '${target}' on '${hostname}'`);
-            return resolve(true);
+      fetch(url)
+        .then(async (response) => {
+          if (response.status !== 200) {
+            helpers.log(ctx, () => `wget failed. HTTP code: ${response.status}.`);
+            resolve(false);
+            return;
           }
-          helpers.log(ctx, () => `Successfully retrieved content to new file '${target}' on '${hostname}'`);
-          return resolve(true);
-        },
-        "text",
-      ).fail(function (e) {
-        helpers.log(ctx, () => JSON.stringify(e));
-        return resolve(false);
-      });
+          const writeResult = server.writeToContentFile(target, await response.text());
+          if (writeResult.overwritten) {
+            helpers.log(ctx, () => `Successfully retrieved content and overwrote '${target}' on '${hostname}'`);
+            resolve(true);
+          } else {
+            helpers.log(ctx, () => `Successfully retrieved content to new file '${target}' on '${hostname}'`);
+            resolve(true);
+          }
+        })
+        .catch((reason) => {
+          helpers.log(ctx, () => JSON.stringify(reason, Object.getOwnPropertyNames(reason)));
+          resolve(false);
+        });
     });
   },
   getFavorToDonate: () => () => {
