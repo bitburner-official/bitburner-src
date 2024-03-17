@@ -6,7 +6,7 @@ import { Player } from "@player";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { KEY } from "../../utils/helpers/keyCodes";
-import { FactionName } from "@enums";
+import { FactionName, GangMemberType } from "@enums";
 import { AllGangFactionInfo } from "../../Gang/data/FactionInfo";
 import { GangConstants } from "../../Gang/data/Constants";
 
@@ -38,7 +38,12 @@ export function CreateGangModal(props: IProps): React.ReactElement {
         It will also reset your reputation with {props.facName}.
         <br />
         <br />
-        This gang will have a maximum of {AllGangFactionInfo[props.facName].numEnforcers} enforcers and {AllGangFactionInfo[props.facName].numHackers} hackers.
+        This gang will have a maximum of
+        {Object.values(GangMemberType).map((memberType) => (
+          <div key={memberType}>
+            {memberType.toLowerCase()}s: {AllGangFactionInfo[props.facName].maxMembers[memberType]}
+          </div>
+        ))}
         All gangs are limited to a maximum of {GangConstants.MaximumGangMembers} total gang members.
         <br />
         <br />

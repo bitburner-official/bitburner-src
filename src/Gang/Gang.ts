@@ -23,7 +23,7 @@ import { GangMember } from "./GangMember";
 
 import { WorkerScript } from "../Netscript/WorkerScript";
 import { Player } from "@player";
-import { FactionName } from "@enums";
+import { FactionName, GangMemberType } from "@enums";
 import { CONSTANTS } from "../Constants";
 import { AllGangFactionInfo } from "./data/FactionInfo";
 
@@ -314,22 +314,23 @@ export class Gang {
     return Math.floor(Math.log(this.respect) / Math.log(recruitCostBase)) + numFreeMembers - this.members.length; //else
   }
 
-  getRecruitTypeAvailable(isEnforcer: boolean): number {
-    const max = isEnforcer ? AllGangFactionInfo[this.facName].numEnforcers : AllGangFactionInfo[this.facName].numHackers;
-    return max - this.members.filter(m => m.isEnforcer === isEnforcer).length;
+  getRecruitsAvailableByType(type: GangMemberType): number {
+    return AllGangFactionInfo[this.facName].maxMembers[type] - this.getMembersByType(type).length;
   }
 
-  recruitMember(name: string, isEnforcer: boolean): boolean {
-    name = String(name);
-    if (name === "" || isEnforcer === null || !this.canRecruitMember()) return false;
+  getMembersByType(type: GangMemberType): GangMember[] {
+    return this.members.filter(m => m.type === type);
+  }
 
-    if (this.getRecruitTypeAvailable(isEnforcer) <= 0) return false;
+  recruitMember(name: string, type: GangMemberType): boolean {
+    name = String(name);
+    if (name === "" || type === null || !this.canRecruitMember()) return false;
+    if (this.getRecruitsAvailableByType(type) <= 0) return false;
 
     // Check for already-existing names
-    const sameNames = this.members.filter((m) => m.name === name);
-    if (sameNames.length >= 1) return false;
+    if (this.members.some((m) => m.name === name)) return false;
 
-    const member = new GangMember(name, isEnforcer);
+    const member = new GangMember(name, type);
     this.members.push(member);
     return true;
   }
@@ -396,14 +397,13 @@ export class Gang {
   }
 
   /** Returns only valid tasks for this gang. Excludes 'Unassigned' */
-  getAllTaskNames(isEnforcer?: boolean): string[] {
+  getAllTaskNames(type?: GangMemberType): string[] {
     return Object.keys(GangMemberTasks).filter((taskName: string) => {
       const task = GangMemberTasks[taskName];
       if (task == null) return false;
       if (task.name === "Unassigned") return false;
-      if (isEnforcer === undefined) return true;
-      // yes you need both checks
-      return !isEnforcer === task.allowHackers || isEnforcer === task.allowEnforcers;
+      if (type === undefined || task.restrictedTypes === undefined) return true;
+      return task.restrictedTypes.includes(type);
     });
   }
 

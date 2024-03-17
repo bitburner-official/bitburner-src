@@ -1,11 +1,11 @@
+import { GangMemberType } from "@enums";
 import { ITaskParams, ITerritory } from "./ITaskParams";
 
 export class GangMemberTask {
   name: string;
   desc: string;
 
-  allowHackers: boolean;
-  allowEnforcers: boolean;
+  restrictedTypes?: GangMemberType[];
 
   baseRespect: number;
   baseWanted: number;
@@ -26,13 +26,11 @@ export class GangMemberTask {
   deathRisk: boolean;
 
   // Defines tasks that Gang Members can work on
-  constructor(name: string, desc: string, allowHackers: boolean, allowEnforcers: boolean, params: ITaskParams) {
+  constructor(name: string, desc: string, params: ITaskParams, restrictedTypes?: GangMemberType[]) {
     this.name = name;
     this.desc = desc;
 
-    // Flags that describe whether this Task is applicable for Hacking/Combat gangs
-    this.allowHackers = allowHackers;
-    this.allowEnforcers = allowEnforcers;
+    this.restrictedTypes = restrictedTypes;
 
     // Base gain rates for respect/wanted/money
     this.baseRespect = params.baseRespect ? params.baseRespect : 0;

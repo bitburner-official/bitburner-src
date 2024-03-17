@@ -111,6 +111,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const member = getGangMember(ctx, memberName);
       return {
         name: member.name,
+        type: member.type,
         task: member.task,
         earnedRespect: member.earnedRespect,
         hack: member.hack,
@@ -148,8 +149,6 @@ export function NetscriptGang(): InternalAPI<IGang> {
         agi_asc_points: member.agi_asc_points,
         cha_asc_points: member.cha_asc_points,
 
-        isEnforcer: member.isEnforcer,
-
         upgrades: member.upgrades.slice(),
         augmentations: member.augmentations.slice(),
 
@@ -170,19 +169,16 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       return gang.respectForNextRecruit();
     },
-    getMemberTypeCount: (ctx) => (_isEnfocer) => {
+    getMemberTypeCount: (ctx) => (_type) => {
       const gang = getGang(ctx);
-      const isEnfocer = !!_isEnfocer;
-      return gang.members.filter(x => x.isEnforcer == isEnfocer).length;
+      const type = getEnumHelper("GangMemberType").nsGetMember(ctx, _type);
+      return gang.members.filter(x => x.type == type).length;
     },
-    recruitMember: (ctx) => (_memberName, _isEnforcer) => {
-      if (_isEnforcer === null || _isEnforcer === undefined) {
-        throw helpers.errorMessage(ctx, `Member type not set.`);
-      }
+    recruitMember: (ctx) => (_memberName, _type) => {
       const memberName = helpers.string(ctx, "memberName", _memberName);
-      const isEnforcer = !!_isEnforcer;
+      const type = getEnumHelper("GangMemberType").nsGetMember(ctx, _type);
       const gang = getGang(ctx);
-      const recruited = gang.recruitMember(memberName, isEnforcer);
+      const recruited = gang.recruitMember(memberName, type);
       if (memberName === "") {
         ctx.workerScript.log("gang.recruitMember", () => `Failed to recruit Gang Member. Name must be provided.`);
         return false;
@@ -206,7 +202,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       const memberName = helpers.string(ctx, "memberName", _memberName);
       const member = getGangMember(ctx, memberName);
-      const tasks = gang.getAllTaskNames(member.isEnforcer);
+      const tasks = gang.getAllTaskNames(member.type);
       return tasks;
     },
     setMemberTask: (ctx) => (_memberName, _taskName) => {
@@ -214,7 +210,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const taskName = helpers.string(ctx, "taskName", _taskName);
       const gang = getGang(ctx);
       const member = getGangMember(ctx, memberName);
-      if (!gang.getAllTaskNames(member.isEnforcer).includes(taskName)) {
+      if (!gang.getAllTaskNames(member.type).includes(taskName)) {
         ctx.workerScript.log(
           "gang.setMemberTask",
           () =>

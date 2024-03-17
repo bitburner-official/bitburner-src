@@ -74,6 +74,7 @@ export function TerritorySubpage(): React.ReactElement {
             </Tooltip>
           }
         />
+
         <Typography>
           <b>Territory Clash Chance:</b> {formatPercent(gang.territoryClashChance, 3)} <br />
           <b>Power:</b> {formatNumberNoSuffix(AllGangs[gang.facName].power, 3)} <br />

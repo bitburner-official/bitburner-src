@@ -5,6 +5,7 @@ import { useGang } from "./Context";
 import { Typography } from "@mui/material";
 import { AllGangFactionInfo } from "../data/FactionInfo";
 import { GangConstants } from "../data/Constants";
+import { GangMemberType } from "@enums";
 
 /** React Component for the subpage that manages gang members, the main page. */
 export function ManagementSubpage(): React.ReactElement {
@@ -15,8 +16,9 @@ export function ManagementSubpage(): React.ReactElement {
         {gang.facName} (your Gang)
       </Typography>
       <Typography>
-        Max enfocers: {AllGangFactionInfo[gang.facName].numEnforcers}.
-        Max hackers: {AllGangFactionInfo[gang.facName].numHackers}.
+        {Object.values(GangMemberType).map((memberType) => (
+          `Max ${memberType.toLowerCase()}s: ${AllGangFactionInfo[gang.facName].maxMembers[memberType]}. `
+        ))}
         Max gang members: {GangConstants.MaximumGangMembers}.
         <br />
         <br />

@@ -1,3 +1,4 @@
+import { GangMemberType } from "@enums";
 import { ITaskParams } from "../ITaskParams";
 
 /**
@@ -8,11 +9,7 @@ interface IGangMemberTaskMetadata {
   /** Description of the task */
   desc: string;
 
-  /** Whether or not this task can be done by enforcers */
-  allowEnforcers: boolean;
-
-  /** Whether or not this task can be done by hackers */
-  allowHackers: boolean;
+  restrictedTypes?: GangMemberType[];
 
   /** Name of the task */
   name: string;
@@ -31,15 +28,12 @@ interface IGangMemberTaskMetadata {
 export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   {
     desc: "This gang member is currently idle",
-    allowEnforcers: true,
-    allowHackers: true,
     name: "Unassigned",
     params: { hackWeight: 100 }, // This is just to get by the weight check in the GangMemberTask constructor
   },
   {
     desc: "Create and distribute ransomware<br><br>Earns money - Slightly increases respect - Slightly increases wanted level",
-    allowEnforcers: false,
-    allowHackers: true,
+    restrictedTypes: [GangMemberType.Hacker],
     name: "Ransomware",
     params: {
       baseRespect: 0.00055,
@@ -51,8 +45,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Attempt phishing scams and attacks<br><br>Earns money - Slightly increases respect - Slightly increases wanted level",
-    allowEnforcers: false,
-    allowHackers: true,
+    restrictedTypes: [GangMemberType.Hacker],
     name: "Phishing",
     params: {
       baseRespect: 0.00088,
@@ -65,8 +58,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Attempt identity theft<br><br>Earns money - Increases respect - Increases wanted level",
-    allowEnforcers: false,
-    allowHackers: true,
+    restrictedTypes: [GangMemberType.Hacker],
     name: "Identity Theft",
     params: {
       baseRespect: 0.0011,
@@ -79,8 +71,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Carry out DDoS attacks<br><br>Increases respect - Increases wanted level",
-    allowEnforcers: false,
-    allowHackers: true,
+    restrictedTypes: [GangMemberType.Hacker],
     name: "DDoS Attacks",
     params: {
       baseRespect: 0.0044,
@@ -91,8 +82,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Create and distribute malicious viruses<br><br>Increases respect - Increases wanted level",
-    allowEnforcers: false,
-    allowHackers: true,
+    restrictedTypes: [GangMemberType.Hacker],
     name: "Plant Virus",
     params: {
       baseRespect: 0.0066,
@@ -103,8 +93,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Commit financial fraud and digital counterfeiting<br><br>Earns money - Slightly increases respect - Slightly increases wanted level",
-    allowEnforcers: false,
-    allowHackers: true,
+    restrictedTypes: [GangMemberType.Hacker],
     name: "Fraud & Counterfeiting",
     params: {
       baseRespect: 0.0044,
@@ -117,8 +106,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Launder money<br><br>Earns money - Increases respect - Increases wanted level",
-    allowEnforcers: false,
-    allowHackers: true,
+    restrictedTypes: [GangMemberType.Hacker],
     name: "Money Laundering",
     params: {
       baseRespect: 0.011,
@@ -131,8 +119,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Commit acts of cyberterrorism<br><br>Greatly increases respect - Greatly increases wanted level",
-    allowEnforcers: false,
-    allowHackers: true,
+    restrictedTypes: [GangMemberType.Hacker],
     name: "Cyberterrorism",
     params: {
       baseRespect: 0.11,
@@ -144,8 +131,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Work as an ethical hacker for corporations<br><br>Earns money - Lowers wanted level",
-    allowEnforcers: false,
-    allowHackers: true,
+    restrictedTypes: [GangMemberType.Hacker],
     name: "Ethical Hacking",
     params: {
       baseWanted: -0.0004,
@@ -157,8 +143,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Mug random people on the streets<br><br>Earns money - Slightly increases respect - Very slightly increases wanted level",
-    allowEnforcers: true,
-    allowHackers: false,
+    restrictedTypes: [GangMemberType.Enforcer],
     name: "Mug People",
     params: {
       baseRespect: 0.00055,
@@ -174,8 +159,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Sell drugs<br><br>Earns money - Slightly increases respect - Slightly increases wanted level - Scales slightly with territory",
-    allowEnforcers: true,
-    allowHackers: false,
+    restrictedTypes: [GangMemberType.Enforcer],
     name: "Deal Drugs",
     params: {
       baseRespect: 0.00066,
@@ -194,8 +178,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Assign this gang member to extort civilians in your territory<br><br>Earns money - Slightly increases respect - Increases wanted - Scales heavily with territory",
-    allowEnforcers: true,
-    allowHackers: false,
+    restrictedTypes: [GangMemberType.Enforcer],
     name: "Strongarm Civilians",
     params: {
       baseRespect: 0.00044,
@@ -217,8 +200,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Assign this gang member to run cons<br><br>Earns money - Increases respect - Increases wanted level",
-    allowEnforcers: true,
-    allowHackers: false,
+    restrictedTypes: [GangMemberType.Enforcer],
     name: "Run a Con",
     params: {
       baseRespect: 0.00132,
@@ -234,8 +216,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Assign this gang member to commit armed robbery on stores, banks and armored cars<br><br>Earns money - Increases respect - Increases wanted level",
-    allowEnforcers: true,
-    allowHackers: false,
+    restrictedTypes: [GangMemberType.Enforcer],
     name: "Armed Robbery",
     params: {
       baseRespect: 0.00154,
@@ -252,8 +233,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Assign this gang member to traffick illegal arms<br><br>Earns money - Increases respect - Increases wanted level - Scales heavily with territory",
-    allowEnforcers: true,
-    allowHackers: false,
+    restrictedTypes: [GangMemberType.Enforcer],
     name: "Traffick Illegal Arms",
     params: {
       baseRespect: 0.0022,
@@ -274,8 +254,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Assign this gang member to threaten and blackmail high-profile targets<br><br>Earns money - Slightly increases respect - Slightly increases wanted level",
-    allowEnforcers: true,
-    allowHackers: false,
+    restrictedTypes: [GangMemberType.Enforcer],
     name: "Threaten & Blackmail",
     params: {
       baseRespect: 0.0022,
@@ -290,8 +269,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Assign this gang member to engage in human trafficking operations<br><br>Earns money - Increases respect - Increases wanted level - Scales heavily with territory",
-    allowEnforcers: true,
-    allowHackers: false,
+    restrictedTypes: [GangMemberType.Enforcer],
     name: "Human Trafficking",
     params: {
       baseRespect: 0.044,
@@ -312,8 +290,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Assign this gang member to commit acts of terrorism<br><br>Greatly increases respect - Greatly increases wanted level - Scales heavily with territory",
-    allowEnforcers: true,
-    allowHackers: false,
+    restrictedTypes: [GangMemberType.Enforcer],
     name: "Terrorism",
     params: {
       baseRespect: 0.11,
@@ -333,8 +310,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Assign this gang member to be a vigilante and protect the city from criminals<br><br>Decreases wanted level",
-    allowEnforcers: true,
-    allowHackers: false,
+    restrictedTypes: [GangMemberType.Enforcer],
     name: "Vigilante Justice",
     params: {
       baseWanted: -0.0004,
@@ -353,8 +329,6 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Assign this gang member to increase their combat stats (str, def, dex, agi)",
-    allowEnforcers: true,
-    allowHackers: true,
     name: "Train Combat",
     params: {
       strWeight: 25,
@@ -366,22 +340,16 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Assign this gang member to train their hacking skills",
-    allowEnforcers: true,
-    allowHackers: true,
     name: "Train Hacking",
     params: { hackWeight: 100, difficulty: 45 },
   },
   {
     desc: "Assign this gang member to train their charisma",
-    allowEnforcers: true,
-    allowHackers: true,
     name: "Train Charisma",
     params: { chaWeight: 100, difficulty: 8 },
   },
   {
     desc: "Members assigned to this task increase your gang's power.<br /><br />Gang members performing this task can be killed during clashes.",
-    allowEnforcers: true,
-    allowHackers: true,
     name: "Territory Warfare",
     params: {
       hackWeight: 5,
@@ -397,8 +365,6 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   },
   {
     desc: "Members assigned to this task increase your gang's power.<br /><br />No risk of death, but slow.",
-    allowEnforcers: true,
-    allowHackers: true,
     name: "Delegate Territory Warfare",
     params: {
       hackWeight: 5,

@@ -550,7 +550,7 @@ function gangMember(ctx: NetscriptContext, m: unknown): GangMember {
 }
 
 function gangTask(ctx: NetscriptContext, t: unknown): GangMemberTask {
-  const error = missingKey(new GangMemberTask("", "", false, false, { hackWeight: 100 }), t);
+  const error = missingKey(new GangMemberTask("", "", { hackWeight: 100 }), t);
   if (error) throw errorMessage(ctx, `task should be a GangMemberTask.\n${error}`, "TYPE");
   return t as GangMemberTask;
 }

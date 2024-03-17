@@ -33,7 +33,7 @@ export function TaskSelector(props: IProps): React.ReactElement {
     props.onTaskChange();
   }
 
-  const tasks = gang.getAllTaskNames(props.member.isEnforcer);
+  const tasks = gang.getAllTaskNames(props.member.type);
 
   return (
     <Box>

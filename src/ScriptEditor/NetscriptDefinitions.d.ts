@@ -1,5 +1,7 @@
 /** All netscript definitions */
 
+import { GangMemberType } from "@enums";
+
 /** @public */
 interface HP {
   current: number;
@@ -790,7 +792,7 @@ interface GangGenInfo {
   wantedLevelGainRate: number;
   /** Indicating if territory clashes are enabled */
   territoryWarfareEngaged: boolean;
-  /** Number indicating the current wanted penalty */
+  /** Number indicating the current wanted penalty, from 1 to 0. Respect and money gains are multiplied by this number. */
   wantedPenalty: number;
 }
 
@@ -816,10 +818,8 @@ interface GangTaskStats {
   name: string;
   /** Task Description */
   desc: string;
-  /** Is a task of a hacking gang */
-  allowHackers: boolean;
-  /** Is a task of a combat gang */
-  allowEnforcers: boolean;
+  /** If set, the task is only available to those member types */
+  restrictedTypes?: GangMemberType[];
   /** Base respect earned */
   baseRespect: number;
   /** Base wanted earned */
@@ -877,6 +877,8 @@ interface GangTerritory {
 interface GangMemberInfo {
   /** Name of the gang member */
   name: string;
+  /** Gang member type */
+  type: GangMemberType;
   /** Currently assigned task */
   task: string;
   /** Amount of Respect earned by member since they last Ascended */
@@ -946,9 +948,6 @@ interface GangMemberInfo {
   agi_asc_points: number;
   /** Total Charisma Ascension points accumulated */
   cha_asc_points: number;
-
-  /** Whether the member is an enforcer or a hacker */
-  isEnforcer: boolean;
 
   /** List of all non-Augmentation Equipment owned by gang member */
   upgrades: string[];
