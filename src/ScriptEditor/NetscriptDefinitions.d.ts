@@ -3993,15 +3993,13 @@ export interface Go {
    *
    * For example, a 5x5 board might look like this:
    *
-   *  <pre lang="javascript">
-   *    [
-   *       "XX.O.",
-   *       "X..OO",
-   *       ".XO..",
-   *       "XXO.#",
-   *       ".XO.#",
-   *    ]
-   * </pre>
+   [<br/>  
+      "XX.O.",<br/>  
+      "X..OO",<br/>  
+      ".XO..",<br/>  
+      "XXO.#",<br/>  
+      ".XO.#",<br/>  
+   ]
    *
    * Each string represents a vertical column on the board, and each character in the string represents a point.
    *
