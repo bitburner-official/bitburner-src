@@ -29,6 +29,7 @@ export function wget(args: (string | number | boolean)[], server: BaseServer): v
       }
     })
     .catch((reason) => {
+      // Check the comment in wget of src\NetscriptFunctions.ts to see why we use Object.getOwnPropertyNames.
       Terminal.error(`wget failed: ${JSON.stringify(reason, Object.getOwnPropertyNames(reason))}`);
     });
 }
