@@ -14,7 +14,7 @@ interface EditorProps {
   onMount: (editor: monaco.editor.IStandaloneCodeEditor) => void;
   /** Function to be ran every time the code is updated */
   onChange: (newCode?: string) => void;
-  /** Currently opened scripts */
+  /** function to open a script */
   openScript: (script: OpenScript) => void;
 }
 

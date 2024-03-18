@@ -155,10 +155,9 @@ function Root(props: IProps): React.ReactElement {
 
   function openNewScript(script: OpenScript) {
     //Models must be unique per script, so its a good way to make sure if script is already open
-    if (openScripts.some((s) => s.model == script.model)) return;
-    openScripts.push(script);
+    if (openScripts.every((s) => s.model != script.model)) openScripts.push(script);
+      currentScript = script;
     parseCode(script.code);
-    currentScript = script;
     rerender();
   }
 
@@ -265,6 +264,7 @@ function Root(props: IProps): React.ReactElement {
 
   function onTabClose(index: number): void {
     // See if the script on the server is up to date
+    console.log(openScripts, index);
     const closingScript = openScripts[index];
     const savedScriptCode = closingScript.code;
     const wasCurrentScript = openScripts[index] === currentScript;
