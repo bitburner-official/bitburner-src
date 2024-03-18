@@ -4404,6 +4404,19 @@ export interface Sleeve {
   travel(sleeveNumber: number, city: CityName | `${CityName}`): boolean;
 
   /**
+   * Get chance to successfully commit a crime for a sleeve.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * This function returns sleeve's chance of success at committing the specified crime.
+   *
+   * @param sleeveNumber - Index of the sleeve to retrieve augmentations from.
+   * @param crimeType - Name of the crime.
+   * @returns Chance of success at committing the specified crime.
+   */
+  getSleeveCrimeChance(sleeveNumber: number, crimeType: CrimeType | `${CrimeType}`): number;
+
+  /**
    * Get augmentations installed on a sleeve.
    * @remarks
    * RAM cost: 4 GB
@@ -4461,6 +4474,20 @@ export interface Sleeve {
    * @returns True if the aug was purchased and installed on the sleeve, false otherwise.
    */
   purchaseSleeveAug(sleeveNumber: number, augName: string): boolean;
+
+  /**
+   * Get estimate success chance of a Bladeburner action for the sleeve.
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * Returns an array with two values, from 0 to 1, representing minimum and maximum success chance.
+   *
+   * @param sleeveNumber - Index of the sleeve.
+   * @param action - Name of the action to be performed.
+   * @param contract - Name of the contract if applicable.
+   * @returns Estimated success chance for the specified action.
+   */
+  getSleeveBladeburnerEstimatedSuccessChance(sleeveNumber: number, action: string, contract?: string): number[];
 
   /**
    * Set a sleeve to perform Bladeburner actions.

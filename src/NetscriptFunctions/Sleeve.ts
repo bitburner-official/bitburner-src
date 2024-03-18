@@ -173,6 +173,15 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
 
       return data;
     },
+    getSleeveCrimeChance: (ctx) => (_sleeveNumber, _crimeType) => {
+      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      const crimeType = helpers.string(ctx, "crimeType", _crimeType);
+      checkSleeveAPIAccess(ctx);
+      checkSleeveNumber(ctx, sleeveNumber);
+      const crime = findCrime(crimeType);
+      if (crime == null) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid crime: '${crimeType}'`);
+      return crime.successRate(Player.sleeves[sleeveNumber]);
+    },
     getSleeveAugmentations: (ctx) => (_sleeveNumber) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
       checkSleeveAPIAccess(ctx);
@@ -229,6 +238,19 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const aug: Augmentation = Augmentations[augName];
       return getAugCost(aug).repCost;
+    },
+    getSleeveBladeburnerEstimatedSuccessChance: (ctx) => (_sleeveNumber, _action, _contract?) => {
+      const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+      checkSleeveAPIAccess(ctx);
+      checkSleeveNumber(ctx, sleeveNumber);
+
+      const action = helpers.string(ctx, "action", _action);
+      if (typeof _contract === "undefined") {
+        return Player.sleeves[sleeveNumber].bladeburnerSuccessChance("General", action);
+      } else {
+        const contract = helpers.string(ctx, "contract", _contract);
+        return Player.sleeves[sleeveNumber].bladeburnerSuccessChance(action, contract);
+      }
     },
     setToBladeburnerAction: (ctx) => (_sleeveNumber, _action, _contract?) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
