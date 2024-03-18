@@ -176,7 +176,7 @@ function logEndGame(logger: (s: string) => void) {
  * Clears the board, resets winstreak if applicable
  */
 export function resetBoardState(error: (s: string) => void, opponent: GoOpponent, boardSize: number) {
-  if (![5, 7, 9, 13].includes(boardSize)) {
+  if (![5, 7, 9, 13].includes(boardSize) && opponent !== GoOpponent.w0r1d_d43m0n) {
     error(`Invalid subnet size requested (${boardSize}), size must be 5, 7, 9, or 13`);
     return;
   }
