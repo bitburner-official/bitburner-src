@@ -90,6 +90,16 @@ function sfAchievements(): Record<string, Achievement> {
   return achs;
 }
 
+function isLastNode(): boolean {
+  const incompleteNodes: number[] = [];
+  for (let i = 1; i < CONSTANTS.TotalNumBitNodes; i++) {
+    if (Player.sourceFileLvl(i) > 0) continue;
+    else incompleteNodes.push(i);
+  }
+  if (incompleteNodes.length !== 1) return false;
+  else return true;
+}
+
 export const achievements: Record<string, Achievement> = {
   [FactionName.CyberSec.toUpperCase()]: {
     ...achievementData[FactionName.CyberSec.toUpperCase()],
@@ -600,6 +610,21 @@ export const achievements: Record<string, Achievement> = {
     Visible: () => hasAccessToSF(12),
     Condition: () => Player.sourceFileLvl(12) >= 50,
   },
+  CHALLENGE_BN13: {
+    ...achievementData.CHALLENGE_BN13,
+    Icon: "BN13+",
+    Visible: () => hasAccessToSF(13),
+    Condition: () =>
+      Player.bitNodeN === 13 &&
+      bitNodeFinishedState() &&
+      !Player.augmentations.some((a) => a.name === AugmentationName.StaneksGift1),
+  },
+  ALLNODES: {
+    ...achievementData.ALLNODES,
+    Icon: "ALLNODES",
+    Visible: () => hasAccessToSF(1),
+    Condition: () => Player.sourceFileLvl(Player.bitNodeN) === 0 && isLastNode() && bitNodeFinishedState(),
+  },
   BYPASS: {
     ...achievementData.BYPASS,
     Icon: "SF-1",
@@ -654,15 +679,6 @@ export const achievements: Record<string, Achievement> = {
     Secret: true,
     // Hey Players! Yes, you're supposed to modify this to get the achievement!
     Condition: () => false,
-  },
-  CHALLENGE_BN13: {
-    ...achievementData.CHALLENGE_BN13,
-    Icon: "BN13+",
-    Visible: () => hasAccessToSF(13),
-    Condition: () =>
-      Player.bitNodeN === 13 &&
-      bitNodeFinishedState() &&
-      !Player.augmentations.some((a) => a.name === AugmentationName.StaneksGift1),
   },
   DEVMENU: {
     ...achievementData.DEVMENU,

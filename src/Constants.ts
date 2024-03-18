@@ -192,7 +192,7 @@ export const CONSTANTS: {
   EntropyEffect: 0.98,
 
   // BitNode/Source-File related stuff
-  TotalNumBitNodes: 24,
+  TotalNumBitNodes: 13,
 
   InfiniteLoopLimit: 2000,
 
