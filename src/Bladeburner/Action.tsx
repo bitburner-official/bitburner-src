@@ -1,6 +1,5 @@
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { addOffset } from "../utils/helpers/addOffset";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { BladeburnerConstants } from "./data/Constants";
 import { Bladeburner } from "./Bladeburner";
 import { Person } from "../PersonObjects/Person";
@@ -44,7 +43,7 @@ export interface ActionParams {
   teamCount?: number;
 }
 
-export class Action {
+export abstract class Action {
   name = "";
 
   // Difficulty scales with level. See getDifficulty() method
@@ -293,14 +292,4 @@ export class Action {
       ++this.maxLevel;
     }
   }
-
-  toJSON(): IReviverValue {
-    return Generic_toJSON("Action", this);
-  }
-
-  static fromJSON(value: IReviverValue): Action {
-    return Generic_fromJSON(Action, value.data);
-  }
 }
-
-constructorsForReviver.Action = Action;
