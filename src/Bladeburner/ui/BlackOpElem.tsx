@@ -8,7 +8,7 @@ import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFuncti
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { TeamSizeButton } from "./TeamSizeButton";
 import { Bladeburner } from "../Bladeburner";
-import { BlackOperation } from "../BlackOperation";
+import { BlackOperation } from "../Actions/BlackOperation";
 import { CopyableText } from "../../ui/React/CopyableText";
 import { SuccessChance } from "./SuccessChance";
 import { StartButton } from "./StartButton";

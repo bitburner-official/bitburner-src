@@ -1,11 +1,10 @@
 import React from "react";
+import { Button } from "@mui/material";
 
-import { Bladeburner } from "../Bladeburner";
-import { BlackOperation } from "../BlackOperation";
 import { Player } from "@player";
-import Button from "@mui/material/Button";
-import { AugmentationName, BladeOperationName } from "@enums";
-import { ActionIdentifier } from "../ActionIdentifier";
+import { AugmentationName, BladeActionType, BladeOperationName } from "@enums";
+import { Bladeburner } from "../Bladeburner";
+import { ActionIdentifier } from "../Actions/ActionIdentifier";
 
 interface StartButtonProps {
   bladeburner: Bladeburner;
@@ -14,17 +13,20 @@ interface StartButtonProps {
 }
 export function StartButton({ bladeburner, actionId, rerender }: StartButtonProps): React.ReactElement {
   const action = bladeburner.getActionObject(actionId);
-  let disabled = false;
-  if (action.count < 1) {
-    disabled = true;
-  }
-  if (actionId.name === BladeOperationName.raid && bladeburner.getCurrentCity().comms === 0) {
-    disabled = true;
-  }
+  const disabled = ((): boolean => {
+    switch (action.type) {
+      case BladeActionType.general:
+        return false;
+      case BladeActionType.contract:
+      case BladeActionType.operation:
+        return (
+          action.count < 1 || (bladeburner.getCurrentCity().comms === 0 && action.name === BladeOperationName.raid)
+        );
+      case BladeActionType.blackOp:
+        return bladeburner.numBlackOpsComplete !== action.id || bladeburner.rank < action.reqdRank;
+    }
+  })();
 
-  if (action instanceof BlackOperation && bladeburner.rank < action.reqdRank) {
-    disabled = true;
-  }
   function onStart(): void {
     if (disabled) return;
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);

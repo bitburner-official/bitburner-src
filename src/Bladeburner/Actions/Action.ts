@@ -1,11 +1,15 @@
-import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { addOffset } from "../utils/helpers/addOffset";
-import { BladeburnerConstants } from "./data/Constants";
-import { Bladeburner } from "./Bladeburner";
-import { Person } from "../PersonObjects/Person";
-import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
+import type { Operation } from "./Operation";
+import type { Contract } from "./Contract";
+import type { BlackOperation } from "./BlackOperation";
+import type { GeneralAction } from "./GeneralAction";
+import type { Bladeburner } from "../Bladeburner";
+import type { Person } from "../../PersonObjects/Person";
 
-interface ISuccessChanceParams {
+import { addOffset } from "../../utils/helpers/addOffset";
+import { BladeburnerConstants } from "../data/Constants";
+import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
+
+export interface SuccessChanceParams {
   est: boolean;
 }
 
@@ -22,58 +26,38 @@ class StatsMultiplier {
 }
 
 export interface ActionParams {
-  name?: string;
-  level?: number;
-  maxLevel?: number;
-  autoLevel?: boolean;
+  desc: string;
   baseDifficulty?: number;
   difficultyFac?: number;
   rewardFac?: number;
-  successes?: number;
-  failures?: number;
   rankGain?: number;
   rankLoss?: number;
   hpLoss?: number;
-  hpLost?: number;
   isStealth?: boolean;
   isKill?: boolean;
-  count?: number;
   weights?: StatsMultiplier;
   decays?: StatsMultiplier;
-  teamCount?: number;
 }
 
-export abstract class Action {
-  name = "";
+export type Action = Contract | Operation | BlackOperation | GeneralAction;
 
+export abstract class ActionClass {
+  desc = "";
   // Difficulty scales with level. See getDifficulty() method
-  level = 1;
-  maxLevel = 1;
-  autoLevel = true;
   baseDifficulty = 100;
   difficultyFac = 1.01;
 
   // Rank increase/decrease is affected by this exponent
   rewardFac = 1.02;
 
-  successes = 0;
-  failures = 0;
-
   // All of these scale with level/difficulty
   rankGain = 0;
   rankLoss = 0;
   hpLoss = 0;
-  hpLost = 0;
 
   // Action Category. Current categories are stealth and kill
   isStealth = false;
   isKill = false;
-
-  /**
-   * Number of this contract remaining, and its growth rate
-   * Growth rate is an integer and the count will increase by that integer every "cycle"
-   */
-  count: number = getRandomInt(1e3, 25e3);
 
   // Weighting of each stat in determining action success rate
   weights: StatsMultiplier = {
@@ -95,66 +79,30 @@ export abstract class Action {
     cha: 0.9,
     int: 0.9,
   };
-  teamCount = 0;
 
-  // Base Class for Contracts, Operations, and BlackOps
   constructor(params: ActionParams | null = null) {
-    //  | null = null
-    if (params && params.name) this.name = params.name;
+    if (!params) return;
+    this.desc = params.desc;
+    if (params.baseDifficulty) this.baseDifficulty = addOffset(params.baseDifficulty, 10);
+    if (params.difficultyFac) this.difficultyFac = params.difficultyFac;
 
-    if (params && params.baseDifficulty) this.baseDifficulty = addOffset(params.baseDifficulty, 10);
-    if (params && params.difficultyFac) this.difficultyFac = params.difficultyFac;
+    if (params.rewardFac) this.rewardFac = params.rewardFac;
+    if (params.rankGain) this.rankGain = params.rankGain;
+    if (params.rankLoss) this.rankLoss = params.rankLoss;
+    if (params.hpLoss) this.hpLoss = params.hpLoss;
 
-    if (params && params.rewardFac) this.rewardFac = params.rewardFac;
-    if (params && params.rankGain) this.rankGain = params.rankGain;
-    if (params && params.rankLoss) this.rankLoss = params.rankLoss;
-    if (params && params.hpLoss) this.hpLoss = params.hpLoss;
+    if (params.isStealth) this.isStealth = params.isStealth;
+    if (params.isKill) this.isKill = params.isKill;
 
-    if (params && params.isStealth) this.isStealth = params.isStealth;
-    if (params && params.isKill) this.isKill = params.isKill;
-
-    if (params && params.count) this.count = params.count;
-
-    if (params && params.weights) this.weights = params.weights;
-    if (params && params.decays) this.decays = params.decays;
-
-    // Check to make sure weights are summed properly
-    let sum = 0;
-    for (const weight of Object.keys(this.weights)) {
-      if (Object.hasOwn(this.weights, weight)) {
-        sum += this.weights[weight];
-      }
-    }
-    if (sum - 1 >= 10 * Number.EPSILON) {
-      throw new Error(
-        "Invalid weights when constructing Action " +
-          this.name +
-          ". The weights should sum up to 1. They sum up to :" +
-          1,
-      );
-    }
-
-    for (const decay of Object.keys(this.decays)) {
-      if (Object.hasOwn(this.decays, decay)) {
-        if (this.decays[decay] > 1) {
-          throw new Error(`Invalid decays when constructing Action ${this.name}. Decay value cannot be greater than 1`);
-        }
-      }
-    }
+    if (params.weights) this.weights = params.weights;
+    if (params.decays) this.decays = params.decays;
   }
 
   getDifficulty(): number {
-    const difficulty = this.baseDifficulty * Math.pow(this.difficultyFac, this.level - 1);
-    if (isNaN(difficulty)) {
-      throw new Error("Calculated NaN in Action.getDifficulty()");
-    }
-    return difficulty;
+    return this.baseDifficulty;
   }
 
-  /**
-   * Tests for success. Should be called when an action has completed
-   * @param inst {Bladeburner} - Bladeburner instance
-   */
+  /** Tests for success. Should be called when an action has completed */
   attempt(inst: Bladeburner, person: Person): boolean {
     return Math.random() < this.getSuccessChance(inst, person);
   }
@@ -192,7 +140,7 @@ export abstract class Action {
     return 1;
   }
 
-  getChaosCompetencePenalty(inst: Bladeburner, params: ISuccessChanceParams): number {
+  getChaosCompetencePenalty(inst: Bladeburner, params: SuccessChanceParams): number {
     const city = inst.getCurrentCity();
     if (params.est) {
       return Math.pow(city.popEst / BladeburnerConstants.PopulationThreshold, BladeburnerConstants.PopulationExponent);
@@ -234,10 +182,7 @@ export abstract class Action {
    * @params - options:
    *  est (bool): Get success chance estimate instead of real success chance
    */
-  getSuccessChance(inst: Bladeburner, person: Person, params: ISuccessChanceParams = { est: false }): number {
-    if (inst == null) {
-      throw new Error("Invalid Bladeburner instance passed into Action.getSuccessChance");
-    }
+  getSuccessChance(inst: Bladeburner, person: Person, params: SuccessChanceParams = { est: false }): number {
     let difficulty = this.getDifficulty();
     let competence = 0;
     for (const stat of Object.keys(this.weights)) {
@@ -260,10 +205,6 @@ export abstract class Action {
     competence *= this.getChaosCompetencePenalty(inst, params);
     difficulty *= this.getChaosDifficultyBonus(inst);
 
-    if (this.name == "Raid" && inst.getCurrentCity().comms <= 0) {
-      return 0;
-    }
-
     // Factor skill multipliers into success chance
     competence *= inst.skillMultipliers.successChanceAll;
     competence *= this.getActionTypeSkillSuccessBonus(inst);
@@ -281,15 +222,5 @@ export abstract class Action {
       throw new Error("Competence calculated as NaN in Action.getSuccessChance()");
     }
     return Math.min(1, competence / difficulty);
-  }
-
-  getSuccessesNeededForNextLevel(baseSuccessesPerLevel: number): number {
-    return Math.ceil(0.5 * this.maxLevel * (2 * baseSuccessesPerLevel + (this.maxLevel - 1)));
-  }
-
-  setMaxLevel(baseSuccessesPerLevel: number): void {
-    if (this.successes >= this.getSuccessesNeededForNextLevel(baseSuccessesPerLevel)) {
-      ++this.maxLevel;
-    }
   }
 }

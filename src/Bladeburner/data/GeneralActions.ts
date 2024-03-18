@@ -1,6 +1,6 @@
 import { BladeGeneralActionName } from "@enums";
-import { GeneralAction } from "./GeneralAction";
-import { BladeburnerConstants } from "./data/Constants";
+import { GeneralAction } from "../Actions/GeneralAction";
+import { BladeburnerConstants } from "./Constants";
 
 export const GeneralActions: Record<BladeGeneralActionName, GeneralAction> = {
   [BladeGeneralActionName.training]: new GeneralAction({

@@ -45,7 +45,7 @@ import { Terminal } from "./Terminal";
 import { getRecordValues } from "./Types/Record";
 import { ExportMaterial } from "./Corporation/Actions";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
-import { blackOpsArray } from "./Bladeburner/BlackOperations";
+import { blackOpsArray } from "./Bladeburner/data/BlackOperations";
 
 /* SaveObject.js
  *  Defines the object used to save/load games

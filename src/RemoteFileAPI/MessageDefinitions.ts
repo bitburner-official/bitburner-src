@@ -1,4 +1,4 @@
-import type { BaseServer } from "src/Server/BaseServer";
+import type { BaseServer } from "../Server/BaseServer";
 
 export class RFAMessage {
   jsonrpc = "2.0"; // Transmits version of JSON-RPC. Compliance maybe allows some funky interaction with external tools?

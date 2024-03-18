@@ -36,7 +36,7 @@ import { isFactionWork } from "../../Work/FactionWork";
 import { ReputationRate } from "./ReputationRate";
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isCrimeWork } from "../../Work/CrimeWork";
-import { ActionIdentifier } from "../../Bladeburner/ActionIdentifier";
+import { ActionIdentifier } from "../../Bladeburner/Actions/ActionIdentifier";
 import { Skills } from "../../PersonObjects/Skills";
 import { calculateSkillProgress } from "../../PersonObjects/formulas/skill";
 import { EventEmitter } from "../../utils/EventEmitter";

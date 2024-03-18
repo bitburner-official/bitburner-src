@@ -1,6 +1,6 @@
 import type { Augmentation } from "../Augmentation/Augmentation";
 import type { Sleeve as NetscriptSleeve } from "@nsdefs";
-import type { ActionIdentifier } from "src/Bladeburner/ActionIdentifier";
+import type { ActionIdentifier } from "../Bladeburner/Actions/ActionIdentifier";
 
 import { Player } from "@player";
 import { BladeActionType } from "@enums";

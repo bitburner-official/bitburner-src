@@ -1,6 +1,6 @@
 import React from "react";
-import { blackOpsArray } from "../BlackOperations";
-import { BlackOperation } from "../BlackOperation";
+import { blackOpsArray } from "../data/BlackOperations";
+import { BlackOperation } from "../Actions/BlackOperation";
 import { BlackOpElem } from "./BlackOpElem";
 import { Bladeburner } from "../Bladeburner";
 

@@ -1,7 +1,6 @@
 import React from "react";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { Contracts } from "../data/Contracts";
 import { Bladeburner } from "../Bladeburner";
 import { Player } from "@player";
 import { SuccessChance } from "./SuccessChance";
@@ -13,7 +12,7 @@ import { formatNumberNoSuffix, formatBigNumber } from "../../ui/formatNumber";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { useRerender } from "../../ui/React/hooks";
-import { Contract } from "../Contract";
+import { Contract } from "../Actions/Contract";
 import { BladeActionType } from "../Enums";
 import { getEnumHelper } from "../../utils/EnumHelper";
 
@@ -32,11 +31,6 @@ export function ContractElem({ bladeburner, action }: ContractElemProps): React.
     bladeburner.actionTimeToComplete,
   );
   const actionTime = action.getActionTime(bladeburner, Player);
-
-  const actionData = Contracts[action.name];
-  if (actionData === undefined) {
-    throw new Error(`Cannot find data for ${action.name}`);
-  }
 
   return (
     <Paper sx={{ my: 1, p: 1 }}>
@@ -67,8 +61,8 @@ export function ContractElem({ bladeburner, action }: ContractElemProps): React.
       <ActionLevel action={action} bladeburner={bladeburner} isActive={isActive} rerender={rerender} />
       <br />
       <br />
-      <Typography>
-        {actionData.desc}
+      <Typography whiteSpace={"pre-wrap"}>
+        {action.desc}
         <br />
         <br />
         <SuccessChance action={action} bladeburner={bladeburner} />

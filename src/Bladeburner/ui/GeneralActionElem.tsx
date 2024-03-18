@@ -1,4 +1,4 @@
-import type { GeneralAction } from "../GeneralAction";
+import type { GeneralAction } from "../Actions/GeneralAction";
 
 import React from "react";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";

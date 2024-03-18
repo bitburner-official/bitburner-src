@@ -6,7 +6,7 @@ import { Bladeburner } from "../Bladeburner";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { CorruptableText } from "../../ui/React/CorruptableText";
-import { blackOpsArray } from "../BlackOperations";
+import { blackOpsArray } from "../data/BlackOperations";
 
 interface BlackOpPageProps {
   bladeburner: Bladeburner;

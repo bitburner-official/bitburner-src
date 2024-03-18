@@ -5,8 +5,8 @@ import {
   BladeGeneralActionName,
   BladeOperationName,
 } from "@enums";
-import { getEnumHelper } from "../utils/EnumHelper";
-import { assertLoadingType } from "../utils/JSONReviver";
+import { getEnumHelper } from "../../utils/EnumHelper";
+import { assertLoadingType } from "../../utils/JSONReviver";
 
 export type ActionIdentifier =
   | { type: BladeActionType.blackOp; name: BladeBlackOpName }

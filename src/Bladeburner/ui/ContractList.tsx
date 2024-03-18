@@ -1,18 +1,14 @@
 import React from "react";
+import { BladeContractName } from "@enums";
 import { ContractElem } from "./ContractElem";
 import { Bladeburner } from "../Bladeburner";
 
-interface IProps {
-  bladeburner: Bladeburner;
-}
-
-export function ContractList(props: IProps): React.ReactElement {
-  const names = Object.keys(props.bladeburner.contracts);
-  const contracts = props.bladeburner.contracts;
+export function ContractList({ bladeburner }: { bladeburner: Bladeburner }): React.ReactElement {
+  const names = Object.values(BladeContractName);
   return (
     <>
-      {names.map((name: string) => (
-        <ContractElem key={name} bladeburner={props.bladeburner} action={contracts[name]} />
+      {names.map((name) => (
+        <ContractElem key={name} bladeburner={bladeburner} action={bladeburner.contracts[name]} />
       ))}
     </>
   );

@@ -83,6 +83,7 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
   const AllContracts = bladeburner.contracts;
   const [contractTarget, setContract] = useState(AllContracts.Tracking.name);
   function setContractDropdown(event: SelectChangeEvent): void {
+    if (!getEnumHelper("BladeContractName").isMember(event.target.value)) return;
     setContract(event.target.value);
   }
   const modifyContractLevel = (modifier: number) => (levelchange: number) => {

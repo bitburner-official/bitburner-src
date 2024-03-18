@@ -1,4 +1,10 @@
+import type { Bladeburner } from "../Bladeburner";
+import type { Operation } from "../Actions/Operation";
+
 import React from "react";
+import { Paper, Typography } from "@mui/material";
+
+import { Player } from "@player";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { SuccessChance } from "./SuccessChance";
@@ -6,16 +12,10 @@ import { ActionLevel } from "./ActionLevel";
 import { Autolevel } from "./Autolevel";
 import { StartButton } from "./StartButton";
 import { TeamSizeButton } from "./TeamSizeButton";
-import { Bladeburner } from "../Bladeburner";
-import { Operation } from "../Operation";
-import { Operations } from "../data/Operations";
-import { Player } from "@player";
 import { CopyableText } from "../../ui/React/CopyableText";
 import { formatNumberNoSuffix, formatBigNumber } from "../../ui/formatNumber";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
 import { useRerender } from "../../ui/React/hooks";
-import { BladeActionType } from "../Enums";
+import { BladeActionType } from "@enums";
 
 interface OperationElemProps {
   bladeburner: Bladeburner;
@@ -31,11 +31,6 @@ export function OperationElem({ bladeburner, operation }: OperationElemProps): R
     bladeburner.actionTimeToComplete,
   );
   const actionTime = operation.getActionTime(bladeburner, Player);
-
-  const actionData = Operations[operation.name];
-  if (actionData === undefined) {
-    throw new Error(`Cannot find data for ${operation.name}`);
-  }
 
   return (
     <Paper sx={{ my: 1, p: 1 }}>
@@ -68,8 +63,8 @@ export function OperationElem({ bladeburner, operation }: OperationElemProps): R
       <ActionLevel action={operation} bladeburner={bladeburner} isActive={isActive} rerender={rerender} />
       <br />
       <br />
-      <Typography>
-        {actionData.desc}
+      <Typography whiteSpace={"pre-wrap"}>
+        {operation.desc}
         <br />
         <br />
         <SuccessChance action={operation} bladeburner={bladeburner} />

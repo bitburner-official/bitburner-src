@@ -1,6 +1,6 @@
 import React from "react";
 import { GeneralActionElem } from "./GeneralActionElem";
-import { GeneralActions } from "../GeneralActions";
+import { GeneralActions } from "../data/GeneralActions";
 import { Bladeburner } from "../Bladeburner";
 
 interface GeneralActionListProps {

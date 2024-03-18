@@ -1,18 +1,14 @@
 import React from "react";
+import { BladeOperationName } from "@enums";
 import { OperationElem } from "./OperationElem";
 import { Bladeburner } from "../Bladeburner";
 
-interface IProps {
-  bladeburner: Bladeburner;
-}
-
-export function OperationList(props: IProps): React.ReactElement {
-  const names = Object.keys(props.bladeburner.operations);
-  const operations = props.bladeburner.operations;
+export function OperationList({ bladeburner }: { bladeburner: Bladeburner }): React.ReactElement {
+  const names = Object.values(BladeOperationName);
   return (
     <>
-      {names.map((name: string) => (
-        <OperationElem key={name} bladeburner={props.bladeburner} operation={operations[name]} />
+      {names.map((name) => (
+        <OperationElem key={name} bladeburner={bladeburner} operation={bladeburner.operations[name]} />
       ))}
     </>
   );

@@ -56,7 +56,7 @@ import { root } from "../Paths/Directory";
 import { getRecordEntries } from "../Types/Record";
 import { JobTracks } from "../Company/data/JobTracks";
 import { ServerConstants } from "../Server/data/Constants";
-import { blackOpsArray } from "../Bladeburner/BlackOperations";
+import { blackOpsArray } from "../Bladeburner/data/BlackOperations";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {

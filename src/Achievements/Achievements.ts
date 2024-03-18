@@ -23,7 +23,7 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 
 import { getRecordValues } from "../Types/Record";
 import { ServerConstants } from "../Server/data/Constants";
-import { blackOpsArray } from "../Bladeburner/BlackOperations";
+import { blackOpsArray } from "../Bladeburner/data/BlackOperations";
 
 // Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
 const achievementData = (<AchievementDataJson>(<unknown>data)).achievements;

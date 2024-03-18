@@ -2,7 +2,7 @@ import React from "react";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { StealthIcon } from "./StealthIcon";
 import { KillIcon } from "./KillIcon";
-import { Action } from "../Action";
+import { Action } from "../Actions/Action";
 import { Bladeburner } from "../Bladeburner";
 import { Player } from "@player";
 

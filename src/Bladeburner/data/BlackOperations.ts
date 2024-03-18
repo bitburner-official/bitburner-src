@@ -1,4 +1,4 @@
-import { BlackOperation } from "./BlackOperation";
+import { BlackOperation } from "../Actions/BlackOperation";
 import { BladeBlackOpName, CityName, FactionName } from "@enums";
 
 export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
