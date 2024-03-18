@@ -31,7 +31,7 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
       return "This sleeve is currently set to synchronize with the original consciousness. This causes the Sleeve's synchronization to increase.";
     case SleeveWorkType.BLADEBURNER:
       return (
-        `This sleeve is currently attempting to perform ${work.actionName}.\n\nTasks Completed: ${formatInt(
+        `This sleeve is currently attempting to perform ${work.actionId.name}.\n\nTasks Completed: ${formatInt(
           work.tasksCompleted,
         )}\n \n` + `Progress: ${formatPercent(progress)}`
       );

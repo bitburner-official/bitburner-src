@@ -1,5 +1,5 @@
 import { BladeBlackOpName } from "@enums";
-import { Action, IActionParams } from "./Action";
+import { Action, ActionParams } from "./Action";
 import { operationSkillSuccessBonus, operationTeamSuccessBonus } from "./Operation";
 
 interface BlackOpParams {
@@ -16,7 +16,7 @@ export class BlackOperation extends Action {
   desc: string;
   reqdRank: number;
   teamCount = 0;
-  constructor(params: IActionParams & BlackOpParams) {
+  constructor(params: ActionParams & BlackOpParams) {
     super(params);
     this.name = params.name;
     this.count = 1;

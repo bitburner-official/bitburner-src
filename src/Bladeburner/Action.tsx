@@ -22,7 +22,7 @@ class StatsMultiplier {
   int = 0;
 }
 
-export interface IActionParams {
+export interface ActionParams {
   name?: string;
   level?: number;
   maxLevel?: number;
@@ -99,7 +99,7 @@ export class Action {
   teamCount = 0;
 
   // Base Class for Contracts, Operations, and BlackOps
-  constructor(params: IActionParams | null = null) {
+  constructor(params: ActionParams | null = null) {
     //  | null = null
     if (params && params.name) this.name = params.name;
 

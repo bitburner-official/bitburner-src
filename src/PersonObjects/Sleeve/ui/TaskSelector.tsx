@@ -1,14 +1,20 @@
+import type { Sleeve } from "../Sleeve";
+
 import React, { useState } from "react";
-import { Sleeve } from "../Sleeve";
+import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
+
 import { Player } from "@player";
+import {
+  BladeActionType,
+  BladeContractName,
+  CityName,
+  FactionName,
+  FactionWorkType,
+  GymType,
+  LocationName,
+} from "@enums";
 import { Crimes } from "../../../Crime/Crimes";
-import { BladeContractName, CityName, FactionName, FactionWorkType, GymType, LocationName } from "@enums";
 import { Factions } from "../../../Faction/Factions";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
-import { isSleeveCompanyWork } from "../Work/SleeveCompanyWork";
-import { isSleeveBladeburnerWork } from "../Work/SleeveBladeburnerWork";
 import { getEnumHelper } from "../../../utils/EnumHelper";
 import { SleeveWorkType } from "../Work/Work";
 
@@ -51,7 +57,7 @@ function possibleJobs(sleeve: Sleeve): string[] {
     if (sleeve === otherSleeve) {
       continue;
     }
-    if (isSleeveCompanyWork(otherSleeve.currentWork)) {
+    if (otherSleeve.currentWork?.type === SleeveWorkType.COMPANY) {
       forbiddenCompanies.push(otherSleeve.currentWork.companyName);
     }
   }
@@ -70,7 +76,7 @@ function possibleFactions(sleeve: Sleeve): string[] {
     if (sleeve === otherSleeve) {
       continue;
     }
-    if (isSleeveFactionWork(otherSleeve.currentWork)) {
+    if (otherSleeve.currentWork?.type === SleeveWorkType.FACTION) {
       forbiddenFactions.push(otherSleeve.currentWork.factionName);
     }
   }
@@ -100,9 +106,12 @@ function possibleContracts(sleeve: Sleeve): BladeContractName[] | ["------"] {
     if (sleeve === otherSleeve) {
       continue;
     }
-    if (isSleeveBladeburnerWork(otherSleeve.currentWork) && otherSleeve.currentWork.actionType === "Contracts") {
+    if (
+      otherSleeve.currentWork?.type === SleeveWorkType.BLADEBURNER &&
+      otherSleeve.currentWork.actionId.type === BladeActionType.contract
+    ) {
       const w = otherSleeve.currentWork;
-      contracts = contracts.filter((x) => x != w.actionName);
+      contracts = contracts.filter((x) => x != w.actionId.name);
     }
   }
   return contracts;
@@ -253,10 +262,10 @@ function getABC(sleeve: Sleeve): [string, string, string] {
       return ["Work for Faction", work.factionName, workNames[work.factionWorkType] ?? ""];
     }
     case SleeveWorkType.BLADEBURNER:
-      if (work.actionType === "Contracts") {
-        return ["Perform Bladeburner Actions", "Take on contracts", work.actionName];
+      if (work.actionId.type === BladeActionType.contract) {
+        return ["Perform Bladeburner Actions", "Take on contracts", work.actionId.name];
       }
-      return ["Perform Bladeburner Actions", work.actionName, "------"];
+      return ["Perform Bladeburner Actions", work.actionId.name, "------"];
     case SleeveWorkType.CLASS: {
       if (!work.isGym()) return ["Take University Course", work.classType, work.location];
       const gymNames: Record<GymType, string> = {

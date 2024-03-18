@@ -1,17 +1,20 @@
 import type { Augmentation } from "../Augmentation/Augmentation";
 import type { Sleeve as NetscriptSleeve } from "@nsdefs";
+import type { ActionIdentifier } from "src/Bladeburner/ActionIdentifier";
 
 import { Player } from "@player";
+import { BladeActionType } from "@enums";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
-import { isSleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
+import { SleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
 import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyWork";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getAugCost } from "../Augmentation/AugmentationHelpers";
 import { Factions } from "../Faction/Factions";
+import { SleeveWorkType } from "../PersonObjects/Sleeve/Work/Work";
 
 export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
   const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
@@ -233,32 +236,25 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
     setToBladeburnerAction: (ctx) => (_sleeveNumber, _action, _contract?) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
       const action = helpers.string(ctx, "action", _action);
-      let contract: string;
-      if (typeof _contract === "undefined") {
-        contract = "------";
-      } else {
-        contract = helpers.string(ctx, "contract", _contract);
-      }
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
-
-      // Cannot Take on Contracts if another sleeve is performing that action
       if (action === "Take on contracts") {
+        const contract = getEnumHelper("BladeContractName").nsGetMember(ctx, _contract);
         for (let i = 0; i < Player.sleeves.length; ++i) {
-          if (i === sleeveNumber) {
-            continue;
-          }
-          const other = Player.sleeves[i];
-          if (isSleeveBladeburnerWork(other.currentWork) && other.currentWork.actionName === contract) {
+          if (i === sleeveNumber) continue;
+          const otherWork = Player.sleeves[i].currentWork;
+          if (otherWork?.type === SleeveWorkType.BLADEBURNER && otherWork.actionId.name === contract) {
             throw helpers.errorMessage(
               ctx,
               `Sleeve ${sleeveNumber} cannot take on contracts because Sleeve ${i} is already performing that action.`,
             );
           }
         }
+        const actionId: ActionIdentifier = { type: BladeActionType.contract, name: contract };
+        Player.sleeves[sleeveNumber].startWork(new SleeveBladeburnerWork({ actionId }));
       }
 
-      return Player.sleeves[sleeveNumber].bladeburner(action, contract);
+      return Player.sleeves[sleeveNumber].bladeburner(action);
     },
   };
 

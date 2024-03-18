@@ -45,6 +45,7 @@ import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportW
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { createEnumKeyedRecord } from "../Types/Record";
+import { GeneralAction } from "./GeneralAction";
 
 export interface BlackOpsAttempt {
   error?: string;
@@ -176,10 +177,6 @@ export class Bladeburner {
       case BladeActionType.operation:
         try {
           const action = this.operations[actionId.name];
-          // Temp, remove once this is fully typesafe (operations are still string-keyed)
-          if (action == null) {
-            throw new Error("Failed to get Operation Object for: " + actionId.name);
-          }
           if (action.count < 1) {
             return this.resetAction();
           }
@@ -208,23 +205,9 @@ export class Bladeburner {
         }
         break;
       case BladeActionType.general: {
-        switch (actionId.name) {
-          case BladeGeneralActionName.recruitment:
-            this.actionTimeToComplete = this.getRecruitmentTime(Player);
-            return;
-          case BladeGeneralActionName.training:
-          case BladeGeneralActionName.fieldAnalysis:
-            this.actionTimeToComplete = 30;
-            return;
-          case BladeGeneralActionName.diplomacy:
-          case BladeGeneralActionName.hyperbolicRegen:
-          case BladeGeneralActionName.inciteViolence:
-            this.actionTimeToComplete = 60;
-            return;
-        }
-        // Typecheck ensures it is impossible to reach this code
-        const __check: never = actionId;
-        break;
+        const action = GeneralActions[actionId.name];
+        this.actionTimeToComplete = action.getActionTime(this, Player);
+        return;
       }
       default: {
         const __check: never = actionId;
@@ -1085,7 +1068,7 @@ export class Bladeburner {
   getActionObject(actionId: ActionIdentifier & { type: BladeActionType.blackOp }): BlackOperation;
   getActionObject(actionId: ActionIdentifier & { type: BladeActionType.operation }): Operation;
   getActionObject(actionId: ActionIdentifier & { type: BladeActionType.contract }): Contract;
-  // Todo: add specific type for general actions?
+  getActionObject(actionId: ActionIdentifier & { type: BladeGeneralActionName }): GeneralAction;
   getActionObject(actionId: ActionIdentifier): Action;
   getActionObject(actionId: ActionIdentifier): Action {
     /**
@@ -1962,24 +1945,7 @@ export class Bladeburner {
     if (!actionId) return "bladeburner.getActionTime";
 
     const actionObj = this.getActionObject(actionId);
-    switch (actionId.type) {
-      case BladeActionType.contract:
-      case BladeActionType.operation:
-      case BladeActionType.blackOp:
-        return actionObj.getActionTime(this, person) * 1000;
-      case BladeActionType.general:
-        switch (actionId.name) {
-          case BladeGeneralActionName.training:
-          case BladeGeneralActionName.fieldAnalysis:
-            return 30000;
-          case BladeGeneralActionName.recruitment:
-            return this.getRecruitmentTime(person) * 1000;
-          case BladeGeneralActionName.diplomacy:
-          case BladeGeneralActionName.hyperbolicRegen:
-          case BladeGeneralActionName.inciteViolence:
-            return 60000;
-        }
-    }
+    return actionObj.getActionTime(this, person) * 1000;
   }
 
   getActionEstimatedSuccessChanceNetscriptFn(person: Person, type: string, name: string): [number, number] | string {

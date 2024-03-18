@@ -1,24 +1,18 @@
 import React from "react";
 import { GeneralActionElem } from "./GeneralActionElem";
-import { Action } from "../Action";
 import { GeneralActions } from "../GeneralActions";
 import { Bladeburner } from "../Bladeburner";
 
-interface IProps {
+interface GeneralActionListProps {
   bladeburner: Bladeburner;
 }
 
-export function GeneralActionList(props: IProps): React.ReactElement {
-  const actions: Action[] = [];
-  for (const name of Object.keys(GeneralActions)) {
-    if (Object.hasOwn(GeneralActions, name)) {
-      actions.push(GeneralActions[name]);
-    }
-  }
+export function GeneralActionList({ bladeburner }: GeneralActionListProps): React.ReactElement {
+  const actions = Object.values(GeneralActions);
   return (
     <>
-      {actions.map((action: Action) => (
-        <GeneralActionElem key={action.name} bladeburner={props.bladeburner} action={action} />
+      {actions.map((action) => (
+        <GeneralActionElem key={action.name} bladeburner={bladeburner} action={action} />
       ))}
     </>
   );

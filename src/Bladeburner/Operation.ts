@@ -2,10 +2,10 @@ import { BladeOperationName } from "@enums";
 import type { BlackOperation } from "./BlackOperation";
 import { Bladeburner } from "./Bladeburner";
 import { BladeburnerConstants } from "./data/Constants";
-import { Action, IActionParams } from "./Action";
+import { Action, ActionParams } from "./Action";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
-export interface OperationParams extends IActionParams {
+export interface OperationParams extends ActionParams {
   name: BladeOperationName;
   reqdRank?: number;
   teamCount?: number;
