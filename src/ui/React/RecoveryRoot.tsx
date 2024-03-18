@@ -12,6 +12,7 @@ import { SoftResetButton } from "./SoftResetButton";
 
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import { isBinaryFormat } from "../../../electron/saveDataBinaryFormat";
 
 export let RecoveryMode = false;
 
@@ -37,7 +38,8 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
     load()
       .then((content) => {
         const epochTime = Math.round(Date.now() / 1000);
-        const filename = `RECOVERY_BITBURNER_${epochTime}.json`;
+        const extension = isBinaryFormat(content) ? "json.gz" : "json";
+        const filename = `RECOVERY_BITBURNER_${epochTime}.${extension}`;
         download(filename, content);
       })
       .catch((err) => console.error(err));

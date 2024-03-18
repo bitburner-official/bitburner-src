@@ -4,7 +4,6 @@ import { GameOptionsPage } from "./GameOptionsPage";
 import { OptionsSlider } from "./OptionsSlider";
 import { AutoexecInput } from "./AutoexecInput";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
-import { canUseBinaryFormat } from "../../utils/saveDataUtils";
 
 export const SystemPage = (): React.ReactElement => {
   const [execTime, setExecTime] = useState(Settings.CodeInstructionRunTime);
@@ -155,13 +154,6 @@ export const SystemPage = (): React.ReactElement => {
         />
       </>
 
-      <OptionSwitch
-        checked={Settings.CompressSaveData}
-        disabled={!canUseBinaryFormat()}
-        onChange={(newValue) => (Settings.CompressSaveData = newValue)}
-        text="Compress save data"
-        tooltip={<>If this is set, save data will be compressed.</>}
-      />
       <OptionSwitch
         checked={Settings.SuppressSavedGameToast}
         onChange={(newValue) => (Settings.SuppressSavedGameToast = newValue)}

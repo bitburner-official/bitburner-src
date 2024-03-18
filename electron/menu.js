@@ -81,7 +81,7 @@ function getMenu(window) {
               defaultPath: defaultPath,
               buttonLabel: "Load",
               filters: [
-                { name: "Game Saves", extensions: ["save", "json", "json.gz", "txt"] },
+                { name: "Game Saves", extensions: ["json", "json.gz", "txt"] },
                 { name: "All", extensions: ["*"] },
               ],
               properties: ["openFile", "dontAddToRecent"],
@@ -103,8 +103,8 @@ function getMenu(window) {
           enabled: storage.isCloudEnabled(),
           click: async () => {
             try {
-              const saveGame = await storage.getSteamCloudSaveString();
-              await storage.pushSaveGameForImport(window, saveGame, false);
+              const saveData = await storage.getSteamCloudSaveData();
+              await storage.pushSaveGameForImport(window, saveData, false);
             } catch (error) {
               log.error(error);
               utils.writeToast(window, "Could not load from Steam Cloud", "error", 5000);
@@ -113,16 +113,6 @@ function getMenu(window) {
         },
         {
           type: "separator",
-        },
-        {
-          label: "Compress Disk Saves (.gz)",
-          type: "checkbox",
-          checked: storage.isSaveCompressionEnabled(),
-          click: (menuItem) => {
-            storage.setSaveCompressionConfig(menuItem.checked);
-            utils.writeToast(window, `${menuItem.checked ? "Enabled" : "Disabled"} Save Compression`, "info", 5000);
-            refreshMenu(window);
-          },
         },
         {
           label: "Auto-Save to Disk",

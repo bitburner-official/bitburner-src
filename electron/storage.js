@@ -87,14 +87,6 @@ function isAutosaveEnabled() {
   return store.get("autosave-enabled", true);
 }
 
-function setSaveCompressionConfig(value) {
-  store.set("save-compression-enabled", value);
-}
-
-function isSaveCompressionEnabled() {
-  return store.get("save-compression-enabled", true);
-}
-
 function setCloudEnabledConfig(value) {
   store.set("cloud-enabled", value);
 }
@@ -164,14 +156,9 @@ async function backupSteamDataToDisk(currentPlayerId) {
   const file = greenworks.getFileNameAndSize(0);
   const previousPlayerId = file.name.replace(".json.gz", "");
   if (previousPlayerId !== currentPlayerId) {
-    // getSteamCloudSaveString returns the save data in the base64 format.
-    const backupSave = await getSteamCloudSaveString();
+    const backupSaveData = await getSteamCloudSaveData();
     const backupFile = path.join(app.getPath("userData"), "/saves/_backups", `${previousPlayerId}.json.gz`);
-    // Decode the save data. buffer is the binary form of the json save string.
-    const buffer = Buffer.from(backupSave, "base64").toString("utf8");
-    // Compress the json save string.
-    saveContent = await gzip(buffer);
-    await fs.writeFile(backupFile, saveContent, "utf8");
+    await fs.writeFile(backupFile, backupSaveData, "utf8");
     log.debug(`Saved backup game to '${backupFile}`);
   }
 }
@@ -181,8 +168,10 @@ async function backupSteamDataToDisk(currentPlayerId) {
  * binary data of compressed json save string. It's weird because the extension is .json.gz while the content is a
  * base64 string. Check the comments in the implementation to see why it is like that.
  */
-async function pushGameSaveToSteamCloud(saveData, currentPlayerId) {
-  if (!isCloudEnabled) return Promise.reject("Steam Cloud is not Enabled");
+async function pushSaveDataToSteamCloud(saveData, currentPlayerId) {
+  if (!isCloudEnabled()) {
+    return Promise.reject("Steam Cloud is not Enabled");
+  }
 
   try {
     backupSteamDataToDisk(currentPlayerId);
@@ -192,30 +181,18 @@ async function pushGameSaveToSteamCloud(saveData, currentPlayerId) {
 
   const steamSaveName = `${currentPlayerId}.json.gz`;
 
-  let compressedBuffer;
-  if (isBinaryFormat(saveData)) {
-    // saveData is in binary format.
-    compressedBuffer = saveData;
-  } else {
-    // saveData is in base64 format.
-    // Let's decode the base64 string so GZIP is more efficient.
-    const buffer = Buffer.from(saveData, "base64");
-    compressedBuffer = await gzip(buffer);
-  }
-
   /**
    * When we push save file to Steam Cloud, we use greenworks.saveTextToFile. It seems that this method expects a string
-   * as the file content. That is why compressedBuffer is encoded in base64 and pushed to Steam Cloud as a text file.
+   * as the file content. That is why saveData is encoded in base64 and pushed to Steam Cloud as a text file.
    *
-   * The comment below was added in the original commit which added support for Steam Cloud & local file system
-   * (d386528627a285c055243739efb47902c5559f3a). The reason which "we can't use utf8" is that encoding in UTF-8 (with
-   * buffer.toString("utf8")) is not the proper way to convert binary data to string. Quote from buffer's documentation:
-   * "If encoding is 'utf8' and a byte sequence in the input is not valid UTF-8, then each invalid byte is replaced with
-   * the replacement character U+FFFD.". The proper way to do it is to use String.fromCharCode or String.fromCodePoint.
-   * Instead of implementing it, I will reuse the old code here for backward compatibility.
+   * Encoding saveData in UTF-8 (with buffer.toString("utf8")) is not the proper way to convert binary data to string.
+   * Quote from buffer's documentation: "If encoding is 'utf8' and a byte sequence in the input is not valid UTF-8, then
+   * each invalid byte is replaced with the replacement character U+FFFD.". The proper way to do it is to use
+   * String.fromCharCode or String.fromCodePoint.
+   *
+   * Instead of implementing it, the old code (encoding in base64) is used here for backward compatibility.
    */
-  // We can't use utf8 for some reason, steamworks is unhappy.
-  const content = compressedBuffer.toString("base64");
+  const content = saveData.toString("base64");
   log.debug(`Uncompressed: ${saveData.length} bytes`);
   log.debug(`Compressed: ${content.length} bytes`);
   log.debug(`Saving to Steam Cloud as ${steamSaveName}`);
@@ -228,35 +205,20 @@ async function pushGameSaveToSteamCloud(saveData, currentPlayerId) {
 }
 
 /**
- * This function processes the save file in Steam Cloud and returns the save data in the base64 format. I don't change
- * it to use the binary format, so there is no change in the logic of processing Steam Cloud save file.
+ * This function processes the save file in Steam Cloud and returns the save data in the binary format.
  */
-async function getSteamCloudSaveString() {
-  if (!isCloudEnabled()) return Promise.reject("Steam Cloud is not Enabled");
+async function getSteamCloudSaveData() {
+  if (!isCloudEnabled()) {
+    return Promise.reject("Steam Cloud is not Enabled");
+  }
   log.debug(`Fetching Save in Steam Cloud`);
   const cloudString = await getCloudFile();
-  // Decode cloudString to get compressedBuffer back.
-  const compressedBuffer = Buffer.from(cloudString, "base64");
-  // uncompressedBuffer is the binary form of the json save string.
-  const uncompressedBuffer = await gunzip(compressedBuffer);
-  // Encode it in base64.
-  const content = uncompressedBuffer.toString("base64");
-  log.debug(`Compressed: ${cloudString.length} bytes`);
-  log.debug(`Uncompressed: ${content.length} bytes`);
-  return content;
+  // Decode cloudString to get save data back.
+  const saveData = Buffer.from(cloudString, "base64");
+  log.debug(`SaveData: ${saveData.length} bytes`);
+  return saveData;
 }
 
-/**
- * Old behavior:
- * - Enable Compress Disk Saves: save file uses .json.gz extension. Save data is json save string in binary format.
- * - Disable Compress Disk Saves: save file uses .json extension. Save data is json save string in base64 format.
- *
- * New behavior:
- * - Enable compression (In-game): save file uses .json.gz extension. Save data is json save string in binary format.
- * - Disable compression (In-game):
- *   - Enable Compress Disk Saves: save file uses .json.gz extension. Save data is json save string in binary format.
- *   - Disable Compress Disk Saves: save file uses .save extension. Save data is json save string in base64 format.
- */
 async function saveGameToDisk(window, electronGameData) {
   const currentFolder = await getSaveFolder(window);
   let saveFolderSizeBytes = await getFolderSizeInBytes(currentFolder);
@@ -268,23 +230,8 @@ async function saveGameToDisk(window, electronGameData) {
     `Remaining: ${remainingSpaceBytes} bytes (${((saveFolderSizeBytes / maxFolderSizeBytes) * 100).toFixed(2)}% used)`,
   );
   let saveData = electronGameData.save;
-  const shouldCompress = isSaveCompressionEnabled() && !isBinaryFormat(saveData);
-  /**
-   * fileName's extension is either .json.gz (binary format) or .save (base64 format).
-   */
-  let fileName = electronGameData.fileName;
-  if (shouldCompress) {
-    // Replace .save with .json.gz
-    fileName = `${fileName.substring(0, fileName.length - 5)}.json.gz`;
-  }
-  const file = path.join(currentFolder, fileName);
+  const file = path.join(currentFolder, electronGameData.fileName);
   try {
-    if (shouldCompress) {
-      // saveData is in the base64 format.
-      // Let's decode the base64 string so GZIP is more efficient.
-      const buffer = Buffer.from(saveData, "base64").toString("utf8");
-      saveData = await gzip(buffer);
-    }
     await fs.writeFile(file, saveData, "utf8");
     log.debug(`Saved Game to '${file}'`);
     log.debug(`Save Size: ${saveData.length} bytes`);
@@ -373,7 +320,7 @@ async function restoreIfNewerExists(window) {
   const disk = {};
 
   try {
-    steam.save = await getSteamCloudSaveString();
+    steam.save = await getSteamCloudSaveData();
     steam.data = await getSaveInformation(window, steam.save);
   } catch (error) {
     log.error("Could not retrieve steam file");
@@ -415,12 +362,12 @@ async function restoreIfNewerExists(window) {
       // We add a few seconds to the currentSave's lastSave to prioritize it
       log.info("Found newer data than the current's save file");
       log.silly(bestMatch.data);
-      await pushSaveGameForImport(window, bestMatch.save, true);
+      pushSaveGameForImport(window, bestMatch.save, true);
       return true;
     } else if (bestMatch.data.playtime > currentData.playtime && currentData.playtime < lowPlaytime) {
       log.info("Found older save, but with more playtime, and current less than 15 mins played");
       log.silly(bestMatch.data);
-      await pushSaveGameForImport(window, bestMatch.save, true);
+      pushSaveGameForImport(window, bestMatch.save, true);
       return true;
     } else {
       log.debug("Current save data is the freshest");
@@ -434,8 +381,8 @@ module.exports = {
   getSaveInformation,
   restoreIfNewerExists,
   pushSaveGameForImport,
-  pushGameSaveToSteamCloud,
-  getSteamCloudSaveString,
+  pushSaveDataToSteamCloud,
+  getSteamCloudSaveData,
   getSteamCloudQuota,
   deleteCloudFile,
   saveGameToDisk,
@@ -448,6 +395,4 @@ module.exports = {
   setCloudEnabledConfig,
   isAutosaveEnabled,
   setAutosaveConfig,
-  isSaveCompressionEnabled,
-  setSaveCompressionConfig,
 };

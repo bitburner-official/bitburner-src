@@ -39,7 +39,7 @@ import { getRecordValues } from "./Types/Record";
 import { ExportMaterial } from "./Corporation/Actions";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
 import { SaveData } from "./types";
-import { decodeSaveData, encodeJsonSaveString } from "./utils/saveDataUtils";
+import { canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/saveDataUtils";
 import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
 
 /* SaveObject.js
@@ -47,8 +47,7 @@ import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
  */
 
 /**
- * This interface is only used for transferring game data to electron-related code, so I rename it from SaveData to
- * ElectronGameData.
+ * This interface is only for transferring game data to electron-related code.
  */
 export interface ElectronGameData {
   playerIdentifier: string;
@@ -117,14 +116,20 @@ class BitburnerSaveObject {
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
 
-    return await encodeJsonSaveString(JSON.stringify(this), Settings.CompressSaveData);
+    return await encodeJsonSaveString(JSON.stringify(this));
   }
 
   async saveGame(emitToastEvent = true): Promise<void> {
     const savedOn = new Date().getTime();
     Player.lastSave = savedOn;
     const saveData = await this.getSaveData();
-    await save(saveData);
+    try {
+      await save(saveData);
+    } catch (error) {
+      console.error(error);
+      dialogBoxCreate(`Cannot save game: ${error}`);
+      return;
+    }
     const electronGameData: ElectronGameData = {
       playerIdentifier: Player.identifier,
       fileName: this.getSaveFileName(),
@@ -138,21 +143,16 @@ class BitburnerSaveObject {
     }
   }
 
-  getSaveFileName(isRecovery = false): string {
+  getSaveFileName(): string {
     // Save file name is based on current timestamp and BitNode
     const epochTime = Math.round(Date.now() / 1000);
     const bn = Player.bitNodeN;
     /**
-     * Old behavior: save file uses .json extension. Save data is json save string in base64 format.
-     *
-     * New behavior:
-     * - Enable compression: save file uses .json.gz extension. Save data is json save string in binary format.
-     * - Disable compression: save file uses .save extension. Save data is json save string in base64 format.
+     * - Binary format: save file uses .json.gz extension. Save data is the compressed json save string.
+     * - Base64 format: save file uses .json extension. Save data is the base64-encoded json save string.
      */
-    const extension = Settings.CompressSaveData ? "json.gz" : "save";
-    let filename = `bitburnerSave_${epochTime}_BN${bn}x${Player.sourceFileLvl(bn) + 1}.${extension}`;
-    if (isRecovery) filename = "RECOVERY" + filename;
-    return filename;
+    const extension = canUseBinaryFormat() ? "json.gz" : "json";
+    return `bitburnerSave_${epochTime}_BN${bn}x${Player.sourceFileLvl(bn) + 1}.${extension}`;
   }
 
   async exportGame(): Promise<void> {
@@ -165,7 +165,13 @@ class BitburnerSaveObject {
     if (!saveData || saveData.length === 0) {
       throw new Error("Invalid import string");
     }
-    await save(saveData);
+    try {
+      await save(saveData);
+    } catch (error) {
+      console.error(error);
+      dialogBoxCreate(`Cannot import save data: ${error}`);
+      return;
+    }
     if (reload) {
       setTimeout(() => location.reload(), 1000);
     }

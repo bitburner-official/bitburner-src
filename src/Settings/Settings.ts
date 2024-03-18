@@ -3,7 +3,6 @@ import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
 import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
-import { canUseBinaryFormat } from "../utils/saveDataUtils";
 
 /** The current options the player has customized to their play style. */
 export const Settings = {
@@ -47,8 +46,6 @@ export const Settings = {
   RemoteFileApiAddress: "localhost",
   /** Port the Remote File API client will try to connect to. 0 to disable. */
   RemoteFileApiPort: 0,
-  /** Whether to compress the save data. */
-  CompressSaveData: false,
   /** Whether to save the game when the player saves any file. */
   SaveGameOnFileSave: true,
   /** Whether to hide the confirmation dialog for augmentation purchases. */
@@ -128,8 +125,5 @@ export const Settings = {
     save.EditorTheme && Object.assign(Settings.EditorTheme, save.EditorTheme);
     delete save.theme, save.styles, save.overview, save.EditorTheme;
     Object.assign(Settings, save);
-    if (Settings.CompressSaveData && !canUseBinaryFormat()) {
-      Settings.CompressSaveData = false;
-    }
   },
 };

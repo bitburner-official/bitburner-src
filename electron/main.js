@@ -152,7 +152,7 @@ function setStopProcessHandler(app, window) {
       log.debug("Saving to Steam Cloud ...");
       try {
         const playerId = window.gameInfo.player.identifier;
-        await storage.pushGameSaveToSteamCloud(save, playerId);
+        await storage.pushSaveDataToSteamCloud(save, playerId);
         log.silly("Saved Game to Steam Cloud");
       } catch (error) {
         log.error(error);
