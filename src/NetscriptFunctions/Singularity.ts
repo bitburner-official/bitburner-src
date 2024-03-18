@@ -1105,7 +1105,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript) => {
       helpers.checkSingularityAccess(ctx);
       const nextBN = helpers.number(ctx, "nextBN", _nextBN);
-      if (nextBN > 13 || nextBN < 1 || !Number.isInteger(nextBN)) {
+      if (nextBN > 14 || nextBN < 1 || !Number.isInteger(nextBN)) {
         throw new Error(`Invalid bitnode specified: ${_nextBN}`);
       }
       const cbScript = _cbScript
