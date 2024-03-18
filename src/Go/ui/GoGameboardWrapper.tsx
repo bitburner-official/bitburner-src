@@ -3,13 +3,13 @@ import type { BoardState } from "../Types";
 import React, { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 
-import { GoOpponent, GoColor, GoValidity, ToastVariant, GoPlayType } from "@enums";
+import { GoColor, GoOpponent, GoPlayType, GoValidity, ToastVariant } from "@enums";
 import { Go, GoEvents } from "../Go";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { getNewBoardState, getStateCopy, makeMove, passTurn, updateCaptures } from "../boardState/boardState";
 import { bitverseArt, weiArt } from "../boardState/asciiArt";
 import { getScore, resetWinstreak } from "../boardAnalysis/scoring";
-import { evaluateIfMoveIsValid, getAllValidMoves, boardFromSimpleBoard } from "../boardAnalysis/boardAnalysis";
+import { boardFromSimpleBoard, evaluateIfMoveIsValid, getAllValidMoves } from "../boardAnalysis/boardAnalysis";
 import { useRerender } from "../../ui/React/hooks";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { boardStyles } from "../boardState/goStyles";
@@ -55,7 +55,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
   // Only run this once on first component mount, to handle scenarios where the game was saved or closed while waiting on the AI to make a move
   useEffect(() => {
-    if (boardState.previousPlayer === GoColor.black && !waitingOnAI) {
+    if (boardState.previousPlayer === GoColor.black && !waitingOnAI && boardState.ai !== GoOpponent.none) {
       takeAiTurn(Go.currentGame);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,6 +101,10 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   function passPlayerTurn() {
     if (boardState.previousPlayer === GoColor.white) {
       passTurn(boardState, GoColor.black);
+      rerender();
+    }
+    if (boardState.previousPlayer === GoColor.black && boardState.ai === GoOpponent.none) {
+      passTurn(boardState, GoColor.white);
       rerender();
     }
     if (boardState.previousPlayer === null) {

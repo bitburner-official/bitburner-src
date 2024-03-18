@@ -319,7 +319,9 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     });
     const flagFunc = Flags(flags._);
     const autocompleteData: AutocompleteData = {
-      servers: GetAllServers().map((server) => server.hostname),
+      servers: GetAllServers()
+        .filter((server) => server.serversOnNetwork.length !== 0)
+        .map((server) => server.hostname),
       scripts: [...currServ.scripts.keys()],
       txts: [...currServ.textFiles.keys()],
       flags: (schema: unknown) => {
