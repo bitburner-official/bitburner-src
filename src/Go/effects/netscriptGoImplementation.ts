@@ -187,7 +187,7 @@ export function resetBoardState(error: (s: string) => void, opponent: GoOpponent
   }
 
   const oldBoardState = Go.currentGame;
-  if (oldBoardState.previousPlayer !== null && oldBoardState.previousBoard) {
+  if (oldBoardState.previousPlayer !== null && oldBoardState.previousBoards.length) {
     resetWinstreak(oldBoardState.ai, false);
   }
 

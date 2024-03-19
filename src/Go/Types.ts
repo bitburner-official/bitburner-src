@@ -36,8 +36,8 @@ export type EyeMove = {
 export type BoardState = {
   board: Board;
   previousPlayer: GoColor | null;
-  /** The previous board position as a SimpleBoard */
-  previousBoard: SimpleBoard | null;
+  /** The previous board positions as a SimpleBoard */
+  previousBoards: SimpleBoard[];
   ai: GoOpponent;
   passCount: number;
   cheatCount: number;

@@ -41,7 +41,8 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
 
   const sizeClass = getSizeClass(state.board[0].length, classes);
 
-  const isNewStone = state.previousBoard && getColorOnSimpleBoard(state.previousBoard, x, y) === GoColor.empty;
+  const isNewStone =
+    state.previousBoards.length && getColorOnSimpleBoard(state.previousBoards[0], x, y) === GoColor.empty;
   const isPriorMove = player === state.previousPlayer && isNewStone;
 
   const emptyPointColorClass =
