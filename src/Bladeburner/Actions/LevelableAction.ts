@@ -15,29 +15,35 @@ export function isLevelableAction(action: Action): action is LevelableAction {
 
 export type LevelableActionParams = ActionParams & {
   growthFunction: () => number;
+  difficultyFac?: number;
+  rewardFac?: number;
   minCount?: number;
   maxCount?: number;
 };
 
 export abstract class LevelableActionClass extends ActionClass {
-  /** Actual count for the real action */
-  count = 0;
-  /** Minimum count for this type of action when resetting / creating a new bladeburner instance */
+  // Static info, not included in save
+  difficultyFac = 1.01;
+  rewardFac = 1.02;
+  growthFunction = () => 0;
   minCount = 1;
-  /** Maximum count for this type of action when resetting / creating a new bladeburner instance */
   maxCount = 150;
+
+  // Dynamic properties included in save
+  count = 0;
   level = 1;
   maxLevel = 1;
   autoLevel = true;
   successes = 0;
   failures = 0;
-  growthFunction = () => 0;
 
   constructor(params: LevelableActionParams | null = null) {
     super(params);
     if (!params) return;
     if (params.minCount) this.minCount = params.minCount;
     if (params.maxCount) this.maxCount = params.maxCount;
+    if (params.difficultyFac) this.difficultyFac = params.difficultyFac;
+    if (params.rewardFac) this.rewardFac = params.rewardFac;
     this.count = getRandomInt(this.minCount, this.maxCount);
     this.growthFunction = params.growthFunction;
   }

@@ -28,7 +28,6 @@ class StatsMultiplier {
 export interface ActionParams {
   desc: string;
   baseDifficulty?: number;
-  difficultyFac?: number;
   rewardFac?: number;
   rankGain?: number;
   rankLoss?: number;
@@ -43,12 +42,8 @@ export type Action = Contract | Operation | BlackOperation | GeneralAction;
 
 export abstract class ActionClass {
   desc = "";
-  // Difficulty scales with level. See getDifficulty() method
+  // For LevelableActions, the base difficulty can be increased based on action level
   baseDifficulty = 100;
-  difficultyFac = 1.01;
-
-  // Rank increase/decrease is affected by this exponent
-  rewardFac = 1.02;
 
   // All of these scale with level/difficulty
   rankGain = 0;
@@ -84,9 +79,7 @@ export abstract class ActionClass {
     if (!params) return;
     this.desc = params.desc;
     if (params.baseDifficulty) this.baseDifficulty = addOffset(params.baseDifficulty, 10);
-    if (params.difficultyFac) this.difficultyFac = params.difficultyFac;
 
-    if (params.rewardFac) this.rewardFac = params.rewardFac;
     if (params.rankGain) this.rankGain = params.rankGain;
     if (params.rankLoss) this.rankLoss = params.rankLoss;
     if (params.hpLoss) this.hpLoss = params.hpLoss;

@@ -27,7 +27,7 @@ export function SkillElem({ skill, bladeburner, onUpgrade }: SkillElemProps): Re
   function onClick(): void {
     if (bladeburner.skillPoints < pointCost) return;
     bladeburner.skillPoints -= pointCost;
-    bladeburner.upgradeSkill(skillName);
+    bladeburner.increaseSkill(skillName);
     onUpgrade();
   }
 

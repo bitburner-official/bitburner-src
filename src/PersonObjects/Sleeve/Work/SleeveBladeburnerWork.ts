@@ -34,9 +34,10 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
   }
 
   cyclesNeeded(sleeve: Sleeve): number {
-    const ret = Player.bladeburner?.getActionTimeNetscriptFn(sleeve, this.actionId.type, this.actionId.name);
-    if (!ret || typeof ret === "string") throw new Error(`Error querying ${this.actionId.name} time`);
-    return ret / CONSTANTS.MilliPerCycle;
+    if (!Player.bladeburner) return Infinity;
+    const action = Player.bladeburner.getActionObject(this.actionId);
+    const timeInMs = action.getActionTime(Player.bladeburner, sleeve) * 1000;
+    return timeInMs / CONSTANTS.MilliPerCycle;
   }
 
   finish() {

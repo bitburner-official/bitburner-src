@@ -53,11 +53,7 @@ import { Operations, initOperations } from "./data/Operations";
 import { clampInteger } from "../utils/helpers/clampNumber";
 import { helpers } from "../Netscript/NetscriptHelpers";
 
-export interface BlackOpsAttempt {
-  error?: string;
-  isAvailable?: boolean;
-  action?: BlackOperation;
-}
+export type BlackOpsAttempt = { isAvailable?: boolean; error: string } | { isAvailable: true };
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
 export class Bladeburner {
@@ -132,82 +128,50 @@ export class Bladeburner {
 
   // Todo, deduplicate this functionality
   getNextBlackOp(): { name: BladeBlackOpName; rank: number } | null {
-    if (this.numBlackOpsComplete === blackOpsArray.length) return null;
+    if (this.numBlackOpsComplete >= blackOpsArray.length) return null;
     const blackOp = blackOpsArray[this.numBlackOpsComplete];
     return { name: blackOp.name, rank: blackOp.reqdRank };
   }
 
   canAttemptBlackOp(blackOpName: BladeBlackOpName): BlackOpsAttempt {
-    const blackOp = BlackOperations[blackOpName];
-    // Don't repeat BlackOps that are already done
-    if (this.numBlackOpsComplete > blackOp.id) {
-      return { error: "Tried to start a Black Operation that had already been completed" };
+    const nextBlackOp = this.getNextBlackOp();
+    if (!nextBlackOp) {
+      return { error: `Already done with all Black Ops` };
+    }
+    if (nextBlackOp.name !== blackOpName) {
+      return { error: `'${blackOpName}' is not the next Black Op (${nextBlackOp.name})` };
+    }
+    if (nextBlackOp.rank > this.rank) {
+      return { error: `Insufficient rank to attempt Black Op ${blackOpName}` };
     }
 
-    if (blackOp.reqdRank > this.rank) {
-      return { error: "Tried to start a Black Operation without meeting the rank requirement" };
-    }
-
-    // Can't start a BlackOp if you haven't done the one before it
-    if (this.numBlackOpsComplete < blackOp.id) {
-      return { error: `Preceding Black Op must be completed before starting '${blackOp.name}'.` };
-    }
-
-    return { isAvailable: true, action: blackOp };
+    return { isAvailable: true };
   }
 
-  /** This function is only for the player. Sleeves use their own functions to perform blade work.
-   *  Todo: partial unification of player and sleeve methods? */
+  /** This function is for the player. Sleeves use their own functions to perform blade work. */
   startAction(actionId: ActionIdentifier | null): void {
     if (!actionId) return this.resetAction();
     this.action = actionId;
     this.actionTimeCurrent = 0;
-    switch (actionId.type) {
-      case BladeActionType.contract: {
-        const action = this.contracts[actionId.name];
-        if (action.count < 1) return this.resetAction();
-        this.actionTimeToComplete = action.getActionTime(this, Player);
-        return;
-      }
+    const action = this.getActionObject(actionId);
+    // This switch statement is just for handling error cases, it does not have to be exhaustive
+    switch (action.type) {
+      case BladeActionType.contract:
       case BladeActionType.operation:
-        try {
-          const action = this.operations[actionId.name];
-          if (action.count < 1) {
-            return this.resetAction();
-          }
-          if (actionId.name === "Raid" && this.getCurrentCity().comms === 0) {
-            return this.resetAction();
-          }
-          this.actionTimeToComplete = action.getActionTime(this, Player);
-        } catch (e: unknown) {
-          exceptionAlert(e);
+        if (action.count < 1 || (actionId.name === BladeOperationName.raid && this.getCurrentCity().comms === 0)) {
+          return this.resetAction();
         }
         break;
-      case BladeActionType.blackOp:
-        try {
-          const testBlackOp = this.canAttemptBlackOp(actionId.name);
-          if (!testBlackOp.isAvailable) {
-            this.resetAction();
-            this.log(`Error: ${testBlackOp.error}`);
-            break;
-          }
-          if (testBlackOp.action === undefined) {
-            throw new Error("action should not be null");
-          }
-          this.actionTimeToComplete = testBlackOp.action.getActionTime(this, Player);
-        } catch (e: unknown) {
-          exceptionAlert(e);
+      case BladeActionType.blackOp: {
+        const attempt = this.canAttemptBlackOp(action.name);
+        if (!attempt.isAvailable) {
+          exceptionAlert(attempt.error);
+          return this.resetAction();
         }
         break;
-      case BladeActionType.general: {
-        const action = GeneralActions[actionId.name];
-        this.actionTimeToComplete = action.getActionTime(this, Player);
-        return;
-      }
-      default: {
-        const __check: never = actionId;
       }
     }
+    this.actionTimeToComplete = action.getActionTime(this, Player);
   }
 
   setSkillLevel(skillName: BladeSkillName, value: number) {
@@ -215,7 +179,7 @@ export class Bladeburner {
     this.updateSkillMultipliers();
   }
 
-  upgradeSkill(skillName: BladeSkillName, count = 1): void {
+  increaseSkill(skillName: BladeSkillName, count = 1): void {
     this.setSkillLevel(skillName, (this.skills[skillName] ?? 0) + count);
   }
 
@@ -423,7 +387,7 @@ export class Bladeburner {
             this.postToConsole(`This skill ${skillName} is already at max level (${level}/${skill.maxLvl}).`);
           } else if (this.skillPoints >= pointCost) {
             this.skillPoints -= pointCost;
-            this.upgradeSkill(skillName);
+            this.increaseSkill(skillName);
             this.log(skillName + " upgraded to Level " + this.getSkillLevel(skillName));
           } else {
             this.postToConsole(
@@ -1595,45 +1559,26 @@ export class Bladeburner {
     }
   }
 
-  startActionNetscriptFn(type: string, name: string, workerScript: WorkerScript): boolean {
-    const errorLogText = `Invalid action: type='${type}' name='${name}'`;
+  startActionNetscriptFn(ctx: NetscriptContext, type: string, name: string): boolean {
     const actionId = this.getActionIdFromTypeAndName(type, name);
-    if (actionId == null) {
-      workerScript.log("bladeburner.startAction", () => errorLogText);
+    if (!actionId) {
+      helpers.log(ctx, () => `Invalid action: type='${type}' name='${name}'`);
       return false;
     }
 
     // Special logic for Black Ops
     if (actionId.type === BladeActionType.blackOp) {
-      const canRunOp = this.canAttemptBlackOp(actionId.name);
-      if (!canRunOp.isAvailable) {
-        workerScript.log("bladeburner.startAction", () => canRunOp.error + "");
+      const attempt = this.canAttemptBlackOp(actionId.name);
+      if (!attempt.isAvailable) {
+        helpers.log(ctx, () => attempt.error);
         return false;
       }
     }
 
-    try {
-      this.startAction(actionId);
-      if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
-      workerScript.log(
-        "bladeburner.startAction",
-        () => `Starting bladeburner action with type '${type}' and name '${name}'`,
-      );
-      return true;
-    } catch (e: unknown) {
-      console.error(e);
-      this.resetAction();
-      workerScript.log("bladeburner.startAction", () => errorLogText);
-      return false;
-    }
-  }
-
-  getActionTimeNetscriptFn(person: Person, type: string, name: string): number | string {
-    const actionId = this.getActionIdFromTypeAndName(type, name);
-    if (!actionId) return "bladeburner.getActionTime";
-
-    const actionObj = this.getActionObject(actionId);
-    return actionObj.getActionTime(this, person) * 1000;
+    this.startAction(actionId);
+    if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
+    helpers.log(ctx, () => `Starting bladeburner action with type '${type}' and name '${name}'`);
+    return true;
   }
 
   getActionEstimatedSuccessChanceNetscriptFn(person: Person, type: string, name: string): [number, number] | string {
@@ -1662,26 +1607,6 @@ export class Bladeburner {
     }
   }
 
-  getActionCountRemainingNetscriptFn(type: string, name: string, workerScript: WorkerScript): number {
-    const errorLogText = `Invalid action: type='${type}' name='${name}'`;
-    const actionId = this.getActionIdFromTypeAndName(type, name);
-    if (!actionId) {
-      workerScript.log("bladeburner.getActionCountRemaining", () => errorLogText);
-      return -1;
-    }
-
-    const actionObj = this.getActionObject(actionId);
-    switch (actionObj.type) {
-      case BladeActionType.contract:
-      case BladeActionType.operation:
-        return actionObj.count;
-      case BladeActionType.blackOp:
-        return actionObj.id <= this.numBlackOpsComplete ? 1 : 0;
-      case BladeActionType.general:
-        return Infinity;
-    }
-  }
-
   upgradeSkillNetscriptFn(ctx: NetscriptContext, skillName: BladeSkillName, count: PositiveInteger): boolean {
     const skill = Skills[skillName];
     const skillLevel = this.getSkillLevel(skillName);
@@ -1702,25 +1627,9 @@ export class Bladeburner {
     }
 
     this.skillPoints -= cost;
-    this.upgradeSkill(skillName, count);
+    this.increaseSkill(skillName, count);
     helpers.log(ctx, () => `'${skillName}' upgraded to level ${this.getSkillLevel(skillName)}`);
     return true;
-  }
-
-  getTeamSizeNetscriptFn(type: string, name: string, workerScript: WorkerScript): number {
-    if (type === "" && name === "") {
-      return this.teamSize;
-    }
-
-    const errorLogText = `Invalid action: type='${type}' name='${name}'`;
-    const actionId = this.getActionIdFromTypeAndName(type, name);
-    if (!actionId) {
-      workerScript.log("bladeburner.getTeamSize", () => errorLogText);
-      return -1;
-    }
-
-    const action = this.getActionObject(actionId);
-    return action.type === BladeActionType.operation || action.type === BladeActionType.blackOp ? action.teamCount : 0;
   }
 
   setTeamSizeNetscriptFn(type: string, name: string, size: number, workerScript: WorkerScript): number {

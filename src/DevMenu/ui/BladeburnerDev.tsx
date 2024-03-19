@@ -64,12 +64,12 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
   }
   const modifySkill = (modifier: number) => (levelchange: number) => {
     if (!isNaN(levelchange)) {
-      bladeburner.upgradeSkill(skillName, levelchange * modifier);
+      bladeburner.increaseSkill(skillName, levelchange * modifier);
       bladeburner.updateSkillMultipliers();
     }
   };
   const addTonsOfSkill = () => {
-    bladeburner.upgradeSkill(skillName, bigNumber);
+    bladeburner.increaseSkill(skillName, bigNumber);
     bladeburner.updateSkillMultipliers();
   };
   const resetSkill = () => {
