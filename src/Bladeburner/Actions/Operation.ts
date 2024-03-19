@@ -1,11 +1,11 @@
 import type { Person } from "../../PersonObjects/Person";
 import type { BlackOperation } from "./BlackOperation";
 import type { Bladeburner } from "../Bladeburner";
-import type { ActionIdentifier } from "./ActionIdentifier";
+import type { ActionAvailability, ActionIdentifier, SuccessChanceParams } from "../Types";
 
 import { BladeActionType, BladeOperationName } from "@enums";
 import { BladeburnerConstants } from "../data/Constants";
-import { ActionAvailability, ActionClass, SuccessChanceParams } from "./Action";
+import { ActionClass } from "./Action";
 import { IReviverValue, assertLoadingType, constructorsForReviver } from "../../utils/JSONReviver";
 import { LevelableActionClass, LevelableActionParams, LevelableActionSaveData } from "./LevelableAction";
 import { getEnumHelper } from "../../utils/EnumHelper";
@@ -35,7 +35,7 @@ export class Operation extends LevelableActionClass {
   getTeamSuccessBonus = operationTeamSuccessBonus;
   getActionTypeSkillSuccessBonus = operationSkillSuccessBonus;
 
-  getChaosDifficultyBonus(inst: Bladeburner /*, params: ISuccessChanceParams*/): number {
+  getChaosSuccessFactor(inst: Bladeburner /*, params: ISuccessChanceParams*/): number {
     const city = inst.getCurrentCity();
     if (city.chaos > BladeburnerConstants.ChaosThreshold) {
       const diff = 1 + (city.chaos - BladeburnerConstants.ChaosThreshold);

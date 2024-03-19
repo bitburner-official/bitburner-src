@@ -1,32 +1,25 @@
+import type { ActionIdentifier } from "../../Bladeburner/Types";
+
 // Root React Component for the Corporation UI
 import React, { useMemo, useState, useEffect, ReactNode } from "react";
-
+import { Box, Button, IconButton, Table, TableBody, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
+import SaveIcon from "@mui/icons-material/Save";
+import ClearAllIcon from "@mui/icons-material/ClearAll";
 import { Theme, useTheme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
+
+import { Player } from "@player";
 import { formatHp, formatMoney, formatSkill } from "../formatNumber";
 import { Reputation } from "./Reputation";
 import { KillScriptsModal } from "./KillScriptsModal";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import SaveIcon from "@mui/icons-material/Save";
-import ClearAllIcon from "@mui/icons-material/ClearAll";
-
 import { Settings } from "../../Settings/Settings";
 import { Router } from "../GameRoot";
 import { Page } from "../Router";
-import { Player } from "@player";
 import { StatsProgressOverviewCell } from "./StatsProgressBar";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-
-import { Box, Tooltip } from "@mui/material";
 
 import { isClassWork } from "../../Work/ClassWork";
 import { CONSTANTS } from "../../Constants";
@@ -36,7 +29,6 @@ import { isFactionWork } from "../../Work/FactionWork";
 import { ReputationRate } from "./ReputationRate";
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isCrimeWork } from "../../Work/CrimeWork";
-import { ActionIdentifier } from "../../Bladeburner/Actions/ActionIdentifier";
 import { Skills } from "../../PersonObjects/Skills";
 import { calculateSkillProgress } from "../../PersonObjects/formulas/skill";
 import { EventEmitter } from "../../utils/EventEmitter";

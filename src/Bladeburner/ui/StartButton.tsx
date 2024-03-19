@@ -1,7 +1,7 @@
-import React from "react";
+import type { Bladeburner } from "../Bladeburner";
+import type { ActionIdentifier } from "../Types";
 
-import { Bladeburner } from "../Bladeburner";
-import { ActionIdentifier } from "../Actions/ActionIdentifier";
+import React from "react";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 
 interface StartButtonProps {

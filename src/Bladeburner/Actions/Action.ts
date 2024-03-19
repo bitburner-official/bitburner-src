@@ -1,19 +1,10 @@
-import type { Operation } from "./Operation";
-import type { Contract } from "./Contract";
-import type { BlackOperation } from "./BlackOperation";
-import type { GeneralAction } from "./GeneralAction";
 import type { Bladeburner } from "../Bladeburner";
 import type { Person } from "../../PersonObjects/Person";
+import type { ActionAvailability, SuccessChanceParams } from "../Types";
 
 import { addOffset } from "../../utils/helpers/addOffset";
 import { BladeburnerConstants } from "../data/Constants";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
-
-export interface SuccessChanceParams {
-  est: boolean;
-}
-
-export type ActionAvailability = { available?: boolean; error: string } | { available: true };
 
 class StatsMultiplier {
   [key: string]: number;
@@ -39,8 +30,6 @@ export interface ActionParams {
   weights?: StatsMultiplier;
   decays?: StatsMultiplier;
 }
-
-export type Action = Contract | Operation | BlackOperation | GeneralAction;
 
 export abstract class ActionClass {
   desc = "";
@@ -93,32 +82,36 @@ export abstract class ActionClass {
     if (params.decays) this.decays = params.decays;
   }
 
-  getDifficulty(): number {
-    return this.baseDifficulty;
-  }
-
-  /** Default implementation is always available */
-  getAvailability(__bladeburner: Bladeburner): ActionAvailability {
-    return { available: true };
-  }
-
   /** Tests for success. Should be called when an action has completed */
-  attempt(inst: Bladeburner, person: Person): boolean {
-    return Math.random() < this.getSuccessChance(inst, person);
+  attempt(bladeburner: Bladeburner, person: Person): boolean {
+    return Math.random() < this.getSuccessChance(bladeburner, person);
   }
 
-  // To be implemented by subtypes
-  getActionTimePenalty(): number {
+  // All the functions below are overwritten by certain subtypes of action, e.g. BlackOps ignore city stats
+  getPopulationSuccessFactor(bladeburner: Bladeburner, { est }: SuccessChanceParams): number {
+    const city = bladeburner.getCurrentCity();
+    const pop = est ? city.popEst : city.pop;
+    return Math.pow(pop / BladeburnerConstants.PopulationThreshold, BladeburnerConstants.PopulationExponent);
+  }
+
+  getChaosSuccessFactor(bladeburner: Bladeburner): number {
+    const city = bladeburner.getCurrentCity();
+    if (city.chaos > BladeburnerConstants.ChaosThreshold) {
+      const diff = 1 + (city.chaos - BladeburnerConstants.ChaosThreshold);
+      const mult = Math.pow(diff, 0.5);
+      return mult;
+    }
+
     return 1;
   }
 
-  getActionTime(inst: Bladeburner, person: Person): number {
+  getActionTime(bladeburner: Bladeburner, person: Person): number {
     const difficulty = this.getDifficulty();
     let baseTime = difficulty / BladeburnerConstants.DifficultyToTimeFactor;
-    const skillFac = inst.skillMultipliers.actionTime; // Always < 1
+    const skillFac = bladeburner.skillMultipliers.actionTime; // Always < 1
 
-    const effAgility = person.skills.agility * inst.skillMultipliers.effAgi;
-    const effDexterity = person.skills.dexterity * inst.skillMultipliers.effDex;
+    const effAgility = person.skills.agility * bladeburner.skillMultipliers.effAgi;
+    const effDexterity = person.skills.dexterity * bladeburner.skillMultipliers.effDex;
     const statFac =
       0.5 *
       (Math.pow(effAgility, BladeburnerConstants.EffAgiExponentialFactor) +
@@ -131,45 +124,36 @@ export abstract class ActionClass {
     return Math.ceil(baseTime * this.getActionTimePenalty());
   }
 
-  // Subtypes of Action implement these differently
-  getTeamSuccessBonus(__inst: Bladeburner): number {
+  getTeamSuccessBonus(__bladeburner: Bladeburner): number {
     return 1;
   }
 
-  getActionTypeSkillSuccessBonus(__inst: Bladeburner): number {
+  getActionTypeSkillSuccessBonus(__bladeburner: Bladeburner): number {
     return 1;
   }
 
-  getChaosCompetencePenalty(inst: Bladeburner, params: SuccessChanceParams): number {
-    const city = inst.getCurrentCity();
-    if (params.est) {
-      return Math.pow(city.popEst / BladeburnerConstants.PopulationThreshold, BladeburnerConstants.PopulationExponent);
-    } else {
-      return Math.pow(city.pop / BladeburnerConstants.PopulationThreshold, BladeburnerConstants.PopulationExponent);
-    }
+  getAvailability(__bladeburner: Bladeburner): ActionAvailability {
+    return { available: true };
   }
 
-  getChaosDifficultyBonus(inst: Bladeburner /*, params: ISuccessChanceParams*/): number {
-    const city = inst.getCurrentCity();
-    if (city.chaos > BladeburnerConstants.ChaosThreshold) {
-      const diff = 1 + (city.chaos - BladeburnerConstants.ChaosThreshold);
-      const mult = Math.pow(diff, 0.5);
-      return mult;
-    }
-
+  getActionTimePenalty(): number {
     return 1;
   }
 
-  getEstSuccessChance(inst: Bladeburner, person: Person): [number, number] {
+  getDifficulty(): number {
+    return this.baseDifficulty;
+  }
+
+  getSuccessRange(bladeburner: Bladeburner, person: Person): [minChance: number, maxChance: number] {
     function clamp(x: number): number {
       return Math.max(0, Math.min(x, 1));
     }
-    const est = this.getSuccessChance(inst, person, { est: true });
-    const real = this.getSuccessChance(inst, person);
+    const est = this.getSuccessChance(bladeburner, person, { est: true });
+    const real = this.getSuccessChance(bladeburner, person);
     const diff = Math.abs(real - est);
     let low = real - diff;
     let high = real + diff;
-    const city = inst.getCurrentCity();
+    const city = bladeburner.getCurrentCity();
     let r = city.pop / city.popEst;
     if (Number.isNaN(r)) r = 0;
     if (r < 1) low *= r;
@@ -177,12 +161,7 @@ export abstract class ActionClass {
     return [clamp(low), clamp(high)];
   }
 
-  /**
-   * @inst - Bladeburner Object
-   * @params - options:
-   *  est (bool): Get success chance estimate instead of real success chance
-   */
-  getSuccessChance(inst: Bladeburner, person: Person, params: SuccessChanceParams = { est: false }): number {
+  getSuccessChance(inst: Bladeburner, person: Person, { est }: SuccessChanceParams = { est: false }): number {
     let difficulty = this.getDifficulty();
     let competence = 0;
     for (const stat of Object.keys(this.weights)) {
@@ -202,8 +181,8 @@ export abstract class ActionClass {
 
     competence *= this.getTeamSuccessBonus(inst);
 
-    competence *= this.getChaosCompetencePenalty(inst, params);
-    difficulty *= this.getChaosDifficultyBonus(inst);
+    competence *= this.getPopulationSuccessFactor(inst, { est });
+    difficulty *= this.getChaosSuccessFactor(inst);
 
     // Factor skill multipliers into success chance
     competence *= inst.skillMultipliers.successChanceAll;

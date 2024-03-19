@@ -1,4 +1,4 @@
-import type { LevelableAction } from "../Actions/LevelableAction";
+import type { LevelableAction } from "../Types";
 
 import React from "react";
 import { Box, Switch, Tooltip, Typography } from "@mui/material";

@@ -1,8 +1,8 @@
 import type { Bladeburner } from "../Bladeburner";
-import type { ActionIdentifier } from "./ActionIdentifier";
+import type { ActionAvailability, ActionIdentifier } from "../Types";
 
 import { BladeActionType, BladeBlackOpName } from "@enums";
-import { ActionAvailability, ActionClass, ActionParams } from "./Action";
+import { ActionClass, ActionParams } from "./Action";
 import { operationSkillSuccessBonus, operationTeamSuccessBonus } from "./Operation";
 
 interface BlackOpParams {
@@ -39,11 +39,11 @@ export class BlackOperation extends ActionClass {
     return 1.5;
   }
 
-  getChaosCompetencePenalty(/*inst: Bladeburner, params: ISuccessChanceParams*/): number {
+  getPopulationSuccessFactor(/*inst: Bladeburner, params: ISuccessChanceParams*/): number {
     return 1;
   }
 
-  getChaosDifficultyBonus(/*inst: Bladeburner, params: ISuccessChanceParams*/): number {
+  getChaosSuccessFactor(/*inst: Bladeburner, params: ISuccessChanceParams*/): number {
     return 1;
   }
   getTeamSuccessBonus = operationTeamSuccessBonus;

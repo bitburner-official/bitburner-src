@@ -1,5 +1,5 @@
 import type { Bladeburner as INetscriptBladeburner } from "@nsdefs";
-import type { Action } from "../Bladeburner/Actions/Action";
+import type { Action, LevelableAction } from "../Bladeburner/Types";
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
 import { Player } from "@player";
@@ -8,7 +8,6 @@ import { Bladeburner, BladeburnerPromise } from "../Bladeburner/Bladeburner";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
-import { LevelableAction, isLevelableAction } from "../Bladeburner/Actions/LevelableAction";
 import { Skills } from "../Bladeburner/data/Skills";
 import { assertString } from "../Netscript/TypeAssertion";
 import { BlackOperations, blackOpsArray } from "../Bladeburner/data/BlackOperations";
@@ -38,6 +37,10 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     if (!actionId) throw helpers.errorMessage(ctx, `Invalid action type='${type}', name='${name}'`);
     const action = bladeburner.getActionObject(actionId);
     return action;
+  }
+
+  function isLevelableAction(action: Action): action is LevelableAction {
+    return action.type === BladeActionType.contract || action.type === BladeActionType.operation;
   }
 
   function getLevelableAction(ctx: NetscriptContext, type: unknown, name: unknown): LevelableAction {
@@ -128,7 +131,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     getActionEstimatedSuccessChance: (ctx) => (type, name) => {
       const bladeburner = getBladeburner(ctx);
       const action = getAction(ctx, type, name);
-      return action.getEstSuccessChance(bladeburner, Player);
+      return action.getSuccessRange(bladeburner, Player);
     },
     getActionRepGain: (ctx) => (type, name, _level) => {
       checkBladeburnerAccess(ctx);

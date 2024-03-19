@@ -1,5 +1,5 @@
 import type { Bladeburner } from "../Bladeburner";
-import type { ActionIdentifier } from "./ActionIdentifier";
+import type { ActionIdentifier } from "../Types";
 
 import { IReviverValue, assertLoadingType, constructorsForReviver } from "../../utils/JSONReviver";
 import { BladeActionType, BladeContractName } from "../Enums";

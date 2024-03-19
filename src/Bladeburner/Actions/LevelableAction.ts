@@ -1,18 +1,10 @@
 import type { Bladeburner } from "../Bladeburner";
-import type { Contract } from "./Contract";
-import type { Operation } from "./Operation";
 import type { Unknownify } from "../../types";
 import type { IReviverValue } from "../../utils/JSONReviver";
+import type { ActionAvailability } from "../Types";
 
-import { BladeActionType } from "@enums";
-import { Action, ActionAvailability, ActionClass, ActionParams } from "./Action";
+import { ActionClass, ActionParams } from "./Action";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
-
-export type LevelableAction = Contract | Operation;
-
-export function isLevelableAction(action: Action): action is LevelableAction {
-  return action.type === BladeActionType.contract || action.type === BladeActionType.operation;
-}
 
 export type LevelableActionParams = ActionParams & {
   growthFunction: () => number;
@@ -94,7 +86,7 @@ export abstract class LevelableActionClass extends ActionClass {
     return baseObject;
   }
   /** Create a basic object just containing the relevant data for a levelable action */
-  save<T extends LevelableAction>(this: T, ctorName: string, ...extraParams: (keyof T)[]): IReviverValue {
+  save<T extends LevelableActionClass>(this: T, ctorName: string, ...extraParams: (keyof T)[]): IReviverValue {
     // Would like to get rid of this any, but not sure what typing will allow doing this
     const data: any = {
       count: this.count,

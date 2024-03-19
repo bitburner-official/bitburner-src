@@ -1,5 +1,5 @@
 import type { Bladeburner } from "../Bladeburner";
-import type { LevelableAction } from "../Actions/LevelableAction";
+import type { LevelableAction } from "../Types";
 
 import React from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";

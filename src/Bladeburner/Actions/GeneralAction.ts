@@ -1,6 +1,6 @@
 import type { Person } from "../../PersonObjects/Person";
 import type { Bladeburner } from "../Bladeburner";
-import type { ActionIdentifier } from "./ActionIdentifier";
+import type { ActionIdentifier } from "../Types";
 
 import { BladeActionType, BladeGeneralActionName } from "@enums";
 import { ActionClass, ActionParams } from "./Action";

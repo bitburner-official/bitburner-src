@@ -1,11 +1,10 @@
 import type { PromisePair } from "../Types/Promises";
 import type { PositiveInteger } from "../types";
-import type { ActionIdentifier } from "./Actions/ActionIdentifier";
+import type { ActionIdentifier, Action } from "./Types";
 import type { BlackOperation } from "./Actions/BlackOperation";
 import type { Contract } from "./Actions/Contract";
 import type { Operation } from "./Actions/Operation";
 import type { GeneralAction } from "./Actions/GeneralAction";
-import type { Action } from "./Actions/Action";
 import type { Person } from "../PersonObjects/Person";
 import type { NetscriptContext } from "../Netscript/APIWrapper";
 
@@ -1527,7 +1526,7 @@ export class Bladeburner {
       case BladeActionType.contract:
       case BladeActionType.operation:
       case BladeActionType.blackOp:
-        return actionObj.getEstSuccessChance(this, person);
+        return actionObj.getSuccessRange(this, person);
       case BladeActionType.general:
         switch (actionId.name) {
           case BladeGeneralActionName.training:

@@ -1,18 +1,8 @@
-import {
-  BladeActionType,
-  BladeBlackOpName,
-  BladeContractName,
-  BladeGeneralActionName,
-  BladeOperationName,
-} from "@enums";
+import type { ActionIdentifier } from "../Types";
+
+import { BladeActionType } from "@enums";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { assertLoadingType } from "../../utils/JSONReviver";
-
-export type ActionIdentifier =
-  | { type: BladeActionType.blackOp; name: BladeBlackOpName }
-  | { type: BladeActionType.contract; name: BladeContractName }
-  | { type: BladeActionType.operation; name: BladeOperationName }
-  | { type: BladeActionType.general; name: BladeGeneralActionName };
 
 /** Returns null if the identifier is not valid */
 export function loadActionIdentifier(identifier: unknown): ActionIdentifier | null {
