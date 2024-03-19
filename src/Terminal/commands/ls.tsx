@@ -1,7 +1,7 @@
 import React from "react";
 import { Theme } from "@mui/material/styles";
 
-import type { TextFilePath } from "../../Paths/TextFilePath";
+import { hasTextExtension, type TextFilePath } from "../../Paths/TextFilePath";
 import type { ContractFilePath } from "../../Paths/ContractFilePath";
 import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 import type { ContentFilePath } from "../../Paths/ContentFile";
@@ -122,7 +122,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
       </span>
     );
   }
-  function ClickableScriptLink(props: { path: ScriptFilePath }): React.ReactElement {
+  function ClickableContentFileLink(props: { path: ScriptFilePath | TextFilePath }): React.ReactElement {
     const classes = makeStyles((theme: Theme) =>
       createStyles({
         link: {
@@ -134,10 +134,15 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     )();
     const fullPath = combinePath(baseDirectory, props.path);
     function onClick() {
-      const code = server.scripts.get(fullPath)?.content ?? "";
+      let content;
+      if (hasTextExtension(fullPath)) {
+        content = server.textFiles.get(fullPath)?.content ?? "";
+      } else {
+        content = server.scripts.get(fullPath)?.content ?? "";
+      }
       const files = new Map<ContentFilePath, string>();
       const options = { hostname: server.hostname };
-      files.set(fullPath, code);
+      files.set(fullPath, content);
       Router.toPage(Page.ScriptEditor, { files, options });
     }
     return (
@@ -188,11 +193,12 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
   type FileGroup =
     | {
         // Types that are not clickable only need to be string[]
-        type: FileType.Folder | FileType.Program | FileType.Contract | FileType.TextFile;
+        type: FileType.Folder | FileType.Program | FileType.Contract;
         segments: string[];
       }
     | { type: FileType.Message; segments: FilePath[] }
-    | { type: FileType.Script; segments: ScriptFilePath[] };
+    | { type: FileType.Script; segments: ScriptFilePath[] }
+    | { type: FileType.TextFile; segments: TextFilePath[] };
 
   function postSegments({ type, segments }: FileGroup, flags: LSFlags): void {
     let segmentElements: React.ReactElement[];
@@ -211,7 +217,8 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
         segmentElements = segments.map((segment) => <ClickableMessageLink key={segment} path={segment} />);
         break;
       case FileType.Script:
-        segmentElements = segments.map((segment) => <ClickableScriptLink key={segment} path={segment} />);
+      case FileType.TextFile:
+        segmentElements = segments.map((segment) => <ClickableContentFileLink key={segment} path={segment} />);
         break;
       default:
         segmentElements = segments.map((segment) => <span key={segment}>{segment}</span>);
