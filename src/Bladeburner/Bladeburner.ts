@@ -40,7 +40,6 @@ import { Settings } from "../Settings/Settings";
 import { getTimestamp } from "../utils/helpers/getTimestamp";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { WorkerScript } from "../Netscript/WorkerScript";
-import { KEY } from "../utils/helpers/keyCodes";
 import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfiltrateWork";
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
@@ -50,6 +49,8 @@ import { Contracts, initContracts } from "./data/Contracts";
 import { Operations, initOperations } from "./data/Operations";
 import { clampInteger } from "../utils/helpers/clampNumber";
 import { helpers } from "../Netscript/NetscriptHelpers";
+import { getActionIdFromTypeAndName } from "./Actions/ActionIdentifier";
+import { parseCommand } from "../Terminal/Parser";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -201,43 +202,6 @@ export class Bladeburner {
     this.storedCycles += numCycles;
   }
 
-  // todo 3.0, remove this fuzz and expect a valid exact action from players
-  getActionIdFromTypeAndName(type = "", name = ""): ActionIdentifier | null {
-    if (!type || !name) return null;
-    const convertedType = type.toLowerCase().trim();
-    switch (convertedType) {
-      case "contract":
-      case "contracts":
-      case "contr":
-        if (!getEnumHelper("BladeContractName").isMember(name)) return null;
-        return { type: BladeActionType.contract, name };
-      case "operation":
-      case "operations":
-      case "op":
-      case "ops":
-        if (!getEnumHelper("BladeOperationName").isMember(name)) return null;
-        return { type: BladeActionType.operation, name };
-      case "blackoperation":
-      case "black operation":
-      case "black operations":
-      case "black op":
-      case "black ops":
-      case "blackop":
-      case "blackops":
-        if (!getEnumHelper("BladeBlackOpName").isMember(name)) return null;
-        return { type: BladeActionType.blackOp, name };
-      case "general":
-      case "general action":
-      case "gen": {
-        const actionName = getEnumHelper("BladeGeneralActionName").getMember(name, { fuzzy: true });
-        if (!actionName) return null;
-        return { type: BladeActionType.general, name: actionName };
-      }
-      default:
-        return null;
-    }
-  }
-
   executeStartConsoleCommand(args: string[]): void {
     if (args.length !== 3) {
       this.postToConsole("Invalid usage of 'start' console command: start [type] [name]");
@@ -246,7 +210,7 @@ export class Bladeburner {
     }
     const type = args[1];
     const name = args[2];
-    const actionId = this.getActionIdFromTypeAndName(type, name);
+    const actionId = getActionIdFromTypeAndName(type, name);
     if (!actionId) {
       this.postToConsole(`Invalid action type / name specified: type: ${type}, name: ${name}`);
       return;
@@ -553,46 +517,11 @@ export class Bladeburner {
     }
   }
 
-  parseCommandArguments(command: string): string[] {
-    /**
-     * Returns an array with command and its arguments in each index.
-     * e.g. skill "blade's intuition" foo returns [skill, blade's intuition, foo]
-     * The input to the fn will be trimmed and will have all whitespace replaced w/ a single space
-     */
-    const args = [];
-    let start = 0;
-    let i = 0;
-    while (i < command.length) {
-      const c = command.charAt(i);
-      if (c === '"' || c === "'") {
-        // Double quotes or Single quotes
-        const endQuote = command.indexOf(c, i + 1);
-        if (endQuote !== -1 && (endQuote === command.length - 1 || command.charAt(endQuote + 1) === KEY.SPACE)) {
-          args.push(command.substring(i + 1, endQuote - i - 1));
-          if (endQuote === command.length - 1) {
-            start = i = endQuote + 1;
-          } else {
-            start = i = endQuote + 2; // Skip the space
-          }
-          continue;
-        }
-      } else if (c === KEY.SPACE) {
-        args.push(command.substring(start, i - start));
-        start = i + 1;
-      }
-      ++i;
-    }
-    if (start !== i) {
-      args.push(command.substring(start, i - start));
-    }
-    return args;
-  }
-
   executeConsoleCommand(command: string): void {
     command = command.trim();
     command = command.replace(/\s\s+/g, " "); // Replace all whitespace w/ a single space
 
-    const args = this.parseCommandArguments(command);
+    const args = parseCommand(command).map(String);
     if (args.length <= 0) return; // Log an error?
 
     switch (args[0].toLowerCase()) {
@@ -1518,7 +1447,7 @@ export class Bladeburner {
   }
 
   getActionEstimatedSuccessChanceNetscriptFn(person: Person, type: string, name: string): [number, number] | string {
-    const actionId = this.getActionIdFromTypeAndName(type, name);
+    const actionId = getActionIdFromTypeAndName(type, name);
     if (!actionId) return "bladeburner.getActionEstimatedSuccessChance";
 
     const actionObj = this.getActionObject(actionId);
@@ -1570,7 +1499,7 @@ export class Bladeburner {
 
   setTeamSizeNetscriptFn(type: string, name: string, size: number, workerScript: WorkerScript): number {
     const errorLogText = `Invalid action: type='${type}' name='${name}'`;
-    const actionId = this.getActionIdFromTypeAndName(type, name);
+    const actionId = getActionIdFromTypeAndName(type, name);
     if (actionId == null) {
       workerScript.log("bladeburner.setTeamSize", () => errorLogText);
       return -1;
