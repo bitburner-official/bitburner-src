@@ -3969,7 +3969,7 @@ export interface Go {
    *  Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable.
    *  x:0 y:0 represents the bottom-left corner of the board in the UI.
    *
-   * @param logOpponentMove optional, if false prevents logging opponent move
+   * @param logOpponentMove - optional, if false prevents logging opponent move
    *
    * @remarks
    * RAM cost: 0 GB
