@@ -85,7 +85,7 @@ export function evaluateIfMoveIsValid(boardState: BoardState, x: number, y: numb
   if (evaluationBoard[x]?.[y]?.color !== player) {
     return GoValidity.noSuicide;
   }
-  if (possibleRepeat && boardState.previousBoards) {
+  if (possibleRepeat && boardState.previousBoards.length) {
     const simpleEvalBoard = simpleBoardFromBoard(evaluationBoard);
     if (boardState.previousBoards.find((board) => areSimpleBoardsIdentical(simpleEvalBoard, board))) {
       return GoValidity.boardRepeated;

@@ -53,4 +53,16 @@ describe("Go board analysis tests", () => {
 
     expect(validity).toEqual(GoValidity.noSuicide);
   });
+
+  it("identifies invalid moves from repeat", async () => {
+    const board = [".X...", ".....", ".....", ".....", "....."];
+    const boardState = boardStateFromSimpleBoard(board);
+    boardState.previousBoards.push([".X...", ".....", ".....", ".....", "....."]);
+    boardState.previousBoards.push([".X...", ".....", ".....", ".....", "....."]);
+    boardState.previousBoards.push([".X...", ".....", ".....", ".....", "....."]);
+    boardState.previousBoards.push(["OX...", ".....", ".....", ".....", "....."]);
+    const validity = evaluateIfMoveIsValid(boardState, 0, 0, GoColor.white, false);
+
+    expect(validity).toEqual(GoValidity.boardRepeated);
+  });
 });
