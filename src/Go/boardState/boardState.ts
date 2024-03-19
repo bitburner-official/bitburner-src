@@ -81,9 +81,9 @@ export function makeMove(boardState: BoardState, x: number, y: number, player: G
     return false;
   }
 
-  // Only maintain last 5 moves
+  // Only maintain last 7 moves
   boardState.previousBoards.unshift(simpleBoardFromBoard(boardState.board));
-  if (boardState.previousBoards.length > 5) {
+  if (boardState.previousBoards.length > 7) {
     boardState.previousBoards.pop();
   }
 
