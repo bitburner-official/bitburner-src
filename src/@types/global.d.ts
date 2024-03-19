@@ -7,6 +7,18 @@ declare module "*.png" {
   export default value;
 }
 
+// When importing wasm, we get a url pointing to the wasm file
+declare module "*.wasm" {
+  const value: string;
+  export default value;
+}
+
+// This module doesnt have TS declarations.
+declare module "acorn-jsx-walk" {
+  function extend(walk: typeof import("acorn-walk")["base"]);
+  export { extend };
+}
+
 // Achievements communicated back to Electron shell for Steam.
 declare interface Document {
   achievements: string[];

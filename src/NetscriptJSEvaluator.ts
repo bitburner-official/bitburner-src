@@ -9,7 +9,8 @@ import { LoadedModule, ScriptURL, ScriptModule } from "./Script/LoadedModule";
 import { Script } from "./Script/Script";
 import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
 import { root } from "./Paths/Directory";
-
+import { TransformFailure } from "esbuild-wasm";
+import { transform } from "./ScriptTransform";
 // Acorn type def is straight up incomplete so we have to fill with our own.
 export type Node = any;
 
@@ -47,11 +48,11 @@ const cleanup = new FinalizationRegistry((mapKey: string) => {
   }
 });
 
-export function compile(script: Script, scripts: Map<ScriptFilePath, Script>): Promise<ScriptModule> {
+export async function compile(script: Script, scripts: Map<ScriptFilePath, Script>): Promise<ScriptModule> {
   // Return the module if it already exists
   if (script.mod) return script.mod.module;
 
-  script.mod = generateLoadedModule(script, scripts, []);
+  script.mod = await generateLoadedModule(script, scripts, []);
   return script.mod.module;
 }
 
@@ -76,15 +77,30 @@ function addDependencyInfo(script: Script, seenStack: Script[]) {
  * @param scripts array of other scripts on the server
  * @param seenStack A stack of scripts that were higher up in the import tree in a recursive call.
  */
-function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Script>, seenStack: Script[]): LoadedModule {
+async function generateLoadedModule(
+  script: Script,
+  scripts: Map<ScriptFilePath, Script>,
+  seenStack: Script[],
+): Promise<LoadedModule> {
   // Early return for recursive calls where the script already has a URL
   if (script.mod) {
     addDependencyInfo(script, seenStack);
     return script.mod;
   }
 
+  const scriptJs = script.filename.endsWith(".js")
+    ? script.code
+    : //tsx can load js, ts, jsx and tsx.
+      await transform(script.code, { loader: "tsx" })
+        .then((result) => result.code)
+        .catch((error: TransformFailure) => error);
+
+  if (typeof scriptJs != "string") {
+    throw scriptJs;
+  }
+
   // Inspired by: https://stackoverflow.com/a/43834063/91401
-  const ast = parse(script.code, { sourceType: "module", ecmaVersion: "latest", ranges: true });
+  const ast = parse(scriptJs, { sourceType: "module", ecmaVersion: "latest", ranges: true });
   interface importNode {
     filename: string;
     start: number;
@@ -122,7 +138,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   // Sort the nodes from last start index to first. This replaces the last import with a blob first,
   // preventing the ranges for other imports from being shifted.
   importNodes.sort((a, b) => b.start - a.start);
-  let newCode = script.code;
+  let newCode = scriptJs;
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
     const filename = resolveScriptFilePath(node.filename, root, ".js");
@@ -133,7 +149,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     if (!importedScript) continue;
 
     seenStack.push(script);
-    importedScript.mod = generateLoadedModule(importedScript, scripts, seenStack);
+    importedScript.mod = await generateLoadedModule(importedScript, scripts, seenStack);
     seenStack.pop();
     newCode = newCode.substring(0, node.start) + importedScript.mod.url + newCode.substring(node.end);
   }

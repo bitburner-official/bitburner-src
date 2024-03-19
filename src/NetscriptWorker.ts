@@ -324,7 +324,7 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
   workerScripts.set(pid, workerScript);
 
   // Start the script's execution using the correct function for file type
-  (workerScript.name.endsWith(".js") ? startNetscript2Script : startNetscript1Script)(workerScript)
+  (workerScript.name.endsWith(".script") ? startNetscript1Script : startNetscript2Script)(workerScript)
     // Once the code finishes (either resolved or rejected, doesnt matter), set its
     // running status to false
     .then(function () {

@@ -7,8 +7,8 @@ type WithScriptExtension = string & { __fileType: "Script" };
 export type ScriptFilePath = FilePath & WithScriptExtension;
 
 /** Valid extensions. Used for some error messaging. */
-export type ScriptExtension = ".js" | ".script";
-export const validScriptExtensions: ScriptExtension[] = [".js", ".script"];
+export const validScriptExtensions = [".js", ".jsx", ".script"] as const;
+export type ScriptExtension = (typeof validScriptExtensions)[number];
 
 /** Sanitize a player input, resolve any relative paths, and for imports add the correct extension if missing
  * @param path The player-provided path to a file. Can contain relative parts.
