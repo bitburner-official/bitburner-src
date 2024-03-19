@@ -23,6 +23,7 @@ export function getNewBoardState(
 ): BoardState {
   if (ai === GoOpponent.w0r1d_d43m0n) {
     boardToCopy = resetCoordinates(rotate90Degrees(boardFromSimpleBoard(bitverseBoardShape)));
+    boardSize = 19;
   }
 
   const newBoardState: BoardState = {
@@ -166,12 +167,12 @@ export function updateChains(board: Board, resetChains = true): void {
  * Modifies the board in place.
  */
 export function updateCaptures(board: Board, playerWhoMoved: GoColor, resetChains = true): void {
-  const boardState = updateChains(board, resetChains);
+  updateChains(board, resetChains);
   const chains = getAllChains(board);
 
   const chainsToCapture = findAllCapturedChains(chains, playerWhoMoved);
   if (!chainsToCapture?.length) {
-    return boardState;
+    return;
   }
 
   chainsToCapture?.forEach((chain) => captureChain(chain));

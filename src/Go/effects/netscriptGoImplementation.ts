@@ -337,7 +337,7 @@ function logEndGame(logger: (s: string) => void) {
  * Clears the board, resets winstreak if applicable
  */
 export function resetBoardState(error: (s: string) => void, opponent: GoOpponent, boardSize: number) {
-  if (![5, 7, 9, 13].includes(boardSize)) {
+  if (![5, 7, 9, 13].includes(boardSize) && opponent !== GoOpponent.w0r1d_d43m0n) {
     error(`Invalid subnet size requested (${boardSize}), size must be 5, 7, 9, or 13`);
     return;
   }
@@ -412,7 +412,7 @@ export async function determineCheatSuccess(
  * Cheating success rate scales with player's crime success rate, and decreases with prior cheat attempts.
  */
 export function cheatSuccessChance(cheatCount: number) {
-  return Math.min(0.6 * (0.8 ^ cheatCount) * Player.mults.crime_success, 1);
+  return Math.min(0.6 * 0.65 ** cheatCount * Player.mults.crime_success, 1);
 }
 
 /**
