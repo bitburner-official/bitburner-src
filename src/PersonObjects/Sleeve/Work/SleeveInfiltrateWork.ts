@@ -4,6 +4,7 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { Sleeve } from "../Sleeve";
 import { SleeveWorkClass, SleeveWorkType } from "./Work";
 import { CONSTANTS } from "../../../Constants";
+import { getKeyList } from "../../../utils/helpers/getKeyList";
 
 const infiltrateCycles = 60000 / CONSTANTS.MilliPerCycle;
 
@@ -43,14 +44,16 @@ export class SleeveInfiltrateWork extends SleeveWorkClass {
     };
   }
 
+  static savedKeys = getKeyList(SleeveInfiltrateWork, { removedKeys: ["nextCompletionPair"] });
+
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("SleeveInfiltrateWork", this);
+    return Generic_toJSON("SleeveInfiltrateWork", this, SleeveInfiltrateWork.savedKeys);
   }
 
   /** Initializes a BladeburnerWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveInfiltrateWork {
-    return Generic_fromJSON(SleeveInfiltrateWork, value.data);
+    return Generic_fromJSON(SleeveInfiltrateWork, value.data, SleeveInfiltrateWork.savedKeys);
   }
 }
 
