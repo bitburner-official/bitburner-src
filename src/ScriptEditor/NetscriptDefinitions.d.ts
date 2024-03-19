@@ -3713,14 +3713,33 @@ export interface Gang {
   respectForNextRecruit(): number;
 
   /**
+   * Retrieves the gang member types.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @returns An array containing all gang member types.
+   */
+  getMemberTypes(): GangMemberType[];
+
+  /**
    * Count how many gang members are of the specified type.
    * @remarks
    * RAM cost: 1 GB
    *
-   * @param isEnforcer - True if you want to count enforcers, false if you want to count hackers.
+   * @param type - Gang member type.
    * @returns The number of gang members of specified type.
    */
-  getMemberTypeCount(isEnforcer: boolean): number;
+  getMemberTypeCount(type: GangMemberType): number;
+
+  /**
+   * The maximum amount of gang members of this type you can have.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @param type - Gang member type.
+   * @returns The maximum number of gang members of specified type.
+   */
+  getMemberTypeMax(type: GangMemberType): number;
 
   /**
    * Recruit a new gang member.

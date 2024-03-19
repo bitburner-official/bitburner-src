@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import { GangMember } from "../GangMember";
 import { GangMemberCardContent } from "./GangMemberCardContent";
 
@@ -17,7 +17,13 @@ export function GangMemberCard(props: IProps): React.ReactElement {
   return (
     <Box component={Paper} sx={{ width: "auto" }}>
       <Box sx={{ m: 1 }}>
-        <ListItemText primary={<span style={{fontWeight: "bold", color: gangMemberTypeColor[props.member.type]}}>{props.member.name} ({props.member.type})</span>} />
+        <ListItemText
+          primary={
+            <span style={{ fontWeight: "bold", color: gangMemberTypeColor[props.member.type] }}>
+              {props.member.name} ({props.member.type})
+            </span>
+          }
+        />
         <GangMemberCardContent member={props.member} />
       </Box>
     </Box>

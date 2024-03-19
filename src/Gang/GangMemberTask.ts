@@ -61,7 +61,7 @@ export class GangMemberTask {
     // Formula: Territory Multiplier = (Territory * 100) ^ factor / 100
     // So factor of 0 means no scaling, 1 means scaling linearly
     this.territory = params.territory ? params.territory : { money: 1, respect: 1, wanted: 1 };
-    
+
     this.territoryPower = params.territoryPower ?? 0;
     this.deathRisk = params.deathRisk ?? false;
   }

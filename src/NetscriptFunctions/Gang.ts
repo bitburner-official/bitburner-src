@@ -6,7 +6,7 @@ import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
 import { GangPromise } from "../Gang/Gang";
 import { Player } from "@player";
-import { FactionName } from "@enums";
+import { GangMemberType } from "@enums";
 import { GangConstants } from "../Gang/data/Constants";
 import { AllGangs } from "../Gang/AllGangs";
 import { GangMemberTasks } from "../Gang/GangMemberTasks";
@@ -157,6 +157,9 @@ export function NetscriptGang(): InternalAPI<IGang> {
         moneyGain: member.calculateMoneyGain(gang),
       };
     },
+    getMemberTypes: () => () => {
+      return Object.values(GangMemberType);
+    },
     canRecruitMember: (ctx) => () => {
       const gang = getGang(ctx);
       return gang.canRecruitMember();
@@ -172,7 +175,12 @@ export function NetscriptGang(): InternalAPI<IGang> {
     getMemberTypeCount: (ctx) => (_type) => {
       const gang = getGang(ctx);
       const type = getEnumHelper("GangMemberType").nsGetMember(ctx, _type);
-      return gang.members.filter(x => x.type == type).length;
+      return gang.members.filter((x) => x.type == type).length;
+    },
+    getMemberTypeMax: (ctx) => (_type) => {
+      const gang = getGang(ctx);
+      const type = getEnumHelper("GangMemberType").nsGetMember(ctx, _type);
+      return gang.memberTypeMax(type);
     },
     recruitMember: (ctx) => (_memberName, _type) => {
       const memberName = helpers.string(ctx, "memberName", _memberName);
@@ -350,7 +358,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
     executeMember: (ctx) => (_memberName) => {
       const memberName = helpers.string(ctx, "memberName", _memberName);
       const gang = getGang(ctx);
-      const member = gang.members.find(x => x.name === memberName);
+      const member = gang.members.find((x) => x.name === memberName);
       if (!member) return false;
       gang.killMember(member, true);
       return true;

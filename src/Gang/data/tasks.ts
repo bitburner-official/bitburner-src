@@ -41,6 +41,11 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
       baseMoney: 15,
       hackWeight: 100,
       difficulty: 1,
+      territory: {
+        money: 1.1,
+        respect: 1,
+        wanted: 1,
+      },
     },
   },
   {
@@ -54,6 +59,11 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
       hackWeight: 85,
       chaWeight: 15,
       difficulty: 3.5,
+      territory: {
+        money: 1.2,
+        respect: 1,
+        wanted: 1,
+      },
     },
   },
   {
@@ -67,6 +77,11 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
       hackWeight: 80,
       chaWeight: 20,
       difficulty: 5,
+      territory: {
+        money: 1.2,
+        respect: 1,
+        wanted: 1,
+      },
     },
   },
   {
@@ -102,10 +117,15 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
       hackWeight: 80,
       chaWeight: 20,
       difficulty: 20,
+      territory: {
+        money: 1.4,
+        respect: 1.1,
+        wanted: 1.1,
+      },
     },
   },
   {
-    desc: "Launder money<br><br>Earns money - Increases respect - Increases wanted level",
+    desc: "Launder money<br><br>Earns money - Increases respect - Increases wanted level - Scales well with territory",
     restrictedTypes: [GangMemberType.Hacker],
     name: "Money Laundering",
     params: {
@@ -115,6 +135,11 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
       hackWeight: 75,
       chaWeight: 25,
       difficulty: 25,
+      territory: {
+        money: 1.5,
+        respect: 1.2,
+        wanted: 1.2,
+      },
     },
   },
   {
@@ -134,7 +159,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     restrictedTypes: [GangMemberType.Hacker],
     name: "Ethical Hacking",
     params: {
-      baseWanted: -0.0004,
+      baseWanted: -0.0005,
       baseMoney: 15,
       hackWeight: 90,
       chaWeight: 10,
@@ -158,7 +183,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     },
   },
   {
-    desc: "Sell drugs<br><br>Earns money - Slightly increases respect - Slightly increases wanted level - Scales slightly with territory",
+    desc: "Sell drugs<br><br>Earns money - Slightly increases respect - Slightly increases wanted level - Scales well with territory",
     restrictedTypes: [GangMemberType.Enforcer],
     name: "Deal Drugs",
     params: {
@@ -170,8 +195,8 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
       chaWeight: 60,
       difficulty: 3.5,
       territory: {
-        money: 1.2,
-        respect: 1,
+        money: 1.1,
+        respect: 1.1,
         wanted: 1.15,
       },
     },
@@ -192,8 +217,8 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
       chaWeight: 10,
       difficulty: 5,
       territory: {
-        money: 1.6,
-        respect: 1.1,
+        money: 1.2,
+        respect: 1.4,
         wanted: 1.5,
       },
     },
@@ -246,8 +271,8 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
       chaWeight: 25,
       difficulty: 32,
       territory: {
-        money: 1.4,
-        respect: 1.3,
+        money: 1.2,
+        respect: 1.4,
         wanted: 1.25,
       },
     },
@@ -282,8 +307,8 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
       chaWeight: 30,
       difficulty: 36,
       territory: {
-        money: 1.5,
-        respect: 1.5,
+        money: 1.25,
+        respect: 1.6,
         wanted: 1.6,
       },
     },
@@ -313,7 +338,7 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
     restrictedTypes: [GangMemberType.Enforcer],
     name: "Vigilante Justice",
     params: {
-      baseWanted: -0.0004,
+      baseWanted: -0.0005,
       hackWeight: 20,
       strWeight: 20,
       defWeight: 20,
@@ -341,12 +366,12 @@ export const gangMemberTasksMetadata: IGangMemberTaskMetadata[] = [
   {
     desc: "Assign this gang member to train their hacking skills",
     name: "Train Hacking",
-    params: { hackWeight: 100, difficulty: 45 },
+    params: { hackWeight: 100, difficulty: 60 },
   },
   {
     desc: "Assign this gang member to train their charisma",
     name: "Train Charisma",
-    params: { chaWeight: 100, difficulty: 8 },
+    params: { chaWeight: 100, difficulty: 60 },
   },
   {
     desc: "Members assigned to this task increase your gang's power.<br /><br />Gang members performing this task can be killed during clashes.",

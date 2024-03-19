@@ -45,7 +45,7 @@ export function RecruitModal(props: IRecruitPopupProps): React.ReactElement {
   function onChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setName(event.target.value);
   }
-  
+
   function switchType(): void {
     const memberTypes = Object.values(GangMemberType);
     const currentIndex = memberTypes.indexOf(memberType);
@@ -56,13 +56,15 @@ export function RecruitModal(props: IRecruitPopupProps): React.ReactElement {
         return;
       }
     }
-  
-    throw new Error('No recruits available for any member type.');
+
+    throw new Error("No recruits available for any member type.");
   }
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
-      <Typography>Enter a name for your new <Button onClick={switchType}>{memberType}</Button>:</Typography>
+      <Typography>
+        Enter a name for your new <Button onClick={switchType}>{memberType}</Button>:
+      </Typography>
       <br />
       <TextField
         autoFocus

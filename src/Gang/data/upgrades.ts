@@ -266,5 +266,5 @@ export const gangMemberUpgradesMetadata: IGangMemberUpgradeMetadata[] = [
     mults: { hack: 1.2, cha: 1.2 },
     name: "Holomask",
     upgType: UpgradeType.Equipment,
-  }
+  },
 ];

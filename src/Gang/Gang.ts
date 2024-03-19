@@ -185,7 +185,8 @@ export class Gang {
             AllGangs[name].power += Math.min(0.85, AllGangs[name].power * 0.005);
           } else {
             // Additive gain (50% chance)
-            AllGangs[name].power += 0.75 * gainRoll * AllGangs[name].territory * AllGangFactionInfo[name].territoryPowerMultiplier;
+            AllGangs[name].power +=
+              0.75 * gainRoll * AllGangs[name].territory * AllGangFactionInfo[name].territoryPowerMultiplier;
           }
         }
       }
@@ -319,7 +320,11 @@ export class Gang {
   }
 
   getMembersByType(type: GangMemberType): GangMember[] {
-    return this.members.filter(m => m.type === type);
+    return this.members.filter((m) => m.type === type);
+  }
+
+  memberTypeMax(type: GangMemberType) {
+    return AllGangFactionInfo[this.facName].maxMembers[type];
   }
 
   recruitMember(name: string, type: GangMemberType): boolean {

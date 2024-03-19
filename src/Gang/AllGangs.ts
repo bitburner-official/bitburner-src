@@ -38,7 +38,7 @@ function defaultGangs(): Record<string, GangTerritory> {
       power: 1,
       territory: 1 / 7,
     },
-  }
+  };
 }
 
 export function resetGangs(): void {
