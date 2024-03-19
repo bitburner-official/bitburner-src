@@ -249,7 +249,10 @@ const go = {
   makeMove: 4,
   passTurn: 0,
   getBoardState: 4,
+  getCurrentPlayer: 0,
+  getGameState: 0,
   getOpponent: 0,
+  opponentNextTurn: 0,
   resetBoardState: 0,
   analysis: {
     getValidMoves: 8,

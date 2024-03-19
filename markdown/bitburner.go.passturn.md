@@ -12,15 +12,14 @@ This can also be used if you pick up the game in a state where the opponent need
 
 ```typescript
 passTurn(): Promise<{
-    type: "invalid" | "move" | "pass" | "gameOver";
-    x: number;
-    y: number;
-    success: boolean;
+    type: "move" | "pass" | "gameOver";
+    x: number | null;
+    y: number | null;
   }>;
 ```
 **Returns:**
 
-Promise&lt;{ type: "invalid" \| "move" \| "pass" \| "gameOver"; x: number; y: number; success: boolean; }&gt;
+Promise&lt;{ type: "move" \| "pass" \| "gameOver"; x: number \| null; y: number \| null; }&gt;
 
 a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
 
