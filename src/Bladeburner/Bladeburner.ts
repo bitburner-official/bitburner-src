@@ -1,4 +1,14 @@
 import type { PromisePair } from "../Types/Promises";
+import type { PositiveInteger } from "../types";
+import type { ActionIdentifier } from "./Actions/ActionIdentifier";
+import type { BlackOperation } from "./Actions/BlackOperation";
+import type { Contract } from "./Actions/Contract";
+import type { Operation } from "./Actions/Operation";
+import type { GeneralAction } from "./Actions/GeneralAction";
+import type { Action } from "./Actions/Action";
+import type { Person } from "../PersonObjects/Person";
+import type { NetscriptContext } from "../Netscript/APIWrapper";
+
 import {
   AugmentationName,
   BladeActionType,
@@ -6,23 +16,17 @@ import {
   BladeContractName,
   BladeGeneralActionName,
   BladeOperationName,
+  BladeSkillName,
   CityName,
   FactionName,
 } from "@enums";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { ActionIdentifier } from "./Actions/ActionIdentifier";
 import { BlackOperations, blackOpsArray } from "./data/BlackOperations";
-import { BlackOperation } from "./Actions/BlackOperation";
-import { Operation } from "./Actions/Operation";
-import { Contract } from "./Actions/Contract";
 import { GeneralActions } from "./data/GeneralActions";
 import { formatNumberNoSuffix } from "../ui/formatNumber";
-import { Skills } from "./Skills";
-import { Skill } from "./Skill";
+import { Skills } from "./data/Skills";
 import { City } from "./City";
-import { Action } from "./Actions/Action";
 import { Player } from "@player";
-import { Person } from "../PersonObjects/Person";
 import { Router } from "../ui/GameRoot";
 import { ConsoleHelpText } from "./data/Help";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
@@ -43,10 +47,11 @@ import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfil
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { getEnumHelper } from "../utils/EnumHelper";
-import { createEnumKeyedRecord } from "../Types/Record";
-import { GeneralAction } from "./Actions/GeneralAction";
+import { PartialRecord, createEnumKeyedRecord } from "../Types/Record";
 import { Contracts, initContracts } from "./data/Contracts";
 import { Operations, initOperations } from "./data/Operations";
+import { clampInteger } from "../utils/helpers/clampNumber";
+import { helpers } from "../Netscript/NetscriptHelpers";
 
 export interface BlackOpsAttempt {
   error?: string;
@@ -81,7 +86,7 @@ export class Bladeburner {
   cities = createEnumKeyedRecord(CityName, (name) => new City(name));
   city = CityName.Sector12;
   // Todo: better types for all these Record<string, etc> types. Will need custom types or enums for the named string categories (e.g. skills).
-  skills: Record<string, number> = {};
+  skills: PartialRecord<BladeSkillName, number> = {};
   skillMultipliers: Record<string, number> = {};
   staminaBonus = 0;
   maxStamina = 0;
@@ -205,18 +210,13 @@ export class Bladeburner {
     }
   }
 
-  upgradeSkill(skill: Skill, count = 1): void {
-    // This does NOT handle deduction of skill points
-    const skillName = skill.name;
-    if (this.skills[skillName]) {
-      this.skills[skillName] += count;
-    } else {
-      this.skills[skillName] = count;
-    }
-    if (isNaN(this.skills[skillName]) || this.skills[skillName] < 0) {
-      throw new Error("Level of Skill " + skillName + " is invalid: " + this.skills[skillName]);
-    }
+  setSkillLevel(skillName: BladeSkillName, value: number) {
+    this.skills[skillName] = clampInteger(value);
     this.updateSkillMultipliers();
+  }
+
+  upgradeSkill(skillName: BladeSkillName, count = 1): void {
+    this.setSkillLevel(skillName, (this.skills[skillName] ?? 0) + count);
   }
 
   executeConsoleCommands(commands: string): void {
@@ -275,7 +275,7 @@ export class Bladeburner {
     this.storedCycles += numCycles;
   }
 
-  // until 3.0.0 this converts some incorrect inputs to their correct identifiers
+  // todo 3.0, remove this fuzz and expect a valid exact action from players
   getActionIdFromTypeAndName(type = "", name = ""): ActionIdentifier | null {
     if (!type || !name) return null;
     const convertedType = type.toLowerCase().trim();
@@ -303,7 +303,6 @@ export class Bladeburner {
       case "general":
       case "general action":
       case "gen": {
-        // Todo: remove fuzzy matching (3.0.0?)
         const actionName = getEnumHelper("BladeGeneralActionName").getMember(name, { fuzzy: true });
         if (!actionName) return null;
         return { type: BladeActionType.general, name: actionName };
@@ -341,17 +340,10 @@ export class Bladeburner {
         if (args[1].toLowerCase() === "list") {
           // List all skills and their level
           this.postToConsole("Skills: ");
-          const skillNames = Object.keys(Skills);
-          for (let i = 0; i < skillNames.length; ++i) {
-            const skill = Skills[skillNames[i]];
-            let level = 0;
-            if (this.skills[skill.name] != null) {
-              level = this.skills[skill.name];
-            }
-            this.postToConsole(skill.name + ": Level " + formatNumberNoSuffix(level, 0));
+          for (const skill of Object.values(Skills)) {
+            const skillLevel = this.getSkillLevel(skill.name);
+            this.postToConsole(`${skill.name}: Level ${formatNumberNoSuffix(skillLevel, 0)}\n\nEffects: `);
           }
-          this.postToConsole(" ");
-          this.postToConsole("Effects: ");
           const multKeys = Object.keys(this.skillMultipliers);
           for (let i = 0; i < multKeys.length; ++i) {
             const mult = this.skillMultipliers[multKeys[i]];
@@ -417,29 +409,22 @@ export class Bladeburner {
       }
       case 3: {
         const skillName = args[2];
-        const skill = Skills[skillName];
-        if (!skill) {
+        if (!getEnumHelper("BladeSkillName").isMember(skillName)) {
           this.postToConsole("Invalid skill name (Note that it is case-sensitive): " + skillName);
-          break;
+          return;
         }
+        const skill = Skills[skillName];
+        const level = this.getSkillLevel(skillName);
         if (args[1].toLowerCase() === "list") {
-          let level = 0;
-          if (this.skills[skill.name] !== undefined) {
-            level = this.skills[skill.name];
-          }
-          this.postToConsole(skill.name + ": Level " + formatNumberNoSuffix(level));
+          this.postToConsole(skillName + ": Level " + formatNumberNoSuffix(level));
         } else if (args[1].toLowerCase() === "level") {
-          let currentLevel = 0;
-          if (this.skills[skillName] && !isNaN(this.skills[skillName])) {
-            currentLevel = this.skills[skillName];
-          }
-          const pointCost = skill.calculateCost(currentLevel);
-          if (skill.maxLvl !== 0 && currentLevel >= skill.maxLvl) {
-            this.postToConsole(`This skill ${skill.name} is already at max level (${currentLevel}/${skill.maxLvl}).`);
+          const pointCost = skill.calculateCost(level);
+          if (skill.maxLvl !== 0 && level >= skill.maxLvl) {
+            this.postToConsole(`This skill ${skillName} is already at max level (${level}/${skill.maxLvl}).`);
           } else if (this.skillPoints >= pointCost) {
             this.skillPoints -= pointCost;
-            this.upgradeSkill(skill);
-            this.log(skill.name + " upgraded to Level " + this.skills[skillName]);
+            this.upgradeSkill(skillName);
+            this.log(skillName + " upgraded to Level " + this.getSkillLevel(skillName));
           } else {
             this.postToConsole(
               "You do not have enough Skill Points to upgrade this. You need " + formatNumberNoSuffix(pointCost, 0),
@@ -940,28 +925,20 @@ export class Bladeburner {
 
   updateSkillMultipliers(): void {
     this.resetSkillMultipliers();
-    for (const skillName of Object.keys(this.skills)) {
-      if (Object.hasOwn(this.skills, skillName)) {
-        const skill = Skills[skillName];
-        if (skill == null) {
-          throw new Error("Could not find Skill Object for: " + skillName);
-        }
-        const level = this.skills[skillName];
-        if (level == null || level <= 0) {
-          continue;
-        } //Not upgraded
+    for (const skill of Object.values(Skills)) {
+      const level = this.getSkillLevel(skill.name);
+      if (!level) continue;
 
-        const multiplierNames = Object.keys(this.skillMultipliers);
-        for (let i = 0; i < multiplierNames.length; ++i) {
-          const multiplierName = multiplierNames[i];
-          if (skill.getMultiplier(multiplierName) != null && !isNaN(skill.getMultiplier(multiplierName))) {
-            const value = skill.getMultiplier(multiplierName) * level;
-            let multiplierValue = 1 + value / 100;
-            if (multiplierName === "actionTime") {
-              multiplierValue = 1 - value / 100;
-            }
-            this.skillMultipliers[multiplierName] *= multiplierValue;
+      const multiplierNames = Object.keys(this.skillMultipliers);
+      for (let i = 0; i < multiplierNames.length; ++i) {
+        const multiplierName = multiplierNames[i];
+        if (skill.getMultiplier(multiplierName) != null && !isNaN(skill.getMultiplier(multiplierName))) {
+          const value = skill.getMultiplier(multiplierName) * level;
+          let multiplierValue = 1 + value / 100;
+          if (multiplierName === "actionTime") {
+            multiplierValue = 1 - value / 100;
           }
+          this.skillMultipliers[multiplierName] *= multiplierValue;
         }
       }
     }
@@ -1528,6 +1505,10 @@ export class Bladeburner {
     }
   }
 
+  getSkillLevel(skillName: BladeSkillName): number {
+    return this.skills[skillName] ?? 0;
+  }
+
   create(): void {
     for (const contract of Object.values(this.contracts)) contract.reset();
     for (const operation of Object.values(this.operations)) operation.reset();
@@ -1701,57 +1682,19 @@ export class Bladeburner {
     }
   }
 
-  getSkillLevelNetscriptFn(skillName: string, workerScript: WorkerScript): number {
-    if (skillName === "" || !Object.hasOwn(Skills, skillName)) {
-      workerScript.log("bladeburner.getSkillLevel", () => `Invalid skill: '${skillName}'`);
-      return -1;
-    }
-
-    if (this.skills[skillName] == null) {
-      return 0;
-    } else {
-      return this.skills[skillName];
-    }
-  }
-
-  getSkillUpgradeCostNetscriptFn(skillName: string, count: number, workerScript: WorkerScript): number {
-    if (skillName === "" || !Object.hasOwn(Skills, skillName)) {
-      workerScript.log("bladeburner.getSkillUpgradeCost", () => `Invalid skill: '${skillName}'`);
-      return -1;
-    }
-
+  upgradeSkillNetscriptFn(ctx: NetscriptContext, skillName: BladeSkillName, count: PositiveInteger): boolean {
     const skill = Skills[skillName];
-    const currentLevel = this.skills[skillName] ?? 0;
+    const skillLevel = this.getSkillLevel(skillName);
+    const cost = skill.calculateCost(skillLevel, count);
 
-    if (skill.maxLvl !== 0 && currentLevel + count > skill.maxLvl) {
-      return Infinity;
-    }
-
-    return skill.calculateCost(currentLevel, count);
-  }
-
-  upgradeSkillNetscriptFn(skillName: string, count: number, workerScript: WorkerScript): boolean {
-    const errorLogText = `Invalid skill: '${skillName}'`;
-    if (!Object.hasOwn(Skills, skillName)) {
-      workerScript.log("bladeburner.upgradeSkill", () => errorLogText);
-      return false;
-    }
-
-    const skill = Skills[skillName];
-    let currentLevel = 0;
-    if (this.skills[skillName] && !isNaN(this.skills[skillName])) {
-      currentLevel = this.skills[skillName];
-    }
-    const cost = skill.calculateCost(currentLevel, count);
-
-    if (skill.maxLvl && currentLevel + count > skill.maxLvl) {
-      workerScript.log("bladeburner.upgradeSkill", () => `Skill '${skillName}' cannot be upgraded ${count} time(s).`);
+    if (!Number.isFinite(cost)) {
+      helpers.log(ctx, () => `Skill '${skillName}' cannot be upgraded ${count} time(s).`);
       return false;
     }
 
     if (this.skillPoints < cost) {
-      workerScript.log(
-        "bladeburner.upgradeSkill",
+      helpers.log(
+        ctx,
         () =>
           `You do not have enough skill points to upgrade ${skillName} ${count} time(s). (You have ${this.skillPoints}, you need ${cost})`,
       );
@@ -1759,8 +1702,8 @@ export class Bladeburner {
     }
 
     this.skillPoints -= cost;
-    this.upgradeSkill(skill, count);
-    workerScript.log("bladeburner.upgradeSkill", () => `'${skillName}' upgraded to level ${this.skills[skillName]}`);
+    this.upgradeSkill(skillName, count);
+    helpers.log(ctx, () => `'${skillName}' upgraded to level ${this.getSkillLevel(skillName)}`);
     return true;
   }
 

@@ -52,8 +52,6 @@ export enum BladeBlackOpName {
 export enum BladeSkillName {
   bladesIntuition = "Blade's Intuition",
   cloak = "Cloak",
-  marksman = "Marksman",
-  weaponProficiency = "Weapon Proficiency",
   shortCircuit = "Short-Circuit",
   digitalObserver = "Digital Observer",
   tracer = "Tracer",

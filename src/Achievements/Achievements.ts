@@ -1,6 +1,13 @@
-import { AugmentationName, CityName, CompletedProgramName, CorpUnlockName, FactionName, IndustryType } from "@enums";
-import { SkillNames } from "../Bladeburner/data/SkillNames";
-import { Skills } from "../Bladeburner/Skills";
+import {
+  AugmentationName,
+  BladeSkillName,
+  CityName,
+  CompletedProgramName,
+  CorpUnlockName,
+  FactionName,
+  IndustryType,
+} from "@enums";
+import { Skills } from "../Bladeburner/data/Skills";
 import { CONSTANTS } from "../Constants";
 import { Exploit } from "../Exploits/Exploit";
 import { Factions } from "../Faction/Factions";
@@ -425,8 +432,7 @@ export const achievements: Record<string, Achievement> = {
     Icon: "BLADEOVERCLOCK",
     Visible: () => hasAccessToSF(6),
     Condition: () =>
-      Player.bladeburner !== null &&
-      Player.bladeburner.skills[SkillNames.Overclock] === Skills[SkillNames.Overclock].maxLvl,
+      Player.bladeburner?.getSkillLevel(BladeSkillName.overclock) === Skills[BladeSkillName.overclock].maxLvl,
   },
   BLADEBURNER_UNSPENT_100000: {
     ...achievementData.BLADEBURNER_UNSPENT_100000,

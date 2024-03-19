@@ -1,7 +1,9 @@
+import type { BladeSkillName } from "@enums";
+
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 interface ISkillParams {
-  name: string;
+  name: BladeSkillName;
   desc: string;
 
   baseCost?: number;
@@ -30,13 +32,13 @@ interface ISkillParams {
 }
 
 export class Skill {
-  name: string;
+  name: BladeSkillName;
   desc: string;
   // Cost is in Skill Points
   baseCost = 1;
   // Additive cost increase per level
   costInc = 1;
-  maxLvl = 0;
+  maxLvl = Number.MAX_SAFE_INTEGER;
 
   /**
    * These benefits are additive. So total multiplier will be level (handled externally) times the
@@ -64,13 +66,7 @@ export class Skill {
   money = 0;
   expGain = 0;
 
-  constructor(params: ISkillParams = { name: "foo", desc: "foo" }) {
-    if (!params.name) {
-      throw new Error("Failed to initialize Bladeburner Skill. No name was specified in ctor");
-    }
-    if (!params.desc) {
-      throw new Error("Failed to initialize Bladeburner Skills. No desc was specified in ctor");
-    }
+  constructor(params: ISkillParams) {
     this.name = params.name;
     this.desc = params.desc;
     this.baseCost = params.baseCost ? params.baseCost : 1;
@@ -134,6 +130,7 @@ export class Skill {
   }
 
   calculateCost(currentLevel: number, count = 1): number {
+    if (currentLevel + count > this.maxLvl) return Infinity;
     //Recursive mode does not handle invalid inputs properly, but it should never
     //be possible for it to run with them. For the sake of not crashing the game,
     const recursiveMode = (currentLevel: number, count: number): number => {

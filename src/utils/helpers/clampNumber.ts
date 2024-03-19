@@ -13,3 +13,11 @@ export function clampNumber(value: number, min = Number.MIN_VALUE, max = Number.
   }
   return Math.max(Math.min(value, max), min);
 }
+
+export function clampInteger(value: number, min = 0, max = Number.MAX_SAFE_INTEGER) {
+  if (isNaN(value)) {
+    if (CONSTANTS.isDevBranch) throw new Error("NaN passed into clampInteger()");
+    return min;
+  }
+  return Math.floor(Math.max(Math.min(value, max), min));
+}

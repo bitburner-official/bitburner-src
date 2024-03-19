@@ -1,18 +1,18 @@
 import * as React from "react";
 import { SkillElem } from "./SkillElem";
-import { Skills } from "../Skills";
+import { Skills } from "../data/Skills";
 import { Bladeburner } from "../Bladeburner";
 
-interface IProps {
+interface SkillListProps {
   bladeburner: Bladeburner;
   onUpgrade: () => void;
 }
 
-export function SkillList(props: IProps): React.ReactElement {
+export function SkillList({ bladeburner, onUpgrade }: SkillListProps): React.ReactElement {
   return (
     <>
-      {Object.keys(Skills).map((skill: string) => (
-        <SkillElem key={skill} bladeburner={props.bladeburner} skill={Skills[skill]} onUpgrade={props.onUpgrade} />
+      {Object.values(Skills).map((skill) => (
+        <SkillElem key={skill.name} bladeburner={bladeburner} skill={skill} onUpgrade={onUpgrade} />
       ))}
     </>
   );

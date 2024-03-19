@@ -4,6 +4,7 @@ import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
 import { Player } from "@player";
 import {
+  BladeActionType,
   BladeBlackOpName,
   BladeContractName,
   BladeGeneralActionName,
@@ -12,10 +13,10 @@ import {
 } from "@enums";
 import { Bladeburner, BladeburnerPromise } from "../Bladeburner/Bladeburner";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { BlackOperation } from "../Bladeburner/Actions/BlackOperation";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { LevelableAction, isLevelableAction } from "../Bladeburner/Actions/LevelableAction";
+import { Skills } from "../Bladeburner/data/Skills";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const checkBladeburnerAccess = function (ctx: NetscriptContext): void {
@@ -75,7 +76,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       const blackOpName = helpers.string(ctx, "blackOpName", _blackOpName);
       checkBladeburnerAccess(ctx);
       const action = getBladeburnerActionObject(ctx, "blackops", blackOpName);
-      if (!(action instanceof BlackOperation)) throw new Error("action was not a black operation");
+      if (action.type !== BladeActionType.blackOp) throw new Error("action was not a black operation");
       return action.reqdRank;
     },
     getGeneralActionNames: (ctx) => () => {
@@ -230,58 +231,39 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       return bladeburner.skillPoints;
     },
     getSkillLevel: (ctx) => (_skillName) => {
-      const skillName = helpers.string(ctx, "skillName", _skillName);
       const bladeburner = getBladeburner(ctx);
-      try {
-        return bladeburner.getSkillLevelNetscriptFn(skillName, ctx.workerScript);
-      } catch (e: unknown) {
-        throw helpers.errorMessage(ctx, String(e));
-      }
+      const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
+      return bladeburner.getSkillLevel(skillName);
     },
     getSkillUpgradeCost:
       (ctx) =>
       (_skillName, _count = 1) => {
         const bladeburner = getBladeburner(ctx);
-        const skillName = helpers.string(ctx, "skillName", _skillName);
-        const count = helpers.number(ctx, "count", _count);
-        try {
-          return bladeburner.getSkillUpgradeCostNetscriptFn(skillName, count, ctx.workerScript);
-        } catch (e: unknown) {
-          throw helpers.errorMessage(ctx, String(e));
-        }
+        const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
+        const count = helpers.positiveInteger(ctx, "count", _count);
+        const currentLevel = bladeburner.getSkillLevel(skillName);
+        return Skills[skillName].calculateCost(currentLevel, count);
       },
     upgradeSkill:
       (ctx) =>
       (_skillName, _count = 1) => {
         const bladeburner = getBladeburner(ctx);
-        const skillName = helpers.string(ctx, "skillName", _skillName);
-        const count = helpers.number(ctx, "count", _count);
-        try {
-          return bladeburner.upgradeSkillNetscriptFn(skillName, count, ctx.workerScript);
-        } catch (e: unknown) {
-          throw helpers.errorMessage(ctx, String(e));
-        }
+        const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
+        const count = helpers.positiveInteger(ctx, "count", _count);
+        return bladeburner.upgradeSkillNetscriptFn(ctx, skillName, count);
       },
     getTeamSize: (ctx) => (_type, _name) => {
       const bladeburner = getBladeburner(ctx);
       const type = helpers.string(ctx, "type", _type);
       const name = helpers.string(ctx, "name", _name);
-      try {
-        return bladeburner.getTeamSizeNetscriptFn(type, name, ctx.workerScript);
-      } catch (e: unknown) {
-        throw helpers.errorMessage(ctx, String(e));
-      }
+      return bladeburner.getTeamSizeNetscriptFn(type, name, ctx.workerScript);
     },
     setTeamSize: (ctx) => (_type, _name, _size) => {
       const bladeburner = getBladeburner(ctx);
       const type = helpers.string(ctx, "type", _type);
       const name = helpers.string(ctx, "name", _name);
       const size = helpers.number(ctx, "size", _size);
-      try {
-        return bladeburner.setTeamSizeNetscriptFn(type, name, size, ctx.workerScript);
-      } catch (e: unknown) {
-        throw helpers.errorMessage(ctx, String(e));
-      }
+      return bladeburner.setTeamSizeNetscriptFn(type, name, size, ctx.workerScript);
     },
     getCityEstimatedPopulation: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
