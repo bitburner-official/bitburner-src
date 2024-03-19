@@ -3,7 +3,7 @@ import type { Unknownify } from "../types";
 
 import { ObjectValidator, validateObject } from "./Validator";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
-import { loadActionIdentifier } from "../Bladeburner/Actions/ActionIdentifier";
+import { loadActionIdentifier } from "../Bladeburner/Actions/utils";
 
 type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
   fromJSON: (value: IReviverValue) => any;

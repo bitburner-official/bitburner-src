@@ -1,22 +1,21 @@
 import type { Bladeburner } from "../Bladeburner";
-import type { ActionIdentifier } from "../Types";
+import type { Action } from "../Types";
 
 import React from "react";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 
 interface StartButtonProps {
   bladeburner: Bladeburner;
-  actionId: ActionIdentifier;
+  action: Action;
   rerender: () => void;
 }
-export function StartButton({ bladeburner, actionId, rerender }: StartButtonProps): React.ReactElement {
-  const action = bladeburner.getActionObject(actionId);
+export function StartButton({ bladeburner, action, rerender }: StartButtonProps): React.ReactElement {
   const availability = action.getAvailability(bladeburner);
   const disabledReason = availability.available ? "" : availability.error;
 
   function onStart(): void {
     if (disabledReason) return;
-    bladeburner.startAction(actionId);
+    bladeburner.startAction(action.id);
     rerender();
   }
 

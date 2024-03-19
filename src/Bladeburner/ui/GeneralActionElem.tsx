@@ -49,7 +49,7 @@ export function GeneralActionElem({ bladeburner, action }: GeneralActionElemProp
       ) : (
         <Box display="flex" flexDirection="row" alignItems="center">
           <CopyableText value={action.name} />
-          <StartButton bladeburner={bladeburner} actionId={action.id} rerender={rerender} />
+          <StartButton bladeburner={bladeburner} action={action} rerender={rerender} />
         </Box>
       )}
       <br />

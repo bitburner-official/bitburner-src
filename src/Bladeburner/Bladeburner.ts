@@ -1,10 +1,8 @@
 import type { PromisePair } from "../Types/Promises";
 import type { PositiveInteger } from "../types";
 import type { ActionIdentifier, Action } from "./Types";
-import type { BlackOperation } from "./Actions/BlackOperation";
 import type { Contract } from "./Actions/Contract";
 import type { Operation } from "./Actions/Operation";
-import type { GeneralAction } from "./Actions/GeneralAction";
 import type { Person } from "../PersonObjects/Person";
 import type { NetscriptContext } from "../Netscript/APIWrapper";
 
@@ -19,8 +17,6 @@ import {
   FactionName,
 } from "@enums";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { BlackOperations } from "./data/BlackOperations";
-import { GeneralActions } from "./data/GeneralActions";
 import { formatNumberNoSuffix } from "../ui/formatNumber";
 import { Skills } from "./data/Skills";
 import { City } from "./City";
@@ -49,7 +45,7 @@ import { Contracts, initContracts } from "./data/Contracts";
 import { Operations, initOperations } from "./data/Operations";
 import { clampInteger } from "../utils/helpers/clampNumber";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { getActionIdFromTypeAndName } from "./Actions/ActionIdentifier";
+import { getActionFromTypeAndName, getActionObject } from "./Actions/utils";
 import { parseCommand } from "../Terminal/Parser";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
@@ -124,13 +120,14 @@ export class Bladeburner {
     return Math.min(1, this.stamina / (0.5 * this.maxStamina));
   }
 
-  /** This function is for the player. Sleeves use their own functions to perform blade work. */
+  /** This function is for the player. Sleeves use their own functions to perform blade work.
+   * Note that this function does not ensure the action is valid, that should be checked before starting */
   startAction(actionId: ActionIdentifier | null): void {
     if (!actionId) return this.resetAction();
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
     this.action = actionId;
     this.actionTimeCurrent = 0;
-    const action = this.getActionObject(actionId);
+    const action = getActionObject(actionId);
     // This switch statement is just for handling error cases, it does not have to be exhaustive
     const availability = action.getAvailability(this);
     if (!availability.available) return this.resetAction();
@@ -210,12 +207,17 @@ export class Bladeburner {
     }
     const type = args[1];
     const name = args[2];
-    const actionId = getActionIdFromTypeAndName(type, name);
-    if (!actionId) {
+    const action = getActionFromTypeAndName(type, name);
+    if (!action) {
       this.postToConsole(`Invalid action type / name specified: type: ${type}, name: ${name}`);
       return;
     }
-    this.startAction(actionId);
+    const availability = action.getAvailability(this);
+    if (!availability.available) {
+      this.postToConsole(`Could not start action ${action.name}. Error: ${availability.error}`);
+      return;
+    }
+    this.startAction(action.id);
   }
 
   executeSkillConsoleCommand(args: string[]): void {
@@ -740,12 +742,6 @@ export class Bladeburner {
     return Math.pow(person.skills.charisma, 0.45) / (this.teamSize - this.sleeveSize + 1);
   }
 
-  getRecruitmentTime(person: Person): number {
-    const effCharisma = person.skills.charisma * this.skillMultipliers.effCha;
-    const charismaFactor = Math.pow(effCharisma, 0.81) + effCharisma / 90;
-    return Math.max(10, Math.round(BladeburnerConstants.BaseRecruitmentTimeNeeded - charismaFactor));
-  }
-
   sleeveSupport(joining: boolean): void {
     if (joining) {
       this.sleeveSize += 1;
@@ -803,7 +799,7 @@ export class Bladeburner {
     if (this.action?.type !== BladeActionType.operation) {
       throw new Error("completeOperation() called even though current action is not an Operation");
     }
-    const action = this.getActionObject(this.action);
+    const action = getActionObject(this.action);
 
     // Calculate team losses
     const teamCount = action.teamCount;
@@ -887,28 +883,6 @@ export class Bladeburner {
     }
   }
 
-  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.blackOp }): BlackOperation;
-  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.operation }): Operation;
-  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.contract }): Contract;
-  getActionObject(actionId: ActionIdentifier & { type: BladeGeneralActionName }): GeneralAction;
-  getActionObject(actionId: ActionIdentifier): Action;
-  getActionObject(actionId: ActionIdentifier): Action {
-    /**
-     * Given an ActionIdentifier object, returns the corresponding
-     * GeneralAction, Contract, Operation, or BlackOperation object
-     */
-    switch (actionId.type) {
-      case BladeActionType.contract:
-        return this.contracts[actionId.name];
-      case BladeActionType.operation:
-        return this.operations[actionId.name];
-      case BladeActionType.blackOp:
-        return BlackOperations[actionId.name];
-      case BladeActionType.general:
-        return GeneralActions[actionId.name];
-    }
-  }
-
   completeContract(success: boolean, actionIdent: ActionIdentifier): void {
     if (actionIdent.type !== BladeActionType.contract) {
       throw new Error("completeContract() called even though current action is not a Contract");
@@ -938,7 +912,7 @@ export class Bladeburner {
 
   completeAction(person: Person, actionIdent: ActionIdentifier, isPlayer = true): WorkStats {
     let retValue = newWorkStats();
-    const action = this.getActionObject(actionIdent);
+    const action = getActionObject(actionIdent);
     switch (action.type) {
       case BladeActionType.contract:
       case BladeActionType.operation: {
@@ -1178,9 +1152,9 @@ export class Bladeburner {
           }
           case BladeGeneralActionName.recruitment: {
             const successChance = this.getRecruitmentSuccessChance(person);
-            const recruitTime = this.getRecruitmentTime(person) * 1000;
+            const actionTime = action.getActionTime(this, person) * 1000;
             if (Math.random() < successChance) {
-              const expGain = 2 * BladeburnerConstants.BaseStatGain * recruitTime;
+              const expGain = 2 * BladeburnerConstants.BaseStatGain * actionTime;
               retValue.chaExp = expGain;
               ++this.teamSize;
               if (this.logging.general) {
@@ -1192,7 +1166,7 @@ export class Bladeburner {
                 );
               }
             } else {
-              const expGain = BladeburnerConstants.BaseStatGain * recruitTime;
+              const expGain = BladeburnerConstants.BaseStatGain * actionTime;
               retValue.chaExp = expGain;
               if (this.logging.general) {
                 this.log(
@@ -1312,7 +1286,7 @@ export class Bladeburner {
   processAction(seconds: number): void {
     // Store action to avoid losing reference to it is action is reset during this function
     if (!this.action) return; // Idle
-    const action = this.getActionObject(this.action);
+    const action = getActionObject(this.action);
     // If the action is no longer valid, discontinue the action
     if (!action.getAvailability(this).available) return this.resetAction();
 
@@ -1447,17 +1421,16 @@ export class Bladeburner {
   }
 
   getActionEstimatedSuccessChanceNetscriptFn(person: Person, type: string, name: string): [number, number] | string {
-    const actionId = getActionIdFromTypeAndName(type, name);
-    if (!actionId) return "bladeburner.getActionEstimatedSuccessChance";
+    const action = getActionFromTypeAndName(type, name);
+    if (!action) return "bladeburner.getActionEstimatedSuccessChance";
 
-    const actionObj = this.getActionObject(actionId);
-    switch (actionId.type) {
+    switch (action.type) {
       case BladeActionType.contract:
       case BladeActionType.operation:
       case BladeActionType.blackOp:
-        return actionObj.getSuccessRange(this, person);
+        return action.getSuccessRange(this, person);
       case BladeActionType.general:
-        switch (actionId.name) {
+        switch (action.name) {
           case BladeGeneralActionName.training:
           case BladeGeneralActionName.fieldAnalysis:
           case BladeGeneralActionName.diplomacy:
@@ -1499,12 +1472,11 @@ export class Bladeburner {
 
   setTeamSizeNetscriptFn(type: string, name: string, size: number, workerScript: WorkerScript): number {
     const errorLogText = `Invalid action: type='${type}' name='${name}'`;
-    const actionId = getActionIdFromTypeAndName(type, name);
-    if (actionId == null) {
+    const action = getActionFromTypeAndName(type, name);
+    if (action == null) {
       workerScript.log("bladeburner.setTeamSize", () => errorLogText);
       return -1;
     }
-    const action = this.getActionObject(actionId);
 
     if (action.type !== BladeActionType.operation && action.type !== BladeActionType.blackOp) {
       workerScript.log("bladeburner.setTeamSize", () => "Only valid for 'Operations' and 'BlackOps'");

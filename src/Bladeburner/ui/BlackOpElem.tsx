@@ -58,7 +58,7 @@ export function BlackOpElem({ bladeburner, blackOp }: BlackOpElemProps): React.R
         <>
           <CopyableText value={blackOp.name} />
 
-          <StartButton bladeburner={bladeburner} actionId={blackOp.id} rerender={rerender} />
+          <StartButton bladeburner={bladeburner} action={blackOp} rerender={rerender} />
           <TeamSizeButton action={blackOp} bladeburner={bladeburner} />
         </>
       )}

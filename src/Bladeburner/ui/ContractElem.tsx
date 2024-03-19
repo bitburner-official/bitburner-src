@@ -48,7 +48,7 @@ export function ContractElem({ bladeburner, action }: ContractElemProps): React.
       ) : (
         <>
           <CopyableText value={action.name} />
-          <StartButton bladeburner={bladeburner} actionId={action.id} rerender={rerender} />
+          <StartButton bladeburner={bladeburner} action={action} rerender={rerender} />
         </>
       )}
       <br />
