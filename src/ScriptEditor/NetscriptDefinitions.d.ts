@@ -1,7 +1,5 @@
 /** All netscript definitions */
 
-import { GangMemberType } from "@enums";
-
 /** @public */
 interface HP {
   current: number;
@@ -763,6 +761,11 @@ interface BladeburnerCurAction {
   type: string;
   /** Name of Action */
   name: string;
+}
+
+declare enum GangMemberType {
+  Hacker = "Hacker",
+  Enforcer = "Enforcer",
 }
 
 /**
