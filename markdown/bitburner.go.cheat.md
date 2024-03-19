@@ -15,10 +15,9 @@ cheat: {
       x: number,
       y: number,
     ): Promise<{
-      type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
-      success: boolean;
+      type: "move" | "pass" | "gameOver";
+      x: number | null;
+      y: number | null;
     }>;
     playTwoMoves(
       x1: number,
@@ -26,30 +25,27 @@ cheat: {
       x2: number,
       y2: number,
     ): Promise<{
-      type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
-      success: boolean;
+      type: "move" | "pass" | "gameOver";
+      x: number | null;
+      y: number | null;
     }>;
 
     repairOfflineNode(
       x: number,
       y: number,
     ): Promise<{
-      type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
-      success: boolean;
+      type: "move" | "pass" | "gameOver";
+      x: number | null;
+      y: number | null;
     }>;
 
     destroyNode(
       x: number,
       y: number,
     ): Promise<{
-      type: "invalid" | "move" | "pass" | "gameOver";
-      x: number;
-      y: number;
-      success: boolean;
+      type: "move" | "pass" | "gameOver";
+      x: number | null;
+      y: number | null;
     }>;
   };
 ```

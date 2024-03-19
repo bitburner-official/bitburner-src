@@ -52,10 +52,9 @@ export type PointState = {
 };
 
 export type Play = {
-  success: boolean;
   type: GoPlayType;
-  x: number;
-  y: number;
+  x: number | null;
+  y: number | null;
 };
 
 export type Neighbor = {
