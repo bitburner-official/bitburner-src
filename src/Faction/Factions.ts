@@ -3,7 +3,8 @@ import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { FactionName, FactionDiscovery } from "@enums";
 import { Faction } from "./Faction";
 
-import { Reviver, assertLoadingType } from "../utils/JSONReviver";
+import { Reviver } from "../utils/JSONReviver";
+import { assertLoadingType } from "../utils/TypeAssertion";
 import { PartialRecord, createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { getEnumHelper } from "../utils/EnumHelper";

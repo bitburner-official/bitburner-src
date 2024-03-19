@@ -8,7 +8,8 @@ import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
 import { CONSTANTS } from "../../../Constants";
 import { scaleWorkStats } from "../../../Work/WorkStats";
 import { getKeyList } from "../../../utils/helpers/getKeyList";
-import { getActionObject, loadActionIdentifier } from "../../../Bladeburner/Actions/utils";
+import { getActionObject } from "../../../Bladeburner/Actions/utils";
+import { loadActionIdentifier } from "../../../Bladeburner/SaveLoad";
 import { invalidWork } from "../../../Work/InvalidWork";
 
 interface SleeveBladeburnerWorkParams {

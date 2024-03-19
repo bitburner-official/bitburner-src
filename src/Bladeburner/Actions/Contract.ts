@@ -1,7 +1,8 @@
 import type { Bladeburner } from "../Bladeburner";
 import type { ActionIdentifier } from "../Types";
 
-import { IReviverValue, assertLoadingType, constructorsForReviver } from "../../utils/JSONReviver";
+import { IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
+import { assertLoadingType } from "../../utils/TypeAssertion";
 import { BladeActionType, BladeContractName } from "../Enums";
 import { LevelableActionClass, LevelableActionParams, LevelableActionSaveData } from "./LevelableAction";
 import { getEnumHelper } from "../../utils/EnumHelper";

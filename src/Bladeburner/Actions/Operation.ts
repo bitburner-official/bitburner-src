@@ -6,7 +6,8 @@ import type { ActionAvailability, ActionIdentifier, SuccessChanceParams } from "
 import { BladeActionType, BladeOperationName } from "@enums";
 import { BladeburnerConstants } from "../data/Constants";
 import { ActionClass } from "./Action";
-import { IReviverValue, assertLoadingType, constructorsForReviver } from "../../utils/JSONReviver";
+import { IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
+import { assertLoadingType } from "../../utils/TypeAssertion";
 import { LevelableActionClass, LevelableActionParams, LevelableActionSaveData } from "./LevelableAction";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { Operations, initOperations } from "../data/Operations";

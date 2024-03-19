@@ -23,14 +23,7 @@ import { SnackbarEvents } from "./ui/React/Snackbar";
 import * as ExportBonus from "./ExportBonus";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
-import {
-  Reviver,
-  constructorsForReviver,
-  Generic_toJSON,
-  Generic_fromJSON,
-  IReviverValue,
-  assertLoadingType,
-} from "./utils/JSONReviver";
+import { Reviver, constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "./utils/JSONReviver";
 import { save } from "./db";
 import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
 import { AugmentationName, BladeBlackOpName, LocationName, ToastVariant } from "@enums";
@@ -46,6 +39,7 @@ import { getRecordValues } from "./Types/Record";
 import { ExportMaterial } from "./Corporation/Actions";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
 import { blackOpsArray } from "./Bladeburner/data/BlackOperations";
+import { assertLoadingType } from "./utils/TypeAssertion";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
