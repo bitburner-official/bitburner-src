@@ -13,6 +13,8 @@ export interface SuccessChanceParams {
   est: boolean;
 }
 
+export type ActionAvailability = { available?: boolean; error: string } | { available: true };
+
 class StatsMultiplier {
   [key: string]: number;
 
@@ -93,6 +95,11 @@ export abstract class ActionClass {
 
   getDifficulty(): number {
     return this.baseDifficulty;
+  }
+
+  /** Default implementation is always available */
+  getAvailability(__bladeburner: Bladeburner): ActionAvailability {
+    return { available: true };
   }
 
   /** Tests for success. Should be called when an action has completed */

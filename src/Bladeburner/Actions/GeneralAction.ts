@@ -1,5 +1,6 @@
 import type { Person } from "../../PersonObjects/Person";
 import type { Bladeburner } from "../Bladeburner";
+import type { ActionIdentifier } from "./ActionIdentifier";
 
 import { BladeActionType, BladeGeneralActionName } from "@enums";
 import { ActionClass, ActionParams } from "./Action";
@@ -12,6 +13,10 @@ type GeneralActionParams = ActionParams & {
 export class GeneralAction extends ActionClass {
   type: BladeActionType.general = BladeActionType.general;
   name: BladeGeneralActionName;
+  get id(): ActionIdentifier {
+    return { type: this.type, name: this.name };
+  }
+
   constructor(params: GeneralActionParams) {
     super(params);
     this.name = params.name;

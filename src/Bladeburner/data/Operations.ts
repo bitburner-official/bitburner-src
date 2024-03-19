@@ -1,6 +1,7 @@
 import { BladeOperationName } from "@enums";
 import { Operation } from "../Actions/Operation";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
+import { LevelableActionClass } from "../Actions/LevelableAction";
 
 export let Operations: Record<BladeOperationName, Operation> | null = null;
 // Must call initOperations() before accessing Operations object
@@ -15,7 +16,6 @@ export function initOperations() {
       baseDifficulty: 400,
       difficultyFac: 1.03,
       rewardFac: 1.07,
-      reqdRank: 25,
       rankGain: 2.2,
       rankLoss: 0.2,
       weights: {
@@ -48,7 +48,6 @@ export function initOperations() {
       baseDifficulty: 500,
       difficultyFac: 1.04,
       rewardFac: 1.09,
-      reqdRank: 100,
       rankGain: 4.4,
       rankLoss: 0.4,
       hpLoss: 2,
@@ -80,7 +79,6 @@ export function initOperations() {
       baseDifficulty: 650,
       difficultyFac: 1.04,
       rewardFac: 1.095,
-      reqdRank: 500,
       rankGain: 5.5,
       rankLoss: 0.5,
       hpLoss: 2.5,
@@ -113,7 +111,6 @@ export function initOperations() {
       baseDifficulty: 800,
       difficultyFac: 1.045,
       rewardFac: 1.1,
-      reqdRank: 3000,
       rankGain: 55,
       rankLoss: 2.5,
       hpLoss: 50,
@@ -137,6 +134,10 @@ export function initOperations() {
       },
       isKill: true,
       growthFunction: () => getRandomInt(2, 40) / 10,
+      getAvailability: function (bladeburner) {
+        if (bladeburner.getCurrentCity().comms < 1) return { error: "No Synthoid communities in current city" };
+        return LevelableActionClass.prototype.getAvailability.call(this, bladeburner);
+      },
     }),
     [BladeOperationName.stealthRetirement]: new Operation({
       name: BladeOperationName.stealthRetirement,
@@ -146,7 +147,6 @@ export function initOperations() {
       baseDifficulty: 1000,
       difficultyFac: 1.05,
       rewardFac: 1.11,
-      reqdRank: 20e3,
       rankGain: 22,
       rankLoss: 2,
       hpLoss: 10,
@@ -180,7 +180,6 @@ export function initOperations() {
       baseDifficulty: 1500,
       difficultyFac: 1.06,
       rewardFac: 1.14,
-      reqdRank: 50e3,
       rankGain: 44,
       rankLoss: 4,
       hpLoss: 5,

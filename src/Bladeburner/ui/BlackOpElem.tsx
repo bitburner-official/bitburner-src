@@ -1,8 +1,7 @@
 import React from "react";
-
 import { Paper, Typography } from "@mui/material";
+
 import { Player } from "@player";
-import { BladeActionType } from "@enums";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
@@ -12,7 +11,6 @@ import { BlackOperation } from "../Actions/BlackOperation";
 import { CopyableText } from "../../ui/React/CopyableText";
 import { SuccessChance } from "./SuccessChance";
 import { StartButton } from "./StartButton";
-
 import { useRerender } from "../../ui/React/hooks";
 
 interface BlackOpElemProps {
@@ -22,7 +20,7 @@ interface BlackOpElemProps {
 
 export function BlackOpElem({ bladeburner, blackOp }: BlackOpElemProps): React.ReactElement {
   const rerender = useRerender();
-  const isCompleted = bladeburner.numBlackOpsComplete > blackOp.id;
+  const isCompleted = bladeburner.numBlackOpsComplete > blackOp.n;
   if (isCompleted) {
     return (
       <Paper sx={{ my: 1, p: 1 }}>
@@ -60,11 +58,7 @@ export function BlackOpElem({ bladeburner, blackOp }: BlackOpElemProps): React.R
         <>
           <CopyableText value={blackOp.name} />
 
-          <StartButton
-            bladeburner={bladeburner}
-            actionId={{ type: BladeActionType.blackOp, name: blackOp.name }}
-            rerender={rerender}
-          />
+          <StartButton bladeburner={bladeburner} actionId={blackOp.id} rerender={rerender} />
           <TeamSizeButton action={blackOp} bladeburner={bladeburner} />
         </>
       )}

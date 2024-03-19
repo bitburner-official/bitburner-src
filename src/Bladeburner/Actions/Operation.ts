@@ -1,10 +1,11 @@
 import type { Person } from "../../PersonObjects/Person";
 import type { BlackOperation } from "./BlackOperation";
 import type { Bladeburner } from "../Bladeburner";
+import type { ActionIdentifier } from "./ActionIdentifier";
 
 import { BladeActionType, BladeOperationName } from "@enums";
 import { BladeburnerConstants } from "../data/Constants";
-import { ActionClass, SuccessChanceParams } from "./Action";
+import { ActionAvailability, ActionClass, SuccessChanceParams } from "./Action";
 import { IReviverValue, assertLoadingType, constructorsForReviver } from "../../utils/JSONReviver";
 import { LevelableActionClass, LevelableActionParams, LevelableActionSaveData } from "./LevelableAction";
 import { getEnumHelper } from "../../utils/EnumHelper";
@@ -12,20 +13,22 @@ import { Operations, initOperations } from "../data/Operations";
 
 export interface OperationParams extends LevelableActionParams {
   name: BladeOperationName;
-  reqdRank?: number;
+  getAvailability?: (bladeburner: Bladeburner) => ActionAvailability;
 }
 
 export class Operation extends LevelableActionClass {
   type: BladeActionType.operation = BladeActionType.operation;
   name = BladeOperationName.investigation;
-  reqdRank = 100;
   teamCount = 0;
+  get id(): ActionIdentifier {
+    return { type: this.type, name: this.name };
+  }
 
   constructor(params: OperationParams | null = null) {
     super(params);
     if (!params) return;
     this.name = params.name;
-    if (params.reqdRank) this.reqdRank = params.reqdRank;
+    if (params.getAvailability) this.getAvailability = params.getAvailability;
   }
 
   // These functions are shared between operations and blackops, so they are defined outside of Operation

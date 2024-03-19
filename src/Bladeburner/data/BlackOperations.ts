@@ -4,7 +4,7 @@ import { BladeBlackOpName, CityName, FactionName } from "@enums";
 export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   [BladeBlackOpName.OperationTyphoon]: new BlackOperation({
     name: BladeBlackOpName.OperationTyphoon,
-    id: 0,
+    n: 0,
     baseDifficulty: 2000,
     reqdRank: 2.5e3,
     rankGain: 50,
@@ -37,7 +37,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationZero]: new BlackOperation({
     name: BladeBlackOpName.OperationZero,
-    id: 1,
+    n: 1,
     baseDifficulty: 2500,
     reqdRank: 5e3,
     rankGain: 60,
@@ -72,7 +72,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationX]: new BlackOperation({
     name: BladeBlackOpName.OperationX,
-    id: 2,
+    n: 2,
     baseDifficulty: 3000,
     reqdRank: 7.5e3,
     rankGain: 75,
@@ -108,7 +108,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationTitan]: new BlackOperation({
     name: BladeBlackOpName.OperationTitan,
-    id: 3,
+    n: 3,
     baseDifficulty: 4000,
     reqdRank: 10e3,
     rankGain: 100,
@@ -144,7 +144,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationAres]: new BlackOperation({
     name: BladeBlackOpName.OperationAres,
-    id: 4,
+    n: 4,
     baseDifficulty: 5000,
     reqdRank: 12.5e3,
     rankGain: 125,
@@ -177,7 +177,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationArchangel]: new BlackOperation({
     name: BladeBlackOpName.OperationArchangel,
-    id: 5,
+    n: 5,
     baseDifficulty: 7500,
     reqdRank: 15e3,
     rankGain: 200,
@@ -211,7 +211,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationJuggernaut]: new BlackOperation({
     name: BladeBlackOpName.OperationJuggernaut,
-    id: 6,
+    n: 6,
     baseDifficulty: 10e3,
     reqdRank: 20e3,
     rankGain: 300,
@@ -246,7 +246,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationRedDragon]: new BlackOperation({
     name: BladeBlackOpName.OperationRedDragon,
-    id: 7,
+    n: 7,
     baseDifficulty: 12.5e3,
     reqdRank: 25e3,
     rankGain: 500,
@@ -280,7 +280,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationK]: new BlackOperation({
     name: BladeBlackOpName.OperationK,
-    id: 8,
+    n: 8,
     baseDifficulty: 15e3,
     reqdRank: 30e3,
     rankGain: 750,
@@ -317,7 +317,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationDeckard]: new BlackOperation({
     name: BladeBlackOpName.OperationDeckard,
-    id: 9,
+    n: 9,
     baseDifficulty: 20e3,
     reqdRank: 40e3,
     rankGain: 1e3,
@@ -352,7 +352,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationTyrell]: new BlackOperation({
     name: BladeBlackOpName.OperationTyrell,
-    id: 10,
+    n: 10,
     baseDifficulty: 25e3,
     reqdRank: 50e3,
     rankGain: 1.5e3,
@@ -386,7 +386,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationWallace]: new BlackOperation({
     name: BladeBlackOpName.OperationWallace,
-    id: 11,
+    n: 11,
     baseDifficulty: 30e3,
     reqdRank: 75e3,
     rankGain: 2e3,
@@ -424,7 +424,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationShoulderOfOrion]: new BlackOperation({
     name: BladeBlackOpName.OperationShoulderOfOrion,
-    id: 12,
+    n: 12,
     baseDifficulty: 35e3,
     reqdRank: 100e3,
     rankGain: 2.5e3,
@@ -458,7 +458,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationHyron]: new BlackOperation({
     name: BladeBlackOpName.OperationHyron,
-    id: 13,
+    n: 13,
     baseDifficulty: 40e3,
     reqdRank: 125e3,
     rankGain: 3e3,
@@ -495,7 +495,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationMorpheus]: new BlackOperation({
     name: BladeBlackOpName.OperationMorpheus,
-    id: 14,
+    n: 14,
     baseDifficulty: 45e3,
     reqdRank: 150e3,
     rankGain: 4e3,
@@ -529,7 +529,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationIonStorm]: new BlackOperation({
     name: BladeBlackOpName.OperationIonStorm,
-    id: 15,
+    n: 15,
     baseDifficulty: 50e3,
     reqdRank: 175e3,
     rankGain: 5e3,
@@ -563,7 +563,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationAnnihilus]: new BlackOperation({
     name: BladeBlackOpName.OperationAnnihilus,
-    id: 16,
+    n: 16,
     baseDifficulty: 55e3,
     reqdRank: 200e3,
     rankGain: 7.5e3,
@@ -596,7 +596,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationUltron]: new BlackOperation({
     name: BladeBlackOpName.OperationUltron,
-    id: 17,
+    n: 17,
     baseDifficulty: 60e3,
     reqdRank: 250e3,
     rankGain: 10e3,
@@ -635,7 +635,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationCenturion]: new BlackOperation({
     name: BladeBlackOpName.OperationCenturion,
-    id: 18,
+    n: 18,
     baseDifficulty: 70e3,
     reqdRank: 300e3,
     rankGain: 15e3,
@@ -669,7 +669,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationVindictus]: new BlackOperation({
     name: BladeBlackOpName.OperationVindictus,
-    id: 19,
+    n: 19,
     baseDifficulty: 75e3,
     reqdRank: 350e3,
     rankGain: 20e3,
@@ -701,7 +701,7 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
   }),
   [BladeBlackOpName.OperationDaedalus]: new BlackOperation({
     name: BladeBlackOpName.OperationDaedalus,
-    id: 20,
+    n: 20,
     baseDifficulty: 80e3,
     reqdRank: 400e3,
     rankGain: 40e3,
@@ -730,8 +730,8 @@ export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
 };
 
 /** Array for quick lookup by blackop number */
-export const blackOpsArray = Object.values(BlackOperations).sort((a, b) => (a.id < b.id ? -1 : 1));
+export const blackOpsArray = Object.values(BlackOperations).sort((a, b) => (a.n < b.n ? -1 : 1));
 // Verify that all "n" properties match the index in the array
-if (!blackOpsArray.every((blackOp, i) => blackOp.id === i)) {
+if (!blackOpsArray.every((blackOp, i) => blackOp.n === i)) {
   throw new Error("blackOpsArray did not initialize with correct indices");
 }

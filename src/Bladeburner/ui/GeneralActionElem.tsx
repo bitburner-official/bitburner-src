@@ -14,7 +14,6 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { useRerender } from "../../ui/React/hooks";
-import { BladeActionType } from "../Enums";
 
 interface GeneralActionElemProps {
   bladeburner: Bladeburner;
@@ -50,11 +49,7 @@ export function GeneralActionElem({ bladeburner, action }: GeneralActionElemProp
       ) : (
         <Box display="flex" flexDirection="row" alignItems="center">
           <CopyableText value={action.name} />
-          <StartButton
-            bladeburner={bladeburner}
-            actionId={{ type: BladeActionType.general, name: action.name }}
-            rerender={rerender}
-          />
+          <StartButton bladeburner={bladeburner} actionId={action.id} rerender={rerender} />
         </Box>
       )}
       <br />

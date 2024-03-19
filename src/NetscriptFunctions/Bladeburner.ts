@@ -68,7 +68,9 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     getNextBlackOp: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
-      return bladeburner.getNextBlackOp();
+      if (bladeburner.numBlackOpsComplete >= blackOpsArray.length) return null;
+      const blackOp = blackOpsArray[bladeburner.numBlackOpsComplete];
+      return { name: blackOp.name, rank: blackOp.reqdRank };
     },
     getBlackOpRank: (ctx) => (_blackOpName) => {
       checkBladeburnerAccess(ctx);
@@ -86,7 +88,14 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     startAction: (ctx) => (type, name) => {
       const bladeburner = getBladeburner(ctx);
       const action = getAction(ctx, type, name);
-      return bladeburner.startActionNetscriptFn(ctx, action.type, action.name);
+      const availability = action.getAvailability(bladeburner);
+      if (!availability.available) {
+        helpers.log(ctx, () => `Coult not start action ${action.name}: ${availability.error}`);
+        return false;
+      }
+      bladeburner.startAction(action.id);
+      helpers.log(ctx, () => `Starting bladeburner action with type '${type}' and name '${name}'`);
+      return true;
     },
     stopBladeburnerAction: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
@@ -135,7 +144,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         case BladeActionType.general:
           return Infinity;
         case BladeActionType.blackOp:
-          return bladeburner.numBlackOpsComplete > action.id ? 0 : 1;
+          return bladeburner.numBlackOpsComplete > action.n ? 0 : 1;
         case BladeActionType.contract:
         case BladeActionType.operation:
           return action.count;

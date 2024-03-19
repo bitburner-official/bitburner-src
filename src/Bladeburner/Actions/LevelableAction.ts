@@ -1,10 +1,11 @@
+import type { Bladeburner } from "../Bladeburner";
 import type { Contract } from "./Contract";
 import type { Operation } from "./Operation";
 import type { Unknownify } from "../../types";
 import type { IReviverValue } from "../../utils/JSONReviver";
 
 import { BladeActionType } from "@enums";
-import { Action, ActionClass, ActionParams } from "./Action";
+import { Action, ActionAvailability, ActionClass, ActionParams } from "./Action";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
 
 export type LevelableAction = Contract | Operation;
@@ -46,6 +47,11 @@ export abstract class LevelableActionClass extends ActionClass {
     if (params.rewardFac) this.rewardFac = params.rewardFac;
     this.count = getRandomInt(this.minCount, this.maxCount);
     this.growthFunction = params.growthFunction;
+  }
+
+  getAvailability(__bladeburner: Bladeburner): ActionAvailability {
+    if (this.count < 1) return { error: "Insufficient action count" };
+    return { available: true };
   }
 
   setMaxLevel(baseSuccessesPerLevel: number): void {

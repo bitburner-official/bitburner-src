@@ -733,7 +733,7 @@ Error: ${e}`);
       assertLoadingType<Record<BladeBlackOpName, boolean>>(blade.blackops);
       for (const blackOp of blackOpsArray) {
         const name = blackOp.name;
-        if (blade.blackops[name]) blade.numBlackOpsComplete = blackOp.id + 1;
+        if (blade.blackops[name]) blade.numBlackOpsComplete = blackOp.n + 1;
       }
       delete blade.blackops;
     }

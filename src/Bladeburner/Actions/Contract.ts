@@ -1,4 +1,6 @@
 import type { Bladeburner } from "../Bladeburner";
+import type { ActionIdentifier } from "./ActionIdentifier";
+
 import { IReviverValue, assertLoadingType, constructorsForReviver } from "../../utils/JSONReviver";
 import { BladeActionType, BladeContractName } from "../Enums";
 import { LevelableActionClass, LevelableActionParams, LevelableActionSaveData } from "./LevelableAction";
@@ -9,6 +11,10 @@ export class Contract extends LevelableActionClass {
   type: BladeActionType.contract = BladeActionType.contract;
   count = 0;
   name: BladeContractName = BladeContractName.tracking;
+  get id(): ActionIdentifier {
+    return { type: this.type, name: this.name };
+  }
+
   constructor(params: (LevelableActionParams & { name: BladeContractName }) | null = null) {
     super(params);
     if (params) this.name = params.name;

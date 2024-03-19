@@ -49,11 +49,7 @@ export function OperationElem({ bladeburner, operation }: OperationElemProps): R
       ) : (
         <>
           <CopyableText value={operation.name} />
-          <StartButton
-            bladeburner={bladeburner}
-            actionId={{ type: BladeActionType.operation, name: operation.name }}
-            rerender={rerender}
-          />
+          <StartButton bladeburner={bladeburner} actionId={operation.id} rerender={rerender} />
           <TeamSizeButton action={operation} bladeburner={bladeburner} />
         </>
       )}

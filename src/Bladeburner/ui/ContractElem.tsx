@@ -13,7 +13,6 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { useRerender } from "../../ui/React/hooks";
 import { Contract } from "../Actions/Contract";
-import { BladeActionType } from "../Enums";
 import { getEnumHelper } from "../../utils/EnumHelper";
 
 interface ContractElemProps {
@@ -49,11 +48,7 @@ export function ContractElem({ bladeburner, action }: ContractElemProps): React.
       ) : (
         <>
           <CopyableText value={action.name} />
-          <StartButton
-            bladeburner={bladeburner}
-            actionId={{ type: BladeActionType.contract, name: action.name }}
-            rerender={rerender}
-          />
+          <StartButton bladeburner={bladeburner} actionId={action.id} rerender={rerender} />
         </>
       )}
       <br />
