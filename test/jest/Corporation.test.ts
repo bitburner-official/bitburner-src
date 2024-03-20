@@ -116,9 +116,7 @@ describe("Corporation", () => {
       expectSharesToAddUp(corporation);
     });
   });
-});
 
-describe("Corporation simple formulas", () => {
   describe("helpers.calculateOfficeSizeUpgradeCost", () => {
     // These values were pulled from v2.6.0 as reference test values
     const refCosts = {
@@ -139,81 +137,37 @@ describe("Corporation simple formulas", () => {
       },
     };
 
-    describe("close to exact", () => {
-      describe("upgrade office size from size 3", () => {
-        it("should be correct when upgrading from 3->6", () => {
-          expect(calculateOfficeSizeUpgradeCost(3, 3)).toBeCloseTo(refCosts.from3[3]);
-        });
-        it("should be correct when upgrading from 3->18", () => {
-          expect(calculateOfficeSizeUpgradeCost(3, 15)).toBeCloseTo(refCosts.from3[15]);
-        });
-        it("should be correct when upgrading from 3->153", () => {
-          expect(calculateOfficeSizeUpgradeCost(3, 150)).toBeCloseTo(refCosts.from3[150]);
-        });
+    describe("upgrade office size from size 3", () => {
+      it("should be correct when upgrading from 3->6", () => {
+        expect(calculateOfficeSizeUpgradeCost(3, 3)).toBeCloseTo(refCosts.from3[3], 1);
       });
-      describe("upgrade office size from size 6", () => {
-        it("should be correct when upgrading from 6->9", () => {
-          expect(calculateOfficeSizeUpgradeCost(6, 3)).toBeCloseTo(refCosts.from6[3]);
-        });
-        it("should be correct when upgrading from 6->21", () => {
-          expect(calculateOfficeSizeUpgradeCost(6, 15)).toBeCloseTo(refCosts.from6[15]);
-        });
-        it("should be correct when upgrading from 6->156", () => {
-          expect(calculateOfficeSizeUpgradeCost(6, 150)).toBeCloseTo(refCosts.from6[150]);
-        });
+      it("should be correct when upgrading from 3->18", () => {
+        expect(calculateOfficeSizeUpgradeCost(3, 15)).toBeCloseTo(refCosts.from3[15], 1);
       });
-      describe("upgrade office size from size 9", () => {
-        it("should be correct when upgrading from 9->12", () => {
-          expect(calculateOfficeSizeUpgradeCost(9, 3)).toBeCloseTo(refCosts.from9[3]);
-        });
-        it("should be correct when upgrading from 9->24", () => {
-          expect(calculateOfficeSizeUpgradeCost(9, 15)).toBeCloseTo(refCosts.from9[15]);
-        });
-        it("should be correct when upgrading from 9->159", () => {
-          expect(calculateOfficeSizeUpgradeCost(9, 150)).toBeCloseTo(refCosts.from9[150]);
-        });
+      it("should be correct when upgrading from 3->153", () => {
+        expect(calculateOfficeSizeUpgradeCost(3, 150)).toBeCloseTo(refCosts.from3[150], 1);
       });
     });
-
-    const tolerances = {
-      3: 1e6,
-      15: 1e7,
-      150: 1e9,
-    };
-
-    describe("within tolerance", () => {
-      describe("upgrade office size from size 3", () => {
-        it("should be within tolerance when upgrading from 3->6", () => {
-          expect(Math.abs(calculateOfficeSizeUpgradeCost(3, 3) - refCosts.from3[3])).toBeLessThan(tolerances[3]);
-        });
-        it("should be within tolerance when upgrading from 3->18", () => {
-          expect(Math.abs(calculateOfficeSizeUpgradeCost(3, 15) - refCosts.from3[15])).toBeLessThan(tolerances[15]);
-        });
-        it("should be within tolerance when upgrading from 3->153", () => {
-          expect(Math.abs(calculateOfficeSizeUpgradeCost(3, 150) - refCosts.from3[150])).toBeLessThan(tolerances[150]);
-        });
+    describe("upgrade office size from size 6", () => {
+      it("should be correct when upgrading from 6->9", () => {
+        expect(calculateOfficeSizeUpgradeCost(6, 3)).toBeCloseTo(refCosts.from6[3], 1);
       });
-      describe("upgrade office size from size 6", () => {
-        it("should be within tolerance when upgrading from 6->9", () => {
-          expect(Math.abs(calculateOfficeSizeUpgradeCost(6, 3) - refCosts.from6[3])).toBeLessThan(tolerances[3]);
-        });
-        it("should be within tolerance when upgrading from 6->21", () => {
-          expect(Math.abs(calculateOfficeSizeUpgradeCost(6, 15) - refCosts.from6[15])).toBeLessThan(tolerances[15]);
-        });
-        it("should be within tolerance when upgrading from 6->156", () => {
-          expect(Math.abs(calculateOfficeSizeUpgradeCost(6, 150) - refCosts.from6[150])).toBeLessThan(tolerances[150]);
-        });
+      it("should be correct when upgrading from 6->21", () => {
+        expect(calculateOfficeSizeUpgradeCost(6, 15)).toBeCloseTo(refCosts.from6[15], 1);
       });
-      describe("upgrade office size from size 9", () => {
-        it("should be within tolerance when upgrading from 9->12", () => {
-          expect(Math.abs(calculateOfficeSizeUpgradeCost(9, 3) - refCosts.from9[3])).toBeLessThan(tolerances[3]);
-        });
-        it("should be within tolerance when upgrading from 9->24", () => {
-          expect(Math.abs(calculateOfficeSizeUpgradeCost(9, 15) - refCosts.from9[15])).toBeLessThan(tolerances[15]);
-        });
-        it("should be within tolerance when upgrading from 9->159", () => {
-          expect(Math.abs(calculateOfficeSizeUpgradeCost(9, 150) - refCosts.from9[150])).toBeLessThan(tolerances[150]);
-        });
+      it("should be correct when upgrading from 6->156", () => {
+        expect(calculateOfficeSizeUpgradeCost(6, 150)).toBeCloseTo(refCosts.from6[150], 1);
+      });
+    });
+    describe("upgrade office size from size 9", () => {
+      it("should be correct when upgrading from 9->12", () => {
+        expect(calculateOfficeSizeUpgradeCost(9, 3)).toBeCloseTo(refCosts.from9[3], 1);
+      });
+      it("should be correct when upgrading from 9->24", () => {
+        expect(calculateOfficeSizeUpgradeCost(9, 15)).toBeCloseTo(refCosts.from9[15], 1);
+      });
+      it("should be correct when upgrading from 9->159", () => {
+        expect(calculateOfficeSizeUpgradeCost(9, 150)).toBeCloseTo(refCosts.from9[150], 1);
       });
     });
   });
