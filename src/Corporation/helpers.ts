@@ -16,14 +16,10 @@ export function calculateUpgradeCost(corporation: Corporation, upgrade: CorpUpgr
 export function calculateOfficeSizeUpgradeCost(currentSize: number, sizeIncrease: number): number {
   if (sizeIncrease < 0) throw new Error("Invalid value for sizeIncrease argument! Must be at least 0!");
   if (sizeIncrease == 0) return 0;
-  const baseSize = corpConstants.officeInitialSize;
-  const initialPriceMult = Math.round(currentSize / baseSize);
-  const costMultiplier = 1.09;
-  let mult = 0;
-  for (let i = 0; i < sizeIncrease / baseSize; ++i) {
-    mult += Math.pow(costMultiplier, initialPriceMult + i);
-  }
-  return corpConstants.officeInitialCost * mult;
+  const baseCostMultiplier = 1.09;
+  const currentSizeFactor = baseCostMultiplier ** (currentSize / 3);
+  const sizeIncreaseFactor = baseCostMultiplier ** (sizeIncrease / 3) - 1;
+  return (corpConstants.officeInitialCost / (baseCostMultiplier - 1)) * currentSizeFactor * sizeIncreaseFactor;
 }
 
 export function calculateMaxAffordableUpgrade(corp: Corporation, upgrade: CorpUpgrade): 0 | PositiveInteger {
