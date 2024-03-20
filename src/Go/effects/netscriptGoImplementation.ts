@@ -412,7 +412,8 @@ export async function determineCheatSuccess(
  * Cheating success rate scales with player's crime success rate, and decreases with prior cheat attempts.
  */
 export function cheatSuccessChance(cheatCount: number) {
-  return Math.min(0.6 * 0.65 ** cheatCount * Player.mults.crime_success, 1);
+  const sourceFileBonus = Player.sourceFileLvl(14) === 3 ? 1.25 : 1;
+  return Math.min(0.6 * 0.65 ** cheatCount * Player.mults.crime_success * sourceFileBonus, 1);
 }
 
 /**
