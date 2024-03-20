@@ -1,10 +1,10 @@
 import type { Bladeburner } from "../Bladeburner";
-import type { Unknownify } from "../../types";
 import type { IReviverValue } from "../../utils/JSONReviver";
 import type { ActionAvailability } from "../Types";
 
 import { ActionClass, ActionParams } from "./Action";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
+import { clampInteger } from "../../utils/helpers/clampNumber";
 
 export type LevelableActionParams = ActionParams & {
   growthFunction: () => number;
@@ -73,22 +73,23 @@ export abstract class LevelableActionClass extends ActionClass {
     this.failures = 0;
   }
 
-  /** Uses savegame data to load info onto the static objects for a levelable action */
-  static load<T extends LevelableActionClass>(baseObject: T, data: Unknownify<LevelableActionSaveData>): T {
-    if (!data || typeof data !== "object") return baseObject;
-    // Rudimentary typechecking
-    if (typeof data.count === "number") baseObject.count = data.count;
-    if (typeof data.level === "number") baseObject.level = data.level;
-    if (typeof data.maxLevel === "number") baseObject.maxLevel = data.maxLevel;
-    baseObject.autoLevel = !!data.autoLevel;
-    if (typeof data.successes === "number") baseObject.successes = data.successes;
-    if (typeof data.failures === "number") baseObject.failures = data.failures;
-    return baseObject;
+  /** These are not loaded the same way as most game objects, to allow better typechecking on load + partially static loading */
+  loadData(loadedObject: LevelableActionClass) {
+    this.maxLevel = clampInteger(loadedObject.maxLevel, 1);
+    this.level = clampInteger(loadedObject.level, 1, this.maxLevel);
+    this.count = clampInteger(loadedObject.count);
+    this.autoLevel = !!loadedObject.autoLevel;
+    this.successes = clampInteger(loadedObject.successes);
+    this.failures = clampInteger(loadedObject.failures);
   }
   /** Create a basic object just containing the relevant data for a levelable action */
-  save<T extends LevelableActionClass>(this: T, ctorName: string, ...extraParams: (keyof T)[]): IReviverValue {
-    // Would like to get rid of this any, but not sure what typing will allow doing this
-    const data: any = {
+  save<T extends LevelableActionClass>(
+    this: T,
+    ctorName: string,
+    ...extraParams: (keyof T)[]
+  ): IReviverValue<LevelableActionSaveData> {
+    const data = {
+      ...Object.fromEntries(extraParams.map((param) => [param, this[param]])),
       count: this.count,
       level: this.level,
       maxLevel: this.maxLevel,
@@ -96,18 +97,15 @@ export abstract class LevelableActionClass extends ActionClass {
       successes: this.successes,
       failures: this.failures,
     };
-    for (const param of extraParams) {
-      data[param] = this[param];
-    }
     return { ctor: ctorName, data };
   }
 }
 
-export type LevelableActionSaveData = {
+export interface LevelableActionSaveData {
   count: number;
   level: number;
   maxLevel: number;
   autoLevel: boolean;
   successes: number;
   failures: number;
-};
+}

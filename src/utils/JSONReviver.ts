@@ -8,9 +8,9 @@ type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
   validationData?: ObjectValidator<any>;
 };
 
-export interface IReviverValue {
+export interface IReviverValue<T = any> {
   ctor: string;
-  data: any;
+  data: T;
 }
 function isReviverValue(value: unknown): value is IReviverValue {
   return (

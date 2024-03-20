@@ -1,6 +1,7 @@
 import { BladeContractName } from "@enums";
 import { Contract } from "../Actions/Contract";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
+import { assertLoadingType } from "../../utils/TypeAssertion";
 
 export let Contracts: Record<BladeContractName, Contract> | null = null;
 // Must call initContracts before trying to access Contracts (including before loading a game)
@@ -109,4 +110,16 @@ export function initContracts() {
     }),
   };
   return Contracts;
+}
+
+export function loadContractsData(data: unknown, contracts: Record<BladeContractName, Contract>) {
+  // loading data as "unknown" and typechecking it down is probably not necessary
+  // but this will prevent crashes even with malformed savedata
+  if (!data || typeof data !== "object") return;
+  assertLoadingType<Record<BladeContractName, unknown>>(data);
+  for (const contractName of Object.values(BladeContractName)) {
+    const loadedContract = data[contractName];
+    if (!(loadedContract instanceof Contract)) continue;
+    contracts[contractName].loadData(loadedContract);
+  }
 }

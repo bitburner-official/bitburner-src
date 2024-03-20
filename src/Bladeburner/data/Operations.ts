@@ -2,6 +2,7 @@ import { BladeOperationName } from "@enums";
 import { Operation } from "../Actions/Operation";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { LevelableActionClass } from "../Actions/LevelableAction";
+import { assertLoadingType } from "../../utils/TypeAssertion";
 
 export let Operations: Record<BladeOperationName, Operation> | null = null;
 // Must call initOperations() before accessing Operations object
@@ -207,4 +208,16 @@ export function initOperations() {
     }),
   };
   return Operations;
+}
+
+export function loadOperationsData(data: unknown, operations: Record<BladeOperationName, Operation>) {
+  // loading data as "unknown" and typechecking it down is probably not necessary
+  // but this will prevent crashes even with malformed savedata
+  if (!data || typeof data !== "object") return;
+  assertLoadingType<Record<BladeOperationName, unknown>>(data);
+  for (const operationName of Object.values(BladeOperationName)) {
+    const loadedOperation = data[operationName];
+    if (!(loadedOperation instanceof Operation)) continue;
+    operations[operationName].loadData(loadedOperation);
+  }
 }

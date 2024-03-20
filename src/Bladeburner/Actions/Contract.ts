@@ -1,12 +1,9 @@
 import type { Bladeburner } from "../Bladeburner";
 import type { ActionIdentifier } from "../Types";
 
-import { IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
-import { assertLoadingType } from "../../utils/TypeAssertion";
+import { Generic_fromJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
 import { BladeActionType, BladeContractName } from "../Enums";
-import { LevelableActionClass, LevelableActionParams, LevelableActionSaveData } from "./LevelableAction";
-import { getEnumHelper } from "../../utils/EnumHelper";
-import { Contracts, initContracts } from "../data/Contracts";
+import { LevelableActionClass, LevelableActionParams } from "./LevelableAction";
 
 export class Contract extends LevelableActionClass {
   type: BladeActionType.contract = BladeActionType.contract;
@@ -26,19 +23,11 @@ export class Contract extends LevelableActionClass {
   }
 
   toJSON(): IReviverValue {
-    return this.save("Contract", "name");
+    return this.save("Contract");
   }
 
   static fromJSON(value: IReviverValue): Contract {
-    const contracts = Contracts || initContracts();
-    // Don't load invalid contracts
-    const name = getEnumHelper("BladeContractName").getMember(value.data?.name);
-    if (!name) return undefined as unknown as Contract;
-    if (!value.data || typeof value.data !== "object") return contracts[name];
-    assertLoadingType<LevelableActionSaveData>(value.data);
-    // Use generic LevelableAction loader first
-    const loadedContract = LevelableActionClass.load(contracts[name], value.data);
-    return loadedContract;
+    return Generic_fromJSON(Contract, value.data);
   }
 }
 

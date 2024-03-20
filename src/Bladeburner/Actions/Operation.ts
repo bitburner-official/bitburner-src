@@ -6,11 +6,9 @@ import type { ActionAvailability, ActionIdentifier, SuccessChanceParams } from "
 import { BladeActionType, BladeOperationName } from "@enums";
 import { BladeburnerConstants } from "../data/Constants";
 import { ActionClass } from "./Action";
-import { IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
-import { assertLoadingType } from "../../utils/TypeAssertion";
-import { LevelableActionClass, LevelableActionParams, LevelableActionSaveData } from "./LevelableAction";
-import { getEnumHelper } from "../../utils/EnumHelper";
-import { Operations, initOperations } from "../data/Operations";
+import { Generic_fromJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
+import { LevelableActionClass, LevelableActionParams } from "./LevelableAction";
+import { clampInteger } from "../../utils/helpers/clampNumber";
 
 export interface OperationParams extends LevelableActionParams {
   name: BladeOperationName;
@@ -57,21 +55,15 @@ export class Operation extends LevelableActionClass {
   }
 
   toJSON(): IReviverValue {
-    return this.save("Operation", "teamCount", "name");
+    return this.save("Operation", "teamCount");
+  }
+  loadData(loadedObject: Operation): void {
+    this.teamCount = clampInteger(loadedObject.teamCount);
+    LevelableActionClass.prototype.loadData.call(this, loadedObject);
   }
 
   static fromJSON(value: IReviverValue): Operation {
-    const operations = Operations || initOperations();
-    // Don't load invalid operations
-    const name = getEnumHelper("BladeOperationName").getMember(value.data?.name);
-    if (!name) return undefined as unknown as Operation;
-    if (!value.data || typeof value.data !== "object") return operations[name];
-    assertLoadingType<OperationSaveData>(value.data);
-    // Use generic LevelableAction loader first
-    const loadedOperation = LevelableActionClass.load(operations[name], value.data);
-    // Then load on extra operation-only fields
-    if (typeof value.data.teamCount === "number") loadedOperation.teamCount = value.data.teamCount;
-    return loadedOperation;
+    return Generic_fromJSON(Operation, value.data);
   }
 }
 
@@ -88,5 +80,3 @@ export function operationTeamSuccessBonus(this: Operation | BlackOperation, inst
 
   return 1;
 }
-
-type OperationSaveData = LevelableActionSaveData & { teamCount: number };

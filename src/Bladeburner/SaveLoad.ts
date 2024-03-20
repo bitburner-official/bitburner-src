@@ -5,8 +5,7 @@ import { getEnumHelper } from "../utils/EnumHelper";
 
 // Helpers related to save and load functionality
 
-/** Returns null if the identifier is not valid
- * Loads solely based on the "name" attribute, so it loads pre-2.6.1 ActionIdentifiers correctly */
+/** Loads solely based on the "name" attribute, so it loads pre-2.6.1 ActionIdentifiers correctly */
 export function loadActionIdentifier(identifier: unknown): ActionIdentifier | null {
   if (!identifier || typeof identifier !== "object") return null;
   assertLoadingType<ActionIdentifier>(identifier);

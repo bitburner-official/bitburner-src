@@ -41,8 +41,8 @@ import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportW
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { PartialRecord, createEnumKeyedRecord } from "../Types/Record";
-import { Contracts, initContracts } from "./data/Contracts";
-import { Operations, initOperations } from "./data/Operations";
+import { Contracts, initContracts, loadContractsData } from "./data/Contracts";
+import { Operations, initOperations, loadOperationsData } from "./data/Operations";
 import { clampInteger } from "../utils/helpers/clampNumber";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getActionFromTypeAndName, getActionObject } from "./Actions/utils";
@@ -1521,6 +1521,14 @@ export class Bladeburner {
   /** Initializes a Bladeburner object from a JSON save state. */
   static fromJSON(value: IReviverValue): Bladeburner {
     const bladeburner = Generic_fromJSON(Bladeburner, value.data);
+    // The load process does not respect how contracts and operations are handled in save data
+    const loadedContracts = bladeburner.contracts;
+    const loadedOperations = bladeburner.operations;
+    // Reload the static objects, then load in valid data from the old loaded versions
+    bladeburner.contracts = Contracts ?? initContracts();
+    bladeburner.operations = Operations ?? initOperations();
+    loadContractsData(loadedContracts, bladeburner.contracts);
+    loadOperationsData(loadedOperations, bladeburner.operations);
     return bladeburner;
   }
 }
