@@ -138,35 +138,35 @@ describe("Corporation", () => {
     };
 
     describe("upgrade office size from size 3", () => {
-      it("should be correct when upgrading from 3->6", () => {
+      it("should match game v2.6.0 when upgrading from 3->6", () => {
         expect(calculateOfficeSizeUpgradeCost(3, 3)).toBeCloseTo(refCosts.from3[3], 1);
       });
-      it("should be correct when upgrading from 3->18", () => {
+      it("should match game v2.6.0 when upgrading from 3->18", () => {
         expect(calculateOfficeSizeUpgradeCost(3, 15)).toBeCloseTo(refCosts.from3[15], 1);
       });
-      it("should be correct when upgrading from 3->153", () => {
+      it("should match game v2.6.0 when upgrading from 3->153", () => {
         expect(calculateOfficeSizeUpgradeCost(3, 150)).toBeCloseTo(refCosts.from3[150], 1);
       });
     });
     describe("upgrade office size from size 6", () => {
-      it("should be correct when upgrading from 6->9", () => {
+      it("should match game v2.6.0 when upgrading from 6->9", () => {
         expect(calculateOfficeSizeUpgradeCost(6, 3)).toBeCloseTo(refCosts.from6[3], 1);
       });
-      it("should be correct when upgrading from 6->21", () => {
+      it("should match game v2.6.0 when upgrading from 6->21", () => {
         expect(calculateOfficeSizeUpgradeCost(6, 15)).toBeCloseTo(refCosts.from6[15], 1);
       });
-      it("should be correct when upgrading from 6->156", () => {
+      it("should match game v2.6.0 when upgrading from 6->156", () => {
         expect(calculateOfficeSizeUpgradeCost(6, 150)).toBeCloseTo(refCosts.from6[150], 1);
       });
     });
     describe("upgrade office size from size 9", () => {
-      it("should be correct when upgrading from 9->12", () => {
+      it("should match game v2.6.0 when upgrading from 9->12", () => {
         expect(calculateOfficeSizeUpgradeCost(9, 3)).toBeCloseTo(refCosts.from9[3], 1);
       });
-      it("should be correct when upgrading from 9->24", () => {
+      it("should match game v2.6.0 when upgrading from 9->24", () => {
         expect(calculateOfficeSizeUpgradeCost(9, 15)).toBeCloseTo(refCosts.from9[15], 1);
       });
-      it("should be correct when upgrading from 9->159", () => {
+      it("should match game v2.6.0 when upgrading from 9->159", () => {
         expect(calculateOfficeSizeUpgradeCost(9, 150)).toBeCloseTo(refCosts.from9[150], 1);
       });
     });
