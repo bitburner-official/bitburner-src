@@ -63,7 +63,7 @@ import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { MaterialInfo } from "../Corporation/MaterialInfo";
-import { calculateUpgradeCost } from "../Corporation/helpers";
+import { calculateOfficeSizeUpgradeCost, calculateUpgradeCost } from "../Corporation/helpers";
 import { PositiveInteger } from "../types";
 import { getRecordKeys } from "../Types/Record";
 
@@ -511,13 +511,15 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const size = helpers.number(ctx, "size", _size);
       if (size < 0) throw new Error("Invalid value for size field! Must be numeric and greater than 0");
       const office = getOffice(divisionName, cityName);
-      const initialPriceMult = Math.round(office.size / corpConstants.officeInitialSize);
-      const costMultiplier = 1.09;
-      let mult = 0;
-      for (let i = 0; i < size / corpConstants.officeInitialSize; ++i) {
-        mult += Math.pow(costMultiplier, initialPriceMult + i);
-      }
-      return corpConstants.officeInitialCost * mult;
+      return calculateOfficeSizeUpgradeCost(office.size, size);
+      // const initialPriceMult = Math.round(office.size / corpConstants.officeInitialSize);
+      // const costMultiplier = 1.09;
+      // let mult = 0;
+      // //
+      // for (let i = 0; i < size / corpConstants.officeInitialSize; ++i) {
+      //   mult += Math.pow(costMultiplier, initialPriceMult + i);
+      // }
+      // return corpConstants.officeInitialCost * mult;
     },
     setAutoJobAssignment: (ctx) => (_divisionName, _cityName, _job, _amount) => {
       checkAccess(ctx, CorpUnlockName.OfficeAPI);
@@ -559,7 +561,8 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       const size = helpers.number(ctx, "size", _size);
-      if (size < 0) throw new Error("Invalid value for size field! Must be numeric and greater than 0");
+      //
+      if (size < 0) throw new Error("Invalid value for size field! Can't decrease office size.");
       const office = getOffice(divisionName, cityName);
       const corporation = getCorporation();
       UpgradeOfficeSize(corporation, office, size);
