@@ -4649,6 +4649,13 @@ interface ReputationFormulas {
    * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    */
   repFromDonation(amount: number, player: Person): number;
+
+  /**
+   * Calculate the donation needed to gain an amount of reputation.
+   * @param reputation - Amount of reputation
+   * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
+   */
+  donationForRep(reputation: number, player: Person): number;
 }
 
 /**
