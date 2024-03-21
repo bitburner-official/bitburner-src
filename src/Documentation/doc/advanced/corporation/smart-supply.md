@@ -46,6 +46,6 @@ For each case, we need to find way(s) to detect congestion and mitigate it. In t
   - If `productionAmount` is 0, increase the entry's value of this warehouse in the map by 1. If not, set the entry's value to 0.
   - If the entry's value is greater than 5, the warehouse is very likely congested.
 - This heuristic is based on the observation: when warehouse is filled with excessive input materials, the production process is halted completely, this means `productionAmount` is 0. We wait for 5 times to reduce false positives.
-- When we start our Smart Supply script, the `productionAmount` of output material/product may be 0, because there is nothing controls the production process in previous cycles.
+- When we start our Smart Supply script, `productionAmount` of output material/product may be 0, because nothing controls the production process in previous cycles.
 
 When there are excessive input materials, discarding all of them is the simplest mitigation measure. It's inefficient, but it's the fastest way to make our production line restart.
