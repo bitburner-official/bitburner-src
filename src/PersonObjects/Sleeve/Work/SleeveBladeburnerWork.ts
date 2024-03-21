@@ -1,3 +1,4 @@
+import type { PromisePair } from "../../../Types/Promises";
 import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { Sleeve } from "../Sleeve";
@@ -21,14 +22,10 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
   cyclesWorked = 0;
   actionType: "General" | "Contracts";
   actionName: string;
-  signalCompletion = () => {
-    // Intentionally empty function, this is just an initial value and will never be used.
-  };
-  nextCompletionPromise: Promise<void> | null;
+  nextCompletionPair: PromisePair<void> = { promise: null, resolve: null };
 
   constructor(params?: SleeveBladeburnerWorkParams) {
     super();
-    this.nextCompletionPromise = null;
     this.actionType = params?.type ?? "General";
     this.actionName = params?.name ?? "Field Analysis";
   }
@@ -40,7 +37,11 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
   }
 
   finish() {
-    if (this.nextCompletionPromise) this.signalCompletion();
+    if (this.nextCompletionPair.resolve) {
+      this.nextCompletionPair.resolve();
+      this.nextCompletionPair.resolve = null;
+      this.nextCompletionPair.promise = null;
+    }
   }
 
   process(sleeve: Sleeve, cycles: number) {
@@ -73,12 +74,13 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
       this.tasksCompleted++;
       this.cyclesWorked -= this.cyclesNeeded(sleeve);
       // Resolve and reset nextCompletion promise
-      if (this.nextCompletionPromise) this.signalCompletion();
+      this.finish();
     }
   }
   get nextCompletion(): Promise<void> {
-    if (!this.nextCompletionPromise) this.nextCompletionPromise = new Promise((r) => (this.signalCompletion = r));
-    return this.nextCompletionPromise;
+    if (!this.nextCompletionPair.promise)
+      this.nextCompletionPair.promise = new Promise((r) => (this.nextCompletionPair.resolve = r));
+    return this.nextCompletionPair.promise;
   }
 
   APICopy(sleeve: Sleeve) {
@@ -93,7 +95,7 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
     };
   }
 
-  static savedKeys = getKeyList(SleeveBladeburnerWork, { removedKeys: ["signalCompletion", "nextCompletion"] });
+  static savedKeys = getKeyList(SleeveBladeburnerWork, { removedKeys: ["nextCompletionPair"] });
 
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
