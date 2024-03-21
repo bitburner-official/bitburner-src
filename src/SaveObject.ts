@@ -38,6 +38,8 @@ import { Terminal } from "./Terminal";
 import { getRecordValues } from "./Types/Record";
 import { ExportMaterial } from "./Corporation/Actions";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
+import { ServerName } from "./Types/strings";
+import { ContentFilePath, ContentFile, ContentFileMap } from "./Paths/ContentFile";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -717,6 +719,41 @@ Error: ${e}`);
     Object.assign(freshSaveData.stats, stats);
     loadGo(JSON.stringify(freshSaveData));
   }
+  if (ver <= 38) {
+    // All whitespace except for spaces was allowed in filenames
+    let found = false;
+    for (const server of GetAllServers()) {
+      for (const script of server.scripts.values()) {
+        if (!/\s/.test(script.filename)) continue;
+        removeWhitespace(server.hostname, script, server.scripts);
+        found = true;
+      }
+      for (const textFile of server.textFiles.values()) {
+        if (!/\s/.test(textFile.filename)) continue;
+        removeWhitespace(server.hostname, textFile, server.textFiles);
+        found = true;
+      }
+    }
+    if (found) Terminal.error("Filenames with whitespace found and corrected, see console for details.");
+  }
+}
+
+function removeWhitespace(hostname: ServerName, file: ContentFile, files: ContentFileMap): void {
+  let filename = file.filename.replace(/\s+/g, "-") as ContentFilePath;
+  // avoid filename conflicts
+  if (files.has(filename)) {
+    const idx = filename.lastIndexOf(".");
+    const path = filename.slice(0, idx);
+    const ext = filename.slice(idx);
+    let i = 1;
+    do {
+      filename = `${path}-${i++}${ext}` as ContentFilePath;
+    } while (files.has(filename));
+  }
+  console.warn(`Renamed "${file.filename}" to "${filename}" on ${hostname}.`);
+  files.delete(file.filename);
+  file.filename = filename;
+  files.set(file.filename, file);
 }
 
 function loadGame(saveString: string): boolean {
