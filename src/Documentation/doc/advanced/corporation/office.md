@@ -55,8 +55,6 @@ Maximum size with a given `MaxCost`:
 
 $$MaxUpgradeLevel = 3\ast\log_{1.09}\left( MaxCost\ast\frac{0.09}{BasePrice} + {1.09}^{\frac{CurrentSize}{3}} \right)$$
 
-When we divide office's size by 3, we need to use `Math.ceil()` to round up the value. This means upgrading from size 3 to size 4 costs the same as upgrading from size 3 to size 6. The most cost-effective size is always a multiple of 3.
-
 ## Energy and morale
 
 They are calculated in START state.
