@@ -97,8 +97,8 @@ Both `makeMove()` and `passTurn()` , when awaited, return an object that tells y
   success: boolean;
   // If the opponent moved or passed, or if the game is now over, or if your move was invalid
   type: "invalid" | "move" | "pass" | "gameOver";
-  x: number; // Opponent move's x coord (if applicable)
-  y: number; // Opponent move's y coord (if applicable)
+  x: number | null; // Opponent move's x coord (if applicable)
+  y: number | null; // Opponent move's y coord (if applicable)
 }
 ```
 
@@ -130,13 +130,13 @@ export async function main(ns) {
       result = await ns.go.makeMove(x, y);
     }
 
+    // Log opponent's next move, once it happens
+    await ns.go.opponentNextTurn();
+
     await ns.sleep(200);
 
     // Keep looping as long as the opponent is playing moves
   } while (result?.type !== "gameOver");
-
-  // After the opponent passes, end the game by passing as well
-  await ns.go.passTurn();
 
   // TODO: add a loop to keep playing
   // TODO: reset board, e.g. `ns.go.resetBoardState("Netburners", 7)`

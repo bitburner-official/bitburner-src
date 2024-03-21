@@ -63,7 +63,7 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
                   Booster Fragments, which take up 5 tiles of the grid. There is no shortage of Booster Fragments, and
                   it is virtually impossible to run out of them. While not providing any direct stat increases to their
                   user, Booster Fragments increase the efficacy of adjacent Stat Fragments by 10%, and do not need to be
-                  charged.
+                  charged. Multiple Booster Fragments can affect the same Stat Fragment.
                 </Typography>
                 <br />
 
@@ -170,11 +170,11 @@ export function StaneksGiftRoot({ staneksGift }: IProps): React.ReactElement {
                   Stat Fragments are charged using the stanek.chargeFragment(rootX, rootY) NetScript API function. The
                   charging process ordinarily takes 1000ms to complete, but only takes 200ms during bonus time. When the
                   function finishes executing, the fragment's charge levels will be raised by an amount corresponding to
-                  the number of threads that were used. Note that it is no more effective to charge a fragment many
-                  times with few threads than to charge few times with many threads, so there is no need to distribute
-                  charging jobs across multiple scripts. As a Stat Fragment's charge level is increased, its bonuses
-                  will increase, but there will be diminishing returns. As such, it is generally most efficient to
-                  charge all of the placed fragments equally. The charge level of a fragment will not decrease over
+                  the number of threads that were used. Note that it is generally more effective to charge a fragment a
+                  few times with many threads than to charge it many times with few threads, so there is a benefit to
+                  combining charging jobs into fewer scripts. As a Stat Fragment's charge level is increased, its
+                  bonuses will increase, but there will be diminishing returns. As such, it is generally most efficient
+                  to charge all of the placed fragments equally. The charge level of a fragment will not decrease over
                   time, but it will be reset to 0 upon removing it from the board or installing augmentations.
                 </Typography>
               </>,

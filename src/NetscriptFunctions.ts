@@ -1,4 +1,3 @@
-import $ from "jquery";
 import { vsprintf, sprintf } from "sprintf-js";
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "./Constants";
@@ -745,7 +744,7 @@ export const ns: InternalAPI<NSFull> = {
         return runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
       }, runOpts.spawnDelay);
 
-      helpers.log(ctx, () => `Will execute '${path}' in ${runOpts.spawnDelay} seconds`);
+      helpers.log(ctx, () => `Will execute '${path}' in ${runOpts.spawnDelay} milliseconds`);
 
       if (killWorkerScript(ctx.workerScript)) {
         helpers.log(ctx, () => "Exiting...");
@@ -1637,33 +1636,42 @@ export const ns: InternalAPI<NSFull> = {
       });
     });
   },
-  wget: (ctx) => (_url, _target, _hostname) => {
+  wget: (ctx) => async (_url, _target, _hostname) => {
     const url = helpers.string(ctx, "url", _url);
     const target = helpers.filePath(ctx, "target", _target);
     const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
     const server = helpers.getServer(ctx, hostname);
     if (!target || (!hasTextExtension(target) && !hasScriptExtension(target))) {
       helpers.log(ctx, () => `Invalid target file: '${target}'. Must be a script or text file.`);
-      return Promise.resolve(false);
+      return false;
     }
-    return new Promise(function (resolve) {
-      $.get(
-        url,
-        function (data) {
-          const res = server.writeToContentFile(target, data);
-          if (res.overwritten) {
-            helpers.log(ctx, () => `Successfully retrieved content and overwrote '${target}' on '${hostname}'`);
-            return resolve(true);
-          }
-          helpers.log(ctx, () => `Successfully retrieved content to new file '${target}' on '${hostname}'`);
-          return resolve(true);
-        },
-        "text",
-      ).fail(function (e) {
-        helpers.log(ctx, () => JSON.stringify(e));
-        return resolve(false);
-      });
-    });
+    let response: Response;
+    try {
+      response = await fetch(url);
+    } catch (error) {
+      /**
+       * Properties in error are not enumerable, so JSON.stringify(error) returns "{}". We need to explicitly specify
+       * the properties in the "replacer" parameter of JSON.stringify. We can do it by using Object.getOwnPropertyNames.
+       *
+       * Ref:
+       * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify
+       * - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyNames
+       * - https://stackoverflow.com/q/18391212
+       */
+      helpers.log(ctx, () => JSON.stringify(error, Object.getOwnPropertyNames(error)));
+      return false;
+    }
+    if (response.status !== 200) {
+      helpers.log(ctx, () => `wget failed. HTTP code: ${response.status}.`);
+      return false;
+    }
+    const writeResult = server.writeToContentFile(target, await response.text());
+    if (writeResult.overwritten) {
+      helpers.log(ctx, () => `Successfully retrieved content and overwrote '${target}' on '${hostname}'`);
+    } else {
+      helpers.log(ctx, () => `Successfully retrieved content to new file '${target}' on '${hostname}'`);
+    }
+    return true;
   },
   getFavorToDonate: () => () => {
     return Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.RepToDonateToFaction);

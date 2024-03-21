@@ -23,10 +23,11 @@ export function getNewBoardState(
 ): BoardState {
   if (ai === GoOpponent.w0r1d_d43m0n) {
     boardToCopy = resetCoordinates(rotate90Degrees(boardFromSimpleBoard(bitverseBoardShape)));
+    boardSize = 19;
   }
 
   const newBoardState: BoardState = {
-    previousBoard: null,
+    previousBoards: [],
     previousPlayer: GoColor.white,
     ai: ai,
     passCount: 0,
@@ -81,7 +82,12 @@ export function makeMove(boardState: BoardState, x: number, y: number, player: G
     return false;
   }
 
-  boardState.previousBoard = simpleBoardFromBoard(boardState.board);
+  // Only maintain last 7 moves
+  boardState.previousBoards.unshift(simpleBoardFromBoard(boardState.board));
+  if (boardState.previousBoards.length > 7) {
+    boardState.previousBoards.pop();
+  }
+
   const point = boardState.board[x][y];
   if (!point) return false;
 
@@ -166,12 +172,12 @@ export function updateChains(board: Board, resetChains = true): void {
  * Modifies the board in place.
  */
 export function updateCaptures(board: Board, playerWhoMoved: GoColor, resetChains = true): void {
-  const boardState = updateChains(board, resetChains);
+  updateChains(board, resetChains);
   const chains = getAllChains(board);
 
   const chainsToCapture = findAllCapturedChains(chains, playerWhoMoved);
   if (!chainsToCapture?.length) {
-    return boardState;
+    return;
   }
 
   chainsToCapture?.forEach((chain) => captureChain(chain));
@@ -265,7 +271,7 @@ export function getEmptySpaces(board: Board): PointState[] {
 export function getStateCopy(initialState: BoardState) {
   const boardState = structuredClone(initialState);
 
-  boardState.previousBoard = initialState.previousBoard ? [...initialState.previousBoard] : null;
+  boardState.previousBoards = initialState.previousBoards ?? [];
   boardState.previousPlayer = initialState.previousPlayer;
   boardState.ai = initialState.ai;
   boardState.passCount = initialState.passCount;

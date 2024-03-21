@@ -12,7 +12,6 @@ import { isInteger, isNumber } from "../types";
 
 type PreviousGameSaveData = { ai: GoOpponent; board: SimpleBoard; previousPlayer: GoColor | null } | null;
 type CurrentGameSaveData = PreviousGameSaveData & {
-  previousBoard: SimpleBoard | null;
   cheatCount: number;
   passCount: number;
 };
@@ -35,7 +34,6 @@ export function getGoSave(): SaveFormat {
     currentGame: {
       ai: Go.currentGame.ai,
       board: simpleBoardFromBoard(Go.currentGame.board),
-      previousBoard: Go.currentGame.previousBoard,
       previousPlayer: Go.currentGame.previousPlayer,
       cheatCount: Go.currentGame.cheatCount,
       passCount: Go.currentGame.passCount,
@@ -94,8 +92,6 @@ function loadCurrentGame(currentGame: unknown): BoardState | string {
   const requiredSize = currentGame.board.length;
   const board = loadSimpleBoard(currentGame.board, requiredSize);
   if (typeof board === "string") return board;
-  const previousBoard = currentGame.previousBoard ? loadSimpleBoard(currentGame.previousBoard, requiredSize) : null;
-  if (typeof previousBoard === "string") return previousBoard;
   const previousPlayer = getEnumHelper("GoColor").getMember(currentGame.previousPlayer) ?? null;
   if (!isInteger(currentGame.cheatCount) || currentGame.cheatCount < 0)
     return "invalid number for currentGame.cheatCount";
@@ -105,7 +101,7 @@ function loadCurrentGame(currentGame: unknown): BoardState | string {
   boardState.previousPlayer = previousPlayer;
   boardState.cheatCount = currentGame.cheatCount;
   boardState.passCount = currentGame.passCount;
-  boardState.previousBoard = previousBoard;
+  boardState.previousBoards = [];
   return boardState;
 }
 

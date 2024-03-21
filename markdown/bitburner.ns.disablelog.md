@@ -28,3 +28,5 @@ RAM cost: 0 GB
 
 Logging can be disabled for all functions by passing `ALL` as the argument.
 
+For specific interfaces, use the form "namespace.functionName". (e.g. "ui.setTheme")
+

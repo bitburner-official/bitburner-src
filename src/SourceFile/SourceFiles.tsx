@@ -239,20 +239,20 @@ export function initSourceFiles() {
         This Source-File grants the following benefits:
         <br />
         <br />
-        Level 1: 25% increased stat multipliers from node Power
+        Level 1: 100% increased stat multipliers from node Power
         <br />
         Level 2: Permanently unlocks the go.cheat API in other BitNodes
         <br />
         Level 3: 25% increased success rate for the go.cheat API
         <br />
         <br />
-        This Source-File also increases the maximum favor you can gain for each faction from IPvGO by:
+        This Source-File also increases the maximum favor you can gain for each faction from IPvGO to:
         <br />
-        Level 1: +10
+        Level 1: 80
         <br />
-        Level 2: +20
+        Level 2: 100
         <br />
-        Level 3: +40
+        Level 3: 120
       </>
     ),
   );

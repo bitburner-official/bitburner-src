@@ -15,8 +15,8 @@ export const GoScoreSummaryTable = ({ score, opponent }: GoScoreSummaryTableProp
   const classes = boardStyles();
   const blackScore = score[GoColor.black];
   const whiteScore = score[GoColor.white];
-  const blackPlayerName = opponent === GoOpponent.none ? "Black" : "You";
-  const whitePlayerName = opponent === GoOpponent.none ? "White" : opponent;
+  const blackPlayerName = opponent === GoOpponent.none ? GoColor.black : "You";
+  const whitePlayerName = opponent === GoOpponent.none ? GoColor.white : opponent;
 
   return (
     <>

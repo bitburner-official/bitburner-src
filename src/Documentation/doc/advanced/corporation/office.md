@@ -41,11 +41,11 @@ $$UpgradeCost = BasePrice\ast{1.09}^{\frac{CurrentSize}{3}}$$
 
 Upgrade cost from size 3 to size n:
 
-$$UpgradeCost_{From\ 3\ to\ n} = \sum_{k = 0}^{\frac{n}{3} - 1}{BasePrice\ast 1.09^k}$$
+$$UpgradeCost_{From\ 3\ to\ n} = \sum_{k = 1}^{\frac{n}{3} - 1}{BasePrice\ast 1.09^k}$$
 
 ≡
 
-$$UpgradeCost_{From\ 3\ to\ n} = BasePrice\ast\left( \frac{{1.09}^{\frac{n}{3}} - 1}{0.09} \right)$$
+$$UpgradeCost_{From\ 3\ to\ n} = BasePrice\ast\left( \frac{{1.09}^{\frac{n}{3}} - 1.09}{0.09} \right)$$
 
 Upgrade cost size a to size b:
 

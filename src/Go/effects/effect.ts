@@ -15,17 +15,21 @@ import { getRecordEntries, getRecordValues } from "../../Types/Record";
  */
 export function CalculateEffect(nodes: number, faction: GoOpponent): number {
   const power = getEffectPowerForFaction(faction);
-  const sourceFileBonus = Player.sourceFileLvl(14) ? 1.25 : 1;
+  const sourceFileBonus = Player.sourceFileLvl(14) ? 2 : 1;
   return (
-    1 + Math.log(nodes + 1) * Math.pow(nodes + 1, 0.3) * 0.004 * power * currentNodeMults.GoPower * sourceFileBonus
+    1 + Math.log(nodes + 1) * Math.pow(nodes + 1, 0.3) * 0.002 * power * currentNodeMults.GoPower * sourceFileBonus
   );
 }
 
+/**
+ * Get maximum favor that you can gain from IPvGO win streaks
+ * for factions you are a member of
+ */
 export function getMaxFavor() {
   const sourceFileLevel = Player.sourceFileLvl(14);
 
   if (sourceFileLevel === 1) {
-    return 90;
+    return 80;
   }
   if (sourceFileLevel === 2) {
     return 100;
@@ -34,7 +38,7 @@ export function getMaxFavor() {
     return 120;
   }
 
-  return 80;
+  return 40;
 }
 
 /**
@@ -94,7 +98,7 @@ function calculateMults(): Multipliers {
 }
 
 export function playerHasDiscoveredGo() {
-  const playedGame = Go.currentGame.previousBoard;
+  const playedGame = Go.currentGame.previousBoards.length;
   const hasRecords = getRecordValues(Go.stats).some((stats) => stats.wins + stats.losses);
   const isInBn14 = Player.bitNodeN === 14;
 
