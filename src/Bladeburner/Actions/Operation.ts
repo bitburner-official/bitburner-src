@@ -1,7 +1,7 @@
 import type { Person } from "../../PersonObjects/Person";
 import type { BlackOperation } from "./BlackOperation";
 import type { Bladeburner } from "../Bladeburner";
-import type { ActionAvailability, ActionIdentifier, SuccessChanceParams } from "../Types";
+import type { Availability, ActionIdentifier, SuccessChanceParams } from "../Types";
 
 import { BladeActionType, BladeOperationName } from "@enums";
 import { BladeburnerConstants } from "../data/Constants";
@@ -12,7 +12,7 @@ import { clampInteger } from "../../utils/helpers/clampNumber";
 
 export interface OperationParams extends LevelableActionParams {
   name: BladeOperationName;
-  getAvailability?: (bladeburner: Bladeburner) => ActionAvailability;
+  getAvailability?: (bladeburner: Bladeburner) => Availability;
 }
 
 export class Operation extends LevelableActionClass {

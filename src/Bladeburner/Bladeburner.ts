@@ -1,10 +1,8 @@
 import type { PromisePair } from "../Types/Promises";
-import type { PositiveInteger } from "../types";
 import type { ActionIdentifier, Action } from "./Types";
 import type { Contract } from "./Actions/Contract";
 import type { Operation } from "./Actions/Operation";
 import type { Person } from "../PersonObjects/Person";
-import type { NetscriptContext } from "../Netscript/APIWrapper";
 
 import {
   AugmentationName,
@@ -44,7 +42,6 @@ import { PartialRecord, createEnumKeyedRecord } from "../Types/Record";
 import { Contracts, initContracts, loadContractsData } from "./data/Contracts";
 import { Operations, initOperations, loadOperationsData } from "./data/Operations";
 import { clampInteger } from "../utils/helpers/clampNumber";
-import { helpers } from "../Netscript/NetscriptHelpers";
 import { getActionFromTypeAndName, getActionObject } from "./Actions/utils";
 import { parseCommand } from "../Terminal/Parser";
 
@@ -310,18 +307,14 @@ export class Bladeburner {
         if (args[1].toLowerCase() === "list") {
           this.postToConsole(skillName + ": Level " + formatNumberNoSuffix(level));
         } else if (args[1].toLowerCase() === "level") {
-          const pointCost = skill.calculateCost(level);
-          if (skill.maxLvl !== 0 && level >= skill.maxLvl) {
-            this.postToConsole(`This skill ${skillName} is already at max level (${level}/${skill.maxLvl}).`);
-          } else if (this.skillPoints >= pointCost) {
-            this.skillPoints -= pointCost;
-            this.increaseSkill(skillName);
-            this.log(skillName + " upgraded to Level " + this.getSkillLevel(skillName));
-          } else {
-            this.postToConsole(
-              "You do not have enough Skill Points to upgrade this. You need " + formatNumberNoSuffix(pointCost, 0),
-            );
+          const availability = skill.canUpgrade(this);
+          if (!availability.available) {
+            this.postToConsole(`Cannot upgrade skill ${skill.name}: ${availability.error}`);
+            return;
           }
+          this.skillPoints -= availability.cost;
+          this.increaseSkill(skillName);
+          this.postToConsole(`${skillName} upgraded to level ${this.getSkillLevel(skillName)}`);
         } else {
           this.postToConsole("Invalid usage of 'skill' console command: skill [action] [name]");
           this.postToConsole("Use 'help skill' for more info");
@@ -1151,9 +1144,8 @@ export class Bladeburner {
             break;
           }
           case BladeGeneralActionName.recruitment: {
-            const successChance = this.getRecruitmentSuccessChance(person);
             const actionTime = action.getActionTime(this, person) * 1000;
-            if (Math.random() < successChance) {
+            if (action.attempt(this, person)) {
               const expGain = 2 * BladeburnerConstants.BaseStatGain * actionTime;
               retValue.chaExp = expGain;
               ++this.teamSize;
@@ -1418,82 +1410,6 @@ export class Bladeburner {
         BladeburnerPromise.promise = null;
       }
     }
-  }
-
-  getActionEstimatedSuccessChanceNetscriptFn(person: Person, type: string, name: string): [number, number] | string {
-    const action = getActionFromTypeAndName(type, name);
-    if (!action) return "bladeburner.getActionEstimatedSuccessChance";
-
-    switch (action.type) {
-      case BladeActionType.contract:
-      case BladeActionType.operation:
-      case BladeActionType.blackOp:
-        return action.getSuccessRange(this, person);
-      case BladeActionType.general:
-        switch (action.name) {
-          case BladeGeneralActionName.training:
-          case BladeGeneralActionName.fieldAnalysis:
-          case BladeGeneralActionName.diplomacy:
-          case BladeGeneralActionName.hyperbolicRegen:
-          case BladeGeneralActionName.inciteViolence:
-            return [1, 1];
-          case BladeGeneralActionName.recruitment: {
-            const recruitChance = this.getRecruitmentSuccessChance(person);
-            return [recruitChance, recruitChance];
-          }
-        }
-    }
-  }
-
-  upgradeSkillNetscriptFn(ctx: NetscriptContext, skillName: BladeSkillName, count: PositiveInteger): boolean {
-    const skill = Skills[skillName];
-    const skillLevel = this.getSkillLevel(skillName);
-    const cost = skill.calculateCost(skillLevel, count);
-
-    if (!Number.isFinite(cost)) {
-      helpers.log(ctx, () => `Skill '${skillName}' cannot be upgraded ${count} time(s).`);
-      return false;
-    }
-
-    if (this.skillPoints < cost) {
-      helpers.log(
-        ctx,
-        () =>
-          `You do not have enough skill points to upgrade ${skillName} ${count} time(s). (You have ${this.skillPoints}, you need ${cost})`,
-      );
-      return false;
-    }
-
-    this.skillPoints -= cost;
-    this.increaseSkill(skillName, count);
-    helpers.log(ctx, () => `'${skillName}' upgraded to level ${this.getSkillLevel(skillName)}`);
-    return true;
-  }
-
-  setTeamSizeNetscriptFn(type: string, name: string, size: number, workerScript: WorkerScript): number {
-    const errorLogText = `Invalid action: type='${type}' name='${name}'`;
-    const action = getActionFromTypeAndName(type, name);
-    if (action == null) {
-      workerScript.log("bladeburner.setTeamSize", () => errorLogText);
-      return -1;
-    }
-
-    if (action.type !== BladeActionType.operation && action.type !== BladeActionType.blackOp) {
-      workerScript.log("bladeburner.setTeamSize", () => "Only valid for 'Operations' and 'BlackOps'");
-      return -1;
-    }
-
-    let sanitizedSize = Math.round(size);
-    if (isNaN(sanitizedSize) || sanitizedSize < 0) {
-      workerScript.log("bladeburner.setTeamSize", () => `Invalid size: ${size}`);
-      return -1;
-    }
-    if (this.teamSize < sanitizedSize) {
-      sanitizedSize = this.teamSize;
-    }
-    action.teamCount = sanitizedSize;
-    workerScript.log("bladeburner.setTeamSize", () => `Team size for '${name}' set to ${sanitizedSize}.`);
-    return sanitizedSize;
   }
 
   joinBladeburnerFactionNetscriptFn(workerScript: WorkerScript): boolean {

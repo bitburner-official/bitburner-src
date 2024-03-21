@@ -1,8 +1,11 @@
 import type { BladeSkillName } from "@enums";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
+import { Bladeburner } from "./Bladeburner";
+import { Availability } from "./Types";
+import { PositiveSafeInteger, isPositiveSafeInteger } from "../types";
 
-interface ISkillParams {
+interface SkillParams {
   name: BladeSkillName;
   desc: string;
 
@@ -66,7 +69,7 @@ export class Skill {
   money = 0;
   expGain = 0;
 
-  constructor(params: ISkillParams) {
+  constructor(params: SkillParams) {
     this.name = params.name;
     this.desc = params.desc;
     this.baseCost = params.baseCost ? params.baseCost : 1;
@@ -129,18 +132,18 @@ export class Skill {
     }
   }
 
-  calculateCost(currentLevel: number, count = 1): number {
+  calculateCost(currentLevel: number, count = 1 as PositiveSafeInteger): number {
     if (currentLevel + count > this.maxLvl) return Infinity;
     //Recursive mode does not handle invalid inputs properly, but it should never
     //be possible for it to run with them. For the sake of not crashing the game,
-    const recursiveMode = (currentLevel: number, count: number): number => {
+    const recursiveMode = (currentLevel: number, count: PositiveSafeInteger): number => {
       if (count <= 1) {
         return Math.floor((this.baseCost + currentLevel * this.costInc) * currentNodeMults.BladeburnerSkillCost);
       } else {
         const thisUpgrade = Math.floor(
           (this.baseCost + currentLevel * this.costInc) * currentNodeMults.BladeburnerSkillCost,
         );
-        return this.calculateCost(currentLevel + 1, count - 1) + thisUpgrade;
+        return this.calculateCost(currentLevel + 1, (count - 1) as PositiveSafeInteger) + thisUpgrade;
       }
     };
 
@@ -161,6 +164,15 @@ export class Skill {
       const unFloored = preMult * currentNodeMults.BladeburnerSkillCost - count / 2;
       return Math.floor(unFloored);
     }
+  }
+
+  canUpgrade(bladeburner: Bladeburner, count = 1): Availability<{ cost: number }> {
+    const currentLevel = bladeburner.skills[this.name] ?? 0;
+    if (!isPositiveSafeInteger(count)) return { error: `Invalid upgrade count ${count}` };
+    if (currentLevel + count > this.maxLvl) return { error: `Upgraded level ${currentLevel + count} exceeds max` };
+    const cost = this.calculateCost(currentLevel, count);
+    if (cost > bladeburner.skillPoints) return { error: `Insufficient skill points for upgrade` };
+    return { available: true, cost };
   }
 
   getMultiplier(name: string): number {

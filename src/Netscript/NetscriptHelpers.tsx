@@ -32,7 +32,15 @@ import { arrayToString } from "../utils/helpers/ArrayHelpers";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { RamCostConstants } from "./RamCostGenerator";
-import { isPositiveInteger, PositiveInteger, Unknownify, isPositiveNumber, PositiveNumber } from "../types";
+import {
+  isPositiveInteger,
+  PositiveInteger,
+  Unknownify,
+  isPositiveNumber,
+  PositiveNumber,
+  PositiveSafeInteger,
+  isPositiveSafeInteger,
+} from "../types";
 import { Engine } from "../engine";
 import { resolveFilePath, FilePath } from "../Paths/FilePath";
 import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
@@ -45,6 +53,7 @@ export const helpers = {
   string,
   number,
   positiveInteger,
+  positiveSafeInteger,
   scriptArgs,
   runOptions,
   spawnOptions,
@@ -120,6 +129,16 @@ function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): Po
   }
   return n;
 }
+
+/** Convert provided value v for argument argName to a positive safe integer, throwing if it looks like something else. */
+function positiveSafeInteger(ctx: NetscriptContext, argName: string, v: unknown): PositiveSafeInteger {
+  const n = number(ctx, argName, v);
+  if (!isPositiveSafeInteger(n)) {
+    throw errorMessage(ctx, `${argName} should be a positive safe integer, was ${n}`, "TYPE");
+  }
+  return n;
+}
+
 /** Convert provided value v for argument argName to a positive number, throwing if it looks like something else. */
 function positiveNumber(ctx: NetscriptContext, argName: string, v: unknown): PositiveNumber {
   const n = number(ctx, argName, v);

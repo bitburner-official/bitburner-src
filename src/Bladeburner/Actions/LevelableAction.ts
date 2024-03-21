@@ -1,6 +1,6 @@
 import type { Bladeburner } from "../Bladeburner";
 import type { IReviverValue } from "../../utils/JSONReviver";
-import type { ActionAvailability } from "../Types";
+import type { Availability } from "../Types";
 
 import { ActionClass, ActionParams } from "./Action";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
@@ -41,7 +41,7 @@ export abstract class LevelableActionClass extends ActionClass {
     this.growthFunction = params.growthFunction;
   }
 
-  getAvailability(__bladeburner: Bladeburner): ActionAvailability {
+  getAvailability(__bladeburner: Bladeburner): Availability {
     if (this.count < 1) return { error: "Insufficient action count" };
     return { available: true };
   }

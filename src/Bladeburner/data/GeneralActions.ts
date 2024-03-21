@@ -21,10 +21,13 @@ export const GeneralActions: Record<BladeGeneralActionName, GeneralAction> = {
   }),
   [BladeGeneralActionName.recruitment]: new GeneralAction({
     name: BladeGeneralActionName.recruitment,
-    getActionTime: function (inst, person) {
-      const effCharisma = person.skills.charisma * inst.skillMultipliers.effCha;
+    getActionTime: function (bladeburner, person) {
+      const effCharisma = person.skills.charisma * bladeburner.skillMultipliers.effCha;
       const charismaFactor = Math.pow(effCharisma, 0.81) + effCharisma / 90;
       return Math.max(10, Math.round(BladeburnerConstants.BaseRecruitmentTimeNeeded - charismaFactor));
+    },
+    getSuccessChance: function (bladeburner, person) {
+      return Math.pow(person.skills.charisma, 0.45) / (bladeburner.teamSize - bladeburner.sleeveSize + 1);
     },
     desc:
       "Attempt to recruit members for your Bladeburner team. These members can help you conduct operations.\n\n" +

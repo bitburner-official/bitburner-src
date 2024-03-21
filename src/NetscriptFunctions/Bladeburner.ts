@@ -210,15 +210,24 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       (_skillName, _count = 1) => {
         const bladeburner = getBladeburner(ctx);
         const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
-        const count = helpers.positiveInteger(ctx, "count", _count);
+        const count = helpers.positiveSafeInteger(ctx, "count", _count);
         const currentLevel = bladeburner.getSkillLevel(skillName);
         return Skills[skillName].calculateCost(currentLevel, count);
       },
     upgradeSkill: (ctx) => (_skillName, _count) => {
       const bladeburner = getBladeburner(ctx);
       const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
-      const count = helpers.positiveInteger(ctx, "count", _count ?? 1);
-      return bladeburner.upgradeSkillNetscriptFn(ctx, skillName, count);
+      const count = helpers.positiveSafeInteger(ctx, "count", _count ?? 1);
+      const skill = Skills[skillName];
+      const availability = skill.canUpgrade(bladeburner, count);
+      if (!availability.available) {
+        helpers.log(ctx, () => `failed to upgrade skill ${skillName}: ${availability.error}`);
+        return false;
+      }
+      bladeburner.skillPoints -= availability.cost;
+      bladeburner.increaseSkill(skillName, count);
+      helpers.log(ctx, () => `'${skillName}' upgraded to level ${bladeburner.getSkillLevel(skillName)}`);
+      return true;
     },
     getTeamSize: (ctx) => (type, name) => {
       const bladeburner = getBladeburner(ctx);

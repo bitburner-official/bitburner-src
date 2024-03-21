@@ -1,5 +1,5 @@
 import type { Bladeburner } from "../Bladeburner";
-import type { ActionAvailability, ActionIdentifier } from "../Types";
+import type { Availability, ActionIdentifier } from "../Types";
 
 import { BladeActionType, BladeBlackOpName } from "@enums";
 import { ActionClass, ActionParams } from "./Action";
@@ -28,7 +28,7 @@ export class BlackOperation extends ActionClass {
     this.n = params.n;
   }
 
-  getAvailability(bladeburner: Bladeburner): ActionAvailability {
+  getAvailability(bladeburner: Bladeburner): Availability {
     if (bladeburner.numBlackOpsComplete < this.n) return { error: "Have not completed the previous Black Operation" };
     if (bladeburner.numBlackOpsComplete > this.n) return { error: "Already completed" };
     if (bladeburner.rank < this.reqdRank) return { error: "Insufficient rank" };

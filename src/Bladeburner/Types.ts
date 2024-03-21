@@ -15,7 +15,9 @@ export interface SuccessChanceParams {
   est: boolean;
 }
 
-export type ActionAvailability = { available?: boolean; error: string } | { available: true };
+type AvailabilitySuccess<T extends object> = { available: true } & T;
+type AvailabilityFailure = { available?: undefined; error: string };
+export type Availability<T extends object = object> = AvailabilitySuccess<T> | AvailabilityFailure;
 
 export type Action = Contract | Operation | BlackOperation | GeneralAction;
 

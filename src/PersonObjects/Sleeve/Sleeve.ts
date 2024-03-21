@@ -32,7 +32,6 @@ import {
 import { Factions } from "../../Faction/Factions";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
-import { formatPercent } from "../../ui/formatNumber";
 import { SleeveClassWork } from "./Work/SleeveClassWork";
 import { SleeveSynchroWork } from "./Work/SleeveSynchroWork";
 import { SleeveRecoveryWork } from "./Work/SleeveRecoveryWork";
@@ -444,29 +443,6 @@ export class Sleeve extends Person implements SleevePerson {
         return true;
     }
     return false;
-  }
-
-  recruitmentSuccessChance(): number {
-    return Math.max(0, Math.min(1, Player.bladeburner?.getRecruitmentSuccessChance(this) ?? 0));
-  }
-
-  contractSuccessChance(type: string, name: string): string {
-    const bb = Player.bladeburner;
-    if (bb === null) {
-      const errorLogText = `bladeburner is null`;
-      console.error(`Function: sleeves.contractSuccessChance; Message: '${errorLogText}'`);
-      return "0%";
-    }
-    const chances = bb.getActionEstimatedSuccessChanceNetscriptFn(this, type, name);
-    if (typeof chances === "string") {
-      console.error(`Function: sleeves.contractSuccessChance; Message: '${chances}'`);
-      return "0%";
-    }
-    if (chances[0] >= 1) {
-      return "100%";
-    } else {
-      return `${formatPercent(chances[0])} - ${formatPercent(chances[1])}`;
-    }
   }
 
   takeDamage(amt: number): boolean {

@@ -1,6 +1,6 @@
 import type { Bladeburner } from "../Bladeburner";
 import type { Person } from "../../PersonObjects/Person";
-import type { ActionAvailability, SuccessChanceParams } from "../Types";
+import type { Availability, SuccessChanceParams } from "../Types";
 
 import { addOffset } from "../../utils/helpers/addOffset";
 import { BladeburnerConstants } from "../data/Constants";
@@ -132,7 +132,7 @@ export abstract class ActionClass {
     return 1;
   }
 
-  getAvailability(__bladeburner: Bladeburner): ActionAvailability {
+  getAvailability(__bladeburner: Bladeburner): Availability {
     return { available: true };
   }
 
