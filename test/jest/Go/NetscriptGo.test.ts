@@ -81,7 +81,7 @@ describe("Netscript Go API unit tests", () => {
     it("should correctly retrieve the current game state", async () => {
       const board = ["OXX..", ".....", ".....", "...XX", "...X."];
       const boardState = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.black);
-      boardState.previousBoard = ["OX..", ".....", ".....", "...XX", "...X."];
+      boardState.previousBoards = [["OX..", ".....", ".....", "...XX", "...X."]];
       Go.currentGame = boardState;
 
       const result = getGameState();
@@ -232,7 +232,7 @@ describe("Netscript Go API unit tests", () => {
 
       await cheatPlayTwoMoves(mockLogger, 4, 3, 3, 4, 1, 0);
       expect(mockLogger).toHaveBeenCalledWith("Cheat failed! You have been ejected from the subnet.");
-      expect(Go.currentGame.previousBoard).toEqual(null);
+      expect(Go.currentGame.previousBoards).toEqual([]);
     });
   });
   describe("cheatRemoveRouter() tests", () => {
@@ -270,7 +270,7 @@ describe("Netscript Go API unit tests", () => {
 
       await cheatRemoveRouter(mockLogger, 0, 0, 1, 0);
       expect(mockLogger).toHaveBeenCalledWith("Cheat failed! You have been ejected from the subnet.");
-      expect(Go.currentGame.previousBoard).toEqual(null);
+      expect(Go.currentGame.previousBoards).toEqual([]);
     });
   });
   describe("cheatRepairOfflineNode() tests", () => {

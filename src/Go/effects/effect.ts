@@ -98,7 +98,7 @@ function calculateMults(): Multipliers {
 }
 
 export function playerHasDiscoveredGo() {
-  const playedGame = Go.currentGame.previousBoard;
+  const playedGame = Go.currentGame.previousBoards.length;
   const hasRecords = getRecordValues(Go.stats).some((stats) => stats.wins + stats.losses);
   const isInBn14 = Player.bitNodeN === 14;
 

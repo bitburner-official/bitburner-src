@@ -27,7 +27,7 @@ export function getNewBoardState(
   }
 
   const newBoardState: BoardState = {
-    previousBoard: null,
+    previousBoards: [],
     previousPlayer: GoColor.white,
     ai: ai,
     passCount: 0,
@@ -82,7 +82,12 @@ export function makeMove(boardState: BoardState, x: number, y: number, player: G
     return false;
   }
 
-  boardState.previousBoard = simpleBoardFromBoard(boardState.board);
+  // Only maintain last 7 moves
+  boardState.previousBoards.unshift(simpleBoardFromBoard(boardState.board));
+  if (boardState.previousBoards.length > 7) {
+    boardState.previousBoards.pop();
+  }
+
   const point = boardState.board[x][y];
   if (!point) return false;
 
@@ -266,7 +271,7 @@ export function getEmptySpaces(board: Board): PointState[] {
 export function getStateCopy(initialState: BoardState) {
   const boardState = structuredClone(initialState);
 
-  boardState.previousBoard = initialState.previousBoard ? [...initialState.previousBoard] : null;
+  boardState.previousBoards = initialState.previousBoards ?? [];
   boardState.previousPlayer = initialState.previousPlayer;
   boardState.ai = initialState.ai;
   boardState.passCount = initialState.passCount;

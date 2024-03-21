@@ -44,7 +44,7 @@ export function evaluateIfMoveIsValid(boardState: BoardState, x: number, y: numb
   }
 
   // Detect if the move might be an immediate repeat (only one board of history is saved to check)
-  const possibleRepeat = boardState.previousBoard && getColorOnSimpleBoard(boardState.previousBoard, x, y) === player;
+  const possibleRepeat = boardState.previousBoards.find((board) => getColorOnSimpleBoard(board, x, y) === player);
 
   if (shortcut) {
     // If the current point has some adjacent open spaces, it is not suicide. If the move is not repeated, it is legal
@@ -85,9 +85,11 @@ export function evaluateIfMoveIsValid(boardState: BoardState, x: number, y: numb
   if (evaluationBoard[x]?.[y]?.color !== player) {
     return GoValidity.noSuicide;
   }
-  if (possibleRepeat && boardState.previousBoard) {
+  if (possibleRepeat && boardState.previousBoards.length) {
     const simpleEvalBoard = simpleBoardFromBoard(evaluationBoard);
-    if (areSimpleBoardsIdentical(simpleEvalBoard, boardState.previousBoard)) return GoValidity.boardRepeated;
+    if (boardState.previousBoards.find((board) => areSimpleBoardsIdentical(simpleEvalBoard, board))) {
+      return GoValidity.boardRepeated;
+    }
   }
 
   return GoValidity.valid;

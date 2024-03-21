@@ -300,11 +300,11 @@ export function getCurrentPlayer(): "None" | "White" | "Black" {
  * Find a move made by the previous player, if present.
  */
 export function getPreviousMove(): [number, number] | null {
-  if (Go.currentGame.passCount) {
+  const priorBoard = Go.currentGame?.previousBoards[0];
+  if (Go.currentGame.passCount || !priorBoard) {
     return null;
   }
 
-  const priorBoard = Go.currentGame?.previousBoard;
   for (const rowIndexString in Go.currentGame.board) {
     const row = Go.currentGame.board[+rowIndexString] ?? [];
     for (const pointIndexString in row) {
@@ -348,7 +348,7 @@ export function resetBoardState(error: (s: string) => void, opponent: GoOpponent
   }
 
   const oldBoardState = Go.currentGame;
-  if (oldBoardState.previousPlayer !== null && oldBoardState.previousBoard) {
+  if (oldBoardState.previousPlayer !== null && oldBoardState.previousBoards.length) {
     resetWinstreak(oldBoardState.ai, false);
   }
 

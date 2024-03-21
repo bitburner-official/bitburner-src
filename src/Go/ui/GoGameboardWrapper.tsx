@@ -143,7 +143,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     setScoreOpen(false);
     setSearchOpen(false);
     setOpponent(newOpponent);
-    if (boardState.previousPlayer !== null && boardState.previousBoard) {
+    if (boardState.previousPlayer !== null && boardState.previousBoards.length) {
       resetWinstreak(boardState.ai, false);
     }
 
@@ -152,16 +152,16 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   }
 
   function getPriorMove() {
-    if (!boardState.previousBoard) return boardState;
+    if (!boardState.previousBoards.length) return boardState;
     const priorState = getStateCopy(boardState);
     priorState.previousPlayer = boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
-    priorState.board = boardFromSimpleBoard(boardState.previousBoard);
+    priorState.board = boardFromSimpleBoard(boardState.previousBoards[0]);
     updateCaptures(priorState.board, priorState.previousPlayer);
     return priorState;
   }
 
   function showPreviousMove(newValue: boolean) {
-    if (boardState.previousBoard) {
+    if (boardState.previousBoards.length) {
       setShowPriorMove(newValue);
     }
   }
@@ -175,7 +175,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     boardState.previousPlayer === GoColor.white && !getAllValidMoves(boardState, GoColor.black).length;
   const disablePassButton = opponent !== GoOpponent.none && boardState.previousPlayer === GoColor.black && waitingOnAI;
 
-  const scoreBoxText = boardState.previousBoard
+  const scoreBoxText = boardState.previousBoards.length
     ? `Score: Black: ${score[GoColor.black].sum} White: ${score[GoColor.white].sum}`
     : "Place a router to begin!";
 
@@ -256,7 +256,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
             />
             <OptionSwitch
               checked={showPriorMove}
-              disabled={!boardState.previousBoard}
+              disabled={!boardState.previousBoards.length}
               onChange={(newValue) => showPreviousMove(newValue)}
               text="Show previous move"
               tooltip={<>Show the board as it was before the last move</>}

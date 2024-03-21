@@ -38,7 +38,7 @@ export function GoTutorialChallenge({
   const [showReset, setShowReset] = useState(false);
 
   const handleClick = (x: number, y: number) => {
-    if (stateRef.current.previousBoard) {
+    if (stateRef.current.previousBoards.length) {
       SnackbarEvents.emit(`Hit 'Reset' to try again`, ToastVariant.WARNING, 2000);
       return;
     }
@@ -67,6 +67,7 @@ export function GoTutorialChallenge({
 
   const reset = () => {
     stateRef.current = getStateCopy(state);
+    stateRef.current.previousBoards = [];
     setDisplayText(description);
     setShowReset(false);
   };
