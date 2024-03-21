@@ -30,7 +30,7 @@ Normal upgrade's formulas:
 
 - Upgrade cost:
 
-$$UpgradeCost = BasePrice\ast{PriceMult}^{UpgradeCurrentLevel}$$
+$$UpgradeCost = BasePrice\ast{PriceMult}^{CurrentLevel}$$
 
 - Upgrade cost from level 0 to level n:
 
