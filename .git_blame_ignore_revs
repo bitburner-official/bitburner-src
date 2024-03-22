@@ -1,8 +1,13 @@
-## Cleaned up and filtered from the output of the command line:
-## git log --grep "[Pp]rettier"
+## What is this?
+##   Some git commits contain mostly prettier/lint changes and aren't as valuable when
+##   using `git blame`.  This file contains a list of hashes that identify such commits
+##   in a way that git can use.
 
 ## Tell git to use this file with:
-## git config --local blame.ignoreRevsFile .git_blame_ignore_revs
+##   git config --local blame.ignoreRevsFile .git_blame_ignore_revs
+
+## This file was created by cleaning up and filtering the output of this command line:
+##   git log --grep "[Pp]rettier"
 
 ## All that's really needed here are the actual 40-digit hashes of
 ## the commits.  I left the author/date info in as it helped when I
