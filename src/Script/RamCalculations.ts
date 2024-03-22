@@ -6,7 +6,7 @@
  * the way
  */
 import * as walk from "acorn-walk";
-import acorn, { parse } from "acorn";
+import * as acorn from "acorn";
 
 import { RamCalculationErrorCode } from "./RamCalculationErrorCodes";
 
@@ -15,6 +15,8 @@ import { Script } from "./Script";
 import { Node } from "../NetscriptJSEvaluator";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
+import jsx from "acorn-jsx";
+import { extend } from "acorn-jsx-walk";
 
 export interface RamUsageEntry {
   type: "ns" | "dom" | "fn" | "misc";
@@ -35,6 +37,12 @@ export type RamCalculationFailure = {
   errorCode: RamCalculationErrorCode;
   errorMessage?: string;
 };
+
+//Extend parser with official jsx extension
+const Parser = acorn.Parser.extend(jsx({ allowNamespaces: false }));
+
+//Extend walk.base to support JSX nodes.
+extend(walk.base);
 
 export type RamCalculation = RamCalculationSuccess | RamCalculationFailure;
 
@@ -202,7 +210,7 @@ function parseOnlyRamCalculate(otherScripts: Map<ScriptFilePath, Script>, code: 
 export function checkInfiniteLoop(code: string): number {
   let ast: acorn.Node;
   try {
-    ast = parse(code, { sourceType: "module", ecmaVersion: "latest" });
+    ast = Parser.parse(code, { sourceType: "module", ecmaVersion: "latest" });
   } catch (e) {
     // If code cannot be parsed, do not provide infinite loop detection warning
     return -1;
@@ -255,7 +263,7 @@ interface ParseDepsResult {
  * that need to be parsed (i.e. are 'import'ed scripts).
  */
 function parseOnlyCalculateDeps(code: string, currentModule: string): ParseDepsResult {
-  const ast = parse(code, { sourceType: "module", ecmaVersion: "latest" });
+  const ast = Parser.parse(code, { sourceType: "module", ecmaVersion: "latest" });
   // Everything from the global scope goes in ".". Everything else goes in ".function", where only
   // the outermost layer of functions counts.
   const globalKey = currentModule + memCheckGlobalKey;
