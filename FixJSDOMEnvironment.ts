@@ -14,5 +14,6 @@ export default class FixJSDOMEnvironment extends JSDOMEnvironment {
     // Wrap the construction of the function in eval, so that transpilers
     // don't touch the import() call.
     this.global.importActual = eval("url => import(url)");
+    this.global.Uint8Array = Uint8Array;
   }
 }
