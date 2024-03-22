@@ -24,6 +24,7 @@ export function getNewBoardState(
   if (ai === GoOpponent.w0r1d_d43m0n) {
     boardToCopy = resetCoordinates(rotate90Degrees(boardFromSimpleBoard(bitverseBoardShape)));
     boardSize = 19;
+    applyObstacles = false;
   }
 
   const newBoardState: BoardState = {
@@ -64,7 +65,13 @@ export function getNewBoardState(
 export function getHandicap(boardSize: number, opponent: GoOpponent) {
   // Illuminati and WD get a few starting routers
   if (opponent === GoOpponent.Illuminati || opponent === GoOpponent.w0r1d_d43m0n) {
-    return ceil(boardSize * 0.35);
+    return {
+      [5]: 1,
+      [7]: 3,
+      [9]: 4,
+      [13]: 5,
+      [19]: 7,
+    }[boardSize];
   }
   return 0;
 }
@@ -123,6 +130,13 @@ export function applyHandicap(board: Board, handicap: number): void {
   const availableMoves = getEmptySpaces(board);
   const handicapMoveOptions = getExpansionMoveArray(board, availableMoves);
   const handicapMoves: Move[] = [];
+
+  // Special handling for 5x5: always have handicap in the center of the board
+  if (availableMoves.length < 26 && board[2][2]) {
+    board[2][2].color = GoColor.white;
+    updateChains(board);
+    return;
+  }
 
   // select random distinct moves from the move options list up to the specified handicap amount
   for (let i = 0; i < handicap && i < handicapMoveOptions.length; i++) {
