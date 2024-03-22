@@ -39,7 +39,7 @@ import { getRecordValues } from "./Types/Record";
 import { ExportMaterial } from "./Corporation/Actions";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
 import { SaveData } from "./types";
-import { canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/saveDataUtils";
+import { canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
 import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
 
 /* SaveObject.js
