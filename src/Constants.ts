@@ -200,13 +200,15 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.1 dev - last updated 11 Mar 2024
+## v2.6.1 dev - last updated 21 Mar 2024
 
 See 2.6.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.0/src/Documentation/doc/changelog.md
 
 ### API
 
-- (Go) Fix a bug that allowed facing secret opponent early (@ficoccelliguy)
+- (Go) Some changes to the Go API, including some minor breaking changes. Please refer to the API documentation in the script editor or at https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.go.md (@ficocelliguy)
+- (Go) Fix a bug that allowed facing secret opponent early or with wrong board size (@ficoccelliguy)
+- (Sleeve) SleeveInfiltrationWork now has a nextCompletion promise (@Caldwell-74)
 
 ### UI
 
@@ -216,8 +218,16 @@ See 2.6.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/
 
 ### MISC
 
-- Miscellaneous documentation fixes (@adeilt, @User670)
+- (Go) "No AI" white player can now pass (@ficocelliguy)
+- (Go) Reimplement superko rule, adjust save data (@ficocelliguy)
+- (Go) Balance tweaks (@ficocelliguy)
+- Update Credits page to show @d0sboots as an active maintainer (@Snarling)
+- Miscellaneous documentation fixes (@adeilt, @User670, @catloversg, @gmcew)
 - Allow .json files (@shyguy1412)
+- Remove jquery dependency (@catloversg)
+- Disable text translation, which commonly causes crashes (@catloversg)
+- Fix an incorrect unit in ns.spawn logs (@FoGsesipod)
+- Servers that don't exist yet will not show up in autocomplete data (@catloversg)
 - Remove some unnecessary data from save file (@Snarling)
 - Nerf noodle bar (various contributors)
 `,
