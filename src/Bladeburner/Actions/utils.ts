@@ -6,8 +6,8 @@ import type { GeneralAction } from "./GeneralAction";
 
 import { BladeActionType } from "@enums";
 import { getEnumHelper } from "../../utils/EnumHelper";
-import { Contracts } from "../data/Contracts";
-import { Operations } from "../data/Operations";
+import { Contracts, initContracts } from "../data/Contracts";
+import { Operations, initOperations } from "../data/Operations";
 import { BlackOperations } from "../data/BlackOperations";
 import { GeneralActions } from "../data/GeneralActions";
 
@@ -20,9 +20,9 @@ export function getActionObject(actionId: ActionIdentifier): Action;
 export function getActionObject(actionId: ActionIdentifier): Action {
   switch (actionId.type) {
     case BladeActionType.contract:
-      return Contracts[actionId.name];
+      return (Contracts ?? initContracts())[actionId.name];
     case BladeActionType.operation:
-      return Operations[actionId.name];
+      return (Operations ?? initOperations())[actionId.name];
     case BladeActionType.blackOp:
       return BlackOperations[actionId.name];
     case BladeActionType.general:
@@ -38,13 +38,13 @@ export function getActionFromTypeAndName(type: string, name: string): Action | n
     case "contracts":
     case "contr":
       if (!getEnumHelper("BladeContractName").isMember(name)) return null;
-      return Contracts[name];
+      return (Contracts ?? initContracts())[name];
     case "operation":
     case "operations":
     case "op":
     case "ops":
       if (!getEnumHelper("BladeOperationName").isMember(name)) return null;
-      return Operations[name];
+      return (Operations ?? initOperations())[name];
     case "blackoperation":
     case "black operation":
     case "black operations":

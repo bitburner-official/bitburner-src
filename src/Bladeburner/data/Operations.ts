@@ -4,18 +4,10 @@ import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { LevelableActionClass } from "../Actions/LevelableAction";
 import { assertLoadingType } from "../../utils/TypeAssertion";
 
-// This is a really weird way to do this, but I didn't see a better way to just export a getter directly while also exporting other stuff.
-const toBeExported = {
-  get Operations(): Record<BladeOperationName, Operation> {
-    return OperationsObject || initOperations();
-  },
-};
-export const Operations = toBeExported.Operations;
-
-// Actual object and initializer are local
-let OperationsObject: Record<BladeOperationName, Operation> | null = null;
-function initOperations() {
-  OperationsObject = {
+export let Operations: Record<BladeOperationName, Operation> | null = null;
+// Must call initOperations() before accessing Operations object
+export function initOperations() {
+  Operations = {
     [BladeOperationName.investigation]: new Operation({
       name: BladeOperationName.investigation,
       desc:
@@ -215,7 +207,7 @@ function initOperations() {
       growthFunction: () => getRandomInt(1, 20) / 10,
     }),
   };
-  return OperationsObject;
+  return Operations;
 }
 
 export function loadOperationsData(data: unknown, operations: Record<BladeOperationName, Operation>) {

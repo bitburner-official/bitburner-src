@@ -39,8 +39,8 @@ import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportW
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { PartialRecord, createEnumKeyedRecord } from "../Types/Record";
-import { Contracts, loadContractsData } from "./data/Contracts";
-import { Operations, loadOperationsData } from "./data/Operations";
+import { Contracts, initContracts, loadContractsData } from "./data/Contracts";
+import { Operations, initOperations, loadOperationsData } from "./data/Operations";
 import { clampInteger } from "../utils/helpers/clampNumber";
 import { getActionFromTypeAndName, getActionObject } from "./Actions/utils";
 import { parseCommand } from "../Terminal/Parser";
@@ -103,8 +103,8 @@ export class Bladeburner {
     // Max Stamina is based on stats and Bladeburner-specific bonuses
     this.calculateMaxStamina();
     this.stamina = this.maxStamina;
-    this.contracts = Contracts;
-    this.operations = Operations;
+    this.contracts = Contracts || initContracts();
+    this.operations = Operations || initOperations();
     this.reset();
   }
 
@@ -1437,14 +1437,14 @@ export class Bladeburner {
   /** Initializes a Bladeburner object from a JSON save state. */
   static fromJSON(value: IReviverValue): Bladeburner {
     const bladeburner = Generic_fromJSON(Bladeburner, value.data);
-    // Loaded values for Operations and Contracts will not be complete and will not reference the static objects
-    // This method of loading is a bit more complex, but allows typechecking and static initialization.
-    // Load valid data from save onto the static objects
-    loadContractsData(bladeburner.contracts, Contracts);
-    loadOperationsData(bladeburner.operations, Operations);
-    // Correct the references so they point to the static objects instead of the loaded data
-    bladeburner.contracts = Contracts;
-    bladeburner.operations = Operations;
+    // The load process does not respect how contracts and operations are handled in save data
+    const loadedContracts = bladeburner.contracts;
+    const loadedOperations = bladeburner.operations;
+    // Reload the static objects, then load in valid data from the old loaded versions
+    bladeburner.contracts = Contracts ?? initContracts();
+    bladeburner.operations = Operations ?? initOperations();
+    loadContractsData(loadedContracts, bladeburner.contracts);
+    loadOperationsData(loadedOperations, bladeburner.operations);
     return bladeburner;
   }
 }
