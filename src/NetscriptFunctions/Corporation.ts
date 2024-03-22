@@ -508,8 +508,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx, CorpUnlockName.OfficeAPI);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
-      const size = helpers.number(ctx, "size", _size);
-      if (size < 0) throw new Error("Invalid value for size field! Must be numeric and greater than 0");
+      const size = helpers.positiveInteger(ctx, "size", _size);
       const office = getOffice(divisionName, cityName);
       return calculateOfficeSizeUpgradeCost(office.size, size);
     },
@@ -552,9 +551,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx, CorpUnlockName.OfficeAPI);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
-      const size = helpers.number(ctx, "size", _size);
-
-      if (size < 0) throw new Error("Invalid value for size field! Can't decrease office size.");
+      const size = helpers.positiveInteger(ctx, "size", _size);
 
       const office = getOffice(divisionName, cityName);
       const corporation = getCorporation();

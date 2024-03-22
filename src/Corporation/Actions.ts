@@ -22,6 +22,7 @@ import {
   buybackSharesFailureReason,
   issueNewSharesFailureReason,
 } from "./helpers";
+import { PositiveInteger } from "../types";
 
 export function NewDivision(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.size >= corporation.maxDivisions)
@@ -361,7 +362,7 @@ export function BuyBackShares(corporation: Corporation, numShares: number): bool
   return true;
 }
 
-export function UpgradeOfficeSize(corp: Corporation, office: OfficeSpace, increase: number): void {
+export function UpgradeOfficeSize(corp: Corporation, office: OfficeSpace, increase: PositiveInteger): void {
   const cost = calculateOfficeSizeUpgradeCost(office.size, increase);
   if (corp.funds < cost) return;
   office.size += increase;

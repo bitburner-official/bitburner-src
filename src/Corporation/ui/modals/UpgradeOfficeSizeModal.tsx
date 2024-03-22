@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import { calculateOfficeSizeUpgradeCost } from "../../helpers";
+import { PositiveInteger } from "../../../types";
 
 interface IUpgradeButton {
   cost: number;
@@ -23,7 +24,7 @@ interface IUpgradeButton {
 
 function UpgradeSizeButton(props: IUpgradeButton): React.ReactElement {
   const corp = useCorporation();
-  function upgradeSize(cost: number, size: number): void {
+  function upgradeSize(cost: number, size: PositiveInteger): void {
     if (corp.funds < cost) {
       return;
     }
@@ -35,7 +36,10 @@ function UpgradeSizeButton(props: IUpgradeButton): React.ReactElement {
   return (
     <Tooltip title={formatMoney(props.cost)}>
       <span>
-        <Button disabled={corp.funds < props.cost} onClick={() => upgradeSize(props.cost, props.size)}>
+        <Button
+          disabled={corp.funds < props.cost}
+          onClick={() => upgradeSize(props.cost, props.size as PositiveInteger)}
+        >
           +{props.size}
         </Button>
       </span>
@@ -54,18 +58,18 @@ export function UpgradeOfficeSizeModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
 
   // appears as +3 office size upgrade
-  const upgradeSizeBase = corpConstants.officeInitialSize;
+  const upgradeSizeBase = corpConstants.officeInitialSize as PositiveInteger;
   const upgradeCostBase = calculateOfficeSizeUpgradeCost(props.office.size, upgradeSizeBase);
 
   // appears as +15 office size upgrade
-  const upgradeSize5x = 5 * corpConstants.officeInitialSize;
-  const upgradeCost5x = calculateOfficeSizeUpgradeCost(props.office.size, 5 * corpConstants.officeInitialSize);
+  const upgradeSize5x = (5 * corpConstants.officeInitialSize) as PositiveInteger;
+  const upgradeCost5x = calculateOfficeSizeUpgradeCost(props.office.size, upgradeSize5x);
 
   // optionally appears as largest affordable office size upgrade (up to +150)
   let upgradeSizeMax = 150;
   let upgradeCostMax = Infinity;
   while (upgradeSizeMax > props.office.size) {
-    upgradeCostMax = calculateOfficeSizeUpgradeCost(props.office.size, upgradeSizeMax - props.office.size);
+    upgradeCostMax = calculateOfficeSizeUpgradeCost(props.office.size, upgradeSizeMax as PositiveInteger);
     if (corp.funds > upgradeCostMax) break;
     upgradeSizeMax -= corpConstants.officeInitialSize;
   }
