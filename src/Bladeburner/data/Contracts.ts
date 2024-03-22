@@ -3,11 +3,18 @@ import { Contract } from "../Actions/Contract";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { assertLoadingType } from "../../utils/TypeAssertion";
 
-export let Contracts: Record<BladeContractName, Contract> | null = null;
-// Must call initContracts before trying to access Contracts (including before loading a game)
-// Could not avoid a load cycle issue without doing this
-export function initContracts() {
-  Contracts = {
+// This is a really weird way to do this, but I didn't see a better way to just export a getter directly while also exporting other stuff.
+const toBeExported = {
+  get Contracts(): Record<BladeContractName, Contract> {
+    return ContractsObject || initContracts();
+  },
+};
+export const Contracts = toBeExported.Contracts;
+
+// Actual object and initializer are local
+let ContractsObject: Record<BladeContractName, Contract> | null = null;
+function initContracts() {
+  ContractsObject = {
     [BladeContractName.tracking]: new Contract({
       name: BladeContractName.tracking,
       desc:
@@ -109,7 +116,7 @@ export function initContracts() {
       minCount: 5,
     }),
   };
-  return Contracts;
+  return ContractsObject;
 }
 
 export function loadContractsData(data: unknown, contracts: Record<BladeContractName, Contract>) {
