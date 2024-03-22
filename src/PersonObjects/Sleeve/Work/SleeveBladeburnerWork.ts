@@ -8,7 +8,6 @@ import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
 import { CONSTANTS } from "../../../Constants";
 import { scaleWorkStats } from "../../../Work/WorkStats";
 import { getKeyList } from "../../../utils/helpers/getKeyList";
-import { getActionObject } from "../../../Bladeburner/Actions/utils";
 import { loadActionIdentifier } from "../../../Bladeburner/SaveLoad";
 import { invalidWork } from "../../../Work/InvalidWork";
 
@@ -33,7 +32,7 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
 
   cyclesNeeded(sleeve: Sleeve): number {
     if (!Player.bladeburner) return Infinity;
-    const action = getActionObject(this.actionId);
+    const action = Player.bladeburner.getActionObject(this.actionId);
     const timeInMs = action.getActionTime(Player.bladeburner, sleeve) * 1000;
     return timeInMs / CONSTANTS.MilliPerCycle;
   }
@@ -50,13 +49,13 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
     if (!Player.bladeburner) return sleeve.stopWork();
     this.cyclesWorked += cycles;
     if (this.actionId.type === BladeActionType.contract) {
-      const action = getActionObject(this.actionId);
+      const action = Player.bladeburner.getActionObject(this.actionId);
       if (action.count < 1) return sleeve.stopWork();
     }
 
     while (this.cyclesWorked >= this.cyclesNeeded(sleeve)) {
       if (this.actionId.type === BladeActionType.contract) {
-        const action = getActionObject(this.actionId);
+        const action = Player.bladeburner.getActionObject(this.actionId);
         if (action.count < 1) return sleeve.stopWork();
       }
       const retValue = Player.bladeburner.completeAction(sleeve, this.actionId, false);

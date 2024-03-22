@@ -4,10 +4,8 @@ import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { LevelableActionClass } from "../Actions/LevelableAction";
 import { assertLoadingType } from "../../utils/TypeAssertion";
 
-export let Operations: Record<BladeOperationName, Operation> | null = null;
-// Must call initOperations() before accessing Operations object
-export function initOperations() {
-  Operations = {
+export function createOperations(): Record<BladeOperationName, Operation> {
+  return {
     [BladeOperationName.investigation]: new Operation({
       name: BladeOperationName.investigation,
       desc:
@@ -207,7 +205,6 @@ export function initOperations() {
       growthFunction: () => getRandomInt(1, 20) / 10,
     }),
   };
-  return Operations;
 }
 
 export function loadOperationsData(data: unknown, operations: Record<BladeOperationName, Operation>) {

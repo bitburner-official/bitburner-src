@@ -1,7 +1,4 @@
-import type { BlackOperation } from "./Actions/BlackOperation";
-import type { Contract } from "./Actions/Contract";
-import type { Operation } from "./Actions/Operation";
-import type { GeneralAction } from "./Actions/GeneralAction";
+import type { BlackOperation, Contract, GeneralAction, Operation } from "./Actions";
 import type {
   BladeActionType,
   BladeBlackOpName,

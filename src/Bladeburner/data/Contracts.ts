@@ -3,11 +3,8 @@ import { Contract } from "../Actions/Contract";
 import { getRandomInt } from "../../utils/helpers/getRandomInt";
 import { assertLoadingType } from "../../utils/TypeAssertion";
 
-export let Contracts: Record<BladeContractName, Contract> | null = null;
-// Must call initContracts before trying to access Contracts (including before loading a game)
-// Could not avoid a load cycle issue without doing this
-export function initContracts() {
-  Contracts = {
+export function createContracts(): Record<BladeContractName, Contract> {
+  return {
     [BladeContractName.tracking]: new Contract({
       name: BladeContractName.tracking,
       desc:
@@ -109,7 +106,6 @@ export function initContracts() {
       minCount: 5,
     }),
   };
-  return Contracts;
 }
 
 export function loadContractsData(data: unknown, contracts: Record<BladeContractName, Contract>) {

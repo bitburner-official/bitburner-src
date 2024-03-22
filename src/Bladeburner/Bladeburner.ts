@@ -1,7 +1,6 @@
 import type { PromisePair } from "../Types/Promises";
+import type { BlackOperation, Contract, GeneralAction, Operation } from "./Actions";
 import type { ActionIdentifier, Action } from "./Types";
-import type { Contract } from "./Actions/Contract";
-import type { Operation } from "./Actions/Operation";
 import type { Person } from "../PersonObjects/Person";
 
 import {
@@ -39,11 +38,12 @@ import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportW
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { PartialRecord, createEnumKeyedRecord } from "../Types/Record";
-import { Contracts, initContracts, loadContractsData } from "./data/Contracts";
-import { Operations, initOperations, loadOperationsData } from "./data/Operations";
+import { createContracts, loadContractsData } from "./data/Contracts";
+import { createOperations, loadOperationsData } from "./data/Operations";
 import { clampInteger } from "../utils/helpers/clampNumber";
-import { getActionFromTypeAndName, getActionObject } from "./Actions/utils";
 import { parseCommand } from "../Terminal/Parser";
+import { BlackOperations } from "./data/BlackOperations";
+import { GeneralActions } from "./data/GeneralActions";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -103,8 +103,8 @@ export class Bladeburner {
     // Max Stamina is based on stats and Bladeburner-specific bonuses
     this.calculateMaxStamina();
     this.stamina = this.maxStamina;
-    this.contracts = Contracts || initContracts();
-    this.operations = Operations || initOperations();
+    this.contracts = createContracts();
+    this.operations = createOperations();
     this.reset();
   }
 
@@ -124,7 +124,7 @@ export class Bladeburner {
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
     this.action = actionId;
     this.actionTimeCurrent = 0;
-    const action = getActionObject(actionId);
+    const action = this.getActionObject(actionId);
     // This switch statement is just for handling error cases, it does not have to be exhaustive
     const availability = action.getAvailability(this);
     if (!availability.available) return this.resetAction();
@@ -204,7 +204,7 @@ export class Bladeburner {
     }
     const type = args[1];
     const name = args[2];
-    const action = getActionFromTypeAndName(type, name);
+    const action = this.getActionFromTypeAndName(type, name);
     if (!action) {
       this.postToConsole(`Invalid action type / name specified: type: ${type}, name: ${name}`);
       return;
@@ -792,7 +792,7 @@ export class Bladeburner {
     if (this.action?.type !== BladeActionType.operation) {
       throw new Error("completeOperation() called even though current action is not an Operation");
     }
-    const action = getActionObject(this.action);
+    const action = this.getActionObject(this.action);
 
     // Calculate team losses
     const teamCount = action.teamCount;
@@ -905,7 +905,7 @@ export class Bladeburner {
 
   completeAction(person: Person, actionIdent: ActionIdentifier, isPlayer = true): WorkStats {
     let retValue = newWorkStats();
-    const action = getActionObject(actionIdent);
+    const action = this.getActionObject(actionIdent);
     switch (action.type) {
       case BladeActionType.contract:
       case BladeActionType.operation: {
@@ -1278,7 +1278,7 @@ export class Bladeburner {
   processAction(seconds: number): void {
     // Store action to avoid losing reference to it is action is reset during this function
     if (!this.action) return; // Idle
-    const action = getActionObject(this.action);
+    const action = this.getActionObject(this.action);
     // If the action is no longer valid, discontinue the action
     if (!action.getAvailability(this).available) return this.resetAction();
 
@@ -1429,6 +1429,59 @@ export class Bladeburner {
     }
   }
 
+  /** Return the action based on an ActionIdentifier, discriminating types when possible */
+  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.blackOp }): BlackOperation;
+  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.operation }): Operation;
+  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.contract }): Contract;
+  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.general }): GeneralAction;
+  getActionObject(actionId: ActionIdentifier): Action;
+  getActionObject(actionId: ActionIdentifier): Action {
+    switch (actionId.type) {
+      case BladeActionType.contract:
+        return this.contracts[actionId.name];
+      case BladeActionType.operation:
+        return this.operations[actionId.name];
+      case BladeActionType.blackOp:
+        return BlackOperations[actionId.name];
+      case BladeActionType.general:
+        return GeneralActions[actionId.name];
+    }
+  }
+
+  getActionFromTypeAndName(type: string, name: string): Action | null {
+    if (!type || !name) return null;
+    const convertedType = type.toLowerCase().trim();
+    switch (convertedType) {
+      case "contract":
+      case "contracts":
+      case "contr":
+        if (!getEnumHelper("BladeContractName").isMember(name)) return null;
+        return this.contracts[name];
+      case "operation":
+      case "operations":
+      case "op":
+      case "ops":
+        if (!getEnumHelper("BladeOperationName").isMember(name)) return null;
+        return this.operations[name];
+      case "blackoperation":
+      case "black operation":
+      case "black operations":
+      case "black op":
+      case "black ops":
+      case "blackop":
+      case "blackops":
+        if (!getEnumHelper("BladeBlackOpName").isMember(name)) return null;
+        return BlackOperations[name];
+      case "general":
+      case "general action":
+      case "gen": {
+        if (!getEnumHelper("BladeGeneralActionName").isMember(name)) return null;
+        return GeneralActions[name];
+      }
+    }
+    return null;
+  }
+
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
     return Generic_toJSON("Bladeburner", this);
@@ -1436,15 +1489,15 @@ export class Bladeburner {
 
   /** Initializes a Bladeburner object from a JSON save state. */
   static fromJSON(value: IReviverValue): Bladeburner {
+    const contractsData = value.data?.contracts;
+    const operationsData = value.data?.operations;
+    // Ensures that contracts and operations will be cleanly initialized
+    delete value.data?.contracts;
+    delete value.data?.operations;
     const bladeburner = Generic_fromJSON(Bladeburner, value.data);
-    // The load process does not respect how contracts and operations are handled in save data
-    const loadedContracts = bladeburner.contracts;
-    const loadedOperations = bladeburner.operations;
-    // Reload the static objects, then load in valid data from the old loaded versions
-    bladeburner.contracts = Contracts ?? initContracts();
-    bladeburner.operations = Operations ?? initOperations();
-    loadContractsData(loadedContracts, bladeburner.contracts);
-    loadOperationsData(loadedOperations, bladeburner.operations);
+    // Load back the partial contracts/operations data removed earlier
+    loadContractsData(contractsData, bladeburner.contracts);
+    loadOperationsData(operationsData, bladeburner.operations);
     return bladeburner;
   }
 }

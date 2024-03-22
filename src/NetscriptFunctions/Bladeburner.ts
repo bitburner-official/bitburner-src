@@ -11,7 +11,6 @@ import { getEnumHelper } from "../utils/EnumHelper";
 import { Skills } from "../Bladeburner/data/Skills";
 import { assertString } from "../Netscript/TypeAssertion";
 import { BlackOperations, blackOpsArray } from "../Bladeburner/data/BlackOperations";
-import { getActionFromTypeAndName } from "../Bladeburner/Actions/utils";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const checkBladeburnerAccess = function (ctx: NetscriptContext): void {
@@ -34,7 +33,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     assertString(ctx, "type", type);
     assertString(ctx, "name", name);
     if (bladeburner === null) throw new Error("Must have joined bladeburner");
-    const action = getActionFromTypeAndName(type, name);
+    const action = bladeburner.getActionFromTypeAndName(type, name);
     if (!action) throw helpers.errorMessage(ctx, `Invalid action type='${type}', name='${name}'`);
     return action;
   }
