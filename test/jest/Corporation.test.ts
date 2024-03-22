@@ -131,7 +131,7 @@ describe("Corporation", () => {
       { fromSize: 9, increaseBy: 15, expectedCost: 31001495186.23076 },
       { fromSize: 9, increaseBy: 150, expectedCost: 4222227371834.145 },
     ])(
-      "should cost $expectedCost to upgrade office by $increase from size $fromSize",
+      "should cost $expectedCost to upgrade office by $increaseBy from size $fromSize",
       ({ fromSize, increaseBy, expectedCost }) => {
         expect(calculateOfficeSizeUpgradeCost(fromSize, increaseBy as PositiveInteger)).toBeCloseTo(expectedCost, 1);
       },
