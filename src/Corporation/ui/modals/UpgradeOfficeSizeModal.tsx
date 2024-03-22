@@ -24,12 +24,12 @@ interface IUpgradeButton {
 
 function UpgradeSizeButton(props: IUpgradeButton): React.ReactElement {
   const corp = useCorporation();
-  function upgradeSize(cost: number, size: PositiveInteger): void {
+  function upgradeSize(cost: number, increase: PositiveInteger): void {
     if (corp.funds < cost) {
       return;
     }
 
-    UpgradeOfficeSize(corp, props.office, size);
+    UpgradeOfficeSize(corp, props.office, increase);
     props.rerender();
     props.onClose();
   }

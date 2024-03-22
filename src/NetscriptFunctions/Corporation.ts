@@ -504,13 +504,13 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const researchName = getEnumHelper("CorpResearchName").nsGetMember(ctx, _researchName, "researchName");
       return hasResearched(getDivision(divisionName), researchName);
     },
-    getOfficeSizeUpgradeCost: (ctx) => (_divisionName, _cityName, _size) => {
+    getOfficeSizeUpgradeCost: (ctx) => (_divisionName, _cityName, _increase) => {
       checkAccess(ctx, CorpUnlockName.OfficeAPI);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
-      const size = helpers.positiveInteger(ctx, "size", _size);
+      const increase = helpers.positiveInteger(ctx, "increase", _increase);
       const office = getOffice(divisionName, cityName);
-      return calculateOfficeSizeUpgradeCost(office.size, size);
+      return calculateOfficeSizeUpgradeCost(office.size, increase);
     },
     setAutoJobAssignment: (ctx) => (_divisionName, _cityName, _job, _amount) => {
       checkAccess(ctx, CorpUnlockName.OfficeAPI);
