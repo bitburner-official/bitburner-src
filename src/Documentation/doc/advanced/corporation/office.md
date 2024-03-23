@@ -37,11 +37,19 @@ $$Salary = 3\ast TotalEmployees\ast\left(AvgIntelligence+AvgCharisma+AvgCreativi
 
 Upgrade cost:
 
-$$UpgradeCost = BasePrice\ast{1.09}^{\frac{CurrentSize}{3}}$$
+$$UpgradeCost = BasePrice\ast\left( \frac{\sqrt[3]{1.09} - 1}{0.09} \right)\ast{1.09}^{\frac{CurrentSize}{3}}$$
 
 Upgrade cost from size 3 to size n:
 
-$$UpgradeCost_{From\ 3\ to\ n} = \sum_{k = 1}^{\frac{n}{3} - 1}{BasePrice\ast 1.09^k}$$
+$$UpgradeCost_{From\ 3\ to\ n} = \sum_{k = 3}^{n - 1}{BasePrice\ast\left( \frac{\sqrt[3]{1.09} - 1}{0.09} \right)\ast{1.09}^{\frac{k}{3}}}$$
+
+≡
+
+$$UpgradeCost_{From\ 3\ to\ n} = \sum_{k = 3}^{n - 1}{BasePrice\ast\left( \frac{\sqrt[3]{1.09} - 1}{0.09} \right)\ast\left( \sqrt[3]{1.09} \right)^{k}}$$
+
+≡
+
+$$UpgradeCost_{From\ 3\ to\ n} = BasePrice\ast\left( \frac{\sqrt[3]{1.09} - 1}{0.09} \right)\ast\left( \frac{\left( \sqrt[3]{1.09} \right)^{n} - 1.09}{\sqrt[3]{1.09} - 1} \right)$$
 
 ≡
 
@@ -53,7 +61,7 @@ $$UpgradeCost_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{1.09}^{\frac{b}{3}} 
 
 Maximum size with a given `MaxCost`:
 
-$$MaxUpgradeLevel = 3\ast\log_{1.09}\left( MaxCost\ast\frac{0.09}{BasePrice} + {1.09}^{\frac{CurrentSize}{3}} \right)$$
+$$MaxSize = 3\ast\log_{1.09}\left( MaxCost\ast\frac{0.09}{BasePrice} + {1.09}^{\frac{CurrentSize}{3}} \right)$$
 
 ## Energy and morale
 
