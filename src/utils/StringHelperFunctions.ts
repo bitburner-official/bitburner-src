@@ -1,5 +1,4 @@
 import { Settings } from "../Settings/Settings";
-import { isString } from "./helpers/string";
 
 /*
 Converts a date representing time in milliseconds to a string with the format H hours M minutes and S seconds
@@ -75,7 +74,7 @@ function longestCommonStart(strings: string[]): string {
 
 // Returns whether an array contains entirely of string objects
 function containsAllStrings(arr: string[]): boolean {
-  return arr.every(isString);
+  return arr.every((value) => typeof value === "string");
 }
 
 // Generates a random alphanumeric string with N characters

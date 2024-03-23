@@ -8,7 +8,6 @@ import { calculateEffectWithFactors } from "../utils/calculateEffectWithFactors"
 import { OfficeSpace } from "./OfficeSpace";
 import { Product } from "./Product";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { isString } from "../utils/helpers/string";
 import { MaterialInfo } from "./MaterialInfo";
 import { Warehouse } from "./Warehouse";
 import { Corporation } from "./Corporation";
@@ -522,7 +521,7 @@ export class Division {
             // The amount gets re-multiplied later, so this is the correct
             // amount to calculate with for "MAX".
             const adjustedQty = mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles);
-            if (isString(mat.desiredSellAmount)) {
+            if (typeof mat.desiredSellAmount === "string") {
               //Dynamically evaluated
               let tmp = mat.desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
               tmp = tmp.replace(/PROD/g, mat.productionAmount.toString());
@@ -575,7 +574,7 @@ export class Division {
             } else if (mat.marketTa1) {
               sCost = mat.marketPrice + markupLimit;
               // check truthyness to avoid unnecessary eval
-            } else if (isString(mat.desiredSellPrice) && mat.desiredSellPrice) {
+            } else if (typeof mat.desiredSellPrice === "string" && mat.desiredSellPrice) {
               sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice.toString());
               sCost = eval(sCost);
             } else {
@@ -853,7 +852,7 @@ export class Division {
           // amount to calculate with for "MAX".
           const adjustedQty = product.cityData[city].stored / (corpConstants.secondsPerMarketCycle * marketCycles);
           const desiredSellAmount = product.cityData[city].desiredSellAmount;
-          if (isString(desiredSellAmount)) {
+          if (typeof desiredSellAmount === "string") {
             //Sell amount is dynamically evaluated
             let tmp: number | string = desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
             tmp = tmp.replace(/PROD/g, product.cityData[city].productionAmount.toString());
@@ -909,7 +908,7 @@ export class Division {
             sCost = optimalPrice;
           } else if (product.marketTa1) {
             sCost = product.cityData[city].productionCost + markupLimit;
-          } else if (isString(sellPrice)) {
+          } else if (typeof sellPrice === "string") {
             let sCostString = sellPrice;
             if (product.markup === 0) {
               console.error(`mku is zero, reverting to 1 to avoid Infinity`);
