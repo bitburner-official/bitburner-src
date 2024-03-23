@@ -38,6 +38,23 @@ export const InterfacePage = (): React.ReactElement => {
         tooltip={<>If this is set, the progress bars in the character overview will be hidden.</>}
       />
       <OptionSwitch
+        checked={Settings.EnableVFX}
+        onChange={(newValue) => (Settings.EnableVFX = newValue)}
+        text={
+          <>
+            Enable VFX{" "}
+            <span style={{ display: "inline", color: Settings.theme.warning }}>(VISUAL EPILEPSY WARNING!)</span>
+          </>
+        }
+        tooltip={
+          <>
+            If this is set all visual effects will be enabled.
+            <br />
+            <span style={{ color: Settings.theme.warning }}>WARNING: DISABLE THIS IF YOU HAVE VISUAL EPILEPSY</span>
+          </>
+        }
+      />
+      <OptionSwitch
         checked={Settings.ShowMiddleNullTimeUnit}
         onChange={(newValue) => (Settings.ShowMiddleNullTimeUnit = newValue)}
         text="Show all intermediary times unit, even when null."

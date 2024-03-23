@@ -13,6 +13,7 @@ import ListItem from "@mui/material/ListItem";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import HelpIcon from "@mui/icons-material/Help";
+import SettingsIcon from "@mui/icons-material/Settings";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import StorageIcon from "@mui/icons-material/Storage";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
@@ -516,6 +517,24 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             you can do. There's a lot of content out in the world, make sure you explore and discover!
             <br />
             <br />
+            Now, let's move to
+          </Typography>
+          <ListItem>
+            <SettingsIcon color={"error"} />
+            <Typography color={"error"}>Options</Typography>
+          </ListItem>
+        </>
+      ),
+      canNext: false,
+    },
+    [iTutorialSteps.OptionsIntroduction as number]: {
+      content: (
+        <>
+          <Typography>
+            Here you can change stuff such as changing your theme, disabling ascii art and enabling visual effects. Take
+            your time to explore all the functions here!
+            <br />
+            <br />
             Lastly, click on
           </Typography>
           <ListItem>
@@ -574,7 +593,12 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         )}
         <br />
         <br />
-        <Button onClick={iTutorialEnd}>
+        <Button
+          style={{
+            marginRight: "10px",
+          }}
+          onClick={iTutorialEnd}
+        >
           {step !== iTutorialSteps.DocumentationPageInfo ? "SKIP TUTORIAL" : "FINISH TUTORIAL"}
         </Button>
       </Paper>

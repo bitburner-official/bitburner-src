@@ -167,7 +167,16 @@ export function BitverseRoot(props: IProps): React.ReactElement {
         "..............................................",
       ];
     }
-    return <CinematicText lines={cinematicLines} onDone={() => setDestroySequence(false)} auto={true} />;
+    return (
+      <CinematicText
+        chromaticAberration={true}
+        fadeOutMs={0}
+        delayToDone={2000}
+        lines={cinematicLines}
+        onDone={() => setDestroySequence(false)}
+        auto={true}
+      />
+    );
   }
 
   const nextSourceFileLvl = (n: number): number => {
@@ -287,7 +296,7 @@ export function BitverseRoot(props: IProps): React.ReactElement {
         "> Welcome to the Bitverse...",
         ">  ",
         "> (Enter a new BitNode using the image above)",
-      ]} />
+      ]} fadeInMs={500} />
     </>
   );
 }

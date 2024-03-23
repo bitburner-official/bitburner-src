@@ -32,6 +32,8 @@ enum iTutorialSteps {
   HacknetNodesIntroduction,
   HacknetNodesGoToWorldPage,
   WorldDescription,
+  //GoToOptionsPage,
+  OptionsIntroduction,
   DocumentationPageInfo,
   End,
 }
@@ -70,6 +72,8 @@ const ITutorial = {
     [iTutorialSteps.HacknetNodesIntroduction]: false,
     [iTutorialSteps.HacknetNodesGoToWorldPage]: false,
     [iTutorialSteps.WorldDescription]: false,
+    //[iTutorialSteps.GoToOptionsPage]: false,
+    [iTutorialSteps.OptionsIntroduction]: false,
     [iTutorialSteps.DocumentationPageInfo]: false,
     [iTutorialSteps.End]: false,
   },

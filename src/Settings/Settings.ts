@@ -18,6 +18,8 @@ export const Settings = {
   CodeInstructionRunTime: 25,
   /** Whether to render city as list of buttons. */
   DisableASCIIArt: false,
+  /** Whether to render w0r1d_d43m0n chromatic aberration VFX. */
+  EnableVFX: false,
   /** Whether global keyboard shortcuts should be disabled throughout the game. */
   DisableHotkeys: false,
   /** Whether text effects such as corruption should be disabled. */

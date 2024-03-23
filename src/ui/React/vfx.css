@@ -1,0 +1,50 @@
+@keyframes chromatic-aberration {
+  0% {
+    background-color: hsl(0, 100%, 50%);
+  }
+  100% {
+    background-color: hsl(0, 100%, 50%);
+  }
+}
+
+@keyframes dead-pixel {
+  0% {
+    background-color: hsl(0, 100%, 50%);
+  }
+  33% {
+    background-color: hsl(120, 100%, 50%);
+  }
+  66% {
+    background-color: hsl(240, 100%, 50%);
+  }
+  100% {
+    background-color: hsl(0, 100%, 50%);
+  }
+}
+
+.dead-pixel-0 {
+  position: absolute;
+  animation: dead-pixel alternate 490ms linear infinite;
+}
+.dead-pixel-1 {
+  position: absolute;
+  animation: dead-pixel alternate-reverse 500ms linear infinite;
+}
+.dead-pixel-2 {
+  position: absolute;
+  animation: dead-pixel alternate-reverse 510ms ease-in-out infinite;
+}
+
+.fade-in {
+  position: absolute;
+  animation: fade-in alternate 200ms linear infinite;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
