@@ -131,8 +131,8 @@ export function applyHandicap(board: Board, handicap: number): void {
   const handicapMoveOptions = getExpansionMoveArray(board, availableMoves);
   const handicapMoves: Move[] = [];
 
-  // Special handling for 5x5: always have handicap in the center of the board
-  if (availableMoves.length < 26 && board[2][2]) {
+  // Special handling for 5x5: extra weight on handicap piece in the center of the board
+  if (availableMoves.length < 26 && board[2][2] && Math.random() < 0.2) {
     board[2][2].color = GoColor.white;
     updateChains(board);
     return;

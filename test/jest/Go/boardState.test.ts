@@ -7,7 +7,11 @@ import { bitverseBoardShape } from "../../../src/Go/Constants";
 describe("Board analysis utility tests", () => {
   it("Correctly applies the board size and handicap for 5x5 board", () => {
     const result = getNewBoardState(5, GoOpponent.Illuminati, false);
-    expect(simpleBoardFromBoard(result.board)).toEqual([".....", ".....", "..O..", ".....", "....."]);
+    const whitePieceCount = simpleBoardFromBoard(result.board)
+      .join("")
+      .split("")
+      .filter((p) => p === "O").length;
+    expect(whitePieceCount).toEqual(1);
     expect(result).toEqual({
       board: expect.any(Object),
       previousPlayer: GoColor.white,
