@@ -1093,10 +1093,10 @@ export const ns: InternalAPI<NSFull> = {
     const server = helpers.getServer(ctx, hostname);
     if (!(server instanceof Server)) {
       helpers.log(ctx, () => "Cannot be executed on this server.");
-      return 5;
+      return undefined;
     }
     if (helpers.failOnHacknetServer(ctx, server)) {
-      return 5;
+      return undefined;
     }
     helpers.log(ctx, () => `returned ${server.numOpenPortsRequired} for '${server.hostname}'`);
     return server.numOpenPortsRequired;
