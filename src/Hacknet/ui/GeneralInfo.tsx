@@ -4,19 +4,27 @@
  * Displays general information about Hacknet Nodes
  */
 import React from "react";
-import Typography from "@mui/material/Typography";
+import { Box, Button, Typography } from "@mui/material";
+
+import { Factions } from "../../Faction/Factions";
+import { FactionName } from "@enums";
+import { Router } from "../../ui/GameRoot";
+import { Page } from "../../ui/Router";
 
 interface IProps {
   hasHacknetServers: boolean;
 }
 
 export function GeneralInfo(props: IProps): React.ReactElement {
+  const faction = Factions[FactionName.Netburners];
+
   return (
     <>
       <Typography>
         The Hacknet is a global, decentralized network of machines. It is used by hackers all around the world to
         anonymously share computing power and perform distributed cyberattacks without the fear of being traced.
       </Typography>
+      <br />
       {!props.hasHacknetServers ? (
         <>
           <Typography>
@@ -45,6 +53,18 @@ export function GeneralInfo(props: IProps): React.ReactElement {
               `scripts.`}
           </Typography>
         </>
+      )}
+      <br />
+      {faction.isMember && (
+        <Box>
+          <Typography>
+            Contributing to the Hacknet network also increases your reputation with {FactionName.Netburners}.
+            <br />
+            <Button onClick={() => Router.toPage(Page.Faction, { faction })}>
+              View {FactionName.Netburners} faction
+            </Button>
+          </Typography>
+        </Box>
       )}
     </>
   );

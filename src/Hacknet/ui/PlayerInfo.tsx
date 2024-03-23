@@ -12,7 +12,11 @@ import { Money } from "../../ui/React/Money";
 import { MoneyRate } from "../../ui/React/MoneyRate";
 import { HashRate } from "../../ui/React/HashRate";
 import { Hashes } from "../../ui/React/Hashes";
-import Typography from "@mui/material/Typography";
+import { Paper, Typography } from "@mui/material";
+import { StatsTable } from "../../ui/React/StatsTable";
+import { Factions } from "../../Faction/Factions";
+import { FactionName } from "@enums";
+import { ReputationRate } from "../../ui/React/ReputationRate";
 
 interface IProps {
   totalProduction: number;
@@ -20,32 +24,28 @@ interface IProps {
 
 export function PlayerInfo(props: IProps): React.ReactElement {
   const hasServers = hasHacknetServers();
+  const faction = Factions[FactionName.Netburners];
 
-  let prod;
+  const rows: React.ReactNode[][] = [["Money:", <Money key="money" money={Player.money} />]];
   if (hasServers) {
-    prod = <HashRate hashes={props.totalProduction} />;
+    rows.push([
+      "Hashes:",
+      <Typography key={"hashes"}>
+        <Hashes hashes={Player.hashManager.hashes} /> / <Hashes hashes={Player.hashManager.capacity} />
+      </Typography>,
+    ]);
+    rows.push(["Total Hacknet Production:", <HashRate key="prod" hashes={props.totalProduction} />]);
   } else {
-    prod = <MoneyRate money={props.totalProduction} />;
+    rows.push(["Total Hacknet Production:", <MoneyRate key="prod" money={props.totalProduction} />]);
+  }
+  if (faction.isMember) {
+    const repRate = (hasServers ? (props.totalProduction * 1e6) / 4 : props.totalProduction) * 1e-2;
+    rows.push([`${faction.name} reputation gain:`, <ReputationRate key="rep" reputation={repRate} />]);
   }
 
   return (
-    <>
-      <Typography>
-        Money:
-        <Money money={Player.money} />
-      </Typography>
-
-      {hasServers && (
-        <>
-          <Typography>
-            Hashes: <Hashes hashes={Player.hashManager.hashes} /> / <Hashes hashes={Player.hashManager.capacity} />
-          </Typography>
-        </>
-      )}
-
-      <Typography>
-        Total Hacknet {hasServers ? "Server" : "Node"} Production: {prod}
-      </Typography>
-    </>
+    <Paper sx={{ display: "inline-block", padding: 0.5, margin: "0.5em 0" }}>
+      <StatsTable rows={rows} />
+    </Paper>
   );
 }
