@@ -1,4 +1,4 @@
-import { CompanyName, JobName, CityName, AugmentationName, LiteratureName, MessageFilename } from "@enums";
+import { CompanyName, JobName, CityName, AugmentationName, LiteratureName, MessageFilename, FactionName } from "@enums";
 import { ServerName } from "../Types/strings";
 import { Server } from "../Server/Server";
 import { GetServer } from "../Server/AllServers";
@@ -15,6 +15,7 @@ import type {
   CompanyReputationRequirement,
   EmployedByRequirement,
   JobTitleRequirement,
+  JoinedFactionRequirement,
   KarmaRequiremennt,
   MoneyRequirement,
   NumAugmentationsRequirement,
@@ -108,6 +109,26 @@ export const notEmployedBy = (companyName: CompanyName): PlayerCondition => ({
   ...notCondition(employedBy(companyName)),
   toString(): string {
     return `Not working for the ${companyName}`;
+  },
+});
+
+export const haveJoinedFaction = (factionName: FactionName): PlayerCondition => ({
+  toString(): string {
+    return `Joined ${factionName}`;
+  },
+  toJSON(): JoinedFactionRequirement {
+    return { type: "joinedFaction", joinedFaction: factionName };
+  },
+  isSatisfied(p: PlayerObject): boolean {
+    const factionsJoined = p.factions;
+    return factionsJoined.includes(factionName);
+  },
+});
+
+export const notHaveJoinedFaction = (factionName: FactionName): PlayerCondition => ({
+  ...notCondition(haveJoinedFaction(factionName)),
+  toString(): string {
+    return `Have not joined ${factionName}`;
   },
 });
 
