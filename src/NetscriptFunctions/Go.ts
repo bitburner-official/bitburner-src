@@ -68,7 +68,7 @@ export function NetscriptGo(): InternalAPI<NSGo> {
       const opponent = getEnumHelper("GoOpponent").nsGetMember(ctx, _opponent);
       const boardSize = helpers.number(ctx, "boardSize", _boardSize);
 
-      return resetBoardState(error(ctx), opponent, boardSize);
+      return resetBoardState(logger(ctx), error(ctx), opponent, boardSize);
     },
     analysis: {
       getValidMoves: () => () => {

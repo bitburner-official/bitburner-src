@@ -336,7 +336,12 @@ function logEndGame(logger: (s: string) => void) {
 /**
  * Clears the board, resets winstreak if applicable
  */
-export function resetBoardState(error: (s: string) => void, opponent: GoOpponent, boardSize: number) {
+export function resetBoardState(
+  logger: (s: string) => void,
+  error: (s: string) => void,
+  opponent: GoOpponent,
+  boardSize: number,
+) {
   if (![5, 7, 9, 13].includes(boardSize) && opponent !== GoOpponent.w0r1d_d43m0n) {
     error(`Invalid subnet size requested (${boardSize}), size must be 5, 7, 9, or 13`);
     return;
@@ -354,6 +359,7 @@ export function resetBoardState(error: (s: string) => void, opponent: GoOpponent
 
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
   GoEvents.emit(); // Trigger a Go UI rerender
+  logger(`New game started: ${opponent}, ${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);
 }
 
@@ -392,7 +398,7 @@ export async function determineCheatSuccess(
   // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly losing
   else if (state.cheatCount && (ejectRngOverride ?? rng.random()) < 0.1) {
     logger(`Cheat failed! You have been ejected from the subnet.`);
-    resetBoardState(logger, state.ai, state.board[0].length);
+    resetBoardState(logger, logger, state.ai, state.board[0].length);
     return {
       type: GoPlayType.gameOver,
       x: null,
