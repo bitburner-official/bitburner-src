@@ -3926,7 +3926,14 @@ export interface Gang {
 }
 
 /** @public */
-type GoOpponent = "Netburners" | "Slum Snakes" | "The Black Hand" | "Tetrads" | "Daedalus" | "Illuminati" | "????????????";
+type GoOpponent =
+  | "Netburners"
+  | "Slum Snakes"
+  | "The Black Hand"
+  | "Tetrads"
+  | "Daedalus"
+  | "Illuminati"
+  | "????????????";
 
 /**
  * IPvGO api
