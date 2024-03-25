@@ -8,7 +8,7 @@ Gets new IPvGO subnet with the specified size owned by the listed faction, ready
 
 Note that some factions will have a few routers on the subnet at this state.
 
-opponent is "Netburners" or "Slum Snakes" or "The Black Hand" or "Daedalus" or "Illuminati",
+opponent is "Netburners" or "Slum Snakes" or "The Black Hand" or "Tetrads" or "Daedalus" or "Illuminati" or "????????????",
 
 **Signature:**
 

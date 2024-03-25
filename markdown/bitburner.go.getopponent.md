@@ -9,9 +9,9 @@ Returns the name of the opponent faction in the current subnet.
 **Signature:**
 
 ```typescript
-getOpponent(): GoOpponent | "No AI" | "????????????";
+getOpponent(): GoOpponent | "No AI";
 ```
 **Returns:**
 
-[GoOpponent](./bitburner.goopponent.md) \| "No AI" \| "????????????"
+[GoOpponent](./bitburner.goopponent.md) \| "No AI"
 
