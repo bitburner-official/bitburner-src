@@ -4561,6 +4561,15 @@ export interface Grafting {
    * @throws Will error if called while you are not in New Tokyo.
    */
   graftAugmentation(augName: string, focus?: boolean): boolean;
+
+  /**
+   * Checks to see if the player is currently grafting
+   * @remarks
+   * RAM cost: 3.75 GB
+   *
+   * @returns True if player is currently Grafting, false otherwise.
+   */
+  isGrafting(): boolean;
 }
 
 /**

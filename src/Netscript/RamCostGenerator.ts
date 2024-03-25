@@ -384,6 +384,7 @@ const grafting = {
   getAugmentationGraftTime: 3.75,
   getGraftableAugmentations: 5,
   graftAugmentation: 7.5,
+  isGrafting: 3.75,
 } as const;
 
 const corporation = {
