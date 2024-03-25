@@ -16,7 +16,13 @@ import { isRelevantMaterial } from "./ui/Helpers";
 import { CityName } from "@enums";
 import { getRandomInt } from "../utils/helpers/getRandomInt";
 import { getRecordValues } from "../Types/Record";
-import { sellSharesFailureReason, buybackSharesFailureReason, issueNewSharesFailureReason } from "./helpers";
+import {
+  calculateOfficeSizeUpgradeCost,
+  sellSharesFailureReason,
+  buybackSharesFailureReason,
+  issueNewSharesFailureReason,
+} from "./helpers";
+import { PositiveInteger } from "../types";
 
 export function NewDivision(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.size >= corporation.maxDivisions)
@@ -356,17 +362,10 @@ export function BuyBackShares(corporation: Corporation, numShares: number): bool
   return true;
 }
 
-export function UpgradeOfficeSize(corp: Corporation, office: OfficeSpace, size: number): void {
-  const initialPriceMult = Math.round(office.size / corpConstants.officeInitialSize);
-  const costMultiplier = 1.09;
-  // Calculate cost to upgrade size by 15 employees
-  let mult = 0;
-  for (let i = 0; i < size / corpConstants.officeInitialSize; ++i) {
-    mult += Math.pow(costMultiplier, initialPriceMult + i);
-  }
-  const cost = corpConstants.officeInitialCost * mult;
+export function UpgradeOfficeSize(corp: Corporation, office: OfficeSpace, increase: PositiveInteger): void {
+  const cost = calculateOfficeSizeUpgradeCost(office.size, increase);
   if (corp.funds < cost) return;
-  office.size += size;
+  office.size += increase;
   corp.loseFunds(cost, "office");
 }
 
