@@ -23,7 +23,7 @@ The product's markup and rating are based on:
 - `ResearchFactor`. It is the industry's `scienceFactor`.
 - Design investment and advertising investment. Game UI shows them as "Design investment" and "Marketing investment". These two investments are not too important because their exponents in the formulas are very low. It's fine to use only 1% of current funds for them.
 
-Office's upgrade and employee stats' upgrades are very important for products because they increase employee production. High employee production means high CreationJobFactors and RP. Those upgrades and products create a powerful loop: More upgrades → Better product → Higher profit → More upgrades.
+Office's upgrade and employee stats' upgrades are very important for products because they increase employee production. High employee production means high `CreationJobFactors` and RP. Those upgrades and products create a powerful loop: More upgrades → Better product → Higher profit → More upgrades.
 
 Office setup is important to efficiently develop new products. Check this [section](./general-advice.md) for advice on how to set up the office.
 
@@ -155,7 +155,7 @@ $$Demand = \begin{cases}Min(100,AdvertInvestMult\ast(100\ast(Popularity/Awarenes
 $$Competition = Random(0,70)$$
 
 - Product's size:
-  - It's product.size.
+  - It's `product.size`.
   - Formula:
 
 $$ProductSize = \sum_{i = 1}^{NumberOfInputMaterials}{{InputMaterialSize}_i\ast{InputMaterialCoefficient}_i}$$
