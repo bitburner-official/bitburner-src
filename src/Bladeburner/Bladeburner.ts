@@ -1,6 +1,6 @@
 import type { PromisePair } from "../Types/Promises";
 import type { BlackOperation, Contract, GeneralAction, Operation } from "./Actions";
-import type { ActionIdentifier, Action } from "./Types";
+import type { ActionIdentifier, Action, Attempt } from "./Types";
 import type { Person } from "../PersonObjects/Person";
 
 import {
@@ -32,7 +32,6 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Settings } from "../Settings/Settings";
 import { getTimestamp } from "../utils/helpers/getTimestamp";
 import { joinFaction } from "../Faction/FactionHelpers";
-import { WorkerScript } from "../Netscript/WorkerScript";
 import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfiltrateWork";
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
@@ -105,7 +104,6 @@ export class Bladeburner {
     this.stamina = this.maxStamina;
     this.contracts = createContracts();
     this.operations = createOperations();
-    this.reset();
   }
 
   getCurrentCity(): City {
@@ -119,16 +117,22 @@ export class Bladeburner {
 
   /** This function is for the player. Sleeves use their own functions to perform blade work.
    * Note that this function does not ensure the action is valid, that should be checked before starting */
-  startAction(actionId: ActionIdentifier | null): void {
-    if (!actionId) return this.resetAction();
+  startAction(actionId: ActionIdentifier | null): Attempt<{ message: string }> {
+    if (!actionId) {
+      this.resetAction();
+      return { success: true, message: "Stopped current bladeburner action" };
+    }
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
-    this.action = actionId;
-    this.actionTimeCurrent = 0;
     const action = this.getActionObject(actionId);
     // This switch statement is just for handling error cases, it does not have to be exhaustive
     const availability = action.getAvailability(this);
-    if (!availability.available) return this.resetAction();
+    if (!availability.available) {
+      return { message: `Could not start action ${action.name}: ${availability.error}` };
+    }
+    this.action = actionId;
+    this.actionTimeCurrent = 0;
     this.actionTimeToComplete = action.getActionTime(this, Player);
+    return { success: true, message: `Started action ${action.name}` };
   }
 
   setSkillLevel(skillName: BladeSkillName, value: number) {
@@ -184,7 +188,7 @@ export class Bladeburner {
     this.consoleLogs.length = 0;
   }
 
-  prestige(): void {
+  prestigeAugmentation(): void {
     this.resetAction();
     const bladeburnerFac = Factions[FactionName.Bladeburners];
     if (this.rank >= BladeburnerConstants.RankNeededForFaction) {
@@ -192,8 +196,18 @@ export class Bladeburner {
     }
   }
 
+  joinFaction(): Attempt<{ message: string }> {
+    const faction = Factions[FactionName.Bladeburners];
+    if (faction.isMember) return { success: true, message: `Already a member of ${FactionName.Bladeburners} faction` };
+    if (this.rank >= BladeburnerConstants.RankNeededForFaction) {
+      joinFaction(faction);
+      return { success: true, message: `Joined ${FactionName.Bladeburners} faction` };
+    }
+    return { message: `Insufficient rank (${this.rank} / ${BladeburnerConstants.RankNeededForFaction})` };
+  }
+
   storeCycles(numCycles = 0): void {
-    this.storedCycles += numCycles;
+    this.storedCycles = clampInteger(this.storedCycles + numCycles);
   }
 
   executeStartConsoleCommand(args: string[]): void {
@@ -209,12 +223,8 @@ export class Bladeburner {
       this.postToConsole(`Invalid action type / name specified: type: ${type}, name: ${name}`);
       return;
     }
-    const availability = action.getAvailability(this);
-    if (!availability.available) {
-      this.postToConsole(`Could not start action ${action.name}. Error: ${availability.error}`);
-      return;
-    }
-    this.startAction(action.id);
+    const attempt = this.startAction(action.id);
+    this.postToConsole(attempt.message);
   }
 
   executeSkillConsoleCommand(args: string[]): void {
@@ -1293,7 +1303,7 @@ export class Bladeburner {
       Player.gainMoney(retValue.money, "bladeburner");
       Player.gainStats(retValue);
       if (action.type != BladeActionType.blackOp) {
-        this.startAction(action.id); // Repeat action
+        this.startAction(action.id); // Attempt to repeat action
       }
     }
   }
@@ -1323,12 +1333,6 @@ export class Bladeburner {
 
   getSkillLevel(skillName: BladeSkillName): number {
     return this.skills[skillName] ?? 0;
-  }
-
-  /** Reinitialize the dynamic properties on the static contract / operation objects */
-  reset(): void {
-    for (const contract of Object.values(this.contracts)) contract.reset();
-    for (const operation of Object.values(this.operations)) operation.reset();
   }
 
   process(): void {
@@ -1409,23 +1413,6 @@ export class Bladeburner {
         BladeburnerPromise.resolve = null;
         BladeburnerPromise.promise = null;
       }
-    }
-  }
-
-  joinBladeburnerFactionNetscriptFn(workerScript: WorkerScript): boolean {
-    const bladeburnerFac = Factions[FactionName.Bladeburners];
-    if (bladeburnerFac.isMember) {
-      return true;
-    } else if (this.rank >= BladeburnerConstants.RankNeededForFaction) {
-      joinFaction(bladeburnerFac);
-      workerScript.log("bladeburner.joinBladeburnerFaction", () => `Joined ${FactionName.Bladeburners} faction.`);
-      return true;
-    } else {
-      workerScript.log(
-        "bladeburner.joinBladeburnerFaction",
-        () => `You do not have the required rank (${this.rank}/${BladeburnerConstants.RankNeededForFaction}).`,
-      );
-      return false;
     }
   }
 

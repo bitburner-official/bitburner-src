@@ -16,6 +16,10 @@ type AvailabilitySuccess<T extends object> = { available: true } & T;
 type AvailabilityFailure = { available?: undefined; error: string };
 export type Availability<T extends object = object> = AvailabilitySuccess<T> | AvailabilityFailure;
 
+type AttemptSuccess<T extends object> = { success: true; message?: string } & T;
+type AttemptFailure = { success?: undefined; message: string };
+export type Attempt<T extends object = object> = AttemptSuccess<T> | AttemptFailure;
+
 export type Action = Contract | Operation | BlackOperation | GeneralAction;
 
 export type ActionIdentifier =

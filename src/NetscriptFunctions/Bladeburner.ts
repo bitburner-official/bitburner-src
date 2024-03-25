@@ -90,14 +90,9 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     startAction: (ctx) => (type, name) => {
       const bladeburner = getBladeburner(ctx);
       const action = getAction(ctx, type, name);
-      const availability = action.getAvailability(bladeburner);
-      if (!availability.available) {
-        helpers.log(ctx, () => `Coult not start action ${action.name}: ${availability.error}`);
-        return false;
-      }
-      bladeburner.startAction(action.id);
-      helpers.log(ctx, () => `Starting bladeburner action with type '${type}' and name '${name}'`);
-      return true;
+      const attempt = bladeburner.startAction(action.id);
+      helpers.log(ctx, () => attempt.message);
+      return !!attempt.success;
     },
     stopBladeburnerAction: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
@@ -293,7 +288,9 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     joinBladeburnerFaction: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
-      return bladeburner.joinBladeburnerFactionNetscriptFn(ctx.workerScript);
+      const attempt = bladeburner.joinFaction();
+      helpers.log(ctx, () => attempt.message);
+      return !!attempt.success;
     },
     joinBladeburnerDivision: (ctx) => () => {
       if (Player.bitNodeN === 7 || Player.sourceFileLvl(7) > 0) {
