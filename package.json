@@ -83,7 +83,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "jsdom": "^20.0.3",
     "lodash": "^4.17.21",
-    "monaco-editor": "^0.35.0",
+    "monaco-editor": "^0.46.0",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "prettier": "^2.8.8",
     "raw-loader": "^4.0.2",

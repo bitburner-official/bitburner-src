@@ -39,6 +39,11 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
     .map((script, originalIndex) => ({ script, originalIndex }))
     .filter(({ script }) => script.hostname.includes(filter) || script.path.includes(filter));
 
+  console.log({
+    scripts, filteredScripts
+  });
+  
+
   function onDragEnd(result: DropResult): void {
     // Dropped outside of the list
     if (!result.destination) return;
@@ -119,7 +124,8 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
               {filteredScripts.map(({ script, originalIndex }, index) => {
                 const { path: fileName, hostname } = script;
                 const isActive = currentScript?.path === script.path && currentScript.hostname === script.hostname;
-
+                console.log(scripts, index, filteredScripts);
+                
                 const title = `${hostname}:~${fileName.startsWith("/") ? "" : "/"}${fileName} ${dirty(scripts, index)}`;
 
                 return (
