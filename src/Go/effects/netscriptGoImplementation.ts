@@ -410,10 +410,25 @@ export async function determineCheatSuccess(
 
 /**
  * Cheating success rate scales with player's crime success rate, and decreases with prior cheat attempts.
+ *
+ * The source file bonus is additive success chance on top of the other multipliers.
+ *
+ * Cheat success chance required for N cheats with 100% success rate in a game:
+ *
+ * 1 100% success rate cheat requires +66% increased crime success rate
+ * 2 100% success cheats: +145% increased crime success rate
+ * 3: +282%
+ * 4: +535%
+ * 5: +1027%
+ * 7: +4278%
+ * 10: +59,854%
+ * 12: +534,704%
+ * 15: +31,358,645%
  */
 export function cheatSuccessChance(cheatCount: number) {
-  const sourceFileBonus = Player.sourceFileLvl(14) === 3 ? 1.25 : 1;
-  return Math.min(0.6 * 0.65 ** cheatCount * Player.mults.crime_success * sourceFileBonus, 1);
+  const sourceFileBonus = Player.sourceFileLvl(14) === 3 ? 0.25 : 0;
+  const cheatCountScalar = (0.7 - 0.02 * cheatCount) ** cheatCount;
+  return Math.max(Math.min(0.6 * cheatCountScalar * Player.mults.crime_success + sourceFileBonus, 1), 0);
 }
 
 /**

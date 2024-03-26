@@ -467,7 +467,7 @@ export function initBitNodes() {
         <br />
         Level 2: Permanently unlocks the go.cheat API
         <br />
-        Level 3: 25% increased success rate for the go.cheat API
+        Level 3: 25% additive increased success rate for the go.cheat API
         <br />
         <br />
         This Source-File also increases the maximum favor you can gain for each faction from IPvGO to:
