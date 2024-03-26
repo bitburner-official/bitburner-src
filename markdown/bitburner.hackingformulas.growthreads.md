@@ -4,7 +4,11 @@
 
 ## HackingFormulas.growThreads() method
 
-Calculate how many threads it will take to grow server to targetMoney. Starting money is server.moneyAvailable.
+Calculate how many threads it will take to grow server to targetMoney. Starting money is server.moneyAvailable. Note that when simulating the effect of [grow](./bitburner.ns.grow.md)<!-- -->, what matters is the state of the server and player when the grow \*finishes\*, not when it is started.
+
+The growth amount depends both linearly \*and\* exponentially on threads; see [grow](./bitburner.ns.grow.md) for more details.
+
+The inverse of this function is [formulas.hacking.growAmount](./bitburner.hackingformulas.growamount.md)<!-- -->, although it can work with fractional threads.
 
 **Signature:**
 

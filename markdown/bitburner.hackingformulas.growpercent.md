@@ -4,7 +4,13 @@
 
 ## HackingFormulas.growPercent() method
 
-Calculate the percent a server would grow to. Not exact due to limitations of mathematics. (Ex: 3.0 would grow the server to 300% of its current value.)
+Calculate the growth multiplier constant for a given server and threads.
+
+The actual amount of money grown depends both linearly \*and\* exponentially on threads; this is only giving the exponential part that is used for the multiplier. See [grow](./bitburner.ns.grow.md) for more details.
+
+As a result of the above, this multiplier does \*not\* depend on the amount of money on the server. Changing server.moneyAvailable and server.moneyMax will have no effect.
+
+For the most common use-cases, you probably want either [formulas.hacking.growThreads](./bitburner.hackingformulas.growthreads.md) or [formulas.hacking.growAmount](./bitburner.hackingformulas.growamount.md) instead.
 
 **Signature:**
 
@@ -17,7 +23,7 @@ growPercent(server: Server, threads: number, player: Person, cores?: number): nu
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  server | [Server](./bitburner.server.md) | Server info, typically from [getServer](./bitburner.ns.getserver.md) |
-|  threads | number | Amount of thread. |
+|  threads | number | Amount of threads. Can be fractional. |
 |  player | [Person](./bitburner.person.md) | Player info, typically from [getPlayer](./bitburner.ns.getplayer.md) |
 |  cores | number | _(Optional)_ Number of cores on the computer that will execute grow. |
 
