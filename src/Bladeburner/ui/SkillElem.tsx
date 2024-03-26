@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { CopyableText } from "../../ui/React/CopyableText";
 import { formatBigNumber } from "../../ui/formatNumber";
 import { Bladeburner } from "../Bladeburner";
@@ -19,15 +19,13 @@ interface SkillElemProps {
 export function SkillElem({ skill, bladeburner, onUpgrade }: SkillElemProps): React.ReactElement {
   const skillName = skill.name;
   const skillLevel = bladeburner.getSkillLevel(skillName);
-  const pointCost = skill.calculateCost(skillLevel);
+  const pointCost = useMemo(() => skill.calculateCost(skillLevel), [skill, skillLevel]);
 
   const canLevel = bladeburner.skillPoints >= pointCost;
   const maxLvl = skill.maxLvl ? skillLevel >= skill.maxLvl : false;
 
   function onClick(): void {
-    if (bladeburner.skillPoints < pointCost) return;
-    bladeburner.skillPoints -= pointCost;
-    bladeburner.increaseSkill(skillName);
+    bladeburner.upgradeSkill(skillName);
     onUpgrade();
   }
 

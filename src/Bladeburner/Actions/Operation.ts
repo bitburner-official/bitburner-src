@@ -3,7 +3,7 @@ import type { BlackOperation } from "./BlackOperation";
 import type { Bladeburner } from "../Bladeburner";
 import type { Availability, ActionIdentifier, SuccessChanceParams } from "../Types";
 
-import { BladeActionType, BladeOperationName } from "@enums";
+import { BladeActionType, BladeMultName, BladeOperationName } from "@enums";
 import { BladeburnerConstants } from "../data/Constants";
 import { ActionClass } from "./Action";
 import { Generic_fromJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
@@ -70,7 +70,9 @@ export class Operation extends LevelableActionClass {
 constructorsForReviver.Operation = Operation;
 
 // shared member functions for Operation and BlackOperation
-export const operationSkillSuccessBonus = (inst: Bladeburner) => inst.skillMultipliers.successChanceOperation;
+export const operationSkillSuccessBonus = (inst: Bladeburner) => {
+  return inst.getSkillMult(BladeMultName.successChanceOperation);
+};
 export function operationTeamSuccessBonus(this: Operation | BlackOperation, inst: Bladeburner) {
   if (this.teamCount && this.teamCount > 0) {
     this.teamCount = Math.min(this.teamCount, inst.teamSize);

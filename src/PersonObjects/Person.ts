@@ -49,7 +49,6 @@ export abstract class Person implements IPerson {
   gainIntelligenceExp = personMethods.gainIntelligenceExp;
   gainStats = personMethods.gainStats;
   regenerateHp = personMethods.regenerateHp;
-  queryStatFromString = personMethods.queryStatFromString;
   updateSkillLevels = personMethods.updateSkillLevels;
   hasAugmentation = personMethods.hasAugmentation;
   calculateSkill = calculateSkill; //Class version is equal to imported version

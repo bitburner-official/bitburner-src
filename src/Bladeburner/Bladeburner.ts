@@ -2,12 +2,14 @@ import type { PromisePair } from "../Types/Promises";
 import type { BlackOperation, Contract, GeneralAction, Operation } from "./Actions";
 import type { ActionIdentifier, Action, Attempt } from "./Types";
 import type { Person } from "../PersonObjects/Person";
+import type { Skills as PersonSkills } from "../PersonObjects/Skills";
 
 import {
   AugmentationName,
   BladeActionType,
   BladeContractName,
   BladeGeneralActionName,
+  BladeMultName,
   BladeOperationName,
   BladeSkillName,
   CityName,
@@ -36,10 +38,10 @@ import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfil
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { getEnumHelper } from "../utils/EnumHelper";
-import { PartialRecord, createEnumKeyedRecord } from "../Types/Record";
+import { PartialRecord, createEnumKeyedRecord, getRecordEntries } from "../Types/Record";
 import { createContracts, loadContractsData } from "./data/Contracts";
 import { createOperations, loadOperationsData } from "./data/Operations";
-import { clampInteger } from "../utils/helpers/clampNumber";
+import { clampInteger, clampNumber } from "../utils/helpers/clampNumber";
 import { parseCommand } from "../Terminal/Parser";
 import { BlackOperations } from "./data/BlackOperations";
 import { GeneralActions } from "./data/GeneralActions";
@@ -73,7 +75,7 @@ export class Bladeburner {
   city = CityName.Sector12;
   // Todo: better types for all these Record<string, etc> types. Will need custom types or enums for the named string categories (e.g. skills).
   skills: PartialRecord<BladeSkillName, number> = {};
-  skillMultipliers: Record<string, number> = {};
+  skillMultipliers: PartialRecord<BladeMultName, number> = {};
   staminaBonus = 0;
   maxStamina = 0;
   stamina = 0;
@@ -97,8 +99,6 @@ export class Bladeburner {
   consoleLogs: string[] = ["Bladeburner Console", "Type 'help' to see console commands"];
 
   constructor() {
-    this.updateSkillMultipliers(); // Calls resetSkillMultipliers()
-
     // Max Stamina is based on stats and Bladeburner-specific bonuses
     this.calculateMaxStamina();
     this.stamina = this.maxStamina;
@@ -135,13 +135,19 @@ export class Bladeburner {
     return { success: true, message: `Started action ${action.name}` };
   }
 
+  /** Directly sets a skill level, with no validation */
   setSkillLevel(skillName: BladeSkillName, value: number) {
     this.skills[skillName] = clampInteger(value);
     this.updateSkillMultipliers();
   }
 
-  increaseSkill(skillName: BladeSkillName, count = 1): void {
+  /** Attempts to perform a skill upgrade, gives a message on both success and failure */
+  upgradeSkill(skillName: BladeSkillName, count = 1): Attempt<{ message: string }> {
+    const availability = Skills[skillName].canUpgrade(this, count);
+    if (!availability.available) return { message: `Cannot upgrade ${skillName}: ${availability.error}` };
+    this.skillPoints -= availability.cost;
     this.setSkillLevel(skillName, (this.skills[skillName] ?? 0) + count);
+    return { success: true, message: `Upgraded skill ${skillName} by ${count} level${count > 1 ? "s" : ""}` };
   }
 
   executeConsoleCommands(commands: string): void {
@@ -190,10 +196,8 @@ export class Bladeburner {
 
   prestigeAugmentation(): void {
     this.resetAction();
-    const bladeburnerFac = Factions[FactionName.Bladeburners];
-    if (this.rank >= BladeburnerConstants.RankNeededForFaction) {
-      joinFaction(bladeburnerFac);
-    }
+    // Attempt to join the faction, this will silently fail if we have insufficient rank
+    this.joinFaction();
   }
 
   joinFaction(): Attempt<{ message: string }> {
@@ -227,6 +231,14 @@ export class Bladeburner {
     this.postToConsole(attempt.message);
   }
 
+  getSkillMultsDisplay(): string[] {
+    const display: string[] = [];
+    for (const [multName, mult] of getRecordEntries(this.skillMultipliers)) {
+      display.push(`${multName}: x${formatNumberNoSuffix(mult, 3)}`);
+    }
+    return display;
+  }
+
   executeSkillConsoleCommand(args: string[]): void {
     switch (args.length) {
       case 1: {
@@ -243,63 +255,7 @@ export class Bladeburner {
             const skillLevel = this.getSkillLevel(skill.name);
             this.postToConsole(`${skill.name}: Level ${formatNumberNoSuffix(skillLevel, 0)}\n\nEffects: `);
           }
-          const multKeys = Object.keys(this.skillMultipliers);
-          for (let i = 0; i < multKeys.length; ++i) {
-            const mult = this.skillMultipliers[multKeys[i]];
-            if (mult && mult !== 1) {
-              const mults = formatNumberNoSuffix(mult, 3);
-              switch (multKeys[i]) {
-                case "successChanceAll":
-                  this.postToConsole("Total Success Chance: x" + mults);
-                  break;
-                case "successChanceStealth":
-                  this.postToConsole("Stealth Success Chance: x" + mults);
-                  break;
-                case "successChanceKill":
-                  this.postToConsole("Retirement Success Chance: x" + mults);
-                  break;
-                case "successChanceContract":
-                  this.postToConsole("Contract Success Chance: x" + mults);
-                  break;
-                case "successChanceOperation":
-                  this.postToConsole("Operation Success Chance: x" + mults);
-                  break;
-                case "successChanceEstimate":
-                  this.postToConsole("Synthoid Data Estimate: x" + mults);
-                  break;
-                case "actionTime":
-                  this.postToConsole("Action Time: x" + mults);
-                  break;
-                case "effHack":
-                  this.postToConsole("Hacking Skill: x" + mults);
-                  break;
-                case "effStr":
-                  this.postToConsole("Strength: x" + mults);
-                  break;
-                case "effDef":
-                  this.postToConsole("Defense: x" + mults);
-                  break;
-                case "effDex":
-                  this.postToConsole("Dexterity: x" + mults);
-                  break;
-                case "effAgi":
-                  this.postToConsole("Agility: x" + mults);
-                  break;
-                case "effCha":
-                  this.postToConsole("Charisma: x" + mults);
-                  break;
-                case "effInt":
-                  this.postToConsole("Intelligence: x" + mults);
-                  break;
-                case "stamina":
-                  this.postToConsole("Stamina: x" + mults);
-                  break;
-                default:
-                  console.warn(`Unrecognized SkillMult Key: ${multKeys[i]}`);
-                  break;
-              }
-            }
-          }
+          for (const logEntry of this.getSkillMultsDisplay()) this.postToConsole(logEntry);
         } else {
           this.postToConsole("Invalid usage of 'skill' console command: skill [action] [name]");
           this.postToConsole("Use 'help skill' for more info");
@@ -312,19 +268,12 @@ export class Bladeburner {
           this.postToConsole("Invalid skill name (Note that it is case-sensitive): " + skillName);
           return;
         }
-        const skill = Skills[skillName];
         const level = this.getSkillLevel(skillName);
         if (args[1].toLowerCase() === "list") {
           this.postToConsole(skillName + ": Level " + formatNumberNoSuffix(level));
         } else if (args[1].toLowerCase() === "level") {
-          const availability = skill.canUpgrade(this);
-          if (!availability.available) {
-            this.postToConsole(`Cannot upgrade skill ${skill.name}: ${availability.error}`);
-            return;
-          }
-          this.skillPoints -= availability.cost;
-          this.increaseSkill(skillName);
-          this.postToConsole(`${skillName} upgraded to level ${this.getSkillLevel(skillName)}`);
+          const attempt = this.upgradeSkill(skillName);
+          this.postToConsole(attempt.message);
         } else {
           this.postToConsole("Invalid usage of 'skill' console command: skill [action] [name]");
           this.postToConsole("Use 'help skill' for more info");
@@ -716,16 +665,16 @@ export class Bladeburner {
 
     const unweightedGain = time * BladeburnerConstants.BaseStatGain * successMult * difficultyMult;
     const unweightedIntGain = time * BladeburnerConstants.BaseIntGain * successMult * difficultyMult;
-    const skillMult = this.skillMultipliers.expGain;
+    const skillMult = this.getSkillMult(BladeMultName.expGain);
 
     return {
-      hackExp: unweightedGain * action.weights.hack * skillMult,
-      strExp: unweightedGain * action.weights.str * skillMult,
-      defExp: unweightedGain * action.weights.def * skillMult,
-      dexExp: unweightedGain * action.weights.dex * skillMult,
-      agiExp: unweightedGain * action.weights.agi * skillMult,
-      chaExp: unweightedGain * action.weights.cha * skillMult,
-      intExp: unweightedIntGain * action.weights.int * skillMult,
+      hackExp: unweightedGain * action.weights.hacking * skillMult,
+      strExp: unweightedGain * action.weights.strength * skillMult,
+      defExp: unweightedGain * action.weights.defense * skillMult,
+      dexExp: unweightedGain * action.weights.dexterity * skillMult,
+      agiExp: unweightedGain * action.weights.agility * skillMult,
+      chaExp: unweightedGain * action.weights.charisma * skillMult,
+      intExp: unweightedIntGain * action.weights.intelligence * skillMult,
       money: 0,
       reputation: 0,
     };
@@ -755,45 +704,34 @@ export class Bladeburner {
     }
   }
 
-  resetSkillMultipliers(): void {
-    this.skillMultipliers = {
-      successChanceAll: 1,
-      successChanceStealth: 1,
-      successChanceKill: 1,
-      successChanceContract: 1,
-      successChanceOperation: 1,
-      successChanceEstimate: 1,
-      actionTime: 1,
-      effHack: 1,
-      effStr: 1,
-      effDef: 1,
-      effDex: 1,
-      effAgi: 1,
-      effCha: 1,
-      effInt: 1,
-      stamina: 1,
-      money: 1,
-      expGain: 1,
-    };
+  getSkillMult(name: BladeMultName): number {
+    return this.skillMultipliers[name] ?? 1;
+  }
+
+  getEffectiveSkillLevel(person: Person, name: keyof PersonSkills): number {
+    switch (name) {
+      case "strength":
+        return person.skills.strength * this.getSkillMult(BladeMultName.effStr);
+      case "defense":
+        return person.skills.defense * this.getSkillMult(BladeMultName.effDef);
+      case "dexterity":
+        return person.skills.dexterity * this.getSkillMult(BladeMultName.effDex);
+      case "agility":
+        return person.skills.agility * this.getSkillMult(BladeMultName.effAgi);
+      case "charisma":
+        return person.skills.charisma * this.getSkillMult(BladeMultName.effCha);
+      default:
+        return person.skills[name];
+    }
   }
 
   updateSkillMultipliers(): void {
-    this.resetSkillMultipliers();
+    this.skillMultipliers = {};
     for (const skill of Object.values(Skills)) {
       const level = this.getSkillLevel(skill.name);
       if (!level) continue;
-
-      const multiplierNames = Object.keys(this.skillMultipliers);
-      for (let i = 0; i < multiplierNames.length; ++i) {
-        const multiplierName = multiplierNames[i];
-        if (skill.getMultiplier(multiplierName) != null && !isNaN(skill.getMultiplier(multiplierName))) {
-          const value = skill.getMultiplier(multiplierName) * level;
-          let multiplierValue = 1 + value / 100;
-          if (multiplierName === "actionTime") {
-            multiplierValue = 1 - value / 100;
-          }
-          this.skillMultipliers[multiplierName] *= multiplierValue;
-        }
+      for (const [name, mult] of getRecordEntries(skill.mults)) {
+        this.skillMultipliers[name] = clampNumber(this.getSkillMult(name) * (1 + mult / 100));
       }
     }
   }
@@ -829,14 +767,14 @@ export class Bladeburner {
     switch (action.name) {
       case BladeOperationName.investigation:
         if (success) {
-          city.improvePopulationEstimateByPercentage(0.4 * this.skillMultipliers.successChanceEstimate);
+          city.improvePopulationEstimateByPercentage(0.4 * this.getSkillMult(BladeMultName.successChanceEstimate));
         } else {
           this.triggerPotentialMigration(this.city, 0.1);
         }
         break;
       case BladeOperationName.undercover:
         if (success) {
-          city.improvePopulationEstimateByPercentage(0.8 * this.skillMultipliers.successChanceEstimate);
+          city.improvePopulationEstimateByPercentage(0.8 * this.getSkillMult(BladeMultName.successChanceEstimate));
         } else {
           this.triggerPotentialMigration(this.city, 0.15);
         }
@@ -895,7 +833,9 @@ export class Bladeburner {
       switch (actionIdent.name) {
         case BladeContractName.tracking:
           // Increase estimate accuracy by a relatively small amount
-          city.improvePopulationEstimateByCount(getRandomInt(100, 1e3) * this.skillMultipliers.successChanceEstimate);
+          city.improvePopulationEstimateByCount(
+            getRandomInt(100, 1e3) * this.getSkillMult(BladeMultName.successChanceEstimate),
+          );
           break;
         case BladeContractName.bountyHunter:
           city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
@@ -944,7 +884,8 @@ export class Bladeburner {
             // Earn money for contracts
             let moneyGain = 0;
             if (!isOperation) {
-              moneyGain = BladeburnerConstants.ContractBaseMoneyGain * rewardMultiplier * this.skillMultipliers.money;
+              moneyGain =
+                BladeburnerConstants.ContractBaseMoneyGain * rewardMultiplier * this.getSkillMult(BladeMultName.money);
               retValue.money = moneyGain;
             }
 
@@ -1099,7 +1040,7 @@ export class Bladeburner {
               defExpGain = 30 * person.mults.defense_exp,
               dexExpGain = 30 * person.mults.dexterity_exp,
               agiExpGain = 30 * person.mults.agility_exp,
-              staminaGain = 0.04 * this.skillMultipliers.stamina;
+              staminaGain = 0.04 * this.getSkillMult(BladeMultName.stamina);
             retValue.strExp = strExpGain;
             retValue.defExp = defExpGain;
             retValue.dexExp = dexExpGain;
@@ -1141,7 +1082,7 @@ export class Bladeburner {
             retValue.intExp = BladeburnerConstants.BaseIntGain;
             this.changeRank(person, rankGain);
             this.getCurrentCity().improvePopulationEstimateByPercentage(
-              eff * this.skillMultipliers.successChanceEstimate,
+              eff * this.getSkillMult(BladeMultName.successChanceEstimate),
             );
             if (this.logging.general) {
               this.log(
@@ -1309,17 +1250,17 @@ export class Bladeburner {
   }
 
   calculateStaminaGainPerSecond(): number {
-    const effAgility = Player.skills.agility * this.skillMultipliers.effAgi;
+    const effAgility = Player.skills.agility * this.getSkillMult(BladeMultName.effAgi);
     const maxStaminaBonus = this.maxStamina / BladeburnerConstants.MaxStaminaToGainFactor;
     const gain = (BladeburnerConstants.StaminaGainPerSecond + maxStaminaBonus) * Math.pow(effAgility, 0.17);
-    return gain * (this.skillMultipliers.stamina * Player.mults.bladeburner_stamina_gain);
+    return gain * (this.getSkillMult(BladeMultName.stamina) * Player.mults.bladeburner_stamina_gain);
   }
 
   calculateMaxStamina(): void {
-    const effAgility = Player.skills.agility * this.skillMultipliers.effAgi;
+    const effAgility = Player.skills.agility * this.getSkillMult(BladeMultName.effAgi);
     const maxStamina =
       (Math.pow(effAgility, 0.8) + this.staminaBonus) *
-      this.skillMultipliers.stamina *
+      this.getSkillMult(BladeMultName.stamina) *
       Player.mults.bladeburner_max_stamina;
     if (this.maxStamina !== maxStamina) {
       const oldMax = this.maxStamina;

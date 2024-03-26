@@ -63,3 +63,21 @@ export enum BladeSkillName {
   handsOfMidas = "Hands of Midas",
   hyperdrive = "Hyperdrive",
 }
+
+export enum BladeMultName {
+  successChanceAll = "Total Success Chance",
+  successChanceStealth = "Stealth Success Chance",
+  successChanceKill = "Retirement Success Chance",
+  successChanceContract = "Contract Success Chance",
+  successChanceOperation = "Operation Success Chance",
+  successChanceEstimate = "Synthoid Data Estimate",
+  actionTime = "Action Time",
+  effStr = "Effective Strength",
+  effDef = "Effective Defense",
+  effDex = "Effective Dexterity",
+  effAgi = "Effective Agility",
+  effCha = "Effective Charisma",
+  stamina = "Stamina",
+  money = "Contract Money",
+  expGain = "Experience Gain",
+}

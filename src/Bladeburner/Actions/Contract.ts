@@ -2,7 +2,7 @@ import type { Bladeburner } from "../Bladeburner";
 import type { ActionIdentifier } from "../Types";
 
 import { Generic_fromJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
-import { BladeActionType, BladeContractName } from "../Enums";
+import { BladeActionType, BladeContractName, BladeMultName } from "../Enums";
 import { LevelableActionClass, LevelableActionParams } from "./LevelableAction";
 
 export class Contract extends LevelableActionClass {
@@ -19,7 +19,7 @@ export class Contract extends LevelableActionClass {
   }
 
   getActionTypeSkillSuccessBonus(inst: Bladeburner): number {
-    return inst.skillMultipliers.successChanceContract;
+    return inst.getSkillMult(BladeMultName.successChanceContract);
   }
 
   toJSON(): IReviverValue {

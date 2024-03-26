@@ -1,22 +1,13 @@
 import type { Bladeburner } from "../Bladeburner";
 import type { Person } from "../../PersonObjects/Person";
 import type { Availability, SuccessChanceParams } from "../Types";
+import type { Skills as PersonSkills } from "../../PersonObjects/Skills";
 
 import { addOffset } from "../../utils/helpers/addOffset";
 import { BladeburnerConstants } from "../data/Constants";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
-
-class StatsMultiplier {
-  [key: string]: number;
-
-  hack = 0;
-  str = 0;
-  def = 0;
-  dex = 0;
-  agi = 0;
-  cha = 0;
-  int = 0;
-}
+import { BladeMultName } from "../Enums";
+import { getRecordKeys } from "../../Types/Record";
 
 export interface ActionParams {
   desc: string;
@@ -27,8 +18,8 @@ export interface ActionParams {
   hpLoss?: number;
   isStealth?: boolean;
   isKill?: boolean;
-  weights?: StatsMultiplier;
-  decays?: StatsMultiplier;
+  weights?: PersonSkills;
+  decays?: PersonSkills;
 }
 
 export abstract class ActionClass {
@@ -46,24 +37,24 @@ export abstract class ActionClass {
   isKill = false;
 
   // Weighting of each stat in determining action success rate
-  weights: StatsMultiplier = {
-    hack: 1 / 7,
-    str: 1 / 7,
-    def: 1 / 7,
-    dex: 1 / 7,
-    agi: 1 / 7,
-    cha: 1 / 7,
-    int: 1 / 7,
+  weights: PersonSkills = {
+    hacking: 1 / 7,
+    strength: 1 / 7,
+    defense: 1 / 7,
+    dexterity: 1 / 7,
+    agility: 1 / 7,
+    charisma: 1 / 7,
+    intelligence: 1 / 7,
   };
   // Diminishing returns of stats (stat ^ decay where 0 <= decay <= 1)
-  decays: StatsMultiplier = {
-    hack: 0.9,
-    str: 0.9,
-    def: 0.9,
-    dex: 0.9,
-    agi: 0.9,
-    cha: 0.9,
-    int: 0.9,
+  decays: PersonSkills = {
+    hacking: 0.9,
+    strength: 0.9,
+    defense: 0.9,
+    dexterity: 0.9,
+    agility: 0.9,
+    charisma: 0.9,
+    intelligence: 0.9,
   };
 
   constructor(params: ActionParams | null = null) {
@@ -108,10 +99,10 @@ export abstract class ActionClass {
   getActionTime(bladeburner: Bladeburner, person: Person): number {
     const difficulty = this.getDifficulty();
     let baseTime = difficulty / BladeburnerConstants.DifficultyToTimeFactor;
-    const skillFac = bladeburner.skillMultipliers.actionTime; // Always < 1
+    const skillFac = bladeburner.getSkillMult(BladeMultName.actionTime); // Always < 1
 
-    const effAgility = person.skills.agility * bladeburner.skillMultipliers.effAgi;
-    const effDexterity = person.skills.dexterity * bladeburner.skillMultipliers.effDex;
+    const effAgility = person.skills.agility * bladeburner.getSkillMult(BladeMultName.effAgi);
+    const effDexterity = person.skills.dexterity * bladeburner.getSkillMult(BladeMultName.effDex);
     const statFac =
       0.5 *
       (Math.pow(effAgility, BladeburnerConstants.EffAgiExponentialFactor) +
@@ -164,17 +155,8 @@ export abstract class ActionClass {
   getSuccessChance(inst: Bladeburner, person: Person, { est }: SuccessChanceParams = { est: false }): number {
     let difficulty = this.getDifficulty();
     let competence = 0;
-    for (const stat of Object.keys(this.weights)) {
-      if (Object.hasOwn(this.weights, stat)) {
-        const playerStatLvl = person.queryStatFromString(stat);
-        const key = "eff" + stat.charAt(0).toUpperCase() + stat.slice(1);
-        let effMultiplier = inst.skillMultipliers[key];
-        if (effMultiplier == null) {
-          console.error(`Failed to find Bladeburner Skill multiplier for: ${stat}`);
-          effMultiplier = 1;
-        }
-        competence += this.weights[stat] * Math.pow(effMultiplier * playerStatLvl, this.decays[stat]);
-      }
+    for (const stat of getRecordKeys(person.skills)) {
+      competence += this.weights[stat] * Math.pow(inst.getEffectiveSkillLevel(person, stat), this.decays[stat]);
     }
     competence *= calculateIntelligenceBonus(person.skills.intelligence, 0.75);
     competence *= inst.calculateStaminaPenalty();
@@ -185,14 +167,10 @@ export abstract class ActionClass {
     difficulty *= this.getChaosSuccessFactor(inst);
 
     // Factor skill multipliers into success chance
-    competence *= inst.skillMultipliers.successChanceAll;
+    competence *= inst.getSkillMult(BladeMultName.successChanceAll);
     competence *= this.getActionTypeSkillSuccessBonus(inst);
-    if (this.isStealth) {
-      competence *= inst.skillMultipliers.successChanceStealth;
-    }
-    if (this.isKill) {
-      competence *= inst.skillMultipliers.successChanceKill;
-    }
+    if (this.isStealth) competence *= inst.getSkillMult(BladeMultName.successChanceStealth);
+    if (this.isKill) competence *= inst.getSkillMult(BladeMultName.successChanceKill);
 
     // Augmentation multiplier
     competence *= person.mults.bladeburner_success_chance;

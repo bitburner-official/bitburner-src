@@ -22,7 +22,7 @@ export const GeneralActions: Record<BladeGeneralActionName, GeneralAction> = {
   [BladeGeneralActionName.recruitment]: new GeneralAction({
     name: BladeGeneralActionName.recruitment,
     getActionTime: function (bladeburner, person) {
-      const effCharisma = person.skills.charisma * bladeburner.skillMultipliers.effCha;
+      const effCharisma = bladeburner.getEffectiveSkillLevel(person, "charisma");
       const charismaFactor = Math.pow(effCharisma, 0.81) + effCharisma / 90;
       return Math.max(10, Math.round(BladeburnerConstants.BaseRecruitmentTimeNeeded - charismaFactor));
     },
