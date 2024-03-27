@@ -1,5 +1,16 @@
 import { SaveData } from "../types";
 
+export abstract class SaveDataError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = this.constructor.name;
+  }
+}
+
+export class UnsupportedSaveData extends SaveDataError {}
+
+export class InvalidSaveData extends SaveDataError {}
+
 export function canUseBinaryFormat(): boolean {
   return "CompressionStream" in globalThis;
 }
@@ -11,7 +22,24 @@ async function compress(dataString: string): Promise<Uint8Array> {
 
 async function decompress(binaryData: Uint8Array): Promise<string> {
   const decompressedReadableStream = new Blob([binaryData]).stream().pipeThrough(new DecompressionStream("gzip"));
-  return await new Response(decompressedReadableStream).text();
+  const reader = decompressedReadableStream.pipeThrough(new TextDecoderStream()).getReader();
+  let result = "";
+  // Use "done" here to stop Lint from showing error
+  const done = false;
+  try {
+    while (!done) {
+      const readResult = await reader.read();
+      if (readResult.done) {
+        break;
+      }
+      result += readResult.value;
+    }
+  } catch (error) {
+    throw new InvalidSaveData(String(error));
+  } finally {
+    reader.releaseLock();
+  }
+  return result;
 }
 
 export async function encodeJsonSaveString(jsonSaveString: string): Promise<SaveData> {
@@ -30,7 +58,7 @@ export async function encodeJsonSaveString(jsonSaveString: string): Promise<Save
 export async function decodeSaveData(saveData: SaveData): Promise<string> {
   if (saveData instanceof Uint8Array) {
     if (!canUseBinaryFormat()) {
-      throw new Error("Your browser does not support Compression Streams API");
+      throw new UnsupportedSaveData("Your browser does not support Compression Streams API");
     }
     return await decompress(saveData);
   } else {

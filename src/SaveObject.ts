@@ -39,7 +39,7 @@ import { getRecordValues } from "./Types/Record";
 import { ExportMaterial } from "./Corporation/Actions";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
 import { SaveData } from "./types";
-import { canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
+import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
 import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
 
 /* SaveObject.js
@@ -197,7 +197,10 @@ class BitburnerSaveObject {
     try {
       decodedSaveData = await decodeSaveData(saveData);
     } catch (error) {
-      console.error(error); // We'll handle below
+      console.error(error);
+      if (error instanceof SaveDataError) {
+        return Promise.reject(error);
+      }
     }
 
     if (!decodedSaveData || decodedSaveData === "") {

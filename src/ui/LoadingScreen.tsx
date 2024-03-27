@@ -36,7 +36,7 @@ export function LoadingScreen(): React.ReactElement {
         await Engine.load(saveData);
       } catch (error) {
         console.error(error);
-        ActivateRecoveryMode();
+        ActivateRecoveryMode(error);
         await Engine.load("");
         setLoaded(true);
         return;
