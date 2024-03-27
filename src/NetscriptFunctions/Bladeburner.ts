@@ -296,7 +296,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
           Player.skills.dexterity >= 100 &&
           Player.skills.agility >= 100
         ) {
-          Player.bladeburner = new Bladeburner();
+          Player.startBladeburner();
           helpers.log(ctx, () => "You have been accepted into the Bladeburner division");
 
           return true;

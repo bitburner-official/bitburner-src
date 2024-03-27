@@ -258,7 +258,6 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         },
         "randomEventCounter": 303,
         "rank": 2000,
-        "skillMultipliers": {},
         "skillPoints": 666,
         "skills": {},
         "sleeveSize": 0,

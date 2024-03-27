@@ -20,7 +20,6 @@ import { NumberInput } from "../../ui/React/NumberInput";
 import { Hashes } from "../../ui/React/Hashes";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { GangConstants } from "../../Gang/data/Constants";
 import { checkForMessagesToSend } from "../../Message/MessageHelpers";
 import { getEnumHelper } from "../../utils/EnumHelper";
@@ -72,7 +71,7 @@ export function General({ parentRerender }: { parentRerender: () => void }): Rea
 
   // Blade functions
   const joinBladeburner = () => {
-    Player.bladeburner = new Bladeburner();
+    Player.startBladeburner();
     parentRerender();
   };
   const leaveBladeburner = () => {

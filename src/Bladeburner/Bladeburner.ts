@@ -15,6 +15,7 @@ import {
   CityName,
   FactionName,
 } from "@enums";
+import { getKeyList } from "../utils/helpers/getKeyList";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { formatNumberNoSuffix } from "../ui/formatNumber";
 import { Skills } from "./data/Skills";
@@ -99,11 +100,14 @@ export class Bladeburner {
   consoleLogs: string[] = ["Bladeburner Console", "Type 'help' to see console commands"];
 
   constructor() {
-    // Max Stamina is based on stats and Bladeburner-specific bonuses
-    this.calculateMaxStamina();
-    this.stamina = this.maxStamina;
     this.contracts = createContracts();
     this.operations = createOperations();
+  }
+
+  // Initialization code that is dependent on Player is here instead of in the constructor
+  init() {
+    this.calculateMaxStamina();
+    this.stamina = this.maxStamina;
   }
 
   getCurrentCity(): City {
@@ -1410,22 +1414,27 @@ export class Bladeburner {
     return null;
   }
 
+  static keysToSave = getKeyList(Bladeburner, { removedKeys: ["skillMultipliers"] });
+  // Don't load contracts or operations because of the special loading method they use, see fromJSON
+  static keysToLoad = getKeyList(Bladeburner, { removedKeys: ["skillMultipliers", "contracts", "operations"] });
+
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("Bladeburner", this);
+    return Generic_toJSON("Bladeburner", this, Bladeburner.keysToSave);
   }
 
   /** Initializes a Bladeburner object from a JSON save state. */
   static fromJSON(value: IReviverValue): Bladeburner {
+    // operations and contracts are not loaded directly from the save, we load them in using a different method
     const contractsData = value.data?.contracts;
     const operationsData = value.data?.operations;
-    // Ensures that contracts and operations will be cleanly initialized
-    delete value.data?.contracts;
-    delete value.data?.operations;
-    const bladeburner = Generic_fromJSON(Bladeburner, value.data);
-    // Load back the partial contracts/operations data removed earlier
+    const bladeburner = Generic_fromJSON(Bladeburner, value.data, Bladeburner.keysToLoad);
+    // Loading this way allows better typesafety and also allows faithfully reconstructing contracts/operations
+    // even from save data that is missing a lot of static info about the objects.
     loadContractsData(contractsData, bladeburner.contracts);
     loadOperationsData(operationsData, bladeburner.operations);
+    // Regenerate skill multiplier data, which is not included in savedata
+    bladeburner.updateSkillMultipliers();
     return bladeburner;
   }
 }
