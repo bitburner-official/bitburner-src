@@ -58,7 +58,7 @@ export class Operation extends LevelableActionClass {
     return this.save("Operation", "teamCount");
   }
   loadData(loadedObject: Operation): void {
-    this.teamCount = clampInteger(loadedObject.teamCount);
+    this.teamCount = clampInteger(loadedObject.teamCount, 0);
     LevelableActionClass.prototype.loadData.call(this, loadedObject);
   }
 

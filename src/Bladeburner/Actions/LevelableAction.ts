@@ -77,10 +77,10 @@ export abstract class LevelableActionClass extends ActionClass {
   loadData(loadedObject: LevelableActionClass) {
     this.maxLevel = clampInteger(loadedObject.maxLevel, 1);
     this.level = clampInteger(loadedObject.level, 1, this.maxLevel);
-    this.count = clampInteger(loadedObject.count);
+    this.count = clampInteger(loadedObject.count, 0);
     this.autoLevel = !!loadedObject.autoLevel;
-    this.successes = clampInteger(loadedObject.successes);
-    this.failures = clampInteger(loadedObject.failures);
+    this.successes = clampInteger(loadedObject.successes, 0);
+    this.failures = clampInteger(loadedObject.failures, 0);
   }
   /** Create a basic object just containing the relevant data for a levelable action */
   save<T extends LevelableActionClass>(
