@@ -140,7 +140,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Contract",
             "data": {
               "autoLevel": true,
-              "count": 0,
+              "count": 117,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -151,7 +151,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Contract",
             "data": {
               "autoLevel": true,
-              "count": 0,
+              "count": 125,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,
@@ -162,7 +162,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Contract",
             "data": {
               "autoLevel": true,
-              "count": 0,
+              "count": 115,
               "failures": 0,
               "level": 1,
               "maxLevel": 1,

@@ -7,7 +7,6 @@ import { LevelableActionClass, LevelableActionParams } from "./LevelableAction";
 
 export class Contract extends LevelableActionClass {
   type: BladeActionType.contract = BladeActionType.contract;
-  count = 0;
   name: BladeContractName = BladeContractName.tracking;
   get id(): ActionIdentifier {
     return { type: this.type, name: this.name };
