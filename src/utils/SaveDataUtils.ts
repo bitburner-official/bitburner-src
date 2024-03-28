@@ -30,8 +30,6 @@ async function decompress(binaryData: Uint8Array): Promise<string> {
     }
   } catch (error) {
     throw new InvalidSaveData(String(error));
-  } finally {
-    reader.releaseLock();
   }
   return result;
 }
