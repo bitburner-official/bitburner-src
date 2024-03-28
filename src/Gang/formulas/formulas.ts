@@ -27,7 +27,7 @@ export function calculateRespectGain(gang: FormulaGang, member: GangMember, task
   const territoryPenalty = (0.2 * gang.territory + 0.8) * currentNodeMults.GangSoftcap;
   if (isNaN(territoryMult) || territoryMult <= 0) return 0;
   const respectMult = calculateWantedPenalty(gang);
-  return Math.pow(11 * task.baseRespect * statWeight * territoryMult * respectMult, territoryPenalty);
+  return Math.pow(task.baseRespect * statWeight * territoryMult * respectMult, territoryPenalty);
 }
 
 export function calculateWantedLevelGain(gang: FormulaGang, member: GangMember, task: GangMemberTask): number {
@@ -44,9 +44,9 @@ export function calculateWantedLevelGain(gang: FormulaGang, member: GangMember, 
   const territoryMult = Math.max(0.005, Math.pow(gang.territory * 100, task.territory.wanted) / 100);
   if (isNaN(territoryMult) || territoryMult <= 0) return 0;
   if (task.baseWanted < 0) {
-    return 0.4 * task.baseWanted * statWeight * territoryMult;
+    return task.baseWanted * statWeight * territoryMult;
   }
-  const calc = (7 * task.baseWanted) / Math.pow(3 * statWeight * territoryMult, 0.8);
+  const calc = task.baseWanted / Math.pow(3 * statWeight * territoryMult, 0.8);
 
   // Put an arbitrary cap on this to prevent wanted level from rising too fast if the
   // denominator is very small. Might want to rethink formula later
@@ -69,7 +69,7 @@ export function calculateMoneyGain(gang: FormulaGang, member: GangMember, task: 
   if (isNaN(territoryMult) || territoryMult <= 0) return 0;
   const respectMult = calculateWantedPenalty(gang);
   const territoryPenalty = (0.2 * gang.territory + 0.8) * currentNodeMults.GangSoftcap;
-  return Math.pow(5 * task.baseMoney * statWeight * territoryMult * respectMult, territoryPenalty);
+  return Math.pow(task.baseMoney * statWeight * territoryMult * respectMult, territoryPenalty);
 }
 
 export function calculateAscensionPointsGain(exp: number): number {

@@ -763,6 +763,11 @@ interface BladeburnerCurAction {
   name: string;
 }
 
+declare enum GangMemberType {
+  Hacker = "Hacker",
+  Enforcer = "Enforcer",
+}
+
 /**
  * Gang general info.
  * @public
@@ -770,8 +775,6 @@ interface BladeburnerCurAction {
 interface GangGenInfo {
   /** Name of faction that the gang belongs to ("Slum Snakes", etc.) */
   faction: string;
-  /** Indicating whether or not it's a hacking gang */
-  isHacking: boolean;
   /** Money earned per game cycle */
   moneyGainRate: number;
   /** Gang's power for territory warfare */
@@ -792,7 +795,7 @@ interface GangGenInfo {
   wantedLevelGainRate: number;
   /** Indicating if territory clashes are enabled */
   territoryWarfareEngaged: boolean;
-  /** Number indicating the current wanted penalty */
+  /** Number indicating the current wanted penalty, from 1 to 0. Respect and money gains are multiplied by this number. */
   wantedPenalty: number;
 }
 
@@ -818,10 +821,8 @@ interface GangTaskStats {
   name: string;
   /** Task Description */
   desc: string;
-  /** Is a task of a hacking gang */
-  isHacking: boolean;
-  /** Is a task of a combat gang */
-  isCombat: boolean;
+  /** If set, the task is only available to those member types */
+  restrictedTypes?: GangMemberType[];
   /** Base respect earned */
   baseRespect: number;
   /** Base wanted earned */
@@ -879,6 +880,8 @@ interface GangTerritory {
 interface GangMemberInfo {
   /** Name of the gang member */
   name: string;
+  /** Gang member type */
+  type: GangMemberType;
   /** Currently assigned task */
   task: string;
   /** Amount of Respect earned by member since they last Ascended */
@@ -3713,6 +3716,36 @@ export interface Gang {
    * Returns `Infinity` if you have reached the gang size limit.
    */
   respectForNextRecruit(): number;
+
+  /**
+   * Retrieves the gang member types.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @returns An array containing all gang member types.
+   */
+  getMemberTypes(): GangMemberType[];
+
+  /**
+   * Count how many gang members are of the specified type.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @param type - Gang member type.
+   * @returns The number of gang members of specified type.
+   */
+  getMemberTypeCount(type: GangMemberType): number;
+
+  /**
+   * The maximum amount of gang members of this type you can have.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @param type - Gang member type.
+   * @returns The maximum number of gang members of specified type.
+   */
+  getMemberTypeMax(type: GangMemberType): number;
+
   /**
    * Recruit a new gang member.
    * @remarks
@@ -3725,20 +3758,33 @@ export interface Gang {
    * * There already exists a member with the specified name
    *
    * @param name - Name of member to recruit.
+   * @param isEnforcer - True if recruiting an enforcer, false if hacker.
    * @returns True if the member was successfully recruited, false otherwise.
    */
-  recruitMember(name: string): boolean;
+  recruitMember(name: string, isEnforcer: boolean): boolean;
+
+  /**
+   * List gang task names.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Get the name of all valid tasks that Gang members can be assigned to.
+   * Includes both enforcer and hacker tasks.
+   *
+   * @returns All valid tasks that Gang members can be assigned to.
+   */
+  getTaskNames(): string[];
 
   /**
    * List member task names.
    * @remarks
    * RAM cost: 1 GB
    *
-   * Get the name of all valid tasks that Gang members can be assigned to.
+   * Get the name of all valid tasks that the specified Gang Member can be assigned to.
    *
-   * @returns All valid tasks that Gang members can be assigned to.
+   * @returns All valid tasks that Gang Member can be assigned to.
    */
-  getTaskNames(): string[];
+  getMemberTaskNames(memberName: string): string[];
 
   /**
    * Set gang member to task.
@@ -3886,6 +3932,18 @@ export interface Gang {
    * @returns Chance you have to win a clash with the specified gang.
    */
   getChanceToWinClash(gangName: string): number;
+
+  /**
+   * Kills a gang member.
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * Has the same effect as dying in a clash, reducing respect. Only useful to replace them with a different type.
+   *
+   * @param memberName - Name of member.
+   * @returns True if successful, false otherwise.
+   */
+  executeMember(memberName: string): boolean;
 
   /**
    * Get bonus time.

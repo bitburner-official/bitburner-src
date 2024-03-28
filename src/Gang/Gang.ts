@@ -23,9 +23,9 @@ import { GangMember } from "./GangMember";
 
 import { WorkerScript } from "../Netscript/WorkerScript";
 import { Player } from "@player";
-import { PowerMultiplier } from "./data/power";
-import { FactionName } from "@enums";
+import { FactionName, GangMemberType } from "@enums";
 import { CONSTANTS } from "../Constants";
+import { AllGangFactionInfo } from "./data/FactionInfo";
 
 export const GangPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -34,8 +34,6 @@ export class Gang {
   members: GangMember[];
   wanted: number;
   respect: number;
-
-  isHackingGang: boolean;
 
   /** Respect gain rate, per cycle */
   respectGainRate: number;
@@ -53,13 +51,11 @@ export class Gang {
 
   notifyMemberDeath: boolean;
 
-  constructor(facName = FactionName.SlumSnakes, hacking = false) {
+  constructor(facName = FactionName.SlumSnakes) {
     this.facName = facName;
     this.members = [];
     this.wanted = 1;
     this.respect = 1;
-
-    this.isHackingGang = hacking;
 
     this.respectGainRate = 0;
     this.wantedGainRate = 0;
@@ -164,9 +160,9 @@ export class Gang {
   /** Process Territory and Power
    * @param numCycles The number of cycles to process. */
   processTerritoryAndPowerGains(numCycles: number): void {
-    function calculateTerritoryGain(winGang: string, loseGang: string): number {
-      const powerBonus = Math.max(1, 1 + Math.log(AllGangs[winGang].power / AllGangs[loseGang].power) / Math.log(50));
-      const gains = Math.min(AllGangs[loseGang].territory, powerBonus * 0.0001 * (Math.random() + 0.5));
+    function calculateTerritoryGain(winnerPower: number, loserPower: number, loserTerritory: number): number {
+      const powerBonus = Math.max(1, 1 + Math.log(winnerPower / loserPower) / Math.log(50));
+      const gains = Math.min(loserTerritory, powerBonus * 0.0001 * (Math.random() + 0.5));
       return gains;
     }
 
@@ -186,14 +182,11 @@ export class Gang {
           if (gainRoll < 0.5) {
             // Multiplicative gain (50% chance)
             // This is capped per cycle, to prevent it from getting out of control
-            const multiplicativeGain = AllGangs[name].power * 0.005;
-            AllGangs[name].power += Math.min(0.85, multiplicativeGain);
+            AllGangs[name].power += Math.min(0.85, AllGangs[name].power * 0.005);
           } else {
             // Additive gain (50% chance)
-            const powerMult = PowerMultiplier[name];
-            if (powerMult === undefined) throw new Error("Should not be undefined");
-            const additiveGain = 0.75 * gainRoll * AllGangs[name].territory * powerMult;
-            AllGangs[name].power += additiveGain;
+            AllGangs[name].power +=
+              0.75 * gainRoll * AllGangs[name].territory * AllGangFactionInfo[name].territoryPowerMultiplier;
           }
         }
       }
@@ -232,7 +225,7 @@ export class Gang {
 
         if (Math.random() < thisChance) {
           if (AllGangs[otherGang].territory <= 0) return;
-          const territoryGain = calculateTerritoryGain(thisGang, otherGang);
+          const territoryGain = calculateTerritoryGain(thisPwr, otherPwr, AllGangs[otherGang].territory);
           AllGangs[thisGang].territory += territoryGain;
           AllGangs[otherGang].territory -= territoryGain;
           if (thisGang === gangName) {
@@ -245,7 +238,7 @@ export class Gang {
           }
         } else {
           if (AllGangs[thisGang].territory <= 0) return;
-          const territoryGain = calculateTerritoryGain(otherGang, thisGang);
+          const territoryGain = calculateTerritoryGain(otherPwr, thisPwr, AllGangs[thisGang].territory);
           AllGangs[thisGang].territory -= territoryGain;
           AllGangs[otherGang].territory += territoryGain;
           if (thisGang === gangName) {
@@ -287,9 +280,9 @@ export class Gang {
 
     for (let i = this.members.length - 1; i >= 0; --i) {
       const member = this.members[i];
+      const task = member.getTask();
 
-      // Only members assigned to Territory Warfare can die
-      if (member.task !== "Territory Warfare") continue;
+      if (!task.deathRisk) continue;
 
       // Chance to die is decreased based on defense
       const modifiedDeathChance = baseDeathChance / Math.pow(member.def, 0.6);
@@ -322,15 +315,27 @@ export class Gang {
     return Math.floor(Math.log(this.respect) / Math.log(recruitCostBase)) + numFreeMembers - this.members.length; //else
   }
 
-  recruitMember(name: string): boolean {
+  getRecruitsAvailableByType(type: GangMemberType): number {
+    return AllGangFactionInfo[this.facName].maxMembers[type] - this.getMembersByType(type).length;
+  }
+
+  getMembersByType(type: GangMemberType): GangMember[] {
+    return this.members.filter((m) => m.type === type);
+  }
+
+  memberTypeMax(type: GangMemberType) {
+    return AllGangFactionInfo[this.facName].maxMembers[type];
+  }
+
+  recruitMember(name: string, type: GangMemberType): boolean {
     name = String(name);
-    if (name === "" || !this.canRecruitMember()) return false;
+    if (name === "" || type === null || !this.canRecruitMember()) return false;
+    if (this.getRecruitsAvailableByType(type) <= 0) return false;
 
     // Check for already-existing names
-    const sameNames = this.members.filter((m) => m.name === name);
-    if (sameNames.length >= 1) return false;
+    if (this.members.some((m) => m.name === name)) return false;
 
-    const member = new GangMember(name);
+    const member = new GangMember(name, type);
     this.members.push(member);
     return true;
   }
@@ -344,13 +349,12 @@ export class Gang {
   calculatePower(): number {
     let memberTotal = 0;
     for (let i = 0; i < this.members.length; ++i) {
-      if (this.members[i].task !== "Territory Warfare") continue;
       memberTotal += this.members[i].calculatePower();
     }
-    return 0.015 * Math.max(0.002, this.getTerritory()) * memberTotal;
+    return Math.max(0.002, this.getTerritory()) * memberTotal;
   }
 
-  killMember(member: GangMember): void {
+  killMember(member: GangMember, suppressMessage = false): void {
     // Player loses a percentage of total respect, plus whatever respect that member has earned
     const totalRespect = this.respect;
     const lostRespect = 0.05 * totalRespect + member.earnedRespect;
@@ -364,7 +368,7 @@ export class Gang {
     }
 
     // Notify of death
-    if (this.notifyMemberDeath) {
+    if (this.notifyMemberDeath && !suppressMessage) {
       dialogBoxCreate(`${member.name} was killed in a gang clash! You lost ${lostRespect} respect`);
     }
   }
@@ -398,13 +402,13 @@ export class Gang {
   }
 
   /** Returns only valid tasks for this gang. Excludes 'Unassigned' */
-  getAllTaskNames(): string[] {
+  getAllTaskNames(type?: GangMemberType): string[] {
     return Object.keys(GangMemberTasks).filter((taskName: string) => {
       const task = GangMemberTasks[taskName];
       if (task == null) return false;
       if (task.name === "Unassigned") return false;
-      // yes you need both checks
-      return this.isHackingGang === task.isHacking || !this.isHackingGang === task.isCombat;
+      if (type === undefined || task.restrictedTypes === undefined) return true;
+      return task.restrictedTypes.includes(type);
     });
   }
 

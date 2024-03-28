@@ -16,35 +16,9 @@ import { GangMemberUpgrade } from "../GangMemberUpgrade";
 import { Money } from "../../ui/React/Money";
 import { GangMember } from "../GangMember";
 import { UpgradeType } from "../data/upgrades";
-import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { StatsRow } from "../../ui/React/StatsRow";
 import { useRerender } from "../../ui/React/hooks";
-
-interface INextRevealProps {
-  upgrades: string[];
-  type: UpgradeType;
-}
-
-function NextReveal(props: INextRevealProps): React.ReactElement {
-  const gang = useGang();
-  const upgrades = Object.keys(GangMemberUpgrades)
-    .filter((upgName: string) => {
-      const upg = GangMemberUpgrades[upgName];
-      if (Player.money > gang.getUpgradeCost(upg)) return false;
-      if (upg.type !== props.type) return false;
-      if (props.upgrades.includes(upgName)) return false;
-      return true;
-    })
-    .map((upgName: string) => GangMemberUpgrades[upgName]);
-
-  if (upgrades.length === 0) return <></>;
-  return (
-    <Typography>
-      Next at <Money money={gang.getUpgradeCost(upgrades[0])} />
-    </Typography>
-  );
-}
 
 function PurchasedUpgrade({ upgName }: { upgName: string }): React.ReactElement {
   const upg = GangMemberUpgrades[upgName];
@@ -86,7 +60,6 @@ interface IPanelProps {
 }
 
 function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
-  const gang = useGang();
   const rerender = useRerender();
   const [currentCategory, setCurrentCategory] = useState("Weapons");
 
@@ -94,7 +67,6 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
     return Object.keys(GangMemberUpgrades)
       .filter((upgName: string) => {
         const upg = GangMemberUpgrades[upgName];
-        if (Player.money < gang.getUpgradeCost(upg)) return false;
         if (upg.type !== type) return false;
         if (list.includes(upgName)) return false;
         return true;
@@ -111,6 +83,7 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
   const armorUpgrades = filterUpgrades(props.member.upgrades, UpgradeType.Armor);
   const vehicleUpgrades = filterUpgrades(props.member.upgrades, UpgradeType.Vehicle);
   const rootkitUpgrades = filterUpgrades(props.member.upgrades, UpgradeType.Rootkit);
+  const equipUpgrades = filterUpgrades(props.member.augmentations, UpgradeType.Equipment);
   const augUpgrades = filterUpgrades(props.member.augmentations, UpgradeType.Augmentation);
 
   const categories: Record<string, (GangMemberUpgrade[] | UpgradeType)[]> = {
@@ -118,6 +91,7 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
     Armor: [armorUpgrades, UpgradeType.Armor],
     Vehicles: [vehicleUpgrades, UpgradeType.Vehicle],
     Rootkits: [rootkitUpgrades, UpgradeType.Rootkit],
+    Equipment: [equipUpgrades, UpgradeType.Equipment],
     Augmentations: [augUpgrades, UpgradeType.Augmentation],
   };
 
@@ -214,7 +188,6 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
                 <UpgradeButton key={upg.name} rerender={rerender} member={props.member} upg={upg} />
               ))}
             </Box>
-            <NextReveal type={categories[currentCategory][1] as UpgradeType} upgrades={props.member.upgrades} />
           </Box>
         </span>
       </Box>

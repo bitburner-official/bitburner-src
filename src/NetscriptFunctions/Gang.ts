@@ -6,7 +6,7 @@ import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
 import { GangPromise } from "../Gang/Gang";
 import { Player } from "@player";
-import { FactionName } from "@enums";
+import { GangMemberType } from "@enums";
 import { GangConstants } from "../Gang/data/Constants";
 import { AllGangs } from "../Gang/AllGangs";
 import { GangMemberTasks } from "../Gang/GangMemberTasks";
@@ -43,8 +43,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       if (Player.gang) return false;
       if (!Player.factions.includes(faction)) return false;
 
-      const isHacking = faction === FactionName.NiteSec || faction === FactionName.TheBlackHand;
-      Player.startGang(faction, isHacking);
+      Player.startGang(faction);
       return true;
     },
     inGang: () => () => {
@@ -84,7 +83,6 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       return {
         faction: gang.facName,
-        isHacking: gang.isHackingGang,
         moneyGainRate: gang.moneyGainRate,
         power: gang.getPower(),
         respect: gang.respect,
@@ -113,6 +111,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const member = getGangMember(ctx, memberName);
       return {
         name: member.name,
+        type: member.type,
         task: member.task,
         earnedRespect: member.earnedRespect,
         hack: member.hack,
@@ -158,6 +157,9 @@ export function NetscriptGang(): InternalAPI<IGang> {
         moneyGain: member.calculateMoneyGain(gang),
       };
     },
+    getMemberTypes: () => () => {
+      return Object.values(GangMemberType);
+    },
     canRecruitMember: (ctx) => () => {
       const gang = getGang(ctx);
       return gang.canRecruitMember();
@@ -170,10 +172,21 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const gang = getGang(ctx);
       return gang.respectForNextRecruit();
     },
-    recruitMember: (ctx) => (_memberName) => {
-      const memberName = helpers.string(ctx, "memberName", _memberName);
+    getMemberTypeCount: (ctx) => (_type) => {
       const gang = getGang(ctx);
-      const recruited = gang.recruitMember(memberName);
+      const type = getEnumHelper("GangMemberType").nsGetMember(ctx, _type);
+      return gang.members.filter((x) => x.type == type).length;
+    },
+    getMemberTypeMax: (ctx) => (_type) => {
+      const gang = getGang(ctx);
+      const type = getEnumHelper("GangMemberType").nsGetMember(ctx, _type);
+      return gang.memberTypeMax(type);
+    },
+    recruitMember: (ctx) => (_memberName, _type) => {
+      const memberName = helpers.string(ctx, "memberName", _memberName);
+      const type = getEnumHelper("GangMemberType").nsGetMember(ctx, _type);
+      const gang = getGang(ctx);
+      const recruited = gang.recruitMember(memberName, type);
       if (memberName === "") {
         ctx.workerScript.log("gang.recruitMember", () => `Failed to recruit Gang Member. Name must be provided.`);
         return false;
@@ -183,7 +196,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       } else {
         ctx.workerScript.log(
           "gang.recruitMember",
-          () => `Failed to recruit Gang Member '${memberName}'. Name already used.`,
+          () => `Failed to recruit Gang Member '${memberName}'. Name already used or over the maximum amount.`,
         );
         return recruited;
       }
@@ -191,7 +204,13 @@ export function NetscriptGang(): InternalAPI<IGang> {
     getTaskNames: (ctx) => () => {
       const gang = getGang(ctx);
       const tasks = gang.getAllTaskNames();
-      tasks.unshift("Unassigned");
+      return tasks;
+    },
+    getMemberTaskNames: (ctx) => (_memberName) => {
+      const gang = getGang(ctx);
+      const memberName = helpers.string(ctx, "memberName", _memberName);
+      const member = getGangMember(ctx, memberName);
+      const tasks = gang.getAllTaskNames(member.type);
       return tasks;
     },
     setMemberTask: (ctx) => (_memberName, _taskName) => {
@@ -199,7 +218,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const taskName = helpers.string(ctx, "taskName", _taskName);
       const gang = getGang(ctx);
       const member = getGangMember(ctx, memberName);
-      if (!gang.getAllTaskNames().includes(taskName)) {
+      if (!gang.getAllTaskNames(member.type).includes(taskName)) {
         ctx.workerScript.log(
           "gang.setMemberTask",
           () =>
@@ -335,6 +354,14 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const otherPower = AllGangs[otherGang].power;
 
       return playerPower / (otherPower + playerPower);
+    },
+    executeMember: (ctx) => (_memberName) => {
+      const memberName = helpers.string(ctx, "memberName", _memberName);
+      const gang = getGang(ctx);
+      const member = gang.members.find((x) => x.name === memberName);
+      if (!member) return false;
+      gang.killMember(member, true);
+      return true;
     },
     getBonusTime: (ctx) => () => {
       const gang = getGang(ctx);
