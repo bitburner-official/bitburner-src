@@ -3,7 +3,7 @@ import { Crime } from "../Crime/Crime";
 import { newWorkStats, scaleWorkStats, WorkStats, multWorkStats } from "./WorkStats";
 import { Person as IPerson } from "@nsdefs";
 import { CONSTANTS } from "../Constants";
-import { ClassType, FactionWorkType, LocationName } from "@enums";
+import { ClassType, FactionWorkType, LocationName, AugmentationName } from "@enums";
 import {
   getFactionFieldWorkRepGain,
   getFactionSecurityWorkRepGain,
@@ -19,6 +19,7 @@ import { serverMetadata } from "../Server/data/servers";
 import { Company } from "../Company/Company";
 import { CompanyPosition } from "../Company/CompanyPosition";
 import { isMember } from "../utils/EnumHelper";
+import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 
 const gameCPS = 1000 / CONSTANTS.MilliPerCycle; // 5 cycles per second
 export const FactionWorkStats: Record<FactionWorkType, WorkStats> = {
@@ -119,7 +120,18 @@ export const calculateCompanyWorkStats = (
   const gains = scaleWorkStats(
     multWorkStats(
       {
-        money: companyPosition.baseSalary * company.salaryMultiplier * bn11Mult * currentNodeMults.CompanyWorkMoney,
+        money:
+          companyPosition.baseSalary *
+          company.salaryMultiplier *
+          bn11Mult *
+          currentNodeMults.CompanyWorkMoney *
+          (Player.augmentations
+            .map((aug: PlayerOwnedAugmentation) => {
+              return aug.name;
+            })
+            .filter((aug) => aug == AugmentationName.EmpathySuppressor).length == 1
+            ? Math.pow(10, Object.values(Player.jobs).filter((job: string) => job == "Chief Executive Officer").length)
+            : 1),
         hackExp: companyPosition.hackingExpGain,
         strExp: companyPosition.strengthExpGain,
         defExp: companyPosition.defenseExpGain,

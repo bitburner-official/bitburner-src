@@ -531,6 +531,15 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       isSpecial: true,
       factions: [FactionName.Bladeburners],
     },
+    [AugmentationName.EmpathySuppressor]: {
+      repCost: 2.5e6,
+      moneyCost: 0,
+      info:
+        "Toggleable cerebral drug packet that floods the nervous system with feel-" +
+        "nothing medication whenever a non-zero level of oxytocin is detected.",
+      isSpecial: true,
+      factions: [FactionName.Silhouette],
+    },
     [AugmentationName.ENM]: {
       repCost: 1.5e4,
       moneyCost: 2.5e8,
