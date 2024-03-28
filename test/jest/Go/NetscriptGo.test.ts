@@ -99,20 +99,24 @@ describe("Netscript Go API unit tests", () => {
     it("should set the player's board to the requested size and opponent", () => {
       const board = ["OXX..", ".....", ".....", ".....", "..###"];
       Go.currentGame = boardStateFromSimpleBoard(board);
+      const mockLogger = jest.fn();
       const mockError = jest.fn();
 
-      const newBoard = resetBoardState(mockError, GoOpponent.SlumSnakes, 9);
+      const newBoard = resetBoardState(mockLogger, mockError, GoOpponent.SlumSnakes, 9);
 
       expect(newBoard?.[0].length).toEqual(9);
       expect(Go.currentGame.board.length).toEqual(9);
       expect(Go.currentGame.ai).toEqual(GoOpponent.SlumSnakes);
+      expect(mockError).not.toHaveBeenCalled();
+      expect(mockLogger).toHaveBeenCalledWith(`New game started: ${GoOpponent.SlumSnakes}, 9x9`);
     });
     it("should throw an error if an invalid opponent is requested", () => {
       const board = ["OXX..", ".....", ".....", ".....", "..###"];
       Go.currentGame = boardStateFromSimpleBoard(board);
+      const mockLogger = jest.fn();
       const mockError = jest.fn();
 
-      resetBoardState(mockError, GoOpponent.w0r1d_d43m0n, 9);
+      resetBoardState(mockLogger, mockError, GoOpponent.w0r1d_d43m0n, 9);
 
       expect(mockError).toHaveBeenCalledWith(
         `Invalid opponent requested (${GoOpponent.w0r1d_d43m0n}), this opponent has not yet been discovered`,
@@ -121,9 +125,10 @@ describe("Netscript Go API unit tests", () => {
     it("should throw an error if an invalid size is requested", () => {
       const board = ["OXX..", ".....", ".....", ".....", "..###"];
       Go.currentGame = boardStateFromSimpleBoard(board);
+      const mockLogger = jest.fn();
       const mockError = jest.fn();
 
-      resetBoardState(mockError, GoOpponent.TheBlackHand, 31337);
+      resetBoardState(mockLogger, mockError, GoOpponent.TheBlackHand, 31337);
 
       expect(mockError).toHaveBeenCalledWith("Invalid subnet size requested (31337), size must be 5, 7, 9, or 13");
     });
