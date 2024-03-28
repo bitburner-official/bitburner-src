@@ -113,7 +113,7 @@
 - Added basic protection for certain global values that could cause a recovery screen if reassigned (@Snarling)
 - Fixed conditions for an easter egg message (@cigarmemr)
 - (Bitverse) Changed listed difficulty for BN3 to "hard"
-- (CodingContract) Reduce incidence of $0 coding contract rewards in circumstances where the reward would be $0 (@trambelus)
+- (CodingContract) Reduce incidence of \$0 coding contract rewards in circumstances where the reward would be $0 (@trambelus)
 - (Corporation) Added better accounting of funds transactions (@jjclark1982)
 - (Corporation) Remove cooldown on starting over corporation, but maintain remaining cooldown for selling shares (@jjclark1982)
 - (Corporation) Removed some legacy code that was not doing anything (@catloversg)
@@ -3128,7 +3128,7 @@ Stanek Gift
 
   - Each stock now has a maximum number of shares you can purchase (both Long and Short positions combined)
   - Added getStockMaxShares() Netscript function to the TIX API
-  - The cost of 4S Market Data TIX API Access increased from $20b to $25b
+  - The cost of 4S Market Data TIX API Access increased from \$20b to $25b
 
 - Job Changes:
 
@@ -3157,7 +3157,7 @@ Stanek Gift
   - The sale price of materials can no longer be marked-up as high
   - Added a Research Tree mechanic. Spend Scientific Research on permanent upgrades for each industry
   - You can now redistribute earnings to shareholders (including yourself) as dividends
-  - Cost of "Smart Supply" upgraded reduced from $50b to $25b
+  - Cost of "Smart Supply" upgraded reduced from \$50b to $25b
   - Now has offline progress, which works similarly to the Gang/Bladeburner mechanics
   - Slightly reduced the amount of money offered to you by investment firms
   - Employee salaries now slowly increase over time
@@ -3168,7 +3168,7 @@ Stanek Gift
   - Buying back shares must now be done at a premium
   - Selling shares can now only be done once per hour
   - Selling large amounts of shares now immediately impacts stock price (during the transaction)
-  - Reduced the initial cost of the DreamSense upgrade from $8b to $4b, but increased its price multiplier
+  - Reduced the initial cost of the DreamSense upgrade from \$8b to $4b, but increased its price multiplier
   - Reduced the price multiplier for ABC SalesBots upgrade
 
 - Added getOrders() Netscript function to the TIX API
@@ -3456,7 +3456,7 @@ Stanek Gift
 
 - After joining the Bladeburners division, there is now a button to go to the Bladeburner content
   in the 'City' page
-- You now start with $250m in BitNode-8 (increased from $100m)
+- You now start with \$250m in BitNode-8 (increased from $100m)
 - Bug Fix: You can now no longer directly edit Hacknet Node values through NetscriptJS (hopefully)
 - Bug Fix: Bladeburners is no longer accessible in BN-8
 - Bug Fix: getBitNodeMultipliers() Netscript function now returns a copy rather than the original object
@@ -4123,7 +4123,7 @@ Similar concepts apply for Terminal Commands such as tail, and Netscript command
 - Cancelling a full time job early now only results in halved gains for reputation. Exp and money earnings are gained in full
 - Added exec() Netscript command, used to run scripts on other servers.
 - NEW HACKING MECHANICS: Whenever a server is hacked, its 'security level' is increased by a very small amount. The security level is denoted by a number between 1-100. A higher security level makes it harder to hack a server and also decreases the amount of money you steal from it. Two Netscript functions, weaken() and getServerSecurityLevel() level, were added. The weaken(server) function lowers a server's security level. See the Netscript documentation for more details
-- When donating to factions, the base rate is now $1,000,000 for 1 reputation point. Before, it was $1,000 for 1 reputation point.
+- When donating to factions, the base rate is now \$1,000,000 for 1 reputation point. Before, it was $1,000 for 1 reputation point.
 - Monetary costs for all Augmentations increased. They are now about ~3.3 - 3.75 times more expensive than before
 
 ## v0.17.1
@@ -4141,7 +4141,7 @@ Similar concepts apply for Terminal Commands such as tail, and Netscript command
 - Added getHostname() command in Netscript that returns the hostname of the server a script is running on
 - jQuery preventDefault() called when pressing ctrl+b in script editor
 - The Neuroflux Governor augmentation (the one that can be repeatedly leveled up) now increases ALL multipliers by 1%. To balance it out, it's price multiplier when it levels up was increased
-- Hacknet Node base production decreased from $1.75/s to $1.65/s
+- Hacknet Node base production decreased from \$1.75/s to $1.65/s
 - Fixed issue with nested for loops in Netscript (stupid Javascript references)
 - Added 'scp' command to Terminal and Netscript
 - Slightly nerfed Hacknet Node Kernel DNI and Hacknet Node Core DNI Augmentations
