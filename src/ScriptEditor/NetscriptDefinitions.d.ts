@@ -7562,7 +7562,7 @@ type CorpSmartSupplyOption = "leftovers" | "imports" | "none";
 
 /** Names of all cities
  * @public */
-declare enum CityName {
+declare const enum CityName {
   Aevum = "Aevum",
   Chongqing = "Chongqing",
   Sector12 = "Sector-12",
@@ -7573,7 +7573,7 @@ declare enum CityName {
 
 /** Names of all locations
  * @public */
-declare enum LocationName {
+declare const enum LocationName {
   AevumAeroCorp = "AeroCorp",
   AevumBachmanAndAssociates = "Bachman & Associates",
   AevumClarkeIncorporated = "Clarke Incorporated",
@@ -7641,7 +7641,7 @@ declare enum LocationName {
 
 /** Names of all companies
  * @public */
-declare enum CompanyName {
+declare const enum CompanyName {
   ECorp = "ECorp",
   MegaCorp = "MegaCorp",
   BachmanAndAssociates = "Bachman & Associates",
