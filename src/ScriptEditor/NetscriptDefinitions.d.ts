@@ -366,13 +366,13 @@ interface AugmentPair {
 }
 
 /** @public */
-declare enum PositionType {
+declare const enum PositionType {
   Long = "L",
   Short = "S",
 }
 
 /** @public */
-declare enum OrderType {
+declare const enum OrderType {
   LimitBuy = "Limit Buy Order",
   LimitSell = "Limit Sell Order",
   StopBuy = "Stop Buy Order",
@@ -7423,7 +7423,7 @@ export interface NS {
 
 // BASE ENUMS
 /** @public */
-declare enum ToastVariant {
+declare const enum ToastVariant {
   SUCCESS = "success",
   WARNING = "warning",
   ERROR = "error",
@@ -7431,7 +7431,7 @@ declare enum ToastVariant {
 }
 
 /** @public */
-declare enum CrimeType {
+declare const enum CrimeType {
   shoplift = "Shoplift",
   robStore = "Rob Store",
   mug = "Mug",
@@ -7447,14 +7447,14 @@ declare enum CrimeType {
 }
 
 /** @public */
-declare enum FactionWorkType {
+declare const enum FactionWorkType {
   hacking = "hacking",
   field = "field",
   security = "security",
 }
 
 /** @public */
-declare enum UniversityClassType {
+declare const enum UniversityClassType {
   computerScience = "Computer Science",
   dataStructures = "Data Structures",
   networks = "Networks",
@@ -7464,7 +7464,7 @@ declare enum UniversityClassType {
 }
 
 /** @public */
-declare enum GymType {
+declare const enum GymType {
   strength = "str",
   defense = "def",
   dexterity = "dex",
@@ -7472,7 +7472,7 @@ declare enum GymType {
 }
 
 /** @public */
-declare enum JobName {
+declare const enum JobName {
   software0 = "Software Engineering Intern",
   software1 = "Junior Software Engineer",
   software2 = "Senior Software Engineer",
@@ -7512,7 +7512,7 @@ declare enum JobName {
 }
 
 /** @public */
-declare enum JobField {
+declare const enum JobField {
   software = "Software",
   softwareConsultant = "Software Consultant",
   it = "IT",
