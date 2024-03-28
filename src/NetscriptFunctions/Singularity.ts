@@ -57,6 +57,7 @@ import { root } from "../Paths/Directory";
 import { getRecordEntries } from "../Types/Record";
 import { JobTracks } from "../Company/data/JobTracks";
 import { ServerConstants } from "../Server/data/Constants";
+import { notCondition, someCondition, haveJoinedFaction } from "../Faction/FactionJoinCondition";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -766,7 +767,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const fac = Factions[facName];
-      return [...fac.getInfo().inviteReqs].map((condition) => condition.toJSON());
+      const enemyNotJoinedReqs =
+        fac.getInfo().enemies.length > 0
+          ? [notCondition(someCondition(fac.getInfo().enemies.map((enemy) => haveJoinedFaction(enemy))))]
+          : [];
+      return [...fac.getInfo().inviteReqs, ...enemyNotJoinedReqs].map((condition) => condition.toJSON());
     },
     checkFactionInvitations: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);

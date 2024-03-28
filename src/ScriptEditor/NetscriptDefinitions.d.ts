@@ -7682,6 +7682,45 @@ declare enum CompanyName {
   NoodleBar = "Noodle Bar",
 }
 
+/** Names of all factions
+ * @public */
+declare enum FactionName {
+  Illuminati = "Illuminati",
+  Daedalus = "Daedalus",
+  TheCovenant = "The Covenant",
+  ECorp = "ECorp",
+  MegaCorp = "MegaCorp",
+  BachmanAssociates = "Bachman & Associates",
+  BladeIndustries = "Blade Industries",
+  NWO = "NWO",
+  ClarkeIncorporated = "Clarke Incorporated",
+  OmniTekIncorporated = "OmniTek Incorporated",
+  FourSigma = "Four Sigma",
+  KuaiGongInternational = "KuaiGong International",
+  FulcrumSecretTechnologies = "Fulcrum Secret Technologies",
+  BitRunners = "BitRunners",
+  TheBlackHand = "The Black Hand",
+  NiteSec = "NiteSec",
+  Aevum = "Aevum",
+  Chongqing = "Chongqing",
+  Ishima = "Ishima",
+  NewTokyo = "New Tokyo",
+  Sector12 = "Sector-12",
+  Volhaven = "Volhaven",
+  SpeakersForTheDead = "Speakers for the Dead",
+  TheDarkArmy = "The Dark Army",
+  TheSyndicate = "The Syndicate",
+  Silhouette = "Silhouette",
+  Tetrads = "Tetrads",
+  SlumSnakes = "Slum Snakes",
+  Netburners = "Netburners",
+  TianDiHui = "Tian Di Hui",
+  CyberSec = "CyberSec",
+  Bladeburners = "Bladeburners",
+  ChurchOfTheMachineGod = "Church of the Machine God",
+  ShadowsOfAnarchy = "Shadows of Anarchy",
+}
+
 /** @public */
 export type NSEnums = {
   CityName: typeof CityName;
@@ -8757,6 +8796,14 @@ interface JobTitleRequirement {
   jobTitle: JobName;
 }
 /**
+ * Player must have joined this faction.
+ * @public
+ */
+interface JoinedFactionRequirement {
+  type: "joinedFaction";
+  joinedFaction: FactionName;
+}
+/**
  * Player must be located in this city.
  * @public
  */
@@ -8880,6 +8927,7 @@ export type PlayerRequirement =
   | EmployedByRequirement
   | CompanyReputationRequirement
   | JobTitleRequirement
+  | JoinedFactionRequirement
   | CityRequirement
   | LocationRequirement
   | BackdoorRequirement
