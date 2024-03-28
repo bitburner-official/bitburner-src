@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { CopyableText } from "../../ui/React/CopyableText";
 import { formatBigNumber } from "../../ui/formatNumber";
 import { Bladeburner } from "../Bladeburner";
@@ -10,34 +10,29 @@ import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import { Skill } from "../Skill";
 
-interface IProps {
+interface SkillElemProps {
   skill: Skill;
   bladeburner: Bladeburner;
   onUpgrade: () => void;
 }
 
-export function SkillElem(props: IProps): React.ReactElement {
-  const skillName = props.skill.name;
-  let currentLevel = 0;
-  if (props.bladeburner.skills[skillName] && !isNaN(props.bladeburner.skills[skillName])) {
-    currentLevel = props.bladeburner.skills[skillName];
-  }
-  const pointCost = props.skill.calculateCost(currentLevel);
+export function SkillElem({ skill, bladeburner, onUpgrade }: SkillElemProps): React.ReactElement {
+  const skillName = skill.name;
+  const skillLevel = bladeburner.getSkillLevel(skillName);
+  const pointCost = useMemo(() => skill.calculateCost(skillLevel), [skill, skillLevel]);
 
-  const canLevel = props.bladeburner.skillPoints >= pointCost;
-  const maxLvl = props.skill.maxLvl ? currentLevel >= props.skill.maxLvl : false;
+  const canLevel = bladeburner.skillPoints >= pointCost;
+  const maxLvl = skill.maxLvl ? skillLevel >= skill.maxLvl : false;
 
   function onClick(): void {
-    if (props.bladeburner.skillPoints < pointCost) return;
-    props.bladeburner.skillPoints -= pointCost;
-    props.bladeburner.upgradeSkill(props.skill);
-    props.onUpgrade();
+    bladeburner.upgradeSkill(skillName);
+    onUpgrade();
   }
 
   return (
     <Paper sx={{ my: 1, p: 1 }}>
       <Box display="flex" flexDirection="row" alignItems="center">
-        <CopyableText variant="h6" color="primary" value={props.skill.name} />
+        <CopyableText variant="h6" color="primary" value={skillName} />
         {!canLevel || maxLvl ? (
           <IconButton disabled>
             <CloseIcon />
@@ -48,13 +43,13 @@ export function SkillElem(props: IProps): React.ReactElement {
           </IconButton>
         )}
       </Box>
-      <Typography>Level: {formatBigNumber(currentLevel)}</Typography>
+      <Typography>Level: {formatBigNumber(skillLevel)}</Typography>
       {maxLvl ? (
         <Typography>MAX LEVEL</Typography>
       ) : (
         <Typography>Skill Points required: {formatBigNumber(pointCost)}</Typography>
       )}
-      <Typography>{props.skill.desc}</Typography>
+      <Typography>{skill.desc}</Typography>
     </Paper>
   );
 }

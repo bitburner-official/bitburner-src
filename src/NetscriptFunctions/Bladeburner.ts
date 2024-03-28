@@ -1,13 +1,16 @@
 import type { Bladeburner as INetscriptBladeburner } from "@nsdefs";
-import type { Action } from "../Bladeburner/Action";
+import type { Action, LevelableAction } from "../Bladeburner/Types";
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
 import { Player } from "@player";
+import { BladeActionType, BladeContractName, BladeGeneralActionName, BladeOperationName, BladeSkillName } from "@enums";
 import { Bladeburner, BladeburnerPromise } from "../Bladeburner/Bladeburner";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { BlackOperation } from "../Bladeburner/BlackOperation";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
+import { Skills } from "../Bladeburner/data/Skills";
+import { assertString } from "../Netscript/TypeAssertion";
+import { BlackOperations, blackOpsArray } from "../Bladeburner/data/BlackOperations";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const checkBladeburnerAccess = function (ctx: NetscriptContext): void {
@@ -25,88 +28,88 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     return bladeburner;
   };
 
-  const getBladeburnerActionObject = function (ctx: NetscriptContext, type: string, name: string): Action {
+  function getAction(ctx: NetscriptContext, type: unknown, name: unknown): Action {
     const bladeburner = Player.bladeburner;
+    assertString(ctx, "type", type);
+    assertString(ctx, "name", name);
     if (bladeburner === null) throw new Error("Must have joined bladeburner");
-    const actionId = bladeburner.getActionIdFromTypeAndName(type, name);
-    if (!actionId) {
-      throw helpers.errorMessage(ctx, `Invalid action type='${type}', name='${name}'`);
-    }
-    const actionObj = bladeburner.getActionObject(actionId);
-    if (!actionObj) {
-      throw helpers.errorMessage(ctx, `Invalid action type='${type}', name='${name}'`);
-    }
+    const action = bladeburner.getActionFromTypeAndName(type, name);
+    if (!action) throw helpers.errorMessage(ctx, `Invalid action type='${type}', name='${name}'`);
+    return action;
+  }
 
-    return actionObj;
-  };
+  function isLevelableAction(action: Action): action is LevelableAction {
+    return action.type === BladeActionType.contract || action.type === BladeActionType.operation;
+  }
+
+  function getLevelableAction(ctx: NetscriptContext, type: unknown, name: unknown): LevelableAction {
+    const action = getAction(ctx, type, name);
+    if (!isLevelableAction(action)) {
+      throw helpers.errorMessage(
+        ctx,
+        `Actions of type ${action.type} are not levelable, ${ctx.functionPath} requires a levelable action`,
+      );
+    }
+    return action;
+  }
 
   return {
     inBladeburner: () => () => !!Player.bladeburner,
     getContractNames: (ctx) => () => {
-      const bladeburner = getBladeburner(ctx);
-      return bladeburner.getContractNamesNetscriptFn();
+      getBladeburner(ctx);
+      return Object.values(BladeContractName);
     },
     getOperationNames: (ctx) => () => {
-      const bladeburner = getBladeburner(ctx);
-      return bladeburner.getOperationNamesNetscriptFn();
+      getBladeburner(ctx);
+      return Object.values(BladeOperationName);
     },
     getBlackOpNames: (ctx) => () => {
-      const bladeburner = getBladeburner(ctx);
-      return bladeburner.getBlackOpNamesNetscriptFn();
+      getBladeburner(ctx);
+      // Ensures they are sent in the correct order
+      return blackOpsArray.map((blackOp) => blackOp.name);
     },
     getNextBlackOp: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
-      return bladeburner.getNextBlackOp();
+      if (bladeburner.numBlackOpsComplete >= blackOpsArray.length) return null;
+      const blackOp = blackOpsArray[bladeburner.numBlackOpsComplete];
+      return { name: blackOp.name, rank: blackOp.reqdRank };
     },
     getBlackOpRank: (ctx) => (_blackOpName) => {
-      const blackOpName = helpers.string(ctx, "blackOpName", _blackOpName);
       checkBladeburnerAccess(ctx);
-      const action = getBladeburnerActionObject(ctx, "blackops", blackOpName);
-      if (!(action instanceof BlackOperation)) throw new Error("action was not a black operation");
-      return action.reqdRank;
+      const blackOpName = getEnumHelper("BladeBlackOpName").nsGetMember(ctx, _blackOpName);
+      return BlackOperations[blackOpName].reqdRank;
     },
     getGeneralActionNames: (ctx) => () => {
-      const bladeburner = getBladeburner(ctx);
-      return bladeburner.getGeneralActionNamesNetscriptFn();
+      getBladeburner(ctx);
+      return Object.values(BladeGeneralActionName);
     },
     getSkillNames: (ctx) => () => {
-      const bladeburner = getBladeburner(ctx);
-      return bladeburner.getSkillNamesNetscriptFn();
+      getBladeburner(ctx);
+      return Object.values(BladeSkillName);
     },
-    startAction: (ctx) => (_type, _name) => {
-      const type = helpers.string(ctx, "type", _type);
-      const name = helpers.string(ctx, "name", _name);
+    startAction: (ctx) => (type, name) => {
       const bladeburner = getBladeburner(ctx);
-      try {
-        return bladeburner.startActionNetscriptFn(type, name, ctx.workerScript);
-      } catch (e: unknown) {
-        throw helpers.errorMessage(ctx, String(e));
-      }
+      const action = getAction(ctx, type, name);
+      const attempt = bladeburner.startAction(action.id);
+      helpers.log(ctx, () => attempt.message);
+      return !!attempt.success;
     },
     stopBladeburnerAction: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
+      helpers.log(ctx, () => `Stopping current Bladeburner action.`);
       return bladeburner.resetAction();
     },
     getCurrentAction: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
-      return bladeburner.getTypeAndNameFromActionId(bladeburner.action);
+      // Temporary bad return type to not be an API break (idle should just return null)
+      if (!bladeburner.action) return { type: "Idle", name: "Idle" };
+      return { ...bladeburner.action };
     },
-    getActionTime: (ctx) => (_type, _name) => {
-      const type = helpers.string(ctx, "type", _type);
-      const name = helpers.string(ctx, "name", _name);
+    getActionTime: (ctx) => (type, name) => {
       const bladeburner = getBladeburner(ctx);
-      try {
-        const time = bladeburner.getActionTimeNetscriptFn(Player, type, name);
-        if (typeof time === "string") {
-          const errorLogText = `Invalid action: type='${type}' name='${name}'`;
-          helpers.log(ctx, () => errorLogText);
-          return -1;
-        } else {
-          return time;
-        }
-      } catch (e: unknown) {
-        throw helpers.errorMessage(ctx, String(e));
-      }
+      const action = getAction(ctx, type, name);
+      // return ms instead of seconds
+      return action.getActionTime(bladeburner, Player) * 1000;
     },
     getActionCurrentTime: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
@@ -119,93 +122,70 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         throw helpers.errorMessage(ctx, String(e));
       }
     },
-    getActionEstimatedSuccessChance: (ctx) => (_type, _name) => {
+    getActionEstimatedSuccessChance: (ctx) => (type, name) => {
       const bladeburner = getBladeburner(ctx);
-      const type = helpers.string(ctx, "type", _type);
-      const name = helpers.string(ctx, "name", _name);
-      try {
-        const chance = bladeburner.getActionEstimatedSuccessChanceNetscriptFn(Player, type, name);
-        if (typeof chance === "string") {
-          const errorLogText = `Invalid action: type='${type}' name='${name}'`;
-          helpers.log(ctx, () => errorLogText);
-          return [-1, -1];
-        } else {
-          return chance;
-        }
-      } catch (e: unknown) {
-        throw helpers.errorMessage(ctx, String(e));
-      }
+      const action = getAction(ctx, type, name);
+      return action.getSuccessRange(bladeburner, Player);
     },
-    getActionRepGain: (ctx) => (_type, _name, _level) => {
+    getActionRepGain: (ctx) => (type, name, _level) => {
       checkBladeburnerAccess(ctx);
-      const type = helpers.string(ctx, "type", _type);
-      const name = helpers.string(ctx, "name", _name);
-      const action = getBladeburnerActionObject(ctx, type, name);
-      const level = _level === undefined ? action.level : helpers.number(ctx, "level", _level);
-      const rewardMultiplier = Math.pow(action.rewardFac, level - 1);
+      const action = getAction(ctx, type, name);
+      const level = isLevelableAction(action) ? helpers.number(ctx, "level", _level ?? action.level) : 1;
+      const rewardMultiplier = isLevelableAction(action) ? Math.pow(action.rewardFac, level - 1) : 1;
       return action.rankGain * rewardMultiplier * currentNodeMults.BladeburnerRank;
     },
-    getActionCountRemaining: (ctx) => (_type, _name) => {
+    getActionCountRemaining: (ctx) => (type, name) => {
       const bladeburner = getBladeburner(ctx);
-      const type = helpers.string(ctx, "type", _type);
-      const name = helpers.string(ctx, "name", _name);
-      try {
-        return bladeburner.getActionCountRemainingNetscriptFn(type, name, ctx.workerScript);
-      } catch (e: unknown) {
-        throw helpers.errorMessage(ctx, String(e));
+      const action = getAction(ctx, type, name);
+      switch (action.type) {
+        case BladeActionType.general:
+          return Infinity;
+        case BladeActionType.blackOp:
+          return bladeburner.numBlackOpsComplete > action.n ? 0 : 1;
+        case BladeActionType.contract:
+        case BladeActionType.operation:
+          return action.count;
       }
     },
-    getActionMaxLevel: (ctx) => (_type, _name) => {
-      const type = helpers.string(ctx, "type", _type);
-      const name = helpers.string(ctx, "name", _name);
+    getActionMaxLevel: (ctx) => (type, name) => {
       checkBladeburnerAccess(ctx);
-      const action = getBladeburnerActionObject(ctx, type, name);
+      const action = getLevelableAction(ctx, type, name);
       return action.maxLevel;
     },
-    getActionCurrentLevel: (ctx) => (_type, _name) => {
-      const type = helpers.string(ctx, "type", _type);
-      const name = helpers.string(ctx, "name", _name);
+    getActionCurrentLevel: (ctx) => (type, name) => {
       checkBladeburnerAccess(ctx);
-      const action = getBladeburnerActionObject(ctx, type, name);
+      const action = getLevelableAction(ctx, type, name);
       return action.level;
     },
-    getActionAutolevel: (ctx) => (_type, _name) => {
-      const type = helpers.string(ctx, "type", _type);
-      const name = helpers.string(ctx, "name", _name);
+    getActionAutolevel: (ctx) => (type, name) => {
       checkBladeburnerAccess(ctx);
-      const action = getBladeburnerActionObject(ctx, type, name);
+      const action = getLevelableAction(ctx, type, name);
       return action.autoLevel;
     },
-    getActionSuccesses: (ctx) => (_type, _name) => {
-      const type = helpers.string(ctx, "type", _type);
-      const name = helpers.string(ctx, "name", _name);
+    getActionSuccesses: (ctx) => (type, name) => {
       checkBladeburnerAccess(ctx);
-      const action = getBladeburnerActionObject(ctx, type, name);
+      const action = getLevelableAction(ctx, type, name);
       return action.successes;
     },
     setActionAutolevel:
       (ctx) =>
-      (_type, _name, _autoLevel = true) => {
-        const type = helpers.string(ctx, "type", _type);
-        const name = helpers.string(ctx, "name", _name);
+      (type, name, _autoLevel = true) => {
         const autoLevel = !!_autoLevel;
         checkBladeburnerAccess(ctx);
-        const action = getBladeburnerActionObject(ctx, type, name);
+        const action = getLevelableAction(ctx, type, name);
         action.autoLevel = autoLevel;
+        helpers.log(ctx, () => `Autolevel for ${action.name} has been ${autoLevel ? "enabled" : "disabled"}`);
       },
-    setActionLevel:
-      (ctx) =>
-      (_type, _name, _level = 1) => {
-        const type = helpers.string(ctx, "type", _type);
-        const name = helpers.string(ctx, "name", _name);
-        const level = helpers.number(ctx, "level", _level);
-        checkBladeburnerAccess(ctx);
-        const action = getBladeburnerActionObject(ctx, type, name);
-        if (level < 1 || level > action.maxLevel) {
-          throw helpers.errorMessage(ctx, `Level must be between 1 and ${action.maxLevel}, is ${level}`);
-        }
-        action.level = level;
-      },
+    setActionLevel: (ctx) => (type, name, _level) => {
+      const level = helpers.positiveInteger(ctx, "level", _level ?? 1);
+      checkBladeburnerAccess(ctx);
+      const action = getLevelableAction(ctx, type, name);
+      if (level < 1 || level > action.maxLevel) {
+        throw helpers.errorMessage(ctx, `Level must be between 1 and ${action.maxLevel}, is ${level}`);
+      }
+      action.level = level;
+      helpers.log(ctx, () => `Set level for ${action.name} to ${level}`);
+    },
     getRank: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
       return bladeburner.rank;
@@ -215,57 +195,57 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       return bladeburner.skillPoints;
     },
     getSkillLevel: (ctx) => (_skillName) => {
-      const skillName = helpers.string(ctx, "skillName", _skillName);
       const bladeburner = getBladeburner(ctx);
-      try {
-        return bladeburner.getSkillLevelNetscriptFn(skillName, ctx.workerScript);
-      } catch (e: unknown) {
-        throw helpers.errorMessage(ctx, String(e));
+      const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
+      return bladeburner.getSkillLevel(skillName);
+    },
+    getSkillUpgradeCost: (ctx) => (_skillName, _count) => {
+      const bladeburner = getBladeburner(ctx);
+      const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
+      const count = helpers.positiveSafeInteger(ctx, "count", _count ?? 1);
+      const currentLevel = bladeburner.getSkillLevel(skillName);
+      return Skills[skillName].calculateCost(currentLevel, count);
+    },
+    upgradeSkill: (ctx) => (_skillName, _count) => {
+      const bladeburner = getBladeburner(ctx);
+      const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
+      const count = helpers.positiveSafeInteger(ctx, "count", _count ?? 1);
+      const attempt = bladeburner.upgradeSkill(skillName, count);
+      helpers.log(ctx, () => attempt.message);
+      return !!attempt.success;
+    },
+    getTeamSize: (ctx) => (type, name) => {
+      const bladeburner = getBladeburner(ctx);
+      if (!type && !name) return bladeburner.teamSize;
+      const action = getAction(ctx, type, name);
+      switch (action.type) {
+        case BladeActionType.general:
+        case BladeActionType.contract:
+          return 0;
+        case BladeActionType.blackOp:
+        case BladeActionType.operation:
+          return action.teamCount;
       }
     },
-    getSkillUpgradeCost:
-      (ctx) =>
-      (_skillName, _count = 1) => {
-        const bladeburner = getBladeburner(ctx);
-        const skillName = helpers.string(ctx, "skillName", _skillName);
-        const count = helpers.number(ctx, "count", _count);
-        try {
-          return bladeburner.getSkillUpgradeCostNetscriptFn(skillName, count, ctx.workerScript);
-        } catch (e: unknown) {
-          throw helpers.errorMessage(ctx, String(e));
-        }
-      },
-    upgradeSkill:
-      (ctx) =>
-      (_skillName, _count = 1) => {
-        const bladeburner = getBladeburner(ctx);
-        const skillName = helpers.string(ctx, "skillName", _skillName);
-        const count = helpers.number(ctx, "count", _count);
-        try {
-          return bladeburner.upgradeSkillNetscriptFn(skillName, count, ctx.workerScript);
-        } catch (e: unknown) {
-          throw helpers.errorMessage(ctx, String(e));
-        }
-      },
-    getTeamSize: (ctx) => (_type, _name) => {
+    setTeamSize: (ctx) => (type, name, _size) => {
       const bladeburner = getBladeburner(ctx);
-      const type = helpers.string(ctx, "type", _type);
-      const name = helpers.string(ctx, "name", _name);
-      try {
-        return bladeburner.getTeamSizeNetscriptFn(type, name, ctx.workerScript);
-      } catch (e: unknown) {
-        throw helpers.errorMessage(ctx, String(e));
+      const action = getAction(ctx, type, name);
+      const size = helpers.positiveInteger(ctx, "size", _size);
+      if (size > bladeburner.teamSize) {
+        helpers.log(ctx, () => `Failed to set team size due to not enough team members.`);
+        return -1;
       }
-    },
-    setTeamSize: (ctx) => (_type, _name, _size) => {
-      const bladeburner = getBladeburner(ctx);
-      const type = helpers.string(ctx, "type", _type);
-      const name = helpers.string(ctx, "name", _name);
-      const size = helpers.number(ctx, "size", _size);
-      try {
-        return bladeburner.setTeamSizeNetscriptFn(type, name, size, ctx.workerScript);
-      } catch (e: unknown) {
-        throw helpers.errorMessage(ctx, String(e));
+      switch (action.type) {
+        case BladeActionType.contract:
+        case BladeActionType.general:
+          helpers.log(ctx, () => "Only valid for Operations and Black Operations");
+          return -1;
+        case BladeActionType.blackOp:
+        case BladeActionType.operation: {
+          action.teamCount = size;
+          helpers.log(ctx, () => `Set team size for ${action.name} to ${size}`);
+          return size;
+        }
       }
     },
     getCityEstimatedPopulation: (ctx) => (_cityName) => {
@@ -299,7 +279,9 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     joinBladeburnerFaction: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
-      return bladeburner.joinBladeburnerFactionNetscriptFn(ctx.workerScript);
+      const attempt = bladeburner.joinFaction();
+      helpers.log(ctx, () => attempt.message);
+      return !!attempt.success;
     },
     joinBladeburnerDivision: (ctx) => () => {
       if (Player.bitNodeN === 7 || Player.sourceFileLvl(7) > 0) {
@@ -314,7 +296,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
           Player.skills.dexterity >= 100 &&
           Player.skills.agility >= 100
         ) {
-          Player.bladeburner = new Bladeburner();
+          Player.startBladeburner();
           helpers.log(ctx, () => "You have been accepted into the Bladeburner division");
 
           return true;

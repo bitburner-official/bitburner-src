@@ -5,7 +5,7 @@ import { Truthy } from "lodash";
 import { GoColor, GoOpponent } from "@enums";
 import { Go } from "./Go";
 import { boardStateFromSimpleBoard, simpleBoardFromBoard } from "./boardAnalysis/boardAnalysis";
-import { assertLoadingType } from "../utils/JSONReviver";
+import { assertLoadingType } from "../utils/TypeAssertion";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { boardSizes } from "./Constants";
 import { isInteger, isNumber } from "../types";

@@ -1,14 +1,13 @@
 import {
   AugmentationName,
-  BlackOperationName,
+  BladeSkillName,
   CityName,
   CompletedProgramName,
   CorpUnlockName,
   FactionName,
   IndustryType,
 } from "@enums";
-import { SkillNames } from "../Bladeburner/data/SkillNames";
-import { Skills } from "../Bladeburner/Skills";
+import { Skills } from "../Bladeburner/data/Skills";
 import { CONSTANTS } from "../Constants";
 import { Exploit } from "../Exploits/Exploit";
 import { Factions } from "../Faction/Factions";
@@ -31,6 +30,7 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 
 import { getRecordValues } from "../Types/Record";
 import { ServerConstants } from "../Server/data/Constants";
+import { blackOpsArray } from "../Bladeburner/data/BlackOperations";
 
 // Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
 const achievementData = (<AchievementDataJson>(<unknown>data)).achievements;
@@ -65,7 +65,7 @@ function bitNodeFinishedState(): boolean {
   const wd = GetServer(SpecialServers.WorldDaemon);
   if (!(wd instanceof Server)) return false;
   if (wd.backdoorInstalled) return true;
-  return Player.bladeburner !== null && BlackOperationName.OperationDaedalus in Player.bladeburner.blackops;
+  return Player.bladeburner !== null && Player.bladeburner.numBlackOpsComplete >= blackOpsArray.length;
 }
 
 function hasAccessToSF(bn: number): boolean {
@@ -432,8 +432,7 @@ export const achievements: Record<string, Achievement> = {
     Icon: "BLADEOVERCLOCK",
     Visible: () => hasAccessToSF(6),
     Condition: () =>
-      Player.bladeburner !== null &&
-      Player.bladeburner.skills[SkillNames.Overclock] === Skills[SkillNames.Overclock].maxLvl,
+      Player.bladeburner?.getSkillLevel(BladeSkillName.overclock) === Skills[BladeSkillName.overclock].maxLvl,
   },
   BLADEBURNER_UNSPENT_100000: {
     ...achievementData.BLADEBURNER_UNSPENT_100000,

@@ -15,10 +15,10 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Adjuster } from "./Adjuster";
 import { Player } from "@player";
-import { CityName } from "@enums";
-import { Skills as AllSkills } from "../../Bladeburner/Skills";
-import { SkillNames } from "../../Bladeburner/data/SkillNames";
+import { BladeSkillName, CityName } from "@enums";
+import { Skills as AllSkills } from "../../Bladeburner/data/Skills";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 const bigNumber = 1e27;
 
@@ -57,24 +57,23 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
   };
 
   // Skill functions
-  const [skill, setSkill] = useState(SkillNames.BladesIntuition);
+  const [skillName, setSkillName] = useState(BladeSkillName.bladesIntuition);
   function setSkillDropdown(event: SelectChangeEvent): void {
-    setSkill(event.target.value);
+    if (!getEnumHelper("BladeSkillName").isMember(event.target.value)) return;
+    setSkillName(event.target.value);
   }
   const modifySkill = (modifier: number) => (levelchange: number) => {
-    if (bladeburner.skills[AllSkills[skill].name] == null) resetSkill();
     if (!isNaN(levelchange)) {
-      bladeburner.skills[AllSkills[skill].name] += levelchange * modifier;
+      bladeburner.setSkillLevel(skillName, bladeburner.getSkillLevel(skillName) + levelchange * modifier);
       bladeburner.updateSkillMultipliers();
     }
   };
   const addTonsOfSkill = () => {
-    if (bladeburner.skills[AllSkills[skill].name] == null) resetSkill();
-    bladeburner.skills[AllSkills[skill].name] += bigNumber;
+    bladeburner.setSkillLevel(skillName, bladeburner.getSkillLevel(skillName) + bigNumber);
     bladeburner.updateSkillMultipliers();
   };
   const resetSkill = () => {
-    bladeburner.skills[AllSkills[skill].name] = 0;
+    bladeburner.setSkillLevel(skillName, 0);
     bladeburner.updateSkillMultipliers();
   };
 
@@ -82,6 +81,7 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
   const AllContracts = bladeburner.contracts;
   const [contractTarget, setContract] = useState(AllContracts.Tracking.name);
   function setContractDropdown(event: SelectChangeEvent): void {
+    if (!getEnumHelper("BladeContractName").isMember(event.target.value)) return;
     setContract(event.target.value);
   }
   const modifyContractLevel = (modifier: number) => (levelchange: number) => {
@@ -117,6 +117,7 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
   const AllOperations = bladeburner.operations;
   const [operationTarget, setOperation] = useState(AllOperations.Investigation.name);
   function setOperationDropdown(event: SelectChangeEvent): void {
+    if (!getEnumHelper("BladeOperationName").isMember(event.target.value)) return;
     setOperation(event.target.value);
   }
   const modifyOperationLevel = (modifier: number) => (levelchange: number) => {
@@ -232,7 +233,7 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
               <td align="center">
                 <FormControl>
                   <InputLabel id="skills-select"></InputLabel>
-                  <Select labelId="skills-select" id="skills-dropdown" onChange={setSkillDropdown} value={skill}>
+                  <Select labelId="skills-select" id="skills-dropdown" onChange={setSkillDropdown} value={skillName}>
                     {Object.values(AllSkills).map((skill) => (
                       <MenuItem key={skill.name} value={skill.name}>
                         {skill.name}

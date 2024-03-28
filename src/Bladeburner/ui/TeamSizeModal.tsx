@@ -1,5 +1,5 @@
-import type { Action } from "../Action";
 import type { Bladeburner } from "../Bladeburner";
+import type { BlackOperation, Operation } from "../Actions";
 
 import React, { useState } from "react";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
@@ -8,7 +8,7 @@ import { Button, TextField, Typography } from "@mui/material";
 
 interface TeamSizeModalProps {
   bladeburner: Bladeburner;
-  action: Action;
+  action: Operation | BlackOperation;
   open: boolean;
   onClose: () => void;
 }

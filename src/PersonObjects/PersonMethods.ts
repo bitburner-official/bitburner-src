@@ -114,33 +114,6 @@ export function gainStats(this: Person, retValue: WorkStats): void {
   this.gainIntelligenceExp(retValue.intExp);
 }
 
-//Given a string expression like "str" or "strength", returns the given stat
-export function queryStatFromString(this: Person, str: string): number {
-  const tempStr = str.toLowerCase();
-  if (tempStr.includes("hack")) {
-    return this.skills.hacking;
-  }
-  if (tempStr.includes("str")) {
-    return this.skills.strength;
-  }
-  if (tempStr.includes("def")) {
-    return this.skills.defense;
-  }
-  if (tempStr.includes("dex")) {
-    return this.skills.dexterity;
-  }
-  if (tempStr.includes("agi")) {
-    return this.skills.agility;
-  }
-  if (tempStr.includes("cha")) {
-    return this.skills.charisma;
-  }
-  if (tempStr.includes("int")) {
-    return this.skills.intelligence;
-  }
-  return 0;
-}
-
 export function regenerateHp(this: Person, amt: number): void {
   if (typeof amt !== "number") {
     console.warn(`Player.regenerateHp() called without a numeric argument: ${amt}`);

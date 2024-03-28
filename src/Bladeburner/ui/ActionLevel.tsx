@@ -1,23 +1,21 @@
-import React from "react";
-import { Action } from "../Action";
-import { Bladeburner } from "../Bladeburner";
-import { BladeburnerConstants } from "../data/Constants";
+import type { Bladeburner } from "../Bladeburner";
+import type { LevelableAction } from "../Types";
 
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
+import React from "react";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
-interface IProps {
-  action: Action;
+import { BladeburnerConstants } from "../data/Constants";
+
+interface ActionLevelProps {
+  action: LevelableAction;
   isActive: boolean;
   bladeburner: Bladeburner;
   rerender: () => void;
 }
 
-export function ActionLevel({ action, isActive, bladeburner, rerender }: IProps): React.ReactElement {
+export function ActionLevel({ action, isActive, bladeburner, rerender }: ActionLevelProps): React.ReactElement {
   const canIncrease = action.level < action.maxLevel;
   const canDecrease = action.level > 1;
 

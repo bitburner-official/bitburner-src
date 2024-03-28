@@ -1,11 +1,10 @@
+import type { GeneralAction } from "../Actions/GeneralAction";
+
 import React from "react";
-import { ActionTypes } from "../data/ActionTypes";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { Bladeburner } from "../Bladeburner";
-import { Action } from "../Action";
-import { GeneralActions } from "../data/GeneralActions";
 import { Player } from "@player";
 import { CopyableText } from "../../ui/React/CopyableText";
 
@@ -16,71 +15,46 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { useRerender } from "../../ui/React/hooks";
 
-interface IProps {
+interface GeneralActionElemProps {
   bladeburner: Bladeburner;
-  action: Action;
+  action: GeneralAction;
 }
 
-export function GeneralActionElem(props: IProps): React.ReactElement {
+export function GeneralActionElem({ bladeburner, action }: GeneralActionElemProps): React.ReactElement {
   const rerender = useRerender();
-  const isActive = props.action.name === props.bladeburner.action.name;
+  const isActive = action.name === bladeburner.action?.name;
   const computedActionTimeCurrent = Math.min(
-    props.bladeburner.actionTimeCurrent + props.bladeburner.actionTimeOverflow,
-    props.bladeburner.actionTimeToComplete,
+    bladeburner.actionTimeCurrent + bladeburner.actionTimeOverflow,
+    bladeburner.actionTimeToComplete,
   );
-  const actionTime = (function (): number {
-    switch (props.action.name) {
-      case "Training":
-      case "Field Analysis":
-        return 30;
-      case "Diplomacy":
-      case "Hyperbolic Regeneration Chamber":
-      case "Incite Violence":
-        return 60;
-      case "Recruitment":
-        return props.bladeburner.getRecruitmentTime(Player);
-    }
-    return -1; // dead code
-  })();
+  const actionTime = action.getActionTime(bladeburner, Player);
   const successChance =
-    props.action.name === "Recruitment"
-      ? Math.max(0, Math.min(props.bladeburner.getRecruitmentSuccessChance(Player), 1))
-      : -1;
-
-  const actionData = GeneralActions[props.action.name];
-  if (actionData === undefined) {
-    throw new Error(`Cannot find data for ${props.action.name}`);
-  }
+    action.name === "Recruitment" ? Math.max(0, Math.min(bladeburner.getRecruitmentSuccessChance(Player), 1)) : -1;
 
   return (
     <Paper sx={{ my: 1, p: 1 }}>
       {isActive ? (
         <>
-          <CopyableText value={props.action.name} />
+          <CopyableText value={action.name} />
           <Typography>
             (IN PROGRESS - {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
-            {formatNumberNoSuffix(props.bladeburner.actionTimeToComplete, 0)})
+            {formatNumberNoSuffix(bladeburner.actionTimeToComplete, 0)})
           </Typography>
           <Typography>
             {createProgressBarText({
-              progress: computedActionTimeCurrent / props.bladeburner.actionTimeToComplete,
+              progress: computedActionTimeCurrent / bladeburner.actionTimeToComplete,
             })}
           </Typography>
         </>
       ) : (
         <Box display="flex" flexDirection="row" alignItems="center">
-          <CopyableText value={props.action.name} />
-          <StartButton
-            bladeburner={props.bladeburner}
-            type={ActionTypes[props.action.name]}
-            name={props.action.name}
-            rerender={rerender}
-          />
+          <CopyableText value={action.name} />
+          <StartButton bladeburner={bladeburner} action={action} rerender={rerender} />
         </Box>
       )}
       <br />
       <br />
-      <Typography>{actionData.desc}</Typography>
+      <Typography>{action.desc}</Typography>
       <br />
       <br />
       <Typography>

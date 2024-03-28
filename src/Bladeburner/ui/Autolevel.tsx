@@ -1,26 +1,24 @@
-import React from "react";
-import { Action } from "../Action";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
-import Switch from "@mui/material/Switch";
+import type { LevelableAction } from "../Types";
 
-interface IProps {
-  action: Action;
+import React from "react";
+import { Box, Switch, Tooltip, Typography } from "@mui/material";
+
+interface AutoLevelProps {
+  action: LevelableAction;
   rerender: () => void;
 }
 
-export function Autolevel(props: IProps): React.ReactElement {
+export function Autolevel({ action, rerender }: AutoLevelProps): React.ReactElement {
   function onAutolevel(event: React.ChangeEvent<HTMLInputElement>): void {
-    props.action.autoLevel = event.target.checked;
-    props.rerender();
+    action.autoLevel = event.target.checked;
+    rerender();
   }
   return (
     <Box display="flex" flexDirection="row" alignItems="center">
       <Tooltip title={<Typography>Automatically increase operation level when possible</Typography>}>
         <Typography> Autolevel:</Typography>
       </Tooltip>
-      <Switch checked={props.action.autoLevel} onChange={onAutolevel} />
+      <Switch checked={action.autoLevel} onChange={onAutolevel} />
     </Box>
   );
 }

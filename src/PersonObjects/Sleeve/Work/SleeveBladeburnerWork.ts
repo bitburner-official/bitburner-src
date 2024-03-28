@@ -1,39 +1,40 @@
+import type { Sleeve } from "../Sleeve";
+import type { ActionIdentifier } from "../../../Bladeburner/Types";
 import type { PromisePair } from "../../../Types/Promises";
 import { Player } from "@player";
+import { BladeActionType, BladeGeneralActionName } from "@enums";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
-import { Sleeve } from "../Sleeve";
 import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
 import { CONSTANTS } from "../../../Constants";
-import { GeneralActions } from "../../../Bladeburner/data/GeneralActions";
 import { scaleWorkStats } from "../../../Work/WorkStats";
 import { getKeyList } from "../../../utils/helpers/getKeyList";
+import { loadActionIdentifier } from "../../../Bladeburner/SaveLoad";
+import { invalidWork } from "../../../Work/InvalidWork";
 
 interface SleeveBladeburnerWorkParams {
-  type: "General" | "Contracts";
-  name: string;
+  actionId: ActionIdentifier & { type: BladeActionType.general | BladeActionType.contract };
 }
 
 export const isSleeveBladeburnerWork = (w: SleeveWorkClass | null): w is SleeveBladeburnerWork =>
-  w !== null && w.type === SleeveWorkType.BLADEBURNER;
+  w?.type === SleeveWorkType.BLADEBURNER;
 
 export class SleeveBladeburnerWork extends SleeveWorkClass {
   type: SleeveWorkType.BLADEBURNER = SleeveWorkType.BLADEBURNER;
   tasksCompleted = 0;
   cyclesWorked = 0;
-  actionType: "General" | "Contracts";
-  actionName: string;
+  actionId: ActionIdentifier & { type: BladeActionType.general | BladeActionType.contract };
   nextCompletionPair: PromisePair<void> = { promise: null, resolve: null };
 
   constructor(params?: SleeveBladeburnerWorkParams) {
     super();
-    this.actionType = params?.type ?? "General";
-    this.actionName = params?.name ?? "Field Analysis";
+    this.actionId = params?.actionId ?? { type: BladeActionType.general, name: BladeGeneralActionName.fieldAnalysis };
   }
 
   cyclesNeeded(sleeve: Sleeve): number {
-    const ret = Player.bladeburner?.getActionTimeNetscriptFn(sleeve, this.actionType, this.actionName);
-    if (!ret || typeof ret === "string") throw new Error(`Error querying ${this.actionName} time`);
-    return ret / CONSTANTS.MilliPerCycle;
+    if (!Player.bladeburner) return Infinity;
+    const action = Player.bladeburner.getActionObject(this.actionId);
+    const timeInMs = action.getActionTime(Player.bladeburner, sleeve) * 1000;
+    return timeInMs / CONSTANTS.MilliPerCycle;
   }
 
   finish() {
@@ -47,30 +48,19 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
   process(sleeve: Sleeve, cycles: number) {
     if (!Player.bladeburner) return sleeve.stopWork();
     this.cyclesWorked += cycles;
-    const actionIdent = Player.bladeburner.getActionIdFromTypeAndName(this.actionType, this.actionName);
-    if (!actionIdent) throw new Error(`Error getting ${this.actionName} action`);
-    if (this.actionType === "Contracts") {
-      const action = Player.bladeburner.getActionObject(actionIdent);
-      if (!action) throw new Error(`Error getting ${this.actionName} action object`);
+    if (this.actionId.type === BladeActionType.contract) {
+      const action = Player.bladeburner.getActionObject(this.actionId);
       if (action.count < 1) return sleeve.stopWork();
     }
 
     while (this.cyclesWorked >= this.cyclesNeeded(sleeve)) {
-      if (this.actionType === "Contracts") {
-        const action = Player.bladeburner.getActionObject(actionIdent);
-        if (!action) throw new Error(`Error getting ${this.actionName} action object`);
+      if (this.actionId.type === BladeActionType.contract) {
+        const action = Player.bladeburner.getActionObject(this.actionId);
         if (action.count < 1) return sleeve.stopWork();
       }
-      const retValue = Player.bladeburner.completeAction(sleeve, actionIdent, false);
-      if (this.actionType === "General") {
-        const exp = GeneralActions[this.actionName]?.exp;
-        if (!exp) throw new Error(`Somehow there was no exp for action ${this.actionType} ${this.actionName}`);
-        applySleeveGains(sleeve, scaleWorkStats(exp, sleeve.shockBonus(), false));
-      }
+      const retValue = Player.bladeburner.completeAction(sleeve, this.actionId, false);
+      applySleeveGains(sleeve, scaleWorkStats(retValue, sleeve.shockBonus(), false));
 
-      if (this.actionType === "Contracts") {
-        applySleeveGains(sleeve, scaleWorkStats(retValue, sleeve.shockBonus(), false));
-      }
       this.tasksCompleted++;
       this.cyclesWorked -= this.cyclesNeeded(sleeve);
       // Resolve and reset nextCompletion promise
@@ -86,8 +76,8 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
   APICopy(sleeve: Sleeve) {
     return {
       type: SleeveWorkType.BLADEBURNER as const,
-      actionType: this.actionType,
-      actionName: this.actionName,
+      actionType: this.actionId.type,
+      actionName: this.actionId.name,
       tasksCompleted: this.tasksCompleted,
       cyclesWorked: this.cyclesWorked,
       cyclesNeeded: this.cyclesNeeded(sleeve),
@@ -104,6 +94,9 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
 
   /** Initializes a BladeburnerWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveBladeburnerWork {
+    const actionId = loadActionIdentifier(value.data?.actionId);
+    if (!actionId) return invalidWork();
+    value.data.actionId = actionId;
     return Generic_fromJSON(SleeveBladeburnerWork, value.data, SleeveBladeburnerWork.savedKeys);
   }
 }

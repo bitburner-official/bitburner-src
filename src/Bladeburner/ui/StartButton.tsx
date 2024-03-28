@@ -1,47 +1,27 @@
+import type { Bladeburner } from "../Bladeburner";
+import type { Action } from "../Types";
+
 import React from "react";
+import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 
-import { Bladeburner } from "../Bladeburner";
-import { BlackOperation } from "../BlackOperation";
-import { Player } from "@player";
-import Button from "@mui/material/Button";
-import { AugmentationName } from "@enums";
-import { ActionIdentifier } from "../ActionIdentifier";
-
-interface IProps {
+interface StartButtonProps {
   bladeburner: Bladeburner;
-  type: number;
-  name: string;
+  action: Action;
   rerender: () => void;
 }
-export function StartButton(props: IProps): React.ReactElement {
-  const action = props.bladeburner.getActionObject(new ActionIdentifier({ name: props.name, type: props.type }));
-  if (action == null) {
-    throw new Error("Failed to get Operation Object for: " + props.name);
-  }
-  let disabled = false;
-  if (action.count < 1) {
-    disabled = true;
-  }
-  if (props.name === "Raid" && props.bladeburner.getCurrentCity().comms === 0) {
-    disabled = true;
-  }
+export function StartButton({ bladeburner, action, rerender }: StartButtonProps): React.ReactElement {
+  const availability = action.getAvailability(bladeburner);
+  const disabledReason = availability.available ? "" : availability.error;
 
-  if (action instanceof BlackOperation && props.bladeburner.rank < action.reqdRank) {
-    disabled = true;
-  }
   function onStart(): void {
-    if (disabled) return;
-    const action = new ActionIdentifier();
-    action.type = props.type;
-    action.name = props.name;
-    if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
-    props.bladeburner.startAction(action);
-    props.rerender();
+    if (disabledReason) return;
+    bladeburner.startAction(action.id);
+    rerender();
   }
 
   return (
-    <Button sx={{ mx: 1 }} disabled={disabled} onClick={onStart}>
+    <ButtonWithTooltip disabledTooltip={disabledReason} onClick={onStart}>
       Start
-    </Button>
+    </ButtonWithTooltip>
   );
 }

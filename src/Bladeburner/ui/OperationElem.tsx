@@ -1,5 +1,10 @@
+import type { Bladeburner } from "../Bladeburner";
+import type { Operation } from "../Actions/Operation";
+
 import React from "react";
-import { ActionTypes } from "../data/ActionTypes";
+import { Paper, Typography } from "@mui/material";
+
+import { Player } from "@player";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { SuccessChance } from "./SuccessChance";
@@ -7,85 +12,69 @@ import { ActionLevel } from "./ActionLevel";
 import { Autolevel } from "./Autolevel";
 import { StartButton } from "./StartButton";
 import { TeamSizeButton } from "./TeamSizeButton";
-import { Bladeburner } from "../Bladeburner";
-import { Operation } from "../Operation";
-import { Operations } from "../data/Operations";
-import { Player } from "@player";
 import { CopyableText } from "../../ui/React/CopyableText";
 import { formatNumberNoSuffix, formatBigNumber } from "../../ui/formatNumber";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
 import { useRerender } from "../../ui/React/hooks";
+import { BladeActionType } from "@enums";
 
-interface IProps {
+interface OperationElemProps {
   bladeburner: Bladeburner;
-  action: Operation;
+  operation: Operation;
 }
 
-export function OperationElem(props: IProps): React.ReactElement {
+export function OperationElem({ bladeburner, operation }: OperationElemProps): React.ReactElement {
   const rerender = useRerender();
   const isActive =
-    props.bladeburner.action.type === ActionTypes.Operation && props.action.name === props.bladeburner.action.name;
+    bladeburner.action?.type === BladeActionType.operation && operation.name === bladeburner.action?.name;
   const computedActionTimeCurrent = Math.min(
-    props.bladeburner.actionTimeCurrent + props.bladeburner.actionTimeOverflow,
-    props.bladeburner.actionTimeToComplete,
+    bladeburner.actionTimeCurrent + bladeburner.actionTimeOverflow,
+    bladeburner.actionTimeToComplete,
   );
-  const actionTime = props.action.getActionTime(props.bladeburner, Player);
-
-  const actionData = Operations[props.action.name];
-  if (actionData === undefined) {
-    throw new Error(`Cannot find data for ${props.action.name}`);
-  }
+  const actionTime = operation.getActionTime(bladeburner, Player);
 
   return (
     <Paper sx={{ my: 1, p: 1 }}>
       {isActive ? (
         <>
           <Typography>
-            <CopyableText value={props.action.name} /> (IN PROGRESS -{" "}
-            {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
-            {formatNumberNoSuffix(props.bladeburner.actionTimeToComplete, 0)})
+            <CopyableText value={operation.name} /> (IN PROGRESS - {formatNumberNoSuffix(computedActionTimeCurrent, 0)}{" "}
+            / {formatNumberNoSuffix(bladeburner.actionTimeToComplete, 0)})
           </Typography>
           <Typography>
             {createProgressBarText({
-              progress: computedActionTimeCurrent / props.bladeburner.actionTimeToComplete,
+              progress: computedActionTimeCurrent / bladeburner.actionTimeToComplete,
             })}
           </Typography>
         </>
       ) : (
         <>
-          <CopyableText value={props.action.name} />
-          <StartButton
-            bladeburner={props.bladeburner}
-            type={ActionTypes.Operation}
-            name={props.action.name}
-            rerender={rerender}
-          />
-          <TeamSizeButton action={props.action} bladeburner={props.bladeburner} />
+          <CopyableText value={operation.name} />
+          <StartButton bladeburner={bladeburner} action={operation} rerender={rerender} />
+          <TeamSizeButton action={operation} bladeburner={bladeburner} />
         </>
       )}
       <br />
       <br />
 
-      <ActionLevel action={props.action} bladeburner={props.bladeburner} isActive={isActive} rerender={rerender} />
+      <ActionLevel action={operation} bladeburner={bladeburner} isActive={isActive} rerender={rerender} />
       <br />
       <br />
-      <Typography>
-        {actionData.desc}
+      <Typography whiteSpace={"pre-wrap"}>
+        {operation.desc}
         <br />
         <br />
-        <SuccessChance action={props.action} bladeburner={props.bladeburner} />
+        <SuccessChance action={operation} bladeburner={bladeburner} />
         <br />
         Time Required: {convertTimeMsToTimeElapsedString(actionTime * 1000)}
         <br />
-        Operations remaining: {formatBigNumber(Math.floor(props.action.count))}
+        Operations remaining: {formatBigNumber(Math.floor(operation.count))}
         <br />
-        Successes: {formatBigNumber(props.action.successes)}
+        Successes: {formatBigNumber(operation.successes)}
         <br />
-        Failures: {formatBigNumber(props.action.failures)}
+        Failures: {formatBigNumber(operation.failures)}
       </Typography>
       <br />
-      <Autolevel rerender={rerender} action={props.action} />
+      <Autolevel rerender={rerender} action={operation} />
     </Paper>
   );
 }
