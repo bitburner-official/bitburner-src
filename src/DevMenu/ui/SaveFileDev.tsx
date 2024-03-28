@@ -6,48 +6,87 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import Typography from "@mui/material/Typography";
-import { saveObject } from "../../SaveObject";
+import { loadGame, saveObject } from "../../SaveObject";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { Upload } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
-import { isBinaryFormat } from "../../../electron/saveDataBinaryFormat";
+import { SaveData } from "../../types";
+import { GetAllServers, loadAllServers, saveAllServers } from "../../Server/AllServers";
+import { Player } from "../../Player";
+import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
+import { loadAllRunningScripts } from "../../NetscriptWorker";
 
 export function SaveFileDev(): React.ReactElement {
   const importInput = useRef<HTMLInputElement>(null);
-  const [saveFile, setSaveFile] = useState("");
+  const [saveData, setSaveData] = useState<SaveData>();
   const [restoreScripts, setRestoreScripts] = useState(true);
-  const [restoreAugs, setRestoreAugs] = useState(true);
+  const [restoreAugmentations, setRestoreAugmentations] = useState(true);
   const [restoreSFs, setRestoreSFs] = useState(true);
 
   async function onImport(event: React.ChangeEvent<HTMLInputElement>): Promise<void> {
     try {
       const saveData = await saveObject.getSaveDataFromFile(event.target.files);
-      // TODO Support binary format. This is low priority because this entire feature (SaveFileDev) is not fully
-      // implemented. "doRestore" does nothing.
-      if (isBinaryFormat(saveData)) {
-        SnackbarEvents.emit("We currently do not support binary format", ToastVariant.ERROR, 5000);
-        return;
-      }
-      const save = decodeURIComponent(escape(atob(saveData as string)));
-      setSaveFile(save);
+      setSaveData(saveData);
     } catch (e: unknown) {
       SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);
     }
   }
 
   function startImport(): void {
-    if (!window.File || !window.FileReader || !window.FileList || !window.Blob) return;
-    const ii = importInput.current;
-    if (ii === null) throw new Error("import input should not be null");
-    ii.click();
+    if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
+      return;
+    }
+    if (!importInput.current) {
+      throw new Error("Invalid import input");
+    }
+    importInput.current.click();
   }
 
-  function doRestore(): void {
-    const save = JSON.parse(saveFile);
-    // TODO unplanned: "Continue here". Unknown what this todo is for.
-    console.error(save);
+  async function doRestore(): Promise<void> {
+    if (!saveData) {
+      return;
+    }
+
+    // Backup current data
+    const currentAllServers = saveAllServers();
+    const currentAugmentations = Player.augmentations;
+    const currentSFs = Player.sourceFiles;
+
+    // Kill all running scripts
+    for (const server of GetAllServers()) {
+      for (const byPid of server.runningScriptMap.values()) {
+        for (const runningScript of byPid.values()) {
+          killWorkerScriptByPid(runningScript.pid);
+        }
+      }
+    }
+
+    // Load save data
+    try {
+      if (!(await loadGame(saveData))) {
+        SnackbarEvents.emit("Cannot load save data", ToastVariant.ERROR, 5000);
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+      SnackbarEvents.emit(String(error), ToastVariant.ERROR, 5000);
+      return;
+    }
+
+    // Restore current data if needed
+    if (!restoreScripts) {
+      loadAllServers(currentAllServers);
+    }
+    if (!restoreAugmentations) {
+      Player.augmentations = currentAugmentations;
+    }
+    if (!restoreSFs) {
+      Player.sourceFiles = currentSFs;
+    }
+
+    loadAllRunningScripts();
   }
 
   return (
@@ -61,27 +100,27 @@ export function SaveFileDev(): React.ReactElement {
           <input ref={importInput} type="file" hidden onChange={onImport} />
         </Button>
         <br />
-        {saveFile !== "" && (
+        {saveData && (
           <>
             <OptionSwitch
               checked={restoreScripts}
               onChange={(v) => setRestoreScripts(v)}
               text="Restore scripts"
-              tooltip={<>Restore the save file home computer scripts.</>}
+              tooltip={<>Restore scripts in all servers.</>}
             />
             <br />
             <OptionSwitch
-              checked={restoreAugs}
-              onChange={(v) => setRestoreAugs(v)}
+              checked={restoreAugmentations}
+              onChange={(v) => setRestoreAugmentations(v)}
               text="Restore Augmentations"
-              tooltip={<>Restore the save file installed augmentations.</>}
+              tooltip={<>Restore installed augmentations.</>}
             />
             <br />
             <OptionSwitch
               checked={restoreSFs}
               onChange={(v) => setRestoreSFs(v)}
               text="Restore Source Files"
-              tooltip={<>Restore the save file acquired source files.</>}
+              tooltip={<>Restore acquired source files.</>}
             />
             <br />
             <Button onClick={doRestore}>Restore</Button>
