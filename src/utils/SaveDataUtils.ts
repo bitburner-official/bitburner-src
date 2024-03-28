@@ -22,17 +22,11 @@ async function compress(dataString: string): Promise<Uint8Array> {
 
 async function decompress(binaryData: Uint8Array): Promise<string> {
   const decompressedReadableStream = new Blob([binaryData]).stream().pipeThrough(new DecompressionStream("gzip"));
-  const reader = decompressedReadableStream.pipeThrough(new TextDecoderStream()).getReader();
+  const reader = decompressedReadableStream.pipeThrough(new TextDecoderStream("utf-8", { fatal: true })).getReader();
   let result = "";
-  // Use "done" here to stop Lint from showing error
-  const done = false;
   try {
-    while (!done) {
-      const readResult = await reader.read();
-      if (readResult.done) {
-        break;
-      }
-      result += readResult.value;
+    for (let { value, done } = await reader.read(); !done; { value, done } = await reader.read()) {
+      result += value;
     }
   } catch (error) {
     throw new InvalidSaveData(String(error));
