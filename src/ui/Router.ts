@@ -2,6 +2,7 @@ import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 import type { TextFilePath } from "../Paths/TextFilePath";
 import type { Faction } from "../Faction/Faction";
 import type { Location } from "../Locations/Location";
+import { SaveData } from "../types";
 
 // This enum doesn't need enum helper support for now
 /**
@@ -70,7 +71,7 @@ export type PageContext<T extends Page> = T extends ComplexPage.BitVerse
   : T extends ComplexPage.Location
   ? { location: Location }
   : T extends ComplexPage.ImportSave
-  ? { base64Save: string; automatic?: boolean }
+  ? { saveData: SaveData; automatic?: boolean }
   : T extends ComplexPage.Documentation
   ? { docPage?: string }
   : never;

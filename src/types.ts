@@ -44,3 +44,6 @@ export interface IMinMaxRange {
   /** The minimum bound of the range. */
   min: number;
 }
+
+// Type of save data. The base64 format is string, the binary format is Uint8Array.
+export type SaveData = string | Uint8Array;
