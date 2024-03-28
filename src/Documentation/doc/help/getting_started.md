@@ -631,10 +631,10 @@ Remember that most of your [Scripts](../basic/scripts.md) are targeting `joesgun
 It will take a bit for them to `grow()` and `weaken()` the [Server](../basic/servers.md) to the appropriate values before they start [hacking](../basic/hacking.md) it.
 Once they do, however, the [Scripts](../basic/scripts.md) will be very profitable.
 
-For reference, in about two hours after starting my first [Script](../basic/scripts.md), my [Scripts](../basic/scripts.md) had a production rate of $20k per second and had earned a total of $70 million.
+For reference, in about two hours after starting my first [Script](../basic/scripts.md), my [Scripts](../basic/scripts.md) had a production rate of \$20k per second and had earned a total of $70 million.
 (You can see these stats on the `Active Scripts` tab).
 
-After another 15 minutes, the production rate had increased to $25k per second and the [Scripts](../basic/scripts.md) had made an additional $55 million.
+After another 15 minutes, the production rate had increased to \$25k per second and the [Scripts](../basic/scripts.md) had made an additional $55 million.
 
 Your results will vary based on how fast you earned money from [crime](../basic/crimes.md)/[working](../basic/companies.md)/[hacknet nodes](../basic/hacknet_nodes.md), but this will hopefully give you a good indication of how much the [Scripts](../basic/scripts.md) can earn.
 

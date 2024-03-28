@@ -56,7 +56,7 @@ When running a script, you can use [flags](https://github.com/bitburner-official
 
 A script can be run with multiple threads, which we call "multithreading."
 Multithreading affects every call to the `ns.hack()`, `ns.grow()`, and `ns.weaken()` methods, multiplying their effects by the number of threads used.
-For example, if a script run with 1 thread is able to hack $10,000, then running the same script with 5 threads would hack $50,000.
+For example, if a script run with 1 thread is able to hack \$10,000, then running the same script with 5 threads would hack $50,000.
 
 [Note -- Scripts will not actually become multithreaded in the real-world sense - Javascript is a "single-threaded" coding language.]
 
