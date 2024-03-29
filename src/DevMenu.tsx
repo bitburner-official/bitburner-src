@@ -22,7 +22,6 @@ import { CodingContractsDev } from "./DevMenu/ui/CodingContractsDev";
 import { StockMarketDev } from "./DevMenu/ui/StockMarketDev";
 import { SleevesDev } from "./DevMenu/ui/SleevesDev";
 import { StanekDev } from "./DevMenu/ui/StanekDev";
-import { SaveFileDev } from "./DevMenu/ui/SaveFileDev";
 import { AchievementsDev } from "./DevMenu/ui/AchievementsDev";
 import { EntropyDev } from "./DevMenu/ui/EntropyDev";
 
@@ -64,7 +63,6 @@ export function DevMenuRoot(): React.ReactElement {
       <TimeSkip />
       <AchievementsDev />
       <EntropyDev />
-      <SaveFileDev />
     </>
   );
 }
