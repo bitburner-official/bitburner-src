@@ -1,11 +1,11 @@
-import type { ActionIdentifier } from "./Types";
+import type { ActionIdentifier } from "../Types";
 import { BladeActionType } from "@enums";
-import { assertLoadingType } from "../utils/TypeAssertion";
-import { getEnumHelper } from "../utils/EnumHelper";
+import { assertLoadingType } from "../../utils/TypeAssertion";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
-// Helpers related to save and load functionality
-
-/** Loads solely based on the "name" attribute, so it loads pre-2.6.1 ActionIdentifiers correctly */
+/** Loads an action identifier
+ * This is used for loading ActionIdentifier class objects from pre-2.6.1
+ * Should load both the old format and the new format */
 export function loadActionIdentifier(identifier: unknown): ActionIdentifier | null {
   if (!identifier || typeof identifier !== "object") return null;
   assertLoadingType<ActionIdentifier>(identifier);

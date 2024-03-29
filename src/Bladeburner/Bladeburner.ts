@@ -735,7 +735,7 @@ export class Bladeburner {
       const level = this.getSkillLevel(skill.name);
       if (!level) continue;
       for (const [name, mult] of getRecordEntries(skill.mults)) {
-        this.skillMultipliers[name] = clampNumber(this.getSkillMult(name) * (1 + mult / 100));
+        this.skillMultipliers[name] = clampNumber(this.getSkillMult(name) * (1 + mult / 100), 0);
       }
     }
   }
@@ -828,13 +828,10 @@ export class Bladeburner {
     }
   }
 
-  completeContract(success: boolean, actionIdent: ActionIdentifier): void {
-    if (actionIdent.type !== BladeActionType.contract) {
-      throw new Error("completeContract() called even though current action is not a Contract");
-    }
+  completeContract(success: boolean, action: Contract): void {
     const city = this.getCurrentCity();
     if (success) {
-      switch (actionIdent.name) {
+      switch (action.name) {
         case BladeContractName.tracking:
           // Increase estimate accuracy by a relatively small amount
           city.improvePopulationEstimateByCount(
@@ -849,10 +846,6 @@ export class Bladeburner {
           city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
           city.changeChaosByCount(0.04);
           break;
-        default: {
-          // Typecheck verifies that the above switch statement is exhaustive
-          const __a: never = actionIdent;
-        }
       }
     }
   }
@@ -912,7 +905,7 @@ export class Bladeburner {
                 );
               }
             }
-            isOperation ? this.completeOperation(true) : this.completeContract(true, actionIdent);
+            isOperation ? this.completeOperation(true) : this.completeContract(true, action);
           } else {
             retValue = this.getActionStats(action, person, false);
             ++action.failures;
@@ -944,7 +937,7 @@ export class Bladeburner {
             } else if (!isOperation && this.logging.contracts) {
               this.log(`${person.whoAmI()}: ` + action.name + " contract failed! " + logLossText);
             }
-            isOperation ? this.completeOperation(false) : this.completeContract(false, actionIdent);
+            isOperation ? this.completeOperation(false) : this.completeContract(false, action);
           }
           if (action.autoLevel) {
             action.level = action.maxLevel;
@@ -1254,26 +1247,25 @@ export class Bladeburner {
   }
 
   calculateStaminaGainPerSecond(): number {
-    const effAgility = Player.skills.agility * this.getSkillMult(BladeMultName.effAgi);
+    const effAgility = this.getEffectiveSkillLevel(Player, "agility");
     const maxStaminaBonus = this.maxStamina / BladeburnerConstants.MaxStaminaToGainFactor;
     const gain = (BladeburnerConstants.StaminaGainPerSecond + maxStaminaBonus) * Math.pow(effAgility, 0.17);
-    return gain * (this.getSkillMult(BladeMultName.stamina) * Player.mults.bladeburner_stamina_gain);
+    return clampNumber(gain * (this.getSkillMult(BladeMultName.stamina) * Player.mults.bladeburner_stamina_gain), 0);
   }
 
   calculateMaxStamina(): void {
-    const effAgility = Player.skills.agility * this.getSkillMult(BladeMultName.effAgi);
-    const maxStamina =
-      (Math.pow(effAgility, 0.8) + this.staminaBonus) *
-      this.getSkillMult(BladeMultName.stamina) *
-      Player.mults.bladeburner_max_stamina;
-    if (this.maxStamina !== maxStamina) {
-      const oldMax = this.maxStamina;
-      this.maxStamina = maxStamina;
-      this.stamina = (this.maxStamina * this.stamina) / oldMax;
-    }
-    if (isNaN(maxStamina)) {
-      throw new Error("Max Stamina calculated to be NaN in Bladeburner.calculateMaxStamina()");
-    }
+    const baseStamina = Math.pow(this.getEffectiveSkillLevel(Player, "agility"), 0.8);
+    const maxStamina = clampNumber(
+      (baseStamina + this.staminaBonus) *
+        this.getSkillMult(BladeMultName.stamina) *
+        Player.mults.bladeburner_max_stamina,
+      0,
+    );
+    if (this.maxStamina === maxStamina) return;
+    // If max stamina changed, adjust stamina accordingly
+    const oldMax = this.maxStamina;
+    this.maxStamina = maxStamina;
+    this.stamina = clampNumber((this.maxStamina * this.stamina) / oldMax, 0, maxStamina);
   }
 
   getSkillLevel(skillName: BladeSkillName): number {
@@ -1380,6 +1372,7 @@ export class Bladeburner {
     }
   }
 
+  /** Fuzzy matching for action identifiers. Should be removed in 3.0 */
   getActionFromTypeAndName(type: string, name: string): Action | null {
     if (!type || !name) return null;
     const convertedType = type.toLowerCase().trim();

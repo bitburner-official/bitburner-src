@@ -19,5 +19,5 @@ export function clampInteger(value: number, min = -Number.MAX_SAFE_INTEGER, max 
     if (CONSTANTS.isDevBranch) throw new Error("NaN passed into clampInteger()");
     return min;
   }
-  return Math.floor(Math.max(Math.min(value, max), min));
+  return Math.round(Math.max(Math.min(value, max), min));
 }

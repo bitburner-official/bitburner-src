@@ -1,7 +1,7 @@
 /* Generic Reviver, toJSON, and fromJSON functions used for saving and loading objects */
 import { ObjectValidator, validateObject } from "./Validator";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
-import { loadActionIdentifier } from "../Bladeburner/SaveLoad";
+import { loadActionIdentifier } from "../Bladeburner/utils/loadActionIdentifier";
 
 type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
   fromJSON: (value: IReviverValue) => any;

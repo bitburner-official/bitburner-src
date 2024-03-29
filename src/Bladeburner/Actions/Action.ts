@@ -101,8 +101,8 @@ export abstract class ActionClass {
     let baseTime = difficulty / BladeburnerConstants.DifficultyToTimeFactor;
     const skillFac = bladeburner.getSkillMult(BladeMultName.actionTime); // Always < 1
 
-    const effAgility = person.skills.agility * bladeburner.getSkillMult(BladeMultName.effAgi);
-    const effDexterity = person.skills.dexterity * bladeburner.getSkillMult(BladeMultName.effDex);
+    const effAgility = bladeburner.getEffectiveSkillLevel(person, "agility");
+    const effDexterity = bladeburner.getEffectiveSkillLevel(person, "dexterity");
     const statFac =
       0.5 *
       (Math.pow(effAgility, BladeburnerConstants.EffAgiExponentialFactor) +
