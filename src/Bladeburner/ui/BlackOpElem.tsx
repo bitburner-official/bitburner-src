@@ -41,18 +41,16 @@ export function BlackOpElem({ bladeburner, blackOp }: BlackOpElemProps): React.R
     <Paper sx={{ my: 1, p: 1 }}>
       {isActive ? (
         <>
-          <>
-            <CopyableText value={blackOp.name} />
-            <Typography>
-              (IN PROGRESS - {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
-              {formatNumberNoSuffix(bladeburner.actionTimeToComplete, 0)})
-            </Typography>
-            <Typography>
-              {createProgressBarText({
-                progress: computedActionTimeCurrent / bladeburner.actionTimeToComplete,
-              })}
-            </Typography>
-          </>
+          <CopyableText value={blackOp.name} />
+          <Typography>
+            (IN PROGRESS - {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
+            {formatNumberNoSuffix(bladeburner.actionTimeToComplete, 0)})
+          </Typography>
+          <Typography>
+            {createProgressBarText({
+              progress: computedActionTimeCurrent / bladeburner.actionTimeToComplete,
+            })}
+          </Typography>
         </>
       ) : (
         <>

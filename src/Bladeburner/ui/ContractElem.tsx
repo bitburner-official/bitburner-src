@@ -35,8 +35,11 @@ export function ContractElem({ bladeburner, action }: ContractElemProps): React.
     <Paper sx={{ my: 1, p: 1 }}>
       {isActive ? (
         <>
-          <CopyableText value={action.name} /> (IN PROGRESS - {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
-          {formatNumberNoSuffix(bladeburner.actionTimeToComplete, 0)})
+          <CopyableText value={action.name} />
+          <Typography>
+            (IN PROGRESS - {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
+            {formatNumberNoSuffix(bladeburner.actionTimeToComplete, 0)})
+          </Typography>
           <Typography>
             {createProgressBarText({
               progress: computedActionTimeCurrent / bladeburner.actionTimeToComplete,
