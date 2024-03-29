@@ -1,7 +1,9 @@
+import type { Bladeburner } from "../Bladeburner";
+import type { Contract } from "../Actions/Contract";
+
 import React from "react";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { Bladeburner } from "../Bladeburner";
 import { Player } from "@player";
 import { SuccessChance } from "./SuccessChance";
 import { CopyableText } from "../../ui/React/CopyableText";
@@ -9,10 +11,8 @@ import { ActionLevel } from "./ActionLevel";
 import { Autolevel } from "./Autolevel";
 import { StartButton } from "./StartButton";
 import { formatNumberNoSuffix, formatBigNumber } from "../../ui/formatNumber";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
+import { Paper, Typography } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";
-import { Contract } from "../Actions/Contract";
 import { getEnumHelper } from "../../utils/EnumHelper";
 
 interface ContractElemProps {

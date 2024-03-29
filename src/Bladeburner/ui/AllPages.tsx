@@ -1,3 +1,5 @@
+import type { Bladeburner } from "../Bladeburner";
+
 import React from "react";
 import { Box, Tab, Tabs } from "@mui/material";
 
@@ -6,7 +8,6 @@ import { ContractPage } from "./ContractPage";
 import { OperationPage } from "./OperationPage";
 import { BlackOpPage } from "./BlackOpPage";
 import { SkillPage } from "./SkillPage";
-import { Bladeburner } from "../Bladeburner";
 
 interface IProps {
   bladeburner: Bladeburner;

@@ -1,18 +1,14 @@
+import type { Bladeburner } from "../Bladeburner";
 import type { GeneralAction } from "../Actions/GeneralAction";
 
 import React from "react";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { Bladeburner } from "../Bladeburner";
 import { Player } from "@player";
 import { CopyableText } from "../../ui/React/CopyableText";
-
 import { StartButton } from "./StartButton";
-
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
+import { Box, Paper, Typography } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";
 
 interface GeneralActionElemProps {

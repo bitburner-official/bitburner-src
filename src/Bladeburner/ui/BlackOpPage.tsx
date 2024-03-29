@@ -1,8 +1,9 @@
+import type { Bladeburner } from "../Bladeburner";
+
 import * as React from "react";
 import { Button, Typography } from "@mui/material";
 import { FactionName } from "@enums";
-import { BlackOpList } from "./BlackOpList";
-import { Bladeburner } from "../Bladeburner";
+import { BlackOpElem } from "./BlackOpElem";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { CorruptableText } from "../../ui/React/CorruptableText";
@@ -13,6 +14,8 @@ interface BlackOpPageProps {
 }
 
 export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactElement {
+  const blackOps = blackOpsArray.slice(0, bladeburner.numBlackOpsComplete + 1);
+
   return (
     <>
       <Typography>
@@ -34,7 +37,11 @@ export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactEleme
           <CorruptableText content="Destroy w0rld_d34mon" spoiler={false}></CorruptableText>
         </Button>
       ) : (
-        <BlackOpList bladeburner={bladeburner} />
+        <>
+          {blackOps.map((blackOp) => (
+            <BlackOpElem key={blackOp.name} bladeburner={bladeburner} blackOp={blackOp} />
+          ))}
+        </>
       )}
     </>
   );

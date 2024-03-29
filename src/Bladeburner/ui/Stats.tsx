@@ -1,3 +1,5 @@
+import type { Bladeburner } from "../Bladeburner";
+
 import React, { useState } from "react";
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import { Player } from "@player";
@@ -10,8 +12,6 @@ import { formatNumberNoSuffix, formatPopulation, formatBigNumber } from "../../u
 import { Factions } from "../../Faction/Factions";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { Bladeburner } from "../Bladeburner";
-
 import { TravelModal } from "./TravelModal";
 
 interface StatsProps {

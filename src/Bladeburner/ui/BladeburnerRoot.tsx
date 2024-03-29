@@ -4,7 +4,7 @@ import { Console } from "./Console";
 import { AllPages } from "./AllPages";
 
 import { Player } from "@player";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";
 
 export function BladeburnerRoot(): React.ReactElement {

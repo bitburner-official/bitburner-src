@@ -1,11 +1,9 @@
+import type { Bladeburner } from "../Bladeburner";
+
 import React, { useMemo } from "react";
 import { CopyableText } from "../../ui/React/CopyableText";
 import { formatBigNumber } from "../../ui/formatNumber";
-import { Bladeburner } from "../Bladeburner";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
+import { Box, IconButton, Paper, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import { Skill } from "../Skill";

@@ -4,7 +4,7 @@ import type { BlackOperation, Operation } from "../Actions";
 import React, { useState } from "react";
 import { TeamSizeModal } from "./TeamSizeModal";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
-import Button from "@mui/material/Button";
+import { Button } from "@mui/material";
 
 interface TeamSizeButtonProps {
   action: Operation | BlackOperation;

@@ -1,25 +1,26 @@
+import type { Bladeburner } from "../Bladeburner";
+
 import React from "react";
 import { Button, Typography } from "@mui/material";
 import { CityName } from "@enums";
-import { Bladeburner } from "../Bladeburner";
 import { WorldMap } from "../../ui/React/WorldMap";
 import { Modal } from "../../ui/React/Modal";
 import { Settings } from "../../Settings/Settings";
 
-interface IProps {
+interface TravelModalProps {
   bladeburner: Bladeburner;
   open: boolean;
   onClose: () => void;
 }
 
-export function TravelModal(props: IProps): React.ReactElement {
+export function TravelModal({ bladeburner, open, onClose }: TravelModalProps): React.ReactElement {
   function travel(city: CityName): void {
-    props.bladeburner.city = city;
-    props.onClose();
+    bladeburner.city = city;
+    onClose();
   }
 
   return (
-    <Modal open={props.open} onClose={props.onClose}>
+    <Modal open={open} onClose={onClose}>
       <>
         <Typography>
           Travel to a different city for your Bladeburner activities. This does not cost any money. The city you are in
@@ -32,7 +33,7 @@ export function TravelModal(props: IProps): React.ReactElement {
             </Button>
           ))
         ) : (
-          <WorldMap currentCity={props.bladeburner.city} onTravel={travel} />
+          <WorldMap currentCity={bladeburner.city} onTravel={travel} />
         )}
       </>
     </Modal>

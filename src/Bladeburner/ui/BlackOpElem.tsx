@@ -1,3 +1,6 @@
+import type { Bladeburner } from "../Bladeburner";
+import type { BlackOperation } from "../Actions/BlackOperation";
+
 import React from "react";
 import { Paper, Typography } from "@mui/material";
 
@@ -6,8 +9,6 @@ import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { TeamSizeButton } from "./TeamSizeButton";
-import { Bladeburner } from "../Bladeburner";
-import { BlackOperation } from "../Actions/BlackOperation";
 import { CopyableText } from "../../ui/React/CopyableText";
 import { SuccessChance } from "./SuccessChance";
 import { StartButton } from "./StartButton";

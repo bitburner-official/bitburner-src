@@ -1,8 +1,9 @@
+import type { Bladeburner } from "../Bladeburner";
+
 import React from "react";
 import { BladeburnerConstants } from "../data/Constants";
-import { Bladeburner } from "../Bladeburner";
 import { formatBigNumber } from "../../ui/formatNumber";
-import Typography from "@mui/material/Typography";
+import { Typography } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";
 import { SkillElem } from "./SkillElem";
 import { Skills } from "../data/Skills";
