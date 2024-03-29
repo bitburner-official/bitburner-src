@@ -78,8 +78,8 @@ export class Bladeburner {
   skills: PartialRecord<BladeSkillName, number> = {};
   skillMultipliers: PartialRecord<BladeMultName, number> = {};
   staminaBonus = 0;
-  maxStamina = 0;
-  stamina = 0;
+  maxStamina = 1;
+  stamina = 1;
   // Contracts and operations are stored on the Bladeburner object even though they are global so that they can utilize save/load of the main bladeburner object
   contracts: Record<BladeContractName, Contract>;
   operations: Record<BladeOperationName, Operation>;
