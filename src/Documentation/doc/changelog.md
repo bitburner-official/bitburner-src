@@ -113,7 +113,7 @@
 - Added basic protection for certain global values that could cause a recovery screen if reassigned (@Snarling)
 - Fixed conditions for an easter egg message (@cigarmemr)
 - (Bitverse) Changed listed difficulty for BN3 to "hard"
-- (CodingContract) Reduce incidence of \$0 coding contract rewards in circumstances where the reward would be $0 (@trambelus)
+- (CodingContract) Reduce incidence of \$0 coding contract rewards in circumstances where the reward would be \$0 (@trambelus)
 - (Corporation) Added better accounting of funds transactions (@jjclark1982)
 - (Corporation) Remove cooldown on starting over corporation, but maintain remaining cooldown for selling shares (@jjclark1982)
 - (Corporation) Removed some legacy code that was not doing anything (@catloversg)
@@ -172,7 +172,7 @@ For the Steam version, any special options you have enabled in the File menu may
 - Fix an error that would occur in some cases when using gymGains or universityGains (@cigarmemr)
 - Fix tab autocompletion when running a sceript without the run command (@mytskine)
 - Fix a bug that could cause the wrong coding contract to be deleted when using rm (@TheAimMan)
-- Scripts no longer show $0 for offline money income (@alutman)
+- Scripts no longer show \$0 for offline money income (@alutman)
 - Faction invitations are now cleared properly when performing a reset (@alutman)
 - API functions that work on a hostname no longer work on servers that have not been added to the network. (@TheAimMan)
 - Fix an issue where the "True Recursion" achievement could be granted incorrectly (@jjclark1982)
@@ -423,7 +423,7 @@ PERFORMANCE:
 NETSCRIPT GENERAL:
 
 - Remove requirement for script args to be unique. This was also related to performance improvements. (@d0sboots)
-- ns.hackAnalyzeThreads no longer indicates infinity any time a single thread would hack less than $1 (@Snarling)
+- ns.hackAnalyzeThreads no longer indicates infinity any time a single thread would hack less than \$1 (@Snarling)
 - ns.renamePurchasedServer no longer crashes if player is connected to the server being renamed (@Snarling)
 - ns.hackAnalyzeThreads now return -1 (instead of 0) if no money can be hacked from the targeted server. (@d0sboots)
 - Fix a possible infinite atExit loop if a script killed itself. (@Snarling)
@@ -1351,7 +1351,7 @@ Stanek Gift
 - Include map bundles in electron for easier debugging (@MartinFournier)
 - Fix importing very large files (@MartinFournier)
 - Cache program blob, reducing ram usage of the game (@theit8514)
-- Dev menu can set server to $0 (@mikomyazaki)
+- Dev menu can set server to \$0 (@mikomyazaki)
 - 'backdoor' allows direct connect (@mikomyazaki)
 - Github workflow work (@MartinFournier)
 - workForFaction / workForCompany have a new parameter (@theit8514)
@@ -2297,7 +2297,7 @@ Stanek Gift
 
 **Misc.**
 
-- Very large number will no longer appear as "$NaNt"
+- Very large number will no longer appear as "\$NaNt"
 - Hash capacity now displays in the "big number" format.
 - nerf noodle bar
 
@@ -2986,7 +2986,7 @@ Stanek Gift
 - 'Generate Coding Contract' hash upgrade is now more expensive
 - 'Generate Coding Contract' hash upgrade now generates the contract randomly on the server, rather than on home computer
 - The cost of selling hashes for money no longer increases each time
-- Selling hashes for money now costs 4 hashes (in exchange for $1m)
+- Selling hashes for money now costs 4 hashes (in exchange for \$1m)
 - Bug Fix: Hacknet Node earnings should work properly when game is inactive/offline
 - Bug Fix: Duplicate Sleeve augmentations are now properly reset when switching to a new BitNode
 
@@ -3128,7 +3128,7 @@ Stanek Gift
 
   - Each stock now has a maximum number of shares you can purchase (both Long and Short positions combined)
   - Added getStockMaxShares() Netscript function to the TIX API
-  - The cost of 4S Market Data TIX API Access increased from \$20b to $25b
+  - The cost of 4S Market Data TIX API Access increased from \$20b to \$25b
 
 - Job Changes:
 
@@ -3150,14 +3150,14 @@ Stanek Gift
 
 - Corporation Changes:
 
-  - Corporation can now be self-funded with $150b or using seed money in exchange for 500m newly-issued shares
-  - In BitNode-3, you no longer start with $150b
+  - Corporation can now be self-funded with \$150b or using seed money in exchange for 500m newly-issued shares
+  - In BitNode-3, you no longer start with \$150b
   - Changed initial market prices for many materials
   - Changed the way a material's demand, competition, and market price change over time
   - The sale price of materials can no longer be marked-up as high
   - Added a Research Tree mechanic. Spend Scientific Research on permanent upgrades for each industry
   - You can now redistribute earnings to shareholders (including yourself) as dividends
-  - Cost of "Smart Supply" upgraded reduced from \$50b to $25b
+  - Cost of "Smart Supply" upgraded reduced from \$50b to \$25b
   - Now has offline progress, which works similarly to the Gang/Bladeburner mechanics
   - Slightly reduced the amount of money offered to you by investment firms
   - Employee salaries now slowly increase over time
@@ -3168,7 +3168,7 @@ Stanek Gift
   - Buying back shares must now be done at a premium
   - Selling shares can now only be done once per hour
   - Selling large amounts of shares now immediately impacts stock price (during the transaction)
-  - Reduced the initial cost of the DreamSense upgrade from \$8b to $4b, but increased its price multiplier
+  - Reduced the initial cost of the DreamSense upgrade from \$8b to \$4b, but increased its price multiplier
   - Reduced the price multiplier for ABC SalesBots upgrade
 
 - Added getOrders() Netscript function to the TIX API
@@ -3456,7 +3456,7 @@ Stanek Gift
 
 - After joining the Bladeburners division, there is now a button to go to the Bladeburner content
   in the 'City' page
-- You now start with \$250m in BitNode-8 (increased from $100m)
+- You now start with \$250m in BitNode-8 (increased from \$100m)
 - Bug Fix: You can now no longer directly edit Hacknet Node values through NetscriptJS (hopefully)
 - Bug Fix: Bladeburners is no longer accessible in BN-8
 - Bug Fix: getBitNodeMultipliers() Netscript function now returns a copy rather than the original object
@@ -3644,7 +3644,7 @@ Stanek Gift
   - purchaseServer(): increased by 0.25GB
 - Note: You may need to re-save all of your scripts in order to re-calculate their RAM usages. Otherwise, it should automatically be re-calculated when you reset/prestige
 - The cost to upgrade your home computer's RAM has been increased (both the base cost and the exponential upgrade multiplier)
-- The cost of purchasing a server was increased by 10% (it is now $55k per RAM)
+- The cost of purchasing a server was increased by 10% (it is now \$55k per RAM)
 - Bug fix: (Hopefully) removed an exploit where you could avoid RAM usage for Netscript function calls by assigning functions to a variable (foo = hack(); foo('helios');)
 - Bug fix: (Hopefully) removed an exploit where you could run arbitrary Javascript code using the constructor() method
 - Thanks to Github user mateon1 and Reddit users havoc_mayhem and spaceglace for notifying me of the above exploits
@@ -3710,7 +3710,7 @@ Stanek Gift
 
 - Game now saves to IndexedDb (if your browser supports it). This means you should no longer have trouble saving the game when your save file gets too big (from running too many scripts). The game will still be saved to localStorage as well
 - New file type: text files (.txt). You can read or write to text files using the read()/write() Netscript commands. You can view text files in Terminal using 'cat'. Eventually I will make it so you can edit them in the editor but that's not available yet. You can also download files to your real computer using the 'download' Terminal command
-- Added a new Crime: Bond Forgery. This crime takes 5 minutes to attempt and gives $4,500,000 if successful. It is meant for mid game.
+- Added a new Crime: Bond Forgery. This crime takes 5 minutes to attempt and gives \$4,500,000 if successful. It is meant for mid game.
 - Added commitCrime(), getCrimeChance(), isBusy(), and getStats() Singularity Functions.
 - Removed getIntelligence() Netscript function
 - Added sprintf and vsprintf to Netscript. See [https://github.com/alexei/sprintf.js this Github page for details]
@@ -4082,7 +4082,7 @@ Similar concepts apply for Terminal Commands such as tail, and Netscript command
 - Added killall Terminal command. Kills all running scripts on the current machine
 - Added kill() and killall() Netscript commands. Used to kill scripts on specified machines. See Netscript documentation
 - Re-designed 'Active Scripts' tab
-- Hacknet Node base production rate lowered from 1.6 to 1.55 ($/second)
+- Hacknet Node base production rate lowered from 1.6 to 1.55 (\$/second)
 - Increased monetary cost of RAM (Upgrading home computer and purchasing servers will now be more expensive)
 - NEW GROWTH MECHANICS - The rate of growth on a server now depends on a server's security level. A higher security level will result in lower growth on a server when using the grow() command. Furthermore, calling grow() on a server raises that server's security level by 0.004. For reference, if a server has a security level of 10 it will have approximately the same growth rate as before.
 - Server growth no longer happens naturally
@@ -4123,7 +4123,7 @@ Similar concepts apply for Terminal Commands such as tail, and Netscript command
 - Cancelling a full time job early now only results in halved gains for reputation. Exp and money earnings are gained in full
 - Added exec() Netscript command, used to run scripts on other servers.
 - NEW HACKING MECHANICS: Whenever a server is hacked, its 'security level' is increased by a very small amount. The security level is denoted by a number between 1-100. A higher security level makes it harder to hack a server and also decreases the amount of money you steal from it. Two Netscript functions, weaken() and getServerSecurityLevel() level, were added. The weaken(server) function lowers a server's security level. See the Netscript documentation for more details
-- When donating to factions, the base rate is now \$1,000,000 for 1 reputation point. Before, it was $1,000 for 1 reputation point.
+- When donating to factions, the base rate is now \$1,000,000 for 1 reputation point. Before, it was \$1,000 for 1 reputation point.
 - Monetary costs for all Augmentations increased. They are now about ~3.3 - 3.75 times more expensive than before
 
 ## v0.17.1
@@ -4141,11 +4141,11 @@ Similar concepts apply for Terminal Commands such as tail, and Netscript command
 - Added getHostname() command in Netscript that returns the hostname of the server a script is running on
 - jQuery preventDefault() called when pressing ctrl+b in script editor
 - The Neuroflux Governor augmentation (the one that can be repeatedly leveled up) now increases ALL multipliers by 1%. To balance it out, it's price multiplier when it levels up was increased
-- Hacknet Node base production decreased from \$1.75/s to $1.65/s
+- Hacknet Node base production decreased from \$1.75/s to \$1.65/s
 - Fixed issue with nested for loops in Netscript (stupid Javascript references)
 - Added 'scp' command to Terminal and Netscript
 - Slightly nerfed Hacknet Node Kernel DNI and Hacknet Node Core DNI Augmentations
-- Increased TOR Router cost to $200k
+- Increased TOR Router cost to \$200k
 
 ## v0.16.0
 
