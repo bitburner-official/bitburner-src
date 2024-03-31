@@ -411,6 +411,9 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       (ctx) =>
       (_sourceDivision, _sourceCity, _targetDivision, _targetCity, _materialName, _amt): void => {
         checkAccess(ctx, CorpUnlockName.WarehouseAPI);
+        if (!hasUnlock(CorpUnlockName.Export)) {
+          throw helpers.errorMessage(ctx, `You have not unlocked the Export feature!`);
+        }
         const sourceDivision = helpers.string(ctx, "sourceDivision", _sourceDivision);
         const sourceCity = getEnumHelper("CityName").nsGetMember(ctx, _sourceCity, "sourceCity");
         const targetDivision = getDivision(helpers.string(ctx, "targetDivision", _targetDivision));
@@ -424,6 +427,9 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       (ctx) =>
       (_sourceDivision, _sourceCity, _targetDivision, _targetCity, _materialName): void => {
         checkAccess(ctx, CorpUnlockName.WarehouseAPI);
+        if (!hasUnlock(CorpUnlockName.Export)) {
+          throw helpers.errorMessage(ctx, `You have not unlocked the Export feature!`);
+        }
         const sourceDivision = helpers.string(ctx, "sourceDivision", _sourceDivision);
         const sourceCity = getEnumHelper("CityName").nsGetMember(ctx, _sourceCity, "sourceCity");
         const targetDivision = helpers.string(ctx, "targetDivision", _targetDivision);
