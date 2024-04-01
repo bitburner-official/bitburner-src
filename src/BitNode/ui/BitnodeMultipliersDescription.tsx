@@ -43,7 +43,7 @@ export const BitNodeMultipliersDisplay = ({ n, level }: IProps): React.ReactElem
   const mults = getBitNodeMultipliers(n, level ?? Math.min(Player.sourceFileLvl(n) + 1, maxSfLevel));
 
   return (
-    <Box sx={{ columnCount: 2, columnGap: 1, mb: (n === 1 ? 0 : -2) }}>
+    <Box sx={{ columnCount: 2, columnGap: 1, mb: n === 1 ? 0 : -2 }}>
       <GeneralMults n={n} mults={mults} />
       <SkillMults n={n} mults={mults} />
       <FactionMults n={n} mults={mults} />
