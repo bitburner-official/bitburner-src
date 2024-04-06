@@ -123,6 +123,10 @@ They are the materials that boost [division production multiplier](./boost-mater
 
 Check the optimizer in this [section](./boost-material.md).
 
+#### Why does [General advice](./general-advice.md) section tell me to use API to upgrade office size?
+
+API (`upgradeOfficeSize`) gives you granular control over office size. You cannot do that through UI.
+
 #### Why does setAutoJobAssignment not take effect immediately?
 
 It only takes effect in next cycle's START state.

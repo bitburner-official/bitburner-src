@@ -2,26 +2,25 @@
 
 ## Round 1
 
-Create Agriculture division, expand to 6 cities and buy 6 warehouses. Set 3 employees to R&D, then switch to Operations (1) + Engineer (1) + Business (1) right before buying boost materials.
+Create Agriculture division, expand to 6 cities and buy 6 warehouses.
 
-Make sure that your employees' energy and morale are at maximum value.
+Use API (`upgradeOfficeSize`) to upgrade office size from 3 to 4. Set 4 employees to R&D and wait until RP is at least 55. Switch to Operations (1) + Engineer (1) + Business (1) + Management (1) before buying boost materials.
 
-Write custom "Smart Supply" script. If you skip this step, buy "Smart Supply" feature. "Smart Supply" costs 25b, and 25b is huge in round 1.
+Make sure that your employees' energy and morale are at maximum value. This is always mandatory, not just in round 1.
+
+Write a custom "Smart Supply" script. If you skip this step, buy "Smart Supply" feature. "Smart Supply" costs 25b, and 25b is huge in round 1.
 
 There are not many things else to do in this round. The budget is too low, so you can skip all these things:
 
 - Expand into other industries.
-- Upgrade office.
 - Buy corporation's upgrades (except Smart Storage).
 
 Use remaining funds to buy these upgrades:
 
 - Only focus on Smart Storage and warehouse upgrade.
-- Only buy 1 or 2 Advert level(s).
+- Buy 2 Advert levels.
 
-After that, find the optimal quantities of boost materials and buy them. Do not use "Bulk Purchase", it requires paying upfront. Buying boost materials per second does not need funds, you can go into debt.
-
-RP is at least ~30 after buying tea and throwing party. Waiting for RP is optional in this round. It's not mandatory and does not affect the offer significantly.
+After that, find the optimal quantities of boost materials and buy them. Do not use "Bulk Purchase", it requires paying upfront. Buying boost materials per second does not need funds because you can go into debt.
 
 ## Round 2
 
@@ -29,12 +28,12 @@ Buy "Export".
 
 Upgrade Agriculture division:
 
-- Find a good number for office size. 6 is the optimal size. In this round, office upgrade is still too expensive and has bad ROI. Instead, you should invest in upgrades that increase division production multiplier, e.g., Smart Storage and warehouse upgrade (more storage space for boost materials), Smart Factories.
+- Find a good number for office size. 8 is the optimal size.
 - Buy a couple of Advert levels. Advert level 8 is enough for most cases.
 
 Create Chemical division:
 
-- Expanding into Chemical industry is mandatory. I tried skipping Chemical and focus budget to Agriculture. It's futile, low-quality materials cannot be sold well.
+- Expanding into Chemical industry is mandatory. Without high-quality Chemicals (material) from Chemical division, output materials in Agriculture will be low-quality, and low-quality materials cannot be sold well.
 - Chemical division is a support division, so don't invest much funds on it. Don't waste funds on its Office/Advert upgrades.
 - Chemical industry has low boost materials' coefficients, so you should only buy very small number of warehouse upgrade for it. On the other hand, you should not skip Chemical's warehouse upgrade entirely. You still need Chemical division produces an acceptable amount of high-quality Chemical; otherwise, the quality of Chemical used in PRODUCTION state of Agriculture division is reduced too much due to "dilution" in PURCHASE state. For this purpose, 1 warehouse upgrade is enough.
 
@@ -47,7 +46,7 @@ Waiting for RP is mandatory in this round. It serves 2 purposes:
   - High-quality Plants can be exported to Chemical to create a loop of quality-enhancing process.
   - High-quality Plants can be sold easier (higher [MaxSalesVolume](./optimal-selling-price-market-ta2.md)). With your limited budget, you can only increase `MaxSalesVolume` by buying Advert and improving quality of output material. Buying Advert costs money, but waiting for RP is free (except your time).
 
-Waiting for 460RP/300RP in Agriculture/Chemical division respectively is enough. You can wait for more if you want.
+Waiting for 700RP/390RP in Agriculture/Chemical division respectively is enough. You can wait for more if you want.
 
 ## Round 3+
 
