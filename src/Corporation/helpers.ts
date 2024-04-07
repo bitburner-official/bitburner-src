@@ -5,6 +5,13 @@ import { Corporation } from "./Corporation";
 import { CorpUpgrade } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
 
+export function costOfCreatingCorporation(restart: boolean): number {
+  if (restart && !Player.corporation?.seedFunded) {
+    return 50e9;
+  }
+  return 150e9;
+}
+
 export function calculateUpgradeCost(corporation: Corporation, upgrade: CorpUpgrade, amount: PositiveInteger): number {
   const priceMult = upgrade.priceMult;
   const level = corporation.upgrades[upgrade.name].level;

@@ -144,7 +144,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
         <Button disabled={!Player.canAccessCorporation() || !!Player.corporation} onClick={() => setOpen(true)}>
           Create a Corporation
         </Button>
-        <CreateCorporationModal open={open} onClose={() => setOpen(false)} />
+        <CreateCorporationModal open={open} onClose={() => setOpen(false)} restart={false} />
       </>
     );
   }

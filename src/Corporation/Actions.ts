@@ -21,8 +21,40 @@ import {
   sellSharesFailureReason,
   buybackSharesFailureReason,
   issueNewSharesFailureReason,
+  costOfCreatingCorporation,
 } from "./helpers";
 import { PositiveInteger } from "../types";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
+
+export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): boolean {
+  if (!Player.canAccessCorporation()) {
+    return false;
+  }
+  if (Player.corporation && !restart) {
+    return false;
+  }
+  if (!corporationName) {
+    return false;
+  }
+  if (Player.bitNodeN !== 3 && !selfFund) {
+    throw new Error("Cannot use seed funds outside of BitNode 3");
+  }
+  if (currentNodeMults.CorporationSoftcap < 0.15) {
+    throw new Error(`You cannot create a corporation in BitNode ${Player.bitNodeN}`);
+  }
+
+  if (selfFund) {
+    const cost = costOfCreatingCorporation(restart);
+    if (!Player.canAfford(cost)) {
+      return false;
+    }
+    Player.startCorporation(corporationName, false);
+    Player.loseMoney(cost, "corporation");
+  } else {
+    Player.startCorporation(corporationName, true);
+  }
+  return true;
+}
 
 export function NewDivision(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.size >= corporation.maxDivisions)

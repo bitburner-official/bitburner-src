@@ -449,6 +449,8 @@ const corporation = {
   hasResearched: RamCostConstants.CorporationInfo,
   setAutoJobAssignment: RamCostConstants.CorporationAction,
   getOfficeSizeUpgradeCost: RamCostConstants.CorporationInfo,
+  restartCorporation: RamCostConstants.CorporationAction,
+  sellDivision: RamCostConstants.CorporationAction,
 } as const;
 
 /** RamCosts guaranteed to match ns structure 1:1 (aside from args and enums).

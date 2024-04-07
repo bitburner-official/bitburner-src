@@ -1,4 +1,4 @@
-import { Player } from "../Player";
+import { Player } from "@player";
 import { Exploit } from "../Exploits/Exploit";
 import * as bcrypt from "bcryptjs";
 import { Apr1Events as devMenu } from "../ui/Apr1";

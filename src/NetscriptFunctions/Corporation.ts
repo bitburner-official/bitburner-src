@@ -1,4 +1,4 @@
-import { Player, Player as player } from "../Player";
+import { Player } from "@player";
 
 import { OfficeSpace } from "../Corporation/OfficeSpace";
 import { Product } from "../Corporation/Product";
@@ -50,6 +50,8 @@ import {
   LimitMaterialProduction,
   LimitProductProduction,
   UpgradeWarehouseCost,
+  createCorporation,
+  removeDivision,
 } from "../Corporation/Actions";
 import { CorpUnlocks } from "../Corporation/data/CorporationUnlocks";
 import { CorpUpgrades } from "../Corporation/data/CorporationUpgrades";
@@ -58,7 +60,6 @@ import { IndustriesData, IndustryResearchTrees } from "../Corporation/data/Indus
 import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
 import { Factions } from "../Faction/Factions";
-import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
@@ -68,24 +69,6 @@ import { PositiveInteger } from "../types";
 import { getRecordKeys } from "../Types/Record";
 
 export function NetscriptCorporation(): InternalAPI<NSCorporation> {
-  function createCorporation(corporationName: string, selfFund = true): boolean {
-    if (!player.canAccessCorporation() || player.corporation) return false;
-    if (!corporationName) return false;
-    if (player.bitNodeN !== 3 && !selfFund) throw new Error("cannot use seed funds outside of BitNode 3");
-    if (currentNodeMults.CorporationSoftcap < 0.15)
-      throw new Error(`You cannot create a corporation in Bitnode ${player.bitNodeN}`);
-
-    if (selfFund) {
-      if (!player.canAfford(150e9)) return false;
-
-      player.startCorporation(corporationName, false);
-      player.loseMoney(150e9, "corporation");
-    } else {
-      player.startCorporation(corporationName, true);
-    }
-    return true;
-  }
-
   function hasUnlock(unlockName: CorpUnlockName): boolean {
     const corporation = getCorporation();
     return corporation.unlocks.has(unlockName);
@@ -128,7 +111,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     const faction = Factions[factionName];
     const info = faction.getInfo();
     if (!info.offersWork()) return false;
-    if (player.hasGangWith(factionName)) return false;
+    if (Player.hasGangWith(factionName)) return false;
 
     const repGain = amountCash / corpConstants.bribeAmountPerReputation;
     faction.playerReputation += repGain;
@@ -138,7 +121,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   }
 
   function getCorporation(): Corporation {
-    const corporation = player.corporation;
+    const corporation = Player.corporation;
     if (corporation === null) throw new Error("cannot be called without a corporation");
     return corporation;
   }
@@ -178,9 +161,9 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   }
 
   function checkAccess(ctx: NetscriptContext, api?: CorpUnlockName): void {
-    if (!player.corporation) throw helpers.errorMessage(ctx, "Must own a corporation.");
+    if (!Player.corporation) throw helpers.errorMessage(ctx, "Must own a corporation.");
     if (!api) return;
-    if (!player.corporation.unlocks.has(api)) {
+    if (!Player.corporation.unlocks.has(api)) {
       throw helpers.errorMessage(ctx, "You do not have access to this API.");
     }
   }
@@ -732,7 +715,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       (_corporationName, _selfFund = true): boolean => {
         const corporationName = helpers.string(ctx, "corporationName", _corporationName);
         const selfFund = !!_selfFund;
-        return createCorporation(corporationName, selfFund);
+        return createCorporation(corporationName, selfFund, false);
       },
     hasUnlock: (ctx) => (_unlockName) => {
       checkAccess(ctx);
@@ -802,6 +785,20 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       if (!CorporationPromise.promise)
         CorporationPromise.promise = new Promise<CorpStateName>((res) => (CorporationPromise.resolve = res));
       return CorporationPromise.promise;
+    },
+    restartCorporation:
+      (ctx) =>
+      (_corporationName, _selfFund): boolean => {
+        checkAccess(ctx);
+        const corporationName = helpers.string(ctx, "corporationName", _corporationName);
+        const selfFund = !!_selfFund;
+        return createCorporation(corporationName, selfFund, true);
+      },
+    sellDivision: (ctx) => (_divisionName) => {
+      checkAccess(ctx);
+      const corporation = getCorporation();
+      const divisionName = helpers.string(ctx, "divisionName", _divisionName);
+      removeDivision(corporation, divisionName);
     },
   };
 

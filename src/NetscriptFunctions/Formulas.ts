@@ -1,4 +1,4 @@
-import { Player as player } from "../Player";
+import { Player } from "@player";
 import { calculateServerGrowth, calculateGrowMoney } from "../Server/formulas/grow";
 import { numCycleForGrowthCorrected } from "../Server/ServerHelpers";
 import {
@@ -62,7 +62,7 @@ import { findCrime } from "../Crime/CrimeHelpers";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
-    if (!player.hasProgram(CompletedProgramName.formulas)) {
+    if (!Player.hasProgram(CompletedProgramName.formulas)) {
       throw helpers.errorMessage(ctx, `Requires Formulas.exe to run.`);
     }
   };
@@ -325,7 +325,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const upgName = helpers.string(ctx, "upgName", _upgName);
         const level = helpers.number(ctx, "level", _level);
         checkFormulasAccess(ctx);
-        const upg = player.hashManager.getUpgrade(upgName);
+        const upg = Player.hashManager.getUpgrade(upgName);
         if (!upg) {
           throw helpers.errorMessage(ctx, `Invalid Hash Upgrade: ${upgName}`);
         }

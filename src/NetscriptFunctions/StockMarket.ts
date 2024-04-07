@@ -1,4 +1,4 @@
-import { Player } from "../Player";
+import { Player } from "@player";
 import { buyStock, sellStock, shortStock, sellShort } from "../StockMarket/BuyingAndSelling";
 import {
   StockMarket,
