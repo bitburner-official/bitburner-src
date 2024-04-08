@@ -202,14 +202,14 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     getSkillUpgradeCost: (ctx) => (_skillName, _count) => {
       const bladeburner = getBladeburner(ctx);
       const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
-      const count = helpers.positiveSafeInteger(ctx, "count", _count ?? 1);
+      const count = helpers.positiveInteger(ctx, "count", _count ?? 1);
       const currentLevel = bladeburner.getSkillLevel(skillName);
       return Skills[skillName].calculateCost(currentLevel, count);
     },
     upgradeSkill: (ctx) => (_skillName, _count) => {
       const bladeburner = getBladeburner(ctx);
       const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
-      const count = helpers.positiveSafeInteger(ctx, "count", _count ?? 1);
+      const count = helpers.positiveInteger(ctx, "count", _count ?? 1);
       const attempt = bladeburner.upgradeSkill(skillName, count);
       helpers.log(ctx, () => attempt.message);
       return !!attempt.success;
