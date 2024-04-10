@@ -9,7 +9,7 @@ Get all the logs of a script.
 **Signature:**
 
 ```typescript
-getScriptLogs(fn?: FilenameOrPID, host?: string, ...args: (string | number | boolean)[]): string[];
+getScriptLogs(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): string[];
 ```
 
 ## Parameters
@@ -18,7 +18,7 @@ getScriptLogs(fn?: FilenameOrPID, host?: string, ...args: (string | number | boo
 |  --- | --- | --- |
 |  fn | [FilenameOrPID](./bitburner.filenameorpid.md) | _(Optional)_ Optional. Filename or PID of script to get logs from. |
 |  host | string | _(Optional)_ Optional. Hostname of the server that the script is on. |
-|  args | (string \| number \| boolean)\[\] | Arguments to identify which scripts to get logs for. |
+|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments to identify which scripts to get logs for. |
 
 **Returns:**
 

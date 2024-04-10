@@ -9,7 +9,7 @@ Get the exp gain of a script.
 **Signature:**
 
 ```typescript
-getScriptExpGain(script: string, host: string, ...args: (string | number | boolean)[]): number;
+getScriptExpGain(script: string, host: string, ...args: ScriptArg[]): number;
 ```
 
 ## Parameters
@@ -18,7 +18,7 @@ getScriptExpGain(script: string, host: string, ...args: (string | number | boole
 |  --- | --- | --- |
 |  script | string | Filename of script. |
 |  host | string | Server on which script is running. |
-|  args | (string \| number \| boolean)\[\] | Arguments that the script is running with. |
+|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments that the script is running with. |
 
 **Returns:**
 

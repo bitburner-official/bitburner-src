@@ -9,7 +9,7 @@ Get the income of a script.
 **Signature:**
 
 ```typescript
-getScriptIncome(script: string, host: string, ...args: (string | number | boolean)[]): number;
+getScriptIncome(script: string, host: string, ...args: ScriptArg[]): number;
 ```
 
 ## Parameters
@@ -18,7 +18,7 @@ getScriptIncome(script: string, host: string, ...args: (string | number | boolea
 |  --- | --- | --- |
 |  script | string | Filename of script. |
 |  host | string | Server on which script is running. |
-|  args | (string \| number \| boolean)\[\] | Arguments that the script is running with. |
+|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments that the script is running with. |
 
 **Returns:**
 

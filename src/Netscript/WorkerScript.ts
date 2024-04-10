@@ -12,7 +12,7 @@ import type { NSFull } from "../NetscriptFunctions";
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 import type { RunningScript } from "../Script/RunningScript";
 import type { Script } from "../Script/Script";
-import type { ScriptArg } from "./ScriptArg";
+import type { ScriptArg } from "@nsdefs";
 import type { ScriptDeath } from "./ScriptDeath";
 
 import { Environment } from "./Environment";

@@ -211,7 +211,7 @@ interface ReactElement {
 /** @public */
 interface RunningScript {
   /** Arguments the script was called with */
-  args: (string | number | boolean)[];
+  args: ScriptArg[];
   /** Filename of the script */
   filename: string;
   /**
@@ -435,7 +435,7 @@ interface ProcessInfo {
   /** Number of threads script is running with */
   threads: number;
   /** Script's arguments */
-  args: (string | number | boolean)[];
+  args: ScriptArg[];
   /** Process ID */
   pid: number;
   /** Whether this process is excluded from saves */
@@ -5351,6 +5351,8 @@ export interface NS {
    * Arguments can be string, number, or boolean.
    * Use `args.length` to get the number of arguments that were passed into a script.
    *
+   * Arguments can also be accessed as additional arguments to `main`.
+   *
    * @example
    * `run example.js 7 text true`
    *
@@ -5364,8 +5366,15 @@ export interface NS {
    *   ns.tprint(ns.args[3]); // undefined, because only 3 arguments were provided
    * }
    * ```
+   *
+   * ```js
+   * // example2.js
+   * export async function main(ns, ...args) {
+   *   // The array "args" will contain the same values as ns.args.
+   * }
+   * ```
    */
-  readonly args: (string | number | boolean)[];
+  readonly args: ScriptArg[];
 
   /** The current script's PID */
   readonly pid: number;
@@ -5834,7 +5843,7 @@ export interface NS {
    * @param args - Arguments to identify which scripts to get logs for.
    * @returns Returns a string array, where each line is an element in the array. The most recently logged line is at the end of the array.
    */
-  getScriptLogs(fn?: FilenameOrPID, host?: string, ...args: (string | number | boolean)[]): string[];
+  getScriptLogs(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): string[];
 
   /**
    * Get an array of recently killed scripts across all servers.
@@ -5884,7 +5893,7 @@ export interface NS {
    * @param host - Optional. Hostname of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
    * @param args - Arguments for the script being tailed.
    */
-  tail(fn?: FilenameOrPID, host?: string, ...args: (string | number | boolean)[]): void;
+  tail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
 
   /**
    * Move a tail window.
@@ -6119,7 +6128,7 @@ export interface NS {
    * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the second argument threadOrOptions must be filled in with a value.
    * @returns Returns the PID of a successfully started script, and 0 otherwise.
    */
-  run(script: string, threadOrOptions?: number | RunOptions, ...args: (string | number | boolean)[]): number;
+  run(script: string, threadOrOptions?: number | RunOptions, ...args: ScriptArg[]): number;
 
   /**
    * Start another script on any server.
@@ -6159,12 +6168,7 @@ export interface NS {
    * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument threadOrOptions must be filled in with a value.
    * @returns Returns the PID of a successfully started script, and 0 otherwise.
    */
-  exec(
-    script: string,
-    hostname: string,
-    threadOrOptions?: number | RunOptions,
-    ...args: (string | number | boolean)[]
-  ): number;
+  exec(script: string, hostname: string, threadOrOptions?: number | RunOptions, ...args: ScriptArg[]): number;
 
   /**
    * Terminate current script and start another in a defined number of milliseconds.
@@ -6189,7 +6193,7 @@ export interface NS {
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link SpawnOptions} object. Threads defaults to 1 and spawnDelay defaults to 10,000 ms.
    * @param args - Additional arguments to pass into the new script that is being run.
    */
-  spawn(script: string, threadOrOptions?: number | SpawnOptions, ...args: (string | number | boolean)[]): void;
+  spawn(script: string, threadOrOptions?: number | SpawnOptions, ...args: ScriptArg[]): void;
   /**
    * Terminate the script with the provided PID.
    * @remarks
@@ -6586,7 +6590,7 @@ export interface NS {
    * @param args - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns True if the specified script is running on the target server, and false otherwise.
    */
-  isRunning(script: FilenameOrPID, host?: string, ...args: (string | number | boolean)[]): boolean;
+  isRunning(script: FilenameOrPID, host?: string, ...args: ScriptArg[]): boolean;
 
   /**
    * Get general info about a running script.
@@ -6605,11 +6609,7 @@ export interface NS {
    * @param args  - Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
    * @returns The info about the running script if found, and null otherwise.
    */
-  getRunningScript(
-    filename?: FilenameOrPID,
-    hostname?: string,
-    ...args: (string | number | boolean)[]
-  ): RunningScript | null;
+  getRunningScript(filename?: FilenameOrPID, hostname?: string, ...args: ScriptArg[]): RunningScript | null;
 
   /**
    * Get cost of purchasing a server.
@@ -7020,7 +7020,7 @@ export interface NS {
    * @param args - Arguments that the script is running with.
    * @returns Amount of income the specified script generates while online.
    */
-  getScriptIncome(script: string, host: string, ...args: (string | number | boolean)[]): number;
+  getScriptIncome(script: string, host: string, ...args: ScriptArg[]): number;
 
   /**
    * Get the exp gain of all scripts.
@@ -7048,7 +7048,7 @@ export interface NS {
    * @param args - Arguments that the script is running with.
    * @returns Amount of hacking experience the specified script generates while online.
    */
-  getScriptExpGain(script: string, host: string, ...args: (string | number | boolean)[]): number;
+  getScriptExpGain(script: string, host: string, ...args: ScriptArg[]): number;
 
   /**
    * Returns the amount of time in milliseconds that have passed since you last installed Augmentations.

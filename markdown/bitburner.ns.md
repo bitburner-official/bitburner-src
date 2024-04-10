@@ -31,7 +31,7 @@ export async function main(ns) {
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [args](./bitburner.ns.args.md) | <code>readonly</code> | (string \| number \| boolean)\[\] | Arguments passed into the script. |
+|  [args](./bitburner.ns.args.md) | <code>readonly</code> | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments passed into the script. |
 |  [bladeburner](./bitburner.ns.bladeburner.md) | <code>readonly</code> | [Bladeburner](./bitburner.bladeburner.md) | Namespace for bladeburner functions. Contains spoilers. |
 |  [codingcontract](./bitburner.ns.codingcontract.md) | <code>readonly</code> | [CodingContract](./bitburner.codingcontract.md) | Namespace for codingcontract functions. |
 |  [corporation](./bitburner.ns.corporation.md) | <code>readonly</code> | [Corporation](./bitburner.corporation.md) | Namespace for corporation functions. Contains spoilers. |

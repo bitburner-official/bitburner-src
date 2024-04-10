@@ -1,4 +1,5 @@
 import type { NetscriptContext } from "./APIWrapper";
+import type { RunningScript as IRunningScript, Person as IPerson, Server as IServer, ScriptArg } from "@nsdefs";
 
 import React from "react";
 import { killWorkerScript } from "./killWorkerScript";
@@ -6,8 +7,6 @@ import { GetAllServers, GetServer } from "../Server/AllServers";
 import { Player } from "@player";
 import { ScriptDeath } from "./ScriptDeath";
 import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/formatNumber";
-import { ScriptArg } from "./ScriptArg";
-import { RunningScript as IRunningScript, Person as IPerson, Server as IServer } from "@nsdefs";
 import { Server } from "../Server/Server";
 import {
   calculateHackingChance,

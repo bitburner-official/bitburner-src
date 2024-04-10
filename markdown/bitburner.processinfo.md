@@ -16,7 +16,7 @@ interface ProcessInfo
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [args](./bitburner.processinfo.args.md) |  | (string \| number \| boolean)\[\] | Script's arguments |
+|  [args](./bitburner.processinfo.args.md) |  | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Script's arguments |
 |  [filename](./bitburner.processinfo.filename.md) |  | string | Script name. |
 |  [pid](./bitburner.processinfo.pid.md) |  | number | Process ID |
 |  [temporary](./bitburner.processinfo.temporary.md) |  | boolean | Whether this process is excluded from saves |
