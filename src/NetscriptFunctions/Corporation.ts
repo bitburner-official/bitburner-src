@@ -786,14 +786,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         CorporationPromise.promise = new Promise<CorpStateName>((res) => (CorporationPromise.resolve = res));
       return CorporationPromise.promise;
     },
-    restartCorporation:
-      (ctx) =>
-      (_corporationName, _selfFund): boolean => {
-        checkAccess(ctx);
-        const corporationName = helpers.string(ctx, "corporationName", _corporationName);
-        const selfFund = !!_selfFund;
-        return createCorporation(corporationName, selfFund, true);
-      },
     sellDivision: (ctx) => (_divisionName) => {
       checkAccess(ctx);
       const corporation = getCorporation();

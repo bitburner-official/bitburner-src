@@ -63,7 +63,7 @@ export function CreateCorporationModal(props: IProps): React.ReactElement {
         )}
         <br />
         <br />
-        If you would like to start {props.restart ? "new" : ""} one, please enter a name for your corporation below:
+        If you would like to start {props.restart ? "a new" : ""} one, please enter a name for your corporation below:
       </Typography>
       <br />
       <TextField autoFocus={true} placeholder="Corporation Name" onChange={onChange} value={name} />

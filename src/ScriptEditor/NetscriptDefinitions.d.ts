@@ -8183,16 +8183,6 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   nextUpdate(): Promise<CorpStateName>;
 
   /**
-   * Restart a Corporation
-   * @remarks
-   * RAM cost: 20 GB
-   *
-   * @param corporationName - Name of the corporation
-   * @param selfFund - Setting it to false only works in BitNode 3
-   * @returns true if restarted and false otherwise */
-  restartCorporation(corporationName: string, selfFund: boolean): boolean;
-
-  /**
    * Sell a division
    * @remarks
    * RAM cost: 20 GB
