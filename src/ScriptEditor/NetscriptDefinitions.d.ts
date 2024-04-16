@@ -5351,8 +5351,6 @@ export interface NS {
    * Arguments can be string, number, or boolean.
    * Use `args.length` to get the number of arguments that were passed into a script.
    *
-   * Arguments can also be accessed as additional arguments to `main`.
-   *
    * @example
    * `run example.js 7 text true`
    *
@@ -5364,13 +5362,6 @@ export interface NS {
    *   ns.tprint(ns.args[1]); // "text" (string)
    *   ns.tprint(ns.args[2]); // true (boolean)
    *   ns.tprint(ns.args[3]); // undefined, because only 3 arguments were provided
-   * }
-   * ```
-   *
-   * ```js
-   * // example2.js
-   * export async function main(ns, ...args) {
-   *   // The array "args" will contain the same values as ns.args.
    * }
    * ```
    */

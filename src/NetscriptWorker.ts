@@ -62,7 +62,7 @@ async function startNetscript2Script(workerScript: WorkerScript): Promise<void> 
   if (typeof mainFunc !== "function")
     throw `${script.filename} cannot be run because it does not have a main function.`;
   // Explicitly called from a variable so that we don't bind "this".
-  await mainFunc(ns, ...workerScript.args);
+  await mainFunc(ns);
 }
 
 async function startNetscript1Script(workerScript: WorkerScript): Promise<void> {
