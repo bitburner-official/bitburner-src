@@ -41,6 +41,7 @@ import { getGoSave, loadGo } from "./Go/SaveLoad";
 import { SaveData } from "./types";
 import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
 import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
+import { downloadContentAsFile } from "./utils/FileUtils";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -158,7 +159,7 @@ class BitburnerSaveObject {
   async exportGame(): Promise<void> {
     const saveData = await this.getSaveData();
     const filename = this.getSaveFileName();
-    download(filename, saveData);
+    downloadContentAsFile(saveData, filename);
   }
 
   async importGame(saveData: SaveData, reload = true): Promise<void> {
@@ -853,23 +854,8 @@ function createBetaUpdateText() {
   );
 }
 
-function download(filename: string, content: SaveData): void {
-  const file = new Blob([content], { type: "text/plain" });
-
-  const a = document.createElement("a"),
-    url = URL.createObjectURL(file);
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(function () {
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  }, 0);
-}
-
 constructorsForReviver.BitburnerSaveObject = BitburnerSaveObject;
 
-export { saveObject, loadGame, download };
+export { saveObject, loadGame };
 
 const saveObject = new BitburnerSaveObject();

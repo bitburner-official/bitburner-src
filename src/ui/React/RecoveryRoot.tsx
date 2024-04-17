@@ -5,7 +5,6 @@ import { Settings } from "../../Settings/Settings";
 import { load } from "../../db";
 import { Router } from "../GameRoot";
 import { Page } from "../Router";
-import { download } from "../../SaveObject";
 import { IErrorData, newIssueUrl } from "../../utils/ErrorHelper";
 import { DeleteGameButton } from "./DeleteGameButton";
 import { SoftResetButton } from "./SoftResetButton";
@@ -14,6 +13,7 @@ import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { isBinaryFormat } from "../../../electron/saveDataBinaryFormat";
 import { InvalidSaveData, UnsupportedSaveData } from "../../utils/SaveDataUtils";
+import { downloadContentAsFile } from "../../utils/FileUtils";
 
 export let RecoveryMode = false;
 let sourceError: unknown;
@@ -44,7 +44,7 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
         const epochTime = Math.round(Date.now() / 1000);
         const extension = isBinaryFormat(content) ? "json.gz" : "json";
         const filename = `RECOVERY_BITBURNER_${epochTime}.${extension}`;
-        download(filename, content);
+        downloadContentAsFile(content, filename);
       })
       .catch((err) => console.error(err));
   }, []);
