@@ -45,5 +45,5 @@ export function download(args: (string | number | boolean)[], server: BaseServer
   }
   const file = server.getContentFile(path);
   if (!file) return Terminal.error(`File not found: ${path}`);
-  return file.download();
+  return downloadContentAsFile(file.content, file.filename);
 }
