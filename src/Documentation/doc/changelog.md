@@ -1018,7 +1018,7 @@ Stanek Gift
 ** Vitalife secret lab **
 
 - A new mechanic called Augmentation Grafting has been added. Resleeving has been removed.
-- Credit to @violet for his incredible work.
+- Credit to @violet for her incredible work.
 
 ** Stanek **
 
