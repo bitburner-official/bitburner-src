@@ -979,7 +979,7 @@ API breaks
 
 - Dividend fixes and exposing dividends info via scripts (@stalefishies)
 - Add big number format support in some Corporation's modal (@borisflagell)
-- Fix #3261 Industry overview number formatting (@nickofolas)
+- Fix #3261 Industry overview number formatting (@violet)
 
   Multipliers
 
@@ -1018,7 +1018,7 @@ Stanek Gift
 ** Vitalife secret lab **
 
 - A new mechanic called Augmentation Grafting has been added. Resleeving has been removed.
-- Credit to @nickofolas for his incredible work.
+- Credit to @violet for his incredible work.
 
 ** Stanek **
 
@@ -1026,14 +1026,14 @@ Stanek Gift
 
 ** UI **
 
-- Major update to Sleeve, Gang UI, and Create Program (@nickofolas)
+- Major update to Sleeve, Gang UI, and Create Program (@violet)
 - re-add pre tags to support slash n in prompt (@jacktose)
 - Tabelize linked output of 'ls' (@Master-Guy)
 - Add the ability to filter open scripts (@phyzical)
-- Add minHeight to editor tabs (@nickofolas)
-- Properly expand gang equipment cards to fill entire screen (@nickofolas)
-- Add shortcut to Faction augmentations page from FactionsRoot (@nickofolas)
-- Fix extra space on editor tabs (@nickofolas)
+- Add minHeight to editor tabs (@violet)
+- Properly expand gang equipment cards to fill entire screen (@violet)
+- Add shortcut to Faction augmentations page from FactionsRoot (@violet)
+- Fix extra space on editor tabs (@violet)
 - Present offline message as list (@DSteve595)
 - add box showing remaining augments per faction (@jjayeon)
 - Add tab switching support to vim mode (@JParisFerrer)
@@ -1094,7 +1094,7 @@ Stanek Gift
 - Fix negative number formatting (@Master-Guy)
 - Fix unique ip generation (@InDieTasten)
 - remove terminal command theme from docs (@phyzical)
-- Fix 'Augmentations Left' with gang factions (@nickofolas)
+- Fix 'Augmentations Left' with gang factions (@violet)
 - Attempt to fix 'bladeburner.process()' early routing issue (@MartinFournier)
 - work in progress augment fix (@phyzical)
 - Fixes missing space in Smart Supply (@TheRealMaxion)
@@ -1121,16 +1121,16 @@ Stanek Gift
 
 ** UI **
 
-- background now matches game primary color (@nickofolas)
+- background now matches game primary color (@violet)
 - page title contains version (@MartinFourier)
-- Major text editor improvements (@nickofolas)
+- Major text editor improvements (@violet)
 - Display bonus time on sleeve page (@MartinFourier)
-- Several UI improvements (@nickofolas, @smolgumball, @DrCuriosity, @phyzical)
+- Several UI improvements (@violet, @smolgumball, @DrCuriosity, @phyzical)
 - Fix aug display in alpha (@Dominik Winter)
 - Fix display of corporation product equation (@SagePtr)
 - Make Bitverse more accessible (@ChrissiQ)
 - Make corporation warehouse more accessible (@ChrissiQ)
-- Make tab style more consistent (@nickofolas)
+- Make tab style more consistent (@violet)
 
 ** Netscript **
 
@@ -1197,8 +1197,8 @@ Stanek Gift
 - Fix cache tooltip (@woody-lam-cwl)
 - Added script to prettify save file for debugging (@MartinFourier)
 - Update documentation / typos (@theit8514, @thadguidry, @tigercat2000, @SlyCedix, @Spacejoker, @KenJohansson,
-  @Ornedan, @JustAnOkapi, @nickofolas, @philarmstead, @TheMas3212, @dcragusa, @XxKingsxX-Pinu,
-  @paiv, @smolgumball, @zeddrak, @stinky-lizard, @nickofolas, @Feodoric, @daanflore,
+  @Ornedan, @JustAnOkapi, @violet, @philarmstead, @TheMas3212, @dcragusa, @XxKingsxX-Pinu,
+  @paiv, @smolgumball, @zeddrak, @stinky-lizard, @violet, @Feodoric, @daanflore,
   @markusariliu, @mstruebing, @erplsf, @waffleattack, @Dexalt142, @AIT-OLPE, @deathly809, @BuckAMayzing,
   @MartinFourier, @pigalot, @lethern)
 - Fix BN3+ achievement (@SagePtr)
@@ -1228,7 +1228,7 @@ Stanek Gift
 - Fix issue that can cause terminal actions to start on one server and end on another (@MartinFourier)
 - Fix 'fileExists' not correctly matching file names (@TheMas3212)
 - Refactor some code to be more efficient (@TheMas3212)
-- Fix exp gain for terminal grow and weaken (@nickofolas)
+- Fix exp gain for terminal grow and weaken (@violet)
 - Refactor script death code to reject waiting promises instead of resolving (@Ornedan)
 - HP recalculates on defense exp gain (@TheMas3212)
 - Fix log for ascendMember (@TheMas3212)
@@ -1243,12 +1243,12 @@ Stanek Gift
 - React and ReactDOM are now global objects (@pigalot)
 - 'nano' supports globs (@smolgumball)
 - Character overview can be dragged (@MartinFourier)
-- Job page updates in real time (@nickofolas)
+- Job page updates in real time (@violet)
 - Company favor gain uses the same calculation as faction, this is just performance
-  the value didn't change (@nickofolas)
+  the value didn't change (@violet)
 - ns2 files work with more import options (@theit8514)
-- Allow autocomplete for partial executables (@nickofolas)
-- Add support for contract completion (@nickofolas)
+- Allow autocomplete for partial executables (@violet)
+- Add support for contract completion (@violet)
 - 'ls' link are clickable (@smolgumball)
 - Prevent steam from opening external LOCAL files (@MartinFourier)
 - Fix a bug with autocomplete (@Feodoric)
@@ -1258,18 +1258,18 @@ Stanek Gift
 - 'analyze' now says if the server is backdoored (@deathly809)
 - Add option to exclude running script from save (@MartinFourier)
 - Game now catches more errors and redirects to recovery page (@MartinFourier)
-- Fix bug with autocomplete (@nickofolas)
-- Add tooltip to unfocus work (@nickofolas)
+- Fix bug with autocomplete (@violet)
+- Add tooltip to unfocus work (@violet)
 - Add detailst overview (@MartinFourier)
 - Fix focus bug (@deathly809)
 - Fix some NaN handling (@deathly809)
 - Added 'mv' ns function (@deathly809)
-- Add focus argument to some singularity functions (@nickofolas)
+- Add focus argument to some singularity functions (@violet)
 - Fix some functions not disabling log correctly (@deathly809)
-- General UI improvements (@nickofolas)
+- General UI improvements (@violet)
 - Handle steamworks errors gravefully (@MartinFourier)
 - Fix some react component not unmounting correctly (@MartinFourier)
-- 'help' autocompletes (@nickofolas)
+- 'help' autocompletes (@violet)
 - No longer push all achievements to steam (@Ornedan)
 - Recovery page has more information (@MartinFourier)
 - Added 'getGameInfo' ns function (@MartinFourier)
@@ -1283,8 +1283,8 @@ Stanek Gift
 - Fix CI (@tvanderpol)
 - Change shortcuts to match sidebar (@MartinFourier)
 - Format gang respect (@attrib)
-- Add modal to text editor with ram details (@nickofolas)
-- Fix several bugs with singularity focus (@nickofolas)
+- Add modal to text editor with ram details (@violet)
+- Fix several bugs with singularity focus (@violet)
 - Nerf noodle bar.
 
 ## v1.3.0 - 2022-01-04 Cleaning up
@@ -1305,7 +1305,7 @@ Stanek Gift
 - Fix some edge case with skill bat tooltips (@MartinFournier)
 - Made some background match theme color (@Kejikus)
 - Fix problem with script editor height not adjusting correctly (@billyvg)
-- Fix some formatting issues with Bladeburner (@MartinFournier, @nickofolas)
+- Fix some formatting issues with Bladeburner (@MartinFournier, @violet)
 - Fix some functions like 'alert' format messages better (@MageKing17)
 - Many community themes added.
 - New script editor theme (@Hedrauta, @Dexalt142)
@@ -1315,7 +1315,7 @@ Stanek Gift
 - Remove alpha from theme editor (@MartinFournier)
 - Fix corporation tooltip not displaying properly (@MartinFournier)
 - Add tooltip on backdoored location names (@MartinFournier)
-- Allow toasts to be dismissed by clicking them (@nickofolas)
+- Allow toasts to be dismissed by clicking them (@violet)
 - Darkweb item listing now shows what you own. (@hexnaught)
 
 ** Bug fix **
@@ -1324,7 +1324,7 @@ Stanek Gift
 - Fixed issue with 'cat' and 'read' not finding foldered files (@Nick-Colclasure)
 - Buying on the dark web will remove incomplete exe (@hexnaught)
 - Fix bug that would cause the game to crash trying to go to a job without a job (@hexnaught)
-- purchaseServer validation (@nickofolas)
+- purchaseServer validation (@violet)
 - Script Editor focuses code when changing tab (@MartinFournier)
 - Fix script editor for .txt files (@65-7a)
 - Fix 'buy' command not displaying correctly. (@hexnaught)
@@ -1332,7 +1332,7 @@ Stanek Gift
 - Electron handles exceptions better (@MageKing17)
 - Electron will handle 'unresponsive' event and present the opportunity to reload the game with no scripts (@MartinFournier)
 - Fix 'cp' between folders (@theit8514)
-- Fix throwing null/undefined errors (@nickofolas)
+- Fix throwing null/undefined errors (@violet)
 - Allow shortcuts to work when unfocused (@MageKing17)
 - Fix some dependency issue (@locriacyber)
 - Fix corporation state returning an object instead of a string (@antonvmironov)
@@ -1368,7 +1368,7 @@ Stanek Gift
   @TheCoderJT, @hexnaught, @sschmidTU, @FOLLGAD, @Hedrauta, @Xynrati,
   @mikomyazaki, @Icehawk78, @aaronransley, @TheMas3212, @Hedrauta, @alkemann,
   @ReeseJones, @amclark42, @thadguidry, @jasonhaxstuff, @pan-kuleczka, @jhollowe,
-  @ApatheticsAnonymous, @erplsf, @daanflore, @nickofolas, @Kebap, @smolgumball,
+  @ApatheticsAnonymous, @erplsf, @daanflore, @violet, @Kebap, @smolgumball,
   @woody-lam-cwl)
 
 ## v1.1.0 - 2021-12-18 You guys are awesome (community because they're god damn awesome)
