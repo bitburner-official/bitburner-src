@@ -114,15 +114,17 @@ const Engine: {
     // Sleeves
     Player.sleeves.forEach((sleeve) => sleeve.process(numCycles));
 
-    // Counters
-    Engine.decrementAllCounters(numCycles);
-    Engine.checkCounters();
-
     // Update the running time of all active scripts
     updateOnlineScriptTimes(numCycles);
 
     // Hacknet Nodes
     processHacknetEarnings(numCycles);
+
+    // Counters
+    Engine.decrementAllCounters(numCycles);
+    // This **MUST** be the last call in the function, because checkCounters()
+    // can invoke the autosave, so any work done after here risks not getting saved!
+    Engine.checkCounters();
   },
 
   /**
@@ -158,19 +160,6 @@ const Engine: {
    * is necessary and then resets the counter
    */
   checkCounters: function () {
-    if (Engine.Counters.autoSaveCounter <= 0) {
-      if (Settings.AutosaveInterval == null) {
-        Settings.AutosaveInterval = 60;
-      }
-      if (Settings.AutosaveInterval === 0) {
-        warnAutosaveDisabled();
-        Engine.Counters.autoSaveCounter = 60 * 5; // Let's check back in a bit
-      } else {
-        Engine.Counters.autoSaveCounter = Settings.AutosaveInterval * 5;
-        saveObject.saveGame(!Settings.SuppressSavedGameToast);
-      }
-    }
-
     if (Engine.Counters.checkFactionInvitations <= 0) {
       const invitedFactions = Player.checkForFactionInvitations();
       if (invitedFactions.length > 0) {
@@ -216,6 +205,24 @@ const Engine: {
     if (Engine.Counters.achievementsCounter <= 0) {
       calculateAchievements();
       Engine.Counters.achievementsCounter = 300;
+    }
+
+    // This **MUST** remain the last block in the function!
+    // Otherwise, any work done after this point won't be saved!
+    // Due to the way most of these counters are reset, that would probably be
+    // OK, but it's much simpler to reason about if we can assume that the
+    // entire function has been performed after a save.
+    if (Engine.Counters.autoSaveCounter <= 0) {
+      if (Settings.AutosaveInterval == null) {
+        Settings.AutosaveInterval = 60;
+      }
+      if (Settings.AutosaveInterval === 0) {
+        warnAutosaveDisabled();
+        Engine.Counters.autoSaveCounter = 60 * 5; // Let's check back in a bit
+      } else {
+        Engine.Counters.autoSaveCounter = Settings.AutosaveInterval * 5;
+        saveObject.saveGame(!Settings.SuppressSavedGameToast);
+      }
     }
   },
 
