@@ -18,6 +18,9 @@ export function TimeSkip(): React.ReactElement {
     return () => {
       Player.lastUpdate -= time;
       Engine._lastUpdate -= time;
+      // (time / CONSTANTS.MilliPerCycle) is enough to counter the decrement of Engine.Counters.autoSaveCounter, but we
+      // use (time) to ensure that autosave does not happen in the delay time (1 second) before we reload.
+      Engine.Counters.autoSaveCounter += time;
       saveObject.saveGame();
       setTimeout(() => location.reload(), 1000);
     };
