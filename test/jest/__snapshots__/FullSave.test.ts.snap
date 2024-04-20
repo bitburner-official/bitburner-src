@@ -432,7 +432,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "jobs": {},
     "karma": 0,
     "lastAugReset": 1687611703623,
-    "lastNodeReset": -1,
+    "lastNodeReset": 1687611703623,
     "lastSave": 0,
     "lastUpdate": 1687611703623,
     "location": "Travel Agency",

@@ -144,6 +144,7 @@ export class PlayerObject extends Person implements IPlayer {
         window.innerHeight +
         getRandomInt(100, 999),
     );
+    this.lastAugReset = this.lastNodeReset = Date.now();
   }
 
   whoAmI(): string {
