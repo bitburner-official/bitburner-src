@@ -34,6 +34,13 @@ export class SleeveInfiltrateWork extends SleeveWorkClass {
       this.nextCompletionPair.promise = new Promise((r) => (this.nextCompletionPair.resolve = r));
     return this.nextCompletionPair.promise;
   }
+  finish() {
+    if (this.nextCompletionPair.resolve) {
+      this.nextCompletionPair.resolve();
+      this.nextCompletionPair.resolve = null;
+      this.nextCompletionPair.promise = null;
+    }
+  }
 
   APICopy() {
     return {
