@@ -15,23 +15,17 @@ export const CONSTANTS: {
   TravelCost: number;
   BaseFavorToDonate: number;
   DonateMoneyToRepDivisor: number;
-  FactionReputationToFavorBase: number;
-  FactionReputationToFavorMult: number;
-  CompanyReputationToFavorBase: number;
-  CompanyReputationToFavorMult: number;
   NeuroFluxGovernorLevelMult: number;
   NumNetscriptPorts: number;
   MultipleAugMultiplier: number;
   TorRouterCost: number;
   HospitalCostPerHp: number;
   IntelligenceCrimeWeight: number;
-  IntelligenceInfiltrationWeight: number;
   IntelligenceCrimeBaseExpGain: number;
   IntelligenceProgramBaseExpGain: number;
   IntelligenceGraftBaseExpGain: number;
   IntelligenceTerminalHackBaseExpGain: number;
   IntelligenceSingFnBaseExpGain: number;
-  IntelligenceClassBaseExpGain: number;
   MillisecondsPer20Hours: number;
   GameCyclesPer20Hours: number;
   MillisecondsPer10Hours: number;
@@ -50,18 +44,6 @@ export const CONSTANTS: {
   GameCyclesPerQuarterHour: number;
   MillisecondsPerFiveMinutes: number;
   GameCyclesPerFiveMinutes: number;
-  ClassDataStructuresBaseCost: number;
-  ClassNetworksBaseCost: number;
-  ClassAlgorithmsBaseCost: number;
-  ClassManagementBaseCost: number;
-  ClassLeadershipBaseCost: number;
-  ClassGymBaseCost: number;
-  ClassStudyComputerScienceBaseExp: number;
-  ClassDataStructuresBaseExp: number;
-  ClassNetworksBaseExp: number;
-  ClassAlgorithmsBaseExp: number;
-  ClassManagementBaseExp: number;
-  ClassLeadershipBaseExp: number;
   CodingContractBaseFactionRepGain: number;
   CodingContractBaseCompanyRepGain: number;
   CodingContractBaseMoneyGain: number;
@@ -70,8 +52,6 @@ export const CONSTANTS: {
   SoACostMult: number;
   SoARepMult: number;
   EntropyEffect: number;
-  TotalNumBitNodes: number;
-  InfiniteLoopLimit: number;
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
   LatestUpdate: string;
 } = {
@@ -100,10 +80,6 @@ export const CONSTANTS: {
   // Faction and Company favor-related things
   BaseFavorToDonate: 150,
   DonateMoneyToRepDivisor: 1e6,
-  FactionReputationToFavorBase: 500,
-  FactionReputationToFavorMult: 1.02,
-  CompanyReputationToFavorBase: 500,
-  CompanyReputationToFavorMult: 1.02,
 
   // NeuroFlux Governor Augmentation cost multiplier
   NeuroFluxGovernorLevelMult: 1.14,
@@ -121,13 +97,11 @@ export const CONSTANTS: {
 
   // Intelligence-related constants
   IntelligenceCrimeWeight: 0.025, // Weight for how much int affects crime success rates
-  IntelligenceInfiltrationWeight: 0.1, // Weight for how much int affects infiltration success rates
   IntelligenceCrimeBaseExpGain: 0.05,
   IntelligenceProgramBaseExpGain: 0.1, // Program required hack level divided by this to determine int exp gain
   IntelligenceGraftBaseExpGain: 0.05,
   IntelligenceTerminalHackBaseExpGain: 200, // Hacking exp divided by this to determine int exp gain
   IntelligenceSingFnBaseExpGain: 1.5,
-  IntelligenceClassBaseExpGain: 0.01,
 
   // Time-related constants
   MillisecondsPer20Hours: 72000000,
@@ -160,20 +134,6 @@ export const CONSTANTS: {
   // Player Work & Action
   BaseFocusBonus: 0.8,
 
-  ClassDataStructuresBaseCost: 40,
-  ClassNetworksBaseCost: 80,
-  ClassAlgorithmsBaseCost: 320,
-  ClassManagementBaseCost: 160,
-  ClassLeadershipBaseCost: 320,
-  ClassGymBaseCost: 120,
-
-  ClassStudyComputerScienceBaseExp: 0.5,
-  ClassDataStructuresBaseExp: 1,
-  ClassNetworksBaseExp: 2,
-  ClassAlgorithmsBaseExp: 4,
-  ClassManagementBaseExp: 2,
-  ClassLeadershipBaseExp: 4,
-
   // Coding Contract
   // TODO: Move this into Coding contract implementation?
   CodingContractBaseFactionRepGain: 2500,
@@ -190,11 +150,6 @@ export const CONSTANTS: {
 
   // Value raised to the number of entropy stacks, then multiplied to player multipliers
   EntropyEffect: 0.98,
-
-  // BitNode/Source-File related stuff
-  TotalNumBitNodes: 24,
-
-  InfiniteLoopLimit: 2000,
 
   Donations: 151,
 
