@@ -8,8 +8,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Player } from "@player";
-import { saveObject } from "../../SaveObject";
 import { Engine } from "../../engine";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 // Update as additional BitNodes get implemented
 
@@ -18,8 +18,7 @@ export function TimeSkip(): React.ReactElement {
     return () => {
       Player.lastUpdate -= time;
       Engine._lastUpdate -= time;
-      saveObject.saveGame();
-      setTimeout(() => location.reload(), 1000);
+      dialogBoxCreate("Time skip effect has been applied");
     };
   }
 
