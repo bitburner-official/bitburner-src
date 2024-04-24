@@ -45,7 +45,7 @@ export class ScriptEditor {
       l.language.tokenizer.root.unshift([new RegExp("\\bns\\b"), { token: "ns" }]);
       for (const symbol of apiKeys)
         l.language.tokenizer.root.unshift([new RegExp(`\\b${symbol}\\b`), { token: "netscriptfunction" }]);
-      const otherKeywords = ["let", "const", "var", "function"];
+      const otherKeywords = ["let", "const", "var", "function", "arguments"];
       const otherKeyvars = ["true", "false", "null", "undefined"];
       otherKeywords.forEach((k) =>
         l.language.tokenizer.root.unshift([new RegExp(`\\b${k}\\b`), { token: "otherkeywords" }]),
