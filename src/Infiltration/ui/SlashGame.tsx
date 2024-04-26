@@ -34,7 +34,8 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
     // Determine timeframes for game phase changes
     const newDifficulty: Difficulty = { window: 0 };
     interpolate(difficulties, difficulty, newDifficulty);
-    const timePreparing = newDifficulty.window;
+    const timePreparing =
+      newDifficulty.window * (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 1.3 : 1);
     const timeAttacking = 250;
     const timeGuarding = Math.random() * 3250 + 1500 - (timeAttacking + timePreparing);
 
@@ -67,7 +68,7 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
 
   return (
     <>
-      <GameTimer millis={5000} onExpire={onFailure} />
+      <GameTimer millis={5000} onExpire={onFailure} ignoreAugment_WKSharmonizer />
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
         <Typography variant="h4">Attack when his guard is down!</Typography>
         {hasAugment && (
