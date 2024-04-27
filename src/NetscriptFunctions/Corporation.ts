@@ -353,7 +353,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
       const amt = helpers.number(ctx, "amt", _amt);
       if (amt < 0 || !Number.isFinite(amt))
-        throw new Error("Invalid value for amount field! Must be numeric and greater than 0");
+        throw new Error("Invalid value for amount field! Must be numeric and greater than or equal to 0");
       const material = getMaterial(divisionName, cityName, materialName);
       BuyMaterial(division, material, amt);
     },
