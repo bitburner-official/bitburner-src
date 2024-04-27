@@ -29,13 +29,18 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
     const reward = calculateReward(startingSecurityLevel);
     const maxLevel = location.infiltrationData.maxClearanceLevel;
     return {
-      location: structuredClone(location) as ILocation,
+      location: {
+        city: location.city!,
+        name: location.name,
+      },
       reward: {
         tradeRep: calculateTradeInformationRepReward(reward, maxLevel, startingSecurityLevel),
         sellCash: calculateSellInformationCashReward(reward, maxLevel, startingSecurityLevel),
         SoARep: calculateInfiltratorsRepReward(Factions[FactionName.ShadowsOfAnarchy], startingSecurityLevel),
       },
       difficulty: difficulty,
+      maxClearanceLevel: location.infiltrationData.maxClearanceLevel,
+      startingSecurityLevel: location.infiltrationData.startingSecurityLevel,
     };
   };
   return {
