@@ -10,6 +10,7 @@ import { Person as IPerson } from "@nsdefs";
 import { Server as IServer } from "@nsdefs";
 import { workerScripts } from "../Netscript/WorkerScripts";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
+import { serverMetadata } from "./data/servers";
 
 /**
  * Constructs a new server, while also ensuring that the new server
@@ -234,6 +235,15 @@ export function isBackdoorInstalled(server: BaseServer): boolean {
     return server.backdoorInstalled;
   }
   return false;
+}
+
+export function isBackdoorInstalledInCompanyServer(companyName: string): boolean {
+  const serverMeta = serverMetadata.find((s) => s.specialName === companyName);
+  const server = GetServer(serverMeta ? serverMeta.hostname : "");
+  if (!server) {
+    return false;
+  }
+  return isBackdoorInstalled(server);
 }
 
 export function getCoreBonus(cores = 1): number {

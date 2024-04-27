@@ -31,6 +31,8 @@
 
 ### Megacorporations
 
+If you install a backdoor on a company's server, the required reputation of that company faction is reduced by 25%.
+
 | Faction Name                | Requirements                                                                                          |
 | --------------------------- | ----------------------------------------------------------------------------------------------------- |
 | ECorp                       | \* Have 400k reputation with the Corporation                                                          |

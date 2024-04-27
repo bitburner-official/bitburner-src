@@ -3,7 +3,6 @@ import { ServerName } from "../Types/strings";
 import { Server } from "../Server/Server";
 import { GetServer } from "../Server/AllServers";
 import { HacknetServer } from "../Hacknet/HacknetServer";
-import { serverMetadata } from "../Server/data/servers";
 import { Companies } from "../Company/Companies";
 import { formatReputation, formatMoney, formatRam } from "../ui/formatNumber";
 import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
@@ -29,6 +28,7 @@ import type {
   SomeRequirement,
   EveryRequirement,
 } from "@nsdefs";
+import { calculateEffectiveRequiredReputation } from "../Company/utils";
 
 /**
  * Declarative format for checking that the player satisfies some condition, such as the requirements for being invited to a faction.
@@ -69,18 +69,19 @@ export const employedBy = (companyName: CompanyName): PlayerCondition => ({
 
 export const haveCompanyRep = (companyName: CompanyName, rep: number): PlayerCondition => ({
   toString(): string {
-    return `${formatReputation(rep)} reputation with ${companyName}`;
+    return `${formatReputation(calculateEffectiveRequiredReputation(companyName, rep))} reputation with ${companyName}`;
   },
   toJSON(): CompanyReputationRequirement {
-    return { type: "companyReputation", company: companyName, reputation: rep };
+    return {
+      type: "companyReputation",
+      company: companyName,
+      reputation: calculateEffectiveRequiredReputation(companyName, rep),
+    };
   },
   isSatisfied(): boolean {
     const company = Companies[companyName];
     if (!company) return false;
-    const serverMeta = serverMetadata.find((s) => s.specialName === companyName);
-    const server = GetServer(serverMeta ? serverMeta.hostname : "");
-    const bonus = server?.backdoorInstalled ? 100e3 : 0;
-    return company.playerReputation + bonus >= rep;
+    return company.playerReputation >= calculateEffectiveRequiredReputation(companyName, rep);
   },
 });
 

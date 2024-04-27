@@ -53,6 +53,7 @@ export const CONSTANTS: {
   SoARepMult: number;
   EntropyEffect: number;
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
+  CompanyRequiredReputationMultiplier: number; // Only use this if a backdoor is installed in the company's server
   LatestUpdate: string;
 } = {
   VersionString: "2.6.1dev",
@@ -152,6 +153,8 @@ export const CONSTANTS: {
   EntropyEffect: 0.98,
 
   Donations: 151,
+
+  CompanyRequiredReputationMultiplier: 0.75,
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
