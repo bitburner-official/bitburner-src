@@ -29,7 +29,7 @@ $$ExpectedSalesVolume = \frac{ProducedUnits}{10}$$
 
 - This means we want to sell all produced units.
 
-In cycle's SALE state, game calculates `MaxSalesVolume` of material/product. If we set price too high, `MaxSalesVolume` is penalized. In order to maximize profit, we have to set the highest possible price while `MaxSalesVolume` is still equals to `ExpectedSalesVolume`. This is what Market-TA2 does.
+In cycle's SALE state, game calculates `MaxSalesVolume` of material/product. If we set price too high, `MaxSalesVolume` is penalized. In order to maximize profit, we have to set the highest possible price while `MaxSalesVolume` is still equal to `ExpectedSalesVolume`. This is what Market-TA2 does.
 
 Calculation of material and product is pretty similar, so I'll call them "item" and use 1 formula.
 
@@ -72,7 +72,7 @@ $$MarkupMultiplier = \begin{cases}\frac{MarketPrice}{SellingPrice}, & SellingPri
 
 ## Optimal selling price
 
-As we can see with previous part, `MarkupMultiplier` is basically a penalty modifier if we set `SellingPrice` greater than `(MarketPrice + MarkupLimit)`, and we'll always do this. This means we need to find out highest possible `SellingPrice` while `MaxSalesVolume` is still equals to `ExpectedSalesVolume`.
+As we can see with previous part, `MarkupMultiplier` is basically a penalty modifier if we set `SellingPrice` greater than `(MarketPrice + MarkupLimit)`, and we'll always do this. This means we need to find out highest possible `SellingPrice` while `MaxSalesVolume` is still equal to `ExpectedSalesVolume`.
 
 This is the reason why we should not bother with Market-TA1. It simply sets `SellingPrice = MarketPrice + MarkupLimit`. This means Market-TA1 sets a "safe" `SellingPrice` for us, it guarantees that we won't be penalized due to too high price. However, this "safe" `SellingPrice` is too low, and we can find a much higher `SellingPrice`.
 
@@ -82,7 +82,7 @@ Formula:
 
 $$M = \ ItemMultiplier\ast BusinessFactor\ast AdvertFactor\ast MarketFactor\ast SaleBotsBonus\ast ResearchBonus$$
 
-- We want `MaxSalesVolume` equals `ExpectedSalesVolume`:
+- We want `MaxSalesVolume` to equal `ExpectedSalesVolume`:
 
 $$MaxSalesVolume = ExpectedSalesVolume$$
 
