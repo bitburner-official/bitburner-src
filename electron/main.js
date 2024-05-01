@@ -2,19 +2,15 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { app, dialog, BrowserWindow, ipcMain, protocol } = require("electron");
 
+const log = require("electron-log");
+log.catchErrors();
+
 // This handler must be set ASAP to prevent ghost processes.
 process.on("uncaughtException", function () {
   // The exception will be logged by electron-log.
   app.quit();
   process.exit(1);
 });
-
-const log = require("electron-log");
-log.catchErrors();
-const Store = require("electron-store");
-const store = new Store();
-log.transports.file.level = store.get("file-log-level", "info");
-log.transports.console.level = store.get("console-log-level", "debug");
 
 // This handler must be set ASAP to prevent ghost processes.
 app.on("window-all-closed", () => {
@@ -30,8 +26,13 @@ const achievements = require("./achievements");
 const utils = require("./utils");
 const storage = require("./storage");
 const debounce = require("lodash/debounce");
+const Store = require("electron-store");
+const store = new Store();
 const path = require("path");
 const { fileURLToPath } = require("url");
+
+log.transports.file.level = store.get("file-log-level", "info");
+log.transports.console.level = store.get("console-log-level", "debug");
 
 log.info(`Started app: ${JSON.stringify(process.argv)}`);
 
