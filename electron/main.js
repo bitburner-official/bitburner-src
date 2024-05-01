@@ -1,7 +1,28 @@
 /* eslint-disable no-process-exit */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { app, dialog, BrowserWindow, ipcMain, protocol } = require("electron");
+
+// This handler must be set ASAP to prevent ghost processes.
+process.on("uncaughtException", function () {
+  // The exception will be logged by electron-log.
+  app.quit();
+  process.exit(1);
+});
+
 const log = require("electron-log");
+log.catchErrors();
+const Store = require("electron-store");
+const store = new Store();
+log.transports.file.level = store.get("file-log-level", "info");
+log.transports.console.level = store.get("console-log-level", "debug");
+
+// This handler must be set ASAP to prevent ghost processes.
+app.on("window-all-closed", () => {
+  log.info("Quitting the app...");
+  app.quit();
+  process.exit(0);
+});
+
 const greenworks = require("./greenworks");
 const api = require("./api-server");
 const gameWindow = require("./gameWindow");
@@ -9,22 +30,10 @@ const achievements = require("./achievements");
 const utils = require("./utils");
 const storage = require("./storage");
 const debounce = require("lodash/debounce");
-const Store = require("electron-store");
-const store = new Store();
 const path = require("path");
 const { fileURLToPath } = require("url");
 
-log.transports.file.level = store.get("file-log-level", "info");
-log.transports.console.level = store.get("console-log-level", "debug");
-
-log.catchErrors();
 log.info(`Started app: ${JSON.stringify(process.argv)}`);
-
-process.on("uncaughtException", function () {
-  // The exception will already have been logged by electron-log
-  app.quit();
-  process.exit(1);
-});
 
 // We want to fail gracefully if we cannot connect to Steam
 try {
@@ -41,13 +50,6 @@ try {
 }
 
 let isRestoreDisabled = false;
-
-// This was moved so that startup errors do not lead to ghost processes
-app.on("window-all-closed", () => {
-  log.info("Quitting the app...");
-  app.quit();
-  process.exit(0);
-});
 
 function setStopProcessHandler(app, window) {
   const closingWindowHandler = async (e) => {
