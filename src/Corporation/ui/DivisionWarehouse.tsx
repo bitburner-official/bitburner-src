@@ -102,21 +102,23 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
     if (mat.stored === 0) continue;
     breakdownItems.push([
       `${matName}:`,
-      `${formatMaterialSize(mat.stored * MaterialInfo[matName].size)}`,
+      `${formatMaterialSize(MaterialInfo[matName].size)}`,
       `${formatNumber(mat.stored)}`,
+      `${formatMaterialSize(mat.stored * MaterialInfo[matName].size)}`,
     ]);
   }
 
   for (const [prodName, product] of division.products) {
     breakdownItems.push([
       `${prodName}:`,
-      `${formatMaterialSize(product.cityData[props.currentCity].stored * product.size)}`,
+      `${formatMaterialSize(product.size)}`,
       `${formatNumber(product.cityData[props.currentCity].stored)}`,
+      `${formatMaterialSize(product.cityData[props.currentCity].stored * product.size)}`,
     ]);
   }
 
   if (breakdownItems.length > 0) {
-    breakdownItems.unshift(["", "Size", "Unit"]);
+    breakdownItems.unshift(["", "Size", "Units", "Total Space"]);
   }
 
   const breakdown =
