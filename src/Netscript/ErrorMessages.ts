@@ -105,3 +105,14 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | ScriptDeath | 
   }
   dialogBoxCreate(initialText + e);
 }
+
+/** Use this handler to handle the error when we call getSaveData function */
+export function handleGetSaveDataError(error: unknown) {
+  console.error(error);
+  const baseErrorMessage = "Cannot get save data";
+  if (error instanceof RangeError) {
+    dialogBoxCreate(`${baseErrorMessage}. Error: ${error}. This may be because the save data is too large.`);
+  } else {
+    dialogBoxCreate(`${baseErrorMessage}. Error: ${error}.`);
+  }
+}

@@ -39,6 +39,7 @@ import { useBoolean } from "../hooks";
 
 import { ComparisonIcon } from "./ComparisonIcon";
 import { SaveData } from "../../../types";
+import { handleGetSaveDataError } from "../../../Netscript/ErrorMessages";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -124,14 +125,29 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
   useEffect(() => {
     async function fetchData(): Promise<void> {
       const dataBeingImported = await saveObject.getImportDataFromSaveData(props.saveData);
-      const dataCurrentlyInGame = await saveObject.getImportDataFromSaveData(await saveObject.getSaveData(true));
+      let saveData;
+      try {
+        saveData = await saveObject.getSaveData(true);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+      const dataCurrentlyInGame = await saveObject.getImportDataFromSaveData(saveData);
 
       setImportData(dataBeingImported);
       setCurrentData(dataCurrentlyInGame);
 
       return Promise.resolve();
     }
-    if (props.saveData) fetchData();
+    if (props.saveData) {
+      fetchData().catch((error) => {
+        handleGoBack();
+        // We cannot show dialog box in this screen (due to "withPopups = false"), so we will try showing it with a
+        // delay. 1 second is usually enough to go back to other normal screens that allow showing popups.
+        setTimeout(() => {
+          handleGetSaveDataError(error);
+        }, 1000);
+      });
+    }
   }, [props.saveData]);
 
   if (!importData || !currentData) return <></>;
