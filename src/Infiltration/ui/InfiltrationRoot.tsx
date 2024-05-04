@@ -33,6 +33,7 @@ export function InfiltrationRoot(props: IProps): React.ReactElement {
       ) : (
         <Intro
           Location={props.location}
+          StartingDifficulty={startingSecurityLevel}
           Difficulty={difficulty}
           MaxLevel={props.location.infiltrationData.maxClearanceLevel}
           start={() => setStart(true)}
