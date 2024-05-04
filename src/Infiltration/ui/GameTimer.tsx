@@ -9,6 +9,7 @@ type GameTimerProps = {
   onExpire: () => void;
   noPaper?: boolean;
   ignoreAugment_WKSharmonizer?: boolean;
+  tick?: number;
 };
 
 export function GameTimer({
@@ -16,12 +17,12 @@ export function GameTimer({
   onExpire,
   noPaper,
   ignoreAugment_WKSharmonizer,
+  tick = 100,
 }: GameTimerProps): React.ReactElement {
   const [v, setV] = useState(100);
   const totalMillis =
     (!ignoreAugment_WKSharmonizer && Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 1.3 : 1) * millis;
 
-  const tick = 200;
   useEffect(() => {
     const intervalId = setInterval(() => {
       setV((old) => {

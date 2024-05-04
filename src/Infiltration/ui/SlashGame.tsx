@@ -19,10 +19,10 @@ const difficulties: {
   Hard: Difficulty;
   Impossible: Difficulty;
 } = {
-  Trivial: { window: 600 },
-  Normal: { window: 325 },
-  Hard: { window: 250 },
-  Impossible: { window: 150 },
+  Trivial: { window: 800 },
+  Normal: { window: 500 },
+  Hard: { window: 350 },
+  Impossible: { window: 250 },
 };
 
 export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps): React.ReactElement {
@@ -70,17 +70,21 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
     <>
       <GameTimer millis={5000} onExpire={onFailure} ignoreAugment_WKSharmonizer />
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
-        <Typography variant="h4">Attack when his guard is down!</Typography>
+        <Typography variant="h4" textAlign="center">
+          Attack after the guard drops his guard and is distracted. Do not alert him!
+        </Typography>
+        <br></br>
         {hasAugment && (
           <Box sx={{ my: 1 }}>
-            <Typography variant="h5">Guard will drop in...</Typography>
-            <GameTimer millis={guardingTime} onExpire={() => null} ignoreAugment_WKSharmonizer noPaper />
+            <Typography variant="h5">The guard will drop his guard and be distracted in ...</Typography>
+            <GameTimer millis={guardingTime} onExpire={() => null} ignoreAugment_WKSharmonizer noPaper tick={20} />
+            <br></br>
           </Box>
         )}
 
         {phase === 0 && <Typography variant="h4">Guarding ...</Typography>}
-        {phase === 1 && <Typography variant="h4">Preparing?</Typography>}
-        {phase === 2 && <Typography variant="h4">ATTACKING!</Typography>}
+        {phase === 1 && <Typography variant="h4">Distracted!</Typography>}
+        {phase === 2 && <Typography variant="h4">Alerted!</Typography>}
         <KeyHandler onKeyDown={press} onFailure={onFailure} />
       </Paper>
     </>
