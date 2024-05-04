@@ -34,7 +34,7 @@ export function GameTimer({
     return () => {
       clearInterval(intervalId);
     };
-  }, [onExpire, totalMillis]);
+  }, [onExpire, tick, totalMillis]);
 
   // https://stackoverflow.com/questions/55593367/disable-material-uis-linearprogress-animation
   // TODO(hydroflame): there's like a bug where it triggers the end before the
