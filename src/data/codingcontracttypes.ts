@@ -1326,7 +1326,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       return [
         "You are given the following encoded binary string: \n",
         `'${n}' \n\n`,
-        "Decode it as an 'extended Hamming code' and convert it to a decimal value:\n",
+        "Decode it as an 'extended Hamming code' and convert it to a decimal value.\n",
         "Parity bits are inserted at positions 0 and 2^N.\n",
         "Parity bits are used to make the total number of '1' bits in a given set of data even.\n",
         "The parity bit at position 0 considers all bits including parity bits.\n",
