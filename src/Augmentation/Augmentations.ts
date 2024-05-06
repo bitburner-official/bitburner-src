@@ -110,11 +110,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       crime_money: 2,
       crime_success: 2,
       work_money: 2,
-      hacknet_node_money: 2,
-      hacknet_node_purchase_cost: 0.5,
-      hacknet_node_ram_cost: 0.5,
-      hacknet_node_core_cost: 0.5,
-      hacknet_node_level_cost: 0.5,
+      hacknet_money: 2,
+      hacknet_purchase_cost: 0.5,
+      hacknet_ram_cost: 0.5,
+      hacknet_core_cost: 0.5,
+      hacknet_level_cost: 0.5,
       bladeburner_max_stamina: 2,
       bladeburner_stamina_gain: 2,
       bladeburner_analysis: 2,
@@ -819,8 +819,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Uploads the architecture and design details of a Hacknet Node's CPU into " +
         "the brain. This allows the user to engineer custom hardware and software " +
         "for the Hacknet Node that provides better performance.",
-      hacknet_node_money: 1.15,
-      hacknet_node_purchase_cost: 0.85,
+      hacknet_money: 1.15,
+      hacknet_purchase_cost: 0.85,
       factions: [FactionName.Netburners],
     },
     [AugmentationName.HacknetNodeCacheUpload]: {
@@ -830,8 +830,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Uploads the architecture and design details of a Hacknet Node's main-memory cache " +
         "into the brain. This allows the user to engineer custom cache hardware for the " +
         "Hacknet Node that offers better performance.",
-      hacknet_node_money: 1.1,
-      hacknet_node_level_cost: 0.85,
+      hacknet_money: 1.1,
+      hacknet_level_cost: 0.85,
       factions: [FactionName.Netburners],
     },
     [AugmentationName.HacknetNodeCoreDNI]: {
@@ -841,7 +841,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Installs a Direct-Neural Interface jack into the arm that is capable of connecting " +
         "to a Hacknet Node. This lets the user access and manipulate the Node's processing logic using " +
         "electrochemical signals.",
-      hacknet_node_money: 1.45,
+      hacknet_money: 1.45,
       factions: [FactionName.Netburners],
     },
     [AugmentationName.HacknetNodeKernelDNI]: {
@@ -851,7 +851,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Installs a Direct-Neural Interface jack into the arm that is capable of connecting to a " +
         "Hacknet Node. This lets the user access and manipulate the Node's kernel using " +
         "electrochemical signals.",
-      hacknet_node_money: 1.25,
+      hacknet_money: 1.25,
       factions: [FactionName.Netburners],
     },
     [AugmentationName.HacknetNodeNICUpload]: {
@@ -861,8 +861,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Uploads the architecture and design details of a Hacknet Node's Network Interface Card (NIC) " +
         "into the brain. This allows the user to engineer a custom NIC for the Hacknet Node that " +
         "offers better performance.",
-      hacknet_node_money: 1.1,
-      hacknet_node_purchase_cost: 0.9,
+      hacknet_money: 1.1,
+      hacknet_purchase_cost: 0.9,
       factions: [FactionName.Netburners],
     },
     [AugmentationName.HemoRecirculator]: {
@@ -1133,11 +1133,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 1.01 + donationBonus,
       crime_money: 1.01 + donationBonus,
       crime_success: 1.01 + donationBonus,
-      hacknet_node_money: 1.01 + donationBonus,
-      hacknet_node_purchase_cost: 1 / (1.01 + donationBonus),
-      hacknet_node_ram_cost: 1 / (1.01 + donationBonus),
-      hacknet_node_core_cost: 1 / (1.01 + donationBonus),
-      hacknet_node_level_cost: 1 / (1.01 + donationBonus),
+      hacknet_money: 1.01 + donationBonus,
+      hacknet_purchase_cost: 1 / (1.01 + donationBonus),
+      hacknet_ram_cost: 1 / (1.01 + donationBonus),
+      hacknet_core_cost: 1 / (1.01 + donationBonus),
+      hacknet_level_cost: 1 / (1.01 + donationBonus),
       work_money: 1.01 + donationBonus,
       factions: Object.values(FactionName).filter(
         (factionName) =>
@@ -1541,11 +1541,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 0.9,
       crime_money: 0.9,
       crime_success: 0.9,
-      hacknet_node_money: 0.9,
-      hacknet_node_purchase_cost: 1.1,
-      hacknet_node_ram_cost: 1.1,
-      hacknet_node_core_cost: 1.1,
-      hacknet_node_level_cost: 1.1,
+      hacknet_money: 0.9,
+      hacknet_purchase_cost: 1.1,
+      hacknet_ram_cost: 1.1,
+      hacknet_core_cost: 1.1,
+      hacknet_level_cost: 1.1,
       work_money: 0.9,
       stats: "Its unstable nature decreases all your stats by 10%.",
       factions: [FactionName.ChurchOfTheMachineGod],
@@ -1579,11 +1579,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 0.95 / 0.9,
       crime_money: 0.95 / 0.9,
       crime_success: 0.95 / 0.9,
-      hacknet_node_money: 0.95 / 0.9,
-      hacknet_node_purchase_cost: 1.05 / 1.1,
-      hacknet_node_ram_cost: 1.05 / 1.1,
-      hacknet_node_core_cost: 1.05 / 1.1,
-      hacknet_node_level_cost: 1.05 / 1.1,
+      hacknet_money: 0.95 / 0.9,
+      hacknet_purchase_cost: 1.05 / 1.1,
+      hacknet_ram_cost: 1.05 / 1.1,
+      hacknet_core_cost: 1.05 / 1.1,
+      hacknet_level_cost: 1.05 / 1.1,
       work_money: 0.95 / 0.9,
       stats: "The penalty for the gift is reduced to 5%.",
       factions: [FactionName.ChurchOfTheMachineGod],
@@ -1618,11 +1618,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       faction_rep: 1 / 0.95,
       crime_money: 1 / 0.95,
       crime_success: 1 / 0.95,
-      hacknet_node_money: 1 / 0.95,
-      hacknet_node_purchase_cost: 1 / 1.05,
-      hacknet_node_ram_cost: 1 / 1.05,
-      hacknet_node_core_cost: 1 / 1.05,
-      hacknet_node_level_cost: 1 / 1.05,
+      hacknet_money: 1 / 0.95,
+      hacknet_purchase_cost: 1 / 1.05,
+      hacknet_ram_cost: 1 / 1.05,
+      hacknet_core_cost: 1 / 1.05,
+      hacknet_level_cost: 1 / 1.05,
       work_money: 1 / 0.95,
       stats: "Stanek's Gift has no penalty.",
       factions: [FactionName.ChurchOfTheMachineGod],

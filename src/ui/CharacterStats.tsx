@@ -158,10 +158,10 @@ function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
       parts.push([`Hacking:`, <Money key="hacking" money={src.hacking} />]);
     }
     if (src.hacknet) {
-      parts.push([`Hacknet Nodes:`, <Money key="hacknet" money={src.hacknet} />]);
+      parts.push([`Hacknet:`, <Money key="hacknet" money={src.hacknet} />]);
     }
     if (src.hacknet_expenses) {
-      parts.push([`Hacknet Nodes Expenses:`, <Money key="hacknet-expenses" money={src.hacknet_expenses} />]);
+      parts.push([`Hacknet Expenses:`, <Money key="hacknet-expenses" money={src.hacknet_expenses} />]);
     }
     if (src.hospitalization) {
       parts.push([`Hospitalization:`, <Money key="hospital" money={src.hospitalization} />]);
@@ -472,25 +472,25 @@ export function CharacterStats(): React.ReactElement {
             <MultiplierTable
               rows={[
                 {
-                  mult: "Hacknet Node Production",
-                  value: Player.mults.hacknet_node_money,
-                  effValue: Player.mults.hacknet_node_money * currentNodeMults.HacknetNodeMoney,
+                  mult: "Hacknet Production",
+                  value: Player.mults.hacknet_money,
+                  effValue: Player.mults.hacknet_money * currentNodeMults.HacknetNodeMoney,
                 },
                 {
                   mult: "Hacknet Node Purchase Cost",
-                  value: Player.mults.hacknet_node_purchase_cost,
+                  value: Player.mults.hacknet_purchase_cost,
                 },
                 {
-                  mult: "Hacknet Node RAM Upgrade Cost",
-                  value: Player.mults.hacknet_node_ram_cost,
+                  mult: "Hacknet RAM Upgrade Cost",
+                  value: Player.mults.hacknet_ram_cost,
                 },
                 {
-                  mult: "Hacknet Node Core Purchase Cost",
-                  value: Player.mults.hacknet_node_core_cost,
+                  mult: "Hacknet Core Upgrade Cost",
+                  value: Player.mults.hacknet_core_cost,
                 },
                 {
-                  mult: "Hacknet Node Level Upgrade Cost",
-                  value: Player.mults.hacknet_node_level_cost,
+                  mult: "Hacknet Level Upgrade Cost",
+                  value: Player.mults.hacknet_level_cost,
                 },
               ]}
               color={Settings.theme.primary}

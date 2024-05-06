@@ -140,7 +140,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
         const i = helpers.number(ctx, "i", _i);
         const n = helpers.number(ctx, "n", _n);
         const node = getHacknetNode(ctx, i);
-        return node.calculateLevelUpgradeCost(n, Player.mults.hacknet_node_level_cost);
+        return node.calculateLevelUpgradeCost(n, Player.mults.hacknet_level_cost);
       },
     getRamUpgradeCost:
       (ctx) =>
@@ -148,7 +148,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
         const i = helpers.number(ctx, "i", _i);
         const n = helpers.number(ctx, "n", _n);
         const node = getHacknetNode(ctx, i);
-        return node.calculateRamUpgradeCost(n, Player.mults.hacknet_node_ram_cost);
+        return node.calculateRamUpgradeCost(n, Player.mults.hacknet_ram_cost);
       },
     getCoreUpgradeCost:
       (ctx) =>
@@ -156,7 +156,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
         const i = helpers.number(ctx, "i", _i);
         const n = helpers.number(ctx, "n", _n);
         const node = getHacknetNode(ctx, i);
-        return node.calculateCoreUpgradeCost(n, Player.mults.hacknet_node_core_cost);
+        return node.calculateCoreUpgradeCost(n, Player.mults.hacknet_core_cost);
       },
     getCacheUpgradeCost:
       (ctx) =>

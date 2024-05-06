@@ -192,30 +192,30 @@ export function PlayerMultipliers(): React.ReactElement {
   ];
   const rightColData: MultiplierListItemData[] = [
     {
-      mult: "Hacknet Node Production",
-      current: Player.mults.hacknet_node_money,
-      augmented: Player.mults.hacknet_node_money * mults.hacknet_node_money,
+      mult: "Hacknet Production",
+      current: Player.mults.hacknet_money,
+      augmented: Player.mults.hacknet_money * mults.hacknet_money,
       bnMult: currentNodeMults.HacknetNodeMoney,
     },
     {
       mult: "Hacknet Node Purchase Cost",
-      current: Player.mults.hacknet_node_purchase_cost,
-      augmented: Player.mults.hacknet_node_purchase_cost * mults.hacknet_node_purchase_cost,
+      current: Player.mults.hacknet_purchase_cost,
+      augmented: Player.mults.hacknet_purchase_cost * mults.hacknet_purchase_cost,
     },
     {
-      mult: "Hacknet Node RAM Upgrade Cost",
-      current: Player.mults.hacknet_node_ram_cost,
-      augmented: Player.mults.hacknet_node_ram_cost * mults.hacknet_node_ram_cost,
+      mult: "Hacknet RAM Upgrade Cost",
+      current: Player.mults.hacknet_ram_cost,
+      augmented: Player.mults.hacknet_ram_cost * mults.hacknet_ram_cost,
     },
     {
-      mult: "Hacknet Node Core Purchase Cost",
-      current: Player.mults.hacknet_node_core_cost,
-      augmented: Player.mults.hacknet_node_core_cost * mults.hacknet_node_core_cost,
+      mult: "Hacknet Core Upgrade Cost",
+      current: Player.mults.hacknet_core_cost,
+      augmented: Player.mults.hacknet_core_cost * mults.hacknet_core_cost,
     },
     {
-      mult: "Hacknet Node Level Upgrade Cost",
-      current: Player.mults.hacknet_node_level_cost,
-      augmented: Player.mults.hacknet_node_level_cost * mults.hacknet_node_level_cost,
+      mult: "Hacknet Level Upgrade Cost",
+      current: Player.mults.hacknet_level_cost,
+      augmented: Player.mults.hacknet_level_cost * mults.hacknet_level_cost,
     },
     {
       mult: "Company Reputation Gain",

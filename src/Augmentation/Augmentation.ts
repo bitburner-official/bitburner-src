@@ -41,11 +41,11 @@ export interface AugmentationCtorParams {
   crime_money?: number;
   crime_success?: number;
   work_money?: number;
-  hacknet_node_money?: number;
-  hacknet_node_purchase_cost?: number;
-  hacknet_node_ram_cost?: number;
-  hacknet_node_core_cost?: number;
-  hacknet_node_level_cost?: number;
+  hacknet_money?: number;
+  hacknet_purchase_cost?: number;
+  hacknet_ram_cost?: number;
+  hacknet_core_cost?: number;
+  hacknet_level_cost?: number;
   bladeburner_max_stamina?: number;
   bladeburner_stamina_gain?: number;
   bladeburner_analysis?: number;
@@ -139,18 +139,18 @@ function generateStatsDescription(mults: Multipliers, programs?: string[], start
   if (mults.work_money !== 1) desc += `\n+${f(mults.work_money - 1)} work money`;
 
   // Hacknet: costs are negative
-  if (mults.hacknet_node_money !== 1) desc += `\n+${f(mults.hacknet_node_money - 1)} hacknet production`;
-  if (mults.hacknet_node_purchase_cost !== 1) {
-    desc += `\n-${f(-(mults.hacknet_node_purchase_cost - 1))} hacknet nodes cost`;
+  if (mults.hacknet_money !== 1) desc += `\n+${f(mults.hacknet_money - 1)} hacknet production`;
+  if (mults.hacknet_purchase_cost !== 1) {
+    desc += `\n-${f(-(mults.hacknet_purchase_cost - 1))} hacknet node purchase cost`;
   }
-  if (mults.hacknet_node_level_cost !== 1) {
-    desc += `\n-${f(-(mults.hacknet_node_level_cost - 1))} hacknet level upgrade cost`;
+  if (mults.hacknet_level_cost !== 1) {
+    desc += `\n-${f(-(mults.hacknet_level_cost - 1))} hacknet level upgrade cost`;
   }
-  if (mults.hacknet_node_ram_cost !== 1) {
-    desc += `\n-${f(-(mults.hacknet_node_ram_cost - 1))} hacknet RAM cost`;
+  if (mults.hacknet_ram_cost !== 1) {
+    desc += `\n-${f(-(mults.hacknet_ram_cost - 1))} hacknet RAM upgrade cost`;
   }
-  if (mults.hacknet_node_core_cost !== 1) {
-    desc += `\n-${f(-(mults.hacknet_node_core_cost - 1))} hacknet core cost`;
+  if (mults.hacknet_core_cost !== 1) {
+    desc += `\n-${f(-(mults.hacknet_core_cost - 1))} hacknet core upgrade cost`;
   }
 
   // Bladeburner
