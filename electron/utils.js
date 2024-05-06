@@ -7,8 +7,12 @@ const store = new Store();
 
 function reloadAndKill(window, killScripts) {
   log.info("Reloading & Killing all scripts...");
+  const zoomFactor = getZoomFactor();
   window.webContents.forcefullyCrashRenderer();
   window.loadFile("index.html", killScripts ? { query: { noScripts: true } } : {});
+  window.once("ready-to-show", () => {
+    setZoomFactor(window, zoomFactor);
+  });
 }
 
 function promptForReload(window) {
