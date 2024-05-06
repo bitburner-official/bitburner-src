@@ -7,6 +7,8 @@ import { initElectron } from "./Electron";
 
 import { newRemoteFileApiConnection } from "./RemoteFileAPI/RemoteFileAPI";
 
+import "./css/font.css";
+
 initElectron();
 globalThis.React = React;
 globalThis.ReactDOM = ReactDOM;
