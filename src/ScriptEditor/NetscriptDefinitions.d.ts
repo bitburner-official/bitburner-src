@@ -3070,12 +3070,9 @@ export interface Bladeburner {
    * @remarks
    * RAM cost: 1 GB
    *
-   * Returns an object that represents the player’s current Bladeburner action.
-   * If the player is not performing an action, the function will return an object with the ‘type’ property set to “Idle”.
-   *
-   * @returns Object that represents the player’s current Bladeburner action.
+   * @returns Object that represents the player’s current Bladeburner action, or null if no action is being performed.
    */
-  getCurrentAction(): BladeburnerCurAction;
+  getCurrentAction(): BladeburnerCurAction | null;
 
   /**
    * Get the time to complete an action.

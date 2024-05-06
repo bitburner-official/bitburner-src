@@ -101,8 +101,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     getCurrentAction: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
-      // Temporary bad return type to not be an API break (idle should just return null)
-      if (!bladeburner.action) return { type: "Idle", name: "Idle" };
+      if (!bladeburner.action) return null;
       return { ...bladeburner.action };
     },
     getActionTime: (ctx) => (type, name) => {
