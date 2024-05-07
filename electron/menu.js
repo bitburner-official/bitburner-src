@@ -212,7 +212,7 @@ function getMenu(window) {
           click: () => window.loadFile("index.html"),
         },
         {
-          label: "Reload & Kill All Scripts",
+          label: "Reload && Kill All Scripts",
           click: () => utils.reloadAndKill(window, true),
         },
       ],

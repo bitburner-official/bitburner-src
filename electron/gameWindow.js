@@ -44,6 +44,9 @@ async function createWindow(killall) {
   window.removeMenu();
   noScripts = killall ? { query: { noScripts: killall } } : {};
   window.loadFile("index.html", noScripts);
+  window.once("ready-to-show", () => {
+    utils.setZoomFactor(window, utils.getZoomFactor());
+  });
   window.show();
   if (debug) window.webContents.openDevTools();
 
@@ -60,7 +63,6 @@ async function createWindow(killall) {
 
   achievements.enableAchievementsInterval(window);
   utils.attachUnresponsiveAppHandler(window);
-  utils.setZoomFactor(window);
 
   try {
     await api.initialize(window);
