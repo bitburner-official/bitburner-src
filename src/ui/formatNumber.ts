@@ -148,7 +148,18 @@ export const formatFavor = formatNumberNoSuffix;
 /** Standard noninteger formatting with no options set. Collapses to suffix at 1000 and shows 3 fractional digits. */
 export const formatBigNumber = (n: number) => formatNumber(n);
 export const formatExp = formatBigNumber;
-export const formatHashes = formatBigNumber;
+export const formatHashes = (n: number) => {
+  if (n < 0.00001) {
+    return formatNumber(n, 8);
+  }
+  if (n < 0.001) {
+    return formatNumber(n, 6);
+  }
+  if (n < 0.01) {
+    return formatNumber(n, 4);
+  }
+  return formatNumber(n);
+};
 export const formatReputation = formatBigNumber;
 export const formatPopulation = formatBigNumber;
 export const formatSecurity = formatBigNumber;
