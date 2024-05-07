@@ -34,14 +34,14 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
     // Determine timeframes for game phase changes
     const newDifficulty: Difficulty = { window: 0 };
     interpolate(difficulties, difficulty, newDifficulty);
-    const timePreparing =
+    const distractedTime =
       newDifficulty.window * (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 1.3 : 1);
-    const timeAttacking = 250;
-    const timeGuarding = Math.random() * 3250 + 1500 - (timeAttacking + timePreparing);
+    const alertedTime = 250;
+    const guardingTime = Math.random() * 3250 + 1500 - (distractedTime + alertedTime);
 
     // Set initial game state
     setPhase(0);
-    setGuardingTime(timeGuarding);
+    setGuardingTime(guardingTime);
     setHasAugment(Player.hasAugmentation(AugmentationName.MightOfAres, true));
 
     // Setup timer for game phases
@@ -49,9 +49,9 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
       setPhase(1);
       id = setTimeout(() => {
         setPhase(2);
-        id = setTimeout(() => onFailure(), timeAttacking);
-      }, timePreparing);
-    }, timeGuarding);
+        id = setTimeout(() => onFailure(), alertedTime);
+      }, distractedTime);
+    }, guardingTime);
 
     return () => clearTimeout(id);
   }, [difficulty, onSuccess, onFailure]);
