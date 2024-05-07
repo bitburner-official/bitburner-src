@@ -153,15 +153,15 @@ interface Multipliers {
   /** Multiplier to amount of money gained from working */
   work_money: number;
   /** Multiplier to amount of money produced by Hacknet Nodes */
-  hacknet_node_money: number;
+  hacknet_money: number;
   /** Multiplier to cost of purchasing a Hacknet Node */
-  hacknet_node_purchase_cost: number;
+  hacknet_purchase_cost: number;
   /** Multiplier to cost of ram for a Hacknet Node */
-  hacknet_node_ram_cost: number;
+  hacknet_ram_cost: number;
   /** Multiplier to cost of core for a Hacknet Node */
-  hacknet_node_core_cost: number;
+  hacknet_core_cost: number;
   /** Multiplier to cost of leveling up a Hacknet Node */
-  hacknet_node_level_cost: number;
+  hacknet_level_cost: number;
   /** Multiplier to Bladeburner max stamina */
   bladeburner_max_stamina: number;
   /** Multiplier to Bladeburner stamina gain rate */
