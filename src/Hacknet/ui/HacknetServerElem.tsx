@@ -60,8 +60,8 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
     }
 
     const base_increase =
-      calculateHashGainRate(node.level + multiplier, 0, node.maxRam, node.cores, Player.mults.hacknet_money) -
-      calculateHashGainRate(node.level, 0, node.maxRam, node.cores, Player.mults.hacknet_money);
+      calculateHashGainRate(node.level + multiplier, 0, node.maxRam, node.cores, Player.mults.hacknet_production) -
+      calculateHashGainRate(node.level, 0, node.maxRam, node.cores, Player.mults.hacknet_production);
     const modded_increase = (base_increase * (node.maxRam - node.ramUsed)) / node.maxRam;
 
     const upgradeLevelCost = node.calculateLevelUpgradeCost(multiplier, Player.mults.hacknet_level_cost);
@@ -121,8 +121,8 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
         0,
         node.maxRam * Math.pow(2, multiplier),
         node.cores,
-        Player.mults.hacknet_money,
-      ) - calculateHashGainRate(node.level, 0, node.maxRam, node.cores, Player.mults.hacknet_money);
+        Player.mults.hacknet_production,
+      ) - calculateHashGainRate(node.level, 0, node.maxRam, node.cores, Player.mults.hacknet_production);
 
     const modded_increase =
       calculateHashGainRate(
@@ -130,10 +130,10 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
         node.ramUsed,
         node.maxRam * Math.pow(2, multiplier),
         node.cores,
-        Player.mults.hacknet_money,
-      ) - calculateHashGainRate(node.level, node.ramUsed, node.maxRam, node.cores, Player.mults.hacknet_money);
+        Player.mults.hacknet_production,
+      ) - calculateHashGainRate(node.level, node.ramUsed, node.maxRam, node.cores, Player.mults.hacknet_production);
 
-    const upgradeRamCost = node.calculateRamUpgradeCost(multiplier, Player.mults.hacknet_ram_cost);
+    const upgradeRamCost = node.calculateRamUpgradeCost(multiplier, Player.mults.hacknet_ram_upgrade_cost);
     upgradeRamButton = (
       <Tooltip
         title={
@@ -177,11 +177,11 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
     }
 
     const base_increase =
-      calculateHashGainRate(node.level, 0, node.maxRam, node.cores + multiplier, Player.mults.hacknet_money) -
-      calculateHashGainRate(node.level, 0, node.maxRam, node.cores, Player.mults.hacknet_money);
+      calculateHashGainRate(node.level, 0, node.maxRam, node.cores + multiplier, Player.mults.hacknet_production) -
+      calculateHashGainRate(node.level, 0, node.maxRam, node.cores, Player.mults.hacknet_production);
     const modded_increase = (base_increase * (node.maxRam - node.ramUsed)) / node.maxRam;
 
-    const upgradeCoreCost = node.calculateCoreUpgradeCost(multiplier, Player.mults.hacknet_core_cost);
+    const upgradeCoreCost = node.calculateCoreUpgradeCost(multiplier, Player.mults.hacknet_core_upgrade_cost);
     upgradeCoresButton = (
       <Tooltip
         title={

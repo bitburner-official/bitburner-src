@@ -179,7 +179,7 @@ export class StaneksGift extends BaseGift {
           mults.charisma_exp *= power;
           break;
         case FragmentType.HacknetMoney:
-          mults.hacknet_money *= power;
+          mults.hacknet_production *= power;
           break;
         case FragmentType.HacknetCost:
           mults.hacknet_purchase_cost /= power;

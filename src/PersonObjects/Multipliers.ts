@@ -15,7 +15,7 @@ export interface Multipliers {
   agility_exp: number;
   charisma: number;
   charisma_exp: number;
-  hacknet_money: number;
+  hacknet_production: number;
   hacknet_purchase_cost: number;
   hacknet_ram_cost: number;
   hacknet_core_cost: number;
@@ -49,7 +49,7 @@ export const defaultMultipliers = (): Multipliers => {
     agility_exp: 1,
     charisma: 1,
     charisma_exp: 1,
-    hacknet_money: 1,
+    hacknet_production: 1,
     hacknet_purchase_cost: 1,
     hacknet_ram_cost: 1,
     hacknet_core_cost: 1,
@@ -84,7 +84,7 @@ export const mergeMultipliers = (m0: Multipliers, m1: Multipliers): Multipliers 
     agility_exp: m0.agility_exp * m1.agility_exp,
     charisma: m0.charisma * m1.charisma,
     charisma_exp: m0.charisma_exp * m1.charisma_exp,
-    hacknet_money: m0.hacknet_money * m1.hacknet_money,
+    hacknet_production: m0.hacknet_production * m1.hacknet_production,
     hacknet_purchase_cost: m0.hacknet_purchase_cost * m1.hacknet_purchase_cost,
     hacknet_ram_cost: m0.hacknet_ram_cost * m1.hacknet_ram_cost,
     hacknet_core_cost: m0.hacknet_core_cost * m1.hacknet_core_cost,
@@ -119,7 +119,7 @@ export const scaleMultipliers = (m0: Multipliers, v: number): Multipliers => {
     agility_exp: (m0.agility_exp - 1) * v + 1,
     charisma: (m0.charisma - 1) * v + 1,
     charisma_exp: (m0.charisma_exp - 1) * v + 1,
-    hacknet_money: (m0.hacknet_money - 1) * v + 1,
+    hacknet_production: (m0.hacknet_production - 1) * v + 1,
     hacknet_purchase_cost: (m0.hacknet_purchase_cost - 1) * v + 1,
     hacknet_ram_cost: (m0.hacknet_ram_cost - 1) * v + 1,
     hacknet_core_cost: (m0.hacknet_core_cost - 1) * v + 1,

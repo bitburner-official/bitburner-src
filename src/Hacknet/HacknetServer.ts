@@ -115,7 +115,7 @@ export class HacknetServer extends BaseServer implements IHacknetNode {
 
   updateRamUsed(ram: number): void {
     super.updateRamUsed(ram);
-    this.updateHashRate(Player.mults.hacknet_money);
+    this.updateHashRate(Player.mults.hacknet_production);
   }
 
   updateHashCapacity(): void {

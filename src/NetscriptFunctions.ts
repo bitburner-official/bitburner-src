@@ -943,7 +943,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   getHacknetMultipliers: () => () => {
     return {
-      production: Player.mults.hacknet_money,
+      production: Player.mults.hacknet_production,
       purchaseCost: Player.mults.hacknet_purchase_cost,
       ramCost: Player.mults.hacknet_ram_cost,
       coreCost: Player.mults.hacknet_core_cost,

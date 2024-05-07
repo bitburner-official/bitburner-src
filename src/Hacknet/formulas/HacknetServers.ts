@@ -13,7 +13,7 @@ export function calculateHashGainRate(
   const coreMultiplier = 1 + (cores - 1) / 5;
   const ramRatio = 1 - ramUsed / maxRam;
 
-  return baseGain * ramMultiplier * coreMultiplier * ramRatio * mult * currentNodeMults.HacknetNodeMoney;
+  return baseGain * ramMultiplier * coreMultiplier * ramRatio * mult * currentNodeMults.HacknetProduction;
 }
 
 export function calculateLevelUpgradeCost(startingLevel: number, extraLevels = 1, costMult = 1): number {
