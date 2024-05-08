@@ -7158,7 +7158,12 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * Prompts the player with a dialog box. Here is an explanation of the various options.
+   * Prompts the player with a dialog box and returns a promise. If the player cancels this dialog box (press X button
+   * or click outside the dialog box), the promise is resolved with a default value (empty string or "false"). If this
+   * API is called again while the old dialog box still exists, the old dialog box will be replaced with a new one, and
+   * the old promise will be resolved with the default value.
+   *
+   * Here is an explanation of the various options.
    *
    * - `options.type` is not provided to the function. If `options.type` is left out and
    *   only a string is passed to the function, then the default behavior is to create a
