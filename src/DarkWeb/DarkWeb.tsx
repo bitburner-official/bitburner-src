@@ -1,6 +1,6 @@
 import React from "react";
 import { DarkWebItems } from "./DarkWebItems";
-
+import { formatMoney } from "../ui/formatNumber";
 import { Player } from "@player";
 import { Terminal } from "../Terminal";
 import { SpecialServers } from "../Server/data/SpecialServers";
@@ -91,7 +91,7 @@ export function buyAllDarkwebItems(): void {
     if (!Player.hasProgram(item.program)) {
       itemsToBuy.push(item);
       if (item.price > Player.money) {
-        Terminal.error("Not enough money to purchase remaining programs");
+        Terminal.error("Need " + formatMoney(item.price - Player.money) + " more to purchase " + item.program);
         return;
       } else {
         buyDarkwebItem(item.program);
