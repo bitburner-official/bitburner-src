@@ -125,13 +125,7 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
   useEffect(() => {
     async function fetchData(): Promise<void> {
       const dataBeingImported = await saveObject.getImportDataFromSaveData(props.saveData);
-      let saveData;
-      try {
-        saveData = await saveObject.getSaveData(true);
-      } catch (error) {
-        return Promise.reject(error);
-      }
-      const dataCurrentlyInGame = await saveObject.getImportDataFromSaveData(saveData);
+      const dataCurrentlyInGame = await saveObject.getImportDataFromSaveData(await saveObject.getSaveData(true));
 
       setImportData(dataBeingImported);
       setCurrentData(dataCurrentlyInGame);

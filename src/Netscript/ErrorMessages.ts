@@ -109,10 +109,12 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | ScriptDeath | 
 /** Use this handler to handle the error when we call getSaveData function */
 export function handleGetSaveDataError(error: unknown) {
   console.error(error);
-  const baseErrorMessage = "Cannot get save data";
+  let errorMessage = `Cannot get save data. Error: ${error}.`;
   if (error instanceof RangeError) {
-    dialogBoxCreate(`${baseErrorMessage}. Error: ${error}. This may be because the save data is too large.`);
-  } else {
-    dialogBoxCreate(`${baseErrorMessage}. Error: ${error}.`);
+    errorMessage += " This may be because the save data is too large.";
   }
+  if (error instanceof Error && error.stack) {
+    errorMessage += `\nStack:\n${error.stack}`;
+  }
+  dialogBoxCreate(errorMessage);
 }
