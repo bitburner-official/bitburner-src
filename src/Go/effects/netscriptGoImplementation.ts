@@ -131,7 +131,7 @@ export async function makePlayerMove(logger: (s: string) => void, error: (s: str
 export async function getOpponentNextMove(logOpponentMove = true, logger: (s: string) => void) {
   // Only asynchronously log the opponent move if not disabled by the player
   if (logOpponentMove) {
-    Go.nextTurn.then((move) => {
+    return Go.nextTurn.then((move) => {
       if (move.type === GoPlayType.gameOver) {
         logEndGame(logger);
       } else if (move.type === GoPlayType.pass) {
@@ -139,6 +139,7 @@ export async function getOpponentNextMove(logOpponentMove = true, logger: (s: st
       } else if (move.type === GoPlayType.move) {
         logger(`Opponent played move: ${move.x}, ${move.y}`);
       }
+      return move;
     });
   }
 
