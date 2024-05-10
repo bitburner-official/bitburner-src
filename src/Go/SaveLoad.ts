@@ -9,6 +9,7 @@ import { assertLoadingType } from "../utils/TypeAssertion";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { boardSizes } from "./Constants";
 import { isInteger, isNumber } from "../types";
+import { makeAIMove } from "./boardAnalysis/goAI";
 
 type PreviousGameSaveData = { ai: GoOpponent; board: SimpleBoard; previousPlayer: GoColor | null } | null;
 type CurrentGameSaveData = PreviousGameSaveData & {
@@ -77,6 +78,10 @@ export function loadGo(data: unknown): boolean {
   Go.currentGame = currentGame;
   Go.previousGame = previousGame;
   Go.stats = stats;
+
+  // If it's the AI's turn, initiate their turn
+  if (currentGame.previousPlayer === GoColor.black && currentGame.ai !== GoOpponent.none) makeAIMove(currentGame);
+
   return true;
 }
 
