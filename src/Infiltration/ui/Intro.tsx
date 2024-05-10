@@ -64,7 +64,7 @@ export function Intro(props: IProps): React.ReactElement {
           <b>HP: {`${formatHp(Player.hp.current)} / ${formatHp(Player.hp.max)}`}</b>
         </Typography>
         <Typography variant="h6">
-          <b>Lose {calculateDamageAfterFailingInfiltration(props.StartingDifficulty)} HP for each failure</b>
+          <b>Lose {formatHp(calculateDamageAfterFailingInfiltration(props.StartingDifficulty))} HP for each failure</b>
         </Typography>
 
         <Typography variant="h6">
