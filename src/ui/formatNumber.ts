@@ -179,8 +179,8 @@ export const formatRespect = (n: number) => formatNumber(n, 5);
 export const formatWanted = formatRespect;
 export const formatPreciseMultiplier = formatRespect;
 
-/** Format a number with no suffix and 1 fractional digit. */
-export const formatMaterialSize = (n: number) => formatNumberNoSuffix(n, 1);
+/** Format a number with 3 fractional digits. */
+export const formatMaterialSize = (n: number) => formatNumber(n, 3);
 
 /** Format a number with no suffix and 2 fractional digits. */
 export const formatMultiplier = (n: number) => formatNumberNoSuffix(n, 2);

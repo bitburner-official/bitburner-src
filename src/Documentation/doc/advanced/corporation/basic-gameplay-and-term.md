@@ -29,7 +29,7 @@ You should look around to get familiar with the UI. One confusing thing for newb
 
 If you want to buy something, write a script to do that. It's too error-prone to do it manually.
 
-When you hover your mouse over a warehouse, you'll see the space that those materials take up in the warehouse. They are _not_ the numbers of units.
+When you hover your mouse over "Storage space", you'll see the space that materials/products take up and the number of units in the warehouse.
 
 ## Terms
 

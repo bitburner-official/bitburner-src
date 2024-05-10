@@ -1,6 +1,6 @@
 import { Button, Container, Paper, Typography } from "@mui/material";
 import React, { useCallback, useState } from "react";
-import { AugmentationName, FactionName } from "@enums";
+import { FactionName } from "@enums";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { Player } from "@player";
@@ -14,6 +14,7 @@ import { MinesweeperGame } from "./MinesweeperGame";
 import { SlashGame } from "./SlashGame";
 import { Victory } from "./Victory";
 import { WireCuttingGame } from "./WireCuttingGame";
+import { calculateDamageAfterFailingInfiltration } from "../utils";
 
 type GameProps = {
   StartingDifficulty: number;
@@ -94,7 +95,7 @@ export function Game(props: GameProps): React.ReactElement {
       // it's clear they're not meant to
       const damage = options?.automated
         ? Player.hp.current
-        : props.StartingDifficulty * 3 * (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 0.5 : 1);
+        : calculateDamageAfterFailingInfiltration(props.StartingDifficulty);
       if (Player.takeDamage(damage)) {
         Router.toPage(Page.City);
         return;
