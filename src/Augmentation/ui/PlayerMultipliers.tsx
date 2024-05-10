@@ -24,10 +24,7 @@ interface IBitNodeModifiedStatsProps {
 }
 
 function customFormatPercent(value: number): string {
-  if (value >= 100) {
-    return formatPercent(value, 2, 100);
-  }
-  return formatPercent(value, 2);
+  return formatPercent(value, 2, 100);
 }
 
 function BitNodeModifiedStats(props: IBitNodeModifiedStatsProps): React.ReactElement {
