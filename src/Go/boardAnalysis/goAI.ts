@@ -32,13 +32,7 @@ export function makeAIMove(boardState: BoardState): Promise<Play> {
   // Disallow new AI moves to be triggered during this one
   isAIBusy = true;
   let resolve: (play: Play) => void;
-  Go.nextTurn = new Promise<Play>((res) => {
-    resolve = (play) => {
-      // Once the promise resolves, stop blocking new AI moves
-      isAIBusy = false;
-      res(play);
-    };
-  });
+  Go.nextTurn = new Promise<Play>((res) => (resolve = res)).finally(() => (isAIBusy = false));
 
   getMove(boardState, GoColor.white, Go.currentGame.ai).then(async (play) => {
     if (play.type === GoPlayType.pass) {
