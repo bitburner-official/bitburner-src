@@ -40,18 +40,15 @@ export async function getAIMove(boardState: BoardState): Promise<Play> {
       return resolve(result);
     }
 
-    await sleep(400);
+    await sleep(500);
     const aiUpdatedBoard = makeMove(boardState, result.x, result.y, GoColor.white);
 
     // Handle the AI breaking. This shouldn't ever happen.
     if (!aiUpdatedBoard) {
       boardState.previousPlayer = GoColor.white;
       console.error(`Invalid AI move attempted: ${result.x}, ${result.y}. This should not happen.`);
-      GoEvents.emit();
-      return resolve(result);
     }
 
-    await sleep(300);
     GoEvents.emit();
     resolve(result);
   });
