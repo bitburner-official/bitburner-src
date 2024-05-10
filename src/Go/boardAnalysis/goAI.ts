@@ -51,10 +51,12 @@ export function makeAIMove(boardState: BoardState): Promise<Play> {
         console.error(`Invalid AI move attempted: ${play.x}, ${play.y}. This should not happen.`);
       }
 
-      GoEvents.emit();
       return play;
     })
-    .finally(() => (isAIBusy = false));
+    .finally(() => {
+      isAIBusy = false;
+      GoEvents.emit();
+    });
 
   return Go.nextTurn;
 }
