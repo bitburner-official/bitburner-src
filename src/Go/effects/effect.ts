@@ -69,7 +69,7 @@ function calculateMults(): Multipliers {
     const effect = CalculateEffect(stats.nodePower, opponent);
     switch (opponent) {
       case GoOpponent.Netburners:
-        mults.hacknet_production *= effect;
+        mults.hacknet_money *= effect;
         break;
       case GoOpponent.SlumSnakes:
         mults.crime_success *= effect;

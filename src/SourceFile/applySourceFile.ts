@@ -39,7 +39,7 @@ export function applySourceFile(bn: number, lvl: number): void {
       Player.mults.faction_rep *= incMult;
       Player.mults.crime_money *= incMult;
       Player.mults.crime_success *= incMult;
-      Player.mults.hacknet_production *= incMult;
+      Player.mults.hacknet_money *= incMult;
       Player.mults.hacknet_purchase_cost *= decMult;
       Player.mults.hacknet_ram_cost *= decMult;
       Player.mults.hacknet_core_cost *= decMult;
@@ -140,7 +140,7 @@ export function applySourceFile(bn: number, lvl: number): void {
       const decMult = 1 - mult / 100;
       Player.mults.hacknet_core_cost *= decMult;
       Player.mults.hacknet_level_cost *= decMult;
-      Player.mults.hacknet_production *= incMult;
+      Player.mults.hacknet_money *= incMult;
       Player.mults.hacknet_purchase_cost *= decMult;
       Player.mults.hacknet_ram_cost *= decMult;
       break;

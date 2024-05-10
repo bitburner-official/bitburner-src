@@ -114,7 +114,7 @@ function GeneralMults({ mults }: IMultsProps): React.ReactElement {
       name: "Daedalus Augs Requirement",
       content: String(mults.DaedalusAugsRequirement),
     },
-    HacknetProduction: { name: "Hacknet Production" },
+    HacknetNodeMoney: { name: "Hacknet Production" },
     CodingContractMoney: { name: "Coding Contract Reward" },
     ClassGymExpGain: { name: "Class/Gym Exp" },
   };

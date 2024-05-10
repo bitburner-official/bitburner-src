@@ -193,9 +193,9 @@ export function PlayerMultipliers(): React.ReactElement {
   const rightColData: MultiplierListItemData[] = [
     {
       mult: "Hacknet Production",
-      current: Player.mults.hacknet_production,
-      augmented: Player.mults.hacknet_production * mults.hacknet_production,
-      bnMult: currentNodeMults.HacknetProduction,
+      current: Player.mults.hacknet_money,
+      augmented: Player.mults.hacknet_money * mults.hacknet_money,
+      bnMult: currentNodeMults.HacknetNodeMoney,
     },
     {
       mult: "Hacknet Node Purchase Cost",

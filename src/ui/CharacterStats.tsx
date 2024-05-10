@@ -473,8 +473,8 @@ export function CharacterStats(): React.ReactElement {
               rows={[
                 {
                   mult: "Hacknet Production",
-                  value: Player.mults.hacknet_production,
-                  effValue: Player.mults.hacknet_production * currentNodeMults.HacknetProduction,
+                  value: Player.mults.hacknet_money,
+                  effValue: Player.mults.hacknet_money * currentNodeMults.HacknetNodeMoney,
                 },
                 {
                   mult: "Hacknet Node Purchase Cost",

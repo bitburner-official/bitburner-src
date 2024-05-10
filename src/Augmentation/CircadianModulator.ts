@@ -80,7 +80,7 @@ function getRandomBonus(): CircadianBonus {
     },
     {
       bonuses: {
-        hacknet_production: 1.2,
+        hacknet_money: 1.2,
         hacknet_purchase_cost: 0.85,
         hacknet_ram_cost: 0.85,
         hacknet_core_cost: 0.85,

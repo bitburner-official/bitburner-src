@@ -529,7 +529,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         CompanyWorkMoney: 0.25,
         CrimeMoney: 0.25,
-        HacknetProduction: 0.25,
+        HacknetNodeMoney: 0.25,
         ScriptHackMoney: 0.2,
 
         RepToDonateToFaction: 0.5,
@@ -555,7 +555,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         CompanyWorkMoney: 0.1,
         CrimeMoney: 0.2,
-        HacknetProduction: 0.05,
+        HacknetNodeMoney: 0.05,
         ScriptHackMoney: 0.2,
 
         ClassGymExpGain: 0.5,
@@ -582,7 +582,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         PurchasedServerSoftcap: 1.2,
 
         CrimeMoney: 0.5,
-        HacknetProduction: 0.2,
+        HacknetNodeMoney: 0.2,
         ScriptHackMoney: 0.15,
 
         HackExpGain: 0.5,
@@ -615,7 +615,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         CompanyWorkMoney: 0.5,
         CrimeMoney: 0.75,
-        HacknetProduction: 0.2,
+        HacknetNodeMoney: 0.2,
         ScriptHackMoney: 0.75,
 
         HackExpGain: 0.25,
@@ -649,7 +649,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         CompanyWorkMoney: 0.5,
         CrimeMoney: 0.75,
-        HacknetProduction: 0.2,
+        HacknetNodeMoney: 0.2,
         ScriptHackMoney: 0.5,
 
         HackExpGain: 0.25,
@@ -685,7 +685,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         CompanyWorkMoney: 0,
         CrimeMoney: 0,
-        HacknetProduction: 0,
+        HacknetNodeMoney: 0,
         ManualHackMoney: 0,
         ScriptHackMoney: 0.3,
         ScriptHackMoneyGain: 0,
@@ -766,7 +766,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         CompanyWorkMoney: 0.5,
         CrimeMoney: 0.5,
-        HacknetProduction: 0.5,
+        HacknetNodeMoney: 0.5,
         ManualHackMoney: 0.5,
         ScriptHackMoney: 0.5,
         CodingContractMoney: 0.5,
@@ -804,7 +804,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         CompanyWorkMoney: 0.5,
         CrimeMoney: 3,
-        HacknetProduction: 0.1,
+        HacknetNodeMoney: 0.1,
         CodingContractMoney: 0.25,
 
         HackExpGain: 0.5,
@@ -857,7 +857,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         CompanyWorkMoney: dec,
         CrimeMoney: dec,
-        HacknetProduction: dec,
+        HacknetNodeMoney: dec,
         ManualHackMoney: dec,
         ScriptHackMoney: dec,
         CodingContractMoney: dec,
@@ -913,7 +913,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         CompanyWorkMoney: 0.4,
         CrimeMoney: 0.4,
-        HacknetProduction: 0.4,
+        HacknetNodeMoney: 0.4,
         ScriptHackMoney: 0.2,
         CodingContractMoney: 0.4,
 
@@ -957,7 +957,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         CrimeMoney: 0.75,
         CrimeSuccessRate: 0.4,
-        HacknetProduction: 0.25,
+        HacknetNodeMoney: 0.25,
         ScriptHackMoney: 0.3,
 
         StrengthLevelMultiplier: 0.5,

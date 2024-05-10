@@ -97,7 +97,7 @@ export class BitNodeMultipliers {
    * Influences how much money is produced by Hacknet Nodes.
    * Influences the hash rate of Hacknet Servers (unlocked in BitNode-9)
    */
-  HacknetProduction = 1;
+  HacknetNodeMoney = 1;
 
   /** Influences how much money it costs to upgrade your home computer's RAM */
   HomeComputerRamCost = 1;

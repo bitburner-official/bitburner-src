@@ -153,7 +153,7 @@ interface Multipliers {
   /** Multiplier to amount of money gained from working */
   work_money: number;
   /** Multiplier to amount of money produced by Hacknet Nodes */
-  hacknet_production: number;
+  hacknet_money: number;
   /** Multiplier to cost of purchasing a Hacknet Node */
   hacknet_purchase_cost: number;
   /** Multiplier to cost of ram for a Hacknet Node */
@@ -673,7 +673,7 @@ interface BitNodeMultipliers {
   HackingLevelMultiplier: number;
   /** Influences how much money is produced by Hacknet Nodes
    *  and the hash rate of Hacknet Servers (unlocked in BitNode-9) */
-  HacknetProduction: number;
+  HacknetNodeMoney: number;
   /** Influences how much money it costs to upgrade your home computer's RAM */
   HomeComputerRamCost: number;
   /** Influences how much money is gained when the player infiltrates a company. */

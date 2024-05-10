@@ -57,7 +57,7 @@ export function HacknetNodeElem(props: IProps): React.ReactElement {
     }
 
     const increase =
-      calculateMoneyGainRate(node.level + multiplier, node.ram, node.cores, Player.mults.hacknet_production) -
+      calculateMoneyGainRate(node.level + multiplier, node.ram, node.cores, Player.mults.hacknet_money) -
       node.moneyGainRatePerSecond;
     const upgradeLevelCost = node.calculateLevelUpgradeCost(multiplier, Player.mults.hacknet_level_cost);
     upgradeLevelButton = (
@@ -95,12 +95,8 @@ export function HacknetNodeElem(props: IProps): React.ReactElement {
     }
 
     const increase =
-      calculateMoneyGainRate(
-        node.level,
-        node.ram * Math.pow(2, multiplier),
-        node.cores,
-        Player.mults.hacknet_production,
-      ) - node.moneyGainRatePerSecond;
+      calculateMoneyGainRate(node.level, node.ram * Math.pow(2, multiplier), node.cores, Player.mults.hacknet_money) -
+      node.moneyGainRatePerSecond;
     const upgradeRamCost = node.calculateRamUpgradeCost(multiplier, Player.mults.hacknet_ram_cost);
     upgradeRAMButton = (
       <Tooltip
@@ -143,7 +139,7 @@ export function HacknetNodeElem(props: IProps): React.ReactElement {
     }
 
     const increase =
-      calculateMoneyGainRate(node.level, node.ram, node.cores + multiplier, Player.mults.hacknet_production) -
+      calculateMoneyGainRate(node.level, node.ram, node.cores + multiplier, Player.mults.hacknet_money) -
       node.moneyGainRatePerSecond;
     const upgradeCoreCost = node.calculateCoreUpgradeCost(multiplier, Player.mults.hacknet_core_cost);
     upgradeCoresButton = (

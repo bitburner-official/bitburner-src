@@ -41,7 +41,7 @@ export interface AugmentationCtorParams {
   crime_money?: number;
   crime_success?: number;
   work_money?: number;
-  hacknet_production?: number;
+  hacknet_money?: number;
   hacknet_purchase_cost?: number;
   hacknet_ram_cost?: number;
   hacknet_core_cost?: number;
@@ -139,7 +139,7 @@ function generateStatsDescription(mults: Multipliers, programs?: string[], start
   if (mults.work_money !== 1) desc += `\n+${f(mults.work_money - 1)} work money`;
 
   // Hacknet: costs are negative
-  if (mults.hacknet_production !== 1) desc += `\n+${f(mults.hacknet_production - 1)} hacknet production`;
+  if (mults.hacknet_money !== 1) desc += `\n+${f(mults.hacknet_money - 1)} hacknet production`;
   if (mults.hacknet_purchase_cost !== 1) {
     desc += `\n-${f(-(mults.hacknet_purchase_cost - 1))} hacknet node purchase cost`;
   }
