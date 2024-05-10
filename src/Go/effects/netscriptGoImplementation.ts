@@ -4,7 +4,7 @@ import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
 import { Go, GoEvents } from "../Go";
 import { getNewBoardState, makeMove, passTurn, updateCaptures, updateChains } from "../boardState/boardState";
-import { getAIMove } from "../boardAnalysis/goAI";
+import { makeAIMove } from "../boardAnalysis/goAI";
 import {
   evaluateIfMoveIsValid,
   getColorOnSimpleBoard,
@@ -104,7 +104,7 @@ export async function handlePassTurn(logger: (s: string) => void) {
     logEndGame(logger);
     return getOpponentNextMove(false, logger);
   } else {
-    return getAIMove(Go.currentGame);
+    return makeAIMove(Go.currentGame);
   }
 }
 
@@ -122,7 +122,7 @@ export async function makePlayerMove(logger: (s: string) => void, error: (s: str
 
   GoEvents.emit();
   logger(`Go move played: ${x}, ${y}`);
-  return getAIMove(boardState);
+  return makeAIMove(boardState);
 }
 
 /**
@@ -381,7 +381,7 @@ export async function determineCheatSuccess(
     callback();
     state.cheatCount++;
     GoEvents.emit();
-    return getAIMove(state);
+    return makeAIMove(state);
   }
   // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly losing
   else if (state.cheatCount && (ejectRngOverride ?? rng.random()) < 0.1) {
@@ -398,7 +398,7 @@ export async function determineCheatSuccess(
     logger(`Cheat failed. Your turn has been skipped.`);
     passTurn(state, GoColor.black, false);
     state.cheatCount++;
-    return getAIMove(state);
+    return makeAIMove(state);
   }
 }
 

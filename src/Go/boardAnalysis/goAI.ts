@@ -26,7 +26,7 @@ let isAIBusy = false;
 /**
  * Retrieves a move from the current faction in response to the player's move
  */
-export async function getAIMove(boardState: BoardState): Promise<Play> {
+export async function makeAIMove(boardState: BoardState): Promise<Play> {
   // If an AI move is already in progress, return the already in progress move
   if (isAIBusy && Go.nextTurn) return Go.nextTurn;
   // Disallow new AI moves to be triggered during this one
