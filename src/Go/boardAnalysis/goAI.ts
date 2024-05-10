@@ -40,27 +40,27 @@ export function makeAIMove(boardState: BoardState): Promise<Play> {
     };
   });
 
-  getMove(boardState, GoColor.white, Go.currentGame.ai).then(async (result) => {
-    if (result.type === GoPlayType.pass) {
+  getMove(boardState, GoColor.white, Go.currentGame.ai).then(async (play) => {
+    if (play.type === GoPlayType.pass) {
       passTurn(Go.currentGame, GoColor.white);
     }
 
     // If there is no move to apply, simply return the result
-    if (boardState !== Go.currentGame || result.type !== GoPlayType.move || result.x === null || result.y === null) {
-      return resolve(result);
+    if (boardState !== Go.currentGame || play.type !== GoPlayType.move || play.x === null || play.y === null) {
+      return resolve(play);
     }
 
     await sleep(500);
-    const aiUpdatedBoard = makeMove(boardState, result.x, result.y, GoColor.white);
+    const aiUpdatedBoard = makeMove(boardState, play.x, play.y, GoColor.white);
 
     // Handle the AI breaking. This shouldn't ever happen.
     if (!aiUpdatedBoard) {
       boardState.previousPlayer = GoColor.white;
-      console.error(`Invalid AI move attempted: ${result.x}, ${result.y}. This should not happen.`);
+      console.error(`Invalid AI move attempted: ${play.x}, ${play.y}. This should not happen.`);
     }
 
     GoEvents.emit();
-    resolve(result);
+    resolve(play);
   });
   return Go.nextTurn;
 }
