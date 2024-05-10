@@ -30,11 +30,20 @@ export function makeAIMove(boardState: BoardState): Promise<Play> {
   // If AI is already taking their turn, return the existing turn.
   if (currentAITurn) return currentAITurn;
   currentAITurn = Go.nextTurn = getMove(boardState, GoColor.white, Go.currentGame.ai)
-    .then(async (play) => {
+    .then(async (play): Promise<Play> => {
       if (boardState !== Go.currentGame) return play; //Stale game
-      if (play.type === GoPlayType.pass) passTurn(boardState, GoColor.white);
-      if (play.type !== GoPlayType.move) return play;
 
+      // Handle AI passing
+      if (play.type === GoPlayType.pass) {
+        passTurn(boardState, GoColor.white);
+        // if passTurn called endGoGame, or the player has no valid moves left, the move should be shown as a game over
+        if (boardState.previousPlayer === null || !getAllValidMoves(boardState, GoColor.black).length) {
+          return { type: GoPlayType.gameOver, x: null, y: null };
+        }
+        return play;
+      }
+
+      // Handle AI making a move
       await sleep(500);
       const aiUpdatedBoard = makeMove(boardState, play.x, play.y, GoColor.white);
 
@@ -77,7 +86,7 @@ export async function getMove(
   player: GoColor,
   opponent: GoOpponent,
   rngOverride?: number,
-): Promise<Play> {
+): Promise<Play & { type: GoPlayType.move | GoPlayType.pass }> {
   await sleep(300);
   const rng = new WHRNG(rngOverride || Player.totalPlaytime);
   const smart = isSmart(opponent, rng.random());
@@ -111,40 +120,10 @@ export async function getMove(
   if (chosenMove) {
     await sleep(200);
     //console.debug(`Non-priority move chosen: ${chosenMove.x} ${chosenMove.y}`);
-    return {
-      type: GoPlayType.move,
-      x: chosenMove.x,
-      y: chosenMove.y,
-    };
-  } else {
-    //console.debug("No valid moves found");
-    return handleNoMoveFound(boardState, player);
+    return { type: GoPlayType.move, x: chosenMove.x, y: chosenMove.y };
   }
-}
-
-/**
- * Detects if the AI is merely passing their turn, or if the game should end.
- *
- * Ends the game if the player passed on the previous turn before the AI passes,
- *   or if the player will be forced to pass their next turn after the AI passes.
- */
-function handleNoMoveFound(boardState: BoardState, player: GoColor): Play {
-  passTurn(boardState, player);
-  const opposingPlayer = player === GoColor.white ? GoColor.black : GoColor.white;
-  const remainingTerritory = getAllValidMoves(boardState, opposingPlayer).length;
-  if (remainingTerritory > 0 && boardState.passCount < 2) {
-    return {
-      type: GoPlayType.pass,
-      x: null,
-      y: null,
-    };
-  } else {
-    return {
-      type: GoPlayType.gameOver,
-      x: null,
-      y: null,
-    };
-  }
+  // Pass if no valid moves were found
+  return { type: GoPlayType.pass, x: null, y: null };
 }
 
 /**
