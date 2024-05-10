@@ -42,6 +42,7 @@ import { SaveData } from "./types";
 import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
 import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
 import { downloadContentAsFile } from "./utils/FileUtils";
+import { handleGetSaveDataError } from "./Netscript/ErrorMessages";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -123,7 +124,13 @@ class BitburnerSaveObject {
   async saveGame(emitToastEvent = true): Promise<void> {
     const savedOn = new Date().getTime();
     Player.lastSave = savedOn;
-    const saveData = await this.getSaveData();
+    let saveData;
+    try {
+      saveData = await this.getSaveData();
+    } catch (error) {
+      handleGetSaveDataError(error);
+      return;
+    }
     try {
       await save(saveData);
     } catch (error) {
@@ -157,7 +164,13 @@ class BitburnerSaveObject {
   }
 
   async exportGame(): Promise<void> {
-    const saveData = await this.getSaveData();
+    let saveData;
+    try {
+      saveData = await this.getSaveData();
+    } catch (error) {
+      handleGetSaveDataError(error);
+      return;
+    }
     const filename = this.getSaveFileName();
     downloadContentAsFile(saveData, filename);
   }

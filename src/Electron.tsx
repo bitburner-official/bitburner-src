@@ -12,6 +12,7 @@ import { CONSTANTS } from "./Constants";
 import { hash } from "./hash/hash";
 import { resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
+import { handleGetSaveDataError } from "./Netscript/ErrorMessages";
 
 interface IReturnWebStatus extends IReturnStatus {
   data?: Record<string, unknown>;
@@ -159,7 +160,13 @@ function initElectronBridge(): void {
   if (!bridge) return;
 
   bridge.receive("get-save-data-request", async () => {
-    const saveData = await window.appSaveFns.getSaveData();
+    let saveData;
+    try {
+      saveData = await window.appSaveFns.getSaveData();
+    } catch (error) {
+      handleGetSaveDataError(error);
+      return;
+    }
     bridge.send("get-save-data-response", saveData);
   });
   bridge.receive("get-save-info-request", async (saveData: unknown) => {

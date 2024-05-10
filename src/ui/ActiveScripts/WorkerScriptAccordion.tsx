@@ -68,7 +68,7 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
       <ListItemButton onClick={() => setOpen((old) => !old)} component={Paper}>
         <ListItemText
           primary={
-            <Typography>
+            <Typography style={{ wordWrap: "break-word" }}>
               └ {props.workerScript.name} {JSON.stringify(props.workerScript.args)}
             </Typography>
           }
