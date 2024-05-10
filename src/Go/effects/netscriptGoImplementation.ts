@@ -7,8 +7,8 @@ import { getNewBoardState, makeMove, passTurn, updateCaptures, updateChains } fr
 import { makeAIMove } from "../boardAnalysis/goAI";
 import {
   evaluateIfMoveIsValid,
-  getColorOnSimpleBoard,
   getControlledSpace,
+  getPreviousMove,
   simpleBoardFromBoard,
 } from "../boardAnalysis/boardAnalysis";
 import { getOpponentStats, getScore, resetWinstreak } from "../boardAnalysis/scoring";
@@ -258,32 +258,6 @@ export function getCurrentPlayer(): "None" | "White" | "Black" {
     return "None";
   }
   return Go.currentGame.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
-}
-
-/**
- * Find a move made by the previous player, if present.
- */
-export function getPreviousMove(): [number, number] | null {
-  const priorBoard = Go.currentGame?.previousBoards[0];
-  if (Go.currentGame.passCount || !priorBoard) {
-    return null;
-  }
-
-  for (const rowIndexString in Go.currentGame.board) {
-    const row = Go.currentGame.board[+rowIndexString] ?? [];
-    for (const pointIndexString in row) {
-      const point = row[+pointIndexString];
-      const priorColor = point && priorBoard && getColorOnSimpleBoard(priorBoard, point.x, point.y);
-      const currentColor = point?.color;
-      const isPreviousPlayer = currentColor === Go.currentGame.previousPlayer;
-      const isChanged = priorColor !== currentColor;
-      if (priorColor && currentColor && isPreviousPlayer && isChanged) {
-        return [+rowIndexString, +pointIndexString];
-      }
-    }
-  }
-
-  return null;
 }
 
 /**
