@@ -21,17 +21,15 @@ import { findAnyMatchedPatterns } from "./patternMatching";
 import { WHRNG } from "../../Casino/RNG";
 import { Go, GoEvents } from "../Go";
 
-let isAIBusy = false;
+let currentAITurn: Promise<Play> | null = null;
 
 /**
  * Retrieves a move from the current faction in response to the player's move
  */
 export function makeAIMove(boardState: BoardState): Promise<Play> {
-  // If an AI move is already in progress, return the already in progress move
-  if (isAIBusy && Go.nextTurn) return Go.nextTurn;
-  // Disallow new AI moves to be triggered during this one
-  isAIBusy = true;
-  Go.nextTurn = getMove(boardState, GoColor.white, Go.currentGame.ai)
+  // If AI is already taking their turn, return the existing turn.
+  if (currentAITurn) return currentAITurn;
+  currentAITurn = Go.nextTurn = getMove(boardState, GoColor.white, Go.currentGame.ai)
     .then(async (play) => {
       if (boardState !== Go.currentGame) return play; //Stale game
       if (play.type === GoPlayType.pass) passTurn(boardState, GoColor.white);
@@ -50,7 +48,7 @@ export function makeAIMove(boardState: BoardState): Promise<Play> {
       return play;
     })
     .finally(() => {
-      isAIBusy = false;
+      currentAITurn = null;
       GoEvents.emit();
     });
 

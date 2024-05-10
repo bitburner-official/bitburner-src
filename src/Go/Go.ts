@@ -1,6 +1,6 @@
-import type { GoOpponent } from "@enums";
 import type { BoardState, OpponentStats, Play } from "./Types";
 
+import { GoPlayType, type GoOpponent } from "@enums";
 import { getRecordValues, PartialRecord } from "../Types/Record";
 import { getNewBoardState } from "./boardState/boardState";
 import { EventEmitter } from "../utils/EventEmitter";
@@ -10,7 +10,7 @@ export class GoObject {
   previousGame: BoardState | null = null;
   currentGame: BoardState = getNewBoardState(7);
   stats: PartialRecord<GoOpponent, OpponentStats> = {};
-  nextTurn: Promise<Play> | null = null;
+  nextTurn: Promise<Play> = Promise.resolve({ type: GoPlayType.gameOver, x: null, y: null });
 
   prestigeAugmentation() {
     for (const stats of getRecordValues(this.stats)) {

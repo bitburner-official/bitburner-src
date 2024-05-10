@@ -2,9 +2,9 @@ import type { BoardState, OpponentStats, SimpleBoard } from "./Types";
 import type { PartialRecord } from "../Types/Record";
 
 import { Truthy } from "lodash";
-import { GoColor, GoOpponent } from "@enums";
+import { GoColor, GoOpponent, GoPlayType } from "@enums";
 import { Go } from "./Go";
-import { boardStateFromSimpleBoard, simpleBoardFromBoard } from "./boardAnalysis/boardAnalysis";
+import { boardStateFromSimpleBoard, getPreviousMove, simpleBoardFromBoard } from "./boardAnalysis/boardAnalysis";
 import { assertLoadingType } from "../utils/TypeAssertion";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { boardSizes } from "./Constants";
@@ -79,9 +79,17 @@ export function loadGo(data: unknown): boolean {
   Go.previousGame = previousGame;
   Go.stats = stats;
 
-  // If it's the AI's turn, initiate their turn
+  // If it's the AI's turn, initiate their turn, which will populate nextTurn
   if (currentGame.previousPlayer === GoColor.black && currentGame.ai !== GoOpponent.none) makeAIMove(currentGame);
-
+  // If it's not the AI's turn and we're not in gameover status, initialize nextTurn promise based on the previous move/pass
+  else if (currentGame.previousPlayer) {
+    const previousMove = getPreviousMove();
+    Go.nextTurn = Promise.resolve(
+      previousMove
+        ? { type: GoPlayType.move, x: previousMove[0], y: previousMove[1] }
+        : { type: GoPlayType.pass, x: null, y: null },
+    );
+  }
   return true;
 }
 

@@ -129,19 +129,6 @@ export async function makePlayerMove(logger: (s: string) => void, error: (s: str
   Returns the promise that provides the opponent's move, once it finishes thinking.
  */
 export async function getOpponentNextMove(logOpponentMove = true, logger: (s: string) => void) {
-  // Handle the case where Go.nextTurn isn't populated yet
-  if (!Go.nextTurn) {
-    const previousMove = getPreviousMove();
-    const type =
-      Go.currentGame.previousPlayer === null ? GoPlayType.gameOver : previousMove ? GoPlayType.move : GoPlayType.pass;
-
-    Go.nextTurn = Promise.resolve({
-      type,
-      x: previousMove?.[0] ?? null,
-      y: previousMove?.[1] ?? null,
-    });
-  }
-
   // Only asynchronously log the opponent move if not disabled by the player
   if (logOpponentMove) {
     return Go.nextTurn.then((move) => {
