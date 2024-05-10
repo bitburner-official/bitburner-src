@@ -39,11 +39,11 @@ export function applySourceFile(bn: number, lvl: number): void {
       Player.mults.faction_rep *= incMult;
       Player.mults.crime_money *= incMult;
       Player.mults.crime_success *= incMult;
-      Player.mults.hacknet_money *= incMult;
-      Player.mults.hacknet_purchase_cost *= decMult;
-      Player.mults.hacknet_ram_cost *= decMult;
-      Player.mults.hacknet_core_cost *= decMult;
-      Player.mults.hacknet_level_cost *= decMult;
+      Player.mults.hacknet_node_money *= incMult;
+      Player.mults.hacknet_node_purchase_cost *= decMult;
+      Player.mults.hacknet_node_ram_cost *= decMult;
+      Player.mults.hacknet_node_core_cost *= decMult;
+      Player.mults.hacknet_node_level_cost *= decMult;
       Player.mults.work_money *= incMult;
       break;
     }
@@ -138,11 +138,11 @@ export function applySourceFile(bn: number, lvl: number): void {
       }
       const incMult = 1 + mult / 100;
       const decMult = 1 - mult / 100;
-      Player.mults.hacknet_core_cost *= decMult;
-      Player.mults.hacknet_level_cost *= decMult;
-      Player.mults.hacknet_money *= incMult;
-      Player.mults.hacknet_purchase_cost *= decMult;
-      Player.mults.hacknet_ram_cost *= decMult;
+      Player.mults.hacknet_node_core_cost *= decMult;
+      Player.mults.hacknet_node_level_cost *= decMult;
+      Player.mults.hacknet_node_money *= incMult;
+      Player.mults.hacknet_node_purchase_cost *= decMult;
+      Player.mults.hacknet_node_ram_cost *= decMult;
       break;
     }
     case 10: {

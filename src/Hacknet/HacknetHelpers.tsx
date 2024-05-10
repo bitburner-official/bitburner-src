@@ -68,7 +68,7 @@ export function purchaseHacknet(): number {
 
     // Auto generate a name for the Node
     const name = hasHacknetServers() ? `hacknet-server-${numOwned}` : `hacknet-node-${numOwned}`;
-    const node = new HacknetNode(name, Player.mults.hacknet_money);
+    const node = new HacknetNode(name, Player.mults.hacknet_node_money);
 
     Player.loseMoney(cost, "hacknet_expenses");
     Player.hacknetNodes.push(node);
@@ -82,11 +82,11 @@ export function hasMaxNumberHacknetServers(): boolean {
 }
 
 export function getCostOfNextHacknetNode(): number {
-  return calculateNodeCost(Player.hacknetNodes.length + 1, Player.mults.hacknet_purchase_cost);
+  return calculateNodeCost(Player.hacknetNodes.length + 1, Player.mults.hacknet_node_purchase_cost);
 }
 
 export function getCostOfNextHacknetServer(): number {
-  return calculateServerCost(Player.hacknetNodes.length + 1, Player.mults.hacknet_purchase_cost);
+  return calculateServerCost(Player.hacknetNodes.length + 1, Player.mults.hacknet_node_purchase_cost);
 }
 
 // Calculate the maximum number of times the Player can afford to upgrade a Hacknet Node's level
@@ -95,14 +95,14 @@ export function getMaxNumberLevelUpgrades(nodeObj: HacknetNode | HacknetServer, 
     throw new Error(`getMaxNumberLevelUpgrades() called without maxLevel arg`);
   }
 
-  if (Player.money < nodeObj.calculateLevelUpgradeCost(1, Player.mults.hacknet_level_cost)) {
+  if (Player.money < nodeObj.calculateLevelUpgradeCost(1, Player.mults.hacknet_node_level_cost)) {
     return 0;
   }
 
   let min = 1;
   let max = maxLevel - 1;
   const levelsToMax = maxLevel - nodeObj.level;
-  if (Player.money > nodeObj.calculateLevelUpgradeCost(levelsToMax, Player.mults.hacknet_level_cost)) {
+  if (Player.money > nodeObj.calculateLevelUpgradeCost(levelsToMax, Player.mults.hacknet_node_level_cost)) {
     return levelsToMax;
   }
 
@@ -110,13 +110,13 @@ export function getMaxNumberLevelUpgrades(nodeObj: HacknetNode | HacknetServer, 
     const curr = ((min + max) / 2) | 0;
     if (
       curr !== maxLevel &&
-      Player.money > nodeObj.calculateLevelUpgradeCost(curr, Player.mults.hacknet_level_cost) &&
-      Player.money < nodeObj.calculateLevelUpgradeCost(curr + 1, Player.mults.hacknet_level_cost)
+      Player.money > nodeObj.calculateLevelUpgradeCost(curr, Player.mults.hacknet_node_level_cost) &&
+      Player.money < nodeObj.calculateLevelUpgradeCost(curr + 1, Player.mults.hacknet_node_level_cost)
     ) {
       return Math.min(levelsToMax, curr);
-    } else if (Player.money < nodeObj.calculateLevelUpgradeCost(curr, Player.mults.hacknet_level_cost)) {
+    } else if (Player.money < nodeObj.calculateLevelUpgradeCost(curr, Player.mults.hacknet_node_level_cost)) {
       max = curr - 1;
-    } else if (Player.money > nodeObj.calculateLevelUpgradeCost(curr, Player.mults.hacknet_level_cost)) {
+    } else if (Player.money > nodeObj.calculateLevelUpgradeCost(curr, Player.mults.hacknet_node_level_cost)) {
       min = curr + 1;
     } else {
       return Math.min(levelsToMax, curr);
@@ -131,7 +131,7 @@ export function getMaxNumberRamUpgrades(nodeObj: HacknetNode | HacknetServer, ma
     throw new Error(`getMaxNumberRamUpgrades() called without maxLevel arg`);
   }
 
-  if (Player.money < nodeObj.calculateRamUpgradeCost(1, Player.mults.hacknet_ram_cost)) {
+  if (Player.money < nodeObj.calculateRamUpgradeCost(1, Player.mults.hacknet_node_ram_cost)) {
     return 0;
   }
 
@@ -141,13 +141,13 @@ export function getMaxNumberRamUpgrades(nodeObj: HacknetNode | HacknetServer, ma
   } else {
     levelsToMax = Math.round(Math.log2(maxLevel / nodeObj.ram));
   }
-  if (Player.money > nodeObj.calculateRamUpgradeCost(levelsToMax, Player.mults.hacknet_ram_cost)) {
+  if (Player.money > nodeObj.calculateRamUpgradeCost(levelsToMax, Player.mults.hacknet_node_ram_cost)) {
     return levelsToMax;
   }
 
   //We'll just loop until we find the max
   for (let i = levelsToMax - 1; i >= 0; --i) {
-    if (Player.money > nodeObj.calculateRamUpgradeCost(i, Player.mults.hacknet_ram_cost)) {
+    if (Player.money > nodeObj.calculateRamUpgradeCost(i, Player.mults.hacknet_node_ram_cost)) {
       return i;
     }
   }
@@ -160,14 +160,14 @@ export function getMaxNumberCoreUpgrades(nodeObj: HacknetNode | HacknetServer, m
     throw new Error(`getMaxNumberCoreUpgrades() called without maxLevel arg`);
   }
 
-  if (Player.money < nodeObj.calculateCoreUpgradeCost(1, Player.mults.hacknet_core_cost)) {
+  if (Player.money < nodeObj.calculateCoreUpgradeCost(1, Player.mults.hacknet_node_core_cost)) {
     return 0;
   }
 
   let min = 1;
   let max = maxLevel - 1;
   const levelsToMax = maxLevel - nodeObj.cores;
-  if (Player.money > nodeObj.calculateCoreUpgradeCost(levelsToMax, Player.mults.hacknet_core_cost)) {
+  if (Player.money > nodeObj.calculateCoreUpgradeCost(levelsToMax, Player.mults.hacknet_node_core_cost)) {
     return levelsToMax;
   }
 
@@ -176,13 +176,13 @@ export function getMaxNumberCoreUpgrades(nodeObj: HacknetNode | HacknetServer, m
     const curr = ((min + max) / 2) | 0;
     if (
       curr != maxLevel &&
-      Player.money > nodeObj.calculateCoreUpgradeCost(curr, Player.mults.hacknet_core_cost) &&
-      Player.money < nodeObj.calculateCoreUpgradeCost(curr + 1, Player.mults.hacknet_core_cost)
+      Player.money > nodeObj.calculateCoreUpgradeCost(curr, Player.mults.hacknet_node_core_cost) &&
+      Player.money < nodeObj.calculateCoreUpgradeCost(curr + 1, Player.mults.hacknet_node_core_cost)
     ) {
       return Math.min(levelsToMax, curr);
-    } else if (Player.money < nodeObj.calculateCoreUpgradeCost(curr, Player.mults.hacknet_core_cost)) {
+    } else if (Player.money < nodeObj.calculateCoreUpgradeCost(curr, Player.mults.hacknet_node_core_cost)) {
       max = curr - 1;
-    } else if (Player.money > nodeObj.calculateCoreUpgradeCost(curr, Player.mults.hacknet_core_cost)) {
+    } else if (Player.money > nodeObj.calculateCoreUpgradeCost(curr, Player.mults.hacknet_node_core_cost)) {
       min = curr + 1;
     } else {
       return Math.min(levelsToMax, curr);
@@ -232,7 +232,7 @@ export function getMaxNumberCacheUpgrades(nodeObj: HacknetServer, maxLevel: numb
 
 export function purchaseLevelUpgrade(node: HacknetNode | HacknetServer, levels = 1): boolean {
   const sanitizedLevels = Math.round(levels);
-  const cost = node.calculateLevelUpgradeCost(sanitizedLevels, Player.mults.hacknet_level_cost);
+  const cost = node.calculateLevelUpgradeCost(sanitizedLevels, Player.mults.hacknet_node_level_cost);
   if (isNaN(cost) || cost <= 0 || sanitizedLevels < 0) {
     return false;
   }
@@ -256,14 +256,14 @@ export function purchaseLevelUpgrade(node: HacknetNode | HacknetServer, levels =
   }
 
   Player.loseMoney(cost, "hacknet_expenses");
-  node.upgradeLevel(sanitizedLevels, Player.mults.hacknet_money);
+  node.upgradeLevel(sanitizedLevels, Player.mults.hacknet_node_money);
 
   return true;
 }
 
 export function purchaseRamUpgrade(node: HacknetNode | HacknetServer, levels = 1): boolean {
   const sanitizedLevels = Math.round(levels);
-  const cost = node.calculateRamUpgradeCost(sanitizedLevels, Player.mults.hacknet_ram_cost);
+  const cost = node.calculateRamUpgradeCost(sanitizedLevels, Player.mults.hacknet_node_ram_cost);
   if (isNaN(cost) || cost <= 0 || sanitizedLevels < 0) {
     return false;
   }
@@ -295,14 +295,14 @@ export function purchaseRamUpgrade(node: HacknetNode | HacknetServer, levels = 1
   }
 
   Player.loseMoney(cost, "hacknet_expenses");
-  node.upgradeRam(sanitizedLevels, Player.mults.hacknet_money);
+  node.upgradeRam(sanitizedLevels, Player.mults.hacknet_node_money);
 
   return true;
 }
 
 export function purchaseCoreUpgrade(node: HacknetNode | HacknetServer, levels = 1): boolean {
   const sanitizedLevels = Math.round(levels);
-  const cost = node.calculateCoreUpgradeCost(sanitizedLevels, Player.mults.hacknet_core_cost);
+  const cost = node.calculateCoreUpgradeCost(sanitizedLevels, Player.mults.hacknet_node_core_cost);
   if (isNaN(cost) || cost <= 0 || sanitizedLevels < 0) {
     return false;
   }
@@ -326,7 +326,7 @@ export function purchaseCoreUpgrade(node: HacknetNode | HacknetServer, levels = 
   }
 
   Player.loseMoney(cost, "hacknet_expenses");
-  node.upgradeCore(sanitizedLevels, Player.mults.hacknet_money);
+  node.upgradeCore(sanitizedLevels, Player.mults.hacknet_node_money);
 
   return true;
 }
@@ -405,7 +405,7 @@ function processAllHacknetServerEarnings(numCycles: number): number {
     if (ip instanceof HacknetNode) throw new Error(`player nodes should not be HacknetNode`);
     const hserver = GetServer(ip);
     if (!(hserver instanceof HacknetServer)) throw new Error(`player nodes should not be Server`);
-    hserver.updateHashRate(Player.mults.hacknet_money);
+    hserver.updateHashRate(Player.mults.hacknet_node_money);
     const h = hserver.process(numCycles);
     hashes += h;
   }

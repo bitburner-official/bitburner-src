@@ -80,13 +80,15 @@ function getRandomBonus(): CircadianBonus {
     },
     {
       bonuses: {
-        hacknet_money: 1.2,
-        hacknet_purchase_cost: 0.85,
-        hacknet_ram_cost: 0.85,
-        hacknet_core_cost: 0.85,
-        hacknet_level_cost: 0.85,
+        hacknet_node_money: 1.2,
+        hacknet_node_purchase_cost: 0.85,
+        hacknet_node_ram_cost: 0.85,
+        hacknet_node_core_cost: 0.85,
+        hacknet_node_level_cost: 0.85,
       },
-      description: "Increases Hacknet production by 20%.\n" + "Decreases all costs related to Hacknets by 15%.",
+      description:
+        "Increases the amount of money produced by Hacknet Nodes by 20%.\n" +
+        "Decreases all costs related to Hacknet Node by 15%.",
     },
     {
       bonuses: {

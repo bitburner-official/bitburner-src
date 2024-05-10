@@ -943,11 +943,11 @@ export const ns: InternalAPI<NSFull> = {
   },
   getHacknetMultipliers: () => () => {
     return {
-      production: Player.mults.hacknet_money,
-      purchaseCost: Player.mults.hacknet_purchase_cost,
-      ramCost: Player.mults.hacknet_ram_cost,
-      coreCost: Player.mults.hacknet_core_cost,
-      levelCost: Player.mults.hacknet_level_cost,
+      production: Player.mults.hacknet_node_money,
+      purchaseCost: Player.mults.hacknet_node_purchase_cost,
+      ramCost: Player.mults.hacknet_node_ram_cost,
+      coreCost: Player.mults.hacknet_node_core_cost,
+      levelCost: Player.mults.hacknet_node_level_cost,
     };
   },
   getBitNodeMultipliers:
