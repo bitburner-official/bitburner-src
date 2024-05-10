@@ -18,19 +18,31 @@ interface Prompt {
 
 export function PromptManager({ hidden }: { hidden: boolean }): React.ReactElement {
   const [prompt, setPrompt] = useState<Prompt | null>(null);
+
+  const resolveCurrentPromptWithDefaultValue = (currentPrompt: Prompt) => {
+    if (["text", "select"].includes(currentPrompt.options?.type ?? "")) {
+      currentPrompt.resolve("");
+    } else {
+      currentPrompt.resolve(false);
+    }
+  };
+
   useEffect(() => {
-    return PromptEvent.subscribe((p: Prompt) => {
-      setPrompt(p);
+    return PromptEvent.subscribe((newPrompt: Prompt) => {
+      setPrompt((currentPrompt) => {
+        if (currentPrompt) {
+          resolveCurrentPromptWithDefaultValue(currentPrompt);
+        }
+        return newPrompt;
+      });
     });
   }, []);
 
   function close(): void {
-    if (prompt === null) return;
-    if (["text", "select"].includes(prompt.options?.type ?? "")) {
-      prompt.resolve("");
-    } else {
-      prompt.resolve(false);
+    if (prompt === null) {
+      return;
     }
+    resolveCurrentPromptWithDefaultValue(prompt);
     setPrompt(null);
   }
 

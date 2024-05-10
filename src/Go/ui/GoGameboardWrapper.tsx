@@ -166,6 +166,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
   function setTraditional(newValue: boolean) {
     Settings.GoTraditionalStyle = newValue;
+    rerender();
   }
 
   const endGameAvailable = boardState.previousPlayer === GoColor.white && boardState.passCount;

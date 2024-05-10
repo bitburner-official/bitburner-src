@@ -1,4 +1,4 @@
-import type { BoardState, Play } from "../Types";
+import { BoardState, Play, SimpleOpponentStats } from "../Types";
 
 import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
@@ -11,8 +11,10 @@ import {
   getControlledSpace,
   simpleBoardFromBoard,
 } from "../boardAnalysis/boardAnalysis";
-import { getScore, resetWinstreak } from "../boardAnalysis/scoring";
+import { getOpponentStats, getScore, resetWinstreak } from "../boardAnalysis/scoring";
 import { WHRNG } from "../../Casino/RNG";
+import { getRecordKeys } from "../../Types/Record";
+import { CalculateEffect, getEffectTypeForFaction } from "./effect";
 
 /**
  * Check the move based on the current settings
@@ -360,6 +362,30 @@ export function resetBoardState(
   GoEvents.emit(); // Trigger a Go UI rerender
   logger(`New game started: ${opponent}, ${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);
+}
+
+/**
+ * Retrieve and clean up stats for each opponent played against
+ */
+export function getStats() {
+  const statDetails: Partial<Record<GoOpponent, SimpleOpponentStats>> = {};
+  for (const opponent of getRecordKeys(Go.stats)) {
+    const details = getOpponentStats(opponent);
+    const nodePower = getOpponentStats(opponent).nodePower;
+    const effectPercent = (CalculateEffect(nodePower, opponent) - 1) * 100;
+    const effectDescription = getEffectTypeForFaction(opponent);
+    statDetails[opponent] = {
+      wins: details.wins,
+      losses: details.losses,
+      winStreak: details.winStreak,
+      highestWinStreak: details.highestWinStreak,
+      favor: details.favor,
+      bonusPercent: effectPercent,
+      bonusDescription: effectDescription,
+    };
+  }
+
+  return statDetails;
 }
 
 /** Validate singularity access by throwing an error if the player does not have access. */

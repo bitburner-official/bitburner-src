@@ -79,3 +79,13 @@ export type OpponentStats = {
   highestWinStreak: number;
   favor: number;
 };
+
+export type SimpleOpponentStats = {
+  wins: number;
+  losses: number;
+  winStreak: number;
+  highestWinStreak: number;
+  favor: number;
+  bonusPercent: number;
+  bonusDescription: string;
+};
