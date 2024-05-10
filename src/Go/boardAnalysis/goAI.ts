@@ -33,14 +33,10 @@ export function makeAIMove(boardState: BoardState): Promise<Play> {
   isAIBusy = true;
   Go.nextTurn = getMove(boardState, GoColor.white, Go.currentGame.ai)
     .then(async (play) => {
-      if (play.type === GoPlayType.pass) {
-        passTurn(Go.currentGame, GoColor.white);
-      }
-
-      // If there is no move to apply, simply return the result
-      if (boardState !== Go.currentGame || play.type !== GoPlayType.move || play.x === null || play.y === null) {
-        return play;
-      }
+      if (boardState !== Go.currentGame) return play; //Stale game
+      if (play.type === GoPlayType.pass) passTurn(boardState, GoColor.white);
+      // The null checking shouldn't be needed below but fixing this requires some types reworking and might be a pain
+      if (play.type !== GoPlayType.move || play.x === null || play.y === null) return play;
 
       await sleep(500);
       const aiUpdatedBoard = makeMove(boardState, play.x, play.y, GoColor.white);
