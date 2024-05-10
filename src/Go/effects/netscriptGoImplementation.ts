@@ -1,10 +1,10 @@
-import { BoardState, Play, SimpleOpponentStats } from "../Types";
+import { Play, SimpleOpponentStats } from "../Types";
 
 import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
 import { Go, GoEvents } from "../Go";
-import { getMove, sleep } from "../boardAnalysis/goAI";
 import { getNewBoardState, makeMove, passTurn, updateCaptures, updateChains } from "../boardState/boardState";
+import { getAIMove } from "../boardAnalysis/goAI";
 import {
   evaluateIfMoveIsValid,
   getColorOnSimpleBoard,
@@ -156,43 +156,6 @@ export async function getOpponentNextMove(logOpponentMove = true, logger: (s: st
     });
   }
 
-  return Go.nextTurn;
-}
-
-/**
- * Retrieves a move from the current faction in response to the player's move
- */
-export async function getAIMove(boardState: BoardState): Promise<Play> {
-  let resolve: (value: Play) => void;
-  Go.nextTurn = new Promise<Play>((res) => {
-    resolve = res;
-  });
-
-  getMove(boardState, GoColor.white, Go.currentGame.ai).then(async (result) => {
-    if (result.type === GoPlayType.pass) {
-      passTurn(Go.currentGame, GoColor.white);
-    }
-
-    // If there is no move to apply, simply return the result
-    if (boardState !== Go.currentGame || result.type !== GoPlayType.move || result.x === null || result.y === null) {
-      return resolve(result);
-    }
-
-    await sleep(400);
-    const aiUpdatedBoard = makeMove(boardState, result.x, result.y, GoColor.white);
-
-    // Handle the AI breaking. This shouldn't ever happen.
-    if (!aiUpdatedBoard) {
-      boardState.previousPlayer = GoColor.white;
-      console.error(`Invalid AI move attempted: ${result.x}, ${result.y}. This should not happen.`);
-      GoEvents.emit();
-      return resolve(result);
-    }
-
-    await sleep(300);
-    GoEvents.emit();
-    resolve(result);
-  });
   return Go.nextTurn;
 }
 

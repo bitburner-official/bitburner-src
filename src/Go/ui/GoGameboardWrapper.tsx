@@ -18,7 +18,7 @@ import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 import { CorruptableText } from "../../ui/React/CorruptableText";
-import { getAIMove } from "../effects/netscriptGoImplementation";
+import { getAIMove } from "../boardAnalysis/goAI";
 
 interface GoGameboardWrapperProps {
   showInstructions: () => void;

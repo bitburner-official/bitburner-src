@@ -1,9 +1,9 @@
-import type { Board, BoardState, EyeMove, Move, MoveOptions, PointState } from "../Types";
+import type { Board, BoardState, EyeMove, Move, MoveOptions, Play, PointState } from "../Types";
 
 import { Player } from "@player";
 import { AugmentationName, GoOpponent, GoColor, GoPlayType } from "@enums";
 import { opponentDetails } from "../Constants";
-import { findNeighbors, floor, isDefined, isNotNull, passTurn } from "../boardState/boardState";
+import { findNeighbors, floor, isDefined, isNotNull, makeMove, passTurn } from "../boardState/boardState";
 import {
   evaluateIfMoveIsValid,
   evaluateMoveResult,
@@ -19,6 +19,44 @@ import {
 import { findDisputedTerritory } from "./controlledTerritory";
 import { findAnyMatchedPatterns } from "./patternMatching";
 import { WHRNG } from "../../Casino/RNG";
+import { Go, GoEvents } from "../Go";
+
+/**
+ * Retrieves a move from the current faction in response to the player's move
+ */
+export async function getAIMove(boardState: BoardState): Promise<Play> {
+  let resolve: (value: Play) => void;
+  Go.nextTurn = new Promise<Play>((res) => {
+    resolve = res;
+  });
+
+  getMove(boardState, GoColor.white, Go.currentGame.ai).then(async (result) => {
+    if (result.type === GoPlayType.pass) {
+      passTurn(Go.currentGame, GoColor.white);
+    }
+
+    // If there is no move to apply, simply return the result
+    if (boardState !== Go.currentGame || result.type !== GoPlayType.move || result.x === null || result.y === null) {
+      return resolve(result);
+    }
+
+    await sleep(400);
+    const aiUpdatedBoard = makeMove(boardState, result.x, result.y, GoColor.white);
+
+    // Handle the AI breaking. This shouldn't ever happen.
+    if (!aiUpdatedBoard) {
+      boardState.previousPlayer = GoColor.white;
+      console.error(`Invalid AI move attempted: ${result.x}, ${result.y}. This should not happen.`);
+      GoEvents.emit();
+      return resolve(result);
+    }
+
+    await sleep(300);
+    GoEvents.emit();
+    resolve(result);
+  });
+  return Go.nextTurn;
+}
 
 /*
   Basic GO AIs, each with some personality and weaknesses
