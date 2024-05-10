@@ -96,7 +96,7 @@ export function validateTurn(error: (s: string) => void, moveString = "") {
 /**
  * Pass player's turn and await the opponent's response (or logs the end of the game if both players pass)
  */
-export async function handlePassTurn(logger: (s: string) => void) {
+export function handlePassTurn(logger: (s: string) => void) {
   passTurn(Go.currentGame, GoColor.black);
   logger("Go turn passed.");
 
@@ -111,7 +111,7 @@ export async function handlePassTurn(logger: (s: string) => void) {
 /**
  * Validates and applies the player's router placement
  */
-export async function makePlayerMove(logger: (s: string) => void, error: (s: string) => void, x: number, y: number) {
+export function makePlayerMove(logger: (s: string) => void, error: (s: string) => void, x: number, y: number) {
   const boardState = Go.currentGame;
   const validity = evaluateIfMoveIsValid(boardState, x, y, GoColor.black);
   const moveWasMade = makeMove(boardState, x, y, GoColor.black);
@@ -128,10 +128,10 @@ export async function makePlayerMove(logger: (s: string) => void, error: (s: str
 /**
   Returns the promise that provides the opponent's move, once it finishes thinking.
  */
-export async function getOpponentNextMove(logOpponentMove = true, logger: (s: string) => void) {
+export function getOpponentNextMove(logOpponentMove = true, logger: (s: string) => void) {
   // Only asynchronously log the opponent move if not disabled by the player
   if (logOpponentMove) {
-    return Go.nextTurn.then((move) => {
+    Go.nextTurn.then((move) => {
       if (move.type === GoPlayType.gameOver) {
         logEndGame(logger);
       } else if (move.type === GoPlayType.pass) {
@@ -139,7 +139,6 @@ export async function getOpponentNextMove(logOpponentMove = true, logger: (s: st
       } else if (move.type === GoPlayType.move) {
         logger(`Opponent played move: ${move.x}, ${move.y}`);
       }
-      return move;
     });
   }
 
@@ -329,7 +328,7 @@ export function checkCheatApiAccess(error: (s: string) => void): void {
  *
  * If it fails, determines if the player's turn is skipped, or if the player is ejected from the subnet.
  */
-export async function determineCheatSuccess(
+export function determineCheatSuccess(
   logger: (s: string) => void,
   callback: () => void,
   successRngOverride?: number,
@@ -348,11 +347,11 @@ export async function determineCheatSuccess(
   else if (state.cheatCount && (ejectRngOverride ?? rng.random()) < 0.1) {
     logger(`Cheat failed! You have been ejected from the subnet.`);
     resetBoardState(logger, logger, state.ai, state.board[0].length);
-    return {
+    return Promise.resolve({
       type: GoPlayType.gameOver,
       x: null,
       y: null,
-    };
+    });
   }
   // If the cheat fails, your turn is skipped
   else {

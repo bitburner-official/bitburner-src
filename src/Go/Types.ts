@@ -51,11 +51,17 @@ export type PointState = {
   y: number;
 };
 
-export type Play = {
-  type: GoPlayType;
-  x: number | null;
-  y: number | null;
-};
+export type Play =
+  | {
+      type: GoPlayType.move;
+      x: number;
+      y: number;
+    }
+  | {
+      type: GoPlayType.gameOver | GoPlayType.pass;
+      x: null;
+      y: null;
+    };
 
 export type Neighbor = {
   north: PointState | null;

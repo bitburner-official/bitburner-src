@@ -33,8 +33,7 @@ export function makeAIMove(boardState: BoardState): Promise<Play> {
     .then(async (play) => {
       if (boardState !== Go.currentGame) return play; //Stale game
       if (play.type === GoPlayType.pass) passTurn(boardState, GoColor.white);
-      // The null checking shouldn't be needed below but fixing this requires some types reworking and might be a pain
-      if (play.type !== GoPlayType.move || play.x === null || play.y === null) return play;
+      if (play.type !== GoPlayType.move) return play;
 
       await sleep(500);
       const aiUpdatedBoard = makeMove(boardState, play.x, play.y, GoColor.white);
@@ -73,7 +72,12 @@ export function makeAIMove(boardState: BoardState): Promise<Play> {
  *
  * @returns a promise that will resolve with a move (or pass) from the designated AI opponent.
  */
-export async function getMove(boardState: BoardState, player: GoColor, opponent: GoOpponent, rngOverride?: number) {
+export async function getMove(
+  boardState: BoardState,
+  player: GoColor,
+  opponent: GoOpponent,
+  rngOverride?: number,
+): Promise<Play> {
   await sleep(300);
   const rng = new WHRNG(rngOverride || Player.totalPlaytime);
   const smart = isSmart(opponent, rng.random());
@@ -124,7 +128,7 @@ export async function getMove(boardState: BoardState, player: GoColor, opponent:
  * Ends the game if the player passed on the previous turn before the AI passes,
  *   or if the player will be forced to pass their next turn after the AI passes.
  */
-function handleNoMoveFound(boardState: BoardState, player: GoColor) {
+function handleNoMoveFound(boardState: BoardState, player: GoColor): Play {
   passTurn(boardState, player);
   const opposingPlayer = player === GoColor.white ? GoColor.black : GoColor.white;
   const remainingTerritory = getAllValidMoves(boardState, opposingPlayer).length;
