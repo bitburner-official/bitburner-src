@@ -31,31 +31,31 @@ export function makeAIMove(boardState: BoardState): Promise<Play> {
   if (isAIBusy && Go.nextTurn) return Go.nextTurn;
   // Disallow new AI moves to be triggered during this one
   isAIBusy = true;
-  let resolve: (play: Play) => void;
-  Go.nextTurn = new Promise<Play>((res) => (resolve = res)).finally(() => (isAIBusy = false));
+  Go.nextTurn = getMove(boardState, GoColor.white, Go.currentGame.ai)
+    .then(async (play) => {
+      if (play.type === GoPlayType.pass) {
+        passTurn(Go.currentGame, GoColor.white);
+      }
 
-  getMove(boardState, GoColor.white, Go.currentGame.ai).then(async (play) => {
-    if (play.type === GoPlayType.pass) {
-      passTurn(Go.currentGame, GoColor.white);
-    }
+      // If there is no move to apply, simply return the result
+      if (boardState !== Go.currentGame || play.type !== GoPlayType.move || play.x === null || play.y === null) {
+        return play;
+      }
 
-    // If there is no move to apply, simply return the result
-    if (boardState !== Go.currentGame || play.type !== GoPlayType.move || play.x === null || play.y === null) {
-      return resolve(play);
-    }
+      await sleep(500);
+      const aiUpdatedBoard = makeMove(boardState, play.x, play.y, GoColor.white);
 
-    await sleep(500);
-    const aiUpdatedBoard = makeMove(boardState, play.x, play.y, GoColor.white);
+      // Handle the AI breaking. This shouldn't ever happen.
+      if (!aiUpdatedBoard) {
+        boardState.previousPlayer = GoColor.white;
+        console.error(`Invalid AI move attempted: ${play.x}, ${play.y}. This should not happen.`);
+      }
 
-    // Handle the AI breaking. This shouldn't ever happen.
-    if (!aiUpdatedBoard) {
-      boardState.previousPlayer = GoColor.white;
-      console.error(`Invalid AI move attempted: ${play.x}, ${play.y}. This should not happen.`);
-    }
+      GoEvents.emit();
+      return play;
+    })
+    .finally(() => (isAIBusy = false));
 
-    GoEvents.emit();
-    resolve(play);
-  });
   return Go.nextTurn;
 }
 
