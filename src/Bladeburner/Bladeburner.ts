@@ -185,7 +185,9 @@ export class Bladeburner {
 
   log(input: string): void {
     // Adds a timestamp and then just calls postToConsole
-    this.postToConsole(`[${formatTime(Settings.TimestampsFormat!=="" ? Settings.TimestampsFormat : "yyyy-MM-dd HH:mm:ss")}] ${input}`);
+    this.postToConsole(
+      `[${formatTime(Settings.TimestampsFormat !== "" ? Settings.TimestampsFormat : "yyyy-MM-dd HH:mm:ss")}] ${input}`,
+    );
   }
 
   resetAction(): void {
