@@ -33,6 +33,7 @@ import { getRecordKeys } from "../../Types/Record";
 import { PositiveInteger } from "../../types";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { CreateCorporationModal } from "./modals/CreateCorporationModal";
+import { isValuationHighEnoughToBribe } from "../helpers";
 
 interface IProps {
   rerender: () => void;
@@ -278,7 +279,7 @@ function BribeButton(): React.ReactElement {
   const corp = useCorporation();
   const [open, setOpen] = useState(false);
   const canBribe =
-    corp.valuation >= corpConstants.bribeThreshold &&
+    isValuationHighEnoughToBribe(corp.valuation) &&
     Player.factions.filter((f) => Factions[f].getInfo().offersWork()).length > 0;
 
   function openBribe(): void {

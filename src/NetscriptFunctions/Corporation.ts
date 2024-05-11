@@ -52,14 +52,14 @@ import {
   UpgradeWarehouseCost,
   createCorporation,
   removeDivision,
+  Bribe,
 } from "../Corporation/Actions";
 import { CorpUnlocks } from "../Corporation/data/CorporationUnlocks";
 import { CorpUpgrades } from "../Corporation/data/CorporationUpgrades";
-import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, CityName, FactionName } from "@enums";
+import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, CityName } from "@enums";
 import { IndustriesData, IndustryResearchTrees } from "../Corporation/data/IndustryData";
 import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
-import { Factions } from "../Faction/Factions";
 import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
@@ -100,24 +100,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
 
   function hasResearched(division: Division, researchName: CorpResearchName): boolean {
     return division.researched.has(researchName);
-  }
-
-  function bribe(factionName: FactionName, amountCash: number): boolean {
-    if (isNaN(amountCash) || amountCash < 0)
-      throw new Error("Invalid value for amount field! Must be numeric, greater than 0.");
-
-    const corporation = getCorporation();
-    if (corporation.funds < amountCash) return false;
-    const faction = Factions[factionName];
-    const info = faction.getInfo();
-    if (!info.offersWork()) return false;
-    if (Player.hasGangWith(factionName)) return false;
-
-    const repGain = amountCash / corpConstants.bribeAmountPerReputation;
-    faction.playerReputation += repGain;
-    corporation.loseFunds(amountCash, "bribery");
-
-    return true;
   }
 
   function getCorporation(): Corporation {
@@ -755,7 +737,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     goPublic: (ctx) => (_numShares) => {
       checkAccess(ctx);
       const corporation = getCorporation();
-      if (corporation.public) throw helpers.errorMessage(ctx, "corporation is already public");
+      if (corporation.public) throw helpers.errorMessage(ctx, "Corporation is already public");
       const numShares = helpers.number(ctx, "numShares", _numShares);
       GoPublic(corporation, numShares);
       return true;
@@ -774,7 +756,11 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx);
       const factionName = getEnumHelper("FactionName").nsGetMember(ctx, _factionName);
       const amountCash = helpers.number(ctx, "amountCash", _amountCash);
-      return bribe(factionName, amountCash);
+      if (isNaN(amountCash) || amountCash <= 0) {
+        throw new Error("Invalid value for amount field! Must be numeric and greater than 0.");
+      }
+
+      return Bribe(getCorporation(), amountCash, factionName).success;
     },
     getBonusTime: (ctx) => () => {
       checkAccess(ctx);

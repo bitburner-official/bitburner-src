@@ -88,3 +88,11 @@ export function issueNewSharesFailureReason(corp: Corporation, numShares: number
 
   return "";
 }
+
+export function isValuationHighEnoughToBribe(valuation: number) {
+  return valuation >= corpConstants.bribeThreshold;
+}
+
+export function reputationGainByBribing(funds: number) {
+  return funds / corpConstants.bribeAmountPerReputation;
+}
