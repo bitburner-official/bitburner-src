@@ -1306,12 +1306,13 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "The parity bit at position 0 considers all bits including parity bits.\n",
         "Each parity bit at position 2^N alternately considers N bits then ignores N bits, starting at position 2^N.\n",
         "The endianness of the parity bits is reversed compared to the endianness of the data bits:\n",
-        "Data bits are encoded left-to-right (most significant byte first) and the parity bits encoded right-to-left.\n",
+        "Data bits are encoded most significant bit first and the parity bits encoded least significant bit first.\n",
         "The parity bit at position 0 is set last.\n\n",
         "Examples:\n",
         "8 in binary is 1000, and encodes to 11110000 (pppdpddd - where p is a parity bit and d is a data bit)\n",
         "21 in binary is 10101, and encodes to 1001101011 (pppdpdddpd)\n\n",
-        "For more information on the 'rule' of encoding, refer to the Wikipedia entry and the 3Blue1Brown videos on Hamming Codes.",
+        "For more information on the 'rule' of encoding, refer to Wikipedia (https://wikipedia.org/wiki/Hamming_code)",
+        "or the 3Blue1Brown videos on Hamming Codes. (https://youtube.com/watch?v=X8jsijhllIA)",
       ].join(" ");
     },
     gen: (): number => {
@@ -1336,7 +1337,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "The parity bit at position 0 considers all bits including parity bits.\n",
         "Each parity bit at position 2^N alternately considers N bits then ignores N bits, starting at position 2^N.\n",
         "The endianness of the parity bits is reversed compared to the endianness of the data bits:\n",
-        "Data bits are encoded left-to-right (most significant byte first) and the parity bits encoded right-to-left.\n",
+        "Data bits are encoded most significant bit first and the parity bits encoded least significant bit first.\n",
         "The parity bit at position 0 is set last.\n",
         "There is a ~55% chance for an altered bit at a random index.\n",
         "Find the possible altered bit, fix it and extract the decimal value.\n\n",
@@ -1344,7 +1345,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "'11110000' passes the parity checks and has data bits of 1000, which is 8 in binary.\n",
         "'1001101010' fails the parity checks and needs the last bit to be corrected to get '1001101011',",
         "after which the data bits are found to be 10101, which is 21 in binary.\n\n",
-        "For more information on the 'rule' of encoding, refer to the Wikipedia entry and the 3Blue1Brown videos on Hamming Codes.",
+        "For more information on the 'rule' of encoding, refer to Wikipedia (https://wikipedia.org/wiki/Hamming_code)",
+        "or the 3Blue1Brown videos on Hamming Codes. (https://youtube.com/watch?v=X8jsijhllIA)",
       ].join(" ");
     },
     gen: (): string => {
