@@ -23,14 +23,19 @@ interface IBitNodeModifiedStatsProps {
   color: string;
 }
 
+function customFormatPercent(value: number): string {
+  return formatPercent(value, 2, 100);
+}
+
 function BitNodeModifiedStats(props: IBitNodeModifiedStatsProps): React.ReactElement {
   // If player doesn't have SF5 or if the property isn't affected by BitNode mults
   if (props.mult === 1 || Player.sourceFileLvl(5) === 0)
-    return <Typography color={props.color}>{formatPercent(props.base)}</Typography>;
+    return <Typography color={props.color}>{customFormatPercent(props.base)}</Typography>;
 
   return (
     <Typography color={props.color}>
-      <span style={{ opacity: 0.5 }}>{formatPercent(props.base)}</span> {formatPercent(props.base * props.mult)}
+      <span style={{ opacity: 0.5 }}>{customFormatPercent(props.base)}</span>{" "}
+      {customFormatPercent(props.base * props.mult)}
     </Typography>
   );
 }

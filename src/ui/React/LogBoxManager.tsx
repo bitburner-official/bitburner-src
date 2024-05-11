@@ -58,6 +58,7 @@ export class LogBoxProperties {
     this.x = x;
     this.y = y;
     this.updateDOM();
+    this.rerender();
   }
 
   setSize(width: number, height: number): void {
