@@ -588,6 +588,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   write: 0,
   tryWritePort: 0,
   read: 0,
+  getFileMetadata: 0,
   peek: 0,
   clear: 0,
   writePort: 0,

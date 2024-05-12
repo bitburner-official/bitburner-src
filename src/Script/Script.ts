@@ -6,6 +6,7 @@ import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { ContentFile } from "../Paths/ContentFile";
+import { FileMetadata } from "../Paths/FileMetadata";
 
 /** A script file as a file on a server.
  * For the execution of a script, see RunningScript and WorkerScript */
@@ -13,6 +14,10 @@ export class Script implements ContentFile {
   code: string;
   filename: ScriptFilePath;
   server: string;
+
+  // Used for the Remote File API,
+  // to resolve conflicts when synchronizing files outside the game
+  metadata: FileMetadata;
 
   // Ram calculation, only exists after first poll of ram cost after updating
   ramUsage: number | null = null;
@@ -31,18 +36,21 @@ export class Script implements ContentFile {
   dependencies = new Map<ScriptURL, Script>();
 
   get content() {
+    this.metadata.read();
     return this.code;
   }
   set content(newCode: string) {
+    this.metadata.edit();
     if (this.code === newCode) return;
     this.code = newCode;
     this.invalidateModule();
   }
 
-  constructor(fn = "default.js" as ScriptFilePath, code = "", server = "") {
-    this.filename = fn;
+  constructor(filename = "default.js" as ScriptFilePath, code = "", server = "") {
+    this.filename = filename;
     this.code = code;
     this.server = server; // hostname of server this script is on
+    this.metadata = new FileMetadata();
   }
 
   /** Invalidates the current script module and related data, e.g. when modifying the file. */
@@ -94,7 +102,7 @@ export class Script implements ContentFile {
   }
 
   /** The keys that are relevant in a save file */
-  static savedKeys = ["code", "filename", "server"] as const;
+  static savedKeys = ["code", "filename", "server", "metadata"] as const;
 
   // Serialize the current object to a JSON save state
   toJSON(): IReviverValue {

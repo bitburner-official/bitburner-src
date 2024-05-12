@@ -4,6 +4,18 @@
 type _ValueOf<T> = T[keyof T];
 
 /** All netscript definitions */
+
+/** Metadata of a {File}
+ * @public */
+interface FileMetadata {
+  /** Time of Access */
+  atime: number;
+  /** Time of Modification */
+  mtime: number;
+  /** Time of Birth (creation) */
+  btime: number;
+}
+
 /** @public */
 interface HP {
   current: number;
@@ -4883,11 +4895,11 @@ export interface Go {
    * For example, a 5x5 board might look like this:
    *
    [<br/>  
-      "XX.O.",<br/>  
-      "X..OO",<br/>  
-      ".XO..",<br/>  
-      "XXO.#",<br/>  
-      ".XO.#",<br/>  
+   "XX.O.",<br/>  
+   "X..OO",<br/>  
+   ".XO..",<br/>  
+   "XXO.#",<br/>  
+   ".XO.#",<br/>  
    ]
    *
    * Each string represents a vertical column on the board, and each character in the string represents a point.
@@ -7709,6 +7721,22 @@ export interface NS {
    * @returns Data in the specified text file.
    */
   read(filename: string): string;
+
+  /**
+   * Get the metadata of a file.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This function is used to read the metadata
+   * from a text file (.txt) or script (.js or .script).
+   *
+   * This function will return the metadata associated with the specified file.
+   * If the file does not exist, this function returns `undefined`.
+   *
+   * @param filename - Name of the file to read the metadata from.
+   * @Returns The FileMetadata of the file.
+   */
+  getFileMetadata(filename: string): FileMetadata | undefined;
 
   /**
    * Get a copy of the data from a port without popping it.

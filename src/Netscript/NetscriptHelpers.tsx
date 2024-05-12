@@ -364,7 +364,7 @@ function checkSingularityAccess(ctx: NetscriptContext): void {
     throw errorMessage(
       ctx,
       `This singularity function requires Source-File 4 to run. A power up you obtain later in the game.
-      It will be very obvious when and how you can obtain it.`,
+	  It will be very obvious when and how you can obtain it.`,
       "API ACCESS",
     );
   }
@@ -382,9 +382,9 @@ function checkEnvFlags(ctx: NetscriptContext): void {
     const err = errorMessage(
       ctx,
       `Concurrent calls to Netscript functions are not allowed!
-      Did you forget to await hack(), grow(), or some other
-      promise-returning function?
-      Currently running: ${ws.env.runningFn} tried to run: ${ctx.function}`,
+	  Did you forget to await hack(), grow(), or some other
+	  promise-returning function?
+	  Currently running: ${ws.env.runningFn} tried to run: ${ctx.function}`,
       "CONCURRENCY",
     );
     killWorkerScript(ws);
@@ -428,23 +428,23 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
     const err = errorMessage(
       ctx,
       `Dynamic RAM usage calculated to be greater than RAM allocation.
-      This is probably because you somehow circumvented the static RAM calculation.
+	  This is probably because you somehow circumvented the static RAM calculation.
 
       Threads: ${ws.scriptRef.threads}
       Dynamic RAM Usage: ${formatRam(ws.dynamicRamUsage)} per thread
       RAM Allocation: ${formatRam(ws.scriptRef.ramUsage)} per thread
       Functions in-use: [${functionsUsed}]
 
-      One of these could be the reason:
-      * Using eval() to get a reference to a ns function
-      \u00a0\u00a0const myScan = eval('ns.scan');
+	  One of these could be the reason:
+	  * Using eval() to get a reference to a ns function
+	  \u00a0\u00a0const myScan = eval('ns.scan');
 
-      * Using map access to do the same
-      \u00a0\u00a0const myScan = ns['scan'];
+	  * Using map access to do the same
+	  \u00a0\u00a0const myScan = ns['scan'];
 
-      * Using RunOptions.ramOverride to set a smaller allocation than needed
+	  * Using RunOptions.ramOverride to set a smaller allocation than needed
 
-      Sorry :(`,
+	  Sorry :(`,
       "RAM USAGE",
     );
     killWorkerScript(ws);

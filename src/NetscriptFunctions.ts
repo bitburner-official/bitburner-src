@@ -1402,6 +1402,12 @@ export const ns: InternalAPI<NSFull> = {
     const server = ctx.workerScript.getServer();
     return server.getContentFile(path)?.content ?? "";
   },
+  getFileMetadata: (ctx) => (_filename) => {
+    const path = helpers.filePath(ctx, "filename", _filename);
+    if (!hasScriptExtension(path) && !hasTextExtension(path)) return undefined;
+    const server = ctx.workerScript.getServer();
+    return server.getContentFile(path)?.metadata.plain() ?? undefined;
+  },
   peek: (ctx) => (_portNumber) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);
     return peekPort(portNumber);
