@@ -9,11 +9,11 @@ import {
 import { Player, setPlayer } from "../../src/Player";
 import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
 import {
-  AcceptInvestmentOffer,
-  BuyBackShares,
-  GoPublic,
-  IssueNewShares,
-  SellShares,
+  acceptInvestmentOffer,
+  buyBackShares,
+  goPublic,
+  issueNewShares,
+  sellShares,
 } from "../../src/Corporation/Actions";
 
 describe("Corporation", () => {
@@ -87,32 +87,32 @@ describe("Corporation", () => {
       expectSharesToAddUp(Player.corporation!);
     });
     it("should be preserved by acceptInvestmentOffer", () => {
-      AcceptInvestmentOffer(corporation);
+      acceptInvestmentOffer(corporation);
       expectSharesToAddUp(corporation);
     });
     it("should be preserved by goPublic", () => {
       const numShares = 1e8;
-      GoPublic(corporation, numShares);
+      goPublic(corporation, numShares);
       expectSharesToAddUp(corporation);
     });
     it("should be preserved by IssueNewShares", () => {
       const numShares = 1e8;
-      GoPublic(corporation, numShares);
+      goPublic(corporation, numShares);
       corporation.issueNewSharesCooldown = 0;
-      IssueNewShares(corporation, numShares);
+      issueNewShares(corporation, numShares);
       expectSharesToAddUp(corporation);
     });
     it("should be preserved by BuyBackShares", () => {
       const numShares = 1e8;
-      GoPublic(corporation, numShares);
-      BuyBackShares(corporation, numShares);
+      goPublic(corporation, numShares);
+      buyBackShares(corporation, numShares);
       expectSharesToAddUp(corporation);
     });
     it("should be preserved by SellShares", () => {
       const numShares = 1e8;
-      GoPublic(corporation, numShares);
+      goPublic(corporation, numShares);
       corporation.shareSaleCooldown = 0;
-      SellShares(corporation, numShares);
+      sellShares(corporation, numShares);
       expectSharesToAddUp(corporation);
     });
   });
