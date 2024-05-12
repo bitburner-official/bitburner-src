@@ -140,7 +140,7 @@ export function applyHandicap(board: Board, handicap: number): void {
 
   // select random distinct moves from the move options list up to the specified handicap amount
   for (let i = 0; i < handicap && i < handicapMoveOptions.length; i++) {
-    const index = floor(Math.random() * handicapMoveOptions.length);
+    const index = Math.floor(Math.random() * handicapMoveOptions.length);
     handicapMoves.push(handicapMoveOptions[index]);
     handicapMoveOptions.splice(index, 1);
   }
@@ -247,16 +247,13 @@ export function findAdjacentPointsInChain(board: Board, x: number, y: number) {
     checkedPoints.push(currentPoint);
     const neighbors = findNeighbors(board, currentPoint.x, currentPoint.y);
 
-    [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
-      .filter(isNotNull)
-      .filter(isDefined)
-      .forEach((neighbor) => {
-        if (neighbor && neighbor.color === currentPoint.color && !contains(checkedPoints, neighbor)) {
-          adjacentPoints.push(neighbor);
-          pointsToCheckNeighbors.push(neighbor);
-        }
-        checkedPoints.push(neighbor);
-      });
+    [neighbors.north, neighbors.east, neighbors.south, neighbors.west].filter(isNotNullish).forEach((neighbor) => {
+      if (neighbor && neighbor.color === currentPoint.color && !contains(checkedPoints, neighbor)) {
+        adjacentPoints.push(neighbor);
+        pointsToCheckNeighbors.push(neighbor);
+      }
+      checkedPoints.push(neighbor);
+    });
   }
 
   return adjacentPoints;
@@ -312,22 +309,9 @@ export function findNeighbors(board: Board, x: number, y: number): Neighbor {
 }
 
 export function getArrayFromNeighbor(neighborObject: Neighbor): PointState[] {
-  return [neighborObject.north, neighborObject.east, neighborObject.south, neighborObject.west]
-    .filter(isNotNull)
-    .filter(isDefined);
+  return [neighborObject.north, neighborObject.east, neighborObject.south, neighborObject.west].filter(isNotNullish);
 }
 
-export function isNotNull<T>(argument: T | null): argument is T {
-  return argument !== null;
-}
-export function isDefined<T>(argument: T | undefined): argument is T {
-  return argument !== undefined;
-}
-
-export function floor(n: number) {
-  return ~~n;
-}
-export function ceil(n: number) {
-  const floored = floor(n);
-  return floored === n ? n : floored + 1;
+export function isNotNullish<T>(argument: T | undefined | null): argument is T {
+  return argument != null;
 }

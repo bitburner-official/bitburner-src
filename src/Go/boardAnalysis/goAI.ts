@@ -3,7 +3,7 @@ import type { Board, BoardState, EyeMove, Move, MoveOptions, Play, PointState } 
 import { Player } from "@player";
 import { AugmentationName, GoOpponent, GoColor, GoPlayType } from "@enums";
 import { opponentDetails } from "../Constants";
-import { findNeighbors, floor, isDefined, isNotNull, makeMove, passTurn } from "../boardState/boardState";
+import { findNeighbors, isNotNullish, makeMove, passTurn } from "../boardState/boardState";
 import {
   evaluateIfMoveIsValid,
   evaluateMoveResult,
@@ -111,11 +111,10 @@ export async function getMove(
     (await moves.eyeMove())?.point,
     (await moves.eyeBlock())?.point,
   ]
-    .filter(isNotNull)
-    .filter(isDefined)
+    .filter(isNotNullish)
     .filter((point) => evaluateIfMoveIsValid(boardState, point.x, point.y, player, false));
 
-  const chosenMove = moveOptions[floor(rng.random() * moveOptions.length)];
+  const chosenMove = moveOptions[Math.floor(rng.random() * moveOptions.length)];
 
   if (chosenMove) {
     await sleep(200);
@@ -393,7 +392,7 @@ function isCornerAvailableForMove(board: Board, x1: number, y1: number, x2: numb
  */
 function getExpansionMove(board: Board, availableSpaces: PointState[], rng: number, moveArray?: Move[]) {
   const moveOptions = moveArray ?? getExpansionMoveArray(board, availableSpaces);
-  const randomIndex = floor(rng * moveOptions.length);
+  const randomIndex = Math.floor(rng * moveOptions.length);
   return moveOptions[randomIndex];
 }
 
@@ -410,7 +409,7 @@ function getJumpMove(board: Board, player: GoColor, availableSpaces: PointState[
     ].some((point) => point?.color === player),
   );
 
-  const randomIndex = floor(rng * moveOptions.length);
+  const randomIndex = Math.floor(rng * moveOptions.length);
   return moveOptions[randomIndex];
 }
 
@@ -469,14 +468,13 @@ async function getLibertyGrowthMoves(board: Board, player: GoColor, availableSpa
   // Get all liberties of friendly chains as potential growth move options
   const liberties = friendlyChains
     .map((chain) =>
-      chain[0].liberties?.filter(isNotNull).map((liberty) => ({
+      chain[0].liberties?.filter(isNotNullish).map((liberty) => ({
         libertyPoint: liberty,
         oldLibertyCount: chain[0].liberties?.length,
       })),
     )
     .flat()
-    .filter(isNotNull)
-    .filter(isDefined)
+    .filter(isNotNullish)
     .filter((liberty) =>
       availableSpaces.find((point) => liberty.libertyPoint.x === point.x && liberty.libertyPoint.y === point.y),
     );
@@ -509,7 +507,7 @@ async function getGrowthMove(board: Board, player: GoColor, availableSpaces: Poi
   const maxLibertyCount = Math.max(...growthMoves.map((l) => l.newLibertyCount - l.oldLibertyCount));
 
   const moveCandidates = growthMoves.filter((l) => l.newLibertyCount - l.oldLibertyCount === maxLibertyCount);
-  return moveCandidates[floor(rng * moveCandidates.length)];
+  return moveCandidates[Math.floor(rng * moveCandidates.length)];
 }
 
 /**
@@ -527,7 +525,7 @@ async function getDefendMove(board: Board, player: GoColor, availableSpaces: Poi
   }
 
   const moveCandidates = libertyIncreases.filter((l) => l.newLibertyCount - l.oldLibertyCount === maxLibertyCount);
-  return moveCandidates[floor(Math.random() * moveCandidates.length)];
+  return moveCandidates[Math.floor(Math.random() * moveCandidates.length)];
 }
 
 /**
@@ -546,7 +544,7 @@ async function getSurroundMove(board: Board, player: GoColor, availableSpaces: P
     .map((chain) => chain[0].liberties)
     .flat()
     .filter((liberty) => availableSpaces.find((point) => liberty?.x === point.x && liberty?.y === point.y))
-    .filter(isNotNull);
+    .filter(isNotNullish);
 
   const captureMoves: Move[] = [];
   const atariMoves: Move[] = [];
@@ -635,7 +633,7 @@ function getEyeCreationMoves(board: Board, player: GoColor, availableSpaces: Poi
     .filter((chain) => !currentLivingGroupIDs.includes(chain[0].chain))
     .map((chain) => chain[0].liberties)
     .flat()
-    .filter(isNotNull)
+    .filter(isNotNullish)
     .filter((point) =>
       availableSpaces.find((availablePoint) => availablePoint.x === point.x && availablePoint.y === point.y),
     )
@@ -755,7 +753,7 @@ function getMoveOptions(
     random: async () => {
       // Only offer a random move if there are some contested spaces on the board.
       // (Random move should not be picked if the AI would otherwise pass turn.)
-      const point = contestedPoints.length ? availableSpaces[floor(rng * availableSpaces.length)] : null;
+      const point = contestedPoints.length ? availableSpaces[Math.floor(rng * availableSpaces.length)] : null;
       return point ? { point } : null;
     },
   };

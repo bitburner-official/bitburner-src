@@ -6,7 +6,7 @@ import { newOpponentStats } from "../Constants";
 import { getAllChains, getPlayerNeighbors } from "./boardAnalysis";
 import { getKomi } from "./goAI";
 import { getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "../effects/effect";
-import { floor, isNotNull } from "../boardState/boardState";
+import { isNotNullish } from "../boardState/boardState";
 import { Factions } from "../../Faction/Factions";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { Go } from "../Go";
@@ -59,7 +59,7 @@ export function endGoGame(boardState: BoardState) {
 
   if (score[GoColor.black].sum < score[GoColor.white].sum) {
     resetWinstreak(boardState.ai, true);
-    statusToUpdate.nodePower += floor(score[GoColor.black].sum * 0.25);
+    statusToUpdate.nodePower += Math.floor(score[GoColor.black].sum * 0.25);
   } else {
     statusToUpdate.wins++;
     statusToUpdate.oldWinStreak = statusToUpdate.winStreak;
@@ -114,7 +114,7 @@ export function resetWinstreak(opponent: GoOpponent, gameComplete: boolean) {
  */
 function getColoredPieceCount(boardState: BoardState, color: GoColor) {
   return boardState.board.reduce(
-    (sum, row) => sum + row.filter(isNotNull).filter((point) => point.color === color).length,
+    (sum, row) => sum + row.filter(isNotNullish).filter((point) => point.color === color).length,
     0,
   );
 }

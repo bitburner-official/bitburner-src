@@ -8,7 +8,7 @@ import {
   getAllPotentialEyes,
   getAllValidMoves,
 } from "./boardAnalysis";
-import { contains, isNotNull } from "../boardState/boardState";
+import { contains, isNotNullish } from "../boardState/boardState";
 
 /**
  * Any empty space fully encircled by the opponent is not worth playing in, unless one of its borders explicitly has a weakness
@@ -57,7 +57,7 @@ export function findDisputedTerritory(boardState: BoardState, player: GoColor, e
         }
 
         const libertiesInsideOfSpaceToAnalyze = liberties
-          .filter(isNotNull)
+          .filter(isNotNullish)
           .filter((point) => contains(space.chain, point));
 
         // If the chain has any liberties outside the empty space being analyzed, it is not yet fully surrounded,

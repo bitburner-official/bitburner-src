@@ -3,13 +3,12 @@ import type { Board, BoardState, PointState } from "../Types";
 import { Player } from "@player";
 import { boardSizes } from "../Constants";
 import { WHRNG } from "../../Casino/RNG";
-import { floor } from "./boardState";
 
 type rand = (n1: number, n2: number) => number;
 
 export function addObstacles(boardState: BoardState) {
   const rng = new WHRNG(Player.totalPlaytime ?? new Date().getTime());
-  const random = (n1: number, n2: number) => n1 + floor((n2 - n1 + 1) * rng.random());
+  const random = (n1: number, n2: number) => n1 + Math.floor((n2 - n1 + 1) * rng.random());
 
   const shouldRemoveCorner = !random(0, 4);
   const shouldRemoveRows = !shouldRemoveCorner && !random(0, 4);
@@ -105,8 +104,8 @@ function addDeadCorner(board: Board, random: rand, size: number) {
 function addCenterBreak(board: Board, random: rand) {
   const size = board[0].length;
   const maxOffset = getScale(board);
-  const xIndex = random(0, maxOffset * 2) - maxOffset + floor(size / 2);
-  const length = random(1, floor(size / 2 - 1));
+  const xIndex = random(0, maxOffset * 2) - maxOffset + Math.floor(size / 2);
+  const length = random(1, Math.floor(size / 2 - 1));
 
   board[xIndex] = board[xIndex].map((point, index) => (index < length ? null : point));
 

@@ -4,7 +4,6 @@ import type { Board, PointState } from "../Types";
 import { GoColor } from "@enums";
 import { sleep } from "./goAI";
 import { findEffectiveLibertiesOfNewMove } from "./boardAnalysis";
-import { floor } from "../boardState/boardState";
 
 export const threeByThreePatterns = [
   // 3x3 piece patterns; X,O are color pieces; x,o are any state except the opposite color piece;
@@ -104,7 +103,7 @@ export async function findAnyMatchedPatterns(
     }
     await sleep(10);
   }
-  return moves[floor(rng * moves.length)] || null;
+  return moves[Math.floor(rng * moves.length)] || null;
 }
 
 /**

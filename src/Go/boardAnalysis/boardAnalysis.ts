@@ -9,8 +9,7 @@ import {
   getBoardCopy,
   getEmptySpaces,
   getNewBoardState,
-  isDefined,
-  isNotNull,
+  isNotNullish,
   updateCaptures,
   updateChains,
 } from "../boardState/boardState";
@@ -155,9 +154,7 @@ const resetChainsById = (board: Board, chainIds: string[]) => {
 export function findEffectiveLibertiesOfNewMove(board: Board, x: number, y: number, player: GoColor) {
   const friendlyChains = getAllChains(board).filter((chain) => chain[0].color === player);
   const neighbors = findAdjacentLibertiesAndAlliesForPoint(board, x, y, player);
-  const neighborPoints = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
-    .filter(isNotNull)
-    .filter(isDefined);
+  const neighborPoints = [neighbors.north, neighbors.east, neighbors.south, neighbors.west].filter(isNotNullish);
   // Get all chains that the new move will connect to
   const allyNeighbors = neighborPoints.filter((neighbor) => neighbor.color === player);
   const allyNeighborChainLiberties = allyNeighbors
@@ -166,7 +163,7 @@ export function findEffectiveLibertiesOfNewMove(board: Board, x: number, y: numb
       return chain?.[0]?.liberties ?? null;
     })
     .flat()
-    .filter(isNotNull);
+    .filter(isNotNullish);
 
   // Get all empty spaces that the new move connects to that aren't already part of friendly liberties
   const directLiberties = neighborPoints.filter((neighbor) => neighbor.color === GoColor.empty);
@@ -188,8 +185,7 @@ export function findEffectiveLibertiesOfNewMove(board: Board, x: number, y: numb
 export function findMaxLibertyCountOfAdjacentChains(boardState: BoardState, x: number, y: number, player: GoColor) {
   const neighbors = findAdjacentLibertiesAndAlliesForPoint(boardState.board, x, y, player);
   const friendlyNeighbors = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
-    .filter(isNotNull)
-    .filter(isDefined)
+    .filter(isNotNullish)
     .filter((neighbor) => neighbor.color === player);
 
   return friendlyNeighbors.reduce((max, neighbor) => Math.max(max, neighbor?.liberties?.length ?? 0), 0);
@@ -207,8 +203,7 @@ export function findEnemyNeighborChainWithFewestLiberties(board: Board, x: numbe
   const chains = getAllChains(board);
   const neighbors = findAdjacentLibertiesAndAlliesForPoint(board, x, y, player);
   const friendlyNeighbors = [neighbors.north, neighbors.east, neighbors.south, neighbors.west]
-    .filter(isNotNull)
-    .filter(isDefined)
+    .filter(isNotNullish)
     .filter((neighbor) => neighbor.color === player);
 
   const minimumLiberties = friendlyNeighbors.reduce(
@@ -353,10 +348,7 @@ function findNeighboringChainsThatFullyEncircleEmptySpace(
 
     const evaluationBoard = getBoardCopy(board);
     const examplePoint = candidateChain[0];
-    const otherChainNeighborPoints = removePointAtIndex(neighborChainList, index)
-      .flat()
-      .filter(isNotNull)
-      .filter(isDefined);
+    const otherChainNeighborPoints = removePointAtIndex(neighborChainList, index).flat().filter(isNotNullish);
     otherChainNeighborPoints.forEach((point) => {
       const pointToEdit = evaluationBoard[point.x]?.[point.y];
       if (pointToEdit) {
