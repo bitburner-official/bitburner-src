@@ -22,8 +22,6 @@ import {
   buybackSharesFailureReason,
   issueNewSharesFailureReason,
   costOfCreatingCorporation,
-  reputationGainByBribing,
-  isValuationHighEnoughToBribe,
 } from "./helpers";
 import { PositiveInteger } from "../types";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
@@ -632,36 +630,22 @@ export function SetProductMarketTA2(product: Product, on: boolean): void {
   product.marketTa2 = on;
 }
 
-export function Bribe(
-  corporation: Corporation,
-  fundsForBribing: number,
-  factionName: FactionName,
-): {
-  success: boolean;
-  reputationGain: number;
-} {
-  const result = {
-    success: false,
-    reputationGain: 0,
-  };
-
-  if (!isValuationHighEnoughToBribe(corporation.valuation)) {
-    return result;
+export function bribe(corporation: Corporation, fundsForBribing: number, factionName: FactionName): number {
+  if (corporation.valuation < corpConstants.bribeThreshold) {
+    return 0;
   }
   if (fundsForBribing <= 0 || corporation.funds < fundsForBribing) {
-    return result;
+    return 0;
   }
   const faction = Factions[factionName];
   const factionInfo = faction.getInfo();
   if (!factionInfo.offersWork()) {
-    return result;
+    return 0;
   }
 
-  const reputationGain = reputationGainByBribing(fundsForBribing);
+  const reputationGain = fundsForBribing / corpConstants.bribeAmountPerReputation;
   faction.playerReputation += reputationGain;
   corporation.loseFunds(fundsForBribing, "bribery");
 
-  result.success = true;
-  result.reputationGain = reputationGain;
-  return result;
+  return reputationGain;
 }

@@ -52,7 +52,7 @@ import {
   UpgradeWarehouseCost,
   createCorporation,
   removeDivision,
-  Bribe,
+  bribe,
 } from "../Corporation/Actions";
 import { CorpUnlocks } from "../Corporation/data/CorporationUnlocks";
 import { CorpUpgrades } from "../Corporation/data/CorporationUpgrades";
@@ -760,7 +760,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         throw new Error("Invalid value for amount field! Must be numeric and greater than 0.");
       }
 
-      return Bribe(getCorporation(), amountCash, factionName).success;
+      return bribe(getCorporation(), amountCash, factionName) > 0;
     },
     getBonusTime: (ctx) => () => {
       checkAccess(ctx);

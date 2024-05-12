@@ -11,8 +11,8 @@ import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import { getEnumHelper } from "../../../utils/EnumHelper";
-import { reputationGainByBribing } from "../../helpers";
-import { Bribe } from "../../Actions";
+import { bribeAmountPerReputation } from "../../data/Constants";
+import * as actions from "../../Actions";
 import { Settings } from "../../../Settings/Settings";
 
 interface IProps {
@@ -45,7 +45,7 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
       return "Your corporation does not have enough funds.";
     } else {
       return `You will gain ${formatReputation(
-        reputationGainByBribing(money),
+        money / bribeAmountPerReputation,
       )} reputation with ${selectedFaction} with this bribe.`;
     }
   }
@@ -55,10 +55,10 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
       return;
     }
     const faction = Factions[selectedFaction];
-    const bribingResult = Bribe(corp, money, faction.name);
-    if (bribingResult.success && bribingResult.reputationGain > 0) {
+    const reputationGain = actions.bribe(corp, money, faction.name);
+    if (reputationGain > 0) {
       dialogBoxCreate(
-        `You gained ${formatReputation(bribingResult.reputationGain)} reputation with ${faction.name} by bribing them.`,
+        `You gained ${formatReputation(reputationGain)} reputation with ${faction.name} by bribing them.`,
       );
     }
     props.onClose();
