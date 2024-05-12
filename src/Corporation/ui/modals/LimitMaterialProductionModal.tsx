@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LimitMaterialProduction } from "../../Actions";
+import * as actions from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -27,7 +27,7 @@ export function LimitMaterialProductionModal(props: IProps): React.ReactElement 
   function limitMaterialProduction(): void {
     let qty = limit;
     if (qty === null) qty = -1;
-    LimitMaterialProduction(props.material, qty);
+    actions.limitMaterialProduction(props.material, qty);
     props.onClose();
   }
 

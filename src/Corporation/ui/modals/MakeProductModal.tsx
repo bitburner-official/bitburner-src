@@ -3,7 +3,7 @@ import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { IndustriesData } from "../../data/IndustryData";
 import { IndustryType } from "@enums";
-import { MakeProduct } from "../../Actions";
+import * as actions from "../../Actions";
 import { useCorporation, useDivision } from "../Context";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -46,7 +46,7 @@ export function MakeProductModal(props: IProps): React.ReactElement {
   function makeProduct(): void {
     if (isNaN(design) || isNaN(marketing)) return;
     try {
-      MakeProduct(corp, division, city, name, design, marketing);
+      actions.makeProduct(corp, division, city, name, design, marketing);
     } catch (err) {
       dialogBoxCreate(err + "");
     }

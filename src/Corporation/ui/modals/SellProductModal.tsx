@@ -7,7 +7,7 @@ import { Button, FormControlLabel, Switch, TextField, Tooltip, Typography } from
 import { Modal } from "../../../ui/React/Modal";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 
-import { SellProduct } from "../../Actions";
+import * as actions from "../../Actions";
 import { KEY } from "../../../utils/helpers/keyCodes";
 
 interface IProps {
@@ -30,7 +30,7 @@ export function SellProductModal(props: IProps): React.ReactElement {
 
   function sellProduct(): void {
     try {
-      SellProduct(props.product, props.city, iQty, px, checked);
+      actions.sellProduct(props.product, props.city, iQty, px, checked);
     } catch (err) {
       dialogBoxCreate(err + "");
     }

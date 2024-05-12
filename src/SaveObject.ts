@@ -36,7 +36,7 @@ import { v2APIBreak } from "./utils/v2APIBreak";
 import { Corporation } from "./Corporation/Corporation";
 import { Terminal } from "./Terminal";
 import { getRecordValues } from "./Types/Record";
-import { ExportMaterial } from "./Corporation/Actions";
+import { exportMaterial } from "./Corporation/Actions";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
 import { SaveData } from "./types";
 import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
@@ -692,7 +692,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
                 const targetDivision = Player.corporation.divisions.get(originalExport.division);
                 if (!targetDivision) throw new Error(`Target division ${originalExport.division} did not exist`);
                 // Set the export again. ExportMaterial throws on failure
-                ExportMaterial(targetDivision, originalExport.city, material, originalExport.amount);
+                exportMaterial(targetDivision, originalExport.city, material, originalExport.amount);
               } catch (e) {
                 anyExportsFailed = true;
                 // We just need the text error, not a full stack trace

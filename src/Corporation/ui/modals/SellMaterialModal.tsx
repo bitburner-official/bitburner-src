@@ -6,7 +6,7 @@ import { Button, FormControlLabel, Switch, TextField, Tooltip, Typography } from
 import { Modal } from "../../../ui/React/Modal";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 
-import { SellMaterial } from "../../Actions";
+import * as actions from "../../Actions";
 import { KEY } from "../../../utils/helpers/keyCodes";
 
 interface IProps {
@@ -23,7 +23,7 @@ export function SellMaterialModal(props: IProps): React.ReactElement {
 
   function sellMaterial(): void {
     try {
-      SellMaterial(props.mat, amt, price);
+      actions.sellMaterial(props.mat, amt, price);
     } catch (err) {
       dialogBoxCreate(err + "");
     }

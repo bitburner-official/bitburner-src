@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { Warehouse } from "../../Warehouse";
-import { SetSmartSupply, SetSmartSupplyOption } from "../../Actions";
+import { setSmartSupply, setSmartSupplyOption } from "../../Actions";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { useDivision } from "../Context";
@@ -26,7 +26,7 @@ function SSoption(props: ISSoptionProps): React.ReactElement {
     try {
       const matName = props.matName;
       const material = props.warehouse.materials[matName];
-      SetSmartSupplyOption(props.warehouse, material, newValue);
+      setSmartSupplyOption(props.warehouse, material, newValue);
     } catch (err) {
       dialogBoxCreate(err + "");
     }
@@ -39,7 +39,7 @@ function SSoption(props: ISSoptionProps): React.ReactElement {
     try {
       const matName = props.matName;
       const material = props.warehouse.materials[matName];
-      SetSmartSupplyOption(props.warehouse, material, newValue);
+      setSmartSupplyOption(props.warehouse, material, newValue);
     } catch (err) {
       dialogBoxCreate(err + "");
     }
@@ -74,7 +74,7 @@ export function SmartSupplyModal(props: IProps): React.ReactElement {
 
   // Smart Supply Checkbox
   function smartSupplyOnChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    SetSmartSupply(props.warehouse, e.target.checked);
+    setSmartSupply(props.warehouse, e.target.checked);
     rerender();
   }
 

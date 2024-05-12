@@ -4,7 +4,7 @@ import { formatPercent, formatShares } from "../../../ui/formatNumber";
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
 import { useCorporation } from "../Context";
-import { AcceptInvestmentOffer } from "../../Actions";
+import { acceptInvestmentOffer } from "../../Actions";
 
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -23,7 +23,7 @@ export function FindInvestorsModal(props: IProps): React.ReactElement {
   function findInvestors(): void {
     if (shares === 0) return;
     try {
-      AcceptInvestmentOffer(corp);
+      acceptInvestmentOffer(corp);
       dialogBoxCreate(
         <>
           <Typography>You accepted the investment offer.</Typography>

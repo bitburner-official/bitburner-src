@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { formatMultiplier, formatPercent } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { OfficeSpace } from "../../OfficeSpace";
-import { ThrowParty } from "../../Actions";
+import * as actions from "../../Actions";
 import { MoneyCost } from "../MoneyCost";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
@@ -37,7 +37,7 @@ export function ThrowPartyModal(props: IProps): React.ReactElement {
     } else if (!canParty) {
       dialogBoxCreate("You don't have enough company funds to throw a party!");
     } else {
-      const mult = ThrowParty(corp, props.office, cost);
+      const mult = actions.throwParty(corp, props.office, cost);
       // Each 10% multiplier gives an extra flat +1 to morale to make recovering from low morale easier.
       const increase = mult > 1 ? (mult - 1) * 0.1 : 0;
 

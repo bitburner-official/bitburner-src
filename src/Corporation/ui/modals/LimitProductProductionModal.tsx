@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import type { CityName } from "@enums";
 import type { Product } from "../../Product";
-import { LimitProductProduction } from "../../Actions";
+import * as actions from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -29,7 +29,7 @@ export function LimitProductProductionModal(props: IProps): React.ReactElement {
   function limitProductProduction(): void {
     let qty = limit;
     if (qty === null) qty = -1;
-    LimitProductProduction(props.product, props.city, qty);
+    actions.limitProductProduction(props.product, props.city, qty);
     props.onClose();
   }
 
