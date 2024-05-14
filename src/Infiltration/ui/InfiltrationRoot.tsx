@@ -5,6 +5,8 @@ import { Page } from "../../ui/Router";
 import { calculateDifficulty, calculateReward } from "../formulas/game";
 import { Game } from "./Game";
 import { Intro } from "./Intro";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
+
 interface IProps {
   location: Location;
 }
@@ -12,7 +14,20 @@ interface IProps {
 export function InfiltrationRoot(props: IProps): React.ReactElement {
   const [start, setStart] = useState(false);
 
-  if (props.location.infiltrationData === undefined) throw new Error("Trying to do infiltration on invalid location.");
+  if (!props.location.infiltrationData) {
+    /**
+     * Using setTimeout is unnecessary, because we can just call cancel() and dialogBoxCreate(). However, without
+     * setTimeout, we will go to City page (in "cancel" function) and update GameRoot while still rendering
+     * InfiltrationRoot. React will complain: "Warning: Cannot update a component (`GameRoot`) while rendering a
+     * different component (`InfiltrationRoot`)".
+     */
+    setTimeout(() => {
+      cancel();
+      dialogBoxCreate(`You tried to infiltrate an invalid location: ${props.location.name}`);
+    }, 100);
+    return <></>;
+  }
+
   const startingSecurityLevel = props.location.infiltrationData.startingSecurityLevel;
   const difficulty = calculateDifficulty(startingSecurityLevel);
   const reward = calculateReward(startingSecurityLevel);
@@ -33,6 +48,7 @@ export function InfiltrationRoot(props: IProps): React.ReactElement {
       ) : (
         <Intro
           Location={props.location}
+          StartingDifficulty={startingSecurityLevel}
           Difficulty={difficulty}
           MaxLevel={props.location.infiltrationData.maxClearanceLevel}
           start={() => setStart(true)}

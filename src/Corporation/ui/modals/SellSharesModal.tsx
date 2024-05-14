@@ -7,7 +7,7 @@ import { useCorporation } from "../Context";
 import * as corpConstants from "../../data/Constants";
 import Typography from "@mui/material/Typography";
 import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
-import { SellShares } from "../../Actions";
+import { sellShares } from "../../Actions";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import { sellSharesFailureReason } from "../../helpers";
@@ -30,7 +30,7 @@ export function SellSharesModal(props: IProps): React.ReactElement {
   function sell(): void {
     if (disabledText) return;
     try {
-      SellShares(corp, shares);
+      sellShares(corp, shares);
       dialogBoxCreate(
         <>
           <Typography>

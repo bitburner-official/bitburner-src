@@ -4,7 +4,7 @@ import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
 import { MoneyRate } from "../../../ui/React/MoneyRate";
 import * as corpConstants from "../../data/Constants";
-import { IssueDividends } from "../../Actions";
+import * as actions from "../../Actions";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -26,7 +26,7 @@ export function IssueDividendsModal(props: IProps): React.ReactElement {
     if (!canIssue) return;
     if (percent === null) return;
     try {
-      IssueDividends(corp, percent / 100);
+      actions.issueDividends(corp, percent / 100);
     } catch (err) {
       dialogBoxCreate(err + "");
     }

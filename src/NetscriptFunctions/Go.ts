@@ -18,6 +18,7 @@ import {
   getGameState,
   getLiberties,
   getOpponentNextMove,
+  getStats,
   getValidMoves,
   handlePassTurn,
   makePlayerMove,
@@ -84,6 +85,9 @@ export function NetscriptGo(): InternalAPI<NSGo> {
       },
       getControlledEmptyNodes: () => () => {
         return getControlledEmptyNodes();
+      },
+      getStats: () => () => {
+        return getStats();
       },
     },
     cheat: {

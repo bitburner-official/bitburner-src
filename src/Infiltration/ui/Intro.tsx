@@ -3,10 +3,13 @@ import { Box, Button, Container, Paper, Tooltip, Typography } from "@mui/materia
 import React from "react";
 import { Location } from "../../Locations/Location";
 import { Settings } from "../../Settings/Settings";
-import { formatNumberNoSuffix } from "../../ui/formatNumber";
+import { formatHp, formatNumberNoSuffix } from "../../ui/formatNumber";
+import { Player } from "@player";
+import { calculateDamageAfterFailingInfiltration } from "../utils";
 
 interface IProps {
   Location: Location;
+  StartingDifficulty: number;
   Difficulty: number;
   MaxLevel: number;
   start: () => void;
@@ -56,6 +59,14 @@ export function Intro(props: IProps): React.ReactElement {
         <Typography variant="h4">
           Infiltrating <b>{props.Location.name}</b>
         </Typography>
+
+        <Typography variant="h6">
+          <b>HP: {`${formatHp(Player.hp.current)} / ${formatHp(Player.hp.max)}`}</b>
+        </Typography>
+        <Typography variant="h6">
+          <b>Lose {formatHp(calculateDamageAfterFailingInfiltration(props.StartingDifficulty))} HP for each failure</b>
+        </Typography>
+
         <Typography variant="h6">
           <b>Maximum Level: </b>
           {props.MaxLevel}

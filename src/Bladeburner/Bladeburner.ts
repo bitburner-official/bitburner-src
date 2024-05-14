@@ -33,7 +33,7 @@ import { Factions } from "../Faction/Factions";
 import { calculateHospitalizationCost } from "../Hospital/Hospital";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Settings } from "../Settings/Settings";
-import { getTimestamp } from "../utils/helpers/getTimestamp";
+import { formatTime } from "../utils/helpers/formatTime";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfiltrateWork";
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
@@ -185,7 +185,9 @@ export class Bladeburner {
 
   log(input: string): void {
     // Adds a timestamp and then just calls postToConsole
-    this.postToConsole(`[${getTimestamp()}] ${input}`);
+    this.postToConsole(
+      `[${formatTime(Settings.TimestampsFormat !== "" ? Settings.TimestampsFormat : "yyyy-MM-dd HH:mm:ss")}] ${input}`,
+    );
   }
 
   resetAction(): void {

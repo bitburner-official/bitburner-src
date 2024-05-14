@@ -10,7 +10,7 @@ import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { IndustriesData } from "../data/IndustryData";
 import { IndustryType } from "@enums";
 import { useCorporation } from "./Context";
-import { NewDivision } from "../Actions";
+import { createDivision } from "../Actions";
 
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { KEY } from "../../utils/helpers/keyCodes";
@@ -38,7 +38,7 @@ export function NewDivisionTab(props: IProps): React.ReactElement {
   function newDivision(): void {
     if (disabledText) return;
     try {
-      NewDivision(corp, industry, name);
+      createDivision(corp, industry, name);
     } catch (err) {
       dialogBoxCreate(err + "");
       return;

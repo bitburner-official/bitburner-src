@@ -51,11 +51,17 @@ export type PointState = {
   y: number;
 };
 
-export type Play = {
-  type: GoPlayType;
-  x: number | null;
-  y: number | null;
-};
+export type Play =
+  | {
+      type: GoPlayType.move;
+      x: number;
+      y: number;
+    }
+  | {
+      type: GoPlayType.gameOver | GoPlayType.pass;
+      x: null;
+      y: null;
+    };
 
 export type Neighbor = {
   north: PointState | null;
@@ -78,4 +84,14 @@ export type OpponentStats = {
   oldWinStreak: number;
   highestWinStreak: number;
   favor: number;
+};
+
+export type SimpleOpponentStats = {
+  wins: number;
+  losses: number;
+  winStreak: number;
+  highestWinStreak: number;
+  favor: number;
+  bonusPercent: number;
+  bonusDescription: string;
 };

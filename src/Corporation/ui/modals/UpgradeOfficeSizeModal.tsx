@@ -3,7 +3,7 @@ import { formatMoney } from "../../../ui/formatNumber";
 import * as corpConstants from "../../data/Constants";
 import { OfficeSpace } from "../../OfficeSpace";
 import { Corporation } from "../../Corporation";
-import { UpgradeOfficeSize } from "../../Actions";
+import { upgradeOfficeSize } from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
@@ -29,7 +29,7 @@ function UpgradeSizeButton(props: IUpgradeButton): React.ReactElement {
       return;
     }
 
-    UpgradeOfficeSize(corp, props.office, increase);
+    upgradeOfficeSize(corp, props.office, increase);
     props.rerender();
     props.onClose();
   }

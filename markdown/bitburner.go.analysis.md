@@ -17,5 +17,7 @@ analysis: {
     getLiberties(): number[][];
 
     getControlledEmptyNodes(): string[];
+
+    getStats(): Partial<Record<GoOpponent, SimpleOpponentStats>>;
   };
 ```

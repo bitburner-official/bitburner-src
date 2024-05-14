@@ -8,7 +8,7 @@ import { floor } from "./boardState";
 type rand = (n1: number, n2: number) => number;
 
 export function addObstacles(boardState: BoardState) {
-  const rng = new WHRNG(Player.totalPlaytime);
+  const rng = new WHRNG(Player.totalPlaytime ?? new Date().getTime());
   const random = (n1: number, n2: number) => n1 + floor((n2 - n1 + 1) * rng.random());
 
   const shouldRemoveCorner = !random(0, 4);

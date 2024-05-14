@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { MathJax } from "better-react-mathjax";
 
 import { CorpUnlockName, IndustryType } from "@enums";
-import { HireAdVert } from "../Actions";
+import { hireAdVert } from "../Actions";
 import { formatBigNumber, formatCorpMultiplier } from "../../ui/formatNumber";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { MakeProductModal } from "./modals/MakeProductModal";
@@ -226,7 +226,7 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
           }
           disabledTooltip={division.getAdVertCost() > corp.funds ? "Insufficient corporation funds" : ""}
           onClick={() => {
-            HireAdVert(corp, division);
+            hireAdVert(corp, division);
             props.rerender();
           }}
         >

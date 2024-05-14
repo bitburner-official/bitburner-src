@@ -50,7 +50,6 @@ export function endGoGame(boardState: BoardState) {
     type: GoPlayType.gameOver,
     x: null,
     y: null,
-    success: true,
   });
 
   boardState.previousPlayer = null;

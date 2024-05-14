@@ -10,7 +10,7 @@ import { NumberInput } from "../../../ui/React/NumberInput";
 import Box from "@mui/material/Box";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { isPositiveInteger } from "../../../types";
-import { GoPublic } from "../../Actions";
+import * as actions from "../../Actions";
 
 interface IProps {
   open: boolean;
@@ -36,7 +36,7 @@ export function GoPublicModal(props: IProps): React.ReactElement {
   function goPublic(): void {
     if (disabledText) return;
     try {
-      GoPublic(corp, shares);
+      actions.goPublic(corp, shares);
       dialogBoxCreate(
         <Typography>
           <b>{corp.name}</b> went public and earned <Money money={shares * initialSharePrice} /> in its IPO.

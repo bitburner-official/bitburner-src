@@ -18,7 +18,7 @@ import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 import { CorruptableText } from "../../ui/React/CorruptableText";
-import { getAIMove } from "../effects/netscriptGoImplementation";
+import { makeAIMove } from "../boardAnalysis/goAI";
 
 interface GoGameboardWrapperProps {
   showInstructions: () => void;
@@ -45,20 +45,12 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   const [showPriorMove, setShowPriorMove] = useState(false);
   const [scoreOpen, setScoreOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [waitingOnAI, setWaitingOnAI] = useState(false);
 
   const classes = boardStyles();
   const boardSize = boardState.board[0].length;
   const currentPlayer = boardState.previousPlayer === GoColor.white ? GoColor.black : GoColor.white;
+  const waitingOnAI = boardState.previousPlayer === GoColor.black && boardState.ai !== GoOpponent.none;
   const score = getScore(boardState);
-
-  // Only run this once on first component mount, to handle scenarios where the game was saved or closed while waiting on the AI to make a move
-  useEffect(() => {
-    if (boardState.previousPlayer === GoColor.black && !waitingOnAI && boardState.ai !== GoOpponent.none) {
-      takeAiTurn(Go.currentGame);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // Do not implement useCallback for this function without ensuring GoGameboard still rerenders for every move
   // Currently this function changing is what triggers a GoGameboard rerender, which is needed
@@ -117,8 +109,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   }
 
   async function takeAiTurn(boardState: BoardState) {
-    setWaitingOnAI(true);
-    const move = await getAIMove(boardState);
+    const move = await makeAIMove(boardState);
 
     if (move.type === GoPlayType.pass) {
       SnackbarEvents.emit(`The opponent passes their turn; It is now your turn to move.`, ToastVariant.WARNING, 4000);
@@ -130,7 +121,6 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
       setScoreOpen(true);
       return;
     }
-    setWaitingOnAI(false);
   }
 
   function newSubnet() {
@@ -166,13 +156,12 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
   function setTraditional(newValue: boolean) {
     Settings.GoTraditionalStyle = newValue;
+    rerender();
   }
 
   const endGameAvailable = boardState.previousPlayer === GoColor.white && boardState.passCount;
   const noLegalMoves =
     boardState.previousPlayer === GoColor.white && !getAllValidMoves(boardState, GoColor.black).length;
-  const disablePassButton =
-    Go.currentGame.ai !== GoOpponent.none && boardState.previousPlayer === GoColor.black && waitingOnAI;
 
   const scoreBoxText = boardState.previousBoards.length
     ? `Score: Black: ${score[GoColor.black].sum} White: ${score[GoColor.white].sum}`
@@ -185,7 +174,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     if (boardState.previousPlayer === null) {
       return "View Final Score";
     }
-    if (boardState.previousPlayer === GoColor.black && waitingOnAI) {
+    if (waitingOnAI) {
       return "Waiting for opponent";
     }
     const currentPlayer = boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
@@ -241,7 +230,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
           </Button>
           <Typography className={classes.scoreBox}>{scoreBoxText}</Typography>
           <Button
-            disabled={disablePassButton}
+            disabled={waitingOnAI}
             onClick={passPlayerTurn}
             className={endGameAvailable || noLegalMoves ? classes.buttonHighlight : classes.resetBoard}
           >

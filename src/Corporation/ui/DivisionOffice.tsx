@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 import { OfficeSpace } from "../OfficeSpace";
 import { CorpUnlockName, CorpEmployeeJob, CorpUpgradeName, CorpProductResearchName } from "@enums";
-import { BuyTea } from "../Actions";
+import { buyTea } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";
 import { formatBigNumber, formatCorpStat, formatCorpMultiplier } from "../../ui/formatNumber";
@@ -375,7 +375,7 @@ export function DivisionOffice(props: OfficeProps): React.ReactElement {
             <ButtonWithTooltip
               normalTooltip={"Provide your employees with tea to increase their energy"}
               disabledTooltip={teaDisabledText}
-              onClick={() => BuyTea(corp, props.office)}
+              onClick={() => buyTea(corp, props.office)}
             >
               {props.office.teaPending ? (
                 "Buying Tea"
