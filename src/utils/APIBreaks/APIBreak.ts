@@ -9,7 +9,7 @@ import { dialogBoxCreate as dialogBoxCreateOriginal } from "../../ui/React/Dialo
 import { Terminal } from "../../Terminal";
 
 // Temporary until fixing alerts manager to store alerts outside of react scope
-const dialogBoxCreate = (text: string) => setTimeout(() => dialogBoxCreateOriginal(text), 1000);
+const dialogBoxCreate = (text: string) => setTimeout(() => dialogBoxCreateOriginal(text), 2000);
 
 /** For a single server, map of script filepath to an array of line numbers where impacted functions were detected */
 type ScriptImpactMap = Map<ScriptFilePath, number[]>;
@@ -74,7 +74,7 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
   if (!details.length) return;
   const textFileName = resolveTextFilePath(`APIBreakInfo-${version}.txt`);
   if (!textFileName) throw new Error("Version string created an invalid API break file name");
-  Player.getHomeComputer().writeToTextFile(textFileName, `API BREAK INFO FOR ${version}\n\n${details.join("\n\n")}`);
+  Player.getHomeComputer().writeToTextFile(textFileName, `API BREAK INFO FOR ${version}\n\n${details.join("\n\n\n\n")}`);
   Terminal.warn(`AN API BREAK FROM VERSION ${version} MAY HAVE AFFECTED SOME OF YOUR SCRIPTS.`);
   Terminal.warn(`INFORMATION ABOUT THIS POTENTIAL IMPACT HAS BEEN LOGGED IN ${textFileName} ON YOUR HOME COMPUTER.`);
   dialogBoxCreate(
