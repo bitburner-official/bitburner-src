@@ -17,5 +17,7 @@ interface InfiltrationLocation
 |  --- | --- | --- | --- |
 |  [difficulty](./bitburner.infiltrationlocation.difficulty.md) |  | number |  |
 |  [location](./bitburner.infiltrationlocation.location.md) |  | [ILocation](./bitburner.ilocation.md) |  |
+|  [maxClearanceLevel](./bitburner.infiltrationlocation.maxclearancelevel.md) |  | number |  |
 |  [reward](./bitburner.infiltrationlocation.reward.md) |  | [InfiltrationReward](./bitburner.infiltrationreward.md) |  |
+|  [startingSecurityLevel](./bitburner.infiltrationlocation.startingsecuritylevel.md) |  | number |  |
 

@@ -5,13 +5,15 @@ import { Box, Button, MenuItem, Select, SelectChangeEvent, Typography } from "@m
 
 import { Player } from "@player";
 import { Factions } from "../../../Faction/Factions";
-import * as corpConstants from "../../data/Constants";
 import { formatReputation } from "../../../ui/formatNumber";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import { getEnumHelper } from "../../../utils/EnumHelper";
+import { bribeAmountPerReputation } from "../../data/Constants";
+import * as actions from "../../Actions";
+import { Settings } from "../../../Settings/Settings";
 
 interface IProps {
   open: boolean;
@@ -20,9 +22,9 @@ interface IProps {
 
 export function BribeFactionModal(props: IProps): React.ReactElement {
   const factions = Player.factions.filter((name) => {
-    const info = Factions[name].getInfo();
-    if (!info.offersWork()) return false;
-    if (Player.hasGangWith(name)) return false;
+    if (!Factions[name].getInfo().offersWork()) {
+      return false;
+    }
     return true;
   });
   const corp = useCorporation();
@@ -35,46 +37,45 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
     setSelectedFaction(event.target.value);
   }
 
-  function repGain(money: number): number {
-    return money / corpConstants.bribeAmountPerReputation;
-  }
-
   function getRepText(money: number): string {
     if (money === 0) return "";
     if (isNaN(money) || money < 0) {
-      return "ERROR: Invalid value(s) entered";
+      return "Invalid value.";
     } else if (corp.funds < money) {
-      return "ERROR: You do not have this much money to bribe with";
+      return "Your corporation does not have enough funds.";
     } else {
-      return (
-        "You will gain " + formatReputation(repGain(money)) + " reputation with " + selectedFaction + " with this bribe"
-      );
+      return `You will gain ${formatReputation(
+        money / bribeAmountPerReputation,
+      )} reputation with ${selectedFaction} with this bribe.`;
     }
   }
 
   function bribe(money: number): void {
-    if (!selectedFaction) return;
-    const fac = Factions[selectedFaction];
-    if (disabled) return;
-    const rep = repGain(money);
-    dialogBoxCreate(`You gained ${formatReputation(rep)} reputation with ${fac.name} by bribing them.`);
-    fac.playerReputation += rep;
-    corp.loseFunds(money, "bribery");
+    if (!selectedFaction || disabled) {
+      return;
+    }
+    const faction = Factions[selectedFaction];
+    const reputationGain = actions.bribe(corp, money, faction.name);
+    if (reputationGain > 0) {
+      dialogBoxCreate(
+        `You gained ${formatReputation(reputationGain)} reputation with ${faction.name} by bribing them.`,
+      );
+    }
     props.onClose();
   }
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        You can use Corporation funds or stock shares to bribe Faction Leaders in exchange for faction reputation.
+        You can use corporation funds to bribe faction leaders in exchange for faction reputation.
       </Typography>
       <Box display="flex" alignItems="center">
-        <Typography>Faction:</Typography>
+        <Typography style={{ whiteSpace: "pre" }}>Faction: </Typography>
         <Select value={selectedFaction} onChange={changeFaction}>
           {factions.map((name) => {
-            const info = Factions[name].getInfo();
-            if (!info.offersWork()) return;
-            if (Player.hasGangWith(name)) return;
+            if (!Factions[name].getInfo().offersWork()) {
+              return;
+            }
             return (
               <MenuItem key={name} value={name}>
                 {name}
@@ -83,8 +84,14 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
           })}
         </Select>
       </Box>
-      <Typography>{getRepText(money ? money : 0)}</Typography>
-      <NumberInput onChange={setMoney} placeholder="Corporation funds" />
+      <Typography color={!disabled ? Settings.theme.primary : Settings.theme.error}>
+        {getRepText(money ? money : 0)}
+      </Typography>
+      <NumberInput
+        onChange={setMoney}
+        placeholder="Corporation funds"
+        defaultValue={!disabled ? money.toExponential() : ""}
+      />
       <Button disabled={disabled} sx={{ mx: 1 }} onClick={() => bribe(money ? money : 0)}>
         Bribe
       </Button>

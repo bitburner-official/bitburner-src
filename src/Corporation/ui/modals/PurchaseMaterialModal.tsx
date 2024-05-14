@@ -4,7 +4,7 @@ import { MaterialInfo } from "../../MaterialInfo";
 import { Warehouse } from "../../Warehouse";
 import { Material } from "../../Material";
 import { formatMatPurchaseAmount } from "../../../ui/formatNumber";
-import { BulkPurchase, BuyMaterial } from "../../Actions";
+import * as actions from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
 import { useCorporation, useDivision } from "../Context";
@@ -66,7 +66,7 @@ function BulkPurchaseSection(props: IBPProps): React.ReactElement {
 
   function bulkPurchase(): void {
     try {
-      BulkPurchase(corp, division, props.warehouse, props.mat, parseFloat(buyAmt));
+      actions.bulkPurchase(corp, division, props.warehouse, props.mat, parseFloat(buyAmt));
     } catch (err) {
       dialogBoxCreate(err + "");
     }
@@ -118,7 +118,7 @@ export function PurchaseMaterialModal(props: IProps): React.ReactElement {
   function purchaseMaterial(): void {
     if (buyAmt === null) return;
     try {
-      BuyMaterial(division, props.mat, buyAmt);
+      actions.buyMaterial(division, props.mat, buyAmt);
     } catch (err) {
       dialogBoxCreate(err + "");
     }

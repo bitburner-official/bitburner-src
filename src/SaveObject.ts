@@ -36,7 +36,7 @@ import { v2APIBreak } from "./utils/v2APIBreak";
 import { Corporation } from "./Corporation/Corporation";
 import { Terminal } from "./Terminal";
 import { getRecordValues } from "./Types/Record";
-import { ExportMaterial } from "./Corporation/Actions";
+import { exportMaterial } from "./Corporation/Actions";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
 import { SaveData } from "./types";
 import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
@@ -44,6 +44,7 @@ import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
 import { downloadContentAsFile } from "./utils/FileUtils";
 import { showAPIBreaks } from "./utils/APIBreaks/APIBreak";
 import { breakInfos261 } from "./utils/APIBreaks/2.6.1";
+import { handleGetSaveDataError } from "./Netscript/ErrorMessages";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -125,7 +126,13 @@ class BitburnerSaveObject {
   async saveGame(emitToastEvent = true): Promise<void> {
     const savedOn = new Date().getTime();
     Player.lastSave = savedOn;
-    const saveData = await this.getSaveData();
+    let saveData;
+    try {
+      saveData = await this.getSaveData();
+    } catch (error) {
+      handleGetSaveDataError(error);
+      return;
+    }
     try {
       await save(saveData);
     } catch (error) {
@@ -159,7 +166,13 @@ class BitburnerSaveObject {
   }
 
   async exportGame(): Promise<void> {
-    const saveData = await this.getSaveData();
+    let saveData;
+    try {
+      saveData = await this.getSaveData();
+    } catch (error) {
+      handleGetSaveDataError(error);
+      return;
+    }
     const filename = this.getSaveFileName();
     downloadContentAsFile(saveData, filename);
   }
@@ -681,7 +694,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
                 const targetDivision = Player.corporation.divisions.get(originalExport.division);
                 if (!targetDivision) throw new Error(`Target division ${originalExport.division} did not exist`);
                 // Set the export again. ExportMaterial throws on failure
-                ExportMaterial(targetDivision, originalExport.city, material, originalExport.amount);
+                exportMaterial(targetDivision, originalExport.city, material, originalExport.amount);
               } catch (e) {
                 anyExportsFailed = true;
                 // We just need the text error, not a full stack trace

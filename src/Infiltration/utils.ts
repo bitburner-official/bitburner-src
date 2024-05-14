@@ -1,4 +1,6 @@
 import { KEY } from "../utils/helpers/keyCodes";
+import { Player } from "@player";
+import { AugmentationName } from "@enums";
 
 export function random(min: number, max: number): number {
   return Math.random() * (max - min) + min;
@@ -26,4 +28,8 @@ export function getArrow(event: KeyboardEvent): Arrow | undefined {
     case KEY.D:
       return rightArrowSymbol;
   }
+}
+
+export function calculateDamageAfterFailingInfiltration(startingDifficulty: number): number {
+  return startingDifficulty * 3 * (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 0.5 : 1);
 }

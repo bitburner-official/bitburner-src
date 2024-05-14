@@ -1,5 +1,5 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import { Infiltration as NetscriptInfiltation, InfiltrationLocation, ILocation } from "@nsdefs";
+import { Infiltration as NetscriptInfiltation, InfiltrationLocation } from "@nsdefs";
 import { FactionName, LocationName } from "@enums";
 import { Location } from "../Locations/Location";
 import { Locations } from "../Locations/Locations";
@@ -29,13 +29,18 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
     const reward = calculateReward(startingSecurityLevel);
     const maxLevel = location.infiltrationData.maxClearanceLevel;
     return {
-      location: structuredClone(location) as ILocation,
+      location: {
+        city: location.city!,
+        name: location.name,
+      },
       reward: {
         tradeRep: calculateTradeInformationRepReward(reward, maxLevel, startingSecurityLevel),
         sellCash: calculateSellInformationCashReward(reward, maxLevel, startingSecurityLevel),
         SoARep: calculateInfiltratorsRepReward(Factions[FactionName.ShadowsOfAnarchy], startingSecurityLevel),
       },
       difficulty: difficulty,
+      maxClearanceLevel: location.infiltrationData.maxClearanceLevel,
+      startingSecurityLevel: location.infiltrationData.startingSecurityLevel,
     };
   };
   return {

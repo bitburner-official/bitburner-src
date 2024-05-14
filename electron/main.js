@@ -206,7 +206,7 @@ app.on("ready", async () => {
     if ((method === "GET" && relativePath.startsWith("dist")) || relativePath.match(/^[a-zA-Z-_]*\.html/)) {
       return callback(filePath);
     }
-    log.error("Tried to access a page outside sandbox.");
+    log.error(`Tried to access a page outside the sandbox. Url: ${url}. Method: ${method}.`);
     callback(path.join(__dirname, "fileError.txt"));
   });
 

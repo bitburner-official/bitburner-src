@@ -7,7 +7,7 @@ import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
 import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import { NumberInput } from "../../../ui/React/NumberInput";
-import { BuyBackShares } from "../../Actions";
+import { buyBackShares } from "../../Actions";
 import { KEY } from "../../../utils/helpers/keyCodes";
 import { buybackSharesFailureReason } from "../../helpers";
 
@@ -29,7 +29,7 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
   function buy(): void {
     if (disabledText) return;
     try {
-      BuyBackShares(corp, shares);
+      buyBackShares(corp, shares);
       dialogBoxCreate(
         <>
           <Typography>

@@ -4,7 +4,7 @@ import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Material } from "../../Material";
 import { Export } from "../../Export";
 import { Division } from "../../Division";
-import { ExportMaterial } from "../../Actions";
+import * as actions from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";
 import { useCorporation } from "../Context";
 import { isRelevantMaterial } from "../Helpers";
@@ -58,7 +58,7 @@ export function ExportModal(props: ExportModalProps): React.ReactElement {
   function exportMaterial(): void {
     try {
       if (!targetDivision || !targetCity) return;
-      ExportMaterial(targetDivision, targetCity, props.mat, exportAmount);
+      actions.exportMaterial(targetDivision, targetCity, props.mat, exportAmount);
     } catch (err) {
       dialogBoxCreate(err + "");
     }

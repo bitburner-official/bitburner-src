@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import { KEY } from "../../../utils/helpers/keyCodes";
-import { IssueNewShares } from "../../Actions";
+import * as actions from "../../Actions";
 import * as corpConstants from "../../data/Constants";
 import { issueNewSharesFailureReason } from "../../helpers";
 
@@ -39,7 +39,7 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
   function issueNewShares(): void {
     if (disabledText) return;
     try {
-      const [profit, newShares, privateShares] = IssueNewShares(corp, shares);
+      const [profit, newShares, privateShares] = actions.issueNewShares(corp, shares);
       dialogBoxCreate(
         <>
           <Typography>

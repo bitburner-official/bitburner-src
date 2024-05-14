@@ -2,10 +2,7 @@ import React, { useEffect } from "react";
 
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
-import ArrowForwardIos from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIos from "@mui/icons-material/ArrowBackIos";
 import { ITutorialEvents } from "./ITutorialEvents";
 import { CopyableText } from "../React/CopyableText";
 
@@ -558,17 +555,18 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     <>
       <Paper square sx={{ maxWidth: "70vw", p: 2 }}>
         {content.content}
+        <br />
         {step !== iTutorialSteps.DocumentationPageInfo && (
           <>
             {step !== iTutorialSteps.Start && (
-              <IconButton onClick={iTutorialPrevStep} aria-label="previous">
-                <ArrowBackIos />
-              </IconButton>
+              <Button onClick={iTutorialPrevStep} aria-label="previous" style={{ marginRight: "1em" }}>
+                Previous
+              </Button>
             )}
             {(content.canNext || ITutorial.stepIsDone[step]) && (
-              <IconButton onClick={iTutorialNextStep} aria-label="next">
-                <ArrowForwardIos />
-              </IconButton>
+              <Button onClick={iTutorialNextStep} aria-label="next">
+                Next
+              </Button>
             )}
           </>
         )}

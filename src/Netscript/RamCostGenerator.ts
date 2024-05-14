@@ -260,6 +260,7 @@ const go = {
     getChains: 16,
     getLiberties: 16,
     getControlledEmptyNodes: 16,
+    getStats: 0,
   },
   cheat: {
     getCheatSuccessChance: 1,

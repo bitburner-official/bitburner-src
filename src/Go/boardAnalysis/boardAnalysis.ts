@@ -1,6 +1,7 @@
 import type { Board, BoardState, Neighbor, PointState, SimpleBoard } from "../Types";
 
 import { GoValidity, GoOpponent, GoColor } from "@enums";
+import { Go } from "../Go";
 import {
   findAdjacentPointsInChain,
   findNeighbors,
@@ -636,5 +637,29 @@ export function getColorOnSimpleBoard(simpleBoard: SimpleBoard, x: number, y: nu
   if (char === "X") return GoColor.black;
   if (char === "O") return GoColor.white;
   if (char === ".") return GoColor.empty;
+  return null;
+}
+
+/** Find a move made by the previous player, if present. */
+export function getPreviousMove(): [number, number] | null {
+  const priorBoard = Go.currentGame?.previousBoards[0];
+  if (Go.currentGame.passCount || !priorBoard) {
+    return null;
+  }
+
+  for (const rowIndexString in Go.currentGame.board) {
+    const row = Go.currentGame.board[+rowIndexString] ?? [];
+    for (const pointIndexString in row) {
+      const point = row[+pointIndexString];
+      const priorColor = point && priorBoard && getColorOnSimpleBoard(priorBoard, point.x, point.y);
+      const currentColor = point?.color;
+      const isPreviousPlayer = currentColor === Go.currentGame.previousPlayer;
+      const isChanged = priorColor !== currentColor;
+      if (priorColor && currentColor && isPreviousPlayer && isChanged) {
+        return [+rowIndexString, +pointIndexString];
+      }
+    }
+  }
+
   return null;
 }

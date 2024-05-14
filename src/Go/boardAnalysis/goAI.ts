@@ -1,9 +1,9 @@
-import type { Board, BoardState, EyeMove, Move, MoveOptions, PointState } from "../Types";
+import type { Board, BoardState, EyeMove, Move, MoveOptions, Play, PointState } from "../Types";
 
 import { Player } from "@player";
 import { AugmentationName, GoOpponent, GoColor, GoPlayType } from "@enums";
 import { opponentDetails } from "../Constants";
-import { findNeighbors, floor, isDefined, isNotNull, passTurn } from "../boardState/boardState";
+import { findNeighbors, floor, isDefined, isNotNull, makeMove, passTurn } from "../boardState/boardState";
 import {
   evaluateIfMoveIsValid,
   evaluateMoveResult,
@@ -19,6 +19,49 @@ import {
 import { findDisputedTerritory } from "./controlledTerritory";
 import { findAnyMatchedPatterns } from "./patternMatching";
 import { WHRNG } from "../../Casino/RNG";
+import { Go, GoEvents } from "../Go";
+
+let currentAITurn: Promise<Play> | null = null;
+
+/**
+ * Retrieves a move from the current faction in response to the player's move
+ */
+export function makeAIMove(boardState: BoardState): Promise<Play> {
+  // If AI is already taking their turn, return the existing turn.
+  if (currentAITurn) return currentAITurn;
+  currentAITurn = Go.nextTurn = getMove(boardState, GoColor.white, Go.currentGame.ai)
+    .then(async (play): Promise<Play> => {
+      if (boardState !== Go.currentGame) return play; //Stale game
+
+      // Handle AI passing
+      if (play.type === GoPlayType.pass) {
+        passTurn(boardState, GoColor.white);
+        // if passTurn called endGoGame, or the player has no valid moves left, the move should be shown as a game over
+        if (boardState.previousPlayer === null || !getAllValidMoves(boardState, GoColor.black).length) {
+          return { type: GoPlayType.gameOver, x: null, y: null };
+        }
+        return play;
+      }
+
+      // Handle AI making a move
+      await sleep(500);
+      const aiUpdatedBoard = makeMove(boardState, play.x, play.y, GoColor.white);
+
+      // Handle the AI breaking. This shouldn't ever happen.
+      if (!aiUpdatedBoard) {
+        boardState.previousPlayer = GoColor.white;
+        console.error(`Invalid AI move attempted: ${play.x}, ${play.y}. This should not happen.`);
+      }
+
+      return play;
+    })
+    .finally(() => {
+      currentAITurn = null;
+      GoEvents.emit();
+    });
+
+  return Go.nextTurn;
+}
 
 /*
   Basic GO AIs, each with some personality and weaknesses
@@ -38,7 +81,12 @@ import { WHRNG } from "../../Casino/RNG";
  *
  * @returns a promise that will resolve with a move (or pass) from the designated AI opponent.
  */
-export async function getMove(boardState: BoardState, player: GoColor, opponent: GoOpponent, rngOverride?: number) {
+export async function getMove(
+  boardState: BoardState,
+  player: GoColor,
+  opponent: GoOpponent,
+  rngOverride?: number,
+): Promise<Play & { type: GoPlayType.move | GoPlayType.pass }> {
   await sleep(300);
   const rng = new WHRNG(rngOverride || Player.totalPlaytime);
   const smart = isSmart(opponent, rng.random());
@@ -72,40 +120,10 @@ export async function getMove(boardState: BoardState, player: GoColor, opponent:
   if (chosenMove) {
     await sleep(200);
     //console.debug(`Non-priority move chosen: ${chosenMove.x} ${chosenMove.y}`);
-    return {
-      type: GoPlayType.move,
-      x: chosenMove.x,
-      y: chosenMove.y,
-    };
-  } else {
-    //console.debug("No valid moves found");
-    return handleNoMoveFound(boardState, player);
+    return { type: GoPlayType.move, x: chosenMove.x, y: chosenMove.y };
   }
-}
-
-/**
- * Detects if the AI is merely passing their turn, or if the game should end.
- *
- * Ends the game if the player passed on the previous turn before the AI passes,
- *   or if the player will be forced to pass their next turn after the AI passes.
- */
-function handleNoMoveFound(boardState: BoardState, player: GoColor) {
-  passTurn(boardState, player);
-  const opposingPlayer = player === GoColor.white ? GoColor.black : GoColor.white;
-  const remainingTerritory = getAllValidMoves(boardState, opposingPlayer).length;
-  if (remainingTerritory > 0 && boardState.passCount < 2) {
-    return {
-      type: GoPlayType.pass,
-      x: null,
-      y: null,
-    };
-  } else {
-    return {
-      type: GoPlayType.gameOver,
-      x: null,
-      y: null,
-    };
-  }
+  // Pass if no valid moves were found
+  return { type: GoPlayType.pass, x: null, y: null };
 }
 
 /**
