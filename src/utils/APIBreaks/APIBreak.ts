@@ -74,7 +74,10 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
   if (!details.length) return;
   const textFileName = resolveTextFilePath(`APIBreakInfo-${version}.txt`);
   if (!textFileName) throw new Error("Version string created an invalid API break file name");
-  Player.getHomeComputer().writeToTextFile(textFileName, `API BREAK INFO FOR ${version}\n\n${details.join("\n\n\n\n")}`);
+  Player.getHomeComputer().writeToTextFile(
+    textFileName,
+    `API BREAK INFO FOR ${version}\n\n${details.join("\n\n\n\n")}`,
+  );
   Terminal.warn(`AN API BREAK FROM VERSION ${version} MAY HAVE AFFECTED SOME OF YOUR SCRIPTS.`);
   Terminal.warn(`INFORMATION ABOUT THIS POTENTIAL IMPACT HAS BEEN LOGGED IN ${textFileName} ON YOUR HOME COMPUTER.`);
   dialogBoxCreate(
