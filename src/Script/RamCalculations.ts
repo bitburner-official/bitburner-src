@@ -208,7 +208,7 @@ export function checkInfiniteLoop(code: string): number {
     return -1;
   }
   function nodeHasTrueTest(node: acorn.Node): boolean {
-    return node.type === "Literal" && "raw" in node && node.raw === "true";
+    return node.type === "Literal" && "raw" in node && (node.raw === "true" || node.raw === "1");
   }
 
   function hasAwait(ast: acorn.Node): boolean {
