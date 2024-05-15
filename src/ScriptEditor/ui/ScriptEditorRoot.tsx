@@ -292,6 +292,7 @@ function Root(props: IProps): React.ReactElement {
         editorRef.current.setModel(currentScript.model);
         editorRef.current.setPosition(currentScript.lastPosition);
         editorRef.current.revealLineInCenter(currentScript.lastPosition.lineNumber);
+        parseCode(currentScript.code);
         editorRef.current.focus();
       }
     }
