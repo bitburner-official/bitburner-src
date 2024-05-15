@@ -231,8 +231,13 @@ export function checkInfiniteLoop(code: string): number {
     {},
     {
       WhileStatement: (node: Node, st: unknown, walkDeeper: walk.WalkerCallback<any>) => {
-        if (nodeHasTrueTest(node.test) && !hasAwait(node)) {
-          missingAwaitLine = (code.slice(0, node.start).match(/\n/g) || []).length + 1;
+				const previousLines = code.slice(0, node.start).trimEnd().split("\n");
+				const lineNumber = previousLines.length + 1;
+				if (previousLines[previousLines.length - 1].match(/^\s*\/\/\s*@ignore-infinite/)) {
+					return;
+				}
+				if (nodeHasTrueTest(node.test) && !hasAwait(node)) {
+          missingAwaitLine = lineNumber;
         } else {
           node.body && walkDeeper(node.body, st);
         }
