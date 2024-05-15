@@ -162,9 +162,8 @@ const Engine: {
   checkCounters: function () {
     if (Engine.Counters.checkFactionInvitations <= 0) {
       const invitedFactions = Player.checkForFactionInvitations();
-      if (invitedFactions.length > 0) {
-        const randFaction = invitedFactions[Math.floor(Math.random() * invitedFactions.length)];
-        inviteToFaction(randFaction);
+      for (const invitedFaction of invitedFactions) {
+        inviteToFaction(invitedFaction);
       }
       Engine.Counters.checkFactionInvitations = 100;
     }
