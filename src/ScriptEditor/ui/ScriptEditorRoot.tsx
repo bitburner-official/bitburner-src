@@ -116,25 +116,23 @@ function Root(props: IProps): React.ReactElement {
     if (editorRef.current === null || currentScript === null) return;
     if (!decorations) decorations = editorRef.current.createDecorationsCollection();
     if (!currentScript.path.endsWith(".js")) return;
-    const awaitWarning = checkInfiniteLoop(newCode);
-    if (awaitWarning !== -1) {
-      decorations.set([
-        {
-          range: {
-            startLineNumber: awaitWarning,
-            startColumn: 1,
-            endLineNumber: awaitWarning,
-            endColumn: 10,
-          },
-          options: {
-            isWholeLine: true,
-            glyphMarginClassName: "myGlyphMarginClass",
-            glyphMarginHoverMessage: {
-              value: "Possible infinite loop, await something.",
-            },
-          },
-        },
-      ]);
+    const possibleLines = checkInfiniteLoop(newCode);
+    if (possibleLines.length !== 0) {
+      decorations.set(possibleLines.map(awaitWarning => ({
+				range: {
+					startLineNumber: awaitWarning,
+					startColumn: 1,
+					endLineNumber: awaitWarning,
+					endColumn: 10,
+				},
+				options: {
+					isWholeLine: true,
+					glyphMarginClassName: "myGlyphMarginClass",
+					glyphMarginHoverMessage: {
+						value: "Possible infinite loop, await something or ignore it with '// @ignore-infinite' above the loop.",
+					},
+				},
+      })));
     } else decorations.clear();
   }
 

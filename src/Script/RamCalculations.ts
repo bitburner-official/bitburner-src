@@ -199,13 +199,13 @@ function parseOnlyRamCalculate(otherScripts: Map<ScriptFilePath, Script>, code: 
   return { cost: ram, entries: detailedCosts.filter((e) => e.cost > 0) };
 }
 
-export function checkInfiniteLoop(code: string): number {
+export function checkInfiniteLoop(code: string): number[] {
   let ast: acorn.Node;
   try {
     ast = parse(code, { sourceType: "module", ecmaVersion: "latest" });
   } catch (e) {
     // If code cannot be parsed, do not provide infinite loop detection warning
-    return -1;
+    return [];
   }
   function nodeHasTrueTest(node: acorn.Node): boolean {
     return node.type === "Literal" && "raw" in node && (node.raw === "true" || node.raw === "1");
@@ -225,7 +225,7 @@ export function checkInfiniteLoop(code: string): number {
     return hasAwait;
   }
 
-  let missingAwaitLine = -1;
+  const possibleLines: number[] = [];
   walk.recursive(
     ast,
     {},
@@ -237,7 +237,7 @@ export function checkInfiniteLoop(code: string): number {
 					return;
 				}
 				if (nodeHasTrueTest(node.test) && !hasAwait(node)) {
-          missingAwaitLine = lineNumber;
+          possibleLines.push(lineNumber);
         } else {
           node.body && walkDeeper(node.body, st);
         }
@@ -245,7 +245,7 @@ export function checkInfiniteLoop(code: string): number {
     },
   );
 
-  return missingAwaitLine;
+  return possibleLines;
 }
 
 interface ParseDepsResult {
