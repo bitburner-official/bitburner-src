@@ -7414,13 +7414,13 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Allows Unix-like flag parsing.
-   * 
+   *
    * We support 2 forms:
-   * 
+   *
    * - Short form: the flag contains only 1 character, e.g. -v.
-   * 
+   *
    * - Long form: the flag contains more than 1 character, e.g. --version.
-   * 
+   *
    * @example
    * ```js
    * export async function main(ns) {
