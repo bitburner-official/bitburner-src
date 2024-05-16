@@ -79,6 +79,7 @@ function calculateMults(): Multipliers {
         break;
       case GoOpponent.Tetrads:
         mults.strength *= effect;
+        mults.defense *= effect;
         mults.dexterity *= effect;
         mults.agility *= effect;
         break;

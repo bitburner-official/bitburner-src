@@ -39,7 +39,7 @@ export const opponentDetails = {
     description: "Martial AI",
     flavorText:
       "The faction known as Tetrads prefers to get up close and personal. Their combat style excels at circling around and cutting through their opponents, both on and off of the subnets.",
-    bonusDescription: "strength, dex, and agility levels",
+    bonusDescription: "strength, defense, dexterity, and agility levels",
     bonusPower: 0.7,
   },
   [GoOpponent.Daedalus]: {
