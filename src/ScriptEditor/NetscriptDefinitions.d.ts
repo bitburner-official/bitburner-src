@@ -7414,6 +7414,13 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Allows Unix-like flag parsing.
+   * 
+   * We support 2 forms:
+   * 
+   * - Short form: the flag contains only 1 character, e.g. -v.
+   * 
+   * - Long form: the flag contains more than 1 character, e.g. --version.
+   * 
    * @example
    * ```js
    * export async function main(ns) {
@@ -7422,22 +7429,25 @@ export interface NS {
    *     ['server', 'foodnstuff'], //  a default string means this flag is a string
    *     ['exclude', []], // a default array means this flag is a default array of string
    *     ['help', false], // a default boolean means this flag is a boolean
+   *     ['v', false], // short form
    *   ]);
    *   ns.tprint(data);
    * }
    *
    * // [home ~/]> run example.js
-   * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":false}
+   * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":false,"v":false}
    * // [home ~/]> run example.js --delay 3000
-   * // {"_":[],"server":"foodnstuff","exclude":[],"help":false,"delay":3000}
+   * // {"_":[],"delay":3000,"server":"foodnstuff","exclude":[],"help":false,"v":false}
    * // [home ~/]> run example.js --delay 3000 --server harakiri-sushi
-   * // {"_":[],"exclude":[],"help":false,"delay":3000,"server":"harakiri-sushi"}
+   * // {"_":[],"delay":3000,"server":"harakiri-sushi","exclude":[],"help":false,"v":false}
    * // [home ~/]> run example.js --delay 3000 --server harakiri-sushi hello world
-   * // {"_":["hello","world"],"exclude":[],"help":false,"delay":3000,"server":"harakiri-sushi"}
+   * // {"_":["hello","world"],"delay":3000,"server":"harakiri-sushi","exclude":[],"help":false,"v":false}
    * // [home ~/]> run example.js --delay 3000 --server harakiri-sushi hello world --exclude a --exclude b
-   * // {"_":["hello","world"],"help":false,"delay":3000,"server":"harakiri-sushi","exclude":["a","b"]}
-   * // [home ~/]> run example.script --help
-   * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":true}
+   * // {"_":["hello","world"],"delay":3000,"server":"harakiri-sushi","exclude":["a","b"],"help":false,"v":false}
+   * // [home ~/]> run example.js --help
+   * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":true,"v":false}
+   * // [home ~/]> run example.js -v
+   * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":false,"v":true}
    * ```
    */
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
