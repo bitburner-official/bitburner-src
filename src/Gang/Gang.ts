@@ -11,7 +11,7 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 
 import { GangMemberUpgrade } from "./GangMemberUpgrade";
 import { GangConstants } from "./data/Constants";
@@ -215,7 +215,7 @@ export class Gang {
         const others = gangs.filter((e) => {
           return e !== gangs[i];
         });
-        const other = getRandomInt(0, others.length - 1);
+        const other = getRandomIntInclusive(0, others.length - 1);
 
         const thisGang = gangs[i];
         const otherGang = others[other];

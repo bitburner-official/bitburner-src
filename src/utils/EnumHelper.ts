@@ -4,7 +4,7 @@ import type { NetscriptContext } from "../Netscript/APIWrapper";
 import * as allEnums from "../Enums";
 import { assertString } from "../Netscript/TypeAssertion";
 import { errorMessage } from "../Netscript/ErrorMessages";
-import { getRandomInt } from "./helpers/getRandomInt";
+import { getRandomIntInclusive } from "./helpers/getRandomIntInclusive";
 
 interface GetMemberOptions {
   /** Whether to use fuzzy matching on the input (case insensitive, ignore spaces and dashes) */
@@ -69,7 +69,7 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
   }
   // Get a random enum member
   random() {
-    const index = getRandomInt(0, this.valueArray.length - 1);
+    const index = getRandomIntInclusive(0, this.valueArray.length - 1);
     return this.valueArray[index];
   }
 }

@@ -3,7 +3,7 @@ import type { IReviverValue } from "../../utils/JSONReviver";
 import type { Availability } from "../Types";
 
 import { ActionClass, ActionParams } from "./Action";
-import { getRandomInt } from "../../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { clampInteger } from "../../utils/helpers/clampNumber";
 
 export type LevelableActionParams = ActionParams & {
@@ -37,7 +37,7 @@ export abstract class LevelableActionClass extends ActionClass {
     if (params.maxCount) this.maxCount = params.maxCount;
     if (params.difficultyFac) this.difficultyFac = params.difficultyFac;
     if (params.rewardFac) this.rewardFac = params.rewardFac;
-    this.count = getRandomInt(this.minCount, this.maxCount);
+    this.count = getRandomIntInclusive(this.minCount, this.maxCount);
     this.growthFunction = params.growthFunction;
   }
 
@@ -65,7 +65,7 @@ export abstract class LevelableActionClass extends ActionClass {
 
   /** Reset a levelable action's tracked stats */
   reset() {
-    this.count = getRandomInt(this.minCount, this.maxCount);
+    this.count = getRandomIntInclusive(this.minCount, this.maxCount);
     this.level = 1;
     this.maxLevel = 1;
     this.autoLevel = true;

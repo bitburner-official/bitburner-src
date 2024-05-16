@@ -23,7 +23,7 @@ import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
 import { JSONMap, JSONSet } from "../../Types/Jsonable";
 import { cyrb53 } from "../../utils/StringHelperFunctions";
-import { getRandomInt } from "../../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { CONSTANTS } from "../../Constants";
 import { Person } from "../Person";
 import { isMember } from "../../utils/EnumHelper";
@@ -142,7 +142,7 @@ export class PlayerObject extends Person implements IPlayer {
         navigator.userAgent +
         window.innerWidth +
         window.innerHeight +
-        getRandomInt(100, 999),
+        getRandomIntInclusive(100, 999),
     );
     this.lastAugReset = this.lastNodeReset = Date.now();
   }

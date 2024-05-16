@@ -3,7 +3,7 @@ import { CityName, CorpEmployeeJob, IndustryType } from "@enums";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { IndustryResearchTrees, IndustriesData } from "./data/IndustryData";
 import * as corpConstants from "./data/Constants";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { calculateEffectWithFactors } from "../utils/calculateEffectWithFactors";
 import { OfficeSpace } from "./OfficeSpace";
 import { Product } from "./Product";
@@ -254,7 +254,7 @@ export class Division {
   processProductMarket(marketCycles = 1): void {
     // Demand gradually decreases, and competition gradually increases
     for (const product of this.products.values()) {
-      let change = getRandomInt(0, 3) * 0.0004;
+      let change = getRandomIntInclusive(0, 3) * 0.0004;
       if (change === 0) continue;
 
       if (
@@ -985,7 +985,7 @@ export class Division {
     const awareness = (this.awareness + 3 * advMult) * (1.005 * advMult);
     this.awareness = Math.min(awareness, Number.MAX_VALUE);
 
-    const popularity = (this.popularity + 1 * advMult) * ((1 + getRandomInt(1, 3) / 200) * advMult);
+    const popularity = (this.popularity + 1 * advMult) * ((1 + getRandomIntInclusive(1, 3) / 200) * advMult);
     this.popularity = Math.min(popularity, Number.MAX_VALUE);
 
     ++this.numAdVerts;

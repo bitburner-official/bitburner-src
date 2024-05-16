@@ -1,6 +1,6 @@
 import { IMinMaxRange } from "../types";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 
 export const StockForecastInfluenceLimit = 5;
 
@@ -37,7 +37,7 @@ function toNumber(n: number | IMinMaxRange): number {
     }
     case "object": {
       const range = n;
-      value = getRandomInt(range.min, range.max);
+      value = getRandomIntInclusive(range.min, range.max);
       break;
     }
     default:
@@ -136,7 +136,7 @@ export class Stock {
     this.b = p.b;
     this.otlkMag = p.otlkMag;
     this.otlkMagForecast = this.getAbsoluteForecast();
-    this.cap = getRandomInt(this.price * 1e3, this.price * 25e3);
+    this.cap = getRandomIntInclusive(this.price * 1e3, this.price * 25e3);
     this.spreadPerc = toNumber(p.spreadPerc);
     this.shareTxForMovement = toNumber(p.shareTxForMovement);
     this.shareTxUntilMovement = this.shareTxForMovement;

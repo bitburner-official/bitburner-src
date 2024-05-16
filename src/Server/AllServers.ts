@@ -6,7 +6,7 @@ import { HacknetServer } from "../Hacknet/HacknetServer";
 
 import { IMinMaxRange } from "../types";
 import { createRandomIp } from "../utils/IPAddress";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { Reviver } from "../utils/JSONReviver";
 import { SpecialServers } from "./data/SpecialServers";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
@@ -133,7 +133,7 @@ export function initForeignServers(homeComputer: Server): void {
 
   const toNumber = (value: number | IMinMaxRange): number => {
     if (typeof value === "number") return value;
-    else return getRandomInt(value.min, value.max);
+    else return getRandomIntInclusive(value.min, value.max);
   };
 
   for (const metadata of serverMetadata) {

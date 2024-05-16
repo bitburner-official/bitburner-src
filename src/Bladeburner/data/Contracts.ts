@@ -1,6 +1,6 @@
 import { BladeContractName } from "@enums";
 import { Contract } from "../Actions/Contract";
-import { getRandomInt } from "../../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { assertLoadingType } from "../../utils/TypeAssertion";
 
 export function createContracts(): Record<BladeContractName, Contract> {
@@ -36,7 +36,7 @@ export function createContracts(): Record<BladeContractName, Contract> {
         intelligence: 1,
       },
       isStealth: true,
-      growthFunction: () => getRandomInt(5, 75) / 10,
+      growthFunction: () => getRandomIntInclusive(5, 75) / 10,
       minCount: 25,
     }),
     [BladeContractName.bountyHunter]: new Contract({
@@ -69,7 +69,7 @@ export function createContracts(): Record<BladeContractName, Contract> {
         intelligence: 0.9,
       },
       isKill: true,
-      growthFunction: () => getRandomInt(5, 75) / 10,
+      growthFunction: () => getRandomIntInclusive(5, 75) / 10,
       minCount: 5,
     }),
     [BladeContractName.retirement]: new Contract({
@@ -102,7 +102,7 @@ export function createContracts(): Record<BladeContractName, Contract> {
         intelligence: 0.9,
       },
       isKill: true,
-      growthFunction: () => getRandomInt(5, 75) / 10,
+      growthFunction: () => getRandomIntInclusive(5, 75) / 10,
       minCount: 5,
     }),
   };
