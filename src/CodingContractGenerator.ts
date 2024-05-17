@@ -140,11 +140,17 @@ function getRandomReward(): ICodingContractReward {
       // Get a random faction that player is a part of. That
       // faction must allow hacking contracts
       const numFactions = factionsThatAllowHacking.length;
-      const randFaction = factionsThatAllowHacking[getRandomIntInclusive(0, numFactions - 1)];
-      return { type: rewardType, name: randFaction };
+      // This check is unnecessary because sanitizeRewardType ensures that it won't happen. However, I'll still leave
+      // it here, just in case somebody else changes sanitizeRewardType without taking account of this check.
+      if (numFactions > 0) {
+        const randFaction = factionsThatAllowHacking[getRandomIntInclusive(0, numFactions - 1)];
+        return { type: rewardType, name: randFaction };
+      }
+      return { type: CodingContractRewardType.Money };
     }
     case CodingContractRewardType.CompanyReputation: {
       const allJobs = Object.keys(Player.jobs);
+      // This check is also unnecessary. Check the comment above.
       if (allJobs.length > 0) {
         return {
           type: CodingContractRewardType.CompanyReputation,

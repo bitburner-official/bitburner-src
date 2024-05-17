@@ -1316,7 +1316,9 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       ].join(" ");
     },
     gen: (): number => {
-      return getRandomIntInclusive(Math.pow(2, 4), Math.pow(2, getRandomIntInclusive(1, 57)));
+      const x = Math.pow(2, 4);
+      const y = Math.pow(2, getRandomIntInclusive(1, 57));
+      return getRandomIntInclusive(Math.min(x, y), Math.max(x, y));
     },
     solver: (data: unknown, ans: string): boolean => {
       if (typeof data !== "number") throw new Error("solver expected number");
@@ -1351,9 +1353,11 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     gen: (): string => {
       const _alteredBit = Math.round(Math.random());
-      const _buildArray: string[] = HammingEncodeProperly(
-        getRandomIntInclusive(Math.pow(2, 4), Math.pow(2, getRandomIntInclusive(1, 57))),
-      ).split("");
+      const x = Math.pow(2, 4);
+      const y = Math.pow(2, getRandomIntInclusive(1, 57));
+      const _buildArray: string[] = HammingEncodeProperly(getRandomIntInclusive(Math.min(x, y), Math.max(x, y))).split(
+        "",
+      );
       if (_alteredBit) {
         const _randomIndex: number = getRandomIntInclusive(0, _buildArray.length - 1);
         _buildArray[_randomIndex] = _buildArray[_randomIndex] == "0" ? "1" : "0";
