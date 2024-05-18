@@ -17,7 +17,5 @@ export function getRandomIntInclusive(min: number, max: number): number {
   if (min > max) {
     throw new Error(`Min is greater than max. Min: ${min}. Max: ${max}.`);
   }
-  const minCeiled = Math.ceil(min);
-  const maxFloored = Math.floor(max);
-  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
