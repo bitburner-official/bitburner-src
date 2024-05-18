@@ -1,6 +1,4 @@
 import { getRandomInt } from "../utils/helpers/getRandomInt";
-import { MinHeap } from "../utils/Heap";
-
 import { comprGenChar, comprLZGenerate, comprLZEncode, comprLZDecode } from "../utils/CompressionContracts";
 import { HammingEncode, HammingDecode, HammingEncodeProperly } from "../utils/HammingCodeTools";
 import { filterTruthy } from "../utils/helpers/ArrayHelpers";
@@ -994,7 +992,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
 
       const distance: [number][] = new Array(height);
       //const prev: [[number, number] | undefined][] = new Array(height);
-      const queue = new MinHeap<[number, number]>();
+      const queue: [number, number][] = [];
 
       for (let y = 0; y < height; y++) {
         distance[y] = new Array(width).fill(Infinity) as [number];
@@ -1015,21 +1013,15 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
 
       // Prepare starting point
       distance[0][0] = 0;
-      queue.push([0, 0], 0);
+      queue.push([0, 0]);
 
       // Take next-nearest position and expand potential paths from there
-      while (queue.size > 0) {
-        const [y, x] = queue.pop() as [number, number];
+      while (queue.length > 0) {
+        const [y, x] = queue.shift() as [number, number];
         for (const [yN, xN] of neighbors(y, x)) {
-          const d = distance[y][x] + 1;
-          if (d < distance[yN][xN]) {
-            if (distance[yN][xN] == Infinity)
-              // Not reached previously
-              queue.push([yN, xN], d);
-            // Found a shorter path
-            else queue.changeWeight(([yQ, xQ]) => yQ == yN && xQ == xN, d);
-            //prev[yN][xN] = [y, x];
-            distance[yN][xN] = d;
+          if (distance[yN][xN] == Infinity) {
+            queue.push([yN, xN]);
+            distance[yN][xN] = distance[y][x] + 1;
           }
         }
       }
