@@ -1282,8 +1282,9 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       // Prevent player from providing extra wrong answers and still receiving credit
       if (result.length !== sanitizedPlayerAnsArr.length) return false;
 
-      for (const expr of result) {
-        if (!sanitizedPlayerAnsArr.includes(expr)) {
+      const resultsSet = new Set(result);
+      for (const expr of sanitizedPlayerAnsArr) {
+        if (!resultsSet.has(expr)) {
           return false;
         }
       }
