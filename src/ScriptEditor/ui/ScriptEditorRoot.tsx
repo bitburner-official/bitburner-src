@@ -130,7 +130,7 @@ function Root(props: IProps): React.ReactElement {
             isWholeLine: true,
             glyphMarginClassName: "myGlyphMarginClass",
             glyphMarginHoverMessage: {
-              value: "Possible infinite loop, await something or ignore it with '// @ignore-infinite' above the loop.",
+              value: "Possible infinite loop, await something. If this is a false-positive, use `// @ignore-infinite` to suppress.",
             },
           },
         })),
