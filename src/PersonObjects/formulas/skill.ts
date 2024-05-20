@@ -10,6 +10,9 @@ export function calculateSkill(exp: number, mult = 1): number {
 }
 
 export function calculateExp(skill: number, mult = 1): number {
+  if (skill === 1) {
+    return 0;
+  }
   const value = Math.exp((skill / mult + 200) / 32) - 534.6;
   return clampNumber(value, 0);
 }
