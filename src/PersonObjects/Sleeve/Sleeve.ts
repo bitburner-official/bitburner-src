@@ -256,6 +256,10 @@ export class Sleeve extends Person implements SleevePerson {
 
   /** Travel to another City. Costs money from player */
   travel(newCity: CityName): boolean {
+    if (!Player.canAfford(CONSTANTS.TravelCost)) {
+      return false;
+    }
+
     Player.loseMoney(CONSTANTS.TravelCost, "sleeves");
     this.city = newCity;
 

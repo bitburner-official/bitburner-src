@@ -4473,7 +4473,7 @@ export interface Sleeve {
   setToGymWorkout(sleeveNumber: number, gymName: string, stat: string): boolean;
 
   /**
-   * Make a sleeve travel to another city.
+   * Make a sleeve travel to another city. The cost for using this function is the same as for a player.
    * @remarks
    * RAM cost: 4 GB
    *
