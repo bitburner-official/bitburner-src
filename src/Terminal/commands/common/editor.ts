@@ -2,7 +2,6 @@ import { Terminal } from "../../../Terminal";
 import { ScriptEditorRouteOptions, Page } from "../../../ui/Router";
 import { Router } from "../../../ui/GameRoot";
 import { BaseServer } from "../../../Server/BaseServer";
-import { CursorPositions } from "../../../ScriptEditor/CursorPositions";
 import { ScriptFilePath, hasScriptExtension } from "../../../Paths/ScriptFilePath";
 import { TextFilePath, hasTextExtension } from "../../../Paths/TextFilePath";
 import { getGlobbedFileMap } from "../../../Paths/GlobbedFiles";
@@ -54,7 +53,6 @@ export function commonEditor(
     const file = server.getContentFile(path);
     const content = file ? file.content : isNs2(path) ? newNs2Template : "";
     files.set(path, content);
-    if (content === newNs2Template) CursorPositions.saveCursor(path, { row: 3, column: 5 });
   }
   if (hasNs1) {
     sendDeprecationNotice();
