@@ -2564,7 +2564,7 @@ export interface Singularity {
    * ```js
    * const programName = "BruteSSH.exe";
    * const cost = ns.getDarkwebProgramCost(programName);
-   * if (cost > 0) ns.tprint(`${programName} costs ${ns.formatMoney(cost)}`);
+   * if (cost > 0) ns.tprint(`${programName} costs ${ns.formatNumber(cost)}`);
    * ```
    * @param programName - Name of program to check the price of
    * @returns Price of the specified darkweb program
@@ -6644,7 +6644,7 @@ export interface NS {
    * ```js
    * const ram = 2 ** 20;
    * const cost = ns.getPurchasedServerCost(ram);
-   * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs ${ns.formatMoney(cost)}`);
+   * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs ${ns.formatNumber(cost)}`);
    * ```
    * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
    * @returns The cost to purchase a server with the specified amount of ram.

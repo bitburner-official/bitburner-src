@@ -38,6 +38,6 @@ If the program does not exist, an error is thrown.
 ```js
 const programName = "BruteSSH.exe";
 const cost = ns.getDarkwebProgramCost(programName);
-if (cost > 0) ns.tprint(`${programName} costs ${ns.formatMoney(cost)}`);
+if (cost > 0) ns.tprint(`${programName} costs ${ns.formatNumber(cost)}`);
 ```
 
