@@ -1798,7 +1798,7 @@ export interface Singularity {
    * @example
    * ```js
    * const programName = "BruteSSH.exe"
-   * const success = ns.purchaseProgram(programName);
+   * const success = ns.singularity.purchaseProgram(programName);
    * if (!success) ns.tprint("ERROR: Failed to purchase ${programName}")
    * ```
    * @param programName - Name of program to purchase.
@@ -2229,7 +2229,7 @@ export interface Singularity {
    * @example
    * ```js
    * const programName = "BruteSSH.exe";
-   * const success = ns.createProgram(programName);
+   * const success = ns.singularity.createProgram(programName);
    * if (!success) ns.tprint("ERROR: Failed to start working on ${programName}")
    * ```
    * @param program - Name of program to create.
@@ -2536,7 +2536,7 @@ export interface Singularity {
    *
    * @example
    * ```js
-   * const programs = ns.getDarkwebPrograms();
+   * const programs = ns.singularity.getDarkwebPrograms();
    * ns.tprint(`Available programs are: ${programs.split(", ")}`);
    * ```
    * @returns - a list of programs available for purchase on the dark web, or [] if Tor has not
@@ -2563,8 +2563,8 @@ export interface Singularity {
    * @example
    * ```js
    * const programName = "BruteSSH.exe";
-   * const cost = ns.getDarkwebProgramCost(programName);
-   * if (cost > 0) ns.tprint(`${programName} costs ${ns.formatNumber(cost)}`);
+   * const cost = ns.singularity.getDarkwebProgramCost(programName);
+   * if (cost > 0) ns.tprint(`${programName} costs $${ns.formatNumber(cost)}`);
    * ```
    * @param programName - Name of program to check the price of
    * @returns Price of the specified darkweb program
@@ -3514,7 +3514,7 @@ export interface CodingContract {
    *
    * @example
    * ```js
-   * const reward = codingcontract.attempt(yourSolution, filename, hostname);
+   * const reward = ns.codingcontract.attempt(yourSolution, filename, hostname);
    * if (reward) {
    *   ns.tprint(`Contract solved successfully! Reward: ${reward}`)
    * } else ns.tprint("Failed to solve contract.")
@@ -5525,7 +5525,7 @@ export interface NS {
    * @example
    * ```ts
    * // Calculate threadcount of a single hack that would take $100k from n00dles
-   * const hackThreads = hackAnalyzeThreads("n00dles", 1e5);
+   * const hackThreads = ns.hackAnalyzeThreads("n00dles", 1e5);
    *
    * // Launching a script requires an integer thread count. The below would take less than the targeted $100k.
    * ns.run("noodleHack.js", Math.floor(hackThreads))
@@ -5880,9 +5880,9 @@ export interface NS {
    * @example
    * ```ts
    * let recentScripts = ns.getRecentScripts();
-   * let mostRecent = recentScripts.shift()
+   * let mostRecent = recentScripts.shift();
    * if (mostRecent)
-   *   ns.tprint(mostRecent.logs.join('\n'))
+   *   ns.tprint(mostRecent.logs.join('\n'));
    * ```
    *
    * @returns Array with information about previously killed scripts.
@@ -6396,8 +6396,8 @@ export interface NS {
    * @example
    * ```js
    * const mults = ns.getHackingMultipliers();
-   * print(`chance: ${mults.chance}`);
-   * print(`growth: ${mults.growth}`);
+   * ns.tprint(`chance: ${mults.chance}`);
+   * ns.tprint(`growth: ${mults.growth}`);
    * ```
    * @returns Object containing the Player’s hacking related multipliers.
    */
@@ -6644,7 +6644,7 @@ export interface NS {
    * ```js
    * const ram = 2 ** 20;
    * const cost = ns.getPurchasedServerCost(ram);
-   * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs ${ns.formatNumber(cost)}`);
+   * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs $${ns.formatNumber(cost)}`);
    * ```
    * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
    * @returns The cost to purchase a server with the specified amount of ram.
@@ -8211,7 +8211,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * ```js
    * while (true) {
    *   const prevState = await ns.corporation.nextUpdate();
-   *   const nextState = ns.corporation.getCorporation().state;
+   *   const nextState = ns.corporation.getCorporation().nextState;
    *   ns.print(`Corporation finished with ${prevState}, next will be ${nextState}.`);
    *   // Manage the Corporation
    * }

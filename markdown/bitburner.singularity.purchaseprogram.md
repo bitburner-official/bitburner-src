@@ -35,7 +35,7 @@ This function allows you to automatically purchase programs. You MUST have a TOR
 
 ```js
 const programName = "BruteSSH.exe"
-const success = ns.purchaseProgram(programName);
+const success = ns.singularity.purchaseProgram(programName);
 if (!success) ns.tprint("ERROR: Failed to purchase ${programName}")
 ```
 
