@@ -390,7 +390,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 50e12,
       info:
         "Developed by a pioneer in Grafting research, this implant generates pulses of stability which seem to have a nullifying effect versus the Entropy virus.\n\n" +
-        "Note: For unknown reasons, the lowercase 'n' appears to be an integral component to its functionality.",
+        "Note: For unknown reasons, the lowercase 'v' appears to be an integral component to its functionality.",
       stats: "This Augmentation removes the Entropy virus, and prevents it from affecting you again.",
       factions: [],
     },
@@ -1781,7 +1781,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info: "Penta-dynamo-neurovascular-valve inserted in the carpal ligament, enhances dexterity.",
-      stats: "This augmentation makes the Cheat Code minigame easier by allowing the opposite character.",
+      stats: "This augmentation makes the Cheat Code minigame easier by showing what character will come next.",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },

@@ -12,7 +12,7 @@ import type { NSFull } from "../NetscriptFunctions";
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 import type { RunningScript } from "../Script/RunningScript";
 import type { Script } from "../Script/Script";
-import type { ScriptArg } from "./ScriptArg";
+import type { ScriptArg } from "@nsdefs";
 import type { ScriptDeath } from "./ScriptDeath";
 
 import { Environment } from "./Environment";
@@ -78,8 +78,8 @@ export class WorkerScript {
   /** hostname on which this script is running */
   hostname: string;
 
-  /** Function called when the script ends. */
-  atExit: (() => void) | undefined = undefined;
+  /**Map of functions called when the script ends. */
+  atExit: Map<string, () => void> = new Map();
 
   constructor(runningScriptObj: RunningScript, pid: number, nsFuncsGenerator?: (ws: WorkerScript) => NSFull) {
     this.name = runningScriptObj.filename;

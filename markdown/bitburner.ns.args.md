@@ -9,7 +9,7 @@ Arguments passed into the script.
 **Signature:**
 
 ```typescript
-readonly args: (string | number | boolean)[];
+readonly args: ScriptArg[];
 ```
 
 ## Remarks

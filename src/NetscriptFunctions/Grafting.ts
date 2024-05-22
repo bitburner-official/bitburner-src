@@ -16,7 +16,7 @@ import { getEnumHelper } from "../utils/EnumHelper";
 export function NetscriptGrafting(): InternalAPI<IGrafting> {
   const checkGraftingAPIAccess = (ctx: NetscriptContext): void => {
     if (!Player.canAccessGrafting()) {
-      throw helpers.makeRuntimeErrorMsg(
+      throw helpers.errorMessage(
         ctx,
         "You do not currently have access to the Grafting API. This is either because you are not in BitNode 10 or because you do not have Source-File 10",
       );
@@ -30,7 +30,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       checkGraftingAPIAccess(ctx);
       if (!isValidGraftingAugName(augName)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid aug: ${augName}`);
+        throw helpers.errorMessage(ctx, `Invalid aug: ${augName}`);
       }
       const graftableAug = new GraftableAugmentation(Augmentations[augName]);
       return graftableAug.cost;
@@ -40,7 +40,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       checkGraftingAPIAccess(ctx);
       if (!isValidGraftingAugName(augName)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid aug: ${augName}`);
+        throw helpers.errorMessage(ctx, `Invalid aug: ${augName}`);
       }
       const graftableAug = new GraftableAugmentation(Augmentations[augName]);
       return calculateGraftingTimeWithBonus(graftableAug);
@@ -59,7 +59,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
         const focus = !!_focus;
         checkGraftingAPIAccess(ctx);
         if (Player.city !== CityName.NewTokyo) {
-          throw helpers.makeRuntimeErrorMsg(ctx, "You must be in New Tokyo to begin grafting an Augmentation.");
+          throw helpers.errorMessage(ctx, "You must be in New Tokyo to begin grafting an Augmentation.");
         }
         if (!isValidGraftingAugName(augName)) {
           helpers.log(ctx, () => `Invalid aug: ${augName}`);

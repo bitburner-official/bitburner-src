@@ -4,15 +4,15 @@ import { Page } from "./ui/Router";
 import { Terminal } from "./Terminal";
 import { SnackbarEvents } from "./ui/React/Snackbar";
 import { ToastVariant } from "@enums";
-import { IReturnStatus } from "./types";
+import { IReturnStatus, SaveData } from "./types";
 import { GetServer } from "./Server/AllServers";
-import { ImportPlayerData, SaveData, saveObject } from "./SaveObject";
+import { ImportPlayerData, ElectronGameData, saveObject } from "./SaveObject";
 import { exportScripts } from "./Terminal/commands/download";
 import { CONSTANTS } from "./Constants";
 import { hash } from "./hash/hash";
-import { Buffer } from "buffer";
 import { resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
+import { handleGetSaveDataError } from "./Netscript/ErrorMessages";
 
 interface IReturnWebStatus extends IReturnStatus {
   data?: Record<string, unknown>;
@@ -28,9 +28,9 @@ declare global {
       triggerSave: () => Promise<void>;
       triggerGameExport: () => void;
       triggerScriptsExport: () => void;
-      getSaveData: () => { save: string; fileName: string };
-      getSaveInfo: (base64Save: string) => Promise<ImportPlayerData | undefined>;
-      pushSaveData: (base64Save: string, automatic?: boolean) => void;
+      getSaveData: () => Promise<{ save: SaveData; fileName: string }>;
+      getSaveInfo: (saveData: SaveData) => Promise<ImportPlayerData | undefined>;
+      pushSaveData: (saveData: SaveData, automatic?: boolean) => void;
     };
     electronBridge: {
       send: (channel: string, data?: unknown) => void;
@@ -85,7 +85,7 @@ function initWebserver(): void {
     if (!path) return { res: false, msg: "Invalid file path." };
     if (!hasScriptExtension(path)) return { res: false, msg: "Invalid file extension: must be a script" };
 
-    code = Buffer.from(code, "base64").toString();
+    code = decodeURIComponent(escape(atob(code)));
     const home = GetServer("home");
     if (!home) return { res: false, msg: "Home server does not exist." };
 
@@ -132,23 +132,23 @@ function initSaveFunctions(): void {
       }
     },
     triggerScriptsExport: (): void => exportScripts("*", Player.getHomeComputer()),
-    getSaveData: (): { save: string; fileName: string } => {
+    getSaveData: async (): Promise<{ save: SaveData; fileName: string }> => {
       return {
-        save: saveObject.getSaveString(),
+        save: await saveObject.getSaveData(),
         fileName: saveObject.getSaveFileName(),
       };
     },
-    getSaveInfo: async (base64Save: string): Promise<ImportPlayerData | undefined> => {
+    getSaveInfo: async (saveData: SaveData): Promise<ImportPlayerData | undefined> => {
       try {
-        const data = await saveObject.getImportDataFromString(base64Save);
-        return data.playerData;
+        const importData = await saveObject.getImportDataFromSaveData(saveData);
+        return importData.playerData;
       } catch (error) {
         console.error(error);
         return;
       }
     },
-    pushSaveData: (base64Save: string, automatic = false): void =>
-      Router.toPage(Page.ImportSave, { base64Save, automatic }),
+    pushSaveData: (saveData: SaveData, automatic = false): void =>
+      Router.toPage(Page.ImportSave, { saveData, automatic }),
   };
 
   // Will be consumed by the electron wrapper.
@@ -159,14 +159,22 @@ function initElectronBridge(): void {
   const bridge = window.electronBridge;
   if (!bridge) return;
 
-  bridge.receive("get-save-data-request", () => {
-    const data = window.appSaveFns.getSaveData();
-    bridge.send("get-save-data-response", data);
+  bridge.receive("get-save-data-request", async () => {
+    let saveData;
+    try {
+      saveData = await window.appSaveFns.getSaveData();
+    } catch (error) {
+      handleGetSaveDataError(error);
+      return;
+    }
+    bridge.send("get-save-data-response", saveData);
   });
-  bridge.receive("get-save-info-request", async (save: unknown) => {
-    if (typeof save !== "string") throw new Error("Error while trying to get save info");
-    const data = await window.appSaveFns.getSaveInfo(save);
-    bridge.send("get-save-info-response", data);
+  bridge.receive("get-save-info-request", async (saveData: unknown) => {
+    if (typeof saveData !== "string" && !(saveData instanceof Uint8Array)) {
+      throw new Error("Error while trying to get save info");
+    }
+    const saveInfo = await window.appSaveFns.getSaveInfo(saveData);
+    bridge.send("get-save-info-response", saveInfo);
   });
   bridge.receive("push-save-request", (params: unknown) => {
     if (typeof params !== "object") throw new Error("Error trying to push save request");
@@ -202,7 +210,7 @@ function initElectronBridge(): void {
   });
 }
 
-export function pushGameSaved(data: SaveData): void {
+export function pushGameSaved(data: ElectronGameData): void {
   const bridge = window.electronBridge;
   if (!bridge) return;
 

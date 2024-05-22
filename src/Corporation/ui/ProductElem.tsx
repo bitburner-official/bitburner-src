@@ -10,7 +10,6 @@ import { CancelProductModal } from "./modals/CancelProductModal";
 
 import { formatBigNumber, formatPercent } from "../../ui/formatNumber";
 
-import { isString } from "../../utils/helpers/string";
 import { Money } from "../../ui/React/Money";
 import { useCorporation, useDivision } from "./Context";
 import { StatsTable } from "../../ui/React/StatsTable";
@@ -41,7 +40,7 @@ export function ProductElem(props: IProductProps): React.ReactElement {
   let sellButtonText: JSX.Element;
   const desiredSellAmount = cityData.desiredSellAmount;
   if (desiredSellAmount !== null) {
-    if (isString(desiredSellAmount)) {
+    if (typeof desiredSellAmount === "string") {
       sellButtonText = (
         <>
           Sell ({formatBigNumber(cityData.actualSellAmount)}/{desiredSellAmount})

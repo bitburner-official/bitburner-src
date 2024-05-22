@@ -1,3 +1,4 @@
+import type { PromisePair } from "../Types/Promises";
 import type { IOrderBook } from "./IOrderBook";
 import type { IStockMarket } from "./IStockMarket";
 import { Order } from "./Order";
@@ -14,7 +15,7 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reviver } from "../utils/JSONReviver";
 import { NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 
 export let StockMarket: IStockMarket = {
   lastUpdate: 0,
@@ -25,7 +26,7 @@ export let StockMarket: IStockMarket = {
 // Gross type, needs to be addressed
 export const SymbolToStockMap: Record<string, Stock> = {}; // Maps symbol -> Stock object
 
-export const StockMarketResolvers: ((msProcessed: number) => void)[] = [];
+export const StockMarketPromise: PromisePair<number> = { promise: null, resolve: null };
 
 export function placeOrder(
   stock: Stock,
@@ -168,7 +169,7 @@ export function initStockMarket(): void {
 
   StockMarket.storedCycles = 0;
   StockMarket.lastUpdate = 0;
-  StockMarket.ticksUntilCycle = getRandomInt(1, StockMarketConstants.TicksPerCycle);
+  StockMarket.ticksUntilCycle = getRandomIntInclusive(1, StockMarketConstants.TicksPerCycle);
   initSymbolToStockMap();
 }
 
@@ -280,9 +281,10 @@ export function processStockPrices(numCycles = 1): void {
     // Shares required for price movement gradually approaches max over time
     stock.shareTxUntilMovement = Math.min(stock.shareTxUntilMovement + 10, stock.shareTxForMovement);
   }
-
-  // Handle "nextUpdate" resolvers after this update
-  for (const resolve of StockMarketResolvers.splice(0)) {
-    resolve(StockMarketConstants.msPerStockUpdate);
+  // Handle "nextUpdate" resolver after this update
+  if (StockMarketPromise.resolve) {
+    StockMarketPromise.resolve(StockMarketConstants.msPerStockUpdate);
+    StockMarketPromise.resolve = null;
+    StockMarketPromise.promise = null;
   }
 }

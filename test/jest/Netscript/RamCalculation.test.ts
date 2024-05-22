@@ -24,6 +24,7 @@ function grabCost<API>(ramEntry: RamCostTree<API>[keyof API]) {
 }
 
 describe("Netscript RAM Calculation/Generation Tests", function () {
+  jest.spyOn(console, "warn").mockImplementation(() => {});
   Player.sourceFiles.set(4, 3);
   // For simulating costs of singularity functions.
   const baseCost = RamCostConstants.Base;
@@ -44,7 +45,9 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
   function tryFunction(fn: PotentiallyAsyncFunction) {
     try {
       fn()?.catch?.(() => undefined);
-    } catch {}
+    } catch {
+      // Intentionally empty
+    }
   }
 
   let scriptRef = createRunningScript("");

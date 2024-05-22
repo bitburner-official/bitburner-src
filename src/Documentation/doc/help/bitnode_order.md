@@ -31,7 +31,7 @@ These paths do not recommend the absolute fastest path, since speed of progressi
    The [Intelligence](../advanced/intelligence.md) stat it unlocks will gradually build up as you continue to play the game, and will be helpful in the future.
    The [Source-File](../advanced/sourcefiles.md) also provides [hacking](../basic/hacking.md) multipliers, which are strong because [hacking](../basic/hacking.md) is typically one of the best ways of earning money.
 
-5. Do BN-4. Its [Source-File](../advanced/sourcefiles.md) does not directly make you more powerful in any way, but unlocks the [Singularity API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.singularity.md).
+5. Do BN-4. Its [Source-File](../advanced/sourcefiles.md) does not directly make you more powerful in any way, but unlocks the [Singularity API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.singularity.md).
    This API allows you to automate significantly more aspects of the game.
    Consider repeating until Level 3, since each level decreases the [RAM](../basic/ram.md) cost of the functions.
 
@@ -56,15 +56,15 @@ The [Sleeves](../advanced/sleeves.md) granted by the [Source-File](../advanced/s
 
 ## For more scripting/hacking
 
-BN-4 unlocks the [Singularity API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.singularity.md), which can be used to automate many different aspects of the game, including working for [Factions](../basic/factions.md) / [Companies](../basic/companies.md), purchasing & installing [Augmentations](../basic/augmentations.md), and creating programs
+BN-4 unlocks the [Singularity API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.singularity.md), which can be used to automate many different aspects of the game, including working for [Factions](../basic/factions.md) / [Companies](../basic/companies.md), purchasing & installing [Augmentations](../basic/augmentations.md), and creating programs
 
-BN-6 and BN-7 unlock [Bladeburner](../advanced/bladeburners.md) and its corresponding [Bladeburner API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.bladeburner.md).
+BN-6 and BN-7 unlock [Bladeburner](../advanced/bladeburners.md) and its corresponding [Bladeburner API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.bladeburner.md).
 This allows you to automate an entire new mechanic.
 
 BN-2 also unlocks a new mechanic and API for automating the [Gang](../advanced/gang.md) mechanic.
 However, it is not as interesting as [Bladeburner](../advanced/bladeburners.md)
 
-BN-9 unlocks the [Hacknet Server](../advanced/hacknetservers.md) mechanic and several new functions in the [Hacknet Node API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.hacknet.md) for using it.
+BN-9 unlocks the [Hacknet Server](../advanced/hacknetservers.md) mechanic and several new functions in the [Hacknet Node API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.hacknet.md) for using it.
 
 ## For new mechanics
 

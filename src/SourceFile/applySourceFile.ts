@@ -167,6 +167,9 @@ export function applySourceFile(bn: number, lvl: number): void {
     case 13: // They're Lunatics
       // Grants more space on Stanek's Gift.
       break;
+    case 14: // IPvGO
+      // Grands increased buffs and favor limit from IPvGO
+      break;
     default:
       console.error(`Invalid source file number: ${bn}`);
       break;

@@ -1,6 +1,6 @@
+import type { ScriptArg } from "@nsdefs";
 import { toNative } from "./toNative";
 import libarg from "arg";
-import { ScriptArg } from "../Netscript/ScriptArg";
 import { NetscriptContext } from "../Netscript/APIWrapper";
 
 type FlagType = StringConstructor | NumberConstructor | BooleanConstructor | StringConstructor[];

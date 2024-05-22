@@ -43,6 +43,20 @@ export function ServersDev(): React.ReactElement {
     }
   }
 
+  function backdoorServer(): void {
+    const s = GetServer(server);
+    if (s === null) return;
+    if (!(s instanceof Server)) return;
+    s.backdoorInstalled = true;
+  }
+
+  function backdoorAllServers(): void {
+    for (const s of GetAllServers()) {
+      if (!(s instanceof Server)) return;
+      s.backdoorInstalled = true;
+    }
+  }
+
   function minSecurity(): void {
     const s = GetServer(server);
     if (s === null) return;
@@ -116,6 +130,17 @@ export function ServersDev(): React.ReactElement {
               </td>
               <td>
                 <Button onClick={rootAllServers}>Root all</Button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <Typography>Backdoor:</Typography>
+              </td>
+              <td>
+                <Button onClick={backdoorServer}>Backdoor one</Button>
+              </td>
+              <td>
+                <Button onClick={backdoorAllServers}>Backdoor all</Button>
               </td>
             </tr>
             <tr>

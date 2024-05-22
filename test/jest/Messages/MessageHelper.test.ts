@@ -44,6 +44,7 @@ describe("MessageHelpers tests", () => {
   it("Should not repeatedly send the Icarus message after the player's first bitnode completion", () => {
     initSourceFiles();
     Player.sourceFiles.set(1, 1);
+    jest.spyOn(console, "warn").mockImplementation(() => {}); // Prevent test spam
     Player.queueAugmentation(AugmentationName.TheRedPill);
     installAugmentations();
     Player.gainHackingExp(2 ** 200);

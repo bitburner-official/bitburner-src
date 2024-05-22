@@ -15,3 +15,5 @@ markdown
 package.json
 package.lock.json
 tsdoc-metadata.json
+
+.git_blame_ignore_revs

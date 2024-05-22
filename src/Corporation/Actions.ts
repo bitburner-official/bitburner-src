@@ -10,15 +10,54 @@ import { OfficeSpace } from "./OfficeSpace";
 import { Material } from "./Material";
 import { Product } from "./Product";
 import { Warehouse } from "./Warehouse";
-import { IndustryType } from "@enums";
+import { FactionName, IndustryType } from "@enums";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
 import { CityName } from "@enums";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { getRecordValues } from "../Types/Record";
-import { sellSharesFailureReason, buybackSharesFailureReason, issueNewSharesFailureReason } from "./helpers";
+import {
+  calculateOfficeSizeUpgradeCost,
+  sellSharesFailureReason,
+  buybackSharesFailureReason,
+  issueNewSharesFailureReason,
+  costOfCreatingCorporation,
+} from "./helpers";
+import { PositiveInteger } from "../types";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
+import { Factions } from "../Faction/Factions";
 
-export function NewDivision(corporation: Corporation, industry: IndustryType, name: string): void {
+export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): boolean {
+  if (!Player.canAccessCorporation()) {
+    return false;
+  }
+  if (Player.corporation && !restart) {
+    return false;
+  }
+  if (!corporationName) {
+    return false;
+  }
+  if (Player.bitNodeN !== 3 && !selfFund) {
+    throw new Error("Cannot use seed funds outside of BitNode 3");
+  }
+  if (currentNodeMults.CorporationSoftcap < 0.15) {
+    throw new Error(`You cannot create a corporation in BitNode ${Player.bitNodeN}`);
+  }
+
+  if (selfFund) {
+    const cost = costOfCreatingCorporation(restart);
+    if (!Player.canAfford(cost)) {
+      return false;
+    }
+    Player.startCorporation(corporationName, false);
+    Player.loseMoney(cost, "corporation");
+  } else {
+    Player.startCorporation(corporationName, true);
+  }
+  return true;
+}
+
+export function createDivision(corporation: Corporation, industry: IndustryType, name: string): void {
   if (corporation.divisions.size >= corporation.maxDivisions)
     throw new Error(`Cannot expand into ${industry} industry, too many divisions!`);
 
@@ -34,7 +73,7 @@ export function NewDivision(corporation: Corporation, industry: IndustryType, na
   } else if (name === "") {
     throw new Error("New division must have a name!");
   } else {
-    corporation.funds = corporation.funds - cost;
+    corporation.loseFunds(cost, "division");
     corporation.divisions.set(
       name,
       new Division({
@@ -43,12 +82,17 @@ export function NewDivision(corporation: Corporation, industry: IndustryType, na
         type: industry,
       }),
     );
+    corporation.numberOfOfficesAndWarehouses += 2;
   }
 }
 
-export function removeDivision(corporation: Corporation, name: string) {
-  if (!corporation.divisions.has(name)) throw new Error("There is no division called " + name);
+export function removeDivision(corporation: Corporation, name: string): number {
+  const division = corporation.divisions.get(name);
+  if (!division) throw new Error("There is no division called " + name);
   corporation.divisions.delete(name);
+  corporation.numberOfOfficesAndWarehouses -= getRecordValues(division.offices).length;
+  corporation.numberOfOfficesAndWarehouses -= getRecordValues(division.warehouses).length;
+
   // We also need to remove any exports that were pointing to the old division
   for (const otherDivision of corporation.divisions.values()) {
     for (const warehouse of getRecordValues(otherDivision.warehouses)) {
@@ -60,6 +104,9 @@ export function removeDivision(corporation: Corporation, name: string) {
       }
     }
   }
+  const price = division.calculateRecoupableValue();
+  corporation.gainFunds(price, "division");
+  return price;
 }
 
 export function purchaseOffice(corporation: Corporation, division: Division, city: CityName): void {
@@ -69,14 +116,15 @@ export function purchaseOffice(corporation: Corporation, division: Division, cit
   if (division.offices[city]) {
     throw new Error(`You have already expanded into ${city} for ${division.name}`);
   }
-  corporation.addNonIncomeFunds(-corpConstants.officeInitialCost);
+  corporation.loseFunds(corpConstants.officeInitialCost, "division");
   division.offices[city] = new OfficeSpace({
     city: city,
     size: corpConstants.officeInitialSize,
   });
+  ++corporation.numberOfOfficesAndWarehouses;
 }
 
-export function IssueDividends(corporation: Corporation, rate: number): void {
+export function issueDividends(corporation: Corporation, rate: number): void {
   if (isNaN(rate) || rate < 0 || rate > corpConstants.dividendMaxRate) {
     throw new Error(`Invalid value. Must be an number between 0 and ${corpConstants.dividendMaxRate}`);
   }
@@ -84,7 +132,7 @@ export function IssueDividends(corporation: Corporation, rate: number): void {
   corporation.dividendRate = rate;
 }
 
-export function GoPublic(corporation: Corporation, numShares: number): void {
+export function goPublic(corporation: Corporation, numShares: number): void {
   const ceoOwnership = (corporation.numShares - numShares) / corporation.totalShares;
   const initialSharePrice = corporation.getTargetSharePrice(ceoOwnership);
 
@@ -98,10 +146,10 @@ export function GoPublic(corporation: Corporation, numShares: number): void {
   corporation.sharePrice = initialSharePrice;
   corporation.issuedShares += numShares;
   corporation.numShares -= numShares;
-  corporation.addNonIncomeFunds(numShares * initialSharePrice);
+  corporation.gainFunds(numShares * initialSharePrice, "public equity");
 }
 
-export function IssueNewShares(
+export function issueNewShares(
   corporation: Corporation,
   amount: number,
 ): [profit: number, amount: number, privateShares: number] {
@@ -118,19 +166,19 @@ export function IssueNewShares(
 
   const privateOwnedRatio = corporation.investorShares / corporation.totalShares;
   const maxPrivateShares = Math.round((amount / 2) * privateOwnedRatio);
-  const privateShares = Math.round(getRandomInt(0, maxPrivateShares) / 10e6) * 10e6;
+  const privateShares = Math.round(getRandomIntInclusive(0, maxPrivateShares) / 10e6) * 10e6;
 
   corporation.issuedShares += amount - privateShares;
   corporation.investorShares += privateShares;
   corporation.totalShares += amount;
-  corporation.addNonIncomeFunds(profit);
+  corporation.gainFunds(profit, "public equity");
   // Set sharePrice directly because all formulas will be based on stale cycleValuation data
   corporation.sharePrice = newSharePrice;
 
   return [profit, amount, privateShares];
 }
 
-export function AcceptInvestmentOffer(corporation: Corporation): void {
+export function acceptInvestmentOffer(corporation: Corporation): void {
   if (
     corporation.fundingRound >= corpConstants.fundingRoundShares.length ||
     corporation.fundingRound >= corpConstants.fundingRoundMultiplier.length ||
@@ -144,13 +192,13 @@ export function AcceptInvestmentOffer(corporation: Corporation): void {
   const funding = val * percShares * roundMultiplier;
   const investShares = Math.floor(corpConstants.initialShares * percShares);
   corporation.fundingRound++;
-  corporation.addNonIncomeFunds(funding);
+  corporation.gainFunds(funding, "private equity");
 
   corporation.numShares -= investShares;
   corporation.investorShares += investShares;
 }
 
-export function SellMaterial(material: Material, amount: string, price: string): void {
+export function sellMaterial(material: Material, amount: string, price: string): void {
   if (price === "") price = "0";
   if (amount === "") amount = "0";
   let cost = price.replace(/\s+/g, "");
@@ -202,7 +250,7 @@ export function SellMaterial(material: Material, amount: string, price: string):
   }
 }
 
-export function SellProduct(product: Product, city: CityName, amt: string, price: string, all: boolean): void {
+export function sellProduct(product: Product, city: CityName, amt: string, price: string, all: boolean): void {
   //Parse price
   // initliaze newPrice with oldPrice as default
   let newPrice = product.cityData[city].desiredSellPrice;
@@ -272,15 +320,15 @@ export function SellProduct(product: Product, city: CityName, amt: string, price
   }
 }
 
-export function SetSmartSupply(warehouse: Warehouse, smartSupply: boolean): void {
+export function setSmartSupply(warehouse: Warehouse, smartSupply: boolean): void {
   warehouse.smartSupplyEnabled = smartSupply;
 }
 
-export function SetSmartSupplyOption(warehouse: Warehouse, material: Material, useOption: CorpSmartSupplyOption): void {
+export function setSmartSupplyOption(warehouse: Warehouse, material: Material, useOption: CorpSmartSupplyOption): void {
   warehouse.smartSupplyOptions[material.name] = useOption;
 }
 
-export function BuyMaterial(division: Division, material: Material, amt: number): void {
+export function buyMaterial(division: Division, material: Material, amt: number): void {
   if (!isRelevantMaterial(material.name, division)) {
     throw new Error(`${material.name} is not a relevant material for industry ${division.type}`);
   }
@@ -290,7 +338,7 @@ export function BuyMaterial(division: Division, material: Material, amt: number)
   material.buyAmount = amt;
 }
 
-export function BulkPurchase(
+export function bulkPurchase(
   corp: Corporation,
   division: Division,
   warehouse: Warehouse,
@@ -310,7 +358,9 @@ export function BulkPurchase(
   }
   const cost = amt * material.marketPrice;
   if (corp.funds >= cost) {
-    corp.funds = corp.funds - cost;
+    corp.loseFunds(cost, "materials");
+    material.averagePrice =
+      (material.averagePrice * material.stored + material.marketPrice * amt) / (material.stored + amt);
     material.stored += amt;
     warehouse.sizeUsed = warehouse.sizeUsed + amt * matSize;
   } else {
@@ -318,7 +368,7 @@ export function BulkPurchase(
   }
 }
 
-export function SellShares(corporation: Corporation, numShares: number): number {
+export function sellShares(corporation: Corporation, numShares: number): number {
   const failureReason = sellSharesFailureReason(corporation, numShares);
   if (failureReason) throw new Error(failureReason);
 
@@ -333,7 +383,7 @@ export function SellShares(corporation: Corporation, numShares: number): number 
   return profit;
 }
 
-export function BuyBackShares(corporation: Corporation, numShares: number): boolean {
+export function buyBackShares(corporation: Corporation, numShares: number): boolean {
   const failureReason = buybackSharesFailureReason(corporation, numShares);
   if (failureReason) throw new Error(failureReason);
 
@@ -347,28 +397,21 @@ export function BuyBackShares(corporation: Corporation, numShares: number): bool
   return true;
 }
 
-export function UpgradeOfficeSize(corp: Corporation, office: OfficeSpace, size: number): void {
-  const initialPriceMult = Math.round(office.size / corpConstants.officeInitialSize);
-  const costMultiplier = 1.09;
-  // Calculate cost to upgrade size by 15 employees
-  let mult = 0;
-  for (let i = 0; i < size / corpConstants.officeInitialSize; ++i) {
-    mult += Math.pow(costMultiplier, initialPriceMult + i);
-  }
-  const cost = corpConstants.officeInitialCost * mult;
+export function upgradeOfficeSize(corp: Corporation, office: OfficeSpace, increase: PositiveInteger): void {
+  const cost = calculateOfficeSizeUpgradeCost(office.size, increase);
   if (corp.funds < cost) return;
-  office.size += size;
-  corp.addNonIncomeFunds(-cost);
+  office.size += increase;
+  corp.loseFunds(cost, "office");
 }
 
-export function BuyTea(corp: Corporation, office: OfficeSpace): boolean {
+export function buyTea(corp: Corporation, office: OfficeSpace): boolean {
   const cost = office.getTeaCost();
   if (corp.funds < cost || !office.setTea()) return false;
-  corp.funds -= cost;
+  corp.loseFunds(cost, "tea");
   return true;
 }
 
-export function ThrowParty(corp: Corporation, office: OfficeSpace, costPerEmployee: number): number {
+export function throwParty(corp: Corporation, office: OfficeSpace, costPerEmployee: number): number {
   const mult = 1 + costPerEmployee / 10e6;
   const cost = costPerEmployee * office.numEmployees;
   if (corp.funds < cost) {
@@ -378,7 +421,7 @@ export function ThrowParty(corp: Corporation, office: OfficeSpace, costPerEmploy
   if (!office.setParty(mult)) {
     return 0;
   }
-  corp.funds -= cost;
+  corp.loseFunds(cost, "parties");
 
   return mult;
 }
@@ -386,37 +429,38 @@ export function ThrowParty(corp: Corporation, office: OfficeSpace, costPerEmploy
 export function purchaseWarehouse(corp: Corporation, division: Division, city: CityName): void {
   if (corp.funds < corpConstants.warehouseInitialCost) return;
   if (division.warehouses[city]) return;
-  corp.addNonIncomeFunds(-corpConstants.warehouseInitialCost);
+  corp.loseFunds(corpConstants.warehouseInitialCost, "division");
   division.warehouses[city] = new Warehouse({
     division: division,
     loc: city,
     size: corpConstants.warehouseInitialSize,
   });
+  ++corp.numberOfOfficesAndWarehouses;
 }
 
-export function UpgradeWarehouseCost(warehouse: Warehouse, amt: number): number {
+export function upgradeWarehouseCost(warehouse: Warehouse, amt: number): number {
   return Array.from(Array(amt).keys()).reduce(
     (acc, index) => acc + corpConstants.warehouseSizeUpgradeCostBase * Math.pow(1.07, warehouse.level + 1 + index),
     0,
   );
 }
 
-export function UpgradeWarehouse(corp: Corporation, division: Division, warehouse: Warehouse, amt = 1): void {
-  const sizeUpgradeCost = UpgradeWarehouseCost(warehouse, amt);
+export function upgradeWarehouse(corp: Corporation, division: Division, warehouse: Warehouse, amt = 1): void {
+  const sizeUpgradeCost = upgradeWarehouseCost(warehouse, amt);
   if (corp.funds < sizeUpgradeCost) return;
   warehouse.level += amt;
   warehouse.updateSize(corp, division);
-  corp.addNonIncomeFunds(-sizeUpgradeCost);
+  corp.loseFunds(sizeUpgradeCost, "warehouse");
 }
 
-export function HireAdVert(corp: Corporation, division: Division): void {
+export function hireAdVert(corp: Corporation, division: Division): void {
   const cost = division.getAdVertCost();
   if (corp.funds < cost) return;
-  corp.funds = corp.funds - cost;
+  corp.loseFunds(cost, "advert");
   division.applyAdVert(corp);
 }
 
-export function MakeProduct(
+export function makeProduct(
   corp: Corporation,
   division: Division,
   city: CityName,
@@ -454,11 +498,11 @@ export function MakeProduct(
     throw new Error(`You already have a product with this name!`);
   }
 
-  corp.funds = corp.funds - (designInvest + marketingInvest);
+  corp.loseFunds(designInvest + marketingInvest, "product development");
   division.products.set(product.name, product);
 }
 
-export function Research(researchingDivision: Division, researchName: CorpResearchName): void {
+export function research(researchingDivision: Division, researchName: CorpResearchName): void {
   const corp = Player.corporation;
   if (!corp) return;
   const researchTree = IndustryResearchTrees[researchingDivision.type];
@@ -497,7 +541,7 @@ export function Research(researchingDivision: Division, researchName: CorpResear
 }
 
 /** Set a new export for a material. Throw on any invalid input. */
-export function ExportMaterial(
+export function exportMaterial(
   targetDivision: Division,
   targetCity: CityName,
   material: Material,
@@ -548,13 +592,13 @@ Error encountered: ${error}`);
   material.exports.push(exportObj);
 }
 
-export function CancelExportMaterial(divisionName: string, cityName: CityName, material: Material): void {
+export function cancelExportMaterial(divisionName: string, cityName: CityName, material: Material): void {
   const index = material.exports.findIndex((exp) => exp.division === divisionName && exp.city === cityName);
   if (index === -1) return;
   material.exports.splice(index, 1);
 }
 
-export function LimitProductProduction(product: Product, cityName: CityName, quantity: number): void {
+export function limitProductProduction(product: Product, cityName: CityName, quantity: number): void {
   if (quantity < 0 || isNaN(quantity)) {
     product.cityData[cityName].productionLimit = null;
   } else {
@@ -562,7 +606,7 @@ export function LimitProductProduction(product: Product, cityName: CityName, qua
   }
 }
 
-export function LimitMaterialProduction(material: Material, quantity: number): void {
+export function limitMaterialProduction(material: Material, quantity: number): void {
   if (quantity < 0 || isNaN(quantity)) {
     material.productionLimit = null;
   } else {
@@ -570,18 +614,38 @@ export function LimitMaterialProduction(material: Material, quantity: number): v
   }
 }
 
-export function SetMaterialMarketTA1(material: Material, on: boolean): void {
+export function setMaterialMarketTA1(material: Material, on: boolean): void {
   material.marketTa1 = on;
 }
 
-export function SetMaterialMarketTA2(material: Material, on: boolean): void {
+export function setMaterialMarketTA2(material: Material, on: boolean): void {
   material.marketTa2 = on;
 }
 
-export function SetProductMarketTA1(product: Product, on: boolean): void {
+export function setProductMarketTA1(product: Product, on: boolean): void {
   product.marketTa1 = on;
 }
 
-export function SetProductMarketTA2(product: Product, on: boolean): void {
+export function setProductMarketTA2(product: Product, on: boolean): void {
   product.marketTa2 = on;
+}
+
+export function bribe(corporation: Corporation, fundsForBribing: number, factionName: FactionName): number {
+  if (corporation.valuation < corpConstants.bribeThreshold) {
+    return 0;
+  }
+  if (fundsForBribing <= 0 || corporation.funds < fundsForBribing) {
+    return 0;
+  }
+  const faction = Factions[factionName];
+  const factionInfo = faction.getInfo();
+  if (!factionInfo.offersWork()) {
+    return 0;
+  }
+
+  const reputationGain = fundsForBribing / corpConstants.bribeAmountPerReputation;
+  faction.playerReputation += reputationGain;
+  corporation.loseFunds(fundsForBribing, "bribery");
+
+  return reputationGain;
 }

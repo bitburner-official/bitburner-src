@@ -58,6 +58,7 @@ export class LogBoxProperties {
     this.x = x;
     this.y = y;
     this.updateDOM();
+    this.rerender();
   }
 
   setSize(width: number, height: number): void {
@@ -171,7 +172,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
   const classes = useStyles();
   const container = useRef<HTMLDivElement>(null);
   const textArea = useRef<HTMLDivElement>(null);
-  const rerender = useRerender(1000);
+  const rerender = useRerender(Settings.TailRenderInterval);
   const propsRef = useRef(new LogBoxProperties(rerender, rootRef));
   script.tailProps = propsRef.current;
   const [minimized, setMinimized] = useState(false);
@@ -306,8 +307,15 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
     if (
       e instanceof MouseEvent &&
       (e.clientX < 0 || e.clientY < 0 || e.clientX > innerWidth || e.clientY > innerHeight)
-    )
+    ) {
       return false;
+    }
+    if (rootRef.current) {
+      // We can set x,y directly. Calling setPosition will make unnecessary calls of updateDOM and rerender.
+      const currentState = rootRef.current.state as { x: number; y: number };
+      propsRef.current.x = currentState.x;
+      propsRef.current.y = currentState.y;
+    }
   };
 
   // Max [width, height]

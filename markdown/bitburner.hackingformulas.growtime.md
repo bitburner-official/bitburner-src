@@ -23,5 +23,5 @@ growTime(server: Server, player: Person): number;
 
 number
 
-The calculated grow time.
+The calculated grow time, in milliseconds.
 

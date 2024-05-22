@@ -4,12 +4,11 @@ import React from "react";
 import { Work, WorkType } from "./Work";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { Player } from "@player";
-import { AugmentationName, FactionName, FactionWorkType } from "@enums";
+import { FactionName, FactionWorkType } from "@enums";
 import { Factions } from "../Faction/Factions";
 import { applyWorkStats, scaleWorkStats, WorkStats } from "./WorkStats";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reputation } from "../ui/React/Reputation";
-import { CONSTANTS } from "../Constants";
 import { calculateFactionExp, calculateFactionRep } from "./Formulas";
 import { getEnumHelper } from "../utils/EnumHelper";
 
@@ -36,18 +35,12 @@ export class FactionWork extends Work {
   }
 
   getReputationRate(): number {
-    let focusBonus = 1;
-    if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
-      focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
-    }
+    const focusBonus = Player.focusPenalty();
     return calculateFactionRep(Player, this.factionWorkType, this.getFaction().favor) * focusBonus;
   }
 
   getExpRates(): WorkStats {
-    let focusBonus = 1;
-    if (!Player.hasAugmentation(AugmentationName.NeuroreceptorManager, true)) {
-      focusBonus = Player.focus ? 1 : CONSTANTS.BaseFocusBonus;
-    }
+    const focusBonus = Player.focusPenalty();
     const rate = calculateFactionExp(Player, this.factionWorkType);
     return scaleWorkStats(rate, focusBonus, false);
   }
@@ -74,9 +67,9 @@ export class FactionWork extends Work {
     }
   }
 
-  APICopy(): Record<string, unknown> {
+  APICopy() {
     return {
-      type: this.type,
+      type: WorkType.FACTION as const,
       cyclesWorked: this.cyclesWorked,
       factionWorkType: this.factionWorkType,
       factionName: this.factionName,

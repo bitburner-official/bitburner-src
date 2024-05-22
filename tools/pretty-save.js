@@ -1,11 +1,20 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require("fs").promises;
 const path = require("path");
+const { isBinaryFormat } = require("../electron/saveDataBinaryFormat");
 
 async function getSave(file) {
-  const data = await fs.readFile(file, "utf8");
+  const data = await fs.readFile(file);
 
-  const save = JSON.parse(decodeURIComponent(escape(atob(data))));
+  let jsonSaveString;
+  if (isBinaryFormat(data)) {
+    const decompressedReadableStream = new Blob([data]).stream().pipeThrough(new DecompressionStream("gzip"));
+    jsonSaveString = await new Response(decompressedReadableStream).text();
+  } else {
+    jsonSaveString = decodeURIComponent(escape(atob(data)));
+  }
+
+  const save = JSON.parse(jsonSaveString);
   const saveData = save.data;
   let gameSave = {
     PlayerSave: JSON.parse(saveData.PlayerSave),
@@ -13,7 +22,6 @@ async function getSave(file) {
     FactionsSave: JSON.parse(saveData.FactionsSave),
     AliasesSave: JSON.parse(saveData.AliasesSave),
     GlobalAliasesSave: JSON.parse(saveData.GlobalAliasesSave),
-    MessagesSave: JSON.parse(saveData.MessagesSave),
     StockMarketSave: JSON.parse(saveData.StockMarketSave),
     SettingsSave: JSON.parse(saveData.SettingsSave),
     VersionSave: JSON.parse(saveData.VersionSave),

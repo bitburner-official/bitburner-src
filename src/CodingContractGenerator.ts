@@ -12,7 +12,7 @@ import { SpecialServers } from "./Server/data/SpecialServers";
 import { Server } from "./Server/Server";
 import { BaseServer } from "./Server/BaseServer";
 
-import { getRandomInt } from "./utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "./utils/helpers/getRandomIntInclusive";
 import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
 
 export function generateRandomContract(): void {
@@ -47,13 +47,15 @@ export function generateRandomContractOnHome(): void {
   serv.addContract(contract);
 }
 
-export const generateDummyContract = (problemType: string): void => {
+export const generateDummyContract = (problemType: string): string => {
   if (!CodingContractTypes[problemType]) throw new Error(`Invalid problem type: '${problemType}'`);
   const serv = Player.getHomeComputer();
 
   const contractFn = getRandomFilename(serv);
   const contract = new CodingContract(contractFn, problemType, null);
   serv.addContract(contract);
+
+  return contractFn;
 };
 
 interface IGenerateContractParams {
@@ -119,7 +121,7 @@ function sanitizeRewardType(rewardType: CodingContractRewardType): CodingContrac
 
 function getRandomProblemType(): string {
   const problemTypes = Object.keys(CodingContractTypes);
-  const randIndex = getRandomInt(0, problemTypes.length - 1);
+  const randIndex = getRandomIntInclusive(0, problemTypes.length - 1);
 
   return problemTypes[randIndex];
 }
@@ -128,7 +130,7 @@ function getRandomReward(): ICodingContractReward {
   // Don't offer money reward by default if BN multiplier is 0 (e.g. BN8)
   const rewardTypeUpperBound =
     currentNodeMults.CodingContractMoney === 0 ? CodingContractRewardType.Money - 1 : CodingContractRewardType.Money;
-  const rewardType = sanitizeRewardType(getRandomInt(0, rewardTypeUpperBound));
+  const rewardType = sanitizeRewardType(getRandomIntInclusive(0, rewardTypeUpperBound));
 
   // Add additional information based on the reward type
   const factionsThatAllowHacking = Player.factions.filter((fac) => Factions[fac].getInfo().offerHackingWork);
@@ -138,13 +140,22 @@ function getRandomReward(): ICodingContractReward {
       // Get a random faction that player is a part of. That
       // faction must allow hacking contracts
       const numFactions = factionsThatAllowHacking.length;
-      const randFaction = factionsThatAllowHacking[getRandomInt(0, numFactions - 1)];
-      return { type: rewardType, name: randFaction };
+      // This check is unnecessary because sanitizeRewardType ensures that it won't happen. However, I'll still leave
+      // it here, just in case somebody else changes sanitizeRewardType without taking account of this check.
+      if (numFactions > 0) {
+        const randFaction = factionsThatAllowHacking[getRandomIntInclusive(0, numFactions - 1)];
+        return { type: rewardType, name: randFaction };
+      }
+      return { type: CodingContractRewardType.Money };
     }
     case CodingContractRewardType.CompanyReputation: {
       const allJobs = Object.keys(Player.jobs);
+      // This check is also unnecessary. Check the comment above.
       if (allJobs.length > 0) {
-        return { type: CodingContractRewardType.CompanyReputation, name: allJobs[getRandomInt(0, allJobs.length - 1)] };
+        return {
+          type: CodingContractRewardType.CompanyReputation,
+          name: allJobs[getRandomIntInclusive(0, allJobs.length - 1)],
+        };
       }
       return { type: CodingContractRewardType.Money };
     }
@@ -155,7 +166,7 @@ function getRandomReward(): ICodingContractReward {
 
 function getRandomServer(): BaseServer {
   const servers = GetAllServers().filter((server: BaseServer) => server.serversOnNetwork.length !== 0);
-  let randIndex = getRandomInt(0, servers.length - 1);
+  let randIndex = getRandomIntInclusive(0, servers.length - 1);
   let randServer = servers[randIndex];
 
   // An infinite loop shouldn't ever happen, but to be safe we'll use
@@ -168,7 +179,7 @@ function getRandomServer(): BaseServer {
     ) {
       break;
     }
-    randIndex = getRandomInt(0, servers.length - 1);
+    randIndex = getRandomIntInclusive(0, servers.length - 1);
     randServer = servers[randIndex];
   }
 
@@ -179,7 +190,7 @@ function getRandomFilename(
   server: BaseServer,
   reward: ICodingContractReward = { type: CodingContractRewardType.Money },
 ): ContractFilePath {
-  let contractFn = `contract-${getRandomInt(0, 1e6)}`;
+  let contractFn = `contract-${getRandomIntInclusive(0, 1e6)}`;
 
   for (let i = 0; i < 1000; ++i) {
     if (
@@ -189,7 +200,7 @@ function getRandomFilename(
     ) {
       break;
     }
-    contractFn = `contract-${getRandomInt(0, 1e6)}`;
+    contractFn = `contract-${getRandomIntInclusive(0, 1e6)}`;
   }
 
   if ("name" in reward) {

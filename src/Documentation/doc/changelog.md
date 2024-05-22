@@ -1,5 +1,223 @@
 # Changelog
 
+## v2.6.1 - 21 May 2024
+
+### MAJOR CHANGES
+
+- Exported savegames are now compressed. This means that savegames from 2.6.1dev will need to be manually converted before backloading into 2.6.0 (@catloversg)
+- There was a small API change related to Bladeburner. If your save file is affected by the API change, a file APIBreakInfo-2.6.1.txt will be created on your home computer, which should assist in updating your scripts.
+- Some Go scripts may also require updates, please reference the current documentation to troubleshoot any issues.
+
+### API
+
+- (Bladeburner) !API Break! ns.bladeburner.getCurrentAction now returns null when not performing an action (@Snarling)
+- (Corporation) Add a missing check on exportMaterial (@catloversg)
+- (Corporation) Add ns.corporation.sellDivision (@catloversg)
+- (Formulas) Add ns.formulas.hacking.growAmount (@d0sboots)
+- (Go) Some changes to the Go API, including some minor breaking changes. Please refer to the API documentation in the script editor or at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.go.md (@ficocelliguy)
+- (Go) Added ns.go.analysis.getStats (@ficocelliguy)
+- (Go) Fix a bug that allowed facing secret opponent early or with wrong board size (@ficoccelliguy)
+- (Infiltration) More information is provided on ns.infiltration.getInfiltration (@catloversg)
+- (Singularity) Added ns.singularity.getFactionEnemies function (@jaguardeer)
+- (Sleeve) SleeveInfiltrationWork now has a nextCompletion promise (@Caldwell-74)
+- ns.getRunningScipt().tailProperties now updates x/y positions while the tail window is being moved (@catloversg)
+- Fixed an issue that caused ns.disableLog to work incorrectly for some functions (@ficocelliguy)
+
+### UI
+
+- (Bladeburner) Console now uses the timestamp formatting from Settings if it is set (@gmcew)
+- (Corporation) More granular control of office size increases (@adeilt)
+- (Corporation) Adjustments on storage space tooltips (@catlovers)
+- (Electron) Fixed an issue where the zoom level would not be updated correctly (@catloversg
+- (Gang) Fix inaccurate display of wanted reduction rate when performing "justice" tasks (@LJNeon)
+- (Go) Fix an incorrect displayed max favor on Go history page (@ficocelliguy)
+- (Hashnet) Show more digits when hashrate is very low (@catloversg)
+- (Infiltration) Intro screen now shows how much damage will be taken for each failure (@catloversg)
+- (Tutorial) Change display of the buttons in the Tutorial (@catloversg)
+- Fixed an issue that could cause wrong RAM value displayed in script editor (@gmcew)
+- Tweak display of very large multipliers on the Augmentations screen (@catloversg)
+- Active scripts screen will now wrap text when there is a very long list of arguments with no spaces (@catloversg)
+- Text files (.txt and .json) posted to the terminal from the ls command are now clickable (@catloversg)
+- Fixed a display issue on the bitverse page (@LJNeon)
+- Fixed a display issue on the stats page (@catloversg)
+- Fixed a display issue with CorruptableText (@catloversg)
+- Add "arguments" to list for special highlighting in script editor (@catloversg)
+
+### MISC
+
+- (Bladeburner) Internal code refactoring (@Snarling)
+- (Corporation) Fix an issue that could cause incorrect average material prices via bulk purchases (@catloversg)\
+- (Corporation) Refactored bribery
+- (Docs) Various doc fixes (@adeilt, @User670, @catloversg, @gmcew, @jeek, @pontsuyo, @ficocelliguy, @d0sboot, @Vilsol)
+- (Electron) Fixed an issue that could cause ghost processes on the Steam version (@catloversg
+- (Go) "No AI" white player can now pass (@ficocelliguy)
+- (Go) Reimplement superko rule, adjust save data (@ficocelliguy)
+- (Go) Balance tweaks and other bugfixes (@ficocelliguy)
+- (Go) Fix an issue that could cause the AI to try taking two turns simultaneously (@Snarling)
+- (Go) Bonus from Tetrads now applies to all combat stats (@gmcew)
+- (Go) Internally streamlined some Go code (@d0sboots, @Snarling)
+- (Hacknet) Fixed an issue in the engine loop that could cause offline earnings with hacknet to be inaccurate (@d0sboots)
+- (Inflitration) Rework and tuning for Slash game (@catloversg)
+- (Inflitration) Fix an "invalid location" crash (@catloversg)
+- (Sleeve) Fix incorrect starting shock values while in BN10
+- New internal implementation for getRandomInt (@catloversg)
+- Improved the description text for the Hamming Code contract (@gmcew)
+- Fixed a bug in the useRerender hook, which could occasionally cause UI bugs (@catloversg)
+- Added error handling in cases where a savegame cannot be loaded (@catloversg)
+- 'buy -a' command will now partially buy programs even if not all can be bought (@TheAimMan)
+- Tweaked the interaction between backdoored servers and reputation requirements (@catloversg)
+- Update Credits page to show @d0sboots as an active maintainer (@Snarling)
+- Changed the name of an augmentation at the request of the original author (@hydroflame)
+- Allow .json files (@shyguy1412)
+- Remove jquery dependency (@catloversg)
+- Disable text translation, which commonly causes crashes (@catloversg)
+- Fix an incorrect unit in ns.spawn logs (@FoGsesipod)
+- Servers that don't exist yet will not show up in autocomplete data (@catloversg)
+- Add optional file for ignoring some specific commits with git blame (@adeilt)
+- Remove some unnecessary data from save file (@Snarling)
+- Added general API break utilities for future use (@Snarling)
+- Remove an internal dependency and streamline code for downloading files (@catloversg)
+- Remove some unused internal constants (@catloversg)
+- Ensure lastNodeReset property is initialized correctly on the player object (@catloversg)
+- The value of "this" within the main function will no longer be the script module itself (@d0sboots)
+- Fixed an incorrect file mode (@mctylr-gh)
+- Nerf noodle bar (various contributors)
+
+## v2.6.0 - IPvGO: 5 Mar 2024
+
+### MAJOR ADDITIONS
+
+- A new minigame IPvGO, based on the game Go. Visit DefComm in New Tokyo or the CIA in Sector-12 for access. Documentation for the mechanic is available ingame under "How to Play" once the mechanic is available. (@ficocelliguy)
+- A new BitNode has been added which focuses on the IPvGO mechanic (@ficocelliguy)
+
+### HOTFIXES
+
+- 6 Mar 2024: Fixed an issue that could result in invalid Go board states (@ficocelliguy)
+
+### API
+
+- (Bladeburner) ns.bladeburner.getSkillUpgradeCost now returns infinity if requesting a cost above the maximum skill level (@Semanual)
+- (CodingContract) Fixed an issue where ns.codingcontract.getData was leaking internal arrays when contract data was a 2-d array (@LJNeon)
+- (CodingContract) ns.codingcontract.createDummyContract now returns the filename of the created contract (@Spartelfant)
+- (Gang) Added ns.gang.getInstallResult for determining the effect an augmentation install will have on gang member ascension multipliers (@LJNeon)
+- (Go) Added the ns.go API, which allows interaction with the new IPvGO mechanic. While this is in development, the API may undergo changes (@ficocelliguy)
+- (Hashnet) Fixed a bug that allowed spending negative hashes (@yichizhng)
+- (Ports) Added ns.nextPortWrite, which allows waiting for the next write to a port without creating a port handle object (@LJNeon)
+- (Ports) Ports now support all clonable data (@LJNeon)
+- (Singularity) Add type information for ns.singularity.getCurrentWork return value (@Semanual)
+- (Stanek) Fix ns.stanek.acceptGift which was not working in 2.5.2 (@jjclark1982)
+- ns.getPlayer now also provides the player's karma. ns.heart.break is no longer a hidden function (@LJNeon)
+- ns.atExit can be provided a string id as a second parameter, to set multiple atExit callbacks for the same script (@shyguy1412)
+- Improved the efficiency and accuracy of growth formulas (@d0sboots)
+- ns.formatNumber now throws an error if specifying a suffixStart less than 1000 (@TheAimMan)
+- HGWOptions now accepts a non-integer number of threads (@Caldwell-74)
+- Fixed outdated docs for ns.spawn() (@adeilt)
+- Fixed ns.serverExists returning incorrect value for an endgame server (@cigarmemr)
+- Refactored weaken effect calculation (@Caldwell-74)
+
+### UI
+
+- (Augmentations) Fixed some missing description text for Hacknet multipliers (@jjclark1982)
+- (Corporation) Align columns correctly in warehouse breakdown table (@jjclark1982)
+- (Corporation) Several typo fixes in Corporation modals (@cigarmemr)
+- (Documentation) Ingame documentation now displays line breaks inside tables correctly (@Snarling)
+- (Documentation) Added a documentation page for converting .script to .js (@LJNeon, @jjclark1982, @Snarling)
+- (Documentation) Script editor doc button points to correct docs (@LJNeon)
+- (Hashnet) Hash upgrade descriptions use proper number formatting options (@Snarling)
+- (Hacknet) Hacknet display shows a dynamic amount of columns based on screen width (@shyguy1412)
+- (Infiltration) Changed how the CheatCodeGame is displayed (@alutman, @Snarling)
+- (Infiltration) If currently performing faction work, UI defaults to trading info for rep with that faction (@LJNeon)
+- (Sleeve) If intelligence is unlocked, sleeve intelligence is shown in the UI (@Caldwell-74)
+- (Stockmarket) Changed color of stocks increasing in value (@Semanual)
+- (Terminal) Improved scroll behavior on the Terminal (@Snarling)
+- (Theme) Added 3 new theme elements to properly support light themes (@adeilt)
+- Added a tail render interval setting, changing how frequently tail windows redraw their contents (@Caldwell-74)
+- Reorganization of some content and sorting of scripts on the Active Scripts page (@Snarling, @TheAimMan)
+- "Disable Text Effects" option also disables the corrupted text display (@draughtnyan)
+- fl1ght.exe now displays the related requirements in a more readable way (@TheAimMan, @LJNeon)
+- Miscellaneous wording fixes (@cigarmemr)
+
+### MISC
+
+- (CodingContract) Improve parsing of player input for arrays in coding contracts (@rocket3989)
+- (Corporation) Fix an incorrect demand range for Minerals (@catloversg)
+- (Corporation) Added ingame documentation (@catloversg)
+- (Corporation) Divisions impact on corporation valuation is now based on number of offices and warehouses (@catloversg)
+- (Corporation) Improve performance of calculations (@catloversg)
+- (Bladeburner) Band-aid fix Blops count and action stopping (@Caldwell-74)
+- (Gang) Add separate money tracking for gang expenses (@deansvendsen)
+- (Ports) Port objects no longer track a separate promise for every use of nextWrite (@Snarling)
+- (Ports) Fixed a crashing bug related to the changes above (@Jman420)
+- (RemoteAPI) Remote API can be targeted to a remote device instead of the default of localhost (@Specker)
+- (RemoteAPI) Added a getAllServers method (@shyguy1412)
+- (ScriptEditor) When importing from other files that are also open in the editor, type information is now available in the IDE (@shyguy1412)
+- (ScriptEditor) Links from "ls" are now tied to that host, instead of your connected machine (@LJNeon)
+- (ScriptEditor) Script "models" in the script editor are now properly disposed (@Caldwell-74)
+- (Terminal) Add --ram-override flag to the run command (@LJNeon)
+- (Terminal) Fix incorrect help text for rm command (@LJNeon)
+- Add a helper for clamping numbers to an allowable range, and use this for player skill formulas (@Caldwell-74)
+- Protect against renaming servers to invalid names (@LJNeon)
+- All running scripts are killed upon entering the BitVerse (@LJNeon)
+- Scripts with the "temporary" flag set do not populate the Recently Killed script list on script death (@TheAimMan)
+- Fix an issue with offline income for scripts (@Caldwell-74)
+- Various "nextUpdate" promises are not tracked internally as a single promise instead of an array of promises (@Caldwell-74, @LJNeon)
+- Fix inconsistent importing of the arg library (@catloversg)
+- Clarify some information in the CONTRIBUTING.md file (@deansvendsen)
+- Internal changes to method used for cloning objects (@LJNeon)
+- Rearrange some internal constants (@Caldwell-74)
+- b1t_flum3.exe can be ran in "quick" mode (@TheAimMan)
+- Nerf noodle bar (various)
+- Nerf noodle bar moar (@Caldwell-74)
+
+## v2.5.2 - 26 December 2023
+
+### API
+
+- Added limit of 1e9 for additionalMsec property of HGWOptions (@d0sboots)
+- ns.share effect is now boosted by host server core count (@TheAimMan)
+- Fix a bug with HGWOptions that caused the default value to be 1 thread even for scripts running multiple threads (@DJMatch3000)
+- (Singularity) ns.singularity.applyToCompany now returns the JobName if a job was obtained, or null otherwise - previously was boolean (@jjclark1982)
+- (Singularity) ns.singularity.getCurrentWork now requires access to the singularity API (@TheAimMan)
+- (Singularity) Added ns.singularity.getFactionInviteRequirements (@jjclark1982)
+- (Stanek) ns.stanek.chargeFragment is now boosted by host server core count (@TheAimMan)
+
+### BUGFIX
+
+- (Bladeburner) Operation team size modal now handles keyboard submission correctly (@Snarling)
+- (Corporation) Fixed an issue with Warehouse size being out of sync following prduct sale (@Kelenius)
+- (Factions) Fixed some display order issues, and possible multiple entries for a faction (@jjclark1982)
+- (Factions) Fixed an issue with certain factions not becoming "known" when joining them (@jjclark1982)
+- (Grafting) Entropy now has the correct negative effect on hacknet multipliers (@TheAimMan)
+- (Hashnet) Fixed an issue where the SF9.3 reward server had an incorrect number of cores (@cigarmemr)
+- (Terminal) Fixed a bug with script autocompletion when the script is inside a subdirectory (@draughtnyan)
+
+### MISC
+
+- Added basic protection for certain global values that could cause a recovery screen if reassigned (@Snarling)
+- Fixed conditions for an easter egg message (@cigarmemr)
+- (Bitverse) Changed listed difficulty for BN3 to "hard"
+- (CodingContract) Reduce incidence of \$0 coding contract rewards in circumstances where the reward would be \$0 (@trambelus)
+- (Corporation) Added better accounting of funds transactions (@jjclark1982)
+- (Corporation) Remove cooldown on starting over corporation, but maintain remaining cooldown for selling shares (@jjclark1982)
+- (Corporation) Removed some legacy code that was not doing anything (@catloversg)
+- (DevMenu) Added the ability to add/remove sleeves from the dev menu (@Sphyxis, @Snarling)
+- (Docs) Fixed various typos in documentation (@tdpeuter)
+- (Factions) Added a documentation page for faction join requirements (@jjclark1982)
+- (Formulas) Added clarification for the unit of time returned by hackTime, growTime, and weakenTime functions (@d0sboots)
+- (Ports) Promises from port.nextWrite resolve in the same order they were created, instead of reverse order (@LJNeon)
+- (Sleeve) Add task counters for Crime and Bladeburner tasks (@TheAimMan)
+- (Stock) Add some randomization to timing for stockmarket forecast change events (@Caldwell-74)
+- (Terminal) Added the --all option for unalias, to allow removing all aliases (@Sphyxis)
+- Nerf noodle bar (various contributors)
+
+### UI
+
+- Message for buying TOR router no longer implies the need to connect to darkweb (@Kelenius)
+- (Company) Rework of the job location details (@jjclark1982)
+- (Company) Added previous/next buttons for job location if the player has multiple jobs (@Kelenius)
+- (Factions) Only show warning about enemy factions for factions with enemies (@jjclark1982)
+- (Stanek) Improved the display of the Stanek grid (@Kelenius)
+
 ## v2.5.1 - 30 November 2023 Update
 
 ### NOTES
@@ -37,7 +255,7 @@ For the Steam version, any special options you have enabled in the File menu may
 - Fix an error that would occur in some cases when using gymGains or universityGains (@cigarmemr)
 - Fix tab autocompletion when running a sceript without the run command (@mytskine)
 - Fix a bug that could cause the wrong coding contract to be deleted when using rm (@TheAimMan)
-- Scripts no longer show $0 for offline money income (@alutman)
+- Scripts no longer show \$0 for offline money income (@alutman)
 - Faction invitations are now cleared properly when performing a reset (@alutman)
 - API functions that work on a hostname no longer work on servers that have not been added to the network. (@TheAimMan)
 - Fix an issue where the "True Recursion" achievement could be granted incorrectly (@jjclark1982)
@@ -288,7 +506,7 @@ PERFORMANCE:
 NETSCRIPT GENERAL:
 
 - Remove requirement for script args to be unique. This was also related to performance improvements. (@d0sboots)
-- ns.hackAnalyzeThreads no longer indicates infinity any time a single thread would hack less than $1 (@Snarling)
+- ns.hackAnalyzeThreads no longer indicates infinity any time a single thread would hack less than \$1 (@Snarling)
 - ns.renamePurchasedServer no longer crashes if player is connected to the server being renamed (@Snarling)
 - ns.hackAnalyzeThreads now return -1 (instead of 0) if no money can be hacked from the targeted server. (@d0sboots)
 - Fix a possible infinite atExit loop if a script killed itself. (@Snarling)
@@ -447,7 +665,7 @@ DOCUMENTATION
 
 - Many documentation updates (@Mughur, @d0sboots, @Snarling, @teauxfu).
 - Official non-markdown docs are at https://github.com/bitburner-official/bitburner-src/tree/dev/src/Documentation/doc
-- Official dev version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md
+- Official dev version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md
 - Official stable version markdown docs are at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md
 - Dev version documentation is now kept up to date as changes are made. (@Snarling)
 
@@ -472,7 +690,7 @@ Hotfix / bugfix:
 - Fixed an issue with sleeve HP calculation
 - Possible fix for MathJax "Typesetting Failed" errors
 - There was an issue with Corporations decaying their employees to 0 stats, even though the minimum was supposed to be 5. Moved the variable storing the min decay value to corporation constants, and raised it to 10.
-- Regenerated documentation at https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md due to corporation changes related to min decay stats.
+- Regenerated documentation at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md due to corporation changes related to min decay stats.
 - Faction XP was unintentionally providing 20x the experience gain as it did prior to v2.0. This caused faction work to exceed gym/university as the optimal way to gain experience. Values have been reduced to only about 2x what they were prior to v2.0, and they are no longer better than gym/university.
 - Fixed an issue where the overview skill bars could be displayed inaccurately based on player multipliers.
 
@@ -844,7 +1062,7 @@ API breaks
 
 - Dividend fixes and exposing dividends info via scripts (@stalefishies)
 - Add big number format support in some Corporation's modal (@borisflagell)
-- Fix #3261 Industry overview number formatting (@nickofolas)
+- Fix #3261 Industry overview number formatting (@violet)
 
   Multipliers
 
@@ -883,7 +1101,7 @@ Stanek Gift
 ** Vitalife secret lab **
 
 - A new mechanic called Augmentation Grafting has been added. Resleeving has been removed.
-- Credit to @nickofolas for his incredible work.
+- Credit to @violet for her incredible work.
 
 ** Stanek **
 
@@ -891,14 +1109,14 @@ Stanek Gift
 
 ** UI **
 
-- Major update to Sleeve, Gang UI, and Create Program (@nickofolas)
+- Major update to Sleeve, Gang UI, and Create Program (@violet)
 - re-add pre tags to support slash n in prompt (@jacktose)
 - Tabelize linked output of 'ls' (@Master-Guy)
 - Add the ability to filter open scripts (@phyzical)
-- Add minHeight to editor tabs (@nickofolas)
-- Properly expand gang equipment cards to fill entire screen (@nickofolas)
-- Add shortcut to Faction augmentations page from FactionsRoot (@nickofolas)
-- Fix extra space on editor tabs (@nickofolas)
+- Add minHeight to editor tabs (@violet)
+- Properly expand gang equipment cards to fill entire screen (@violet)
+- Add shortcut to Faction augmentations page from FactionsRoot (@violet)
+- Fix extra space on editor tabs (@violet)
 - Present offline message as list (@DSteve595)
 - add box showing remaining augments per faction (@jjayeon)
 - Add tab switching support to vim mode (@JParisFerrer)
@@ -959,7 +1177,7 @@ Stanek Gift
 - Fix negative number formatting (@Master-Guy)
 - Fix unique ip generation (@InDieTasten)
 - remove terminal command theme from docs (@phyzical)
-- Fix 'Augmentations Left' with gang factions (@nickofolas)
+- Fix 'Augmentations Left' with gang factions (@violet)
 - Attempt to fix 'bladeburner.process()' early routing issue (@MartinFournier)
 - work in progress augment fix (@phyzical)
 - Fixes missing space in Smart Supply (@TheRealMaxion)
@@ -986,16 +1204,16 @@ Stanek Gift
 
 ** UI **
 
-- background now matches game primary color (@nickofolas)
+- background now matches game primary color (@violet)
 - page title contains version (@MartinFourier)
-- Major text editor improvements (@nickofolas)
+- Major text editor improvements (@violet)
 - Display bonus time on sleeve page (@MartinFourier)
-- Several UI improvements (@nickofolas, @smolgumball, @DrCuriosity, @phyzical)
+- Several UI improvements (@violet, @smolgumball, @DrCuriosity, @phyzical)
 - Fix aug display in alpha (@Dominik Winter)
 - Fix display of corporation product equation (@SagePtr)
 - Make Bitverse more accessible (@ChrissiQ)
 - Make corporation warehouse more accessible (@ChrissiQ)
-- Make tab style more consistent (@nickofolas)
+- Make tab style more consistent (@violet)
 
 ** Netscript **
 
@@ -1062,8 +1280,8 @@ Stanek Gift
 - Fix cache tooltip (@woody-lam-cwl)
 - Added script to prettify save file for debugging (@MartinFourier)
 - Update documentation / typos (@theit8514, @thadguidry, @tigercat2000, @SlyCedix, @Spacejoker, @KenJohansson,
-  @Ornedan, @JustAnOkapi, @nickofolas, @philarmstead, @TheMas3212, @dcragusa, @XxKingsxX-Pinu,
-  @paiv, @smolgumball, @zeddrak, @stinky-lizard, @nickofolas, @Feodoric, @daanflore,
+  @Ornedan, @JustAnOkapi, @violet, @philarmstead, @TheMas3212, @dcragusa, @XxKingsxX-Pinu,
+  @paiv, @smolgumball, @zeddrak, @stinky-lizard, @violet, @Feodoric, @daanflore,
   @markusariliu, @mstruebing, @erplsf, @waffleattack, @Dexalt142, @AIT-OLPE, @deathly809, @BuckAMayzing,
   @MartinFourier, @pigalot, @lethern)
 - Fix BN3+ achievement (@SagePtr)
@@ -1093,7 +1311,7 @@ Stanek Gift
 - Fix issue that can cause terminal actions to start on one server and end on another (@MartinFourier)
 - Fix 'fileExists' not correctly matching file names (@TheMas3212)
 - Refactor some code to be more efficient (@TheMas3212)
-- Fix exp gain for terminal grow and weaken (@nickofolas)
+- Fix exp gain for terminal grow and weaken (@violet)
 - Refactor script death code to reject waiting promises instead of resolving (@Ornedan)
 - HP recalculates on defense exp gain (@TheMas3212)
 - Fix log for ascendMember (@TheMas3212)
@@ -1108,12 +1326,12 @@ Stanek Gift
 - React and ReactDOM are now global objects (@pigalot)
 - 'nano' supports globs (@smolgumball)
 - Character overview can be dragged (@MartinFourier)
-- Job page updates in real time (@nickofolas)
+- Job page updates in real time (@violet)
 - Company favor gain uses the same calculation as faction, this is just performance
-  the value didn't change (@nickofolas)
+  the value didn't change (@violet)
 - ns2 files work with more import options (@theit8514)
-- Allow autocomplete for partial executables (@nickofolas)
-- Add support for contract completion (@nickofolas)
+- Allow autocomplete for partial executables (@violet)
+- Add support for contract completion (@violet)
 - 'ls' link are clickable (@smolgumball)
 - Prevent steam from opening external LOCAL files (@MartinFourier)
 - Fix a bug with autocomplete (@Feodoric)
@@ -1123,18 +1341,18 @@ Stanek Gift
 - 'analyze' now says if the server is backdoored (@deathly809)
 - Add option to exclude running script from save (@MartinFourier)
 - Game now catches more errors and redirects to recovery page (@MartinFourier)
-- Fix bug with autocomplete (@nickofolas)
-- Add tooltip to unfocus work (@nickofolas)
+- Fix bug with autocomplete (@violet)
+- Add tooltip to unfocus work (@violet)
 - Add detailst overview (@MartinFourier)
 - Fix focus bug (@deathly809)
 - Fix some NaN handling (@deathly809)
 - Added 'mv' ns function (@deathly809)
-- Add focus argument to some singularity functions (@nickofolas)
+- Add focus argument to some singularity functions (@violet)
 - Fix some functions not disabling log correctly (@deathly809)
-- General UI improvements (@nickofolas)
+- General UI improvements (@violet)
 - Handle steamworks errors gravefully (@MartinFourier)
 - Fix some react component not unmounting correctly (@MartinFourier)
-- 'help' autocompletes (@nickofolas)
+- 'help' autocompletes (@violet)
 - No longer push all achievements to steam (@Ornedan)
 - Recovery page has more information (@MartinFourier)
 - Added 'getGameInfo' ns function (@MartinFourier)
@@ -1148,8 +1366,8 @@ Stanek Gift
 - Fix CI (@tvanderpol)
 - Change shortcuts to match sidebar (@MartinFourier)
 - Format gang respect (@attrib)
-- Add modal to text editor with ram details (@nickofolas)
-- Fix several bugs with singularity focus (@nickofolas)
+- Add modal to text editor with ram details (@violet)
+- Fix several bugs with singularity focus (@violet)
 - Nerf noodle bar.
 
 ## v1.3.0 - 2022-01-04 Cleaning up
@@ -1170,7 +1388,7 @@ Stanek Gift
 - Fix some edge case with skill bat tooltips (@MartinFournier)
 - Made some background match theme color (@Kejikus)
 - Fix problem with script editor height not adjusting correctly (@billyvg)
-- Fix some formatting issues with Bladeburner (@MartinFournier, @nickofolas)
+- Fix some formatting issues with Bladeburner (@MartinFournier, @violet)
 - Fix some functions like 'alert' format messages better (@MageKing17)
 - Many community themes added.
 - New script editor theme (@Hedrauta, @Dexalt142)
@@ -1180,7 +1398,7 @@ Stanek Gift
 - Remove alpha from theme editor (@MartinFournier)
 - Fix corporation tooltip not displaying properly (@MartinFournier)
 - Add tooltip on backdoored location names (@MartinFournier)
-- Allow toasts to be dismissed by clicking them (@nickofolas)
+- Allow toasts to be dismissed by clicking them (@violet)
 - Darkweb item listing now shows what you own. (@hexnaught)
 
 ** Bug fix **
@@ -1189,7 +1407,7 @@ Stanek Gift
 - Fixed issue with 'cat' and 'read' not finding foldered files (@Nick-Colclasure)
 - Buying on the dark web will remove incomplete exe (@hexnaught)
 - Fix bug that would cause the game to crash trying to go to a job without a job (@hexnaught)
-- purchaseServer validation (@nickofolas)
+- purchaseServer validation (@violet)
 - Script Editor focuses code when changing tab (@MartinFournier)
 - Fix script editor for .txt files (@65-7a)
 - Fix 'buy' command not displaying correctly. (@hexnaught)
@@ -1197,7 +1415,7 @@ Stanek Gift
 - Electron handles exceptions better (@MageKing17)
 - Electron will handle 'unresponsive' event and present the opportunity to reload the game with no scripts (@MartinFournier)
 - Fix 'cp' between folders (@theit8514)
-- Fix throwing null/undefined errors (@nickofolas)
+- Fix throwing null/undefined errors (@violet)
 - Allow shortcuts to work when unfocused (@MageKing17)
 - Fix some dependency issue (@locriacyber)
 - Fix corporation state returning an object instead of a string (@antonvmironov)
@@ -1216,7 +1434,7 @@ Stanek Gift
 - Include map bundles in electron for easier debugging (@MartinFournier)
 - Fix importing very large files (@MartinFournier)
 - Cache program blob, reducing ram usage of the game (@theit8514)
-- Dev menu can set server to $0 (@mikomyazaki)
+- Dev menu can set server to \$0 (@mikomyazaki)
 - 'backdoor' allows direct connect (@mikomyazaki)
 - Github workflow work (@MartinFournier)
 - workForFaction / workForCompany have a new parameter (@theit8514)
@@ -1233,7 +1451,7 @@ Stanek Gift
   @TheCoderJT, @hexnaught, @sschmidTU, @FOLLGAD, @Hedrauta, @Xynrati,
   @mikomyazaki, @Icehawk78, @aaronransley, @TheMas3212, @Hedrauta, @alkemann,
   @ReeseJones, @amclark42, @thadguidry, @jasonhaxstuff, @pan-kuleczka, @jhollowe,
-  @ApatheticsAnonymous, @erplsf, @daanflore, @nickofolas, @Kebap, @smolgumball,
+  @ApatheticsAnonymous, @erplsf, @daanflore, @violet, @Kebap, @smolgumball,
   @woody-lam-cwl)
 
 ## v1.1.0 - 2021-12-18 You guys are awesome (community because they're god damn awesome)
@@ -1418,7 +1636,7 @@ Stanek Gift
 ** Documentation **
 
 - The new documentation for the netscript API is available at
-  https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md
+  https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md
   This documentation is used in-game to validate the code, in-editor to autocomplete, and
   for users to reference. This is a huge quality of life improvements for me.
 
@@ -2162,7 +2380,7 @@ Stanek Gift
 
 **Misc.**
 
-- Very large number will no longer appear as "$NaNt"
+- Very large number will no longer appear as "\$NaNt"
 - Hash capacity now displays in the "big number" format.
 - nerf noodle bar
 
@@ -2851,7 +3069,7 @@ Stanek Gift
 - 'Generate Coding Contract' hash upgrade is now more expensive
 - 'Generate Coding Contract' hash upgrade now generates the contract randomly on the server, rather than on home computer
 - The cost of selling hashes for money no longer increases each time
-- Selling hashes for money now costs 4 hashes (in exchange for $1m)
+- Selling hashes for money now costs 4 hashes (in exchange for \$1m)
 - Bug Fix: Hacknet Node earnings should work properly when game is inactive/offline
 - Bug Fix: Duplicate Sleeve augmentations are now properly reset when switching to a new BitNode
 
@@ -2993,7 +3211,7 @@ Stanek Gift
 
   - Each stock now has a maximum number of shares you can purchase (both Long and Short positions combined)
   - Added getStockMaxShares() Netscript function to the TIX API
-  - The cost of 4S Market Data TIX API Access increased from $20b to $25b
+  - The cost of 4S Market Data TIX API Access increased from \$20b to \$25b
 
 - Job Changes:
 
@@ -3015,14 +3233,14 @@ Stanek Gift
 
 - Corporation Changes:
 
-  - Corporation can now be self-funded with $150b or using seed money in exchange for 500m newly-issued shares
-  - In BitNode-3, you no longer start with $150b
+  - Corporation can now be self-funded with \$150b or using seed money in exchange for 500m newly-issued shares
+  - In BitNode-3, you no longer start with \$150b
   - Changed initial market prices for many materials
   - Changed the way a material's demand, competition, and market price change over time
   - The sale price of materials can no longer be marked-up as high
   - Added a Research Tree mechanic. Spend Scientific Research on permanent upgrades for each industry
   - You can now redistribute earnings to shareholders (including yourself) as dividends
-  - Cost of "Smart Supply" upgraded reduced from $50b to $25b
+  - Cost of "Smart Supply" upgraded reduced from \$50b to \$25b
   - Now has offline progress, which works similarly to the Gang/Bladeburner mechanics
   - Slightly reduced the amount of money offered to you by investment firms
   - Employee salaries now slowly increase over time
@@ -3033,7 +3251,7 @@ Stanek Gift
   - Buying back shares must now be done at a premium
   - Selling shares can now only be done once per hour
   - Selling large amounts of shares now immediately impacts stock price (during the transaction)
-  - Reduced the initial cost of the DreamSense upgrade from $8b to $4b, but increased its price multiplier
+  - Reduced the initial cost of the DreamSense upgrade from \$8b to \$4b, but increased its price multiplier
   - Reduced the price multiplier for ABC SalesBots upgrade
 
 - Added getOrders() Netscript function to the TIX API
@@ -3321,7 +3539,7 @@ Stanek Gift
 
 - After joining the Bladeburners division, there is now a button to go to the Bladeburner content
   in the 'City' page
-- You now start with $250m in BitNode-8 (increased from $100m)
+- You now start with \$250m in BitNode-8 (increased from \$100m)
 - Bug Fix: You can now no longer directly edit Hacknet Node values through NetscriptJS (hopefully)
 - Bug Fix: Bladeburners is no longer accessible in BN-8
 - Bug Fix: getBitNodeMultipliers() Netscript function now returns a copy rather than the original object
@@ -3509,7 +3727,7 @@ Stanek Gift
   - purchaseServer(): increased by 0.25GB
 - Note: You may need to re-save all of your scripts in order to re-calculate their RAM usages. Otherwise, it should automatically be re-calculated when you reset/prestige
 - The cost to upgrade your home computer's RAM has been increased (both the base cost and the exponential upgrade multiplier)
-- The cost of purchasing a server was increased by 10% (it is now $55k per RAM)
+- The cost of purchasing a server was increased by 10% (it is now \$55k per RAM)
 - Bug fix: (Hopefully) removed an exploit where you could avoid RAM usage for Netscript function calls by assigning functions to a variable (foo = hack(); foo('helios');)
 - Bug fix: (Hopefully) removed an exploit where you could run arbitrary Javascript code using the constructor() method
 - Thanks to Github user mateon1 and Reddit users havoc_mayhem and spaceglace for notifying me of the above exploits
@@ -3575,7 +3793,7 @@ Stanek Gift
 
 - Game now saves to IndexedDb (if your browser supports it). This means you should no longer have trouble saving the game when your save file gets too big (from running too many scripts). The game will still be saved to localStorage as well
 - New file type: text files (.txt). You can read or write to text files using the read()/write() Netscript commands. You can view text files in Terminal using 'cat'. Eventually I will make it so you can edit them in the editor but that's not available yet. You can also download files to your real computer using the 'download' Terminal command
-- Added a new Crime: Bond Forgery. This crime takes 5 minutes to attempt and gives $4,500,000 if successful. It is meant for mid game.
+- Added a new Crime: Bond Forgery. This crime takes 5 minutes to attempt and gives \$4,500,000 if successful. It is meant for mid game.
 - Added commitCrime(), getCrimeChance(), isBusy(), and getStats() Singularity Functions.
 - Removed getIntelligence() Netscript function
 - Added sprintf and vsprintf to Netscript. See [https://github.com/alexei/sprintf.js this Github page for details]
@@ -3947,7 +4165,7 @@ Similar concepts apply for Terminal Commands such as tail, and Netscript command
 - Added killall Terminal command. Kills all running scripts on the current machine
 - Added kill() and killall() Netscript commands. Used to kill scripts on specified machines. See Netscript documentation
 - Re-designed 'Active Scripts' tab
-- Hacknet Node base production rate lowered from 1.6 to 1.55 ($/second)
+- Hacknet Node base production rate lowered from 1.6 to 1.55 (\$/second)
 - Increased monetary cost of RAM (Upgrading home computer and purchasing servers will now be more expensive)
 - NEW GROWTH MECHANICS - The rate of growth on a server now depends on a server's security level. A higher security level will result in lower growth on a server when using the grow() command. Furthermore, calling grow() on a server raises that server's security level by 0.004. For reference, if a server has a security level of 10 it will have approximately the same growth rate as before.
 - Server growth no longer happens naturally
@@ -3988,7 +4206,7 @@ Similar concepts apply for Terminal Commands such as tail, and Netscript command
 - Cancelling a full time job early now only results in halved gains for reputation. Exp and money earnings are gained in full
 - Added exec() Netscript command, used to run scripts on other servers.
 - NEW HACKING MECHANICS: Whenever a server is hacked, its 'security level' is increased by a very small amount. The security level is denoted by a number between 1-100. A higher security level makes it harder to hack a server and also decreases the amount of money you steal from it. Two Netscript functions, weaken() and getServerSecurityLevel() level, were added. The weaken(server) function lowers a server's security level. See the Netscript documentation for more details
-- When donating to factions, the base rate is now $1,000,000 for 1 reputation point. Before, it was $1,000 for 1 reputation point.
+- When donating to factions, the base rate is now \$1,000,000 for 1 reputation point. Before, it was \$1,000 for 1 reputation point.
 - Monetary costs for all Augmentations increased. They are now about ~3.3 - 3.75 times more expensive than before
 
 ## v0.17.1
@@ -4006,11 +4224,11 @@ Similar concepts apply for Terminal Commands such as tail, and Netscript command
 - Added getHostname() command in Netscript that returns the hostname of the server a script is running on
 - jQuery preventDefault() called when pressing ctrl+b in script editor
 - The Neuroflux Governor augmentation (the one that can be repeatedly leveled up) now increases ALL multipliers by 1%. To balance it out, it's price multiplier when it levels up was increased
-- Hacknet Node base production decreased from $1.75/s to $1.65/s
+- Hacknet Node base production decreased from \$1.75/s to \$1.65/s
 - Fixed issue with nested for loops in Netscript (stupid Javascript references)
 - Added 'scp' command to Terminal and Netscript
 - Slightly nerfed Hacknet Node Kernel DNI and Hacknet Node Core DNI Augmentations
-- Increased TOR Router cost to $200k
+- Increased TOR Router cost to \$200k
 
 ## v0.16.0
 

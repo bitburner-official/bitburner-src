@@ -1,93 +1,78 @@
+import type { Bladeburner } from "../Bladeburner";
+import type { BlackOperation } from "../Actions/BlackOperation";
+
 import React from "react";
+import { Paper, Typography } from "@mui/material";
+
+import { Player } from "@player";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
-import { ActionTypes } from "../data/ActionTypes";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { TeamSizeButton } from "./TeamSizeButton";
-import { Bladeburner } from "../Bladeburner";
-import { BlackOperation } from "../BlackOperation";
-import { BlackOperations } from "../data/BlackOperations";
-import { Player } from "@player";
 import { CopyableText } from "../../ui/React/CopyableText";
 import { SuccessChance } from "./SuccessChance";
 import { StartButton } from "./StartButton";
-
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
 import { useRerender } from "../../ui/React/hooks";
 
-interface IProps {
+interface BlackOpElemProps {
   bladeburner: Bladeburner;
-  action: BlackOperation;
+  blackOp: BlackOperation;
 }
 
-export function BlackOpElem(props: IProps): React.ReactElement {
+export function BlackOpElem({ bladeburner, blackOp }: BlackOpElemProps): React.ReactElement {
   const rerender = useRerender();
-  const isCompleted = props.bladeburner.blackops[props.action.name] != null;
+  const isCompleted = bladeburner.numBlackOpsComplete > blackOp.n;
   if (isCompleted) {
     return (
       <Paper sx={{ my: 1, p: 1 }}>
-        <Typography>{props.action.name} (COMPLETED)</Typography>
+        <Typography>{blackOp.name} (COMPLETED)</Typography>
       </Paper>
     );
   }
 
-  const isActive =
-    props.bladeburner.action.type === ActionTypes.BlackOperation && props.action.name === props.bladeburner.action.name;
-  const actionTime = props.action.getActionTime(props.bladeburner, Player);
-  const hasReqdRank = props.bladeburner.rank >= props.action.reqdRank;
+  const isActive = bladeburner.action?.name === blackOp.name;
+  const actionTime = blackOp.getActionTime(bladeburner, Player);
+  const hasReqdRank = bladeburner.rank >= blackOp.reqdRank;
   const computedActionTimeCurrent = Math.min(
-    props.bladeburner.actionTimeCurrent + props.bladeburner.actionTimeOverflow,
-    props.bladeburner.actionTimeToComplete,
+    bladeburner.actionTimeCurrent + bladeburner.actionTimeOverflow,
+    bladeburner.actionTimeToComplete,
   );
-
-  const actionData = BlackOperations[props.action.name];
-  if (actionData === undefined) {
-    throw new Error(`Cannot find data for ${props.action.name}`);
-  }
 
   return (
     <Paper sx={{ my: 1, p: 1 }}>
       {isActive ? (
         <>
-          <>
-            <CopyableText value={props.action.name} />
-            <Typography>
-              (IN PROGRESS - {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
-              {formatNumberNoSuffix(props.bladeburner.actionTimeToComplete, 0)})
-            </Typography>
-            <Typography>
-              {createProgressBarText({
-                progress: computedActionTimeCurrent / props.bladeburner.actionTimeToComplete,
-              })}
-            </Typography>
-          </>
+          <CopyableText value={blackOp.name} />
+          <Typography>
+            (IN PROGRESS - {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
+            {formatNumberNoSuffix(bladeburner.actionTimeToComplete, 0)})
+          </Typography>
+          <Typography>
+            {createProgressBarText({
+              progress: computedActionTimeCurrent / bladeburner.actionTimeToComplete,
+            })}
+          </Typography>
         </>
       ) : (
         <>
-          <CopyableText value={props.action.name} />
+          <CopyableText value={blackOp.name} />
 
-          <StartButton
-            bladeburner={props.bladeburner}
-            type={ActionTypes.BlackOperation}
-            name={props.action.name}
-            rerender={rerender}
-          />
-          <TeamSizeButton action={props.action} bladeburner={props.bladeburner} />
+          <StartButton bladeburner={bladeburner} action={blackOp} rerender={rerender} />
+          <TeamSizeButton action={blackOp} bladeburner={bladeburner} />
         </>
       )}
 
       <br />
       <br />
-      <Typography>{actionData.desc}</Typography>
+      <Typography whiteSpace={"pre-wrap"}>{blackOp.desc}</Typography>
       <br />
       <br />
       <Typography color={hasReqdRank ? "primary" : "error"}>
-        Required Rank: {formatNumberNoSuffix(props.action.reqdRank, 0)}
+        Required Rank: {formatNumberNoSuffix(blackOp.reqdRank, 0)}
       </Typography>
       <br />
       <Typography>
-        <SuccessChance action={props.action} bladeburner={props.bladeburner} />
+        <SuccessChance action={blackOp} bladeburner={bladeburner} />
         <br />
         Time Required: {convertTimeMsToTimeElapsedString(actionTime * 1000)}
       </Typography>

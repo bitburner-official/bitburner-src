@@ -29,6 +29,6 @@ Returns an object containing the Player’s hacking related multipliers. These m
 ```js
 const mults = ns.getHackingMultipliers();
 print(`chance: ${mults.chance}`);
-print(`growthL ${mults.growth}`);
+print(`growth: ${mults.growth}`);
 ```
 

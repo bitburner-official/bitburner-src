@@ -1,37 +1,35 @@
-import $ from "jquery";
-
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 
 export function wget(args: (string | number | boolean)[], server: BaseServer): void {
-  if (args.length !== 2) {
+  if (args.length !== 2 || typeof args[0] !== "string" || typeof args[1] !== "string") {
     Terminal.error("Incorrect usage of wget command. Usage: wget [url] [target file]");
     return;
   }
 
-  const url = args[0] + "";
-  const target = Terminal.getFilepath(args[1] + "");
+  const target = Terminal.getFilepath(args[1]);
   if (!target || (!hasScriptExtension(target) && !hasTextExtension(target))) {
-    return Terminal.error(`wget failed: Invalid target file. Target file must be script or text file`);
+    Terminal.error(`wget failed: Invalid target file. Target file must be a script file or a text file.`);
+    return;
   }
-  $.get(
-    url,
-    function (data: unknown) {
-      let res;
-      if (hasTextExtension(target)) {
-        res = server.writeToTextFile(target, String(data));
+
+  fetch(args[0])
+    .then(async (response) => {
+      if (response.status !== 200) {
+        Terminal.error(`wget failed. HTTP code: ${response.status}.`);
+        return;
+      }
+      const writeResult = server.writeToContentFile(target, await response.text());
+      if (writeResult.overwritten) {
+        Terminal.print(`wget successfully retrieved content and overwrote ${target}`);
       } else {
-        res = server.writeToScriptFile(target, String(data));
+        Terminal.print(`wget successfully retrieved content to new file ${target}`);
       }
-      if (res.overwritten) {
-        return Terminal.print(`wget successfully retrieved content and overwrote ${target}`);
-      }
-      return Terminal.print(`wget successfully retrieved content to new file ${target}`);
-    },
-    "text",
-  ).fail(function (e) {
-    return Terminal.error("wget failed: " + JSON.stringify(e));
-  });
+    })
+    .catch((reason) => {
+      // Check the comment in wget of src\NetscriptFunctions.ts to see why we use Object.getOwnPropertyNames.
+      Terminal.error(`wget failed: ${JSON.stringify(reason, Object.getOwnPropertyNames(reason))}`);
+    });
 }

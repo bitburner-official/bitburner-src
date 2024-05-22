@@ -6,7 +6,7 @@ import { formatCorpMultiplier } from "../../../ui/formatNumber";
 import { IndustryResearchTrees } from "../../data/IndustryData";
 import * as corpConstants from "../../data/Constants";
 import { Division } from "../../Division";
-import { Research } from "../../Actions";
+import * as actions from "../../Actions";
 import { Node } from "../../ResearchTree";
 import { ResearchMap } from "../../ResearchMap";
 import { Settings } from "../../../Settings/Settings";
@@ -38,7 +38,7 @@ function Upgrade({ n, division }: INodeProps): React.ReactElement {
   function research(): void {
     if (n === null || disabled) return;
     try {
-      Research(division, n.researchName);
+      actions.research(division, n.researchName);
     } catch (err) {
       dialogBoxCreate(err + "");
       return;

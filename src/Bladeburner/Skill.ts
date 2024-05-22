@@ -1,161 +1,56 @@
+import type { BladeMultName, BladeSkillName } from "@enums";
+
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
+import { Bladeburner } from "./Bladeburner";
+import { Availability } from "./Types";
+import { PositiveInteger, PositiveSafeInteger, isPositiveInteger } from "../types";
+import { PartialRecord, getRecordEntries } from "../Types/Record";
 
-interface ISkillParams {
-  name: string;
+interface SkillParams {
+  name: BladeSkillName;
   desc: string;
-
   baseCost?: number;
   costInc?: number;
   maxLvl?: number;
-
-  successChanceAll?: number;
-  successChanceStealth?: number;
-  successChanceKill?: number;
-  successChanceContract?: number;
-  successChanceOperation?: number;
-  successChanceEstimate?: number;
-
-  actionTime?: number;
-
-  effHack?: number;
-  effStr?: number;
-  effDef?: number;
-  effDex?: number;
-  effAgi?: number;
-  effCha?: number;
-
-  stamina?: number;
-  money?: number;
-  expGain?: number;
+  mults: PartialRecord<BladeMultName, number>;
 }
 
 export class Skill {
-  name: string;
+  name: BladeSkillName;
   desc: string;
   // Cost is in Skill Points
-  baseCost = 1;
+  baseCost: number;
   // Additive cost increase per level
-  costInc = 1;
-  maxLvl = 0;
+  costInc: number;
+  maxLvl: number;
+  mults: PartialRecord<BladeMultName, number> = {};
 
-  /**
-   * These benefits are additive. So total multiplier will be level (handled externally) times the
-   * effects below
-   */
-  successChanceAll = 0;
-  successChanceStealth = 0;
-  successChanceKill = 0;
-  successChanceContract = 0;
-  successChanceOperation = 0;
-
-  /**
-   * This multiplier affects everything that increases synthoid population/community estimate
-   * e.g. Field analysis, Investigation Op, Undercover Op
-   */
-  successChanceEstimate = 0;
-  actionTime = 0;
-  effHack = 0;
-  effStr = 0;
-  effDef = 0;
-  effDex = 0;
-  effAgi = 0;
-  effCha = 0;
-  stamina = 0;
-  money = 0;
-  expGain = 0;
-
-  constructor(params: ISkillParams = { name: "foo", desc: "foo" }) {
-    if (!params.name) {
-      throw new Error("Failed to initialize Bladeburner Skill. No name was specified in ctor");
-    }
-    if (!params.desc) {
-      throw new Error("Failed to initialize Bladeburner Skills. No desc was specified in ctor");
-    }
+  constructor(params: SkillParams) {
     this.name = params.name;
     this.desc = params.desc;
-    this.baseCost = params.baseCost ? params.baseCost : 1;
-    this.costInc = params.costInc ? params.costInc : 1;
-
-    if (params.maxLvl) {
-      this.maxLvl = params.maxLvl;
-    }
-
-    if (params.successChanceAll) {
-      this.successChanceAll = params.successChanceAll;
-    }
-    if (params.successChanceStealth) {
-      this.successChanceStealth = params.successChanceStealth;
-    }
-    if (params.successChanceKill) {
-      this.successChanceKill = params.successChanceKill;
-    }
-    if (params.successChanceContract) {
-      this.successChanceContract = params.successChanceContract;
-    }
-    if (params.successChanceOperation) {
-      this.successChanceOperation = params.successChanceOperation;
-    }
-
-    if (params.successChanceEstimate) {
-      this.successChanceEstimate = params.successChanceEstimate;
-    }
-
-    if (params.actionTime) {
-      this.actionTime = params.actionTime;
-    }
-    if (params.effHack) {
-      this.effHack = params.effHack;
-    }
-    if (params.effStr) {
-      this.effStr = params.effStr;
-    }
-    if (params.effDef) {
-      this.effDef = params.effDef;
-    }
-    if (params.effDex) {
-      this.effDex = params.effDex;
-    }
-    if (params.effAgi) {
-      this.effAgi = params.effAgi;
-    }
-    if (params.effCha) {
-      this.effCha = params.effCha;
-    }
-
-    if (params.stamina) {
-      this.stamina = params.stamina;
-    }
-    if (params.money) {
-      this.money = params.money;
-    }
-    if (params.expGain) {
-      this.expGain = params.expGain;
-    }
+    this.baseCost = params.baseCost ?? 1;
+    this.costInc = params.costInc ?? 1;
+    this.maxLvl = params.maxLvl ?? Number.MAX_SAFE_INTEGER;
+    for (const [multName, mult] of getRecordEntries(params.mults)) this.mults[multName] = mult;
   }
 
-  calculateCost(currentLevel: number, count = 1): number {
-    //Recursive mode does not handle invalid inputs properly, but it should never
-    //be possible for it to run with them. For the sake of not crashing the game,
-    const recursiveMode = (currentLevel: number, count: number): number => {
+  calculateCost(currentLevel: number, count = 1 as PositiveInteger): number {
+    if (currentLevel + count > this.maxLvl) return Infinity;
+
+    const recursiveMode = (currentLevel: number, count: PositiveSafeInteger): number => {
       if (count <= 1) {
         return Math.floor((this.baseCost + currentLevel * this.costInc) * currentNodeMults.BladeburnerSkillCost);
       } else {
         const thisUpgrade = Math.floor(
           (this.baseCost + currentLevel * this.costInc) * currentNodeMults.BladeburnerSkillCost,
         );
-        return this.calculateCost(currentLevel + 1, count - 1) + thisUpgrade;
+        return this.calculateCost(currentLevel + 1, (count - 1) as PositiveSafeInteger) + thisUpgrade;
       }
     };
 
-    //Count must be a positive integer.
-    if (count < 0 || count % 1 != 0) {
-      throw new Error(`${count} is an invalid number of upgrades`);
-    }
-    //Use recursive mode if count is small
-    if (count <= 100) {
-      return recursiveMode(currentLevel, count);
-    }
-    //Use optimized mode if count is large
+    // Use recursive mode if count is small
+    if (count <= 100) return recursiveMode(currentLevel, count as PositiveSafeInteger);
+    // Use optimized mode if count is large
     else {
       //unFloored is roughly equivalent to
       //(this.baseCost + currentLevel * this.costInc) * BitNodeMultipliers.BladeburnerSkillCost
@@ -166,26 +61,16 @@ export class Skill {
     }
   }
 
-  getMultiplier(name: string): number {
-    if (name === "successChanceAll") return this.successChanceAll;
-    if (name === "successChanceStealth") return this.successChanceStealth;
-    if (name === "successChanceKill") return this.successChanceKill;
-    if (name === "successChanceContract") return this.successChanceContract;
-    if (name === "successChanceOperation") return this.successChanceOperation;
-    if (name === "successChanceEstimate") return this.successChanceEstimate;
+  canUpgrade(bladeburner: Bladeburner, count = 1): Availability<{ cost: number }> {
+    const currentLevel = bladeburner.skills[this.name] ?? 0;
+    if (!isPositiveInteger(count)) return { error: `Invalid upgrade count ${count}` };
+    if (currentLevel + count > this.maxLvl) return { error: `Upgraded level ${currentLevel + count} exceeds max` };
+    const cost = this.calculateCost(currentLevel, count);
+    if (cost > bladeburner.skillPoints) return { error: `Insufficient skill points for upgrade` };
+    return { available: true, cost };
+  }
 
-    if (name === "actionTime") return this.actionTime;
-
-    if (name === "effHack") return this.effHack;
-    if (name === "effStr") return this.effStr;
-    if (name === "effDef") return this.effDef;
-    if (name === "effDex") return this.effDex;
-    if (name === "effAgi") return this.effAgi;
-    if (name === "effCha") return this.effCha;
-
-    if (name === "stamina") return this.stamina;
-    if (name === "money") return this.money;
-    if (name === "expGain") return this.expGain;
-    return 0;
+  getMultiplier(name: BladeMultName): number {
+    return this.mults[name] ?? 0;
   }
 }

@@ -1,15 +1,19 @@
 import { PositiveInteger } from "../../src/types";
 import { Corporation } from "../../src/Corporation/Corporation";
 import { CorpUpgrades } from "../../src/Corporation/data/CorporationUpgrades";
-import { calculateMaxAffordableUpgrade, calculateUpgradeCost } from "../../src/Corporation/helpers";
+import {
+  calculateMaxAffordableUpgrade,
+  calculateUpgradeCost,
+  calculateOfficeSizeUpgradeCost,
+} from "../../src/Corporation/helpers";
 import { Player, setPlayer } from "../../src/Player";
 import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
 import {
-  AcceptInvestmentOffer,
-  BuyBackShares,
-  GoPublic,
-  IssueNewShares,
-  SellShares,
+  acceptInvestmentOffer,
+  buyBackShares,
+  goPublic,
+  issueNewShares,
+  sellShares,
 } from "../../src/Corporation/Actions";
 
 describe("Corporation", () => {
@@ -83,33 +87,54 @@ describe("Corporation", () => {
       expectSharesToAddUp(Player.corporation!);
     });
     it("should be preserved by acceptInvestmentOffer", () => {
-      AcceptInvestmentOffer(corporation);
+      acceptInvestmentOffer(corporation);
       expectSharesToAddUp(corporation);
     });
     it("should be preserved by goPublic", () => {
       const numShares = 1e8;
-      GoPublic(corporation, numShares);
+      goPublic(corporation, numShares);
       expectSharesToAddUp(corporation);
     });
     it("should be preserved by IssueNewShares", () => {
       const numShares = 1e8;
-      GoPublic(corporation, numShares);
+      goPublic(corporation, numShares);
       corporation.issueNewSharesCooldown = 0;
-      IssueNewShares(corporation, numShares);
+      issueNewShares(corporation, numShares);
       expectSharesToAddUp(corporation);
     });
     it("should be preserved by BuyBackShares", () => {
       const numShares = 1e8;
-      GoPublic(corporation, numShares);
-      BuyBackShares(corporation, numShares);
+      goPublic(corporation, numShares);
+      buyBackShares(corporation, numShares);
       expectSharesToAddUp(corporation);
     });
     it("should be preserved by SellShares", () => {
       const numShares = 1e8;
-      GoPublic(corporation, numShares);
+      goPublic(corporation, numShares);
       corporation.shareSaleCooldown = 0;
-      SellShares(corporation, numShares);
+      sellShares(corporation, numShares);
       expectSharesToAddUp(corporation);
     });
+  });
+
+  describe("helpers.calculateOfficeSizeUpgradeCost matches documented formula", () => {
+    // for discussion and computation of these test values, see:
+    // https://github.com/bitburner-official/bitburner-src/pull/1179#discussion_r1534948725
+    it.each([
+      { fromSize: 3, increaseBy: 3, expectedCost: 4360000000.0 },
+      { fromSize: 3, increaseBy: 15, expectedCost: 26093338259.6 },
+      { fromSize: 3, increaseBy: 150, expectedCost: 3553764305895.24902 },
+      { fromSize: 6, increaseBy: 3, expectedCost: 4752400000.0 },
+      { fromSize: 6, increaseBy: 15, expectedCost: 28441738702.964 },
+      { fromSize: 6, increaseBy: 150, expectedCost: 3873603093425.821 },
+      { fromSize: 9, increaseBy: 3, expectedCost: 5180116000.0 },
+      { fromSize: 9, increaseBy: 15, expectedCost: 31001495186.23076 },
+      { fromSize: 9, increaseBy: 150, expectedCost: 4222227371834.145 },
+    ])(
+      "should cost $expectedCost to upgrade office by $increaseBy from size $fromSize",
+      ({ fromSize, increaseBy, expectedCost }) => {
+        expect(calculateOfficeSizeUpgradeCost(fromSize, increaseBy as PositiveInteger)).toBeCloseTo(expectedCost, 1);
+      },
+    );
   });
 });

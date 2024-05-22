@@ -79,7 +79,6 @@ interface ClassWorkParams {
 }
 
 export const isClassWork = (w: Work | null): w is ClassWork => w !== null && w.type === WorkType.CLASS;
-
 export class ClassWork extends Work {
   classType: ClassType;
   location: LocationName;
@@ -132,9 +131,9 @@ export class ClassWork extends Work {
     }
   }
 
-  APICopy(): Record<string, unknown> {
+  APICopy() {
     return {
-      type: this.type,
+      type: WorkType.CLASS as const,
       cyclesWorked: this.cyclesWorked,
       classType: this.classType,
       location: this.location,

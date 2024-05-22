@@ -14,7 +14,7 @@ This extension includes several features such as:
 
 - Dynamic RAM calculation
 - RAM Usage breakdown
-- Typescript definition files with jsdoc comments
+- Typescript definition files with JSDoc comments
 - Syntax highlighting
 
-You can find more information and download links [on this reddit post](https://www.reddit.com/r/Bitburner/comments/bh48y2/visual_studio_code_ram_calculator_extra/).
+You can find more information and download links [on this Reddit post](https://www.reddit.com/r/Bitburner/comments/bh48y2/visual_studio_code_ram_calculator_extra/).

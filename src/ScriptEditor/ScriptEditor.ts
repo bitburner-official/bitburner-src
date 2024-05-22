@@ -45,7 +45,7 @@ export class ScriptEditor {
       l.language.tokenizer.root.unshift([new RegExp("\\bns\\b"), { token: "ns" }]);
       for (const symbol of apiKeys)
         l.language.tokenizer.root.unshift([new RegExp(`\\b${symbol}\\b`), { token: "netscriptfunction" }]);
-      const otherKeywords = ["let", "const", "var", "function"];
+      const otherKeywords = ["let", "const", "var", "function", "arguments"];
       const otherKeyvars = ["true", "false", "null", "undefined"];
       otherKeywords.forEach((k) =>
         l.language.tokenizer.root.unshift([new RegExp(`\\b${k}\\b`), { token: "otherkeywords" }]),
@@ -60,6 +60,12 @@ export class ScriptEditor {
     const source = (libSource + "").replace(/export /g, "");
     monaco.languages.typescript.javascriptDefaults.addExtraLib(source, "netscript.d.ts");
     monaco.languages.typescript.typescriptDefaults.addExtraLib(source, "netscript.d.ts");
+    monaco.languages.json.jsonDefaults.setModeConfiguration({
+      ...monaco.languages.json.jsonDefaults.modeConfiguration,
+      //completion should be disabled because the
+      //json language server tries to load a schema by default
+      completionItems: false,
+    });
     // Load themes
     loadThemes(monaco.editor.defineTheme);
     sanitizeTheme(Settings.EditorTheme);

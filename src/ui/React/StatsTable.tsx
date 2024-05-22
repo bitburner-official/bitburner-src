@@ -8,16 +8,18 @@ interface StatsTableProps {
   rows: ReactNode[][];
   title?: string;
   wide?: boolean;
+  paddingLeft?: string;
 }
 
-const useStyles = makeStyles({
-  firstCell: { textAlign: "left" },
-  nonFirstCell: { textAlign: "right", paddingLeft: "0.5em" },
-});
+const useStyles = (paddingLeft: string) =>
+  makeStyles({
+    firstCell: { textAlign: "left" },
+    nonFirstCell: { textAlign: "right", paddingLeft: paddingLeft },
+  })();
 
-export function StatsTable({ rows, title, wide }: StatsTableProps): ReactElement {
+export function StatsTable({ rows, title, wide, paddingLeft }: StatsTableProps): ReactElement {
   const T = wide ? MuiTable : Table;
-  const classes = useStyles();
+  const classes = useStyles(paddingLeft ?? "0.5em");
   return (
     <>
       {title && <Typography>{title}</Typography>}

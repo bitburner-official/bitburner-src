@@ -10,7 +10,7 @@ import { GetServer } from "../Server/AllServers";
 import { AddRecentScript } from "./RecentScripts";
 import { ITutorial } from "../InteractiveTutorial";
 import { AlertEvents } from "../ui/React/AlertManager";
-import { handleUnknownError } from "./NetscriptHelpers";
+import { handleUnknownError } from "./ErrorMessages";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 
 export function killWorkerScript(ws: WorkerScript): boolean {
@@ -42,20 +42,24 @@ function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   if (ws.delay) clearTimeout(ws.delay);
   ws.delayReject?.(new ScriptDeath(ws));
   ws.env.runningFn = "";
+  const atExit = ws.atExit;
+  //Calling ns.exit inside ns.atExit can lead to recursion
+  //so the map must be cleared before looping
+  ws.atExit = new Map();
 
-  if (typeof ws.atExit === "function") {
+  for (const [id, callback] of atExit) {
     try {
-      const atExit = ws.atExit;
-      ws.atExit = undefined;
-      atExit();
+      callback();
     } catch (e: unknown) {
-      handleUnknownError(e, ws, "Error running atExit function.\n\n");
-    }
-    if (ws.env.stopFlag) {
-      // If atExit() kills the script, we'll already be stopped, don't stop again.
-      return;
+      handleUnknownError(e, ws, `Error running atExit function with id ${id}.\n\n`);
     }
   }
+
+  if (ws.env.stopFlag) {
+    // If atExit() kills the script, we'll already be stopped, don't stop again.
+    return;
+  }
+
   ws.env.stopFlag = true;
   removeWorkerScript(ws);
 }
@@ -93,5 +97,7 @@ function removeWorkerScript(workerScript: WorkerScript): void {
   server.updateRamUsed(roundToTwo(server.ramUsed - rs.ramUsage * rs.threads));
 
   workerScripts.delete(workerScript.pid);
-  AddRecentScript(workerScript);
+  if (rs.temporary === false) {
+    AddRecentScript(workerScript);
+  }
 }

@@ -1,9 +1,9 @@
 import { Skills } from "@nsdefs";
 
 import { loadAliases, loadGlobalAliases, Aliases, GlobalAliases } from "./Alias";
-import { Companies, loadCompanies } from "./Company/Companies";
+import { getCompaniesSave, loadCompanies } from "./Company/Companies";
 import { CONSTANTS } from "./Constants";
-import { Factions, loadFactions } from "./Faction/Factions";
+import { getFactionsSave, loadFactions } from "./Faction/Factions";
 import { loadAllGangs, AllGangs } from "./Gang/AllGangs";
 import { Player, setPlayer, loadPlayer } from "./Player";
 import {
@@ -26,32 +26,42 @@ import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { Reviver, constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "./utils/JSONReviver";
 import { save } from "./db";
 import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
-import { AugmentationName, FactionName, LocationName, ToastVariant } from "@enums";
+import { AugmentationName, LocationName, ToastVariant } from "@enums";
 import { PlayerOwnedAugmentation } from "./Augmentation/PlayerOwnedAugmentation";
 import { pushGameSaved } from "./Electron";
 import { defaultMonacoTheme } from "./ScriptEditor/ui/themes";
-import { Faction } from "./Faction/Faction";
 import { safelyCreateUniqueServer } from "./Server/ServerHelpers";
 import { SpecialServers } from "./Server/data/SpecialServers";
 import { v2APIBreak } from "./utils/v2APIBreak";
 import { Corporation } from "./Corporation/Corporation";
 import { Terminal } from "./Terminal";
 import { getRecordValues } from "./Types/Record";
-import { ExportMaterial } from "./Corporation/Actions";
+import { exportMaterial } from "./Corporation/Actions";
+import { getGoSave, loadGo } from "./Go/SaveLoad";
+import { SaveData } from "./types";
+import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
+import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
+import { downloadContentAsFile } from "./utils/FileUtils";
+import { showAPIBreaks } from "./utils/APIBreaks/APIBreak";
+import { breakInfos261 } from "./utils/APIBreaks/2.6.1";
+import { handleGetSaveDataError } from "./Netscript/ErrorMessages";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
  */
 
-export interface SaveData {
+/**
+ * This interface is only for transferring game data to electron-related code.
+ */
+export interface ElectronGameData {
   playerIdentifier: string;
   fileName: string;
-  save: string;
+  save: SaveData;
   savedOn: number;
 }
 
 export interface ImportData {
-  base64: string;
+  saveData: SaveData;
   playerData?: ImportPlayerData;
 }
 
@@ -86,8 +96,9 @@ class BitburnerSaveObject {
   AllGangsSave = "";
   LastExportBonus = "0";
   StaneksGiftSave = "";
+  GoSave = "";
 
-  getSaveString(forceExcludeRunningScripts = false): string {
+  async getSaveData(forceExcludeRunningScripts = false): Promise<SaveData> {
     this.PlayerSave = JSON.stringify(Player);
 
     // For the servers save, overwrite the ExcludeRunningScripts setting if forced
@@ -96,8 +107,8 @@ class BitburnerSaveObject {
     this.AllServersSave = saveAllServers();
     Settings.ExcludeRunningScriptsFromSave = originalExcludeSetting;
 
-    this.CompaniesSave = JSON.stringify(Companies);
-    this.FactionsSave = JSON.stringify(Factions);
+    this.CompaniesSave = JSON.stringify(getCompaniesSave());
+    this.FactionsSave = JSON.stringify(getFactionsSave());
     this.AliasesSave = JSON.stringify(Object.fromEntries(Aliases.entries()));
     this.GlobalAliasesSave = JSON.stringify(Object.fromEntries(GlobalAliases.entries()));
     this.StockMarketSave = JSON.stringify(StockMarket);
@@ -105,118 +116,129 @@ class BitburnerSaveObject {
     this.VersionSave = JSON.stringify(CONSTANTS.VersionNumber);
     this.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
     this.StaneksGiftSave = JSON.stringify(staneksGift);
+    this.GoSave = JSON.stringify(getGoSave());
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
 
-    const saveString = btoa(unescape(encodeURIComponent(JSON.stringify(this))));
-    return saveString;
+    return await encodeJsonSaveString(JSON.stringify(this));
   }
 
-  saveGame(emitToastEvent = true): Promise<void> {
+  async saveGame(emitToastEvent = true): Promise<void> {
     const savedOn = new Date().getTime();
     Player.lastSave = savedOn;
-    const saveString = this.getSaveString();
-    return new Promise((resolve, reject) => {
-      save(saveString)
-        .then(() => {
-          const saveData: SaveData = {
-            playerIdentifier: Player.identifier,
-            fileName: this.getSaveFileName(),
-            save: saveString,
-            savedOn,
-          };
-          pushGameSaved(saveData);
+    let saveData;
+    try {
+      saveData = await this.getSaveData();
+    } catch (error) {
+      handleGetSaveDataError(error);
+      return;
+    }
+    try {
+      await save(saveData);
+    } catch (error) {
+      console.error(error);
+      dialogBoxCreate(`Cannot save game: ${error}`);
+      return;
+    }
+    const electronGameData: ElectronGameData = {
+      playerIdentifier: Player.identifier,
+      fileName: this.getSaveFileName(),
+      save: saveData,
+      savedOn,
+    };
+    pushGameSaved(electronGameData);
 
-          if (emitToastEvent) {
-            SnackbarEvents.emit("Game Saved!", ToastVariant.INFO, 2000);
-          }
-          return resolve();
-        })
-        .catch((err) => {
-          console.error(err);
-          return reject();
-        });
-    });
+    if (emitToastEvent) {
+      SnackbarEvents.emit("Game Saved!", ToastVariant.INFO, 2000);
+    }
   }
 
-  getSaveFileName(isRecovery = false): string {
+  getSaveFileName(): string {
     // Save file name is based on current timestamp and BitNode
     const epochTime = Math.round(Date.now() / 1000);
     const bn = Player.bitNodeN;
-    let filename = `bitburnerSave_${epochTime}_BN${bn}x${Player.sourceFileLvl(bn) + 1}.json`;
-    if (isRecovery) filename = "RECOVERY" + filename;
-    return filename;
+    /**
+     * - Binary format: save file uses .json.gz extension. Save data is the compressed json save string.
+     * - Base64 format: save file uses .json extension. Save data is the base64-encoded json save string.
+     */
+    const extension = canUseBinaryFormat() ? "json.gz" : "json";
+    return `bitburnerSave_${epochTime}_BN${bn}x${Player.sourceFileLvl(bn) + 1}.${extension}`;
   }
 
-  exportGame(): void {
-    const saveString = this.getSaveString();
+  async exportGame(): Promise<void> {
+    let saveData;
+    try {
+      saveData = await this.getSaveData();
+    } catch (error) {
+      handleGetSaveDataError(error);
+      return;
+    }
     const filename = this.getSaveFileName();
-    download(filename, saveString);
+    downloadContentAsFile(saveData, filename);
   }
 
-  importGame(base64Save: string, reload = true): Promise<void> {
-    if (!base64Save || base64Save === "") throw new Error("Invalid import string");
-    return save(base64Save).then(() => {
-      if (reload) setTimeout(() => location.reload(), 1000);
-      return Promise.resolve();
-    });
+  async importGame(saveData: SaveData, reload = true): Promise<void> {
+    if (!saveData || saveData.length === 0) {
+      throw new Error("Invalid import string");
+    }
+    try {
+      await save(saveData);
+    } catch (error) {
+      console.error(error);
+      dialogBoxCreate(`Cannot import save data: ${error}`);
+      return;
+    }
+    if (reload) {
+      setTimeout(() => location.reload(), 1000);
+    }
   }
 
-  getImportStringFromFile(files: FileList | null): Promise<string> {
+  async getSaveDataFromFile(files: FileList | null): Promise<SaveData> {
     if (files === null) return Promise.reject(new Error("No file selected"));
     const file = files[0];
     if (!file) return Promise.reject(new Error("Invalid file selected"));
 
-    const reader = new FileReader();
-    const promise = new Promise<string>((resolve, reject) => {
-      reader.onload = function (this: FileReader, e: ProgressEvent<FileReader>) {
-        const target = e.target;
-        if (target === null) {
-          return reject(new Error("Error importing file"));
-        }
-        const result = target.result;
-        if (typeof result !== "string") {
-          return reject(new Error("FileReader event was not type string"));
-        }
-        const contents = result;
-        resolve(contents);
-      };
-    });
-    reader.readAsText(file);
-    return promise;
+    const rawData = new Uint8Array(await file.arrayBuffer());
+    if (isBinaryFormat(rawData)) {
+      return rawData;
+    } else {
+      return new TextDecoder().decode(rawData);
+    }
   }
 
-  async getImportDataFromString(base64Save: string): Promise<ImportData> {
-    if (!base64Save || base64Save === "") throw new Error("Invalid import string");
+  async getImportDataFromSaveData(saveData: SaveData): Promise<ImportData> {
+    if (!saveData || saveData.length === 0) throw new Error("Invalid save data");
 
-    let newSave;
+    let decodedSaveData;
     try {
-      newSave = window.atob(base64Save);
-      newSave = newSave.trim();
+      decodedSaveData = await decodeSaveData(saveData);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof SaveDataError) {
+        return Promise.reject(error);
+      }
+    }
+
+    if (!decodedSaveData || decodedSaveData === "") {
+      return Promise.reject(new Error("Save game is invalid"));
+    }
+
+    let parsedSaveData;
+    try {
+      parsedSaveData = JSON.parse(decodedSaveData);
     } catch (error) {
       console.error(error); // We'll handle below
     }
 
-    if (!newSave || newSave === "") {
-      return Promise.reject(new Error("Save game had not content or was not base64 encoded"));
-    }
-
-    let parsedSave;
-    try {
-      parsedSave = JSON.parse(newSave);
-    } catch (error) {
-      console.error(error); // We'll handle below
-    }
-
-    if (!parsedSave || parsedSave.ctor !== "BitburnerSaveObject" || !parsedSave.data) {
+    if (!parsedSaveData || parsedSaveData.ctor !== "BitburnerSaveObject" || !parsedSaveData.data) {
       return Promise.reject(new Error("Save game did not seem valid"));
     }
 
     const data: ImportData = {
-      base64: base64Save,
+      saveData: saveData,
     };
 
-    const importedPlayer = loadPlayer(parsedSave.data.PlayerSave);
+    const importedPlayer = loadPlayer(parsedSaveData.data.PlayerSave);
 
     const playerData: ImportPlayerData = {
       identifier: importedPlayer.identifier,
@@ -379,7 +401,6 @@ function evaluateVersionCompatibility(ver: string | number): void {
   }
   //Fix contract names
   if (ver < 16) {
-    Factions[FactionName.ShadowsOfAnarchy] = new Faction(FactionName.ShadowsOfAnarchy);
     //Iterate over all contracts on all servers
     for (const server of GetAllServers()) {
       for (const contract of server.contracts) {
@@ -651,7 +672,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
       let valuation = oldCorp.valuation * 2 + oldCorp.revenue * 100;
       if (isNaN(valuation)) valuation = 300e9;
       Player.startCorporation(String(oldCorp.name), !!oldCorp.seedFunded);
-      Player.corporation?.addFunds(valuation);
+      Player.corporation?.gainFunds(valuation, "force majeure");
       Terminal.warn("Loading corporation from version prior to 2.3. Corporation has been reset.");
     }
     // End 2.3 changes
@@ -673,7 +694,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
                 const targetDivision = Player.corporation.divisions.get(originalExport.division);
                 if (!targetDivision) throw new Error(`Target division ${originalExport.division} did not exist`);
                 // Set the export again. ExportMaterial throws on failure
-                ExportMaterial(targetDivision, originalExport.city, material, originalExport.amount);
+                exportMaterial(targetDivision, originalExport.city, material, originalExport.amount);
               } catch (e) {
                 anyExportsFailed = true;
                 // We just need the text error, not a full stack trace
@@ -704,19 +725,35 @@ Error: ${e}`);
       }
     }
   }
+  v2_60: if (ver < 38 && "go" in Player) {
+    const goData = Player.go;
+    // Remove outdated savedata
+    delete Player.go;
+    // Attempt to load back in at least the stats object. The current game will not be loaded.
+    if (!goData || typeof goData !== "object") break v2_60;
+    const stats = "status" in goData ? goData.status : "stats" in goData ? goData.stats : null;
+    if (!stats || typeof stats !== "object") break v2_60;
+    const freshSaveData = getGoSave();
+    Object.assign(freshSaveData.stats, stats);
+    loadGo(JSON.stringify(freshSaveData));
+  }
+  if (ver < 39) {
+    showAPIBreaks("2.6.1", ...breakInfos261);
+  }
 }
 
-function loadGame(saveString: string): boolean {
+async function loadGame(saveData: SaveData): Promise<boolean> {
   createScamUpdateText();
-  if (!saveString) return false;
-  saveString = decodeURIComponent(escape(atob(saveString)));
+  if (!saveData) return false;
+  const jsonSaveString = await decodeSaveData(saveData);
 
-  const saveObj = JSON.parse(saveString, Reviver);
+  const saveObj = JSON.parse(jsonSaveString, Reviver);
 
   setPlayer(loadPlayer(saveObj.PlayerSave));
   loadAllServers(saveObj.AllServersSave);
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave, Player);
+  loadGo(saveObj.GoSave);
 
   if (Object.hasOwn(saveObj, "StaneksGiftSave")) {
     loadStaneksGift(saveObj.StaneksGiftSave);
@@ -835,23 +872,8 @@ function createBetaUpdateText() {
   );
 }
 
-function download(filename: string, content: string): void {
-  const file = new Blob([content], { type: "text/plain" });
-
-  const a = document.createElement("a"),
-    url = URL.createObjectURL(file);
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(function () {
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  }, 0);
-}
-
 constructorsForReviver.BitburnerSaveObject = BitburnerSaveObject;
 
-export { saveObject, loadGame, download };
+export { saveObject, loadGame };
 
 const saveObject = new BitburnerSaveObject();

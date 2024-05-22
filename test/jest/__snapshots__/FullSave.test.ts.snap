@@ -2,549 +2,49 @@
 
 exports[`Check Save File Continuity CompaniesSave continuity 1`] = `
 {
-  "AeroCorp": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Aevum Police Headquarters": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Alpha Enterprises": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Bachman & Associates": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Blade Industries": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Carmichael Security": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Central Intelligence Agency": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Clarke Incorporated": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "CompuTek": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "DefComm": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "DeltaOne": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "ECorp": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "FoodNStuff": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Four Sigma": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Fulcrum Technologies": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Galactic Cybersystems": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Global Pharmaceuticals": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Helios Labs": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Icarus Microsystems": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Joe's Guns": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "KuaiGong International": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "LexoCorp": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "MegaCorp": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "NWO": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "National Security Agency": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "NetLink Technologies": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
   "Noodle Bar": {
-    "ctor": "Company",
-    "data": {
-      "favor": 100,
-      "playerReputation": 100000,
-    },
-  },
-  "Nova Medical": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Omega Software": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "OmniTek Incorporated": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Omnia Cybersystems": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Rho Construction": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Solaris Space Systems": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Storm Technologies": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "SysCore Securities": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Universal Energy": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "VitaLife": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Watchdog Security": {
-    "ctor": "Company",
-    "data": {
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "favor": 100,
+    "playerReputation": 100000,
   },
 }
 `;
 
 exports[`Check Save File Continuity FactionsSave continuity 1`] = `
 {
-  "Aevum": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Bachman & Associates": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "BitRunners": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Blade Industries": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
   "Bladeburners": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 4000,
-    },
-  },
-  "Chongqing": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Church of the Machine God": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Clarke Incorporated": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "discovery": "known",
+    "playerReputation": 4000,
   },
   "CyberSec": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 20,
-      "playerReputation": 1000000,
-    },
-  },
-  "Daedalus": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "ECorp": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Four Sigma": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Fulcrum Secret Technologies": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Illuminati": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Ishima": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "KuaiGong International": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "MegaCorp": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "NWO": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Netburners": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "New Tokyo": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "NiteSec": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "OmniTek Incorporated": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Sector-12": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Shadows of Anarchy": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Silhouette": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "discovery": "known",
+    "favor": 20,
+    "playerReputation": 1000000,
   },
   "Slum Snakes": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
+    "discovery": "known",
   },
-  "Speakers for the Dead": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
+}
+`;
+
+exports[`Check Save File Continuity GoSave continuity 1`] = `
+{
+  "currentGame": {
+    "ai": "Netburners",
+    "board": [
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+      ".......",
+    ],
+    "cheatCount": 0,
+    "passCount": 0,
+    "previousPlayer": "White",
   },
-  "Tetrads": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "The Black Hand": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "The Covenant": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "The Dark Army": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "The Syndicate": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Tian Di Hui": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
-  "Volhaven": {
-    "ctor": "Faction",
-    "data": {
-      "discovery": "unknown",
-      "favor": 0,
-      "playerReputation": 0,
-    },
-  },
+  "previousGame": null,
+  "stats": {},
 }
 `;
 
@@ -558,34 +58,15 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "bladeburner": {
       "ctor": "Bladeburner",
       "data": {
-        "action": {
-          "ctor": "ActionIdentifier",
-          "data": {
-            "name": "",
-            "type": 1,
-          },
-        },
+        "action": null,
         "actionTimeCurrent": 0,
         "actionTimeOverflow": 0,
         "actionTimeToComplete": 0,
-        "automateActionHigh": {
-          "ctor": "ActionIdentifier",
-          "data": {
-            "name": "",
-            "type": 1,
-          },
-        },
-        "automateActionLow": {
-          "ctor": "ActionIdentifier",
-          "data": {
-            "name": "",
-            "type": 1,
-          },
-        },
+        "automateActionHigh": null,
+        "automateActionLow": null,
         "automateEnabled": false,
         "automateThreshHigh": 0,
         "automateThreshLow": 0,
-        "blackops": {},
         "cities": {
           "Aevum": {
             "ctor": "City",
@@ -659,124 +140,36 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "ctor": "Contract",
             "data": {
               "autoLevel": true,
-              "baseDifficulty": 266.2162162162162,
               "count": 117,
-              "decays": {
-                "agi": 0.91,
-                "cha": 0.8,
-                "def": 0.91,
-                "dex": 0.91,
-                "hack": 0,
-                "int": 0.9,
-                "str": 0.91,
-              },
-              "difficultyFac": 1.04,
               "failures": 0,
-              "hpLoss": 1,
-              "hpLost": 0,
-              "isKill": true,
-              "isStealth": false,
               "level": 1,
               "maxLevel": 1,
-              "name": "Bounty Hunter",
-              "rankGain": 0.9,
-              "rankLoss": 0,
-              "rewardFac": 1.085,
               "successes": 0,
-              "teamCount": 0,
-              "weights": {
-                "agi": 0.25,
-                "cha": 0.1,
-                "def": 0.15,
-                "dex": 0.25,
-                "hack": 0,
-                "int": 0.1,
-                "str": 0.15,
-              },
             },
           },
           "Retirement": {
             "ctor": "Contract",
             "data": {
               "autoLevel": true,
-              "baseDifficulty": 216.21621621621622,
-              "count": 129,
-              "decays": {
-                "agi": 0.91,
-                "cha": 0.8,
-                "def": 0.91,
-                "dex": 0.91,
-                "hack": 0,
-                "int": 0.9,
-                "str": 0.91,
-              },
-              "difficultyFac": 1.03,
+              "count": 125,
               "failures": 0,
-              "hpLoss": 1,
-              "hpLost": 0,
-              "isKill": true,
-              "isStealth": false,
               "level": 1,
               "maxLevel": 1,
-              "name": "Retirement",
-              "rankGain": 0.6,
-              "rankLoss": 0,
-              "rewardFac": 1.065,
               "successes": 0,
-              "teamCount": 0,
-              "weights": {
-                "agi": 0.2,
-                "cha": 0.1,
-                "def": 0.2,
-                "dex": 0.2,
-                "hack": 0,
-                "int": 0.1,
-                "str": 0.2,
-              },
             },
           },
           "Tracking": {
             "ctor": "Contract",
             "data": {
               "autoLevel": true,
-              "baseDifficulty": 131.0810810810811,
-              "count": 111,
-              "decays": {
-                "agi": 0.91,
-                "cha": 0.9,
-                "def": 0.91,
-                "dex": 0.91,
-                "hack": 0,
-                "int": 1,
-                "str": 0.91,
-              },
-              "difficultyFac": 1.02,
+              "count": 115,
               "failures": 0,
-              "hpLoss": 0.5,
-              "hpLost": 0,
-              "isKill": false,
-              "isStealth": true,
               "level": 1,
               "maxLevel": 1,
-              "name": "Tracking",
-              "rankGain": 0.3,
-              "rankLoss": 0,
-              "rewardFac": 1.041,
               "successes": 0,
-              "teamCount": 0,
-              "weights": {
-                "agi": 0.35,
-                "cha": 0.1,
-                "def": 0.05,
-                "dex": 0.35,
-                "hack": 0,
-                "int": 0.05,
-                "str": 0.05,
-              },
             },
           },
         },
-        "hpLost": 0,
         "logging": {
           "blackops": true,
           "contracts": true,
@@ -787,276 +180,84 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "maxRank": 2000,
         "maxStamina": 1,
         "moneyLost": 0,
+        "numBlackOpsComplete": 0,
         "numHosp": 0,
         "operations": {
           "Assassination": {
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "baseDifficulty": 1467.5675675675675,
-              "count": 51,
-              "decays": {
-                "agi": 0.8,
-                "cha": 0,
-                "def": 0.8,
-                "dex": 0.8,
-                "hack": 0.6,
-                "int": 0.8,
-                "str": 0.8,
-              },
-              "difficultyFac": 1.06,
+              "count": 23,
               "failures": 0,
-              "hpLoss": 5,
-              "hpLost": 0,
-              "isKill": true,
-              "isStealth": true,
               "level": 1,
               "maxLevel": 1,
-              "name": "Assassination",
-              "rankGain": 44,
-              "rankLoss": 4,
-              "reqdRank": 50000,
-              "rewardFac": 1.14,
               "successes": 0,
               "teamCount": 0,
-              "weights": {
-                "agi": 0.3,
-                "cha": 0,
-                "def": 0.1,
-                "dex": 0.3,
-                "hack": 0.1,
-                "int": 0.1,
-                "str": 0.1,
-              },
             },
           },
           "Investigation": {
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "baseDifficulty": 438.9189189189189,
-              "count": 94,
-              "decays": {
-                "agi": 0.9,
-                "cha": 0.7,
-                "def": 0.9,
-                "dex": 0.9,
-                "hack": 0.85,
-                "int": 0.9,
-                "str": 0.9,
-              },
-              "difficultyFac": 1.03,
+              "count": 88,
               "failures": 0,
-              "hpLoss": 0,
-              "hpLost": 0,
-              "isKill": false,
-              "isStealth": true,
               "level": 1,
               "maxLevel": 1,
-              "name": "Investigation",
-              "rankGain": 2.2,
-              "rankLoss": 0.2,
-              "reqdRank": 25,
-              "rewardFac": 1.07,
               "successes": 0,
               "teamCount": 0,
-              "weights": {
-                "agi": 0.1,
-                "cha": 0.25,
-                "def": 0.05,
-                "dex": 0.2,
-                "hack": 0.25,
-                "int": 0.1,
-                "str": 0.05,
-              },
             },
           },
           "Raid": {
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "baseDifficulty": 756.7567567567568,
-              "count": 27,
-              "decays": {
-                "agi": 0.8,
-                "cha": 0,
-                "def": 0.8,
-                "dex": 0.8,
-                "hack": 0.7,
-                "int": 0.9,
-                "str": 0.8,
-              },
-              "difficultyFac": 1.045,
+              "count": 7,
               "failures": 0,
-              "hpLoss": 50,
-              "hpLost": 0,
-              "isKill": true,
-              "isStealth": false,
               "level": 1,
               "maxLevel": 1,
-              "name": "Raid",
-              "rankGain": 55,
-              "rankLoss": 2.5,
-              "reqdRank": 3000,
-              "rewardFac": 1.1,
               "successes": 0,
               "teamCount": 0,
-              "weights": {
-                "agi": 0.2,
-                "cha": 0,
-                "def": 0.2,
-                "dex": 0.2,
-                "hack": 0.1,
-                "int": 0.1,
-                "str": 0.2,
-              },
             },
           },
           "Stealth Retirement Operation": {
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "baseDifficulty": 962.1621621621622,
-              "count": 39,
-              "decays": {
-                "agi": 0.8,
-                "cha": 0,
-                "def": 0.8,
-                "dex": 0.8,
-                "hack": 0.7,
-                "int": 0.9,
-                "str": 0.8,
-              },
-              "difficultyFac": 1.05,
+              "count": 15,
               "failures": 0,
-              "hpLoss": 10,
-              "hpLost": 0,
-              "isKill": true,
-              "isStealth": true,
               "level": 1,
               "maxLevel": 1,
-              "name": "Stealth Retirement Operation",
-              "rankGain": 22,
-              "rankLoss": 2,
-              "reqdRank": 20000,
-              "rewardFac": 1.11,
               "successes": 0,
               "teamCount": 0,
-              "weights": {
-                "agi": 0.3,
-                "cha": 0,
-                "def": 0.1,
-                "dex": 0.3,
-                "hack": 0.1,
-                "int": 0.1,
-                "str": 0.1,
-              },
             },
           },
           "Sting Operation": {
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "baseDifficulty": 604.3243243243244,
-              "count": 15,
-              "decays": {
-                "agi": 0.85,
-                "cha": 0.7,
-                "def": 0.85,
-                "dex": 0.85,
-                "hack": 0.8,
-                "int": 0.9,
-                "str": 0.85,
-              },
-              "difficultyFac": 1.04,
+              "count": 148,
               "failures": 0,
-              "hpLoss": 2.5,
-              "hpLost": 0,
-              "isKill": false,
-              "isStealth": true,
               "level": 1,
               "maxLevel": 1,
-              "name": "Sting Operation",
-              "rankGain": 5.5,
-              "rankLoss": 0.5,
-              "reqdRank": 500,
-              "rewardFac": 1.095,
               "successes": 0,
               "teamCount": 0,
-              "weights": {
-                "agi": 0.1,
-                "cha": 0.2,
-                "def": 0.05,
-                "dex": 0.25,
-                "hack": 0.25,
-                "int": 0.1,
-                "str": 0.05,
-              },
             },
           },
           "Undercover Operation": {
             "ctor": "Operation",
             "data": {
               "autoLevel": true,
-              "baseDifficulty": 456.7567567567568,
-              "count": 2,
-              "decays": {
-                "agi": 0.9,
-                "cha": 0.7,
-                "def": 0.9,
-                "dex": 0.9,
-                "hack": 0.8,
-                "int": 0.9,
-                "str": 0.9,
-              },
-              "difficultyFac": 1.04,
+              "count": 94,
               "failures": 0,
-              "hpLoss": 2,
-              "hpLost": 0,
-              "isKill": false,
-              "isStealth": true,
               "level": 1,
               "maxLevel": 1,
-              "name": "Undercover Operation",
-              "rankGain": 4.4,
-              "rankLoss": 0.4,
-              "reqdRank": 100,
-              "rewardFac": 1.09,
               "successes": 0,
               "teamCount": 0,
-              "weights": {
-                "agi": 0.2,
-                "cha": 0.2,
-                "def": 0.05,
-                "dex": 0.2,
-                "hack": 0.2,
-                "int": 0.1,
-                "str": 0.05,
-              },
             },
           },
         },
         "randomEventCounter": 303,
         "rank": 2000,
-        "skillMultipliers": {
-          "actionTime": 1,
-          "effAgi": 1,
-          "effCha": 1,
-          "effDef": 1,
-          "effDex": 1,
-          "effHack": 1,
-          "effInt": 1,
-          "effStr": 1,
-          "expGain": 1,
-          "money": 1,
-          "stamina": 1,
-          "successChanceAll": 1,
-          "successChanceContract": 1,
-          "successChanceEstimate": 1,
-          "successChanceKill": 1,
-          "successChanceOperation": 1,
-          "successChanceStealth": 1,
-        },
         "skillPoints": 666,
         "skills": {},
         "sleeveSize": 0,
@@ -1231,11 +432,11 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "jobs": {},
     "karma": 0,
     "lastAugReset": 1687611703623,
-    "lastNodeReset": -1,
+    "lastNodeReset": 1687611703623,
     "lastSave": 0,
     "lastUpdate": 1687611703623,
     "location": "Travel Agency",
-    "money": 1113,
+    "money": 1151,
     "moneySourceA": {
       "ctor": "MoneySourceTracker",
       "data": {
@@ -1247,6 +448,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "corporation": 0,
         "crime": 0,
         "gang": 0,
+        "gang_expenses": 0,
         "hacking": 0,
         "hacknet": 0,
         "hacknet_expenses": 0,
@@ -1271,6 +473,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "corporation": 0,
         "crime": 0,
         "gang": 0,
+        "gang_expenses": 0,
         "hacking": 0,
         "hacknet": 0,
         "hacknet_expenses": 0,
@@ -1347,6 +550,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "data": {
               "crimeType": "Homicide",
               "cyclesWorked": 0,
+              "tasksCompleted": 0,
               "type": "CRIME",
             },
           },

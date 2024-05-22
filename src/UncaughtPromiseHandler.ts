@@ -1,4 +1,4 @@
-import { handleUnknownError } from "./Netscript/NetscriptHelpers";
+import { handleUnknownError } from "./Netscript/ErrorMessages";
 
 export function setupUncaughtPromiseHandler(): void {
   window.addEventListener("unhandledrejection", (e) => {

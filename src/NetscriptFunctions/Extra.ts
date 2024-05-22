@@ -1,4 +1,4 @@
-import { Player } from "../Player";
+import { Player } from "@player";
 import { Exploit } from "../Exploits/Exploit";
 import * as bcrypt from "bcryptjs";
 import { Apr1Events as devMenu } from "../ui/Apr1";
@@ -7,9 +7,6 @@ import { helpers } from "../Netscript/NetscriptHelpers";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 
 export interface INetscriptExtra {
-  heart: {
-    break(): number;
-  };
   openDevMenu(): void;
   exploit(): void;
   bypass(doc: Document): void;
@@ -19,9 +16,6 @@ export interface INetscriptExtra {
 
 export function NetscriptExtra(): InternalAPI<INetscriptExtra> {
   return {
-    heart: {
-      break: () => () => Player.karma,
-    },
     openDevMenu: () => () => devMenu.emit(),
     exploit: () => () => Player.giveExploit(Exploit.UndocumentedFunctionCall),
     bypass: (ctx) => (doc) => {

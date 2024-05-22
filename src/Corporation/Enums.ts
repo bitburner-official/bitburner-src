@@ -1,4 +1,4 @@
-import { Member } from "src/types";
+import type { Member } from "../types";
 
 export enum IndustryType {
   Water = "Water Utilities",

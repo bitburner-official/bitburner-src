@@ -46,7 +46,7 @@ Here is everything you will **KEEP** when you install an Augmentation:
 - Every Augmentation you have previously installed
 - [Scripts](scripts.md) on your home computer
 - [RAM](ram.md) / Core Upgrades on your home computer
-- [World Stock Exchange account](stockmarket.md) and [TIX API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.tix.md) Access
+- [World Stock Exchange account](stockmarket.md) and [TIX API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.tix.md) Access
 
 ## Purchasing Multiple Augmentations
 

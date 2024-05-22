@@ -14,6 +14,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 import { makeTheme, sanitizeTheme } from "./themes";
 
+import { CONSTANTS } from "../../Constants";
 import { Modal } from "../../ui/React/Modal";
 import { Page } from "../../ui/Router";
 import { Router } from "../../ui/GameRoot";
@@ -22,6 +23,10 @@ import { Settings } from "../../Settings/Settings";
 import { OptionsModal, OptionsModalProps } from "./OptionsModal";
 import { useScriptEditorContext } from "./ScriptEditorContext";
 
+const docUrl =
+  "https://github.com/bitburner-official/bitburner-src/blob/" +
+  (CONSTANTS.isDevBranch ? "dev" : "stable") +
+  "/markdown/bitburner.ns.md";
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
 interface IProps {
@@ -69,10 +74,7 @@ export function Toolbar({ editor, onSave }: IProps) {
           Terminal (Ctrl/Cmd + b)
         </Button>
         <Typography>
-          <Link
-            target="_blank"
-            href="https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.ns.md"
-          >
+          <Link target="_blank" href={docUrl}>
             Documentation
           </Link>
         </Typography>

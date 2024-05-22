@@ -121,7 +121,7 @@ export function setRemovedFunctions(api: object, infos: Record<string, RemovedFu
   for (const [key, { version, replacement, replaceMsg }] of Object.entries(infos)) {
     Object.defineProperty(api, key, {
       value: (ctx: NetscriptContext) => () => {
-        throw helpers.makeRuntimeErrorMsg(
+        throw helpers.errorMessage(
           ctx,
           `Function removed in ${version}. ${replaceMsg ? replacement : `Please use ${replacement} instead.`}`,
           "REMOVED FUNCTION",

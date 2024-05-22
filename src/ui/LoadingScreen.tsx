@@ -31,27 +31,20 @@ export function LoadingScreen(): React.ReactElement {
   });
 
   useEffect(() => {
-    async function doLoad(): Promise<void> {
-      await load()
-        .then((saveString) => {
-          try {
-            Engine.load(saveString);
-          } catch (err: unknown) {
-            ActivateRecoveryMode();
-            setLoaded(true);
-            throw err;
-          }
+    load().then(async (saveData) => {
+      try {
+        await Engine.load(saveData);
+      } catch (error) {
+        console.error(error);
+        ActivateRecoveryMode(error);
+        await Engine.load("");
+        setLoaded(true);
+        return;
+      }
 
-          pushGameReady();
-          setLoaded(true);
-        })
-        .catch((reason) => {
-          console.error(reason);
-          Engine.load("");
-          setLoaded(true);
-        });
-    }
-    doLoad();
+      pushGameReady();
+      setLoaded(true);
+    });
   }, []);
 
   return loaded ? (

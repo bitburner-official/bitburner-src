@@ -1,13 +1,9 @@
+import type { Bladeburner } from "../Bladeburner";
+
 import React, { useState, useRef, useEffect } from "react";
-import { Bladeburner } from "../Bladeburner";
 import { KEY } from "../../utils/helpers/keyCodes";
 
-import Paper from "@mui/material/Paper";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
+import { Box, List, ListItem, Paper, TextField, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";

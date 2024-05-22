@@ -28,7 +28,7 @@ export const MaterialInfo: Record<CorpMaterialName, CorpMaterialConstantData> = 
     name: "Minerals",
     size: 0.04,
     demandBase: 75,
-    demandRange: [90, 60],
+    demandRange: [60, 90],
     competitionBase: 80,
     competitionRange: [65, 95],
     baseCost: 500,

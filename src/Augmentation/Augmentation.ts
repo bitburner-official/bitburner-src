@@ -141,11 +141,18 @@ function generateStatsDescription(mults: Multipliers, programs?: string[], start
   // Hacknet: costs are negative
   if (mults.hacknet_node_money !== 1) desc += `\n+${f(mults.hacknet_node_money - 1)} hacknet production`;
   if (mults.hacknet_node_purchase_cost !== 1) {
-    desc += `\n-${f(-(mults.hacknet_node_purchase_cost - 1))} hacknet nodes cost`;
+    desc += `\n-${f(-(mults.hacknet_node_purchase_cost - 1))} hacknet purchase cost`;
   }
   if (mults.hacknet_node_level_cost !== 1) {
-    desc += `\n-${f(-(mults.hacknet_node_level_cost - 1))} hacknet nodes upgrade cost`;
+    desc += `\n-${f(-(mults.hacknet_node_level_cost - 1))} hacknet level upgrade cost`;
   }
+  if (mults.hacknet_node_ram_cost !== 1) {
+    desc += `\n-${f(-(mults.hacknet_node_ram_cost - 1))} hacknet RAM upgrade cost`;
+  }
+  if (mults.hacknet_node_core_cost !== 1) {
+    desc += `\n-${f(-(mults.hacknet_node_core_cost - 1))} hacknet core upgrade cost`;
+  }
+
   // Bladeburner
   if (mults.bladeburner_max_stamina !== 1) desc += `\n+${f(mults.bladeburner_max_stamina - 1)} Bladeburner Max Stamina`;
   if (mults.bladeburner_stamina_gain !== 1) {

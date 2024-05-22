@@ -1,3 +1,5 @@
+import type { Bladeburner } from "../Bladeburner";
+
 import React, { useState } from "react";
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import { Player } from "@player";
@@ -10,29 +12,21 @@ import { formatNumberNoSuffix, formatPopulation, formatBigNumber } from "../../u
 import { Factions } from "../../Faction/Factions";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { joinFaction } from "../../Faction/FactionHelpers";
-import { Bladeburner } from "../Bladeburner";
-
 import { TravelModal } from "./TravelModal";
 
-interface IProps {
+interface StatsProps {
   bladeburner: Bladeburner;
 }
 
-export function Stats(props: IProps): React.ReactElement {
+export function Stats({ bladeburner }: StatsProps): React.ReactElement {
   const [travelOpen, setTravelOpen] = useState(false);
   useRerender(1000);
 
-  const inFaction = props.bladeburner.rank >= BladeburnerConstants.RankNeededForFaction;
+  const inFaction = bladeburner.rank >= BladeburnerConstants.RankNeededForFaction;
 
   function openFaction(): void {
-    if (!inFaction) return;
-    const faction = Factions[FactionName.Bladeburners];
-    if (!faction.isMember) {
-      joinFaction(faction);
-    }
-
-    Router.toPage(Page.Faction, { faction });
+    const success = bladeburner.joinFaction();
+    if (success) Router.toPage(Page.Faction, { faction: Factions[FactionName.Bladeburners] });
   }
 
   return (
@@ -49,11 +43,11 @@ export function Stats(props: IProps): React.ReactElement {
               </Button>
             </span>
           </Tooltip>
-          <TravelModal open={travelOpen} onClose={() => setTravelOpen(false)} bladeburner={props.bladeburner} />
+          <TravelModal open={travelOpen} onClose={() => setTravelOpen(false)} bladeburner={bladeburner} />
         </Box>
         <Box display="flex">
           <Tooltip title={<Typography>Your rank within the Bladeburner division.</Typography>}>
-            <Typography>Rank: {formatBigNumber(props.bladeburner.rank)}</Typography>
+            <Typography>Rank: {formatBigNumber(bladeburner.rank)}</Typography>
           </Tooltip>
         </Box>
         <br />
@@ -82,23 +76,23 @@ export function Stats(props: IProps): React.ReactElement {
             }
           >
             <Typography>
-              Stamina: {formatBigNumber(props.bladeburner.stamina)} / {formatBigNumber(props.bladeburner.maxStamina)}
+              Stamina: {formatBigNumber(bladeburner.stamina)} / {formatBigNumber(bladeburner.maxStamina)}
             </Typography>
           </Tooltip>
         </Box>
         <Typography>
-          Stamina Penalty: {formatNumberNoSuffix((1 - props.bladeburner.calculateStaminaPenalty()) * 100, 1)}%
+          Stamina Penalty: {formatNumberNoSuffix((1 - bladeburner.calculateStaminaPenalty()) * 100, 1)}%
         </Typography>
         <br />
-        <Typography>Team Size: {formatNumberNoSuffix(props.bladeburner.teamSize, 0)}</Typography>
-        <Typography>Team Members Lost: {formatNumberNoSuffix(props.bladeburner.teamLost, 0)}</Typography>
+        <Typography>Team Size: {formatNumberNoSuffix(bladeburner.teamSize, 0)}</Typography>
+        <Typography>Team Members Lost: {formatNumberNoSuffix(bladeburner.teamLost, 0)}</Typography>
         <br />
-        <Typography>Num Times Hospitalized: {props.bladeburner.numHosp}</Typography>
+        <Typography>Num Times Hospitalized: {bladeburner.numHosp}</Typography>
         <Typography>
-          Money Lost From Hospitalizations: <Money money={props.bladeburner.moneyLost} />
+          Money Lost From Hospitalizations: <Money money={bladeburner.moneyLost} />
         </Typography>
         <br />
-        <Typography>Current City: {props.bladeburner.city}</Typography>
+        <Typography>Current City: {bladeburner.city}</Typography>
         <Box display="flex">
           <Tooltip
             title={
@@ -108,9 +102,7 @@ export function Stats(props: IProps): React.ReactElement {
               </Typography>
             }
           >
-            <Typography>
-              Est. Synthoid Population: {formatPopulation(props.bladeburner.getCurrentCity().popEst)}
-            </Typography>
+            <Typography>Est. Synthoid Population: {formatPopulation(bladeburner.getCurrentCity().popEst)}</Typography>
           </Tooltip>
         </Box>
         <Box display="flex">
@@ -122,9 +114,7 @@ export function Stats(props: IProps): React.ReactElement {
               </Typography>
             }
           >
-            <Typography>
-              Synthoid Communities: {formatNumberNoSuffix(props.bladeburner.getCurrentCity().comms, 0)}
-            </Typography>
+            <Typography>Synthoid Communities: {formatNumberNoSuffix(bladeburner.getCurrentCity().comms, 0)}</Typography>
           </Tooltip>
         </Box>
         <Box display="flex">
@@ -136,11 +126,11 @@ export function Stats(props: IProps): React.ReactElement {
               </Typography>
             }
           >
-            <Typography>City Chaos: {formatBigNumber(props.bladeburner.getCurrentCity().chaos)}</Typography>
+            <Typography>City Chaos: {formatBigNumber(bladeburner.getCurrentCity().chaos)}</Typography>
           </Tooltip>
         </Box>
         <br />
-        {(props.bladeburner.storedCycles / BladeburnerConstants.CyclesPerSecond) * 1000 > 15000 && (
+        {(bladeburner.storedCycles / BladeburnerConstants.CyclesPerSecond) * 1000 > 15000 && (
           <>
             <Box display="flex">
               <Tooltip
@@ -154,7 +144,7 @@ export function Stats(props: IProps): React.ReactElement {
                 <Typography>
                   Bonus time:{" "}
                   {convertTimeMsToTimeElapsedString(
-                    (props.bladeburner.storedCycles / BladeburnerConstants.CyclesPerSecond) * 1000,
+                    (bladeburner.storedCycles / BladeburnerConstants.CyclesPerSecond) * 1000,
                   )}
                 </Typography>
               </Tooltip>
@@ -162,7 +152,7 @@ export function Stats(props: IProps): React.ReactElement {
             <br />
           </>
         )}
-        <Typography>Skill Points: {formatBigNumber(props.bladeburner.skillPoints)}</Typography>
+        <Typography>Skill Points: {formatBigNumber(bladeburner.skillPoints)}</Typography>
         <br />
         <Typography>
           Aug. Success Chance mult: {formatNumberNoSuffix(Player.mults.bladeburner_success_chance * 100, 1)}%

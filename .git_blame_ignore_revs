@@ -1,0 +1,191 @@
+## What is this?
+##   Some git commits contain mostly prettier/lint changes and aren't as valuable when
+##   using `git blame`.  This file contains a list of hashes that identify such commits
+##   in a way that git can use.
+
+## Tell git to use this file with:
+##   git config --local blame.ignoreRevsFile .git_blame_ignore_revs
+
+## This file was created by cleaning up and filtering the output of this command line:
+##   git log --grep "[Pp]rettier"
+
+## All that's really needed here are the actual 40-digit hashes of
+## the commits.  I left the author/date info in as it helped when I
+## was filtering this list to just formatting changes.
+
+4c9ca4990450740785a4dc95a75de53aeac724df
+# Author: omuretsu
+# Date:   Fri Jun 23 10:14:18 2023 -0400
+
+07b1eefe33b16251e0e67ae3231db2059defb1cc
+# Author: omuretsu
+# Date:   Tue Feb 7 21:16:18 2023 -0500
+
+bbe6421b067b0d0b876c42e49dafcbbb6458ef8d
+# Author: borisflagell
+# Date:   Tue Oct 11 15:33:55 2022 +0300
+
+ed0a28d29272ba2d5716618b73d231bca1ad79d1
+# Author: hydroflame
+# Date:   Sun Oct 9 00:22:25 2022 -0400
+
+a1f90d77ce708efb968d7e7ddb804b9862f2f460
+# Author: Snarling
+# Date:   Tue Sep 27 19:58:14 2022 -0400
+
+6be884a9ad42e9920be233302a066dea01766c8e
+# Author: borisflagell
+# Date:   Sat May 28 01:15:05 2022 +0200
+
+51ba358464ce5787ef472531e0bdb2b6b239955e
+# Author: Markus-D-M
+# Date:   Wed May 25 21:27:58 2022 +0200
+
+9091441389182a261438ec16ea17edcf11ab6f39
+# Author: borisflagell
+# Date:   Mon May 23 19:43:46 2022 +0200
+
+5bc1d293ca14f717d967ff4a345fe1ace1ffdd4c
+# Author: borisflagell
+# Date:   Sun May 22 11:59:14 2022 +0200
+
+d44d71712f066518321cefed18e145141ea23818
+# Author: borisflagell
+# Date:   Sun May 22 06:40:32 2022 +0200
+
+bd2d5396a60f31c1bd9837786fb10586cbcc6eda
+# Author: phyzical
+# Date:   Thu Apr 28 19:22:37 2022 +0800
+
+ad4c84be937224297f6745b6df3d433466b047c1
+# Author: borisflagell
+# Date:   Sat Apr 23 15:18:43 2022 +0200
+
+d4f8f2d0354832101f48d60f0b3445cc1f43dd23
+# Author: borisflagell
+# Date:   Sat Apr 23 15:01:24 2022 +0200
+
+a7045a234353de795494c0b3f378808b4a6d32aa
+# Author: borisflagell
+# Date:   Thu Apr 21 19:20:16 2022 +0200
+
+421e7b8c74eb85238ccf45b1a83225a452024058
+# Author: borisflagell
+# Date:   Thu Apr 21 18:51:04 2022 +0200
+
+9850b56711b29c254102ad8694b1610b4d5adc81
+# Author: Snarling
+# Date:   Sun Apr 17 17:23:14 2022 -0400
+
+567fcf8fb63bc469ae61013cca511a76eb6f9086
+# Author: violet
+# Date:   Wed Apr 13 14:42:07 2022 -0500
+
+f6af85a38d8286aec702556f1296565de5a5067f
+# Author: violet
+# Date:   Sun Apr 10 15:57:34 2022 -0500
+
+57f04d3911b5a384c379dcfb2d0bcb18b25c37ea
+# Author: violet
+# Date:   Thu Apr 7 11:45:21 2022 -0500
+
+720e2112c6766b581e43e1f9e712c47300b22dcd
+# Author: violet
+# Date:   Mon Mar 21 14:40:17 2022 -0500
+
+ecffc8655a70e6e3c7bd03ba5723b437d7857dfa
+Merge: 8506dcfed 00d1d294e
+# Author: hydroflame
+# Date:   Sun Mar 20 22:21:00 2022 -0400
+
+901ee92fe97606bd27840900512b0fa760ba428e
+# Author: Olivier Gagnon
+# Date:   Sun Mar 20 22:02:36 2022 -0400
+
+b3f9380ebd3feb3b6ef91873a1c6a3a1ddc56654
+# Author: Billy Vong
+# Date:   Fri Dec 17 12:56:48 2021 -0500
+
+# I *really* didn't want to include this one because it has a few tiny, actual
+# code changes, but it reformats tens of thousands of lines of code.  Argh.
+8f13363466c2e825bbfb7e4b66d853c4805eda61
+# Author: Olivier Gagnon
+# Date:   Mon Oct 11 16:38:50 2021 -0400
+
+66a2adaeb4b12a48fc8fdafe5e5169919f8d46a5
+# Author: Olivier Gagnon
+# Date:   Wed Sep 22 12:56:55 2021 -0400
+
+## Additional changes that should be ignored for blame.
+
+2e7f164b5f251ce457f0d3b9a42cfa0f08ef200e
+# Author: tyasuh.taeragan
+# Date:   Fri Oct 22 16:35:05 2021 -0400
+
+a18bdd6afc77752bded2f0794bf35ad9d6455fa1
+# Author: Olivier Gagnon
+# Date:   Sat Sep 4 19:09:30 2021 -0400
+
+# from a search for "lint"; many more of these had significant code changes than
+# Prettier, so I'm only vetting the largest for inclusion
+
+48f80f25d6fb90edc292481905814c0d5593b5a9
+# Author: Olivier Gagnon
+# Date:   Wed Apr 6 19:30:08 2022 -0400
+
+b0f20c8c8f4859f01cfc79bc3945a8e7272d6592
+# Author: Olivier Gagnon
+# Date:   Sat Sep 25 01:26:03 2021 -0400
+
+d745150c45979ab251b51447a0847e28966346a6
+# Author: Olivier Gagnon
+# Date:   Sat May 1 03:17:31 2021 -0400
+
+3fad5050961a3259b0158763f48016174a2a690e
+# Author: Olivier Gagnon
+# Date:   Thu Apr 29 23:52:56 2021 -0400
+
+#
+# The commits listed below showed up on a search for "[Pp]rettier", but
+# weren't just Prettier/lint changes.
+#
+
+# 6459b1ab483cf66ae1e6e50518424311c6bbbd8b
+# Author: omuretsu
+# Date:   Sat Feb 4 07:42:35 2023 -0500
+
+# 5b4addbb212411aa1de27ba0ee16ebaabedbc6a1
+# Author: borisflagell
+# Date:   Sun May 22 01:08:53 2022 +0200
+
+# 705a56f3bdcb859179144cdafab7eeb8832f7eb9
+# Author: borisflagell
+# Date:   Sat May 7 12:55:56 2022 +0200
+
+# 4fa65322fe770dc3d79cd0301521d230694a1fc7
+# Author: borisflagell
+# Date:   Thu Apr 21 18:37:47 2022 +0200
+
+# 81d1c02fdfe087c3bd0a2a8a2a41c2f82a6fef56
+# Author: hydroflame
+# Date:   Sun Mar 20 22:50:42 2022 -0400
+
+# 4a7fcda86f5d3d05638b4a9f3a61e5937dde52c6
+# Author: hydroflame
+# Date:   Sat Sep 4 19:03:05 2021 -0400
+
+# 7ee2612c17a90a80e5a0a7793a4c81465e212c0c
+# Author: Martin Fournier
+# Date:   Sun Jan 9 11:15:09 2022 -0500
+
+# c59806c87d543c7cc78d1d68af9599d118c0cb2b
+# Author: Martin Fournier
+# Date:   Fri Dec 17 09:54:32 2021 -0500
+
+# 306facc0d10104d543974d5cb01b6ff419c9acb2
+# Author: David Edmondson
+# Date:   Sat Sep 4 22:17:30 2021 -0700
+
+# 1e42f73e2a1b7ac9489a7287c7be99298f412ac0
+# Author: David Edmondson
+# Date:   Sat Sep 4 13:18:08 2021 -0700commit 2e7f164b5f251ce457f0d3b9a42cfa0f08ef200e

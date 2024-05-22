@@ -1,13 +1,15 @@
-import * as React from "react";
-import { ContractList } from "./ContractList";
-import { Bladeburner } from "../Bladeburner";
-import Typography from "@mui/material/Typography";
+import type { Bladeburner } from "../Bladeburner";
 
-interface IProps {
+import * as React from "react";
+import { ContractElem } from "./ContractElem";
+import { Typography } from "@mui/material";
+
+interface ContractPageProps {
   bladeburner: Bladeburner;
 }
 
-export function ContractPage(props: IProps): React.ReactElement {
+export function ContractPage({ bladeburner }: ContractPageProps): React.ReactElement {
+  const contracts = Object.values(bladeburner.contracts);
   return (
     <>
       <Typography>
@@ -18,7 +20,9 @@ export function ContractPage(props: IProps): React.ReactElement {
         You can unlock higher-level contracts by successfully completing them. Higher-level contracts are more
         difficult, but grant more rank, experience, and money.
       </Typography>
-      <ContractList bladeburner={props.bladeburner} />
+      {contracts.map((contract) => (
+        <ContractElem key={contract.name} bladeburner={bladeburner} action={contract} />
+      ))}
     </>
   );
 }

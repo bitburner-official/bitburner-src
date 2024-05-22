@@ -3,12 +3,11 @@ import { CityName, CorpEmployeeJob, IndustryType } from "@enums";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { IndustryResearchTrees, IndustriesData } from "./data/IndustryData";
 import * as corpConstants from "./data/Constants";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { calculateEffectWithFactors } from "../utils/calculateEffectWithFactors";
 import { OfficeSpace } from "./OfficeSpace";
 import { Product } from "./Product";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { isString } from "../utils/helpers/string";
 import { MaterialInfo } from "./MaterialInfo";
 import { Warehouse } from "./Warehouse";
 import { Corporation } from "./Corporation";
@@ -133,6 +132,17 @@ export class Division {
     multSum < 1 ? (this.productionMult = 1) : (this.productionMult = multSum);
   }
 
+  calculateRecoupableValue(): number {
+    let price = this.startingCost;
+    for (const city of getRecordKeys(this.offices)) {
+      if (city === CityName.Sector12) continue;
+      price += corpConstants.officeInitialCost;
+      if (this.warehouses[city]) price += corpConstants.warehouseInitialCost;
+    }
+    price /= 2;
+    return price;
+  }
+
   updateWarehouseSizeUsed(warehouse: Warehouse): void {
     warehouse.updateMaterialSizeUsed();
 
@@ -244,7 +254,7 @@ export class Division {
   processProductMarket(marketCycles = 1): void {
     // Demand gradually decreases, and competition gradually increases
     for (const product of this.products.values()) {
-      let change = getRandomInt(0, 3) * 0.0004;
+      let change = getRandomIntInclusive(0, 3) * 0.0004;
       if (change === 0) continue;
 
       if (
@@ -511,7 +521,7 @@ export class Division {
             // The amount gets re-multiplied later, so this is the correct
             // amount to calculate with for "MAX".
             const adjustedQty = mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles);
-            if (isString(mat.desiredSellAmount)) {
+            if (typeof mat.desiredSellAmount === "string") {
               //Dynamically evaluated
               let tmp = mat.desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
               tmp = tmp.replace(/PROD/g, mat.productionAmount.toString());
@@ -564,7 +574,7 @@ export class Division {
             } else if (mat.marketTa1) {
               sCost = mat.marketPrice + markupLimit;
               // check truthyness to avoid unnecessary eval
-            } else if (isString(mat.desiredSellPrice) && mat.desiredSellPrice) {
+            } else if (typeof mat.desiredSellPrice === "string" && mat.desiredSellPrice) {
               sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice.toString());
               sCost = eval(sCost);
             } else {
@@ -842,7 +852,7 @@ export class Division {
           // amount to calculate with for "MAX".
           const adjustedQty = product.cityData[city].stored / (corpConstants.secondsPerMarketCycle * marketCycles);
           const desiredSellAmount = product.cityData[city].desiredSellAmount;
-          if (isString(desiredSellAmount)) {
+          if (typeof desiredSellAmount === "string") {
             //Sell amount is dynamically evaluated
             let tmp: number | string = desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
             tmp = tmp.replace(/PROD/g, product.cityData[city].productionAmount.toString());
@@ -898,7 +908,7 @@ export class Division {
             sCost = optimalPrice;
           } else if (product.marketTa1) {
             sCost = product.cityData[city].productionCost + markupLimit;
-          } else if (isString(sellPrice)) {
+          } else if (typeof sellPrice === "string") {
             let sCostString = sellPrice;
             if (product.markup === 0) {
               console.error(`mku is zero, reverting to 1 to avoid Infinity`);
@@ -975,7 +985,7 @@ export class Division {
     const awareness = (this.awareness + 3 * advMult) * (1.005 * advMult);
     this.awareness = Math.min(awareness, Number.MAX_VALUE);
 
-    const popularity = (this.popularity + 1 * advMult) * ((1 + getRandomInt(1, 3) / 200) * advMult);
+    const popularity = (this.popularity + 1 * advMult) * ((1 + getRandomIntInclusive(1, 3) / 200) * advMult);
     this.popularity = Math.min(popularity, Number.MAX_VALUE);
 
     ++this.numAdVerts;

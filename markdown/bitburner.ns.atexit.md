@@ -9,7 +9,7 @@ Add callback function when the script dies
 **Signature:**
 
 ```typescript
-atExit(f: () => void): void;
+atExit(f: () => void, id?: string): void;
 ```
 
 ## Parameters
@@ -17,6 +17,7 @@ atExit(f: () => void): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  f | () =&gt; void |  |
+|  id | string | _(Optional)_ |
 
 **Returns:**
 

@@ -55,10 +55,10 @@ export class CrimeWork extends Work {
       );
       return;
     }
-    const focusPenalty = Player.focusPenalty();
+    const focusBonus = Player.focusPenalty();
     // exp times 2 because were trying to maintain the same numbers as before the conversion
     // Technically the definition of Crimes should have the success numbers and failure should divide by 4
-    let gains = scaleWorkStats(this.earnings(), focusPenalty, false);
+    let gains = scaleWorkStats(this.earnings(), focusBonus, false);
     let karma = crime.karma;
     const success = determineCrimeSuccess(crime.type);
     if (success) {
@@ -75,16 +75,16 @@ export class CrimeWork extends Work {
     Player.gainDexterityExp(gains.dexExp);
     Player.gainAgilityExp(gains.agiExp);
     Player.gainCharismaExp(gains.chaExp);
-    Player.karma -= karma * focusPenalty;
+    Player.karma -= karma * focusBonus;
   }
 
   finish(): void {
     /** nothing to do */
   }
 
-  APICopy(): Record<string, unknown> {
+  APICopy() {
     return {
-      type: this.type,
+      type: WorkType.CRIME as const,
       cyclesWorked: this.cyclesWorked,
       crimeType: this.crimeType,
     };

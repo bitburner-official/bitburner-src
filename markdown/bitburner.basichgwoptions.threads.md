@@ -4,7 +4,7 @@
 
 ## BasicHGWOptions.threads property
 
-Number of threads to use for this function. Must be less than or equal to the number of threads the script is running with.
+Number of threads to use for this function. Must be less than or equal to the number of threads the script is running with. Accepts positive non integer values.
 
 **Signature:**
 

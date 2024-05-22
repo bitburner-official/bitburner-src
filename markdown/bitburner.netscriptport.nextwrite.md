@@ -4,7 +4,7 @@
 
 ## NetscriptPort.nextWrite() method
 
-Sleeps until the port is written to.
+Waits until the port is written to.
 
 **Signature:**
 

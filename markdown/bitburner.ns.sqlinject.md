@@ -26,6 +26,8 @@ void
 
 RAM cost: 0.05 GB
 
+Runs the SQLInject.exe program on the target server. SQLInject.exe must exist on your home computer.
+
 ## Example
 
 

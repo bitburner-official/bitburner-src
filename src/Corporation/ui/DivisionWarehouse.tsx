@@ -11,7 +11,7 @@ import { ProductElem } from "./ProductElem";
 import { MaterialElem } from "./MaterialElem";
 import { MaterialInfo } from "../MaterialInfo";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
-import { formatBigNumber, formatMaterialSize } from "../../ui/formatNumber";
+import { formatBigNumber, formatMaterialSize, formatNumber } from "../../ui/formatNumber";
 
 import { Corporation } from "../Corporation";
 import { Division } from "../Division";
@@ -22,6 +22,7 @@ import { purchaseWarehouse } from "../Actions";
 import { useCorporation, useDivision } from "./Context";
 import { gameCyclesPerCorpStateCycle } from "../data/Constants";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
+import { StatsTable } from "../../ui/React/StatsTable";
 
 interface WarehouseProps {
   corp: Corporation;
@@ -54,7 +55,7 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
     if (!canAffordUpgrade) return;
     ++props.warehouse.level;
     props.warehouse.updateSize(corp, division);
-    corp.funds = corp.funds - sizeUpgradeCost;
+    corp.loseFunds(sizeUpgradeCost, "warehouse");
     props.rerender();
   }
   // -1 because as soon as it hits "full" it processes and resets to 0, *2 to double the size of the bar
@@ -95,32 +96,40 @@ function WarehouseRoot(props: WarehouseProps): React.ReactElement {
     }
   }
 
-  const breakdownItems: string[] = [];
+  const breakdownItems: string[][] = [];
   for (const matName of corpConstants.materialNames) {
     const mat = props.warehouse.materials[matName];
     if (mat.stored === 0) continue;
-    breakdownItems.push(`${matName}: ${formatMaterialSize(mat.stored * MaterialInfo[matName].size)}`);
+    breakdownItems.push([
+      `${matName}:`,
+      `${formatMaterialSize(MaterialInfo[matName].size)}`,
+      `${formatNumber(mat.stored)}`,
+      `${formatMaterialSize(mat.stored * MaterialInfo[matName].size)}`,
+    ]);
   }
 
   for (const [prodName, product] of division.products) {
-    breakdownItems.push(
-      `${prodName}: ${formatMaterialSize(product.cityData[props.currentCity].stored * product.size)}`,
-    );
+    breakdownItems.push([
+      `${prodName}:`,
+      `${formatMaterialSize(product.size)}`,
+      `${formatNumber(product.cityData[props.currentCity].stored)}`,
+      `${formatMaterialSize(product.cityData[props.currentCity].stored * product.size)}`,
+    ]);
   }
 
-  let breakdown;
   if (breakdownItems.length > 0) {
-    breakdown = breakdownItems.map((item, i) => <p key={i}>{item}</p>);
-  } else {
-    breakdown = <>No items in storage.</>;
+    breakdownItems.unshift(["", "Size", "Units", "Total Space"]);
   }
+
+  const breakdown =
+    breakdownItems.length > 0 ? <StatsTable rows={breakdownItems} paddingLeft="1em" /> : <>No items in storage.</>;
 
   return (
     <Paper>
       <Box display="flex" alignItems="center">
         <Tooltip title={breakdown}>
           <Typography color={props.warehouse.sizeUsed >= props.warehouse.size ? "error" : "primary"}>
-            Storage: {formatBigNumber(props.warehouse.sizeUsed)} / {formatBigNumber(props.warehouse.size)}
+            Storage space: {formatBigNumber(props.warehouse.sizeUsed)} / {formatBigNumber(props.warehouse.size)}
           </Typography>
         </Tooltip>
       </Box>

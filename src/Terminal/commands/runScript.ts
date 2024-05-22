@@ -3,33 +3,41 @@ import { BaseServer } from "../../Server/BaseServer";
 import { LogBoxEvents } from "../../ui/React/LogBoxManager";
 import { startWorkerScript } from "../../NetscriptWorker";
 import { RunningScript } from "../../Script/RunningScript";
-import * as libarg from "arg";
+import libarg from "arg";
 import { formatRam } from "../../ui/formatNumber";
 import { ScriptArg } from "@nsdefs";
 import { isPositiveInteger } from "../../types";
 import { ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { sendDeprecationNotice } from "./common/deprecation";
+import { RamCostConstants } from "../../Netscript/RamCostGenerator";
 
 export function runScript(path: ScriptFilePath, commandArgs: (string | number | boolean)[], server: BaseServer): void {
   // This takes in the absolute filepath, see "run.ts"
   const script = server.scripts.get(path);
   if (!script) return Terminal.error(`Script ${path} does not exist on this server.`);
 
-  const runArgs = { "--tail": Boolean, "-t": Number };
+  const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
   const flags = libarg(runArgs, {
     permissive: true,
     argv: commandArgs,
   });
   const tailFlag = flags["--tail"] === true;
   const numThreads = parseFloat(flags["-t"] ?? 1);
+  const ramOverride = flags["--ram-override"] != null ? parseFloat(flags["--ram-override"]) : null;
   if (!isPositiveInteger(numThreads)) {
     return Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
+  }
+  if (ramOverride != null && (isNaN(ramOverride) || ramOverride < RamCostConstants.Base)) {
+    return Terminal.error(
+      `Invalid ram override specified. Ram override must be a number greater than ${RamCostConstants.Base}`,
+    );
   }
   if (!server.hasAdminRights) return Terminal.error("Need root access to run script");
 
   // Todo: Switch out arg for something with typescript support
   const args = flags._ as ScriptArg[];
 
-  const singleRamUsage = script.getRamUsage(server.scripts);
+  const singleRamUsage = ramOverride ?? script.getRamUsage(server.scripts);
   if (!singleRamUsage) {
     return Terminal.error(`Error while calculating ram usage for this script. ${script.ramCalculationError}`);
   }
@@ -52,6 +60,9 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   const success = startWorkerScript(runningScript, server);
   if (!success) return Terminal.error(`Failed to start script`);
 
+  if (path.endsWith(".script")) {
+    sendDeprecationNotice();
+  }
   Terminal.print(
     `Running script with ${numThreads} thread(s), pid ${runningScript.pid} and args: ${JSON.stringify(args)}.`,
   );

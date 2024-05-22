@@ -2,8 +2,9 @@ import type { Member } from "../types";
 import type { NetscriptContext } from "../Netscript/APIWrapper";
 
 import * as allEnums from "../Enums";
-import { assertString, helpers } from "../Netscript/NetscriptHelpers";
-import { getRandomInt } from "./helpers/getRandomInt";
+import { assertString } from "../Netscript/TypeAssertion";
+import { errorMessage } from "../Netscript/ErrorMessages";
+import { getRandomIntInclusive } from "./helpers/getRandomIntInclusive";
 
 interface GetMemberOptions {
   /** Whether to use fuzzy matching on the input (case insensitive, ignore spaces and dashes) */
@@ -50,7 +51,7 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
       );
       allowableValues = `See the developer console for allowable values.`;
     }
-    throw helpers.makeRuntimeErrorMsg(
+    throw errorMessage(
       ctx,
       `Argument ${argName} should be a ${this.name} enum member.\nProvided value: "${toValidate}".\n${allowableValues}`,
     );
@@ -68,7 +69,7 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
   }
   // Get a random enum member
   random() {
-    const index = getRandomInt(0, this.valueArray.length - 1);
+    const index = getRandomIntInclusive(0, this.valueArray.length - 1);
     return this.valueArray[index];
   }
 }

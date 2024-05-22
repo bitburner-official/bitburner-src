@@ -38,6 +38,8 @@ import { Page } from "../../Router";
 import { useBoolean } from "../hooks";
 
 import { ComparisonIcon } from "./ComparisonIcon";
+import { SaveData } from "../../../types";
+import { handleGetSaveDataError } from "../../../Netscript/ErrorMessages";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -89,7 +91,7 @@ const playerSkills: (keyof Skills)[] = ["hacking", "strength", "defense", "dexte
 
 let initialAutosave = 0;
 
-export const ImportSave = (props: { importString: string; automatic: boolean }): JSX.Element => {
+export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): JSX.Element => {
   const classes = useStyles();
   const [importData, setImportData] = useState<ImportData | undefined>();
   const [currentData, setCurrentData] = useState<ImportData | undefined>();
@@ -105,7 +107,7 @@ export const ImportSave = (props: { importString: string; automatic: boolean }):
   };
 
   const handleImport = async (): Promise<void> => {
-    await saveObject.importGame(props.importString, true);
+    await saveObject.importGame(props.saveData, true);
     pushImportResult(true);
   };
 
@@ -122,16 +124,25 @@ export const ImportSave = (props: { importString: string; automatic: boolean }):
 
   useEffect(() => {
     async function fetchData(): Promise<void> {
-      const dataBeingImported = await saveObject.getImportDataFromString(props.importString);
-      const dataCurrentlyInGame = await saveObject.getImportDataFromString(saveObject.getSaveString(true));
+      const dataBeingImported = await saveObject.getImportDataFromSaveData(props.saveData);
+      const dataCurrentlyInGame = await saveObject.getImportDataFromSaveData(await saveObject.getSaveData(true));
 
       setImportData(dataBeingImported);
       setCurrentData(dataCurrentlyInGame);
 
       return Promise.resolve();
     }
-    if (props.importString) fetchData();
-  }, [props.importString]);
+    if (props.saveData) {
+      fetchData().catch((error) => {
+        handleGoBack();
+        // We cannot show dialog box in this screen (due to "withPopups = false"), so we will try showing it with a
+        // delay. 1 second is usually enough to go back to other normal screens that allow showing popups.
+        setTimeout(() => {
+          handleGetSaveDataError(error);
+        }, 1000);
+      });
+    }
+  }, [props.saveData]);
 
   if (!importData || !currentData) return <></>;
 

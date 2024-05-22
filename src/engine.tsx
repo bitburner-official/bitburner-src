@@ -9,6 +9,7 @@ import { staneksGift } from "./CotMG/Helper";
 import { processPassiveFactionRepGain, inviteToFaction } from "./Faction/FactionHelpers";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
+import "./utils/Protections"; // Side-effect: Protect against certain unrecoverable errors
 import "./PersonObjects/Player/PlayerObject"; // For side-effect of creating Player
 
 import {
@@ -42,6 +43,7 @@ import React from "react";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
 import { SnackbarEvents } from "./ui/React/Snackbar";
+import { SaveData } from "./types";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
@@ -65,7 +67,7 @@ const Engine: {
   };
   decrementAllCounters: (numCycles?: number) => void;
   checkCounters: () => void;
-  load: (saveString: string) => void;
+  load: (saveData: SaveData) => Promise<void>;
   start: () => void;
 } = {
   // Time variables (milliseconds unix epoch time)
@@ -112,15 +114,17 @@ const Engine: {
     // Sleeves
     Player.sleeves.forEach((sleeve) => sleeve.process(numCycles));
 
-    // Counters
-    Engine.decrementAllCounters(numCycles);
-    Engine.checkCounters();
-
     // Update the running time of all active scripts
     updateOnlineScriptTimes(numCycles);
 
     // Hacknet Nodes
     processHacknetEarnings(numCycles);
+
+    // Counters
+    Engine.decrementAllCounters(numCycles);
+    // This **MUST** be the last call in the function, because checkCounters()
+    // can invoke the autosave, so any work done after here risks not getting saved!
+    Engine.checkCounters();
   },
 
   /**
@@ -156,19 +160,6 @@ const Engine: {
    * is necessary and then resets the counter
    */
   checkCounters: function () {
-    if (Engine.Counters.autoSaveCounter <= 0) {
-      if (Settings.AutosaveInterval == null) {
-        Settings.AutosaveInterval = 60;
-      }
-      if (Settings.AutosaveInterval === 0) {
-        warnAutosaveDisabled();
-        Engine.Counters.autoSaveCounter = 60 * 5; // Let's check back in a bit
-      } else {
-        Engine.Counters.autoSaveCounter = Settings.AutosaveInterval * 5;
-        saveObject.saveGame(!Settings.SuppressSavedGameToast);
-      }
-    }
-
     if (Engine.Counters.checkFactionInvitations <= 0) {
       const invitedFactions = Player.checkForFactionInvitations();
       if (invitedFactions.length > 0) {
@@ -215,9 +206,27 @@ const Engine: {
       calculateAchievements();
       Engine.Counters.achievementsCounter = 300;
     }
+
+    // This **MUST** remain the last block in the function!
+    // Otherwise, any work done after this point won't be saved!
+    // Due to the way most of these counters are reset, that would probably be
+    // OK, but it's much simpler to reason about if we can assume that the
+    // entire function has been performed after a save.
+    if (Engine.Counters.autoSaveCounter <= 0) {
+      if (Settings.AutosaveInterval == null) {
+        Settings.AutosaveInterval = 60;
+      }
+      if (Settings.AutosaveInterval === 0) {
+        warnAutosaveDisabled();
+        Engine.Counters.autoSaveCounter = 60 * 5; // Let's check back in a bit
+      } else {
+        Engine.Counters.autoSaveCounter = Settings.AutosaveInterval * 5;
+        saveObject.saveGame(!Settings.SuppressSavedGameToast);
+      }
+    }
   },
 
-  load: function (saveString) {
+  load: async function (saveData) {
     startExploits();
     setupUncaughtPromiseHandler();
     // Source files must be initialized early because save-game translation in
@@ -225,7 +234,7 @@ const Engine: {
     initSourceFiles();
     // Load game from save or create new game
 
-    if (loadGame(saveString)) {
+    if (await loadGame(saveData)) {
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
       if (Player.hasWseAccount) {

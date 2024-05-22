@@ -3,7 +3,7 @@ import type { Faction } from "./Faction";
 
 import { Augmentations } from "../Augmentation/Augmentations";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
-import { AugmentationName } from "@enums";
+import { AugmentationName, FactionDiscovery } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 import { Player } from "@player";
@@ -26,6 +26,7 @@ export function inviteToFaction(faction: Faction): void {
   if (faction.alreadyInvited || faction.isMember) return;
   Player.receiveInvite(faction.name);
   faction.alreadyInvited = true;
+  faction.discovery = FactionDiscovery.known;
   if (!Settings.SuppressFactionInvites) {
     InvitationEvent.emit(faction);
   }
@@ -34,6 +35,9 @@ export function inviteToFaction(faction: Faction): void {
 export function joinFaction(faction: Faction): void {
   if (faction.isMember) return;
   faction.isMember = true;
+  faction.alreadyInvited = true;
+  faction.discovery = FactionDiscovery.known;
+
   // Add this faction to player's faction list, keeping it in standard order
   Player.factions = getRecordKeys(Factions).filter((facName) => Factions[facName].isMember);
 

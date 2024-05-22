@@ -69,7 +69,9 @@ export function calculateHackingTime(server: IServer, person: IPerson): number {
   const hackTimeMultiplier = 5;
   const hackingTime =
     (hackTimeMultiplier * skillFactor) /
-    (person.mults.hacking_speed * calculateIntelligenceBonus(person.skills.intelligence, 1));
+    (person.mults.hacking_speed *
+      currentNodeMults.HackingSpeedMultiplier *
+      calculateIntelligenceBonus(person.skills.intelligence, 1));
 
   return hackingTime;
 }

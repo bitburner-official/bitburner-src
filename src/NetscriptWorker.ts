@@ -32,7 +32,8 @@ import { simple as walksimple } from "acorn-walk";
 import { parseCommand } from "./Terminal/Parser";
 import { Terminal } from "./Terminal";
 import { ScriptArg } from "@nsdefs";
-import { handleUnknownError, CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/NetscriptHelpers";
+import { CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/NetscriptHelpers";
+import { handleUnknownError } from "./Netscript/ErrorMessages";
 import { resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
 import { root } from "./Paths/Directory";
 
@@ -56,10 +57,12 @@ async function startNetscript2Script(workerScript: WorkerScript): Promise<void> 
   const loadedModule = await compile(script, scripts);
 
   if (!loadedModule) throw `${script.filename} cannot be run because the script module won't load`;
+  const mainFunc = loadedModule.main;
   // TODO unplanned: Better error for "unexpected reserved word" when using await in non-async function?
-  if (typeof loadedModule.main !== "function")
+  if (typeof mainFunc !== "function")
     throw `${script.filename} cannot be run because it does not have a main function.`;
-  await loadedModule.main(ns);
+  // Explicitly called from a variable so that we don't bind "this".
+  await mainFunc(ns);
 }
 
 async function startNetscript1Script(workerScript: WorkerScript): Promise<void> {

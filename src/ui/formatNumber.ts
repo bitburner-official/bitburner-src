@@ -101,7 +101,7 @@ export function formatPercent(n: number, fractionalDigits = 2, multStart = 1e6) 
   if (nAbs * 100 === Infinity) return n < 0 ? "-∞%" : "∞%";
 
   // Mult form. There are probably some areas in the game this wouldn't make sense, but they hopefully won't ever have huge %.
-  if (nAbs >= multStart) return "x" + formatNumber(n, fractionalDigits, 0);
+  if (nAbs >= multStart) return "x" + formatNumber(n, fractionalDigits);
 
   return getFormatter(fractionalDigits, percentFormats, { style: "percent" }).format(n);
 }
@@ -113,8 +113,11 @@ export function formatNumber(n: number, fractionalDigits = 3, suffixStart = 1000
 
   // Special handling for Infinities
   if (nAbs === Infinity) return n < 0 ? "-∞" : "∞";
+  if (suffixStart < 1000) {
+    throw new Error("suffixStart must be greater than or equal to 1000");
+  }
 
-  // Early return for non-suffix
+  // Early return for non-suffix or if number and suffix are 0
   if (nAbs < suffixStart) {
     if (isInteger) return basicFormatter.format(n);
     return getFormatter(fractionalDigits).format(n);
@@ -145,7 +148,18 @@ export const formatFavor = formatNumberNoSuffix;
 /** Standard noninteger formatting with no options set. Collapses to suffix at 1000 and shows 3 fractional digits. */
 export const formatBigNumber = (n: number) => formatNumber(n);
 export const formatExp = formatBigNumber;
-export const formatHashes = formatBigNumber;
+export const formatHashes = (n: number) => {
+  if (n < 0.00001) {
+    return formatNumber(n, 8);
+  }
+  if (n < 0.001) {
+    return formatNumber(n, 6);
+  }
+  if (n < 0.01) {
+    return formatNumber(n, 4);
+  }
+  return formatNumber(n);
+};
 export const formatReputation = formatBigNumber;
 export const formatPopulation = formatBigNumber;
 export const formatSecurity = formatBigNumber;
@@ -176,8 +190,8 @@ export const formatRespect = (n: number) => formatNumber(n, 5);
 export const formatWanted = formatRespect;
 export const formatPreciseMultiplier = formatRespect;
 
-/** Format a number with no suffix and 1 fractional digit. */
-export const formatMaterialSize = (n: number) => formatNumberNoSuffix(n, 1);
+/** Format a number with 3 fractional digits. */
+export const formatMaterialSize = (n: number) => formatNumber(n, 3);
 
 /** Format a number with no suffix and 2 fractional digits. */
 export const formatMultiplier = (n: number) => formatNumberNoSuffix(n, 2);

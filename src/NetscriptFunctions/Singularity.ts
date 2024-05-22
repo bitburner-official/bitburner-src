@@ -1,14 +1,12 @@
-import type { Singularity as ISingularity } from "@nsdefs";
+import type { Singularity as ISingularity, Task as ITask } from "@nsdefs";
 
 import { Player } from "@player";
 import {
   AugmentationName,
-  BlackOperationName,
   CityName,
   FactionName,
   FactionWorkType,
   GymType,
-  JobField,
   LocationName,
   UniversityClassType,
 } from "@enums";
@@ -55,8 +53,11 @@ import { Engine } from "../engine";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
-import { companyNameAsLocationName } from "../Company/utils";
 import { getRecordEntries } from "../Types/Record";
+import { JobTracks } from "../Company/data/JobTracks";
+import { ServerConstants } from "../Server/data/Constants";
+import { blackOpsArray } from "../Bladeburner/data/BlackOperations";
+import { calculateEffectiveRequiredReputation } from "../Company/utils";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -190,7 +191,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.makeRuntimeErrorMsg(ctx, `Could not resolve file path: ${_cbScript}`);
+      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
 
       helpers.log(ctx, () => "Soft resetting. This will cause this script to be killed");
       installAugmentations(true);
@@ -201,7 +202,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.makeRuntimeErrorMsg(ctx, `Could not resolve file path: ${_cbScript}`);
+      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
 
       if (Player.queuedAugmentations.length === 0) {
         helpers.log(ctx, () => "You do not have any Augmentations to be installed.");
@@ -409,7 +410,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 50000);
           return true;
         default:
-          throw helpers.makeRuntimeErrorMsg(ctx, `Invalid city name: '${cityName}'.`);
+          throw helpers.errorMessage(ctx, `Invalid city name: '${cityName}'.`);
       }
     },
 
@@ -428,7 +429,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       Player.loseMoney(CONSTANTS.TorRouterCost, "other");
 
       const darkweb = GetServer(SpecialServers.DarkWeb);
-      if (!darkweb) throw helpers.makeRuntimeErrorMsg(ctx, "DarkWeb was not a server but should have been");
+      if (!darkweb) throw helpers.errorMessage(ctx, "DarkWeb was not a server but should have been");
 
       Player.getHomeComputer().serversOnNetwork.push(darkweb.hostname);
       darkweb.serversOnNetwork.push(Player.getHomeComputer().hostname);
@@ -483,12 +484,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const hostname = helpers.string(ctx, "hostname", _hostname);
       if (!hostname) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid hostname: '${hostname}'`);
+        throw helpers.errorMessage(ctx, `Invalid hostname: '${hostname}'`);
       }
 
       const target = GetServer(hostname);
       if (target == null) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Invalid hostname: '${hostname}'`);
+        throw helpers.errorMessage(ctx, `Invalid hostname: '${hostname}'`);
       }
 
       //Home case
@@ -530,7 +531,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     manualHack: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
       const server = Player.getCurrentServer();
-      return helpers.hack(ctx, server.hostname, true);
+      return helpers.hack(ctx, server.hostname, true, null);
     },
     installBackdoor: (ctx) => async (): Promise<void> => {
       helpers.checkSingularityAccess(ctx);
@@ -545,7 +546,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       // No root access or skill level too low
       const canHack = netscriptCanHack(server);
       if (!canHack.res) {
-        throw helpers.makeRuntimeErrorMsg(ctx, canHack.msg || "");
+        throw helpers.errorMessage(ctx, canHack.msg || "");
       }
 
       helpers.log(
@@ -573,7 +574,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const focus = !!_focus;
       if (Player.currentWork === null) {
-        throw helpers.makeRuntimeErrorMsg(ctx, "Not currently working");
+        throw helpers.errorMessage(ctx, "Not currently working");
       }
 
       if (!Player.focus && focus) {
@@ -641,7 +642,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // Check if we're at max RAM
       const homeComputer = Player.getHomeComputer();
-      if (homeComputer.maxRam >= CONSTANTS.HomeComputerMaxRam) {
+      if (homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam) {
         helpers.log(ctx, () => `Your home computer is at max RAM.`);
         return false;
       }
@@ -682,25 +683,17 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const company = Companies[companyName];
 
       if (!company.hasPosition(positionName)) {
-        throw helpers.makeRuntimeErrorMsg(ctx, `Company '${companyName}' does not have position '${positionName}'`);
+        throw helpers.errorMessage(ctx, `Company '${companyName}' does not have position '${positionName}'`);
       }
 
       const job = CompanyPositions[positionName];
       const res = {
-        name: CompanyPositions[positionName].name,
-        field: CompanyPositions[positionName].field,
-        nextPosition: CompanyPositions[positionName].nextPosition,
-        salary: CompanyPositions[positionName].baseSalary * company.salaryMultiplier,
-        requiredReputation: CompanyPositions[positionName].requiredReputation,
-        requiredSkills: {
-          hacking: job.requiredHacking > 0 ? job.requiredHacking + company.jobStatReqOffset : 0,
-          strength: job.requiredStrength > 0 ? job.requiredStrength + company.jobStatReqOffset : 0,
-          defense: job.requiredDefense > 0 ? job.requiredDefense + company.jobStatReqOffset : 0,
-          dexterity: job.requiredDexterity > 0 ? job.requiredDexterity + company.jobStatReqOffset : 0,
-          agility: job.requiredAgility > 0 ? job.requiredAgility + company.jobStatReqOffset : 0,
-          charisma: job.requiredCharisma > 0 ? job.requiredCharisma + company.jobStatReqOffset : 0,
-          intelligence: 0,
-        },
+        name: job.name,
+        field: job.field,
+        nextPosition: job.nextPosition,
+        salary: job.baseSalary * company.salaryMultiplier,
+        requiredReputation: calculateEffectiveRequiredReputation(companyName, job.requiredReputation),
+        requiredSkills: job.requiredSkills(company.jobStatReqOffset),
       };
       return res;
     },
@@ -714,7 +707,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         const jobName = Player.jobs[companyName];
         // Make sure player is actually employed at the company
         if (!jobName) {
-          throw helpers.makeRuntimeErrorMsg(ctx, `You do not have a job at: '${companyName}'`);
+          throw helpers.errorMessage(ctx, `You do not have a job at: '${companyName}'`);
         }
 
         const wasFocused = Player.focus;
@@ -739,62 +732,16 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       const field = getEnumHelper("JobField").nsGetMember(ctx, _field, "field", { fuzzy: true });
+      const company = Companies[companyName];
+      const entryPos = CompanyPositions[JobTracks[field][0]];
 
-      Player.location = companyNameAsLocationName(companyName);
-      let res;
-      switch (field) {
-        case JobField.software:
-          res = Player.applyForSoftwareJob(true);
-          break;
-        case JobField.softwareConsultant:
-          res = Player.applyForSoftwareConsultantJob(true);
-          break;
-        case JobField.it:
-          res = Player.applyForItJob(true);
-          break;
-        case JobField.securityEngineer:
-          res = Player.applyForSecurityEngineerJob(true);
-          break;
-        case JobField.networkEngineer:
-          res = Player.applyForNetworkEngineerJob(true);
-          break;
-        case JobField.business:
-          res = Player.applyForBusinessJob(true);
-          break;
-        case JobField.businessConsultant:
-          res = Player.applyForBusinessConsultantJob(true);
-          break;
-        case JobField.security:
-          res = Player.applyForSecurityJob(true);
-          break;
-        case JobField.agent:
-          res = Player.applyForAgentJob(true);
-          break;
-        case JobField.employee:
-          res = Player.applyForEmployeeJob(true);
-          break;
-        case JobField.partTimeEmployee:
-          res = Player.applyForPartTimeEmployeeJob(true);
-          break;
-        case JobField.waiter:
-          res = Player.applyForWaiterJob(true);
-          break;
-        case JobField.partTimeWaiter:
-          res = Player.applyForPartTimeWaiterJob(true);
-          break;
-        default:
-          helpers.log(ctx, () => `Invalid job: '${field}'.`);
-          return false;
-      }
-      if (res) {
-        helpers.log(
-          ctx,
-          () => `You were offered a new job at '${companyName}' with position '${Player.jobs[companyName]}'`,
-        );
+      const jobName = Player.applyForJob(company, entryPos, true);
+      if (jobName) {
+        helpers.log(ctx, () => `You were offered a new job at '${companyName}' with position '${jobName}'`);
       } else {
         helpers.log(ctx, () => `You failed to get a new job/promotion at '${companyName}' in the '${field}' field.`);
       }
-      return res;
+      return jobName;
     },
     quitJob: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
@@ -816,14 +763,18 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       return Companies[companyName].getFavorGain();
     },
-    /* Function temporarily removed, likely to change in next version to be more programming-friendly instead of providing human-readable string outputs for each requirement
     getFactionInviteRequirements: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const fac = Factions[facName];
-      return fac.getInfo().inviteReqs.map((condition) => condition.toString());
+      return [...fac.getInfo().inviteReqs].map((condition) => condition.toJSON());
     },
-    */
+    getFactionEnemies: (ctx) => (_facName) => {
+      helpers.checkSingularityAccess(ctx);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
+      const fac = Factions[facName];
+      return fac.getInfo().enemies.slice();
+    },
     checkFactionInvitations: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
       // Manually trigger a check for faction invites
@@ -1061,7 +1012,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // If input isn't a crimeType, use search using roughname.
       const crime = findCrime(crimeType);
-      if (crime == null) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid crime: '${crimeType}'`);
+      if (crime == null) throw helpers.errorMessage(ctx, `Invalid crime: '${crimeType}'`);
 
       helpers.log(ctx, () => `Attempting to commit ${crime.type}...`);
       const crimeTime = crime.commit(1, ctx.workerScript);
@@ -1080,7 +1031,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // If input isn't a crimeType, use search using roughname.
       const crime = findCrime(crimeType);
-      if (crime == null) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid crime: '${crimeType}'`);
+      if (crime == null) throw helpers.errorMessage(ctx, `Invalid crime: '${crimeType}'`);
 
       return crime.successRate(Player);
     },
@@ -1090,7 +1041,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // If input isn't a crimeType, use search using roughname.
       const crime = findCrime(crimeType);
-      if (crime == null) throw helpers.makeRuntimeErrorMsg(ctx, `Invalid crime: '${crimeType}'`);
+      if (crime == null) throw helpers.errorMessage(ctx, `Invalid crime: '${crimeType}'`);
 
       const crimeStatsWithMultipliers = calculateCrimeWorkStats(Player, crime);
 
@@ -1135,7 +1086,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       // doesn't exist, it's the first time they've run the script. So throw an error to let them know
       // that they need to fix it.
       if (item == null) {
-        throw helpers.makeRuntimeErrorMsg(
+        throw helpers.errorMessage(
           ctx,
           `No such exploit ('${programName}') found on the darkweb! ` +
             `\nThis function is not case-sensitive. Did you perhaps forget .exe at the end?`,
@@ -1154,20 +1105,20 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.makeRuntimeErrorMsg(ctx, `Could not resolve file path: ${_cbScript}`);
+      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
       enterBitNode(true, Player.bitNodeN, nextBN);
       if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
     },
     destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript) => {
       helpers.checkSingularityAccess(ctx);
       const nextBN = helpers.number(ctx, "nextBN", _nextBN);
-      if (nextBN > 13 || nextBN < 1 || !Number.isInteger(nextBN)) {
+      if (nextBN > 14 || nextBN < 1 || !Number.isInteger(nextBN)) {
         throw new Error(`Invalid bitnode specified: ${_nextBN}`);
       }
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.makeRuntimeErrorMsg(ctx, `Could not resolve file path: ${_cbScript}`);
+      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
 
       const wd = GetServer(SpecialServers.WorldDaemon);
       if (!(wd instanceof Server)) throw new Error("WorldDaemon was not a normal server. This is a bug contact dev.");
@@ -1178,7 +1129,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       };
       const bladeburnerRequirements = () => {
         if (!Player.bladeburner) return false;
-        return Player.bladeburner.blackops[BlackOperationName.OperationDaedalus];
+        return Player.bladeburner.numBlackOpsComplete >= blackOpsArray.length;
       };
 
       if (!hackingRequirements() && !bladeburnerRequirements()) {
@@ -1191,9 +1142,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       enterBitNode(false, Player.bitNodeN, nextBN);
       if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
     },
-    getCurrentWork: () => () => {
+    getCurrentWork: (ctx) => () => {
+      helpers.checkSingularityAccess(ctx);
       if (!Player.currentWork) return null;
-      return Player.currentWork.APICopy();
+      return Player.currentWork.APICopy() as ITask;
     },
     exportGame: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);

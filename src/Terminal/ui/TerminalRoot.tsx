@@ -1,12 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import Typography from "@mui/material/Typography";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import { Link as MuiLink } from "@mui/material";
+import { Link as MuiLink, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
-import Box from "@mui/material/Box";
 import _ from "lodash";
 
 import { Output, Link, RawOutput } from "../OutputTypes";
@@ -22,8 +18,16 @@ import { TerminalActionTimer } from "./TerminalActionTimer";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    nopadding: {
-      padding: theme.spacing(0),
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      height: "calc(100vh - 16px)",
+    },
+    entries: {
+      padding: 0,
+      overflow: "scroll",
+      flex: "0 1 auto",
+      margin: "auto 0 0",
     },
     preformatted: {
       whiteSpace: "pre-wrap",
@@ -31,16 +35,11 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(0),
       width: "100%",
     },
-    list: {
-      padding: theme.spacing(0),
-      height: "100%",
-      width: "100%",
-    },
   }),
 );
 
 export function TerminalRoot(): React.ReactElement {
-  const scrollHook = useRef<HTMLDivElement>(null);
+  const scrollHook = useRef<HTMLUListElement>(null);
   const rerender = useRerender();
   const [key, setKey] = useState(0);
 
@@ -66,7 +65,7 @@ export function TerminalRoot(): React.ReactElement {
   function doScroll(): number | undefined {
     const hook = scrollHook.current;
     if (hook !== null) {
-      return window.setTimeout(() => hook.scrollIntoView(true), 50);
+      return window.setTimeout(() => (hook.scrollTop = hook.scrollHeight), 50);
     }
   }
 
@@ -85,39 +84,34 @@ export function TerminalRoot(): React.ReactElement {
 
   const classes = useStyles();
   return (
-    <>
-      <Box width="100%" minHeight="100vh" display={"flex"} alignItems={"flex-end"}>
-        <List key={key} id="terminal" classes={{ root: classes.list }}>
-          {Terminal.outputHistory.map((item, i) => (
-            <ListItem key={i} classes={{ root: classes.nopadding }}>
-              {item instanceof Output && <ANSIITypography text={item.text} color={item.color} />}
-              {item instanceof RawOutput && (
-                <Typography classes={{ root: classes.preformatted }} paragraph={false}>
-                  {item.raw}
-                </Typography>
-              )}
-              {item instanceof Link && (
-                <Typography classes={{ root: classes.preformatted }}>
-                  {item.dashes}
-                  <MuiLink onClick={() => Terminal.connectToServer(item.hostname)}>{item.hostname}</MuiLink>
-                </Typography>
-              )}
-            </ListItem>
-          ))}
+    <div className={classes.container}>
+      <ul key={key} id="terminal" className={classes.entries} ref={scrollHook}>
+        {Terminal.outputHistory.map((item, i) => (
+          <li key={i}>
+            {item instanceof Output && <ANSIITypography text={item.text} color={item.color} />}
+            {item instanceof RawOutput && (
+              <Typography classes={{ root: classes.preformatted }} paragraph={false}>
+                {item.raw}
+              </Typography>
+            )}
+            {item instanceof Link && (
+              <Typography classes={{ root: classes.preformatted }}>
+                {item.dashes}
+                <MuiLink onClick={() => Terminal.connectToServer(item.hostname)}>{item.hostname}</MuiLink>
+              </Typography>
+            )}
+          </li>
+        ))}
 
-          {Terminal.action !== null && (
-            <ListItem classes={{ root: classes.nopadding }}>
-              <TerminalActionTimer />{" "}
-            </ListItem>
-          )}
-        </List>
-        <div ref={scrollHook}></div>
-      </Box>
-      <Box position="sticky" bottom={0} width="100%" px={0}>
-        <TerminalInput />
-      </Box>
+        {Terminal.action !== null && (
+          <li>
+            <TerminalActionTimer />{" "}
+          </li>
+        )}
+      </ul>
+      <TerminalInput />
       <BitFlumeModal />
       <CodingContractModal />
-    </>
+    </div>
   );
 }

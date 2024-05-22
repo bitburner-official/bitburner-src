@@ -1,22 +1,16 @@
 import { Person as IPerson } from "@nsdefs";
 import { CONSTANTS } from "../Constants";
 import { JobName, JobField } from "@enums";
-import {
-  agentJobs,
-  businessConsultJobs,
-  businessJobs,
-  itJobs,
-  netEngJobs,
-  securityJobs,
-  softwareConsultJobs,
-  softwareJobs,
-} from "./data/JobTracks";
+import type { Skills } from "../PersonObjects/Skills";
 
 export interface CompanyPositionCtorParams {
   nextPosition: JobName | null;
   field: JobField;
   baseSalary: number;
   repMultiplier: number;
+  applyText?: string;
+  hiredText?: string;
+  isPartTime?: boolean;
 
   reqdHacking?: number;
   reqdStrength?: number;
@@ -60,6 +54,15 @@ export class CompanyPosition {
   /** Reputation multiplier */
   repMultiplier: number;
 
+  /** Text to display when applying for this job */
+  applyText: string;
+
+  /** Text to display when receiving this job */
+  hiredText: string;
+
+  /** Whether this position is part-time */
+  isPartTime: boolean;
+
   /** Required stats to earn this position */
   requiredAgility: number;
   requiredCharisma: number;
@@ -93,6 +96,9 @@ export class CompanyPosition {
     this.nextPosition = p.nextPosition;
     this.baseSalary = p.baseSalary;
     this.repMultiplier = p.repMultiplier;
+    this.isPartTime = p.isPartTime ?? false;
+    this.applyText = p.applyText ?? `Apply for ${this.name} Job`;
+    this.hiredText = p.hiredText ?? `Congratulations, you are now employed as a ${this.name}`;
 
     this.requiredHacking = p.reqdHacking != null ? p.reqdHacking : 0;
     this.requiredStrength = p.reqdStrength != null ? p.reqdStrength : 0;
@@ -130,6 +136,18 @@ export class CompanyPosition {
     this.charismaExpGain = p.charismaExpGain != null ? p.charismaExpGain : 0;
   }
 
+  requiredSkills(jobStatReqOffset: number): Skills {
+    return {
+      hacking: this.requiredHacking > 0 ? this.requiredHacking + jobStatReqOffset : 0,
+      strength: this.requiredStrength > 0 ? this.requiredStrength + jobStatReqOffset : 0,
+      defense: this.requiredDefense > 0 ? this.requiredDefense + jobStatReqOffset : 0,
+      dexterity: this.requiredDexterity > 0 ? this.requiredDexterity + jobStatReqOffset : 0,
+      agility: this.requiredAgility > 0 ? this.requiredAgility + jobStatReqOffset : 0,
+      charisma: this.requiredCharisma > 0 ? this.requiredCharisma + jobStatReqOffset : 0,
+      intelligence: 0,
+    };
+  }
+
   calculateJobPerformance(worker: IPerson): number {
     const hackRatio: number = (this.hackingEffectiveness * worker.skills.hacking) / CONSTANTS.MaxSkillLevel;
     const strRatio: number = (this.strengthEffectiveness * worker.skills.strength) / CONSTANTS.MaxSkillLevel;
@@ -146,45 +164,5 @@ export class CompanyPosition {
     }
     reputationGain += worker.skills.intelligence / CONSTANTS.MaxSkillLevel;
     return reputationGain;
-  }
-
-  isSoftwareJob(): boolean {
-    return softwareJobs.includes(this.name);
-  }
-
-  isITJob(): boolean {
-    return itJobs.includes(this.name);
-  }
-
-  isSecurityEngineerJob(): boolean {
-    return this.name === JobName.securityEng;
-  }
-
-  isNetworkEngineerJob(): boolean {
-    return netEngJobs.includes(this.name);
-  }
-
-  isBusinessJob(): boolean {
-    return businessJobs.includes(this.name);
-  }
-
-  isSecurityJob(): boolean {
-    return securityJobs.includes(this.name);
-  }
-
-  isAgentJob(): boolean {
-    return agentJobs.includes(this.name);
-  }
-
-  isSoftwareConsultantJob(): boolean {
-    return softwareConsultJobs.includes(this.name);
-  }
-
-  isBusinessConsultantJob(): boolean {
-    return businessConsultJobs.includes(this.name);
-  }
-
-  isPartTimeJob(): boolean {
-    return [JobName.employeePT, JobName.waiterPT].includes(this.name);
   }
 }

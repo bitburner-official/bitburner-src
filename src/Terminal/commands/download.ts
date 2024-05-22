@@ -1,11 +1,11 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import FileSaver from "file-saver";
 import JSZip from "jszip";
 import { root } from "../../Paths/Directory";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { getGlobbedFileMap } from "../../Paths/GlobbedFiles";
+import { downloadContentAsFile } from "../../utils/FileUtils";
 
 // Basic globbing implementation only supporting * and ?. Can be broken out somewhere else later.
 export function exportScripts(pattern: string, server: BaseServer, currDir = root): void {
@@ -17,10 +17,10 @@ export function exportScripts(pattern: string, server: BaseServer, currDir = roo
 
   // Return an error if no files matched, rather than an empty zip folder
   if (Object.keys(zip.files).length == 0) throw new Error(`No files match the pattern ${pattern}`);
-  const zipFn = `bitburner${
+  const filename = `bitburner${
     hasScriptExtension(pattern) ? "Scripts" : pattern.endsWith(".txt") ? "Texts" : "Files"
   }.zip`;
-  zip.generateAsync({ type: "blob" }).then((content: Blob) => FileSaver.saveAs(content, zipFn));
+  zip.generateAsync({ type: "blob" }).then((content: Blob) => downloadContentAsFile(content, filename));
 }
 
 export function download(args: (string | number | boolean)[], server: BaseServer): void {
@@ -45,5 +45,5 @@ export function download(args: (string | number | boolean)[], server: BaseServer
   }
   const file = server.getContentFile(path);
   if (!file) return Terminal.error(`File not found: ${path}`);
-  return file.download();
+  return downloadContentAsFile(file.content, file.filename);
 }

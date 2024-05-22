@@ -1,7 +1,7 @@
 import { resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { hasScriptExtension } from "../Paths/ScriptFilePath";
-import { GetServer } from "../Server/AllServers";
+import { GetServer, GetAllServers } from "../Server/AllServers";
 import {
   RFAMessage,
   FileData,
@@ -110,5 +110,15 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => void | R
 
   getDefinitionFile: function (msg: RFAMessage): RFAMessage {
     return new RFAMessage({ result: libSource + "", id: msg.id });
+  },
+
+  getAllServers: function (msg: RFAMessage): RFAMessage {
+    const servers = GetAllServers().map(({ hostname, hasAdminRights, purchasedByPlayer }) => ({
+      hostname,
+      hasAdminRights,
+      purchasedByPlayer,
+    }));
+
+    return new RFAMessage({ result: servers, id: msg.id });
   },
 };

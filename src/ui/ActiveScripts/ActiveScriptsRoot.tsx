@@ -8,14 +8,9 @@ import Tab from "@mui/material/Tab";
 
 import { ActiveScriptsPage } from "./ActiveScriptsPage";
 import { RecentScriptsPage } from "./RecentScriptsPage";
-import { WorkerScript } from "../../Netscript/WorkerScript";
 import { useRerender } from "../React/hooks";
 
-interface IProps {
-  workerScripts: Map<number, WorkerScript>;
-}
-
-export function ActiveScriptsRoot(props: IProps): React.ReactElement {
+export function ActiveScriptsRoot(): React.ReactElement {
   const [tab, setTab] = useState<"active" | "recent">("active");
   useRerender(400);
 
@@ -29,7 +24,7 @@ export function ActiveScriptsRoot(props: IProps): React.ReactElement {
         <Tab label={"Recently Killed"} value={"recent"} />
       </Tabs>
 
-      {tab === "active" && <ActiveScriptsPage workerScripts={props.workerScripts} />}
+      {tab === "active" && <ActiveScriptsPage />}
       {tab === "recent" && <RecentScriptsPage />}
     </>
   );

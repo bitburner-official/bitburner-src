@@ -1,4 +1,5 @@
 import { Sleeve } from "../Sleeve";
+import { Player } from "@player";
 import { formatExp, formatPercent } from "../../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
 import { CONSTANTS } from "../../../Constants";
@@ -28,6 +29,16 @@ export function MoreStatsModal(props: IProps): React.ReactElement {
           ],
           [<>Agility:&nbsp;</>, props.sleeve.skills.agility, <>&nbsp;({formatExp(props.sleeve.exp.agility)} exp)</>],
           [<>Charisma:&nbsp;</>, props.sleeve.skills.charisma, <>&nbsp;({formatExp(props.sleeve.exp.charisma)} exp)</>],
+          [
+            ...(Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5
+              ? [
+                  <>Intelligence:&nbsp;</>,
+                  props.sleeve.skills.intelligence,
+                  <>&nbsp;({formatExp(props.sleeve.exp.intelligence)} exp)</>,
+                ]
+              : [<></>]),
+          ],
+          [<></>],
         ]}
         title="Stats:"
       />

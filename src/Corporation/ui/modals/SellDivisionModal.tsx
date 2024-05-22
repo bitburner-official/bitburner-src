@@ -2,14 +2,14 @@ import React, { useState } from "react";
 
 import { Modal } from "../../../ui/React/Modal";
 import { Money } from "../../../ui/React/Money";
+import { MoneyRate } from "../../../ui/React/MoneyRate";
+import { StatsTable } from "../../../ui/React/StatsTable";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useCorporation } from "../../ui/Context";
-import { CityName } from "@enums";
-import * as corpConstants from "../../data/Constants";
-import { removeDivision as removeDivision } from "../../Actions";
+import { removeDivision } from "../../Actions";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { getRecordKeys } from "../../../Types/Record";
 
@@ -23,18 +23,7 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
   const allDivisions = [...corp.divisions.values()];
   const [divisionToSell, setDivisionToSell] = useState(allDivisions[0]);
   if (allDivisions.length === 0) return <></>;
-  const price = calculatePrice();
-
-  function calculatePrice() {
-    let price = divisionToSell.startingCost;
-    for (const city of getRecordKeys(divisionToSell.offices)) {
-      if (city === CityName.Sector12) continue;
-      price += corpConstants.officeInitialCost;
-      if (divisionToSell.warehouses[city]) price += corpConstants.warehouseInitialCost;
-    }
-    price /= 2;
-    return price;
-  }
+  const price = divisionToSell.calculateRecoupableValue();
 
   function onDivisionChange(event: SelectChangeEvent): void {
     const div = corp.divisions.get(event.target.value);
@@ -43,12 +32,11 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
   }
 
   function sellDivision() {
-    removeDivision(corp, divisionToSell.name);
-    corp.funds += price;
+    const soldPrice = removeDivision(corp, divisionToSell.name);
     props.onClose();
     dialogBoxCreate(
       <Typography>
-        Sold <b>{divisionToSell.name}</b> for <Money money={price} />, you now have space for
+        Sold <b>{divisionToSell.name}</b> for <Money money={soldPrice} />, you now have space for{" "}
         {corp.maxDivisions - corp.divisions.size} more divisions.
       </Typography>,
     );
@@ -70,12 +58,20 @@ export function SellDivisionModal(props: IProps): React.ReactElement {
           ))}
         </Select>
         <Typography>Division {divisionToSell.name} has:</Typography>
-        <Typography>
-          Profit: <Money money={(divisionToSell.lastCycleRevenue - divisionToSell.lastCycleExpenses) / 10} /> / sec{" "}
-        </Typography>
-        <Typography>Cities:{getRecordKeys(divisionToSell.offices).length}</Typography>
-        <Typography>Warehouses:{getRecordKeys(divisionToSell.warehouses).length}</Typography>
-        {divisionToSell.makesProducts ?? <Typography>Products: {divisionToSell.products.size}</Typography>}
+        <StatsTable
+          rows={[
+            [
+              "Profit:",
+              <MoneyRate
+                key="profit"
+                money={(divisionToSell.lastCycleRevenue - divisionToSell.lastCycleExpenses) / 10}
+              />,
+            ],
+            ["Cities:", getRecordKeys(divisionToSell.offices).length],
+            ["Warehouses:", getRecordKeys(divisionToSell.warehouses).length],
+            divisionToSell.makesProducts ? ["Products:", divisionToSell.products.size] : [],
+          ]}
+        />
         <br />
         <Typography>
           Sell price: <Money money={price} />

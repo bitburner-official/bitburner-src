@@ -12,35 +12,20 @@ export const CONSTANTS: {
   OfflineHackingIncome: number;
   CorpFactionRepRequirement: number;
   BaseFocusBonus: number;
-  BaseCostFor1GBOfRamHome: number;
-  BaseCostFor1GBOfRamServer: number;
   TravelCost: number;
   BaseFavorToDonate: number;
   DonateMoneyToRepDivisor: number;
-  FactionReputationToFavorBase: number;
-  FactionReputationToFavorMult: number;
-  CompanyReputationToFavorBase: number;
-  CompanyReputationToFavorMult: number;
   NeuroFluxGovernorLevelMult: number;
   NumNetscriptPorts: number;
-  HomeComputerMaxRam: number;
-  ServerBaseGrowthRate: number;
-  ServerMaxGrowthRate: number;
-  ServerFortifyAmount: number;
-  ServerWeakenAmount: number;
-  PurchasedServerLimit: number;
-  PurchasedServerMaxRam: number;
   MultipleAugMultiplier: number;
   TorRouterCost: number;
   HospitalCostPerHp: number;
   IntelligenceCrimeWeight: number;
-  IntelligenceInfiltrationWeight: number;
   IntelligenceCrimeBaseExpGain: number;
   IntelligenceProgramBaseExpGain: number;
   IntelligenceGraftBaseExpGain: number;
   IntelligenceTerminalHackBaseExpGain: number;
   IntelligenceSingFnBaseExpGain: number;
-  IntelligenceClassBaseExpGain: number;
   MillisecondsPer20Hours: number;
   GameCyclesPer20Hours: number;
   MillisecondsPer10Hours: number;
@@ -59,18 +44,6 @@ export const CONSTANTS: {
   GameCyclesPerQuarterHour: number;
   MillisecondsPerFiveMinutes: number;
   GameCyclesPerFiveMinutes: number;
-  ClassDataStructuresBaseCost: number;
-  ClassNetworksBaseCost: number;
-  ClassAlgorithmsBaseCost: number;
-  ClassManagementBaseCost: number;
-  ClassLeadershipBaseCost: number;
-  ClassGymBaseCost: number;
-  ClassStudyComputerScienceBaseExp: number;
-  ClassDataStructuresBaseExp: number;
-  ClassNetworksBaseExp: number;
-  ClassAlgorithmsBaseExp: number;
-  ClassManagementBaseExp: number;
-  ClassLeadershipBaseExp: number;
   CodingContractBaseFactionRepGain: number;
   CodingContractBaseCompanyRepGain: number;
   CodingContractBaseMoneyGain: number;
@@ -79,14 +52,13 @@ export const CONSTANTS: {
   SoACostMult: number;
   SoARepMult: number;
   EntropyEffect: number;
-  TotalNumBitNodes: number;
-  InfiniteLoopLimit: number;
   Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
+  CompanyRequiredReputationMultiplier: number; // Only use this if a backdoor is installed in the company's server
   LatestUpdate: string;
 } = {
-  VersionString: "2.5.2dev",
+  VersionString: "2.6.2dev",
   isDevBranch: true,
-  VersionNumber: 36,
+  VersionNumber: 39,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -103,35 +75,17 @@ export const CONSTANTS: {
   // How much reputation is needed to join a megacorporation's faction
   CorpFactionRepRequirement: 400e3,
 
-  // Base RAM costs
-  BaseCostFor1GBOfRamHome: 32000,
-  BaseCostFor1GBOfRamServer: 55000, //1 GB of RAM
-
   // Cost to travel to another city
   TravelCost: 200e3,
 
   // Faction and Company favor-related things
   BaseFavorToDonate: 150,
   DonateMoneyToRepDivisor: 1e6,
-  FactionReputationToFavorBase: 500,
-  FactionReputationToFavorMult: 1.02,
-  CompanyReputationToFavorBase: 500,
-  CompanyReputationToFavorMult: 1.02,
 
   // NeuroFlux Governor Augmentation cost multiplier
   NeuroFluxGovernorLevelMult: 1.14,
 
   NumNetscriptPorts: Number.MAX_SAFE_INTEGER,
-
-  // Server-related constants
-  HomeComputerMaxRam: 1073741824, // 2 ^ 30
-  ServerBaseGrowthRate: 1.03, // Unadjusted Growth rate
-  ServerMaxGrowthRate: 1.0035, // Maximum possible growth rate (max rate accounting for server security)
-  ServerFortifyAmount: 0.002, // Amount by which server's security increases when its hacked/grown
-  ServerWeakenAmount: 0.05, // Amount by which server's security decreases when weakened
-
-  PurchasedServerLimit: 25,
-  PurchasedServerMaxRam: 1048576, // 2^20
 
   // Augmentation Constants
   MultipleAugMultiplier: 1.9,
@@ -144,13 +98,11 @@ export const CONSTANTS: {
 
   // Intelligence-related constants
   IntelligenceCrimeWeight: 0.025, // Weight for how much int affects crime success rates
-  IntelligenceInfiltrationWeight: 0.1, // Weight for how much int affects infiltration success rates
   IntelligenceCrimeBaseExpGain: 0.05,
   IntelligenceProgramBaseExpGain: 0.1, // Program required hack level divided by this to determine int exp gain
   IntelligenceGraftBaseExpGain: 0.05,
   IntelligenceTerminalHackBaseExpGain: 200, // Hacking exp divided by this to determine int exp gain
   IntelligenceSingFnBaseExpGain: 1.5,
-  IntelligenceClassBaseExpGain: 0.01,
 
   // Time-related constants
   MillisecondsPer20Hours: 72000000,
@@ -183,20 +135,6 @@ export const CONSTANTS: {
   // Player Work & Action
   BaseFocusBonus: 0.8,
 
-  ClassDataStructuresBaseCost: 40,
-  ClassNetworksBaseCost: 80,
-  ClassAlgorithmsBaseCost: 320,
-  ClassManagementBaseCost: 160,
-  ClassLeadershipBaseCost: 320,
-  ClassGymBaseCost: 120,
-
-  ClassStudyComputerScienceBaseExp: 0.5,
-  ClassDataStructuresBaseExp: 1,
-  ClassNetworksBaseExp: 2,
-  ClassAlgorithmsBaseExp: 4,
-  ClassManagementBaseExp: 2,
-  ClassLeadershipBaseExp: 4,
-
   // Coding Contract
   // TODO: Move this into Coding contract implementation?
   CodingContractBaseFactionRepGain: 2500,
@@ -214,39 +152,16 @@ export const CONSTANTS: {
   // Value raised to the number of entropy stacks, then multiplied to player multipliers
   EntropyEffect: 0.98,
 
-  // BitNode/Source-File related stuff
-  TotalNumBitNodes: 24,
+  Donations: 151,
 
-  InfiniteLoopLimit: 2000,
-
-  Donations: 113,
+  CompanyRequiredReputationMultiplier: 0.75,
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.5.2dev changelog - Last updated 30 November 2023
+## v2.6.2 dev - Last update 22 May 2024
 
-### NOTES
+See 2.6.1 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.1/src/Documentation/doc/changelog.md
 
-See the 2.5.1 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.5.1/src/Documentation/doc/changelog.md
-
-### MAJOR ADDITIONS
-
-- No changes since 2.5.1
-
-### API
-
-- No changes since 2.5.1
-
-### BUGFIX
-
-- No changes since 2.5.1
-
-### MISC
-
-- Nerf noodle bar (various contributors)
-
-### UI
-
-- No changes since 2.5.1
+No changes yet since 2.6.1 release
 `,
 };

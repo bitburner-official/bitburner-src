@@ -232,4 +232,28 @@ export function initSourceFiles() {
     13,
     <>Each level of this Source-File increases the size of Stanek's Gift.</>,
   );
+  SourceFiles.SourceFile14 = new SourceFile(
+    14,
+    (
+      <>
+        This Source-File grants the following benefits:
+        <br />
+        <br />
+        Level 1: 100% increased stat multipliers from node Power
+        <br />
+        Level 2: Permanently unlocks the go.cheat API in other BitNodes
+        <br />
+        Level 3: 25% additive increased success rate for the go.cheat API
+        <br />
+        <br />
+        This Source-File also increases the maximum favor you can gain for each faction from IPvGO to:
+        <br />
+        Level 1: 80
+        <br />
+        Level 2: 100
+        <br />
+        Level 3: 120
+      </>
+    ),
+  );
 }

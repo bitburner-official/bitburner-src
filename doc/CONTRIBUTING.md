@@ -207,9 +207,17 @@ the following rules:
 - Ensure you have run `npm run lint` to make sure your changes conform to the
   rules enforced across the code base. The command will fail if any of the
   linters find a violation.
+- Ensure you have run `npm run format` to make sure your changes conform to the
+  style guide.
+- Also, ensure you have run `npm run test` to make sure your changes pass
+  the automated tests.
 - Do not check in any bundled files (`dist\*.bundle.js`) or the `index.html`
   in the root of the repository. These will be updated as part of official
   releases.
+- The title of your Pull Request will need to be formatted like
+  `MISC: Reticulated the splines`, where the first word must be capitalised
+  and relate to the kind of change being implemented. Possible examples
+  are UI, BUGFIX, SERVERS, NETSCRIPT... You get the idea.
 
 ## As a Documenter
 

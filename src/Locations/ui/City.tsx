@@ -28,7 +28,7 @@ interface IProps {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     location: {
-      color: theme.colors.white,
+      color: theme.colors.maplocation,
       whiteSpace: "nowrap",
       margin: "0px",
       padding: "0px",

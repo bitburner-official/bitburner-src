@@ -24,21 +24,6 @@ export class TextFile implements ContentFile {
     this.text = txt;
   }
 
-  /** Serves the file to the user as a downloadable resource through the browser. */
-  download(): void {
-    const file: Blob = new Blob([this.text], { type: "text/plain" });
-    const a: HTMLAnchorElement = document.createElement("a");
-    const url: string = URL.createObjectURL(file);
-    a.href = url;
-    a.download = this.filename;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }, 0);
-  }
-
   /** Serialize the current file to a JSON save state. */
   toJSON(): IReviverValue {
     return Generic_toJSON("TextFile", this);

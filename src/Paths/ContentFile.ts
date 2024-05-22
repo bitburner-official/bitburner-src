@@ -7,7 +7,6 @@ export type ContentFilePath = ScriptFilePath | TextFilePath;
 export interface ContentFile {
   filename: ContentFilePath;
   content: string;
-  download: () => void;
   deleteFromServer: (server: BaseServer) => boolean;
 }
 export type ContentFileMap = Map<ContentFilePath, ContentFile>;

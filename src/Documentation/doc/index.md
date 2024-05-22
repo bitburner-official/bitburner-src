@@ -1,6 +1,8 @@
 # Documentation
 
-## [Beginners guide](help/getting_started.md)
+## Guides
+
+- [Beginners guide](help/getting_started.md)
 
 ## Basic Mechanics
 
@@ -24,6 +26,8 @@
 
 ## Advanced Mechanics
 
+- [Hacking Algorithms](programming/hackingalgorithms.md)
+- [IPvGO](programming/go_algorithms.md)
 - [BitNodes](advanced/bitnodes.md)
 - [BladeBurners](advanced/bladeburners.md)
 - [Corporations](advanced/corporations.md)
@@ -31,6 +35,7 @@
 - [Grafting](advanced/grafting.md)
 - [Hacknet Servers](advanced/hacknetservers.md)
 - [Intelligence](advanced/intelligence.md)
+- [List of Factions and their Requirements](advanced/faction_list.md)
 - [Offline Scripts and Bonus Time](advanced/offlineandbonustime.md)
 - [Sleeves](advanced/sleeves.md)
 - [Source-Files](advanced/sourcefiles.md)
@@ -46,5 +51,6 @@
 
 ## Migration
 
-- [v1.0.0 script migration guide](migrations/v1.md)
-- [v2.0.0 script migration guide](migrations/v2.md)
+- [Bitburner v1.0.0 script migration guide](migrations/v1.md)
+- [Bitburner v2.0.0 script migration guide](migrations/v2.md)
+- [Netscript 2 migration guide (.script to .js)](migrations/ns2.md)

@@ -90,7 +90,7 @@ export enum AugmentationName {
   BrachiBlades = "BrachiBlades",
   BionicArms = "Bionic Arms",
   SNA = "Social Negotiation Assistant (S.N.A)",
-  CongruityImplant = "nickofolas Congruity Implant",
+  CongruityImplant = "violet Congruity Implant",
   HydroflameLeftArm = "Hydroflame Left Arm",
   BigDsBigBrain = "BigD's Big ... Brain",
   ZOE = "Z.O.Ë.",

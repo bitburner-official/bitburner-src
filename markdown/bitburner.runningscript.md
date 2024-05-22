@@ -15,7 +15,7 @@ interface RunningScript
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [args](./bitburner.runningscript.args.md) |  | (string \| number \| boolean)\[\] | Arguments the script was called with |
+|  [args](./bitburner.runningscript.args.md) |  | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments the script was called with |
 |  [filename](./bitburner.runningscript.filename.md) |  | string | Filename of the script |
 |  [logs](./bitburner.runningscript.logs.md) |  | string\[\] | Script logs as an array. The newest log entries are at the bottom. Timestamps, if enabled, are placed inside <code>[brackets]</code> at the start of each line. |
 |  [offlineExpGained](./bitburner.runningscript.offlineexpgained.md) |  | number | Total amount of hacking experience earned from this script when offline |

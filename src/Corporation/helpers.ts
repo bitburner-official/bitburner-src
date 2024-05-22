@@ -3,6 +3,14 @@ import { PositiveInteger, isPositiveInteger } from "../types";
 import { formatShares } from "../ui/formatNumber";
 import { Corporation } from "./Corporation";
 import { CorpUpgrade } from "./data/CorporationUpgrades";
+import * as corpConstants from "./data/Constants";
+
+export function costOfCreatingCorporation(restart: boolean): number {
+  if (restart && !Player.corporation?.seedFunded) {
+    return 50e9;
+  }
+  return 150e9;
+}
 
 export function calculateUpgradeCost(corporation: Corporation, upgrade: CorpUpgrade, amount: PositiveInteger): number {
   const priceMult = upgrade.priceMult;
@@ -10,6 +18,15 @@ export function calculateUpgradeCost(corporation: Corporation, upgrade: CorpUpgr
   const baseCost = upgrade.basePrice * Math.pow(priceMult, level);
   const cost = (baseCost * (1 - Math.pow(priceMult, amount))) / (1 - priceMult);
   return cost;
+}
+
+export function calculateOfficeSizeUpgradeCost(currentSize: number, sizeIncrease: PositiveInteger): number {
+  if (sizeIncrease <= 0) throw new Error("Invalid value for sizeIncrease argument! Must be at least 0!");
+  const baseCostDivisor = 0.09;
+  const baseCostMultiplier = 1 + baseCostDivisor;
+  const currentSizeFactor = baseCostMultiplier ** (currentSize / 3);
+  const sizeIncreaseFactor = baseCostMultiplier ** (sizeIncrease / 3) - 1;
+  return (corpConstants.officeInitialCost / baseCostDivisor) * currentSizeFactor * sizeIncreaseFactor;
 }
 
 export function calculateMaxAffordableUpgrade(corp: Corporation, upgrade: CorpUpgrade): 0 | PositiveInteger {

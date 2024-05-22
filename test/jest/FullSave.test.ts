@@ -11,9 +11,9 @@ import { Companies } from "../../src/Company/Companies";
 describe("Check Save File Continuity", () => {
   establishInitialConditions();
   // Calling getSaveString forces save info to update
-  saveObject.getSaveString();
+  saveObject.getSaveData();
 
-  const savesToTest = ["FactionsSave", "PlayerSave", "CompaniesSave"] as const;
+  const savesToTest = ["FactionsSave", "PlayerSave", "CompaniesSave", "GoSave"] as const;
   for (const saveToTest of savesToTest) {
     test(`${saveToTest} continuity`, () => {
       const parsed = JSON.parse(saveObject[saveToTest]);

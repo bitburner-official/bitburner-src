@@ -9,7 +9,6 @@ import { ExportModal } from "./modals/ExportModal";
 import { SellMaterialModal } from "./modals/SellMaterialModal";
 import { PurchaseMaterialModal } from "./modals/PurchaseMaterialModal";
 import { formatBigNumber, formatCorpStat, formatQuality } from "../../ui/formatNumber";
-import { isString } from "../../utils/helpers/string";
 import { Money } from "../../ui/React/Money";
 import { useCorporation, useDivision } from "./Context";
 import { LimitMaterialProductionModal } from "./modals/LimitMaterialProductionModal";
@@ -54,7 +53,7 @@ export function MaterialElem(props: IMaterialProps): React.ReactElement {
   // Sell material button
   let sellButtonText: JSX.Element;
   if (mat.desiredSellAmount) {
-    if (isString(mat.desiredSellAmount)) {
+    if (typeof mat.desiredSellAmount === "string") {
       sellButtonText = (
         <>
           Sell ({formatBigNumber(mat.actualSellAmount)}/{mat.desiredSellAmount})

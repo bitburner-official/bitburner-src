@@ -5,18 +5,22 @@ import { Settings } from "../../Settings/Settings";
 import { load } from "../../db";
 import { Router } from "../GameRoot";
 import { Page } from "../Router";
-import { download } from "../../SaveObject";
 import { IErrorData, newIssueUrl } from "../../utils/ErrorHelper";
 import { DeleteGameButton } from "./DeleteGameButton";
 import { SoftResetButton } from "./SoftResetButton";
 
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import { isBinaryFormat } from "../../../electron/saveDataBinaryFormat";
+import { InvalidSaveData, UnsupportedSaveData } from "../../utils/SaveDataUtils";
+import { downloadContentAsFile } from "../../utils/FileUtils";
 
 export let RecoveryMode = false;
+let sourceError: unknown;
 
-export function ActivateRecoveryMode(): void {
+export function ActivateRecoveryMode(error: unknown): void {
   RecoveryMode = true;
+  sourceError = error;
 }
 
 interface IProps {
@@ -29,6 +33,7 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
   function recover(): void {
     if (resetError) resetError();
     RecoveryMode = false;
+    sourceError = undefined;
     Router.toPage(Page.Terminal);
   }
   Settings.AutosaveInterval = 0;
@@ -37,41 +42,65 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
     load()
       .then((content) => {
         const epochTime = Math.round(Date.now() / 1000);
-        const filename = `RECOVERY_BITBURNER_${epochTime}.json`;
-        download(filename, content);
+        const extension = isBinaryFormat(content) ? "json.gz" : "json";
+        const filename = `RECOVERY_BITBURNER_${epochTime}.${extension}`;
+        downloadContentAsFile(content, filename);
       })
       .catch((err) => console.error(err));
   }, []);
+
+  let instructions;
+  if (sourceError instanceof UnsupportedSaveData) {
+    instructions = <Typography variant="h6">Please update your browser.</Typography>;
+  } else if (sourceError instanceof InvalidSaveData) {
+    instructions = (
+      <Typography variant="h6">Your save data is invalid. Please import a valid backup save file.</Typography>
+    );
+  } else {
+    instructions = (
+      <Box>
+        <Typography>It is recommended to alert a developer.</Typography>
+        <Typography>
+          <Link href={errorData?.issueUrl ?? newIssueUrl} target="_blank">
+            File an issue on github
+          </Link>
+        </Typography>
+        <Typography>
+          <Link href="https://www.reddit.com/r/Bitburner/" target="_blank">
+            Make a reddit post
+          </Link>
+        </Typography>
+        <Typography>
+          <Link href="https://discord.gg/TFc3hKD" target="_blank">
+            Post in the #bug-report channel on Discord.
+          </Link>
+        </Typography>
+        <Typography>Please include your save file.</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ padding: "8px 16px", minHeight: "100vh", maxWidth: "1200px", boxSizing: "border-box" }}>
       <Typography variant="h3">RECOVERY MODE ACTIVATED</Typography>
       <Typography>
-        There was an error with your save file and the game went into recovery mode. In this mode saving is disabled and
-        the game will automatically export your save file (to prevent corruption).
+        There was an error with your save file and the game went into recovery mode. In this mode, saving is disabled
+        and the game will automatically export your save file to prevent corruption.
       </Typography>
-      <Typography>At this point it is recommended to alert a developer.</Typography>
-      <Typography>
-        <Link href={errorData?.issueUrl ?? newIssueUrl} target="_blank">
-          File an issue on github
-        </Link>
-      </Typography>
-      <Typography>
-        <Link href="https://www.reddit.com/r/Bitburner/" target="_blank">
-          Make a reddit post
-        </Link>
-      </Typography>
-      <Typography>
-        <Link href="https://discord.gg/TFc3hKD" target="_blank">
-          Post in the #bug-report channel on Discord.
-        </Link>
-      </Typography>
-      <Typography>Please include your save file.</Typography>
       <br />
+      {sourceError && (
+        <Box>
+          <Typography variant="h6" color={Settings.theme.error}>
+            Error: {sourceError.toString()}
+          </Typography>
+          <br />
+        </Box>
+      )}
+      {instructions}
       <br />
-      <Typography>You can disable recovery mode now. But chances are the game will not work correctly.</Typography>
+      <Typography>You can disable the recovery mode, but the game may not work correctly.</Typography>
       <ButtonGroup sx={{ my: 2 }}>
-        <Tooltip title="Disables the recovery mode & attempt to head back to the terminal page. This may or may not work. Ensure you have saved the recovery file.">
+        <Tooltip title="Disable the recovery mode and attempt to head back to the terminal page. This may or may not work. Ensure you saved the recovery file.">
           <Button onClick={recover} startIcon={<DirectionsRunIcon />}>
             Disable Recovery Mode
           </Button>
@@ -96,7 +125,7 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
               sx={{ "& .MuiOutlinedInput-root": { color: Settings.theme.secondary } }}
             />
           </Box>
-          <Tooltip title="Submitting an issue to GitHub really help us improve the game!">
+          <Tooltip title="Submitting an issue to GitHub really helps us improve the game!">
             <Button
               component={Link}
               startIcon={<GitHubIcon />}

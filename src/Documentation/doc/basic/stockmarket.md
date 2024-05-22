@@ -77,15 +77,15 @@ For example if you choose to short a stock with 5000 shares using a Market Order
 
 A Limit Order is an order that only executes under certain conditions.
 A Limit Order is used to buy or sell a stock at a specified price or better.
-For example, lets say you purchased a Long position of 100 shares of some stock at a price of $10 per share.
-You can place a Limit Order to sell those 100 shares at $50 or better.
-The Limit Order will execute when the price of the stock reaches a value of $50 or higher.
+For example, lets say you purchased a Long position of 100 shares of some stock at a price of \$10 per share.
+You can place a Limit Order to sell those 100 shares at \$50 or better.
+The Limit Order will execute when the price of the stock reaches a value of \$50 or higher.
 
 A Stop Order is the opposite of a Limit Order.
 It is used to buy or sell a stock at a specified price (before the price gets 'worse').
-For example, lets say you purchased a Short position of 100 shares of some stock at a price of $100 per share.
-The current price of the stock is $80 (a profit of $20 per share).
-You can place a Stop Order to sell the Short position if the stock's price reaches $90 or higher.
+For example, lets say you purchased a Short position of 100 shares of some stock at a price of \$100 per share.
+The current price of the stock is \$80 (a profit of \$20 per share).
+You can place a Stop Order to sell the Short position if the stock's price reaches \$90 or higher.
 This can be used to lock in your profits and limit any losses.
 
 Here is a summary of how each order works and when they execute:
@@ -144,7 +144,7 @@ The potency of this effect is based on how effective you are when you work (i.e.
 ## Automating the Stock Market
 
 You can write scripts to perform automatic and algorithmic trading on the Stock Market.
-See [TIX API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.tix.md) for more details.
+See [TIX API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.tix.md) for more details.
 
 ## Under the Hood
 

@@ -17,7 +17,7 @@ import { GetServer } from "../Server/AllServers";
 
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
 import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
-import { processSingleServerGrowth } from "../Server/ServerHelpers";
+import { processSingleServerGrowth, getWeakenEffect } from "../Server/ServerHelpers";
 import { parseCommand, parseCommands } from "./Parser";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Settings } from "../Settings/Settings";
@@ -81,6 +81,7 @@ import { Directory, resolveDirectory, root } from "../Paths/Directory";
 import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
+import { ServerConstants } from "../Server/data/Constants";
 
 export class Terminal {
   // Flags to determine whether the player is currently running a hack or an analyze
@@ -227,7 +228,7 @@ export class Terminal {
       Player.gainIntelligenceExp(expGainedOnSuccess / CONSTANTS.IntelligenceTerminalHackBaseExpGain);
 
       const oldSec = server.hackDifficulty;
-      server.fortify(CONSTANTS.ServerFortifyAmount);
+      server.fortify(ServerConstants.ServerFortifyAmount);
       const newSec = server.hackDifficulty;
 
       this.print(
@@ -279,14 +280,16 @@ export class Terminal {
     if (!(server instanceof Server)) throw new Error("server should be normal server");
     const expGain = calculateHackingExpGain(server, Player);
     const oldSec = server.hackDifficulty;
-    server.weaken(CONSTANTS.ServerWeakenAmount);
+    const weakenAmt = getWeakenEffect(1, server.cpuCores);
+    server.weaken(weakenAmt);
     const newSec = server.hackDifficulty;
 
     Player.gainHackingExp(expGain);
     this.print(
-      `Security decreased on '${server.hostname}' from ${formatSecurity(oldSec)} to ${formatSecurity(
-        newSec,
-      )} (min: ${formatSecurity(server.minDifficulty)})` + ` and Gained ${formatExp(expGain)} hacking exp.`,
+      `Security decreased on '${server.hostname}' by ${formatSecurity(weakenAmt)} from ${formatSecurity(
+        oldSec,
+      )} to ${formatSecurity(newSec)} (min: ${formatSecurity(server.minDifficulty)})` +
+        ` and Gained ${formatExp(expGain)} hacking exp.`,
     );
   }
 

@@ -77,6 +77,7 @@ export class Material {
     this.competition = MaterialInfo[this.name].competitionBase;
     this.competitionRange = MaterialInfo[this.name].competitionRange;
     this.marketPrice = MaterialInfo[this.name].baseCost;
+    this.averagePrice = this.marketPrice;
     this.maxVolatility = MaterialInfo[this.name].maxVolatility;
     this.markup = MaterialInfo[this.name].baseMarkup;
   }
@@ -135,7 +136,13 @@ export class Material {
   // Initializes a Material object from a JSON save state.
   static fromJSON(value: IReviverValue): Material {
     const material = Generic_fromJSON(Material, value.data);
-    if (isNaN(material.quality)) material.quality = 1;
+    if (isNaN(material.quality)) {
+      material.quality = 1;
+    }
+    // averagePrice has not been initialized properly, so if it is 0 (wrong initial value), we set it to marketPrice.
+    if (material.averagePrice === 0) {
+      material.averagePrice = material.marketPrice;
+    }
     return material;
   }
 }

@@ -9,11 +9,7 @@ Get general info about a running script.
 **Signature:**
 
 ```typescript
-getRunningScript(
-    filename?: FilenameOrPID,
-    hostname?: string,
-    ...args: (string | number | boolean)[]
-  ): RunningScript | null;
+getRunningScript(filename?: FilenameOrPID, hostname?: string, ...args: ScriptArg[]): RunningScript | null;
 ```
 
 ## Parameters
@@ -22,7 +18,7 @@ getRunningScript(
 |  --- | --- | --- |
 |  filename | [FilenameOrPID](./bitburner.filenameorpid.md) | _(Optional)_ Optional. Filename or PID of the script. |
 |  hostname | string | _(Optional)_ Hostname of target server. Optional, defaults to the server the calling script is running on. |
-|  args | (string \| number \| boolean)\[\] | Arguments to specify/identify the script. Optional, when looking for scripts run without arguments. |
+|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments to specify/identify the script. Optional, when looking for scripts run without arguments. |
 
 **Returns:**
 

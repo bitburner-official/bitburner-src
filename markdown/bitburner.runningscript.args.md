@@ -9,5 +9,5 @@ Arguments the script was called with
 **Signature:**
 
 ```typescript
-args: (string | number | boolean)[];
+args: ScriptArg[];
 ```

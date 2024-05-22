@@ -1,6 +1,6 @@
 # Getting Started Guide for Beginner Programmers
 
-_Note_: The [Scripts](../basic/scripts.md) and strategies in this guide aren't necessarily optimal or comperhensive.
+_Note_: The [Scripts](../basic/scripts.md) and strategies in this guide aren't necessarily optimal or comprehensive.
 This guide is tailored to help those with minimal programming knowledge experience Bitburner during early stages of the game.
 
 If you are confused or overwhelmed by the game, especially the coding and scripting aspects, this guide is perfect for you!
@@ -69,7 +69,7 @@ Enter the following code in the [Script](../basic/scripts.md) editor:
         // In this case, it is set to the maximum amount of money.
         const moneyThresh = ns.getServerMaxMoney(target);
 
-        // Defines the maximum security level the target server can
+        // Defines the minimum security level the target server can
         // have. If the target's security level is higher than this,
         // we'll weaken it before doing anything else
         const securityThresh = ns.getServerMinSecurityLevel(target);
@@ -405,7 +405,7 @@ This early in the game, we don't have enough [RAM](../basic/ram.md) to efficient
 You should definitely do this later on, though!
 
 Note that purchasing a [Server](../basic/servers.md) is fairly expensive, and purchasing the maximum amount of [Servers](../basic/servers.md) even more so.
-At the time of writing this guide, the [Script](../basic/scripts.md) above requires $11 million in order to finish purchasing all of the 8GB [Servers](../basic/servers.md).
+At the time of writing this guide, the [Script](../basic/scripts.md) above requires \$11 million in order to finish purchasing all of the 8GB [Servers](../basic/servers.md).
 Therefore, we need to find additional ways to make money to speed up the process!
 These are covered in the next section.
 
@@ -439,10 +439,10 @@ Nothing bad happens if you fail a [crime](../basic/crimes.md), but you won't ear
 Raising your stats improves your chance of successfully committing a [crime](../basic/crimes.md).
 
 Right now, the best option is the `Rob Store` [crime](../basic/crimes.md).
-This takes 60 seconds to attempt, gives $400k if successful, and gives hacking experience (which is very important right now).
+This takes 60 seconds to attempt, gives \$400k if successful, and gives hacking experience (which is very important right now).
 
 Alternatively, you can also use the `Shoplift` [crime](../basic/crimes.md).
-This takes 2 seconds to attempt and gives $15k if successful.
+This takes 2 seconds to attempt and gives \$15k if successful.
 This [crime](../basic/crimes.md) is slightly easier and more profitable than `Rob Store`, but doesn't give hacking experience.
 
 ## Work for a Company
@@ -455,7 +455,7 @@ At `Joe's Guns`, there will be an option that says `Apply to be an Employee`.
 Click this to get the job.
 Then, a new option will appear that simply says `Work`.
 Click this to start working.
-Working at `Joe's Guns` earns $110 per second and also grants some experience for every stat except hacking.
+Working at `Joe's Guns` earns \$110 per second and also grants some experience for every stat except hacking.
 
 Working for a [company](../basic/companies.md), like [crime](../basic/crimes.md), is completely passive.
 You can choose to focus on your work, do something else simultaneously, or switch between those two.
@@ -471,7 +471,7 @@ Feel free to explore!
 
 ## After you Purchase your New Servers
 
-After you've made a total of $11 million, your automatic [Server](../basic/servers.md)-purchasing [Script](../basic/scripts.md) should finish running.
+After you've made a total of \$11 million, your automatic [Server](../basic/servers.md)-purchasing [Script](../basic/scripts.md) should finish running.
 This will free up some [RAM](../basic/ram.md) on your home computer.
 We don't want this [RAM](../basic/ram.md) to go to waste, so we'll make use of it.
 Go to `Terminal` and enter the following commands:
@@ -631,10 +631,10 @@ Remember that most of your [Scripts](../basic/scripts.md) are targeting `joesgun
 It will take a bit for them to `grow()` and `weaken()` the [Server](../basic/servers.md) to the appropriate values before they start [hacking](../basic/hacking.md) it.
 Once they do, however, the [Scripts](../basic/scripts.md) will be very profitable.
 
-For reference, in about two hours after starting my first [Script](../basic/scripts.md), my [Scripts](../basic/scripts.md) had a production rate of $20k per second and had earned a total of $70 million.
+For reference, in about two hours after starting my first [Script](../basic/scripts.md), my [Scripts](../basic/scripts.md) had a production rate of \$20k per second and had earned a total of \$70 million.
 (You can see these stats on the `Active Scripts` tab).
 
-After another 15 minutes, the production rate had increased to $25k per second and the [Scripts](../basic/scripts.md) had made an additional $55 million.
+After another 15 minutes, the production rate had increased to \$25k per second and the [Scripts](../basic/scripts.md) had made an additional \$55 million.
 
 Your results will vary based on how fast you earned money from [crime](../basic/crimes.md)/[working](../basic/companies.md)/[hacknet nodes](../basic/hacknet_nodes.md), but this will hopefully give you a good indication of how much the [Scripts](../basic/scripts.md) can earn.
 
@@ -649,7 +649,7 @@ You can cancel your [faction](../basic/factions.md) work at any time with no pen
 
 ## Purchasing Upgrades and Augmentations
 
-As I mentioned before, within 1-2 hours I had earned over $200 million.
+As I mentioned before, within 1-2 hours I had earned over \$200 million.
 Now, it's time to spend all of this money on some persistent upgrades to help progress!
 
 ## Upgrading RAM on Home computer
@@ -692,7 +692,7 @@ That's the end of the walkthrough portion of this guide!
 You should continue to explore what the game has to offer.
 There's quite a few features that aren't covered or mentioned in this guide, and even more that get unlocked as you continue to play!
 
-Also, check out the api documentation to see what it has to offer.
+Also, check out the API documentation to see what it has to offer.
 Writing [Scripts](../basic/scripts.md) to perform and automate various tasks is where most of the fun in the game comes from (in my opinion)!
 
 The following are a few things you may want to consider doing in the near future.

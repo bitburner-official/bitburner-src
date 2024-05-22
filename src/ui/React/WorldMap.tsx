@@ -14,10 +14,15 @@ interface ICityProps {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     travel: {
-      color: theme.colors.white,
+      color: theme.colors.maplocation,
       lineHeight: "1em",
       whiteSpace: "pre",
       cursor: "pointer",
+    },
+    currentCity: {
+      color: theme.colors.disabled,
+      lineHeight: "1em",
+      whiteSpace: "pre",
     },
   }),
 );
@@ -33,7 +38,7 @@ function City(props: ICityProps): React.ReactElement {
       </Tooltip>
     );
   }
-  return <span>{props.city[0]}</span>;
+  return <span className={classes.currentCity}>{props.city[0]}</span>;
 }
 
 interface IProps {

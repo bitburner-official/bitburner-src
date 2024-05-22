@@ -1,17 +1,21 @@
+import type { Bladeburner } from "../Bladeburner";
+
 import * as React from "react";
 import { Button, Typography } from "@mui/material";
-import { BlackOperationName, FactionName } from "@enums";
-import { BlackOpList } from "./BlackOpList";
-import { Bladeburner } from "../Bladeburner";
+import { FactionName } from "@enums";
+import { BlackOpElem } from "./BlackOpElem";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { CorruptableText } from "../../ui/React/CorruptableText";
+import { blackOpsArray } from "../data/BlackOperations";
 
-interface IProps {
+interface BlackOpPageProps {
   bladeburner: Bladeburner;
 }
 
-export function BlackOpPage(props: IProps): React.ReactElement {
+export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactElement {
+  const blackOps = blackOpsArray.slice(0, bladeburner.numBlackOpsComplete + 1);
+
   return (
     <>
       <Typography>
@@ -28,12 +32,16 @@ export function BlackOpPage(props: IProps): React.ReactElement {
         Like normal operations, you may use a team for Black Ops. Failing a black op will incur heavy HP and rank
         losses.
       </Typography>
-      {props.bladeburner.blackops[BlackOperationName.OperationDaedalus] ? (
+      {bladeburner.numBlackOpsComplete >= blackOpsArray.length ? (
         <Button sx={{ my: 1, p: 1 }} onClick={() => Router.toPage(Page.BitVerse, { flume: false, quick: false })}>
-          <CorruptableText content="Destroy w0rld_d34mon"></CorruptableText>
+          <CorruptableText content="Destroy w0rld_d34mon" spoiler={false}></CorruptableText>
         </Button>
       ) : (
-        <BlackOpList bladeburner={props.bladeburner} />
+        <>
+          {blackOps.map((blackOp) => (
+            <BlackOpElem key={blackOp.name} bladeburner={bladeburner} blackOp={blackOp} />
+          ))}
+        </>
       )}
     </>
   );

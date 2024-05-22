@@ -11,4 +11,4 @@ Favor increases the rate at which reputation is gained with that faction.
 With enough favor, donations are unlocked.
 Donations allow you to spend money to acquire reputation directly.
 Without working for the faction.
-This feature is particularily useful when a very large amount of reputation is needed for an augmentation.
+This feature is particularly useful when a very large amount of reputation is needed for an augmentation.

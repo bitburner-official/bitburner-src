@@ -479,7 +479,7 @@ export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 
           Player.hashManager.refundUpgrade(upgName, count);
           return false;
         }
-        corp.addNonIncomeFunds(upg.value * count);
+        corp.gainFunds(upg.value * count, "hacknet");
         break;
       }
       case "Reduce Minimum Security": {

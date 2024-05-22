@@ -12,6 +12,8 @@ export const GangConstants = {
   CyclesPerTerritoryAndPowerUpdate: 100,
   // Portion of upgrade multiplier that is kept after ascending
   AscensionMultiplierRatio: 0.15,
+  // Penalty to ascension points on install
+  InstallAscensionPenalty: 0.95,
   // Names of possible Gangs
   Names: [
     FactionName.SlumSnakes,

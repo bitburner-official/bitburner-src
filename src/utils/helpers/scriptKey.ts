@@ -1,4 +1,4 @@
-import type { ScriptArg } from "../../Netscript/ScriptArg";
+import type { ScriptArg } from "@nsdefs";
 import type { ScriptFilePath } from "../../Paths/ScriptFilePath";
 
 // This needs to be high in the dependency graph, with few/no dependencies of

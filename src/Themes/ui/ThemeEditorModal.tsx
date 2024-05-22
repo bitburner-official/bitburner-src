@@ -339,6 +339,40 @@ export function ThemeEditorModal(props: IProps): React.ReactElement {
           color={customTheme.disabled}
           defaultColor={defaultTheme.disabled}
         />
+
+        <br />
+        <ColorEditor
+          name="maplocation"
+          onColorChange={onColorChange}
+          color={customTheme.maplocation}
+          defaultColor={defaultTheme.maplocation}
+        />
+
+        <br />
+        <ColorEditor
+          name="bnlvl0"
+          onColorChange={onColorChange}
+          color={customTheme.bnlvl0}
+          defaultColor={defaultTheme.bnlvl0}
+        />
+        <ColorEditor
+          name="bnlvl1"
+          onColorChange={onColorChange}
+          color={customTheme.bnlvl1}
+          defaultColor={defaultTheme.bnlvl1}
+        />
+        <ColorEditor
+          name="bnlvl2"
+          onColorChange={onColorChange}
+          color={customTheme.bnlvl2}
+          defaultColor={defaultTheme.bnlvl2}
+        />
+        <ColorEditor
+          name="bnlvl3"
+          onColorChange={onColorChange}
+          color={customTheme.bnlvl3}
+          defaultColor={defaultTheme.bnlvl3}
+        />
       </Paper>
 
       <Paper sx={{ px: 1, py: 1, my: 1 }}>

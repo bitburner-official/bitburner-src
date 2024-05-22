@@ -45,22 +45,6 @@ export class Script implements ContentFile {
     this.server = server; // hostname of server this script is on
   }
 
-  /** Download the script as a file */
-  download(): void {
-    const filename = this.filename;
-    const file = new Blob([this.code], { type: "text/plain" });
-    const a = document.createElement("a"),
-      url = URL.createObjectURL(file);
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function () {
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    }, 0);
-  }
-
   /** Invalidates the current script module and related data, e.g. when modifying the file. */
   invalidateModule(): void {
     // Always clear ram usage

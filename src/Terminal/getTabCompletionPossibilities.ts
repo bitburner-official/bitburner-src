@@ -7,7 +7,7 @@ import { HelpTexts } from "./HelpText";
 import { compile } from "../NetscriptJSEvaluator";
 import { Flags } from "../NetscriptFunctions/Flags";
 import { AutocompleteData } from "@nsdefs";
-import * as libarg from "arg";
+import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
 
@@ -312,14 +312,16 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     }
     if (!loadedModule || !loadedModule.autocomplete) return; // Doesn't have an autocomplete function.
 
-    const runArgs = { "--tail": Boolean, "-t": Number };
+    const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
     const flags = libarg(runArgs, {
       permissive: true,
       argv: command.slice(2),
     });
     const flagFunc = Flags(flags._);
     const autocompleteData: AutocompleteData = {
-      servers: GetAllServers().map((server) => server.hostname),
+      servers: GetAllServers()
+        .filter((server) => server.serversOnNetwork.length !== 0)
+        .map((server) => server.hostname),
       scripts: [...currServ.scripts.keys()],
       txts: [...currServ.textFiles.keys()],
       flags: (schema: unknown) => {

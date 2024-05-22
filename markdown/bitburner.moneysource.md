@@ -22,6 +22,7 @@ interface MoneySource
 |  [codingcontract](./bitburner.moneysource.codingcontract.md) |  | number |  |
 |  [corporation](./bitburner.moneysource.corporation.md) |  | number |  |
 |  [crime](./bitburner.moneysource.crime.md) |  | number |  |
+|  [gang\_expenses](./bitburner.moneysource.gang_expenses.md) |  | number |  |
 |  [gang](./bitburner.moneysource.gang.md) |  | number |  |
 |  [hacking](./bitburner.moneysource.hacking.md) |  | number |  |
 |  [hacknet\_expenses](./bitburner.moneysource.hacknet_expenses.md) |  | number |  |

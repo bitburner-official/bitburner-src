@@ -33,12 +33,9 @@ for (let i = 0; i < recentPatchData.length; i++) {
 }
 
 export function CreditsModal(props: CreditsModalProps): React.ReactElement {
-  const leadDevs = `danielyxie
-Olivier Gagnon
-@Snarling
-`;
+  const leadDevs = ["danielyxie", "hydroflame", "Snarling"];
 
-  const currentMaintainer = `@Snarling`;
+  const currentMaintainers = ["Snarling", "d0sboots"];
 
   const handles = handle.sort((a, b) => a.localeCompare(b)).join(", ");
   const contributorsURL = `https://github.com/bitburner-official/bitburner-src/graphs/contributors`;
@@ -60,11 +57,11 @@ or to participate yourself`;
       <Typography sx={{ textDecoration: "underline" }}>Original Code and Concept</Typography>
       <Typography>danielyxie</Typography>
       <br />
-      <Typography sx={{ textDecoration: "underline" }}>Lead Developers:</Typography>
-      <Typography style={{ whiteSpace: "pre-wrap" }}>{leadDevs}</Typography>
+      <Typography sx={{ textDecoration: "underline" }}>Lead Developers</Typography>
+      <Typography style={{ whiteSpace: "pre-wrap" }}>{leadDevs.join("\n")}</Typography>
       <br />
-      <Typography sx={{ textDecoration: "underline" }}>Current Maintainer</Typography>
-      <Typography>{currentMaintainer}</Typography>
+      <Typography sx={{ textDecoration: "underline" }}>Current Maintainers</Typography>
+      <Typography whiteSpace={"pre-wrap"}>{currentMaintainers.join("\n")}</Typography>
       <br />
       <Typography sx={{ textDecoration: "underline" }}>Recent patch contributors:</Typography>
       <Typography style={{ whiteSpace: "pre-wrap", maxWidth: maxEM + "rem", textOverflow: "clip" }}>

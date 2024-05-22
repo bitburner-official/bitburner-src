@@ -48,8 +48,10 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [getCurrentWork()](./bitburner.singularity.getcurrentwork.md) | Get the current work the player is doing. |
 |  [getDarkwebProgramCost(programName)](./bitburner.singularity.getdarkwebprogramcost.md) | Check the price of an exploit on the dark web |
 |  [getDarkwebPrograms()](./bitburner.singularity.getdarkwebprograms.md) | Get a list of programs offered on the dark web. |
+|  [getFactionEnemies(faction)](./bitburner.singularity.getfactionenemies.md) | Get a list of enemies of a faction. |
 |  [getFactionFavor(faction)](./bitburner.singularity.getfactionfavor.md) | Get faction favor. |
 |  [getFactionFavorGain(faction)](./bitburner.singularity.getfactionfavorgain.md) | Get faction favor gain. |
+|  [getFactionInviteRequirements(faction)](./bitburner.singularity.getfactioninviterequirements.md) | List conditions for being invited to a faction. |
 |  [getFactionRep(faction)](./bitburner.singularity.getfactionrep.md) | Get faction reputation. |
 |  [getOwnedAugmentations(purchased)](./bitburner.singularity.getownedaugmentations.md) | Get a list of owned augmentation. |
 |  [getOwnedSourceFiles()](./bitburner.singularity.getownedsourcefiles.md) | Get a list of acquired Source-Files. |

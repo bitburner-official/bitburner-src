@@ -6,7 +6,7 @@ import { AddToAllServers, createUniqueRandomIp, GetServer, renameServer } from "
 import { safelyCreateUniqueServer } from "./ServerHelpers";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { CONSTANTS } from "../Constants";
+import { ServerConstants } from "./data/Constants";
 import { Player } from "@player";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
@@ -20,6 +20,7 @@ import { workerScripts } from "../Netscript/WorkerScripts";
  * @returns Cost of purchasing the given server. Returns infinity for invalid arguments
  */
 export function getPurchaseServerCost(ram: number): number {
+  // TODO shift checks into
   const sanitizedRam = Math.round(ram);
   if (isNaN(sanitizedRam) || !isPowerOfTwo(sanitizedRam) || !(Math.sign(sanitizedRam) === 1)) {
     return Infinity;
@@ -33,7 +34,7 @@ export function getPurchaseServerCost(ram: number): number {
 
   return (
     sanitizedRam *
-    CONSTANTS.BaseCostFor1GBOfRamServer *
+    ServerConstants.BaseCostFor1GBOfRamServer *
     currentNodeMults.PurchasedServerCost *
     Math.pow(currentNodeMults.PurchasedServerSoftcap, upg)
   );
@@ -64,6 +65,9 @@ export const renamePurchasedServer = (hostname: string, newName: string): void =
   if (!server) throw new Error(`Server '${hostname}' doesn't exists.`);
   if (GetServer(newName)) throw new Error(`Server '${newName}' already exists.`);
   if (!Player.purchasedServers.includes(hostname)) throw new Error(`Server '${hostname}' is not a player server.`);
+  if (newName.startsWith("hacknet-node-") || newName.startsWith("hacknet-server-")) {
+    throw new Error(`'${newName}' is a reserved hostname.`);
+  }
   const replace = (arr: string[], old: string, next: string): string[] => {
     return arr.map((v) => (v === old ? next : v));
   };
@@ -86,11 +90,11 @@ export const renamePurchasedServer = (hostname: string, newName: string): void =
 };
 
 export function getPurchaseServerLimit(): number {
-  return Math.round(CONSTANTS.PurchasedServerLimit * currentNodeMults.PurchasedServerLimit);
+  return Math.round(ServerConstants.PurchasedServerLimit * currentNodeMults.PurchasedServerLimit);
 }
 
 export function getPurchaseServerMaxRam(): number {
-  const ram = Math.round(CONSTANTS.PurchasedServerMaxRam * currentNodeMults.PurchasedServerMaxRam);
+  const ram = Math.round(ServerConstants.PurchasedServerMaxRam * currentNodeMults.PurchasedServerMaxRam);
 
   // Round this to the nearest power of 2
   return 1 << (31 - Math.clz32(ram));
@@ -118,6 +122,11 @@ export function purchaseServer(hostname: string, ram: number, cost: number): voi
 
   if (hostname == "") {
     dialogBoxCreate("You must enter a hostname for your new server!");
+    return;
+  }
+
+  if (hostname.startsWith("hacknet-node-") || hostname.startsWith("hacknet-server-")) {
+    dialogBoxCreate(`'${hostname}' is a reserved hostname, please try again.`);
     return;
   }
 
@@ -155,7 +164,7 @@ export function purchaseRamForHomeComputer(): void {
   }
 
   const homeComputer = Player.getHomeComputer();
-  if (homeComputer.maxRam >= CONSTANTS.HomeComputerMaxRam) {
+  if (homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam) {
     dialogBoxCreate(`You cannot upgrade your home computer RAM because it is at its maximum possible value`);
     return;
   }

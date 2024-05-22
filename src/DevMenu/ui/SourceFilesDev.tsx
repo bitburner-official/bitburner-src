@@ -10,7 +10,7 @@ import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { MaxSleevesFromCovenant } from "../../PersonObjects/Sleeve/SleeveCovenantPurchases";
 
 // Update as additional BitNodes get implemented
-const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 const useStyles = makeStyles({
   group: {
     display: "inline-flex",

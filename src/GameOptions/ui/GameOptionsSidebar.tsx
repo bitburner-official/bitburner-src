@@ -71,8 +71,8 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
 
   async function onImport(event: React.ChangeEvent<HTMLInputElement>): Promise<void> {
     try {
-      const base64Save = await saveObject.getImportStringFromFile(event.target.files);
-      const data = await saveObject.getImportDataFromString(base64Save);
+      const saveData = await saveObject.getSaveDataFromFile(event.target.files);
+      const data = await saveObject.getImportDataFromSaveData(saveData);
       setImportData(data);
       setImportSaveOpen(true);
     } catch (e: unknown) {
@@ -88,7 +88,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
     if (!importData) return;
 
     try {
-      await saveObject.importGame(importData.base64);
+      await saveObject.importGame(importData.saveData);
     } catch (e: unknown) {
       SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);
     }
@@ -99,7 +99,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
 
   function compareSaveGame(): void {
     if (!importData) return;
-    Router.toPage(Page.ImportSave, { base64Save: importData.base64 });
+    Router.toPage(Page.ImportSave, { saveData: importData.saveData });
     setImportSaveOpen(false);
     setImportData(null);
   }

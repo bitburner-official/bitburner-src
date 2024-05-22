@@ -1,17 +1,16 @@
 /* Generic Reviver, toJSON, and fromJSON functions used for saving and loading objects */
-import type { Unknownify } from "../types";
-
 import { ObjectValidator, validateObject } from "./Validator";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
+import { loadActionIdentifier } from "../Bladeburner/utils/loadActionIdentifier";
 
 type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
   fromJSON: (value: IReviverValue) => any;
   validationData?: ObjectValidator<any>;
 };
 
-export interface IReviverValue {
+export interface IReviverValue<T = any> {
   ctor: string;
-  data: any;
+  data: T;
 }
 function isReviverValue(value: unknown): value is IReviverValue {
   return (
@@ -30,15 +29,15 @@ export function Reviver(_key: string, value: unknown): any {
   if (!ctor) {
     // Known missing constructors with special handling.
     switch (value.ctor) {
-      case "AllServersMap":
-        console.warn("Converting AllServersMap for v0.43.1");
+      case "AllServersMap": // Reviver removed in v0.43.1
+      case "Industry": // No longer part of save data since v2.3.0
+      case "Employee": // Entire object removed from game in v2.2.0 (employees abstracted)
+      case "Company": // Reviver removed in v2.6.1
+      case "Faction": // Reviver removed in v2.6.1
+        console.warn(`Legacy load type ${value.ctor} converted to expected format while loading.`);
         return value.data;
-      case "Industry":
-        console.warn("Converting a corp from pre-2.3");
-        return value.data; // Will immediately be overwritten by v2.3 save migration code
-      case "Employee":
-        console.warn("Converting a corp from pre-2.2");
-        return value.data; // Will immediately be overwritten by v2.3 save migration code
+      case "ActionIdentifier": // No longer a class as of v2.6.1
+        return loadActionIdentifier(value.data);
     }
     // Missing constructor with no special handling. Throw error.
     throw new Error(`Could not locate constructor named ${value.ctor}. If the save data is valid, this is a bug.`);
@@ -104,7 +103,3 @@ export function Generic_fromJSON<T extends Record<string, any>>(
   for (const [key, val] of Object.entries(data) as [keyof T, T[keyof T]][]) obj[key] = val;
   return obj;
 }
-
-// This function is empty because Unknownify<T> is a typesafe assertion on any object with no runtime checks needed.
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-export function assertLoadingType<T extends object>(val: object): asserts val is Unknownify<T> {}

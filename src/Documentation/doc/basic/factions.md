@@ -18,3 +18,5 @@ You will only earn [Reputation](reputation.md) in your Faction and train your [S
 Earning [Reputation](reputation.md) for a Faction unlocks powerful [Augmentations](augmentations.md).
 Purchasing and installing these [Augmentations](augmentations.md) will upgrade your abilities.
 The [Augmentations](augmentations.md) that are available to unlock vary from Faction to Faction.
+
+See also the complete [List of Factions and their Requirements](../advanced/faction_list.md) (contains spoilers).

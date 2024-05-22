@@ -3,8 +3,9 @@ import type { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { FactionName, FactionDiscovery } from "@enums";
 import { Faction } from "./Faction";
 
-import { Reviver, assertLoadingType } from "../utils/JSONReviver";
-import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
+import { Reviver } from "../utils/JSONReviver";
+import { assertLoadingType } from "../utils/TypeAssertion";
+import { PartialRecord, createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { getEnumHelper } from "../utils/EnumHelper";
 
@@ -18,6 +19,8 @@ for (const aug of getRecordValues(Augmentations)) {
   }
 }
 
+type SavegameFaction = { playerReputation?: number; favor?: number; discovery?: FactionDiscovery };
+
 export function loadFactions(saveString: string, player: PlayerObject): void {
   const loadedFactions = JSON.parse(saveString, Reviver) as unknown;
   // This loading method allows invalid data in player save, but just ignores anything invalid
@@ -28,7 +31,7 @@ export function loadFactions(saveString: string, player: PlayerObject): void {
     if (!loadedFaction) continue;
     const faction = Factions[loadedFactionName];
     if (typeof loadedFaction !== "object") continue;
-    assertLoadingType<Faction>(loadedFaction);
+    assertLoadingType<SavegameFaction>(loadedFaction);
     const { playerReputation: loadedRep, favor: loadedFavor, discovery: loadedDiscovery } = loadedFaction;
     if (typeof loadedRep === "number" && loadedRep > 0) faction.playerReputation = loadedRep;
     if (typeof loadedFavor === "number" && loadedFavor > 0) faction.favor = loadedFavor;
@@ -55,4 +58,17 @@ export function loadFactions(saveString: string, player: PlayerObject): void {
     Factions[invitedFaction].alreadyInvited = true;
     Factions[invitedFaction].discovery = FactionDiscovery.known;
   }
+}
+
+export function getFactionsSave(): PartialRecord<FactionName, SavegameFaction> {
+  const save: PartialRecord<FactionName, SavegameFaction> = {};
+  for (const factionName of getEnumHelper("FactionName").valueArray) {
+    const faction = Factions[factionName];
+    const discovery = faction.discovery === FactionDiscovery.unknown ? undefined : faction.discovery;
+    const { favor, playerReputation } = faction;
+    if (discovery || favor || playerReputation) {
+      save[factionName] = { favor: favor || undefined, playerReputation: playerReputation || undefined, discovery };
+    }
+  }
+  return save;
 }

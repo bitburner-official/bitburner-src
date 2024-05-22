@@ -1,13 +1,15 @@
-import * as React from "react";
-import { OperationList } from "./OperationList";
-import { Bladeburner } from "../Bladeburner";
-import Typography from "@mui/material/Typography";
+import type { Bladeburner } from "../Bladeburner";
 
-interface IProps {
+import * as React from "react";
+import { OperationElem } from "./OperationElem";
+import { Typography } from "@mui/material";
+
+interface OperationPageProps {
   bladeburner: Bladeburner;
 }
 
-export function OperationPage(props: IProps): React.ReactElement {
+export function OperationPage({ bladeburner }: OperationPageProps): React.ReactElement {
+  const operations = Object.values(bladeburner.operations);
   return (
     <>
       <Typography>
@@ -27,7 +29,9 @@ export function OperationPage(props: IProps): React.ReactElement {
         You can unlock higher-level operations by successfully completing them. Higher-level operations are more
         difficult, but grant more rank and experience.
       </Typography>
-      <OperationList bladeburner={props.bladeburner} />
+      {operations.map((operation) => (
+        <OperationElem key={operation.name} bladeburner={bladeburner} operation={operation} />
+      ))}
     </>
   );
 }

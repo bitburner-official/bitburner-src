@@ -9,7 +9,7 @@ Generate a dummy contract.
 **Signature:**
 
 ```typescript
-createDummyContract(type: string): void;
+createDummyContract(type: string): string;
 ```
 
 ## Parameters
@@ -20,7 +20,9 @@ createDummyContract(type: string): void;
 
 **Returns:**
 
-void
+string
+
+Filename of the contract.
 
 ## Remarks
 

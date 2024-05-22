@@ -28,11 +28,11 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { MultiplierButtons } from "./MultiplierButtons";
-import { SellCorporationModal } from "./modals/SellCorporationModal";
 import { SellDivisionModal } from "./modals/SellDivisionModal";
 import { getRecordKeys } from "../../Types/Record";
 import { PositiveInteger } from "../../types";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
+import { CreateCorporationModal } from "./modals/CreateCorporationModal";
 
 interface IProps {
   rerender: () => void;
@@ -319,16 +319,12 @@ function SellDivisionButton(): React.ReactElement {
 function RestartButton(): React.ReactElement {
   const [open, setOpen] = useState(false);
 
-  function restart(): void {
-    setOpen(true);
-  }
-
   return (
     <>
-      <ButtonWithTooltip normalTooltip={"Sell corporation and start over"} onClick={restart}>
+      <ButtonWithTooltip normalTooltip={"Sell corporation and start over"} onClick={() => setOpen(true)}>
         Sell CEO position
       </ButtonWithTooltip>
-      <SellCorporationModal open={open} onClose={() => setOpen(false)} />
+      <CreateCorporationModal open={open} onClose={() => setOpen(false)} restart={true} />
     </>
   );
 }

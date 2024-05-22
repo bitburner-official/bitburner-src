@@ -1,10 +1,9 @@
 import React from "react";
 import { DarkWebItems } from "./DarkWebItems";
-
+import { formatMoney } from "../ui/formatNumber";
 import { Player } from "@player";
 import { Terminal } from "../Terminal";
 import { SpecialServers } from "../Server/data/SpecialServers";
-import { formatMoney } from "../ui/formatNumber";
 import { Money } from "../ui/React/Money";
 import { DarkWebItem } from "./DarkWebItem";
 import { isCreateProgramWork } from "../Work/CreateProgramWork";
@@ -86,13 +85,17 @@ export function buyDarkwebItem(itemName: string): void {
 
 export function buyAllDarkwebItems(): void {
   const itemsToBuy: DarkWebItem[] = [];
-  let cost = 0;
 
   for (const key of Object.keys(DarkWebItems) as (keyof typeof DarkWebItems)[]) {
     const item = DarkWebItems[key];
     if (!Player.hasProgram(item.program)) {
       itemsToBuy.push(item);
-      cost += item.price;
+      if (item.price > Player.money) {
+        Terminal.error("Need " + formatMoney(item.price - Player.money) + " more to purchase " + item.program);
+        return;
+      } else {
+        buyDarkwebItem(item.program);
+      }
     }
   }
 
@@ -101,12 +104,8 @@ export function buyAllDarkwebItems(): void {
     return;
   }
 
-  if (cost > Player.money) {
-    Terminal.error("Not enough money to purchase remaining programs, " + formatMoney(cost) + " required");
+  if (itemsToBuy.length > 0) {
+    Terminal.print("All programs have been purchased.");
     return;
-  }
-
-  for (const item of itemsToBuy) {
-    buyDarkwebItem(item.program);
   }
 }

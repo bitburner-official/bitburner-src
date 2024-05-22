@@ -3,7 +3,7 @@
 Coding Contracts are a mechanic that lets players earn rewards in exchange for solving programming problems.
 
 Coding Contracts are files with the `.cct` extension.
-They can be accessed through the [Terminal](terminal.md) or through [Scripts](scripts.md) using the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md).
+They can be accessed through the [Terminal](terminal.md) or through [Scripts](scripts.md) using the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md).
 
 Each contract has a limited number of attempts.
 If you provide the wrong answer too many times and exceed the number of attempts, the contract will self destruct (delete itself).
@@ -22,16 +22,16 @@ The popup will display the contract's problem, the number of attempts remaining,
 
 ## Interacting through Scripts
 
-See the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md).
+See the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md).
 Interacting with Coding Contracts via the [Terminal](terminal.md) can be tedious the more contracts you solve.
-Consider using the [API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md) to automate various aspects of your solution.
+Consider using the [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) to automate various aspects of your solution.
 For example, some contracts have long solutions while others have even longer solutions.
-You might want to use the [API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md) to automate the process of submitting your solution rather than copy and paste a long solution into an answer box.
+You might want to use the [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) to automate the process of submitting your solution rather than copy and paste a long solution into an answer box.
 
-However, using the [API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md) comes at a cost.
-Like most functions in other APIs, each function in the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md) has a RAM cost.
-Depending on which function you use, the initial [RAM](ram.md) on your home server might not be enough to allow you to use various [API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md) functions.
-Plan on upgrading the [RAM](ram.md) on your home server if you want to use the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.md).
+However, using the [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) comes at a cost.
+Like most functions in other APIs, each function in the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) has a RAM cost.
+Depending on which function you use, the initial [RAM](ram.md) on your home server might not be enough to allow you to use various [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) functions.
+Plan on upgrading the [RAM](ram.md) on your home server if you want to use the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md).
 
 ## Submitting Solutions
 
