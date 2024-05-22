@@ -56,8 +56,8 @@ export const CONSTANTS: {
   CompanyRequiredReputationMultiplier: number; // Only use this if a backdoor is installed in the company's server
   LatestUpdate: string;
 } = {
-  VersionString: "2.6.1dev",
-  isDevBranch: true,
+  VersionString: "2.6.1",
+  isDevBranch: false,
   // 39 is 2.6.1 final, incremented early due to API break. No need to increment on 2.6.1 full release.
   VersionNumber: 39,
 
@@ -159,21 +159,21 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.1 dev - last updated 14 May 2024
-
-See 2.6.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.0/src/Documentation/doc/changelog.md
+## v2.6.1 Release - 21 May 2024
 
 ### MAJOR CHANGES
 
 - Exported savegames are now compressed. This means that savegames from 2.6.1dev will need to be manually converted before backloading into 2.6.0 (@catloversg)
+- There was a small API change related to Bladeburner. If your save file is affected by the API change, a file APIBreakInfo-2.6.1.txt will be created on your home computer, which should assist in updating your scripts.
+- Some Go scripts may also require updates, please reference the current documentation to troubleshoot any issues.
 
 ### API
 
-- (Bladeburner) ns.bladeburner.getCurrentAction now returns null when not performing an action (@Snarling)
+- (Bladeburner) !API Break! ns.bladeburner.getCurrentAction now returns null when not performing an action (@Snarling)
 - (Corporation) Add a missing check on exportMaterial (@catloversg)
 - (Corporation) Add ns.corporation.sellDivision (@catloversg)
 - (Formulas) Add ns.formulas.hacking.growAmount (@d0sboots)
-- (Go) Some changes to the Go API, including some minor breaking changes. Please refer to the API documentation in the script editor or at https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.go.md (@ficocelliguy)
+- (Go) Some changes to the Go API, including some minor breaking changes. Please refer to the API documentation in the script editor or at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.go.md (@ficocelliguy)
 - (Go) Added ns.go.analysis.getStats (@ficocelliguy)
 - (Go) Fix a bug that allowed facing secret opponent early or with wrong board size (@ficoccelliguy)
 - (Infiltration) More information is provided on ns.infiltration.getInfiltration (@catloversg)
@@ -193,6 +193,7 @@ See 2.6.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/
 - (Hashnet) Show more digits when hashrate is very low (@catloversg)
 - (Infiltration) Intro screen now shows how much damage will be taken for each failure (@catloversg)
 - (Tutorial) Change display of the buttons in the Tutorial (@catloversg)
+- Fixed an issue that could cause wrong RAM value displayed in script editor (@gmcew)
 - Tweak display of very large multipliers on the Augmentations screen (@catloversg)
 - Active scripts screen will now wrap text when there is a very long list of arguments with no spaces (@catloversg)
 - Text files (.txt and .json) posted to the terminal from the ls command are now clickable (@catloversg)
@@ -206,22 +207,25 @@ See 2.6.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/
 - (Bladeburner) Internal code refactoring (@Snarling)
 - (Corporation) Fix an issue that could cause incorrect average material prices via bulk purchases (@catloversg)\
 - (Corporation) Refactored bribery 
+- (Docs) Various doc fixes (@adeilt, @User670, @catloversg, @gmcew, @jeek, @pontsuyo, @ficocelliguy, @d0sboot, @Vilsol)
 - (Electron) Fixed an issue that could cause ghost processes on the Steam version (@catloversg
 - (Go) "No AI" white player can now pass (@ficocelliguy)
 - (Go) Reimplement superko rule, adjust save data (@ficocelliguy)
 - (Go) Balance tweaks and other bugfixes (@ficocelliguy)
 - (Go) Fix an issue that could cause the AI to try taking two turns simultaneously (@Snarling)
+- (Go) Bonus from Tetrads now applies to all combat stats (@gmcew)
+- (Go) Internally streamlined some Go code (@d0sboots, @Snarling)
 - (Hacknet) Fixed an issue in the engine loop that could cause offline earnings with hacknet to be inaccurate (@d0sboots)
 - (Inflitration) Rework and tuning for Slash game (@catloversg)
 - (Inflitration) Fix an "invalid location" crash (@catloversg)
-- Fixed an incorrect file mode (@mctylr-gh)
+- (Sleeve) Fix incorrect starting shock values while in BN10
+- New internal implementation for getRandomInt (@catloversg)
 - Improved the description text for the Hamming Code contract (@gmcew)
 - Fixed a bug in the useRerender hook, which could occasionally cause UI bugs (@catloversg)
 - Added error handling in cases where a savegame cannot be loaded (@catloversg)
 - 'buy -a' command will now partially buy programs even if not all can be bought (@TheAimMan)
 - Tweaked the interaction between backdoored servers and reputation requirements (@catloversg)
 - Update Credits page to show @d0sboots as an active maintainer (@Snarling)
-- Miscellaneous documentation fixes (@adeilt, @User670, @catloversg, @gmcew, @jeek, @pontsuyo, @ficocelliguy, @d0sboots)
 - Changed the name of an augmentation at the request of the original author (@hydroflame)
 - Allow .json files (@shyguy1412)
 - Remove jquery dependency (@catloversg)
@@ -235,6 +239,7 @@ See 2.6.0 changelog at https://github.com/bitburner-official/bitburner-src/blob/
 - Remove some unused internal constants (@catloversg)
 - Ensure lastNodeReset property is initialized correctly on the player object (@catloversg)
 - The value of "this" within the main function will no longer be the script module itself (@d0sboots)
+- Fixed an incorrect file mode (@mctylr-gh)
 - Nerf noodle bar (various contributors)
 `,
 };
