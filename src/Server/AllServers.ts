@@ -136,7 +136,6 @@ export function initForeignServers(homeComputer: Server): void {
     else return getRandomIntInclusive(value.min, value.max);
   };
 
-
   for (const metadata of serverMetadata) {
     const serverParams: IServerParams = {
       hostname: metadata.hostname,
@@ -156,11 +155,10 @@ export function initForeignServers(homeComputer: Server): void {
       //const maxCount = Math.floor((toNumber(metadata.networkLayer)+1) / 2);
       //const minCount = Math.ceil(toNumber(metadata.networkLayer) / 4);
       //const coreCount = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
-	  const layer = toNumber(metadata.networkLayer)
-      server.cpuCores = getRandomIntInclusive(Math.ceil(layer/2),layer);
+      const layer = toNumber(metadata.networkLayer);
+      server.cpuCores = getRandomIntInclusive(Math.ceil(layer / 2), layer);
     }
     if (metadata.maxRamExponent !== undefined) {
-      const minRam = Math.pow(2, toNumber(metadata.maxRamExponent));
       serverParams.maxRam = Math.pow(2, toNumber(metadata.maxRamExponent));
     }
 
