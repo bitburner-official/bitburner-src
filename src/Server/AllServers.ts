@@ -136,10 +136,6 @@ export function initForeignServers(homeComputer: Server): void {
     else return getRandomIntInclusive(value.min, value.max);
   };
 
-  const toMin = (value: number | IMinMaxRange): number => {
-    if (typeof value === "number") return value;
-    else return getRandomInt(value.min, value.min);
-  };
 
   for (const metadata of serverMetadata) {
     const serverParams: IServerParams = {
@@ -157,17 +153,15 @@ export function initForeignServers(homeComputer: Server): void {
     const server = new Server(serverParams);
 
     if (metadata.networkLayer) {
-      const maxCount = Math.floor(toNumber(metadata.networkLayer) / 2);
-      const minCount = Math.ceil(toNumber(metadata.networkLayer) / 4);
-      const coreCount = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
-      server.cpuCores = toNumber(coreCount);
+      //const maxCount = Math.floor((toNumber(metadata.networkLayer)+1) / 2);
+      //const minCount = Math.ceil(toNumber(metadata.networkLayer) / 4);
+      //const coreCount = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
+	  const layer = toNumber(metadata.networkLayer)
+      server.cpuCores = getRandomIntInclusive(Math.ceil(layer/2),layer);
     }
     if (metadata.maxRamExponent !== undefined) {
-      const minRam = Math.pow(2, toMin(metadata.maxRamExponent));
+      const minRam = Math.pow(2, toNumber(metadata.maxRamExponent));
       serverParams.maxRam = Math.pow(2, toNumber(metadata.maxRamExponent));
-      if (serverParams.maxRam == minRam) {
-        server.cpuCores = server.cpuCores + 1;
-      }
     }
 
     for (const filename of metadata.literature || []) {
