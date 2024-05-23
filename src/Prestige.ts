@@ -25,10 +25,23 @@ import { CONSTANTS } from "./Constants";
 import { LogBoxClearEvents } from "./ui/React/LogBoxManager";
 import { initCircadianModulator } from "./Augmentation/Augmentations";
 import { Go } from "./Go/Go";
+import { calculateExp } from "./PersonObjects/formulas/skill";
+import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string) {
   setTimeout(() => dialogBoxCreate(message), 200);
+}
+
+function setInitialExpForPlayer() {
+  Player.exp.hacking = calculateExp(1, Player.mults.hacking * currentNodeMults.HackingLevelMultiplier);
+  Player.exp.strength = calculateExp(1, Player.mults.strength * currentNodeMults.StrengthLevelMultiplier);
+  Player.exp.defense = calculateExp(1, Player.mults.defense * currentNodeMults.DefenseLevelMultiplier);
+  Player.exp.dexterity = calculateExp(1, Player.mults.dexterity * currentNodeMults.DexterityLevelMultiplier);
+  Player.exp.agility = calculateExp(1, Player.mults.agility * currentNodeMults.AgilityLevelMultiplier);
+  Player.exp.charisma = calculateExp(1, Player.mults.charisma * currentNodeMults.CharismaLevelMultiplier);
+  Player.updateSkillLevels();
+  Player.hp.current = Player.hp.max;
 }
 
 // Prestige by purchasing augmentation
@@ -100,7 +113,6 @@ export function prestigeAugmentation(): void {
   }
   Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
-  Player.hp.current = Player.hp.max;
 
   staneksGift.prestigeAugmentation();
 
@@ -173,6 +185,8 @@ export function prestigeAugmentation(): void {
   resetPidCounter();
   ProgramsSeen.clear();
   InvitationsSeen.clear();
+
+  setInitialExpForPlayer();
 }
 
 // Prestige by destroying Bit Node and gaining a Source File
@@ -314,4 +328,6 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // Clear recent scripts
   recentScripts.splice(0, recentScripts.length);
   resetPidCounter();
+
+  setInitialExpForPlayer();
 }
