@@ -8,7 +8,6 @@ import { parse } from "acorn";
 import { LoadedModule, ScriptURL, ScriptModule } from "./Script/LoadedModule";
 import { Script } from "./Script/Script";
 import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
-import { root } from "./Paths/Directory";
 
 // Acorn type def is straight up incomplete so we have to fill with our own.
 export type Node = any;
@@ -125,7 +124,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   let newCode = script.code;
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
-    const filename = resolveScriptFilePath(node.filename, root, ".js");
+    const filename = resolveScriptFilePath(node.filename, script.filename, ".js");
     if (!filename) throw new Error(`Failed to parse import: ${node.filename}`);
 
     // Find the corresponding script.
@@ -149,6 +148,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     // script dedupe properly.
     const adjustedCode = newCode + `\n//# sourceURL=${script.server}/${script.filename}`;
     // At this point we have the full code and can construct a new blob / assign the URL.
+
     const url = URL.createObjectURL(makeScriptBlob(adjustedCode)) as ScriptURL;
     const module = config.doImport(url).catch((e) => {
       script.invalidateModule();
