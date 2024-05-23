@@ -8,19 +8,15 @@ import { sha256 } from "js-sha256";
 export const AlertEvents = new EventEmitter<[string | JSX.Element]>();
 
 interface Alert {
-  id: string;
   text: string | JSX.Element;
   hash: string;
 }
 
-let i = 0;
 export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElement {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   useEffect(
     () =>
       AlertEvents.subscribe((text: string | JSX.Element) => {
-        const id = i + "";
-        i++;
         setAlerts((old) => {
           const hash = getMessageHash(text);
           if (old.some((a) => a.hash === hash)) {
@@ -29,7 +25,6 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
           return [
             ...old,
             {
-              id: id,
               text: text,
               hash: hash,
             },
@@ -58,7 +53,7 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
 
   function close(): void {
     setAlerts((old) => {
-      return old.slice(1, 1e99);
+      return old.slice(1);
     });
   }
 

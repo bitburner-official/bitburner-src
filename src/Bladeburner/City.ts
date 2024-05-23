@@ -1,6 +1,6 @@
 import { CityName } from "@enums";
 import { BladeburnerConstants } from "./data/Constants";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { addOffset } from "../utils/helpers/addOffset";
 import { clampInteger, clampNumber } from "../utils/helpers/clampNumber";
@@ -16,11 +16,14 @@ export class City {
     this.name = name;
 
     // Synthoid population and estimate
-    this.pop = getRandomInt(BladeburnerConstants.PopulationThreshold, 1.5 * BladeburnerConstants.PopulationThreshold);
+    this.pop = getRandomIntInclusive(
+      BladeburnerConstants.PopulationThreshold,
+      1.5 * BladeburnerConstants.PopulationThreshold,
+    );
     this.popEst = this.pop * (Math.random() + 0.5);
 
     // Number of Synthoid communities population and estimate
-    this.comms = getRandomInt(5, 150);
+    this.comms = getRandomIntInclusive(5, 150);
     this.chaos = 0;
   }
 

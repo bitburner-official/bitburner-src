@@ -14,7 +14,7 @@ import { FactionName, IndustryType } from "@enums";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
 import { CityName } from "@enums";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { getRecordValues } from "../Types/Record";
 import {
   calculateOfficeSizeUpgradeCost,
@@ -166,7 +166,7 @@ export function issueNewShares(
 
   const privateOwnedRatio = corporation.investorShares / corporation.totalShares;
   const maxPrivateShares = Math.round((amount / 2) * privateOwnedRatio);
-  const privateShares = Math.round(getRandomInt(0, maxPrivateShares) / 10e6) * 10e6;
+  const privateShares = Math.round(getRandomIntInclusive(0, maxPrivateShares) / 10e6) * 10e6;
 
   corporation.issuedShares += amount - privateShares;
   corporation.investorShares += privateShares;

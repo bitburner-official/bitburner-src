@@ -6,7 +6,7 @@ import { IndustriesData } from "./data/IndustryData";
 import { MaterialInfo } from "./MaterialInfo";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { PartialRecord, createEnumKeyedRecord, getRecordEntries, getRecordKeys } from "../Types/Record";
 
 interface IConstructorParams {
@@ -202,7 +202,7 @@ export class Product {
 
     this.demand =
       division.awareness === 0 ? 20 : Math.min(100, advMult * (100 * (division.popularity / division.awareness)));
-    this.competition = getRandomInt(0, 70);
+    this.competition = getRandomIntInclusive(0, 70);
 
     //Calculate the product's required materials and size
     this.size = 0;

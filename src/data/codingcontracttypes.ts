@@ -1,4 +1,5 @@
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
+
 import { comprGenChar, comprLZGenerate, comprLZEncode, comprLZDecode } from "../utils/CompressionContracts";
 import { HammingEncode, HammingDecode, HammingEncodeProperly } from "../utils/HammingCodeTools";
 import { filterTruthy } from "../utils/helpers/ArrayHelpers";
@@ -67,7 +68,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 1,
     gen: (): number => {
-      return getRandomInt(500, 1e9);
+      return getRandomIntInclusive(500, 1e9);
     },
     name: "Find Largest Prime Factor",
     numTries: 10,
@@ -97,11 +98,11 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 1,
     gen: (): number[] => {
-      const len: number = getRandomInt(5, 40);
+      const len: number = getRandomIntInclusive(5, 40);
       const arr: number[] = [];
       arr.length = len;
       for (let i = 0; i < len; ++i) {
-        arr[i] = getRandomInt(-10, 10);
+        arr[i] = getRandomIntInclusive(-10, 10);
       }
 
       return arr;
@@ -133,7 +134,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 1.5,
     gen: (): number => {
-      return getRandomInt(8, 100);
+      return getRandomIntInclusive(8, 100);
     },
     name: "Total Ways to Sum",
     numTries: 10,
@@ -165,8 +166,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 2,
     gen: (): [number, number[]] => {
-      const n: number = getRandomInt(12, 200);
-      const maxLen: number = getRandomInt(8, 12);
+      const n: number = getRandomIntInclusive(12, 200);
+      const maxLen: number = getRandomIntInclusive(8, 12);
       const s: number[] = [];
       // Bias towards small numbers is intentional to have much bigger answers in general
       // to force people better optimize their solutions
@@ -239,8 +240,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 2,
     gen: (): number[][] => {
-      const m: number = getRandomInt(1, 15);
-      const n: number = getRandomInt(1, 15);
+      const m: number = getRandomIntInclusive(1, 15);
+      const n: number = getRandomIntInclusive(1, 15);
       const matrix: number[][] = [];
       matrix.length = m;
       for (let i = 0; i < m; ++i) {
@@ -250,7 +251,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
 
       for (let i = 0; i < m; ++i) {
         for (let j = 0; j < n; ++j) {
-          matrix[i][j] = getRandomInt(1, 50);
+          matrix[i][j] = getRandomIntInclusive(1, 50);
         }
       }
 
@@ -343,14 +344,14 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 2.5,
     gen: (): number[] => {
-      const len: number = getRandomInt(3, 25);
+      const len: number = getRandomIntInclusive(3, 25);
       const arr: number[] = [];
       arr.length = len;
       for (let i = 0; i < arr.length; ++i) {
         if (Math.random() < 0.2) {
           arr[i] = 0; // 20% chance of being 0
         } else {
-          arr[i] = getRandomInt(0, 10);
+          arr[i] = getRandomIntInclusive(0, 10);
         }
       }
 
@@ -387,7 +388,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 3,
     gen: (): number[] => {
-      const len: number = getRandomInt(3, 25);
+      const len: number = getRandomIntInclusive(3, 25);
       const arr: number[] = [];
       arr.length = len;
       for (let i = 0; i < arr.length; i++) {
@@ -445,10 +446,10 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     difficulty: 3,
     gen: (): number[][] => {
       const intervals: number[][] = [];
-      const numIntervals: number = getRandomInt(3, 20);
+      const numIntervals: number = getRandomIntInclusive(3, 20);
       for (let i = 0; i < numIntervals; ++i) {
-        const start: number = getRandomInt(1, 25);
-        const end: number = start + getRandomInt(1, 10);
+        const start: number = getRandomIntInclusive(1, 25);
+        const end: number = start + getRandomIntInclusive(1, 10);
         intervals.push([start, end]);
       }
 
@@ -501,7 +502,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     gen: (): string => {
       let str = "";
       for (let i = 0; i < 4; ++i) {
-        const num: number = getRandomInt(0, 255);
+        const num: number = getRandomIntInclusive(0, 255);
         const convNum: string = num.toString();
         str += convNum;
       }
@@ -565,11 +566,11 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 1,
     gen: (): number[] => {
-      const len: number = getRandomInt(3, 50);
+      const len: number = getRandomIntInclusive(3, 50);
       const arr: number[] = [];
       arr.length = len;
       for (let i = 0; i < len; ++i) {
-        arr[i] = getRandomInt(1, 200);
+        arr[i] = getRandomIntInclusive(1, 200);
       }
 
       return arr;
@@ -605,11 +606,11 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 2,
     gen: (): number[] => {
-      const len: number = getRandomInt(3, 50);
+      const len: number = getRandomIntInclusive(3, 50);
       const arr: number[] = [];
       arr.length = len;
       for (let i = 0; i < len; ++i) {
-        arr[i] = getRandomInt(1, 200);
+        arr[i] = getRandomIntInclusive(1, 200);
       }
 
       return arr;
@@ -643,11 +644,11 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 5,
     gen: (): number[] => {
-      const len: number = getRandomInt(3, 50);
+      const len: number = getRandomIntInclusive(3, 50);
       const arr: number[] = [];
       arr.length = len;
       for (let i = 0; i < len; ++i) {
-        arr[i] = getRandomInt(1, 200);
+        arr[i] = getRandomIntInclusive(1, 200);
       }
 
       return arr;
@@ -691,12 +692,12 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 8,
     gen: (): [number, number[]] => {
-      const k = getRandomInt(2, 10);
-      const len = getRandomInt(3, 50);
+      const k = getRandomIntInclusive(2, 10);
+      const len = getRandomIntInclusive(3, 50);
       const prices: number[] = [];
       prices.length = len;
       for (let i = 0; i < len; ++i) {
-        prices[i] = getRandomInt(1, 200);
+        prices[i] = getRandomIntInclusive(1, 200);
       }
 
       return [k, prices];
@@ -783,14 +784,14 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     difficulty: 5,
     gen: (): number[][] => {
       const triangle: number[][] = [];
-      const levels: number = getRandomInt(3, 12);
+      const levels: number = getRandomIntInclusive(3, 12);
       triangle.length = levels;
 
       for (let row = 0; row < levels; ++row) {
         triangle[row] = [];
         triangle[row].length = row + 1;
         for (let i = 0; i < triangle[row].length; ++i) {
-          triangle[row][i] = getRandomInt(1, 9);
+          triangle[row][i] = getRandomIntInclusive(1, 9);
         }
       }
 
@@ -830,8 +831,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 3,
     gen: (): number[] => {
-      const numRows: number = getRandomInt(2, 14);
-      const numColumns: number = getRandomInt(2, 14);
+      const numRows: number = getRandomIntInclusive(2, 14);
+      const numColumns: number = getRandomIntInclusive(2, 14);
 
       return [numRows, numColumns];
     },
@@ -876,8 +877,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 5,
     gen: (): number[][] => {
-      const numRows: number = getRandomInt(2, 12);
-      const numColumns: number = getRandomInt(2, 12);
+      const numRows: number = getRandomIntInclusive(2, 12);
+      const numColumns: number = getRandomIntInclusive(2, 12);
 
       const grid: number[][] = [];
       grid.length = numRows;
@@ -959,8 +960,8 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     difficulty: 7,
     numTries: 10,
     gen: (): number[][] => {
-      const height = getRandomInt(6, 12);
-      const width = getRandomInt(6, 12);
+      const height = getRandomIntInclusive(6, 12);
+      const width = getRandomIntInclusive(6, 12);
       const dstY = height - 1;
       const dstX = width - 1;
       const minPathLength = dstY + dstX; // Math.abs(dstY - srcY) + Math.abs(dstX - srcX)
@@ -1079,7 +1080,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 10,
     gen: (): string => {
-      const len: number = getRandomInt(6, 20);
+      const len: number = getRandomIntInclusive(6, 20);
       const chars: string[] = [];
       chars.length = len;
 
@@ -1197,18 +1198,18 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     difficulty: 10,
     gen: (): [string, number] => {
-      const numDigits = getRandomInt(4, 12);
+      const numDigits = getRandomIntInclusive(4, 12);
       const digitsArray: string[] = [];
       digitsArray.length = numDigits;
       for (let i = 0; i < digitsArray.length; ++i) {
         if (i === 0) {
-          digitsArray[i] = String(getRandomInt(1, 9));
+          digitsArray[i] = String(getRandomIntInclusive(1, 9));
         } else {
-          digitsArray[i] = String(getRandomInt(0, 9));
+          digitsArray[i] = String(getRandomIntInclusive(0, 9));
         }
       }
 
-      const target: number = getRandomInt(-100, 100);
+      const target: number = getRandomIntInclusive(-100, 100);
       const digits: string = digitsArray.join("");
 
       return [digits, target];
@@ -1308,7 +1309,9 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       ].join(" ");
     },
     gen: (): number => {
-      return getRandomInt(Math.pow(2, 4), Math.pow(2, getRandomInt(1, 57)));
+      const x = Math.pow(2, 4);
+      const y = Math.pow(2, getRandomIntInclusive(1, 57));
+      return getRandomIntInclusive(Math.min(x, y), Math.max(x, y));
     },
     solver: (data: unknown, ans: string): boolean => {
       if (typeof data !== "number") throw new Error("solver expected number");
@@ -1343,11 +1346,13 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
     },
     gen: (): string => {
       const _alteredBit = Math.round(Math.random());
-      const _buildArray: string[] = HammingEncodeProperly(
-        getRandomInt(Math.pow(2, 4), Math.pow(2, getRandomInt(1, 57))),
-      ).split("");
+      const x = Math.pow(2, 4);
+      const y = Math.pow(2, getRandomIntInclusive(1, 57));
+      const _buildArray: string[] = HammingEncodeProperly(getRandomIntInclusive(Math.min(x, y), Math.max(x, y))).split(
+        "",
+      );
       if (_alteredBit) {
-        const _randomIndex: number = getRandomInt(0, _buildArray.length - 1);
+        const _randomIndex: number = getRandomIntInclusive(0, _buildArray.length - 1);
         _buildArray[_randomIndex] = _buildArray[_randomIndex] == "0" ? "1" : "0";
       }
       return _buildArray.join("");

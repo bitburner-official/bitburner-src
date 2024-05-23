@@ -16,7 +16,7 @@ import {
 } from "../PersonObjects/formulas/reputation";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { InvitationEvent } from "./ui/InvitationModal";
+import { FactionInvitationEvents } from "./ui/FactionInvitationManager";
 import { SFC32RNG } from "../Casino/RNG";
 import { isFactionWork } from "../Work/FactionWork";
 import { getAugCost } from "../Augmentation/AugmentationHelpers";
@@ -28,7 +28,7 @@ export function inviteToFaction(faction: Faction): void {
   faction.alreadyInvited = true;
   faction.discovery = FactionDiscovery.known;
   if (!Settings.SuppressFactionInvites) {
-    InvitationEvent.emit(faction);
+    FactionInvitationEvents.emit({ type: "New", factionName: faction.name });
   }
 }
 

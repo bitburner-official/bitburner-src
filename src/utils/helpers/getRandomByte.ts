@@ -1,4 +1,4 @@
-import { getRandomInt } from "./getRandomInt";
+import { getRandomIntInclusive } from "./getRandomIntInclusive";
 
 /**
  * Gets a random value in the range of a byte (0 - 255), or up to the maximum.
@@ -9,5 +9,5 @@ export function getRandomByte(max: number): number {
   const byteMaximum = 255;
   const upper: number = Math.max(Math.min(max, byteMaximum), 0);
 
-  return getRandomInt(0, upper);
+  return getRandomIntInclusive(0, upper);
 }

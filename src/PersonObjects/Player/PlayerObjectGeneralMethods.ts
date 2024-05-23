@@ -26,7 +26,7 @@ import { CONSTANTS } from "../../Constants";
 import { Exploit } from "../../Exploits/Exploit";
 import { Faction } from "../../Faction/Faction";
 import { Factions } from "../../Faction/Factions";
-import { InvitationEvent } from "../../Faction/ui/InvitationModal";
+import { FactionInvitationEvents } from "../../Faction/ui/FactionInvitationManager";
 import { resetGangs } from "../../Gang/AllGangs";
 import { Cities } from "../../Locations/Cities";
 import { Locations } from "../../Locations/Locations";
@@ -104,7 +104,7 @@ export function prestigeAugmentation(this: PlayerObject): void {
   this.factionInvitations = [];
   this.factionRumors.clear();
   // Clear any pending invitation modals
-  InvitationEvent.emit(null);
+  FactionInvitationEvents.emit({ type: "ClearAll" });
 
   this.queuedAugmentations = [];
 

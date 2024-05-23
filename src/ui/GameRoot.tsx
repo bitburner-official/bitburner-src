@@ -56,7 +56,7 @@ import { Snackbar, SnackbarProvider } from "./React/Snackbar";
 import { LogBoxManager } from "./React/LogBoxManager";
 import { AlertManager } from "./React/AlertManager";
 import { PromptManager } from "./React/PromptManager";
-import { InvitationModal } from "../Faction/ui/InvitationModal";
+import { FactionInvitationManager } from "../Faction/ui/FactionInvitationManager";
 import { calculateAchievements } from "../Achievements/Achievements";
 
 import { RecoveryMode, RecoveryRoot } from "./React/RecoveryRoot";
@@ -407,7 +407,7 @@ export function GameRoot(): React.ReactElement {
               <LogBoxManager hidden={!withPopups} />
               <AlertManager hidden={!withPopups} />
               <PromptManager hidden={!withPopups} />
-              <InvitationModal hidden={!withPopups} />
+              <FactionInvitationManager hidden={!withPopups} />
               <Snackbar hidden={!withPopups} />
               <Apr1 />
             </SnackbarProvider>

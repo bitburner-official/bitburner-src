@@ -95,7 +95,7 @@ export const Settings = {
   /** Whether to auto detect indentation settings per-file based on contents */
   MonacoDetectIndentation: false,
   /** Font Family for script editor. */
-  MonacoFontFamily: "Lucida Console",
+  MonacoFontFamily: "JetBrainsMono",
   /** Text size for script editor. */
   MonacoFontSize: 20,
   /** Whether to use font ligatures */

@@ -148,7 +148,7 @@ module.exports = (env, argv) => {
             },
           },
         },
-        { test: /\.(ttf|png|jpe?g|gif|jp2|webp)$/, type: "asset/resource" },
+        { test: /\.(ttf|woff2|png|jpe?g|gif|jp2|webp)$/, type: "asset/resource" },
         {
           test: /\.s?css$/,
           use: ["style-loader", "css-loader"],

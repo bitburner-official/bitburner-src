@@ -3,7 +3,7 @@ import * as corpConstants from "./data/Constants";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { Division } from "./Division";
 import { Corporation } from "./Corporation";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { createEnumKeyedRecord, getRecordKeys } from "../Types/Record";
 
 interface IParams {
@@ -178,15 +178,19 @@ export class OfficeSpace {
   hireRandomEmployee(position: CorpEmployeeJob): boolean {
     if (this.atCapacity()) return false;
 
-    this.totalExperience += getRandomInt(50, 100);
+    this.totalExperience += getRandomIntInclusive(50, 100);
 
-    this.avgMorale = (this.avgMorale * this.numEmployees + getRandomInt(50, 100)) / (this.numEmployees + 1);
-    this.avgEnergy = (this.avgEnergy * this.numEmployees + getRandomInt(50, 100)) / (this.numEmployees + 1);
+    this.avgMorale = (this.avgMorale * this.numEmployees + getRandomIntInclusive(50, 100)) / (this.numEmployees + 1);
+    this.avgEnergy = (this.avgEnergy * this.numEmployees + getRandomIntInclusive(50, 100)) / (this.numEmployees + 1);
 
-    this.avgIntelligence = (this.avgIntelligence * this.numEmployees + getRandomInt(50, 100)) / (this.numEmployees + 1);
-    this.avgCharisma = (this.avgCharisma * this.numEmployees + getRandomInt(50, 100)) / (this.numEmployees + 1);
-    this.avgCreativity = (this.avgCreativity * this.numEmployees + getRandomInt(50, 100)) / (this.numEmployees + 1);
-    this.avgEfficiency = (this.avgEfficiency * this.numEmployees + getRandomInt(50, 100)) / (this.numEmployees + 1);
+    this.avgIntelligence =
+      (this.avgIntelligence * this.numEmployees + getRandomIntInclusive(50, 100)) / (this.numEmployees + 1);
+    this.avgCharisma =
+      (this.avgCharisma * this.numEmployees + getRandomIntInclusive(50, 100)) / (this.numEmployees + 1);
+    this.avgCreativity =
+      (this.avgCreativity * this.numEmployees + getRandomIntInclusive(50, 100)) / (this.numEmployees + 1);
+    this.avgEfficiency =
+      (this.avgEfficiency * this.numEmployees + getRandomIntInclusive(50, 100)) / (this.numEmployees + 1);
 
     ++this.numEmployees;
     ++this.employeeJobs[position];

@@ -1,6 +1,6 @@
 import { BladeOperationName } from "@enums";
 import { Operation } from "../Actions/Operation";
-import { getRandomInt } from "../../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { LevelableActionClass } from "../Actions/LevelableAction";
 import { assertLoadingType } from "../../utils/TypeAssertion";
 
@@ -36,7 +36,7 @@ export function createOperations(): Record<BladeOperationName, Operation> {
         intelligence: 0.9,
       },
       isStealth: true,
-      growthFunction: () => getRandomInt(10, 40) / 10,
+      growthFunction: () => getRandomIntInclusive(10, 40) / 10,
       maxCount: 100,
     }),
     [BladeOperationName.undercover]: new Operation({
@@ -69,7 +69,7 @@ export function createOperations(): Record<BladeOperationName, Operation> {
         intelligence: 0.9,
       },
       isStealth: true,
-      growthFunction: () => getRandomInt(10, 40) / 10,
+      growthFunction: () => getRandomIntInclusive(10, 40) / 10,
       maxCount: 100,
     }),
     [BladeOperationName.sting]: new Operation({
@@ -100,7 +100,7 @@ export function createOperations(): Record<BladeOperationName, Operation> {
         intelligence: 0.9,
       },
       isStealth: true,
-      growthFunction: () => getRandomInt(3, 40) / 10,
+      growthFunction: () => getRandomIntInclusive(3, 40) / 10,
     }),
     [BladeOperationName.raid]: new Operation({
       name: BladeOperationName.raid,
@@ -132,7 +132,7 @@ export function createOperations(): Record<BladeOperationName, Operation> {
         intelligence: 0.9,
       },
       isKill: true,
-      growthFunction: () => getRandomInt(2, 40) / 10,
+      growthFunction: () => getRandomIntInclusive(2, 40) / 10,
       getAvailability: function (bladeburner) {
         if (bladeburner.getCurrentCity().comms < 1) return { error: "No Synthoid communities in current city" };
         return LevelableActionClass.prototype.getAvailability.call(this, bladeburner);
@@ -169,7 +169,7 @@ export function createOperations(): Record<BladeOperationName, Operation> {
       },
       isStealth: true,
       isKill: true,
-      growthFunction: () => getRandomInt(1, 20) / 10,
+      growthFunction: () => getRandomIntInclusive(1, 20) / 10,
     }),
     [BladeOperationName.assassination]: new Operation({
       name: BladeOperationName.assassination,
@@ -202,7 +202,7 @@ export function createOperations(): Record<BladeOperationName, Operation> {
       },
       isStealth: true,
       isKill: true,
-      growthFunction: () => getRandomInt(1, 20) / 10,
+      growthFunction: () => getRandomIntInclusive(1, 20) / 10,
     }),
   };
 }

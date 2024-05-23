@@ -24,7 +24,7 @@ import { Player } from "@player";
 import { Router } from "../ui/GameRoot";
 import { ConsoleHelpText } from "./data/Help";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
-import { getRandomInt } from "../utils/helpers/getRandomInt";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { BladeburnerConstants } from "./data/Constants";
 import { formatExp, formatMoney, formatPercent, formatBigNumber, formatStamina } from "../ui/formatNumber";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
@@ -64,7 +64,7 @@ export class Bladeburner {
 
   storedCycles = 0;
 
-  randomEventCounter: number = getRandomInt(240, 600);
+  randomEventCounter: number = getRandomIntInclusive(240, 600);
 
   actionTimeToComplete = 0;
   actionTimeCurrent = 0;
@@ -522,11 +522,11 @@ export class Bladeburner {
     const sourceCity = this.cities[sourceCityName];
 
     const rand = Math.random();
-    let percentage = getRandomInt(3, 15) / 100;
+    let percentage = getRandomIntInclusive(3, 15) / 100;
 
     if (rand < 0.05 && sourceCity.comms > 0) {
       // 5% chance for community migration
-      percentage *= getRandomInt(2, 4); // Migration increases population change
+      percentage *= getRandomIntInclusive(2, 4); // Migration increases population change
       --sourceCity.comms;
       ++destCity.comms;
     }
@@ -565,7 +565,7 @@ export class Bladeburner {
     if (chance <= 0.05) {
       // New Synthoid Community, 5%
       ++sourceCity.comms;
-      const percentage = getRandomInt(10, 20) / 100;
+      const percentage = getRandomIntInclusive(10, 20) / 100;
       const count = Math.round(sourceCity.pop * percentage);
       sourceCity.pop += count;
       if (sourceCity.pop < BladeburnerConstants.PopGrowthCeiling) {
@@ -579,7 +579,7 @@ export class Bladeburner {
       if (sourceCity.comms <= 0) {
         // If no comms in source city, then instead trigger a new Synthoid community event
         ++sourceCity.comms;
-        const percentage = getRandomInt(10, 20) / 100;
+        const percentage = getRandomIntInclusive(10, 20) / 100;
         const count = Math.round(sourceCity.pop * percentage);
         sourceCity.pop += count;
         if (sourceCity.pop < BladeburnerConstants.PopGrowthCeiling) {
@@ -593,7 +593,7 @@ export class Bladeburner {
         ++destCity.comms;
 
         // Change pop
-        const percentage = getRandomInt(10, 20) / 100;
+        const percentage = getRandomIntInclusive(10, 20) / 100;
         const count = Math.round(sourceCity.pop * percentage);
         sourceCity.pop -= count;
         destCity.pop += count;
@@ -608,7 +608,7 @@ export class Bladeburner {
       }
     } else if (chance <= 0.3) {
       // New Synthoids (non community), 20%
-      const percentage = getRandomInt(8, 24) / 100;
+      const percentage = getRandomIntInclusive(8, 24) / 100;
       const count = Math.round(sourceCity.pop * percentage);
       sourceCity.pop += count;
       if (sourceCity.pop < BladeburnerConstants.PopGrowthCeiling) {
@@ -632,13 +632,13 @@ export class Bladeburner {
     } else if (chance <= 0.7) {
       // Synthoid Riots (+chaos), 20%
       sourceCity.chaos += 1;
-      sourceCity.chaos *= 1 + getRandomInt(5, 20) / 100;
+      sourceCity.chaos *= 1 + getRandomIntInclusive(5, 20) / 100;
       if (this.logging.events) {
         this.log("Tensions between Synthoids and humans lead to riots in " + sourceCityName + "! Chaos increased");
       }
     } else if (chance <= 0.9) {
       // Less Synthoids, 20%
-      const percentage = getRandomInt(8, 20) / 100;
+      const percentage = getRandomIntInclusive(8, 20) / 100;
       const count = Math.round(sourceCity.pop * percentage);
       sourceCity.pop -= count;
       if (this.logging.events) {
@@ -753,7 +753,7 @@ export class Bladeburner {
     const teamCount = action.teamCount;
     if (teamCount >= 1) {
       const maxLosses = success ? Math.ceil(teamCount / 2) : Math.floor(teamCount);
-      const losses = getRandomInt(0, maxLosses);
+      const losses = getRandomIntInclusive(0, maxLosses);
       this.teamSize -= losses;
       if (this.teamSize < this.sleeveSize) {
         const sup = Player.sleeves.filter((x) => isSleeveSupportWork(x.currentWork));
@@ -803,13 +803,13 @@ export class Bladeburner {
           });
           --city.comms;
         } else {
-          const change = getRandomInt(-10, -5) / 10;
+          const change = getRandomIntInclusive(-10, -5) / 10;
           city.changePopulationByPercentage(change, {
             nonZero: true,
             changeEstEqually: false,
           });
         }
-        city.changeChaosByPercentage(getRandomInt(1, 5));
+        city.changeChaosByPercentage(getRandomIntInclusive(1, 5));
         break;
       case BladeOperationName.stealthRetirement:
         if (success) {
@@ -818,13 +818,13 @@ export class Bladeburner {
             nonZero: true,
           });
         }
-        city.changeChaosByPercentage(getRandomInt(-3, -1));
+        city.changeChaosByPercentage(getRandomIntInclusive(-3, -1));
         break;
       case BladeOperationName.assassination:
         if (success) {
           city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
         }
-        city.changeChaosByPercentage(getRandomInt(-5, 5));
+        city.changeChaosByPercentage(getRandomIntInclusive(-5, 5));
         break;
       default:
         throw new Error("Invalid Action name in completeOperation: " + this.action.name);
@@ -838,7 +838,7 @@ export class Bladeburner {
         case BladeContractName.tracking:
           // Increase estimate accuracy by a relatively small amount
           city.improvePopulationEstimateByCount(
-            getRandomInt(100, 1e3) * this.getSkillMult(BladeMultName.successChanceEstimate),
+            getRandomIntInclusive(100, 1e3) * this.getSkillMult(BladeMultName.successChanceEstimate),
           );
           break;
         case BladeContractName.bountyHunter:
@@ -1012,7 +1012,7 @@ export class Bladeburner {
 
         // Calculate team losses
         if (teamCount >= 1) {
-          const losses = getRandomInt(1, teamLossMax);
+          const losses = getRandomIntInclusive(1, teamLossMax);
           this.teamSize -= losses;
           if (this.teamSize < this.sleeveSize) {
             const sup = Player.sleeves.filter((x) => isSleeveSupportWork(x.currentWork));
@@ -1332,7 +1332,7 @@ export class Bladeburner {
       if (this.randomEventCounter <= 0) {
         this.randomEvent();
         // Add instead of setting because we might have gone over the required time for the event
-        this.randomEventCounter += getRandomInt(240, 600);
+        this.randomEventCounter += getRandomIntInclusive(240, 600);
       }
 
       this.processAction(seconds);

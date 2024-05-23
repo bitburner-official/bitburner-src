@@ -356,7 +356,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
     },
     coordinates: {
       color: theme.colors.white,
-      fontFamily: `"Lucida Console", "Lucida Sans Unicode", "Fira Mono", Consolas, "Courier New", Courier, monospace, "Times New Roman"`,
+      fontFamily: `JetBrainsMono, "Courier New", monospace`,
       fontSize: "calc(min(1.3vw, 12px))",
       display: "none",
       position: "relative",
