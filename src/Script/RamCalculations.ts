@@ -14,7 +14,6 @@ import { RamCosts, RamCostConstants } from "../Netscript/RamCostGenerator";
 import { Script } from "./Script";
 import { Node } from "../NetscriptJSEvaluator";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
-import { root } from "../Paths/Directory";
 
 export interface RamUsageEntry {
   type: "ns" | "dom" | "fn" | "misc";
@@ -82,10 +81,10 @@ function parseOnlyRamCalculate(
   const completedParses = new Set();
 
   // Scripts we've discovered that need to be parsed.
-  const parseQueue: string[] = [];
+  const parseQueue: ScriptFilePath[] = [];
   // Parses a chunk of code with a given module name, and updates parseQueue and dependencyMap.
-  function parseCode(code: string, moduleName: string): void {
-    const result = parseOnlyCalculateDeps(code, scriptname, moduleName);
+  function parseCode(code: string, moduleName: string, filename: ScriptFilePath): void {
+    const result = parseOnlyCalculateDeps(code, moduleName, filename, ns1);
     completedParses.add(moduleName);
 
     // Add any additional modules to the parse queue;
@@ -101,7 +100,7 @@ function parseOnlyRamCalculate(
 
   // Parse the initial module, which is the "main" script that is being run
   const initialModule = "__SPECIAL_INITIAL_MODULE__";
-  parseCode(code, initialModule);
+  parseCode(code, initialModule, scriptname);
 
   // Process additional modules, which occurs if the "main" script has any imports
   while (parseQueue.length > 0) {
@@ -110,16 +109,18 @@ function parseOnlyRamCalculate(
     if (nextModule.startsWith("https://") || nextModule.startsWith("http://")) continue;
 
     // Using root as the path base right now. Difficult to implement
-    const filename = resolveScriptFilePath(nextModule, root, ns1 ? ".script" : ".js");
-    if (!filename) {
+    if (!nextModule) {
       return { errorCode: RamCalculationErrorCode.ImportError, errorMessage: `Invalid import path: "${nextModule}"` };
     }
-    const script = otherScripts.get(filename);
+    const script = otherScripts.get(nextModule);
     if (!script) {
-      return { errorCode: RamCalculationErrorCode.ImportError, errorMessage: `No such file on server: "${filename}"` };
+      return {
+        errorCode: RamCalculationErrorCode.ImportError,
+        errorMessage: `No such file on server: "${nextModule}"`,
+      };
     }
 
-    parseCode(script.code, nextModule);
+    parseCode(script.code, nextModule, nextModule);
   }
 
   // Finally, walk the reference map and generate a ram cost. The initial set of keys to scan
@@ -258,7 +259,7 @@ export function checkInfiniteLoop(code: string): number[] {
 
 interface ParseDepsResult {
   dependencyMap: Record<string, Set<string> | undefined>;
-  additionalModules: string[];
+  additionalModules: ScriptFilePath[];
 }
 
 /**
@@ -267,7 +268,12 @@ interface ParseDepsResult {
  * for RAM usage calculations. It also returns an array of additional modules
  * that need to be parsed (i.e. are 'import'ed scripts).
  */
-function parseOnlyCalculateDeps(code: string, filename: ScriptFilePath, currentModule: string): ParseDepsResult {
+function parseOnlyCalculateDeps(
+  code: string,
+  currentModule: string,
+  currentscript: ScriptFilePath,
+  ns1?: boolean,
+): ParseDepsResult {
   const ast = parse(code, { sourceType: "module", ecmaVersion: "latest" });
   // Everything from the global scope goes in ".". Everything else goes in ".function", where only
   // the outermost layer of functions counts.
@@ -279,7 +285,7 @@ function parseOnlyCalculateDeps(code: string, filename: ScriptFilePath, currentM
   // Filled when we import names from other modules.
   const internalToExternal: Record<string, string | undefined> = {};
 
-  const additionalModules: string[] = [];
+  const additionalModules: ScriptFilePath[] = [];
 
   // References get added pessimistically. They are added for thisModule.name, name, and for
   // any aliases.
@@ -346,10 +352,10 @@ function parseOnlyCalculateDeps(code: string, filename: ScriptFilePath, currentM
     Object.assign(
       {
         ImportDeclaration: (node: Node, st: State) => {
-          const importModuleName = resolveScriptFilePath(node.source.value, filename, ".js");
+          const importModuleName = resolveScriptFilePath(node.source.value, currentscript, ns1 ? ".script" : ".js");
           if (!importModuleName)
             throw new Error(
-              `ScriptFilePath couldnt be resolved in ImportDeclaration. Value: ${node.source.value}  ScriptFilePath: ${filename}`,
+              `ScriptFilePath couldnt be resolved in ImportDeclaration. Value: ${node.source.value}  ScriptFilePath: ${currentscript}`,
             );
           additionalModules.push(importModuleName);
 
