@@ -31,18 +31,18 @@ type FactionRootProps = {
 const hackingContractsInfo =
   "Complete hacking contracts for your faction. " +
   "Your effectiveness, which determines how much " +
-  "reputation you gain for this faction, is based on your hacking skill. " +
+  "reputation you gain for this faction, is based completely on your hacking skill. " +
   "You will gain hacking exp.";
 const fieldWorkInfo =
   "Carry out field missions for your faction. " +
   "Your effectiveness, which determines how much " +
-  "reputation you gain for this faction, is based on all of your stats. " +
+  "reputation you gain for this faction, is based on all of your stats equally . " +
   "You will gain exp for all stats.";
 const securityWorkInfo =
   "Serve in a security detail for your faction. " +
   "Your effectiveness, which determines how much " +
-  "reputation you gain for this faction, is based on your combat stats. " +
-  "You will gain exp for all combat stats.";
+  "reputation you gain for this faction, is based on your combat stats and your hacking skill. " +
+  "You will gain exp for all combat stats and hacking.";
 const augmentationsInfo =
   "As your reputation with this faction rises, you will " +
   "unlock Augmentations, which you can purchase to enhance " +
