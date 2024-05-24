@@ -2054,7 +2054,7 @@ export interface Singularity {
    * @example
    * ```js
    * ns.singularity.getFactionInviteRequirements("The Syndicate");
-   * 
+   *
    * [
    *   { "type": "someCondition", "conditions": [
    *       { "type": "city", "city": "Aevum" },
