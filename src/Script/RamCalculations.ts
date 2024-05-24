@@ -15,7 +15,6 @@ import { Script } from "./Script";
 import { Node } from "../NetscriptJSEvaluator";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { root } from "../Paths/Directory";
-import { FilePath, resolveFilePath } from "../Paths/FilePath";
 
 export interface RamUsageEntry {
   type: "ns" | "dom" | "fn" | "misc";
@@ -57,11 +56,14 @@ function getNumericCost(cost: number | (() => number)): number {
  * Parses code into an AST and walks through it recursively to calculate
  * RAM usage. Also accounts for imported modules.
  * @param otherScripts - All other scripts on the server. Used to account for imported scripts
- * @param code - The code being parsed */
+ * @param code - The code being parsed
+ * @param scriptname - The name of the script that ram needs to be added to
+ * */
+
 function parseOnlyRamCalculate(
   otherScripts: Map<ScriptFilePath, Script>,
   code: string,
-  mainFileName: FilePath,
+  scriptname: ScriptFilePath,
   ns1?: boolean,
 ): RamCalculation {
   /**
@@ -83,7 +85,7 @@ function parseOnlyRamCalculate(
   const parseQueue: string[] = [];
   // Parses a chunk of code with a given module name, and updates parseQueue and dependencyMap.
   function parseCode(code: string, moduleName: string): void {
-    const result = parseOnlyCalculateDeps(code, mainFileName, moduleName);
+    const result = parseOnlyCalculateDeps(code, scriptname, moduleName);
     completedParses.add(moduleName);
 
     // Add any additional modules to the parse queue;
@@ -265,7 +267,7 @@ interface ParseDepsResult {
  * for RAM usage calculations. It also returns an array of additional modules
  * that need to be parsed (i.e. are 'import'ed scripts).
  */
-function parseOnlyCalculateDeps(code: string, filename: FilePath, currentModule: string): ParseDepsResult {
+function parseOnlyCalculateDeps(code: string, filename: ScriptFilePath, currentModule: string): ParseDepsResult {
   const ast = parse(code, { sourceType: "module", ecmaVersion: "latest" });
   // Everything from the global scope goes in ".". Everything else goes in ".function", where only
   // the outermost layer of functions counts.
@@ -344,7 +346,11 @@ function parseOnlyCalculateDeps(code: string, filename: FilePath, currentModule:
     Object.assign(
       {
         ImportDeclaration: (node: Node, st: State) => {
-          const importModuleName = resolveFilePath(node.source.value, filename) as FilePath;
+          const importModuleName = resolveScriptFilePath(node.source.value, filename, ".js");
+          if (!importModuleName)
+            throw new Error(
+              `ScriptFilePath couldnt be resolved in ImportDeclaration. Value: ${node.source.value}  ScriptFilePath: ${filename}`,
+            );
           additionalModules.push(importModuleName);
 
           // This module's global scope refers to that module's global scope, no matter how we
@@ -403,17 +409,18 @@ function parseOnlyCalculateDeps(code: string, filename: FilePath, currentModule:
 /**
  * Calculate's a scripts RAM Usage
  * @param {string} code - The script's code
+ * @param {ScriptFilePath} scriptname - The script's name. Used to resolve relative paths
  * @param {Script[]} otherScripts - All other scripts on the server.
  *                                  Used to account for imported scripts
  */
 export function calculateRamUsage(
   code: string,
-  scriptName: FilePath,
+  scriptname: ScriptFilePath,
   otherScripts: Map<ScriptFilePath, Script>,
   ns1?: boolean,
 ): RamCalculation {
   try {
-    return parseOnlyRamCalculate(otherScripts, code, scriptName, ns1);
+    return parseOnlyRamCalculate(otherScripts, code, scriptname, ns1);
   } catch (e) {
     return {
       errorCode: RamCalculationErrorCode.SyntaxError,

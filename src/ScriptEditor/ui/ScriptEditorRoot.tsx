@@ -140,11 +140,10 @@ function Root(props: IProps): React.ReactElement {
   }
 
   const debouncedCodeParsing = debounce((newCode: string) => {
-    if (!currentScript) return;
     infLoop(newCode);
     updateRAM(
       !currentScript || currentScript.isTxt ? null : newCode,
-      currentScript.path,
+      currentScript?.path ?? null,
       currentScript && GetServer(currentScript.hostname),
     );
     finishUpdatingRAM();

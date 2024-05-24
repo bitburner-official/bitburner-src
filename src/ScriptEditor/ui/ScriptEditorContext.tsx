@@ -8,12 +8,14 @@ import { useBoolean } from "../../ui/React/hooks";
 import { BaseServer } from "../../Server/BaseServer";
 
 import { Options } from "./Options";
-import { FilePath } from "src/Paths/FilePath";
+import { FilePath } from "../../Paths/FilePath";
+import { resolveScriptFilePath } from "../../Paths/ScriptFilePath";
+import { root } from "../../Paths/Directory";
 
 export interface ScriptEditorContextShape {
   ram: string;
   ramEntries: string[][];
-  updateRAM: (newCode: string | null, filename: FilePath, server: BaseServer | null) => void;
+  updateRAM: (newCode: string | null, filename: FilePath | null, server: BaseServer | null) => void;
 
   isUpdatingRAM: boolean;
   startUpdatingRAM: () => void;
@@ -29,8 +31,15 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
   const [ram, setRAM] = useState("RAM: ???");
   const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
 
-  const updateRAM: ScriptEditorContextShape["updateRAM"] = (newCode, scriptname, server) => {
-    if (newCode === null || server === null) {
+  const updateRAM: ScriptEditorContextShape["updateRAM"] = (newCode, filename, server) => {
+    if (newCode === null || filename === null || server === null) {
+      setRAM("N/A");
+      setRamEntries([["N/A", ""]]);
+      return;
+    }
+    //temp duplication to turn FilePath into ScriptFilePath
+    const scriptname = resolveScriptFilePath(filename, root, ".js");
+    if (!scriptname) {
       setRAM("N/A");
       setRamEntries([["N/A", ""]]);
       return;
