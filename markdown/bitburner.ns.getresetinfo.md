@@ -26,6 +26,6 @@ RAM cost: 1 GB
 const resetInfo = ns.getResetInfo();
 const lastAugReset = resetInfo.lastAugReset;
 ns.tprint(`The last augmentation reset was: ${new Date(lastAugReset)}`);
-ns.tprint(`It has been ${Date.now() - lastAugReset}ms since the last augmentation reset.`);
+ns.tprint(`It has been ${Date.now() - lastAugReset} ms since the last augmentation reset.`);
 ```
 

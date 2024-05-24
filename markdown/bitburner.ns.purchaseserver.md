@@ -44,7 +44,7 @@ Returns the hostname of the newly purchased server as a string. If the function 
 // Attempt to purchase 5 servers with 64GB of ram each
 const ram = 64;
 const prefix = "pserv-";
-for (i = 0; i < 5; ++i) {
+for (let i = 0; i < 5; ++i) {
    ns.purchaseServer(prefix + i, ram);
 }
 ```

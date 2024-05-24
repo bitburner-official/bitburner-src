@@ -42,7 +42,7 @@ ns.printf("I'm %d seconds old.", age);
 ns.printf("My age in binary is %b.", age);
 ns.printf("My age in scientific notation is %e.", age);
 ns.printf("In %d seconds, I'll be %s.", 6, "Byte");
-ns.printf("Am I a nibble? %t", (4 == age));
+ns.printf("Am I a nibble? %t", (4 === age));
 ns.tail();
 ```
 

@@ -21,7 +21,7 @@ Object containing information for all the Limit and Stop Orders you have in the 
 
 RAM cost: 2.5 GB This is an object containing information for all the Limit and Stop Orders you have in the stock market. For each symbol you have a position in, the returned object will have a key with that symbol's name. The object's properties are each an array of [StockOrderObject](./bitburner.stockorderobject.md) The object has the following structure:
 
-```ts
+```js
 {
  string1: [ // Array of orders for this stock
      {
@@ -46,7 +46,7 @@ The “Order type” property can have one of the following four values: "Limit 
 ## Example
 
 
-```ts
+```js
 "If you do not have orders in Nova Medical (NVMD), then the returned object will not have a “NVMD” property."
 {
  ECP: [

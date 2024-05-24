@@ -33,7 +33,7 @@ RAM cost: 0 GB
 
 ```js
 // This will count from 1 to 10 in your terminal, with one number every 5 seconds
-for (var i = 1; i <= 10; i++) {
+for (let i = 1; i <= 10; ++i) {
   ns.tprint(i);
   await ns.sleep(5000);
 }

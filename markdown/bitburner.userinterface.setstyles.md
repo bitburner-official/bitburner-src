@@ -30,7 +30,7 @@ RAM cost: 0 GB
 
 Usage example (NS2)
 
-```ts
+```js
 const styles = ns.ui.getStyles();
 styles.fontFamily = 'Comic Sans Ms';
 ns.ui.setStyles(styles);

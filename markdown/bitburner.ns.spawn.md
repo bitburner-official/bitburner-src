@@ -39,6 +39,6 @@ Running this function with 0 or fewer threads will cause a runtime error.
 
 ```js
 //The following example will execute the script ‘foo.js’ with 10 threads, in 500 milliseconds and the arguments ‘foodnstuff’ and 90:
-ns.spawn('foo.js', {threads: 10, spawnDelay: 500}, 'foodnstuff', 90);
+ns.spawn("foo.js", {threads: 10, spawnDelay: 500}, "foodnstuff", 90);
 ```
 
