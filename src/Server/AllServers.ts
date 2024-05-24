@@ -152,9 +152,6 @@ export function initForeignServers(homeComputer: Server): void {
     const server = new Server(serverParams);
 
     if (metadata.networkLayer) {
-      //const maxCount = Math.floor((toNumber(metadata.networkLayer)+1) / 2);
-      //const minCount = Math.ceil(toNumber(metadata.networkLayer) / 4);
-      //const coreCount = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
       const layer = toNumber(metadata.networkLayer);
       server.cpuCores = getRandomIntInclusive(Math.ceil(layer / 2), layer);
     }
