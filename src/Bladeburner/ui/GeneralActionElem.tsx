@@ -8,6 +8,7 @@ import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFuncti
 import { Player } from "@player";
 import { CopyableText } from "../../ui/React/CopyableText";
 import { StartButton } from "./StartButton";
+import { StopButton } from "./StopButton";
 import { Box, Paper, Typography } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";
 
@@ -31,7 +32,10 @@ export function GeneralActionElem({ bladeburner, action }: GeneralActionElemProp
     <Paper sx={{ my: 1, p: 1 }}>
       {isActive ? (
         <>
-          <CopyableText value={action.name} />
+          <Box display="flex" flexDirection="row" alignItems="center">
+            <CopyableText value={action.name} />
+            <StopButton bladeburner={bladeburner} rerender={rerender} />
+          </Box>
           <Typography>
             (IN PROGRESS - {formatNumberNoSuffix(computedActionTimeCurrent, 0)} /{" "}
             {formatNumberNoSuffix(bladeburner.actionTimeToComplete, 0)})
