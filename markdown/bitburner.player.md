@@ -20,7 +20,7 @@ interface Player extends Person
 |  [factions](./bitburner.player.factions.md) |  | string\[\] |  |
 |  [jobs](./bitburner.player.jobs.md) |  | Partial&lt;Record&lt;[CompanyName](./bitburner.companyname.md)<!-- -->, [JobName](./bitburner.jobname.md)<!-- -->&gt;&gt; |  |
 |  [karma](./bitburner.player.karma.md) |  | number |  |
-|  [location](./bitburner.player.location.md) |  | string |  |
+|  [location](./bitburner.player.location.md) |  | [LocationName](./bitburner.locationname.md) |  |
 |  [money](./bitburner.player.money.md) |  | number |  |
 |  [numPeopleKilled](./bitburner.player.numpeoplekilled.md) |  | number |  |
 |  [totalPlaytime](./bitburner.player.totalplaytime.md) |  | number |  |

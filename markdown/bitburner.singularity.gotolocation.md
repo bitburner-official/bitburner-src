@@ -9,14 +9,14 @@ Go to a location.
 **Signature:**
 
 ```typescript
-goToLocation(locationName: string): boolean;
+goToLocation(locationName: LocationName | `${LocationName}`): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  locationName | string | Name of the location. |
+|  locationName | [LocationName](./bitburner.locationname.md) \| \`${[LocationName](./bitburner.locationname.md)<!-- -->}\` | Name of the location. |
 
 **Returns:**
 

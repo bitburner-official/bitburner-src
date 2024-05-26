@@ -10,7 +10,7 @@
 universityGains(
     person: Person,
     classType: UniversityClassType | `${UniversityClassType}`,
-    locationName: string,
+    locationName: LocationName | `${LocationName}`,
   ): WorkStats;
 ```
 
@@ -20,7 +20,7 @@ universityGains(
 |  --- | --- | --- |
 |  person | [Person](./bitburner.person.md) |  |
 |  classType | [UniversityClassType](./bitburner.universityclasstype.md) \| \`${[UniversityClassType](./bitburner.universityclasstype.md)<!-- -->}\` |  |
-|  locationName | string |  |
+|  locationName | [LocationName](./bitburner.locationname.md) \| \`${[LocationName](./bitburner.locationname.md)<!-- -->}\` |  |
 
 **Returns:**
 

@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-location: string;
+location: LocationName;
 ```
