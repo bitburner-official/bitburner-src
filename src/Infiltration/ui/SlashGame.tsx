@@ -70,15 +70,17 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
     <>
       <GameTimer millis={5000} onExpire={onFailure} ignoreAugment_WKSharmonizer />
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
-        <Typography variant="h4" textAlign="center">
-          Attack after the guard drops his guard and is distracted. Do not alert him!
+        <Typography variant="h5" textAlign="center">
+          Attack after the sentinel drops his guard and is distracted.
+          <br />
+          Do not alert him!
         </Typography>
-        <br></br>
+        <br />
         {hasAugment && (
           <Box sx={{ my: 1 }}>
-            <Typography variant="h5">The guard will drop his guard and be distracted in ...</Typography>
+            <Typography variant="h5">The sentinel will drop his guard and be distracted in ...</Typography>
             <GameTimer millis={guardingTime} onExpire={() => null} ignoreAugment_WKSharmonizer noPaper tick={20} />
-            <br></br>
+            <br />
           </Box>
         )}
 
