@@ -47,7 +47,7 @@ interface Player extends Person {
   jobs: Partial<Record<CompanyName, JobName>>;
   factions: string[];
   totalPlaytime: number;
-  location: string;
+  location: LocationName;
   karma: number;
 }
 
@@ -1611,7 +1611,7 @@ export interface StudyTask {
   type: "CLASS";
   cyclesWorked: number;
   classType: string;
-  location: string;
+  location: LocationName | `${LocationName}`;
 }
 /**
  * Company Work
@@ -2460,7 +2460,7 @@ export interface Singularity {
    * @param locationName - Name of the location.
    * @returns True if the player was moved there, false otherwise.
    */
-  goToLocation(locationName: string): boolean;
+  goToLocation(locationName: LocationName | `${LocationName}`): boolean;
 
   /**
    * Get the current server.
@@ -4657,12 +4657,12 @@ interface WorkFormulas {
   /** @returns The WorkStats gained when completing one instance of the specified crime. */
   crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by taking the specified gym class. */
-  gymGains(person: Person, gymType: GymType | `${GymType}`, locationName: string): WorkStats;
+  gymGains(person: Person, gymType: GymType | `${GymType}`, locationName: LocationName | `${LocationName}`): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by taking the specified university class. */
   universityGains(
     person: Person,
     classType: UniversityClassType | `${UniversityClassType}`,
-    locationName: string,
+    locationName: LocationName | `${LocationName}`,
   ): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified faction work. */
   factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
@@ -5179,7 +5179,7 @@ interface Infiltration {
    *
    * @returns Infiltration data for given location.
    */
-  getInfiltration(location: string): InfiltrationLocation;
+  getInfiltration(location: LocationName | `${LocationName}`): InfiltrationLocation;
 }
 
 /**
