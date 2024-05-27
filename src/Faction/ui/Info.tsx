@@ -17,6 +17,7 @@ import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import { useRerender } from "../../ui/React/hooks";
+import { calculateFavorAfterResetting } from "../formulas/favor";
 
 interface IProps {
   faction: Faction;
@@ -49,8 +50,6 @@ export function Info(props: IProps): React.ReactElement {
 
   const Assignment = props.factionInfo.assignment ?? DefaultAssignment;
 
-  const favorGain = props.faction.getFavorGain();
-
   return (
     <>
       <Typography classes={{ root: classes.noformat }}>{props.factionInfo.infoText}</Typography>
@@ -60,8 +59,9 @@ export function Info(props: IProps): React.ReactElement {
           title={
             <>
               <Typography>
-                You will have <Favor favor={Math.floor(props.faction.favor + favorGain)} /> faction favor after
-                installing an Augmentation.
+                You will have{" "}
+                <Favor favor={calculateFavorAfterResetting(props.faction.favor, props.faction.playerReputation)} />{" "}
+                faction favor after installing an Augmentation.
               </Typography>
               <MathJax>{"\\(\\huge{r = \\text{total faction reputation}}\\)"}</MathJax>
               <MathJax>

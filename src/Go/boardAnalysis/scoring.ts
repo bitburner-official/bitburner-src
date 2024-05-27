@@ -76,7 +76,7 @@ export function endGoGame(boardState: BoardState) {
       Player.factions.includes(factionName) &&
       statusToUpdate.favor < getMaxFavor()
     ) {
-      Factions[factionName].favor++;
+      Factions[factionName].gainFavor(1);
       statusToUpdate.favor++;
     }
   }
