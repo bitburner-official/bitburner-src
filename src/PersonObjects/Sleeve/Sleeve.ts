@@ -274,6 +274,9 @@ export class Sleeve extends Person implements SleevePerson {
     // Verify that this sleeve does not already have that augmentation.
     if (this.hasAugmentation(aug.name)) return false;
 
+    // Verify that the augmentation is available for purchase.
+    if (!this.findPurchasableAugs().includes(aug)) return false;
+
     Player.loseMoney(aug.baseCost, "sleeves");
     this.installAugmentation(aug);
     return true;
