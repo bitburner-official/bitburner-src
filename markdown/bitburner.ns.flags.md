@@ -49,19 +49,19 @@ export async function main(ns) {
   ns.tprint(data);
 }
 
-// [home ~/]> run example.js
+// [home /]> run example.js
 // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":false,"v":false}
-// [home ~/]> run example.js --delay 3000
+// [home /]> run example.js --delay 3000
 // {"_":[],"delay":3000,"server":"foodnstuff","exclude":[],"help":false,"v":false}
-// [home ~/]> run example.js --delay 3000 --server harakiri-sushi
+// [home /]> run example.js --delay 3000 --server harakiri-sushi
 // {"_":[],"delay":3000,"server":"harakiri-sushi","exclude":[],"help":false,"v":false}
-// [home ~/]> run example.js --delay 3000 --server harakiri-sushi hello world
+// [home /]> run example.js --delay 3000 --server harakiri-sushi hello world
 // {"_":["hello","world"],"delay":3000,"server":"harakiri-sushi","exclude":[],"help":false,"v":false}
-// [home ~/]> run example.js --delay 3000 --server harakiri-sushi hello world --exclude a --exclude b
+// [home /]> run example.js --delay 3000 --server harakiri-sushi hello world --exclude a --exclude b
 // {"_":["hello","world"],"delay":3000,"server":"harakiri-sushi","exclude":["a","b"],"help":false,"v":false}
-// [home ~/]> run example.js --help
+// [home /]> run example.js --help
 // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":true,"v":false}
-// [home ~/]> run example.js -v
+// [home /]> run example.js -v
 // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":false,"v":true}
 ```
 

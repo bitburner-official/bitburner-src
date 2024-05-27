@@ -126,7 +126,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>Let's try it out. Start by entering</Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> help"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> help"}</Typography>
           <Typography>(Don't forget to press Enter after typing the command)</Typography>
         </>
       ),
@@ -135,7 +135,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.TerminalLs as number]: {
       content: (
         <>
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> help"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> help"}</Typography>
           <Typography>
             displays a list of all available Terminal commands, how to use them, and a description of what they do.{" "}
             <br />
@@ -143,7 +143,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             Let's try another command. Enter
           </Typography>
 
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> ls"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
         </>
       ),
       canNext: false,
@@ -151,7 +151,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.TerminalScan as number]: {
       content: (
         <>
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> ls"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
           <Typography>
             {" "}
             is a basic command that shows files on the computer. Right now, it shows that you have a program called{" "}
@@ -160,7 +160,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             Using your home computer's terminal, you can connect to other machines throughout the world. Let's do that
             now by first entering
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> scan"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan"}</Typography>
         </>
       ),
       canNext: false,
@@ -168,7 +168,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.TerminalScanAnalyze1 as number]: {
       content: (
         <>
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> scan"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan"}</Typography>
           <Typography>
             shows all available network connections. In other words, it displays a list of all servers that can be
             connected to from your current machine. A server is identified by its hostname. <br />
@@ -176,7 +176,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             That's great and all, but there's so many servers. Which one should you go to?{" "}
           </Typography>
 
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> scan-analyze"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze"}</Typography>
           <Typography>gives some more detailed information about servers on the network. Try it now!</Typography>
         </>
       ),
@@ -185,7 +185,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     [iTutorialSteps.TerminalScanAnalyze2 as number]: {
       content: (
         <>
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> scan-analyze"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze"}</Typography>
           <Typography>
             shows more detailed information about each server that you can connect to (servers that are a distance of
             one node away). <br />
@@ -193,7 +193,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             following command:{" "}
           </Typography>
 
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> scan-analyze 2"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze 2"}</Typography>
         </>
       ),
       canNext: false,
@@ -206,17 +206,17 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             navigate to those servers through the network. You can only connect to a server that is one node away. To
             connect to a machine, use
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> connect hostname"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> connect hostname"}</Typography>
 
           <Typography>From the results of </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> scan-analyze 2"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> scan-analyze 2"}</Typography>
 
           <Typography>
             {" "}
             we can see that the n00dles server is only one node away. Let's connect to it now using:
           </Typography>
 
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> connect n00dles"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> connect n00dles"}</Typography>
         </>
       ),
       canNext: false,
@@ -233,7 +233,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             Before you try to hack a server, you should run diagnostics using{" "}
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles ~/]> analyze"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
         </>
       ),
       canNext: false,
@@ -242,7 +242,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>When </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles ~/]> analyze"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
 
           <Typography>
             finishes running it will show useful information about hacking the server. <br />
@@ -251,14 +251,14 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             on your home computer is a virus that will grant you root access to a machine if there are enough open
             ports.
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles ~/]> analyze"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> analyze"}</Typography>
 
           <Typography>
             {" "}
             shows that there do not need to be any open ports on this machine for the NUKE virus to work, so go ahead
             and run the virus using{" "}
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles ~/]> run NUKE.exe"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> run NUKE.exe"}</Typography>
 
           <Typography></Typography>
         </>
@@ -269,7 +269,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>You now have root access! You can hack the server using </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles ~/]> hack"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> hack"}</Typography>
 
           <Typography> Try doing that now.</Typography>
         </>
@@ -290,9 +290,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <br />
           The amount of money on a server is not limitless. So, if you constantly hack a server and deplete its money,
           then you will encounter diminishing returns in your hacking. You will need to use{" "}
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles ~/]> grow"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> grow"}</Typography>
           which tricks the company into adding money to their server and{" "}
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles ~/]> weaken"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> weaken"}</Typography>
           which increases the speed of hack and grow.
         </Typography>
       ),
@@ -302,7 +302,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       content: (
         <>
           <Typography>From any server you can get back home using</Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[n00dles ~/]> home"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[n00dles /]> home"}</Typography>
 
           <Typography>Let's head home before creating our first script!</Typography>
         </>
@@ -319,10 +319,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             To create a new script or edit an existing one, you can use{" "}
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> nano"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> nano"}</Typography>
 
           <Typography>Scripts must end with the .js extension. Let's make a script now by entering </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home ~/]> nano ${tutorialScriptName}`}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{`[home /]> nano ${tutorialScriptName}`}</Typography>
         </>
       ),
       canNext: false,
@@ -368,7 +368,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             To check how much RAM is available on this machine, enter
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{"[home ~/]> free"}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{"[home /]> free"}</Typography>
         </>
       ),
       canNext: false,
@@ -379,7 +379,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography>
             We have 8GB of free RAM on this machine, which is enough to run our script. Let's run our script using
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home ~/]> run ${tutorialScriptName}`}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{`[home /]> run ${tutorialScriptName}`}</Typography>
         </>
       ),
       canNext: false,
@@ -435,7 +435,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             One last thing about scripts, each active script contains logs that detail what it's doing. We can check
             these logs using the tail command. Do that now for the script we just ran by typing{" "}
           </Typography>
-          <Typography classes={{ root: classes.textfield }}>{`[home ~/]> tail ${tutorialScriptName}`}</Typography>
+          <Typography classes={{ root: classes.textfield }}>{`[home /]> tail ${tutorialScriptName}`}</Typography>
         </>
       ),
       canNext: false,
