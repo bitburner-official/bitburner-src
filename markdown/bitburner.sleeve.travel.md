@@ -4,7 +4,7 @@
 
 ## Sleeve.travel() method
 
-Make a sleeve travel to another city.
+Make a sleeve travel to another city. The cost for using this function is the same as for a player.
 
 **Signature:**
 
