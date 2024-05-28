@@ -56,7 +56,9 @@ export class Company {
   }
 
   /**
-   * Read comments on Faction.setFavor for more information.
+   * There is no setter for this.#favor. This is intentional. Performing arithmetic operations on `favor` may lead to
+   * the overflow error of `playerReputation`, so anything that wants to change `favor` must explicitly do that through
+   * `setFavor`.
    *
    * @param value
    */
@@ -66,10 +68,6 @@ export class Company {
       return;
     }
     this.#favor = clampNumber(value, 0, MaxFavor);
-  }
-
-  gainFavor(value: number) {
-    this.setFavor(this.favor + value);
   }
 
   hasPosition(pos: CompanyPosition | JobName): boolean {

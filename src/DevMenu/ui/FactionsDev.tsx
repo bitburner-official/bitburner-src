@@ -87,7 +87,7 @@ export function FactionsDev(): React.ReactElement {
   function modifyFactionFavor(modifier: number): (x: number) => void {
     return function (favor: number): void {
       if (!isNaN(favor)) {
-        selectedFaction.gainFavor(favor * modifier);
+        selectedFaction.setFavor(selectedFaction.favor + favor * modifier);
       }
     };
   }

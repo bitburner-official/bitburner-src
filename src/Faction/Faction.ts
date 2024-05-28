@@ -42,15 +42,7 @@ export class Faction {
   /**
    * There is no setter for this.#favor. This is intentional. Performing arithmetic operations on `favor` may lead to
    * the overflow error of `playerReputation`, so anything that wants to change `favor` must explicitly do that through
-   * `setFavor` and `gainFavor`.
-   *
-   * Only use this function in these cases:
-   * - Initialize favor = 0.
-   * - Set value returned from calculateFavorAfterResetting function.
-   * - Load value from save data.
-   * - Dev menu.
-   *
-   * If you want to increase the favor, you must use the `gainFavor` function.
+   * `setFavor`.
    *
    * @param value
    */
@@ -60,10 +52,6 @@ export class Faction {
       return;
     }
     this.#favor = clampNumber(value, 0, MaxFavor);
-  }
-
-  gainFavor(value: number) {
-    this.setFavor(this.favor + value);
   }
 
   getInfo(): FactionInfo {

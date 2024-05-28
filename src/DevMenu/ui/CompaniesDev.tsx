@@ -41,7 +41,7 @@ export function CompaniesDev(): React.ReactElement {
     return function (favor: number): void {
       const company = Companies[companyName];
       if (!isNaN(favor)) {
-        company.gainFavor(favor * modifier);
+        company.setFavor(company.favor + favor * modifier);
       }
     };
   }

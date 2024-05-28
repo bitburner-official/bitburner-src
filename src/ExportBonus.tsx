@@ -12,7 +12,7 @@ export function canGetBonus(): boolean {
 export function onExport(): void {
   if (!canGetBonus()) return;
   for (const facName of Player.factions) {
-    Factions[facName].gainFavor(1);
+    Factions[facName].setFavor(Factions[facName].favor + 1);
   }
   LastExportBonus = new Date().getTime();
 }

@@ -570,7 +570,7 @@ export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 
           console.error(`Invalid target specified in purchaseHashUpgrade(): ${upgTarget}`);
           throw new Error(`'${upgTarget}' is not a company.`);
         }
-        Companies[upgTarget].gainFavor(5 * count);
+        Companies[upgTarget].setFavor(Companies[upgTarget].favor + 5 * count);
         break;
       }
       default:
