@@ -385,14 +385,14 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
               return testRelativeAgain(ns)
           }
         `;
-      const libOneScript = new Script(libNameOne, libCodeOne);
+      const libScriptOne = new Script(libNameOne, libCodeOne);
 
       const libCodeTwo = `
           export function testRelativeAgain(ns) {
               return ns.hack("n00dles")
           }
         `;
-      const libTwoScript = new Script(libNameTwo, libCodeTwo);
+      const libScriptTwo = new Script(libNameTwo, libCodeTwo);
 
       const code = `
           import { testRelative } from "./libTestOne";
@@ -405,8 +405,8 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
         code,
         folderFilename,
         new Map([
-          [libNameOne, libOneScript],
-          [libNameTwo, libTwoScript],
+          [libNameOne, libScriptOne],
+          [libNameTwo, libScriptTwo],
         ]),
         server,
       ).cost;
@@ -437,7 +437,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
               return ns.grow("n00dles")
           }
         `;
-      const libScriptThree = new Script(fail_libNameTwo, fail_libCodeTwo);
+      const fail_libScriptTwo = new Script(fail_libNameTwo, fail_libCodeTwo);
 
       const code = `
           import { testRelative } from "foo/libTestOne";
@@ -452,7 +452,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
         new Map([
           [libNameOne, libScriptOne],
           [libNameTwo, libScriptTwo],
-          [fail_libNameTwo, libScriptThree],
+          [fail_libNameTwo, fail_libScriptTwo],
         ]),
         server,
       ).cost;
