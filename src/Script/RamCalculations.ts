@@ -14,6 +14,7 @@ import { RamCosts, RamCostConstants } from "../Netscript/RamCostGenerator";
 import { Script } from "./Script";
 import { Node } from "../NetscriptJSEvaluator";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
+import { ServerName } from "../Types/strings";
 
 export interface RamUsageEntry {
   type: "ns" | "dom" | "fn" | "misc";
@@ -57,12 +58,13 @@ function getNumericCost(cost: number | (() => number)): number {
  * @param otherScripts - All other scripts on the server. Used to account for imported scripts
  * @param code - The code being parsed
  * @param scriptname - The name of the script that ram needs to be added to
+ * @param server - Servername of the scripts for Error Message
  * */
-
 function parseOnlyRamCalculate(
   otherScripts: Map<ScriptFilePath, Script>,
   code: string,
   scriptname: ScriptFilePath,
+  server: ServerName,
   ns1?: boolean,
 ): RamCalculation {
   /**
@@ -83,8 +85,8 @@ function parseOnlyRamCalculate(
   // Scripts we've discovered that need to be parsed.
   const parseQueue: ScriptFilePath[] = [];
   // Parses a chunk of code with a given module name, and updates parseQueue and dependencyMap.
-  function parseCode(code: string, moduleName: string, filename: ScriptFilePath): void {
-    const result = parseOnlyCalculateDeps(code, moduleName, filename, ns1);
+  function parseCode(code: string, moduleName: ScriptFilePath): void {
+    const result = parseOnlyCalculateDeps(code, moduleName, ns1);
     completedParses.add(moduleName);
 
     // Add any additional modules to the parse queue;
@@ -99,8 +101,8 @@ function parseOnlyRamCalculate(
   }
 
   // Parse the initial module, which is the "main" script that is being run
-  const initialModule = "__SPECIAL_INITIAL_MODULE__";
-  parseCode(code, initialModule, scriptname);
+  const initialModule = scriptname;
+  parseCode(code, initialModule);
 
   // Process additional modules, which occurs if the "main" script has any imports
   while (parseQueue.length > 0) {
@@ -108,23 +110,19 @@ function parseOnlyRamCalculate(
     if (nextModule === undefined) throw new Error("nextModule should not be undefined");
     if (nextModule.startsWith("https://") || nextModule.startsWith("http://")) continue;
 
-    // Using root as the path base right now. Difficult to implement
-    if (!nextModule) {
-      return { errorCode: RamCalculationErrorCode.ImportError, errorMessage: `Invalid import path: "${nextModule}"` };
-    }
     const script = otherScripts.get(nextModule);
     if (!script) {
       return {
         errorCode: RamCalculationErrorCode.ImportError,
-        errorMessage: `No such file on server: "${nextModule}"`,
+        errorMessage: `File:"${nextModule}" not found on server: ${server}`,
       };
     }
 
-    parseCode(script.code, nextModule, nextModule);
+    parseCode(script.code, nextModule);
   }
 
   // Finally, walk the reference map and generate a ram cost. The initial set of keys to scan
-  // are those that start with __SPECIAL_INITIAL_MODULE__.
+  // are those that start with the name of the main script.
   let ram = RamCostConstants.Base;
   const detailedCosts: RamUsageEntry[] = [{ type: "misc", name: "baseCost", cost: RamCostConstants.Base }];
   const unresolvedRefs = Object.keys(dependencyMap).filter((s) => s.startsWith(initialModule));
@@ -268,12 +266,7 @@ interface ParseDepsResult {
  * for RAM usage calculations. It also returns an array of additional modules
  * that need to be parsed (i.e. are 'import'ed scripts).
  */
-function parseOnlyCalculateDeps(
-  code: string,
-  currentModule: string,
-  currentscript: ScriptFilePath,
-  ns1?: boolean,
-): ParseDepsResult {
+function parseOnlyCalculateDeps(code: string, currentModule: ScriptFilePath, ns1?: boolean): ParseDepsResult {
   const ast = parse(code, { sourceType: "module", ecmaVersion: "latest" });
   // Everything from the global scope goes in ".". Everything else goes in ".function", where only
   // the outermost layer of functions counts.
@@ -352,11 +345,12 @@ function parseOnlyCalculateDeps(
     Object.assign(
       {
         ImportDeclaration: (node: Node, st: State) => {
-          const importModuleName = resolveScriptFilePath(node.source.value, currentscript, ns1 ? ".script" : ".js");
+          const importModuleName = resolveScriptFilePath(node.source.value, currentModule, ns1 ? ".script" : ".js");
           if (!importModuleName)
             throw new Error(
-              `ScriptFilePath couldnt be resolved in ImportDeclaration. Value: ${node.source.value}  ScriptFilePath: ${currentscript}`,
+              `ScriptFilePath couldnt be resolved in ImportDeclaration. Value: ${node.source.value}  ScriptFilePath: ${currentModule}`,
             );
+
           additionalModules.push(importModuleName);
 
           // This module's global scope refers to that module's global scope, no matter how we
@@ -418,15 +412,18 @@ function parseOnlyCalculateDeps(
  * @param {ScriptFilePath} scriptname - The script's name. Used to resolve relative paths
  * @param {Script[]} otherScripts - All other scripts on the server.
  *                                  Used to account for imported scripts
+ * @param {ServerName} server - Servername of the scripts for Error Message
+ * @param {boolean} ns1 - Deprecated: is the fileExtension .script or .js
  */
 export function calculateRamUsage(
   code: string,
   scriptname: ScriptFilePath,
   otherScripts: Map<ScriptFilePath, Script>,
+  server: ServerName,
   ns1?: boolean,
 ): RamCalculation {
   try {
-    return parseOnlyRamCalculate(otherScripts, code, scriptname, ns1);
+    return parseOnlyRamCalculate(otherScripts, code, scriptname, server, ns1);
   } catch (e) {
     return {
       errorCode: RamCalculationErrorCode.SyntaxError,

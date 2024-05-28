@@ -44,7 +44,7 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
       setRamEntries([["N/A", ""]]);
       return;
     }
-    const ramUsage = calculateRamUsage(newCode, scriptname, server.scripts);
+    const ramUsage = calculateRamUsage(newCode, scriptname, server.scripts, server.hostname);
     if (ramUsage.cost && ramUsage.cost > 0) {
       const entries = ramUsage.entries?.sort((a, b) => b.cost - a.cost) ?? [];
       const entriesDisp = [];
