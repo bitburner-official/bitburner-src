@@ -9,6 +9,7 @@ import { calculateRamUsage } from "../../../src/Script/RamCalculations";
 import { ns } from "../../../src/NetscriptFunctions";
 import { InternalAPI } from "src/Netscript/APIWrapper";
 import { Singularity } from "@nsdefs";
+import { ScriptFilePath } from "src/Paths/ScriptFilePath";
 
 type PotentiallyAsyncFunction = (arg?: unknown) => { catch?: PotentiallyAsyncFunction };
 
@@ -71,13 +72,15 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     extraLayerCost = 0,
   ) {
     const code = `${fnPath.join(".")}();\n`.repeat(3);
+    const filename = "testfile.js" as ScriptFilePath;
     const fnName = fnPath[fnPath.length - 1];
+    const server = "testserver";
 
     //check imported getRamCost fn vs. expected ram from test
     expect(getRamCost(fnPath, true)).toEqual(expectedRamCost);
 
     // Static ram check
-    const staticCost = calculateRamUsage(code, new Map()).cost;
+    const staticCost = calculateRamUsage(code, filename, new Map(), server).cost;
     expect(staticCost).toBeCloseTo(Math.min(baseCost + expectedRamCost + extraLayerCost, maxCost));
 
     // reset workerScript for dynamic check
