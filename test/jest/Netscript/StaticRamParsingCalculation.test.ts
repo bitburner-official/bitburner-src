@@ -12,6 +12,7 @@ const HacknetCost = 4;
 const MaxCost = 1024;
 
 const filename = "testfile.js" as ScriptFilePath;
+const folderFilename = "test/testfile.js" as ScriptFilePath;
 const server = "testserver";
 describe("Parsing NetScript code to work out static RAM costs", function () {
   jest.spyOn(console, "error").mockImplementation(() => {});
@@ -350,6 +351,112 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
         server,
       ).cost;
       expectCost(calculated, GrowCost);
+    });
+
+    it("Importing with a relative path - One Layer Deep", async function () {
+      const libCode = `
+          export async function testRelative(ns) {
+              await ns.hack("n00dles")
+          }
+        `;
+      const lib = new Script("test/libTest.js" as ScriptFilePath, libCode);
+      const code = `
+          import { testRelative } from "./libTest";
+
+          export async function main(ns) {
+            await testRelative(ns)
+          }
+        `;
+      const calculated = calculateRamUsage(
+        code,
+        folderFilename,
+        new Map([["test/libTest.js" as ScriptFilePath, lib]]),
+        server,
+      ).cost;
+      expectCost(calculated, HackCost);
+    });
+    it("Importing with a relative path - Two Layer Deep", async function () {
+      const libNameOne = "test/libTestOne.js" as ScriptFilePath;
+      const libNameTwo = "test/libTestTwo.js" as ScriptFilePath;
+
+      const libCodeOne = `
+          import { testRelativeAgain } from "./libTestTwo";
+          export function testRelative(ns) {
+              return testRelativeAgain(ns)
+          }
+        `;
+      const libOneScript = new Script(libNameOne, libCodeOne);
+
+      const libCodeTwo = `
+          export function testRelativeAgain(ns) {
+              return ns.hack("n00dles")
+          }
+        `;
+      const libTwoScript = new Script(libNameTwo, libCodeTwo);
+
+      const code = `
+          import { testRelative } from "./libTestOne";
+
+          export async function main(ns) {
+            await testRelative(ns)
+          }
+        `;
+      const calculated = calculateRamUsage(
+        code,
+        folderFilename,
+        new Map([
+          [libNameOne, libOneScript],
+          [libNameTwo, libTwoScript],
+        ]),
+        server,
+      ).cost;
+      expectCost(calculated, HackCost);
+    });
+    it("Importing with a relative path - possible path conflict", async function () {
+      const libNameOne = "foo/libTestOne.js" as ScriptFilePath;
+      const libNameTwo = "foo/libTestTwo.js" as ScriptFilePath;
+      const fail_libNameTwo = "test/libTestTwo.js" as ScriptFilePath;
+
+      const libCodeOne = `
+          import { testRelativeAgain } from "./libTestTwo";
+          export function testRelative(ns) {
+              return testRelativeAgain(ns)
+          }
+        `;
+      const libScriptOne = new Script(libNameOne, libCodeOne);
+
+      const libCodeTwo = `
+          export function testRelativeAgain(ns) {
+              return ns.hack("n00dles")
+          }
+        `;
+      const libScriptTwo = new Script(libNameTwo, libCodeTwo);
+
+      const fail_libCodeTwo = `
+          export function testRelativeAgain(ns) {
+              return ns.grow("n00dles")
+          }
+        `;
+      const libScriptThree = new Script(fail_libNameTwo, fail_libCodeTwo);
+
+      const code = `
+          import { testRelative } from "foo/libTestOne";
+
+          export async function main(ns) {
+            await testRelative(ns)
+          }
+        `;
+      const calculated = calculateRamUsage(
+        code,
+        folderFilename,
+        new Map([
+          [libNameOne, libScriptOne],
+          [libNameTwo, libScriptTwo],
+          [fail_libNameTwo, libScriptThree],
+        ]),
+        server,
+      ).cost;
+      expectCost(calculated, HackCost);
     });
   });
 });
