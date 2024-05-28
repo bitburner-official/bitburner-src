@@ -9,8 +9,7 @@ import { BaseServer } from "../../Server/BaseServer";
 
 import { Options } from "./Options";
 import { FilePath } from "../../Paths/FilePath";
-import { resolveScriptFilePath } from "../../Paths/ScriptFilePath";
-import { root } from "../../Paths/Directory";
+import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 
 export interface ScriptEditorContextShape {
   ram: string;
@@ -32,19 +31,12 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
   const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
 
   const updateRAM: ScriptEditorContextShape["updateRAM"] = (newCode, filename, server) => {
-    if (newCode === null || filename === null || server === null) {
+    if (newCode === null || filename === null || server === null || !hasScriptExtension(filename)) {
       setRAM("N/A");
       setRamEntries([["N/A", ""]]);
       return;
     }
-    //temp duplication to turn FilePath into ScriptFilePath
-    const scriptname = resolveScriptFilePath(filename, root, ".js");
-    if (!scriptname) {
-      setRAM("N/A");
-      setRamEntries([["N/A", ""]]);
-      return;
-    }
-    const ramUsage = calculateRamUsage(newCode, scriptname, server.scripts, server.hostname);
+    const ramUsage = calculateRamUsage(newCode, filename, server.scripts, server.hostname);
     if (ramUsage.cost && ramUsage.cost > 0) {
       const entries = ramUsage.entries?.sort((a, b) => b.cost - a.cost) ?? [];
       const entriesDisp = [];

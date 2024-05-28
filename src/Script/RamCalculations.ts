@@ -70,7 +70,7 @@ function parseOnlyRamCalculate(
   /**
    * Maps dependent identifiers to their dependencies.
    *
-   * The initial identifier is __SPECIAL_INITIAL_MODULE__.__GLOBAL__.
+   * The initial identifier is <name of the main script>.__GLOBAL__.
    * It depends on all the functions declared in the module, all the global scopes
    * of its imports, and any identifiers referenced in this global scope. Each
    * function depends on all the identifiers referenced internally.
