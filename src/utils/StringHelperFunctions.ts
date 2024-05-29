@@ -60,7 +60,6 @@ function longestCommonStart(strings: string[]): string {
   }
 
   const a1: string = strings[0];
-  const areEqualCaseInsensitive = (a: string, b: string) => a.toUpperCase() === b.toUpperCase();
   for (let i = 0; i < a1.length; ++i) {
     const chr = a1.charAt(i).toUpperCase();
     for (let s = 1; s < strings.length; ++s) {
