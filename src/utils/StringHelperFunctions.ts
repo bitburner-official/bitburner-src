@@ -59,14 +59,15 @@ function longestCommonStart(strings: string[]): string {
     return "";
   }
 
-  const A: string[] = strings.concat().sort();
-  const a1: string = A[0];
-  const a2: string = A[A.length - 1];
-  const L: number = a1.length;
-  let i = 0;
+  const a1: string = strings[0];
   const areEqualCaseInsensitive = (a: string, b: string) => a.toUpperCase() === b.toUpperCase();
-  while (i < L && areEqualCaseInsensitive(a1.charAt(i), a2.charAt(i))) {
-    i++;
+  let i;
+  c: for (i = 0; i < a1.length; ++i) {
+    for (let s = 1; s < strings.length; ++s) {
+      if (!areEqualCaseInsensitive(a1.charAt(i), strings[s].charAt(i))) {
+        break c;
+      }
+    }
   }
 
   return a1.substring(0, i);
