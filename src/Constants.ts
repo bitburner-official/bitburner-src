@@ -24,7 +24,6 @@ export const CONSTANTS: {
   IntelligenceCrimeBaseExpGain: number;
   IntelligenceProgramBaseExpGain: number;
   IntelligenceGraftBaseExpGain: number;
-  IntelligenceTerminalHackBaseExpGain: number;
   IntelligenceSingFnBaseExpGain: number;
   MillisecondsPer20Hours: number;
   GameCyclesPer20Hours: number;
@@ -101,7 +100,6 @@ export const CONSTANTS: {
   IntelligenceCrimeBaseExpGain: 0.05,
   IntelligenceProgramBaseExpGain: 0.1, // Program required hack level divided by this to determine int exp gain
   IntelligenceGraftBaseExpGain: 0.05,
-  IntelligenceTerminalHackBaseExpGain: 200, // Hacking exp divided by this to determine int exp gain
   IntelligenceSingFnBaseExpGain: 1.5,
 
   // Time-related constants
