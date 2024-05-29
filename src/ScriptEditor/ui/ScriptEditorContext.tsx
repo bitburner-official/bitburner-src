@@ -31,7 +31,7 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
   const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
 
   const updateRAM: ScriptEditorContextShape["updateRAM"] = (newCode, filename, server) => {
-    if (newCode === null || filename === null || server === null || !hasScriptExtension(filename)) {
+    if (newCode == null || filename == null || server == null || !hasScriptExtension(filename)) {
       setRAM("N/A");
       setRamEntries([["N/A", ""]]);
       return;

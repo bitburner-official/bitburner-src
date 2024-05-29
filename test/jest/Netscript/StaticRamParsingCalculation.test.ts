@@ -415,7 +415,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
     it("Importing with a relative path - possible path conflict", async function () {
       const libNameOne = "foo/libTestOne.js" as ScriptFilePath;
       const libNameTwo = "foo/libTestTwo.js" as ScriptFilePath;
-      const fail_libNameTwo = "test/libTestTwo.js" as ScriptFilePath;
+      const incorrect_libNameTwo = "test/libTestTwo.js" as ScriptFilePath;
 
       const libCodeOne = `
           import { testRelativeAgain } from "./libTestTwo";
@@ -432,12 +432,12 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
         `;
       const libScriptTwo = new Script(libNameTwo, libCodeTwo);
 
-      const fail_libCodeTwo = `
+      const incorrect_libCodeTwo = `
           export function testRelativeAgain(ns) {
               return ns.grow("n00dles")
           }
         `;
-      const fail_libScriptTwo = new Script(fail_libNameTwo, fail_libCodeTwo);
+      const incorrect_libScriptTwo = new Script(incorrect_libNameTwo, incorrect_libCodeTwo);
 
       const code = `
           import { testRelative } from "foo/libTestOne";
@@ -452,7 +452,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
         new Map([
           [libNameOne, libScriptOne],
           [libNameTwo, libScriptTwo],
-          [fail_libNameTwo, fail_libScriptTwo],
+          [incorrect_libNameTwo, incorrect_libScriptTwo],
         ]),
         server,
       ).cost;

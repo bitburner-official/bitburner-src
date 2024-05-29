@@ -143,7 +143,7 @@ function Root(props: IProps): React.ReactElement {
     infLoop(newCode);
     updateRAM(
       !currentScript || currentScript.isTxt ? null : newCode,
-      currentScript?.path ?? null,
+      currentScript && currentScript.path,
       currentScript && GetServer(currentScript.hostname),
     );
     finishUpdatingRAM();
