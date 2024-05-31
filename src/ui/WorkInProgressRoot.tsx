@@ -305,7 +305,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       ),
 
       progress: {
-        remaining: rate, //create.cyclesWorked * CONSTANTS.MilliPerCycle,
+        remaining: rate,
         percentage: completion,
       },
 
@@ -335,7 +335,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       ),
 
       progress: {
-        remaining: rate, //graftWork.cyclesWorked * CONSTANTS.MilliPerCycle,
+        remaining: rate,
         percentage: (graftWork.unitCompleted / graftWork.unitNeeded()) * 100,
       },
 
