@@ -1,7 +1,6 @@
 import { Typography } from "@mui/material";
 import React from "react";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import { makeStyles } from "tss-react/mui";
 import { Theme } from "@mui/material/styles";
 import { Settings } from "../../Settings/Settings";
 
@@ -10,45 +9,43 @@ import { Settings } from "../../Settings/Settings";
 // eslint-disable-next-line no-control-regex
 const ANSI_ESCAPE = new RegExp("\u{001b}\\[(?<code>.*?)m", "ug");
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    success: {
-      whiteSpace: "pre-wrap",
-      overflowWrap: "anywhere",
-      margin: theme.spacing(0),
-      color: theme.colors.success,
-      "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
-    },
-    error: {
-      whiteSpace: "pre-wrap",
-      overflowWrap: "anywhere",
-      margin: theme.spacing(0),
-      color: theme.palette.error.main,
-      "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
-    },
-    primary: {
-      whiteSpace: "pre-wrap",
-      overflowWrap: "anywhere",
-      margin: theme.spacing(0),
-      color: theme.palette.primary.main,
-      "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
-    },
-    info: {
-      whiteSpace: "pre-wrap",
-      overflowWrap: "anywhere",
-      margin: theme.spacing(0),
-      color: theme.palette.info.main,
-      "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
-    },
-    warning: {
-      whiteSpace: "pre-wrap",
-      overflowWrap: "anywhere",
-      margin: theme.spacing(0),
-      color: theme.palette.warning.main,
-      "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
-    },
-  }),
-);
+const useStyles = makeStyles()((theme: Theme) => ({
+  success: {
+    whiteSpace: "pre-wrap",
+    overflowWrap: "anywhere",
+    margin: theme.spacing(0),
+    color: theme.colors.success,
+    "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
+  },
+  error: {
+    whiteSpace: "pre-wrap",
+    overflowWrap: "anywhere",
+    margin: theme.spacing(0),
+    color: theme.palette.error.main,
+    "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
+  },
+  primary: {
+    whiteSpace: "pre-wrap",
+    overflowWrap: "anywhere",
+    margin: theme.spacing(0),
+    color: theme.palette.primary.main,
+    "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
+  },
+  info: {
+    whiteSpace: "pre-wrap",
+    overflowWrap: "anywhere",
+    margin: theme.spacing(0),
+    color: theme.palette.info.main,
+    "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
+  },
+  warning: {
+    whiteSpace: "pre-wrap",
+    overflowWrap: "anywhere",
+    margin: theme.spacing(0),
+    color: theme.palette.warning.main,
+    "--padForFlushBg": (Settings.styles.lineHeight - 1) / 2 + "em",
+  },
+}));
 
 const lineClass = (classes: Record<string, string>, s: string): string => {
   const lineClassMap: Record<string, string> = {
@@ -67,7 +64,7 @@ type ANSIITypographyProps = {
 
 export const ANSIITypography = React.memo(function ANSIITypography(props: ANSIITypographyProps): React.ReactElement {
   const text = String(props.text);
-  const classes = useStyles();
+  const { classes } = useStyles();
   const parts = [];
 
   // Build a look-alike regex match to place at the front of the matches list

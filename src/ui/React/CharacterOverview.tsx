@@ -6,8 +6,7 @@ import { Box, Button, IconButton, Table, TableBody, TableCell, TableRow, Tooltip
 import SaveIcon from "@mui/icons-material/Save";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import { Theme, useTheme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import { makeStyles } from "tss-react/mui";
 
 import { Player } from "@player";
 import { formatHp, formatMoney, formatSkill } from "../formatNumber";
@@ -129,7 +128,7 @@ interface DataRowProps {
   cellType: "cellNone" | "cell";
 }
 export function DataRow({ name, showBar, color, cellType }: DataRowProps): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const isSkill = name in skillNameMap;
   const skillBar = showBar && isSkill ? <SkillBar name={name as SkillRowName} color={color} /> : <></>;
   return (
@@ -171,7 +170,7 @@ export function CharacterOverview({ parentOpen, save, killScripts }: OverviewPro
     }, 600);
     return () => clearInterval(interval);
   }, [parentOpen]);
-  const classes = useStyles();
+  const { classes } = useStyles();
   const theme = useTheme();
   return (
     <>
@@ -243,7 +242,7 @@ function ActionText({ action }: { action: ActionIdentifier }): React.ReactElemen
 }
 
 function BladeburnerText(): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const rerender = useRerender();
   useEffect(() => {
     const clearSubscription = OverviewEventEmitter.subscribe(rerender);
@@ -284,7 +283,7 @@ const onClickFocusWork = (): void => {
   Router.toPage(Page.Work);
 };
 function WorkInProgressOverview({ tooltip, children, header }: WorkInProgressOverviewProps): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <>
       <TableRow>
@@ -409,52 +408,50 @@ function Work(): React.ReactElement {
   );
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    workCell: {
-      textAlign: "center",
-      maxWidth: "200px",
-      borderBottom: "none",
-      padding: 0,
-      margin: 0,
-    },
+const useStyles = makeStyles()((theme: Theme) => ({
+  workCell: {
+    textAlign: "center",
+    maxWidth: "200px",
+    borderBottom: "none",
+    padding: 0,
+    margin: 0,
+  },
 
-    workHeader: {
-      fontSize: "0.9rem",
-    },
+  workHeader: {
+    fontSize: "0.9rem",
+  },
 
-    workSubtitles: {
-      fontSize: "0.8rem",
-    },
+  workSubtitles: {
+    fontSize: "0.8rem",
+  },
 
-    cellNone: {
-      borderBottom: "none",
-      padding: 0,
-      margin: 0,
-    },
-    cell: {
-      padding: 0,
-      margin: 0,
-    },
-    hp: {
-      color: theme.colors.hp,
-    },
-    money: {
-      color: theme.colors.money,
-    },
-    hack: {
-      color: theme.colors.hack,
-    },
-    combat: {
-      color: theme.colors.combat,
-    },
-    cha: {
-      color: theme.colors.cha,
-    },
-    int: {
-      color: theme.colors.int,
-    },
-  }),
-);
+  cellNone: {
+    borderBottom: "none",
+    padding: 0,
+    margin: 0,
+  },
+  cell: {
+    padding: 0,
+    margin: 0,
+  },
+  hp: {
+    color: theme.colors.hp,
+  },
+  money: {
+    color: theme.colors.money,
+  },
+  hack: {
+    color: theme.colors.hack,
+  },
+  combat: {
+    color: theme.colors.combat,
+  },
+  cha: {
+    color: theme.colors.cha,
+  },
+  int: {
+    color: theme.colors.int,
+  },
+}));
 
 export { useStyles };

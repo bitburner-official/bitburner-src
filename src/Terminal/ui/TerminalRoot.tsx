@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link as MuiLink, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import { makeStyles } from "tss-react/mui";
 import _ from "lodash";
 
 import { Output, Link, RawOutput } from "../OutputTypes";
@@ -16,27 +15,25 @@ import { ANSIITypography } from "../../ui/React/ANSIITypography";
 import { useRerender } from "../../ui/React/hooks";
 import { TerminalActionTimer } from "./TerminalActionTimer";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      display: "flex",
-      flexDirection: "column",
-      height: "calc(100vh - 16px)",
-    },
-    entries: {
-      padding: 0,
-      overflow: "scroll",
-      flex: "0 1 auto",
-      margin: "auto 0 0",
-    },
-    preformatted: {
-      whiteSpace: "pre-wrap",
-      overflowWrap: "anywhere",
-      margin: theme.spacing(0),
-      width: "100%",
-    },
-  }),
-);
+const useStyles = makeStyles()((theme: Theme) => ({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    height: "calc(100vh - 16px)",
+  },
+  entries: {
+    padding: 0,
+    overflow: "scroll",
+    flex: "0 1 auto",
+    margin: "auto 0 0",
+  },
+  preformatted: {
+    whiteSpace: "pre-wrap",
+    overflowWrap: "anywhere",
+    margin: theme.spacing(0),
+    width: "100%",
+  },
+}));
 
 export function TerminalRoot(): React.ReactElement {
   const scrollHook = useRef<HTMLUListElement>(null);
@@ -82,7 +79,7 @@ export function TerminalRoot(): React.ReactElement {
     };
   }, []);
 
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <div className={classes.container}>
       <ul key={key} id="terminal" className={classes.entries} ref={scrollHook}>

@@ -33,7 +33,7 @@ interface IProps {
 }
 
 export function StatsElement(props: IProps): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   return (
     <Table sx={{ display: "table", mb: 1, width: "100%" }}>
@@ -109,7 +109,7 @@ export function StatsElement(props: IProps): React.ReactElement {
 }
 
 export function EarningsElement(props: IProps): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   let data: (string | JSX.Element)[][] = [];
   if (isSleeveCrimeWork(props.sleeve.currentWork)) {

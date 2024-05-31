@@ -20,7 +20,7 @@ interface GoPointProps {
 }
 
 export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwner }: GoPointProps): React.ReactElement {
-  const classes = pointStyle();
+  const { classes } = pointStyle();
 
   const currentPoint = state.board[x]?.[y];
   const player = currentPoint?.color;

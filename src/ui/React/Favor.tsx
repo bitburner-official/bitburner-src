@@ -1,18 +1,15 @@
 import * as React from "react";
 import { formatFavor } from "../formatNumber";
 import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import { makeStyles } from "tss-react/mui";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    favor: {
-      color: theme.colors.rep,
-    },
-  }),
-);
+const useStyles = makeStyles()((theme: Theme) => ({
+  favor: {
+    color: theme.colors.rep,
+  },
+}));
 
 export function Favor({ favor }: { favor: number | string }): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return <span className={classes.favor}>{typeof favor === "number" ? formatFavor(favor) : favor}</span>;
 }

@@ -70,7 +70,7 @@ const makeTwoEyesChallenge = (
 );
 
 export const GoInstructionsPage = (): React.ReactElement => {
-  const classes = boardStyles();
+  const { classes } = boardStyles();
   return (
     <div className={classes.instructionScroller}>
       <>

@@ -8,8 +8,6 @@ import Paper from "@mui/material/Paper";
 import Draggable, { DraggableEvent } from "react-draggable";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
 import IconButton from "@mui/material/IconButton";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -25,7 +23,7 @@ import { Settings } from "../../Settings/Settings";
 import { ANSIITypography } from "./ANSIITypography";
 import { useRerender } from "./hooks";
 import { dialogBoxCreate } from "./DialogBox";
-
+import { makeStyles } from "tss-react/mui";
 let layerCounter = 0;
 
 export const LogBoxEvents = new EventEmitter<[RunningScript]>();
@@ -143,33 +141,31 @@ interface LogWindowProps {
   hidden: boolean;
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    logs: {
-      overflowY: "scroll",
-      overflowX: "hidden",
-      scrollbarWidth: "auto",
-      flexDirection: "column-reverse",
-      whiteSpace: "pre-wrap",
-      wordWrap: "break-word",
-    },
-    titleButton: {
-      borderWidth: "0 0 0 1px",
-      borderColor: Settings.theme.welllight,
-      borderStyle: "solid",
-      borderRadius: "0",
-      padding: "0",
-      height: "100%",
-    },
-  }),
-);
+const useStyles = makeStyles()({
+  logs: {
+    overflowY: "scroll",
+    overflowX: "hidden",
+    scrollbarWidth: "auto",
+    flexDirection: "column-reverse",
+    whiteSpace: "pre-wrap",
+    wordWrap: "break-word",
+  },
+  titleButton: {
+    borderWidth: "0 0 0 1px",
+    borderColor: Settings.theme.welllight,
+    borderStyle: "solid",
+    borderRadius: "0",
+    padding: "0",
+    height: "100%",
+  },
+});
 
 export const logBoxBaseZIndex = 1500;
 
 function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElement {
   const draggableRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<Draggable>(null);
-  const classes = useStyles();
+  const { classes } = useStyles();
   const container = useRef<HTMLDivElement>(null);
   const textArea = useRef<HTMLDivElement>(null);
   const rerender = useRerender(Settings.TailRenderInterval);

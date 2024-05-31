@@ -14,8 +14,7 @@ import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import StorageIcon from "@mui/icons-material/Storage";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import { makeStyles } from "tss-react/mui";
 
 import {
   iTutorialPrevStep,
@@ -31,20 +30,18 @@ interface IContent {
   canNext: boolean;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    textfield: {
-      borderBottom: "1px solid " + theme.palette.primary.main,
-    },
-    code: {
-      whiteSpace: "pre",
-      backgroundColor: theme.palette.background.paper,
-    },
-  }),
-);
+const useStyles = makeStyles()((theme: Theme) => ({
+  textfield: {
+    borderBottom: "1px solid " + theme.palette.primary.main,
+  },
+  code: {
+    whiteSpace: "pre",
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
 
 export function InteractiveTutorialRoot(): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const rerender = useRerender();
 
   const tutorialScriptName = `n00dles.js`;
