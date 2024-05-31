@@ -64,8 +64,8 @@ export class CreateProgramWork extends Work {
     skillMult *= focusBonus;
     //Skill multiplier directly applied to "time worked"
     this.cyclesWorked += cycles;
-    this.unitCompleted += CONSTANTS.MilliPerCycle * cycles * skillMult;
     this.unitRate = CONSTANTS.MilliPerCycle * cycles * skillMult;
+    this.unitCompleted += this.unitRate;
 
     if (this.unitCompleted >= this.unitNeeded()) {
       return true;
