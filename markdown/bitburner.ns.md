@@ -143,6 +143,7 @@ export async function main(ns) {
 |  [prompt(txt, options)](./bitburner.ns.prompt.md) | Prompt the player with an input modal. |
 |  [ps(host)](./bitburner.ns.ps.md) | List running scripts on a server. |
 |  [purchaseServer(hostname, ram)](./bitburner.ns.purchaseserver.md) | Purchase a server. |
+|  [ramOverride(ram)](./bitburner.ns.ramoverride.md) | Change the current static RAM allocation of the script. |
 |  [read(filename)](./bitburner.ns.read.md) | Read content of a file. |
 |  [readPort(portNumber)](./bitburner.ns.readport.md) | Read data from a port. |
 |  [relaysmtp(host)](./bitburner.ns.relaysmtp.md) | Runs relaySMTP.exe on a server. |

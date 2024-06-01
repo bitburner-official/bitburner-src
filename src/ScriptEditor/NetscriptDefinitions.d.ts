@@ -212,6 +212,16 @@ interface ReactElement {
 interface RunningScript {
   /** Arguments the script was called with */
   args: ScriptArg[];
+  /**
+   * The dynamic RAM usage of (one thread of) this script instance.
+   * Does not affect overall RAM consumption (ramUsage is for that), but
+   * rather shows how much of the reserved RAM is currently in use via all the
+   * ns functions the script has called. Initially 1.6GB, this increases as
+   * new functions are called.
+   *
+   * Only set for scripts that are still running.
+   */
+  dynamicRamUsage: number | undefined;
   /** Filename of the script */
   filename: string;
   /**
@@ -233,7 +243,11 @@ interface RunningScript {
   onlineRunningTime: number;
   /** Process ID. Must be an integer */
   pid: number;
-  /** How much RAM this script uses for ONE thread */
+  /**
+   * How much RAM this script uses for ONE thread.
+   * Also known as "static RAM usage," this value does not change once the
+   * script is started, unless you call ns.ramOverride().
+   */
   ramUsage: number;
   /** Hostname of the server on which this script runs */
   server: string;
@@ -6691,6 +6705,25 @@ export interface NS {
    * @returns The info about the running script if found, and null otherwise.
    */
   getRunningScript(filename?: FilenameOrPID, hostname?: string, ...args: ScriptArg[]): RunningScript | null;
+
+  /**
+   * Change the current static RAM allocation of the script.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This acts analagously to the ramOverride parameter in runOptions, but for changing RAM in
+   * the current running script. The static RAM allocation (the amount of RAM used by ONE thread)
+   * will be adjusted to the given value, if possible. This can fail if the number is less than the
+   * current dynamic RAM limit, or if adjusting upward would require more RAM than is available on
+   * the server.
+   *
+   * RAM usage will be rounded to the nearest hundredth of a GB, which is the granularity of all RAM calculations.
+   *
+   * @param ram - The new RAM limit to set.
+   * @returns The new static RAM limit, which will be the old one if it wasn't changed.
+   * This means you can use no parameters to check the current ram limit.
+   */
+  ramOverride(ram?: number): number;
 
   /**
    * Get cost of purchasing a server.

@@ -1,5 +1,6 @@
 import type { NetscriptContext } from "./APIWrapper";
 import type { RunningScript as IRunningScript, Person as IPerson, Server as IServer, ScriptArg } from "@nsdefs";
+import type { WorkerScript } from "./WorkerScript";
 
 import React from "react";
 import { killWorkerScript } from "./killWorkerScript";
@@ -16,6 +17,7 @@ import {
 } from "../Hacking";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
+import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { influenceStockThroughServerHack } from "../StockMarket/PlayerInfluencing";
@@ -331,6 +333,9 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
   ws.dynamicRamUsage = Math.min(ws.dynamicRamUsage + ramCost, RamCostConstants.Max);
   // This constant is just a handful of ULPs, and gives protection against
   // rounding issues without exposing rounding exploits in ramUsage.
+  // Most RAM calculations are guarded with roundToTwo(), but we use direct
+  // addition and this multiplication here for speed, since dynamic RAM
+  // checking is a speed-critical component.
   if (ws.dynamicRamUsage > 1.00000000000001 * ws.scriptRef.ramUsage) {
     log(ctx, () => "Insufficient static ram available.");
     const functionsUsed = Object.keys(ws.dynamicLoadedFns).join(", ");
@@ -666,10 +671,11 @@ function getCannotFindRunningScriptErrorMessage(ident: ScriptIdentifier): string
  * @param runningScript Existing, internal RunningScript
  * @returns A sanitized, NS-facing copy of the RunningScript
  */
-function createPublicRunningScript(runningScript: RunningScript): IRunningScript {
+function createPublicRunningScript(runningScript: RunningScript, workerScript?: WorkerScript): IRunningScript {
   const logProps = runningScript.tailProps;
   return {
     args: runningScript.args.slice(),
+    dynamicRamUsage: workerScript && roundToTwo(workerScript.dynamicRamUsage),
     filename: runningScript.filename,
     logs: runningScript.logs.map((x) => "" + x),
     offlineExpGained: runningScript.offlineExpGained,

@@ -63,6 +63,7 @@ import {
   formatNumber,
 } from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
+import { roundToTwo } from "./utils/helpers/roundToTwo";
 import { LogBoxEvents, LogBoxCloserEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { NetscriptGang } from "./NetscriptFunctions/Gang";
@@ -1465,8 +1466,31 @@ export const ns: InternalAPI<NSFull> = {
       const ident = helpers.scriptIdentifier(ctx, fn, hostname, args);
       const runningScript = helpers.getRunningScript(ctx, ident);
       if (runningScript === null) return null;
-      return helpers.createPublicRunningScript(runningScript);
+      return helpers.createPublicRunningScript(runningScript, ctx.workerScript);
     },
+  ramOverride: (ctx) => (_ram) => {
+    const newRam = roundToTwo(helpers.number(ctx, "ram", _ram || 0));
+    const rs = ctx.workerScript.scriptRef;
+    const server = ctx.workerScript.getServer();
+    if (newRam < roundToTwo(ctx.workerScript.dynamicRamUsage)) {
+      // Impossibly small, return immediately.
+      return rs.ramUsage;
+    }
+    const newServerRamUsed = roundToTwo(server.ramUsed + (newRam - rs.ramUsage) * rs.threads);
+    if (newServerRamUsed >= server.maxRam) {
+      // Can't allocate more RAM.
+      return rs.ramUsage;
+    }
+    if (newServerRamUsed <= 0) {
+      throw helpers.errorMessage(
+        ctx,
+        `Game error: Calculated impossible new server ramUsed ${newServerRamUsed} from new limit of ${_ram}`,
+      );
+    }
+    server.updateRamUsed(newServerRamUsed);
+    rs.ramUsage = newRam;
+    return rs.ramUsage;
+  },
   getHackTime:
     (ctx) =>
     (_hostname = ctx.workerScript.hostname) => {
