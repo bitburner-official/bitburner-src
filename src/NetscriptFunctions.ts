@@ -737,23 +737,36 @@ export const ns: InternalAPI<NSFull> = {
       const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
       const runOpts = helpers.spawnOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
-      setTimeout(() => {
+      const spawnCb = () => {
         if (Router.page() === Page.BitVerse) {
           helpers.log(ctx, () => `Script execution is canceled because you are in Bitverse.`);
           return;
         }
         const scriptServer = GetServer(ctx.workerScript.hostname);
-        if (scriptServer === null) {
+        if (scriptServer == null) {
           throw helpers.errorMessage(ctx, `Cannot find server ${ctx.workerScript.hostname}`);
         }
 
-        runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
-      }, runOpts.spawnDelay);
+        return runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
+      };
 
-      helpers.log(ctx, () => `Will execute '${path}' in ${runOpts.spawnDelay} milliseconds`);
+      if (runOpts.spawnDelay !== 0) {
+        setTimeout(spawnCb, runOpts.spawnDelay);
+        helpers.log(ctx, () => `Will execute '${path}' in ${runOpts.spawnDelay} milliseconds`);
+      }
 
-      if (killWorkerScript(ctx.workerScript)) {
-        helpers.log(ctx, () => "Exiting...");
+      helpers.log(ctx, () => "About to exit...");
+      const killed = killWorkerScript(ctx.workerScript);
+
+      if (runOpts.spawnDelay === 0) {
+        helpers.log(ctx, () => `Executing '${path}' immediately`);
+        spawnCb();
+      }
+
+      if (killed) {
+        // This prevents error messages about statements after the spawn()
+        // trying to be executed when the script is dead.
+        throw new ScriptDeath(ctx.workerScript);
       }
     },
   kill:

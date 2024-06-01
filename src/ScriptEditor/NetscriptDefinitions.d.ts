@@ -283,7 +283,10 @@ interface RunOptions {
 
 /** @public */
 interface SpawnOptions extends RunOptions {
-  /** Number of milliseconds to delay before spawning script, defaults to 10000 (10s). Must be a positive integer. */
+  /**
+   * Number of milliseconds to delay before spawning script, defaults to 10000 (10s).
+   * Must be a non-negative integer. If 0, the script will be spawned synchronously.
+   */
   spawnDelay?: number;
 }
 
@@ -6260,6 +6263,9 @@ export interface NS {
    * newly-specified script. The purpose of this function is to execute a new script without being
    * constrained by the RAM usage of the current one. This function can only be used to run scripts
    * on the local server.
+   *
+   * The delay specified can be 0; in this case the new script will synchronously replace
+   * the old one. (There will not be any opportunity for other scripts to use up the RAM in-between.)
    *
    * Because this function immediately terminates the script, it does not have a return value.
    *
