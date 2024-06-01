@@ -6,16 +6,15 @@ import { makeStyles } from "tss-react/mui";
 import { EventEmitter } from "../../utils/EventEmitter";
 import Alert from "@mui/material/Alert";
 import Paper from "@mui/material/Paper";
-import { logBoxBaseZIndex } from "./LogBoxManager";
+import { logBoxBaseZIndex } from "./Constants";
 
 interface IProps {
   children: React.ReactNode | React.ReactNode[];
 }
-
 const useStyles = makeStyles()({
   snackbar: {
     // Log popup z-index increments, so let's add a padding to be well above them.
-    zIndex: `${logBoxBaseZIndex + 1000} !important` as any,
+    zIndex: `${logBoxBaseZIndex} !important` as any,
 
     "& .MuiAlert-icon": {
       alignSelf: "center",

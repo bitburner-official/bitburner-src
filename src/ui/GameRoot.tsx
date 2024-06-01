@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "tss-react/mui";
 import { Box, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
+import { makeStyles } from "tss-react/mui";
 
 import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
@@ -115,8 +115,6 @@ function determineStartPage() {
 }
 
 export function GameRoot(): React.ReactElement {
-  // eslint-disable-next-line no-debugger
-  debugger;
   const { classes } = useStyles();
 
   const [pages, setPages] = useState<PageWithContext[]>(() => [{ page: determineStartPage() }]);

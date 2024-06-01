@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { EventEmitter } from "../../utils/EventEmitter";
 import { RunningScript } from "../../Script/RunningScript";
 import { killWorkerScriptByPid } from "../../Netscript/killWorkerScript";
+
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+
 import Draggable, { DraggableEvent } from "react-draggable";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
 import IconButton from "@mui/material/IconButton";
@@ -24,6 +26,7 @@ import { ANSIITypography } from "./ANSIITypography";
 import { useRerender } from "./hooks";
 import { dialogBoxCreate } from "./DialogBox";
 import { makeStyles } from "tss-react/mui";
+import { logBoxBaseZIndex } from "./Constants";
 let layerCounter = 0;
 
 export const LogBoxEvents = new EventEmitter<[RunningScript]>();
@@ -159,8 +162,6 @@ const useStyles = makeStyles()({
     height: "100%",
   },
 });
-
-export const logBoxBaseZIndex = 1500;
 
 function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElement {
   const draggableRef = useRef<HTMLDivElement>(null);
