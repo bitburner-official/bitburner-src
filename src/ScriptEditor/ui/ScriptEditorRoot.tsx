@@ -35,7 +35,6 @@ interface IProps {
   // Map of filename -> code
   files: Map<ContentFilePath, string>;
   hostname: string;
-  vim: boolean;
 }
 const openScripts: OpenScript[] = [];
 let currentScript: OpenScript | null = null;
@@ -422,7 +421,7 @@ function Root(props: IProps): React.ReactElement {
 // Called every time script editor is opened
 export function ScriptEditorRoot(props: IProps) {
   return (
-    <ScriptEditorContextProvider vim={props.vim}>
+    <ScriptEditorContextProvider>
       <Root {...props} />
     </ScriptEditorContextProvider>
   );

@@ -1,17 +1,14 @@
 import React from "react";
 import { Theme } from "@mui/material/styles";
 
-import { hasTextExtension, type TextFilePath } from "../../Paths/TextFilePath";
+import { type TextFilePath } from "../../Paths/TextFilePath";
 import type { ContractFilePath } from "../../Paths/ContractFilePath";
 import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
-import type { ContentFilePath } from "../../Paths/ContentFile";
 import type { ScriptFilePath } from "../../Paths/ScriptFilePath";
 
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import { BaseServer } from "../../Server/BaseServer";
-import { Router } from "../../ui/GameRoot";
-import { Page } from "../../ui/Router";
 import { Terminal } from "../../Terminal";
 import libarg from "arg";
 import { showLiterature } from "../../Literature/LiteratureHelpers";
@@ -25,6 +22,7 @@ import {
   root,
 } from "../../Paths/Directory";
 import { isMember } from "../../utils/EnumHelper";
+import { commonEditor } from "./common/editor";
 
 export function ls(args: (string | number | boolean)[], server: BaseServer): void {
   interface LSFlags {
@@ -134,16 +132,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     )();
     const fullPath = combinePath(baseDirectory, props.path);
     function onClick() {
-      let content;
-      if (hasTextExtension(fullPath)) {
-        content = server.textFiles.get(fullPath)?.content ?? "";
-      } else {
-        content = server.scripts.get(fullPath)?.content ?? "";
-      }
-      const files = new Map<ContentFilePath, string>();
-      const options = { hostname: server.hostname };
-      files.set(fullPath, content);
-      Router.toPage(Page.ScriptEditor, { files, options });
+      commonEditor("ls", { args: [fullPath], server }, { hostname: server.hostname });
     }
     return (
       <span>

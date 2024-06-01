@@ -24,7 +24,7 @@ export interface ScriptEditorContextShape {
 
 const ScriptEditorContext = React.createContext({} as ScriptEditorContextShape);
 
-export function ScriptEditorContextProvider({ children, vim }: { children: React.ReactNode; vim: boolean }) {
+export function ScriptEditorContextProvider({ children }: { children: React.ReactNode }) {
   const [ram, setRAM] = useState("RAM: ???");
   const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
 
@@ -75,12 +75,15 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
     fontSize: Settings.MonacoFontSize,
     fontLigatures: Settings.MonacoFontLigatures,
     wordWrap: Settings.MonacoWordWrap,
-    vim: vim || Settings.MonacoVim,
+    vim: Settings.MonacoVim,
     cursorStyle: Settings.MonacoCursorStyle,
     cursorBlinking: Settings.MonacoCursorBlinking,
   });
 
+  console.log("Context Vim", options.vim, Settings.MonacoVim);
+
   function saveOptions(options: Options) {
+    console.log("Saving Vim", options.vim, Settings.MonacoVim);
     setOptions(options);
     Settings.MonacoTheme = options.theme;
     Settings.MonacoInsertSpaces = options.insertSpaces;

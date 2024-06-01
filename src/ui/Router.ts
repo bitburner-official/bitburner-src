@@ -89,7 +89,6 @@ export type PageWithContext =
   | { page: SimplePage };
 
 export interface ScriptEditorRouteOptions {
-  vim?: boolean;
   hostname?: string;
 }
 
