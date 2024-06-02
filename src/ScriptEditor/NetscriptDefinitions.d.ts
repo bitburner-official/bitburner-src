@@ -270,7 +270,8 @@ interface RunOptions {
    * You can also use this to <i>increase</i> the RAM if the static RAM checker has missed functions
    * that you need to call.
    *
-   * Must be greater-or-equal to the base RAM cost. Defaults to the statically calculated cost.
+   * Must be greater-or-equal to the base RAM cost. Will be rounded to the nearest hundredth-of-a-GB,
+   * which is the granularity of all RAM calculations. Defaults to the statically calculated cost.
    */
   ramOverride?: number;
   /**

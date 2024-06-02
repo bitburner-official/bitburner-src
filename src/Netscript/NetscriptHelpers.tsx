@@ -28,6 +28,7 @@ import { toNative } from "../NetscriptFunctions/toNative";
 import { ScriptIdentifier } from "./ScriptIdentifier";
 import { findRunningScripts, findRunningScriptByPid } from "../Script/ScriptHelpers";
 import { arrayToString } from "../utils/helpers/ArrayHelpers";
+import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { RamCostConstants } from "./RamCostGenerator";
@@ -180,6 +181,9 @@ function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRun
         `RunOptions.ramOverride must be >= baseCost (${RamCostConstants.Base}), was ${result.ramOverride}`,
       );
     }
+    // It is important that all RAM calculations operate in hundredths-of-a-GB,
+    // otherwise we can get inconsistent rounding results.
+    result.ramOverride = roundToTwo(result.ramOverride);
   }
   return result;
 }
@@ -329,6 +333,7 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
   // rounding issues without exposing rounding exploits in ramUsage.
   if (ws.dynamicRamUsage > 1.00000000000001 * ws.scriptRef.ramUsage) {
     log(ctx, () => "Insufficient static ram available.");
+    const functionsUsed = Object.keys(ws.dynamicLoadedFns).join(", ");
     const err = errorMessage(
       ctx,
       `Dynamic RAM usage calculated to be greater than RAM allocation.
@@ -337,6 +342,7 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
       Threads: ${ws.scriptRef.threads}
       Dynamic RAM Usage: ${formatRam(ws.dynamicRamUsage)} per thread
       RAM Allocation: ${formatRam(ws.scriptRef.ramUsage)} per thread
+      Functions in-use: [${functionsUsed}]
 
       One of these could be the reason:
       * Using eval() to get a reference to a ns function
