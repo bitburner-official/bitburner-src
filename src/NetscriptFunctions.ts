@@ -108,6 +108,7 @@ import { getEnumHelper } from "./utils/EnumHelper";
 import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
 import { ServerConstants } from "./Server/data/Constants";
 import { assertFunction } from "./Netscript/TypeAssertion";
+import { NetscriptMyrian } from "./NetscriptFunctions/Myrian";
 
 export const enums: NSEnums = {
   CityName,
@@ -135,6 +136,7 @@ export const ns: InternalAPI<NSFull> = {
   sleeve: NetscriptSleeve(),
   corporation: NetscriptCorporation(),
   stanek: NetscriptStanek(),
+  myrian: NetscriptMyrian(),
   infiltration: NetscriptInfiltration(),
   ui: NetscriptUserInterface(),
   formulas: NetscriptFormulas(),

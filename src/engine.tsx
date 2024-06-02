@@ -360,31 +360,33 @@ const Engine: {
 
       Player.lastUpdate = Engine._lastUpdate;
       Engine.start(); // Run main game loop and Scripts loop
-      const timeOfflineString = convertTimeMsToTimeElapsedString(time);
-      setTimeout(
-        () =>
-          AlertEvents.emit(
-            <>
-              <Typography>Offline for {timeOfflineString}. While you were offline:</Typography>
-              <ul>
-                <li>
-                  <Typography>
-                    Your scripts generated <Money money={offlineHackingIncome} />
-                  </Typography>
-                </li>
-                <li>
-                  <Typography>Your Hacknet Nodes generated {hacknetProdInfo}</Typography>
-                </li>
-                <li>
-                  <Typography>
-                    You gained <Reputation reputation={offlineReputation} /> reputation divided amongst your factions
-                  </Typography>
-                </li>
-              </ul>
-            </>,
-          ),
-        250,
-      );
+      if (process.env.NODE_ENV !== "development") {
+        const timeOfflineString = convertTimeMsToTimeElapsedString(time);
+        setTimeout(
+          () =>
+            AlertEvents.emit(
+              <>
+                <Typography>Offline for {timeOfflineString}. While you were offline:</Typography>
+                <ul>
+                  <li>
+                    <Typography>
+                      Your scripts generated <Money money={offlineHackingIncome} />
+                    </Typography>
+                  </li>
+                  <li>
+                    <Typography>Your Hacknet Nodes generated {hacknetProdInfo}</Typography>
+                  </li>
+                  <li>
+                    <Typography>
+                      You gained <Reputation reputation={offlineReputation} /> reputation divided amongst your factions
+                    </Typography>
+                  </li>
+                </ul>
+              </>,
+            ),
+          250,
+        );
+      }
     } else {
       // No save found, start new game
       FormatsNeedToChange.emit();

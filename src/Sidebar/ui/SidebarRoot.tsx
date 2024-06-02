@@ -34,6 +34,7 @@ import CheckIcon from "@mui/icons-material/Check"; // Milestones
 import HelpIcon from "@mui/icons-material/Help"; // Tutorial
 import SettingsIcon from "@mui/icons-material/Settings"; // options
 import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard"; // Dev
+import SettingsInputComponentIcon from "@mui/icons-material/SettingsInputComponent"; // Myrian
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"; // Achievements
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PublicIcon from "@mui/icons-material/Public";
@@ -351,6 +352,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canCorporation && { key_: Page.Corporation, icon: BusinessIcon },
             canGang && { key_: Page.Gang, icon: SportsMmaIcon },
             canIPvGO && { key_: Page.Go, icon: BorderInnerSharp },
+            Player.myrianConnection && { key_: Page.MyrianOS, icon: SettingsInputComponentIcon },
           ]}
         />
         <Divider />

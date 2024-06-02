@@ -68,6 +68,7 @@ export class PlayerObject extends Person implements IPlayer {
   lastUpdate = 0;
   lastSave = 0;
   totalPlaytime = 0;
+  myrianConnection = false;
 
   currentWork: Work | null = null;
   focus = false;
@@ -129,6 +130,7 @@ export class PlayerObject extends Person implements IPlayer {
   checkForFactionInvitations = generalMethods.checkForFactionInvitations;
   setBitNodeNumber = generalMethods.setBitNodeNumber;
   canAccessCotMG = generalMethods.canAccessCotMG;
+  canAccessMyrian = generalMethods.canAccessMyrian;
   sourceFileLvl = generalMethods.sourceFileLvl;
   applyEntropy = augmentationMethods.applyEntropy;
   focusPenalty = generalMethods.focusPenalty;

@@ -114,6 +114,9 @@ export class BitNodeMultipliers {
    */
   ManualHackMoney = 1;
 
+  /** Influence how strongly Myrian improves bitnode multipliers */
+  MyrianPower = 1;
+
   /** Influence how much it costs to purchase a server */
   PurchasedServerCost = 1;
 

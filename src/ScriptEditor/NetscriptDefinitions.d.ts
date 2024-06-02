@@ -5162,6 +5162,447 @@ interface Stanek {
   acceptGift(): boolean;
 }
 
+// declare enum DeviceType {
+//   Bus = "bus",
+//   ISocket = "isocket",
+//   OSocket = "osocket",
+//   Reducer = "reducer",
+//   Cache = "cache",
+//   Lock = "lock",
+//   Battery = "battery",
+// }
+
+// declare enum Component {
+//   // tier 0
+//   R0 = "r0",
+//   G0 = "g0",
+//   B0 = "b0",
+
+//   // tier 1
+//   R1 = "r1",
+//   G1 = "g1",
+//   B1 = "b1",
+
+//   Y1 = "y1",
+//   C1 = "c1",
+//   M1 = "m1",
+
+//   // tier 2
+//   R2 = "r2",
+//   G2 = "g2",
+//   B2 = "b2",
+
+//   Y2 = "y2",
+//   C2 = "c2",
+//   M2 = "m2",
+
+//   W2 = "w2",
+
+//   // tier 3
+//   R3 = "r3",
+//   G3 = "g3",
+//   B3 = "b3",
+
+//   Y3 = "y3",
+//   C3 = "c3",
+//   M3 = "m3",
+
+//   W3 = "w3",
+
+//   // tier 4
+//   R4 = "r4",
+//   G4 = "g4",
+//   B4 = "b4",
+
+//   Y4 = "y4",
+//   C4 = "c4",
+//   M4 = "m4",
+
+//   W4 = "w4",
+
+//   // tier 5
+//   R5 = "r5",
+//   G5 = "g5",
+//   B5 = "b5",
+
+//   Y5 = "y5",
+//   C5 = "c5",
+//   M5 = "m5",
+
+//   W5 = "w5",
+
+//   // tier 6
+//   Y6 = "y6",
+//   C6 = "c6",
+//   M6 = "m6",
+
+//   W6 = "w6",
+
+//   // tier 7
+//   W7 = "w7",
+// }
+
+// declare enum Glitch {
+//   // Locks spawn at random
+//   Segmentation = "segmentation",
+//   // ISockets and OSockets move around on their own
+//   Roaming = "roaming",
+//   // OSocket ask for more complicated components
+//   Encryption = "encryption",
+//   // Energy starts being consumed (level 0 is no consumption)
+//   Magnetism = "magnetism",
+//   // Hidden tiles on the board, when stepped on the bus loses upgrades
+//   Rust = "rust",
+//   // Move slows down
+//   Friction = "friction",
+//   // Transfer components and charging slows down
+//   Isolation = "isolation",
+//   // Install/Uninstall slows down
+//   Virtualization = "virtualization",
+//   // Reduce slows down
+//   Jamming = "jamming",
+// }
+
+export interface BaseDevice {
+  name: string;
+  type: DeviceType;
+  x: number;
+  y: number;
+  isBusy: boolean;
+}
+
+export interface Bus extends ContainerDevice, EnergyDevice {
+  type: DeviceType.Bus;
+  moveLvl: number;
+  transferLvl: number;
+  reduceLvl: number;
+  installLvl: number;
+}
+
+export interface EnergyDevice extends BaseDevice {
+  energy: number;
+  maxEnergy: number;
+}
+
+export interface TieredDevice extends BaseDevice {
+  tier: number;
+}
+
+export interface ContainerDevice extends BaseDevice {
+  content: Component[];
+  maxContent: number;
+}
+
+export interface ISocket extends ContainerDevice {
+  type: DeviceType.ISocket;
+  emitting: Component;
+  emissionLvl: number;
+  cooldownUntil: number;
+}
+
+export interface OSocket extends ContainerDevice {
+  type: DeviceType.OSocket;
+  currentRequest: Component[];
+}
+
+export interface Cache extends ContainerDevice {
+  type: DeviceType.Cache;
+}
+
+export interface Reducer extends ContainerDevice, TieredDevice {
+  type: DeviceType.Reducer;
+}
+
+export interface Lock extends BaseDevice {
+  type: DeviceType.Lock;
+}
+
+export interface Battery extends EnergyDevice, TieredDevice {
+  type: DeviceType.Battery;
+}
+
+export interface Recipe {
+  input: Component[];
+  output: Component;
+}
+
+export type DeviceID = string | [number, number];
+
+export type Device = Bus | ISocket | OSocket | Reducer | Cache | Lock | Battery;
+
+interface Myrian {
+  /**
+   * Give yourself some vulns, for testing.
+   * @param n amount of vulns to give
+   */
+  DEBUG_GIVE_VULNS(n: number): void;
+  /**
+   * Completely reset the myrian os, for debug purposes
+   * @remarks
+   * RAM cost: 0 GB
+   */
+  DEUBG_RESET(): void;
+
+  /**
+   * Get device
+   * @remarks
+   * RAM cost: 0GB
+   * @returns device with this ID
+   */
+  getDevice(device: DeviceID): Device | undefined;
+
+  /**
+   * Get all devices
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns all devices
+   */
+  getDevices(): Device[];
+
+  /**
+   * get number of vulnerabilities available
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns number of vulnerabilities available
+   */
+  getVulns(): number;
+
+  /**
+   * Move a bus
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns true if the move succeeded, false otherwise.
+   */
+  moveBus(bus: DeviceID, coord: [number, number]): Promise<boolean>;
+
+  /**
+   * Delete the entire content of a device, typically used for debugging.
+   * @returns true if the formatting succeeded, false otherwise.
+   */
+  formatContent(device: DeviceID): boolean;
+
+  /**
+   * Transfer components between devices, one of them must be a bus.
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns true if the transfer succeeded, false otherwise.
+   */
+  transfer(from: DeviceID, to: DeviceID, input: Component[], output?: Component[]): Promise<boolean>;
+
+  /**
+   * Make a bus use a reducer in order to produce an component.
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns true if the crafting succeeded, false otherwise.
+   */
+  reduce(bus: DeviceID, reducer: DeviceID): Promise<boolean>;
+
+  /**
+   * Change the component that an isocket emits.
+   * @param component tier 0 component that the isocket should emit
+   * @returns true if the tweak succeeded, false otherwise.
+   */
+  tweakISocket(bus: DeviceID, isocket: DeviceID, component: Component): Promise<boolean>;
+
+  /**
+   * Charge a bus with a battery, restoring it's energy.
+   * @returns positive number for the amount of energy transfered, -1 on failure.
+   */
+  energize(bus: DeviceID, battery: DeviceID): Promise<number>;
+
+  /**
+   * Get the cost of a device.
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns cost of the next device of that type
+   */
+  getDeviceCost(type: DeviceType): number;
+
+  /**
+   * Make a bus install a new device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns true if the installation succeeded, false otherwise.
+   */
+  installDevice(bus: DeviceID, name: string, coord: [number, number], deviceType: DeviceType): Promise<boolean>;
+
+  /**
+   * Make a bus uninstall a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns true if the uninstallation succeeded, false otherwise.
+   */
+  uninstallDevice(bus: DeviceID, coord: [number, number]): Promise<boolean>;
+
+  /**
+   * Rename a device, no 2 entity can have the same name
+   * @returns true if the rename succeeded, false otherwise.
+   */
+  renameDevice(device: DeviceID, name: string): boolean;
+
+  /**
+   * Upgrade the max content of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns true if the upgrade succeeded, false otherwise.
+   */
+  upgradeMaxContent(device: DeviceID): boolean;
+
+  /**
+   * Get the cost of upgrading the content of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns cost of upgrading the content of a device, -1 on failure.
+   */
+  getUpgradeMaxContentCost(device: DeviceID): number;
+
+  /**
+   * Upgrade the tier of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns true if the upgrade succeeded, false otherwise.
+   */
+  upgradeTier(device: DeviceID): boolean;
+
+  /**
+   * Get the cost of upgrading the tier of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns cost of upgrading the tier of a device, -1 on failure.
+   */
+  getUpgradeTierCost(device: DeviceID): number;
+
+  /**
+   * Get the cost of upgrading the emission of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns cost of upgrading the emission of a device, -1 on failure.
+   */
+  getUpgradeEmissionLvlCost(device: DeviceID): number;
+
+  /**
+   * Upgrade the emissionLvl of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns true if the upgrade succeeded, false otherwise.
+   */
+  upgradeEmissionLvl(device: DeviceID): boolean;
+
+  /**
+   * Get the cost of upgrading the moveLvl of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns cost of upgrading the moveLvl of a device, -1 on failure.
+   */
+  getUpgradeMoveLvlCost(device: DeviceID): number;
+
+  /**
+   * Upgrade the moveLvl of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns true if the upgrade succeeded, false otherwise.
+   */
+  upgradeMoveLvl(device: DeviceID): boolean;
+
+  /**
+   * Get the cost of upgrading the transferLvl of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns cost of upgrading the transferLvl of a device, -1 on failure.
+   */
+  getUpgradeTransferLvlCost(device: DeviceID): number;
+
+  /**
+   * Upgrade the moveLvl of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns true if the upgrade succeeded, false otherwise.
+   */
+  upgradeTransferLvl(device: DeviceID): boolean;
+
+  /**
+   * Get the cost of upgrading the reduceLvl of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns cost of upgrading the reduceLvl of a device, -1 on failure.
+   */
+  getUpgradeReduceLvlCost(device: DeviceID): number;
+
+  /**
+   * Upgrade the reduceLvl of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns true if the upgrade succeeded, false otherwise.
+   */
+  upgradeReduceLvl(device: DeviceID): boolean;
+
+  /**
+   * Get the cost of upgrading the installLvl of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns cost of upgrading the installLvl of a device, -1 on failure.
+   */
+  getUpgradeInstallLvlCost(device: DeviceID): number;
+
+  /**
+   * Upgrade the installLvl of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns true if the upgrade succeeded, false otherwise.
+   */
+  upgradeInstallLvl(device: DeviceID): boolean;
+
+  /**
+   * Get the cost of upgrading the maxEnergy of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns cost of upgrading the maxEnergy of a device, -1 on failure.
+   */
+  getUpgradeMaxEnergyCost(device: DeviceID): number;
+
+  /**
+   * Upgrade the maxEnergy of a device
+   * @remarks
+   * RAM cost: 0 GB
+   * @returns true if the upgrade succeeded, false otherwise.
+   */
+  upgradeMaxEnergy(device: DeviceID): boolean;
+
+  /**
+   * Set the lvl of a glitch
+   * @param glitch name of the glitch
+   * @param lvl new lvl of the glitch
+   */
+  setGlitchLvl(glitch: Glitch, lvl: number): Promise<void>;
+
+  /**
+   * Get the lvl of a glitch
+   * @param glitch name of the glitch
+   * @returns current lvl of the glitch
+   */
+  getGlitchLvl(glitch: Glitch): number;
+
+  /**
+   * Get the max lvl of a glitch
+   * @param glitch name of the glitch
+   * @returns max lvl of the glitch
+   */
+  getGlitchMaxLvl(glitch: Glitch): number;
+
+  /**
+   * Get the vulns multiplier for a glitch
+   * @param glitch name of the glitch
+   * @returns multiplier for the glitch
+   */
+  getGlitchMult(glitch: Glitch): number;
+
+  /**
+   * Get the total vulns multiplier for all glitches
+   * @returns total vulns multiplier
+   */
+  getTotalGlitchMult(): number;
+}
+
 /** @public */
 interface InfiltrationReward {
   tradeRep: number;
@@ -5366,6 +5807,12 @@ export interface NS {
    * @remarks RAM cost: 0 GB
    */
   readonly stanek: Stanek;
+
+  /**
+   * Namespace for myrian functions. Contains spoilers.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly myrian: Myrian;
 
   /**
    * Namespace for infiltration functions.

@@ -300,11 +300,36 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
   }
 
   function renderGlitch(): React.ReactElement {
+    const onClick = () => {
+      dialogBoxCreate(
+        "Hexabytes of information are streamed to your mind. Completely drained one thing remained clear as crystal. You now understand how to connect directly to the machine running the bitnodes. Myrian.",
+      );
+      Router.toPage(Page.MyrianOS);
+      Player.myrianConnection = true;
+    };
+    if (!Player.canAccessMyrian())
+      return (
+        <>
+          <Typography>
+            <CorruptableText
+              content={"An eerie aura surrounds this area. You feel you should leave."}
+              spoiler={false}
+            />
+          </Typography>
+        </>
+      );
+
     return (
       <>
         <Typography>
-          <CorruptableText content={"An eerie aura surrounds this area. You feel you should leave."} spoiler={false} />
+          You find yourself standing in a small, unremarkable alley. Despite the lack of air you do not feel the need to
+          breathe. There is no light, yet you can see every details of every objects in the alley. A rat walking in the
+          alley completely stop in it's track as if frozen in time. You know what this means. This location has fallen
+          through the crack of the Enders.
+          <br />
+          In the middle of the alley is a personal link port. You can connect your personal link to the anomaly.
         </Typography>
+        <Button onClick={onClick}>Connect your personal link to the anomaly</Button>
       </>
     );
   }

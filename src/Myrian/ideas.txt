@@ -1,0 +1,1 @@
+New device that makes special requests like "has red" | "at least tier 3" | "does not contain blue" that increases the reward.

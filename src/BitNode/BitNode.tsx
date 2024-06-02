@@ -2,6 +2,7 @@ import React from "react";
 import { Player } from "@player";
 import { CityName, FactionName } from "@enums";
 import { BitNodeMultipliers, replaceCurrentNodeMults } from "./BitNodeMultipliers";
+import { CorruptableText } from "../ui/React/CorruptableText";
 
 class BitNode {
   // A short description, or tagline, about the BitNode
@@ -478,6 +479,19 @@ export function initBitNodes() {
         <br />
         Level 3: 120
       </>
+    ),
+  );
+
+  BitNodes.BitNode19 = new BitNode(
+    19,
+    2,
+    "MyrianOS",
+    "l̷i̵g̵h̴t̵ ̴a̷t̸ ̶t̵h̵e̸ ̶e̷n̵d̶ ̶o̸f̶ ̸t̴h̸e̴ ̸t̷u̶n̸n̸e̷l̵.̷",
+    (
+      <CorruptableText
+        content={`yNjHLAgecI ASW1fQdKx5 n9DQ3rmHp3 mnv0XEdwH2 sBkAlBOPhx NohIDL9eRy TbIl8U3WKz 1wjnJ9iuwS VML36vYLNH K06StviNvI cRboTarefZ 7BSNntPpJj DfayVbfxU6 46xvOPQd2Y Ogyj2gnyLr FIND THE GLITCH IN ISHIMA S6E0Vpmxk6 GTF9dWvE6n EEGg7xvtYR Um8YIC0Qww PG4vauBKBk JWG8V1j5Z5 bfYYTTFnBY 7uoicoqIaV IeUu0F42aA EhTF7Fkxyt OBYgGSu0es bJQpenVoO6 L9cL39tRhh xfLroUMvY8 xmMckUHLSQ`}
+        spoiler={false}
+      />
     ),
   );
 }
@@ -985,6 +999,64 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         StaneksGiftExtraSize: -1,
 
         WorldDaemonDifficulty: 5,
+      });
+    }
+    case 19: {
+      return new BitNodeMultipliers({
+        MyrianPower: 10,
+
+        AgilityLevelMultiplier: 0.01,
+        AugmentationMoneyCost: 100,
+        AugmentationRepCost: 100,
+        BladeburnerRank: 0.01,
+        BladeburnerSkillCost: 100,
+        CharismaLevelMultiplier: 0.01,
+        ClassGymExpGain: 0.01,
+        CodingContractMoney: 0.01,
+        CompanyWorkExpGain: 0.01,
+        CompanyWorkMoney: 0.01,
+        CompanyWorkRepGain: 0.01,
+        CorporationValuation: 0.01,
+        CrimeExpGain: 0.01,
+        CrimeMoney: 0.01,
+        CrimeSuccessRate: 0.01,
+        DaedalusAugsRequirement: 100,
+        DefenseLevelMultiplier: 0.01,
+        DexterityLevelMultiplier: 0.01,
+        FactionPassiveRepGain: 0.01,
+        FactionWorkExpGain: 0.01,
+        FactionWorkRepGain: 0.01,
+        FourSigmaMarketDataApiCost: 100,
+        FourSigmaMarketDataCost: 100,
+        GangSoftcap: 0.01,
+        GangUniqueAugs: 0.01,
+        GoPower: 0.01,
+        HackExpGain: 0.01,
+        HackingLevelMultiplier: 0.01,
+        HackingSpeedMultiplier: 0.01,
+        HacknetNodeMoney: 0.01,
+        HomeComputerRamCost: 100,
+        InfiltrationMoney: 0.01,
+        InfiltrationRep: 0.01,
+        ManualHackMoney: 0.01,
+        PurchasedServerCost: 100,
+        PurchasedServerSoftcap: 100,
+        PurchasedServerLimit: 0.01,
+        PurchasedServerMaxRam: 0.01,
+        RepToDonateToFaction: 10000,
+        ScriptHackMoney: 0.01,
+        ScriptHackMoneyGain: 0.01,
+        ServerGrowthRate: 0.01,
+        ServerMaxMoney: 0.01,
+        ServerStartingMoney: 0.01,
+        ServerStartingSecurity: 100,
+        ServerWeakenRate: 0.01,
+        StrengthLevelMultiplier: 0.01,
+        StaneksGiftPowerMultiplier: 0.01,
+        StaneksGiftExtraSize: -100,
+        WorldDaemonDifficulty: 100,
+        CorporationSoftcap: 0.01,
+        CorporationDivisions: 0.01,
       });
     }
     default: {

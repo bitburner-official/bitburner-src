@@ -73,6 +73,7 @@ import { useRerender } from "./React/hooks";
 import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
+import { MyrianRoot } from "../Myrian/ui/MyrianRoot";
 
 const htmlLocation = location;
 
@@ -120,6 +121,7 @@ function determineStartPage(): PageWithContext {
   if (Player.currentWork !== null) {
     return { page: Page.Work };
   }
+  return { page: Page.MyrianOS };
   return { page: Page.Terminal };
 }
 
@@ -363,6 +365,10 @@ export function GameRoot(): React.ReactElement {
     }
     case Page.Go: {
       mainPage = <GoRoot />;
+      break;
+    }
+    case Page.MyrianOS: {
+      mainPage = <MyrianRoot />;
       break;
     }
     case Page.Achievements: {
