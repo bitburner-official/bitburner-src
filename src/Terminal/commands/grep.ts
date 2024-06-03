@@ -12,16 +12,17 @@ const green: string = "\x1b[32m"; // green
 const cyan: string = "\x1b[36m"; // cyan
 const magenta: string = "\x1b[35m"; // Magenta
 
-export function grep(args: (string | number | boolean)[]): void {
+export function grep(args: (string | number | boolean)[], server: BaseServer): void {
   if (!args.length) {
-    return Terminal.error("Incorrect usage of grep command. Usage: grep [search string] ...[optional file path(s)]");
+    return Terminal.error(
+      "Incorrect usage of grep command. Usage: grep [-H/-n] [search string] ...[optional file path(s)]",
+    );
   }
 
   const query: RegExp = new RegExp(args[0].toString(), "g");
   const [runArgs, otherArgs]: [string[], string[]] = args.slice(1).reduce(
     ([runArgs, fileStrings]: [string[], string[]], arg) => {
       const strArg: string = arg.toString();
-
       if (strArg.startsWith("-") || strArg.startsWith("--")) {
         return [[...runArgs, strArg], fileStrings];
       } else {
@@ -50,7 +51,6 @@ export function grep(args: (string | number | boolean)[]): void {
   const isNumbered: boolean = runArgs.some((arg) => ["-n", "--line-number"].includes(arg));
   const isMultiscript: boolean = runArgs.some((arg) => ["-H", "--with-filename"].includes(arg)) || argFiles.length > 1;
 
-  const server: BaseServer | null = GetServer(Player.currentServer);
   const files: (Script | TextFile | null)[] = argFiles.length
     ? argFiles
     : [...(server?.scripts ?? []), ...(server?.textFiles ?? [])].map((tuple) => tuple[1]);
