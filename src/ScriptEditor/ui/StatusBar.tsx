@@ -183,13 +183,13 @@ export class StatusBar {
     }
 
     // this handles pressing escape in the input box.
-    if (e.keyCode === 27) {
+    if (e.key === "Escape") {
       e.stopPropagation();
       this.closeInput();
     }
 
     // this handles pressing enter in the input box.
-    if (e.keyCode === 13 && this.onCloseHandler !== null) {
+    if (e.key === "Enter" && this.onCloseHandler !== null) {
       e.stopPropagation();
       e.preventDefault();
       this.onCloseHandler(this.inputValue);
