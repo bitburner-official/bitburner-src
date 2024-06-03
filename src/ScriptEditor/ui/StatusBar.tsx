@@ -1,5 +1,5 @@
 import { Input, Typography } from "@mui/material";
-import { styled } from "@mui/styles";
+import { styled } from "@mui/material/styles";
 import type { editor } from "monaco-editor";
 import React from "react";
 type IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
