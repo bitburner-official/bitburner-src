@@ -34,7 +34,7 @@ export function grep(args: (string | number | boolean)[]): void {
     (tuple) => tuple[1],
   );
 
-  const files : (Script | TextFile | null)[] = argScripts.length ? argScripts : defaultFiles;
+  const files: (Script | TextFile | null)[] = argScripts.length ? argScripts : defaultFiles;
 
   const result: string = files.reduce((accumulator: string, script) => {
     if (!script) return accumulator;
@@ -45,7 +45,7 @@ export function grep(args: (string | number | boolean)[]): void {
       content = script["code"];
     }
     if (!content.includes(query)) return accumulator;
-    const editedContent:string = content
+    const editedContent: string = content
       .split("\n")
       .filter((line) => line.includes(query))
       .map((line, i) => editLine(line.split(query), query, i))
@@ -56,8 +56,8 @@ export function grep(args: (string | number | boolean)[]): void {
   Terminal.print(result);
 }
 
-  function editLine(line: string[], query: string, i: number): string {
-    const red: string = "\x1b[31m"; // red
-    const def: string = "\x1b[0m"; // default
-    return `${i}:${line.join(`${red}${query}${def}`)}`;
-  }
+function editLine(line: string[], query: string, i: number): string {
+  const red: string = "\x1b[31m"; // red
+  const def: string = "\x1b[0m"; // default
+  return `${i}:${line.join(`${red}${query}${def}`)}`;
+}
