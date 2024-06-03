@@ -66,6 +66,14 @@ export class ScriptEditor {
       //json language server tries to load a schema by default
       completionItems: false,
     });
+    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+      ...monaco.languages.typescript.javascriptDefaults.getCompilerOptions(),
+      strictNullChecks: true,
+    });
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+      ...monaco.languages.typescript.typescriptDefaults.getCompilerOptions(),
+      strictNullChecks: true,
+    });
     // Load themes
     loadThemes(monaco.editor.defineTheme);
     sanitizeTheme(Settings.EditorTheme);

@@ -72,6 +72,7 @@ import { MathJaxContext } from "better-react-mathjax";
 import { useRerender } from "./React/hooks";
 import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
+import { WormRoot } from "../Worm/ui/WormRoot";
 
 const htmlLocation = location;
 
@@ -236,6 +237,10 @@ export function GameRoot(): React.ReactElement {
     }
     case Page.StaneksGift: {
       mainPage = <StaneksGiftRoot staneksGift={staneksGift} />;
+      break;
+    }
+    case Page.Worm: {
+      mainPage = <WormRoot />;
       break;
     }
     case Page.Stats: {

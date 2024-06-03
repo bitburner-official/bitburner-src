@@ -48,6 +48,7 @@ export class PlayerObject extends Person implements IPlayer {
   jobs: PartialRecord<CompanyName, JobName> = {};
   karma = 0;
   numPeopleKilled = 0;
+  numContractsSolved = 0;
   location = LocationName.TravelAgency;
   money = 1000 + CONSTANTS.Donations;
   moneySourceA = new MoneySourceTracker();

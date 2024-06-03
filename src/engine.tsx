@@ -44,6 +44,8 @@ import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
 import { SnackbarEvents } from "./ui/React/Snackbar";
 import { SaveData } from "./types";
+import { wormSourceFileEffect } from "./Worm/calculations";
+import { worm } from "./Worm/Worm";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
@@ -87,6 +89,10 @@ const Engine: {
     Player.playtimeSinceLastAug += time;
     Player.playtimeSinceLastBitnode += time;
 
+    if (worm !== null) {
+      numCycles *= worm.specialMults.gameTickSpeed;
+    }
+
     Terminal.process(numCycles);
 
     Player.processWork(numCycles);
@@ -110,6 +116,8 @@ const Engine: {
 
     // Bladeburner
     if (Player.bladeburner) Player.bladeburner.storeCycles(numCycles);
+
+    if (worm) worm.process();
 
     // Sleeves
     Player.sleeves.forEach((sleeve) => sleeve.process(numCycles));
@@ -144,7 +152,7 @@ const Engine: {
     passiveFactionGrowth: 5,
     messages: 150,
     mechanicProcess: 5, // Processes certain mechanics (Corporation, Bladeburner)
-    contractGeneration: 3000, // Generate Coding Contracts
+    contractGeneration: CONSTANTS.CodingContractSpawnInterval, // Generate Coding Contracts
     achievementsCounter: 60, // Check if we have new achievements
   },
 
@@ -198,7 +206,8 @@ const Engine: {
       if (Math.random() <= 0.25) {
         generateRandomContract();
       }
-      Engine.Counters.contractGeneration = 3000;
+      Engine.Counters.contractGeneration =
+        CONSTANTS.CodingContractSpawnInterval * wormSourceFileEffect(Player.sourceFileLvl(16));
     }
 
     if (Engine.Counters.achievementsCounter <= 0) {
@@ -250,7 +259,12 @@ const Engine: {
       const numCyclesOffline = Math.floor(timeOffline / CONSTANTS.MilliPerCycle);
 
       // Calculate the number of chances for a contract the player had whilst offline
-      const contractChancesWhileOffline = Math.floor(timeOffline / (1000 * 60 * 10));
+      const contractChancesWhileOffline = Math.floor(
+        timeOffline /
+          (CONSTANTS.MilliPerCycle *
+            CONSTANTS.CodingContractSpawnInterval *
+            wormSourceFileEffect(Player.sourceFileLvl(16))),
+      );
 
       // Generate coding contracts
       let numContracts = 0;
@@ -329,6 +343,8 @@ const Engine: {
 
       // Bladeburner offline progress
       if (Player.bladeburner) Player.bladeburner.storeCycles(numCyclesOffline);
+
+      if (worm) worm.process();
 
       staneksGift.process(numCyclesOffline);
 

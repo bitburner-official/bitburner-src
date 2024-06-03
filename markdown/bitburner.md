@@ -142,6 +142,8 @@
 |  [WarehouseAPI](./bitburner.warehouseapi.md) | Corporation Warehouse API |
 |  [WorkFormulas](./bitburner.workformulas.md) | Work formulas |
 |  [WorkStats](./bitburner.workstats.md) |  |
+|  [Worm](./bitburner.worm.md) | Worm API. |
+|  [WormSession](./bitburner.wormsession.md) |  |
 
 ## Type Aliases
 
@@ -174,4 +176,5 @@
 |  [SleeveSynchroTask](./bitburner.sleevesynchrotask.md) |  |
 |  [SleeveTask](./bitburner.sleevetask.md) | Object representing a sleeve current task. |
 |  [Task](./bitburner.task.md) | Task |
+|  [WormParams](./bitburner.wormparams.md) |  |
 

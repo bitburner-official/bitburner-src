@@ -10,6 +10,7 @@ import { SpecialServers } from "../../Server/data/SpecialServers";
 import { hasHacknetServers } from "../../Hacknet/HacknetHelpers";
 
 import type { PlayerObject } from "./PlayerObject";
+import { Player } from "@player";
 
 export function hasTorRouter(this: PlayerObject): boolean {
   return this.getHomeComputer().serversOnNetwork.includes(SpecialServers.DarkWeb);
@@ -35,12 +36,17 @@ export function getUpgradeHomeRamCost(this: PlayerObject): number {
   //Calculate cost
   //Have cost increase by some percentage each time RAM has been upgraded
   const mult = Math.pow(1.58, numUpgrades);
-  const cost = currentRam * ServerConstants.BaseCostFor1GBOfRamHome * mult * currentNodeMults.HomeComputerRamCost;
+  const cost =
+    currentRam *
+    ServerConstants.BaseCostFor1GBOfRamHome *
+    mult *
+    currentNodeMults.HomeComputerRamCost *
+    Player.mults.home_ram_cost;
   return cost;
 }
 
 export function getUpgradeHomeCoresCost(this: PlayerObject): number {
-  return 1e9 * Math.pow(7.5, this.getHomeComputer().cpuCores);
+  return 1e9 * Math.pow(7.5, this.getHomeComputer().cpuCores) * Player.mults.home_core_cost;
 }
 
 export function createHacknetServer(this: PlayerObject): HacknetServer {

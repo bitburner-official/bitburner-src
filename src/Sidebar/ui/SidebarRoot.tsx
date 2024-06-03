@@ -40,6 +40,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PublicIcon from "@mui/icons-material/Public";
 import LiveHelpIcon from "@mui/icons-material/LiveHelp";
 import BorderInnerSharp from "@mui/icons-material/BorderInnerSharp";
+import RouteIcon from "@mui/icons-material/Route"; // Worm
 
 import { Router } from "../../ui/GameRoot";
 import { Page, isSimplePage } from "../../ui/Router";
@@ -57,6 +58,7 @@ import { hash } from "../../hash/hash";
 import { Locations } from "../../Locations/Locations";
 import { useRerender } from "../../ui/React/hooks";
 import { playerHasDiscoveredGo } from "../../Go/effects/effect";
+import { canAccessWorm } from "../../Worm/Worm";
 
 const RotatedDoubleArrowIcon = React.forwardRef(function RotatedDoubleArrowIcon(
   props: { color: "primary" | "secondary" | "error" },
@@ -161,6 +163,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   const canBladeburner = !!Player.bladeburner;
   const canStaneksGift = Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1);
   const canIPvGO = playerHasDiscoveredGo();
+  const canWorm = canAccessWorm();
 
   const clickPage = useCallback(
     (page: Page) => {
@@ -354,6 +357,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canCorporation && { key_: Page.Corporation, icon: BusinessIcon },
             canGang && { key_: Page.Gang, icon: SportsMmaIcon },
             canIPvGO && { key_: Page.Go, icon: BorderInnerSharp },
+            canWorm && { key_: Page.Worm, icon: RouteIcon },
           ]}
         />
         <Divider />

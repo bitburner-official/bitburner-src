@@ -45,6 +45,7 @@ import { downloadContentAsFile } from "./utils/FileUtils";
 import { showAPIBreaks } from "./utils/APIBreaks/APIBreak";
 import { breakInfos261 } from "./utils/APIBreaks/2.6.1";
 import { handleGetSaveDataError } from "./Netscript/ErrorMessages";
+import { loadWorm, worm } from "./Worm/Worm";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -97,6 +98,7 @@ class BitburnerSaveObject {
   LastExportBonus = "0";
   StaneksGiftSave = "";
   GoSave = "";
+  WormSave = "";
 
   async getSaveData(forceExcludeRunningScripts = false): Promise<SaveData> {
     this.PlayerSave = JSON.stringify(Player);
@@ -117,6 +119,7 @@ class BitburnerSaveObject {
     this.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
     this.StaneksGiftSave = JSON.stringify(staneksGift);
     this.GoSave = JSON.stringify(getGoSave());
+    this.WormSave = worm === null ? "" : JSON.stringify(worm);
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
 
@@ -754,6 +757,7 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave, Player);
   loadGo(saveObj.GoSave);
+  loadWorm(saveObj.WormSave);
 
   if (Object.hasOwn(saveObj, "StaneksGiftSave")) {
     loadStaneksGift(saveObj.StaneksGiftSave);

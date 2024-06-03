@@ -42,6 +42,9 @@ interface Multipliers
 |  [hacknet\_node\_money](./bitburner.multipliers.hacknet_node_money.md) |  | number | Multiplier to amount of money produced by Hacknet Nodes |
 |  [hacknet\_node\_purchase\_cost](./bitburner.multipliers.hacknet_node_purchase_cost.md) |  | number | Multiplier to cost of purchasing a Hacknet Node |
 |  [hacknet\_node\_ram\_cost](./bitburner.multipliers.hacknet_node_ram_cost.md) |  | number | Multiplier to cost of ram for a Hacknet Node |
+|  [home\_core\_cost](./bitburner.multipliers.home_core_cost.md) |  | number | Multiplier to cost of core upgrade for home |
+|  [home\_ram\_cost](./bitburner.multipliers.home_ram_cost.md) |  | number | Multiplier to cost of ram upgrade for home |
+|  [server\_cost](./bitburner.multipliers.server_cost.md) |  | number | Multiplier to cost of purchasable servers |
 |  [strength\_exp](./bitburner.multipliers.strength_exp.md) |  | number | Multiplier to strength experience gain rate |
 |  [strength](./bitburner.multipliers.strength.md) |  | number | Multiplier to strength skill |
 |  [work\_money](./bitburner.multipliers.work_money.md) |  | number | Multiplier to amount of money gained from working |

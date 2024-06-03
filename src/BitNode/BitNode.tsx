@@ -2,6 +2,7 @@ import React from "react";
 import { Player } from "@player";
 import { CityName, FactionName } from "@enums";
 import { BitNodeMultipliers, replaceCurrentNodeMults } from "./BitNodeMultipliers";
+import { wormMaxSessions } from "../Worm/calculations";
 
 class BitNode {
   // A short description, or tagline, about the BitNode
@@ -477,6 +478,46 @@ export function initBitNodes() {
         Level 2: 100
         <br />
         Level 3: 120
+      </>
+    ),
+  );
+  BitNodes.BitNode16 = new BitNode(
+    16,
+    2,
+    "The Worm",
+    "I deciphered, I adapted, I conquered.",
+    (
+      <>
+        In the turbulent 2060s, the digital world is besieged by an onslaught of malicious software, with thousands of
+        worms and malware spreading like never seen before. As society became increasingly reliant on advanced
+        technology, the vulnerability of interconnected systems was exposed, providing fertile ground for cyber threats
+        to flourish.
+        <br />
+        <br />
+        Amidst this warfare, a rogue program cracked the code to victory, exploiting software thought to be impenetrable
+        and wielding its newfound power to reshape the digital landscape in its own image.
+        <br />
+        <br />
+        Destroying this BitNode will give you Source-File 16, or if you already have this Source-File it will upgrade
+        its level up to a maximum of 3. This Source-File lets the Worm appear in other BitNodes. Each level of this
+        Source-File increases the maximum number of sessions you can have open at once from {wormMaxSessions(0)} to:
+        <br />
+        <br />
+        Level 1: {wormMaxSessions(1)}
+        <br />
+        Level 2: {wormMaxSessions(2)}
+        <br />
+        Level 3: {wormMaxSessions(3)}
+        <br />
+        <br />
+        This Source-File also decreases the time it takes for a coding contract to appear by:
+        <br />
+        <br />
+        Level 1: 12%
+        <br />
+        Level 2: 18%
+        <br />
+        Level 3: 21%
       </>
     ),
   );
@@ -985,6 +1026,51 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         StaneksGiftExtraSize: -1,
 
         WorldDaemonDifficulty: 5,
+      });
+    }
+    case 16: {
+      return new BitNodeMultipliers({
+        CodingContractMoney: 5,
+
+        PurchasedServerSoftcap: 1.3,
+        PurchasedServerLimit: 1.5,
+        PurchasedServerCost: 0.9,
+        PurchasedServerMaxRam: 1.3,
+
+        HomeComputerRamCost: 1.5,
+
+        WorldDaemonDifficulty: 2.5,
+
+        FactionWorkRepGain: 0.5,
+        CompanyWorkMoney: 0.5,
+
+        GangSoftcap: 0.8,
+        GangUniqueAugs: 0.6,
+
+        StaneksGiftPowerMultiplier: 0.7,
+
+        CorporationSoftcap: 0.8,
+        CorporationValuation: 0.5,
+        CorporationDivisions: 0.8,
+
+        ScriptHackMoney: 0.5,
+        HacknetNodeMoney: 1.1,
+        CrimeMoney: 1.1,
+        CrimeSuccessRate: 0.8,
+
+        ServerMaxMoney: 0.8,
+        ServerStartingMoney: 0.7,
+        ServerStartingSecurity: 1.3,
+
+        HackingSpeedMultiplier: 0.8,
+
+        HackingLevelMultiplier: 0.7,
+        StrengthLevelMultiplier: 0.7,
+        DefenseLevelMultiplier: 0.7,
+        AgilityLevelMultiplier: 0.7,
+        DexterityLevelMultiplier: 0.7,
+
+        BladeburnerRank: 0.7,
       });
     }
     default: {

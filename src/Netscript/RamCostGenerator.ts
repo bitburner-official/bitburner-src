@@ -367,6 +367,31 @@ const stanek = {
   acceptGift: RamCostConstants.StanekAcceptGift,
 } as const;
 
+// Worm API
+const worm = {
+  testInput: 62.4,
+  attemptSolve: 30.4,
+  getSessionStates: 4,
+  getSessionSymbols: 4,
+  getSessionParams: 0,
+  setShortestPath: 0,
+  setIsBipartite: 0,
+  setNodeValue: 0,
+  setNodeIndegree: 0,
+  setDepthFirstSearchState: 0,
+  getUnsolvedSessions: 16,
+  createNewSession: 16,
+  getSessionLimit: 1,
+  getSessionTestsDone: 2,
+  getSessionMaxReward: 2,
+  getFinishedSessions: 4,
+  getFinishedSession: 4,
+  getCompletions: 0.5,
+  getTestingTime: 0.5,
+  getContractInfluence: 1,
+  setBonus: 0.5,
+} as const;
+
 // UI API
 const ui = {
   getTheme: 0,
@@ -469,6 +494,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   codingcontract,
   sleeve,
   stanek,
+  worm,
   ui,
   grafting,
 

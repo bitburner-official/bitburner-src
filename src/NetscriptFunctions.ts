@@ -71,6 +71,7 @@ import { NetscriptSleeve } from "./NetscriptFunctions/Sleeve";
 import { NetscriptExtra } from "./NetscriptFunctions/Extra";
 import { NetscriptHacknet } from "./NetscriptFunctions/Hacknet";
 import { NetscriptStanek } from "./NetscriptFunctions/Stanek";
+import { NetscriptWorm } from "./NetscriptFunctions/Worm";
 import { NetscriptInfiltration } from "./NetscriptFunctions/Infiltration";
 import { NetscriptUserInterface } from "./NetscriptFunctions/UserInterface";
 import { NetscriptBladeburner } from "./NetscriptFunctions/Bladeburner";
@@ -135,6 +136,7 @@ export const ns: InternalAPI<NSFull> = {
   sleeve: NetscriptSleeve(),
   corporation: NetscriptCorporation(),
   stanek: NetscriptStanek(),
+  worm: NetscriptWorm(),
   infiltration: NetscriptInfiltration(),
   ui: NetscriptUserInterface(),
   formulas: NetscriptFormulas(),
@@ -1686,6 +1688,7 @@ export const ns: InternalAPI<NSFull> = {
       city: Player.city,
       // Player-specific
       numPeopleKilled: Player.numPeopleKilled,
+      numContractsSolved: Player.numContractsSolved,
       money: Player.money,
       location: Player.location,
       totalPlaytime: Player.totalPlaytime,

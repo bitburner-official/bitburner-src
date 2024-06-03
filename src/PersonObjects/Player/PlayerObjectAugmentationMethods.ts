@@ -3,6 +3,7 @@ import { calculateEntropy } from "../Grafting/EntropyAccumulation";
 import { staneksGift } from "../../CotMG/Helper";
 import { updateGoMults } from "../../Go/effects/effect";
 
+import { updateWormMults } from "../../Worm/calculations";
 import type { PlayerObject } from "./PlayerObject";
 
 export function applyEntropy(this: PlayerObject, stacks = 1): void {
@@ -13,9 +14,11 @@ export function applyEntropy(this: PlayerObject, stacks = 1): void {
   this.reapplyAllAugmentations();
   this.reapplyAllSourceFiles();
 
-  this.mults = calculateEntropy(stacks);
+  const entropyMults = calculateEntropy(stacks);
+  this.mults = entropyMults;
   staneksGift.updateMults();
   updateGoMults();
+  updateWormMults();
 
   /**
    * The ratio of (hp.current / hp.max) may be wrong after multiple function calls above. We need to recalculate

@@ -223,6 +223,22 @@ export function PlayerMultipliers(): React.ReactElement {
       augmented: Player.mults.hacknet_node_level_cost * mults.hacknet_node_level_cost,
     },
     {
+      mult: "Purchased Server Cost",
+      current: Player.mults.server_cost,
+      augmented: Player.mults.server_cost * mults.server_cost,
+    },
+    {
+      mult: "Home Ram Cost",
+      current: Player.mults.home_ram_cost,
+      augmented: Player.mults.home_ram_cost * mults.home_ram_cost,
+      bnMult: currentNodeMults.HomeComputerRamCost,
+    },
+    {
+      mult: "Home Core Cost",
+      current: Player.mults.home_core_cost,
+      augmented: Player.mults.home_core_cost * mults.home_core_cost,
+    },
+    {
       mult: "Company Reputation Gain",
       current: Player.mults.company_rep,
       augmented: Player.mults.company_rep * mults.company_rep,

@@ -102,6 +102,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       city: CityName.Sector12,
       // Player-specific
       numPeopleKilled: 0,
+      numContractsSolved: 0,
       money: 0,
       location: LocationName.TravelAgency,
       totalPlaytime: 0,

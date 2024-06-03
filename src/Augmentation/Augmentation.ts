@@ -46,6 +46,9 @@ export interface AugmentationCtorParams {
   hacknet_node_ram_cost?: number;
   hacknet_node_core_cost?: number;
   hacknet_node_level_cost?: number;
+  server_cost?: number;
+  home_ram_cost?: number;
+  home_core_cost?: number;
   bladeburner_max_stamina?: number;
   bladeburner_stamina_gain?: number;
   bladeburner_analysis?: number;

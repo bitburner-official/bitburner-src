@@ -3,6 +3,7 @@ import { calculateSkill } from "./formulas/skill";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
 import { WorkStats } from "@nsdefs";
+import { worm } from "../Worm/Worm";
 
 export function gainHackingExp(this: Person, exp: number): void {
   if (isNaN(exp)) {
@@ -100,7 +101,8 @@ export function gainIntelligenceExp(this: Person, exp: number): void {
     return;
   }
   if (Player.sourceFileLvl(5) > 0 || this.skills.intelligence > 0 || Player.bitNodeN === 5) {
-    this.exp.intelligence += exp;
+    const wormMultiplier = worm === null ? 1 : worm.specialMults.intelligenceMult;
+    this.exp.intelligence += exp * wormMultiplier;
     this.skills.intelligence = Math.floor(this.calculateSkill(this.exp.intelligence, 1));
   }
 }

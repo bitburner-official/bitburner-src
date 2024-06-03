@@ -8,6 +8,7 @@ import { BladeburnerConstants } from "../data/Constants";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { BladeMultName } from "../Enums";
 import { getRecordKeys } from "../../Types/Record";
+import { worm } from "../../Worm/Worm";
 
 export interface ActionParams {
   desc: string;
@@ -112,7 +113,9 @@ export abstract class ActionClass {
 
     baseTime = Math.max(1, (baseTime * skillFac) / statFac);
 
-    return Math.ceil(baseTime * this.getActionTimePenalty());
+    const wormMult = worm === null ? 1 : worm.specialMults.bladeburnerMult;
+
+    return Math.ceil(baseTime * wormMult * this.getActionTimePenalty());
   }
 
   getTeamSuccessBonus(__bladeburner: Bladeburner): number {

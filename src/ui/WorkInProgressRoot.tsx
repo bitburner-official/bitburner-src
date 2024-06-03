@@ -200,7 +200,7 @@ export function WorkInProgressRoot(): React.ReactElement {
 
   if (isCrimeWork(Player.currentWork)) {
     const crime = Player.currentWork.getCrime();
-    const completion = (Player.currentWork.unitCompleted / crime.time) * 100;
+    const completion = (Player.currentWork.unitCompleted / crime.getTime()) * 100;
     const gains = Player.currentWork.earnings();
     const successChance = crime.successRate(Player);
     workInfo = {
@@ -231,7 +231,7 @@ export function WorkInProgressRoot(): React.ReactElement {
         ...CrimeExpRows(gains),
       ],
       progress: {
-        remaining: crime.time - Player.currentWork.unitCompleted,
+        remaining: crime.getTime() - Player.currentWork.unitCompleted,
         percentage: completion,
       },
 

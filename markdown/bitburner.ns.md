@@ -49,6 +49,7 @@ export async function main(ns) {
 |  [stanek](./bitburner.ns.stanek.md) | <code>readonly</code> | [Stanek](./bitburner.stanek.md) | Namespace for stanek functions. Contains spoilers. |
 |  [stock](./bitburner.ns.stock.md) | <code>readonly</code> | [TIX](./bitburner.tix.md) | Namespace for stock functions. |
 |  [ui](./bitburner.ns.ui.md) | <code>readonly</code> | [UserInterface](./bitburner.userinterface.md) | Namespace for user interface functions. |
+|  [worm](./bitburner.ns.worm.md) | <code>readonly</code> | [Worm](./bitburner.worm.md) | Namespace for worm functions. |
 
 ## Methods
 

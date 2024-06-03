@@ -34,6 +34,7 @@ export enum SimplePage {
   BladeburnerCinematic = "Bladeburner Cinematic",
   Loading = "Loading",
   StaneksGift = "Staneks Gift",
+  Worm = "Worm",
   Recovery = "Recovery",
   Achievements = "Achievements",
   ThemeBrowser = "Theme Browser",

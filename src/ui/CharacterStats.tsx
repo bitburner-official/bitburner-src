@@ -492,6 +492,18 @@ export function CharacterStats(): React.ReactElement {
                   mult: "Hacknet Level Upgrade Cost",
                   value: Player.mults.hacknet_node_level_cost,
                 },
+                {
+                  mult: "Purchased Server Cost",
+                  value: Player.mults.server_cost,
+                },
+                {
+                  mult: "Home Ram Cost",
+                  value: Player.mults.home_ram_cost,
+                },
+                {
+                  mult: "Home Core Cost",
+                  value: Player.mults.home_core_cost,
+                },
               ]}
               color={Settings.theme.primary}
             />
@@ -517,22 +529,6 @@ export function CharacterStats(): React.ReactElement {
                 },
               ]}
               color={Settings.theme.money}
-            />
-            <MultiplierTable
-              rows={[
-                {
-                  mult: "Crime Success Chance",
-                  value: Player.mults.crime_success,
-                  effValue: Player.mults.crime_success * currentNodeMults.CrimeSuccessRate,
-                },
-                {
-                  mult: "Crime Money",
-                  value: Player.mults.crime_money,
-                  effValue: Player.mults.crime_money * currentNodeMults.CrimeMoney,
-                  color: Settings.theme.money,
-                },
-              ]}
-              color={Settings.theme.combat}
             />
             {Player.canAccessBladeburner() && currentNodeMults.BladeburnerRank > 0 && (
               <MultiplierTable

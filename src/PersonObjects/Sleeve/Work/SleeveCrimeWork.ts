@@ -32,7 +32,7 @@ export class SleeveCrimeWork extends SleeveWorkClass {
   }
 
   cyclesNeeded(): number {
-    return this.getCrime().time / CONSTANTS.MilliPerCycle;
+    return this.getCrime().getTime() / CONSTANTS.MilliPerCycle;
   }
 
   process(sleeve: Sleeve, cycles: number) {

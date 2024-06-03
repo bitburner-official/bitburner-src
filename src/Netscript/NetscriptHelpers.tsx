@@ -51,6 +51,7 @@ import { assertString, debugType } from "./TypeAssertion";
 export const helpers = {
   string,
   number,
+  boolean,
   positiveInteger,
   positiveSafeInteger,
   scriptArgs,
@@ -99,6 +100,17 @@ export interface CompleteHGWOptions {
   threads: PositiveNumber;
   stock: boolean;
   additionalMsec: number;
+}
+
+function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
+  if (typeof v === "string") {
+    if (v.toLowerCase() === "true") return true;
+    if (v.toLowerCase() === "false") return false;
+  } else if (typeof v === "number") {
+    if (v === 1) return true;
+    if (v === 0) return false;
+  } else if (typeof v === "boolean") return v;
+  throw errorMessage(ctx, `'${argName}' should be a boolean. ${debugType(v)}`, "TYPE");
 }
 
 /** Convert a provided value v for argument argName to string. If it wasn't originally a string or number, throw. */
