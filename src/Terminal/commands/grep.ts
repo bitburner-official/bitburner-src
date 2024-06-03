@@ -8,19 +8,19 @@ import { Player } from "@player";
 
 const red: string = "\x1b[31m"; // red
 const def: string = "\x1b[0m"; // default
-const green = "\x1b[32m"; // green
-const cyan = "\x1b[36m"; // cyan
-const magenta = "\x1b[35m"; // Magenta
+const green: string = "\x1b[32m"; // green
+const cyan: string = "\x1b[36m"; // cyan
+const magenta: string = "\x1b[35m"; // Magenta
 
 export function grep(args: (string | number | boolean)[]): void {
   if (!args.length) {
     return Terminal.error("Incorrect usage of grep command. Usage: grep [search string] ...[optional file path(s)]");
   }
 
-  const query = new RegExp(args[0].toString(), "g");
+  const query: RegExp = new RegExp(args[0].toString(), "g");
   const [runArgs, otherArgs]: [string[], string[]] = args.slice(1).reduce(
     ([runArgs, fileStrings]: [string[], string[]], arg) => {
-      const strArg = arg.toString();
+      const strArg: string = arg.toString();
 
       if (strArg.startsWith("-") || strArg.startsWith("--")) {
         return [[...runArgs, strArg], fileStrings];
