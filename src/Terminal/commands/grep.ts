@@ -64,7 +64,6 @@ export function grep(args: (string | number | boolean)[]): void {
     const editedContent: string = content
       .split("\n")
       .map((line, i) => {
-        const splits = line.split(query);
         if (!line.match(query)?.length) return null;
         const prefix: string = `${isMultiscript ? `${magenta}${script.filename}${cyan}:${def}` : ""}${
           isNumbered ? `${green}${i + 1}${cyan}:${def}` : ""
