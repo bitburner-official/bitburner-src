@@ -1,5 +1,6 @@
 import { Theme } from "@mui/material/styles";
-import { makeStyles, createStyles } from "@mui/styles";
+import makeStyles from "@mui/styles/makeStyles";
+import createStyles from "@mui/styles/createStyles";
 
 export const pointStyle = makeStyles((theme: Theme) =>
   createStyles({
