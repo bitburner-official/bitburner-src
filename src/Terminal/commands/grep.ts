@@ -42,8 +42,8 @@ export function grep(args: (string | number | boolean)[]): void {
 
     const editedContent: string = content
       .split("\n")
-      .filter((line) => line.includes(query))
-      .map((line, i) => editLine(line.split(query), query, i))
+      .map((line, i) => (line.includes(query) ? editLine(line.split(query), query, i) : null))
+      .filter((line) => line !== null)
       .join("\n");
 
     return `${accumulator}\n${script.filename}\n${editedContent}\n`;
