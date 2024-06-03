@@ -46,6 +46,7 @@ import { cp } from "./commands/cp";
 import { download } from "./commands/download";
 import { expr } from "./commands/expr";
 import { free } from "./commands/free";
+import { grep } from "./commands/grep";
 import { grow } from "./commands/grow";
 import { hack } from "./commands/hack";
 import { help } from "./commands/help";
@@ -758,6 +759,7 @@ export class Terminal {
       download: download,
       expr: expr,
       free: free,
+      grep: grep,
       grow: grow,
       hack: hack,
       help: help,
