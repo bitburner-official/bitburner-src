@@ -316,7 +316,8 @@ export function WorkInProgressRoot(): React.ReactElement {
 
   if (isGraftingWork(Player.currentWork)) {
     const graftWork = Player.currentWork;
-    const remainingTime = ((graftWork.unitNeeded() - graftWork.unitCompleted) / graftWork.unitRate) * CONSTANTS.MilliPerCycle;
+    const remainingTime =
+      ((graftWork.unitNeeded() - graftWork.unitCompleted) / graftWork.unitRate) * CONSTANTS.MilliPerCycle;
     workInfo = {
       buttons: {
         cancel: () => {
