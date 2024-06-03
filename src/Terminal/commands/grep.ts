@@ -1,10 +1,8 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import { GetServer } from "../../Server/AllServers";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { Script } from "src/Script/Script";
 import { TextFile } from "src/TextFile";
-import { Player } from "@player";
 
 const red: string = "\x1b[31m"; // red
 const def: string = "\x1b[0m"; // default
@@ -49,6 +47,7 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
 
   // passed options
   const isNumbered: boolean = runArgs.some((arg) => ["-n", "--line-number"].includes(arg));
+
   const isMultiscript: boolean = runArgs.some((arg) => ["-H", "--with-filename"].includes(arg)) || argFiles.length > 1;
 
   const files: (Script | TextFile | null)[] = argFiles.length
