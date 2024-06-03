@@ -48,7 +48,7 @@ export function grep(args: (string | number | boolean)[]): void {
 
   // passed options
   const isNumbered: boolean = runArgs.some((arg) => ["-n", "--line-number"].includes(arg));
-  const isMultiscript: boolean = argFiles.length > 1;
+  const isMultiscript: boolean = runArgs.some((arg) => ["-H", "--with-filename"].includes(arg)) || argFiles.length > 1;
 
   const server: BaseServer | null = GetServer(Player.currentServer);
   const files: (Script | TextFile | null)[] = argFiles.length
