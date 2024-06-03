@@ -7,7 +7,7 @@ import { TextFile } from "src/TextFile";
 import { Player } from "@player";
 
 export function grep(args: (string | number | boolean)[]): void {
-  if (args.length === 0) {
+  if (!args.length) {
     return Terminal.error("Incorrect usage of grep command. Usage: grep [search string] ...[optional file path(s)]");
   }
 
@@ -28,10 +28,9 @@ export function grep(args: (string | number | boolean)[]): void {
   }
 
   const server: BaseServer | null = GetServer(Player.currentServer);
-  const files: (Script | TextFile | null)[] =
-    argScripts.length !== 0
-      ? argScripts
-      : [...(server?.scripts ?? []), ...(server?.textFiles ?? [])].map((tuple) => tuple[1]);
+  const files: (Script | TextFile | null)[] = argScripts.length
+    ? argScripts
+    : [...(server?.scripts ?? []), ...(server?.textFiles ?? [])].map((tuple) => tuple[1]);
 
   const query: string = argStrings[0];
   const result: string = files.reduce((accumulator: string, script) => {
@@ -43,7 +42,7 @@ export function grep(args: (string | number | boolean)[]): void {
     const editedContent: string = content
       .split("\n")
       .map((line, i) => (line.includes(query) ? editLine(line.split(query), query, i) : null))
-      .filter((line) => line !== null)
+      .filter((line) => line)
       .join("\n");
 
     return `${accumulator}\n${script.filename}\n${editedContent}\n`;
@@ -55,5 +54,5 @@ export function grep(args: (string | number | boolean)[]): void {
 function editLine(line: string[], query: string, i: number): string {
   const red: string = "\x1b[31m"; // red
   const def: string = "\x1b[0m"; // default
-  return `${i}:${line.join(`${red}${query}${def}`)}`;
+  return `${i + 1}:${line.join(`${red}${query}${def}`)}`;
 }
