@@ -17,7 +17,7 @@ export function grep(args: (string | number | boolean)[]): void {
     return Terminal.error("Incorrect usage of grep command. Usage: grep [search string] ...[optional file path(s)]");
   }
 
-  const query = args[0].toString();
+  const query = new RegExp(args[0].toString(), "g");
   const [runArgs, otherArgs]: [string[], string[]] = args.slice(1).reduce(
     ([runArgs, fileStrings]: [string[], string[]], arg) => {
       const strArg = arg.toString();
@@ -59,18 +59,17 @@ export function grep(args: (string | number | boolean)[]): void {
     if (!script) return accumulator;
 
     const content: string = "content" in script ? script["content"] : script["code"];
-    if (!content.includes(query)) return accumulator;
+    if (!content.match(query)?.length) return accumulator;
 
     const editedContent: string = content
       .split("\n")
       .map((line, i) => {
-        if (!line.includes(query)) return null;
+        const splits = line.split(query);
+        if (!line.match(query)?.length) return null;
         const prefix: string = `${isMultiscript ? `${magenta}${script.filename}${cyan}:${def}` : ""}${
           isNumbered ? `${green}${i + 1}${cyan}:${def}` : ""
         }`;
-        const splits = line.split(query);
-
-        return `${prefix}${splits.join(`${red}${query}${def}`)}`;
+        return `${prefix}${line.replaceAll(query, `${red}$&${def}`)}`;
       })
       .filter((line) => line)
       .join("\n");
