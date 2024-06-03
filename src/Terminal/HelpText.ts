@@ -15,7 +15,7 @@ export const TerminalHelpText: string[] = [
   "    download [script/text file]      Downloads scripts or text files to your computer",
   "    expr [math expression]           Evaluate a mathematical expression",
   "    free                             Check the machine's memory (RAM) usage",
-  "    grep [query] [file(s)...]        Search file(s) for query string and print lines to terminal",
+  "    grep [-H/-n] [query] [files...]  Search file(s) for query string and print lines to terminal",
   "    grow                             Spoof money in a servers bank account, increasing the amount available.",
   "    hack                             Hack the current machine",
   "    help [command]                   Display this help text, or the help text for a command",
@@ -232,10 +232,12 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
   ],
   grep: [
-    "Usage: grep [query] [file(s)...]",
+    "Usage: grep [-H/-n] [query] [file(s)...]",
     " ",
     "Search file(s) for query string, and print results (including line numbers) to the terminal.",
     "Without arguments, searches every file on current server.",
+    "When ran with -H or --with-filename flag, or with multiple file arguments, will print filenames with lines.",
+    "When ran with -n or --line-number flag, will print line numbers with lines.",
     " ",
   ],
   grow: [
