@@ -234,7 +234,7 @@ export const HelpTexts: Record<string, string[]> = {
   grep: [
     "Usage: grep [-H/-n] [query] [file(s)...]",
     " ",
-    "Search file(s) for query string, and print results (including line numbers) to the terminal.",
+    "Search file(s) for query string, and print results to the terminal.",
     "Without arguments, searches every file on current server.",
     "When ran with -H or --with-filename flag, or with multiple file arguments, will print filenames with lines.",
     "When ran with -n or --line-number flag, will print line numbers with lines.",
