@@ -80,8 +80,6 @@ export function ScriptEditorContextProvider({ children }: { children: React.Reac
     cursorBlinking: Settings.MonacoCursorBlinking,
   });
 
-  console.log("Context Vim", options.vim, Settings.MonacoVim);
-
   function saveOptions(options: Options) {
     console.log("Saving Vim", options.vim, Settings.MonacoVim);
     setOptions(options);
