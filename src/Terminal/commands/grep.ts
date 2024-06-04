@@ -4,11 +4,17 @@ import { hasTextExtension } from "../../Paths/TextFilePath";
 import { Script } from "src/Script/Script";
 import { TextFile } from "src/TextFile";
 
-const red: string = "\x1b[31m"; // red
-const def: string = "\x1b[0m"; // default
-const green: string = "\x1b[32m"; // green
-const cyan: string = "\x1b[36m"; // cyan
-const magenta: string = "\x1b[35m"; // Magenta
+const RED: string = "\x1b[31m"; // red
+const DEF: string = "\x1b[0m"; // default
+const GREEN: string = "\x1b[32m"; // green
+const CYAN: string = "\x1b[36m"; // cyan
+const MAGENTA: string = "\x1b[35m"; // Magenta
+
+const VALID_ARGS = {
+  lineNo: ["-n", "--line-number"],
+  fileName: ["-H", "--with-filename"],
+  regExp: ["-G", "--basic-regexp"],
+};
 
 export function grep(args: (string | number | boolean)[], server: BaseServer): void {
   if (!args.length) {
@@ -18,7 +24,8 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   const [optionArgs, otherArgs]: [string[], string[]] = args.reduce(
     ([runArgs, otherArgs]: [string[], string[]], arg) => {
       const strArg: string = arg.toString();
-      if (strArg.startsWith("-") || strArg.startsWith("--")) {
+      const validArgs = Object.values(VALID_ARGS).flat();
+      if (validArgs.includes(strArg)) {
         return [[...runArgs, strArg], otherArgs];
       } else {
         return [runArgs, [...otherArgs, strArg]];
@@ -43,10 +50,9 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   }
 
   // passed options
-  const isNumbered: boolean = optionArgs.some((arg) => ["-n", "--line-number"].includes(arg));
-  const isMultiscript: boolean =
-    optionArgs.some((arg) => ["-H", "--with-filename"].includes(arg)) || validFiles.length > 1;
-  const isRegExp: boolean = optionArgs.some((arg) => ["-G", "--basic-regexp"].includes(arg));
+  const isNumbered: boolean = optionArgs.some((arg) => VALID_ARGS.lineNo.includes(arg));
+  const isMultiscript: boolean = optionArgs.some((arg) => VALID_ARGS.fileName.includes(arg)) || validFiles.length > 1;
+  const isRegExp: boolean = optionArgs.some((arg) => VALID_ARGS.regExp.includes(arg));
 
   let pattern: string | RegExp = otherArgs[0];
   if (isRegExp) {
@@ -72,10 +78,10 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
       .split("\n")
       .map((line, i) => {
         if (!line.match(pattern)?.length) return null;
-        const prefix: string = `${isMultiscript ? `${magenta}${script.filename}${cyan}:${def}` : ""}${
-          isNumbered ? `${green}${i + 1}${cyan}:${def}` : ""
+        const prefix: string = `${isMultiscript ? `${MAGENTA}${script.filename}${CYAN}:${DEF}` : ""}${
+          isNumbered ? `${GREEN}${i + 1}${CYAN}:${DEF}` : ""
         }`;
-        return `${prefix}${line.replaceAll(pattern, `${red}$&${def}`)}`;
+        return `${prefix}${line.replaceAll(pattern, `${RED}$&${DEF}`)}`;
       })
       .filter((line) => line)
       .join("\n");
