@@ -242,6 +242,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "Output control:",
     "  -H --with-filename   print file name with output lines",
+    "  -h --no-filename     do not print file name with output lines. Overrides -H",
     "  -n --line-number     print line number with output lines",
     " ",
     "Without FILE(s) passed, defaults to search every file on current server.",
