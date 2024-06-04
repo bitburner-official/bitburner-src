@@ -80,8 +80,8 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
         // if pattern is blank, just pass line back (avoid infinite replaceAll)
         const editedLine = pattern.toString().length ? line.replaceAll(pattern, `${RED}$&${DEF}`) : line;
 
-        const fileName:string = isMultiscript ? `${MAGENTA}${script.filename}${CYAN}:${DEF}` : "";
-        const lineNo :string= isNumbered ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
+        const fileName: string = isMultiscript ? `${MAGENTA}${script.filename}${CYAN}:${DEF}` : "";
+        const lineNo: string = isNumbered ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
         const prefix: string = fileName + lineNo;
 
         return `${prefix}${editedLine}`;
