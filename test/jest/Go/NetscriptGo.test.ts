@@ -92,9 +92,9 @@ describe("Netscript Go API unit tests", () => {
 
   describe("getGameState() tests", () => {
     it("should correctly retrieve the current game state", async () => {
-      const board = ["OXX..", ".....", ".....", "...XX", "...X."];
+      const board = ["OXX..", ".....", "..#..", "...XX", "...X."];
       const boardState = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.black);
-      boardState.previousBoards = [["OX..", ".....", ".....", "...XX", "...X."]];
+      boardState.previousBoards = ["OX.........#.....XX...X."];
       Go.currentGame = boardState;
 
       const result = getGameState();

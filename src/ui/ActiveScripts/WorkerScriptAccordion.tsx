@@ -18,7 +18,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import makeStyles from "@mui/styles/makeStyles";
+import { makeStyles } from "tss-react/mui";
 
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
@@ -34,7 +34,7 @@ import { arrayToString } from "../../utils/helpers/ArrayHelpers";
 import { Money } from "../React/Money";
 import { MoneyRate } from "../React/MoneyRate";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   noborder: {
     borderBottom: "none",
   },
@@ -45,7 +45,7 @@ interface IProps {
 }
 
 export function WorkerScriptAccordion(props: IProps): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [open, setOpen] = React.useState(false);
   const workerScript = props.workerScript;
   const scriptRef = workerScript.scriptRef;

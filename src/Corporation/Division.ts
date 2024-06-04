@@ -925,6 +925,8 @@ export class Division {
             if (sCost - product.cityData[city].productionCost > markupLimit) {
               markup = markupLimit / (sCost - product.cityData[city].productionCost);
             }
+          } else if (sCost <= 0) {
+            markup = 1e12; //Sell everything, essentially discard - as materials
           }
 
           product.maxSellAmount =
@@ -939,7 +941,7 @@ export class Division {
           sellAmt = Math.min(product.maxSellAmount, sellAmt);
           sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;
           sellAmt = Math.min(product.cityData[city].stored, sellAmt); //data[0] is qty
-          if (sellAmt && sCost) {
+          if (sellAmt && sCost >= 0) {
             product.cityData[city].stored -= sellAmt; //data[0] is qty
             totalProfit += sellAmt * sCost;
             product.cityData[city].actualSellAmount = sellAmt / (corpConstants.secondsPerMarketCycle * marketCycles); //data[2] is sell property

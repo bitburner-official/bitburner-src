@@ -7,7 +7,7 @@ import { GoColor } from "@enums";
 import { columnIndexes } from "../Constants";
 import { findNeighbors } from "../boardState/boardState";
 import { pointStyle } from "../boardState/goStyles";
-import { findAdjacentLibertiesAndAlliesForPoint, getColorOnSimpleBoard } from "../boardAnalysis/boardAnalysis";
+import { findAdjacentLibertiesAndAlliesForPoint, getColorOnBoardString } from "../boardAnalysis/boardAnalysis";
 
 interface GoPointProps {
   state: BoardState;
@@ -42,7 +42,7 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
   const sizeClass = getSizeClass(state.board[0].length, classes);
 
   const isNewStone =
-    state.previousBoards.length && getColorOnSimpleBoard(state.previousBoards[0], x, y) === GoColor.empty;
+    state.previousBoards.length && getColorOnBoardString(state.previousBoards[0], x, y) === GoColor.empty;
   const isPriorMove = player === state.previousPlayer && isNewStone;
 
   const emptyPointColorClass =

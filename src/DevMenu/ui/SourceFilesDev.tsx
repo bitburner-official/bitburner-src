@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 
 import { Accordion, AccordionSummary, AccordionDetails, Button, ButtonGroup, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { makeStyles } from "@mui/styles";
+import { makeStyles } from "tss-react/mui";
 
 import { Player } from "@player";
 import { Sleeve } from "../../PersonObjects/Sleeve/Sleeve";
@@ -11,7 +11,7 @@ import { MaxSleevesFromCovenant } from "../../PersonObjects/Sleeve/SleeveCovenan
 
 // Update as additional BitNodes get implemented
 const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   group: {
     display: "inline-flex",
     placeItems: "center",
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 });
 
 export function SourceFilesDev({ parentRerender }: { parentRerender: () => void }): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const setSF = useCallback(
     (sfN: number, sfLvl: number) => () => {
