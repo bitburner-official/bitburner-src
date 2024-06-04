@@ -226,7 +226,7 @@ export class Terminal {
       Player.gainMoney(moneyGained, "hacking");
       Player.gainHackingExp(expGainedOnSuccess);
       if (expGainedOnSuccess > 1) {
-        Player.gainIntelligenceExp(Math.log10(expGainedOnSuccess));
+        Player.gainIntelligenceExp(4 * Math.log10(expGainedOnSuccess));
       }
 
       const oldSec = server.hackDifficulty;
