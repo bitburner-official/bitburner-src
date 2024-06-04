@@ -72,16 +72,19 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     if (!script) return accumulator;
 
     const content: string = "content" in script ? script["content"] : script["code"];
-    if (!content.match(pattern)?.length) return accumulator;
 
     const editedContent: string = content
       .split("\n")
       .map((line, i) => {
-        if (!line.match(pattern)?.length) return null;
-        const prefix: string = `${isMultiscript ? `${MAGENTA}${script.filename}${CYAN}:${DEF}` : ""}${
-          isNumbered ? `${GREEN}${i + 1}${CYAN}:${DEF}` : ""
-        }`;
-        return `${prefix}${line.replaceAll(pattern, `${RED}$&${DEF}`)}`;
+        if (!(isRegExp ? line.match(pattern)?.length : line.split(pattern).length > 1)) return null;
+        // if pattern is blank, just pass line back (avoid infinite replaceAll)
+        const editedLine = pattern.toString().length ? line.replaceAll(pattern, `${RED}$&${DEF}`) : line;
+
+        const fileName:string = isMultiscript ? `${MAGENTA}${script.filename}${CYAN}:${DEF}` : "";
+        const lineNo :string= isNumbered ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
+        const prefix: string = fileName + lineNo;
+
+        return `${prefix}${editedLine}`;
       })
       .filter((line) => line)
       .join("\n");
