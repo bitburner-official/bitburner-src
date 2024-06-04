@@ -144,6 +144,10 @@ export function initForeignServers(homeComputer: Server): void {
       organizationName: metadata.organizationName,
     };
 
+    if (metadata.maxRamExponent !== undefined) {
+      serverParams.maxRam = Math.pow(2, toNumber(metadata.maxRamExponent));
+    }
+
     if (metadata.hackDifficulty) serverParams.hackDifficulty = toNumber(metadata.hackDifficulty);
     if (metadata.moneyAvailable) serverParams.moneyAvailable = toNumber(metadata.moneyAvailable);
     if (metadata.requiredHackingSkill) serverParams.requiredHackingSkill = toNumber(metadata.requiredHackingSkill);
@@ -154,9 +158,6 @@ export function initForeignServers(homeComputer: Server): void {
     if (metadata.networkLayer) {
       const layer = toNumber(metadata.networkLayer);
       server.cpuCores = getRandomIntInclusive(Math.ceil(layer / 2), layer);
-    }
-    if (metadata.maxRamExponent !== undefined) {
-      serverParams.maxRam = Math.pow(2, toNumber(metadata.maxRamExponent));
     }
 
     for (const filename of metadata.literature || []) {
