@@ -12,16 +12,7 @@ const magenta: string = "\x1b[35m"; // Magenta
 
 export function grep(args: (string | number | boolean)[], server: BaseServer): void {
   if (!args.length) {
-    return Terminal.error(
-      "Incorrect usage of grep command. Usage: grep [-H/-n] [search string] ...[optional file path(s)]",
-    );
-  }
-
-  let query: RegExp = new RegExp("", "g");
-  try {
-    query = new RegExp(args[0].toString(), "g");
-  } catch (e) {
-    return Terminal.error(`Regular expression ${e}`);
+    return Terminal.error("Incorrect usage of grep command. Usage: grep [OPTION]... PATTERN [FILE]...");
   }
 
   const [runArgs, otherArgs]: [string[], string[]] = args.slice(1).reduce(
@@ -53,8 +44,17 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
 
   // passed options
   const isNumbered: boolean = runArgs.some((arg) => ["-n", "--line-number"].includes(arg));
-
   const isMultiscript: boolean = runArgs.some((arg) => ["-H", "--with-filename"].includes(arg)) || argFiles.length > 1;
+  const isRegExp: boolean = runArgs.some((arg) => ["-G", "--basic-regexp"].includes(arg));
+
+  let pattern: string | RegExp = args[0].toString();
+  if (isRegExp) {
+    try {
+      pattern = new RegExp(pattern, "g");
+    } catch (e) {
+      return Terminal.error(`Regular expression ${e}`);
+    }
+  }
 
   const files: (Script | TextFile | null)[] = argFiles.length
     ? argFiles
@@ -64,16 +64,16 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     if (!script) return accumulator;
 
     const content: string = "content" in script ? script["content"] : script["code"];
-    if (!content.match(query)?.length) return accumulator;
+    if (!content.match(pattern)?.length) return accumulator;
 
     const editedContent: string = content
       .split("\n")
       .map((line, i) => {
-        if (!line.match(query)?.length) return null;
+        if (!line.match(pattern)?.length) return null;
         const prefix: string = `${isMultiscript ? `${magenta}${script.filename}${cyan}:${def}` : ""}${
           isNumbered ? `${green}${i + 1}${cyan}:${def}` : ""
         }`;
-        return `${prefix}${line.replaceAll(query, `${red}$&${def}`)}`;
+        return `${prefix}${line.replaceAll(pattern, `${red}$&${def}`)}`;
       })
       .filter((line) => line)
       .join("\n");
