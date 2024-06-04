@@ -82,8 +82,8 @@ function validateFiles(filesStrings: string[], server: BaseServer): [(Script | T
   const goodFiles = okFiles.length
     ? okFiles
     : [...(server?.scripts ?? []), ...(server?.textFiles ?? [])].map(
-        (tuple: [TextFilePath | ScriptFilePath, TextFile | Script]): Script | TextFile => tuple[1],
-      );
+      (tuple: [TextFilePath | ScriptFilePath, TextFile | Script]): Script | TextFile => tuple[1],
+    );
 
   return [goodFiles, badFiles];
 }
@@ -108,19 +108,15 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     return Terminal.error(`Invalid filename(s): ${badFiles.join(", ")}`);
   }
 
-  let pattern: string | RegExp = otherArgs[0];
-  if (options.regExpr) {
-    try {
-      pattern = new RegExp(pattern, "g");
-    } catch (e) {
-      return Terminal.error(`Regular expression ${e}`);
-    }
+  try {
+    const pattern: string | RegExp = options.regExpr ? new RegExp(otherArgs[0],"g") : otherArgs[0];
+    const result: string = okFiles
+      .flatMap(parseScript(options, pattern))
+      .filter((line: string | null) => !!line)
+      .join("\n");
+    Terminal.print(result);
+  } catch (e) {
+    Terminal.error("RegExp Err - " + e);
   }
 
-  const result: string = okFiles
-    .flatMap(parseScript(options, pattern))
-    .filter((line: string | null) => !!line)
-    .join("\n");
-
-  Terminal.print(result);
 }
