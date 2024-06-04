@@ -76,10 +76,8 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     const editedContent: string = content
       .split("\n")
       .map((line, i) => {
-        if (!(isRegExp ? line.match(pattern)?.length : line.split(pattern).length > 1)) return null;
-        // if pattern is blank, just pass line back (avoid infinite replaceAll)
-        const editedLine = pattern.toString().length ? line.replaceAll(pattern, `${RED}$&${DEF}`) : line;
-
+        const editedLine = line.replaceAll(pattern, `${RED}$&${DEF}`);
+        if (line === editedLine) return null; // don't print unmatched lines
         const fileName: string = isMultiscript ? `${MAGENTA}${script.filename}${CYAN}:${DEF}` : "";
         const lineNo: string = isNumbered ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
         const prefix: string = fileName + lineNo;
