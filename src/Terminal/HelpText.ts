@@ -15,7 +15,7 @@ export const TerminalHelpText: string[] = [
   "    download [script/text file]      Downloads scripts or text files to your computer",
   "    expr [math expression]           Evaluate a mathematical expression",
   "    free                             Check the machine's memory (RAM) usage",
-  "    grep [OPTION] PATTERN [FILE]...  Search for PATTERN (string/regular expression) in each FILE and print results to terminal",
+  "    grep [opts]... pattern [file]... Search for PATTERN (string/regular expression) in each FILE and print results to terminal",
   "    grow                             Spoof money in a servers bank account, increasing the amount available.",
   "    hack                             Hack the current machine",
   "    help [command]                   Display this help text, or the help text for a command",
@@ -246,6 +246,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "Without FILE(s) passed, defaults to search every file on current server.",
     'If encountering difficulties with argument parsing, consider explicitly passing a string as PATTERN. Example: grep -G "(complex|regexp|\\w+)" script.js',
+    " ",
   ],
   grow: [
     "Usage: grow",
