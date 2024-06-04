@@ -17,7 +17,13 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     );
   }
 
-  const query: RegExp = new RegExp(args[0].toString(), "g");
+  let query: RegExp = new RegExp("", "g");
+  try {
+    query = new RegExp(args[0].toString(), "g");
+  } catch (e) {
+    return Terminal.error(`Regular expression ${e}`);
+  }
+
   const [runArgs, otherArgs]: [string[], string[]] = args.slice(1).reduce(
     ([runArgs, fileStrings]: [string[], string[]], arg) => {
       const strArg: string = arg.toString();
