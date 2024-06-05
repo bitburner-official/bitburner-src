@@ -11,7 +11,7 @@ import {
   getPreviousMove,
   simpleBoardFromBoard,
 } from "../boardAnalysis/boardAnalysis";
-import { getOpponentStats, getScore, resetWinstreak } from "../boardAnalysis/scoring";
+import { endGoGame, getOpponentStats, getScore, resetWinstreak } from "../boardAnalysis/scoring";
 import { WHRNG } from "../../Casino/RNG";
 import { getRecordKeys } from "../../Types/Record";
 import { CalculateEffect, getEffectTypeForFaction } from "./effect";
@@ -337,30 +337,27 @@ export async function determineCheatSuccess(
 ): Promise<Play> {
   const state = Go.currentGame;
   const rng = new WHRNG(Player.totalPlaytime);
+  state.passCount = 0;
+
   // If cheat is successful, run callback
   if ((successRngOverride ?? rng.random()) <= cheatSuccessChance(state.cheatCount)) {
     callback();
-    state.cheatCount++;
     GoEvents.emit();
-    return makeAIMove(state);
   }
   // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly losing
   else if (state.cheatCount && (ejectRngOverride ?? rng.random()) < 0.1) {
     logger(`Cheat failed! You have been ejected from the subnet.`);
-    resetBoardState(logger, logger, state.ai, state.board[0].length);
-    return {
-      type: GoPlayType.gameOver,
-      x: null,
-      y: null,
-    };
+    endGoGame(state);
+    return Go.nextTurn;
   }
   // If the cheat fails, your turn is skipped
   else {
     logger(`Cheat failed. Your turn has been skipped.`);
     passTurn(state, GoColor.black, false);
-    state.cheatCount++;
-    return makeAIMove(state);
   }
+
+  state.cheatCount++;
+  return makeAIMove(state);
 }
 
 /**
@@ -395,7 +392,7 @@ export function cheatRemoveRouter(
   y: number,
   successRngOverride?: number,
   ejectRngOverride?: number,
-) {
+): Promise<Play> {
   const point = Go.currentGame.board[x][y]!;
   return determineCheatSuccess(
     logger,
@@ -421,7 +418,7 @@ export function cheatPlayTwoMoves(
   y2: number,
   successRngOverride?: number,
   ejectRngOverride?: number,
-) {
+): Promise<Play> {
   const point1 = Go.currentGame.board[x1][y1]!;
   const point2 = Go.currentGame.board[x2][y2]!;
 
@@ -446,7 +443,7 @@ export function cheatRepairOfflineNode(
   y: number,
   successRngOverride?: number,
   ejectRngOverride?: number,
-) {
+): Promise<Play> {
   return determineCheatSuccess(
     logger,
     () => {
@@ -472,7 +469,7 @@ export function cheatDestroyNode(
   y: number,
   successRngOverride?: number,
   ejectRngOverride?: number,
-) {
+): Promise<Play> {
   return determineCheatSuccess(
     logger,
     () => {

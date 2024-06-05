@@ -44,6 +44,7 @@ import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
 import { SnackbarEvents } from "./ui/React/Snackbar";
 import { SaveData } from "./types";
+import { Go } from "./Go/Go";
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
@@ -329,6 +330,8 @@ const Engine: {
 
       // Bladeburner offline progress
       if (Player.bladeburner) Player.bladeburner.storeCycles(numCyclesOffline);
+
+      Go.storeCycles(numCyclesOffline);
 
       staneksGift.process(numCyclesOffline);
 

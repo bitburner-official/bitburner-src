@@ -45,6 +45,7 @@ exports[`Check Save File Continuity GoSave continuity 1`] = `
   },
   "previousGame": null,
   "stats": {},
+  "storedCycles": 0,
 }
 `;
 

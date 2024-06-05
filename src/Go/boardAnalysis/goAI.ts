@@ -57,7 +57,7 @@ export function makeAIMove(boardState: BoardState): Promise<Play> {
       }
 
       // Handle AI making a move
-      await sleep(500);
+      await waitCycle();
       const aiUpdatedBoard = makeMove(boardState, play.x, play.y, GoColor.white);
 
       // Handle the AI breaking. This shouldn't ever happen.
@@ -114,7 +114,7 @@ export async function getMove(
   opponent: GoOpponent,
   rngOverride?: number,
 ): Promise<Play & { type: GoPlayType.move | GoPlayType.pass }> {
-  await sleep(300);
+  await waitCycle();
   const rng = new WHRNG(rngOverride || Player.totalPlaytime);
   const smart = isSmart(opponent, rng.random());
   const moves = getMoveOptions(boardState, player, rng.random(), smart);
@@ -142,9 +142,9 @@ export async function getMove(
     .filter((point) => evaluateIfMoveIsValid(boardState, point.x, point.y, player, false));
 
   const chosenMove = moveOptions[Math.floor(rng.random() * moveOptions.length)];
+  await waitCycle();
 
   if (chosenMove) {
-    await sleep(200);
     //console.debug(`Non-priority move chosen: ${chosenMove.x} ${chosenMove.y}`);
     return { type: GoPlayType.move, x: chosenMove.x, y: chosenMove.y };
   }
@@ -786,7 +786,7 @@ function getMoveOptions(
   };
 
   async function retrieveMoveOption(id: keyof typeof moveOptions): Promise<Move | null> {
-    await sleep(100);
+    await waitCycle();
     if (moveOptions[id] !== undefined) {
       return moveOptions[id] ?? null;
     }
@@ -811,6 +811,18 @@ export function getKomi(opponent: GoOpponent) {
  */
 export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Spend some time waiting to allow the UI & CSS to render smoothly
+ * If bonus time is available, significantly decrease the length of the wait
+ */
+function waitCycle(): Promise<void> {
+  if (Go.storedCycles > 0) {
+    Go.storedCycles -= 1;
+    return sleep(40);
+  }
+  return sleep(200);
 }
 
 export function showWorldDemon() {

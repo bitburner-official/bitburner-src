@@ -11,6 +11,7 @@ export class GoObject {
   currentGame: BoardState = getNewBoardState(7);
   stats: PartialRecord<GoOpponent, OpponentStats> = {};
   nextTurn: Promise<Play> = Promise.resolve({ type: GoPlayType.gameOver, x: null, y: null });
+  storedCycles: number = 0;
 
   prestigeAugmentation() {
     for (const stats of getRecordValues(this.stats)) {
@@ -23,6 +24,16 @@ export class GoObject {
     this.previousGame = null;
     this.currentGame = getNewBoardState(7);
     this.stats = {};
+  }
+
+  /**
+   * Stores offline time that is consumed to speed up the AI.
+   * Only stores offline time if the player has actually been using the mechanic.
+   */
+  storeCycles(offlineCycles: number) {
+    if (this.previousGame) {
+      this.storedCycles += offlineCycles ?? 0;
+    }
   }
 }
 
