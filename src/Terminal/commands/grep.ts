@@ -40,35 +40,40 @@ function filterArgs([options, otherArgs]: [Options, string[]], arg: string): [Op
   return isOption ? [options, otherArgs] : [options, [...otherArgs, arg]];
 }
 
-function parseScript(
+function parseLine(
+  pattern: string | RegExp,
+  options: Options,
+  scriptName: string,
+): (line: string, i: number) => string {
+  return function (line: string, i: number): string {
+    const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEF}`);
+    if (line === editedLine) return ""; // don't print unmatched lines
+    const fileName: string =
+      (options.multiScript || options.yesName) && !options.notName ? `${MAGENTA}${scriptName}${CYAN}:${DEF}` : "";
+    const lineNo: string = options.lineNum ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
+    const prefix: string = fileName + lineNo;
+
+    return prefix + editedLine;
+  };
+}
+
+function parseFile(
   options: Options,
   pattern: string | RegExp,
-): (script: Script | TextFile | null) => (string | null)[] | null {
+): (script: Script | TextFile | null) => string[] | string {
   return function (script: Script | TextFile | null) {
-    if (!script) return null;
-
+    if (!script) return "";
     const content: string = "content" in script ? script["content"] : script["code"];
 
-    const editedContent: (string | null)[] = content.split("\n").map((line: string, i: number): string | null => {
-      const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEF}`);
-      if (line === editedLine) return null; // don't print unmatched lines
-      const fileName: string =
-        (options.multiScript || options.yesName) && !options.notName
-          ? `${MAGENTA}${script.filename}${CYAN}:${DEF}`
-          : "";
-      const lineNo: string = options.lineNum ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
-      const prefix: string = fileName + lineNo;
-
-      return prefix + editedLine;
-    });
+    const editedContent: string[] = content.split("\n").map(parseLine(pattern, options, script.filename));
 
     return editedContent;
   };
 }
 
-function validateFiles(filesStrings: string[], server: BaseServer): [(Script | TextFile | null)[], string[]] {
+function getArgFiles(args: string[]): [(Script | TextFile | null)[], string[]] {
   const badFiles: string[] = [];
-  const okFiles: (Script | TextFile | null)[] = filesStrings.slice(1).map((arg: string): Script | TextFile | null => {
+  const okFiles: (Script | TextFile | null)[] = args.map((arg: string): Script | TextFile | null => {
     const script: Script | TextFile | null = hasTextExtension(arg)
       ? Terminal.getTextFile(arg)
       : Terminal.getScript(arg);
@@ -77,15 +82,16 @@ function validateFiles(filesStrings: string[], server: BaseServer): [(Script | T
     }
     return script;
   });
+  return [okFiles, badFiles];
+}
 
-  // search all files on server if no file arguments passed
-  const goodFiles = okFiles.length
-    ? okFiles
-    : [...(server?.scripts ?? []), ...(server?.textFiles ?? [])].map(
-        (tuple: [TextFilePath | ScriptFilePath, TextFile | Script]): Script | TextFile => tuple[1],
-      );
-
-  return [goodFiles, badFiles];
+function getServerFiles(server: BaseServer): [(Script | TextFile | null)[], string[]] {
+  return [
+    [...(server?.scripts ?? []), ...(server?.textFiles ?? [])].map(
+      (tuple: [TextFilePath | ScriptFilePath, TextFile | Script]): Script | TextFile => tuple[1],
+    ),
+    [],
+  ];
 }
 
 export function grep(args: (string | number | boolean)[], server: BaseServer): void {
@@ -93,14 +99,14 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     return Terminal.error("Incorrect usage of grep command. Usage: grep [OPTION]... PATTERN [FILE]...");
   }
 
-  const initArgs: [Options, []] = [
-    { lineNum: false, regExpr: false, yesName: false, notName: false, multiScript: false },
-    [],
-  ];
+  const initOpts: Options = { lineNum: false, regExpr: false, yesName: false, notName: false, multiScript: false };
+  const [options, otherArgs]: [Options, string[]] = args.map(String).reduce(filterArgs, [initOpts, []]);
 
-  const [options, otherArgs]: [Options, string[]] = args.map(String).reduce(filterArgs, initArgs);
+  const fileArgs = otherArgs.slice(1);
 
-  const [okFiles, badFiles]: [(Script | TextFile | null)[], string[]] = validateFiles(otherArgs, server);
+  const [okFiles, badFiles]: [(Script | TextFile | null)[], string[]] = fileArgs.length
+    ? getArgFiles(fileArgs)
+    : getServerFiles(server);
 
   options.multiScript = okFiles.length > 1;
 
@@ -111,11 +117,11 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   try {
     const pattern: string | RegExp = options.regExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
     const result: string = okFiles
-      .flatMap(parseScript(options, pattern))
-      .filter((line: string | null) => !!line)
+      .flatMap(parseFile(options, pattern))
+      .filter((line: string) => line.length)
       .join("\n");
     Terminal.print(result);
   } catch (e) {
-    Terminal.error("RegExp Err - " + e);
+    Terminal.error("RegExp Err: " + e);
   }
 }
