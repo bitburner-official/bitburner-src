@@ -40,32 +40,32 @@ function filterArgs([options, otherArgs]: [Options, string[]], arg: string): [Op
   return isOption ? [options, otherArgs] : [options, [...otherArgs, arg]];
 }
 
-function parseLine(
+function getParseFunc(
   pattern: string | RegExp,
   options: Options,
-  scriptName: string,
-): (line: string, i: number) => string {
-  return function (line: string, i: number): string {
-    const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEF}`);
-    if (line === editedLine) return ""; // don't print unmatched lines
-    const fileName: string =
-      (options.multiScript || options.yesName) && !options.notName ? `${MAGENTA}${scriptName}${CYAN}:${DEF}` : "";
-    const lineNo: string = options.lineNum ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
-    const prefix: string = fileName + lineNo;
+): (scriptName: string) => (line: string, i: number) => string {
+  return function (scriptName: string): (line: string, i: number) => string {
+    return function (line: string, i: number): string {
+      const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEF}`);
+      if (line === editedLine) return ""; // don't print unmatched lines
+      const fileName: string =
+        (options.multiScript || options.yesName) && !options.notName ? `${MAGENTA}${scriptName}${CYAN}:${DEF}` : "";
+      const lineNo: string = options.lineNum ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
+      const prefix: string = fileName + lineNo;
 
-    return prefix + editedLine;
+      return prefix + editedLine;
+    };
   };
 }
 
 function parseFile(
-  options: Options,
-  pattern: string | RegExp,
+  parseLine: (scriptName: string) => (line: string, i: number) => string,
 ): (script: Script | TextFile | null) => string[] | string {
   return function (script: Script | TextFile | null) {
     if (!script) return "";
     const content: string = "content" in script ? script["content"] : script["code"];
 
-    const editedContent: string[] = content.split("\n").map(parseLine(pattern, options, script.filename));
+    const editedContent: string[] = content.split("\n").map(parseLine(script.filename));
 
     return editedContent;
   };
@@ -117,7 +117,7 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   try {
     const pattern: string | RegExp = options.regExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
     const result: string = okFiles
-      .flatMap(parseFile(options, pattern))
+      .flatMap(parseFile(getParseFunc(pattern, options)))
       .filter((line: string) => line.length)
       .join("\n");
     Terminal.print(result);
