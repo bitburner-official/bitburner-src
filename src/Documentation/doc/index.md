@@ -48,6 +48,7 @@
 - [Game Frozen or Stuck?](programming/game_frozen.md)
 - [Tools & Resources](help/tools_and_resources.md)
 - [Changelog](changelog.md)
+- [Credits and history](credits.md)
 
 ## Migration
 
