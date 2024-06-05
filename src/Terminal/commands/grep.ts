@@ -1,15 +1,12 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import { TextFilePath, hasTextExtension } from "../../Paths/TextFilePath";
-import { Script } from "src/Script/Script";
-import { TextFile } from "src/TextFile";
-import { ScriptFilePath } from "src/Paths/ScriptFilePath";
+import { hasTextExtension } from "../../Paths/TextFilePath";
+import { ContentFile, ContentFilePath, allContentFiles} from "../../Paths/ContentFile";
 
 type LineParser = (line: string, i: number) => string;
 type fnLineParser = (filename: string) => LineParser;
-type FileParser = (file: Script | TextFile | null) => string[] | string;
-type File = Script | TextFile | null;
-type FileTuple = [TextFilePath | ScriptFilePath, TextFile | Script];
+type FileParser = (file: ContentFile | null) => string[] | string;
+type FileTuple = [ContentFilePath, ContentFile];
 
 interface OkArgs {
   lineNum: string[];
@@ -55,7 +52,7 @@ function getParseFunc(pattern: string | RegExp, options: Options): fnLineParser 
 }
 
 function parseFile(parseLine: fnLineParser): FileParser {
-  return function (file: File): string | string[] {
+  return function (file: ContentFile | null): string | string[] {
     if (!file) return "";
     const content: string = "content" in file ? file["content"] : file["code"];
 
@@ -65,23 +62,23 @@ function parseFile(parseLine: fnLineParser): FileParser {
   };
 }
 
-function getServerFiles(server: BaseServer): [File[], string[]] {
+function getServerFiles(server: BaseServer): [ContentFile[], string[]] {
   return [
-    [...(server?.scripts ?? []), ...(server?.textFiles ?? [])].map((tuple: FileTuple): Script | TextFile => tuple[1]),
+    [...allContentFiles(server)].map((tuple: FileTuple): ContentFile => tuple[1]),
     [], // empty array for badFiles
   ];
 }
 
-function getArgFiles(args: string[]): [File[], string[]] {
-  const badFiles: string[] = [];
-  const okFiles: File[] = args.map((arg: string): File => {
-    const script: File = hasTextExtension(arg) ? Terminal.getTextFile(arg) : Terminal.getScript(arg);
+function getArgFiles(args: string[]): [(ContentFile | null)[], string[]] {
+  const notFiles: string[] = [];
+  const files: (ContentFile | null)[] = args.map((arg: string): ContentFile | null => {
+    const script: ContentFile | null = hasTextExtension(arg) ? Terminal.getTextFile(arg) : Terminal.getScript(arg);
     if (!script) {
-      badFiles.push(arg);
+      notFiles.push(arg);
     }
     return script;
   });
-  return [okFiles, badFiles];
+  return [files, notFiles];
 }
 
 function filterArgs([options, otherArgs]: [Options, string[]], arg: string): [Options, string[]] {
@@ -101,18 +98,20 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
 
   const fileArgs = otherArgs.slice(1);
 
-  const [okFiles, badFiles]: [File[], string[]] = fileArgs.length ? getArgFiles(fileArgs) : getServerFiles(server);
+  const [files, notFiles]: [(ContentFile | null)[], string[]] = fileArgs.length
+    ? getArgFiles(fileArgs)
+    : getServerFiles(server);
 
-  options.multiFile = okFiles.length > 1;
+  options.multiFile = files.length > 1;
 
-  if (badFiles.length) {
-    return Terminal.error(`Invalid filename(s): ${badFiles.join(", ")}`);
+  if (notFiles.length) {
+    return Terminal.error(`Invalid filename(s): ${notFiles.join(", ")}`);
   }
 
   try {
     const pattern: string | RegExp = options.regExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
     const parseFunc: fnLineParser = getParseFunc(pattern, options);
-    const result: string = okFiles
+    const result: string = files
       .flatMap(parseFile(parseFunc))
       .filter((line: string) => line.length)
       .join("\n");
