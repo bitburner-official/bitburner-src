@@ -5,11 +5,11 @@ import { Script } from "src/Script/Script";
 import { TextFile } from "src/TextFile";
 import { ScriptFilePath } from "src/Paths/ScriptFilePath";
 
-const RED: string = "\x1b[31m"; // red
-const DEF: string = "\x1b[0m"; // default
-const GREEN: string = "\x1b[32m"; // green
-const CYAN: string = "\x1b[36m"; // cyan
-const MAGENTA: string = "\x1b[35m"; // Magenta
+type LineParser = (line: string, i: number) => string;
+type GetLineParser = (filename: string) => LineParser;
+type FileParser = (file: Script | TextFile | null) => string[] | string;
+type File = Script | TextFile | null;
+type FileTuple = [TextFilePath | ScriptFilePath, TextFile | Script];
 
 interface OkArgs {
   lineNum: string[];
@@ -23,7 +23,7 @@ interface Options {
   regExpr: boolean;
   yesName: boolean;
   notName: boolean;
-  multiScript: boolean;
+  multiFile: boolean;
 }
 
 const OK_ARGS: OkArgs = {
@@ -33,50 +33,49 @@ const OK_ARGS: OkArgs = {
   notName: ["-h", "--no-filename"],
 };
 
-function filterArgs([options, otherArgs]: [Options, string[]], arg: string): [Options, string[]] {
-  const isOption: boolean = Object.keys(OK_ARGS).some((key: string): boolean =>
-    OK_ARGS[key as keyof OkArgs].includes(arg) ? (options[key as keyof Options] = true) : false,
-  );
-  return isOption ? [options, otherArgs] : [options, [...otherArgs, arg]];
-}
-
-function getParseFunc(
-  pattern: string | RegExp,
-  options: Options,
-): (scriptName: string) => (line: string, i: number) => string {
-  return function (scriptName: string): (line: string, i: number) => string {
+function getParseFunc(pattern: string | RegExp, options: Options): GetLineParser {
+  return function (filename: string): LineParser {
     return function (line: string, i: number): string {
+      const RED: string = "\x1b[31m";
+      const DEF: string = "\x1b[0m"; // default
+      const GREEN: string = "\x1b[32m";
+      const CYAN: string = "\x1b[36m";
+      const MAGENTA: string = "\x1b[35m";
+
       const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEF}`);
       if (line === editedLine) return ""; // don't print unmatched lines
-      const fileName: string =
-        (options.multiScript || options.yesName) && !options.notName ? `${MAGENTA}${scriptName}${CYAN}:${DEF}` : "";
+      const name: string =
+        (options.multiFile || options.yesName) && !options.notName ? `${MAGENTA}${filename}${CYAN}:${DEF}` : "";
       const lineNo: string = options.lineNum ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
-      const prefix: string = fileName + lineNo;
+      const prefix: string = name + lineNo;
 
       return prefix + editedLine;
     };
   };
 }
 
-function parseFile(
-  parseLine: (scriptName: string) => (line: string, i: number) => string,
-): (script: Script | TextFile | null) => string[] | string {
-  return function (script: Script | TextFile | null) {
-    if (!script) return "";
-    const content: string = "content" in script ? script["content"] : script["code"];
+function parseFile(parseLine: GetLineParser): FileParser {
+  return function (file: File) {
+    if (!file) return "";
+    const content: string = "content" in file ? file["content"] : file["code"];
 
-    const editedContent: string[] = content.split("\n").map(parseLine(script.filename));
+    const editedContent: string[] = content.split("\n").map(parseLine(file.filename));
 
     return editedContent;
   };
 }
 
-function getArgFiles(args: string[]): [(Script | TextFile | null)[], string[]] {
+function getServerFiles(server: BaseServer): [File[], string[]] {
+  return [
+    [...(server?.scripts ?? []), ...(server?.textFiles ?? [])].map((tuple: FileTuple): Script | TextFile => tuple[1]),
+    [], // empty array for badFiles
+  ];
+}
+
+function getArgFiles(args: string[]): [File[], string[]] {
   const badFiles: string[] = [];
-  const okFiles: (Script | TextFile | null)[] = args.map((arg: string): Script | TextFile | null => {
-    const script: Script | TextFile | null = hasTextExtension(arg)
-      ? Terminal.getTextFile(arg)
-      : Terminal.getScript(arg);
+  const okFiles: File[] = args.map((arg: string): File => {
+    const script: File = hasTextExtension(arg) ? Terminal.getTextFile(arg) : Terminal.getScript(arg);
     if (!script) {
       badFiles.push(arg);
     }
@@ -85,13 +84,11 @@ function getArgFiles(args: string[]): [(Script | TextFile | null)[], string[]] {
   return [okFiles, badFiles];
 }
 
-function getServerFiles(server: BaseServer): [(Script | TextFile | null)[], string[]] {
-  return [
-    [...(server?.scripts ?? []), ...(server?.textFiles ?? [])].map(
-      (tuple: [TextFilePath | ScriptFilePath, TextFile | Script]): Script | TextFile => tuple[1],
-    ),
-    [],
-  ];
+function filterArgs([options, otherArgs]: [Options, string[]], arg: string): [Options, string[]] {
+  const isOption: boolean = Object.keys(OK_ARGS).some((key: string): boolean =>
+    OK_ARGS[key as keyof OkArgs].includes(arg) ? (options[key as keyof Options] = true) : false,
+  );
+  return isOption ? [options, otherArgs] : [options, [...otherArgs, arg]];
 }
 
 export function grep(args: (string | number | boolean)[], server: BaseServer): void {
@@ -99,16 +96,14 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     return Terminal.error("Incorrect usage of grep command. Usage: grep [OPTION]... PATTERN [FILE]...");
   }
 
-  const initOpts: Options = { lineNum: false, regExpr: false, yesName: false, notName: false, multiScript: false };
+  const initOpts: Options = { lineNum: false, regExpr: false, yesName: false, notName: false, multiFile: false };
   const [options, otherArgs]: [Options, string[]] = args.map(String).reduce(filterArgs, [initOpts, []]);
 
   const fileArgs = otherArgs.slice(1);
 
-  const [okFiles, badFiles]: [(Script | TextFile | null)[], string[]] = fileArgs.length
-    ? getArgFiles(fileArgs)
-    : getServerFiles(server);
+  const [okFiles, badFiles]: [File[], string[]] = fileArgs.length ? getArgFiles(fileArgs) : getServerFiles(server);
 
-  options.multiScript = okFiles.length > 1;
+  options.multiFile = okFiles.length > 1;
 
   if (badFiles.length) {
     return Terminal.error(`Invalid filename(s): ${badFiles.join(", ")}`);
