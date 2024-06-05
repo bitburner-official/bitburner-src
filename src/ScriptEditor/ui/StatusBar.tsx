@@ -40,8 +40,8 @@ export class StatusBar {
   rerender: () => void;
 
   onCloseHandler: ((query: string) => void) | null;
-  onKeyDownHandler: ((e: KeyboardEvent, query: string, close: () => void) => void) | null;
-  onKeyUpHandler: ((e: KeyboardEvent, query: string, close: () => void) => void) | null;
+  onKeyDownHandler: ((e: React.KeyboardEvent, query: string, close: () => void) => void) | null;
+  onKeyUpHandler: ((e: React.KeyboardEvent, query: string, close: () => void) => void) | null;
 
   // node is used to setup the status bar. However, we use it to forward the resulting status bar to the outside.
   // sanitizer is weird, so we use it to forward a rerender hook.
@@ -91,18 +91,18 @@ export class StatusBar {
     // this is the created HTML element from monaco-vim. We're not going to use it, so it is marked as unused.
     __text: HTMLElement,
     // this is used to close the input box and set the cursor back to the line in the monaco-editor. query is the text in the input box.
-    onClose: (query: string) => void,
+    onClose: ((query: string) => void) | null,
     options: {
       // This handles ESC, Backspace when input is empty, CTRL-C and CTRL-[. query is the text in the input box. close is a function that closes the input box. e is the key event.
-      onKeyDown: (e: KeyboardEvent, query: string, close: () => void) => void;
+      onKeyDown: ((e: React.KeyboardEvent, query: string, close: () => void) => void) | undefined;
       // This handles all other key events. query is the text in the input box. close is a function that closes the input box. e is the key event.
-      onKeyUp: (e: KeyboardEvent, query: string, close: () => void) => void | undefined;
+      onKeyUp: ((e: React.KeyboardEvent, query: string, close: () => void) => void) | undefined;
       // this is a default value for the input box. The box should be empty if this is not set.
       value: string | undefined;
     },
   ) {
     this.onCloseHandler = onClose;
-    this.onKeyDownHandler = options.onKeyDown;
+    this.onKeyDownHandler = options.onKeyDown ?? null;
     this.onKeyUpHandler = options.onKeyUp ?? null;
     this.inputValue = options.value || "";
     this.showInput = true;
@@ -142,44 +142,17 @@ export class StatusBar {
   };
 
   keyUp = (e: React.KeyboardEvent) => {
-    const event = new KeyboardEvent("keyup", {
-      altKey: e.altKey,
-      ctrlKey: e.ctrlKey,
-      metaKey: e.metaKey,
-      shiftKey: e.shiftKey,
-      key: e.key,
-      code: e.code,
-      charCode: e.charCode,
-      keyCode: e.keyCode,
-      which: e.which,
-      location: e.location,
-      repeat: e.repeat,
-      bubbles: e.bubbles,
-      cancelable: e.cancelable,
-    });
     if (this.onKeyUpHandler !== null) {
-      this.onKeyUpHandler(event, this.inputValue, this.closeInput);
+      this.onKeyUpHandler(e, this.inputValue, this.closeInput);
+    } else {
+      // if the player somehow gets stuck here, they can also press enter to close the input box.
+      if (e.key === "Enter") this.closeInput();
     }
   };
 
   keyDown = (e: React.KeyboardEvent) => {
-    const event = new KeyboardEvent("keydown", {
-      altKey: e.altKey,
-      ctrlKey: e.ctrlKey,
-      metaKey: e.metaKey,
-      shiftKey: e.shiftKey,
-      key: e.key,
-      code: e.code,
-      charCode: e.charCode,
-      keyCode: e.keyCode,
-      which: e.which,
-      location: e.location,
-      repeat: e.repeat,
-      bubbles: e.bubbles,
-      cancelable: e.cancelable,
-    });
     if (this.onKeyDownHandler !== null) {
-      this.onKeyDownHandler(event, this.inputValue, this.closeInput);
+      this.onKeyDownHandler(e, this.inputValue, this.closeInput);
     }
 
     // this handles pressing escape in the input box.

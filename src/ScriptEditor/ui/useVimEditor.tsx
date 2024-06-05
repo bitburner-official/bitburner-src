@@ -41,6 +41,10 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
           Router.toPage(Page.Terminal);
         });
 
+        // Remove any macro recording, since it isn't supported.
+        MonacoVim.VimMode.Vim.mapCommand("q", "", "", null, { context: "normal" });
+        MonacoVim.VimMode.Vim.mapCommand("@", "", "", null, { context: "normal" });
+
         const saveNQuit = (): void => {
           actionsRef.current.save();
           Router.toPage(Page.Terminal);
