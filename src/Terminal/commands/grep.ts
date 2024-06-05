@@ -1,10 +1,10 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { hasTextExtension } from "../../Paths/TextFilePath";
-import { ContentFile, ContentFilePath, allContentFiles} from "../../Paths/ContentFile";
+import { ContentFile, ContentFilePath, allContentFiles } from "../../Paths/ContentFile";
 
 type LineParser = (line: string, i: number) => string;
-type fnLineParser = (filename: string) => LineParser;
+type PtLineParser = (filename: string, line: string, i: number) => string;
 type FileParser = (file: ContentFile | null) => string[] | string;
 type FileTuple = [ContentFilePath, ContentFile];
 
@@ -30,33 +30,31 @@ const OK_ARGS: OkArgs = {
   notName: ["-h", "--no-filename"],
 };
 
-function getParseFunc(pattern: string | RegExp, options: Options): fnLineParser {
-  return function (filename: string): LineParser {
-    return function (line: string, i: number): string {
-      const RED: string = "\x1b[31m";
-      const DEF: string = "\x1b[0m"; // default
-      const GREEN: string = "\x1b[32m";
-      const CYAN: string = "\x1b[36m";
-      const MAGENTA: string = "\x1b[35m";
+function getParseFunc(pattern: string | RegExp, options: Options, filename: string, line: string, i: number): string {
+  const RED: string = "\x1b[31m";
+  const DEF: string = "\x1b[0m"; // default
+  const GREEN: string = "\x1b[32m";
+  const CYAN: string = "\x1b[36m";
+  const MAGENTA: string = "\x1b[35m";
 
-      const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEF}`);
-      if (line === editedLine) return ""; // don't print unmatched lines
-      const name: string =
-        (options.multiFile || options.yesName) && !options.notName ? `${MAGENTA}${filename}${CYAN}:${DEF}` : "";
-      const lineNo: string = options.lineNum ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
-      const prefix: string = name + lineNo;
+  const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEF}`);
+  if (line === editedLine) return ""; // don't print unmatched lines
+  const name: string =
+    (options.multiFile || options.yesName) && !options.notName ? `${MAGENTA}${filename}${CYAN}:${DEF}` : "";
+  const lineNo: string = options.lineNum ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
+  const prefix: string = name + lineNo;
 
-      return prefix + editedLine;
-    };
-  };
+  return prefix + editedLine;
 }
 
-function parseFile(parseLine: fnLineParser): FileParser {
+function parseLine(parseFunc: PtLineParser): FileParser {
   return function (file: ContentFile | null): string | string[] {
     if (!file) return "";
     const content: string = "content" in file ? file["content"] : file["code"];
 
-    const editedContent: string[] = content.split("\n").map(parseLine(file.filename));
+    const parseLine: LineParser = parseFunc.bind(null, file.filename);
+
+    const editedContent: string | string[] = content.split("\n").map(parseLine);
 
     return editedContent;
   };
@@ -110,9 +108,9 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
 
   try {
     const pattern: string | RegExp = options.regExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
-    const parseFunc: fnLineParser = getParseFunc(pattern, options);
+    const parseFunc: PtLineParser = getParseFunc.bind(null, pattern, options);
     const result: string = files
-      .flatMap(parseFile(parseFunc))
+      .flatMap(parseLine(parseFunc))
       .filter((line: string) => line.length)
       .join("\n");
     Terminal.print(result);
