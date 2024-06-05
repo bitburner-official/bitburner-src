@@ -6,7 +6,7 @@ import { TextFile } from "src/TextFile";
 import { ScriptFilePath } from "src/Paths/ScriptFilePath";
 
 type LineParser = (line: string, i: number) => string;
-type GetLineParser = (filename: string) => LineParser;
+type fnLineParser = (filename: string) => LineParser;
 type FileParser = (file: Script | TextFile | null) => string[] | string;
 type File = Script | TextFile | null;
 type FileTuple = [TextFilePath | ScriptFilePath, TextFile | Script];
@@ -33,7 +33,7 @@ const OK_ARGS: OkArgs = {
   notName: ["-h", "--no-filename"],
 };
 
-function getParseFunc(pattern: string | RegExp, options: Options): GetLineParser {
+function getParseFunc(pattern: string | RegExp, options: Options): fnLineParser {
   return function (filename: string): LineParser {
     return function (line: string, i: number): string {
       const RED: string = "\x1b[31m";
@@ -54,8 +54,8 @@ function getParseFunc(pattern: string | RegExp, options: Options): GetLineParser
   };
 }
 
-function parseFile(parseLine: GetLineParser): FileParser {
-  return function (file: File) {
+function parseFile(parseLine: fnLineParser): FileParser {
+  return function (file: File): string | string[] {
     if (!file) return "";
     const content: string = "content" in file ? file["content"] : file["code"];
 
@@ -111,8 +111,9 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
 
   try {
     const pattern: string | RegExp = options.regExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
+    const parseFunc: fnLineParser = getParseFunc(pattern, options);
     const result: string = okFiles
-      .flatMap(parseFile(getParseFunc(pattern, options)))
+      .flatMap(parseFile(parseFunc))
       .filter((line: string) => line.length)
       .join("\n");
     Terminal.print(result);
