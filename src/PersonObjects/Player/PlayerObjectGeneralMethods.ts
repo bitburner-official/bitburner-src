@@ -33,7 +33,7 @@ import { Locations } from "../../Locations/Locations";
 import { Sleeve } from "../Sleeve/Sleeve";
 import { SleeveWorkType } from "../Sleeve/Work/Work";
 import { calculateSkillProgress as calculateSkillProgressF, ISkillProgress } from "../formulas/skill";
-import { AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
+import { AddToAllServers, GetServer, createUniqueRandomIp } from "../../Server/AllServers";
 import { safelyCreateUniqueServer } from "../../Server/ServerHelpers";
 
 import { SpecialServers } from "../../Server/data/SpecialServers";
@@ -51,6 +51,8 @@ import { achievements } from "../../Achievements/Achievements";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isMember } from "../../utils/EnumHelper";
+import { Server } from "../../Server/Server";
+import { blackOpsArray } from "../../Bladeburner/data/BlackOperations";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -587,4 +589,23 @@ export function focusPenalty(this: PlayerObject): number {
     focus = this.focus ? 1 : CONSTANTS.BaseFocusBonus;
   }
   return focus;
+}
+
+export function bitNodeFinishedState(this: PlayerObject): boolean {
+  const wd = GetServer(SpecialServers.WorldDaemon);
+  if (!(wd instanceof Server)) {
+    return false;
+  }
+  if (wd.backdoorInstalled) {
+    return true;
+  }
+  return this.bladeburner !== null && this.bladeburner.numBlackOpsComplete >= blackOpsArray.length;
+}
+
+export function canAccessBitNodeFeature(this: PlayerObject, bn: number): boolean {
+  return this.bitNodeN === bn || this.sourceFileLvl(bn) > 0;
+}
+
+export function knowsAboutBitverse(this: PlayerObject): boolean {
+  return this.sourceFiles.size > 0;
 }

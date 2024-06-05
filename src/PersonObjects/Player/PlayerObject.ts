@@ -132,6 +132,9 @@ export class PlayerObject extends Person implements IPlayer {
   sourceFileLvl = generalMethods.sourceFileLvl;
   applyEntropy = augmentationMethods.applyEntropy;
   focusPenalty = generalMethods.focusPenalty;
+  bitNodeFinishedState = generalMethods.bitNodeFinishedState;
+  canAccessBitNodeFeature = generalMethods.canAccessBitNodeFeature;
+  knowsAboutBitverse = generalMethods.knowsAboutBitverse;
 
   constructor() {
     super();
