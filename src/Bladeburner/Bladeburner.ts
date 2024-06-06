@@ -17,7 +17,7 @@ import {
 } from "@enums";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { formatNumberNoSuffix } from "../ui/formatNumber";
+import { formatHp, formatNumber, formatNumberNoSuffix } from "../ui/formatNumber";
 import { Skills } from "./data/Skills";
 import { City } from "./City";
 import { Player } from "@player";
@@ -46,6 +46,8 @@ import { clampInteger, clampNumber } from "../utils/helpers/clampNumber";
 import { parseCommand } from "../Terminal/Parser";
 import { BlackOperations } from "./data/BlackOperations";
 import { GeneralActions } from "./data/GeneralActions";
+import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
+import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -854,6 +856,22 @@ export class Bladeburner {
   }
 
   completeAction(person: Person, actionIdent: ActionIdentifier, isPlayer = true): WorkStats {
+    const currentHp = person.hp.current;
+    const getExtraLogAfterTakingDamage = (damage: number) => {
+      let extraLog = "";
+      if (currentHp <= damage) {
+        if (person instanceof PlayerObject) {
+          extraLog += ` ${person.whoAmI()} was hospitalized. Current HP is ${formatHp(person.hp.current)}.`;
+        } else if (person instanceof Sleeve) {
+          extraLog += ` ${person.whoAmI()} was shocked. Current shock is ${formatNumber(
+            person.shock,
+          )}. Current HP is ${formatHp(person.hp.current)}.`;
+        }
+      } else {
+        extraLog += ` HP reduced from ${currentHp} to ${person.hp.current}.`;
+      }
+      return extraLog;
+    };
     let retValue = newWorkStats();
     const action = this.getActionObject(actionIdent);
     switch (action.type) {
@@ -899,12 +917,12 @@ export class Bladeburner {
               this.changeRank(person, gain);
               if (isOperation && this.logging.ops) {
                 this.log(
-                  `${person.whoAmI()}: ${action.name} successfully completed! Gained ${formatBigNumber(gain)} rank`,
+                  `${person.whoAmI()}: ${action.name} successfully completed! Gained ${formatBigNumber(gain)} rank.`,
                 );
               } else if (!isOperation && this.logging.contracts) {
                 this.log(
                   `${person.whoAmI()}: ${action.name} contract successfully completed! Gained ` +
-                    `${formatBigNumber(gain)} rank and ${formatMoney(moneyGain)}`,
+                    `${formatBigNumber(gain)} rank and ${formatMoney(moneyGain)}.`,
                 );
               }
             }
@@ -930,15 +948,15 @@ export class Bladeburner {
             }
             let logLossText = "";
             if (loss > 0) {
-              logLossText += "Lost " + formatNumberNoSuffix(loss, 3) + " rank. ";
+              logLossText += ` Lost ${formatNumberNoSuffix(loss, 3)} rank.`;
             }
             if (damage > 0) {
-              logLossText += "Took " + formatNumberNoSuffix(damage, 0) + " damage.";
+              logLossText += ` Took ${formatNumberNoSuffix(damage, 0)} damage.${getExtraLogAfterTakingDamage(damage)}`;
             }
             if (isOperation && this.logging.ops) {
-              this.log(`${person.whoAmI()}: ` + action.name + " failed! " + logLossText);
+              this.log(`${person.whoAmI()}: ${action.name} failed!${logLossText}`);
             } else if (!isOperation && this.logging.contracts) {
-              this.log(`${person.whoAmI()}: ` + action.name + " contract failed! " + logLossText);
+              this.log(`${person.whoAmI()}: ${action.name} contract failed!${logLossText}`);
             }
             isOperation ? this.completeOperation(false) : this.completeContract(false, action);
           }
@@ -977,7 +995,9 @@ export class Bladeburner {
           teamLossMax = Math.ceil(teamCount / 2);
 
           if (this.logging.blackops) {
-            this.log(`${person.whoAmI()}: ${action.name} successful! Gained ${formatNumberNoSuffix(rankGain, 1)} rank`);
+            this.log(
+              `${person.whoAmI()}: ${action.name} successful! Gained ${formatNumberNoSuffix(rankGain, 1)} rank.`,
+            );
           }
         } else {
           retValue = this.getActionStats(action, person, false);
@@ -1003,7 +1023,7 @@ export class Bladeburner {
               `${person.whoAmI()}: ${action.name} failed! Lost ${formatNumberNoSuffix(
                 rankLoss,
                 1,
-              )} rank and took ${formatNumberNoSuffix(damage, 0)} damage`,
+              )} rank. Took ${formatNumberNoSuffix(damage, 0)} damage.${getExtraLogAfterTakingDamage(damage)}`,
             );
           }
         }
@@ -1026,7 +1046,7 @@ export class Bladeburner {
           this.teamLost += losses;
           if (this.logging.blackops) {
             this.log(
-              `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(losses, 0)} team members during ${action.name}`,
+              `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(losses, 0)} team members during ${action.name}.`,
             );
           }
         }
@@ -1059,7 +1079,7 @@ export class Bladeburner {
                   formatExp(agiExpGain) +
                   " agi exp, " +
                   formatBigNumber(staminaGain) +
-                  " max stamina",
+                  " max stamina.",
               );
             }
             break;
@@ -1089,7 +1109,7 @@ export class Bladeburner {
                 `${person.whoAmI()}: ` +
                   `Field analysis completed. Gained ${formatBigNumber(rankGain)} rank, ` +
                   `${formatExp(hackingExpGain)} hacking exp, and ` +
-                  `${formatExp(charismaExpGain)} charisma exp`,
+                  `${formatExp(charismaExpGain)} charisma exp.`,
               );
             }
             break;
@@ -1105,7 +1125,7 @@ export class Bladeburner {
                   `${person.whoAmI()}: ` +
                     "Successfully recruited a team member! Gained " +
                     formatExp(expGain) +
-                    " charisma exp",
+                    " charisma exp.",
                 );
               }
             } else {
@@ -1116,7 +1136,7 @@ export class Bladeburner {
                   `${person.whoAmI()}: ` +
                     "Failed to recruit a team member. Gained " +
                     formatExp(expGain) +
-                    " charisma exp",
+                    " charisma exp.",
                 );
               }
             }
@@ -1132,7 +1152,7 @@ export class Bladeburner {
               this.log(
                 `${person.whoAmI()}: Diplomacy completed. Chaos levels in the current city fell by ${formatPercent(
                   1 - eff,
-                )}`,
+                )}.`,
               );
             }
             break;
@@ -1140,14 +1160,22 @@ export class Bladeburner {
           case BladeGeneralActionName.hyperbolicRegen: {
             person.regenerateHp(BladeburnerConstants.HrcHpGain);
 
+            const currentStamina = this.stamina;
             const staminaGain = this.maxStamina * (BladeburnerConstants.HrcStaminaGain / 100);
             this.stamina = Math.min(this.maxStamina, this.stamina + staminaGain);
             if (this.logging.general) {
-              this.log(
-                `${person.whoAmI()}: Rested in Hyperbolic Regeneration Chamber. Restored ${
-                  BladeburnerConstants.HrcHpGain
-                } HP and gained ${formatStamina(staminaGain)} stamina`,
-              );
+              let extraLog = "";
+              if (Player.hp.current > currentHp) {
+                extraLog += ` Restored ${formatHp(BladeburnerConstants.HrcHpGain)} HP. Current HP is ${formatHp(
+                  Player.hp.current,
+                )}.`;
+              }
+              if (this.stamina > currentStamina) {
+                extraLog += ` Restored ${formatStamina(staminaGain)} stamina. Current stamina is ${formatStamina(
+                  this.stamina,
+                )}.`;
+              }
+              this.log(`${person.whoAmI()}: Rested in Hyperbolic Regeneration Chamber.${extraLog}`);
             }
             break;
           }
