@@ -161,6 +161,7 @@ function writeToFile(
       );
     }
   }
+  server.writeToContentFile(outFilePath, rawResult);
 }
 
 export function grep(args: (string | number | boolean)[], server: BaseServer): void {
@@ -171,7 +172,6 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   const [options, otherArgs, outFileStr]: [Options, string[], string] = filterArgs(args.map(String));
 
   const outFilePath = Terminal.getFilepath(outFileStr);
-
   const fileArgs = otherArgs.slice(1);
 
   const [files, notFiles]: [(ContentFile | null)[], string[]] = fileArgs.length
