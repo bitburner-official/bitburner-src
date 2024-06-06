@@ -4,49 +4,78 @@ import { hasTextExtension } from "../../Paths/TextFilePath";
 import { ContentFile, allContentFiles } from "../../Paths/ContentFile";
 import { FilePath } from "src/Paths/FilePath";
 
-type LineParser = (line: string, i: number) => [string, string];
-type PtLineParser = (filename: string, line: string, i: number) => [string, string];
-type FileParser = (file: ContentFile | null) => [string, string][];
+type LineParser = (line: string, i: number) => LineInfo;
+type PtLineParser = (filename: string, line: string, i: number) => LineInfo;
+type FileParser = (file: ContentFile) => LineInfo[];
 
-interface OkArgs {
-  lineNum: string[];
+interface Lines {
+  rawLine: string;
+  prettyLine: string;
+}
+
+interface LineInfo {
+  isPrint: boolean;
+  isEdited: boolean;
+  lines: Lines;
+}
+
+interface ValidArgs {
   regExpr: string[];
+
+  lineNum: string[];
   yesName: string[];
   notName: string[];
+  quiet: string[];
+
   toFile: string[];
   overWrite: string[];
-  quiet: string[];
+
+  preContext: string[];
+  context: string[];
+  postContext: string[];
+
+  searchAll: string[];
 }
 
 interface Options {
-  lineNum: boolean;
   regExpr: boolean;
+
+  lineNum: boolean;
   yesName: boolean;
   notName: boolean;
+  quiet: boolean;
+
   toFile: boolean;
   overWrite: boolean;
-  quiet: boolean;
+
+  searchAll: boolean;
+
+  preContext: boolean;
+  context: boolean;
+  postContext: boolean;
 
   multiFile: boolean;
 }
 
-const OK_ARGS: OkArgs = {
-  lineNum: ["-n", "--line-number"],
+const VALID_ARGS: ValidArgs = {
   regExpr: ["-G", "--basic-regexp"],
+
+  lineNum: ["-n", "--line-number"],
   yesName: ["-H", "--with-filename"],
   notName: ["-h", "--no-filename"],
+  quiet: ["-q", "--quiet", "--silent"],
+
   toFile: ["-O", "--output"],
   overWrite: ["-f", "--allow-overwrite"],
-  quiet: ["-q", "--quiet", "--silent"],
+
+  preContext: ["-B", "--before-context"],
+  context: ["-C", "--context"],
+  postContext: ["-A", "--after-context"],
+
+  searchAll: ["-*", "--search-all"],
 };
 
-function parseLine(
-  pattern: string | RegExp,
-  options: Options,
-  filename: string,
-  line: string,
-  i: number,
-): [string, string] {
+function parseLine(pattern: string | RegExp, options: Options, filename: string, line: string, i: number): LineInfo {
   const RED: string = "\x1b[31m";
   const DEFAULT: string = "\x1b[0m"; // default
   const GREEN: string = "\x1b[32m";
@@ -55,27 +84,23 @@ function parseLine(
   const cyanColon: string = "\x1b[36m:" + DEFAULT;
 
   const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEFAULT}`);
-  if (line === editedLine) {
-    return ["", ""]; // don't print unmatched lines
-  }
-  const name: string = (options.multiFile || options.yesName) && !options.notName ? `${filename}` : "";
 
+  const name: string = (options.multiFile || options.yesName) && !options.notName ? `${filename}` : "";
   const lineNo: string = options.lineNum ? `${i + 1}` : "";
 
   const [colName, rawName] = name ? [`${MAGENTA}${name}${cyanColon}`, `${name}:`] : ["", ""];
-
   const [colLineNo, rawLineNo] = lineNo ? [`${GREEN}${lineNo}${cyanColon}`, `${lineNo}:`] : ["", ""];
+  const lines: Lines = { rawLine: rawName + rawLineNo + line, prettyLine: colName + colLineNo + editedLine };
 
-  return [rawName + rawLineNo + line, colName + colLineNo + editedLine];
+  const isEdited = line !== editedLine;
+  const isPrint = isEdited;
+
+  return { isEdited, isPrint, lines };
 }
 
-function parseFile(parseFunc: PtLineParser, file: ContentFile | null): [string, string][] {
-  if (!file) {
-    return [["", ""]];
-  }
+function parseFile(parseFunc: PtLineParser, file: ContentFile): LineInfo[] {
   const parseLine: LineParser = parseFunc.bind(null, file.filename);
-
-  const editedContent: [string, string][] = file.content.split("\n").map(parseLine);
+  const editedContent: LineInfo[] = file.content.split("\n").map(parseLine);
 
   return editedContent;
 }
@@ -88,60 +113,88 @@ function getServerFiles(server: BaseServer): [ContentFile[], string[]] {
   return [files, []];
 }
 
-function getArgFiles(args: string[]): [(ContentFile | null)[], string[]] {
+function getArgFiles(args: string[]): [ContentFile[], string[]] {
   const notFiles: string[] = [];
-  const files: (ContentFile | null)[] = args.map((arg: string): ContentFile | null => {
+  const files: ContentFile[] = [];
+
+  for (const arg of args) {
     const file: ContentFile | null = hasTextExtension(arg) ? Terminal.getTextFile(arg) : Terminal.getScript(arg);
     if (!file) notFiles.push(arg);
+    else files.push(file);
+  }
 
-    return file;
-  });
   return [files, notFiles];
 }
 
 function filterOpts([options, otherArgs]: [Options, string[]], arg: string): [Options, string[]] {
-  const isOption: boolean = Object.keys(OK_ARGS).some((key: string): boolean => {
-    if (OK_ARGS[key as keyof OkArgs].includes(arg)) {
+  const isOption: boolean = Object.keys(VALID_ARGS).some((key: string): boolean => {
+    if (VALID_ARGS[key as keyof ValidArgs].includes(arg)) {
       return (options[key as keyof Options] = true);
     }
     return false;
   });
+
   return isOption ? [options, otherArgs] : [options, [...otherArgs, arg]];
 }
 
-function filterArgs(args: string[]): [Options, string[], string] {
+function filterArgs(args: string[]): [Options, string[], string, number] {
   const initOpts: Options = {
-    lineNum: false,
     regExpr: false,
+
+    lineNum: false,
     yesName: false,
     notName: false,
-    multiFile: false,
+    quiet: false,
     toFile: false,
     overWrite: false,
-    quiet: false,
+    searchAll: false,
+
+    preContext: false,
+    context: false,
+    postContext: false,
+
+    multiFile: false,
   };
 
-  const outputArgIndex = OK_ARGS.toFile.reduce((ret: number, arg: string) => {
-    const argIndex = args.indexOf(arg);
-    return argIndex > -1 ? argIndex : ret;
-  }, NaN);
-  // if outputArgIndex !NaN grab next arg as output file
-  const outFileStr: string | undefined = !isNaN(outputArgIndex) ? args.splice(outputArgIndex + 1, 1)?.[0] : undefined;
+  let outFileStr: string | undefined;
+  let contextNum: string | undefined;
+
+  [outFileStr, args] = getNextArg(args, VALID_ARGS.toFile);
+  [contextNum, args] = getContext(args);
+  console.log(args);
+
+  console.log(contextNum);
 
   const [options, otherArgs]: [Options, string[]] = args.map(String).reduce(filterOpts, [initOpts, []]);
 
-  options.toFile = !!outFileStr;
-
-  return [options, otherArgs, outFileStr ?? ""];
+  return [options, otherArgs, outFileStr ?? "", Number(contextNum) ?? 0];
 }
 
-function splitResults(
-  [rawResult, prettyResult]: [string, string],
-  [rawStr, prettyStr]: [string, string],
-): [string, string] {
-  return !rawStr || !prettyStr
-    ? [rawResult, prettyResult]
-    : [`${rawResult}${rawStr}\n`, `${prettyResult}${prettyStr}\n`];
+function getContext(args: string[]): [string, string[]] | [undefined, string[]] {
+  let context;
+  [context, args] = getNextArg(args, VALID_ARGS.preContext);
+  if (!context) [context, args] = getNextArg(args, VALID_ARGS.context);
+  if (!context) [context, args] = getNextArg(args, VALID_ARGS.postContext);
+  return [context, args];
+}
+
+function getNextArg(args: string[], validArgs: string[]): [string, string[]] | [undefined, string[]] {
+  const argIndex = validArgs.reduce((ret: number, arg: string) => {
+    const argIndex = args.indexOf(arg);
+    return argIndex > -1 ? argIndex : ret;
+  }, NaN);
+
+  if (isNaN(argIndex)) return [undefined, args];
+
+  // if outputArgIndex !NaN splice out next arg from args array to use for outFileStr
+  const nextArg: string | number = args.splice(argIndex + 1, 1)?.[0];
+  return [nextArg, args];
+}
+
+function stringResults([rawResult, prettyResult]: [string, string], lineInfo: LineInfo): [string, string] {
+  return lineInfo.isPrint
+    ? [`${rawResult}${lineInfo.lines.rawLine}\n`, `${prettyResult}${lineInfo.lines.prettyLine}\n`]
+    : [rawResult, prettyResult];
 }
 
 function writeToFile(
@@ -169,36 +222,71 @@ function writeToFile(
   server.writeToContentFile(outFilePath, rawResult);
 }
 
+function addContext(results: LineInfo[], options: Options, contextNum: number): LineInfo[] {
+  if (!(options.preContext || options.context || options.postContext)) return results;
+
+  for (let i = 0; i < results.length; i++) {
+    const line: LineInfo = results[i];
+    if (line.isEdited) {
+      const editLineIndex = i;
+      for (let i = 0; i < contextNum; i++) {
+        if (options.preContext) {
+          const line = results[editLineIndex - i];
+          if (line) line.isPrint = true;
+        }
+        if (options.context) {
+          const line = results[editLineIndex - Math.floor(contextNum / 2) + i];
+          if (line) line.isPrint = true;
+        }
+        if (options.postContext) {
+          const line = results[editLineIndex + i];
+          if (line) line.isPrint = true;
+        }
+      }
+    }
+  }
+  return results;
+}
+
 export function grep(args: (string | number | boolean)[], server: BaseServer): void {
   if (!args.length) {
-    return Terminal.error(
-      "Incorrect usage of grep command. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE]",
-    );
+    return Terminal.error("grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE]");
   }
 
-  const [options, otherArgs, outFileStr]: [Options, string[], string] = filterArgs(args.map(String));
+  const [options, otherArgs, outFileStr, contextNum]: [Options, string[], string, number] = filterArgs(
+    args.map(String),
+  );
 
   const outFilePath = Terminal.getFilepath(outFileStr);
   const fileArgs = otherArgs.slice(1);
 
-  const [files, notFiles]: [(ContentFile | null)[], string[]] = fileArgs.length
-    ? getArgFiles(fileArgs)
-    : getServerFiles(server);
+  const [files, notFiles]: [ContentFile[], string[]] = options.searchAll
+    ? getServerFiles(server)
+    : getArgFiles(fileArgs);
 
   options.multiFile = files.length > 1;
 
   if (notFiles.length) {
     return Terminal.error(`Invalid filename(s): ${notFiles.join(", ")}`);
   }
+  if (!options.searchAll && !files.length) {
+    return Terminal.error(
+      "grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server",
+    );
+  }
 
   try {
     const pattern: string | RegExp = options.regExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
     const fileParser: FileParser = parseFile.bind(null, parseLine.bind(null, pattern, options));
-    const [rawResult, prettyResult]: [string, string] = files.flatMap(fileParser).reduce(splitResults, ["", ""]);
+    const results = files.flatMap(fileParser);
+    const [rawResult, prettyResult]: [string, string] = addContext(results, options, contextNum).reduce(stringResults, [
+      "",
+      "",
+    ]);
 
     if (!options.quiet) Terminal.print(prettyResult);
     if (options.toFile) writeToFile(outFilePath, outFileStr, options, rawResult, server);
   } catch (e) {
-    Terminal.error("RegExp Err: " + e);
+    Terminal.error("RegExp error: " + e);
   }
 }
