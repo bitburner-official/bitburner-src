@@ -50,19 +50,23 @@ function parseLine(
   const RED: string = "\x1b[31m";
   const DEFAULT: string = "\x1b[0m"; // default
   const GREEN: string = "\x1b[32m";
-  const CYAN: string = "\x1b[36m";
   const MAGENTA: string = "\x1b[35m";
+
+  const cyanColon: string = "\x1b[36m:" + DEFAULT;
 
   const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEFAULT}`);
   if (line === editedLine) {
     return ["", ""]; // don't print unmatched lines
   }
-  const name: string =
-    (options.multiFile || options.yesName) && !options.notName ? `${MAGENTA}${filename}${CYAN}:${DEFAULT}` : "";
-  const lineNo: string = options.lineNum ? `${GREEN}${i + 1}${CYAN}:${DEFAULT}` : "";
-  const prefix: string = name + lineNo;
+  const name: string = (options.multiFile || options.yesName) && !options.notName ? `${filename}` : "";
 
-  return [line, prefix + editedLine];
+  const lineNo: string = options.lineNum ? `${i + 1}` : "";
+
+  const [colName, rawName] = name ? [`${MAGENTA}${name}${cyanColon}`, `${name}:`] : ["", ""];
+
+  const [colLineNo, rawLineNo] = lineNo ? [`${GREEN}${lineNo}${cyanColon}`, `${lineNo}:`] : ["", ""];
+
+  return [rawName + rawLineNo + line, colName + colLineNo + editedLine];
 }
 
 function parseFile(parseFunc: PtLineParser, file: ContentFile | null): [string, string][] {
@@ -87,11 +91,10 @@ function getServerFiles(server: BaseServer): [ContentFile[], string[]] {
 function getArgFiles(args: string[]): [(ContentFile | null)[], string[]] {
   const notFiles: string[] = [];
   const files: (ContentFile | null)[] = args.map((arg: string): ContentFile | null => {
-    const script: ContentFile | null = hasTextExtension(arg) ? Terminal.getTextFile(arg) : Terminal.getScript(arg);
-    if (!script) {
-      notFiles.push(arg);
-    }
-    return script;
+    const file: ContentFile | null = hasTextExtension(arg) ? Terminal.getTextFile(arg) : Terminal.getScript(arg);
+    if (!file) notFiles.push(arg);
+
+    return file;
   });
   return [files, notFiles];
 }
@@ -100,9 +103,8 @@ function filterOpts([options, otherArgs]: [Options, string[]], arg: string): [Op
   const isOption: boolean = Object.keys(OK_ARGS).some((key: string): boolean => {
     if (OK_ARGS[key as keyof OkArgs].includes(arg)) {
       return (options[key as keyof Options] = true);
-    } else {
-      return false;
     }
+    return false;
   });
   return isOption ? [options, otherArgs] : [options, [...otherArgs, arg]];
 }
@@ -139,7 +141,7 @@ function splitResults(
 ): [string, string] {
   return !rawStr || !prettyStr
     ? [rawResult, prettyResult]
-    : [`${rawResult}\n${rawStr}`, `${prettyResult}\n${prettyStr}`];
+    : [`${rawResult}${rawStr}\n`, `${prettyResult}${prettyStr}\n`];
 }
 
 function writeToFile(
@@ -150,14 +152,16 @@ function writeToFile(
   server: BaseServer,
 ): void {
   if (!outFilePath || !hasTextExtension(outFilePath)) {
-    return Terminal.error(`grep failed: Invalid output file "${outFileStr}". Output file must be a text file.`);
+    return Terminal.error(
+      `grep file output failed: Invalid output file "${outFileStr}". Output file must be a text file.`,
+    );
   }
 
   if (options.toFile && !options.overWrite) {
     for (const tuple of allContentFiles(server)) {
       if (tuple[1].filename === outFilePath) {
         return Terminal.error(
-          `grep failed: Invalid output file "${outFilePath}". Output file must not already exist. Pass -f to force.`,
+          `grep file output failed: Invalid output file "${outFilePath}". Output file must not already exist. Pass -f/--allow-overwrite to overwrite.`,
         );
       }
     }
@@ -167,7 +171,9 @@ function writeToFile(
 
 export function grep(args: (string | number | boolean)[], server: BaseServer): void {
   if (!args.length) {
-    return Terminal.error("Incorrect usage of grep command. Usage: grep [OPTION]... PATTERN [FILE]...");
+    return Terminal.error(
+      "Incorrect usage of grep command. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE]",
+    );
   }
 
   const [options, otherArgs, outFileStr]: [Options, string[], string] = filterArgs(args.map(String));
