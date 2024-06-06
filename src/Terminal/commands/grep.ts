@@ -1,13 +1,12 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { hasTextExtension } from "../../Paths/TextFilePath";
-import { ContentFile, ContentFilePath, allContentFiles } from "../../Paths/ContentFile";
+import { ContentFile, allContentFiles } from "../../Paths/ContentFile";
 import { FilePath } from "src/Paths/FilePath";
 
 type LineParser = (line: string, i: number) => [string, string];
 type PtLineParser = (filename: string, line: string, i: number) => [string, string];
 type FileParser = (file: ContentFile | null) => [string, string][];
-type FileTuple = [ContentFilePath, ContentFile];
 
 interface OkArgs {
   lineNum: string[];
@@ -15,7 +14,7 @@ interface OkArgs {
   yesName: string[];
   notName: string[];
   toFile: string[];
-  overWrt: string[];
+  overWrite: string[];
   quiet: string[];
 }
 
@@ -25,7 +24,7 @@ interface Options {
   yesName: boolean;
   notName: boolean;
   toFile: boolean;
-  overWrt: boolean;
+  overWrite: boolean;
   quiet: boolean;
 
   multiFile: boolean;
@@ -36,8 +35,8 @@ const OK_ARGS: OkArgs = {
   regExpr: ["-G", "--basic-regexp"],
   yesName: ["-H", "--with-filename"],
   notName: ["-h", "--no-filename"],
-  toFile: ["-O", "--output-number"],
-  overWrt: ["-f", "--allow-overwite"],
+  toFile: ["-O", "--output"],
+  overWrite: ["-f", "--allow-overwrite"],
   quiet: ["-q", "--quiet", "--silent"],
 };
 
@@ -49,18 +48,18 @@ function parseLine(
   i: number,
 ): [string, string] {
   const RED: string = "\x1b[31m";
-  const DEF: string = "\x1b[0m"; // default
+  const DEFAULT: string = "\x1b[0m"; // default
   const GREEN: string = "\x1b[32m";
   const CYAN: string = "\x1b[36m";
   const MAGENTA: string = "\x1b[35m";
 
-  const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEF}`);
+  const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEFAULT}`);
   if (line === editedLine) {
     return ["", ""]; // don't print unmatched lines
   }
   const name: string =
-    (options.multiFile || options.yesName) && !options.notName ? `${MAGENTA}${filename}${CYAN}:${DEF}` : "";
-  const lineNo: string = options.lineNum ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
+    (options.multiFile || options.yesName) && !options.notName ? `${MAGENTA}${filename}${CYAN}:${DEFAULT}` : "";
+  const lineNo: string = options.lineNum ? `${GREEN}${i + 1}${CYAN}:${DEFAULT}` : "";
   const prefix: string = name + lineNo;
 
   return [line, prefix + editedLine];
@@ -70,20 +69,19 @@ function parseFile(parseFunc: PtLineParser, file: ContentFile | null): [string, 
   if (!file) {
     return [["", ""]];
   }
-  const content: string = "content" in file ? file["content"] : file["code"];
-
   const parseLine: LineParser = parseFunc.bind(null, file.filename);
 
-  const editedContent: [string, string][] = content.split("\n").map(parseLine);
+  const editedContent: [string, string][] = file.content.split("\n").map(parseLine);
 
   return editedContent;
 }
 
 function getServerFiles(server: BaseServer): [ContentFile[], string[]] {
-  return [
-    [...allContentFiles(server)].map((tuple: FileTuple): ContentFile => tuple[1]),
-    [], // empty array for notFiles
-  ];
+  const files: ContentFile[] = [];
+  for (const tuple of allContentFiles(server)) {
+    files.push(tuple[1]);
+  }
+  return [files, []];
 }
 
 function getArgFiles(args: string[]): [(ContentFile | null)[], string[]] {
@@ -99,9 +97,13 @@ function getArgFiles(args: string[]): [(ContentFile | null)[], string[]] {
 }
 
 function filterOpts([options, otherArgs]: [Options, string[]], arg: string): [Options, string[]] {
-  const isOption: boolean = Object.keys(OK_ARGS).some((key: string): boolean =>
-    OK_ARGS[key as keyof OkArgs].includes(arg) ? (options[key as keyof Options] = true) : false,
-  );
+  const isOption: boolean = Object.keys(OK_ARGS).some((key: string): boolean => {
+    if (OK_ARGS[key as keyof OkArgs].includes(arg)) {
+      return (options[key as keyof Options] = true);
+    } else {
+      return false;
+    }
+  });
   return isOption ? [options, otherArgs] : [options, [...otherArgs, arg]];
 }
 
@@ -113,7 +115,7 @@ function filterArgs(args: string[]): [Options, string[], string] {
     notName: false,
     multiFile: false,
     toFile: false,
-    overWrt: false,
+    overWrite: false,
     quiet: false,
   };
 
@@ -151,14 +153,13 @@ function writeToFile(
     return Terminal.error(`grep failed: Invalid output file "${outFileStr}". Output file must be a text file.`);
   }
 
-  if (options.toFile && !options.overWrt) {
-    const overWrtFileExists: boolean = [...allContentFiles(server)]
-      .flatMap((tuple: FileTuple): string => tuple[1].filename)
-      .includes(outFilePath);
-    if (overWrtFileExists) {
-      return Terminal.error(
-        `grep failed: Invalid output file "${outFileStr}". Output file must not already exist. Pass -f to force.`,
-      );
+  if (options.toFile && !options.overWrite) {
+    for (const tuple of allContentFiles(server)) {
+      if (tuple[1].filename === outFilePath) {
+        return Terminal.error(
+          `grep failed: Invalid output file "${outFilePath}". Output file must not already exist. Pass -f to force.`,
+        );
+      }
     }
   }
   server.writeToContentFile(outFilePath, rawResult);
