@@ -25,6 +25,8 @@ interface ValidArgs {
   lineNum: string[];
   yesName: string[];
   notName: string[];
+  invert: string[];
+
   quiet: string[];
   verbose: string[];
 
@@ -44,6 +46,8 @@ interface Options {
   lineNum: boolean;
   yesName: boolean;
   notName: boolean;
+  invert: boolean;
+
   quiet: boolean;
   verbose: boolean;
 
@@ -65,6 +69,8 @@ const VALID_ARGS: ValidArgs = {
   lineNum: ["-n", "--line-number"],
   yesName: ["-H", "--with-filename"],
   notName: ["-h", "--no-filename"],
+  invert: ["-v", "--invert-match"],
+
   quiet: ["-q", "--quiet", "--silent"],
   verbose: ["-V", "--verbose"],
 
@@ -147,15 +153,19 @@ function filterArgs(args: string[]): [Options, string[], string, number] {
     lineNum: false,
     yesName: false,
     notName: false,
+    invert: false,
+
     quiet: false,
+    verbose: false,
+
     toFile: false,
     overWrite: false,
-    searchAll: false,
-    verbose: false,
 
     preContext: false,
     context: false,
     postContext: false,
+
+    searchAll: false,
 
     multiFile: false,
   };
@@ -285,7 +295,7 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   try {
     const pattern: string | RegExp = options.regExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
     const fileParser: FileParser = parseFile.bind(null, parseLine.bind(null, pattern, options));
-    const results = files.flatMap(fileParser);
+    const results: LineInfo[] = tryInvert(files.flatMap(fileParser), options.invert);
     const [rawResult, prettyResult, count]: [string, string, number] = addContext(results, options, contextNum).reduce(
       stringResults,
       ["", "", 0],
@@ -303,4 +313,9 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   } catch (e) {
     Terminal.error("RegExp error: " + e);
   }
+}
+
+function tryInvert(files: LineInfo[], isInvert: boolean): LineInfo[] {
+  if (!isInvert) return files;
+  return files.map((line: LineInfo) => ((line.isPrint = !line.isPrint), line));
 }
