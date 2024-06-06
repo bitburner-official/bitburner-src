@@ -90,7 +90,7 @@ const DEFAULT: string = "\x1b[0m"; // default
 const GREEN: string = "\x1b[32m";
 const MAGENTA: string = "\x1b[35m";
 const cyanColon: string = "\x1b[36m:" + DEFAULT;
-const BOLD: string = "\x1b[2m";
+const WHITE: string = "\x1b[37m";
 
 function parseLine(pattern: string | RegExp, options: Options, filename: string, line: string, i: number): LineInfo {
   const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEFAULT}`);
@@ -203,13 +203,14 @@ function getNextArg(args: string[], validArgs: string[]): [string, string[]] | [
   return [nextArg, args];
 }
 
-function stringResults(
-  [rawResult, prettyResult, count]: [string, string, number],
+function filterResults(
+  options: Options,
+  [rawResult, prettyResult]: [string, string],
   lineInfo: LineInfo,
-): [string, string, number] {
-  return lineInfo.isPrint
-    ? [`${rawResult}${lineInfo.lines.rawLine}\n`, `${prettyResult}${lineInfo.lines.prettyLine}\n`, count + 1]
-    : [rawResult, prettyResult, count];
+): [string, string] {
+  return lineInfo.isPrint !== options.invert
+    ? [`${rawResult}${lineInfo.lines.rawLine}\n`, `${prettyResult}${lineInfo.lines.prettyLine}\n`]
+    : [rawResult, prettyResult];
 }
 
 function writeToFile(
@@ -245,8 +246,8 @@ function addContext(results: LineInfo[], options: Options, contextNum: number): 
     for (let contextLineIndex = 0; contextLineIndex < contextNum; contextLineIndex++) {
       let contextLine;
       if (options.preContext) contextLine = results[editLineIndex - contextLineIndex];
-      else if (options.context) contextLine = results[editLineIndex - Math.floor(contextNum / 2) + contextLineIndex];
       else if (options.postContext) contextLine = results[editLineIndex + contextLineIndex];
+      else if (options.context) contextLine = results[editLineIndex - Math.floor(contextNum / 2) + contextLineIndex];
 
       if (contextLine && line.filename === contextLine.filename) contextLine.isPrint = true;
     }
@@ -284,20 +285,21 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   try {
     const pattern: string | RegExp = options.regExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
     const fileParser: FileParser = parseFile.bind(null, parseLine.bind(null, pattern, options));
-    const results: LineInfo[] = tryInvert(files.flatMap(fileParser), options.invert);
+    const results: LineInfo[] = files.flatMap(fileParser);
     const totalLines = results.length;
-    const [rawResult, prettyResult, count]: [string, string, number] = addContext(results, options, contextNum).reduce(
-      stringResults,
-      ["", "", 0],
+    const matchCount = results.reduce((acc, result) => acc + Number(result.isEdited), 0);
+    const [rawResult, prettyResult]: [string, string] = addContext(results, options, contextNum).reduce(
+      filterResults.bind(null, options),
+      ["", ""],
     );
 
     const info = [
-      `${count} ${options.invert ? "INVERTED" : ""} matches against`,
+      `${matchCount} ${options.invert ? "INVERTED" : ""} matches against`,
       `PATTERN "${pattern.toString()}" in`,
       `${totalLines} lines, in`,
       `${files.length} files:`,
       `\n${files
-        .map((file, i) => `${i % 2 ? BOLD : ""}${file.filename}(${file.content.split("\n").length}loc)${DEFAULT}`)
+        .map((file, i) => `${i % 2 ? WHITE : ""}${file.filename}(${file.content.split("\n").length}loc)${DEFAULT}`)
         .join(", ")}`,
     ].join(" ");
 
@@ -306,9 +308,4 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   } catch (e) {
     Terminal.error("RegExp error: " + e);
   }
-}
-
-function tryInvert(files: LineInfo[], isInvert: boolean): LineInfo[] {
-  if (!isInvert) return files;
-  return files.map((line: LineInfo) => ((line.isPrint = !line.isPrint), line));
 }
