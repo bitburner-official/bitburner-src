@@ -57,7 +57,7 @@ function parseLine(
   const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEF}`);
   if (line === editedLine) {
     return ["", ""]; // don't print unmatched lines
-  } 
+  }
   const name: string =
     (options.multiFile || options.yesName) && !options.notName ? `${MAGENTA}${filename}${CYAN}:${DEF}` : "";
   const lineNo: string = options.lineNum ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
