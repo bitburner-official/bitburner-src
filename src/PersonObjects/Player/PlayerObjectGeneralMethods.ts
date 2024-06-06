@@ -361,14 +361,16 @@ export function getNextCompanyPosition(
   return pos;
 }
 
-export function quitJob(this: PlayerObject, company: CompanyName): void {
+export function quitJob(this: PlayerObject, company: CompanyName, suppressDialog?: boolean): void {
   if (isCompanyWork(this.currentWork) && this.currentWork.companyName === company) {
     this.finishWork(true);
   }
   for (const sleeve of this.sleeves) {
     if (sleeve.currentWork?.type === SleeveWorkType.COMPANY && sleeve.currentWork.companyName === company) {
       sleeve.stopWork();
-      dialogBoxCreate(`You quit ${company} while one of your sleeves was working there. The sleeve is now idle.`);
+      if (!suppressDialog) {
+        dialogBoxCreate(`You quit ${company} while one of your sleeves was working there. The sleeve is now idle.`);
+      }
     }
   }
   delete this.jobs[company];

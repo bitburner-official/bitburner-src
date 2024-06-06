@@ -4050,6 +4050,21 @@ export interface Go {
   getBoardState(): string[];
 
   /**
+   * Returns all the prior moves in the current game, as an array of simple board states.
+   *
+   * For example, a single 5x5 prior move board might look like this:
+   *
+   *    [<br/>
+   *       "XX.O.",<br/>
+   *       "X..OO",<br/>
+   *       ".XO..",<br/>
+   *       "XXO.#",<br/>
+   *       ".XO.#",<br/>
+   *    ]
+   */
+  getMoveHistory(): string[][];
+
+  /**
    * Returns the color of the current player, or 'None' if the game is over.
    * @returns "White" | "Black" | "None"
    */
@@ -4065,6 +4080,8 @@ export interface Go {
     whiteScore: number;
     blackScore: number;
     previousMove: [number, number] | null;
+    komi: number;
+    bonusCycles: number;
   };
 
   /**

@@ -17,6 +17,7 @@ import {
   getCurrentPlayer,
   getGameState,
   getLiberties,
+  getMoveHistory,
   getOpponentNextMove,
   getStats,
   getValidMoves,
@@ -57,6 +58,9 @@ export function NetscriptGo(): InternalAPI<NSGo> {
     },
     getBoardState: () => () => {
       return simpleBoardFromBoard(Go.currentGame.board);
+    },
+    getMoveHistory: () => () => {
+      return getMoveHistory();
     },
     getCurrentPlayer: () => () => {
       return getCurrentPlayer();

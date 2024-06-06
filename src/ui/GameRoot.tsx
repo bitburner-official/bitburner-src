@@ -77,8 +77,8 @@ const htmlLocation = location;
 
 const useStyles = makeStyles()((theme: Theme) => ({
   root: {
-    "-ms-overflow-style": "none" /* for Internet Explorer, Edge */,
-    "scrollbar-width": "none" /* for Firefox */,
+    msOverflowStyle: "none" /* for Internet Explorer, Edge */,
+    scrollbarWidth: "none" /* for Firefox */,
     margin: theme.spacing(0),
     flexGrow: 1,
     padding: "8px",

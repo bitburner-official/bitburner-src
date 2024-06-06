@@ -747,7 +747,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     quitJob: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
-      Player.quitJob(companyName);
+      Player.quitJob(companyName, true);
     },
     getCompanyRep: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);

@@ -104,6 +104,8 @@ describe("Netscript Go API unit tests", () => {
         whiteScore: 6.5,
         blackScore: 6,
         previousMove: [0, 2],
+        bonusCycles: 0,
+        komi: 5.5,
       });
     });
   });

@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const GoScorePowerSummary = ({ finalScore, opponent }: Props) => {
-  const classes = boardStyles();
+  const { classes } = boardStyles();
   const status = getOpponentStats(opponent);
   const winStreak = status.winStreak;
   const oldWinStreak = status.winStreak;

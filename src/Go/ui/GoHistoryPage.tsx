@@ -16,7 +16,7 @@ import { getRecordKeys } from "../../Types/Record";
 
 export const GoHistoryPage = (): React.ReactElement => {
   useRerender(400);
-  const classes = boardStyles();
+  const { classes } = boardStyles();
   const priorBoard = Go.previousGame ?? getNewBoardState(7);
   const score = getScore(priorBoard);
   const opponent = priorBoard.ai;

@@ -1,4 +1,4 @@
-import { Play, SimpleOpponentStats } from "../Types";
+import { Play, SimpleBoard, SimpleOpponentStats } from "../Types";
 
 import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
@@ -10,6 +10,7 @@ import {
   getControlledSpace,
   getPreviousMove,
   simpleBoardFromBoard,
+  simpleBoardFromBoardString,
 } from "../boardAnalysis/boardAnalysis";
 import { endGoGame, getOpponentStats, getScore, resetWinstreak } from "../boardAnalysis/scoring";
 import { WHRNG } from "../../Casino/RNG";
@@ -223,6 +224,8 @@ export function getControlledEmptyNodes() {
  * Gets the status of the current game.
  * Shows the current player, current score, and the previous move coordinates.
  * Previous move coordinates will be [-1, -1] for a pass, or if there are no prior moves.
+ *
+ * Also provides the white player's komi (bonus starting score), and the amount of bonus cycles from offline time remaining
  */
 export function getGameState() {
   const currentPlayer = getCurrentPlayer();
@@ -234,7 +237,13 @@ export function getGameState() {
     whiteScore: score[GoColor.white].sum,
     blackScore: score[GoColor.black].sum,
     previousMove,
+    komi: score[GoColor.white].komi,
+    bonusCycles: Go.storedCycles,
   };
+}
+
+export function getMoveHistory(): SimpleBoard[] {
+  return Go.currentGame.previousBoards.map((boardString) => simpleBoardFromBoardString(boardString));
 }
 
 /**
