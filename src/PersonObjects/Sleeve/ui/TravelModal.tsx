@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, Typography } from "@mui/material";
-import { Player } from "@player";
 import { CityName } from "@enums";
 import { Sleeve } from "../Sleeve";
 import { CONSTANTS } from "../../../Constants";
@@ -19,11 +18,10 @@ interface IProps {
 
 export function TravelModal(props: IProps): React.ReactElement {
   function travel(city: string): void {
-    if (!Player.canAfford(CONSTANTS.TravelCost)) {
+    if (!props.sleeve.travel(city as CityName)) {
       dialogBoxCreate("You cannot afford to have this sleeve travel to another city");
+      return;
     }
-    props.sleeve.city = city as CityName;
-    Player.loseMoney(CONSTANTS.TravelCost, "sleeves");
     props.sleeve.stopWork();
     props.rerender();
     props.onClose();

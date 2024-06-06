@@ -44,6 +44,7 @@ import { SleeveCrimeWork } from "./Work/SleeveCrimeWork";
 import * as sleeveMethods from "./SleeveMethods";
 import { calculateIntelligenceBonus } from "../formulas/intelligence";
 import { getEnumHelper } from "../../utils/EnumHelper";
+import { Cities } from "../../Locations/Cities";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: SleeveWork | null = null;
@@ -255,13 +256,16 @@ export class Sleeve extends Person implements SleevePerson {
   }
 
   /** Travel to another City. Costs money from player */
-  travel(newCity: CityName): boolean {
+  travel(cityName: CityName): boolean {
+    if (Cities[cityName] == null) {
+      throw new Error(`Sleeve.travel() was called with an invalid city: ${cityName}`);
+    }
     if (!Player.canAfford(CONSTANTS.TravelCost)) {
       return false;
     }
 
     Player.loseMoney(CONSTANTS.TravelCost, "sleeves");
-    this.city = newCity;
+    this.city = cityName;
 
     return true;
   }

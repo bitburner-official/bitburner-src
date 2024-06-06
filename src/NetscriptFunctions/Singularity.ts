@@ -269,7 +269,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.Sector12RothmanUniversity;
+            Player.gotoLocation(LocationName.Sector12RothmanUniversity);
             break;
           case LocationName.VolhavenZBInstituteOfTechnology.toLowerCase():
             if (Player.city != CityName.Volhaven) {
@@ -279,7 +279,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.VolhavenZBInstituteOfTechnology;
+            Player.gotoLocation(LocationName.VolhavenZBInstituteOfTechnology);
             break;
           default:
             helpers.log(ctx, () => `Invalid university name: '${universityName}'.`);
@@ -327,7 +327,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.AevumCrushFitnessGym;
+            Player.gotoLocation(LocationName.AevumCrushFitnessGym);
             break;
           case LocationName.AevumSnapFitnessGym.toLowerCase():
             if (Player.city != CityName.Aevum) {
@@ -338,7 +338,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.AevumSnapFitnessGym;
+            Player.gotoLocation(LocationName.AevumSnapFitnessGym);
             break;
           case LocationName.Sector12IronGym.toLowerCase():
             if (Player.city != CityName.Sector12) {
@@ -349,7 +349,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.Sector12IronGym;
+            Player.gotoLocation(LocationName.Sector12IronGym);
             break;
           case LocationName.Sector12PowerhouseGym.toLowerCase():
             if (Player.city != CityName.Sector12) {
@@ -360,7 +360,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.Sector12PowerhouseGym;
+            Player.gotoLocation(LocationName.Sector12PowerhouseGym);
             break;
           case LocationName.VolhavenMilleniumFitnessGym.toLowerCase():
             if (Player.city != CityName.Volhaven) {
@@ -371,7 +371,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.VolhavenMilleniumFitnessGym;
+            Player.gotoLocation(LocationName.VolhavenMilleniumFitnessGym);
             break;
           default:
             helpers.log(ctx, () => `Invalid gym name: ${gymName}. gymWorkout() failed`);
@@ -401,12 +401,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         case CityName.NewTokyo:
         case CityName.Ishima:
         case CityName.Volhaven:
-          if (Player.money < CONSTANTS.TravelCost) {
+          if (!Player.travel(cityName)) {
             helpers.log(ctx, () => "Not enough money to travel.");
             return false;
           }
-          Player.loseMoney(CONSTANTS.TravelCost, "other");
-          Player.city = cityName;
           helpers.log(ctx, () => `Traveled to ${cityName}`);
           Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 50000);
           return true;
