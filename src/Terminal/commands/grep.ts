@@ -26,6 +26,7 @@ interface ValidArgs {
   yesName: string[];
   notName: string[];
   quiet: string[];
+  verbose: string[];
 
   toFile: string[];
   overWrite: string[];
@@ -44,6 +45,7 @@ interface Options {
   yesName: boolean;
   notName: boolean;
   quiet: boolean;
+  verbose: boolean;
 
   toFile: boolean;
   overWrite: boolean;
@@ -64,6 +66,7 @@ const VALID_ARGS: ValidArgs = {
   yesName: ["-H", "--with-filename"],
   notName: ["-h", "--no-filename"],
   quiet: ["-q", "--quiet", "--silent"],
+  verbose: ["-V", "--verbose"],
 
   toFile: ["-O", "--output"],
   overWrite: ["-f", "--allow-overwrite"],
@@ -148,6 +151,7 @@ function filterArgs(args: string[]): [Options, string[], string, number] {
     toFile: false,
     overWrite: false,
     searchAll: false,
+    verbose: false,
 
     preContext: false,
     context: false,
@@ -191,10 +195,13 @@ function getNextArg(args: string[], validArgs: string[]): [string, string[]] | [
   return [nextArg, args];
 }
 
-function stringResults([rawResult, prettyResult]: [string, string], lineInfo: LineInfo): [string, string] {
+function stringResults(
+  [rawResult, prettyResult, count]: [string, string, number],
+  lineInfo: LineInfo,
+): [string, string, number] {
   return lineInfo.isPrint
-    ? [`${rawResult}${lineInfo.lines.rawLine}\n`, `${prettyResult}${lineInfo.lines.prettyLine}\n`]
-    : [rawResult, prettyResult];
+    ? [`${rawResult}${lineInfo.lines.rawLine}\n`, `${prettyResult}${lineInfo.lines.prettyLine}\n`, count + 1]
+    : [rawResult, prettyResult, count];
 }
 
 function writeToFile(
@@ -279,12 +286,19 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     const pattern: string | RegExp = options.regExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
     const fileParser: FileParser = parseFile.bind(null, parseLine.bind(null, pattern, options));
     const results = files.flatMap(fileParser);
-    const [rawResult, prettyResult]: [string, string] = addContext(results, options, contextNum).reduce(stringResults, [
-      "",
-      "",
-    ]);
+    const [rawResult, prettyResult, count]: [string, string, number] = addContext(results, options, contextNum).reduce(
+      stringResults,
+      ["", "", 0],
+    );
 
-    if (!options.quiet) Terminal.print(prettyResult);
+    const info = [
+      `${count} matches against`,
+      `PATTERN "${pattern.toString()}" in`,
+      `${files.length} files:\n`,
+      `${files.map((file) => file.filename).join(", ")}`,
+    ].join(" ");
+
+    if (!options.quiet) Terminal.print(prettyResult + (options.verbose ? info : ""));
     if (options.toFile) writeToFile(outFilePath, outFileStr, options, rawResult, server);
   } catch (e) {
     Terminal.error("RegExp error: " + e);
