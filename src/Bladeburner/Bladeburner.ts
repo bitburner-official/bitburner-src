@@ -17,7 +17,7 @@ import {
 } from "@enums";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { formatHp, formatNumber, formatNumberNoSuffix } from "../ui/formatNumber";
+import { formatHp, formatNumberNoSuffix, formatSleeveShock } from "../ui/formatNumber";
 import { Skills } from "./data/Skills";
 import { City } from "./City";
 import { Player } from "@player";
@@ -863,12 +863,12 @@ export class Bladeburner {
         if (person instanceof PlayerObject) {
           extraLog += ` ${person.whoAmI()} was hospitalized. Current HP is ${formatHp(person.hp.current)}.`;
         } else if (person instanceof Sleeve) {
-          extraLog += ` ${person.whoAmI()} was shocked. Current shock is ${formatNumber(
+          extraLog += ` ${person.whoAmI()} was shocked. Current shock is ${formatSleeveShock(
             person.shock,
           )}. Current HP is ${formatHp(person.hp.current)}.`;
         }
       } else {
-        extraLog += ` HP reduced from ${currentHp} to ${person.hp.current}.`;
+        extraLog += ` HP reduced from ${formatHp(currentHp)} to ${formatHp(person.hp.current)}.`;
       }
       return extraLog;
     };
