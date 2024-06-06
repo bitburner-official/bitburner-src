@@ -2,6 +2,7 @@ import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { ContentFile, ContentFilePath, allContentFiles } from "../../Paths/ContentFile";
+import { FilePath } from "src/Paths/FilePath";
 
 type LineParser = (line: string, i: number) => string;
 type PtLineParser = (filename: string, line: string, i: number) => string;
@@ -13,6 +14,9 @@ interface OkArgs {
   regExpr: string[];
   yesName: string[];
   notName: string[];
+  toFile: string[];
+  overWrt: string[];
+  quiet: string[];
 }
 
 interface Options {
@@ -20,6 +24,10 @@ interface Options {
   regExpr: boolean;
   yesName: boolean;
   notName: boolean;
+  toFile: boolean;
+  overWrt: boolean;
+  quiet: boolean;
+
   multiFile: boolean;
 }
 
@@ -28,6 +36,9 @@ const OK_ARGS: OkArgs = {
   regExpr: ["-G", "--basic-regexp"],
   yesName: ["-H", "--with-filename"],
   notName: ["-h", "--no-filename"],
+  toFile: ["-O", "--output-number"],
+  overWrt: ["-f", "--allow-overwite"],
+  quiet: ["-q", "--quiet", "--silent"],
 };
 
 function getParseFunc(pattern: string | RegExp, options: Options, filename: string, line: string, i: number): string {
@@ -39,6 +50,7 @@ function getParseFunc(pattern: string | RegExp, options: Options, filename: stri
 
   const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEF}`);
   if (line === editedLine) return ""; // don't print unmatched lines
+  if (options.toFile) return line; // don't colour when outputting to file
   const name: string =
     (options.multiFile || options.yesName) && !options.notName ? `${MAGENTA}${filename}${CYAN}:${DEF}` : "";
   const lineNo: string = options.lineNum ? `${GREEN}${i + 1}${CYAN}:${DEF}` : "";
@@ -47,7 +59,7 @@ function getParseFunc(pattern: string | RegExp, options: Options, filename: stri
   return prefix + editedLine;
 }
 
-function parseLine(parseFunc: PtLineParser): FileParser {
+function parseFile(parseFunc: PtLineParser): FileParser {
   return function (file: ContentFile | null): string | string[] {
     if (!file) return "";
     const content: string = "content" in file ? file["content"] : file["code"];
@@ -79,11 +91,39 @@ function getArgFiles(args: string[]): [(ContentFile | null)[], string[]] {
   return [files, notFiles];
 }
 
-function filterArgs([options, otherArgs]: [Options, string[]], arg: string): [Options, string[]] {
+function filterOpts([options, otherArgs]: [Options, string[]], arg: string): [Options, string[]] {
   const isOption: boolean = Object.keys(OK_ARGS).some((key: string): boolean =>
     OK_ARGS[key as keyof OkArgs].includes(arg) ? (options[key as keyof Options] = true) : false,
   );
   return isOption ? [options, otherArgs] : [options, [...otherArgs, arg]];
+}
+
+function filterArgs(args: string[]): [Options, string[], FilePath | null] {
+  const initOpts: Options = {
+    lineNum: false,
+    regExpr: false,
+    yesName: false,
+    notName: false,
+    multiFile: false,
+    toFile: false,
+    overWrt: false,
+    quiet: false,
+  };
+
+  const outputArgIndex = OK_ARGS.toFile.reduce((ret: number, arg: string) => {
+    const argIndex = args.indexOf(arg);
+    return argIndex > -1 ? argIndex : ret;
+  }, NaN);
+  // if outputArgIndex !NaN grab next arg as output file
+  const outFileStr: string | undefined = !isNaN(outputArgIndex) ? args.splice(outputArgIndex + 1)?.[0] : undefined;
+
+  const outFile = outFileStr ? Terminal.getFilepath(outFileStr) : null;
+
+  const [options, otherArgs]: [Options, string[]] = args.map(String).reduce(filterOpts, [initOpts, []]);
+
+  options.toFile = !!outFile;
+
+  return [options, otherArgs, outFile];
 }
 
 export function grep(args: (string | number | boolean)[], server: BaseServer): void {
@@ -91,8 +131,22 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     return Terminal.error("Incorrect usage of grep command. Usage: grep [OPTION]... PATTERN [FILE]...");
   }
 
-  const initOpts: Options = { lineNum: false, regExpr: false, yesName: false, notName: false, multiFile: false };
-  const [options, otherArgs]: [Options, string[]] = args.map(String).reduce(filterArgs, [initOpts, []]);
+  const [options, otherArgs, outFilePath]: [Options, string[], FilePath | null] = filterArgs(args.map(String));
+  if (!outFilePath || !hasTextExtension(outFilePath)) {
+    return Terminal.error(`grep failed: Invalid output file "${outFilePath}". Output file must be a text file.`);
+  }
+
+  console.log(options);
+  if (options.toFile && !options.overWrt) {
+    const overWrtFileExists = [...allContentFiles(server)]
+      .map((tuple: FileTuple): string => tuple[1].filename)
+      .includes(outFilePath);
+    if (overWrtFileExists) {
+      return Terminal.error(
+        `grep failed: Invalid output file "${outFilePath}". Output file must not already exist. Pass -f to force.`,
+      );
+    }
+  }
 
   const fileArgs = otherArgs.slice(1);
 
@@ -110,10 +164,15 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     const pattern: string | RegExp = options.regExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
     const parseFunc: PtLineParser = getParseFunc.bind(null, pattern, options);
     const result: string = files
-      .flatMap(parseLine(parseFunc))
+      .flatMap(parseFile(parseFunc))
       .filter((line: string) => line.length)
       .join("\n");
-    Terminal.print(result);
+    if (options.toFile) {
+      server.writeToContentFile(outFilePath, result);
+    }
+    if (!options.quiet) {
+      Terminal.print(result);
+    }
   } catch (e) {
     Terminal.error("RegExp Err: " + e);
   }
