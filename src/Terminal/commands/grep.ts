@@ -304,8 +304,8 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     const info = [
       `${count} matches against`,
       `PATTERN "${pattern.toString()}" in`,
-      `${files.length} files:\n`,
-      `${files.map((file) => file.filename).join(", ")}`,
+      `${files.length} files:`,
+      `\n${files.map((file) => file.filename).join(", ")}`,
     ].join(" ");
 
     if (!options.quiet) Terminal.print(prettyResult + (options.verbose ? info : ""));

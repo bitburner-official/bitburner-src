@@ -257,7 +257,7 @@ export const HelpTexts: Record<string, string[]> = {
     "  -v --invert-match      select non-matching lines",
     " ",
     "By default PATTERN is interpreted as a simple string.",
-    "Without FILE(s) passed, defaults to search every file on current server.",
+    "At least one FILE argument must be passed, or -*/--search-all OPTION to search all files.",
     "If encountering difficulties with argument parsing, consider explicitly passing a string as PATTERN.",
     'Example: grep -G "(complex|regexp|\\w+)" script.js',
     " ",
