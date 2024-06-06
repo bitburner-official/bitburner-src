@@ -1,6 +1,6 @@
 import type { Bladeburner } from "../Bladeburner";
 
-import * as React from "react";
+import React from "react";
 import { Button, Typography } from "@mui/material";
 import { FactionName } from "@enums";
 import { BlackOpElem } from "./BlackOpElem";
@@ -14,7 +14,7 @@ interface BlackOpPageProps {
 }
 
 export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactElement {
-  const blackOps = blackOpsArray.slice(0, bladeburner.numBlackOpsComplete + 1).reverse();
+  const blackOperations = blackOpsArray.slice(0, bladeburner.numBlackOpsComplete + 1).reverse();
 
   return (
     <>
@@ -38,8 +38,8 @@ export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactEleme
         </Button>
       ) : (
         <>
-          {blackOps.map((blackOp) => (
-            <BlackOpElem key={blackOp.name} bladeburner={bladeburner} blackOp={blackOp} />
+          {blackOperations.map((blackOperation) => (
+            <BlackOpElem key={blackOperation.name} bladeburner={bladeburner} action={blackOperation} />
           ))}
         </>
       )}
