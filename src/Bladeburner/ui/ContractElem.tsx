@@ -10,7 +10,6 @@ import { Autolevel } from "./Autolevel";
 import { formatBigNumber } from "../../ui/formatNumber";
 import { Paper, Typography } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";
-import { getEnumHelper } from "../../utils/EnumHelper";
 import { ActionHeader } from "./ActionHeader";
 
 interface ContractElemProps {
@@ -20,8 +19,6 @@ interface ContractElemProps {
 
 export function ContractElem({ bladeburner, action }: ContractElemProps): React.ReactElement {
   const rerender = useRerender();
-  // Temp special return
-  if (!getEnumHelper("BladeContractName").isMember(action.name)) return <></>;
   const isActive = action.name === bladeburner.action?.name;
   const actionTime = action.getActionTime(bladeburner, Player);
 
