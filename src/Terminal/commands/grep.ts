@@ -3,6 +3,8 @@ import { BaseServer } from "../../Server/BaseServer";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { ContentFile, allContentFiles } from "../../Paths/ContentFile";
 import { FilePath } from "src/Paths/FilePath";
+import { Settings } from "../../Settings/Settings";
+import { help } from "../commands/help";
 
 type LineParser = (line: string, i: number) => LineInfo;
 type PtLineParser = (filename: string, line: string, i: number) => LineInfo;
@@ -38,6 +40,8 @@ interface ValidArgs {
   context: string[];
   postContext: string[];
 
+  help: string[];
+
   searchAll: string[];
 }
 
@@ -61,6 +65,8 @@ interface Options {
   context: boolean;
   postContext: boolean;
 
+  help: boolean;
+
   multiFile: boolean;
 }
 
@@ -83,6 +89,8 @@ const VALID_ARGS: ValidArgs = {
   postContext: ["-A", "--after-context"],
 
   searchAll: ["-*", "--search-all"],
+
+  help: ["--help"],
 };
 
 const RED: string = "\x1b[31m";
@@ -168,6 +176,8 @@ function filterArgs(args: string[]): [Options, string[], string, number] {
 
     searchAll: false,
 
+    help: false,
+
     multiFile: false,
   };
 
@@ -205,11 +215,14 @@ function getNextArg(args: string[], validArgs: string[]): [string, string[]] | [
 
 function filterResults(
   options: Options,
-  [rawResult, prettyResult]: [string, string],
+  [rawResult, prettyResult]: [string[], string[]],
   lineInfo: LineInfo,
-): [string, string] {
+): [string[], string[]] {
   return lineInfo.isPrint !== options.invert
-    ? [`${rawResult}${lineInfo.lines.rawLine}\n`, `${prettyResult}${lineInfo.lines.prettyLine}\n`]
+    ? [
+        [...rawResult, lineInfo.lines.rawLine],
+        [...prettyResult, lineInfo.lines.prettyLine],
+      ]
     : [rawResult, prettyResult];
 }
 
@@ -255,9 +268,27 @@ function addContext(results: LineInfo[], options: Options, contextNum: number): 
   return results;
 }
 
+function getVerboseInfo(results: LineInfo[], files: ContentFile[], pattern: string | RegExp, options: Options): string {
+  const totalLines = results.length;
+  const matchCount = results.reduce((acc, result) => acc + Number(result.isEdited), 0);
+  const info = [
+    `${matchCount} ${options.invert ? "INVERTED" : ""} matches against`,
+    `PATTERN "${pattern.toString()}" in`,
+    `${totalLines} lines, in`,
+    `${files.length} files:`,
+    `\n${files
+      .map((file, i) => `${i % 2 ? WHITE : ""}${file.filename}(${file.content.split("\n").length}loc)${DEFAULT}`)
+      .join(", ")}`,
+  ].join(" ");
+
+  return options.verbose ? info : "";
+}
+
 export function grep(args: (string | number | boolean)[], server: BaseServer): void {
   if (!args.length) {
-    return Terminal.error("grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE]");
+    return Terminal.error(
+      "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE] [-B/A/C] [NUM]",
+    );
   }
 
   const [options, otherArgs, outFileStr, contextNum]: [Options, string[], string, number] = filterArgs(
@@ -270,6 +301,8 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   const [files, notFiles]: [ContentFile[], string[]] = options.searchAll
     ? getServerFiles(server)
     : getArgFiles(fileArgs);
+
+  if (options.help) return help(["grep"]);
 
   options.multiFile = files.length > 1;
 
@@ -286,26 +319,21 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     const pattern: string | RegExp = options.regExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
     const fileParser: FileParser = parseFile.bind(null, parseLine.bind(null, pattern, options));
     const results: LineInfo[] = files.flatMap(fileParser);
-    const totalLines = results.length;
-    const matchCount = results.reduce((acc, result) => acc + Number(result.isEdited), 0);
-    const [rawResult, prettyResult]: [string, string] = addContext(results, options, contextNum).reduce(
+    const [rawResult, prettyResult]: [string[], string[]] = addContext(results, options, contextNum).reduce(
       filterResults.bind(null, options),
-      ["", ""],
+      [[""], [""]],
     );
+    // limit printing to terminal
+    const printResult: string[] = prettyResult.slice(prettyResult.length - Settings.MaxTerminalCapacity);
+    const isTruncated: boolean = prettyResult.length !== printResult.length;
+    const truncateInfo: string = isTruncated
+      ? `${RED}grep output TRUNCATED from ${prettyResult.length} lines to ${Settings.MaxTerminalCapacity} (Max terminal capacity)`
+      : "";
 
-    const info = [
-      `${matchCount} ${options.invert ? "INVERTED" : ""} matches against`,
-      `PATTERN "${pattern.toString()}" in`,
-      `${totalLines} lines, in`,
-      `${files.length} files:`,
-      `\n${files
-        .map((file, i) => `${i % 2 ? WHITE : ""}${file.filename}(${file.content.split("\n").length}loc)${DEFAULT}`)
-        .join(", ")}`,
-    ].join(" ");
-
-    if (!options.quiet) Terminal.print(prettyResult + (options.verbose ? info : ""));
-    if (options.toFile) writeToFile(outFilePath, outFileStr, options, rawResult, server);
+    if (!options.quiet)
+      Terminal.print(printResult.join("\n") + getVerboseInfo(results, files, pattern, options) + truncateInfo);
+    if (options.toFile) writeToFile(outFilePath, outFileStr, options, rawResult.join("\n"), server);
   } catch (e) {
-    Terminal.error("RegExp error: " + e);
+    Terminal.error("grep processing error: " + e);
   }
 }
