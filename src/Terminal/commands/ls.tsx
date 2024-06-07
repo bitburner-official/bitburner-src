@@ -25,6 +25,7 @@ import {
   root,
 } from "../../Paths/Directory";
 import { isMember } from "../../utils/EnumHelper";
+import { Settings } from "../../Settings/Settings";
 
 export function ls(args: (string | number | boolean)[], server: BaseServer): void {
   interface LSFlags {
@@ -141,7 +142,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
         content = server.scripts.get(fullPath)?.content ?? "";
       }
       const files = new Map<ContentFilePath, string>();
-      const options = { hostname: server.hostname };
+      const options = { hostname: server.hostname, vim: Settings.MonacoDefaultToVim };
       files.set(fullPath, content);
       Router.toPage(Page.ScriptEditor, { files, options });
     }

@@ -26,7 +26,7 @@ export interface ScriptEditorContextShape {
 
 const ScriptEditorContext = React.createContext({} as ScriptEditorContextShape);
 
-export function ScriptEditorContextProvider({ children, vim }: { children: React.ReactNode; vim: boolean }) {
+export function ScriptEditorContextProvider({ children }: { children: React.ReactNode }) {
   const [ram, setRAM] = useState("RAM: ???");
   const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
 
@@ -76,7 +76,6 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
     fontSize: Settings.MonacoFontSize,
     fontLigatures: Settings.MonacoFontLigatures,
     wordWrap: Settings.MonacoWordWrap,
-    vim: vim || Settings.MonacoVim,
     cursorStyle: Settings.MonacoCursorStyle,
     cursorBlinking: Settings.MonacoCursorBlinking,
   });
@@ -93,7 +92,6 @@ export function ScriptEditorContextProvider({ children, vim }: { children: React
     Settings.MonacoCursorStyle = options.cursorStyle;
     Settings.MonacoCursorBlinking = options.cursorBlinking;
     Settings.MonacoWordWrap = options.wordWrap;
-    Settings.MonacoVim = options.vim;
   }
 
   return (

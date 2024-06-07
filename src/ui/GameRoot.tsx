@@ -72,6 +72,7 @@ import { MathJaxContext } from "better-react-mathjax";
 import { useRerender } from "./React/hooks";
 import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
+import { Settings } from "../Settings/Settings";
 
 const htmlLocation = location;
 
@@ -247,7 +248,7 @@ export function GameRoot(): React.ReactElement {
         <ScriptEditorRoot
           files={pageWithContext.files ?? new Map()}
           hostname={pageWithContext.options?.hostname ?? Player.getCurrentServer().hostname}
-          vim={!!pageWithContext.options?.vim}
+          vim={pageWithContext.options === undefined ? Settings.MonacoDefaultToVim : pageWithContext.options.vim}
         />
       );
       break;

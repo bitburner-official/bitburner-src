@@ -44,7 +44,7 @@ function Root(props: IProps): React.ReactElement {
   const rerender = useRerender();
   const editorRef = useRef<IStandaloneCodeEditor | null>(null);
 
-  const { options, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
+  const { updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
 
   let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
 
@@ -194,6 +194,7 @@ function Root(props: IProps): React.ReactElement {
           props.hostname,
           new monaco.Position(0, 0),
           makeModel(props.hostname, filename, code),
+          props.vim,
         );
         openScripts.push(newScript);
         currentScript = newScript;
@@ -375,7 +376,7 @@ function Root(props: IProps): React.ReactElement {
 
   const { VimStatus } = useVimEditor({
     editor: editorRef.current,
-    vim: options.vim,
+    vim: currentScript !== null ? currentScript.vimMode : props.vim,
     onSave: save,
     onOpenNextTab,
     onOpenPreviousTab,
@@ -423,7 +424,7 @@ function Root(props: IProps): React.ReactElement {
 // Called every time script editor is opened
 export function ScriptEditorRoot(props: IProps) {
   return (
-    <ScriptEditorContextProvider vim={props.vim}>
+    <ScriptEditorContextProvider>
       <Root {...props} />
     </ScriptEditorContextProvider>
   );

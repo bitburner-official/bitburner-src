@@ -101,7 +101,7 @@ export const Settings = {
   /** Whether to use font ligatures */
   MonacoFontLigatures: false,
   /** Whether to use Vim mod by default in the script editor */
-  MonacoVim: false,
+  MonacoDefaultToVim: false,
   /** Word wrap setting for Script Editor. */
   MonacoWordWrap: "off" as WordWrapOptions,
   /** Control the cursor style*/

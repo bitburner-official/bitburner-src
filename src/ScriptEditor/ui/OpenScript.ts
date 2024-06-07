@@ -12,16 +12,25 @@ export class OpenScript {
   hostname: string;
   lastPosition: Position;
   model: ITextModel;
+  vimMode: boolean;
   isTxt: boolean;
   // TODO: Adding actual external update notifications for the OpenScript class
   // hasExternalUpdate = false;
 
-  constructor(path: ContentFilePath, code: string, hostname: string, lastPosition: Position, model: ITextModel) {
+  constructor(
+    path: ContentFilePath,
+    code: string,
+    hostname: string,
+    lastPosition: Position,
+    model: ITextModel,
+    vimMode: boolean,
+  ) {
     this.path = path;
     this.code = code;
     this.hostname = hostname;
     this.lastPosition = lastPosition;
     this.model = model;
+    this.vimMode = vimMode;
     this.isTxt = hasTextExtension(path);
   }
 

@@ -42,6 +42,18 @@ export const MiscPage = (): React.ReactElement => {
           </>
         }
       />
+      <OptionSwitch
+        checked={Settings.MonacoDefaultToVim}
+        onChange={(newValue) => (Settings.MonacoDefaultToVim = newValue)}
+        text="Enable Vim as default editor"
+        tooltip={
+          <>
+            This setting is only used when opening a file through ways that do not determine the editor mode. Using
+            'nano' or 'vim' will set the editor mode for the specified files, while 'ls' will open the file using the
+            the value from this setting.
+          </>
+        }
+      />
     </GameOptionsPage>
   );
 };
