@@ -119,7 +119,7 @@
     "watch": "webpack --watch --mode production",
     "watch:dev": "webpack --watch --mode development",
     "electron": "bash ./tools/package-electron.sh",
-    "electron:packager-all": "electron-packager .package bitburner --platform all --arch x64,armv7l,arm64,mips64el --out .build --overwrite --icon .package/icon.png",
+    "electron:packager-all": "electron-packager .package bitburner --platform all --arch x64,armv7l,arm64,mips64el --out .build --overwrite --icon .package/icon.png --app-copyright \"Copyright (C) 2024 Bitburner\"",
     "preversion": "npm install && npm run test",
     "version": "sh ./tools/build-release.sh && git add --all",
     "postversion": "git push -u origin dev && git push --tags",
