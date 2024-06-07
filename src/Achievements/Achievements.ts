@@ -29,6 +29,7 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 
 import { getRecordValues } from "../Types/Record";
 import { ServerConstants } from "../Server/data/Constants";
+import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 
 // Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
 const achievementData = (<AchievementDataJson>(<unknown>data)).achievements;
@@ -59,6 +60,14 @@ export interface AchievementData {
   Description: string;
 }
 
+function canAccessBitNodeFeature(bitNode: number): boolean {
+  return Player.bitNodeN === bitNode || Player.sourceFileLvl(bitNode) > 0;
+}
+
+function knowAboutBitverse(): boolean {
+  return Player.sourceFiles.size > 0;
+}
+
 function sfAchievements(): Record<string, Achievement> {
   const achs: Record<string, Achievement> = {};
   for (let i = 1; i <= 12; i++) {
@@ -66,7 +75,7 @@ function sfAchievements(): Record<string, Achievement> {
     achs[ID] = {
       ...achievementData[ID],
       Icon: ID,
-      Visible: () => Player.knowsAboutBitverse(),
+      Visible: knowAboutBitverse,
       Condition: () => Player.sourceFileLvl(i) >= 1,
     };
   }
@@ -321,25 +330,25 @@ export const achievements: Record<string, Achievement> = {
   GANG: {
     ...achievementData.GANG,
     Icon: "GANG",
-    Visible: () => Player.canAccessBitNodeFeature(2),
+    Visible: () => canAccessBitNodeFeature(2),
     Condition: () => Player.gang !== null,
   },
   FULL_GANG: {
     ...achievementData.FULL_GANG,
     Icon: "GANGMAX",
-    Visible: () => Player.canAccessBitNodeFeature(2),
+    Visible: () => canAccessBitNodeFeature(2),
     Condition: () => Player.gang !== null && Player.gang.members.length === GangConstants.MaximumGangMembers,
   },
   GANG_TERRITORY: {
     ...achievementData.GANG_TERRITORY,
     Icon: "GANG100%",
-    Visible: () => Player.canAccessBitNodeFeature(2),
+    Visible: () => canAccessBitNodeFeature(2),
     Condition: () => Player.gang !== null && AllGangs[Player.gang.facName].territory >= 0.999,
   },
   GANG_MEMBER_POWER: {
     ...achievementData.GANG_MEMBER_POWER,
     Icon: "GANG10000",
-    Visible: () => Player.canAccessBitNodeFeature(2),
+    Visible: () => canAccessBitNodeFeature(2),
     Condition: () =>
       Player.gang !== null &&
       Player.gang.members.some(
@@ -350,19 +359,19 @@ export const achievements: Record<string, Achievement> = {
   CORPORATION: {
     ...achievementData.CORPORATION,
     Icon: "CORP",
-    Visible: () => Player.canAccessBitNodeFeature(3),
+    Visible: () => canAccessBitNodeFeature(3),
     Condition: () => Player.corporation !== null,
   },
   CORPORATION_BRIBE: {
     ...achievementData.CORPORATION_BRIBE,
     Icon: "CORPLOBBY",
-    Visible: () => Player.canAccessBitNodeFeature(3),
+    Visible: () => canAccessBitNodeFeature(3),
     Condition: () => !!Player.corporation && Player.corporation.unlocks.has(CorpUnlockName.GovernmentPartnership),
   },
   CORPORATION_PROD_1000: {
     ...achievementData.CORPORATION_PROD_1000,
     Icon: "CORP1000",
-    Visible: () => Player.canAccessBitNodeFeature(3),
+    Visible: () => canAccessBitNodeFeature(3),
     Condition: () => {
       if (!Player.corporation) return false;
       for (const division of Player.corporation.divisions.values()) {
@@ -374,7 +383,7 @@ export const achievements: Record<string, Achievement> = {
   CORPORATION_EMPLOYEE_3000: {
     ...achievementData.CORPORATION_EMPLOYEE_3000,
     Icon: "CORPCITY",
-    Visible: () => Player.canAccessBitNodeFeature(3),
+    Visible: () => canAccessBitNodeFeature(3),
     Condition: (): boolean => {
       if (!Player.corporation) return false;
       for (const division of Player.corporation.divisions.values()) {
@@ -389,7 +398,7 @@ export const achievements: Record<string, Achievement> = {
     Icon: "CORPRE",
     Name: "Own the land",
     Description: "Expand to the Real Estate division.",
-    Visible: () => Player.canAccessBitNodeFeature(3),
+    Visible: () => canAccessBitNodeFeature(3),
     Condition: () => {
       if (!Player.corporation) return false;
       for (const division of Player.corporation.divisions.values()) {
@@ -401,26 +410,26 @@ export const achievements: Record<string, Achievement> = {
   INTELLIGENCE_255: {
     ...achievementData.INTELLIGENCE_255,
     Icon: "INT255",
-    Visible: () => Player.canAccessBitNodeFeature(5),
+    Visible: () => canAccessBitNodeFeature(5),
     Condition: () => Player.skills.intelligence >= 255,
   },
   BLADEBURNER_DIVISION: {
     ...achievementData.BLADEBURNER_DIVISION,
     Icon: "BLADE",
-    Visible: () => Player.canAccessBitNodeFeature(6),
+    Visible: () => canAccessBitNodeFeature(6),
     Condition: () => Player.bladeburner !== null,
   },
   BLADEBURNER_OVERCLOCK: {
     ...achievementData.BLADEBURNER_OVERCLOCK,
     Icon: "BLADEOVERCLOCK",
-    Visible: () => Player.canAccessBitNodeFeature(6),
+    Visible: () => canAccessBitNodeFeature(6),
     Condition: () =>
       Player.bladeburner?.getSkillLevel(BladeSkillName.overclock) === Skills[BladeSkillName.overclock].maxLvl,
   },
   BLADEBURNER_UNSPENT_100000: {
     ...achievementData.BLADEBURNER_UNSPENT_100000,
     Icon: "BLADE100K",
-    Visible: () => Player.canAccessBitNodeFeature(6),
+    Visible: () => canAccessBitNodeFeature(6),
     Condition: () => Player.bladeburner !== null && Player.bladeburner.skillPoints >= 100000,
   },
   "4S": {
@@ -431,21 +440,21 @@ export const achievements: Record<string, Achievement> = {
   FIRST_HACKNET_SERVER: {
     ...achievementData.FIRST_HACKNET_SERVER,
     Icon: "HASHNET",
-    Visible: () => Player.canAccessBitNodeFeature(9),
+    Visible: () => canAccessBitNodeFeature(9),
     Condition: () => hasHacknetServers() && Player.hacknetNodes.length > 0,
     AdditionalUnlock: [achievementData.FIRST_HACKNET_NODE.ID],
   },
   ALL_HACKNET_SERVER: {
     ...achievementData.ALL_HACKNET_SERVER,
     Icon: "HASHNETALL",
-    Visible: () => Player.canAccessBitNodeFeature(9),
+    Visible: () => canAccessBitNodeFeature(9),
     Condition: () => hasHacknetServers() && Player.hacknetNodes.length === HacknetServerConstants.MaxServers,
     AdditionalUnlock: [achievementData["30_HACKNET_NODE"].ID],
   },
   MAX_HACKNET_SERVER: {
     ...achievementData.MAX_HACKNET_SERVER,
     Icon: "HASHNETALL",
-    Visible: () => Player.canAccessBitNodeFeature(9),
+    Visible: () => canAccessBitNodeFeature(9),
     Condition: (): boolean => {
       if (!hasHacknetServers()) return false;
       for (const h of Player.hacknetNodes) {
@@ -467,14 +476,14 @@ export const achievements: Record<string, Achievement> = {
   HACKNET_SERVER_1B: {
     ...achievementData.HACKNET_SERVER_1B,
     Icon: "HASHNETMONEY",
-    Visible: () => Player.canAccessBitNodeFeature(9),
+    Visible: () => canAccessBitNodeFeature(9),
     Condition: () => hasHacknetServers() && Player.moneySourceB.hacknet >= 1e9,
     AdditionalUnlock: [achievementData.HACKNET_NODE_10M.ID],
   },
   MAX_CACHE: {
     ...achievementData.MAX_CACHE,
     Icon: "HASHNETCAP",
-    Visible: () => Player.canAccessBitNodeFeature(9),
+    Visible: () => canAccessBitNodeFeature(9),
     Condition: () =>
       hasHacknetServers() &&
       Player.hashManager.hashes === Player.hashManager.capacity &&
@@ -483,13 +492,13 @@ export const achievements: Record<string, Achievement> = {
   SLEEVE_8: {
     ...achievementData.SLEEVE_8,
     Icon: "SLEEVE8",
-    Visible: () => Player.canAccessBitNodeFeature(10),
+    Visible: () => canAccessBitNodeFeature(10),
     Condition: () => Player.sleeves.length === 8 && Player.sourceFileLvl(10) === 3,
   },
   INDECISIVE: {
     ...achievementData.INDECISIVE,
     Icon: "1H",
-    Visible: () => Player.knowsAboutBitverse(),
+    Visible: knowAboutBitverse,
     Condition: (function () {
       let c = 0;
       setInterval(() => {
@@ -505,67 +514,66 @@ export const achievements: Record<string, Achievement> = {
   FAST_BN: {
     ...achievementData.FAST_BN,
     Icon: "2DAYS",
-    Visible: () => Player.knowsAboutBitverse(),
-    Condition: () => Player.bitNodeFinishedState() && Player.playtimeSinceLastBitnode < 1000 * 60 * 60 * 24 * 2,
+    Visible: knowAboutBitverse,
+    Condition: () => isBitNodeFinished() && Player.playtimeSinceLastBitnode < 1000 * 60 * 60 * 24 * 2,
   },
   CHALLENGE_BN1: {
     ...achievementData.CHALLENGE_BN1,
     Icon: "BN1+",
-    Visible: () => Player.knowsAboutBitverse(),
+    Visible: knowAboutBitverse,
     Condition: () =>
       Player.bitNodeN === 1 &&
-      Player.bitNodeFinishedState() &&
+      isBitNodeFinished() &&
       Player.getHomeComputer().maxRam <= 128 &&
       Player.getHomeComputer().cpuCores === 1,
   },
   CHALLENGE_BN2: {
     ...achievementData.CHALLENGE_BN2,
     Icon: "BN2+",
-    Visible: () => Player.canAccessBitNodeFeature(2),
-    Condition: () => Player.bitNodeN === 2 && Player.bitNodeFinishedState() && Player.gang === null,
+    Visible: () => canAccessBitNodeFeature(2),
+    Condition: () => Player.bitNodeN === 2 && isBitNodeFinished() && Player.gang === null,
   },
   CHALLENGE_BN3: {
     ...achievementData.CHALLENGE_BN3,
     Icon: "BN3+",
-    Visible: () => Player.canAccessBitNodeFeature(3),
-    Condition: () => Player.bitNodeN === 3 && Player.bitNodeFinishedState() && Player.corporation === null,
+    Visible: () => canAccessBitNodeFeature(3),
+    Condition: () => Player.bitNodeN === 3 && isBitNodeFinished() && Player.corporation === null,
   },
   CHALLENGE_BN6: {
     ...achievementData.CHALLENGE_BN6,
     Icon: "BN6+",
-    Visible: () => Player.canAccessBitNodeFeature(6),
-    Condition: () => Player.bitNodeN === 6 && Player.bitNodeFinishedState() && Player.bladeburner === null,
+    Visible: () => canAccessBitNodeFeature(6),
+    Condition: () => Player.bitNodeN === 6 && isBitNodeFinished() && Player.bladeburner === null,
   },
   CHALLENGE_BN7: {
     ...achievementData.CHALLENGE_BN7,
     Icon: "BN7+",
-    Visible: () => Player.canAccessBitNodeFeature(7),
-    Condition: () => Player.bitNodeN === 7 && Player.bitNodeFinishedState() && Player.bladeburner === null,
+    Visible: () => canAccessBitNodeFeature(7),
+    Condition: () => Player.bitNodeN === 7 && isBitNodeFinished() && Player.bladeburner === null,
   },
   CHALLENGE_BN8: {
     ...achievementData.CHALLENGE_BN8,
     Icon: "BN8+",
-    Visible: () => Player.canAccessBitNodeFeature(8),
-    Condition: () =>
-      Player.bitNodeN === 8 && Player.bitNodeFinishedState() && !Player.has4SData && !Player.has4SDataTixApi,
+    Visible: () => canAccessBitNodeFeature(8),
+    Condition: () => Player.bitNodeN === 8 && isBitNodeFinished() && !Player.has4SData && !Player.has4SDataTixApi,
   },
   CHALLENGE_BN9: {
     ...achievementData.CHALLENGE_BN9,
     Icon: "BN9+",
-    Visible: () => Player.canAccessBitNodeFeature(9),
+    Visible: () => canAccessBitNodeFeature(9),
     Condition: () =>
       Player.bitNodeN === 9 &&
-      Player.bitNodeFinishedState() &&
+      isBitNodeFinished() &&
       Player.moneySourceB.hacknet === 0 &&
       Player.moneySourceB.hacknet_expenses === 0,
   },
   CHALLENGE_BN10: {
     ...achievementData.CHALLENGE_BN10,
     Icon: "BN10+",
-    Visible: () => Player.canAccessBitNodeFeature(10),
+    Visible: () => canAccessBitNodeFeature(10),
     Condition: () =>
       Player.bitNodeN === 10 &&
-      Player.bitNodeFinishedState() &&
+      isBitNodeFinished() &&
       !Player.sleeves.some(
         (s) =>
           s.augmentations.length > 0 ||
@@ -580,7 +588,7 @@ export const achievements: Record<string, Achievement> = {
   CHALLENGE_BN12: {
     ...achievementData.CHALLENGE_BN12,
     Icon: "BN12+",
-    Visible: () => Player.canAccessBitNodeFeature(12),
+    Visible: () => canAccessBitNodeFeature(12),
     Condition: () => Player.sourceFileLvl(12) >= 50,
   },
   BYPASS: {
@@ -641,10 +649,10 @@ export const achievements: Record<string, Achievement> = {
   CHALLENGE_BN13: {
     ...achievementData.CHALLENGE_BN13,
     Icon: "BN13+",
-    Visible: () => Player.canAccessBitNodeFeature(13),
+    Visible: () => canAccessBitNodeFeature(13),
     Condition: () =>
       Player.bitNodeN === 13 &&
-      Player.bitNodeFinishedState() &&
+      isBitNodeFinished() &&
       !Player.augmentations.some((a) => a.name === AugmentationName.StaneksGift1),
   },
   DEVMENU: {

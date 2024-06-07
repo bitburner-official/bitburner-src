@@ -1123,7 +1123,9 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
 
       const wd = GetServer(SpecialServers.WorldDaemon);
-      if (!(wd instanceof Server)) throw new Error("WorldDaemon was not a normal server. This is a bug contact dev.");
+      if (!(wd instanceof Server)) {
+        throw new Error("WorldDaemon is not a normal server. This is a bug. Please contact developers.");
+      }
       const hackingRequirements = () => {
         if (Player.skills.hacking < wd.requiredHackingSkill) return false;
         if (!wd.hasAdminRights) return false;

@@ -72,6 +72,7 @@ import { MathJaxContext } from "better-react-mathjax";
 import { useRerender } from "./React/hooks";
 import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
+import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 
 const htmlLocation = location;
 
@@ -112,7 +113,7 @@ function determineStartPage(): PageWithContext {
   if (RecoveryMode) {
     return { page: Page.Recovery };
   }
-  if (Player.bitNodeFinishedState()) {
+  if (isBitNodeFinished()) {
     // Go to BitVerse UI without animation.
     return { page: Page.BitVerse, flume: false, quick: true };
   }
