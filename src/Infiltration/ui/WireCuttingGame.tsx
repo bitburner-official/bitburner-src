@@ -4,7 +4,6 @@ import { Box, Paper, Typography } from "@mui/material";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { KEY } from "../../utils/helpers/keyCodes";
 import { random } from "../utils";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
@@ -207,7 +206,7 @@ function generateWires(difficulty: Difficulty): Wire[] {
     if (Math.random() < 0.15) {
       wireColors.push(colors[Math.floor(Math.random() * colors.length)]);
     }
-    const wireType = [...wireColors.map(color => colorNames[color]).join("")];
+    const wireType = [...wireColors.map((color) => colorNames[color]).join("")];
     wires.push({
       wireType,
       colors: wireColors,
