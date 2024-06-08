@@ -6,43 +6,20 @@ import { FilePath } from "src/Paths/FilePath";
 import { Settings } from "../../Settings/Settings";
 import { help } from "../commands/help";
 
-type LineParser = (line: string, i: number) => LineInfo;
-type PtLineParser = (options: Options, filename: string, line: string, i: number) => LineInfo;
-type FileParser = (file: ContentFile) => LineInfo[];
+type LineParser = (line: string, i: number) => Line;
+type PtLineParser = (options: Options, filename: string, line: string, i: number) => Line;
+type FileParser = (file: ContentFile, i: number) => Line[];
 
-interface Lines {
+interface LineStrings {
   rawLine: string;
   prettyLine: string;
 }
 
-interface LineInfo {
+interface Line {
   isPrint: boolean;
-  isEdited: boolean;
-  lines: Lines;
+  isMatched: boolean;
+  lines: LineStrings;
   filename: string;
-}
-
-interface ValidArgs {
-  regExpr: string[];
-
-  lineNum: string[];
-  yesName: string[];
-  notName: string[];
-  invert: string[];
-
-  quiet: string[];
-  verbose: string[];
-
-  toFile: string[];
-  overWrite: string[];
-
-  preContext: string[];
-  context: string[];
-  postContext: string[];
-
-  help: string[];
-
-  searchAll: string[];
 }
 
 interface Options {
@@ -52,6 +29,7 @@ interface Options {
   yesName: boolean;
   notName: boolean;
   invert: boolean;
+  limit: boolean;
 
   quiet: boolean;
   verbose: boolean;
@@ -70,6 +48,30 @@ interface Options {
   multiFile: boolean;
 }
 
+interface ValidArgs {
+  regExpr: string[];
+
+  lineNum: string[];
+  yesName: string[];
+  notName: string[];
+  invert: string[];
+  limit: string[];
+
+  quiet: string[];
+  verbose: string[];
+
+  toFile: string[];
+  overWrite: string[];
+
+  preContext: string[];
+  context: string[];
+  postContext: string[];
+
+  help: string[];
+
+  searchAll: string[];
+}
+
 const VALID_ARGS: ValidArgs = {
   regExpr: ["-G", "--basic-regexp"],
 
@@ -77,6 +79,7 @@ const VALID_ARGS: ValidArgs = {
   yesName: ["-H", "--with-filename"],
   notName: ["-h", "--no-filename"],
   invert: ["-v", "--invert-match"],
+  limit: ["-m", "--max-count"],
 
   quiet: ["-q", "--quiet", "--silent"],
   verbose: ["-V", "--verbose"],
@@ -100,32 +103,134 @@ const MAGENTA: string = "\x1b[35m";
 const CYAN: string = "\x1b[36m";
 const WHITE: string = "\x1b[37m";
 
-class Results {
-  results: LineInfo[];
+class Args {
+  args: string[];
 
-  constructor(results: LineInfo[]) {
-    this.results = results;
+  constructor(args: (string | number | boolean)[]) {
+    this.args = args.map(String);
   }
 
-  addContext(options: Options, contextNum: number): LineInfo[] {
-    for (const [editLineIndex, line] of this.results.entries()) {
-      if (!line.isEdited) continue;
+  initOpts: Options = {
+    regExpr: false,
+
+    lineNum: false,
+    yesName: false,
+    notName: false,
+    invert: false,
+    limit: false,
+
+    quiet: false,
+    verbose: false,
+
+    toFile: false,
+    overWrite: false,
+
+    preContext: false,
+    context: false,
+    postContext: false,
+
+    searchAll: false,
+
+    help: false,
+
+    multiFile: false,
+  };
+
+  splitOptsAndArgs(): [Options, string[], string, number, number] {
+    let outFile, limit, context;
+
+    [outFile, this.args] = this.spliceOptParam(VALID_ARGS.toFile);
+    [limit, this.args] = this.spliceOptParam(VALID_ARGS.limit);
+    [context, this.args] = this.spliceOptParam(VALID_ARGS.preContext);
+    if (!context) [context, this.args] = this.spliceOptParam(VALID_ARGS.context);
+    if (!context) [context, this.args] = this.spliceOptParam(VALID_ARGS.postContext);
+
+    const outFileStr: string = outFile ?? "";
+    const limitNum: number = limit ? Number(limit) : -1;
+    const contextNum: number = context ? Number(context) : 1;
+
+    const [options, otherArgs] = this.args.map(String).reduce(
+      ([options, otherArgs]: [Options, string[]], arg: string): [Options, string[]] => {
+        const isOption: boolean = Object.keys(VALID_ARGS).some((key: string): boolean => {
+          if (VALID_ARGS[key as keyof ValidArgs].includes(arg)) {
+            return (options[key as keyof Options] = true);
+          }
+          return false;
+        });
+        return isOption ? [options, otherArgs] : [options, [...otherArgs, arg]];
+      },
+      [this.initOpts, []],
+    );
+
+    return [options, otherArgs, outFileStr, contextNum, limitNum];
+  }
+
+  spliceOptParam(validArgs: string[]): [string, string[]] | [undefined, string[]] {
+    const argIndex = validArgs.reduce((ret: number, arg: string) => {
+      const argIndex = this.args.indexOf(arg);
+      return argIndex > -1 ? argIndex : ret;
+    }, NaN);
+
+    if (isNaN(argIndex)) return [undefined, this.args];
+
+    const nextArg: string | number = this.args.splice(argIndex + 1, 1)?.[0];
+
+    return [nextArg, this.args];
+  }
+}
+
+class Results {
+  lines: Line[];
+  areEdited: boolean;
+
+  constructor(results: Line[]) {
+    this.lines = results;
+    this.areEdited = results.reduce((ret, line) => (line.isMatched ? true : ret), false);
+  }
+
+  addContext(options: Options, contextNum: number): Results {
+    for (const [editLineIndex, line] of this.lines.entries()) {
+      if (!line.isMatched) continue;
       for (let contextLineIndex = 0; contextLineIndex <= contextNum; contextLineIndex++) {
-        let contextLine;
-        if (options.preContext) contextLine = this.results[editLineIndex - contextLineIndex];
-        else if (options.postContext) contextLine = this.results[editLineIndex + contextLineIndex];
+        let contextLine: Line | undefined;
+        if (options.preContext) contextLine = this.lines[editLineIndex - contextLineIndex];
+        else if (options.postContext) contextLine = this.lines[editLineIndex + contextLineIndex];
         else if (options.context)
-          contextLine = this.results[editLineIndex - Math.floor(contextNum / 2) + contextLineIndex];
+          contextLine = this.lines[editLineIndex - Math.floor(contextNum / 2) + contextLineIndex];
         else contextLine = line;
 
         if (contextLine && line.filename === contextLine.filename) contextLine.isPrint = true;
       }
     }
-    return this.results;
+    return this;
+  }
+
+  splitAndFilter(options: Options): [string[], string[]] {
+    return this.lines.reduce(
+      ([rawResult, prettyResult]: [string[], string[]], lineInfo: Line): [string[], string[]] => {
+        return lineInfo.isPrint === options.invert
+          ? [rawResult, prettyResult]
+          : [
+              [...rawResult, lineInfo.lines.rawLine],
+              [...prettyResult, lineInfo.lines.prettyLine],
+            ];
+      },
+      [[], []],
+    );
+  }
+
+  limitMatches(options: Options, limitNum: number): Results {
+    let counter = 0;
+    if (!options.limit) return this;
+    for (const line of this.lines) {
+      if (line.isMatched) counter++;
+      if (counter > limitNum) line.isMatched = false;
+    }
+    return this;
   }
 }
 
-function lineParser(pattern: string | RegExp, options: Options, filename: string, line: string, i: number): LineInfo {
+function parseLine(pattern: string | RegExp, options: Options, filename: string, line: string, i: number): Line {
   const editedLine: string = line.replaceAll(pattern, `${RED}$&${DEFAULT}`);
 
   const name: string = (options.multiFile || options.yesName) && !options.notName ? `${filename}` : "";
@@ -133,24 +238,25 @@ function lineParser(pattern: string | RegExp, options: Options, filename: string
 
   const [colName, rawName] = name ? [`${MAGENTA}${name}${CYAN}:${DEFAULT}`, `${name}:`] : ["", ""];
   const [colLineNo, rawLineNo] = lineNo ? [`${GREEN}${lineNo}${CYAN}:${DEFAULT}`, `${lineNo}:`] : ["", ""];
-  const lines: Lines = { rawLine: rawName + rawLineNo + line, prettyLine: colName + colLineNo + editedLine };
+  const lines: LineStrings = { rawLine: rawName + rawLineNo + line, prettyLine: colName + colLineNo + editedLine };
 
   const isEdited = line !== editedLine;
-  return { isEdited, isPrint: false, lines, filename };
+  return { isMatched: isEdited, isPrint: false, lines, filename };
 }
 
-function parseFile(parseFunc: PtLineParser, options: Options, file: ContentFile): LineInfo[] {
+function parseFile(parseFunc: PtLineParser, options: Options, file: ContentFile, i: number): Line[] {
   const parseLineFn: LineParser = parseFunc.bind(null, options, file.filename);
-  const editedContent: LineInfo[] = file.content.split("\n").map(parseLineFn);
+  const editedContent: Line[] = file.content.split("\n").map(parseLineFn);
 
-  const fileSeparator: LineInfo = {
+  const fileSeparator: Line = {
     lines: { prettyLine: `${CYAN}--${DEFAULT}`, rawLine: "--" },
     isPrint: true,
-    isEdited: false,
+    isMatched: false,
     filename: "",
   };
   const isContext: boolean = options.context || options.preContext || options.postContext;
-  if (isContext) return [fileSeparator, ...editedContent];
+
+  if (isContext && i !== 0) return [fileSeparator, ...editedContent];
   return editedContent;
 }
 
@@ -173,88 +279,6 @@ function getArgFiles(args: string[]): [ContentFile[], string[]] {
   }
 
   return [files, notFiles];
-}
-
-function filterOpts([options, otherArgs]: [Options, string[]], arg: string): [Options, string[]] {
-  const isOption: boolean = Object.keys(VALID_ARGS).some((key: string): boolean => {
-    if (VALID_ARGS[key as keyof ValidArgs].includes(arg)) {
-      return (options[key as keyof Options] = true);
-    }
-    return false;
-  });
-
-  return isOption ? [options, otherArgs] : [options, [...otherArgs, arg]];
-}
-
-function filterArgs(args: string[]): [Options, string[], string, number] {
-  const initOpts: Options = {
-    regExpr: false,
-
-    lineNum: false,
-    yesName: false,
-    notName: false,
-    invert: false,
-
-    quiet: false,
-    verbose: false,
-
-    toFile: false,
-    overWrite: false,
-
-    preContext: false,
-    context: false,
-    postContext: false,
-
-    searchAll: false,
-
-    help: false,
-
-    multiFile: false,
-  };
-
-  const [outFile, argsMinusOutfile] = getNextArg(args, VALID_ARGS.toFile);
-  const [context, splicedArgs] = getContext(argsMinusOutfile);
-
-  const contextNum: number = isNaN(Number(context)) ? 1 : Number(context) + 1;
-  const outFileStr: string = outFile ?? "";
-
-  const [options, otherArgs]: [Options, string[]] = splicedArgs.map(String).reduce(filterOpts, [initOpts, []]);
-
-  return [options, otherArgs, outFileStr, contextNum];
-}
-
-function getContext(args: string[]): [string, string[]] | [undefined, string[]] {
-  let context;
-  [context, args] = getNextArg(args, VALID_ARGS.preContext);
-  if (!context) [context, args] = getNextArg(args, VALID_ARGS.context);
-  if (!context) [context, args] = getNextArg(args, VALID_ARGS.postContext);
-  return [context, args];
-}
-
-function getNextArg(args: string[], validArgs: string[]): [string, string[]] | [undefined, string[]] {
-  const argIndex = validArgs.reduce((ret: number, arg: string) => {
-    const argIndex = args.indexOf(arg);
-    return argIndex > -1 ? argIndex : ret;
-  }, NaN);
-
-  if (isNaN(argIndex)) return [undefined, args];
-
-  const nextArg: string | number = args.splice(argIndex + 1, 1)?.[0];
-
-  return [nextArg, args];
-}
-
-function filterResults(
-  options: Options,
-  [rawResult, prettyResult]: [string[], string[]],
-  lineInfo: LineInfo,
-): [string[], string[]] {
-  return lineInfo.isPrint === options.invert
-    ? [rawResult, prettyResult]
-    : [
-        [...rawResult, lineInfo.lines.rawLine],
-        [...prettyResult, lineInfo.lines.prettyLine],
-      ];
 }
 
 function writeToFile(
@@ -282,11 +306,11 @@ function writeToFile(
   server.writeToContentFile(outFilePath, rawResult);
 }
 
-function getVerboseInfo(results: LineInfo[], files: ContentFile[], pattern: string | RegExp, options: Options): string {
+function getVerboseInfo(results: Line[], files: ContentFile[], pattern: string | RegExp, options: Options): string {
   const totalLines = results.length;
-  const matchCount = results.reduce((acc, result) => acc + Number(result.isEdited), 0);
+  const matchCount = results.reduce((acc, result) => acc + Number(result.isMatched), 0);
   const info = [
-    `\n${matchCount} ${options.invert ? "INVERTED" : ""} matches against`,
+    `\n${options.invert ? totalLines - matchCount + " INVERTED" : matchCount} matches against`,
     `PATTERN "${pattern.toString()}" in`,
     `${totalLines} lines, in`,
     `${files.length} files:`,
@@ -305,9 +329,9 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     );
   }
 
-  const [options, otherArgs, outFileStr, contextNum]: [Options, string[], string, number] = filterArgs(
-    args.map(String),
-  );
+  const [options, otherArgs, outFileStr, contextNum, limitNum]: [Options, string[], string, number, number] = new Args(
+    args,
+  ).splitOptsAndArgs();
 
   const outFilePath = Terminal.getFilepath(outFileStr);
   const fileArgs = otherArgs.slice(1);
@@ -331,19 +355,24 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
 
   try {
     const pattern: string | RegExp = options.regExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
-    const fileParser: FileParser = parseFile.bind(null, lineParser.bind(null, pattern), options);
+    const lineParser: PtLineParser = parseLine.bind(null, pattern);
+    const fileParser: FileParser = parseFile.bind(null, lineParser, options);
     const results: Results = new Results(files.flatMap(fileParser));
     const [rawResult, prettyResult]: [string[], string[]] = results
+      .limitMatches(options, limitNum)
       .addContext(options, contextNum)
-      .reduce(filterResults.bind(null, options), [[""], [""]]);
+      .splitAndFilter(options);
     const printResult: string[] = prettyResult.slice(prettyResult.length - Settings.MaxTerminalCapacity); // limit printing to terminal
     const isTruncated: boolean = prettyResult.length !== printResult.length;
     const truncateInfo: string = isTruncated
       ? `\n${RED}grep output TRUNCATED from ${prettyResult.length} lines to ${Settings.MaxTerminalCapacity} (Max terminal capacity)`
       : "";
 
-    if (!options.quiet)
-      Terminal.print(printResult.join("\n") + getVerboseInfo(results.results, files, pattern, options) + truncateInfo);
+    if (!options.quiet) {
+      const verboseInfo = getVerboseInfo(results.lines, files, pattern, options);
+      if (results.areEdited) Terminal.print(printResult.join("\n") + truncateInfo);
+      if (options.verbose) Terminal.print(verboseInfo);
+    }
     if (options.toFile) writeToFile(outFilePath, outFileStr, options, rawResult.join("\n"), server);
   } catch (e) {
     Terminal.error("grep processing error: " + e);
