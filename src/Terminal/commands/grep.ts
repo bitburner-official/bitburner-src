@@ -21,6 +21,16 @@ interface Line {
   isFileSep: boolean;
 }
 
+class ArgStrings {
+  short: string[];
+  long: string[];
+
+  constructor(validArgs: ArgStrings) {
+    this.long = validArgs.long;
+    this.short = validArgs.long;
+  }
+}
+
 // Options and ValidArgs key names must correlate
 interface Options {
   isRegExpr: boolean;
@@ -51,52 +61,52 @@ interface Options {
   hasContextFlag: boolean;
 }
 interface ValidArgs {
-  isRegExpr: string[];
+  isRegExpr: ArgStrings;
 
-  isLineNum: string[];
-  isNamed: string[];
-  isNotNamed: string[];
-  isInvertMatch: string[];
-  isMaxMatches: string[];
+  isLineNum: ArgStrings;
+  isNamed: ArgStrings;
+  isNotNamed: ArgStrings;
+  isInvertMatch: ArgStrings;
+  isMaxMatches: ArgStrings;
 
-  isQuiet: string[];
-  isVerbose: string[];
+  isQuiet: ArgStrings;
+  isVerbose: ArgStrings;
 
-  isToFile: string[];
-  isOverWrite: string[];
+  isToFile: ArgStrings;
+  isOverWrite: ArgStrings;
 
-  isPreContext: string[];
-  isContext: string[];
-  isPostContext: string[];
+  isPreContext: ArgStrings;
+  isContext: ArgStrings;
+  isPostContext: ArgStrings;
 
-  isHelp: string[];
+  isHelp: ArgStrings;
 
-  isSearchAll: string[];
-  isPipeIn: string[];
+  isSearchAll: ArgStrings;
+  isPipeIn: ArgStrings;
 }
 const VALID_ARGS: ValidArgs = {
-  isRegExpr: ["-G", "--basic-regexp"],
+  isRegExpr: { short: ["-G"], long: ["--basic-regexp"] },
 
-  isLineNum: ["-n", "--line-number"],
-  isNamed: ["-H", "--with-filename"],
-  isNotNamed: ["-h", "--no-filename"],
-  isInvertMatch: ["-v", "--invert-match"],
-  isMaxMatches: ["-m", "--max-count"],
+  isLineNum: { short: ["-n"], long: ["--line-number"] },
+  isNamed: { short: ["-H"], long: ["--with-filename"] },
+  isNotNamed: { short: ["-h"], long: ["--no-filename"] },
+  isInvertMatch: { short: ["-v"], long: ["--invert-match"] },
+  isMaxMatches: { short: ["-m"], long: ["--max-count"] },
 
-  isQuiet: ["-q", "--quiet", "--silent"],
-  isVerbose: ["-V", "--verbose"],
+  isQuiet: { short: ["-q"], long: ["--silent", "--quiet"] },
+  isVerbose: { short: ["-V"], long: ["--verbose"] },
 
-  isToFile: ["-O", "--output"],
-  isOverWrite: ["-f", "--allow-overwrite"],
+  isToFile: { short: ["-O"], long: ["--output"] },
+  isOverWrite: { short: ["-f"], long: ["--allow-overwrite"] },
 
-  isPreContext: ["-B", "--before-context"],
-  isContext: ["-C", "--context"],
-  isPostContext: ["-A", "--after-context"],
+  isPreContext: { short: ["-B"], long: ["--before-context"] },
+  isContext: { short: ["-C"], long: ["--context"] },
+  isPostContext: { short: ["-A"], long: ["--after-context"] },
 
-  isSearchAll: ["-*", "--search-all"],
-  isPipeIn: ["-p", "--pipe-terminal"],
+  isSearchAll: { short: ["-*"], long: ["--search-all"] },
+  isPipeIn: { short: ["-p"], long: ["--pipe-terminal"] },
 
-  isHelp: ["--help"],
+  isHelp: { short: [], long: ["--help"] },
 };
 //
 
@@ -114,9 +124,12 @@ const ERR: Errors = {
   noArgs: "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE] [-B/A/C] [NUM]",
   noSearchArg:
     "grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server",
-  badSearchFile: (files: string[]) => "grep argument error: Invalid filename(s): " + files.join(", "),
+  badSearchFile: (files: string[]) =>
+    `grep argument error: Invalid filename(s): ${files.join(
+      ", ",
+    )}. OPTIONS with additional parameters (-O, -m, -B/A/C) must be separated from other options`,
   badParameter: (option: string, arg: string) =>
-    `grep argument error: Incorrect ${option} argument "${arg}". Must be a number`,
+    `grep argument error: Incorrect ${option} argument "${arg}". Must be a number.`,
   outFileExists: (path: string) =>
     `grep file output failed: Invalid output file "${path}". Output file must not already exist. Pass -f/--allow-overwrite to overwrite.`,
   badOutFile: (path: string) =>
@@ -167,6 +180,31 @@ class Args {
     hasContextFlag: false,
   };
 
+  checkIfOption(fullArg: string, options: Options): [Options, boolean] {
+    const isOption = Object.keys(VALID_ARGS)
+      .map((key: string): boolean => {
+        const stripDash = (arg: string) => arg.replace("-", "");
+        if (!fullArg.startsWith("-")) return false;
+        // check long args
+        const theseArgs = VALID_ARGS[key as keyof ValidArgs];
+        const allArgs = [...theseArgs.long, ...theseArgs.short];
+        if (allArgs.includes(fullArg)) {
+          options[key as keyof Options] = true;
+          return true;
+        }
+        // check multiflag args
+        const multiFlag = stripDash(fullArg);
+        const shortArgs = theseArgs.short.map(stripDash);
+        if (multiFlag.length > 1 && shortArgs.some((arg) => [...multiFlag].includes(arg))) {
+          options[key as keyof Options] = true;
+          return true;
+        }
+        return false;
+      })
+      .some(Boolean); // map to some to avoid short circuit when checking multiflag
+    return [options, isOption];
+  }
+
   splitOptsAndArgs(): [Options, string[], string, string, string] {
     let outFile, limit, context;
 
@@ -177,15 +215,10 @@ class Args {
     if (!context) [context, this.args] = this.spliceOptParam(VALID_ARGS.isPostContext);
 
     const [options, otherArgs] = this.args.reduce(
-      ([options, otherArgs]: [Options, string[]], arg: string): [Options, string[]] => {
-        const isOption = Object.keys(VALID_ARGS).some((key: string): boolean => {
-          if (VALID_ARGS[key as keyof ValidArgs].includes(arg)) {
-            return (options[key as keyof Options] = true);
-          }
-          return false;
-        });
-
-        return isOption ? [options, otherArgs] : [options, [...otherArgs, arg]];
+      ([options, otherArgs]: [Options, string[]], fullArg: string): [Options, string[]] => {
+        let isOption = false;
+        [options, isOption] = this.checkIfOption(fullArg, options);
+        return isOption ? [options, otherArgs] : [options, [...otherArgs, fullArg]];
       },
       [this.initOptions, []],
     );
@@ -196,8 +229,8 @@ class Args {
     return [options, otherArgs, outFileStr, contextNum, limitNum];
   }
 
-  spliceOptParam(validArgs: string[]): [string, string[]] | [undefined, string[]] {
-    const argIndex = validArgs.reduce((ret: number, arg: string) => {
+  spliceOptParam(validArgs: ArgStrings): [string, string[]] | [undefined, string[]] {
+    const argIndex = [...validArgs.long, ...validArgs.short].reduce((ret: number, arg: string) => {
       const argIndex = this.args.indexOf(arg);
       return argIndex > -1 ? argIndex : ret;
     }, NaN);
@@ -260,7 +293,6 @@ class Results {
   }
 
   capMatches(limit: number): Results {
-    console.log(limit);
     if (!this.options.isMaxMatches) return this;
     for (const line of this.lines) {
       if (line.isMatched) this.matchCounter += 1;
@@ -404,7 +436,6 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
       ? new Results(grabTerminal().map(termParser), options, nLimit)
       : new Results(files.flatMap(fileParser), options, nLimit);
     const tres = results.capMatches(nLimit).addContext(nContext);
-    console.log(tres);
     const [rawResult, prettyResult] = tres.splitAndFilter();
 
     if (options.isPipeIn) files.length = 0;
