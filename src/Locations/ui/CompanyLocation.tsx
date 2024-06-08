@@ -57,7 +57,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
    */
   const currentPosition = jobTitle ? CompanyPositions[jobTitle] : null;
 
-  Player.location = companyNameAsLocationName(props.companyName);
+  Player.gotoLocation(companyNameAsLocationName(props.companyName));
 
   function startInfiltration(e: React.MouseEvent<HTMLElement>): void {
     if (!e.isTrusted) {
