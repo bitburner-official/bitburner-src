@@ -14,6 +14,7 @@ import { useGang } from "./Context";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
+import { GangConstants } from "../data/Constants";
 
 export function GangStats(): React.ReactElement {
   const gang = useGang();
@@ -40,7 +41,10 @@ export function GangStats(): React.ReactElement {
           }
         >
           <Typography>
-            Respect: {formatRespect(gang.respect)} ({formatRespect(5 * gang.respectGainRate)} / sec)
+            Respect: {formatRespect(gang.respect)} ({formatRespect(5 * gang.respectGainRate)} / sec){" "}
+            {gang.storedCycles > 2 * GangConstants.maxCyclesToProcess
+              ? `[Effective Gain: ${formatRespect(5 * gang.respectGainRate * GangConstants.maxCyclesToProcess)} / sec]`
+              : ""}
           </Typography>
         </Tooltip>
       </Box>
@@ -55,7 +59,10 @@ export function GangStats(): React.ReactElement {
           }
         >
           <Typography>
-            Wanted Level: {formatWanted(gang.wanted)} ({formatWanted(5 * gang.wantedGainRate)} / sec)
+            Wanted Level: {formatWanted(gang.wanted)} ({formatWanted(5 * gang.wantedGainRate)} / sec){" "}
+            {gang.storedCycles > 2 * GangConstants.maxCyclesToProcess
+              ? `[Effective Gain: ${formatWanted(5 * gang.wantedGainRate * GangConstants.maxCyclesToProcess)} / sec]`
+              : ""}
           </Typography>
         </Tooltip>
       </Box>
@@ -69,7 +76,14 @@ export function GangStats(): React.ReactElement {
       </Box>
 
       <Typography>
-        Money gain rate: <MoneyRate money={5 * gang.moneyGainRate} />
+        Money gain rate: <MoneyRate money={5 * gang.moneyGainRate} />{" "}
+        {gang.storedCycles > 2 * GangConstants.maxCyclesToProcess ? "[Effective Gain:" : ""}{" "}
+        {gang.storedCycles > 2 * GangConstants.maxCyclesToProcess ? (
+          <MoneyRate money={5 * gang.moneyGainRate * GangConstants.maxCyclesToProcess} />
+        ) : (
+          ""
+        )}
+        {gang.storedCycles > 2 * GangConstants.maxCyclesToProcess ? "]" : ""}
       </Typography>
 
       <Box display="flex">
