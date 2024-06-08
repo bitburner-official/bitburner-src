@@ -85,7 +85,7 @@ interface ValidArgs {
   isPipeIn: ArgStrings;
 }
 const VALID_ARGS: ValidArgs = {
-  isRegExpr: { short: ["-G"], long: ["--basic-regexp"] },
+  isRegExpr: { short: ["-R"], long: ["--regexp"] },
 
   isLineNum: { short: ["-n"], long: ["--line-number"] },
   isNamed: { short: ["-H"], long: ["--with-filename"] },
