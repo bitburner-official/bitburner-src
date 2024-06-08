@@ -243,6 +243,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "Search control:",
     "  -* --search-all          search for PATTERN in each FILE on server. Ignores any FILE argument(s) passed",
+    "  -p --pipe-terminal       search for PATTERN in terminal output. Ignores any FILE argument(s) passed",
     " ",
     "Pattern selection and interpretation:",
     "  -G, --basic-regexp       PATTERN is basic regular expression. PATTERN is a string by default",
