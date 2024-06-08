@@ -375,7 +375,7 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   if (options.isHelp) return help(["grep"]);
   if (notFiles.length) return Terminal.error(ERR.badSearchFile(notFiles));
   if (!options.isPipeIn && !options.isSearchAll && !files.length) return Terminal.error(ERR.noSearchArg);
-  if (options.isContext || options.isPreContext || (options.isPostContext && isNaN(Number(context))))
+  if ((options.isContext || options.isPreContext || options.isPostContext) && isNaN(Number(context)))
     return Terminal.error(ERR.badParameter("context", context));
   if (options.isMaxMatches && isNaN(Number(limit))) return Terminal.error(ERR.badParameter("limit", limit));
 
