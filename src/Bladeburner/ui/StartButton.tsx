@@ -20,7 +20,11 @@ export function StartButton({ bladeburner, action, rerender }: StartButtonProps)
   }
 
   return (
-    <ButtonWithTooltip disabledTooltip={disabledReason} onClick={onStart}>
+    <ButtonWithTooltip
+      buttonProps={{ style: { marginLeft: "1rem" } }}
+      disabledTooltip={disabledReason}
+      onClick={onStart}
+    >
       Start
     </ButtonWithTooltip>
   );

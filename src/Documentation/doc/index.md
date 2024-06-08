@@ -48,6 +48,8 @@
 - [Game Frozen or Stuck?](programming/game_frozen.md)
 - [Tools & Resources](help/tools_and_resources.md)
 - [Changelog](changelog.md)
+- [Changelog - Legacy v1](changelog-v1.md)
+- [Changelog - Legacy v0](changelog-v0.md)
 
 ## Migration
 

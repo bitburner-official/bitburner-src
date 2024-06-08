@@ -737,11 +737,11 @@ export const ns: InternalAPI<NSFull> = {
       const args = helpers.scriptArgs(ctx, _args);
       setTimeout(() => {
         const scriptServer = GetServer(ctx.workerScript.hostname);
-        if (scriptServer == null) {
-          throw helpers.errorMessage(ctx, "Could not find server. This is a bug. Report to dev");
+        if (scriptServer === null) {
+          throw helpers.errorMessage(ctx, `Cannot find server ${ctx.workerScript.hostname}`);
         }
 
-        return runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
+        runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
       }, runOpts.spawnDelay);
 
       helpers.log(ctx, () => `Will execute '${path}' in ${runOpts.spawnDelay} milliseconds`);

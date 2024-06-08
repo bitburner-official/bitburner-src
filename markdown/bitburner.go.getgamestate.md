@@ -14,9 +14,11 @@ getGameState(): {
     whiteScore: number;
     blackScore: number;
     previousMove: [number, number] | null;
+    komi: number;
+    bonusCycles: number;
   };
 ```
 **Returns:**
 
-{ currentPlayer: "White" \| "Black" \| "None"; whiteScore: number; blackScore: number; previousMove: \[number, number\] \| null; }
+{ currentPlayer: "White" \| "Black" \| "None"; whiteScore: number; blackScore: number; previousMove: \[number, number\] \| null; komi: number; bonusCycles: number; }
 

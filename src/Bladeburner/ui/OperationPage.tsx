@@ -1,6 +1,6 @@
 import type { Bladeburner } from "../Bladeburner";
 
-import * as React from "react";
+import React from "react";
 import { OperationElem } from "./OperationElem";
 import { Typography } from "@mui/material";
 
@@ -30,7 +30,7 @@ export function OperationPage({ bladeburner }: OperationPageProps): React.ReactE
         difficult, but grant more rank and experience.
       </Typography>
       {operations.map((operation) => (
-        <OperationElem key={operation.name} bladeburner={bladeburner} operation={operation} />
+        <OperationElem key={operation.name} bladeburner={bladeburner} action={operation} />
       ))}
     </>
   );
