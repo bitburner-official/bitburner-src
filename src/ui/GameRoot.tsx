@@ -72,6 +72,7 @@ import { MathJaxContext } from "better-react-mathjax";
 import { useRerender } from "./React/hooks";
 import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
+import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 
 const htmlLocation = location;
 
@@ -108,16 +109,24 @@ export let Router: IRouter = {
   },
 };
 
-function determineStartPage() {
-  if (RecoveryMode) return Page.Recovery;
-  if (Player.currentWork !== null) return Page.Work;
-  return Page.Terminal;
+function determineStartPage(): PageWithContext {
+  if (RecoveryMode) {
+    return { page: Page.Recovery };
+  }
+  if (isBitNodeFinished()) {
+    // Go to BitVerse UI without animation.
+    return { page: Page.BitVerse, flume: false, quick: true };
+  }
+  if (Player.currentWork !== null) {
+    return { page: Page.Work };
+  }
+  return { page: Page.Terminal };
 }
 
 export function GameRoot(): React.ReactElement {
   const { classes } = useStyles();
 
-  const [pages, setPages] = useState<PageWithContext[]>(() => [{ page: determineStartPage() }]);
+  const [pages, setPages] = useState<PageWithContext[]>(() => [determineStartPage()]);
   const pageWithContext = pages[0];
 
   const setNextPage = (pageWithContext: PageWithContext) =>

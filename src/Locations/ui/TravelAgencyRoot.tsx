@@ -24,14 +24,12 @@ import Button from "@mui/material/Button";
 import { useRerender } from "../../ui/React/hooks";
 
 function travel(to: CityName): void {
-  const cost = CONSTANTS.TravelCost;
-  if (!Player.canAfford(cost)) {
+  if (!Player.travel(to)) {
     return;
   }
-
-  Player.loseMoney(cost, "other");
-  Player.travel(to);
-  if (!Settings.SuppressTravelConfirmation) dialogBoxCreate(`You are now in ${to}!`);
+  if (!Settings.SuppressTravelConfirmation) {
+    dialogBoxCreate(`You are now in ${to}!`);
+  }
   Router.toPage(Page.City);
 }
 
@@ -41,8 +39,7 @@ export function TravelAgencyRoot(): React.ReactElement {
   useRerender(1000);
 
   function startTravel(city: CityName): void {
-    const cost = CONSTANTS.TravelCost;
-    if (!Player.canAfford(cost)) {
+    if (!Player.canAfford(CONSTANTS.TravelCost)) {
       return;
     }
     if (Settings.SuppressTravelConfirmation) {

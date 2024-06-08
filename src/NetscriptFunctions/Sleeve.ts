@@ -79,7 +79,11 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
-      return Player.sleeves[sleeveNumber].travel(cityName);
+      if (!Player.sleeves[sleeveNumber].travel(cityName)) {
+        helpers.log(ctx, () => "Not enough money to travel.");
+        return false;
+      }
+      return true;
     },
     setToCompanyWork: (ctx) => (_sleeveNumber, _companyName) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
