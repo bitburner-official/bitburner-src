@@ -180,28 +180,26 @@ class Args {
     hasContextFlag: false,
   };
 
-  checkIfOption(fullArg: string, options: Options): [Options, boolean] {
-    const isOption = Object.keys(VALID_ARGS)
-      .map((key: string): boolean => {
-        const stripDash = (arg: string) => arg.replace("-", "");
-        if (!fullArg.startsWith("-")) return false;
-        // check long args
-        const theseArgs = VALID_ARGS[key as keyof ValidArgs];
-        const allArgs = [...theseArgs.long, ...theseArgs.short];
-        if (allArgs.includes(fullArg)) {
-          options[key as keyof Options] = true;
-          return true;
-        }
-        // check multiflag args
-        const multiFlag = stripDash(fullArg);
-        const shortArgs = theseArgs.short.map(stripDash);
-        if (multiFlag.length > 1 && shortArgs.some((arg) => [...multiFlag].includes(arg))) {
-          options[key as keyof Options] = true;
-          return true;
-        }
-        return false;
-      })
-      .some(Boolean); // map to some to avoid short circuit when checking multiflag
+  mapArgToOpts(fullArg: string, options: Options): [Options, boolean] {
+    let isOption = false;
+    for (const key of Object.keys(VALID_ARGS)) {
+      const stripDash = (arg: string) => arg.replace("-", "");
+      if (!fullArg.startsWith("-")) break;
+      // check long args
+      const theseArgs = VALID_ARGS[key as keyof ValidArgs];
+      const allArgs = [...theseArgs.long, ...theseArgs.short];
+      if (allArgs.includes(fullArg)) {
+        options[key as keyof Options] = true;
+        isOption = true;
+      }
+      // check multiflag args
+      const multiFlag = stripDash(fullArg);
+      const shortArgs = theseArgs.short.map(stripDash);
+      if (multiFlag.length > 1 && shortArgs.some((arg) => [...multiFlag].includes(arg))) {
+        options[key as keyof Options] = true;
+        isOption = true;
+      }
+    }
     return [options, isOption];
   }
 
@@ -217,7 +215,7 @@ class Args {
     const [options, otherArgs] = this.args.reduce(
       ([options, otherArgs]: [Options, string[]], fullArg: string): [Options, string[]] => {
         let isOption = false;
-        [options, isOption] = this.checkIfOption(fullArg, options);
+        [options, isOption] = this.mapArgToOpts(fullArg, options);
         return isOption ? [options, otherArgs] : [options, [...otherArgs, fullArg]];
       },
       [this.initOptions, []],
