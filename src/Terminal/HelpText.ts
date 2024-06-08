@@ -269,7 +269,7 @@ export const HelpTexts: Record<string, string[]> = {
     "Regular OPTIONs may be combined into one. Context, max-count and output OPTIONs must be separated. Example: grep test -VnH* -O output.txt -C 5",
     "By default PATTERN is interpreted as a simple string.",
     "At least one FILE argument must be passed, or pass -*/--search-all to search all files.",
-    "The argument immediately following -m, -O and -B/A/C will be interpreted as the argument for that OPTION.",
+    "The argument immediately following -m, -O and -B/A/C will be interpreted as the parameter for that OPTION.",
     'If encountering difficulties with argument parsing, consider explicitly passing a string as PATTERN. Example: grep -G "(complex|regexp|\\w+)" script.js',
     " ",
   ],
