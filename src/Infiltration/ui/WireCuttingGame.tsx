@@ -150,7 +150,7 @@ export function WireCuttingGame({ onSuccess, onFailure, difficulty }: IMinigameP
                   hasAugment && !isCorrectWire ? Settings.theme.disabled : wire.colors[i % wire.colors.length];
                 return (
                   <Typography key={j} style={{ color: wireColor }}>
-                    |{wire.wireType[i % wire.wireType.length]}| {/* this bit!*/}
+                    |{wire.wireType[i % wire.wireType.length]}|
                   </Typography>
                 );
               })}
