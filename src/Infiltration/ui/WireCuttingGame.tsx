@@ -32,19 +32,17 @@ const difficulties: {
   Impossible: { timer: 4000, wiresmin: 9, wiresmax: 9, rules: 4 },
 };
 
-const types = [KEY.PIPE, KEY.DOT, KEY.FORWARD_SLASH, KEY.HYPHEN, "█", KEY.HASH];
-
 const colors = ["red", "#FFC107", "blue", "white"];
 
 const colorNames: Record<string, string> = {
-  red: "red",
-  "#FFC107": "yellow",
-  blue: "blue",
-  white: "white",
+  red: "RED",
+  "#FFC107": "YELLOW",
+  blue: "BLUE",
+  white: "WHITE",
 };
 
 interface Wire {
-  wireType: string;
+  wireType: string[];
   colors: string[];
 }
 
@@ -142,7 +140,7 @@ export function WireCuttingGame({ onSuccess, onFailure, difficulty }: IMinigameP
               </Typography>
             );
           })}
-          {new Array(8).fill(0).map((_, i) => (
+          {new Array(11).fill(0).map((_, i) => (
             <React.Fragment key={i}>
               {wires.map((wire, j) => {
                 if ((i === 3 || i === 4) && cutWires[j]) {
@@ -153,7 +151,7 @@ export function WireCuttingGame({ onSuccess, onFailure, difficulty }: IMinigameP
                   hasAugment && !isCorrectWire ? Settings.theme.disabled : wire.colors[i % wire.colors.length];
                 return (
                   <Typography key={j} style={{ color: wireColor }}>
-                    |{wire.wireType}|
+                    |{wire.wireType[i % wire.wireType.length]}| {/* this bit!*/}
                   </Typography>
                 );
               })}
@@ -172,7 +170,7 @@ function randomPositionQuestion(wires: Wire[]): Question {
     toString: (): string => {
       return `Cut wires number ${index + 1}.`;
     },
-    shouldCut: (wire: Wire, i: number): boolean => {
+    shouldCut: (_wire: Wire, i: number): boolean => {
       return index === i;
     },
   };
@@ -209,8 +207,9 @@ function generateWires(difficulty: Difficulty): Wire[] {
     if (Math.random() < 0.15) {
       wireColors.push(colors[Math.floor(Math.random() * colors.length)]);
     }
+    const wireType = [...wireColors.map(color => colorNames[color]).join("")];
     wires.push({
-      wireType: types[Math.floor(Math.random() * types.length)],
+      wireType,
       colors: wireColors,
     });
   }
