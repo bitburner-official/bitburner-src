@@ -64,7 +64,7 @@ function canAccessBitNodeFeature(bitNode: number): boolean {
   return Player.bitNodeN === bitNode || Player.sourceFileLvl(bitNode) > 0;
 }
 
-function knowAboutBitverse(): boolean {
+function knowsAboutBitverse(): boolean {
   return Player.sourceFiles.size > 0;
 }
 
@@ -75,7 +75,7 @@ function sfAchievements(): Record<string, Achievement> {
     achs[ID] = {
       ...achievementData[ID],
       Icon: ID,
-      Visible: knowAboutBitverse,
+      Visible: knowsAboutBitverse,
       Condition: () => Player.sourceFileLvl(i) >= 1,
     };
   }
@@ -498,7 +498,7 @@ export const achievements: Record<string, Achievement> = {
   INDECISIVE: {
     ...achievementData.INDECISIVE,
     Icon: "1H",
-    Visible: knowAboutBitverse,
+    Visible: knowsAboutBitverse,
     Condition: (function () {
       let c = 0;
       setInterval(() => {
@@ -514,13 +514,13 @@ export const achievements: Record<string, Achievement> = {
   FAST_BN: {
     ...achievementData.FAST_BN,
     Icon: "2DAYS",
-    Visible: knowAboutBitverse,
+    Visible: knowsAboutBitverse,
     Condition: () => isBitNodeFinished() && Player.playtimeSinceLastBitnode < 1000 * 60 * 60 * 24 * 2,
   },
   CHALLENGE_BN1: {
     ...achievementData.CHALLENGE_BN1,
     Icon: "BN1+",
-    Visible: knowAboutBitverse,
+    Visible: knowsAboutBitverse,
     Condition: () =>
       Player.bitNodeN === 1 &&
       isBitNodeFinished() &&
