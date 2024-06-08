@@ -269,6 +269,7 @@ class Results {
     const suffix = (pre: string, num: number) => pre + (num === 1 ? "" : "s");
     const totalLines = this.lines.length;
     const matchCount = Math.abs((options.isInvertMatch ? totalLines : 0) - this.numMatches);
+    const inputString = options.isPipeIn ? "piped from terminal " : `in ${totalLines} ${suffix("line", totalLines)},\n`;
     const filesString = files
       .map((file, i) => `${i % 2 ? WHITE : ""}${file.filename}(${file.content.split("\n").length}loc)${DEFAULT}`)
       .join(", ");
@@ -278,7 +279,7 @@ class Results {
       suffix("line", matchCount) + " matched ",
       `against PATTERN "${pattern.toString()}" `,
       `in ${totalLines} ${suffix("line", totalLines)}, `,
-      `in ${files.length} ${suffix("file", files.length)}:\n`,
+      inputString,
       `${filesString}`,
     ].join("");
   }
@@ -394,6 +395,7 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
       : new Results(files.flatMap(fileParser), options);
     const [rawResult, prettyResult] = results.capMatches(limit).addContext(context).splitAndFilter();
 
+    if (options.isPipeIn) files.length = 0;
     if (!options.isQuiet) writeToTerminal(prettyResult, options, results, files, pattern);
     if (outFilePath && options.isToFile) server.writeToContentFile(outFilePath, rawResult.join("\n"));
   } catch (e) {
