@@ -538,8 +538,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const baseserver = Player.getCurrentServer();
       if (!(baseserver instanceof Server)) {
-        helpers.log(ctx, () => "cannot backdoor this kind of server");
-        return Promise.resolve();
+        throw helpers.errorMessage(ctx, "Cannot be executed on this server.");
       }
       const server = baseserver;
       const installTime = (calculateHackingTime(server, Player) / 4) * 1000;

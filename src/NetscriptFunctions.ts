@@ -257,13 +257,7 @@ export const ns: InternalAPI<NSFull> = {
 
     const server = helpers.getServer(ctx, hostname);
     if (!(server instanceof Server)) {
-      helpers.log(ctx, () => "Cannot be executed on this server.");
-      return Promise.resolve(0);
-    }
-
-    const host = GetServer(ctx.workerScript.hostname);
-    if (host === null) {
-      throw new Error("Workerscript host is null");
+      throw helpers.errorMessage(ctx, "Cannot be executed on this server.");
     }
 
     // No root access or skill level too low
@@ -282,6 +276,10 @@ export const ns: InternalAPI<NSFull> = {
         )} (t=${formatThreads(threads)}).`,
     );
     return helpers.netscriptDelay(ctx, growTime * 1000).then(function () {
+      const host = GetServer(ctx.workerScript.hostname);
+      if (host === null) {
+        throw helpers.errorMessage(ctx, `Cannot find host of WorkerScript. Hostname: ${ctx.workerScript.hostname}.`);
+      }
       const moneyBefore = server.moneyAvailable <= 0 ? 1 : server.moneyAvailable;
       processSingleServerGrowth(server, threads, host.cpuCores);
       const moneyAfter = server.moneyAvailable;
@@ -356,8 +354,7 @@ export const ns: InternalAPI<NSFull> = {
 
     const server = helpers.getServer(ctx, hostname);
     if (!(server instanceof Server)) {
-      helpers.log(ctx, () => "Cannot be executed on this server.");
-      return Promise.resolve(0);
+      throw helpers.errorMessage(ctx, "Cannot be executed on this server.");
     }
 
     // No root access or skill level too low
@@ -378,8 +375,7 @@ export const ns: InternalAPI<NSFull> = {
     return helpers.netscriptDelay(ctx, weakenTime * 1000).then(function () {
       const host = GetServer(ctx.workerScript.hostname);
       if (host === null) {
-        helpers.log(ctx, () => "Server is null, did it die?");
-        return Promise.resolve(0);
+        throw helpers.errorMessage(ctx, `Cannot find host of WorkerScript. Hostname: ${ctx.workerScript.hostname}.`);
       }
       const weakenAmt = getWeakenEffect(threads, host.cpuCores);
       server.weaken(weakenAmt);
