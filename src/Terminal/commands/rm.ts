@@ -55,16 +55,6 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
 
   const reports: { target: string; result: IReturnStatus }[] = [];
 
-  const logResults = () => {
-    for (const report of reports) {
-      if (report.result.res) {
-        Terminal.success(`Deleted: ${report.target}`);
-      } else {
-        Terminal.error(errors["deleteFailed"](report.target, report.result.msg));
-      }
-    }
-  };
-
   const deleteSelectedTargets = () => {
     for (const file of files) {
       reports.push({ target: file, result: server.removeFile(file) });
@@ -74,7 +64,14 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
         if (file.startsWith(dir)) reports.push({ target: file, result: server.removeFile(file) });
       }
     }
-    logResults();
+
+    for (const report of reports) {
+      if (report.result.res) {
+        Terminal.success(`Deleted: ${report.target}`);
+      } else {
+        Terminal.error(errors["deleteFailed"](report.target, report.result.msg));
+      }
+    }
   };
 
   if (force) {
