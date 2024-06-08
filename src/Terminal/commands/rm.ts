@@ -14,12 +14,15 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
     invalidDir: (name: string) => `Invalid directory: ${name}`,
     invalidFile: (name: string) => `Invalid file: ${name}`,
     deleteFailed: (name: string, reason?: string) => `Failed to delete "${name}". ${reason ?? "Uncaught error"}`,
+    rootDeletion: () =>
+      "You are trying to delete all files within the root directory. If this is intentional, use the --no-preserve-root flag",
   } as const;
 
   if (args.length === 0) return Terminal.error(errors["arg"]("No arguments provided"));
 
-  const recursive = args.includes("-r") || args.includes("-rf");
-  const force = args.includes("-f") || args.includes("-rf");
+  const recursive = args.includes("-r") || args.includes("-R") || args.includes("--recursive") || args.includes("-rf");
+  const force = args.includes("-f") || args.includes("--force") || args.includes("-rf");
+  const ignoreSpecialRoot = args.includes("--no-preserve-root");
 
   const isTargetString = (
     arg: string | number | boolean,
@@ -30,6 +33,7 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
   const targets = args.filter(isTargetString);
 
   if (targets.length === 0) return Terminal.error(errors["arg"]("No targets provided"));
+  if (!ignoreSpecialRoot && targets.includes("/")) return Terminal.error(errors["rootDeletion"]());
 
   const directories: Directory[] = [];
   const files: FilePath[] = [];
