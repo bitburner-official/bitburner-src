@@ -107,7 +107,7 @@
     "doc": "bash ./tools/doc.sh",
     "format": "prettier -c --write .",
     "format:report": "prettier -c .",
-    "start": "electron .app/index.html --no-sandbox",
+    "start": "electron .app/index.html",
     "start:dev": "webpack serve --progress --env devServer --mode development",
     "build": "bash ./tools/build.sh production",
     "build:dev": "bash ./tools/build.sh development",
