@@ -1,4 +1,5 @@
 import { Input, Typography } from "@mui/material";
+import { Modal } from "../../ui/React/Modal";
 import { styled } from "@mui/material/styles";
 import type { editor } from "monaco-editor";
 import React from "react";
@@ -36,6 +37,9 @@ export class StatusBar {
   showInput = false;
   inputValue = "";
   buffer = "";
+  notification = "";
+  showRegisters = false;
+  registers: Record<string, string> = {};
 
   rerender: () => void;
 
@@ -131,9 +135,39 @@ export class StatusBar {
     this.node.current = null;
   };
 
-  // this is used to show notifications. In game, these won't be rendered, so the function is empty.
-  showNotification(__text: HTMLElement) {
-    return;
+  parseRegisters = (html: HTMLElement) => {
+    this.registers = {};
+
+    const registerValues = html.innerText.split("\n").filter((s) => s.startsWith('"'));
+    for (const registerValue of registerValues) {
+      const name = registerValue[1];
+      const value = registerValue.slice(2).trim();
+      this.registers[name] = value;
+    }
+    console.log(this.registers);
+  };
+  // this is used to show notifications.
+  // The package passes a new HTMLElement, but we only want to show the text.
+  showNotification(html: HTMLElement) {
+    // Registers are too big for the status bar, so we show them in a modal.
+    if (html.innerText.startsWith("----------Registers----------\n\n") && html.innerText.length > 31) {
+      this.parseRegisters(html);
+      this.showRegisters = true;
+      return this.update();
+    }
+    if (html.innerText.startsWith("----------Registers----------\n\n")) this.notification = "Registers are empty";
+    else this.notification = html.innerText;
+
+    const currentNotification = this.notification;
+
+    setTimeout(() => {
+      // don't update if the notification has changed in the meantime
+      if (this.notification !== currentNotification) return;
+      this.notification = "";
+      this.update();
+    }, 5000);
+
+    this.update();
   }
 
   update = () => {
@@ -177,8 +211,22 @@ export class StatusBar {
   };
 
   StatusBar(): React.ReactElement {
+    const registers = Object.entries(this.registers).map(([name, value]) => `[${name}]: ${value.slice(0, 100)}`);
+
     return (
       <StatusBarContainer>
+        <Modal
+          open={this.showRegisters}
+          onClose={() => {
+            this.showRegisters = false;
+            this.update();
+          }}
+          removeFocus={false}
+        >
+          {registers.map((registers) => (
+            <Typography key={registers}>{registers}</Typography>
+          ))}
+        </Modal>
         <StatusBarLeft>
           <Typography sx={{ mr: 4 }}>{this.mode}</Typography>
           {this.showInput && (
@@ -188,9 +236,10 @@ export class StatusBar {
               onKeyUp={this.keyUp}
               onKeyDown={this.keyDown}
               autoFocus={true}
+              sx={{ mr: 4 }}
             />
           )}
-          {!this.showInput && <div />}
+          <Typography overflow="hidden">{this.notification}</Typography>
         </StatusBarLeft>
         <Typography>{this.buffer}</Typography>
       </StatusBarContainer>

@@ -43,9 +43,10 @@ interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
   sx?: SxProps<Theme>;
+  removeFocus?: boolean;
 }
 
-export const Modal = ({ open, onClose, children, sx }: ModalProps): React.ReactElement => {
+export const Modal = ({ open, onClose, children, sx, removeFocus = true }: ModalProps): React.ReactElement => {
   const { classes } = useStyles();
   const [content, setContent] = useState(children);
   useEffect(() => {
@@ -55,10 +56,10 @@ export const Modal = ({ open, onClose, children, sx }: ModalProps): React.ReactE
 
   return (
     <M
-      disableRestoreFocus
+      disableRestoreFocus={removeFocus}
       disableScrollLock
       disableEnforceFocus
-      disableAutoFocus
+      disableAutoFocus={removeFocus}
       open={open}
       onClose={onClose}
       closeAfterTransition
