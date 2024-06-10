@@ -10,6 +10,7 @@ import { AutocompleteData } from "@nsdefs";
 import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
+import { enums } from "../NetscriptFunctions";
 
 // TODO: this shouldn't be hardcoded in two places with no typechecks to verify equivalence
 // An array of all Terminal commands
@@ -324,6 +325,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
         .map((server) => server.hostname),
       scripts: [...currServ.scripts.keys()],
       txts: [...currServ.textFiles.keys()],
+      enums: structuredClone(enums),
       flags: (schema: unknown) => {
         if (!Array.isArray(schema)) throw new Error("flags require an array of array");
         pos2 = schema.map((f: unknown) => {
