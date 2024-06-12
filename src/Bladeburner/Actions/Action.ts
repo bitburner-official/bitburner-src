@@ -146,9 +146,19 @@ export abstract class ActionClass {
     let high = real + diff;
     const city = bladeburner.getCurrentCity();
     let r = city.pop / city.popEst;
-    if (Number.isNaN(r)) r = 0;
-    if (r < 1) low *= r;
-    else high *= r;
+    if (Number.isNaN(r)) {
+      r = 0;
+    }
+    if (r < 1) {
+      low *= r;
+    } else {
+      // This happens when the action is Raid, popEst=0, and comms=0.
+      if (high === 0 && r === Infinity) {
+        high = 0;
+      } else {
+        high *= r;
+      }
+    }
     return [clamp(low), clamp(high)];
   }
 

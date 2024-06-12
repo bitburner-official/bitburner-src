@@ -125,7 +125,7 @@ export class Bladeburner {
   startAction(actionId: ActionIdentifier | null): Attempt<{ message: string }> {
     if (!actionId) {
       this.resetAction();
-      return { success: true, message: "Stopped current bladeburner action" };
+      return { success: true, message: "Stopped current Bladeburner action" };
     }
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
     const action = this.getActionObject(actionId);

@@ -20,7 +20,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const getBladeburner = function (ctx: NetscriptContext): Bladeburner {
     const apiAccess = Player.bitNodeN === 7 || Player.sourceFileLvl(7) > 0;
     if (!apiAccess) {
-      throw helpers.errorMessage(ctx, "You have not unlocked the bladeburner API.", "API ACCESS");
+      throw helpers.errorMessage(ctx, "You have not unlocked the Bladeburner API.", "API ACCESS");
     }
     const bladeburner = Player.bladeburner;
     if (!bladeburner)
@@ -112,14 +112,10 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     getActionCurrentTime: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
-      try {
-        const timecomputed =
-          Math.min(bladeburner.actionTimeCurrent + bladeburner.actionTimeOverflow, bladeburner.actionTimeToComplete) *
-          1000;
-        return timecomputed;
-      } catch (e: unknown) {
-        throw helpers.errorMessage(ctx, String(e));
-      }
+      return (
+        Math.min(bladeburner.actionTimeCurrent + bladeburner.actionTimeOverflow, bladeburner.actionTimeToComplete) *
+        1000
+      );
     },
     getActionEstimatedSuccessChance: (ctx) => (type, name) => {
       const bladeburner = getBladeburner(ctx);
