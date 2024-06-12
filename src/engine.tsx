@@ -148,7 +148,7 @@ const Engine: {
     checkFactionInvitations: 100,
     passiveFactionGrowth: 5,
     messages: 150,
-    mechanicProcess: 5, // Processes certain mechanics (Corporation, Bladeburner)
+    mechanicProcess: 5, // Process Bladeburner
     contractGeneration: 3000, // Generate Coding Contracts
     achievementsCounter: 60, // Check if we have new achievements
   },
