@@ -10,7 +10,7 @@ import { IPAddress } from "../Types/strings";
 
 export interface IConstructorParams {
   adminRights?: boolean;
-  hackDifficulty?: number;
+  security?: number;
   hostname: string;
   ip?: IPAddress;
   isConnectedTo?: boolean;
@@ -29,13 +29,13 @@ export class Server extends BaseServer {
 
   // Initial server security level
   // (i.e. security level when the server was created)
-  baseDifficulty = 1;
+  baseSecurity = 1;
 
   // Server Security Level
-  hackDifficulty = 1;
+  security = 1;
 
   // Minimum server security level that this server can be weakened to
-  minDifficulty = 1;
+  minSecurity = 1;
 
   // How much money currently resides on the server and can be hacked
   moneyAvailable = 0;
@@ -75,31 +75,30 @@ export class Server extends BaseServer {
     this.moneyAvailable = baseMoney * currentNodeMults.ServerStartingMoney;
     this.moneyMax = 25 * baseMoney * currentNodeMults.ServerMaxMoney;
 
-    //Hack Difficulty is synonymous with server security. Base Difficulty = Starting difficulty
-    const realDifficulty =
-      params.hackDifficulty != null ? params.hackDifficulty * currentNodeMults.ServerStartingSecurity : 1;
-    this.hackDifficulty = Math.min(realDifficulty, 100);
-    this.baseDifficulty = this.hackDifficulty;
-    this.minDifficulty = Math.min(Math.max(1, Math.round(realDifficulty / 3)), 100);
+    //Base Security = Starting difficulty
+    const realDifficulty = params.security != null ? params.security * currentNodeMults.ServerStartingSecurity : 1;
+    this.security = Math.min(realDifficulty, 100);
+    this.baseSecurity = this.security;
+    this.minSecurity = Math.min(Math.max(1, Math.round(realDifficulty / 3)), 100);
     this.serverGrowth = params.serverGrowth != null ? params.serverGrowth : 1; //Integer from 0 to 100. Affects money increase from grow()
 
     //Port information, required for porthacking servers to get admin rights
     this.numOpenPortsRequired = params.numOpenPortsRequired != null ? params.numOpenPortsRequired : 5;
   }
 
-  /** Ensures that the server's difficulty (server security) doesn't get too high */
-  capDifficulty(): void {
-    if (this.hackDifficulty < this.minDifficulty) {
-      this.hackDifficulty = this.minDifficulty;
+  /** Ensures that the server's security doesn't get too high */
+  capSecurity(): void {
+    if (this.security < this.minSecurity) {
+      this.security = this.minSecurity;
     }
-    if (this.hackDifficulty < 1) {
-      this.hackDifficulty = 1;
+    if (this.security < 1) {
+      this.security = 1;
     }
 
     // Place some arbitrarily limit that realistically should never happen unless someone is
     // screwing around with the game
-    if (this.hackDifficulty > 100) {
-      this.hackDifficulty = 100;
+    if (this.security > 100) {
+      this.security = 100;
     }
   }
 
@@ -110,13 +109,13 @@ export class Server extends BaseServer {
    */
   changeMinimumSecurity(n: number, perc = false): void {
     if (perc) {
-      this.minDifficulty *= n;
+      this.minSecurity *= n;
     } else {
-      this.minDifficulty += n;
+      this.minSecurity += n;
     }
 
     // Server security cannot go below 1
-    this.minDifficulty = Math.max(1, this.minDifficulty);
+    this.minSecurity = Math.max(1, this.minSecurity);
   }
 
   /**
@@ -133,16 +132,16 @@ export class Server extends BaseServer {
     this.moneyMax *= n;
   }
 
-  /** Strengthens a server's security level (difficulty) by the specified amount */
+  /** Strengthens a server's security level by the specified amount */
   fortify(amt: number): void {
-    this.hackDifficulty += amt;
-    this.capDifficulty();
+    this.security += amt;
+    this.capSecurity();
   }
 
-  /** Lowers the server's security level (difficulty) by the specified amount) */
+  /** Lowers the server's security level by the specified amount) */
   weaken(amt: number): void {
-    this.hackDifficulty -= amt;
-    this.capDifficulty();
+    this.security -= amt;
+    this.capSecurity();
   }
 
   /** Serialize the current object to a JSON save state */

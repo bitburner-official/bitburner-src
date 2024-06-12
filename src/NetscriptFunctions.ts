@@ -388,7 +388,7 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(
         ctx,
         () =>
-          `'${server.hostname}' security level weakened to ${server.hackDifficulty}. Gained ${formatExp(
+          `'${server.hostname}' security level weakened to ${server.security}. Gained ${formatExp(
             expGain,
           )} hacking exp (t=${formatThreads(threads)})`,
       );
@@ -965,7 +965,7 @@ export const ns: InternalAPI<NSFull> = {
   getServer: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
     const server = helpers.getServer(ctx, hostname);
-    return {
+    const data = {
       hostname: server.hostname,
       ip: server.ip,
       sshPortOpen: server.sshPortOpen,
@@ -981,9 +981,9 @@ export const ns: InternalAPI<NSFull> = {
       organizationName: server.organizationName,
       purchasedByPlayer: server.purchasedByPlayer,
       backdoorInstalled: server.backdoorInstalled,
-      baseDifficulty: server.baseDifficulty,
-      hackDifficulty: server.hackDifficulty,
-      minDifficulty: server.minDifficulty,
+      baseSecurity: server.baseSecurity,
+      security: server.security,
+      minSecurity: server.minSecurity,
       moneyAvailable: server.moneyAvailable,
       moneyMax: server.moneyMax,
       numOpenPortsRequired: server.numOpenPortsRequired,
@@ -991,6 +991,24 @@ export const ns: InternalAPI<NSFull> = {
       requiredHackingSkill: server.requiredHackingSkill,
       serverGrowth: server.serverGrowth,
     };
+    setDeprecatedProperties(data, {
+      baseDifficulty: {
+        identifier: "ns.getServer().baseDifficulty",
+        message: "Use ns.getServer().baseSecurity instead.",
+        value: server.baseSecurity,
+      },
+      hackDifficulty: {
+        identifier: "ns.getServer().hackDifficulty",
+        message: "Use  ns.getServer().baseSecurity instead.",
+        value: server.security,
+      },
+      minDifficulty: {
+        identifier: "ns.getServer().minDifficulty",
+        message: "Use  ns.getServer().baseSecurity instead",
+        value: server.minSecurity,
+      },
+    });
+    return data;
   },
   getServerMoneyAvailable: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -1020,8 +1038,8 @@ export const ns: InternalAPI<NSFull> = {
     if (helpers.failOnHacknetServer(ctx, server)) {
       return 1;
     }
-    helpers.log(ctx, () => `returned ${formatSecurity(server.hackDifficulty)} for '${server.hostname}'`);
-    return server.hackDifficulty;
+    helpers.log(ctx, () => `returned ${formatSecurity(server.security)} for '${server.hostname}'`);
+    return server.security;
   },
   getServerBaseSecurityLevel: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -1033,8 +1051,8 @@ export const ns: InternalAPI<NSFull> = {
     if (helpers.failOnHacknetServer(ctx, server)) {
       return 1;
     }
-    helpers.log(ctx, () => `returned ${formatSecurity(server.baseDifficulty)} for '${server.hostname}'`);
-    return server.baseDifficulty;
+    helpers.log(ctx, () => `returned ${formatSecurity(server.baseSecurity)} for '${server.hostname}'`);
+    return server.baseSecurity;
   },
   getServerMinSecurityLevel: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -1046,8 +1064,8 @@ export const ns: InternalAPI<NSFull> = {
     if (helpers.failOnHacknetServer(ctx, server)) {
       return 1;
     }
-    helpers.log(ctx, () => `returned ${formatSecurity(server.minDifficulty)} for ${server.hostname}`);
-    return server.minDifficulty;
+    helpers.log(ctx, () => `returned ${formatSecurity(server.minSecurity)} for ${server.hostname}`);
+    return server.minSecurity;
   },
   getServerRequiredHackingLevel: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);

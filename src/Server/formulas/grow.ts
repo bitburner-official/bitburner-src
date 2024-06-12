@@ -6,12 +6,12 @@ import { isValidNumber } from "../../utils/helpers/isValidNumber";
 // Returns the log of the growth rate. When passing 1 for threads, this gives a useful constant.
 export function calculateServerGrowthLog(server: IServer, threads: number, p: IPerson, cores = 1): number {
   if (!server.serverGrowth) return -Infinity;
-  const hackDifficulty = server.hackDifficulty ?? 100;
+  const difficulty = server.security ?? 100;
   const numServerGrowthCycles = Math.max(threads, 0);
 
   //Get adjusted growth log, which accounts for server security
   //log1p computes log(1+p), it is far more accurate for small values.
-  let adjGrowthLog = Math.log1p(ServerConstants.ServerBaseGrowthIncr / hackDifficulty);
+  let adjGrowthLog = Math.log1p(ServerConstants.ServerBaseGrowthIncr / difficulty);
   if (adjGrowthLog >= ServerConstants.ServerMaxGrowthLog) {
     adjGrowthLog = ServerConstants.ServerMaxGrowthLog;
   }

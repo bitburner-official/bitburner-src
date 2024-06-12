@@ -6,14 +6,14 @@ import { numCycleForGrowthCorrected } from "../../src/Server/ServerHelpers";
 test("Grow is accurate", () => {
   // Tests that certain special values work out to exactly what we'd expect,
   // given the formulas. The growth multiplier maxes out at 1.0035, and the
-  // increment is .03 so with a difficulty of 10 it should be .003.
+  // increment is .03 so with a security of 10 it should be .003.
   // These tests are *exact* because the whole point is that the math should
   // get exactly the right value (or as close as is possible with floating-point).
-  const server = new Server({ hostname: "foo", hackDifficulty: 5, serverGrowth: 100 });
+  const server = new Server({ hostname: "foo", security: 5, serverGrowth: 100 });
   const player = new PlayerObject();
   expect(calculateServerGrowth(server, 1, player)).toBe(1.0035);
   expect(calculateServerGrowth(server, 2, player)).toBe(1.00701225);
-  server.hackDifficulty = 10;
+  server.security = 10;
   expect(calculateServerGrowth(server, 1, player)).toBe(1.003);
   expect(calculateServerGrowth(server, 2, player)).toBe(1.006009);
   expect(calculateServerGrowth(server, 3, player)).toBe(1.009027027);
@@ -33,7 +33,7 @@ describe("numCycleForGrowthCorrected reverses calculateServerGrowth", () => {
 
   // This is an arbitrary transcedental constant.
   const multiplier = Math.exp(1.4);
-  const server = new Server({ hostname: "foo", hackDifficulty: 10 * multiplier, serverGrowth: 100 });
+  const server = new Server({ hostname: "foo", security: 10 * multiplier, serverGrowth: 100 });
   server.moneyMax = 1e308; // Not available as a constructor param
   const player = new PlayerObject();
   const tests = [];

@@ -57,7 +57,7 @@ interface BitNodeMultipliers
 |  [ServerGrowthRate](./bitburner.bitnodemultipliers.servergrowthrate.md) |  | number | Influences the growth percentage per cycle against a server. |
 |  [ServerMaxMoney](./bitburner.bitnodemultipliers.servermaxmoney.md) |  | number | Influences the maximum money that a server can grow to. |
 |  [ServerStartingMoney](./bitburner.bitnodemultipliers.serverstartingmoney.md) |  | number | Influences the initial money that a server starts with. |
-|  [ServerStartingSecurity](./bitburner.bitnodemultipliers.serverstartingsecurity.md) |  | number | Influences the initial security level (hackDifficulty) of a server. |
+|  [ServerStartingSecurity](./bitburner.bitnodemultipliers.serverstartingsecurity.md) |  | number | Influences the initial security level of a server. |
 |  [ServerWeakenRate](./bitburner.bitnodemultipliers.serverweakenrate.md) |  | number | Influences the weaken amount per invocation against a server. |
 |  [StaneksGiftExtraSize](./bitburner.bitnodemultipliers.staneksgiftextrasize.md) |  | number | Influences the size of the gift |
 |  [StaneksGiftPowerMultiplier](./bitburner.bitnodemultipliers.staneksgiftpowermultiplier.md) |  | number | Influences the power of the gift |

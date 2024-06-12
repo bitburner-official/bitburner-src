@@ -10,7 +10,7 @@ import { IMinMaxRange } from "../../types";
  */
 interface IServerMetadata {
   /** When populated, the base security level of the server. */
-  hackDifficulty?: number | IMinMaxRange;
+  security?: number | IMinMaxRange;
 
   /** The DNS name of the server. */
   hostname: ServerName;
@@ -53,7 +53,7 @@ interface IServerMetadata {
 /** The metadata for building up the servers on the network. */
 export const serverMetadata: IServerMetadata[] = [
   {
-    hackDifficulty: 99,
+    security: 99,
     hostname: LocationName.AevumECorp.toLowerCase(),
     moneyAvailable: {
       max: 70e9,
@@ -70,7 +70,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.AevumECorp,
   },
   {
-    hackDifficulty: 99,
+    security: 99,
     hostname: LocationName.Sector12MegaCorp.toLowerCase(),
     moneyAvailable: {
       max: 60e9,
@@ -87,7 +87,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.Sector12MegaCorp,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 88,
       min: 72,
     },
@@ -110,7 +110,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.AevumBachmanAndAssociates,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 97,
       min: 88,
     },
@@ -138,7 +138,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.Sector12BladeIndustries,
   },
   {
-    hackDifficulty: 99,
+    security: 99,
     hostname: LocationName.VolhavenNWO.toLowerCase(),
     literature: [LiteratureName.TheHiddenWorld],
     moneyAvailable: {
@@ -159,7 +159,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.VolhavenNWO,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 65,
       min: 45,
     },
@@ -183,7 +183,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.AevumClarkeIncorporated,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 99,
       min: 90,
     },
@@ -211,7 +211,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.VolhavenOmniTekIncorporated,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 75,
       min: 55,
     },
@@ -234,7 +234,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.Sector12FourSigma,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 99,
       min: 95,
     },
@@ -257,7 +257,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.ChongqingKuaiGongInternational,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 97,
       min: 83,
     },
@@ -285,7 +285,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.AevumFulcrumTechnologies,
   },
   {
-    hackDifficulty: 99,
+    security: 99,
     hostname: "fulcrumassets",
     moneyAvailable: 1e6,
     networkLayer: 15,
@@ -299,7 +299,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: SpecialServers.FulcrumSecretTechnologies,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 92,
       min: 78,
     },
@@ -322,7 +322,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.IshimaStormTechnologies,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 96,
       min: 84,
     },
@@ -345,7 +345,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.NewTokyoDefComm,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 90,
       min: 70,
     },
@@ -367,7 +367,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
   },
   {
-    hackDifficulty: {
+    security: {
       max: 95,
       min: 85,
     },
@@ -395,7 +395,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.VolhavenHeliosLabs,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 90,
       min: 80,
     },
@@ -423,7 +423,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.NewTokyoVitaLife,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 95,
       min: 85,
     },
@@ -446,7 +446,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.Sector12IcarusMicrosystems,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 90,
       min: 80,
     },
@@ -473,7 +473,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.Sector12UniversalEnergy,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 80,
       min: 70,
     },
@@ -500,7 +500,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
   },
   {
-    hackDifficulty: {
+    security: {
       max: 75,
       min: 65,
     },
@@ -527,7 +527,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
   },
   {
-    hackDifficulty: {
+    security: {
       max: 80,
       min: 70,
     },
@@ -550,7 +550,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
   },
   {
-    hackDifficulty: {
+    security: {
       max: 65,
       min: 55,
     },
@@ -573,7 +573,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.AevumGalacticCybersystems,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 90,
       min: 80,
     },
@@ -597,7 +597,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.AevumAeroCorp,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 95,
       min: 85,
     },
@@ -625,7 +625,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.VolhavenOmniaCybersystems,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 65,
       min: 55,
     },
@@ -648,7 +648,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
   },
   {
-    hackDifficulty: {
+    security: {
       max: 80,
       min: 60,
     },
@@ -670,7 +670,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
   },
   {
-    hackDifficulty: {
+    security: {
       max: 80,
       min: 70,
     },
@@ -698,7 +698,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.ChongqingSolarisSpaceSystems,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 85,
       min: 75,
     },
@@ -721,7 +721,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.Sector12DeltaOne,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 85,
       min: 75,
     },
@@ -749,7 +749,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.NewTokyoGlobalPharmaceuticals,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 80,
       min: 60,
     },
@@ -772,7 +772,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.IshimaNovaMedical,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 90,
       min: 70,
     },
@@ -794,7 +794,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
   },
   {
-    hackDifficulty: {
+    security: {
       max: 80,
       min: 70,
     },
@@ -820,7 +820,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
   },
   {
-    hackDifficulty: {
+    security: {
       max: 80,
       min: 60,
     },
@@ -847,7 +847,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.VolhavenLexoCorp,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 60,
       min: 40,
     },
@@ -874,7 +874,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.AevumRhoConstruction,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 70,
       min: 50,
     },
@@ -902,7 +902,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.Sector12AlphaEnterprises,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 80,
       min: 70,
     },
@@ -929,7 +929,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.AevumPolice,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 55,
       min: 45,
     },
@@ -957,7 +957,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.Sector12RothmanUniversity,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 85,
       min: 65,
     },
@@ -984,7 +984,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.VolhavenZBInstituteOfTechnology,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 65,
       min: 45,
     },
@@ -1012,7 +1012,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.AevumSummitUniversity,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 80,
       min: 60,
     },
@@ -1035,7 +1035,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.VolhavenSysCoreSecurities,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 70,
       min: 60,
     },
@@ -1062,7 +1062,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
   },
   {
-    hackDifficulty: {
+    security: {
       max: 45,
       min: 35,
     },
@@ -1088,7 +1088,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
   },
   {
-    hackDifficulty: {
+    security: {
       max: 65,
       min: 55,
     },
@@ -1112,7 +1112,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.VolhavenCompuTek,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 80,
       min: 60,
     },
@@ -1137,7 +1137,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.AevumNetLinkTechnologies,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 65,
       min: 35,
     },
@@ -1159,7 +1159,7 @@ export const serverMetadata: IServerMetadata[] = [
     },
   },
   {
-    hackDifficulty: 1,
+    security: 1,
     hostname: "n00dles",
     literature: [],
     maxRamExponent: 2,
@@ -1172,7 +1172,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.NewTokyoNoodleBar,
   },
   {
-    hackDifficulty: 10,
+    security: 10,
     hostname: LocationName.Sector12FoodNStuff.toLowerCase(),
     literature: [LiteratureName.Sector12Crime],
     maxRamExponent: 4,
@@ -1185,7 +1185,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.Sector12FoodNStuff,
   },
   {
-    hackDifficulty: 10,
+    security: 10,
     hostname: "sigma-cosmetics",
     maxRamExponent: 4,
     moneyAvailable: 2300000,
@@ -1196,7 +1196,7 @@ export const serverMetadata: IServerMetadata[] = [
     serverGrowth: 10,
   },
   {
-    hackDifficulty: 15,
+    security: 15,
     hostname: "joesguns",
     maxRamExponent: 4,
     moneyAvailable: 2500000,
@@ -1208,7 +1208,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.Sector12JoesGuns,
   },
   {
-    hackDifficulty: 25,
+    security: 25,
     hostname: "zer0",
     maxRamExponent: 5,
     moneyAvailable: 7500000,
@@ -1219,7 +1219,7 @@ export const serverMetadata: IServerMetadata[] = [
     serverGrowth: 40,
   },
   {
-    hackDifficulty: 20,
+    security: 20,
     hostname: "nectar-net",
     maxRamExponent: 4,
     moneyAvailable: 2750000,
@@ -1230,7 +1230,7 @@ export const serverMetadata: IServerMetadata[] = [
     serverGrowth: 25,
   },
   {
-    hackDifficulty: 25,
+    security: 25,
     hostname: "neo-net",
     literature: [LiteratureName.TheHiddenWorld],
     maxRamExponent: 5,
@@ -1242,7 +1242,7 @@ export const serverMetadata: IServerMetadata[] = [
     serverGrowth: 25,
   },
   {
-    hackDifficulty: 30,
+    security: 30,
     hostname: "silver-helix",
     literature: [LiteratureName.NewTriads],
     maxRamExponent: 6,
@@ -1254,7 +1254,7 @@ export const serverMetadata: IServerMetadata[] = [
     serverGrowth: 30,
   },
   {
-    hackDifficulty: 15,
+    security: 15,
     hostname: "hong-fang-tea",
     literature: [LiteratureName.BrighterThanTheSun],
     maxRamExponent: 4,
@@ -1266,7 +1266,7 @@ export const serverMetadata: IServerMetadata[] = [
     serverGrowth: 20,
   },
   {
-    hackDifficulty: 15,
+    security: 15,
     hostname: "harakiri-sushi",
     maxRamExponent: 4,
     moneyAvailable: 4000000,
@@ -1277,7 +1277,7 @@ export const serverMetadata: IServerMetadata[] = [
     serverGrowth: 40,
   },
   {
-    hackDifficulty: 20,
+    security: 20,
     hostname: "phantasy",
     maxRamExponent: 5,
     moneyAvailable: 24000000,
@@ -1288,7 +1288,7 @@ export const serverMetadata: IServerMetadata[] = [
     serverGrowth: 35,
   },
   {
-    hackDifficulty: 15,
+    security: 15,
     hostname: "max-hardware",
     maxRamExponent: 5,
     moneyAvailable: 10000000,
@@ -1299,7 +1299,7 @@ export const serverMetadata: IServerMetadata[] = [
     serverGrowth: 30,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 35,
       min: 25,
     },
@@ -1324,7 +1324,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.IshimaOmegaSoftware,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 45,
       min: 35,
     },
@@ -1347,7 +1347,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.AevumCrushFitnessGym,
   },
   {
-    hackDifficulty: 30,
+    security: 30,
     hostname: "iron-gym",
     maxRamExponent: 5,
     moneyAvailable: 20000000,
@@ -1359,7 +1359,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.Sector12IronGym,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 55,
       min: 45,
     },
@@ -1383,7 +1383,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.VolhavenMilleniumFitnessGym,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 65,
       min: 55,
     },
@@ -1407,7 +1407,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.Sector12PowerhouseGym,
   },
   {
-    hackDifficulty: {
+    security: {
       max: 60,
       min: 40,
     },
@@ -1427,7 +1427,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: LocationName.AevumSnapFitnessGym,
   },
   {
-    hackDifficulty: 0,
+    security: 0,
     hostname: "run4theh111z",
     literature: [LiteratureName.SimulatedReality, LiteratureName.TheNewGod],
     maxRamExponent: {
@@ -1446,7 +1446,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: SpecialServers.BitRunnersServer,
   },
   {
-    hackDifficulty: 0,
+    security: 0,
     hostname: "I.I.I.I",
     literature: [LiteratureName.DemocracyIsDead],
     maxRamExponent: {
@@ -1465,7 +1465,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: SpecialServers.TheBlackHandServer,
   },
   {
-    hackDifficulty: 0,
+    security: 0,
     hostname: "avmnite-02h",
     literature: [LiteratureName.DemocracyIsDead],
     maxRamExponent: {
@@ -1484,7 +1484,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: SpecialServers.NiteSecServer,
   },
   {
-    hackDifficulty: 0,
+    security: 0,
     hostname: ".",
     maxRamExponent: 4,
     moneyAvailable: 0,
@@ -1499,7 +1499,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: SpecialServers.TheDarkArmyServer,
   },
   {
-    hackDifficulty: 0,
+    security: 0,
     hostname: "CSEC",
     literature: [LiteratureName.DemocracyIsDead],
     maxRamExponent: 3,
@@ -1515,7 +1515,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: SpecialServers.CyberSecServer,
   },
   {
-    hackDifficulty: 0,
+    security: 0,
     hostname: "The-Cave",
     literature: [LiteratureName.AlphaOmega],
     moneyAvailable: 0,
@@ -1527,7 +1527,7 @@ export const serverMetadata: IServerMetadata[] = [
     specialName: SpecialServers.DaedalusServer,
   },
   {
-    hackDifficulty: 0,
+    security: 0,
     hostname: "w0r1d_d43m0n",
     moneyAvailable: 0,
     numOpenPortsRequired: 5,

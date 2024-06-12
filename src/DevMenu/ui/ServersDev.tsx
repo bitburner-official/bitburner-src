@@ -61,13 +61,13 @@ export function ServersDev(): React.ReactElement {
     const s = GetServer(server);
     if (s === null) return;
     if (!(s instanceof Server)) return;
-    s.hackDifficulty = s.minDifficulty;
+    s.security = s.minSecurity;
   }
 
   function minAllSecurity(): void {
     for (const s of GetAllServers()) {
       if (!(s instanceof Server)) return;
-      s.hackDifficulty = s.minDifficulty;
+      s.security = s.minSecurity;
     }
   }
 

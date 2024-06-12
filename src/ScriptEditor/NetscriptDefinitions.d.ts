@@ -587,13 +587,13 @@ export interface Server {
   backdoorInstalled?: boolean;
 
   /** Server's initial server security level at creation. */
-  baseDifficulty?: number;
+  baseSecurity?: number;
 
-  /** Server Security Level */
-  hackDifficulty?: number;
+  /** Server's current security Level */
+  security?: number;
 
-  /** Minimum server security level that this server can be weakened to */
-  minDifficulty?: number;
+  /** server's minimum  security level that this server can be weakened to */
+  minSecurity?: number;
 
   /** How much money currently resides on the server and can be hacked */
   moneyAvailable?: number;
@@ -703,7 +703,7 @@ interface BitNodeMultipliers {
   ServerMaxMoney: number;
   /** Influences the initial money that a server starts with. */
   ServerStartingMoney: number;
-  /** Influences the initial security level (hackDifficulty) of a server. */
+  /** Influences the initial security level of a server. */
   ServerStartingSecurity: number;
   /** Influences the weaken amount per invocation against a server. */
   ServerWeakenRate: number;

@@ -148,7 +148,7 @@ export class BitNodeMultipliers {
   /** Influences the initial money that a server starts with. */
   ServerStartingMoney = 1;
 
-  /** Influences the initial security level (hackDifficulty) of a server. */
+  /** Influences the initial security level of a server. */
   ServerStartingSecurity = 1;
 
   /** Influences the weaken amount per invocation against a server. */

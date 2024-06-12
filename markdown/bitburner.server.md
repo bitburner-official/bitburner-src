@@ -17,17 +17,16 @@ export interface Server
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [backdoorInstalled?](./bitburner.server.backdoorinstalled.md) |  | boolean | _(Optional)_ Flag indicating whether this server has a backdoor installed by a player |
-|  [baseDifficulty?](./bitburner.server.basedifficulty.md) |  | number | _(Optional)_ Server's initial server security level at creation. |
+|  [baseSecurity?](./bitburner.server.basesecurity.md) |  | number | _(Optional)_ Server's initial server security level at creation. |
 |  [cpuCores](./bitburner.server.cpucores.md) |  | number | How many CPU cores this server has. Affects magnitude of grow and weaken ran from this server. |
 |  [ftpPortOpen](./bitburner.server.ftpportopen.md) |  | boolean | Whether or not the FTP port is open |
-|  [hackDifficulty?](./bitburner.server.hackdifficulty.md) |  | number | _(Optional)_ Server Security Level |
 |  [hasAdminRights](./bitburner.server.hasadminrights.md) |  | boolean | Flag indicating whether player has admin/root access to this server |
 |  [hostname](./bitburner.server.hostname.md) |  | string | Hostname. Must be unique |
 |  [httpPortOpen](./bitburner.server.httpportopen.md) |  | boolean | Whether or not the HTTP Port is open |
 |  [ip](./bitburner.server.ip.md) |  | string | IP Address. Must be unique |
 |  [isConnectedTo](./bitburner.server.isconnectedto.md) |  | boolean | Flag indicating whether player is currently connected to this server |
 |  [maxRam](./bitburner.server.maxram.md) |  | number | RAM (GB) available on this server |
-|  [minDifficulty?](./bitburner.server.mindifficulty.md) |  | number | _(Optional)_ Minimum server security level that this server can be weakened to |
+|  [minSecurity?](./bitburner.server.minsecurity.md) |  | number | _(Optional)_ server's minimum security level that this server can be weakened to |
 |  [moneyAvailable?](./bitburner.server.moneyavailable.md) |  | number | _(Optional)_ How much money currently resides on the server and can be hacked |
 |  [moneyMax?](./bitburner.server.moneymax.md) |  | number | _(Optional)_ Maximum amount of money that this server can hold |
 |  [numOpenPortsRequired?](./bitburner.server.numopenportsrequired.md) |  | number | _(Optional)_ Number of open ports required in order to gain admin/root access |
@@ -36,6 +35,7 @@ export interface Server
 |  [purchasedByPlayer](./bitburner.server.purchasedbyplayer.md) |  | boolean | Flag indicating whether this is a purchased server |
 |  [ramUsed](./bitburner.server.ramused.md) |  | number | RAM (GB) used. i.e. unavailable RAM |
 |  [requiredHackingSkill?](./bitburner.server.requiredhackingskill.md) |  | number | _(Optional)_ Hacking level required to hack this server |
+|  [security?](./bitburner.server.security.md) |  | number | _(Optional)_ Server's current security Level |
 |  [serverGrowth?](./bitburner.server.servergrowth.md) |  | number | _(Optional)_ Growth effectiveness statistic. Higher values produce more growth with ns.grow() |
 |  [smtpPortOpen](./bitburner.server.smtpportopen.md) |  | boolean | Whether or not the SMTP Port is open |
 |  [sqlPortOpen](./bitburner.server.sqlportopen.md) |  | boolean | Whether or not the SQL Port is open |

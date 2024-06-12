@@ -6,12 +6,12 @@ import { clampNumber } from "./utils/helpers/clampNumber";
 
 /** Returns the chance the person has to successfully hack a server */
 export function calculateHackingChance(server: IServer, person: IPerson): number {
-  const hackDifficulty = server.hackDifficulty ?? 100;
+  const difficulty = server.security ?? 100;
   const requiredHackingSkill = server.requiredHackingSkill ?? 1e9;
   // Unrooted or unhackable server
-  if (!server.hasAdminRights || hackDifficulty >= 100) return 0;
+  if (!server.hasAdminRights || difficulty >= 100) return 0;
   const hackFactor = 1.75;
-  const difficultyMult = (100 - hackDifficulty) / 100;
+  const difficultyMult = (100 - difficulty) / 100;
   const skillMult = clampNumber(hackFactor * person.skills.hacking, 1);
   const skillChance = (skillMult - requiredHackingSkill) / skillMult;
   const chance =
@@ -27,12 +27,12 @@ export function calculateHackingChance(server: IServer, person: IPerson): number
  * successfully hacking a server
  */
 export function calculateHackingExpGain(server: IServer, person: IPerson): number {
-  const baseDifficulty = server.baseDifficulty;
-  if (!baseDifficulty) return 0;
+  const difficulty = server.baseSecurity;
+  if (!difficulty) return 0;
   const baseExpGain = 3;
   const diffFactor = 0.3;
   let expGain = baseExpGain;
-  expGain += baseDifficulty * diffFactor;
+  expGain += difficulty * diffFactor;
   return expGain * person.mults.hacking_exp * currentNodeMults.HackExpGain;
 }
 
@@ -41,13 +41,13 @@ export function calculateHackingExpGain(server: IServer, person: IPerson): numbe
  * it is successfully hacked (returns the decimal form, not the actual percent value)
  */
 export function calculatePercentMoneyHacked(server: IServer, person: IPerson): number {
-  const hackDifficulty = server.hackDifficulty ?? 100;
-  if (hackDifficulty >= 100) return 0;
+  const difficulty = server.security ?? 100;
+  if (difficulty >= 100) return 0;
   const requiredHackingSkill = server.requiredHackingSkill ?? 1e9;
   // Adjust if needed for balancing. This is the divisor for the final calculation
   const balanceFactor = 240;
 
-  const difficultyMult = (100 - hackDifficulty) / 100;
+  const difficultyMult = (100 - difficulty) / 100;
   const skillMult = (person.skills.hacking - (requiredHackingSkill - 1)) / person.skills.hacking;
   const percentMoneyHacked =
     (difficultyMult * skillMult * person.mults.hacking_money * currentNodeMults.ScriptHackMoney) / balanceFactor;
@@ -57,9 +57,9 @@ export function calculatePercentMoneyHacked(server: IServer, person: IPerson): n
 
 /** Returns time it takes to complete a hack on a server, in seconds */
 export function calculateHackingTime(server: IServer, person: IPerson): number {
-  const { hackDifficulty, requiredHackingSkill } = server;
-  if (typeof hackDifficulty !== "number" || typeof requiredHackingSkill !== "number") return Infinity;
-  const difficultyMult = requiredHackingSkill * hackDifficulty;
+  const { security: difficulty, requiredHackingSkill } = server;
+  if (typeof difficulty !== "number" || typeof requiredHackingSkill !== "number") return Infinity;
+  const difficultyMult = requiredHackingSkill * difficulty;
 
   const baseDiff = 500;
   const baseSkill = 50;

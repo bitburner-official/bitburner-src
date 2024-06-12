@@ -222,8 +222,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
       }
 
       Terminal.print(targetServer.hostname + ":");
-      Terminal.print("Server base security level: " + targetServer.baseDifficulty);
-      Terminal.print("Server current security level: " + targetServer.hackDifficulty);
+      Terminal.print("Server base security level: " + targetServer.baseSecurity);
+      Terminal.print("Server current security level: " + targetServer.security);
       Terminal.print("Server growth rate: " + targetServer.serverGrowth);
       Terminal.print(
         `Netscript hack() execution time: ${convertTimeMsToTimeElapsedString(

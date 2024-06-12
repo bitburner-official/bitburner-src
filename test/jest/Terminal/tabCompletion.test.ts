@@ -25,7 +25,7 @@ describe("getTabCompletionPossibilities", function () {
     closeServer = new Server({
       ip: "8.8.8.8" as IPAddress,
       hostname: "near",
-      hackDifficulty: 1,
+      security: 1,
       moneyAvailable: 70000,
       numOpenPortsRequired: 0,
       organizationName: LocationName.NewTokyoNoodleBar,
@@ -35,7 +35,7 @@ describe("getTabCompletionPossibilities", function () {
     farServer = new Server({
       ip: "4.4.4.4" as IPAddress,
       hostname: "far",
-      hackDifficulty: 1,
+      security: 1,
       moneyAvailable: 70000,
       numOpenPortsRequired: 0,
       organizationName: LocationName.Sector12JoesGuns,

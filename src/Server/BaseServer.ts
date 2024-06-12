@@ -113,9 +113,9 @@ export abstract class BaseServer implements IServer {
 
   // Optional, listed just so they can be accessed on a BaseServer. These will be undefined for HacknetServers.
   backdoorInstalled?: boolean;
-  baseDifficulty?: number;
-  hackDifficulty?: number;
-  minDifficulty?: number;
+  baseSecurity?: number;
+  security?: number;
+  minSecurity?: number;
   moneyAvailable?: number;
   moneyMax?: number;
   numOpenPortsRequired?: number;

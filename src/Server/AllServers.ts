@@ -112,7 +112,7 @@ export const renameServer = (hostname: string, newName: string): void => {
 };
 
 interface IServerParams {
-  hackDifficulty?: number;
+  security?: number;
   hostname: string;
   ip: IPAddress;
   maxRam?: number;
@@ -148,7 +148,7 @@ export function initForeignServers(homeComputer: Server): void {
       serverParams.maxRam = Math.pow(2, toNumber(metadata.maxRamExponent));
     }
 
-    if (metadata.hackDifficulty) serverParams.hackDifficulty = toNumber(metadata.hackDifficulty);
+    if (metadata.security) serverParams.security = toNumber(metadata.security);
     if (metadata.moneyAvailable) serverParams.moneyAvailable = toNumber(metadata.moneyAvailable);
     if (metadata.requiredHackingSkill) serverParams.requiredHackingSkill = toNumber(metadata.requiredHackingSkill);
     if (metadata.serverGrowth) serverParams.serverGrowth = toNumber(metadata.serverGrowth);

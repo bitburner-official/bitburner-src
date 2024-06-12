@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.ServerStartingSecurity property
 
-Influences the initial security level (hackDifficulty) of a server.
+Influences the initial security level of a server.
 
 **Signature:**
 

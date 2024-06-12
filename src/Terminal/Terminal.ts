@@ -229,9 +229,9 @@ export class Terminal {
         Player.gainIntelligenceExp(4 * Math.log10(expGainedOnSuccess));
       }
 
-      const oldSec = server.hackDifficulty;
+      const oldSec = server.security;
       server.fortify(ServerConstants.ServerFortifyAmount);
-      const newSec = server.hackDifficulty;
+      const newSec = server.security;
 
       this.print(
         `Hack successful on '${server.hostname}'! Gained ${formatMoney(moneyGained)} and ${formatExp(
@@ -257,9 +257,9 @@ export class Terminal {
     }
     if (!(server instanceof Server)) throw new Error("server should be normal server");
     const expGain = calculateHackingExpGain(server, Player);
-    const oldSec = server.hackDifficulty;
+    const oldSec = server.security;
     const growth = processSingleServerGrowth(server, 25, server.cpuCores) - 1;
-    const newSec = server.hackDifficulty;
+    const newSec = server.security;
 
     Player.gainHackingExp(expGain);
     this.print(
@@ -281,16 +281,16 @@ export class Terminal {
     }
     if (!(server instanceof Server)) throw new Error("server should be normal server");
     const expGain = calculateHackingExpGain(server, Player);
-    const oldSec = server.hackDifficulty;
+    const oldSec = server.security;
     const weakenAmt = getWeakenEffect(1, server.cpuCores);
     server.weaken(weakenAmt);
-    const newSec = server.hackDifficulty;
+    const newSec = server.security;
 
     Player.gainHackingExp(expGain);
     this.print(
       `Security decreased on '${server.hostname}' by ${formatSecurity(weakenAmt)} from ${formatSecurity(
         oldSec,
-      )} to ${formatSecurity(newSec)} (min: ${formatSecurity(server.minDifficulty)})` +
+      )} to ${formatSecurity(newSec)} (min: ${formatSecurity(server.minSecurity)})` +
         ` and Gained ${formatExp(expGain)} hacking exp.`,
     );
   }
@@ -333,7 +333,7 @@ export class Terminal {
         this.print("Backdoor: " + (currServ.backdoorInstalled ? "YES" : "NO"));
         const hackingSkill = currServ.requiredHackingSkill;
         this.print("Required hacking skill for hack() and backdoor: " + (!isHacknet ? hackingSkill : "N/A"));
-        const security = currServ.hackDifficulty;
+        const security = currServ.security;
         this.print("Server security level: " + (!isHacknet ? formatSecurity(security) : "N/A"));
         const hackingChance = calculateHackingChance(currServ, Player);
         this.print("Chance to hack: " + (!isHacknet ? formatPercent(hackingChance) : "N/A"));
