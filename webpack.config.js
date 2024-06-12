@@ -10,7 +10,7 @@ module.exports = (env, argv) => {
   const isDevServer = (env || {}).devServer === true;
   const runInContainer = (env || {}).runInContainer === true;
   const isDevelopment = argv.mode === "development";
-  const isFastRefresh = argv.fast === "true";
+  const enableReactRefresh = (env || {}).enableReactRefresh === true;
   const outputDirectory = "dist";
   const entry = "./src/index.tsx";
 
@@ -126,7 +126,7 @@ module.exports = (env, argv) => {
           columns: true,
           module: true,
         }),
-      isFastRefresh && new ReactRefreshWebpackPlugin(),
+      enableReactRefresh && new ReactRefreshWebpackPlugin(),
     ].filter(Boolean),
     target: "web",
     entry: entry,
@@ -143,7 +143,7 @@ module.exports = (env, argv) => {
           use: {
             loader: "babel-loader",
             options: {
-              plugins: [isFastRefresh && require.resolve("react-refresh/babel")].filter(Boolean),
+              plugins: [enableReactRefresh && require.resolve("react-refresh/babel")].filter(Boolean),
               cacheDirectory: true,
             },
           },
