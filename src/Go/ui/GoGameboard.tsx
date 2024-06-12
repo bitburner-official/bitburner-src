@@ -27,7 +27,7 @@ export function GoGameboard({ boardState, traditional, clickHandler, hover }: Go
   }
 
   const boardSize = boardState.board[0].length;
-  const classes = boardStyles();
+  const { classes } = boardStyles();
 
   return (
     <Grid container id="goGameboard" className={`${classes.board} ${traditional ? classes.traditional : ""}`}>

@@ -31,7 +31,7 @@ describe("Go AI tests", () => {
   it("prioritizes eye creation moves for Illuminati", async () => {
     const board = ["...O...", "OOOO...", ".......", ".......", ".......", ".......", "......."];
     const boardState = boardStateFromSimpleBoard(board, GoOpponent.Daedalus);
-    const move = await getMove(boardState, GoColor.white, GoOpponent.Daedalus, 0);
+    const move = await getMove(boardState, GoColor.white, GoOpponent.Daedalus, false, 0);
 
     expect([move.x, move.y]).toEqual([0, 1]);
   });

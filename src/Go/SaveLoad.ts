@@ -21,6 +21,7 @@ type SaveFormat = {
   previousGame: PreviousGameSaveData;
   currentGame: CurrentGameSaveData;
   stats: PartialRecord<GoOpponent, OpponentStats>;
+  storedCycles: number;
 };
 
 export function getGoSave(): SaveFormat {
@@ -40,6 +41,7 @@ export function getGoSave(): SaveFormat {
       passCount: Go.currentGame.passCount,
     },
     stats: Go.stats,
+    storedCycles: Go.storedCycles,
   };
 }
 
@@ -78,6 +80,7 @@ export function loadGo(data: unknown): boolean {
   Go.currentGame = currentGame;
   Go.previousGame = previousGame;
   Go.stats = stats;
+  Go.storeCycles(loadStoredCycles(parsedData.storedCycles));
 
   // If it's the AI's turn, initiate their turn, which will populate nextTurn
   if (currentGame.previousPlayer === GoColor.black && currentGame.ai !== GoOpponent.none) makeAIMove(currentGame);
@@ -177,4 +180,12 @@ function loadSimpleBoard(simpleBoard: unknown, requiredSize?: number): SimpleBoa
     return "Incorrect types or column size while loading a SimpleBoard.";
   }
   return simpleBoard;
+}
+
+function loadStoredCycles(storedCycles: unknown): number {
+  if (!storedCycles || isNaN(+storedCycles)) {
+    return 0;
+  }
+
+  return +storedCycles;
 }

@@ -1,9 +1,31 @@
 import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import { makeStyles } from "tss-react/mui";
+import { keyframes } from "tss-react";
 
-export const pointStyle = makeStyles((theme: Theme) =>
-  createStyles({
+type Size = "fiveByFive" | "sevenBySeven" | "nineByNine" | "thirteenByThirteen" | "nineteenByNineteen";
+type Point =
+  | "blackPoint"
+  | "whitePoint"
+  | "innerPoint"
+  | "filledPoint"
+  | "emptyPoint"
+  | "broken"
+  | "tradStone"
+  | "priorStoneTrad";
+type Structure = "coordinates" | "liberty" | "northLiberty" | "eastLiberty" | "westLiberty" | "southLiberty";
+type Highlight = "hover" | "valid" | "priorPoint";
+
+const fadeLoop = keyframes`
+    0% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 1;
+    }
+`;
+
+export const pointStyle = makeStyles<void, Size | Point | Structure | Highlight>({ uniqId: "pointStyle" })(
+  (theme: Theme, _, classes) => ({
     hover: {},
     valid: {},
     priorPoint: {},
@@ -12,24 +34,24 @@ export const pointStyle = makeStyles((theme: Theme) =>
       height: "100%",
       width: "100%",
 
-      "&$hover$valid:hover $innerPoint": {
+      [`&.${classes.hover}.${classes.valid}:hover .${classes.innerPoint}`]: {
         outlineColor: theme.colors.white,
       },
-      "&$hover$priorPoint $innerPoint": {
+      [`&.${classes.hover}.${classes.priorPoint} .${classes.innerPoint}`]: {
         outlineColor: theme.colors.white,
       },
-      "&$hover$priorPoint $priorStoneTrad$blackPoint": {
+      [`&.${classes.hover}.${classes.priorPoint} .${classes.priorStoneTrad}.${classes.blackPoint}`]: {
         outlineColor: theme.colors.white,
         display: "block",
       },
-      "&$hover$priorPoint $priorStoneTrad$whitePoint": {
+      [`&.${classes.hover}.${classes.priorPoint} .${classes.priorStoneTrad}.${classes.whitePoint}`]: {
         outlineColor: theme.colors.black,
         display: "block",
       },
-      "&$hover:hover $coordinates": {
+      [`&.${classes.hover}:hover .${classes.coordinates}`]: {
         display: "block",
       },
-      "&:hover $broken": {
+      [`&:hover .${classes.broken}`]: {
         opacity: "0.4",
       },
     },
@@ -43,7 +65,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
       width: "83%",
       height: "83%",
       transition: "all 0.3s",
-      "& $coordinates": {
+      [`& .${classes.coordinates}`]: {
         fontSize: "10px",
       },
     },
@@ -59,142 +81,143 @@ export const pointStyle = makeStyles((theme: Theme) =>
       overflow: "hidden",
     },
     traditional: {
-      "& $innerPoint": {
+      [`& .${classes.innerPoint}`]: {
         display: "none",
       },
-      "& $broken": {
+      [`& .${classes.broken}`]: {
         backgroundImage: "none",
         backgroundColor: theme.colors.black,
       },
-      "& $tradStone": {
+      [`& .${classes.tradStone}`]: {
         display: "block",
       },
-      "& $liberty": {
+      [`& .${classes.liberty}`]: {
         backgroundColor: theme.colors.black,
         transition: "none",
-        "&:not($northLiberty):not($southLiberty):not($eastLiberty):not($westLiberty)": {
-          width: 0,
-          height: 0,
-        },
+        [`&:not(.${classes.northLiberty}):not(.${classes.southLiberty}):not(.${classes.eastLiberty}):not(.${classes.westLiberty})`]:
+          {
+            width: 0,
+            height: 0,
+          },
       },
-      "& $northLiberty, & $southLiberty": {
+      [`& .${classes.northLiberty}, & .${classes.southLiberty}`]: {
         width: "0.9px",
       },
-      "& $eastLiberty, & $westLiberty": {
+      [`& .${classes.eastLiberty}, & .${classes.westLiberty}`]: {
         height: "0.9px",
       },
-      "&$nineteenByNineteen": {
-        "& $blackPoint": {
+      [`&.${classes.nineteenByNineteen}`]: {
+        [`& .${classes.blackPoint}`]: {
           "&:before": {
             backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(30px, 5vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
           },
         },
-        "& $whitePoint": {
+        [`& .${classes.whitePoint}`]: {
           "&:before": {
             backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(30px, 5vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
           },
         },
-        "& $coordinates": {
+        [`& .${classes.coordinates}`]: {
           fontSize: "0.9vw",
         },
       },
-      "&$thirteenByThirteen": {
-        "& $blackPoint": {
+      [`&.${classes.thirteenByThirteen}`]: {
+        [`& .${classes.blackPoint}`]: {
           "&:before": {
             backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(40px, 6vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
           },
         },
-        "& $whitePoint": {
+        [`& .${classes.whitePoint}`]: {
           "&:before": {
             backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(40px, 6vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
           },
         },
-        "& $coordinates": {
+        [`& .${classes.coordinates}`]: {
           fontSize: "0.9vw",
         },
       },
-      "&$nineByNine": {
-        "& $blackPoint": {
+      [`&.${classes.nineByNine}`]: {
+        [`& .${classes.blackPoint}`]: {
           "&:before": {
             backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(60px, 7vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
           },
         },
-        "& $whitePoint": {
+        [`& .${classes.whitePoint}`]: {
           "&:before": {
             backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(60px, 7vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
           },
         },
       },
-      "&$sevenBySeven": {
-        "& $blackPoint": {
+      [`&.${classes.sevenBySeven}`]: {
+        [`& .${classes.blackPoint}`]: {
           "&:before": {
             backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(80px, 8vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
           },
         },
-        "& $whitePoint": {
+        [`& .${classes.whitePoint}`]: {
           "&:before": {
             backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(80px, 8vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
           },
         },
       },
-      "& $coordinates": {
+      [`& .${classes.coordinates}`]: {
         color: "black",
         left: "15%",
       },
-      "& $blackPoint ~ $coordinates": {
+      [`& .${classes.blackPoint} ~ .${classes.coordinates}`]: {
         color: theme.colors.white,
       },
     },
     fiveByFive: {
-      "& $blackPoint": {
+      [`& .${classes.blackPoint}`]: {
         backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(35px, 4vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
       },
-      "& $whitePoint": {
+      [`& .${classes.whitePoint}`]: {
         backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(35px, 4vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
       },
     },
     sevenBySeven: {
-      "& $blackPoint": {
+      [`& .${classes.blackPoint}`]: {
         backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(23px, 3vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
       },
-      "& $whitePoint": {
+      [`& .${classes.whitePoint}`]: {
         backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(25px, 3vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
       },
     },
     nineByNine: {
-      "& $filledPoint": {
+      [`& .${classes.filledPoint}`]: {
         boxShadow: "0px 0px 30px hsla(0, 100%, 100%, 0.48)",
       },
-      "& $blackPoint": {
+      [`& .${classes.blackPoint}`]: {
         backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(15px, 2vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
       },
-      "& $whitePoint": {
+      [`& .${classes.whitePoint}`]: {
         backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(15px, 2vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
       },
     },
     thirteenByThirteen: {
-      "& $filledPoint": {
+      [`& .${classes.filledPoint}`]: {
         boxShadow: "0px 0px 18px hsla(0, 100%, 100%, 0.48)",
       },
-      "& $blackPoint": {
+      [`& .${classes.blackPoint}`]: {
         backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
       },
-      "& $whitePoint": {
+      [`& .${classes.whitePoint}`]: {
         backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
       },
     },
     nineteenByNineteen: {
-      "& $filledPoint": {
+      [`& .${classes.filledPoint}`]: {
         boxShadow: "0px 0px 18px hsla(0, 100%, 100%, 0.48)",
       },
-      "& $blackPoint": {
+      [`& .${classes.blackPoint}`]: {
         backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
       },
-      "& $whitePoint": {
+      [`& .${classes.whitePoint}`]: {
         backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(10px, 1.5vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
       },
 
-      "& $innerPoint": {
+      [`& .${classes.innerPoint}`]: {
         width: "70%",
         height: "70%",
         margin: "15%",
@@ -229,7 +252,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
         top: 0,
       },
 
-      "&$blackPoint": {
+      [`&.${classes.blackPoint}`]: {
         position: "static",
         outlineWidth: 0,
         width: 0,
@@ -241,7 +264,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
           backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.black} 65%), radial-gradient(calc(min(150px, 11vw)) at 42% 38%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.25) 35%, transparent 36%)`,
         },
       },
-      "&$whitePoint": {
+      [`&.${classes.whitePoint}`]: {
         backgroundColor: "transparent",
         width: 0,
         height: 0,
@@ -252,7 +275,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
           backgroundImage: `linear-gradient(145deg, transparent, ${theme.colors.white} 65%), radial-gradient(calc(min(150px, 11vw)) at 42% 38%, white 0%, white 35%, transparent 36%)`,
         },
       },
-      "&$emptyPoint": {
+      [`&.${classes.emptyPoint}`]: {
         width: 0,
         height: 0,
         margin: 0,
@@ -305,15 +328,7 @@ export const pointStyle = makeStyles((theme: Theme) =>
       outlineColor: theme.colors.white,
     },
     fadeLoopAnimation: {
-      animation: `$fadeLoop 800ms ${theme.transitions.easing.easeInOut} infinite alternate`,
-    },
-    "@keyframes fadeLoop": {
-      "0%": {
-        opacity: 0.4,
-      },
-      "100%": {
-        opacity: 1,
-      },
+      animation: `${fadeLoop} 800ms ${theme.transitions.easing.easeInOut} infinite alternate`,
     },
     liberty: {
       position: "absolute",
@@ -381,8 +396,8 @@ export const pointStyle = makeStyles((theme: Theme) =>
   }),
 );
 
-export const boardStyles = makeStyles((theme: Theme) =>
-  createStyles({
+export const boardStyles = makeStyles<void, Size | "background">({ uniqId: "boardStyles" })(
+  (theme: Theme, _, classes) => ({
     tab: {
       paddingTop: 0,
       paddingBottom: 0,
@@ -469,15 +484,7 @@ export const boardStyles = makeStyles((theme: Theme) =>
       borderColor: theme.colors.success,
       padding: "0 12px",
       width: "200px",
-      animation: `$fadeLoop 600ms ${theme.transitions.easing.easeInOut} infinite alternate`,
-    },
-    "@keyframes fadeLoop": {
-      "0%": {
-        opacity: 0.6,
-      },
-      "100%": {
-        opacity: 1,
-      },
+      animation: `${fadeLoop} 600ms ${theme.transitions.easing.easeInOut} infinite alternate`,
     },
     scoreBox: {
       display: "inline-flex",
@@ -491,35 +498,35 @@ export const boardStyles = makeStyles((theme: Theme) =>
     },
     fiveByFive: {
       height: "20%",
-      "& $fiveByFive": {
+      [`& .${classes.fiveByFive}`]: {
         width: "20%",
         height: "100%",
       },
     },
     sevenBySeven: {
       height: "14%",
-      "& $sevenBySeven": {
+      [`& .${classes.sevenBySeven}`]: {
         width: "14%",
         height: "100%",
       },
     },
     nineByNine: {
       height: "11%",
-      "& $nineByNine": {
+      [`& .${classes.nineByNine}`]: {
         width: "11%",
         height: "100%",
       },
     },
     thirteenByThirteen: {
       height: "7.5%",
-      "& $thirteenByThirteen": {
+      [`& .${classes.thirteenByThirteen}`]: {
         width: "7.5%",
         height: "100%",
       },
     },
     nineteenByNineteen: {
       height: "5.2%",
-      "& $nineteenByNineteen": {
+      [`& .${classes.nineteenByNineteen}`]: {
         width: "5.2%",
         height: "100%",
       },
@@ -535,7 +542,7 @@ export const boardStyles = makeStyles((theme: Theme) =>
       paddingTop: "15px",
     },
     bitverseBackground: {
-      "&$background": {
+      [`&.${classes.background}`]: {
         fontSize: "calc(min(.83vh - 1px, 0.72vw, 7.856px))",
         opacity: 0.11,
       },

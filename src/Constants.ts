@@ -24,7 +24,6 @@ export const CONSTANTS: {
   IntelligenceCrimeBaseExpGain: number;
   IntelligenceProgramBaseExpGain: number;
   IntelligenceGraftBaseExpGain: number;
-  IntelligenceTerminalHackBaseExpGain: number;
   IntelligenceSingFnBaseExpGain: number;
   MillisecondsPer20Hours: number;
   GameCyclesPer20Hours: number;
@@ -101,7 +100,6 @@ export const CONSTANTS: {
   IntelligenceCrimeBaseExpGain: 0.05,
   IntelligenceProgramBaseExpGain: 0.1, // Program required hack level divided by this to determine int exp gain
   IntelligenceGraftBaseExpGain: 0.05,
-  IntelligenceTerminalHackBaseExpGain: 200, // Hacking exp divided by this to determine int exp gain
   IntelligenceSingFnBaseExpGain: 1.5,
 
   // Time-related constants
@@ -158,12 +156,48 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.2 dev - Last update 2 June 2024
+## v2.6.2 dev - Last update 4 June 2024
 
 See 2.6.1 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.1/src/Documentation/doc/changelog.md
 
-### HOTFIX (changes also added to 2.6.1 post release)
+### CHANGES
 
-- Fixed an issue with invalid format on steam cloud save (@catloversg)
+- Hotfix (also backported to 2.6.1): Fixed an issue with invalid format on steam cloud save (@catloversg)
+- Augmentations: Adjusted handling of augmentations that affect starting money or programs (@jjclark1982)
+- Coding Contracts: Improved the performance of the All Valid Math Expressions contract checker (@yichizhng)
+- Coding Contracts: Simplified the Shortest Path contract checker (@gmcew)
+- Coding Contracts: Clarification on HammingCodes: Encoded Binary to Integer description (@gmcew)
+- Faction: Fixed some edge cases around Favor overflow (@catloversg)
+- Faction Invites: Code refactoring, all available invites are sent at once (@catloversg)
+- Faction UI: show which skills are relevant for each type of Faction work (@gmcew)
+- Font: Embedded the JetBrains Mono font as "JetBrainsMono" (@catloversg)
+- Go: Support playing manually as white against your own scripts (@ficocelliguy)
+- Go: Save a full game history to prevent repeat moves (@ficocelliguy)
+- Infiltration: Updated Slash game text to be less confusing (@catloversg)
+- Netscript API docs: Fixed some invalid usage issues + general type improvements (@catloversg, @ficocelliguy)
+- Programs UI: Changed time elapsed display to time left (@TheAimMan)
+- Servers: Game servers can now start with more than 1 core (@TheAimMan)
+- Scripts: Relative imports should now work correctly (@Caldwell-74)
+- Script Editor: Improved detection of possible infinite loops (@G4mingJon4s)
+- Script Editor: should now remember cursor location when switching tabs or game pages (@catloversg)
+- Skill XP: Fix an issue where in some cases, too much experience was needed to raise a skill from 1 to 2 (@catloversg)
+- Terminal: Improved autocompletion code for mixed case strings (@yichizhng)
+- Codebase: Partial migration away from outdated mui/styles (@Caldwell-74)
+
+### SPOILER CHANGES
+
+- Bladeburner: Added a button to stop the current action (@Kelenius)
+- Bladeburner UI: Display Black Operations in the expected order (@catloversg)
+- Corporation: Allow mass discarding products by selling for 0 (@gmcew)
+- Grafting: Fixed a spacing issue (@Sphyxis)
+- Grafting/Hacknet: Fixed an issue that could cause hacknet node production to be inaccurrate when combined with Grafting (@catloversg)
+- Grafting: Fixed an issue that could cause inaccurate HP after Grafting (@catloversg)
+- Hashnet: Clarified effect of hacknet multipliers in in documentation (@catloversg)
+- Sleeve: Sleeve travel can no longer be performed if the player has insufficient funds (@gmcew)
+- Sleeve: Added a missing availability check when installing augmentations on Sleeves (@yichizhng)
+- Sleeve API: Fix an issue in ns.sleeve.setToBladeburnerAction that prevented setting sleeves to contract work (@Sphyxis)
+
+### OTHER
+- Nerf noodle bar
 `,
 };

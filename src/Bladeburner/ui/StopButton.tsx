@@ -13,5 +13,9 @@ export function StopButton({ bladeburner, rerender }: StopButtonProps): React.Re
     rerender();
   }
 
-  return <Button onClick={onClick}>Stop</Button>;
+  return (
+    <Button style={{ marginLeft: "1rem" }} onClick={onClick}>
+      Stop
+    </Button>
+  );
 }

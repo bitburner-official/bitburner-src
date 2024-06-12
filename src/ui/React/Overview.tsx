@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Draggable, { DraggableEventHandler } from "react-draggable";
-import makeStyles from "@mui/styles/makeStyles";
+import { makeStyles } from "tss-react/mui";
 import Collapse from "@mui/material/Collapse";
 import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -13,7 +13,7 @@ import { Settings } from "../../Settings/Settings";
 import { Box, Button, Typography } from "@mui/material";
 import { debounce } from "lodash";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   overviewContainer: {
     position: "fixed",
     top: 0,
@@ -68,7 +68,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
   const [open, setOpen] = useState(Settings.overview.opened);
   const [x, setX] = useState(Settings.overview.x);
   const [y, setY] = useState(Settings.overview.y);
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const CurrentIcon = open ? KeyboardArrowUpIcon : KeyboardArrowDownIcon;
   const LeftIcon = mode === "tutorial" ? SchoolIcon : EqualizerIcon;

@@ -11,8 +11,7 @@ import { Reputation } from "../../ui/React/Reputation";
 import { Favor } from "../../ui/React/Favor";
 import { MathJax } from "better-react-mathjax";
 
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import { makeStyles } from "tss-react/mui";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
@@ -24,14 +23,12 @@ interface IProps {
   factionInfo: FactionInfo;
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    noformat: {
-      whiteSpace: "pre-wrap",
-      lineHeight: "1em",
-    },
-  }),
-);
+const useStyles = makeStyles()({
+  noformat: {
+    whiteSpace: "pre-wrap",
+    lineHeight: "1em",
+  },
+});
 
 function DefaultAssignment(): React.ReactElement {
   return (
@@ -46,7 +43,7 @@ function DefaultAssignment(): React.ReactElement {
 
 export function Info(props: IProps): React.ReactElement {
   useRerender(200);
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const Assignment = props.factionInfo.assignment ?? DefaultAssignment;
 

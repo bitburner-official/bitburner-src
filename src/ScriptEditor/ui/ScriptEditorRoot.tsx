@@ -374,7 +374,7 @@ function Root(props: IProps): React.ReactElement {
     }
   }
 
-  const { VimStatus } = useVimEditor({
+  const { statusBarRef } = useVimEditor({
     editor: editorRef.current,
     vim: currentScript !== null ? currentScript.vimMode : props.vim,
     onSave: save,
@@ -412,7 +412,7 @@ function Root(props: IProps): React.ReactElement {
         <div style={{ flex: "0 0 5px" }} />
         <Editor onMount={onMount} onChange={updateCode} onUnmount={onUnmountEditor} />
 
-        {VimStatus}
+        {statusBarRef.current}
 
         <Toolbar onSave={save} editor={editorRef.current} />
       </div>

@@ -1,7 +1,7 @@
 // React Component for displaying an Industry's warehouse information
 // (right-side panel in the Industry UI)
 import React, { useState } from "react";
-import { createStyles, makeStyles } from "@mui/styles";
+import { makeStyles } from "tss-react/mui";
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import * as corpConstants from "../data/Constants";
 import { CityName, CorpUnlockName } from "@enums";
@@ -32,16 +32,14 @@ interface WarehouseProps {
   rerender: () => void;
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    retainHeight: {
-      minHeight: "3em",
-    },
-  }),
-);
+const useStyles = makeStyles()(() => ({
+  retainHeight: {
+    minHeight: "3em",
+  },
+}));
 
 function WarehouseRoot(props: WarehouseProps): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const corp = useCorporation();
   const division = useDivision();
   const [smartSupplyOpen, setSmartSupplyOpen] = useState(false);

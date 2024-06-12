@@ -18,24 +18,21 @@ import { Page } from "../../ui/Router";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import { makeStyles } from "tss-react/mui";
 
 interface IProps {
   city: City;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    location: {
-      color: theme.colors.maplocation,
-      whiteSpace: "nowrap",
-      margin: "0px",
-      padding: "0px",
-      cursor: "pointer",
-    },
-  }),
-);
+const useStyles = makeStyles()((theme: Theme) => ({
+  location: {
+    color: theme.colors.maplocation,
+    whiteSpace: "nowrap",
+    margin: "0px",
+    padding: "0px",
+    cursor: "pointer",
+  },
+}));
 
 function toLocation(location: Location): void {
   if (location.name === LocationName.TravelAgency) {
@@ -97,7 +94,7 @@ function ASCIICity(props: IProps): React.ReactElement {
     Y: 24,
     Z: 25,
   };
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const lineElems = (s: string): (string | React.ReactElement)[] => {
     const elems: (string | React.ReactElement)[] = [];

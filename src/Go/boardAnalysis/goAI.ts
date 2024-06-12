@@ -28,7 +28,7 @@ let currentTurnResolver: (() => void) | null = null;
 /**
  * Retrieves a move from the current faction in response to the player's move
  */
-export function makeAIMove(boardState: BoardState): Promise<Play> {
+export function makeAIMove(boardState: BoardState, useOfflineCycles = true): Promise<Play> {
   // If AI is already taking their turn, return the existing turn.
   if (isAiThinking) {
     return Go.nextTurn;
@@ -43,31 +43,33 @@ export function makeAIMove(boardState: BoardState): Promise<Play> {
   }
   // If an AI is in use, find the faction's move in response, and resolve the Go.nextTurn promise once it is found and played.
   else {
-    Go.nextTurn = getMove(boardState, GoColor.white, Go.currentGame.ai).then(async (play): Promise<Play> => {
-      if (boardState !== Go.currentGame) return play; //Stale game
+    Go.nextTurn = getMove(boardState, GoColor.white, Go.currentGame.ai, useOfflineCycles).then(
+      async (play): Promise<Play> => {
+        if (boardState !== Go.currentGame) return play; //Stale game
 
-      // Handle AI passing
-      if (play.type === GoPlayType.pass) {
-        passTurn(boardState, GoColor.white);
-        // if passTurn called endGoGame, or the player has no valid moves left, the move should be shown as a game over
-        if (boardState.previousPlayer === null || !getAllValidMoves(boardState, GoColor.black).length) {
-          return { type: GoPlayType.gameOver, x: null, y: null };
+        // Handle AI passing
+        if (play.type === GoPlayType.pass) {
+          passTurn(boardState, GoColor.white);
+          // if passTurn called endGoGame, or the player has no valid moves left, the move should be shown as a game over
+          if (boardState.previousPlayer === null || !getAllValidMoves(boardState, GoColor.black).length) {
+            return { type: GoPlayType.gameOver, x: null, y: null };
+          }
+          return play;
         }
+
+        // Handle AI making a move
+        await waitCycle(useOfflineCycles);
+        const aiUpdatedBoard = makeMove(boardState, play.x, play.y, GoColor.white);
+
+        // Handle the AI breaking. This shouldn't ever happen.
+        if (!aiUpdatedBoard) {
+          boardState.previousPlayer = GoColor.white;
+          console.error(`Invalid AI move attempted: ${play.x}, ${play.y}. This should not happen.`);
+        }
+
         return play;
-      }
-
-      // Handle AI making a move
-      await sleep(500);
-      const aiUpdatedBoard = makeMove(boardState, play.x, play.y, GoColor.white);
-
-      // Handle the AI breaking. This shouldn't ever happen.
-      if (!aiUpdatedBoard) {
-        boardState.previousPlayer = GoColor.white;
-        console.error(`Invalid AI move attempted: ${play.x}, ${play.y}. This should not happen.`);
-      }
-
-      return play;
-    });
+      },
+    );
   }
 
   // Once the AI moves (or the player playing as white with No AI moves),
@@ -112,9 +114,10 @@ export async function getMove(
   boardState: BoardState,
   player: GoColor,
   opponent: GoOpponent,
+  useOfflineCycles = true,
   rngOverride?: number,
 ): Promise<Play & { type: GoPlayType.move | GoPlayType.pass }> {
-  await sleep(300);
+  await waitCycle(useOfflineCycles);
   const rng = new WHRNG(rngOverride || Player.totalPlaytime);
   const smart = isSmart(opponent, rng.random());
   const moves = getMoveOptions(boardState, player, rng.random(), smart);
@@ -142,9 +145,9 @@ export async function getMove(
     .filter((point) => evaluateIfMoveIsValid(boardState, point.x, point.y, player, false));
 
   const chosenMove = moveOptions[Math.floor(rng.random() * moveOptions.length)];
+  await waitCycle(useOfflineCycles);
 
   if (chosenMove) {
-    await sleep(200);
     //console.debug(`Non-priority move chosen: ${chosenMove.x} ${chosenMove.y}`);
     return { type: GoPlayType.move, x: chosenMove.x, y: chosenMove.y };
   }
@@ -786,7 +789,7 @@ function getMoveOptions(
   };
 
   async function retrieveMoveOption(id: keyof typeof moveOptions): Promise<Move | null> {
-    await sleep(100);
+    await waitCycle();
     if (moveOptions[id] !== undefined) {
       return moveOptions[id] ?? null;
     }
@@ -811,6 +814,18 @@ export function getKomi(opponent: GoOpponent) {
  */
 export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Spend some time waiting to allow the UI & CSS to render smoothly
+ * If bonus time is available, significantly decrease the length of the wait
+ */
+function waitCycle(useOfflineCycles = true): Promise<void> {
+  if (useOfflineCycles && Go.storedCycles > 0) {
+    Go.storedCycles -= 2;
+    return sleep(40);
+  }
+  return sleep(200);
 }
 
 export function showWorldDemon() {

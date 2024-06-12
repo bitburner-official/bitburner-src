@@ -148,8 +148,7 @@ export const HelpTexts: Record<string, string[]> = {
   cd: [
     "Usage: cd [dir]",
     " ",
-    "Change to the specified directory. Note that this works even for directories that don't exist. If you ",
-    "change to a directory that does not exist, it will not be 'created'. Examples:",
+    "Change to the specified directory. You cannot change to a directory that does not exist. Examples:",
     " ",
     "    cd scripts/hacking",
     " ",

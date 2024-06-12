@@ -3,8 +3,7 @@ import { BitNodes } from "../BitNode";
 import { PortalModal } from "./PortalModal";
 import { CinematicText } from "../../ui/React/CinematicText";
 import { Player } from "@player";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import { makeStyles } from "tss-react/mui";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
@@ -12,33 +11,31 @@ import { Settings } from "../../Settings/Settings";
 import Button from "@mui/material/Button";
 import { CompletedProgramName } from "@enums";
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    portal: {
-      cursor: "pointer",
-      fontFamily: "inherit",
-      fontSize: "1rem",
-      fontWeight: "bold",
-      lineHeight: 1,
-      padding: 0,
-      "&:hover": {
-        color: "#fff",
-      },
+const useStyles = makeStyles()(() => ({
+  portal: {
+    cursor: "pointer",
+    fontFamily: "inherit",
+    fontSize: "1rem",
+    fontWeight: "bold",
+    lineHeight: 1,
+    padding: 0,
+    "&:hover": {
+      color: "#fff",
     },
-    level0: {
-      color: Settings.theme.bnlvl0,
-    },
-    level1: {
-      color: Settings.theme.bnlvl1,
-    },
-    level2: {
-      color: Settings.theme.bnlvl2,
-    },
-    level3: {
-      color: Settings.theme.bnlvl3,
-    },
-  }),
-);
+  },
+  level0: {
+    color: Settings.theme.bnlvl0,
+  },
+  level1: {
+    color: Settings.theme.bnlvl1,
+  },
+  level2: {
+    color: Settings.theme.bnlvl2,
+  },
+  level3: {
+    color: Settings.theme.bnlvl3,
+  },
+}));
 
 interface IPortalProps {
   n: number;
@@ -48,7 +45,7 @@ interface IPortalProps {
 }
 function BitNodePortal(props: IPortalProps): React.ReactElement {
   const [portalOpen, setPortalOpen] = useState(false);
-  const classes = useStyles();
+  const { classes } = useStyles();
   const bitNode = BitNodes[`BitNode${props.n}`];
   if (bitNode == null) {
     return <>O</>;

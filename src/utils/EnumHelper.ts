@@ -26,7 +26,7 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
     this.valueSet = new Set(this.valueArray);
     this.fuzzMap = new Map(this.valueArray.map((val) => [val.toLowerCase().replace(/[ -]+/g, ""), val]));
   }
-  /** Provide a boolean indication for whether a  */
+  /** Provide a boolean indication for whether a value is a member of an enum */
   isMember(toValidate: unknown): toValidate is EnumMember {
     // Asserting that Set.has actually takes in arbitrary values, which it does.
     return (this.valueSet.has as (value: unknown) => boolean)(toValidate);

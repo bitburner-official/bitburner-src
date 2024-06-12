@@ -2,7 +2,7 @@ import React, { ReactNode, ReactElement } from "react";
 
 import { Table, TableCell } from "./Table";
 import { TableBody, TableRow, Table as MuiTable, Typography } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { makeStyles } from "tss-react/mui";
 
 interface StatsTableProps {
   rows: ReactNode[][];
@@ -12,14 +12,14 @@ interface StatsTableProps {
 }
 
 const useStyles = (paddingLeft: string) =>
-  makeStyles({
+  makeStyles()({
     firstCell: { textAlign: "left" },
     nonFirstCell: { textAlign: "right", paddingLeft: paddingLeft },
   })();
 
 export function StatsTable({ rows, title, wide, paddingLeft }: StatsTableProps): ReactElement {
   const T = wide ? MuiTable : Table;
-  const classes = useStyles(paddingLeft ?? "0.5em");
+  const { classes } = useStyles(paddingLeft ?? "0.5em");
   return (
     <>
       {title && <Typography>{title}</Typography>}

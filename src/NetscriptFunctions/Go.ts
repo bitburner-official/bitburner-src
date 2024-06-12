@@ -17,6 +17,7 @@ import {
   getCurrentPlayer,
   getGameState,
   getLiberties,
+  getMoveHistory,
   getOpponentNextMove,
   getStats,
   getValidMoves,
@@ -47,16 +48,19 @@ export function NetscriptGo(): InternalAPI<NSGo> {
         validateMove(error(ctx), x, y, "makeMove");
         return makePlayerMove(logger(ctx), error(ctx), x, y);
       },
-    passTurn: (ctx: NetscriptContext) => (): Promise<Play> => {
+    passTurn: (ctx: NetscriptContext) => async (): Promise<Play> => {
       validateTurn(error(ctx), "passTurn()");
       return handlePassTurn(logger(ctx));
     },
-    opponentNextTurn: (ctx: NetscriptContext) => (_logOpponentMove) => {
+    opponentNextTurn: (ctx: NetscriptContext) => async (_logOpponentMove) => {
       const logOpponentMove = typeof _logOpponentMove === "boolean" ? _logOpponentMove : true;
       return getOpponentNextMove(logOpponentMove, logger(ctx));
     },
     getBoardState: () => () => {
       return simpleBoardFromBoard(Go.currentGame.board);
+    },
+    getMoveHistory: () => () => {
+      return getMoveHistory();
     },
     getCurrentPlayer: () => () => {
       return getCurrentPlayer();

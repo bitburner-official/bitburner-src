@@ -15,6 +15,7 @@ import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { PartialRecord, getRecordEntries, getRecordKeys, getRecordValues } from "../Types/Record";
 import { Material } from "./Material";
 import { getKeyList } from "../utils/helpers/getKeyList";
+import { calculateMarkupMultiplier } from "./helpers";
 
 interface DivisionParams {
   name: string;
@@ -582,26 +583,13 @@ export class Division {
             }
             mat.uiMarketPrice = sCost;
 
-            // Calculate how much of the material sells (per second)
-            let markup = 1;
-            if (sCost > mat.marketPrice) {
-              //Penalty if difference between sCost and bCost is greater than markup limit
-              if (sCost - mat.marketPrice > markupLimit) {
-                markup = Math.pow(markupLimit / (sCost - mat.marketPrice), 2);
-              }
-            } else if (sCost < mat.marketPrice) {
-              if (sCost <= 0) {
-                markup = 1e12; //Sell everything, essentially discard
-              } else {
-                //Lower prices than market increases sales
-                markup = mat.marketPrice / sCost;
-              }
-            }
+            const markupMultiplier = calculateMarkupMultiplier(sCost, mat.marketPrice, markupLimit);
 
+            // Calculate how much of the material sells (per second)
             mat.maxSellPerCycle =
               (mat.quality + 0.001) *
               marketFactor *
-              markup *
+              markupMultiplier *
               businessFactor *
               corporation.getSalesMult() *
               advertisingFactor *
@@ -920,21 +908,15 @@ export class Division {
             sCost = sellPrice;
           }
           product.uiMarketPrice[city] = sCost;
-          let markup = 1;
-          if (sCost > product.cityData[city].productionCost) {
-            if (sCost - product.cityData[city].productionCost > markupLimit) {
-              markup = markupLimit / (sCost - product.cityData[city].productionCost);
-            }
-          } else if (sCost <= 0) {
-            markup = 1e12; //Sell everything, essentially discard - as materials
-          }
+
+          const markupMultiplier = calculateMarkupMultiplier(sCost, product.cityData[city].productionCost, markupLimit);
 
           product.maxSellAmount =
             0.5 *
             Math.pow(product.cityData[city].effectiveRating, 0.65) *
             marketFactor *
             corporation.getSalesMult() *
-            Math.pow(markup, 2) *
+            markupMultiplier *
             businessFactor *
             advertisingFactor *
             this.getSalesMultiplier();

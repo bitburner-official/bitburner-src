@@ -154,6 +154,12 @@ export function initForeignServers(homeComputer: Server): void {
     if (metadata.serverGrowth) serverParams.serverGrowth = toNumber(metadata.serverGrowth);
 
     const server = new Server(serverParams);
+
+    if (metadata.networkLayer) {
+      const layer = toNumber(metadata.networkLayer);
+      server.cpuCores = getRandomIntInclusive(Math.ceil(layer / 2), layer);
+    }
+
     for (const filename of metadata.literature || []) {
       server.messages.push(filename);
     }

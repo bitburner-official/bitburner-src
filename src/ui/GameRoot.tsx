@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { createStyles, makeStyles } from "@mui/styles";
 import { Box, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
+import { makeStyles } from "tss-react/mui";
 
 import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
@@ -73,28 +73,25 @@ import { useRerender } from "./React/hooks";
 import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
 import { Settings } from "../Settings/Settings";
+import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 
 const htmlLocation = location;
 
-const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      root: {
-        "-ms-overflow-style": "none" /* for Internet Explorer, Edge */,
-        "scrollbar-width": "none" /* for Firefox */,
-        margin: theme.spacing(0),
-        flexGrow: 1,
-        padding: "8px",
-        minHeight: "100vh",
-        boxSizing: "border-box",
-        width: "1px",
-      },
-    }),
-  { name: "GameRoot" },
-);
+const useStyles = makeStyles()((theme: Theme) => ({
+  root: {
+    msOverflowStyle: "none" /* for Internet Explorer, Edge */,
+    scrollbarWidth: "none" /* for Firefox */,
+    margin: theme.spacing(0),
+    flexGrow: 1,
+    padding: "8px",
+    minHeight: "100vh",
+    boxSizing: "border-box",
+    width: "1px",
+  },
+}));
 
 const uninitialized = (): void => {
-  throw new Error("Router called before initialization");
+  throw new Error("Router called before initialization - uninitialized");
 };
 
 const MAX_PAGES_IN_HISTORY = 10;
@@ -102,27 +99,35 @@ const MAX_PAGES_IN_HISTORY = 10;
 export let Router: IRouter = {
   isInitialized: false,
   page: () => {
-    throw new Error("Router called before initialization");
+    throw new Error("Router called before initialization - page");
   },
   allowRouting: uninitialized,
   toPage: () => {
-    throw new Error("Router called before initialization");
+    throw new Error("Router called before initialization - toPage");
   },
   back: () => {
-    throw new Error("Router called before initialization");
+    throw new Error("Router called before initialization - back");
   },
 };
 
-function determineStartPage() {
-  if (RecoveryMode) return Page.Recovery;
-  if (Player.currentWork !== null) return Page.Work;
-  return Page.Terminal;
+function determineStartPage(): PageWithContext {
+  if (RecoveryMode) {
+    return { page: Page.Recovery };
+  }
+  if (isBitNodeFinished()) {
+    // Go to BitVerse UI without animation.
+    return { page: Page.BitVerse, flume: false, quick: true };
+  }
+  if (Player.currentWork !== null) {
+    return { page: Page.Work };
+  }
+  return { page: Page.Terminal };
 }
 
 export function GameRoot(): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
-  const [pages, setPages] = useState<PageWithContext[]>(() => [{ page: determineStartPage() }]);
+  const [pages, setPages] = useState<PageWithContext[]>(() => [determineStartPage()]);
   const pageWithContext = pages[0];
 
   const setNextPage = (pageWithContext: PageWithContext) =>

@@ -361,14 +361,16 @@ export function getNextCompanyPosition(
   return pos;
 }
 
-export function quitJob(this: PlayerObject, company: CompanyName): void {
+export function quitJob(this: PlayerObject, company: CompanyName, suppressDialog?: boolean): void {
   if (isCompanyWork(this.currentWork) && this.currentWork.companyName === company) {
     this.finishWork(true);
   }
   for (const sleeve of this.sleeves) {
     if (sleeve.currentWork?.type === SleeveWorkType.COMPANY && sleeve.currentWork.companyName === company) {
       sleeve.stopWork();
-      dialogBoxCreate(`You quit ${company} while one of your sleeves was working there. The sleeve is now idle.`);
+      if (!suppressDialog) {
+        dialogBoxCreate(`You quit ${company} while one of your sleeves was working there. The sleeve is now idle.`);
+      }
     }
   }
   delete this.jobs[company];
@@ -529,20 +531,23 @@ export function gainCodingContractReward(
   }
 }
 
-export function travel(this: PlayerObject, to: CityName): boolean {
-  if (Cities[to] == null) {
-    console.warn(`Player.travel() called with invalid city: ${to}`);
+export function travel(this: PlayerObject, cityName: CityName): boolean {
+  if (Cities[cityName] == null) {
+    throw new Error(`Player.travel() was called with an invalid city: ${cityName}`);
+  }
+  if (!this.canAfford(CONSTANTS.TravelCost)) {
     return false;
   }
-  this.city = to;
+
+  this.loseMoney(CONSTANTS.TravelCost, "other");
+  this.city = cityName;
 
   return true;
 }
 
 export function gotoLocation(this: PlayerObject, to: LocationName): boolean {
   if (Locations[to] == null) {
-    console.warn(`Player.gotoLocation() called with invalid location: ${to}`);
-    return false;
+    throw new Error(`Player.gotoLocation() was called with an invalid location: ${to}`);
   }
   this.location = to;
 

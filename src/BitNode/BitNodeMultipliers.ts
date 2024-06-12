@@ -1,5 +1,5 @@
 import { PartialRecord, getRecordEntries } from "../Types/Record";
-
+import { clampNumber } from "../utils/helpers/clampNumber";
 /**
  * Bitnode multipliers influence the difficulty of different aspects of the game.
  * Each Bitnode has a different theme/strategy to achieving the end goal, so these multipliers will can help drive the
@@ -173,7 +173,7 @@ export class BitNodeMultipliers {
   CorporationDivisions = 1;
 
   constructor(a: PartialRecord<keyof BitNodeMultipliers, number> = {}) {
-    for (const [key, value] of getRecordEntries(a)) this[key] = value;
+    for (const [key, value] of getRecordEntries(a)) this[key] = clampNumber(value);
   }
 }
 

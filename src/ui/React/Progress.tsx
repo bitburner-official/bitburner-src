@@ -1,8 +1,8 @@
 import LinearProgress from "@mui/material/LinearProgress";
 import { Theme } from "@mui/material/styles";
-import withStyles from "@mui/styles/withStyles";
+import { withStyles } from "tss-react/mui";
 
-export const ProgressBar = withStyles((theme: Theme) => ({
+export const ProgressBar = withStyles(LinearProgress, (theme: Theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
   },
@@ -10,4 +10,4 @@ export const ProgressBar = withStyles((theme: Theme) => ({
     transition: "none",
     backgroundColor: theme.palette.primary.main,
   },
-}))(LinearProgress);
+}));

@@ -4,10 +4,10 @@ import * as MonacoVim from "monaco-vim";
 import type { editor } from "monaco-editor";
 type IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 
-import Box from "@mui/material/Box";
-
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
+import { StatusBar } from "./StatusBar";
+import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
   vim: boolean;
@@ -21,7 +21,8 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
   // monaco-vim does not have types, so this is an any
   const [vimEditor, setVimEditor] = useState<any>(null);
 
-  const vimStatusRef = useRef<HTMLElement>(null);
+  const statusBarRef = useRef<React.ReactElement | null>(null);
+  const rerender = useRerender();
 
   const actionsRef = useRef({ save: onSave, openNextTab: onOpenNextTab, openPreviousTab: onOpenPreviousTab });
   actionsRef.current = { save: onSave, openNextTab: onOpenNextTab, openPreviousTab: onOpenPreviousTab };
@@ -31,7 +32,7 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
     if (vim && editor && !vimEditor) {
       // Using try/catch because MonacoVim does not have types.
       try {
-        setVimEditor(MonacoVim.initVimMode(editor, vimStatusRef.current));
+        setVimEditor(MonacoVim.initVimMode(editor, statusBarRef, StatusBar, rerender));
         MonacoVim.VimMode.Vim.defineEx("write", "w", function () {
           // your own implementation on what you want to do when :w is pressed
           actionsRef.current.save();
@@ -39,6 +40,10 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
         MonacoVim.VimMode.Vim.defineEx("quit", "q", function () {
           Router.toPage(Page.Terminal);
         });
+
+        // Remove any macro recording, since it isn't supported.
+        MonacoVim.VimMode.Vim.mapCommand("q", "", "", null, { context: "normal" });
+        MonacoVim.VimMode.Vim.mapCommand("@", "", "", null, { context: "normal" });
 
         const saveNQuit = (): void => {
           actionsRef.current.save();
@@ -72,19 +77,7 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
     return () => {
       vimEditor?.dispose();
     };
-  }, [vim, editor, vimEditor]);
+  }, [vim, editor, vimEditor, rerender]);
 
-  const VimStatus = (
-    <Box
-      ref={vimStatusRef}
-      className="vim-display"
-      display="flex"
-      flexGrow="0"
-      flexDirection="row"
-      sx={{ p: 1 }}
-      alignItems="center"
-    />
-  );
-
-  return { VimStatus };
+  return { statusBarRef };
 }

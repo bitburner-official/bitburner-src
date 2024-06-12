@@ -1,9 +1,9 @@
 import React from "react";
 import { TableCell as MuiTableCell, TableCellProps, Table as MuiTable, TableProps } from "@mui/material";
 
-import makeStyles from "@mui/styles/makeStyles";
+import { makeStyles } from "tss-react/mui";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   root: {
     borderBottom: "none",
   },
@@ -17,7 +17,7 @@ export const TableCell: React.FC<TableCellProps> = (props: TableCellProps) => {
     <MuiTableCell
       {...props}
       classes={{
-        root: useStyles().root,
+        root: useStyles().classes.root,
         ...props.classes,
       }}
     />
@@ -29,7 +29,7 @@ export const Table: React.FC<TableProps> = (props: TableProps) => {
     <MuiTable
       {...props}
       classes={{
-        root: useStyles().small,
+        root: useStyles().classes.small,
         ...props.classes,
       }}
     />

@@ -1,23 +1,19 @@
 import React from "react";
 import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
 import { ListItemText, Table, TableCell, TableCellProps, TableRow, Typography } from "@mui/material";
 import { LiProps, TableDataCellProps, TableHeaderCellProps } from "react-markdown/lib/ast-to-react";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    th: { whiteSpace: "pre", fontWeight: "bold" },
-    td: { whiteSpace: "pre" },
-    blockquote: {
-      borderLeftColor: theme.palette.background.paper,
-      borderLeftStyle: "solid",
-      borderLeftWidth: "4px",
-      paddingLeft: "16px",
-      paddingRight: "16px",
-    },
-  }),
-);
+import { makeStyles } from "tss-react/mui";
+const useStyles = makeStyles()((theme: Theme) => ({
+  th: { whiteSpace: "pre", fontWeight: "bold" },
+  td: { whiteSpace: "pre" },
+  blockquote: {
+    borderLeftColor: theme.palette.background.paper,
+    borderLeftStyle: "solid",
+    borderLeftWidth: "4px",
+    paddingLeft: "16px",
+    paddingRight: "16px",
+  },
+}));
 
 export const h1 = (props: React.PropsWithChildren<object>): React.ReactElement => (
   // We are just going to cheat and lower every h# by 1.
@@ -78,7 +74,7 @@ const fixAlign = (align: React.CSSProperties["textAlign"]): TableCellProps["alig
 };
 
 export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.ReactElement => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const align = fixAlign(props.style?.textAlign);
   const content = props.children?.map((child, i) => {
     if (child === "<br />") return <br key={i} />;
@@ -94,7 +90,7 @@ export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.Re
 };
 
 export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.ReactElement => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const align = fixAlign(props.style?.textAlign);
 
   return (
@@ -115,6 +111,6 @@ export const tr = (props: React.PropsWithChildren<object>): React.ReactElement =
 };
 
 export const Blockquote = (props: React.PropsWithChildren<object>): React.ReactElement => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return <blockquote className={classes.blockquote}>{props.children}</blockquote>;
 };

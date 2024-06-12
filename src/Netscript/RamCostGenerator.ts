@@ -250,6 +250,7 @@ const go = {
   makeMove: 4,
   passTurn: 0,
   getBoardState: 4,
+  getMoveHistory: 0,
   getCurrentPlayer: 0,
   getGameState: 0,
   getOpponent: 0,

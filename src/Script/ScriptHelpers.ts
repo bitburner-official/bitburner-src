@@ -15,7 +15,7 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
   //The Player object stores the last update time from when we were online
   const thisUpdate = new Date().getTime();
   const lastUpdate = Player.lastUpdate;
-  const timePassed = (thisUpdate - lastUpdate) / 1000; //Seconds
+  const timePassed = Math.max((thisUpdate - lastUpdate) / 1000, 0); //Seconds
 
   //Calculate the "confidence" rating of the script's true production. This is based
   //entirely off of time. We will arbitrarily say that if a script has been running for

@@ -211,7 +211,7 @@ export class Terminal {
         Router.toPage(Page.BitVerse, { flume: false, quick: false });
         return;
       }
-      // Manunally check for faction invites
+      // Manually check for faction invitations
       Engine.Counters.checkFactionInvitations = 0;
       Engine.checkCounters();
 
@@ -225,7 +225,9 @@ export class Terminal {
       server.moneyAvailable -= moneyGained;
       Player.gainMoney(moneyGained, "hacking");
       Player.gainHackingExp(expGainedOnSuccess);
-      Player.gainIntelligenceExp(expGainedOnSuccess / CONSTANTS.IntelligenceTerminalHackBaseExpGain);
+      if (expGainedOnSuccess > 1) {
+        Player.gainIntelligenceExp(4 * Math.log10(expGainedOnSuccess));
+      }
 
       const oldSec = server.hackDifficulty;
       server.fortify(ServerConstants.ServerFortifyAmount);

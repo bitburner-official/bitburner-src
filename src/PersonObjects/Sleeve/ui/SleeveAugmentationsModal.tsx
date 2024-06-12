@@ -27,12 +27,13 @@ export function SleeveAugmentationsModal(props: IProps): React.ReactElement {
     <Modal open={props.open} onClose={props.onClose}>
       <Container component={Paper} disableGutters maxWidth="lg" sx={{ mx: 0, mb: 1, p: 1 }}>
         <Typography>
-          You can purchase Augmentations for your Duplicate Sleeves. These Augmentations have the same effect as they
-          would for you. You can only purchase Augmentations that you have unlocked through Factions.
+          You can purchase augmentations for your Sleeves. These augmentations have the same effect as they would for
+          you. You can only purchase augmentations that you unlocked through factions. If an augmentation is useless for
+          Sleeves, it will not be available. Sleeves can install an augmentation without its prerequisites.
           <br />
           <br />
-          When purchasing an Augmentation for a Duplicate Sleeve, they are immediately installed. This means that the
-          Duplicate Sleeve will immediately lose all of its stat experience.
+          When purchasing an augmentation for a Sleeve, it is immediately installed. This means that the Sleeve will
+          immediately lose all of its stat experience.
           <br />
           <br />
           Augmentations will appear below as they become available.
