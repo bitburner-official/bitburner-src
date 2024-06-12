@@ -74,7 +74,7 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
     }
   };
 
-  if (force) {
+  if (force || (directories.length === 0 && files.length === 1)) {
     deleteSelectedTargets();
   } else {
     PromptEvent.emit({

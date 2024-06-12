@@ -363,7 +363,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "Remove the FILE(s).",
     " ",
-    "-f, --force					Force removal of the file(s).",
+    "-f, --force					Force removal of multiple files.",
     "-r, -R, --recursive	Remove directories and their contents recursively.",
     "--no-preserve-root		Do not treat '/' specially.",
     " ",
