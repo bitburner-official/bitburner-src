@@ -53,16 +53,19 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
     files.push(file);
   }
 
+  for (const dir of directories) {
+    for (const file of server.scripts.keys()) {
+      if (file.startsWith(dir)) files.push(file);
+    }
+  }
+
+  const targetList = files.map((file) => "* " + file.toString()).join("\n");
+
   const reports: { target: string; result: IReturnStatus }[] = [];
 
   const deleteSelectedTargets = () => {
     for (const file of files) {
       reports.push({ target: file, result: server.removeFile(file) });
-    }
-    for (const dir of directories) {
-      for (const file of server.scripts.keys()) {
-        if (file.startsWith(dir)) reports.push({ target: file, result: server.removeFile(file) });
-      }
     }
 
     for (const report of reports) {
@@ -74,11 +77,11 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
     }
   };
 
-  if (force || (directories.length === 0 && files.length === 1)) {
+  if (force || files.length === 1) {
     deleteSelectedTargets();
   } else {
     PromptEvent.emit({
-      txt: "Are you sure you want to delete these files? This is irreversible.",
+      txt: "Are you sure you want to delete these files? This is irreversible.\n\nDeleting:\n" + targetList,
       resolve: (value: string | boolean) => {
         if (typeof value === "string") throw new Error("PromptEvent got a string, expected boolean");
         if (value) deleteSelectedTargets();
