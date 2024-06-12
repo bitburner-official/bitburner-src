@@ -417,8 +417,10 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   if (options.isHelp) return help(["grep"]);
   if (notFiles.length) return Terminal.error(ERR.badSearchFile(notFiles));
   if (!options.isPipeIn && !options.isSearchAll && !files.length) return Terminal.error(ERR.noSearchArg);
-  if (options.hasContextFlag &&(context ==="" ||isNaN(Number(context)))) return Terminal.error(ERR.badParameter("context", context));
-  if (options.isMaxMatches && (limit === "" || isNaN(Number(limit)))) return Terminal.error(ERR.badParameter("limit", limit));
+  if (options.hasContextFlag && (context === "" || isNaN(Number(context))))
+    return Terminal.error(ERR.badParameter("context", context));
+  if (options.isMaxMatches && (limit === "" || isNaN(Number(limit))))
+    return Terminal.error(ERR.badParameter("limit", limit));
 
   const outFilePath = checkOutFile(outFile, options, server);
   const nContext = Number(context);
