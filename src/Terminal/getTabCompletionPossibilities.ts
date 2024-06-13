@@ -325,7 +325,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
         .map((server) => server.hostname),
       scripts: [...currServ.scripts.keys()],
       txts: [...currServ.textFiles.keys()],
-      enums: structuredClone(enums),
+      enums: enums,
       flags: (schema: unknown) => {
         if (!Array.isArray(schema)) throw new Error("flags require an array of array");
         pos2 = schema.map((f: unknown) => {
