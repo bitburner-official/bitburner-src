@@ -264,11 +264,15 @@ class Results {
       if (!line.isMatched) continue;
       for (let contextLineIndex = 0; contextLineIndex <= nContext; contextLineIndex++) {
         let contextLine;
-        if (this.options.isPreContext) contextLine = this.lines[editLineIndex - contextLineIndex];
-        else if (this.options.isPostContext) contextLine = this.lines[editLineIndex + contextLineIndex];
-        else if (this.options.isContext)
+        if (this.options.isPreContext) {
+          contextLine = this.lines[editLineIndex - contextLineIndex];
+        } else if (this.options.isPostContext) {
+          contextLine = this.lines[editLineIndex + contextLineIndex];
+        } else if (this.options.isContext) {
           contextLine = this.lines[editLineIndex - Math.floor(nContext / 2) + contextLineIndex];
-        else contextLine = line;
+        } else {
+          contextLine = line;
+        }
 
         if (contextLine && !line.isFileSep && line.filename === contextLine.filename) contextLine.isPrint = true;
       }
@@ -277,30 +281,21 @@ class Results {
   }
 
   splitAndFilter(): [string[], string[]] {
-    return this.lines.reduce(
-      ([rawResult, prettyResult]: [string[], string[]], lineInfo: Line): [string[], string[]] => {
-        return lineInfo.isPrint === this.options.isInvertMatch
-          ? [rawResult, prettyResult]
-          : [
-  if (lineInfo.isPrint !== this.options.isInvertMatch) return [[], []];
-  const rawResult = [], prettyResult = [];
-  for (const lineInfo of this.lines) {
-    rawResult.push(lineInfo.lines.rawLine);
-    prettyResult.push(lineInfo.lines.prettyLine);
-  }
-  return [rawResult, prettyResult];
-              [...prettyResult, lineInfo.lines.prettyLine],
-            ];
-      },
-      [[], []],
-    );
+    const rawResult = [],
+      prettyResult = [];
+    for (const lineInfo of this.lines) {
+      if (lineInfo.isPrint !== this.options.isInvertMatch) continue;
+      rawResult.push(lineInfo.lines.rawLine);
+      prettyResult.push(lineInfo.lines.prettyLine);
+    }
+    return [rawResult, prettyResult];
   }
 
   capMatches(limit: number): Results {
     if (!this.options.isMaxMatches) return this;
     for (const line of this.lines) {
       if (line.isMatched) this.matchCounter += 1;
-      if (this.matchCounter > Number(limit)) line.isMatched = false;
+      if (this.matchCounter > limit) line.isMatched = false;
     }
     return this;
   }
