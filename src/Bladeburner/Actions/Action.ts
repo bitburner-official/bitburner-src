@@ -8,6 +8,7 @@ import { BladeburnerConstants } from "../data/Constants";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { BladeMultName } from "../Enums";
 import { getRecordKeys } from "../../Types/Record";
+import { clampNumber } from "../../utils/helpers/clampNumber";
 
 export interface ActionParams {
   desc: string;
@@ -152,12 +153,9 @@ export abstract class ActionClass {
     if (r < 1) {
       low *= r;
     } else {
-      // This happens when the action is Raid, popEst=0, and comms=0.
-      if (high === 0 && r === Infinity) {
-        high = 0;
-      } else {
-        high *= r;
-      }
+      // We need to "clamp" r with "clampNumber" (not "clamp"), otherwise (high *= r) may be NaN. This happens when the
+      // action is Raid, popEst=0, and comms=0.
+      high *= clampNumber(r);
     }
     return [clamp(low), clamp(high)];
   }
