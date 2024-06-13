@@ -6,24 +6,19 @@ import { Settings } from "../../Settings/Settings";
 import { help } from "../commands/help";
 import { Output } from "../OutputTypes";
 
-type LineParser = (options: Options, filename: string, line: string, i: number) => Line;
+type LineParser = (options: Options, filename: string, line: string, i: number) => ParsedLine;
 
-interface LineStrings {
-  rawLine: string;
-  prettyLine: string;
-}
+const RED: string = "\x1b[31m";
+const DEFAULT: string = "\x1b[0m";
+const GREEN: string = "\x1b[32m";
+const MAGENTA: string = "\x1b[35m";
+const CYAN: string = "\x1b[36m";
+const WHITE: string = "\x1b[37m";
 
-interface Line {
-  isPrint: boolean;
-  isMatched: boolean;
-  lines: LineStrings;
-  filename: string;
-  isFileSep: boolean;
-}
-
+// Options and ValidArgs key names must correlate
 class ArgStrings {
-  short: string[];
-  long: string[];
+  short: readonly string[];
+  long: readonly string[];
 
   constructor(validArgs: ArgStrings) {
     this.long = validArgs.long;
@@ -31,7 +26,6 @@ class ArgStrings {
   }
 }
 
-// Options and ValidArgs key names must correlate
 interface Options {
   isRegExpr: boolean;
 
@@ -107,7 +101,7 @@ const VALID_ARGS: ValidArgs = {
   isPipeIn: { short: ["-p"], long: ["--pipe-terminal"] },
 
   isHelp: { short: [], long: ["--help"] },
-};
+} as const;
 //
 
 interface Errors {
@@ -117,7 +111,7 @@ interface Errors {
   badParameter: (opt: string, arg: string) => string;
   badOutFile: (str: string) => string;
   outFileExists: (str: string) => string;
-  truncated: (len: number) => string;
+  truncated: () => string;
 }
 
 const ERR: Errors = {
@@ -134,16 +128,8 @@ const ERR: Errors = {
     `grep file output failed: Invalid output file "${path}". Output file must not already exist. Pass -f/--allow-overwrite to overwrite.`,
   badOutFile: (path: string) =>
     `grep file output failed: Invalid output file "${path}". Output file must be a text file.`,
-  truncated: (length: number) =>
-    `\n${RED}Terminal output truncated from ${length} lines to ${Settings.MaxTerminalCapacity} (Max terminal capacity)`,
-};
-
-const RED: string = "\x1b[31m";
-const DEFAULT: string = "\x1b[0m"; // default
-const GREEN: string = "\x1b[32m";
-const MAGENTA: string = "\x1b[35m";
-const CYAN: string = "\x1b[36m";
-const WHITE: string = "\x1b[37m";
+  truncated: () => `\n${RED}Terminal output truncated to ${Settings.MaxTerminalCapacity} lines (Max terminal capacity)`,
+} as const;
 
 class Args {
   args: string[];
@@ -241,15 +227,28 @@ class Args {
   }
 }
 
+interface LineStrings {
+  rawLine: string;
+  prettyLine: string;
+}
+
+interface ParsedLine {
+  isPrint: boolean;
+  isMatched: boolean;
+  lines: LineStrings;
+  filename: string;
+  isFileSep: boolean;
+}
+
 class Results {
-  lines: Line[];
+  lines: ParsedLine[];
   areEdited: boolean;
   numMatches: number;
   options: Options;
   matchCounter: number;
   matchLimit: number;
 
-  constructor(results: Line[], options: Options, matchLimit: number) {
+  constructor(results: ParsedLine[], options: Options, matchLimit: number) {
     this.lines = results;
     this.options = options;
     this.areEdited = results.some((line) => line.isMatched);
@@ -347,7 +346,7 @@ function getArgFiles(args: string[]): [ContentFile[], string[]] {
   return [files, notFiles];
 }
 
-function parseLine(pattern: string | RegExp, options: Options, filename: string, line: string, i: number): Line {
+function parseLine(pattern: string | RegExp, options: Options, filename: string, line: string, i: number): ParsedLine {
   const editedLine = line.replaceAll(pattern, `${RED}$&${DEFAULT}`);
 
   const name = options.isMultiFile || (options.isNamed && !options.isNotNamed) ? `${filename}` : "";
@@ -361,15 +360,15 @@ function parseLine(pattern: string | RegExp, options: Options, filename: string,
   return { lines, filename, isMatched, isPrint: false, isFileSep: false };
 }
 
-function parseFile(lineParser: LineParser, options: Options, file: ContentFile, i: number): Line[] {
+function parseFile(lineParser: LineParser, options: Options, file: ContentFile, i: number): ParsedLine[] {
   const parseLineFn = lineParser.bind(null, options, file.filename);
-  const editedContent: Line[] = file.content.split("\n").map(parseLineFn);
+  const editedContent: ParsedLine[] = file.content.split("\n").map(parseLineFn);
 
   const hasMatch = editedContent.some((line) => line.isMatched);
 
   const isPrintFileSep = options.hasContextFlag && hasMatch && i !== 0;
 
-  const fileSeparator: Line = {
+  const fileSeparator: ParsedLine = {
     lines: { prettyLine: `${CYAN}--${DEFAULT}`, rawLine: "--" },
     isPrint: true,
     isMatched: false,
@@ -389,7 +388,7 @@ function writeToTerminal(
   const printResult = prettyResult.slice(prettyResult.length - Settings.MaxTerminalCapacity); // limit printing to terminal
   const isTruncated = prettyResult.length !== printResult.length;
   const verboseInfo = results.getVerboseInfo(files, pattern, options);
-  const truncateInfo = isTruncated ? ERR.truncated(prettyResult.length) : "";
+  const truncateInfo = isTruncated ? ERR.truncated() : "";
 
   if (results.areEdited) Terminal.print(printResult.join("\n") + truncateInfo);
   if (options.isVerbose) Terminal.print(verboseInfo);
@@ -443,7 +442,7 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
 
     if (options.isPipeIn) files.length = 0;
     if (!options.isQuiet) writeToTerminal(prettyResult, options, results, files, pattern);
-    if (outFilePath && options.isToFile) server.writeToContentFile(outFilePath, rawResult.join("\n"));
+    if (options.isToFile && outFilePath) server.writeToContentFile(outFilePath, rawResult.join("\n"));
   } catch (e) {
     Terminal.error("grep processing error: " + e);
   }
