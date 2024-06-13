@@ -282,7 +282,13 @@ class Results {
         return lineInfo.isPrint === this.options.isInvertMatch
           ? [rawResult, prettyResult]
           : [
-              [...rawResult, lineInfo.lines.rawLine],
+  if (lineInfo.isPrint !== this.options.isInvertMatch) return [[], []];
+  const rawResult = [], prettyResult = [];
+  for (const lineInfo of this.lines) {
+    rawResult.push(lineInfo.lines.rawLine);
+    prettyResult.push(lineInfo.lines.prettyLine);
+  }
+  return [rawResult, prettyResult];
               [...prettyResult, lineInfo.lines.prettyLine],
             ];
       },
