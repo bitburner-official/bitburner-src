@@ -337,8 +337,11 @@ function getArgFiles(args: string[]): [ContentFile[], string[]] {
 
   for (const arg of args) {
     const file = hasTextExtension(arg) ? Terminal.getTextFile(arg) : Terminal.getScript(arg);
-    if (!file) notFiles.push(arg);
-    else files.push(file);
+    if (!file) {
+      notFiles.push(arg);
+    } else {
+      files.push(file);
+    }
   }
 
   return [files, notFiles];
@@ -411,10 +414,13 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
 
   const [options, otherArgs, outFile, context, limit] = new Args(args).splitOptsAndArgs();
   const [files, notFiles] = options.isSearchAll ? getServerFiles(server) : getArgFiles(otherArgs.slice(1));
+  const outFilePath = checkOutFile(outFile, options, server);
 
   options.isMultiFile = files.length > 1;
   options.hasContextFlag = options.isContext || options.isPreContext || options.isPostContext;
 
+  // error checking
+  if (!outFilePath) return; // associated errors are printed in checkOutFile
   if (options.isHelp) return help(["grep"]);
   if (notFiles.length) return Terminal.error(ERR.badSearchFile(notFiles));
   if (!options.isPipeIn && !options.isSearchAll && !files.length) return Terminal.error(ERR.noSearchArg);
@@ -423,7 +429,6 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   if (options.isMaxMatches && (limit === "" || isNaN(Number(limit))))
     return Terminal.error(ERR.badParameter("limit", limit));
 
-  const outFilePath = checkOutFile(outFile, options, server);
   const nContext = Number(context);
   const nLimit = Number(limit);
 
@@ -432,9 +437,8 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     const lineParser = parseLine.bind(null, pattern);
     const termParser = lineParser.bind(null, options, "Terminal");
     const fileParser = parseFile.bind(null, lineParser, options);
-    const results = options.isPipeIn
-      ? new Results(grabTerminal().map(termParser), options, nLimit)
-      : new Results(files.flatMap(fileParser), options, nLimit);
+    const contentToMatch = options.isPipeIn ? grabTerminal().map(termParser) : files.flatMap(fileParser);
+    const results = new Results(contentToMatch, options, nLimit);
     const [rawResult, prettyResult] = results.capMatches(nLimit).addContext(nContext).splitAndFilter();
 
     if (options.isPipeIn) files.length = 0;
