@@ -420,7 +420,7 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   options.hasContextFlag = options.isContext || options.isPreContext || options.isPostContext;
 
   // error checking
-  if (!outFilePath) return; // associated errors are printed in checkOutFile
+  if (options.isToFile && !outFilePath) return; // associated errors are printed in checkOutFile
   if (options.isHelp) return help(["grep"]);
   if (notFiles.length) return Terminal.error(ERR.badSearchFile(notFiles));
   if (!options.isPipeIn && !options.isSearchAll && !files.length) return Terminal.error(ERR.noSearchArg);
