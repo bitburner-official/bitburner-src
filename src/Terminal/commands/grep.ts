@@ -284,7 +284,7 @@ class Results {
     const rawResult = [],
       prettyResult = [];
     for (const lineInfo of this.lines) {
-      if (lineInfo.isPrint !== this.options.isInvertMatch) continue;
+      if (lineInfo.isPrint === this.options.isInvertMatch) continue;
       rawResult.push(lineInfo.lines.rawLine);
       prettyResult.push(lineInfo.lines.prettyLine);
     }
