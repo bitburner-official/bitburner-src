@@ -281,8 +281,8 @@ class Results {
   }
 
   splitAndFilter(): [string[], string[]] {
-    const rawResult = [],
-      prettyResult = [];
+    const rawResult = [];
+    const prettyResult = [];
     for (const lineInfo of this.lines) {
       if (lineInfo.isPrint === this.options.isInvertMatch) continue;
       rawResult.push(lineInfo.lines.rawLine);
@@ -435,8 +435,7 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     const results = options.isPipeIn
       ? new Results(grabTerminal().map(termParser), options, nLimit)
       : new Results(files.flatMap(fileParser), options, nLimit);
-    const tres = results.capMatches(nLimit).addContext(nContext);
-    const [rawResult, prettyResult] = tres.splitAndFilter();
+    const [rawResult, prettyResult] = results.capMatches(nLimit).addContext(nContext).splitAndFilter();
 
     if (options.isPipeIn) files.length = 0;
     if (!options.isQuiet) writeToTerminal(prettyResult, options, results, files, pattern);
