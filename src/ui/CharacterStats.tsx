@@ -229,8 +229,6 @@ export function CharacterStats(): React.ReactElement {
   }
   timeRows.push(["Total", convertTimeMsToTimeElapsedString(Player.totalPlaytime)]);
 
-  let showBitNodeMults = false;
-  if (Player.sourceFileLvl(5) > 0) showBitNodeMults = true;
   return (
     <Container maxWidth="lg" disableGutters sx={{ mx: 0 }}>
       <Typography variant="h4">Stats</Typography>
@@ -592,7 +590,7 @@ export function CharacterStats(): React.ReactElement {
 
       <CurrentBitNode />
 
-      {showBitNodeMults && (
+      {(Player.bitNodeN === 5 || Player.sourceFileLvl(5) > 0) && (
         <Paper sx={{ p: 1, mb: 1 }}>
           <Typography variant="h5">BitNode Multipliers</Typography>
           <BitNodeMultipliersDisplay n={Player.bitNodeN} />

@@ -28,9 +28,10 @@ function customFormatPercent(value: number): string {
 }
 
 function BitNodeModifiedStats(props: IBitNodeModifiedStatsProps): React.ReactElement {
-  // If player doesn't have SF5 or if the property isn't affected by BitNode mults
-  if (props.mult === 1 || Player.sourceFileLvl(5) === 0)
+  // If the player doesn't have access to SF5 feature or if the property isn't affected by BitNode mults
+  if (props.mult === 1 || (Player.bitNodeN !== 5 && Player.sourceFileLvl(5) === 0)) {
     return <Typography color={props.color}>{customFormatPercent(props.base)}</Typography>;
+  }
 
   return (
     <Typography color={props.color}>
