@@ -56,6 +56,7 @@ export enum AugmentationName {
   HacknetNodeNICUpload = "Hacknet Node NIC Architecture Neural-Upload",
   HacknetNodeKernelDNI = "Hacknet Node Kernel Direct-Neural Interface",
   HacknetNodeCoreDNI = "Hacknet Node Core Direct-Neural Interface",
+  HacknetRecoveryKey = "Hacknet Recovery Key",
   Neurotrainer1 = "Neurotrainer I",
   Neurotrainer2 = "Neurotrainer II",
   Neurotrainer3 = "Neurotrainer III",

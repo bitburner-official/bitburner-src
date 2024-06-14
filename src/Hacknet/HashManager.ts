@@ -10,6 +10,7 @@ import { HashUpgrades } from "./HashUpgrades";
 import { HashUpgrade } from "./HashUpgrade";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { updateHashManagerCapacity } from "./HacknetHelpers";
 
 export class HashManager {
   // Max number of hashes this can hold. Equal to the sum of capacities of
@@ -81,8 +82,7 @@ export class HashManager {
     }
     this.hashes = 0;
 
-    // When prestiging, player's hacknet nodes are always reset. So capacity = 0
-    this.updateCapacity(0);
+    updateHashManagerCapacity();
   }
 
   /** Reverts an upgrade and refunds the hashes used to buy it */

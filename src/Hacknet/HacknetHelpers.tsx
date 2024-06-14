@@ -24,6 +24,9 @@ import { Server } from "../Server/Server";
 import { Companies } from "../Company/Companies";
 import { isMember } from "../utils/EnumHelper";
 
+import { Factions } from "../Faction/Factions";
+import { FactionName } from "@enums";
+
 // Returns a boolean indicating whether the player has Hacknet Servers
 // (the upgraded form of Hacknet Nodes)
 export function hasHacknetServers(): boolean {
@@ -382,6 +385,7 @@ function processAllHacknetNodeEarnings(numCycles: number): number {
     node.updateMoneyGainRate(Player.mults.hacknet_node_money);
     total += processSingleHacknetNodeEarnings(numCycles, node);
   }
+  gainNetburnersRep(total);
 
   return total;
 }
@@ -391,6 +395,17 @@ function processSingleHacknetNodeEarnings(numCycles: number, nodeObj: HacknetNod
   Player.gainMoney(totalEarnings, "hacknet");
 
   return totalEarnings;
+}
+
+function gainNetburnersRep(moneyValue: number): void {
+  const netburners = Factions[FactionName.Netburners];
+  if (netburners.isMember) {
+    // Netburners augs require up to 1.25e4 reputation.
+    // This should be achievable in 12 hours of hacknet which is expected to pay for itself.
+    // Or 1-2 hours of overinvestment in hacknet.
+    const conversionRate = 1e-2;
+    netburners.playerReputation += moneyValue * conversionRate;
+  }
 }
 
 function processAllHacknetServerEarnings(numCycles: number): number {
@@ -410,6 +425,7 @@ function processAllHacknetServerEarnings(numCycles: number): number {
     const h = hserver.process(numCycles);
     hashes += h;
   }
+  gainNetburnersRep((hashes * 1e6) / 4);
 
   const wastedHashes = Player.hashManager.storeHashes(hashes);
   if (wastedHashes > 0) {

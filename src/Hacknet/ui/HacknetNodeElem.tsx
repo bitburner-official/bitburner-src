@@ -63,9 +63,9 @@ export function HacknetNodeElem(props: IProps): React.ReactElement {
     upgradeLevelButton = (
       <Tooltip
         title={
-          <Typography>
+          <>
             +<MoneyRate money={increase} />
-          </Typography>
+          </>
         }
       >
         <Button onClick={upgradeLevelOnClick}>
@@ -105,9 +105,9 @@ export function HacknetNodeElem(props: IProps): React.ReactElement {
     upgradeRAMButton = (
       <Tooltip
         title={
-          <Typography>
+          <>
             +<MoneyRate money={increase} />
-          </Typography>
+          </>
         }
       >
         <Button onClick={upgradeRamOnClick}>
@@ -149,9 +149,9 @@ export function HacknetNodeElem(props: IProps): React.ReactElement {
     upgradeCoresButton = (
       <Tooltip
         title={
-          <Typography>
+          <>
             +<MoneyRate money={increase} />
-          </Typography>
+          </>
         }
       >
         <Button onClick={upgradeCoresOnClick}>
@@ -164,7 +164,7 @@ export function HacknetNodeElem(props: IProps): React.ReactElement {
 
   return (
     <Grid item component={Paper} p={1}>
-      <Table size="small">
+      <Table size="small" sx={{ "white-space": "nowrap" }}>
         <TableBody>
           <TableRow>
             <TableCell colSpan={3}>

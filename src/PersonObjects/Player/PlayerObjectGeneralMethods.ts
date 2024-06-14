@@ -120,7 +120,15 @@ export function prestigeAugmentation(this: PlayerObject): void {
   this.scriptProdSinceLastAug = 0;
   this.moneySourceA.reset();
 
-  this.hacknetNodes.length = 0;
+  if (this.hasAugmentation(AugmentationName.HacknetRecoveryKey, false)) {
+    // TODO:
+    // - select the highest-level one instead of the first one
+    // - apply some reasonable level limits
+    // - ensure server contents are wiped
+    this.hacknetNodes.length = 1;
+  } else {
+    this.hacknetNodes.length = 0;
+  }
   this.hashManager.prestige();
 
   // Reapply augs, re-calculate skills and reset HP

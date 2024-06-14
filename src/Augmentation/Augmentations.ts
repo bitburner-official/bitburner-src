@@ -814,7 +814,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     // === H === //
     [AugmentationName.HacknetNodeCPUUpload]: {
       repCost: 3.75e3,
-      moneyCost: 1.1e7,
+      moneyCost: 11e6,
       info:
         "Uploads the architecture and design details of a Hacknet Node's CPU into " +
         "the brain. This allows the user to engineer custom hardware and software " +
@@ -835,8 +835,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       factions: [FactionName.Netburners],
     },
     [AugmentationName.HacknetNodeCoreDNI]: {
-      repCost: 1.25e4,
-      moneyCost: 6e7,
+      repCost: 12.5e3,
+      moneyCost: 60e6,
       info:
         "Installs a Direct-Neural Interface jack into the arm that is capable of connecting " +
         "to a Hacknet Node. This lets the user access and manipulate the Node's processing logic using " +
@@ -846,7 +846,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     },
     [AugmentationName.HacknetNodeKernelDNI]: {
       repCost: 7.5e3,
-      moneyCost: 4e7,
+      moneyCost: 40e6,
       info:
         "Installs a Direct-Neural Interface jack into the arm that is capable of connecting to a " +
         "Hacknet Node. This lets the user access and manipulate the Node's kernel using " +
@@ -863,6 +863,21 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "offers better performance.",
       hacknet_node_money: 1.1,
       hacknet_node_purchase_cost: 0.9,
+      factions: [FactionName.Netburners],
+    },
+    [AugmentationName.HacknetRecoveryKey]: {
+      repCost: 1e6,
+      moneyCost: 1e9, // $24.7b if all 6 augs are bought at once
+      info: "Stores the cryptographic passkey for one Hacknet Node.",
+      stats: "This augmentation lets you keep your highest-level Hacknet Node after installing augmentations.",
+      isSpecial: true,
+      prereqs: [
+        AugmentationName.HacknetNodeCPUUpload,
+        AugmentationName.HacknetNodeCacheUpload,
+        AugmentationName.HacknetNodeCoreDNI,
+        AugmentationName.HacknetNodeKernelDNI,
+        AugmentationName.HacknetNodeNICUpload,
+      ],
       factions: [FactionName.Netburners],
     },
     [AugmentationName.HemoRecirculator]: {
