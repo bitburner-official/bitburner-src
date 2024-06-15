@@ -80,7 +80,7 @@ export enum LocationType {
   Gym = "Gym",
   Hospital = "Hospital",
   Slums = "Slums",
-  Special = "Special", // This location has special options/activities (e.g. Bladeburner, Re-sleeving)
+  Special = "Special", // This location has special options/activities (e.g., Bladeburner, Grafting, etc.)
   StockMarket = "Stock Market",
   TechVendor = "Tech Vendor",
   TravelAgency = "Travel Agency",

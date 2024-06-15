@@ -4,7 +4,7 @@
  *
  * Examples:
  *      - Bladeburner @ NSA
- *      - Re-sleeving @ VitaLife
+ *      - Grafting @ VitaLife
  *      - Create Corporation @ City Hall
  *
  * This subcomponent creates all of the buttons for interacting with those special
@@ -69,7 +69,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     }
   }
 
-  /** Click handler for Resleeving button at New Tokyo VitaLife */
+  /** Click handler for Secret lab button at New Tokyo VitaLife */
   function handleGrafting(): void {
     Router.toPage(Page.Grafting);
   }
