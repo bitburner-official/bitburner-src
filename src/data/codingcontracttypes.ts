@@ -339,7 +339,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "\n\nAssuming you are initially positioned",
         "at the start of the array, determine whether you are",
         "able to reach the last index.\n\n",
-        "Your answer should be submitted as 1 or 0, representing true and false respectively",
+        "Your answer should be submitted as 1 or 0, representing true and false respectively.",
       ].join(" ");
     },
     difficulty: 2.5,
@@ -561,7 +561,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "Determine the maximum possible profit you can earn using at most",
         "one transaction (i.e. you can only buy and sell the stock once). If no profit can be made",
         "then the answer should be 0. Note",
-        "that you have to buy the stock before you can sell it",
+        "that you have to buy the stock before you can sell it.",
       ].join(" ");
     },
     difficulty: 1,
@@ -601,7 +601,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "and then selling one share of the stock. Note that you cannot",
         "engage in multiple transactions at once. In other words, you",
         "must sell the stock before you buy it again.\n\n",
-        "If no profit can be made, then the answer should be 0",
+        "If no profit can be made, then the answer should be 0.",
       ].join(" ");
     },
     difficulty: 2,
@@ -639,7 +639,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "and then selling one share of the stock. Note that you cannot",
         "engage in multiple transactions at once. In other words, you",
         "must sell the stock before you buy it again.\n\n",
-        "If no profit can be made, then the answer should be 0",
+        "If no profit can be made, then the answer should be 0.",
       ].join(" ");
     },
     difficulty: 5,
@@ -954,7 +954,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "&nbsp;&nbsp;&nbsp;&nbsp;[[0,1],\n",
         "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1,0]]\n",
         "\n",
-        "Answer: ''\n\n",
+        "Answer: ''",
       ].join(" ");
     },
     difficulty: 7,
@@ -1535,7 +1535,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "&nbsp; &nbsp; aaaaabccc &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-> &nbsp;5a1b3c\n",
         "&nbsp; &nbsp; aAaAaA &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -> &nbsp;1a1A1a1A1a1A\n",
         "&nbsp; &nbsp; 111112333 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-> &nbsp;511233\n",
-        "&nbsp; &nbsp; zzzzzzzzzzzzzzzzzzz &nbsp;-> &nbsp;9z9z1z &nbsp;(or 9z8z2z, etc.)\n",
+        "&nbsp; &nbsp; zzzzzzzzzzzzzzzzzzz &nbsp;-> &nbsp;9z9z1z &nbsp;(or 9z8z2z, etc.)",
       ].join(" ");
     },
     gen: (): string => {
