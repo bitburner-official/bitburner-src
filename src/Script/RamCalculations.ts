@@ -15,6 +15,7 @@ import { Script } from "./Script";
 import { Node } from "../NetscriptJSEvaluator";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { ServerName } from "../Types/strings";
+import { roundToTwo } from "../utils/helpers/roundToTwo";
 
 export interface RamUsageEntry {
   type: "ns" | "dom" | "fn" | "misc";
@@ -43,6 +44,11 @@ export type RamCalculation = RamCalculationSuccess | RamCalculationFailure;
 const specialReferenceIF = "__SPECIAL_referenceIf";
 const specialReferenceFOR = "__SPECIAL_referenceFor";
 const specialReferenceWHILE = "__SPECIAL_referenceWhile";
+
+// This special string is used to signal that RAM is being overriden for a script.
+// It doesn't apply when importing that script.
+// The nature of the name guarantees it can never be conflated with a valid identifier.
+const specialReferenceRAM = ".^SPECIAL_ramOverride";
 
 // The global scope of a script is registered under this key during parsing.
 const memCheckGlobalKey = ".__GLOBAL__";
@@ -77,7 +83,7 @@ function parseOnlyRamCalculate(
    * We walk the dependency graph to calculate RAM usage, given that some identifiers
    * reference Netscript functions which have a RAM cost.
    */
-  let dependencyMap: Record<string, string[]> = {};
+  let dependencyMap: Record<string, Set<string>> = {};
 
   // Scripts we've parsed.
   const completedParses = new Set();
@@ -132,6 +138,16 @@ function parseOnlyRamCalculate(
     const ref = unresolvedRefs.shift();
     if (ref === undefined) throw new Error("ref should not be undefined");
 
+    if (ref.endsWith(specialReferenceRAM)) {
+      if (ref !== initialModule + specialReferenceRAM) {
+        // All RAM override tokens that *aren't* for the main module should be discarded.
+        continue;
+      }
+      // This is a RAM override for the main module. We can end ram calculation immediately.
+      const [first] = dependencyMap[ref];
+      const override = Number(first);
+      return { cost: override, entries: [{ type: "misc", name: "override", cost: override }] };
+    }
     // Check if this is one of the special keys, and add the appropriate ram cost if so.
     if (ref === "hacknet" && !resolvedRefs.has("hacknet")) {
       ram += RamCostConstants.HacknetNodes;
@@ -299,6 +315,52 @@ function parseOnlyCalculateDeps(code: string, currentModule: ScriptFilePath, ns1
     key: string;
   }
 
+  function checkRamOverride(node: Node) {
+    // To trigger a syntactic RAM override, the first statement must be a call
+    // to ns.ramOverride() (or something that looks similar).
+    if (!node.body || !node.body.length) return;
+    const statement = node.body[0];
+    if (statement.type !== "ExpressionStatement") return;
+    const expr = statement.expression;
+    if (expr.type !== "CallExpression") return;
+    if (!expr.arguments || expr.arguments.length !== 1) return;
+
+    function findIdentifier(node: Node): Node {
+      for (;;) {
+        // Find the identifier node attached to the call
+        switch (node.type) {
+          case "ParenthesizedExpression":
+          case "ChainExpression":
+            node = node.expression;
+            break;
+          case "MemberExpression":
+            node = node.property;
+            break;
+          default:
+            return node;
+        }
+      }
+    }
+    const idNode = findIdentifier(expr.callee);
+    if (idNode.type !== "Identifier" || idNode.name !== "ramOverride") return;
+
+    // For the time being, we only handle simple literals for the argument.
+    // If needed, this could be extended to simple constant expressions.
+    const literal = expr.arguments[0];
+    if (literal.type !== "Literal") return;
+    const value = literal.value;
+    if (typeof value !== "number") return;
+
+    // Finally, we know the syntax checks out for applying the RAM override.
+    // But the value might be illegal.
+    if (!isFinite(value) || value < RamCostConstants.Base) return;
+
+    // This is an unusual arrangement; the "function name" here is our special
+    // case, and it is "depending on" the stringified value of our ram override
+    // (which is not any kind of identifier).
+    dependencyMap[currentModule + specialReferenceRAM] = new Set([roundToTwo(value).toString()]);
+  }
+
   // If we discover a dependency identifier, state.key is the dependent identifier.
   // walkDeeper is for doing recursive walks of expressions in composites that we handle.
   function commonVisitors(): walk.RecursiveVisitors<State> {
@@ -373,6 +435,9 @@ function parseOnlyCalculateDeps(code: string, currentModule: ScriptFilePath, ns1
           }
         },
         FunctionDeclaration: (node: Node) => {
+          if (node.id?.name === "main") {
+            checkRamOverride(node.body);
+          }
           // node.id will be null when using 'export default'. Add a module name indicating the default export.
           const key = currentModule + "." + (node.id === null ? "__SPECIAL_DEFAULT_EXPORT__" : node.id.name);
           walk.recursive(node, { key: key }, commonVisitors());
