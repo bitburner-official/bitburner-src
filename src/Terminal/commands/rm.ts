@@ -55,12 +55,31 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
     const fileDir = Terminal.getDirectory(target + (target[target.length - 1] === "/" ? "" : "/"));
     const file = Terminal.getFilepath(target);
 
+    const fileExists = file !== null && allFiles.has(file);
+
     if (fileDir === null) return Terminal.error(errors.invalidFile(target));
     const dirExists = allDirs.has(fileDir);
     if (file === null || dirExists) {
       // If file === null, it means we specified a trailing-slash directory/,
       // or something that does not have an extension or otherwise isn't file-like.
-      if (!recursive) return Terminal.error(errors.dirsProvided(target));
+      if (fileExists) {
+        // We have this early case here specifically to handle situations where
+        // a file and a directory with the same name exist. That's right, you
+        // can have *both* /foo.txt *and* /foo.txt/bar.txt.
+        //
+        // In this case, we need to treat filenames preferrentially as files first.
+        // If we have -r, we will *also* delete the directory.
+        files.push(file);
+      }
+      if (!recursive) {
+        if (fileExists) {
+          // This is valid, but we shouldn't touch the directory.
+          continue;
+        } else {
+          // Only exists as a directory (maybe).
+          return Terminal.error(errors.dirsProvided(target));
+        }
+      }
       if (!dirExists && !force) {
         return Terminal.error(errors.noSuchDir(target));
       }
