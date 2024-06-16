@@ -1,16 +1,19 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { PromptEvent } from "../../ui/React/PromptManager";
-import { isDirectoryPath, type Directory } from "../../Paths/Directory";
+import { getAllDirectories, type Directory } from "../../Paths/Directory";
+import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 import type { IReturnStatus } from "../../types";
 import type { FilePath } from "../../Paths/FilePath";
 
 export function rm(args: (string | number | boolean)[], server: BaseServer): void {
   const errors = {
     arg: (reason: string) => `Incorrect usage of rm command. ${reason}. Usage: rm [OPTION]... [FILE]...`,
-    dirsProvided: () => "Incorrect usage of rm command. To delete directories, use the -r flag",
-    invalidDir: (name: string) => `Invalid directory: ${name}`,
-    invalidFile: (name: string) => `Invalid file: ${name}`,
+    dirsProvided: (name: string) =>
+      `Incorrect usage of rm command. To delete directories, use the -r flag. Failing directory: ${name}`,
+    invalidFile: (name: string) => `Invalid filename: ${name}`,
+    noSuchFile: (name: string) => `File does not exist: ${name}`,
+    noSuchDir: (name: string) => `Directory does not exist: ${name}`,
     deleteFailed: (name: string, reason?: string) => `Failed to delete "${name}". ${reason ?? "Uncaught error"}`,
     rootDeletion: () =>
       "You are trying to delete all files within the root directory. If this is intentional, use the --no-preserve-root flag",
@@ -35,38 +38,50 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
 
   const directories: Directory[] = [];
   const files: FilePath[] = [];
+  const allDirs: Set<Directory> = getAllDirectories(server);
+  const allFiles: Set<FilePath> = new Set([
+    ...server.scripts.keys(),
+    ...server.textFiles.keys(),
+    ...(server.programs as ProgramFilePath[]),
+  ]);
+
+  for (const file of server.contracts) {
+    allFiles.add(file.fn);
+  }
 
   for (const target of targets) {
-    if (isDirectoryPath(target) || !/\..+$/.test(target)) {
-      const dirPath = Terminal.getDirectory(target);
-      if (dirPath === null) return Terminal.error(errors["invalidDir"](target));
-      if (!recursive) return Terminal.error(errors["dirsProvided"]());
-      directories.push(dirPath);
+    // Directories can be specified with or without a trailing slash. However,
+    // trying to remove a file with a trailing slash is an error.
+    const fileDir = Terminal.getDirectory(target + (target[target.length - 1] === "/" ? "" : "/"));
+    const file = Terminal.getFilepath(target);
+
+    if (fileDir === null) return Terminal.error(errors.invalidFile(target));
+    const dirExists = allDirs.has(fileDir);
+    if (file === null || dirExists) {
+      // If file === null, it means we specified a trailing-slash directory/,
+      // or something that does not have an extension or otherwise isn't file-like.
+      if (!recursive) return Terminal.error(errors.dirsProvided(target));
+      if (!dirExists && !force) {
+        return Terminal.error(errors.noSuchDir(target));
+      }
+      // If we pass -f and pass a non-existing directory, we will add it
+      // here and then it will match no files, producing no errors. This
+      // aligns with Unix rm.
+      directories.push(fileDir);
       continue;
     }
-
-    const file = Terminal.getFilepath(target);
-    if (file === null) return Terminal.error(errors["invalidFile"](target));
-
+    if (!force && !allFiles.has(file)) {
+      // With -f, we ignore file-not-found and try to delete everything at the end.
+      return Terminal.error(errors.noSuchFile(target));
+    }
     files.push(file);
   }
 
-  for (const dir of directories) {
-    for (const file of server.scripts.keys()) {
-      if (file.startsWith(dir)) files.push(file);
-    }
-    for (const file of server.textFiles.keys()) {
-      if (file.startsWith(dir)) files.push(file);
-    }
-    for (const file of server.messages) {
-      if (file.endsWith(".msg")) continue;
-      if (file.startsWith(dir)) files.push(file as FilePath);
-    }
-    for (const file of server.contracts) {
-      if (file.fn.startsWith(dir)) files.push(file.fn);
-    }
-    for (const file of server.programs) {
-      if (file.startsWith(dir)) files.push(file as FilePath);
+  for (const file of allFiles) {
+    for (const dir of directories) {
+      if (file.startsWith(dir)) {
+        files.push(file);
+      }
     }
   }
 
@@ -83,7 +98,7 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
       if (report.result.res) {
         Terminal.success(`Deleted: ${report.target}`);
       } else {
-        Terminal.error(errors["deleteFailed"](report.target, report.result.msg));
+        Terminal.error(errors.deleteFailed(report.target, report.result.msg));
       }
     }
   };
