@@ -48,6 +48,11 @@ export function rm(args: (string | number | boolean)[], server: BaseServer): voi
   for (const file of server.contracts) {
     allFiles.add(file.fn);
   }
+  for (const file of server.messages) {
+    if (file.endsWith(".lit")) {
+      allFiles.add(file as FilePath);
+    }
+  }
 
   for (const target of targets) {
     // Directories can be specified with or without a trailing slash. However,
