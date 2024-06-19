@@ -27,6 +27,7 @@ function grabCost<API>(ramEntry: RamCostTree<API>[keyof API]) {
 describe("Netscript RAM Calculation/Generation Tests", function () {
   jest.spyOn(console, "warn").mockImplementation(() => {});
   Player.sourceFiles.set(4, 3);
+  Player.bitNodeOptions.activeSourceFiles.set(4, 3);
   // For simulating costs of singularity functions.
   const baseCost = RamCostConstants.Base;
   const maxCost = RamCostConstants.Max;
@@ -145,6 +146,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
   describe("Singularity multiplier checks", () => {
     // Checks were already done above for SF4.3 having normal ramcost.
     Player.sourceFiles.set(4, 3);
+    Player.bitNodeOptions.activeSourceFiles.set(4, 3);
     const lvlToMult = { 0: 16, 1: 16, 2: 4 };
     const externalSingularity = nsExternal.singularity;
     const ramCostSingularity = RamCosts.singularity;
@@ -161,6 +163,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     for (const lvl of [0, 1, 2] as const) {
       it(`SF4.${lvl} check for x${lvlToMult[lvl]} costs`, () => {
         Player.sourceFiles.set(4, lvl);
+        Player.bitNodeOptions.activeSourceFiles.set(4, lvl);
         const expectedMult = lvlToMult[lvl];
         singObjects.forEach(({ name, baseRam }) => {
           const fn = getFunction(externalSingularity[name]);
