@@ -19,7 +19,10 @@ interface IProps {
 
 export function RamButton(props: IProps): React.ReactElement {
   const homeComputer = Player.getHomeComputer();
-  if (homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam) {
+  if (
+    (Player.bitNodeOptions.restrictHomePCUpgrade && homeComputer.maxRam >= 128) ||
+    homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam
+  ) {
     return <Button>Upgrade 'home' RAM - MAX</Button>;
   }
 

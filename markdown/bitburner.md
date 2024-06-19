@@ -30,7 +30,9 @@
 |  [AutocompleteData](./bitburner.autocompletedata.md) | Used for autocompletion |
 |  [BackdoorRequirement](./bitburner.backdoorrequirement.md) | Player must have installed a backdoor on this server. |
 |  [BasicHGWOptions](./bitburner.basichgwoptions.md) | Options to affect the behavior of [hack](./bitburner.ns.hack.md)<!-- -->, [grow](./bitburner.ns.grow.md)<!-- -->, and [weaken](./bitburner.ns.weaken.md)<!-- -->. |
+|  [BitNodeBooleanOptions](./bitburner.bitnodebooleanoptions.md) |  |
 |  [BitNodeMultipliers](./bitburner.bitnodemultipliers.md) | All multipliers affecting the difficulty of the current challenge. |
+|  [BitNodeOptions](./bitburner.bitnodeoptions.md) | Default value: - activeSourceFiles: current SourceFiles - All boolean options: false |
 |  [BitNodeRequirement](./bitburner.bitnoderequirement.md) | Player must be located in this BitNode. |
 |  [Bladeburner](./bitburner.bladeburner.md) | Bladeburner API |
 |  [BladeburnerCurAction](./bitburner.bladeburnercuraction.md) | Bladeburner current action. |

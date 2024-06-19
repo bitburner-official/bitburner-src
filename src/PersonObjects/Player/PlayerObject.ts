@@ -74,6 +74,18 @@ export class PlayerObject extends Person implements IPlayer {
 
   entropy = 0;
 
+  bitNodeOptions = {
+    initialized: false,
+    activeSourceFiles: new JSONMap<number, number>(),
+    restrictHomePCUpgrade: false,
+    disableGang: false,
+    disableCorporation: false,
+    disableBladeburner: false,
+    disable4SData: false,
+    disableHacknetServer: false,
+    disableSleeveExpAndAugmentation: false,
+  };
+
   // Player-specific methods
   init = generalMethods.init;
   startWork = workMethods.startWork;
@@ -130,6 +142,7 @@ export class PlayerObject extends Person implements IPlayer {
   setBitNodeNumber = generalMethods.setBitNodeNumber;
   canAccessCotMG = generalMethods.canAccessCotMG;
   sourceFileLvl = generalMethods.sourceFileLvl;
+  activeSourceFileLvl = generalMethods.activeSourceFileLvl;
   applyEntropy = augmentationMethods.applyEntropy;
   focusPenalty = generalMethods.focusPenalty;
 
@@ -180,6 +193,11 @@ export class PlayerObject extends Person implements IPlayer {
       if (!isMember("CompanyName", loadedCompanyName) || !isMember("JobName", loadedJobName)) {
         delete player.jobs[loadedCompanyName as CompanyName];
       }
+    }
+    // Initialize bitNodeOptions
+    if (!player.bitNodeOptions.initialized) {
+      player.bitNodeOptions.activeSourceFiles = new JSONMap(player.sourceFiles);
+      player.bitNodeOptions.initialized = true;
     }
     return player;
   }

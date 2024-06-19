@@ -29,7 +29,7 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 
 import { getRecordValues } from "../Types/Record";
 import { ServerConstants } from "../Server/data/Constants";
-import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
+import { canAccessBitNodeFeature, isBitNodeFinished, knowAboutBitverse } from "../BitNode/BitNodeUtils";
 
 // Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
 const achievementData = (<AchievementDataJson>(<unknown>data)).achievements;
@@ -60,14 +60,6 @@ export interface AchievementData {
   Description: string;
 }
 
-function canAccessBitNodeFeature(bitNode: number): boolean {
-  return Player.bitNodeN === bitNode || Player.sourceFileLvl(bitNode) > 0;
-}
-
-function knowsAboutBitverse(): boolean {
-  return Player.sourceFiles.size > 0;
-}
-
 function sfAchievements(): Record<string, Achievement> {
   const achs: Record<string, Achievement> = {};
   for (let i = 1; i <= 12; i++) {
@@ -75,7 +67,7 @@ function sfAchievements(): Record<string, Achievement> {
     achs[ID] = {
       ...achievementData[ID],
       Icon: ID,
-      Visible: knowsAboutBitverse,
+      Visible: knowAboutBitverse,
       Condition: () => Player.sourceFileLvl(i) >= 1,
     };
   }
@@ -498,7 +490,7 @@ export const achievements: Record<string, Achievement> = {
   INDECISIVE: {
     ...achievementData.INDECISIVE,
     Icon: "1H",
-    Visible: knowsAboutBitverse,
+    Visible: knowAboutBitverse,
     Condition: (function () {
       let c = 0;
       setInterval(() => {
@@ -514,13 +506,13 @@ export const achievements: Record<string, Achievement> = {
   FAST_BN: {
     ...achievementData.FAST_BN,
     Icon: "2DAYS",
-    Visible: knowsAboutBitverse,
+    Visible: knowAboutBitverse,
     Condition: () => isBitNodeFinished() && Player.playtimeSinceLastBitnode < 1000 * 60 * 60 * 24 * 2,
   },
   CHALLENGE_BN1: {
     ...achievementData.CHALLENGE_BN1,
     Icon: "BN1+",
-    Visible: knowsAboutBitverse,
+    Visible: knowAboutBitverse,
     Condition: () =>
       Player.bitNodeN === 1 &&
       isBitNodeFinished() &&

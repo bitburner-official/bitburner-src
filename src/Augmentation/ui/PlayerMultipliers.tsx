@@ -7,6 +7,7 @@ import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { formatPercent } from "../../ui/formatNumber";
 import { Augmentations } from "../Augmentations";
+import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 
 function calculateAugmentedStats(): Multipliers {
   let augP: Multipliers = defaultMultipliers();
@@ -29,7 +30,7 @@ function customFormatPercent(value: number): string {
 
 function BitNodeModifiedStats(props: IBitNodeModifiedStatsProps): React.ReactElement {
   // If the player doesn't have access to SF5 feature or if the property isn't affected by BitNode mults
-  if (props.mult === 1 || (Player.bitNodeN !== 5 && Player.sourceFileLvl(5) === 0)) {
+  if (props.mult === 1 || !canAccessBitNodeFeature(5)) {
     return <Typography color={props.color}>{customFormatPercent(props.base)}</Typography>;
   }
 

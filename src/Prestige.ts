@@ -28,6 +28,7 @@ import { initCircadianModulator } from "./Augmentation/Augmentations";
 import { Go } from "./Go/Go";
 import { calculateExp } from "./PersonObjects/formulas/skill";
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
+import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string) {
@@ -82,7 +83,7 @@ export function prestigeAugmentation(): void {
       homeComp.programs.push(program);
     }
   }
-  if (Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) {
+  if (canAccessBitNodeFeature(5)) {
     homeComp.programs.push(CompletedProgramName.formulas);
   }
 
@@ -146,7 +147,7 @@ export function prestigeAugmentation(): void {
   if (Player.bitNodeN === 8) {
     Player.money = BitNode8StartingMoney;
   }
-  if (Player.bitNodeN === 8 || Player.sourceFileLvl(8) > 0) {
+  if (canAccessBitNodeFeature(8)) {
     Player.hasWseAccount = true;
     Player.hasTixApiAccess = true;
   }
@@ -169,7 +170,7 @@ export function prestigeAugmentation(): void {
   // Bitnode 13: Church of the Machine God
   if (Player.hasAugmentation(AugmentationName.StaneksGift1, true)) {
     joinFaction(Factions[FactionName.ChurchOfTheMachineGod]);
-  } else if (Player.bitNodeN != 13) {
+  } else if (Player.bitNodeN !== 13) {
     if (Player.augmentations.some((a) => a.name !== AugmentationName.NeuroFluxGovernor)) {
       Factions[FactionName.ChurchOfTheMachineGod].isBanned = true;
     }
@@ -215,9 +216,9 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // Re-create foreign servers
   initForeignServers(Player.getHomeComputer());
 
-  if (Player.sourceFileLvl(9) >= 2) {
+  if (Player.activeSourceFileLvl(9) >= 2) {
     homeComp.setMaxRam(128);
-  } else if (Player.sourceFileLvl(1) > 0) {
+  } else if (Player.activeSourceFileLvl(1) > 0) {
     homeComp.setMaxRam(32);
   } else {
     homeComp.setMaxRam(8);
@@ -234,10 +235,10 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
 
   // Give levels of NeuroFluxGovernor for Source-File 12. Must be done here before Augmentations are recalculated
-  if (Player.sourceFileLvl(12) > 0) {
+  if (Player.activeSourceFileLvl(12) > 0) {
     Player.augmentations.push({
       name: AugmentationName.NeuroFluxGovernor,
-      level: Player.sourceFileLvl(12),
+      level: Player.activeSourceFileLvl(12),
     });
   }
 
@@ -246,7 +247,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
 
-  if (Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) {
+  if (canAccessBitNodeFeature(5)) {
     homeComp.programs.push(CompletedProgramName.formulas);
   }
 
@@ -269,7 +270,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   if (Player.bitNodeN === 8) {
     Player.money = BitNode8StartingMoney;
   }
-  if (Player.bitNodeN === 8 || Player.sourceFileLvl(8) > 0) {
+  if (Player.bitNodeN === 8 || Player.activeSourceFileLvl(8) > 0) {
     Player.hasWseAccount = true;
     Player.hasTixApiAccess = true;
   }
@@ -282,7 +283,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
 
   // BitNode 12: The Recursion
-  if (Player.bitNodeN === 12 && Player.sourceFileLvl(12) > 100) {
+  if (Player.bitNodeN === 12 && Player.activeSourceFileLvl(12) > 100) {
     delayedDialog("Saynt_Garmo is watching you");
   }
 
@@ -301,7 +302,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // Source-File 9 (level 3) effect
   // also now applies when entering bn9 until install
-  if (Player.sourceFileLvl(9) >= 3 || Player.bitNodeN === 9) {
+  if ((Player.activeSourceFileLvl(9) >= 3 || Player.bitNodeN === 9) && !Player.bitNodeOptions.disableHacknetServer) {
     const hserver = Player.createHacknetServer();
 
     hserver.level = 100;
@@ -319,7 +320,9 @@ export function prestigeSourceFile(isFlume: boolean): void {
   staneksGift.prestigeSourceFile();
 
   // Gain int exp
-  if (Player.sourceFileLvl(5) !== 0 && !isFlume) Player.gainIntelligenceExp(300);
+  if (Player.activeSourceFileLvl(5) !== 0 && !isFlume) {
+    Player.gainIntelligenceExp(300);
+  }
 
   // Clear recent scripts
   recentScripts.splice(0, recentScripts.length);

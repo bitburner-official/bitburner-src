@@ -289,7 +289,7 @@ export const haveSourceFile = (n: number): PlayerCondition => ({
     };
   },
   isSatisfied(p: PlayerObject): boolean {
-    return p.bitNodeN == n || p.sourceFileLvl(n) > 0;
+    return p.bitNodeN == n || p.activeSourceFileLvl(n) > 0;
   },
 });
 

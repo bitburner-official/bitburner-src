@@ -11,6 +11,7 @@ import { StatsRow } from "../../ui/React/StatsRow";
 import { defaultMultipliers, getBitNodeMultipliers } from "../BitNode";
 import { BitNodeMultipliers } from "../BitNodeMultipliers";
 import { PartialRecord, getRecordEntries } from "../../Types/Record";
+import { canAccessBitNodeFeature } from "../BitNodeUtils";
 
 interface IProps {
   n: number;
@@ -39,8 +40,8 @@ export const BitNodeMultipliersDisplay = ({ n, level }: IProps): React.ReactElem
   // If not, then we have to assume that we want the next level up from the
   // current node's source file, so we get the min of that, the SF's max level,
   // or if it's BN12, ∞
-  const maxSfLevel = n === 12 ? Infinity : 3;
-  const mults = getBitNodeMultipliers(n, level ?? Math.min(Player.sourceFileLvl(n) + 1, maxSfLevel));
+  const maxSfLevel = n === 12 ? Number.MAX_VALUE : 3;
+  const mults = getBitNodeMultipliers(n, level ?? Math.min(Player.activeSourceFileLvl(n) + 1, maxSfLevel));
 
   return (
     <Box sx={{ columnCount: 2, columnGap: 1, mb: n === 1 ? 0 : -2 }}>
@@ -314,7 +315,7 @@ function StanekMults({ mults }: IMultsProps): React.ReactElement {
 }
 
 function GangMults({ mults }: IMultsProps): React.ReactElement {
-  if (Player.bitNodeN !== 2 && Player.sourceFileLvl(2) <= 0) return <></>;
+  if (!canAccessBitNodeFeature(2)) return <></>;
 
   const rows: IBNMultRows = {
     GangSoftcap: {

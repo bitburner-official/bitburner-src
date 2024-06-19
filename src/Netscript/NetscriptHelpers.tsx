@@ -1,5 +1,11 @@
 import type { NetscriptContext } from "./APIWrapper";
-import type { RunningScript as IRunningScript, Person as IPerson, Server as IServer, ScriptArg } from "@nsdefs";
+import type {
+  RunningScript as IRunningScript,
+  Person as IPerson,
+  Server as IServer,
+  ScriptArg,
+  BitNodeOptions,
+} from "@nsdefs";
 
 import React from "react";
 import { killWorkerScript } from "./killWorkerScript";
@@ -47,6 +53,7 @@ import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
 import { basicErrorMessage, errorMessage, log } from "./ErrorMessages";
 import { assertString, debugType } from "./TypeAssertion";
+import { canAccessBitNodeFeature, getDefaultBitNodeOptions, validateActiveSourceFiles } from "../BitNode/BitNodeUtils";
 
 export const helpers = {
   string,
@@ -81,6 +88,7 @@ export const helpers = {
   getCannotFindRunningScriptErrorMessage,
   createPublicRunningScript,
   failOnHacknetServer,
+  validateBitNodeOptions,
 };
 
 /** RunOptions with non-optional, type-validated members, for passing between internal functions. */
@@ -269,7 +277,7 @@ function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOp
 
 /** Validate singularity access by throwing an error if the player does not have access. */
 function checkSingularityAccess(ctx: NetscriptContext): void {
-  if (Player.bitNodeN !== 4 && Player.sourceFileLvl(4) === 0) {
+  if (!canAccessBitNodeFeature(4)) {
     throw errorMessage(
       ctx,
       `This singularity function requires Source-File 4 to run. A power up you obtain later in the game.
@@ -715,4 +723,33 @@ let customElementKey = 0;
  */
 export function wrapUserNode(value: unknown) {
   return <CustomBoundary key={`PlayerContent${customElementKey++}`}>{value}</CustomBoundary>;
+}
+
+function validateBitNodeOptions(ctx: NetscriptContext, bitNodeOptions: unknown): BitNodeOptions {
+  const result = getDefaultBitNodeOptions();
+  if (bitNodeOptions === undefined || bitNodeOptions === null) {
+    return result;
+  }
+  if (typeof bitNodeOptions !== "object") {
+    throw errorMessage(ctx, `bitNodeOptions must be an object if it's specified. It was ${bitNodeOptions}.`);
+  }
+  const options = bitNodeOptions as Unknownify<BitNodeOptions>;
+  if (!(options.activeSourceFiles instanceof Map)) {
+    throw errorMessage(ctx, `activeSourceFiles must be a Map.`);
+  }
+  const validationResultForActiveSourceFiles = validateActiveSourceFiles(options.activeSourceFiles);
+  if (!validationResultForActiveSourceFiles.valid) {
+    throw errorMessage(ctx, `activeSourceFiles is invalid. Reason: ${validationResultForActiveSourceFiles.message}`);
+  }
+
+  result.activeSourceFiles = new Map(options.activeSourceFiles);
+  result.restrictHomePCUpgrade = !!options.restrictHomePCUpgrade;
+  result.disableGang = !!options.disableGang;
+  result.disableCorporation = !!options.disableCorporation;
+  result.disableBladeburner = !!options.disableBladeburner;
+  result.disable4SData = !!options.disable4SData;
+  result.disableHacknetServer = !!options.disableHacknetServer;
+  result.disableSleeveExpAndAugmentation = !!options.disableSleeveExpAndAugmentation;
+
+  return result;
 }

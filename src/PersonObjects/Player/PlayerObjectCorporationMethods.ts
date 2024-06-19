@@ -3,9 +3,10 @@ import { resetIndustryResearchTrees } from "../../Corporation/data/IndustryData"
 import { Corporation } from "../../Corporation/Corporation";
 
 import type { PlayerObject } from "./PlayerObject";
+import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 
 export function canAccessCorporation(this: PlayerObject): boolean {
-  return this.bitNodeN === 3 || this.sourceFileLvl(3) > 0;
+  return canAccessBitNodeFeature(3) && !this.bitNodeOptions.disableCorporation;
 }
 
 export function startCorporation(this: PlayerObject, corpName: string, seedFunded: boolean): void {
@@ -17,7 +18,7 @@ export function startCorporation(this: PlayerObject, corpName: string, seedFunde
   //reset the research tree in case the corporation was restarted
   resetIndustryResearchTrees();
 
-  if (this.bitNodeN === 3 || this.sourceFileLvl(3) === 3) {
+  if (this.bitNodeN === 3 || this.activeSourceFileLvl(3) === 3) {
     this.corporation.unlocks.add(CorpUnlockName.WarehouseAPI);
     this.corporation.unlocks.add(CorpUnlockName.OfficeAPI);
   }

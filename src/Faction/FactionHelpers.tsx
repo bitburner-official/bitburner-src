@@ -149,7 +149,7 @@ export const getFactionAugmentationsFiltered = (faction: Faction): AugmentationN
       augs.push(Augmentations[AugmentationName.TheRedPill]);
     }
 
-    const rng = SFC32RNG(`BN${Player.bitNodeN}.${Player.sourceFileLvl(Player.bitNodeN)}`);
+    const rng = SFC32RNG(`BN${Player.bitNodeN}.${Player.activeSourceFileLvl(Player.bitNodeN)}`);
     // Remove faction-unique augs that don't belong to this faction
     const uniqueFilter = (a: Augmentation): boolean => {
       // Keep all the non-unique one

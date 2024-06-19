@@ -9,7 +9,7 @@ Destroy the w0r1d\_d43m0n and move on to the next BN.
 **Signature:**
 
 ```typescript
-destroyW0r1dD43m0n(nextBN: number, callbackScript?: string): void;
+destroyW0r1dD43m0n(nextBN: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
 ```
 
 ## Parameters
@@ -18,6 +18,7 @@ destroyW0r1dD43m0n(nextBN: number, callbackScript?: string): void;
 |  --- | --- | --- |
 |  nextBN | number | BN number to jump to |
 |  callbackScript | string | _(Optional)_ Name of the script to launch in the next BN. |
+|  bitNodeOptions | [BitNodeOptions](./bitburner.bitnodeoptions.md) | _(Optional)_ BitNode options for the next BN. |
 
 **Returns:**
 
