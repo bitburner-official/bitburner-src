@@ -100,7 +100,29 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const aug = Augmentations[augName];
-      return aug.factions.slice();
+      const factions = aug.factions.slice();
+      if (!Player.gang) {
+        return factions;
+      }
+      const gangFactionName = Player.gang.facName;
+      const augmentationListOfGangFaction = getFactionAugmentationsFiltered(Factions[gangFactionName]);
+      /**
+       * If the gang faction does not offer this augmentation, we need to remove the gang faction from the faction list.
+       * Example: "NeuroFlux Governor"
+       */
+      if (!augmentationListOfGangFaction.includes(augName)) {
+        return factions.filter((factionName) => factionName !== gangFactionName);
+      }
+      /**
+       * If the gang faction offers this augmentation, but the faction list does not contain the gang faction, we need
+       * to add the gang faction to that list.
+       * Example: "The Red Pill" in BN2
+       */
+      if (augmentationListOfGangFaction.includes(augName) && !factions.includes(gangFactionName)) {
+        factions.push(gangFactionName);
+        return factions;
+      }
+      return factions;
     },
     getAugmentationsFromFaction: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
