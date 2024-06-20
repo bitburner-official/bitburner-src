@@ -13,11 +13,26 @@ import { Page } from "../ui/Router";
 import { mergeMultipliers } from "../PersonObjects/Multipliers";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
+const soaAugmentationNames = [
+  AugmentationName.BeautyOfAphrodite,
+  AugmentationName.ChaosOfDionysus,
+  AugmentationName.FloodOfPoseidon,
+  AugmentationName.HuntOfArtemis,
+  AugmentationName.KnowledgeOfApollo,
+  AugmentationName.MightOfAres,
+  AugmentationName.TrickeryOfHermes,
+  AugmentationName.WKSharmonizer,
+  AugmentationName.WisdomOfAthena,
+];
+
 export function getBaseAugmentationPriceMultiplier(): number {
   return CONSTANTS.MultipleAugMultiplier * [1, 0.96, 0.94, 0.93][Player.sourceFileLvl(11)];
 }
 export function getGenericAugmentationPriceMultiplier(): number {
-  return Math.pow(getBaseAugmentationPriceMultiplier(), Player.queuedAugmentations.length);
+  const queuedNonSoAAugmentationList = Player.queuedAugmentations.filter((augmentation) => {
+    return !soaAugmentationNames.includes(augmentation.name);
+  });
+  return Math.pow(getBaseAugmentationPriceMultiplier(), queuedNonSoAAugmentationList.length);
 }
 
 export function applyAugmentation(aug: PlayerOwnedAugmentation, reapply = false): void {
@@ -111,7 +126,7 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
       const multiplier = Math.pow(CONSTANTS.NeuroFluxGovernorLevelMult, aug.getLevel());
       repCost = aug.baseRepRequirement * multiplier * currentNodeMults.AugmentationRepCost;
       moneyCost = aug.baseCost * multiplier * currentNodeMults.AugmentationMoneyCost;
-      moneyCost *= getBaseAugmentationPriceMultiplier() ** Player.queuedAugmentations.length;
+      moneyCost *= getGenericAugmentationPriceMultiplier();
       break;
     }
     // SOA Augments use a unique cost method
@@ -124,17 +139,6 @@ export function getAugCost(aug: Augmentation): AugmentationCosts {
     case AugmentationName.TrickeryOfHermes:
     case AugmentationName.WKSharmonizer:
     case AugmentationName.WisdomOfAthena: {
-      const soaAugmentationNames = [
-        AugmentationName.BeautyOfAphrodite,
-        AugmentationName.ChaosOfDionysus,
-        AugmentationName.FloodOfPoseidon,
-        AugmentationName.HuntOfArtemis,
-        AugmentationName.KnowledgeOfApollo,
-        AugmentationName.MightOfAres,
-        AugmentationName.TrickeryOfHermes,
-        AugmentationName.WKSharmonizer,
-        AugmentationName.WisdomOfAthena,
-      ];
       const soaAugCount = soaAugmentationNames.filter((augName) => Player.hasAugmentation(augName)).length;
       moneyCost = aug.baseCost * Math.pow(CONSTANTS.SoACostMult, soaAugCount);
       repCost = aug.baseRepRequirement * Math.pow(CONSTANTS.SoARepMult, soaAugCount);
