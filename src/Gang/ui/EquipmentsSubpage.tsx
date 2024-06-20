@@ -67,7 +67,6 @@ interface IPanelProps {
 }
 
 function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
-  const gang = useGang();
   const rerender = useRerender();
   const [currentCategory, setCurrentCategory] = useState("Weapons");
 
