@@ -186,6 +186,7 @@ const singularity = {
   checkFactionInvitations: SF4Cost(RamCostConstants.SingularityFn2),
   joinFaction: SF4Cost(RamCostConstants.SingularityFn2),
   workForFaction: SF4Cost(RamCostConstants.SingularityFn2),
+  getFactionWorkTypes: SF4Cost(RamCostConstants.SingularityFn2 / 3),
   getFactionRep: SF4Cost(RamCostConstants.SingularityFn2 / 3),
   getFactionFavor: SF4Cost(RamCostConstants.SingularityFn2 / 3),
   getFactionFavorGain: SF4Cost(RamCostConstants.SingularityFn2 / 4),
