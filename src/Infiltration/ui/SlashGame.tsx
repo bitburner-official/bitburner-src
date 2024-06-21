@@ -1,5 +1,5 @@
 import { Box, Paper, Typography } from "@mui/material";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { KEY } from "../../utils/helpers/keyCodes";
@@ -47,19 +47,32 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
   }, [difficulty]);
 
   useEffect(() => {
-    // Start the timer if the player does not have MightOfAres augmentation.
-    if (phase === 0 && !data.hasAugment) {
-      timeOutId.current = setTimeout(() => {
-        startPhase1();
-      }, data.guardingTime);
-    }
-
     return () => {
       if (timeOutId.current !== -1) {
         clearTimeout(timeOutId.current);
       }
     };
   }, []);
+
+  const startPhase1 = useCallback(
+    (alertedTime: number, distractedTime: number) => {
+      setPhase(1);
+      timeOutId.current = setTimeout(() => {
+        setPhase(2);
+        timeOutId.current = setTimeout(() => onFailure(), alertedTime);
+      }, distractedTime);
+    },
+    [onFailure],
+  );
+
+  useEffect(() => {
+    // Start the timer if the player does not have MightOfAres augmentation.
+    if (phase === 0 && !data.hasAugment) {
+      timeOutId.current = setTimeout(() => {
+        startPhase1(data.alertedTime, data.distractedTime);
+      }, data.guardingTime);
+    }
+  }, [phase, data, startPhase1]);
 
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();
@@ -69,14 +82,6 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
     } else {
       onSuccess();
     }
-  }
-
-  function startPhase1() {
-    setPhase(1);
-    timeOutId.current = setTimeout(() => {
-      setPhase(2);
-      timeOutId.current = setTimeout(() => onFailure(), data.alertedTime);
-    }, data.distractedTime);
   }
 
   return (
@@ -95,7 +100,7 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
             <GameTimer
               millis={data.guardingTime}
               onExpire={() => {
-                startPhase1();
+                startPhase1(data.alertedTime, data.distractedTime);
               }}
               ignoreAugment_WKSharmonizer
               noPaper
