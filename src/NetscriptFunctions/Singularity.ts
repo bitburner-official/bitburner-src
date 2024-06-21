@@ -611,11 +611,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     hospitalize: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
-      if (Player.currentWork || Router.page() === Page.Infiltration || Router.page() === Page.BitVerse) {
-        helpers.log(ctx, () => "Cannot go to the hospital because the player is busy.");
-        return;
-      }
-      Player.hospitalize();
+      Player.hospitalize(true);
     },
     isBusy: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);

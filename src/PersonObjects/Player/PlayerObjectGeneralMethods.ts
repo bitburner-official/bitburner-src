@@ -256,19 +256,20 @@ export function takeDamage(this: PlayerObject, amt: number): boolean {
 
   this.hp.current -= amt;
   if (this.hp.current <= 0) {
-    this.hospitalize();
+    this.hospitalize(false);
     return true;
   } else {
     return false;
   }
 }
 
-export function hospitalize(this: PlayerObject): number {
+export function hospitalize(this: PlayerObject, suppressNotification: boolean): number {
   const cost = getHospitalizationCost();
-  SnackbarEvents.emit(`You've been Hospitalized for ${formatMoney(cost)}`, ToastVariant.SUCCESS, 2000);
-
   this.loseMoney(cost, "hospitalization");
   this.hp.current = this.hp.max;
+  if (!suppressNotification) {
+    SnackbarEvents.emit(`You've been Hospitalized for ${formatMoney(cost)}`, ToastVariant.SUCCESS, 2000);
+  }
   return cost;
 }
 
