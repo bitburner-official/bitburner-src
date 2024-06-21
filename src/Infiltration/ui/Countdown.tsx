@@ -5,19 +5,19 @@ interface IProps {
   onFinish: () => void;
 }
 
-export function Countdown(props: IProps): React.ReactElement {
+export function Countdown({ onFinish }: IProps): React.ReactElement {
   const [x, setX] = useState(3);
 
   useEffect(() => {
     if (x === 0) {
-      props.onFinish();
+      onFinish();
     }
-  }, [x]);
+  }, [x, onFinish]);
 
   useEffect(() => {
     const id = setInterval(() => {
       setX((previousValue) => previousValue - 1);
-    }, 1000);
+    }, 300);
     return () => {
       clearInterval(id);
     };

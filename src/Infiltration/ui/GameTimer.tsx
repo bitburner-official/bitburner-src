@@ -27,7 +27,7 @@ export function GameTimer({
     if (v <= 0) {
       onExpire();
     }
-  }, [v]);
+  }, [v, onExpire]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
