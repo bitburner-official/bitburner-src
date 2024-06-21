@@ -7,13 +7,21 @@ interface IProps {
 
 export function Countdown(props: IProps): React.ReactElement {
   const [x, setX] = useState(3);
+
   useEffect(() => {
     if (x === 0) {
       props.onFinish();
-      return;
     }
-    setTimeout(() => setX(x - 1), 300);
-  });
+  }, [x]);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setX((previousValue) => previousValue - 1);
+    }, 1000);
+    return () => {
+      clearInterval(id);
+    };
+  }, []);
 
   return (
     <Paper sx={{ p: 1, textAlign: "center" }}>
