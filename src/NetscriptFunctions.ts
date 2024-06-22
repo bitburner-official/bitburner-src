@@ -108,6 +108,8 @@ import { getEnumHelper } from "./utils/EnumHelper";
 import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
 import { ServerConstants } from "./Server/data/Constants";
 import { assertFunction } from "./Netscript/TypeAssertion";
+import { Router } from "./ui/GameRoot";
+import { Page } from "./ui/Router";
 
 export const enums: NSEnums = {
   CityName,
@@ -736,6 +738,10 @@ export const ns: InternalAPI<NSFull> = {
       const runOpts = helpers.spawnOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       setTimeout(() => {
+        if (Router.page() === Page.BitVerse) {
+          helpers.log(ctx, () => `Script execution is canceled because you are in Bitverse.`);
+          return;
+        }
         const scriptServer = GetServer(ctx.workerScript.hostname);
         if (scriptServer === null) {
           throw helpers.errorMessage(ctx, `Cannot find server ${ctx.workerScript.hostname}`);
