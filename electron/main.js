@@ -29,6 +29,7 @@ const debounce = require("lodash/debounce");
 const Store = require("electron-store");
 const store = new Store();
 const path = require("path");
+const { realpathSync } = require("fs");
 const { fileURLToPath } = require("url");
 
 log.transports.file.level = store.get("file-log-level", "info");
@@ -201,13 +202,18 @@ app.on("ready", async () => {
   // Intercept file protocol requests and only let valid requests through
   protocol.interceptFileProtocol("file", ({ url, method }, callback) => {
     const filePath = fileURLToPath(url);
-    const relativePath = path.relative(__dirname, filePath);
-    //only provide html files in same directory, or anything in dist
-    if ((method === "GET" && relativePath.startsWith("dist")) || relativePath.match(/^[a-zA-Z-_]*\.html/)) {
-      return callback(filePath);
+    const realPath = realpathSync(filePath);
+    const relativePath = path.relative(__dirname, realPath);
+    // Only allow access to files in "dist" folder or html files in the same directory
+    if (method === "GET" && (relativePath.startsWith("dist") || relativePath.match(/^[a-zA-Z-_]*\.html/))) {
+      callback(realPath);
+      return;
     }
-    log.error(`Tried to access a page outside the sandbox. Url: ${url}. Method: ${method}.`);
-    callback(path.join(__dirname, "fileError.txt"));
+    log.error(
+      `Tried to access a page outside the sandbox. Url: ${url}. FilePath: ${filePath}. RealPath: ${realPath}.` +
+        ` __dirname: ${__dirname}. RelativePath: ${relativePath}. Method: ${method}.`,
+    );
+    callback(path.join(__dirname, "fileError.html"));
   });
 
   log.info("Application is ready!");
