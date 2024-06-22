@@ -107,7 +107,7 @@ const VALID_ARGS: ValidArgs = {
 interface Errors {
   noArgs: string;
   noSearchArg: string;
-  badSearchFile: (str: string[]) => string;
+  badArgs: (str: string[]) => string;
   badParameter: (opt: string, arg: string) => string;
   badOutFile: (str: string) => string;
   outFileExists: (str: string) => string;
@@ -115,15 +115,12 @@ interface Errors {
 }
 
 const ERR: Errors = {
-  noArgs: "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE] [-B/A/C] [NUM]",
+  noArgs: "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE] [-m -B/A/C] [NUM]",
   noSearchArg:
     "grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server",
-  badSearchFile: (files: string[]) =>
-    `grep argument error: Invalid filename(s): ${files.join(
-      ", ",
-    )}. OPTIONS with additional parameters (-O, -m, -B/A/C) must be separated from other options`,
+  badArgs: (args: string[]) => "grep argument error: Invalid argument(s): " + args.join(", "),
   badParameter: (option: string, arg: string) =>
-    `grep argument error: Incorrect ${option} argument "${arg}". Must be a number.`,
+    `grep argument error: Incorrect ${option} argument "${arg}". Must be a number. OPTIONS with additional parameters (-O, -m, -B/A/C) must be separated from other options`,
   outFileExists: (path: string) =>
     `grep file output failed: Invalid output file "${path}". Output file must not already exist. Pass -f/--allow-overwrite to overwrite.`,
   badOutFile: (path: string) =>
@@ -166,30 +163,11 @@ class Args {
     hasContextFlag: false,
   };
 
-  mapArgToOpts(fullArg: string, options: Options): [Options, boolean] {
-    let isOption = false;
-    for (const key of Object.keys(VALID_ARGS)) {
-      const stripDash = (arg: string) => arg.replace("-", "");
-      if (!fullArg.startsWith("-")) break;
-      // check long args
-      const theseArgs = VALID_ARGS[key as keyof ValidArgs];
-      const allArgs = [...theseArgs.long, ...theseArgs.short];
-      if (allArgs.includes(fullArg)) {
-        options[key as keyof Options] = true;
-        isOption = true;
-      }
-      // check multiflag args
-      const multiFlag = stripDash(fullArg);
-      const shortArgs = theseArgs.short.map(stripDash);
-      if (multiFlag.length > 1 && shortArgs.some((arg) => [...multiFlag].includes(arg))) {
-        options[key as keyof Options] = true;
-        isOption = true;
-      }
-    }
-    return [options, isOption];
-  }
-
   splitOptsAndArgs(): [Options, string[], string, string, string] {
+    const stripDash = (arg: string) => arg.slice(1);
+    const argKeys = Object.keys(VALID_ARGS);
+    const validFlagChars = argKeys.flatMap((key: string) => VALID_ARGS[key as keyof ValidArgs].short.map(stripDash));
+
     let outFile, limit, context;
 
     [outFile, this.args] = this.spliceOptParam(VALID_ARGS.isToFile);
@@ -198,11 +176,32 @@ class Args {
     if (!context) [context, this.args] = this.spliceOptParam(VALID_ARGS.isContext);
     if (!context) [context, this.args] = this.spliceOptParam(VALID_ARGS.isPostContext);
 
-    const [options, otherArgs] = this.args.reduce(
-      ([options, otherArgs]: [Options, string[]], fullArg: string): [Options, string[]] => {
-        let isOption = false;
-        [options, isOption] = this.mapArgToOpts(fullArg, options);
-        return isOption ? [options, otherArgs] : [options, [...otherArgs, fullArg]];
+    const [options, fileArgs] = this.args.reduce(
+      ([options, fileArgs]: [Options, string[]], fullArg: string): [Options, string[]] => {
+        const isFlagged = fullArg.startsWith("-");
+        if (!isFlagged) return [options, [...fileArgs, fullArg]];
+        const isLongArg = fullArg.startsWith("--");
+        const isShortArg = fullArg.length === 2;
+        let isBadArg = false;
+        for (const key of argKeys) {
+          const argStrings = VALID_ARGS[key as keyof ValidArgs];
+          // check for exact matches
+          if (isLongArg || isShortArg) {
+            if ([...argStrings.long, ...argStrings.short].includes(fullArg)) {
+              options[key as keyof Options] = true;
+            }
+          } else {
+            // or check multiflag
+            const flagStr = stripDash(fullArg);
+            const shortArgs = argStrings.short.map(stripDash);
+            isBadArg = [...flagStr].some((char) => !validFlagChars.includes(char));
+            if (!isBadArg && shortArgs.some((arg) => [...flagStr].includes(arg))) {
+              options[key as keyof Options] = true;
+            }
+          }
+        }
+
+        return !isBadArg ? [options, fileArgs] : [options, [...fileArgs, fullArg]];
       },
       [this.initOptions, []],
     );
@@ -210,7 +209,7 @@ class Args {
     const limitNum = limit ?? "";
     const contextNum = context ?? "";
 
-    return [options, otherArgs, outFileStr, contextNum, limitNum];
+    return [options, fileArgs, outFileStr, contextNum, limitNum];
   }
 
   spliceOptParam(validArgs: ArgStrings): [string, string[]] | [undefined, string[]] {
@@ -412,20 +411,21 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   if (!args.length) return Terminal.error(ERR.noArgs);
 
   const [options, otherArgs, outFile, context, limit] = new Args(args).splitOptsAndArgs();
-  const [files, notFiles] = options.isSearchAll ? getServerFiles(server) : getArgFiles(otherArgs.slice(1));
-  const outFilePath = checkOutFile(outFile, options, server);
-
-  options.isMultiFile = files.length > 1;
+  if (options.isHelp) return help(["grep"]);
   options.hasContextFlag = options.isContext || options.isPreContext || options.isPostContext;
 
-  // error checking
+  const [files, notFiles] = options.isSearchAll ? getServerFiles(server) : getArgFiles(otherArgs.slice(1));
+  if (notFiles.length) return Terminal.error(ERR.badArgs(notFiles));
+  options.isMultiFile = files.length > 1;
+
+  const outFilePath = checkOutFile(outFile, options, server);
   if (options.isToFile && !outFilePath) return; // associated errors are printed in checkOutFile
-  if (options.isHelp) return help(["grep"]);
-  if (notFiles.length) return Terminal.error(ERR.badSearchFile(notFiles));
+
   if (!options.isPipeIn && !options.isSearchAll && !files.length) return Terminal.error(ERR.noSearchArg);
-  if (options.hasContextFlag && (context === "" || isNaN(Number(context))))
+
+  if (options.hasContextFlag && (!context.length || isNaN(Number(context))))
     return Terminal.error(ERR.badParameter("context", context));
-  if (options.isMaxMatches && (limit === "" || isNaN(Number(limit))))
+  if (options.isMaxMatches && (!limit.length || isNaN(Number(limit))))
     return Terminal.error(ERR.badParameter("limit", limit));
 
   const nContext = Number(context);
