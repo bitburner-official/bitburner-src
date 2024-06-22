@@ -13,20 +13,15 @@ const DEFAULT: string = "\x1b[0m";
 const GREEN: string = "\x1b[32m";
 const MAGENTA: string = "\x1b[35m";
 const CYAN: string = "\x1b[36m";
+const YELLOW: string = "\x1b[33m";
 const WHITE: string = "\x1b[37m";
 
-// Options and ValidArgs key names must correlate
-class ArgStrings {
+type ArgStrings = {
   short: readonly string[];
   long: readonly string[];
+};
 
-  constructor(validArgs: ArgStrings) {
-    this.long = validArgs.long;
-    this.short = validArgs.long;
-  }
-}
-
-interface Options {
+type Options = {
   isRegExpr: boolean;
 
   isLineNum: boolean;
@@ -50,35 +45,15 @@ interface Options {
   isSearchAll: boolean;
   isPipeIn: boolean;
 
-  // exceptions: these options are not explicitly checked against passed arguments
   isMultiFile: boolean;
   hasContextFlag: boolean;
-}
-interface ValidArgs {
-  isRegExpr: ArgStrings;
+};
 
-  isLineNum: ArgStrings;
-  isNamed: ArgStrings;
-  isNotNamed: ArgStrings;
-  isInvertMatch: ArgStrings;
-  isMaxMatches: ArgStrings;
+type ValidArgs<T extends keyof Options> = {
+  [key in T]: ArgStrings;
+};
 
-  isQuiet: ArgStrings;
-  isVerbose: ArgStrings;
-
-  isToFile: ArgStrings;
-  isOverWrite: ArgStrings;
-
-  isPreContext: ArgStrings;
-  isContext: ArgStrings;
-  isPostContext: ArgStrings;
-
-  isHelp: ArgStrings;
-
-  isSearchAll: ArgStrings;
-  isPipeIn: ArgStrings;
-}
-const VALID_ARGS: ValidArgs = {
+const VALID_ARGS: ValidArgs<keyof Options> = {
   isRegExpr: { short: ["-R"], long: ["--regexp"] },
 
   isLineNum: { short: ["-n"], long: ["--line-number"] },
@@ -101,10 +76,12 @@ const VALID_ARGS: ValidArgs = {
   isPipeIn: { short: ["-p"], long: ["--pipe-terminal"] },
 
   isHelp: { short: [], long: ["--help"] },
-} as const;
-//
 
-interface Errors {
+  isMultiFile: { short: [], long: [] },
+  hasContextFlag: { short: [], long: [] },
+} as const;
+
+type Errors = {
   noArgs: string;
   noSearchArg: string;
   badArgs: (str: string[]) => string;
@@ -112,7 +89,7 @@ interface Errors {
   badOutFile: (str: string) => string;
   outFileExists: (str: string) => string;
   truncated: () => string;
-}
+};
 
 const ERR: Errors = {
   noArgs: "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE] [-m -B/A/C] [NUM]",
@@ -123,9 +100,9 @@ const ERR: Errors = {
     `grep argument error: Incorrect ${option} argument "${arg}". Must be a number. OPTIONS with additional parameters (-O, -m, -B/A/C) must be separated from other options`,
   outFileExists: (path: string) =>
     `grep file output failed: Invalid output file "${path}". Output file must not already exist. Pass -f/--allow-overwrite to overwrite.`,
-  badOutFile: (path: string) =>
-    `grep file output failed: Invalid output file "${path}". Output file must be a text file.`,
-  truncated: () => `\n${RED}Terminal output truncated to ${Settings.MaxTerminalCapacity} lines (Max terminal capacity)`,
+  badOutFile: (path: string) => `grep file output failed: Invalid output file "${path}". Output file must be `,
+  truncated: () =>
+    `\n${YELLOW}Terminal output truncated to ${Settings.MaxTerminalCapacity} lines (Max terminal capacity)`,
 } as const;
 
 class Args {
@@ -165,30 +142,39 @@ class Args {
 
   splitOptsAndArgs(): [Options, string[], string, string, string] {
     const stripDash = (arg: string) => arg.slice(1);
-    const argKeys = Object.keys(VALID_ARGS);
-    const validFlagChars = argKeys.flatMap((key: string) => VALID_ARGS[key as keyof ValidArgs].short.map(stripDash));
+    const argKeys = Object.keys(VALID_ARGS).map((k) => k as keyof Options);
+    const [allValidArgs, validFlagChars] = argKeys.reduce(
+      (ret: [readonly string[], string], key: keyof Options): [readonly string[], string] => {
+        const argStrings = VALID_ARGS[key];
+        return [
+          [...ret[0], ...argStrings.long, ...argStrings.short],
+          ret[1] + argStrings.short.map(stripDash).join(""),
+        ];
+      },
+      [[], ""],
+    );
 
     let outFile, limit, context;
-
     [outFile, this.args] = this.spliceOptParam(VALID_ARGS.isToFile);
     [limit, this.args] = this.spliceOptParam(VALID_ARGS.isMaxMatches);
     [context, this.args] = this.spliceOptParam(VALID_ARGS.isPreContext);
     if (!context) [context, this.args] = this.spliceOptParam(VALID_ARGS.isContext);
     if (!context) [context, this.args] = this.spliceOptParam(VALID_ARGS.isPostContext);
+    [outFile, limit, context] = [outFile, limit, context].map((val) => val ?? "");
 
     const [options, fileArgs] = this.args.reduce(
       ([options, fileArgs]: [Options, string[]], fullArg: string): [Options, string[]] => {
-        const isFlagged = fullArg.startsWith("-");
-        if (!isFlagged) return [options, [...fileArgs, fullArg]];
+        if (!fullArg.startsWith("-")) return [options, [...fileArgs, fullArg]];
         const isLongArg = fullArg.startsWith("--");
         const isShortArg = fullArg.length === 2;
         let isBadArg = false;
         for (const key of argKeys) {
-          const argStrings = VALID_ARGS[key as keyof ValidArgs];
+          const argStrings = VALID_ARGS[key];
           // check for exact matches
           if (isLongArg || isShortArg) {
-            if ([...argStrings.long, ...argStrings.short].includes(fullArg)) {
-              options[key as keyof Options] = true;
+            isBadArg = !allValidArgs.includes(fullArg);
+            if (!isBadArg && [...argStrings.long, ...argStrings.short].includes(fullArg)) {
+              options[key] = true;
             }
           } else {
             // or check multiflag
@@ -196,20 +182,15 @@ class Args {
             const shortArgs = argStrings.short.map(stripDash);
             isBadArg = [...flagStr].some((char) => !validFlagChars.includes(char));
             if (!isBadArg && shortArgs.some((arg) => [...flagStr].includes(arg))) {
-              options[key as keyof Options] = true;
+              options[key] = true;
             }
           }
         }
-
         return !isBadArg ? [options, fileArgs] : [options, [...fileArgs, fullArg]];
       },
       [this.initOptions, []],
     );
-    const outFileStr = outFile ?? "";
-    const limitNum = limit ?? "";
-    const contextNum = context ?? "";
-
-    return [options, fileArgs, outFileStr, contextNum, limitNum];
+    return [options, fileArgs, outFile, context, limit];
   }
 
   spliceOptParam(validArgs: ArgStrings): [string, string[]] | [undefined, string[]] {
@@ -226,18 +207,18 @@ class Args {
   }
 }
 
-interface LineStrings {
+type LineStrings = {
   rawLine: string;
   prettyLine: string;
-}
+};
 
-interface ParsedLine {
+type ParsedLine = {
   isPrint: boolean;
   isMatched: boolean;
   lines: LineStrings;
   filename: string;
   isFileSep: boolean;
-}
+};
 
 class Results {
   lines: ParsedLine[];
@@ -384,11 +365,9 @@ function writeToTerminal(
   files: ContentFile[],
   pattern: string | RegExp,
 ): void {
-  const printResult = prettyResult.slice(prettyResult.length - Settings.MaxTerminalCapacity); // limit printing to terminal
-  const isTruncated = prettyResult.length !== printResult.length;
+  const printResult = prettyResult.slice(0, Math.min(prettyResult.length, Settings.MaxTerminalCapacity)); // limit printing to terminal
   const verboseInfo = results.getVerboseInfo(files, pattern, options);
-  const truncateInfo = isTruncated ? ERR.truncated() : "";
-
+  const truncateInfo = prettyResult.length !== printResult.length ? ERR.truncated() : "";
   if (results.areEdited) Terminal.print(printResult.join("\n") + truncateInfo);
   if (options.isVerbose) Terminal.print(verboseInfo);
 }
