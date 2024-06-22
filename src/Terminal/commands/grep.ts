@@ -16,6 +16,31 @@ const CYAN: string = "\x1b[36m";
 const YELLOW: string = "\x1b[33m";
 const WHITE: string = "\x1b[37m";
 
+type Errors = {
+  noArgs: string;
+  noSearchArg: string;
+  badArgs: (str: string[]) => string;
+  badParameter: (opt: string, arg: string) => string;
+  badOutFile: (str: string) => string;
+  outFileExists: (str: string) => string;
+  truncated: () => string;
+};
+
+const ERR: Errors = {
+  noArgs: "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE] [-m -B/A/C] [NUM]",
+  noSearchArg:
+    "grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server",
+  badArgs: (args: string[]) => "grep argument error: Invalid argument(s): " + args.join(", "),
+  badParameter: (option: string, arg: string) =>
+    `grep argument error: Incorrect ${option} argument "${arg}". Must be a number. OPTIONS with additional parameters (-O, -m, -B/A/C) must be separated from other options`,
+  outFileExists: (path: string) =>
+    `grep file output failed: Invalid output file "${path}". Output file must not already exist. Pass -f/--allow-overwrite to overwrite.`,
+  badOutFile: (path: string) =>
+    `grep file output failed: Invalid output file "${path}". Output file path must be a valid .txt file.`,
+  truncated: () =>
+    `\n${YELLOW}Terminal output truncated to ${Settings.MaxTerminalCapacity} lines (Max terminal capacity)`,
+} as const;
+
 type ArgStrings = {
   short: readonly string[];
   long: readonly string[];
@@ -79,30 +104,6 @@ const VALID_ARGS: ValidArgs<keyof Options> = {
 
   isMultiFile: { short: [], long: [] },
   hasContextFlag: { short: [], long: [] },
-} as const;
-
-type Errors = {
-  noArgs: string;
-  noSearchArg: string;
-  badArgs: (str: string[]) => string;
-  badParameter: (opt: string, arg: string) => string;
-  badOutFile: (str: string) => string;
-  outFileExists: (str: string) => string;
-  truncated: () => string;
-};
-
-const ERR: Errors = {
-  noArgs: "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE] [-m -B/A/C] [NUM]",
-  noSearchArg:
-    "grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server",
-  badArgs: (args: string[]) => "grep argument error: Invalid argument(s): " + args.join(", "),
-  badParameter: (option: string, arg: string) =>
-    `grep argument error: Incorrect ${option} argument "${arg}". Must be a number. OPTIONS with additional parameters (-O, -m, -B/A/C) must be separated from other options`,
-  outFileExists: (path: string) =>
-    `grep file output failed: Invalid output file "${path}". Output file must not already exist. Pass -f/--allow-overwrite to overwrite.`,
-  badOutFile: (path: string) => `grep file output failed: Invalid output file "${path}". Output file must be `,
-  truncated: () =>
-    `\n${YELLOW}Terminal output truncated to ${Settings.MaxTerminalCapacity} lines (Max terminal capacity)`,
 } as const;
 
 class Args {
