@@ -106,44 +106,12 @@ const VALID_ARGS: ValidArgs<keyof Options> = {
   hasContextFlag: { short: [], long: [] },
 } as const;
 
-const INIT_OPTIONS: Options = {
-  isRegExpr: false,
-
-  isLineNum: false,
-  isNamed: false,
-  isNotNamed: false,
-  isInvertMatch: false,
-  isMaxMatches: false,
-
-  isQuiet: false,
-  isVerbose: false,
-
-  isToFile: false,
-  isOverWrite: false,
-
-  isPreContext: false,
-  isContext: false,
-  isPostContext: false,
-
-  isSearchAll: false,
-  isPipeIn: false,
-
-  isHelp: false,
-
-  isMultiFile: false,
-  hasContextFlag: false,
-};
-
 type Params = {
-  context: string;
-  limit: string;
-  outfile: string;
-};
-
-const INIT_PARAMS: Params = {
-  context: "",
-  limit: "",
-  outfile: "",
+  isPreContext: string;
+  isContext: string;
+  isPostContext: string;
+  isMaxMatches: string;
+  isToFile: string;
 };
 
 class Args {
@@ -153,9 +121,46 @@ class Args {
 
   constructor(args: (string | number | boolean)[]) {
     this.args = args.map(String);
-    this.options = INIT_OPTIONS;
-    this.params = INIT_PARAMS;
+    this.options = this.INIT_OPTIONS;
+    this.params = this.INIT_PARAMS;
   }
+
+  INIT_OPTIONS: Options = {
+    isRegExpr: false,
+
+    isLineNum: false,
+    isNamed: false,
+    isNotNamed: false,
+    isInvertMatch: false,
+    isMaxMatches: false,
+
+    isQuiet: false,
+    isVerbose: false,
+
+    isToFile: false,
+    isOverWrite: false,
+
+    isPreContext: false,
+    isContext: false,
+    isPostContext: false,
+
+    isSearchAll: false,
+    isPipeIn: false,
+
+    isHelp: false,
+
+    isMultiFile: false,
+    hasContextFlag: false,
+  };
+
+  INIT_PARAMS: Params = {
+    isPreContext: "",
+    isContext: "",
+    isPostContext: "",
+    isMaxMatches: "",
+    isToFile: "",
+  };
+
 
   private spliceParam(validArgs: ArgStrings): string {
     const argIndex = [...validArgs.long, ...validArgs.short].reduce((ret: number, arg: string) => {
@@ -169,10 +174,11 @@ class Args {
   }
 
   private spliceOptionalParams(): Args {
-    this.params.outfile = this.spliceParam(VALID_ARGS.isToFile);
-    this.params.limit = this.spliceParam(VALID_ARGS.isMaxMatches);
-    for (const args of [VALID_ARGS.isPreContext, VALID_ARGS.isContext, VALID_ARGS.isPostContext]) {
-      if (!this.params.context) this.params.context = this.spliceParam(args);
+    for (const [key, args] of Object.keys(this.params).map((key): [string, ArgStrings] => [
+      key,
+      VALID_ARGS[key as keyof Options],
+    ])) {
+      this.params[key as keyof Params] = this.spliceParam(args);
     }
     return this;
   }
@@ -190,8 +196,7 @@ class Args {
       },
       [[], ""],
     );
-
-    return this.args.reduce((fileArgs: string[], fullArg: string): string[] => {
+    const fileArgs = this.args.reduce((fileArgs: string[], fullArg: string): string[] => {
       if (!fullArg.startsWith("-")) return [...fileArgs, fullArg];
       const isLongArg = fullArg.startsWith("--");
       const isShortArg = fullArg.length === 2;
@@ -216,7 +221,10 @@ class Args {
       }
       return !isBadArg ? fileArgs : [...fileArgs, fullArg];
     }, []);
+
+    return fileArgs;
   }
+
   splitOptsAndArgs(): [string[], Options, Params] {
     return [this.spliceOptionalParams().reduceToOptionsAndFiles(), this.options, this.params];
   }
@@ -240,7 +248,6 @@ class Results {
   areEdited: boolean;
   numMatches: number;
   options: Options;
-  matchCounter: number;
   matchLimit: number;
 
   constructor(results: ParsedLine[], options: Options, matchLimit: number) {
@@ -249,7 +256,6 @@ class Results {
     this.areEdited = results.some((line) => line.isMatched);
     this.numMatches = results.reduce((acc, result) => acc + Number(result.isMatched), 0);
     this.matchLimit = matchLimit;
-    this.matchCounter = 0;
   }
 
   addContext(context: number): Results {
@@ -287,9 +293,11 @@ class Results {
 
   capMatches(limit: number): Results {
     if (!this.options.isMaxMatches) return this;
+
+    let matchCounter = 0;
     for (const line of this.lines) {
-      if (line.isMatched) this.matchCounter += 1;
-      if (this.matchCounter > limit) line.isMatched = false;
+      if (line.isMatched) matchCounter += 1;
+      if (matchCounter > limit) line.isMatched = false;
     }
     return this;
   }
@@ -407,24 +415,25 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   const [otherArgs, options, params] = new Args(args).splitOptsAndArgs();
   if (options.isHelp) return help(["grep"]);
   options.hasContextFlag = options.isContext || options.isPreContext || options.isPostContext;
+  console.log(params)
+  console.log(options)
+
+  const nContext = Math.max(Number(params.isPreContext), Number(params.isContext), Number(params.isPostContext));
+  const nLimit = Number(params.isMaxMatches);
+
+  if (options.hasContextFlag && (!nContext || isNaN(Number(params.isContext))))
+    return Terminal.error(ERR.badParameter("context", params.isContext));
+  if (options.isMaxMatches && (!nLimit || isNaN(Number(params.isMaxMatches))))
+    return Terminal.error(ERR.badParameter("limit", params.isMaxMatches));
 
   const [files, notFiles] = options.isSearchAll ? getServerFiles(server) : getArgFiles(otherArgs.slice(1));
+
   if (notFiles.length) return Terminal.error(ERR.badArgs(notFiles));
-  options.isMultiFile = files.length > 1;
-
-  console.log(params);
-  const outFilePath = checkOutFile(params.outfile, options, server);
-  if (options.isToFile && !outFilePath) return; // associated errors are printed in checkOutFile
-
   if (!options.isPipeIn && !options.isSearchAll && !files.length) return Terminal.error(ERR.noSearchArg);
 
-  if (options.hasContextFlag && (!params.context.length || isNaN(Number(params.context))))
-    return Terminal.error(ERR.badParameter("context", params.context));
-  if (options.isMaxMatches && (!params.limit.length || isNaN(Number(params.limit))))
-    return Terminal.error(ERR.badParameter("limit", params.limit));
-
-  const nContext = Number(params.context);
-  const nLimit = Number(params.limit);
+  options.isMultiFile = files.length > 1;
+  const outFilePath = checkOutFile(params.isToFile, options, server);
+  if (options.isToFile && !outFilePath) return; // associated errors are printed in checkOutFile
 
   try {
     const pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
