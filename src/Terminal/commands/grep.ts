@@ -414,8 +414,6 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   const [otherArgs, options, params] = new Args(args).splitOptsAndArgs();
   if (options.isHelp) return help(["grep"]);
   options.hasContextFlag = options.isContext || options.isPreContext || options.isPostContext;
-  console.log(params);
-  console.log(options);
 
   const nContext = Math.max(Number(params.isPreContext), Number(params.isContext), Number(params.isPostContext));
   const nLimit = Number(params.isMaxMatches);
