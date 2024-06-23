@@ -106,42 +106,78 @@ const VALID_ARGS: ValidArgs<keyof Options> = {
   hasContextFlag: { short: [], long: [] },
 } as const;
 
+const INIT_OPTIONS: Options = {
+  isRegExpr: false,
+
+  isLineNum: false,
+  isNamed: false,
+  isNotNamed: false,
+  isInvertMatch: false,
+  isMaxMatches: false,
+
+  isQuiet: false,
+  isVerbose: false,
+
+  isToFile: false,
+  isOverWrite: false,
+
+  isPreContext: false,
+  isContext: false,
+  isPostContext: false,
+
+  isSearchAll: false,
+  isPipeIn: false,
+
+  isHelp: false,
+
+  isMultiFile: false,
+  hasContextFlag: false,
+};
+
+type Params = {
+  context: string;
+  limit: string;
+  outfile: string;
+};
+
+const INIT_PARAMS: Params = {
+  context: "",
+  limit: "",
+  outfile: "",
+};
+
 class Args {
   args: string[];
+  options: Options;
+  params: Params;
 
   constructor(args: (string | number | boolean)[]) {
     this.args = args.map(String);
+    this.options = INIT_OPTIONS;
+    this.params = INIT_PARAMS;
   }
 
-  initOptions: Options = {
-    isRegExpr: false,
+  private spliceParam(validArgs: ArgStrings): string {
+    const argIndex = [...validArgs.long, ...validArgs.short].reduce((ret: number, arg: string) => {
+      const argIndex = this.args.indexOf(arg);
+      return argIndex > -1 ? argIndex : ret;
+    }, NaN);
 
-    isLineNum: false,
-    isNamed: false,
-    isNotNamed: false,
-    isInvertMatch: false,
-    isMaxMatches: false,
+    if (isNaN(argIndex)) return "";
 
-    isQuiet: false,
-    isVerbose: false,
+    return this.args.splice(argIndex + 1, 1)[0];
+  }
 
-    isToFile: false,
-    isOverWrite: false,
+  private spliceOptionalParams(): Args {
+    this.params.outfile = this.spliceParam(VALID_ARGS.isToFile);
+    this.params.limit = this.spliceParam(VALID_ARGS.isMaxMatches);
+    for (const args of [VALID_ARGS.isPreContext, VALID_ARGS.isContext, VALID_ARGS.isPostContext]) {
+      if (!this.params.context) this.params.context = this.spliceParam(args);
+    }
+    return this;
+  }
 
-    isPreContext: false,
-    isContext: false,
-    isPostContext: false,
-
-    isSearchAll: false,
-    isPipeIn: false,
-
-    isHelp: false,
-
-    isMultiFile: false,
-    hasContextFlag: false,
-  };
-
-  splitOptsAndArgs(): [Options, string[], string, string, string] {
+  private reduceToOptionsAndFiles(): string[] {
     const stripDash = (arg: string) => arg.slice(1);
     const argKeys = Object.keys(VALID_ARGS).map((k) => k as keyof Options);
     const [allValidArgs, validFlagChars] = argKeys.reduce(
@@ -155,56 +191,34 @@ class Args {
       [[], ""],
     );
 
-    let outFile, limit, context;
-    [outFile, this.args] = this.spliceOptParam(VALID_ARGS.isToFile);
-    [limit, this.args] = this.spliceOptParam(VALID_ARGS.isMaxMatches);
-    [context, this.args] = this.spliceOptParam(VALID_ARGS.isPreContext);
-    if (!context) [context, this.args] = this.spliceOptParam(VALID_ARGS.isContext);
-    if (!context) [context, this.args] = this.spliceOptParam(VALID_ARGS.isPostContext);
-    [outFile, limit, context] = [outFile, limit, context].map((val) => val ?? "");
-
-    const [options, fileArgs] = this.args.reduce(
-      ([options, fileArgs]: [Options, string[]], fullArg: string): [Options, string[]] => {
-        if (!fullArg.startsWith("-")) return [options, [...fileArgs, fullArg]];
-        const isLongArg = fullArg.startsWith("--");
-        const isShortArg = fullArg.length === 2;
-        let isBadArg = false;
-        for (const key of argKeys) {
-          const argStrings = VALID_ARGS[key];
-          // check for exact matches
-          if (isLongArg || isShortArg) {
-            isBadArg = !allValidArgs.includes(fullArg);
-            if (!isBadArg && [...argStrings.long, ...argStrings.short].includes(fullArg)) {
-              options[key] = true;
-            }
-          } else {
-            // or check multiflag
-            const flagStr = stripDash(fullArg);
-            const shortArgs = argStrings.short.map(stripDash);
-            isBadArg = [...flagStr].some((char) => !validFlagChars.includes(char));
-            if (!isBadArg && shortArgs.some((arg) => [...flagStr].includes(arg))) {
-              options[key] = true;
-            }
+    return this.args.reduce((fileArgs: string[], fullArg: string): string[] => {
+      if (!fullArg.startsWith("-")) return [...fileArgs, fullArg];
+      const isLongArg = fullArg.startsWith("--");
+      const isShortArg = fullArg.length === 2;
+      let isBadArg = false;
+      for (const key of argKeys) {
+        const argStrings = VALID_ARGS[key];
+        // check for exact matches
+        if (isLongArg || isShortArg) {
+          isBadArg = !allValidArgs.includes(fullArg);
+          if (!isBadArg && [...argStrings.long, ...argStrings.short].includes(fullArg)) {
+            this.options[key] = true;
+          }
+        } else {
+          // or check multiflag
+          const flagStr = stripDash(fullArg);
+          const shortArgs = argStrings.short.map(stripDash);
+          isBadArg = [...flagStr].some((char) => !validFlagChars.includes(char));
+          if (!isBadArg && shortArgs.some((arg) => [...flagStr].includes(arg))) {
+            this.options[key] = true;
           }
         }
-        return !isBadArg ? [options, fileArgs] : [options, [...fileArgs, fullArg]];
-      },
-      [this.initOptions, []],
-    );
-    return [options, fileArgs, outFile, context, limit];
+      }
+      return !isBadArg ? fileArgs : [...fileArgs, fullArg];
+    }, []);
   }
-
-  spliceOptParam(validArgs: ArgStrings): [string, string[]] | [undefined, string[]] {
-    const argIndex = [...validArgs.long, ...validArgs.short].reduce((ret: number, arg: string) => {
-      const argIndex = this.args.indexOf(arg);
-      return argIndex > -1 ? argIndex : ret;
-    }, NaN);
-
-    if (isNaN(argIndex)) return [undefined, this.args];
-
-    const nextArg = this.args.splice(argIndex + 1, 1)[0];
-
-    return [nextArg, this.args];
+  splitOptsAndArgs(): [string[], Options, Params] {
+    return [this.spliceOptionalParams().reduceToOptionsAndFiles(), this.options, this.params];
   }
 }
 
@@ -390,7 +404,7 @@ function grabTerminal(): string[] {
 export function grep(args: (string | number | boolean)[], server: BaseServer): void {
   if (!args.length) return Terminal.error(ERR.noArgs);
 
-  const [options, otherArgs, outFile, context, limit] = new Args(args).splitOptsAndArgs();
+  const [otherArgs, options, params] = new Args(args).splitOptsAndArgs();
   if (options.isHelp) return help(["grep"]);
   options.hasContextFlag = options.isContext || options.isPreContext || options.isPostContext;
 
@@ -398,18 +412,19 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   if (notFiles.length) return Terminal.error(ERR.badArgs(notFiles));
   options.isMultiFile = files.length > 1;
 
-  const outFilePath = checkOutFile(outFile, options, server);
+  console.log(params);
+  const outFilePath = checkOutFile(params.outfile, options, server);
   if (options.isToFile && !outFilePath) return; // associated errors are printed in checkOutFile
 
   if (!options.isPipeIn && !options.isSearchAll && !files.length) return Terminal.error(ERR.noSearchArg);
 
-  if (options.hasContextFlag && (!context.length || isNaN(Number(context))))
-    return Terminal.error(ERR.badParameter("context", context));
-  if (options.isMaxMatches && (!limit.length || isNaN(Number(limit))))
-    return Terminal.error(ERR.badParameter("limit", limit));
+  if (options.hasContextFlag && (!params.context.length || isNaN(Number(params.context))))
+    return Terminal.error(ERR.badParameter("context", params.context));
+  if (options.isMaxMatches && (!params.limit.length || isNaN(Number(params.limit))))
+    return Terminal.error(ERR.badParameter("limit", params.limit));
 
-  const nContext = Number(context);
-  const nLimit = Number(limit);
+  const nContext = Number(params.context);
+  const nLimit = Number(params.limit);
 
   try {
     const pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
