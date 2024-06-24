@@ -1672,6 +1672,7 @@ export interface GraftingTask {
   type: "GRAFTING";
   cyclesWorked: number;
   augmentation: string;
+  completion: Promise<void>;
 }
 
 /**
@@ -4603,18 +4604,22 @@ export interface Grafting {
   getAugmentationGraftPrice(augName: string): number;
 
   /**
-   * Retrieves the time required to graft an aug.
+   * Retrieves the time required to graft an aug. Do not use this value to determine when the ongoing grafting finishes.
+   * The ongoing grafting is affected by current intelligence level and focus bonus. You should use
+   * {@link waitForOngoingGrafting} for that purpose.
+   *
    * @remarks
    * RAM cost: 3.75 GB
    *
    * @param augName - Name of the aug to check the grafting time of. Must be an exact match.
-   * @returns The time required, in millis, to graft the named augmentation.
+   * @returns The time required, in milliseconds, to graft the named augmentation.
    * @throws Will error if an invalid Augmentation name is provided.
    */
   getAugmentationGraftTime(augName: string): number;
 
   /**
    * Retrieves a list of Augmentations that can be grafted.
+   *
    * @remarks
    * RAM cost: 5 GB
    *
@@ -4626,7 +4631,9 @@ export interface Grafting {
   getGraftableAugmentations(): string[];
 
   /**
-   * Begins grafting the named aug. You must be in New Tokyo to use this.
+   * Begins grafting the named aug. You must be in New Tokyo to use this. When you call this API, the current work
+   * (grafting or other actions) will be canceled.
+   *
    * @remarks
    * RAM cost: 7.5 GB
    *
@@ -4637,6 +4644,17 @@ export interface Grafting {
    * @throws Will error if called while you are not in New Tokyo.
    */
   graftAugmentation(augName: string, focus?: boolean): boolean;
+
+  /**
+   * Wait until the ongoing grafting finishes or is canceled.
+   *
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @returns A promise that resolves when the current grafting finishes or is canceled. If there is no ongoing
+   * grafting, the promise resolves immediately.
+   */
+  waitForOngoingGrafting(): Promise<void>;
 }
 
 /**
