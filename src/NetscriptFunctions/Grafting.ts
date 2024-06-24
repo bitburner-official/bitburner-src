@@ -12,7 +12,6 @@ import { Page } from "../ui/Router";
 import { GraftingWork } from "../Work/GraftingWork";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
-import { WorkType } from "../Work/Work";
 
 export function NetscriptGrafting(): InternalAPI<IGrafting> {
   const checkGraftingAPIAccess = (ctx: NetscriptContext): void => {
