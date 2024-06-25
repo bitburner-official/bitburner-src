@@ -16,17 +16,7 @@ const CYAN: string = "\x1b[36m";
 const YELLOW: string = "\x1b[33m";
 const WHITE: string = "\x1b[37m";
 
-type Errors = {
-  noArgs: string;
-  noSearchArg: string;
-  badArgs: (str: string[]) => string;
-  badParameter: (opt: string, arg: string) => string;
-  badOutFile: (str: string) => string;
-  outFileExists: (str: string) => string;
-  truncated: () => string;
-};
-
-const ERR: Errors = {
+const ERR = {
   noArgs: "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE] [-m -B/A/C] [NUM]",
   noSearchArg:
     "grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server",
@@ -185,16 +175,15 @@ class Args {
   private reduceToOptionsAndFiles(): string[] {
     const stripDash = (arg: string) => arg.slice(1);
     const argKeys = Object.keys(VALID_ARGS).map((k) => k as keyof Options);
-    const [allValidArgs, validFlagChars] = argKeys.reduce(
-      (ret: [readonly string[], string], key: keyof Options): [readonly string[], string] => {
-        const argStrings = VALID_ARGS[key];
-        return [
-          [...ret[0], ...argStrings.long, ...argStrings.short],
-          ret[1] + argStrings.short.map(stripDash).join(""),
-        ];
-      },
-      [[], ""],
-    );
+    const allValidArgs: string[] = [];
+
+    let validFlagChars = "";
+    for (const key of argKeys) {
+      const argString = VALID_ARGS[key];
+      allValidArgs.push(...[...argString.long, ...argString.short]);
+      validFlagChars += argString.short.map(stripDash).join("");
+    }
+
     const fileArgs = this.args.reduce((fileArgs: string[], fullArg: string): string[] => {
       if (!fullArg.startsWith("-")) return [...fileArgs, fullArg];
       const isLongArg = fullArg.startsWith("--");
