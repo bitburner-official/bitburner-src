@@ -4606,7 +4606,7 @@ export interface Grafting {
   /**
    * Retrieves the time required to graft an aug. Do not use this value to determine when the ongoing grafting finishes.
    * The ongoing grafting is affected by current intelligence level and focus bonus. You should use
-   * {@link waitForOngoingGrafting} for that purpose.
+   * {@link Grafting.waitForOngoingGrafting | waitForOngoingGrafting} for that purpose.
    *
    * @remarks
    * RAM cost: 3.75 GB

@@ -4,7 +4,7 @@
 
 ## Grafting.getAugmentationGraftTime() method
 
-Retrieves the time required to graft an aug. Do not use this value to determine when the ongoing grafting finishes. The ongoing grafting is affected by current intelligence level and focus bonus. You should use  for that purpose.
+Retrieves the time required to graft an aug. Do not use this value to determine when the ongoing grafting finishes. The ongoing grafting is affected by current intelligence level and focus bonus. You should use [waitForOngoingGrafting](./bitburner.grafting.waitforongoinggrafting.md) for that purpose.
 
 **Signature:**
 
