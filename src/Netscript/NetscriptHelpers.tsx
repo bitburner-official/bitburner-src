@@ -54,6 +54,7 @@ import { ServerConstants } from "../Server/data/Constants";
 import { basicErrorMessage, errorMessage, log } from "./ErrorMessages";
 import { assertString, debugType } from "./TypeAssertion";
 import { canAccessBitNodeFeature, getDefaultBitNodeOptions, validateActiveSourceFiles } from "../BitNode/BitNodeUtils";
+import { JSONMap } from "../Types/Jsonable";
 
 export const helpers = {
   string,
@@ -727,7 +728,7 @@ export function wrapUserNode(value: unknown) {
 
 function validateBitNodeOptions(ctx: NetscriptContext, bitNodeOptions: unknown): BitNodeOptions {
   const result = getDefaultBitNodeOptions();
-  if (bitNodeOptions === undefined || bitNodeOptions === null) {
+  if (bitNodeOptions == null) {
     return result;
   }
   if (typeof bitNodeOptions !== "object") {
@@ -742,7 +743,7 @@ function validateBitNodeOptions(ctx: NetscriptContext, bitNodeOptions: unknown):
     throw errorMessage(ctx, `activeSourceFiles is invalid. Reason: ${validationResultForActiveSourceFiles.message}`);
   }
 
-  result.activeSourceFiles = new Map(options.activeSourceFiles);
+  result.activeSourceFiles = new JSONMap(options.activeSourceFiles);
   result.restrictHomePCUpgrade = !!options.restrictHomePCUpgrade;
   result.disableGang = !!options.disableGang;
   result.disableCorporation = !!options.disableCorporation;

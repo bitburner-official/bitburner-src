@@ -1693,6 +1693,13 @@ export interface BitNodeOptions extends BitNodeBooleanOptions {
   activeSourceFiles: Map<number, number>;
 }
 
+/**
+ * restrictHomePCUpgrade: The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max
+ * core: 1.
+ *
+ * disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy
+ * augmentations for them.
+ */
 export interface BitNodeBooleanOptions {
   restrictHomePCUpgrade: boolean;
   disableGang: boolean;

@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
-import { Exploit, ExploitName } from "../../Exploits/Exploit";
+import { Exploit, ExploitDescription } from "../../Exploits/Exploit";
 import { Player } from "@player";
 import { OwnedAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
@@ -31,35 +31,6 @@ const getSourceFileData = (sfNumber: number): SourceFileData | null => {
       maxLevel = 3;
   }
 
-  if (sfNumber === -1) {
-    return {
-      n: sfNumber,
-      level: Player.exploits.length,
-      maxLevel: maxLevel,
-      activeLevel: Player.exploits.length,
-      name: "Source-File -1: Exploits in the BitNodes",
-      info: (
-        <>
-          This Source-File can only be acquired with obscure knowledge of the game, Javascript, and the web ecosystem.
-          <br />
-          <br />
-          It increases all of the player's multipliers by 0.1%
-          <br />
-          <br />
-          You have found the following exploits:
-          <br />
-          <br />
-          {Player.exploits.map((c) => (
-            <React.Fragment key={c}>
-              * {ExploitName(c)}
-              <br />
-            </React.Fragment>
-          ))}
-        </>
-      ),
-    };
-  }
-
   const sourceFile = SourceFiles["SourceFile" + sfNumber];
   if (sourceFile === undefined) {
     console.error(`Invalid source file number: ${sfNumber}`);
@@ -81,7 +52,31 @@ export function SourceFilesElement(): React.ReactElement {
   const exploits = Player.exploits;
   // Create a fake SF for -1, if "owned"
   if (exploits.length > 0) {
-    sourceFileList.push(getSourceFileData(-1)!);
+    sourceFileList.push({
+      n: -1,
+      level: Player.exploits.length,
+      maxLevel: Object.keys(Exploit).length,
+      activeLevel: Player.exploits.length,
+      name: "Source-File -1: Exploits in the BitNodes",
+      info: (
+        <>
+          This Source-File can only be acquired with obscure knowledge of the game, Javascript, and the web ecosystem.
+          <br />
+          <br />
+          It increases all of the player's multipliers by 0.1%
+          <br />
+          <br />
+          You have found the following exploits:
+          <ul>
+            {Player.exploits.map((c) => (
+              <li key={c}>
+                {c}: {ExploitDescription[c]}
+              </li>
+            ))}
+          </ul>
+        </>
+      ),
+    });
   }
   for (const [sfNumber] of Player.sourceFiles.entries()) {
     const sourceFileData = getSourceFileData(sfNumber);
@@ -133,7 +128,9 @@ export function SourceFilesElement(): React.ReactElement {
                         <Typography>
                           Level: {sourceFileData.level} / {sourceFileData.maxLevel}
                         </Typography>
-                        <Typography>Active level: {sourceFileData.activeLevel}</Typography>
+                        {sourceFileData.activeLevel < sourceFileData.level && (
+                          <Typography>Active level: {sourceFileData.activeLevel}</Typography>
+                        )}
                       </>
                     }
                   />
@@ -147,19 +144,17 @@ export function SourceFilesElement(): React.ReactElement {
             <Typography variant="h6" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
               {selectedSfData.name}
             </Typography>
-            <Typography sx={{ maxHeight: 350, overflowY: "scroll" }}>
-              {(() => {
-                return (
-                  <>
-                    Level: {selectedSfData.level} / {selectedSfData.maxLevel}
-                    <br />
-                    Active level: {selectedSfData.activeLevel}
-                    <br />
-                    <br />
-                    {selectedSfData.info}
-                  </>
-                );
-              })()}
+            <Typography component="div" sx={{ maxHeight: 350, overflowY: "scroll" }}>
+              Level: {selectedSfData.level} / {selectedSfData.maxLevel}
+              <br />
+              {selectedSfData.activeLevel < selectedSfData.level && (
+                <>
+                  Active level: {selectedSfData.activeLevel}
+                  <br />
+                </>
+              )}
+              <br />
+              {selectedSfData.info}
             </Typography>
           </Box>
         )}

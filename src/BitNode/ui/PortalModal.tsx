@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { BitnodeMultiplierDescription } from "./BitnodeMultipliersDescription";
 import { BitNodeAdvancedOptions } from "./BitNodeAdvancedOptions";
+import { JSONMap } from "../../Types/Jsonable";
 
 interface IProps {
   open: boolean;
@@ -35,16 +36,8 @@ export function PortalModal(props: IProps): React.ReactElement {
   }
   currentSourceFiles = new Map([...currentSourceFiles].sort((a, b) => a[0] - b[0]));
 
-  let activeSourceFiles = new Map(currentSourceFiles);
-  let bitNodeBooleanOptions = {
-    restrictHomePCUpgrade: false,
-    disableGang: false,
-    disableCorporation: false,
-    disableBladeburner: false,
-    disable4SData: false,
-    disableHacknetServer: false,
-    disableSleeveExpAndAugmentation: false,
-  };
+  let activeSourceFiles: JSONMap<number, number>;
+  let bitNodeBooleanOptions: BitNodeBooleanOptions;
   const callbacks = {
     setSourceFileLevel: (sfNumber: number, sfLevel: number) => {
       if (sfLevel > 0) {
@@ -60,7 +53,7 @@ export function PortalModal(props: IProps): React.ReactElement {
       bitNodeBooleanOptions[key] = value;
     },
     resetAll: () => {
-      activeSourceFiles = new Map(currentSourceFiles);
+      activeSourceFiles = new JSONMap(currentSourceFiles);
       bitNodeBooleanOptions = {
         restrictHomePCUpgrade: false,
         disableGang: false,
@@ -72,6 +65,7 @@ export function PortalModal(props: IProps): React.ReactElement {
       };
     },
   };
+  callbacks.resetAll();
 
   return (
     <Modal open={props.open} onClose={props.onClose}>

@@ -1764,6 +1764,7 @@ export const ns: InternalAPI<NSFull> = {
     currentNode: Player.bitNodeN,
     ownedAugs: new Map(Player.augmentations.map((aug) => [aug.name, aug.level])),
     ownedSF: new Map(Player.sourceFiles),
+    // We need to skip some internal-only properties, e.g., Player.bitNodeOptions.initialized.
     bitNodeOptions: {
       activeSourceFiles: new Map(Player.bitNodeOptions.activeSourceFiles),
       restrictHomePCUpgrade: Player.bitNodeOptions.restrictHomePCUpgrade,

@@ -40,6 +40,9 @@ export function validateActiveSourceFiles(activeSourceFiles: Map<number, number>
   valid: boolean;
   message?: string;
 } {
+  if (!(activeSourceFiles instanceof JSONMap)) {
+    return { valid: false, message: `It must be a JSONMap.` };
+  }
   for (const [sfNumber, sfLevel] of activeSourceFiles.entries()) {
     if (!validBitNodes.includes(sfNumber)) {
       return { valid: false, message: `Invalid BitNode: ${sfNumber}.` };
@@ -58,12 +61,5 @@ export function setBitNodeOptions(bitNodeOptions: BitNodeOptions): void {
     throw new Error(`activeSourceFiles is invalid. Reason: ${validationResultForActiveSourceFiles.message}`);
   }
 
-  Player.bitNodeOptions.activeSourceFiles = new JSONMap(bitNodeOptions.activeSourceFiles);
-  Player.bitNodeOptions.restrictHomePCUpgrade = bitNodeOptions.restrictHomePCUpgrade;
-  Player.bitNodeOptions.disableGang = bitNodeOptions.disableGang;
-  Player.bitNodeOptions.disableCorporation = bitNodeOptions.disableCorporation;
-  Player.bitNodeOptions.disableBladeburner = bitNodeOptions.disableBladeburner;
-  Player.bitNodeOptions.disable4SData = bitNodeOptions.disable4SData;
-  Player.bitNodeOptions.disableHacknetServer = bitNodeOptions.disableHacknetServer;
-  Player.bitNodeOptions.disableSleeveExpAndAugmentation = bitNodeOptions.disableSleeveExpAndAugmentation;
+  Object.assign(Player.bitNodeOptions, bitNodeOptions);
 }

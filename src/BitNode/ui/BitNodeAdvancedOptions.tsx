@@ -3,6 +3,7 @@ import React from "react";
 import { Box, ButtonGroup, Collapse, Paper, TextField, Typography } from "@mui/material";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
+import { validBitNodes } from "../BitNodeUtils";
 
 interface SourceFileButtonRowProps {
   sourceFileNumber: number;
@@ -117,15 +118,14 @@ export function BitNodeAdvancedOptions({
           <Typography>Set active level of Source-File:</Typography>
           <br />
           <Typography>
-            Note: If you change the active level of SF, the SF's effects are affected, but you still have that SF level.
-            For example, if you have SF 1.2 and enter BN 1.3 with the active level set to 0, the effects of SF 1.1 and
-            1.2 are disabled, but you still have SF 1.2. When you destroy BN 1.3, your SF 1.2 will be upgraded to SF
-            1.3.
+            Note: Changing the active level of a SF is temporary; you still permanently own that SF level. For example,
+            if you enter BN 1.3 while having SF 1.2 but with the active level set to 0, you will not get the bonuses
+            from SF 1.1 or SF 1.2, but you will still earn SF 1.3 when destroying the BN.
           </Typography>
           <br />
           <table>
             <tbody>
-              {[...currentSourceFiles].map(([sourceFileNumber]) => (
+              {validBitNodes.map((sourceFileNumber) => (
                 <SourceFileButtonRow
                   key={sourceFileNumber}
                   sourceFileNumber={sourceFileNumber}
@@ -146,36 +146,35 @@ export function BitNodeAdvancedOptions({
             text="Restrict Home PC upgrade"
             tooltip={<>Max RAM: 128GB. Max core: 1.</>}
           />
-          {(getSourceFileLevel(2) > 0 || targetBitNode === 2) && (
-            <OptionSwitch
-              checked={false}
-              onChange={(value) => {
-                callbacks.setBooleanOption("disableGang", value);
-              }}
-              text="Disable Gang"
-              tooltip={<>Disable Gang</>}
-            />
-          )}
-          {(getSourceFileLevel(3) > 0 || targetBitNode === 3) && (
-            <OptionSwitch
-              checked={false}
-              onChange={(value) => {
-                callbacks.setBooleanOption("disableCorporation", value);
-              }}
-              text="Disable Corporation"
-              tooltip={<>Disable Corporation</>}
-            />
-          )}
-          {(getSourceFileLevel(6) > 0 || getSourceFileLevel(7) > 0 || targetBitNode === 6 || targetBitNode === 7) && (
-            <OptionSwitch
-              checked={false}
-              onChange={(value) => {
-                callbacks.setBooleanOption("disableBladeburner", value);
-              }}
-              text="Disable Bladeburner"
-              tooltip={<>Disable Bladeburner</>}
-            />
-          )}
+          <OptionSwitch
+            disabled={getSourceFileLevel(2) === 0 && targetBitNode !== 2}
+            checked={false}
+            onChange={(value) => {
+              callbacks.setBooleanOption("disableGang", value);
+            }}
+            text="Disable Gang"
+            tooltip={<>Disable Gang</>}
+          />
+          <OptionSwitch
+            disabled={getSourceFileLevel(3) === 0 && targetBitNode !== 3}
+            checked={false}
+            onChange={(value) => {
+              callbacks.setBooleanOption("disableCorporation", value);
+            }}
+            text="Disable Corporation"
+            tooltip={<>Disable Corporation</>}
+          />
+          <OptionSwitch
+            disabled={
+              getSourceFileLevel(6) === 0 && getSourceFileLevel(7) === 0 && targetBitNode !== 6 && targetBitNode !== 7
+            }
+            checked={false}
+            onChange={(value) => {
+              callbacks.setBooleanOption("disableBladeburner", value);
+            }}
+            text="Disable Bladeburner"
+            tooltip={<>Disable Bladeburner</>}
+          />
           <OptionSwitch
             checked={false}
             onChange={(value) => {
@@ -184,28 +183,24 @@ export function BitNodeAdvancedOptions({
             text="Disable 4S Market Data"
             tooltip={<>Disable 4S Market Data</>}
           />
-          {(getSourceFileLevel(9) > 0 || targetBitNode === 9) && (
-            <OptionSwitch
-              checked={false}
-              onChange={(value) => {
-                callbacks.setBooleanOption("disableHacknetServer", value);
-              }}
-              text="Disable Hacknet Server"
-              tooltip={<>Disable Hacknet Server</>}
-            />
-          )}
-          {(getSourceFileLevel(10) > 0 || targetBitNode === 10) && (
-            <>
-              <OptionSwitch
-                checked={false}
-                onChange={(value) => {
-                  callbacks.setBooleanOption("disableSleeveExpAndAugmentation", value);
-                }}
-                text="Disable Sleeves' experience and augmentation"
-                tooltip={<>Sleeves cannot gain experience or install augmentations</>}
-              />
-            </>
-          )}
+          <OptionSwitch
+            disabled={getSourceFileLevel(9) === 0 && targetBitNode !== 9}
+            checked={false}
+            onChange={(value) => {
+              callbacks.setBooleanOption("disableHacknetServer", value);
+            }}
+            text="Disable Hacknet Server"
+            tooltip={<>Disable Hacknet Server</>}
+          />
+          <OptionSwitch
+            disabled={getSourceFileLevel(10) === 0 && targetBitNode !== 10}
+            checked={false}
+            onChange={(value) => {
+              callbacks.setBooleanOption("disableSleeveExpAndAugmentation", value);
+            }}
+            text="Disable Sleeves' experience and augmentation"
+            tooltip={<>Sleeves cannot gain experience or install augmentations</>}
+          />
         </Box>
       </Collapse>
     </>
