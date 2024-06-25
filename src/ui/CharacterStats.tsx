@@ -561,7 +561,7 @@ export function CharacterStats(): React.ReactElement {
                 rows={[
                   {
                     mult: "IPvGO Node Power bonus",
-                    value: Player.sourceFileLvl(14) ? 1.25 * currentNodeMults.GoPower : currentNodeMults.GoPower,
+                    value: Player.sourceFileLvl(14) ? 2 * currentNodeMults.GoPower : currentNodeMults.GoPower,
                   },
                   {
                     mult: "IPvGO Max Favor",

@@ -2150,6 +2150,18 @@ export interface Singularity {
   workForFaction(faction: string, workType: FactionWorkType | `${FactionWorkType}`, focus?: boolean): boolean;
 
   /**
+   * Get the work types of a faction.
+   * @remarks
+   * RAM cost: 1 GB * 16/4/1
+   *
+   * This function returns an array containing the work types of the specified faction.
+   *
+   * @param faction - Name of the faction.
+   * @returns The work types of the faction.
+   */
+  getFactionWorkTypes(faction: string): FactionWorkType[];
+
+  /**
    * Get faction reputation.
    * @remarks
    * RAM cost: 1 GB * 16/4/1

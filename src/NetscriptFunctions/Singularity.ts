@@ -611,11 +611,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     hospitalize: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
-      if (Player.currentWork || Router.page() === Page.Infiltration || Router.page() === Page.BitVerse) {
-        helpers.log(ctx, () => "Cannot go to the hospital because the player is busy.");
-        return;
-      }
-      Player.hospitalize();
+      Player.hospitalize(true);
     },
     isBusy: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
@@ -831,7 +827,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
         // if the player is in a gang and the target faction is any of the gang faction, fail
         if (Player.gang && faction.name === Player.getGangFaction().name) {
-          helpers.log(ctx, () => `You can't work for '${facName}' because youre managing a gang for it`);
+          helpers.log(ctx, () => `You can't work for '${facName}' because you are managing a gang for it`);
           return false;
         }
 
@@ -917,6 +913,26 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
             return false;
         }
       },
+    getFactionWorkTypes: (ctx) => (_facName) => {
+      helpers.checkSingularityAccess(ctx);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
+      // Gang does not offer normal work.
+      if (Player.gang?.facName === facName) {
+        return [];
+      }
+      const factionInfo = Factions[facName].getInfo();
+      const workTypes = [];
+      if (factionInfo.offerHackingWork) {
+        workTypes.push(FactionWorkType.hacking);
+      }
+      if (factionInfo.offerFieldWork) {
+        workTypes.push(FactionWorkType.field);
+      }
+      if (factionInfo.offerSecurityWork) {
+        workTypes.push(FactionWorkType.security);
+      }
+      return workTypes;
+    },
     getFactionRep: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
@@ -945,7 +961,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         return false;
       }
       if (Player.gang && faction.name === Player.getGangFaction().name) {
-        helpers.log(ctx, () => `You can't donate to '${facName}' because youre managing a gang for it`);
+        helpers.log(ctx, () => `You can't donate to '${facName}' because you are managing a gang for it`);
         return false;
       }
       if (faction.name === FactionName.ChurchOfTheMachineGod || faction.name === FactionName.Bladeburners) {

@@ -492,7 +492,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "that can be created from the string:\n\n",
         `${data}\n\n`,
         "Note that an octet cannot begin with a '0' unless the number",
-        "itself is actually 0. For example, '192.168.010.1' is not a valid IP.\n\n",
+        "itself is exactly '0'. For example, '192.168.010.1' is not a valid IP.\n\n",
         "Examples:\n\n",
         '25525511135 -> ["255.255.11.135", "255.255.111.35"]\n',
         '1938718066 -> ["193.87.180.66"]',
