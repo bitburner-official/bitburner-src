@@ -28,23 +28,24 @@ const difficulties: {
 export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps): React.ReactElement {
   const [phase, setPhase] = useState(0);
   const timeOutId = useRef<number | ReturnType<typeof setTimeout>>(-1);
+  const hasWKSharmonizer = Player.hasAugmentation(AugmentationName.WKSharmonizer, true);
+  const hasMightOfAres = Player.hasAugmentation(AugmentationName.MightOfAres, true);
 
   const data = useMemo(() => {
     // Determine time window of phases
     const newDifficulty: Difficulty = { window: 0 };
     interpolate(difficulties, difficulty, newDifficulty);
-    const distractedTime =
-      newDifficulty.window * (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 1.3 : 1);
+    const distractedTime = newDifficulty.window * (hasWKSharmonizer ? 1.3 : 1);
     const alertedTime = 250;
     const guardingTime = Math.random() * 3250 + 1500 - (distractedTime + alertedTime);
 
     return {
-      hasAugment: Player.hasAugmentation(AugmentationName.MightOfAres, true),
+      hasAugment: hasMightOfAres,
       guardingTime,
       distractedTime,
       alertedTime,
     };
-  }, [difficulty]);
+  }, [difficulty, hasWKSharmonizer, hasMightOfAres]);
 
   useEffect(() => {
     return () => {
