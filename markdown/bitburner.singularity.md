@@ -53,6 +53,7 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [getFactionFavorGain(faction)](./bitburner.singularity.getfactionfavorgain.md) | Get faction favor gain. |
 |  [getFactionInviteRequirements(faction)](./bitburner.singularity.getfactioninviterequirements.md) | List conditions for being invited to a faction. |
 |  [getFactionRep(faction)](./bitburner.singularity.getfactionrep.md) | Get faction reputation. |
+|  [getFactionWorkTypes(faction)](./bitburner.singularity.getfactionworktypes.md) | Get the work types of a faction. |
 |  [getOwnedAugmentations(purchased)](./bitburner.singularity.getownedaugmentations.md) | Get a list of owned augmentation. |
 |  [getOwnedSourceFiles()](./bitburner.singularity.getownedsourcefiles.md) | Get a list of acquired Source-Files. |
 |  [getUpgradeHomeCoresCost()](./bitburner.singularity.getupgradehomecorescost.md) | Get the price of upgrading home cores. |

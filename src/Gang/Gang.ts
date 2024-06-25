@@ -154,9 +154,11 @@ export class Gang {
       const newWanted = oldWanted + wantedLevelGainPerCycle * numCycles;
       // Allows recovery when wanted / respect ratio is too high
       this.wanted = newWanted * (1 - justice * 0.001);
-      this.wantedGainRate -= newWanted - this.wanted;
+      this.wantedGainRate = (this.wanted - oldWanted) / numCycles;
       // Prevent overflow
-      if (this.wanted < 1 || (wantedLevelGainPerCycle <= 0 && this.wanted > oldWanted)) this.wanted = 1;
+      if (this.wanted < 1 || (wantedLevelGainPerCycle <= 0 && this.wanted > oldWanted)) {
+        this.wanted = 1;
+      }
     }
     Player.gainMoney(moneyGainPerCycle * numCycles, "gang");
   }

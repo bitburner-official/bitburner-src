@@ -174,6 +174,4 @@ export function applySourceFile(bn: number, lvl: number): void {
       console.error(`Invalid source file number: ${bn}`);
       break;
   }
-
-  sourceFileObject.owned = true;
 }
