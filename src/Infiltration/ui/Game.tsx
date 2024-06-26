@@ -97,7 +97,11 @@ export function Game(props: GameProps): React.ReactElement {
       if (options?.automated) {
         damage = Player.hp.current;
         setTimeout(() => {
-          SnackbarEvents.emit("You were hospitalized. Do not try to automate infiltration!", ToastVariant.WARNING, 5000);
+          SnackbarEvents.emit(
+            "You were hospitalized. Do not try to automate infiltration!",
+            ToastVariant.WARNING,
+            5000,
+          );
         }, 500);
       }
       if (Player.takeDamage(damage)) {
