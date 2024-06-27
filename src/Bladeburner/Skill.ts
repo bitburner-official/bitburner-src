@@ -3,7 +3,7 @@ import type { BladeMultName, BladeSkillName } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Bladeburner } from "./Bladeburner";
 import { Availability } from "./Types";
-import { PositiveInteger, PositiveSafeInteger, isPositiveInteger } from "../types";
+import { PositiveInteger, isPositiveInteger } from "../types";
 import { PartialRecord, getRecordEntries } from "../Types/Record";
 
 interface SkillParams {
@@ -35,30 +35,10 @@ export class Skill {
   }
 
   calculateCost(currentLevel: number, count = 1 as PositiveInteger): number {
-    if (currentLevel + count > this.maxLvl) return Infinity;
-
-    const recursiveMode = (currentLevel: number, count: PositiveSafeInteger): number => {
-      if (count <= 1) {
-        return Math.floor((this.baseCost + currentLevel * this.costInc) * currentNodeMults.BladeburnerSkillCost);
-      } else {
-        const thisUpgrade = Math.floor(
-          (this.baseCost + currentLevel * this.costInc) * currentNodeMults.BladeburnerSkillCost,
-        );
-        return this.calculateCost(currentLevel + 1, (count - 1) as PositiveSafeInteger) + thisUpgrade;
-      }
-    };
-
-    // Use recursive mode if count is small
-    if (count <= 100) return recursiveMode(currentLevel, count as PositiveSafeInteger);
-    // Use optimized mode if count is large
-    else {
-      //unFloored is roughly equivalent to
-      //(this.baseCost + currentLevel * this.costInc) * BitNodeMultipliers.BladeburnerSkillCost
-      //being repeated for increasing currentLevel
-      const preMult = (count * (2 * this.baseCost + this.costInc * (2 * currentLevel + count + 1))) / 2;
-      const unFloored = preMult * currentNodeMults.BladeburnerSkillCost - count / 2;
-      return Math.floor(unFloored);
-    }
+    return Math.floor(
+      count * this.baseCost * currentNodeMults.BladeburnerSkillCost +
+        this.costInc * currentNodeMults.BladeburnerSkillCost * (count * currentLevel + (count * (count - 1)) / 2),
+    );
   }
 
   canUpgrade(bladeburner: Bladeburner, count = 1): Availability<{ cost: number }> {
