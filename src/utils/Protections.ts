@@ -7,3 +7,17 @@ Object.defineProperties(window, {
   Object: { writable: false },
   String: { writable: false },
 });
+
+/**
+ * Automated infiltration scripts usually intercept document.addEventListener and document.removeEventListener.
+ */
+Object.defineProperty(document, "addEventListener", {
+  writable: false,
+  configurable: false,
+  value: document.addEventListener,
+});
+Object.defineProperty(document, "removeEventListener", {
+  writable: false,
+  configurable: false,
+  value: document.removeEventListener,
+});
