@@ -5840,7 +5840,8 @@ export interface NS {
   clearLog(): void;
 
   /**
-   * Disables logging for the given function.
+   * Disables logging for the given NS function.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -5848,29 +5849,49 @@ export interface NS {
    *
    * For specific interfaces, use the form "namespace.functionName". (e.g. "ui.setTheme")
    *
-   * @param fn - Name of function for which to disable logging.
+   * @example
+   * ```js
+   * ns.disableLog("hack"); // Disable logging for `ns.hack()`
+   *
+   * ```
+   *
+   * @param fn - Name of the NS function for which to disable logging.
    */
   disableLog(fn: string): void;
 
   /**
-   * Enable logging for a certain function.
+   * Enables logging for the given NS function.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
-   * Re-enables logging for the given function. If `ALL` is passed into this
-   * function as an argument, then it will revert the effects of disableLog(`ALL`).
+   * Re-enables logging for the given function. If `ALL` is passed into this function as an argument, it will revert the
+   * effect of disableLog("ALL").
    *
-   * @param fn - Name of function for which to enable logging.
+   * @example
+   * ```js
+   * ns.enableLog("hack"); // Enable logging for `ns.hack()`
+   *
+   * ```
+   *
+   * @param fn - Name of the NS function for which to enable logging.
    */
   enableLog(fn: string): void;
 
   /**
-   * Checks the status of the logging for the given function.
+   * Checks the status of the logging for the given NS function.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
+   * @example
+   * ```js
+   * ns.print(ns.isLogEnabled("hack")); // Check if logging is enabled for `ns.hack()`
+   *
+   * ```
+   *
    * @param fn - Name of function to check.
-   * @returns Returns a boolean indicating whether or not logging is enabled for that function (or `ALL`).
+   * @returns Returns a boolean indicating whether or not logging is enabled for that NS function (or `ALL`).
    */
   isLogEnabled(fn: string): boolean;
 

@@ -4,7 +4,7 @@
 
 ## NS.disableLog() method
 
-Disables logging for the given function.
+Disables logging for the given NS function.
 
 **Signature:**
 
@@ -16,7 +16,7 @@ disableLog(fn: string): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  fn | string | Name of function for which to disable logging. |
+|  fn | string | Name of the NS function for which to disable logging. |
 
 **Returns:**
 
@@ -29,4 +29,12 @@ RAM cost: 0 GB
 Logging can be disabled for all functions by passing `ALL` as the argument.
 
 For specific interfaces, use the form "namespace.functionName". (e.g. "ui.setTheme")
+
+## Example
+
+
+```js
+ns.disableLog("hack"); // Disable logging for `ns.hack()`
+
+```
 

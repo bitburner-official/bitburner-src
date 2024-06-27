@@ -63,8 +63,8 @@ export async function main(ns) {
 |  [clearPort(portNumber)](./bitburner.ns.clearport.md) | Clear data from a port. |
 |  [closeTail(pid)](./bitburner.ns.closetail.md) | Close the tail window of a script. |
 |  [deleteServer(host)](./bitburner.ns.deleteserver.md) | Delete a purchased server. |
-|  [disableLog(fn)](./bitburner.ns.disablelog.md) | Disables logging for the given function. |
-|  [enableLog(fn)](./bitburner.ns.enablelog.md) | Enable logging for a certain function. |
+|  [disableLog(fn)](./bitburner.ns.disablelog.md) | Disables logging for the given NS function. |
+|  [enableLog(fn)](./bitburner.ns.enablelog.md) | Enables logging for the given NS function. |
 |  [exec(script, hostname, threadOrOptions, args)](./bitburner.ns.exec.md) | Start another script on any server. |
 |  [exit()](./bitburner.ns.exit.md) | Terminates the current script immediately. |
 |  [fileExists(filename, host)](./bitburner.ns.fileexists.md) | Check if a file exists. |
@@ -125,7 +125,7 @@ export async function main(ns) {
 |  [hasRootAccess(host)](./bitburner.ns.hasrootaccess.md) | Check if you have root access on a server. |
 |  [hasTorRouter()](./bitburner.ns.hastorrouter.md) | Returns whether the player has access to the darkweb. |
 |  [httpworm(host)](./bitburner.ns.httpworm.md) | Runs HTTPWorm.exe on a server. |
-|  [isLogEnabled(fn)](./bitburner.ns.islogenabled.md) | Checks the status of the logging for the given function. |
+|  [isLogEnabled(fn)](./bitburner.ns.islogenabled.md) | Checks the status of the logging for the given NS function. |
 |  [isRunning(script, host, args)](./bitburner.ns.isrunning.md) | Check if a script is running. |
 |  [kill(pid)](./bitburner.ns.kill.md) | Terminate the script with the provided PID. |
 |  [kill(filename, hostname, args)](./bitburner.ns.kill_1.md) | Terminate the script(s) with the provided filename, hostname, and script arguments. |
