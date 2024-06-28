@@ -15,7 +15,7 @@ waitForOngoingGrafting(): Promise<void>;
 
 Promise&lt;void&gt;
 
-A promise that resolves when the current grafting finishes or is canceled. If there is no ongoing grafting, the promise resolves immediately.
+A promise that resolves when the current grafting finishes or is canceled. If there is no current work, the promise resolves immediately. If the current work is not a grafting work, the promise rejects immediately.
 
 ## Remarks
 

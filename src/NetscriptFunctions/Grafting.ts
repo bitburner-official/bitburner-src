@@ -100,8 +100,13 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
 
     waitForOngoingGrafting: (ctx) => () => {
       checkGraftingAPIAccess(ctx);
-      if (!Player.currentWork || !(Player.currentWork instanceof GraftingWork)) {
+      if (!Player.currentWork) {
         return Promise.resolve();
+      }
+      if (!(Player.currentWork instanceof GraftingWork)) {
+        return Promise.reject(
+          `The current work is not a grafting work. Type of current work: ${Player.currentWork.type}.`,
+        );
       }
       return Player.currentWork.completion;
     },

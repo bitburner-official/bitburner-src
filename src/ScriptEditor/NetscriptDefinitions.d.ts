@@ -4651,8 +4651,8 @@ export interface Grafting {
    * @remarks
    * RAM cost: 1 GB
    *
-   * @returns A promise that resolves when the current grafting finishes or is canceled. If there is no ongoing
-   * grafting, the promise resolves immediately.
+   * @returns A promise that resolves when the current grafting finishes or is canceled. If there is no current work,
+   * the promise resolves immediately. If the current work is not a grafting work, the promise rejects immediately.
    */
   waitForOngoingGrafting(): Promise<void>;
 }
