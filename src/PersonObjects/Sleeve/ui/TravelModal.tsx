@@ -9,16 +9,16 @@ import { Settings } from "../../../Settings/Settings";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 
-interface IProps {
+interface TravelModalProps {
   open: boolean;
   onClose: () => void;
   sleeve: Sleeve;
   rerender: () => void;
 }
 
-export function TravelModal(props: IProps): React.ReactElement {
-  function travel(city: string): void {
-    if (!props.sleeve.travel(city as CityName)) {
+export function TravelModal(props: TravelModalProps): React.ReactElement {
+  function travel(city: CityName): void {
+    if (!props.sleeve.travel(city)) {
       dialogBoxCreate("You cannot afford to have this sleeve travel to another city");
       return;
     }
@@ -36,13 +36,13 @@ export function TravelModal(props: IProps): React.ReactElement {
           also set your current sleeve task to idle.
         </Typography>
         {Settings.DisableASCIIArt ? (
-          Object.values(CityName).map((city: CityName) => (
+          Object.values(CityName).map((city) => (
             <Button key={city} onClick={() => travel(city)}>
               {city}
             </Button>
           ))
         ) : (
-          <WorldMap currentCity={props.sleeve.city} onTravel={(city: CityName) => travel(city)} />
+          <WorldMap currentCity={props.sleeve.city} onTravel={travel} />
         )}
       </>
     </Modal>

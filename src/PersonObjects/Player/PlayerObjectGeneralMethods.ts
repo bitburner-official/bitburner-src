@@ -28,8 +28,6 @@ import { Faction } from "../../Faction/Faction";
 import { Factions } from "../../Faction/Factions";
 import { FactionInvitationEvents } from "../../Faction/ui/FactionInvitationManager";
 import { resetGangs } from "../../Gang/AllGangs";
-import { Cities } from "../../Locations/Cities";
-import { Locations } from "../../Locations/Locations";
 import { Sleeve } from "../Sleeve/Sleeve";
 import { SleeveWorkType } from "../Sleeve/Work/Work";
 import { calculateSkillProgress as calculateSkillProgressF, ISkillProgress } from "../formulas/skill";
@@ -532,26 +530,8 @@ export function gainCodingContractReward(
   }
 }
 
-export function travel(this: PlayerObject, cityName: CityName): boolean {
-  if (Cities[cityName] == null) {
-    throw new Error(`Player.travel() was called with an invalid city: ${cityName}`);
-  }
-  if (!this.canAfford(CONSTANTS.TravelCost)) {
-    return false;
-  }
-
-  this.loseMoney(CONSTANTS.TravelCost, "other");
-  this.city = cityName;
-
-  return true;
-}
-
 export function gotoLocation(this: PlayerObject, to: LocationName): boolean {
-  if (Locations[to] == null) {
-    throw new Error(`Player.gotoLocation() was called with an invalid location: ${to}`);
-  }
   this.location = to;
-
   return true;
 }
 

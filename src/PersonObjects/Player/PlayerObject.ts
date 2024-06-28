@@ -110,7 +110,6 @@ export class PlayerObject extends Person implements IPlayer {
   startFocusing = generalMethods.startFocusing;
   startGang = gangMethods.startGang;
   takeDamage = generalMethods.takeDamage;
-  travel = generalMethods.travel;
   giveExploit = generalMethods.giveExploit;
   giveAchievement = generalMethods.giveAchievement;
   getCasinoWinnings = generalMethods.getCasinoWinnings;

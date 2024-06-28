@@ -1,6 +1,6 @@
 import { Button, Container, Paper, Typography } from "@mui/material";
 import React, { useCallback, useState } from "react";
-import { FactionName } from "@enums";
+import { FactionName, ToastVariant } from "@enums";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { Player } from "@player";
@@ -15,6 +15,7 @@ import { SlashGame } from "./SlashGame";
 import { Victory } from "./Victory";
 import { WireCuttingGame } from "./WireCuttingGame";
 import { calculateDamageAfterFailingInfiltration } from "../utils";
+import { SnackbarEvents } from "../../ui/React/Snackbar";
 
 type GameProps = {
   StartingDifficulty: number;
@@ -91,11 +92,18 @@ export function Game(props: GameProps): React.ReactElement {
       setStage(Stage.Countdown);
       pushResult(false);
       Player.receiveRumor(FactionName.ShadowsOfAnarchy);
-      // Kill the player immediately if they use automation, so
-      // it's clear they're not meant to
-      const damage = options?.automated
-        ? Player.hp.current
-        : calculateDamageAfterFailingInfiltration(props.StartingDifficulty);
+      let damage = calculateDamageAfterFailingInfiltration(props.StartingDifficulty);
+      // Kill the player immediately if they use automation, so it's clear they're not meant to
+      if (options?.automated) {
+        damage = Player.hp.current;
+        setTimeout(() => {
+          SnackbarEvents.emit(
+            "You were hospitalized. Do not try to automate infiltration!",
+            ToastVariant.WARNING,
+            5000,
+          );
+        }, 500);
+      }
       if (Player.takeDamage(damage)) {
         Router.toPage(Page.City);
         return;

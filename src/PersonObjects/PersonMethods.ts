@@ -1,8 +1,10 @@
+import type { CityName } from "@enums";
 import { Person } from "./Person";
 import { calculateSkill } from "./formulas/skill";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
 import { WorkStats } from "@nsdefs";
+import { CONSTANTS } from "../Constants";
 
 export function gainHackingExp(this: Person, exp: number): void {
   if (isNaN(exp)) {
@@ -166,4 +168,16 @@ export function hasAugmentation(this: Person, augName: string, ignoreQueued = fa
     return true;
   }
   return false;
+}
+
+/** Travel to another City. Costs money from player regardless of which person is traveling */
+export function travel(this: Person, cityName: CityName): boolean {
+  if (!Player.canAfford(CONSTANTS.TravelCost)) {
+    return false;
+  }
+
+  Player.loseMoney(CONSTANTS.TravelCost, "sleeves");
+  this.city = cityName;
+
+  return true;
 }
