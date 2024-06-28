@@ -43,17 +43,11 @@ type Options = {
   isNamed: boolean;
   isNotNamed: boolean;
   isInvertMatch: boolean;
-  isMaxMatches: boolean;
 
   isQuiet: boolean;
   isVerbose: boolean;
 
-  isToFile: boolean;
   isOverWrite: boolean;
-
-  isPreContext: boolean;
-  isContext: boolean;
-  isPostContext: boolean;
 
   isHelp: boolean;
 
@@ -62,6 +56,28 @@ type Options = {
 
   isMultiFile: boolean;
   hasContextFlag: boolean;
+};
+
+type Parameters = {
+  preContext: string;
+  context: string;
+  postContext: string;
+
+  outfile: string;
+  maxMatches: string;
+};
+
+type ValidParams<T extends keyof Parameters> = {
+  [key in T]: ArgStrings;
+};
+
+const VALID_PARAMS: ValidParams<keyof Parameters> = {
+  preContext: { short: ["-B"], long: ["--before-context"] },
+  context: { short: ["-C"], long: ["--context"] },
+  postContext: { short: ["-A"], long: ["--after-context"] },
+
+  maxMatches: { short: ["-m"], long: ["--max-count"] },
+  outfile: { short: ["-O"], long: ["--output"] },
 };
 
 type ValidArgs<T extends keyof Options> = {
@@ -75,17 +91,11 @@ const VALID_ARGS: ValidArgs<keyof Options> = {
   isNamed: { short: ["-H"], long: ["--with-filename"] },
   isNotNamed: { short: ["-h"], long: ["--no-filename"] },
   isInvertMatch: { short: ["-v"], long: ["--invert-match"] },
-  isMaxMatches: { short: ["-m"], long: ["--max-count"] },
 
   isQuiet: { short: ["-q"], long: ["--silent", "--quiet"] },
   isVerbose: { short: ["-V"], long: ["--verbose"] },
 
-  isToFile: { short: ["-O"], long: ["--output"] },
   isOverWrite: { short: ["-f"], long: ["--allow-overwrite"] },
-
-  isPreContext: { short: ["-B"], long: ["--before-context"] },
-  isContext: { short: ["-C"], long: ["--context"] },
-  isPostContext: { short: ["-A"], long: ["--after-context"] },
 
   isSearchAll: { short: ["-*"], long: ["--search-all"] },
   isPipeIn: { short: ["-p"], long: ["--pipe-terminal"] },
@@ -96,18 +106,10 @@ const VALID_ARGS: ValidArgs<keyof Options> = {
   hasContextFlag: { short: [], long: [] },
 } as const;
 
-type Params = {
-  isPreContext: string;
-  isContext: string;
-  isPostContext: string;
-  isMaxMatches: string;
-  isToFile: string;
-};
-
 class Args {
   args: string[];
   options: Options;
-  params: Params;
+  params: Parameters;
 
   constructor(args: (string | number | boolean)[]) {
     this.args = args.map(String);
@@ -122,17 +124,11 @@ class Args {
     isNamed: false,
     isNotNamed: false,
     isInvertMatch: false,
-    isMaxMatches: false,
 
     isQuiet: false,
     isVerbose: false,
 
-    isToFile: false,
     isOverWrite: false,
-
-    isPreContext: false,
-    isContext: false,
-    isPostContext: false,
 
     isSearchAll: false,
     isPipeIn: false,
@@ -143,15 +139,16 @@ class Args {
     hasContextFlag: false,
   };
 
-  INIT_PARAMS: Params = {
-    isPreContext: "",
-    isContext: "",
-    isPostContext: "",
-    isMaxMatches: "",
-    isToFile: "",
+  INIT_PARAMS: Parameters = {
+    preContext: "",
+    context: "",
+    postContext: "",
+    maxMatches: "",
+    outfile: "",
   };
 
   private spliceParam(validArgs: ArgStrings): string {
+    console.log(validArgs)
     const argIndex = [...validArgs.long, ...validArgs.short].reduce((ret: number, arg: string) => {
       const argIndex = this.args.indexOf(arg);
       return argIndex > -1 ? argIndex : ret;
@@ -163,11 +160,8 @@ class Args {
   }
 
   private spliceOptionalParams(): Args {
-    for (const [key, args] of Object.keys(this.params).map((key): [string, ArgStrings] => [
-      key,
-      VALID_ARGS[key as keyof Options],
-    ])) {
-      this.params[key as keyof Params] = this.spliceParam(args);
+    for (const [key, validArgs] of Object.entries(VALID_PARAMS)) {
+      this.params[key as keyof Parameters] = this.spliceParam(validArgs);
     }
     return this;
   }
@@ -175,12 +169,17 @@ class Args {
   private reduceToOptionsAndFiles(): string[] {
     const stripDash = (arg: string) => arg.slice(1);
     const argKeys = Object.keys(VALID_ARGS).map((k) => k as keyof Options);
+    const paramKeys = Object.keys(VALID_PARAMS).map((k) => k as keyof Parameters);
     const allValidArgs: string[] = [];
 
     let validFlagChars = "";
+    for (const key of paramKeys) {
+      const argString =VALID_PARAMS[key];
+      allValidArgs.push(...argString.long,...argString.short)
+    }
     for (const key of argKeys) {
       const argString = VALID_ARGS[key];
-      allValidArgs.push(...[...argString.long, ...argString.short]);
+      allValidArgs.push(...argString.long, ...argString.short);
       validFlagChars += argString.short.map(stripDash).join("");
     }
 
@@ -213,7 +212,7 @@ class Args {
     return fileArgs;
   }
 
-  splitOptsAndArgs(): [string[], Options, Params] {
+  splitOptsAndArgs(): [string[], Options, Parameters] {
     return [this.spliceOptionalParams().reduceToOptionsAndFiles(), this.options, this.params];
   }
 }
@@ -232,32 +231,32 @@ type ParsedLine = {
 };
 
 class Results {
-  lines: ParsedLine[];
+  results: ParsedLine[];
   areEdited: boolean;
   numMatches: number;
   options: Options;
-  matchLimit: number;
+  params: Parameters;
 
-  constructor(results: ParsedLine[], options: Options, matchLimit: number) {
-    this.lines = results;
+  constructor(results: ParsedLine[], options: Options, params: Parameters) {
+    this.results = results;
     this.options = options;
+    this.params = params;
     this.areEdited = results.some((line) => line.isMatched);
     this.numMatches = results.reduce((acc, result) => acc + Number(result.isMatched), 0);
-    this.matchLimit = matchLimit;
   }
 
   addContext(context: number): Results {
     const nContext = isNaN(Number(context)) ? 0 : Number(context);
-    for (const [editLineIndex, line] of this.lines.entries()) {
+    for (const [editLineIndex, line] of this.results.entries()) {
       if (!line.isMatched) continue;
       for (let contextLineIndex = 0; contextLineIndex <= nContext; contextLineIndex++) {
         let contextLine;
-        if (this.options.isPreContext) {
-          contextLine = this.lines[editLineIndex - contextLineIndex];
-        } else if (this.options.isPostContext) {
-          contextLine = this.lines[editLineIndex + contextLineIndex];
-        } else if (this.options.isContext) {
-          contextLine = this.lines[editLineIndex - Math.floor(nContext / 2) + contextLineIndex];
+        if (this.params.preContext) {
+          contextLine = this.results[editLineIndex - contextLineIndex];
+        } else if (this.params.postContext) {
+          contextLine = this.results[editLineIndex + contextLineIndex];
+        } else if (this.params.context) {
+          contextLine = this.results[editLineIndex - Math.floor(nContext / 2) + contextLineIndex];
         } else {
           contextLine = line;
         }
@@ -271,7 +270,7 @@ class Results {
   splitAndFilter(): [string[], string[]] {
     const rawResult = [];
     const prettyResult = [];
-    for (const lineInfo of this.lines) {
+    for (const lineInfo of this.results) {
       if (lineInfo.isPrint === this.options.isInvertMatch) continue;
       rawResult.push(lineInfo.lines.rawLine);
       prettyResult.push(lineInfo.lines.prettyLine);
@@ -280,10 +279,10 @@ class Results {
   }
 
   capMatches(limit: number): Results {
-    if (!this.options.isMaxMatches) return this;
+    if (!this.params.maxMatches) return this;
 
     let matchCounter = 0;
-    for (const line of this.lines) {
+    for (const line of this.results) {
       if (line.isMatched) matchCounter += 1;
       if (matchCounter > limit) line.isMatched = false;
     }
@@ -293,7 +292,7 @@ class Results {
   getVerboseInfo(files: ContentFile[], pattern: string | RegExp, options: Options): string {
     if (!options.isVerbose) return "";
     const suffix = (pre: string, num: number) => pre + (num === 1 ? "" : "s");
-    const totalLines = this.lines.length;
+    const totalLines = this.results.length;
     const matchCount = Math.abs((options.isInvertMatch ? totalLines : 0) - this.numMatches);
     const inputStr = options.isPipeIn
       ? "piped from terminal "
@@ -303,7 +302,9 @@ class Results {
       .join(", ");
 
     return [
-      `\n${(options.isMaxMatches ? this.matchLimit : matchCount) + (options.isInvertMatch ? " INVERTED" : "")} `,
+      `\n${
+        (this.params.maxMatches ? this.params.maxMatches : matchCount) + (options.isInvertMatch ? " INVERTED" : "")
+      } `,
       suffix("line", matchCount) + " matched ",
       `against PATTERN "${pattern.toString()}" `,
       `in ${totalLines} ${suffix("line", totalLines)}, `,
@@ -384,7 +385,7 @@ function writeToTerminal(
 }
 
 function checkOutFile(outFileStr: string, options: Options, server: BaseServer): ContentFilePath | void {
-  if (!options.isToFile) return;
+  if (!outFileStr) return;
   const outFilePath = Terminal.getFilepath(outFileStr);
   if (!outFilePath || !hasTextExtension(outFilePath)) {
     return Terminal.error(ERR.badOutFile(outFileStr));
@@ -402,15 +403,15 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
 
   const [otherArgs, options, params] = new Args(args).splitOptsAndArgs();
   if (options.isHelp) return help(["grep"]);
-  options.hasContextFlag = options.isContext || options.isPreContext || options.isPostContext;
+  options.hasContextFlag = !!params.context || !!params.preContext || !!params.postContext;
 
-  const nContext = Math.max(Number(params.isPreContext), Number(params.isContext), Number(params.isPostContext));
-  const nLimit = Number(params.isMaxMatches);
+  const nContext = Math.max(Number(params.preContext), Number(params.context), Number(params.postContext));
+  const nLimit = Number(params.maxMatches);
 
-  if (options.hasContextFlag && (!nContext || isNaN(Number(params.isContext))))
-    return Terminal.error(ERR.badParameter("context", params.isContext));
-  if (options.isMaxMatches && (!nLimit || isNaN(Number(params.isMaxMatches))))
-    return Terminal.error(ERR.badParameter("limit", params.isMaxMatches));
+  if (options.hasContextFlag && (!nContext || isNaN(Number(params.context))))
+    return Terminal.error(ERR.badParameter("context", params.context));
+  if (params.maxMatches && (!nLimit || isNaN(Number(params.maxMatches))))
+    return Terminal.error(ERR.badParameter("limit", params.maxMatches));
 
   const [files, notFiles] = options.isSearchAll ? getServerFiles(server) : getArgFiles(otherArgs.slice(1));
 
@@ -418,8 +419,8 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   if (!options.isPipeIn && !options.isSearchAll && !files.length) return Terminal.error(ERR.noSearchArg);
 
   options.isMultiFile = files.length > 1;
-  const outFilePath = checkOutFile(params.isToFile, options, server);
-  if (options.isToFile && !outFilePath) return; // associated errors are printed in checkOutFile
+  const outFilePath = checkOutFile(params.outfile, options, server);
+  if (params.outfile && !outFilePath) return; // associated errors are printed in checkOutFile
 
   try {
     const pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
@@ -427,12 +428,12 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     const termParser = lineParser.bind(null, options, "Terminal");
     const fileParser = parseFile.bind(null, lineParser, options);
     const contentToMatch = options.isPipeIn ? grabTerminal().map(termParser) : files.flatMap(fileParser);
-    const results = new Results(contentToMatch, options, nLimit);
+    const results = new Results(contentToMatch, options, params);
     const [rawResult, prettyResult] = results.capMatches(nLimit).addContext(nContext).splitAndFilter();
 
     if (options.isPipeIn) files.length = 0;
     if (!options.isQuiet) writeToTerminal(prettyResult, options, results, files, pattern);
-    if (options.isToFile && outFilePath) server.writeToContentFile(outFilePath, rawResult.join("\n"));
+    if (params.outfile && outFilePath) server.writeToContentFile(outFilePath, rawResult.join("\n"));
   } catch (e) {
     Terminal.error("grep processing error: " + e);
   }
