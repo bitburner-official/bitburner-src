@@ -148,7 +148,7 @@ class Args {
   };
 
   private spliceParam(validArgs: ArgStrings): string {
-    console.log(validArgs)
+    console.log(validArgs);
     const argIndex = [...validArgs.long, ...validArgs.short].reduce((ret: number, arg: string) => {
       const argIndex = this.args.indexOf(arg);
       return argIndex > -1 ? argIndex : ret;
@@ -174,8 +174,8 @@ class Args {
 
     let validFlagChars = "";
     for (const key of paramKeys) {
-      const argString =VALID_PARAMS[key];
-      allValidArgs.push(...argString.long,...argString.short)
+      const argString = VALID_PARAMS[key];
+      allValidArgs.push(...argString.long, ...argString.short);
     }
     for (const key of argKeys) {
       const argString = VALID_ARGS[key];
