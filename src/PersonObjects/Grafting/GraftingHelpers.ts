@@ -21,7 +21,7 @@ export const getGraftingAvailableAugs = (): AugmentationName[] => {
 };
 
 export const graftingIntBonus = (): number => {
-  return 1 + (calculateIntelligenceBonus(Player.skills.intelligence, 3) - 1) / 3;
+  return calculateIntelligenceBonus(Player.skills.intelligence, 1);
 };
 
 export const calculateGraftingTimeWithBonus = (aug: GraftableAugmentation): number => {
