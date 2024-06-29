@@ -17,7 +17,6 @@ import {
 } from "../Hacking";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
-import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { influenceStockThroughServerHack } from "../StockMarket/PlayerInfluencing";
