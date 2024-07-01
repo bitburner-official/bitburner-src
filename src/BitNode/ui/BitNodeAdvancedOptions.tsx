@@ -125,7 +125,7 @@ export function SourceFileOverrides({
       <ul style={{ marginTop: 0 }}>
         <li>{basicNote}</li>
         <li>
-          Changing the active level of SF 10 does not affect your current sleeves or the maximum number of sleeves
+          Changing the active level of SF 10 does not affect your current sleeves or the maximum number of sleeves.
         </li>
       </ul>
     </>
