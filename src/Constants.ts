@@ -156,46 +156,69 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.2 dev - Last update 4 June 2024
+## v2.6.2 dev - Last update 27 June 2024
 
 See 2.6.1 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.1/src/Documentation/doc/changelog.md
 
 ### CHANGES
 
 - Hotfix (also backported to 2.6.1): Fixed an issue with invalid format on steam cloud save (@catloversg)
-- Augmentations: Adjusted handling of augmentations that affect starting money or programs (@jjclark1982)
+- Augmentations: Augmentations that affect starting money now add money instead of replacing it (@jjclark1982)
 - Coding Contracts: Improved the performance of the All Valid Math Expressions contract checker (@yichizhng)
 - Coding Contracts: Simplified the Shortest Path contract checker (@gmcew)
-- Coding Contracts: Clarification on HammingCodes: Encoded Binary to Integer description (@gmcew)
+- Documentation: Various improvements (@mrsimo, @catloversg, @ficocelliguy, @gmcew, @otac0n)
+- Electron: Game can now load correctly when the path includes symbolic links (@catloversg)
 - Faction: Fixed some edge cases around Favor overflow (@catloversg)
-- Faction Invites: Code refactoring, all available invites are sent at once (@catloversg)
+- Faction: All available invites are sent at once (@catloversg)
 - Faction UI: show which skills are relevant for each type of Faction work (@gmcew)
 - Font: Embedded the JetBrains Mono font as "JetBrainsMono" (@catloversg)
-- Go: Support playing manually as white against your own scripts (@ficocelliguy)
+- Go: Can now play manually as white against your own scripts (@ficocelliguy)
 - Go: Save a full game history to prevent repeat moves (@ficocelliguy)
-- Infiltration: Updated Slash game text to be less confusing (@catloversg)
-- Netscript API docs: Fixed some invalid usage issues + general type improvements (@catloversg, @ficocelliguy)
-- Programs UI: Changed time elapsed display to time left (@TheAimMan)
-- Servers: Game servers can now start with more than 1 core (@TheAimMan)
-- Scripts: Relative imports should now work correctly (@Caldwell-74)
+- Go: Support offline time / bonus cycles to allow less time between AI moved (@ficocelliguy)
+- Hacking: Clamp hack success chance to prevent issues with infinity (@Caldwell-74)
+- Hacknet: Fix an issue that caused inaccurate level base cost (@JamesWilcox-git)
+- Hacknet: UI improvements (@jjclark1982)
+- Hospital: Can now be hospitalized even when busy performing a work task (@catloversg)
+- Infiltration: Automating infiltration is now more difficult (@catloversg)
+- Infiltration: Wire game shows wire colors on wires (@muesli4brekkies)
+- Misc: Changed how negative changes in system time are handled (@catloversg)
+- Programs UI: Now displays time remaining (@TheAimMan)
+- Servers: Existing servers can now have more than 1 core (@TheAimMan)
+- Scripts: Relative imports can now be used (@Caldwell-74)
 - Script Editor: Improved detection of possible infinite loops (@G4mingJon4s)
-- Script Editor: should now remember cursor location when switching tabs or game pages (@catloversg)
-- Skill XP: Fix an issue where in some cases, too much experience was needed to raise a skill from 1 to 2 (@catloversg)
-- Terminal: Improved autocompletion code for mixed case strings (@yichizhng)
+- Script Editor: Cursor location is remembered when switching tabs or game pages (@catloversg)
+- Script Editor: Improvements to vim mode (@G4mingJon4s)
+- Script Editor: Individual script tabs can be in separate editor modes (@G4mingJon4s)
+- Skills: Fix an inconsistency in experience needed to level a skill from 1 to 2 (@catloversg)
+- Terminal: Add more options to the rm command (@G4mingJon4s, @d0sboots)
+- Terminal: Added grep command (@muesli4brekkies)
+- Terminal: Improved autocompletion for mixed case strings (@yichizhng)
 - Codebase: Partial migration away from outdated mui/styles (@Caldwell-74)
+- Codebase: Cleanup / refactoring (@catloversg, @Caldwell-74, @Snarling, @ficocelliguy)
 
 ### SPOILER CHANGES
 
-- Bladeburner: Added a button to stop the current action (@Kelenius)
-- Bladeburner UI: Display Black Operations in the expected order (@catloversg)
+- Bladeburner: Added a button to stop the current action (@Kelenius, @catloversg)
+- Bladeburner: Improved logging of information in the Bladeburner console (@Kelenius, @catloversg)
+- Bladeburner: Black Operations show in the expected order again (@catloversg)
+- Bitnode 5: Show bitnode multipliers while in BN5.1 (@catloversg)
+- Bitverse: Spawned scripts will no longer launch from the bitverse screen (@catloversg)
+- Corporation: Refactor markup multiplier (@catloversg)
 - Corporation: Allow mass discarding products by selling for 0 (@gmcew)
+- Corporation: Allow access to constants even when API access is not available (@ilkecan)
+- Gang: Show equipment even when it cannot be purchased yet (@catloversg)
+- Gang: Fix an issue with wanted gain rate (@catloversg)
+- Gang: Show effective gain rates when bonus time in effect (@G4mingJon4s)
 - Grafting: Fixed a spacing issue (@Sphyxis)
-- Grafting/Hacknet: Fixed an issue that could cause hacknet node production to be inaccurrate when combined with Grafting (@catloversg)
+- Grafting: Fixed an issue that could cause hacknet node production to be inaccurrate when combined with Grafting (@catloversg)
 - Grafting: Fixed an issue that could cause inaccurate HP after Grafting (@catloversg)
-- Hashnet: Clarified effect of hacknet multipliers in in documentation (@catloversg)
+- Intelligence: Changed scaling for intelligence gain from manual hacking (@catloversg)
 - Sleeve: Sleeve travel can no longer be performed if the player has insufficient funds (@gmcew)
-- Sleeve: Added a missing availability check when installing augmentations on Sleeves (@yichizhng)
-- Sleeve API: Fix an issue in ns.sleeve.setToBladeburnerAction that prevented setting sleeves to contract work (@Sphyxis)
+- Sleeve: It's no longer possible to install an unavailable augmentation on a sleeve (@yichizhng)
+- Sleeve: No longer show a dialog message if a sleeve is working at a job while quitting that company (@Kelenius)
+- Sleeve: ns.sleeve.setToBladeburnerAction works again for setting sleeves to Bladeburner contract work (@Sphyxis)
+- Singularity: Add ns.singularity.getFactionWorkTypes (@catloversg)
+- Singularity: Fix an edge case issue with ns.singularity.getAugmentationFactions (@catloversg)
 
 ### OTHER
 - Nerf noodle bar

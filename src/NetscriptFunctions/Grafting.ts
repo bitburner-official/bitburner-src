@@ -97,5 +97,18 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
         helpers.log(ctx, () => `Began grafting Augmentation ${augName}.`);
         return true;
       },
+
+    waitForOngoingGrafting: (ctx) => () => {
+      checkGraftingAPIAccess(ctx);
+      if (!Player.currentWork) {
+        return Promise.resolve();
+      }
+      if (!(Player.currentWork instanceof GraftingWork)) {
+        return Promise.reject(
+          `The current work is not a grafting work. Type of current work: ${Player.currentWork.type}.`,
+        );
+      }
+      return Player.currentWork.completion;
+    },
   };
 }

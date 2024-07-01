@@ -9,7 +9,7 @@ Get estimate success chance of an action.
 **Signature:**
 
 ```typescript
-getActionEstimatedSuccessChance(type: string, name: string): [number, number];
+getActionEstimatedSuccessChance(type: string, name: string, sleeve?: number): [number, number];
 ```
 
 ## Parameters
@@ -18,6 +18,7 @@ getActionEstimatedSuccessChance(type: string, name: string): [number, number];
 |  --- | --- | --- |
 |  type | string | Type of action. |
 |  name | string | Name of action. Must be an exact match. |
+|  sleeve | number | _(Optional)_ Optional. Sleeve number to check for success. |
 
 **Returns:**
 

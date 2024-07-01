@@ -214,6 +214,16 @@ interface ReactElement {
 interface RunningScript {
   /** Arguments the script was called with */
   args: ScriptArg[];
+  /**
+   * The dynamic RAM usage of (one thread of) this script instance.
+   * Does not affect overall RAM consumption (ramUsage is for that), but
+   * rather shows how much of the reserved RAM is currently in use via all the
+   * ns functions the script has called. Initially 1.6GB, this increases as
+   * new functions are called.
+   *
+   * Only set for scripts that are still running.
+   */
+  dynamicRamUsage: number | undefined;
   /** Filename of the script */
   filename: string;
   /**
@@ -235,7 +245,11 @@ interface RunningScript {
   onlineRunningTime: number;
   /** Process ID. Must be an integer */
   pid: number;
-  /** How much RAM this script uses for ONE thread */
+  /**
+   * How much RAM this script uses for ONE thread.
+   * Also known as "static RAM usage," this value does not change once the
+   * script is started, unless you call ns.ramOverride().
+   */
   ramUsage: number;
   /** Hostname of the server on which this script runs */
   server: string;
@@ -272,7 +286,8 @@ interface RunOptions {
    * You can also use this to <i>increase</i> the RAM if the static RAM checker has missed functions
    * that you need to call.
    *
-   * Must be greater-or-equal to the base RAM cost. Defaults to the statically calculated cost.
+   * Must be greater-or-equal to the base RAM cost. Will be rounded to the nearest hundredth-of-a-GB,
+   * which is the granularity of all RAM calculations. Defaults to the statically calculated cost.
    */
   ramOverride?: number;
   /**
@@ -284,7 +299,10 @@ interface RunOptions {
 
 /** @public */
 interface SpawnOptions extends RunOptions {
-  /** Number of milliseconds to delay before spawning script, defaults to 10000 (10s). Must be a positive integer. */
+  /**
+   * Number of milliseconds to delay before spawning script, defaults to 10000 (10s).
+   * Must be a non-negative integer. If 0, the script will be spawned synchronously.
+   */
   spawnDelay?: number;
 }
 
@@ -1674,6 +1692,7 @@ export interface GraftingTask {
   type: "GRAFTING";
   cyclesWorked: number;
   augmentation: string;
+  completion: Promise<void>;
 }
 
 /**
@@ -3156,9 +3175,10 @@ export interface Bladeburner {
    *
    * @param type - Type of action.
    * @param name - Name of action. Must be an exact match.
+   * @param sleeve - Optional.  Sleeve number to check for success.
    * @returns Estimated success chance for the specified action.
    */
-  getActionEstimatedSuccessChance(type: string, name: string): [number, number];
+  getActionEstimatedSuccessChance(type: string, name: string, sleeve?: number): [number, number];
 
   /**
    * Get the reputation gain of an action.
@@ -4645,18 +4665,22 @@ export interface Grafting {
   getAugmentationGraftPrice(augName: string): number;
 
   /**
-   * Retrieves the time required to graft an aug.
+   * Retrieves the time required to graft an aug. Do not use this value to determine when the ongoing grafting finishes.
+   * The ongoing grafting is affected by current intelligence level and focus bonus. You should use
+   * {@link Grafting.waitForOngoingGrafting | waitForOngoingGrafting} for that purpose.
+   *
    * @remarks
    * RAM cost: 3.75 GB
    *
    * @param augName - Name of the aug to check the grafting time of. Must be an exact match.
-   * @returns The time required, in millis, to graft the named augmentation.
+   * @returns The time required, in milliseconds, to graft the named augmentation.
    * @throws Will error if an invalid Augmentation name is provided.
    */
   getAugmentationGraftTime(augName: string): number;
 
   /**
    * Retrieves a list of Augmentations that can be grafted.
+   *
    * @remarks
    * RAM cost: 5 GB
    *
@@ -4668,7 +4692,9 @@ export interface Grafting {
   getGraftableAugmentations(): string[];
 
   /**
-   * Begins grafting the named aug. You must be in New Tokyo to use this.
+   * Begins grafting the named aug. You must be in New Tokyo to use this. When you call this API, the current work
+   * (grafting or other actions) will be canceled.
+   *
    * @remarks
    * RAM cost: 7.5 GB
    *
@@ -4679,6 +4705,17 @@ export interface Grafting {
    * @throws Will error if called while you are not in New Tokyo.
    */
   graftAugmentation(augName: string, focus?: boolean): boolean;
+
+  /**
+   * Wait until the ongoing grafting finishes or is canceled.
+   *
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @returns A promise that resolves when the current grafting finishes or is canceled. If there is no current work,
+   * the promise resolves immediately. If the current work is not a grafting work, the promise rejects immediately.
+   */
+  waitForOngoingGrafting(): Promise<void>;
 }
 
 /**
@@ -5870,7 +5907,8 @@ export interface NS {
   clearLog(): void;
 
   /**
-   * Disables logging for the given function.
+   * Disables logging for the given NS function.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -5878,29 +5916,49 @@ export interface NS {
    *
    * For specific interfaces, use the form "namespace.functionName". (e.g. "ui.setTheme")
    *
-   * @param fn - Name of function for which to disable logging.
+   * @example
+   * ```js
+   * ns.disableLog("hack"); // Disable logging for `ns.hack()`
+   *
+   * ```
+   *
+   * @param fn - Name of the NS function for which to disable logging.
    */
   disableLog(fn: string): void;
 
   /**
-   * Enable logging for a certain function.
+   * Enables logging for the given NS function.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
-   * Re-enables logging for the given function. If `ALL` is passed into this
-   * function as an argument, then it will revert the effects of disableLog(`ALL`).
+   * Re-enables logging for the given function. If `ALL` is passed into this function as an argument, it will revert the
+   * effect of disableLog("ALL").
    *
-   * @param fn - Name of function for which to enable logging.
+   * @example
+   * ```js
+   * ns.enableLog("hack"); // Enable logging for `ns.hack()`
+   *
+   * ```
+   *
+   * @param fn - Name of the NS function for which to enable logging.
    */
   enableLog(fn: string): void;
 
   /**
-   * Checks the status of the logging for the given function.
+   * Checks the status of the logging for the given NS function.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
+   * @example
+   * ```js
+   * ns.print(ns.isLogEnabled("hack")); // Check if logging is enabled for `ns.hack()`
+   *
+   * ```
+   *
    * @param fn - Name of function to check.
-   * @returns Returns a boolean indicating whether or not logging is enabled for that function (or `ALL`).
+   * @returns Returns a boolean indicating whether or not logging is enabled for that NS function (or `ALL`).
    */
   isLogEnabled(fn: string): boolean;
 
@@ -6268,6 +6326,9 @@ export interface NS {
    * newly-specified script. The purpose of this function is to execute a new script without being
    * constrained by the RAM usage of the current one. This function can only be used to run scripts
    * on the local server.
+   *
+   * The delay specified can be 0; in this case the new script will synchronously replace
+   * the old one. (There will not be any opportunity for other scripts to use up the RAM in-between.)
    *
    * Because this function immediately terminates the script, it does not have a return value.
    *
@@ -6699,6 +6760,25 @@ export interface NS {
    * @returns The info about the running script if found, and null otherwise.
    */
   getRunningScript(filename?: FilenameOrPID, hostname?: string, ...args: ScriptArg[]): RunningScript | null;
+
+  /**
+   * Change the current static RAM allocation of the script.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This acts analagously to the ramOverride parameter in runOptions, but for changing RAM in
+   * the current running script. The static RAM allocation (the amount of RAM used by ONE thread)
+   * will be adjusted to the given value, if possible. This can fail if the number is less than the
+   * current dynamic RAM limit, or if adjusting upward would require more RAM than is available on
+   * the server.
+   *
+   * RAM usage will be rounded to the nearest hundredth of a GB, which is the granularity of all RAM calculations.
+   *
+   * @param ram - The new RAM limit to set.
+   * @returns The new static RAM limit, which will be the old one if it wasn't changed.
+   * This means you can use no parameters to check the current ram limit.
+   */
+  ramOverride(ram?: number): number;
 
   /**
    * Get cost of purchasing a server.

@@ -11,6 +11,7 @@ import { getEnumHelper } from "../utils/EnumHelper";
 import { Skills } from "../Bladeburner/data/Skills";
 import { assertString } from "../Netscript/TypeAssertion";
 import { BlackOperations, blackOpsArray } from "../Bladeburner/data/BlackOperations";
+import { checkSleeveAPIAccess, checkSleeveNumber } from "../NetscriptFunctions/Sleeve";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
@@ -28,7 +29,6 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       throw helpers.errorMessage(ctx, "You must be a member of the Bladeburner division to use this API.");
     return bladeburner;
   };
-
   function getAction(ctx: NetscriptContext, type: unknown, name: unknown): Action {
     const bladeburner = Player.bladeburner;
     assertString(ctx, "type", type);
@@ -118,10 +118,20 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         1000
       );
     },
-    getActionEstimatedSuccessChance: (ctx) => (type, name) => {
+    getActionEstimatedSuccessChance: (ctx) => (type, name, _sleeve) => {
       const bladeburner = getBladeburner(ctx);
       const action = getAction(ctx, type, name);
-      return action.getSuccessRange(bladeburner, Player);
+      if (_sleeve != null) {
+        checkSleeveAPIAccess(ctx);
+        const sleeveNumber = helpers.number(ctx, "sleeve", _sleeve);
+        checkSleeveNumber(ctx, sleeveNumber);
+        if (action.type === BladeActionType.contract) {
+          const sleevePerson = Player.sleeves[sleeveNumber];
+          return action.getSuccessRange(bladeburner, sleevePerson);
+        } else return [0, 0];
+      } else {
+        return action.getSuccessRange(bladeburner, Player);
+      }
     },
     getActionRepGain: (ctx) => (type, name, _level) => {
       checkBladeburnerAccess(ctx);

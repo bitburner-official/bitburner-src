@@ -17,6 +17,23 @@ import { Factions } from "../Faction/Factions";
 import { SleeveWorkType } from "../PersonObjects/Sleeve/Work/Work";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
 
+export const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
+  if (Player.bitNodeN !== 10 && !Player.sourceFileLvl(10)) {
+    throw helpers.errorMessage(
+      ctx,
+      "You do not currently have access to the Sleeve API. This is either because you are not in BitNode-10 or because you do not have Source-File 10",
+    );
+  }
+};
+
+export const checkSleeveNumber = function (ctx: NetscriptContext, sleeveNumber: number) {
+  if (sleeveNumber >= Player.sleeves.length || sleeveNumber < 0) {
+    const msg = `Invalid sleeve number: ${sleeveNumber}`;
+    helpers.log(ctx, () => msg);
+    throw helpers.errorMessage(ctx, msg);
+  }
+};
+
 export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
   const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
     if (!canAccessBitNodeFeature(10)) {

@@ -27,19 +27,19 @@
 ## Advanced Mechanics
 
 - [Hacking Algorithms](programming/hackingalgorithms.md)
-- [IPvGO](programming/go_algorithms.md)
-- [BitNodes](advanced/bitnodes.md)
-- [BladeBurners](advanced/bladeburners.md)
-- [Corporations](advanced/corporations.md)
-- [Gang](advanced/gang.md)
-- [Grafting](advanced/grafting.md)
-- [Hacknet Servers](advanced/hacknetservers.md)
-- [Intelligence](advanced/intelligence.md)
 - [List of Factions and their Requirements](advanced/faction_list.md)
 - [Offline Scripts and Bonus Time](advanced/offlineandbonustime.md)
-- [Sleeves](advanced/sleeves.md)
+- [BitNodes](advanced/bitnodes.md)
 - [Source-Files](advanced/sourcefiles.md)
+- [Gang](advanced/gang.md)
+- [Corporations](advanced/corporations.md)
+- [Intelligence](advanced/intelligence.md)
+- [BladeBurners](advanced/bladeburners.md)
+- [Hacknet Servers](advanced/hacknetservers.md)
+- [Sleeves](advanced/sleeves.md)
+- [Grafting](advanced/grafting.md)
 - [Stanek's Gift](advanced/stanek.md)
+- [IPvGO](programming/go_algorithms.md)
 
 ## Resources
 

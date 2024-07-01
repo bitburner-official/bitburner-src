@@ -1,5 +1,5 @@
 import { Box, Paper, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { KEY } from "../../utils/helpers/keyCodes";
@@ -27,34 +27,53 @@ const difficulties: {
 
 export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps): React.ReactElement {
   const [phase, setPhase] = useState(0);
-  const [hasAugment, setHasAugment] = useState(false);
-  const [guardingTime, setGuardingTime] = useState(0);
+  const timeOutId = useRef<number | ReturnType<typeof setTimeout>>(-1);
+  const hasWKSharmonizer = Player.hasAugmentation(AugmentationName.WKSharmonizer, true);
+  const hasMightOfAres = Player.hasAugmentation(AugmentationName.MightOfAres, true);
 
-  useEffect(() => {
-    // Determine timeframes for game phase changes
+  const data = useMemo(() => {
+    // Determine time window of phases
     const newDifficulty: Difficulty = { window: 0 };
     interpolate(difficulties, difficulty, newDifficulty);
-    const distractedTime =
-      newDifficulty.window * (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 1.3 : 1);
+    const distractedTime = newDifficulty.window * (hasWKSharmonizer ? 1.3 : 1);
     const alertedTime = 250;
     const guardingTime = Math.random() * 3250 + 1500 - (distractedTime + alertedTime);
 
-    // Set initial game state
-    setPhase(0);
-    setGuardingTime(guardingTime);
-    setHasAugment(Player.hasAugmentation(AugmentationName.MightOfAres, true));
+    return {
+      hasAugment: hasMightOfAres,
+      guardingTime,
+      distractedTime,
+      alertedTime,
+    };
+  }, [difficulty, hasWKSharmonizer, hasMightOfAres]);
 
-    // Setup timer for game phases
-    let id = setTimeout(() => {
+  useEffect(() => {
+    return () => {
+      if (timeOutId.current !== -1) {
+        clearTimeout(timeOutId.current);
+      }
+    };
+  }, []);
+
+  const startPhase1 = useCallback(
+    (alertedTime: number, distractedTime: number) => {
       setPhase(1);
-      id = setTimeout(() => {
+      timeOutId.current = setTimeout(() => {
         setPhase(2);
-        id = setTimeout(() => onFailure(), alertedTime);
+        timeOutId.current = setTimeout(() => onFailure(), alertedTime);
       }, distractedTime);
-    }, guardingTime);
+    },
+    [onFailure],
+  );
 
-    return () => clearTimeout(id);
-  }, [difficulty, onSuccess, onFailure]);
+  useEffect(() => {
+    // Start the timer if the player does not have MightOfAres augmentation.
+    if (phase === 0 && !data.hasAugment) {
+      timeOutId.current = setTimeout(() => {
+        startPhase1(data.alertedTime, data.distractedTime);
+      }, data.guardingTime);
+    }
+  }, [phase, data, startPhase1]);
 
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();
@@ -76,10 +95,18 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
           Do not alert him!
         </Typography>
         <br />
-        {hasAugment && (
+        {phase === 0 && data.hasAugment && (
           <Box sx={{ my: 1 }}>
             <Typography variant="h5">The sentinel will drop his guard and be distracted in ...</Typography>
-            <GameTimer millis={guardingTime} onExpire={() => null} ignoreAugment_WKSharmonizer noPaper tick={20} />
+            <GameTimer
+              millis={data.guardingTime}
+              onExpire={() => {
+                startPhase1(data.alertedTime, data.distractedTime);
+              }}
+              ignoreAugment_WKSharmonizer
+              noPaper
+              tick={20}
+            />
             <br />
           </Box>
         )}

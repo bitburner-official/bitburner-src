@@ -51,6 +51,7 @@ export abstract class Person implements IPerson {
   regenerateHp = personMethods.regenerateHp;
   updateSkillLevels = personMethods.updateSkillLevels;
   hasAugmentation = personMethods.hasAugmentation;
+  travel = personMethods.travel;
   calculateSkill = calculateSkill; //Class version is equal to imported version
 
   /** Reset all multipliers to 1 */

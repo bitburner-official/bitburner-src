@@ -394,6 +394,7 @@ const grafting = {
   getAugmentationGraftTime: 3.75,
   getGraftableAugmentations: 5,
   graftAugmentation: 7.5,
+  waitForOngoingGrafting: 1,
 } as const;
 
 const corporation = {
@@ -575,6 +576,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   getTotalScriptExpGain: RamCostConstants.GetScript,
   getScriptExpGain: RamCostConstants.GetScript,
   getRunningScript: RamCostConstants.GetRunningScript,
+  ramOverride: 0,
   formatNumber: 0,
   formatRam: 0,
   formatPercent: 0,

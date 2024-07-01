@@ -1013,9 +1013,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 1e6,
       info:
         "Extra-ocular neurons taken from old martial art master. Injecting them gives the user the ability to " +
-        "predict the enemy's attack before they even know it themselves.",
+        "predict the enemy's movement.",
       stats:
-        "This augmentation makes the Slash minigame easier by showing you via an indicator when the slash is coming.",
+        "This augmentation makes the Slash minigame easier by showing you via an indicator when the sentinel is distracted.",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },

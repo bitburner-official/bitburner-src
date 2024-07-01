@@ -4,7 +4,7 @@
 
 ## RunningScript.ramUsage property
 
-How much RAM this script uses for ONE thread
+How much RAM this script uses for ONE thread. Also known as "static RAM usage," this value does not change once the script is started, unless you call ns.ramOverride().
 
 **Signature:**
 

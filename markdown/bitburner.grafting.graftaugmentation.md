@@ -4,7 +4,7 @@
 
 ## Grafting.graftAugmentation() method
 
-Begins grafting the named aug. You must be in New Tokyo to use this.
+Begins grafting the named aug. You must be in New Tokyo to use this. When you call this API, the current work (grafting or other actions) will be canceled.
 
 **Signature:**
 

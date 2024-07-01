@@ -6,6 +6,7 @@ import type {
   ScriptArg,
   BitNodeOptions,
 } from "@nsdefs";
+import type { WorkerScript } from "./WorkerScript";
 
 import React from "react";
 import { killWorkerScript } from "./killWorkerScript";
@@ -34,6 +35,7 @@ import { toNative } from "../NetscriptFunctions/toNative";
 import { ScriptIdentifier } from "./ScriptIdentifier";
 import { findRunningScripts, findRunningScriptByPid } from "../Script/ScriptHelpers";
 import { arrayToString } from "../utils/helpers/ArrayHelpers";
+import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { RamCostConstants } from "./RamCostGenerator";
@@ -105,7 +107,7 @@ export interface CompleteRunOptions {
 }
 /** SpawnOptions with non-optional, type-validated members, for passing between internal functions. */
 export interface CompleteSpawnOptions extends CompleteRunOptions {
-  spawnDelay: PositiveInteger;
+  spawnDelay: number;
 }
 /** HGWOptions with non-optional, type-validated members, for passing between internal functions. */
 export interface CompleteHGWOptions {
@@ -193,16 +195,24 @@ function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRun
         `RunOptions.ramOverride must be >= baseCost (${RamCostConstants.Base}), was ${result.ramOverride}`,
       );
     }
+    // It is important that all RAM calculations operate in hundredths-of-a-GB,
+    // otherwise we can get inconsistent rounding results.
+    result.ramOverride = roundToTwo(result.ramOverride);
   }
   return result;
 }
 
 function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteSpawnOptions {
-  const result: CompleteSpawnOptions = { spawnDelay: 10000 as PositiveInteger, ...runOptions(ctx, threadOrOption) };
+  const result: CompleteSpawnOptions = { spawnDelay: 10000, ...runOptions(ctx, threadOrOption) };
   if (typeof threadOrOption !== "object" || !threadOrOption) return result;
   // Safe assertion since threadOrOption type has been narrowed to a non-null object
   const { spawnDelay } = threadOrOption as Unknownify<CompleteSpawnOptions>;
-  if (spawnDelay !== undefined) result.spawnDelay = positiveInteger(ctx, "spawnDelayMsec", spawnDelay);
+  if (spawnDelay !== undefined) {
+    result.spawnDelay = number(ctx, "spawnDelay", spawnDelay);
+    if (result.spawnDelay < 0) {
+      throw errorMessage(ctx, `spawnDelay must be non-negative, got ${spawnDelay}`);
+    }
+  }
   return result;
 }
 
@@ -340,8 +350,12 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
   ws.dynamicRamUsage = Math.min(ws.dynamicRamUsage + ramCost, RamCostConstants.Max);
   // This constant is just a handful of ULPs, and gives protection against
   // rounding issues without exposing rounding exploits in ramUsage.
+  // Most RAM calculations are guarded with roundToTwo(), but we use direct
+  // addition and this multiplication here for speed, since dynamic RAM
+  // checking is a speed-critical component.
   if (ws.dynamicRamUsage > 1.00000000000001 * ws.scriptRef.ramUsage) {
     log(ctx, () => "Insufficient static ram available.");
+    const functionsUsed = Object.keys(ws.dynamicLoadedFns).join(", ");
     const err = errorMessage(
       ctx,
       `Dynamic RAM usage calculated to be greater than RAM allocation.
@@ -350,6 +364,7 @@ function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
       Threads: ${ws.scriptRef.threads}
       Dynamic RAM Usage: ${formatRam(ws.dynamicRamUsage)} per thread
       RAM Allocation: ${formatRam(ws.scriptRef.ramUsage)} per thread
+      Functions in-use: [${functionsUsed}]
 
       One of these could be the reason:
       * Using eval() to get a reference to a ns function
@@ -673,10 +688,11 @@ function getCannotFindRunningScriptErrorMessage(ident: ScriptIdentifier): string
  * @param runningScript Existing, internal RunningScript
  * @returns A sanitized, NS-facing copy of the RunningScript
  */
-function createPublicRunningScript(runningScript: RunningScript): IRunningScript {
+function createPublicRunningScript(runningScript: RunningScript, workerScript?: WorkerScript): IRunningScript {
   const logProps = runningScript.tailProps;
   return {
     args: runningScript.args.slice(),
+    dynamicRamUsage: workerScript && roundToTwo(workerScript.dynamicRamUsage),
     filename: runningScript.filename,
     logs: runningScript.logs.map((x) => "" + x),
     offlineExpGained: runningScript.offlineExpGained,

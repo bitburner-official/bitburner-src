@@ -4,7 +4,7 @@
 
 ## SpawnOptions.spawnDelay property
 
-Number of milliseconds to delay before spawning script, defaults to 10000 (10s). Must be a positive integer.
+Number of milliseconds to delay before spawning script, defaults to 10000 (10s). Must be a non-negative integer. If 0, the script will be spawned synchronously.
 
 **Signature:**
 
