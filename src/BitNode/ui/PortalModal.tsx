@@ -37,7 +37,7 @@ export function PortalModal(props: IProps): React.ReactElement {
       <Typography> Difficulty: {["easy", "normal", "hard"][bitNode.difficulty]}</Typography>
       <br />
       <br />
-      <Typography>{bitNode.info}</Typography>
+      <Typography component="div">{bitNode.info}</Typography>
       <BitnodeMultiplierDescription n={props.n} level={newLevel} />
       <br />
       <Button
