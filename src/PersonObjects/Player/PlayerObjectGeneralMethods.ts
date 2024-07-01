@@ -418,7 +418,7 @@ export function reapplyAllSourceFiles(this: PlayerObject): void {
   //Will always be called after reapplyAllAugmentations() so multipliers do not have to be reset
   //this.resetMultipliers();
 
-  for (const [bn, lvl] of this.bitNodeOptions.activeSourceFiles) {
+  for (const [bn, lvl] of this.activeSourceFiles) {
     const srcFileKey = "SourceFile" + bn;
     const sourceFileObject = SourceFiles[srcFileKey];
     if (!sourceFileObject) {
@@ -589,7 +589,10 @@ export function sourceFileLvl(this: PlayerObject, n: number): number {
 }
 
 export function activeSourceFileLvl(this: PlayerObject, n: number): number {
-  return this.bitNodeOptions.activeSourceFiles.get(n) ?? 0;
+  if (this.bitNodeOptions.sourceFileOverrides.has(n)) {
+    return this.bitNodeOptions.sourceFileOverrides.get(n) ?? 0;
+  }
+  return this.sourceFiles.get(n) ?? 0;
 }
 
 export function focusPenalty(this: PlayerObject): number {

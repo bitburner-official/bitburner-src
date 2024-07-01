@@ -78,7 +78,7 @@ export function SourceFilesElement(): React.ReactElement {
       ),
     });
   }
-  for (const [sfNumber] of Player.sourceFiles.entries()) {
+  for (const sfNumber of Player.sourceFiles.keys()) {
     const sourceFileData = getSourceFileData(sfNumber);
     if (!sourceFileData) {
       continue;

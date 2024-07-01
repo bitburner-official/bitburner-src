@@ -36,15 +36,11 @@ export function PortalModal(props: IProps): React.ReactElement {
   }
   currentSourceFiles = new Map([...currentSourceFiles].sort((a, b) => a[0] - b[0]));
 
-  let activeSourceFiles: JSONMap<number, number>;
+  let sourceFileOverrides: JSONMap<number, number>;
   let bitNodeBooleanOptions: BitNodeBooleanOptions;
   const callbacks = {
-    setSourceFileLevel: (sfNumber: number, sfLevel: number) => {
-      if (sfLevel > 0) {
-        activeSourceFiles.set(sfNumber, sfLevel);
-      } else {
-        activeSourceFiles.delete(sfNumber);
-      }
+    setSfActiveLevel: (sfNumber: number, sfLevel: number) => {
+      sourceFileOverrides.set(sfNumber, sfLevel);
     },
     setBooleanOption: (key: keyof BitNodeBooleanOptions, value: boolean) => {
       if (!(key in bitNodeBooleanOptions)) {
@@ -53,7 +49,7 @@ export function PortalModal(props: IProps): React.ReactElement {
       bitNodeBooleanOptions[key] = value;
     },
     resetAll: () => {
-      activeSourceFiles = new JSONMap(currentSourceFiles);
+      sourceFileOverrides = new JSONMap();
       bitNodeBooleanOptions = {
         restrictHomePCUpgrade: false,
         disableGang: false,
@@ -95,7 +91,7 @@ export function PortalModal(props: IProps): React.ReactElement {
         autoFocus={true}
         onClick={() => {
           const bitNodeOptions = {
-            activeSourceFiles: activeSourceFiles,
+            sourceFileOverrides: sourceFileOverrides,
             ...bitNodeBooleanOptions,
           };
           enterBitNode(props.flume, props.destroyedBitNode, props.n, bitNodeOptions);

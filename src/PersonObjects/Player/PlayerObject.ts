@@ -75,8 +75,7 @@ export class PlayerObject extends Person implements IPlayer {
   entropy = 0;
 
   bitNodeOptions = {
-    initialized: false,
-    activeSourceFiles: new JSONMap<number, number>(),
+    sourceFileOverrides: new JSONMap<number, number>(),
     restrictHomePCUpgrade: false,
     disableGang: false,
     disableCorporation: false,
@@ -85,6 +84,10 @@ export class PlayerObject extends Person implements IPlayer {
     disableHacknetServer: false,
     disableSleeveExpAndAugmentation: false,
   };
+
+  get activeSourceFiles(): JSONMap<number, number> {
+    return new JSONMap([...this.sourceFiles, ...this.bitNodeOptions.sourceFileOverrides]);
+  }
 
   // Player-specific methods
   init = generalMethods.init;
@@ -193,11 +196,6 @@ export class PlayerObject extends Person implements IPlayer {
       if (!isMember("CompanyName", loadedCompanyName) || !isMember("JobName", loadedJobName)) {
         delete player.jobs[loadedCompanyName as CompanyName];
       }
-    }
-    // Initialize bitNodeOptions
-    if (!player.bitNodeOptions.initialized) {
-      player.bitNodeOptions.activeSourceFiles = new JSONMap(player.sourceFiles);
-      player.bitNodeOptions.initialized = true;
     }
     return player;
   }

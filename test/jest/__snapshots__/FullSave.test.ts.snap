@@ -57,18 +57,17 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "augmentations": [],
     "bitNodeN": 1,
     "bitNodeOptions": {
-      "activeSourceFiles": {
-        "ctor": "JSONMap",
-        "data": [],
-      },
       "disable4SData": false,
       "disableBladeburner": false,
       "disableCorporation": false,
       "disableGang": false,
       "disableHacknetServer": false,
       "disableSleeveExpAndAugmentation": false,
-      "initialized": false,
       "restrictHomePCUpgrade": false,
+      "sourceFileOverrides": {
+        "ctor": "JSONMap",
+        "data": [],
+      },
     },
     "bladeburner": {
       "ctor": "Bladeburner",

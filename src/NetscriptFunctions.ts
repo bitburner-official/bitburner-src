@@ -1770,16 +1770,9 @@ export const ns: InternalAPI<NSFull> = {
     currentNode: Player.bitNodeN,
     ownedAugs: new Map(Player.augmentations.map((aug) => [aug.name, aug.level])),
     ownedSF: new Map(Player.sourceFiles),
-    // We need to skip some internal-only properties, e.g., Player.bitNodeOptions.initialized.
     bitNodeOptions: {
-      activeSourceFiles: new Map(Player.bitNodeOptions.activeSourceFiles),
-      restrictHomePCUpgrade: Player.bitNodeOptions.restrictHomePCUpgrade,
-      disableGang: Player.bitNodeOptions.disableGang,
-      disableCorporation: Player.bitNodeOptions.disableCorporation,
-      disableBladeburner: Player.bitNodeOptions.disableBladeburner,
-      disable4SData: Player.bitNodeOptions.disable4SData,
-      disableHacknetServer: Player.bitNodeOptions.disableHacknetServer,
-      disableSleeveExpAndAugmentation: Player.bitNodeOptions.disableSleeveExpAndAugmentation,
+      ...Player.bitNodeOptions,
+      sourceFileOverrides: new Map(Player.bitNodeOptions.sourceFileOverrides),
     },
   }),
   getFunctionRamCost: (ctx) => (_name) => {

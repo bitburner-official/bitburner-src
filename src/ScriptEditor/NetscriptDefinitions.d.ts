@@ -1686,11 +1686,11 @@ export type Task = StudyTask | CompanyWorkTask | CreateProgramWorkTask | CrimeTa
 
 /**
  * Default value:
- * - activeSourceFiles: current SourceFiles
+ * - sourceFileOverrides: an empty Map
  * - All boolean options: false
  */
 export interface BitNodeOptions extends BitNodeBooleanOptions {
-  activeSourceFiles: Map<number, number>;
+  sourceFileOverrides: Map<number, number>;
 }
 
 /**

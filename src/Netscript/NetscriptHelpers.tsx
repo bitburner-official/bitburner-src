@@ -53,7 +53,11 @@ import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
 import { basicErrorMessage, errorMessage, log } from "./ErrorMessages";
 import { assertString, debugType } from "./TypeAssertion";
-import { canAccessBitNodeFeature, getDefaultBitNodeOptions, validateActiveSourceFiles } from "../BitNode/BitNodeUtils";
+import {
+  canAccessBitNodeFeature,
+  getDefaultBitNodeOptions,
+  validateSourceFileOverrides,
+} from "../BitNode/BitNodeUtils";
 import { JSONMap } from "../Types/Jsonable";
 
 export const helpers = {
@@ -735,15 +739,18 @@ function validateBitNodeOptions(ctx: NetscriptContext, bitNodeOptions: unknown):
     throw errorMessage(ctx, `bitNodeOptions must be an object if it's specified. It was ${bitNodeOptions}.`);
   }
   const options = bitNodeOptions as Unknownify<BitNodeOptions>;
-  if (!(options.activeSourceFiles instanceof Map)) {
-    throw errorMessage(ctx, `activeSourceFiles must be a Map.`);
+  if (!(options.sourceFileOverrides instanceof Map)) {
+    throw errorMessage(ctx, `sourceFileOverrides must be a Map.`);
   }
-  const validationResultForActiveSourceFiles = validateActiveSourceFiles(options.activeSourceFiles);
-  if (!validationResultForActiveSourceFiles.valid) {
-    throw errorMessage(ctx, `activeSourceFiles is invalid. Reason: ${validationResultForActiveSourceFiles.message}`);
+  const validationResultForSourceFileOverrides = validateSourceFileOverrides(options.sourceFileOverrides, true);
+  if (!validationResultForSourceFileOverrides.valid) {
+    throw errorMessage(
+      ctx,
+      `sourceFileOverrides is invalid. Reason: ${validationResultForSourceFileOverrides.message}`,
+    );
   }
 
-  result.activeSourceFiles = new JSONMap(options.activeSourceFiles);
+  result.sourceFileOverrides = new JSONMap(options.sourceFileOverrides);
   result.restrictHomePCUpgrade = !!options.restrictHomePCUpgrade;
   result.disableGang = !!options.disableGang;
   result.disableCorporation = !!options.disableCorporation;

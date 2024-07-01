@@ -20,12 +20,17 @@ export function canAccessBitNodeFeature(bitNode: number): boolean {
 }
 
 export function knowAboutBitverse(): boolean {
-  return Player.bitNodeOptions.activeSourceFiles.size > 0;
+  for (const [, sfActiveLevel] of Player.activeSourceFiles) {
+    if (sfActiveLevel > 0) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export function getDefaultBitNodeOptions(): BitNodeOptions {
   return {
-    activeSourceFiles: new Map(Player.sourceFiles),
+    sourceFileOverrides: new Map<number, number>(),
     restrictHomePCUpgrade: false,
     disableGang: false,
     disableCorporation: false,
@@ -36,16 +41,22 @@ export function getDefaultBitNodeOptions(): BitNodeOptions {
   };
 }
 
-export function validateActiveSourceFiles(activeSourceFiles: Map<number, number>): {
+export function validateSourceFileOverrides(
+  sourceFileOverrides: Map<number, number>,
+  isDataFromPlayer: boolean,
+): {
   valid: boolean;
   message?: string;
 } {
-  if (!(activeSourceFiles instanceof JSONMap)) {
+  if (!isDataFromPlayer && !(sourceFileOverrides instanceof JSONMap)) {
     return { valid: false, message: `It must be a JSONMap.` };
   }
-  for (const [sfNumber, sfLevel] of activeSourceFiles.entries()) {
+  for (const [sfNumber, sfLevel] of sourceFileOverrides.entries()) {
     if (!validBitNodes.includes(sfNumber)) {
       return { valid: false, message: `Invalid BitNode: ${sfNumber}.` };
+    }
+    if (!Number.isFinite(sfLevel)) {
+      return { valid: false, message: `Invalid SF level: ${sfLevel}.` };
     }
     const maxSfLevel = Player.sourceFileLvl(sfNumber);
     if (sfLevel > maxSfLevel) {
@@ -56,9 +67,9 @@ export function validateActiveSourceFiles(activeSourceFiles: Map<number, number>
 }
 
 export function setBitNodeOptions(bitNodeOptions: BitNodeOptions): void {
-  const validationResultForActiveSourceFiles = validateActiveSourceFiles(bitNodeOptions.activeSourceFiles);
-  if (!validationResultForActiveSourceFiles.valid) {
-    throw new Error(`activeSourceFiles is invalid. Reason: ${validationResultForActiveSourceFiles.message}`);
+  const validationResultForSourceFileOverrides = validateSourceFileOverrides(bitNodeOptions.sourceFileOverrides, false);
+  if (!validationResultForSourceFileOverrides.valid) {
+    throw new Error(`sourceFileOverrides is invalid. Reason: ${validationResultForSourceFileOverrides.message}`);
   }
 
   Object.assign(Player.bitNodeOptions, bitNodeOptions);

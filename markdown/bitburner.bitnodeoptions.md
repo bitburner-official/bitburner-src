@@ -4,7 +4,7 @@
 
 ## BitNodeOptions interface
 
-Default value: - activeSourceFiles: current SourceFiles - All boolean options: false
+Default value: - sourceFileOverrides: an empty Map - All boolean options: false
 
 **Signature:**
 
@@ -17,5 +17,5 @@ export interface BitNodeOptions extends BitNodeBooleanOptions
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [activeSourceFiles](./bitburner.bitnodeoptions.activesourcefiles.md) |  | Map&lt;number, number&gt; |  |
+|  [sourceFileOverrides](./bitburner.bitnodeoptions.sourcefileoverrides.md) |  | Map&lt;number, number&gt; |  |
 
