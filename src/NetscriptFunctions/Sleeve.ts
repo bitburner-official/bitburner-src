@@ -28,7 +28,6 @@ export const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
 export const checkSleeveNumber = function (ctx: NetscriptContext, sleeveNumber: number) {
   if (sleeveNumber >= Player.sleeves.length || sleeveNumber < 0) {
     const msg = `Invalid sleeve number: ${sleeveNumber}`;
-    helpers.log(ctx, () => msg);
     throw helpers.errorMessage(ctx, msg);
   }
 };
