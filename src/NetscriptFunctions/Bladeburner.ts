@@ -127,9 +127,10 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         switch (action.type) {
           case BladeActionType.general:
             return [1, 1];
-          case BladeActionType.contract:
+          case BladeActionType.contract: {
             const sleevePerson = Player.sleeves[sleeveNumber];
             return action.getSuccessRange(bladeburner, sleevePerson);
+          }
           default:
             return [0, 0];
         }
