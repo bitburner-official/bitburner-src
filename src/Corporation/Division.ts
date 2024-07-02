@@ -574,8 +574,7 @@ export class Division {
               sCost = optimalPrice;
             } else if (mat.marketTa1) {
               sCost = mat.marketPrice + markupLimit;
-              // check truthyness to avoid unnecessary eval
-            } else if (typeof mat.desiredSellPrice === "string" && mat.desiredSellPrice) {
+            } else if (typeof mat.desiredSellPrice === "string") {
               sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice.toString());
               sCost = eval(sCost);
             } else {
@@ -903,7 +902,7 @@ export class Division {
               product.markup = 1;
             }
             sCostString = sCostString.replace(/MP/g, product.cityData[city].productionCost.toString());
-            sCost = Math.max(product.cityData[city].productionCost, eval(sCostString));
+            sCost = eval(sCostString);
           } else {
             sCost = sellPrice;
           }
