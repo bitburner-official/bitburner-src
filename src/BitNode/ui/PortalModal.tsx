@@ -48,8 +48,11 @@ export function PortalModal(props: IProps): React.ReactElement {
       }
       bitNodeBooleanOptions[key] = value;
     },
-    resetAll: () => {
+    resetSourceFileOverrides: () => {
       sourceFileOverrides = new JSONMap();
+    },
+    resetAll: () => {
+      callbacks.resetSourceFileOverrides();
       bitNodeBooleanOptions = {
         restrictHomePCUpgrade: false,
         disableGang: false,

@@ -11,12 +11,14 @@ import {
   Paper,
   Select,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { JSONMap } from "../../Types/Jsonable";
+import { Settings } from "../../Settings/Settings";
 
 interface SourceFileButtonRowProps {
   sfOverrides: JSONMap<number, number>;
@@ -44,23 +46,25 @@ function SourceFileButtonRow({
   const title = `SF-${sfNumber}`;
   const sourceFileLevelTool =
     sfNumber !== 12 ? (
-      Array.from([0, 1, 2, 3]).map((level) => (
-        <ButtonWithTooltip
+      [...Array(sfLevel + 1).keys()].map((level) => (
+        <Button
           key={level}
           onClick={() => {
             setActiveLevel(level);
             callbacks.setSfActiveLevel(sfNumber, level);
           }}
-          disabledTooltip={sfLevel < level ? "You have not unlocked this Source-File level" : ""}
-          buttonProps={{ sx: { marginRight: "0.5rem" } }}
+          sx={{
+            marginRight: "0.5rem !important",
+            border: level === activeLevel ? `1px solid ${Settings.theme.info}` : "",
+          }}
         >
           {level}
-        </ButtonWithTooltip>
+        </Button>
       ))
     ) : (
       // The usage of TextField instead of NumberInput is intentional.
       <TextField
-        sx={{ maxWidth: "11.5rem" }}
+        sx={{ maxWidth: "12rem" }}
         value={inputValue}
         onChange={(event) => {
           if (event.target.value === "") {
@@ -79,6 +83,12 @@ function SourceFileButtonRow({
         }}
       ></TextField>
     );
+  const extraInfo =
+    sfNumber === 12 ? (
+      <td>
+        <Typography marginLeft="1rem">Max level: {sfLevel}</Typography>
+      </td>
+    ) : null;
 
   return (
     <tr>
@@ -88,12 +98,7 @@ function SourceFileButtonRow({
       <td>
         <ButtonGroup>{sourceFileLevelTool}</ButtonGroup>
       </td>
-      <td>
-        <Typography marginLeft="1rem">Level: {sfLevel}</Typography>
-      </td>
-      <td>
-        <Typography marginLeft="1rem">Active level: {activeLevel}</Typography>
-      </td>
+      {extraInfo}
     </tr>
   );
 }
@@ -108,9 +113,11 @@ export function SourceFileOverrides({
   getSfLevel: (sfNumber: number) => number;
 }): React.ReactElement {
   const [sfOverrides, setSfOverrides] = React.useState<JSONMap<number, number>>(new JSONMap());
-  const [selectElementValue, setSelectElementValue] = React.useState<number | null>(
-    currentSourceFiles.size > 0 ? [...currentSourceFiles.keys()][0] : null,
+  const firstSourceFile = React.useMemo(
+    () => (currentSourceFiles.size > 0 ? [...currentSourceFiles.keys()][0] : null),
+    [currentSourceFiles],
   );
+  const [selectElementValue, setSelectElementValue] = React.useState<number | null>(firstSourceFile);
   const getMenuItemList = (data: typeof sfOverrides): number[] => {
     return [...currentSourceFiles.keys()].filter((sfNumber) => ![...data.keys()].includes(sfNumber));
   };
@@ -178,6 +185,18 @@ export function SourceFileOverrides({
         >
           Add
         </Button>
+        <ButtonWithTooltip
+          normalTooltip="Remove all overridden SF"
+          disabledTooltip={sfOverrides.size === 0 ? "No overridden SF" : ""}
+          onClick={() => {
+            setSfOverrides(new JSONMap());
+            setSelectElementValue(firstSourceFile);
+            callbacks.resetSourceFileOverrides();
+          }}
+          buttonProps={{ sx: { marginLeft: "1rem" } }}
+        >
+          Remove all
+        </ButtonWithTooltip>
       </div>
       <br />
       {sfOverrides.size > 0 && (
@@ -186,7 +205,9 @@ export function SourceFileOverrides({
             <tbody>
               <tr>
                 <td>
-                  <Typography minWidth="7rem">Set all SF</Typography>
+                  <Tooltip title="Set active level for all chosen SF">
+                    <Typography minWidth="7rem">Set all SF</Typography>
+                  </Tooltip>
                 </td>
                 <td>
                   <ButtonGroup>
@@ -234,6 +255,7 @@ interface BitNodeAdvancedOptionsProps {
   callbacks: {
     setSfActiveLevel: (sfNumber: number, sfLevel: number) => void;
     setBooleanOption: (key: keyof BitNodeBooleanOptions, value: boolean) => void;
+    resetSourceFileOverrides: () => void;
     resetAll: () => void;
   };
 }
@@ -264,8 +286,8 @@ export function BitNodeAdvancedOptions({
             onChange={(value) => {
               callbacks.setBooleanOption("restrictHomePCUpgrade", value);
             }}
-            text="Restrict Home PC upgrade"
-            tooltip={<>Max RAM: 128GB. Max core: 1.</>}
+            text="Restrict max RAM and core of Home PC"
+            tooltip="The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max core: 1."
           />
           <OptionSwitch
             disabled={getSfLevel(2) === 0 && targetBitNode !== 2}
@@ -274,7 +296,7 @@ export function BitNodeAdvancedOptions({
               callbacks.setBooleanOption("disableGang", value);
             }}
             text="Disable Gang"
-            tooltip={<>Disable Gang</>}
+            tooltip="Disable Gang"
           />
           <OptionSwitch
             disabled={getSfLevel(3) === 0 && targetBitNode !== 3}
@@ -283,7 +305,7 @@ export function BitNodeAdvancedOptions({
               callbacks.setBooleanOption("disableCorporation", value);
             }}
             text="Disable Corporation"
-            tooltip={<>Disable Corporation</>}
+            tooltip="Disable Corporation"
           />
           <OptionSwitch
             disabled={getSfLevel(6) === 0 && getSfLevel(7) === 0 && targetBitNode !== 6 && targetBitNode !== 7}
@@ -292,7 +314,7 @@ export function BitNodeAdvancedOptions({
               callbacks.setBooleanOption("disableBladeburner", value);
             }}
             text="Disable Bladeburner"
-            tooltip={<>Disable Bladeburner</>}
+            tooltip="Disable Bladeburner"
           />
           <OptionSwitch
             checked={false}
@@ -300,7 +322,7 @@ export function BitNodeAdvancedOptions({
               callbacks.setBooleanOption("disable4SData", value);
             }}
             text="Disable 4S Market Data"
-            tooltip={<>Disable 4S Market Data</>}
+            tooltip="Disable 4S Market Data"
           />
           <OptionSwitch
             disabled={getSfLevel(9) === 0 && targetBitNode !== 9}
@@ -309,7 +331,7 @@ export function BitNodeAdvancedOptions({
               callbacks.setBooleanOption("disableHacknetServer", value);
             }}
             text="Disable Hacknet Server"
-            tooltip={<>Disable Hacknet Server</>}
+            tooltip="Hacknet Node is re-enabled in place of Hacknet Server."
           />
           <OptionSwitch
             disabled={getSfLevel(10) === 0 && targetBitNode !== 10}
@@ -318,7 +340,7 @@ export function BitNodeAdvancedOptions({
               callbacks.setBooleanOption("disableSleeveExpAndAugmentation", value);
             }}
             text="Disable Sleeves' experience and augmentation"
-            tooltip={<>Sleeves cannot gain experience or install augmentations</>}
+            tooltip="Sleeves cannot gain experience or install augmentations"
           />
           <br />
           <SourceFileOverrides
