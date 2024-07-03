@@ -329,15 +329,7 @@ export const HelpTexts: Record<string, string[]> = {
     "If you are killing the script using its PID, then the PID argument must be numeric",
     " ",
   ],
-  killall: [
-    "Usage: killall",
-    " ",
-    "Kills all scripts on the current server. ",
-    "Note that after the 'kill' command is issued for a script, it may take a while for the script to actually stop running. ",
-    "This will happen if the script is in the middle of a command such as grow() or weaken() that takes time to execute. ",
-    "The script will not be stopped/killed until after that time has elapsed.",
-    " ",
-  ],
+  killall: ["Usage: killall", " ", "Kills all scripts on the current server."],
   ls: [
     "Usage: ls [dir] [-l] [--grep pattern]",
     " ",
