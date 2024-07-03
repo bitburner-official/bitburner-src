@@ -55,9 +55,9 @@ export const CONSTANTS: {
   CompanyRequiredReputationMultiplier: number; // Only use this if a backdoor is installed in the company's server
   LatestUpdate: string;
 } = {
-  VersionString: "2.6.2dev",
-  isDevBranch: true,
-  VersionNumber: 39,
+  VersionString: "2.6.2",
+  isDevBranch: false,
+  VersionNumber: 40,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -156,14 +156,14 @@ export const CONSTANTS: {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.2 dev - Last update 27 June 2024
-
-See 2.6.1 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.1/src/Documentation/doc/changelog.md
+## v2.6.2 Release: 3 July 2024
 
 ### CHANGES
 
 - Hotfix (also backported to 2.6.1): Fixed an issue with invalid format on steam cloud save (@catloversg)
 - Augmentations: Augmentations that affect starting money now add money instead of replacing it (@jjclark1982)
+- API: ns.spawn can now be used with 0 delay for a synchronous effect (@d0sboots)
+- API: Added the ns.ramOverride function, which allows altering the ram usage of a script at runtime (@d0sboots)
 - Coding Contracts: Improved the performance of the All Valid Math Expressions contract checker (@yichizhng)
 - Coding Contracts: Simplified the Shortest Path contract checker (@gmcew)
 - Documentation: Various improvements (@mrsimo, @catloversg, @ficocelliguy, @gmcew, @otac0n)
@@ -194,7 +194,7 @@ See 2.6.1 changelog at https://github.com/bitburner-official/bitburner-src/blob/
 - Terminal: Added grep command (@muesli4brekkies)
 - Terminal: Improved autocompletion for mixed case strings (@yichizhng)
 - Codebase: Partial migration away from outdated mui/styles (@Caldwell-74)
-- Codebase: Cleanup / refactoring (@catloversg, @Caldwell-74, @Snarling, @ficocelliguy)
+- Codebase: Cleanup / refactoring (@catloversg, @Caldwell-74, @Snarling, @ficocelliguy, @tomprince)
 
 ### SPOILER CHANGES
 
@@ -212,6 +212,7 @@ See 2.6.1 changelog at https://github.com/bitburner-official/bitburner-src/blob/
 - Grafting: Fixed a spacing issue (@Sphyxis)
 - Grafting: Fixed an issue that could cause hacknet node production to be inaccurrate when combined with Grafting (@catloversg)
 - Grafting: Fixed an issue that could cause inaccurate HP after Grafting (@catloversg)
+- Grafting: Added ns.grafting.waitForOngoingGrafting (@catloversg)
 - Intelligence: Changed scaling for intelligence gain from manual hacking (@catloversg)
 - Sleeve: Sleeve travel can no longer be performed if the player has insufficient funds (@gmcew)
 - Sleeve: It's no longer possible to install an unavailable augmentation on a sleeve (@yichizhng)
