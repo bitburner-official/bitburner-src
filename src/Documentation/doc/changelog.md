@@ -66,6 +66,7 @@
 - Singularity: Fix an edge case issue with ns.singularity.getAugmentationFactions (@catloversg)
 
 ### OTHER
+
 - Nerf noodle bar
 
 ## v2.6.1 - 21 May 2024
