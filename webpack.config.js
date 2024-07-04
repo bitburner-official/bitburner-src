@@ -140,6 +140,7 @@ module.exports = (env, argv) => {
         {
           test: /\.(js$|jsx|ts|tsx)$/,
           exclude: /node_modules/,
+          resourceQuery: { not: /raw/ },
           use: {
             loader: "babel-loader",
             options: {
@@ -152,6 +153,10 @@ module.exports = (env, argv) => {
         {
           test: /\.s?css$/,
           use: ["style-loader", "css-loader"],
+        },
+        {
+          resourceQuery: /raw/,
+          type: "asset/source",
         },
       ],
     },

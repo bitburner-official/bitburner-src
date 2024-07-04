@@ -3,7 +3,7 @@ import type { ContentFilePath } from "../Paths/ContentFile";
 import { EventEmitter } from "../utils/EventEmitter";
 import * as monaco from "monaco-editor";
 import { loadThemes, makeTheme, sanitizeTheme } from "./ui/themes";
-import libSource from "!!raw-loader!./NetscriptDefinitions.d.ts";
+import libSource from "./NetscriptDefinitions.d.ts?raw";
 import { Settings } from "../Settings/Settings";
 import { NetscriptExtra } from "../NetscriptFunctions/Extra";
 import * as enums from "../Enums";

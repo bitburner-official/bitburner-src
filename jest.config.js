@@ -12,7 +12,7 @@ module.exports = {
     "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
       "<rootDir>/test/__mocks__/fileMock.js",
     "\\.(css|less)$": "<rootDir>/test/__mocks__/NullMock.js",
-    "\\!!raw-loader!.*$": "<rootDir>/test/__mocks__/NullMock.js",
+    ".*?raw$": "<rootDir>/test/__mocks__/fileMock.js",
     "@player": "<rootDir>/src/Player",
     "@enums": "<rootDir>/src/Enums",
     "@nsdefs": "<rootDir>/src/ScriptEditor/NetscriptDefinitions",
