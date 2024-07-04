@@ -57,7 +57,7 @@ export class ScriptEditor {
     })();
 
     // Add ts definitions for API
-    const source = (libSource + "").replace(/export /g, "");
+    const source = libSource.replace(/export /g, "");
     monaco.languages.typescript.javascriptDefaults.addExtraLib(source, "netscript.d.ts");
     monaco.languages.typescript.typescriptDefaults.addExtraLib(source, "netscript.d.ts");
     monaco.languages.json.jsonDefaults.setModeConfiguration({

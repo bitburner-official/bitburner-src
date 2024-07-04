@@ -1,4 +1,4 @@
 declare module "!!raw-loader!*" {
-  const contents: { default: string };
-  export = contents;
+  const contents: string;
+  export default contents;
 }

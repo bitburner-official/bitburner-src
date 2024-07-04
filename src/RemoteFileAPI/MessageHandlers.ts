@@ -109,7 +109,7 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => void | R
   },
 
   getDefinitionFile: function (msg: RFAMessage): RFAMessage {
-    return new RFAMessage({ result: libSource + "", id: msg.id });
+    return new RFAMessage({ result: libSource, id: msg.id });
   },
 
   getAllServers: function (msg: RFAMessage): RFAMessage {

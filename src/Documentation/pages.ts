@@ -61,9 +61,8 @@ import file58 from "!!raw-loader!./doc/programming/hackingalgorithms.md";
 import file59 from "!!raw-loader!./doc/programming/learn.md";
 import file60 from "!!raw-loader!./doc/programming/remote_api.md";
 
-interface Document {
-  default: string;
-}
+import type { Document } from "./root.ts";
+
 export const AllPages: Record<string, Document> = {};
 AllPages["advanced/bitnodes.md"] = file0;
 AllPages["advanced/bladeburners.md"] = file1;
