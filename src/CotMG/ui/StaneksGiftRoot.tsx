@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringUtils";
 import { CONSTANTS } from "../../Constants";
 import { StaneksGiftEvents } from "../StaneksGiftEvents";
 import { MainBoard } from "./MainBoard";

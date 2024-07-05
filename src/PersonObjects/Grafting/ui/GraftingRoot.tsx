@@ -18,7 +18,7 @@ import { Page } from "../../../ui/Router";
 import { ConfirmationModal } from "../../../ui/React/ConfirmationModal";
 import { Money } from "../../../ui/React/Money";
 import { formatNumberNoSuffix } from "../../../ui/formatNumber";
-import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../../utils/StringUtils";
 import { GraftableAugmentation } from "../GraftableAugmentation";
 import { calculateGraftingTimeWithBonus, getGraftingAvailableAugs } from "../GraftingHelpers";
 import { useRerender } from "../../../ui/React/hooks";

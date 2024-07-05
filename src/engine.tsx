@@ -1,4 +1,4 @@
-import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "./utils/StringUtils";
 import { AugmentationName, ToastVariant } from "@enums";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { initSourceFiles } from "./SourceFile/SourceFiles";

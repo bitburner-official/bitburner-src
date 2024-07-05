@@ -12,7 +12,7 @@ import { Player } from "@player";
 import { formatHp, formatMoney, formatSkill } from "../formatNumber";
 import { Reputation } from "./Reputation";
 import { KillScriptsModal } from "./KillScriptsModal";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringUtils";
 
 import { Settings } from "../../Settings/Settings";
 import { Router } from "../GameRoot";

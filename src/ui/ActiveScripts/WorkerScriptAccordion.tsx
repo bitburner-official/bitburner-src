@@ -29,7 +29,7 @@ import { WorkerScript } from "../../Netscript/WorkerScript";
 
 import { dialogBoxCreate } from "../React/DialogBox";
 import { LogBoxEvents } from "../React/LogBoxManager";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringUtils";
 import { arrayToString } from "../../utils/helpers/ArrayHelpers";
 import { Money } from "../React/Money";
 import { MoneyRate } from "../React/MoneyRate";

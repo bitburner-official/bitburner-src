@@ -31,7 +31,7 @@ import {
   calculateWeakenTime,
 } from "../Hacking";
 import { formatExp, formatMoney, formatPercent, formatRam, formatSecurity } from "../ui/formatNumber";
-import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../utils/StringUtils";
 
 // TODO: Does every terminal function really need its own file...?
 import { alias } from "./commands/alias";

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
 import { Player } from "@player";
 import { FactionName } from "@enums";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringUtils";
 import { BladeburnerConstants } from "../data/Constants";
 import { Money } from "../../ui/React/Money";
 import { useRerender } from "../../ui/React/hooks";

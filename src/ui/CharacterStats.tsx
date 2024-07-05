@@ -8,7 +8,7 @@ import { HacknetServerConstants } from "../Hacknet/data/Constants";
 import { getPurchaseServerLimit } from "../Server/ServerPurchases";
 import { Settings } from "../Settings/Settings";
 import { MoneySourceTracker } from "../utils/MoneySourceTracker";
-import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../utils/StringUtils";
 import { Player } from "@player";
 import { formatPercent, formatNumber } from "./formatNumber";
 import { Modal } from "./React/Modal";

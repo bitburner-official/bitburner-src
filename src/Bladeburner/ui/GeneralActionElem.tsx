@@ -3,7 +3,7 @@ import type { GeneralAction } from "../Actions/GeneralAction";
 
 import React from "react";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringUtils";
 import { Player } from "@player";
 import { Paper, Typography } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";

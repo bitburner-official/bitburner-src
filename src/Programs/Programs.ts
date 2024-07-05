@@ -4,7 +4,7 @@ import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
 import { Terminal } from "../Terminal";
 import { Player } from "@player";
-import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../utils/StringUtils";
 import { GetServer } from "../Server/AllServers";
 import { formatMoney } from "../ui/formatNumber";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";

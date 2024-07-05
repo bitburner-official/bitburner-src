@@ -22,7 +22,7 @@ import { HashManager } from "../../Hacknet/HashManager";
 import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
 import { JSONMap, JSONSet } from "../../Types/Jsonable";
-import { cyrb53 } from "../../utils/StringHelperFunctions";
+import { cyrb53 } from "../../utils/StringUtils";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { CONSTANTS } from "../../Constants";
 import { Person } from "../Person";

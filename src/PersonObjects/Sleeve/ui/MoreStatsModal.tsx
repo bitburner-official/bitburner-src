@@ -1,7 +1,7 @@
 import { Sleeve } from "../Sleeve";
 import { Player } from "@player";
 import { formatExp, formatPercent } from "../../../ui/formatNumber";
-import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../../utils/StringUtils";
 import { CONSTANTS } from "../../../Constants";
 import { Typography } from "@mui/material";
 import { StatsTable } from "../../../ui/React/StatsTable";
