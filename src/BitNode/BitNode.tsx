@@ -165,17 +165,11 @@ export function initBitNodes() {
         In addition, this Source-File will unlock:
         <ul>
           <li>
-            <span>
-              <code>getBitNodeMultipliers()</code> Netscript function
-            </span>
+            <code>getBitNodeMultipliers()</code> Netscript function
           </li>
+          <li>Permanent access to Formulas.exe</li>
           <li>
-            <span>Permanent access to Formulas.exe</span>
-          </li>
-          <li>
-            <span>
-              Access to BitNode multiplier information on the <b>Stats</b> page
-            </span>
+            Access to BitNode multiplier information on the <b>Stats</b> page
           </li>
         </ul>
         It will also raise all of your hacking-related multipliers by:
