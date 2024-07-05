@@ -1,4 +1,4 @@
-import { convertTimeMsToTimeElapsedString } from "../../src/utils/StringHelperFunctions";
+import { convertTimeMsToTimeElapsedString } from "../../src/utils/StringUtils";
 
 describe("StringHelperFunctions Tests", function () {
   it("transforms strings", () => {
