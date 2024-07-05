@@ -39,6 +39,9 @@ export class Skill {
      * The cost of the next level: (baseCost + currentLevel * costInc) * mult. The cost needs to be an integer, so we
      * need to use Math.floor or Math.round.
      *
+     * Note: there is no notation for Math.round, so I use \lceil and \rceil as alternatives for non-existent \lround
+     * and \rround. When you see \lceil and \rceil, it means Math.round, not Math.ceil.
+     *
      * In order to calculate the cost of "count" levels, we need to run a loop. "count" can be a big number, so it's
      * infeasible to calculate the cost in that way. We need to find the closed forms of:
      *
