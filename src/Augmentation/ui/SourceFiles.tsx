@@ -135,7 +135,7 @@ export function SourceFilesElement(): React.ReactElement {
           <Typography variant="h6" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
             {safeGetSf(selectedSf.n)?.name}
           </Typography>
-          <Typography sx={{ maxHeight: 350, overflowY: "scroll" }}>
+          <Typography component="div" sx={{ maxHeight: 350, overflowY: "scroll" }}>
             {(() => {
               const sfObj = safeGetSf(selectedSf.n);
               if (!sfObj) return;
