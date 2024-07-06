@@ -8,6 +8,7 @@ import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -87,20 +88,28 @@ export function Toolbar({ editor, onSave }: IProps) {
         onThemeChange={onThemeChange}
       />
       <Modal open={ramInfoOpen} onClose={closeRAMInfo}>
-        <Table>
-          <TableBody>
-            {ramEntries.map(([n, r]) => (
-              <React.Fragment key={n + r}>
-                <TableRow>
-                  <TableCell sx={{ color: Settings.theme.primary }}>{n}</TableCell>
-                  <TableCell align="right" sx={{ color: Settings.theme.primary }}>
-                    {r}
-                  </TableCell>
-                </TableRow>
-              </React.Fragment>
-            ))}
-          </TableBody>
-        </Table>
+        <Tooltip
+          title={
+            "Static RAM costs of individual functions used by this script. " +
+            "Calling `ns.ramOverride()` with a constant number as the first statement in " +
+            "your script will override the value here, as well."
+          }
+        >
+          <Table>
+            <TableBody>
+              {ramEntries.map(([n, r]) => (
+                <React.Fragment key={n + r}>
+                  <TableRow>
+                    <TableCell sx={{ color: Settings.theme.primary }}>{n}</TableCell>
+                    <TableCell align="right" sx={{ color: Settings.theme.primary }}>
+                      {r}
+                    </TableCell>
+                  </TableRow>
+                </React.Fragment>
+              ))}
+            </TableBody>
+          </Table>
+        </Tooltip>
       </Modal>
     </>
   );

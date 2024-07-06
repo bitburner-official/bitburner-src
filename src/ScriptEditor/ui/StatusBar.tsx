@@ -144,7 +144,6 @@ export class StatusBar {
       const value = registerValue.slice(2).trim();
       this.registers[name] = value;
     }
-    console.log(this.registers);
   };
   // this is used to show notifications.
   // The package passes a new HTMLElement, but we only want to show the text.

@@ -121,16 +121,21 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     getActionEstimatedSuccessChance: (ctx) => (type, name, _sleeve) => {
       const bladeburner = getBladeburner(ctx);
       const action = getAction(ctx, type, name);
-      if (_sleeve != null) {
-        checkSleeveAPIAccess(ctx);
-        const sleeveNumber = helpers.number(ctx, "sleeve", _sleeve);
-        checkSleeveNumber(ctx, sleeveNumber);
-        if (action.type === BladeActionType.contract) {
+      if (_sleeve == null) {
+        return action.getSuccessRange(bladeburner, Player);
+      }
+      checkSleeveAPIAccess(ctx);
+      const sleeveNumber = helpers.number(ctx, "sleeve", _sleeve);
+      checkSleeveNumber(ctx, sleeveNumber);
+      switch (action.type) {
+        case BladeActionType.general:
+          return [1, 1];
+        case BladeActionType.contract: {
           const sleevePerson = Player.sleeves[sleeveNumber];
           return action.getSuccessRange(bladeburner, sleevePerson);
-        } else return [0, 0];
-      } else {
-        return action.getSuccessRange(bladeburner, Player);
+        }
+        default:
+          return [0, 0];
       }
     },
     getActionRepGain: (ctx) => (type, name, _level) => {

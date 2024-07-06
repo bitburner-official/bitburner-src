@@ -148,7 +148,6 @@ class Args {
   };
 
   private spliceParam(validArgs: ArgStrings): string {
-    console.log(validArgs);
     const argIndex = [...validArgs.long, ...validArgs.short].reduce((ret: number, arg: string) => {
       const argIndex = this.args.indexOf(arg);
       return argIndex > -1 ? argIndex : ret;

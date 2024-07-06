@@ -5,6 +5,7 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Player } from "@player";
 import { WorkStats } from "@nsdefs";
 import { CONSTANTS } from "../Constants";
+import { PlayerObject } from "./Player/PlayerObject";
 
 export function gainHackingExp(this: Person, exp: number): void {
   if (isNaN(exp)) {
@@ -176,7 +177,7 @@ export function travel(this: Person, cityName: CityName): boolean {
     return false;
   }
 
-  Player.loseMoney(CONSTANTS.TravelCost, "sleeves");
+  Player.loseMoney(CONSTANTS.TravelCost, this instanceof PlayerObject ? "other" : "sleeves");
   this.city = cityName;
 
   return true;

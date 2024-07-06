@@ -102,10 +102,15 @@ Destroying this BitNode will give you Source-File 4, or if you already have this
 
 They said it couldn't be done. They said the human brain, along with its consciousness and intelligence, couldn't be replicated. They said the complexity of the brain results from unpredictable, nonlinear interactions that couldn't be modeled by 1's and 0's. They were wrong.
 
-Destroying this BitNode will give you Source-File 5, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File grants you a special new stat called Intelligence. Intelligence is unique because it is permanent and persistent (it never gets reset back to 1). However, gaining Intelligence
-experience is much slower than other stats. Higher Intelligence levels will boost your production for many actions in the game.
+Destroying this BitNode will give you Source-File 5, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File grants you a new stat called Intelligence. Intelligence is unique because it is permanent and persistent (it never gets reset back to 1). However, gaining Intelligence experience is much slower than other stats. Higher Intelligence levels will boost your production for many actions in the game.
 
-In addition, this Source-File will unlock the getBitNodeMultipliers() Netscript function and let you start with Formulas.exe, and will also raise all of your hacking-related multipliers by:
+In addition, this Source-File will unlock:
+
+- `getBitNodeMultipliers()` Netscript function
+- Permanent access to `Formulas.exe`
+- Access to BitNode multiplier information on the `Stats` page
+
+It will also raise all of your hacking-related multipliers by:
 
 - Level 1: 8%
 - Level 2: 12%

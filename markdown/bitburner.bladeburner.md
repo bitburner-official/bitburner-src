@@ -24,7 +24,7 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [getActionCountRemaining(type, name)](./bitburner.bladeburner.getactioncountremaining.md) | Get action count remaining. |
 |  [getActionCurrentLevel(type, name)](./bitburner.bladeburner.getactioncurrentlevel.md) | Get the current level of an action. |
 |  [getActionCurrentTime()](./bitburner.bladeburner.getactioncurrenttime.md) | Get the time elapsed on current action. |
-|  [getActionEstimatedSuccessChance(type, name, sleeve)](./bitburner.bladeburner.getactionestimatedsuccesschance.md) | Get estimate success chance of an action. |
+|  [getActionEstimatedSuccessChance(type, name, sleeveNumber)](./bitburner.bladeburner.getactionestimatedsuccesschance.md) | Get estimate success chance of an action. |
 |  [getActionMaxLevel(type, name)](./bitburner.bladeburner.getactionmaxlevel.md) | Get the maximum level of an action. |
 |  [getActionRepGain(type, name, level)](./bitburner.bladeburner.getactionrepgain.md) | Get the reputation gain of an action. |
 |  [getActionSuccesses(type, name)](./bitburner.bladeburner.getactionsuccesses.md) | Get action successes. |

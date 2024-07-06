@@ -169,4 +169,18 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
       });
     }
   });
+
+  describe("ramOverride checks", () => {
+    test.each([
+      ["ns.ramOverride(5)", 5],
+      ["ramOverride(5)", 5],
+      ["ns.ramOverride(5 * 1024)", baseCost], // Constant expressions are not handled yet
+    ])("%s", (code, expected) => {
+      const fullCode = `export function main(ns) { ${code} }`;
+
+      const result = calculateRamUsage(fullCode, "testfile.js", new Map(), "testserver");
+      expect(result.errorMessage).toBe(undefined);
+      expect(result.cost).toBe(expected);
+    });
+  });
 });
