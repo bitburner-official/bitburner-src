@@ -46,6 +46,9 @@ import { SnackbarEvents } from "./ui/React/Snackbar";
 import { SaveData } from "./types";
 import { Go } from "./Go/Go";
 
+// Only show warning if the time diff is greater than this value.
+const thresholdOfTimeDiffForShowingWarningAboutSystemClock = CONSTANTS.MillisecondsPerFiveMinutes;
+
 function showWarningAboutSystemClock() {
   AlertEvents.emit("Warning: The system clock moved backward.");
 }
@@ -253,10 +256,12 @@ const Engine: {
       const lastUpdate = Player.lastUpdate;
       let timeOffline = Engine._lastUpdate - lastUpdate;
       if (timeOffline < 0) {
+        if (Math.abs(timeOffline) > thresholdOfTimeDiffForShowingWarningAboutSystemClock) {
+          setTimeout(() => {
+            showWarningAboutSystemClock();
+          }, 250);
+        }
         timeOffline = 0;
-        setTimeout(() => {
-          showWarningAboutSystemClock();
-        }, 250);
       }
       const numCyclesOffline = Math.floor(timeOffline / CONSTANTS.MilliPerCycle);
 
@@ -404,10 +409,12 @@ const Engine: {
     const _thisUpdate = new Date().getTime();
     let diff = _thisUpdate - Engine._lastUpdate;
     if (diff < 0) {
+      if (Math.abs(diff) > thresholdOfTimeDiffForShowingWarningAboutSystemClock) {
+        showWarningAboutSystemClock();
+      }
       diff = 0;
       Engine._lastUpdate = _thisUpdate;
       Player.lastUpdate = _thisUpdate;
-      showWarningAboutSystemClock();
     }
     const offset = diff % CONSTANTS.MilliPerCycle;
 
