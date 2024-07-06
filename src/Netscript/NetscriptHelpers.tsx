@@ -420,6 +420,7 @@ function hack(ctx: NetscriptContext, hostname: string, manual: boolean, opts: un
   if (!(server instanceof Server)) {
     throw errorMessage(ctx, "Cannot be executed on this server.");
   }
+  if (server.purchasedByPlayer) throw errorMessage(ctx, "Cannot hack your own machines!");
 
   // Calculate the hacking time
   // This is in seconds

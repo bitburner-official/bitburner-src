@@ -175,6 +175,10 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => "Cannot be executed on this server.");
       return -1;
     }
+    if (server.purchasedByPlayer) {
+      helpers.log(ctx, () => "Cannot hack your own machines.");
+      return -1;
+    }
     if (isNaN(hackAmount)) {
       throw helpers.errorMessage(
         ctx,
@@ -204,7 +208,10 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => "Cannot be executed on this server.");
       return 0;
     }
-
+    if (server.purchasedByPlayer) {
+      helpers.log(ctx, () => "Cannot hack your own machines.");
+      return 0;
+    }
     return calculatePercentMoneyHacked(server, Player);
   },
   hackAnalyzeSecurity: (ctx) => (_threads, _hostname?) => {
@@ -216,7 +223,10 @@ export const ns: InternalAPI<NSFull> = {
         helpers.log(ctx, () => "Cannot be executed on this server.");
         return 0;
       }
-
+      if (server.purchasedByPlayer) {
+        helpers.log(ctx, () => "Cannot hack your own machines.");
+        return 0;
+      }
       const percentHacked = calculatePercentMoneyHacked(server, Player);
 
       if (percentHacked > 0) {
@@ -235,7 +245,10 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => "Cannot be executed on this server.");
       return 0;
     }
-
+    if (server.purchasedByPlayer) {
+      helpers.log(ctx, () => "Cannot hack your own machines.");
+      return 0;
+    }
     return calculateHackingChance(server, Player);
   },
   sleep:
@@ -263,7 +276,10 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => "Cannot be executed on this server.");
       return Promise.resolve(0);
     }
-
+    if (server.purchasedByPlayer) {
+      helpers.log(ctx, () => "Cannot grow your own machines.");
+      return Promise.resolve(0);
+    }
     const host = GetServer(ctx.workerScript.hostname);
     if (host === null) {
       throw new Error("Workerscript host is null");
@@ -320,6 +336,10 @@ export const ns: InternalAPI<NSFull> = {
         helpers.log(ctx, () => `${host} is not a hackable server. Returning 0.`);
         return 0;
       }
+      if (server.purchasedByPlayer) {
+        helpers.log(ctx, () => `Cannot grow your own servers.`);
+        return 0;
+      }
       if (mult < 1 || !isFinite(mult)) {
         throw helpers.errorMessage(ctx, `Invalid argument: multiplier must be finite and >= 1, is ${mult}.`);
       }
@@ -343,7 +363,10 @@ export const ns: InternalAPI<NSFull> = {
           helpers.log(ctx, () => "Cannot be executed on this server.");
           return 0;
         }
-
+        if (server.purchasedByPlayer) {
+          helpers.log(ctx, () => "Cannot grow your own servers.");
+          return 0;
+        }
         const maxThreadsNeeded = Math.ceil(
           numCycleForGrowthCorrected(server, server.moneyMax, server.moneyAvailable, cores),
         );
@@ -362,7 +385,10 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(ctx, () => "Cannot be executed on this server.");
       return Promise.resolve(0);
     }
-
+    if (server.purchasedByPlayer) {
+      helpers.log(ctx, () => "Cannot weaken your own machines.");
+      return Promise.resolve(0);
+    }
     // No root access or skill level too low
     const canHack = netscriptCanWeaken(server);
     if (!canHack.res) {
@@ -1513,6 +1539,7 @@ export const ns: InternalAPI<NSFull> = {
         helpers.log(ctx, () => "invalid for this kind of server");
         return Infinity;
       }
+      if (server.purchasedByPlayer) return Terminal.error("Cannot hack your own machines!");
       if (helpers.failOnHacknetServer(ctx, server)) {
         return Infinity;
       }
