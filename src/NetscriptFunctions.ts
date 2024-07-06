@@ -62,7 +62,7 @@ import {
   formatThreads,
   formatNumber,
 } from "./ui/formatNumber";
-import { convertTimeMsToTimeElapsedString } from "./utils/StringUtils";
+import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { roundToTwo } from "./utils/helpers/roundToTwo";
 import { LogBoxEvents, LogBoxCloserEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";

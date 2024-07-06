@@ -5,7 +5,7 @@ import { formatExp } from "../ui/formatNumber";
 import { ClassType, GymType, LocationName, UniversityClassType } from "@enums";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Money } from "../ui/React/Money";
-import { convertTimeMsToTimeElapsedString } from "../utils/StringUtils";
+import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 import { Player } from "@player";
 import { calculateClassEarnings as calculateClassEarningsRate } from "./Formulas";
 import { Work, WorkType } from "./Work";

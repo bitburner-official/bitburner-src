@@ -12,7 +12,7 @@ import { TeamSizeButton } from "./TeamSizeButton";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { BlackOperation, Operation } from "../Actions";
 import { BladeburnerConstants } from "../data/Constants";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringUtils";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 
 interface ActionHeaderProps {
   bladeburner: Bladeburner;

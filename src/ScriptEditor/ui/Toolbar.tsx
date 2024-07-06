@@ -21,7 +21,7 @@ import { useBoolean } from "../../ui/React/hooks";
 import { Settings } from "../../Settings/Settings";
 import { OptionsModal, OptionsModalProps } from "./OptionsModal";
 import { useScriptEditorContext } from "./ScriptEditorContext";
-import { getNsApiDocumentationUrl } from "../../utils/StringUtils";
+import { getNsApiDocumentationUrl } from "../../utils/StringHelperFunctions";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 

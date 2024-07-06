@@ -21,7 +21,7 @@ import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringUtils";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { arrayToString } from "../../utils/helpers/ArrayHelpers";
 import { Money } from "../React/Money";
 import { MoneyRate } from "../React/MoneyRate";

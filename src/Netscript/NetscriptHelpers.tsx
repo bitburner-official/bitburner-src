@@ -16,7 +16,7 @@ import {
   calculatePercentMoneyHacked,
 } from "../Hacking";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
-import { convertTimeMsToTimeElapsedString } from "../utils/StringUtils";
+import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { influenceStockThroughServerHack } from "../StockMarket/PlayerInfluencing";

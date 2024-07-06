@@ -3,7 +3,7 @@ import { Link } from "@mui/material";
 import { useNavigator } from "../React/Documentation";
 import { CorruptableText } from "../React/CorruptableText";
 import { Player } from "@player";
-import { getNsApiDocumentationUrl } from "../../utils/StringUtils";
+import { getNsApiDocumentationUrl } from "../../utils/StringHelperFunctions";
 
 export const isSpoiler = (title: string): boolean => title.includes("advanced/") && Player.sourceFileLvl(1) === 0;
 

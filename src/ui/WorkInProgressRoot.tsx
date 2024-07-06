@@ -16,7 +16,7 @@ import { Companies } from "../Company/Companies";
 import { CONSTANTS } from "../Constants";
 import { Locations } from "../Locations/Locations";
 import { Settings } from "../Settings/Settings";
-import { convertTimeMsToTimeElapsedString } from "../utils/StringUtils";
+import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
 import { filterTruthy } from "../utils/helpers/ArrayHelpers";
 
 import { isCrimeWork } from "../Work/CrimeWork";

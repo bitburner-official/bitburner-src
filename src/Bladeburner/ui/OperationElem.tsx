@@ -5,7 +5,7 @@ import React from "react";
 import { Paper, Typography } from "@mui/material";
 
 import { Player } from "@player";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringUtils";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { SuccessChance } from "./SuccessChance";
 import { ActionLevel } from "./ActionLevel";
 import { Autolevel } from "./Autolevel";

@@ -2,7 +2,7 @@ import type { Bladeburner } from "../Bladeburner";
 import type { Contract } from "../Actions/Contract";
 
 import React from "react";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringUtils";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { Player } from "@player";
 import { SuccessChance } from "./SuccessChance";
 import { ActionLevel } from "./ActionLevel";

@@ -6,7 +6,7 @@ import { Paper, Typography } from "@mui/material";
 
 import { Player } from "@player";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
-import { convertTimeMsToTimeElapsedString } from "../../utils/StringUtils";
+import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { SuccessChance } from "./SuccessChance";
 import { useRerender } from "../../ui/React/hooks";
 import { ActionHeader } from "./ActionHeader";

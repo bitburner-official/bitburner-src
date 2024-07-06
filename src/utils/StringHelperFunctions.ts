@@ -1,8 +1,3 @@
-/**
- * TODO v3.0.0
- * Move all string-related utility functions in /src/utils to this file.
- */
-
 import { Settings } from "../Settings/Settings";
 import { CONSTANTS } from "../Constants";
 

@@ -8,7 +8,7 @@ import { Terminal } from "../../Terminal";
 import { Player } from "@player";
 import { getTabCompletionPossibilities } from "../getTabCompletionPossibilities";
 import { Settings } from "../../Settings/Settings";
-import { longestCommonStart } from "../../utils/StringUtils";
+import { longestCommonStart } from "../../utils/StringHelperFunctions";
 
 const useStyles = makeStyles()((theme: Theme) => ({
   input: {

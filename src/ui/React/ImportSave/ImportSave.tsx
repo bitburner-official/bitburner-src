@@ -28,7 +28,7 @@ import { Skills } from "@nsdefs";
 
 import { ImportData, saveObject } from "../../../SaveObject";
 import { Settings } from "../../../Settings/Settings";
-import { convertTimeMsToTimeElapsedString } from "../../../utils/StringUtils";
+import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
 import { formatMoney, formatNumberNoSuffix } from "../../formatNumber";
 import { ConfirmationModal } from "../ConfirmationModal";
 import { pushImportResult } from "../../../Electron";
