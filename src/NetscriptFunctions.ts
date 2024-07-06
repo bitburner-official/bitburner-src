@@ -1539,7 +1539,10 @@ export const ns: InternalAPI<NSFull> = {
         helpers.log(ctx, () => "invalid for this kind of server");
         return Infinity;
       }
-      if (server.purchasedByPlayer) return Terminal.error("Cannot hack your own machines!");
+      if (server.purchasedByPlayer) {
+        helpers.log(ctx, () => "cannot hack your own servers");
+        return Infinity;
+      }
       if (helpers.failOnHacknetServer(ctx, server)) {
         return Infinity;
       }
@@ -1555,7 +1558,8 @@ export const ns: InternalAPI<NSFull> = {
         helpers.log(ctx, () => "invalid for this kind of server");
         return Infinity;
       }
-      if (helpers.failOnHacknetServer(ctx, server)) {
+      if (server.purchasedByPlayer) {
+        helpers.log(ctx, () => "cannot hack your own servers");
         return Infinity;
       }
 
@@ -1570,7 +1574,8 @@ export const ns: InternalAPI<NSFull> = {
         helpers.log(ctx, () => "invalid for this kind of server");
         return Infinity;
       }
-      if (helpers.failOnHacknetServer(ctx, server)) {
+      if (server.purchasedByPlayer) {
+        helpers.log(ctx, () => "cannot hack your own servers");
         return Infinity;
       }
 
