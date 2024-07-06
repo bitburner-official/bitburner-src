@@ -3,58 +3,7 @@
  *
  * Constants for specific mechanics or features will NOT be here.
  */
-export const CONSTANTS: {
-  VersionString: string;
-  isDevBranch: boolean;
-  VersionNumber: number;
-  MaxSkillLevel: number;
-  MilliPerCycle: number;
-  OfflineHackingIncome: number;
-  CorpFactionRepRequirement: number;
-  BaseFocusBonus: number;
-  TravelCost: number;
-  BaseFavorToDonate: number;
-  DonateMoneyToRepDivisor: number;
-  NeuroFluxGovernorLevelMult: number;
-  NumNetscriptPorts: number;
-  MultipleAugMultiplier: number;
-  TorRouterCost: number;
-  HospitalCostPerHp: number;
-  IntelligenceCrimeWeight: number;
-  IntelligenceCrimeBaseExpGain: number;
-  IntelligenceProgramBaseExpGain: number;
-  IntelligenceGraftBaseExpGain: number;
-  IntelligenceSingFnBaseExpGain: number;
-  MillisecondsPer20Hours: number;
-  GameCyclesPer20Hours: number;
-  MillisecondsPer10Hours: number;
-  GameCyclesPer10Hours: number;
-  MillisecondsPer8Hours: number;
-  GameCyclesPer8Hours: number;
-  MillisecondsPer4Hours: number;
-  GameCyclesPer4Hours: number;
-  MillisecondsPer2Hours: number;
-  GameCyclesPer2Hours: number;
-  MillisecondsPerHour: number;
-  GameCyclesPerHour: number;
-  MillisecondsPerHalfHour: number;
-  GameCyclesPerHalfHour: number;
-  MillisecondsPerQuarterHour: number;
-  GameCyclesPerQuarterHour: number;
-  MillisecondsPerFiveMinutes: number;
-  GameCyclesPerFiveMinutes: number;
-  CodingContractBaseFactionRepGain: number;
-  CodingContractBaseCompanyRepGain: number;
-  CodingContractBaseMoneyGain: number;
-  AugmentationGraftingCostMult: number;
-  AugmentationGraftingTimeBase: number;
-  SoACostMult: number;
-  SoARepMult: number;
-  EntropyEffect: number;
-  Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
-  CompanyRequiredReputationMultiplier: number; // Only use this if a backdoor is installed in the company's server
-  LatestUpdate: string;
-} = {
+export const CONSTANTS = {
   VersionString: "2.6.3dev",
   isDevBranch: true,
   VersionNumber: 40,
@@ -150,8 +99,10 @@ export const CONSTANTS: {
   // Value raised to the number of entropy stacks, then multiplied to player multipliers
   EntropyEffect: 0.98,
 
+  // Number of blood, plasma, or platelet donations the developer has verified. Boosts NFG.
   Donations: 151,
 
+  // Only use this if a backdoor is installed in the company's server
   CompanyRequiredReputationMultiplier: 0.75,
 
   // Also update doc/source/changelog.rst
