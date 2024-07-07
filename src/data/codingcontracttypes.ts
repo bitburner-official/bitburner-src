@@ -1332,7 +1332,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "Parity bits are inserted at positions 0 and 2^N.\n",
         "Parity bits are used to make the total number of '1' bits in a given set of data even.\n",
         "The parity bit at position 0 considers all bits including parity bits.\n",
-        "Each parity bit at position 2^N alternately considers N bits then ignores N bits, starting at position 2^N.\n",
+        "Each parity bit at position 2^N alternately considers 2^N bits then ignores 2^N bits, starting at position 2^N.\n",
         "The endianness of the parity bits is reversed compared to the endianness of the data bits:\n",
         "Data bits are encoded most significant bit first and the parity bits encoded least significant bit first.\n",
         "The parity bit at position 0 is set last.\n",
