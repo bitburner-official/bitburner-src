@@ -49,8 +49,10 @@ import { Go } from "./Go/Go";
 // Only show warning if the time diff is greater than this value.
 const thresholdOfTimeDiffForShowingWarningAboutSystemClock = CONSTANTS.MillisecondsPerFiveMinutes;
 
-function showWarningAboutSystemClock() {
-  AlertEvents.emit("Warning: The system clock moved backward.");
+function showWarningAboutSystemClock(timeDiff: number) {
+  AlertEvents.emit(
+    `Warning: The system clock moved backward: ${convertTimeMsToTimeElapsedString(Math.abs(timeDiff))}.`,
+  );
 }
 
 /** Game engine. Handles the main game loop. */
@@ -257,8 +259,9 @@ const Engine: {
       let timeOffline = Engine._lastUpdate - lastUpdate;
       if (timeOffline < 0) {
         if (Math.abs(timeOffline) > thresholdOfTimeDiffForShowingWarningAboutSystemClock) {
+          const timeDiff = timeOffline;
           setTimeout(() => {
-            showWarningAboutSystemClock();
+            showWarningAboutSystemClock(timeDiff);
           }, 250);
         }
         timeOffline = 0;
@@ -410,7 +413,7 @@ const Engine: {
     let diff = _thisUpdate - Engine._lastUpdate;
     if (diff < 0) {
       if (Math.abs(diff) > thresholdOfTimeDiffForShowingWarningAboutSystemClock) {
-        showWarningAboutSystemClock();
+        showWarningAboutSystemClock(diff);
       }
       diff = 0;
       Engine._lastUpdate = _thisUpdate;
