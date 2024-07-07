@@ -3325,7 +3325,7 @@ export interface Bladeburner {
    *
    * This function returns the number of skill points needed to upgrade the specified skill the specified number of times.
    *
-   * The function returns -1 if an invalid skill name is passed in, and Infinity if the count overflows the maximum level.
+   * The function returns Infinity if the sum of the current level and count exceeds the maximum level.
    *
    * @param skillName - Name of skill. Case-sensitive and must be an exact match.
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
