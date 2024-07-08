@@ -12,6 +12,7 @@ jest.mock("../../../src/ui/GameRoot", () => ({
   Router: {
     page: () => ({}),
     toPage: () => ({}),
+    hidingMessages: () => false,
   },
 }));
 
