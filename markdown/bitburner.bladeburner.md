@@ -43,6 +43,7 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [getOperationNames()](./bitburner.bladeburner.getoperationnames.md) | List all operations. |
 |  [getRank()](./bitburner.bladeburner.getrank.md) | Get player bladeburner rank. |
 |  [getSkillLevel(skillName)](./bitburner.bladeburner.getskilllevel.md) | Get skill level. |
+|  [getSkillMaxUpgradeCount(skillName, skillPoints)](./bitburner.bladeburner.getskillmaxupgradecount.md) | Get the max upgrade count of a skill. |
 |  [getSkillNames()](./bitburner.bladeburner.getskillnames.md) | List all skills. |
 |  [getSkillPoints()](./bitburner.bladeburner.getskillpoints.md) | Get bladeburner skill points. |
 |  [getSkillUpgradeCost(skillName, count)](./bitburner.bladeburner.getskillupgradecost.md) | Get cost to upgrade skill. |

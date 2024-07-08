@@ -80,6 +80,62 @@ export class Skill {
     );
   }
 
+  calculateMaxUpgradeCount(currentLevel: number, cost: PositiveInteger): number {
+    /**
+     * Note: there is no notation for Math.round, so I use \lceil and \rceil as alternatives for non-existent \lround
+     * and \rround. When you see \lceil and \rceil, it means Math.round, not Math.ceil.
+     *
+     * Define:
+     * - x = count
+     * - a = currentNodeMults.BladeburnerSkillCost
+     * - b = this.baseCost
+     * - c = this.costInc
+     * - d = currentLevel
+     * - y = cost
+     *
+     * We have:
+     *
+     * $$ y = \lceil x \ast a \ast (b + c \ast (d + \frac{x - 1}{2})) \rceil$$
+     *
+     * To simplify the calculation, let's ignore the Math.round part:
+     *
+     * $$ y = x \ast a \ast (b + c \ast (d + \frac{x - 1}{2}))$$
+     *
+     * Solve for x in terms of y:
+     *
+     * Define:
+     *
+     * $$ e = -2 \ast b - 2 \ast c \ast d + c $$
+     *
+     * $$ Delta = \sqrt{a \ast (a \ast {e ^ 2} + 8 \ast c \ast y)} $$
+     *
+     * Solutions:
+     *
+     * $$ x_1 = \frac{a \ast e + Delta}{2 \ast a \ast c} $$
+     *
+     * $$ x_2 = \frac{a \ast e - Delta}{2 \ast a \ast c} $$
+     *
+     * $a$, $c$ and $y$ are always greater than 0, so $x_2$ is always less than 0. Therefore, $x_1$ is the only
+     * solution.
+     */
+    const e = -2 * this.baseCost - 2 * this.costInc * currentLevel + this.costInc;
+    const delta = Math.sqrt(
+      currentNodeMults.BladeburnerSkillCost *
+        (currentNodeMults.BladeburnerSkillCost * Math.pow(e, 2) + 8 * this.costInc * cost),
+    );
+    // We ignore Math.round in the previous part, so x2 is just an estimation. In order to not "overestimate" the final
+    // result, we use Math.floor here, then "adjust" it later if necessary.
+    const result = Math.floor(
+      (currentNodeMults.BladeburnerSkillCost * e + delta) / (2 * currentNodeMults.BladeburnerSkillCost * this.costInc),
+    );
+    // Check if we can afford 1 more upgrade count.
+    const costOfResultPlus1 = this.calculateCost(currentLevel, (result + 1) as PositiveInteger);
+    if (costOfResultPlus1 <= cost) {
+      return result + 1;
+    }
+    return result;
+  }
+
   canUpgrade(bladeburner: Bladeburner, count = 1): Availability<{ cost: number }> {
     const currentLevel = bladeburner.skills[this.name] ?? 0;
     if (!isPositiveInteger(count)) return { error: `Invalid upgrade count ${count}` };

@@ -3334,6 +3334,20 @@ export interface Bladeburner {
   getSkillUpgradeCost(skillName: string, count?: number): number;
 
   /**
+   * Get the max upgrade count of a skill.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * This function returns the number of times that you can upgrade the specified skill with the specified skill points.
+   *
+   * @param skillName - Name of skill. Case-sensitive and must be an exact match.
+   * @param skillPoints - Number of skill points to upgrade the skill. It must be a positive integer.
+   * @returns Number of times that you can upgrade the specified skill.
+   */
+  getSkillMaxUpgradeCount(skillName: string, skillPoints: number): number;
+
+  /**
    * Upgrade skill.
    * @remarks
    * RAM cost: 4 GB

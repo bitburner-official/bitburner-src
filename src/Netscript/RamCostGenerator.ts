@@ -301,6 +301,7 @@ const bladeburner = {
   getSkillPoints: RamCostConstants.BladeburnerApiBase,
   getSkillLevel: RamCostConstants.BladeburnerApiBase,
   getSkillUpgradeCost: RamCostConstants.BladeburnerApiBase,
+  getSkillMaxUpgradeCount: RamCostConstants.BladeburnerApiBase,
   upgradeSkill: RamCostConstants.BladeburnerApiBase,
   getTeamSize: RamCostConstants.BladeburnerApiBase,
   setTeamSize: RamCostConstants.BladeburnerApiBase,
