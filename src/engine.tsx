@@ -8,7 +8,6 @@ import { Factions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
 import { processPassiveFactionRepGain, inviteToFaction } from "./Faction/FactionHelpers";
 import { Router } from "./ui/GameRoot";
-import { Page } from "./ui/Router";
 import "./utils/Protections"; // Side-effect: Protect against certain unrecoverable errors
 import "./PersonObjects/Player/PlayerObject"; // For side-effect of creating Player
 
@@ -441,8 +440,7 @@ function warnAutosaveDisabled(): void {
 
   // We don't want this warning to show up on certain pages.
   // When in recovery or importing we want to keep autosave disabled.
-  const ignoredPages = [Page.Recovery as Page, Page.ImportSave];
-  if (ignoredPages.includes(Router.page())) return;
+  if (Router.hidingMessages()) return;
 
   const warningToast = (
     <>

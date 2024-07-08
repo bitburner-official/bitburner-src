@@ -3,7 +3,6 @@ import { Message } from "./Message";
 import { AugmentationName, CompletedProgramName, FactionName, MessageFilename } from "@enums";
 import { Router } from "../ui/GameRoot";
 import { Player } from "@player";
-import { Page } from "../ui/Router";
 import { GetServer } from "../Server/AllServers";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Settings } from "../Settings/Settings";
@@ -53,7 +52,7 @@ function recvd(name: MessageFilename): boolean {
 
 //Checks if any of the 'timed' messages should be sent
 function checkForMessagesToSend(): void {
-  if (Router.page() === Page.BitVerse) return;
+  if (Router.hidingMessages()) return;
 
   if (Player.hasAugmentation(AugmentationName.TheRedPill, true)) {
     //Get the world daemon required hacking level

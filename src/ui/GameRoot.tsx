@@ -18,7 +18,8 @@ import { dialogBoxCreate } from "./React/DialogBox";
 import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 
-import { Page, PageWithContext, IRouter, ComplexPage, PageContext } from "./Router";
+import type { PageWithContext, IRouter, ComplexPage, PageContext } from "./Router";
+import { Page } from "./Router";
 import { Overview } from "./React/Overview";
 import { SidebarRoot } from "../Sidebar/ui/SidebarRoot";
 import { AugmentationsRoot } from "../Augmentation/ui/AugmentationsRoot";
@@ -90,20 +91,18 @@ const useStyles = makeStyles()((theme: Theme) => ({
   },
 }));
 
-const uninitialized = (): void => {
-  throw new Error("Router called before initialization - uninitialized");
-};
-
 const MAX_PAGES_IN_HISTORY = 10;
 
 export let Router: IRouter = {
-  isInitialized: false,
   page: () => {
-    throw new Error("Router called before initialization - page");
+    return Page.LoadingScreen;
   },
-  allowRouting: uninitialized,
-  toPage: () => {
-    throw new Error("Router called before initialization - toPage");
+  allowRouting: () => {
+    throw new Error("Router called before initialization - allowRouting");
+  },
+  hidingMessages: () => true,
+  toPage: (page: Page) => {
+    throw new Error(`Router called before initialization - toPage(${page})`);
   },
   back: () => {
     throw new Error("Router called before initialization - back");
@@ -163,10 +162,18 @@ export function GameRoot(): React.ReactElement {
     console.error(`Routing is currently disabled - Attempted router.${name}()`);
   }
 
+  const hiddenPages = new Set([
+    Page.Recovery,
+    Page.ImportSave,
+    Page.BitVerse,
+    Page.Infiltration,
+    Page.BladeburnerCinematic,
+  ]);
+
   Router = {
-    isInitialized: true,
     page: () => pageWithContext.page,
     allowRouting: (value: boolean) => setAllowRoutingCalls(value),
+    hidingMessages: () => hiddenPages.has(pageWithContext.page),
     toPage: (page: Page, context?: PageContext<ComplexPage>) => {
       if (!allowRoutingCalls) return attemptedForbiddenRouting("toPage");
       switch (page) {
@@ -199,32 +206,28 @@ export function GameRoot(): React.ReactElement {
 
   let mainPage = <Typography>Cannot load</Typography>;
   let withSidebar = true;
-  let withPopups = true;
+  const hidePopups = Router.hidingMessages();
   let bypassGame = false;
   switch (pageWithContext.page) {
     case Page.Recovery: {
       mainPage = <RecoveryRoot softReset={softReset} />;
       withSidebar = false;
-      withPopups = false;
       bypassGame = true;
       break;
     }
     case Page.BitVerse: {
       mainPage = <BitverseRoot flume={pageWithContext.flume} quick={pageWithContext.quick} />;
       withSidebar = false;
-      withPopups = false;
       break;
     }
     case Page.Infiltration: {
       mainPage = <InfiltrationRoot location={pageWithContext.location} />;
       withSidebar = false;
-      withPopups = false;
       break;
     }
     case Page.BladeburnerCinematic: {
       mainPage = <BladeburnerCinematic />;
       withSidebar = false;
-      withPopups = false;
       break;
     }
     case Page.Work: {
@@ -377,7 +380,6 @@ export function GameRoot(): React.ReactElement {
     case Page.ImportSave: {
       mainPage = <ImportSave saveData={pageWithContext.saveData} automatic={!!pageWithContext.automatic} />;
       withSidebar = false;
-      withPopups = false;
       bypassGame = true;
     }
   }
@@ -410,11 +412,11 @@ export function GameRoot(): React.ReactElement {
                 <Box className={classes.root}>{mainPage}</Box>
               )}
               <Unclickable />
-              <LogBoxManager hidden={!withPopups} />
-              <AlertManager hidden={!withPopups} />
-              <PromptManager hidden={!withPopups} />
-              <FactionInvitationManager hidden={!withPopups} />
-              <Snackbar hidden={!withPopups} />
+              <LogBoxManager hidden={hidePopups} />
+              <AlertManager hidden={hidePopups} />
+              <PromptManager hidden={hidePopups} />
+              <FactionInvitationManager hidden={hidePopups} />
+              <Snackbar hidden={hidePopups} />
               <Apr1 />
             </SnackbarProvider>
           </HistoryProvider>

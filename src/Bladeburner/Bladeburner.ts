@@ -22,6 +22,7 @@ import { Skills } from "./data/Skills";
 import { City } from "./City";
 import { Player } from "@player";
 import { Router } from "../ui/GameRoot";
+import { Page } from "../ui/Router";
 import { ConsoleHelpText } from "./data/Help";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
@@ -1307,7 +1308,7 @@ export class Bladeburner {
 
   process(): void {
     // Edge race condition when the engine checks the processing counters and attempts to route before the router is initialized.
-    if (!Router.isInitialized) return;
+    if (Router.page() === Page.LoadingScreen) return;
 
     // If the Player starts doing some other actions, set action to idle and alert
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true) && Player.currentWork) {
