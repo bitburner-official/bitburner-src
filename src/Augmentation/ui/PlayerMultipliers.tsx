@@ -71,8 +71,12 @@ function MultiplierList(props: IMultiplierListProps): React.ReactElement {
               secondary={
                 <span style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
                   <BitNodeModifiedStats base={current} mult={bnMult} color={color} />
-                  <DoubleArrow fontSize="small" color="success" sx={{ mb: 0.5, mx: 1 }} />
-                  <BitNodeModifiedStats base={augmented} mult={bnMult} color={Settings.theme.success} />
+                  {current !== augmented && (
+                    <>
+                      <DoubleArrow fontSize="small" color="success" sx={{ mb: 0.5, mx: 1 }} />
+                      <BitNodeModifiedStats base={augmented} mult={bnMult} color={Settings.theme.success} />
+                    </>
+                  )}
                 </span>
               }
               disableTypography
