@@ -23,6 +23,7 @@ module.exports = (env, argv) => {
     chunkOrigins: false,
     colors: true,
     entrypoints: false,
+    warningsFilter: ["./node_modules/@babel/standalone/babel.js"],
   };
 
   const devServerSettings = {
