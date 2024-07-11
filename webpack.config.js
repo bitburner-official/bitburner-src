@@ -23,7 +23,6 @@ module.exports = (env, argv) => {
     chunkOrigins: false,
     colors: true,
     entrypoints: false,
-    warningsFilter: ["./node_modules/@babel/standalone/babel.js"],
   };
 
   const devServerSettings = {
@@ -193,5 +192,11 @@ module.exports = (env, argv) => {
       fallback: { crypto: false },
     },
     stats: statsConfig,
+    ignoreWarnings: [
+      {
+        module: /@babel\/standalone/,
+        message: /Critical dependency: the request of a dependency is an expression/,
+      },
+    ],
   };
 };
