@@ -37,10 +37,14 @@ export function PortalModal(props: IProps): React.ReactElement {
   currentSourceFiles = new Map([...currentSourceFiles].sort((a, b) => a[0] - b[0]));
 
   let sourceFileOverrides: JSONMap<number, number>;
+  let intelligenceOverride: number | undefined;
   let bitNodeBooleanOptions: BitNodeBooleanOptions;
   const callbacks = {
     setSfActiveLevel: (sfNumber: number, sfLevel: number) => {
       sourceFileOverrides.set(sfNumber, sfLevel);
+    },
+    setIntelligenceOverride: (value: number | undefined) => {
+      intelligenceOverride = value;
     },
     setBooleanOption: (key: keyof BitNodeBooleanOptions, value: boolean) => {
       if (!(key in bitNodeBooleanOptions)) {
@@ -53,6 +57,7 @@ export function PortalModal(props: IProps): React.ReactElement {
     },
     resetAll: () => {
       callbacks.resetSourceFileOverrides();
+      intelligenceOverride = undefined;
       bitNodeBooleanOptions = {
         restrictHomePCUpgrade: false,
         disableGang: false,
@@ -94,6 +99,7 @@ export function PortalModal(props: IProps): React.ReactElement {
         onClick={() => {
           const bitNodeOptions = {
             sourceFileOverrides: sourceFileOverrides,
+            intelligenceOverride: intelligenceOverride,
             ...bitNodeBooleanOptions,
           };
           enterBitNode(props.flume, props.destroyedBitNode, props.n, bitNodeOptions);

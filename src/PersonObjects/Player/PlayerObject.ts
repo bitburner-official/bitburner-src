@@ -1,4 +1,4 @@
-import type { Player as IPlayer } from "@nsdefs";
+import type { BitNodeOptions, Player as IPlayer } from "@nsdefs";
 import type { PlayerAchievement } from "../../Achievements/Achievements";
 import type { Bladeburner } from "../../Bladeburner/Bladeburner";
 import type { Corporation } from "../../Corporation/Corporation";
@@ -74,8 +74,9 @@ export class PlayerObject extends Person implements IPlayer {
 
   entropy = 0;
 
-  bitNodeOptions = {
+  bitNodeOptions: BitNodeOptions = {
     sourceFileOverrides: new JSONMap<number, number>(),
+    intelligenceOverride: undefined,
     restrictHomePCUpgrade: false,
     disableGang: false,
     disableCorporation: false,

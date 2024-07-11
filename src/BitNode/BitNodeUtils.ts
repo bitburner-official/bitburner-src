@@ -20,7 +20,7 @@ export function canAccessBitNodeFeature(bitNode: number): boolean {
 }
 
 export function knowAboutBitverse(): boolean {
-  for (const [, sfActiveLevel] of Player.activeSourceFiles) {
+  for (const sfActiveLevel of Player.activeSourceFiles.values()) {
     if (sfActiveLevel > 0) {
       return true;
     }
@@ -31,6 +31,7 @@ export function knowAboutBitverse(): boolean {
 export function getDefaultBitNodeOptions(): BitNodeOptions {
   return {
     sourceFileOverrides: new Map<number, number>(),
+    intelligenceOverride: undefined,
     restrictHomePCUpgrade: false,
     disableGang: false,
     disableCorporation: false,
@@ -70,6 +71,12 @@ export function setBitNodeOptions(bitNodeOptions: BitNodeOptions): void {
   const validationResultForSourceFileOverrides = validateSourceFileOverrides(bitNodeOptions.sourceFileOverrides, false);
   if (!validationResultForSourceFileOverrides.valid) {
     throw new Error(`sourceFileOverrides is invalid. Reason: ${validationResultForSourceFileOverrides.message}`);
+  }
+  if (
+    bitNodeOptions.intelligenceOverride !== undefined &&
+    (!Number.isInteger(bitNodeOptions.intelligenceOverride) || bitNodeOptions.intelligenceOverride < 0)
+  ) {
+    throw new Error(`intelligenceOverride is invalid. It must be a non-negative integer.`);
   }
 
   Object.assign(Player.bitNodeOptions, bitNodeOptions);

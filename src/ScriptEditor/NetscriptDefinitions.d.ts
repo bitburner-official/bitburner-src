@@ -1706,10 +1706,14 @@ export type Task = StudyTask | CompanyWorkTask | CreateProgramWorkTask | CrimeTa
 /**
  * Default value:
  * - sourceFileOverrides: an empty Map
+ * - intelligenceOverride: undefined
  * - All boolean options: false
+ *
+ * If you specify intelligenceOverride, it must be a non-negative integer.
  */
 export interface BitNodeOptions extends BitNodeBooleanOptions {
   sourceFileOverrides: Map<number, number>;
+  intelligenceOverride: number | undefined;
 }
 
 /**

@@ -30,8 +30,8 @@ export function OptionSwitch({
         disabled={disabled}
         control={<Switch checked={value} onChange={handleSwitchChange} />}
         label={
-          <Tooltip title={<Typography>{tooltip}</Typography>}>
-            <Typography>{text}</Typography>
+          <Tooltip title={<Typography component="div">{tooltip}</Typography>}>
+            <Typography component="div">{text}</Typography>
           </Tooltip>
         }
       />

@@ -19,6 +19,7 @@ import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { JSONMap } from "../../Types/Jsonable";
 import { Settings } from "../../Settings/Settings";
+import { Player } from "@player";
 
 interface SourceFileButtonRowProps {
   sfOverrides: JSONMap<number, number>;
@@ -68,7 +69,7 @@ function SourceFileButtonRow({
         value={inputValue}
         onChange={(event) => {
           if (event.target.value === "") {
-            setInputValue("");
+            setInputValue("0");
             setActiveLevel(0);
             callbacks.setSfActiveLevel(sfNumber, 0);
             return;
@@ -211,7 +212,7 @@ export function SourceFileOverrides({
                 </td>
                 <td>
                   <ButtonGroup>
-                    {Array.from([0, 1, 2, 3]).map((level) => (
+                    {[0, 1, 2, 3].map((level) => (
                       <ButtonWithTooltip
                         key={level}
                         onClick={() => {
@@ -254,6 +255,7 @@ interface BitNodeAdvancedOptionsProps {
   currentSourceFiles: Map<number, number>;
   callbacks: {
     setSfActiveLevel: (sfNumber: number, sfLevel: number) => void;
+    setIntelligenceOverride: (value: number | undefined) => void;
     setBooleanOption: (key: keyof BitNodeBooleanOptions, value: boolean) => void;
     resetSourceFileOverrides: () => void;
     resetAll: () => void;
@@ -266,11 +268,39 @@ export function BitNodeAdvancedOptions({
   callbacks,
 }: BitNodeAdvancedOptionsProps): React.ReactElement {
   const [open, setOpen] = React.useState(false);
+  const [intelligenceOverride, setIntelligenceOverride] = React.useState<string>("");
   const getSfLevel = React.useCallback(
     (sfNumber: number): number => {
       return currentSourceFiles.get(sfNumber) ?? 0;
     },
     [currentSourceFiles],
+  );
+  const intelligenceOverrideTool = (
+    <>
+      <Typography component="div" display="flex" gap="1rem">
+        <Typography display="flex" alignItems="center">
+          Override Intelligence:
+        </Typography>
+        <TextField
+          sx={{ maxWidth: "4rem" }}
+          disabled={intelligenceOverride === ""}
+          value={intelligenceOverride}
+          onChange={(event) => {
+            if (event.target.value === "") {
+              setIntelligenceOverride("0");
+              callbacks.setIntelligenceOverride(0);
+              return;
+            }
+            const value = Number.parseInt(event.target.value);
+            if (!Number.isInteger(value) || value < 0) {
+              return;
+            }
+            setIntelligenceOverride(value.toString());
+            callbacks.setIntelligenceOverride(value);
+          }}
+        ></TextField>
+      </Typography>
+    </>
   );
 
   return (
@@ -341,6 +371,44 @@ export function BitNodeAdvancedOptions({
             }}
             text="Disable Sleeves' experience and augmentation"
             tooltip="Sleeves cannot gain experience or install augmentations"
+          />
+          <OptionSwitch
+            disabled={Player.skills.intelligence <= 0}
+            checked={false}
+            onChange={(value) => {
+              if (!value) {
+                setIntelligenceOverride("");
+                callbacks.setIntelligenceOverride(undefined);
+                return;
+              }
+              setIntelligenceOverride(Player.skills.intelligence.toString());
+              callbacks.setIntelligenceOverride(Player.skills.intelligence);
+            }}
+            text={intelligenceOverrideTool}
+            tooltip={
+              <>
+                <Typography component="div">
+                  The Intelligence bonuses for you and your Sleeves will be limited by this value. For example:
+                  <ul>
+                    <li>
+                      If your Intelligence is 1000 and you set this value to 500, the "effective" Intelligence, which is
+                      used for bonus calculation, is only 500.
+                    </li>
+                    <li>
+                      If a Sleeve's Intelligence is 200 and you set this value to 500, the "effective" Intelligence,
+                      which is used for bonus calculation, is still 200.
+                    </li>
+                  </ul>
+                </Typography>
+                <Typography>
+                  You will still gain Intelligence experience as normal. Intelligence Override only affects the
+                  Intelligence bonus. You can hover your mouse over the Intelligence stat in the character overview to
+                  see the overridden value.
+                </Typography>
+                <br />
+                <Typography>Intelligence Override must be a non-negative integer.</Typography>
+              </>
+            }
           />
           <br />
           <SourceFileOverrides
