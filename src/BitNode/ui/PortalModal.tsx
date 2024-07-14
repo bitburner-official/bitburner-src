@@ -21,6 +21,18 @@ interface IProps {
 }
 
 export function PortalModal(props: IProps): React.ReactElement {
+  const [sourceFileOverrides, setSourceFileOverrides] = React.useState<JSONMap<number, number>>(new JSONMap());
+  const [intelligenceOverride, setIntelligenceOverride] = React.useState<number | undefined>();
+  const [bitNodeBooleanOptions, setBitNodeBooleanOptions] = React.useState<BitNodeBooleanOptions>({
+    restrictHomePCUpgrade: false,
+    disableGang: false,
+    disableCorporation: false,
+    disableBladeburner: false,
+    disable4SData: false,
+    disableHacknetServer: false,
+    disableSleeveExpAndAugmentation: false,
+  });
+
   const bitNodeKey = "BitNode" + props.n;
   const bitNode = BitNodes[bitNodeKey];
   if (bitNode == null) throw new Error(`Could not find BitNode object for number: ${props.n}`);
@@ -36,43 +48,50 @@ export function PortalModal(props: IProps): React.ReactElement {
   }
   currentSourceFiles = new Map([...currentSourceFiles].sort((a, b) => a[0] - b[0]));
 
-  let sourceFileOverrides: JSONMap<number, number>;
-  let intelligenceOverride: number | undefined;
-  let bitNodeBooleanOptions: BitNodeBooleanOptions;
   const callbacks = {
+    setSfOverrides: (value: JSONMap<number, number>) => {
+      setSourceFileOverrides(value);
+    },
     setSfActiveLevel: (sfNumber: number, sfLevel: number) => {
-      sourceFileOverrides.set(sfNumber, sfLevel);
+      setSourceFileOverrides((old) => {
+        const newValue = new JSONMap(old);
+        newValue.set(sfNumber, sfLevel);
+        return newValue;
+      });
     },
     setIntelligenceOverride: (value: number | undefined) => {
-      intelligenceOverride = value;
+      setIntelligenceOverride(value);
     },
     setBooleanOption: (key: keyof BitNodeBooleanOptions, value: boolean) => {
       if (!(key in bitNodeBooleanOptions)) {
         throw new Error(`Invalid key of booleanOptions: ${key}`);
       }
-      bitNodeBooleanOptions[key] = value;
-    },
-    resetSourceFileOverrides: () => {
-      sourceFileOverrides = new JSONMap();
-    },
-    resetAll: () => {
-      callbacks.resetSourceFileOverrides();
-      intelligenceOverride = undefined;
-      bitNodeBooleanOptions = {
-        restrictHomePCUpgrade: false,
-        disableGang: false,
-        disableCorporation: false,
-        disableBladeburner: false,
-        disable4SData: false,
-        disableHacknetServer: false,
-        disableSleeveExpAndAugmentation: false,
-      };
+      setBitNodeBooleanOptions((old) => {
+        return {
+          ...old,
+          [key]: value,
+        };
+      });
     },
   };
-  callbacks.resetAll();
+
+  function onClose() {
+    setSourceFileOverrides(new JSONMap());
+    setIntelligenceOverride(undefined);
+    setBitNodeBooleanOptions({
+      restrictHomePCUpgrade: false,
+      disableGang: false,
+      disableCorporation: false,
+      disableBladeburner: false,
+      disable4SData: false,
+      disableHacknetServer: false,
+      disableSleeveExpAndAugmentation: false,
+    });
+    props.onClose();
+  }
 
   return (
-    <Modal open={props.open} onClose={props.onClose}>
+    <Modal open={props.open} onClose={onClose}>
       <Typography variant="h4">
         BitNode-{props.n}: {bitNode.name}
       </Typography>
@@ -90,6 +109,9 @@ export function PortalModal(props: IProps): React.ReactElement {
       <BitNodeAdvancedOptions
         targetBitNode={props.n}
         currentSourceFiles={currentSourceFiles}
+        sourceFileOverrides={sourceFileOverrides}
+        intelligenceOverride={intelligenceOverride}
+        bitNodeBooleanOptions={bitNodeBooleanOptions}
         callbacks={callbacks}
       ></BitNodeAdvancedOptions>
       <br />
@@ -98,10 +120,13 @@ export function PortalModal(props: IProps): React.ReactElement {
         autoFocus={true}
         onClick={() => {
           const bitNodeOptions = {
-            sourceFileOverrides: sourceFileOverrides,
-            intelligenceOverride: intelligenceOverride,
+            sourceFileOverrides,
+            intelligenceOverride,
             ...bitNodeBooleanOptions,
           };
+          console.log(sourceFileOverrides);
+          console.log(intelligenceOverride);
+          console.log(bitNodeBooleanOptions);
           enterBitNode(props.flume, props.destroyedBitNode, props.n, bitNodeOptions);
           props.onClose();
         }}

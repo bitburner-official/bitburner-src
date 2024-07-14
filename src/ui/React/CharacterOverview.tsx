@@ -118,11 +118,15 @@ export function Val({ name, color }: ValProps): React.ReactElement {
     return clearSubscription;
   }, [name]);
 
-  if (name === "Int" && Player.bitNodeOptions.intelligenceOverride !== undefined) {
+  if (
+    name === "Int" &&
+    Player.bitNodeOptions.intelligenceOverride !== undefined &&
+    Player.bitNodeOptions.intelligenceOverride < Player.skills.intelligence
+  ) {
     return (
-      <Tooltip title={`Intelligence Override: ${formatSkill(Player.bitNodeOptions.intelligenceOverride)}`}>
+      <Tooltip title={`Intelligence: ${formatSkill(Player.skills.intelligence)}`}>
         <Typography color={color}>
-          {formattedVals[name]()}
+          {formatSkill(Player.bitNodeOptions.intelligenceOverride)}
           <sup>*</sup>
         </Typography>
       </Tooltip>
