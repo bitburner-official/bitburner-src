@@ -1,12 +1,10 @@
 /**
  * Implements RAM Calculation functionality.
  *
- * Uses the acorn.js library to parse a script's code into an AST and
- * recursively walk through that AST, calculating RAM usage along
- * the way
+ * Uses acorn-walk to recursively walk through the AST, calculating RAM usage along the way.
  */
 import * as walk from "acorn-walk";
-import * as acorn from "acorn";
+import type * as acorn from "acorn";
 import { extendAcornWalkForTypeScriptNodes } from "../ThirdParty/acorn-typescript-walk";
 import { extend as extendAcornWalkForJsxNodes } from "acorn-jsx-walk";
 

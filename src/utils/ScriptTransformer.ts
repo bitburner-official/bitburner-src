@@ -72,6 +72,10 @@ export function getFileTypeFeature(fileType: FileType): FileTypeFeature {
 export function parseAST(code: string, fileType: FileType): AST {
   const fileTypeFeature = getFileTypeFeature(fileType);
   let ast: AST;
+  /**
+   * acorn is much faster than babel-parser, especially when parsing many big JS files, so we use it to parse the AST of
+   * JS code. babel-parser is only useful when we have to parse JSX and TypeScript.
+   */
   if (fileType === FileType.JS) {
     ast = acorn.parse(code, { sourceType: "module", ecmaVersion: "latest" });
   } else {
@@ -85,6 +89,10 @@ export function parseAST(code: string, fileType: FileType): AST {
     ast = babel.packages.parser.parse(code, {
       sourceType: "module",
       ecmaVersion: "latest",
+      /**
+       * The usage of the "estree" plugin is mandatory. We use acorn-walk to walk the AST. acorn-walk only supports the
+       * ESTree AST format, but babel-parser uses the Babel AST format by default.
+       */
       plugins: [["estree", { classFeatures: true }], ...plugins],
     }).program;
   }
@@ -118,6 +126,15 @@ export function getModuleScript(
   return script;
 }
 
+/**
+ * This function must be synchronous to avoid race conditions. Check https://github.com/bitburner-official/bitburner-src/pull/1173#issuecomment-2026940461
+ * for more information.
+ *
+ * @param filename
+ * @param code
+ * @param fileType
+ * @returns
+ */
 export function transformScript(filename: string, code: string, fileType: FileType): string | null | undefined {
   if (supportedFileTypes.every((v) => v !== fileType)) {
     throw new Error(`Invalid file type: ${fileType}`);
