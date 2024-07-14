@@ -12,6 +12,7 @@ import { Skills } from "../Bladeburner/data/Skills";
 import { assertString } from "../Netscript/TypeAssertion";
 import { BlackOperations, blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { checkSleeveAPIAccess, checkSleeveNumber } from "../NetscriptFunctions/Sleeve";
+import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const checkBladeburnerAccess = function (ctx: NetscriptContext): void {
@@ -19,7 +20,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     return;
   };
   const getBladeburner = function (ctx: NetscriptContext): Bladeburner {
-    const apiAccess = Player.bitNodeN === 7 || Player.sourceFileLvl(7) > 0;
+    const apiAccess = canAccessBitNodeFeature(7);
     if (!apiAccess) {
       throw helpers.errorMessage(ctx, "You have not unlocked the Bladeburner API.", "API ACCESS");
     }
@@ -298,28 +299,28 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       return !!attempt.success;
     },
     joinBladeburnerDivision: (ctx) => () => {
-      if (Player.bitNodeN === 7 || Player.sourceFileLvl(7) > 0) {
-        if (currentNodeMults.BladeburnerRank === 0) {
-          return false; // Disabled in this bitnode
-        }
-        if (Player.bladeburner) {
-          return true; // Already member
-        } else if (
-          Player.skills.strength >= 100 &&
-          Player.skills.defense >= 100 &&
-          Player.skills.dexterity >= 100 &&
-          Player.skills.agility >= 100
-        ) {
-          Player.startBladeburner();
-          helpers.log(ctx, () => "You have been accepted into the Bladeburner division");
-
-          return true;
-        } else {
-          helpers.log(ctx, () => "You do not meet the requirements for joining the Bladeburner division");
-          return false;
-        }
+      if (!canAccessBitNodeFeature(7) || Player.bitNodeOptions.disableBladeburner) {
+        return false;
       }
-      return false;
+      if (currentNodeMults.BladeburnerRank === 0) {
+        return false; // Disabled in this bitnode
+      }
+      if (Player.bladeburner) {
+        return true; // Already member
+      }
+      if (
+        Player.skills.strength < 100 ||
+        Player.skills.defense < 100 ||
+        Player.skills.dexterity < 100 ||
+        Player.skills.agility < 100
+      ) {
+        helpers.log(ctx, () => "You do not meet the requirements for joining the Bladeburner division");
+        return false;
+      }
+      Player.startBladeburner();
+      helpers.log(ctx, () => "You have been accepted into the Bladeburner division");
+
+      return true;
     },
     getBonusTime: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);

@@ -76,6 +76,8 @@ interface ResetInfo {
   ownedAugs: Map<string, number>;
   /** A map of owned SF to their levels. Keyed by the SF number. Map values are the SF level. */
   ownedSF: Map<number, number>;
+  /** Current BitNode options */
+  bitNodeOptions: BitNodeOptions;
 }
 
 /** @public */
@@ -1702,6 +1704,36 @@ export interface GraftingTask {
 export type Task = StudyTask | CompanyWorkTask | CreateProgramWorkTask | CrimeTask | FactionWorkTask | GraftingTask;
 
 /**
+ * Default value:
+ * - sourceFileOverrides: an empty Map
+ * - intelligenceOverride: undefined
+ * - All boolean options: false
+ *
+ * If you specify intelligenceOverride, it must be a non-negative integer.
+ */
+export interface BitNodeOptions extends BitNodeBooleanOptions {
+  sourceFileOverrides: Map<number, number>;
+  intelligenceOverride: number | undefined;
+}
+
+/**
+ * restrictHomePCUpgrade: The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max
+ * core: 1.
+ *
+ * disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy
+ * augmentations for them.
+ */
+export interface BitNodeBooleanOptions {
+  restrictHomePCUpgrade: boolean;
+  disableGang: boolean;
+  disableCorporation: boolean;
+  disableBladeburner: boolean;
+  disable4SData: boolean;
+  disableHacknetServer: boolean;
+  disableSleeveExpAndAugmentation: boolean;
+}
+
+/**
  * Singularity API
  * @remarks
  * This API requires Source-File 4 to use. The RAM cost of all these functions is multiplied by 16/4/1 based on
@@ -2615,8 +2647,9 @@ export interface Singularity {
    *
    * @param nextBN - BN number to jump to
    * @param callbackScript - Name of the script to launch in the next BN.
+   * @param bitNodeOptions - BitNode options for the next BN.
    */
-  b1tflum3(nextBN: number, callbackScript?: string): void;
+  b1tflum3(nextBN: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
 
   /**
    * Destroy the w0r1d_d43m0n and move on to the next BN.
@@ -2629,8 +2662,9 @@ export interface Singularity {
    *
    * @param nextBN - BN number to jump to
    * @param callbackScript - Name of the script to launch in the next BN.
+   * @param bitNodeOptions - BitNode options for the next BN.
    */
-  destroyW0r1dD43m0n(nextBN: number, callbackScript?: string): void;
+  destroyW0r1dD43m0n(nextBN: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
 
   /**
    * Get the current work the player is doing.

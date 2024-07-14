@@ -13,6 +13,7 @@ import { calculateHackingTime, calculateGrowTime, calculateWeakenTime } from "..
 import { CompletedProgramName, FactionName } from "@enums";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
+import { knowAboutBitverse } from "../BitNode/BitNodeUtils";
 
 function requireHackingLevel(lvl: number) {
   return function () {
@@ -22,7 +23,7 @@ function requireHackingLevel(lvl: number) {
 
 function bitFlumeRequirements() {
   return function () {
-    return Player.sourceFiles.size > 0 && Player.skills.hacking >= 1;
+    return knowAboutBitverse() && Player.skills.hacking >= 1;
   };
 }
 

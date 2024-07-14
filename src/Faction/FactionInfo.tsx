@@ -32,6 +32,8 @@ import {
   everyCondition,
   delayedCondition,
   unsatisfiable,
+  notCondition,
+  inBitNode,
 } from "./FactionJoinCondition";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { CONSTANTS } from "../Constants";
@@ -694,7 +696,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ),
     rumorText: <>The {CompanyName.NSA} would like to have a word with you once you're ready.</>,
     inviteReqs: [haveSomeSourceFile(6, 7), haveBladeburnerRank(BladeburnerConstants.RankNeededForFaction)],
-    rumorReqs: [haveSomeSourceFile(6, 7)],
+    rumorReqs: [haveSomeSourceFile(6, 7), notCondition(inBitNode(8))],
     special: true,
     assignment: (): React.ReactElement => {
       return (

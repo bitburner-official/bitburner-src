@@ -20,6 +20,20 @@ import { Company } from "../Company/Company";
 import { CompanyPosition } from "../Company/CompanyPosition";
 import { isMember } from "../utils/EnumHelper";
 
+function processWorkStats(person: IPerson, workStats: WorkStats): WorkStats {
+  // "person" can be a normal object that the player passes to NS APIs, so we cannot use `person instanceof Sleeve`.
+  if (Player.bitNodeOptions.disableSleeveExpAndAugmentation && "shock" in person) {
+    workStats.hackExp = 0;
+    workStats.strExp = 0;
+    workStats.defExp = 0;
+    workStats.dexExp = 0;
+    workStats.agiExp = 0;
+    workStats.chaExp = 0;
+    workStats.intExp = 0;
+  }
+  return workStats;
+}
+
 const gameCPS = 1000 / CONSTANTS.MilliPerCycle; // 5 cycles per second
 export const FactionWorkStats: Record<FactionWorkType, WorkStats> = {
   [FactionWorkType.hacking]: newWorkStats({ hackExp: 2 }),
@@ -60,7 +74,7 @@ export function calculateCrimeWorkStats(person: IPerson, crime: Crime): WorkStat
     currentNodeMults.CrimeExpGain,
     false,
   );
-  return gains;
+  return processWorkStats(person, gains);
 }
 
 /** @returns faction rep rate per cycle */
@@ -75,9 +89,9 @@ export const calculateFactionRep = (person: IPerson, type: FactionWorkType, favo
 
 /** @returns per-cycle WorkStats */
 export function calculateFactionExp(person: IPerson, type: FactionWorkType): WorkStats {
-  return scaleWorkStats(
-    multWorkStats(FactionWorkStats[type], person.mults),
-    currentNodeMults.FactionWorkExpGain / gameCPS,
+  return processWorkStats(
+    person,
+    scaleWorkStats(multWorkStats(FactionWorkStats[type], person.mults), currentNodeMults.FactionWorkExpGain / gameCPS),
   );
 }
 
@@ -102,7 +116,7 @@ export function calculateClassEarnings(person: IPerson, type: ClassType, locatio
     person.mults,
   );
   earnings.money = calculateCost(classs, location) / gameCPS;
-  return earnings;
+  return processWorkStats(person, earnings);
 }
 
 /** @returns per-cycle WorkStats */
@@ -114,7 +128,7 @@ export const calculateCompanyWorkStats = (
 ): WorkStats => {
   // If player has SF-11, calculate salary multiplier from favor
   const favorMult = isNaN(favor) ? 1 : 1 + favor / 100;
-  const bn11Mult = Player.sourceFileLvl(11) > 0 ? favorMult : 1;
+  const bn11Mult = Player.activeSourceFileLvl(11) > 0 ? favorMult : 1;
 
   const gains = scaleWorkStats(
     multWorkStats(
@@ -138,5 +152,5 @@ export const calculateCompanyWorkStats = (
 
   gains.reputation = jobPerformance * worker.mults.company_rep * favorMult * currentNodeMults.CompanyWorkRepGain;
 
-  return gains;
+  return processWorkStats(worker, gains);
 };

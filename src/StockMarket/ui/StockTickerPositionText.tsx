@@ -65,7 +65,7 @@ function ShortPosition(props: IProps): React.ReactElement {
     percentageGains = 0;
   }
 
-  if (Player.bitNodeN === 8 || Player.sourceFileLvl(8) >= 2) {
+  if (Player.bitNodeN === 8 || Player.activeSourceFileLvl(8) >= 2) {
     return (
       <>
         <Box display="flex">

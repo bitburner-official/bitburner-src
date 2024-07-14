@@ -23,11 +23,12 @@ import { GetServer } from "../Server/AllServers";
 import { Server } from "../Server/Server";
 import { Companies } from "../Company/Companies";
 import { isMember } from "../utils/EnumHelper";
+import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
 
 // Returns a boolean indicating whether the player has Hacknet Servers
 // (the upgraded form of Hacknet Nodes)
 export function hasHacknetServers(): boolean {
-  return Player.bitNodeN === 9 || Player.sourceFileLvl(9) > 0;
+  return canAccessBitNodeFeature(9) && !Player.bitNodeOptions.disableHacknetServer;
 }
 
 export function purchaseHacknet(): number {

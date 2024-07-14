@@ -86,10 +86,16 @@ export const RamCostConstants = {
 
 function SF4Cost(cost: number): () => number {
   return () => {
-    if (Player.bitNodeN === 4) return cost;
-    const sf4 = Player.sourceFileLvl(4);
-    if (sf4 <= 1) return cost * 16;
-    if (sf4 === 2) return cost * 4;
+    if (Player.bitNodeN === 4) {
+      return cost;
+    }
+    const sf4 = Player.activeSourceFileLvl(4);
+    if (sf4 <= 1) {
+      return cost * 16;
+    }
+    if (sf4 === 2) {
+      return cost * 4;
+    }
     return cost;
   };
 }

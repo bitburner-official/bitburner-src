@@ -56,6 +56,7 @@ import { hash } from "../../hash/hash";
 import { Locations } from "../../Locations/Locations";
 import { useRerender } from "../../ui/React/hooks";
 import { playerHasDiscoveredGo } from "../../Go/effects/effect";
+import { knowAboutBitverse } from "../../BitNode/BitNodeUtils";
 
 const RotatedDoubleArrowIcon = React.forwardRef(function RotatedDoubleArrowIcon(
   props: { color: "primary" | "secondary" | "error" },
@@ -141,12 +142,12 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     Player.factions.length > 0 ||
     Player.augmentations.length > 0 ||
     Player.queuedAugmentations.length > 0 ||
-    Player.sourceFiles.size > 0;
+    knowAboutBitverse();
 
   const canOpenAugmentations =
     Player.augmentations.length > 0 ||
     Player.queuedAugmentations.length > 0 ||
-    Player.sourceFiles.size > 0 ||
+    knowAboutBitverse() ||
     Player.exploits.length > 0;
 
   const canOpenSleeves = Player.sleeves.length > 0;

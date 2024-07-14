@@ -14,7 +14,7 @@ export function ArcadeRoot(): React.ReactElement {
   const [page, setPage] = useState(Page.None);
 
   function mbBurner2000(): void {
-    if (Player.sourceFileLvl(1) === 0) {
+    if (Player.activeSourceFileLvl(1) === 0) {
       AlertEvents.emit("This machine is broken.");
     } else {
       setPage(Page.Megabyteburner2000);

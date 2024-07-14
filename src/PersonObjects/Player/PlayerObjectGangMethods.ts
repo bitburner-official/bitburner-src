@@ -6,12 +6,16 @@ import { Factions } from "../../Faction/Factions";
 import { Gang } from "../../Gang/Gang";
 import { GangConstants } from "../../Gang/data/Constants";
 import { isFactionWork } from "../../Work/FactionWork";
+import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 
 export function canAccessGang(this: PlayerObject): boolean {
+  if (this.bitNodeOptions.disableGang) {
+    return false;
+  }
   if (this.bitNodeN === 2) {
     return true;
   }
-  if (this.sourceFileLvl(2) <= 0) {
+  if (this.activeSourceFileLvl(2) === 0) {
     return false;
   }
 
@@ -19,7 +23,7 @@ export function canAccessGang(this: PlayerObject): boolean {
 }
 
 export function isAwareOfGang(this: PlayerObject): boolean {
-  return this.bitNodeN === 2 || this.sourceFileLvl(2) >= 1;
+  return canAccessBitNodeFeature(2) && !this.bitNodeOptions.disableGang;
 }
 
 export function getGangFaction(this: PlayerObject): Faction {

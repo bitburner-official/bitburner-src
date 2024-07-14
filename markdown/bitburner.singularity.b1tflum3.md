@@ -9,7 +9,7 @@ b1t\_flum3 into a different BN.
 **Signature:**
 
 ```typescript
-b1tflum3(nextBN: number, callbackScript?: string): void;
+b1tflum3(nextBN: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
 ```
 
 ## Parameters
@@ -18,6 +18,7 @@ b1tflum3(nextBN: number, callbackScript?: string): void;
 |  --- | --- | --- |
 |  nextBN | number | BN number to jump to |
 |  callbackScript | string | _(Optional)_ Name of the script to launch in the next BN. |
+|  bitNodeOptions | [BitNodeOptions](./bitburner.bitnodeoptions.md) | _(Optional)_ BitNode options for the next BN. |
 
 **Returns:**
 
