@@ -124,9 +124,6 @@ export function PortalModal(props: IProps): React.ReactElement {
             intelligenceOverride,
             ...bitNodeBooleanOptions,
           };
-          console.log(sourceFileOverrides);
-          console.log(intelligenceOverride);
-          console.log(bitNodeBooleanOptions);
           enterBitNode(props.flume, props.destroyedBitNode, props.n, bitNodeOptions);
           props.onClose();
         }}
