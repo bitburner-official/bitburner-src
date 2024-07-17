@@ -6,6 +6,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 
+/** @type import("webpack-cli").CallableOption} */
 module.exports = (env, argv) => {
   const isDevServer = (env || {}).devServer === true;
   const runInContainer = (env || {}).runInContainer === true;
