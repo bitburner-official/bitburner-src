@@ -47,6 +47,20 @@ function Root(props: IProps): React.ReactElement {
   const rerender = useRerender();
   const editorRef = useRef<IStandaloneCodeEditor | null>(null);
 
+  // This is the workaround for a bug in monaco-editor: https://github.com/microsoft/monaco-editor/issues/4455
+  const removeOutlineOfEditor = useCallback(() => {
+    if (!editorRef.current) {
+      return;
+    }
+    const containerDomNode = editorRef.current.getContainerDomNode();
+    const elements = containerDomNode.getElementsByClassName("monaco-editor");
+    if (elements.length === 0) {
+      return;
+    }
+    const editorElement = elements[0];
+    (editorElement as HTMLElement).style.outline = "none";
+  }, [editorRef]);
+
   const { showRAMError, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
 
   let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
@@ -278,6 +292,7 @@ function Root(props: IProps): React.ReactElement {
       parseCode(currentScript.code);
       editorRef.current.focus();
     }
+    removeOutlineOfEditor();
   }
 
   function onTabClose(index: number): void {
@@ -324,6 +339,7 @@ function Root(props: IProps): React.ReactElement {
       }
     }
     rerender();
+    removeOutlineOfEditor();
   }
 
   function onTabUpdate(index: number): void {
