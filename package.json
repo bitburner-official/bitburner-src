@@ -19,6 +19,7 @@
     "@mui/styles": "^5.14.12",
     "@mui/system": "^5.14.12",
     "@swc/wasm-web": "^1.4.14",
+    "@types/convert-source-map": "^2.0.3",
     "@types/estree": "^1.0.2",
     "@types/react-syntax-highlighter": "^15.5.8",
     "acorn": "^8.11.3",

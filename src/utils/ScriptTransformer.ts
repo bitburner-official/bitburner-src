@@ -129,13 +129,11 @@ export function getModuleScript(
 /**
  * This function must be synchronous to avoid race conditions. Check https://github.com/bitburner-official/bitburner-src/pull/1173#issuecomment-2026940461
  * for more information.
- *
- * @param filename
- * @param code
- * @param fileType
- * @returns
  */
-export function transformScript(filename: string, code: string, fileType: FileType): string | null | undefined {
+export function transformScript(
+  script: Script,
+  fileType: FileType,
+): { scriptCode: string; sourceMap: object | undefined } {
   if (supportedFileTypes.every((v) => v !== fileType)) {
     throw new Error(`Invalid file type: ${fileType}`);
   }
@@ -149,28 +147,43 @@ export function transformScript(filename: string, code: string, fileType: FileTy
     if (fileTypeFeature.isTypeScript) {
       presets.push("typescript");
     }
-    return babel.transform(code, { filename: filename, presets: presets }).code;
-  }
-  let parserConfig: ParserConfig;
-  if (fileTypeFeature.isTypeScript) {
-    parserConfig = {
-      syntax: "typescript",
-    };
-    if (fileTypeFeature.isReact) {
-      parserConfig.tsx = true;
+    const result = babel.transform(script.code, {
+      filename: script.filename,
+      presets: presets,
+      sourceMaps: true,
+    });
+    if (!result.code) {
+      throw new Error(`Cannot transform script. Filename: ${script.filename}, server: ${script.server}.`);
     }
+    return {
+      scriptCode: result.code,
+      sourceMap: result.map!,
+    };
   } else {
-    parserConfig = {
-      syntax: "ecmascript",
-    };
-    if (fileTypeFeature.isReact) {
-      parserConfig.jsx = true;
+    let parserConfig: ParserConfig;
+    if (fileTypeFeature.isTypeScript) {
+      parserConfig = {
+        syntax: "typescript",
+      };
+      if (fileTypeFeature.isReact) {
+        parserConfig.tsx = true;
+      }
+    } else {
+      parserConfig = {
+        syntax: "ecmascript",
+      };
+      if (fileTypeFeature.isReact) {
+        parserConfig.jsx = true;
+      }
     }
+    const result = transformSync(script.code, {
+      jsc: {
+        parser: parserConfig,
+        target: "es2020",
+      },
+      sourceMaps: true,
+      sourceFileName: script.filename,
+    });
+    return { scriptCode: result.code, sourceMap: JSON.parse(result.map!) };
   }
-  return transformSync(code, {
-    jsc: {
-      parser: parserConfig,
-      target: "es2020",
-    },
-  }).code;
 }
