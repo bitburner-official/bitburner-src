@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme: Theme) => ({
   },
 }));
 
-export const Pre = (props: React.PropsWithChildren<object>): React.ReactElement => {
+export const Pre = (props: JSX.IntrinsicElements["code"]): React.ReactElement => {
   const { classes } = useStyles();
   return (
     <Typography component="span" classes={{ root: classes.pre }}>
@@ -30,13 +30,13 @@ export const Pre = (props: React.PropsWithChildren<object>): React.ReactElement 
   );
 };
 
-const InlineCode = (props: React.PropsWithChildren<CodeProps>): React.ReactElement => (
+const InlineCode = (props: JSX.IntrinsicElements["code"]): React.ReactElement => (
   <Typography component="span" classes={{ root: useStyles().classes.code }}>
     {props.children}
   </Typography>
 );
 
-const BigCode = (props: React.PropsWithChildren<CodeProps>): React.ReactElement => (
+const BigCode = (props: JSX.IntrinsicElements["code"]): React.ReactElement => (
   <SyntaxHighlighter
     language="javascript"
     style={theme}
@@ -49,5 +49,6 @@ const BigCode = (props: React.PropsWithChildren<CodeProps>): React.ReactElement 
   </SyntaxHighlighter>
 );
 
-export const code = (props: React.PropsWithChildren<CodeProps>): React.ReactElement =>
+export const code = (props: JSX.IntrinsicElements["code"]): React.ReactElement =>
+  // FIXME: inline is no longer supported
   props.inline ? <InlineCode {...props} /> : <BigCode {...props} />;

@@ -1,7 +1,6 @@
 import React from "react";
 import { Theme } from "@mui/material/styles";
 import { ListItemText, Table, TableCell, TableCellProps, TableRow, Typography } from "@mui/material";
-import { LiProps, TableDataCellProps, TableHeaderCellProps } from "react-markdown/lib/ast-to-react";
 import { makeStyles } from "tss-react/mui";
 const useStyles = makeStyles()((theme: Theme) => ({
   th: { whiteSpace: "pre", fontWeight: "bold" },
@@ -15,41 +14,42 @@ const useStyles = makeStyles()((theme: Theme) => ({
   },
 }));
 
-export const h1 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+export const h1 = (props: JSX.IntrinsicElements["h1"]): React.ReactElement => (
   // We are just going to cheat and lower every h# by 1.
   <Typography variant="h2">{props.children}</Typography>
 );
 
-export const h2 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+export const h2 = (props: JSX.IntrinsicElements["h2"]): React.ReactElement => (
   // We are just going to cheat and lower every h# by 1.
   <Typography variant="h3">{props.children}</Typography>
 );
 
-export const h3 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+export const h3 = (props: JSX.IntrinsicElements["h3"]): React.ReactElement => (
   // We are just going to cheat and lower every h# by 1.
   <Typography variant="h4">{props.children}</Typography>
 );
 
-export const h4 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+export const h4 = (props: JSX.IntrinsicElements["h4"]): React.ReactElement => (
   // We are just going to cheat and lower every h# by 1.
   <Typography variant="h5">{props.children}</Typography>
 );
 
-export const h5 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+export const h5 = (props: JSX.IntrinsicElements["h5"]): React.ReactElement => (
   // We are just going to cheat and lower every h# by 1.
   <Typography variant="h6">{props.children}</Typography>
 );
 
-export const h6 = (props: React.PropsWithChildren<object>): React.ReactElement => (
+export const h6 = (props: JSX.IntrinsicElements["h6"]): React.ReactElement => (
   // Except for h6, that's going to stay h6. If there's complaints we'll figure it out.
   <Typography variant="h6">{props.children}</Typography>
 );
 
-export const p = (props: React.PropsWithChildren<object>): React.ReactElement => (
+export const p = (props: JSX.IntrinsicElements["p"]): React.ReactElement => (
   <Typography sx={{ mb: 1 }}>{props.children}</Typography>
 );
 
-export const li = (props: React.PropsWithChildren<LiProps>): React.ReactElement => {
+export const li = (props: JSX.IntrinsicElements["li"]): React.ReactElement => {
+  // FIXME: .ordered and .index are not defined automatically
   const prefix = props.ordered ? `${props.index + 1}. ` : "· ";
   return (
     <ListItemText>
@@ -73,13 +73,16 @@ const fixAlign = (align: React.CSSProperties["textAlign"]): TableCellProps["alig
   return align;
 };
 
-export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.ReactElement => {
+export const Td = (props: JSX.IntrinsicElements["td"]): React.ReactElement => {
   const { classes } = useStyles();
   const align = fixAlign(props.style?.textAlign);
-  const content = props.children?.map((child, i) => {
-    if (child === "<br />") return <br key={i} />;
-    return child;
-  });
+  // FIXME: children isn't nescesarily an array
+  const content = Array.isArray(props.children)
+    ? props.children?.map((child, i) => {
+        if (child === "<br />") return <br key={i} />;
+        return child;
+      })
+    : props.children;
   return (
     <TableCell align={align}>
       <Typography align={align} classes={{ root: classes.td }}>
@@ -89,7 +92,7 @@ export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.Re
   );
 };
 
-export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.ReactElement => {
+export const Th = (props: JSX.IntrinsicElements["td"]): React.ReactElement => {
   const { classes } = useStyles();
   const align = fixAlign(props.style?.textAlign);
 
@@ -102,15 +105,15 @@ export const Th = (props: React.PropsWithChildren<TableHeaderCellProps>): React.
   );
 };
 
-export const table = (props: React.PropsWithChildren<object>): React.ReactElement => {
+export const table = (props: JSX.IntrinsicElements["table"]): React.ReactElement => {
   return <Table sx={{ width: "inherit" }}>{props.children}</Table>;
 };
 
-export const tr = (props: React.PropsWithChildren<object>): React.ReactElement => {
+export const tr = (props: JSX.IntrinsicElements["tr"]): React.ReactElement => {
   return <TableRow>{props.children}</TableRow>;
 };
 
-export const Blockquote = (props: React.PropsWithChildren<object>): React.ReactElement => {
+export const Blockquote = (props: JSX.IntrinsicElements["blockquote"]): React.ReactElement => {
   const { classes } = useStyles();
   return <blockquote className={classes.blockquote}>{props.children}</blockquote>;
 };

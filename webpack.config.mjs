@@ -1,12 +1,28 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const path = require("path");
-const webpack = require("webpack");
-const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
+import path from "path";
+import webpack from "webpack";
+import MonacoWebpackPlugin from "monaco-editor-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
+import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
+import { execSync } from "child_process";
+import { exit } from "process";
 
-module.exports = (env, argv) => {
+/** @type {import("unified").Pluggable[]} */
+const remarkPlugins = [
+  (await import("remark-gfm")).default,
+  (await import("remark-math")).default,
+  [(await import("remark-rehype")).default, { allowDangerousHtml: true }],
+  (await import("rehype-mathjax")).default,
+  /** Turn the generated hast into JSON for converting to react at runtime. */
+  function rehypeToJson() {
+    this.Compiler = function compiler(tree) {
+      return JSON.stringify(tree);
+    };
+  },
+];
+
+/** @type {(env: any, argv: any) => import("webpack").Configuration} */
+export default (env, argv) => {
   const isDevServer = (env || {}).devServer === true;
   const runInContainer = (env || {}).runInContainer === true;
   const isDevelopment = argv.mode === "development";
@@ -33,7 +49,7 @@ module.exports = (env, argv) => {
       stats: statsConfig,
     },
     static: {
-      directory: path.join(__dirname, "dist"),
+      directory: path.join(import.meta.dirname, "dist"),
       publicPath: "/dist",
     },
   };
@@ -50,7 +66,7 @@ module.exports = (env, argv) => {
 
   // Get the current commit hash to inject into the app
   // https://stackoverflow.com/a/38401256
-  const commitHash = require("child_process").execSync("git rev-parse --short HEAD").toString().trim();
+  const commitHash = execSync("git rev-parse --short HEAD").toString().trim();
 
   const htmlConfig = {
     title: "Bitburner",
@@ -131,7 +147,7 @@ module.exports = (env, argv) => {
     target: "web",
     entry: entry,
     output: {
-      path: path.resolve(__dirname, outputDirectory),
+      path: path.resolve(import.meta.dirname, outputDirectory),
       filename: "[name].bundle.js",
       assetModuleFilename: "assets/[hash][ext][query]",
     },
@@ -144,7 +160,7 @@ module.exports = (env, argv) => {
           use: {
             loader: "babel-loader",
             options: {
-              plugins: [enableReactRefresh && require.resolve("react-refresh/babel")].filter(Boolean),
+              // plugins: [enableReactRefresh && "react-refresh/babel"],
               cacheDirectory: true,
             },
           },
@@ -157,6 +173,17 @@ module.exports = (env, argv) => {
         {
           resourceQuery: /raw/,
           type: "asset/source",
+        },
+        // This turns markdown into JSON-ified hast for use at runtime.
+        {
+          test: /\.md$/,
+          type: "json",
+          loader: "remark-loader",
+          options: {
+            remarkOptions: {
+              plugins: remarkPlugins,
+            },
+          },
         },
       ],
     },
@@ -185,9 +212,9 @@ module.exports = (env, argv) => {
     resolve: {
       extensions: [".tsx", ".ts", ".js", ".jsx"],
       alias: {
-        "@player": path.resolve(__dirname, "src/Player"),
-        "@enums": path.resolve(__dirname, "src/Enums"),
-        "@nsdefs": path.resolve(__dirname, "src/ScriptEditor/NetscriptDefinitions.d.ts"),
+        "@player": path.resolve(import.meta.dirname, "src/Player"),
+        "@enums": path.resolve(import.meta.dirname, "src/Enums"),
+        "@nsdefs": path.resolve(import.meta.dirname, "src/ScriptEditor/NetscriptDefinitions.d.ts"),
       },
       fallback: { crypto: false },
     },
