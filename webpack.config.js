@@ -130,7 +130,7 @@ module.exports = (env, argv) => {
       new CopyPlugin({
         patterns: [
           {
-            from: "**/*",
+            from: "{tex-chtml.js,*/**/*}",
             to: "mathjax",
             context: "node_modules/mathjax-full/es5",
           },
