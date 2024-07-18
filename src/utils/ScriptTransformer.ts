@@ -4,12 +4,6 @@ import * as acorn from "acorn";
 import { resolveScriptFilePath, validScriptExtensions, type ScriptFilePath } from "../Paths/ScriptFilePath";
 import type { Script } from "../Script/Script";
 
-// This is only for testing. It will be removed after we decide between Babel and SWC.
-declare global {
-  // eslint-disable-next-line no-var
-  var forceBabelTransform: boolean;
-}
-
 export type AcornASTProgram = acorn.Program;
 export type BabelASTProgram = object;
 export type AST = AcornASTProgram | BabelASTProgram;
@@ -135,22 +129,11 @@ export function getModuleScript(
  * @param fileType
  * @returns
  */
-export function transformScript(filename: string, code: string, fileType: FileType): string | null | undefined {
+export function transformScript(code: string, fileType: FileType): string | null | undefined {
   if (supportedFileTypes.every((v) => v !== fileType)) {
     throw new Error(`Invalid file type: ${fileType}`);
   }
   const fileTypeFeature = getFileTypeFeature(fileType);
-  // This is only for testing. It will be removed after we decide between Babel and SWC.
-  if (globalThis.forceBabelTransform) {
-    const presets = [];
-    if (fileTypeFeature.isReact) {
-      presets.push("react");
-    }
-    if (fileTypeFeature.isTypeScript) {
-      presets.push("typescript");
-    }
-    return babel.transform(code, { filename: filename, presets: presets }).code;
-  }
   let parserConfig: ParserConfig;
   if (fileTypeFeature.isTypeScript) {
     parserConfig = {
