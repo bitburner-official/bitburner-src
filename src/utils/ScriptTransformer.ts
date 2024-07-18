@@ -124,7 +124,6 @@ export function getModuleScript(
  * This function must be synchronous to avoid race conditions. Check https://github.com/bitburner-official/bitburner-src/pull/1173#issuecomment-2026940461
  * for more information.
  *
- * @param filename
  * @param code
  * @param fileType
  * @returns
