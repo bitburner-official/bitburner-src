@@ -19,14 +19,14 @@ function getDB(): Promise<IDBObjectStore> {
       db.createObjectStore("savestring");
     };
 
-    indexedDbRequest.onerror = function (this: IDBRequest<IDBDatabase>, ev: Event) {
-      reject(`Failed to get IDB ${ev}`);
+    indexedDbRequest.onerror = function (this: IDBRequest<IDBDatabase>) {
+      reject(new Error("Failed to get IDB", { cause: this.error }));
     };
 
     indexedDbRequest.onsuccess = function (this: IDBRequest<IDBDatabase>) {
       const db = this.result;
       if (!db) {
-        reject("database loading result was undefined");
+        reject(new Error("database loading result was undefined"));
         return;
       }
       resolve(db.transaction(["savestring"], "readwrite").objectStore("savestring"));
@@ -35,21 +35,17 @@ function getDB(): Promise<IDBObjectStore> {
 }
 
 export function load(): Promise<SaveData> {
-  return new Promise((resolve, reject) => {
-    getDB()
-      .then((db) => {
-        return new Promise<SaveData>((resolve, reject) => {
-          const request: IDBRequest<SaveData> = db.get("save");
-          request.onerror = function (this: IDBRequest<SaveData>, ev: Event) {
-            reject("Error in Database request to get save data: " + ev);
-          };
+  return getDB().then((db) => {
+    return new Promise<SaveData>((resolve, reject) => {
+      const request: IDBRequest<SaveData> = db.get("save");
+      request.onerror = function (this: IDBRequest<SaveData>) {
+        reject(new Error("Error in Database request to get save data", { cause: this.error }));
+      };
 
-          request.onsuccess = function (this: IDBRequest<SaveData>) {
-            resolve(this.result);
-          };
-        }).then((saveData) => resolve(saveData));
-      })
-      .catch((r) => reject(r));
+      request.onsuccess = function (this: IDBRequest<SaveData>) {
+        resolve(this.result);
+      };
+    });
   });
 }
 
@@ -59,8 +55,8 @@ export function save(saveData: SaveData): Promise<void> {
       // We'll save to IndexedDB
       const request = db.put(saveData, "save");
 
-      request.onerror = function (e) {
-        reject("Error saving game to IndexedDB: " + e);
+      request.onerror = function (this: IDBRequest<IDBValidKey>) {
+        reject(new Error("Error saving game to IndexedDB", { cause: this.error }));
       };
 
       request.onsuccess = () => resolve();
