@@ -49,8 +49,8 @@ export class GraftingWork extends Work {
   process(cycles: number): boolean {
     const focusBonus = Player.focusPenalty();
     this.cyclesWorked += cycles;
-    this.unitRate = CONSTANTS.MilliPerCycle * cycles * graftingIntBonus() * focusBonus;
-    this.unitCompleted += this.unitRate;
+    this.unitRate = CONSTANTS.MilliPerCycle * graftingIntBonus() * focusBonus;
+    this.unitCompleted += this.unitRate * cycles;
     return this.unitCompleted >= this.unitNeeded();
   }
 
