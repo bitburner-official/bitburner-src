@@ -18,9 +18,9 @@ The game's official documentation can be found in-game.
 The [in-game documentation](./markdown/bitburner.md) is generated from the [TypeScript definitions](./src/ScriptEditor/NetscriptDefinitions.d.ts).
 
 Anyone is welcome to contribute to the documentation by editing the [source
-files](/doc/source) and then making a pull request with your contributions.
+files](/src/Documentation/doc) and then making a pull request with your contributions.
 For further guidance, please refer to the "As A Documenter" section of
-[CONTRIBUTING](./doc/CONTRIBUTING.md).
+[CONTRIBUTING](./doc/CONTRIBUTING.md#as-a-documenter).
 
 # Contribution
 
