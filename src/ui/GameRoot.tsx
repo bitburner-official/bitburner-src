@@ -385,7 +385,7 @@ export function GameRoot(): React.ReactElement {
   }
 
   return (
-    <MathJaxContext version={3} src={"dist/mathjax/tex-chtml.js"}>
+    <MathJaxContext version={3} src={__webpack_public_path__ + "mathjax/tex-chtml.js"}>
       <ErrorBoundary key={errorBoundaryKey} softReset={softReset}>
         <BypassWrapper content={bypassGame ? mainPage : null}>
           <HistoryProvider>

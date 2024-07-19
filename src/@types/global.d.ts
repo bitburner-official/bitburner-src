@@ -1,5 +1,6 @@
 // Defined by webpack on startup or compilation
 declare const __COMMIT_HASH__: string;
+declare const __webpack_public_path__: string;
 
 // When using file-loader, we'll get a path to the resource
 declare module "*.png" {
