@@ -52,7 +52,7 @@ export const p = (props: React.PropsWithChildren<object>): React.ReactElement =>
    * - Other pages: Home > bitburner > something
    *
    * The "Home" button (index.md) is useless. It's also confusing because we have a custom "Home" button linking to
-   * src\Documentation\doc\index.md. If we want to customize this "header", we have to customize api-documenter, which
+   * src/Documentation/doc/en/index.md. If we want to customize this "header", we have to customize api-documenter, which
    * is a complicated task. In order to remove the useless "Home" link, it's easier to check the content of
    * props.children like this. It's not ideal, but it does the job well.
    */
