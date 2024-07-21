@@ -30,7 +30,7 @@ export class Skill {
     this.desc = params.desc;
     this.baseCost = params.baseCost ?? 1;
     this.costInc = params.costInc ?? 1;
-    this.maxLvl = params.maxLvl ?? Number.MAX_SAFE_INTEGER;
+    this.maxLvl = params.maxLvl ?? Number.MAX_VALUE;
     for (const [multName, mult] of getRecordEntries(params.mults)) this.mults[multName] = mult;
   }
 

@@ -143,7 +143,7 @@ export class Bladeburner {
 
   /** Directly sets a skill level, with no validation */
   setSkillLevel(skillName: BladeSkillName, value: number) {
-    this.skills[skillName] = clampInteger(value, 0);
+    this.skills[skillName] = clampNumber(value, 0);
     this.updateSkillMultipliers();
   }
 
