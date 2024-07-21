@@ -120,7 +120,7 @@ export function capitalizeEachWord(s: string): string {
     .join(" ");
 }
 
-export function getNsApiDocumentationUrl(isDevBranch = CONSTANTS.isDevBranch): string {
+export function getNsApiDocumentationUrl(isDevBranch: boolean = CONSTANTS.isDevBranch): string {
   return `https://github.com/bitburner-official/bitburner-src/blob/${
     isDevBranch ? "dev" : "stable"
   }/markdown/bitburner.ns.md`;

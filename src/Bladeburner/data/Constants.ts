@@ -50,4 +50,4 @@ export const BladeburnerConstants = {
 
   HrcHpGain: 2, // HP Gained from Hyperbolic Regeneration chamber
   HrcStaminaGain: 1, // Percentage Stamina gained from Hyperbolic Regeneration Chamber
-};
+} as const;

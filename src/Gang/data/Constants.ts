@@ -29,4 +29,4 @@ export const GangConstants = {
   minCyclesToProcess: 2000 / CONSTANTS.MilliPerCycle,
   /** Maximum number of cycles to process at once during bonus time (5 seconds) */
   maxCyclesToProcess: 5000 / CONSTANTS.MilliPerCycle,
-};
+} as const;
