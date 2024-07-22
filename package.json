@@ -113,7 +113,7 @@
     "format": "prettier -c --write .",
     "format:report": "prettier -c .",
     "start": "electron .app/index.html",
-    "start:dev": "webpack serve --progress --env devServer --mode development",
+    "start:dev": "webpack serve --progress --mode development",
     "build": "bash ./tools/build.sh production",
     "build:dev": "bash ./tools/build.sh development",
     "lint": "eslint --fix --ext js,jsx,ts,tsx --max-warnings 0 src",

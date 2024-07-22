@@ -7,15 +7,16 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
-/** @type import("webpack-cli").CallableOption} */
+/** @type {import("webpack-cli").CallableOption} */
 module.exports = (env, argv) => {
-  const isDevServer = (env || {}).devServer === true;
+  const isDevServer = (env || {}).WEBPACK_SERVE === true;
   const runInContainer = (env || {}).runInContainer === true;
   const isDevelopment = argv.mode === "development";
   const enableReactRefresh = (env || {}).enableReactRefresh === true;
   const outputDirectory = "dist";
   const entry = "./src/index.tsx";
 
+  /** @type {webpack.StatsOptions} */
   const statsConfig = {
     builtAt: true,
     children: false,
@@ -27,6 +28,7 @@ module.exports = (env, argv) => {
     entrypoints: false,
   };
 
+  /** @type {webpack.Configuration["devServer"]} */
   const devServerSettings = {
     hot: true,
     port: 8000,
@@ -42,17 +44,14 @@ module.exports = (env, argv) => {
   // By default, the webpack-dev-server is not exposed outside of localhost.
   // When running in a container we need it accessible externally.
   if (runInContainer) {
-    devServerSettings.disableHostCheck = true;
     devServerSettings.host = "0.0.0.0";
-    devServerSettings.watchOptions = {
-      poll: true,
-    };
   }
 
   // Get the current commit hash to inject into the app
   // https://stackoverflow.com/a/38401256
   const commitHash = require("child_process").execSync("git rev-parse --short HEAD").toString().trim();
 
+  /** @type {HtmlWebpackPlugin.Options} */
   const htmlConfig = {
     title: "Bitburner",
     template: "src/index.html",
@@ -192,6 +191,10 @@ module.exports = (env, argv) => {
       },
     },
     devServer: devServerSettings,
+    watchOptions: {
+      // When running in a container, we can't necesarily watch filesystem events.
+      poll: runInContainer ? true : undefined,
+    },
     resolve: {
       extensions: [".tsx", ".ts", ".js", ".jsx"],
       alias: {
