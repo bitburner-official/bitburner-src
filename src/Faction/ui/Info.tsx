@@ -15,7 +15,7 @@ import { makeStyles } from "tss-react/mui";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 import { calculateFavorAfterResetting } from "../formulas/favor";
 
 interface IProps {
@@ -42,7 +42,7 @@ function DefaultAssignment(): React.ReactElement {
 }
 
 export function Info(props: IProps): React.ReactElement {
-  useRerender(200);
+  useCycleRerender();
   const { classes } = useStyles();
 
   const Assignment = props.factionInfo.assignment ?? DefaultAssignment;

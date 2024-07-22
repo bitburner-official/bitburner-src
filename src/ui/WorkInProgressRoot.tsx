@@ -10,7 +10,7 @@ import { ProgressBar } from "./React/Progress";
 import { Reputation } from "./React/Reputation";
 import { ReputationRate } from "./React/ReputationRate";
 import { StatsRow } from "./React/StatsRow";
-import { useRerender } from "./React/hooks";
+import { useCycleRerender } from "./React/hooks";
 
 import { Companies } from "../Company/Companies";
 import { CONSTANTS } from "../Constants";
@@ -183,7 +183,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
 }
 
 export function WorkInProgressRoot(): React.ReactElement {
-  useRerender(CONSTANTS.MilliPerCycle);
+  useCycleRerender();
 
   let workInfo: IWorkInfo = {
     buttons: {

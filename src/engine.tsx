@@ -39,11 +39,13 @@ import { startExploits } from "./Exploits/loops";
 import { calculateAchievements } from "./Achievements/Achievements";
 
 import React from "react";
+import ReactDOM from "react-dom";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
 import { SnackbarEvents } from "./ui/React/Snackbar";
 import { SaveData } from "./types";
 import { Go } from "./Go/Go";
+import { EventEmitter } from "./utils/EventEmitter";
 
 // Only show warning if the time diff is greater than this value.
 const thresholdOfTimeDiffForShowingWarningAboutSystemClock = CONSTANTS.MillisecondsPerFiveMinutes;
@@ -53,6 +55,8 @@ function showWarningAboutSystemClock(timeDiff: number) {
     `Warning: The system clock moved backward: ${convertTimeMsToTimeElapsedString(Math.abs(timeDiff))}.`,
   );
 }
+
+export const GameCycleEvents = new EventEmitter<[]>();
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
@@ -428,6 +432,11 @@ const Engine: {
       Engine._lastUpdate = _thisUpdate - offset;
       Player.lastUpdate = _thisUpdate - offset;
       Engine.updateGame(diff);
+      if (GameCycleEvents.hasSubscibers()) {
+        ReactDOM.unstable_batchedUpdates(() => {
+          GameCycleEvents.emit();
+        });
+      }
     }
     window.setTimeout(Engine.start, CONSTANTS.MilliPerCycle - offset);
   },

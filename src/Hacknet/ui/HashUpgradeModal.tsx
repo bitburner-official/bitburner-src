@@ -7,7 +7,7 @@ import { HacknetUpgradeElem } from "./HacknetUpgradeElem";
 import { Modal } from "../../ui/React/Modal";
 import { Player } from "@player";
 import Typography from "@mui/material/Typography";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 
 interface IProps {
   open: boolean;
@@ -16,7 +16,7 @@ interface IProps {
 
 /** Create the pop-up for purchasing upgrades with hashes */
 export function HashUpgradeModal(props: IProps): React.ReactElement {
-  const rerender = useRerender(200);
+  const rerender = useCycleRerender();
 
   const hashManager = Player.hashManager;
   if (!hashManager) {
