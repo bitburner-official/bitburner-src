@@ -20,14 +20,10 @@ export class ScriptDeath {
   /** IP Address on which the script was running */
   hostname: string;
 
-  /** Status message in case of script error. */
-  errorMessage = "";
-
   constructor(ws: WorkerScript) {
     this.pid = ws.pid;
     this.name = ws.name;
     this.hostname = ws.hostname;
-    this.errorMessage = ws.errorMessage;
 
     Object.freeze(this);
   }
