@@ -1026,6 +1026,9 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           helpers.log(ctx, () => `Hacking level is too low to create '${p.name}' (level ${create.level} req)`);
           return false;
         }
+        if (Player.currentWork) {
+          Player.finishWork(true);
+        }
 
         Player.startWork(
           new CreateProgramWork({
