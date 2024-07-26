@@ -111,7 +111,7 @@ import { ServerConstants } from "./Server/data/Constants";
 import { assertFunction } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
-import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
+import { canAccessBitNodeFeature, validBitNodes, knowAboutBitverse } from "./BitNode/BitNodeUtils";
 
 export const enums: NSEnums = {
   CityName,
@@ -1749,18 +1749,47 @@ export const ns: InternalAPI<NSFull> = {
         identifier: "ns.getPlayer().playtimeSinceLastAug",
         message: "Use ns.getResetInfo().lastAugReset instead. This is a static timestamp instead of an elapsed time.",
         value: Player.playtimeSinceLastAug,
+        hide: false,
       },
       playtimeSinceLastBitnode: {
         identifier: "ns.getPlayer().playtimeSinceLastBitnode",
         message: "Use ns.getResetInfo().lastNodeReset instead. This is a static timestamp instead of an elapsed time.",
         value: Player.playtimeSinceLastBitnode,
+        hide: !knowAboutBitverse(),
       },
       bitNodeN: {
         identifier: "ns.getPlayer().bitNodeN",
         message: "Use ns.getResetInfo().currentNode instead",
         value: Player.bitNodeN,
+        hide: !knowAboutBitverse(),
       },
     });
+    // Hide values which should not yet be available
+    if (!canAccessBitNodeFeature(5)) {
+      Object.defineProperty(data.skills, "intelligence", { value: data.skills.intelligence, enumerable: false });
+      Object.defineProperty(data.exp, "intelligence", { value: data.exp.intelligence, enumerable: false });
+    }
+    if (!canAccessBitNodeFeature(6) && !canAccessBitNodeFeature(7)) {
+      Object.defineProperty(data.mults, "bladeburner_max_stamina", {
+        value: data.mults.bladeburner_max_stamina,
+        enumerable: false,
+      });
+      Object.defineProperty(data.mults, "bladeburner_stamina_gain", {
+        value: data.mults.bladeburner_stamina_gain,
+        enumerable: false,
+      });
+      Object.defineProperty(data.mults, "bladeburner_analysis", {
+        value: data.mults.bladeburner_analysis,
+        enumerable: false,
+      });
+      Object.defineProperty(data.mults, "bladeburner_success_chance", {
+        value: data.mults.bladeburner_success_chance,
+        enumerable: false,
+      });
+    }
+    if (!canAccessBitNodeFeature(10)) {
+      Object.defineProperty(data, "entropy", { value: data.entropy, enumerable: false });
+    }
     return data;
   },
   getMoneySources: () => () => ({

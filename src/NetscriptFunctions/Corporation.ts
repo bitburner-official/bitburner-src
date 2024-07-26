@@ -687,6 +687,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
           identifier: "ns.corporation.getCorporation().state",
           message: "Use ns.corporation.getCorporation().nextState instead.",
           value: corporation.state.nextName,
+          hide: false,
         },
       });
       return data;
