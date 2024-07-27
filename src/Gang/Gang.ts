@@ -322,7 +322,8 @@ export class Gang {
     }
     const numFreeMembers = GangConstants.numFreeMembers;
     const recruitCostBase = GangConstants.recruitThresholdBase;
-    const membersRecruitabile = Math.floor(Math.log(this.respect) / Math.log(recruitCostBase)) + numFreeMembers;
+    const membersRecruitabile =
+      Math.floor(Math.max(Math.log(this.respect), 0) / Math.log(recruitCostBase)) + numFreeMembers;
     return Math.min(membersRecruitabile, GangConstants.MaximumGangMembers) - this.members.length;
   }
 
