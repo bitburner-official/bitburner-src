@@ -325,7 +325,14 @@ export class Gang {
     if (this.members.length < numFreeMembers && this.respect < Math.pow(recruitCostBase, numFreeMembers)) {
       return numFreeMembers - this.members.length; // if the max possible is less than freeMembers
     }
-    return Math.floor(Math.log(this.respect) / Math.log(recruitCostBase)) + numFreeMembers - this.members.length; //else
+    return (
+      Math.min(
+        Math.floor(Math.log(this.respect) / Math.log(recruitCostBase)),
+        GangConstants.MaximumGangMembers - numFreeMembers,
+      ) +
+      numFreeMembers -
+      this.members.length
+    ); //else
   }
 
   recruitMember(name: string): boolean {
