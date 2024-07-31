@@ -207,7 +207,7 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
             <Typography>
               <b>Reputation:</b> <Reputation reputation={faction.playerReputation} />
               <br />
-              <b>Favor:</b> <Favor favor={Math.floor(faction.favor)} />
+              <b>Favor:</b> <Favor favor={faction.favor} />
             </Typography>
           </Box>
           <Box sx={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>

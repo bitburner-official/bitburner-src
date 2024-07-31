@@ -193,9 +193,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
 
       {props.faction.isMember && (
         <Box display="grid" sx={{ alignItems: "center", justifyItems: "left", gridAutoFlow: "row" }}>
-          <Typography sx={{ color: Settings.theme.rep }}>
-            {formatFavor(Math.floor(props.faction.favor))} favor
-          </Typography>
+          <Typography sx={{ color: Settings.theme.rep }}>{formatFavor(props.faction.favor)} favor</Typography>
           <Typography sx={{ color: Settings.theme.rep }}>
             {formatReputation(props.faction.playerReputation)} rep
           </Typography>

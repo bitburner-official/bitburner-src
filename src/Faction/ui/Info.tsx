@@ -91,7 +91,7 @@ export function Info(props: IProps): React.ReactElement {
           }
         >
           <Typography>
-            Faction Favor: <Favor favor={Math.floor(props.faction.favor)} />
+            Faction Favor: <Favor favor={props.faction.favor} />
           </Typography>
         </Tooltip>
       </Box>
