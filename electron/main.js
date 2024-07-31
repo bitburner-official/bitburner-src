@@ -201,13 +201,20 @@ global.app_handlers = {
 app.on("ready", async () => {
   // Intercept file protocol requests and only let valid requests through
   protocol.interceptFileProtocol("file", ({ url, method }, callback) => {
-    const filePath = fileURLToPath(url);
-    const realPath = realpathSync(filePath);
-    const relativePath = path.relative(__dirname, realPath);
-    // Only allow access to files in "dist" folder or html files in the same directory
-    if (method === "GET" && (relativePath.startsWith("dist") || relativePath.match(/^[a-zA-Z-_]*\.html/))) {
-      callback(realPath);
-      return;
+    let filePath;
+    let realPath;
+    let relativePath;
+    try {
+      filePath = fileURLToPath(url);
+      realPath = realpathSync(filePath);
+      relativePath = path.relative(__dirname, realPath);
+      // Only allow access to files in "dist" folder or html files in the same directory
+      if (method === "GET" && (relativePath.startsWith("dist") || relativePath.match(/^[a-zA-Z-_]*\.html/))) {
+        callback(realPath);
+        return;
+      }
+    } catch (error) {
+      log.error(error);
     }
     log.error(
       `Tried to access a page outside the sandbox. Url: ${url}. FilePath: ${filePath}. RealPath: ${realPath}.` +
