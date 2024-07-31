@@ -4,7 +4,7 @@ import JSZip from "jszip";
 import { root } from "../../Paths/Directory";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
-import { getGlobbedFileMap } from "../../Paths/GlobbedFiles";
+import { getGlobbedFileMap } from "../../Paths/ListFiles";
 import { downloadContentAsFile } from "../../utils/FileUtils";
 
 // Basic globbing implementation only supporting * and ?. Can be broken out somewhere else later.

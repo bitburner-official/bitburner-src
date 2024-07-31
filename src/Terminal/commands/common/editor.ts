@@ -4,7 +4,7 @@ import { Router } from "../../../ui/GameRoot";
 import { BaseServer } from "../../../Server/BaseServer";
 import { type ScriptFilePath, hasScriptExtension, isLegacyScript } from "../../../Paths/ScriptFilePath";
 import { TextFilePath, hasTextExtension } from "../../../Paths/TextFilePath";
-import { getGlobbedFileMap } from "../../../Paths/GlobbedFiles";
+import { getGlobbedFileMap } from "../../../Paths/ListFiles";
 import { sendDeprecationNotice } from "./deprecation";
 import { getFileType, getFileTypeFeature } from "../../../utils/ScriptTransformer";
 

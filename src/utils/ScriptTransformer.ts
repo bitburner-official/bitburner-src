@@ -1,7 +1,13 @@
 import * as babel from "@babel/standalone";
 import { transformSync, type ParserConfig } from "@swc/wasm-web";
 import * as acorn from "acorn";
-import { resolveScriptFilePath, validScriptExtensions, type ScriptFilePath } from "../Paths/ScriptFilePath";
+import {
+  isLegacyScript,
+  legacyScriptExtension,
+  resolveScriptFilePath,
+  scriptExtensions,
+  type ScriptFilePath,
+} from "../Paths/ScriptFilePath";
 import type { Script } from "../Script/Script";
 
 export type AcornASTProgram = acorn.Program;
@@ -104,7 +110,7 @@ export function getModuleScript(
   scripts: Map<ScriptFilePath, Script>,
 ): Script {
   let script;
-  for (const extension of validScriptExtensions) {
+  for (const extension of isLegacyScript(baseModule) ? ([legacyScriptExtension] as const) : scriptExtensions) {
     const filename = resolveScriptFilePath(moduleName, baseModule, extension);
     if (!filename) {
       throw new ModuleResolutionError(`Invalid module: "${moduleName}". Base module: "${baseModule}".`);

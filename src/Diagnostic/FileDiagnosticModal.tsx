@@ -16,7 +16,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ServerName } from "../Types/strings";
-import { allContentFiles } from "../Paths/ContentFile";
+import { allContentFiles } from "../Paths/ListFiles";
 
 interface File {
   name: string;

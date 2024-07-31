@@ -13,6 +13,7 @@ module.exports = {
       "<rootDir>/test/__mocks__/fileMock.js",
     "\\.(css|less)$": "<rootDir>/test/__mocks__/NullMock.js",
     ".*?raw$": "<rootDir>/test/__mocks__/fileMock.js",
+    "worker-url$": "<rootDir>/test/__mocks__/fileMock.js",
     "@player": "<rootDir>/src/Player",
     "@enums": "<rootDir>/src/Enums",
     "@nsdefs": "<rootDir>/src/ScriptEditor/NetscriptDefinitions",

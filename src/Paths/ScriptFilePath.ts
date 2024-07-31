@@ -9,8 +9,9 @@ export type ScriptFilePath = FilePath & WithScriptExtension;
 export const legacyScriptExtension = ".script";
 
 /** Valid extensions. Used for some error messaging. */
-export const validScriptExtensions = [".js", ".jsx", ".ts", ".tsx", legacyScriptExtension] as const;
-export type ScriptExtension = (typeof validScriptExtensions)[number];
+export const scriptExtensions = [".js", ".jsx", ".ts", ".tsx"] as const;
+export const allScriptExtensions = [...scriptExtensions, legacyScriptExtension] as const;
+export type ScriptExtension = (typeof allScriptExtensions)[number];
 
 /** Sanitize a player input, resolve any relative paths, and for imports add the correct extension if missing
  * @param path The player-provided path to a file. Can contain relative parts.
@@ -28,7 +29,7 @@ export function resolveScriptFilePath(
 
 /** Just check extension */
 export function hasScriptExtension(path: string): path is WithScriptExtension {
-  return validScriptExtensions.some((extension) => path.endsWith(extension));
+  return allScriptExtensions.some((extension) => path.endsWith(extension));
 }
 
 export function isLegacyScript(path: string): boolean {

@@ -1,6 +1,27 @@
-import { BaseServer } from "../Server/BaseServer";
-import { root } from "./Directory";
-import { ContentFileMap, allContentFiles } from "./ContentFile";
+import type { BaseServer } from "../Server/BaseServer";
+import type { ContentFile, ContentFileMap, ContentFilePath } from "./ContentFile";
+import { type Directory, root } from "./Directory";
+import type { FilePath } from "./FilePath";
+
+/** Generator function to allow iterating through all content files on a server */
+export function* allContentFiles(server: BaseServer): Generator<[ContentFilePath, ContentFile], void, undefined> {
+  yield* server.scripts;
+  yield* server.textFiles;
+}
+
+export function getAllDirectories(server: BaseServer): Set<Directory> {
+  const dirSet = new Set([root]);
+  function peel(path: FilePath | Directory) {
+    const lastSlashIndex = path.lastIndexOf("/", path.length - 2);
+    if (lastSlashIndex === -1) return;
+    const newDir = path.substring(0, lastSlashIndex + 1) as Directory;
+    if (dirSet.has(newDir)) return;
+    dirSet.add(newDir);
+    peel(newDir);
+  }
+  for (const [filename] of allContentFiles(server)) peel(filename);
+  return dirSet;
+}
 
 /** Search for files (Script and TextFile only) that match a given glob pattern
  * @param pattern The glob pattern. Supported glob characters are * and ?

@@ -1,7 +1,8 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { PromptEvent } from "../../ui/React/PromptManager";
-import { getAllDirectories, type Directory } from "../../Paths/Directory";
+import { type Directory } from "../../Paths/Directory";
+import { getAllDirectories } from "../../Paths/ListFiles";
 import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 import type { IReturnStatus } from "../../types";
 import type { FilePath } from "../../Paths/FilePath";

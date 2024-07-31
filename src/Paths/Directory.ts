@@ -1,7 +1,5 @@
-import { allContentFiles } from "./ContentFile";
 import type { BaseServer } from "../Server/BaseServer";
 import type { FilePath } from "./FilePath";
-import { escapeRegExp } from "lodash";
 
 /** The directory part of a BasicFilePath. Everything up to and including the last /
  * e.g. "file.js" => "", or "dir/file.js" => "dir/", or "../test.js" => "../" */
@@ -28,7 +26,7 @@ export const root = "" as Directory;
 const invalidCharacters = ["/", "*", "?", "[", "]", "!", "\\", "~", "|", "#", '"', "'", " "];
 
 /** A valid character is any character that is not one of the invalid characters */
-export const oneValidCharacter = `[^${escapeRegExp(invalidCharacters.join(""))}]`;
+export const oneValidCharacter = `[^${invalidCharacters.map((c) => "\\" + c).join("")}]`;
 
 /** Regex string for matching the directory part of a valid filepath */
 export const directoryRegexString = `^(?<directory>(?:${oneValidCharacter}+\\/)*)`;
@@ -95,20 +93,6 @@ export function getFirstDirectoryInPath(path: FilePath | Directory): Directory |
   const firstSlashIndex = path.indexOf("/");
   if (firstSlashIndex === -1) return null;
   return path.substring(0, firstSlashIndex + 1) as Directory;
-}
-
-export function getAllDirectories(server: BaseServer): Set<Directory> {
-  const dirSet = new Set([root]);
-  function peel(path: FilePath | Directory) {
-    const lastSlashIndex = path.lastIndexOf("/", path.length - 2);
-    if (lastSlashIndex === -1) return;
-    const newDir = path.substring(0, lastSlashIndex + 1) as Directory;
-    if (dirSet.has(newDir)) return;
-    dirSet.add(newDir);
-    peel(newDir);
-  }
-  for (const [filename] of allContentFiles(server)) peel(filename);
-  return dirSet;
 }
 
 // This is to validate the assertion earlier that root is in fact a Directory

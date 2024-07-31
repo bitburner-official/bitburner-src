@@ -8,7 +8,8 @@ import { compile } from "../NetscriptJSEvaluator";
 import { Flags } from "../NetscriptFunctions/Flags";
 import { AutocompleteData } from "@nsdefs";
 import libarg from "arg";
-import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
+import { resolveDirectory, root } from "../Paths/Directory";
+import { getAllDirectories } from "../Paths/ListFiles";
 import { isLegacyScript, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { enums } from "../NetscriptFunctions";
 

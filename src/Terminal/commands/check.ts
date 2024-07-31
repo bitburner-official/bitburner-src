@@ -1,7 +1,7 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { findRunningScripts } from "../../Script/ScriptHelpers";
-import { hasScriptExtension, validScriptExtensions } from "../../Paths/ScriptFilePath";
+import { hasScriptExtension, allScriptExtensions } from "../../Paths/ScriptFilePath";
 
 export function check(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length < 1) {
@@ -12,7 +12,7 @@ export function check(args: (string | number | boolean)[], server: BaseServer): 
 
     // Can only tail script files
     if (!hasScriptExtension(scriptName)) {
-      return Terminal.error(`check: File extension must be one of ${validScriptExtensions.join(", ")})`);
+      return Terminal.error(`check: File extension must be one of ${allScriptExtensions.join(", ")})`);
     }
 
     // Check that the script is running on this machine

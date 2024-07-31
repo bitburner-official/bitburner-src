@@ -13,6 +13,7 @@ import { Settings } from "../Settings/Settings";
 import { NetscriptExtra } from "../NetscriptFunctions/Extra";
 import * as enums from "../Enums";
 import { ns } from "../NetscriptFunctions";
+import workerUrl from "./worker-url";
 
 /** Event emitter used for tracking when changes have been made to a content file. */
 export const fileEditEvents = new EventEmitter<[hostname: string, filename: ContentFilePath]>();
@@ -70,6 +71,12 @@ export class ScriptEditor {
       languageDefaults.addExtraLib(source, "netscript.d.ts");
       languageDefaults.addExtraLib(reactTypes, "react.d.ts");
       languageDefaults.addExtraLib(reactDomTypes, "react-dom.d.ts");
+      languageDefaults.setWorkerOptions({
+        // Monaco allows us to extend the LanguageServiceHost it provides to the typescript
+        // language server. We pass the URL of a web worker script that does that.
+        // See `./worker.ts` for details.
+        customWorkerPath: workerUrl,
+      });
       languageDefaults.setCompilerOptions({
         ...languageDefaults.getCompilerOptions(),
         // We allow direct importing of `.ts`/`.tsx` files, so tell the typescript language server that.

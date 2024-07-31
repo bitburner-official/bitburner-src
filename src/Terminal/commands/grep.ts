@@ -1,10 +1,11 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
 import { hasTextExtension } from "../../Paths/TextFilePath";
-import { ContentFile, ContentFilePath, allContentFiles } from "../../Paths/ContentFile";
+import { ContentFile, ContentFilePath } from "../../Paths/ContentFile";
 import { Settings } from "../../Settings/Settings";
 import { help } from "../commands/help";
 import { Output } from "../OutputTypes";
+import { allContentFiles } from "../../Paths/ListFiles";
 
 type LineParser = (options: Options, filename: string, line: string, i: number) => ParsedLine;
 

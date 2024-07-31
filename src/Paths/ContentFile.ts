@@ -10,9 +10,3 @@ export interface ContentFile {
   deleteFromServer: (server: BaseServer) => boolean;
 }
 export type ContentFileMap = Map<ContentFilePath, ContentFile>;
-
-/** Generator function to allow iterating through all content files on a server */
-export function* allContentFiles(server: BaseServer): Generator<[ContentFilePath, ContentFile], void, undefined> {
-  yield* server.scripts;
-  yield* server.textFiles;
-}
