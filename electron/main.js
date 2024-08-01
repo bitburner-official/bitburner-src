@@ -204,6 +204,11 @@ app.on("ready", async () => {
     let filePath;
     let realPath;
     let relativePath;
+    /**
+     * "realpathSync" will throw an error if "filePath" points to a non-existent file. If an error is thrown here, the
+     * electron app will crash immediately. We can use fs.existsSync to check "filePath" before using it, but it's best
+     * to try-catch the entire code block and avoid unexpected issues.
+     */
     try {
       filePath = fileURLToPath(url);
       realPath = realpathSync(filePath);
