@@ -28,7 +28,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const code = `
         export async function main(ns) { }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, 0);
     });
 
@@ -38,7 +38,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           ns.print("Slum snakes r00l!");
         }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, 0);
     });
 
@@ -48,7 +48,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           await ns.hack("joesguns");
         }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, HackCost);
     });
 
@@ -58,7 +58,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           await X.hack("joesguns");
         }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, HackCost);
     });
 
@@ -69,7 +69,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           await ns.hack("joesguns");
         }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, HackCost);
     });
 
@@ -80,7 +80,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           await ns.grow("joesguns");
         }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, HackCost + GrowCost);
     });
 
@@ -93,7 +93,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           await ns.hack("joesguns");
         }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, HackCost);
     });
 
@@ -108,7 +108,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           async doHacking() { await this.ns.hack("joesguns"); }
         }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, HackCost);
     });
 
@@ -123,7 +123,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           async doHacking() { await this.#ns.hack("joesguns"); }
         }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, HackCost);
     });
   });
@@ -136,7 +136,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
         }
         function get() { return 0; }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, 0);
     });
 
@@ -147,7 +147,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
         }
         function purchaseNode() { return 0; }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       // Works at present, because the parser checks the namespace only, not the function name
       expectCost(calculated, 0);
     });
@@ -160,7 +160,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
         }
         function getTask() { return 0; }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, 0);
     });
   });
@@ -172,7 +172,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           ns.hacknet.purchaseNode(0);
         }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, HacknetCost);
     });
 
@@ -182,7 +182,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           ns.sleeve.getTask(3);
         }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, SleeveGetTaskCost);
     });
   });
@@ -203,8 +203,8 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const calculated = calculateRamUsage(
         code,
         filename,
-        new Map([["libTest.js" as ScriptFilePath, lib]]),
         server,
+        new Map([["libTest.js" as ScriptFilePath, lib]]),
       ).cost;
       expectCost(calculated, 0);
     });
@@ -224,8 +224,8 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const calculated = calculateRamUsage(
         code,
         filename,
-        new Map([["libTest.js" as ScriptFilePath, lib]]),
         server,
+        new Map([["libTest.js" as ScriptFilePath, lib]]),
       ).cost;
       expectCost(calculated, HackCost);
     });
@@ -246,8 +246,8 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const calculated = calculateRamUsage(
         code,
         filename,
-        new Map([["libTest.js" as ScriptFilePath, lib]]),
         server,
+        new Map([["libTest.js" as ScriptFilePath, lib]]),
       ).cost;
       expectCost(calculated, HackCost);
     });
@@ -268,8 +268,8 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const calculated = calculateRamUsage(
         code,
         filename,
-        new Map([["libTest.js" as ScriptFilePath, lib]]),
         server,
+        new Map([["libTest.js" as ScriptFilePath, lib]]),
       ).cost;
       expectCost(calculated, HackCost + GrowCost);
     });
@@ -291,7 +291,7 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
           ${lines.join("\n")};
         }
       `;
-      const calculated = calculateRamUsage(code, filename, new Map(), server).cost;
+      const calculated = calculateRamUsage(code, filename, server, new Map()).cost;
       expectCost(calculated, MaxCost);
     });
 
@@ -316,8 +316,8 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const calculated = calculateRamUsage(
         code,
         filename,
-        new Map([["libTest.js" as ScriptFilePath, lib]]),
         server,
+        new Map([["libTest.js" as ScriptFilePath, lib]]),
       ).cost;
       expectCost(calculated, HackCost);
     });
@@ -347,8 +347,8 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const calculated = calculateRamUsage(
         code,
         filename,
-        new Map([["libTest.js" as ScriptFilePath, lib]]),
         server,
+        new Map([["libTest.js" as ScriptFilePath, lib]]),
       ).cost;
       expectCost(calculated, GrowCost);
     });
@@ -370,8 +370,8 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const calculated = calculateRamUsage(
         code,
         folderFilename,
-        new Map([["test/libTest.js" as ScriptFilePath, lib]]),
         server,
+        new Map([["test/libTest.js" as ScriptFilePath, lib]]),
       ).cost;
       expectCost(calculated, HackCost);
     });
@@ -404,11 +404,11 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const calculated = calculateRamUsage(
         code,
         folderFilename,
+        server,
         new Map([
           [libNameOne, libScriptOne],
           [libNameTwo, libScriptTwo],
         ]),
-        server,
       ).cost;
       expectCost(calculated, HackCost);
     });
@@ -449,12 +449,12 @@ describe("Parsing NetScript code to work out static RAM costs", function () {
       const calculated = calculateRamUsage(
         code,
         folderFilename,
+        server,
         new Map([
           [libNameOne, libScriptOne],
           [libNameTwo, libScriptTwo],
           [incorrect_libNameTwo, incorrect_libScriptTwo],
         ]),
-        server,
       ).cost;
       expectCost(calculated, HackCost);
     });

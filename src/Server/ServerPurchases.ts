@@ -164,7 +164,10 @@ export function purchaseRamForHomeComputer(): void {
   }
 
   const homeComputer = Player.getHomeComputer();
-  if (homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam) {
+  if (
+    (Player.bitNodeOptions.restrictHomePCUpgrade && homeComputer.maxRam >= 128) ||
+    homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam
+  ) {
     dialogBoxCreate(`You cannot upgrade your home computer RAM because it is at its maximum possible value`);
     return;
   }

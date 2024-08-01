@@ -323,8 +323,8 @@ export function getStats() {
 
 /** Validate singularity access by throwing an error if the player does not have access. */
 export function checkCheatApiAccess(error: (s: string) => void): void {
-  const hasSourceFile = Player.sourceFileLvl(14) > 1;
-  const isBitnodeFourteenTwo = Player.sourceFileLvl(14) === 1 && Player.bitNodeN === 14;
+  const hasSourceFile = Player.activeSourceFileLvl(14) > 1;
+  const isBitnodeFourteenTwo = Player.activeSourceFileLvl(14) === 1 && Player.bitNodeN === 14;
   if (!hasSourceFile && !isBitnodeFourteenTwo) {
     error(
       `The go.cheat API requires Source-File 14.2 to run, a power up you obtain later in the game.
@@ -387,7 +387,7 @@ export async function determineCheatSuccess(
  * 15: +31,358,645%
  */
 export function cheatSuccessChance(cheatCount: number) {
-  const sourceFileBonus = Player.sourceFileLvl(14) === 3 ? 0.25 : 0;
+  const sourceFileBonus = Player.activeSourceFileLvl(14) === 3 ? 0.25 : 0;
   const cheatCountScalar = (0.7 - 0.02 * cheatCount) ** cheatCount;
   return Math.max(Math.min(0.6 * cheatCountScalar * Player.mults.crime_success + sourceFileBonus, 1), 0);
 }

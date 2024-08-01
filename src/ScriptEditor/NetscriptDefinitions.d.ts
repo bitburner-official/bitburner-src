@@ -76,6 +76,8 @@ interface ResetInfo {
   ownedAugs: Map<string, number>;
   /** A map of owned SF to their levels. Keyed by the SF number. Map values are the SF level. */
   ownedSF: Map<number, number>;
+  /** Current BitNode options */
+  bitNodeOptions: BitNodeOptions;
 }
 
 /** @public */
@@ -1702,6 +1704,36 @@ export interface GraftingTask {
 export type Task = StudyTask | CompanyWorkTask | CreateProgramWorkTask | CrimeTask | FactionWorkTask | GraftingTask;
 
 /**
+ * Default value:
+ * - sourceFileOverrides: an empty Map
+ * - intelligenceOverride: undefined
+ * - All boolean options: false
+ *
+ * If you specify intelligenceOverride, it must be a non-negative integer.
+ */
+export interface BitNodeOptions extends BitNodeBooleanOptions {
+  sourceFileOverrides: Map<number, number>;
+  intelligenceOverride: number | undefined;
+}
+
+/**
+ * restrictHomePCUpgrade: The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max
+ * core: 1.
+ *
+ * disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy
+ * augmentations for them.
+ */
+export interface BitNodeBooleanOptions {
+  restrictHomePCUpgrade: boolean;
+  disableGang: boolean;
+  disableCorporation: boolean;
+  disableBladeburner: boolean;
+  disable4SData: boolean;
+  disableHacknetServer: boolean;
+  disableSleeveExpAndAugmentation: boolean;
+}
+
+/**
  * Singularity API
  * @remarks
  * This API requires Source-File 4 to use. The RAM cost of all these functions is multiplied by 16/4/1 based on
@@ -2615,8 +2647,9 @@ export interface Singularity {
    *
    * @param nextBN - BN number to jump to
    * @param callbackScript - Name of the script to launch in the next BN.
+   * @param bitNodeOptions - BitNode options for the next BN.
    */
-  b1tflum3(nextBN: number, callbackScript?: string): void;
+  b1tflum3(nextBN: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
 
   /**
    * Destroy the w0r1d_d43m0n and move on to the next BN.
@@ -2629,8 +2662,9 @@ export interface Singularity {
    *
    * @param nextBN - BN number to jump to
    * @param callbackScript - Name of the script to launch in the next BN.
+   * @param bitNodeOptions - BitNode options for the next BN.
    */
-  destroyW0r1dD43m0n(nextBN: number, callbackScript?: string): void;
+  destroyW0r1dD43m0n(nextBN: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
 
   /**
    * Get the current work the player is doing.
@@ -6899,7 +6933,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * This function can be used to write data to a text file (.txt) or a script (.js or .script).
+   * This function can be used to write data to a text file (.txt, .json) or a script (.js, .jsx, .ts, .tsx, .script).
    *
    * This function will write data to that file. If the specified file does not exist,
    * then it will be created. The third argument mode defines how the data will be written to
@@ -6945,7 +6979,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * This function is used to read data from a text file (.txt) or script (.js or .script).
+   * This function is used to read data from a text file (.txt, .json) or script (.js, .jsx, .ts, .tsx, .script).
    *
    * This function will return the data in the specified file.
    * If the file does not exist, an empty string will be returned.
@@ -7410,7 +7444,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Retrieves data from a URL and downloads it to a file on the specified server.
-   * The data can only be downloaded to a script (.js or .script) or a text file (.txt).
+   * The data can only be downloaded to a script (.js, .jsx, .ts, .tsx, .script) or a text file (.txt, .json).
    * If the file already exists, it will be overwritten by this command.
    * Note that it will not be possible to download data from many websites because they
    * do not allow cross-origin resource sharing (CORS).

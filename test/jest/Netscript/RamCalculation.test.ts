@@ -72,7 +72,6 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     extraLayerCost = 0,
   ) {
     const code = `${fnPath.join(".")}();\n`.repeat(3);
-    const filename = "testfile.js" as ScriptFilePath;
     const fnName = fnPath[fnPath.length - 1];
     const server = "testserver";
 
@@ -80,7 +79,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     expect(getRamCost(fnPath, true)).toEqual(expectedRamCost);
 
     // Static ram check
-    const staticCost = calculateRamUsage(code, filename, new Map(), server).cost;
+    const staticCost = calculateRamUsage(code, `${fnName}.js` as ScriptFilePath, server, new Map()).cost;
     expect(staticCost).toBeCloseTo(Math.min(baseCost + expectedRamCost + extraLayerCost, maxCost));
 
     // reset workerScript for dynamic check

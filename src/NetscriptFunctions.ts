@@ -111,6 +111,7 @@ import { ServerConstants } from "./Server/data/Constants";
 import { assertFunction } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
+import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
 
 export const enums: NSEnums = {
   CityName,
@@ -972,13 +973,19 @@ export const ns: InternalAPI<NSFull> = {
   },
   getBitNodeMultipliers:
     (ctx) =>
-    (_n = Player.bitNodeN, _lvl = Player.sourceFileLvl(Player.bitNodeN) + 1) => {
-      if (Player.sourceFileLvl(5) <= 0 && Player.bitNodeN !== 5)
+    (_n = Player.bitNodeN, _lvl = Player.activeSourceFileLvl(Player.bitNodeN) + 1) => {
+      if (!canAccessBitNodeFeature(5)) {
         throw helpers.errorMessage(ctx, "Requires Source-File 5 to run.");
+      }
+      // TODO v3.0: check n and lvl with helpers.number() and Number.isInteger().
       const n = Math.round(helpers.number(ctx, "n", _n));
       const lvl = Math.round(helpers.number(ctx, "lvl", _lvl));
-      if (n < 1 || n > 14) throw new Error("n must be between 1 and 14");
-      if (lvl < 1) throw new Error("lvl must be >= 1");
+      if (!validBitNodes.includes(n)) {
+        throw new Error(`Invalid BitNode: ${n}.`);
+      }
+      if (lvl < 1) {
+        throw new Error("SF level must be greater than or equal to 1.");
+      }
 
       return Object.assign({}, getBitNodeMultipliers(n, lvl));
     },
@@ -1800,6 +1807,10 @@ export const ns: InternalAPI<NSFull> = {
     currentNode: Player.bitNodeN,
     ownedAugs: new Map(Player.augmentations.map((aug) => [aug.name, aug.level])),
     ownedSF: new Map(Player.sourceFiles),
+    bitNodeOptions: {
+      ...Player.bitNodeOptions,
+      sourceFileOverrides: new Map(Player.bitNodeOptions.sourceFileOverrides),
+    },
   }),
   getFunctionRamCost: (ctx) => (_name) => {
     const name = helpers.string(ctx, "name", _name);

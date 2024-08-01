@@ -143,17 +143,29 @@ export class Bladeburner {
 
   /** Directly sets a skill level, with no validation */
   setSkillLevel(skillName: BladeSkillName, value: number) {
-    this.skills[skillName] = clampInteger(value, 0);
+    this.skills[skillName] = clampInteger(value, 0, Number.MAX_VALUE);
     this.updateSkillMultipliers();
   }
 
   /** Attempts to perform a skill upgrade, gives a message on both success and failure */
   upgradeSkill(skillName: BladeSkillName, count = 1): Attempt<{ message: string }> {
-    const availability = Skills[skillName].canUpgrade(this, count);
-    if (!availability.available) return { message: `Cannot upgrade ${skillName}: ${availability.error}` };
+    const currentSkillLevel = this.skills[skillName] ?? 0;
+    const actualCount = currentSkillLevel + count - currentSkillLevel;
+    if (actualCount === 0) {
+      return {
+        message: `Cannot upgrade ${skillName}: Due to floating-point inaccuracy and the small value of specified "count", your skill cannot be upgraded.`,
+      };
+    }
+    const availability = Skills[skillName].canUpgrade(this, actualCount);
+    if (!availability.available) {
+      return { message: `Cannot upgrade ${skillName}: ${availability.error}` };
+    }
     this.skillPoints -= availability.cost;
-    this.setSkillLevel(skillName, (this.skills[skillName] ?? 0) + count);
-    return { success: true, message: `Upgraded skill ${skillName} by ${count} level${count > 1 ? "s" : ""}` };
+    this.setSkillLevel(skillName, currentSkillLevel + actualCount);
+    return {
+      success: true,
+      message: `Upgraded skill ${skillName} by ${actualCount} level${actualCount > 1 ? "s" : ""}`,
+    };
   }
 
   executeConsoleCommands(commands: string): void {

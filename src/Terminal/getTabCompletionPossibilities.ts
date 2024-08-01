@@ -9,7 +9,7 @@ import { Flags } from "../NetscriptFunctions/Flags";
 import { AutocompleteData } from "@nsdefs";
 import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
-import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
+import { isLegacyScript, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { enums } from "../NetscriptFunctions";
 
 // TODO: this shouldn't be hardcoded in two places with no typechecks to verify equivalence
@@ -299,7 +299,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     }
     const filepath = resolveScriptFilePath(filename, baseDir);
     if (!filepath) return; // Not a script path.
-    if (filepath.endsWith(".script")) return; // Doesn't work with ns1.
+    if (isLegacyScript(filepath)) return; // Doesn't work with ns1.
     const script = currServ.scripts.get(filepath);
     if (!script) return; // Doesn't exist.
 

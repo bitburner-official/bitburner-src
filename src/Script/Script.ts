@@ -73,13 +73,7 @@ export class Script implements ContentFile {
    * @param {Script[]} otherScripts - Other scripts on the server. Used to process imports
    */
   updateRamUsage(otherScripts: Map<ScriptFilePath, Script>): void {
-    const ramCalc = calculateRamUsage(
-      this.code,
-      this.filename,
-      otherScripts,
-      this.server,
-      this.filename.endsWith(".script"),
-    );
+    const ramCalc = calculateRamUsage(this.code, this.filename, this.server, otherScripts);
     if (ramCalc.cost && ramCalc.cost >= RamCostConstants.Base) {
       this.ramUsage = roundToTwo(ramCalc.cost);
       this.ramUsageEntries = ramCalc.entries as RamUsageEntry[];

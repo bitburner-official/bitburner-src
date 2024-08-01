@@ -166,7 +166,7 @@ function fieldEquals(a: boolean[][], b: boolean[][]): boolean {
 
 function generateEmptyField(difficulty: Difficulty): boolean[][] {
   const field = [];
-  for (let i = 0; i < difficulty.height; i++) {
+  for (let i = 0; i < Math.round(difficulty.height); i++) {
     field.push(new Array(Math.round(difficulty.width)).fill(false));
   }
   return field;
@@ -174,7 +174,7 @@ function generateEmptyField(difficulty: Difficulty): boolean[][] {
 
 function generateMinefield(difficulty: Difficulty): boolean[][] {
   const field = generateEmptyField(difficulty);
-  for (let i = 0; i < difficulty.mines; i++) {
+  for (let i = 0; i < Math.round(difficulty.mines); i++) {
     const x = Math.floor(Math.random() * field.length);
     const y = Math.floor(Math.random() * field[0].length);
     if (field[x][y]) {

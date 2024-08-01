@@ -49,6 +49,7 @@ import { achievements } from "../../Achievements/Achievements";
 
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isMember } from "../../utils/EnumHelper";
+import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -415,7 +416,7 @@ export function reapplyAllSourceFiles(this: PlayerObject): void {
   //Will always be called after reapplyAllAugmentations() so multipliers do not have to be reset
   //this.resetMultipliers();
 
-  for (const [bn, lvl] of this.sourceFiles) {
+  for (const [bn, lvl] of this.activeSourceFiles) {
     const srcFileKey = "SourceFile" + bn;
     const sourceFileObject = SourceFiles[srcFileKey];
     if (!sourceFileObject) {
@@ -536,7 +537,7 @@ export function gotoLocation(this: PlayerObject, to: LocationName): boolean {
 }
 
 export function canAccessGrafting(this: PlayerObject): boolean {
-  return this.bitNodeN === 10 || this.sourceFileLvl(10) > 0;
+  return canAccessBitNodeFeature(10);
 }
 
 export function giveExploit(this: PlayerObject, exploit: Exploit): void {
@@ -560,10 +561,17 @@ export function getCasinoWinnings(this: PlayerObject): number {
 }
 
 export function canAccessCotMG(this: PlayerObject): boolean {
-  return this.bitNodeN === 13 || this.sourceFileLvl(13) > 0;
+  return canAccessBitNodeFeature(13);
 }
 
 export function sourceFileLvl(this: PlayerObject, n: number): number {
+  return this.sourceFiles.get(n) ?? 0;
+}
+
+export function activeSourceFileLvl(this: PlayerObject, n: number): number {
+  if (this.bitNodeOptions.sourceFileOverrides.has(n)) {
+    return this.bitNodeOptions.sourceFileOverrides.get(n) ?? 0;
+  }
   return this.sourceFiles.get(n) ?? 0;
 }
 

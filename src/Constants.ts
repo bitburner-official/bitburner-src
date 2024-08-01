@@ -119,4 +119,4 @@ See 2.6.2 changelog at https://github.com/bitburner-official/bitburner-src/blob/
 
 - Nerf noodle bar
 `,
-};
+} as const;

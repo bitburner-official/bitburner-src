@@ -14,7 +14,7 @@ export const HacknetNodeConstants = {
   MaxLevel: 200,
   MaxRam: 64,
   MaxCores: 16,
-};
+} as const;
 
 export const PurchaseMultipliers: {
   [key: string]: number | "MAX" | undefined;
@@ -49,4 +49,4 @@ export const HacknetServerConstants = {
   MaxRam: 8192,
   MaxCores: 128,
   MaxCache: 15,
-};
+} as const;

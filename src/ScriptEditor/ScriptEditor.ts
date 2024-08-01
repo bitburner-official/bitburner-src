@@ -63,14 +63,45 @@ export class ScriptEditor {
 
     // Add ts definitions for API
     const source = netscriptDefinitions.replace(/export /g, "");
-    for (const languageDefaults of [
-      monaco.languages.typescript.javascriptDefaults,
-      monaco.languages.typescript.typescriptDefaults,
-    ]) {
+    for (const [language, languageDefaults] of [
+      ["javascript", monaco.languages.typescript.javascriptDefaults],
+      ["typescript", monaco.languages.typescript.typescriptDefaults],
+    ] as const) {
       languageDefaults.addExtraLib(source, "netscript.d.ts");
       languageDefaults.addExtraLib(reactTypes, "react.d.ts");
       languageDefaults.addExtraLib(reactDomTypes, "react-dom.d.ts");
+      languageDefaults.setCompilerOptions({
+        ...languageDefaults.getCompilerOptions(),
+        // We allow direct importing of `.ts`/`.tsx` files, so tell the typescript language server that.
+        allowImportingTsExtensions: true,
+        // We use file-at-a-time transpiler. See https://www.typescriptlang.org/tsconfig/#isolatedModules
+        isolatedModules: true,
+        // We use the classic (i.e. `React.createElement`:) react runtime.
+        jsx: monaco.languages.typescript.JsxEmit.React,
+        // We define `React` and `ReactDOM` as globals. Don't mark using them as errors.
+        allowUmdGlobalAccess: true,
+        // Enable strict typechecking.
+        // Note that checking in javascript is disabled by default but can be enabled via `// @ts-check`.
+        // This enables strictNullChecks, which impacts reported types, even in javascript.
+        strict: true,
+        noImplicitAny: language === "typescript",
+        noImplicitReturns: true,
+      });
+      languageDefaults.setDiagnosticsOptions({
+        ...languageDefaults.getDiagnosticsOptions(),
+        // Show semantic errors, even in javascript.
+        // Note that this will only happen if checking is enabled in javascript (e.g. by `// @ts-check`)
+        noSemanticValidation: false,
+        // Ignore these errors in the editor:
+        diagnosticCodesToIgnore: [
+          // We define `React` and `ReactDOM` as globals. Don't mark using them as errors.
+          // Even though we set allowUmdGlobalAccess, it still shows a warning (instead of an error).
+          // - 'React' refers to a UMD global, but the current file is a module. Consider adding an import instead.(2686)
+          2686,
+        ],
+      });
     }
+
     monaco.languages.json.jsonDefaults.setModeConfiguration({
       ...monaco.languages.json.jsonDefaults.modeConfiguration,
       //completion should be disabled because the

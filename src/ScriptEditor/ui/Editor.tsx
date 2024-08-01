@@ -41,11 +41,6 @@ export function Editor({ onMount, onChange, onUnmount }: EditorProps) {
       onChange(editorRef.current?.getValue());
     });
 
-    // This is the workaround for a bug in monaco-editor: https://github.com/microsoft/monaco-editor/issues/4455
-    if (containerDiv.current.firstElementChild) {
-      (containerDiv.current.firstElementChild as HTMLElement).style.outline = "none";
-    }
-
     // Unmounting
     return () => {
       onUnmount();

@@ -7,7 +7,7 @@ import libarg from "arg";
 import { formatRam } from "../../ui/formatNumber";
 import { ScriptArg } from "@nsdefs";
 import { isPositiveInteger } from "../../types";
-import { ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { ScriptFilePath, isLegacyScript } from "../../Paths/ScriptFilePath";
 import { sendDeprecationNotice } from "./common/deprecation";
 import { roundToTwo } from "../../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../../Netscript/RamCostGenerator";
@@ -61,7 +61,7 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   const success = startWorkerScript(runningScript, server);
   if (!success) return Terminal.error(`Failed to start script`);
 
-  if (path.endsWith(".script")) {
+  if (isLegacyScript(path)) {
     sendDeprecationNotice();
   }
   Terminal.print(

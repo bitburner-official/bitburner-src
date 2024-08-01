@@ -1,21 +1,30 @@
 /**
  * Implements RAM Calculation functionality.
  *
- * Uses the acorn.js library to parse a script's code into an AST and
- * recursively walk through that AST, calculating RAM usage along
- * the way
+ * Uses acorn-walk to recursively walk through the AST, calculating RAM usage along the way.
  */
 import * as walk from "acorn-walk";
-import acorn, { parse } from "acorn";
+import type * as acorn from "acorn";
+import { extendAcornWalkForTypeScriptNodes } from "../ThirdParty/acorn-typescript-walk";
+import { extend as extendAcornWalkForJsxNodes } from "acorn-jsx-walk";
 
 import { RamCalculationErrorCode } from "./RamCalculationErrorCodes";
 
 import { RamCosts, RamCostConstants } from "../Netscript/RamCostGenerator";
-import { Script } from "./Script";
-import { Node } from "../NetscriptJSEvaluator";
-import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
-import { ServerName } from "../Types/strings";
+import type { Script } from "./Script";
+import type { Node } from "../NetscriptJSEvaluator";
+import type { ScriptFilePath } from "../Paths/ScriptFilePath";
+import type { ServerName } from "../Types/strings";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
+import {
+  type AST,
+  type FileTypeFeature,
+  getFileType,
+  getFileTypeFeature,
+  getModuleScript,
+  parseAST,
+  ModuleResolutionError,
+} from "../utils/ScriptTransformer";
 
 export interface RamUsageEntry {
   type: "ns" | "dom" | "fn" | "misc";
@@ -39,6 +48,12 @@ export type RamCalculationFailure = {
 
 export type RamCalculation = RamCalculationSuccess | RamCalculationFailure;
 
+// Extend acorn-walk to support TypeScript nodes.
+extendAcornWalkForTypeScriptNodes(walk.base);
+
+// Extend acorn-walk to support JSX nodes.
+extendAcornWalkForJsxNodes(walk.base);
+
 // These special strings are used to reference the presence of a given logical
 // construct within a user script.
 const specialReferenceIF = "__SPECIAL_referenceIf";
@@ -61,17 +76,18 @@ function getNumericCost(cost: number | (() => number)): number {
 /**
  * Parses code into an AST and walks through it recursively to calculate
  * RAM usage. Also accounts for imported modules.
- * @param otherScripts - All other scripts on the server. Used to account for imported scripts
- * @param code - The code being parsed
- * @param scriptname - The name of the script that ram needs to be added to
+ * @param ast - AST of the code being parsed
+ * @param scriptName - The name of the script that ram needs to be added to
  * @param server - Servername of the scripts for Error Message
+ * @param fileTypeFeature
+ * @param otherScripts - All other scripts on the server. Used to account for imported scripts
  * */
 function parseOnlyRamCalculate(
-  otherScripts: Map<ScriptFilePath, Script>,
-  code: string,
-  scriptname: ScriptFilePath,
+  ast: AST,
+  scriptName: ScriptFilePath,
   server: ServerName,
-  ns1?: boolean,
+  fileTypeFeature: FileTypeFeature,
+  otherScripts: Map<ScriptFilePath, Script>,
 ): RamCalculation {
   /**
    * Maps dependent identifiers to their dependencies.
@@ -91,14 +107,14 @@ function parseOnlyRamCalculate(
   // Scripts we've discovered that need to be parsed.
   const parseQueue: ScriptFilePath[] = [];
   // Parses a chunk of code with a given module name, and updates parseQueue and dependencyMap.
-  function parseCode(code: string, moduleName: ScriptFilePath): void {
-    const result = parseOnlyCalculateDeps(code, moduleName, ns1);
+  function parseCode(ast: AST, moduleName: ScriptFilePath, fileTypeFeatureOfModule: FileTypeFeature): void {
+    const result = parseOnlyCalculateDeps(ast, moduleName, fileTypeFeatureOfModule, otherScripts);
     completedParses.add(moduleName);
 
     // Add any additional modules to the parse queue;
-    for (let i = 0; i < result.additionalModules.length; ++i) {
-      if (!completedParses.has(result.additionalModules[i])) {
-        parseQueue.push(result.additionalModules[i]);
+    for (const additionalModule of result.additionalModules) {
+      if (!completedParses.has(additionalModule) && !parseQueue.includes(additionalModule)) {
+        parseQueue.push(additionalModule);
       }
     }
 
@@ -107,24 +123,40 @@ function parseOnlyRamCalculate(
   }
 
   // Parse the initial module, which is the "main" script that is being run
-  const initialModule = scriptname;
-  parseCode(code, initialModule);
+  const initialModule = scriptName;
+  parseCode(ast, initialModule, fileTypeFeature);
 
   // Process additional modules, which occurs if the "main" script has any imports
   while (parseQueue.length > 0) {
     const nextModule = parseQueue.shift();
-    if (nextModule === undefined) throw new Error("nextModule should not be undefined");
-    if (nextModule.startsWith("https://") || nextModule.startsWith("http://")) continue;
+
+    if (nextModule === undefined) {
+      throw new Error("nextModule should not be undefined");
+    }
+    if (nextModule.startsWith("https://") || nextModule.startsWith("http://")) {
+      continue;
+    }
 
     const script = otherScripts.get(nextModule);
     if (!script) {
       return {
         errorCode: RamCalculationErrorCode.ImportError,
-        errorMessage: `File: "${nextModule}" not found on server: ${server}`,
+        errorMessage: `"${nextModule}" does not exist on server: ${server}`,
       };
     }
-
-    parseCode(script.code, nextModule);
+    const scriptFileType = getFileType(script.filename);
+    let moduleAST;
+    try {
+      moduleAST = parseAST(script.code, scriptFileType);
+    } catch (error) {
+      return {
+        errorCode: RamCalculationErrorCode.ImportError,
+        errorMessage: `Cannot parse module: ${nextModule}. Filename: ${script.filename}. Reason: ${
+          error instanceof Error ? error.message : String(error)
+        }.`,
+      };
+    }
+    parseCode(moduleAST, nextModule, getFileTypeFeature(scriptFileType));
   }
 
   // Finally, walk the reference map and generate a ram cost. The initial set of keys to scan
@@ -136,7 +168,9 @@ function parseOnlyRamCalculate(
   const loadedFns: Record<string, boolean> = {};
   while (unresolvedRefs.length > 0) {
     const ref = unresolvedRefs.shift();
-    if (ref === undefined) throw new Error("ref should not be undefined");
+    if (ref === undefined) {
+      throw new Error("ref should not be undefined");
+    }
 
     if (ref.endsWith(specialReferenceRAM)) {
       if (ref !== initialModule + specialReferenceRAM) {
@@ -169,13 +203,17 @@ function parseOnlyRamCalculate(
       const prefix = ref.slice(0, ref.length - 2);
       for (const ident of Object.keys(dependencyMap).filter((k) => k.startsWith(prefix))) {
         for (const dep of dependencyMap[ident] || []) {
-          if (!resolvedRefs.has(dep)) unresolvedRefs.push(dep);
+          if (!resolvedRefs.has(dep)) {
+            unresolvedRefs.push(dep);
+          }
         }
       }
     } else {
       // An exact reference. Add all dependencies of this ref.
       for (const dep of dependencyMap[ref] || []) {
-        if (!resolvedRefs.has(dep)) unresolvedRefs.push(dep);
+        if (!resolvedRefs.has(dep)) {
+          unresolvedRefs.push(dep);
+        }
       }
     }
 
@@ -194,14 +232,18 @@ function parseOnlyRamCalculate(
         obj: object,
         ref: string,
       ): { func: () => number | number; refDetail: string } | undefined => {
-        if (!obj) return;
+        if (!obj) {
+          return;
+        }
         const elem = Object.entries(obj).find(([key]) => key === ref);
         if (elem !== undefined && (typeof elem[1] === "function" || typeof elem[1] === "number")) {
           return { func: elem[1], refDetail: `${prefix}${ref}` };
         }
         for (const [key, value] of Object.entries(obj)) {
           const found = findFunc(`${key}.`, value, ref);
-          if (found) return found;
+          if (found) {
+            return found;
+          }
         }
         return undefined;
       };
@@ -222,14 +264,7 @@ function parseOnlyRamCalculate(
   return { cost: ram, entries: detailedCosts.filter((e) => e.cost > 0) };
 }
 
-export function checkInfiniteLoop(code: string): number[] {
-  let ast: acorn.Node;
-  try {
-    ast = parse(code, { sourceType: "module", ecmaVersion: "latest" });
-  } catch (e) {
-    // If code cannot be parsed, do not provide infinite loop detection warning
-    return [];
-  }
+export function checkInfiniteLoop(ast: AST, code: string): number[] {
   function nodeHasTrueTest(node: acorn.Node): boolean {
     return node.type === "Literal" && "raw" in node && (node.raw === "true" || node.raw === "1");
   }
@@ -250,7 +285,7 @@ export function checkInfiniteLoop(code: string): number[] {
 
   const possibleLines: number[] = [];
   walk.recursive(
-    ast,
+    ast as acorn.Node, // Pretend that ast is an acorn node
     {},
     {
       WhileStatement: (node: Node, st: unknown, walkDeeper: walk.WalkerCallback<any>) => {
@@ -282,8 +317,12 @@ interface ParseDepsResult {
  * for RAM usage calculations. It also returns an array of additional modules
  * that need to be parsed (i.e. are 'import'ed scripts).
  */
-function parseOnlyCalculateDeps(code: string, currentModule: ScriptFilePath, ns1?: boolean): ParseDepsResult {
-  const ast = parse(code, { sourceType: "module", ecmaVersion: "latest" });
+function parseOnlyCalculateDeps(
+  ast: AST,
+  currentModule: ScriptFilePath,
+  fileTypeFeature: FileTypeFeature,
+  otherScripts: Map<ScriptFilePath, Script>,
+): ParseDepsResult {
   // Everything from the global scope goes in ".". Everything else goes in ".function", where only
   // the outermost layer of functions counts.
   const globalKey = currentModule + memCheckGlobalKey;
@@ -402,17 +441,17 @@ function parseOnlyCalculateDeps(code: string, currentModule: ScriptFilePath, ns1
   }
 
   walk.recursive<State>(
-    ast,
+    ast as acorn.Node, // Pretend that ast is an acorn node
     { key: globalKey },
     Object.assign(
       {
         ImportDeclaration: (node: Node, st: State) => {
-          const importModuleName = resolveScriptFilePath(node.source.value, currentModule, ns1 ? ".script" : ".js");
-          if (!importModuleName)
-            throw new Error(
-              `ScriptFilePath couldnt be resolved in ImportDeclaration. Value: ${node.source.value}  ScriptFilePath: ${currentModule}`,
-            );
-
+          const rawImportModuleName = node.source.value;
+          // Skip these modules. They are popular path aliases of NetscriptDefinitions.d.ts.
+          if (fileTypeFeature.isTypeScript && (rawImportModuleName === "@nsdefs" || rawImportModuleName === "@ns")) {
+            return;
+          }
+          const importModuleName = getModuleScript(rawImportModuleName, currentModule, otherScripts).filename;
           additionalModules.push(importModuleName);
 
           // This module's global scope refers to that module's global scope, no matter how we
@@ -472,27 +511,31 @@ function parseOnlyCalculateDeps(code: string, currentModule: ScriptFilePath, ns1
 }
 
 /**
- * Calculate's a scripts RAM Usage
- * @param {string} code - The script's code
- * @param {ScriptFilePath} scriptname - The script's name. Used to resolve relative paths
- * @param {Script[]} otherScripts - All other scripts on the server.
- *                                  Used to account for imported scripts
- * @param {ServerName} server - Servername of the scripts for Error Message
- * @param {boolean} ns1 - Deprecated: is the fileExtension .script or .js
+ * Calculate RAM usage of a script
+ *
+ * @param input - Code's AST or code of the script
+ * @param scriptName - The script's name. Used to resolve relative paths
+ * @param server - Servername of the scripts for Error Message
+ * @param otherScripts - Other scripts on the server
+ * @returns
  */
 export function calculateRamUsage(
-  code: string,
-  scriptname: ScriptFilePath,
-  otherScripts: Map<ScriptFilePath, Script>,
+  input: AST | string,
+  scriptName: ScriptFilePath,
   server: ServerName,
-  ns1?: boolean,
+  otherScripts: Map<ScriptFilePath, Script>,
 ): RamCalculation {
   try {
-    return parseOnlyRamCalculate(otherScripts, code, scriptname, server, ns1);
-  } catch (e) {
+    const fileType = getFileType(scriptName);
+    const ast = typeof input === "string" ? parseAST(input, fileType) : input;
+    return parseOnlyRamCalculate(ast, scriptName, server, getFileTypeFeature(fileType), otherScripts);
+  } catch (error) {
     return {
-      errorCode: RamCalculationErrorCode.SyntaxError,
-      errorMessage: e instanceof Error ? e.message : undefined,
+      errorCode:
+        error instanceof ModuleResolutionError
+          ? RamCalculationErrorCode.ImportError
+          : RamCalculationErrorCode.SyntaxError,
+      errorMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }

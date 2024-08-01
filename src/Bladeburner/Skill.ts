@@ -30,11 +30,12 @@ export class Skill {
     this.desc = params.desc;
     this.baseCost = params.baseCost ?? 1;
     this.costInc = params.costInc ?? 1;
-    this.maxLvl = params.maxLvl ?? Number.MAX_SAFE_INTEGER;
+    this.maxLvl = params.maxLvl ?? Number.MAX_VALUE;
     for (const [multName, mult] of getRecordEntries(params.mults)) this.mults[multName] = mult;
   }
 
   calculateCost(currentLevel: number, count = 1 as PositiveInteger): number {
+    const actualCount = currentLevel + count - currentLevel;
     /**
      * The cost of the next level: (baseCost + currentLevel * costInc) * mult. The cost needs to be an integer, so we
      * need to use Math.floor or Math.round.
@@ -76,7 +77,9 @@ export class Skill {
      *
      */
     return Math.round(
-      count * currentNodeMults.BladeburnerSkillCost * (this.baseCost + this.costInc * (currentLevel + (count - 1) / 2)),
+      actualCount *
+        currentNodeMults.BladeburnerSkillCost *
+        (this.baseCost + this.costInc * (currentLevel + (actualCount - 1) / 2)),
     );
   }
 
@@ -138,10 +141,16 @@ export class Skill {
 
   canUpgrade(bladeburner: Bladeburner, count = 1): Availability<{ cost: number }> {
     const currentLevel = bladeburner.skills[this.name] ?? 0;
-    if (!isPositiveInteger(count)) return { error: `Invalid upgrade count ${count}` };
-    if (currentLevel + count > this.maxLvl) return { error: `Upgraded level ${currentLevel + count} exceeds max` };
+    if (!isPositiveInteger(count)) {
+      return { error: `Invalid upgrade count ${count}` };
+    }
+    if (currentLevel + count > this.maxLvl) {
+      return { error: `Upgraded level ${currentLevel + count} exceeds max` };
+    }
     const cost = this.calculateCost(currentLevel, count);
-    if (cost > bladeburner.skillPoints) return { error: `Insufficient skill points for upgrade` };
+    if (cost > bladeburner.skillPoints) {
+      return { error: `Insufficient skill points for upgrade` };
+    }
     return { available: true, cost };
   }
 

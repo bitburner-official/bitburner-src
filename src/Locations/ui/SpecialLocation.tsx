@@ -35,6 +35,7 @@ import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { GetServer } from "../../Server/AllServers";
 import { ArcadeRoot } from "../../Arcade/ui/ArcadeRoot";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
+import { canAccessBitNodeFeature, knowAboutBitverse } from "../../BitNode/BitNodeUtils";
 
 interface SpecialLocationProps {
   loc: Location;
@@ -91,8 +92,10 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     function EatNoodles(): void {
       SnackbarEvents.emit("You ate some delicious noodles and feel refreshed", ToastVariant.SUCCESS, 2000);
       N00dles(); // This is the true power of the noodles.
-      if (Player.sourceFiles.size > 0) Player.giveExploit(Exploit.N00dles);
-      if (Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) {
+      if (knowAboutBitverse()) {
+        Player.giveExploit(Exploit.N00dles);
+      }
+      if (canAccessBitNodeFeature(5)) {
         Player.exp.intelligence *= 1.0000000000000002;
       }
       Player.exp.hacking *= 1.0000000000000002;

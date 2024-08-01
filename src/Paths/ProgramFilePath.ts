@@ -1,7 +1,7 @@
 import { Directory, isAbsolutePath } from "./Directory";
 import { FilePath, isFilePath, resolveFilePath } from "./FilePath";
 
-/** Filepath with the additional constraint of having a .cct extension */
+/** Filepath with the additional constraint of having a .exe extension */
 type WithProgramExtension = string & { __fileType: "Program" };
 export type ProgramFilePath = FilePath & WithProgramExtension;
 

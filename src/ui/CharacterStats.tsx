@@ -17,6 +17,7 @@ import { StatsRow } from "./React/StatsRow";
 import { StatsTable } from "./React/StatsTable";
 import { useRerender } from "./React/hooks";
 import { getMaxFavor } from "../Go/effects/effect";
+import { canAccessBitNodeFeature, knowAboutBitverse } from "../BitNode/BitNodeUtils";
 
 interface EmployersModalProps {
   open: boolean;
@@ -68,7 +69,7 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
         {props.rows.map((data) => {
           const { mult, value, effValue = null, color = props.color } = data;
 
-          if (effValue !== null && effValue !== value && Player.sourceFileLvl(5) > 0) {
+          if (effValue !== null && effValue !== value && canAccessBitNodeFeature(5)) {
             return (
               <StatsRow key={mult} name={mult} color={color} data={{}}>
                 <>
@@ -100,9 +101,9 @@ function MultiplierTable(props: MultTableProps): React.ReactElement {
 }
 
 function CurrentBitNode(): React.ReactElement {
-  if (Player.sourceFiles.size > 0) {
+  if (knowAboutBitverse()) {
     const index = "BitNode" + Player.bitNodeN;
-    const lvl = Math.min(Player.sourceFileLvl(Player.bitNodeN) + 1, Player.bitNodeN === 12 ? Infinity : 3);
+    const lvl = Math.min(Player.sourceFileLvl(Player.bitNodeN) + 1, Player.bitNodeN === 12 ? Number.MAX_VALUE : 3);
     return (
       <Paper sx={{ mb: 1, p: 1 }}>
         <Typography variant="h5">
@@ -194,7 +195,7 @@ function MoneyModal({ open, onClose }: IMoneyModalProps): React.ReactElement {
       {convertMoneySourceTrackerToString(Player.moneySourceA)}
     </>
   );
-  if (Player.sourceFiles.size > 0) {
+  if (knowAboutBitverse()) {
     content = (
       <>
         {content}
@@ -224,7 +225,7 @@ export function CharacterStats(): React.ReactElement {
   const timeRows = [
     ["Since last Augmentation installation", convertTimeMsToTimeElapsedString(Player.playtimeSinceLastAug)],
   ];
-  if (Player.sourceFiles.size > 0) {
+  if (knowAboutBitverse()) {
     timeRows.push(["Since last Bitnode destroyed", convertTimeMsToTimeElapsedString(Player.playtimeSinceLastBitnode)]);
   }
   timeRows.push(["Total", convertTimeMsToTimeElapsedString(Player.totalPlaytime)]);
@@ -265,13 +266,11 @@ export function CharacterStats(): React.ReactElement {
                 data={{ content: `${Player.purchasedServers.length} / ${getPurchaseServerLimit()}` }}
               />
               <StatsRow
-                name={`Hacknet ${Player.bitNodeN === 9 || Player.sourceFileLvl(9) > 0 ? "Servers" : "Nodes"} owned`}
+                name={`Hacknet ${canAccessBitNodeFeature(9) ? "Servers" : "Nodes"} owned`}
                 color={Settings.theme.primary}
                 data={{
                   content: `${Player.hacknetNodes.length}${
-                    Player.bitNodeN === 9 || Player.sourceFileLvl(9) > 0
-                      ? ` / ${HacknetServerConstants.MaxServers}`
-                      : ""
+                    canAccessBitNodeFeature(9) ? ` / ${HacknetServerConstants.MaxServers}` : ""
                   }`,
                 }}
               />
@@ -317,7 +316,7 @@ export function CharacterStats(): React.ReactElement {
                 color={Settings.theme.cha}
                 data={{ level: Player.skills.charisma, exp: Player.exp.charisma }}
               />
-              {Player.skills.intelligence > 0 && (Player.bitNodeN === 5 || Player.sourceFileLvl(5) > 0) && (
+              {Player.skills.intelligence > 0 && canAccessBitNodeFeature(5) && (
                 <StatsRow
                   name="Intelligence"
                   color={Settings.theme.int}
@@ -332,7 +331,7 @@ export function CharacterStats(): React.ReactElement {
       <Paper sx={{ p: 1, mb: 1 }}>
         <Typography variant="h5" color="primary" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
           Multipliers
-          {Player.sourceFileLvl(5) > 0 && (
+          {canAccessBitNodeFeature(5) && (
             <Tooltip
               title={
                 <Typography>
@@ -553,15 +552,15 @@ export function CharacterStats(): React.ReactElement {
                   },
                 ]}
                 color={Settings.theme.primary}
-                noMargin={!Player.sourceFileLvl(14) && Player.bitNodeN !== 14}
+                noMargin={!canAccessBitNodeFeature(14)}
               />
             )}
-            {(Player.sourceFileLvl(14) || Player.bitNodeN === 14) && (
+            {canAccessBitNodeFeature(14) && (
               <MultiplierTable
                 rows={[
                   {
                     mult: "IPvGO Node Power bonus",
-                    value: Player.sourceFileLvl(14) ? 2 * currentNodeMults.GoPower : currentNodeMults.GoPower,
+                    value: Player.activeSourceFileLvl(14) ? 2 * currentNodeMults.GoPower : currentNodeMults.GoPower,
                   },
                   {
                     mult: "IPvGO Max Favor",
@@ -590,7 +589,7 @@ export function CharacterStats(): React.ReactElement {
 
       <CurrentBitNode />
 
-      {(Player.bitNodeN === 5 || Player.sourceFileLvl(5) > 0) && (
+      {canAccessBitNodeFeature(5) && (
         <Paper sx={{ p: 1, mb: 1 }}>
           <Typography variant="h5">BitNode Multipliers</Typography>
           <BitNodeMultipliersDisplay n={Player.bitNodeN} />

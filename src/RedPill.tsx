@@ -1,12 +1,14 @@
 /** Implementation for what happens when you destroy a BitNode */
 import React from "react";
 import { Player } from "@player";
+import { type BitNodeOptions } from "@nsdefs";
 import { SourceFiles } from "./SourceFile/SourceFiles";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { prestigeSourceFile } from "./Prestige";
+import { setBitNodeOptions } from "./BitNode/BitNodeUtils";
 
 function giveSourceFile(bitNodeNumber: number): void {
   const sourceFileKey = "SourceFile" + bitNodeNumber.toString();
@@ -48,7 +50,12 @@ function giveSourceFile(bitNodeNumber: number): void {
   }
 }
 
-export function enterBitNode(isFlume: boolean, destroyedBitNode: number, newBitNode: number): void {
+export function enterBitNode(
+  isFlume: boolean,
+  destroyedBitNode: number,
+  newBitNode: number,
+  bitNodeOptions: BitNodeOptions,
+): void {
   if (!isFlume) {
     giveSourceFile(destroyedBitNode);
   } else if (Player.sourceFileLvl(5) === 0 && newBitNode !== 5) {
@@ -60,6 +67,9 @@ export function enterBitNode(isFlume: boolean, destroyedBitNode: number, newBitN
   }
   // Set new Bit Node
   Player.bitNodeN = newBitNode;
+
+  // Set BitNode options
+  setBitNodeOptions(bitNodeOptions);
 
   if (newBitNode === 6) {
     Router.toPage(Page.BladeburnerCinematic);

@@ -19,5 +19,6 @@ module.exports = {
     "^monaco-editor$": "<rootDir>/test/__mocks__/NullMock.js",
     "^monaco-vim$": "<rootDir>/test/__mocks__/NullMock.js",
     "/utils/Protections$": "<rootDir>/test/__mocks__/NullMock.js",
+    "@swc/wasm-web": "@swc/core",
   },
 };

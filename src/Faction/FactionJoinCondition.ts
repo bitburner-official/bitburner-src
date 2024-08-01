@@ -27,6 +27,7 @@ import type {
   NotRequirement,
   SomeRequirement,
   EveryRequirement,
+  BitNodeRequirement,
 } from "@nsdefs";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
 
@@ -275,6 +276,18 @@ export const haveBladeburnerRank = (n: number): PlayerCondition => ({
   },
 });
 
+export const inBitNode = (n: number): PlayerCondition => ({
+  toString(): string {
+    return `In BitNode ${n}`;
+  },
+  toJSON(): BitNodeRequirement {
+    return { type: "bitNodeN", bitNodeN: n };
+  },
+  isSatisfied(p: PlayerObject): boolean {
+    return p.bitNodeN == n;
+  },
+});
+
 export const haveSourceFile = (n: number): PlayerCondition => ({
   toString(): string {
     return `In BitNode ${n} or have SourceFile ${n}`;
@@ -289,7 +302,7 @@ export const haveSourceFile = (n: number): PlayerCondition => ({
     };
   },
   isSatisfied(p: PlayerObject): boolean {
-    return p.bitNodeN == n || p.sourceFileLvl(n) > 0;
+    return p.bitNodeN == n || p.activeSourceFileLvl(n) > 0;
   },
 });
 

@@ -8,6 +8,7 @@ import { SpecialServers } from "../Server/data/SpecialServers";
 import { Settings } from "../Settings/Settings";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Server } from "../Server/Server";
+import { knowAboutBitverse } from "../BitNode/BitNodeUtils";
 
 //Sends message to player, including a pop up
 function sendMessage(name: MessageFilename, forced = false): void {
@@ -63,9 +64,9 @@ function checkForMessagesToSend(): void {
     //If the daemon can be hacked, send the player icarus.msg
     if (
       Player.skills.hacking >= worldDaemon.requiredHackingSkill &&
-      (Player.sourceFiles.size === 0 || !recvd(MessageFilename.RedPill))
+      (!knowAboutBitverse() || !recvd(MessageFilename.RedPill))
     ) {
-      sendMessage(MessageFilename.RedPill, Player.sourceFiles.size === 0);
+      sendMessage(MessageFilename.RedPill, !knowAboutBitverse());
     }
     //If the daemon cannot be hacked, send the player truthgazer.msg a single time.
     else if (!recvd(MessageFilename.TruthGazer)) {

@@ -172,7 +172,7 @@ export function BitverseRoot(props: IProps): React.ReactElement {
     if (n !== destroyed) {
       return lvl;
     }
-    const max = n === 12 ? Infinity : 3;
+    const max = n === 12 ? Number.MAX_VALUE : 3;
 
     // If accessed via flume, display the current BN level, else the next
     return Math.min(max, lvl + Number(!props.flume));

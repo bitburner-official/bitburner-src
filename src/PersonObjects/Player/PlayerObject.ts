@@ -1,4 +1,4 @@
-import type { Player as IPlayer } from "@nsdefs";
+import type { BitNodeOptions, Player as IPlayer } from "@nsdefs";
 import type { PlayerAchievement } from "../../Achievements/Achievements";
 import type { Bladeburner } from "../../Bladeburner/Bladeburner";
 import type { Corporation } from "../../Corporation/Corporation";
@@ -74,6 +74,22 @@ export class PlayerObject extends Person implements IPlayer {
 
   entropy = 0;
 
+  bitNodeOptions: BitNodeOptions = {
+    sourceFileOverrides: new JSONMap<number, number>(),
+    intelligenceOverride: undefined,
+    restrictHomePCUpgrade: false,
+    disableGang: false,
+    disableCorporation: false,
+    disableBladeburner: false,
+    disable4SData: false,
+    disableHacknetServer: false,
+    disableSleeveExpAndAugmentation: false,
+  };
+
+  get activeSourceFiles(): JSONMap<number, number> {
+    return new JSONMap([...this.sourceFiles, ...this.bitNodeOptions.sourceFileOverrides]);
+  }
+
   // Player-specific methods
   init = generalMethods.init;
   startWork = workMethods.startWork;
@@ -129,6 +145,7 @@ export class PlayerObject extends Person implements IPlayer {
   setBitNodeNumber = generalMethods.setBitNodeNumber;
   canAccessCotMG = generalMethods.canAccessCotMG;
   sourceFileLvl = generalMethods.sourceFileLvl;
+  activeSourceFileLvl = generalMethods.activeSourceFileLvl;
   applyEntropy = augmentationMethods.applyEntropy;
   focusPenalty = generalMethods.focusPenalty;
 

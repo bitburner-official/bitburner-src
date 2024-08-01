@@ -320,12 +320,11 @@ export class Gang {
     if (this.members.length >= GangConstants.MaximumGangMembers) {
       return 0;
     }
-    const numFreeMembers = 3;
-    const recruitCostBase = 5;
-    if (this.members.length < numFreeMembers && this.respect < Math.pow(recruitCostBase, numFreeMembers)) {
-      return numFreeMembers - this.members.length; // if the max possible is less than freeMembers
-    }
-    return Math.floor(Math.log(this.respect) / Math.log(recruitCostBase)) + numFreeMembers - this.members.length; //else
+    const numFreeMembers = GangConstants.numFreeMembers;
+    const recruitCostBase = GangConstants.recruitThresholdBase;
+    const membersRecruitabile =
+      Math.floor(Math.max(Math.log(this.respect), 0) / Math.log(recruitCostBase)) + numFreeMembers;
+    return Math.min(membersRecruitabile, GangConstants.MaximumGangMembers) - this.members.length;
   }
 
   recruitMember(name: string): boolean {
