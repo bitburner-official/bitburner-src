@@ -103,25 +103,27 @@ export class ScriptEditor {
           2686,
         ],
       });
-      // Sync all javascript and typescript text models to both language servers.
-      {
-        // `monaco.languages.typescript.get{Java,Type}ScriptWorker` returns a promise that
-        // fires with a function that takes a list of `monaco.Uri`s and sync's them with the
-        // worker. (It also returns the worker, but we don't care about that.)
-        const languageWorker = new Promise<(...uris: monaco.Uri[]) => unknown>((resolve) =>
-          monaco.languages.onLanguage(language, () => getLanguageWorker().then(resolve)),
-        );
-        // Whenever a model is created, arange for it synced to the language server.
-        monaco.editor.onDidCreateModel((model) => {
-          if (language === "typescript" && isLegacyScript(model.uri.path)) {
-            // Don't sync legacy scripts to typescript worker.
-            return;
-          }
-          if (["javascript", "typescript"].includes(model.getLanguageId())) {
-            languageWorker.then((cb) => cb(model.uri));
-          }
-        });
-      }
+
+      //  Sync all javascript and typescript text models to both language servers.
+      //
+      // `monaco.languages.typescript.get{Java,Type}ScriptWorker` returns a promise that
+      // fires with a function that takes a list of `monaco.Uri`s and sync's them with the
+      // worker. (It also returns the worker, but we don't care about that.) However, it
+      // returns a reject promise if the language worker is not loaded yet, so we wait to
+      // call it until the language gets loaded.
+      const languageWorker = new Promise<(...uris: monaco.Uri[]) => unknown>((resolve) =>
+        monaco.languages.onLanguage(language, () => getLanguageWorker().then(resolve)),
+      );
+      // Whenever a model is created, arange for it synced to the language server.
+      monaco.editor.onDidCreateModel((model) => {
+        if (language === "typescript" && isLegacyScript(model.uri.path)) {
+          // Don't sync legacy scripts to typescript worker.
+          return;
+        }
+        if (["javascript", "typescript"].includes(model.getLanguageId())) {
+          languageWorker.then((cb) => cb(model.uri));
+        }
+      });
     }
 
     monaco.languages.json.jsonDefaults.setModeConfiguration({
