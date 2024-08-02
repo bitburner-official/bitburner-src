@@ -125,7 +125,12 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
   const addGlobalAliases = () => addGeneric({ iterable: GlobalAliases.keys() });
   const addCommands = () => addGeneric({ iterable: gameCommands });
   const addDarkwebItems = () => addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program) });
-  const addServerNames = () => addGeneric({ iterable: GetAllServers().map((server) => server.hostname) });
+  const addServerNames = () =>
+    addGeneric({
+      iterable: GetAllServers()
+        .filter((server) => server.serversOnNetwork.length !== 0)
+        .map((server) => server.hostname),
+    });
   const addScripts = () => addGeneric({ iterable: currServ.scripts.keys(), usePathing: true });
   const addTextFiles = () => addGeneric({ iterable: currServ.textFiles.keys(), usePathing: true });
   const addCodingContracts = () => {
