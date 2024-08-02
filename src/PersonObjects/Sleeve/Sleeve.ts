@@ -48,6 +48,7 @@ import { Multipliers, mergeMultipliers } from "../Multipliers";
 import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
 import { Augmentations } from "../../Augmentation/Augmentations";
 import { getAugCost } from "../../Augmentation/AugmentationHelpers";
+import type { MoneySource } from "../../utils/MoneySourceTracker";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: SleeveWork | null = null;
@@ -527,6 +528,10 @@ export class Sleeve extends Person implements SleevePerson {
         return true;
     }
     return false;
+  }
+
+  travelCostMoneySource(): MoneySource {
+    return "sleeves";
   }
 
   takeDamage(amt: number): boolean {

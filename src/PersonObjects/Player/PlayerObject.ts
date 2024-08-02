@@ -19,7 +19,7 @@ import * as workMethods from "./PlayerObjectWorkMethods";
 import { setPlayer } from "@player";
 import { CompanyName, FactionName, JobName, LocationName } from "@enums";
 import { HashManager } from "../../Hacknet/HashManager";
-import { MoneySourceTracker } from "../../utils/MoneySourceTracker";
+import { type MoneySource, MoneySourceTracker } from "../../utils/MoneySourceTracker";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
 import { JSONMap, JSONSet } from "../../Types/Jsonable";
 import { cyrb53 } from "../../utils/StringHelperFunctions";
@@ -161,6 +161,10 @@ export class PlayerObject extends Person implements IPlayer {
         getRandomIntInclusive(100, 999),
     );
     this.lastAugReset = this.lastNodeReset = Date.now();
+  }
+
+  travelCostMoneySource(): MoneySource {
+    return "other";
   }
 
   whoAmI(): string {

@@ -1,16 +1,16 @@
-import type { Skills } from "./Skills";
-import type { HP } from "./HP";
 import type { Person as IPerson, WorkStats } from "@nsdefs";
+import type { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
+import type { IReviverValue } from "../utils/JSONReviver";
+import type { MoneySource } from "../utils/MoneySourceTracker";
+import type { HP } from "./HP";
+import type { Skills } from "./Skills";
 
 import { CityName } from "@enums";
-import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
-import { calculateSkill } from "./formulas/skill";
-import { defaultMultipliers } from "./Multipliers";
-import { IReviverValue } from "../utils/JSONReviver";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { Player } from "../Player";
 import { CONSTANTS } from "../Constants";
-import { PlayerObject } from "./Player/PlayerObject";
+import { Player } from "../Player";
+import { defaultMultipliers } from "./Multipliers";
+import { calculateSkill } from "./formulas/skill";
 
 // Base class representing a person-like object
 export abstract class Person implements IPerson {
@@ -226,7 +226,7 @@ export abstract class Person implements IPerson {
       return false;
     }
 
-    Player.loseMoney(CONSTANTS.TravelCost, this instanceof PlayerObject ? "other" : "sleeves");
+    Player.loseMoney(CONSTANTS.TravelCost, this.travelCostMoneySource());
     this.city = cityName;
 
     return true;
@@ -239,6 +239,7 @@ export abstract class Person implements IPerson {
     this.mults = defaultMultipliers();
   }
 
+  abstract travelCostMoneySource(): MoneySource;
   abstract takeDamage(amt: number): boolean;
   abstract whoAmI(): string;
   abstract toJSON(): IReviverValue;
