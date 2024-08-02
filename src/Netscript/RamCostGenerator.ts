@@ -307,7 +307,6 @@ const bladeburner = {
   getSkillPoints: RamCostConstants.BladeburnerApiBase,
   getSkillLevel: RamCostConstants.BladeburnerApiBase,
   getSkillUpgradeCost: RamCostConstants.BladeburnerApiBase,
-  getSkillMaxUpgradeCount: RamCostConstants.BladeburnerApiBase,
   upgradeSkill: RamCostConstants.BladeburnerApiBase,
   getTeamSize: RamCostConstants.BladeburnerApiBase,
   setTeamSize: RamCostConstants.BladeburnerApiBase,
@@ -667,6 +666,9 @@ export const RamCosts: RamCostTree<NSFull> = {
       universityGains: 0,
       factionGains: 0,
       companyGains: 0,
+    },
+    bladeburner: {
+      skillMaxUpgradeCount: 0,
     },
   },
 } as const;

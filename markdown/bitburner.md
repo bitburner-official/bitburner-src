@@ -36,6 +36,7 @@
 |  [BitNodeRequirement](./bitburner.bitnoderequirement.md) | Player must be located in this BitNode. |
 |  [Bladeburner](./bitburner.bladeburner.md) | Bladeburner API |
 |  [BladeburnerCurAction](./bitburner.bladeburnercuraction.md) | Bladeburner current action. |
+|  [BladeburnerFormulas](./bitburner.bladeburnerformulas.md) | Bladeburner formulas |
 |  [BladeburnerRankRequirement](./bitburner.bladeburnerrankrequirement.md) | Player must have at least this rank in the Bladeburner Division. |
 |  [CityRequirement](./bitburner.cityrequirement.md) | Player must be located in this city. |
 |  [CodingContract](./bitburner.codingcontract.md) | Coding Contract API |

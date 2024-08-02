@@ -3368,20 +3368,6 @@ export interface Bladeburner {
   getSkillUpgradeCost(skillName: string, count?: number): number;
 
   /**
-   * Get the max upgrade count of a skill.
-   *
-   * @remarks
-   * RAM cost: 4 GB
-   *
-   * This function returns the number of times that you can upgrade the specified skill with the specified skill points.
-   *
-   * @param skillName - Name of skill. Case-sensitive and must be an exact match.
-   * @param skillPoints - Number of skill points to upgrade the skill. It must be a positive integer.
-   * @returns Number of times that you can upgrade the specified skill.
-   */
-  getSkillMaxUpgradeCount(skillName: string, skillPoints: number): number;
-
-  /**
    * Upgrade skill.
    * @remarks
    * RAM cost: 4 GB
@@ -5102,6 +5088,22 @@ interface GangFormulas {
 }
 
 /**
+ * Bladeburner formulas
+ * @public
+ */
+interface BladeburnerFormulas {
+  /**
+   * Calculate the number of times that you can upgrade a skill.
+   *
+   * @param name - Skill name. It's case-sensitive and must be an exact match.
+   * @param level - Skill level. It must be a non-negative number.
+   * @param skillPoints - Number of skill points to upgrade the skill. It must be a positive number.
+   * @returns Number of times that you can upgrade the skill.
+   */
+  skillMaxUpgradeCount(name: string, level: number, skillPoints: number): number;
+}
+
+/**
  * Formulas API
  * @remarks
  * You need Formulas.exe on your home computer to use this API.
@@ -5125,6 +5127,8 @@ export interface Formulas {
   gang: GangFormulas;
   /** Work formulas */
   work: WorkFormulas;
+  /** Bladeburner formulas */
+  bladeburner: BladeburnerFormulas;
 }
 
 /** @public */

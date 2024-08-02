@@ -221,17 +221,6 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       }
       return skill.calculateCost(currentLevel, count);
     },
-    getSkillMaxUpgradeCount: (ctx) => (_skillName, _skillPoints) => {
-      const bladeburner = getBladeburner(ctx);
-      const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
-      const skillPoints = helpers.positiveInteger(ctx, "skillPoints", _skillPoints);
-      const currentLevel = bladeburner.getSkillLevel(skillName);
-      const skill = Skills[skillName];
-      if (currentLevel >= skill.maxLvl) {
-        return 0;
-      }
-      return skill.calculateMaxUpgradeCount(currentLevel, skillPoints);
-    },
     upgradeSkill: (ctx) => (_skillName, _count) => {
       const bladeburner = getBladeburner(ctx);
       const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");

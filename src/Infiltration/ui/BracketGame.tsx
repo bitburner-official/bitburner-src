@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { KEY } from "../../utils/helpers/keyCodes";
-import { random } from "../utils";
 import { BlinkingCursor } from "./BlinkingCursor";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
+import { getRandomArbitrary } from "../../utils/helpers/getRandomArbitrary";
 
 interface Difficulty {
   [key: string]: number;
@@ -35,7 +35,7 @@ function generateLeftSide(difficulty: Difficulty): string {
   if (Player.hasAugmentation(AugmentationName.WisdomOfAthena, true)) {
     options.splice(0, 1);
   }
-  const length = random(difficulty.min, difficulty.max);
+  const length = getRandomArbitrary(difficulty.min, difficulty.max);
   for (let i = 0; i < length; i++) {
     str += options[Math.floor(Math.random() * options.length)];
   }
