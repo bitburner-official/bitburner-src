@@ -225,7 +225,7 @@ app.on("ready", async () => {
       `Tried to access a page outside the sandbox. Url: ${url}. FilePath: ${filePath}. RealPath: ${realPath}.` +
         ` __dirname: ${__dirname}. RelativePath: ${relativePath}. Method: ${method}.`,
     );
-    callback(path.join(__dirname, "fileError.html"));
+    callback({ statusCode: 403 });
   });
 
   log.info("Application is ready!");
