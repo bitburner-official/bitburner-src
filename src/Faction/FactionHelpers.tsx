@@ -2,7 +2,6 @@ import type { Augmentation } from "../Augmentation/Augmentation";
 import type { Faction } from "./Faction";
 
 import { Augmentations } from "../Augmentation/Augmentations";
-import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { AugmentationName, FactionDiscovery } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
