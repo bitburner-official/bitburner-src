@@ -84,11 +84,7 @@ export function purchaseAugmentation(aug: Augmentation, fac: Faction, sing = fal
     }
     dialogBoxCreate(txt);
   } else if (augCosts.moneyCost === 0 || Player.money >= augCosts.moneyCost) {
-    const queuedAugmentation = new PlayerOwnedAugmentation(aug.name);
-    if (aug.name == AugmentationName.NeuroFluxGovernor) {
-      queuedAugmentation.level = aug.getNextLevel();
-    }
-    Player.queuedAugmentations.push(queuedAugmentation);
+    Player.queueAugmentation(aug.name, sing);
 
     Player.loseMoney(augCosts.moneyCost, "augmentations");
 

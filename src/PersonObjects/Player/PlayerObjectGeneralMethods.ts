@@ -50,6 +50,9 @@ import { achievements } from "../../Achievements/Achievements";
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isMember } from "../../utils/EnumHelper";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
+import { isGraftingWork } from "../../Work/GraftingWork";
+import { AlertEvents } from "../../ui/React/AlertManager";
+import { Augmentations } from "../../Augmentation/Augmentations";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -454,22 +457,36 @@ export function setBitNodeNumber(this: PlayerObject, n: number): void {
   this.bitNodeN = n;
 }
 
-export function queueAugmentation(this: PlayerObject, name: AugmentationName): void {
-  for (const aug of this.queuedAugmentations) {
-    if (aug.name == name) {
-      console.warn(`tried to queue ${name} twice, this may be a bug`);
-      return;
+export function queueAugmentation(this: PlayerObject, name: AugmentationName, callFromSingularityAPI = false): void {
+  // Cancel the current work if the player is grafting this augmentation.
+  if (isGraftingWork(this.currentWork) && this.currentWork.augmentation === name) {
+    this.finishWork(true, callFromSingularityAPI);
+  }
+
+  if (name !== AugmentationName.NeuroFluxGovernor) {
+    for (const aug of this.queuedAugmentations) {
+      if (name === aug.name) {
+        AlertEvents.emit(`Tried to queue ${name} twice. This is a bug. Please contact developers.`);
+        return;
+      }
+    }
+
+    for (const aug of this.augmentations) {
+      if (aug.name === name) {
+        AlertEvents.emit(
+          `Tried to queue ${name}, but this augmentation was installed. This is a bug. Please contact developers.`,
+        );
+        return;
+      }
     }
   }
 
-  for (const aug of this.augmentations) {
-    if (aug.name == name) {
-      console.warn(`tried to queue ${name} twice, this may be a bug`);
-      return;
-    }
+  const queuedAugmentation = new PlayerOwnedAugmentation(name);
+  if (name === AugmentationName.NeuroFluxGovernor) {
+    const augmentation = Augmentations[name];
+    queuedAugmentation.level = augmentation.getNextLevel();
   }
-
-  this.queuedAugmentations.push(new PlayerOwnedAugmentation(name));
+  this.queuedAugmentations.push(queuedAugmentation);
 }
 
 /************* Coding Contracts **************/

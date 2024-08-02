@@ -20,12 +20,19 @@ export function AugmentationsDev(): React.ReactElement {
   function setAugmentationDropdown(event: SelectChangeEvent): void {
     setAugmentation(event.target.value as AugmentationName);
   }
+
   function queueAug(): void {
+    if (Player.hasAugmentation(augmentation)) {
+      return;
+    }
     Player.queueAugmentation(augmentation);
   }
 
   function queueAllAugs(): void {
     for (const augName of Object.values(AugmentationName)) {
+      if (Player.hasAugmentation(augName)) {
+        continue;
+      }
       Player.queueAugmentation(augName);
     }
   }

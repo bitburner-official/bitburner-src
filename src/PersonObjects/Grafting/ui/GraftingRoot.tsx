@@ -159,11 +159,16 @@ export const GraftingRoot = (): React.ReactElement => {
                   <>
                     Cancelling grafting will <b>not</b> save grafting progress, and the money you spend will <b>not</b>{" "}
                     be returned.
+                    <br />
+                    <br />
+                    If you purchase this augmentation, the current grafting work will be canceled.
+                    <br />
+                    <br />
                     {!Player.hasAugmentation(AugmentationName.CongruityImplant) && (
                       <>
-                        <br />
-                        <br />
                         Additionally, grafting an Augmentation will increase the potency of the Entropy virus.
+                        <br />
+                        <br />
                       </>
                     )}
                   </>
