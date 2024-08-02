@@ -1633,7 +1633,11 @@ export const ns: InternalAPI<NSFull> = {
     return convertTimeMsToTimeElapsedString(milliseconds, milliPrecision);
   },
   getTimeSinceLastAug: () => () => {
-    deprecationWarning("ns.getTimeSinceLastAug()", "Use ns.getResetInfo().lastAugReset instead.");
+    deprecationWarning(
+      "ns.getTimeSinceLastAug()",
+      "Use ns.getResetInfo().lastAugReset instead. Please note that ns.getResetInfo().lastAugReset does NOT return the " +
+        "same value as ns.getTimeSinceLastAug(). Check the NS API documentation for details.",
+    );
     return Player.playtimeSinceLastAug;
   },
   alert: (ctx) => (_message) => {
