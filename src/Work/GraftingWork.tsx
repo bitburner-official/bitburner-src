@@ -59,6 +59,14 @@ export class GraftingWork extends Work {
     if (!cancelled) {
       applyAugmentation({ name: augName, level: 1 });
 
+      // Remove this augmentation from the list of queued augmentations.
+      for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
+        if (Player.queuedAugmentations[i].name === augName) {
+          Player.queuedAugmentations.splice(i, 1);
+          break;
+        }
+      }
+
       if (!Player.hasAugmentation(AugmentationName.CongruityImplant, true)) {
         Player.entropy += 1;
         Player.applyEntropy(Player.entropy);

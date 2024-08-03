@@ -83,7 +83,7 @@ export function purchaseAugmentation(aug: Augmentation, fac: Faction, sing = fal
     }
     dialogBoxCreate(txt);
   } else if (augCosts.moneyCost === 0 || Player.money >= augCosts.moneyCost) {
-    Player.queueAugmentation(aug.name, sing);
+    Player.queueAugmentation(aug.name);
 
     Player.loseMoney(augCosts.moneyCost, "augmentations");
 

@@ -50,7 +50,6 @@ import { achievements } from "../../Achievements/Achievements";
 import { isCompanyWork } from "../../Work/CompanyWork";
 import { isMember } from "../../utils/EnumHelper";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
-import { isGraftingWork } from "../../Work/GraftingWork";
 import { AlertEvents } from "../../ui/React/AlertManager";
 import { Augmentations } from "../../Augmentation/Augmentations";
 
@@ -457,12 +456,7 @@ export function setBitNodeNumber(this: PlayerObject, n: number): void {
   this.bitNodeN = n;
 }
 
-export function queueAugmentation(this: PlayerObject, name: AugmentationName, callFromSingularityAPI = false): void {
-  // Cancel the current work if the player is grafting this augmentation.
-  if (isGraftingWork(this.currentWork) && this.currentWork.augmentation === name) {
-    this.finishWork(true, callFromSingularityAPI);
-  }
-
+export function queueAugmentation(this: PlayerObject, name: AugmentationName): void {
   if (name !== AugmentationName.NeuroFluxGovernor) {
     for (const aug of this.queuedAugmentations) {
       if (name === aug.name) {
