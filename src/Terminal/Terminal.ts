@@ -76,6 +76,7 @@ import { wget } from "./commands/wget";
 import { hash } from "../hash/hash";
 import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
+import { clear } from "./commands/clear";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Engine } from "../engine";
 import { Directory, resolveDirectory, root } from "../Paths/Directory";
@@ -83,6 +84,52 @@ import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
+
+export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
+  "scan-analyze": scananalyze,
+  alias: alias,
+  analyze: analyze,
+  backdoor: backdoor,
+  buy: buy,
+  cat: cat,
+  cd: cd,
+  changelog: changelog,
+  check: check,
+  clear: clear,
+  cls: clear,
+  connect: connect,
+  cp: cp,
+  download: download,
+  expr: expr,
+  free: free,
+  grep: grep,
+  grow: grow,
+  hack: hack,
+  help: help,
+  history: history,
+  home: home,
+  hostname: hostname,
+  kill: kill,
+  killall: killall,
+  ls: ls,
+  lscpu: lscpu,
+  mem: mem,
+  mv: mv,
+  nano: nano,
+  ps: ps,
+  rm: rm,
+  run: run,
+  scan: scan,
+  scp: scp,
+  sudov: sudov,
+  tail: tail,
+  apr1: apr1,
+  top: top,
+  unalias: unalias,
+  vim: vim,
+  weaken: weaken,
+  wget: wget,
+};
 
 export class Terminal {
   // Flags to determine whether the player is currently running a hack or an analyze
@@ -744,53 +791,7 @@ export class Terminal {
     // Aside from the run-by-path command, we don't need the first entry once we've stored it in commandName.
     commandArray.shift();
 
-    const commands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
-      "scan-analyze": scananalyze,
-      alias: alias,
-      analyze: analyze,
-      backdoor: backdoor,
-      buy: buy,
-      cat: cat,
-      cd: cd,
-      changelog: changelog,
-      check: check,
-      clear: () => this.clear(),
-      cls: () => this.clear(),
-      connect: connect,
-      cp: cp,
-      download: download,
-      expr: expr,
-      free: free,
-      grep: grep,
-      grow: grow,
-      hack: hack,
-      help: help,
-      history: history,
-      home: home,
-      hostname: hostname,
-      kill: kill,
-      killall: killall,
-      ls: ls,
-      lscpu: lscpu,
-      mem: mem,
-      mv: mv,
-      nano: nano,
-      ps: ps,
-      rm: rm,
-      run: run,
-      scan: scan,
-      scp: scp,
-      sudov: sudov,
-      tail: tail,
-      apr1: apr1,
-      top: top,
-      unalias: unalias,
-      vim: vim,
-      weaken: weaken,
-      wget: wget,
-    };
-
-    const f = commands[commandName.toLowerCase()];
+    const f = TerminalCommands[commandName.toLowerCase()];
     if (!f) return this.error(`Command ${commandName} not found`);
 
     f(commandArray, currentServer);
