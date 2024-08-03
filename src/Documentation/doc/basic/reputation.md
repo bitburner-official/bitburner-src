@@ -2,7 +2,7 @@
 
 In order to acquire [Augmentations](augmentations.md) from [Factions](factions.md), you need to earn their trust.
 
-This can be done in a variety of ways, but the most common is offering your services to a [Faction](faction.md).
+This can be done in a variety of ways, but the most common is offering your services to a [Faction](factions.md).
 Another option is to give them intel from [Infiltrations](infiltration.md).
 
 When installing [Augmentations](augmentations.md), all your reputation gets converted to favor.
