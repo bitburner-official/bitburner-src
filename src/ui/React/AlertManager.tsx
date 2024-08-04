@@ -3,7 +3,7 @@ import { EventEmitter } from "../../utils/EventEmitter";
 import { Modal } from "./Modal";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { digestSHA256 } from "../../utils/CryptoUtils";
+import { cyrb53 } from "../../utils/StringHelperFunctions";
 
 export const AlertEvents = new EventEmitter<[string | JSX.Element]>();
 
@@ -48,9 +48,9 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
 
   async function getMessageHash(text: string | JSX.Element): Promise<string> {
     if (typeof text === "string") {
-      return digestSHA256(text);
+      return cyrb53(text);
     }
-    return digestSHA256(JSON.stringify(text.props));
+    return cyrb53(JSON.stringify(text.props));
   }
 
   function close(): void {
