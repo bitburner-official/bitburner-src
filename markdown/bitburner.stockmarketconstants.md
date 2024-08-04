@@ -4,7 +4,7 @@
 
 ## StockMarketConstants interface
 
-Constants used for the stockmarket game mechanic.
+Constants used for the stock market game mechanic.
 
 **Signature:**
 

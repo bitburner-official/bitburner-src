@@ -819,16 +819,16 @@ export const ns: InternalAPI<NSFull> = {
     },
   killall:
     (ctx) =>
-    (_hostname = ctx.workerScript.hostname, _safetyguard = true) => {
+    (_hostname = ctx.workerScript.hostname, _safetyGuard = true) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
-      const safetyguard = !!_safetyguard;
+      const safetyGuard = !!_safetyGuard;
       const server = helpers.getServer(ctx, hostname);
 
       let scriptsKilled = 0;
 
       for (const byPid of server.runningScriptMap.values()) {
         for (const pid of byPid.keys()) {
-          if (safetyguard && pid == ctx.workerScript.pid) continue;
+          if (safetyGuard && pid == ctx.workerScript.pid) continue;
           killWorkerScriptByPid(pid);
           ++scriptsKilled;
         }

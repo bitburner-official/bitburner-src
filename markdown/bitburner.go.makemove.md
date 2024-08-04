@@ -4,7 +4,7 @@
 
 ## Go.makeMove() method
 
-Make a move on the IPvGO subnet gameboard, and await the opponent's response. x:0 y:0 represents the bottom-left corner of the board in the UI.
+Make a move on the IPvGO subnet game board, and await the opponent's response. x:0 y:0 represents the bottom-left corner of the board in the UI.
 
 **Signature:**
 

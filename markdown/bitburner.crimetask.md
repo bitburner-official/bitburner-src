@@ -14,7 +14,7 @@ export interface CrimeTask
 
 ## Remarks
 
-An object representing the crime being commited
+An object representing the crime being committed
 
 ## Properties
 

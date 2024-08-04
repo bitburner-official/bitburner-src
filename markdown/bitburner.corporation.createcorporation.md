@@ -17,7 +17,7 @@ createCorporation(corporationName: string, selfFund: boolean): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  corporationName | string | Name of the corporation |
-|  selfFund | boolean | If you should self fund, defaults to true, false will only work on Bitnode 3 |
+|  selfFund | boolean | If you should self fund, defaults to true, false will only work on BitNode 3 |
 
 **Returns:**
 

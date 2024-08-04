@@ -68,9 +68,9 @@ interface SleevePerson extends Person {
 interface ResetInfo {
   /** Numeric timestamp (from Date.now()) of last augmentation reset */
   lastAugReset: number;
-  /** Numeric timestamp (from Date.now()) of last bitnode reset */
+  /** Numeric timestamp (from Date.now()) of last BitNode reset */
   lastNodeReset: number;
-  /** The current bitnode */
+  /** The current BitNode */
   currentNode: number;
   /** A map of owned augmentations to their levels. Keyed by the augmentation name. Map values are the augmentation level (e.g. for NeuroFlux governor). */
   ownedAugs: Map<string, number>;
@@ -424,7 +424,7 @@ interface StockOrder {
   [key: string]: StockOrderObject[];
 }
 
-/** Constants used for the stockmarket game mechanic.
+/** Constants used for the stock market game mechanic.
  * @public */
 interface StockMarketConstants {
   /** Normal time in ms between stock market updates */
@@ -1249,7 +1249,7 @@ export interface TIX {
    * ns.tprint("Stock organization: " + ns.stock.getOrganization(sym));
    * ```
    * @param sym - Stock symbol.
-   * @returns The organization assicated with the stock symbol.
+   * @returns The organization associated with the stock symbol.
    */
   getOrganization(sym: string): string;
 
@@ -1660,7 +1660,7 @@ export interface CreateProgramWorkTask {
 /**
  * Crime
  * @remarks
- * An object representing the crime being commited
+ * An object representing the crime being committed
  * @public
  */
 export interface CrimeTask {
@@ -4037,7 +4037,7 @@ type SimpleOpponentStats = {
  */
 export interface Go {
   /**
-   *  Make a move on the IPvGO subnet gameboard, and await the opponent's response.
+   *  Make a move on the IPvGO subnet game board, and await the opponent's response.
    *  x:0 y:0 represents the bottom-left corner of the board in the UI.
    *
    * @remarks
@@ -4291,7 +4291,7 @@ export interface Go {
   };
 
   /**
-   * Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Bitnode 14.2 to use.
+   * Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 14.2 to use.
    */
   cheat: {
     /**
@@ -4303,7 +4303,7 @@ export interface Go {
      *
      * @remarks
      * RAM cost: 1 GB
-     * Requires Bitnode 14.2 to use
+     * Requires BitNode 14.2 to use
      */
     getCheatSuccessChance(): number;
     /**
@@ -4316,7 +4316,7 @@ export interface Go {
      *
      * @remarks
      * RAM cost: 8 GB
-     * Requires Bitnode 14.2 to use
+     * Requires BitNode 14.2 to use
      *
      * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
      */
@@ -4339,7 +4339,7 @@ export interface Go {
      *
      * @remarks
      * RAM cost: 8 GB
-     * Requires Bitnode 14.2 to use
+     * Requires BitNode 14.2 to use
      *
      * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
      */
@@ -4364,7 +4364,7 @@ export interface Go {
      *
      * @remarks
      * RAM cost: 8 GB
-     * Requires Bitnode 14.2 to use
+     * Requires BitNode 14.2 to use
      *
      * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
      */
@@ -4388,7 +4388,7 @@ export interface Go {
      *
      * @remarks
      * RAM cost: 8 GB
-     * Requires Bitnode 14.2 to use
+     * Requires BitNode 14.2 to use
      *
      * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
      */
@@ -5632,7 +5632,7 @@ export interface NS {
    *
    * @example
    * ```js
-   * // Calculate threadcount of a single hack that would take $100k from n00dles
+   * // Calculate the thread count of a single hack that would take $100k from n00dles
    * const hackThreads = ns.hackAnalyzeThreads("n00dles", 1e5);
    *
    * // Launching a script requires an integer thread count. The below would take less than the targeted $100k.
@@ -6052,7 +6052,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * Moves a tail window. Coordinates are in screenspace pixels (top left is 0,0).
+   * Moves a tail window. Coordinates are in screen space pixels (top left is 0,0).
    *
    * @param x - x coordinate.
    * @param y - y coordinate.
@@ -6404,10 +6404,10 @@ export interface NS {
    * If no host is defined, it will kill all scripts, where the script is running.
    *
    * @param host - IP or hostname of the server on which to kill all scripts.
-   * @param safetyguard - Skips the script that calls this function
+   * @param safetyGuard - Skips the script that calls this function
    * @returns True if any scripts were killed, and false otherwise.
    */
-  killall(host?: string, safetyguard?: boolean): boolean;
+  killall(host?: string, safetyGuard?: boolean): boolean;
 
   /**
    * Terminates the current script immediately.
@@ -6770,7 +6770,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * This acts analagously to the ramOverride parameter in runOptions, but for changing RAM in
+   * This acts analogously to the ramOverride parameter in runOptions, but for changing RAM in
    * the current running script. The static RAM allocation (the amount of RAM used by ONE thread)
    * will be adjusted to the given value, if possible. This can fail if the number is less than the
    * current dynamic RAM limit, or if adjusting upward would require more RAM than is available on
@@ -7466,12 +7466,12 @@ export interface NS {
   getFavorToDonate(): number;
 
   /**
-   * Get the current Bitnode multipliers.
+   * Get the current BitNode multipliers.
    * @remarks
    * RAM cost: 4 GB
    *
    * Returns an object containing the current (or supplied) BitNode multipliers.
-   * This function requires you to be in Bitnode 5 or have Source-File 5 in order to run.
+   * This function requires you to be in BitNode 5 or have Source-File 5 in order to run.
    * The multipliers are returned in decimal forms (e.g. 1.5 instead of 150%).
    * The multipliers represent the difference between the current BitNode and
    * the original BitNode (BitNode-1).
@@ -8243,7 +8243,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
 
   /** Create a Corporation
    * @param corporationName - Name of the corporation
-   * @param selfFund - If you should self fund, defaults to true, false will only work on Bitnode 3
+   * @param selfFund - If you should self fund, defaults to true, false will only work on BitNode 3
    * @returns true if created and false if not */
   createCorporation(corporationName: string, selfFund: boolean): boolean;
 
@@ -8920,7 +8920,7 @@ interface SkillRequirement {
  * Player must have less than this much karma.
  * @public
  */
-interface KarmaRequiremennt {
+interface KarmaRequirement {
   type: "karma";
   karma: number;
 }
@@ -9091,7 +9091,7 @@ interface EveryRequirement {
 export type PlayerRequirement =
   | MoneyRequirement
   | SkillRequirement
-  | KarmaRequiremennt
+  | KarmaRequirement
   | PeopleKilledRequirement
   | FileRequirement
   | NumAugmentationsRequirement

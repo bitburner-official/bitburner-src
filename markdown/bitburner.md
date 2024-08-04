@@ -94,7 +94,7 @@
 |  [InvestmentOffer](./bitburner.investmentoffer.md) | Corporation investment offer |
 |  [IStyleSettings](./bitburner.istylesettings.md) | Interface Styles |
 |  [JobTitleRequirement](./bitburner.jobtitlerequirement.md) | Player must have this job title at some company. |
-|  [KarmaRequiremennt](./bitburner.karmarequiremennt.md) | Player must have less than this much karma. |
+|  [KarmaRequirement](./bitburner.karmarequirement.md) | Player must have less than this much karma. |
 |  [LocationRequirement](./bitburner.locationrequirement.md) | Player must be at this location within a city. |
 |  [Material](./bitburner.material.md) | Material in a warehouse |
 |  [MoneyRequirement](./bitburner.moneyrequirement.md) | Player must have at least this much money. |
@@ -132,7 +132,7 @@
 |  [SourceFileRequirement](./bitburner.sourcefilerequirement.md) | Player must have this Source File. |
 |  [SpawnOptions](./bitburner.spawnoptions.md) |  |
 |  [Stanek](./bitburner.stanek.md) | Stanek's Gift API. |
-|  [StockMarketConstants](./bitburner.stockmarketconstants.md) | Constants used for the stockmarket game mechanic. |
+|  [StockMarketConstants](./bitburner.stockmarketconstants.md) | Constants used for the stock market game mechanic. |
 |  [StockOrder](./bitburner.stockorder.md) | <p>Return value of [getOrders](./bitburner.tix.getorders.md)</p><p>Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md)</p> |
 |  [StockOrderObject](./bitburner.stockorderobject.md) | Value in map of [StockOrder](./bitburner.stockorder.md) |
 |  [StudyTask](./bitburner.studytask.md) | Study |

@@ -4,7 +4,7 @@
 
 ## ResetInfo.lastNodeReset property
 
-Numeric timestamp (from Date.now()) of last bitnode reset
+Numeric timestamp (from Date.now()) of last BitNode reset
 
 **Signature:**
 

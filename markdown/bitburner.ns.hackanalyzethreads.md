@@ -35,7 +35,7 @@ This function returns the decimal number of script threads you need when running
 
 
 ```js
-// Calculate threadcount of a single hack that would take $100k from n00dles
+// Calculate the thread count of a single hack that would take $100k from n00dles
 const hackThreads = ns.hackAnalyzeThreads("n00dles", 1e5);
 
 // Launching a script requires an integer thread count. The below would take less than the targeted $100k.

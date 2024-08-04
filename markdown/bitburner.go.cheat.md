@@ -4,7 +4,7 @@
 
 ## Go.cheat property
 
-Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires Bitnode 14.2 to use.
+Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 14.2 to use.
 
 **Signature:**
 
