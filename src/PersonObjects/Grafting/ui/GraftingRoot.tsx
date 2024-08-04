@@ -156,19 +156,17 @@ export const GraftingRoot = (): React.ReactElement => {
                   Router.toPage(Page.Work);
                 }}
                 confirmationText={
-                  <>
+                  <Typography component="div" paddingBottom="1rem">
                     Cancelling grafting will <b>not</b> save grafting progress, and the money you spend will <b>not</b>{" "}
                     be returned.
-                    <br />
-                    <br />
                     {!Player.hasAugmentation(AugmentationName.CongruityImplant) && (
                       <>
+                        <br />
+                        <br />
                         Additionally, grafting an Augmentation will increase the potency of the Entropy virus.
-                        <br />
-                        <br />
                       </>
                     )}
-                  </>
+                  </Typography>
                 }
               />
               <Box sx={{ maxHeight: 330, overflowY: "scroll" }}>
