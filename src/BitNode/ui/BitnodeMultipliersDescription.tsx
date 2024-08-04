@@ -141,6 +141,10 @@ function CompanyMults({ mults }: IMultsProps): React.ReactElement {
       name: "Work Money",
       color: Settings.theme.money,
     },
+    CompanyWorkRepGain: {
+      name: "Work Reputation",
+      color: Settings.theme.rep,
+    },
     CompanyWorkExpGain: { name: "Work Exp" },
   };
 
@@ -177,11 +181,13 @@ function CrimeMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
     CrimeExpGain: {
       name: "Crime Exp",
-      color: Settings.theme.combat,
     },
     CrimeMoney: {
       name: "Crime Money",
-      color: Settings.theme.combat,
+      color: Settings.theme.money,
+    },
+    CrimeSuccessRate: {
+      name: "Crime Success Rate",
     },
   };
 
@@ -225,9 +231,13 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
       name: "Hacking Exp",
       color: Settings.theme.hack,
     },
+    HackingSpeedMultiplier: {
+      name: "Hacking Speed",
+      color: Settings.theme.hack,
+    },
     ServerGrowthRate: { name: "Server Growth Rate" },
-    ServerMaxMoney: { name: "Server Max Money" },
-    ServerStartingMoney: { name: "Server Starting Money" },
+    ServerMaxMoney: { name: "Server Max Money", color: Settings.theme.money },
+    ServerStartingMoney: { name: "Server Starting Money", color: Settings.theme.money },
     ServerStartingSecurity: { name: "Server Starting Security" },
     ServerWeakenRate: { name: "Server Weaken Rate" },
     ManualHackMoney: {
