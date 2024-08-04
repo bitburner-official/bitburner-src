@@ -1710,6 +1710,8 @@ export type Task = StudyTask | CompanyWorkTask | CreateProgramWorkTask | CrimeTa
  * - All boolean options: false
  *
  * If you specify intelligenceOverride, it must be a non-negative integer.
+ *
+ * @public
  */
 export interface BitNodeOptions extends BitNodeBooleanOptions {
   sourceFileOverrides: Map<number, number>;
@@ -1722,6 +1724,8 @@ export interface BitNodeOptions extends BitNodeBooleanOptions {
  *
  * disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy
  * augmentations for them.
+ *
+ * @public
  */
 export interface BitNodeBooleanOptions {
   restrictHomePCUpgrade: boolean;
