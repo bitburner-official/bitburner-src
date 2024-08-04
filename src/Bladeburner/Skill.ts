@@ -3,7 +3,7 @@ import type { BladeMultName, BladeSkillName } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Bladeburner } from "./Bladeburner";
 import { Availability } from "./Types";
-import { PositiveInteger, PositiveSafeInteger, isPositiveInteger } from "../types";
+import { PositiveInteger, isPositiveInteger } from "../types";
 import { PartialRecord, getRecordEntries } from "../Types/Record";
 
 interface SkillParams {
@@ -30,43 +30,71 @@ export class Skill {
     this.desc = params.desc;
     this.baseCost = params.baseCost ?? 1;
     this.costInc = params.costInc ?? 1;
-    this.maxLvl = params.maxLvl ?? Number.MAX_SAFE_INTEGER;
+    this.maxLvl = params.maxLvl ?? Number.MAX_VALUE;
     for (const [multName, mult] of getRecordEntries(params.mults)) this.mults[multName] = mult;
   }
 
   calculateCost(currentLevel: number, count = 1 as PositiveInteger): number {
-    if (currentLevel + count > this.maxLvl) return Infinity;
-
-    const recursiveMode = (currentLevel: number, count: PositiveSafeInteger): number => {
-      if (count <= 1) {
-        return Math.floor((this.baseCost + currentLevel * this.costInc) * currentNodeMults.BladeburnerSkillCost);
-      } else {
-        const thisUpgrade = Math.floor(
-          (this.baseCost + currentLevel * this.costInc) * currentNodeMults.BladeburnerSkillCost,
-        );
-        return this.calculateCost(currentLevel + 1, (count - 1) as PositiveSafeInteger) + thisUpgrade;
-      }
-    };
-
-    // Use recursive mode if count is small
-    if (count <= 100) return recursiveMode(currentLevel, count as PositiveSafeInteger);
-    // Use optimized mode if count is large
-    else {
-      //unFloored is roughly equivalent to
-      //(this.baseCost + currentLevel * this.costInc) * BitNodeMultipliers.BladeburnerSkillCost
-      //being repeated for increasing currentLevel
-      const preMult = (count * (2 * this.baseCost + this.costInc * (2 * currentLevel + count + 1))) / 2;
-      const unFloored = preMult * currentNodeMults.BladeburnerSkillCost - count / 2;
-      return Math.floor(unFloored);
-    }
+    const actualCount = currentLevel + count - currentLevel;
+    /**
+     * The cost of the next level: (baseCost + currentLevel * costInc) * mult. The cost needs to be an integer, so we
+     * need to use Math.floor or Math.round.
+     *
+     * Note: there is no notation for Math.round, so I use \lceil and \rceil as alternatives for non-existent \lround
+     * and \rround. When you see \lceil and \rceil, it means Math.round, not Math.ceil.
+     *
+     * In order to calculate the cost of "count" levels, we need to run a loop. "count" can be a big number, so it's
+     * infeasible to calculate the cost in that way. We need to find the closed forms of:
+     *
+     * [1]:
+     * $$Cost = \sum_{i = CurrentLevel}^{CurrentLevel+Count-1}\lfloor ((BaseCost + i \ast CostInc) \ast Mult) \rfloor$$
+     *
+     * Or:
+     *
+     * [2]:
+     * $$Cost = \sum_{i = CurrentLevel}^{CurrentLevel+Count-1}\lceil ((BaseCost + i \ast CostInc) \ast Mult) \rceil$$
+     *
+     * It's really hard to find the closed forms of those two equations, so we switch to these equations:
+     *
+     * [3]:
+     * $$Cost = \lfloor\sum_{i = CurrentLevel}^{CurrentLevel+Count-1} ((BaseCost + i \ast CostInc) \ast Mult) \rfloor$$
+     *
+     * Or
+     *
+     * [4]:
+     * $$Cost = \lceil\sum_{i = CurrentLevel}^{CurrentLevel+Count-1} ((BaseCost + i \ast CostInc) \ast Mult) \rceil$$
+     *
+     * This means that we do the flooring/rounding at the end instead of each iterative step.
+     *
+     * [3] and [4] are not equivalent to [1] and [2] respectively, but it's much easier to find the close forms of [3]
+     * and [4] than [1] and [2]. After testing, we conclude that the cost calculated by [4] is a good approximation of
+     * [2], so we choose [4] to calculate the cost. In order to calculate the cost with a big "count", we accept the
+     * slight inaccuracy.
+     *
+     * The closed form of [4]:
+     *
+     * $$Cost = \lceil Count \ast Mult \ast (BaseCost + (CostInc \ast (CurrentLevel + \frac{Count - 1}{2}))) \rceil$$
+     *
+     */
+    return Math.round(
+      actualCount *
+        currentNodeMults.BladeburnerSkillCost *
+        (this.baseCost + this.costInc * (currentLevel + (actualCount - 1) / 2)),
+    );
   }
 
   canUpgrade(bladeburner: Bladeburner, count = 1): Availability<{ cost: number }> {
     const currentLevel = bladeburner.skills[this.name] ?? 0;
-    if (!isPositiveInteger(count)) return { error: `Invalid upgrade count ${count}` };
-    if (currentLevel + count > this.maxLvl) return { error: `Upgraded level ${currentLevel + count} exceeds max` };
+    if (!isPositiveInteger(count)) {
+      return { error: `Invalid upgrade count ${count}` };
+    }
+    if (currentLevel + count > this.maxLvl) {
+      return { error: `Upgraded level ${currentLevel + count} exceeds max` };
+    }
     const cost = this.calculateCost(currentLevel, count);
-    if (cost > bladeburner.skillPoints) return { error: `Insufficient skill points for upgrade` };
+    if (cost > bladeburner.skillPoints) {
+      return { error: `Insufficient skill points for upgrade` };
+    }
     return { available: true, cost };
   }
 

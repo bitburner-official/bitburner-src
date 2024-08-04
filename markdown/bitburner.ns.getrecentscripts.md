@@ -26,10 +26,10 @@ The most recently killed script is the first element in the array. Note that the
 ## Example
 
 
-```ts
+```js
 let recentScripts = ns.getRecentScripts();
-let mostRecent = recentScripts.shift()
+let mostRecent = recentScripts.shift();
 if (mostRecent)
-  ns.tprint(mostRecent.logs.join('\n'))
+  ns.tprint(mostRecent.logs.join('\n'));
 ```
 

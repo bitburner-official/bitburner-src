@@ -47,7 +47,7 @@ interface Player extends Person {
   jobs: Partial<Record<CompanyName, JobName>>;
   factions: string[];
   totalPlaytime: number;
-  location: string;
+  location: LocationName;
   karma: number;
 }
 
@@ -76,6 +76,8 @@ interface ResetInfo {
   ownedAugs: Map<string, number>;
   /** A map of owned SF to their levels. Keyed by the SF number. Map values are the SF level. */
   ownedSF: Map<number, number>;
+  /** Current BitNode options */
+  bitNodeOptions: BitNodeOptions;
 }
 
 /** @public */
@@ -212,6 +214,16 @@ interface ReactElement {
 interface RunningScript {
   /** Arguments the script was called with */
   args: ScriptArg[];
+  /**
+   * The dynamic RAM usage of (one thread of) this script instance.
+   * Does not affect overall RAM consumption (ramUsage is for that), but
+   * rather shows how much of the reserved RAM is currently in use via all the
+   * ns functions the script has called. Initially 1.6GB, this increases as
+   * new functions are called.
+   *
+   * Only set for scripts that are still running.
+   */
+  dynamicRamUsage: number | undefined;
   /** Filename of the script */
   filename: string;
   /**
@@ -233,7 +245,11 @@ interface RunningScript {
   onlineRunningTime: number;
   /** Process ID. Must be an integer */
   pid: number;
-  /** How much RAM this script uses for ONE thread */
+  /**
+   * How much RAM this script uses for ONE thread.
+   * Also known as "static RAM usage," this value does not change once the
+   * script is started, unless you call ns.ramOverride().
+   */
   ramUsage: number;
   /** Hostname of the server on which this script runs */
   server: string;
@@ -270,7 +286,8 @@ interface RunOptions {
    * You can also use this to <i>increase</i> the RAM if the static RAM checker has missed functions
    * that you need to call.
    *
-   * Must be greater-or-equal to the base RAM cost. Defaults to the statically calculated cost.
+   * Must be greater-or-equal to the base RAM cost. Will be rounded to the nearest hundredth-of-a-GB,
+   * which is the granularity of all RAM calculations. Defaults to the statically calculated cost.
    */
   ramOverride?: number;
   /**
@@ -282,7 +299,10 @@ interface RunOptions {
 
 /** @public */
 interface SpawnOptions extends RunOptions {
-  /** Number of milliseconds to delay before spawning script, defaults to 10000 (10s). Must be a positive integer. */
+  /**
+   * Number of milliseconds to delay before spawning script, defaults to 10000 (10s).
+   * Must be a non-negative integer. If 0, the script will be spawned synchronously.
+   */
   spawnDelay?: number;
 }
 
@@ -1449,7 +1469,7 @@ export interface TIX {
    * The object's properties are each an array of {@link StockOrderObject}
    * The object has the following structure:
    *
-   * ```ts
+   * ```js
    * {
    *  string1: [ // Array of orders for this stock
    *      {
@@ -1474,7 +1494,7 @@ export interface TIX {
    * Note that the order book will only contain information for stocks that you actually have orders in.
    *
    * @example
-   * ```ts
+   * ```js
    * "If you do not have orders in Nova Medical (NVMD), then the returned object will not have a “NVMD” property."
    * {
    *  ECP: [
@@ -1611,7 +1631,7 @@ export interface StudyTask {
   type: "CLASS";
   cyclesWorked: number;
   classType: string;
-  location: string;
+  location: LocationName | `${LocationName}`;
 }
 /**
  * Company Work
@@ -1672,6 +1692,7 @@ export interface GraftingTask {
   type: "GRAFTING";
   cyclesWorked: number;
   augmentation: string;
+  completion: Promise<void>;
 }
 
 /**
@@ -1681,6 +1702,36 @@ export interface GraftingTask {
  * @public
  */
 export type Task = StudyTask | CompanyWorkTask | CreateProgramWorkTask | CrimeTask | FactionWorkTask | GraftingTask;
+
+/**
+ * Default value:
+ * - sourceFileOverrides: an empty Map
+ * - intelligenceOverride: undefined
+ * - All boolean options: false
+ *
+ * If you specify intelligenceOverride, it must be a non-negative integer.
+ */
+export interface BitNodeOptions extends BitNodeBooleanOptions {
+  sourceFileOverrides: Map<number, number>;
+  intelligenceOverride: number | undefined;
+}
+
+/**
+ * restrictHomePCUpgrade: The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max
+ * core: 1.
+ *
+ * disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy
+ * augmentations for them.
+ */
+export interface BitNodeBooleanOptions {
+  restrictHomePCUpgrade: boolean;
+  disableGang: boolean;
+  disableCorporation: boolean;
+  disableBladeburner: boolean;
+  disable4SData: boolean;
+  disableHacknetServer: boolean;
+  disableSleeveExpAndAugmentation: boolean;
+}
 
 /**
  * Singularity API
@@ -1797,9 +1848,9 @@ export interface Singularity {
    *
    * @example
    * ```js
-   * const programName = "BruteSSH.exe"
-   * const success = ns.purchaseProgram(programName);
-   * if (!success) ns.tprint("ERROR: Failed to purchase ${programName}")
+   * const programName = "BruteSSH.exe";
+   * const success = ns.singularity.purchaseProgram(programName);
+   * if (!success) ns.tprint(`ERROR: Failed to purchase ${programName}`);
    * ```
    * @param programName - Name of program to purchase.
    * @returns True if the specified program is purchased, and false otherwise.
@@ -2053,7 +2104,8 @@ export interface Singularity {
    *
    * @example
    * ```js
-   * ns.singularity.getFactionInviteRequirements("The Syndicate")
+   * ns.singularity.getFactionInviteRequirements("The Syndicate");
+   *
    * [
    *   { "type": "someCondition", "conditions": [
    *       { "type": "city", "city": "Aevum" },
@@ -2070,7 +2122,10 @@ export interface Singularity {
    *   },
    *   { "type": "money", "money": 10000000 },
    *   { "type": "skills", "skills": { "hacking": 200 } },
-   *   { "type": "skills", "skills": { "strength": 200, "defense": 200, "dexterity": 200, "agility": 200 } },
+   *   { "type": "skills", "skills": { "strength": 200 } },
+   *   { "type": "skills", "skills": { "defense": 200 } },
+   *   { "type": "skills", "skills": { "dexterity": 200 } },
+   *   { "type": "skills", "skills": { "agility": 200 } },
    *   { "type": "karma", "karma": -90 }
    * ]
    * ```
@@ -2136,7 +2191,7 @@ export interface Singularity {
    * const workType = "hacking";
    *
    * let success = ns.singularity.workForFaction(factionName, workType);
-   * if (!success) ns.tprint(`ERROR: Failed to start work for ${factionName} with work type ${workType}.`)
+   * if (!success) ns.tprint(`ERROR: Failed to start work for ${factionName} with work type ${workType}.`);
    * ```
    * @param faction - Name of faction to work for.
    * @param workType - Type of work to perform for the faction.
@@ -2144,6 +2199,18 @@ export interface Singularity {
    * @returns True if the player starts working, and false otherwise.
    */
   workForFaction(faction: string, workType: FactionWorkType | `${FactionWorkType}`, focus?: boolean): boolean;
+
+  /**
+   * Get the work types of a faction.
+   * @remarks
+   * RAM cost: 1 GB * 16/4/1
+   *
+   * This function returns an array containing the work types of the specified faction.
+   *
+   * @param faction - Name of the faction.
+   * @returns The work types of the faction.
+   */
+  getFactionWorkTypes(faction: string): FactionWorkType[];
 
   /**
    * Get faction reputation.
@@ -2229,8 +2296,8 @@ export interface Singularity {
    * @example
    * ```js
    * const programName = "BruteSSH.exe";
-   * const success = ns.createProgram(programName);
-   * if (!success) ns.tprint("ERROR: Failed to start working on ${programName}")
+   * const success = ns.singularity.createProgram(programName);
+   * if (!success) ns.tprint(`ERROR: Failed to start working on ${programName}`);
    * ```
    * @param program - Name of program to create.
    * @param focus - Acquire player focus on this program creation. Optional. Defaults to true.
@@ -2460,7 +2527,7 @@ export interface Singularity {
    * @param locationName - Name of the location.
    * @returns True if the player was moved there, false otherwise.
    */
-  goToLocation(locationName: string): boolean;
+  goToLocation(locationName: LocationName | `${LocationName}`): boolean;
 
   /**
    * Get the current server.
@@ -2536,8 +2603,8 @@ export interface Singularity {
    *
    * @example
    * ```js
-   * const programs = ns.getDarkwebPrograms();
-   * ns.tprint(`Available programs are: ${programs.split(", ")}`);
+   * const programs = ns.singularity.getDarkwebPrograms();
+   * ns.tprint(`Available programs are: ${programs}`);
    * ```
    * @returns - a list of programs available for purchase on the dark web, or [] if Tor has not
    * been purchased
@@ -2563,8 +2630,8 @@ export interface Singularity {
    * @example
    * ```js
    * const programName = "BruteSSH.exe";
-   * const cost = ns.getDarkwebProgramCost(programName);
-   * if (cost > 0) ns.tprint(`${programName} costs ${ns.formatMoney(cost)}`);
+   * const cost = ns.singularity.getDarkwebProgramCost(programName);
+   * if (cost > 0) ns.tprint(`${programName} costs $${ns.formatNumber(cost)}`);
    * ```
    * @param programName - Name of program to check the price of
    * @returns Price of the specified darkweb program
@@ -2580,8 +2647,9 @@ export interface Singularity {
    *
    * @param nextBN - BN number to jump to
    * @param callbackScript - Name of the script to launch in the next BN.
+   * @param bitNodeOptions - BitNode options for the next BN.
    */
-  b1tflum3(nextBN: number, callbackScript?: string): void;
+  b1tflum3(nextBN: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
 
   /**
    * Destroy the w0r1d_d43m0n and move on to the next BN.
@@ -2594,8 +2662,9 @@ export interface Singularity {
    *
    * @param nextBN - BN number to jump to
    * @param callbackScript - Name of the script to launch in the next BN.
+   * @param bitNodeOptions - BitNode options for the next BN.
    */
-  destroyW0r1dD43m0n(nextBN: number, callbackScript?: string): void;
+  destroyW0r1dD43m0n(nextBN: number, callbackScript?: string, bitNodeOptions?: BitNodeOptions): void;
 
   /**
    * Get the current work the player is doing.
@@ -3110,9 +3179,10 @@ export interface Bladeburner {
    *
    * @param type - Type of action.
    * @param name - Name of action. Must be an exact match.
+   * @param sleeveNumber - Optional. Index of the sleeve to retrieve information.
    * @returns Estimated success chance for the specified action.
    */
-  getActionEstimatedSuccessChance(type: string, name: string): [number, number];
+  getActionEstimatedSuccessChance(type: string, name: string, sleeveNumber?: number): [number, number];
 
   /**
    * Get the reputation gain of an action.
@@ -3128,7 +3198,7 @@ export interface Bladeburner {
    * @param level - Optional number. Action level at which to calculate the gain. Will be the action's current level if not given.
    * @returns Average Bladeburner reputation gain for successfully completing the specified action.
    */
-  getActionRepGain(type: string, name: string, level: number): number;
+  getActionRepGain(type: string, name: string, level?: number): number;
 
   /**
    * Get action count remaining.
@@ -3289,7 +3359,7 @@ export interface Bladeburner {
    *
    * This function returns the number of skill points needed to upgrade the specified skill the specified number of times.
    *
-   * The function returns -1 if an invalid skill name is passed in, and Infinity if the count overflows the maximum level.
+   * The function returns Infinity if the sum of the current level and count exceeds the maximum level.
    *
    * @param skillName - Name of skill. Case-sensitive and must be an exact match.
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
@@ -3317,7 +3387,9 @@ export interface Bladeburner {
    * @remarks
    * RAM cost: 4 GB
    *
-   * Returns the number of Bladeburner team members you have assigned to the specified action.
+   * Returns the number of available Bladeburner team members.
+   * You can also pass the type and name of an action to get the number of
+   * Bladeburner team members you have assigned to the specified action.
    *
    * Setting a team is only applicable for Operations and BlackOps. This function will return 0 for other action types.
    *
@@ -3325,7 +3397,7 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns Number of Bladeburner team members that were assigned to the specified action.
    */
-  getTeamSize(type: string, name: string): number;
+  getTeamSize(type?: string, name?: string): number;
 
   /**
    * Set team size.
@@ -3514,10 +3586,12 @@ export interface CodingContract {
    *
    * @example
    * ```js
-   * const reward = codingcontract.attempt(yourSolution, filename, hostname);
+   * const reward = ns.codingcontract.attempt(yourSolution, filename, hostname);
    * if (reward) {
-   *   ns.tprint(`Contract solved successfully! Reward: ${reward}`)
-   * } else ns.tprint("Failed to solve contract.")
+   *   ns.tprint(`Contract solved successfully! Reward: ${reward}`);
+   * } else {
+   *   ns.tprint("Failed to solve contract.");
+   * }
    * ```
    *
    * @param answer - Attempted solution for the contract.
@@ -3969,7 +4043,7 @@ export interface Go {
    * @remarks
    * RAM cost: 4 GB
    *
-   * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+   * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    */
   makeMove(
     x: number,
@@ -3987,7 +4061,7 @@ export interface Go {
    * This can also be used if you pick up the game in a state where the opponent needs to play next. For example: if BitBurner was
    * closed while waiting for the opponent to make a move, you may need to call passTurn() to get them to play their move on game start.
    *
-   * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+   * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    *
    * @remarks
    * RAM cost: 0 GB
@@ -4044,6 +4118,21 @@ export interface Go {
   getBoardState(): string[];
 
   /**
+   * Returns all the prior moves in the current game, as an array of simple board states.
+   *
+   * For example, a single 5x5 prior move board might look like this:
+   *
+   [<br/>  
+      "XX.O.",<br/>  
+      "X..OO",<br/>  
+      ".XO..",<br/>  
+      "XXO.#",<br/>  
+      ".XO.#",<br/>  
+   ]
+   */
+  getMoveHistory(): string[][];
+
+  /**
    * Returns the color of the current player, or 'None' if the game is over.
    * @returns "White" | "Black" | "None"
    */
@@ -4059,6 +4148,8 @@ export interface Go {
     whiteScore: number;
     blackScore: number;
     previousMove: [number, number] | null;
+    komi: number;
+    bonusCycles: number;
   };
 
   /**
@@ -4073,7 +4164,7 @@ export interface Go {
    *
    * Note that some factions will have a few routers on the subnet at this state.
    *
-   * opponent is "Netburners" or "Slum Snakes" or "The Black Hand" or "Tetrads" or "Daedalus" or "Illuminati" or "????????????",
+   * opponent is "Netburners" or "Slum Snakes" or "The Black Hand" or "Tetrads" or "Daedalus" or "Illuminati" or "????????????" or "No AI",
    *
    * @returns a simplified version of the board state as an array of strings representing the board columns. See ns.Go.getBoardState() for full details
    *
@@ -4205,7 +4296,7 @@ export interface Go {
   cheat: {
     /**
      * Returns your chance of successfully playing one of the special moves in the ns.go.cheat API.
-     * Scales with your crime success rate stat. Caps at 80%.
+     * Scales with your crime success rate stat.
      *
      * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
      * small (~10%) chance you will instantly be ejected from the subnet.
@@ -4227,7 +4318,7 @@ export interface Go {
      * RAM cost: 8 GB
      * Requires Bitnode 14.2 to use
      *
-     * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+     * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
      */
     removeRouter(
       x: number,
@@ -4250,7 +4341,7 @@ export interface Go {
      * RAM cost: 8 GB
      * Requires Bitnode 14.2 to use
      *
-     * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+     * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
      */
     playTwoMoves(
       x1: number,
@@ -4275,7 +4366,7 @@ export interface Go {
      * RAM cost: 8 GB
      * Requires Bitnode 14.2 to use
      *
-     * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+     * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
      */
     repairOfflineNode(
       x: number,
@@ -4299,7 +4390,7 @@ export interface Go {
      * RAM cost: 8 GB
      * Requires Bitnode 14.2 to use
      *
-     * @returns a promise that contains if your move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+     * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
      */
     destroyNode(
       x: number,
@@ -4398,13 +4489,13 @@ export interface Sleeve {
    * Return a boolean indicating whether or not this action was set successfully (false if an invalid action is specified).
    *
    * @example
-   * ```ts
+   * ```js
    * // Assigns the first sleeve to Homicide.
    * ns.sleeve.setToCommitCrime(0, "Homicide");
    *
    * // Assigns the second sleeve to Grand Theft Auto, using enum
    * const crimes = ns.enums.CrimeType;
-   * ns.sleeve.setToCommitCrime(1, crimes.grandTheftAuto)
+   * ns.sleeve.setToCommitCrime(1, crimes.grandTheftAuto);
    * ```
    *
    * @param sleeveNumber - Index of the sleeve to start committing crime. Sleeves are numbered starting from 0.
@@ -4473,7 +4564,7 @@ export interface Sleeve {
   setToGymWorkout(sleeveNumber: number, gymName: string, stat: string): boolean;
 
   /**
-   * Make a sleeve travel to another city.
+   * Make a sleeve travel to another city. The cost for using this function is the same as for a player.
    * @remarks
    * RAM cost: 4 GB
    *
@@ -4578,18 +4669,22 @@ export interface Grafting {
   getAugmentationGraftPrice(augName: string): number;
 
   /**
-   * Retrieves the time required to graft an aug.
+   * Retrieves the time required to graft an aug. Do not use this value to determine when the ongoing grafting finishes.
+   * The ongoing grafting is affected by current intelligence level and focus bonus. You should use
+   * {@link Grafting.waitForOngoingGrafting | waitForOngoingGrafting} for that purpose.
+   *
    * @remarks
    * RAM cost: 3.75 GB
    *
    * @param augName - Name of the aug to check the grafting time of. Must be an exact match.
-   * @returns The time required, in millis, to graft the named augmentation.
+   * @returns The time required, in milliseconds, to graft the named augmentation.
    * @throws Will error if an invalid Augmentation name is provided.
    */
   getAugmentationGraftTime(augName: string): number;
 
   /**
    * Retrieves a list of Augmentations that can be grafted.
+   *
    * @remarks
    * RAM cost: 5 GB
    *
@@ -4601,7 +4696,9 @@ export interface Grafting {
   getGraftableAugmentations(): string[];
 
   /**
-   * Begins grafting the named aug. You must be in New Tokyo to use this.
+   * Begins grafting the named aug. You must be in New Tokyo to use this. When you call this API, the current work
+   * (grafting or other actions) will be canceled.
+   *
    * @remarks
    * RAM cost: 7.5 GB
    *
@@ -4612,6 +4709,17 @@ export interface Grafting {
    * @throws Will error if called while you are not in New Tokyo.
    */
   graftAugmentation(augName: string, focus?: boolean): boolean;
+
+  /**
+   * Wait until the ongoing grafting finishes or is canceled.
+   *
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @returns A promise that resolves when the current grafting finishes or is canceled. If there is no current work,
+   * the promise resolves immediately. If the current work is not a grafting work, the promise rejects immediately.
+   */
+  waitForOngoingGrafting(): Promise<void>;
 }
 
 /**
@@ -4657,12 +4765,12 @@ interface WorkFormulas {
   /** @returns The WorkStats gained when completing one instance of the specified crime. */
   crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by taking the specified gym class. */
-  gymGains(person: Person, gymType: GymType | `${GymType}`, locationName: string): WorkStats;
+  gymGains(person: Person, gymType: GymType | `${GymType}`, locationName: LocationName | `${LocationName}`): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by taking the specified university class. */
   universityGains(
     person: Person,
     classType: UniversityClassType | `${UniversityClassType}`,
-    locationName: string,
+    locationName: LocationName | `${LocationName}`,
   ): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified faction work. */
   factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
@@ -5179,7 +5287,7 @@ interface Infiltration {
    *
    * @returns Infiltration data for given location.
    */
-  getInfiltration(location: string): InfiltrationLocation;
+  getInfiltration(location: LocationName | `${LocationName}`): InfiltrationLocation;
 }
 
 /**
@@ -5211,7 +5319,7 @@ interface UserInterface {
    * RAM cost: 0 GB
    * @example
    * Usage example (NS2)
-   * ```ts
+   * ```js
    * const theme = ns.ui.getTheme();
    * theme.primary = '#ff5500';
    * ns.ui.setTheme(theme);
@@ -5241,7 +5349,7 @@ interface UserInterface {
    * RAM cost: 0 GB
    * @example
    * Usage example (NS2)
-   * ```ts
+   * ```js
    * const styles = ns.ui.getStyles();
    * styles.fontFamily = 'Comic Sans Ms';
    * ns.ui.setStyles(styles);
@@ -5466,7 +5574,7 @@ export interface NS {
    * @example
    * ```js
    * let currentMoney = ns.getServerMoneyAvailable("n00dles");
-   * currentMoney *= await ns.grow("foodnstuff");
+   * currentMoney *= await ns.grow("n00dles");
    * ```
    * @param host - Hostname of the target server to grow.
    * @param opts - Optional parameters for configuring function behavior.
@@ -5523,12 +5631,12 @@ export interface NS {
    *
    *
    * @example
-   * ```ts
+   * ```js
    * // Calculate threadcount of a single hack that would take $100k from n00dles
-   * const hackThreads = hackAnalyzeThreads("n00dles", 1e5);
+   * const hackThreads = ns.hackAnalyzeThreads("n00dles", 1e5);
    *
    * // Launching a script requires an integer thread count. The below would take less than the targeted $100k.
-   * ns.run("noodleHack.js", Math.floor(hackThreads))
+   * ns.run("noodleHack.js", Math.floor(hackThreads));
    *
    * ```
    * @param host - Hostname of the target server to analyze.
@@ -5652,7 +5760,7 @@ export interface NS {
    * @example
    * ```js
    * // This will count from 1 to 10 in your terminal, with one number every 5 seconds
-   * for (var i = 1; i <= 10; i++) {
+   * for (let i = 1; i <= 10; ++i) {
    *   ns.tprint(i);
    *   await ns.sleep(5000);
    * }
@@ -5750,7 +5858,7 @@ export interface NS {
    * ns.printf("My age in binary is %b.", age);
    * ns.printf("My age in scientific notation is %e.", age);
    * ns.printf("In %d seconds, I'll be %s.", 6, "Byte");
-   * ns.printf("Am I a nibble? %t", (4 == age));
+   * ns.printf("Am I a nibble? %t", (4 === age));
    * ns.tail();
    * ```
    *
@@ -5803,7 +5911,8 @@ export interface NS {
   clearLog(): void;
 
   /**
-   * Disables logging for the given function.
+   * Disables logging for the given NS function.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -5811,29 +5920,49 @@ export interface NS {
    *
    * For specific interfaces, use the form "namespace.functionName". (e.g. "ui.setTheme")
    *
-   * @param fn - Name of function for which to disable logging.
+   * @example
+   * ```js
+   * ns.disableLog("hack"); // Disable logging for `ns.hack()`
+   *
+   * ```
+   *
+   * @param fn - Name of the NS function for which to disable logging.
    */
   disableLog(fn: string): void;
 
   /**
-   * Enable logging for a certain function.
+   * Enables logging for the given NS function.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
-   * Re-enables logging for the given function. If `ALL` is passed into this
-   * function as an argument, then it will revert the effects of disableLog(`ALL`).
+   * Re-enables logging for the given function. If `ALL` is passed into this function as an argument, it will revert the
+   * effect of disableLog("ALL").
    *
-   * @param fn - Name of function for which to enable logging.
+   * @example
+   * ```js
+   * ns.enableLog("hack"); // Enable logging for `ns.hack()`
+   *
+   * ```
+   *
+   * @param fn - Name of the NS function for which to enable logging.
    */
   enableLog(fn: string): void;
 
   /**
-   * Checks the status of the logging for the given function.
+   * Checks the status of the logging for the given NS function.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
+   * @example
+   * ```js
+   * ns.print(ns.isLogEnabled("hack")); // Check if logging is enabled for `ns.hack()`
+   *
+   * ```
+   *
    * @param fn - Name of function to check.
-   * @returns Returns a boolean indicating whether or not logging is enabled for that function (or `ALL`).
+   * @returns Returns a boolean indicating whether or not logging is enabled for that NS function (or `ALL`).
    */
   isLogEnabled(fn: string): boolean;
 
@@ -5878,11 +6007,11 @@ export interface NS {
    * This is configurable in the game's options as `Recently killed scripts size`.
    *
    * @example
-   * ```ts
+   * ```js
    * let recentScripts = ns.getRecentScripts();
-   * let mostRecent = recentScripts.shift()
+   * let mostRecent = recentScripts.shift();
    * if (mostRecent)
-   *   ns.tprint(mostRecent.logs.join('\n'))
+   *   ns.tprint(mostRecent.logs.join('\n'));
    * ```
    *
    * @returns Array with information about previously killed scripts.
@@ -6143,7 +6272,7 @@ export interface NS {
    * ns.run("foo.js", {threads: 5});
    *
    * //This next example will run ‘foo.js’ single-threaded, and will pass the string ‘foodnstuff’ into the script as an argument:
-   * ns.run("foo.js", 1, 'foodnstuff');
+   * ns.run("foo.js", 1, "foodnstuff");
    * ```
    * @param script - Filename of script to run.
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
@@ -6202,6 +6331,9 @@ export interface NS {
    * constrained by the RAM usage of the current one. This function can only be used to run scripts
    * on the local server.
    *
+   * The delay specified can be 0; in this case the new script will synchronously replace
+   * the old one. (There will not be any opportunity for other scripts to use up the RAM in-between.)
+   *
    * Because this function immediately terminates the script, it does not have a return value.
    *
    * Running this function with 0 or fewer threads will cause a runtime error.
@@ -6209,7 +6341,7 @@ export interface NS {
    * @example
    * ```js
    * //The following example will execute the script ‘foo.js’ with 10 threads, in 500 milliseconds and the arguments ‘foodnstuff’ and 90:
-   * ns.spawn('foo.js', {threads: 10, spawnDelay: 500}, 'foodnstuff', 90);
+   * ns.spawn("foo.js", {threads: 10, spawnDelay: 500}, "foodnstuff", 90);
    * ```
    * @param script - Filename of script to execute.
    * @param threadOrOptions - Either an integer number of threads for new script, or a {@link SpawnOptions} object. Threads defaults to 1 and spawnDelay defaults to 10,000 ms.
@@ -6338,7 +6470,7 @@ export interface NS {
    * @example
    * ```js
    * const ps = ns.ps("home");
-   * for (let script of ps) {
+   * for (const script of ps) {
    *   ns.tprint(`${script.filename} ${script.threads}`);
    *   ns.tprint(script.args);
    * }
@@ -6396,8 +6528,8 @@ export interface NS {
    * @example
    * ```js
    * const mults = ns.getHackingMultipliers();
-   * print(`chance: ${mults.chance}`);
-   * print(`growth: ${mults.growth}`);
+   * ns.tprint(`chance: ${mults.chance}`);
+   * ns.tprint(`growth: ${mults.growth}`);
    * ```
    * @returns Object containing the Player’s hacking related multipliers.
    */
@@ -6634,6 +6766,25 @@ export interface NS {
   getRunningScript(filename?: FilenameOrPID, hostname?: string, ...args: ScriptArg[]): RunningScript | null;
 
   /**
+   * Change the current static RAM allocation of the script.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This acts analagously to the ramOverride parameter in runOptions, but for changing RAM in
+   * the current running script. The static RAM allocation (the amount of RAM used by ONE thread)
+   * will be adjusted to the given value, if possible. This can fail if the number is less than the
+   * current dynamic RAM limit, or if adjusting upward would require more RAM than is available on
+   * the server.
+   *
+   * RAM usage will be rounded to the nearest hundredth of a GB, which is the granularity of all RAM calculations.
+   *
+   * @param ram - The new RAM limit to set.
+   * @returns The new static RAM limit, which will be the old one if it wasn't changed.
+   * This means you can use no parameters to check the current ram limit.
+   */
+  ramOverride(ram?: number): number;
+
+  /**
    * Get cost of purchasing a server.
    * @remarks
    * RAM cost: 0.25 GB
@@ -6644,7 +6795,7 @@ export interface NS {
    * ```js
    * const ram = 2 ** 20;
    * const cost = ns.getPurchasedServerCost(ram);
-   * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs ${ns.formatMoney(cost)}`);
+   * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs $${ns.formatNumber(cost)}`);
    * ```
    * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
    * @returns The cost to purchase a server with the specified amount of ram.
@@ -6680,7 +6831,7 @@ export interface NS {
    * // Attempt to purchase 5 servers with 64GB of ram each
    * const ram = 64;
    * const prefix = "pserv-";
-   * for (i = 0; i < 5; ++i) {
+   * for (let i = 0; i < 5; ++i) {
    *    ns.purchaseServer(prefix + i, ram);
    * }
    * ```
@@ -6768,7 +6919,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * This function can be used to write data to a text file (.txt) or a script (.js or .script).
+   * This function can be used to write data to a text file (.txt, .json) or a script (.js, .jsx, .ts, .tsx, .script).
    *
    * This function will write data to that file. If the specified file does not exist,
    * then it will be created. The third argument mode defines how the data will be written to
@@ -6814,7 +6965,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * This function is used to read data from a text file (.txt) or script (.js or .script).
+   * This function is used to read data from a text file (.txt, .json) or script (.js, .jsx, .ts, .tsx, .script).
    *
    * This function will return the data in the specified file.
    * If the file does not exist, an empty string will be returned.
@@ -6866,11 +7017,18 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Write data to the given Netscript port.
+   *
+   * There is a limit on the maximum number of ports, but you won't reach that limit in normal situations. If you do, it
+   * usually means that there is a bug in your script that leaks port data. A port is freed when it does not have any
+   * data in its underlying queue. `ns.clearPort` deletes all data on a port. `ns.readPort` reads the first element in
+   * the port's queue, then removes it from the queue.
+   *
    * @param portNumber - Port to write to. Must be a positive integer.
    * @param data - Data to write, it's cloned with structuredClone().
    * @returns The data popped off the queue if it was full, or null if it was not full.
    */
   writePort(portNumber: number, data: any): any;
+
   /**
    * Read data from a port.
    * @remarks
@@ -7272,7 +7430,7 @@ export interface NS {
    * RAM cost: 0 GB
    *
    * Retrieves data from a URL and downloads it to a file on the specified server.
-   * The data can only be downloaded to a script (.js or .script) or a text file (.txt).
+   * The data can only be downloaded to a script (.js, .jsx, .ts, .tsx, .script) or a text file (.txt, .json).
    * If the file already exists, it will be overwritten by this command.
    * Note that it will not be possible to download data from many websites because they
    * do not allow cross-origin resource sharing (CORS).
@@ -7392,7 +7550,7 @@ export interface NS {
    * const resetInfo = ns.getResetInfo();
    * const lastAugReset = resetInfo.lastAugReset;
    * ns.tprint(`The last augmentation reset was: ${new Date(lastAugReset)}`);
-   * ns.tprint(`It has been ${Date.now() - lastAugReset}ms since the last augmentation reset.`);
+   * ns.tprint(`It has been ${Date.now() - lastAugReset} ms since the last augmentation reset.`);
    * ```
    * */
   getResetInfo(): ResetInfo;
@@ -7433,19 +7591,19 @@ export interface NS {
    *   ns.tprint(data);
    * }
    *
-   * // [home ~/]> run example.js
+   * // [home /]> run example.js
    * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":false,"v":false}
-   * // [home ~/]> run example.js --delay 3000
+   * // [home /]> run example.js --delay 3000
    * // {"_":[],"delay":3000,"server":"foodnstuff","exclude":[],"help":false,"v":false}
-   * // [home ~/]> run example.js --delay 3000 --server harakiri-sushi
+   * // [home /]> run example.js --delay 3000 --server harakiri-sushi
    * // {"_":[],"delay":3000,"server":"harakiri-sushi","exclude":[],"help":false,"v":false}
-   * // [home ~/]> run example.js --delay 3000 --server harakiri-sushi hello world
+   * // [home /]> run example.js --delay 3000 --server harakiri-sushi hello world
    * // {"_":["hello","world"],"delay":3000,"server":"harakiri-sushi","exclude":[],"help":false,"v":false}
-   * // [home ~/]> run example.js --delay 3000 --server harakiri-sushi hello world --exclude a --exclude b
+   * // [home /]> run example.js --delay 3000 --server harakiri-sushi hello world --exclude a --exclude b
    * // {"_":["hello","world"],"delay":3000,"server":"harakiri-sushi","exclude":["a","b"],"help":false,"v":false}
-   * // [home ~/]> run example.js --help
+   * // [home /]> run example.js --help
    * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":true,"v":false}
-   * // [home ~/]> run example.js -v
+   * // [home /]> run example.js -v
    * // {"_":[],"delay":0,"server":"foodnstuff","exclude":[],"help":false,"v":true}
    * ```
    */
@@ -8211,7 +8369,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * ```js
    * while (true) {
    *   const prevState = await ns.corporation.nextUpdate();
-   *   const nextState = ns.corporation.getCorporation().state;
+   *   const nextState = ns.corporation.getCorporation().nextState;
    *   ns.print(`Corporation finished with ${prevState}, next will be ${nextState}.`);
    *   // Manage the Corporation
    * }
@@ -8738,6 +8896,7 @@ interface AutocompleteData {
   servers: string[];
   scripts: string[];
   txts: string[];
+  enums: NSEnums;
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
 }
 

@@ -63,12 +63,13 @@ $$MarketFactor = Max\left(0.1,{Demand\ast(100 - Competition)}\ast{0.01}\right)$$
 - Division's research bonus: this is always 1. Currently there is not any research that increases the sales bonus.
 - `MarkupMultiplier`: initialize with 1.
   - `SellingPrice` is the selling price that you set.
-  - With materials, if we set `SellingPrice` to 0, `MarkupMultiplier` is $10^{12}$ (check the formula below). Extremely high `MarkupMultiplier` means that we can sell all units, regardless of other factors. This is the fastest way to discard materials.
-  - If `(SellingPrice > MarketPrice + MarkupLimit)`:
-    $$MarkupMultiplier = \left(\frac{MarkupLimit}{SellingPrice - MarketPrice}\right)^{2}$$
-  - If item is material and `SellingPrice` is less than `MarketPrice`:
+  - If we set `SellingPrice` to 0 or a negative number, `MarkupMultiplier` is $10^{12}$ (check the formula below). With an extremely high `MarkupMultiplier`, we can sell all units, regardless of other factors. This is the fastest way to discard stored units.
+  - If `(SellingPrice > MarketPrice)`:
+    - If `(SellingPrice > MarketPrice + MarkupLimit)`:
+      $$MarkupMultiplier = \left(\frac{MarkupLimit}{SellingPrice - MarketPrice}\right)^{2}$$
+  - If `(SellingPrice <= MarketPrice)`:
 
-$$MarkupMultiplier = \begin{cases}\frac{MarketPrice}{SellingPrice}, & SellingPrice > 0 \land SellingPrice < MarketPrice \newline 10^{12}, & SellingPrice \leq 0 \end{cases}$$
+$$MarkupMultiplier = \begin{cases}\frac{MarketPrice}{SellingPrice}, & SellingPrice > 0 \newline 10^{12}, & SellingPrice \leq 0 \end{cases}$$
 
 ## Optimal selling price
 

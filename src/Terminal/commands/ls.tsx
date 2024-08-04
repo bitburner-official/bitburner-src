@@ -7,8 +7,7 @@ import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 import type { ContentFilePath } from "../../Paths/ContentFile";
 import type { ScriptFilePath } from "../../Paths/ScriptFilePath";
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+import { makeStyles } from "tss-react/mui";
 import { BaseServer } from "../../Server/BaseServer";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
@@ -25,6 +24,7 @@ import {
   root,
 } from "../../Paths/Directory";
 import { isMember } from "../../utils/EnumHelper";
+import { Settings } from "../../Settings/Settings";
 
 export function ls(args: (string | number | boolean)[], server: BaseServer): void {
   interface LSFlags {
@@ -109,7 +109,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
   folders.sort();
 
   function SegmentGrid(props: { colSize: string; children: React.ReactChild[] }): React.ReactElement {
-    const classes = makeStyles({
+    const { classes } = makeStyles()({
       segmentGrid: {
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, var(--colSize))",
@@ -123,15 +123,13 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     );
   }
   function ClickableContentFileLink(props: { path: ScriptFilePath | TextFilePath }): React.ReactElement {
-    const classes = makeStyles((theme: Theme) =>
-      createStyles({
-        link: {
-          cursor: "pointer",
-          textDecorationLine: "underline",
-          color: theme.palette.warning.main,
-        },
-      }),
-    )();
+    const { classes } = makeStyles()((theme: Theme) => ({
+      link: {
+        cursor: "pointer",
+        textDecorationLine: "underline",
+        color: theme.palette.warning.main,
+      },
+    }))();
     const fullPath = combinePath(baseDirectory, props.path);
     function onClick() {
       let content;
@@ -141,7 +139,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
         content = server.scripts.get(fullPath)?.content ?? "";
       }
       const files = new Map<ContentFilePath, string>();
-      const options = { hostname: server.hostname };
+      const options = { hostname: server.hostname, vim: Settings.MonacoDefaultToVim };
       files.set(fullPath, content);
       Router.toPage(Page.ScriptEditor, { files, options });
     }
@@ -155,7 +153,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
   }
 
   function ClickableMessageLink(props: { path: FilePath }): React.ReactElement {
-    const classes = makeStyles({
+    const { classes } = makeStyles()({
       link: {
         cursor: "pointer",
         textDecorationLine: "underline",

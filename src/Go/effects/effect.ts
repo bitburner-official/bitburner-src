@@ -15,7 +15,7 @@ import { getRecordEntries, getRecordValues } from "../../Types/Record";
  */
 export function CalculateEffect(nodes: number, faction: GoOpponent): number {
   const power = getEffectPowerForFaction(faction);
-  const sourceFileBonus = Player.sourceFileLvl(14) ? 2 : 1;
+  const sourceFileBonus = Player.activeSourceFileLvl(14) ? 2 : 1;
   return (
     1 + Math.log(nodes + 1) * Math.pow(nodes + 1, 0.3) * 0.002 * power * currentNodeMults.GoPower * sourceFileBonus
   );
@@ -26,7 +26,7 @@ export function CalculateEffect(nodes: number, faction: GoOpponent): number {
  * for factions you are a member of
  */
 export function getMaxFavor() {
-  const sourceFileLevel = Player.sourceFileLvl(14);
+  const sourceFileLevel = Player.activeSourceFileLvl(14);
 
   if (sourceFileLevel === 1) {
     return 80;

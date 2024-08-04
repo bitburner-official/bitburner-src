@@ -6,6 +6,7 @@ import { assertLoadingType } from "../utils/TypeAssertion";
 import { CompanyName } from "./Enums";
 import { PartialRecord, createEnumKeyedRecord } from "../Types/Record";
 import { getEnumHelper } from "../utils/EnumHelper";
+import { clampNumber } from "../utils/helpers/clampNumber";
 
 export const Companies: Record<CompanyName, Company> = (() => {
   const metadata = getCompaniesMetadata();
@@ -27,8 +28,14 @@ export function loadCompanies(saveString: string): void {
     const company = Companies[loadedCompanyName];
     assertLoadingType<SavegameCompany>(loadedCompany);
     const { playerReputation: loadedRep, favor: loadedFavor } = loadedCompany;
-    if (typeof loadedRep === "number" && loadedRep > 0) company.playerReputation = loadedRep;
-    if (typeof loadedFavor === "number" && loadedFavor > 0) company.favor = loadedFavor;
+    if (typeof loadedRep === "number" && loadedRep >= 0) {
+      // `playerReputation` must be in [0, Number.MAX_VALUE].
+      company.playerReputation = clampNumber(loadedRep, 0);
+    }
+    if (typeof loadedFavor === "number" && loadedFavor >= 0) {
+      // `favor` must be in [0, MaxFavor]. This rule will be enforced in the `setFavor` function.
+      company.setFavor(loadedFavor);
+    }
   }
 }
 

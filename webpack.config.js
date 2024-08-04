@@ -5,15 +5,18 @@ const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
+/** @type {import("webpack-cli").CallableOption} */
 module.exports = (env, argv) => {
-  const isDevServer = (env || {}).devServer === true;
+  const isDevServer = (env || {}).WEBPACK_SERVE === true;
   const runInContainer = (env || {}).runInContainer === true;
   const isDevelopment = argv.mode === "development";
-  const isFastRefresh = argv.fast === "true";
+  const enableReactRefresh = (env || {}).enableReactRefresh === true;
   const outputDirectory = "dist";
   const entry = "./src/index.tsx";
 
+  /** @type {webpack.StatsOptions} */
   const statsConfig = {
     builtAt: true,
     children: false,
@@ -25,11 +28,11 @@ module.exports = (env, argv) => {
     entrypoints: false,
   };
 
+  /** @type {webpack.Configuration["devServer"]} */
   const devServerSettings = {
     hot: true,
     port: 8000,
     devMiddleware: {
-      publicPath: `/`,
       stats: statsConfig,
     },
     static: {
@@ -41,17 +44,14 @@ module.exports = (env, argv) => {
   // By default, the webpack-dev-server is not exposed outside of localhost.
   // When running in a container we need it accessible externally.
   if (runInContainer) {
-    devServerSettings.disableHostCheck = true;
     devServerSettings.host = "0.0.0.0";
-    devServerSettings.watchOptions = {
-      poll: true,
-    };
   }
 
   // Get the current commit hash to inject into the app
   // https://stackoverflow.com/a/38401256
   const commitHash = require("child_process").execSync("git rev-parse --short HEAD").toString().trim();
 
+  /** @type {HtmlWebpackPlugin.Options} */
   const htmlConfig = {
     title: "Bitburner",
     template: "src/index.html",
@@ -126,7 +126,16 @@ module.exports = (env, argv) => {
           columns: true,
           module: true,
         }),
-      isFastRefresh && new ReactRefreshWebpackPlugin(),
+      enableReactRefresh && new ReactRefreshWebpackPlugin(),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: "{tex-chtml.js,*/**/*}",
+            to: "mathjax",
+            context: "node_modules/mathjax-full/es5",
+          },
+        ],
+      }),
     ].filter(Boolean),
     target: "web",
     entry: entry,
@@ -140,10 +149,11 @@ module.exports = (env, argv) => {
         {
           test: /\.(js$|jsx|ts|tsx)$/,
           exclude: /node_modules/,
+          resourceQuery: { not: /raw/ },
           use: {
             loader: "babel-loader",
             options: {
-              plugins: [isFastRefresh && require.resolve("react-refresh/babel")].filter(Boolean),
+              plugins: [enableReactRefresh && require.resolve("react-refresh/babel")].filter(Boolean),
               cacheDirectory: true,
             },
           },
@@ -152,6 +162,10 @@ module.exports = (env, argv) => {
         {
           test: /\.s?css$/,
           use: ["style-loader", "css-loader"],
+        },
+        {
+          resourceQuery: /raw/,
+          type: "asset/source",
         },
       ],
     },
@@ -177,6 +191,10 @@ module.exports = (env, argv) => {
       },
     },
     devServer: devServerSettings,
+    watchOptions: {
+      // When running in a container, we can't necesarily watch filesystem events.
+      poll: runInContainer ? true : undefined,
+    },
     resolve: {
       extensions: [".tsx", ".ts", ".js", ".jsx"],
       alias: {
@@ -187,5 +205,11 @@ module.exports = (env, argv) => {
       fallback: { crypto: false },
     },
     stats: statsConfig,
+    ignoreWarnings: [
+      {
+        module: /@babel\/standalone/,
+        message: /Critical dependency: the request of a dependency is an expression/,
+      },
+    ],
   };
 };

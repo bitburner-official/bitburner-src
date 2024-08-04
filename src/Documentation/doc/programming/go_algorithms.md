@@ -91,14 +91,12 @@ Now that a simple move type is available, it can be used to play on the current 
 
 `await ns.go.passTurn()` can be used if no moves are found. This will end the game if the AI also passes (or just passed previously).
 
-Both `makeMove()` and `passTurn()` , when awaited, return an object that tells you if your move was valid and successfully played, and what the AI's response is.
+Both `makeMove()` and `passTurn()`, when awaited, return an object that tells you what the AI's response is, and if the game is over.
 
 ```js
 {
-  // If your move was successfully applied to the subnet
-  success: boolean;
-  // If the opponent moved or passed, or if the game is now over, or if your move was invalid
-  type: "invalid" | "move" | "pass" | "gameOver";
+  // If the opponent moved or passed, or if the game is now over.
+  type: "move" | "pass" | "gameOver";
   x: number | null; // Opponent move's x coord (if applicable)
   y: number | null; // Opponent move's y coord (if applicable)
 }

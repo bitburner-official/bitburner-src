@@ -22,6 +22,6 @@ An object representing the current study task
 |  --- | --- | --- | --- |
 |  [classType](./bitburner.studytask.classtype.md) |  | string |  |
 |  [cyclesWorked](./bitburner.studytask.cyclesworked.md) |  | number |  |
-|  [location](./bitburner.studytask.location.md) |  | string |  |
+|  [location](./bitburner.studytask.location.md) |  | [LocationName](./bitburner.locationname.md) \| \`${[LocationName](./bitburner.locationname.md)<!-- -->}\` |  |
 |  [type](./bitburner.studytask.type.md) |  | "CLASS" |  |
 

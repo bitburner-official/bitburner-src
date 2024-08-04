@@ -1,6 +1,7 @@
 import { AugmentationName, FactionName, FactionDiscovery } from "@enums";
 import { FactionInfo, FactionInfos } from "./FactionInfo";
-import { favorToRep, repToFavor } from "./formulas/favor";
+import { MaxFavor, calculateFavorAfterResetting } from "./formulas/favor";
+import { clampNumber } from "../utils/helpers/clampNumber";
 
 export class Faction {
   /**
@@ -13,7 +14,7 @@ export class Faction {
   augmentations: AugmentationName[] = [];
 
   /** Amount of favor the player has with this faction. */
-  favor = 0;
+  #favor = 0;
 
   /** Flag signalling whether player has been banned from this faction */
   isBanned = false;
@@ -34,6 +35,25 @@ export class Faction {
     this.name = name;
   }
 
+  get favor() {
+    return this.#favor;
+  }
+
+  /**
+   * There is no setter for this.#favor. This is intentional. Performing arithmetic operations on `favor` may lead to
+   * the overflow error of `playerReputation`, so anything that wants to change `favor` must explicitly do that through
+   * `setFavor`.
+   *
+   * @param value
+   */
+  setFavor(value: number) {
+    if (Number.isNaN(value)) {
+      this.#favor = 0;
+      return;
+    }
+    this.#favor = clampNumber(value, 0, MaxFavor);
+  }
+
   getInfo(): FactionInfo {
     const info = FactionInfos[this.name];
     if (info == null) {
@@ -47,7 +67,7 @@ export class Faction {
 
   prestigeSourceFile() {
     // Reset favor, reputation, and flags
-    this.favor = 0;
+    this.setFavor(0);
     this.playerReputation = 0;
     this.alreadyInvited = false;
     this.isMember = false;
@@ -56,23 +76,11 @@ export class Faction {
 
   prestigeAugmentation(): void {
     // Gain favor
-    if (this.favor == null) this.favor = 0;
-    this.favor += this.getFavorGain();
+    this.setFavor(calculateFavorAfterResetting(this.favor, this.playerReputation));
     // Reset reputation and flags
     this.playerReputation = 0;
     this.alreadyInvited = false;
     this.isMember = false;
     this.isBanned = false;
-  }
-
-  //Returns an array with [How much favor would be gained, how much rep would be left over]
-  getFavorGain(): number {
-    if (this.favor == null) {
-      this.favor = 0;
-    }
-    const storedRep = Math.max(0, favorToRep(this.favor));
-    const totalRep = storedRep + this.playerReputation;
-    const newFavor = repToFavor(totalRep);
-    return newFavor - this.favor;
   }
 }

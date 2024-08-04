@@ -18,9 +18,10 @@ interface IProps {
   cancel: () => void;
   showInstructions: () => void;
 }
+const boardSizeOptions = boardSizes.filter((size) => size !== 19);
 
 export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProps): React.ReactElement => {
-  const classes = boardStyles();
+  const { classes } = boardStyles();
   const [opponent, setOpponent] = useState<GoOpponent>(Go.currentGame?.ai ?? GoOpponent.SlumSnakes);
   const preselectedBoardSize =
     opponent === GoOpponent.w0r1d_d43m0n ? 19 : Math.min(Go.currentGame?.board?.[0]?.length ?? 7, 13);
@@ -88,7 +89,7 @@ export const GoSubnetSearch = ({ open, search, cancel, showInstructions }: IProp
             <Typography>????</Typography>
           ) : (
             <Select value={`${boardSize}`} onChange={changeBoardSize} sx={{ mr: 1 }}>
-              {boardSizes.map((size) => (
+              {boardSizeOptions.map((size) => (
                 <MenuItem key={size} value={size}>
                   {size}x{size}
                 </MenuItem>

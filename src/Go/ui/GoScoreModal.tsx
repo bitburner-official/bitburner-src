@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const GoScoreModal = ({ open, onClose, finalScore, newSubnet, opponent }: Props): React.ReactElement => {
-  const classes = boardStyles();
+  const { classes } = boardStyles();
 
   const blackScore = finalScore[GoColor.black];
   const whiteScore = finalScore[GoColor.white];

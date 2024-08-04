@@ -8,7 +8,6 @@ import { Factions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
 import { processPassiveFactionRepGain, inviteToFaction } from "./Faction/FactionHelpers";
 import { Router } from "./ui/GameRoot";
-import { Page } from "./ui/Router";
 import "./utils/Protections"; // Side-effect: Protect against certain unrecoverable errors
 import "./PersonObjects/Player/PlayerObject"; // For side-effect of creating Player
 
@@ -40,10 +39,24 @@ import { startExploits } from "./Exploits/loops";
 import { calculateAchievements } from "./Achievements/Achievements";
 
 import React from "react";
+import ReactDOM from "react-dom";
 import { setupUncaughtPromiseHandler } from "./UncaughtPromiseHandler";
 import { Button, Typography } from "@mui/material";
 import { SnackbarEvents } from "./ui/React/Snackbar";
 import { SaveData } from "./types";
+import { Go } from "./Go/Go";
+import { EventEmitter } from "./utils/EventEmitter";
+
+// Only show warning if the time diff is greater than this value.
+const thresholdOfTimeDiffForShowingWarningAboutSystemClock = CONSTANTS.MillisecondsPerFiveMinutes;
+
+function showWarningAboutSystemClock(timeDiff: number) {
+  AlertEvents.emit(
+    `Warning: The system clock moved backward: ${convertTimeMsToTimeElapsedString(Math.abs(timeDiff))}.`,
+  );
+}
+
+export const GameCycleEvents = new EventEmitter<[]>();
 
 /** Game engine. Handles the main game loop. */
 const Engine: {
@@ -143,7 +156,7 @@ const Engine: {
     checkFactionInvitations: 100,
     passiveFactionGrowth: 5,
     messages: 150,
-    mechanicProcess: 5, // Processes certain mechanics (Corporation, Bladeburner)
+    mechanicProcess: 5, // Process Bladeburner
     contractGeneration: 3000, // Generate Coding Contracts
     achievementsCounter: 60, // Check if we have new achievements
   },
@@ -162,9 +175,8 @@ const Engine: {
   checkCounters: function () {
     if (Engine.Counters.checkFactionInvitations <= 0) {
       const invitedFactions = Player.checkForFactionInvitations();
-      if (invitedFactions.length > 0) {
-        const randFaction = invitedFactions[Math.floor(Math.random() * invitedFactions.length)];
-        inviteToFaction(randFaction);
+      for (const invitedFaction of invitedFactions) {
+        inviteToFaction(invitedFaction);
       }
       Engine.Counters.checkFactionInvitations = 100;
     }
@@ -247,7 +259,16 @@ const Engine: {
       // Calculate the number of cycles have elapsed while offline
       Engine._lastUpdate = new Date().getTime();
       const lastUpdate = Player.lastUpdate;
-      const timeOffline = Engine._lastUpdate - lastUpdate;
+      let timeOffline = Engine._lastUpdate - lastUpdate;
+      if (timeOffline < 0) {
+        if (Math.abs(timeOffline) > thresholdOfTimeDiffForShowingWarningAboutSystemClock) {
+          const timeDiff = timeOffline;
+          setTimeout(() => {
+            showWarningAboutSystemClock(timeDiff);
+          }, 250);
+        }
+        timeOffline = 0;
+      }
       const numCyclesOffline = Math.floor(timeOffline / CONSTANTS.MilliPerCycle);
 
       // Calculate the number of chances for a contract the player had whilst offline
@@ -331,6 +352,8 @@ const Engine: {
       // Bladeburner offline progress
       if (Player.bladeburner) Player.bladeburner.storeCycles(numCyclesOffline);
 
+      Go.storeCycles(numCyclesOffline);
+
       staneksGift.process(numCyclesOffline);
 
       // Sleeves offline progress
@@ -391,6 +414,14 @@ const Engine: {
     // Get time difference
     const _thisUpdate = new Date().getTime();
     let diff = _thisUpdate - Engine._lastUpdate;
+    if (diff < 0) {
+      if (Math.abs(diff) > thresholdOfTimeDiffForShowingWarningAboutSystemClock) {
+        showWarningAboutSystemClock(diff);
+      }
+      diff = 0;
+      Engine._lastUpdate = _thisUpdate;
+      Player.lastUpdate = _thisUpdate;
+    }
     const offset = diff % CONSTANTS.MilliPerCycle;
 
     // Divide this by cycle time to determine how many cycles have elapsed since last update
@@ -401,6 +432,11 @@ const Engine: {
       Engine._lastUpdate = _thisUpdate - offset;
       Player.lastUpdate = _thisUpdate - offset;
       Engine.updateGame(diff);
+      if (GameCycleEvents.hasSubscibers()) {
+        ReactDOM.unstable_batchedUpdates(() => {
+          GameCycleEvents.emit();
+        });
+      }
     }
     window.setTimeout(Engine.start, CONSTANTS.MilliPerCycle - offset);
   },
@@ -413,8 +449,7 @@ function warnAutosaveDisabled(): void {
 
   // We don't want this warning to show up on certain pages.
   // When in recovery or importing we want to keep autosave disabled.
-  const ignoredPages = [Page.Recovery as Page, Page.ImportSave];
-  if (ignoredPages.includes(Router.page())) return;
+  if (Router.hidingMessages()) return;
 
   const warningToast = (
     <>

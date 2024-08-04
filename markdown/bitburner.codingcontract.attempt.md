@@ -36,9 +36,11 @@ Attempts to solve the Coding Contract with the provided solution.
 
 
 ```js
-const reward = codingcontract.attempt(yourSolution, filename, hostname);
+const reward = ns.codingcontract.attempt(yourSolution, filename, hostname);
 if (reward) {
-  ns.tprint(`Contract solved successfully! Reward: ${reward}`)
-} else ns.tprint("Failed to solve contract.")
+  ns.tprint(`Contract solved successfully! Reward: ${reward}`);
+} else {
+  ns.tprint("Failed to solve contract.");
+}
 ```
 

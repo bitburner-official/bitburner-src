@@ -14,6 +14,7 @@ import { useGang } from "./Context";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
+import { GangConstants } from "../data/Constants";
 
 export function GangStats(): React.ReactElement {
   const gang = useGang();
@@ -26,6 +27,21 @@ export function GangStats(): React.ReactElement {
   } else {
     territoryStr = formatNumberNoSuffix(territoryMult, 2);
   }
+  const hasEnoughBonusTime = gang.storedCycles > GangConstants.maxCyclesToProcess;
+  const bonusCyclesInOneSecond = 5 * GangConstants.maxCyclesToProcess;
+  const respectGainRateInBonusTime = hasEnoughBonusTime
+    ? `[Effective Gain: ${formatRespect(gang.respectGainRate * bonusCyclesInOneSecond)} / sec]`
+    : "";
+  const wantedGainRateInBonusTime = hasEnoughBonusTime
+    ? `[Effective Gain: ${formatWanted(gang.wantedGainRate * bonusCyclesInOneSecond)} / sec]`
+    : "";
+  const moneyGainRateInBonusTime = hasEnoughBonusTime ? (
+    <>
+      [Effective Gain: <MoneyRate money={gang.moneyGainRate * bonusCyclesInOneSecond} />]
+    </>
+  ) : (
+    ""
+  );
 
   return (
     <>
@@ -40,7 +56,8 @@ export function GangStats(): React.ReactElement {
           }
         >
           <Typography>
-            Respect: {formatRespect(gang.respect)} ({formatRespect(5 * gang.respectGainRate)} / sec)
+            Respect: {formatRespect(gang.respect)} ({formatRespect(5 * gang.respectGainRate)} / sec){" "}
+            {respectGainRateInBonusTime}
           </Typography>
         </Tooltip>
       </Box>
@@ -55,7 +72,8 @@ export function GangStats(): React.ReactElement {
           }
         >
           <Typography>
-            Wanted Level: {formatWanted(gang.wanted)} ({formatWanted(5 * gang.wantedGainRate)} / sec)
+            Wanted Level: {formatWanted(gang.wanted)} ({formatWanted(5 * gang.wantedGainRate)} / sec){" "}
+            {wantedGainRateInBonusTime}
           </Typography>
         </Tooltip>
       </Box>
@@ -69,7 +87,7 @@ export function GangStats(): React.ReactElement {
       </Box>
 
       <Typography>
-        Money gain rate: <MoneyRate money={5 * gang.moneyGainRate} />
+        Money gain rate: <MoneyRate money={5 * gang.moneyGainRate} /> {moneyGainRateInBonusTime}
       </Typography>
 
       <Box display="flex">

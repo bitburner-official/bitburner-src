@@ -1,4 +1,5 @@
 import { AugmentationName, CityName, CompletedProgramName, FactionName, LiteratureName, CompanyName } from "@enums";
+import { Augmentations } from "./Augmentation/Augmentations";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { Companies } from "./Company/Companies";
 import { resetIndustryResearchTrees } from "./Corporation/data/IndustryData";
@@ -25,10 +26,24 @@ import { CONSTANTS } from "./Constants";
 import { LogBoxClearEvents } from "./ui/React/LogBoxManager";
 import { initCircadianModulator } from "./Augmentation/Augmentations";
 import { Go } from "./Go/Go";
+import { calculateExp } from "./PersonObjects/formulas/skill";
+import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
+import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string) {
   setTimeout(() => dialogBoxCreate(message), 200);
+}
+
+function setInitialExpForPlayer() {
+  Player.exp.hacking = calculateExp(1, Player.mults.hacking * currentNodeMults.HackingLevelMultiplier);
+  Player.exp.strength = calculateExp(1, Player.mults.strength * currentNodeMults.StrengthLevelMultiplier);
+  Player.exp.defense = calculateExp(1, Player.mults.defense * currentNodeMults.DefenseLevelMultiplier);
+  Player.exp.dexterity = calculateExp(1, Player.mults.dexterity * currentNodeMults.DexterityLevelMultiplier);
+  Player.exp.agility = calculateExp(1, Player.mults.agility * currentNodeMults.AgilityLevelMultiplier);
+  Player.exp.charisma = calculateExp(1, Player.mults.charisma * currentNodeMults.CharismaLevelMultiplier);
+  Player.updateSkillLevels();
+  Player.hp.current = Player.hp.max;
 }
 
 // Prestige by purchasing augmentation
@@ -60,20 +75,15 @@ export function prestigeAugmentation(): void {
   AddToAllServers(homeComp);
   prestigeHomeComputer(homeComp);
 
-  if (Player.hasAugmentation(AugmentationName.Neurolink, true)) {
-    homeComp.programs.push(CompletedProgramName.ftpCrack);
-    homeComp.programs.push(CompletedProgramName.relaySmtp);
+  // Receive starting money and programs from installed augmentations
+  for (const ownedAug of Player.augmentations) {
+    const aug = Augmentations[ownedAug.name];
+    Player.gainMoney(aug.startingMoney, "other");
+    for (const program of aug.programs) {
+      homeComp.programs.push(program);
+    }
   }
-  if (Player.hasAugmentation(AugmentationName.CashRoot, true)) {
-    Player.setMoney(1e6);
-    homeComp.programs.push(CompletedProgramName.bruteSsh);
-  }
-  if (Player.hasAugmentation(AugmentationName.PCMatrix, true)) {
-    homeComp.programs.push(CompletedProgramName.deepScan1);
-    homeComp.programs.push(CompletedProgramName.autoLink);
-  }
-
-  if (Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) {
+  if (canAccessBitNodeFeature(5)) {
     homeComp.programs.push(CompletedProgramName.formulas);
   }
 
@@ -100,7 +110,6 @@ export function prestigeAugmentation(): void {
   }
   Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
-  Player.hp.current = Player.hp.max;
 
   staneksGift.prestigeAugmentation();
 
@@ -138,7 +147,7 @@ export function prestigeAugmentation(): void {
   if (Player.bitNodeN === 8) {
     Player.money = BitNode8StartingMoney;
   }
-  if (Player.bitNodeN === 8 || Player.sourceFileLvl(8) > 0) {
+  if (canAccessBitNodeFeature(8)) {
     Player.hasWseAccount = true;
     Player.hasTixApiAccess = true;
   }
@@ -161,7 +170,7 @@ export function prestigeAugmentation(): void {
   // Bitnode 13: Church of the Machine God
   if (Player.hasAugmentation(AugmentationName.StaneksGift1, true)) {
     joinFaction(Factions[FactionName.ChurchOfTheMachineGod]);
-  } else if (Player.bitNodeN != 13) {
+  } else if (Player.bitNodeN !== 13) {
     if (Player.augmentations.some((a) => a.name !== AugmentationName.NeuroFluxGovernor)) {
       Factions[FactionName.ChurchOfTheMachineGod].isBanned = true;
     }
@@ -173,6 +182,8 @@ export function prestigeAugmentation(): void {
   resetPidCounter();
   ProgramsSeen.clear();
   InvitationsSeen.clear();
+
+  setInitialExpForPlayer();
 }
 
 // Prestige by destroying Bit Node and gaining a Source File
@@ -205,9 +216,9 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // Re-create foreign servers
   initForeignServers(Player.getHomeComputer());
 
-  if (Player.sourceFileLvl(9) >= 2) {
+  if (Player.activeSourceFileLvl(9) >= 2) {
     homeComp.setMaxRam(128);
-  } else if (Player.sourceFileLvl(1) > 0) {
+  } else if (Player.activeSourceFileLvl(1) > 0) {
     homeComp.setMaxRam(32);
   } else {
     homeComp.setMaxRam(8);
@@ -224,10 +235,10 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
 
   // Give levels of NeuroFluxGovernor for Source-File 12. Must be done here before Augmentations are recalculated
-  if (Player.sourceFileLvl(12) > 0) {
+  if (Player.activeSourceFileLvl(12) > 0) {
     Player.augmentations.push({
       name: AugmentationName.NeuroFluxGovernor,
-      level: Player.sourceFileLvl(12),
+      level: Player.activeSourceFileLvl(12),
     });
   }
 
@@ -236,7 +247,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
 
-  if (Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) {
+  if (canAccessBitNodeFeature(5)) {
     homeComp.programs.push(CompletedProgramName.formulas);
   }
 
@@ -259,7 +270,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   if (Player.bitNodeN === 8) {
     Player.money = BitNode8StartingMoney;
   }
-  if (Player.bitNodeN === 8 || Player.sourceFileLvl(8) > 0) {
+  if (Player.bitNodeN === 8 || Player.activeSourceFileLvl(8) > 0) {
     Player.hasWseAccount = true;
     Player.hasTixApiAccess = true;
   }
@@ -272,7 +283,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
 
   // BitNode 12: The Recursion
-  if (Player.bitNodeN === 12 && Player.sourceFileLvl(12) > 100) {
+  if (Player.bitNodeN === 12 && Player.activeSourceFileLvl(12) > 100) {
     delayedDialog("Saynt_Garmo is watching you");
   }
 
@@ -291,7 +302,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // Source-File 9 (level 3) effect
   // also now applies when entering bn9 until install
-  if (Player.sourceFileLvl(9) >= 3 || Player.bitNodeN === 9) {
+  if ((Player.activeSourceFileLvl(9) >= 3 || Player.bitNodeN === 9) && !Player.bitNodeOptions.disableHacknetServer) {
     const hserver = Player.createHacknetServer();
 
     hserver.level = 100;
@@ -309,9 +320,13 @@ export function prestigeSourceFile(isFlume: boolean): void {
   staneksGift.prestigeSourceFile();
 
   // Gain int exp
-  if (Player.sourceFileLvl(5) !== 0 && !isFlume) Player.gainIntelligenceExp(300);
+  if (Player.activeSourceFileLvl(5) !== 0 && !isFlume) {
+    Player.gainIntelligenceExp(300);
+  }
 
   // Clear recent scripts
   recentScripts.splice(0, recentScripts.length);
   resetPidCounter();
+
+  setInitialExpForPlayer();
 }

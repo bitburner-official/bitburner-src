@@ -5,7 +5,7 @@ import { Settings } from "../../Settings/Settings";
 import { load } from "../../db";
 import { Router } from "../GameRoot";
 import { Page } from "../Router";
-import { IErrorData, newIssueUrl } from "../../utils/ErrorHelper";
+import { IErrorData, newIssueUrl, getErrorForDisplay } from "../../utils/ErrorHelper";
 import { DeleteGameButton } from "./DeleteGameButton";
 import { SoftResetButton } from "./SoftResetButton";
 
@@ -37,6 +37,13 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
     Router.toPage(Page.Terminal);
   }
   Settings.AutosaveInterval = 0;
+
+  // The architecture around RecoveryRoot is awkward, and it can be invoked in
+  // a number of ways. If we are invoked via a save error, sourceError will be set
+  // and we won't have decoded the information into errorData.
+  if (errorData == null && sourceError) {
+    errorData = getErrorForDisplay(sourceError, undefined, Page.LoadingScreen);
+  }
 
   useEffect(() => {
     load()

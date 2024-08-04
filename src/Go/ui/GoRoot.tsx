@@ -9,7 +9,7 @@ import { GoGameboardWrapper } from "./GoGameboardWrapper";
 import { boardStyles } from "../boardState/goStyles";
 
 export function GoRoot(): React.ReactElement {
-  const classes = boardStyles();
+  const { classes } = boardStyles();
   const [value, setValue] = React.useState(0);
 
   function handleChange(event: React.SyntheticEvent, tab: number): void {

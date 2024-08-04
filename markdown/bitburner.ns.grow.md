@@ -54,6 +54,6 @@ The grow() command requires root access to the target server, but there is no re
 
 ```js
 let currentMoney = ns.getServerMoneyAvailable("n00dles");
-currentMoney *= await ns.grow("foodnstuff");
+currentMoney *= await ns.grow("n00dles");
 ```
 

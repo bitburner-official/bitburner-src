@@ -2,6 +2,7 @@ import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { Person as IPerson } from "@nsdefs";
 import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
 import { Server as IServer } from "@nsdefs";
+import { clampNumber } from "./utils/helpers/clampNumber";
 
 /** Returns the chance the person has to successfully hack a server */
 export function calculateHackingChance(server: IServer, person: IPerson): number {
@@ -11,14 +12,14 @@ export function calculateHackingChance(server: IServer, person: IPerson): number
   if (!server.hasAdminRights || hackDifficulty >= 100) return 0;
   const hackFactor = 1.75;
   const difficultyMult = (100 - hackDifficulty) / 100;
-  const skillMult = hackFactor * person.skills.hacking;
+  const skillMult = clampNumber(hackFactor * person.skills.hacking, 1);
   const skillChance = (skillMult - requiredHackingSkill) / skillMult;
   const chance =
     skillChance *
     difficultyMult *
     person.mults.hacking_chance *
     calculateIntelligenceBonus(person.skills.intelligence, 1);
-  return Math.min(1, Math.max(chance, 0));
+  return clampNumber(chance, 0, 1);
 }
 
 /**

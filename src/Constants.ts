@@ -3,62 +3,10 @@
  *
  * Constants for specific mechanics or features will NOT be here.
  */
-export const CONSTANTS: {
-  VersionString: string;
-  isDevBranch: boolean;
-  VersionNumber: number;
-  MaxSkillLevel: number;
-  MilliPerCycle: number;
-  OfflineHackingIncome: number;
-  CorpFactionRepRequirement: number;
-  BaseFocusBonus: number;
-  TravelCost: number;
-  BaseFavorToDonate: number;
-  DonateMoneyToRepDivisor: number;
-  NeuroFluxGovernorLevelMult: number;
-  NumNetscriptPorts: number;
-  MultipleAugMultiplier: number;
-  TorRouterCost: number;
-  HospitalCostPerHp: number;
-  IntelligenceCrimeWeight: number;
-  IntelligenceCrimeBaseExpGain: number;
-  IntelligenceProgramBaseExpGain: number;
-  IntelligenceGraftBaseExpGain: number;
-  IntelligenceTerminalHackBaseExpGain: number;
-  IntelligenceSingFnBaseExpGain: number;
-  MillisecondsPer20Hours: number;
-  GameCyclesPer20Hours: number;
-  MillisecondsPer10Hours: number;
-  GameCyclesPer10Hours: number;
-  MillisecondsPer8Hours: number;
-  GameCyclesPer8Hours: number;
-  MillisecondsPer4Hours: number;
-  GameCyclesPer4Hours: number;
-  MillisecondsPer2Hours: number;
-  GameCyclesPer2Hours: number;
-  MillisecondsPerHour: number;
-  GameCyclesPerHour: number;
-  MillisecondsPerHalfHour: number;
-  GameCyclesPerHalfHour: number;
-  MillisecondsPerQuarterHour: number;
-  GameCyclesPerQuarterHour: number;
-  MillisecondsPerFiveMinutes: number;
-  GameCyclesPerFiveMinutes: number;
-  CodingContractBaseFactionRepGain: number;
-  CodingContractBaseCompanyRepGain: number;
-  CodingContractBaseMoneyGain: number;
-  AugmentationGraftingCostMult: number;
-  AugmentationGraftingTimeBase: number;
-  SoACostMult: number;
-  SoARepMult: number;
-  EntropyEffect: number;
-  Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
-  CompanyRequiredReputationMultiplier: number; // Only use this if a backdoor is installed in the company's server
-  LatestUpdate: string;
-} = {
-  VersionString: "2.6.2dev",
+export const CONSTANTS = {
+  VersionString: "2.6.3dev",
   isDevBranch: true,
-  VersionNumber: 39,
+  VersionNumber: 40,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -101,7 +49,6 @@ export const CONSTANTS: {
   IntelligenceCrimeBaseExpGain: 0.05,
   IntelligenceProgramBaseExpGain: 0.1, // Program required hack level divided by this to determine int exp gain
   IntelligenceGraftBaseExpGain: 0.05,
-  IntelligenceTerminalHackBaseExpGain: 200, // Hacking exp divided by this to determine int exp gain
   IntelligenceSingFnBaseExpGain: 1.5,
 
   // Time-related constants
@@ -152,16 +99,24 @@ export const CONSTANTS: {
   // Value raised to the number of entropy stacks, then multiplied to player multipliers
   EntropyEffect: 0.98,
 
+  // Number of blood, plasma, or platelet donations the developer has verified. Boosts NFG.
   Donations: 151,
 
+  // Only use this if a backdoor is installed in the company's server
   CompanyRequiredReputationMultiplier: 0.75,
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.2 dev - Last update 22 May 2024
+## v2.6.3 Dev: Last updated 3 July 2024
 
-See 2.6.1 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.1/src/Documentation/doc/changelog.md
+See 2.6.2 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.2/src/Documentation/doc/changelog.md
 
-No changes yet since 2.6.1 release
+### CHANGES
+
+- No changes yet since 2.6.2 release
+
+### OTHER
+
+- Nerf noodle bar
 `,
-};
+} as const;

@@ -1,5 +1,4 @@
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
-import { MinHeap } from "../utils/Heap";
 
 import { comprGenChar, comprLZGenerate, comprLZEncode, comprLZDecode } from "../utils/CompressionContracts";
 import { HammingEncode, HammingDecode, HammingEncodeProperly } from "../utils/HammingCodeTools";
@@ -340,7 +339,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "\n\nAssuming you are initially positioned",
         "at the start of the array, determine whether you are",
         "able to reach the last index.\n\n",
-        "Your answer should be submitted as 1 or 0, representing true and false respectively",
+        "Your answer should be submitted as 1 or 0, representing true and false respectively.",
       ].join(" ");
     },
     difficulty: 2.5,
@@ -493,7 +492,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "that can be created from the string:\n\n",
         `${data}\n\n`,
         "Note that an octet cannot begin with a '0' unless the number",
-        "itself is actually 0. For example, '192.168.010.1' is not a valid IP.\n\n",
+        "itself is exactly '0'. For example, '192.168.010.1' is not a valid IP.\n\n",
         "Examples:\n\n",
         '25525511135 -> ["255.255.11.135", "255.255.111.35"]\n',
         '1938718066 -> ["193.87.180.66"]',
@@ -562,7 +561,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "Determine the maximum possible profit you can earn using at most",
         "one transaction (i.e. you can only buy and sell the stock once). If no profit can be made",
         "then the answer should be 0. Note",
-        "that you have to buy the stock before you can sell it",
+        "that you have to buy the stock before you can sell it.",
       ].join(" ");
     },
     difficulty: 1,
@@ -602,7 +601,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "and then selling one share of the stock. Note that you cannot",
         "engage in multiple transactions at once. In other words, you",
         "must sell the stock before you buy it again.\n\n",
-        "If no profit can be made, then the answer should be 0",
+        "If no profit can be made, then the answer should be 0.",
       ].join(" ");
     },
     difficulty: 2,
@@ -640,7 +639,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "and then selling one share of the stock. Note that you cannot",
         "engage in multiple transactions at once. In other words, you",
         "must sell the stock before you buy it again.\n\n",
-        "If no profit can be made, then the answer should be 0",
+        "If no profit can be made, then the answer should be 0.",
       ].join(" ");
     },
     difficulty: 5,
@@ -955,7 +954,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "&nbsp;&nbsp;&nbsp;&nbsp;[[0,1],\n",
         "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1,0]]\n",
         "\n",
-        "Answer: ''\n\n",
+        "Answer: ''",
       ].join(" ");
     },
     difficulty: 7,
@@ -994,7 +993,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
 
       const distance: [number][] = new Array(height);
       //const prev: [[number, number] | undefined][] = new Array(height);
-      const queue = new MinHeap<[number, number]>();
+      const queue: [number, number][] = [];
 
       for (let y = 0; y < height; y++) {
         distance[y] = new Array(width).fill(Infinity) as [number];
@@ -1015,21 +1014,15 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
 
       // Prepare starting point
       distance[0][0] = 0;
-      queue.push([0, 0], 0);
+      queue.push([0, 0]);
 
       // Take next-nearest position and expand potential paths from there
-      while (queue.size > 0) {
-        const [y, x] = queue.pop() as [number, number];
+      while (queue.length > 0) {
+        const [y, x] = queue.shift() as [number, number];
         for (const [yN, xN] of neighbors(y, x)) {
-          const d = distance[y][x] + 1;
-          if (d < distance[yN][xN]) {
-            if (distance[yN][xN] == Infinity)
-              // Not reached previously
-              queue.push([yN, xN], d);
-            // Found a shorter path
-            else queue.changeWeight(([yQ, xQ]) => yQ == yN && xQ == xN, d);
-            //prev[yN][xN] = [y, x];
-            distance[yN][xN] = d;
+          if (distance[yN][xN] == Infinity) {
+            queue.push([yN, xN]);
+            distance[yN][xN] = distance[y][x] + 1;
           }
         }
       }
@@ -1282,8 +1275,9 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
       // Prevent player from providing extra wrong answers and still receiving credit
       if (result.length !== sanitizedPlayerAnsArr.length) return false;
 
-      for (const expr of result) {
-        if (!sanitizedPlayerAnsArr.includes(expr)) {
+      const resultsSet = new Set(result);
+      for (const expr of sanitizedPlayerAnsArr) {
+        if (!resultsSet.has(expr)) {
           return false;
         }
       }
@@ -1334,10 +1328,11 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "You are given the following encoded binary string: \n",
         `'${n}' \n\n`,
         "Decode it as an 'extended Hamming code' and convert it to a decimal value.\n",
+        "The binary string may include leading zeroes.\n",
         "Parity bits are inserted at positions 0 and 2^N.\n",
         "Parity bits are used to make the total number of '1' bits in a given set of data even.\n",
         "The parity bit at position 0 considers all bits including parity bits.\n",
-        "Each parity bit at position 2^N alternately considers N bits then ignores N bits, starting at position 2^N.\n",
+        "Each parity bit at position 2^N alternately considers 2^N bits then ignores 2^N bits, starting at position 2^N.\n",
         "The endianness of the parity bits is reversed compared to the endianness of the data bits:\n",
         "Data bits are encoded most significant bit first and the parity bits encoded least significant bit first.\n",
         "The parity bit at position 0 is set last.\n",
@@ -1540,7 +1535,7 @@ export const codingContractTypesMetadata: ICodingContractTypeMetadata[] = [
         "&nbsp; &nbsp; aaaaabccc &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-> &nbsp;5a1b3c\n",
         "&nbsp; &nbsp; aAaAaA &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -> &nbsp;1a1A1a1A1a1A\n",
         "&nbsp; &nbsp; 111112333 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-> &nbsp;511233\n",
-        "&nbsp; &nbsp; zzzzzzzzzzzzzzzzzzz &nbsp;-> &nbsp;9z9z1z &nbsp;(or 9z8z2z, etc.)\n",
+        "&nbsp; &nbsp; zzzzzzzzzzzzzzzzzzz &nbsp;-> &nbsp;9z9z1z &nbsp;(or 9z8z2z, etc.)",
       ].join(" ");
     },
     gen: (): string => {

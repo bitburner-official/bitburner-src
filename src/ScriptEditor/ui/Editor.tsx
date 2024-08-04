@@ -10,9 +10,11 @@ interface EditorProps {
   onMount: (editor: monaco.editor.IStandaloneCodeEditor) => void;
   /** Function to be ran every time the code is updated */
   onChange: (newCode?: string) => void;
+  /** This function is called before unmounting the editor */
+  onUnmount: () => void;
 }
 
-export function Editor({ onMount, onChange }: EditorProps) {
+export function Editor({ onMount, onChange, onUnmount }: EditorProps) {
   const containerDiv = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const subscription = useRef<monaco.IDisposable | null>(null);
@@ -41,6 +43,7 @@ export function Editor({ onMount, onChange }: EditorProps) {
 
     // Unmounting
     return () => {
+      onUnmount();
       subscription.current?.dispose();
       monaco.editor.getModels().forEach((model) => model.dispose());
       editorRef.current?.dispose();

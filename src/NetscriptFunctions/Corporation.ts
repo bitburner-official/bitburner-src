@@ -588,8 +588,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     ...warehouseAPI,
     ...officeAPI,
     hasCorporation: () => () => !!Player.corporation,
-    getConstants: (ctx) => () => {
-      checkAccess(ctx);
+    getConstants: () => () => {
       /* TODO 2.2: possibly just rework the whole corp constants structure to be more readable, and just use
        *           structuredClone to provide it directly to player.
        * TODO 2.2: Roll product information into industriesData, there's no reason to look up a product separately */

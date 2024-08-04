@@ -11,6 +11,8 @@ import { getEnumHelper } from "../utils/EnumHelper";
 import { Skills } from "../Bladeburner/data/Skills";
 import { assertString } from "../Netscript/TypeAssertion";
 import { BlackOperations, blackOpsArray } from "../Bladeburner/data/BlackOperations";
+import { checkSleeveAPIAccess, checkSleeveNumber } from "../NetscriptFunctions/Sleeve";
+import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const checkBladeburnerAccess = function (ctx: NetscriptContext): void {
@@ -18,16 +20,15 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     return;
   };
   const getBladeburner = function (ctx: NetscriptContext): Bladeburner {
-    const apiAccess = Player.bitNodeN === 7 || Player.sourceFileLvl(7) > 0;
+    const apiAccess = canAccessBitNodeFeature(7);
     if (!apiAccess) {
-      throw helpers.errorMessage(ctx, "You have not unlocked the bladeburner API.", "API ACCESS");
+      throw helpers.errorMessage(ctx, "You have not unlocked the Bladeburner API.", "API ACCESS");
     }
     const bladeburner = Player.bladeburner;
     if (!bladeburner)
       throw helpers.errorMessage(ctx, "You must be a member of the Bladeburner division to use this API.");
     return bladeburner;
   };
-
   function getAction(ctx: NetscriptContext, type: unknown, name: unknown): Action {
     const bladeburner = Player.bladeburner;
     assertString(ctx, "type", type);
@@ -112,19 +113,30 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     getActionCurrentTime: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
-      try {
-        const timecomputed =
-          Math.min(bladeburner.actionTimeCurrent + bladeburner.actionTimeOverflow, bladeburner.actionTimeToComplete) *
-          1000;
-        return timecomputed;
-      } catch (e: unknown) {
-        throw helpers.errorMessage(ctx, String(e));
-      }
+      return (
+        Math.min(bladeburner.actionTimeCurrent + bladeburner.actionTimeOverflow, bladeburner.actionTimeToComplete) *
+        1000
+      );
     },
-    getActionEstimatedSuccessChance: (ctx) => (type, name) => {
+    getActionEstimatedSuccessChance: (ctx) => (type, name, _sleeve) => {
       const bladeburner = getBladeburner(ctx);
       const action = getAction(ctx, type, name);
-      return action.getSuccessRange(bladeburner, Player);
+      if (_sleeve == null) {
+        return action.getSuccessRange(bladeburner, Player);
+      }
+      checkSleeveAPIAccess(ctx);
+      const sleeveNumber = helpers.number(ctx, "sleeve", _sleeve);
+      checkSleeveNumber(ctx, sleeveNumber);
+      switch (action.type) {
+        case BladeActionType.general:
+          return [1, 1];
+        case BladeActionType.contract: {
+          const sleevePerson = Player.sleeves[sleeveNumber];
+          return action.getSuccessRange(bladeburner, sleevePerson);
+        }
+        default:
+          return [0, 0];
+      }
     },
     getActionRepGain: (ctx) => (type, name, _level) => {
       checkBladeburnerAccess(ctx);
@@ -203,7 +215,11 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
       const count = helpers.positiveInteger(ctx, "count", _count ?? 1);
       const currentLevel = bladeburner.getSkillLevel(skillName);
-      return Skills[skillName].calculateCost(currentLevel, count);
+      const skill = Skills[skillName];
+      if (currentLevel + count > skill.maxLvl) {
+        return Infinity;
+      }
+      return skill.calculateCost(currentLevel, count);
     },
     upgradeSkill: (ctx) => (_skillName, _count) => {
       const bladeburner = getBladeburner(ctx);
@@ -283,28 +299,28 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       return !!attempt.success;
     },
     joinBladeburnerDivision: (ctx) => () => {
-      if (Player.bitNodeN === 7 || Player.sourceFileLvl(7) > 0) {
-        if (currentNodeMults.BladeburnerRank === 0) {
-          return false; // Disabled in this bitnode
-        }
-        if (Player.bladeburner) {
-          return true; // Already member
-        } else if (
-          Player.skills.strength >= 100 &&
-          Player.skills.defense >= 100 &&
-          Player.skills.dexterity >= 100 &&
-          Player.skills.agility >= 100
-        ) {
-          Player.startBladeburner();
-          helpers.log(ctx, () => "You have been accepted into the Bladeburner division");
-
-          return true;
-        } else {
-          helpers.log(ctx, () => "You do not meet the requirements for joining the Bladeburner division");
-          return false;
-        }
+      if (!canAccessBitNodeFeature(7) || Player.bitNodeOptions.disableBladeburner) {
+        return false;
       }
-      return false;
+      if (currentNodeMults.BladeburnerRank === 0) {
+        return false; // Disabled in this bitnode
+      }
+      if (Player.bladeburner) {
+        return true; // Already member
+      }
+      if (
+        Player.skills.strength < 100 ||
+        Player.skills.defense < 100 ||
+        Player.skills.dexterity < 100 ||
+        Player.skills.agility < 100
+      ) {
+        helpers.log(ctx, () => "You do not meet the requirements for joining the Bladeburner division");
+        return false;
+      }
+      Player.startBladeburner();
+      helpers.log(ctx, () => "You have been accepted into the Bladeburner division");
+
+      return true;
     },
     getBonusTime: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);

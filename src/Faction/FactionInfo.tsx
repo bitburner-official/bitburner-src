@@ -32,6 +32,8 @@ import {
   everyCondition,
   delayedCondition,
   unsatisfiable,
+  notCondition,
+  inBitNode,
 } from "./FactionJoinCondition";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { CONSTANTS } from "../Constants";
@@ -657,8 +659,8 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   // Early game factions - factions the player will prestige with early on that don't belong in other categories.
   [FactionName.Netburners]: new FactionInfo({
-    infoText: <>{"~~//*>H4CK|\\|3T 8URN3R5**>?>\\~~"}</>,
-    rumorText: <>{"~~//*>H4CK|\\|3T 8URN3R5**>?>\\~~"}</>,
+    infoText: <>{"~~//*>H4CK|\\|3T 8URN3R5**>?>\\\\~~"}</>,
+    rumorText: <>{"~~//*>H4CK|\\|3T 8URN3R5**>?>\\\\~~"}</>,
     inviteReqs: [haveSkill("hacking", 80), totalHacknetRam(8), totalHacknetCores(4), totalHacknetLevels(100)],
     rumorReqs: [totalHacknetLevels(50)],
     offerHackingWork: true,
@@ -694,7 +696,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     ),
     rumorText: <>The {CompanyName.NSA} would like to have a word with you once you're ready.</>,
     inviteReqs: [haveSomeSourceFile(6, 7), haveBladeburnerRank(BladeburnerConstants.RankNeededForFaction)],
-    rumorReqs: [haveSomeSourceFile(6, 7)],
+    rumorReqs: [haveSomeSourceFile(6, 7), notCondition(inBitNode(8))],
     special: true,
     assignment: (): React.ReactElement => {
       return (

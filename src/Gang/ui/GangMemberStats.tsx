@@ -21,7 +21,7 @@ interface IProps {
 }
 
 export function GangMemberStats(props: IProps): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const asc = {
     hack: props.member.calculateAscensionMult(props.member.hack_asc_points),

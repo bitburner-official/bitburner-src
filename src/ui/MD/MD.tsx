@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { TableHead } from "@mui/material";
 import remarkGfm from "remark-gfm";
@@ -7,8 +7,20 @@ import { code, Pre } from "./code";
 import { A } from "./a";
 import remarkMath from "remark-math";
 import rehypeMathjax from "rehype-mathjax/svg";
+import { FilePath } from "../../Paths/FilePath";
+import { getPage } from "../../Documentation/root";
 
-export function MD(props: { md: string }): React.ReactElement {
+export function MD(props: { pageFilePath: FilePath; top: number }): React.ReactElement {
+  const pageContent = getPage(props.pageFilePath);
+
+  useEffect(() => {
+    // This is a workaround. window.scrollTo does not work when we switch from Documentation tab to another tab, then
+    // switch back.
+    setTimeout(() => {
+      window.scrollTo({ top: props.top, behavior: "instant" });
+    }, 0);
+  });
+
   return (
     <ReactMarkdown
       components={{
@@ -34,7 +46,7 @@ export function MD(props: { md: string }): React.ReactElement {
       remarkPlugins={[remarkGfm, remarkMath]}
       rehypePlugins={[rehypeMathjax]}
     >
-      {props.md}
+      {pageContent}
     </ReactMarkdown>
   );
 }

@@ -1,9 +1,10 @@
+import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
 
 import type { PlayerObject } from "./PlayerObject";
 
 export function canAccessBladeburner(this: PlayerObject): boolean {
-  return this.bitNodeN === 6 || this.bitNodeN === 7 || this.sourceFileLvl(6) > 0 || this.sourceFileLvl(7) > 0;
+  return (canAccessBitNodeFeature(6) || canAccessBitNodeFeature(7)) && !this.bitNodeOptions.disableBladeburner;
 }
 
 export function startBladeburner(this: PlayerObject): void {

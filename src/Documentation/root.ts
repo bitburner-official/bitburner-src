@@ -1,10 +1,6 @@
-import index from "!!raw-loader!./doc/index.md";
+import Root from "./doc/index.md?raw";
 import { AllPages } from "./pages";
 
-export type Document = typeof index;
-
-export const Root = {
-  content: index,
-};
+export type Document = typeof Root;
 
 export const getPage = (title: string): Document => AllPages[title] ?? Root;

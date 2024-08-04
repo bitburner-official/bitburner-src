@@ -29,7 +29,7 @@ export function DeleteGameButton({ color = "primary" }: IProps): React.ReactElem
               pushDisableRestore();
               setTimeout(() => location.reload(), 1000);
             })
-            .catch((r) => console.error(`Could not delete game: ${r}`));
+            .catch((r) => console.error("Could not delete game: %o", r));
         }}
         open={modalOpened}
         onClose={() => setModalOpened(false)}

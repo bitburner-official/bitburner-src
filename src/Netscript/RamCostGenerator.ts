@@ -86,10 +86,16 @@ export const RamCostConstants = {
 
 function SF4Cost(cost: number): () => number {
   return () => {
-    if (Player.bitNodeN === 4) return cost;
-    const sf4 = Player.sourceFileLvl(4);
-    if (sf4 <= 1) return cost * 16;
-    if (sf4 === 2) return cost * 4;
+    if (Player.bitNodeN === 4) {
+      return cost;
+    }
+    const sf4 = Player.activeSourceFileLvl(4);
+    if (sf4 <= 1) {
+      return cost * 16;
+    }
+    if (sf4 === 2) {
+      return cost * 4;
+    }
     return cost;
   };
 }
@@ -186,6 +192,7 @@ const singularity = {
   checkFactionInvitations: SF4Cost(RamCostConstants.SingularityFn2),
   joinFaction: SF4Cost(RamCostConstants.SingularityFn2),
   workForFaction: SF4Cost(RamCostConstants.SingularityFn2),
+  getFactionWorkTypes: SF4Cost(RamCostConstants.SingularityFn2 / 3),
   getFactionRep: SF4Cost(RamCostConstants.SingularityFn2 / 3),
   getFactionFavor: SF4Cost(RamCostConstants.SingularityFn2 / 3),
   getFactionFavorGain: SF4Cost(RamCostConstants.SingularityFn2 / 4),
@@ -250,6 +257,7 @@ const go = {
   makeMove: 4,
   passTurn: 0,
   getBoardState: 4,
+  getMoveHistory: 0,
   getCurrentPlayer: 0,
   getGameState: 0,
   getOpponent: 0,
@@ -386,6 +394,7 @@ const grafting = {
   getAugmentationGraftTime: 3.75,
   getGraftableAugmentations: 5,
   graftAugmentation: 7.5,
+  waitForOngoingGrafting: 1,
 } as const;
 
 const corporation = {
@@ -567,6 +576,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   getTotalScriptExpGain: RamCostConstants.GetScript,
   getScriptExpGain: RamCostConstants.GetScript,
   getRunningScript: RamCostConstants.GetRunningScript,
+  ramOverride: 0,
   formatNumber: 0,
   formatRam: 0,
   formatPercent: 0,

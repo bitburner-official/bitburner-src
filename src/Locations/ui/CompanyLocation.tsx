@@ -19,11 +19,12 @@ import { Page } from "../../ui/Router";
 import { Player } from "@player";
 import { QuitJobModal } from "../../Company/ui/QuitJobModal";
 import { CompanyWork } from "../../Work/CompanyWork";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 import { companyNameAsLocationName } from "../../Company/utils";
 import { JobSummary } from "../../Company/ui/JobSummary";
 import { StatsTable } from "../../ui/React/StatsTable";
 import { JobListings } from "../../Company/ui/JobListings";
+import { calculateFavorAfterResetting } from "../../Faction/formulas/favor";
 
 interface IProps {
   companyName: CompanyName;
@@ -31,7 +32,7 @@ interface IProps {
 
 export function CompanyLocation(props: IProps): React.ReactElement {
   const [quitOpen, setQuitOpen] = useState(false);
-  const rerender = useRerender(200);
+  const rerender = useCycleRerender();
 
   /**
    * We'll keep a reference to the Company that this component is being rendered for,
@@ -56,7 +57,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
    */
   const currentPosition = jobTitle ? CompanyPositions[jobTitle] : null;
 
-  Player.location = companyNameAsLocationName(props.companyName);
+  Player.gotoLocation(companyNameAsLocationName(props.companyName));
 
   function startInfiltration(e: React.MouseEvent<HTMLElement>): void {
     if (!e.isTrusted) {
@@ -98,7 +99,6 @@ export function CompanyLocation(props: IProps): React.ReactElement {
   }
 
   const isEmployedHere = currentPosition != null;
-  const favorGain = company.getFavorGain();
 
   return (
     <>
@@ -120,8 +120,9 @@ export function CompanyLocation(props: IProps): React.ReactElement {
                     key="repLabel"
                     title={
                       <>
-                        You will have <Favor favor={company.favor + favorGain} /> company favor upon resetting after
-                        installing Augmentations
+                        You will have{" "}
+                        <Favor favor={calculateFavorAfterResetting(company.favor, company.playerReputation)} /> company
+                        favor upon resetting after installing Augmentations
                       </>
                     }
                   >

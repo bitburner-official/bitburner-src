@@ -30,7 +30,7 @@ RAM cost: 0 GB
 
 Usage example (NS2)
 
-```ts
+```js
 const theme = ns.ui.getTheme();
 theme.primary = '#ff5500';
 ns.ui.setTheme(theme);

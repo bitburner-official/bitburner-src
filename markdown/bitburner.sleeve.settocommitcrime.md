@@ -34,12 +34,12 @@ Return a boolean indicating whether or not this action was set successfully (fal
 ## Example
 
 
-```ts
+```js
 // Assigns the first sleeve to Homicide.
 ns.sleeve.setToCommitCrime(0, "Homicide");
 
 // Assigns the second sleeve to Grand Theft Auto, using enum
 const crimes = ns.enums.CrimeType;
-ns.sleeve.setToCommitCrime(1, crimes.grandTheftAuto)
+ns.sleeve.setToCommitCrime(1, crimes.grandTheftAuto);
 ```
 

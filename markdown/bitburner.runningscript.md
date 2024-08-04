@@ -16,6 +16,7 @@ interface RunningScript
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [args](./bitburner.runningscript.args.md) |  | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments the script was called with |
+|  [dynamicRamUsage](./bitburner.runningscript.dynamicramusage.md) |  | number \| undefined | <p>The dynamic RAM usage of (one thread of) this script instance. Does not affect overall RAM consumption (ramUsage is for that), but rather shows how much of the reserved RAM is currently in use via all the ns functions the script has called. Initially 1.6GB, this increases as new functions are called.</p><p>Only set for scripts that are still running.</p> |
 |  [filename](./bitburner.runningscript.filename.md) |  | string | Filename of the script |
 |  [logs](./bitburner.runningscript.logs.md) |  | string\[\] | Script logs as an array. The newest log entries are at the bottom. Timestamps, if enabled, are placed inside <code>[brackets]</code> at the start of each line. |
 |  [offlineExpGained](./bitburner.runningscript.offlineexpgained.md) |  | number | Total amount of hacking experience earned from this script when offline |
@@ -25,7 +26,7 @@ interface RunningScript
 |  [onlineMoneyMade](./bitburner.runningscript.onlinemoneymade.md) |  | number | Total amount of money made by this script when online |
 |  [onlineRunningTime](./bitburner.runningscript.onlinerunningtime.md) |  | number | Number of seconds that this script has been running online |
 |  [pid](./bitburner.runningscript.pid.md) |  | number | Process ID. Must be an integer |
-|  [ramUsage](./bitburner.runningscript.ramusage.md) |  | number | How much RAM this script uses for ONE thread |
+|  [ramUsage](./bitburner.runningscript.ramusage.md) |  | number | How much RAM this script uses for ONE thread. Also known as "static RAM usage," this value does not change once the script is started, unless you call ns.ramOverride(). |
 |  [server](./bitburner.runningscript.server.md) |  | string | Hostname of the server on which this script runs |
 |  [tailProperties](./bitburner.runningscript.tailproperties.md) |  | [TailProperties](./bitburner.tailproperties.md) \| null | Properties of the tail window, or null if it is not shown |
 |  [temporary](./bitburner.runningscript.temporary.md) |  | boolean | Whether this RunningScript is excluded from saves |

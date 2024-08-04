@@ -88,3 +88,26 @@ export function issueNewSharesFailureReason(corp: Corporation, numShares: number
 
   return "";
 }
+
+export function calculateMarkupMultiplier(sellingPrice: number, marketPrice: number, markupLimit: number): number {
+  // Sanitize sellingPrice
+  if (!Number.isFinite(sellingPrice)) {
+    return 1;
+  }
+  let markupMultiplier = 1;
+  if (sellingPrice > marketPrice) {
+    // markupMultiplier is a penalty modifier if sellingPrice is greater than the sum of marketPrice and markupLimit.
+    if (sellingPrice > marketPrice + markupLimit) {
+      markupMultiplier = Math.pow(markupLimit / (sellingPrice - marketPrice), 2);
+    }
+  } else {
+    if (sellingPrice <= 0) {
+      // Discard
+      markupMultiplier = 1e12;
+    } else {
+      // markupMultiplier is a bonus modifier if sellingPrice is less than marketPrice.
+      markupMultiplier = marketPrice / sellingPrice;
+    }
+  }
+  return markupMultiplier;
+}

@@ -23,7 +23,7 @@ export class StaneksGift extends BaseGift {
   }
 
   baseSize(): number {
-    return StanekConstants.BaseSize + currentNodeMults.StaneksGiftExtraSize + Player.sourceFileLvl(13);
+    return StanekConstants.BaseSize + currentNodeMults.StaneksGiftExtraSize + Player.activeSourceFileLvl(13);
   }
 
   width(): number {

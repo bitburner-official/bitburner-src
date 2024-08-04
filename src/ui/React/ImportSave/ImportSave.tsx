@@ -15,8 +15,7 @@ import TableCell from "@mui/material/TableCell";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import { makeStyles } from "tss-react/mui";
 import { Theme } from "@mui/material/styles";
 
 import WarningIcon from "@mui/icons-material/Warning";
@@ -41,50 +40,48 @@ import { ComparisonIcon } from "./ComparisonIcon";
 import { SaveData } from "../../../types";
 import { handleGetSaveDataError } from "../../../Netscript/ErrorMessages";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      padding: theme.spacing(2),
-      maxWidth: "1000px",
+const useStyles = makeStyles()((theme: Theme) => ({
+  root: {
+    padding: theme.spacing(2),
+    maxWidth: "1000px",
 
-      "& .MuiTable-root": {
+    "& .MuiTable-root": {
+      "& .MuiTableCell-root": {
+        borderBottom: `1px solid ${Settings.theme.welllight}`,
+      },
+
+      "& .MuiTableHead-root .MuiTableRow-root": {
+        backgroundColor: Settings.theme.backgroundsecondary,
+
         "& .MuiTableCell-root": {
-          borderBottom: `1px solid ${Settings.theme.welllight}`,
+          color: Settings.theme.primary,
+          fontWeight: "bold",
         },
+      },
 
-        "& .MuiTableHead-root .MuiTableRow-root": {
+      "& .MuiTableBody-root": {
+        "& .MuiTableRow-root:nth-of-type(odd)": {
+          backgroundColor: Settings.theme.well,
+
+          "& .MuiTableCell-root": {
+            color: Settings.theme.primarylight,
+          },
+        },
+        "& .MuiTableRow-root:nth-of-type(even)": {
           backgroundColor: Settings.theme.backgroundsecondary,
 
           "& .MuiTableCell-root": {
-            color: Settings.theme.primary,
-            fontWeight: "bold",
-          },
-        },
-
-        "& .MuiTableBody-root": {
-          "& .MuiTableRow-root:nth-of-type(odd)": {
-            backgroundColor: Settings.theme.well,
-
-            "& .MuiTableCell-root": {
-              color: Settings.theme.primarylight,
-            },
-          },
-          "& .MuiTableRow-root:nth-of-type(even)": {
-            backgroundColor: Settings.theme.backgroundsecondary,
-
-            "& .MuiTableCell-root": {
-              color: Settings.theme.primarylight,
-            },
+            color: Settings.theme.primarylight,
           },
         },
       },
     },
+  },
 
-    skillTitle: {
-      textTransform: "capitalize",
-    },
-  }),
-);
+  skillTitle: {
+    textTransform: "capitalize",
+  },
+}));
 
 // TODO: move to game constants and/or extract as an enum
 const playerSkills: (keyof Skills)[] = ["hacking", "strength", "defense", "dexterity", "agility", "charisma"];
@@ -92,7 +89,7 @@ const playerSkills: (keyof Skills)[] = ["hacking", "strength", "defense", "dexte
 let initialAutosave = 0;
 
 export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): JSX.Element => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [importData, setImportData] = useState<ImportData | undefined>();
   const [currentData, setCurrentData] = useState<ImportData | undefined>();
   const [isImportModalOpen, { on: openImportModal, off: closeImportModal }] = useBoolean(false);

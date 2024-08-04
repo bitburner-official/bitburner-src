@@ -32,7 +32,8 @@ RAM cost: 3 GB \* 16/4/1
 
 
 ```js
-ns.singularity.getFactionInviteRequirements("The Syndicate")
+ns.singularity.getFactionInviteRequirements("The Syndicate");
+
 [
   { "type": "someCondition", "conditions": [
       { "type": "city", "city": "Aevum" },
@@ -49,7 +50,10 @@ ns.singularity.getFactionInviteRequirements("The Syndicate")
   },
   { "type": "money", "money": 10000000 },
   { "type": "skills", "skills": { "hacking": 200 } },
-  { "type": "skills", "skills": { "strength": 200, "defense": 200, "dexterity": 200, "agility": 200 } },
+  { "type": "skills", "skills": { "strength": 200 } },
+  { "type": "skills", "skills": { "defense": 200 } },
+  { "type": "skills", "skills": { "dexterity": 200 } },
+  { "type": "skills", "skills": { "agility": 200 } },
   { "type": "karma", "karma": -90 }
 ]
 ```

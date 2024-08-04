@@ -25,6 +25,7 @@ import { isSleeveClassWork } from "../Work/SleeveClassWork";
 import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../Work/SleeveCompanyWork";
 import { isSleeveCrimeWork } from "../Work/SleeveCrimeWork";
+import { canAccessBitNodeFeature } from "../../../BitNode/BitNodeUtils";
 
 const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;
 
@@ -33,7 +34,7 @@ interface IProps {
 }
 
 export function StatsElement(props: IProps): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   return (
     <Table sx={{ display: "table", mb: 1, width: "100%" }}>
@@ -76,7 +77,7 @@ export function StatsElement(props: IProps): React.ReactElement {
           color={Settings.theme.cha}
           data={{ level: props.sleeve.skills.charisma, exp: props.sleeve.exp.charisma }}
         />
-        {(Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) && (
+        {canAccessBitNodeFeature(5) && (
           <StatsRow
             name="Intelligence"
             color={Settings.theme.int}
@@ -109,9 +110,9 @@ export function StatsElement(props: IProps): React.ReactElement {
 }
 
 export function EarningsElement(props: IProps): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
-  let data: (string | JSX.Element)[][] = [];
+  let data: [string, string | JSX.Element][] = [];
   if (isSleeveCrimeWork(props.sleeve.currentWork)) {
     const gains = props.sleeve.currentWork.getExp(props.sleeve);
     data = [
@@ -150,20 +151,21 @@ export function EarningsElement(props: IProps): React.ReactElement {
     ];
   }
 
-  companyWork: if (isSleeveCompanyWork(props.sleeve.currentWork)) {
+  if (isSleeveCompanyWork(props.sleeve.currentWork)) {
     const job = Player.jobs[props.sleeve.currentWork.companyName];
-    if (!job) break companyWork;
-    const rates = props.sleeve.currentWork.getGainRates(props.sleeve, job);
-    data = [
-      [`Money:`, <MoneyRate key="money-rate" money={CYCLES_PER_SEC * rates.money} />],
-      [`Hacking Exp:`, `${formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],
-      [`Strength Exp:`, `${formatExp(CYCLES_PER_SEC * rates.strExp)} / sec`],
-      [`Defense Exp:`, `${formatExp(CYCLES_PER_SEC * rates.defExp)} / sec`],
-      [`Dexterity Exp:`, `${formatExp(CYCLES_PER_SEC * rates.dexExp)} / sec`],
-      [`Agility Exp:`, `${formatExp(CYCLES_PER_SEC * rates.agiExp)} / sec`],
-      [`Charisma Exp:`, `${formatExp(CYCLES_PER_SEC * rates.chaExp)} / sec`],
-      [`Reputation:`, <ReputationRate key="reputation-rate" reputation={CYCLES_PER_SEC * rates.reputation} />],
-    ];
+    if (job) {
+      const rates = props.sleeve.currentWork.getGainRates(props.sleeve, job);
+      data = [
+        [`Money:`, <MoneyRate key="money-rate" money={CYCLES_PER_SEC * rates.money} />],
+        [`Hacking Exp:`, `${formatExp(CYCLES_PER_SEC * rates.hackExp)} / sec`],
+        [`Strength Exp:`, `${formatExp(CYCLES_PER_SEC * rates.strExp)} / sec`],
+        [`Defense Exp:`, `${formatExp(CYCLES_PER_SEC * rates.defExp)} / sec`],
+        [`Dexterity Exp:`, `${formatExp(CYCLES_PER_SEC * rates.dexExp)} / sec`],
+        [`Agility Exp:`, `${formatExp(CYCLES_PER_SEC * rates.agiExp)} / sec`],
+        [`Charisma Exp:`, `${formatExp(CYCLES_PER_SEC * rates.chaExp)} / sec`],
+        [`Reputation:`, <ReputationRate key="reputation-rate" reputation={CYCLES_PER_SEC * rates.reputation} />],
+      ];
+    }
   }
 
   return (

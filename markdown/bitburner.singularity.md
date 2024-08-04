@@ -21,12 +21,12 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  Method | Description |
 |  --- | --- |
 |  [applyToCompany(companyName, field)](./bitburner.singularity.applytocompany.md) | Apply for a job at a company. |
-|  [b1tflum3(nextBN, callbackScript)](./bitburner.singularity.b1tflum3.md) | b1t\_flum3 into a different BN. |
+|  [b1tflum3(nextBN, callbackScript, bitNodeOptions)](./bitburner.singularity.b1tflum3.md) | b1t\_flum3 into a different BN. |
 |  [checkFactionInvitations()](./bitburner.singularity.checkfactioninvitations.md) | List all current faction invitations. |
 |  [commitCrime(crime, focus)](./bitburner.singularity.commitcrime.md) | Commit a crime. |
 |  [connect(hostname)](./bitburner.singularity.connect.md) | Connect to a server. |
 |  [createProgram(program, focus)](./bitburner.singularity.createprogram.md) | Create a program. |
-|  [destroyW0r1dD43m0n(nextBN, callbackScript)](./bitburner.singularity.destroyw0r1dd43m0n.md) | Destroy the w0r1d\_d43m0n and move on to the next BN. |
+|  [destroyW0r1dD43m0n(nextBN, callbackScript, bitNodeOptions)](./bitburner.singularity.destroyw0r1dd43m0n.md) | Destroy the w0r1d\_d43m0n and move on to the next BN. |
 |  [donateToFaction(faction, amount)](./bitburner.singularity.donatetofaction.md) | Donate to a faction. |
 |  [exportGame()](./bitburner.singularity.exportgame.md) | Backup game save. |
 |  [exportGameBonus()](./bitburner.singularity.exportgamebonus.md) | Returns Backup save bonus availability. |
@@ -53,6 +53,7 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [getFactionFavorGain(faction)](./bitburner.singularity.getfactionfavorgain.md) | Get faction favor gain. |
 |  [getFactionInviteRequirements(faction)](./bitburner.singularity.getfactioninviterequirements.md) | List conditions for being invited to a faction. |
 |  [getFactionRep(faction)](./bitburner.singularity.getfactionrep.md) | Get faction reputation. |
+|  [getFactionWorkTypes(faction)](./bitburner.singularity.getfactionworktypes.md) | Get the work types of a faction. |
 |  [getOwnedAugmentations(purchased)](./bitburner.singularity.getownedaugmentations.md) | Get a list of owned augmentation. |
 |  [getOwnedSourceFiles()](./bitburner.singularity.getownedsourcefiles.md) | Get a list of acquired Source-Files. |
 |  [getUpgradeHomeCoresCost()](./bitburner.singularity.getupgradehomecorescost.md) | Get the price of upgrading home cores. |

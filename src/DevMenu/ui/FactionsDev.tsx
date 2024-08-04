@@ -29,8 +29,9 @@ import { Factions } from "../../Faction/Factions";
 import { getRecordValues } from "../../Types/Record";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { useRerender } from "../../ui/React/hooks";
+import { MaxFavor } from "../../Faction/formulas/favor";
 
-const bigNumber = 1e12;
+const largeAmountOfReputation = 1e12;
 
 export function FactionsDev(): React.ReactElement {
   const [selectedFaction, setSelectedFaction] = useState(Factions[FactionName.Illuminati]);
@@ -73,7 +74,9 @@ export function FactionsDev(): React.ReactElement {
 
   function modifyFactionRep(modifier: number): (x: number) => void {
     return function (reputation: number): void {
-      if (!isNaN(reputation)) selectedFaction.playerReputation += reputation * modifier;
+      if (!isNaN(reputation)) {
+        selectedFaction.playerReputation += reputation * modifier;
+      }
     };
   }
 
@@ -83,17 +86,19 @@ export function FactionsDev(): React.ReactElement {
 
   function modifyFactionFavor(modifier: number): (x: number) => void {
     return function (favor: number): void {
-      if (!isNaN(favor)) selectedFaction.favor += favor * modifier;
+      if (!isNaN(favor)) {
+        selectedFaction.setFavor(selectedFaction.favor + favor * modifier);
+      }
     };
   }
 
   function resetFactionFavor(): void {
-    selectedFaction.favor = 0;
+    selectedFaction.setFavor(0);
   }
 
   function tonsOfRep(): void {
     for (const faction of getRecordValues(Factions)) {
-      faction.playerReputation = bigNumber;
+      faction.playerReputation = largeAmountOfReputation;
     }
   }
 
@@ -105,17 +110,17 @@ export function FactionsDev(): React.ReactElement {
 
   function tonsOfFactionFavor(): void {
     for (const faction of getRecordValues(Factions)) {
-      faction.favor = bigNumber;
+      faction.setFavor(MaxFavor);
     }
   }
 
   function resetAllFactionFavor(): void {
     for (const faction of getRecordValues(Factions)) {
-      faction.favor = 0;
+      faction.setFavor(0);
     }
   }
 
-  function setDiscovery(event: React.ChangeEvent<HTMLInputElement>, value: string): void {
+  function setDiscovery(_: React.ChangeEvent<HTMLInputElement>, value: string): void {
     if (!getEnumHelper("FactionDiscovery").isMember(value)) return;
     selectedFaction.discovery = value;
     rerender();
@@ -187,7 +192,7 @@ export function FactionsDev(): React.ReactElement {
                 <Adjuster
                   label="reputation"
                   placeholder="amt"
-                  tons={() => modifyFactionRep(1)(bigNumber)}
+                  tons={() => modifyFactionRep(1)(largeAmountOfReputation)}
                   add={modifyFactionRep(1)}
                   subtract={modifyFactionRep(-1)}
                   reset={resetFactionRep}
@@ -202,7 +207,7 @@ export function FactionsDev(): React.ReactElement {
                 <Adjuster
                   label="favor"
                   placeholder="amt"
-                  tons={() => modifyFactionFavor(1)(2000)}
+                  tons={() => modifyFactionFavor(1)(MaxFavor)}
                   add={modifyFactionFavor(1)}
                   subtract={modifyFactionFavor(-1)}
                   reset={resetFactionFavor}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Draggable, { DraggableEventHandler } from "react-draggable";
-import makeStyles from "@mui/styles/makeStyles";
+import { makeStyles } from "tss-react/mui";
 import Collapse from "@mui/material/Collapse";
 import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -13,7 +13,7 @@ import { Settings } from "../../Settings/Settings";
 import { Box, Button, Typography } from "@mui/material";
 import { debounce } from "lodash";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   overviewContainer: {
     position: "fixed",
     top: 0,
@@ -68,7 +68,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
   const [open, setOpen] = useState(Settings.overview.opened);
   const [x, setX] = useState(Settings.overview.x);
   const [y, setY] = useState(Settings.overview.y);
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const CurrentIcon = open ? KeyboardArrowUpIcon : KeyboardArrowDownIcon;
   const LeftIcon = mode === "tutorial" ? SchoolIcon : EqualizerIcon;
@@ -94,7 +94,11 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
         triggerMouseEvent(node, "mousedown");
         triggerMouseEvent(document, "mousemove");
         triggerMouseEvent(node, "mouseup");
-        triggerMouseEvent(node, "click");
+        // According to a comment in the above GitHub issue, apparently mousemove is important,
+        // but click probably isn't. This click causes a runtime error in Safari (NotAllowedError),
+        // but not Chromium. If further errors occur, a more thorough fix, possibly using
+        // navigator.userActivation.isActive, might be necessary.
+        // triggerMouseEvent(node, "click");
       }, 100),
     [],
   );
@@ -111,8 +115,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
   }, [fakeDrag]);
 
   const triggerMouseEvent = (node: HTMLDivElement | Document, eventType: string): void => {
-    const clickEvent = document.createEvent("MouseEvents");
-    clickEvent.initEvent(eventType, true, true);
+    const clickEvent = new MouseEvent(eventType, { bubbles: true, cancelable: true });
     node.dispatchEvent(clickEvent);
   };
 

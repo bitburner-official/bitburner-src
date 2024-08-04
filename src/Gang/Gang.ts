@@ -154,9 +154,11 @@ export class Gang {
       const newWanted = oldWanted + wantedLevelGainPerCycle * numCycles;
       // Allows recovery when wanted / respect ratio is too high
       this.wanted = newWanted * (1 - justice * 0.001);
-      this.wantedGainRate -= newWanted - this.wanted;
+      this.wantedGainRate = (this.wanted - oldWanted) / numCycles;
       // Prevent overflow
-      if (this.wanted < 1 || (wantedLevelGainPerCycle <= 0 && this.wanted > oldWanted)) this.wanted = 1;
+      if (this.wanted < 1 || (wantedLevelGainPerCycle <= 0 && this.wanted > oldWanted)) {
+        this.wanted = 1;
+      }
     }
     Player.gainMoney(moneyGainPerCycle * numCycles, "gang");
   }
@@ -315,11 +317,14 @@ export class Gang {
   }
 
   getRecruitsAvailable(): number {
-    const numFreeMembers = 3;
-    const recruitCostBase = 5;
-    if (this.members.length < numFreeMembers && this.respect < Math.pow(recruitCostBase, numFreeMembers))
-      return numFreeMembers - this.members.length; // if the max possible is less than freeMembers
-    return Math.floor(Math.log(this.respect) / Math.log(recruitCostBase)) + numFreeMembers - this.members.length; //else
+    if (this.members.length >= GangConstants.MaximumGangMembers) {
+      return 0;
+    }
+    const numFreeMembers = GangConstants.numFreeMembers;
+    const recruitCostBase = GangConstants.recruitThresholdBase;
+    const membersRecruitabile =
+      Math.floor(Math.max(Math.log(this.respect), 0) / Math.log(recruitCostBase)) + numFreeMembers;
+    return Math.min(membersRecruitabile, GangConstants.MaximumGangMembers) - this.members.length;
   }
 
   recruitMember(name: string): boolean {

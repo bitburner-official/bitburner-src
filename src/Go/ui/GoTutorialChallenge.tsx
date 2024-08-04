@@ -33,7 +33,7 @@ export function GoTutorialChallenge({
   incorrectText2,
 }: IProps): React.ReactElement {
   const stateRef = useRef(getStateCopy(state));
-  const classes = boardStyles();
+  const { classes } = boardStyles();
   const [displayText, setDisplayText] = useState(description);
   const [showReset, setShowReset] = useState(false);
 

@@ -49,6 +49,7 @@ export enum ComplexPage {
   Location = "Location",
   ImportSave = "Import Save",
   Documentation = "Documentation",
+  LoadingScreen = "Loading Screen", // Has no PageContext, and thus toPage() cannot be used
 }
 
 // Using the same name as both type and object to mimic enum-like behavior.
@@ -86,18 +87,20 @@ export type PageWithContext =
   | ({ page: ComplexPage.Location } & PageContext<ComplexPage.Location>)
   | ({ page: ComplexPage.ImportSave } & PageContext<ComplexPage.ImportSave>)
   | ({ page: ComplexPage.Documentation } & PageContext<ComplexPage.Documentation>)
+  | { page: ComplexPage.LoadingScreen }
   | { page: SimplePage };
 
 export interface ScriptEditorRouteOptions {
-  vim?: boolean;
+  vim: boolean;
   hostname?: string;
 }
 
 /** The router keeps track of player navigation/routing within the game. */
 export interface IRouter {
-  isInitialized: boolean;
   page(): Page;
   allowRouting(value: boolean): void;
+  /** If messages/toasts are hidden on this page */
+  hidingMessages(): boolean;
   toPage(page: SimplePage): void;
   toPage<T extends ComplexPage>(page: T, context: PageContext<T>): void;
   /** go to a preveious page (if any) */

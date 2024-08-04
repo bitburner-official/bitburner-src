@@ -26,15 +26,7 @@ import {
   calculateGrowTime,
   calculateWeakenTime,
 } from "../Hacking";
-import {
-  CityName,
-  CompletedProgramName,
-  FactionWorkType,
-  GymType,
-  JobName,
-  LocationName,
-  UniversityClassType,
-} from "@enums";
+import { CityName, CompletedProgramName, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
 import { Formulas as IFormulas, Player as IPlayer, Person as IPerson } from "@nsdefs";
 import {
   calculateRespectGain,
@@ -427,12 +419,10 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       companyGains: (ctx) => (_person, _companyName, _positionName, _favor) => {
         checkFormulasAccess(ctx);
         const person = helpers.person(ctx, _person);
-        const positionName = findEnumMember(JobName, helpers.string(ctx, "_positionName", _positionName));
-        if (!positionName) throw new Error(`Invalid company position: ${_positionName}`);
+        const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
+        const company = Companies[companyName];
+        const positionName = getEnumHelper("JobName").nsGetMember(ctx, _positionName);
         const position = CompanyPositions[positionName];
-        const companyName = helpers.string(ctx, "_companyName", _companyName);
-        const company = Object.values(Companies).find((c) => c.name === companyName);
-        if (!company) throw new Error(`Invalid company name: ${companyName}`);
         const favor = helpers.number(ctx, "favor", _favor);
         return calculateCompanyWorkStats(person, company, position, favor);
       },

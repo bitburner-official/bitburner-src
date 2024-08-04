@@ -57,11 +57,11 @@ function establishInitialConditions() {
   joinFaction(csec);
   joinFaction(slumSnakes);
   csec.playerReputation = 1e6;
-  csec.favor = 20;
+  csec.setFavor(20);
 
   // Companies
   const noodleBar = Companies[CompanyName.NoodleBar];
-  noodleBar.favor = 100;
+  noodleBar.setFavor(100);
   noodleBar.playerReputation = 100000;
 
   // Bladeburner. Adding rank will also add bladeburner faction rep.

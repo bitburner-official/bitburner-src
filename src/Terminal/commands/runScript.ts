@@ -7,8 +7,9 @@ import libarg from "arg";
 import { formatRam } from "../../ui/formatNumber";
 import { ScriptArg } from "@nsdefs";
 import { isPositiveInteger } from "../../types";
-import { ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { ScriptFilePath, isLegacyScript } from "../../Paths/ScriptFilePath";
 import { sendDeprecationNotice } from "./common/deprecation";
+import { roundToTwo } from "../../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../../Netscript/RamCostGenerator";
 
 export function runScript(path: ScriptFilePath, commandArgs: (string | number | boolean)[], server: BaseServer): void {
@@ -23,7 +24,7 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   });
   const tailFlag = flags["--tail"] === true;
   const numThreads = parseFloat(flags["-t"] ?? 1);
-  const ramOverride = flags["--ram-override"] != null ? parseFloat(flags["--ram-override"]) : null;
+  const ramOverride = flags["--ram-override"] != null ? roundToTwo(parseFloat(flags["--ram-override"])) : null;
   if (!isPositiveInteger(numThreads)) {
     return Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
   }
@@ -60,7 +61,7 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   const success = startWorkerScript(runningScript, server);
   if (!success) return Terminal.error(`Failed to start script`);
 
-  if (path.endsWith(".script")) {
+  if (isLegacyScript(path)) {
     sendDeprecationNotice();
   }
   Terminal.print(

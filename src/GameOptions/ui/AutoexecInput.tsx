@@ -60,7 +60,7 @@ export const AutoexecInput = (props: IProps): React.ReactElement => {
       );
     }
     // Stolen from Prestige.ts
-    const minRam = Player.sourceFileLvl(9) >= 2 ? 128 : Player.sourceFileLvl(1) > 0 ? 32 : 8;
+    const minRam = Player.activeSourceFileLvl(9) >= 2 ? 128 : Player.activeSourceFileLvl(1) > 0 ? 32 : 8;
     if (ramUsage <= minRam) {
       return (
         <Tooltip

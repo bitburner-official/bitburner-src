@@ -14,7 +14,6 @@ interface IProps {
 }
 
 export function TravelConfirmationModal(props: IProps): React.ReactElement {
-  const cost = CONSTANTS.TravelCost;
   function travel(): void {
     props.travel();
   }
@@ -22,7 +21,8 @@ export function TravelConfirmationModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Typography>
-        Would you like to travel to {props.city}? The trip will cost <Money money={cost} forPurchase={true} />.
+        Would you like to travel to {props.city}? The trip will cost{" "}
+        <Money money={CONSTANTS.TravelCost} forPurchase={true} />.
       </Typography>
       <br />
       <br />

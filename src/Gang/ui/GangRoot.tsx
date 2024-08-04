@@ -8,7 +8,7 @@ import { Context } from "./Context";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 
 /** React Component for all the gang stuff. */
 export function GangRoot(): React.ReactElement {
@@ -22,7 +22,7 @@ export function GangRoot(): React.ReactElement {
     setValue(tab);
   }
 
-  useRerender(200);
+  useCycleRerender();
 
   return (
     <Context.Gang.Provider value={gang}>

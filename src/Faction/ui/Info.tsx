@@ -11,26 +11,24 @@ import { Reputation } from "../../ui/React/Reputation";
 import { Favor } from "../../ui/React/Favor";
 import { MathJax } from "better-react-mathjax";
 
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import { makeStyles } from "tss-react/mui";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
+import { calculateFavorAfterResetting } from "../formulas/favor";
 
 interface IProps {
   faction: Faction;
   factionInfo: FactionInfo;
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    noformat: {
-      whiteSpace: "pre-wrap",
-      lineHeight: "1em",
-    },
-  }),
-);
+const useStyles = makeStyles()({
+  noformat: {
+    whiteSpace: "pre-wrap",
+    lineHeight: "1em",
+  },
+});
 
 function DefaultAssignment(): React.ReactElement {
   return (
@@ -44,12 +42,10 @@ function DefaultAssignment(): React.ReactElement {
 }
 
 export function Info(props: IProps): React.ReactElement {
-  useRerender(200);
-  const classes = useStyles();
+  useCycleRerender();
+  const { classes } = useStyles();
 
   const Assignment = props.factionInfo.assignment ?? DefaultAssignment;
-
-  const favorGain = props.faction.getFavorGain();
 
   return (
     <>
@@ -60,8 +56,9 @@ export function Info(props: IProps): React.ReactElement {
           title={
             <>
               <Typography>
-                You will have <Favor favor={Math.floor(props.faction.favor + favorGain)} /> faction favor after
-                installing an Augmentation.
+                You will have{" "}
+                <Favor favor={calculateFavorAfterResetting(props.faction.favor, props.faction.playerReputation)} />{" "}
+                faction favor after installing an Augmentation.
               </Typography>
               <MathJax>{"\\(\\huge{r = \\text{total faction reputation}}\\)"}</MathJax>
               <MathJax>
@@ -94,7 +91,7 @@ export function Info(props: IProps): React.ReactElement {
           }
         >
           <Typography>
-            Faction Favor: <Favor favor={Math.floor(props.faction.favor)} />
+            Faction Favor: <Favor favor={props.faction.favor} />
           </Typography>
         </Tooltip>
       </Box>

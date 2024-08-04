@@ -13,7 +13,7 @@ import { GoOpponent } from "@enums";
 
 export const GoStatusPage = (): React.ReactElement => {
   useRerender(400);
-  const classes = boardStyles();
+  const { classes } = boardStyles();
   const score = getScore(Go.currentGame);
   const opponent = Go.currentGame.ai;
   const playedOpponentList = getRecordKeys(Go.stats).filter((o) => o !== GoOpponent.none);

@@ -9,7 +9,7 @@ import {
   findLibertiesForChain,
   getAllChains,
   boardFromSimpleBoard,
-  simpleBoardFromBoard,
+  boardStringFromBoard,
 } from "../boardAnalysis/boardAnalysis";
 import { endGoGame } from "../boardAnalysis/scoring";
 import { addObstacles, resetCoordinates, rotate90Degrees } from "./offlineNodes";
@@ -89,14 +89,11 @@ export function makeMove(boardState: BoardState, x: number, y: number, player: G
     return false;
   }
 
-  // Only maintain last 7 moves
-  boardState.previousBoards.unshift(simpleBoardFromBoard(boardState.board));
-  if (boardState.previousBoards.length > 7) {
-    boardState.previousBoards.pop();
-  }
-
   const point = boardState.board[x][y];
   if (!point) return false;
+
+  // Add move to board history
+  boardState.previousBoards.unshift(boardStringFromBoard(boardState.board));
 
   point.color = player;
   boardState.previousPlayer = player;

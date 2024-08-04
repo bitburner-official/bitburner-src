@@ -7,6 +7,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import { BladeburnerConstants } from "../data/Constants";
+import { Contract } from "../Actions";
 
 interface ActionLevelProps {
   action: LevelableAction;
@@ -18,6 +19,11 @@ interface ActionLevelProps {
 export function ActionLevel({ action, isActive, bladeburner, rerender }: ActionLevelProps): React.ReactElement {
   const canIncrease = action.level < action.maxLevel;
   const canDecrease = action.level > 1;
+  const successesNeededForNextLevel = action.getSuccessesNeededForNextLevel(
+    action instanceof Contract
+      ? BladeburnerConstants.ContractSuccessesPerLevel
+      : BladeburnerConstants.OperationSuccessesPerLevel,
+  );
 
   function increaseLevel(): void {
     if (!canIncrease) return;
@@ -36,21 +42,7 @@ export function ActionLevel({ action, isActive, bladeburner, rerender }: ActionL
   return (
     <Box display="flex" flexDirection="row" alignItems="center">
       <Box display="flex">
-        <Tooltip
-          title={
-            action.constructor.name === "Contract" ? (
-              <Typography>
-                {action.getSuccessesNeededForNextLevel(BladeburnerConstants.ContractSuccessesPerLevel)} successes needed
-                for next level
-              </Typography>
-            ) : (
-              <Typography>
-                {action.getSuccessesNeededForNextLevel(BladeburnerConstants.OperationSuccessesPerLevel)} successes
-                needed for next level
-              </Typography>
-            )
-          }
-        >
+        <Tooltip title={<Typography>{successesNeededForNextLevel} successes needed for next level</Typography>}>
           <Typography>
             Level: {action.level} / {action.maxLevel}
           </Typography>

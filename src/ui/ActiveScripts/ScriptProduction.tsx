@@ -11,28 +11,25 @@ import { Player } from "@player";
 import Typography from "@mui/material/Typography";
 
 import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
+import { makeStyles } from "tss-react/mui";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    cell: {
-      borderBottom: "none",
-      padding: theme.spacing(1),
-      margin: theme.spacing(1),
-      whiteSpace: "nowrap",
-    },
-    size: {
-      width: "1px",
-    },
-  }),
-);
+const useStyles = makeStyles()((theme: Theme) => ({
+  cell: {
+    borderBottom: "none",
+    padding: theme.spacing(1),
+    margin: theme.spacing(1),
+    whiteSpace: "nowrap",
+  },
+  size: {
+    width: "1px",
+  },
+}));
 export function ScriptProduction(): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const prodRateSinceLastAug = Player.scriptProdSinceLastAug / (Player.playtimeSinceLastAug / 1000);
 
   return (

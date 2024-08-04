@@ -58,6 +58,8 @@ import { JobTracks } from "../Company/data/JobTracks";
 import { ServerConstants } from "../Server/data/Constants";
 import { blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
+import { calculateFavorAfterResetting } from "../Faction/formulas/favor";
+import { validBitNodes } from "../BitNode/BitNodeUtils";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -99,7 +101,29 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
       const aug = Augmentations[augName];
-      return aug.factions.slice();
+      const factions = aug.factions.slice();
+      if (!Player.gang) {
+        return factions;
+      }
+      const gangFactionName = Player.gang.facName;
+      const augmentationListOfGangFaction = getFactionAugmentationsFiltered(Factions[gangFactionName]);
+      /**
+       * If the gang faction does not offer this augmentation, we need to remove the gang faction from the faction list.
+       * Example: "NeuroFlux Governor"
+       */
+      if (!augmentationListOfGangFaction.includes(augName)) {
+        return factions.filter((factionName) => factionName !== gangFactionName);
+      }
+      /**
+       * If the gang faction offers this augmentation, but the faction list does not contain the gang faction, we need
+       * to add the gang faction to that list.
+       * Example: "The Red Pill" in BN2
+       */
+      if (augmentationListOfGangFaction.includes(augName) && !factions.includes(gangFactionName)) {
+        factions.push(gangFactionName);
+        return factions;
+      }
+      return factions;
     },
     getAugmentationsFromFaction: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
@@ -268,7 +292,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.Sector12RothmanUniversity;
+            Player.gotoLocation(LocationName.Sector12RothmanUniversity);
             break;
           case LocationName.VolhavenZBInstituteOfTechnology.toLowerCase():
             if (Player.city != CityName.Volhaven) {
@@ -278,7 +302,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.VolhavenZBInstituteOfTechnology;
+            Player.gotoLocation(LocationName.VolhavenZBInstituteOfTechnology);
             break;
           default:
             helpers.log(ctx, () => `Invalid university name: '${universityName}'.`);
@@ -326,7 +350,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.AevumCrushFitnessGym;
+            Player.gotoLocation(LocationName.AevumCrushFitnessGym);
             break;
           case LocationName.AevumSnapFitnessGym.toLowerCase():
             if (Player.city != CityName.Aevum) {
@@ -337,7 +361,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.AevumSnapFitnessGym;
+            Player.gotoLocation(LocationName.AevumSnapFitnessGym);
             break;
           case LocationName.Sector12IronGym.toLowerCase():
             if (Player.city != CityName.Sector12) {
@@ -348,7 +372,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.Sector12IronGym;
+            Player.gotoLocation(LocationName.Sector12IronGym);
             break;
           case LocationName.Sector12PowerhouseGym.toLowerCase():
             if (Player.city != CityName.Sector12) {
@@ -359,7 +383,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.Sector12PowerhouseGym;
+            Player.gotoLocation(LocationName.Sector12PowerhouseGym);
             break;
           case LocationName.VolhavenMilleniumFitnessGym.toLowerCase():
             if (Player.city != CityName.Volhaven) {
@@ -370,7 +394,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
               );
               return false;
             }
-            Player.location = LocationName.VolhavenMilleniumFitnessGym;
+            Player.gotoLocation(LocationName.VolhavenMilleniumFitnessGym);
             break;
           default:
             helpers.log(ctx, () => `Invalid gym name: ${gymName}. gymWorkout() failed`);
@@ -400,12 +424,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         case CityName.NewTokyo:
         case CityName.Ishima:
         case CityName.Volhaven:
-          if (Player.money < CONSTANTS.TravelCost) {
+          if (!Player.travel(cityName)) {
             helpers.log(ctx, () => "Not enough money to travel.");
             return false;
           }
-          Player.loseMoney(CONSTANTS.TravelCost, "other");
-          Player.city = cityName;
           helpers.log(ctx, () => `Traveled to ${cityName}`);
           Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 50000);
           return true;
@@ -590,11 +612,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     hospitalize: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
-      if (Player.currentWork || Router.page() === Page.Infiltration || Router.page() === Page.BitVerse) {
-        helpers.log(ctx, () => "Cannot go to the hospital because the player is busy.");
-        return;
-      }
-      Player.hospitalize();
+      Player.hospitalize(true);
     },
     isBusy: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
@@ -611,7 +629,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // Check if we're at max cores
       const homeComputer = Player.getHomeComputer();
-      if (homeComputer.cpuCores >= 8) {
+      if (Player.bitNodeOptions.restrictHomePCUpgrade || homeComputer.cpuCores >= 8) {
         helpers.log(ctx, () => `Your home computer is at max cores.`);
         return false;
       }
@@ -642,7 +660,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // Check if we're at max RAM
       const homeComputer = Player.getHomeComputer();
-      if (homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam) {
+      if (
+        (Player.bitNodeOptions.restrictHomePCUpgrade && homeComputer.maxRam >= 128) ||
+        homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam
+      ) {
         helpers.log(ctx, () => `Your home computer is at max RAM.`);
         return false;
       }
@@ -746,7 +767,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     quitJob: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
-      Player.quitJob(companyName);
+      Player.quitJob(companyName, true);
     },
     getCompanyRep: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
@@ -761,7 +782,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     getCompanyFavorGain: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
-      return Companies[companyName].getFavorGain();
+      const company = Companies[companyName];
+      return calculateFavorAfterResetting(company.favor, company.playerReputation) - company.favor;
     },
     getFactionInviteRequirements: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
@@ -809,7 +831,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
         // if the player is in a gang and the target faction is any of the gang faction, fail
         if (Player.gang && faction.name === Player.getGangFaction().name) {
-          helpers.log(ctx, () => `You can't work for '${facName}' because youre managing a gang for it`);
+          helpers.log(ctx, () => `You can't work for '${facName}' because you are managing a gang for it`);
           return false;
         }
 
@@ -895,6 +917,26 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
             return false;
         }
       },
+    getFactionWorkTypes: (ctx) => (_facName) => {
+      helpers.checkSingularityAccess(ctx);
+      const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
+      // Gang does not offer normal work.
+      if (Player.gang?.facName === facName) {
+        return [];
+      }
+      const factionInfo = Factions[facName].getInfo();
+      const workTypes = [];
+      if (factionInfo.offerHackingWork) {
+        workTypes.push(FactionWorkType.hacking);
+      }
+      if (factionInfo.offerFieldWork) {
+        workTypes.push(FactionWorkType.field);
+      }
+      if (factionInfo.offerSecurityWork) {
+        workTypes.push(FactionWorkType.security);
+      }
+      return workTypes;
+    },
     getFactionRep: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
@@ -911,7 +953,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const faction = Factions[facName];
-      return faction.getFavorGain();
+      return calculateFavorAfterResetting(faction.favor, faction.playerReputation) - faction.favor;
     },
     donateToFaction: (ctx) => (_facName, _amt) => {
       helpers.checkSingularityAccess(ctx);
@@ -923,7 +965,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         return false;
       }
       if (Player.gang && faction.name === Player.getGangFaction().name) {
-        helpers.log(ctx, () => `You can't donate to '${facName}' because youre managing a gang for it`);
+        helpers.log(ctx, () => `You can't donate to '${facName}' because you are managing a gang for it`);
         return false;
       }
       if (faction.name === FactionName.ChurchOfTheMachineGod || faction.name === FactionName.Bladeburners) {
@@ -983,6 +1025,9 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         if (!create.req()) {
           helpers.log(ctx, () => `Hacking level is too low to create '${p.name}' (level ${create.level} req)`);
           return false;
+        }
+        if (Player.currentWork) {
+          Player.finishWork(true);
         }
 
         Player.startWork(
@@ -1099,36 +1144,47 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
       return item.price;
     },
-    b1tflum3: (ctx) => (_nextBN, _cbScript) => {
+    b1tflum3: (ctx) => (_nextBN, _cbScript, _bitNodeOptions) => {
       helpers.checkSingularityAccess(ctx);
       const nextBN = helpers.number(ctx, "nextBN", _nextBN);
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
-      enterBitNode(true, Player.bitNodeN, nextBN);
-      if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
+      if (cbScript === null) {
+        throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
+      }
+      enterBitNode(true, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
+      if (cbScript) {
+        setTimeout(() => runAfterReset(cbScript), 500);
+      }
     },
-    destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript) => {
+    destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript, _bitNodeOptions) => {
       helpers.checkSingularityAccess(ctx);
       const nextBN = helpers.number(ctx, "nextBN", _nextBN);
-      if (nextBN > 14 || nextBN < 1 || !Number.isInteger(nextBN)) {
-        throw new Error(`Invalid bitnode specified: ${_nextBN}`);
+      if (!validBitNodes.includes(nextBN)) {
+        throw new Error(`Invalid BitNode: ${_nextBN}.`);
       }
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
+      if (cbScript === null) {
+        throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
+      }
 
       const wd = GetServer(SpecialServers.WorldDaemon);
-      if (!(wd instanceof Server)) throw new Error("WorldDaemon was not a normal server. This is a bug contact dev.");
+      if (!(wd instanceof Server)) {
+        throw new Error("WorldDaemon is not a normal server. This is a bug. Please contact developers.");
+      }
       const hackingRequirements = () => {
-        if (Player.skills.hacking < wd.requiredHackingSkill) return false;
-        if (!wd.hasAdminRights) return false;
+        if (Player.skills.hacking < wd.requiredHackingSkill || !wd.hasAdminRights) {
+          return false;
+        }
         return true;
       };
       const bladeburnerRequirements = () => {
-        if (!Player.bladeburner) return false;
+        if (!Player.bladeburner) {
+          return false;
+        }
         return Player.bladeburner.numBlackOpsComplete >= blackOpsArray.length;
       };
 
@@ -1139,8 +1195,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       wd.backdoorInstalled = true;
       calculateAchievements();
-      enterBitNode(false, Player.bitNodeN, nextBN);
-      if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
+      enterBitNode(false, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
+      if (cbScript) {
+        setTimeout(() => runAfterReset(cbScript), 500);
+      }
     },
     getCurrentWork: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);

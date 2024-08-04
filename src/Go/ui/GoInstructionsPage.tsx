@@ -70,7 +70,7 @@ const makeTwoEyesChallenge = (
 );
 
 export const GoInstructionsPage = (): React.ReactElement => {
-  const classes = boardStyles();
+  const { classes } = boardStyles();
   return (
     <div className={classes.instructionScroller}>
       <>
@@ -80,6 +80,16 @@ export const GoInstructionsPage = (): React.ReactElement => {
           In late 2070, the .org bubble burst, and most of the newly-implemented IPvGO 'net collapsed overnight. Since
           then, various factions have been fighting over small subnets to control their computational power. These
           subnets are very valuable in the right hands, if you can wrest them from their current owners.
+          <br />
+          <br />
+          (For details about how to automate with the API, and for a working starter script, visit the IPvGO section of
+          the in-game{" "}
+          <Link
+            style={{ cursor: "pointer" }}
+            onClick={() => Router.toPage(Page.Documentation, { docPage: "programming/go_algorithms.md" })}
+          >
+            Bitburner Documentation)
+          </Link>
         </Typography>
         <br />
         <br />

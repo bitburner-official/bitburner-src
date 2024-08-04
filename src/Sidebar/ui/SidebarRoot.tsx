@@ -1,8 +1,7 @@
 import React, { useMemo, useCallback, useState, useEffect } from "react";
 import { KEYCODE } from "../../utils/helpers/keyCodes";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
+import { makeStyles } from "tss-react/mui";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -55,8 +54,9 @@ import { ProgramsSeen } from "../../Programs/ui/ProgramsRoot";
 import { InvitationsSeen } from "../../Faction/ui/FactionsRoot";
 import { hash } from "../../hash/hash";
 import { Locations } from "../../Locations/Locations";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 import { playerHasDiscoveredGo } from "../../Go/effects/effect";
+import { knowAboutBitverse } from "../../BitNode/BitNodeUtils";
 
 const RotatedDoubleArrowIcon = React.forwardRef(function RotatedDoubleArrowIcon(
   props: { color: "primary" | "secondary" | "error" },
@@ -100,17 +100,15 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" 
   }),
 }));
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    active: {
-      borderLeft: "3px solid " + theme.palette.primary.main,
-    },
-    listitem: {},
-  }),
-);
+const useStyles = makeStyles()((theme: Theme) => ({
+  active: {
+    borderLeft: "3px solid " + theme.palette.primary.main,
+  },
+  listitem: {},
+}));
 
 export function SidebarRoot(props: { page: Page }): React.ReactElement {
-  useRerender(200);
+  useCycleRerender();
 
   let flash: Page | null = null;
   switch (ITutorial.currStep) {
@@ -144,12 +142,12 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     Player.factions.length > 0 ||
     Player.augmentations.length > 0 ||
     Player.queuedAugmentations.length > 0 ||
-    Player.sourceFiles.size > 0;
+    knowAboutBitverse();
 
   const canOpenAugmentations =
     Player.augmentations.length > 0 ||
     Player.queuedAugmentations.length > 0 ||
-    Player.sourceFiles.size > 0 ||
+    knowAboutBitverse() ||
     Player.exploits.length > 0;
 
   const canOpenSleeves = Player.sleeves.length > 0;
@@ -256,7 +254,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     return () => document.removeEventListener("keydown", handleShortcuts);
   }, [canJob, clickPage, props.page]);
 
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [open, setOpen] = useState(Settings.IsSidebarOpened);
   const toggleDrawer = (): void =>
     setOpen((old) => {

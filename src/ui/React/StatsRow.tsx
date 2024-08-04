@@ -19,7 +19,7 @@ interface IProps {
 }
 
 export const StatsRow = ({ name, color, children, data }: IProps): React.ReactElement => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   let content = "";
   if (data) {

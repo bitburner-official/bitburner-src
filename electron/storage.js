@@ -192,9 +192,9 @@ async function pushSaveDataToSteamCloud(saveData, currentPlayerId) {
    *
    * Instead of implementing it, the old code (encoding in base64) is used here for backward compatibility.
    */
-  const content = saveData.toString("base64");
-  log.debug(`Uncompressed: ${saveData.length} bytes`);
-  log.debug(`Compressed: ${content.length} bytes`);
+  const content = Buffer.from(saveData).toString("base64");
+  log.debug(`saveData: ${saveData.length} bytes`);
+  log.debug(`Base64 string of saveData: ${content.length} bytes`);
   log.debug(`Saving to Steam Cloud as ${steamSaveName}`);
 
   try {

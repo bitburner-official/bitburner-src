@@ -42,6 +42,6 @@ const factionName = "CyberSec";
 const workType = "hacking";
 
 let success = ns.singularity.workForFaction(factionName, workType);
-if (!success) ns.tprint(`ERROR: Failed to start work for ${factionName} with work type ${workType}.`)
+if (!success) ns.tprint(`ERROR: Failed to start work for ${factionName} with work type ${workType}.`);
 ```
 

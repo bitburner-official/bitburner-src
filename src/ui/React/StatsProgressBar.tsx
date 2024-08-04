@@ -54,7 +54,7 @@ export function StatsProgressBar({
 }
 
 export function StatsProgressOverviewCell({ progress: skill, color }: IStatsOverviewCellProps): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <TableCell
       component="th"

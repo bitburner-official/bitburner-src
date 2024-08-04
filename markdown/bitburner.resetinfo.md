@@ -16,6 +16,7 @@ interface ResetInfo
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
+|  [bitNodeOptions](./bitburner.resetinfo.bitnodeoptions.md) |  | [BitNodeOptions](./bitburner.bitnodeoptions.md) | Current BitNode options |
 |  [currentNode](./bitburner.resetinfo.currentnode.md) |  | number | The current bitnode |
 |  [lastAugReset](./bitburner.resetinfo.lastaugreset.md) |  | number | Numeric timestamp (from Date.now()) of last augmentation reset |
 |  [lastNodeReset](./bitburner.resetinfo.lastnodereset.md) |  | number | Numeric timestamp (from Date.now()) of last bitnode reset |

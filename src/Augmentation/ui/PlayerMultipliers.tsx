@@ -7,6 +7,7 @@ import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { formatPercent } from "../../ui/formatNumber";
 import { Augmentations } from "../Augmentations";
+import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 
 function calculateAugmentedStats(): Multipliers {
   let augP: Multipliers = defaultMultipliers();
@@ -28,9 +29,10 @@ function customFormatPercent(value: number): string {
 }
 
 function BitNodeModifiedStats(props: IBitNodeModifiedStatsProps): React.ReactElement {
-  // If player doesn't have SF5 or if the property isn't affected by BitNode mults
-  if (props.mult === 1 || Player.sourceFileLvl(5) === 0)
+  // If the player doesn't have access to SF5 feature or if the property isn't affected by BitNode mults
+  if (props.mult === 1 || !canAccessBitNodeFeature(5)) {
     return <Typography color={props.color}>{customFormatPercent(props.base)}</Typography>;
+  }
 
   return (
     <Typography color={props.color}>
@@ -70,8 +72,12 @@ function MultiplierList(props: IMultiplierListProps): React.ReactElement {
               secondary={
                 <span style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
                   <BitNodeModifiedStats base={current} mult={bnMult} color={color} />
-                  <DoubleArrow fontSize="small" color="success" sx={{ mb: 0.5, mx: 1 }} />
-                  <BitNodeModifiedStats base={augmented} mult={bnMult} color={Settings.theme.success} />
+                  {current !== augmented && (
+                    <>
+                      <DoubleArrow fontSize="small" color="success" sx={{ mb: 0.5, mx: 1 }} />
+                      <BitNodeModifiedStats base={augmented} mult={bnMult} color={Settings.theme.success} />
+                    </>
+                  )}
                 </span>
               }
               disableTypography

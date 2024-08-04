@@ -1,4 +1,4 @@
-import { Play, SimpleOpponentStats } from "../Types";
+import { Play, SimpleBoard, SimpleOpponentStats } from "../Types";
 
 import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
@@ -10,8 +10,9 @@ import {
   getControlledSpace,
   getPreviousMove,
   simpleBoardFromBoard,
+  simpleBoardFromBoardString,
 } from "../boardAnalysis/boardAnalysis";
-import { getOpponentStats, getScore, resetWinstreak } from "../boardAnalysis/scoring";
+import { endGoGame, getOpponentStats, getScore, resetWinstreak } from "../boardAnalysis/scoring";
 import { WHRNG } from "../../Casino/RNG";
 import { getRecordKeys } from "../../Types/Record";
 import { CalculateEffect, getEffectTypeForFaction } from "./effect";
@@ -223,6 +224,8 @@ export function getControlledEmptyNodes() {
  * Gets the status of the current game.
  * Shows the current player, current score, and the previous move coordinates.
  * Previous move coordinates will be [-1, -1] for a pass, or if there are no prior moves.
+ *
+ * Also provides the white player's komi (bonus starting score), and the amount of bonus cycles from offline time remaining
  */
 export function getGameState() {
   const currentPlayer = getCurrentPlayer();
@@ -234,7 +237,13 @@ export function getGameState() {
     whiteScore: score[GoColor.white].sum,
     blackScore: score[GoColor.black].sum,
     previousMove,
+    komi: score[GoColor.white].komi,
+    bonusCycles: Go.storedCycles,
   };
+}
+
+export function getMoveHistory(): SimpleBoard[] {
+  return Go.currentGame.previousBoards.map((boardString) => simpleBoardFromBoardString(boardString));
 }
 
 /**
@@ -314,8 +323,8 @@ export function getStats() {
 
 /** Validate singularity access by throwing an error if the player does not have access. */
 export function checkCheatApiAccess(error: (s: string) => void): void {
-  const hasSourceFile = Player.sourceFileLvl(14) > 1;
-  const isBitnodeFourteenTwo = Player.sourceFileLvl(14) === 1 && Player.bitNodeN === 14;
+  const hasSourceFile = Player.activeSourceFileLvl(14) > 1;
+  const isBitnodeFourteenTwo = Player.activeSourceFileLvl(14) === 1 && Player.bitNodeN === 14;
   if (!hasSourceFile && !isBitnodeFourteenTwo) {
     error(
       `The go.cheat API requires Source-File 14.2 to run, a power up you obtain later in the game.
@@ -337,30 +346,27 @@ export async function determineCheatSuccess(
 ): Promise<Play> {
   const state = Go.currentGame;
   const rng = new WHRNG(Player.totalPlaytime);
+  state.passCount = 0;
+
   // If cheat is successful, run callback
   if ((successRngOverride ?? rng.random()) <= cheatSuccessChance(state.cheatCount)) {
     callback();
-    state.cheatCount++;
     GoEvents.emit();
-    return makeAIMove(state);
   }
   // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly losing
   else if (state.cheatCount && (ejectRngOverride ?? rng.random()) < 0.1) {
     logger(`Cheat failed! You have been ejected from the subnet.`);
-    resetBoardState(logger, logger, state.ai, state.board[0].length);
-    return {
-      type: GoPlayType.gameOver,
-      x: null,
-      y: null,
-    };
+    endGoGame(state);
+    return Go.nextTurn;
   }
   // If the cheat fails, your turn is skipped
   else {
     logger(`Cheat failed. Your turn has been skipped.`);
     passTurn(state, GoColor.black, false);
-    state.cheatCount++;
-    return makeAIMove(state);
   }
+
+  state.cheatCount++;
+  return makeAIMove(state);
 }
 
 /**
@@ -381,7 +387,7 @@ export async function determineCheatSuccess(
  * 15: +31,358,645%
  */
 export function cheatSuccessChance(cheatCount: number) {
-  const sourceFileBonus = Player.sourceFileLvl(14) === 3 ? 0.25 : 0;
+  const sourceFileBonus = Player.activeSourceFileLvl(14) === 3 ? 0.25 : 0;
   const cheatCountScalar = (0.7 - 0.02 * cheatCount) ** cheatCount;
   return Math.max(Math.min(0.6 * cheatCountScalar * Player.mults.crime_success + sourceFileBonus, 1), 0);
 }
@@ -395,7 +401,7 @@ export function cheatRemoveRouter(
   y: number,
   successRngOverride?: number,
   ejectRngOverride?: number,
-) {
+): Promise<Play> {
   const point = Go.currentGame.board[x][y]!;
   return determineCheatSuccess(
     logger,
@@ -421,7 +427,7 @@ export function cheatPlayTwoMoves(
   y2: number,
   successRngOverride?: number,
   ejectRngOverride?: number,
-) {
+): Promise<Play> {
   const point1 = Go.currentGame.board[x1][y1]!;
   const point2 = Go.currentGame.board[x2][y2]!;
 
@@ -446,7 +452,7 @@ export function cheatRepairOfflineNode(
   y: number,
   successRngOverride?: number,
   ejectRngOverride?: number,
-) {
+): Promise<Play> {
   return determineCheatSuccess(
     logger,
     () => {
@@ -472,7 +478,7 @@ export function cheatDestroyNode(
   y: number,
   successRngOverride?: number,
   ejectRngOverride?: number,
-) {
+): Promise<Play> {
   return determineCheatSuccess(
     logger,
     () => {

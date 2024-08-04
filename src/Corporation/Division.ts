@@ -15,6 +15,7 @@ import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { PartialRecord, getRecordEntries, getRecordKeys, getRecordValues } from "../Types/Record";
 import { Material } from "./Material";
 import { getKeyList } from "../utils/helpers/getKeyList";
+import { calculateMarkupMultiplier } from "./helpers";
 
 interface DivisionParams {
   name: string;
@@ -573,8 +574,7 @@ export class Division {
               sCost = optimalPrice;
             } else if (mat.marketTa1) {
               sCost = mat.marketPrice + markupLimit;
-              // check truthyness to avoid unnecessary eval
-            } else if (typeof mat.desiredSellPrice === "string" && mat.desiredSellPrice) {
+            } else if (typeof mat.desiredSellPrice === "string") {
               sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice.toString());
               sCost = eval(sCost);
             } else {
@@ -582,26 +582,13 @@ export class Division {
             }
             mat.uiMarketPrice = sCost;
 
-            // Calculate how much of the material sells (per second)
-            let markup = 1;
-            if (sCost > mat.marketPrice) {
-              //Penalty if difference between sCost and bCost is greater than markup limit
-              if (sCost - mat.marketPrice > markupLimit) {
-                markup = Math.pow(markupLimit / (sCost - mat.marketPrice), 2);
-              }
-            } else if (sCost < mat.marketPrice) {
-              if (sCost <= 0) {
-                markup = 1e12; //Sell everything, essentially discard
-              } else {
-                //Lower prices than market increases sales
-                markup = mat.marketPrice / sCost;
-              }
-            }
+            const markupMultiplier = calculateMarkupMultiplier(sCost, mat.marketPrice, markupLimit);
 
+            // Calculate how much of the material sells (per second)
             mat.maxSellPerCycle =
               (mat.quality + 0.001) *
               marketFactor *
-              markup *
+              markupMultiplier *
               businessFactor *
               corporation.getSalesMult() *
               advertisingFactor *
@@ -915,31 +902,27 @@ export class Division {
               product.markup = 1;
             }
             sCostString = sCostString.replace(/MP/g, product.cityData[city].productionCost.toString());
-            sCost = Math.max(product.cityData[city].productionCost, eval(sCostString));
+            sCost = eval(sCostString);
           } else {
             sCost = sellPrice;
           }
           product.uiMarketPrice[city] = sCost;
-          let markup = 1;
-          if (sCost > product.cityData[city].productionCost) {
-            if (sCost - product.cityData[city].productionCost > markupLimit) {
-              markup = markupLimit / (sCost - product.cityData[city].productionCost);
-            }
-          }
+
+          const markupMultiplier = calculateMarkupMultiplier(sCost, product.cityData[city].productionCost, markupLimit);
 
           product.maxSellAmount =
             0.5 *
             Math.pow(product.cityData[city].effectiveRating, 0.65) *
             marketFactor *
             corporation.getSalesMult() *
-            Math.pow(markup, 2) *
+            markupMultiplier *
             businessFactor *
             advertisingFactor *
             this.getSalesMultiplier();
           sellAmt = Math.min(product.maxSellAmount, sellAmt);
           sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;
           sellAmt = Math.min(product.cityData[city].stored, sellAmt); //data[0] is qty
-          if (sellAmt && sCost) {
+          if (sellAmt && sCost >= 0) {
             product.cityData[city].stored -= sellAmt; //data[0] is qty
             totalProfit += sellAmt * sCost;
             product.cityData[city].actualSellAmount = sellAmt / (corpConstants.secondsPerMarketCycle * marketCycles); //data[2] is sell property

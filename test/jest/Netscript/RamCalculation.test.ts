@@ -9,6 +9,7 @@ import { calculateRamUsage } from "../../../src/Script/RamCalculations";
 import { ns } from "../../../src/NetscriptFunctions";
 import { InternalAPI } from "src/Netscript/APIWrapper";
 import { Singularity } from "@nsdefs";
+import { ScriptFilePath } from "src/Paths/ScriptFilePath";
 
 type PotentiallyAsyncFunction = (arg?: unknown) => { catch?: PotentiallyAsyncFunction };
 
@@ -72,12 +73,13 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
   ) {
     const code = `${fnPath.join(".")}();\n`.repeat(3);
     const fnName = fnPath[fnPath.length - 1];
+    const server = "testserver";
 
     //check imported getRamCost fn vs. expected ram from test
     expect(getRamCost(fnPath, true)).toEqual(expectedRamCost);
 
     // Static ram check
-    const staticCost = calculateRamUsage(code, new Map()).cost;
+    const staticCost = calculateRamUsage(code, `${fnName}.js` as ScriptFilePath, server, new Map()).cost;
     expect(staticCost).toBeCloseTo(Math.min(baseCost + expectedRamCost + extraLayerCost, maxCost));
 
     // reset workerScript for dynamic check
@@ -165,5 +167,19 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
         });
       });
     }
+  });
+
+  describe("ramOverride checks", () => {
+    test.each([
+      ["ns.ramOverride(5)", 5],
+      ["ramOverride(5)", 5],
+      ["ns.ramOverride(5 * 1024)", baseCost], // Constant expressions are not handled yet
+    ])("%s", (code, expected) => {
+      const fullCode = `export function main(ns) { ${code} }`;
+
+      const result = calculateRamUsage(fullCode, "testfile.js", new Map(), "testserver");
+      expect(result.errorMessage).toBe(undefined);
+      expect(result.cost).toBe(expected);
+    });
   });
 });

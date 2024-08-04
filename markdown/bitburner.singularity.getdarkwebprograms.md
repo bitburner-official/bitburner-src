@@ -27,7 +27,7 @@ This function allows the player to get a list of programs available for purchase
 
 
 ```js
-const programs = ns.getDarkwebPrograms();
-ns.tprint(`Available programs are: ${programs.split(", ")}`);
+const programs = ns.singularity.getDarkwebPrograms();
+ns.tprint(`Available programs are: ${programs}`);
 ```
 

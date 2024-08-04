@@ -1,14 +1,4 @@
-export const ServerConstants: {
-  BaseCostFor1GBOfRamHome: number;
-  BaseCostFor1GBOfRamServer: number;
-  HomeComputerMaxRam: number;
-  ServerBaseGrowthIncr: number;
-  ServerMaxGrowthLog: number;
-  ServerFortifyAmount: number;
-  ServerWeakenAmount: number;
-  PurchasedServerLimit: number;
-  PurchasedServerMaxRam: number;
-} = {
+export const ServerConstants = {
   // Base RAM costs
   BaseCostFor1GBOfRamHome: 32000,
   BaseCostFor1GBOfRamServer: 55000, //1 GB of RAM
@@ -21,4 +11,4 @@ export const ServerConstants: {
 
   PurchasedServerLimit: 25,
   PurchasedServerMaxRam: 1048576, // 2^20
-};
+} as const;

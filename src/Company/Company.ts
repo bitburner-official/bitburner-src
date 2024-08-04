@@ -1,7 +1,8 @@
 import type { CompanyPosition } from "./CompanyPosition";
 
 import { CompanyName, JobName, FactionName } from "@enums";
-import { favorToRep, repToFavor } from "../Faction/formulas/favor";
+import { MaxFavor, calculateFavorAfterResetting } from "../Faction/formulas/favor";
+import { clampNumber } from "../utils/helpers/clampNumber";
 
 export interface CompanyCtorParams {
   name: CompanyName;
@@ -37,7 +38,8 @@ export class Company {
 
   // Dynamic info, loaded from save and updated during game.
   playerReputation = 0;
-  favor = 0;
+
+  #favor = 0;
 
   constructor(p: CompanyCtorParams) {
     this.name = p.name;
@@ -49,26 +51,36 @@ export class Company {
     if (p.relatedFaction) this.relatedFaction = p.relatedFaction;
   }
 
+  get favor() {
+    return this.#favor;
+  }
+
+  /**
+   * There is no setter for this.#favor. This is intentional. Performing arithmetic operations on `favor` may lead to
+   * the overflow error of `playerReputation`, so anything that wants to change `favor` must explicitly do that through
+   * `setFavor`.
+   *
+   * @param value
+   */
+  setFavor(value: number) {
+    if (Number.isNaN(value)) {
+      this.#favor = 0;
+      return;
+    }
+    this.#favor = clampNumber(value, 0, MaxFavor);
+  }
+
   hasPosition(pos: CompanyPosition | JobName): boolean {
     return this.companyPositions.has(typeof pos === "string" ? pos : pos.name);
   }
 
   prestigeAugmentation(): void {
-    if (this.favor == null) this.favor = 0;
-    this.favor += this.getFavorGain();
+    this.setFavor(calculateFavorAfterResetting(this.favor, this.playerReputation));
     this.playerReputation = 0;
   }
 
   prestigeSourceFile() {
-    this.favor = 0;
+    this.setFavor(0);
     this.playerReputation = 0;
-  }
-
-  getFavorGain(): number {
-    if (this.favor == null) this.favor = 0;
-    const storedRep = Math.max(0, favorToRep(this.favor));
-    const totalRep = storedRep + this.playerReputation;
-    const newFavor = repToFavor(totalRep);
-    return newFavor - this.favor;
   }
 }

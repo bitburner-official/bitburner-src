@@ -30,7 +30,9 @@
 |  [AutocompleteData](./bitburner.autocompletedata.md) | Used for autocompletion |
 |  [BackdoorRequirement](./bitburner.backdoorrequirement.md) | Player must have installed a backdoor on this server. |
 |  [BasicHGWOptions](./bitburner.basichgwoptions.md) | Options to affect the behavior of [hack](./bitburner.ns.hack.md)<!-- -->, [grow](./bitburner.ns.grow.md)<!-- -->, and [weaken](./bitburner.ns.weaken.md)<!-- -->. |
+|  [BitNodeBooleanOptions](./bitburner.bitnodebooleanoptions.md) | <p>restrictHomePCUpgrade: The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max core: 1.</p><p>disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy augmentations for them.</p> |
 |  [BitNodeMultipliers](./bitburner.bitnodemultipliers.md) | All multipliers affecting the difficulty of the current challenge. |
+|  [BitNodeOptions](./bitburner.bitnodeoptions.md) | <p>Default value: - sourceFileOverrides: an empty Map - intelligenceOverride: undefined - All boolean options: false</p><p>If you specify intelligenceOverride, it must be a non-negative integer.</p> |
 |  [BitNodeRequirement](./bitburner.bitnoderequirement.md) | Player must be located in this BitNode. |
 |  [Bladeburner](./bitburner.bladeburner.md) | Bladeburner API |
 |  [BladeburnerCurAction](./bitburner.bladeburnercuraction.md) | Bladeburner current action. |

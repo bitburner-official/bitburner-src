@@ -40,7 +40,7 @@ Note that creating a program using this function has the same hacking level requ
 
 ```js
 const programName = "BruteSSH.exe";
-const success = ns.createProgram(programName);
-if (!success) ns.tprint("ERROR: Failed to start working on ${programName}")
+const success = ns.singularity.createProgram(programName);
+if (!success) ns.tprint(`ERROR: Failed to start working on ${programName}`);
 ```
 

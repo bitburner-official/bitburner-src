@@ -195,6 +195,12 @@ export class Augmentation {
   // The Player/Person classes
   mults: Multipliers = defaultMultipliers();
 
+  // Amount of money given to the Player when prestiging with this augmentation.
+  startingMoney: number;
+
+  // Array of programs to be given to the player when prestiging with this augmentation.
+  programs: CompletedProgramName[];
+
   // Factions that offer this aug.
   factions: FactionName[] = [];
 
@@ -218,6 +224,9 @@ export class Augmentation {
       const mult = params[multName];
       if (mult) this.mults[multName] = mult;
     }
+
+    this.startingMoney = params.startingMoney ?? 0;
+    this.programs = params.programs ?? [];
 
     if (params.stats === undefined)
       this.stats = generateStatsDescription(this.mults, params.programs, params.startingMoney);

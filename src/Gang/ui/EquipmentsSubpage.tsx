@@ -21,31 +21,6 @@ import { Settings } from "../../Settings/Settings";
 import { StatsRow } from "../../ui/React/StatsRow";
 import { useRerender } from "../../ui/React/hooks";
 
-interface INextRevealProps {
-  upgrades: string[];
-  type: UpgradeType;
-}
-
-function NextReveal(props: INextRevealProps): React.ReactElement {
-  const gang = useGang();
-  const upgrades = Object.keys(GangMemberUpgrades)
-    .filter((upgName: string) => {
-      const upg = GangMemberUpgrades[upgName];
-      if (Player.money > gang.getUpgradeCost(upg)) return false;
-      if (upg.type !== props.type) return false;
-      if (props.upgrades.includes(upgName)) return false;
-      return true;
-    })
-    .map((upgName: string) => GangMemberUpgrades[upgName]);
-
-  if (upgrades.length === 0) return <></>;
-  return (
-    <Typography>
-      Next at <Money money={gang.getUpgradeCost(upgrades[0])} />
-    </Typography>
-  );
-}
-
 function PurchasedUpgrade({ upgName }: { upgName: string }): React.ReactElement {
   const upg = GangMemberUpgrades[upgName];
   return (
@@ -65,6 +40,8 @@ interface IUpgradeButtonProps {
 
 function UpgradeButton(props: IUpgradeButtonProps): React.ReactElement {
   const gang = useGang();
+  const upgradeCost = gang.getUpgradeCost(props.upg);
+  const isUpgradable = Player.money >= upgradeCost;
   function onClick(): void {
     props.member.buyUpgrade(props.upg);
     props.rerender();
@@ -72,9 +49,13 @@ function UpgradeButton(props: IUpgradeButtonProps): React.ReactElement {
   return (
     <Tooltip title={<Typography dangerouslySetInnerHTML={{ __html: props.upg.desc }} />}>
       <span>
-        <Button onClick={onClick} sx={{ display: "flex", flexDirection: "column", width: "100%", height: "100%" }}>
+        <Button
+          disabled={!isUpgradable}
+          onClick={onClick}
+          sx={{ display: "flex", flexDirection: "column", width: "100%", height: "100%" }}
+        >
           <Typography sx={{ display: "block" }}>{props.upg.name}</Typography>
-          <Money money={gang.getUpgradeCost(props.upg)} />
+          <Money money={upgradeCost} forPurchase />
         </Button>
       </span>
     </Tooltip>
@@ -86,7 +67,6 @@ interface IPanelProps {
 }
 
 function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
-  const gang = useGang();
   const rerender = useRerender();
   const [currentCategory, setCurrentCategory] = useState("Weapons");
 
@@ -94,7 +74,6 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
     return Object.keys(GangMemberUpgrades)
       .filter((upgName: string) => {
         const upg = GangMemberUpgrades[upgName];
-        if (Player.money < gang.getUpgradeCost(upg)) return false;
         if (upg.type !== type) return false;
         if (list.includes(upgName)) return false;
         return true;
@@ -214,7 +193,6 @@ function GangMemberUpgradePanel(props: IPanelProps): React.ReactElement {
                 <UpgradeButton key={upg.name} rerender={rerender} member={props.member} upg={upg} />
               ))}
             </Box>
-            <NextReveal type={categories[currentCategory][1] as UpgradeType} upgrades={props.member.upgrades} />
           </Box>
         </span>
       </Box>

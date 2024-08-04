@@ -30,7 +30,7 @@ interface BrowserFeatures {
 }
 
 interface IErrorMetadata {
-  error: Error;
+  error: Record<string, unknown>;
   errorInfo?: React.ErrorInfo;
   page?: Page;
 
@@ -54,7 +54,7 @@ export interface IErrorData {
 
 export const newIssueUrl = `https://github.com/bitburner-official/bitburner-src/issues/new`;
 
-function getErrorMetadata(error: Error, errorInfo?: React.ErrorInfo, page?: Page): IErrorMetadata {
+function getErrorMetadata(error: unknown, errorInfo?: React.ErrorInfo, page?: Page): IErrorMetadata {
   const isElectron = navigator.userAgent.toLowerCase().includes(" electron/");
   const env = process.env.NODE_ENV === "development" ? GameEnv.Development : GameEnv.Production;
   const version: GameVersion = {
@@ -70,19 +70,20 @@ function getErrorMetadata(error: Error, errorInfo?: React.ErrorInfo, page?: Page
     doNotTrack: navigator.doNotTrack,
     indexedDb: !!window.indexedDB,
   };
+  const errorObj = typeof error === "object" && error !== null ? (error as Record<string, unknown>) : {};
   const metadata: IErrorMetadata = {
     platform: isElectron ? Platform.Steam : Platform.Browser,
     environment: env,
     version,
     features,
-    error,
+    error: errorObj,
     errorInfo,
     page,
   };
   return metadata;
 }
 
-export function getErrorForDisplay(error: Error, errorInfo?: React.ErrorInfo, page?: Page): IErrorData {
+export function getErrorForDisplay(error: unknown, errorInfo?: React.ErrorInfo, page?: Page): IErrorData {
   const metadata = getErrorMetadata(error, errorInfo, page);
   const fileName = (metadata.error as any).fileName;
   const features =
@@ -112,16 +113,11 @@ Please fill this information with details if relevant.
 * Features: ${features}
 * Source: ${fileName ?? "n/a"}
 
-${
-  metadata.environment === GameEnv.Development
-    ? `
 ### Stack Trace
 \`\`\`
-${metadata.errorInfo?.componentStack.toString().trim()}
+${metadata.error.stack}
 \`\`\`
-`
-    : ""
-}
+
 ### Save
 \`\`\`
 Copy your save here if possible

@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 
 import { Accordion, AccordionSummary, AccordionDetails, Button, ButtonGroup, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { makeStyles } from "@mui/styles";
+import { makeStyles } from "tss-react/mui";
 
 import { Player } from "@player";
 import { Sleeve } from "../../PersonObjects/Sleeve/Sleeve";
@@ -11,7 +11,7 @@ import { MaxSleevesFromCovenant } from "../../PersonObjects/Sleeve/SleeveCovenan
 
 // Update as additional BitNodes get implemented
 const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   group: {
     display: "inline-flex",
     placeItems: "center",
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 });
 
 export function SourceFilesDev({ parentRerender }: { parentRerender: () => void }): React.ReactElement {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const setSF = useCallback(
     (sfN: number, sfLvl: number) => () => {
@@ -32,12 +32,18 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
       }
       if (sfLvl === 0) {
         Player.sourceFiles.delete(sfN);
-        if (sfN === 10) Sleeve.recalculateNumOwned();
+        Player.bitNodeOptions.sourceFileOverrides.delete(sfN);
+        if (sfN === 10) {
+          Sleeve.recalculateNumOwned();
+        }
         parentRerender();
         return;
       }
       Player.sourceFiles.set(sfN, sfLvl);
-      if (sfN === 10) Sleeve.recalculateNumOwned();
+      Player.bitNodeOptions.sourceFileOverrides.set(sfN, sfLvl);
+      if (sfN === 10) {
+        Sleeve.recalculateNumOwned();
+      }
       parentRerender();
     },
     [parentRerender],
@@ -113,6 +119,8 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
         <Typography>Source-Files</Typography>
       </AccordionSummary>
       <AccordionDetails>
+        <Typography>Note: This tool sets both the owned level and the overridden level.</Typography>
+        <br />
         <table>
           <tbody>
             <tr>

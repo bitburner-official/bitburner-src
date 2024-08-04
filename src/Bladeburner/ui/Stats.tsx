@@ -130,7 +130,7 @@ export function Stats({ bladeburner }: StatsProps): React.ReactElement {
           </Tooltip>
         </Box>
         <br />
-        {(bladeburner.storedCycles / BladeburnerConstants.CyclesPerSecond) * 1000 > 15000 && (
+        {bladeburner.storedCycles / BladeburnerConstants.CyclesPerSecond > 3 && (
           <>
             <Box display="flex">
               <Tooltip

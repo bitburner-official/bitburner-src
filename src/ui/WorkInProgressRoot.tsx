@@ -10,7 +10,7 @@ import { ProgressBar } from "./React/Progress";
 import { Reputation } from "./React/Reputation";
 import { ReputationRate } from "./React/ReputationRate";
 import { StatsRow } from "./React/StatsRow";
-import { useRerender } from "./React/hooks";
+import { useCycleRerender } from "./React/hooks";
 
 import { Companies } from "../Company/Companies";
 import { CONSTANTS } from "../Constants";
@@ -183,7 +183,7 @@ function CrimeExpRows(rate: WorkStats): React.ReactElement[] {
 }
 
 export function WorkInProgressRoot(): React.ReactElement {
-  useRerender(CONSTANTS.MilliPerCycle);
+  useCycleRerender();
 
   let workInfo: IWorkInfo = {
     buttons: {
@@ -286,7 +286,7 @@ export function WorkInProgressRoot(): React.ReactElement {
   if (isCreateProgramWork(Player.currentWork)) {
     const create = Player.currentWork;
     const completion = (create.unitCompleted / create.unitNeeded()) * 100;
-
+    const remainingTime = ((create.unitNeeded() - create.unitCompleted) / create.unitRate) * CONSTANTS.MilliPerCycle;
     workInfo = {
       buttons: {
         cancel: () => {
@@ -305,7 +305,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       ),
 
       progress: {
-        elapsed: create.cyclesWorked * CONSTANTS.MilliPerCycle,
+        remaining: remainingTime,
         percentage: completion,
       },
 
@@ -316,7 +316,8 @@ export function WorkInProgressRoot(): React.ReactElement {
 
   if (isGraftingWork(Player.currentWork)) {
     const graftWork = Player.currentWork;
-
+    const remainingTime =
+      ((graftWork.unitNeeded() - graftWork.unitCompleted) / graftWork.unitRate) * CONSTANTS.MilliPerCycle;
     workInfo = {
       buttons: {
         cancel: () => {
@@ -335,7 +336,7 @@ export function WorkInProgressRoot(): React.ReactElement {
       ),
 
       progress: {
-        elapsed: graftWork.cyclesWorked * CONSTANTS.MilliPerCycle,
+        remaining: remainingTime,
         percentage: (graftWork.unitCompleted / graftWork.unitNeeded()) * 100,
       },
 

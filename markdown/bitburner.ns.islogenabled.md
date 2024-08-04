@@ -4,7 +4,7 @@
 
 ## NS.isLogEnabled() method
 
-Checks the status of the logging for the given function.
+Checks the status of the logging for the given NS function.
 
 **Signature:**
 
@@ -22,9 +22,17 @@ isLogEnabled(fn: string): boolean;
 
 boolean
 
-Returns a boolean indicating whether or not logging is enabled for that function (or `ALL`<!-- -->).
+Returns a boolean indicating whether or not logging is enabled for that NS function (or `ALL`<!-- -->).
 
 ## Remarks
 
 RAM cost: 0 GB
+
+## Example
+
+
+```js
+ns.print(ns.isLogEnabled("hack")); // Check if logging is enabled for `ns.hack()`
+
+```
 

@@ -94,11 +94,6 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
       </div>
 
       <div style={{ display: "flex", alignItems: "center" }}>
-        <Typography marginRight={"auto"}>Enable vim mode: </Typography>
-        <Switch onChange={(e) => props.onOptionChange("vim", e.target.checked)} checked={props.options.vim} />
-      </div>
-
-      <div style={{ display: "flex", alignItems: "center" }}>
         <Typography marginRight={"auto"}>Font family: </Typography>
         <TextField
           type="text"

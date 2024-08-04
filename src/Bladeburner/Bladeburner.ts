@@ -17,11 +17,12 @@ import {
 } from "@enums";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { formatNumberNoSuffix } from "../ui/formatNumber";
+import { formatHp, formatNumberNoSuffix, formatSleeveShock } from "../ui/formatNumber";
 import { Skills } from "./data/Skills";
 import { City } from "./City";
 import { Player } from "@player";
 import { Router } from "../ui/GameRoot";
+import { Page } from "../ui/Router";
 import { ConsoleHelpText } from "./data/Help";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
@@ -46,6 +47,8 @@ import { clampInteger, clampNumber } from "../utils/helpers/clampNumber";
 import { parseCommand } from "../Terminal/Parser";
 import { BlackOperations } from "./data/BlackOperations";
 import { GeneralActions } from "./data/GeneralActions";
+import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
+import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -115,7 +118,6 @@ export class Bladeburner {
   }
 
   calculateStaminaPenalty(): number {
-    if (this.stamina === this.maxStamina) return 1;
     return Math.min(1, this.stamina / (0.5 * this.maxStamina));
   }
 
@@ -124,7 +126,7 @@ export class Bladeburner {
   startAction(actionId: ActionIdentifier | null): Attempt<{ message: string }> {
     if (!actionId) {
       this.resetAction();
-      return { success: true, message: "Stopped current bladeburner action" };
+      return { success: true, message: "Stopped current Bladeburner action" };
     }
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
     const action = this.getActionObject(actionId);
@@ -141,17 +143,29 @@ export class Bladeburner {
 
   /** Directly sets a skill level, with no validation */
   setSkillLevel(skillName: BladeSkillName, value: number) {
-    this.skills[skillName] = clampInteger(value, 0);
+    this.skills[skillName] = clampInteger(value, 0, Number.MAX_VALUE);
     this.updateSkillMultipliers();
   }
 
   /** Attempts to perform a skill upgrade, gives a message on both success and failure */
   upgradeSkill(skillName: BladeSkillName, count = 1): Attempt<{ message: string }> {
-    const availability = Skills[skillName].canUpgrade(this, count);
-    if (!availability.available) return { message: `Cannot upgrade ${skillName}: ${availability.error}` };
+    const currentSkillLevel = this.skills[skillName] ?? 0;
+    const actualCount = currentSkillLevel + count - currentSkillLevel;
+    if (actualCount === 0) {
+      return {
+        message: `Cannot upgrade ${skillName}: Due to floating-point inaccuracy and the small value of specified "count", your skill cannot be upgraded.`,
+      };
+    }
+    const availability = Skills[skillName].canUpgrade(this, actualCount);
+    if (!availability.available) {
+      return { message: `Cannot upgrade ${skillName}: ${availability.error}` };
+    }
     this.skillPoints -= availability.cost;
-    this.setSkillLevel(skillName, (this.skills[skillName] ?? 0) + count);
-    return { success: true, message: `Upgraded skill ${skillName} by ${count} level${count > 1 ? "s" : ""}` };
+    this.setSkillLevel(skillName, currentSkillLevel + actualCount);
+    return {
+      success: true,
+      message: `Upgraded skill ${skillName} by ${actualCount} level${actualCount > 1 ? "s" : ""}`,
+    };
   }
 
   executeConsoleCommands(commands: string): void {
@@ -854,6 +868,22 @@ export class Bladeburner {
   }
 
   completeAction(person: Person, actionIdent: ActionIdentifier, isPlayer = true): WorkStats {
+    const currentHp = person.hp.current;
+    const getExtraLogAfterTakingDamage = (damage: number) => {
+      let extraLog = "";
+      if (currentHp <= damage) {
+        if (person instanceof PlayerObject) {
+          extraLog += ` ${person.whoAmI()} was hospitalized. Current HP is ${formatHp(person.hp.current)}.`;
+        } else if (person instanceof Sleeve) {
+          extraLog += ` ${person.whoAmI()} was shocked. Current shock is ${formatSleeveShock(
+            person.shock,
+          )}. Current HP is ${formatHp(person.hp.current)}.`;
+        }
+      } else {
+        extraLog += ` HP reduced from ${formatHp(currentHp)} to ${formatHp(person.hp.current)}.`;
+      }
+      return extraLog;
+    };
     let retValue = newWorkStats();
     const action = this.getActionObject(actionIdent);
     switch (action.type) {
@@ -899,12 +929,12 @@ export class Bladeburner {
               this.changeRank(person, gain);
               if (isOperation && this.logging.ops) {
                 this.log(
-                  `${person.whoAmI()}: ${action.name} successfully completed! Gained ${formatBigNumber(gain)} rank`,
+                  `${person.whoAmI()}: ${action.name} successfully completed! Gained ${formatBigNumber(gain)} rank.`,
                 );
               } else if (!isOperation && this.logging.contracts) {
                 this.log(
                   `${person.whoAmI()}: ${action.name} contract successfully completed! Gained ` +
-                    `${formatBigNumber(gain)} rank and ${formatMoney(moneyGain)}`,
+                    `${formatBigNumber(gain)} rank and ${formatMoney(moneyGain)}.`,
                 );
               }
             }
@@ -930,15 +960,15 @@ export class Bladeburner {
             }
             let logLossText = "";
             if (loss > 0) {
-              logLossText += "Lost " + formatNumberNoSuffix(loss, 3) + " rank. ";
+              logLossText += ` Lost ${formatNumberNoSuffix(loss, 3)} rank.`;
             }
             if (damage > 0) {
-              logLossText += "Took " + formatNumberNoSuffix(damage, 0) + " damage.";
+              logLossText += ` Took ${formatNumberNoSuffix(damage, 0)} damage.${getExtraLogAfterTakingDamage(damage)}`;
             }
             if (isOperation && this.logging.ops) {
-              this.log(`${person.whoAmI()}: ` + action.name + " failed! " + logLossText);
+              this.log(`${person.whoAmI()}: ${action.name} failed!${logLossText}`);
             } else if (!isOperation && this.logging.contracts) {
-              this.log(`${person.whoAmI()}: ` + action.name + " contract failed! " + logLossText);
+              this.log(`${person.whoAmI()}: ${action.name} contract failed!${logLossText}`);
             }
             isOperation ? this.completeOperation(false) : this.completeContract(false, action);
           }
@@ -977,7 +1007,9 @@ export class Bladeburner {
           teamLossMax = Math.ceil(teamCount / 2);
 
           if (this.logging.blackops) {
-            this.log(`${person.whoAmI()}: ${action.name} successful! Gained ${formatNumberNoSuffix(rankGain, 1)} rank`);
+            this.log(
+              `${person.whoAmI()}: ${action.name} successful! Gained ${formatNumberNoSuffix(rankGain, 1)} rank.`,
+            );
           }
         } else {
           retValue = this.getActionStats(action, person, false);
@@ -1003,7 +1035,7 @@ export class Bladeburner {
               `${person.whoAmI()}: ${action.name} failed! Lost ${formatNumberNoSuffix(
                 rankLoss,
                 1,
-              )} rank and took ${formatNumberNoSuffix(damage, 0)} damage`,
+              )} rank. Took ${formatNumberNoSuffix(damage, 0)} damage.${getExtraLogAfterTakingDamage(damage)}`,
             );
           }
         }
@@ -1026,7 +1058,7 @@ export class Bladeburner {
           this.teamLost += losses;
           if (this.logging.blackops) {
             this.log(
-              `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(losses, 0)} team members during ${action.name}`,
+              `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(losses, 0)} team members during ${action.name}.`,
             );
           }
         }
@@ -1059,7 +1091,7 @@ export class Bladeburner {
                   formatExp(agiExpGain) +
                   " agi exp, " +
                   formatBigNumber(staminaGain) +
-                  " max stamina",
+                  " max stamina.",
               );
             }
             break;
@@ -1089,7 +1121,7 @@ export class Bladeburner {
                 `${person.whoAmI()}: ` +
                   `Field analysis completed. Gained ${formatBigNumber(rankGain)} rank, ` +
                   `${formatExp(hackingExpGain)} hacking exp, and ` +
-                  `${formatExp(charismaExpGain)} charisma exp`,
+                  `${formatExp(charismaExpGain)} charisma exp.`,
               );
             }
             break;
@@ -1105,7 +1137,7 @@ export class Bladeburner {
                   `${person.whoAmI()}: ` +
                     "Successfully recruited a team member! Gained " +
                     formatExp(expGain) +
-                    " charisma exp",
+                    " charisma exp.",
                 );
               }
             } else {
@@ -1116,7 +1148,7 @@ export class Bladeburner {
                   `${person.whoAmI()}: ` +
                     "Failed to recruit a team member. Gained " +
                     formatExp(expGain) +
-                    " charisma exp",
+                    " charisma exp.",
                 );
               }
             }
@@ -1132,7 +1164,7 @@ export class Bladeburner {
               this.log(
                 `${person.whoAmI()}: Diplomacy completed. Chaos levels in the current city fell by ${formatPercent(
                   1 - eff,
-                )}`,
+                )}.`,
               );
             }
             break;
@@ -1140,14 +1172,22 @@ export class Bladeburner {
           case BladeGeneralActionName.hyperbolicRegen: {
             person.regenerateHp(BladeburnerConstants.HrcHpGain);
 
+            const currentStamina = this.stamina;
             const staminaGain = this.maxStamina * (BladeburnerConstants.HrcStaminaGain / 100);
             this.stamina = Math.min(this.maxStamina, this.stamina + staminaGain);
             if (this.logging.general) {
-              this.log(
-                `${person.whoAmI()}: Rested in Hyperbolic Regeneration Chamber. Restored ${
-                  BladeburnerConstants.HrcHpGain
-                } HP and gained ${formatStamina(staminaGain)} stamina`,
-              );
+              let extraLog = "";
+              if (Player.hp.current > currentHp) {
+                extraLog += ` Restored ${formatHp(BladeburnerConstants.HrcHpGain)} HP. Current HP is ${formatHp(
+                  Player.hp.current,
+                )}.`;
+              }
+              if (this.stamina > currentStamina) {
+                extraLog += ` Restored ${formatStamina(staminaGain)} stamina. Current stamina is ${formatStamina(
+                  this.stamina,
+                )}.`;
+              }
+              this.log(`${person.whoAmI()}: Rested in Hyperbolic Regeneration Chamber.${extraLog}`);
             }
             break;
           }
@@ -1258,13 +1298,16 @@ export class Bladeburner {
 
   calculateMaxStamina(): void {
     const baseStamina = Math.pow(this.getEffectiveSkillLevel(Player, "agility"), 0.8);
+    // Min value of maxStamina is an arbitrarily small positive value. It must not be 0 to avoid NaN stamina penalty.
     const maxStamina = clampNumber(
       (baseStamina + this.staminaBonus) *
         this.getSkillMult(BladeMultName.stamina) *
         Player.mults.bladeburner_max_stamina,
-      0,
+      1e-9,
     );
-    if (this.maxStamina === maxStamina) return;
+    if (this.maxStamina === maxStamina) {
+      return;
+    }
     // If max stamina changed, adjust stamina accordingly
     const oldMax = this.maxStamina;
     this.maxStamina = maxStamina;
@@ -1277,7 +1320,7 @@ export class Bladeburner {
 
   process(): void {
     // Edge race condition when the engine checks the processing counters and attempts to route before the router is initialized.
-    if (!Router.isInitialized) return;
+    if (Router.page() === Page.LoadingScreen) return;
 
     // If the Player starts doing some other actions, set action to idle and alert
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true) && Player.currentWork) {
@@ -1431,6 +1474,16 @@ export class Bladeburner {
     loadOperationsData(operationsData, bladeburner.operations);
     // Regenerate skill multiplier data, which is not included in savedata
     bladeburner.updateSkillMultipliers();
+    // If stamina or maxStamina is invalid, we set both of them to 1 and recalculate them.
+    if (
+      !Number.isFinite(bladeburner.stamina) ||
+      !Number.isFinite(bladeburner.maxStamina) ||
+      bladeburner.maxStamina === 0
+    ) {
+      bladeburner.stamina = 1;
+      bladeburner.maxStamina = 1;
+      bladeburner.calculateMaxStamina();
+    }
     return bladeburner;
   }
 }

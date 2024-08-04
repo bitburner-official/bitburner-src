@@ -36,6 +36,6 @@ Returns the cost to purchase a server with the specified amount of ram.
 ```js
 const ram = 2 ** 20;
 const cost = ns.getPurchasedServerCost(ram);
-ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs ${ns.formatMoney(cost)}`);
+ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs $${ns.formatNumber(cost)}`);
 ```
 

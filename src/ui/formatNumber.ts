@@ -143,7 +143,7 @@ export function formatNumber(n: number, fractionalDigits = 3, suffixStart = 1000
 export const formatNumberNoSuffix = (n: number, fractionalDigits = 0) => {
   return formatNumber(n, fractionalDigits, 1e33);
 };
-export const formatFavor = formatNumberNoSuffix;
+export const formatFavor = (n: number) => formatNumberNoSuffix(n, 3);
 
 /** Standard noninteger formatting with no options set. Collapses to suffix at 1000 and shows 3 fractional digits. */
 export const formatBigNumber = (n: number) => formatNumber(n);

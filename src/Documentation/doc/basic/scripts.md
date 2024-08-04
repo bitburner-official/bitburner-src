@@ -62,6 +62,21 @@ For example, if a script run with 1 thread is able to hack \$10,000, then runnin
 
 When "multithreading" a script, the total [RAM](ram.md) cost can be calculated by simply multiplying the [RAM](ram.md) cost of a single instance of your script by the number of threads you will use. [See [`ns.getScriptRam()`](https://github.com/bitburner-official/bitburner-src/blob/bec737a25307be29c7efef147fc31effca65eedc/markdown/bitburner.ns.getscriptram.md) or the `mem` terminal command detailed below]
 
+## Never-ending scripts
+
+Sometimes it might be necessary for a script to never end and keep doing a particular task.
+In that case you would want to write your script in a never-ending loop, like `while (true)`.
+
+However, if you are not careful, this can crash your game.
+If the code inside the loop doesn't `await` for some time, it will never give other scripts and the game itself time to process.
+
+<br />
+
+To help you find this potential bug, any `while (true)` loop without any `await` statement inside it will be marked.
+A red decoration will appear on the left side of the script editor, telling you about the issue.
+
+If you are really sure that this is not an oversight, you can suppress the warning using the comment `// @ignore-infinite` directly above the loop.
+
 ## Working with Scripts in Terminal
 
 Here are some [terminal](terminal.md) commands you will find useful when working with scripts:
@@ -99,7 +114,7 @@ Check how much [RAM](ram.md) a script requires to run with "n" threads
 **nano [script]**
 
 Create/Edit a script.
-The name of a script must end with `.js`, but you can also create `.txt` files.
+The name of a script must end with a script extension (.js, .jsx, .ts, .tsx, .script). You can also create a text file with a text extension (.txt, .json).
 
 **ps**
 

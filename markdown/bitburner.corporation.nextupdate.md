@@ -33,7 +33,7 @@ The amount of real time spent asleep between updates can vary due to "bonus time
 ```js
 while (true) {
   const prevState = await ns.corporation.nextUpdate();
-  const nextState = ns.corporation.getCorporation().state;
+  const nextState = ns.corporation.getCorporation().nextState;
   ns.print(`Corporation finished with ${prevState}, next will be ${nextState}.`);
   // Manage the Corporation
 }

@@ -76,14 +76,10 @@ export function errorMessage(ctx: NetscriptContext, msg: string, type = "RUNTIME
 }
 
 /** Generate an error dialog when workerscript is known */
-export function handleUnknownError(e: unknown, ws: WorkerScript | ScriptDeath | null = null, initialText = "") {
+export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, initialText = "") {
   if (e instanceof ScriptDeath) {
-    //No dialog for an empty ScriptDeath
-    if (e.errorMessage === "") return;
-    if (!ws) {
-      ws = e;
-      e = ws.errorMessage;
-    }
+    // No dialog for ScriptDeath
+    return;
   }
   if (ws && typeof e === "string") {
     const headerText = basicErrorMessage(ws, "", "");

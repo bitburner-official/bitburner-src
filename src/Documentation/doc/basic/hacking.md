@@ -75,7 +75,7 @@ Calling the `grow` function in a script will also increase security level of the
 These actions will make it harder for you to hack the [server](servers.md), and decrease the amount of money you can steal.
 You can lower a [server](servers.md)'s security level in a script using the `weaken` function.
 
-This means that a [server](servers.md)'s security level will not fall below this value if you are trying to `weaken` it.
+Each server has a minimum security level. The [server](servers.md)'s security level will not fall below this value if you try to `weaken` it. You can get this value with the `getServerMinSecurityLevel` function.
 
 ## Backdoors
 

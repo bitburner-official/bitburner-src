@@ -5,10 +5,10 @@
 import * as walk from "acorn-walk";
 import { parse } from "acorn";
 
-import { LoadedModule, ScriptURL, ScriptModule } from "./Script/LoadedModule";
-import { Script } from "./Script/Script";
-import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
-import { root } from "./Paths/Directory";
+import { LoadedModule, type ScriptURL, type ScriptModule } from "./Script/LoadedModule";
+import type { Script } from "./Script/Script";
+import type { ScriptFilePath } from "./Paths/ScriptFilePath";
+import { FileType, getFileType, getModuleScript, transformScript } from "./utils/ScriptTransformer";
 
 // Acorn type def is straight up incomplete so we have to fill with our own.
 export type Node = any;
@@ -83,8 +83,26 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     return script.mod;
   }
 
+  let scriptCode;
+  const fileType = getFileType(script.filename);
+  switch (fileType) {
+    case FileType.JS:
+      scriptCode = script.code;
+      break;
+    case FileType.JSX:
+    case FileType.TS:
+    case FileType.TSX:
+      scriptCode = transformScript(script.code, fileType);
+      break;
+    default:
+      throw new Error(`Invalid file type: ${fileType}. Filename: ${script.filename}, server: ${script.server}.`);
+  }
+  if (!scriptCode) {
+    throw new Error(`Cannot transform script. Filename: ${script.filename}, server: ${script.server}.`);
+  }
+
   // Inspired by: https://stackoverflow.com/a/43834063/91401
-  const ast = parse(script.code, { sourceType: "module", ecmaVersion: "latest", ranges: true });
+  const ast = parse(scriptCode, { sourceType: "module", ecmaVersion: "latest", ranges: true });
   interface importNode {
     filename: string;
     start: number;
@@ -122,15 +140,10 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   // Sort the nodes from last start index to first. This replaces the last import with a blob first,
   // preventing the ranges for other imports from being shifted.
   importNodes.sort((a, b) => b.start - a.start);
-  let newCode = script.code;
+  let newCode = scriptCode;
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
-    const filename = resolveScriptFilePath(node.filename, root, ".js");
-    if (!filename) throw new Error(`Failed to parse import: ${node.filename}`);
-
-    // Find the corresponding script.
-    const importedScript = scripts.get(filename);
-    if (!importedScript) continue;
+    const importedScript = getModuleScript(node.filename, script.filename, scripts);
 
     seenStack.push(script);
     importedScript.mod = generateLoadedModule(importedScript, scripts, seenStack);
@@ -149,6 +162,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     // script dedupe properly.
     const adjustedCode = newCode + `\n//# sourceURL=${script.server}/${script.filename}`;
     // At this point we have the full code and can construct a new blob / assign the URL.
+
     const url = URL.createObjectURL(makeScriptBlob(adjustedCode)) as ScriptURL;
     const module = config.doImport(url).catch((e) => {
       script.invalidateModule();

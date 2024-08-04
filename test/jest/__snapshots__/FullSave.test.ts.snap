@@ -45,6 +45,7 @@ exports[`Check Save File Continuity GoSave continuity 1`] = `
   },
   "previousGame": null,
   "stats": {},
+  "storedCycles": 0,
 }
 `;
 
@@ -55,6 +56,19 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "achievements": [],
     "augmentations": [],
     "bitNodeN": 1,
+    "bitNodeOptions": {
+      "disable4SData": false,
+      "disableBladeburner": false,
+      "disableCorporation": false,
+      "disableGang": false,
+      "disableHacknetServer": false,
+      "disableSleeveExpAndAugmentation": false,
+      "restrictHomePCUpgrade": false,
+      "sourceFileOverrides": {
+        "ctor": "JSONMap",
+        "data": [],
+      },
+    },
     "bladeburner": {
       "ctor": "Bladeburner",
       "data": {

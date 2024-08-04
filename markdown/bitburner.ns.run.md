@@ -51,6 +51,6 @@ ns.run("foo.js");
 ns.run("foo.js", {threads: 5});
 
 //This next example will run ‘foo.js’ single-threaded, and will pass the string ‘foodnstuff’ into the script as an argument:
-ns.run("foo.js", 1, 'foodnstuff');
+ns.run("foo.js", 1, "foodnstuff");
 ```
 

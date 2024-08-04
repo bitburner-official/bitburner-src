@@ -8,6 +8,7 @@ import { assertLoadingType } from "../utils/TypeAssertion";
 import { PartialRecord, createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { getEnumHelper } from "../utils/EnumHelper";
+import { clampNumber } from "../utils/helpers/clampNumber";
 
 /** The static list of all factions. Initialized once and never modified. */
 export const Factions = createEnumKeyedRecord(FactionName, (name) => new Faction(name));
@@ -33,8 +34,14 @@ export function loadFactions(saveString: string, player: PlayerObject): void {
     if (typeof loadedFaction !== "object") continue;
     assertLoadingType<SavegameFaction>(loadedFaction);
     const { playerReputation: loadedRep, favor: loadedFavor, discovery: loadedDiscovery } = loadedFaction;
-    if (typeof loadedRep === "number" && loadedRep > 0) faction.playerReputation = loadedRep;
-    if (typeof loadedFavor === "number" && loadedFavor > 0) faction.favor = loadedFavor;
+    if (typeof loadedRep === "number" && loadedRep >= 0) {
+      // `playerReputation` must be in [0, Number.MAX_VALUE].
+      faction.playerReputation = clampNumber(loadedRep, 0);
+    }
+    if (typeof loadedFavor === "number" && loadedFavor >= 0) {
+      // `favor` must be in [0, MaxFavor]. This rule will be enforced in the `setFavor` function.
+      faction.setFavor(loadedFavor);
+    }
     if (getEnumHelper("FactionDiscovery").isMember(loadedDiscovery)) faction.discovery = loadedDiscovery;
   }
   // Load joined factions from player save

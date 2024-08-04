@@ -12,7 +12,7 @@ interface GoScoreSummaryTableProps {
 }
 
 export const GoScoreSummaryTable = ({ score, opponent }: GoScoreSummaryTableProps) => {
-  const classes = boardStyles();
+  const { classes } = boardStyles();
   const blackScore = score[GoColor.black];
   const whiteScore = score[GoColor.white];
   const blackPlayerName = opponent === GoOpponent.none ? GoColor.black : "You";

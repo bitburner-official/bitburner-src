@@ -37,7 +37,7 @@ export type BoardState = {
   board: Board;
   previousPlayer: GoColor | null;
   /** The previous board positions as a SimpleBoard */
-  previousBoards: SimpleBoard[];
+  previousBoards: string[];
   ai: GoOpponent;
   passCount: number;
   cheatCount: number;

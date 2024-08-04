@@ -14,8 +14,9 @@ import { Companies } from "../../Company/Companies";
 import { Adjuster } from "./Adjuster";
 import { isMember } from "../../utils/EnumHelper";
 import { getRecordValues } from "../../Types/Record";
+import { MaxFavor } from "../../Faction/formulas/favor";
 
-const bigNumber = 1e12;
+const largeAmountOfReputation = 1e12;
 
 export function CompaniesDev(): React.ReactElement {
   const [companyName, setCompanyName] = useState(CompanyName.ECorp);
@@ -40,18 +41,18 @@ export function CompaniesDev(): React.ReactElement {
     return function (favor: number): void {
       const company = Companies[companyName];
       if (!isNaN(favor)) {
-        company.favor += favor * modifier;
+        company.setFavor(company.favor + favor * modifier);
       }
     };
   }
 
   function resetCompanyFavor(): void {
-    Companies[companyName].favor = 0;
+    Companies[companyName].setFavor(0);
   }
 
   function tonsOfRepCompanies(): void {
     for (const company of getRecordValues(Companies)) {
-      company.playerReputation = bigNumber;
+      company.playerReputation = largeAmountOfReputation;
     }
   }
 
@@ -63,13 +64,13 @@ export function CompaniesDev(): React.ReactElement {
 
   function tonsOfFavorCompanies(): void {
     for (const company of getRecordValues(Companies)) {
-      company.favor = bigNumber;
+      company.setFavor(MaxFavor);
     }
   }
 
   function resetAllFavorCompanies(): void {
     for (const company of getRecordValues(Companies)) {
-      company.favor = 0;
+      company.setFavor(0);
     }
   }
 
@@ -103,7 +104,7 @@ export function CompaniesDev(): React.ReactElement {
                 <Adjuster
                   label="reputation"
                   placeholder="amt"
-                  tons={() => modifyCompanyRep(1)(bigNumber)}
+                  tons={() => modifyCompanyRep(1)(largeAmountOfReputation)}
                   add={modifyCompanyRep(1)}
                   subtract={modifyCompanyRep(-1)}
                   reset={resetCompanyRep}

@@ -30,6 +30,8 @@ RAM cost: 2 GB
 
 Terminates the current script, and then after a defined delay it will execute the newly-specified script. The purpose of this function is to execute a new script without being constrained by the RAM usage of the current one. This function can only be used to run scripts on the local server.
 
+The delay specified can be 0; in this case the new script will synchronously replace the old one. (There will not be any opportunity for other scripts to use up the RAM in-between.)
+
 Because this function immediately terminates the script, it does not have a return value.
 
 Running this function with 0 or fewer threads will cause a runtime error.
@@ -39,6 +41,6 @@ Running this function with 0 or fewer threads will cause a runtime error.
 
 ```js
 //The following example will execute the script ‘foo.js’ with 10 threads, in 500 milliseconds and the arguments ‘foodnstuff’ and 90:
-ns.spawn('foo.js', {threads: 10, spawnDelay: 500}, 'foodnstuff', 90);
+ns.spawn("foo.js", {threads: 10, spawnDelay: 500}, "foodnstuff", 90);
 ```
 
