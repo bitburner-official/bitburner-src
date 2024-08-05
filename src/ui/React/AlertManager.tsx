@@ -16,8 +16,8 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
   const [alerts, setAlerts] = useState<Alert[]>([]);
   useEffect(
     () =>
-      AlertEvents.subscribe(async (text: string | JSX.Element) => {
-        const hash = await getMessageHash(text);
+      AlertEvents.subscribe((text: string | JSX.Element) => {
+        const hash = getMessageHash(text);
         setAlerts((old) => {
           if (old.some((a) => a.hash === hash)) {
             return old;
@@ -46,7 +46,7 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
 
   const alertMessage = alerts[0]?.text || "No alert to show";
 
-  async function getMessageHash(text: string | JSX.Element): Promise<string> {
+  function getMessageHash(text: string | JSX.Element): string {
     if (typeof text === "string") {
       return cyrb53(text);
     }
