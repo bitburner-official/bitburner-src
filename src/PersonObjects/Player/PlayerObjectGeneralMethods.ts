@@ -67,7 +67,7 @@ export function init(this: PlayerObject): void {
   this.currentServer = SpecialServers.Home;
   AddToAllServers(t_homeComp);
 
-  this.getHomeComputer().programs.push(CompletedProgramName.nuke);
+  this.getHomeComputer().pushProgram(CompletedProgramName.nuke);
 }
 
 export function prestigeAugmentation(this: PlayerObject): void {

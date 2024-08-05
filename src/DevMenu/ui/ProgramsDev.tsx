@@ -18,12 +18,13 @@ export function ProgramsDev(): React.ReactElement {
     setProgram(event.target.value as CompletedProgramName);
   }
   function addProgram(): void {
-    if (!Player.hasProgram(program)) Player.getHomeComputer().programs.push(program);
+    Player.getHomeComputer().pushProgram(program);
   }
 
   function addAllPrograms(): void {
+    const home = Player.getHomeComputer();
     for (const name of Object.values(CompletedProgramName)) {
-      if (!Player.hasProgram(name)) Player.getHomeComputer().programs.push(name);
+      home.pushProgram(name);
     }
   }
 

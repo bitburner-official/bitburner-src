@@ -197,9 +197,9 @@ export function prestigeHomeComputer(homeComp: Server): void {
   homeComp.serversOnNetwork = [];
   homeComp.isConnectedTo = true;
   homeComp.ramUsed = 0;
-  homeComp.programs.push(CompletedProgramName.nuke);
+  homeComp.pushProgram(CompletedProgramName.nuke);
   if (hasBitflume) {
-    homeComp.programs.push(CompletedProgramName.bitFlume);
+    homeComp.pushProgram(CompletedProgramName.bitFlume);
   }
 
   homeComp.messages.length = 0; //Remove .lit and .msg files
