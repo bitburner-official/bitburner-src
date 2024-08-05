@@ -9,43 +9,5 @@ Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 
 **Signature:**
 
 ```typescript
-cheat: {
-    getCheatSuccessChance(): number;
-    removeRouter(
-      x: number,
-      y: number,
-    ): Promise<{
-      type: "move" | "pass" | "gameOver";
-      x: number | null;
-      y: number | null;
-    }>;
-    playTwoMoves(
-      x1: number,
-      y1: number,
-      x2: number,
-      y2: number,
-    ): Promise<{
-      type: "move" | "pass" | "gameOver";
-      x: number | null;
-      y: number | null;
-    }>;
-
-    repairOfflineNode(
-      x: number,
-      y: number,
-    ): Promise<{
-      type: "move" | "pass" | "gameOver";
-      x: number | null;
-      y: number | null;
-    }>;
-
-    destroyNode(
-      x: number,
-      y: number,
-    ): Promise<{
-      type: "move" | "pass" | "gameOver";
-      x: number | null;
-      y: number | null;
-    }>;
-  };
+cheat: GoCheat;
 ```

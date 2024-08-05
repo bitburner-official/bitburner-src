@@ -4036,6 +4036,239 @@ type SimpleOpponentStats = {
 };
 
 /**
+ * Tools to analyze the IPvGO subnet.
+ *
+ * @public
+ */
+export interface GoAnalysis {
+  /**
+   * Shows if each point on the board is a valid move for the player.
+   *
+   * The true/false validity of each move can be retrieved via the X and Y coordinates of the move.
+   *      `const validMoves = ns.go.analysis.getValidMoves();`
+   *
+   *      `const moveIsValid = validMoves[x][y];`
+   *
+   * Note that the [0][0] point is shown on the bottom-left on the visual board (as is traditional), and each
+   * string represents a vertical column on the board. In other words, the printed example above can be understood to
+   * be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.
+   *
+   * @remarks
+   * RAM cost: 8 GB
+   * (This is intentionally expensive; you can derive this info from just getBoardState() )
+   */
+  getValidMoves(): boolean[][];
+
+  /**
+   * Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points
+   * are also given chain IDs to represent continuous empty space. Dead nodes are given the value `null.`
+   *
+   * The data from getChains() can be used with the data from getBoardState() to see which player (or empty) each chain is
+   *
+   * For example, a 5x5 board might look like this. There is a large chain #1 on the left side, smaller chains
+   * 2 and 3 on the right, and a large chain 0 taking up the center of the board.
+   * <pre lang="javascript">
+   *       [
+   *         [   0,0,0,3,4],
+   *         [   1,0,0,3,3],
+   *         [   1,1,0,0,0],
+   *         [null,1,0,2,2],
+   *         [null,1,0,2,5],
+   *       ]
+   * </pre>
+   * @remarks
+   * RAM cost: 16 GB
+   * (This is intentionally expensive; you can derive this info from just getBoardState() )
+   *
+   */
+  getChains(): (number | null)[][];
+
+  /**
+   * Returns a number for each point, representing how many open nodes its network/chain is connected to.
+   * Empty nodes and dead nodes are shown as -1 liberties.
+   *
+   * For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one
+   * in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!
+   *
+   * <pre lang="javascript">
+   *      [
+   *         [-1, 5,-1,-1, 2],
+   *         [ 5, 5,-1,-1,-1],
+   *         [-1,-1, 4,-1,-1],
+   *         [ 3,-1,-1, 3, 1],
+   *         [ 3,-1,-1, 3, 1],
+   *      ]
+   * </pre>
+   *
+   * @remarks
+   * RAM cost: 16 GB
+   * (This is intentionally expensive; you can derive this info from just getBoardState() )
+   */
+  getLiberties(): number[][];
+
+  /**
+   * Returns 'X', 'O', or '?' for each empty point to indicate which player controls that empty point.
+   * If no single player fully encircles the empty space, it is shown as contested with '?'.
+   * "#" are dead nodes that are not part of the subnet.
+   *
+   * Filled points of any color are indicated with '.'
+   *
+   * In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center:
+   *
+   * <pre lang="javascript">
+   *   [
+   *      "OO..?",
+   *      "OO.?.",
+   *      "O.?.X",
+   *      ".?.XX",
+   *      "?..X#",
+   *   ]
+   * </pre>
+   *
+   * @remarks
+   * RAM cost: 16 GB
+   * (This is intentionally expensive; you can derive this info from just getBoardState() )
+   */
+  getControlledEmptyNodes(): string[];
+
+  /**
+   * Displays the game history, captured nodes, and gained bonuses for each opponent you have played against.
+   *
+   * The details are keyed by opponent name, in this structure:
+   *
+   * <pre lang="javascript">
+   * {
+   *   <OpponentName>: {
+   *     wins: number,
+   *     losses: number,
+   *     winStreak: number,
+   *     highestWinStreak: number,
+   *     favor: number,
+   *     bonusPercent: number,
+   *     bonusDescription: string,
+   *   }
+   * }
+   * </pre>
+   *
+   */
+  getStats(): Partial<Record<GoOpponent, SimpleOpponentStats>>;
+}
+
+/**
+ * Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 14.2 to use.
+ *
+ * @public
+ */
+export interface GoCheat {
+  /**
+   * Returns your chance of successfully playing one of the special moves in the ns.go.cheat API.
+   * Scales with your crime success rate stat.
+   *
+   * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
+   * small (~10%) chance you will instantly be ejected from the subnet.
+   *
+   * @remarks
+   * RAM cost: 1 GB
+   * Requires BitNode 14.2 to use
+   */
+  getCheatSuccessChance(): number;
+  /**
+   * Attempts to remove an existing router, leaving an empty node behind.
+   *
+   * Success chance can be seen via ns.go.getCheatSuccessChance()
+   *
+   * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
+   * small (~10%) chance you will instantly be ejected from the subnet.
+   *
+   * @remarks
+   * RAM cost: 8 GB
+   * Requires BitNode 14.2 to use
+   *
+   * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+   */
+  removeRouter(
+    x: number,
+    y: number,
+  ): Promise<{
+    type: "move" | "pass" | "gameOver";
+    x: number | null;
+    y: number | null;
+  }>;
+  /**
+   * Attempts to place two routers at once on empty nodes. Note that this ignores other move restrictions, so you can
+   * suicide your own routers if they have no access to empty ports and do not capture any enemy routers.
+   *
+   * Success chance can be seen via ns.go.getCheatSuccessChance()
+   *
+   * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
+   * small (~10%) chance you will instantly be ejected from the subnet.
+   *
+   * @remarks
+   * RAM cost: 8 GB
+   * Requires BitNode 14.2 to use
+   *
+   * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+   */
+  playTwoMoves(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+  ): Promise<{
+    type: "move" | "pass" | "gameOver";
+    x: number | null;
+    y: number | null;
+  }>;
+
+  /**
+   * Attempts to repair an offline node, leaving an empty playable node behind.
+   *
+   * Success chance can be seen via ns.go.getCheatSuccessChance()
+   *
+   * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
+   * small (~10%) chance you will instantly be ejected from the subnet.
+   *
+   * @remarks
+   * RAM cost: 8 GB
+   * Requires BitNode 14.2 to use
+   *
+   * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+   */
+  repairOfflineNode(
+    x: number,
+    y: number,
+  ): Promise<{
+    type: "move" | "pass" | "gameOver";
+    x: number | null;
+    y: number | null;
+  }>;
+
+  /**
+   * Attempts to destroy an empty node, leaving an offline dead space that does not count as territory or
+   * provide open node access to adjacent routers.
+   *
+   * Success chance can be seen via ns.go.getCheatSuccessChance()
+   *
+   * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
+   * small (~10%) chance you will instantly be ejected from the subnet.
+   *
+   * @remarks
+   * RAM cost: 8 GB
+   * Requires BitNode 14.2 to use
+   *
+   * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+   */
+  destroyNode(
+    x: number,
+    y: number,
+  ): Promise<{
+    type: "move" | "pass" | "gameOver";
+    x: number | null;
+    y: number | null;
+  }>;
+}
+
+/**
  * IPvGO api
  * @public
  */
@@ -4180,231 +4413,12 @@ export interface Go {
   /**
    * Tools to analyze the IPvGO subnet.
    */
-  analysis: {
-    /**
-     * Shows if each point on the board is a valid move for the player.
-     *
-     * The true/false validity of each move can be retrieved via the X and Y coordinates of the move.
-     *      `const validMoves = ns.go.analysis.getValidMoves();`
-     *
-     *      `const moveIsValid = validMoves[x][y];`
-     *
-     * Note that the [0][0] point is shown on the bottom-left on the visual board (as is traditional), and each
-     * string represents a vertical column on the board. In other words, the printed example above can be understood to
-     * be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.
-     *
-     * @remarks
-     * RAM cost: 8 GB
-     * (This is intentionally expensive; you can derive this info from just getBoardState() )
-     */
-    getValidMoves(): boolean[][];
-
-    /**
-     * Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points
-     * are also given chain IDs to represent continuous empty space. Dead nodes are given the value `null.`
-     *
-     * The data from getChains() can be used with the data from getBoardState() to see which player (or empty) each chain is
-     *
-     * For example, a 5x5 board might look like this. There is a large chain #1 on the left side, smaller chains
-     * 2 and 3 on the right, and a large chain 0 taking up the center of the board.
-     * <pre lang="javascript">
-     *       [
-     *         [   0,0,0,3,4],
-     *         [   1,0,0,3,3],
-     *         [   1,1,0,0,0],
-     *         [null,1,0,2,2],
-     *         [null,1,0,2,5],
-     *       ]
-     * </pre>
-     * @remarks
-     * RAM cost: 16 GB
-     * (This is intentionally expensive; you can derive this info from just getBoardState() )
-     *
-     */
-    getChains(): (number | null)[][];
-
-    /**
-     * Returns a number for each point, representing how many open nodes its network/chain is connected to.
-     * Empty nodes and dead nodes are shown as -1 liberties.
-     *
-     * For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one
-     * in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!
-     *
-     * <pre lang="javascript">
-     *      [
-     *         [-1, 5,-1,-1, 2],
-     *         [ 5, 5,-1,-1,-1],
-     *         [-1,-1, 4,-1,-1],
-     *         [ 3,-1,-1, 3, 1],
-     *         [ 3,-1,-1, 3, 1],
-     *      ]
-     * </pre>
-     *
-     * @remarks
-     * RAM cost: 16 GB
-     * (This is intentionally expensive; you can derive this info from just getBoardState() )
-     */
-    getLiberties(): number[][];
-
-    /**
-     * Returns 'X', 'O', or '?' for each empty point to indicate which player controls that empty point.
-     * If no single player fully encircles the empty space, it is shown as contested with '?'.
-     * "#" are dead nodes that are not part of the subnet.
-     *
-     * Filled points of any color are indicated with '.'
-     *
-     * In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center:
-     *
-     * <pre lang="javascript">
-     *   [
-     *      "OO..?",
-     *      "OO.?.",
-     *      "O.?.X",
-     *      ".?.XX",
-     *      "?..X#",
-     *   ]
-     * </pre>
-     *
-     * @remarks
-     * RAM cost: 16 GB
-     * (This is intentionally expensive; you can derive this info from just getBoardState() )
-     */
-    getControlledEmptyNodes(): string[];
-
-    /**
-     * Displays the game history, captured nodes, and gained bonuses for each opponent you have played against.
-     *
-     * The details are keyed by opponent name, in this structure:
-     *
-     * <pre lang="javascript">
-     * {
-     *   <OpponentName>: {
-     *     wins: number,
-     *     losses: number,
-     *     winStreak: number,
-     *     highestWinStreak: number,
-     *     favor: number,
-     *     bonusPercent: number,
-     *     bonusDescription: string,
-     *   }
-     * }
-     * </pre>
-     *
-     */
-    getStats(): Partial<Record<GoOpponent, SimpleOpponentStats>>;
-  };
+  analysis: GoAnalysis;
 
   /**
    * Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 14.2 to use.
    */
-  cheat: {
-    /**
-     * Returns your chance of successfully playing one of the special moves in the ns.go.cheat API.
-     * Scales with your crime success rate stat.
-     *
-     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
-     * small (~10%) chance you will instantly be ejected from the subnet.
-     *
-     * @remarks
-     * RAM cost: 1 GB
-     * Requires BitNode 14.2 to use
-     */
-    getCheatSuccessChance(): number;
-    /**
-     * Attempts to remove an existing router, leaving an empty node behind.
-     *
-     * Success chance can be seen via ns.go.getCheatSuccessChance()
-     *
-     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
-     * small (~10%) chance you will instantly be ejected from the subnet.
-     *
-     * @remarks
-     * RAM cost: 8 GB
-     * Requires BitNode 14.2 to use
-     *
-     * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
-     */
-    removeRouter(
-      x: number,
-      y: number,
-    ): Promise<{
-      type: "move" | "pass" | "gameOver";
-      x: number | null;
-      y: number | null;
-    }>;
-    /**
-     * Attempts to place two routers at once on empty nodes. Note that this ignores other move restrictions, so you can
-     * suicide your own routers if they have no access to empty ports and do not capture any enemy routers.
-     *
-     * Success chance can be seen via ns.go.getCheatSuccessChance()
-     *
-     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
-     * small (~10%) chance you will instantly be ejected from the subnet.
-     *
-     * @remarks
-     * RAM cost: 8 GB
-     * Requires BitNode 14.2 to use
-     *
-     * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
-     */
-    playTwoMoves(
-      x1: number,
-      y1: number,
-      x2: number,
-      y2: number,
-    ): Promise<{
-      type: "move" | "pass" | "gameOver";
-      x: number | null;
-      y: number | null;
-    }>;
-
-    /**
-     * Attempts to repair an offline node, leaving an empty playable node behind.
-     *
-     * Success chance can be seen via ns.go.getCheatSuccessChance()
-     *
-     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
-     * small (~10%) chance you will instantly be ejected from the subnet.
-     *
-     * @remarks
-     * RAM cost: 8 GB
-     * Requires BitNode 14.2 to use
-     *
-     * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
-     */
-    repairOfflineNode(
-      x: number,
-      y: number,
-    ): Promise<{
-      type: "move" | "pass" | "gameOver";
-      x: number | null;
-      y: number | null;
-    }>;
-
-    /**
-     * Attempts to destroy an empty node, leaving an offline dead space that does not count as territory or
-     * provide open node access to adjacent routers.
-     *
-     * Success chance can be seen via ns.go.getCheatSuccessChance()
-     *
-     * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
-     * small (~10%) chance you will instantly be ejected from the subnet.
-     *
-     * @remarks
-     * RAM cost: 8 GB
-     * Requires BitNode 14.2 to use
-     *
-     * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
-     */
-    destroyNode(
-      x: number,
-      y: number,
-    ): Promise<{
-      type: "move" | "pass" | "gameOver";
-      x: number | null;
-      y: number | null;
-    }>;
-  };
+  cheat: GoCheat;
 }
 
 /**

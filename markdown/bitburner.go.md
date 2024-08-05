@@ -16,8 +16,8 @@ export interface Go
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [analysis](./bitburner.go.analysis.md) |  | { getValidMoves(): boolean\[\]\[\]; getChains(): (number \| null)\[\]\[\]; getLiberties(): number\[\]\[\]; getControlledEmptyNodes(): string\[\]; getStats(): Partial&lt;Record&lt;[GoOpponent](./bitburner.goopponent.md)<!-- -->, [SimpleOpponentStats](./bitburner.simpleopponentstats.md)<!-- -->&gt;&gt;; } | Tools to analyze the IPvGO subnet. |
-|  [cheat](./bitburner.go.cheat.md) |  | { getCheatSuccessChance(): number; removeRouter( x: number, y: number, ): Promise&lt;{ type: "move" \| "pass" \| "gameOver"; x: number \| null; y: number \| null; }&gt;; playTwoMoves( x1: number, y1: number, x2: number, y2: number, ): Promise&lt;{ type: "move" \| "pass" \| "gameOver"; x: number \| null; y: number \| null; }&gt;; repairOfflineNode( x: number, y: number, ): Promise&lt;{ type: "move" \| "pass" \| "gameOver"; x: number \| null; y: number \| null; }&gt;; destroyNode( x: number, y: number, ): Promise&lt;{ type: "move" \| "pass" \| "gameOver"; x: number \| null; y: number \| null; }&gt;; } | Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 14.2 to use. |
+|  [analysis](./bitburner.go.analysis.md) |  | [GoAnalysis](./bitburner.goanalysis.md) | Tools to analyze the IPvGO subnet. |
+|  [cheat](./bitburner.go.cheat.md) |  | [GoCheat](./bitburner.gocheat.md) | Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 14.2 to use. |
 
 ## Methods
 

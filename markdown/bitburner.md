@@ -72,6 +72,8 @@
 |  [GangTaskStats](./bitburner.gangtaskstats.md) | Object representing data representing a gang member task. |
 |  [GangTerritory](./bitburner.gangterritory.md) |  |
 |  [Go](./bitburner.go.md) | IPvGO api |
+|  [GoAnalysis](./bitburner.goanalysis.md) | Tools to analyze the IPvGO subnet. |
+|  [GoCheat](./bitburner.gocheat.md) | Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 14.2 to use. |
 |  [Grafting](./bitburner.grafting.md) | Grafting API |
 |  [GraftingTask](./bitburner.graftingtask.md) | Faction Work |
 |  [HackingFormulas](./bitburner.hackingformulas.md) | Hacking formulas |
