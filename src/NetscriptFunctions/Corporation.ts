@@ -223,7 +223,9 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         quality: material.quality,
         demand: corporation.unlocks.has(CorpUnlockName.MarketResearchDemand) ? material.demand : undefined,
         competition: corporation.unlocks.has(CorpUnlockName.MarketDataCompetition) ? material.competition : undefined,
+        buyAmount: material.buyAmount,
         productionAmount: material.productionAmount,
+        importAmount: material.importAmount,
         actualSellAmount: material.actualSellAmount,
         exports: exports,
       };

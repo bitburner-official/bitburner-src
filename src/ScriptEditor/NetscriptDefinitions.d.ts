@@ -8725,10 +8725,14 @@ interface Material {
   demand: number | undefined;
   /** Competition for the material, only present if "Market Research - Competition" unlocked */
   competition: number | undefined;
-  /** Amount of material produced last cycle */
-  productionAmount: number;
+  /** Amount of material purchased from the market last cycle */
+  buyAmount: number;
   /** Amount of material sold last cycle */
   actualSellAmount: number;
+  /** Amount of material produced last cycle */
+  productionAmount: number;
+  /** Amount of material imported from other divisions last cycle */
+  importAmount: number;
   /** Cost to buy material */
   marketPrice: number;
   /** Sell cost, can be "MP+5" */
