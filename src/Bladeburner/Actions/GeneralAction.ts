@@ -4,6 +4,7 @@ import type { ActionIdentifier } from "../Types";
 
 import { BladeActionType, BladeGeneralActionName } from "@enums";
 import { ActionClass, ActionParams } from "./Action";
+import { clampNumber } from "../../utils/helpers/clampNumber";
 
 type GeneralActionParams = ActionParams & {
   name: BladeGeneralActionName;
@@ -28,8 +29,9 @@ export class GeneralAction extends ActionClass {
   getSuccessChance(__bladeburner: Bladeburner, __person: Person): number {
     return 1;
   }
+
   getSuccessRange(bladeburner: Bladeburner, person: Person): [minChance: number, maxChance: number] {
-    const chance = this.getSuccessChance(bladeburner, person);
+    const chance = clampNumber(this.getSuccessChance(bladeburner, person), 0, 1);
     return [chance, chance];
   }
 }
