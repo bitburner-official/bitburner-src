@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Box, Button, Tooltip, Typography, Paper, Container, TextField } from "@mui/material";
+import { Box, Button, Typography, Paper, Container, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 import { Augmentations } from "../../Augmentation/Augmentations";
