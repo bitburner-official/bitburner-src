@@ -61,9 +61,7 @@ export function Info(props: IProps): React.ReactElement {
                 faction favor after installing an Augmentation.
               </Typography>
               <MathJax>{"\\(\\huge{r = \\text{total faction reputation}}\\)"}</MathJax>
-              <MathJax>
-                {"\\(\\huge{favor=1+\\left\\lfloor\\log_{1.02}\\left(\\frac{r+25000}{25500}\\right)\\right\\rfloor}\\)"}
-              </MathJax>
+              <MathJax>{"\\(\\huge{favor=\\log_{1.02}\\left(1+\\frac{r}{25000}\\right)}\\)"}</MathJax>
             </>
           }
         >
@@ -82,7 +80,7 @@ export function Info(props: IProps): React.ReactElement {
               <Typography>
                 Faction favor increases the rate at which you earn reputation for this faction by 1% per favor. Faction
                 favor is gained whenever you install an Augmentation. The amount of favor you gain depends on the total
-                amount of reputation you earned with this faction. Across all resets.
+                amount of reputation you earned with this faction across all resets.
               </Typography>
 
               <MathJax>{"\\(\\huge{r = reputation}\\)"}</MathJax>
