@@ -2046,13 +2046,13 @@ export interface Singularity {
    * apply for promotions by specifying the company and field you are already
    * employed at.
    *
-   * This function will return true if you successfully get a job/promotion,
-   * and false otherwise. Note that if you are trying to use this function to
-   * apply for a promotion and don’t get one, the function will return false.
+   * This function will return the job name if you successfully get a job/promotion,
+   * and null otherwise. Note that if you are trying to use this function to
+   * apply for a promotion and don’t get one, the function will return null.
    *
    * @param companyName - Name of company to apply to.
    * @param field - Field to which you want to apply.
-   * @returns True if the player successfully get a job/promotion, and false otherwise.
+   * @returns Job name if the player successfully get a job/promotion, and null otherwise.
    */
   applyToCompany(companyName: CompanyName | `${CompanyName}`, field: JobField | `${JobField}`): JobName | null;
 
