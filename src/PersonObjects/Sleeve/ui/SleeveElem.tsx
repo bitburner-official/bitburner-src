@@ -30,10 +30,21 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
     case SleeveWorkType.SYNCHRO:
       return "This sleeve is currently set to synchronize with the original consciousness. This causes the Sleeve's synchronization to increase.";
     case SleeveWorkType.BLADEBURNER:
+      const bladeburner = Player.bladeburner;
+      let estimatedSuccessChance;
+      if (bladeburner) {
+        const action = bladeburner.getActionFromTypeAndName(work.actionId.type, work.actionId.name);
+        if (action) {
+          const [minChance, maxChance] = action.getSuccessRange(bladeburner, sleeve);
+          estimatedSuccessChance =
+            formatPercent(minChance, 1) + (minChance === maxChance ? "" : ` ~ ${formatPercent(maxChance, 1)}`);
+        }
+      }
       return (
-        `This sleeve is currently attempting to perform ${work.actionId.name}.\n\nTasks Completed: ${formatInt(
-          work.tasksCompleted,
-        )}\n \n` + `Progress: ${formatPercent(progress)}`
+        `This sleeve is currently attempting to perform ${work.actionId.name}.\n\n` +
+        (estimatedSuccessChance ? `Estimated success chance: ${estimatedSuccessChance}\n\n` : "") +
+        `Tasks Completed: ${formatInt(work.tasksCompleted)}\n \n` +
+        `Progress: ${formatPercent(progress)}`
       );
     case SleeveWorkType.CRIME: {
       const crime = work.getCrime();
