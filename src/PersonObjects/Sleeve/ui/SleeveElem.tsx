@@ -29,7 +29,7 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
       return "This sleeve is currently set to focus on shock recovery. This causes the Sleeve's shock to decrease at a faster rate.";
     case SleeveWorkType.SYNCHRO:
       return "This sleeve is currently set to synchronize with the original consciousness. This causes the Sleeve's synchronization to increase.";
-    case SleeveWorkType.BLADEBURNER:
+    case SleeveWorkType.BLADEBURNER: {
       const bladeburner = Player.bladeburner;
       let estimatedSuccessChance;
       if (bladeburner) {
@@ -46,6 +46,7 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
         `Tasks Completed: ${formatInt(work.tasksCompleted)}\n \n` +
         `Progress: ${formatPercent(progress)}`
       );
+    }
     case SleeveWorkType.CRIME: {
       const crime = work.getCrime();
       return (
