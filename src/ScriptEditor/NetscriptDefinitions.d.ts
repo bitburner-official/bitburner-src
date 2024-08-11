@@ -4067,15 +4067,17 @@ export interface GoAnalysis {
    *
    * For example, a 5x5 board might look like this. There is a large chain #1 on the left side, smaller chains
    * 2 and 3 on the right, and a large chain 0 taking up the center of the board.
-   * <pre lang="javascript">
-   *       [
-   *         [   0,0,0,3,4],
-   *         [   1,0,0,3,3],
-   *         [   1,1,0,0,0],
-   *         [null,1,0,2,2],
-   *         [null,1,0,2,5],
-   *       ]
-   * </pre>
+   *
+   * ```js
+   * [
+   *   [   0,0,0,3,4],
+   *   [   1,0,0,3,3],
+   *   [   1,1,0,0,0],
+   *   [null,1,0,2,2],
+   *   [null,1,0,2,5],
+   * ]
+   * ```
+   *
    * @remarks
    * RAM cost: 16 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
@@ -4090,15 +4092,15 @@ export interface GoAnalysis {
    * For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one
    * in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!
    *
-   * <pre lang="javascript">
-   *      [
-   *         [-1, 5,-1,-1, 2],
-   *         [ 5, 5,-1,-1,-1],
-   *         [-1,-1, 4,-1,-1],
-   *         [ 3,-1,-1, 3, 1],
-   *         [ 3,-1,-1, 3, 1],
-   *      ]
-   * </pre>
+   * ```js
+   * [
+   *   [-1, 5,-1,-1, 2],
+   *   [ 5, 5,-1,-1,-1],
+   *   [-1,-1, 4,-1,-1],
+   *   [ 3,-1,-1, 3, 1],
+   *   [ 3,-1,-1, 3, 1],
+   * ]
+   * ```
    *
    * @remarks
    * RAM cost: 16 GB
@@ -4115,15 +4117,15 @@ export interface GoAnalysis {
    *
    * In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center:
    *
-   * <pre lang="javascript">
-   *   [
-   *      "OO..?",
-   *      "OO.?.",
-   *      "O.?.X",
-   *      ".?.XX",
-   *      "?..X#",
-   *   ]
-   * </pre>
+   * ```js
+   * [
+   *   "OO..?",
+   *   "OO.?.",
+   *   "O.?.X",
+   *   ".?.XX",
+   *   "?..X#",
+   * ]
+   * ```
    *
    * @remarks
    * RAM cost: 16 GB
@@ -4136,7 +4138,7 @@ export interface GoAnalysis {
    *
    * The details are keyed by opponent name, in this structure:
    *
-   * <pre lang="javascript">
+   * ```js
    * {
    *   <OpponentName>: {
    *     wins: number,
@@ -4148,8 +4150,7 @@ export interface GoAnalysis {
    *     bonusDescription: string,
    *   }
    * }
-   * </pre>
-   *
+   * ```
    */
   getStats(): Partial<Record<GoOpponent, SimpleOpponentStats>>;
 }
@@ -4333,13 +4334,15 @@ export interface Go {
    *
    * For example, a 5x5 board might look like this:
    *
-   [<br/>  
-      "XX.O.",<br/>  
-      "X..OO",<br/>  
-      ".XO..",<br/>  
-      "XXO.#",<br/>  
-      ".XO.#",<br/>  
-   ]
+   * ```js
+   * [
+   *   "XX.O.",
+   *   "X..OO",
+   *   ".XO..",
+   *   "XXO.#",
+   *   ".XO.#",
+   * ]
+   * ```
    *
    * Each string represents a vertical column on the board, and each character in the string represents a point.
    *
@@ -4359,13 +4362,15 @@ export interface Go {
    *
    * For example, a single 5x5 prior move board might look like this:
    *
-   [<br/>  
-      "XX.O.",<br/>  
-      "X..OO",<br/>  
-      ".XO..",<br/>  
-      "XXO.#",<br/>  
-      ".XO.#",<br/>  
-   ]
+   * ```js
+   * [
+   *   "XX.O.",
+   *   "X..OO",
+   *   ".XO..",
+   *   "XXO.#",
+   *   ".XO.#",
+   * ]
+   * ```
    */
   getMoveHistory(): string[][];
 

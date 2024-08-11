@@ -23,10 +23,30 @@ export interface Go
 
 |  Method | Description |
 |  --- | --- |
-|  [getBoardState()](./bitburner.go.getboardstate.md) | <p>Retrieves a simplified version of the board state. "X" represents black pieces, "O" white, and "." empty points. "\#" are dead nodes that are not part of the subnet. (They are not territory nor open nodes.)</p><p>For example, a 5x5 board might look like this:</p><p>\[<br/> "XX.O.",<br/> "X..OO",<br/> ".XO..",<br/> "XXO.\#",<br/> ".XO.\#",<br/> \]</p><p>Each string represents a vertical column on the board, and each character in the string represents a point.</p><p>Traditional notation for Go is e.g. "B,1" referring to second ("B") column, first rank. This is the equivalent of index \[1\]\[0\].</p><p>Note that the \[0\]\[0\] point is shown on the bottom-left on the visual board (as is traditional), and each string represents a vertical column on the board. In other words, the printed example above can be understood to be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.</p> |
+|  [getBoardState()](./bitburner.go.getboardstate.md) | <p>Retrieves a simplified version of the board state. "X" represents black pieces, "O" white, and "." empty points. "\#" are dead nodes that are not part of the subnet. (They are not territory nor open nodes.)</p><p>For example, a 5x5 board might look like this:</p>
+```js
+[
+  "XX.O.",
+  "X..OO",
+  ".XO..",
+  "XXO.#",
+  ".XO.#",
+]
+```
+<p>Each string represents a vertical column on the board, and each character in the string represents a point.</p><p>Traditional notation for Go is e.g. "B,1" referring to second ("B") column, first rank. This is the equivalent of index \[1\]\[0\].</p><p>Note that the \[0\]\[0\] point is shown on the bottom-left on the visual board (as is traditional), and each string represents a vertical column on the board. In other words, the printed example above can be understood to be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.</p> |
 |  [getCurrentPlayer()](./bitburner.go.getcurrentplayer.md) | Returns the color of the current player, or 'None' if the game is over. |
 |  [getGameState()](./bitburner.go.getgamestate.md) | Gets the status of the current game. Shows the current player, current score, and the previous move coordinates. Previous move coordinates will be \[-1, -1\] for a pass, or if there are no prior moves. |
-|  [getMoveHistory()](./bitburner.go.getmovehistory.md) | <p>Returns all the prior moves in the current game, as an array of simple board states.</p><p>For example, a single 5x5 prior move board might look like this:</p><p>\[<br/> "XX.O.",<br/> "X..OO",<br/> ".XO..",<br/> "XXO.\#",<br/> ".XO.\#",<br/> \]</p> |
+|  [getMoveHistory()](./bitburner.go.getmovehistory.md) | <p>Returns all the prior moves in the current game, as an array of simple board states.</p><p>For example, a single 5x5 prior move board might look like this:</p>
+```js
+[
+  "XX.O.",
+  "X..OO",
+  ".XO..",
+  "XXO.#",
+  ".XO.#",
+]
+```
+ |
 |  [getOpponent()](./bitburner.go.getopponent.md) | Returns the name of the opponent faction in the current subnet. |
 |  [makeMove(x, y)](./bitburner.go.makemove.md) | Make a move on the IPvGO subnet game board, and await the opponent's response. x:0 y:0 represents the bottom-left corner of the board in the UI. |
 |  [opponentNextTurn(logOpponentMove)](./bitburner.go.opponentnextturn.md) | Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable. x:0 y:0 represents the bottom-left corner of the board in the UI. |
