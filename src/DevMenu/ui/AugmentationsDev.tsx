@@ -1,16 +1,15 @@
 import { Player } from "@player";
-import React, { useState } from "react";
+import React from "react";
 import { Clear, ExpandMore } from "@mui/icons-material";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Autocomplete,
   Box,
   Button,
   IconButton,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -19,17 +18,17 @@ import ReplyIcon from "@mui/icons-material/Reply";
 import { AugmentationName } from "@enums";
 
 export function AugmentationsDev(): React.ReactElement {
-  const [augmentation, setAugmentation] = useState(AugmentationName.Targeting1);
-
-  function setAugmentationDropdown(event: SelectChangeEvent): void {
-    setAugmentation(event.target.value as AugmentationName);
-  }
+  const [augmentation, setAugmentation] = React.useState<AugmentationName | null>(null);
 
   function queueAug(): void {
+    if (!augmentation) {
+      return;
+    }
     if (Player.hasAugmentation(augmentation)) {
       return;
     }
     Player.queueAugmentation(augmentation);
+    setAugmentation(null);
   }
 
   function queueAllAugs(): void {
@@ -39,6 +38,7 @@ export function AugmentationsDev(): React.ReactElement {
       }
       Player.queueAugmentation(augName);
     }
+    setAugmentation(null);
   }
 
   function clearAugs(): void {
@@ -49,6 +49,10 @@ export function AugmentationsDev(): React.ReactElement {
     Player.queuedAugmentations = [];
   }
 
+  const options = Object.values(AugmentationName).filter(
+    (augmentationName) => !Player.hasAugmentation(augmentationName),
+  );
+
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary expandIcon={<ExpandMore />}>
@@ -56,29 +60,26 @@ export function AugmentationsDev(): React.ReactElement {
       </AccordionSummary>
       <AccordionDetails>
         <Box display="flex" marginBottom="8px">
-          <Tooltip title="Queue all augmentations" sx={{ marginRight: "8px" }}>
+          <Tooltip title="Queue all augmentations" style={{ marginRight: "8px" }}>
             <Button onClick={queueAllAugs}>
               <ReplyAllIcon />
             </Button>
           </Tooltip>
-          <Select
-            onChange={setAugmentationDropdown}
+          <Tooltip title="Queue augmentation">
+            <IconButton onClick={queueAug}>
+              <ReplyIcon />
+            </IconButton>
+          </Tooltip>
+          <Autocomplete
+            style={{ width: "400px" }}
+            options={options}
             value={augmentation}
-            startAdornment={
-              <Tooltip title="Queue augmentation">
-                <IconButton onClick={queueAug}>
-                  <ReplyIcon />
-                </IconButton>
-              </Tooltip>
-            }
-          >
-            {Object.values(AugmentationName).map((aug) => (
-              <MenuItem key={aug} value={aug}>
-                {aug}
-              </MenuItem>
-            ))}
-          </Select>
-          <Tooltip title="Clear augmentations" sx={{ marginLeft: "8px" }}>
+            renderInput={(params) => <TextField {...params} style={{ height: "100%" }} />}
+            onChange={(_, augmentationName) => {
+              setAugmentation(augmentationName);
+            }}
+          ></Autocomplete>
+          <Tooltip title="Clear augmentations" style={{ marginLeft: "8px" }}>
             <Button onClick={clearAugs}>
               <Clear />
             </Button>
