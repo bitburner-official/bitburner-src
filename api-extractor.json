@@ -88,19 +88,15 @@
      *
      * DEFAULT VALUE: no overrideTsconfig section
      */
+    /**
+     * We need to override TsConfig, otherwise api-extractor will read our tsconfig.json and process every files, not
+     * just NetscriptDefinitions.d.ts.
+     */
     "overrideTsconfig": {
       "compilerOptions": {
-        "baseUrl": ".",
-        "esModuleInterop": true,
-        "isolatedModules": true,
-        "jsx": "react",
-        "module": "commonjs",
-        "noEmit": true,
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "sourceMap": true,
-        "strict": true,
-        "target": "ESNext"
+        // Without enabling this option, api-extractor will report unrelated warnings of jsdom. Check this link for more
+        // information: https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/57467.
+        "skipLibCheck": true
       },
       "include": ["src/ScriptEditor/NetscriptDefinitions.d.ts"]
     }
