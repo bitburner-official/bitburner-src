@@ -329,4 +329,10 @@ export function prestigeSourceFile(isFlume: boolean): void {
   resetPidCounter();
 
   setInitialExpForPlayer();
+
+  if (!isFlume && Player.sourceFiles.size === 1 && Player.sourceFileLvl(1) === 1) {
+    delayedDialog(
+      "Congratulations on destroying your first BitNode! Make sure to check the Documentation tab. Many pages are unlocked now.",
+    );
+  }
 }
