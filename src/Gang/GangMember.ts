@@ -14,6 +14,7 @@ import {
   calculateAscensionMult,
   calculateAscensionPointsGain,
 } from "./formulas/formulas";
+import { GangMemberType } from "@enums";
 
 interface IMults {
   hack: number;
@@ -26,6 +27,7 @@ interface IMults {
 
 export class GangMember {
   name: string;
+  type: GangMemberType;
   task = "Unassigned";
 
   earnedRespect = 0;
@@ -61,8 +63,9 @@ export class GangMember {
   upgrades: string[] = []; // Names of upgrades
   augmentations: string[] = []; // Names of augmentations only
 
-  constructor(name = "") {
+  constructor(name = "", type = GangMemberType.Enforcer) {
     this.name = name;
+    this.type = type;
   }
 
   calculateSkill(exp: number, mult = 1): number {
@@ -83,7 +86,8 @@ export class GangMember {
   }
 
   calculatePower(): number {
-    return (this.hack + this.str + this.def + this.dex + this.agi + this.cha) / 95;
+    const task = this.getTask();
+    return (task.territoryPower * (this.hack + this.str + this.def + this.dex + this.agi + this.cha) * 0.015) / 95;
   }
 
   assignToTask(taskName: string): boolean {

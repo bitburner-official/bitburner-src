@@ -60,6 +60,8 @@ export class GangMemberUpgrade {
         return "Rootkit";
       case UpgradeType.Augmentation:
         return "Augmentation";
+      case UpgradeType.Equipment:
+        return "Equipment";
       default:
         return "";
     }

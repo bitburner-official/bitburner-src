@@ -1,11 +1,11 @@
+import { GangMemberType } from "@enums";
 import { ITaskParams, ITerritory } from "./ITaskParams";
 
 export class GangMemberTask {
   name: string;
   desc: string;
 
-  isHacking: boolean;
-  isCombat: boolean;
+  restrictedTypes?: GangMemberType[];
 
   baseRespect: number;
   baseWanted: number;
@@ -22,14 +22,15 @@ export class GangMemberTask {
 
   territory: ITerritory;
 
+  territoryPower: number;
+  deathRisk: boolean;
+
   // Defines tasks that Gang Members can work on
-  constructor(name: string, desc: string, isHacking: boolean, isCombat: boolean, params: ITaskParams) {
+  constructor(name: string, desc: string, params: ITaskParams, restrictedTypes?: GangMemberType[]) {
     this.name = name;
     this.desc = desc;
 
-    // Flags that describe whether this Task is applicable for Hacking/Combat gangs
-    this.isHacking = isHacking;
-    this.isCombat = isCombat;
+    this.restrictedTypes = restrictedTypes;
 
     // Base gain rates for respect/wanted/money
     this.baseRespect = params.baseRespect ? params.baseRespect : 0;
@@ -58,8 +59,10 @@ export class GangMemberTask {
 
     // Territory Factors. Exponential factors that dictate how territory affects gains
     // Formula: Territory Multiplier = (Territory * 100) ^ factor / 100
-    // So factor should be > 1 if something should scale exponentially with territory
-    // and should be < 1 if it should have diminishing returns
+    // So factor of 0 means no scaling, 1 means scaling linearly
     this.territory = params.territory ? params.territory : { money: 1, respect: 1, wanted: 1 };
+
+    this.territoryPower = params.territoryPower ?? 0;
+    this.deathRisk = params.deathRisk ?? false;
   }
 }

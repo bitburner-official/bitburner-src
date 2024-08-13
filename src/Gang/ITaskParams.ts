@@ -16,4 +16,6 @@ export interface ITaskParams {
   chaWeight?: number;
   difficulty?: number;
   territory?: ITerritory;
+  territoryPower?: number;
+  deathRisk?: boolean;
 }
