@@ -5607,7 +5607,7 @@ export interface NS {
    *
    * Use your hacking skills to attack a server’s security, lowering the server’s security level.
    * The runtime for this function depends on your hacking level and the target server’s security
-   * level when this function is called. This function lowers the security level of the target server by 0.05.
+   * level when this function is called.
    *
    * Like {@link NS.hack | hack} and {@link NS.grow| grow}, `weaken` can be called on any server, regardless of
    * where the script is running. This function requires root access to the target server, but
