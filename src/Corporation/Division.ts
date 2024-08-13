@@ -375,7 +375,7 @@ export class Division {
           // buy them
           for (const [matName, [buyAmt]] of getRecordEntries(smartBuy)) {
             const mat = warehouse.materials[matName];
-            if (mat.stored + buyAmt != 0) {
+            if (mat.stored + buyAmt !== 0) {
               mat.quality = (mat.quality * mat.stored + 1 * buyAmt) / (mat.stored + buyAmt);
               mat.averagePrice = (mat.averagePrice * mat.stored + mat.marketPrice * buyAmt) / (mat.stored + buyAmt);
             } else {
