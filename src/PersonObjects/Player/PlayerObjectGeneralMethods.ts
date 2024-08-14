@@ -52,6 +52,7 @@ import { isMember } from "../../utils/EnumHelper";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 import { AlertEvents } from "../../ui/React/AlertManager";
 import { Augmentations } from "../../Augmentation/Augmentations";
+import { PlayerEventType, PlayerEvents } from "./PlayerEvents";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -269,8 +270,9 @@ export function hospitalize(this: PlayerObject, suppressNotification: boolean): 
   this.loseMoney(cost, "hospitalization");
   this.hp.current = this.hp.max;
   if (!suppressNotification) {
-    SnackbarEvents.emit(`You've been Hospitalized for ${formatMoney(cost)}`, ToastVariant.SUCCESS, 2000);
+    SnackbarEvents.emit(`You've been hospitalized for ${formatMoney(cost)}`, ToastVariant.SUCCESS, 2000);
   }
+  PlayerEvents.emit(PlayerEventType.Hospitalized);
   return cost;
 }
 
