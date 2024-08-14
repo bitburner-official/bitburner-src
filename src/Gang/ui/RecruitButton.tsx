@@ -16,7 +16,7 @@ export function RecruitButton(props: IProps): React.ReactElement {
   const [open, setOpen] = useState(false);
   const recruitsAvailable = gang.getRecruitsAvailable();
 
-  if (!gang.canRecruitMember()) {
+  if (!gang.canRecruitMember().isSuccess) {
     const respectNeeded = gang.respectForNextRecruit();
     return (
       <Box display="flex" alignItems="center" sx={{ mx: 1 }}>

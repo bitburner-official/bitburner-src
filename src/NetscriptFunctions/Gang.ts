@@ -160,7 +160,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
     },
     canRecruitMember: (ctx) => () => {
       const gang = getGang(ctx);
-      return gang.canRecruitMember();
+      return gang.canRecruitMember().isSuccess;
     },
     getRecruitsAvailable: (ctx) => () => {
       const gang = getGang(ctx);
@@ -173,20 +173,16 @@ export function NetscriptGang(): InternalAPI<IGang> {
     recruitMember: (ctx) => (_memberName) => {
       const memberName = helpers.string(ctx, "memberName", _memberName);
       const gang = getGang(ctx);
-      const recruited = gang.recruitMember(memberName);
-      if (memberName === "") {
-        ctx.workerScript.log("gang.recruitMember", () => `Failed to recruit Gang Member. Name must be provided.`);
-        return false;
-      } else if (recruited) {
-        ctx.workerScript.log("gang.recruitMember", () => `Successfully recruited Gang Member '${memberName}'`);
-        return recruited;
-      } else {
+      const result = gang.recruitMember(memberName);
+      if (!result.isSuccess) {
         ctx.workerScript.log(
           "gang.recruitMember",
-          () => `Failed to recruit Gang Member '${memberName}'. Name already used.`,
+          () => `Failed to recruit gang Member '${memberName}'. ${result.errorType ?? "Unknown reason"}.`,
         );
-        return recruited;
+        return false;
       }
+      ctx.workerScript.log("gang.recruitMember", () => `Successfully recruited gang Member '${memberName}'`);
+      return true;
     },
     getTaskNames: (ctx) => () => {
       const gang = getGang(ctx);

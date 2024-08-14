@@ -18,12 +18,12 @@ export function RecruitModal(props: IRecruitPopupProps): React.ReactElement {
   const gang = useGang();
   const [name, setName] = useState("");
 
-  const disabled = name === "" || !gang.canRecruitMember();
+  const disabled = name === "" || !gang.canRecruitMember().isSuccess;
   function recruit(): void {
     if (disabled) return;
     // At this point, the only way this can fail is if you already
     // have a gang member with the same name
-    if (!gang.recruitMember(name) && name !== "") {
+    if (!gang.recruitMember(name).isSuccess && name !== "") {
       dialogBoxCreate("You already have a gang member with this name!");
       return;
     }

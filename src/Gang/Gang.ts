@@ -27,6 +27,13 @@ import { PowerMultiplier } from "./data/power";
 import { FactionName } from "@enums";
 import { CONSTANTS } from "../Constants";
 
+export enum RecruitmentErrorType {
+  EmptyName = "Member name cannot be an empty string",
+  DuplicatedName = "This name was used",
+  ExceedMaxNumber = "Your gang recruited maximum number of members",
+  NotEnoughRespect = "Your gang does not have enough respect to recruit more members",
+}
+
 export const GangPromise: PromisePair<number> = { promise: null, resolve: null };
 
 export class Gang {
@@ -301,9 +308,22 @@ export class Gang {
     }
   }
 
-  canRecruitMember(): boolean {
-    if (this.members.length >= GangConstants.MaximumGangMembers) return false;
-    return this.respect >= this.respectForNextRecruit();
+  canRecruitMember(): { isSuccess: boolean; errorType?: RecruitmentErrorType } {
+    if (this.members.length >= GangConstants.MaximumGangMembers) {
+      return {
+        isSuccess: false,
+        errorType: RecruitmentErrorType.ExceedMaxNumber,
+      };
+    }
+    if (this.respect < this.respectForNextRecruit()) {
+      return {
+        isSuccess: false,
+        errorType: RecruitmentErrorType.NotEnoughRespect,
+      };
+    }
+    return {
+      isSuccess: true,
+    };
   }
 
   /** @returns The respect threshold needed for the next member recruitment. Infinity if already at or above max members. */
@@ -327,17 +347,35 @@ export class Gang {
     return Math.min(membersRecruitabile, GangConstants.MaximumGangMembers) - this.members.length;
   }
 
-  recruitMember(name: string): boolean {
-    name = String(name);
-    if (name === "" || !this.canRecruitMember()) return false;
+  recruitMember(name: string): { isSuccess: boolean; errorType?: RecruitmentErrorType } {
+    if (name === "") {
+      return {
+        isSuccess: false,
+        errorType: RecruitmentErrorType.EmptyName,
+      };
+    }
+
+    const resultOfCheckingIfGangCanRecruitMember = this.canRecruitMember();
+    if (!resultOfCheckingIfGangCanRecruitMember.isSuccess) {
+      return {
+        isSuccess: false,
+        errorType: resultOfCheckingIfGangCanRecruitMember.errorType,
+      };
+    }
 
     // Check for already-existing names
-    const sameNames = this.members.filter((m) => m.name === name);
-    if (sameNames.length >= 1) return false;
+    if (this.members.some((m) => m.name === name)) {
+      return {
+        isSuccess: false,
+        errorType: RecruitmentErrorType.DuplicatedName,
+      };
+    }
 
     const member = new GangMember(name);
     this.members.push(member);
-    return true;
+    return {
+      isSuccess: true,
+    };
   }
 
   // Money and Respect gains multiplied by this number (< 1)
