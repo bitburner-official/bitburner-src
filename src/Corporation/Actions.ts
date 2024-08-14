@@ -333,7 +333,9 @@ export function buyMaterial(division: Division, material: Material, amt: number)
     throw new Error(`${material.name} is not a relevant material for industry ${division.type}`);
   }
   if (!Number.isFinite(amt) || amt < 0) {
-    throw new Error("Invalid value for amount field! Must be numeric and greater than or equal to 0");
+    throw new Error(
+      `Invalid amount '${amt}' to buy material '${material.name}'. Must be numeric and greater than or equal to 0`,
+    );
   }
   material.buyAmount = amt;
 }
@@ -351,7 +353,9 @@ export function bulkPurchase(
   const matSize = MaterialInfo[material.name].size;
   const maxAmount = (warehouse.size - warehouse.sizeUsed) / matSize;
   if (!Number.isFinite(amt) || amt < 0) {
-    throw new Error("Invalid value for amount field! Must be numeric and greater than or equal to 0");
+    throw new Error(
+      `Invalid amount '${amt}' to buy material '${material.name}'. Must be numeric and greater than or equal to 0`,
+    );
   }
   if (amt > maxAmount) {
     throw new Error(`You do not have enough warehouse size to fit this purchase`);
