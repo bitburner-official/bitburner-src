@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node v16.13.1
+      - name: Use Node 20
         uses: actions/setup-node@v2
         with:
-          node-version: 16.13.1
+          node-version: 20
           cache: "npm"
       - name: Install NPM dependencies
         working-directory: ./tools/fetch-changelog
