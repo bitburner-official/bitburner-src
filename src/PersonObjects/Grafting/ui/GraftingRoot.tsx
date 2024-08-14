@@ -70,13 +70,19 @@ export const GraftingRoot = (): React.ReactElement => {
   const selectedAugmentation = Augmentations[selectedAug];
   const rerender = useCycleRerender();
 
+  const matches = (s1: string, s2: string) => s1.toLowerCase().includes(s2.toLowerCase());
   const getAugsSorted = (): AugmentationName[] => {
     const augs = getGraftingAvailableAugs();
     if (Settings.PurchaseAugmentationsOrder === PurchaseAugmentationsOrderSetting.Cost) {
       augs.sort((a, b) => graftableAugmentations[a].cost - graftableAugmentations[b].cost);
     }
     if (filterText !== "") {
-      return augs.filter((augmentationName) => augmentationName.toLowerCase().includes(filterText));
+      return augs.filter(
+        (aug: AugmentationName) =>
+          matches(Augmentations[aug].name, filterText) ||
+          matches(Augmentations[aug].info, filterText) ||
+          matches(Augmentations[aug].stats, filterText),
+      );
     }
     return augs;
   };
