@@ -5542,7 +5542,8 @@ export interface NS {
    * server to hack that server. For example, you can create a script that hacks the `foodnstuff`
    * server and run that script on any server in the game.
    *
-   * A successful `hack()` on a server will raise that server’s security level by 0.002.
+   * A successful `hack()` on a server will raise that server’s security level by 0.002 per thread. You can use
+   * {@link NS.hackAnalyzeSecurity | hackAnalyzeSecurity} to calculate the security increase for a number of threads.
    *
    * @example
    * ```js
@@ -5608,6 +5609,9 @@ export interface NS {
    * Use your hacking skills to attack a server’s security, lowering the server’s security level.
    * The runtime for this function depends on your hacking level and the target server’s security
    * level when this function is called.
+   *
+   * This function usually lowers the security level of the target server by 0.05 per thread, and only in unusual
+   * situations does it do less. Use {@link NS.weakenAnalyze | weakenAnalyze} to determine the exact value.
    *
    * Like {@link NS.hack | hack} and {@link NS.grow| grow}, `weaken` can be called on any server, regardless of
    * where the script is running. This function requires root access to the target server, but
