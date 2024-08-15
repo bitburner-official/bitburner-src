@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.hasWarehouse() method
 
-Check if you have a warehouse in city
+Check if you have a warehouse in city.
 
 **Signature:**
 
@@ -23,5 +23,9 @@ hasWarehouse(divisionName: string, city: CityName | `${CityName}`): boolean;
 
 boolean
 
-true if warehouse is present, false if not
+true if warehouse is present, false if not.
+
+## Remarks
+
+RAM cost: 10 GB
 

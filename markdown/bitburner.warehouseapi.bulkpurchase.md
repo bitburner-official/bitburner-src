@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.bulkPurchase() method
 
-Set material to bulk buy
+Set material to bulk-buy.
 
 **Signature:**
 
@@ -24,4 +24,8 @@ bulkPurchase(divisionName: string, city: CityName | `${CityName}`, materialName:
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

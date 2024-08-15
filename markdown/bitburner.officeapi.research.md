@@ -4,7 +4,7 @@
 
 ## OfficeAPI.research() method
 
-Purchase a research
+Purchase a research.
 
 **Signature:**
 
@@ -22,4 +22,8 @@ research(divisionName: string, researchName: string): void;
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

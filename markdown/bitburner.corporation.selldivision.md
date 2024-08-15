@@ -4,7 +4,7 @@
 
 ## Corporation.sellDivision() method
 
-Sell a division
+Sell a division.
 
 **Signature:**
 

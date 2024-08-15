@@ -22,3 +22,7 @@ hireAdVert(divisionName: string): void;
 
 void
 
+## Remarks
+
+RAM cost: 20 GB
+

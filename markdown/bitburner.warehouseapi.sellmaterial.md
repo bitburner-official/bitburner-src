@@ -32,3 +32,7 @@ sellMaterial(
 
 void
 
+## Remarks
+
+RAM cost: 20 GB
+
