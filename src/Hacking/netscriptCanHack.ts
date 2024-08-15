@@ -9,28 +9,28 @@ import { IReturnStatus } from "../types";
 import { Player } from "@player";
 import { Server } from "../Server/Server";
 
-function baseCheck(server: Server, fnName: string): IReturnStatus {
+function baseCheck(server: Server, actionName: string): IReturnStatus {
   const hostname = server.hostname;
 
-  if (!("requiredHackingSkill" in server)) {
+  if (server.purchasedByPlayer) {
     return {
       res: false,
-      msg: `Cannot ${fnName} ${hostname} server because it is a Hacknet Node`,
+      msg: `Cannot ${actionName} ${hostname} server because it is your server`,
     };
   }
 
   if (!server.hasAdminRights) {
     return {
       res: false,
-      msg: `Cannot ${fnName} ${hostname} server because you do not have root access`,
+      msg: `Cannot ${actionName} ${hostname} server because you do not have root access`,
     };
   }
 
   return { res: true };
 }
 
-export function netscriptCanHack(server: Server): IReturnStatus {
-  const initialCheck = baseCheck(server, "hack");
+export function netscriptCanHack(server: Server, customActionName?: string): IReturnStatus {
+  const initialCheck = baseCheck(server, customActionName ?? "hack");
   if (!initialCheck.res) {
     return initialCheck;
   }
