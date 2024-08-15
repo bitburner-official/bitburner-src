@@ -59,7 +59,7 @@ export class RunningScript {
   pid = -1;
 
   // How much RAM this script uses for ONE thread
-  ramUsage = RamCostConstants.Base;
+  ramUsage: number = RamCostConstants.Base;
 
   // hostname of the server on which this script is running
   server = "";
