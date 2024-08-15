@@ -4,7 +4,7 @@ import type { GangMember } from "../Gang/GangMember";
 import type { GangMemberTask } from "../Gang/GangMemberTask";
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
-import { GangPromise } from "../Gang/Gang";
+import { GangPromise, RecruitmentResult } from "../Gang/Gang";
 import { Player } from "@player";
 import { FactionName } from "@enums";
 import { GangConstants } from "../Gang/data/Constants";
@@ -160,7 +160,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
     },
     canRecruitMember: (ctx) => () => {
       const gang = getGang(ctx);
-      return gang.canRecruitMember().isSuccess;
+      return gang.canRecruitMember() === RecruitmentResult.Success;
     },
     getRecruitsAvailable: (ctx) => () => {
       const gang = getGang(ctx);
@@ -174,14 +174,11 @@ export function NetscriptGang(): InternalAPI<IGang> {
       const memberName = helpers.string(ctx, "memberName", _memberName);
       const gang = getGang(ctx);
       const result = gang.recruitMember(memberName);
-      if (!result.isSuccess) {
-        ctx.workerScript.log(
-          "gang.recruitMember",
-          () => `Failed to recruit gang Member '${memberName}'. ${result.errorType ?? "Unknown reason"}.`,
-        );
+      if (result !== RecruitmentResult.Success) {
+        ctx.workerScript.log("gang.recruitMember", () => `Failed to recruit gang member '${memberName}'. ${result}.`);
         return false;
       }
-      ctx.workerScript.log("gang.recruitMember", () => `Successfully recruited gang Member '${memberName}'`);
+      ctx.workerScript.log("gang.recruitMember", () => `Successfully recruited gang member '${memberName}'`);
       return true;
     },
     getTaskNames: (ctx) => () => {
