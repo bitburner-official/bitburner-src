@@ -12,12 +12,12 @@ jobs:
         uses: CyberAndrii/setup-steamcmd@v1
 
       - name: Checkout dev branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: dev
 
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 

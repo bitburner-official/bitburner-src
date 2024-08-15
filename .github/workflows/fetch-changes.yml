@@ -12,9 +12,9 @@ jobs:
   fetchChangelog:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Use Node 20
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "npm"
@@ -38,7 +38,7 @@ jobs:
           echo
           echo "You may want to go to https://gist.github.com/ to upload the final changelog"
           echo "The next step will require an url because we can't easily pass multiline strings to actions"
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: bitburner_changelog___DRAFT.md
           path: ./tools/fetch-changelog/changes.md

@@ -15,13 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout files
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Check bundle files
         id: changed-bundle-files
-        uses: tj-actions/changed-files@v18.4
+        uses: tj-actions/changed-files@v44
         with:
           files: |
-            dist/*
+            dist/**
 
       - name: Warn when dist was changed or title is invalid
         id: warn-bundles-changed
