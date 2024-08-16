@@ -9,14 +9,14 @@ Get cost to upgrade skill.
 **Signature:**
 
 ```typescript
-getSkillUpgradeCost(skillName: string, count?: number): number;
+getSkillUpgradeCost(skillName: BladeburnerSkillName | `${BladeburnerSkillName}`, count?: number): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  skillName | string | Name of skill. Case-sensitive and must be an exact match. |
+|  skillName | [BladeburnerSkillName](./bitburner.bladeburnerskillname.md) \| \`${[BladeburnerSkillName](./bitburner.bladeburnerskillname.md)<!-- -->}\` | Name of skill. Case-sensitive and must be an exact match. |
 |  count | number | _(Optional)_ Number of times to upgrade the skill. Defaults to 1 if not specified. |
 
 **Returns:**

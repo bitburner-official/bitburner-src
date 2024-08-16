@@ -1,19 +1,19 @@
 import type { Bladeburner } from "../Bladeburner";
 import type { Availability, ActionIdentifier } from "../Types";
 
-import { BladeActionType, BladeBlackOpName } from "@enums";
+import { BladeburnerActionType, BladeburnerBlackOpName } from "@enums";
 import { ActionClass, ActionParams } from "./Action";
 import { operationSkillSuccessBonus, operationTeamSuccessBonus } from "./Operation";
 
 interface BlackOpParams {
-  name: BladeBlackOpName;
+  name: BladeburnerBlackOpName;
   reqdRank: number;
   n: number;
 }
 
 export class BlackOperation extends ActionClass {
-  type: BladeActionType.blackOp = BladeActionType.blackOp;
-  name: BladeBlackOpName;
+  type: BladeburnerActionType.BlackOp = BladeburnerActionType.BlackOp;
+  name: BladeburnerBlackOpName;
   n: number;
   reqdRank: number;
   teamCount = 0;

@@ -1,5 +1,5 @@
 import type { ActionIdentifier } from "../Types";
-import { BladeActionType } from "@enums";
+import { BladeburnerActionType } from "@enums";
 import { assertLoadingType } from "../../utils/TypeAssertion";
 import { getEnumHelper } from "../../utils/EnumHelper";
 
@@ -9,17 +9,17 @@ import { getEnumHelper } from "../../utils/EnumHelper";
 export function loadActionIdentifier(identifier: unknown): ActionIdentifier | null {
   if (!identifier || typeof identifier !== "object") return null;
   assertLoadingType<ActionIdentifier>(identifier);
-  if (getEnumHelper("BladeBlackOpName").isMember(identifier.name)) {
-    return { type: BladeActionType.blackOp, name: identifier.name };
+  if (getEnumHelper("BladeburnerBlackOpName").isMember(identifier.name)) {
+    return { type: BladeburnerActionType.BlackOp, name: identifier.name };
   }
-  if (getEnumHelper("BladeContractName").isMember(identifier.name)) {
-    return { type: BladeActionType.contract, name: identifier.name };
+  if (getEnumHelper("BladeburnerContractName").isMember(identifier.name)) {
+    return { type: BladeburnerActionType.Contract, name: identifier.name };
   }
-  if (getEnumHelper("BladeOperationName").isMember(identifier.name)) {
-    return { type: BladeActionType.operation, name: identifier.name };
+  if (getEnumHelper("BladeburnerOperationName").isMember(identifier.name)) {
+    return { type: BladeburnerActionType.Operation, name: identifier.name };
   }
-  if (getEnumHelper("BladeGeneralActionName").isMember(identifier.name)) {
-    return { type: BladeActionType.general, name: identifier.name };
+  if (getEnumHelper("BladeburnerGeneralActionName").isMember(identifier.name)) {
+    return { type: BladeburnerActionType.General, name: identifier.name };
   }
   return null;
 }

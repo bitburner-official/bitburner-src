@@ -15,7 +15,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Adjuster } from "./Adjuster";
 import { Player } from "@player";
-import { BladeSkillName, CityName } from "@enums";
+import { BladeburnerSkillName, CityName } from "@enums";
 import { Skills as AllSkills } from "../../Bladeburner/data/Skills";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { getEnumHelper } from "../../utils/EnumHelper";
@@ -57,9 +57,9 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
   };
 
   // Skill functions
-  const [skillName, setSkillName] = useState(BladeSkillName.bladesIntuition);
+  const [skillName, setSkillName] = useState(BladeburnerSkillName.BladesIntuition);
   function setSkillDropdown(event: SelectChangeEvent): void {
-    if (!getEnumHelper("BladeSkillName").isMember(event.target.value)) return;
+    if (!getEnumHelper("BladeburnerSkillName").isMember(event.target.value)) return;
     setSkillName(event.target.value);
   }
   const modifySkill = (modifier: number) => (levelchange: number) => {
@@ -81,7 +81,7 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
   const AllContracts = bladeburner.contracts;
   const [contractTarget, setContract] = useState(AllContracts.Tracking.name);
   function setContractDropdown(event: SelectChangeEvent): void {
-    if (!getEnumHelper("BladeContractName").isMember(event.target.value)) return;
+    if (!getEnumHelper("BladeburnerContractName").isMember(event.target.value)) return;
     setContract(event.target.value);
   }
   const modifyContractLevel = (modifier: number) => (levelchange: number) => {
@@ -117,7 +117,7 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
   const AllOperations = bladeburner.operations;
   const [operationTarget, setOperation] = useState(AllOperations.Investigation.name);
   function setOperationDropdown(event: SelectChangeEvent): void {
-    if (!getEnumHelper("BladeOperationName").isMember(event.target.value)) return;
+    if (!getEnumHelper("BladeburnerOperationName").isMember(event.target.value)) return;
     setOperation(event.target.value);
   }
   const modifyOperationLevel = (modifier: number) => (levelchange: number) => {

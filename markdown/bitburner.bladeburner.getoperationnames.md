@@ -9,11 +9,11 @@ List all operations.
 **Signature:**
 
 ```typescript
-getOperationNames(): string[];
+getOperationNames(): BladeburnerOperationName[];
 ```
 **Returns:**
 
-string\[\]
+[BladeburnerOperationName](./bitburner.bladeburneroperationname.md)<!-- -->\[\]
 
 Array of strings containing the names of all Bladeburner operations.
 

@@ -5,8 +5,8 @@ import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 import { Player } from "@player";
 import {
-  BladeActionType,
-  BladeContractName,
+  BladeburnerActionType,
+  BladeburnerContractName,
   CityName,
   FactionName,
   FactionWorkType,
@@ -96,19 +96,19 @@ function possibleFactions(sleeve: Sleeve): string[] {
   });
 }
 
-function possibleContracts(sleeve: Sleeve): BladeContractName[] | ["------"] {
+function possibleContracts(sleeve: Sleeve): BladeburnerContractName[] | ["------"] {
   const bb = Player.bladeburner;
   if (bb === null) {
     return ["------"];
   }
-  let contracts = Object.values(BladeContractName);
+  let contracts = Object.values(BladeburnerContractName);
   for (const otherSleeve of Player.sleeves) {
     if (sleeve === otherSleeve) {
       continue;
     }
     if (
       otherSleeve.currentWork?.type === SleeveWorkType.BLADEBURNER &&
-      otherSleeve.currentWork.actionId.type === BladeActionType.contract
+      otherSleeve.currentWork.actionId.type === BladeburnerActionType.Contract
     ) {
       const w = otherSleeve.currentWork;
       contracts = contracts.filter((x) => x != w.actionId.name);
@@ -262,7 +262,7 @@ function getABC(sleeve: Sleeve): [string, string, string] {
       return ["Work for Faction", work.factionName, workNames[work.factionWorkType] ?? ""];
     }
     case SleeveWorkType.BLADEBURNER:
-      if (work.actionId.type === BladeActionType.contract) {
+      if (work.actionId.type === BladeburnerActionType.Contract) {
         return ["Perform Bladeburner Actions", "Take on contracts", work.actionId.name];
       }
       return ["Perform Bladeburner Actions", work.actionId.name, "------"];

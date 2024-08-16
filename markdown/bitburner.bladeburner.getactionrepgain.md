@@ -9,15 +9,19 @@ Get the reputation gain of an action.
 **Signature:**
 
 ```typescript
-getActionRepGain(type: string, name: string, level?: number): number;
+getActionRepGain(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+    level?: number,
+  ): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  type | string | Type of action. |
-|  name | string | Name of action. Must be an exact match. |
+|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) \| \`${[BladeburnerActionType](./bitburner.bladeburneractiontype.md)<!-- -->}\` | Type of action. |
+|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) \| \`${[BladeburnerActionName](./bitburner.bladeburneractionname.md)<!-- -->}\` | Name of action. Must be an exact match. |
 |  level | number | _(Optional)_ Optional number. Action level at which to calculate the gain. Will be the action's current level if not given. |
 
 **Returns:**

@@ -1787,7 +1787,11 @@ export interface Singularity {
    * @param focus - Acquire player focus on this class. Optional. Defaults to true.
    * @returns True if action is successfully started, false otherwise.
    */
-  universityCourse(universityName: string, courseName: string, focus?: boolean): boolean;
+  universityCourse(
+    universityName: UniversityLocationName | `${UniversityLocationName}`,
+    courseName: UniversityClassType | `${UniversityClassType}`,
+    focus?: boolean,
+  ): boolean;
 
   /**
    * Workout at the gym.
@@ -1809,7 +1813,7 @@ export interface Singularity {
    * @param focus - Acquire player focus on this gym workout. Optional. Defaults to true.
    * @returns True if action is successfully started, false otherwise.
    */
-  gymWorkout(gymName: string, stat: string, focus?: boolean): boolean;
+  gymWorkout(gymName: GymLocationName | `${GymLocationName}`, stat: GymType | `${GymType}`, focus?: boolean): boolean;
 
   /**
    * Travel to another city.
@@ -3034,6 +3038,133 @@ export interface Hacknet {
 }
 
 /**
+ * Action types of Bladeburner
+ *
+ * @public
+ */
+declare enum BladeburnerActionType {
+  General = "General",
+  Contract = "Contracts",
+  Operation = "Operations",
+  BlackOp = "Black Operations",
+}
+
+/**
+ * General action names of Bladeburner
+ *
+ * @public
+ */
+declare enum BladeburnerGeneralActionName {
+  Training = "Training",
+  FieldAnalysis = "Field Analysis",
+  Recruitment = "Recruitment",
+  Diplomacy = "Diplomacy",
+  HyperbolicRegen = "Hyperbolic Regeneration Chamber",
+  InciteViolence = "Incite Violence",
+}
+
+/**
+ * Contract names of Bladeburner
+ *
+ * @public
+ */
+declare enum BladeburnerContractName {
+  Tracking = "Tracking",
+  BountyHunter = "Bounty Hunter",
+  Retirement = "Retirement",
+}
+
+/**
+ * Operation names of Bladeburner
+ *
+ * @public
+ */
+declare enum BladeburnerOperationName {
+  Investigation = "Investigation",
+  Undercover = "Undercover Operation",
+  Sting = "Sting Operation",
+  Raid = "Raid",
+  StealthRetirement = "Stealth Retirement Operation",
+  Assassination = "Assassination",
+}
+
+/**
+ * Black Operation names of Bladeburner
+ *
+ * @public
+ */
+declare enum BladeburnerBlackOpName {
+  OperationTyphoon = "Operation Typhoon",
+  OperationZero = "Operation Zero",
+  OperationX = "Operation X",
+  OperationTitan = "Operation Titan",
+  OperationAres = "Operation Ares",
+  OperationArchangel = "Operation Archangel",
+  OperationJuggernaut = "Operation Juggernaut",
+  OperationRedDragon = "Operation Red Dragon",
+  OperationK = "Operation K",
+  OperationDeckard = "Operation Deckard",
+  OperationTyrell = "Operation Tyrell",
+  OperationWallace = "Operation Wallace",
+  OperationShoulderOfOrion = "Operation Shoulder of Orion",
+  OperationHyron = "Operation Hyron",
+  OperationMorpheus = "Operation Morpheus",
+  OperationIonStorm = "Operation Ion Storm",
+  OperationAnnihilus = "Operation Annihilus",
+  OperationUltron = "Operation Ultron",
+  OperationCenturion = "Operation Centurion",
+  OperationVindictus = "Operation Vindictus",
+  OperationDaedalus = "Operation Daedalus",
+}
+
+/**
+ * Skill names type of Bladeburner
+ *
+ * @public
+ */
+declare enum BladeburnerSkillName {
+  BladesIntuition = "Blade's Intuition",
+  Cloak = "Cloak",
+  ShortCircuit = "Short-Circuit",
+  DigitalObserver = "Digital Observer",
+  Tracer = "Tracer",
+  Overclock = "Overclock",
+  Reaper = "Reaper",
+  EvasiveSystem = "Evasive System",
+  Datamancer = "Datamancer",
+  CybersEdge = "Cyber's Edge",
+  HandsOfMidas = "Hands of Midas",
+  Hyperdrive = "Hyperdrive",
+}
+
+/**
+ * @public
+ */
+export type BladeburnerActionName =
+  | BladeburnerGeneralActionName
+  | BladeburnerContractName
+  | BladeburnerOperationName
+  | BladeburnerBlackOpName;
+
+/**
+ * These special Bladeburner action types are only for Sleeve
+ *
+ * @public
+ */
+declare enum SpecialBladeburnerActionTypeForSleeve {
+  InfiltrateSynthoids = "Infiltrate Synthoids",
+  SupportMainSleeve = "Support main sleeve",
+  TakeOnContracts = "Take on contracts",
+}
+
+/**
+ * @public
+ */
+export type BladeburnerActionTypeForSleeve =
+  | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionName.inciteViolence>
+  | SpecialBladeburnerActionTypeForSleeve;
+
+/**
  * Bladeburner API
  * @remarks
  * You have to be employed in the Bladeburner division and be in BitNode-7
@@ -3050,7 +3181,7 @@ export interface Bladeburner {
    *
    * @returns Array of strings containing the names of all Bladeburner contracts.
    */
-  getContractNames(): string[];
+  getContractNames(): BladeburnerContractName[];
 
   /**
    * List all operations.
@@ -3061,7 +3192,7 @@ export interface Bladeburner {
    *
    * @returns Array of strings containing the names of all Bladeburner operations.
    */
-  getOperationNames(): string[];
+  getOperationNames(): BladeburnerOperationName[];
 
   /**
    * List all black ops.
@@ -3072,7 +3203,7 @@ export interface Bladeburner {
    *
    * @returns Array of strings containing the names of all Bladeburner Black Ops.
    */
-  getBlackOpNames(): string[];
+  getBlackOpNames(): BladeburnerBlackOpName[];
 
   /**
    * Get an object with the name and rank requirement of the next BlackOp that can be completed.
@@ -3084,7 +3215,7 @@ export interface Bladeburner {
    *
    * @returns An object with the `.name` and `.rank` properties of the available BlackOp, or `null`.
    */
-  getNextBlackOp(): { name: string; rank: number } | null;
+  getNextBlackOp(): { name: BladeburnerBlackOpName; rank: number } | null;
 
   /**
    * List all general actions.
@@ -3095,7 +3226,7 @@ export interface Bladeburner {
    *
    * @returns Array of strings containing the names of all general Bladeburner actions.
    */
-  getGeneralActionNames(): string[];
+  getGeneralActionNames(): BladeburnerGeneralActionName[];
 
   /**
    * List all skills.
@@ -3106,7 +3237,7 @@ export interface Bladeburner {
    *
    * @returns Array of strings containing the names of all general Bladeburner skills.
    */
-  getSkillNames(): string[];
+  getSkillNames(): BladeburnerSkillName[];
 
   /**
    * Start an action.
@@ -3126,7 +3257,10 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match
    * @returns True if the action was started successfully, and false otherwise.
    */
-  startAction(type: string, name: string): boolean;
+  startAction(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+  ): boolean;
 
   /**
    * Stop current action.
@@ -3158,7 +3292,10 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns Number of milliseconds it takes to complete the specified action.
    */
-  getActionTime(type: string, name: string): number;
+  getActionTime(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+  ): number;
 
   /**
    * Get the time elapsed on current action.
@@ -3186,7 +3323,11 @@ export interface Bladeburner {
    * @param sleeveNumber - Optional. Index of the sleeve to retrieve information.
    * @returns Estimated success chance for the specified action.
    */
-  getActionEstimatedSuccessChance(type: string, name: string, sleeveNumber?: number): [number, number];
+  getActionEstimatedSuccessChance(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+    sleeveNumber?: number,
+  ): [number, number];
 
   /**
    * Get the reputation gain of an action.
@@ -3202,7 +3343,11 @@ export interface Bladeburner {
    * @param level - Optional number. Action level at which to calculate the gain. Will be the action's current level if not given.
    * @returns Average Bladeburner reputation gain for successfully completing the specified action.
    */
-  getActionRepGain(type: string, name: string, level?: number): number;
+  getActionRepGain(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+    level?: number,
+  ): number;
 
   /**
    * Get action count remaining.
@@ -3220,7 +3365,10 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns Remaining count of the specified action.
    */
-  getActionCountRemaining(type: string, name: string): number;
+  getActionCountRemaining(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+  ): number;
 
   /**
    * Get the maximum level of an action.
@@ -3235,7 +3383,10 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns Maximum level of the specified action.
    */
-  getActionMaxLevel(type: string, name: string): number;
+  getActionMaxLevel(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+  ): number;
 
   /**
    * Get the current level of an action.
@@ -3250,7 +3401,10 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns Current level of the specified action.
    */
-  getActionCurrentLevel(type: string, name: string): number;
+  getActionCurrentLevel(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+  ): number;
 
   /**
    * Get whether an action is set to autolevel.
@@ -3265,7 +3419,10 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns True if the action is set to autolevel, and false otherwise.
    */
-  getActionAutolevel(type: string, name: string): boolean;
+  getActionAutolevel(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+  ): boolean;
 
   /**
    * Get action successes.
@@ -3278,7 +3435,10 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns a number with how many successes you have with action.
    */
-  getActionSuccesses(type: string, name: string): number;
+  getActionSuccesses(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+  ): number;
 
   /**
    * Set an action autolevel.
@@ -3291,7 +3451,11 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @param autoLevel - Whether or not to autolevel this action
    */
-  setActionAutolevel(type: string, name: string, autoLevel: boolean): void;
+  setActionAutolevel(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+    autoLevel: boolean,
+  ): void;
 
   /**
    * Set the level of an action.
@@ -3304,7 +3468,11 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @param level - Level to set this action to.
    */
-  setActionLevel(type: string, name: string, level: number): void;
+  setActionLevel(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+    level: number,
+  ): void;
 
   /**
    * Get player bladeburner rank.
@@ -3329,7 +3497,7 @@ export interface Bladeburner {
    * @param name - Name of BlackOp. Must be an exact match.
    * @returns Rank required to complete this BlackOp.
    */
-  getBlackOpRank(name: string): number;
+  getBlackOpRank(name: BladeburnerBlackOpName): number;
 
   /**
    * Get bladeburner skill points.
@@ -3354,7 +3522,7 @@ export interface Bladeburner {
    * @param skillName - Name of skill. Case-sensitive and must be an exact match.
    * @returns Level in the specified skill.
    */
-  getSkillLevel(skillName: string): number;
+  getSkillLevel(skillName: BladeburnerSkillName | `${BladeburnerSkillName}`): number;
 
   /**
    * Get cost to upgrade skill.
@@ -3369,7 +3537,7 @@ export interface Bladeburner {
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
    * @returns Number of skill points needed to upgrade the specified skill.
    */
-  getSkillUpgradeCost(skillName: string, count?: number): number;
+  getSkillUpgradeCost(skillName: BladeburnerSkillName | `${BladeburnerSkillName}`, count?: number): number;
 
   /**
    * Upgrade skill.
@@ -3384,7 +3552,7 @@ export interface Bladeburner {
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
    * @returns true if the skill is successfully upgraded, and false otherwise.
    */
-  upgradeSkill(skillName: string, count?: number): boolean;
+  upgradeSkill(skillName: BladeburnerSkillName | `${BladeburnerSkillName}`, count?: number): boolean;
 
   /**
    * Get team size.
@@ -3401,7 +3569,10 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns Number of Bladeburner team members that were assigned to the specified action.
    */
-  getTeamSize(type?: string, name?: string): number;
+  getTeamSize(
+    type?: BladeburnerActionType | `${BladeburnerActionType}`,
+    name?: BladeburnerActionName | `${BladeburnerActionName}`,
+  ): number;
 
   /**
    * Set team size.
@@ -3417,7 +3588,11 @@ export interface Bladeburner {
    * @param size - Number of team members to set. Will be converted using Math.round().
    * @returns Number of Bladeburner team members you assigned to the specified action.
    */
-  setTeamSize(type: string, name: string, size: number): number;
+  setTeamSize(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+    size: number,
+  ): number;
 
   /**
    * Get estimated population in city.
@@ -4566,11 +4741,15 @@ export interface Sleeve {
    * Return a boolean indicating whether or not this action was set successfully.
    *
    * @param sleeveNumber - Index of the sleeve to start taking class.
-   * @param university - Name of the university to attend.
-   * @param className - Name of the class to follow.
+   * @param universityName - Name of the university to attend.
+   * @param courseName - Name of the course to follow.
    * @returns True if this action was set successfully, false otherwise.
    */
-  setToUniversityCourse(sleeveNumber: number, university: string, className: string): boolean;
+  setToUniversityCourse(
+    sleeveNumber: number,
+    universityName: UniversityLocationName | `${UniversityLocationName}`,
+    courseName: UniversityClassType | `${UniversityClassType}`,
+  ): boolean;
 
   /**
    * Set a sleeve to workout at the gym.
@@ -4584,7 +4763,11 @@ export interface Sleeve {
    * @param stat - Name of the stat to train.
    * @returns True if the sleeve started working out, false otherwise.
    */
-  setToGymWorkout(sleeveNumber: number, gymName: string, stat: string): boolean;
+  setToGymWorkout(
+    sleeveNumber: number,
+    gymName: GymLocationName | `${GymLocationName}`,
+    stat: GymType | `${GymType}`,
+  ): boolean;
 
   /**
    * Make a sleeve travel to another city. The cost for using this function is the same as for a player.
@@ -4670,7 +4853,11 @@ export interface Sleeve {
    * @param contract - Name of the contract if applicable.
    * @returns True if the sleeve started the given Bladeburner action, false otherwise.
    */
-  setToBladeburnerAction(sleeveNumber: number, action: string, contract?: string): boolean;
+  setToBladeburnerAction(
+    sleeveNumber: number,
+    action: BladeburnerActionTypeForSleeve | `${BladeburnerActionTypeForSleeve}`,
+    contract?: BladeburnerContractName,
+  ): boolean;
 }
 
 /**
@@ -7873,6 +8060,30 @@ declare enum LocationName {
   WorldStockExchange = "World Stock Exchange",
 
   Void = "The Void",
+}
+
+/**
+ * Locations of university
+ *
+ * @public
+ */
+declare enum UniversityLocationName {
+  AevumSummitUniversity = LocationName.AevumSummitUniversity,
+  Sector12RothmanUniversity = LocationName.Sector12RothmanUniversity,
+  VolhavenZBInstituteOfTechnology = LocationName.VolhavenZBInstituteOfTechnology,
+}
+
+/**
+ * Locations of gym
+ *
+ * @public
+ */
+declare enum GymLocationName {
+  AevumCrushFitnessGym = LocationName.AevumCrushFitnessGym,
+  AevumSnapFitnessGym = LocationName.AevumSnapFitnessGym,
+  Sector12IronGym = LocationName.Sector12IronGym,
+  Sector12PowerhouseGym = LocationName.Sector12PowerhouseGym,
+  VolhavenMilleniumFitnessGym = LocationName.VolhavenMilleniumFitnessGym,
 }
 
 /** Names of all companies

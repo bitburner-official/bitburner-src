@@ -9,11 +9,11 @@ List all contracts.
 **Signature:**
 
 ```typescript
-getContractNames(): string[];
+getContractNames(): BladeburnerContractName[];
 ```
 **Returns:**
 
-string\[\]
+[BladeburnerContractName](./bitburner.bladeburnercontractname.md)<!-- -->\[\]
 
 Array of strings containing the names of all Bladeburner contracts.
 

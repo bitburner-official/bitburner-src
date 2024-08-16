@@ -9,11 +9,11 @@ Get an object with the name and rank requirement of the next BlackOp that can be
 **Signature:**
 
 ```typescript
-getNextBlackOp(): { name: string; rank: number } | null;
+getNextBlackOp(): { name: BladeburnerBlackOpName; rank: number } | null;
 ```
 **Returns:**
 
-{ name: string; rank: number } \| null
+{ name: [BladeburnerBlackOpName](./bitburner.bladeburnerblackopname.md)<!-- -->; rank: number } \| null
 
 An object with the `.name` and `.rank` properties of the available BlackOp, or `null`<!-- -->.
 

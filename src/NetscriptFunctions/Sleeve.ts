@@ -3,7 +3,7 @@ import type { Sleeve as NetscriptSleeve } from "@nsdefs";
 import type { ActionIdentifier } from "../Bladeburner/Types";
 
 import { Player } from "@player";
-import { BladeActionType, type BladeContractName } from "@enums";
+import { BladeburnerActionType, type BladeburnerContractName } from "@enums";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
@@ -259,9 +259,9 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       const action = helpers.string(ctx, "action", _action);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
-      let contract: BladeContractName | undefined = undefined;
+      let contract: BladeburnerContractName | undefined = undefined;
       if (action === "Take on contracts") {
-        contract = getEnumHelper("BladeContractName").nsGetMember(ctx, _contract);
+        contract = getEnumHelper("BladeburnerContractName").nsGetMember(ctx, _contract);
         for (let i = 0; i < Player.sleeves.length; ++i) {
           if (i === sleeveNumber) continue;
           const otherWork = Player.sleeves[i].currentWork;
@@ -272,7 +272,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
             );
           }
         }
-        const actionId: ActionIdentifier = { type: BladeActionType.contract, name: contract };
+        const actionId: ActionIdentifier = { type: BladeburnerActionType.Contract, name: contract };
         Player.sleeves[sleeveNumber].startWork(new SleeveBladeburnerWork({ actionId }));
       }
       return Player.sleeves[sleeveNumber].bladeburner(action, contract);
