@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.buyMaterial() method
 
-Set material buy data
+Set material buy data.
 
 **Signature:**
 
@@ -24,4 +24,8 @@ buyMaterial(divisionName: string, city: CityName | `${CityName}`, materialName: 
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

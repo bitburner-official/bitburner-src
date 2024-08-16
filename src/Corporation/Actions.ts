@@ -332,8 +332,10 @@ export function buyMaterial(division: Division, material: Material, amt: number)
   if (!isRelevantMaterial(material.name, division)) {
     throw new Error(`${material.name} is not a relevant material for industry ${division.type}`);
   }
-  if (isNaN(amt) || amt < 0) {
-    throw new Error(`Invalid amount '${amt}' to buy material '${material.name}'`);
+  if (!Number.isFinite(amt) || amt < 0) {
+    throw new Error(
+      `Invalid amount '${amt}' to buy material '${material.name}'. Must be numeric and greater than or equal to 0`,
+    );
   }
   material.buyAmount = amt;
 }
@@ -350,22 +352,27 @@ export function bulkPurchase(
   }
   const matSize = MaterialInfo[material.name].size;
   const maxAmount = (warehouse.size - warehouse.sizeUsed) / matSize;
-  if (isNaN(amt) || amt < 0) {
-    throw new Error(`Invalid input amount`);
+  if (!Number.isFinite(amt) || amt < 0) {
+    throw new Error(
+      `Invalid amount '${amt}' to buy material '${material.name}'. Must be numeric and greater than or equal to 0`,
+    );
   }
   if (amt > maxAmount) {
     throw new Error(`You do not have enough warehouse size to fit this purchase`);
   }
+  // Special case: if "amount" is 0, this is a no-op.
+  if (amt === 0) {
+    return;
+  }
   const cost = amt * material.marketPrice;
-  if (corp.funds >= cost) {
-    corp.loseFunds(cost, "materials");
-    material.averagePrice =
-      (material.averagePrice * material.stored + material.marketPrice * amt) / (material.stored + amt);
-    material.stored += amt;
-    warehouse.sizeUsed = warehouse.sizeUsed + amt * matSize;
-  } else {
+  if (corp.funds < cost) {
     throw new Error(`You cannot afford this purchase.`);
   }
+  corp.loseFunds(cost, "materials");
+  material.averagePrice =
+    (material.averagePrice * material.stored + material.marketPrice * amt) / (material.stored + amt);
+  material.stored += amt;
+  warehouse.sizeUsed = warehouse.sizeUsed + amt * matSize;
 }
 
 export function sellShares(corporation: Corporation, numShares: number): number {

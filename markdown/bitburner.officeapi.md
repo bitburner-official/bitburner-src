@@ -14,23 +14,23 @@ export interface OfficeAPI
 
 ## Remarks
 
-requires the Office API upgrade from your corporation.
+Requires the Office API upgrade from your corporation.
 
 ## Methods
 
 |  Method | Description |
 |  --- | --- |
-|  [buyTea(divisionName, city)](./bitburner.officeapi.buytea.md) | Buy tea for your employees |
+|  [buyTea(divisionName, city)](./bitburner.officeapi.buytea.md) | Buy tea for your employees. |
 |  [getHireAdVertCost(divisionName)](./bitburner.officeapi.gethireadvertcost.md) | Get the cost to hire AdVert. |
 |  [getHireAdVertCount(divisionName)](./bitburner.officeapi.gethireadvertcount.md) | Get the number of times you have hired AdVert. |
-|  [getOffice(divisionName, city)](./bitburner.officeapi.getoffice.md) | Get data about an office |
-|  [getOfficeSizeUpgradeCost(divisionName, city, size)](./bitburner.officeapi.getofficesizeupgradecost.md) | Cost to Upgrade office size. |
-|  [getResearchCost(divisionName, researchName)](./bitburner.officeapi.getresearchcost.md) | Get the cost to unlock research |
-|  [hasResearched(divisionName, researchName)](./bitburner.officeapi.hasresearched.md) | Gets if you have unlocked a research |
+|  [getOffice(divisionName, city)](./bitburner.officeapi.getoffice.md) | Get data about an office. |
+|  [getOfficeSizeUpgradeCost(divisionName, city, size)](./bitburner.officeapi.getofficesizeupgradecost.md) | Get the cost to upgrade an office. |
+|  [getResearchCost(divisionName, researchName)](./bitburner.officeapi.getresearchcost.md) | Get the cost to unlock a research. |
+|  [hasResearched(divisionName, researchName)](./bitburner.officeapi.hasresearched.md) | Check if you unlocked a research. |
 |  [hireAdVert(divisionName)](./bitburner.officeapi.hireadvert.md) | Hire AdVert. |
 |  [hireEmployee(divisionName, city, employeePosition)](./bitburner.officeapi.hireemployee.md) | Hire an employee. |
-|  [research(divisionName, researchName)](./bitburner.officeapi.research.md) | Purchase a research |
-|  [setAutoJobAssignment(divisionName, city, job, amount)](./bitburner.officeapi.setautojobassignment.md) | Set the auto job assignment for a job |
-|  [throwParty(divisionName, city, costPerEmployee)](./bitburner.officeapi.throwparty.md) | Throw a party for your employees |
+|  [research(divisionName, researchName)](./bitburner.officeapi.research.md) | Purchase a research. |
+|  [setAutoJobAssignment(divisionName, city, job, amount)](./bitburner.officeapi.setautojobassignment.md) | Set the job assignment for a job. |
+|  [throwParty(divisionName, city, costPerEmployee)](./bitburner.officeapi.throwparty.md) | Throw a party for your employees. |
 |  [upgradeOfficeSize(divisionName, city, size)](./bitburner.officeapi.upgradeofficesize.md) | Upgrade office size. |
 

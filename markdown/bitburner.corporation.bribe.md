@@ -4,7 +4,7 @@
 
 ## Corporation.bribe() method
 
-Bribe a faction
+Bribe a faction.
 
 **Signature:**
 
@@ -23,5 +23,9 @@ bribe(factionName: string, amountCash: number): boolean;
 
 boolean
 
-True if successful, false if not
+true if successful, false if not
+
+## Remarks
+
+RAM cost: 20 GB
 

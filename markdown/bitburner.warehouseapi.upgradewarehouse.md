@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.upgradeWarehouse() method
 
-Upgrade warehouse
+Upgrade warehouse.
 
 **Signature:**
 
@@ -18,9 +18,13 @@ upgradeWarehouse(divisionName: string, city: CityName | `${CityName}`, amt?: num
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
-|  amt | number | _(Optional)_ amount of upgrades defaults to 1 |
+|  amt | number | _(Optional)_ Amount of upgrades. Defaults to 1. |
 
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

@@ -10,7 +10,15 @@ Filled points of any color are indicated with '.'
 
 In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center:
 
-<pre lang="javascript"> \[ "OO..?", "OO.?.", "O.?.X", ".?.XX", "?..X\#", \] </pre>
+```js
+[
+  "OO..?",
+  "OO.?.",
+  "O.?.X",
+  ".?.XX",
+  "?..X#",
+]
+```
 
 **Signature:**
 

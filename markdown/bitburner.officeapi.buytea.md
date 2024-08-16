@@ -4,7 +4,7 @@
 
 ## OfficeAPI.buyTea() method
 
-Buy tea for your employees
+Buy tea for your employees.
 
 **Signature:**
 
@@ -24,4 +24,8 @@ buyTea(divisionName: string, city: CityName | `${CityName}`): boolean;
 boolean
 
 true if buying tea was successful, false otherwise
+
+## Remarks
+
+RAM cost: 20 GB
 

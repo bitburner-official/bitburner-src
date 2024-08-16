@@ -112,7 +112,7 @@ const Engine: {
     // Gang
     if (Player.gang) Player.gang.process(numCycles);
 
-    // Staneks gift
+    // Stanek's gift
     staneksGift.process(numCycles);
 
     // Corporation

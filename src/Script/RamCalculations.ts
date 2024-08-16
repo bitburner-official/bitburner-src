@@ -161,7 +161,7 @@ function parseOnlyRamCalculate(
 
   // Finally, walk the reference map and generate a ram cost. The initial set of keys to scan
   // are those that start with the name of the main script.
-  let ram = RamCostConstants.Base;
+  let ram: number = RamCostConstants.Base;
   const detailedCosts: RamUsageEntry[] = [{ type: "misc", name: "baseCost", cost: RamCostConstants.Base }];
   const unresolvedRefs = Object.keys(dependencyMap).filter((s) => s.startsWith(initialModule));
   const resolvedRefs = new Set();

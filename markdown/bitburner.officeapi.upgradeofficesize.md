@@ -24,3 +24,7 @@ upgradeOfficeSize(divisionName: string, city: CityName | `${CityName}`, size: nu
 
 void
 
+## Remarks
+
+RAM cost: 20 GB
+

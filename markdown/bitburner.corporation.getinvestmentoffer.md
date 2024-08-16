@@ -4,7 +4,7 @@
 
 ## Corporation.getInvestmentOffer() method
 
-Get an offer for investment based on you companies current valuation
+Get an offer for investment based on current corporation valuation.
 
 **Signature:**
 
@@ -16,4 +16,8 @@ getInvestmentOffer(): InvestmentOffer;
 [InvestmentOffer](./bitburner.investmentoffer.md)
 
 An offer of investment
+
+## Remarks
+
+RAM cost: 10 GB
 

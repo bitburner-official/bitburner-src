@@ -4,7 +4,7 @@
 
 ## Corporation.getConstants() method
 
-Get corporation related constants
+Get corporation-related constants.
 
 **Signature:**
 
@@ -15,5 +15,9 @@ getConstants(): CorpConstants;
 
 [CorpConstants](./bitburner.corpconstants.md)
 
-corporation related constants
+Corporation-related constants
+
+## Remarks
+
+RAM cost: 0 GB
 

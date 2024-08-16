@@ -4,7 +4,7 @@
 
 ## Corporation.createCorporation() method
 
-Create a Corporation
+Create a Corporation.
 
 **Signature:**
 
@@ -17,11 +17,21 @@ createCorporation(corporationName: string, selfFund: boolean): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  corporationName | string | Name of the corporation |
-|  selfFund | boolean | If you should self fund, defaults to true, false will only work on BitNode 3 |
+|  selfFund | boolean | If you want to self-fund. Defaults to true, false will only work in BitNode 3. |
 
 **Returns:**
 
 boolean
 
 true if created and false if not
+
+## Remarks
+
+RAM cost: 20 GB
+
+This function throws an error if:
+
+- Try to self-fund outside BitNode 3.
+
+- Be in a BitNode that has CorporationSoftcap (a BN modifier) less than 0.15. Use [getBitNodeMultipliers](./bitburner.ns.getbitnodemultipliers.md) to get the value of this modifier.
 

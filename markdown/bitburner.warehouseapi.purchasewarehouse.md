@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.purchaseWarehouse() method
 
-Purchase warehouse for a new city
+Purchase warehouse for a new city.
 
 **Signature:**
 
@@ -22,4 +22,8 @@ purchaseWarehouse(divisionName: string, city: CityName | `${CityName}`): void;
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

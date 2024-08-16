@@ -4,7 +4,7 @@
 
 ## OfficeAPI.hasResearched() method
 
-Gets if you have unlocked a research
+Check if you unlocked a research.
 
 **Signature:**
 
@@ -24,4 +24,8 @@ hasResearched(divisionName: string, researchName: string): boolean;
 boolean
 
 true is unlocked, false if not
+
+## Remarks
+
+RAM cost: 10 GB
 

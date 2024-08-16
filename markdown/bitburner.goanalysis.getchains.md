@@ -8,7 +8,17 @@ Returns an ID for each point. All points that share an ID are part of the same n
 
 The data from getChains() can be used with the data from getBoardState() to see which player (or empty) each chain is
 
-For example, a 5x5 board might look like this. There is a large chain \#1 on the left side, smaller chains 2 and 3 on the right, and a large chain 0 taking up the center of the board. <pre lang="javascript"> \[ \[ 0,0,0,3,4\], \[ 1,0,0,3,3\], \[ 1,1,0,0,0\], \[null,1,0,2,2\], \[null,1,0,2,5\], \] </pre>
+For example, a 5x5 board might look like this. There is a large chain \#1 on the left side, smaller chains 2 and 3 on the right, and a large chain 0 taking up the center of the board.
+
+```js
+[
+  [   0,0,0,3,4],
+  [   1,0,0,3,3],
+  [   1,1,0,0,0],
+  [null,1,0,2,2],
+  [null,1,0,2,5],
+]
+```
 
 **Signature:**
 

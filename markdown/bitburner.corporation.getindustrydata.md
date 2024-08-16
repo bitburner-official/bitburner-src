@@ -4,7 +4,7 @@
 
 ## Corporation.getIndustryData() method
 
-Get constant industry definition data for a specific industry
+Get constant data of an industry.
 
 **Signature:**
 
@@ -16,9 +16,15 @@ getIndustryData(industryName: CorpIndustryName): CorpIndustryData;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  industryName | [CorpIndustryName](./bitburner.corpindustryname.md) |  |
+|  industryName | [CorpIndustryName](./bitburner.corpindustryname.md) | Name of the industry |
 
 **Returns:**
 
 [CorpIndustryData](./bitburner.corpindustrydata.md)
+
+Industry data
+
+## Remarks
+
+RAM cost: 10 GB
 

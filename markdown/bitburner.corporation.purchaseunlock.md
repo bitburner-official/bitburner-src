@@ -4,7 +4,7 @@
 
 ## Corporation.purchaseUnlock() method
 
-Unlock an upgrade
+Unlock an upgrade.
 
 **Signature:**
 
@@ -21,4 +21,8 @@ purchaseUnlock(upgradeName: string): void;
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

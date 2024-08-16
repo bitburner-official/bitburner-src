@@ -139,8 +139,11 @@ export class Material {
     if (isNaN(material.quality)) {
       material.quality = 1;
     }
-    // averagePrice has not been initialized properly, so if it is 0 (wrong initial value), we set it to marketPrice.
-    if (material.averagePrice === 0) {
+    /**
+     * averagePrice has not been calculated properly, so if it is an invalid value (Number.isFinite returns false) or 0
+     * (wrong initial value), we set it to marketPrice.
+     */
+    if (!Number.isFinite(material.averagePrice) || material.averagePrice === 0) {
       material.averagePrice = material.marketPrice;
     }
     return material;

@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.makeProduct() method
 
-Create a new product
+Create a new product.
 
 **Signature:**
 
@@ -31,4 +31,8 @@ makeProduct(
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

@@ -559,14 +559,14 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const baseserver = Player.getCurrentServer();
       if (!(baseserver instanceof Server)) {
-        helpers.log(ctx, () => "cannot backdoor this kind of server");
+        helpers.log(ctx, () => "Cannot backdoor this kind of server");
         return Promise.resolve();
       }
       const server = baseserver;
       const installTime = (calculateHackingTime(server, Player) / 4) * 1000;
 
       // No root access or skill level too low
-      const canHack = netscriptCanHack(server);
+      const canHack = netscriptCanHack(server, "backdoor");
       if (!canHack.res) {
         throw helpers.errorMessage(ctx, canHack.msg || "");
       }

@@ -16,9 +16,53 @@ export interface GoAnalysis
 
 |  Method | Description |
 |  --- | --- |
-|  [getChains()](./bitburner.goanalysis.getchains.md) | <p>Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points are also given chain IDs to represent continuous empty space. Dead nodes are given the value <code>null.</code></p><p>The data from getChains() can be used with the data from getBoardState() to see which player (or empty) each chain is</p><p>For example, a 5x5 board might look like this. There is a large chain \#1 on the left side, smaller chains 2 and 3 on the right, and a large chain 0 taking up the center of the board. <pre lang="javascript"> \[ \[ 0,0,0,3,4\], \[ 1,0,0,3,3\], \[ 1,1,0,0,0\], \[null,1,0,2,2\], \[null,1,0,2,5\], \] </pre></p> |
-|  [getControlledEmptyNodes()](./bitburner.goanalysis.getcontrolledemptynodes.md) | <p>Returns 'X', 'O', or '?' for each empty point to indicate which player controls that empty point. If no single player fully encircles the empty space, it is shown as contested with '?'. "\#" are dead nodes that are not part of the subnet.</p><p>Filled points of any color are indicated with '.'</p><p>In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center:</p><p><pre lang="javascript"> \[ "OO..?", "OO.?.", "O.?.X", ".?.XX", "?..X\#", \] </pre></p> |
-|  [getLiberties()](./bitburner.goanalysis.getliberties.md) | <p>Returns a number for each point, representing how many open nodes its network/chain is connected to. Empty nodes and dead nodes are shown as -1 liberties.</p><p>For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!</p><p><pre lang="javascript"> \[ \[-1, 5,-1,-1, 2\], \[ 5, 5,-1,-1,-1\], \[-1,-1, 4,-1,-1\], \[ 3,-1,-1, 3, 1\], \[ 3,-1,-1, 3, 1\], \] </pre></p> |
-|  [getStats()](./bitburner.goanalysis.getstats.md) | <p>Displays the game history, captured nodes, and gained bonuses for each opponent you have played against.</p><p>The details are keyed by opponent name, in this structure:</p><p><pre lang="javascript"> { <OpponentName>: { wins: number, losses: number, winStreak: number, highestWinStreak: number, favor: number, bonusPercent: number, bonusDescription: string, } } </pre></p> |
+|  [getChains()](./bitburner.goanalysis.getchains.md) | <p>Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points are also given chain IDs to represent continuous empty space. Dead nodes are given the value <code>null.</code></p><p>The data from getChains() can be used with the data from getBoardState() to see which player (or empty) each chain is</p><p>For example, a 5x5 board might look like this. There is a large chain \#1 on the left side, smaller chains 2 and 3 on the right, and a large chain 0 taking up the center of the board.</p>
+```js
+[
+  [   0,0,0,3,4],
+  [   1,0,0,3,3],
+  [   1,1,0,0,0],
+  [null,1,0,2,2],
+  [null,1,0,2,5],
+]
+```
+ |
+|  [getControlledEmptyNodes()](./bitburner.goanalysis.getcontrolledemptynodes.md) | <p>Returns 'X', 'O', or '?' for each empty point to indicate which player controls that empty point. If no single player fully encircles the empty space, it is shown as contested with '?'. "\#" are dead nodes that are not part of the subnet.</p><p>Filled points of any color are indicated with '.'</p><p>In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center:</p>
+```js
+[
+  "OO..?",
+  "OO.?.",
+  "O.?.X",
+  ".?.XX",
+  "?..X#",
+]
+```
+ |
+|  [getLiberties()](./bitburner.goanalysis.getliberties.md) | <p>Returns a number for each point, representing how many open nodes its network/chain is connected to. Empty nodes and dead nodes are shown as -1 liberties.</p><p>For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!</p>
+```js
+[
+  [-1, 5,-1,-1, 2],
+  [ 5, 5,-1,-1,-1],
+  [-1,-1, 4,-1,-1],
+  [ 3,-1,-1, 3, 1],
+  [ 3,-1,-1, 3, 1],
+]
+```
+ |
+|  [getStats()](./bitburner.goanalysis.getstats.md) | <p>Displays the game history, captured nodes, and gained bonuses for each opponent you have played against.</p><p>The details are keyed by opponent name, in this structure:</p>
+```js
+{
+  <OpponentName>: {
+    wins: number,
+    losses: number,
+    winStreak: number,
+    highestWinStreak: number,
+    favor: number,
+    bonusPercent: number,
+    bonusDescription: string,
+  }
+}
+```
+ |
 |  [getValidMoves()](./bitburner.goanalysis.getvalidmoves.md) | <p>Shows if each point on the board is a valid move for the player.</p><p>The true/false validity of each move can be retrieved via the X and Y coordinates of the move. <code>const validMoves = ns.go.analysis.getValidMoves();</code></p><p><code>const moveIsValid = validMoves[x][y];</code></p><p>Note that the \[0\]\[0\] point is shown on the bottom-left on the visual board (as is traditional), and each string represents a vertical column on the board. In other words, the printed example above can be understood to be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.</p> |
 

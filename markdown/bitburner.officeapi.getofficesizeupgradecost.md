@@ -4,7 +4,7 @@
 
 ## OfficeAPI.getOfficeSizeUpgradeCost() method
 
-Cost to Upgrade office size.
+Get the cost to upgrade an office.
 
 **Signature:**
 
@@ -25,4 +25,8 @@ getOfficeSizeUpgradeCost(divisionName: string, city: CityName | `${CityName}`, s
 number
 
 Cost of upgrading the office
+
+## Remarks
+
+RAM cost: 10 GB
 
