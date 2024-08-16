@@ -88,9 +88,18 @@
      *
      * DEFAULT VALUE: no overrideTsconfig section
      */
-    // "overrideTsconfig": {
-    //   . . .
-    // }
+    /**
+     * We need to override TsConfig, otherwise api-extractor will read our tsconfig.json and process every files, not
+     * just NetscriptDefinitions.d.ts.
+     */
+    "overrideTsconfig": {
+      "compilerOptions": {
+        // Without enabling this option, api-extractor will report unrelated warnings of jsdom. Check this link for more
+        // information: https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/57467.
+        "skipLibCheck": true
+      },
+      "include": ["src/ScriptEditor/NetscriptDefinitions.d.ts"]
+    }
     /**
      * This option causes the compiler to be invoked with the --skipLibCheck option. This option is not recommended
      * and may cause API Extractor to produce incomplete or incorrect declarations, but it may be required when

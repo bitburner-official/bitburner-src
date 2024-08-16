@@ -4,7 +4,7 @@
 
 ## Corporation.getCorporation() method
 
-Get corporation data
+Get corporation data.
 
 **Signature:**
 
@@ -16,4 +16,8 @@ getCorporation(): CorporationInfo;
 [CorporationInfo](./bitburner.corporationinfo.md)
 
 Corporation data
+
+## Remarks
+
+RAM cost: 10 GB
 

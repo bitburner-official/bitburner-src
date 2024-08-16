@@ -74,10 +74,7 @@ function checkForMessagesToSend(): void {
     }
   } else if (!recvd(MessageFilename.Jumper0) && Player.skills.hacking >= 25) {
     sendMessage(MessageFilename.Jumper0);
-    const homeComp = Player.getHomeComputer();
-    if (!homeComp.programs.includes(CompletedProgramName.flight)) {
-      homeComp.programs.push(CompletedProgramName.flight);
-    }
+    Player.getHomeComputer().pushProgram(CompletedProgramName.flight);
   } else if (!recvd(MessageFilename.Jumper1) && Player.skills.hacking >= 40) {
     sendMessage(MessageFilename.Jumper1);
   } else if (!recvd(MessageFilename.CyberSecTest) && Player.skills.hacking >= 50) {

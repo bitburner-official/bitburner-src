@@ -15,5 +15,9 @@ hasCorporation(): boolean;
 
 boolean
 
-whether the player has a corporation
+Whether the player has a corporation
+
+## Remarks
+
+RAM cost: 0 GB
 

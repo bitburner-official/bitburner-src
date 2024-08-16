@@ -151,6 +151,13 @@ export const GoInstructionsPage = (): React.ReactElement => {
               <br />
               Win streaks against a faction will give you +1 favor to that faction at certain numbers of wins (up to a
               max of {getMaxFavor()} favor), if you are currently a member of that faction.
+              <br />
+              <br />
+              For experienced Go players: IPvGO uses the old traditional Go score rules, area scoring, rather than the
+              Japanese territory scoring that was popular in the mid-21st century. All stones are alive and count
+              towards score unless captured during the game. Chains that could be dead are not automatically captured
+              after the game, and prisoners are not calculated. This was chosen for its simplicity to teach and to
+              calculate, rather than using the territory scoring shortcuts designed to make physical games quicker.
             </Typography>
           </Grid>
         </Grid>

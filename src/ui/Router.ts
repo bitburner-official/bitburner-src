@@ -33,7 +33,7 @@ export enum SimplePage {
   Work = "Work",
   BladeburnerCinematic = "Bladeburner Cinematic",
   Loading = "Loading",
-  StaneksGift = "Staneks Gift",
+  StaneksGift = "Stanek's Gift",
   Recovery = "Recovery",
   Achievements = "Achievements",
   ThemeBrowser = "Theme Browser",

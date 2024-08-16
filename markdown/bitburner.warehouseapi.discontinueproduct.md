@@ -23,3 +23,7 @@ discontinueProduct(divisionName: string, productName: string): void;
 
 void
 
+## Remarks
+
+RAM cost: 20 GB
+

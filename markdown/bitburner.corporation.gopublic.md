@@ -4,7 +4,7 @@
 
 ## Corporation.goPublic() method
 
-Go public
+Go public.
 
 **Signature:**
 
@@ -16,11 +16,15 @@ goPublic(numShares: number): boolean;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  numShares | number | number of shares you would like to issue for your IPO |
+|  numShares | number | Number of shares you would like to issue for your IPO |
 
 **Returns:**
 
 boolean
 
 true if you successfully go public, false if not
+
+## Remarks
+
+RAM cost: 20 GB
 

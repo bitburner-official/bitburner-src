@@ -4,7 +4,7 @@
 
 ## Corporation.hasUnlock() method
 
-Check if you have a one time unlockable upgrade
+Check if you have a one-time unlockable upgrade.
 
 **Signature:**
 
@@ -23,4 +23,8 @@ hasUnlock(upgradeName: string): boolean;
 boolean
 
 true if unlocked and false if not
+
+## Remarks
+
+RAM cost: 10 GB
 

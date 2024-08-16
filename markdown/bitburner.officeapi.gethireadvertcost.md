@@ -24,3 +24,7 @@ number
 
 The cost to hire AdVert.
 
+## Remarks
+
+RAM cost: 10 GB
+

@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.getMaterial() method
 
-Get material data
+Get material data.
 
 **Signature:**
 
@@ -24,5 +24,9 @@ getMaterial(divisionName: string, city: CityName | `${CityName}`, materialName: 
 
 [Material](./bitburner.material.md)
 
-material data
+Material data
+
+## Remarks
+
+RAM cost: 10 GB
 

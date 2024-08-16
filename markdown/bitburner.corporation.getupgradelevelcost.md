@@ -4,7 +4,7 @@
 
 ## Corporation.getUpgradeLevelCost() method
 
-Gets the cost to unlock the next level of a levelable upgrade
+Get the cost to unlock the next level of a levelable upgrade.
 
 **Signature:**
 
@@ -22,5 +22,9 @@ getUpgradeLevelCost(upgradeName: string): number;
 
 number
 
-cost of the upgrade
+Cost of the upgrade
+
+## Remarks
+
+RAM cost: 10 GB
 

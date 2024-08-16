@@ -4,7 +4,7 @@
 
 ## OfficeAPI.setAutoJobAssignment() method
 
-Set the auto job assignment for a job
+Set the job assignment for a job.
 
 **Signature:**
 
@@ -26,4 +26,8 @@ setAutoJobAssignment(divisionName: string, city: CityName | `${CityName}`, job: 
 boolean
 
 true if the employee count reached the target amount, false if not
+
+## Remarks
+
+RAM cost: 20 GB
 

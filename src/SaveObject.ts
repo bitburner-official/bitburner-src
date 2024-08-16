@@ -758,7 +758,7 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   if (Object.hasOwn(saveObj, "StaneksGiftSave")) {
     loadStaneksGift(saveObj.StaneksGiftSave);
   } else {
-    console.warn(`Could not load Staneks Gift from save`);
+    console.warn(`Could not load Stanek's Gift from save`);
     loadStaneksGift("");
   }
   if (Object.hasOwn(saveObj, "AliasesSave")) {
@@ -853,6 +853,7 @@ function createNewUpdateText() {
           "Please report any bugs/issues through the GitHub repository " +
           "or the Bitburner subreddit (reddit.com/r/bitburner).\n\n" +
           CONSTANTS.LatestUpdate,
+        true,
       ),
     1000,
   );
@@ -867,6 +868,7 @@ function createBetaUpdateText() {
           "Please report any bugs/issues through the github repository (https://github.com/bitburner-official/bitburner-src/issues) " +
           "or the Bitburner subreddit (reddit.com/r/bitburner).\n\n" +
           CONSTANTS.LatestUpdate,
+        true,
       ),
     1000,
   );

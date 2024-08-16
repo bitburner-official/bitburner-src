@@ -107,16 +107,10 @@ export const CONSTANTS = {
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.3 Dev: Last updated 3 July 2024
+## v2.6.3 Dev: Last updated 15 August 2024
 
-See 2.6.2 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.2/src/Documentation/doc/changelog.md
+See current dev branch changes <a href='https://github.com/bitburner-official/bitburner-src/commits/a48bfba53621b0f93e271a1a52cedd6c08d41713/?since=2024-07-03&until=2024-08-15&before=a48bfba53621b0f93e271a1a52cedd6c08d41713+35'>here</a> (commit history)
 
-### CHANGES
-
-- No changes yet since 2.6.2 release
-
-### OTHER
-
-- Nerf noodle bar
+See 2.6.2 changelog <a href='https://github.com/bitburner-official/bitburner-src/blob/v2.6.2/src/Documentation/doc/changelog.md'>here</a>
 `,
 } as const;

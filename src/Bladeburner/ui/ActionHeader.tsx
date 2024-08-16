@@ -27,10 +27,11 @@ export function ActionHeader({ bladeburner, action, rerender }: ActionHeaderProp
     bladeburner.actionTimeToComplete,
   );
   const remainingSeconds = Math.max(
-    bladeburner.actionTimeToComplete - bladeburner.actionTimeCurrent + bladeburner.actionTimeOverflow,
+    bladeburner.actionTimeToComplete - bladeburner.actionTimeCurrent - bladeburner.actionTimeOverflow,
     0,
   );
-  const remainingBonusSeconds = Math.floor(bladeburner.storedCycles / BladeburnerConstants.CyclesPerSecond);
+  const remainingBonusSeconds = bladeburner.storedCycles / BladeburnerConstants.CyclesPerSecond;
+  const showMilliseconds = remainingBonusSeconds > 4;
   /**
    * Bladeburner is processed every second. Each time it's processed, we use (up to) 4 bonus seconds and process it as
    * if (up to) 5 seconds passed.
@@ -41,7 +42,7 @@ export function ActionHeader({ bladeburner, action, rerender }: ActionHeaderProp
   let eta;
   if (remainingSeconds <= effectiveBonusSeconds) {
     // If we have enough effectiveBonusSeconds, ETA is (remainingSeconds / 5).
-    eta = Math.floor(remainingSeconds / 5);
+    eta = remainingSeconds / 5;
   } else {
     /**
      * For example, let's say we start the "Training" action with 20 bonus seconds: remainingSeconds=30;remainingBonusSeconds=20.
@@ -75,7 +76,9 @@ export function ActionHeader({ bladeburner, action, rerender }: ActionHeaderProp
               progress: computedActionTimeCurrent / bladeburner.actionTimeToComplete,
             })}
           </Typography>
-          <Typography marginLeft="1rem">Remaining time: {convertTimeMsToTimeElapsedString(eta * 1000)}</Typography>
+          <Typography marginLeft="1rem">
+            Remaining time: {convertTimeMsToTimeElapsedString(eta * 1000, showMilliseconds)}
+          </Typography>
         </Box>
       </>
     );

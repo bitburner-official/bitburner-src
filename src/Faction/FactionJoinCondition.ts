@@ -14,7 +14,7 @@ import type {
   CompanyReputationRequirement,
   EmployedByRequirement,
   JobTitleRequirement,
-  KarmaRequiremennt,
+  KarmaRequirement,
   MoneyRequirement,
   NumAugmentationsRequirement,
   PeopleKilledRequirement,
@@ -173,7 +173,7 @@ export const haveKarma = (n: number): PlayerCondition => ({
     else if (n < -10) return "A history of violence";
     else return "Street cred";
   },
-  toJSON(): KarmaRequiremennt {
+  toJSON(): KarmaRequirement {
     return { type: "karma", karma: n };
   },
   isSatisfied(p: PlayerObject): boolean {

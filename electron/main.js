@@ -201,19 +201,31 @@ global.app_handlers = {
 app.on("ready", async () => {
   // Intercept file protocol requests and only let valid requests through
   protocol.interceptFileProtocol("file", ({ url, method }, callback) => {
-    const filePath = fileURLToPath(url);
-    const realPath = realpathSync(filePath);
-    const relativePath = path.relative(__dirname, realPath);
-    // Only allow access to files in "dist" folder or html files in the same directory
-    if (method === "GET" && (relativePath.startsWith("dist") || relativePath.match(/^[a-zA-Z-_]*\.html/))) {
-      callback(realPath);
-      return;
+    let filePath;
+    let realPath;
+    let relativePath;
+    /**
+     * "realpathSync" will throw an error if "filePath" points to a non-existent file. If an error is thrown here, the
+     * electron app will crash immediately. We can use fs.existsSync to check "filePath" before using it, but it's best
+     * to try-catch the entire code block and avoid unexpected issues.
+     */
+    try {
+      filePath = fileURLToPath(url);
+      realPath = realpathSync(filePath);
+      relativePath = path.relative(__dirname, realPath);
+      // Only allow access to files in "dist" folder or html files in the same directory
+      if (method === "GET" && (relativePath.startsWith("dist") || relativePath.match(/^[a-zA-Z-_]*\.html/))) {
+        callback(realPath);
+        return;
+      }
+    } catch (error) {
+      log.error(error);
     }
     log.error(
       `Tried to access a page outside the sandbox. Url: ${url}. FilePath: ${filePath}. RealPath: ${realPath}.` +
         ` __dirname: ${__dirname}. RelativePath: ${relativePath}. Method: ${method}.`,
     );
-    callback(path.join(__dirname, "fileError.html"));
+    callback({ statusCode: 403 });
   });
 
   log.info("Application is ready!");

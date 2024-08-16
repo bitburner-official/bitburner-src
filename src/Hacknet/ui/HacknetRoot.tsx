@@ -25,12 +25,12 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 
 /** Root React Component for the Hacknet Node UI */
 export function HacknetRoot(): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const rerender = useRerender(200);
+  const rerender = useCycleRerender();
   const [purchaseMultiplier, setPurchaseMultiplier] = useState<number | "MAX">(PurchaseMultipliers.x1);
 
   let totalProduction = 0;

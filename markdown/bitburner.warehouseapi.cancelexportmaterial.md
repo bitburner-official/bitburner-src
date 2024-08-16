@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.cancelExportMaterial() method
 
-Cancel material export
+Cancel material export.
 
 **Signature:**
 
@@ -31,4 +31,8 @@ cancelExportMaterial(
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

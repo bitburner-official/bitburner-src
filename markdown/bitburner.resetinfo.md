@@ -17,9 +17,9 @@ interface ResetInfo
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [bitNodeOptions](./bitburner.resetinfo.bitnodeoptions.md) |  | [BitNodeOptions](./bitburner.bitnodeoptions.md) | Current BitNode options |
-|  [currentNode](./bitburner.resetinfo.currentnode.md) |  | number | The current bitnode |
+|  [currentNode](./bitburner.resetinfo.currentnode.md) |  | number | The current BitNode |
 |  [lastAugReset](./bitburner.resetinfo.lastaugreset.md) |  | number | Numeric timestamp (from Date.now()) of last augmentation reset |
-|  [lastNodeReset](./bitburner.resetinfo.lastnodereset.md) |  | number | Numeric timestamp (from Date.now()) of last bitnode reset |
+|  [lastNodeReset](./bitburner.resetinfo.lastnodereset.md) |  | number | Numeric timestamp (from Date.now()) of last BitNode reset |
 |  [ownedAugs](./bitburner.resetinfo.ownedaugs.md) |  | Map&lt;string, number&gt; | A map of owned augmentations to their levels. Keyed by the augmentation name. Map values are the augmentation level (e.g. for NeuroFlux governor). |
 |  [ownedSF](./bitburner.resetinfo.ownedsf.md) |  | Map&lt;number, number&gt; | A map of owned SF to their levels. Keyed by the SF number. Map values are the SF level. |
 

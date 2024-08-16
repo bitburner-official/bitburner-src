@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.limitMaterialProduction() method
 
-Limit Material Production.
+Limit material production.
 
 **Signature:**
 
@@ -29,4 +29,8 @@ limitMaterialProduction(
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

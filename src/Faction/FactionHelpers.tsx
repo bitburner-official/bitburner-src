@@ -2,7 +2,6 @@ import type { Augmentation } from "../Augmentation/Augmentation";
 import type { Faction } from "./Faction";
 
 import { Augmentations } from "../Augmentation/Augmentations";
-import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import { AugmentationName, FactionDiscovery } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
@@ -84,11 +83,7 @@ export function purchaseAugmentation(aug: Augmentation, fac: Faction, sing = fal
     }
     dialogBoxCreate(txt);
   } else if (augCosts.moneyCost === 0 || Player.money >= augCosts.moneyCost) {
-    const queuedAugmentation = new PlayerOwnedAugmentation(aug.name);
-    if (aug.name == AugmentationName.NeuroFluxGovernor) {
-      queuedAugmentation.level = aug.getNextLevel();
-    }
-    Player.queuedAugmentations.push(queuedAugmentation);
+    Player.queueAugmentation(aug.name);
 
     Player.loseMoney(augCosts.moneyCost, "augmentations");
 

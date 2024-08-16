@@ -7,6 +7,7 @@ export const TerminalHelpText: string[] = [
   "    buy [-l/-a/program]              Purchase a program through the Dark Web",
   "    cat [file]                       Display a .msg, .lit, or .txt file",
   "    cd [dir]                         Change to a new directory",
+  "    changelog                        Display changelog",
   "    check [script] [args...]         Print a script's logs to Terminal",
   "    clear                            Clear all text on the terminal ",
   "    cls                              See 'clear' command ",
@@ -160,6 +161,7 @@ export const HelpTexts: Record<string, string[]> = {
     "    cd ../",
     " ",
   ],
+  changelog: ["Usage: changelog", " ", "Display changelog.", " "],
   check: [
     "Usage: check [script name] [args...]",
     " ",

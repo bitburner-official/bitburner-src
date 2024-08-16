@@ -223,7 +223,9 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         quality: material.quality,
         demand: corporation.unlocks.has(CorpUnlockName.MarketResearchDemand) ? material.demand : undefined,
         competition: corporation.unlocks.has(CorpUnlockName.MarketDataCompetition) ? material.competition : undefined,
+        buyAmount: material.buyAmount,
         productionAmount: material.productionAmount,
+        importAmount: material.importAmount,
         actualSellAmount: material.actualSellAmount,
         exports: exports,
       };
@@ -334,8 +336,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
       const amt = helpers.number(ctx, "amt", _amt);
-      if (amt < 0 || !Number.isFinite(amt))
-        throw new Error("Invalid value for amount field! Must be numeric and greater than or equal to 0");
       const material = getMaterial(divisionName, cityName, materialName);
       buyMaterial(division, material, amt);
     },

@@ -243,12 +243,12 @@ export class StaneksGift extends BaseGift {
 
   static includedProperties = getKeyList(StaneksGift, { removedKeys: ["justCharged"] });
 
-  /** Serialize Staneks Gift to a JSON save state. */
+  /** Serialize Stanek's Gift to a JSON save state. */
   toJSON(): IReviverValue {
     return Generic_toJSON("StaneksGift", this, StaneksGift.includedProperties);
   }
 
-  /** Initializes Staneks Gift from a JSON save state */
+  /** Initializes Stanek's Gift from a JSON save state */
   static fromJSON(value: IReviverValue): StaneksGift {
     return Generic_fromJSON(StaneksGift, value.data, StaneksGift.includedProperties);
   }

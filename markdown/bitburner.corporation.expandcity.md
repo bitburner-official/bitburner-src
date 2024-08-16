@@ -4,7 +4,7 @@
 
 ## Corporation.expandCity() method
 
-Expand to a new city
+Expand to a new city.
 
 **Signature:**
 
@@ -22,4 +22,8 @@ expandCity(divisionName: string, city: CityName | `${CityName}`): void;
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

@@ -82,7 +82,7 @@ export const RamCostConstants = {
   StanekAcceptGift: 2,
 
   CycleTiming: 1,
-};
+} as const;
 
 function SF4Cost(cost: number): () => number {
   return () => {
@@ -398,19 +398,16 @@ const grafting = {
 } as const;
 
 const corporation = {
-  hasCorporation: 0, // This one is free
-  getConstants: 0,
-  getBonusTime: 0,
-  nextUpdate: RamCostConstants.CycleTiming,
-  getIndustryData: RamCostConstants.CorporationInfo,
-  getMaterialData: RamCostConstants.CorporationInfo,
-  issueNewShares: RamCostConstants.CorporationAction,
+  hasCorporation: 0,
   createCorporation: RamCostConstants.CorporationAction,
   hasUnlock: RamCostConstants.CorporationInfo,
   getUnlockCost: RamCostConstants.CorporationInfo,
   getUpgradeLevel: RamCostConstants.CorporationInfo,
   getUpgradeLevelCost: RamCostConstants.CorporationInfo,
   getInvestmentOffer: RamCostConstants.CorporationInfo,
+  getConstants: 0,
+  getIndustryData: RamCostConstants.CorporationInfo,
+  getMaterialData: RamCostConstants.CorporationInfo,
   acceptInvestmentOffer: RamCostConstants.CorporationAction,
   goPublic: RamCostConstants.CorporationAction,
   bribe: RamCostConstants.CorporationAction,
@@ -421,8 +418,13 @@ const corporation = {
   purchaseUnlock: RamCostConstants.CorporationAction,
   levelUpgrade: RamCostConstants.CorporationAction,
   issueDividends: RamCostConstants.CorporationAction,
+  issueNewShares: RamCostConstants.CorporationAction,
   buyBackShares: RamCostConstants.CorporationAction,
   sellShares: RamCostConstants.CorporationAction,
+  getBonusTime: 0,
+  nextUpdate: RamCostConstants.CycleTiming,
+  sellDivision: RamCostConstants.CorporationAction,
+  // Warehouse API
   sellMaterial: RamCostConstants.CorporationAction,
   sellProduct: RamCostConstants.CorporationAction,
   discontinueProduct: RamCostConstants.CorporationAction,
@@ -446,6 +448,7 @@ const corporation = {
   limitProductProduction: RamCostConstants.CorporationAction,
   getUpgradeWarehouseCost: RamCostConstants.CorporationInfo,
   hasWarehouse: RamCostConstants.CorporationInfo,
+  // Warehouse API
   hireEmployee: RamCostConstants.CorporationAction,
   upgradeOfficeSize: RamCostConstants.CorporationAction,
   throwParty: RamCostConstants.CorporationAction,
@@ -459,7 +462,6 @@ const corporation = {
   hasResearched: RamCostConstants.CorporationInfo,
   setAutoJobAssignment: RamCostConstants.CorporationAction,
   getOfficeSizeUpgradeCost: RamCostConstants.CorporationInfo,
-  sellDivision: RamCostConstants.CorporationAction,
 } as const;
 
 /** RamCosts guaranteed to match ns structure 1:1 (aside from args and enums).

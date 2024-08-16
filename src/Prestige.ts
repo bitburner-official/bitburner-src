@@ -80,11 +80,11 @@ export function prestigeAugmentation(): void {
     const aug = Augmentations[ownedAug.name];
     Player.gainMoney(aug.startingMoney, "other");
     for (const program of aug.programs) {
-      homeComp.programs.push(program);
+      homeComp.pushProgram(program);
     }
   }
   if (canAccessBitNodeFeature(5)) {
-    homeComp.programs.push(CompletedProgramName.formulas);
+    homeComp.pushProgram(CompletedProgramName.formulas);
   }
 
   // Re-create foreign servers
@@ -248,7 +248,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   Player.reapplyAllSourceFiles();
 
   if (canAccessBitNodeFeature(5)) {
-    homeComp.programs.push(CompletedProgramName.formulas);
+    homeComp.pushProgram(CompletedProgramName.formulas);
   }
 
   // BitNode 3: Corporatocracy
@@ -329,4 +329,10 @@ export function prestigeSourceFile(isFlume: boolean): void {
   resetPidCounter();
 
   setInitialExpForPlayer();
+
+  if (!isFlume && Player.sourceFiles.size === 1 && Player.sourceFileLvl(1) === 1) {
+    delayedDialog(
+      "Congratulations on destroying your first BitNode! Make sure to check the Documentation tab. Many pages are unlocked now.",
+    );
+  }
 }

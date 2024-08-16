@@ -585,6 +585,9 @@ export const boardStyles = makeStyles<void, Size | "background">({ uniqId: "boar
     scoreModal: {
       width: "400px",
     },
+    scoreExplanationModal: {
+      width: "80vw",
+    },
     centeredText: {
       textAlign: "center",
     },

@@ -22,7 +22,7 @@ getOrganization(sym: string): string;
 
 string
 
-The organization assicated with the stock symbol.
+The organization associated with the stock symbol.
 
 ## Remarks
 

@@ -13,6 +13,7 @@ import { Settings } from "../Settings/Settings";
 import { NetscriptExtra } from "../NetscriptFunctions/Extra";
 import * as enums from "../Enums";
 import { ns } from "../NetscriptFunctions";
+import { isLegacyScript } from "../Paths/ScriptFilePath";
 
 /** Event emitter used for tracking when changes have been made to a content file. */
 export const fileEditEvents = new EventEmitter<[hostname: string, filename: ContentFilePath]>();
@@ -63,9 +64,9 @@ export class ScriptEditor {
 
     // Add ts definitions for API
     const source = netscriptDefinitions.replace(/export /g, "");
-    for (const [language, languageDefaults] of [
-      ["javascript", monaco.languages.typescript.javascriptDefaults],
-      ["typescript", monaco.languages.typescript.typescriptDefaults],
+    for (const [language, languageDefaults, getLanguageWorker] of [
+      ["javascript", monaco.languages.typescript.javascriptDefaults, monaco.languages.typescript.getJavaScriptWorker],
+      ["typescript", monaco.languages.typescript.typescriptDefaults, monaco.languages.typescript.getTypeScriptWorker],
     ] as const) {
       languageDefaults.addExtraLib(source, "netscript.d.ts");
       languageDefaults.addExtraLib(reactTypes, "react.d.ts");
@@ -86,6 +87,8 @@ export class ScriptEditor {
         strict: true,
         noImplicitAny: language === "typescript",
         noImplicitReturns: true,
+        // Allow processing of javascript files, for handling cross-language imports.
+        allowJs: true,
       });
       languageDefaults.setDiagnosticsOptions({
         ...languageDefaults.getDiagnosticsOptions(),
@@ -99,6 +102,27 @@ export class ScriptEditor {
           // - 'React' refers to a UMD global, but the current file is a module. Consider adding an import instead.(2686)
           2686,
         ],
+      });
+
+      //  Sync all javascript and typescript text models to both language servers.
+      //
+      // `monaco.languages.typescript.get{Java,Type}ScriptWorker` returns a promise that
+      // fires with a function that takes a list of `monaco.Uri`s and sync's them with the
+      // worker. (It also returns the worker, but we don't care about that.) However, it
+      // returns a reject promise if the language worker is not loaded yet, so we wait to
+      // call it until the language gets loaded.
+      const languageWorker = new Promise<(...uris: monaco.Uri[]) => unknown>((resolve) =>
+        monaco.languages.onLanguage(language, () => getLanguageWorker().then(resolve)),
+      );
+      // Whenever a model is created, arange for it synced to the language server.
+      monaco.editor.onDidCreateModel((model) => {
+        if (language === "typescript" && isLegacyScript(model.uri.path)) {
+          // Don't sync legacy scripts to typescript worker.
+          return;
+        }
+        if (["javascript", "typescript"].includes(model.getLanguageId())) {
+          languageWorker.then((cb) => cb(model.uri));
+        }
       });
     }
 
