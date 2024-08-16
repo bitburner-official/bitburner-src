@@ -118,6 +118,12 @@ export class Skill {
     const m = -this.baseCost - this.costInc * currentLevel + this.costInc / 2;
     const delta = Math.sqrt(m * m + (2 * this.costInc * cost) / currentNodeMults.BladeburnerSkillCost);
     const result = Math.round((m + delta) / this.costInc);
+    /**
+     * Due to floating-point rounding and edge-cases, we cannot ensure that rounding x_1 will give us the correct
+     * integer. In other words, we cannot be sure that x_1 is within 0.5 of the integer value we want. However, we can
+     * be sure that it is within 1 of the value we want, which means that checking the numbers above and below the
+     * rounded value are sufficient to find our correct integer.
+     */
     const costOfResultPlus1 = this.calculateCost(currentLevel, (result + 1) as PositiveInteger);
     if (costOfResultPlus1 <= cost) {
       return result + 1;
