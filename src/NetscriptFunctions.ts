@@ -62,7 +62,6 @@ import {
   formatRam,
   formatSecurity,
   formatThreads,
-  formatNumber,
 } from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { roundToTwo } from "./utils/helpers/roundToTwo";
@@ -114,6 +113,7 @@ import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
 import { isIPAddress } from "./Types/strings";
 import { compile } from "./NetscriptJSEvaluator";
 import { Script } from "./Script/Script";
+import { NetscriptFormat } from "./NetscriptFunctions/Format";
 
 export const enums: NSEnums = {
   CityName,
@@ -136,6 +136,7 @@ export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums
 
 export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
+  format: NetscriptFormat(),
   gang: NetscriptGang(),
   go: NetscriptGo(),
   bladeburner: NetscriptBladeburner(),
@@ -1613,34 +1614,6 @@ export const ns: InternalAPI<NSFull> = {
       }
       return runningScript.onlineExpGained / runningScript.onlineRunningTime;
     },
-  formatNumber:
-    (ctx) =>
-    (_n, _fractionalDigits = 3, _suffixStart = 1000, isInteger) => {
-      const n = helpers.number(ctx, "n", _n);
-      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      const suffixStart = helpers.number(ctx, "suffixStart", _suffixStart);
-      return formatNumber(n, fractionalDigits, suffixStart, !!isInteger);
-    },
-  formatRam:
-    (ctx) =>
-    (_n, _fractionalDigits = 2) => {
-      const n = helpers.number(ctx, "n", _n);
-      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      return formatRam(n, fractionalDigits);
-    },
-  formatPercent:
-    (ctx) =>
-    (_n, _fractionalDigits = 2, _multStart = 1e6) => {
-      const n = helpers.number(ctx, "n", _n);
-      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      const multStart = helpers.number(ctx, "multStart", _multStart);
-      return formatPercent(n, fractionalDigits, multStart);
-    },
-  tFormat: (ctx) => (_milliseconds, _milliPrecision) => {
-    const milliseconds = helpers.number(ctx, "milliseconds", _milliseconds);
-    const milliPrecision = !!_milliPrecision;
-    return convertTimeMsToTimeElapsedString(milliseconds, milliPrecision);
-  },
   alert: (ctx) => (_message) => {
     const message = helpers.string(ctx, "message", _message);
     dialogBoxCreate(message, { html: true, canBeDismissedEasily: true });
