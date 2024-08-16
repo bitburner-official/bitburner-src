@@ -29,5 +29,9 @@ true if created and false if not
 
 RAM cost: 20 GB
 
-This function throws an error if: - Try to self-fund outside BitNode 3. - Be in a BitNode that has CorporationSoftcap (a BN modifier) less than 0.15. Use [getBitNodeMultipliers](./bitburner.ns.getbitnodemultipliers.md) to get the value of this modifier.
+This function throws an error if:
+
+- Try to self-fund outside BitNode 3.
+
+- Be in a BitNode that has CorporationSoftcap (a BN modifier) less than 0.15. Use [getBitNodeMultipliers](./bitburner.ns.getbitnodemultipliers.md) to get the value of this modifier.
 

@@ -8466,7 +8466,9 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * RAM cost: 20 GB
    *
    * This function throws an error if:
+   *
    * - Try to self-fund outside BitNode 3.
+   *
    * - Be in a BitNode that has CorporationSoftcap (a BN modifier) less than 0.15. Use
    * {@link NS.getBitNodeMultipliers | getBitNodeMultipliers} to get the value of this modifier.
    *
