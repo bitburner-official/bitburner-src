@@ -3161,7 +3161,7 @@ declare enum SpecialBladeburnerActionTypeForSleeve {
  * @public
  */
 export type BladeburnerActionTypeForSleeve =
-  | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionName.inciteViolence>
+  | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionName.InciteViolence>
   | SpecialBladeburnerActionTypeForSleeve;
 
 /**

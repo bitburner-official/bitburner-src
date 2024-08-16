@@ -9,8 +9,8 @@
 
 ```typescript
 export type BladeburnerActionTypeForSleeve =
-  | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionName.inciteViolence>
+  | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionName.InciteViolence>
   | SpecialBladeburnerActionTypeForSleeve;
 ```
-**References:** [BladeburnerGeneralActionName](./bitburner.bladeburnergeneralactionname.md)<!-- -->, [SpecialBladeburnerActionTypeForSleeve](./bitburner.specialbladeburneractiontypeforsleeve.md)
+**References:** [BladeburnerGeneralActionName](./bitburner.bladeburnergeneralactionname.md)<!-- -->, [BladeburnerGeneralActionName.InciteViolence](./bitburner.bladeburnergeneralactionname.md)<!-- -->, [SpecialBladeburnerActionTypeForSleeve](./bitburner.specialbladeburneractiontypeforsleeve.md)
 
