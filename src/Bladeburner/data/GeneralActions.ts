@@ -53,6 +53,6 @@ export const GeneralActions: Record<BladeGeneralActionName, GeneralAction> = {
     getActionTime: () => 60,
     desc:
       "Purposefully stir trouble in the synthoid community in order to gain a political edge. This will generate " +
-      "additional contracts and operations, at the cost of increased Chaos.",
+      "additional contracts and operations. Completing this action will increase the Chaos level in your current city.",
   }),
 };
