@@ -1,4 +1,4 @@
-import type { BladeburnerMultName, BladeburnerSkillName } from "@enums";
+import type { BladeMultName, BladeSkillName } from "@enums";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Bladeburner } from "./Bladeburner";
@@ -7,23 +7,23 @@ import { PositiveInteger, PositiveNumber, isPositiveInteger } from "../types";
 import { PartialRecord, getRecordEntries } from "../Types/Record";
 
 interface SkillParams {
-  name: BladeburnerSkillName;
+  name: BladeSkillName;
   desc: string;
   baseCost?: number;
   costInc?: number;
   maxLvl?: number;
-  mults: PartialRecord<BladeburnerMultName, number>;
+  mults: PartialRecord<BladeMultName, number>;
 }
 
 export class Skill {
-  name: BladeburnerSkillName;
+  name: BladeSkillName;
   desc: string;
   // Cost is in Skill Points
   baseCost: number;
   // Additive cost increase per level
   costInc: number;
   maxLvl: number;
-  mults: PartialRecord<BladeburnerMultName, number> = {};
+  mults: PartialRecord<BladeMultName, number> = {};
 
   constructor(params: SkillParams) {
     this.name = params.name;
@@ -150,7 +150,7 @@ export class Skill {
     return { available: true, cost };
   }
 
-  getMultiplier(name: BladeburnerMultName): number {
+  getMultiplier(name: BladeMultName): number {
     return this.mults[name] ?? 0;
   }
 }

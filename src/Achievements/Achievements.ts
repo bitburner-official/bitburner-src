@@ -1,6 +1,6 @@
 import {
   AugmentationName,
-  BladeburnerSkillName,
+  BladeSkillName,
   CityName,
   CompletedProgramName,
   CorpUnlockName,
@@ -417,8 +417,7 @@ export const achievements: Record<string, Achievement> = {
     Icon: "BLADEOVERCLOCK",
     Visible: () => canAccessBitNodeFeature(6),
     Condition: () =>
-      Player.bladeburner?.getSkillLevel(BladeburnerSkillName.Overclock) ===
-      Skills[BladeburnerSkillName.Overclock].maxLvl,
+      Player.bladeburner?.getSkillLevel(BladeSkillName.overclock) === Skills[BladeSkillName.overclock].maxLvl,
   },
   BLADEBURNER_UNSPENT_100000: {
     ...achievementData.BLADEBURNER_UNSPENT_100000,

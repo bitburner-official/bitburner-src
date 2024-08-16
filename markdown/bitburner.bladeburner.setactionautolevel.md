@@ -9,19 +9,15 @@ Set an action autolevel.
 **Signature:**
 
 ```typescript
-setActionAutolevel(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-    autoLevel: boolean,
-  ): void;
+setActionAutolevel(type: string, name: string, autoLevel: boolean): void;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) \| \`${[BladeburnerActionType](./bitburner.bladeburneractiontype.md)<!-- -->}\` | Type of action. |
-|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) \| \`${[BladeburnerActionName](./bitburner.bladeburneractionname.md)<!-- -->}\` | Name of action. Must be an exact match. |
+|  type | string | Type of action. |
+|  name | string | Name of action. Must be an exact match. |
 |  autoLevel | boolean | Whether or not to autolevel this action |
 
 **Returns:**

@@ -9,11 +9,11 @@ List all general actions.
 **Signature:**
 
 ```typescript
-getGeneralActionNames(): BladeburnerGeneralActionName[];
+getGeneralActionNames(): string[];
 ```
 **Returns:**
 
-[BladeburnerGeneralActionName](./bitburner.bladeburnergeneralactionname.md)<!-- -->\[\]
+string\[\]
 
 Array of strings containing the names of all general Bladeburner actions.
 

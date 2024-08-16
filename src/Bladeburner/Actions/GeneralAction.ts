@@ -2,19 +2,19 @@ import type { Person } from "../../PersonObjects/Person";
 import type { Bladeburner } from "../Bladeburner";
 import type { ActionIdentifier } from "../Types";
 
-import { BladeburnerActionType, BladeburnerGeneralActionName } from "@enums";
+import { BladeActionType, BladeGeneralActionName } from "@enums";
 import { ActionClass, ActionParams } from "./Action";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 
 type GeneralActionParams = ActionParams & {
-  name: BladeburnerGeneralActionName;
+  name: BladeGeneralActionName;
   getActionTime: (bladeburner: Bladeburner, person: Person) => number;
   getSuccessChance?: (bladeburner: Bladeburner, person: Person) => number;
 };
 
 export class GeneralAction extends ActionClass {
-  type: BladeburnerActionType.General = BladeburnerActionType.General;
-  name: BladeburnerGeneralActionName;
+  type: BladeActionType.general = BladeActionType.general;
+  name: BladeGeneralActionName;
   get id(): ActionIdentifier {
     return { type: this.type, name: this.name };
   }

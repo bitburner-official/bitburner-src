@@ -9,11 +9,11 @@ List all skills.
 **Signature:**
 
 ```typescript
-getSkillNames(): BladeburnerSkillName[];
+getSkillNames(): string[];
 ```
 **Returns:**
 
-[BladeburnerSkillName](./bitburner.bladeburnerskillname.md)<!-- -->\[\]
+string\[\]
 
 Array of strings containing the names of all general Bladeburner skills.
 

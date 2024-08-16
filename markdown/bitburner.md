@@ -8,27 +8,18 @@
 
 |  Enumeration | Description |
 |  --- | --- |
-|  [BladeburnerActionType](./bitburner.bladeburneractiontype.md) | Action types of Bladeburner |
-|  [BladeburnerBlackOpName](./bitburner.bladeburnerblackopname.md) | Black Operation names of Bladeburner |
-|  [BladeburnerContractName](./bitburner.bladeburnercontractname.md) | Contract names of Bladeburner |
-|  [BladeburnerGeneralActionName](./bitburner.bladeburnergeneralactionname.md) | General action names of Bladeburner |
-|  [BladeburnerOperationName](./bitburner.bladeburneroperationname.md) | Operation names of Bladeburner |
-|  [BladeburnerSkillName](./bitburner.bladeburnerskillname.md) | Skill names type of Bladeburner |
 |  [CityName](./bitburner.cityname.md) | Names of all cities |
 |  [CompanyName](./bitburner.companyname.md) | Names of all companies |
 |  [CrimeType](./bitburner.crimetype.md) |  |
 |  [FactionWorkType](./bitburner.factionworktype.md) |  |
-|  [GymLocationName](./bitburner.gymlocationname.md) | Locations of gym |
 |  [GymType](./bitburner.gymtype.md) |  |
 |  [JobField](./bitburner.jobfield.md) |  |
 |  [JobName](./bitburner.jobname.md) |  |
 |  [LocationName](./bitburner.locationname.md) | Names of all locations |
 |  [OrderType](./bitburner.ordertype.md) |  |
 |  [PositionType](./bitburner.positiontype.md) |  |
-|  [SpecialBladeburnerActionTypeForSleeve](./bitburner.specialbladeburneractiontypeforsleeve.md) | These special Bladeburner action types are only for Sleeve |
 |  [ToastVariant](./bitburner.toastvariant.md) |  |
 |  [UniversityClassType](./bitburner.universityclasstype.md) |  |
-|  [UniversityLocationName](./bitburner.universitylocationname.md) | Locations of university |
 
 ## Interfaces
 
@@ -161,8 +152,6 @@
 
 |  Type Alias | Description |
 |  --- | --- |
-|  [BladeburnerActionName](./bitburner.bladeburneractionname.md) |  |
-|  [BladeburnerActionTypeForSleeve](./bitburner.bladeburneractiontypeforsleeve.md) |  |
 |  [CodingContractData](./bitburner.codingcontractdata.md) | Coding contract data will differ depending on coding contract. |
 |  [CorpEmployeePosition](./bitburner.corpemployeeposition.md) |  |
 |  [CorpIndustryName](./bitburner.corpindustryname.md) |  |

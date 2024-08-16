@@ -9,11 +9,11 @@ List all black ops.
 **Signature:**
 
 ```typescript
-getBlackOpNames(): BladeburnerBlackOpName[];
+getBlackOpNames(): string[];
 ```
 **Returns:**
 
-[BladeburnerBlackOpName](./bitburner.bladeburnerblackopname.md)<!-- -->\[\]
+string\[\]
 
 Array of strings containing the names of all Bladeburner Black Ops.
 

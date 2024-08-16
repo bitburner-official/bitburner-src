@@ -3,7 +3,7 @@ import type { BlackOperation } from "./BlackOperation";
 import type { Bladeburner } from "../Bladeburner";
 import type { Availability, ActionIdentifier, SuccessChanceParams } from "../Types";
 
-import { BladeburnerActionType, BladeburnerMultName, BladeburnerOperationName } from "@enums";
+import { BladeActionType, BladeMultName, BladeOperationName } from "@enums";
 import { BladeburnerConstants } from "../data/Constants";
 import { ActionClass } from "./Action";
 import { Generic_fromJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
@@ -11,13 +11,13 @@ import { LevelableActionClass, LevelableActionParams } from "./LevelableAction";
 import { clampInteger } from "../../utils/helpers/clampNumber";
 
 export interface OperationParams extends LevelableActionParams {
-  name: BladeburnerOperationName;
+  name: BladeOperationName;
   getAvailability?: (bladeburner: Bladeburner) => Availability;
 }
 
 export class Operation extends LevelableActionClass {
-  type: BladeburnerActionType.Operation = BladeburnerActionType.Operation;
-  name = BladeburnerOperationName.Investigation;
+  type: BladeActionType.operation = BladeActionType.operation;
+  name = BladeOperationName.investigation;
   teamCount = 0;
   get id(): ActionIdentifier {
     return { type: this.type, name: this.name };
@@ -46,7 +46,7 @@ export class Operation extends LevelableActionClass {
     return 1;
   }
   getSuccessChance(inst: Bladeburner, person: Person, params: SuccessChanceParams) {
-    if (this.name === BladeburnerOperationName.Raid && inst.getCurrentCity().comms <= 0) {
+    if (this.name === BladeOperationName.raid && inst.getCurrentCity().comms <= 0) {
       return 0;
     }
     return ActionClass.prototype.getSuccessChance.call(this, inst, person, params);
@@ -75,7 +75,7 @@ constructorsForReviver.Operation = Operation;
 
 // shared member functions for Operation and BlackOperation
 export const operationSkillSuccessBonus = (inst: Bladeburner) => {
-  return inst.getSkillMult(BladeburnerMultName.SuccessChanceOperation);
+  return inst.getSkillMult(BladeMultName.successChanceOperation);
 };
 
 export function operationTeamSuccessBonus(this: Operation | BlackOperation, inst: Bladeburner) {

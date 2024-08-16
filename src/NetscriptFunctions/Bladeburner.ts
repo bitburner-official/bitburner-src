@@ -3,13 +3,7 @@ import type { Action, LevelableAction } from "../Bladeburner/Types";
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
 import { Player } from "@player";
-import {
-  BladeburnerActionType,
-  BladeburnerContractName,
-  BladeburnerGeneralActionName,
-  BladeburnerOperationName,
-  BladeburnerSkillName,
-} from "@enums";
+import { BladeActionType, BladeContractName, BladeGeneralActionName, BladeOperationName, BladeSkillName } from "@enums";
 import { Bladeburner, BladeburnerPromise } from "../Bladeburner/Bladeburner";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { helpers } from "../Netscript/NetscriptHelpers";
@@ -46,7 +40,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   }
 
   function isLevelableAction(action: Action): action is LevelableAction {
-    return action.type === BladeburnerActionType.Contract || action.type === BladeburnerActionType.Operation;
+    return action.type === BladeActionType.contract || action.type === BladeActionType.operation;
   }
 
   function getLevelableAction(ctx: NetscriptContext, type: unknown, name: unknown): LevelableAction {
@@ -64,11 +58,11 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     inBladeburner: () => () => !!Player.bladeburner,
     getContractNames: (ctx) => () => {
       getBladeburner(ctx);
-      return Object.values(BladeburnerContractName);
+      return Object.values(BladeContractName);
     },
     getOperationNames: (ctx) => () => {
       getBladeburner(ctx);
-      return Object.values(BladeburnerOperationName);
+      return Object.values(BladeOperationName);
     },
     getBlackOpNames: (ctx) => () => {
       getBladeburner(ctx);
@@ -83,16 +77,16 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     getBlackOpRank: (ctx) => (_blackOpName) => {
       checkBladeburnerAccess(ctx);
-      const blackOpName = getEnumHelper("BladeburnerBlackOpName").nsGetMember(ctx, _blackOpName);
+      const blackOpName = getEnumHelper("BladeBlackOpName").nsGetMember(ctx, _blackOpName);
       return BlackOperations[blackOpName].reqdRank;
     },
     getGeneralActionNames: (ctx) => () => {
       getBladeburner(ctx);
-      return Object.values(BladeburnerGeneralActionName);
+      return Object.values(BladeGeneralActionName);
     },
     getSkillNames: (ctx) => () => {
       getBladeburner(ctx);
-      return Object.values(BladeburnerSkillName);
+      return Object.values(BladeSkillName);
     },
     startAction: (ctx) => (type, name) => {
       const bladeburner = getBladeburner(ctx);
@@ -134,8 +128,8 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       const sleeveNumber = helpers.number(ctx, "sleeve", _sleeve);
       checkSleeveNumber(ctx, sleeveNumber);
       switch (action.type) {
-        case BladeburnerActionType.General:
-        case BladeburnerActionType.Contract: {
+        case BladeActionType.general:
+        case BladeActionType.contract: {
           const sleevePerson = Player.sleeves[sleeveNumber];
           return action.getSuccessRange(bladeburner, sleevePerson);
         }
@@ -154,12 +148,12 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       const bladeburner = getBladeburner(ctx);
       const action = getAction(ctx, type, name);
       switch (action.type) {
-        case BladeburnerActionType.General:
+        case BladeActionType.general:
           return Infinity;
-        case BladeburnerActionType.BlackOp:
+        case BladeActionType.blackOp:
           return bladeburner.numBlackOpsComplete > action.n ? 0 : 1;
-        case BladeburnerActionType.Contract:
-        case BladeburnerActionType.Operation:
+        case BladeActionType.contract:
+        case BladeActionType.operation:
           return action.count;
       }
     },
@@ -212,12 +206,12 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     getSkillLevel: (ctx) => (_skillName) => {
       const bladeburner = getBladeburner(ctx);
-      const skillName = getEnumHelper("BladeburnerSkillName").nsGetMember(ctx, _skillName, "skillName");
+      const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
       return bladeburner.getSkillLevel(skillName);
     },
     getSkillUpgradeCost: (ctx) => (_skillName, _count) => {
       const bladeburner = getBladeburner(ctx);
-      const skillName = getEnumHelper("BladeburnerSkillName").nsGetMember(ctx, _skillName, "skillName");
+      const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
       const count = helpers.positiveInteger(ctx, "count", _count ?? 1);
       const currentLevel = bladeburner.getSkillLevel(skillName);
       const skill = Skills[skillName];
@@ -228,7 +222,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     upgradeSkill: (ctx) => (_skillName, _count) => {
       const bladeburner = getBladeburner(ctx);
-      const skillName = getEnumHelper("BladeburnerSkillName").nsGetMember(ctx, _skillName, "skillName");
+      const skillName = getEnumHelper("BladeSkillName").nsGetMember(ctx, _skillName, "skillName");
       const count = helpers.positiveInteger(ctx, "count", _count ?? 1);
       const attempt = bladeburner.upgradeSkill(skillName, count);
       helpers.log(ctx, () => attempt.message);
@@ -239,11 +233,11 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       if (!type && !name) return bladeburner.teamSize;
       const action = getAction(ctx, type, name);
       switch (action.type) {
-        case BladeburnerActionType.General:
-        case BladeburnerActionType.Contract:
+        case BladeActionType.general:
+        case BladeActionType.contract:
           return 0;
-        case BladeburnerActionType.BlackOp:
-        case BladeburnerActionType.Operation:
+        case BladeActionType.blackOp:
+        case BladeActionType.operation:
           return action.teamCount;
       }
     },
@@ -256,12 +250,12 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         return -1;
       }
       switch (action.type) {
-        case BladeburnerActionType.Contract:
-        case BladeburnerActionType.General:
+        case BladeActionType.contract:
+        case BladeActionType.general:
           helpers.log(ctx, () => "Only valid for Operations and Black Operations");
           return -1;
-        case BladeburnerActionType.BlackOp:
-        case BladeburnerActionType.Operation: {
+        case BladeActionType.blackOp:
+        case BladeActionType.operation: {
           action.teamCount = size;
           helpers.log(ctx, () => `Set team size for ${action.name} to ${size}`);
           return size;

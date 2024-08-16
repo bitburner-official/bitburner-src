@@ -1,12 +1,12 @@
-import { BladeburnerContractName } from "@enums";
+import { BladeContractName } from "@enums";
 import { Contract } from "../Actions/Contract";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { assertLoadingType } from "../../utils/TypeAssertion";
 
-export function createContracts(): Record<BladeburnerContractName, Contract> {
+export function createContracts(): Record<BladeContractName, Contract> {
   return {
-    [BladeburnerContractName.Tracking]: new Contract({
-      name: BladeburnerContractName.Tracking,
+    [BladeContractName.tracking]: new Contract({
+      name: BladeContractName.tracking,
       desc:
         "Identify and locate Synthoids. This contract involves reconnaissance and information-gathering ONLY. Do NOT " +
         "engage. Stealth is of the utmost importance.\n\n" +
@@ -39,8 +39,8 @@ export function createContracts(): Record<BladeburnerContractName, Contract> {
       growthFunction: () => getRandomIntInclusive(5, 75) / 10,
       minCount: 25,
     }),
-    [BladeburnerContractName.BountyHunter]: new Contract({
-      name: BladeburnerContractName.BountyHunter,
+    [BladeContractName.bountyHunter]: new Contract({
+      name: BladeContractName.bountyHunter,
       desc:
         "Hunt down and capture fugitive Synthoids. These Synthoids are wanted alive.\n\n" +
         "Successfully completing a Bounty Hunter contract will lower the population in your current city, and will also " +
@@ -72,8 +72,8 @@ export function createContracts(): Record<BladeburnerContractName, Contract> {
       growthFunction: () => getRandomIntInclusive(5, 75) / 10,
       minCount: 5,
     }),
-    [BladeburnerContractName.Retirement]: new Contract({
-      name: BladeburnerContractName.Retirement,
+    [BladeContractName.retirement]: new Contract({
+      name: BladeContractName.retirement,
       desc:
         "Hunt down and retire (kill) rogue Synthoids.\n\n" +
         "Successfully completing a Retirement contract will lower the population in your current city, and will also " +
@@ -108,12 +108,12 @@ export function createContracts(): Record<BladeburnerContractName, Contract> {
   };
 }
 
-export function loadContractsData(data: unknown, contracts: Record<BladeburnerContractName, Contract>) {
+export function loadContractsData(data: unknown, contracts: Record<BladeContractName, Contract>) {
   // loading data as "unknown" and typechecking it down is probably not necessary
   // but this will prevent crashes even with malformed savedata
   if (!data || typeof data !== "object") return;
-  assertLoadingType<Record<BladeburnerContractName, unknown>>(data);
-  for (const contractName of Object.values(BladeburnerContractName)) {
+  assertLoadingType<Record<BladeContractName, unknown>>(data);
+  for (const contractName of Object.values(BladeContractName)) {
     const loadedContract = data[contractName];
     if (!(loadedContract instanceof Contract)) continue;
     contracts[contractName].loadData(loadedContract);

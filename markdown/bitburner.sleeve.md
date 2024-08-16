@@ -36,6 +36,6 @@ If you are not in BitNode-10, then you must have Source-File 10 in order to use 
 |  [setToIdle(sleeveNumber)](./bitburner.sleeve.settoidle.md) | Set a sleeve to idle. |
 |  [setToShockRecovery(sleeveNumber)](./bitburner.sleeve.settoshockrecovery.md) | Set a sleeve to shock recovery. |
 |  [setToSynchronize(sleeveNumber)](./bitburner.sleeve.settosynchronize.md) | Set a sleeve to synchronize. |
-|  [setToUniversityCourse(sleeveNumber, universityName, courseName)](./bitburner.sleeve.settouniversitycourse.md) | Set a sleeve to take a class at a university. |
+|  [setToUniversityCourse(sleeveNumber, university, className)](./bitburner.sleeve.settouniversitycourse.md) | Set a sleeve to take a class at a university. |
 |  [travel(sleeveNumber, city)](./bitburner.sleeve.travel.md) | Make a sleeve travel to another city. The cost for using this function is the same as for a player. |
 

@@ -9,11 +9,7 @@ Set a sleeve to workout at the gym.
 **Signature:**
 
 ```typescript
-setToGymWorkout(
-    sleeveNumber: number,
-    gymName: GymLocationName | `${GymLocationName}`,
-    stat: GymType | `${GymType}`,
-  ): boolean;
+setToGymWorkout(sleeveNumber: number, gymName: string, stat: string): boolean;
 ```
 
 ## Parameters
@@ -21,8 +17,8 @@ setToGymWorkout(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  sleeveNumber | number | Index of the sleeve to workout at the gym. |
-|  gymName | [GymLocationName](./bitburner.gymlocationname.md) \| \`${[GymLocationName](./bitburner.gymlocationname.md)<!-- -->}\` | Name of the gym. |
-|  stat | [GymType](./bitburner.gymtype.md) \| \`${[GymType](./bitburner.gymtype.md)<!-- -->}\` | Name of the stat to train. |
+|  gymName | string | Name of the gym. |
+|  stat | string | Name of the stat to train. |
 
 **Returns:**
 

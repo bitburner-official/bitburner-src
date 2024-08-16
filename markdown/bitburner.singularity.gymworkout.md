@@ -9,15 +9,15 @@ Workout at the gym.
 **Signature:**
 
 ```typescript
-gymWorkout(gymName: GymLocationName | `${GymLocationName}`, stat: GymType | `${GymType}`, focus?: boolean): boolean;
+gymWorkout(gymName: string, stat: string, focus?: boolean): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  gymName | [GymLocationName](./bitburner.gymlocationname.md) \| \`${[GymLocationName](./bitburner.gymlocationname.md)<!-- -->}\` | Name of gym. You must be in the correct city for whatever gym you specify. |
-|  stat | [GymType](./bitburner.gymtype.md) \| \`${[GymType](./bitburner.gymtype.md)<!-- -->}\` | The stat you want to train. |
+|  gymName | string | Name of gym. You must be in the correct city for whatever gym you specify. |
+|  stat | string | The stat you want to train. |
 |  focus | boolean | _(Optional)_ Acquire player focus on this gym workout. Optional. Defaults to true. |
 
 **Returns:**

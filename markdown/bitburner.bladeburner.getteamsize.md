@@ -9,18 +9,15 @@ Get team size.
 **Signature:**
 
 ```typescript
-getTeamSize(
-    type?: BladeburnerActionType | `${BladeburnerActionType}`,
-    name?: BladeburnerActionName | `${BladeburnerActionName}`,
-  ): number;
+getTeamSize(type?: string, name?: string): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) \| \`${[BladeburnerActionType](./bitburner.bladeburneractiontype.md)<!-- -->}\` | _(Optional)_ Type of action. |
-|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) \| \`${[BladeburnerActionName](./bitburner.bladeburneractionname.md)<!-- -->}\` | _(Optional)_ Name of action. Must be an exact match. |
+|  type | string | _(Optional)_ Type of action. |
+|  name | string | _(Optional)_ Name of action. Must be an exact match. |
 
 **Returns:**
 

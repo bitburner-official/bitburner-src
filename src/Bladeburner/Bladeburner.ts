@@ -6,12 +6,12 @@ import type { Skills as PersonSkills } from "../PersonObjects/Skills";
 
 import {
   AugmentationName,
-  BladeburnerActionType,
-  BladeburnerContractName,
-  BladeburnerGeneralActionName,
-  BladeburnerMultName,
-  BladeburnerOperationName,
-  BladeburnerSkillName,
+  BladeActionType,
+  BladeContractName,
+  BladeGeneralActionName,
+  BladeMultName,
+  BladeOperationName,
+  BladeSkillName,
   CityName,
   FactionName,
 } from "@enums";
@@ -78,14 +78,14 @@ export class Bladeburner {
   cities = createEnumKeyedRecord(CityName, (name) => new City(name));
   city = CityName.Sector12;
   // Todo: better types for all these Record<string, etc> types. Will need custom types or enums for the named string categories (e.g. skills).
-  skills: PartialRecord<BladeburnerSkillName, number> = {};
-  skillMultipliers: PartialRecord<BladeburnerMultName, number> = {};
+  skills: PartialRecord<BladeSkillName, number> = {};
+  skillMultipliers: PartialRecord<BladeMultName, number> = {};
   staminaBonus = 0;
   maxStamina = 1;
   stamina = 1;
   // Contracts and operations are stored on the Bladeburner object even though they are global so that they can utilize save/load of the main bladeburner object
-  contracts: Record<BladeburnerContractName, Contract>;
-  operations: Record<BladeburnerOperationName, Operation>;
+  contracts: Record<BladeContractName, Contract>;
+  operations: Record<BladeOperationName, Operation>;
   numBlackOpsComplete = 0;
   logging = {
     general: true,
@@ -142,13 +142,13 @@ export class Bladeburner {
   }
 
   /** Directly sets a skill level, with no validation */
-  setSkillLevel(skillName: BladeburnerSkillName, value: number) {
+  setSkillLevel(skillName: BladeSkillName, value: number) {
     this.skills[skillName] = clampInteger(value, 0, Number.MAX_VALUE);
     this.updateSkillMultipliers();
   }
 
   /** Attempts to perform a skill upgrade, gives a message on both success and failure */
-  upgradeSkill(skillName: BladeburnerSkillName, count = 1): Attempt<{ message: string }> {
+  upgradeSkill(skillName: BladeSkillName, count = 1): Attempt<{ message: string }> {
     const currentSkillLevel = this.skills[skillName] ?? 0;
     const actualCount = currentSkillLevel + count - currentSkillLevel;
     if (actualCount === 0) {
@@ -284,7 +284,7 @@ export class Bladeburner {
       }
       case 3: {
         const skillName = args[2];
-        if (!getEnumHelper("BladeburnerSkillName").isMember(skillName)) {
+        if (!getEnumHelper("BladeSkillName").isMember(skillName)) {
           this.postToConsole("Invalid skill name (Note that it is case-sensitive): " + skillName);
           return;
         }
@@ -450,31 +450,31 @@ export class Bladeburner {
           return;
         case "general":
         case "gen": {
-          if (!getEnumHelper("BladeburnerGeneralActionName").isMember(name)) {
+          if (!getEnumHelper("BladeGeneralActionName").isMember(name)) {
             this.postToConsole("Invalid General Action name specified: " + name);
             return;
           }
-          actionId = { type: BladeburnerActionType.General, name };
+          actionId = { type: BladeActionType.general, name };
           break;
         }
         case "contract":
         case "contracts": {
-          if (!getEnumHelper("BladeburnerContractName").isMember(name)) {
+          if (!getEnumHelper("BladeContractName").isMember(name)) {
             this.postToConsole("Invalid Contract name specified: " + name);
             return;
           }
-          actionId = { type: BladeburnerActionType.Contract, name };
+          actionId = { type: BladeActionType.contract, name };
           break;
         }
         case "ops":
         case "op":
         case "operations":
         case "operation":
-          if (!getEnumHelper("BladeburnerOperationName").isMember(name)) {
+          if (!getEnumHelper("BladeOperationName").isMember(name)) {
             this.postToConsole("Invalid Operation name specified: " + name);
             return;
           }
-          actionId = { type: BladeburnerActionType.Operation, name };
+          actionId = { type: BladeActionType.operation, name };
           break;
         default:
           this.postToConsole("Invalid use of automate command.");
@@ -685,7 +685,7 @@ export class Bladeburner {
 
     const unweightedGain = time * BladeburnerConstants.BaseStatGain * successMult * difficultyMult;
     const unweightedIntGain = time * BladeburnerConstants.BaseIntGain * successMult * difficultyMult;
-    const skillMult = this.getSkillMult(BladeburnerMultName.ExpGain);
+    const skillMult = this.getSkillMult(BladeMultName.expGain);
 
     return {
       hackExp: unweightedGain * action.weights.hacking * skillMult,
@@ -724,22 +724,22 @@ export class Bladeburner {
     }
   }
 
-  getSkillMult(name: BladeburnerMultName): number {
+  getSkillMult(name: BladeMultName): number {
     return this.skillMultipliers[name] ?? 1;
   }
 
   getEffectiveSkillLevel(person: Person, name: keyof PersonSkills): number {
     switch (name) {
       case "strength":
-        return person.skills.strength * this.getSkillMult(BladeburnerMultName.EffStr);
+        return person.skills.strength * this.getSkillMult(BladeMultName.effStr);
       case "defense":
-        return person.skills.defense * this.getSkillMult(BladeburnerMultName.EffDef);
+        return person.skills.defense * this.getSkillMult(BladeMultName.effDef);
       case "dexterity":
-        return person.skills.dexterity * this.getSkillMult(BladeburnerMultName.EffDex);
+        return person.skills.dexterity * this.getSkillMult(BladeMultName.effDex);
       case "agility":
-        return person.skills.agility * this.getSkillMult(BladeburnerMultName.EffAgi);
+        return person.skills.agility * this.getSkillMult(BladeMultName.effAgi);
       case "charisma":
-        return person.skills.charisma * this.getSkillMult(BladeburnerMultName.EffCha);
+        return person.skills.charisma * this.getSkillMult(BladeMultName.effCha);
       default:
         return person.skills[name];
     }
@@ -758,7 +758,7 @@ export class Bladeburner {
   }
 
   completeOperation(success: boolean): void {
-    if (this.action?.type !== BladeburnerActionType.Operation) {
+    if (this.action?.type !== BladeActionType.operation) {
       throw new Error("completeOperation() called even though current action is not an Operation");
     }
     const action = this.getActionObject(this.action);
@@ -786,25 +786,21 @@ export class Bladeburner {
 
     const city = this.getCurrentCity();
     switch (action.name) {
-      case BladeburnerOperationName.Investigation:
+      case BladeOperationName.investigation:
         if (success) {
-          city.improvePopulationEstimateByPercentage(
-            0.4 * this.getSkillMult(BladeburnerMultName.SuccessChanceEstimate),
-          );
+          city.improvePopulationEstimateByPercentage(0.4 * this.getSkillMult(BladeMultName.successChanceEstimate));
         } else {
           this.triggerPotentialMigration(this.city, 0.1);
         }
         break;
-      case BladeburnerOperationName.Undercover:
+      case BladeOperationName.undercover:
         if (success) {
-          city.improvePopulationEstimateByPercentage(
-            0.8 * this.getSkillMult(BladeburnerMultName.SuccessChanceEstimate),
-          );
+          city.improvePopulationEstimateByPercentage(0.8 * this.getSkillMult(BladeMultName.successChanceEstimate));
         } else {
           this.triggerPotentialMigration(this.city, 0.15);
         }
         break;
-      case BladeburnerOperationName.Sting:
+      case BladeOperationName.sting:
         if (success) {
           city.changePopulationByPercentage(-0.1, {
             changeEstEqually: true,
@@ -813,7 +809,7 @@ export class Bladeburner {
         }
         city.changeChaosByCount(0.1);
         break;
-      case BladeburnerOperationName.Raid:
+      case BladeOperationName.raid:
         if (success) {
           city.changePopulationByPercentage(-1, {
             changeEstEqually: true,
@@ -829,7 +825,7 @@ export class Bladeburner {
         }
         city.changeChaosByPercentage(getRandomIntInclusive(1, 5));
         break;
-      case BladeburnerOperationName.StealthRetirement:
+      case BladeOperationName.stealthRetirement:
         if (success) {
           city.changePopulationByPercentage(-0.5, {
             changeEstEqually: true,
@@ -838,7 +834,7 @@ export class Bladeburner {
         }
         city.changeChaosByPercentage(getRandomIntInclusive(-3, -1));
         break;
-      case BladeburnerOperationName.Assassination:
+      case BladeOperationName.assassination:
         if (success) {
           city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
         }
@@ -853,17 +849,17 @@ export class Bladeburner {
     const city = this.getCurrentCity();
     if (success) {
       switch (action.name) {
-        case BladeburnerContractName.Tracking:
+        case BladeContractName.tracking:
           // Increase estimate accuracy by a relatively small amount
           city.improvePopulationEstimateByCount(
-            getRandomIntInclusive(100, 1e3) * this.getSkillMult(BladeburnerMultName.SuccessChanceEstimate),
+            getRandomIntInclusive(100, 1e3) * this.getSkillMult(BladeMultName.successChanceEstimate),
           );
           break;
-        case BladeburnerContractName.BountyHunter:
+        case BladeContractName.bountyHunter:
           city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
           city.changeChaosByCount(0.02);
           break;
-        case BladeburnerContractName.Retirement:
+        case BladeContractName.retirement:
           city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
           city.changeChaosByCount(0.04);
           break;
@@ -891,10 +887,10 @@ export class Bladeburner {
     let retValue = newWorkStats();
     const action = this.getActionObject(actionIdent);
     switch (action.type) {
-      case BladeburnerActionType.Contract:
-      case BladeburnerActionType.Operation: {
+      case BladeActionType.contract:
+      case BladeActionType.operation: {
         try {
-          const isOperation = action.type === BladeburnerActionType.Operation;
+          const isOperation = action.type === BladeActionType.operation;
           const difficulty = action.getDifficulty();
           const difficultyMultiplier =
             Math.pow(difficulty, BladeburnerConstants.DiffMultExponentialFactor) +
@@ -919,9 +915,7 @@ export class Bladeburner {
             let moneyGain = 0;
             if (!isOperation) {
               moneyGain =
-                BladeburnerConstants.ContractBaseMoneyGain *
-                rewardMultiplier *
-                this.getSkillMult(BladeburnerMultName.Money);
+                BladeburnerConstants.ContractBaseMoneyGain * rewardMultiplier * this.getSkillMult(BladeMultName.money);
               retValue.money = moneyGain;
             }
 
@@ -986,7 +980,7 @@ export class Bladeburner {
         }
         break;
       }
-      case BladeburnerActionType.BlackOp: {
+      case BladeActionType.blackOp: {
         const difficulty = action.getDifficulty();
         const difficultyMultiplier =
           Math.pow(difficulty, BladeburnerConstants.DiffMultExponentialFactor) +
@@ -1070,15 +1064,15 @@ export class Bladeburner {
         }
         break;
       }
-      case BladeburnerActionType.General:
+      case BladeActionType.general:
         switch (action.name) {
-          case BladeburnerGeneralActionName.Training: {
+          case BladeGeneralActionName.training: {
             this.stamina -= 0.5 * BladeburnerConstants.BaseStaminaLoss;
             const strExpGain = 30 * person.mults.strength_exp,
               defExpGain = 30 * person.mults.defense_exp,
               dexExpGain = 30 * person.mults.dexterity_exp,
               agiExpGain = 30 * person.mults.agility_exp,
-              staminaGain = 0.04 * this.getSkillMult(BladeburnerMultName.Stamina);
+              staminaGain = 0.04 * this.getSkillMult(BladeMultName.stamina);
             retValue.strExp = strExpGain;
             retValue.defExp = defExpGain;
             retValue.dexExp = dexExpGain;
@@ -1102,7 +1096,7 @@ export class Bladeburner {
             }
             break;
           }
-          case BladeburnerGeneralActionName.FieldAnalysis: {
+          case BladeGeneralActionName.fieldAnalysis: {
             // Does not use stamina. Effectiveness depends on hacking, int, and cha
             let eff =
               0.04 * Math.pow(person.skills.hacking, 0.3) +
@@ -1120,7 +1114,7 @@ export class Bladeburner {
             retValue.intExp = BladeburnerConstants.BaseIntGain;
             this.changeRank(person, rankGain);
             this.getCurrentCity().improvePopulationEstimateByPercentage(
-              eff * this.getSkillMult(BladeburnerMultName.SuccessChanceEstimate),
+              eff * this.getSkillMult(BladeMultName.successChanceEstimate),
             );
             if (this.logging.general) {
               this.log(
@@ -1132,7 +1126,7 @@ export class Bladeburner {
             }
             break;
           }
-          case BladeburnerGeneralActionName.Recruitment: {
+          case BladeGeneralActionName.recruitment: {
             const actionTime = action.getActionTime(this, person) * 1000;
             if (action.attempt(this, person)) {
               const expGain = 2 * BladeburnerConstants.BaseStatGain * actionTime;
@@ -1160,7 +1154,7 @@ export class Bladeburner {
             }
             break;
           }
-          case BladeburnerGeneralActionName.Diplomacy: {
+          case BladeGeneralActionName.diplomacy: {
             const eff = this.getDiplomacyEffectiveness(person);
             this.getCurrentCity().chaos *= eff;
             if (this.getCurrentCity().chaos < 0) {
@@ -1175,7 +1169,7 @@ export class Bladeburner {
             }
             break;
           }
-          case BladeburnerGeneralActionName.HyperbolicRegen: {
+          case BladeGeneralActionName.hyperbolicRegen: {
             person.regenerateHp(BladeburnerConstants.HrcHpGain);
 
             const currentStamina = this.stamina;
@@ -1197,7 +1191,7 @@ export class Bladeburner {
             }
             break;
           }
-          case BladeburnerGeneralActionName.InciteViolence: {
+          case BladeGeneralActionName.inciteViolence: {
             for (const contract of Object.values(this.contracts)) {
               contract.count += (60 * 3 * contract.growthFunction()) / BladeburnerConstants.ActionCountGrowthPeriod;
             }
@@ -1231,10 +1225,10 @@ export class Bladeburner {
   infiltrateSynthoidCommunities(): void {
     const infilSleeves = Player.sleeves.filter((s) => isSleeveInfiltrateWork(s.currentWork)).length;
     const amt = Math.pow(infilSleeves, -0.5) / 2;
-    for (const contract of Object.values(BladeburnerContractName)) {
+    for (const contract of Object.values(BladeContractName)) {
       this.contracts[contract].count += amt;
     }
-    for (const operation of Object.values(BladeburnerOperationName)) {
+    for (const operation of Object.values(BladeOperationName)) {
       this.operations[operation].count += amt;
     }
     if (this.logging.general) {
@@ -1289,7 +1283,7 @@ export class Bladeburner {
       const retValue = this.completeAction(Player, action.id);
       Player.gainMoney(retValue.money, "bladeburner");
       Player.gainStats(retValue);
-      if (action.type != BladeburnerActionType.BlackOp) {
+      if (action.type != BladeActionType.blackOp) {
         this.startAction(action.id); // Attempt to repeat action
       }
     }
@@ -1299,10 +1293,7 @@ export class Bladeburner {
     const effAgility = this.getEffectiveSkillLevel(Player, "agility");
     const maxStaminaBonus = this.maxStamina / BladeburnerConstants.MaxStaminaToGainFactor;
     const gain = (BladeburnerConstants.StaminaGainPerSecond + maxStaminaBonus) * Math.pow(effAgility, 0.17);
-    return clampNumber(
-      gain * (this.getSkillMult(BladeburnerMultName.Stamina) * Player.mults.bladeburner_stamina_gain),
-      0,
-    );
+    return clampNumber(gain * (this.getSkillMult(BladeMultName.stamina) * Player.mults.bladeburner_stamina_gain), 0);
   }
 
   calculateMaxStamina(): void {
@@ -1310,7 +1301,7 @@ export class Bladeburner {
     // Min value of maxStamina is an arbitrarily small positive value. It must not be 0 to avoid NaN stamina penalty.
     const maxStamina = clampNumber(
       (baseStamina + this.staminaBonus) *
-        this.getSkillMult(BladeburnerMultName.Stamina) *
+        this.getSkillMult(BladeMultName.stamina) *
         Player.mults.bladeburner_max_stamina,
       1e-9,
     );
@@ -1323,7 +1314,7 @@ export class Bladeburner {
     this.stamina = clampNumber((this.maxStamina * this.stamina) / oldMax, 0, maxStamina);
   }
 
-  getSkillLevel(skillName: BladeburnerSkillName): number {
+  getSkillLevel(skillName: BladeSkillName): number {
     return this.skills[skillName] ?? 0;
   }
 
@@ -1409,20 +1400,20 @@ export class Bladeburner {
   }
 
   /** Return the action based on an ActionIdentifier, discriminating types when possible */
-  getActionObject(actionId: ActionIdentifier & { type: BladeburnerActionType.BlackOp }): BlackOperation;
-  getActionObject(actionId: ActionIdentifier & { type: BladeburnerActionType.Operation }): Operation;
-  getActionObject(actionId: ActionIdentifier & { type: BladeburnerActionType.Contract }): Contract;
-  getActionObject(actionId: ActionIdentifier & { type: BladeburnerActionType.General }): GeneralAction;
+  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.blackOp }): BlackOperation;
+  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.operation }): Operation;
+  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.contract }): Contract;
+  getActionObject(actionId: ActionIdentifier & { type: BladeActionType.general }): GeneralAction;
   getActionObject(actionId: ActionIdentifier): Action;
   getActionObject(actionId: ActionIdentifier): Action {
     switch (actionId.type) {
-      case BladeburnerActionType.Contract:
+      case BladeActionType.contract:
         return this.contracts[actionId.name];
-      case BladeburnerActionType.Operation:
+      case BladeActionType.operation:
         return this.operations[actionId.name];
-      case BladeburnerActionType.BlackOp:
+      case BladeActionType.blackOp:
         return BlackOperations[actionId.name];
-      case BladeburnerActionType.General:
+      case BladeActionType.general:
         return GeneralActions[actionId.name];
     }
   }
@@ -1435,13 +1426,13 @@ export class Bladeburner {
       case "contract":
       case "contracts":
       case "contr":
-        if (!getEnumHelper("BladeburnerContractName").isMember(name)) return null;
+        if (!getEnumHelper("BladeContractName").isMember(name)) return null;
         return this.contracts[name];
       case "operation":
       case "operations":
       case "op":
       case "ops":
-        if (!getEnumHelper("BladeburnerOperationName").isMember(name)) return null;
+        if (!getEnumHelper("BladeOperationName").isMember(name)) return null;
         return this.operations[name];
       case "blackoperation":
       case "black operation":
@@ -1450,12 +1441,12 @@ export class Bladeburner {
       case "black ops":
       case "blackop":
       case "blackops":
-        if (!getEnumHelper("BladeburnerBlackOpName").isMember(name)) return null;
+        if (!getEnumHelper("BladeBlackOpName").isMember(name)) return null;
         return BlackOperations[name];
       case "general":
       case "general action":
       case "gen": {
-        if (!getEnumHelper("BladeburnerGeneralActionName").isMember(name)) return null;
+        if (!getEnumHelper("BladeGeneralActionName").isMember(name)) return null;
         return GeneralActions[name];
       }
     }

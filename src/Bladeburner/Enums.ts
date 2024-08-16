@@ -1,35 +1,31 @@
-export enum BladeburnerActionType {
-  General = "General",
-  Contract = "Contracts",
-  Operation = "Operations",
-  BlackOp = "Black Operations",
+export enum BladeActionType {
+  general = "General",
+  contract = "Contracts",
+  operation = "Operations",
+  blackOp = "Black Operations",
 }
-
-export enum BladeburnerGeneralActionName {
-  Training = "Training",
-  FieldAnalysis = "Field Analysis",
-  Recruitment = "Recruitment",
-  Diplomacy = "Diplomacy",
-  HyperbolicRegen = "Hyperbolic Regeneration Chamber",
-  InciteViolence = "Incite Violence",
+export enum BladeGeneralActionName {
+  training = "Training",
+  fieldAnalysis = "Field Analysis",
+  recruitment = "Recruitment",
+  diplomacy = "Diplomacy",
+  hyperbolicRegen = "Hyperbolic Regeneration Chamber",
+  inciteViolence = "Incite Violence",
 }
-
-export enum BladeburnerContractName {
-  Tracking = "Tracking",
-  BountyHunter = "Bounty Hunter",
-  Retirement = "Retirement",
+export enum BladeContractName {
+  tracking = "Tracking",
+  bountyHunter = "Bounty Hunter",
+  retirement = "Retirement",
 }
-
-export enum BladeburnerOperationName {
-  Investigation = "Investigation",
-  Undercover = "Undercover Operation",
-  Sting = "Sting Operation",
-  Raid = "Raid",
-  StealthRetirement = "Stealth Retirement Operation",
-  Assassination = "Assassination",
+export enum BladeOperationName {
+  investigation = "Investigation",
+  undercover = "Undercover Operation",
+  sting = "Sting Operation",
+  raid = "Raid",
+  stealthRetirement = "Stealth Retirement Operation",
+  assassination = "Assassination",
 }
-
-export enum BladeburnerBlackOpName {
+export enum BladeBlackOpName {
   OperationTyphoon = "Operation Typhoon",
   OperationZero = "Operation Zero",
   OperationX = "Operation X",
@@ -53,35 +49,35 @@ export enum BladeburnerBlackOpName {
   OperationDaedalus = "Operation Daedalus",
 }
 
-export enum BladeburnerSkillName {
-  BladesIntuition = "Blade's Intuition",
-  Cloak = "Cloak",
-  ShortCircuit = "Short-Circuit",
-  DigitalObserver = "Digital Observer",
-  Tracer = "Tracer",
-  Overclock = "Overclock",
-  Reaper = "Reaper",
-  EvasiveSystem = "Evasive System",
-  Datamancer = "Datamancer",
-  CybersEdge = "Cyber's Edge",
-  HandsOfMidas = "Hands of Midas",
-  Hyperdrive = "Hyperdrive",
+export enum BladeSkillName {
+  bladesIntuition = "Blade's Intuition",
+  cloak = "Cloak",
+  shortCircuit = "Short-Circuit",
+  digitalObserver = "Digital Observer",
+  tracer = "Tracer",
+  overclock = "Overclock",
+  reaper = "Reaper",
+  evasiveSystem = "Evasive System",
+  datamancer = "Datamancer",
+  cybersEdge = "Cyber's Edge",
+  handsOfMidas = "Hands of Midas",
+  hyperdrive = "Hyperdrive",
 }
 
-export enum BladeburnerMultName {
-  SuccessChanceAll = "Total Success Chance",
-  SuccessChanceStealth = "Stealth Success Chance",
-  SuccessChanceKill = "Retirement Success Chance",
-  SuccessChanceContract = "Contract Success Chance",
-  SuccessChanceOperation = "Operation Success Chance",
-  SuccessChanceEstimate = "Synthoid Data Estimate",
-  ActionTime = "Action Time",
-  EffStr = "Effective Strength",
-  EffDef = "Effective Defense",
-  EffDex = "Effective Dexterity",
-  EffAgi = "Effective Agility",
-  EffCha = "Effective Charisma",
-  Stamina = "Stamina",
-  Money = "Contract Money",
-  ExpGain = "Experience Gain",
+export enum BladeMultName {
+  successChanceAll = "Total Success Chance",
+  successChanceStealth = "Stealth Success Chance",
+  successChanceKill = "Retirement Success Chance",
+  successChanceContract = "Contract Success Chance",
+  successChanceOperation = "Operation Success Chance",
+  successChanceEstimate = "Synthoid Data Estimate",
+  actionTime = "Action Time",
+  effStr = "Effective Strength",
+  effDef = "Effective Defense",
+  effDex = "Effective Dexterity",
+  effAgi = "Effective Agility",
+  effCha = "Effective Charisma",
+  stamina = "Stamina",
+  money = "Contract Money",
+  expGain = "Experience Gain",
 }

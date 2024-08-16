@@ -1,9 +1,9 @@
 import { BlackOperation } from "../Actions/BlackOperation";
-import { BladeburnerBlackOpName, CityName, FactionName } from "@enums";
+import { BladeBlackOpName, CityName, FactionName } from "@enums";
 
-export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
-  [BladeburnerBlackOpName.OperationTyphoon]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationTyphoon,
+export const BlackOperations: Record<BladeBlackOpName, BlackOperation> = {
+  [BladeBlackOpName.OperationTyphoon]: new BlackOperation({
+    name: BladeBlackOpName.OperationTyphoon,
     n: 0,
     baseDifficulty: 2000,
     reqdRank: 2.5e3,
@@ -32,11 +32,11 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     desc:
       "Obadiah Zenyatta is the leader of a RedWater PMC. It has long been known among the intelligence community " +
       "that Zenyatta, along with the rest of the PMC, is a Synthoid.\n\n" +
-      `The goal of ${BladeburnerBlackOpName.OperationTyphoon} is to find and eliminate Zenyatta and RedWater by any means ` +
+      `The goal of ${BladeBlackOpName.OperationTyphoon} is to find and eliminate Zenyatta and RedWater by any means ` +
       "necessary. After the task is completed, the actions must be covered up from the general public.",
   }),
-  [BladeburnerBlackOpName.OperationZero]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationZero,
+  [BladeBlackOpName.OperationZero]: new BlackOperation({
+    name: BladeBlackOpName.OperationZero,
     n: 1,
     baseDifficulty: 2500,
     reqdRank: 5e3,
@@ -65,13 +65,13 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     desc:
       "AeroCorp is one of the world's largest defense contractors. Its leader, Steve Watataki, is thought to be " +
       "a supporter of Synthoid rights. He must be removed.\n\n" +
-      `The goal of ${BladeburnerBlackOpName.OperationZero} is to covertly infiltrate AeroCorp and uncover any incriminating ` +
+      `The goal of ${BladeBlackOpName.OperationZero} is to covertly infiltrate AeroCorp and uncover any incriminating ` +
       "evidence or information against Watataki that will cause him to be removed from his position at AeroCorp. " +
       "Incriminating evidence can be fabricated as a last resort. Be warned that AeroCorp has some of the most advanced " +
       "security measures in the world.",
   }),
-  [BladeburnerBlackOpName.OperationX]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationX,
+  [BladeBlackOpName.OperationX]: new BlackOperation({
+    name: BladeBlackOpName.OperationX,
     n: 2,
     baseDifficulty: 3000,
     reqdRank: 7.5e3,
@@ -106,8 +106,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       `their base of operations is in ${CityName.Ishima}'s underground sewer systems. Your task is to investigate the ` +
       "sewer systems, and eliminate Samizdat. They must never publish anything again.",
   }),
-  [BladeburnerBlackOpName.OperationTitan]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationTitan,
+  [BladeBlackOpName.OperationTitan]: new BlackOperation({
+    name: BladeBlackOpName.OperationTitan,
     n: 3,
     baseDifficulty: 4000,
     reqdRank: 10e3,
@@ -142,8 +142,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "just to retire the Synthoids there, but also to destroy any information or research at the facility that is " +
       "relevant to the Synthoids and their goals.",
   }),
-  [BladeburnerBlackOpName.OperationAres]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationAres,
+  [BladeBlackOpName.OperationAres]: new BlackOperation({
+    name: BladeBlackOpName.OperationAres,
     n: 4,
     baseDifficulty: 5000,
     reqdRank: 12.5e3,
@@ -175,8 +175,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "weapons. It is critical for the safety of humanity that this deal does not happen.\n\n" +
       "Your task is to intercept the deal. Leave no survivors.",
   }),
-  [BladeburnerBlackOpName.OperationArchangel]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationArchangel,
+  [BladeBlackOpName.OperationArchangel]: new BlackOperation({
+    name: BladeBlackOpName.OperationArchangel,
     n: 5,
     baseDifficulty: 7500,
     reqdRank: 15e3,
@@ -209,8 +209,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "The goal of this operation is to take out the leaders that are running the Red Rabbit brothel. Try to limit the " +
       "number of other casualties, but do what you must to complete the mission.",
   }),
-  [BladeburnerBlackOpName.OperationJuggernaut]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationJuggernaut,
+  [BladeBlackOpName.OperationJuggernaut]: new BlackOperation({
+    name: BladeBlackOpName.OperationJuggernaut,
     n: 6,
     baseDifficulty: 10e3,
     reqdRank: 20e3,
@@ -244,8 +244,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "Synthoid, and have thus enlisted our help.\n\n" +
       "Your mission is to eradicate Juggernaut and his followers.",
   }),
-  [BladeburnerBlackOpName.OperationRedDragon]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationRedDragon,
+  [BladeBlackOpName.OperationRedDragon]: new BlackOperation({
+    name: BladeBlackOpName.OperationRedDragon,
     n: 7,
     baseDifficulty: 12.5e3,
     reqdRank: 25e3,
@@ -278,8 +278,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       `Your task is to infiltrate and destroy the ${FactionName.Tetrads}' base of operations in Los Angeles. ` +
       "Intelligence tells us that their base houses one of their Synthoid manufacturing units.",
   }),
-  [BladeburnerBlackOpName.OperationK]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationK,
+  [BladeBlackOpName.OperationK]: new BlackOperation({
+    name: BladeBlackOpName.OperationK,
     n: 8,
     baseDifficulty: 15e3,
     reqdRank: 30e3,
@@ -315,8 +315,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "to a covert operation. Your goal is to destroy this technology and eliminate anyone who was involved in its " +
       "creation.",
   }),
-  [BladeburnerBlackOpName.OperationDeckard]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationDeckard,
+  [BladeBlackOpName.OperationDeckard]: new BlackOperation({
+    name: BladeBlackOpName.OperationDeckard,
     n: 9,
     baseDifficulty: 20e3,
     reqdRank: 40e3,
@@ -344,14 +344,14 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     isKill: true,
     desc:
       "Despite your success in eliminating VitaLife's new android-replicating technology in " +
-      `${BladeburnerBlackOpName.OperationK}, we've discovered that a small group of MK-VI Synthoids were able to make off with ` +
+      `${BladeBlackOpName.OperationK}, we've discovered that a small group of MK-VI Synthoids were able to make off with ` +
       "the schematics and design of the technology before the Operation. It is almost a certainty that these Synthoids " +
       "are some of the rogue MK-VI ones from the Synthoid Uprising.\n\n" +
-      `The goal of ${BladeburnerBlackOpName.OperationDeckard} is to hunt down these Synthoids and retire them. I don't need to ` +
+      `The goal of ${BladeBlackOpName.OperationDeckard} is to hunt down these Synthoids and retire them. I don't need to ` +
       "tell you how critical this mission is.",
   }),
-  [BladeburnerBlackOpName.OperationTyrell]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationTyrell,
+  [BladeBlackOpName.OperationTyrell]: new BlackOperation({
+    name: BladeBlackOpName.OperationTyrell,
     n: 10,
     baseDifficulty: 25e3,
     reqdRank: 50e3,
@@ -384,8 +384,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "We cannot have Synthoids upgrading their already-enhanced abilities with Augmentations. Your task is to hunt " +
       `down associated ${FactionName.TheDarkArmy} members and eliminate them.`,
   }),
-  [BladeburnerBlackOpName.OperationWallace]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationWallace,
+  [BladeBlackOpName.OperationWallace]: new BlackOperation({
+    name: BladeBlackOpName.OperationWallace,
     n: 11,
     baseDifficulty: 30e3,
     reqdRank: 75e3,
@@ -412,18 +412,18 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     },
     isKill: true,
     desc:
-      `Based on information gathered from ${BladeburnerBlackOpName.OperationTyrell}, we've discovered that ` +
+      `Based on information gathered from ${BladeBlackOpName.OperationTyrell}, we've discovered that ` +
       `${FactionName.TheDarkArmy} was well aware that there were Synthoids amongst their ranks. Even worse, we believe ` +
       `that ${FactionName.TheDarkArmy} is working together with other criminal organizations such as ` +
       `${FactionName.TheSyndicate} and that they are planning some sort of large-scale takeover of multiple major ` +
       `cities, most notably ${CityName.Aevum}. We suspect that Synthoids have infiltrated the ranks of these criminal ` +
       "factions and are trying to stage another Synthoid uprising.\n\n" +
       "The best way to deal with this is to prevent it before it even happens. The goal of " +
-      `${BladeburnerBlackOpName.OperationWallace} is to destroy ${FactionName.TheDarkArmy} and Syndicate factions in ` +
+      `${BladeBlackOpName.OperationWallace} is to destroy ${FactionName.TheDarkArmy} and Syndicate factions in ` +
       `${CityName.Aevum} immediately. Leave no survivors.`,
   }),
-  [BladeburnerBlackOpName.OperationShoulderOfOrion]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationShoulderOfOrion,
+  [BladeBlackOpName.OperationShoulderOfOrion]: new BlackOperation({
+    name: BladeBlackOpName.OperationShoulderOfOrion,
     n: 12,
     baseDifficulty: 35e3,
     reqdRank: 100e3,
@@ -456,8 +456,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "mission you will be officially disavowed by the NSA and the national government until after you successfully " +
       "return. In the event of failure, all of the operation's team members must not let themselves be captured alive.",
   }),
-  [BladeburnerBlackOpName.OperationHyron]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationHyron,
+  [BladeBlackOpName.OperationHyron]: new BlackOperation({
+    name: BladeBlackOpName.OperationHyron,
     n: 13,
     baseDifficulty: 40e3,
     reqdRank: 125e3,
@@ -493,8 +493,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       `facilities in ${CityName.Aevum}, codenamed 'Alpha Ranch'. Infiltrate the compound, delete and destroy the work, ` +
       "and then find and kill the project lead.",
   }),
-  [BladeburnerBlackOpName.OperationMorpheus]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationMorpheus,
+  [BladeBlackOpName.OperationMorpheus]: new BlackOperation({
+    name: BladeBlackOpName.OperationMorpheus,
     n: 14,
     baseDifficulty: 45e3,
     reqdRank: 150e3,
@@ -527,8 +527,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "has been compromised by Synthoids and is being used to spread pro-Synthoid propaganda.\n\n" +
       "The mission is to destroy this broadcast tower. Speed and stealth are of the utmost importance for this.",
   }),
-  [BladeburnerBlackOpName.OperationIonStorm]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationIonStorm,
+  [BladeBlackOpName.OperationIonStorm]: new BlackOperation({
+    name: BladeBlackOpName.OperationIonStorm,
     n: 15,
     baseDifficulty: 50e3,
     reqdRank: 175e3,
@@ -561,8 +561,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       `This is a full-scale assault operation to find and retire all of these Synthoids in the ${CityName.Sector12} ` +
       "Slums.",
   }),
-  [BladeburnerBlackOpName.OperationAnnihilus]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationAnnihilus,
+  [BladeBlackOpName.OperationAnnihilus]: new BlackOperation({
+    name: BladeBlackOpName.OperationAnnihilus,
     n: 16,
     baseDifficulty: 55e3,
     reqdRank: 200e3,
@@ -594,8 +594,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       `organization called '${FactionName.TheCovenant}'. We have no prior intelligence about this organization, so you ` +
       "are going in blind.",
   }),
-  [BladeburnerBlackOpName.OperationUltron]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationUltron,
+  [BladeBlackOpName.OperationUltron]: new BlackOperation({
+    name: BladeBlackOpName.OperationUltron,
     n: 17,
     baseDifficulty: 60e3,
     reqdRank: 250e3,
@@ -633,8 +633,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "moves to take control of and weaponize DeltaOne's Tactical High-Energy Satellite Laser Array (THESLA).\n\n" +
       "Your task is to find and destroy Ultron.",
   }),
-  [BladeburnerBlackOpName.OperationCenturion]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationCenturion,
+  [BladeBlackOpName.OperationCenturion]: new BlackOperation({
+    name: BladeBlackOpName.OperationCenturion,
     n: 18,
     baseDifficulty: 70e3,
     reqdRank: 300e3,
@@ -667,8 +667,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "It seems that the universe is not without a sense of irony.\n\n" +
       "D)@#)($M)C0293c40($*)@#D0JUMP3Rm0C<*@#)*$)#02c94830c(#$*D)",
   }),
-  [BladeburnerBlackOpName.OperationVindictus]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationVindictus,
+  [BladeBlackOpName.OperationVindictus]: new BlackOperation({
+    name: BladeBlackOpName.OperationVindictus,
     n: 19,
     baseDifficulty: 75e3,
     reqdRank: 350e3,
@@ -699,8 +699,8 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "ways.\n\n" +
       "D)@#)($M)C0293c40($*)@#D0JUMP3Rm0C<*@#)*$)#02c94830c(#$*D)",
   }),
-  [BladeburnerBlackOpName.OperationDaedalus]: new BlackOperation({
-    name: BladeburnerBlackOpName.OperationDaedalus,
+  [BladeBlackOpName.OperationDaedalus]: new BlackOperation({
+    name: BladeBlackOpName.OperationDaedalus,
     n: 20,
     baseDifficulty: 80e3,
     reqdRank: 400e3,

@@ -9,11 +9,7 @@ Set a sleeve to perform Bladeburner actions.
 **Signature:**
 
 ```typescript
-setToBladeburnerAction(
-    sleeveNumber: number,
-    action: BladeburnerActionTypeForSleeve | `${BladeburnerActionTypeForSleeve}`,
-    contract?: BladeburnerContractName,
-  ): boolean;
+setToBladeburnerAction(sleeveNumber: number, action: string, contract?: string): boolean;
 ```
 
 ## Parameters
@@ -21,8 +17,8 @@ setToBladeburnerAction(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  sleeveNumber | number | Index of the sleeve to perform a Bladeburner action. |
-|  action | [BladeburnerActionTypeForSleeve](./bitburner.bladeburneractiontypeforsleeve.md) \| \`${[BladeburnerActionTypeForSleeve](./bitburner.bladeburneractiontypeforsleeve.md)<!-- -->}\` | Name of the action to be performed. |
-|  contract | [BladeburnerContractName](./bitburner.bladeburnercontractname.md) | _(Optional)_ Name of the contract if applicable. |
+|  action | string | Name of the action to be performed. |
+|  contract | string | _(Optional)_ Name of the contract if applicable. |
 
 **Returns:**
 

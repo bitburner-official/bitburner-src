@@ -1,77 +1,77 @@
-import { BladeburnerMultName, BladeburnerSkillName } from "@enums";
+import { BladeMultName, BladeSkillName } from "@enums";
 import { Skill } from "../Skill";
 
-export const Skills: Record<BladeburnerSkillName, Skill> = {
-  [BladeburnerSkillName.BladesIntuition]: new Skill({
-    name: BladeburnerSkillName.BladesIntuition,
+export const Skills: Record<BladeSkillName, Skill> = {
+  [BladeSkillName.bladesIntuition]: new Skill({
+    name: BladeSkillName.bladesIntuition,
     desc: "Each level of this skill increases your success chance for all Contracts, Operations, and BlackOps by 3%",
     baseCost: 3,
     costInc: 2.1,
-    mults: { [BladeburnerMultName.SuccessChanceAll]: 3 },
+    mults: { [BladeMultName.successChanceAll]: 3 },
   }),
-  [BladeburnerSkillName.Cloak]: new Skill({
-    name: BladeburnerSkillName.Cloak,
+  [BladeSkillName.cloak]: new Skill({
+    name: BladeSkillName.cloak,
     desc:
       "Each level of this skill increases your " +
       "success chance in stealth-related Contracts, Operations, and BlackOps by 5.5%",
     baseCost: 2,
     costInc: 1.1,
-    mults: { [BladeburnerMultName.SuccessChanceStealth]: 5.5 },
+    mults: { [BladeMultName.successChanceStealth]: 5.5 },
   }),
-  [BladeburnerSkillName.ShortCircuit]: new Skill({
-    name: BladeburnerSkillName.ShortCircuit,
+  [BladeSkillName.shortCircuit]: new Skill({
+    name: BladeSkillName.shortCircuit,
     desc:
       "Each level of this skill increases your success chance " +
       "in Contracts, Operations, and BlackOps that involve retirement by 5.5%",
     baseCost: 2,
     costInc: 2.1,
-    mults: { [BladeburnerMultName.SuccessChanceKill]: 5.5 },
+    mults: { [BladeMultName.successChanceKill]: 5.5 },
   }),
-  [BladeburnerSkillName.DigitalObserver]: new Skill({
-    name: BladeburnerSkillName.DigitalObserver,
+  [BladeSkillName.digitalObserver]: new Skill({
+    name: BladeSkillName.digitalObserver,
     desc: "Each level of this skill increases your success chance in all Operations and BlackOps by 4%",
     baseCost: 2,
     costInc: 2.1,
-    mults: { [BladeburnerMultName.SuccessChanceOperation]: 4 },
+    mults: { [BladeMultName.successChanceOperation]: 4 },
   }),
-  [BladeburnerSkillName.Tracer]: new Skill({
-    name: BladeburnerSkillName.Tracer,
+  [BladeSkillName.tracer]: new Skill({
+    name: BladeSkillName.tracer,
     desc: "Each level of this skill increases your success chance in all Contracts by 4%",
     baseCost: 2,
     costInc: 2.1,
-    mults: { [BladeburnerMultName.SuccessChanceContract]: 4 },
+    mults: { [BladeMultName.successChanceContract]: 4 },
   }),
-  [BladeburnerSkillName.Overclock]: new Skill({
-    name: BladeburnerSkillName.Overclock,
+  [BladeSkillName.overclock]: new Skill({
+    name: BladeSkillName.overclock,
     desc:
       "Each level of this skill decreases the time it takes " +
       "to attempt a Contract, Operation, and BlackOp by 1% (Max Level: 90)",
     baseCost: 3,
     costInc: 1.4,
     maxLvl: 90,
-    mults: { [BladeburnerMultName.ActionTime]: -1 },
+    mults: { [BladeMultName.actionTime]: -1 },
   }),
-  [BladeburnerSkillName.Reaper]: new Skill({
-    name: BladeburnerSkillName.Reaper,
+  [BladeSkillName.reaper]: new Skill({
+    name: BladeSkillName.reaper,
     desc: "Each level of this skill increases your effective combat stats for Bladeburner actions by 2%",
     baseCost: 2,
     costInc: 2.1,
     mults: {
-      [BladeburnerMultName.EffStr]: 2,
-      [BladeburnerMultName.EffDef]: 2,
-      [BladeburnerMultName.EffDex]: 2,
-      [BladeburnerMultName.EffAgi]: 2,
+      [BladeMultName.effStr]: 2,
+      [BladeMultName.effDef]: 2,
+      [BladeMultName.effDex]: 2,
+      [BladeMultName.effAgi]: 2,
     },
   }),
-  [BladeburnerSkillName.EvasiveSystem]: new Skill({
-    name: BladeburnerSkillName.EvasiveSystem,
+  [BladeSkillName.evasiveSystem]: new Skill({
+    name: BladeSkillName.evasiveSystem,
     desc: "Each level of this skill increases your effective dexterity and agility for Bladeburner actions by 4%",
     baseCost: 2,
     costInc: 2.1,
-    mults: { [BladeburnerMultName.EffDex]: 4, [BladeburnerMultName.EffAgi]: 4 },
+    mults: { [BladeMultName.effDex]: 4, [BladeMultName.effAgi]: 4 },
   }),
-  [BladeburnerSkillName.Datamancer]: new Skill({
-    name: BladeburnerSkillName.Datamancer,
+  [BladeSkillName.datamancer]: new Skill({
+    name: BladeSkillName.datamancer,
     desc:
       "Each level of this skill increases your effectiveness in " +
       "synthoid population analysis and investigation by 5%. " +
@@ -79,27 +79,27 @@ export const Skills: Record<BladeburnerSkillName, Skill> = {
       "the accuracy of your synthoid population/community estimates.",
     baseCost: 3,
     costInc: 1,
-    mults: { [BladeburnerMultName.SuccessChanceEstimate]: 5 },
+    mults: { [BladeMultName.successChanceEstimate]: 5 },
   }),
-  [BladeburnerSkillName.CybersEdge]: new Skill({
-    name: BladeburnerSkillName.CybersEdge,
+  [BladeSkillName.cybersEdge]: new Skill({
+    name: BladeSkillName.cybersEdge,
     desc: "Each level of this skill increases your max stamina by 2%",
     baseCost: 1,
     costInc: 3,
-    mults: { [BladeburnerMultName.Stamina]: 2 },
+    mults: { [BladeMultName.stamina]: 2 },
   }),
-  [BladeburnerSkillName.HandsOfMidas]: new Skill({
-    name: BladeburnerSkillName.HandsOfMidas,
+  [BladeSkillName.handsOfMidas]: new Skill({
+    name: BladeSkillName.handsOfMidas,
     desc: "Each level of this skill increases the amount of money you receive from Contracts by 10%",
     baseCost: 2,
     costInc: 2.5,
-    mults: { [BladeburnerMultName.Money]: 10 },
+    mults: { [BladeMultName.money]: 10 },
   }),
-  [BladeburnerSkillName.Hyperdrive]: new Skill({
-    name: BladeburnerSkillName.Hyperdrive,
+  [BladeSkillName.hyperdrive]: new Skill({
+    name: BladeSkillName.hyperdrive,
     desc: "Each level of this skill increases the experience earned from Contracts, Operations, and BlackOps by 10%",
     baseCost: 1,
     costInc: 2.5,
-    mults: { [BladeburnerMultName.ExpGain]: 10 },
+    mults: { [BladeMultName.expGain]: 10 },
   }),
 };

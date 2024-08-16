@@ -1,17 +1,17 @@
-import { BladeburnerGeneralActionName } from "@enums";
+import { BladeGeneralActionName } from "@enums";
 import { GeneralAction } from "../Actions/GeneralAction";
 import { BladeburnerConstants } from "./Constants";
 
-export const GeneralActions: Record<BladeburnerGeneralActionName, GeneralAction> = {
-  [BladeburnerGeneralActionName.Training]: new GeneralAction({
-    name: BladeburnerGeneralActionName.Training,
+export const GeneralActions: Record<BladeGeneralActionName, GeneralAction> = {
+  [BladeGeneralActionName.training]: new GeneralAction({
+    name: BladeGeneralActionName.training,
     getActionTime: () => 30,
     desc:
       "Improve your abilities at the Bladeburner unit's specialized training center. Doing this gives experience for " +
       "all combat stats and also increases your max stamina.",
   }),
-  [BladeburnerGeneralActionName.FieldAnalysis]: new GeneralAction({
-    name: BladeburnerGeneralActionName.FieldAnalysis,
+  [BladeGeneralActionName.fieldAnalysis]: new GeneralAction({
+    name: BladeGeneralActionName.fieldAnalysis,
     getActionTime: () => 30,
     desc:
       "Mine and analyze Synthoid-related data. This improves the Bladeburner unit's intelligence on Synthoid locations " +
@@ -19,8 +19,8 @@ export const GeneralActions: Record<BladeburnerGeneralActionName, GeneralAction>
       "current city.\n\n" +
       "Does NOT require stamina.",
   }),
-  [BladeburnerGeneralActionName.Recruitment]: new GeneralAction({
-    name: BladeburnerGeneralActionName.Recruitment,
+  [BladeGeneralActionName.recruitment]: new GeneralAction({
+    name: BladeGeneralActionName.recruitment,
     getActionTime: function (bladeburner, person) {
       const effCharisma = bladeburner.getEffectiveSkillLevel(person, "charisma");
       const charismaFactor = Math.pow(effCharisma, 0.81) + effCharisma / 90;
@@ -33,23 +33,23 @@ export const GeneralActions: Record<BladeburnerGeneralActionName, GeneralAction>
       "Attempt to recruit members for your Bladeburner team. These members can help you conduct operations.\n\n" +
       "Does NOT require stamina.",
   }),
-  [BladeburnerGeneralActionName.Diplomacy]: new GeneralAction({
-    name: BladeburnerGeneralActionName.Diplomacy,
+  [BladeGeneralActionName.diplomacy]: new GeneralAction({
+    name: BladeGeneralActionName.diplomacy,
     getActionTime: () => 60,
     desc:
       "Improve diplomatic relations with the Synthoid population. Completing this action will reduce the Chaos level in " +
       "your current city.\n\n" +
       "Does NOT require stamina.",
   }),
-  [BladeburnerGeneralActionName.HyperbolicRegen]: new GeneralAction({
-    name: BladeburnerGeneralActionName.HyperbolicRegen,
+  [BladeGeneralActionName.hyperbolicRegen]: new GeneralAction({
+    name: BladeGeneralActionName.hyperbolicRegen,
     getActionTime: () => 60,
     desc:
       "Enter cryogenic stasis using the Bladeburner division's hi-tech Regeneration Chamber. This will slowly heal your " +
       "wounds and slightly increase your stamina.",
   }),
-  [BladeburnerGeneralActionName.InciteViolence]: new GeneralAction({
-    name: BladeburnerGeneralActionName.InciteViolence,
+  [BladeGeneralActionName.inciteViolence]: new GeneralAction({
+    name: BladeGeneralActionName.inciteViolence,
     getActionTime: () => 60,
     desc:
       "Purposefully stir trouble in the synthoid community in order to gain a political edge. This will generate " +

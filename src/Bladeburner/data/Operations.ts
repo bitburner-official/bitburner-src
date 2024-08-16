@@ -1,13 +1,13 @@
-import { BladeburnerOperationName } from "@enums";
+import { BladeOperationName } from "@enums";
 import { Operation } from "../Actions/Operation";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { LevelableActionClass } from "../Actions/LevelableAction";
 import { assertLoadingType } from "../../utils/TypeAssertion";
 
-export function createOperations(): Record<BladeburnerOperationName, Operation> {
+export function createOperations(): Record<BladeOperationName, Operation> {
   return {
-    [BladeburnerOperationName.Investigation]: new Operation({
-      name: BladeburnerOperationName.Investigation,
+    [BladeOperationName.investigation]: new Operation({
+      name: BladeOperationName.investigation,
       desc:
         "As a field agent, investigate and identify Synthoid populations, movements, and operations.\n\n" +
         "Successful Investigation ops will increase the accuracy of your synthoid data.\n\n" +
@@ -39,8 +39,8 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       growthFunction: () => getRandomIntInclusive(10, 40) / 10,
       maxCount: 100,
     }),
-    [BladeburnerOperationName.Undercover]: new Operation({
-      name: BladeburnerOperationName.Undercover,
+    [BladeOperationName.undercover]: new Operation({
+      name: BladeOperationName.undercover,
       desc:
         "Conduct undercover operations to identify hidden and underground Synthoid communities and organizations.\n\n" +
         "Successful Undercover ops will increase the accuracy of your synthoid data.",
@@ -72,8 +72,8 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       growthFunction: () => getRandomIntInclusive(10, 40) / 10,
       maxCount: 100,
     }),
-    [BladeburnerOperationName.Sting]: new Operation({
-      name: BladeburnerOperationName.Sting,
+    [BladeOperationName.sting]: new Operation({
+      name: BladeOperationName.sting,
       desc: "Conduct a sting operation to bait and capture particularly notorious Synthoid criminals.",
       baseDifficulty: 650,
       difficultyFac: 1.04,
@@ -102,8 +102,8 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       isStealth: true,
       growthFunction: () => getRandomIntInclusive(3, 40) / 10,
     }),
-    [BladeburnerOperationName.Raid]: new Operation({
-      name: BladeburnerOperationName.Raid,
+    [BladeOperationName.raid]: new Operation({
+      name: BladeOperationName.raid,
       desc:
         "Lead an assault on a known Synthoid community. Note that there must be an existing Synthoid community in your " +
         "current city in order for this Operation to be successful.",
@@ -138,8 +138,8 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
         return LevelableActionClass.prototype.getAvailability.call(this, bladeburner);
       },
     }),
-    [BladeburnerOperationName.StealthRetirement]: new Operation({
-      name: BladeburnerOperationName.StealthRetirement,
+    [BladeOperationName.stealthRetirement]: new Operation({
+      name: BladeOperationName.stealthRetirement,
       desc:
         "Lead a covert operation to retire Synthoids. The objective is to complete the task without drawing any " +
         "attention. Stealth and discretion are key.",
@@ -171,8 +171,8 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       isKill: true,
       growthFunction: () => getRandomIntInclusive(1, 20) / 10,
     }),
-    [BladeburnerOperationName.Assassination]: new Operation({
-      name: BladeburnerOperationName.Assassination,
+    [BladeOperationName.assassination]: new Operation({
+      name: BladeOperationName.assassination,
       desc:
         "Assassinate Synthoids that have been identified as important, high-profile social and political leaders in the " +
         "Synthoid communities.",
@@ -207,12 +207,12 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
   };
 }
 
-export function loadOperationsData(data: unknown, operations: Record<BladeburnerOperationName, Operation>) {
+export function loadOperationsData(data: unknown, operations: Record<BladeOperationName, Operation>) {
   // loading data as "unknown" and typechecking it down is probably not necessary
   // but this will prevent crashes even with malformed savedata
   if (!data || typeof data !== "object") return;
-  assertLoadingType<Record<BladeburnerOperationName, unknown>>(data);
-  for (const operationName of Object.values(BladeburnerOperationName)) {
+  assertLoadingType<Record<BladeOperationName, unknown>>(data);
+  for (const operationName of Object.values(BladeOperationName)) {
     const loadedOperation = data[operationName];
     if (!(loadedOperation instanceof Operation)) continue;
     operations[operationName].loadData(loadedOperation);

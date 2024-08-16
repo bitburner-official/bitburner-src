@@ -25,8 +25,8 @@ import {
   UniversityClassType,
   CompanyName,
   FactionName,
-  BladeburnerActionType,
-  BladeburnerGeneralActionName,
+  BladeActionType,
+  BladeGeneralActionName,
   AugmentationName,
 } from "@enums";
 
@@ -482,7 +482,7 @@ export class Sleeve extends Person implements SleevePerson {
       case "Training":
         this.startWork(
           new SleeveBladeburnerWork({
-            actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.Training },
+            actionId: { type: BladeActionType.general, name: BladeGeneralActionName.training },
           }),
         );
         return true;
@@ -490,28 +490,28 @@ export class Sleeve extends Person implements SleevePerson {
       case "Field Analysis":
         this.startWork(
           new SleeveBladeburnerWork({
-            actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.FieldAnalysis },
+            actionId: { type: BladeActionType.general, name: BladeGeneralActionName.fieldAnalysis },
           }),
         );
         return true;
       case "Recruitment":
         this.startWork(
           new SleeveBladeburnerWork({
-            actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.Recruitment },
+            actionId: { type: BladeActionType.general, name: BladeGeneralActionName.recruitment },
           }),
         );
         return true;
       case "Diplomacy":
         this.startWork(
           new SleeveBladeburnerWork({
-            actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.Diplomacy },
+            actionId: { type: BladeActionType.general, name: BladeGeneralActionName.diplomacy },
           }),
         );
         return true;
       case "Hyperbolic Regeneration Chamber":
         this.startWork(
           new SleeveBladeburnerWork({
-            actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.HyperbolicRegen },
+            actionId: { type: BladeActionType.general, name: BladeGeneralActionName.hyperbolicRegen },
           }),
         );
         return true;
@@ -523,10 +523,8 @@ export class Sleeve extends Person implements SleevePerson {
         this.startWork(new SleeveSupportWork());
         return true;
       case "Take on contracts":
-        if (!getEnumHelper("BladeburnerContractName").isMember(contract)) return false;
-        this.startWork(
-          new SleeveBladeburnerWork({ actionId: { type: BladeburnerActionType.Contract, name: contract } }),
-        );
+        if (!getEnumHelper("BladeContractName").isMember(contract)) return false;
+        this.startWork(new SleeveBladeburnerWork({ actionId: { type: BladeActionType.contract, name: contract } }));
         return true;
     }
     return false;

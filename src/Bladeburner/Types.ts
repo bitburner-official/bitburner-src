@@ -1,10 +1,10 @@
 import type { BlackOperation, Contract, GeneralAction, Operation } from "./Actions";
 import type {
-  BladeburnerActionType,
-  BladeburnerBlackOpName,
-  BladeburnerContractName,
-  BladeburnerOperationName,
-  BladeburnerGeneralActionName,
+  BladeActionType,
+  BladeBlackOpName,
+  BladeContractName,
+  BladeOperationName,
+  BladeGeneralActionName,
 } from "@enums";
 
 export interface SuccessChanceParams {
@@ -23,9 +23,9 @@ export type Attempt<T extends object = object> = AttemptSuccess<T> | AttemptFail
 export type Action = Contract | Operation | BlackOperation | GeneralAction;
 
 export type ActionIdentifier =
-  | { type: BladeburnerActionType.BlackOp; name: BladeburnerBlackOpName }
-  | { type: BladeburnerActionType.Contract; name: BladeburnerContractName }
-  | { type: BladeburnerActionType.Operation; name: BladeburnerOperationName }
-  | { type: BladeburnerActionType.General; name: BladeburnerGeneralActionName };
+  | { type: BladeActionType.blackOp; name: BladeBlackOpName }
+  | { type: BladeActionType.contract; name: BladeContractName }
+  | { type: BladeActionType.operation; name: BladeOperationName }
+  | { type: BladeActionType.general; name: BladeGeneralActionName };
 
 export type LevelableAction = Contract | Operation;
