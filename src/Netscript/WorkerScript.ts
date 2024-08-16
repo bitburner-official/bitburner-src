@@ -131,7 +131,7 @@ export class WorkerScript {
   }
 
   shouldLog(fn: string): boolean {
-    return this.disableLogs[fn] == null;
+    return !(this.disableLogs.ALL || this.disableLogs[fn]);
   }
 
   log(func: string, txt: () => string): void {
