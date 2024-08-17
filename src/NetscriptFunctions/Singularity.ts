@@ -968,7 +968,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(ctx, () => `You can't donate to '${facName}' because you are managing a gang for it`);
         return false;
       }
-      if (faction.name === FactionName.ChurchOfTheMachineGod || faction.name === FactionName.Bladeburners || faction.name === FactionName.ShadowsOfAnarchy) {
+      if (
+        faction.name === FactionName.ChurchOfTheMachineGod ||
+        faction.name === FactionName.Bladeburners ||
+        faction.name === FactionName.ShadowsOfAnarchy
+      ) {
         helpers.log(ctx, () => `You can't donate to '${facName}' because they do not accept donations`);
         return false;
       }
