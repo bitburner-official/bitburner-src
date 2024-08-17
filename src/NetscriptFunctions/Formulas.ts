@@ -431,7 +431,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
     bladeburner: {
       skillMaxUpgradeCount: (ctx) => (_name, _level, _skillPoints) => {
         checkFormulasAccess(ctx);
-        const name = getEnumHelper("BladeSkillName").nsGetMember(ctx, _name, "name");
+        const name = getEnumHelper("BladeburnerSkillName").nsGetMember(ctx, _name, "name");
         const level = helpers.number(ctx, "level", _level);
         if (level < 0) {
           throw new Error(`Level must be a non-negative number.`);

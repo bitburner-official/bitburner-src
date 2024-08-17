@@ -1,12 +1,12 @@
 import { currentNodeMults } from "../../../src/BitNode/BitNodeMultipliers";
 import { Skill } from "../../../src/Bladeburner/Skill";
-import { BladeSkillName } from "../../../src/Enums";
+import { BladeburnerSkillName } from "../../../src/Enums";
 import { PositiveInteger, isPositiveInteger, isPositiveNumber } from "../../../src/types";
 import { getRandomArbitrary } from "../../../src/utils/helpers/getRandomArbitrary";
 import { getRandomIntInclusive } from "../../../src/utils/helpers/getRandomIntInclusive";
 
 const skill = new Skill({
-  name: BladeSkillName.hyperdrive,
+  name: BladeburnerSkillName.Hyperdrive,
   desc: "",
   baseCost: 1,
   costInc: 1,
