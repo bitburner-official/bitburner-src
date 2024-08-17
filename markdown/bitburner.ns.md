@@ -63,8 +63,8 @@ export async function main(ns) {
 |  [clearPort(portNumber)](./bitburner.ns.clearport.md) | Clear data from a port. |
 |  [closeTail(pid)](./bitburner.ns.closetail.md) | Close the tail window of a script. |
 |  [deleteServer(host)](./bitburner.ns.deleteserver.md) | Delete a purchased server. |
-|  [disableLog(fn)](./bitburner.ns.disablelog.md) | Disables logging for the given function. |
-|  [enableLog(fn)](./bitburner.ns.enablelog.md) | Enable logging for a certain function. |
+|  [disableLog(fn)](./bitburner.ns.disablelog.md) | Disables logging for the given NS function. |
+|  [enableLog(fn)](./bitburner.ns.enablelog.md) | Enables logging for the given NS function. |
 |  [exec(script, hostname, threadOrOptions, args)](./bitburner.ns.exec.md) | Start another script on any server. |
 |  [exit()](./bitburner.ns.exit.md) | Terminates the current script immediately. |
 |  [fileExists(filename, host)](./bitburner.ns.fileexists.md) | Check if a file exists. |
@@ -73,7 +73,7 @@ export async function main(ns) {
 |  [formatPercent(n, fractionalDigits, suffixStart)](./bitburner.ns.formatpercent.md) | Format a number as a percentage. |
 |  [formatRam(n, fractionalDigits)](./bitburner.ns.formatram.md) | Format a number as an amount of ram. |
 |  [ftpcrack(host)](./bitburner.ns.ftpcrack.md) | Runs FTPCrack.exe on a server. |
-|  [getBitNodeMultipliers(n, lvl)](./bitburner.ns.getbitnodemultipliers.md) | Get the current Bitnode multipliers. |
+|  [getBitNodeMultipliers(n, lvl)](./bitburner.ns.getbitnodemultipliers.md) | Get the current BitNode multipliers. |
 |  [getFavorToDonate()](./bitburner.ns.getfavortodonate.md) | Returns the amount of Faction favor required to be able to donate to a faction. |
 |  [getFunctionRamCost(name)](./bitburner.ns.getfunctionramcost.md) | Get the ram cost of a netscript function. |
 |  [getGrowTime(host)](./bitburner.ns.getgrowtime.md) | Get the execution time of a grow() call. |
@@ -125,11 +125,11 @@ export async function main(ns) {
 |  [hasRootAccess(host)](./bitburner.ns.hasrootaccess.md) | Check if you have root access on a server. |
 |  [hasTorRouter()](./bitburner.ns.hastorrouter.md) | Returns whether the player has access to the darkweb. |
 |  [httpworm(host)](./bitburner.ns.httpworm.md) | Runs HTTPWorm.exe on a server. |
-|  [isLogEnabled(fn)](./bitburner.ns.islogenabled.md) | Checks the status of the logging for the given function. |
+|  [isLogEnabled(fn)](./bitburner.ns.islogenabled.md) | Checks the status of the logging for the given NS function. |
 |  [isRunning(script, host, args)](./bitburner.ns.isrunning.md) | Check if a script is running. |
 |  [kill(pid)](./bitburner.ns.kill.md) | Terminate the script with the provided PID. |
 |  [kill(filename, hostname, args)](./bitburner.ns.kill_1.md) | Terminate the script(s) with the provided filename, hostname, and script arguments. |
-|  [killall(host, safetyguard)](./bitburner.ns.killall.md) | Terminate all scripts on a server. |
+|  [killall(host, safetyGuard)](./bitburner.ns.killall.md) | Terminate all scripts on a server. |
 |  [ls(host, substring)](./bitburner.ns.ls.md) | List files on a server. |
 |  [moveTail(x, y, pid)](./bitburner.ns.movetail.md) | Move a tail window. |
 |  [mv(host, source, destination)](./bitburner.ns.mv.md) | Move a file on the target server. |
@@ -143,6 +143,7 @@ export async function main(ns) {
 |  [prompt(txt, options)](./bitburner.ns.prompt.md) | Prompt the player with an input modal. |
 |  [ps(host)](./bitburner.ns.ps.md) | List running scripts on a server. |
 |  [purchaseServer(hostname, ram)](./bitburner.ns.purchaseserver.md) | Purchase a server. |
+|  [ramOverride(ram)](./bitburner.ns.ramoverride.md) | Change the current static RAM allocation of the script. |
 |  [read(filename)](./bitburner.ns.read.md) | Read content of a file. |
 |  [readPort(portNumber)](./bitburner.ns.readport.md) | Read data from a port. |
 |  [relaysmtp(host)](./bitburner.ns.relaysmtp.md) | Runs relaySMTP.exe on a server. |

@@ -11,6 +11,7 @@ import { StatsRow } from "../../ui/React/StatsRow";
 import { defaultMultipliers, getBitNodeMultipliers } from "../BitNode";
 import { BitNodeMultipliers } from "../BitNodeMultipliers";
 import { PartialRecord, getRecordEntries } from "../../Types/Record";
+import { canAccessBitNodeFeature } from "../BitNodeUtils";
 
 interface IProps {
   n: number;
@@ -23,7 +24,7 @@ export function BitnodeMultiplierDescription({ n, level }: IProps): React.ReactE
 
   return (
     <Box component={Paper} sx={{ mt: 1, p: 1 }}>
-      <ListItemButton disableGutters onClick={() => setOpen((old) => !old)}>
+      <ListItemButton disableGutters onClick={() => setOpen((old) => !old)} sx={{ padding: "4px 8px" }}>
         <ListItemText primary={<Typography variant="h6">Bitnode Multipliers</Typography>} />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>
@@ -39,8 +40,8 @@ export const BitNodeMultipliersDisplay = ({ n, level }: IProps): React.ReactElem
   // If not, then we have to assume that we want the next level up from the
   // current node's source file, so we get the min of that, the SF's max level,
   // or if it's BN12, ∞
-  const maxSfLevel = n === 12 ? Infinity : 3;
-  const mults = getBitNodeMultipliers(n, level ?? Math.min(Player.sourceFileLvl(n) + 1, maxSfLevel));
+  const maxSfLevel = n === 12 ? Number.MAX_VALUE : 3;
+  const mults = getBitNodeMultipliers(n, level ?? Math.min(Player.activeSourceFileLvl(n) + 1, maxSfLevel));
 
   return (
     <Box sx={{ columnCount: 2, columnGap: 1, mb: n === 1 ? 0 : -2 }}>
@@ -140,6 +141,10 @@ function CompanyMults({ mults }: IMultsProps): React.ReactElement {
       name: "Work Money",
       color: Settings.theme.money,
     },
+    CompanyWorkRepGain: {
+      name: "Work Reputation",
+      color: Settings.theme.rep,
+    },
     CompanyWorkExpGain: { name: "Work Exp" },
   };
 
@@ -176,11 +181,13 @@ function CrimeMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
     CrimeExpGain: {
       name: "Crime Exp",
-      color: Settings.theme.combat,
     },
     CrimeMoney: {
       name: "Crime Money",
-      color: Settings.theme.combat,
+      color: Settings.theme.money,
+    },
+    CrimeSuccessRate: {
+      name: "Crime Success Rate",
     },
   };
 
@@ -224,9 +231,13 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
       name: "Hacking Exp",
       color: Settings.theme.hack,
     },
+    HackingSpeedMultiplier: {
+      name: "Hacking Speed",
+      color: Settings.theme.hack,
+    },
     ServerGrowthRate: { name: "Server Growth Rate" },
-    ServerMaxMoney: { name: "Server Max Money" },
-    ServerStartingMoney: { name: "Server Starting Money" },
+    ServerMaxMoney: { name: "Server Max Money", color: Settings.theme.money },
+    ServerStartingMoney: { name: "Server Starting Money", color: Settings.theme.money },
     ServerStartingSecurity: { name: "Server Starting Security" },
     ServerWeakenRate: { name: "Server Weaken Rate" },
     ManualHackMoney: {
@@ -314,7 +325,7 @@ function StanekMults({ mults }: IMultsProps): React.ReactElement {
 }
 
 function GangMults({ mults }: IMultsProps): React.ReactElement {
-  if (Player.bitNodeN !== 2 && Player.sourceFileLvl(2) <= 0) return <></>;
+  if (!canAccessBitNodeFeature(2)) return <></>;
 
   const rows: IBNMultRows = {
     GangSoftcap: {

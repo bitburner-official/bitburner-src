@@ -26,15 +26,7 @@ import {
   calculateGrowTime,
   calculateWeakenTime,
 } from "../Hacking";
-import {
-  CityName,
-  CompletedProgramName,
-  FactionWorkType,
-  GymType,
-  JobName,
-  LocationName,
-  UniversityClassType,
-} from "@enums";
+import { CityName, CompletedProgramName, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
 import { Formulas as IFormulas, Player as IPlayer, Person as IPerson } from "@nsdefs";
 import {
   calculateRespectGain,
@@ -59,6 +51,7 @@ import { findEnumMember } from "../utils/helpers/enum";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { findCrime } from "../Crime/CrimeHelpers";
+import { Skills } from "../Bladeburner/data/Skills";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
@@ -427,14 +420,28 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       companyGains: (ctx) => (_person, _companyName, _positionName, _favor) => {
         checkFormulasAccess(ctx);
         const person = helpers.person(ctx, _person);
-        const positionName = findEnumMember(JobName, helpers.string(ctx, "_positionName", _positionName));
-        if (!positionName) throw new Error(`Invalid company position: ${_positionName}`);
+        const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
+        const company = Companies[companyName];
+        const positionName = getEnumHelper("JobName").nsGetMember(ctx, _positionName);
         const position = CompanyPositions[positionName];
-        const companyName = helpers.string(ctx, "_companyName", _companyName);
-        const company = Object.values(Companies).find((c) => c.name === companyName);
-        if (!company) throw new Error(`Invalid company name: ${companyName}`);
         const favor = helpers.number(ctx, "favor", _favor);
         return calculateCompanyWorkStats(person, company, position, favor);
+      },
+    },
+    bladeburner: {
+      skillMaxUpgradeCount: (ctx) => (_name, _level, _skillPoints) => {
+        checkFormulasAccess(ctx);
+        const name = getEnumHelper("BladeSkillName").nsGetMember(ctx, _name, "name");
+        const level = helpers.number(ctx, "level", _level);
+        if (level < 0) {
+          throw new Error(`Level must be a non-negative number.`);
+        }
+        const skillPoints = helpers.positiveNumber(ctx, "skillPoints", _skillPoints);
+        const skill = Skills[name];
+        if (level >= skill.maxLvl) {
+          return 0;
+        }
+        return skill.calculateMaxUpgradeCount(level, skillPoints);
       },
     },
   };

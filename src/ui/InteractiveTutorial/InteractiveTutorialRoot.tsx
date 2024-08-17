@@ -318,7 +318,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{"[home /]> nano"}</Typography>
 
-          <Typography>Scripts must end with the .js extension. Let's make a script now by entering </Typography>
+          <Typography>
+            Scripts must end with a script extension (.js, .jsx, .ts, .tsx, .script). Let's make a script now by
+            entering
+          </Typography>
           <Typography classes={{ root: classes.textfield }}>{`[home /]> nano ${tutorialScriptName}`}</Typography>
         </>
       ),

@@ -15,13 +15,30 @@ import { helpers } from "../Netscript/NetscriptHelpers";
 import { getAugCost } from "../Augmentation/AugmentationHelpers";
 import { Factions } from "../Faction/Factions";
 import { SleeveWorkType } from "../PersonObjects/Sleeve/Work/Work";
+import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
+
+export const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
+  if (Player.bitNodeN !== 10 && !Player.sourceFileLvl(10)) {
+    throw helpers.errorMessage(
+      ctx,
+      "You do not currently have access to the Sleeve API. This is either because you are not in BitNode-10 or because you do not have Source-File 10",
+    );
+  }
+};
+
+export const checkSleeveNumber = function (ctx: NetscriptContext, sleeveNumber: number) {
+  if (sleeveNumber >= Player.sleeves.length || sleeveNumber < 0) {
+    const msg = `Invalid sleeve number: ${sleeveNumber}`;
+    throw helpers.errorMessage(ctx, msg);
+  }
+};
 
 export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
   const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
-    if (Player.bitNodeN !== 10 && !Player.sourceFileLvl(10)) {
+    if (!canAccessBitNodeFeature(10)) {
       throw helpers.errorMessage(
         ctx,
-        "You do not currently have access to the Sleeve API. This is either because you are not in BitNode-10 or because you do not have Source-File 10",
+        "You do not have access to the Sleeve API. This is either because you are not in BitNode-10 or because you do not have Source-File 10.",
       );
     }
   };
@@ -79,7 +96,11 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
-      return Player.sleeves[sleeveNumber].travel(cityName);
+      if (!Player.sleeves[sleeveNumber].travel(cityName)) {
+        helpers.log(ctx, () => "Not enough money to travel.");
+        return false;
+      }
+      return true;
     },
     setToCompanyWork: (ctx) => (_sleeveNumber, _companyName) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);

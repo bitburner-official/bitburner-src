@@ -129,7 +129,7 @@ export class CodingContract {
   }
 
   getDescription(): string {
-    return CodingContractTypes[this.type].desc(this.data);
+    return CodingContractTypes[this.type].desc(this.data).replaceAll("&nbsp;", " ");
   }
 
   getDifficulty(): number {

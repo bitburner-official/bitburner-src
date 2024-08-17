@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 
 import Button from "@mui/material/Button";
 import { MD } from "../../ui/MD/MD";
 
-import { getPage } from "../root";
-import { Navigator, useHistory } from "../../ui/React/Documentation";
+import { Navigator, windowTopPositionOfPages, useHistory } from "../../ui/React/Documentation";
 import { CONSTANTS } from "../../Constants";
 import { asFilePath, resolveFilePath } from "../../Paths/FilePath";
+import Box from "@mui/material/Box";
+import { Settings } from "../../Settings/Settings";
+import { Router } from "../../ui/GameRoot";
+import { Page } from "../../ui/Router";
 
 export function DocumentationRoot({ docPage }: { docPage?: string }): React.ReactElement {
   const history = useHistory();
@@ -15,7 +18,6 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
     history.push(asFilePath(deepLink));
     setDeepLink(undefined);
   }
-  const page = getPage(history.page);
   const navigator = {
     navigate(relPath: string, external: boolean) {
       const newPath = resolveFilePath("./" + relPath, history.page);
@@ -30,19 +32,30 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
         return;
       }
       history.push(newPath);
-
-      // Reset scroll to the top of the page.
-      window.scrollTo(0, 0);
     },
   };
 
+  // We need to use "useLayoutEffect" instead of "useEffect". "useLayoutEffect" is fired before the browser repaints the
+  // screen.
+  useLayoutEffect(() => {
+    return () => {
+      if (Router.page() !== Page.Documentation) {
+        windowTopPositionOfPages.set(history.page, window.scrollY);
+      }
+    };
+  }, [history]);
+
   return (
     <>
-      <Button onClick={() => history.pop()}>Back</Button>
-      <Button onClick={() => history.home()}>Home</Button>
-      <Navigator.Provider value={navigator}>
-        <MD md={page + ""} />
-      </Navigator.Provider>
+      <Box position="fixed" top={0} zIndex={1} width="100%" paddingTop="8px" bgcolor={Settings.theme.backgroundprimary}>
+        <Button onClick={() => history.pop()}>Back</Button>
+        <Button onClick={() => history.home()}>Home</Button>
+      </Box>
+      <Box paddingTop="50px">
+        <Navigator.Provider value={navigator}>
+          <MD pageFilePath={history.page} top={windowTopPositionOfPages.get(history.page) ?? 0} />
+        </Navigator.Provider>
+      </Box>
     </>
   );
 }

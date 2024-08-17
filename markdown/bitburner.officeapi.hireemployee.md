@@ -26,3 +26,7 @@ boolean
 
 True if an employee was hired, false otherwise
 
+## Remarks
+
+RAM cost: 20 GB
+

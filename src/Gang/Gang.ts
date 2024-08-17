@@ -27,6 +27,14 @@ import { PowerMultiplier } from "./data/power";
 import { FactionName } from "@enums";
 import { CONSTANTS } from "../Constants";
 
+export enum RecruitmentResult {
+  Success = "Success",
+  EmptyName = "Member name cannot be an empty string",
+  DuplicatedName = "This name was used",
+  ExceedMaxNumber = "Your gang recruited maximum number of members",
+  NotEnoughRespect = "Your gang does not have enough respect to recruit more members",
+}
+
 export const GangPromise: PromisePair<number> = { promise: null, resolve: null };
 
 export class Gang {
@@ -154,9 +162,11 @@ export class Gang {
       const newWanted = oldWanted + wantedLevelGainPerCycle * numCycles;
       // Allows recovery when wanted / respect ratio is too high
       this.wanted = newWanted * (1 - justice * 0.001);
-      this.wantedGainRate -= newWanted - this.wanted;
+      this.wantedGainRate = (this.wanted - oldWanted) / numCycles;
       // Prevent overflow
-      if (this.wanted < 1 || (wantedLevelGainPerCycle <= 0 && this.wanted > oldWanted)) this.wanted = 1;
+      if (this.wanted < 1 || (wantedLevelGainPerCycle <= 0 && this.wanted > oldWanted)) {
+        this.wanted = 1;
+      }
     }
     Player.gainMoney(moneyGainPerCycle * numCycles, "gang");
   }
@@ -299,9 +309,14 @@ export class Gang {
     }
   }
 
-  canRecruitMember(): boolean {
-    if (this.members.length >= GangConstants.MaximumGangMembers) return false;
-    return this.respect >= this.respectForNextRecruit();
+  canRecruitMember(): RecruitmentResult {
+    if (this.members.length >= GangConstants.MaximumGangMembers) {
+      return RecruitmentResult.ExceedMaxNumber;
+    }
+    if (this.respect < this.respectForNextRecruit()) {
+      return RecruitmentResult.NotEnoughRespect;
+    }
+    return RecruitmentResult.Success;
   }
 
   /** @returns The respect threshold needed for the next member recruitment. Infinity if already at or above max members. */
@@ -315,24 +330,34 @@ export class Gang {
   }
 
   getRecruitsAvailable(): number {
-    const numFreeMembers = 3;
-    const recruitCostBase = 5;
-    if (this.members.length < numFreeMembers && this.respect < Math.pow(recruitCostBase, numFreeMembers))
-      return numFreeMembers - this.members.length; // if the max possible is less than freeMembers
-    return Math.floor(Math.log(this.respect) / Math.log(recruitCostBase)) + numFreeMembers - this.members.length; //else
+    if (this.members.length >= GangConstants.MaximumGangMembers) {
+      return 0;
+    }
+    const numFreeMembers = GangConstants.numFreeMembers;
+    const recruitCostBase = GangConstants.recruitThresholdBase;
+    const membersRecruitabile =
+      Math.floor(Math.max(Math.log(this.respect), 0) / Math.log(recruitCostBase)) + numFreeMembers;
+    return Math.min(membersRecruitabile, GangConstants.MaximumGangMembers) - this.members.length;
   }
 
-  recruitMember(name: string): boolean {
-    name = String(name);
-    if (name === "" || !this.canRecruitMember()) return false;
+  recruitMember(name: string): RecruitmentResult {
+    if (name === "") {
+      return RecruitmentResult.EmptyName;
+    }
+
+    const resultOfCheckingIfGangCanRecruitMember = this.canRecruitMember();
+    if (resultOfCheckingIfGangCanRecruitMember !== RecruitmentResult.Success) {
+      return resultOfCheckingIfGangCanRecruitMember;
+    }
 
     // Check for already-existing names
-    const sameNames = this.members.filter((m) => m.name === name);
-    if (sameNames.length >= 1) return false;
+    if (this.members.some((m) => m.name === name)) {
+      return RecruitmentResult.DuplicatedName;
+    }
 
     const member = new GangMember(name);
     this.members.push(member);
-    return true;
+    return RecruitmentResult.Success;
   }
 
   // Money and Respect gains multiplied by this number (< 1)

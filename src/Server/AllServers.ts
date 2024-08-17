@@ -22,24 +22,10 @@ import "../Script/RunningScript"; // For reviver side-effect
 let AllServers: Record<string, Server | HacknetServer> = {};
 
 function GetServerByIP(ip: string): BaseServer | undefined {
-  for (const key of Object.keys(AllServers)) {
-    const server = AllServers[key];
+  for (const server of Object.values(AllServers)) {
     if (server.ip !== ip) continue;
     return server;
   }
-}
-
-//Returns server object with corresponding hostname
-//    Relatively slow, would rather not use this a lot
-function GetServerByHostname(hostname: string): BaseServer | null {
-  for (const key of Object.keys(AllServers)) {
-    const server = AllServers[key];
-    if (server.hostname == hostname) {
-      return server;
-    }
-  }
-
-  return null;
 }
 
 //Get server by IP or hostname. Returns null if invalid
@@ -48,15 +34,21 @@ export function GetServer(s: string): BaseServer | null {
     const server = AllServers[s];
     if (server) return server;
   }
-
-  if (!isIPAddress(s)) return GetServerByHostname(s);
-
+  if (!isIPAddress(s)) return null;
   const ipserver = GetServerByIP(s);
   if (ipserver !== undefined) {
     return ipserver;
   }
 
   return null;
+}
+
+//Get server by IP or hostname. Returns null if invalid or unreachable.
+export function GetReachableServer(s: string): BaseServer | null {
+  const server = GetServer(s);
+  if (server === null) return server;
+  if (server.serversOnNetwork.length === 0) return null;
+  return server;
 }
 
 export function GetAllServers(): BaseServer[] {

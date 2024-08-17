@@ -32,6 +32,7 @@ export class Operation extends LevelableActionClass {
 
   // These functions are shared between operations and blackops, so they are defined outside of Operation
   getTeamSuccessBonus = operationTeamSuccessBonus;
+
   getActionTypeSkillSuccessBonus = operationSkillSuccessBonus;
 
   getChaosSuccessFactor(inst: Bladeburner /*, params: ISuccessChanceParams*/): number {
@@ -45,7 +46,9 @@ export class Operation extends LevelableActionClass {
     return 1;
   }
   getSuccessChance(inst: Bladeburner, person: Person, params: SuccessChanceParams) {
-    if (this.name == BladeOperationName.raid && inst.getCurrentCity().comms <= 0) return 0;
+    if (this.name === BladeOperationName.raid && inst.getCurrentCity().comms <= 0) {
+      return 0;
+    }
     return ActionClass.prototype.getSuccessChance.call(this, inst, person, params);
   }
 
@@ -57,6 +60,7 @@ export class Operation extends LevelableActionClass {
   toJSON(): IReviverValue {
     return this.save("Operation", "teamCount");
   }
+
   loadData(loadedObject: Operation): void {
     this.teamCount = clampInteger(loadedObject.teamCount, 0);
     LevelableActionClass.prototype.loadData.call(this, loadedObject);
@@ -73,6 +77,7 @@ constructorsForReviver.Operation = Operation;
 export const operationSkillSuccessBonus = (inst: Bladeburner) => {
   return inst.getSkillMult(BladeMultName.successChanceOperation);
 };
+
 export function operationTeamSuccessBonus(this: Operation | BlackOperation, inst: Bladeburner) {
   if (this.teamCount && this.teamCount > 0) {
     this.teamCount = Math.min(this.teamCount, inst.teamSize);

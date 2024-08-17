@@ -20,7 +20,9 @@ export function cat(args: (string | number | boolean)[], server: BaseServer): vo
     return dialogBoxCreate(`${file.filename}\n\n${file.content}`);
   }
   if (!path.endsWith(".msg") && !path.endsWith(".lit")) {
-    return Terminal.error("Invalid file extension. Filename must end with .msg, .txt, .lit, .script or .js");
+    return Terminal.error(
+      "Invalid file extension. Filename must end with .msg, .lit, a script extension (.js, .jsx, .ts, .tsx, .script) or a text extension (.txt, .json)",
+    );
   }
 
   // Message

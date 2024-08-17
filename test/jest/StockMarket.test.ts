@@ -33,10 +33,6 @@ import {
 } from "../../src/StockMarket/StockMarketHelpers";
 import { CompanyName, OrderType, PositionType } from "../../src/Enums";
 
-jest.mock(`!!raw-loader!../NetscriptDefinitions.d.ts`, () => "", {
-  virtual: true,
-});
-
 // jest.mock("../src/ui/React/createPopup.tsx", () => ({
 //   createPopup: jest.fn(),
 // }));

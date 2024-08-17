@@ -9,6 +9,8 @@ export const Navigator = React.createContext<Navigator>({ navigate: () => undefi
 
 export const useNavigator = (): Navigator => useContext(Navigator);
 
+export const windowTopPositionOfPages = new Map<FilePath, number>();
+
 interface History {
   pages: FilePath[];
   page: FilePath;
@@ -59,13 +61,22 @@ export const HistoryProvider = (props: React.PropsWithChildren<object>): React.R
     page: defaultPage,
     pages: [],
     push(p: FilePath) {
-      setHistory((h) => onPush(h, p));
+      setHistory((h) => {
+        windowTopPositionOfPages.set(h.page, window.scrollY);
+        return onPush(h, p);
+      });
     },
     pop() {
-      setHistory((h) => onPop(h));
+      setHistory((h) => {
+        windowTopPositionOfPages.set(h.page, window.scrollY);
+        return onPop(h);
+      });
     },
     home() {
-      setHistory((h) => onHome(h));
+      setHistory((h) => {
+        windowTopPositionOfPages.set(h.page, window.scrollY);
+        return onHome(h);
+      });
     },
   });
   return <Provider value={history}>{props.children}</Provider>;

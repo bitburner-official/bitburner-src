@@ -68,6 +68,10 @@ export function CodingContractModal(): React.ReactElement {
       <br />
       <Typography>{description}</Typography>
       <br />
+      <Typography>
+        If your solution is an empty string, you must leave the text box empty. Do not use "", '', or ``.
+      </Typography>
+      <br />
       <TextField
         autoFocus
         placeholder="Enter Solution here"

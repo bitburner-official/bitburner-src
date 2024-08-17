@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { KEY } from "../../utils/helpers/keyCodes";
-import { random } from "../utils";
 import { BlinkingCursor } from "./BlinkingCursor";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
+import { getRandomArbitrary } from "../../utils/helpers/getRandomArbitrary";
 
 interface Difficulty {
   [key: string]: number;
@@ -67,7 +67,7 @@ export function BackwardGame(props: IMinigameProps): React.ReactElement {
 }
 
 function makeAnswer(difficulty: Difficulty): string {
-  const length = random(difficulty.min, difficulty.max);
+  const length = getRandomArbitrary(difficulty.min, difficulty.max);
   let answer = "";
   for (let i = 0; i < length; i++) {
     if (i > 0) answer += " ";

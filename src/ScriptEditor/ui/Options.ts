@@ -14,7 +14,6 @@ export interface Options {
   fontSize: number;
   fontLigatures: boolean;
   wordWrap: WordWrapOptions;
-  vim: boolean;
   cursorStyle: CursorStyle;
   cursorBlinking: CursorBlinking;
 }

@@ -105,6 +105,9 @@ function PurchaseWseAccountButton(props: IProps): React.ReactElement {
 
 function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
   function purchaseTixApiAccess(): void {
+    if (Player.bitNodeOptions.disable4SData) {
+      return;
+    }
     if (Player.hasTixApiAccess) {
       return;
     }
@@ -135,6 +138,9 @@ function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
 
 function Purchase4SMarketDataButton(props: IProps): React.ReactElement {
   function purchase4SMarketData(): void {
+    if (Player.bitNodeOptions.disable4SData) {
+      return;
+    }
     if (Player.has4SData) {
       return;
     }
@@ -184,18 +190,22 @@ export function InfoAndPurchases(props: IProps): React.ReactElement {
         the TIX API lets you write code to create your own algorithmic/automated trading strategies.
       </Typography>
       <PurchaseTixApiAccessButton {...props} />
-      <Typography variant="h5" color="primary">
-        {FactionName.FourSigma} (4S) Market Data Feed
-      </Typography>
-      <Typography>
-        {FactionName.FourSigma}'s (4S) Market Data Feed provides information about stocks that will help your trading
-        strategies.
-        <IconButton onClick={() => setHelpOpen(true)}>
-          <HelpIcon />
-        </IconButton>
-      </Typography>
-      <Purchase4SMarketDataTixApiAccessButton {...props} />
-      <Purchase4SMarketDataButton {...props} />
+      {!Player.bitNodeOptions.disable4SData && (
+        <>
+          <Typography variant="h5" color="primary">
+            {FactionName.FourSigma} (4S) Market Data Feed
+          </Typography>
+          <Typography>
+            {FactionName.FourSigma}'s (4S) Market Data Feed provides information about stocks that will help your
+            trading strategies.
+            <IconButton onClick={() => setHelpOpen(true)}>
+              <HelpIcon />
+            </IconButton>
+          </Typography>
+          <Purchase4SMarketDataTixApiAccessButton {...props} />
+          <Purchase4SMarketDataButton {...props} />
+        </>
+      )}
       <Typography>
         Commission Fees: Every transaction you make has a{" "}
         <Money money={StockMarketConstants.StockMarketCommission} forPurchase={true} /> commission fee.

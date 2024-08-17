@@ -21,6 +21,7 @@ An object representing the current grafting status
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [augmentation](./bitburner.graftingtask.augmentation.md) |  | string |  |
+|  [completion](./bitburner.graftingtask.completion.md) |  | Promise&lt;void&gt; |  |
 |  [cyclesWorked](./bitburner.graftingtask.cyclesworked.md) |  | number |  |
 |  [type](./bitburner.graftingtask.type.md) |  | "GRAFTING" |  |
 

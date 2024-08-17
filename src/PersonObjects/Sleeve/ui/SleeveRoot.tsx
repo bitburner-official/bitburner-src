@@ -6,11 +6,11 @@ import { Player } from "@player";
 
 import { SleeveElem } from "./SleeveElem";
 import { FAQModal } from "./FAQModal";
-import { useRerender } from "../../../ui/React/hooks";
+import { useCycleRerender } from "../../../ui/React/hooks";
 
 export function SleeveRoot(): React.ReactElement {
   const [FAQOpen, setFAQOpen] = useState(false);
-  const rerender = useRerender(200);
+  const rerender = useCycleRerender();
 
   return (
     <>

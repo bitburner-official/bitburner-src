@@ -4,7 +4,7 @@
 
 ## Corporation.nextUpdate() method
 
-Sleep until the next Corporation update has happened.
+Sleep until the next Corporation update happens.
 
 **Signature:**
 
@@ -17,15 +17,15 @@ Promise&lt;[CorpStateName](./bitburner.corpstatename.md)<!-- -->&gt;
 
 Promise that resolves to the name of the state that was just processed.
 
-I.e. when the state is PURCHASE, it means purchasing has just happened. Note that this is the state just before `getCorporation().state`<!-- -->.
-
-Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.
-
 ## Remarks
 
 RAM cost: 1 GB
 
 The amount of real time spent asleep between updates can vary due to "bonus time" (usually 200 milliseconds - 2 seconds).
+
+If the returned state is X, it means X just happened.
+
+Possible states are START, PURCHASE, PRODUCTION, EXPORT, SALE.
 
 ## Example
 

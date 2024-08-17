@@ -10,6 +10,8 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
 import { Augmentations } from "../Augmentation/Augmentations";
+import { PromisePair } from "../Types/Promises";
+import { getKeyList } from "../utils/helpers/getKeyList";
 
 export const isGraftingWork = (w: Work | null): w is GraftingWork => w !== null && w.type === WorkType.GRAFTING;
 
@@ -22,6 +24,14 @@ export class GraftingWork extends Work {
   augmentation: AugmentationName;
   unitCompleted: number;
   unitRate: number;
+  completionPromisePair: PromisePair<void> = { promise: null, resolve: null };
+
+  get completion(): Promise<void> {
+    if (!this.completionPromisePair.promise) {
+      this.completionPromisePair.promise = new Promise((r) => (this.completionPromisePair.resolve = r));
+    }
+    return this.completionPromisePair.promise;
+  }
 
   constructor(params?: GraftingWorkParams) {
     super(WorkType.GRAFTING, params?.singularity ?? true);
@@ -39,8 +49,8 @@ export class GraftingWork extends Work {
   process(cycles: number): boolean {
     const focusBonus = Player.focusPenalty();
     this.cyclesWorked += cycles;
-    this.unitRate = CONSTANTS.MilliPerCycle * cycles * graftingIntBonus() * focusBonus;
-    this.unitCompleted += this.unitRate;
+    this.unitRate = CONSTANTS.MilliPerCycle * graftingIntBonus() * focusBonus;
+    this.unitCompleted += this.unitRate * cycles;
     return this.unitCompleted >= this.unitNeeded();
   }
 
@@ -48,6 +58,14 @@ export class GraftingWork extends Work {
     const augName = this.augmentation;
     if (!cancelled) {
       applyAugmentation({ name: augName, level: 1 });
+
+      // Remove this augmentation from the list of queued augmentations.
+      for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
+        if (Player.queuedAugmentations[i].name === augName) {
+          Player.queuedAugmentations.splice(i, 1);
+          break;
+        }
+      }
 
       if (!Player.hasAugmentation(AugmentationName.CongruityImplant, true)) {
         Player.entropy += 1;
@@ -79,6 +97,12 @@ export class GraftingWork extends Work {
         (CONSTANTS.IntelligenceGraftBaseExpGain * this.cyclesWorked * CONSTANTS.MilliPerCycle) / 10000,
       );
     }
+
+    if (this.completionPromisePair.resolve) {
+      this.completionPromisePair.resolve();
+      this.completionPromisePair.resolve = null;
+      this.completionPromisePair.promise = null;
+    }
   }
 
   APICopy() {
@@ -86,17 +110,20 @@ export class GraftingWork extends Work {
       type: WorkType.GRAFTING as const,
       cyclesWorked: this.cyclesWorked,
       augmentation: this.augmentation,
+      completion: this.completion,
     };
   }
 
+  static savedKeys = getKeyList(GraftingWork, { removedKeys: ["completionPromisePair"] });
+
   /** Serialize the current object to a JSON save state. */
   toJSON(): IReviverValue {
-    return Generic_toJSON("GraftingWork", this);
+    return Generic_toJSON("GraftingWork", this, GraftingWork.savedKeys);
   }
 
   /** Initializes a GraftingWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): GraftingWork {
-    return Generic_fromJSON(GraftingWork, value.data);
+    return Generic_fromJSON(GraftingWork, value.data, GraftingWork.savedKeys);
   }
 }
 

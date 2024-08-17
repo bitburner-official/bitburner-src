@@ -114,7 +114,7 @@ Check how much [RAM](ram.md) a script requires to run with "n" threads
 **nano [script]**
 
 Create/Edit a script.
-The name of a script must end with `.js`, but you can also create `.txt` files.
+The name of a script must end with a script extension (.js, .jsx, .ts, .tsx, .script). You can also create a text file with a text extension (.txt, .json).
 
 **ps**
 

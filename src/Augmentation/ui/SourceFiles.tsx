@@ -3,93 +3,101 @@ import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
-import { Exploit, ExploitName } from "../../Exploits/Exploit";
+import { Exploit, ExploitDescription } from "../../Exploits/Exploit";
 import { Player } from "@player";
 import { OwnedAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
-import { SourceFile } from "../../SourceFile/SourceFile";
 import { SourceFiles } from "../../SourceFile/SourceFiles";
 
-interface SfMinus1 {
-  info: React.ReactElement;
+interface SourceFileData {
   n: number;
+  level: number;
+  maxLevel: number;
+  activeLevel: number;
   name: string;
-  lvl: number;
+  info: JSX.Element;
 }
 
-const safeGetSf = (sfNum: number): SourceFile | SfMinus1 | null => {
-  if (sfNum === -1) {
-    const sfMinus1: SfMinus1 = {
+const getSourceFileData = (sfNumber: number): SourceFileData | null => {
+  let maxLevel: number;
+  switch (sfNumber) {
+    case -1:
+      maxLevel = Object.keys(Exploit).length;
+      break;
+    case 12:
+      maxLevel = Infinity;
+      break;
+    default:
+      maxLevel = 3;
+  }
+
+  const sourceFile = SourceFiles["SourceFile" + sfNumber];
+  if (sourceFile === undefined) {
+    console.error(`Invalid source file number: ${sfNumber}`);
+    return null;
+  }
+  return {
+    n: sfNumber,
+    level: Player.sourceFileLvl(sfNumber),
+    maxLevel: maxLevel,
+    activeLevel: Player.activeSourceFileLvl(sfNumber),
+    name: sourceFile.name,
+    info: sourceFile.info,
+  };
+};
+
+export function SourceFilesElement(): React.ReactElement {
+  const sourceFileList: SourceFileData[] = [];
+
+  const exploits = Player.exploits;
+  // Create a fake SF for -1, if "owned"
+  if (exploits.length > 0) {
+    sourceFileList.push({
+      n: -1,
+      level: Player.exploits.length,
+      maxLevel: Object.keys(Exploit).length,
+      activeLevel: Player.exploits.length,
+      name: "Source-File -1: Exploits in the BitNodes",
       info: (
         <>
-          This Source-File can only be acquired with obscure knowledge of the game, javascript, and the web ecosystem.
+          This Source-File can only be acquired with obscure knowledge of the game, Javascript, and the web ecosystem.
           <br />
           <br />
           It increases all of the player's multipliers by 0.1%
           <br />
           <br />
           You have found the following exploits:
-          <br />
-          <br />
-          {Player.exploits.map((c) => (
-            <React.Fragment key={c}>
-              * {ExploitName(c)}
-              <br />
-            </React.Fragment>
-          ))}
+          <ul>
+            {Player.exploits.map((c) => (
+              <li key={c}>
+                {c}: {ExploitDescription[c]}
+              </li>
+            ))}
+          </ul>
         </>
       ),
-      lvl: Player.exploits.length,
-      n: -1,
-      name: "Source-File -1: Exploits in the BitNodes",
-    };
-    return sfMinus1;
+    });
+  }
+  for (const sfNumber of Player.sourceFiles.keys()) {
+    const sourceFileData = getSourceFileData(sfNumber);
+    if (!sourceFileData) {
+      continue;
+    }
+    sourceFileList.push(sourceFileData);
   }
 
-  const srcFileKey = "SourceFile" + sfNum;
-  const sfObj = SourceFiles[srcFileKey];
-  if (sfObj == null) {
-    console.error(`Invalid source file number: ${sfNum}`);
-    return null;
-  }
-  return sfObj;
-};
-
-const getMaxLevel = (sfObj: SourceFile | SfMinus1): string | number => {
-  let maxLevel;
-  switch (sfObj.n) {
-    case 12:
-      maxLevel = "∞";
-      break;
-    case -1:
-      maxLevel = Object.keys(Exploit).length;
-      break;
-    default:
-      maxLevel = "3";
-  }
-  return maxLevel;
-};
-
-export function SourceFilesElement(): React.ReactElement {
-  const sourceFilesCopy = new Map(Player.sourceFiles);
-  const exploits = Player.exploits;
-  // Create a fake SF for -1, if "owned"
-  if (exploits.length > 0) {
-    sourceFilesCopy.set(-1, exploits.length);
-  }
-
-  const sfList = [...sourceFilesCopy];
   if (Settings.OwnedAugmentationsOrder === OwnedAugmentationsOrderSetting.Alphabetically) {
-    sfList.sort(([n1, __lvl1], [n2, __lvl2]) => n1 - n2);
+    sourceFileList.sort((a, b) => a.n - b.n);
   }
 
-  const [selectedSf, setSelectedSf] = useState(() => {
-    if (sfList.length === 0) return null;
-    const [n, lvl] = sfList[0];
-    return { n, lvl };
+  const [selectedSfData, setSelectedSfData] = useState<SourceFileData | null>(() => {
+    if (sourceFileList.length === 0) {
+      return null;
+    }
+    return sourceFileList[0];
   });
 
-  if (!selectedSf) {
+  if (!selectedSfData) {
     return <></>;
   }
 
@@ -104,26 +112,26 @@ export function SourceFilesElement(): React.ReactElement {
             sx={{ height: 400, overflowY: "scroll", borderRight: `1px solid ${Settings.theme.welllight}` }}
             disablePadding
           >
-            {sfList.map(([n, lvl], i) => {
-              const sfObj = safeGetSf(n);
-              if (!sfObj) return;
-
-              const maxLevel = getMaxLevel(sfObj);
-
+            {sourceFileList.map((sourceFileData, i) => {
               return (
                 <ListItemButton
                   key={i + 1}
-                  onClick={() => setSelectedSf({ n, lvl })}
-                  selected={selectedSf.n === n}
+                  onClick={() => setSelectedSfData(sourceFileData)}
+                  selected={selectedSfData.n === sourceFileData.n}
                   sx={{ py: 0 }}
                 >
                   <ListItemText
                     disableTypography
-                    primary={<Typography>{sfObj.name}</Typography>}
+                    primary={<Typography>{sourceFileData.name}</Typography>}
                     secondary={
-                      <Typography>
-                        Level {lvl} / {maxLevel}
-                      </Typography>
+                      <>
+                        <Typography>
+                          Level: {sourceFileData.level} / {sourceFileData.maxLevel}
+                        </Typography>
+                        {sourceFileData.activeLevel < sourceFileData.level && (
+                          <Typography>Active level: {sourceFileData.activeLevel}</Typography>
+                        )}
+                      </>
                     }
                   />
                 </ListItemButton>
@@ -131,28 +139,25 @@ export function SourceFilesElement(): React.ReactElement {
             })}
           </List>
         </Box>
-        <Box sx={{ m: 1 }}>
-          <Typography variant="h6" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
-            {safeGetSf(selectedSf.n)?.name}
-          </Typography>
-          <Typography sx={{ maxHeight: 350, overflowY: "scroll" }}>
-            {(() => {
-              const sfObj = safeGetSf(selectedSf.n);
-              if (!sfObj) return;
-
-              const maxLevel = getMaxLevel(sfObj);
-
-              return (
+        {selectedSfData !== null && (
+          <Box sx={{ m: 1 }}>
+            <Typography variant="h6" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
+              {selectedSfData.name}
+            </Typography>
+            <Typography component="div" sx={{ maxHeight: 350, overflowY: "scroll" }}>
+              Level: {selectedSfData.level} / {selectedSfData.maxLevel}
+              <br />
+              {selectedSfData.activeLevel < selectedSfData.level && (
                 <>
-                  Level {selectedSf.lvl} / {maxLevel}
+                  Active level: {selectedSfData.activeLevel}
                   <br />
-                  <br />
-                  {sfObj.info}
                 </>
-              );
-            })()}
-          </Typography>
-        </Box>
+              )}
+              <br />
+              {selectedSfData.info}
+            </Typography>
+          </Box>
+        )}
       </Paper>
     </Box>
   );

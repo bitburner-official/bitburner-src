@@ -9,51 +9,9 @@ import { Flags } from "../NetscriptFunctions/Flags";
 import { AutocompleteData } from "@nsdefs";
 import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
-import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
-
-// TODO: this shouldn't be hardcoded in two places with no typechecks to verify equivalence
-// An array of all Terminal commands
-const gameCommands = [
-  "alias",
-  "analyze",
-  "backdoor",
-  "cat",
-  "cd",
-  "changelog",
-  "check",
-  "clear",
-  "cls",
-  "connect",
-  "cp",
-  "download",
-  "expr",
-  "free",
-  "grow",
-  "hack",
-  "help",
-  "home",
-  "hostname",
-  "ifconfig",
-  "kill",
-  "killall",
-  "ls",
-  "lscpu",
-  "mem",
-  "mv",
-  "nano",
-  "ps",
-  "rm",
-  "run",
-  "scan-analyze",
-  "scan",
-  "scp",
-  "sudov",
-  "tail",
-  "theme",
-  "top",
-  "vim",
-  "weaken",
-];
+import { isLegacyScript, resolveScriptFilePath } from "../Paths/ScriptFilePath";
+import { enums } from "../NetscriptFunctions";
+import { TerminalCommands } from "./Terminal";
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal
@@ -122,9 +80,14 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
 
   const addAliases = () => addGeneric({ iterable: Aliases.keys() });
   const addGlobalAliases = () => addGeneric({ iterable: GlobalAliases.keys() });
-  const addCommands = () => addGeneric({ iterable: gameCommands });
+  const addCommands = () => addGeneric({ iterable: Object.keys(TerminalCommands) });
   const addDarkwebItems = () => addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program) });
-  const addServerNames = () => addGeneric({ iterable: GetAllServers().map((server) => server.hostname) });
+  const addServerNames = () =>
+    addGeneric({
+      iterable: GetAllServers()
+        .filter((server) => server.serversOnNetwork.length !== 0)
+        .map((server) => server.hostname),
+    });
   const addScripts = () => addGeneric({ iterable: currServ.scripts.keys(), usePathing: true });
   const addTextFiles = () => addGeneric({ iterable: currServ.textFiles.keys(), usePathing: true });
   const addCodingContracts = () => {
@@ -298,7 +261,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     }
     const filepath = resolveScriptFilePath(filename, baseDir);
     if (!filepath) return; // Not a script path.
-    if (filepath.endsWith(".script")) return; // Doesn't work with ns1.
+    if (isLegacyScript(filepath)) return; // Doesn't work with ns1.
     const script = currServ.scripts.get(filepath);
     if (!script) return; // Doesn't exist.
 
@@ -324,6 +287,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
         .map((server) => server.hostname),
       scripts: [...currServ.scripts.keys()],
       txts: [...currServ.textFiles.keys()],
+      enums: enums,
       flags: (schema: unknown) => {
         if (!Array.isArray(schema)) throw new Error("flags require an array of array");
         pos2 = schema.map((f: unknown) => {

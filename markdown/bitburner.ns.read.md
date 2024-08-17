@@ -28,7 +28,7 @@ Data in the specified text file.
 
 RAM cost: 0 GB
 
-This function is used to read data from a text file (.txt) or script (.js or .script).
+This function is used to read data from a text file (.txt, .json) or script (.js, .jsx, .ts, .tsx, .script).
 
 This function will return the data in the specified file. If the file does not exist, an empty string will be returned.
 

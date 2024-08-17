@@ -64,8 +64,8 @@ export class CreateProgramWork extends Work {
     skillMult *= focusBonus;
     //Skill multiplier directly applied to "time worked"
     this.cyclesWorked += cycles;
-    this.unitRate = CONSTANTS.MilliPerCycle * cycles * skillMult;
-    this.unitCompleted += this.unitRate;
+    this.unitRate = CONSTANTS.MilliPerCycle * skillMult;
+    this.unitCompleted += this.unitRate * cycles;
 
     if (this.unitCompleted >= this.unitNeeded()) {
       return true;
@@ -87,14 +87,12 @@ export class CreateProgramWork extends Work {
         dialogBoxCreate(lines.join("\n"));
       }
 
-      if (!Player.getHomeComputer().programs.includes(programName)) {
-        Player.getHomeComputer().programs.push(programName);
-      }
+      Player.getHomeComputer().pushProgram(programName);
     } else if (!Player.getHomeComputer().programs.includes(programName)) {
       //Incomplete case
       const perc = ((100 * this.unitCompleted) / this.unitNeeded()).toFixed(2);
       const incompleteName = asProgramFilePath(programName + "-" + perc + "%-INC");
-      Player.getHomeComputer().programs.push(incompleteName);
+      Player.getHomeComputer().pushProgram(incompleteName);
     }
   }
 

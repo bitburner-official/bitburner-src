@@ -22,7 +22,7 @@ export function calculateLevelUpgradeCost(startingLevel: number, extraLevels = 1
 
   const mult = HacknetNodeConstants.UpgradeLevelMult;
   let totalMultiplier = 0;
-  let currLevel = startingLevel;
+  let currLevel = startingLevel - 1;
   for (let i = 0; i < sanitizedLevels; ++i) {
     totalMultiplier += Math.pow(mult, currLevel);
     ++currLevel;

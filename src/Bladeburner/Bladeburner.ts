@@ -22,6 +22,7 @@ import { Skills } from "./data/Skills";
 import { City } from "./City";
 import { Player } from "@player";
 import { Router } from "../ui/GameRoot";
+import { Page } from "../ui/Router";
 import { ConsoleHelpText } from "./data/Help";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
@@ -125,7 +126,7 @@ export class Bladeburner {
   startAction(actionId: ActionIdentifier | null): Attempt<{ message: string }> {
     if (!actionId) {
       this.resetAction();
-      return { success: true, message: "Stopped current bladeburner action" };
+      return { success: true, message: "Stopped current Bladeburner action" };
     }
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
     const action = this.getActionObject(actionId);
@@ -142,17 +143,29 @@ export class Bladeburner {
 
   /** Directly sets a skill level, with no validation */
   setSkillLevel(skillName: BladeSkillName, value: number) {
-    this.skills[skillName] = clampInteger(value, 0);
+    this.skills[skillName] = clampInteger(value, 0, Number.MAX_VALUE);
     this.updateSkillMultipliers();
   }
 
   /** Attempts to perform a skill upgrade, gives a message on both success and failure */
   upgradeSkill(skillName: BladeSkillName, count = 1): Attempt<{ message: string }> {
-    const availability = Skills[skillName].canUpgrade(this, count);
-    if (!availability.available) return { message: `Cannot upgrade ${skillName}: ${availability.error}` };
+    const currentSkillLevel = this.skills[skillName] ?? 0;
+    const actualCount = currentSkillLevel + count - currentSkillLevel;
+    if (actualCount === 0) {
+      return {
+        message: `Cannot upgrade ${skillName}: Due to floating-point inaccuracy and the small value of specified "count", your skill cannot be upgraded.`,
+      };
+    }
+    const availability = Skills[skillName].canUpgrade(this, actualCount);
+    if (!availability.available) {
+      return { message: `Cannot upgrade ${skillName}: ${availability.error}` };
+    }
     this.skillPoints -= availability.cost;
-    this.setSkillLevel(skillName, (this.skills[skillName] ?? 0) + count);
-    return { success: true, message: `Upgraded skill ${skillName} by ${count} level${count > 1 ? "s" : ""}` };
+    this.setSkillLevel(skillName, currentSkillLevel + actualCount);
+    return {
+      success: true,
+      message: `Upgraded skill ${skillName} by ${actualCount} level${actualCount > 1 ? "s" : ""}`,
+    };
   }
 
   executeConsoleCommands(commands: string): void {
@@ -632,8 +645,8 @@ export class Bladeburner {
       }
     } else if (chance <= 0.7) {
       // Synthoid Riots (+chaos), 20%
-      sourceCity.chaos += 1;
-      sourceCity.chaos *= 1 + getRandomIntInclusive(5, 20) / 100;
+      sourceCity.changeChaosByCount(1);
+      sourceCity.changeChaosByPercentage(getRandomIntInclusive(5, 20));
       if (this.logging.events) {
         this.log("Tensions between Synthoids and humans lead to riots in " + sourceCityName + "! Chaos increased");
       }
@@ -687,14 +700,14 @@ export class Bladeburner {
     };
   }
 
-  getDiplomacyEffectiveness(person: Person): number {
-    // Returns a decimal by which the city's chaos level should be multiplied (e.g. 0.98)
+  getDiplomacyPercentage(person: Person): number {
+    // Returns a percentage by which the city's chaos level should be modified (e.g. 2 for 2%)
     const CharismaLinearFactor = 1e3;
     const CharismaExponentialFactor = 0.045;
 
     const charismaEff =
       Math.pow(person.skills.charisma, CharismaExponentialFactor) + person.skills.charisma / CharismaLinearFactor;
-    return (100 - charismaEff) / 100;
+    return charismaEff;
   }
 
   getRecruitmentSuccessChance(person: Person): number {
@@ -1142,15 +1155,12 @@ export class Bladeburner {
             break;
           }
           case BladeGeneralActionName.diplomacy: {
-            const eff = this.getDiplomacyEffectiveness(person);
-            this.getCurrentCity().chaos *= eff;
-            if (this.getCurrentCity().chaos < 0) {
-              this.getCurrentCity().chaos = 0;
-            }
+            const diplomacyPct = this.getDiplomacyPercentage(person);
+            this.getCurrentCity().changeChaosByPercentage(-diplomacyPct);
             if (this.logging.general) {
               this.log(
                 `${person.whoAmI()}: Diplomacy completed. Chaos levels in the current city fell by ${formatPercent(
-                  1 - eff,
+                  diplomacyPct / 100,
                 )}.`,
               );
             }
@@ -1190,8 +1200,8 @@ export class Bladeburner {
             }
             for (const cityName of Object.values(CityName)) {
               const city = this.cities[cityName];
-              city.chaos += 10;
-              city.chaos += city.chaos / (Math.log(city.chaos) / Math.log(10));
+              city.changeChaosByCount(10);
+              city.changeChaosByCount(city.chaos / Math.log10(city.chaos));
             }
             break;
           }
@@ -1307,7 +1317,7 @@ export class Bladeburner {
 
   process(): void {
     // Edge race condition when the engine checks the processing counters and attempts to route before the router is initialized.
-    if (!Router.isInitialized) return;
+    if (Router.page() === Page.LoadingScreen) return;
 
     // If the Player starts doing some other actions, set action to idle and alert
     if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true) && Player.currentWork) {

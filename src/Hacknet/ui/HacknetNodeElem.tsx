@@ -164,7 +164,7 @@ export function HacknetNodeElem(props: IProps): React.ReactElement {
 
   return (
     <Grid item component={Paper} p={1}>
-      <Table size="small">
+      <Table size="small" sx={{ whiteSpace: "nowrap" }}>
         <TableBody>
           <TableRow>
             <TableCell colSpan={3}>

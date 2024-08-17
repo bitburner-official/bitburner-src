@@ -5,15 +5,23 @@ interface IProps {
   onFinish: () => void;
 }
 
-export function Countdown(props: IProps): React.ReactElement {
+export function Countdown({ onFinish }: IProps): React.ReactElement {
   const [x, setX] = useState(3);
+
   useEffect(() => {
     if (x === 0) {
-      props.onFinish();
-      return;
+      onFinish();
     }
-    setTimeout(() => setX(x - 1), 300);
-  });
+  }, [x, onFinish]);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setX((previousValue) => previousValue - 1);
+    }, 300);
+    return () => {
+      clearInterval(id);
+    };
+  }, []);
 
   return (
     <Paper sx={{ p: 1, textAlign: "center" }}>

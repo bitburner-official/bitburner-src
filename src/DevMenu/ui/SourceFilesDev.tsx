@@ -32,12 +32,18 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
       }
       if (sfLvl === 0) {
         Player.sourceFiles.delete(sfN);
-        if (sfN === 10) Sleeve.recalculateNumOwned();
+        Player.bitNodeOptions.sourceFileOverrides.delete(sfN);
+        if (sfN === 10) {
+          Sleeve.recalculateNumOwned();
+        }
         parentRerender();
         return;
       }
       Player.sourceFiles.set(sfN, sfLvl);
-      if (sfN === 10) Sleeve.recalculateNumOwned();
+      Player.bitNodeOptions.sourceFileOverrides.set(sfN, sfLvl);
+      if (sfN === 10) {
+        Sleeve.recalculateNumOwned();
+      }
       parentRerender();
     },
     [parentRerender],
@@ -113,6 +119,8 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
         <Typography>Source-Files</Typography>
       </AccordionSummary>
       <AccordionDetails>
+        <Typography>Note: This tool sets both the owned level and the overridden level.</Typography>
+        <br />
         <table>
           <tbody>
             <tr>

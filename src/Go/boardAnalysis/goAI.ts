@@ -829,5 +829,5 @@ function waitCycle(useOfflineCycles = true): Promise<void> {
 }
 
 export function showWorldDemon() {
-  return Player.hasAugmentation(AugmentationName.TheRedPill, true) && Player.sourceFileLvl(1);
+  return Player.hasAugmentation(AugmentationName.TheRedPill, true) && Player.activeSourceFileLvl(1);
 }

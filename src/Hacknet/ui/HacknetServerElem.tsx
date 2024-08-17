@@ -245,10 +245,10 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
 
   return (
     <Grid item component={Paper} p={1}>
-      <Table size="small">
+      <Table size="small" sx={{ whiteSpace: "nowrap" }}>
         <TableBody>
           <TableRow>
-            <TableCell>
+            <TableCell colSpan={3}>
               <Typography>{node.hostname}</Typography>
             </TableCell>
           </TableRow>

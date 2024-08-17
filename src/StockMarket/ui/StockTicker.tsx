@@ -270,12 +270,12 @@ export function StockTicker(props: IProps): React.ReactElement {
 
   // Whether the player has access to orders besides market orders (limit/stop)
   function hasOrderAccess(): boolean {
-    return Player.bitNodeN === 8 || Player.sourceFileLvl(8) >= 3;
+    return Player.bitNodeN === 8 || Player.activeSourceFileLvl(8) >= 3;
   }
 
   // Whether the player has access to shorting stocks
   function hasShortAccess(): boolean {
-    return Player.bitNodeN === 8 || Player.sourceFileLvl(8) >= 2;
+    return Player.bitNodeN === 8 || Player.activeSourceFileLvl(8) >= 2;
   }
 
   return (

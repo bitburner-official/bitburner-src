@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Box, Button, Tooltip, Typography, Paper, Container, TextField } from "@mui/material";
+import { Box, Button, Typography, Paper, Container, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 import { Augmentations } from "../../Augmentation/Augmentations";
@@ -141,48 +141,46 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
   );
   const owned = augs.filter((aug) => !purchasable.includes(aug));
 
-  const multiplierComponent =
-    faction.name !== FactionName.ShadowsOfAnarchy ? (
-      <Tooltip
-        title={
-          <Typography>
-            The price of every Augmentation increases for every queued Augmentation and it is reset when you install
-            them.
-          </Typography>
-        }
-      >
-        <Typography>
-          <b>Price multiplier:</b> x {formatBigNumber(getGenericAugmentationPriceMultiplier())}
-        </Typography>
-      </Tooltip>
-    ) : (
-      <Tooltip
-        title={
-          <Typography>
-            This price multiplier increases for each {FactionName.ShadowsOfAnarchy} augmentation already purchased. The
-            multiplier is NOT reset when installing augmentations.
-          </Typography>
-        }
-      >
-        <Typography>
-          <b>Price multiplier:</b> x{" "}
-          {formatBigNumber(
-            Math.pow(
-              CONSTANTS.SoACostMult,
-              augs.filter((augmentationName) => Player.hasAugmentation(augmentationName)).length,
-            ),
-          )}
-          <br />
-          <b>Reputation multiplier:</b> x{" "}
-          {formatBigNumber(
-            Math.pow(
-              CONSTANTS.SoARepMult,
-              augs.filter((augmentationName) => Player.hasAugmentation(augmentationName)).length,
-            ),
-          )}
-        </Typography>
-      </Tooltip>
+  let multiplierDescription;
+  let multiplierComponent;
+  if (faction.name !== FactionName.ShadowsOfAnarchy) {
+    multiplierDescription = (
+      <Typography>
+        The price of every Augmentation increases for every queued Augmentation and it is reset when you install them.
+      </Typography>
     );
+    multiplierComponent = (
+      <Typography>
+        <b>Price multiplier:</b> x {formatBigNumber(getGenericAugmentationPriceMultiplier())}
+      </Typography>
+    );
+  } else {
+    multiplierDescription = (
+      <Typography>
+        This price multiplier increases for each {FactionName.ShadowsOfAnarchy} augmentation already purchased. The
+        multiplier is NOT reset when installing augmentations.
+      </Typography>
+    );
+    multiplierComponent = (
+      <Typography>
+        <b>Price multiplier:</b> x{" "}
+        {formatBigNumber(
+          Math.pow(
+            CONSTANTS.SoACostMult,
+            augs.filter((augmentationName) => Player.hasAugmentation(augmentationName)).length,
+          ),
+        )}
+        <br />
+        <b>Reputation multiplier:</b> x{" "}
+        {formatBigNumber(
+          Math.pow(
+            CONSTANTS.SoARepMult,
+            augs.filter((augmentationName) => Player.hasAugmentation(augmentationName)).length,
+          ),
+        )}
+      </Typography>
+    );
+  }
 
   return (
     <>
@@ -193,8 +191,9 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
           <Typography>
             These are all of the Augmentations that are available to purchase from <b>{faction.name}</b>. Augmentations
             are powerful upgrades that will enhance your abilities.
-            <br />
           </Typography>
+          <br />
+          {multiplierDescription}
           <Box
             sx={{
               display: "grid",
@@ -207,7 +206,7 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
             <Typography>
               <b>Reputation:</b> <Reputation reputation={faction.playerReputation} />
               <br />
-              <b>Favor:</b> <Favor favor={Math.floor(faction.favor)} />
+              <b>Favor:</b> <Favor favor={faction.favor} />
             </Typography>
           </Box>
           <Box sx={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>

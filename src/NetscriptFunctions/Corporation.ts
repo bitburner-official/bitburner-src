@@ -223,7 +223,9 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         quality: material.quality,
         demand: corporation.unlocks.has(CorpUnlockName.MarketResearchDemand) ? material.demand : undefined,
         competition: corporation.unlocks.has(CorpUnlockName.MarketDataCompetition) ? material.competition : undefined,
+        buyAmount: material.buyAmount,
         productionAmount: material.productionAmount,
+        importAmount: material.importAmount,
         actualSellAmount: material.actualSellAmount,
         exports: exports,
       };
@@ -334,8 +336,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       const materialName = getEnumHelper("CorpMaterialName").nsGetMember(ctx, _materialName, "materialName");
       const amt = helpers.number(ctx, "amt", _amt);
-      if (amt < 0 || !Number.isFinite(amt))
-        throw new Error("Invalid value for amount field! Must be numeric and greater than or equal to 0");
       const material = getMaterial(divisionName, cityName, materialName);
       buyMaterial(division, material, amt);
     },
@@ -588,8 +588,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     ...warehouseAPI,
     ...officeAPI,
     hasCorporation: () => () => !!Player.corporation,
-    getConstants: (ctx) => () => {
-      checkAccess(ctx);
+    getConstants: () => () => {
       /* TODO 2.2: possibly just rework the whole corp constants structure to be more readable, and just use
        *           structuredClone to provide it directly to player.
        * TODO 2.2: Roll product information into industriesData, there's no reason to look up a product separately */

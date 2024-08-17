@@ -4,8 +4,8 @@ import { Player } from "@player";
 import { AugmentationName } from "@enums";
 
 import React, { useState } from "react";
-import { CheckBox, CheckBoxOutlineBlank, Construction } from "@mui/icons-material";
-import { Box, Button, Container, List, ListItemButton, Paper, Typography } from "@mui/material";
+import { CheckBox, CheckBoxOutlineBlank, Construction, Search } from "@mui/icons-material";
+import { Box, Button, Container, List, ListItemButton, Paper, TextField, Typography } from "@mui/material";
 
 import { GraftingWork } from "../../../Work/GraftingWork";
 import { Augmentations } from "../../../Augmentation/Augmentations";
@@ -21,7 +21,7 @@ import { formatNumberNoSuffix } from "../../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../../utils/StringHelperFunctions";
 import { GraftableAugmentation } from "../GraftableAugmentation";
 import { calculateGraftingTimeWithBonus, getGraftingAvailableAugs } from "../GraftingHelpers";
-import { useRerender } from "../../../ui/React/hooks";
+import { useCycleRerender } from "../../../ui/React/hooks";
 
 export const GraftableAugmentations = (): Record<string, GraftableAugmentation> => {
   const gAugs: Record<string, GraftableAugmentation> = {};
@@ -66,17 +66,25 @@ export const GraftingRoot = (): React.ReactElement => {
 
   const [selectedAug, setSelectedAug] = useState(getGraftingAvailableAugs()[0]);
   const [graftOpen, setGraftOpen] = useState(false);
+  const [filterText, setFilterText] = useState("");
   const selectedAugmentation = Augmentations[selectedAug];
-  const rerender = useRerender(200);
+  const rerender = useCycleRerender();
 
+  const matches = (s1: string, s2: string) => s1.toLowerCase().includes(s2.toLowerCase());
   const getAugsSorted = (): AugmentationName[] => {
     const augs = getGraftingAvailableAugs();
-    switch (Settings.PurchaseAugmentationsOrder) {
-      case PurchaseAugmentationsOrderSetting.Cost:
-        return augs.sort((a, b) => graftableAugmentations[a].cost - graftableAugmentations[b].cost);
-      default:
-        return augs;
+    if (Settings.PurchaseAugmentationsOrder === PurchaseAugmentationsOrderSetting.Cost) {
+      augs.sort((a, b) => graftableAugmentations[a].cost - graftableAugmentations[b].cost);
     }
+    if (filterText !== "") {
+      return augs.filter(
+        (aug: AugmentationName) =>
+          matches(Augmentations[aug].name, filterText) ||
+          matches(Augmentations[aug].info, filterText) ||
+          matches(Augmentations[aug].stats, filterText),
+      );
+    }
+    return augs;
   };
 
   const switchSortOrder = (newOrder: PurchaseAugmentationsOrderSetting): void => {
@@ -114,19 +122,29 @@ export const GraftingRoot = (): React.ReactElement => {
         </Paper>
         {getGraftingAvailableAugs().length > 0 ? (
           <Paper sx={{ mb: 1, width: "fit-content", display: "grid", gridTemplateColumns: "1fr 3fr" }}>
-            <List sx={{ height: 400, overflowY: "scroll", borderRight: `1px solid ${Settings.theme.welllight}` }}>
-              {getAugsSorted().map((k, i) => (
-                <ListItemButton key={i + 1} onClick={() => setSelectedAug(k)} selected={selectedAug === k}>
-                  <Typography
-                    sx={{
-                      color: canGraft(graftableAugmentations[k]) ? Settings.theme.primary : Settings.theme.disabled,
-                    }}
-                  >
-                    {k}
-                  </Typography>
-                </ListItemButton>
-              ))}
-            </List>
+            <Box>
+              <TextField
+                style={{ width: "100%" }}
+                value={filterText}
+                onChange={(e) => {
+                  setFilterText(e.target.value);
+                }}
+                InputProps={{ startAdornment: <Search /> }}
+              />
+              <List sx={{ height: 400, overflowY: "scroll", borderRight: `1px solid ${Settings.theme.welllight}` }}>
+                {getAugsSorted().map((k, i) => (
+                  <ListItemButton key={i + 1} onClick={() => setSelectedAug(k)} selected={selectedAug === k}>
+                    <Typography
+                      sx={{
+                        color: canGraft(graftableAugmentations[k]) ? Settings.theme.primary : Settings.theme.disabled,
+                      }}
+                    >
+                      {k}
+                    </Typography>
+                  </ListItemButton>
+                ))}
+              </List>
+            </Box>
             <Box sx={{ m: 1 }}>
               <Typography variant="h6" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
                 <Construction sx={{ mr: 1 }} /> {selectedAug}
@@ -156,7 +174,7 @@ export const GraftingRoot = (): React.ReactElement => {
                   Router.toPage(Page.Work);
                 }}
                 confirmationText={
-                  <>
+                  <Typography component="div" paddingBottom="1rem">
                     Cancelling grafting will <b>not</b> save grafting progress, and the money you spend will <b>not</b>{" "}
                     be returned.
                     {!Player.hasAugmentation(AugmentationName.CongruityImplant) && (
@@ -166,7 +184,7 @@ export const GraftingRoot = (): React.ReactElement => {
                         Additionally, grafting an Augmentation will increase the potency of the Entropy virus.
                       </>
                     )}
-                  </>
+                  </Typography>
                 }
               />
               <Box sx={{ maxHeight: 330, overflowY: "scroll" }}>

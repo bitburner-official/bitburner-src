@@ -6,7 +6,7 @@ import { StockTickers } from "./StockTickers";
 import { IStockMarket } from "../IStockMarket";
 
 import { Player } from "@player";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 
 interface IProps {
   stockMarket: IStockMarket;
@@ -14,7 +14,7 @@ interface IProps {
 
 /** Root React component for the Stock Market UI */
 export function StockMarketRoot(props: IProps): React.ReactElement {
-  const rerender = useRerender(200);
+  const rerender = useCycleRerender();
   return (
     <>
       <InfoAndPurchases rerender={rerender} />

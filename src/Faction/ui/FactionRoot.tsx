@@ -20,7 +20,7 @@ import { CovenantPurchasesRoot } from "../../PersonObjects/Sleeve/ui/CovenantPur
 import { FactionName, FactionWorkType } from "@enums";
 import { GangButton } from "./GangButton";
 import { FactionWork } from "../../Work/FactionWork";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 import { repNeededToDonate } from "../formulas/donation";
 
 type FactionRootProps = {
@@ -147,7 +147,7 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
 }
 
 export function FactionRoot({ faction }: FactionRootProps): React.ReactElement {
-  const rerender = useRerender(200);
+  const rerender = useCycleRerender();
 
   if (!Player.factions.includes(faction.name)) {
     return (

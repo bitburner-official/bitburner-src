@@ -394,6 +394,16 @@ export function refreshTheme(): void {
           },
         },
       },
+      MuiAutocomplete: {
+        styleOverrides: {
+          option: {
+            color: Settings.theme.primary,
+          },
+          inputRoot: {
+            height: "100%",
+          },
+        },
+      },
     },
   });
 

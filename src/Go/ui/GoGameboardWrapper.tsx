@@ -19,6 +19,7 @@ import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 import { CorruptableText } from "../../ui/React/CorruptableText";
 import { makeAIMove, resolveCurrentTurn } from "../boardAnalysis/goAI";
+import { GoScoreExplanation } from "./GoScoreExplanation";
 
 interface GoGameboardWrapperProps {
   showInstructions: () => void;
@@ -44,6 +45,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   const traditional = Settings.GoTraditionalStyle;
   const [showPriorMove, setShowPriorMove] = useState(false);
   const [scoreOpen, setScoreOpen] = useState(false);
+  const [scoreExplanationOpen, setScoreExplanationOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
   const { classes } = boardStyles();
@@ -203,7 +205,9 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
         newSubnet={() => newSubnet()}
         finalScore={score}
         opponent={Go.currentGame.ai}
-      ></GoScoreModal>
+        showScoreExplanation={() => setScoreExplanationOpen(true)}
+      />
+      <GoScoreExplanation onClose={() => setScoreExplanationOpen(false)} open={scoreExplanationOpen} />
       <div className={classes.boardFrame}>
         {traditional ? (
           ""

@@ -2,10 +2,8 @@ import { BitNodes } from "../BitNode/BitNode";
 
 export class SourceFile {
   info: JSX.Element;
-  lvl = 1;
   n: number;
   name: string;
-  owned = false;
 
   constructor(number: number, info: JSX.Element) {
     const bitnodeKey = "BitNode" + number;

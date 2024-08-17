@@ -14,7 +14,7 @@ interface IProps {
 
 export function CoresButton(props: IProps): React.ReactElement {
   const homeComputer = Player.getHomeComputer();
-  const maxCores = homeComputer.cpuCores >= 8;
+  const maxCores = Player.bitNodeOptions.restrictHomePCUpgrade || homeComputer.cpuCores >= 8;
   if (maxCores) {
     return <Button>Upgrade 'home' cores - MAX</Button>;
   }

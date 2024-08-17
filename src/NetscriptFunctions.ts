@@ -63,6 +63,7 @@ import {
   formatNumber,
 } from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
+import { roundToTwo } from "./utils/helpers/roundToTwo";
 import { LogBoxEvents, LogBoxCloserEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { NetscriptGang } from "./NetscriptFunctions/Gang";
@@ -108,6 +109,9 @@ import { getEnumHelper } from "./utils/EnumHelper";
 import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
 import { ServerConstants } from "./Server/data/Constants";
 import { assertFunction } from "./Netscript/TypeAssertion";
+import { Router } from "./ui/GameRoot";
+import { Page } from "./ui/Router";
+import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
 
 export const enums: NSEnums = {
   CityName,
@@ -487,37 +491,46 @@ export const ns: InternalAPI<NSFull> = {
   },
   disableLog: (ctx) => (_fn) => {
     const fn = helpers.string(ctx, "fn", _fn);
-    if (fn === "ALL") {
-      for (const fn of Object.keys(possibleLogs)) {
-        ctx.workerScript.disableLogs[fn] = true;
-      }
-      helpers.log(ctx, () => `Disabled logging for all functions`);
-    } else if (possibleLogs[fn] === undefined) {
+    if (possibleLogs[fn] === undefined) {
       throw helpers.errorMessage(ctx, `Invalid argument: ${fn}.`);
+    }
+    if (fn === "ALL") {
+      ctx.workerScript.disableLogs = allDisabled;
+      // No need to log here, it's been disabled.
     } else {
-      ctx.workerScript.disableLogs[fn] = true;
-      helpers.log(ctx, () => `Disabled logging for ${fn}`);
+      // We don't track individual log entries when all are disabled.
+      if (!ctx.workerScript.disableLogs["ALL"]) {
+        ctx.workerScript.disableLogs[fn] = true;
+        helpers.log(ctx, () => `Disabled logging for ${fn}`);
+      }
     }
   },
   enableLog: (ctx) => (_fn) => {
     const fn = helpers.string(ctx, "fn", _fn);
-    if (fn === "ALL") {
-      for (const fn of Object.keys(possibleLogs)) {
-        delete ctx.workerScript.disableLogs[fn];
-      }
-      helpers.log(ctx, () => `Enabled logging for all functions`);
-    } else if (possibleLogs[fn] === undefined) {
+    if (possibleLogs[fn] === undefined) {
       throw helpers.errorMessage(ctx, `Invalid argument: ${fn}.`);
     }
-    delete ctx.workerScript.disableLogs[fn];
-    helpers.log(ctx, () => `Enabled logging for ${fn}`);
+    if (fn === "ALL") {
+      ctx.workerScript.disableLogs = {};
+      helpers.log(ctx, () => `Enabled logging for all functions`);
+    } else {
+      if (ctx.workerScript.disableLogs["ALL"]) {
+        // As an optimization, we normally store only that key, but we have to
+        // expand it out to all keys at this point.
+        // Conveniently, possibleLogs serves as a model for "all keys disabled."
+        ctx.workerScript.disableLogs = Object.assign({}, possibleLogs, { ALL: false, [fn]: false });
+      } else {
+        ctx.workerScript.disableLogs[fn] = false;
+      }
+      helpers.log(ctx, () => `Enabled logging for ${fn}`);
+    }
   },
   isLogEnabled: (ctx) => (_fn) => {
     const fn = helpers.string(ctx, "fn", _fn);
     if (possibleLogs[fn] === undefined) {
       throw helpers.errorMessage(ctx, `Invalid argument: ${fn}.`);
     }
-    return !ctx.workerScript.disableLogs[fn];
+    return ctx.workerScript.shouldLog(fn);
   },
   getScriptLogs:
     (ctx) =>
@@ -731,19 +744,36 @@ export const ns: InternalAPI<NSFull> = {
       const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
       const runOpts = helpers.spawnOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
-      setTimeout(() => {
+      const spawnCb = () => {
+        if (Router.page() === Page.BitVerse) {
+          helpers.log(ctx, () => `Script execution is canceled because you are in Bitverse.`);
+          return;
+        }
         const scriptServer = GetServer(ctx.workerScript.hostname);
-        if (scriptServer === null) {
+        if (scriptServer == null) {
           throw helpers.errorMessage(ctx, `Cannot find server ${ctx.workerScript.hostname}`);
         }
 
-        runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
-      }, runOpts.spawnDelay);
+        return runScriptFromScript("spawn", scriptServer, path, args, ctx.workerScript, runOpts);
+      };
 
-      helpers.log(ctx, () => `Will execute '${path}' in ${runOpts.spawnDelay} milliseconds`);
+      if (runOpts.spawnDelay !== 0) {
+        setTimeout(spawnCb, runOpts.spawnDelay);
+        helpers.log(ctx, () => `Will execute '${path}' in ${runOpts.spawnDelay} milliseconds`);
+      }
 
-      if (killWorkerScript(ctx.workerScript)) {
-        helpers.log(ctx, () => "Exiting...");
+      helpers.log(ctx, () => "About to exit...");
+      const killed = killWorkerScript(ctx.workerScript);
+
+      if (runOpts.spawnDelay === 0) {
+        helpers.log(ctx, () => `Executing '${path}' immediately`);
+        spawnCb();
+      }
+
+      if (killed) {
+        // This prevents error messages about statements after the spawn()
+        // trying to be executed when the script is dead.
+        throw new ScriptDeath(ctx.workerScript);
       }
     },
   kill:
@@ -794,16 +824,16 @@ export const ns: InternalAPI<NSFull> = {
     },
   killall:
     (ctx) =>
-    (_hostname = ctx.workerScript.hostname, _safetyguard = true) => {
+    (_hostname = ctx.workerScript.hostname, _safetyGuard = true) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
-      const safetyguard = !!_safetyguard;
+      const safetyGuard = !!_safetyGuard;
       const server = helpers.getServer(ctx, hostname);
 
       let scriptsKilled = 0;
 
       for (const byPid of server.runningScriptMap.values()) {
         for (const pid of byPid.keys()) {
-          if (safetyguard && pid == ctx.workerScript.pid) continue;
+          if (safetyGuard && pid == ctx.workerScript.pid) continue;
           killWorkerScriptByPid(pid);
           ++scriptsKilled;
         }
@@ -948,13 +978,19 @@ export const ns: InternalAPI<NSFull> = {
   },
   getBitNodeMultipliers:
     (ctx) =>
-    (_n = Player.bitNodeN, _lvl = Player.sourceFileLvl(Player.bitNodeN) + 1) => {
-      if (Player.sourceFileLvl(5) <= 0 && Player.bitNodeN !== 5)
+    (_n = Player.bitNodeN, _lvl = Player.activeSourceFileLvl(Player.bitNodeN) + 1) => {
+      if (!canAccessBitNodeFeature(5)) {
         throw helpers.errorMessage(ctx, "Requires Source-File 5 to run.");
+      }
+      // TODO v3.0: check n and lvl with helpers.number() and Number.isInteger().
       const n = Math.round(helpers.number(ctx, "n", _n));
       const lvl = Math.round(helpers.number(ctx, "lvl", _lvl));
-      if (n < 1 || n > 14) throw new Error("n must be between 1 and 14");
-      if (lvl < 1) throw new Error("lvl must be >= 1");
+      if (!validBitNodes.includes(n)) {
+        throw new Error(`Invalid BitNode: ${n}.`);
+      }
+      if (lvl < 1) {
+        throw new Error("SF level must be greater than or equal to 1.");
+      }
 
       return Object.assign({}, getBitNodeMultipliers(n, lvl));
     },
@@ -1455,8 +1491,31 @@ export const ns: InternalAPI<NSFull> = {
       const ident = helpers.scriptIdentifier(ctx, fn, hostname, args);
       const runningScript = helpers.getRunningScript(ctx, ident);
       if (runningScript === null) return null;
-      return helpers.createPublicRunningScript(runningScript);
+      return helpers.createPublicRunningScript(runningScript, ctx.workerScript);
     },
+  ramOverride: (ctx) => (_ram) => {
+    const newRam = roundToTwo(helpers.number(ctx, "ram", _ram || 0));
+    const rs = ctx.workerScript.scriptRef;
+    const server = ctx.workerScript.getServer();
+    if (newRam < roundToTwo(ctx.workerScript.dynamicRamUsage)) {
+      // Impossibly small, return immediately.
+      return rs.ramUsage;
+    }
+    const newServerRamUsed = roundToTwo(server.ramUsed + (newRam - rs.ramUsage) * rs.threads);
+    if (newServerRamUsed >= server.maxRam) {
+      // Can't allocate more RAM.
+      return rs.ramUsage;
+    }
+    if (newServerRamUsed <= 0) {
+      throw helpers.errorMessage(
+        ctx,
+        `Game error: Calculated impossible new server ramUsed ${newServerRamUsed} from new limit of ${_ram}`,
+      );
+    }
+    server.updateRamUsed(newServerRamUsed);
+    rs.ramUsage = newRam;
+    return rs.ramUsage;
+  },
   getHackTime:
     (ctx) =>
     (_hostname = ctx.workerScript.hostname) => {
@@ -1579,7 +1638,11 @@ export const ns: InternalAPI<NSFull> = {
     return convertTimeMsToTimeElapsedString(milliseconds, milliPrecision);
   },
   getTimeSinceLastAug: () => () => {
-    deprecationWarning("ns.getTimeSinceLastAug()", "Use ns.getResetInfo().lastAugReset instead.");
+    deprecationWarning(
+      "ns.getTimeSinceLastAug()",
+      "Use `Date.now() - ns.getResetInfo().lastAugReset` instead. Please note that ns.getResetInfo().lastAugReset does NOT return the " +
+        "same value as ns.getTimeSinceLastAug(). Check the NS API documentation for details.",
+    );
     return Player.playtimeSinceLastAug;
   },
   alert: (ctx) => (_message) => {
@@ -1753,6 +1816,10 @@ export const ns: InternalAPI<NSFull> = {
     currentNode: Player.bitNodeN,
     ownedAugs: new Map(Player.augmentations.map((aug) => [aug.name, aug.level])),
     ownedSF: new Map(Player.sourceFiles),
+    bitNodeOptions: {
+      ...Player.bitNodeOptions,
+      sourceFileOverrides: new Map(Player.bitNodeOptions.sourceFileOverrides),
+    },
   }),
   getFunctionRamCost: (ctx) => (_name) => {
     const name = helpers.string(ctx, "name", _name);
@@ -1778,7 +1845,13 @@ export function NetscriptFunctions(ws: WorkerScript): NSFull {
   return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid, enums });
 }
 
-const possibleLogs = Object.fromEntries([...getFunctionNames(ns, "")].map((a) => [a, true]));
+const possibleLogs = Object.fromEntries(getFunctionNames(ns, "").map((a) => [a, true]));
+possibleLogs.ALL = true;
+
+// We reuse this object for *all* scripts that disable all keys, to prevent memory growth.
+// Any script that needs a custom set of values will use a fresh object.
+const allDisabled = { ALL: true } as const;
+
 /** Provides an array of all function names on a nested object */
 function getFunctionNames(obj: object, prefix: string): string[] {
   const functionNames: string[] = [];

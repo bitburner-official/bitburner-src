@@ -34,7 +34,7 @@ import { Terminal } from "./Terminal";
 import { ScriptArg } from "@nsdefs";
 import { CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/NetscriptHelpers";
 import { handleUnknownError } from "./Netscript/ErrorMessages";
-import { resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
+import { isLegacyScript, legacyScriptExtension, resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
 import { root } from "./Paths/Directory";
 
 export const NetscriptPorts = new Map<PortNumber, Port>();
@@ -158,7 +158,7 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
   walksimple(ast, {
     ImportDeclaration: (node: Node) => {
       hasImports = true;
-      const scriptName = resolveScriptFilePath(node.source.value, root, ".script");
+      const scriptName = resolveScriptFilePath(node.source.value, root, legacyScriptExtension);
       if (!scriptName) throw new Error("'Import' failed due to invalid path: " + scriptName);
       const script = getScript(scriptName);
       if (!script) throw new Error("'Import' failed due to script not found: " + scriptName);
@@ -326,7 +326,7 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
   workerScripts.set(pid, workerScript);
 
   // Start the script's execution using the correct function for file type
-  (workerScript.name.endsWith(".js") ? startNetscript2Script : startNetscript1Script)(workerScript)
+  (isLegacyScript(workerScript.name) ? startNetscript1Script : startNetscript2Script)(workerScript)
     // Once the code finishes (either resolved or rejected, doesnt matter), set its
     // running status to false
     .then(function () {

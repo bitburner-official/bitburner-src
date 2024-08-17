@@ -34,18 +34,20 @@ export class BlackOperation extends ActionClass {
     if (bladeburner.rank < this.reqdRank) return { error: "Insufficient rank" };
     return { available: true };
   }
-  // To be implemented by subtypes
+
   getActionTimePenalty(): number {
     return 1.5;
   }
 
-  getPopulationSuccessFactor(/*inst: Bladeburner, params: ISuccessChanceParams*/): number {
+  getPopulationSuccessFactor(): number {
     return 1;
   }
 
-  getChaosSuccessFactor(/*inst: Bladeburner, params: ISuccessChanceParams*/): number {
+  getChaosSuccessFactor(): number {
     return 1;
   }
+
   getTeamSuccessBonus = operationTeamSuccessBonus;
+
   getActionTypeSkillSuccessBonus = operationSkillSuccessBonus;
 }

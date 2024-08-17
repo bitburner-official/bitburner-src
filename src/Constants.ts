@@ -3,61 +3,10 @@
  *
  * Constants for specific mechanics or features will NOT be here.
  */
-export const CONSTANTS: {
-  VersionString: string;
-  isDevBranch: boolean;
-  VersionNumber: number;
-  MaxSkillLevel: number;
-  MilliPerCycle: number;
-  OfflineHackingIncome: number;
-  CorpFactionRepRequirement: number;
-  BaseFocusBonus: number;
-  TravelCost: number;
-  BaseFavorToDonate: number;
-  DonateMoneyToRepDivisor: number;
-  NeuroFluxGovernorLevelMult: number;
-  NumNetscriptPorts: number;
-  MultipleAugMultiplier: number;
-  TorRouterCost: number;
-  HospitalCostPerHp: number;
-  IntelligenceCrimeWeight: number;
-  IntelligenceCrimeBaseExpGain: number;
-  IntelligenceProgramBaseExpGain: number;
-  IntelligenceGraftBaseExpGain: number;
-  IntelligenceSingFnBaseExpGain: number;
-  MillisecondsPer20Hours: number;
-  GameCyclesPer20Hours: number;
-  MillisecondsPer10Hours: number;
-  GameCyclesPer10Hours: number;
-  MillisecondsPer8Hours: number;
-  GameCyclesPer8Hours: number;
-  MillisecondsPer4Hours: number;
-  GameCyclesPer4Hours: number;
-  MillisecondsPer2Hours: number;
-  GameCyclesPer2Hours: number;
-  MillisecondsPerHour: number;
-  GameCyclesPerHour: number;
-  MillisecondsPerHalfHour: number;
-  GameCyclesPerHalfHour: number;
-  MillisecondsPerQuarterHour: number;
-  GameCyclesPerQuarterHour: number;
-  MillisecondsPerFiveMinutes: number;
-  GameCyclesPerFiveMinutes: number;
-  CodingContractBaseFactionRepGain: number;
-  CodingContractBaseCompanyRepGain: number;
-  CodingContractBaseMoneyGain: number;
-  AugmentationGraftingCostMult: number;
-  AugmentationGraftingTimeBase: number;
-  SoACostMult: number;
-  SoARepMult: number;
-  EntropyEffect: number;
-  Donations: number; // number of blood/plasma/palette donation the dev have verified., boosts NFG
-  CompanyRequiredReputationMultiplier: number; // Only use this if a backdoor is installed in the company's server
-  LatestUpdate: string;
-} = {
-  VersionString: "2.6.2dev",
+export const CONSTANTS = {
+  VersionString: "2.6.3dev",
   isDevBranch: true,
-  VersionNumber: 39,
+  VersionNumber: 40,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -150,54 +99,18 @@ export const CONSTANTS: {
   // Value raised to the number of entropy stacks, then multiplied to player multipliers
   EntropyEffect: 0.98,
 
+  // Number of blood, plasma, or platelet donations the developer has verified. Boosts NFG.
   Donations: 151,
 
+  // Only use this if a backdoor is installed in the company's server
   CompanyRequiredReputationMultiplier: 0.75,
 
   // Also update doc/source/changelog.rst
   LatestUpdate: `
-## v2.6.2 dev - Last update 4 June 2024
+## v2.6.3 Dev: Last updated 15 August 2024
 
-See 2.6.1 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.1/src/Documentation/doc/changelog.md
+See current dev branch changes <a href='https://github.com/bitburner-official/bitburner-src/commits/a48bfba53621b0f93e271a1a52cedd6c08d41713/?since=2024-07-03&until=2024-08-15&before=a48bfba53621b0f93e271a1a52cedd6c08d41713+35'>here</a> (commit history)
 
-### CHANGES
-
-- Hotfix (also backported to 2.6.1): Fixed an issue with invalid format on steam cloud save (@catloversg)
-- Augmentations: Adjusted handling of augmentations that affect starting money or programs (@jjclark1982)
-- Coding Contracts: Improved the performance of the All Valid Math Expressions contract checker (@yichizhng)
-- Coding Contracts: Simplified the Shortest Path contract checker (@gmcew)
-- Coding Contracts: Clarification on HammingCodes: Encoded Binary to Integer description (@gmcew)
-- Faction: Fixed some edge cases around Favor overflow (@catloversg)
-- Faction Invites: Code refactoring, all available invites are sent at once (@catloversg)
-- Faction UI: show which skills are relevant for each type of Faction work (@gmcew)
-- Font: Embedded the JetBrains Mono font as "JetBrainsMono" (@catloversg)
-- Go: Support playing manually as white against your own scripts (@ficocelliguy)
-- Go: Save a full game history to prevent repeat moves (@ficocelliguy)
-- Infiltration: Updated Slash game text to be less confusing (@catloversg)
-- Netscript API docs: Fixed some invalid usage issues + general type improvements (@catloversg, @ficocelliguy)
-- Programs UI: Changed time elapsed display to time left (@TheAimMan)
-- Servers: Game servers can now start with more than 1 core (@TheAimMan)
-- Scripts: Relative imports should now work correctly (@Caldwell-74)
-- Script Editor: Improved detection of possible infinite loops (@G4mingJon4s)
-- Script Editor: should now remember cursor location when switching tabs or game pages (@catloversg)
-- Skill XP: Fix an issue where in some cases, too much experience was needed to raise a skill from 1 to 2 (@catloversg)
-- Terminal: Improved autocompletion code for mixed case strings (@yichizhng)
-- Codebase: Partial migration away from outdated mui/styles (@Caldwell-74)
-
-### SPOILER CHANGES
-
-- Bladeburner: Added a button to stop the current action (@Kelenius)
-- Bladeburner UI: Display Black Operations in the expected order (@catloversg)
-- Corporation: Allow mass discarding products by selling for 0 (@gmcew)
-- Grafting: Fixed a spacing issue (@Sphyxis)
-- Grafting/Hacknet: Fixed an issue that could cause hacknet node production to be inaccurrate when combined with Grafting (@catloversg)
-- Grafting: Fixed an issue that could cause inaccurate HP after Grafting (@catloversg)
-- Hashnet: Clarified effect of hacknet multipliers in in documentation (@catloversg)
-- Sleeve: Sleeve travel can no longer be performed if the player has insufficient funds (@gmcew)
-- Sleeve: Added a missing availability check when installing augmentations on Sleeves (@yichizhng)
-- Sleeve API: Fix an issue in ns.sleeve.setToBladeburnerAction that prevented setting sleeves to contract work (@Sphyxis)
-
-### OTHER
-- Nerf noodle bar
+See 2.6.2 changelog <a href='https://github.com/bitburner-official/bitburner-src/blob/v2.6.2/src/Documentation/doc/changelog.md'>here</a>
 `,
-};
+} as const;
