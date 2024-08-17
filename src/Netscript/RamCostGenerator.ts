@@ -669,6 +669,9 @@ export const RamCosts: RamCostTree<NSFull> = {
       factionGains: 0,
       companyGains: 0,
     },
+    bladeburner: {
+      skillMaxUpgradeCount: 0,
+    },
   },
 } as const;
 

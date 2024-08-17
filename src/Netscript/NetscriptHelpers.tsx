@@ -67,6 +67,7 @@ export const helpers = {
   number,
   positiveInteger,
   positiveSafeInteger,
+  positiveNumber,
   scriptArgs,
   runOptions,
   spawnOptions,

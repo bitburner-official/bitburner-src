@@ -2,11 +2,12 @@ import { Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
-import { Arrow, downArrowSymbol, getArrow, leftArrowSymbol, random, rightArrowSymbol, upArrowSymbol } from "../utils";
+import { Arrow, downArrowSymbol, getArrow, leftArrowSymbol, rightArrowSymbol, upArrowSymbol } from "../utils";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
+import { getRandomArbitrary } from "../../utils/helpers/getRandomArbitrary";
 
 interface Difficulty {
   [key: string]: number;
@@ -77,7 +78,7 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
 function generateCode(difficulty: Difficulty): Arrow[] {
   const arrows: Arrow[] = [leftArrowSymbol, rightArrowSymbol, upArrowSymbol, downArrowSymbol];
   const code: Arrow[] = [];
-  for (let i = 0; i < random(difficulty.min, difficulty.max); i++) {
+  for (let i = 0; i < getRandomArbitrary(difficulty.min, difficulty.max); i++) {
     let arrow = arrows[Math.floor(4 * Math.random())];
     while (arrow === code[code.length - 1]) arrow = arrows[Math.floor(4 * Math.random())];
     code.push(arrow);

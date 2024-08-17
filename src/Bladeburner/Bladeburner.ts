@@ -645,8 +645,8 @@ export class Bladeburner {
       }
     } else if (chance <= 0.7) {
       // Synthoid Riots (+chaos), 20%
-      sourceCity.chaos += 1;
-      sourceCity.chaos *= 1 + getRandomIntInclusive(5, 20) / 100;
+      sourceCity.changeChaosByCount(1);
+      sourceCity.changeChaosByPercentage(getRandomIntInclusive(5, 20));
       if (this.logging.events) {
         this.log("Tensions between Synthoids and humans lead to riots in " + sourceCityName + "! Chaos increased");
       }
@@ -700,14 +700,14 @@ export class Bladeburner {
     };
   }
 
-  getDiplomacyEffectiveness(person: Person): number {
-    // Returns a decimal by which the city's chaos level should be multiplied (e.g. 0.98)
+  getDiplomacyPercentage(person: Person): number {
+    // Returns a percentage by which the city's chaos level should be modified (e.g. 2 for 2%)
     const CharismaLinearFactor = 1e3;
     const CharismaExponentialFactor = 0.045;
 
     const charismaEff =
       Math.pow(person.skills.charisma, CharismaExponentialFactor) + person.skills.charisma / CharismaLinearFactor;
-    return (100 - charismaEff) / 100;
+    return charismaEff;
   }
 
   getRecruitmentSuccessChance(person: Person): number {
@@ -1161,15 +1161,12 @@ export class Bladeburner {
             break;
           }
           case BladeburnerGeneralActionName.Diplomacy: {
-            const eff = this.getDiplomacyEffectiveness(person);
-            this.getCurrentCity().chaos *= eff;
-            if (this.getCurrentCity().chaos < 0) {
-              this.getCurrentCity().chaos = 0;
-            }
+            const diplomacyPct = this.getDiplomacyPercentage(person);
+            this.getCurrentCity().changeChaosByPercentage(-diplomacyPct);
             if (this.logging.general) {
               this.log(
                 `${person.whoAmI()}: Diplomacy completed. Chaos levels in the current city fell by ${formatPercent(
-                  1 - eff,
+                  diplomacyPct / 100,
                 )}.`,
               );
             }
@@ -1209,8 +1206,8 @@ export class Bladeburner {
             }
             for (const cityName of Object.values(CityName)) {
               const city = this.cities[cityName];
-              city.chaos += 10;
-              city.chaos += city.chaos / (Math.log(city.chaos) / Math.log(10));
+              city.changeChaosByCount(10);
+              city.changeChaosByCount(city.chaos / Math.log10(city.chaos));
             }
             break;
           }

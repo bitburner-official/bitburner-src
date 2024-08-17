@@ -51,6 +51,7 @@ import { findEnumMember } from "../utils/helpers/enum";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { findCrime } from "../Crime/CrimeHelpers";
+import { Skills } from "../Bladeburner/data/Skills";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
@@ -425,6 +426,22 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const position = CompanyPositions[positionName];
         const favor = helpers.number(ctx, "favor", _favor);
         return calculateCompanyWorkStats(person, company, position, favor);
+      },
+    },
+    bladeburner: {
+      skillMaxUpgradeCount: (ctx) => (_name, _level, _skillPoints) => {
+        checkFormulasAccess(ctx);
+        const name = getEnumHelper("BladeSkillName").nsGetMember(ctx, _name, "name");
+        const level = helpers.number(ctx, "level", _level);
+        if (level < 0) {
+          throw new Error(`Level must be a non-negative number.`);
+        }
+        const skillPoints = helpers.positiveNumber(ctx, "skillPoints", _skillPoints);
+        const skill = Skills[name];
+        if (level >= skill.maxLvl) {
+          return 0;
+        }
+        return skill.calculateMaxUpgradeCount(level, skillPoints);
       },
     },
   };

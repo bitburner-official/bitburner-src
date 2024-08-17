@@ -50,10 +50,10 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
   const wipeAllChaos = () => Object.values(CityName).forEach((city) => (bladeburner.cities[city].chaos = 0));
   const wipeActiveCityChaos = () => (bladeburner.cities[bladeburner.city].chaos = 0);
   const addAllChaos = (modify: number) => (chaos: number) => {
-    Object.values(CityName).forEach((city) => (bladeburner.cities[city].chaos += chaos * modify));
+    Object.values(CityName).forEach((city) => bladeburner.cities[city].changeChaosByCount(chaos * modify));
   };
   const addTonsAllChaos = () => {
-    Object.values(CityName).forEach((city) => (bladeburner.cities[city].chaos += bigNumber));
+    Object.values(CityName).forEach((city) => bladeburner.cities[city].changeChaosByCount(bigNumber));
   };
 
   // Skill functions

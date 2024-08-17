@@ -4,12 +4,12 @@ import { Box, Paper, Typography } from "@mui/material";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { random } from "../utils";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
 import { isPositiveInteger } from "../../types";
+import { getRandomArbitrary } from "../../utils/helpers/getRandomArbitrary";
 
 interface Difficulty {
   [key: string]: number;
@@ -200,7 +200,7 @@ function generateQuestion(wires: Wire[], difficulty: Difficulty): Question[] {
 
 function generateWires(difficulty: Difficulty): Wire[] {
   const wires = [];
-  const numWires = random(difficulty.wiresmin, difficulty.wiresmax);
+  const numWires = getRandomArbitrary(difficulty.wiresmin, difficulty.wiresmax);
   for (let i = 0; i < numWires; i++) {
     const wireColors = [colors[Math.floor(Math.random() * colors.length)]];
     if (Math.random() < 0.15) {
