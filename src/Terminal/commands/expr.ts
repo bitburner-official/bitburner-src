@@ -8,10 +8,10 @@ export function expr(args: (string | number | boolean)[]): void {
   const expr = args.join("");
 
   // Sanitize the math expression
-  const sanitizedExpr = expr.replace(/s+/g, "").replace(/[^-()\d/*+.%]/g, "");
+  const sanitizedExpr = expr.replace(/[^-()\d/*+.%]/g, "");
   let result;
   try {
-    result = eval(sanitizedExpr);
+    result = eval?.(sanitizedExpr);
   } catch (e) {
     Terminal.error(`Could not evaluate expression: ${sanitizedExpr}`);
     return;

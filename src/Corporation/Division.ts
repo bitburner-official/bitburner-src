@@ -527,7 +527,7 @@ export class Division {
               let tmp = mat.desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
               tmp = tmp.replace(/PROD/g, mat.productionAmount.toString());
               try {
-                sellAmt = eval(tmp);
+                sellAmt = eval?.(tmp);
               } catch (e) {
                 dialogBoxCreate(
                   `Error evaluating your sell amount for material ${mat.name} in ${this.name}'s ${city} office. The sell amount is being set to zero`,
@@ -576,7 +576,7 @@ export class Division {
               sCost = mat.marketPrice + markupLimit;
             } else if (typeof mat.desiredSellPrice === "string") {
               sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice.toString());
-              sCost = eval(sCost);
+              sCost = eval?.(sCost);
             } else {
               sCost = mat.desiredSellPrice;
             }
@@ -642,7 +642,7 @@ export class Division {
                 amtStr = amtStr.replace(/IINV/g, `(${tempMaterial.stored})`);
                 let amt = 0;
                 try {
-                  amt = eval(amtStr);
+                  amt = eval?.(amtStr);
                 } catch (e) {
                   dialogBoxCreate(
                     `Calculating export for ${mat.name} in ${this.name}'s ${city} division failed with error: ${e}`,
@@ -844,7 +844,7 @@ export class Division {
             let tmp: number | string = desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
             tmp = tmp.replace(/PROD/g, product.cityData[city].productionAmount.toString());
             try {
-              tmp = eval(tmp);
+              tmp = eval?.(tmp);
               if (typeof tmp !== "number") throw "";
             } catch (e) {
               dialogBoxCreate(
@@ -902,7 +902,7 @@ export class Division {
               product.markup = 1;
             }
             sCostString = sCostString.replace(/MP/g, product.cityData[city].productionCost.toString());
-            sCost = eval(sCostString);
+            sCost = eval?.(sCostString);
           } else {
             sCost = sellPrice;
           }

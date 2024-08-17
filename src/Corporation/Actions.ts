@@ -206,7 +206,7 @@ export function sellMaterial(material: Material, amount: string, price: string):
   let temp = cost.replace(/MP/, "1.234e5");
   try {
     if (temp.includes("MP")) throw "Only one reference to MP is allowed in sell price.";
-    temp = eval(temp);
+    temp = eval?.(temp);
   } catch (e) {
     throw new Error("Invalid value or expression for sell price field: " + e);
   }
@@ -230,7 +230,7 @@ export function sellMaterial(material: Material, amount: string, price: string):
     tempQty = tempQty.replace(/PROD/g, material.productionAmount.toString());
     tempQty = tempQty.replace(/INV/g, material.productionAmount.toString());
     try {
-      tempQty = eval(tempQty);
+      tempQty = eval?.(tempQty);
     } catch (e) {
       throw new Error("Invalid value or expression for sell quantity field: " + e);
     }
@@ -262,7 +262,7 @@ export function sellProduct(product: Product, city: CityName, amt: string, price
     let temp = price.replace(/MP/, "1.234e5");
     try {
       if (temp.includes("MP")) throw "Only one reference to MP is allowed in sell price.";
-      temp = eval(temp);
+      temp = eval?.(temp);
     } catch (e) {
       throw new Error("Invalid value or expression for sell price field: " + e);
     }
@@ -290,7 +290,7 @@ export function sellProduct(product: Product, city: CityName, amt: string, price
     temp = temp.replace(/PROD/g, product.cityData[city].productionAmount.toString());
     temp = temp.replace(/INV/g, product.cityData[city].stored.toString());
     try {
-      temp = eval(temp);
+      temp = eval?.(temp);
     } catch (e) {
       throw new Error("Invalid value or expression for sell quantity field: " + e);
     }
@@ -579,7 +579,7 @@ Attempted export amount: ${amount}`);
     const replaced = sanitizedAmt.replace(/(MAX|IPROD|EPROD|IINV|EINV)/g, testReplacement);
     let evaluated, error;
     try {
-      evaluated = eval(replaced);
+      evaluated = eval?.(replaced);
     } catch (e) {
       error = e;
     }
