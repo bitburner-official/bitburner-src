@@ -10,7 +10,7 @@ import type { WorkerScript } from "./WorkerScript";
 
 import React from "react";
 import { killWorkerScript } from "./killWorkerScript";
-import { GetAllServers, GetServer } from "../Server/AllServers";
+import { GetServer } from "../Server/AllServers";
 import { Player } from "@player";
 import { ScriptDeath } from "./ScriptDeath";
 import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/formatNumber";
@@ -649,17 +649,9 @@ export function getRunningScriptsByArgs(
   return findRunningScripts(path, scriptArgs, server);
 }
 
-function getRunningScriptByPid(pid: number): RunningScript | null {
-  for (const server of GetAllServers()) {
-    const runningScript = findRunningScriptByPid(pid, server);
-    if (runningScript) return runningScript;
-  }
-  return null;
-}
-
 function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): RunningScript | null {
   if (typeof ident === "number") {
-    return getRunningScriptByPid(ident);
+    return findRunningScriptByPid(ident);
   } else {
     const scripts = getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
     if (scripts === null) return null;

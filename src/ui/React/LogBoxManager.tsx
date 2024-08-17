@@ -212,7 +212,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
   function run(): void {
     const server = GetServer(script.server);
     if (server === null) return;
-    const s = findRunningScriptByPid(script.pid, server);
+    const s = findRunningScriptByPid(script.pid);
     if (s === null) {
       const baseScript = server.scripts.get(script.filename);
       if (!baseScript) {
