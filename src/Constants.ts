@@ -105,12 +105,98 @@ export const CONSTANTS = {
   // Only use this if a backdoor is installed in the company's server
   CompanyRequiredReputationMultiplier: 0.75,
 
-  // Also update doc/source/changelog.rst
+  // Also update Documentation/doc/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
 ## v2.6.3 Dev: Last updated 15 August 2024
 
-See current dev branch changes <a href='https://github.com/bitburner-official/bitburner-src/commits/a48bfba53621b0f93e271a1a52cedd6c08d41713/?since=2024-07-03&until=2024-08-15&before=a48bfba53621b0f93e271a1a52cedd6c08d41713+35'>here</a> (commit history)
+### MAJOR ADDITIONS
 
-See 2.6.2 changelog <a href='https://github.com/bitburner-official/bitburner-src/blob/v2.6.2/src/Documentation/doc/changelog.md'>here</a>
+- BN options selection interface (@catloversg)
+- Support JSX, TS, TSX script files (@catloversg)
+
+### UI
+
+- Tweak Hacknet summary (@catloversg)
+- Only show relevant changes in "Purchased Augmentations" table (@catloversg)
+- Correctly show remaining grafting/programming time left when cycles are skipped. (@tom.prince)
+- Update monaco-editor to 0.50.0 and work around a bug (@tom.prince, @catloversg)
+- Fix misleading favor numbers (@catloversg)
+- Sync UI updates to game updates. (@tom.prince)
+- Always show description of faction price multiplier (@catloversg)
+- Add apostrophe to stanek's gift strings (@nicole)
+- Use Autocomplete instead of Select in augmentation tool (@catloversg)
+- Notify players about documentation tab after getting SF1.1 (@catloversg)
+
+### DOCUMENTATION
+
+- Remove obsolete description of killall (@catloversg)
+- Update description of source files (@catloversg)
+- Add link to NS API documentation (@catloversg)
+- fix a typo in the hamming code problem statement (@jazzybones)
+- Fix broken link in README.md (@ngcthao)
+- Remove "&nbsp;"s from .getDescription() result (@gmcew)
+- Typo in ns2 migration doc (@mctylr-gh)
+- Remove unmaintained VS Code extension from docs (@catloversg)
+- Fix link to non-existing page (@BaxoPlenty)
+- Add help text for changelog command (@catloversg)
+- Clarify deprecation warning of ns.getTimeSinceLastAug() (@catloversg)
+- Fix typos in NetscriptDefinitions.d.ts (@catloversg)
+- Add GoAnalysis and GoCheat doc namespaces (@catloversg)
+- Hamming Code parity sentence clarification, "Find All Valid Math Expressions" missing line breaks added, example formatting made consistent (@gmcew)
+- Outdated formula of favor in tooltip (@catloversg)
+- add scoring rules explanations to how to play page and score modal (@ficocelliguy)
+- Fix wrong description of ns.singularity.applyToCompany (@catloversg)
+- Fix errors and warnings shown by api-extractor (@catloversg)
+- Remove wrong information in ns.weaken (@catloversg)
+
+### MISC
+
+- Fix wrong money source when traveling (@catloversg)
+- Update caniuse-lite to latest version (@tom.prince)
+- Use ramOverride() to set compiled script RAM (@d0sboots)
+- Remove redundant type of CONSTANTS (@catloversg)
+- Add threshold for warning about system clock (@catloversg)
+- Provide type definitions for \`React\` and \`ReactDOM\` in in-game editor. (@tom.prince)
+- Fix "Router called before initialization" race (@d0sboots)
+- Always include stack trace in Recovery Mode (@d0sboots)
+- Add a type annotation to webpack configuration function. (@tom.prince)
+- Remove testing code in ScriptTransformer (@catloversg)
+- Use mathjax from npm, rather than vendored copy. Also fix mathjax path. (@tom.prince)
+- Don't spin forever if IDB can't be loaded (@d0sboots)
+- Prevent runtime NotAllowedError on Safari (@robofinch)
+- Remove unsed attribues of internal \`ScriptDeath\`. (@tom.prince)
+- Enable strict typechecking of typescript, and several other typescript improvements (@tom.prince)
+- Add some more types to \`webpack.config.js\`. (@tom.prince)
+- Minesweepergame minor bugfix, made rounding behavior for height, width and mine count consistent (@mmjr-x)
+- Refactor Person.ts and Sleeve.ts (@catloversg)
+- Fix crash when accessing nonexist files with file protocol (@catloversg)
+- Stop terminal scp from revealing and copying to unreachable servers (@yichizhng)
+- Tab completion uses wrong command list (@catloversg)
+- Fix: prompt does not reset text value (@catloversg)
+- Remove unnecessary dependency in Person class (@catloversg)
+- Remove js-sha256 (@catloversg)
+- Duplicated program in edge case (@catloversg)
+- Small change in devmenu augmentation tool (@catloversg)
+- Update Electron to v29 (@catloversg)
+- Improve rep calculation accuracy (@d0sboots)
+- CORPORATION: Fix NaN Total Assets caused by bug in bulkPurchase API (#1573) (@catloversg)
+- Cancel infiltration when player is hospitalized (@catloversg)
+- Update Node version (@catloversg)
+
+### SPOILER CHANGES
+
+- Change formula of bladeburner skill cost (@catloversg)
+- Fix wrong behavior of ns.bladeburner.getSkillUpgradeCost (@catloversg)
+- Disable rumor of Bladeburners in BN8 (@catloversg)
+- Stop current work when starting a program with Singularity (@TheAimMan)
+- Cap Gang recruit member calculation (@TheAimMan)
+- Allow upgrading bladeburner skill level over max safe integer (@catloversg)
+- Wrong countdown of remaining time for Bladeburner action (@catloversg)
+- Duplicated augmentation when buying after grafting (@catloversg)
+- Wrong success range of Bladeburner general action (@catloversg)
+- Add buyAmount and importAmount to Corporation Material API (@yichizhng)
+- Add success chance of Bladeburner action to Sleeves UI (@catloversg)
+- Allow filtering graftable augmentations (@catloversg)
+- Wrong error message when failing to recruit gang member (@catloversg)
 `,
 } as const;

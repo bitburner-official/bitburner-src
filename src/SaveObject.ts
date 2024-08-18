@@ -853,7 +853,6 @@ function createNewUpdateText() {
           "Please report any bugs/issues through the GitHub repository " +
           "or the Bitburner subreddit (reddit.com/r/bitburner).\n\n" +
           CONSTANTS.LatestUpdate,
-        true,
       ),
     1000,
   );
@@ -868,7 +867,6 @@ function createBetaUpdateText() {
           "Please report any bugs/issues through the github repository (https://github.com/bitburner-official/bitburner-src/issues) " +
           "or the Bitburner subreddit (reddit.com/r/bitburner).\n\n" +
           CONSTANTS.LatestUpdate,
-        true,
       ),
     1000,
   );
