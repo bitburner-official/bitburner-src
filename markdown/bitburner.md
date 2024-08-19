@@ -43,6 +43,7 @@
 |  [Export](./bitburner.export.md) | Export order for a material |
 |  [FactionWorkTask](./bitburner.factionworktask.md) | Faction Work |
 |  [FileRequirement](./bitburner.filerequirement.md) | Player must have a specific Literature or Message file on their home computer. |
+|  [Format](./bitburner.format.md) | Format API |
 |  [Formulas](./bitburner.formulas.md) | Formulas API |
 |  [Fragment](./bitburner.fragment.md) |  |
 |  [GameInfo](./bitburner.gameinfo.md) | Game Information |

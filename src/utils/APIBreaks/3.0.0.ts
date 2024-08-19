@@ -60,4 +60,17 @@ export const breakInfos300: APIBreakInfo[] = [
       'It has been automatically replaced with "ns.corporation.getCorporation().nextState"',
     showPopUp: false,
   },
+  {
+    brokenAPIs: [
+      { name: "ns.formatNumber", migration: { searchValue: "ns.formatNumber", replaceValue: "ns.format.number" } },
+      { name: "ns.formatRam", migration: { searchValue: "ns.formatRam", replaceValue: "ns.format.ram" } },
+      { name: "ns.formatPercent", migration: { searchValue: "ns.formatPercent", replaceValue: "ns.format.percent" } },
+      { name: "ns.tFormat", migration: { searchValue: "ns.tFormat", replaceValue: "ns.format.time" } },
+    ],
+    info:
+      "The formatting functions have been moved to their own interface, ns.format.\n" +
+      "Each function has been replaced with their corresponding interface variant.\n" +
+      "Additionally, the naming of ns.tFormat has been changed to ns.format.time.",
+    showPopUp: false,
+  },
 ];
