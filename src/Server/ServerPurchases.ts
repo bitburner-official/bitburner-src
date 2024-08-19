@@ -47,7 +47,7 @@ export const getPurchasedServerUpgradeCost = (hostname: string, ram: number): nu
   if (isNaN(ram) || !isPowerOfTwo(ram) || !(Math.sign(ram) === 1))
     throw new Error(`${ram} is not a positive power of 2`);
   if (server.maxRam >= ram)
-    throw new Error(`New RAM (${ram}) should be bigger than server (${hostname}) current RAM (${server.maxRam}).`);
+    throw new Error(`The new ram of '${hostname}' (${ram}) must be bigger than its current ram (${server.maxRam}).`);
   return getPurchaseServerCost(ram) - getPurchaseServerCost(server.maxRam);
 };
 
