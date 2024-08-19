@@ -7,7 +7,7 @@ import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
-import { getRandomArbitrary } from "../../utils/helpers/getRandomArbitrary";
+import { randomInRange } from "../../utils/helpers/randomInRange";
 
 interface Difficulty {
   [key: string]: number;
@@ -78,7 +78,7 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
 function generateCode(difficulty: Difficulty): Arrow[] {
   const arrows: Arrow[] = [leftArrowSymbol, rightArrowSymbol, upArrowSymbol, downArrowSymbol];
   const code: Arrow[] = [];
-  for (let i = 0; i < getRandomArbitrary(difficulty.min, difficulty.max); i++) {
+  for (let i = 0; i < randomInRange(difficulty.min, difficulty.max); i++) {
     let arrow = arrows[Math.floor(4 * Math.random())];
     while (arrow === code[code.length - 1]) arrow = arrows[Math.floor(4 * Math.random())];
     code.push(arrow);

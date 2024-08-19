@@ -8,7 +8,7 @@ import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
-import { getRandomArbitrary } from "../../utils/helpers/getRandomArbitrary";
+import { randomInRange } from "../../utils/helpers/randomInRange";
 
 interface Difficulty {
   [key: string]: number;
@@ -67,7 +67,7 @@ export function BackwardGame(props: IMinigameProps): React.ReactElement {
 }
 
 function makeAnswer(difficulty: Difficulty): string {
-  const length = getRandomArbitrary(difficulty.min, difficulty.max);
+  const length = randomInRange(difficulty.min, difficulty.max);
   let answer = "";
   for (let i = 0; i < length; i++) {
     if (i > 0) answer += " ";

@@ -2,7 +2,7 @@ import { currentNodeMults } from "../../../src/BitNode/BitNodeMultipliers";
 import { Skill } from "../../../src/Bladeburner/Skill";
 import { BladeburnerSkillName } from "../../../src/Enums";
 import { PositiveInteger, isPositiveInteger, isPositiveNumber } from "../../../src/types";
-import { getRandomArbitrary } from "../../../src/utils/helpers/getRandomArbitrary";
+import { randomInRange } from "../../../src/utils/helpers/randomInRange";
 import { getRandomIntInclusive } from "../../../src/utils/helpers/getRandomIntInclusive";
 
 const skill = new Skill({
@@ -22,9 +22,9 @@ describe("Test calculateMaxUpgradeCount", function () {
     for (let i = 0; i < 10; ++i) {
       skill.baseCost = getRandomIntInclusive(1, 1000);
       for (let j = 0; j < 10; ++j) {
-        skill.costInc = getRandomArbitrary(1, 1000);
+        skill.costInc = randomInRange(1, 1000);
         for (let k = 0; k < 10; ++k) {
-          currentNodeMults.BladeburnerSkillCost = getRandomArbitrary(1, 1000);
+          currentNodeMults.BladeburnerSkillCost = randomInRange(1, 1000);
           for (let m = 0; m < 1e4; ++m) {
             const currentLevel = getRandomIntInclusive(0, 1e9);
             let count = 0;
@@ -56,7 +56,7 @@ describe("Test calculateMaxUpgradeCount", function () {
 
             // Test 2
             ++testCaseCount;
-            const budget = getRandomArbitrary(1e9, 1e50);
+            const budget = randomInRange(1e9, 1e50);
             if (!isPositiveNumber(budget)) {
               throw new Error(`Invalid budget: ${budget}`);
             }

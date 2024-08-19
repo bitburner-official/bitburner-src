@@ -9,7 +9,7 @@ import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
 import { isPositiveInteger } from "../../types";
-import { getRandomArbitrary } from "../../utils/helpers/getRandomArbitrary";
+import { randomInRange } from "../../utils/helpers/randomInRange";
 
 interface Difficulty {
   [key: string]: number;
@@ -200,7 +200,7 @@ function generateQuestion(wires: Wire[], difficulty: Difficulty): Question[] {
 
 function generateWires(difficulty: Difficulty): Wire[] {
   const wires = [];
-  const numWires = getRandomArbitrary(difficulty.wiresmin, difficulty.wiresmax);
+  const numWires = randomInRange(difficulty.wiresmin, difficulty.wiresmax);
   for (let i = 0; i < numWires; i++) {
     const wireColors = [colors[Math.floor(Math.random() * colors.length)]];
     if (Math.random() < 0.15) {
