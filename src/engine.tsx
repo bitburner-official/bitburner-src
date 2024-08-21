@@ -22,7 +22,7 @@ import { checkForMessagesToSend } from "./Message/MessageHelpers";
 import { loadAllRunningScripts, updateOnlineScriptTimes } from "./NetscriptWorker";
 import { Player } from "@player";
 import { saveObject, loadGame } from "./SaveObject";
-import { initForeignServers } from "./Server/AllServers";
+import { GetAllServers, initForeignServers } from "./Server/AllServers";
 import { Settings } from "./Settings/Settings";
 import { FormatsNeedToChange } from "./ui/formatNumber";
 import { initSymbolToStockMap, processStockPrices } from "./StockMarket/StockMarket";
@@ -46,6 +46,22 @@ import { SnackbarEvents } from "./ui/React/Snackbar";
 import { SaveData } from "./types";
 import { Go } from "./Go/Go";
 import { EventEmitter } from "./utils/EventEmitter";
+import { Companies } from "./Company/Companies";
+
+declare global {
+  // This property is only available in the dev build
+  // eslint-disable-next-line no-var
+  var Bitburner: {
+    Player: typeof Player;
+    GetAllServers: typeof GetAllServers;
+    Factions: typeof Factions;
+    Companies: typeof Companies;
+    SaveObject: {
+      saveObject: typeof saveObject;
+      loadGame: typeof loadGame;
+    };
+  };
+}
 
 // Only show warning if the time diff is greater than this value.
 const thresholdOfTimeDiffForShowingWarningAboutSystemClock = CONSTANTS.MillisecondsPerFiveMinutes;
@@ -407,6 +423,24 @@ const Engine: {
 
       // Start interactive tutorial
       iTutorialStart();
+    }
+
+    // Expose internal objects/functions in the dev build
+    if (process.env.NODE_ENV === "development") {
+      globalThis.Bitburner = {
+        // Most data is in this object
+        Player: Player,
+        // Manipulate data of servers
+        GetAllServers: GetAllServers,
+        // Manipulate data of Factions and Companies
+        Factions: Factions,
+        Companies: Companies,
+        // saveObject and loadGame can be used to create a custom save/load tool
+        SaveObject: {
+          saveObject: saveObject,
+          loadGame: loadGame,
+        },
+      };
     }
   },
 
