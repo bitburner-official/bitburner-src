@@ -254,7 +254,7 @@ export class Bladeburner {
   getSkillMultsDisplay(): string[] {
     const display: string[] = [];
     for (const [multName, mult] of getRecordEntries(this.skillMultipliers)) {
-      display.push(`${multName}: x${formatNumberNoSuffix(mult, 3)}`);
+      display.push(`${multName}: x${formatBigNumber(mult)}`);
     }
     return display;
   }
@@ -751,8 +751,8 @@ export class Bladeburner {
       const level = this.getSkillLevel(skill.name);
       if (!level) continue;
       for (const [name, baseMult] of getRecordEntries(skill.mults)) {
-        const mult = baseMult * level;
-        this.skillMultipliers[name] = clampNumber(this.getSkillMult(name) + mult / 100, 0);
+        const mult = 1 + baseMult * level / 100;
+        this.skillMultipliers[name] = clampNumber(this.getSkillMult(name) * mult, 0);
       }
     }
   }
