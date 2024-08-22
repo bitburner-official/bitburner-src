@@ -751,7 +751,7 @@ export class Bladeburner {
       const level = this.getSkillLevel(skill.name);
       if (!level) continue;
       for (const [name, baseMult] of getRecordEntries(skill.mults)) {
-        const mult = 1 + baseMult * level / 100;
+        const mult = 1 + (baseMult * level) / 100;
         this.skillMultipliers[name] = clampNumber(this.getSkillMult(name) * mult, 0);
       }
     }
