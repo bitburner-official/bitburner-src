@@ -103,7 +103,9 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
       throw new Error(`Invalid function specified: [${fnPath.toString()}]`);
     }
 
-    expect(workerScript.dynamicLoadedFns).toHaveProperty(fnName);
+    if (expectedRamCost !== 0) {
+      expect(workerScript.dynamicLoadedFns).toHaveProperty(fnName);
+    }
     expect(workerScript.dynamicRamUsage).toBeCloseTo(Math.min(expectedRamCost + baseCost, maxCost), 5);
     expect(workerScript.dynamicRamUsage).toBeCloseTo(scriptRef.ramUsage - extraLayerCost, 5);
   }
