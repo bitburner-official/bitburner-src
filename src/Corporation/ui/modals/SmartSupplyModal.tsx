@@ -48,7 +48,7 @@ function SSoption(props: ISSoptionProps): React.ReactElement {
 
   return (
     <>
-      label={<Typography>{props.warehouse.materials[props.matName].name}</Typography>}
+      {<Typography>{props.warehouse.materials[props.matName].name}</Typography>}
       <FormControlLabel
         control={<Switch checked={value == "leftovers"} onChange={onLOChange} />}
         label={<Typography>{"Use leftovers"}</Typography>}
