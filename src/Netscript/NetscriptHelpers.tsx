@@ -343,6 +343,7 @@ function netscriptDelay(ctx: NetscriptContext, time: number): Promise<void> {
 
 /** Adds to dynamic ram cost when calling new ns functions from a script */
 function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
+  if (ramCost === 0) return;
   const ws = ctx.workerScript;
   const fnName = ctx.function;
   if (ws.dynamicLoadedFns[fnName]) return;
