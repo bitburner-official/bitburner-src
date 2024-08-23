@@ -761,7 +761,7 @@ function validateBitNodeOptions(ctx: NetscriptContext, bitNodeOptions: unknown):
 
   result.sourceFileOverrides = new JSONMap(options.sourceFileOverrides);
   if (options.intelligenceOverride !== undefined) {
-    result.intelligenceOverride = number(ctx, "intelligenceOverride", options.intelligenceOverride);
+    result.intelligenceOverride = positiveInteger(ctx, "intelligenceOverride", options.intelligenceOverride);
   } else {
     result.intelligenceOverride = undefined;
   }

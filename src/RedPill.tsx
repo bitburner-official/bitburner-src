@@ -8,7 +8,7 @@ import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { prestigeSourceFile } from "./Prestige";
-import { setBitNodeOptions } from "./BitNode/BitNodeUtils";
+import { getDefaultBitNodeOptions, setBitNodeOptions } from "./BitNode/BitNodeUtils";
 
 function giveSourceFile(bitNodeNumber: number): void {
   const sourceFileKey = "SourceFile" + bitNodeNumber.toString();
@@ -69,12 +69,26 @@ export function enterBitNode(
   Player.bitNodeN = newBitNode;
 
   // Set BitNode options
-  setBitNodeOptions(bitNodeOptions);
+  try {
+    setBitNodeOptions(bitNodeOptions);
+  } catch (error) {
+    dialogBoxCreate(
+      <>
+        Invalid BitNode options. This is a bug. Please report it to developers.
+        <br />
+        <br />
+        {error instanceof Error ? error.stack : String(error)}
+      </>,
+    );
+    // Use default options
+    setBitNodeOptions(getDefaultBitNodeOptions());
+  }
+
+  prestigeSourceFile(isFlume);
 
   if (newBitNode === 6) {
     Router.toPage(Page.BladeburnerCinematic);
   } else {
     Router.toPage(Page.Terminal);
   }
-  prestigeSourceFile(isFlume);
 }
