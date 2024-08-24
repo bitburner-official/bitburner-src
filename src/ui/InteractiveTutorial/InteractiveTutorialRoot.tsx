@@ -530,7 +530,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           but I highly suggest you read (or at least skim) through this before you start playing.
           <br />
           <br />
-          The Beginner's Guide contains the guide for new players, navigating you through most of early game.
+          The Beginner's guide contains the guide for new players, navigating you through most of early game.
           <br />
           <br />
           That's the end of the tutorial. Hope you enjoy the game!
