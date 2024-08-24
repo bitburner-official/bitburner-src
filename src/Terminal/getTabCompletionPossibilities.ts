@@ -276,10 +276,21 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     if (!loadedModule || !loadedModule.autocomplete) return; // Doesn't have an autocomplete function.
 
     const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
-    const flags = libarg(runArgs, {
-      permissive: true,
-      argv: command.slice(2),
-    });
+    let flags = {
+      _: [],
+    };
+    try {
+      flags = libarg(runArgs, {
+        permissive: true,
+        argv: command.slice(2),
+      });
+    } catch (error) {
+      /**
+       * This error can only happen when the player specifies "-t" or "--ram-override", then presses [Tab] without
+       * giving a number. We don't need to show an error here.
+       */
+      console.warn(error);
+    }
     const flagFunc = Flags(flags._);
     const autocompleteData: AutocompleteData = {
       servers: GetAllServers()

@@ -18,10 +18,16 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   if (!script) return Terminal.error(`Script ${path} does not exist on this server.`);
 
   const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
-  const flags = libarg(runArgs, {
-    permissive: true,
-    argv: commandArgs,
-  });
+  let flags;
+  try {
+    flags = libarg(runArgs, {
+      permissive: true,
+      argv: commandArgs,
+    });
+  } catch (error) {
+    Terminal.error(`Invalid arguments. ${String(error)}.`);
+    return;
+  }
   const tailFlag = flags["--tail"] === true;
   const numThreads = parseFloat(flags["-t"] ?? 1);
   const ramOverride = flags["--ram-override"] != null ? roundToTwo(parseFloat(flags["--ram-override"])) : null;
