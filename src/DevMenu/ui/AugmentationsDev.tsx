@@ -71,7 +71,7 @@ export function AugmentationsDev(): React.ReactElement {
             </IconButton>
           </Tooltip>
           <Autocomplete
-            style={{ width: "400px" }}
+            style={{ width: "500px" }}
             options={options}
             value={augmentation}
             renderInput={(params) => <TextField {...params} style={{ height: "100%" }} />}
