@@ -24,6 +24,7 @@ import {
   iTutorialEnd,
 } from "../../InteractiveTutorial";
 import { useRerender } from "../React/hooks";
+import { Settings } from "../../Settings/Settings";
 
 interface IContent {
   content: React.ReactElement;
@@ -525,13 +526,27 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     },
     [iTutorialSteps.DocumentationPageInfo as number]: {
       content: (
-        <Typography>
-          This page contains a lot of different documentation about the game's content and mechanics. I know it's a lot,
-          but I highly suggest you read (or at least skim) through this before you start playing.
+        <Typography component="div">
+          This page contains a lot of different documentation about the game's contents and mechanics. I know it's a
+          lot, but I highly suggest you read (or at least skim) through this before you start playing. Some pages are
+          inaccessible at the start and will be unlocked later.
           <br />
           <br />
-          The Beginner's guide contains the guide for new players, navigating you through most of early game.
+          You should at least check these pages:
+          <ul>
+            <li>
+              The Beginner's guide contains the guide for new players, navigating you through most of the early game.
+            </li>
+            <li>The NS API documentation contains reference materials for all NS APIs.</li>
+          </ul>
+          <Typography fontWeight="fontWeightBold">
+            This documentation page is the best place to get up-to-date information, especially when you get stuck. If
+            you have a question and cannot find the answer here, please ask us on Discord.
+          </Typography>
           <br />
+          <Typography color={Settings.theme.warning}>
+            The documentation at readthedocs is outdated and unmaintained. Do not use them!
+          </Typography>
           <br />
           That's the end of the tutorial. Hope you enjoy the game!
         </Typography>
