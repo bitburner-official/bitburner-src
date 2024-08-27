@@ -26,7 +26,9 @@ void
 
 RAM cost: 0 GB
 
-Re-enables logging for the given function. If `ALL` is passed into this function as an argument, it will revert the effect of disableLog("ALL").
+Logging can be enabled for all functions by passing `ALL` as the argument.
+
+For specific interfaces, use the form "namespace.functionName". (e.g. "ui.setTheme")
 
 ## Example
 
