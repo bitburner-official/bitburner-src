@@ -8,19 +8,7 @@ Displays the game history, captured nodes, and gained bonuses for each opponent 
 
 The details are keyed by opponent name, in this structure:
 
-```js
-{
-  <OpponentName>: {
-    wins: number,
-    losses: number,
-    winStreak: number,
-    highestWinStreak: number,
-    favor: number,
-    bonusPercent: number,
-    bonusDescription: string,
-  }
-}
-```
+<pre lang="javascript"> { <OpponentName>: { wins: number, losses: number, winStreak: number, highestWinStreak: number, favor: number, bonusPercent: number, bonusDescription: string, } } </pre>
 
 **Signature:**
 

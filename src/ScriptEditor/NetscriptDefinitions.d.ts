@@ -653,7 +653,7 @@ interface BitNodeMultipliers {
   CharismaLevelMultiplier: number;
   /** Influences the experience gained for each ability when a player completes a class. */
   ClassGymExpGain: number;
-  /**Influences the amount of money gained from completing Coding Contracts. */
+  /** Influences the amount of money gained from completing Coding Contracts. */
   CodingContractMoney: number;
   /** Influences the experience gained for each ability when the player completes working their job. */
   CompanyWorkExpGain: number;
@@ -661,13 +661,17 @@ interface BitNodeMultipliers {
   CompanyWorkMoney: number;
   /** Influences how much rep the player gains when performing work for a company. */
   CompanyWorkRepGain: number;
+  /** Influences the amount of divisions a corporation can have at the same time. */
+  CorporationDivisions: number;
+  /** Influences profits from corporation dividends and selling shares. */
+  CorporationSoftcap: number;
   /** Influences the valuation of corporations created by the player. */
   CorporationValuation: number;
   /** Influences the base experience gained for each ability when the player commits a crime. */
   CrimeExpGain: number;
   /** Influences the base money gained when the player commits a crime. */
   CrimeMoney: number;
-  /** influences the success chance of committing crimes */
+  /** Influences the success chance of committing crimes */
   CrimeSuccessRate: number;
   /** Influences how many Augmentations you need in order to get invited to the Daedalus faction */
   DaedalusAugsRequirement: number;
@@ -685,7 +689,7 @@ interface BitNodeMultipliers {
   FourSigmaMarketDataApiCost: number;
   /** Influences how much it costs to unlock the stock market's 4S Market Data (NOT API) */
   FourSigmaMarketDataCost: number;
-  /** Reduces gangs earning. */
+  /** Influences the respect gain and money gain of your gang. */
   GangSoftcap: number;
   /** Percentage of unique augs that the gang has. */
   GangUniqueAugs: number;
@@ -726,7 +730,7 @@ interface BitNodeMultipliers {
   /** Influences how much money can be stolen from a server when a script performs a hack against it. */
   ScriptHackMoney: number;
   /**
-   * The amount of money actually gained when script hack a server. This is
+   * The amount of money actually gained when a script hacks a server. This is
    * different than the above because you can reduce the amount of money but
    * not gain that same amount.
    */
@@ -749,10 +753,6 @@ interface BitNodeMultipliers {
   StaneksGiftExtraSize: number;
   /** Influences the hacking skill required to backdoor the world daemon. */
   WorldDaemonDifficulty: number;
-  /** Influences profits from corporation dividends and selling shares. */
-  CorporationSoftcap: number;
-  /** Influences the amount of divisions a corporation can have have at the same time*/
-  CorporationDivisions: number;
 }
 
 /**
@@ -4260,16 +4260,15 @@ export interface GoAnalysis {
    *
    * For example, a 5x5 board might look like this. There is a large chain #1 on the left side, smaller chains
    * 2 and 3 on the right, and a large chain 0 taking up the center of the board.
-   *
-   * ```js
-   * [
-   *   [   0,0,0,3,4],
-   *   [   1,0,0,3,3],
-   *   [   1,1,0,0,0],
-   *   [null,1,0,2,2],
-   *   [null,1,0,2,5],
-   * ]
-   * ```
+   * <pre lang="javascript">
+   *       [
+   *         [   0,0,0,3,4],
+   *         [   1,0,0,3,3],
+   *         [   1,1,0,0,0],
+   *         [null,1,0,2,2],
+   *         [null,1,0,2,5],
+   *       ]
+   * </pre>
    *
    * @remarks
    * RAM cost: 16 GB
@@ -4284,16 +4283,15 @@ export interface GoAnalysis {
    *
    * For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one
    * in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!
-   *
-   * ```js
-   * [
-   *   [-1, 5,-1,-1, 2],
-   *   [ 5, 5,-1,-1,-1],
-   *   [-1,-1, 4,-1,-1],
-   *   [ 3,-1,-1, 3, 1],
-   *   [ 3,-1,-1, 3, 1],
-   * ]
-   * ```
+   * <pre lang="javascript">
+   *      [
+   *         [-1, 5,-1,-1, 2],
+   *         [ 5, 5,-1,-1,-1],
+   *         [-1,-1, 4,-1,-1],
+   *         [ 3,-1,-1, 3, 1],
+   *         [ 3,-1,-1, 3, 1],
+   *      ]
+   * </pre>
    *
    * @remarks
    * RAM cost: 16 GB
@@ -4309,16 +4307,15 @@ export interface GoAnalysis {
    * Filled points of any color are indicated with '.'
    *
    * In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center:
-   *
-   * ```js
-   * [
-   *   "OO..?",
-   *   "OO.?.",
-   *   "O.?.X",
-   *   ".?.XX",
-   *   "?..X#",
-   * ]
-   * ```
+   * <pre lang="javascript">
+   *   [
+   *      "OO..?",
+   *      "OO.?.",
+   *      "O.?.X",
+   *      ".?.XX",
+   *      "?..X#",
+   *   ]
+   * </pre>
    *
    * @remarks
    * RAM cost: 16 GB
@@ -4331,7 +4328,7 @@ export interface GoAnalysis {
    *
    * The details are keyed by opponent name, in this structure:
    *
-   * ```js
+   * <pre lang="javascript">
    * {
    *   <OpponentName>: {
    *     wins: number,
@@ -4343,7 +4340,7 @@ export interface GoAnalysis {
    *     bonusDescription: string,
    *   }
    * }
-   * ```
+   * </pre>
    */
   getStats(): Partial<Record<GoOpponent, SimpleOpponentStats>>;
 }
@@ -4527,15 +4524,13 @@ export interface Go {
    *
    * For example, a 5x5 board might look like this:
    *
-   * ```js
-   * [
-   *   "XX.O.",
-   *   "X..OO",
-   *   ".XO..",
-   *   "XXO.#",
-   *   ".XO.#",
-   * ]
-   * ```
+   [<br/>  
+      "XX.O.",<br/>  
+      "X..OO",<br/>  
+      ".XO..",<br/>  
+      "XXO.#",<br/>  
+      ".XO.#",<br/>  
+   ]
    *
    * Each string represents a vertical column on the board, and each character in the string represents a point.
    *
@@ -4555,15 +4550,13 @@ export interface Go {
    *
    * For example, a single 5x5 prior move board might look like this:
    *
-   * ```js
-   * [
-   *   "XX.O.",
-   *   "X..OO",
-   *   ".XO..",
-   *   "XXO.#",
-   *   ".XO.#",
-   * ]
-   * ```
+   [<br/>  
+      "XX.O.",<br/>  
+      "X..OO",<br/>  
+      ".XO..",<br/>  
+      "XXO.#",<br/>  
+      ".XO.#",<br/>  
+   ]
    */
   getMoveHistory(): string[][];
 

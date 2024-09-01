@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.StaneksGiftPowerMultiplier property
 
-Influences the power of the gift
+Influences the power of the gift.
 
 **Signature:**
 
