@@ -57,7 +57,7 @@ import { BlackOperations } from "./data/BlackOperations";
 import { GeneralActions } from "./data/GeneralActions";
 import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
-import { fuzzyActionIdentifier } from "./utils/loadActionIdentifier";
+import { autoCompleteTypeShorthand } from "./Actions/ActionIdentifier";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -1436,7 +1436,7 @@ export class Bladeburner {
   /** Fuzzy matching for action identifiers. Should be removed in 3.0 */
   getActionFromTypeAndName(type: string, name: string): Action | null {
     if (!type || !name) return null;
-    const id = fuzzyActionIdentifier(type, name);
+    const id = autoCompleteTypeShorthand(type, name);
     return id ? this.getActionObject(id) : null;
   }
 
