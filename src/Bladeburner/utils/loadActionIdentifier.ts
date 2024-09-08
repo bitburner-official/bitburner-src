@@ -24,15 +24,48 @@ export function loadActionIdentifier(identifier: unknown): ActionIdentifier | nu
   return null;
 }
 
-export function fuzzyActionIdentifier(type: string, name: string): ActionIdentifier | null {
-  const convertedType = type.toLowerCase().trim();
-  if (convertedType.startsWith("contr") && getEnumHelper("BladeburnerContractName").isMember(name)) {
+/** These shorthands match those documented in the BB Terminal Help */
+const BladeBurnerTerminalShorthands = {
+  contracts: <readonly string[]>["contract", "contracts", "contr"],
+  operations: <readonly string[]>["operation", "operations", "op", "ops"],
+  blackops: <readonly string[]>[
+    "blackoperation",
+    "black operation",
+    "black operations",
+    "black op",
+    "black ops",
+    "blackop",
+    "blackops",
+  ],
+  general: <readonly string[]>["general", "general action", "gen"],
+} as const;
+
+export function fuzzyActionIdentifier(typeShorthand: string, name: string): ActionIdentifier | null {
+  const type = typeShorthand.toLowerCase().trim();
+  if (
+    BladeBurnerTerminalShorthands.contracts.includes(type) &&
+    getEnumHelper("BladeburnerContractName").isMember(name)
+  ) {
     return { type: BladeburnerActionType.Contract, name };
-  } else if (convertedType.startsWith("op") && getEnumHelper("BladeburnerOperationName").isMember(name)) {
+  }
+
+  if (
+    BladeBurnerTerminalShorthands.operations.includes(type) &&
+    getEnumHelper("BladeburnerOperationName").isMember(name)
+  ) {
     return { type: BladeburnerActionType.Operation, name };
-  } else if (convertedType.startsWith("black") && getEnumHelper("BladeburnerBlackOpName").isMember(name)) {
+  }
+
+  if (BladeBurnerTerminalShorthands.blackops.includes(type) && getEnumHelper("BladeburnerBlackOpName").isMember(name)) {
     return { type: BladeburnerActionType.BlackOp, name };
-  } else if (convertedType.startsWith("gen") && getEnumHelper("BladeburnerGeneralActionName").isMember(name)) {
+  }
+
+  if (
+    BladeBurnerTerminalShorthands.general.includes(type) &&
+    getEnumHelper("BladeburnerGeneralActionName").isMember(name)
+  ) {
     return { type: BladeburnerActionType.General, name };
-  } else return null;
+  }
+
+  return null;
 }
