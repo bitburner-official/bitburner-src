@@ -536,6 +536,11 @@ export class Sleeve extends Person implements SleevePerson {
     return "sleeves";
   }
 
+  /** Sleeves are immortal, but we damage them for max hp so they get shocked */
+  kill() {
+    return this.takeDamage(this.hp.max);
+  }
+
   takeDamage(amt: number): boolean {
     if (typeof amt !== "number") {
       console.warn(`Player.takeDamage() called without a numeric argument: ${amt}`);

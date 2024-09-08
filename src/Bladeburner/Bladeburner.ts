@@ -50,10 +50,19 @@ import { GeneralActions } from "./data/GeneralActions";
 import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
 import { autoCompleteTypeShorthand } from "./utils/terminalShorthands";
+import { CasualtyReport, KillBladeburnerCasualties, OperationCasualtyOutcome } from "./Actions/Casualties";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
-export class Bladeburner {
+export interface OperationTeam {
+  teamSize: number;
+  teamLost: number;
+  sleeveSize: number;
+
+  killSupportingSleeves(sleeveDeaths: number): void;
+}
+
+export class Bladeburner implements OperationTeam {
   numHosp = 0;
   moneyLost = 0;
   rank = 0;
@@ -750,31 +759,28 @@ export class Bladeburner {
     }
   }
 
+  private casualties(action: Operation | BlackOperation, severity: OperationCasualtyOutcome) {
+    const report = CasualtyReport(action.teamCount, severity, this.sleeveSize);
+    KillBladeburnerCasualties(report, this);
+
+    return report;
+  }
+
+  public killSupportingSleeves(sleeveDeaths: number) {
+    const sup = Player.sleeves.filter((x) => isSleeveSupportWork(x.currentWork));
+    const damagedIndices = [...Array(Math.min(sup.length, sleeveDeaths)).keys()].sort(() => 0.5 - Math.random());
+    damagedIndices.forEach((idx) => sup[idx].kill());
+  }
+
   completeOperation(success: boolean): void {
     if (this.action?.type !== BladeburnerActionType.Operation) {
       throw new Error("completeOperation() called even though current action is not an Operation");
     }
     const action = this.getActionObject(this.action);
-
-    // Calculate team losses
-    const teamCount = action.teamCount;
-    if (teamCount >= 1) {
-      const maxLosses = success ? Math.ceil(teamCount / 2) : Math.floor(teamCount);
-      const losses = getRandomIntInclusive(0, maxLosses);
-      this.teamSize -= losses;
-      if (this.teamSize < this.sleeveSize) {
-        const sup = Player.sleeves.filter((x) => isSleeveSupportWork(x.currentWork));
-        for (let i = 0; i > this.teamSize - this.sleeveSize; i--) {
-          const r = Math.floor(Math.random() * sup.length);
-          sup[r].takeDamage(sup[r].hp.max);
-          sup.splice(r, 1);
-        }
-        this.teamSize += this.sleeveSize;
-      }
-      this.teamLost += losses;
-      if (this.logging.ops && losses > 0) {
-        this.log("Lost " + formatNumberNoSuffix(losses, 0) + " team members during this " + action.name);
-      }
+    const severity = success ? OperationCasualtyOutcome.LOW_CASUALTIES : OperationCasualtyOutcome.HIGH_CASUALTIES;
+    const { deaths } = this.casualties(action, severity);
+    if (this.logging.ops && deaths > 0) {
+      this.log("Lost " + formatNumberNoSuffix(deaths, 0) + " team members during this " + action.name);
     }
 
     const city = this.getCurrentCity();
@@ -992,8 +998,7 @@ export class Bladeburner {
         }
 
         // Team loss variables
-        const teamCount = action.teamCount;
-        let teamLossMax;
+        let casualtySeverity: OperationCasualtyOutcome;
 
         if (action.attempt(this, person)) {
           retValue = this.getActionStats(action, person, true);
@@ -1003,7 +1008,8 @@ export class Bladeburner {
             rankGain = addOffset(action.rankGain * currentNodeMults.BladeburnerRank, 10);
             this.changeRank(person, rankGain);
           }
-          teamLossMax = Math.ceil(teamCount / 2);
+
+          casualtySeverity = OperationCasualtyOutcome.LOW_CASUALTIES;
 
           if (this.logging.blackops) {
             this.log(
@@ -1027,7 +1033,7 @@ export class Bladeburner {
               this.moneyLost += cost;
             }
           }
-          teamLossMax = Math.floor(teamCount);
+          casualtySeverity = OperationCasualtyOutcome.HIGH_CASUALTIES;
 
           if (this.logging.blackops) {
             this.log(
@@ -1041,25 +1047,11 @@ export class Bladeburner {
 
         this.resetAction(); // Stop regardless of success or fail
 
-        // Calculate team losses
-        if (teamCount >= 1) {
-          const losses = getRandomIntInclusive(1, teamLossMax);
-          this.teamSize -= losses;
-          if (this.teamSize < this.sleeveSize) {
-            const sup = Player.sleeves.filter((x) => isSleeveSupportWork(x.currentWork));
-            for (let i = 0; i > this.teamSize - this.sleeveSize; i--) {
-              const r = Math.floor(Math.random() * sup.length);
-              sup[r].takeDamage(sup[r].hp.max);
-              sup.splice(r, 1);
-            }
-            this.teamSize += this.sleeveSize;
-          }
-          this.teamLost += losses;
-          if (this.logging.blackops) {
-            this.log(
-              `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(losses, 0)} team members during ${action.name}.`,
-            );
-          }
+        const { deaths } = this.casualties(action, casualtySeverity);
+        if (this.logging.blackops && deaths > 0) {
+          this.log(
+            `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(deaths, 0)} team members during ${action.name}.`,
+          );
         }
         break;
       }
