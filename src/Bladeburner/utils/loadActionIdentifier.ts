@@ -23,3 +23,16 @@ export function loadActionIdentifier(identifier: unknown): ActionIdentifier | nu
   }
   return null;
 }
+
+export function fuzzyActionIdentifier(type: string, name: string): ActionIdentifier | null {
+  const convertedType = type.toLowerCase().trim();
+  if (convertedType.startsWith("contr") && getEnumHelper("BladeburnerContractName").isMember(name)) {
+    return { type: BladeburnerActionType.Contract, name };
+  } else if (convertedType.startsWith("op") && getEnumHelper("BladeburnerOperationName").isMember(name)) {
+    return { type: BladeburnerActionType.Operation, name };
+  } else if (convertedType.startsWith("black") && getEnumHelper("BladeburnerBlackOpName").isMember(name)) {
+    return { type: BladeburnerActionType.BlackOp, name };
+  } else if (convertedType.startsWith("gen") && getEnumHelper("BladeburnerGeneralActionName").isMember(name)) {
+    return { type: BladeburnerActionType.General, name };
+  } else return null;
+}

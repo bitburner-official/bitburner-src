@@ -1,6 +1,6 @@
 import type { PromisePair } from "../Types/Promises";
 import type { BlackOperation, Contract, GeneralAction, Operation } from "./Actions";
-import type { ActionIdentifier, Action, Attempt } from "./Types";
+import type { Action, ActionIdentifier, Attempt } from "./Types";
 import type { Person } from "../PersonObjects/Person";
 import type { Skills as PersonSkills } from "../PersonObjects/Skills";
 
@@ -16,8 +16,17 @@ import {
   FactionName,
 } from "@enums";
 import { getKeyList } from "../utils/helpers/getKeyList";
-import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
-import { formatHp, formatNumberNoSuffix, formatSleeveShock } from "../ui/formatNumber";
+import { constructorsForReviver, Generic_fromJSON, Generic_toJSON, IReviverValue } from "../utils/JSONReviver";
+import {
+  formatBigNumber,
+  formatExp,
+  formatHp,
+  formatMoney,
+  formatNumberNoSuffix,
+  formatPercent,
+  formatSleeveShock,
+  formatStamina,
+} from "../ui/formatNumber";
 import { Skills } from "./data/Skills";
 import { City } from "./City";
 import { Player } from "@player";
@@ -27,7 +36,6 @@ import { ConsoleHelpText } from "./data/Help";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { BladeburnerConstants } from "./data/Constants";
-import { formatExp, formatMoney, formatPercent, formatBigNumber, formatStamina } from "../ui/formatNumber";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { addOffset } from "../utils/helpers/addOffset";
 import { Factions } from "../Faction/Factions";
@@ -38,9 +46,9 @@ import { formatTime } from "../utils/helpers/formatTime";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfiltrateWork";
 import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
-import { WorkStats, newWorkStats } from "../Work/WorkStats";
+import { newWorkStats, WorkStats } from "../Work/WorkStats";
 import { getEnumHelper } from "../utils/EnumHelper";
-import { PartialRecord, createEnumKeyedRecord, getRecordEntries } from "../Types/Record";
+import { createEnumKeyedRecord, getRecordEntries, PartialRecord } from "../Types/Record";
 import { createContracts, loadContractsData } from "./data/Contracts";
 import { createOperations, loadOperationsData } from "./data/Operations";
 import { clampInteger, clampNumber } from "../utils/helpers/clampNumber";
@@ -49,6 +57,7 @@ import { BlackOperations } from "./data/BlackOperations";
 import { GeneralActions } from "./data/GeneralActions";
 import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
+import { fuzzyActionIdentifier } from "./utils/loadActionIdentifier";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -1427,36 +1436,8 @@ export class Bladeburner {
   /** Fuzzy matching for action identifiers. Should be removed in 3.0 */
   getActionFromTypeAndName(type: string, name: string): Action | null {
     if (!type || !name) return null;
-    const convertedType = type.toLowerCase().trim();
-    switch (convertedType) {
-      case "contract":
-      case "contracts":
-      case "contr":
-        if (!getEnumHelper("BladeburnerContractName").isMember(name)) return null;
-        return this.contracts[name];
-      case "operation":
-      case "operations":
-      case "op":
-      case "ops":
-        if (!getEnumHelper("BladeburnerOperationName").isMember(name)) return null;
-        return this.operations[name];
-      case "blackoperation":
-      case "black operation":
-      case "black operations":
-      case "black op":
-      case "black ops":
-      case "blackop":
-      case "blackops":
-        if (!getEnumHelper("BladeburnerBlackOpName").isMember(name)) return null;
-        return BlackOperations[name];
-      case "general":
-      case "general action":
-      case "gen": {
-        if (!getEnumHelper("BladeburnerGeneralActionName").isMember(name)) return null;
-        return GeneralActions[name];
-      }
-    }
-    return null;
+    const id = fuzzyActionIdentifier(type, name);
+    return id ? this.getActionObject(id) : null;
   }
 
   static keysToSave = getKeyList(Bladeburner, { removedKeys: ["skillMultipliers"] });
