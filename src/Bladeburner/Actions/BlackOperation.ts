@@ -1,9 +1,10 @@
 import type { Bladeburner } from "../Bladeburner";
-import type { Availability, ActionIdentifier } from "../Types";
+import { Availability, TypeOfActionId } from "../Types";
 
 import { BladeburnerActionType, BladeburnerBlackOpName } from "@enums";
 import { ActionClass, ActionParams } from "./Action";
 import { operationSkillSuccessBonus, operationTeamSuccessBonus } from "./Operation";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 interface BlackOpParams {
   name: BladeburnerBlackOpName;
@@ -12,13 +13,22 @@ interface BlackOpParams {
 }
 
 export class BlackOperation extends ActionClass {
-  type: BladeburnerActionType.BlackOp = BladeburnerActionType.BlackOp;
-  name: BladeburnerBlackOpName;
+  readonly type: BladeburnerActionType.BlackOp = BladeburnerActionType.BlackOp;
+  readonly name: BladeburnerBlackOpName;
   n: number;
   reqdRank: number;
   teamCount = 0;
-  get id(): ActionIdentifier {
-    return { type: this.type, name: this.name };
+
+  get id() {
+    return BlackOperation.ActionIdentifier(this.name);
+  }
+
+  static ActionIdentifier(name: BladeburnerBlackOpName): TypeOfActionId<BlackOperation> {
+    return { type: BladeburnerActionType.BlackOp, name };
+  }
+
+  static IsAcceptedName(name: unknown): name is BladeburnerBlackOpName {
+    return getEnumHelper("BladeburnerBlackOpName").isMember(name);
   }
 
   constructor(params: ActionParams & BlackOpParams) {

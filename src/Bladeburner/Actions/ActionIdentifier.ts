@@ -1,29 +1,45 @@
-import type { ActionIdentifier } from "../Types";
+import { ActionIdentifier } from "../Types";
 import { BladeburnerActionType } from "@enums";
 import { assertLoadingType } from "../../utils/TypeAssertion";
-import { getEnumHelper } from "../../utils/EnumHelper";
+import { Contract } from "./Contract";
+import { BlackOperation } from "./BlackOperation";
+import { GeneralAction } from "./GeneralAction";
+import { Operation } from "./Operation";
 
 /** Loads an action identifier
  * This is used for loading ActionIdentifier class objects from pre-2.6.1
  * Should load both the old format and the new format */
 export function resolveActionIdentifier(identifier: unknown): ActionIdentifier | null {
-  if (!identifier || typeof identifier !== "object") return null;
+  if (!identifier || typeof identifier !== "object" || !("name" in identifier)) return null;
   assertLoadingType<ActionIdentifier>(identifier);
-  for (const matcher of TypeToActionMatchers) {
-    const id = matcher(identifier.name);
-    if (id) {
-      return id;
-    }
+  return resolveActionIdentifierFromName(identifier.name);
+}
+
+/** Resolve identifier by auto completing from a fuzzy type match, e.g. "blackops" */
+export function autoCompleteTypeShorthand(typeShorthand: string, name: string): ActionIdentifier | null {
+  let id = resolveActionIdentifier({ name });
+
+  if (id && !TerminalShorthands[id.type].includes(typeShorthand.toLowerCase().trim())) {
+    id = null;
   }
 
-  return null;
+  return id;
 }
+
+const resolveActionIdentifierFromName = (name: unknown): ActionIdentifier | null => {
+  if (Contract.IsAcceptedName(name)) return Contract.ActionIdentifier(name);
+  if (BlackOperation.IsAcceptedName(name)) return BlackOperation.ActionIdentifier(name);
+  if (GeneralAction.IsAcceptedName(name)) return GeneralAction.ActionIdentifier(name);
+  if (Operation.IsAcceptedName(name)) return Operation.ActionIdentifier(name);
+
+  return null;
+};
 
 /** These shorthands match those documented in the BB Terminal Help */
 export const TerminalShorthands = {
-  [BladeburnerActionType.Contract]: <readonly string[]>["contract", "contracts", "contr"],
-  [BladeburnerActionType.Operation]: <readonly string[]>["operation", "operations", "op", "ops"],
-  [BladeburnerActionType.BlackOp]: <readonly string[]>[
+  [BladeburnerActionType.Contract]: <string[]>["contract", "contracts", "contr"],
+  [BladeburnerActionType.Operation]: <string[]>["operation", "operations", "op", "ops"],
+  [BladeburnerActionType.BlackOp]: <string[]>[
     "blackoperation",
     "black operation",
     "black operations",
@@ -32,35 +48,5 @@ export const TerminalShorthands = {
     "blackop",
     "blackops",
   ],
-  [BladeburnerActionType.General]: <readonly string[]>["general", "general action", "gen"],
+  [BladeburnerActionType.General]: <string[]>["general", "general action", "gen"],
 } as const;
-
-export function autoCompleteTypeShorthand(typeShorthand: string, name: string): ActionIdentifier | null {
-  const matchedType = typeShorthand.toLowerCase().trim();
-  let id = resolveActionIdentifier({ name });
-
-  if (id && !TerminalShorthands[id.type].includes(matchedType)) {
-    id = null;
-  }
-
-  return id;
-}
-
-const TypeToActionMatchers = [
-  (name: unknown) =>
-    getEnumHelper("BladeburnerContractName").isMember(name)
-      ? ({ type: BladeburnerActionType.Contract, name } as const)
-      : undefined,
-  (name: unknown) =>
-    getEnumHelper("BladeburnerOperationName").isMember(name)
-      ? ({ type: BladeburnerActionType.Operation, name } as const)
-      : undefined,
-  (name: unknown) =>
-    getEnumHelper("BladeburnerBlackOpName").isMember(name)
-      ? ({ type: BladeburnerActionType.BlackOp, name } as const)
-      : undefined,
-  (name: unknown) =>
-    getEnumHelper("BladeburnerGeneralActionName").isMember(name)
-      ? ({ type: BladeburnerActionType.General, name } as const)
-      : undefined,
-] as const;
