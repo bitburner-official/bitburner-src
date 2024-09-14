@@ -1,6 +1,6 @@
 import type { Person } from "../../PersonObjects/Person";
 import type { Bladeburner } from "../Bladeburner";
-import type { TypeOfActionId } from "../Types";
+import type { ActionIdFor } from "../Types";
 
 import { BladeburnerActionType, BladeburnerGeneralActionName } from "@enums";
 import { ActionClass, ActionParams } from "./Action";
@@ -18,14 +18,14 @@ export class GeneralAction extends ActionClass {
   readonly name: BladeburnerGeneralActionName;
 
   get id() {
-    return GeneralAction.ActionIdentifier(this.name);
+    return GeneralAction.createId(this.name);
   }
 
   static IsAcceptedName(name: unknown): name is BladeburnerGeneralActionName {
     return getEnumHelper("BladeburnerGeneralActionName").isMember(name);
   }
 
-  static ActionIdentifier(name: BladeburnerGeneralActionName): TypeOfActionId<GeneralAction> {
+  static createId(name: BladeburnerGeneralActionName): ActionIdFor<GeneralAction> {
     return { type: BladeburnerActionType.General, name };
   }
 

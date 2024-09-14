@@ -1,7 +1,7 @@
 import type { Bladeburner } from "../Bladeburner";
-import { TypeOfActionId } from "../Types";
+import type { ActionIdFor } from "../Types";
 
-import { constructorsForReviver, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
+import { Generic_fromJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
 import { BladeburnerActionType, BladeburnerContractName, BladeburnerMultName } from "../Enums";
 import { LevelableActionClass, LevelableActionParams } from "./LevelableAction";
 import { getEnumHelper } from "../../utils/EnumHelper";
@@ -11,14 +11,14 @@ export class Contract extends LevelableActionClass {
   readonly name: BladeburnerContractName;
 
   get id() {
-    return Contract.ActionIdentifier(this.name);
+    return Contract.createId(this.name);
   }
 
   static IsAcceptedName(name: unknown): name is BladeburnerContractName {
     return getEnumHelper("BladeburnerContractName").isMember(name);
   }
 
-  static ActionIdentifier(name: BladeburnerContractName): TypeOfActionId<Contract> {
+  static createId(name: BladeburnerContractName): ActionIdFor<Contract> {
     return { type: BladeburnerActionType.Contract, name };
   }
 

@@ -1,4 +1,4 @@
-import { TerminalShorthands, autoCompleteTypeShorthand } from "../../../../src/Bladeburner/Actions/ActionIdentifier";
+import { autoCompleteTypeShorthand, TerminalShorthands } from "../../../../src/Bladeburner/utils/terminalShorthands";
 import {
   BladeburnerActionType,
   BladeburnerBlackOpName,

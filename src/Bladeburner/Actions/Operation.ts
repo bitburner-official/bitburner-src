@@ -1,12 +1,12 @@
 import type { Person } from "../../PersonObjects/Person";
 import type { BlackOperation } from "./BlackOperation";
 import type { Bladeburner } from "../Bladeburner";
-import type { Availability, SuccessChanceParams, TypeOfActionId } from "../Types";
+import type { ActionIdFor, Availability, SuccessChanceParams } from "../Types";
 
 import { BladeburnerActionType, BladeburnerMultName, BladeburnerOperationName } from "@enums";
 import { BladeburnerConstants } from "../data/Constants";
 import { ActionClass } from "./Action";
-import { constructorsForReviver, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
+import { Generic_fromJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
 import { LevelableActionClass, LevelableActionParams } from "./LevelableAction";
 import { clampInteger } from "../../utils/helpers/clampNumber";
 import { getEnumHelper } from "../../utils/EnumHelper";
@@ -22,14 +22,14 @@ export class Operation extends LevelableActionClass {
   teamCount = 0;
 
   get id() {
-    return Operation.ActionIdentifier(this.name);
+    return Operation.createId(this.name);
   }
 
   static IsAcceptedName(name: unknown): name is BladeburnerOperationName {
     return getEnumHelper("BladeburnerOperationName").isMember(name);
   }
 
-  static ActionIdentifier(name: BladeburnerOperationName): TypeOfActionId<Operation> {
+  static createId(name: BladeburnerOperationName): ActionIdFor<Operation> {
     return { type: BladeburnerActionType.Operation, name };
   }
 

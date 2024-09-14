@@ -1,5 +1,5 @@
 import type { Bladeburner } from "../Bladeburner";
-import { Availability, TypeOfActionId } from "../Types";
+import type { ActionIdFor, Availability } from "../Types";
 
 import { BladeburnerActionType, BladeburnerBlackOpName } from "@enums";
 import { ActionClass, ActionParams } from "./Action";
@@ -20,10 +20,10 @@ export class BlackOperation extends ActionClass {
   teamCount = 0;
 
   get id() {
-    return BlackOperation.ActionIdentifier(this.name);
+    return BlackOperation.createId(this.name);
   }
 
-  static ActionIdentifier(name: BladeburnerBlackOpName): TypeOfActionId<BlackOperation> {
+  static createId(name: BladeburnerBlackOpName): ActionIdFor<BlackOperation> {
     return { type: BladeburnerActionType.BlackOp, name };
   }
 

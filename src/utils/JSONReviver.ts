@@ -1,7 +1,7 @@
 /* Generic Reviver, toJSON, and fromJSON functions used for saving and loading objects */
 import { ObjectValidator, validateObject } from "./Validator";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
-import { resolveActionIdentifier } from "../Bladeburner/Actions/ActionIdentifier";
+import { loadActionIdentifier } from "../Bladeburner/utils/loadActionIdentifier";
 
 type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
   fromJSON: (value: IReviverValue) => any;
@@ -12,6 +12,7 @@ export interface IReviverValue<T = any> {
   ctor: string;
   data: T;
 }
+
 function isReviverValue(value: unknown): value is IReviverValue {
   return (
     typeof value === "object" && value !== null && "ctor" in value && typeof value.ctor === "string" && "data" in value
@@ -37,7 +38,7 @@ export function Reviver(_key: string, value: unknown): any {
         console.warn(`Legacy load type ${value.ctor} converted to expected format while loading.`);
         return value.data;
       case "ActionIdentifier": // No longer a class as of v2.6.1
-        return resolveActionIdentifier(value.data);
+        return loadActionIdentifier(value.data);
     }
     // Missing constructor with no special handling. Throw error.
     throw new Error(`Could not locate constructor named ${value.ctor}. If the save data is valid, this is a bug.`);
