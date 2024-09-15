@@ -1,10 +1,19 @@
 import { ActionIdentifier } from "../Types";
 import { BladeburnerActionType } from "@enums";
-import { loadActionIdentifier } from "../utils/loadActionIdentifier";
+import { BlackOperation, Contract, GeneralAction, Operation } from "../Actions";
+
+const resolveActionIdentifierFromName = (name: unknown): ActionIdentifier | null => {
+  if (Contract.IsAcceptedName(name)) return Contract.createId(name);
+  if (BlackOperation.IsAcceptedName(name)) return BlackOperation.createId(name);
+  if (GeneralAction.IsAcceptedName(name)) return GeneralAction.createId(name);
+  if (Operation.IsAcceptedName(name)) return Operation.createId(name);
+
+  return null;
+};
 
 /** Resolve identifier by auto completing from a fuzzy type match, e.g. "blackops" */
 export function autoCompleteTypeShorthand(typeShorthand: string, name: string): ActionIdentifier | null {
-  let id = loadActionIdentifier({ name });
+  let id = resolveActionIdentifierFromName(name);
 
   if (id && !TerminalShorthands[id.type].includes(typeShorthand.toLowerCase().trim())) {
     id = null;
