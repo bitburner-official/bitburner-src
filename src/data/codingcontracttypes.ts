@@ -67,7 +67,7 @@ function convert2DArrayToString(arr: number[][]): string {
   return components.join(",").replace(/\s/g, "");
 }
 
-export const codingContractTypesMetadata: CodingContractType<any>[] = [
+export const codingContractTypesMetadata = [
   {
     desc: (n: number): string => {
       return ["A prime factor is a factor that is a prime number.", `What is the largest prime factor of ${n}?`].join(
@@ -91,7 +91,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return (n === 1 ? fac - 1 : n) === parseInt(ans, 10);
     },
-  } as CodingContractType<number>,
+  } satisfies CodingContractType<number>,
   {
     desc: (n: number[]): string => {
       return [
@@ -121,7 +121,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return parseInt(ans, 10) === Math.max(...nums);
     },
-  } as CodingContractType<number[]>,
+  } satisfies CodingContractType<number[]>,
   {
     desc: (n: number): string => {
       return [
@@ -152,7 +152,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return ways[data] === parseInt(ans, 10);
     },
-  } as CodingContractType<number>,
+  } satisfies CodingContractType<number>,
   {
     desc: (data: [number, number[]]): string => {
       const n: number = data[0];
@@ -196,7 +196,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       }
       return ways[n] === parseInt(ans, 10);
     },
-  } as CodingContractType<[number, number[]]>,
+  } satisfies CodingContractType<[number, number[]]>,
   {
     desc: (n: number[][]): string => {
       let d: string = [
@@ -320,7 +320,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return true;
     },
-  } as CodingContractType<number[][]>,
+  } satisfies CodingContractType<number[][]>,
   {
     desc: (arr: number[]): string => {
       return [
@@ -362,7 +362,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       const solution: boolean = i === n;
       return (ans === "1" && solution) || (ans === "0" && !solution);
     },
-  } as CodingContractType<number[]>,
+  } satisfies CodingContractType<number[]>,
   {
     desc: (arr: number[]): string => {
       return [
@@ -418,7 +418,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       }
       return jumps === parseInt(ans, 10);
     },
-  } as CodingContractType<number[]>,
+  } satisfies CodingContractType<number[]>,
   {
     desc: (arr: number[][]): string => {
       return [
@@ -472,7 +472,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return sanitizedResult === sanitizedAns || sanitizedResult === removeBracketsFromArrayString(sanitizedAns);
     },
-  } as CodingContractType<number[][]>,
+  } satisfies CodingContractType<number[][]>,
   {
     desc: (data: string): string => {
       return [
@@ -537,7 +537,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return true;
     },
-  } as CodingContractType<string>,
+  } satisfies CodingContractType<string>,
   {
     desc: (data: number[]): string => {
       return [
@@ -573,7 +573,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return maxSoFar.toString() === ans;
     },
-  } as CodingContractType<number[]>,
+  } satisfies CodingContractType<number[]>,
   {
     desc: (data: number[]): string => {
       return [
@@ -608,7 +608,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return profit.toString() === ans;
     },
-  } as CodingContractType<number[]>,
+  } satisfies CodingContractType<number[]>,
   {
     desc: (data: number[]): string => {
       return [
@@ -649,7 +649,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return release2.toString() === ans;
     },
-  } as CodingContractType<number[]>,
+  } satisfies CodingContractType<number[]>,
   {
     desc: (data: [number, number[]]): string => {
       const k = data[0];
@@ -718,7 +718,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return parseInt(ans) === rele[k];
     },
-  } as CodingContractType<[number, number[]]>,
+  } satisfies CodingContractType<[number, number[]]>,
   {
     desc: (data: number[][]): string => {
       function createTriangleRecurse(data: number[][], level = 0): string {
@@ -784,7 +784,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return dp[0] === parseInt(ans);
     },
-  } as CodingContractType<number[][]>,
+  } satisfies CodingContractType<number[][]>,
   {
     desc: (data: number[]): string => {
       const numRows = data[0];
@@ -826,7 +826,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return parseInt(ans) === currentRow[n - 1];
     },
-  } as CodingContractType<number[]>,
+  } satisfies CodingContractType<number[]>,
   {
     desc: (data: number[][]): string => {
       let gridString = "";
@@ -897,7 +897,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return obstacleGrid[obstacleGrid.length - 1][obstacleGrid[0].length - 1] === parseInt(ans);
     },
-  } as CodingContractType<number[][]>,
+  } satisfies CodingContractType<number[][]>,
   {
     name: "Shortest Path in a Grid",
     desc: (data: number[][]): string => {
@@ -1024,7 +1024,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       // Path was valid, finally verify that the answer path brought us to the end coordinates
       return ansY == dstY && ansX == dstX;
     },
-  } as CodingContractType<number[][]>,
+  } satisfies CodingContractType<number[][]>,
   {
     desc: (data: string): string => {
       return [
@@ -1131,7 +1131,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return true;
     },
-  } as CodingContractType<string>,
+  } satisfies CodingContractType<string>,
   {
     desc: (data: [string, number]): string => {
       const digits: string = data[0];
@@ -1243,7 +1243,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return true;
     },
-  } as CodingContractType<[string, number]>,
+  } satisfies CodingContractType<[string, number]>,
   {
     name: "HammingCodes: Integer to Encoded Binary",
     difficulty: 5,
@@ -1275,7 +1275,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
     solver: (data: number, ans: string): boolean => {
       return ans === HammingEncode(data);
     },
-  } as CodingContractType<number>,
+  } satisfies CodingContractType<number>,
   {
     name: "HammingCodes: Encoded Binary to Integer",
     difficulty: 8,
@@ -1318,7 +1318,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
     solver: (data: string, ans: string): boolean => {
       return parseInt(ans, 10) === HammingDecode(data);
     },
-  } as CodingContractType<string>,
+  } satisfies CodingContractType<string>,
   {
     name: "Proper 2-Coloring of a Graph",
     difficulty: 7,
@@ -1469,7 +1469,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       //Return false if the coloring is the wrong size
       else return false;
     },
-  } as CodingContractType<[number, [number, number][]]>,
+  } satisfies CodingContractType<[number, [number, number][]]>,
   {
     name: "Compression I: RLE Compression",
     difficulty: 2,
@@ -1547,7 +1547,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return ans.length <= length;
     },
-  } as CodingContractType<string>,
+  } satisfies CodingContractType<string>,
   {
     name: "Compression II: LZ Decompression",
     difficulty: 4,
@@ -1581,7 +1581,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
     solver: (compr: string, ans: string): boolean => {
       return ans === comprLZDecode(compr);
     },
-  } as CodingContractType<string>,
+  } satisfies CodingContractType<string>,
   {
     name: "Compression III: LZ Compression",
     difficulty: 10,
@@ -1618,7 +1618,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
     solver: (plain: string, ans: string): boolean => {
       return comprLZDecode(ans) === plain && ans.length <= comprLZEncode(plain).length;
     },
-  } as CodingContractType<string>,
+  } satisfies CodingContractType<string>,
   {
     desc: (data: [string, number]): string => {
       return [
@@ -1680,7 +1680,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         .join("");
       return cipher === ans;
     },
-  } as CodingContractType<[string, number]>,
+  } satisfies CodingContractType<[string, number]>,
   {
     desc: (data: [string, string]): string => {
       return [
@@ -1848,5 +1848,5 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         .join("");
       return cipher === ans;
     },
-  } as CodingContractType<[string, string]>,
-];
+  } satisfies CodingContractType<[string, string]>,
+] as const;

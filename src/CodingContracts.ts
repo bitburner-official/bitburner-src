@@ -9,7 +9,11 @@ import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFileP
 export const CodingContractTypes: Record<string, CodingContractType<unknown>> = {};
 
 for (const md of codingContractTypesMetadata) {
-  CodingContractTypes[md.name] = md;
+  // Because functions are contravariant with their parameters, we can't
+  // consider arbitrary CodingContractTypes as CodingContractType<unknown>
+  // directly. However, we do want that as the final type, to enforce that the
+  // state and data are unknown. So we cast through CodingContractType<any>.
+  CodingContractTypes[md.name] = md as CodingContractType<any>;
 }
 
 // Numeric enum
