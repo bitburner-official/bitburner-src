@@ -39,9 +39,8 @@ export class TeamCasualties {
   }
 
   get worstCase() {
-    const worstCaseFraction = this.severity === CasualtyFactor.LOW_CASUALTIES ? 0.5 : 1;
-    const worstCaseOp = Math[this.severity === CasualtyFactor.LOW_CASUALTIES ? "ceil" : "floor"];
-    return worstCaseOp(this.teamSizeUsed * worstCaseFraction);
+    const worstCaseOp = Math[this.severity < 1 ? "ceil" : "floor"];
+    return worstCaseOp(this.teamSizeUsed * this.severity);
   }
 
   get bestCase() {
