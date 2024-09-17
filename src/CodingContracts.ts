@@ -1,20 +1,12 @@
 import type { FactionName } from "@enums";
-import { codingContractTypesMetadata, type CodingContractType } from "./data/codingcontracttypes";
+import { codingContractTypesMetadata } from "./data/codingcontracttypes";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
 import { CodingContractEvent } from "./ui/React/CodingContractModal";
 import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
 
 /* Contract Types */
-export const CodingContractTypes: Record<string, CodingContractType<unknown>> = {};
-
-for (const md of codingContractTypesMetadata) {
-  // Because functions are contravariant with their parameters, we can't
-  // consider arbitrary CodingContractTypes as CodingContractType<unknown>
-  // directly. However, we do want that as the final type, to enforce that the
-  // state and data are unknown. So we cast through CodingContractType<any>.
-  CodingContractTypes[md.name] = md as CodingContractType<any>;
-}
+export const CodingContractTypes = Object.fromEntries(codingContractTypesMetadata.map((x) => [x.name, x]));
 
 // Numeric enum
 /** Enum representing the different types of rewards a Coding Contract can give */
