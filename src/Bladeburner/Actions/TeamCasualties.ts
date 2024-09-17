@@ -30,7 +30,7 @@ export class TeamCasualties {
 
     /** Supporting Sleeves take damage when they are part of losses,
      *   e.g. 8 sleeves + 3 team members with 4 losses -> 1 sleeve takes damage */
-    if (damagedSleeves > 0) team.killSupportingSleeves(damagedSleeves);
+    team.killSupportingSleeves(damagedSleeves);
 
     team.teamSize -= humanDeaths;
     team.teamLost += deaths;
