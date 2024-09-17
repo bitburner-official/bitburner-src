@@ -1,6 +1,6 @@
 import type { PromisePair } from "../Types/Promises";
 import type { BlackOperation, Contract, GeneralAction, Operation } from "./Actions";
-import type { Action, ActionIdFor, ActionIdentifier, Attempt } from "./Types";
+import type { Action, ActionIdentifier, ActionIdFor, Attempt } from "./Types";
 import type { Person } from "../PersonObjects/Person";
 import type { Skills as PersonSkills } from "../PersonObjects/Skills";
 
@@ -50,17 +50,9 @@ import { GeneralActions } from "./data/GeneralActions";
 import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
 import { autoCompleteTypeShorthand } from "./utils/terminalShorthands";
-import { CasualtyReport, KillBladeburnerCasualties, OperationCasualtyOutcome } from "./Actions/Casualties";
+import { CasualtyFactor, type OperationTeam, TeamCasualties } from "./Actions/TeamCasualties";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
-
-export interface OperationTeam {
-  teamSize: number;
-  teamLost: number;
-  sleeveSize: number;
-
-  killSupportingSleeves(sleeveDeaths: number): void;
-}
 
 export class Bladeburner implements OperationTeam {
   numHosp = 0;
@@ -759,11 +751,10 @@ export class Bladeburner implements OperationTeam {
     }
   }
 
-  private casualties(action: Operation | BlackOperation, severity: OperationCasualtyOutcome) {
-    const report = CasualtyReport(action.teamCount, severity, this.sleeveSize);
-    KillBladeburnerCasualties(report, this);
-
-    return report;
+  private getActionCasualties(action: Operation | BlackOperation, success: boolean) {
+    const severity = success ? CasualtyFactor.LOW_CASUALTIES : CasualtyFactor.HIGH_CASUALTIES;
+    const casualties = new TeamCasualties(severity, action.teamCount, this.sleeveSize);
+    return casualties.rollOutcome(getRandomIntInclusive, this);
   }
 
   public killSupportingSleeves(sleeveDeaths: number) {
@@ -777,8 +768,7 @@ export class Bladeburner implements OperationTeam {
       throw new Error("completeOperation() called even though current action is not an Operation");
     }
     const action = this.getActionObject(this.action);
-    const severity = success ? OperationCasualtyOutcome.LOW_CASUALTIES : OperationCasualtyOutcome.HIGH_CASUALTIES;
-    const { deaths } = this.casualties(action, severity);
+    const { deaths } = this.getActionCasualties(action, success);
     if (this.logging.ops && deaths > 0) {
       this.log("Lost " + formatNumberNoSuffix(deaths, 0) + " team members during this " + action.name);
     }
@@ -998,7 +988,7 @@ export class Bladeburner implements OperationTeam {
         }
 
         // Team loss variables
-        let casualtySeverity: OperationCasualtyOutcome;
+        let deaths;
 
         if (action.attempt(this, person)) {
           retValue = this.getActionStats(action, person, true);
@@ -1009,7 +999,7 @@ export class Bladeburner implements OperationTeam {
             this.changeRank(person, rankGain);
           }
 
-          casualtySeverity = OperationCasualtyOutcome.LOW_CASUALTIES;
+          deaths = this.getActionCasualties(action, true).deaths;
 
           if (this.logging.blackops) {
             this.log(
@@ -1033,7 +1023,8 @@ export class Bladeburner implements OperationTeam {
               this.moneyLost += cost;
             }
           }
-          casualtySeverity = OperationCasualtyOutcome.HIGH_CASUALTIES;
+
+          deaths = this.getActionCasualties(action, false).deaths;
 
           if (this.logging.blackops) {
             this.log(
@@ -1047,7 +1038,6 @@ export class Bladeburner implements OperationTeam {
 
         this.resetAction(); // Stop regardless of success or fail
 
-        const { deaths } = this.casualties(action, casualtySeverity);
         if (this.logging.blackops && deaths > 0) {
           this.log(
             `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(deaths, 0)} team members during ${action.name}.`,
