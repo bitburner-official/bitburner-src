@@ -287,20 +287,26 @@ const Engine: {
       }
       const numCyclesOffline = Math.floor(timeOffline / CONSTANTS.MilliPerCycle);
 
-      // Calculate the number of chances for a contract the player had whilst offline
-      const contractChancesWhileOffline = Math.floor(timeOffline / (1000 * 60 * 10));
-
-      // Generate coding contracts
+      // Generate bonus CCTs
       let numContracts = 0;
-      if (contractChancesWhileOffline > 100) {
-        numContracts += Math.floor(contractChancesWhileOffline * 0.25);
-      }
-      if (contractChancesWhileOffline > 0 && contractChancesWhileOffline <= 100) {
-        for (let i = 0; i < contractChancesWhileOffline; ++i) {
-          if (Math.random() <= 0.25) {
-            numContracts++;
+      if (timeOffline < CONSTANTS.MillisecondsPer30Days) {
+        // Calculate the number of chances for a contract the player had whilst offline
+        const contractChancesWhileOffline = Math.floor(timeOffline / (1000 * 60 * 10));
+
+        // Generate coding contracts
+        if (contractChancesWhileOffline > 100) {
+          numContracts += Math.floor(contractChancesWhileOffline * 0.25);
+        }
+        if (contractChancesWhileOffline > 0 && contractChancesWhileOffline <= 100) {
+          for (let i = 0; i < contractChancesWhileOffline; ++i) {
+            if (Math.random() <= 0.25) {
+              numContracts++;
+            }
           }
         }
+      } else {
+        const offlineDay = timeOffline / CONSTANTS.MillisecondsPer24Hours;
+        numContracts = 6500 / (1 + Math.exp(-0.02 * offlineDay + 2.2));
       }
       for (let i = 0; i < numContracts; i++) {
         generateRandomContract();

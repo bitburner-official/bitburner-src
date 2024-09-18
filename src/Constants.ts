@@ -52,6 +52,10 @@ export const CONSTANTS = {
   IntelligenceSingFnBaseExpGain: 1.5,
 
   // Time-related constants
+  MillisecondsPer30Days: 2592000000,
+
+  MillisecondsPer24Hours: 86400000,
+
   MillisecondsPer20Hours: 72000000,
   GameCyclesPer20Hours: 72000000 / 200,
 
