@@ -1052,7 +1052,8 @@ export class Bladeburner {
               sup[r].takeDamage(sup[r].hp.max);
               sup.splice(r, 1);
             }
-            this.teamSize += this.sleeveSize;
+            // If this happens, all team members died and some sleeves took damage. In this case, teamSize = sleeveSize.
+            this.teamSize = this.sleeveSize;
           }
           this.teamLost += losses;
           if (this.logging.blackops) {
