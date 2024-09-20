@@ -48,6 +48,10 @@ const useStyles = makeStyles()((theme: Theme) => ({
     "& .MuiTable-root": {
       "& .MuiTableCell-root": {
         borderBottom: `1px solid ${Settings.theme.welllight}`,
+        width: "30%"
+      },
+      "& .MuiTableCell-root:last-child": {
+        width: "10%"
       },
 
       "& .MuiTableHead-root .MuiTableRow-root": {
@@ -88,7 +92,7 @@ const playerSkills: (keyof Skills)[] = ["hacking", "strength", "defense", "dexte
 
 let initialAutosave = 0;
 
-export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): JSX.Element => {
+export const ImportSave = (props: { saveData: SaveData; automatic: boolean; }): JSX.Element => {
   const { classes } = useStyles();
   const [importData, setImportData] = useState<ImportData | undefined>();
   const [currentData, setCurrentData] = useState<ImportData | undefined>();
@@ -165,7 +169,7 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
               <TableCell></TableCell>
               <TableCell>Current Game</TableCell>
               <TableCell>Being Imported</TableCell>
-              <TableCell width={56}></TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
 
@@ -252,7 +256,7 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
                             <TableCell className={classes.skillTitle}>{skill}</TableCell>
                             <TableCell>{formatNumberNoSuffix(currentSkill, 0)}</TableCell>
                             <TableCell>{formatNumberNoSuffix(importSkill, 0)}</TableCell>
-                            <TableCell width={56}>
+                            <TableCell>
                               {currentSkill !== importSkill && <ComparisonIcon isBetter={importSkill > currentSkill} />}
                             </TableCell>
                           </TableRow>
