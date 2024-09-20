@@ -14,6 +14,24 @@ import { BaseServer } from "./Server/BaseServer";
 
 import { getRandomIntInclusive } from "./utils/helpers/getRandomIntInclusive";
 import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
+import { clampNumber } from "./utils/helpers/clampNumber";
+
+export function tryGeneratingRandomContract(numberOfTries: number): void {
+  // We try to generate a contract every 10 minutes. 525600 is the number of tries in 10 years. There is no reason to
+  // support anything above that.
+  numberOfTries = clampNumber(0, 525600);
+  let currentNumberOfContracts = GetAllServers().reduce((sum, server) => {
+    return sum + server.contracts.length;
+  }, 0);
+  for (let i = 0; i < numberOfTries; ++i) {
+    const random = Math.random();
+    if (random > 0.25 / (1 + Math.exp(0.0012 * currentNumberOfContracts - 6))) {
+      continue;
+    }
+    generateRandomContract();
+    ++currentNumberOfContracts;
+  }
+}
 
 export function generateRandomContract(): void {
   // First select a random problem type
