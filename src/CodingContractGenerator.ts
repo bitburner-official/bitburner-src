@@ -19,7 +19,10 @@ import { clampNumber } from "./utils/helpers/clampNumber";
 export function tryGeneratingRandomContract(numberOfTries: number): void {
   // We try to generate a contract every 10 minutes. 525600 is the number of tries in 10 years. There is no reason to
   // support anything above that.
-  numberOfTries = clampNumber(0, 525600);
+  numberOfTries = clampNumber(Math.floor(numberOfTries), 0, 525600);
+  if (numberOfTries < 1) {
+    return;
+  }
   let currentNumberOfContracts = GetAllServers().reduce((sum, server) => {
     return sum + server.contracts.length;
   }, 0);
