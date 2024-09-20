@@ -98,6 +98,7 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
   const [currentData, setCurrentData] = useState<ImportData | undefined>();
   const [isImportModalOpen, { on: openImportModal, off: closeImportModal }] = useBoolean(false);
   const [isSkillsExpanded, { toggle: toggleSkillsExpand }] = useBoolean(true);
+  const [isOthersExpanded, { toggle: toggleOthersExpand }] = useBoolean(true);
   const [headback, setHeadback] = useState(false);
 
   const handleGoBack = (): void => {
@@ -234,6 +235,7 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
                 )}
               </TableCell>
             </TableRow>
+
             <TableRow>
               <TableCell colSpan={4}>
                 <IconButton aria-label="expand row" size="small" onClick={toggleSkillsExpand}>
@@ -273,86 +275,113 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
             <TableRow>{/* empty row to keep even/odd coloring */}</TableRow>
 
             <TableRow>
-              <TableCell>Augmentations</TableCell>
-              <TableCell>{currentData.playerData?.augmentations}</TableCell>
-              <TableCell>{importData.playerData?.augmentations}</TableCell>
-              <TableCell>
-                {importData.playerData?.augmentations !== currentData.playerData?.augmentations && (
-                  <ComparisonIcon
-                    isBetter={
-                      (importData.playerData?.augmentations ?? 0) > (currentData.playerData?.augmentations ?? 0)
-                    }
-                  />
-                )}
+              <TableCell colSpan={4}>
+                <IconButton aria-label="expand row" size="small" onClick={toggleOthersExpand}>
+                  {isOthersExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+                Others
               </TableCell>
             </TableRow>
+            <TableRow>
+              <TableCell colSpan={4} padding="none">
+                <Collapse in={isOthersExpanded}>
+                  <Table>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>Augmentations</TableCell>
+                        <TableCell>{currentData.playerData?.augmentations}</TableCell>
+                        <TableCell>{importData.playerData?.augmentations}</TableCell>
+                        <TableCell>
+                          {importData.playerData?.augmentations !== currentData.playerData?.augmentations && (
+                            <ComparisonIcon
+                              isBetter={
+                                (importData.playerData?.augmentations ?? 0) >
+                                (currentData.playerData?.augmentations ?? 0)
+                              }
+                            />
+                          )}
+                        </TableCell>
+                      </TableRow>
 
-            <TableRow>
-              <TableCell>Factions</TableCell>
-              <TableCell>{currentData.playerData?.factions}</TableCell>
-              <TableCell>{importData.playerData?.factions}</TableCell>
-              <TableCell>
-                {importData.playerData?.factions !== currentData.playerData?.factions && (
-                  <ComparisonIcon
-                    isBetter={(importData.playerData?.factions ?? 0) > (currentData.playerData?.factions ?? 0)}
-                  />
-                )}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Achievements</TableCell>
-              <TableCell>{currentData.playerData?.achievements}</TableCell>
-              <TableCell>{importData.playerData?.achievements}</TableCell>
-              <TableCell>
-                {importData.playerData?.achievements !== currentData.playerData?.achievements && (
-                  <ComparisonIcon
-                    isBetter={(importData.playerData?.achievements ?? 0) > (currentData.playerData?.achievements ?? 0)}
-                  />
-                )}
-              </TableCell>
-            </TableRow>
+                      <TableRow>
+                        <TableCell>Factions</TableCell>
+                        <TableCell>{currentData.playerData?.factions}</TableCell>
+                        <TableCell>{importData.playerData?.factions}</TableCell>
+                        <TableCell>
+                          {importData.playerData?.factions !== currentData.playerData?.factions && (
+                            <ComparisonIcon
+                              isBetter={
+                                (importData.playerData?.factions ?? 0) > (currentData.playerData?.factions ?? 0)
+                              }
+                            />
+                          )}
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Achievements</TableCell>
+                        <TableCell>{currentData.playerData?.achievements}</TableCell>
+                        <TableCell>{importData.playerData?.achievements}</TableCell>
+                        <TableCell>
+                          {importData.playerData?.achievements !== currentData.playerData?.achievements && (
+                            <ComparisonIcon
+                              isBetter={
+                                (importData.playerData?.achievements ?? 0) > (currentData.playerData?.achievements ?? 0)
+                              }
+                            />
+                          )}
+                        </TableCell>
+                      </TableRow>
 
-            <TableRow>
-              <Tooltip title="The total SF levels owned, except for SF-1 Exploit levels.">
-                <TableCell>Source File Levels</TableCell>
-              </Tooltip>
-              <TableCell>{currentData.playerData?.sourceFiles}</TableCell>
-              <TableCell>{importData.playerData?.sourceFiles}</TableCell>
-              <TableCell>
-                {importData.playerData?.sourceFiles !== currentData.playerData?.sourceFiles && (
-                  <ComparisonIcon
-                    isBetter={(importData.playerData?.sourceFiles ?? 0) > (currentData.playerData?.sourceFiles ?? 0)}
-                  />
-                )}
-              </TableCell>
-            </TableRow>
+                      <TableRow>
+                        <Tooltip title="The total SF levels owned, except for SF-1 Exploit levels.">
+                          <TableCell>Source File Levels</TableCell>
+                        </Tooltip>
+                        <TableCell>{currentData.playerData?.sourceFiles}</TableCell>
+                        <TableCell>{importData.playerData?.sourceFiles}</TableCell>
+                        <TableCell>
+                          {importData.playerData?.sourceFiles !== currentData.playerData?.sourceFiles && (
+                            <ComparisonIcon
+                              isBetter={
+                                (importData.playerData?.sourceFiles ?? 0) > (currentData.playerData?.sourceFiles ?? 0)
+                              }
+                            />
+                          )}
+                        </TableCell>
+                      </TableRow>
 
-            <TableRow>
-              <Tooltip title="Number of exploits owned.">
-                <TableCell>Exploits</TableCell>
-              </Tooltip>
-              <TableCell>{currentData.playerData?.exploits}</TableCell>
-              <TableCell>{importData.playerData?.exploits}</TableCell>
-              <TableCell>
-                {importData.playerData?.exploits !== currentData.playerData?.exploits && (
-                  <ComparisonIcon
-                    isBetter={(importData.playerData?.exploits ?? 0) > (currentData.playerData?.exploits ?? 0)}
-                  />
-                )}
-              </TableCell>
-            </TableRow>
+                      <TableRow>
+                        <Tooltip title="Number of exploits owned.">
+                          <TableCell>Exploits</TableCell>
+                        </Tooltip>
+                        <TableCell>{currentData.playerData?.exploits}</TableCell>
+                        <TableCell>{importData.playerData?.exploits}</TableCell>
+                        <TableCell>
+                          {importData.playerData?.exploits !== currentData.playerData?.exploits && (
+                            <ComparisonIcon
+                              isBetter={
+                                (importData.playerData?.exploits ?? 0) > (currentData.playerData?.exploits ?? 0)
+                              }
+                            />
+                          )}
+                        </TableCell>
+                      </TableRow>
 
-            <TableRow>
-              <Tooltip title="The player's current BitNode.">
-                <TableCell>BitNode</TableCell>
-              </Tooltip>
-              <TableCell>
-                {currentData.playerData?.bitNode}-{currentData.playerData?.bitNodeLevel}
+                      <TableRow>
+                        <Tooltip title="The player's current BitNode.">
+                          <TableCell>BitNode</TableCell>
+                        </Tooltip>
+                        <TableCell>
+                          {currentData.playerData?.bitNode}-{currentData.playerData?.bitNodeLevel}
+                        </TableCell>
+                        <TableCell>
+                          {importData.playerData?.bitNode}-{importData.playerData?.bitNodeLevel}
+                        </TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </Collapse>
               </TableCell>
-              <TableCell>
-                {importData.playerData?.bitNode}-{importData.playerData?.bitNodeLevel}
-              </TableCell>
-              <TableCell></TableCell>
             </TableRow>
           </TableBody>
         </Table>
