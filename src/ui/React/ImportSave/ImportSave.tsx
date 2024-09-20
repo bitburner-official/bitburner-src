@@ -48,10 +48,10 @@ const useStyles = makeStyles()((theme: Theme) => ({
     "& .MuiTable-root": {
       "& .MuiTableCell-root": {
         borderBottom: `1px solid ${Settings.theme.welllight}`,
-        width: "30%"
+        width: "30%",
       },
       "& .MuiTableCell-root:last-child": {
-        width: "10%"
+        width: "10%",
       },
 
       "& .MuiTableHead-root .MuiTableRow-root": {
@@ -92,7 +92,7 @@ const playerSkills: (keyof Skills)[] = ["hacking", "strength", "defense", "dexte
 
 let initialAutosave = 0;
 
-export const ImportSave = (props: { saveData: SaveData; automatic: boolean; }): JSX.Element => {
+export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): JSX.Element => {
   const { classes } = useStyles();
   const [importData, setImportData] = useState<ImportData | undefined>();
   const [currentData, setCurrentData] = useState<ImportData | undefined>();
