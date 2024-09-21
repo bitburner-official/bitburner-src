@@ -161,6 +161,28 @@ function Root(props: IProps): React.ReactElement {
     }
   }
 
+  function loadAllServerScripts(): void {
+    let server;
+    if (!currentScript || !(server = GetServer(currentScript.hostname))) {
+      return;
+    }
+
+    server.scripts.forEach((s) => {
+      const uri = monaco.Uri.from({
+        scheme: "file",
+        path: `${s.server}/${s.filename}`,
+      });
+
+      const model = monaco.editor.getModel(uri);
+      if (model !== null && !model.isDisposed()) {
+        // there's already a model, don't overwrite
+        return;
+      }
+
+      makeModel(server.hostname, s.filename, s.code);
+    });
+  }
+
   const debouncedCodeParsing = debounce((newCode: string) => {
     let server;
     if (!currentScript || !hasScriptExtension(currentScript.path) || !(server = GetServer(currentScript.hostname))) {
@@ -183,6 +205,7 @@ function Root(props: IProps): React.ReactElement {
   }, 300);
 
   const parseCode = (newCode: string) => {
+    loadAllServerScripts();
     startUpdatingRAM();
     debouncedCodeParsing(newCode);
   };
