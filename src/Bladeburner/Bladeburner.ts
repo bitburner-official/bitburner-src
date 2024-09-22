@@ -37,7 +37,6 @@ import { Settings } from "../Settings/Settings";
 import { formatTime } from "../utils/helpers/formatTime";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfiltrateWork";
-import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { PartialRecord, createEnumKeyedRecord, getRecordEntries } from "../Types/Record";
@@ -50,7 +49,8 @@ import { GeneralActions } from "./data/GeneralActions";
 import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
 import { autoCompleteTypeShorthand } from "./utils/terminalShorthands";
-import { CasualtyFactor, type OperationTeam, TeamCasualties } from "./Actions/TeamCasualties";
+import type { OperationTeam } from "./Actions/TeamCasualties";
+import { shuffleArray } from "../Infiltration/ui/BribeGame";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -751,16 +751,10 @@ export class Bladeburner implements OperationTeam {
     }
   }
 
-  private getActionCasualties(action: Operation | BlackOperation, success: boolean) {
-    const severity = success ? CasualtyFactor.LOW_CASUALTIES : CasualtyFactor.HIGH_CASUALTIES;
-    const casualties = new TeamCasualties(severity, action.teamCount, this.sleeveSize);
-    return casualties.rollOutcome(getRandomIntInclusive, this);
-  }
-
-  public killSupportingSleeves(sleeveDeaths: number) {
-    const sup = Player.sleeves.filter((x) => isSleeveSupportWork(x.currentWork));
-    const damagedIndices = [...Array(Math.min(sup.length, sleeveDeaths)).keys()].sort(() => 0.5 - Math.random());
-    damagedIndices.forEach((idx) => sup[idx].kill());
+  public killRandomSupportingSleeves(n: number) {
+    const sup = [...Player.sleevesSupportingBladeburner()]; // Explicit shallow copy
+    shuffleArray(sup);
+    sup.slice(0, Math.min(sup.length, n)).forEach((sleeve) => sleeve.kill());
   }
 
   completeOperation(success: boolean): void {
@@ -768,7 +762,7 @@ export class Bladeburner implements OperationTeam {
       throw new Error("completeOperation() called even though current action is not an Operation");
     }
     const action = this.getActionObject(this.action);
-    const { deaths } = this.getActionCasualties(action, success);
+    const { deaths } = action.resolveTeamCasualties(this, success);
     if (this.logging.ops && deaths > 0) {
       this.log("Lost " + formatNumberNoSuffix(deaths, 0) + " team members during this " + action.name);
     }
@@ -987,7 +981,6 @@ export class Bladeburner implements OperationTeam {
           this.stamina = 0;
         }
 
-        // Team loss variables
         let deaths;
 
         if (action.attempt(this, person)) {
@@ -999,7 +992,7 @@ export class Bladeburner implements OperationTeam {
             this.changeRank(person, rankGain);
           }
 
-          deaths = this.getActionCasualties(action, true).deaths;
+          deaths = action.resolveTeamCasualties(this, true).deaths;
 
           if (this.logging.blackops) {
             this.log(
@@ -1024,7 +1017,7 @@ export class Bladeburner implements OperationTeam {
             }
           }
 
-          deaths = this.getActionCasualties(action, false).deaths;
+          deaths = action.resolveTeamCasualties(this, false).deaths;
 
           if (this.logging.blackops) {
             this.log(

@@ -28,6 +28,7 @@ import { CONSTANTS } from "../../Constants";
 import { Person } from "../Person";
 import { isMember } from "../../utils/EnumHelper";
 import { PartialRecord } from "../../Types/Record";
+import { isSleeveSupportWork } from "../Sleeve/Work/SleeveSupportWork";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
@@ -169,6 +170,10 @@ export class PlayerObject extends Person implements IPlayer {
 
   whoAmI(): string {
     return "Player";
+  }
+
+  sleevesSupportingBladeburner(): Sleeve[] {
+    return this.sleeves.filter((s) => isSleeveSupportWork(s.currentWork));
   }
 
   /** Serialize the current object to a JSON save state. */

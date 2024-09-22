@@ -6,17 +6,19 @@ import type { ActionIdFor, Availability, SuccessChanceParams } from "../Types";
 import { BladeburnerActionType, BladeburnerMultName, BladeburnerOperationName } from "@enums";
 import { BladeburnerConstants } from "../data/Constants";
 import { ActionClass } from "./Action";
-import { Generic_fromJSON, IReviverValue, constructorsForReviver } from "../../utils/JSONReviver";
+import { constructorsForReviver, Generic_fromJSON, IReviverValue } from "../../utils/JSONReviver";
 import { LevelableActionClass, LevelableActionParams } from "./LevelableAction";
 import { clampInteger } from "../../utils/helpers/clampNumber";
 import { getEnumHelper } from "../../utils/EnumHelper";
+import { resolveTeamCasualties, type TeamActionWithCasualties } from "./TeamCasualties";
+import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 
 export interface OperationParams extends LevelableActionParams {
   name: BladeburnerOperationName;
   getAvailability?: (bladeburner: Bladeburner) => Availability;
 }
 
-export class Operation extends LevelableActionClass {
+export class Operation extends LevelableActionClass implements TeamActionWithCasualties {
   readonly type: BladeburnerActionType.Operation = BladeburnerActionType.Operation;
   readonly name: BladeburnerOperationName;
   teamCount = 0;
@@ -43,6 +45,10 @@ export class Operation extends LevelableActionClass {
   getTeamSuccessBonus = operationTeamSuccessBonus;
 
   getActionTypeSkillSuccessBonus = operationSkillSuccessBonus;
+
+  getTeamCasualtiesRoll = getRandomIntInclusive;
+
+  resolveTeamCasualties = resolveTeamCasualties;
 
   getChaosSuccessFactor(inst: Bladeburner /*, params: ISuccessChanceParams*/): number {
     const city = inst.getCurrentCity();

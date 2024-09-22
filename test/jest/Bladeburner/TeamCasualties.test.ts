@@ -1,83 +1,161 @@
-import { CasualtyFactor, TeamCasualties } from "../../../src/Bladeburner/Actions/TeamCasualties";
-import { getRandomIntInclusive } from "../../../src/utils/helpers/getRandomIntInclusive";
+import { Player, setPlayer } from "@player";
+import { FormatsNeedToChange } from "../../../src/ui/formatNumber";
+import type { ActionIdFor } from "../../../src/Bladeburner/Types";
+import type { Bladeburner } from "../../../src/Bladeburner/Bladeburner";
+import { BlackOperation, Contract, Operation } from "../../../src/Bladeburner/Actions";
+import { Sleeve } from "../../../src/PersonObjects/Sleeve/Sleeve";
+import { SleeveSupportWork } from "../../../src/PersonObjects/Sleeve/Work/SleeveSupportWork";
+import { BladeburnerBlackOpName, BladeburnerContractName, BladeburnerOperationName } from "@enums";
+import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 
+/**
+ * You may want to use hook to help with debugging
+ * <code>
+ *   afterEach(() => {
+ *     console.error(inst.consoleLogs);
+ *   });
+ * </code>
+ */
 describe("Bladeburner Team", () => {
-  const HIGH_ROLL = (_: number, high: number) => high;
-  const NORMAL_ROLL = getRandomIntInclusive;
+  const MAX_ROLL = (_: number, high: number) => high;
+  const MIN_ROLL = (low: number, _: number) => low;
+  const BLACK_OP = BlackOperation.createId(BladeburnerBlackOpName.OperationAnnihilus);
+  const OP = Operation.createId(BladeburnerOperationName.Assassination);
 
-  const CasualtyReport = (used: number, severity: CasualtyFactor, sleeves: number = 0) =>
-    new TeamCasualties(severity, used, sleeves);
+  let inst: Bladeburner;
+  let action: BlackOperation | Operation;
+
+  beforeAll(() => {
+    /* Initialise Formatters. Dependency of Bladeburner */
+    FormatsNeedToChange.emit();
+  });
+
+  beforeEach(() => {
+    setPlayer(new PlayerObject());
+    Player.init();
+    Player.startBladeburner();
+
+    if (!Player.bladeburner) throw new Error();
+    inst = Player.bladeburner;
+
+    Player.sourceFiles.set(10, 3);
+    Player.sleevesFromCovenant = 5;
+    Sleeve.recalculateNumOwned();
+    Player.sleeves.forEach((s) => (s.shock = 0));
+  });
 
   it("always has a chance of zero deaths", () => {
-    expect(CasualtyReport(10, CasualtyFactor.LOW_CASUALTIES, 0).bestCase).toBe(0);
+    teamSize(10), startAction(OP), teamUsed(10), forceMinCasualties();
+    actionFails();
+    expect(inst.teamSize).toBe(10);
   });
 
   describe("Solo: with no members or sleeves", () => {
-    it.each([[CasualtyFactor.LOW_CASUALTIES], [CasualtyFactor.HIGH_CASUALTIES]])(
-      "remains unchanged at all rates: %s",
-      () => {
-        expect(CasualtyReport(0, CasualtyFactor.LOW_CASUALTIES, 0)).toMatchObject({ worstCase: 0, bestCase: 0 });
-      },
-    );
+    it.each([
+      ["success", actionSucceeds],
+      ["fail", actionFails],
+    ])("remains unchanged at all rates: %s", (_: string, attempt: CallableFunction) => {
+      teamSize(1000), startAction(OP), teamUsed(0);
+      attempt();
+      expect(inst.teamSize).toBe(1000);
+    });
   });
 
-  describe("Team members assigned to action (no sleeves)", () => {
+  describe("Human members", () => {
     it("get killed according to roll", () => {
-      const c = CasualtyReport(15, CasualtyFactor.LOW_CASUALTIES);
-      const { team } = c.rollOutcome(HIGH_ROLL, TeamWithShockingSleeves(15));
-      expect(team).toMatchObject({ teamSize: 7, teamLost: 8 });
-    });
-
-    it("may only get killed when assigned (team used <= team size)", () => {
-      const teamUsed = 10;
-      const teamSize = 20;
-      const c = CasualtyReport(teamUsed, CasualtyFactor.HIGH_CASUALTIES);
-      const { team } = c.rollOutcome(HIGH_ROLL, TeamWithShockingSleeves(teamSize));
-      expect(team.teamLost).toBeLessThanOrEqual(teamUsed);
+      teamSize(15), startAction(OP), teamUsed(15), forceMaxCasualties(), actionSucceeds();
+      expect(inst).toMatchObject({ teamSize: 7, teamLost: 8 });
     });
   });
 
-  describe("Team members and sleeves assigned to action", () => {
-    it("get killed with human casualties first", () => {
-      const c = CasualtyReport(18, CasualtyFactor.LOW_CASUALTIES, 8);
-      const teamWithShockControl = TeamWithShockingSleeves(10);
-      const { team, damagedSleeves } = c.rollOutcome(NORMAL_ROLL, teamWithShockControl);
-      expect(damagedSleeves).toBe(0);
-      expect(teamWithShockControl.shocked).toBe(0);
+  describe("Assigned team members", () => {
+    it("get killed with human casualties before sleeves", () => {
+      /** At most 10 + 8 -> 9 casualties occur at worst,
+       * killing human team members before sleeves */
+      teamSize(10), startAction(BLACK_OP), supportingSleeves(8), teamUsed(18);
+      actionSucceeds();
+      expect(inst.teamSize).toBeLessThanOrEqual(18);
+      assertNoShockIncrease();
     });
 
-    it("shocks sleeves when deaths exceed human team size", () => {
-      const totalAssigned = 18;
-      const c = CasualtyReport(totalAssigned, CasualtyFactor.HIGH_CASUALTIES, 8);
-      const { team, damagedSleeves } = c.rollOutcome(HIGH_ROLL, TeamWithShockingSleeves(18));
-      expect(damagedSleeves).toBe(8);
+    it("shocks sleeves when deaths exceed humans", () => {
+      teamSize(0), startAction(OP), supportingSleeves(8), forceMaxCasualties(), teamUsed(8);
+      actionFails();
+      assertSleevesHaveBeenShocked();
     });
   });
 
   describe("Casualties", () => {
-    it("are potentially entire team when high", () => {
-      const losses = CasualtyReport(5, CasualtyFactor.HIGH_CASUALTIES, 0);
-      expect(losses.worstCase).toBe(5);
+    it("do not affect contracts", () => {
+      teamSize(3);
+      inst.action = Contract.createId(BladeburnerContractName.Tracking);
+      actionFails();
+      expect(inst.teamSize).toBe(3);
     });
 
-    it("at worst half the team when low", () => {
-      const losses = CasualtyReport(5, CasualtyFactor.LOW_CASUALTIES, 0);
-      expect(losses.worstCase).toBeLessThan(5);
-      expect(losses.worstCase).toBeGreaterThan(0);
+    it.each([[OP], [BLACK_OP]])(
+      "will occur on actions that support teams: %s",
+      (op: ActionIdFor<BlackOperation> | ActionIdFor<Operation>) => {
+        teamSize(5), startAction(op), forceMaxCasualties(), teamUsed(5), actionFails();
+        expect(inst.teamSize).toBe(0);
+      },
+    );
+
+    it("are potentially entire team when failing", () => {
+      teamSize(5), startAction(OP), forceMaxCasualties(), teamUsed(5), actionFails();
+      expect(inst).toMatchObject({ teamSize: 0, teamLost: 5 });
+    });
+
+    it("at worst half the team when succeeding (rounding up)", () => {
+      teamSize(5), startAction(OP), forceMaxCasualties(), teamUsed(5), actionSucceeds();
+      expect(inst).toMatchObject({ teamSize: 2, teamLost: 3 });
     });
   });
 
-  function TeamWithShockingSleeves(teamSize: number = 0) {
-    let sleevesShocked = 0;
-    return {
-      teamSize,
-      teamLost: 0,
-      killSupportingSleeves(numShocked: number) {
-        sleevesShocked += numShocked;
-      },
-      get shocked() {
-        return sleevesShocked;
-      },
-    };
+  function teamSize(n: number) {
+    inst.teamSize = n;
+  }
+
+  function teamUsed(n: number) {
+    action.teamCount = n;
+  }
+
+  function startAction(type: ActionIdFor<BlackOperation> | ActionIdFor<Operation>) {
+    inst.action = type;
+    action = inst.getActionObject(type) as BlackOperation | Operation;
+  }
+
+  function forceMaxCasualties() {
+    action.getTeamCasualtiesRoll = MAX_ROLL;
+  }
+
+  function forceMinCasualties() {
+    action.getTeamCasualtiesRoll = MIN_ROLL;
+  }
+
+  function actionSucceeds() {
+    action.baseDifficulty = 0;
+    Player.skills.strength = 1e12;
+    Player.skills.agility = 1e12;
+    inst.action && inst.completeAction(Player, inst.action);
+  }
+
+  function actionFails() {
+    action.baseDifficulty = 1e15;
+    inst.action && inst.completeAction(Player, inst.action);
+  }
+
+  function supportingSleeves(n: number) {
+    for (let i = 0; i < n; i++) Player.sleeves[i].startWork(new SleeveSupportWork());
+  }
+
+  function assertNoShockIncrease() {
+    const shockIncrease = Player.sleeves.reduce((sum, s) => sum + s.shock, 0);
+    expect(shockIncrease).toBe(0);
+  }
+
+  function assertSleevesHaveBeenShocked() {
+    const shockIncrease = Player.sleeves.reduce((sum, s) => sum + s.shock, 0);
+    expect(shockIncrease).toBeGreaterThan(0);
   }
 });
