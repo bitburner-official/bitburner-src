@@ -19,8 +19,6 @@ export interface TeamActionWithCasualties {
   teamCount: number;
 
   getMinimumCasualties(): number;
-
-  resolveTeamCasualties: typeof resolveTeamCasualties;
 }
 
 /**
