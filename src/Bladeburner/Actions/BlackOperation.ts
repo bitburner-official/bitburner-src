@@ -5,7 +5,6 @@ import { BladeburnerActionType, BladeburnerBlackOpName } from "@enums";
 import { ActionClass, ActionParams } from "./Action";
 import { operationSkillSuccessBonus, operationTeamSuccessBonus } from "./Operation";
 import { getEnumHelper } from "../../utils/EnumHelper";
-import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { resolveTeamCasualties, type TeamActionWithCasualties } from "./TeamCasualties";
 
 interface BlackOpParams {

@@ -11,7 +11,6 @@ import { LevelableActionClass, LevelableActionParams } from "./LevelableAction";
 import { clampInteger } from "../../utils/helpers/clampNumber";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { resolveTeamCasualties, type TeamActionWithCasualties } from "./TeamCasualties";
-import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 
 export interface OperationParams extends LevelableActionParams {
   name: BladeburnerOperationName;
