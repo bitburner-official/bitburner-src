@@ -76,6 +76,8 @@ export const CONSTANTS = {
   MillisecondsPerQuarterHour: 900000,
   GameCyclesPerQuarterHour: 900000 / 200,
 
+  MillisecondsPerTenMinutes: 600000,
+
   MillisecondsPerFiveMinutes: 300000,
   GameCyclesPerFiveMinutes: 300000 / 200,
 

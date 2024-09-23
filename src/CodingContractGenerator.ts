@@ -14,6 +14,63 @@ import { BaseServer } from "./Server/BaseServer";
 
 import { getRandomIntInclusive } from "./utils/helpers/getRandomIntInclusive";
 import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
+import { clampNumber } from "./utils/helpers/clampNumber";
+
+export function tryGeneratingRandomContract(numberOfTries: number): void {
+  /**
+   * We try to generate a contract every 10 minutes. 525600 is the number of tries in 10 years. There is no reason to
+   * support anything above that. We tested this number (525600) on a very old machine. It took only 300-350ms to
+   * loop 525600 times and generate ~9137 contracts on that machine.
+   */
+  numberOfTries = clampNumber(Math.floor(numberOfTries), 0, 525600);
+  if (numberOfTries < 1) {
+    return;
+  }
+  let currentNumberOfContracts = GetAllServers().reduce((sum, server) => {
+    return sum + server.contracts.length;
+  }, 0);
+  for (let i = 0; i < numberOfTries; ++i) {
+    const random = Math.random();
+    /**
+     * When currentNumberOfContracts is small, the probability is ~0.25. 25% is the "reasonable" chance of getting a
+     * contract in normal situations (low currentNumberOfContracts). We have used this probability for a long time as a
+     * constant before we decide to switch to a new function that is based on currentNumberOfContracts.
+     *
+     * This function was chosen due to these characteristics:
+     * - The probability is exactly 0.25 if currentNumberOfContracts is 0.
+     * - The probability is ~0.25 if currentNumberOfContracts is small (near 0).
+     * - The probability approaches 0 when currentNumberOfContracts becomes unusually large:
+     *   - If currentNumberOfContracts is 2500, the probability is 0.23861.
+     *   - If currentNumberOfContracts is 5000, the probability is 0.12462.
+     *   - If currentNumberOfContracts is 7500, the probability is 0.01176.
+     *   - If currentNumberOfContracts is 10000, the probability is 0.0006129.
+     *
+     * With this function, we ensure that:
+     * - The player gets a reasonable amount of contracts in normal situations.
+     * - If the offline time is unusually large (being offline for years, editing save file, tampering function prototype,
+     * etc.), the game will not hang when it tries to generate contracts.
+     *
+     * These are some data for reference:
+     * - 1 month: ~1077 contracts.
+     * - 3 months: ~3157 contracts.
+     * - 6 months: ~5296 contracts.
+     * - 12 months: ~6678 contracts.
+     * - 2 years: ~7570 contracts.
+     * - 5 years: ~8504 contracts.
+     * - 10 years: ~9137 contracts.
+     * - 25 years: ~9936 contracts.
+     * - 50 years: ~10526 contracts.
+     *
+     * Those numbers mean: If the player does not have any contracts and is online (or loads a save file with equivalent
+     * offline time) for X months/years, they will have ~Y contracts.
+     */
+    if (random > 100 / (399 + Math.exp(0.0012 * currentNumberOfContracts))) {
+      continue;
+    }
+    generateRandomContract();
+    ++currentNumberOfContracts;
+  }
+}
 
 export function generateRandomContract(): void {
   // First select a random problem type

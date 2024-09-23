@@ -2,7 +2,7 @@ import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions"
 import { AugmentationName, ToastVariant } from "@enums";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { initSourceFiles } from "./SourceFile/SourceFiles";
-import { generateRandomContract } from "./CodingContractGenerator";
+import { tryGeneratingRandomContract } from "./CodingContractGenerator";
 import { CONSTANTS } from "./Constants";
 import { Factions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
@@ -223,10 +223,7 @@ const Engine: {
     }
 
     if (Engine.Counters.contractGeneration <= 0) {
-      // X% chance of a contract being generated
-      if (Math.random() <= 0.25) {
-        generateRandomContract();
-      }
+      tryGeneratingRandomContract(1);
       Engine.Counters.contractGeneration = 3000;
     }
 
@@ -287,24 +284,8 @@ const Engine: {
       }
       const numCyclesOffline = Math.floor(timeOffline / CONSTANTS.MilliPerCycle);
 
-      // Calculate the number of chances for a contract the player had whilst offline
-      const contractChancesWhileOffline = Math.floor(timeOffline / (1000 * 60 * 10));
-
-      // Generate coding contracts
-      let numContracts = 0;
-      if (contractChancesWhileOffline > 100) {
-        numContracts += Math.floor(contractChancesWhileOffline * 0.25);
-      }
-      if (contractChancesWhileOffline > 0 && contractChancesWhileOffline <= 100) {
-        for (let i = 0; i < contractChancesWhileOffline; ++i) {
-          if (Math.random() <= 0.25) {
-            numContracts++;
-          }
-        }
-      }
-      for (let i = 0; i < numContracts; i++) {
-        generateRandomContract();
-      }
+      // Generate bonus CCTs
+      tryGeneratingRandomContract(timeOffline / CONSTANTS.MillisecondsPerTenMinutes);
 
       let offlineReputation = 0;
       const offlineHackingIncome =
