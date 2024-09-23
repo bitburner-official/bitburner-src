@@ -752,7 +752,7 @@ export class Bladeburner implements OperationTeam {
     }
   }
 
-  public killRandomSupportingSleeves(n: number) {
+  killRandomSupportingSleeves(n: number) {
     const sup = [...Player.sleevesSupportingBladeburner()]; // Explicit shallow copy
     shuffleArray(sup);
     sup.slice(0, Math.min(sup.length, n)).forEach((sleeve) => sleeve.kill());
