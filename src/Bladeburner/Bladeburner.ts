@@ -49,7 +49,7 @@ import { GeneralActions } from "./data/GeneralActions";
 import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
 import { autoCompleteTypeShorthand } from "./utils/terminalShorthands";
-import type { OperationTeam } from "./Actions/TeamCasualties";
+import { resolveTeamCasualties, type OperationTeam } from "./Actions/TeamCasualties";
 import { shuffleArray } from "../Infiltration/ui/BribeGame";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
@@ -763,7 +763,7 @@ export class Bladeburner implements OperationTeam {
       throw new Error("completeOperation() called even though current action is not an Operation");
     }
     const action = this.getActionObject(this.action);
-    const deaths = action.resolveTeamCasualties(this, success);
+    const deaths = resolveTeamCasualties(action, this, success);
     if (this.logging.ops && deaths > 0) {
       this.log("Lost " + formatNumberNoSuffix(deaths, 0) + " team members during this " + action.name);
     }
@@ -993,7 +993,7 @@ export class Bladeburner implements OperationTeam {
             this.changeRank(person, rankGain);
           }
 
-          deaths = action.resolveTeamCasualties(this, true);
+          deaths = resolveTeamCasualties(action, this, true);
 
           if (this.logging.blackops) {
             this.log(
@@ -1018,7 +1018,7 @@ export class Bladeburner implements OperationTeam {
             }
           }
 
-          deaths = action.resolveTeamCasualties(this, false);
+          deaths = resolveTeamCasualties(action, this, false);
 
           if (this.logging.blackops) {
             this.log(

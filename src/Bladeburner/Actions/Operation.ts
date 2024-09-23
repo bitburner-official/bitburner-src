@@ -10,7 +10,7 @@ import { constructorsForReviver, Generic_fromJSON, IReviverValue } from "../../u
 import { LevelableActionClass, LevelableActionParams } from "./LevelableAction";
 import { clampInteger } from "../../utils/helpers/clampNumber";
 import { getEnumHelper } from "../../utils/EnumHelper";
-import { resolveTeamCasualties, type TeamActionWithCasualties } from "./TeamCasualties";
+import type { TeamActionWithCasualties } from "./TeamCasualties";
 
 export interface OperationParams extends LevelableActionParams {
   name: BladeburnerOperationName;
@@ -44,8 +44,6 @@ export class Operation extends LevelableActionClass implements TeamActionWithCas
   getTeamSuccessBonus = operationTeamSuccessBonus;
 
   getActionTypeSkillSuccessBonus = operationSkillSuccessBonus;
-
-  resolveTeamCasualties = resolveTeamCasualties;
 
   getMinimumCasualties(): number {
     return 0;
