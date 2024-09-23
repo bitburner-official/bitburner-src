@@ -1,5 +1,4 @@
 import type { Bladeburner } from "../../../src/Bladeburner/Bladeburner";
-import { FormatsNeedToChange } from "../../../src/ui/formatNumber";
 import { Player, setPlayer } from "@player";
 import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 import { BladeburnerContractName } from "@enums";
@@ -19,6 +18,12 @@ describe("Bladeburner Console", () => {
     if (!Player.bladeburner) throw new Error();
     inst = Player.bladeburner;
     inst.clearConsole();
+  });
+
+  it("May concatenate multiple commands with ';'", () => {
+    inst.startAction(Contract.createId(BladeburnerContractName.Tracking));
+    bb("stop;start contract Retirement;help cls;");
+    expect(inst.consoleLogs).not.toContainEqual("Invalid console command");
   });
 
   describe.each(FEEDBACK_CMDS)("%s", (cmd: string) => {
@@ -82,6 +87,6 @@ describe("Bladeburner Console", () => {
   });
 
   function bb(cmd: string) {
-    inst.executeConsoleCommand(cmd);
+    inst.executeConsoleCommands(cmd);
   }
 });
