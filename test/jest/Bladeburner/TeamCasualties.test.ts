@@ -136,11 +136,11 @@ describe("Bladeburner Team", () => {
   }
 
   function forceMaxCasualties() {
-    action.getTeamCasualtiesRoll = MAX_ROLL;
+    inst.getTeamCasualtiesRoll = MAX_ROLL;
   }
 
   function forceMinCasualties() {
-    action.getTeamCasualtiesRoll = MIN_ROLL;
+    inst.getTeamCasualtiesRoll = MIN_ROLL;
   }
 
   function actionSucceeds() {

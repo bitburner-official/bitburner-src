@@ -10,13 +10,13 @@ export interface OperationTeam {
   /** number of supporting sleeves at time of action completion */
   sleeveSize: number;
 
+  getTeamCasualtiesRoll(low: number, high: number): number;
+
   killRandomSupportingSleeves(sleeveDeaths: number): void;
 }
 
 export interface TeamActionWithCasualties {
   teamCount: number;
-
-  getTeamCasualtiesRoll(low: number, high: number): number;
 
   getMinimumCasualties(): number;
 
@@ -33,19 +33,17 @@ export function resolveTeamCasualties(this: TeamActionWithCasualties, team: Oper
   const radius = this.teamCount * severity;
   const worstCase = severity < 1 ? Math.ceil(radius) : Math.floor(radius);
   /** Best case is always no deaths */
-  const deaths = this.getTeamCasualtiesRoll(this.getMinimumCasualties(), worstCase);
+  const deaths = team.getTeamCasualtiesRoll(this.getMinimumCasualties(), worstCase);
   const humans = this.teamCount - team.sleeveSize;
   const humanDeaths = Math.min(humans, deaths);
-  const damagedSleeves = deaths - humanDeaths;
-
   /** Supporting Sleeves take damage when they are part of losses,
    *   e.g. 8 sleeves + 3 team members with 4 losses -> 1 sleeve takes damage */
-  team.killRandomSupportingSleeves(damagedSleeves);
+  team.killRandomSupportingSleeves(deaths - humanDeaths);
 
   /** Clamped, bugfix for PR#1659
    * "BUGFIX: Wrong team size when all team members die in Bladeburner's action" */
   team.teamSize = Math.max(team.teamSize - humanDeaths, team.sleeveSize);
   team.teamLost += deaths;
 
-  return { deaths, team, damagedSleeves };
+  return deaths;
 }

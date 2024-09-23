@@ -46,8 +46,6 @@ export class Operation extends LevelableActionClass implements TeamActionWithCas
 
   getActionTypeSkillSuccessBonus = operationSkillSuccessBonus;
 
-  getTeamCasualtiesRoll = getRandomIntInclusive;
-
   resolveTeamCasualties = resolveTeamCasualties;
 
   getMinimumCasualties(): number {

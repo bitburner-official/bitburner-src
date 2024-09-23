@@ -103,6 +103,7 @@ export class Bladeburner implements OperationTeam {
   automateThreshLow = 0;
   consoleHistory: string[] = [];
   consoleLogs: string[] = ["Bladeburner Console", "Type 'help' to see console commands"];
+  getTeamCasualtiesRoll = getRandomIntInclusive;
 
   constructor() {
     this.contracts = createContracts();
@@ -762,7 +763,7 @@ export class Bladeburner implements OperationTeam {
       throw new Error("completeOperation() called even though current action is not an Operation");
     }
     const action = this.getActionObject(this.action);
-    const { deaths } = action.resolveTeamCasualties(this, success);
+    const deaths = action.resolveTeamCasualties(this, success);
     if (this.logging.ops && deaths > 0) {
       this.log("Lost " + formatNumberNoSuffix(deaths, 0) + " team members during this " + action.name);
     }
@@ -992,7 +993,7 @@ export class Bladeburner implements OperationTeam {
             this.changeRank(person, rankGain);
           }
 
-          deaths = action.resolveTeamCasualties(this, true).deaths;
+          deaths = action.resolveTeamCasualties(this, true);
 
           if (this.logging.blackops) {
             this.log(
@@ -1017,7 +1018,7 @@ export class Bladeburner implements OperationTeam {
             }
           }
 
-          deaths = action.resolveTeamCasualties(this, false).deaths;
+          deaths = action.resolveTeamCasualties(this, false);
 
           if (this.logging.blackops) {
             this.log(

@@ -67,7 +67,5 @@ export class BlackOperation extends ActionClass implements TeamActionWithCasualt
 
   getActionTypeSkillSuccessBonus = operationSkillSuccessBonus;
 
-  getTeamCasualtiesRoll = getRandomIntInclusive;
-
   resolveTeamCasualties = resolveTeamCasualties;
 }
