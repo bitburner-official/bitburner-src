@@ -59,6 +59,10 @@ export class BlackOperation extends ActionClass implements TeamActionWithCasualt
     return 1;
   }
 
+  getMinimumCasualties(): number {
+    return 1;
+  }
+
   getTeamSuccessBonus = operationTeamSuccessBonus;
 
   getActionTypeSkillSuccessBonus = operationSkillSuccessBonus;

@@ -15,7 +15,11 @@ export interface OperationTeam {
 
 export interface TeamActionWithCasualties {
   teamCount: number;
-  getTeamCasualtiesRoll: (low: number, high: number) => number;
+
+  getTeamCasualtiesRoll(low: number, high: number): number;
+
+  getMinimumCasualties(): number;
+
   resolveTeamCasualties: typeof resolveTeamCasualties;
 }
 
@@ -29,7 +33,7 @@ export function resolveTeamCasualties(this: TeamActionWithCasualties, team: Oper
   const radius = this.teamCount * severity;
   const worstCase = severity < 1 ? Math.ceil(radius) : Math.floor(radius);
   /** Best case is always no deaths */
-  const deaths = this.getTeamCasualtiesRoll(0, worstCase);
+  const deaths = this.getTeamCasualtiesRoll(this.getMinimumCasualties(), worstCase);
   const humans = this.teamCount - team.sleeveSize;
   const humanDeaths = Math.min(humans, deaths);
   const damagedSleeves = deaths - humanDeaths;

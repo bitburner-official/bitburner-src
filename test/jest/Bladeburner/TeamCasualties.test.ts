@@ -44,10 +44,20 @@ describe("Bladeburner Team", () => {
     Player.sleeves.forEach((s) => (s.shock = 0));
   });
 
-  it("always has a chance of zero deaths", () => {
-    teamSize(10), startAction(OP), teamUsed(10), forceMinCasualties();
-    actionFails();
-    expect(inst.teamSize).toBe(10);
+  describe("Operations", () => {
+    it("hav a chance of zero deaths for Operations", () => {
+      teamSize(10), startAction(OP), teamUsed(10), forceMinCasualties();
+      actionFails();
+      expect(inst.teamSize).toBe(10);
+    });
+  });
+
+  describe("Black Operations", () => {
+    it("always have at least 1 death", () => {
+      teamSize(10), startAction(BLACK_OP), teamUsed(10), forceMinCasualties();
+      actionFails();
+      expect(inst.teamSize).toBe(9);
+    });
   });
 
   describe("Solo: with no members or sleeves", () => {

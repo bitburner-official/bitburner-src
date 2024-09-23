@@ -50,6 +50,10 @@ export class Operation extends LevelableActionClass implements TeamActionWithCas
 
   resolveTeamCasualties = resolveTeamCasualties;
 
+  getMinimumCasualties(): number {
+    return 0;
+  }
+
   getChaosSuccessFactor(inst: Bladeburner /*, params: ISuccessChanceParams*/): number {
     const city = inst.getCurrentCity();
     if (city.chaos > BladeburnerConstants.ChaosThreshold) {
