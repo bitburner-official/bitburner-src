@@ -35,7 +35,7 @@ export function ServerDropdown(props: IProps): React.ReactElement {
    * 'serverType' property
    */
   function isValidServer(s: BaseServer): boolean {
-    const purchased = s instanceof Server && s.purchasedByPlayer;
+    const purchased = (s instanceof Server && s.purchasedByPlayer) || s instanceof HacknetServer;
     const type = props.serverType;
     switch (type) {
       case ServerType.All:
@@ -43,9 +43,9 @@ export function ServerDropdown(props: IProps): React.ReactElement {
       case ServerType.Foreign:
         return s.hostname !== "home" && !purchased;
       case ServerType.Owned:
-        return purchased || s instanceof HacknetServer || s.hostname === "home";
+        return purchased || s.hostname === "home";
       case ServerType.Purchased:
-        return purchased || s instanceof HacknetServer;
+        return purchased;
       default:
         console.warn(`Invalid ServerType specified for ServerDropdown component: ${type}`);
         return false;
