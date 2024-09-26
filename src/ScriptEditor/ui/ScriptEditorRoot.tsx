@@ -162,8 +162,12 @@ function Root(props: IProps): React.ReactElement {
   }
 
   function loadAllServerScripts(): void {
-    let server;
-    if (!currentScript || !(server = GetServer(currentScript.hostname))) {
+    if (!currentScript) {
+      return;
+    }
+
+    const server = GetServer(currentScript.hostname);
+    if (!server) {
       return;
     }
 
