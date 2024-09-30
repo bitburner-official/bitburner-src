@@ -18,7 +18,7 @@ import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
  */
 describe("Bladeburner Team", () => {
   const MAX_ROLL = (_: number, high: number) => high;
-  const MIN_ROLL = (low: number, _: number) => low;
+  const MIN_ROLL = (low: number, __: number) => low;
   const BLACK_OP = BlackOperation.createId(BladeburnerBlackOpName.OperationAnnihilus);
   const OP = Operation.createId(BladeburnerOperationName.Assassination);
 
@@ -96,6 +96,15 @@ describe("Bladeburner Team", () => {
   });
 
   describe("Casualties", () => {
+    it.each([[OP], [BLACK_OP]])(
+      "no change in team size when not using team. Action: %s",
+      (op: ActionIdFor<BlackOperation> | ActionIdFor<Operation>) => {
+        teamSize(0), supportingSleeves(3), startAction(op), teamUsed(0), actionFails();
+        expect(inst.teamSize).toBe(3);
+        expect(inst.teamLost).toBe(0);
+      },
+    );
+
     it("do not affect contracts", () => {
       teamSize(3);
       inst.action = Contract.createId(BladeburnerContractName.Tracking);

@@ -26,22 +26,33 @@ export interface TeamActionWithCasualties {
  * and may result in casualties, reducing the player's hp, killing team members
  * and killing sleeves (to shock them, sleeves are immortal) *
  */
-export function resolveTeamCasualties(action: TeamActionWithCasualties, team: OperationTeam, success: boolean) {
-  const severity = success ? CasualtyFactor.LOW_CASUALTIES : CasualtyFactor.HIGH_CASUALTIES;
-  const radius = action.teamCount * severity;
-  const worstCase = severity < 1 ? Math.ceil(radius) : Math.floor(radius);
-  /** Best case is always no deaths */
-  const deaths = team.getTeamCasualtiesRoll(action.getMinimumCasualties(), worstCase);
-  const humans = action.teamCount - team.sleeveSize;
-  const humanDeaths = Math.min(humans, deaths);
-  /** Supporting Sleeves take damage when they are part of losses,
-   *   e.g. 8 sleeves + 3 team members with 4 losses -> 1 sleeve takes damage */
-  team.killRandomSupportingSleeves(deaths - humanDeaths);
+export function resolveTeamCasualties(action: TeamActionWithCasualties, team: OperationTeam, success: boolean): number {
+  if (action.teamCount <= 0) {
+    return 0;
+  }
 
-  /** Clamped, bugfix for PR#1659
-   * "BUGFIX: Wrong team size when all team members die in Bladeburner's action" */
-  team.teamSize = Math.max(team.teamSize - humanDeaths, team.sleeveSize);
-  team.teamLost += deaths;
+  // Operation actions and Black Operation actions have different min casualties: Min of Ops = 0. Min of BlackOps = 1.
+  const minCasualties = action.getMinimumCasualties();
+  const maxCasualties = success
+    ? Math.ceil(action.teamCount * CasualtyFactor.LOW_CASUALTIES)
+    : Math.floor(action.teamCount * CasualtyFactor.HIGH_CASUALTIES);
+  /**
+   * In the current state, it's safe to assume that minCasualties <= maxCasualties. However, in the future, if we change
+   * min casualties, LOW_CASUALTIES, or HIGH_CASUALTIES, the call of getTeamCasualtiesRoll may crash.
+   * getTeamCasualtiesRoll is just getRandomIntInclusive, and that function's parameters need to be in the form of
+   * (min, max).
+   */
+  const losses =
+    minCasualties <= maxCasualties
+      ? team.getTeamCasualtiesRoll(minCasualties, maxCasualties)
+      : team.getTeamCasualtiesRoll(maxCasualties, minCasualties);
+  team.teamSize -= losses;
+  if (team.teamSize < team.sleeveSize) {
+    team.killRandomSupportingSleeves(team.sleeveSize - team.teamSize);
+    // If this happens, all team members died and some sleeves took damage. In this case, teamSize = sleeveSize.
+    team.teamSize = team.sleeveSize;
+  }
+  team.teamLost += losses;
 
-  return deaths;
+  return losses;
 }
