@@ -3610,7 +3610,7 @@ export interface Bladeburner {
    *
    * @param type - Type of action.
    * @param name - Name of action. Must be an exact match.
-   * @param size - Number of team members to set. Will be converted using Math.round().
+   * @param size - Number of team members to set. Must be a non-negative integer.
    * @returns Number of Bladeburner team members you assigned to the specified action.
    */
   setTeamSize(

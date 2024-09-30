@@ -47,6 +47,8 @@ import {
   PositiveNumber,
   PositiveSafeInteger,
   isPositiveSafeInteger,
+  isInteger,
+  type Integer,
 } from "../types";
 import { Engine } from "../engine";
 import { resolveFilePath, FilePath } from "../Paths/FilePath";
@@ -65,6 +67,7 @@ import { JSONMap } from "../Types/Jsonable";
 export const helpers = {
   string,
   number,
+  integer,
   positiveInteger,
   positiveSafeInteger,
   positiveNumber,
@@ -133,14 +136,23 @@ function number(ctx: NetscriptContext, argName: string, v: unknown): number {
     if (isNaN(v)) throw errorMessage(ctx, `'${argName}' is NaN.`);
     return v;
   }
-  throw errorMessage(ctx, `'${argName}' should be a number. ${debugType(v)}`, "TYPE");
+  throw errorMessage(ctx, `'${argName}' must be a number. ${debugType(v)}`, "TYPE");
+}
+
+/** Convert provided value v for argument argName to an integer, throwing if it looks like something else. */
+function integer(ctx: NetscriptContext, argName: string, v: unknown): Integer {
+  const n = number(ctx, argName, v);
+  if (!isInteger(n)) {
+    throw errorMessage(ctx, `${argName} must be an integer, was ${n}`, "TYPE");
+  }
+  return n;
 }
 
 /** Convert provided value v for argument argName to a positive integer, throwing if it looks like something else. */
 function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): PositiveInteger {
   const n = number(ctx, argName, v);
   if (!isPositiveInteger(n)) {
-    throw errorMessage(ctx, `${argName} should be a positive integer, was ${n}`, "TYPE");
+    throw errorMessage(ctx, `${argName} must be a positive integer, was ${n}`, "TYPE");
   }
   return n;
 }
@@ -149,7 +161,7 @@ function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): Po
 function positiveSafeInteger(ctx: NetscriptContext, argName: string, v: unknown): PositiveSafeInteger {
   const n = number(ctx, argName, v);
   if (!isPositiveSafeInteger(n)) {
-    throw errorMessage(ctx, `${argName} should be a positive safe integer, was ${n}`, "TYPE");
+    throw errorMessage(ctx, `${argName} must be a positive safe integer, was ${n}`, "TYPE");
   }
   return n;
 }
@@ -158,7 +170,7 @@ function positiveSafeInteger(ctx: NetscriptContext, argName: string, v: unknown)
 function positiveNumber(ctx: NetscriptContext, argName: string, v: unknown): PositiveNumber {
   const n = number(ctx, argName, v);
   if (!isPositiveNumber(n)) {
-    throw errorMessage(ctx, `${argName} should be a positive number, was ${n}`, "TYPE");
+    throw errorMessage(ctx, `${argName} must be a positive number, was ${n}`, "TYPE");
   }
   return n;
 }
