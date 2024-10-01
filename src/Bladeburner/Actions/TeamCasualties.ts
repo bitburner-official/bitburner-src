@@ -43,9 +43,7 @@ export function resolveTeamCasualties(action: TeamActionWithCasualties, team: Op
    * (min, max).
    */
   const losses =
-    minCasualties <= maxCasualties
-      ? team.getTeamCasualtiesRoll(minCasualties, maxCasualties)
-      : team.getTeamCasualtiesRoll(maxCasualties, minCasualties);
+    minCasualties <= maxCasualties ? team.getTeamCasualtiesRoll(minCasualties, maxCasualties) : minCasualties;
   team.teamSize -= losses;
   if (team.teamSize < team.sleeveSize) {
     team.killRandomSupportingSleeves(team.sleeveSize - team.teamSize);
