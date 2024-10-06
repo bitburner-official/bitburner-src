@@ -43,8 +43,7 @@ export abstract class BaseServer implements IServer {
   // Coding Contract files on this server
   contracts: CodingContract[] = [];
 
-  // How many CPU cores this server has. Maximum of 8.
-  // Currently, this only affects hacking missions
+  // How many CPU cores this server has.
   cpuCores = 1;
 
   // Flag indicating whether the FTP port is open
