@@ -61,11 +61,11 @@ export function prestigeAugmentation(): void {
     }
   }
 
-  Player.prestigeAugmentation();
-  Go.prestigeAugmentation();
-
   // Delete all Worker Scripts objects
   prestigeWorkerScripts();
+
+  Player.prestigeAugmentation();
+  Go.prestigeAugmentation();
 
   const homeComp = Player.getHomeComputer();
   // Delete all servers except home computer
@@ -190,10 +190,10 @@ export function prestigeAugmentation(): void {
 export function prestigeSourceFile(isFlume: boolean): void {
   initBitNodeMultipliers();
 
+  prestigeWorkerScripts(); // Delete all Worker Scripts objects
+
   Player.prestigeSourceFile();
   Go.prestigeSourceFile();
-
-  prestigeWorkerScripts(); // Delete all Worker Scripts objects
 
   const homeComp = Player.getHomeComputer();
 
