@@ -2294,6 +2294,10 @@ export interface Singularity {
    * Attempts to donate money to the specified faction in exchange for reputation.
    * Returns true if you successfully donate the money, and false otherwise.
    *
+   * You cannot donate to your gang's faction.
+   *
+   * The specified faction must offer at least 1 type of work. You can use {@link Singularity.getFactionWorkTypes | getFactionWorkTypes} to get the list of work types of a faction.
+   *
    * @param faction - Name of faction to donate to.
    * @param amount - Amount of money to donate.
    * @returns True if the money was donated, and false otherwise.

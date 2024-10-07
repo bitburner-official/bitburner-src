@@ -1,15 +1,7 @@
 import type { Singularity as ISingularity, Task as ITask } from "@nsdefs";
 
 import { Player } from "@player";
-import {
-  AugmentationName,
-  CityName,
-  FactionName,
-  FactionWorkType,
-  GymType,
-  LocationName,
-  UniversityClassType,
-} from "@enums";
+import { AugmentationName, CityName, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
 import { Augmentations } from "../Augmentation/Augmentations";
@@ -967,12 +959,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(ctx, () => `You can't donate to '${facName}' because you are managing a gang for it`);
         return false;
       }
-      if (
-        faction.name === FactionName.ChurchOfTheMachineGod ||
-        faction.name === FactionName.Bladeburners ||
-        faction.name === FactionName.ShadowsOfAnarchy
-      ) {
-        helpers.log(ctx, () => `You can't donate to '${facName}' because they do not accept donations`);
+      if (!faction.getInfo().offersWork()) {
+        helpers.log(ctx, () => `You can't donate to '${facName}' because this faction does not offer any type of work`);
         return false;
       }
       if (typeof amt !== "number" || amt <= 0 || isNaN(amt)) {
