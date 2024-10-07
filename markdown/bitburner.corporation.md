@@ -18,7 +18,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI
 |  Method | Description |
 |  --- | --- |
 |  [acceptInvestmentOffer()](./bitburner.corporation.acceptinvestmentoffer.md) | Accept the investment offer. The value of offer is based on current corporation valuation. |
-|  [bribe(factionName, amountCash)](./bitburner.corporation.bribe.md) | Bribe a faction. |
+|  [bribe(factionName, amountCash)](./bitburner.corporation.bribe.md) | Bribe a faction. The specified faction must offer at least 1 type of work. You can use [getFactionWorkTypes](./bitburner.singularity.getfactionworktypes.md) to get the list of work types of a faction. |
 |  [buyBackShares(amount)](./bitburner.corporation.buybackshares.md) | Buyback shares. Spend money from the player's wallet to transfer shares from public traders to the CEO. |
 |  [createCorporation(corporationName, selfFund)](./bitburner.corporation.createcorporation.md) | Create a Corporation. |
 |  [expandCity(divisionName, city)](./bitburner.corporation.expandcity.md) | Expand to a new city. |

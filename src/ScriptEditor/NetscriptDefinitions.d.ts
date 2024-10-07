@@ -8842,7 +8842,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   goPublic(numShares: number): boolean;
 
   /**
-   * Bribe a faction.
+   * Bribe a faction. The specified faction must offer at least 1 type of work. You can use {@link Singularity.getFactionWorkTypes | getFactionWorkTypes} to get the list of work types of a faction.
    *
    * @remarks
    * RAM cost: 20 GB

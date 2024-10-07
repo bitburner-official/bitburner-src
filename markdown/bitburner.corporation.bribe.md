@@ -4,7 +4,7 @@
 
 ## Corporation.bribe() method
 
-Bribe a faction.
+Bribe a faction. The specified faction must offer at least 1 type of work. You can use [getFactionWorkTypes](./bitburner.singularity.getfactionworktypes.md) to get the list of work types of a faction.
 
 **Signature:**
 
