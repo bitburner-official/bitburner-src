@@ -56,6 +56,9 @@ async function startNetscript2Script(workerScript: WorkerScript): Promise<void> 
 
   const loadedModule = await compile(script, scripts);
 
+  // if for whatever reason the stopFlag is already set we abort
+  if (workerScript.env.stopFlag) return;
+
   if (!loadedModule) throw `${script.filename} cannot be run because the script module won't load`;
   const mainFunc = loadedModule.main;
   // TODO unplanned: Better error for "unexpected reserved word" when using await in non-async function?
