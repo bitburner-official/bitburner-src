@@ -71,7 +71,16 @@ export function Toolbar({ editor, onSave }: IProps) {
           Terminal (Ctrl/Cmd + b)
         </Button>
         <Typography>
-          <Link target="_blank" href={getNsApiDocumentationUrl()} fontSize="1.2rem">
+          <Link
+            target="_blank"
+            href={getNsApiDocumentationUrl()}
+            fontSize="1.2rem"
+            color={Settings.theme.info}
+            sx={{
+              textDecorationThickness: "3px",
+              textUnderlineOffset: "5px",
+            }}
+          >
             NS API documentation
           </Link>
         </Typography>

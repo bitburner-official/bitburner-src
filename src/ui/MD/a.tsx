@@ -4,6 +4,7 @@ import { useNavigator } from "../React/Documentation";
 import { CorruptableText } from "../React/CorruptableText";
 import { Player } from "@player";
 import { getNsApiDocumentationUrl } from "../../utils/StringHelperFunctions";
+import { Settings } from "../../Settings/Settings";
 
 export const isSpoiler = (title: string): boolean => title.includes("advanced/") && Player.sourceFileLvl(1) === 0;
 
@@ -22,7 +23,16 @@ export const A = (props: React.PropsWithChildren<{ href?: string }>): React.Reac
       href = getNsApiDocumentationUrl();
     }
     return (
-      <Link rel="noopener noreferrer" href={href} target="_blank">
+      <Link
+        rel="noopener noreferrer"
+        href={href}
+        target="_blank"
+        color={Settings.theme.info}
+        sx={{
+          textDecorationThickness: "3px",
+          textUnderlineOffset: "5px",
+        }}
+      >
         {props.children}
       </Link>
     );

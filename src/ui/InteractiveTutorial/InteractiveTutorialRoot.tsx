@@ -339,10 +339,11 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography classes={{ root: classes.code }}>
             {
               <CopyableText
-                value={`export async function main(ns) {
-	while(true) {
-		await ns.hack('n00dles');
-	}
+                value={`/** @param {NS} ns */
+export async function main(ns) {
+  while (true) {
+    await ns.hack("n00dles");
+  }
 }`}
               />
             }
@@ -350,6 +351,13 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography>
             For anyone with basic programming experience, this code should be straightforward. This script will
             continuously hack the n00dles server.
+            <br />
+            <br />
+            To access{" "}
+            <Typography component="span" color={Settings.theme.warning}>
+              NS API documentation
+            </Typography>
+            , press the link at the bottom.
             <br />
             <br />
             To save and close the script editor, press the button at the bottom.

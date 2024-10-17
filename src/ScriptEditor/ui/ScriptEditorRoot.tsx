@@ -87,7 +87,7 @@ function Root(props: IProps): React.ReactElement {
       }
       const cleanCode = currentScript.code.replace(/\s/g, "");
       const ns1 = "while(true){hack('n00dles');}";
-      const ns2 = `exportasyncfunctionmain(ns){while(true){awaitns.hack('n00dles');}}`;
+      const ns2 = `/**@param{NS}ns*/exportasyncfunctionmain(ns){while(true){awaitns.hack("n00dles");}}`;
       if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
         dialogBoxCreate("Please copy and paste the code from the tutorial!");
         return;
