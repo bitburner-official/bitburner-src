@@ -168,9 +168,13 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
   const description = (
     <>
       {info}
-      <br />
-      <br />
-      {aug.stats}
+      {aug.stats && (
+        <>
+          <br />
+          <br />
+          {aug.stats}
+        </>
+      )}
     </>
   );
 
