@@ -1496,7 +1496,11 @@ export const ns: InternalAPI<NSFull> = {
       const ident = helpers.scriptIdentifier(ctx, fn, hostname, args);
       const runningScript = helpers.getRunningScript(ctx, ident);
       if (runningScript === null) return null;
-      return helpers.createPublicRunningScript(runningScript, ctx.workerScript);
+      // Need to look this up again, because we only have ident-based lookup
+      // for RunningScript.
+      const ws = workerScripts.get(runningScript.pid);
+      // We don't check for null, since it's fine to pass null as the 2nd arg.
+      return helpers.createPublicRunningScript(runningScript, ws);
     },
   ramOverride: (ctx) => (_ram) => {
     const newRam = roundToTwo(helpers.number(ctx, "ram", _ram || 0));
