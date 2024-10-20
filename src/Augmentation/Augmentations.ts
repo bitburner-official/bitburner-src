@@ -884,7 +884,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "enhance your abilities.",
       hacking_grow: 3,
       stats:
-        `Many hackers says that they can spoof money much better than normal after installing this augmentation. ` +
+        `Many hackers say that they can spoof money much better than normal after installing this augmentation. ` +
         `A leaked document from ${FactionName.ECorp} contains this weird message: "vnmehidi's gorw oprwe si ebesaccisl aiv sliguntayir".`,
       factions: [FactionName.ECorp],
     },
