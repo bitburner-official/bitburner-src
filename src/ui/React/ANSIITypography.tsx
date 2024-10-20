@@ -95,7 +95,12 @@ export const ANSIITypography = React.memo(function ANSIITypography(props: ANSIIT
     parts.push({ code: null, text: text });
   }
   return (
-    <Typography component={"div"} classes={{ root: lineClass(classes, props.color) }} paragraph={false}>
+    <Typography
+      component={"div"}
+      classes={{ root: lineClass(classes, props.color) }}
+      paragraph={false}
+      sx={{ ...(props.styles ?? {}) }}
+    >
       {parts.map((part, i) => (
         <span key={i} style={{ ...ansiCodeStyle(part.code), ...(props.styles ?? {}) }}>
           {part.text}

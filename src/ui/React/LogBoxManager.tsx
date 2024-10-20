@@ -408,7 +408,6 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
                         styles={{
                           display: "inline-block",
                           fontSize: Settings.styles.tailFontSize,
-                          lineHeight: `calc(${Settings.styles.tailFontSize}px * ${Settings.styles.lineHeight})`,
                         }}
                       />
                     ),

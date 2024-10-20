@@ -106,8 +106,10 @@ export function StyleEditorModal(props: IProps): React.ReactElement {
         <StyleField<"fontSize">
           name="Font Size"
           type="number"
-          value={customStyle.fontSize}
-          onChange={(value, error) => update({ ...customStyle, fontSize: Math.max(5, Number(value) ?? 8) }, error)}
+          value={customStyle.fontSize * (16 / 14)}
+          onChange={(value, error) =>
+            update({ ...customStyle, fontSize: Math.max(5, (Number(value) ?? 8) * (14 / 16)) }, error)
+          }
         />
         <br />
         <StyleField<"fontSize">
