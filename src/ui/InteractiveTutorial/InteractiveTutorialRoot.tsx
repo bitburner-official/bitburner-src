@@ -25,6 +25,7 @@ import {
 } from "../../InteractiveTutorial";
 import { useRerender } from "../React/hooks";
 import { Settings } from "../../Settings/Settings";
+import { NsApiDocumentationLink } from "../React/NsApiDocumentationLink";
 
 interface IContent {
   content: React.ReactElement;
@@ -353,11 +354,7 @@ export async function main(ns) {
             continuously hack the n00dles server.
             <br />
             <br />
-            To access{" "}
-            <Typography component="span" color={Settings.theme.warning}>
-              NS API documentation
-            </Typography>
-            , press the link at the bottom.
+            To access <NsApiDocumentationLink />, press the link at the bottom.
             <br />
             <br />
             To save and close the script editor, press the button at the bottom.
