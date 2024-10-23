@@ -4,6 +4,7 @@ import { BladeburnerSkillName } from "../../../src/Enums";
 import { PositiveInteger, isPositiveInteger, isPositiveNumber } from "../../../src/types";
 import { randomInRange } from "../../../src/utils/helpers/randomInRange";
 import { getRandomIntInclusive } from "../../../src/utils/helpers/getRandomIntInclusive";
+import { Skills } from "../../../src/Bladeburner/data/Skills";
 
 const skill = new Skill({
   name: BladeburnerSkillName.Hyperdrive,
@@ -14,6 +15,18 @@ const skill = new Skill({
 });
 
 describe("Test calculateMaxUpgradeCount", function () {
+  it.failing("Bug: Returns 1 when SP is too small and current level is too high", () => {
+    expect(Skills.Hyperdrive.calculateMaxUpgradeCount(1e50, 1)).toBe(0);
+  });
+
+  it.failing("Bug: Returns 1 when SP is too small and current level is too high", () => {
+    expect(Skills.Hyperdrive.calculateMaxUpgradeCount(1e50, Number.MAX_SAFE_INTEGER)).toBe(0);
+  });
+
+  it.failing("Bug: Returns Infinity when SP is large enough and current level is too high", () => {
+    expect(Number.isFinite(Skills.Hyperdrive.calculateMaxUpgradeCount(1e50, Number.MAX_VALUE))).toBeTruthy();
+  });
+
   test("errorCount", () => {
     let testCaseCount = 0;
     let errorCount = 0;
