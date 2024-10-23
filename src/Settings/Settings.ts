@@ -43,9 +43,6 @@ export function isValidConnectionPort(port: number): boolean {
   return Number.isFinite(port) && port > 0 && port <= 65535;
 }
 
-//@ts-ignore
-globalThis.isValidConnectionHostname = isValidConnectionHostname;
-
 /** The current options the player has customized to their play style. */
 export const Settings = {
   /** How many servers per page */
