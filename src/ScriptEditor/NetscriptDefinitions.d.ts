@@ -1653,7 +1653,7 @@ export interface TIX {
  */
 export interface BaseTask {
   /**
-   * The number of game engine cycles has passed since this task started. 1 engine cycle = 200ms.
+   * The number of game engine cycles that has passed since this task started. 1 engine cycle = 200ms.
    */
   cyclesWorked: number;
 }
