@@ -1647,62 +1647,80 @@ export interface TIX {
 }
 
 /**
- * Study
- * @remarks
- * An object representing the current study task
+ * Base interface of all tasks.
+ *
  * @public
  */
-export interface StudyTask {
-  type: "CLASS";
+export interface BaseTask {
+  /**
+   * The number of game engine cycles has passed since this task started. 1 engine cycle = 200ms.
+   */
   cyclesWorked: number;
+}
+
+/**
+ * Study
+ *
+ * @remarks
+ * An object representing the current study task
+ *
+ * @public
+ */
+export interface StudyTask extends BaseTask {
+  type: "CLASS";
   classType: string;
   location: LocationName | `${LocationName}`;
 }
+
 /**
  * Company Work
+ *
  * @remarks
  * An object representing the current work for a company
+ *
  * @public
  */
-export interface CompanyWorkTask {
+export interface CompanyWorkTask extends BaseTask {
   type: "COMPANY";
-  cyclesWorked: number;
   companyName: CompanyName;
 }
 
 /**
  * Create Program
+ *
  * @remarks
  * An object representing the status of the program being created
+ *
  * @public
  */
-export interface CreateProgramWorkTask {
+export interface CreateProgramWorkTask extends BaseTask {
   type: "CREATE_PROGRAM";
-  cyclesWorked: number;
   programName: string;
 }
 
 /**
  * Crime
+ *
  * @remarks
  * An object representing the crime being committed
+ *
  * @public
  */
-export interface CrimeTask {
+export interface CrimeTask extends BaseTask {
   type: "CRIME";
-  cyclesWorked: number;
   crimeType: CrimeType;
 }
 
 /**
  * Faction Work
+ *
  * @remarks
  * An object representing the current work for a faction
+ *
  * @public
  */
-export interface FactionWorkTask {
+export interface FactionWorkTask extends BaseTask {
   type: "FACTION";
-  cyclesWorked: number;
   factionWorkType: FactionWorkType;
   factionName: string;
 }
@@ -1713,21 +1731,23 @@ export interface FactionWorkTask {
  * @remarks
  * An object representing the current grafting task
  *
- * The "completion" property is a promise that resolves when the task is complete.
- *
  * @public
  */
-export interface GraftingTask {
+export interface GraftingTask extends BaseTask {
   type: "GRAFTING";
-  cyclesWorked: number;
   augmentation: string;
+  /**
+   * This promise resolves when the task is complete.
+   */
   completion: Promise<void>;
 }
 
 /**
  * Task
+ *
  * @remarks
  * Represents any task, such as studying, working for a faction etc.
+ *
  * @public
  */
 export type Task = StudyTask | CompanyWorkTask | CreateProgramWorkTask | CrimeTask | FactionWorkTask | GraftingTask;

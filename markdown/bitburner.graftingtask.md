@@ -9,21 +9,19 @@ Grafting Work
 **Signature:**
 
 ```typescript
-export interface GraftingTask 
+export interface GraftingTask extends BaseTask 
 ```
+**Extends:** [BaseTask](./bitburner.basetask.md)
 
 ## Remarks
 
 An object representing the current grafting task
-
-The "completion" property is a promise that resolves when the task is complete.
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [augmentation](./bitburner.graftingtask.augmentation.md) |  | string |  |
-|  [completion](./bitburner.graftingtask.completion.md) |  | Promise&lt;void&gt; |  |
-|  [cyclesWorked](./bitburner.graftingtask.cyclesworked.md) |  | number |  |
+|  [completion](./bitburner.graftingtask.completion.md) |  | Promise&lt;void&gt; | This promise resolves when the task is complete. |
 |  [type](./bitburner.graftingtask.type.md) |  | "GRAFTING" |  |
 
