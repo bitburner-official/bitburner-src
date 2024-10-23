@@ -229,6 +229,19 @@ function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteS
   return result;
 }
 
+function mapToString(map: Map<unknown, unknown>): string {
+  const formattedMap = [...map]
+    .map((m) => {
+      return `${m[0]} => ${m[1]}`;
+    })
+    .join("; ");
+  return `< Map: ${formattedMap} >`;
+}
+
+function setToString(set: Set<unknown>): string {
+  return `< Set: ${[...set].join("; ")} >`;
+}
+
 /** Convert multiple arguments for tprint or print into a single string. */
 function argsToString(args: unknown[]): string {
   // Reduce array of args into a single output string
@@ -243,17 +256,12 @@ function argsToString(args: unknown[]): string {
 
     // Handle Map formatting, since it does not JSON stringify or toString in a helpful way
     // output is  "< Map: key1 => value1; key2 => value2 >"
-    if (nativeArg instanceof Map && [...nativeArg].length) {
-      const formattedMap = [...nativeArg]
-        .map((m) => {
-          return `${m[0]} => ${m[1]}`;
-        })
-        .join("; ");
-      return (out += `< Map: ${formattedMap} >`);
+    if (nativeArg instanceof Map) {
+      return (out += mapToString(nativeArg));
     }
     // Handle Set formatting, since it does not JSON stringify or toString in a helpful way
     if (nativeArg instanceof Set) {
-      return (out += `< Set: ${[...nativeArg].join("; ")} >`);
+      return (out += setToString(nativeArg));
     }
     if (typeof nativeArg === "object") {
       return (out += JSON.stringify(nativeArg, (_, value) => {
@@ -263,6 +271,12 @@ function argsToString(args: unknown[]): string {
          */
         if (value instanceof Promise) {
           return value.toString();
+        }
+        if (value instanceof Map) {
+          return mapToString(value);
+        }
+        if (value instanceof Set) {
+          return setToString(value);
         }
         return value;
       }));
