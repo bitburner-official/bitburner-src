@@ -4,6 +4,48 @@ import { defaultStyles } from "../Themes/Styles";
 import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
 
+/**
+ * This function won't be able to catch **all** invalid hostnames, and it's still fine. In order to validate a hostname
+ * properly, we need to import a good validation library or write one by ourselves. I think that it's unnecessary.
+ *
+ * Some invalid hostnames that we don't catch:
+ * - Invalid/missing TLD: "abc".
+ * - Use space character: "a a.com"
+ * - Use non-http schemes in the hostname: "ftp://a.com"
+ * - etc.
+ */
+export function isValidConnectionHostname(hostname: string): boolean {
+  /**
+   * We expect a hostname, but the player may mistakenly put other unexpected things. We will try to catch common mistakes:
+   * - Specify a scheme: http or https.
+   * - Specify a port.
+   * - Specify a pathname or search params.
+   */
+  try {
+    // Check scheme.
+    if (hostname.startsWith("http://") || hostname.startsWith("https://")) {
+      return false;
+    }
+    // Parse to a URL with a default scheme.
+    const url = new URL(`http://${hostname}`);
+    // Check port, pathname, and search params.
+    if (url.port !== "" || url.pathname !== "/" || url.search !== "") {
+      return false;
+    }
+  } catch (e) {
+    console.error(`Invalid hostname: ${hostname}`, e);
+    return false;
+  }
+  return true;
+}
+
+export function isValidConnectionPort(port: number): boolean {
+  return Number.isFinite(port) && port > 0 && port <= 65535;
+}
+
+//@ts-ignore
+globalThis.isValidConnectionHostname = isValidConnectionHostname;
+
 /** The current options the player has customized to their play style. */
 export const Settings = {
   /** How many servers per page */
@@ -125,5 +167,15 @@ export const Settings = {
     save.EditorTheme && Object.assign(Settings.EditorTheme, save.EditorTheme);
     delete save.theme, save.styles, save.overview, save.EditorTheme;
     Object.assign(Settings, save);
+    /**
+     * The hostname and port of RFA have not been validated properly, so the save data may contain invalid data. In that
+     * case, we set them to the default value.
+     */
+    if (!isValidConnectionHostname(Settings.RemoteFileApiAddress)) {
+      Settings.RemoteFileApiAddress = "localhost";
+    }
+    if (!isValidConnectionPort(Settings.RemoteFileApiPort)) {
+      Settings.RemoteFileApiPort = 0;
+    }
   },
 };
