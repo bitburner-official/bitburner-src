@@ -120,6 +120,7 @@
     "lint": "eslint-baseline --fix --ext js,jsx,ts,tsx --max-warnings 0 src",
     "lint:report": "eslint-baseline --ext js,jsx,ts,tsx --max-warnings 0 src",
     "lint:full": "eslint --fix --ext js,jsx,ts,tsx --max-warnings 0 src",
+    "lint:reset-baseline": "rm -f .eslint-baseline.json && npm run lint:report --quiet; npx prettier -c --write .eslint-baseline.json; git add .eslint-baseline.json",
     "preinstall": "node ./tools/engines-check/engines-check.js",
     "test": "jest",
     "test:watch": "jest --watch",

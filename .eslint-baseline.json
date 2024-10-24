@@ -921,11 +921,11 @@
   },
   {
     "path": "src/Gang/AllGangs.ts",
-    "line": 74,
+    "line": 49,
     "column": 3,
     "ruleId": "@typescript-eslint/no-unsafe-assignment",
     "message": "Unsafe assignment of an `any` value.",
-    "hash": "fe53c9052caa6af3bdb1d71e0ac1e91433aff059"
+    "hash": "c7ee16c69a7381c7005f50172622ce4f69711bd9"
   },
   {
     "path": "src/Gang/Gang.ts",
@@ -1873,179 +1873,195 @@
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 237,
-    "column": 15,
-    "ruleId": "@typescript-eslint/restrict-plus-operands",
-    "message": "Invalid operand for a '+' operation. Operands must each be a number or string, allowing a string + any of: `any`, `boolean`, `null`, `RegExp`, `undefined`. Got `unknown`.",
-    "hash": "ff6f6e47ce7fce38e9e0b3f654df063c96dd6507"
+    "line": 235,
+    "column": 17,
+    "ruleId": "@typescript-eslint/restrict-template-expressions",
+    "message": "Invalid type \"unknown\" of template literal expression.",
+    "hash": "6f9a479c750461b582dd90bc0ef80823c4908b9f"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 240,
-    "column": 15,
-    "ruleId": "@typescript-eslint/restrict-plus-operands",
-    "message": "Invalid operand for a '+' operation. Operands must each be a number or string, allowing a string + any of: `any`, `boolean`, `null`, `RegExp`, `undefined`. Got `unknown`.",
-    "hash": "3bd1554942fabb814207c8e836e9962e3920a537"
+    "line": 235,
+    "column": 28,
+    "ruleId": "@typescript-eslint/restrict-template-expressions",
+    "message": "Invalid type \"unknown\" of template literal expression.",
+    "hash": "34ec6e6a1101a11c937b655737f92329bd55e59a"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 252,
+    "line": 250,
     "column": 15,
     "ruleId": "@typescript-eslint/restrict-plus-operands",
     "message": "Invalid operand for a '+' operation. Operands must each be a number or string, allowing a string + any of: `any`, `boolean`, `null`, `RegExp`, `undefined`. Got `unknown`.",
-    "hash": "1ca940c248b557ebb6a0672d7728a4648749704e"
+    "hash": "d86c9a8ce9f3c68f882708d72293b2d6f77b89e6"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 256,
+    "line": 253,
     "column": 15,
     "ruleId": "@typescript-eslint/restrict-plus-operands",
     "message": "Invalid operand for a '+' operation. Operands must each be a number or string, allowing a string + any of: `any`, `boolean`, `null`, `RegExp`, `undefined`. Got `unknown`.",
-    "hash": "46e6a7800106511b850af58c7758e800de48077c"
+    "hash": "a5dace3e4bd0bb35ae808f276ae3fed86de166e2"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 259,
+    "line": 260,
     "column": 15,
     "ruleId": "@typescript-eslint/restrict-plus-operands",
     "message": "Invalid operand for a '+' operation. Operands must each be a number or string, allowing a string + any of: `any`, `boolean`, `null`, `RegExp`, `undefined`. Got `unknown`.",
-    "hash": "b725d271228ec48ba352d1e15a5579aed1eaf065"
+    "hash": "9a16e6384bf82692fa0b03cc4826fe7fc91f604b"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 265,
-    "column": 18,
-    "ruleId": "@typescript-eslint/no-base-to-string",
-    "message": "'value' will evaluate to '[object Object]' when stringified.",
-    "hash": "f1e6ccff018b5f82683b46a2d376fd888ca32340"
+    "line": 264,
+    "column": 15,
+    "ruleId": "@typescript-eslint/restrict-plus-operands",
+    "message": "Invalid operand for a '+' operation. Operands must each be a number or string, allowing a string + any of: `any`, `boolean`, `null`, `RegExp`, `undefined`. Got `unknown`.",
+    "hash": "a6b19ca5d97f5340e6655e12123a3d9abd6f74ab"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
     "line": 267,
+    "column": 15,
+    "ruleId": "@typescript-eslint/restrict-plus-operands",
+    "message": "Invalid operand for a '+' operation. Operands must each be a number or string, allowing a string + any of: `any`, `boolean`, `null`, `RegExp`, `undefined`. Got `unknown`.",
+    "hash": "3e7882faf3474bf398702d51145c395e247a0e34"
+  },
+  {
+    "path": "src/Netscript/NetscriptHelpers.tsx",
+    "line": 273,
+    "column": 18,
+    "ruleId": "@typescript-eslint/no-base-to-string",
+    "message": "'value' will evaluate to '[object Object]' when stringified.",
+    "hash": "ece56f21a202d83a7dd2c1d5de4431bce38f837c"
+  },
+  {
+    "path": "src/Netscript/NetscriptHelpers.tsx",
+    "line": 281,
     "column": 9,
     "ruleId": "@typescript-eslint/no-unsafe-return",
     "message": "Unsafe return of an `any` typed value.",
-    "hash": "6cd9aaedc7477bf7acba76078f338b59622164a8"
+    "hash": "08a643a4fbf9f42f2f933c0c613d91f8dcb95371"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 271,
+    "line": 285,
     "column": 13,
     "ruleId": "@typescript-eslint/restrict-plus-operands",
     "message": "Invalid operand for a '+' operation. Operands must each be a number or string, allowing a string + any of: `any`, `boolean`, `null`, `RegExp`, `undefined`. Got `unknown`.",
-    "hash": "5054e7c71d83035cd6be2abdf159f34dc6c3096c"
+    "hash": "cca3124487ef6ecfabd073e2d19255c20409d746"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 271,
+    "line": 285,
     "column": 23,
     "ruleId": "@typescript-eslint/restrict-template-expressions",
     "message": "Invalid type \"{} | undefined\" of template literal expression.",
-    "hash": "05139df69534d43737cc0ddb4c923f89c14c69a4"
+    "hash": "73eaebb4d225932237f94d742f60fb68b274c308"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 285,
+    "line": 299,
     "column": 84,
     "ruleId": "@typescript-eslint/no-base-to-string",
     "message": "'opts' will evaluate to '[object Object]' when stringified.",
-    "hash": "701c8bf510e15c689318added7e30ad1df68294c"
+    "hash": "0730ad6276ca41f58673e580e81d448710046865"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 285,
+    "line": 299,
     "column": 84,
     "ruleId": "@typescript-eslint/restrict-template-expressions",
     "message": "Invalid type \"{}\" of template literal expression.",
-    "hash": "ecfd624f57493c71dab41d2de58be05a9cad3f37"
+    "hash": "676309db6b94ee7d2d4cb3c24e5337dd631e42f5"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 292,
+    "line": 306,
     "column": 73,
     "ruleId": "@typescript-eslint/restrict-template-expressions",
     "message": "Invalid type \"unknown\" of template literal expression.",
-    "hash": "1e141fbf764b27783283e4a5a16921e2abfa7a2d"
+    "hash": "ca2712e7e7b642bd4e01f184afaed3c386b7afa2"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 295,
+    "line": 309,
     "column": 69,
     "ruleId": "@typescript-eslint/restrict-template-expressions",
     "message": "Invalid type \"unknown\" of template literal expression.",
-    "hash": "8384c8d58fabfc294f7f07c24d211b70b6299eb5"
+    "hash": "a58ef037fb586e0602ae2e8d355d514772d5c3e3"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 637,
+    "line": 651,
     "column": 68,
     "ruleId": "@typescript-eslint/restrict-template-expressions",
     "message": "Invalid type \"unknown\" of template literal expression.",
-    "hash": "a23051e08aba6216512b0bd02e1d773fa37b8bc8"
+    "hash": "b23df3131ae33241a3f16234d5f70b8003cdcc61"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 680,
+    "line": 694,
     "column": 5,
     "ruleId": "@typescript-eslint/no-unsafe-return",
     "message": "Unsafe return of an `any` typed value.",
-    "hash": "f2c2a61a4e4c8dd8addc7a666fe8d9d327e39aff"
+    "hash": "4f468ba920a4cc1f1b389f4f08f38b977c540396"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 712,
+    "line": 726,
     "column": 46,
     "ruleId": "@typescript-eslint/restrict-plus-operands",
     "message": "Invalid operand for a '+' operation. Operands must each be a number or string, allowing a string + any of: `any`, `boolean`, `null`, `RegExp`, `undefined`. Got `{}`.",
-    "hash": "5a292efb2ef5a2047c19e582eb3a64406a8966cd"
+    "hash": "e6b6644d7c3db781b453fab3a3b6ca32708f9f2d"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 712,
+    "line": 726,
     "column": 46,
     "ruleId": "@typescript-eslint/restrict-plus-operands",
     "message": "Invalid operand for a '+' operation. Operands must each be a number or string, allowing a string + any of: `any`, `boolean`, `null`, `RegExp`, `undefined`. Got `ReactElement<any, string | JSXElementConstructor<any>>`.",
-    "hash": "5a292efb2ef5a2047c19e582eb3a64406a8966cd"
+    "hash": "e6b6644d7c3db781b453fab3a3b6ca32708f9f2d"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 712,
+    "line": 726,
     "column": 46,
     "ruleId": "@typescript-eslint/restrict-plus-operands",
     "message": "Invalid operand for a '+' operation. Operands must each be a number or string, allowing a string + any of: `any`, `boolean`, `null`, `RegExp`, `undefined`. Got `Iterable<ReactNode>`.",
-    "hash": "5a292efb2ef5a2047c19e582eb3a64406a8966cd"
+    "hash": "e6b6644d7c3db781b453fab3a3b6ca32708f9f2d"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 712,
+    "line": 726,
     "column": 46,
     "ruleId": "@typescript-eslint/restrict-plus-operands",
     "message": "Invalid operand for a '+' operation. Operands must each be a number or string, allowing a string + any of: `any`, `boolean`, `null`, `RegExp`, `undefined`. Got `ReactPortal`.",
-    "hash": "5a292efb2ef5a2047c19e582eb3a64406a8966cd"
+    "hash": "e6b6644d7c3db781b453fab3a3b6ca32708f9f2d"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 771,
+    "line": 785,
     "column": 91,
     "ruleId": "@typescript-eslint/no-base-to-string",
     "message": "'bitNodeOptions' will evaluate to '[object Object]' when stringified.",
-    "hash": "b2441e8e6b53aa7f183ec562b7445d5b19e2d396"
+    "hash": "88c05697b8fbfaa006ce79eccdd79d52bfe731d5"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 771,
+    "line": 785,
     "column": 91,
     "ruleId": "@typescript-eslint/restrict-template-expressions",
     "message": "Invalid type \"{}\" of template literal expression.",
-    "hash": "65b92601a553cfff65ad39c59ae50998bdf2f3ee"
+    "hash": "4f5d5dfa99ce4947e71c8859d99d4f53065e9157"
   },
   {
     "path": "src/Netscript/NetscriptHelpers.tsx",
-    "line": 777,
+    "line": 791,
     "column": 78,
     "ruleId": "@typescript-eslint/no-unsafe-argument",
     "message": "Unsafe argument of type `Map<any, any>` assigned to a parameter of type `Map<number, number>`.",
-    "hash": "72c583183d85c63e6de6c308f87b5e4a04c754bd"
+    "hash": "118d69dd48d4f7cc684fa61aa13fb6a68ab56f7a"
   },
   {
     "path": "src/NetscriptFunctions.ts",
@@ -5409,67 +5425,67 @@
   },
   {
     "path": "src/ScriptEditor/NetscriptDefinitions.d.ts",
-    "line": 8128,
+    "line": 8148,
     "column": 3,
     "ruleId": "@typescript-eslint/prefer-literal-enum-member",
     "message": "Explicit enum value must only be a literal value (string, number, boolean, etc).",
-    "hash": "e6532c6989b4eb9878d333c72ce464fe9a94fd02"
+    "hash": "1f48fea265f37035f8b41e1046f99c8fd9196ced"
   },
   {
     "path": "src/ScriptEditor/NetscriptDefinitions.d.ts",
-    "line": 8129,
+    "line": 8149,
     "column": 3,
     "ruleId": "@typescript-eslint/prefer-literal-enum-member",
     "message": "Explicit enum value must only be a literal value (string, number, boolean, etc).",
-    "hash": "090f6f76e15bc645dfb4dcd9dcdfadd35f3cc4c5"
+    "hash": "2d5fda9e4cd323cfa837d6e424b4d703d28445f2"
   },
   {
     "path": "src/ScriptEditor/NetscriptDefinitions.d.ts",
-    "line": 8130,
+    "line": 8150,
     "column": 3,
     "ruleId": "@typescript-eslint/prefer-literal-enum-member",
     "message": "Explicit enum value must only be a literal value (string, number, boolean, etc).",
-    "hash": "90b2b9274233003a9717da9ff1f7a163d1cc1da4"
+    "hash": "ca652432bb2618e78dd173f219942ca9638e7377"
   },
   {
     "path": "src/ScriptEditor/NetscriptDefinitions.d.ts",
-    "line": 8139,
+    "line": 8159,
     "column": 3,
     "ruleId": "@typescript-eslint/prefer-literal-enum-member",
     "message": "Explicit enum value must only be a literal value (string, number, boolean, etc).",
-    "hash": "ae5b0d13439f9d8a722116e83b42682e4d749939"
+    "hash": "f309aa519f49c784930cc611c41ce20b1dd24007"
   },
   {
     "path": "src/ScriptEditor/NetscriptDefinitions.d.ts",
-    "line": 8140,
+    "line": 8160,
     "column": 3,
     "ruleId": "@typescript-eslint/prefer-literal-enum-member",
     "message": "Explicit enum value must only be a literal value (string, number, boolean, etc).",
-    "hash": "d4782a3a7832ca3939b6c024372499ffa1aae6c1"
+    "hash": "b068435c20a4372d8a987461794397b7d28abf52"
   },
   {
     "path": "src/ScriptEditor/NetscriptDefinitions.d.ts",
-    "line": 8141,
+    "line": 8161,
     "column": 3,
     "ruleId": "@typescript-eslint/prefer-literal-enum-member",
     "message": "Explicit enum value must only be a literal value (string, number, boolean, etc).",
-    "hash": "d5192ae49e118d8a808e4f27e7adfd102a12527b"
+    "hash": "cbd27f216b0058a95ba7939224281aa620f713f4"
   },
   {
     "path": "src/ScriptEditor/NetscriptDefinitions.d.ts",
-    "line": 8142,
+    "line": 8162,
     "column": 3,
     "ruleId": "@typescript-eslint/prefer-literal-enum-member",
     "message": "Explicit enum value must only be a literal value (string, number, boolean, etc).",
-    "hash": "bbdabd10c909fa362924fde3ab5e2bc4db1bbd00"
+    "hash": "242bf9655b669ae4855749b494814ef0dcfda5a4"
   },
   {
     "path": "src/ScriptEditor/NetscriptDefinitions.d.ts",
-    "line": 8143,
+    "line": 8163,
     "column": 3,
     "ruleId": "@typescript-eslint/prefer-literal-enum-member",
     "message": "Explicit enum value must only be a literal value (string, number, boolean, etc).",
-    "hash": "03f9d3c270b1c9486f681da523a597dabce42e4c"
+    "hash": "c8b2cb3099e842628cb9feb51e4f6ee38c0dbfd5"
   },
   {
     "path": "src/ScriptEditor/ScriptEditor.ts",
@@ -5993,107 +6009,107 @@
   },
   {
     "path": "src/Settings/Settings.ts",
-    "line": 121,
+    "line": 160,
     "column": 11,
     "ruleId": "@typescript-eslint/no-unsafe-assignment",
     "message": "Unsafe assignment of an `any` value.",
-    "hash": "46a006e01887b7baa71c49a2fe631694b401604e"
+    "hash": "c993155f0a3ebafe18d93c35d7f739d1337cc58e"
   },
   {
     "path": "src/Settings/Settings.ts",
-    "line": 122,
+    "line": 161,
     "column": 10,
     "ruleId": "@typescript-eslint/no-unsafe-member-access",
     "message": "Unsafe member access .theme on an `any` value.",
-    "hash": "a64390164cf381932e75aad5bd2d8d43e9a8c978"
+    "hash": "42d061cedfadba7eea85a3bc86c51b3e2f994e5f"
   },
   {
     "path": "src/Settings/Settings.ts",
-    "line": 122,
+    "line": 161,
     "column": 54,
     "ruleId": "@typescript-eslint/no-unsafe-member-access",
     "message": "Unsafe member access .theme on an `any` value.",
-    "hash": "8c1beb57cb062ea6d642b0e0011a736f915fc7cf"
+    "hash": "a32e8b8e80aa72e9bca8baf73d2ad845033292cf"
   },
   {
     "path": "src/Settings/Settings.ts",
-    "line": 123,
+    "line": 162,
     "column": 10,
     "ruleId": "@typescript-eslint/no-unsafe-member-access",
     "message": "Unsafe member access .styles on an `any` value.",
-    "hash": "00fc22d19d37681d139177d34ef6820a9feca652"
+    "hash": "869e0b98842f1cd44b3b75334de9c124546ff50b"
   },
   {
     "path": "src/Settings/Settings.ts",
-    "line": 123,
+    "line": 162,
     "column": 56,
     "ruleId": "@typescript-eslint/no-unsafe-member-access",
     "message": "Unsafe member access .styles on an `any` value.",
-    "hash": "1d9e7eadf7916431174825216d072eafdc4f3b0f"
+    "hash": "4e22312cb68ae7262eefd5d0aaa27da47259f3a8"
   },
   {
     "path": "src/Settings/Settings.ts",
-    "line": 124,
+    "line": 163,
     "column": 10,
     "ruleId": "@typescript-eslint/no-unsafe-member-access",
     "message": "Unsafe member access .overview on an `any` value.",
-    "hash": "f8a1b7055da8101134d357f5c8a68c06fc9b8290"
+    "hash": "0739c8cd9d036b59b5c8b4fa81f7af68faa6b22a"
   },
   {
     "path": "src/Settings/Settings.ts",
-    "line": 124,
+    "line": 163,
     "column": 60,
     "ruleId": "@typescript-eslint/no-unsafe-member-access",
     "message": "Unsafe member access .overview on an `any` value.",
-    "hash": "0b09901a3e40a96e13dd28413e58896799b1d68b"
+    "hash": "8ab8660524777f3728e3a24108741d77afaaf02f"
   },
   {
     "path": "src/Settings/Settings.ts",
-    "line": 125,
+    "line": 164,
     "column": 10,
     "ruleId": "@typescript-eslint/no-unsafe-member-access",
     "message": "Unsafe member access .EditorTheme on an `any` value.",
-    "hash": "a0a884b63ac6f28dff5c4e35d215424385ad7800"
+    "hash": "8e6a50f273a2855043afd8a62ad703625349b363"
   },
   {
     "path": "src/Settings/Settings.ts",
-    "line": 125,
+    "line": 164,
     "column": 66,
     "ruleId": "@typescript-eslint/no-unsafe-member-access",
     "message": "Unsafe member access .EditorTheme on an `any` value.",
-    "hash": "15302c465bc12c80fd42181f15d095eba6ac47d7"
+    "hash": "94fbfc034afad1de0ec2be628e5ead24aed0f8c1"
   },
   {
     "path": "src/Settings/Settings.ts",
-    "line": 126,
+    "line": 165,
     "column": 17,
     "ruleId": "@typescript-eslint/no-unsafe-member-access",
     "message": "Unsafe member access .theme on an `any` value.",
-    "hash": "32e112be9619c8433fc1796755977fa8c9b5443e"
+    "hash": "794385dde42eba1bb1c474e3fe6fc0c9935a0e61"
   },
   {
     "path": "src/Settings/Settings.ts",
-    "line": 126,
+    "line": 165,
     "column": 29,
     "ruleId": "@typescript-eslint/no-unsafe-member-access",
     "message": "Unsafe member access .styles on an `any` value.",
-    "hash": "e431cacdf3f96e9d6c09128bf8bef4129d3ff143"
+    "hash": "78030c33f6a997d0c171584c9a7498e5ed9224cd"
   },
   {
     "path": "src/Settings/Settings.ts",
-    "line": 126,
+    "line": 165,
     "column": 42,
     "ruleId": "@typescript-eslint/no-unsafe-member-access",
     "message": "Unsafe member access .overview on an `any` value.",
-    "hash": "3b15cf8217463d40ce2cd44380383aac05367706"
+    "hash": "d6d618004a58c0f7e670a8a7fc0f16be0ae9ac6e"
   },
   {
     "path": "src/Settings/Settings.ts",
-    "line": 126,
+    "line": 165,
     "column": 57,
     "ruleId": "@typescript-eslint/no-unsafe-member-access",
     "message": "Unsafe member access .EditorTheme on an `any` value.",
-    "hash": "3d470088efd133d457bcb1ead1ee295d7010cd59"
+    "hash": "b9f3a382ce64dda9641f9553e02024789decab7a"
   },
   {
     "path": "src/Sidebar/ui/SidebarAccordion.tsx",
