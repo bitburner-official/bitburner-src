@@ -119,6 +119,7 @@
     "build:dev": "bash ./tools/build.sh development",
     "lint": "eslint-baseline --fix --ext js,jsx,ts,tsx --max-warnings 0 src",
     "lint:report": "eslint-baseline --ext js,jsx,ts,tsx --max-warnings 0 src",
+    "lint:full": "eslint --fix --ext js,jsx,ts,tsx --max-warnings 0 src",
     "preinstall": "node ./tools/engines-check/engines-check.js",
     "test": "jest",
     "test:watch": "jest --watch",
