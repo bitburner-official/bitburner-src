@@ -16,6 +16,7 @@ import { PartialRecord, getRecordEntries, getRecordKeys, getRecordValues } from 
 import { Material } from "./Material";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import { calculateMarkupMultiplier } from "./helpers";
+import { smartSupply, getProductionCapacity } from "./SmartSupply";
 
 interface DivisionParams {
   name: string;
@@ -290,114 +291,66 @@ export class Division {
         this.getScientificResearchMultiplier();
 
       // Employee pay is an expense even with no warehouse.
-      expenses += office.totalSalary;
+      expenses += office.totalSalary; // Ann.: Might need to be multiplied by marketCycles
 
       const warehouse = this.warehouses[city];
       if (!warehouse) continue;
 
       switch (state) {
         case "PURCHASE": {
-          const smartBuy: PartialRecord<CorpMaterialName, [buyAmt: number, reqMat: number]> = {};
+          const buy = (warehouse: Warehouse, matName: CorpMaterialName, buyAmt: number) => {
+            const mat = warehouse.materials[matName];
+            const size = MaterialInfo[matName].size;
+            const maxAmt = Math.floor((warehouse.size - warehouse.sizeUsed) / size);
+            buyAmt = Math.min(buyAmt, maxAmt);
+            if (buyAmt > 0) {
+              mat.quality = Math.max(0.1, (mat.quality * mat.stored + 1 * buyAmt) / (mat.stored + buyAmt));
+              mat.averagePrice = (mat.stored * mat.averagePrice + buyAmt * mat.marketPrice) / (mat.stored + buyAmt);
+              mat.stored += buyAmt;
+              warehouse.updateMaterialSizeUsed();
+              return buyAmt * mat.marketPrice;
+            }
+            return 0;
+          };
 
-          /* Process purchase of materials, not from smart supply */
+          const getMaxProd = (office: OfficeSpace, forProduct: boolean) =>
+            this.getOfficeProductivity(office, { forProduct }) *
+            this.productionMult *
+            corporation.getProductionMultiplier() *
+            this.getProductionMultiplier();
+          const passedSeconds = corpConstants.secondsPerMarketCycle * marketCycles;
+
+          const pBaseOutput = getMaxProd(office, false) * passedSeconds;
+          const pBaseProduct = getMaxProd(office, true) * passedSeconds;
+
+          // Determine average size of materials produced by this city's office
+          // and calculate production capacity
+          const [avgSize, pOutput, pProduct] = getProductionCapacity(
+            warehouse,
+            this.producedMaterials,
+            this.products,
+            pBaseOutput,
+            pBaseProduct,
+          );
+
+          // Set buy amounts automatically, when smartSupply is enabled
+          smartSupply(warehouse, this.requiredMaterials, pOutput + pProduct, avgSize, passedSeconds);
+
+          /* Process purchase of materials*/
           for (const [matName, mat] of getRecordEntries(warehouse.materials)) {
-            const reqMat = this.requiredMaterials[matName];
-            if (warehouse.smartSupplyEnabled && reqMat) {
-              // Smart supply
-              mat.buyAmount = reqMat * warehouse.smartSupplyStore;
-              let buyAmt = mat.buyAmount * corpConstants.secondsPerMarketCycle * marketCycles;
-              const maxAmt = Math.floor((warehouse.size - warehouse.sizeUsed) / MaterialInfo[matName].size);
-              buyAmt = Math.min(buyAmt, maxAmt);
-              if (buyAmt > 0) smartBuy[matName] = [buyAmt, reqMat];
-            } else {
-              // Not smart supply
-              let buyAmt = 0;
-              let maxAmt = 0;
-
-              buyAmt = mat.buyAmount * corpConstants.secondsPerMarketCycle * marketCycles;
-
-              maxAmt = Math.floor((warehouse.size - warehouse.sizeUsed) / MaterialInfo[matName].size);
-
-              buyAmt = Math.min(buyAmt, maxAmt);
-              if (buyAmt > 0) {
-                mat.quality = Math.max(0.1, (mat.quality * mat.stored + 1 * buyAmt) / (mat.stored + buyAmt));
-                mat.averagePrice = (mat.stored * mat.averagePrice + buyAmt * mat.marketPrice) / (mat.stored + buyAmt);
-                mat.stored += buyAmt;
-                expenses += buyAmt * mat.marketPrice;
-              }
-              this.updateWarehouseSizeUsed(warehouse);
-            }
-          } //End process purchase of materials
-
-          // Find which material were trying to create the least amount of product with.
-          let worseAmt = 1e99;
-          for (const [buyAmt, reqMat] of Object.values(smartBuy)) {
-            const amt = buyAmt / reqMat;
-            if (amt < worseAmt) worseAmt = amt;
-          }
-
-          // Align all the materials to the smallest amount.
-          for (const buyArray of Object.values(smartBuy)) {
-            buyArray[0] = worseAmt * buyArray[1];
-          }
-
-          // Calculate the total size of all things were trying to buy
-          let totalSize = 0;
-          for (const [matName, [buyAmt]] of getRecordEntries(smartBuy)) {
-            if (buyAmt === undefined) throw new Error(`Somehow smartbuy matname is undefined`);
-            totalSize += buyAmt * MaterialInfo[matName].size;
-          }
-
-          // Shrink to the size of available space.
-          const freeSpace = warehouse.size - warehouse.sizeUsed;
-          if (totalSize > freeSpace) {
-            // Multiplier applied to buy amounts to not overfill warehouse
-            const buyMult = freeSpace / totalSize;
-            for (const buyArray of Object.values(smartBuy)) {
-              buyArray[0] = Math.floor(buyArray[0] * buyMult);
-            }
-          }
-
-          // Use the materials already in the warehouse if the option is on.
-          for (const [matName, buyArray] of getRecordEntries(smartBuy)) {
-            if (warehouse.smartSupplyOptions[matName] === "none") continue;
-            const mat = warehouse.materials[matName];
-            if (warehouse.smartSupplyOptions[matName] === "leftovers") {
-              buyArray[0] = Math.max(0, buyArray[0] - mat.stored);
-            } else {
-              buyArray[0] = Math.max(
-                0,
-                buyArray[0] - mat.importAmount * corpConstants.secondsPerMarketCycle * marketCycles,
-              );
-            }
-          }
-
-          // buy them
-          for (const [matName, [buyAmt]] of getRecordEntries(smartBuy)) {
-            const mat = warehouse.materials[matName];
-            if (mat.stored + buyAmt !== 0) {
-              mat.quality = (mat.quality * mat.stored + 1 * buyAmt) / (mat.stored + buyAmt);
-              mat.averagePrice = (mat.averagePrice * mat.stored + mat.marketPrice * buyAmt) / (mat.stored + buyAmt);
-            } else {
-              mat.quality = 1;
-              mat.averagePrice = mat.marketPrice;
-            }
-            mat.stored += buyAmt;
-            mat.buyAmount = buyAmt / (corpConstants.secondsPerMarketCycle * marketCycles);
-            expenses += buyAmt * mat.marketPrice;
+            const buyAmt = mat.buyAmount * corpConstants.secondsPerMarketCycle * marketCycles;
+            expenses += buy(warehouse, matName, buyAmt);
           }
           break;
         }
         case "PRODUCTION":
-          warehouse.smartSupplyStore = 0; //Reset smart supply amount
-
           /* Process production of materials */
           if (this.producedMaterials.length > 0) {
+            // Ann.: This causes the production limit of the first material to be used for all materials
             const mat = warehouse.materials[this.producedMaterials[0]];
             //Calculate the maximum production of this material based
-            //on the office's productivity
             const maxProd =
-              this.getOfficeProductivity(office) *
+              this.getOfficeProductivity(office) * // on the office's productivity
               this.productionMult * // Multiplier from materials
               corporation.getProductionMultiplier() *
               this.getProductionMultiplier(); // Multiplier from Research
@@ -407,7 +360,6 @@ export class Division {
             prod = mat.productionLimit === null ? maxProd : Math.min(maxProd, mat.productionLimit);
 
             prod *= corpConstants.secondsPerMarketCycle * marketCycles; //Convert production from per second to per market cycle
-
             // Calculate net change in warehouse storage making the produced materials will cost
             let totalMatSize = 0;
             for (let tmp = 0; tmp < this.producedMaterials.length; ++tmp) {
@@ -418,6 +370,15 @@ export class Division {
             }
             // If not enough space in warehouse, limit the amount of produced materials
             if (totalMatSize > 0) {
+              /*
+                TODO: Consider rewriting this to optimize production throughput.
+                Space freed up by consuming materials can be used to produce more materials.
+                However, full production might hinder imports if not properly accounted for.
+                Therefore, it may be beneficial to allow the player to set a limit on the warehouse for production.
+                For example: Production Space = CAPACITY - IMPORTS.
+                This needs to be discussed, as smartSupply should use the same logic as production but currently assumes full production.
+                The calculation logic from smartSupply.ts/getProductionCapacity can be reused here.
+              */
               const maxAmt = Math.floor((warehouse.size - warehouse.sizeUsed) / totalMatSize);
               prod = Math.min(maxAmt, prod);
             }
@@ -425,9 +386,6 @@ export class Division {
             if (prod < 0) {
               prod = 0;
             }
-
-            // Keep track of production for smart supply (/s)
-            warehouse.smartSupplyStore += prod / (corpConstants.secondsPerMarketCycle * marketCycles);
 
             // Make sure we have enough resource to make our materials
             let producableFrac = 1;
@@ -777,11 +735,9 @@ export class Division {
 
           //If there's not enough space in warehouse, limit the amount of Product
           if (netStorageSize > 0) {
-            const maxAmt = Math.floor((warehouse.size - warehouse.sizeUsed) / netStorageSize);
+            const maxAmt = Math.floor((warehouse.size - warehouse.sizeUsed) / netStorageSize); // ToDO: Use geometric series
             prod = Math.min(maxAmt, prod);
           }
-
-          warehouse.smartSupplyStore += prod / (corpConstants.secondsPerMarketCycle * marketCycles);
 
           //Make sure we have enough resources to make our Products
           let producableFrac = 1;

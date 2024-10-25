@@ -40,11 +40,6 @@ export class Warehouse {
     materialNames.map((matName) => [matName, "leftovers"]),
   );
 
-  // Stores the amount of product to be produced. Used for Smart Supply unlock.
-  // The production tracked by smart supply is always based on the previous cycle,
-  // so it will always trail the "true" production by 1 cycle
-  smartSupplyStore = 0;
-
   constructor(params: IConstructorParams | null = null) {
     const corp = Player.corporation;
     if (!corp || params === null) return;
