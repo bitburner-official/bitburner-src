@@ -223,7 +223,7 @@ function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteS
   if (spawnDelay !== undefined) {
     result.spawnDelay = number(ctx, "spawnDelay", spawnDelay);
     if (result.spawnDelay < 0) {
-      throw errorMessage(ctx, `spawnDelay must be non-negative, got ${spawnDelay}`);
+      throw errorMessage(ctx, `spawnDelay must be non-negative, got ${String(spawnDelay)}`);
     }
   }
   return result;
@@ -232,7 +232,7 @@ function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteS
 function mapToString(map: Map<unknown, unknown>): string {
   const formattedMap = [...map]
     .map((m) => {
-      return `${m[0]} => ${m[1]}`;
+      return `${String(m[0])} => ${String(m[1])}`;
     })
     .join("; ");
   return `< Map: ${formattedMap} >`;
@@ -245,7 +245,7 @@ function setToString(set: Set<unknown>): string {
 /** Convert multiple arguments for tprint or print into a single string. */
 function argsToString(args: unknown[]): string {
   // Reduce array of args into a single output string
-  return args.reduce((out, arg) => {
+  return args.reduce((out: string, arg) => {
     if (arg === null) {
       return (out += "null");
     }
@@ -264,12 +264,13 @@ function argsToString(args: unknown[]): string {
       return (out += setToString(nativeArg));
     }
     if (typeof nativeArg === "object") {
-      return (out += JSON.stringify(nativeArg, (_, value) => {
+      return (out += JSON.stringify(nativeArg, (_, value: unknown) => {
         /**
          * If the property is a promise, we will return a string that clearly states that it's a promise object, not a
          * normal object. If we don't do that, all promises will be serialized into "{}".
          */
         if (value instanceof Promise) {
+          // eslint-disable-next-line @typescript-eslint/no-base-to-string -- "[object Promise]" is exactly the string that we want.
           return value.toString();
         }
         if (value instanceof Map) {
@@ -282,8 +283,8 @@ function argsToString(args: unknown[]): string {
       }));
     }
 
-    return (out += `${nativeArg}`);
-  }, "") as string;
+    return (out += String(nativeArg));
+  }, "");
 }
 
 function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOptions {
@@ -296,17 +297,17 @@ function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOp
     return result;
   }
   if (typeof opts !== "object") {
-    throw errorMessage(ctx, `BasicHGWOptions must be an object if specified, was ${opts}`);
+    throw errorMessage(ctx, `BasicHGWOptions must be an object if specified, was ${String(opts)}`);
   }
   // Safe assertion since threadOrOption type has been narrowed to a non-null object
   const options = opts as Unknownify<CompleteHGWOptions>;
   result.stock = !!options.stock;
   result.additionalMsec = number(ctx, "opts.additionalMsec", options.additionalMsec ?? 0);
   if (result.additionalMsec < 0) {
-    throw errorMessage(ctx, `additionalMsec must be non-negative, got ${options.additionalMsec}`);
+    throw errorMessage(ctx, `additionalMsec must be non-negative, got ${String(options.additionalMsec)}`);
   }
   if (result.additionalMsec > 1e9) {
-    throw errorMessage(ctx, `additionalMsec too large (>1e9), got ${options.additionalMsec}`);
+    throw errorMessage(ctx, `additionalMsec too large (>1e9), got ${String(options.additionalMsec)}`);
   }
   const requestedThreads = options.threads;
   const threads = ctx.workerScript.scriptRef.threads;
@@ -648,7 +649,7 @@ export function filePath(ctx: NetscriptContext, argName: string, filename: unkno
 export function scriptPath(ctx: NetscriptContext, argName: string, filename: unknown): ScriptFilePath {
   const path = filePath(ctx, argName, filename);
   if (hasScriptExtension(path)) return path;
-  throw errorMessage(ctx, `Invalid ${argName}, must be a script: ${filename}`);
+  throw errorMessage(ctx, `Invalid ${argName}, must be a script: ${String(filename)}`);
 }
 
 /**
@@ -723,7 +724,7 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
     args: runningScript.args.slice(),
     dynamicRamUsage: workerScript && roundToTwo(workerScript.dynamicRamUsage),
     filename: runningScript.filename,
-    logs: runningScript.logs.map((x) => "" + x),
+    logs: runningScript.logs.map((x) => String(x)),
     offlineExpGained: runningScript.offlineExpGained,
     offlineMoneyMade: runningScript.offlineMoneyMade,
     offlineRunningTime: runningScript.offlineRunningTime,
@@ -782,13 +783,20 @@ function validateBitNodeOptions(ctx: NetscriptContext, bitNodeOptions: unknown):
     return result;
   }
   if (typeof bitNodeOptions !== "object") {
-    throw errorMessage(ctx, `bitNodeOptions must be an object if it's specified. It was ${bitNodeOptions}.`);
+    throw errorMessage(ctx, `bitNodeOptions must be an object if it's specified. It was ${String(bitNodeOptions)}.`);
   }
   const options = bitNodeOptions as Unknownify<BitNodeOptions>;
   if (!(options.sourceFileOverrides instanceof Map)) {
     throw errorMessage(ctx, `sourceFileOverrides must be a Map.`);
   }
-  const validationResultForSourceFileOverrides = validateSourceFileOverrides(options.sourceFileOverrides, true);
+  const validationResultForSourceFileOverrides = validateSourceFileOverrides(
+    /**
+     * Cast the type from Map<any, any> to Map<number, number> to satisfy the lint rule. The validation logic in
+     * validateSourceFileOverrides will check the data.
+     */
+    options.sourceFileOverrides as Map<number, number>,
+    true,
+  );
   if (!validationResultForSourceFileOverrides.valid) {
     throw errorMessage(
       ctx,

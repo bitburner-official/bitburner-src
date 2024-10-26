@@ -39,8 +39,8 @@ function Upgrade({ n, division }: INodeProps): React.ReactElement {
     if (n === null || disabled) return;
     try {
       actions.research(division, n.researchName);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
       return;
     }
 

@@ -37,7 +37,7 @@ function getDB(): Promise<IDBObjectStore> {
 export function load(): Promise<SaveData> {
   return getDB().then((db) => {
     return new Promise<SaveData>((resolve, reject) => {
-      const request: IDBRequest<SaveData> = db.get("save");
+      const request = db.get("save") as IDBRequest<SaveData>;
       request.onerror = function (this: IDBRequest<SaveData>) {
         reject(new Error("Error in Database request to get save data", { cause: this.error }));
       };

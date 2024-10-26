@@ -59,8 +59,8 @@ export function ExportModal(props: ExportModalProps): React.ReactElement {
     try {
       if (!targetDivision || !targetCity) return;
       actions.exportMaterial(targetDivision, targetCity, props.mat, exportAmount);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
     }
     props.onClose();
   }

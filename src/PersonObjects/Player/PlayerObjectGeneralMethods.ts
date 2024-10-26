@@ -252,7 +252,7 @@ export function stopFocusing(this: PlayerObject): void {
 // Returns true if hospitalized, false otherwise
 export function takeDamage(this: PlayerObject, amt: number): boolean {
   if (typeof amt !== "number") {
-    console.warn(`Player.takeDamage() called without a numeric argument: ${amt}`);
+    console.warn(`Player.takeDamage() called without a numeric argument: ${String(amt)}`);
     return false;
   }
 
@@ -302,7 +302,7 @@ export function applyForJob(
   }
 
   if (!company.hasPosition(pos)) {
-    console.error(`Company ${company.name} does not have position ${pos}. Player.applyToCompany() failed.`);
+    console.error(`Company ${company.name} does not have position ${pos.name}. Player.applyToCompany() failed.`);
     return null;
   }
 

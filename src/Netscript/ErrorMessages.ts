@@ -96,16 +96,16 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
   if (typeof e !== "string") {
     console.error("Unexpected error:", e);
     const msg = `Unexpected type of error thrown. This error was likely thrown manually within a script.
-      Error has been logged to the console.\n\nType of error: ${typeof e}\nValue of error: ${e}`;
+      Error has been logged to the console.\n\nType of error: ${typeof e}\nValue of error: ${String(e)}`;
     e = ws ? basicErrorMessage(ws, msg, "UNKNOWN") : msg;
   }
-  dialogBoxCreate(initialText + e);
+  dialogBoxCreate(initialText + String(e));
 }
 
-/** Use this handler to handle the error when we call getSaveData function */
-export function handleGetSaveDataError(error: unknown) {
+/** Use this handler to handle the error when we call getSaveData function or getSaveInfo function */
+export function handleGetSaveDataInfoError(error: unknown, fromGetSaveInfo = false) {
   console.error(error);
-  let errorMessage = `Cannot get save data. Error: ${error}.`;
+  let errorMessage = `Cannot get save ${fromGetSaveInfo ? "info" : "data"}. Error: ${String(error)}.`;
   if (error instanceof RangeError) {
     errorMessage += " This may be because the save data is too large.";
   }

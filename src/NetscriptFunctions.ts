@@ -542,7 +542,7 @@ export const ns: InternalAPI<NSFull> = {
         return [] as string[];
       }
 
-      return runningScriptObj.logs.map((x) => "" + x);
+      return runningScriptObj.logs.map((x) => String(x));
     },
   tail:
     (ctx) =>
@@ -812,7 +812,10 @@ export const ns: InternalAPI<NSFull> = {
         if (killByPid) {
           helpers.log(ctx, () => `Killing script with PID ${ident}`);
         } else {
-          helpers.log(ctx, () => `Killing '${scriptID}' on '${hostname}' with args: ${arrayToString(scriptArgs)}.`);
+          helpers.log(
+            ctx,
+            () => `Killing '${String(scriptID)}' on '${String(hostname)}' with args: ${arrayToString(scriptArgs)}.`,
+          );
         }
         return true;
       } else {
@@ -821,7 +824,10 @@ export const ns: InternalAPI<NSFull> = {
         } else {
           helpers.log(
             ctx,
-            () => `Internal error killing '${scriptID}' on '${hostname}' with args: ${arrayToString(scriptArgs)}`,
+            () =>
+              `Internal error killing '${String(scriptID)}' on '${String(hostname)}' with args: ${arrayToString(
+                scriptArgs,
+              )}`,
           );
         }
         return false;
@@ -1422,7 +1428,7 @@ export const ns: InternalAPI<NSFull> = {
   clear: (ctx) => (_file) => {
     const path = helpers.filePath(ctx, "file", _file);
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-      throw helpers.errorMessage(ctx, `Invalid file path or extension: ${_file}`);
+      throw helpers.errorMessage(ctx, `Invalid file path or extension: ${String(_file)}`);
     }
     const server = ctx.workerScript.getServer();
     const file = server.getContentFile(path);
@@ -1518,7 +1524,7 @@ export const ns: InternalAPI<NSFull> = {
     if (newServerRamUsed <= 0) {
       throw helpers.errorMessage(
         ctx,
-        `Game error: Calculated impossible new server ramUsed ${newServerRamUsed} from new limit of ${_ram}`,
+        `Game error: Calculated impossible new server ramUsed ${newServerRamUsed} from new limit of ${String(_ram)}`,
       );
     }
     server.updateRamUsed(newServerRamUsed);
@@ -1870,7 +1876,7 @@ function getFunctionNames(obj: object, prefix: string): string[] {
     } else if (typeof value === "function") {
       functionNames.push(prefix + key);
     } else if (typeof value === "object") {
-      functionNames.push(...getFunctionNames(value, `${prefix}${key}.`));
+      functionNames.push(...getFunctionNames(value as object, `${prefix}${key}.`));
     }
   }
   return functionNames;

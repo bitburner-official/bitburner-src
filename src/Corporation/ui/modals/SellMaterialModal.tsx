@@ -24,8 +24,8 @@ export function SellMaterialModal(props: IProps): React.ReactElement {
   function sellMaterial(): void {
     try {
       actions.sellMaterial(props.mat, amt, price);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
     }
     props.onClose();
   }

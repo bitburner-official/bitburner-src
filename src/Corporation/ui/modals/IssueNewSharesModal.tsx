@@ -55,8 +55,8 @@ export function IssueNewSharesModal(props: IProps): React.ReactElement {
       );
       props.onClose();
       props.rerender();
-    } catch (err) {
-      dialogBoxCreate(`${err}`);
+    } catch (error) {
+      dialogBoxCreate(String(error));
     }
   }
 

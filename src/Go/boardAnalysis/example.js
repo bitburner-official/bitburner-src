@@ -1,3 +1,9 @@
+/* eslint-disable */
+/**
+ * This file was used as a starter script when we wrote documentation for IPvGO. It's not used in our codebase, so we
+ * can disable eslint in this file.
+ */
+
 /** @param {NS} ns */
 export async function main(ns) {
   let result;

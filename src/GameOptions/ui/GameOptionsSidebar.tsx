@@ -90,6 +90,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
     try {
       await saveObject.importGame(importData.saveData);
     } catch (e: unknown) {
+      console.error(e);
       SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);
     }
 

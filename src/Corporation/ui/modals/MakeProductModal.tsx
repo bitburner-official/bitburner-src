@@ -47,8 +47,8 @@ export function MakeProductModal(props: IProps): React.ReactElement {
     if (isNaN(design) || isNaN(marketing)) return;
     try {
       actions.makeProduct(corp, division, city, name, design, marketing);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
     }
     props.onClose();
   }

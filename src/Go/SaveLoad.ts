@@ -102,7 +102,7 @@ function loadCurrentGame(currentGame: unknown): BoardState | string {
   if (!currentGame) return "Savedata did not contain a currentGame";
   assertLoadingType<CurrentGameSaveData>(currentGame);
   const ai = getEnumHelper("GoOpponent").getMember(currentGame.ai);
-  if (!ai) return `currentGame had an invalid opponent: ${currentGame.ai}`;
+  if (!ai) return `currentGame had an invalid opponent: ${String(currentGame.ai)}`;
 
   if (!Array.isArray(currentGame.board)) return "Non-array encountered while trying to load a board.";
   const requiredSize = currentGame.board.length;
@@ -127,7 +127,7 @@ function loadPreviousGame(previousGame: unknown): BoardState | null | string {
   if (!previousGame) return null;
   assertLoadingType<Truthy<PreviousGameSaveData>>(previousGame);
   const ai = getEnumHelper("GoOpponent").getMember(previousGame.ai);
-  if (!ai) return `currentGame had an invalid opponent: ${previousGame.ai}`;
+  if (!ai) return `currentGame had an invalid opponent: ${String(previousGame.ai)}`;
 
   if (!Array.isArray(previousGame.board)) return "Non-array encountered while trying to load a board.";
   const board = loadSimpleBoard(previousGame.board);

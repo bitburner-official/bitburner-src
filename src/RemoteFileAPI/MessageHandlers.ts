@@ -18,7 +18,7 @@ function error(errorMsg: string, { id }: RFAMessage): RFAMessage {
   return new RFAMessage({ error: errorMsg, id: id });
 }
 
-export const RFARequestHandler: Record<string, (message: RFAMessage) => void | RFAMessage> = {
+export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessage> = {
   pushFile: function (msg: RFAMessage): RFAMessage {
     if (!isFileData(msg.params)) return error("Misses parameters", msg);
 

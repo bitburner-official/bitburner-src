@@ -645,7 +645,9 @@ export class Division {
                   amt = eval?.(amtStr);
                 } catch (e) {
                   dialogBoxCreate(
-                    `Calculating export for ${mat.name} in ${this.name}'s ${city} division failed with error: ${e}`,
+                    `Calculating export for ${mat.name} in ${this.name}'s ${city} division failed with error: ${String(
+                      e,
+                    )}`,
                   );
                   continue;
                 }

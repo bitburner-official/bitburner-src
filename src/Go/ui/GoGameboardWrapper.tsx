@@ -20,6 +20,7 @@ import { GoSubnetSearch } from "./GoSubnetSearch";
 import { CorruptableText } from "../../ui/React/CorruptableText";
 import { makeAIMove, resetAI, resolveCurrentTurn } from "../boardAnalysis/goAI";
 import { GoScoreExplanation } from "./GoScoreExplanation";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 interface GoGameboardWrapperProps {
   showInstructions: () => void;
@@ -56,7 +57,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
   // Do not implement useCallback for this function without ensuring GoGameboard still rerenders for every move
   // Currently this function changing is what triggers a GoGameboard rerender, which is needed
-  async function clickHandler(x: number, y: number) {
+  function clickHandler(x: number, y: number) {
     if (showPriorMove) {
       SnackbarEvents.emit(
         `Currently showing a past board state. Please disable "Show previous move" to continue.`,
@@ -87,7 +88,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     const didUpdateBoard = makeMove(boardState, x, y, currentPlayer);
     if (didUpdateBoard) {
       rerender();
-      takeAiTurn(boardState);
+      takeAiTurn(boardState).catch((error) => exceptionAlert(error));
     }
   }
 
@@ -106,7 +107,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     }
 
     setTimeout(() => {
-      takeAiTurn(boardState);
+      takeAiTurn(boardState).catch((error) => exceptionAlert(error));
     }, 100);
   }
 

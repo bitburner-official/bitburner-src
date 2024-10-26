@@ -33,6 +33,7 @@ import { useCallback } from "react";
 import { type AST, getFileType, parseAST } from "../../utils/ScriptTransformer";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
 import { hasScriptExtension, isLegacyScript } from "../../Paths/ScriptFilePath";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 interface IProps {
   // Map of filename -> code
@@ -105,7 +106,9 @@ function Root(props: IProps): React.ReactElement {
     const server = GetServer(currentScript.hostname);
     if (server === null) throw new Error("Server should not be null but it is.");
     server.writeToContentFile(currentScript.path, currentScript.code);
-    if (Settings.SaveGameOnFileSave) saveObject.saveGame();
+    if (Settings.SaveGameOnFileSave) {
+      saveObject.saveGame().catch((error) => exceptionAlert(error));
+    }
     rerender();
   }, [rerender]);
 
@@ -285,7 +288,9 @@ function Root(props: IProps): React.ReactElement {
     if (!server) throw new Error("Server should not be null but it is.");
     // This server helper already handles overwriting, etc.
     server.writeToContentFile(scriptToSave.path, scriptToSave.code);
-    if (Settings.SaveGameOnFileSave) saveObject.saveGame();
+    if (Settings.SaveGameOnFileSave) {
+      saveObject.saveGame().catch((error) => exceptionAlert(error));
+    }
   }
 
   function currentTabIndex(): number | undefined {

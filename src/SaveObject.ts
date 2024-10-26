@@ -44,7 +44,7 @@ import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
 import { downloadContentAsFile } from "./utils/FileUtils";
 import { showAPIBreaks } from "./utils/APIBreaks/APIBreak";
 import { breakInfos261 } from "./utils/APIBreaks/2.6.1";
-import { handleGetSaveDataError } from "./Netscript/ErrorMessages";
+import { handleGetSaveDataInfoError } from "./Netscript/ErrorMessages";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -130,14 +130,14 @@ class BitburnerSaveObject {
     try {
       saveData = await this.getSaveData();
     } catch (error) {
-      handleGetSaveDataError(error);
+      handleGetSaveDataInfoError(error);
       return;
     }
     try {
       await save(saveData);
     } catch (error) {
       console.error(error);
-      dialogBoxCreate(`Cannot save game: ${error}`);
+      dialogBoxCreate(`Cannot save game: ${String(error)}`);
       return;
     }
     const electronGameData: ElectronGameData = {
@@ -170,7 +170,7 @@ class BitburnerSaveObject {
     try {
       saveData = await this.getSaveData();
     } catch (error) {
-      handleGetSaveDataError(error);
+      handleGetSaveDataInfoError(error);
       return;
     }
     const filename = this.getSaveFileName();
@@ -185,7 +185,7 @@ class BitburnerSaveObject {
       await save(saveData);
     } catch (error) {
       console.error(error);
-      dialogBoxCreate(`Cannot import save data: ${error}`);
+      dialogBoxCreate(`Cannot import save data: ${String(error)}`);
       return;
     }
     if (reload) {
@@ -700,7 +700,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
                 // We just need the text error, not a full stack trace
                 console.error(`Failed to load export of material ${material.name} (${division.name} ${warehouse.city})
 Original export details: ${JSON.stringify(originalExport)}
-Error: ${e}`);
+Error: ${String(e)}`);
               }
             }
           }
@@ -805,16 +805,16 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   if (Object.hasOwn(saveObj, "LastExportBonus")) {
     try {
       ExportBonus.setLastExportBonus(JSON.parse(saveObj.LastExportBonus));
-    } catch (err) {
+    } catch (error) {
       ExportBonus.setLastExportBonus(new Date().getTime());
-      console.error("ERROR: Failed to parse last export bonus Settings " + err);
+      console.error(`ERROR: Failed to parse last export bonus setting. Error: ${String(error)}.`);
     }
   }
   if (Player.gang && Object.hasOwn(saveObj, "AllGangsSave")) {
     try {
       loadAllGangs(saveObj.AllGangsSave);
-    } catch (e) {
-      console.error("ERROR: Failed to parse AllGangsSave: " + e);
+    } catch (error) {
+      console.error(`ERROR: Failed to parse AllGangsSave. Error: ${String(error)}.`);
     }
   }
   if (Object.hasOwn(saveObj, "VersionSave")) {

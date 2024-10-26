@@ -157,7 +157,12 @@ export const Settings = {
   disableSuffixes: false,
 
   load(saveString: string) {
-    const save = JSON.parse(saveString);
+    const save = JSON.parse(saveString) as {
+      theme?: typeof Settings.theme;
+      styles?: typeof Settings.styles;
+      overview?: typeof Settings.overview;
+      EditorTheme?: typeof Settings.EditorTheme;
+    };
     save.theme && Object.assign(Settings.theme, save.theme);
     save.styles && Object.assign(Settings.styles, save.styles);
     save.overview && Object.assign(Settings.overview, save.overview);

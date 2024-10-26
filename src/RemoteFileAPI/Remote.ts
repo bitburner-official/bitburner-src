@@ -40,7 +40,7 @@ export class Remote {
 }
 
 function handleMessageEvent(this: WebSocket, e: MessageEvent): void {
-  const msg: RFAMessage = JSON.parse(e.data);
+  const msg = JSON.parse(e.data as string) as RFAMessage;
 
   if (!msg.method || !RFARequestHandler[msg.method]) {
     const response = new RFAMessage({ error: "Unknown message received", id: msg.id });
