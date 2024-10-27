@@ -397,9 +397,10 @@ async function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): Promi
 /**
  * Get a move that places a piece to influence (and later control) a corner
  */
-function getCornerMove(board: Board) {
+async function getCornerMove(board: Board) {
   const boardEdge = board[0].length - 1;
   const cornerMax = boardEdge - 2;
+  await sleep(10);
   if (isCornerAvailableForMove(board, cornerMax, cornerMax, boardEdge, boardEdge)) {
     return board[cornerMax][cornerMax];
   }
@@ -440,7 +441,8 @@ function isCornerAvailableForMove(board: Board, x1: number, y1: number, x2: numb
 /**
  * Select a move from the list of open-area moves
  */
-function getExpansionMove(board: Board, availableSpaces: PointState[], rng: number, moveArray?: Move[]) {
+async function getExpansionMove(board: Board, availableSpaces: PointState[], rng: number, moveArray?: Move[]) {
+  await sleep(10);
   const moveOptions = moveArray ?? getExpansionMoveArray(board, availableSpaces);
   const randomIndex = Math.floor(rng * moveOptions.length);
   return moveOptions[randomIndex];
@@ -449,7 +451,13 @@ function getExpansionMove(board: Board, availableSpaces: PointState[], rng: numb
 /**
  * Get a move in open space that is nearby a friendly piece
  */
-function getJumpMove(board: Board, player: GoColor, availableSpaces: PointState[], rng: number, moveArray?: Move[]) {
+async function getJumpMove(
+  board: Board,
+  player: GoColor,
+  availableSpaces: PointState[],
+  rng: number,
+  moveArray?: Move[],
+) {
   const moveOptions = (moveArray ?? getExpansionMoveArray(board, availableSpaces)).filter(({ point }) =>
     [
       board[point.x]?.[point.y + 2],
@@ -458,6 +466,7 @@ function getJumpMove(board: Board, player: GoColor, availableSpaces: PointState[
       board[point.x - 2]?.[point.y],
     ].some((point) => point?.color === player),
   );
+  await sleep(10);
 
   const randomIndex = Math.floor(rng * moveOptions.length);
   return moveOptions[randomIndex];
@@ -528,6 +537,7 @@ async function getLibertyGrowthMoves(board: Board, player: GoColor, availableSpa
     .filter((liberty) =>
       availableSpaces.find((point) => liberty.libertyPoint.x === point.x && liberty.libertyPoint.y === point.y),
     );
+  await sleep(10);
 
   // Find a liberty where playing a piece increases the liberty of the chain (aka expands or defends the chain)
   return liberties
@@ -595,6 +605,7 @@ async function getSurroundMove(board: Board, player: GoColor, availableSpaces: P
     .flat()
     .filter((liberty) => availableSpaces.find((point) => liberty?.x === point.x && liberty?.y === point.y))
     .filter(isNotNullish);
+  await sleep(10);
 
   const captureMoves: Move[] = [];
   const atariMoves: Move[] = [];
@@ -667,7 +678,7 @@ async function getSurroundMove(board: Board, player: GoColor, availableSpaces: P
  * If a chain has multiple eyes, it cannot be captured by the opponent (since they can only fill one eye at a time,
  *  and suiciding your own pieces is not legal unless it captures the opponents' first)
  */
-function getEyeCreationMoves(board: Board, player: GoColor, availableSpaces: PointState[], maxLiberties = 99) {
+async function getEyeCreationMoves(board: Board, player: GoColor, availableSpaces: PointState[], maxLiberties = 99) {
   const allEyes = getAllEyesByChainId(board, player);
   const currentEyes = getAllEyes(board, player, allEyes);
 
@@ -696,6 +707,7 @@ function getEyeCreationMoves(board: Board, player: GoColor, availableSpaces: Poi
       );
     });
 
+  await sleep(10);
   const eyeCreationMoves = friendlyLiberties.reduce((moveOptions: EyeMove[], point: PointState) => {
     const evaluationBoard = evaluateMoveResult(board, point.x, point.y, player);
     const newEyes = getAllEyes(evaluationBoard, player);
@@ -716,16 +728,16 @@ function getEyeCreationMoves(board: Board, player: GoColor, availableSpaces: Poi
   return eyeCreationMoves.sort((moveA, moveB) => +moveB.createsLife - +moveA.createsLife);
 }
 
-function getEyeCreationMove(board: Board, player: GoColor, availableSpaces: PointState[]) {
-  return getEyeCreationMoves(board, player, availableSpaces)[0];
+async function getEyeCreationMove(board: Board, player: GoColor, availableSpaces: PointState[]) {
+  return (await getEyeCreationMoves(board, player, availableSpaces))[0];
 }
 
 /**
  * If there is only one move that would create two eyes for the opponent, it should be blocked if possible
  */
-function getEyeBlockingMove(board: Board, player: GoColor, availablePoints: PointState[]) {
+async function getEyeBlockingMove(board: Board, player: GoColor, availablePoints: PointState[]) {
   const opposingPlayer = player === GoColor.white ? GoColor.black : GoColor.white;
-  const opponentEyeMoves = getEyeCreationMoves(board, opposingPlayer, availablePoints, 5);
+  const opponentEyeMoves = await getEyeCreationMoves(board, opposingPlayer, availablePoints, 5);
   const twoEyeMoves = opponentEyeMoves.filter((move) => move.createsLife);
   const oneEyeMoves = opponentEyeMoves.filter((move) => !move.createsLife);
 
@@ -785,8 +797,9 @@ function getMoveOptions(
         ? defendMove
         : null;
     },
-    eyeMove: async () => (endGameAvailable ? null : getEyeCreationMove(board, player, availableSpaces) ?? null),
-    eyeBlock: async () => (endGameAvailable ? null : getEyeBlockingMove(board, player, availableSpaces) ?? null),
+    eyeMove: async () => (endGameAvailable ? null : (await getEyeCreationMove(board, player, availableSpaces)) ?? null),
+    eyeBlock: async () =>
+      endGameAvailable ? null : (await getEyeBlockingMove(board, player, availableSpaces)) ?? null,
     pattern: async () => {
       const point = endGameAvailable ? null : await findAnyMatchedPatterns(board, player, availableSpaces, smart, rng);
       return point ? { point } : null;
@@ -797,13 +810,14 @@ function getMoveOptions(
     defend: async () => (await getDefendMove(board, player, availableSpaces)) ?? null,
     surround: async () => (await getSurroundMove(board, player, availableSpaces, smart)) ?? null,
     corner: async () => {
-      const point = getCornerMove(board);
+      const point = await getCornerMove(board);
       return point ? { point } : null;
     },
     random: async () => {
       // Only offer a random move if there are some contested spaces on the board.
       // (Random move should not be picked if the AI would otherwise pass turn.)
       const point = contestedPoints.length ? availableSpaces[Math.floor(rng * availableSpaces.length)] : null;
+      await sleep(10);
       return point ? { point } : null;
     },
   };

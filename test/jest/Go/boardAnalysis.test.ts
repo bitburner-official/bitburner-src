@@ -12,7 +12,7 @@ import { findAnyMatchedPatterns } from "../../../src/Go/boardAnalysis/patternMat
 setPlayer(new PlayerObject());
 
 describe("Go board analysis tests", () => {
-  it("identifies chains and liberties", async () => {
+  it("identifies chains and liberties", () => {
     const board = ["XOO..", ".....", ".....", ".....", "....."];
     const boardState = boardStateFromSimpleBoard(board);
 
@@ -20,7 +20,7 @@ describe("Go board analysis tests", () => {
     expect(boardState.board[0]?.[1]?.liberties?.length).toEqual(3);
   });
 
-  it("identifies all points that are part of 'eyes' on the board", async () => {
+  it("identifies all points that are part of 'eyes' on the board", () => {
     const board = ["..O..", "OOOOO", "..XXX", "..XX.", "..X.X"];
     const boardState = boardStateFromSimpleBoard(board);
 
@@ -46,7 +46,7 @@ describe("Go board analysis tests", () => {
     expect(point?.y).toEqual(2);
   });
 
-  it("identifies invalid moves from self-capture", async () => {
+  it("identifies invalid moves from self-capture", () => {
     const board = [".X...", "X....", ".....", ".....", "....."];
     const boardState = boardStateFromSimpleBoard(board);
     const validity = evaluateIfMoveIsValid(boardState, 0, 0, GoColor.white, false);
@@ -54,7 +54,7 @@ describe("Go board analysis tests", () => {
     expect(validity).toEqual(GoValidity.noSuicide);
   });
 
-  it("identifies invalid moves from repeat", async () => {
+  it("identifies invalid moves from repeat", () => {
     const board = [".X...", ".....", ".....", ".....", "....."];
     const boardState = boardStateFromSimpleBoard(board);
     boardState.previousBoards.push(".X.......................");

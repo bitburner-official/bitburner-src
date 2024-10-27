@@ -49,7 +49,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   const [scoreExplanationOpen, setScoreExplanationOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  const { classes } = boardStyles();
+  const { classes } = boardStyles({});
   const boardSize = boardState.board[0].length;
   const currentPlayer = boardState.previousPlayer === GoColor.white ? GoColor.black : GoColor.white;
   const waitingOnAI = boardState.previousPlayer === GoColor.black && boardState.ai !== GoOpponent.none;

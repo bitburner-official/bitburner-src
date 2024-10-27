@@ -696,19 +696,21 @@ export function getPreviousMove(): [number, number] | null {
     return null;
   }
 
-  for (const rowIndexString in Go.currentGame.board) {
+  Go.currentGame.board.forEach((rowIndexString) => {
     const row = Go.currentGame.board[+rowIndexString] ?? [];
-    for (const pointIndexString in row) {
-      const point = row[+pointIndexString];
-      const priorColor = point && priorBoard && getColorOnBoardString(priorBoard, point.x, point.y);
-      const currentColor = point?.color;
-      const isPreviousPlayer = currentColor === Go.currentGame.previousPlayer;
-      const isChanged = priorColor !== currentColor;
-      if (priorColor && currentColor && isPreviousPlayer && isChanged) {
-        return [+rowIndexString, +pointIndexString];
+    row.forEach((pointIndexString) => {
+      if (pointIndexString) {
+        const point = row[+pointIndexString];
+        const priorColor = point && priorBoard && getColorOnBoardString(priorBoard, point.x, point.y);
+        const currentColor = point?.color;
+        const isPreviousPlayer = currentColor === Go.currentGame.previousPlayer;
+        const isChanged = priorColor !== currentColor;
+        if (priorColor && currentColor && isPreviousPlayer && isChanged) {
+          return [+rowIndexString, +pointIndexString];
+        }
       }
-    }
-  }
+    });
+  });
 
   return null;
 }

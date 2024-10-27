@@ -13,7 +13,8 @@ describe("Board analysis utility tests", () => {
       .filter((p) => p === "O").length;
     expect(whitePieceCount).toEqual(1);
     expect(result).toEqual({
-      board: expect.any(Object),
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      board: expect.any(Object), // This board state is different every run
       previousPlayer: GoColor.white,
       previousBoards: [],
       ai: GoOpponent.Illuminati,
