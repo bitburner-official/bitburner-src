@@ -32,7 +32,7 @@ import { useVimEditor } from "./useVimEditor";
 import { useCallback } from "react";
 import { type AST, getFileType, parseAST } from "../../utils/ScriptTransformer";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
-import { hasScriptExtension, isLegacyScript } from "../../Paths/ScriptFilePath";
+import { hasScriptExtension, isLegacyScript, resolveScriptFilePath, ScriptFilePath } from "../../Paths/ScriptFilePath";
 
 interface IProps {
   // Map of filename -> code
@@ -42,6 +42,72 @@ interface IProps {
 }
 const openScripts: OpenScript[] = [];
 let currentScript: OpenScript | null = null;
+let vim: boolean = false; // this will be set on mounting the component
+
+export function openCodeEditor(
+  source: monaco.editor.ICodeEditor,
+  resource: monaco.Uri,
+  selectionOrPosition?: monaco.IRange | monaco.IPosition,
+): boolean {
+  const resolvedPath = resolveScriptFilePath(resource.path);
+  if (resolvedPath === null) {
+    return false;
+  }
+
+  const [hostname, path] = resolvedPath.split("/", 2);
+
+  // check if we have an open file already; if so, show it at the requested position
+  const openScript = openScripts.find((s) => s.path === path && s.hostname === hostname);
+  if (openScript) {
+    if (openScript.model === undefined || openScript.model === null || openScript.model.isDisposed()) {
+      openScript.regenerateModel();
+    }
+    currentScript = openScript;
+    source.setModel(openScript.model);
+  } else {
+    const server = GetServer(hostname);
+    if (server === null) {
+      return false;
+    }
+
+    const script = server.scripts.get(path as ScriptFilePath);
+    if (script === undefined) {
+      return false;
+    }
+
+    // Open script
+    const newScript = new OpenScript(
+      path as ScriptFilePath,
+      script.code,
+      hostname,
+      new monaco.Position(0, 0),
+      makeModel(hostname, path, script.code),
+      vim,
+    );
+    openScripts.push(newScript);
+    currentScript = newScript;
+    source.setModel(newScript.model);
+  }
+
+  if (selectionOrPosition === undefined) {
+    return true;
+  }
+
+  if ((selectionOrPosition as monaco.IRange) !== undefined) {
+    const range = selectionOrPosition as monaco.IRange;
+
+    source.setSelection(range);
+    source.revealLineInCenter(range.startLineNumber);
+  } else if ((selectionOrPosition as monaco.IPosition) !== undefined) {
+    const pos = selectionOrPosition as monaco.IPosition;
+
+    source.setPosition(pos);
+    source.revealLineInCenter(pos.lineNumber);
+  }
+
+  source.focus();
+  return true;
+}
 
 function Root(props: IProps): React.ReactElement {
   const rerender = useRerender();
@@ -214,11 +280,33 @@ function Root(props: IProps): React.ReactElement {
     debouncedCodeParsing(newCode);
   };
 
+  let changeModelCallback: monaco.IDisposable | null = null;
+
   // When the editor is mounted
   function onMount(editor: IStandaloneCodeEditor): void {
     // Required when switching between site navigation (e.g. from Script Editor -> Terminal and back)
     // the `useEffect()` for vim mode is called before editor is mounted.
     editorRef.current = editor;
+    changeModelCallback = editorRef.current.onDidChangeModel((e) => {
+      if (e.newModelUrl === null) {
+        return;
+      }
+
+      const resolvedPath = resolveScriptFilePath(e.newModelUrl.path);
+      if (resolvedPath === null) {
+        return false;
+      }
+      const [hostname, path] = resolvedPath.split("/", 2);
+
+      const script = openScripts.find((s) => s.hostname === hostname && s.path === path);
+      if (script) {
+        parseCode(script.code);
+      }
+
+      rerender();
+      removeOutlineOfEditor();
+    });
+    vim = props.vim;
 
     if (props.files.size === 0 && currentScript !== null) {
       // Open currentscript
@@ -226,7 +314,6 @@ function Root(props: IProps): React.ReactElement {
       editorRef.current.setModel(currentScript.model);
       editorRef.current.setPosition(currentScript.lastPosition);
       editorRef.current.revealLineInCenter(currentScript.lastPosition.lineNumber);
-      parseCode(currentScript.code);
       editorRef.current.focus();
       return;
     }
@@ -245,7 +332,6 @@ function Root(props: IProps): React.ReactElement {
         editorRef.current.setModel(openScript.model);
         editorRef.current.setPosition(openScript.lastPosition);
         editorRef.current.revealLineInCenter(openScript.lastPosition.lineNumber);
-        parseCode(openScript.code);
       } else {
         // Open script
         const newScript = new OpenScript(
@@ -259,7 +345,6 @@ function Root(props: IProps): React.ReactElement {
         openScripts.push(newScript);
         currentScript = newScript;
         editorRef.current.setModel(newScript.model);
-        parseCode(newScript.code);
       }
     }
 
@@ -316,7 +401,6 @@ function Root(props: IProps): React.ReactElement {
       editorRef.current.setModel(currentScript.model);
       editorRef.current.setPosition(currentScript.lastPosition);
       editorRef.current.revealLineInCenter(currentScript.lastPosition.lineNumber);
-      parseCode(currentScript.code);
       editorRef.current.focus();
     }
     removeOutlineOfEditor();
@@ -361,7 +445,6 @@ function Root(props: IProps): React.ReactElement {
         editorRef.current.setModel(currentScript.model);
         editorRef.current.setPosition(currentScript.lastPosition);
         editorRef.current.revealLineInCenter(currentScript.lastPosition.lineNumber);
-        parseCode(currentScript.code);
         editorRef.current.focus();
       }
     }
@@ -393,9 +476,7 @@ function Root(props: IProps): React.ReactElement {
                 openScript.regenerateModel();
               }
               editorRef.current.setModel(openScript.model);
-
               editorRef.current.setValue(openScript.code);
-              parseCode(openScript.code);
               editorRef.current.focus();
             }
           }
@@ -426,6 +507,11 @@ function Root(props: IProps): React.ReactElement {
   }
 
   function onUnmountEditor() {
+    if (changeModelCallback) {
+      changeModelCallback.dispose();
+      changeModelCallback = null;
+    }
+
     if (!currentScript) {
       return;
     }

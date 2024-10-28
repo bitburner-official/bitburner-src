@@ -14,6 +14,7 @@ import { NetscriptExtra } from "../NetscriptFunctions/Extra";
 import * as enums from "../Enums";
 import { ns } from "../NetscriptFunctions";
 import { isLegacyScript } from "../Paths/ScriptFilePath";
+import { openCodeEditor } from "./ui/ScriptEditorRoot";
 
 /** Event emitter used for tracking when changes have been made to a content file. */
 export const fileEditEvents = new EventEmitter<[hostname: string, filename: ContentFilePath]>();
@@ -125,6 +126,8 @@ export class ScriptEditor {
         }
       });
     }
+
+    monaco.editor.registerEditorOpener({openCodeEditor});
 
     monaco.languages.json.jsonDefaults.setModeConfiguration({
       ...monaco.languages.json.jsonDefaults.modeConfiguration,
