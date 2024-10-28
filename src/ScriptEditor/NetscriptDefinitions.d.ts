@@ -4271,6 +4271,8 @@ type SimpleOpponentStats = {
 export interface GoAnalysis {
   /**
    * Shows if each point on the board is a valid move for the player.
+   * By default, analyzes the current board state.
+   * Takes an optional boardState (and an optional prior-move boardState, if desired) to analyze a custom board.
    *
    * The true/false validity of each move can be retrieved via the X and Y coordinates of the move.
    *      `const validMoves = ns.go.analysis.getValidMoves();`
@@ -4281,15 +4283,20 @@ export interface GoAnalysis {
    * string represents a vertical column on the board. In other words, the printed example above can be understood to
    * be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.
    *
+   * Also note that, when given a custom board state, only one prior move can be analyzed. This means that the superko rules
+   *  (no duplicate board states in the full game history) is not supported; you will have to implement your own analysis for that.
+   *
    * @remarks
    * RAM cost: 8 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    */
-  getValidMoves(): boolean[][];
+  getValidMoves(boardState?: string[], priorBoardState?: string[]): boolean[][];
 
   /**
    * Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points
    * are also given chain IDs to represent continuous empty space. Dead nodes are given the value `null.`
+   *
+   * Takes an optional boardState argument; by default uses the current board state.
    *
    * The data from getChains() can be used with the data from getBoardState() to see which player (or empty) each chain is
    *
@@ -4310,11 +4317,13 @@ export interface GoAnalysis {
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    *
    */
-  getChains(): (number | null)[][];
+  getChains(boardState?: string[]): (number | null)[][];
 
   /**
    * Returns a number for each point, representing how many open nodes its network/chain is connected to.
    * Empty nodes and dead nodes are shown as -1 liberties.
+   *
+   * Takes an optional boardState argument; by default uses the current board state.
    *
    * For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one
    * in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!
@@ -4332,12 +4341,14 @@ export interface GoAnalysis {
    * RAM cost: 16 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    */
-  getLiberties(): number[][];
+  getLiberties(boardState?: string[]): number[][];
 
   /**
-   * Returns 'X', 'O', or '?' for each empty point to indicate which player controls that empty point.
+   * Returns 'X' for black, 'O' for white, or '?' for each empty point to indicate which player controls that empty point.
    * If no single player fully encircles the empty space, it is shown as contested with '?'.
    * "#" are dead nodes that are not part of the subnet.
+   *
+   * Takes an optional boardState argument; by default uses the current board state.
    *
    * Filled points of any color are indicated with '.'
    *
@@ -4356,7 +4367,7 @@ export interface GoAnalysis {
    * RAM cost: 16 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    */
-  getControlledEmptyNodes(): string[];
+  getControlledEmptyNodes(boardState?: string[]): string[];
 
   /**
    * Displays the game history, captured nodes, and gained bonuses for each opponent you have played against.
@@ -4388,16 +4399,27 @@ export interface GoAnalysis {
 export interface GoCheat {
   /**
    * Returns your chance of successfully playing one of the special moves in the ns.go.cheat API.
-   * Scales with your crime success rate stat.
+   * Scales up with your crime success rate stat.
+   * Scales down with the number of times you've attempted to cheat in the current game.
    *
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
+   *
+   * @param cheatCount - Optional override for the number of cheats already attempted. Defaults to the number of cheats attempted in the current game.
    *
    * @remarks
    * RAM cost: 1 GB
    * Requires BitNode 14.2 to use
    */
-  getCheatSuccessChance(): number;
+  getCheatSuccessChance(cheatCount?: number): number;
+  /**
+   * Returns the number of times you've attempted to cheat in the current game.
+   *
+   * @remarks
+   * RAM cost: 1 GB
+   * Requires BitNode 14.2 to use
+   */
+  getCheatCount(): number;
   /**
    * Attempts to remove an existing router, leaving an empty node behind.
    *

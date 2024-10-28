@@ -24,6 +24,8 @@ export function LoadingScreen(): React.ReactElement {
     document.title = `Bitburner ${version}`;
   }
 
+  document.body.style.fontVariantLigatures = "none";
+
   useEffect(() => {
     const id = setTimeout(() => {
       if (!loaded) setShow(true);

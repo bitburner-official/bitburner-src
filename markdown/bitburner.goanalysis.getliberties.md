@@ -6,13 +6,22 @@
 
 Returns a number for each point, representing how many open nodes its network/chain is connected to. Empty nodes and dead nodes are shown as -1 liberties.
 
+Takes an optional boardState argument; by default uses the current board state.
+
 For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured! <pre lang="javascript"> \[ \[-1, 5,-1,-1, 2\], \[ 5, 5,-1,-1,-1\], \[-1,-1, 4,-1,-1\], \[ 3,-1,-1, 3, 1\], \[ 3,-1,-1, 3, 1\], \] </pre>
 
 **Signature:**
 
 ```typescript
-getLiberties(): number[][];
+getLiberties(boardState?: string[]): number[][];
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  boardState | string\[\] | _(Optional)_ |
+
 **Returns:**
 
 number\[\]\[\]

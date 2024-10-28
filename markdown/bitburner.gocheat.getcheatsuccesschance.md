@@ -4,15 +4,22 @@
 
 ## GoCheat.getCheatSuccessChance() method
 
-Returns your chance of successfully playing one of the special moves in the ns.go.cheat API. Scales with your crime success rate stat.
+Returns your chance of successfully playing one of the special moves in the ns.go.cheat API. Scales up with your crime success rate stat. Scales down with the number of times you've attempted to cheat in the current game.
 
 Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a small (\~10%) chance you will instantly be ejected from the subnet.
 
 **Signature:**
 
 ```typescript
-getCheatSuccessChance(): number;
+getCheatSuccessChance(cheatCount?: number): number;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  cheatCount | number | _(Optional)_ Optional override for the number of cheats already attempted. Defaults to the number of cheats attempted in the current game. |
+
 **Returns:**
 
 number

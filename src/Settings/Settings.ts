@@ -137,7 +137,7 @@ export const Settings = {
   MonacoFontFamily: "JetBrainsMono",
   /** Text size for script editor. */
   MonacoFontSize: 20,
-  /** Whether to use font ligatures */
+  /** Whether to use font ligatures in the script editor */
   MonacoFontLigatures: false,
   /** Whether to use Vim mod by default in the script editor */
   MonacoDefaultToVim: false,

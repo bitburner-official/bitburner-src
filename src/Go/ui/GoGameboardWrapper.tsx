@@ -54,6 +54,13 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   const waitingOnAI = boardState.previousPlayer === GoColor.black && boardState.ai !== GoOpponent.none;
   const score = getScore(boardState);
 
+  // Disable showing prior move if there are no prior moves (if a new game is started while looking at a prior move)
+  useEffect(() => {
+    if (boardState.previousBoards.length === 0) {
+      setShowPriorMove(false);
+    }
+  }, [boardState.previousBoards.length]);
+
   // Do not implement useCallback for this function without ensuring GoGameboard still rerenders for every move
   // Currently this function changing is what triggers a GoGameboard rerender, which is needed
   async function clickHandler(x: number, y: number) {
@@ -139,6 +146,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   function resetState(newBoardSize = boardSize, newOpponent = Go.currentGame.ai) {
     setScoreOpen(false);
     setSearchOpen(false);
+    setShowPriorMove(false);
     if (boardState.previousPlayer !== null && boardState.previousBoards.length) {
       resetWinstreak(boardState.ai, false);
     }
@@ -159,9 +167,8 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   }
 
   function showPreviousMove(newValue: boolean) {
-    if (boardState.previousBoards.length) {
-      setShowPriorMove(newValue);
-    }
+    // Only show prior move if there is previous moves to show
+    setShowPriorMove(!!boardState.previousBoards.length && newValue);
   }
 
   function setTraditional(newValue: boolean) {

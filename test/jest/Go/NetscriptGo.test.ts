@@ -1,7 +1,11 @@
 import { Player, setPlayer } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType } from "@enums";
 import { Go } from "../../../src/Go/Go";
-import { boardStateFromSimpleBoard, simpleBoardFromBoard } from "../../../src/Go/boardAnalysis/boardAnalysis";
+import {
+  boardStateFromSimpleBoard,
+  simpleBoardFromBoard,
+  updatedBoardFromSimpleBoard,
+} from "../../../src/Go/boardAnalysis/boardAnalysis";
 import {
   cheatPlayTwoMoves,
   cheatRemoveRouter,
@@ -19,7 +23,7 @@ import {
 } from "../../../src/Go/effects/netscriptGoImplementation";
 import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 import "../../../src/Faction/Factions";
-import { getNewBoardState } from "../../../src/Go/boardState/boardState";
+import { getNewBoardState, getNewBoardStateFromSimpleBoard } from "../../../src/Go/boardState/boardState";
 import { installAugmentations } from "../../../src/Augmentation/AugmentationHelpers";
 import { AddToAllServers } from "../../../src/Server/AllServers";
 import { Server } from "../../../src/Server/Server";
@@ -164,6 +168,25 @@ describe("Netscript Go API unit tests", () => {
         [false, true, false, true, false],
       ]);
     });
+
+    it("should return all valid and invalid moves on the board, if a board is provided", () => {
+      const currentBoard = [".....", ".....", ".....", ".....", "....."];
+      Go.currentGame = boardStateFromSimpleBoard(currentBoard, GoOpponent.Daedalus, GoColor.white);
+
+      const board = getNewBoardStateFromSimpleBoard(
+        ["XXO.#", "XO.O.", ".OOOO", "XXXXX", "X.X.X"],
+        ["XXO.#", "XO.O.", ".OOO.", "XXXXX", "X.X.X"],
+      );
+      const result = getValidMoves(board);
+
+      expect(result).toEqual([
+        [false, false, false, false, false],
+        [false, false, false, false, false],
+        [true, false, false, false, false],
+        [false, false, false, false, false],
+        [false, true, false, true, false],
+      ]);
+    });
   });
 
   describe("getChains() unit tests", () => {
@@ -202,6 +225,16 @@ describe("Netscript Go API unit tests", () => {
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
 
       const result = getControlledEmptyNodes();
+
+      expect(result).toEqual(["...O#", "..O.O", "?....", ".....", ".X.X."]);
+    });
+
+    it("should show the details for the given board, if provided", () => {
+      const currentBoard = [".....", ".....", ".....", ".....", "....."];
+      Go.currentGame = boardStateFromSimpleBoard(currentBoard, GoOpponent.Daedalus, GoColor.white);
+
+      const board = updatedBoardFromSimpleBoard(["XXO.#", "XO.O.", ".OOOO", "XXXXX", "X.X.X"]);
+      const result = getControlledEmptyNodes(board);
 
       expect(result).toEqual(["...O#", "..O.O", "?....", ".....", ".X.X."]);
     });
