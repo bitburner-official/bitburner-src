@@ -97,7 +97,7 @@ export function ThemeEditorModal(props: IProps): React.ReactElement {
     } catch (error) {
       console.error(`Theme data is invalid. Data: ${event.target.value}.`);
       console.error(error);
-      dialogBoxCreate(`Invalid theme. ${String(error)}`);
+      dialogBoxCreate(`Invalid theme. ${error}`);
     }
   }
 
