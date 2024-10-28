@@ -204,8 +204,6 @@ export function GameRoot(): React.ReactElement {
     Router.toPage(Page.Terminal);
   }
 
-  document.body.style.fontVariantLigatures = Settings.FontLigatures ? "normal" : "none";
-
   let mainPage = <Typography>Cannot load</Typography>;
   let withSidebar = true;
   const hidePopups = Router.hidingMessages();

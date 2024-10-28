@@ -43,12 +43,6 @@ export const InterfacePage = (): React.ReactElement => {
         text="Show all intermediary time units, even when null."
         tooltip={<>Example: 1 hour 13 seconds becomes 1 hour 0 minutes 13 seconds.</>}
       />
-      <OptionSwitch
-        checked={Settings.FontLigatures}
-        onChange={(newValue) => (Settings.FontLigatures = newValue)}
-        text="Use font ligatures"
-        tooltip={<>If this is set, the main UI will use font ligatures.</>}
-      />
       <Tooltip
         title={
           <Typography>

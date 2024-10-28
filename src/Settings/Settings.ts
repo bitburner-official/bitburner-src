@@ -155,8 +155,6 @@ export const Settings = {
   useEngineeringNotation: false,
   /** Whether to disable suffixes and always use exponential form (scientific or engineering). */
   disableSuffixes: false,
-  /** Whether to use font ligatures in the main UI */
-  FontLigatures: false,
 
   load(saveString: string) {
     const save = JSON.parse(saveString);
