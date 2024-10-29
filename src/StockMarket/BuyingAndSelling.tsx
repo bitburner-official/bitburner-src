@@ -48,11 +48,9 @@ export function buyStock(
   if (shares <= 0) {
     return false;
   }
-  // TODO: Validation code in this function and other ones (sellStock, shortStock, sellShort) are bad. I'll rewrite them later.
   if (stock == null || isNaN(shares)) {
     if (ctx) {
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
-      helpers.log(ctx, () => `Invalid arguments: stock='${stock}' shares='${shares}'`);
+      helpers.log(ctx, () => `Invalid arguments: stock='${stock?.name}' shares='${shares}'`);
     } else if (opts.suppressDialog !== true) {
       dialogBoxCreate("Failed to buy stock. This may be a bug, contact developer");
     }
@@ -147,8 +145,7 @@ export function sellStock(
   // Sanitize/Validate arguments
   if (stock == null || shares < 0 || isNaN(shares)) {
     if (ctx) {
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
-      helpers.log(ctx, () => `Invalid arguments: stock='${stock}' shares='${shares}'`);
+      helpers.log(ctx, () => `Invalid arguments: stock='${stock?.name}' shares='${shares}'`);
     } else if (opts.suppressDialog !== true) {
       dialogBoxCreate(
         "Failed to sell stock. This is probably due to an invalid quantity. Otherwise, this may be a bug, contact developer",
@@ -228,8 +225,7 @@ export function shortStock(
   }
   if (stock == null || isNaN(shares)) {
     if (ctx) {
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
-      helpers.log(ctx, () => `Invalid arguments: stock='${stock}' shares='${shares}'`);
+      helpers.log(ctx, () => `Invalid arguments: stock='${stock?.name}' shares='${shares}'`);
     } else if (opts.suppressDialog !== true) {
       dialogBoxCreate(
         "Failed to initiate a short position in a stock. This is probably " +
@@ -325,8 +321,7 @@ export function sellShort(
 ): boolean {
   if (stock == null || isNaN(shares) || shares < 0) {
     if (ctx) {
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
-      helpers.log(ctx, () => `Invalid arguments: stock='${stock}' shares='${shares}'`);
+      helpers.log(ctx, () => `Invalid arguments: stock='${stock?.name}' shares='${shares}'`);
     } else if (!opts.suppressDialog) {
       dialogBoxCreate(
         "Failed to sell a short position in a stock. This is probably " +
