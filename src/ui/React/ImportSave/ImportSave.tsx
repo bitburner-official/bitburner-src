@@ -38,7 +38,7 @@ import { useBoolean } from "../hooks";
 
 import { ComparisonIcon } from "./ComparisonIcon";
 import { SaveData } from "../../../types";
-import { handleGetSaveDataError } from "../../../Netscript/ErrorMessages";
+import { handleGetSaveDataInfoError } from "../../../Netscript/ErrorMessages";
 
 const useStyles = makeStyles()((theme: Theme) => ({
   root: {
@@ -140,7 +140,7 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
         // We cannot show dialog box in this screen (due to "withPopups = false"), so we will try showing it with a
         // delay. 1 second is usually enough to go back to other normal screens that allow showing popups.
         setTimeout(() => {
-          handleGetSaveDataError(error);
+          handleGetSaveDataInfoError(error);
         }, 1000);
       });
     }

@@ -218,7 +218,7 @@ export function makeTheme(theme: IScriptEditorTheme): editor.IStandaloneThemeDat
   return { base: theme.base, inherit: theme.inherit, rules: themeRules, colors: themeColors };
 }
 
-export async function loadThemes(defineTheme: DefineThemeFn): Promise<void> {
+export function loadThemes(defineTheme: DefineThemeFn): void {
   defineTheme("monokai", {
     base: "vs-dark",
     inherit: true,

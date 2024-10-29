@@ -20,7 +20,13 @@ export function exportScripts(pattern: string, server: BaseServer, currDir = roo
   const filename = `bitburner${
     hasScriptExtension(pattern) ? "Scripts" : pattern.endsWith(".txt") ? "Texts" : "Files"
   }.zip`;
-  zip.generateAsync({ type: "blob" }).then((content: Blob) => downloadContentAsFile(content, filename));
+  zip
+    .generateAsync({ type: "blob" })
+    .then((content: Blob) => downloadContentAsFile(content, filename))
+    .catch((error) => {
+      console.error(error);
+      Terminal.error(`Cannot compress scripts with pattern ${pattern} on ${server.hostname}. Error: ${error}`);
+    });
 }
 
 export function download(args: (string | number | boolean)[], server: BaseServer): void {
@@ -33,9 +39,10 @@ export function download(args: (string | number | boolean)[], server: BaseServer
     try {
       exportScripts(pattern, server, Terminal.currDir);
       return;
-    } catch (e: any) {
-      const msg = String(e?.message ?? e);
-      return Terminal.error(msg);
+    } catch (error) {
+      console.error(error);
+      Terminal.error(`Cannot export scripts with pattern ${pattern} on ${server.hostname}. Error: ${error}`);
+      return;
     }
   }
   const path = Terminal.getFilepath(pattern);

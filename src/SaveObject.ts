@@ -44,7 +44,7 @@ import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
 import { downloadContentAsFile } from "./utils/FileUtils";
 import { showAPIBreaks } from "./utils/APIBreaks/APIBreak";
 import { breakInfos261 } from "./utils/APIBreaks/2.6.1";
-import { handleGetSaveDataError } from "./Netscript/ErrorMessages";
+import { handleGetSaveDataInfoError } from "./Netscript/ErrorMessages";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -130,7 +130,7 @@ class BitburnerSaveObject {
     try {
       saveData = await this.getSaveData();
     } catch (error) {
-      handleGetSaveDataError(error);
+      handleGetSaveDataInfoError(error);
       return;
     }
     try {
@@ -170,7 +170,7 @@ class BitburnerSaveObject {
     try {
       saveData = await this.getSaveData();
     } catch (error) {
-      handleGetSaveDataError(error);
+      handleGetSaveDataInfoError(error);
       return;
     }
     const filename = this.getSaveFileName();
@@ -698,9 +698,12 @@ function evaluateVersionCompatibility(ver: string | number): void {
               } catch (e) {
                 anyExportsFailed = true;
                 // We just need the text error, not a full stack trace
-                console.error(`Failed to load export of material ${material.name} (${division.name} ${warehouse.city})
+                console.error(
+                  `Failed to load export of material ${material.name} (${division.name} ${warehouse.city})
 Original export details: ${JSON.stringify(originalExport)}
-Error: ${e}`);
+Error: ${e}`,
+                  e,
+                );
               }
             }
           }
@@ -805,16 +808,16 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   if (Object.hasOwn(saveObj, "LastExportBonus")) {
     try {
       ExportBonus.setLastExportBonus(JSON.parse(saveObj.LastExportBonus));
-    } catch (err) {
+    } catch (error) {
       ExportBonus.setLastExportBonus(new Date().getTime());
-      console.error("ERROR: Failed to parse last export bonus Settings " + err);
+      console.error(`ERROR: Failed to parse last export bonus setting. Error: ${error}.`, error);
     }
   }
   if (Player.gang && Object.hasOwn(saveObj, "AllGangsSave")) {
     try {
       loadAllGangs(saveObj.AllGangsSave);
-    } catch (e) {
-      console.error("ERROR: Failed to parse AllGangsSave: " + e);
+    } catch (error) {
+      console.error(`ERROR: Failed to parse AllGangsSave. Error: ${error}.`, error);
     }
   }
   if (Object.hasOwn(saveObj, "VersionSave")) {

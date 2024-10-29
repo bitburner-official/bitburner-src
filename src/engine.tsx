@@ -246,7 +246,7 @@ const Engine: {
         Engine.Counters.autoSaveCounter = 60 * 5; // Let's check back in a bit
       } else {
         Engine.Counters.autoSaveCounter = Settings.AutosaveInterval * 5;
-        saveObject.saveGame(!Settings.SuppressSavedGameToast);
+        saveObject.saveGame(!Settings.SuppressSavedGameToast).catch((error) => console.error(error));
       }
     }
   },

@@ -106,7 +106,7 @@ export class RunningScript {
 
     let logEntry = txt;
     if (Settings.TimestampsFormat && typeof txt === "string") {
-      logEntry = "[" + formatTime(Settings.TimestampsFormat) + "] " + logEntry;
+      logEntry = `[${formatTime(Settings.TimestampsFormat)}] ${txt}`;
     }
 
     this.logs.push(logEntry);

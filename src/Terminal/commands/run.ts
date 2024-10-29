@@ -19,7 +19,10 @@ export function run(args: (string | number | boolean)[], server: BaseServer): vo
   if (hasScriptExtension(path)) {
     return runScript(path, args, server);
   } else if (hasContractExtension(path)) {
-    Terminal.runContract(path);
+    Terminal.runContract(path).catch((error) => {
+      console.error(error);
+      Terminal.error(`Cannot run contract ${path} on ${server.hostname}. Error: ${error}.`);
+    });
     return;
   } else if (hasProgramExtension(path)) {
     return runProgram(path, args, server);

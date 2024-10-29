@@ -30,7 +30,7 @@ function makeScriptBlob(code: string): Blob {
 // config object to provide a hook point.
 export const config = {
   doImport(url: ScriptURL): Promise<ScriptModule> {
-    return import(/*webpackIgnore:true*/ url);
+    return import(/*webpackIgnore:true*/ url) as Promise<ScriptModule>;
   },
 };
 

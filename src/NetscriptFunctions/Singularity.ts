@@ -1,4 +1,4 @@
-import type { Singularity as ISingularity, Task as ITask } from "@nsdefs";
+import type { Singularity as ISingularity } from "@nsdefs";
 
 import { Player } from "@player";
 import { AugmentationName, CityName, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
@@ -1142,7 +1142,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
       if (cbScript === null) {
-        throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
+        throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
       }
       enterBitNode(true, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
       if (cbScript) {
@@ -1159,7 +1159,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
       if (cbScript === null) {
-        throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
+        throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
       }
 
       const wd = GetServer(SpecialServers.WorldDaemon);
@@ -1194,7 +1194,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     getCurrentWork: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
       if (!Player.currentWork) return null;
-      return Player.currentWork.APICopy() as ITask;
+      return Player.currentWork.APICopy();
     },
     exportGame: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);

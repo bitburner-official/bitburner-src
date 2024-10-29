@@ -36,9 +36,9 @@ export function getGangFaction(this: PlayerObject): Faction {
   return fac;
 }
 
-export function getGangName(this: PlayerObject): string {
+export function getGangName(this: PlayerObject): FactionName | null {
   const gang = this.gang;
-  return gang ? gang.facName : "";
+  return gang ? gang.facName : null;
 }
 
 export function hasGangWith(this: PlayerObject, facName: FactionName): boolean {

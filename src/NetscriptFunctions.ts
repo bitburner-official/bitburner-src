@@ -542,7 +542,7 @@ export const ns: InternalAPI<NSFull> = {
         return [] as string[];
       }
 
-      return runningScriptObj.logs.map((x) => "" + x);
+      return runningScriptObj.logs.map((x) => String(x));
     },
   tail:
     (ctx) =>
@@ -1870,7 +1870,7 @@ function getFunctionNames(obj: object, prefix: string): string[] {
     } else if (typeof value === "function") {
       functionNames.push(prefix + key);
     } else if (typeof value === "object") {
-      functionNames.push(...getFunctionNames(value, `${prefix}${key}.`));
+      functionNames.push(...getFunctionNames(value as object, `${prefix}${key}.`));
     }
   }
   return functionNames;

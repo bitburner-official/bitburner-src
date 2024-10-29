@@ -207,8 +207,8 @@ export function sellMaterial(material: Material, amount: string, price: string):
   try {
     if (temp.includes("MP")) throw "Only one reference to MP is allowed in sell price.";
     temp = eval?.(temp);
-  } catch (e) {
-    throw new Error("Invalid value or expression for sell price field: " + e);
+  } catch (error) {
+    throw new Error("Invalid value or expression for sell price field", { cause: error });
   }
 
   if (temp == null || isNaN(parseFloat(temp))) {
@@ -231,8 +231,8 @@ export function sellMaterial(material: Material, amount: string, price: string):
     tempQty = tempQty.replace(/INV/g, material.productionAmount.toString());
     try {
       tempQty = eval?.(tempQty);
-    } catch (e) {
-      throw new Error("Invalid value or expression for sell quantity field: " + e);
+    } catch (error) {
+      throw new Error("Invalid value or expression for sell quantity field", { cause: error });
     }
 
     if (tempQty == null || isNaN(parseFloat(tempQty))) {
@@ -263,8 +263,8 @@ export function sellProduct(product: Product, city: CityName, amt: string, price
     try {
       if (temp.includes("MP")) throw "Only one reference to MP is allowed in sell price.";
       temp = eval?.(temp);
-    } catch (e) {
-      throw new Error("Invalid value or expression for sell price field: " + e);
+    } catch (error) {
+      throw new Error("Invalid value or expression for sell price field.", { cause: error });
     }
     if (temp == null || isNaN(parseFloat(temp))) {
       throw new Error("Invalid value or expression for sell price field.");
@@ -291,8 +291,8 @@ export function sellProduct(product: Product, city: CityName, amt: string, price
     temp = temp.replace(/INV/g, product.cityData[city].stored.toString());
     try {
       temp = eval?.(temp);
-    } catch (e) {
-      throw new Error("Invalid value or expression for sell quantity field: " + e);
+    } catch (error) {
+      throw new Error("Invalid value or expression for sell quantity field", { cause: error });
     }
 
     if (temp == null || isNaN(parseFloat(temp))) {
@@ -585,13 +585,16 @@ Attempted export amount: ${amount}`);
     }
     if (!error && isNaN(evaluated)) error = "evaluated value is NaN";
     if (error) {
-      throw new Error(`Error while trying to set the exported amount of ${material.name}.
+      throw new Error(
+        `Error while trying to set the exported amount of ${material.name}.
 Error occurred while testing keyword replacement with ${testReplacement}.
 Your input: ${amount}
 Sanitized input: ${sanitizedAmt}
 Input after replacement: ${replaced}
-Evaluated value: ${evaluated}
-Error encountered: ${error}`);
+Evaluated value: ${evaluated}` +
+          // eslint-disable-next-line @typescript-eslint/no-base-to-string
+          `Error encountered: ${error}`,
+      );
     }
   }
 

@@ -112,7 +112,7 @@ export class Gang {
       this.processTerritoryAndPowerGains(cycles);
       this.storedCycles -= cycles;
     } catch (e: unknown) {
-      console.error(`Exception caught when processing Gang: ${e}`);
+      console.error("Exception caught when processing Gang", e);
     }
 
     // Handle "nextUpdate" resolver after this update
