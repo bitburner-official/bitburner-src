@@ -21,7 +21,7 @@ export function run(args: (string | number | boolean)[], server: BaseServer): vo
   } else if (hasContractExtension(path)) {
     Terminal.runContract(path).catch((error) => {
       console.error(error);
-      Terminal.error(`Cannot run contract ${path} on ${server.hostname}. Error: ${String(error)}.`);
+      Terminal.error(`Cannot run contract ${path} on ${server.hostname}. Error: ${error}.`);
     });
     return;
   } else if (hasProgramExtension(path)) {

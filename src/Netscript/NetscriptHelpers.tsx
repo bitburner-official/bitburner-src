@@ -223,7 +223,7 @@ function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteS
   if (spawnDelay !== undefined) {
     result.spawnDelay = number(ctx, "spawnDelay", spawnDelay);
     if (result.spawnDelay < 0) {
-      throw errorMessage(ctx, `spawnDelay must be non-negative, got ${String(spawnDelay)}`);
+      throw errorMessage(ctx, `spawnDelay must be non-negative, got ${spawnDelay}`);
     }
   }
   return result;
@@ -297,17 +297,18 @@ function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOp
     return result;
   }
   if (typeof opts !== "object") {
-    throw errorMessage(ctx, `BasicHGWOptions must be an object if specified, was ${String(opts)}`);
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    throw errorMessage(ctx, `BasicHGWOptions must be an object if specified, was ${opts}`);
   }
   // Safe assertion since threadOrOption type has been narrowed to a non-null object
   const options = opts as Unknownify<CompleteHGWOptions>;
   result.stock = !!options.stock;
   result.additionalMsec = number(ctx, "opts.additionalMsec", options.additionalMsec ?? 0);
   if (result.additionalMsec < 0) {
-    throw errorMessage(ctx, `additionalMsec must be non-negative, got ${String(options.additionalMsec)}`);
+    throw errorMessage(ctx, `additionalMsec must be non-negative, got ${options.additionalMsec}`);
   }
   if (result.additionalMsec > 1e9) {
-    throw errorMessage(ctx, `additionalMsec too large (>1e9), got ${String(options.additionalMsec)}`);
+    throw errorMessage(ctx, `additionalMsec too large (>1e9), got ${options.additionalMsec}`);
   }
   const requestedThreads = options.threads;
   const threads = ctx.workerScript.scriptRef.threads;
@@ -649,7 +650,7 @@ export function filePath(ctx: NetscriptContext, argName: string, filename: unkno
 export function scriptPath(ctx: NetscriptContext, argName: string, filename: unknown): ScriptFilePath {
   const path = filePath(ctx, argName, filename);
   if (hasScriptExtension(path)) return path;
-  throw errorMessage(ctx, `Invalid ${argName}, must be a script: ${String(filename)}`);
+  throw errorMessage(ctx, `Invalid ${argName}, must be a script: ${filename}`);
 }
 
 /**
@@ -783,7 +784,8 @@ function validateBitNodeOptions(ctx: NetscriptContext, bitNodeOptions: unknown):
     return result;
   }
   if (typeof bitNodeOptions !== "object") {
-    throw errorMessage(ctx, `bitNodeOptions must be an object if it's specified. It was ${String(bitNodeOptions)}.`);
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    throw errorMessage(ctx, `bitNodeOptions must be an object if it's specified. It was ${bitNodeOptions}.`);
   }
   const options = bitNodeOptions as Unknownify<BitNodeOptions>;
   if (!(options.sourceFileOverrides instanceof Map)) {

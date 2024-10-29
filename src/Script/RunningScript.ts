@@ -106,7 +106,8 @@ export class RunningScript {
 
     let logEntry = txt;
     if (Settings.TimestampsFormat && typeof txt === "string") {
-      logEntry = "[" + formatTime(Settings.TimestampsFormat) + "] " + String(logEntry);
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      logEntry = "[" + formatTime(Settings.TimestampsFormat) + "] " + logEntry;
     }
 
     this.logs.push(logEntry);

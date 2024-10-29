@@ -441,6 +441,6 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     if (params.outfile && outFilePath) server.writeToContentFile(outFilePath, rawResult.join("\n"));
   } catch (error) {
     console.error(error);
-    Terminal.error(`grep processing error: ${String(error)}`);
+    Terminal.error(`grep processing error: ${error}`);
   }
 }

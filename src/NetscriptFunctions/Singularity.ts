@@ -1142,7 +1142,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
       if (cbScript === null) {
-        throw helpers.errorMessage(ctx, `Could not resolve file path: ${String(_cbScript)}`);
+        throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
       }
       enterBitNode(true, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
       if (cbScript) {
@@ -1153,13 +1153,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const nextBN = helpers.number(ctx, "nextBN", _nextBN);
       if (!validBitNodes.includes(nextBN)) {
-        throw new Error(`Invalid BitNode: ${String(_nextBN)}.`);
+        throw new Error(`Invalid BitNode: ${_nextBN}.`);
       }
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
       if (cbScript === null) {
-        throw helpers.errorMessage(ctx, `Could not resolve file path: ${String(_cbScript)}`);
+        throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
       }
 
       const wd = GetServer(SpecialServers.WorldDaemon);

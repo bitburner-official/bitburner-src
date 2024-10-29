@@ -137,7 +137,7 @@ class BitburnerSaveObject {
       await save(saveData);
     } catch (error) {
       console.error(error);
-      dialogBoxCreate(`Cannot save game: ${String(error)}`);
+      dialogBoxCreate(`Cannot save game: ${error}`);
       return;
     }
     const electronGameData: ElectronGameData = {
@@ -185,7 +185,7 @@ class BitburnerSaveObject {
       await save(saveData);
     } catch (error) {
       console.error(error);
-      dialogBoxCreate(`Cannot import save data: ${String(error)}`);
+      dialogBoxCreate(`Cannot import save data: ${error}`);
       return;
     }
     if (reload) {
@@ -698,9 +698,12 @@ function evaluateVersionCompatibility(ver: string | number): void {
               } catch (e) {
                 anyExportsFailed = true;
                 // We just need the text error, not a full stack trace
-                console.error(`Failed to load export of material ${material.name} (${division.name} ${warehouse.city})
+                console.error(
+                  `Failed to load export of material ${material.name} (${division.name} ${warehouse.city})
 Original export details: ${JSON.stringify(originalExport)}
-Error: ${String(e)}`);
+Error: ${e}`,
+                  e,
+                );
               }
             }
           }
@@ -807,14 +810,14 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
       ExportBonus.setLastExportBonus(JSON.parse(saveObj.LastExportBonus));
     } catch (error) {
       ExportBonus.setLastExportBonus(new Date().getTime());
-      console.error(`ERROR: Failed to parse last export bonus setting. Error: ${String(error)}.`);
+      console.error(`ERROR: Failed to parse last export bonus setting. Error: ${error}.`, error);
     }
   }
   if (Player.gang && Object.hasOwn(saveObj, "AllGangsSave")) {
     try {
       loadAllGangs(saveObj.AllGangsSave);
     } catch (error) {
-      console.error(`ERROR: Failed to parse AllGangsSave. Error: ${String(error)}.`);
+      console.error(`ERROR: Failed to parse AllGangsSave. Error: ${error}.`, error);
     }
   }
   if (Object.hasOwn(saveObj, "VersionSave")) {

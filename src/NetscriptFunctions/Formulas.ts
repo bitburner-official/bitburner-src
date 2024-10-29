@@ -380,21 +380,21 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         const person = helpers.person(ctx, _person);
         const crime = findCrime(helpers.string(ctx, "crimeType", _crimeType));
-        if (!crime) throw new Error(`Invalid crime type: ${String(_crimeType)}`);
+        if (!crime) throw new Error(`Invalid crime type: ${_crimeType}`);
         return crime.successRate(person);
       },
       crimeGains: (ctx) => (_person, _crimeType) => {
         checkFormulasAccess(ctx);
         const person = helpers.person(ctx, _person);
         const crime = findCrime(helpers.string(ctx, "crimeType", _crimeType));
-        if (!crime) throw new Error(`Invalid crime type: ${String(_crimeType)}`);
+        if (!crime) throw new Error(`Invalid crime type: ${_crimeType}`);
         return calculateCrimeWorkStats(person, crime);
       },
       gymGains: (ctx) => (_person, _classType, _locationName) => {
         checkFormulasAccess(ctx);
         const person = helpers.person(ctx, _person);
         const classType = findEnumMember(GymType, helpers.string(ctx, "classType", _classType));
-        if (!classType) throw new Error(`Invalid gym training type: ${String(_classType)}`);
+        if (!classType) throw new Error(`Invalid gym training type: ${_classType}`);
         const locationName = getEnumHelper("LocationName").nsGetMember(ctx, _locationName);
         return calculateClassEarnings(person, classType, locationName);
       },
@@ -402,7 +402,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         const person = helpers.person(ctx, _person);
         const classType = findEnumMember(UniversityClassType, helpers.string(ctx, "classType", _classType));
-        if (!classType) throw new Error(`Invalid university class type: ${String(_classType)}`);
+        if (!classType) throw new Error(`Invalid university class type: ${_classType}`);
         const locationName = getEnumHelper("LocationName").nsGetMember(ctx, _locationName);
         return calculateClassEarnings(person, classType, locationName);
       },
@@ -410,7 +410,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         const player = helpers.person(ctx, _player);
         const workType = findEnumMember(FactionWorkType, helpers.string(ctx, "_workType", _workType));
-        if (!workType) throw new Error(`Invalid faction work type: ${String(_workType)}`);
+        if (!workType) throw new Error(`Invalid faction work type: ${_workType}`);
         const favor = helpers.number(ctx, "favor", _favor);
         const exp = calculateFactionExp(player, workType);
         const rep = calculateFactionRep(player, workType, favor);

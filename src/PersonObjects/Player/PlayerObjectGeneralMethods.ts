@@ -252,7 +252,7 @@ export function stopFocusing(this: PlayerObject): void {
 // Returns true if hospitalized, false otherwise
 export function takeDamage(this: PlayerObject, amt: number): boolean {
   if (typeof amt !== "number") {
-    console.warn(`Player.takeDamage() called without a numeric argument: ${String(amt)}`);
+    console.warn(`Player.takeDamage() called without a numeric argument: ${amt}`);
     return false;
   }
 

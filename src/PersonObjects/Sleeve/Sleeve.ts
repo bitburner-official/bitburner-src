@@ -543,7 +543,7 @@ export class Sleeve extends Person implements SleevePerson {
 
   takeDamage(amt: number): boolean {
     if (typeof amt !== "number") {
-      console.warn(`Player.takeDamage() called without a numeric argument: ${String(amt)}`);
+      console.warn(`Player.takeDamage() called without a numeric argument: ${amt}`);
       return false;
     }
 

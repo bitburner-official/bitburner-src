@@ -165,7 +165,7 @@ export abstract class Person implements IPerson {
 
   regenerateHp(amt: number): void {
     if (typeof amt !== "number") {
-      console.warn(`Player.regenerateHp() called without a numeric argument: ${String(amt)}`);
+      console.warn(`Player.regenerateHp() called without a numeric argument: ${amt}`);
       return;
     }
     this.hp.current += amt;

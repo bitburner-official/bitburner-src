@@ -814,7 +814,7 @@ export const ns: InternalAPI<NSFull> = {
         } else {
           helpers.log(
             ctx,
-            () => `Killing '${String(scriptID)}' on '${String(hostname)}' with args: ${arrayToString(scriptArgs)}.`,
+            () => `Killing '${scriptID}' on '${hostname}' with args: ${arrayToString(scriptArgs)}.`,
           );
         }
         return true;
@@ -825,7 +825,7 @@ export const ns: InternalAPI<NSFull> = {
           helpers.log(
             ctx,
             () =>
-              `Internal error killing '${String(scriptID)}' on '${String(hostname)}' with args: ${arrayToString(
+              `Internal error killing '${scriptID}' on '${hostname}' with args: ${arrayToString(
                 scriptArgs,
               )}`,
           );
@@ -1428,7 +1428,7 @@ export const ns: InternalAPI<NSFull> = {
   clear: (ctx) => (_file) => {
     const path = helpers.filePath(ctx, "file", _file);
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-      throw helpers.errorMessage(ctx, `Invalid file path or extension: ${String(_file)}`);
+      throw helpers.errorMessage(ctx, `Invalid file path or extension: ${_file}`);
     }
     const server = ctx.workerScript.getServer();
     const file = server.getContentFile(path);
@@ -1524,7 +1524,7 @@ export const ns: InternalAPI<NSFull> = {
     if (newServerRamUsed <= 0) {
       throw helpers.errorMessage(
         ctx,
-        `Game error: Calculated impossible new server ramUsed ${newServerRamUsed} from new limit of ${String(_ram)}`,
+        `Game error: Calculated impossible new server ramUsed ${newServerRamUsed} from new limit of ${_ram}`,
       );
     }
     server.updateRamUsed(newServerRamUsed);

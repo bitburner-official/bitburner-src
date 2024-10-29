@@ -25,7 +25,7 @@ export function exportScripts(pattern: string, server: BaseServer, currDir = roo
     .then((content: Blob) => downloadContentAsFile(content, filename))
     .catch((error) => {
       console.error(error);
-      Terminal.error(`Cannot compress scripts with pattern ${pattern} on ${server.hostname}. Error: ${String(error)}`);
+      Terminal.error(`Cannot compress scripts with pattern ${pattern} on ${server.hostname}. Error: ${error}.`);
     });
 }
 
@@ -41,7 +41,7 @@ export function download(args: (string | number | boolean)[], server: BaseServer
       return;
     } catch (error) {
       console.error(error);
-      Terminal.error(`Cannot export scripts with pattern ${pattern} on ${server.hostname}. Error: ${String(error)}`);
+      Terminal.error(`Cannot export scripts with pattern ${pattern} on ${server.hostname}. Error: ${error}.`);
       return;
     }
   }
