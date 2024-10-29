@@ -812,10 +812,7 @@ export const ns: InternalAPI<NSFull> = {
         if (killByPid) {
           helpers.log(ctx, () => `Killing script with PID ${ident}`);
         } else {
-          helpers.log(
-            ctx,
-            () => `Killing '${scriptID}' on '${hostname}' with args: ${arrayToString(scriptArgs)}.`,
-          );
+          helpers.log(ctx, () => `Killing '${scriptID}' on '${hostname}' with args: ${arrayToString(scriptArgs)}.`);
         }
         return true;
       } else {
@@ -824,10 +821,7 @@ export const ns: InternalAPI<NSFull> = {
         } else {
           helpers.log(
             ctx,
-            () =>
-              `Internal error killing '${scriptID}' on '${hostname}' with args: ${arrayToString(
-                scriptArgs,
-              )}`,
+            () => `Internal error killing '${scriptID}' on '${hostname}' with args: ${arrayToString(scriptArgs)}`,
           );
         }
         return false;
