@@ -5930,7 +5930,8 @@ export interface NS {
    *
    * This function returns the decimal number of script threads you need when running the hack command
    * to steal the specified amount of money from the target server.
-   * If hackAmount is less than zero or greater than the amount of money available on the server,
+   * If hackAmount is less than zero, greater than the amount of money available on the server,
+   * or your hacking level is below the required level for the target server,
    * then this function returns -1.
    *
    *
