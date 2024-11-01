@@ -23,7 +23,7 @@ export function StockTickerHeaderText(props: IProps): React.ReactElement {
   const stock = props.stock;
 
   const stockPriceFormat = formatMoney(stock.price);
-  const spacesAllottedForStockPrice = localesWithLongPriceFormat.includes(Settings.Locale) ? 15 : 12;
+  const spacesAllottedForStockPrice = localesWithLongPriceFormat.includes(Settings.NumericLocale) ? 15 : 12;
   const spacesAfterStockName = " ".repeat(
     1 +
       TickerHeaderFormatData.longestName -

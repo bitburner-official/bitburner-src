@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextField, Tooltip, Typography } from "@mui/material";
+import { MenuItem, Select, SelectChangeEvent, TextField, Tooltip, Typography } from "@mui/material";
 import { Settings } from "../../Settings/Settings";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { GameOptionsPage } from "./GameOptionsPage";
@@ -7,6 +7,12 @@ import { formatTime } from "../../utils/helpers/formatTime";
 
 export const InterfacePage = (): React.ReactElement => {
   const [timestampFormat, setTimestampFormat] = useState(Settings.TimestampsFormat);
+  const [locale, setLocale] = useState(Settings.InterfaceLocale);
+
+  function handleLocaleChange(event: SelectChangeEvent): void {
+    setLocale(event.target.value);
+    Settings.InterfaceLocale = event.target.value;
+  }
 
   function handleTimestampFormatChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setTimestampFormat(event.target.value);
@@ -70,6 +76,10 @@ export const InterfacePage = (): React.ReactElement => {
         Example timestamp: {timestampFormat !== "" ? formatTime(timestampFormat) : "no timestamp"}
       </Typography>
       <br />
+      <Select startAdornment={<Typography>Locale&nbsp;</Typography>} value={locale} onChange={handleLocaleChange}>
+        <MenuItem value="en">en</MenuItem>
+        <MenuItem value="jp">jp</MenuItem>
+      </Select>
     </GameOptionsPage>
   );
 };

@@ -6,11 +6,11 @@ import { GameOptionsPage } from "./GameOptionsPage";
 import { FormatsNeedToChange } from "../../ui/formatNumber";
 
 export const NumericDisplayPage = (): React.ReactElement => {
-  const [locale, setLocale] = useState(Settings.Locale);
+  const [locale, setLocale] = useState(Settings.NumericLocale);
 
   function handleLocaleChange(event: SelectChangeEvent): void {
     setLocale(event.target.value);
-    Settings.Locale = event.target.value;
+    Settings.NumericLocale = event.target.value;
     FormatsNeedToChange.emit();
   }
   return (

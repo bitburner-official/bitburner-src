@@ -12,6 +12,7 @@ import { Page } from "../Router";
 import { Settings } from "../../Settings/Settings";
 import { Box, Button, Typography } from "@mui/material";
 import { debounce } from "lodash";
+import { Locale } from "../../Locales/Locales";
 
 const useStyles = makeStyles()({
   overviewContainer: {
@@ -128,7 +129,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
           <Box className={classes.header}>
             <LeftIcon color="secondary" className={classes.icon} sx={{ padding: "2px" }} />
             <Typography flexGrow={1} color="secondary">
-              {header}
+              {Locale.Overview(header)}
             </Typography>
             <Button
               aria-label="expand or collapse character overview"

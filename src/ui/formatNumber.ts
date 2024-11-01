@@ -32,7 +32,9 @@ FormatsNeedToChange.subscribe(() => {
   digitFormats = {};
   percentFormats = {};
   exponentialFormatter = makeFormatter(3, { notation: Settings.useEngineeringNotation ? "engineering" : "scientific" });
-  basicFormatter = new Intl.NumberFormat([Settings.Locale, "en"], { useGrouping: !Settings.hideThousandsSeparator });
+  basicFormatter = new Intl.NumberFormat([Settings.NumericLocale, "en"], {
+    useGrouping: !Settings.hideThousandsSeparator,
+  });
   [ramSuffixList, ramLogFn, ramLogDivisor] = Settings.UseIEC60027_2
     ? // log2 of 1024 is 10 as divisor for log base 1024
       [ramLog1024Suffixes, Math.log2, 10]
@@ -49,7 +51,7 @@ FormatsNeedToChange.subscribe(() => {
 /** Makes a new formatter */
 function makeFormatter(fractionalDigits: number, otherOptions: Intl.NumberFormatOptions = {}): Intl.NumberFormat {
   if (Settings.hideThousandsSeparator) otherOptions.useGrouping = false;
-  return new Intl.NumberFormat([Settings.Locale, "en"], {
+  return new Intl.NumberFormat([Settings.NumericLocale, "en"], {
     minimumFractionDigits: Settings.hideTrailingDecimalZeros ? 0 : fractionalDigits,
     maximumFractionDigits: fractionalDigits,
     ...otherOptions,

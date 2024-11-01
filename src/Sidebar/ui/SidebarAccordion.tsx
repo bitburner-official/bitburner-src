@@ -10,6 +10,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { SidebarItem, ICreateProps as IItemProps } from "./SidebarItem";
 import type { Page } from "../../ui/Router";
+import { Locale } from "../../Locales/Locales";
 
 type SidebarAccordionProps = {
   key_: string;
@@ -68,7 +69,7 @@ export function SidebarAccordion({
                 <Icon color={"primary"} />
               </Tooltip>
             </ListItemIcon>
-            <ListItemText primary={<Typography>{key_}</Typography>} />
+            <ListItemText primary={<Typography>{Locale.Menu(key_)}</Typography>} />
             {open ? <ExpandLessIcon color="primary" /> : <ExpandMoreIcon color="primary" />}
           </ListItem>
         ),

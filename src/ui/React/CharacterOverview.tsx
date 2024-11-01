@@ -32,6 +32,7 @@ import { Skills } from "../../PersonObjects/Skills";
 import { calculateSkillProgress } from "../../PersonObjects/formulas/skill";
 import { EventEmitter } from "../../utils/EventEmitter";
 import { useRerender } from "./hooks";
+import { Locale } from "../../Locales/Locales";
 
 type SkillRowName = "Hack" | "Str" | "Def" | "Dex" | "Agi" | "Cha" | "Int";
 type RowName = SkillRowName | "HP" | "Money";
@@ -149,7 +150,7 @@ export function DataRow({ name, showBar, color, cellType }: DataRowProps): React
     <>
       <TableRow>
         <TableCell component="th" scope="row" classes={{ root: classes[cellType] }}>
-          <Typography color={color}>{name}&nbsp;</Typography>
+          <Typography color={color}>{Locale.Overview(name)}&nbsp;</Typography>
         </TableCell>
         <TableCell align="right" classes={{ root: classes[cellType] }}>
           <Val name={name} color={color} />

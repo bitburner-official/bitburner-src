@@ -5,6 +5,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { Locale } from "../../Locales/Locales";
 
 import type { Page } from "../../ui/Router";
 
@@ -40,7 +41,7 @@ export const SidebarItem = memo(function SidebarItem(props: SidebarItemProps): R
         </Badge>
       </ListItemIcon>
       <ListItemText>
-        <Typography color={color}>{props.key_}</Typography>
+        <Typography color={color}>{Locale.Menu(props.key_)}</Typography>
       </ListItemText>
     </ListItem>
   );

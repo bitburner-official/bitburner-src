@@ -71,8 +71,10 @@ export const Settings = {
   GoTraditionalStyle: false,
   /** Timestamps format string */
   TimestampsFormat: "",
+  /** Locale used for gameplay. */
+  InterfaceLocale: "en",
   /** Locale used for display numbers. */
-  Locale: "en",
+  NumericLocale: "en",
   /** Limit the number of recently killed script entries being tracked. */
   MaxRecentScriptsCapacity: 50,
   /** Limit the number of log entries for each script being executed on each server. */
