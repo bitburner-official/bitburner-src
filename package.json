@@ -31,7 +31,6 @@
     "date-fns": "^2.30.0",
     "escodegen": "^2.1.0",
     "jszip": "^3.10.1",
-    "material-ui-color": "^1.2.0",
     "material-ui-popup-state": "^1.9.3",
     "monaco-vim": "^0.3.5",
     "notistack": "^2.0.8",

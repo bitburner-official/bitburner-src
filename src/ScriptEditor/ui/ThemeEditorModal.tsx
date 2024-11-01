@@ -3,7 +3,6 @@ import _ from "lodash";
 
 import { Grid, Box, Button, IconButton, Paper, TextField, Tooltip, Typography } from "@mui/material";
 import { History, Reply } from "@mui/icons-material";
-import { Color, ColorPicker } from "material-ui-color";
 
 import { Settings } from "../../Settings/Settings";
 import { useRerender } from "../../ui/React/hooks";
@@ -11,6 +10,7 @@ import { Modal } from "../../ui/React/Modal";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 
 import { defaultMonacoTheme } from "./themes";
+import { OpenColorPickerButton } from "../../Themes/ui/ColorPicker";
 
 type ColorEditorProps = {
   label: string;
@@ -26,7 +26,6 @@ function ColorEditor({ label, themePath, onColorChange, color, defaultColor }: C
     console.error(`color ${themePath} was undefined, reverting to default`);
     color = defaultColor;
   }
-
   return (
     <Tooltip title={label}>
       <span>
@@ -37,12 +36,10 @@ function ColorEditor({ label, themePath, onColorChange, color, defaultColor }: C
           InputProps={{
             readOnly: true,
             startAdornment: (
-              <ColorPicker
-                hideTextfield
-                deferred
-                value={"#" + color}
-                onChange={(newColor: Color) => onColorChange(themePath, newColor.hex)}
-                disableAlpha
+              <OpenColorPickerButton
+                title={""}
+                color={`#${color}`}
+                onColorChange={(c) => onColorChange(themePath, c)}
               />
             ),
             endAdornment: (
