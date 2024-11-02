@@ -64,7 +64,9 @@ export class Bladeburner implements OperationTeam {
   totalSkillPoints = 0;
 
   teamSize = 0;
-  sleeveSize = 0;
+  get sleeveSize() {
+    return Player.sleevesSupportingBladeburner().length;
+  }
   teamLost = 0;
 
   storedCycles = 0;
@@ -711,10 +713,8 @@ export class Bladeburner implements OperationTeam {
 
   sleeveSupport(joining: boolean): void {
     if (joining) {
-      this.sleeveSize += 1;
       this.teamSize += 1;
     } else {
-      this.sleeveSize -= 1;
       this.teamSize -= 1;
     }
   }
