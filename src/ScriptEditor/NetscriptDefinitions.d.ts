@@ -1653,7 +1653,7 @@ export interface TIX {
  */
 export interface BaseTask {
   /**
-   * The number of game engine cycles that has passed since this task started. 1 engine cycle = 200ms.
+   * The number of game engine cycles has passed since this task started. 1 engine cycle = 200ms.
    */
   cyclesWorked: number;
 }
@@ -3584,7 +3584,15 @@ export interface Bladeburner {
    *
    * This function returns the number of skill points needed to upgrade the specified skill the specified number of times.
    *
-   * The function returns Infinity if the sum of the current level and count exceeds the maximum level.
+   * The function may return 0 or Infinity in special cases:
+   *
+   * - Return 0 if the current skill level is too high and the specified count is too small. In normal situations, you
+   * don't need to worry about this case. It only happens when involved numbers surpass Number.MAX_SAFE_INTEGER and be
+   * affected by the floating-point inaccuracy.
+   *
+   * - Return Infinity if the sum of the current level and count exceeds the maximum level.
+   *
+   * {@link BladeburnerFormulas.skillMaxUpgradeCount | skillMaxUpgradeCount} is the inverse function of this one.
    *
    * @param skillName - Name of skill. Case-sensitive and must be an exact match.
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
