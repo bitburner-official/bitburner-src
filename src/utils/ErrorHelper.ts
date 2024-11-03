@@ -85,7 +85,7 @@ export function getErrorMetadata(error: unknown, errorInfo?: React.ErrorInfo, pa
 
 export function getErrorForDisplay(error: unknown, errorInfo?: React.ErrorInfo, page?: Page): IErrorData {
   const metadata = getErrorMetadata(error, errorInfo, page);
-  const fileName = (metadata.error as any).fileName;
+  const fileName = String(metadata.error.fileName);
   const features =
     `lang=${metadata.features.language} cookiesEnabled=${metadata.features.cookiesEnabled.toString()}` +
     ` doNotTrack=${metadata.features.doNotTrack ?? "null"} indexedDb=${metadata.features.indexedDb.toString()}`;
@@ -104,7 +104,7 @@ Please fill this information with details if relevant.
 
 ### Environment
 
-* Error: ${metadata.error.toString() ?? "n/a"}
+* Error: ${String(metadata.error) ?? "n/a"}
 * Page: ${metadata.page ?? "n/a"}
 * Version: ${metadata.version.toDisplay()}
 * Environment: ${GameEnv[metadata.environment]}
@@ -116,6 +116,11 @@ Please fill this information with details if relevant.
 ### Stack Trace
 \`\`\`
 ${metadata.error.stack}
+\`\`\`
+
+### React Component Stack
+\`\`\`
+${metadata.errorInfo?.componentStack}
 \`\`\`
 
 ### Save
