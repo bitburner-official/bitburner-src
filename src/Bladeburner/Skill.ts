@@ -2,7 +2,7 @@ import type { BladeburnerMultName, BladeburnerSkillName } from "@enums";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Bladeburner } from "./Bladeburner";
-import { Availability } from "./Types";
+import type { Availability } from "../types";
 import { PositiveInteger, PositiveNumber, isPositiveInteger } from "../types";
 import { PartialRecord, getRecordEntries } from "../Types/Record";
 

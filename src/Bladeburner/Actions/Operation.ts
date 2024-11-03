@@ -1,7 +1,8 @@
 import type { Person } from "../../PersonObjects/Person";
 import type { BlackOperation } from "./BlackOperation";
 import type { Bladeburner } from "../Bladeburner";
-import type { ActionIdFor, Availability, SuccessChanceParams } from "../Types";
+import type { ActionIdFor, SuccessChanceParams } from "../Types";
+import type { Availability } from "../../types";
 
 import { BladeburnerActionType, BladeburnerMultName, BladeburnerOperationName } from "@enums";
 import { BladeburnerConstants } from "../data/Constants";

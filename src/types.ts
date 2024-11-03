@@ -24,12 +24,22 @@ export type Member<T> = T extends (infer arrayMember)[] ? arrayMember : T[keyof 
 //** Get the keys of an object where the values match a given type */
 export type TypedKeys<Obj, T> = { [K in keyof Obj]-?: Obj[K] extends T ? K : never }[keyof Obj];
 
-/** Status object for functions that return a boolean indicating success/failure
- * and an optional message */
+/**
+ * Status object for functions that return a boolean indicating success/failure
+ * and an optional message
+ */
 export interface IReturnStatus {
   res: boolean;
   msg?: string;
 }
+
+type AvailabilitySuccess<T extends object> = { available: true } & T;
+type AvailabilityFailure = { available?: undefined; error: string };
+export type Availability<T extends object = object> = AvailabilitySuccess<T> | AvailabilityFailure;
+
+type AttemptSuccess<T extends object> = { success: true; message?: string } & T;
+type AttemptFailure = { success?: undefined; message: string };
+export type Attempt<T extends object = object> = AttemptSuccess<T> | AttemptFailure;
 
 /** Defines the minimum and maximum values for a range.
  * It is up to the consumer if these values are inclusive or exclusive.
