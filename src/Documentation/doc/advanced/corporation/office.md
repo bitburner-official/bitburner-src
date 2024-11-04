@@ -106,7 +106,7 @@ There are 3 ways to counter the drop of energy/morale:
 
 - Buy tea and throw party. You should always use this option. Writing script to automate them is very easy.
 - Assign Intern. Many people throw around the ratio 1/9 as the way to counter the drop of energy/morale. You can only use that ratio when your corporation/division works fine. If it does not, there is a penalty multiplier (0.001). In this case, you need to use 1/6.
-- Buy 2 researches: AutoBrew and AutoPartyManager. They keep energy/morale at maximum value. However, you should never buy them. It's always better to spend your RP on other useful researches or just stock up on RP.
+- Buy 2 research upgrades: AutoBrew and AutoPartyManager. They keep energy/morale at maximum value. However, you should never buy them. It's always better to spend your RP on other useful research upgrades or just stock up on RP.
 
 `AvgEnergy` and `AvgMorale` are increased by a randomized amount when we hire new employee.
 
@@ -149,7 +149,7 @@ One big party is less cost-effective than multiple small parties. For example: t
 Don't be a cheapskate when it comes to tea/party. Energy and morale are vital to efficient office. Check the next part for the formulas.
 
 - It's fine to spend 500e3 per employee when throwing party. You can spend more if you want.
-- Try to maintain maximum energy/morale at all times. Personally, I always buy tea / throw party when energy/morale decreases to 99.5 (109.5, if I bought the relevant researches).
+- Try to maintain maximum energy/morale at all times. Personally, I always buy tea / throw party when energy/morale decreases to 99.5 (109.5, if I bought the relevant research upgrades).
 - In round 1 and 2, the office's size is small, it's usually smaller than 9, so energy/morale is not a problem. In round 3+, you should buy tea / throw party every cycle.
 
 ## Employee production by job

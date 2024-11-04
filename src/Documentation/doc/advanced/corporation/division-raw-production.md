@@ -37,4 +37,4 @@ For example, with Agriculture, if `RawProduction` is 1000, we need 500 units of 
     $$OfficeMultiplier = 0.5\ast BalancingMultiplier\ast EmployeeProductionMultiplier$$
 - Division production multiplier: see previous [section](./boost-material.md).
 - Upgrade multiplier: multiplier from [Smart Factories](./unlocks-upgrade-research.md).
-- Research multiplier: multiplier from [researches](./unlocks-upgrade-research.md).
+- Research multiplier: multiplier from [research](./unlocks-upgrade-research.md).
