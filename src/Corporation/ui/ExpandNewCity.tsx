@@ -29,8 +29,8 @@ export function ExpandNewCity(props: IProps): React.ReactElement {
   function expand(): void {
     try {
       purchaseOffice(corp, division, city);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
       return;
     }
 

@@ -31,8 +31,8 @@ export function SellProductModal(props: IProps): React.ReactElement {
   function sellProduct(): void {
     try {
       actions.sellProduct(props.product, props.city, iQty, px, checked);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
     }
 
     props.onClose();

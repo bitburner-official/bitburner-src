@@ -32,7 +32,8 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
       }
       LogBoxEvents.emit(runningScript);
     }
-  } catch (e) {
-    Terminal.error(e + "");
+  } catch (error) {
+    console.error(error);
+    Terminal.error(String(error));
   }
 }

@@ -25,7 +25,7 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
       argv: commandArgs,
     });
   } catch (error) {
-    Terminal.error(`Invalid arguments. ${String(error)}.`);
+    Terminal.error(`Invalid arguments. ${error}.`);
     return;
   }
   const tailFlag = flags["--tail"] === true;

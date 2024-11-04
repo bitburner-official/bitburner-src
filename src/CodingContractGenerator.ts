@@ -159,7 +159,7 @@ function sanitizeRewardType(rewardType: CodingContractRewardType): CodingContrac
     try {
       return Factions[fac].getInfo().offerHackingWork;
     } catch (e) {
-      console.error(`Error when trying to filter Hacking Factions for Coding Contract Generation: ${e}`);
+      console.error("Error when trying to filter Hacking Factions for Coding Contract Generation", e);
       return false;
     }
   });

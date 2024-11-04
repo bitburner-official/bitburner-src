@@ -274,7 +274,6 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "rank": 2000,
         "skillPoints": 666,
         "skills": {},
-        "sleeveSize": 0,
         "stamina": 1,
         "staminaBonus": 0,
         "storedCycles": 0,

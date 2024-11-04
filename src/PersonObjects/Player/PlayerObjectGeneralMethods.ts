@@ -302,7 +302,7 @@ export function applyForJob(
   }
 
   if (!company.hasPosition(pos)) {
-    console.error(`Company ${company.name} does not have position ${pos}. Player.applyToCompany() failed.`);
+    console.error(`Company ${company.name} does not have position ${pos.name}. Player.applyToCompany() failed.`);
     return null;
   }
 

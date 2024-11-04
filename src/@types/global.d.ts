@@ -31,4 +31,21 @@ declare global {
       };
     };
   }
+
+  /**
+   * "loader" is not exposed in the public API.
+   */
+  module "monaco-editor" {
+    namespace languages {
+      interface ILanguageExtensionPoint {
+        loader: () => Promise<{
+          language: {
+            tokenizer: {
+              root: any[];
+            };
+          };
+        }>;
+      }
+    }
+  }
 }

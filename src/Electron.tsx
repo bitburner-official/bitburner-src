@@ -12,7 +12,7 @@ import { CONSTANTS } from "./Constants";
 import { commitHash } from "./utils/helpers/commitHash";
 import { resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
-import { handleGetSaveDataError } from "./Netscript/ErrorMessages";
+import { handleGetSaveDataInfoError } from "./Netscript/ErrorMessages";
 
 interface IReturnWebStatus extends IReturnStatus {
   data?: Record<string, unknown>;
@@ -103,14 +103,14 @@ function initAppNotifier(): void {
   const funcs = {
     terminal: (message: string, type?: string) => {
       const typesFn: Record<string, (s: string) => void> = {
-        info: Terminal.info,
-        warn: Terminal.warn,
-        error: Terminal.error,
-        success: Terminal.success,
+        info: (s) => Terminal.info(s),
+        warn: (s) => Terminal.warn(s),
+        error: (s) => Terminal.error(s),
+        success: (s) => Terminal.success(s),
       };
       let fn;
       if (type) fn = typesFn[type];
-      if (!fn) fn = Terminal.print;
+      if (!fn) fn = (s: string) => Terminal.print(s);
       fn.bind(Terminal)(message);
     },
     toast: (message: string, type: ToastVariant, duration = 2000) => SnackbarEvents.emit(message, type, duration),
@@ -124,12 +124,10 @@ function initSaveFunctions(): void {
   const funcs = {
     triggerSave: (): Promise<void> => saveObject.saveGame(true),
     triggerGameExport: (): void => {
-      try {
-        saveObject.exportGame();
-      } catch (error) {
+      saveObject.exportGame().catch((error) => {
         console.error(error);
         SnackbarEvents.emit("Could not export game.", ToastVariant.ERROR, 2000);
-      }
+      });
     },
     triggerScriptsExport: (): void => exportScripts("*", Player.getHomeComputer()),
     getSaveData: async (): Promise<{ save: SaveData; fileName: string }> => {
@@ -159,22 +157,28 @@ function initElectronBridge(): void {
   const bridge = window.electronBridge;
   if (!bridge) return;
 
-  bridge.receive("get-save-data-request", async () => {
-    let saveData;
-    try {
-      saveData = await window.appSaveFns.getSaveData();
-    } catch (error) {
-      handleGetSaveDataError(error);
-      return;
-    }
-    bridge.send("get-save-data-response", saveData);
+  bridge.receive("get-save-data-request", () => {
+    window.appSaveFns
+      .getSaveData()
+      .then((saveData) => {
+        bridge.send("get-save-data-response", saveData);
+      })
+      .catch((error) => {
+        handleGetSaveDataInfoError(error);
+      });
   });
-  bridge.receive("get-save-info-request", async (saveData: unknown) => {
+  bridge.receive("get-save-info-request", (saveData: unknown) => {
     if (typeof saveData !== "string" && !(saveData instanceof Uint8Array)) {
       throw new Error("Error while trying to get save info");
     }
-    const saveInfo = await window.appSaveFns.getSaveInfo(saveData);
-    bridge.send("get-save-info-response", saveInfo);
+    window.appSaveFns
+      .getSaveInfo(saveData)
+      .then((saveInfo) => {
+        bridge.send("get-save-info-response", saveInfo);
+      })
+      .catch((error) => {
+        handleGetSaveDataInfoError(error, true);
+      });
   });
   bridge.receive("push-save-request", (params: unknown) => {
     if (typeof params !== "object") throw new Error("Error trying to push save request");
@@ -182,7 +186,7 @@ function initElectronBridge(): void {
     window.appSaveFns.pushSaveData(save, automatic);
   });
   bridge.receive("trigger-save", () => {
-    return window.appSaveFns
+    window.appSaveFns
       .triggerSave()
       .then(() => {
         bridge.send("save-completed");

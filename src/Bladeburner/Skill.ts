@@ -135,19 +135,25 @@ export class Skill {
     return result - 1;
   }
 
-  canUpgrade(bladeburner: Bladeburner, count = 1): Availability<{ cost: number }> {
+  canUpgrade(bladeburner: Bladeburner, count = 1): Availability<{ actualCount: number; cost: number }> {
     const currentLevel = bladeburner.skills[this.name] ?? 0;
-    if (!isPositiveInteger(count)) {
-      return { error: `Invalid upgrade count ${count}` };
+    const actualCount = currentLevel + count - currentLevel;
+    if (actualCount === 0) {
+      return {
+        error: `Cannot upgrade ${this.name}: Due to floating-point inaccuracy and the small value of specified "count", your skill cannot be upgraded.`,
+      };
     }
-    if (currentLevel + count > this.maxLvl) {
-      return { error: `Upgraded level ${currentLevel + count} exceeds max` };
+    if (!isPositiveInteger(actualCount)) {
+      return { error: `Invalid upgrade count ${actualCount}` };
     }
-    const cost = this.calculateCost(currentLevel, count);
+    if (currentLevel + actualCount > this.maxLvl) {
+      return { error: `Upgraded level ${currentLevel + actualCount} exceeds max` };
+    }
+    const cost = this.calculateCost(currentLevel, actualCount);
     if (cost > bladeburner.skillPoints) {
       return { error: `Insufficient skill points for upgrade` };
     }
-    return { available: true, cost };
+    return { available: true, actualCount, cost };
   }
 
   getMultiplier(name: BladeburnerMultName): number {

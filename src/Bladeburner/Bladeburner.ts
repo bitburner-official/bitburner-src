@@ -65,7 +65,9 @@ export class Bladeburner implements OperationTeam {
   totalSkillPoints = 0;
 
   teamSize = 0;
-  sleeveSize = 0;
+  get sleeveSize() {
+    return Player.sleevesSupportingBladeburner().length;
+  }
   teamLost = 0;
 
   storedCycles = 0;
@@ -154,21 +156,17 @@ export class Bladeburner implements OperationTeam {
   /** Attempts to perform a skill upgrade, gives a message on both success and failure */
   upgradeSkill(skillName: BladeburnerSkillName, count = 1): Attempt<{ message: string }> {
     const currentSkillLevel = this.skills[skillName] ?? 0;
-    const actualCount = currentSkillLevel + count - currentSkillLevel;
-    if (actualCount === 0) {
-      return {
-        message: `Cannot upgrade ${skillName}: Due to floating-point inaccuracy and the small value of specified "count", your skill cannot be upgraded.`,
-      };
-    }
-    const availability = Skills[skillName].canUpgrade(this, actualCount);
+    const availability = Skills[skillName].canUpgrade(this, count);
     if (!availability.available) {
       return { message: `Cannot upgrade ${skillName}: ${availability.error}` };
     }
     this.skillPoints -= availability.cost;
-    this.setSkillLevel(skillName, currentSkillLevel + actualCount);
+    this.setSkillLevel(skillName, currentSkillLevel + availability.actualCount);
     return {
       success: true,
-      message: `Upgraded skill ${skillName} by ${actualCount} level${actualCount > 1 ? "s" : ""}`,
+      message: `Upgraded skill ${skillName} by ${availability.actualCount} level${
+        availability.actualCount > 1 ? "s" : ""
+      }`,
     };
   }
 
@@ -706,16 +704,10 @@ export class Bladeburner implements OperationTeam {
     return charismaEff;
   }
 
-  getRecruitmentSuccessChance(person: Person): number {
-    return Math.pow(person.skills.charisma, 0.45) / (this.teamSize - this.sleeveSize + 1);
-  }
-
   sleeveSupport(joining: boolean): void {
     if (joining) {
-      this.sleeveSize += 1;
       this.teamSize += 1;
     } else {
-      this.sleeveSize -= 1;
       this.teamSize -= 1;
     }
   }

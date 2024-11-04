@@ -27,8 +27,9 @@ function SSoption(props: ISSoptionProps): React.ReactElement {
       const matName = props.matName;
       const material = props.warehouse.materials[matName];
       setSmartSupplyOption(props.warehouse, material, newValue);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
+      return;
     }
     setChecked(newValue);
   }
@@ -40,8 +41,9 @@ function SSoption(props: ISSoptionProps): React.ReactElement {
       const matName = props.matName;
       const material = props.warehouse.materials[matName];
       setSmartSupplyOption(props.warehouse, material, newValue);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
+      return;
     }
     setChecked(newValue);
   }
