@@ -24,7 +24,7 @@ export interface TeamActionWithCasualties {
 /**
  * Some actions (Operations and Black Operations) use teams for success bonus
  * and may result in casualties, reducing the player's hp, killing team members
- * and killing sleeves (to shock them, sleeves are immortal) *
+ * and killing sleeves (to shock them, sleeves are immortal)
  */
 export function resolveTeamCasualties(action: TeamActionWithCasualties, team: OperationTeam, success: boolean): number {
   if (action.teamCount <= 0) {

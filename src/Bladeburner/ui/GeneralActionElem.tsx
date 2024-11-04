@@ -8,6 +8,8 @@ import { Player } from "@player";
 import { Paper, Typography } from "@mui/material";
 import { useRerender } from "../../ui/React/hooks";
 import { ActionHeader } from "./ActionHeader";
+import { BladeburnerGeneralActionName } from "@enums";
+import { clampNumber } from "../../utils/helpers/clampNumber";
 
 interface GeneralActionElemProps {
   bladeburner: Bladeburner;
@@ -17,8 +19,6 @@ interface GeneralActionElemProps {
 export function GeneralActionElem({ bladeburner, action }: GeneralActionElemProps): React.ReactElement {
   const rerender = useRerender();
   const actionTime = action.getActionTime(bladeburner, Player);
-  const successChance =
-    action.name === "Recruitment" ? Math.max(0, Math.min(bladeburner.getRecruitmentSuccessChance(Player), 1)) : -1;
 
   return (
     <Paper sx={{ my: 1, p: 1 }}>
@@ -28,10 +28,11 @@ export function GeneralActionElem({ bladeburner, action }: GeneralActionElemProp
       <br />
       <Typography>
         Time Required: {convertTimeMsToTimeElapsedString(actionTime * 1000)}
-        {successChance !== -1 && (
+        {action.name === BladeburnerGeneralActionName.Recruitment && (
           <>
             <br />
-            Estimated success chance: {formatNumberNoSuffix(successChance * 100, 1)}%
+            Estimated success chance:{" "}
+            {formatNumberNoSuffix(clampNumber(action.getSuccessChance(bladeburner, Player), 0, 1) * 100, 1)}%
           </>
         )}
       </Typography>
