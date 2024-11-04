@@ -21,7 +21,7 @@ export function SkillElem({ skill, bladeburner, onUpgrade }: SkillElemProps): Re
   // No need to support "+1" button when the skill level reaches Number.MAX_SAFE_INTEGER.
   const isSupported = skillLevel < Number.MAX_SAFE_INTEGER;
   // Use skill.canUpgrade() instead of reimplementing all conditional checks.
-  const canLevel = isSupported ? skill.canUpgrade(bladeburner, 1).available ?? false : false;
+  const canLevel = isSupported && skill.canUpgrade(bladeburner, 1).available;
   /**
    * maxLvl is only useful when we check if we should show "MAX LEVEL". For the check of the icon button, we don't need
    * it. This condition is checked in skill.canUpgrade().
