@@ -196,7 +196,7 @@ As soon as possible, it greatly increases your profit because it can find the op
 Market-TA1: set a price that ensures that you can sell all produced goods in storage.  
 Market-TA2: set the highest possible price that ensures that you can sell all produced goods in storage.
 
-#### I bought Market-TA2, but it does not set an optimal price for me.
+#### I bought Market-TA2, but it does not set the optimal price for me.
 
 You have to enable it.
 
