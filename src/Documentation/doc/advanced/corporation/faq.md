@@ -189,7 +189,7 @@ No, wait for Market-TA2. Market-TA1 is useless on its own.
 
 #### When should I buy Market-TA2?
 
-As soon as possible, it greatly increases your profit because it can find the optimal price. However, you should not use all your RP to buy it. Depleting the entire RP pool extremely degrades your product rating. That research costs a total of 75e3 RP (Hi-Tech R&D Laboratory + Market-TA1 + Market-TA2), so I recommend saving up 150e3 RP before buying it. Depleting half of the RP pool is acceptable, considering the positive effect of Market-TA2.
+As soon as possible, it greatly increases your profit because it can find the optimal price. However, you should not use all your RP to buy it. Depleting the entire RP pool severely degrades your product rating. That research costs a total of 75e3 RP (Hi-Tech R&D Laboratory + Market-TA1 + Market-TA2), so I recommend saving up 150e3 RP before buying it. Depleting half of the RP pool is acceptable, considering the positive effect of Market-TA2.
 
 #### What is the difference between Market-TA1 and Market-TA2?
 
