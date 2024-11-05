@@ -198,125 +198,120 @@ export function acceptInvestmentOffer(corporation: Corporation): void {
   corporation.investorShares += investShares;
 }
 
-export function sellMaterial(material: Material, amount: string, price: string): void {
-  if (price === "") price = "0";
-  if (amount === "") amount = "0";
-  let cost = price.replace(/\s+/g, "");
-  cost = cost.replace(/[^-()\d/*+.MPe]/g, ""); //Sanitize cost
-  let temp = cost.replace(/MP/, "1.234e5");
+export function convertPriceString(price: string): string | number {
+  // Replace whitespace characters.
+  let sanitizedPrice = price.replace(/\s+/g, "");
+  /**
+   * Replace invalid characters. Only accepts:
+   * - Digit characters
+   * - 4 most basic algebraic operations (+ - * /)
+   * - Parentheses
+   * - Dot character
+   * - e
+   * - MP
+   */
+  sanitizedPrice = sanitizedPrice.replace(/[^\d+\-*/().eMP]/g, "");
+
+  // // If the input does not contain "MP", we only need to convert it to a number.
+  if (!sanitizedPrice.includes("MP")) {
+    const priceAsNumber = parseFloat(sanitizedPrice);
+    if (!Number.isFinite(priceAsNumber)) {
+      throw new Error(`Invalid value for sell price field: ${price}`);
+    }
+    return priceAsNumber;
+  }
+
+  // Replace MP with an arbitrary number.
+  const temp: string = sanitizedPrice.replace(/MP/g, "1.234e5");
+  let evaluatedTemp: unknown;
   try {
-    if (temp.includes("MP")) throw "Only one reference to MP is allowed in sell price.";
-    temp = eval?.(temp);
+    evaluatedTemp = eval?.(temp);
+    if (typeof evaluatedTemp !== "number" || !Number.isFinite(evaluatedTemp)) {
+      throw new Error(`Evaluated value is not a valid number: ${evaluatedTemp}`);
+    }
   } catch (error) {
-    throw new Error("Invalid value or expression for sell price field", { cause: error });
+    throw new Error(`Invalid value or expression for sell price field: ${error}`, { cause: error });
   }
+  // Use sanitized price.
+  return sanitizedPrice;
+}
 
-  if (temp == null || isNaN(parseFloat(temp))) {
-    throw new Error("Invalid value or expression for sell price field");
-  }
+export function convertAmountString(amount: string, max: number, prod: number, inv: number) {
+  // Replace whitespace characters.
+  let sanitizedAmount = amount.replace(/\s+/g, "");
+  /**
+   * Replace invalid characters. Only accepts:
+   * - Digit characters
+   * - 4 most basic algebraic operations (+ - * /)
+   * - Parentheses
+   * - Dot character
+   * - e
+   * - MAXPRODINV
+   */
+  sanitizedAmount = sanitizedAmount.replace(/[^\d+\-*/().eMAXPRODINV]/g, "");
 
-  if (cost.includes("MP")) {
-    material.desiredSellPrice = cost; //Dynamically evaluated
-  } else {
-    material.desiredSellPrice = temp;
-  }
-
-  //Parse quantity
-  amount = amount.toUpperCase();
-  if (amount.includes("MAX") || amount.includes("PROD") || amount.includes("INV")) {
-    let q = amount.replace(/\s+/g, "");
-    q = q.replace(/[^-()\d/*+.MAXPRODINV]/g, "");
-    let tempQty = q.replace(/MAX/g, material.maxSellPerCycle.toString());
-    tempQty = tempQty.replace(/PROD/g, material.productionAmount.toString());
-    tempQty = tempQty.replace(/INV/g, material.productionAmount.toString());
-    try {
-      tempQty = eval?.(tempQty);
-    } catch (error) {
-      throw new Error("Invalid value or expression for sell quantity field", { cause: error });
+  // // If the input does not contain "MAX", "PROD", and "INV", we only need to convert it to a number.
+  if (!sanitizedAmount.includes("MAX") && !sanitizedAmount.includes("PROD") && !sanitizedAmount.includes("INV")) {
+    const amountAsNumber = parseFloat(sanitizedAmount);
+    if (!Number.isFinite(amountAsNumber)) {
+      throw new Error(`Invalid value for sell quantity field: ${amount}`);
     }
-
-    if (tempQty == null || isNaN(parseFloat(tempQty))) {
-      throw new Error("Invalid value or expression for sell quantity field");
-    }
-    material.desiredSellAmount = q; //Use sanitized input
-  } else if (isNaN(parseFloat(amount)) || parseFloat(amount) < 0) {
-    throw new Error("Invalid value for sell quantity field! Must be numeric or 'PROD' or 'MAX'");
-  } else {
-    let q = parseFloat(amount);
-    if (isNaN(q)) {
-      q = 0;
-    }
-    material.desiredSellAmount = q;
+    return amountAsNumber;
   }
+
+  let temp = sanitizedAmount.replace(/MAX/g, max.toString());
+  temp = temp.replace(/PROD/g, prod.toString());
+  temp = temp.replace(/INV/g, inv.toString());
+  let evaluatedTemp: unknown;
+  try {
+    evaluatedTemp = eval?.(temp);
+    if (typeof evaluatedTemp !== "number" || !Number.isFinite(evaluatedTemp)) {
+      throw new Error(`Evaluated value is not a valid number: ${evaluatedTemp}`);
+    }
+  } catch (error) {
+    throw new Error(`Invalid value or expression for sell quantity field: ${error}`, { cause: error });
+  }
+  // Use sanitized amount.
+  return sanitizedAmount;
+}
+
+export function sellMaterial(material: Material, amount: string, price: string): void {
+  if (price === "") {
+    price = "0";
+  }
+  if (amount === "") {
+    amount = "0";
+  }
+
+  const convertedPrice = convertPriceString(price);
+  const convertedAmount = convertAmountString(
+    amount.toUpperCase(),
+    material.maxSellPerCycle,
+    material.productionAmount,
+    material.stored,
+  );
+
+  material.desiredSellPrice = convertedPrice;
+  material.desiredSellAmount = convertedAmount;
 }
 
 export function sellProduct(product: Product, city: CityName, amt: string, price: string, all: boolean): void {
-  //Parse price
-  // initliaze newPrice with oldPrice as default
-  let newPrice = product.cityData[city].desiredSellPrice;
-  if (price.includes("MP")) {
-    //Dynamically evaluated quantity. First test to make sure its valid
-    //Sanitize input, then replace dynamic variables with arbitrary numbers
-    price = price.replace(/\s+/g, "");
-    price = price.replace(/[^-()\d/*+.MPe]/g, "");
-    let temp = price.replace(/MP/, "1.234e5");
-    try {
-      if (temp.includes("MP")) throw "Only one reference to MP is allowed in sell price.";
-      temp = eval?.(temp);
-    } catch (error) {
-      throw new Error("Invalid value or expression for sell price field.", { cause: error });
-    }
-    if (temp == null || isNaN(parseFloat(temp))) {
-      throw new Error("Invalid value or expression for sell price field.");
-    }
-    newPrice = price; //Use sanitized price
-  } else {
-    const cost = parseFloat(price);
-    if (isNaN(cost)) {
-      throw new Error("Invalid value for sell price field");
-    }
-    newPrice = cost;
-  }
+  const convertedPrice = convertPriceString(price);
+  const convertedAmount = convertAmountString(
+    amt.toUpperCase(),
+    product.maxSellAmount,
+    product.cityData[city].productionAmount,
+    product.cityData[city].stored,
+  );
 
-  // Parse quantity
-  amt = amt.toUpperCase();
-  //initialize newAmount with old as default
-  let newAmount = product.cityData[city].desiredSellAmount;
-  if (amt.includes("MAX") || amt.includes("PROD") || amt.includes("INV")) {
-    //Dynamically evaluated quantity. First test to make sure its valid
-    let qty = amt.replace(/\s+/g, "");
-    qty = qty.replace(/[^-()\d/*+.MAXPRODINV]/g, "");
-    let temp = qty.replace(/MAX/g, product.maxSellAmount.toString());
-    temp = temp.replace(/PROD/g, product.cityData[city].productionAmount.toString());
-    temp = temp.replace(/INV/g, product.cityData[city].stored.toString());
-    try {
-      temp = eval?.(temp);
-    } catch (error) {
-      throw new Error("Invalid value or expression for sell quantity field", { cause: error });
-    }
-
-    if (temp == null || isNaN(parseFloat(temp))) {
-      throw new Error("Invalid value or expression for sell quantity field");
-    }
-    newAmount = qty; //Use sanitized input
-  } else if (isNaN(parseFloat(amt)) || parseFloat(amt) < 0) {
-    throw new Error("Invalid value for sell quantity field! Must be numeric or 'PROD' or 'MAX'");
-  } else {
-    let qty = parseFloat(amt);
-    if (isNaN(qty)) {
-      qty = 0;
-    }
-    newAmount = qty;
-  }
-  //apply new price and amount to all or just current
   if (all) {
     for (const cityName of Object.values(CityName)) {
-      product.cityData[cityName].desiredSellAmount = newAmount;
-      product.cityData[cityName].desiredSellPrice = newPrice;
+      product.cityData[cityName].desiredSellAmount = convertedAmount;
+      product.cityData[cityName].desiredSellPrice = convertedPrice;
     }
   } else {
-    product.cityData[city].desiredSellAmount = newAmount;
-    product.cityData[city].desiredSellPrice = newPrice;
+    product.cityData[city].desiredSellAmount = convertedAmount;
+    product.cityData[city].desiredSellPrice = convertedPrice;
   }
 }
 
@@ -577,23 +572,21 @@ Attempted export amount: ${amount}`);
   sanitizedAmt = sanitizedAmt.replace(/[^-()\d/*+.MAXEPRODINV]/g, "");
   for (const testReplacement of ["(1.23)", "(-1.23)"]) {
     const replaced = sanitizedAmt.replace(/(MAX|IPROD|EPROD|IINV|EINV)/g, testReplacement);
-    let evaluated, error;
+    let evaluated: unknown;
     try {
       evaluated = eval?.(replaced);
-    } catch (e) {
-      error = e;
-    }
-    if (!error && isNaN(evaluated)) error = "evaluated value is NaN";
-    if (error) {
+      if (typeof evaluated !== "number" || !Number.isFinite(evaluated)) {
+        throw new Error(`Evaluated value is not a valid number: ${evaluated}`);
+      }
+    } catch (error) {
       throw new Error(
         `Error while trying to set the exported amount of ${material.name}.
 Error occurred while testing keyword replacement with ${testReplacement}.
 Your input: ${amount}
 Sanitized input: ${sanitizedAmt}
 Input after replacement: ${replaced}
-Evaluated value: ${evaluated}` +
-          // eslint-disable-next-line @typescript-eslint/no-base-to-string
-          `Error encountered: ${error}`,
+Evaluated value: ${evaluated}
+Error encountered: ${error}`,
       );
     }
   }

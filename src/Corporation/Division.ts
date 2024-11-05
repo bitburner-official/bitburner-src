@@ -526,11 +526,17 @@ export class Division {
               //Dynamically evaluated
               let tmp = mat.desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
               tmp = tmp.replace(/PROD/g, mat.productionAmount.toString());
+              tmp = tmp.replace(/INV/g, mat.stored.toString());
               try {
-                sellAmt = eval?.(tmp);
-              } catch (e) {
+                // Typecasting here is fine. We will validate the result immediately after this line.
+                sellAmt = eval?.(tmp) as number;
+                if (typeof sellAmt !== "number" || !Number.isFinite(sellAmt)) {
+                  throw new Error(`Evaluated value is not a valid number: ${sellAmt}`);
+                }
+              } catch (error) {
                 dialogBoxCreate(
-                  `Error evaluating your sell amount for material ${mat.name} in ${this.name}'s ${city} office. The sell amount is being set to zero`,
+                  `Error evaluating your sell amount for material ${mat.name} in ${this.name}'s ${city} office. ` +
+                    `The sell amount is being set to zero. Error: ${error}`,
                 );
                 sellAmt = 0;
               }
@@ -642,16 +648,14 @@ export class Division {
                 amtStr = amtStr.replace(/IINV/g, `(${tempMaterial.stored})`);
                 let amt = 0;
                 try {
-                  amt = eval?.(amtStr);
+                  // Typecasting here is fine. We will validate the result immediately after this line.
+                  amt = eval?.(amtStr) as number;
+                  if (typeof amt !== "number" || !Number.isFinite(amt)) {
+                    throw new Error(`Evaluated value is not a valid number: ${amt}`);
+                  }
                 } catch (e) {
                   dialogBoxCreate(
                     `Calculating export for ${mat.name} in ${this.name}'s ${city} division failed with error: ${e}`,
-                  );
-                  continue;
-                }
-                if (isNaN(amt)) {
-                  dialogBoxCreate(
-                    `Error calculating export amount for ${mat.name} in ${this.name}'s ${city} division.`,
                   );
                   continue;
                 }
@@ -834,25 +838,29 @@ export class Division {
           const marketFactor = this.getMarketFactor(product); //Competition + demand
 
           // Parse player sell-amount input (needed for TA.II and selling)
-          let sellAmt: number | string;
+          let sellAmt: number;
           // The amount gets re-multiplied later, so this is the correct
           // amount to calculate with for "MAX".
           const adjustedQty = product.cityData[city].stored / (corpConstants.secondsPerMarketCycle * marketCycles);
           const desiredSellAmount = product.cityData[city].desiredSellAmount;
           if (typeof desiredSellAmount === "string") {
             //Sell amount is dynamically evaluated
-            let tmp: number | string = desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
+            let tmp: string = desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
             tmp = tmp.replace(/PROD/g, product.cityData[city].productionAmount.toString());
+            tmp = tmp.replace(/INV/g, product.cityData[city].stored.toString());
             try {
-              tmp = eval?.(tmp);
-              if (typeof tmp !== "number") throw "";
-            } catch (e) {
+              // Typecasting here is fine. We will validate the result immediately after this line.
+              sellAmt = eval?.(tmp) as number;
+              if (typeof sellAmt !== "number" || !Number.isFinite(sellAmt)) {
+                throw new Error(`Evaluated value is not a valid number: ${sellAmt}`);
+              }
+            } catch (error) {
               dialogBoxCreate(
-                `Error evaluating your sell price expression for ${product.name} in ${this.name}'s ${city} office. Sell price is being set to MAX`,
+                `Error evaluating your sell amount expression for ${product.name} in ${this.name}'s ${city} office. ` +
+                  `The sell amount is being set to MAX. Error: ${error}`,
               );
-              tmp = product.maxSellAmount;
+              sellAmt = product.maxSellAmount;
             }
-            sellAmt = tmp;
           } else if (desiredSellAmount && desiredSellAmount > 0) {
             sellAmt = desiredSellAmount;
           } else sellAmt = adjustedQty;
