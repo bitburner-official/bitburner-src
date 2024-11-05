@@ -1,7 +1,6 @@
 import type { Bladeburner } from "../Bladeburner";
 import type { Person } from "../../PersonObjects/Person";
-import type { SuccessChanceParams } from "../Types";
-import type { Availability } from "../../types";
+import type { Availability, SuccessChanceParams } from "../Types";
 import type { Skills as PersonSkills } from "../../PersonObjects/Skills";
 
 import { addOffset } from "../../utils/helpers/addOffset";

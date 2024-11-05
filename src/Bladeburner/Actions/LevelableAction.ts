@@ -1,6 +1,6 @@
 import type { Bladeburner } from "../Bladeburner";
 import type { IReviverValue } from "../../utils/JSONReviver";
-import type { Availability } from "../../types";
+import type { Availability } from "../Types";
 
 import { ActionClass, ActionParams } from "./Action";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";

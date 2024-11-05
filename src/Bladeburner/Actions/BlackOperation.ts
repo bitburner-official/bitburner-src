@@ -1,6 +1,5 @@
 import type { Bladeburner } from "../Bladeburner";
-import type { ActionIdFor } from "../Types";
-import type { Availability } from "../../types";
+import type { ActionIdFor, Availability } from "../Types";
 
 import { BladeburnerActionType, BladeburnerBlackOpName } from "@enums";
 import { ActionClass, ActionParams } from "./Action";
