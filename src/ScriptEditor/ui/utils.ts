@@ -2,6 +2,7 @@ import { GetServer } from "../../Server/AllServers";
 import { editor, Uri } from "monaco-editor";
 import { OpenScript } from "./OpenScript";
 import { getFileType, FileType } from "../../utils/ScriptTransformer";
+import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 
 function getServerCode(scripts: OpenScript[], index: number): string | null {
   const openScript = scripts[index];
@@ -48,7 +49,7 @@ function makeModel(hostname: string, filename: string, code: string) {
       language = "javascript";
       break;
     default:
-      throw new Error(`Invalid file type: ${fileType}. Filename: ${filename}.`);
+      throwIfReachable(fileType);
   }
   //if somehow a model already exist return it
   return editor.getModel(uri) ?? editor.createModel(code, language, uri);

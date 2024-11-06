@@ -231,7 +231,7 @@ function parseOnlyRamCalculate(
         prefix: string,
         obj: object,
         ref: string,
-      ): { func: () => number | number; refDetail: string } | undefined => {
+      ): { func: () => number; refDetail: string } | undefined => {
         if (!obj) {
           return;
         }

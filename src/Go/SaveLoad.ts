@@ -83,7 +83,11 @@ export function loadGo(data: unknown): boolean {
   Go.storeCycles(loadStoredCycles(parsedData.storedCycles));
 
   // If it's the AI's turn, initiate their turn, which will populate nextTurn
-  if (currentGame.previousPlayer === GoColor.black && currentGame.ai !== GoOpponent.none) makeAIMove(currentGame);
+  if (currentGame.previousPlayer === GoColor.black && currentGame.ai !== GoOpponent.none) {
+    makeAIMove(currentGame).catch((error) => {
+      showError(error);
+    });
+  }
   // If it's not the AI's turn and we're not in gameover status, initialize nextTurn promise based on the previous move/pass
   else if (currentGame.previousPlayer) {
     const previousMove = getPreviousMove();

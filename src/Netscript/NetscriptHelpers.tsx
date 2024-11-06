@@ -692,8 +692,11 @@ function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): Runni
     return findRunningScriptByPid(ident);
   } else {
     const scripts = getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
-    if (scripts === null) return null;
-    return scripts.values().next().value ?? null;
+    if (scripts === null) {
+      return null;
+    }
+    const next = scripts.values().next();
+    return !next.done ? next.value : null;
   }
 }
 

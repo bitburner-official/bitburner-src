@@ -38,7 +38,7 @@ type RowName = SkillRowName | "HP" | "Money";
 const OverviewEventEmitter = new EventEmitter();
 
 // These values aren't displayed, they're just used for comparison to check if state has changed
-const valUpdaters: Record<RowName, () => any> = {
+const valUpdaters: Record<RowName, () => unknown> = {
   HP: () => Player.hp.current + "|" + Player.hp.max, // This isn't displayed, it's just compared for updates.
   Money: () => Player.money,
   Hack: () => Player.skills.hacking,

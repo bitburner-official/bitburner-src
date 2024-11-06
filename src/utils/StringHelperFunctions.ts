@@ -125,3 +125,9 @@ export function getNsApiDocumentationUrl(isDevBranch: boolean = CONSTANTS.isDevB
     isDevBranch ? "dev" : "stable"
   }/markdown/bitburner.ns.md`;
 }
+
+export function getKeyFromReactElements(a: string | React.JSX.Element, b: string | React.JSX.Element): string {
+  const keyOfA = typeof a === "string" ? a : a.key ?? "";
+  const keyOfb = typeof b === "string" ? b : b.key ?? "";
+  return keyOfA + keyOfb;
+}

@@ -44,8 +44,8 @@ export function SellSharesModal(props: IProps): React.ReactElement {
       props.onClose();
       props.rerender();
       setShares(NaN);
-    } catch (err) {
-      dialogBoxCreate(`${err as Error}`);
+    } catch (error) {
+      dialogBoxCreate(String(error));
     }
   }
 

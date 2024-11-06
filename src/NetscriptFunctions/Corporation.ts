@@ -624,15 +624,19 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx);
       const unlockName = getEnumHelper("CorpUnlockName").nsGetMember(ctx, _unlockName, "unlockName");
       const corporation = getCorporation();
-      const message = corporation.purchaseUnlock(unlockName);
-      if (message) throw new Error(`Could not unlock ${unlockName}: ${message}`);
+      const result = corporation.purchaseUnlock(unlockName);
+      if (!result.success) {
+        throw new Error(`Could not unlock ${unlockName}: ${result.message}`);
+      }
     },
     levelUpgrade: (ctx) => (_upgradeName) => {
       checkAccess(ctx);
       const upgradeName = getEnumHelper("CorpUpgradeName").nsGetMember(ctx, _upgradeName, "upgradeName");
       const corporation = getCorporation();
-      const message = corporation.purchaseUpgrade(upgradeName, 1);
-      if (message) throw new Error(`Could not upgrade ${upgradeName}: ${message}`);
+      const result = corporation.purchaseUpgrade(upgradeName, 1);
+      if (!result.success) {
+        throw new Error(`Could not upgrade ${upgradeName}: ${result.message}`);
+      }
     },
     issueDividends: (ctx) => (_rate) => {
       checkAccess(ctx);

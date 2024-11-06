@@ -298,7 +298,16 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
     return !(bounds.right < 0 || bounds.bottom < 0 || bounds.left > innerWidth || bounds.top > outerWidth);
   };
 
-  const onDrag = (e: DraggableEvent): void | false => {
+  /**
+   * The returned type of onDrag is a bit weird here. The Draggable component expects an onDrag that returns "void | false".
+   * In that component's internal code, it checks for the explicit "false" value. If onDrag returns false, the component
+   * cancels the dragging.
+   *
+   * That's why they use "void | false" as the returned type. However, in TypeScript, "void" is not supposed to be used
+   * like that. ESLint will complain "void is not valid as a constituent in a union type". Please check its documentation
+   * for the reason. In order to solve this problem, I changed the returned type to "undefined | false".
+   */
+  const onDrag = (e: DraggableEvent): undefined | false => {
     e.preventDefault();
     // bound to body
     if (

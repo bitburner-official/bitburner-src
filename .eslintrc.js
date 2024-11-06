@@ -35,6 +35,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "react/no-unescaped-entities": "off",
     "@typescript-eslint/restrict-template-expressions": "off",
+    "@typescript-eslint/no-unsafe-enum-comparison": "off",
   },
   settings: {
     react: {

@@ -49,3 +49,14 @@ declare global {
     }
   }
 }
+
+module "monaco-vim" {
+  export const initVimMode: (...args: unknown[]) => { dispose: () => void };
+  export const VimMode: {
+    Vim: {
+      defineEx: (...args: unknown[]) => void;
+      mapCommand: (...args: unknown[]) => void;
+      defineAction: (...args: unknown[]) => void;
+    };
+  };
+}
