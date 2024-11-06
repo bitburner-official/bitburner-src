@@ -330,21 +330,23 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
 
   // Start the script's execution using the correct function for file type
   (isLegacyScript(workerScript.name) ? startNetscript1Script : startNetscript2Script)(workerScript)
-    // Once the code finishes (either resolved or rejected, doesnt matter), set its
+    // Once the code finishes (either resolved or rejected, doesn't matter), set its
     // running status to false
     .then(function () {
-      // On natural death, the earnings are transferred to the parent if it still exists.
-      if (parent && !parent.env.stopFlag) {
-        parent.scriptRef.onlineExpGained += runningScriptObj.onlineExpGained;
-        parent.scriptRef.onlineMoneyMade += runningScriptObj.onlineMoneyMade;
-      }
       killWorkerScript(workerScript);
       workerScript.log("", () => "Script finished running");
     })
     .catch(function (e) {
       handleUnknownError(e, workerScript);
-      workerScript.log("", () => (e instanceof ScriptDeath ? "Script killed." : "Script crashed due to an error."));
       killWorkerScript(workerScript);
+      workerScript.log("", () => (e instanceof ScriptDeath ? "Script killed." : "Script crashed due to an error."));
+    })
+    .finally(() => {
+      // The earnings are transferred to the parent if it still exists.
+      if (parent && !parent.env.stopFlag) {
+        parent.scriptRef.onlineExpGained += runningScriptObj.onlineExpGained;
+        parent.scriptRef.onlineMoneyMade += runningScriptObj.onlineMoneyMade;
+      }
     });
   return true;
 }
