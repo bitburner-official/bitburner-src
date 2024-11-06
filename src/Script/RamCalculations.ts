@@ -231,16 +231,16 @@ function parseOnlyRamCalculate(
         prefix: string,
         obj: object,
         ref: string,
-      ): { func: () => number; refDetail: string } | undefined => {
+      ): { func: (() => number) | number; refDetail: string } | undefined => {
         if (!obj) {
           return;
         }
         const elem = Object.entries(obj).find(([key]) => key === ref);
         if (elem !== undefined && (typeof elem[1] === "function" || typeof elem[1] === "number")) {
-          return { func: elem[1], refDetail: `${prefix}${ref}` };
+          return { func: elem[1] as (() => number) | number, refDetail: `${prefix}${ref}` };
         }
         for (const [key, value] of Object.entries(obj)) {
-          const found = findFunc(`${key}.`, value, ref);
+          const found = findFunc(`${key}.`, value as object, ref);
           if (found) {
             return found;
           }
