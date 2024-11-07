@@ -4,8 +4,11 @@ import { matchScriptPathUnanchored } from "../../utils/helpers/scriptKey";
 import libarg from "arg";
 
 export function ps(args: (string | number | boolean)[], server: BaseServer): void {
-  let flags;
+  let flags: {
+    "--grep": string;
+  };
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     flags = libarg(
       {
         "--grep": String,

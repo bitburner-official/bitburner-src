@@ -82,14 +82,14 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
     setStyles: (ctx) => (newStyles) => {
       const styleValidator: Record<string, string | number | undefined> = {};
       assertObjectType(ctx, "newStyles", newStyles, styleValidator);
-      const currentStyles = { ...Settings.styles };
+      const currentStyles: Record<string, unknown> = { ...Settings.styles };
       const errors: string[] = [];
       for (const key of Object.keys(newStyles)) {
-        if (!(currentStyles as any)[key]) {
+        if (!currentStyles[key]) {
           // Invalid key
           errors.push(`Invalid key "${key}"`);
         } else {
-          (currentStyles as any)[key] = newStyles[key];
+          currentStyles[key] = newStyles[key];
         }
       }
 

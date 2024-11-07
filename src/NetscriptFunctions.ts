@@ -20,11 +20,12 @@ import {
   GymType,
   JobName,
   JobField,
-  LiteratureName,
+  type LiteratureName,
   LocationName,
   ToastVariant,
   UniversityClassType,
   CompanyName,
+  type MessageFilename,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer, DeleteServer, AddToAllServers, createUniqueRandomIp } from "./Server/AllServers";
@@ -145,8 +146,19 @@ export const ns: InternalAPI<NSFull> = {
   stock: NetscriptStockMarket(),
   grafting: NetscriptGrafting(),
   hacknet: NetscriptHacknet(),
-  sprintf: () => sprintf,
-  vsprintf: () => vsprintf,
+  sprintf:
+    (ctx) =>
+    (_format, ...args) => {
+      const format = helpers.string(ctx, "format", _format);
+      return sprintf(format, ...(args as unknown[]));
+    },
+  vsprintf: (ctx) => (_format, _args) => {
+    const format = helpers.string(ctx, "format", _format);
+    if (!Array.isArray(_args)) {
+      throw helpers.errorMessage(ctx, `args must be an array.`);
+    }
+    return vsprintf(format, _args);
+  },
   scan: (ctx) => (_hostname) => {
     const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
     const server = helpers.getServer(ctx, hostname);
@@ -1163,7 +1175,8 @@ export const ns: InternalAPI<NSFull> = {
     if (!path) return false;
     if (hasScriptExtension(path)) return server.scripts.has(path);
     if (hasTextExtension(path)) return server.textFiles.has(path);
-    if (path.endsWith(".lit") || path.endsWith(".msg")) return server.messages.includes(path as any);
+    if (path.endsWith(".lit") || path.endsWith(".msg"))
+      return server.messages.includes(path as LiteratureName | MessageFilename);
     if (hasContractExtension(path)) return !!server.contracts.find(({ fn }) => fn === path);
     const lowerPath = path.toLowerCase();
     return server.programs.map((programName) => programName.toLowerCase()).includes(lowerPath);

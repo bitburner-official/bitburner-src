@@ -45,6 +45,7 @@ import { downloadContentAsFile } from "./utils/FileUtils";
 import { showAPIBreaks } from "./utils/APIBreaks/APIBreak";
 import { breakInfos261 } from "./utils/APIBreaks/2.6.1";
 import { handleGetSaveDataInfoError } from "./Netscript/ErrorMessages";
+import type { ProgramFilePath } from "./Paths/ProgramFilePath";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -225,7 +226,12 @@ class BitburnerSaveObject {
 
     let parsedSaveData;
     try {
-      parsedSaveData = JSON.parse(decodedSaveData);
+      parsedSaveData = JSON.parse(decodedSaveData) as {
+        ctor: string;
+        data: {
+          PlayerSave: string;
+        };
+      };
     } catch (error) {
       console.error(error); // We'll handle below
     }
@@ -282,8 +288,69 @@ function convert(code: string, changes: [RegExp, string][]): string {
 // Makes necessary changes to the loaded/imported data to ensure
 // the game stills works with new versions
 function evaluateVersionCompatibility(ver: string | number): void {
-  // We have to do this because ts won't let us otherwise
-  const anyPlayer = Player as any;
+  type LegacyPlayer = {
+    [key: string]: unknown;
+    companyPosition?:
+      | string
+      | {
+          data: {
+            positionName: string;
+          };
+        };
+    companyName: string;
+    jobs: Record<string, unknown>;
+    queuedAugmentations: { name: string }[];
+    augmentations: { name: string }[];
+    bladeburner?: number | null;
+    gang?: number | null;
+    getHomeComputer: () => {
+      messages: Array<{ filename: string }>;
+    };
+    money: string | number;
+    sleeves: {
+      [key: string]: unknown;
+      augmentations: { name: string }[];
+      hp: {
+        current: number;
+        max: number;
+      };
+      intelligence_exp: unknown;
+      exp: {
+        intelligence: number;
+      };
+    }[];
+    resleeves: unknown;
+    hp: {
+      current: number;
+      max: number;
+    };
+    hacking_exp: number;
+    strength_exp: number;
+    defense_exp: number;
+    dexterity_exp: number;
+    agility_exp: number;
+    charisma_exp: number;
+    intelligence_exp: number;
+    exp: {
+      hacking: number;
+      strength: number;
+      defense: number;
+      dexterity: number;
+      agility: number;
+      charisma: number;
+      intelligence: number;
+    };
+    createProgramName: ProgramFilePath;
+    graftAugmentationName: AugmentationName;
+    currentWork: unknown;
+    hashManager: {
+      upgrades: Record<string, unknown>;
+    };
+    lastUpdate: number;
+    playtimeSinceLastAug: number;
+    playtimeSinceLastBitnode: number;
+  };
+  const anyPlayer = Player as unknown as LegacyPlayer;
   if (typeof ver === "string") {
     // This version refactored the Company/job-related code
     if (ver <= "0.41.2") {
@@ -327,7 +394,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
       const home = anyPlayer.getHomeComputer();
       for (let i = 0; i < home.messages.length; i++) {
         if (home.messages[i].filename) {
-          home.messages[i] = home.messages[i].filename;
+          (home.messages as unknown as string[])[i] = home.messages[i].filename;
         }
       }
     }
@@ -369,7 +436,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
     Player.reapplyAllSourceFiles();
   }
   if (ver < 3) {
-    anyPlayer.money = parseFloat(anyPlayer.money);
+    anyPlayer.money = parseFloat(anyPlayer.money as string);
   }
   if (ver < 9) {
     if (Object.hasOwn(StockMarket, "Joes Guns")) {
@@ -632,6 +699,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
     if (isNaN(intExp)) intExp = 0;
     anyPlayer.exp.intelligence += intExp;
     for (const field of removePlayerFields) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete anyPlayer[field];
     }
     for (const sleeve of anyPlayer.sleeves) {
@@ -640,6 +708,7 @@ function evaluateVersionCompatibility(ver: string | number): void {
       if (isNaN(intExp)) intExp = 0;
       anySleeve.exp.intelligence += intExp;
       for (const field of removeSleeveFields) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete sleeve[field];
       }
     }
@@ -750,7 +819,21 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   if (!saveData) return false;
   const jsonSaveString = await decodeSaveData(saveData);
 
-  const saveObj = JSON.parse(jsonSaveString, Reviver);
+  const saveObj = JSON.parse(jsonSaveString, Reviver) as {
+    PlayerSave: string;
+    AllServersSave: string;
+    CompaniesSave: string;
+    FactionsSave: string;
+    GoSave: string;
+    StaneksGiftSave: string;
+    AliasesSave: string;
+    GlobalAliasesSave: string;
+    StockMarketSave: string;
+    SettingsSave: string;
+    LastExportBonus: string;
+    AllGangsSave: string;
+    VersionSave: string;
+  };
 
   setPlayer(loadPlayer(saveObj.PlayerSave));
   loadAllServers(saveObj.AllServersSave);
@@ -807,7 +890,7 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   }
   if (Object.hasOwn(saveObj, "LastExportBonus")) {
     try {
-      ExportBonus.setLastExportBonus(JSON.parse(saveObj.LastExportBonus));
+      ExportBonus.setLastExportBonus(JSON.parse(saveObj.LastExportBonus) as number);
     } catch (error) {
       ExportBonus.setLastExportBonus(new Date().getTime());
       console.error(`ERROR: Failed to parse last export bonus setting. Error: ${error}.`, error);
@@ -822,7 +905,7 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   }
   if (Object.hasOwn(saveObj, "VersionSave")) {
     try {
-      const ver = JSON.parse(saveObj.VersionSave, Reviver);
+      const ver = JSON.parse(saveObj.VersionSave, Reviver) as string | number;
       evaluateVersionCompatibility(ver);
       if (CONSTANTS.isDevBranch) {
         // Beta branch, always show changes

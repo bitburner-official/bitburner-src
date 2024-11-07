@@ -100,10 +100,16 @@ export class GangMember {
   }
 
   getTask(): GangMemberTask {
+    /**
+     * TODO: It's best to remove this code. It tries to provide "backward compatibility", but it's a futile attempt.
+     * "this.task" has already been a string since at least v2.0.0. There is no reason to support weird workaround code
+     * in the name of "backward compatibility". In a transition from a pre-v2.0 version to the current version, I doubt
+     * that gang data can be migrated successfully even with this weird code.
+     */
     // TODO unplanned: transfer that to a save file migration function
     // Backwards compatibility
     if ((this.task as any) instanceof GangMemberTask) {
-      this.task = (this.task as any).name;
+      this.task = (this.task as unknown as { name: string }).name;
     }
 
     if (Object.hasOwn(GangMemberTasks, this.task)) {

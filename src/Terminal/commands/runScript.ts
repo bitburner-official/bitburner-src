@@ -18,8 +18,14 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   if (!script) return Terminal.error(`Script ${path} does not exist on this server.`);
 
   const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
-  let flags;
+  let flags: {
+    _: ScriptArg[];
+    "--tail": boolean;
+    "-t": string;
+    "--ram-override": string;
+  };
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     flags = libarg(runArgs, {
       permissive: true,
       argv: commandArgs,
@@ -42,7 +48,7 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   if (!server.hasAdminRights) return Terminal.error("Need root access to run script");
 
   // Todo: Switch out arg for something with typescript support
-  const args = flags._ as ScriptArg[];
+  const args = flags._;
 
   const singleRamUsage = ramOverride ?? script.getRamUsage(server.scripts);
   if (!singleRamUsage) {

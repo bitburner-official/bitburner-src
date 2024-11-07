@@ -63,6 +63,7 @@ export function DeleteServer(serverkey: string): void {
   for (const key of Object.keys(AllServers)) {
     const server = AllServers[key];
     if (server.ip !== serverkey && server.hostname !== serverkey) continue;
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete AllServers[key];
     break;
   }
@@ -100,6 +101,7 @@ export function AddToAllServers(server: Server | HacknetServer): void {
 
 export const renameServer = (hostname: string, newName: string): void => {
   AllServers[newName] = AllServers[hostname];
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   delete AllServers[hostname];
 };
 
@@ -188,13 +190,14 @@ export function initForeignServers(homeComputer: Server): void {
 
 export function prestigeAllServers(): void {
   for (const member of Object.keys(AllServers)) {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete AllServers[member];
   }
   AllServers = {};
 }
 
 export function loadAllServers(saveString: string): void {
-  AllServers = JSON.parse(saveString, Reviver);
+  AllServers = JSON.parse(saveString, Reviver) as typeof AllServers;
 }
 
 export function saveAllServers(): string {

@@ -137,7 +137,7 @@ export function loadStockMarket(saveString: string): void {
       storedCycles: 0,
       ticksUntilCycle: 0,
     } as IStockMarket;
-  } else StockMarket = JSON.parse(saveString, Reviver);
+  } else StockMarket = JSON.parse(saveString, Reviver) as typeof StockMarket;
 }
 
 export function deleteStockMarket(): void {
@@ -151,6 +151,7 @@ export function deleteStockMarket(): void {
 
 export function initStockMarket(): void {
   for (const stockName of Object.getOwnPropertyNames(StockMarket)) {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete StockMarket[stockName];
   }
 
