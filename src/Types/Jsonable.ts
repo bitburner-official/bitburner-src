@@ -6,7 +6,7 @@ export class JSONSet<T> extends Set<T> {
     return { ctor: "JSONSet", data: Array.from(this) };
   }
   static fromJSON(value: IReviverValue): JSONSet<any> {
-    return new JSONSet(value.data);
+    return new JSONSet(value.data as Iterable<any>);
   }
 }
 
@@ -16,6 +16,6 @@ export class JSONMap<K, __V> extends Map<K, __V> {
   }
 
   static fromJSON(value: IReviverValue): JSONMap<any, any> {
-    return new JSONMap(value.data);
+    return new JSONMap(value.data as Iterable<[any, any]>);
   }
 }
