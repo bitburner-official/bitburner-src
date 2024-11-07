@@ -1404,8 +1404,8 @@ export class Bladeburner implements OperationTeam {
   /** Initializes a Bladeburner object from a JSON save state. */
   static fromJSON(value: IReviverValue): Bladeburner {
     // operations and contracts are not loaded directly from the save, we load them in using a different method
-    const contractsData = value.data?.contracts;
-    const operationsData = value.data?.operations;
+    const contractsData = value.data?.contracts as unknown;
+    const operationsData = value.data?.operations as unknown;
     const bladeburner = Generic_fromJSON(Bladeburner, value.data, Bladeburner.keysToLoad);
     // Loading this way allows better typesafety and also allows faithfully reconstructing contracts/operations
     // even from save data that is missing a lot of static info about the objects.

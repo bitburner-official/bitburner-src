@@ -313,8 +313,8 @@ export abstract class BaseServer implements IServer {
   // Initializes a Server Object from a JSON save state
   // Called by subclasses, not Reviver.
   static fromJSONBase<T extends BaseServer>(value: IReviverValue, ctor: new () => T, keys: readonly (keyof T)[]): T {
-    const server = Generic_fromJSON(ctor, value.data, keys);
-    server.savedScripts = value.data.runningScripts;
+    const server = Generic_fromJSON(ctor, value.data as Record<keyof T, any>, keys);
+    server.savedScripts = value.data.runningScripts as typeof server.savedScripts;
     // If textFiles is not an array, we've already done the 2.3 migration to textFiles and scripts as maps + path changes.
     if (!Array.isArray(server.textFiles)) return server;
 
@@ -333,7 +333,7 @@ export abstract class BaseServer implements IServer {
     // In case somehow there are previously valid filenames that can't be sanitized, they will go in a new directory with a note.
     for (const script of oldScripts) {
       // We're about to do type validation on the filename anyway.
-      if (script.filename.endsWith(".ns")) script.filename = (script.filename + ".js") as any;
+      if (script.filename.endsWith(".ns")) script.filename = (script.filename + ".js") as ScriptFilePath;
       let newFilePath = resolveScriptFilePath(script.filename);
       if (!newFilePath) {
         newFilePath = `${newDirectory}script${++invalidScriptCount}.js` as ScriptFilePath;

@@ -42,4 +42,12 @@ module.exports = {
       version: "detect",
     },
   },
+  overrides: [
+    {
+      files: ["src/ScriptEditor/NetscriptDefinitions.d.ts"],
+      rules: {
+        "@typescript-eslint/prefer-literal-enum-member": ["off"],
+      },
+    },
+  ],
 };

@@ -8,7 +8,7 @@ type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
   validationData?: ObjectValidator<any>;
 };
 
-export interface IReviverValue<T = any> {
+export interface IReviverValue<T = Record<string, any>> {
   ctor: string;
   data: T;
 }
@@ -44,7 +44,7 @@ export function Reviver(_key: string, value: unknown): any {
     throw new Error(`Could not locate constructor named ${value.ctor}. If the save data is valid, this is a bug.`);
   }
 
-  const obj = ctor.fromJSON(value);
+  const obj = ctor.fromJSON(value) as unknown;
   if (ctor.validationData !== undefined) {
     validateObject(obj, ctor.validationData);
   }

@@ -129,7 +129,7 @@ export class CodingContract {
   static fromJSON(value: IReviverValue): CodingContract {
     // In previous versions, there was a data field instead of a state field.
     if ("data" in value.data) {
-      value.data.state = value.data.data;
+      value.data.state = value.data.data as unknown;
       delete value.data.data;
     }
     return Generic_fromJSON(CodingContract, value.data);
