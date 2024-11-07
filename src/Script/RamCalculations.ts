@@ -12,7 +12,6 @@ import { RamCalculationErrorCode } from "./RamCalculationErrorCodes";
 
 import { RamCosts, RamCostConstants } from "../Netscript/RamCostGenerator";
 import type { Script } from "./Script";
-import type { Node } from "../NetscriptJSEvaluator";
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 import type { ServerName } from "../Types/strings";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
@@ -288,7 +287,7 @@ export function checkInfiniteLoop(ast: AST, code: string): number[] {
     ast as acorn.Node, // Pretend that ast is an acorn node
     {},
     {
-      WhileStatement: (node: Node, st: unknown, walkDeeper: walk.WalkerCallback<any>) => {
+      WhileStatement: (node: acorn.WhileStatement, st: unknown, walkDeeper: walk.WalkerCallback<any>) => {
         const previousLines = code.slice(0, node.start).trimEnd().split("\n");
         const lineNumber = previousLines.length + 1;
         if (previousLines[previousLines.length - 1].match(/^\s*\/\/\s*@ignore-infinite/)) {
@@ -354,7 +353,7 @@ function parseOnlyCalculateDeps(
     key: string;
   }
 
-  function checkRamOverride(node: Node) {
+  function checkRamOverride(node: acorn.BlockStatement) {
     // To trigger a syntactic RAM override, the first statement must be a call
     // to ns.ramOverride() (or something that looks similar).
     if (!node.body || !node.body.length) return;
@@ -364,7 +363,12 @@ function parseOnlyCalculateDeps(
     if (expr.type !== "CallExpression") return;
     if (!expr.arguments || expr.arguments.length !== 1) return;
 
-    function findIdentifier(node: Node): Node {
+    /**
+     * This function is called with expr.callee. expr.callee can be Expression or Super. In its implementation, the
+     * "node" parameter can be reassigned to node.property if "node" is MemberExpression. node.property may be
+     * PrivateIdentifier, so we need to add that type to the type list of "node".
+     */
+    function findIdentifier(node: acorn.Expression | acorn.Super | acorn.PrivateIdentifier) {
       for (;;) {
         // Find the identifier node attached to the call
         switch (node.type) {
@@ -404,36 +408,36 @@ function parseOnlyCalculateDeps(
   // walkDeeper is for doing recursive walks of expressions in composites that we handle.
   function commonVisitors(): walk.RecursiveVisitors<State> {
     return {
-      Identifier: (node: Node, st: State) => {
+      Identifier: (node: acorn.Identifier, st: State) => {
         if (objectPrototypeProperties.includes(node.name)) {
           return;
         }
         addRef(st.key, node.name);
       },
-      WhileStatement: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+      WhileStatement: (node: acorn.WhileStatement, st: State, walkDeeper: walk.WalkerCallback<State>) => {
         addRef(st.key, specialReferenceWHILE);
         node.test && walkDeeper(node.test, st);
         node.body && walkDeeper(node.body, st);
       },
-      DoWhileStatement: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+      DoWhileStatement: (node: acorn.DoWhileStatement, st: State, walkDeeper: walk.WalkerCallback<State>) => {
         addRef(st.key, specialReferenceWHILE);
         node.test && walkDeeper(node.test, st);
         node.body && walkDeeper(node.body, st);
       },
-      ForStatement: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+      ForStatement: (node: acorn.ForStatement, st: State, walkDeeper: walk.WalkerCallback<State>) => {
         addRef(st.key, specialReferenceFOR);
         node.init && walkDeeper(node.init, st);
         node.test && walkDeeper(node.test, st);
         node.update && walkDeeper(node.update, st);
         node.body && walkDeeper(node.body, st);
       },
-      IfStatement: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+      IfStatement: (node: acorn.IfStatement, st: State, walkDeeper: walk.WalkerCallback<State>) => {
         addRef(st.key, specialReferenceIF);
         node.test && walkDeeper(node.test, st);
         node.consequent && walkDeeper(node.consequent, st);
         node.alternate && walkDeeper(node.alternate, st);
       },
-      MemberExpression: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+      MemberExpression: (node: acorn.MemberExpression, st: State, walkDeeper: walk.WalkerCallback<State>) => {
         node.object && walkDeeper(node.object, st);
         node.property && walkDeeper(node.property, st);
       },
@@ -445,8 +449,12 @@ function parseOnlyCalculateDeps(
     { key: globalKey },
     Object.assign(
       {
-        ImportDeclaration: (node: Node, st: State) => {
+        ImportDeclaration: (node: acorn.ImportDeclaration, st: State) => {
           const rawImportModuleName = node.source.value;
+          if (typeof rawImportModuleName !== "string") {
+            console.error("Invalid node when walking ImportDeclaration in parseOnlyCalculateDeps. node:", node);
+            return;
+          }
           // Skip these modules. They are popular path aliases of NetscriptDefinitions.d.ts.
           if (fileTypeFeature.isTypeScript && (rawImportModuleName === "@nsdefs" || rawImportModuleName === "@ns")) {
             return;
@@ -462,7 +470,11 @@ function parseOnlyCalculateDeps(
 
           for (let i = 0; i < node.specifiers.length; ++i) {
             const spec = node.specifiers[i];
-            if (spec.imported !== undefined && spec.local !== undefined) {
+            /**
+             * spec can be ImportSpecifier, ImportDefaultSpecifier, or ImportNamespaceSpecifier. "imported" only exists
+             * in ImportSpecifier. "imported" can be Identifier or Literal. imported.name only exists in Identifier.
+             */
+            if (spec.type === "ImportSpecifier" && spec.imported.type === "Identifier" && spec.local !== undefined) {
               // We depend on specific things.
               internalToExternal[spec.local.name] = importModuleName + "." + spec.imported.name;
             } else {
@@ -473,7 +485,7 @@ function parseOnlyCalculateDeps(
             }
           }
         },
-        FunctionDeclaration: (node: Node) => {
+        FunctionDeclaration: (node: acorn.FunctionDeclaration) => {
           if (node.id?.name === "main") {
             checkRamOverride(node.body);
           }
@@ -481,22 +493,35 @@ function parseOnlyCalculateDeps(
           const key = currentModule + "." + (node.id === null ? "__SPECIAL_DEFAULT_EXPORT__" : node.id.name);
           walk.recursive(node, { key: key }, commonVisitors());
         },
-        ExportNamedDeclaration: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
-          if (node.declaration !== null) {
+        ExportNamedDeclaration: (
+          node: acorn.ExportNamedDeclaration,
+          st: State,
+          walkDeeper: walk.WalkerCallback<State>,
+        ) => {
+          if (node.declaration != null) {
             // if this is true, the statement is not a named export, but rather a exported function/variable
             walkDeeper(node.declaration, st);
             return;
           }
 
           for (const specifier of node.specifiers) {
+            /**
+             * specifier.exported can be Identifier or Literal. specifier.exported.name only exists in Identifier.
+             */
+            if (specifier.exported.type === "Literal") {
+              continue;
+            }
             const exportedDepName = currentModule + "." + specifier.exported.name;
-
-            if (node.source !== null) {
+            /**
+             * We need to use specifier.local.name and node.source.value. Before doing that, we need to check if they
+             * exist. local.name only exists in Identifier.
+             */
+            if (node.source != null && typeof node.source.value === "string" && specifier.local.type === "Identifier") {
               // if this is true, we are re-exporting something
-              addRef(exportedDepName, specifier.local.name, node.source.value);
-              additionalModules.push(node.source.value);
-            } else if (specifier.exported.name !== specifier.local.name) {
-              // this makes sure we are not refering to ourselves
+              addRef(exportedDepName, specifier.local.name, node.source.value as ScriptFilePath);
+              additionalModules.push(node.source.value as ScriptFilePath);
+            } else if (specifier.local.type === "Identifier" && specifier.exported.name !== specifier.local.name) {
+              // this makes sure we are not referring to ourselves
               // if this is not true, we don't need to add anything
               addRef(exportedDepName, specifier.local.name);
             }
