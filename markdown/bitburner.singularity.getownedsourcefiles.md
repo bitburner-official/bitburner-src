@@ -21,5 +21,7 @@ Array containing an object with number and level of the source file.
 
 RAM cost: 5 GB
 
-Returns an array of source files
+Returns an array of source files.
+
+This array always contains all your acquired Source-Files even when you override their active levels via BitNode options. If you want to check the active levels of Source-Files and other BitNode options, you can check the "ResetInfo.bitNodeOptions" property with [getResetInfo](./bitburner.ns.getresetinfo.md)<!-- -->.
 
