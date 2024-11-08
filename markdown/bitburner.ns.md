@@ -134,7 +134,7 @@ export async function main(ns) {
 |  [moveTail(x, y, pid)](./bitburner.ns.movetail.md) | Move a tail window. |
 |  [mv(host, source, destination)](./bitburner.ns.mv.md) | Move a file on the target server. |
 |  [nextPortWrite(port)](./bitburner.ns.nextportwrite.md) | Listen for a port write. |
-|  [nFormat(n, format)](./bitburner.ns.nformat.md) | Format a number using the numeral library. This function is deprecated and will be removed in 2.4. |
+|  [nFormat(n, format)](./bitburner.ns.nformat.md) | Format a number using the numeral library. This function is deprecated and will be removed in a later version. |
 |  [nuke(host)](./bitburner.ns.nuke.md) | Runs NUKE.exe on a server. |
 |  [peek(portNumber)](./bitburner.ns.peek.md) | Get a copy of the data from a port without popping it. |
 |  [print(args)](./bitburner.ns.print.md) | Prints one or more values or variables to the script’s logs. |

@@ -1635,7 +1635,8 @@ export const ns: InternalAPI<NSFull> = {
   nFormat: (ctx) => (_n, _format) => {
     deprecationWarning(
       "ns.nFormat",
-      "Use ns.formatNumber, formatRam, formatPercent, or js builtins like Intl.NumberFormat instead.",
+      "Use ns.formatNumber, ns.formatRam, ns.formatPercent, or JS built-in objects/functions (e.g., Intl namespace) instead. " +
+        "Check the NS API documentation for details.",
     );
     const n = helpers.number(ctx, "n", _n);
     const format = helpers.string(ctx, "format", _format);
