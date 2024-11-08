@@ -48,3 +48,9 @@ export function resetGangs(): void {
 export function loadAllGangs(saveString: string): void {
   AllGangs = JSON.parse(saveString, Reviver);
 }
+
+export function getClashWinChance(thisGang: string, otherGang: string): number {
+  const thisGangPower = AllGangs[thisGang].power;
+  const otherGangPower = AllGangs[otherGang].power;
+  return thisGangPower / (thisGangPower + otherGangPower);
+}

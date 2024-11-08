@@ -18,7 +18,7 @@ import { GangConstants } from "./data/Constants";
 import { GangMemberTasks } from "./GangMemberTasks";
 import { IAscensionResult } from "./IAscensionResult";
 
-import { AllGangs } from "./AllGangs";
+import { AllGangs, getClashWinChance } from "./AllGangs";
 import { GangMember } from "./GangMember";
 
 import { WorkerScript } from "../Netscript/WorkerScript";
@@ -236,11 +236,7 @@ export class Gang {
           if (!(Math.random() < this.territoryClashChance)) continue;
         }
 
-        const thisPwr = AllGangs[thisGang].power;
-        const otherPwr = AllGangs[otherGang].power;
-        const thisChance = thisPwr / (thisPwr + otherPwr);
-
-        if (Math.random() < thisChance) {
+        if (Math.random() < getClashWinChance(thisGang, otherGang)) {
           if (AllGangs[otherGang].territory <= 0) return;
           const territoryGain = calculateTerritoryGain(thisGang, otherGang);
           AllGangs[thisGang].territory += territoryGain;
