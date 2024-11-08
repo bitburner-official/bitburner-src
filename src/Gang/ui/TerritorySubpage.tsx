@@ -50,7 +50,7 @@ export function TerritorySubpage(): React.ReactElement {
                   }
                 }
                 /**
-                 * Show a confirmation popup if the player tries to enable the territory clash when their gang is too 
+                 * Show a confirmation popup if the player tries to enable the territory clash when their gang is too
                  * weak and cannot win any other gangs.
                  */
                 if (event.target.checked && !canWinAtLeastOneGang) {
@@ -143,7 +143,7 @@ interface ITerritoryProps {
 function OtherGangTerritory(props: ITerritoryProps): React.ReactElement {
   const gang = useGang();
   const territory = AllGangs[props.name].territory;
-  const opacity = (territory > 0) ? 1 : 0.75;
+  const opacity = territory > 0 ? 1 : 0.75;
   return (
     <Box component={Paper} sx={{ p: 1, opacity }}>
       <Typography variant="h6" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
