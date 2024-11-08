@@ -97,9 +97,6 @@ export class Gang {
 
   /** Main process function called by the engine loop every game cycle */
   process(numCycles = 1): void {
-    if (isNaN(numCycles)) {
-      console.error(`NaN passed into Gang.process(): ${numCycles}`);
-    }
     this.storedCycles += numCycles;
     if (this.storedCycles < GangConstants.minCyclesToProcess) return;
 
@@ -112,7 +109,7 @@ export class Gang {
       this.processTerritoryAndPowerGains(cycles);
       this.storedCycles -= cycles;
     } catch (e: unknown) {
-      console.error("Exception caught when processing Gang", e);
+      exceptionAlert(e);
     }
 
     // Handle "nextUpdate" resolver after this update
