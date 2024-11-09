@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.FactionWorkRepGain property
 
-Influences how much rep the player gains when performing work for a faction.
+Influences how much rep the player gains when performing work for a faction or donating to it.
 
 **Signature:**
 

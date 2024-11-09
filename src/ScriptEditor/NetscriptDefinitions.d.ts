@@ -690,7 +690,7 @@ interface BitNodeMultipliers {
   FactionPassiveRepGain: number;
   /** Influences the experience gained for each ability when the player completes work for a Faction. */
   FactionWorkExpGain: number;
-  /** Influences how much rep the player gains when performing work for a faction. */
+  /** Influences how much rep the player gains when performing work for a faction or donating to it. */
   FactionWorkRepGain: number;
   /** Influences how much it costs to unlock the stock market's 4S Market Data API */
   FourSigmaMarketDataApiCost: number;
