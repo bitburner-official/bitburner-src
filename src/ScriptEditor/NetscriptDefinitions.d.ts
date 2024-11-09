@@ -8905,7 +8905,14 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   goPublic(numShares: number): boolean;
 
   /**
-   * Bribe a faction. The specified faction must offer at least 1 type of work. You can use {@link Singularity.getFactionWorkTypes | getFactionWorkTypes} to get the list of work types of a faction.
+   * Bribe a faction. You must satisfy these conditions:
+   *
+   * - The corporation valuation must be greater than or equal to a threshold. You can use
+   * {@link Corporation.getCorporation | getCorporation} and {@link Corporation.getConstants | getConstants} to get
+   * these information.
+   *
+   * - The specified faction must offer at least 1 type of work. You can use
+   * {@link Singularity.getFactionWorkTypes | getFactionWorkTypes} to get the list of work types of a faction.
    *
    * @remarks
    * RAM cost: 20 GB

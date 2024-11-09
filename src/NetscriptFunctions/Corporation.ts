@@ -758,12 +758,12 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     bribe: (ctx) => (_factionName, _amountCash) => {
       checkAccess(ctx);
       const factionName = getEnumHelper("FactionName").nsGetMember(ctx, _factionName);
-      const amountCash = helpers.number(ctx, "amountCash", _amountCash);
-      if (isNaN(amountCash) || amountCash <= 0) {
-        throw new Error("Invalid value for amount field! Must be numeric and greater than 0.");
+      const amountCash = helpers.positiveNumber(ctx, "amountCash", _amountCash);
+      const result = bribe(getCorporation(), amountCash, factionName);
+      if (!result.success) {
+        helpers.log(ctx, () => result.message);
       }
-
-      return bribe(getCorporation(), amountCash, factionName) > 0;
+      return result.success;
     },
     getBonusTime: (ctx) => () => {
       checkAccess(ctx);
