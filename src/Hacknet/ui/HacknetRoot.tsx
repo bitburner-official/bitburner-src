@@ -110,7 +110,9 @@ export function HacknetRoot(): React.ReactElement {
 
       {hasHacknetServers() && (
         <>
-          <Button focusRipple={false} onClick={() => setOpen(true)}>Spend Hashes on Upgrades</Button>
+          <Button focusRipple={false} onClick={() => setOpen(true)}>
+            Spend Hashes on Upgrades
+          </Button>
           <br />
         </>
       )}
