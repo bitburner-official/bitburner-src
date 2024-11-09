@@ -21,7 +21,5 @@ Array containing an object with number and level of the source file.
 
 RAM cost: 5 GB
 
-Returns an array of source files.
-
-This array always contains your current Source-Files and their levels, regardless of BitNode options. If you want to check the active levels of Source-Files and other BitNode options, you can check the "ResetInfo.bitNodeOptions" property with [getResetInfo](./bitburner.ns.getresetinfo.md)<!-- -->.
+Returns an array of source files. This function takes BitNode options into account. For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 0. In this case, this function returns {<!-- -->"n":1,"lvl":0<!-- -->}<!-- -->.
 

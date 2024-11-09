@@ -4,7 +4,7 @@
 
 ## ResetInfo.ownedSF property
 
-A map of owned SF to their levels. Keyed by the SF number. Map values are the SF level.
+A map of owned source files. Its keys are the SF numbers. Its values are the active SF levels. This map takes BitNode options into account. For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 0. In this case, this map contains this entry: Key: 1 =<!-- -->&gt; Value: 0.
 
 **Signature:**
 

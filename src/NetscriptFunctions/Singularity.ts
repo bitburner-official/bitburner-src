@@ -88,7 +88,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
       return res;
     },
-    getOwnedSourceFiles: () => () => [...Player.sourceFiles].map(([n, lvl]) => ({ n, lvl })),
+    getOwnedSourceFiles: () => () => [...Player.activeSourceFiles].map(([n, lvl]) => ({ n, lvl })),
     getAugmentationFactions: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);

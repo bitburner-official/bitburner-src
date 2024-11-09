@@ -74,7 +74,11 @@ interface ResetInfo {
   currentNode: number;
   /** A map of owned augmentations to their levels. Keyed by the augmentation name. Map values are the augmentation level (e.g. for NeuroFlux governor). */
   ownedAugs: Map<string, number>;
-  /** A map of owned SF to their levels. Keyed by the SF number. Map values are the SF level. */
+  /**
+   * A map of owned source files. Its keys are the SF numbers. Its values are the active SF levels. This map takes
+   * BitNode options into account. For example, let's say you have SF 1.3, but you overrode the active level of SF1 and
+   * set it to level 0. In this case, this map contains this entry: Key: 1 => Value: 0.
+   */
   ownedSF: Map<number, number>;
   /** Current BitNode options */
   bitNodeOptions: BitNodeOptions;
@@ -2435,11 +2439,9 @@ export interface Singularity {
    * RAM cost: 5 GB
    *
    *
-   * Returns an array of source files.
-   *
-   * This array always contains your current Source-Files and their levels, regardless of BitNode options. If you want
-   * to check the active levels of Source-Files and other BitNode options, you can check the "ResetInfo.bitNodeOptions"
-   * property with {@link NS.getResetInfo | getResetInfo}.
+   * Returns an array of source files. This function takes BitNode options into account. For example, let's say you have
+   * SF 1.3, but you overrode the active level of SF1 and set it to level 0. In this case, this function returns
+   * {"n":1,"lvl":0}.
    *
    * @returns Array containing an object with number and level of the source file.
    */
