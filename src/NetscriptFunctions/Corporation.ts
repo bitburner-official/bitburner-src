@@ -685,6 +685,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         nextState: corporation.state.nextName,
         prevState: corporation.state.prevName,
         divisions: [...corporation.divisions.keys()],
+        valuation: corporation.valuation,
       };
       setDeprecatedProperties(data, {
         state: {

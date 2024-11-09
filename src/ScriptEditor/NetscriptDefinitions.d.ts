@@ -9166,6 +9166,8 @@ interface CorporationInfo {
   prevState: CorpStateName;
   /** Array of all division names */
   divisions: string[];
+  /** Corporation valuation */
+  valuation: number;
 }
 
 /**
