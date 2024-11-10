@@ -108,6 +108,11 @@ export function StyleEditorModal(props: IProps): React.ReactElement {
           type="number"
           value={customStyle.fontSize * (16 / 14)}
           onChange={(value, error) =>
+            // MUI has an internal font size of 14, which then gets translated to 16px inside the typography.
+            // The font size that "overwrites" the tail font size is directly added by the styling. This value is in pixels.
+            // The inputs need to match, as two differently scaling inputs are hard to work with.
+            // To the user, both inputs are in pixels. The value MUI uses to set the font size needs to have this weird
+            // scaling of 16 to 14, so it will correctly scale back to 16px.
             update({ ...customStyle, fontSize: Math.max(5, (Number(value) ?? 8) * (14 / 16)) }, error)
           }
         />
