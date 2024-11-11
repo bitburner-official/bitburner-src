@@ -109,7 +109,7 @@ export class Gang {
       this.processTerritoryAndPowerGains(cycles);
       this.storedCycles -= cycles;
     } catch (e: unknown) {
-      exceptionAlert(e);
+      exceptionAlert(e, true);
     }
 
     // Handle "nextUpdate" resolver after this update

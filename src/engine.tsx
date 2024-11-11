@@ -170,7 +170,10 @@ const Engine: {
 
   decrementAllCounters: function (numCycles = 1) {
     for (const [counterName, counter] of Object.entries(Engine.Counters)) {
-      if (counter === undefined) throw new Error("counter should not be undefined");
+      if (counter === undefined) {
+        exceptionAlert(new Error(`counter value is undefined. counterName: ${counterName}.`), true);
+        continue;
+      }
       Engine.Counters[counterName] = counter - numCycles;
     }
   },
@@ -207,7 +210,7 @@ const Engine: {
         try {
           Player.bladeburner.process();
         } catch (e) {
-          exceptionAlert(e);
+          exceptionAlert(e, true);
         }
       }
       Engine.Counters.mechanicProcess = 5;
