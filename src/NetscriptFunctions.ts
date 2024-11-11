@@ -1824,7 +1824,11 @@ export const ns: InternalAPI<NSFull> = {
     lastNodeReset: Player.lastNodeReset,
     currentNode: Player.bitNodeN,
     ownedAugs: new Map(Player.augmentations.map((aug) => [aug.name, aug.level])),
-    ownedSF: new Map(Player.activeSourceFiles),
+    ownedSF: new Map(
+      [...Player.activeSourceFiles].filter(([__, activeLevel]) => {
+        return activeLevel > 0;
+      }),
+    ),
     bitNodeOptions: {
       ...Player.bitNodeOptions,
       sourceFileOverrides: new Map(Player.bitNodeOptions.sourceFileOverrides),

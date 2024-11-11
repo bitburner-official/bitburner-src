@@ -76,8 +76,12 @@ interface ResetInfo {
   ownedAugs: Map<string, number>;
   /**
    * A map of owned source files. Its keys are the SF numbers. Its values are the active SF levels. This map takes
-   * BitNode options into account. For example, let's say you have SF 1.3, but you overrode the active level of SF1 and
-   * set it to level 0. In this case, this map contains this entry: Key: 1 => Value: 0.
+   * BitNode options into account.
+   *
+   * For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 1. In this
+   * case, this map contains this entry: Key: 1 => Value: 1.
+   *
+   * If the active level of a source file is 0, that source file won't be included in the result.
    */
   ownedSF: Map<number, number>;
   /** Current BitNode options */
@@ -2439,9 +2443,12 @@ export interface Singularity {
    * RAM cost: 5 GB
    *
    *
-   * Returns an array of source files. This function takes BitNode options into account. For example, let's say you have
-   * SF 1.3, but you overrode the active level of SF1 and set it to level 0. In this case, this function returns
-   * {"n":1,"lvl":0}.
+   * Returns an array of source files. This function takes BitNode options into account.
+   *
+   * For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 1. In this
+   * case, this function returns {"n":1,"lvl":1}.
+   *
+   * If the active level of a source file is 0, that source file won't be included in the result.
    *
    * @returns Array containing an object with number and level of the source file.
    */
