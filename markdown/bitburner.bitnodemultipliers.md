@@ -38,7 +38,7 @@ interface BitNodeMultipliers
 |  [DexterityLevelMultiplier](./bitburner.bitnodemultipliers.dexteritylevelmultiplier.md) |  | number | Influences how quickly the player's dexterity level (not exp) scales |
 |  [FactionPassiveRepGain](./bitburner.bitnodemultipliers.factionpassiverepgain.md) |  | number | Influences how much rep the player gains in each faction simply by being a member. |
 |  [FactionWorkExpGain](./bitburner.bitnodemultipliers.factionworkexpgain.md) |  | number | Influences the experience gained for each ability when the player completes work for a Faction. |
-|  [FactionWorkRepGain](./bitburner.bitnodemultipliers.factionworkrepgain.md) |  | number | Influences how much rep the player gains when performing work for a faction. |
+|  [FactionWorkRepGain](./bitburner.bitnodemultipliers.factionworkrepgain.md) |  | number | Influences how much rep the player gains when performing work for a faction or donating to it. |
 |  [FourSigmaMarketDataApiCost](./bitburner.bitnodemultipliers.foursigmamarketdataapicost.md) |  | number | Influences how much it costs to unlock the stock market's 4S Market Data API |
 |  [FourSigmaMarketDataCost](./bitburner.bitnodemultipliers.foursigmamarketdatacost.md) |  | number | Influences how much it costs to unlock the stock market's 4S Market Data (NOT API) |
 |  [GangSoftcap](./bitburner.bitnodemultipliers.gangsoftcap.md) |  | number | Influences the respect gain and money gain of your gang. |

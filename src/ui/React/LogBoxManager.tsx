@@ -407,7 +407,19 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {script.logs.map(
                   (line: React.ReactNode, i: number): React.ReactNode =>
-                    typeof line !== "string" ? line : <ANSIITypography key={i} text={line} color={lineColor(line)} />,
+                    typeof line !== "string" ? (
+                      line
+                    ) : (
+                      <ANSIITypography
+                        key={i}
+                        text={line}
+                        color={lineColor(line)}
+                        styles={{
+                          display: "inline-block",
+                          fontSize: Settings.styles.tailFontSize,
+                        }}
+                      />
+                    ),
                 )}
               </div>
             </Paper>

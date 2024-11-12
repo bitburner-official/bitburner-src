@@ -110,7 +110,15 @@ export function HacknetRoot(): React.ReactElement {
 
       {hasHacknetServers() && (
         <>
-          <Button onClick={() => setOpen(true)}>Spend Hashes on Upgrades</Button>
+          {/* 
+          The usage of focusRipple in this button is intentional. Without it, after closing the modal by pressing the
+          Esc button, this button has a weird ripple effect (only on Chrome).
+          The documentation says that focusRipple is false by default, but I have to explicitly set it to false to fix
+          this weird ripple effect.
+          */}
+          <Button focusRipple={false} onClick={() => setOpen(true)}>
+            Spend Hashes on Upgrades
+          </Button>
           <br />
         </>
       )}

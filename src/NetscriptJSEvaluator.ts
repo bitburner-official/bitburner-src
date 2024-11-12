@@ -4,14 +4,12 @@
  */
 import * as walk from "acorn-walk";
 import { parse } from "acorn";
+import type * as acorn from "acorn";
 
 import { LoadedModule, type ScriptURL, type ScriptModule } from "./Script/LoadedModule";
 import type { Script } from "./Script/Script";
 import type { ScriptFilePath } from "./Paths/ScriptFilePath";
 import { FileType, getFileType, getModuleScript, transformScript } from "./utils/ScriptTransformer";
-
-// Acorn type def is straight up incomplete so we have to fill with our own.
-export type Node = any;
 
 // Makes a blob that contains the code of a given script.
 function makeScriptBlob(code: string): Blob {
@@ -103,33 +101,51 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
 
   // Inspired by: https://stackoverflow.com/a/43834063/91401
   const ast = parse(scriptCode, { sourceType: "module", ecmaVersion: "latest", ranges: true });
-  interface importNode {
+  interface ImportNode {
     filename: string;
     start: number;
     end: number;
   }
-  const importNodes: importNode[] = [];
+  const importNodes: ImportNode[] = [];
   // Walk the nodes of this tree and find any import declaration statements.
   walk.simple(ast, {
-    ImportDeclaration(node: Node) {
+    ImportDeclaration(node: acorn.ImportDeclaration) {
       // Push this import onto the stack to replace
-      if (!node.source) return;
+      if (!node.source) {
+        return;
+      }
+      if (typeof node.source.value !== "string" || !node.source.range) {
+        console.error("Invalid node when walking ImportDeclaration in generateLoadedModule. node:", node);
+        return;
+      }
       importNodes.push({
         filename: node.source.value,
         start: node.source.range[0] + 1,
         end: node.source.range[1] - 1,
       });
     },
-    ExportNamedDeclaration(node: Node) {
-      if (!node.source) return;
+    ExportNamedDeclaration(node: acorn.ExportNamedDeclaration) {
+      if (!node.source) {
+        return;
+      }
+      if (typeof node.source.value !== "string" || !node.source.range) {
+        console.error("Invalid node when walking ExportNamedDeclaration in generateLoadedModule. node:", node);
+        return;
+      }
       importNodes.push({
         filename: node.source.value,
         start: node.source.range[0] + 1,
         end: node.source.range[1] - 1,
       });
     },
-    ExportAllDeclaration(node: Node) {
-      if (!node.source) return;
+    ExportAllDeclaration(node: acorn.ExportAllDeclaration) {
+      if (!node.source) {
+        return;
+      }
+      if (typeof node.source.value !== "string" || !node.source.range) {
+        console.error("Invalid node when walking ExportAllDeclaration in generateLoadedModule. node:", node);
+        return;
+      }
       importNodes.push({
         filename: node.source.value,
         start: node.source.range[0] + 1,

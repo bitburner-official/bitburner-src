@@ -60,6 +60,7 @@ const lineClass = (classes: Record<string, string>, s: string): string => {
 type ANSIITypographyProps = {
   text: unknown;
   color: "primary" | "error" | "success" | "info" | "warn";
+  styles?: React.CSSProperties;
 };
 
 export const ANSIITypography = React.memo(function ANSIITypography(props: ANSIITypographyProps): React.ReactElement {
@@ -94,9 +95,14 @@ export const ANSIITypography = React.memo(function ANSIITypography(props: ANSIIT
     parts.push({ code: null, text: text });
   }
   return (
-    <Typography component={"div"} classes={{ root: lineClass(classes, props.color) }} paragraph={false}>
+    <Typography
+      component={"div"}
+      classes={{ root: lineClass(classes, props.color) }}
+      paragraph={false}
+      sx={{ ...(props.styles ?? {}) }}
+    >
       {parts.map((part, i) => (
-        <span key={i} style={ansiCodeStyle(part.code)}>
+        <span key={i} style={{ ...ansiCodeStyle(part.code), ...(props.styles ?? {}) }}>
           {part.text}
         </span>
       ))}

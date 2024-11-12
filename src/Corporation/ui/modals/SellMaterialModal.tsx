@@ -31,10 +31,16 @@ export function SellMaterialModal(props: IProps): React.ReactElement {
   }
 
   function onAmtChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    if (event.target.value === "") {
+      return;
+    }
     setAmt(event.target.value);
   }
 
   function onPriceChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    if (event.target.value === "") {
+      return;
+    }
     setPrice(event.target.value);
   }
 
