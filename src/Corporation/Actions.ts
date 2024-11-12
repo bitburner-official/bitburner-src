@@ -198,111 +198,80 @@ export function acceptInvestmentOffer(corporation: Corporation): void {
   corporation.investorShares += investShares;
 }
 
-export function convertPriceString(price: string): string | number {
-  // Replace whitespace characters.
-  let sanitizedPrice = price.replace(/\s+/g, "");
+export function convertPriceString(price: string): string {
   /**
    * Replace invalid characters. Only accepts:
    * - Digit characters
    * - 4 most basic algebraic operations (+ - * /)
    * - Parentheses
    * - Dot character
-   * - e
-   * - MP
+   * - Any characters in this list: [E, M, P]
    */
-  sanitizedPrice = sanitizedPrice.replace(/[^\d+\-*/().eMP]/g, "");
+  const sanitizedPrice = price.replace(/[^\d+\-*/().EMP]/g, "");
 
-  // // If the input does not contain "MP", we only need to convert it to a number.
-  if (!sanitizedPrice.includes("MP")) {
-    const priceAsNumber = parseFloat(sanitizedPrice);
-    if (!Number.isFinite(priceAsNumber)) {
-      throw new Error(`Invalid value for sell price field: ${price}`);
+  // Replace MP with test numbers.
+  for (const testNumber of [-1.2e123, -123456, 123456, 1.2e123]) {
+    const temp = sanitizedPrice.replace(/MP/g, testNumber.toString());
+    let evaluatedTemp: unknown;
+    try {
+      evaluatedTemp = eval?.(temp);
+      if (typeof evaluatedTemp !== "number" || !Number.isFinite(evaluatedTemp)) {
+        throw new Error(
+          `Evaluated value is not a valid number: ${evaluatedTemp}. Price: ${price}. sanitizedPrice: ${sanitizedPrice}. testNumber: ${testNumber}.`,
+        );
+      }
+    } catch (error) {
+      throw new Error(`Invalid value or expression for sell price field: ${error}`, { cause: error });
     }
-    return priceAsNumber;
   }
 
-  // Replace MP with an arbitrary number.
-  const temp: string = sanitizedPrice.replace(/MP/g, "1.234e5");
-  let evaluatedTemp: unknown;
-  try {
-    evaluatedTemp = eval?.(temp);
-    if (typeof evaluatedTemp !== "number" || !Number.isFinite(evaluatedTemp)) {
-      throw new Error(`Evaluated value is not a valid number: ${evaluatedTemp}`);
-    }
-  } catch (error) {
-    throw new Error(`Invalid value or expression for sell price field: ${error}`, { cause: error });
-  }
   // Use sanitized price.
   return sanitizedPrice;
 }
 
-export function convertAmountString(amount: string, max: number, prod: number, inv: number) {
-  // Replace whitespace characters.
-  let sanitizedAmount = amount.replace(/\s+/g, "");
+export function convertAmountString(amount: string): string {
   /**
    * Replace invalid characters. Only accepts:
    * - Digit characters
    * - 4 most basic algebraic operations (+ - * /)
    * - Parentheses
    * - Dot character
-   * - e
-   * - MAXPRODINV
+   * - Any characters in this list: [E, M, A, X, P, R, O, D, I, N, V]
    */
-  sanitizedAmount = sanitizedAmount.replace(/[^\d+\-*/().eMAXPRODINV]/g, "");
+  const sanitizedAmount = amount.replace(/[^\d+\-*/().EMAXPRODINV]/g, "");
 
-  // // If the input does not contain "MAX", "PROD", and "INV", we only need to convert it to a number.
-  if (!sanitizedAmount.includes("MAX") && !sanitizedAmount.includes("PROD") && !sanitizedAmount.includes("INV")) {
-    const amountAsNumber = parseFloat(sanitizedAmount);
-    if (!Number.isFinite(amountAsNumber)) {
-      throw new Error(`Invalid value for sell quantity field: ${amount}`);
+  for (const testNumber of [-1.2e123, -123456, 123456, 1.2e123]) {
+    let temp = sanitizedAmount.replace(/MAX/g, testNumber.toString());
+    temp = temp.replace(/PROD/g, testNumber.toString());
+    temp = temp.replace(/INV/g, testNumber.toString());
+    let evaluatedTemp: unknown;
+    try {
+      evaluatedTemp = eval?.(temp);
+      if (typeof evaluatedTemp !== "number" || !Number.isFinite(evaluatedTemp)) {
+        throw new Error(
+          `Evaluated value is not a valid number: ${evaluatedTemp}. Amount: ${amount}. sanitizedAmount: ${sanitizedAmount}. testNumber: ${testNumber}.`,
+        );
+      }
+    } catch (error) {
+      throw new Error(`Invalid value or expression for sell quantity field: ${error}`, { cause: error });
     }
-    return amountAsNumber;
   }
 
-  let temp = sanitizedAmount.replace(/MAX/g, max.toString());
-  temp = temp.replace(/PROD/g, prod.toString());
-  temp = temp.replace(/INV/g, inv.toString());
-  let evaluatedTemp: unknown;
-  try {
-    evaluatedTemp = eval?.(temp);
-    if (typeof evaluatedTemp !== "number" || !Number.isFinite(evaluatedTemp)) {
-      throw new Error(`Evaluated value is not a valid number: ${evaluatedTemp}`);
-    }
-  } catch (error) {
-    throw new Error(`Invalid value or expression for sell quantity field: ${error}`, { cause: error });
-  }
   // Use sanitized amount.
   return sanitizedAmount;
 }
 
 export function sellMaterial(material: Material, amount: string, price: string): void {
-  if (price === "") {
-    price = "0";
-  }
-  if (amount === "") {
-    amount = "0";
-  }
-
-  const convertedPrice = convertPriceString(price);
-  const convertedAmount = convertAmountString(
-    amount.toUpperCase(),
-    material.maxSellPerCycle,
-    material.productionAmount,
-    material.stored,
-  );
+  const convertedPrice = convertPriceString(price.toUpperCase());
+  const convertedAmount = convertAmountString(amount.toUpperCase());
 
   material.desiredSellPrice = convertedPrice;
   material.desiredSellAmount = convertedAmount;
 }
 
 export function sellProduct(product: Product, city: CityName, amt: string, price: string, all: boolean): void {
-  const convertedPrice = convertPriceString(price);
-  const convertedAmount = convertAmountString(
-    amt.toUpperCase(),
-    product.maxSellAmount,
-    product.cityData[city].productionAmount,
-    product.cityData[city].stored,
-  );
+  const convertedPrice = convertPriceString(price.toUpperCase());
+  const convertedAmount = convertAmountString(amt.toUpperCase());
 
   if (all) {
     for (const cityName of Object.values(CityName)) {

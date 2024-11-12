@@ -21,8 +21,8 @@ interface IProps {
 // Create a popup that let the player manage sales of a material
 export function SellProductModal(props: IProps): React.ReactElement {
   const [checked, setChecked] = useState(true);
-  const [iQty, setQty] = useState<string>(String(props.product.cityData[props.city].desiredSellAmount));
-  const [px, setPx] = useState<string>(String(props.product.cityData[props.city].desiredSellPrice));
+  const [amt, setAmt] = useState<string>(String(props.product.cityData[props.city].desiredSellAmount));
+  const [price, setPrice] = useState<string>(String(props.product.cityData[props.city].desiredSellPrice));
 
   function onCheckedChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setChecked(event.target.checked);
@@ -30,7 +30,7 @@ export function SellProductModal(props: IProps): React.ReactElement {
 
   function sellProduct(): void {
     try {
-      actions.sellProduct(props.product, props.city, iQty, px, checked);
+      actions.sellProduct(props.product, props.city, amt, price, checked);
     } catch (error) {
       dialogBoxCreate(String(error));
     }
@@ -39,11 +39,17 @@ export function SellProductModal(props: IProps): React.ReactElement {
   }
 
   function onAmtChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setQty(event.target.value);
+    if (event.target.value === "") {
+      return;
+    }
+    setAmt(event.target.value);
   }
 
   function onPriceChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setPx(event.target.value);
+    if (event.target.value === "") {
+      return;
+    }
+    setPrice(event.target.value);
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
@@ -75,14 +81,14 @@ export function SellProductModal(props: IProps): React.ReactElement {
       </Typography>
       <br />
       <TextField
-        value={iQty}
+        value={amt}
         autoFocus={true}
         type="text"
         placeholder="Sell amount"
         onChange={onAmtChange}
         onKeyDown={onKeyDown}
       />
-      <TextField value={px} type="text" placeholder="Sell price" onChange={onPriceChange} onKeyDown={onKeyDown} />
+      <TextField value={price} type="text" placeholder="Sell price" onChange={onPriceChange} onKeyDown={onKeyDown} />
       <Button onClick={sellProduct} style={{ marginLeft: ".5rem", marginRight: ".5rem" }}>
         Confirm
       </Button>
