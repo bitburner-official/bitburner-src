@@ -3,7 +3,7 @@ import { Terminal } from "../Terminal";
 const deprecatedWarningsGiven = new Set();
 export function setDeprecatedProperties(
   obj: object,
-  properties: Record<string, { identifier: string; message: string; value: any }>,
+  properties: Record<string, { identifier: string; message: string; value: unknown }>,
 ) {
   for (const [name, info] of Object.entries(properties)) {
     Object.defineProperty(obj, name, {
@@ -11,7 +11,7 @@ export function setDeprecatedProperties(
         deprecationWarning(info.identifier, info.message);
         return info.value;
       },
-      set: (value: any) => (info.value = value),
+      set: (value: unknown) => (info.value = value),
       enumerable: true,
     });
   }

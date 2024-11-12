@@ -399,7 +399,11 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
         <ConfirmationModal
           open={isImportModalOpen}
           onClose={closeImportModal}
-          onConfirm={handleImport}
+          onConfirm={() => {
+            handleImport().catch((error) => {
+              console.error(error);
+            });
+          }}
           confirmationText={
             <>
               Importing new save game data will <strong>completely wipe</strong> the current game data!

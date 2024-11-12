@@ -7,17 +7,17 @@ export let staneksGift = new StaneksGift();
 
 export function loadStaneksGift(saveString: string): void {
   if (saveString) {
-    staneksGift = JSON.parse(saveString, Reviver);
+    staneksGift = JSON.parse(saveString, Reviver) as StaneksGift;
   } else {
     staneksGift = new StaneksGift();
   }
 }
 
 export function zeros(width: number, height: number): number[][] {
-  const array = [];
+  const array: number[][] = [];
 
   for (let i = 0; i < width; ++i) {
-    array.push(Array(height).fill(0));
+    array.push(Array<number>(height).fill(0));
   }
 
   return array;

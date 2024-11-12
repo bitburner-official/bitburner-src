@@ -55,10 +55,10 @@ export function BribeFactionModal(props: IProps): React.ReactElement {
       return;
     }
     const faction = Factions[selectedFaction];
-    const reputationGain = actions.bribe(corp, money, faction.name);
-    if (reputationGain > 0) {
+    const result = actions.bribe(corp, money, faction.name);
+    if (result.success) {
       dialogBoxCreate(
-        `You gained ${formatReputation(reputationGain)} reputation with ${faction.name} by bribing them.`,
+        `You gained ${formatReputation(result.reputationGain)} reputation with ${faction.name} by bribing them.`,
       );
     }
     props.onClose();

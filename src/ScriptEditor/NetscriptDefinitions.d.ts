@@ -74,7 +74,15 @@ interface ResetInfo {
   currentNode: number;
   /** A map of owned augmentations to their levels. Keyed by the augmentation name. Map values are the augmentation level (e.g. for NeuroFlux governor). */
   ownedAugs: Map<string, number>;
-  /** A map of owned SF to their levels. Keyed by the SF number. Map values are the SF level. */
+  /**
+   * A map of owned source files. Its keys are the SF numbers. Its values are the active SF levels. This map takes
+   * BitNode options into account.
+   *
+   * For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 1. In this
+   * case, this map contains this entry: Key: 1 => Value: 1.
+   *
+   * If the active level of a source file is 0, that source file won't be included in the result.
+   */
   ownedSF: Map<number, number>;
   /** Current BitNode options */
   bitNodeOptions: BitNodeOptions;
@@ -690,7 +698,7 @@ interface BitNodeMultipliers {
   FactionPassiveRepGain: number;
   /** Influences the experience gained for each ability when the player completes work for a Faction. */
   FactionWorkExpGain: number;
-  /** Influences how much rep the player gains when performing work for a faction. */
+  /** Influences how much rep the player gains when performing work for a faction or donating to it. */
   FactionWorkRepGain: number;
   /** Influences how much it costs to unlock the stock market's 4S Market Data API */
   FourSigmaMarketDataApiCost: number;
@@ -2435,7 +2443,12 @@ export interface Singularity {
    * RAM cost: 5 GB
    *
    *
-   * Returns an array of source files
+   * Returns an array of source files. This function takes BitNode options into account.
+   *
+   * For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 1. In this
+   * case, this function returns {"n":1,"lvl":1}.
+   *
+   * If the active level of a source file is 0, that source file won't be included in the result.
    *
    * @returns Array containing an object with number and level of the source file.
    */
@@ -7637,15 +7650,21 @@ export interface NS {
   formatPercent(n: number, fractionalDigits?: number, suffixStart?: number): string;
 
   /**
-   * Format a number using the numeral library. This function is deprecated and will be removed in 2.4.
-   * @deprecated Use ns.formatNumber, formatRam, or formatPercent instead. Will be removed in 2.4.
+   * Format a number using the numeral library. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   *
+   * Use alternatives:
+   *
+   * - NS APIs: ns.formatNumber, ns.formatRam, ns.formatPercent
+   *
+   * - JS built-in objects/functions: Intl.NumberFormat, Intl.PluralRules, Intl.Locale, etc.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
    * Converts a number into a string with the specified format options.
    * See http://numeraljs.com/#format for documentation on format strings supported.
-   *
-   * This function is deprecated and will be removed in 2.3.
    *
    * @param n - Number to format.
    * @param format - Formatting options. See http://numeraljs.com/#format for valid formats.
@@ -8905,7 +8924,14 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   goPublic(numShares: number): boolean;
 
   /**
-   * Bribe a faction. The specified faction must offer at least 1 type of work. You can use {@link Singularity.getFactionWorkTypes | getFactionWorkTypes} to get the list of work types of a faction.
+   * Bribe a faction. You must satisfy these conditions:
+   *
+   * - The corporation valuation must be greater than or equal to a threshold. You can use
+   * {@link Corporation.getCorporation | getCorporation} and {@link Corporation.getConstants | getConstants} to get this
+   * information.
+   *
+   * - The specified faction must offer at least 1 type of work. You can use
+   * {@link Singularity.getFactionWorkTypes | getFactionWorkTypes} to get the list of work types of a faction.
    *
    * @remarks
    * RAM cost: 20 GB
@@ -9166,6 +9192,8 @@ interface CorporationInfo {
   prevState: CorpStateName;
   /** Array of all division names */
   divisions: string[];
+  /** Corporation valuation */
+  valuation: number;
 }
 
 /**
@@ -9562,6 +9590,8 @@ interface UserInterfaceTheme {
  */
 interface IStyleSettings {
   fontFamily: string;
+  fontSize: number;
+  tailFontSize: number;
   lineHeight: number;
 }
 

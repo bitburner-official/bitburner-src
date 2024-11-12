@@ -155,13 +155,27 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
         >
           <Button onClick={startImport} startIcon={<Upload />} sx={{ gridArea: "import" }}>
             Import Game
-            <input ref={importInput} id="import-game-file-selector" type="file" hidden onChange={onImport} />
+            <input
+              ref={importInput}
+              id="import-game-file-selector"
+              type="file"
+              hidden
+              onChange={(event) => {
+                onImport(event).catch((error) => {
+                  console.error(error);
+                });
+              }}
+            />
           </Button>
         </Tooltip>
         <ConfirmationModal
           open={importSaveOpen}
           onClose={() => setImportSaveOpen(false)}
-          onConfirm={() => confirmedImportGame()}
+          onConfirm={() => {
+            confirmedImportGame().catch((error) => {
+              console.error(error);
+            });
+          }}
           additionalButton={<Button onClick={compareSaveGame}>Compare Save</Button>}
           confirmationText={
             <>

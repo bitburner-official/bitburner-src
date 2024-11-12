@@ -17,6 +17,7 @@ import { Material } from "./Material";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import { calculateMarkupMultiplier } from "./helpers";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 
 interface DivisionParams {
   name: string;
@@ -726,8 +727,7 @@ export class Division {
         case "START":
           break;
         default:
-          console.error(`Invalid state: ${state}`);
-          break;
+          throwIfReachable(state);
       } //End switch(this.state)
       this.updateWarehouseSizeUsed(warehouse);
     }
@@ -979,8 +979,7 @@ export class Division {
         case "EXPORT":
           break;
         default:
-          console.error(`Invalid State: ${state}`);
-          break;
+          throwIfReachable(state);
       } //End switch(this.state)
       this.updateWarehouseSizeUsed(warehouse);
     }

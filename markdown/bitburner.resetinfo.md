@@ -21,5 +21,5 @@ interface ResetInfo
 |  [lastAugReset](./bitburner.resetinfo.lastaugreset.md) |  | number | Numeric timestamp (from Date.now()) of last augmentation reset |
 |  [lastNodeReset](./bitburner.resetinfo.lastnodereset.md) |  | number | Numeric timestamp (from Date.now()) of last BitNode reset |
 |  [ownedAugs](./bitburner.resetinfo.ownedaugs.md) |  | Map&lt;string, number&gt; | A map of owned augmentations to their levels. Keyed by the augmentation name. Map values are the augmentation level (e.g. for NeuroFlux governor). |
-|  [ownedSF](./bitburner.resetinfo.ownedsf.md) |  | Map&lt;number, number&gt; | A map of owned SF to their levels. Keyed by the SF number. Map values are the SF level. |
+|  [ownedSF](./bitburner.resetinfo.ownedsf.md) |  | Map&lt;number, number&gt; | <p>A map of owned source files. Its keys are the SF numbers. Its values are the active SF levels. This map takes BitNode options into account.</p><p>For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 1. In this case, this map contains this entry: Key: 1 =<!-- -->&gt; Value: 1.</p><p>If the active level of a source file is 0, that source file won't be included in the result.</p> |
 

@@ -5,6 +5,7 @@ import * as allEnums from "../Enums";
 import { assertString } from "../Netscript/TypeAssertion";
 import { errorMessage } from "../Netscript/ErrorMessages";
 import { getRandomIntInclusive } from "./helpers/getRandomIntInclusive";
+import { getRecordValues } from "../Types/Record";
 
 interface GetMemberOptions {
   /** Whether to use fuzzy matching on the input (case insensitive, ignore spaces and dashes) */
@@ -22,7 +23,7 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
   constructor(obj: EnumObj, name: string) {
     this.name = name;
     this.defaultArgName = name.charAt(0).toLowerCase() + name.slice(1);
-    this.valueArray = Object.values(obj);
+    this.valueArray = getRecordValues(obj);
     this.valueSet = new Set(this.valueArray);
     this.fuzzMap = new Map(this.valueArray.map((val) => [val.toLowerCase().replace(/[ -]+/g, ""), val]));
   }

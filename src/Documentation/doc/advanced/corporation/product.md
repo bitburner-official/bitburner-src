@@ -8,7 +8,7 @@ Market-TA2 automatically sets the optimal prices for products. Check this [secti
 
 Products need to be developed before being produced. We can put multiple products in the development queue, but only one product can be developed at a time.
 
-There is a limit on how many products a division can have. The default limit is 3. There are 2 researches that increase that limit. However, those researches are nearly useless because, in most cases, there is no point in increasing the maximum number of products. Check this [section](./unlocks-upgrade-research.md) for details. When we reach the limit, we need to discontinue a product before developing a new one.
+There is a limit on how many products a division can have. The default limit is 3. There are 2 research upgrades that increase that limit. However, those research upgrades are nearly useless because, in most cases, there is no point in increasing the maximum number of products. Check this [section](./unlocks-upgrade-research.md) for details. When we reach the limit, we need to discontinue a product before developing a new one.
 
 We need to continuously develop new products. New products are almost always better than the old ones and generate much more profit.
 

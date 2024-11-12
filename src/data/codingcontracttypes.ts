@@ -917,7 +917,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
     desc: (data: number[][]): string => {
       return [
         "You are located in the top-left corner of the following grid:\n\n",
-        `&nbsp;&nbsp;[${data.map((line) => "[" + line + "]").join(",\n&nbsp;&nbsp;&nbsp;")}]\n\n`,
+        `&nbsp;&nbsp;[${data.map((line) => `[${line}]`).join(",\n&nbsp;&nbsp;&nbsp;")}]\n\n`,
         "You are trying to find the shortest path to the bottom-right corner of the grid,",
         "but there are obstacles on the grid that you cannot move onto.",
         "These obstacles are denoted by '1', while empty spaces are denoted by 0.\n\n",
@@ -945,8 +945,8 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       const dstX = width - 1;
       const minPathLength = dstY + dstX; // Math.abs(dstY - srcY) + Math.abs(dstX - srcX)
 
-      const grid: number[][] = new Array(height);
-      for (let y = 0; y < height; y++) grid[y] = new Array(width).fill(0);
+      const grid: number[][] = new Array<number[]>(height);
+      for (let y = 0; y < height; y++) grid[y] = new Array<number>(width).fill(0);
 
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
@@ -969,12 +969,12 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       const dstY = height - 1;
       const dstX = width - 1;
 
-      const distance: [number][] = new Array(height);
+      const distance: number[][] = new Array<number[]>(height);
       //const prev: [[number, number] | undefined][] = new Array(height);
       const queue: [number, number][] = [];
 
       for (let y = 0; y < height; y++) {
-        distance[y] = new Array(width).fill(Infinity) as [number];
+        distance[y] = new Array<number>(width).fill(Infinity);
         //prev[y] = new Array(width).fill(undefined) as [undefined];
       }
 
@@ -1422,7 +1422,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       //Attempt to construct one to check if this is correct.
       if (sanitizedPlayerAns === "") {
         //Verify that there is no solution by attempting to create a proper 2-coloring.
-        const coloring: (number | undefined)[] = Array(data[0]).fill(undefined);
+        const coloring: (number | undefined)[] = Array<number | undefined>(data[0]).fill(undefined);
         while (coloring.some((val) => val === undefined)) {
           //Color a vertex in the graph
           const initialVertex: number = coloring.findIndex((val) => val === undefined);
@@ -1435,9 +1435,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
             const neighbors: number[] = neighbourhood(v);
 
             //For each vertex u adjacent to v
-            for (const id in neighbors) {
-              const u: number = neighbors[id];
-
+            for (const u of neighbors) {
               //Set the color of u to the opposite of v's color if it is new,
               //then add u to the frontier to continue the algorithm.
               if (coloring[u] === undefined) {
