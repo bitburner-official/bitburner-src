@@ -98,7 +98,7 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
       {sourceError && (
         <Box>
           <Typography variant="h6" color={Settings.theme.error}>
-            Error: {sourceError.toString()}
+            Error: {String(sourceError)}
           </Typography>
           <br />
         </Box>

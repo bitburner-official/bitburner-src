@@ -35,7 +35,10 @@ export function Toolbar({ editor, onSave }: IProps) {
   const [optionsOpen, { on: openOptions, off: closeOptions }] = useBoolean(false);
 
   function beautify(): void {
-    editor?.getAction("editor.action.formatDocument")?.run();
+    editor
+      ?.getAction("editor.action.formatDocument")
+      ?.run()
+      .catch((error) => console.error(error));
   }
 
   const { ram, ramEntries, isUpdatingRAM, options, saveOptions } = useScriptEditorContext();

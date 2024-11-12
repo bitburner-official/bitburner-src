@@ -63,15 +63,6 @@ declare global {
   };
 }
 
-// Only show warning if the time diff is greater than this value.
-const thresholdOfTimeDiffForShowingWarningAboutSystemClock = CONSTANTS.MillisecondsPerFiveMinutes;
-
-function showWarningAboutSystemClock(timeDiff: number) {
-  AlertEvents.emit(
-    `Warning: The system clock moved backward: ${convertTimeMsToTimeElapsedString(Math.abs(timeDiff))}.`,
-  );
-}
-
 export const GameCycleEvents = new EventEmitter<[]>();
 
 /** Game engine. Handles the main game loop. */
@@ -179,7 +170,10 @@ const Engine: {
 
   decrementAllCounters: function (numCycles = 1) {
     for (const [counterName, counter] of Object.entries(Engine.Counters)) {
-      if (counter === undefined) throw new Error("counter should not be undefined");
+      if (counter === undefined) {
+        exceptionAlert(new Error(`counter value is undefined. counterName: ${counterName}.`), true);
+        continue;
+      }
       Engine.Counters[counterName] = counter - numCycles;
     }
   },
@@ -216,7 +210,7 @@ const Engine: {
         try {
           Player.bladeburner.process();
         } catch (e) {
-          exceptionAlert(e);
+          exceptionAlert(e, true);
         }
       }
       Engine.Counters.mechanicProcess = 5;
@@ -246,7 +240,7 @@ const Engine: {
         Engine.Counters.autoSaveCounter = 60 * 5; // Let's check back in a bit
       } else {
         Engine.Counters.autoSaveCounter = Settings.AutosaveInterval * 5;
-        saveObject.saveGame(!Settings.SuppressSavedGameToast);
+        saveObject.saveGame(!Settings.SuppressSavedGameToast).catch((error) => console.error(error));
       }
     }
   },
@@ -274,12 +268,6 @@ const Engine: {
       const lastUpdate = Player.lastUpdate;
       let timeOffline = Engine._lastUpdate - lastUpdate;
       if (timeOffline < 0) {
-        if (Math.abs(timeOffline) > thresholdOfTimeDiffForShowingWarningAboutSystemClock) {
-          const timeDiff = timeOffline;
-          setTimeout(() => {
-            showWarningAboutSystemClock(timeDiff);
-          }, 250);
-        }
         timeOffline = 0;
       }
       const numCyclesOffline = Math.floor(timeOffline / CONSTANTS.MilliPerCycle);
@@ -430,9 +418,6 @@ const Engine: {
     const _thisUpdate = new Date().getTime();
     let diff = _thisUpdate - Engine._lastUpdate;
     if (diff < 0) {
-      if (Math.abs(diff) > thresholdOfTimeDiffForShowingWarningAboutSystemClock) {
-        showWarningAboutSystemClock(diff);
-      }
       diff = 0;
       Engine._lastUpdate = _thisUpdate;
       Player.lastUpdate = _thisUpdate;

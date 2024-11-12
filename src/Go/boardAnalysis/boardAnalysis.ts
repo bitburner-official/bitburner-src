@@ -645,6 +645,16 @@ export function boardFromSimpleBoard(simpleBoard: SimpleBoard): Board {
   );
 }
 
+/**
+ * Creates a Board object from the given simpleBoard string array
+ * Also updates the board object with the analytics (liberties/chains) from the simple board
+ */
+export const updatedBoardFromSimpleBoard = (simpleBoard: SimpleBoard): Board => {
+  const board = boardFromSimpleBoard(simpleBoard);
+  updateChains(board);
+  return board;
+};
+
 export function boardStateFromSimpleBoard(
   simpleBoard: SimpleBoard,
   ai = GoOpponent.Daedalus,

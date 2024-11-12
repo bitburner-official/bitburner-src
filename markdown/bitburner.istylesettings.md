@@ -17,5 +17,7 @@ interface IStyleSettings
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [fontFamily](./bitburner.istylesettings.fontfamily.md) |  | string |  |
+|  [fontSize](./bitburner.istylesettings.fontsize.md) |  | number |  |
 |  [lineHeight](./bitburner.istylesettings.lineheight.md) |  | number |  |
+|  [tailFontSize](./bitburner.istylesettings.tailfontsize.md) |  | number |  |
 

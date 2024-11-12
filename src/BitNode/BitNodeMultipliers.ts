@@ -72,7 +72,7 @@ export class BitNodeMultipliers {
   /** Influences the experience gained for each ability when the player completes work for a Faction. */
   FactionWorkExpGain = 1;
 
-  /** Influences how much rep the player gains when performing work for a faction. */
+  /** Influences how much rep the player gains when performing work for a faction or donating to it. */
   FactionWorkRepGain = 1;
 
   /** Influences how much it costs to unlock the stock market's 4S Market Data API */

@@ -6,6 +6,8 @@
 
 Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points are also given chain IDs to represent continuous empty space. Dead nodes are given the value `null.`
 
+Takes an optional boardState argument; by default uses the current board state.
+
 The data from getChains() can be used with the data from getBoardState() to see which player (or empty) each chain is
 
 For example, a 5x5 board might look like this. There is a large chain \#1 on the left side, smaller chains 2 and 3 on the right, and a large chain 0 taking up the center of the board. <pre lang="javascript"> \[ \[ 0,0,0,3,4\], \[ 1,0,0,3,3\], \[ 1,1,0,0,0\], \[null,1,0,2,2\], \[null,1,0,2,5\], \] </pre>
@@ -13,8 +15,15 @@ For example, a 5x5 board might look like this. There is a large chain \#1 on the
 **Signature:**
 
 ```typescript
-getChains(): (number | null)[][];
+getChains(boardState?: string[]): (number | null)[][];
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  boardState | string\[\] | _(Optional)_ |
+
 **Returns:**
 
 (number \| null)\[\]\[\]

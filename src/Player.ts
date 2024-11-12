@@ -11,7 +11,7 @@ export function setPlayer(playerObj: PlayerObject): void {
 }
 
 export function loadPlayer(saveString: string): PlayerObject {
-  const player = JSON.parse(saveString, Reviver);
+  const player = JSON.parse(saveString, Reviver) as PlayerObject;
   player.money = parseFloat(player.money + "");
   player.exploits = sanitizeExploits(player.exploits);
   return player;

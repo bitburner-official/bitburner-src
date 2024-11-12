@@ -209,8 +209,14 @@ export function GameRoot(): React.ReactElement {
     for (const server of GetAllServers()) {
       server.runningScriptMap.clear();
     }
-    saveObject.saveGame();
-    setTimeout(() => htmlLocation.reload(), 2000);
+    saveObject
+      .saveGame()
+      .then(() => {
+        setTimeout(() => htmlLocation.reload(), 2000);
+      })
+      .catch((error) => {
+        exceptionAlert(error);
+      });
   }
 
   function attemptedForbiddenRouting(name: string) {
@@ -397,11 +403,13 @@ export function GameRoot(): React.ReactElement {
     case Page.Options: {
       mainPage = (
         <GameOptionsRoot
-          save={() => saveObject.saveGame()}
+          save={() => {
+            saveObject.saveGame().catch((error) => exceptionAlert(error));
+          }}
           export={() => {
             // Apply the export bonus before saving the game
             onExport();
-            saveObject.exportGame();
+            saveObject.exportGame().catch((error) => exceptionAlert(error));
           }}
           forceKill={killAllScripts}
           softReset={softReset}
@@ -420,7 +428,7 @@ export function GameRoot(): React.ReactElement {
           exportGameFn={() => {
             // Apply the export bonus before saving the game
             onExport();
-            saveObject.exportGame();
+            saveObject.exportGame().catch((error) => exceptionAlert(error));
           }}
           installAugmentationsFn={() => {
             installAugmentations();
@@ -487,7 +495,9 @@ export function GameRoot(): React.ReactElement {
                   !ITutorial.isRunning ? (
                     <CharacterOverview
                       parentOpen={parentOpen}
-                      save={() => saveObject.saveGame()}
+                      save={() => {
+                        saveObject.saveGame().catch((error) => exceptionAlert(error));
+                      }}
                       killScripts={killAllScripts}
                     />
                   ) : (

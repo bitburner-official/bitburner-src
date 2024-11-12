@@ -11,7 +11,7 @@ import { generateNextPid } from "./Netscript/Pid";
 import { CONSTANTS } from "./Constants";
 import { Interpreter } from "./ThirdParty/JSInterpreter";
 import { NetscriptFunctions } from "./NetscriptFunctions";
-import { compile, Node } from "./NetscriptJSEvaluator";
+import { compile } from "./NetscriptJSEvaluator";
 import { Port, PortNumber } from "./NetscriptPort";
 import { RunningScript } from "./Script/RunningScript";
 import { scriptCalculateOfflineProduction } from "./Script/ScriptHelpers";
@@ -28,6 +28,7 @@ import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { roundToTwo } from "./utils/helpers/roundToTwo";
 
 import { parse } from "acorn";
+import type * as acorn from "acorn";
 import { simple as walksimple } from "acorn-walk";
 import { parseCommand } from "./Terminal/Parser";
 import { Terminal } from "./Terminal";
@@ -94,6 +95,7 @@ async function startNetscript1Script(workerScript: WorkerScript): Promise<void> 
           try {
             // Sent a resolver function as an extra arg. See createAsyncFunction JSInterpreter.js:3209
             const callback = args.pop() as (value: unknown) => void;
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call -- NS1 is deprecated.
             const result = await entry(...args.map((arg) => int.pseudoToNative(arg)));
             return callback(int.nativeToPseudo(result));
           } catch (e: unknown) {
@@ -107,6 +109,7 @@ async function startNetscript1Script(workerScript: WorkerScript): Promise<void> 
       } else {
         // new object layer, e.g. bladeburner
         int.setProperty(intLayer, name, int.nativeToPseudo({}));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument -- NS1 is deprecated.
         wrapNS1Layer(int, (intLayer as BasicObject).properties[name], nsLayer[name]);
       }
     }
@@ -141,7 +144,7 @@ async function startNetscript1Script(workerScript: WorkerScript): Promise<void> 
 */
 function processNetscript1Imports(code: string, workerScript: WorkerScript): { code: string; lineOffset: number } {
   //allowReserved prevents 'import' from throwing error in ES5
-  const ast: Node = parse(code, {
+  const ast = parse(code, {
     ecmaVersion: 9,
     allowReserved: true,
     sourceType: "module",
@@ -161,9 +164,9 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
 
   // Walk over the tree and process ImportDeclaration nodes
   walksimple(ast, {
-    ImportDeclaration: (node: Node) => {
+    ImportDeclaration: (node: acorn.ImportDeclaration) => {
       hasImports = true;
-      const scriptName = resolveScriptFilePath(node.source.value, root, legacyScriptExtension);
+      const scriptName = resolveScriptFilePath(node.source.value as string, root, legacyScriptExtension);
       if (!scriptName) throw new Error("'Import' failed due to invalid path: " + scriptName);
       const script = getScript(scriptName);
       if (!script) throw new Error("'Import' failed due to script not found: " + scriptName);
@@ -177,9 +180,12 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
         // import * as namespace from script
         const namespace = node.specifiers[0].local.name;
         const fnNames: string[] = []; //Names only
-        const fnDeclarations: Node[] = []; //FunctionDeclaration Node objects
+        const fnDeclarations: acorn.Node[] = []; //FunctionDeclaration Node objects
         walksimple(scriptAst, {
-          FunctionDeclaration: (node: Node) => {
+          FunctionDeclaration: (node: acorn.FunctionDeclaration | acorn.AnonymousFunctionDeclaration) => {
+            if (!node.id) {
+              return;
+            }
             fnNames.push(node.id.name);
             fnDeclarations.push(node);
           },
@@ -189,7 +195,7 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
         generatedCode += `var ${namespace};\n(function (namespace) {\n`;
 
         //Add the function declarations
-        fnDeclarations.forEach((fn: Node) => {
+        fnDeclarations.forEach((fn) => {
           generatedCode += generate(fn);
           generatedCode += "\n";
         });
@@ -207,14 +213,17 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
 
         //Get array of all fns to import
         const fnsToImport: string[] = [];
-        node.specifiers.forEach((e: Node) => {
+        node.specifiers.forEach((e) => {
           fnsToImport.push(e.local.name);
         });
 
         //Walk through script and get FunctionDeclaration code for all specified fns
-        const fnDeclarations: Node[] = [];
+        const fnDeclarations: acorn.Node[] = [];
         walksimple(scriptAst, {
-          FunctionDeclaration: (node: Node) => {
+          FunctionDeclaration: (node: acorn.FunctionDeclaration | acorn.AnonymousFunctionDeclaration) => {
+            if (!node.id) {
+              return;
+            }
             if (fnsToImport.includes(node.id.name)) {
               fnDeclarations.push(node);
             }
@@ -222,7 +231,7 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
         });
 
         //Convert FunctionDeclarations into code
-        fnDeclarations.forEach((fn: Node) => {
+        fnDeclarations.forEach((fn) => {
           generatedCode += generate(fn);
           generatedCode += "\n";
         });
@@ -332,21 +341,23 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
 
   // Start the script's execution using the correct function for file type
   (isLegacyScript(workerScript.name) ? startNetscript1Script : startNetscript2Script)(workerScript)
-    // Once the code finishes (either resolved or rejected, doesnt matter), set its
+    // Once the code finishes (either resolved or rejected, doesn't matter), set its
     // running status to false
     .then(function () {
-      // On natural death, the earnings are transferred to the parent if it still exists.
-      if (parent && !parent.env.stopFlag) {
-        parent.scriptRef.onlineExpGained += runningScriptObj.onlineExpGained;
-        parent.scriptRef.onlineMoneyMade += runningScriptObj.onlineMoneyMade;
-      }
       killWorkerScript(workerScript);
       workerScript.log("", () => "Script finished running");
     })
     .catch(function (e) {
       handleUnknownError(e, workerScript);
-      workerScript.log("", () => (e instanceof ScriptDeath ? "Script killed." : "Script crashed due to an error."));
       killWorkerScript(workerScript);
+      workerScript.log("", () => (e instanceof ScriptDeath ? "Script killed." : "Script crashed due to an error."));
+    })
+    .finally(() => {
+      // The earnings are transferred to the parent if it still exists.
+      if (parent && !parent.env.stopFlag) {
+        parent.scriptRef.onlineExpGained += runningScriptObj.onlineExpGained;
+        parent.scriptRef.onlineMoneyMade += runningScriptObj.onlineMoneyMade;
+      }
     });
   return true;
 }

@@ -114,6 +114,7 @@ export function refreshTheme(): void {
     },
     typography: {
       fontFamily: Settings.styles.fontFamily,
+      fontSize: Settings.styles.fontSize,
       button: {
         textTransform: "none",
       },

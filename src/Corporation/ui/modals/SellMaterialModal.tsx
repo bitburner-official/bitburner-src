@@ -24,17 +24,23 @@ export function SellMaterialModal(props: IProps): React.ReactElement {
   function sellMaterial(): void {
     try {
       actions.sellMaterial(props.mat, amt, price);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
     }
     props.onClose();
   }
 
   function onAmtChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    if (event.target.value === "") {
+      return;
+    }
     setAmt(event.target.value);
   }
 
   function onPriceChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    if (event.target.value === "") {
+      return;
+    }
     setPrice(event.target.value);
   }
 

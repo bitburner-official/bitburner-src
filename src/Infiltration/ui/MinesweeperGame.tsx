@@ -135,7 +135,7 @@ export function MinesweeperGame(props: IMinigameProps): React.ReactElement {
 
             return (
               <Typography
-                key={`${item}${uniqueId()}`}
+                key={uniqueId()}
                 sx={{
                   color: color,
                   border: `2px solid ${item.current ? Settings.theme.infolight : Settings.theme.primary}`,

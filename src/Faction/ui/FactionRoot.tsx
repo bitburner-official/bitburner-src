@@ -97,7 +97,7 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
     startWork();
   }
 
-  // We have a special flag for whether the player this faction is the player's
+  // We have a special flag for whether this faction is the player's
   // gang faction because if the player has a gang, they cannot do any other action
   const isPlayersGang = Player.gang && Player.getGangName() === faction.name;
 

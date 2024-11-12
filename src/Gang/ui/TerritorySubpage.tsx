@@ -5,10 +5,11 @@ import { Help } from "@mui/icons-material";
 
 import { formatNumberNoSuffix, formatPercent } from "../../ui/formatNumber";
 
-import { AllGangs } from "../AllGangs";
+import { AllGangs, getClashWinChance } from "../AllGangs";
 
 import { useGang } from "./Context";
 import { TerritoryInfoModal } from "./TerritoryInfoModal";
+import { PromptEvent } from "../../ui/React/PromptManager";
 
 /** React Component for the territory subpage. */
 export function TerritorySubpage(): React.ReactElement {
@@ -37,7 +38,34 @@ export function TerritorySubpage(): React.ReactElement {
           control={
             <Switch
               checked={gang.territoryWarfareEngaged}
-              onChange={(event) => (gang.territoryWarfareEngaged = event.target.checked)}
+              onChange={(event) => {
+                let canWinAtLeastOneGang = false;
+                for (const gangName of Object.keys(AllGangs)) {
+                  if (gang.facName === gangName) {
+                    continue;
+                  }
+                  if (getClashWinChance(gang.facName, gangName) >= 0.5) {
+                    canWinAtLeastOneGang = true;
+                    break;
+                  }
+                }
+                /**
+                 * Show a confirmation popup if the player tries to enable the territory clash when their gang is too
+                 * weak and cannot win any other gangs.
+                 */
+                if (event.target.checked && !canWinAtLeastOneGang) {
+                  PromptEvent.emit({
+                    txt: "Your gang is too weak. Its win chances against all other gangs are below 50%.\nOn average, you will always lose territory when being engaged in clashes.\n\nDo you really want to engage in territory clashes?",
+                    resolve: (value: string | boolean) => {
+                      if (value === true) {
+                        gang.territoryWarfareEngaged = true;
+                      }
+                    },
+                  });
+                } else {
+                  gang.territoryWarfareEngaged = event.target.checked;
+                }
+              }}
             />
           }
           label={
@@ -114,20 +142,17 @@ interface ITerritoryProps {
 
 function OtherGangTerritory(props: ITerritoryProps): React.ReactElement {
   const gang = useGang();
-  const playerPower = AllGangs[gang.facName].power;
-  const power = AllGangs[props.name].power;
-  const clashVictoryChance = playerPower / (power + playerPower);
   const territory = AllGangs[props.name].territory;
-  const opacity = territory ? 1 : 0.75;
+  const opacity = territory > 0 ? 1 : 0.75;
   return (
     <Box component={Paper} sx={{ p: 1, opacity }}>
       <Typography variant="h6" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
         {props.name}
       </Typography>
       <Typography>
-        <b>Power:</b> {formatNumberNoSuffix(power, 3)} <br />
+        <b>Power:</b> {formatNumberNoSuffix(AllGangs[props.name].power, 3)} <br />
         <b>Territory:</b> {formatTerritory(territory)}% <br />
-        <b>Clash Win Chance:</b> {formatPercent(clashVictoryChance, 3)}
+        <b>Clash Win Chance:</b> {formatPercent(getClashWinChance(gang.facName, props.name), 3)}
       </Typography>
     </Box>
   );

@@ -27,8 +27,8 @@ export function IssueDividendsModal(props: IProps): React.ReactElement {
     if (percent === null) return;
     try {
       actions.issueDividends(corp, percent / 100);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
     }
 
     props.onClose();

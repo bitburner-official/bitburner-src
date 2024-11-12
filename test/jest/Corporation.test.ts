@@ -11,6 +11,8 @@ import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
 import {
   acceptInvestmentOffer,
   buyBackShares,
+  convertAmountString,
+  convertPriceString,
   goPublic,
   issueNewShares,
   sellShares,
@@ -84,7 +86,10 @@ describe("Corporation", () => {
     it("should be preserved by seed funding", () => {
       const seedFunded = true;
       Player.startCorporation("TestCorp", seedFunded);
-      expectSharesToAddUp(Player.corporation!);
+      if (!Player.corporation) {
+        throw new Error("Player.startCorporation failed to create a corporation.");
+      }
+      expectSharesToAddUp(Player.corporation);
     });
     it("should be preserved by acceptInvestmentOffer", () => {
       acceptInvestmentOffer(corporation);
@@ -136,5 +141,46 @@ describe("Corporation", () => {
         expect(calculateOfficeSizeUpgradeCost(fromSize, increaseBy as PositiveInteger)).toBeCloseTo(expectedCost, 1);
       },
     );
+  });
+
+  describe("convertPriceString", () => {
+    it("should pass normally", () => {
+      expect(convertPriceString("MP")).toStrictEqual("MP");
+      expect(convertPriceString("MP+1")).toStrictEqual("MP+1");
+      expect(convertPriceString("MP+MP")).toStrictEqual("MP+MP");
+      expect(convertPriceString("123")).toStrictEqual("123");
+      expect(convertPriceString("123+456")).toStrictEqual("123+456");
+      expect(convertPriceString("1e10")).toStrictEqual("1e10");
+      expect(convertPriceString("1E10")).toStrictEqual("1E10");
+    });
+    it("should throw errors", () => {
+      expect(() => convertPriceString("")).toThrow();
+      expect(() => convertPriceString("null")).toThrow();
+      expect(() => convertPriceString("undefined")).toThrow();
+      expect(() => convertPriceString("Infinity")).toThrow();
+      expect(() => convertPriceString("abc")).toThrow();
+    });
+  });
+
+  describe("convertAmountString", () => {
+    it("should pass normally", () => {
+      expect(convertAmountString("MAX")).toStrictEqual("MAX");
+      expect(convertAmountString("PROD")).toStrictEqual("PROD");
+      expect(convertAmountString("INV")).toStrictEqual("INV");
+      expect(convertAmountString("MAX+1")).toStrictEqual("MAX+1");
+      expect(convertAmountString("MAX+MAX")).toStrictEqual("MAX+MAX");
+      expect(convertAmountString("MAX+PROD+INV")).toStrictEqual("MAX+PROD+INV");
+      expect(convertAmountString("123")).toStrictEqual("123");
+      expect(convertAmountString("123+456")).toStrictEqual("123+456");
+      expect(convertAmountString("1e10")).toStrictEqual("1e10");
+      expect(convertAmountString("1E10")).toStrictEqual("1E10");
+    });
+    it("should throw errors", () => {
+      expect(() => convertAmountString("")).toThrow();
+      expect(() => convertAmountString("null")).toThrow();
+      expect(() => convertAmountString("undefined")).toThrow();
+      expect(() => convertAmountString("Infinity")).toThrow();
+      expect(() => convertAmountString("abc")).toThrow();
+    });
   });
 });

@@ -1,10 +1,10 @@
 export function HammingEncode(data: number): string {
   const enc: number[] = [0];
-  const data_bits: any[] = data.toString(2).split("").reverse();
-
-  data_bits.forEach((e, i, a) => {
-    a[i] = parseInt(e);
-  });
+  const data_bits: number[] = data
+    .toString(2)
+    .split("")
+    .reverse()
+    .map((value) => parseInt(value));
 
   let k = data_bits.length;
 
@@ -18,35 +18,36 @@ export function HammingEncode(data: number): string {
     }
   }
 
-  let parity: any = 0;
+  let parityNumber = 0;
 
   /* Figure out the subsection parities */
   for (let i = 0; i < enc.length; i++) {
     if (enc[i]) {
-      parity ^= i;
+      parityNumber ^= i;
     }
   }
 
-  parity = parity.toString(2).split("").reverse();
-  parity.forEach((e: any, i: any, a: any) => {
-    a[i] = parseInt(e);
-  });
+  const parityArray = parityNumber
+    .toString(2)
+    .split("")
+    .reverse()
+    .map((value) => parseInt(value));
 
   /* Set the parity bits accordingly */
-  for (let i = 0; i < parity.length; i++) {
-    enc[2 ** i] = parity[i] ? 1 : 0;
+  for (let i = 0; i < parityArray.length; i++) {
+    enc[2 ** i] = parityArray[i] ? 1 : 0;
   }
 
-  parity = 0;
+  parityNumber = 0;
   /* Figure out the overall parity for the entire block */
   for (let i = 0; i < enc.length; i++) {
     if (enc[i]) {
-      parity++;
+      parityNumber++;
     }
   }
 
   /* Finally set the overall parity bit */
-  enc[0] = parity % 2 == 0 ? 0 : 1;
+  enc[0] = parityNumber % 2 == 0 ? 0 : 1;
 
   return enc.join("");
 }
@@ -68,11 +69,11 @@ export function HammingEncodeProperly(data: number): string {
   const k: number = 2 ** m - m - 1;
 
   const enc: number[] = [0];
-  const data_bits: any[] = data.toString(2).split("").reverse();
-
-  data_bits.forEach((e, i, a) => {
-    a[i] = parseInt(e);
-  });
+  const data_bits: number[] = data
+    .toString(2)
+    .split("")
+    .reverse()
+    .map((value) => parseInt(value));
 
   /* Flip endianness as in the original implementation by Hedrauta
    * and write the data back to front
@@ -83,35 +84,36 @@ export function HammingEncodeProperly(data: number): string {
     }
   }
 
-  let parity: any = 0;
+  let parityNumber = 0;
 
   /* Figure out the subsection parities */
   for (let i = 0; i < n; i++) {
     if (enc[i]) {
-      parity ^= i;
+      parityNumber ^= i;
     }
   }
 
-  parity = parity.toString(2).split("").reverse();
-  parity.forEach((e: any, i: any, a: any) => {
-    a[i] = parseInt(e);
-  });
+  const parityArray = parityNumber
+    .toString(2)
+    .split("")
+    .reverse()
+    .map((value) => parseInt(value));
 
   /* Set the parity bits accordingly */
   for (let i = 0; i < m; i++) {
-    enc[2 ** i] = parity[i] ? 1 : 0;
+    enc[2 ** i] = parityArray[i] ? 1 : 0;
   }
 
-  parity = 0;
+  parityNumber = 0;
   /* Figure out the overall parity for the entire block */
   for (let i = 0; i < n; i++) {
     if (enc[i]) {
-      parity++;
+      parityNumber++;
     }
   }
 
   /* Finally set the overall parity bit */
-  enc[0] = parity % 2 == 0 ? 0 : 1;
+  enc[0] = parityNumber % 2 == 0 ? 0 : 1;
 
   return enc.join("");
 }
@@ -121,8 +123,9 @@ export function HammingDecode(data: string): number {
   const bits: number[] = [];
 
   /* TODO why not just work with an array of digits from the start? */
-  for (const i in data.split("")) {
-    const bit = parseInt(data[i]);
+  const bitStringArray = data.split("");
+  for (let i = 0; i < bitStringArray.length; ++i) {
+    const bit = parseInt(bitStringArray[i]);
     bits[i] = bit;
 
     if (bit) {

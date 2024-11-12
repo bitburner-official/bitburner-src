@@ -4,7 +4,9 @@
 
 ## GoAnalysis.getControlledEmptyNodes() method
 
-Returns 'X', 'O', or '?' for each empty point to indicate which player controls that empty point. If no single player fully encircles the empty space, it is shown as contested with '?'. "\#" are dead nodes that are not part of the subnet.
+Returns 'X' for black, 'O' for white, or '?' for each empty point to indicate which player controls that empty point. If no single player fully encircles the empty space, it is shown as contested with '?'. "\#" are dead nodes that are not part of the subnet.
+
+Takes an optional boardState argument; by default uses the current board state.
 
 Filled points of any color are indicated with '.'
 
@@ -13,8 +15,15 @@ In this example, white encircles some space in the top-left, black encircles som
 **Signature:**
 
 ```typescript
-getControlledEmptyNodes(): string[];
+getControlledEmptyNodes(boardState?: string[]): string[];
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  boardState | string\[\] | _(Optional)_ |
+
 **Returns:**
 
 string\[\]

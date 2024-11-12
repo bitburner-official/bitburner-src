@@ -542,7 +542,7 @@ export const ns: InternalAPI<NSFull> = {
         return [] as string[];
       }
 
-      return runningScriptObj.logs.map((x) => "" + x);
+      return runningScriptObj.logs.map((x) => String(x));
     },
   tail:
     (ctx) =>
@@ -1635,7 +1635,8 @@ export const ns: InternalAPI<NSFull> = {
   nFormat: (ctx) => (_n, _format) => {
     deprecationWarning(
       "ns.nFormat",
-      "Use ns.formatNumber, formatRam, formatPercent, or js builtins like Intl.NumberFormat instead.",
+      "Use ns.formatNumber, ns.formatRam, ns.formatPercent, or JS built-in objects/functions (e.g., Intl namespace) instead. " +
+        "Check the NS API documentation for details.",
     );
     const n = helpers.number(ctx, "n", _n);
     const format = helpers.string(ctx, "format", _format);
@@ -1824,7 +1825,11 @@ export const ns: InternalAPI<NSFull> = {
     lastNodeReset: Player.lastNodeReset,
     currentNode: Player.bitNodeN,
     ownedAugs: new Map(Player.augmentations.map((aug) => [aug.name, aug.level])),
-    ownedSF: new Map(Player.sourceFiles),
+    ownedSF: new Map(
+      [...Player.activeSourceFiles].filter(([__, activeLevel]) => {
+        return activeLevel > 0;
+      }),
+    ),
     bitNodeOptions: {
       ...Player.bitNodeOptions,
       sourceFileOverrides: new Map(Player.bitNodeOptions.sourceFileOverrides),
@@ -1870,7 +1875,7 @@ function getFunctionNames(obj: object, prefix: string): string[] {
     } else if (typeof value === "function") {
       functionNames.push(prefix + key);
     } else if (typeof value === "object") {
-      functionNames.push(...getFunctionNames(value, `${prefix}${key}.`));
+      functionNames.push(...getFunctionNames(value as object, `${prefix}${key}.`));
     }
   }
   return functionNames;

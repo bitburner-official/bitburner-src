@@ -14,7 +14,7 @@ interface IProps {
 const useStyles = makeStyles()({
   snackbar: {
     // Log popup z-index increments, so let's add a padding to be well above them.
-    zIndex: `${logBoxBaseZIndex + 1000} !important` as any,
+    zIndex: `${logBoxBaseZIndex + 1000} !important`,
 
     "& .MuiAlert-icon": {
       alignSelf: "center",

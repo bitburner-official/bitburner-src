@@ -17,7 +17,7 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { formatMoney } from "../ui/formatNumber";
-import { isPositiveInteger } from "../types";
+import { isPositiveInteger, type Result } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 import { getKeyList } from "../utils/helpers/getKeyList";
 
@@ -372,29 +372,56 @@ export class Corporation {
     }
   }
 
-  /** Purchasing a one-time unlock
-   * @returns A string on failure, indicating the reason for failure. */
-  purchaseUnlock(unlockName: CorpUnlockName): string | void {
-    if (this.unlocks.has(unlockName)) return `The corporation has already unlocked ${unlockName}`;
+  /**
+   * Purchasing a one-time unlock
+   */
+  purchaseUnlock(unlockName: CorpUnlockName): Result {
+    if (this.unlocks.has(unlockName)) {
+      return {
+        success: false,
+        message: `${unlockName} has already been unlocked.`,
+      };
+    }
     const price = CorpUnlocks[unlockName].price;
-    if (this.funds < price) return `Insufficient funds to purchase ${unlockName}, requires ${formatMoney(price)}`;
+    if (this.funds < price) {
+      return {
+        success: false,
+        message: `Insufficient funds to purchase ${unlockName}, requires ${formatMoney(price)}.`,
+      };
+    }
     this.loseFunds(price, "upgrades");
     this.unlocks.add(unlockName);
 
     // Apply effects for one-time unlocks
-    if (unlockName === CorpUnlockName.ShadyAccounting) this.dividendTax -= 0.05;
-    if (unlockName === CorpUnlockName.GovernmentPartnership) this.dividendTax -= 0.1;
+    if (unlockName === CorpUnlockName.ShadyAccounting) {
+      this.dividendTax -= 0.05;
+    }
+    if (unlockName === CorpUnlockName.GovernmentPartnership) {
+      this.dividendTax -= 0.1;
+    }
+    return {
+      success: true,
+    };
   }
 
-  /** Purchasing a levelable upgrade
-   * @returns A string on failure, indicating the reason for failure. */
-  purchaseUpgrade(upgradeName: CorpUpgradeName, amount = 1): string | void {
+  /**
+   * Purchasing a levelable upgrade
+   */
+  purchaseUpgrade(upgradeName: CorpUpgradeName, amount = 1): Result {
     if (!isPositiveInteger(amount)) {
-      return `Number of upgrade levels purchased must be a positive integer (attempted: ${amount}).`;
+      return {
+        success: false,
+        message: `Number of upgrade levels purchased must be a positive integer (attempted: ${amount}).`,
+      };
     }
     const upgrade = CorpUpgrades[upgradeName];
     const totalCost = calculateUpgradeCost(this, upgrade, amount);
-    if (this.funds < totalCost) return `Not enough funds to purchase ${amount} of upgrade ${upgradeName}.`;
+    if (this.funds < totalCost) {
+      return {
+        success: false,
+        message: `Not enough funds to purchase ${amount} of upgrade ${upgradeName}.`,
+      };
+    }
     this.loseFunds(totalCost, "upgrades");
     this.upgrades[upgradeName].level += amount;
     this.upgrades[upgradeName].value += upgrade.benefit * amount;
@@ -407,6 +434,9 @@ export class Corporation {
         }
       }
     }
+    return {
+      success: true,
+    };
   }
 
   getProductionMultiplier(): number {

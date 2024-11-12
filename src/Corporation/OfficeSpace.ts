@@ -5,6 +5,7 @@ import { Division } from "./Division";
 import { Corporation } from "./Corporation";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { createEnumKeyedRecord, getRecordKeys } from "../Types/Record";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 
 interface IParams {
   city: CityName;
@@ -165,8 +166,7 @@ export class OfficeSpace {
         case "total":
           continue;
         default:
-          console.error(`Invalid employee position: ${name}`);
-          break;
+          throwIfReachable(name);
       }
       this.employeeProductionByJob[name] = this.employeeJobs[name] * prodMult * prodBase;
       total += this.employeeProductionByJob[name];

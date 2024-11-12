@@ -1,8 +1,6 @@
 /** Generic Event Emitter class following a subscribe/publish paradigm. */
 export class EventEmitter<T extends any[]> {
-  private subscribers: Set<(...args: [...T]) => void | undefined> = new Set();
-
-  constructor() {}
+  private subscribers: Set<(...args: [...T]) => void> = new Set();
 
   subscribe(s: (...args: [...T]) => void): () => void {
     this.subscribers.add(s);

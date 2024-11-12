@@ -229,10 +229,23 @@ function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteS
   return result;
 }
 
+function mapToString(map: Map<unknown, unknown>): string {
+  const formattedMap = [...map]
+    .map((m) => {
+      return `${String(m[0])} => ${String(m[1])}`;
+    })
+    .join("; ");
+  return `< Map: ${formattedMap} >`;
+}
+
+function setToString(set: Set<unknown>): string {
+  return `< Set: ${[...set].join("; ")} >`;
+}
+
 /** Convert multiple arguments for tprint or print into a single string. */
 function argsToString(args: unknown[]): string {
   // Reduce array of args into a single output string
-  return args.reduce((out, arg) => {
+  return args.reduce((out: string, arg) => {
     if (arg === null) {
       return (out += "null");
     }
@@ -243,33 +256,35 @@ function argsToString(args: unknown[]): string {
 
     // Handle Map formatting, since it does not JSON stringify or toString in a helpful way
     // output is  "< Map: key1 => value1; key2 => value2 >"
-    if (nativeArg instanceof Map && [...nativeArg].length) {
-      const formattedMap = [...nativeArg]
-        .map((m) => {
-          return `${m[0]} => ${m[1]}`;
-        })
-        .join("; ");
-      return (out += `< Map: ${formattedMap} >`);
+    if (nativeArg instanceof Map) {
+      return (out += mapToString(nativeArg));
     }
     // Handle Set formatting, since it does not JSON stringify or toString in a helpful way
     if (nativeArg instanceof Set) {
-      return (out += `< Set: ${[...nativeArg].join("; ")} >`);
+      return (out += setToString(nativeArg));
     }
     if (typeof nativeArg === "object") {
-      return (out += JSON.stringify(nativeArg, (_, value) => {
+      return (out += JSON.stringify(nativeArg, (_, value: unknown) => {
         /**
          * If the property is a promise, we will return a string that clearly states that it's a promise object, not a
          * normal object. If we don't do that, all promises will be serialized into "{}".
          */
         if (value instanceof Promise) {
+          // eslint-disable-next-line @typescript-eslint/no-base-to-string -- "[object Promise]" is exactly the string that we want.
           return value.toString();
+        }
+        if (value instanceof Map) {
+          return mapToString(value);
+        }
+        if (value instanceof Set) {
+          return setToString(value);
         }
         return value;
       }));
     }
 
-    return (out += `${nativeArg}`);
-  }, "") as string;
+    return (out += String(nativeArg));
+  }, "");
 }
 
 function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOptions {
@@ -282,6 +297,7 @@ function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOp
     return result;
   }
   if (typeof opts !== "object") {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     throw errorMessage(ctx, `BasicHGWOptions must be an object if specified, was ${opts}`);
   }
   // Safe assertion since threadOrOption type has been narrowed to a non-null object
@@ -676,8 +692,11 @@ function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): Runni
     return findRunningScriptByPid(ident);
   } else {
     const scripts = getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
-    if (scripts === null) return null;
-    return scripts.values().next().value ?? null;
+    if (scripts === null) {
+      return null;
+    }
+    const next = scripts.values().next();
+    return !next.done ? next.value : null;
   }
 }
 
@@ -709,7 +728,7 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
     args: runningScript.args.slice(),
     dynamicRamUsage: workerScript && roundToTwo(workerScript.dynamicRamUsage),
     filename: runningScript.filename,
-    logs: runningScript.logs.map((x) => "" + x),
+    logs: runningScript.logs.map((x) => String(x)),
     offlineExpGained: runningScript.offlineExpGained,
     offlineMoneyMade: runningScript.offlineMoneyMade,
     offlineRunningTime: runningScript.offlineRunningTime,
@@ -768,13 +787,21 @@ function validateBitNodeOptions(ctx: NetscriptContext, bitNodeOptions: unknown):
     return result;
   }
   if (typeof bitNodeOptions !== "object") {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     throw errorMessage(ctx, `bitNodeOptions must be an object if it's specified. It was ${bitNodeOptions}.`);
   }
   const options = bitNodeOptions as Unknownify<BitNodeOptions>;
   if (!(options.sourceFileOverrides instanceof Map)) {
     throw errorMessage(ctx, `sourceFileOverrides must be a Map.`);
   }
-  const validationResultForSourceFileOverrides = validateSourceFileOverrides(options.sourceFileOverrides, true);
+  const validationResultForSourceFileOverrides = validateSourceFileOverrides(
+    /**
+     * Cast the type from Map<any, any> to Map<number, number> to satisfy the lint rule. The validation logic in
+     * validateSourceFileOverrides will check the data.
+     */
+    options.sourceFileOverrides as Map<number, number>,
+    true,
+  );
   if (!validationResultForSourceFileOverrides.valid) {
     throw errorMessage(
       ctx,

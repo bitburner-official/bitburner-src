@@ -6,10 +6,14 @@
 
 > Warning: This API is now obsolete.
 > 
-> Use ns.formatNumber, formatRam, or formatPercent instead. Will be removed in 2.4.
+> Use alternatives:
+> 
+> - NS APIs: ns.formatNumber, ns.formatRam, ns.formatPercent
+> 
+> - JS built-in objects/functions: Intl.NumberFormat, Intl.PluralRules, Intl.Locale, etc.
 > 
 
-Format a number using the numeral library. This function is deprecated and will be removed in 2.4.
+Format a number using the numeral library. This function is deprecated and will be removed in a later version.
 
 **Signature:**
 
@@ -35,6 +39,4 @@ Formatted number.
 RAM cost: 0 GB
 
 Converts a number into a string with the specified format options. See http://numeraljs.com/\#format for documentation on format strings supported.
-
-This function is deprecated and will be removed in 2.3.
 

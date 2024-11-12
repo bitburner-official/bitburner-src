@@ -3,6 +3,7 @@ import { Card, Suit } from "./Card";
 
 import { makeStyles } from "tss-react/mui";
 import Paper from "@mui/material/Paper";
+import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 
 interface Props {
   card: Card;
@@ -51,7 +52,7 @@ export const ReactCard: FC<Props> = ({ card, hidden }) => {
       suit = <span>&#9824;</span>;
       break;
     default:
-      throw new Error(`MissingCaseException: ${card.suit}`);
+      throwIfReachable(card.suit);
   }
   return (
     <Paper className={`${classes.card} ${card.isRedSuit() ? classes.red : classes.black}`}>
