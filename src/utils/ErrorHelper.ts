@@ -54,6 +54,26 @@ export interface IErrorData {
 
 export const newIssueUrl = `https://github.com/bitburner-official/bitburner-src/issues/new`;
 
+export function parseUnknownError(error: unknown): { errorAsString: string; stack?: string; cause?: string } {
+  const errorAsString = String(error);
+  let stack: string | undefined = undefined;
+  let cause: string | undefined = undefined;
+  if (error instanceof Error) {
+    stack = error.stack;
+    // If error.cause is an error, we use error.cause.stack; otherwise, we parse error.cause to a string.
+    if (error.cause instanceof Error) {
+      cause = error.cause.stack;
+    } else if (error.cause != null) {
+      cause = String(error.cause);
+    }
+  }
+  return {
+    errorAsString,
+    stack,
+    cause,
+  };
+}
+
 export function getErrorMetadata(error: unknown, errorInfo?: React.ErrorInfo, page?: Page): IErrorMetadata {
   const isElectron = navigator.userAgent.toLowerCase().includes(" electron/");
   const env = process.env.NODE_ENV === "development" ? GameEnv.Development : GameEnv.Production;
@@ -85,12 +105,21 @@ export function getErrorMetadata(error: unknown, errorInfo?: React.ErrorInfo, pa
 
 export function getErrorForDisplay(error: unknown, errorInfo?: React.ErrorInfo, page?: Page): IErrorData {
   const metadata = getErrorMetadata(error, errorInfo, page);
+  const errorData = parseUnknownError(error);
   const fileName = String(metadata.error.fileName);
   const features =
     `lang=${metadata.features.language} cookiesEnabled=${metadata.features.cookiesEnabled.toString()}` +
     ` doNotTrack=${metadata.features.doNotTrack ?? "null"} indexedDb=${metadata.features.indexedDb.toString()}`;
 
   const title = `${metadata.error.name}: ${metadata.error.message} (at "${metadata.page}")`;
+  const cause = errorData.cause
+    ? `
+### Error cause
+\`\`\`
+${errorData.cause}
+\`\`\`
+`
+    : "";
   const body = `
 ## ${title}
 
@@ -104,7 +133,7 @@ Please fill this information with details if relevant.
 
 ### Environment
 
-* Error: ${String(metadata.error) ?? "n/a"}
+* Error: ${errorData.errorAsString ?? "n/a"}
 * Page: ${metadata.page ?? "n/a"}
 * Version: ${metadata.version.toDisplay()}
 * Environment: ${GameEnv[metadata.environment]}
@@ -115,9 +144,9 @@ Please fill this information with details if relevant.
 
 ### Stack Trace
 \`\`\`
-${metadata.error.stack}
+${errorData.stack}
 \`\`\`
-
+${cause}
 ### React Component Stack
 \`\`\`
 ${metadata.errorInfo?.componentStack}

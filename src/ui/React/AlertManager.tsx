@@ -50,7 +50,18 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
     if (typeof text === "string") {
       return cyrb53(text);
     }
-    return cyrb53(JSON.stringify(text.props));
+    let propsAsString: string;
+    /**
+     * JSON.stringify can throw an error in edge cases. One of them is "TypeError: Converting circular structure to
+     * JSON". If it happens, we use the Unix timestamp as the fallback value.
+     */
+    try {
+      propsAsString = JSON.stringify(text.props);
+    } catch (error) {
+      console.error(error);
+      propsAsString = Date.now().toString();
+    }
+    return cyrb53(propsAsString);
   }
 
   function close(): void {
