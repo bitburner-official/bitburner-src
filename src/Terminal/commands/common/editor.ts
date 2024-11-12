@@ -16,7 +16,7 @@ interface EditorParameters {
 }
 
 function getScriptTemplate(path: string): string {
-  if (isLegacyScript(path)) {
+  if (hasTextExtension(path) || isLegacyScript(path)) {
     return "";
   }
   const fileTypeFeature = getFileTypeFeature(getFileType(path));
