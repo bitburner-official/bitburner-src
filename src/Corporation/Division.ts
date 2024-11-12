@@ -452,6 +452,21 @@ export class Division {
                 const reqMatQtyNeeded = reqMat * prod * producableFrac;
                 // producableFrac already takes into account that we have enough stored
                 // Math.max is used here to avoid stored becoming negative (which can lead to NaNs)
+                /**
+                 * material.stored can become negative due to floating-point inaccuracy.
+                 *
+                 * Let's check this situation: Tobacco: 1 Plants -> 1 Product. In this situation, we have:
+                 * - reqQty = 1
+                 * - producableFrac = material.stored / prod
+                 * - reqMatQtyNeeded = prod * material.stored / prod
+                 *
+                 * Due to floating-point inaccuracy, "prod * material.stored / prod" may be slightly greater than
+                 * "material.stored". Example numbers from a real test run:
+                 * - warehouse.materials[reqMatName].stored: 942118
+                 * - prod: 176915618.50773352
+                 * - producableFrac: 0.005325239274783516
+                 * - reqMatQtyNeeded: 942118.0000000001
+                 */
                 warehouse.materials[reqMatName].stored = Math.max(
                   0,
                   warehouse.materials[reqMatName].stored - reqMatQtyNeeded,
@@ -797,7 +812,27 @@ export class Division {
             let avgQlt = 1;
             for (const [reqMatName, reqQty] of getRecordEntries(product.requiredMaterials)) {
               const reqMatQtyNeeded = reqQty * prod * producableFrac;
-              warehouse.materials[reqMatName].stored -= reqMatQtyNeeded;
+              // producableFrac already takes into account that we have enough stored
+              // Math.max is used here to avoid stored becoming negative (which can lead to NaNs)
+              /**
+               * material.stored can become negative due to floating-point inaccuracy.
+               *
+               * Let's check this situation: Tobacco: 1 Plants -> 1 Product. In this situation, we have:
+               * - reqQty = 1
+               * - producableFrac = material.stored / prod
+               * - reqMatQtyNeeded = prod * material.stored / prod
+               *
+               * Due to floating-point inaccuracy, "prod * material.stored / prod" may be slightly greater than
+               * "material.stored". Example numbers from a real test run:
+               * - warehouse.materials[reqMatName].stored: 942118
+               * - prod: 176915618.50773352
+               * - producableFrac: 0.005325239274783516
+               * - reqMatQtyNeeded: 942118.0000000001
+               */
+              warehouse.materials[reqMatName].stored = Math.max(
+                0,
+                warehouse.materials[reqMatName].stored - reqMatQtyNeeded,
+              );
               warehouse.materials[reqMatName].productionAmount -=
                 reqMatQtyNeeded / (corpConstants.secondsPerMarketCycle * marketCycles);
               avgQlt += warehouse.materials[reqMatName].quality;
