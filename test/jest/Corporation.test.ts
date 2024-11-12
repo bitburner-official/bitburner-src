@@ -148,10 +148,10 @@ describe("Corporation", () => {
       expect(convertPriceString("MP")).toStrictEqual("MP");
       expect(convertPriceString("MP+1")).toStrictEqual("MP+1");
       expect(convertPriceString("MP+MP")).toStrictEqual("MP+MP");
-      expect(convertPriceString("123")).toStrictEqual(123);
-      // parseFloat ignores "+456"
-      expect(convertPriceString("123+456")).toStrictEqual(123);
-      expect(convertPriceString("1e10")).toStrictEqual(1e10);
+      expect(convertPriceString("123")).toStrictEqual("123");
+      expect(convertPriceString("123+456")).toStrictEqual("123+456");
+      expect(convertPriceString("1e10")).toStrictEqual("1e10");
+      expect(convertPriceString("1E10")).toStrictEqual("1E10");
     });
     it("should throw errors", () => {
       expect(() => convertPriceString("")).toThrow();
@@ -164,23 +164,23 @@ describe("Corporation", () => {
 
   describe("convertAmountString", () => {
     it("should pass normally", () => {
-      expect(convertAmountString("MAX", 0, 0, 0)).toStrictEqual("MAX");
-      expect(convertAmountString("PROD", 0, 0, 0)).toStrictEqual("PROD");
-      expect(convertAmountString("INV", 0, 0, 0)).toStrictEqual("INV");
-      expect(convertAmountString("MAX+1", 0, 0, 0)).toStrictEqual("MAX+1");
-      expect(convertAmountString("MAX+MAX", 0, 0, 0)).toStrictEqual("MAX+MAX");
-      expect(convertAmountString("MAX+PROD+INV", 0, 0, 0)).toStrictEqual("MAX+PROD+INV");
-      expect(convertAmountString("123", 0, 0, 0)).toStrictEqual(123);
-      // parseFloat ignores "+456"
-      expect(convertAmountString("123+456", 0, 0, 0)).toStrictEqual(123);
-      expect(convertAmountString("1e10", 0, 0, 0)).toStrictEqual(1e10);
+      expect(convertAmountString("MAX")).toStrictEqual("MAX");
+      expect(convertAmountString("PROD")).toStrictEqual("PROD");
+      expect(convertAmountString("INV")).toStrictEqual("INV");
+      expect(convertAmountString("MAX+1")).toStrictEqual("MAX+1");
+      expect(convertAmountString("MAX+MAX")).toStrictEqual("MAX+MAX");
+      expect(convertAmountString("MAX+PROD+INV")).toStrictEqual("MAX+PROD+INV");
+      expect(convertAmountString("123")).toStrictEqual("123");
+      expect(convertAmountString("123+456")).toStrictEqual("123+456");
+      expect(convertAmountString("1e10")).toStrictEqual("1e10");
+      expect(convertAmountString("1E10")).toStrictEqual("1E10");
     });
     it("should throw errors", () => {
-      expect(() => convertAmountString("", 0, 0, 0)).toThrow();
-      expect(() => convertAmountString("null", 0, 0, 0)).toThrow();
-      expect(() => convertAmountString("undefined", 0, 0, 0)).toThrow();
-      expect(() => convertAmountString("Infinity", 0, 0, 0)).toThrow();
-      expect(() => convertAmountString("abc", 0, 0, 0)).toThrow();
+      expect(() => convertAmountString("")).toThrow();
+      expect(() => convertAmountString("null")).toThrow();
+      expect(() => convertAmountString("undefined")).toThrow();
+      expect(() => convertAmountString("Infinity")).toThrow();
+      expect(() => convertAmountString("abc")).toThrow();
     });
   });
 });

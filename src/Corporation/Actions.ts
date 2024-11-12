@@ -205,9 +205,9 @@ export function convertPriceString(price: string): string {
    * - 4 most basic algebraic operations (+ - * /)
    * - Parentheses
    * - Dot character
-   * - Any characters in this list: [E, M, P]
+   * - Any characters in this list: [e, E, M, P]
    */
-  const sanitizedPrice = price.replace(/[^\d+\-*/().EMP]/g, "");
+  const sanitizedPrice = price.replace(/[^\d+\-*/().eEMP]/g, "");
 
   // Replace MP with test numbers.
   for (const testNumber of [-1.2e123, -123456, 123456, 1.2e123]) {
@@ -236,9 +236,9 @@ export function convertAmountString(amount: string): string {
    * - 4 most basic algebraic operations (+ - * /)
    * - Parentheses
    * - Dot character
-   * - Any characters in this list: [E, M, A, X, P, R, O, D, I, N, V]
+   * - Any characters in this list: [e, E, M, A, X, P, R, O, D, I, N, V]
    */
-  const sanitizedAmount = amount.replace(/[^\d+\-*/().EMAXPRODINV]/g, "");
+  const sanitizedAmount = amount.replace(/[^\d+\-*/().eEMAXPRODINV]/g, "");
 
   for (const testNumber of [-1.2e123, -123456, 123456, 1.2e123]) {
     let temp = sanitizedAmount.replace(/MAX/g, testNumber.toString());
