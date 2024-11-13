@@ -316,8 +316,8 @@ export abstract class BaseServer implements IServer {
   // Called by subclasses, not Reviver.
   static fromJSONBase<T extends BaseServer>(value: IReviverValue, ctor: new () => T, keys: readonly (keyof T)[]): T {
     throwErrorIfNotObject(value.data);
-    const server = Generic_fromJSON(ctor, value.data as Record<keyof T, any>, keys);
-    server.savedScripts = value.data.runningScripts as typeof server.savedScripts;
+    const server = Generic_fromJSON(ctor, value.data, keys);
+    server.savedScripts = value.data.runningScripts;
     // If textFiles is not an array, we've already done the 2.3 migration to textFiles and scripts as maps + path changes.
     if (!Array.isArray(server.textFiles)) return server;
 

@@ -197,7 +197,7 @@ export function prestigeAllServers(): void {
 }
 
 export function loadAllServers(saveString: string): void {
-  AllServers = JSON.parse(saveString, Reviver) as typeof AllServers;
+  AllServers = JSON.parse(saveString, Reviver);
 }
 
 export function saveAllServers(): string {

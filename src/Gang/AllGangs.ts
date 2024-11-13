@@ -46,7 +46,7 @@ export function resetGangs(): void {
 }
 
 export function loadAllGangs(saveString: string): void {
-  AllGangs = JSON.parse(saveString, Reviver) as typeof AllGangs;
+  AllGangs = JSON.parse(saveString, Reviver);
 }
 
 export function getClashWinChance(thisGang: string, otherGang: string): number {

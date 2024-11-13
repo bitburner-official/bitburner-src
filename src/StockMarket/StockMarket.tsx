@@ -137,7 +137,7 @@ export function loadStockMarket(saveString: string): void {
       storedCycles: 0,
       ticksUntilCycle: 0,
     } as IStockMarket;
-  } else StockMarket = JSON.parse(saveString, Reviver) as typeof StockMarket;
+  } else StockMarket = JSON.parse(saveString, Reviver);
 }
 
 export function deleteStockMarket(): void {
