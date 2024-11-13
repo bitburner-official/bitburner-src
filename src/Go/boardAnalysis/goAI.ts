@@ -397,10 +397,10 @@ async function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): Promi
 /**
  * Get a move that places a piece to influence (and later control) a corner
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 async function getCornerMove(board: Board) {
   const boardEdge = board[0].length - 1;
   const cornerMax = boardEdge - 2;
-  await sleep(10);
   if (isCornerAvailableForMove(board, cornerMax, cornerMax, boardEdge, boardEdge)) {
     return board[cornerMax][cornerMax];
   }
@@ -441,8 +441,8 @@ function isCornerAvailableForMove(board: Board, x1: number, y1: number, x2: numb
 /**
  * Select a move from the list of open-area moves
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 async function getExpansionMove(board: Board, availableSpaces: PointState[], rng: number, moveArray?: Move[]) {
-  await sleep(10);
   const moveOptions = moveArray ?? getExpansionMoveArray(board, availableSpaces);
   const randomIndex = Math.floor(rng * moveOptions.length);
   return moveOptions[randomIndex];
@@ -451,6 +451,7 @@ async function getExpansionMove(board: Board, availableSpaces: PointState[], rng
 /**
  * Get a move in open space that is nearby a friendly piece
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 async function getJumpMove(
   board: Board,
   player: GoColor,
@@ -466,7 +467,6 @@ async function getJumpMove(
       board[point.x - 2]?.[point.y],
     ].some((point) => point?.color === player),
   );
-  await sleep(10);
 
   const randomIndex = Math.floor(rng * moveOptions.length);
   return moveOptions[randomIndex];
@@ -517,6 +517,7 @@ function getDisputedTerritoryMoves(board: Board, availableSpaces: PointState[], 
 /**
  * Finds all moves that increases the liberties of the player's pieces, making them harder to capture and occupy more space on the board.
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 async function getLibertyGrowthMoves(board: Board, player: GoColor, availableSpaces: PointState[]) {
   const friendlyChains = getAllChains(board).filter((chain) => chain[0].color === player);
 
@@ -537,7 +538,6 @@ async function getLibertyGrowthMoves(board: Board, player: GoColor, availableSpa
     .filter((liberty) =>
       availableSpaces.find((point) => liberty.libertyPoint.x === point.x && liberty.libertyPoint.y === point.y),
     );
-  await sleep(10);
 
   // Find a liberty where playing a piece increases the liberty of the chain (aka expands or defends the chain)
   return liberties
@@ -592,6 +592,7 @@ async function getDefendMove(board: Board, player: GoColor, availableSpaces: Poi
  * Find a move that reduces the opponent's liberties as much as possible,
  *   capturing (or making it easier to capture) their pieces
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 async function getSurroundMove(board: Board, player: GoColor, availableSpaces: PointState[], smart = true) {
   const opposingPlayer = player === GoColor.black ? GoColor.white : GoColor.black;
   const enemyChains = getAllChains(board).filter((chain) => chain[0].color === opposingPlayer);
@@ -605,7 +606,6 @@ async function getSurroundMove(board: Board, player: GoColor, availableSpaces: P
     .flat()
     .filter((liberty) => availableSpaces.find((point) => liberty?.x === point.x && liberty?.y === point.y))
     .filter(isNotNullish);
-  await sleep(10);
 
   const captureMoves: Move[] = [];
   const atariMoves: Move[] = [];
@@ -678,6 +678,7 @@ async function getSurroundMove(board: Board, player: GoColor, availableSpaces: P
  * If a chain has multiple eyes, it cannot be captured by the opponent (since they can only fill one eye at a time,
  *  and suiciding your own pieces is not legal unless it captures the opponents' first)
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 async function getEyeCreationMoves(board: Board, player: GoColor, availableSpaces: PointState[], maxLiberties = 99) {
   const allEyes = getAllEyesByChainId(board, player);
   const currentEyes = getAllEyes(board, player, allEyes);
@@ -707,7 +708,6 @@ async function getEyeCreationMoves(board: Board, player: GoColor, availableSpace
       );
     });
 
-  await sleep(10);
   const eyeCreationMoves = friendlyLiberties.reduce((moveOptions: EyeMove[], point: PointState) => {
     const evaluationBoard = evaluateMoveResult(board, point.x, point.y, player);
     const newEyes = getAllEyes(evaluationBoard, player);
@@ -813,11 +813,11 @@ function getMoveOptions(
       const point = await getCornerMove(board);
       return point ? { point } : null;
     },
+    // eslint-disable-next-line @typescript-eslint/require-await
     random: async () => {
       // Only offer a random move if there are some contested spaces on the board.
       // (Random move should not be picked if the AI would otherwise pass turn.)
       const point = contestedPoints.length ? availableSpaces[Math.floor(rng * availableSpaces.length)] : null;
-      await sleep(10);
       return point ? { point } : null;
     },
   };

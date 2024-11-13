@@ -6,8 +6,10 @@ import {
   getAllValidMoves,
   boardStateFromSimpleBoard,
   evaluateIfMoveIsValid,
+  getPreviousMove,
 } from "../../../src/Go/boardAnalysis/boardAnalysis";
 import { findAnyMatchedPatterns } from "../../../src/Go/boardAnalysis/patternMatching";
+import { Go } from "../../../src/Go/Go";
 
 setPlayer(new PlayerObject());
 
@@ -64,5 +66,13 @@ describe("Go board analysis tests", () => {
     const validity = evaluateIfMoveIsValid(boardState, 0, 0, GoColor.white, false);
 
     expect(validity).toEqual(GoValidity.boardRepeated);
+  });
+
+  it("identifies the previous move made, based on the board history", () => {
+    const board = [".XXO.", ".....", ".....", ".....", "....."];
+    Go.currentGame = boardStateFromSimpleBoard(board);
+    Go.currentGame.previousBoards.push("..XO.....................");
+
+    expect(getPreviousMove()).toEqual([0, 1]);
   });
 });
