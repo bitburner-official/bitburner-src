@@ -1,6 +1,7 @@
 import { IMinMaxRange } from "../types";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
+import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 export const StockForecastInfluenceLimit = 5;
 
@@ -271,6 +272,7 @@ export class Stock {
 
   /** Initializes a Stock from a JSON save state */
   static fromJSON(value: IReviverValue): Stock {
+    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(Stock, value.data);
   }
 }

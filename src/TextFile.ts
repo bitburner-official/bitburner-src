@@ -2,6 +2,7 @@ import { BaseServer } from "./Server/BaseServer";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
 import { TextFilePath } from "./Paths/TextFilePath";
 import { ContentFile } from "./Paths/ContentFile";
+import { throwErrorIfNotObject } from "./utils/helpers/typeAssertion";
 
 /** Represents a plain text file that is typically stored on a server. */
 export class TextFile implements ContentFile {
@@ -37,6 +38,7 @@ export class TextFile implements ContentFile {
 
   /** Initializes a TextFile from a JSON save state. */
   static fromJSON(value: IReviverValue): TextFile {
+    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(TextFile, value.data);
   }
 }

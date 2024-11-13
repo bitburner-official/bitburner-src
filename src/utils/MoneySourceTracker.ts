@@ -1,4 +1,5 @@
 import type { TypedKeys } from "../types";
+import { throwErrorIfNotObject } from "./helpers/typeAssertion";
 
 import { Generic_fromJSON, Generic_toJSON, constructorsForReviver, IReviverValue } from "./JSONReviver";
 
@@ -48,6 +49,7 @@ export class MoneySourceTracker {
 
   // Initializes a MoneySourceTracker object from a JSON save state.
   static fromJSON(value: IReviverValue): MoneySourceTracker {
+    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(MoneySourceTracker, value.data);
   }
 }

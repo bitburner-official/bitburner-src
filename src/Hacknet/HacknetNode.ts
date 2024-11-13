@@ -19,6 +19,7 @@ import { HacknetNodeConstants } from "./data/Constants";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { ObjectValidator, minMax } from "../utils/Validator";
+import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 export class HacknetNode implements IHacknetNode {
   static validationData: ObjectValidator<HacknetNode> = {
@@ -127,6 +128,7 @@ export class HacknetNode implements IHacknetNode {
 
   /** Initializes a HacknetNode object from a JSON save state. */
   static fromJSON(value: IReviverValue): HacknetNode {
+    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(HacknetNode, value.data);
   }
 }

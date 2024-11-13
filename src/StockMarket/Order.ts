@@ -5,6 +5,7 @@
 import { PositionType, OrderType } from "@enums";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 export class Order {
   readonly pos: PositionType;
@@ -49,6 +50,7 @@ export class Order {
 
   /** Initializes a Order from a JSON save state */
   static fromJSON(value: IReviverValue): Order {
+    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(Order, value.data);
   }
 }

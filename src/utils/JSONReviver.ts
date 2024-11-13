@@ -4,26 +4,16 @@ import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { loadActionIdentifier } from "../Bladeburner/utils/loadActionIdentifier";
 
 type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
-  fromJSON: (value: IReviverValue) => any;
+  fromJSON: (value: IReviverValue) => unknown;
   validationData?: ObjectValidator<any>;
 };
 
-type JsonableArrayClass = (new () => { toJSON: () => IReviverArrayValue }) & {
-  fromJSON: (value: IReviverArrayValue) => any;
-  validationData?: ObjectValidator<any>;
-};
-
-export interface IReviverValue<T = Record<string, any>> {
+export interface IReviverValue<T = unknown> {
   ctor: string;
   data: T;
 }
 
-export interface IReviverArrayValue<T = Iterable<any>> {
-  ctor: string;
-  data: T;
-}
-
-function isReviverValue(value: unknown): value is IReviverValue | IReviverArrayValue {
+function isReviverValue(value: unknown): value is IReviverValue {
   return (
     typeof value === "object" && value !== null && "ctor" in value && typeof value.ctor === "string" && "data" in value
   );
@@ -35,15 +25,8 @@ function isReviverValue(value: unknown): value is IReviverValue | IReviverArrayV
  * If it finds them, and finds a matching constructor, it hands
  * off to that `fromJSON` function, passing in the value. */
 export function Reviver(_key: string, value: unknown): any {
-  if (!isReviverValue(value)) {
-    return value;
-  }
-  let ctor: JsonableClass | JsonableArrayClass | undefined;
-  if (["JSONSet", "JSONMap"].includes(value.ctor)) {
-    ctor = constructorsForArrayReviver[value.ctor];
-  } else {
-    ctor = constructorsForReviver[value.ctor];
-  }
+  if (!isReviverValue(value)) return value;
+  const ctor = constructorsForReviver[value.ctor];
   if (!ctor) {
     // Known missing constructors with special handling.
     switch (value.ctor) {
@@ -60,16 +43,15 @@ export function Reviver(_key: string, value: unknown): any {
     // Missing constructor with no special handling. Throw error.
     throw new Error(`Could not locate constructor named ${value.ctor}. If the save data is valid, this is a bug.`);
   }
-  // @ts-expect-error Satisfying type checking here is too hard.
-  const obj = ctor.fromJSON(value) as unknown;
+
+  const obj = ctor.fromJSON(value);
   if (ctor.validationData !== undefined) {
     validateObject(obj, ctor.validationData);
   }
   return obj;
 }
 
-export const constructorsForReviver: Partial<Record<string, JsonableClass>> = {};
-const constructorsForArrayReviver: Partial<Record<string, JsonableArrayClass>> = { JSONSet, JSONMap };
+export const constructorsForReviver: Partial<Record<string, JsonableClass>> = { JSONSet, JSONMap };
 
 /**
  * A generic "toJSON" function that creates the data expected by Reviver.

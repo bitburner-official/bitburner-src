@@ -22,6 +22,30 @@ export function getFriendlyType(v: unknown): string {
   return v === null ? "null" : Array.isArray(v) ? "array" : typeof v;
 }
 
+/**
+ * This function is different from objectAssert:
+ * - objectAssert asserts PartialRecord. This function asserts Record.
+ * - objectAssert throws the friendlyType of v. This function throws an error instance.
+ */
+export function throwErrorIfNotObject(v: unknown): asserts v is Record<string, unknown> {
+  const type = getFriendlyType(v);
+  if (type !== "object") {
+    console.error("The value is not an object. Value:", v);
+    throw new Error(`The value is not an object. Its type is ${type}. Its string value is ${String(v)}.`);
+  }
+}
+
+/**
+ * This function is different from arrayAssert:
+ * - arrayAssert throws the friendlyType of v
+ * - This function throws an error instance.
+ */
+export function throwErrorIfNotArray(v: unknown): asserts v is unknown[] {
+  if (!Array.isArray(v)) {
+    throw new Error(`The value is not an array. Its type is ${getFriendlyType(v)}.`);
+  }
+}
+
 //All assertion functions used here should return the friendlyType of the input.
 
 /** For non-objects, and for array/null, throws the friendlyType of v. */

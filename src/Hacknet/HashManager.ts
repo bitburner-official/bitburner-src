@@ -10,6 +10,7 @@ import { HashUpgrades } from "./HashUpgrades";
 import { HashUpgrade } from "./HashUpgrade";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 export class HashManager {
   // Max number of hashes this can hold. Equal to the sum of capacities of
@@ -152,6 +153,7 @@ export class HashManager {
 
   // Initializes a HashManager object from a JSON save state.
   static fromJSON(value: IReviverValue): HashManager {
+    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(HashManager, value.data);
   }
 }

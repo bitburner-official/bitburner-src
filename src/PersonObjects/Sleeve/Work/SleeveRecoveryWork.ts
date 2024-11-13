@@ -2,6 +2,7 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { Sleeve } from "../Sleeve";
 import { SleeveWorkClass, SleeveWorkType } from "./Work";
 import { calculateIntelligenceBonus } from "../../formulas/intelligence";
+import { throwErrorIfNotObject } from "../../../utils/helpers/typeAssertion";
 
 export const isSleeveRecoveryWork = (w: SleeveWorkClass | null): w is SleeveRecoveryWork =>
   w !== null && w.type === SleeveWorkType.RECOVERY;
@@ -28,6 +29,7 @@ export class SleeveRecoveryWork extends SleeveWorkClass {
 
   /** Initializes a RecoveryWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveRecoveryWork {
+    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(SleeveRecoveryWork, value.data);
   }
 }

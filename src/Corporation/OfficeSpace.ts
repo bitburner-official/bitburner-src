@@ -6,6 +6,7 @@ import { Corporation } from "./Corporation";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { createEnumKeyedRecord, getRecordKeys } from "../Types/Record";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 interface IParams {
   city: CityName;
@@ -240,6 +241,7 @@ export class OfficeSpace {
   }
 
   static fromJSON(value: IReviverValue): OfficeSpace {
+    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(OfficeSpace, value.data);
   }
 }

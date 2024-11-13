@@ -1,6 +1,7 @@
 import { CorpStateName } from "@nsdefs";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { stateNames } from "./data/Constants";
+import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 export class CorporationState {
   // Number representing what state the Corporation is in. The number
   // is an index for the array that holds all Corporation States
@@ -26,6 +27,7 @@ export class CorporationState {
   }
   // Initializes a CorporationState object from a JSON save state.
   static fromJSON(value: IReviverValue): CorporationState {
+    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(CorporationState, value.data);
   }
 }

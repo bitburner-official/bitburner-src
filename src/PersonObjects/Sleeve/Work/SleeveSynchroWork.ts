@@ -3,6 +3,7 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { Sleeve } from "../Sleeve";
 import { SleeveWorkClass, SleeveWorkType } from "./Work";
 import { calculateIntelligenceBonus } from "../../formulas/intelligence";
+import { throwErrorIfNotObject } from "../../../utils/helpers/typeAssertion";
 
 export const isSleeveSynchroWork = (w: SleeveWorkClass | null): w is SleeveSynchroWork =>
   w !== null && w.type === SleeveWorkType.SYNCHRO;
@@ -29,6 +30,7 @@ export class SleeveSynchroWork extends SleeveWorkClass {
 
   /** Initializes a SynchroWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveSynchroWork {
+    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(SleeveSynchroWork, value.data);
   }
 }

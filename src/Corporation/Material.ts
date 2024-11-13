@@ -3,6 +3,7 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { materialNames } from "./data/Constants";
 import { Export } from "./Export";
 import { MaterialInfo } from "./MaterialInfo";
+import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 interface IConstructorParams {
   name: CorpMaterialName;
@@ -135,6 +136,7 @@ export class Material {
 
   // Initializes a Material object from a JSON save state.
   static fromJSON(value: IReviverValue): Material {
+    throwErrorIfNotObject(value.data);
     const material = Generic_fromJSON(Material, value.data);
     if (isNaN(material.quality)) {
       material.quality = 1;

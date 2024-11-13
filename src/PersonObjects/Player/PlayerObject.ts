@@ -29,6 +29,7 @@ import { Person } from "../Person";
 import { isMember } from "../../utils/EnumHelper";
 import { PartialRecord } from "../../Types/Record";
 import { isSleeveSupportWork } from "../Sleeve/Work/SleeveSupportWork";
+import { throwErrorIfNotObject } from "../../utils/helpers/typeAssertion";
 
 export class PlayerObject extends Person implements IPlayer {
   // Player-specific properties
@@ -183,6 +184,7 @@ export class PlayerObject extends Person implements IPlayer {
 
   /** Initializes a PlayerObject object from a JSON save state. */
   static fromJSON(value: IReviverValue): PlayerObject {
+    throwErrorIfNotObject(value.data);
     const player = Generic_fromJSON(PlayerObject, value.data);
     // Any statistics that could be infinite would be serialized as null (JSON.stringify(Infinity) is "null")
     player.hp = { current: player.hp?.current ?? 10, max: player.hp?.max ?? 10 };
