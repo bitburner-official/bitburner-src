@@ -5,6 +5,7 @@ import { Sleeve } from "../Sleeve";
 import { SleeveWorkClass, SleeveWorkType } from "./Work";
 import { CONSTANTS } from "../../../Constants";
 import { getKeyList } from "../../../utils/helpers/getKeyList";
+import { throwErrorIfNotObject } from "../../../utils/helpers/typeAssertion";
 
 const infiltrateCycles = 60000 / CONSTANTS.MilliPerCycle;
 
@@ -60,6 +61,7 @@ export class SleeveInfiltrateWork extends SleeveWorkClass {
 
   /** Initializes a BladeburnerWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveInfiltrateWork {
+    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(SleeveInfiltrateWork, value.data, SleeveInfiltrateWork.savedKeys);
   }
 }

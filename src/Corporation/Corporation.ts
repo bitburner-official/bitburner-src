@@ -20,6 +20,7 @@ import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger, type Result } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 import { getKeyList } from "../utils/helpers/getKeyList";
+import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 export const CorporationPromise: PromisePair<CorpStateName> = { promise: null, resolve: null };
 
@@ -501,6 +502,7 @@ export class Corporation {
 
   /** Initializes a Corporation object from a JSON save state. */
   static fromJSON(value: IReviverValue): Corporation {
+    throwErrorIfNotObject(value.data);
     const corporation = Generic_fromJSON(Corporation, value.data, Corporation.includedProperties);
     // numberOfOfficesAndWarehouses is not in the included properties and must be calculated
     for (const division of corporation.divisions.values()) {

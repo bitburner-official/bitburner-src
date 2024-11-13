@@ -13,6 +13,7 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { defaultMultipliers, mergeMultipliers, Multipliers, scaleMultipliers } from "../PersonObjects/Multipliers";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { getKeyList } from "../utils/helpers/getKeyList";
+import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 export class StaneksGift extends BaseGift {
   isBonusCharging = false;
@@ -247,6 +248,7 @@ export class StaneksGift extends BaseGift {
 
   /** Initializes Stanek's Gift from a JSON save state */
   static fromJSON(value: IReviverValue): StaneksGift {
+    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(StaneksGift, value.data, StaneksGift.includedProperties);
   }
 }

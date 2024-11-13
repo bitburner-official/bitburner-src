@@ -18,6 +18,7 @@ import { getKeyList } from "../utils/helpers/getKeyList";
 import { calculateMarkupMultiplier } from "./helpers";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 interface DivisionParams {
   name: string;
@@ -1189,6 +1190,7 @@ export class Division {
 
   /** Initializes a Industry object from a JSON save state. */
   static fromJSON(value: IReviverValue): Division {
+    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(Division, value.data, Division.includedKeys);
   }
 
