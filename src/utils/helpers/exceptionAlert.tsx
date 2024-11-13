@@ -39,11 +39,21 @@ export function exceptionAlert(error: unknown, showOnlyOnce = false): void {
           Stack: {errorData.stack}
         </Typography>
       )}
-      {errorData.cause && (
-        <Typography component="div" style={{ whiteSpace: "pre-wrap" }}>
-          Error cause: {errorData.cause}
-        </Typography>
+      {errorData.causeAsString && (
+        <>
+          <br />
+          <Typography component="div" style={{ whiteSpace: "pre-wrap" }}>
+            Error cause: {errorData.causeAsString}
+            {errorData.causeStack && (
+              <>
+                <br />
+                Cause stack: {errorData.causeStack}
+              </>
+            )}
+          </Typography>
+        </>
       )}
+      <br />
       Commit: {commitHash()}
       <br />
       UserAgent: {navigator.userAgent}

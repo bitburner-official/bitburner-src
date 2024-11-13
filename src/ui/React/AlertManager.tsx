@@ -50,18 +50,22 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
     if (typeof text === "string") {
       return cyrb53(text);
     }
-    let propsAsString: string;
     /**
-     * JSON.stringify can throw an error in edge cases. One of them is "TypeError: Converting circular structure to
-     * JSON". If it happens, we use the Unix timestamp as the fallback value.
+     * JSON.stringify may throw an error in edge cases. One possible error is "TypeError: Converting circular structure
+     * to JSON". It may happen in very special cases. This is the flow of one of them:
+     * - An error occurred in GameRoot.tsx and we show a warning popup by calling "exceptionAlert" without delaying.
+     * - "exceptionAlert" constructs a React element and passes it via "dialogBoxCreate" -> "AlertEvents.emit".
+     * - When we receive the final React element here, the element's "props" property may contain a circular structure.
      */
+    let textPropsAsString;
     try {
-      propsAsString = JSON.stringify(text.props);
-    } catch (error) {
-      console.error(error);
-      propsAsString = Date.now().toString();
+      textPropsAsString = JSON.stringify(text.props);
+    } catch (e) {
+      console.error(e);
+      // Use the current timestamp as the fallback value.
+      textPropsAsString = Date.now().toString();
     }
-    return cyrb53(propsAsString);
+    return cyrb53(textPropsAsString);
   }
 
   function close(): void {

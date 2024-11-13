@@ -54,23 +54,30 @@ export interface IErrorData {
 
 export const newIssueUrl = `https://github.com/bitburner-official/bitburner-src/issues/new`;
 
-export function parseUnknownError(error: unknown): { errorAsString: string; stack?: string; cause?: string } {
+export function parseUnknownError(error: unknown): {
+  errorAsString: string;
+  stack?: string;
+  causeAsString?: string;
+  causeStack?: string;
+} {
   const errorAsString = String(error);
   let stack: string | undefined = undefined;
-  let cause: string | undefined = undefined;
+  let causeAsString: string | undefined = undefined;
+  let causeStack: string | undefined = undefined;
   if (error instanceof Error) {
     stack = error.stack;
-    // If error.cause is an error, we use error.cause.stack; otherwise, we parse error.cause to a string.
-    if (error.cause instanceof Error) {
-      cause = error.cause.stack;
-    } else if (error.cause != null) {
-      cause = String(error.cause);
+    if (error.cause != null) {
+      causeAsString = String(error.cause);
+      if (error.cause instanceof Error) {
+        causeStack = error.cause.stack;
+      }
     }
   }
   return {
     errorAsString,
     stack,
-    cause,
+    causeAsString,
+    causeStack,
   };
 }
 
@@ -112,14 +119,18 @@ export function getErrorForDisplay(error: unknown, errorInfo?: React.ErrorInfo, 
     ` doNotTrack=${metadata.features.doNotTrack ?? "null"} indexedDb=${metadata.features.indexedDb.toString()}`;
 
   const title = `${metadata.error.name}: ${metadata.error.message} (at "${metadata.page}")`;
-  const cause = errorData.cause
+  let causeAndCauseStack = errorData.causeAsString
     ? `
-### Error cause
-\`\`\`
-${errorData.cause}
-\`\`\`
+### Error cause: ${errorData.causeAsString}
 `
     : "";
+  if (errorData.causeStack) {
+    causeAndCauseStack += `Cause stack:
+\`\`\`
+${errorData.causeStack}
+\`\`\`
+`;
+  }
   const body = `
 ## ${title}
 
@@ -146,7 +157,7 @@ Please fill this information with details if relevant.
 \`\`\`
 ${errorData.stack}
 \`\`\`
-${cause}
+${causeAndCauseStack}
 ### React Component Stack
 \`\`\`
 ${metadata.errorInfo?.componentStack}
