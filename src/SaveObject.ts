@@ -129,10 +129,8 @@ function assertBitburnerSaveObjectType(saveObject: unknown): asserts saveObject 
 
   const optional2KeysOfSaveObj = ["SettingsSave", "LastExportBonus", "AllGangsSave", "VersionSave"];
   for (const key of optional2KeysOfSaveObj) {
-    if (Object.hasOwn(saveObject, key)) {
-      if (typeof saveObject[key] !== "string") {
-        throw new Error(`Save data contains invalid data. Value of ${key} is not a string.`);
-      }
+    if (Object.hasOwn(saveObject, key) && typeof saveObject[key] !== "string") {
+      throw new Error(`Save data contains invalid data. Value of ${key} is not a string.`);
     }
   }
 }
