@@ -51,7 +51,7 @@ import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
 import { autoCompleteTypeShorthand } from "./utils/terminalShorthands";
 import { resolveTeamCasualties, type OperationTeam } from "./Actions/TeamCasualties";
 import { shuffleArray } from "../Infiltration/ui/BribeGame";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
+import { objectAssert } from "../utils/helpers/typeAssertion";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -1404,7 +1404,7 @@ export class Bladeburner implements OperationTeam {
 
   /** Initializes a Bladeburner object from a JSON save state. */
   static fromJSON(value: IReviverValue): Bladeburner {
-    throwErrorIfNotObject(value.data);
+    objectAssert(value.data);
     // operations and contracts are not loaded directly from the save, we load them in using a different method
     const contractsData = value.data.contracts;
     const operationsData = value.data.operations;

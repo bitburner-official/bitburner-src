@@ -2,7 +2,7 @@
 import { ObjectValidator, validateObject } from "./Validator";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { loadActionIdentifier } from "../Bladeburner/utils/loadActionIdentifier";
-import { throwErrorIfNotObject } from "./helpers/typeAssertion";
+import { objectAssert } from "./helpers/typeAssertion";
 
 type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
   fromJSON: (value: IReviverValue) => unknown;
@@ -91,7 +91,7 @@ export function Generic_fromJSON<T extends Record<string, any>>(
   data: unknown,
   keys?: readonly (keyof T)[],
 ): T {
-  throwErrorIfNotObject(data);
+  objectAssert(data);
   const obj = new ctor();
   // If keys were provided, just load the provided keys (if they are in the data)
   if (keys) {

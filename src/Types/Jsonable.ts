@@ -1,4 +1,4 @@
-import { getFriendlyType, throwErrorIfNotArray } from "../utils/helpers/typeAssertion";
+import { arrayAssert } from "../utils/helpers/typeAssertion";
 import type { IReviverValue } from "../utils/JSONReviver";
 // Versions of js builtin classes that can be converted to and from JSON for use in save files
 
@@ -7,7 +7,7 @@ export class JSONSet<T> extends Set<T> {
     return { ctor: "JSONSet", data: Array.from(this) };
   }
   static fromJSON(value: IReviverValue): JSONSet<any> {
-    throwErrorIfNotArray(value.data);
+    arrayAssert(value.data);
     return new JSONSet(value.data);
   }
 }
@@ -18,12 +18,11 @@ export class JSONMap<K, __V> extends Map<K, __V> {
   }
 
   static fromJSON(value: IReviverValue): JSONMap<any, any> {
-    throwErrorIfNotArray(value.data);
+    arrayAssert(value.data);
     for (const item of value.data) {
-      if (!Array.isArray(item)) {
-        throw new Error(`An item in the array is not an array. Its type is ${getFriendlyType(value.data)}.`);
-      }
+      arrayAssert(item);
       if (item.length !== 2) {
+        console.error("Invalid data passed to JSONMap.fromJSON(). Value:", value);
         throw new Error(`An item is not an array with exactly 2 items. Its length is ${item.length}.`);
       }
     }

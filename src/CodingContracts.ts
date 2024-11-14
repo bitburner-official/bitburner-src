@@ -4,7 +4,7 @@ import { codingContractTypesMetadata } from "./data/codingcontracttypes";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
 import { CodingContractEvent } from "./ui/React/CodingContractModal";
 import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
-import { throwErrorIfNotObject } from "./utils/helpers/typeAssertion";
+import { objectAssert } from "./utils/helpers/typeAssertion";
 
 /* Contract Types */
 export const CodingContractTypes = Object.fromEntries(codingContractTypesMetadata.map((x) => [x.name, x]));
@@ -128,7 +128,7 @@ export class CodingContract {
 
   /** Initializes a CodingContract from a JSON save state. */
   static fromJSON(value: IReviverValue): CodingContract {
-    throwErrorIfNotObject(value.data);
+    objectAssert(value.data);
     // In previous versions, there was a data field instead of a state field.
     if ("data" in value.data) {
       value.data.state = value.data.data;
