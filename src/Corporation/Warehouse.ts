@@ -9,7 +9,6 @@ import { MaterialInfo } from "./MaterialInfo";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { materialNames } from "./data/Constants";
 import { createFullRecordFromEntries, getRecordEntries } from "../Types/Record";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 interface IConstructorParams {
   division: Division;
@@ -81,7 +80,6 @@ export class Warehouse {
 
   // Initializes a Warehouse object from a JSON save state.
   static fromJSON(value: IReviverValue): Warehouse {
-    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(Warehouse, value.data);
   }
 }

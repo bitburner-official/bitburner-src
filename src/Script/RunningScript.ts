@@ -18,7 +18,6 @@ import { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { ScriptKey, scriptKey } from "../utils/helpers/scriptKey";
 
 import type { LogBoxProperties } from "../ui/React/LogBoxManager";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 export class RunningScript {
   // Script arguments
@@ -165,7 +164,6 @@ export class RunningScript {
 
   // Initializes a RunningScript Object from a JSON save state
   static fromJSON(value: IReviverValue): RunningScript {
-    throwErrorIfNotObject(value.data);
     const runningScript = Generic_fromJSON(RunningScript, value.data, includedProperties);
     if (!runningScript.scriptKey) runningScript.scriptKey = scriptKey(runningScript.filename, runningScript.args);
     if (!runningScript.title) runningScript.title = `${runningScript.filename} ${runningScript.args.join(" ")}`;

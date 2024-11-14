@@ -12,7 +12,6 @@ import { Work, WorkType } from "./Work";
 import { applyWorkStats, newWorkStats, sumWorkStats, WorkStats } from "./WorkStats";
 import { findEnumMember } from "../utils/helpers/enum";
 import { isMember } from "../utils/EnumHelper";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 export interface Class {
   type: ClassType;
@@ -148,7 +147,6 @@ export class ClassWork extends Work {
 
   /** Initializes a ClassWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): ClassWork {
-    throwErrorIfNotObject(value.data);
     const classWork = Generic_fromJSON(ClassWork, value.data);
     classWork.classType =
       findEnumMember(UniversityClassType, classWork.classType) ??

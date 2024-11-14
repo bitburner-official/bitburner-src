@@ -12,7 +12,6 @@ import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmen
 import { Augmentations } from "../Augmentation/Augmentations";
 import { PromisePair } from "../Types/Promises";
 import { getKeyList } from "../utils/helpers/getKeyList";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 export const isGraftingWork = (w: Work | null): w is GraftingWork => w !== null && w.type === WorkType.GRAFTING;
 
@@ -124,7 +123,6 @@ export class GraftingWork extends Work {
 
   /** Initializes a GraftingWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): GraftingWork {
-    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(GraftingWork, value.data, GraftingWork.savedKeys);
   }
 }

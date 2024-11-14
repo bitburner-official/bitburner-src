@@ -9,7 +9,6 @@ import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
 import { CONSTANTS } from "../../../Constants";
 import { calculateCrimeWorkStats } from "../../../Work/Formulas";
 import { findCrime } from "../../../Crime/CrimeHelpers";
-import { throwErrorIfNotObject } from "../../../utils/helpers/typeAssertion";
 
 export const isSleeveCrimeWork = (w: SleeveWorkClass | null): w is SleeveCrimeWork =>
   w !== null && w.type === SleeveWorkType.CRIME;
@@ -71,7 +70,6 @@ export class SleeveCrimeWork extends SleeveWorkClass {
 
   /** Initializes a RecoveryWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveCrimeWork {
-    throwErrorIfNotObject(value.data);
     const crimeWork = Generic_fromJSON(SleeveCrimeWork, value.data);
     crimeWork.crimeType = findCrime(crimeWork.crimeType)?.type ?? CrimeType.shoplift;
     return crimeWork;

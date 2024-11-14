@@ -49,7 +49,6 @@ import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
 import { Augmentations } from "../../Augmentation/Augmentations";
 import { getAugCost } from "../../Augmentation/AugmentationHelpers";
 import type { MoneySource } from "../../utils/MoneySourceTracker";
-import { throwErrorIfNotObject } from "../../utils/helpers/typeAssertion";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: SleeveWork | null = null;
@@ -582,7 +581,6 @@ export class Sleeve extends Person implements SleevePerson {
 
   /** Initializes a Sleeve object from a JSON save state. */
   static fromJSON(value: IReviverValue): Sleeve {
-    throwErrorIfNotObject(value.data);
     const sleeve = Generic_fromJSON(Sleeve, value.data);
     if (!sleeve.hp?.current || !sleeve.hp?.max) sleeve.hp = { current: 10, max: 10 };
     // Remove any invalid aug names on game load

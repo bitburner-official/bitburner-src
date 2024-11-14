@@ -26,7 +26,6 @@ import { Player } from "@player";
 import { PowerMultiplier } from "./data/power";
 import { FactionName } from "@enums";
 import { CONSTANTS } from "../Constants";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 export enum RecruitmentResult {
   Success = "Success",
@@ -441,7 +440,6 @@ export class Gang {
 
   /** Initializes a Gang object from a JSON save state. */
   static fromJSON(value: IReviverValue): Gang {
-    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(Gang, value.data);
   }
 }

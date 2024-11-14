@@ -4,7 +4,6 @@ import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { addOffset } from "../utils/helpers/addOffset";
 import { clampInteger, clampNumber } from "../utils/helpers/clampNumber";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 export class City {
   name: CityName;
@@ -98,7 +97,6 @@ export class City {
 
   /** Initializes a City object from a JSON save state. */
   static fromJSON(value: IReviverValue): City {
-    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(City, value.data);
   }
 }

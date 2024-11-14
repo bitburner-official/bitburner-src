@@ -8,7 +8,6 @@ import { calculateFactionExp, calculateFactionRep } from "../../../Work/Formulas
 import { Faction } from "../../../Faction/Faction";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
 import { getEnumHelper } from "../../../utils/EnumHelper";
-import { throwErrorIfNotObject } from "../../../utils/helpers/typeAssertion";
 
 interface SleeveFactionWorkParams {
   factionWorkType: FactionWorkType;
@@ -67,7 +66,6 @@ export class SleeveFactionWork extends SleeveWorkClass {
 
   /** Initializes a FactionWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveFactionWork {
-    throwErrorIfNotObject(value.data);
     const factionWork = Generic_fromJSON(SleeveFactionWork, value.data);
     factionWork.factionWorkType = getEnumHelper("FactionWorkType").getMember(factionWork.factionWorkType, {
       alwaysMatch: true,

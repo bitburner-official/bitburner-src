@@ -14,7 +14,6 @@ import {
   calculateAscensionMult,
   calculateAscensionPointsGain,
 } from "./formulas/formulas";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 interface IMults {
   hack: number;
@@ -335,7 +334,6 @@ export class GangMember {
 
   /** Initializes a GangMember object from a JSON save state. */
   static fromJSON(value: IReviverValue): GangMember {
-    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(GangMember, value.data);
   }
 }

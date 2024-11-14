@@ -1,6 +1,5 @@
 import { Fragment, FragmentById } from "./Fragment";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 export interface IActiveFragmentParams {
   x: number;
@@ -79,7 +78,6 @@ export class ActiveFragment {
 
   /** Initializes an active fragment from a JSON save state */
   static fromJSON(value: IReviverValue): ActiveFragment {
-    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(ActiveFragment, value.data);
   }
 }

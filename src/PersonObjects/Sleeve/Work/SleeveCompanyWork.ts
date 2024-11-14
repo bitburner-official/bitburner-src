@@ -11,7 +11,6 @@ import { influenceStockThroughCompanyWork } from "../../../StockMarket/PlayerInf
 import { CompanyPositions } from "../../../Company/CompanyPositions";
 import { isMember } from "../../../utils/EnumHelper";
 import { invalidWork } from "../../../Work/InvalidWork";
-import { throwErrorIfNotObject } from "../../../utils/helpers/typeAssertion";
 
 export const isSleeveCompanyWork = (w: SleeveWorkClass | null): w is SleeveCompanyWork =>
   w !== null && w.type === SleeveWorkType.COMPANY;
@@ -62,7 +61,6 @@ export class SleeveCompanyWork extends SleeveWorkClass {
 
   /** Initializes a CompanyWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveCompanyWork {
-    throwErrorIfNotObject(value.data);
     const work = Generic_fromJSON(SleeveCompanyWork, value.data);
     if (!isMember("CompanyName", work.companyName)) return invalidWork();
     return work;

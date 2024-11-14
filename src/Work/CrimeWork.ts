@@ -10,7 +10,6 @@ import { Work, WorkType } from "./Work";
 import { scaleWorkStats, WorkStats } from "./WorkStats";
 import { calculateCrimeWorkStats } from "./Formulas";
 import { getEnumHelper } from "../utils/EnumHelper";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 interface CrimeWorkParams {
   crimeType: CrimeType;
@@ -98,7 +97,6 @@ export class CrimeWork extends Work {
 
   /** Initializes a CrimeWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): CrimeWork {
-    throwErrorIfNotObject(value.data);
     const crimeWork = Generic_fromJSON(CrimeWork, value.data);
     crimeWork.crimeType = getEnumHelper("CrimeType").getMember(crimeWork.crimeType, { alwaysMatch: true });
     return crimeWork;

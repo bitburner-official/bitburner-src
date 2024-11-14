@@ -8,7 +8,6 @@ import { MaterialInfo } from "./MaterialInfo";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { PartialRecord, createEnumKeyedRecord, getRecordEntries, getRecordKeys } from "../Types/Record";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 interface IConstructorParams {
   name: string;
@@ -231,7 +230,6 @@ export class Product {
 
   // Initializes a Product object from a JSON save state.
   static fromJSON(value: IReviverValue): Product {
-    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(Product, value.data);
   }
 }

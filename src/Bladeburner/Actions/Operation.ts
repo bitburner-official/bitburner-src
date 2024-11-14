@@ -11,7 +11,6 @@ import { LevelableActionClass, LevelableActionParams } from "./LevelableAction";
 import { clampInteger } from "../../utils/helpers/clampNumber";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import type { TeamActionWithCasualties } from "./TeamCasualties";
-import { throwErrorIfNotObject } from "../../utils/helpers/typeAssertion";
 
 export interface OperationParams extends LevelableActionParams {
   name: BladeburnerOperationName;
@@ -83,7 +82,6 @@ export class Operation extends LevelableActionClass implements TeamActionWithCas
   }
 
   static fromJSON(value: IReviverValue): Operation {
-    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(Operation, value.data);
   }
 }

@@ -6,7 +6,6 @@ import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
 import { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { ContentFile } from "../Paths/ContentFile";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 /** A script file as a file on a server.
  * For the execution of a script, see RunningScript and WorkerScript */
@@ -104,7 +103,6 @@ export class Script implements ContentFile {
 
   // Initializes a Script Object from a JSON save state
   static fromJSON(value: IReviverValue): Script {
-    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(Script, value.data, Script.savedKeys);
   }
 }

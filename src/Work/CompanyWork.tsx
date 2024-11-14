@@ -13,7 +13,6 @@ import { Reputation } from "../ui/React/Reputation";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { isMember } from "../utils/EnumHelper";
 import { invalidWork } from "./InvalidWork";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 interface CompanyWorkParams {
   companyName: CompanyName;
@@ -77,7 +76,6 @@ export class CompanyWork extends Work {
 
   /** Initializes a CompanyWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): CompanyWork {
-    throwErrorIfNotObject(value.data);
     const work = Generic_fromJSON(CompanyWork, value.data);
     if (!isMember("CompanyName", work.companyName)) return invalidWork();
     return work;

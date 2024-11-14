@@ -8,7 +8,6 @@ import { Work, WorkType } from "./Work";
 import { Program } from "../Programs/Program";
 import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligence";
 import { asProgramFilePath } from "../Paths/ProgramFilePath";
-import { throwErrorIfNotObject } from "../utils/helpers/typeAssertion";
 
 export const isCreateProgramWork = (w: Work | null): w is CreateProgramWork =>
   w !== null && w.type === WorkType.CREATE_PROGRAM;
@@ -112,7 +111,6 @@ export class CreateProgramWork extends Work {
 
   /** Initializes a CreateProgramWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): CreateProgramWork {
-    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(CreateProgramWork, value.data);
   }
 }

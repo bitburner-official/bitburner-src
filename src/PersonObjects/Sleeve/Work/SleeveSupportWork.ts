@@ -1,7 +1,6 @@
 import { Player } from "@player";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { SleeveWorkClass, SleeveWorkType } from "./Work";
-import { throwErrorIfNotObject } from "../../../utils/helpers/typeAssertion";
 
 export const isSleeveSupportWork = (w: SleeveWorkClass | null): w is SleeveSupportWork =>
   w !== null && w.type === SleeveWorkType.SUPPORT;
@@ -30,7 +29,6 @@ export class SleeveSupportWork extends SleeveWorkClass {
 
   /** Initializes a BladeburnerWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveSupportWork {
-    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(SleeveSupportWork, value.data);
   }
 }

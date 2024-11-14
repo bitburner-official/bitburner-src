@@ -5,7 +5,6 @@ import { Generic_fromJSON, IReviverValue, constructorsForReviver } from "../../u
 import { BladeburnerActionType, BladeburnerContractName, BladeburnerMultName } from "../Enums";
 import { LevelableActionClass, LevelableActionParams } from "./LevelableAction";
 import { getEnumHelper } from "../../utils/EnumHelper";
-import { throwErrorIfNotObject } from "../../utils/helpers/typeAssertion";
 
 export class Contract extends LevelableActionClass {
   readonly type: BladeburnerActionType.Contract = BladeburnerActionType.Contract;
@@ -37,7 +36,6 @@ export class Contract extends LevelableActionClass {
   }
 
   static fromJSON(value: IReviverValue): Contract {
-    throwErrorIfNotObject(value.data);
     return Generic_fromJSON(Contract, value.data);
   }
 }
