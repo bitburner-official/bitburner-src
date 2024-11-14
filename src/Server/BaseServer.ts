@@ -316,12 +316,7 @@ export abstract class BaseServer implements IServer {
   // Called by subclasses, not Reviver.
   static fromJSONBase<T extends BaseServer>(value: IReviverValue, ctor: new () => T, keys: readonly (keyof T)[]): T {
     throwErrorIfNotObject(value.data);
-    /**
-     * Validating the key list of value.data with ctor is too hard. When we serialize/deserialize subclasses, some keys
-     * are skipped, and some keys are renamed. It's not worth the effort, so we just typecast it here. Each server
-     * instance will be checked later in loadAllServers (AllServers.ts).
-     */
-    const server = Generic_fromJSON(ctor, value.data as Record<keyof T, any>, keys);
+    const server = Generic_fromJSON(ctor, value.data, keys);
     if (value.data.runningScripts != null && Array.isArray(value.data.runningScripts)) {
       server.savedScripts = value.data.runningScripts;
     }
