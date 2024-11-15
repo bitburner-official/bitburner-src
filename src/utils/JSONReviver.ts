@@ -102,6 +102,7 @@ export function Generic_fromJSON<T extends Record<string, any>>(
     for (const key of keys as string[]) {
       const val = data[key];
       if (val !== undefined) {
+        // This is an unsafe assignment. We may load data with wrong types at runtime.
         // @ts-expect-error -- TypeScript won't allow this action: Type 'T' is generic and can only be indexed for reading.
         obj[key] = val;
       }
@@ -109,6 +110,9 @@ export function Generic_fromJSON<T extends Record<string, any>>(
     return obj;
   }
   // No keys provided: load every key in data
-  for (const [key, val] of Object.entries(data) as [keyof T, T[keyof T]][]) obj[key] = val;
+  for (const [key, val] of Object.entries(data) as [keyof T, T[keyof T]][]) {
+    // This is an unsafe assignment. We may load data with wrong types at runtime.
+    obj[key] = val;
+  }
   return obj;
 }
