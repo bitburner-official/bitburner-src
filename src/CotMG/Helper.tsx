@@ -7,7 +7,11 @@ export let staneksGift = new StaneksGift();
 
 export function loadStaneksGift(saveString: string): void {
   if (saveString) {
-    staneksGift = JSON.parse(saveString, Reviver) as StaneksGift;
+    const staneksGiftData: unknown = JSON.parse(saveString, Reviver);
+    if (!(staneksGiftData instanceof StaneksGift)) {
+      throw new Error(`Cannot load data of Stanek's Gift from the save string. saveString: ${saveString}`);
+    }
+    staneksGift = staneksGiftData;
   } else {
     staneksGift = new StaneksGift();
   }

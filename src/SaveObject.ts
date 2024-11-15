@@ -220,11 +220,13 @@ class BitburnerSaveObject {
     }
 
     if (!decodedSaveData || decodedSaveData === "") {
-      return Promise.reject(new Error("Save game is invalid"));
+      console.error("decodedSaveData:", decodedSaveData);
+      return Promise.reject(new Error("Save game is invalid. The save data cannot be decoded."));
     }
 
     let parsedSaveData;
     try {
+      // Typecasting here is fine. We will validate parsedSaveData immediately after this line.
       parsedSaveData = JSON.parse(decodedSaveData) as {
         ctor: string;
         data: {
@@ -235,8 +237,14 @@ class BitburnerSaveObject {
       console.error(error); // We'll handle below
     }
 
-    if (!parsedSaveData || parsedSaveData.ctor !== "BitburnerSaveObject" || !parsedSaveData.data) {
-      return Promise.reject(new Error("Save game did not seem valid"));
+    if (
+      !parsedSaveData ||
+      parsedSaveData.ctor !== "BitburnerSaveObject" ||
+      !parsedSaveData.data ||
+      !parsedSaveData.data.PlayerSave
+    ) {
+      console.error("decodedSaveData:", decodedSaveData);
+      return Promise.reject(new Error("Save game is invalid. The decoded save data is not valid."));
     }
 
     const data: ImportData = {
