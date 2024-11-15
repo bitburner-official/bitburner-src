@@ -203,6 +203,7 @@ export class PlayerObject extends Person implements IPlayer {
     // Remove any invalid jobs
     for (const [loadedCompanyName, loadedJobName] of Object.entries(player.jobs)) {
       if (!isMember("CompanyName", loadedCompanyName) || !isMember("JobName", loadedJobName)) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete player.jobs[loadedCompanyName as CompanyName];
       }
     }

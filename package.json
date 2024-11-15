@@ -70,6 +70,7 @@
     "@types/react-beautiful-dnd": "^13.1.5",
     "@types/react-dom": "^17.0.21",
     "@types/react-resizable": "^3.0.5",
+    "@types/sprintf-js": "^1.1.4",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.9.1",
     "babel-jest": "^29.7.0",

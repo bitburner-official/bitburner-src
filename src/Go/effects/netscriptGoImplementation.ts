@@ -472,7 +472,11 @@ export function cheatRemoveRouter(
   successRngOverride?: number,
   ejectRngOverride?: number,
 ): Promise<Play> {
-  const point = Go.currentGame.board[x][y]!;
+  const point = Go.currentGame.board[x][y];
+  if (!point) {
+    logger(`Cheat failed. The point ${x},${y} is already offline.`);
+    return Go.nextTurn;
+  }
   return determineCheatSuccess(
     logger,
     () => {
@@ -498,8 +502,13 @@ export function cheatPlayTwoMoves(
   successRngOverride?: number,
   ejectRngOverride?: number,
 ): Promise<Play> {
-  const point1 = Go.currentGame.board[x1][y1]!;
-  const point2 = Go.currentGame.board[x2][y2]!;
+  const point1 = Go.currentGame.board[x1][y1];
+  const point2 = Go.currentGame.board[x2][y2];
+
+  if (!point1 || !point2) {
+    logger(`Cheat failed. One of the points ${x1},${y1} or ${x2},${y2} is already offline.`);
+    return Go.nextTurn;
+  }
 
   return determineCheatSuccess(
     logger,

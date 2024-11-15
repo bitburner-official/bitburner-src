@@ -5,7 +5,7 @@ import { GetAllServers } from "../Server/AllServers";
 import { parseCommand, parseCommands } from "./Parser";
 import { HelpTexts } from "./HelpText";
 import { compile } from "../NetscriptJSEvaluator";
-import { Flags } from "../NetscriptFunctions/Flags";
+import { Flags, type Schema } from "../NetscriptFunctions/Flags";
 import { AutocompleteData } from "@nsdefs";
 import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
@@ -280,6 +280,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       _: [],
     };
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
       flags = libarg(runArgs, {
         permissive: true,
         argv: command.slice(2),
@@ -299,9 +300,9 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       scripts: [...currServ.scripts.keys()],
       txts: [...currServ.textFiles.keys()],
       enums: enums,
-      flags: (schema: unknown) => {
+      flags: (schema: Schema) => {
         if (!Array.isArray(schema)) throw new Error("flags require an array of array");
-        pos2 = schema.map((f: unknown) => {
+        pos2 = schema.map((f) => {
           if (!Array.isArray(f)) throw new Error("flags require an array of array");
           if (f[0].length === 1) return "-" + f[0];
           return "--" + f[0];

@@ -377,6 +377,7 @@ export function quitJob(this: PlayerObject, company: CompanyName, suppressDialog
       }
     }
   }
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   delete this.jobs[company];
 }
 

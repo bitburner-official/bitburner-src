@@ -151,6 +151,7 @@ export function deleteStockMarket(): void {
 
 export function initStockMarket(): void {
   for (const stockName of Object.getOwnPropertyNames(StockMarket)) {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete StockMarket[stockName];
   }
 

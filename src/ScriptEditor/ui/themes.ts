@@ -79,7 +79,10 @@ export const sanitizeTheme = (theme: IScriptEditorTheme): void => {
     return;
   }
   for (const themeKey of getRecordKeys(theme)) {
-    if (typeof theme[themeKey] !== "object") delete theme[themeKey];
+    if (typeof theme[themeKey] !== "object") {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete theme[themeKey];
+    }
     switch (themeKey) {
       case "base":
         if (!["vs-dark", "vs"].includes(theme.base)) theme.base = "vs-dark";

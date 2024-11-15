@@ -42,4 +42,18 @@ module.exports = {
       version: "detect",
     },
   },
+  overrides: [
+    /**
+     * Some enums are subsets of other enums. For example, UniversityLocationName contains locations of 3 universities.
+     * With each member, we refer to the respective LocationName's member instead of using a literal string. This usage
+     * is okay, but it triggers the "prefer-literal-enum-member" rule. This rule is not useful in this case, so we
+     * suppress it in NetscriptDefinitions.d.ts.
+     */
+    {
+      files: ["src/ScriptEditor/NetscriptDefinitions.d.ts"],
+      rules: {
+        "@typescript-eslint/prefer-literal-enum-member": ["off"],
+      },
+    },
+  ],
 };

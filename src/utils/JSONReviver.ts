@@ -2,13 +2,14 @@
 import { ObjectValidator, validateObject } from "./Validator";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { loadActionIdentifier } from "../Bladeburner/utils/loadActionIdentifier";
+import { objectAssert } from "./helpers/typeAssertion";
 
 type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
-  fromJSON: (value: IReviverValue) => any;
+  fromJSON: (value: IReviverValue) => unknown;
   validationData?: ObjectValidator<any>;
 };
 
-export interface IReviverValue<T = any> {
+export interface IReviverValue<T = unknown> {
   ctor: string;
   data: T;
 }
@@ -87,16 +88,23 @@ export function Generic_toJSON<T extends Record<string, any>>(
  * @returns    The object */
 export function Generic_fromJSON<T extends Record<string, any>>(
   ctor: new () => T,
-  // data can actually be anything. We're just pretending it has the right keys for T. Save data is not type validated.
-  data: Record<keyof T, any>,
+  data: unknown,
   keys?: readonly (keyof T)[],
 ): T {
+  objectAssert(data);
   const obj = new ctor();
   // If keys were provided, just load the provided keys (if they are in the data)
   if (keys) {
-    for (const key of keys) {
+    /**
+     * The type of key is "keyof T", but the type of data is Record<string, unknown>. TypeScript won't allow us to use
+     * key as the index of data, so we need to typecast here.
+     */
+    for (const key of keys as string[]) {
       const val = data[key];
-      if (val !== undefined) obj[key] = val;
+      if (val !== undefined) {
+        // @ts-expect-error -- TypeScript won't allow this action: Type 'T' is generic and can only be indexed for reading.
+        obj[key] = val;
+      }
     }
     return obj;
   }

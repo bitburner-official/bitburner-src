@@ -277,7 +277,12 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
 
     let parsedSaveData;
     try {
-      parsedSaveData = JSON.parse(decodedSaveData);
+      parsedSaveData = JSON.parse(decodedSaveData) as {
+        ctor: string;
+        data: {
+          PlayerSave: string;
+        };
+      };
     } catch (error) {
       console.error(error); // We'll handle below
     }

@@ -10,6 +10,7 @@ import { scaleWorkStats } from "../../../Work/WorkStats";
 import { getKeyList } from "../../../utils/helpers/getKeyList";
 import { loadActionIdentifier } from "../../../Bladeburner/utils/loadActionIdentifier";
 import { invalidWork } from "../../../Work/InvalidWork";
+import { objectAssert } from "../../../utils/helpers/typeAssertion";
 
 interface SleeveBladeburnerWorkParams {
   actionId: ActionIdentifier & { type: BladeburnerActionType.General | BladeburnerActionType.Contract };
@@ -98,6 +99,7 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
 
   /** Initializes a BladeburnerWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveBladeburnerWork {
+    objectAssert(value.data);
     const actionId = loadActionIdentifier(value.data?.actionId);
     if (!actionId) return invalidWork();
     value.data.actionId = actionId;

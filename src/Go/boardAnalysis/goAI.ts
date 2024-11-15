@@ -1,4 +1,4 @@
-import type { Board, BoardState, EyeMove, Move, MoveOptions, Play, PointState } from "../Types";
+import type { Board, BoardState, EyeMove, Move, MoveOptions, MoveType, Play, PointState } from "../Types";
 
 import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType } from "@enums";
@@ -153,13 +153,13 @@ export async function getMove(
 
   // If no priority move is chosen, pick one of the reasonable moves
   const moveOptions = [
-    (await moves.growth())?.point,
-    (await moves.surround())?.point,
-    (await moves.defend())?.point,
-    (await moves.expansion())?.point,
+    moves.growth()?.point,
+    moves.surround()?.point,
+    moves.defend()?.point,
+    moves.expansion()?.point,
     (await moves.pattern())?.point,
-    (await moves.eyeMove())?.point,
-    (await moves.eyeBlock())?.point,
+    moves.eyeMove()?.point,
+    moves.eyeBlock()?.point,
   ]
     .filter(isNotNullish)
     .filter((point) => evaluateIfMoveIsValid(boardState, point.x, point.y, player, false));
@@ -221,12 +221,12 @@ function isSmart(faction: GoOpponent, rng: number) {
 async function getNetburnersPriorityMove(moves: MoveOptions, rng: number): Promise<PointState | null> {
   if (rng < 0.2) {
     return getIlluminatiPriorityMove(moves, rng);
-  } else if (rng < 0.4 && (await moves.expansion())) {
-    return (await moves.expansion())?.point ?? null;
-  } else if (rng < 0.6 && (await moves.growth())) {
-    return (await moves.growth())?.point ?? null;
+  } else if (rng < 0.4 && moves.expansion()) {
+    return moves.expansion()?.point ?? null;
+  } else if (rng < 0.6 && moves.growth()) {
+    return moves.growth()?.point ?? null;
   } else if (rng < 0.75) {
-    return (await moves.random())?.point ?? null;
+    return moves.random()?.point ?? null;
   }
 
   return null;
@@ -242,10 +242,10 @@ async function getSlumSnakesPriorityMove(moves: MoveOptions, rng: number): Promi
 
   if (rng < 0.2) {
     return getIlluminatiPriorityMove(moves, rng);
-  } else if (rng < 0.6 && (await moves.growth())) {
-    return (await moves.growth())?.point ?? null;
+  } else if (rng < 0.6 && moves.growth()) {
+    return moves.growth()?.point ?? null;
   } else if (rng < 0.65) {
-    return (await moves.random())?.point ?? null;
+    return moves.random()?.point ?? null;
   }
 
   return null;
@@ -260,7 +260,7 @@ async function getBlackHandPriorityMove(moves: MoveOptions, rng: number): Promis
     return (await moves.capture())?.point ?? null;
   }
 
-  const surround = await moves.surround();
+  const surround = moves.surround();
 
   if (surround && surround.point && (surround.newLibertyCount ?? 999) <= 1) {
     //console.debug("surround move chosen");
@@ -282,7 +282,7 @@ async function getBlackHandPriorityMove(moves: MoveOptions, rng: number): Promis
   } else if (rng < 0.75 && surround) {
     return surround.point;
   } else if (rng < 0.8) {
-    return (await moves.random())?.point ?? null;
+    return moves.random()?.point ?? null;
   }
 
   return null;
@@ -307,7 +307,7 @@ async function getTetradPriorityMove(moves: MoveOptions, rng: number): Promise<P
     return (await moves.pattern())?.point ?? null;
   }
 
-  const surround = await moves.surround();
+  const surround = moves.surround();
   if (surround && surround.point && (surround?.newLibertyCount ?? 9) <= 1) {
     //console.debug("surround move chosen");
     return surround.point;
@@ -350,30 +350,28 @@ async function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): Promi
     return (await moves.defendCapture())?.point ?? null;
   }
 
-  if (await moves.eyeMove()) {
+  if (moves.eyeMove()) {
     //console.debug("Create eye move chosen");
-    return (await moves.eyeMove())?.point ?? null;
+    return moves.eyeMove()?.point ?? null;
   }
 
-  const surround = await moves.surround();
+  const surround = moves.surround();
   if (surround && surround.point && (surround?.newLibertyCount ?? 9) <= 1) {
     //console.debug("surround move chosen");
     return surround.point;
   }
 
-  if (await moves.eyeBlock()) {
+  if (moves.eyeBlock()) {
     //console.debug("Block eye move chosen");
-    return (await moves.eyeBlock())?.point ?? null;
+    return moves.eyeBlock()?.point ?? null;
   }
 
-  if (await moves.corner()) {
+  if (moves.corner()) {
     //console.debug("Corner move chosen");
-    return (await moves.corner())?.point ?? null;
+    return moves.corner()?.point ?? null;
   }
 
-  const hasMoves = [await moves.eyeMove(), await moves.eyeBlock(), await moves.growth(), moves.defend, surround].filter(
-    (m) => m,
-  ).length;
+  const hasMoves = [moves.eyeMove(), moves.eyeBlock(), moves.growth(), moves.defend, surround].filter((m) => m).length;
   const usePattern = rng > 0.25 || !hasMoves;
 
   if ((await moves.pattern()) && usePattern) {
@@ -381,9 +379,9 @@ async function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): Promi
     return (await moves.pattern())?.point ?? null;
   }
 
-  if (rng > 0.4 && (await moves.jump())) {
+  if (rng > 0.4 && moves.jump()) {
     //console.debug("Jump move chosen");
-    return (await moves.jump())?.point ?? null;
+    return moves.jump()?.point ?? null;
   }
 
   if (rng < 0.6 && surround && surround.point && (surround?.newLibertyCount ?? 9) <= 2) {
@@ -508,7 +506,7 @@ function getDisputedTerritoryMoves(board: Board, availableSpaces: PointState[], 
 /**
  * Finds all moves that increases the liberties of the player's pieces, making them harder to capture and occupy more space on the board.
  */
-async function getLibertyGrowthMoves(board: Board, player: GoColor, availableSpaces: PointState[]) {
+function getLibertyGrowthMoves(board: Board, player: GoColor, availableSpaces: PointState[]) {
   const friendlyChains = getAllChains(board).filter((chain) => chain[0].color === player);
 
   if (!friendlyChains.length) {
@@ -551,8 +549,8 @@ async function getLibertyGrowthMoves(board: Board, player: GoColor, availableSpa
 /**
  * Find a move that increases the player's liberties by the maximum amount
  */
-async function getGrowthMove(board: Board, player: GoColor, availableSpaces: PointState[], rng: number) {
-  const growthMoves = await getLibertyGrowthMoves(board, player, availableSpaces);
+function getGrowthMove(board: Board, player: GoColor, availableSpaces: PointState[], rng: number) {
+  const growthMoves = getLibertyGrowthMoves(board, player, availableSpaces);
 
   const maxLibertyCount = Math.max(...growthMoves.map((l) => l.newLibertyCount - l.oldLibertyCount));
 
@@ -563,8 +561,8 @@ async function getGrowthMove(board: Board, player: GoColor, availableSpaces: Poi
 /**
  * Find a move that specifically increases a chain's liberties from 1 to more than 1, preventing capture
  */
-async function getDefendMove(board: Board, player: GoColor, availableSpaces: PointState[]) {
-  const growthMoves = await getLibertyGrowthMoves(board, player, availableSpaces);
+function getDefendMove(board: Board, player: GoColor, availableSpaces: PointState[]) {
+  const growthMoves = getLibertyGrowthMoves(board, player, availableSpaces);
   const libertyIncreases =
     growthMoves?.filter((move) => move.oldLibertyCount <= 1 && move.newLibertyCount > move.oldLibertyCount) ?? [];
 
@@ -582,7 +580,7 @@ async function getDefendMove(board: Board, player: GoColor, availableSpaces: Poi
  * Find a move that reduces the opponent's liberties as much as possible,
  *   capturing (or making it easier to capture) their pieces
  */
-async function getSurroundMove(board: Board, player: GoColor, availableSpaces: PointState[], smart = true) {
+function getSurroundMove(board: Board, player: GoColor, availableSpaces: PointState[], smart = true) {
   const opposingPlayer = player === GoColor.black ? GoColor.white : GoColor.black;
   const enemyChains = getAllChains(board).filter((chain) => chain[0].color === opposingPlayer);
 
@@ -741,12 +739,7 @@ function getEyeBlockingMove(board: Board, player: GoColor, availablePoints: Poin
 /**
  * Gets a group of reasonable moves based on the current board state, to be passed to the factions' AI to decide on
  */
-function getMoveOptions(
-  boardState: BoardState,
-  player: GoColor,
-  rng: number,
-  smart = true,
-): { [s in keyof MoveOptions]: () => Promise<Move | null> } {
+function getMoveOptions(boardState: BoardState, player: GoColor, rng: number, smart = true) {
   const board = boardState.board;
   const availableSpaces = findDisputedTerritory(boardState, player, smart);
   const contestedPoints = getDisputedTerritoryMoves(board, availableSpaces);
@@ -756,7 +749,7 @@ function getMoveOptions(
   // needlessly extend the game, unless they actually can change the score
   const endGameAvailable = !contestedPoints.length && boardState.passCount;
 
-  const moveOptions: { [s in keyof MoveOptions]: Move | null | undefined } = {
+  const moveOptions: { [s in MoveType]: Move | null | undefined } = {
     capture: undefined,
     defendCapture: undefined,
     eyeMove: undefined,
@@ -771,7 +764,7 @@ function getMoveOptions(
     random: undefined,
   };
 
-  const moveOptionGetters: { [s in keyof MoveOptions]: () => Promise<Move | null> } = {
+  const moveOptionGetters: MoveOptions = {
     capture: async () => {
       const surroundMove = await retrieveMoveOption("surround");
       return surroundMove && surroundMove?.newLibertyCount === 0 ? surroundMove : null;
@@ -785,30 +778,30 @@ function getMoveOptions(
         ? defendMove
         : null;
     },
-    eyeMove: async () => (endGameAvailable ? null : getEyeCreationMove(board, player, availableSpaces) ?? null),
-    eyeBlock: async () => (endGameAvailable ? null : getEyeBlockingMove(board, player, availableSpaces) ?? null),
+    eyeMove: () => (endGameAvailable ? null : getEyeCreationMove(board, player, availableSpaces) ?? null),
+    eyeBlock: () => (endGameAvailable ? null : getEyeBlockingMove(board, player, availableSpaces) ?? null),
     pattern: async () => {
       const point = endGameAvailable ? null : await findAnyMatchedPatterns(board, player, availableSpaces, smart, rng);
       return point ? { point } : null;
     },
-    growth: async () => (endGameAvailable ? null : (await getGrowthMove(board, player, availableSpaces, rng)) ?? null),
-    expansion: async () => (await getExpansionMove(board, availableSpaces, rng, expansionMoves)) ?? null,
-    jump: async () => (await getJumpMove(board, player, availableSpaces, rng, expansionMoves)) ?? null,
-    defend: async () => (await getDefendMove(board, player, availableSpaces)) ?? null,
-    surround: async () => (await getSurroundMove(board, player, availableSpaces, smart)) ?? null,
-    corner: async () => {
+    growth: () => (endGameAvailable ? null : getGrowthMove(board, player, availableSpaces, rng) ?? null),
+    expansion: () => getExpansionMove(board, availableSpaces, rng, expansionMoves) ?? null,
+    jump: () => getJumpMove(board, player, availableSpaces, rng, expansionMoves) ?? null,
+    defend: () => getDefendMove(board, player, availableSpaces) ?? null,
+    surround: () => getSurroundMove(board, player, availableSpaces, smart) ?? null,
+    corner: () => {
       const point = getCornerMove(board);
       return point ? { point } : null;
     },
-    random: async () => {
+    random: () => {
       // Only offer a random move if there are some contested spaces on the board.
       // (Random move should not be picked if the AI would otherwise pass turn.)
       const point = contestedPoints.length ? availableSpaces[Math.floor(rng * availableSpaces.length)] : null;
       return point ? { point } : null;
     },
-  };
+  } as const;
 
-  async function retrieveMoveOption(id: keyof typeof moveOptions): Promise<Move | null> {
+  async function retrieveMoveOption(id: MoveType): Promise<Move | null> {
     await waitCycle();
     if (moveOptions[id] !== undefined) {
       return moveOptions[id] ?? null;
