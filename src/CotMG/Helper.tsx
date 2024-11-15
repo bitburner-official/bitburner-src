@@ -1,3 +1,4 @@
+import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reviver } from "../utils/JSONReviver";
 import { BaseGift } from "./BaseGift";
 
@@ -9,7 +10,12 @@ export function loadStaneksGift(saveString: string): void {
   if (saveString) {
     const staneksGiftData: unknown = JSON.parse(saveString, Reviver);
     if (!(staneksGiftData instanceof StaneksGift)) {
-      throw new Error(`Cannot load data of Stanek's Gift from the save string. saveString: ${saveString}`);
+      console.error("Invalid StaneksGiftSave:", saveString);
+      setTimeout(() => {
+        dialogBoxCreate("Cannot load data of Stanek's Gift from the save string. StaneksGift is reset.");
+      }, 1000);
+      staneksGift = new StaneksGift();
+      return;
     }
     staneksGift = staneksGiftData;
   } else {
