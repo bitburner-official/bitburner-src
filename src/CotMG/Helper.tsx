@@ -7,20 +7,21 @@ import { StaneksGift } from "./StaneksGift";
 export let staneksGift = new StaneksGift();
 
 export function loadStaneksGift(saveString: string): void {
-  if (saveString) {
-    const staneksGiftData: unknown = JSON.parse(saveString, Reviver);
-    if (!(staneksGiftData instanceof StaneksGift)) {
-      console.error("Invalid StaneksGiftSave:", saveString);
-      setTimeout(() => {
-        dialogBoxCreate("Cannot load data of Stanek's Gift from the save string. StaneksGift is reset.");
-      }, 1000);
-      staneksGift = new StaneksGift();
-      return;
-    }
-    staneksGift = staneksGiftData;
-  } else {
-    staneksGift = new StaneksGift();
+  let staneksGiftData: unknown;
+  try {
+    staneksGiftData = JSON.parse(saveString, Reviver);
+  } catch (error) {
+    console.error(error);
   }
+  if (!(staneksGiftData instanceof StaneksGift)) {
+    console.error("Invalid StaneksGiftSave:", saveString);
+    staneksGift = new StaneksGift();
+    setTimeout(() => {
+      dialogBoxCreate("Cannot load data of Stanek's Gift. Stanek's Gift is reset.");
+    }, 1000);
+    return;
+  }
+  staneksGift = staneksGiftData;
 }
 
 export function zeros(width: number, height: number): number[][] {
