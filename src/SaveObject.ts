@@ -45,7 +45,7 @@ import { downloadContentAsFile } from "./utils/FileUtils";
 import { showAPIBreaks } from "./utils/APIBreaks/APIBreak";
 import { breakInfos261 } from "./utils/APIBreaks/2.6.1";
 import { handleGetSaveDataInfoError } from "./Netscript/ErrorMessages";
-import { isObject, objectAssert } from "./utils/helpers/typeAssertion";
+import { isObject } from "./utils/helpers/typeAssertion";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
