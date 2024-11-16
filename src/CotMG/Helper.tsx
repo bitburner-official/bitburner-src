@@ -26,7 +26,7 @@ export function loadStaneksGift(saveString: string): void {
 }
 
 export function zeros(width: number, height: number): number[][] {
-  const array: number[][] = [];
+  const array = [];
 
   for (let i = 0; i < width; ++i) {
     array.push(Array<number>(height).fill(0));
@@ -36,14 +36,16 @@ export function zeros(width: number, height: number): number[][] {
 }
 
 export function calculateGrid(gift: BaseGift): number[][] {
-  const newgrid = zeros(gift.width(), gift.height()) as unknown as number[][];
+  const newGrid = zeros(gift.width(), gift.height());
   for (let i = 0; i < gift.width(); i++) {
     for (let j = 0; j < gift.height(); j++) {
       const fragment = gift.fragmentAt(i, j);
-      if (!fragment) continue;
-      newgrid[i][j] = 1;
+      if (!fragment) {
+        continue;
+      }
+      newGrid[i][j] = 1;
     }
   }
 
-  return newgrid;
+  return newGrid;
 }
