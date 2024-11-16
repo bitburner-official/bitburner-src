@@ -10,9 +10,9 @@ import { Companies } from "../../src/Company/Companies";
 
 describe("Check Save File Continuity", () => {
   establishInitialConditions();
-  // Calling getSaveString forces save info to update
-  saveObject.getSaveData().catch((error) => {
-    console.error(error);
+  beforeAll(async () => {
+    // Calling getSaveString forces save info to update
+    await saveObject.getSaveData();
   });
 
   const savesToTest = ["FactionsSave", "PlayerSave", "CompaniesSave", "GoSave"] as const;

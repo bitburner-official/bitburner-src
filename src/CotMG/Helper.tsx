@@ -10,14 +10,15 @@ export function loadStaneksGift(saveString: string): void {
   let staneksGiftData: unknown;
   try {
     staneksGiftData = JSON.parse(saveString, Reviver);
+    if (!(staneksGiftData instanceof StaneksGift)) {
+      throw new Error(`Data of Stanek's Gift is not an instance of "StaneksGift"`);
+    }
   } catch (error) {
     console.error(error);
-  }
-  if (!(staneksGiftData instanceof StaneksGift)) {
     console.error("Invalid StaneksGiftSave:", saveString);
     staneksGift = new StaneksGift();
     setTimeout(() => {
-      dialogBoxCreate("Cannot load data of Stanek's Gift. Stanek's Gift is reset.");
+      dialogBoxCreate(`Cannot load data of Stanek's Gift. Stanek's Gift is reset. Error: ${error}.`);
     }, 1000);
     return;
   }

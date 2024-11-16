@@ -45,6 +45,7 @@ import { downloadContentAsFile } from "./utils/FileUtils";
 import { showAPIBreaks } from "./utils/APIBreaks/APIBreak";
 import { breakInfos261 } from "./utils/APIBreaks/2.6.1";
 import { handleGetSaveDataInfoError } from "./Netscript/ErrorMessages";
+import { isObject, objectAssert } from "./utils/helpers/typeAssertion";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -224,24 +225,18 @@ class BitburnerSaveObject {
       return Promise.reject(new Error("Save game is invalid. The save data cannot be decoded."));
     }
 
-    let parsedSaveData;
+    let parsedSaveData: unknown;
     try {
-      // Typecasting here is fine. We will validate parsedSaveData immediately after this line.
-      parsedSaveData = JSON.parse(decodedSaveData) as {
-        ctor: string;
-        data: {
-          PlayerSave: string;
-        };
-      };
+      parsedSaveData = JSON.parse(decodedSaveData);
     } catch (error) {
       console.error(error); // We'll handle below
     }
 
     if (
-      !parsedSaveData ||
+      !isObject(parsedSaveData) ||
       parsedSaveData.ctor !== "BitburnerSaveObject" ||
-      !parsedSaveData.data ||
-      !parsedSaveData.data.PlayerSave
+      !isObject(parsedSaveData.data) ||
+      typeof parsedSaveData.data.PlayerSave !== "string"
     ) {
       console.error("decodedSaveData:", decodedSaveData);
       return Promise.reject(new Error("Save game is invalid. The decoded save data is not valid."));

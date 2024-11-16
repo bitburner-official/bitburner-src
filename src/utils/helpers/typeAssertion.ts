@@ -35,6 +35,10 @@ function getFriendlyType(v: unknown): string {
   return v === null ? "null" : Array.isArray(v) ? "array" : typeof v;
 }
 
+export function isObject(v: unknown): v is Record<string, unknown> {
+  return getFriendlyType(v) === "object";
+}
+
 //All assertion functions used here should return the friendlyType of the input.
 
 /** For non-objects, and for array/null, throws an error with the friendlyType of v. */
