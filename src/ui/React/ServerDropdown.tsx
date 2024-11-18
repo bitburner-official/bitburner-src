@@ -7,11 +7,12 @@ import React from "react";
 import { GetAllServers } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
 import { BaseServer } from "../../Server/BaseServer";
-
+import { Player } from "@player";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
+import { AugmentationName } from "@enums";
 
 // TODO make this an enum when this gets converted to TypeScript
 export const ServerType = {
@@ -41,7 +42,9 @@ export function ServerDropdown(props: IProps): React.ReactElement {
       case ServerType.All:
         return true;
       case ServerType.Foreign:
-        return s.hostname !== "home" && !purchased;
+        return s.hostname !== "home" && !purchased && !Player.hasAugmentation(AugmentationName.TheRedPill, true)
+          ? s.hostname !== "w0r1d_d43m0n"
+          : true;
       case ServerType.Owned:
         return purchased || s.hostname === "home";
       case ServerType.Purchased:
