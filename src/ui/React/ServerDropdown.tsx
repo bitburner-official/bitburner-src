@@ -13,19 +13,20 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import { AugmentationName } from "@enums";
+import { SpecialServers } from "../../Server/data/SpecialServers";
+import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 
-// TODO make this an enum when this gets converted to TypeScript
-export const ServerType = {
-  All: 0,
-  Foreign: 1, // Hackable, non-owned servers
-  Owned: 2, // Home Computer, Purchased Servers, and Hacknet Servers
-  Purchased: 3, // Everything from Owned except home computer
-};
+export enum ServerType {
+  All = 0,
+  Foreign = 1, // Non-owned servers
+  Owned = 2, // Home Computer, Purchased Servers, and Hacknet Servers
+  Purchased = 3, // Everything from Owned except home computer
+}
 
 interface IProps {
   purchase: () => void;
   canPurchase: boolean;
-  serverType: number;
+  serverType: ServerType;
   onChange: (event: SelectChangeEvent) => void;
   value: string;
 }
@@ -35,24 +36,35 @@ export function ServerDropdown(props: IProps): React.ReactElement {
    * Checks if the server should be shown in the dropdown menu, based on the
    * 'serverType' property
    */
-  function isValidServer(s: BaseServer): boolean {
-    const purchased = (s instanceof Server && s.purchasedByPlayer) || s instanceof HacknetServer;
+  function isValidServer(baseServer: BaseServer): boolean {
+    /**
+     * isOwnedServer is true if baseServer is home, private servers, or hacknet servers. Note that home satisfies the
+     * condition: (baseServer instanceof Server && baseServer.purchasedByPlayer).
+     */
+    const isOwnedServer =
+      (baseServer instanceof Server && baseServer.purchasedByPlayer) || baseServer instanceof HacknetServer;
     const type = props.serverType;
     switch (type) {
       case ServerType.All:
         return true;
       case ServerType.Foreign:
-        return s.hostname !== "home" && !purchased && !Player.hasAugmentation(AugmentationName.TheRedPill, true)
-          ? s.hostname !== "w0r1d_d43m0n"
-          : true;
+        // Exclude home, private servers, hacknet servers.
+        if (isOwnedServer) {
+          return false;
+        }
+        // If the player has not installed TRP, exclude WD server.
+        if (!Player.hasAugmentation(AugmentationName.TheRedPill, true)) {
+          return baseServer.hostname !== SpecialServers.WorldDaemon;
+        }
+        return true;
       case ServerType.Owned:
-        return purchased || s.hostname === "home";
+        return isOwnedServer;
       case ServerType.Purchased:
-        return purchased;
+        return isOwnedServer && baseServer.hostname !== SpecialServers.Home;
       default:
-        console.warn(`Invalid ServerType specified for ServerDropdown component: ${type}`);
-        return false;
+        throwIfReachable(type);
     }
+    return false;
   }
 
   const servers = [];
