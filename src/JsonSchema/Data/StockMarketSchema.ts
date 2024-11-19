@@ -1,0 +1,138 @@
+import { OrderType, PositionType, StockSymbol } from "@enums";
+import { getKeyList } from "../../utils/helpers/getKeyList";
+import { Stock } from "../../StockMarket/Stock";
+import { Order } from "../../StockMarket/Order";
+
+const stockSymbolKeys = Object.keys(StockSymbol);
+const stockSymbolValues = Object.values(StockSymbol);
+const stockKeys = getKeyList(Stock);
+const orderKeys = getKeyList(Order);
+
+/**
+ * It's intentional to not use JSONSchemaType here. The data structure of StockMarket is not suitable for the usage of
+ * JSONSchemaType. These are 2 biggest problems:
+ * - IStockMarket is an intersection type. In our case, satisfying TS's type-checking for JSONSchemaType is too hard.
+ * - Stock and Order are classes, not interfaces or types. In those classes, we have functions, but functions are not
+ * supported by JSON (without ugly hacks). Let's use the "Order" class as an example. The Order class has the toJSON
+ * function, so ajv forces us to define the "toJSON" property. If we define it, we have to give it a "type". In
+ * JavaScript, a function is just an object, so the naive solution is to use {type:"object"}. However, the generated
+ * validation code uses "typeof" to check the data. "typeof functionName" is "function", not "object", so ajv sees it as
+ * invalid data. There are some ways to work around this problem, but all of them are complicated. In the end,
+ * JSONSchemaType is only a utility type. If our schema is designed and tested properly, after the validation, we can
+ * typecast the data.
+ */
+export const StockMarketSchema = {
+  $schema: "http://json-schema.org/draft-07/schema#",
+  type: "object",
+  patternProperties: {
+    "^(?!.*(lastUpdate|Orders|storedCycles|ticksUntilCycle))": {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        b: {
+          type: "boolean",
+        },
+        cap: {
+          type: "number",
+        },
+        lastPrice: {
+          type: "number",
+        },
+        maxShares: {
+          type: "number",
+        },
+        mv: {
+          type: "number",
+        },
+        name: {
+          type: "string",
+          enum: [...stockSymbolKeys],
+        },
+        otlkMag: {
+          type: "number",
+        },
+        otlkMagForecast: {
+          type: "number",
+        },
+        playerAvgPx: {
+          type: "number",
+        },
+        playerAvgShortPx: {
+          type: "number",
+        },
+        playerShares: {
+          type: "number",
+        },
+        playerShortShares: {
+          type: "number",
+        },
+        price: {
+          type: "number",
+        },
+        shareTxForMovement: {
+          type: "number",
+        },
+        shareTxUntilMovement: {
+          type: "number",
+        },
+        spreadPerc: {
+          type: "number",
+        },
+        symbol: {
+          type: "string",
+          enum: [...stockSymbolValues],
+        },
+        totalShares: {
+          type: "number",
+        },
+      },
+      required: [...stockKeys],
+    },
+  },
+  properties: {
+    lastUpdate: { type: "number" },
+    Orders: {
+      type: "object",
+      patternProperties: {
+        ".*": {
+          type: "array",
+          items: {
+            type: "object",
+            additionalProperties: false,
+            properties: {
+              pos: {
+                type: "string",
+                enum: [PositionType.Long, PositionType.Short],
+              },
+              price: {
+                type: "number",
+              },
+              shares: {
+                type: "number",
+              },
+              stockSymbol: {
+                type: "string",
+                enum: [...stockSymbolValues],
+              },
+              type: {
+                type: "string",
+                enum: [OrderType.LimitBuy, OrderType.LimitSell, OrderType.StopBuy, OrderType.StopSell],
+              },
+            },
+            required: [...orderKeys],
+          },
+        },
+      },
+      propertyNames: {
+        enum: [...stockSymbolValues],
+      },
+      required: [],
+    },
+    storedCycles: { type: "number" },
+    ticksUntilCycle: { type: "number" },
+  },
+  propertyNames: {
+    enum: [...stockSymbolKeys, "lastUpdate", "Orders", "storedCycles", "ticksUntilCycle"],
+  },
+  required: ["lastUpdate", "Orders", "storedCycles", "ticksUntilCycle"],
+};
