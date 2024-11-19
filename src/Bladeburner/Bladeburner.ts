@@ -924,7 +924,7 @@ export class Bladeburner implements OperationTeam {
             }
             isOperation ? this.completeOperation(true) : this.completeContract(true, action);
             /**
-             * If the player successfully completes a contract/operation involving killing, we reduce their karma by 1.
+             * If the player successfully completes a contract/operation involving killing, we deduct their karma by 1.
              * The amount of reduction must be a small, flat value because the action time of contract/operation can be
              * reduced to 1 second.
              */
@@ -1003,7 +1003,7 @@ export class Bladeburner implements OperationTeam {
             );
           }
           /**
-           * If the player successfully completes a BlackOp involving killing, we reduce their karma by 15. The amount
+           * If the player successfully completes a BlackOp involving killing, we deduct their karma by 15. The amount
            * of reduction is higher than contract/operation because the number of BlackOps is small. It won't affect the
            * balance. -15 karma is the same amount of karma for "heist" crime, which is the crime giving the highest
            * "negative karma".
