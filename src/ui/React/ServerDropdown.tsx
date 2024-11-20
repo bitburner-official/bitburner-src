@@ -38,8 +38,8 @@ export function ServerDropdown(props: IProps): React.ReactElement {
    */
   function isValidServer(baseServer: BaseServer): boolean {
     /**
-     * isOwnedServer is true if baseServer is home, private servers, or hacknet servers. Note that home satisfies the
-     * condition: (baseServer instanceof Server && baseServer.purchasedByPlayer).
+     * isOwnedServer is true if baseServer is home, private servers, or hacknet servers. Note that, with home computer,
+     * baseServer.purchasedByPlayer is true.
      */
     const isOwnedServer =
       (baseServer instanceof Server && baseServer.purchasedByPlayer) || baseServer instanceof HacknetServer;
@@ -53,10 +53,10 @@ export function ServerDropdown(props: IProps): React.ReactElement {
           return false;
         }
         // If the player has not installed TRP, exclude WD server.
-        if (!Player.hasAugmentation(AugmentationName.TheRedPill, true)) {
-          return baseServer.hostname !== SpecialServers.WorldDaemon;
-        }
-        return true;
+        return (
+          Player.hasAugmentation(AugmentationName.TheRedPill, true) ||
+          baseServer.hostname !== SpecialServers.WorldDaemon
+        );
       case ServerType.Owned:
         return isOwnedServer;
       case ServerType.Purchased:
