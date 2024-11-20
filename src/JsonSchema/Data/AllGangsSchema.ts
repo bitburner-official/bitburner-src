@@ -1,4 +1,4 @@
-import { JSONSchemaType } from "ajv";
+import type { JSONSchemaType } from "ajv";
 import type { AllGangs } from "../../Gang/AllGangs";
 import { GangConstants } from "../../Gang/data/Constants";
 
