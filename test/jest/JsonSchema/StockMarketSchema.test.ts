@@ -68,17 +68,7 @@ describe("Success", () => {
   });
   test("StockMarket with Orders", () => {
     const stockMarket = getCloneOfDefaultStockMarket();
-    stockMarket.Orders = {
-      ECP: [
-        {
-          stockSymbol: "ECP",
-          shares: 1,
-          price: 1000,
-          type: "Limit Buy Order",
-          pos: "L",
-        },
-      ],
-    };
+    stockMarket.Orders = getCloneOfSampleOrders();
     expect(JsonSchemaValidator.StockMarket(stockMarket)).toStrictEqual(true);
   });
 });
