@@ -12,6 +12,8 @@ import { OptionSwitch } from "../../ui/React/OptionSwitch";
 
 import { defaultMonacoTheme } from "./themes";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { assertEditorTheme } from "../../JsonSchema/JSONSchemaAssertion";
+import { getRecordKeys } from "../../Types/Record";
 
 type ColorEditorProps = {
   label: string;
@@ -74,21 +76,25 @@ export function ThemeEditorModal(props: ThemeEditorProps): React.ReactElement {
   }
 
   function onThemeChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    const currentTheme: Record<string, unknown> = { ...Settings.EditorTheme };
+    let themeData: unknown;
     try {
-      const importedTheme = JSON.parse(event.target.value) as typeof Settings.EditorTheme;
-      if (importedTheme == null) {
-        throw new Error("Theme data must not be null or undefined.");
+      themeData = JSON.parse(event.target.value);
+      assertEditorTheme(themeData);
+      for (const key of getRecordKeys(themeData)) {
+        if (!currentTheme[key]) {
+          throw new Error(`Invalid key "${key}"`);
+        }
+        currentTheme[key] = themeData[key];
       }
-      if (typeof importedTheme !== "object") {
-        throw new Error(`Theme data is invalid.`);
-      }
-      Settings.EditorTheme = importedTheme;
-      props.onChange();
     } catch (error) {
-      console.error(`Theme data is invalid. Data: ${event.target.value}.`);
       console.error(error);
-      dialogBoxCreate(`Invalid theme. ${error}`);
+      console.error("Theme data is invalid. Data:", event.target.value);
+      dialogBoxCreate(`Invalid theme. Errors: ${error}.`);
+      return;
     }
+    Object.assign(Settings.EditorTheme, currentTheme);
+    props.onChange();
   }
 
   const onResetToDefault = () => {

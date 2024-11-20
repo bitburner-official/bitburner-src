@@ -1,7 +1,6 @@
 import * as predefined from "./data";
 
 export interface ITheme {
-  [key: string]: string | undefined;
   primarylight: string;
   primary: string;
   primarydark: string;

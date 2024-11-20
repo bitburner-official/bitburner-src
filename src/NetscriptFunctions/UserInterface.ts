@@ -9,6 +9,9 @@ import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { Terminal } from "../../src/Terminal";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { errorMessage } from "../Netscript/ErrorMessages";
+import { JsonSchemaValidator } from "../JsonSchema/JsonSchemaValidator";
+import { assertMainTheme } from "../JsonSchema/JSONSchemaAssertion";
+import { getRecordKeys } from "../Types/Record";
 
 /** Will probably remove the below function in favor of a different approach to object type assertion.
  *  This method cannot be used to handle optional properties. */
@@ -54,17 +57,18 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
     },
 
     setTheme: (ctx) => (newTheme) => {
-      const themeValidator: Record<string, string | undefined> = {};
-      assertObjectType(ctx, "newTheme", newTheme, themeValidator);
-      const hex = /^(#)((?:[A-Fa-f0-9]{2}){3,4}|(?:[A-Fa-f0-9]{3}))$/;
+      try {
+        assertMainTheme(newTheme);
+      } catch (error) {
+        helpers.log(ctx, () => `Failed to set theme. Errors: ${error}`);
+        return;
+      }
       const currentTheme = { ...Settings.theme };
       const errors: string[] = [];
-      for (const key of Object.keys(newTheme)) {
+      for (const key of getRecordKeys(newTheme)) {
         if (!currentTheme[key]) {
           // Invalid key
           errors.push(`Invalid key "${key}"`);
-        } else if (!hex.test(newTheme[key] ?? "")) {
-          errors.push(`Invalid color "${key}": ${newTheme[key]}`);
         } else {
           currentTheme[key] = newTheme[key];
         }
@@ -80,11 +84,15 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
     },
 
     setStyles: (ctx) => (newStyles) => {
-      const styleValidator: Record<string, string | number | undefined> = {};
-      assertObjectType(ctx, "newStyles", newStyles, styleValidator);
+      const validate = JsonSchemaValidator.Styles;
+      if (!validate(newStyles)) {
+        // validate.errors is an array of objects, so we need to use JSON.stringify.
+        helpers.log(ctx, () => `Failed to set theme. Errors: ${JSON.stringify(validate.errors)}`);
+        return;
+      }
       const currentStyles: Record<string, unknown> = { ...Settings.styles };
       const errors: string[] = [];
-      for (const key of Object.keys(newStyles)) {
+      for (const key of getRecordKeys(newStyles)) {
         if (!currentStyles[key]) {
           // Invalid key
           errors.push(`Invalid key "${key}"`);
