@@ -1,12 +1,10 @@
-import { OrderType, PositionType, StockSymbol } from "@enums";
+import { OrderType, PositionType } from "@enums";
 import { getKeyList } from "../../utils/helpers/getKeyList";
 import { Stock } from "../../StockMarket/Stock";
 import { Order } from "../../StockMarket/Order";
 
-const stockSymbolKeys = Object.keys(StockSymbol);
-const stockSymbolValues = Object.values(StockSymbol);
-const stockKeys = getKeyList(Stock);
-const orderKeys = getKeyList(Order);
+const stockObjectProperties = getKeyList(Stock);
+const orderObjectProperties = getKeyList(Order);
 
 /**
  * It's intentional to not use JSONSchemaType here. The data structure of StockMarket is not suitable for the usage of
@@ -25,9 +23,18 @@ export const StockMarketSchema = {
   $schema: "http://json-schema.org/draft-07/schema#",
   type: "object",
   patternProperties: {
-    "^(?!.*(lastUpdate|Orders|storedCycles|ticksUntilCycle))": {
+    /**
+     * IStockMarket is an intersection type combining:
+     * - Record<string, Stock> [1]
+     * - {lastUpdate: number;Orders: IOrderBook;storedCycles: number;ticksUntilCycle: number;} [2]
+     *
+     * StockMarketSchema contains:
+     * - patternProperties: Defines [1]. The following regex matches all properties that are not in [2]. It defines the
+     * map of "Full stock name -> Stock".
+     * - properties: Define [2].
+     */
+    "^(?!(lastUpdate|Orders|storedCycles|ticksUntilCycle))": {
       type: "object",
-      additionalProperties: false,
       properties: {
         b: {
           type: "boolean",
@@ -46,7 +53,6 @@ export const StockMarketSchema = {
         },
         name: {
           type: "string",
-          enum: [...stockSymbolKeys],
         },
         otlkMag: {
           type: "number",
@@ -80,13 +86,12 @@ export const StockMarketSchema = {
         },
         symbol: {
           type: "string",
-          enum: [...stockSymbolValues],
         },
         totalShares: {
           type: "number",
         },
       },
-      required: [...stockKeys],
+      required: [...stockObjectProperties],
     },
   },
   properties: {
@@ -98,7 +103,6 @@ export const StockMarketSchema = {
           type: "array",
           items: {
             type: "object",
-            additionalProperties: false,
             properties: {
               pos: {
                 type: "string",
@@ -112,27 +116,19 @@ export const StockMarketSchema = {
               },
               stockSymbol: {
                 type: "string",
-                enum: [...stockSymbolValues],
               },
               type: {
                 type: "string",
                 enum: [OrderType.LimitBuy, OrderType.LimitSell, OrderType.StopBuy, OrderType.StopSell],
               },
             },
-            required: [...orderKeys],
+            required: [...orderObjectProperties],
           },
         },
       },
-      propertyNames: {
-        enum: [...stockSymbolValues],
-      },
-      required: [],
     },
     storedCycles: { type: "number" },
     ticksUntilCycle: { type: "number" },
-  },
-  propertyNames: {
-    enum: [...stockSymbolKeys, "lastUpdate", "Orders", "storedCycles", "ticksUntilCycle"],
   },
   required: ["lastUpdate", "Orders", "storedCycles", "ticksUntilCycle"],
 };

@@ -1,7 +1,15 @@
 import { JSONSchemaType } from "ajv";
 import type { AllGangs } from "../../Gang/AllGangs";
-import { FactionName } from "@enums";
+import { GangConstants } from "../../Gang/data/Constants";
 
+/**
+ * If we add/remove gangs, we must change 3 places:
+ * - src\Gang\AllGangs.ts: getDefaultAllGangs
+ * - src\Gang\data\Constants.ts: GangConstants.Names
+ * - src\Gang\data\power.ts: PowerMultiplier
+ *
+ * Gang code assumes that save data contains exactly gangs defined in these places.
+ */
 export const AllGangsSchema: JSONSchemaType<typeof AllGangs> = {
   $schema: "http://json-schema.org/draft-07/schema#",
   type: "object",
@@ -20,23 +28,7 @@ export const AllGangsSchema: JSONSchemaType<typeof AllGangs> = {
     },
   },
   propertyNames: {
-    enum: [
-      FactionName.SlumSnakes,
-      FactionName.Tetrads,
-      FactionName.TheSyndicate,
-      FactionName.TheDarkArmy,
-      FactionName.SpeakersForTheDead,
-      FactionName.NiteSec,
-      FactionName.TheBlackHand,
-    ],
+    enum: GangConstants.Names,
   },
-  required: [
-    FactionName.SlumSnakes,
-    FactionName.Tetrads,
-    FactionName.TheSyndicate,
-    FactionName.TheDarkArmy,
-    FactionName.SpeakersForTheDead,
-    FactionName.NiteSec,
-    FactionName.TheBlackHand,
-  ],
+  required: GangConstants.Names,
 };

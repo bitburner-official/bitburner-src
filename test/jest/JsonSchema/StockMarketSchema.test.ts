@@ -57,7 +57,6 @@ function getCloneOfSampleOrders() {
   };
 }
 
-type SampleStock = ReturnType<typeof getCloneOfSampleStock>;
 type SampleOrders = ReturnType<typeof getCloneOfSampleOrders>;
 
 describe("Success", () => {
@@ -103,23 +102,6 @@ describe("Failure", () => {
       stockMarket.ECorp = [];
       expect(JsonSchemaValidator.StockMarket(stockMarket)).toStrictEqual(false);
     });
-    test("Have invalid stock name 1", () => {
-      const stockMarket = getCloneOfDefaultStockMarket();
-      stockMarket.ECorp1 = getCloneOfSampleStock();
-      expect(JsonSchemaValidator.StockMarket(stockMarket)).toStrictEqual(false);
-    });
-    test("Have invalid stock name 2", () => {
-      const stockMarket = getCloneOfDefaultStockMarket();
-      stockMarket.ECorp = getCloneOfSampleStock();
-      (stockMarket.ECorp as SampleStock).name = "ECorp1";
-      expect(JsonSchemaValidator.StockMarket(stockMarket)).toStrictEqual(false);
-    });
-    test("Have invalid stock symbol", () => {
-      const stockMarket = getCloneOfDefaultStockMarket();
-      stockMarket.ECorp = getCloneOfSampleStock();
-      (stockMarket.ECorp as SampleStock).symbol = "ECP1";
-      expect(JsonSchemaValidator.StockMarket(stockMarket)).toStrictEqual(false);
-    });
     const sampleStock = getCloneOfSampleStock();
     for (const [key, value] of Object.entries(sampleStock)) {
       if (typeof value === "string") {
@@ -138,19 +120,6 @@ describe("Failure", () => {
     test("Have invalid type of Orders", () => {
       const stockMarket = getCloneOfDefaultStockMarket();
       stockMarket.Orders = [];
-      expect(JsonSchemaValidator.StockMarket(stockMarket)).toStrictEqual(false);
-    });
-    test("Have invalid Order: Invalid symbol 1", () => {
-      const stockMarket = getCloneOfDefaultStockMarket();
-      stockMarket.Orders = {
-        ECP1: [],
-      };
-      expect(JsonSchemaValidator.StockMarket(stockMarket)).toStrictEqual(false);
-    });
-    test("Have invalid Order: Invalid symbol 2", () => {
-      const stockMarket = getCloneOfDefaultStockMarket();
-      stockMarket.Orders = getCloneOfSampleOrders();
-      (stockMarket.Orders as SampleOrders).ECP[0].stockSymbol = "ECP1";
       expect(JsonSchemaValidator.StockMarket(stockMarket)).toStrictEqual(false);
     });
     test("Have invalid Order: Invalid order type", () => {
