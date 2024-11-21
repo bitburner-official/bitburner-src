@@ -3,6 +3,7 @@ import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
 import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
+import { objectAssert } from "../utils/helpers/typeAssertion";
 
 /**
  * This function won't be able to catch **all** invalid hostnames, and it's still fine. In order to validate a hostname
@@ -157,12 +158,8 @@ export const Settings = {
   disableSuffixes: false,
 
   load(saveString: string) {
-    const save = JSON.parse(saveString) as {
-      theme?: typeof Settings.theme;
-      styles?: typeof Settings.styles;
-      overview?: typeof Settings.overview;
-      EditorTheme?: typeof Settings.EditorTheme;
-    };
+    const save: unknown = JSON.parse(saveString);
+    objectAssert(save);
     save.theme && Object.assign(Settings.theme, save.theme);
     save.styles && Object.assign(Settings.styles, save.styles);
     save.overview && Object.assign(Settings.overview, save.overview);
