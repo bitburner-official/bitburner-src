@@ -1524,7 +1524,7 @@ export const ns: InternalAPI<NSFull> = {
       return rs.ramUsage;
     }
     const newServerRamUsed = roundToTwo(server.ramUsed + (newRam - rs.ramUsage) * rs.threads);
-    if (newServerRamUsed >= server.maxRam) {
+    if (newServerRamUsed > server.maxRam) {
       // Can't allocate more RAM.
       return rs.ramUsage;
     }

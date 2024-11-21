@@ -26,7 +26,7 @@ import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString
 import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
 import { downloadContentAsFile } from "./utils/FileUtils";
 import { handleGetSaveDataInfoError } from "./Netscript/ErrorMessages";
-import { objectAssert } from "./utils/helpers/typeAssertion";
+import { isObject, objectAssert } from "./utils/helpers/typeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
 
 /* SaveObject.js
@@ -272,23 +272,25 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
     }
 
     if (!decodedSaveData || decodedSaveData === "") {
-      return Promise.reject(new Error("Save game is invalid"));
+      console.error("decodedSaveData:", decodedSaveData);
+      return Promise.reject(new Error("Save game is invalid. The save data cannot be decoded."));
     }
 
-    let parsedSaveData;
+    let parsedSaveData: unknown;
     try {
-      parsedSaveData = JSON.parse(decodedSaveData) as {
-        ctor: string;
-        data: {
-          PlayerSave: string;
-        };
-      };
+      parsedSaveData = JSON.parse(decodedSaveData);
     } catch (error) {
       console.error(error); // We'll handle below
     }
 
-    if (!parsedSaveData || parsedSaveData.ctor !== "BitburnerSaveObject" || !parsedSaveData.data) {
-      return Promise.reject(new Error("Save game did not seem valid"));
+    if (
+      !isObject(parsedSaveData) ||
+      parsedSaveData.ctor !== "BitburnerSaveObject" ||
+      !isObject(parsedSaveData.data) ||
+      typeof parsedSaveData.data.PlayerSave !== "string"
+    ) {
+      console.error("decodedSaveData:", decodedSaveData);
+      return Promise.reject(new Error("Save game is invalid. The decoded save data is not valid."));
     }
 
     const data: ImportData = {

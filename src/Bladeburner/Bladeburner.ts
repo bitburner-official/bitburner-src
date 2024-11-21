@@ -52,6 +52,7 @@ import { autoCompleteTypeShorthand } from "./utils/terminalShorthands";
 import { resolveTeamCasualties, type OperationTeam } from "./Actions/TeamCasualties";
 import { shuffleArray } from "../Infiltration/ui/BribeGame";
 import { objectAssert } from "../utils/helpers/typeAssertion";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -822,7 +823,7 @@ export class Bladeburner implements OperationTeam {
         city.changeChaosByPercentage(getRandomIntInclusive(-5, 5));
         break;
       default:
-        throw new Error("Invalid Action name in completeOperation: " + this.action.name);
+        throwIfReachable(action.name);
     }
   }
 
@@ -922,6 +923,14 @@ export class Bladeburner implements OperationTeam {
               }
             }
             isOperation ? this.completeOperation(true) : this.completeContract(true, action);
+            /**
+             * If the player successfully completes a contract/operation involving killing, we deduct their karma by 1.
+             * The amount of reduction must be a small, flat value because the action time of contract/operation can be
+             * reduced to 1 second.
+             */
+            if (action.isKill) {
+              Player.karma -= 1;
+            }
           } else {
             retValue = this.getActionStats(action, person, false);
             ++action.failures;
@@ -992,6 +1001,15 @@ export class Bladeburner implements OperationTeam {
             this.log(
               `${person.whoAmI()}: ${action.name} successful! Gained ${formatNumberNoSuffix(rankGain, 1)} rank.`,
             );
+          }
+          /**
+           * If the player successfully completes a BlackOp involving killing, we deduct their karma by 15. The amount
+           * of reduction is higher than contract/operation because the number of BlackOps is small. It won't affect the
+           * balance. -15 karma is the same amount of karma for "heist" crime, which is the crime giving the highest
+           * "negative karma".
+           */
+          if (action.isKill) {
+            Player.karma -= 15;
           }
         } else {
           retValue = this.getActionStats(action, person, false);

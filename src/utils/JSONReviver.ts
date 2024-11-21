@@ -95,20 +95,20 @@ export function Generic_fromJSON<T extends Record<string, any>>(
   const obj = new ctor();
   // If keys were provided, just load the provided keys (if they are in the data)
   if (keys) {
-    /**
-     * The type of key is "keyof T", but the type of data is Record<string, unknown>. TypeScript won't allow us to use
-     * key as the index of data, so we need to typecast here.
-     */
-    for (const key of keys as string[]) {
-      const val = data[key];
+    for (const key of keys) {
+      // This cast is safe (T has string keys), but still needed because "keyof T" cannot be used to index data.
+      const val = data[key as string];
       if (val !== undefined) {
-        // @ts-expect-error -- TypeScript won't allow this action: Type 'T' is generic and can only be indexed for reading.
-        obj[key] = val;
+        // This is an unsafe assignment. We may load data with wrong types at runtime.
+        obj[key] = val as T[keyof T];
       }
     }
     return obj;
   }
   // No keys provided: load every key in data
-  for (const [key, val] of Object.entries(data) as [keyof T, T[keyof T]][]) obj[key] = val;
+  for (const [key, val] of Object.entries(data) as [keyof T, T[keyof T]][]) {
+    // This is an unsafe assignment. We may load data with wrong types at runtime.
+    obj[key] = val;
+  }
   return obj;
 }
