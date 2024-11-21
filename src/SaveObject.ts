@@ -13,6 +13,7 @@ import {
   createUniqueRandomIp,
   AddToAllServers,
   GetServer,
+  renameServer,
 } from "./Server/AllServers";
 import { Settings } from "./Settings/Settings";
 import { loadStockMarket, StockMarket } from "./StockMarket/StockMarket";
@@ -313,6 +314,10 @@ function evaluateVersionCompatibility(ver: string | number): void {
       delete anyPlayer.companyPosition;
     }
     if (ver < "0.56.0") {
+      // In older versions, keys of AllServers are IP addresses instead of hostnames.
+      for (const server of GetAllServers()) {
+        renameServer(server.ip, server.hostname);
+      }
       for (const q of anyPlayer.queuedAugmentations) {
         if (q.name === "Graphene BranchiBlades Upgrade") {
           q.name = "Graphene BrachiBlades Upgrade";
