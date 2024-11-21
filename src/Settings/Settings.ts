@@ -164,7 +164,10 @@ export const Settings = {
     save.styles && Object.assign(Settings.styles, save.styles);
     save.overview && Object.assign(Settings.overview, save.overview);
     save.EditorTheme && Object.assign(Settings.EditorTheme, save.EditorTheme);
-    delete save.theme, save.styles, save.overview, save.EditorTheme;
+    delete save.theme;
+    delete save.styles;
+    delete save.overview;
+    delete save.EditorTheme;
     Object.assign(Settings, save);
     /**
      * The hostname and port of RFA have not been validated properly, so the save data may contain invalid data. In that
