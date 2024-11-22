@@ -32,6 +32,13 @@ export const StockMarketSchema = {
      * - patternProperties: Defines [1]. The following regex matches all properties that are not in [2]. It defines the
      * map of "Full stock name -> Stock".
      * - properties: Define [2].
+     *
+     * Note that with [1], our code allows unknown stocks. Let's say the player loads a save file with this entry in
+     * [1]: UnknownCorp123 -> Stock with symbol UCP123. Although this stock is not in our list of "valid" stocks, we
+     * still process it normally. By "tolerating" unknown stocks, we allow loading a save file created in:
+     * - Old versions with unsupported stocks: In very old versions (v1.2.0 and older ones), the "full stock name" of
+     * "Joe's Guns" is "Joes Guns".
+     * - New versions with unknown stocks.
      */
     "^(?!(lastUpdate|Orders|storedCycles|ticksUntilCycle))": {
       type: "object",
