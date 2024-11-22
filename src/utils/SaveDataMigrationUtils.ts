@@ -13,7 +13,7 @@
 
 import { Player } from "@player";
 import { AugmentationName, LocationName } from "@enums";
-import { AddToAllServers, createUniqueRandomIp, GetAllServers, GetServer } from "../Server/AllServers";
+import { AddToAllServers, createUniqueRandomIp, GetAllServers, GetServer, renameServer } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 import { AwardNFG, v1APIBreak } from "./v1APIBreak";
 import { Settings } from "../Settings/Settings";
@@ -63,6 +63,10 @@ export function evaluateVersionCompatibility(ver: string | number): void {
       delete anyPlayer.companyPosition;
     }
     if (ver < "0.56.0") {
+      // In older versions, keys of AllServers are IP addresses instead of hostnames.
+      for (const server of GetAllServers()) {
+        renameServer(server.ip, server.hostname);
+      }
       for (const q of anyPlayer.queuedAugmentations) {
         if (q.name === "Graphene BranchiBlades Upgrade") {
           q.name = "Graphene BrachiBlades Upgrade";
