@@ -1,10 +1,13 @@
 import type { editor } from "monaco-editor";
-import { getRecordKeys } from "../../Types/Record";
-import { Settings } from "../../Settings/Settings";
 type DefineThemeFn = typeof editor.defineTheme;
 
+export const validEditorThemeBases = ["vs", "vs-dark", "hc-black", "hc-light"] as const;
+
+/**
+ * If we change this interface, we must change EditorThemeSchema.
+ */
 export interface IScriptEditorTheme {
-  base: "vs" | "vs-dark" | "hc-black";
+  base: (typeof validEditorThemeBases)[number];
   inherit: boolean;
   common: {
     accent: string;
@@ -65,45 +68,6 @@ export const defaultMonacoTheme: IScriptEditorTheme = {
       bg: "ADD6FF26",
     },
   },
-};
-
-// Regex used for token color validation
-// https://github.com/microsoft/vscode/blob/973684056e67153952f495fce93bf50d0ec0b892/src/vs/editor/common/languages/supports/tokenization.ts#L153
-const colorRegExp = /^#?([0-9A-Fa-f]{6})([0-9A-Fa-f]{2})?$/;
-
-// Recursively sanitize the theme data to prevent errors
-// Invalid data will be replaced with FF0000 (bright red)
-export const sanitizeTheme = (theme: IScriptEditorTheme): void => {
-  if (typeof theme !== "object") {
-    Settings.EditorTheme = structuredClone(defaultMonacoTheme);
-    return;
-  }
-  for (const themeKey of getRecordKeys(theme)) {
-    if (typeof theme[themeKey] !== "object") {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete theme[themeKey];
-    }
-    switch (themeKey) {
-      case "base":
-        if (!["vs-dark", "vs"].includes(theme.base)) theme.base = "vs-dark";
-        continue;
-      case "inherit":
-        if (typeof theme.inherit !== "boolean") theme.inherit = true;
-        continue;
-    }
-
-    const block = theme[themeKey];
-    const repairBlock = <T extends Record<string, unknown>>(block: T) => {
-      for (const [blockKey, blockValue] of Object.entries(block) as [keyof T, unknown][]) {
-        if (!blockValue || (typeof blockValue !== "string" && typeof blockValue !== "object"))
-          (block[blockKey] as string) = "FF0000";
-        else if (typeof blockValue === "object") repairBlock(blockValue as Record<string, unknown>);
-        else if (!blockValue.match(colorRegExp)) (block[blockKey] as string) = "FF0000";
-      }
-    };
-    // Type assertion is to something less specific.
-    repairBlock(block);
-  }
 };
 
 export function makeTheme(theme: IScriptEditorTheme): editor.IStandaloneThemeData {

@@ -1,5 +1,8 @@
 import * as predefined from "./data";
 
+/**
+ * If we change this interface, we must change MainThemeSchema and UserInterfaceTheme.
+ */
 export interface ITheme {
   primarylight: string;
   primary: string;

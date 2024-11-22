@@ -12,8 +12,7 @@ import { OptionSwitch } from "../../ui/React/OptionSwitch";
 
 import { defaultMonacoTheme } from "./themes";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { assertEditorTheme } from "../../JsonSchema/JSONSchemaAssertion";
-import { getRecordKeys } from "../../Types/Record";
+import { assertAndSanitizeEditorTheme } from "../../JsonSchema/JSONSchemaAssertion";
 
 type ColorEditorProps = {
   label: string;
@@ -76,24 +75,17 @@ export function ThemeEditorModal(props: ThemeEditorProps): React.ReactElement {
   }
 
   function onThemeChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    const currentTheme: Record<string, unknown> = { ...Settings.EditorTheme };
     let themeData: unknown;
     try {
       themeData = JSON.parse(event.target.value);
-      assertEditorTheme(themeData);
-      for (const key of getRecordKeys(themeData)) {
-        if (!currentTheme[key]) {
-          throw new Error(`Invalid key "${key}"`);
-        }
-        currentTheme[key] = themeData[key];
-      }
+      assertAndSanitizeEditorTheme(themeData);
     } catch (error) {
       console.error(error);
       console.error("Theme data is invalid. Data:", event.target.value);
       dialogBoxCreate(`Invalid theme. Errors: ${error}.`);
       return;
     }
-    Object.assign(Settings.EditorTheme, currentTheme);
+    Object.assign(Settings.EditorTheme, themeData);
     props.onChange();
   }
 

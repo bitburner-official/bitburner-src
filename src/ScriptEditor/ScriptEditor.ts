@@ -2,11 +2,11 @@ import type { ContentFilePath } from "../Paths/ContentFile";
 
 import { EventEmitter } from "../utils/EventEmitter";
 import * as monaco from "monaco-editor";
-import { loadThemes, makeTheme, sanitizeTheme } from "./ui/themes";
+import { loadThemes, makeTheme } from "./ui/themes";
 import netscriptDefinitions from "./NetscriptDefinitions.d.ts?raw";
 // We use a relative paths here to
 // - bypass the exports in @types/react's package.json
-// - to prevent typescript from complaining about importing a delcaration file.
+// - to prevent typescript from complaining about importing a declaration file.
 import reactTypes from "../../node_modules/@types/react/index.d.ts?raw";
 import reactDomTypes from "../../node_modules/@types/react-dom/index.d.ts?raw";
 import { Settings } from "../Settings/Settings";
@@ -143,7 +143,6 @@ export class ScriptEditor {
     });
     // Load themes
     loadThemes(monaco.editor.defineTheme);
-    sanitizeTheme(Settings.EditorTheme);
     monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
   }
 }

@@ -19,8 +19,7 @@ import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { ThemeCollaborate } from "./ThemeCollaborate";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { getRecordKeys } from "../../Types/Record";
-import { assertMainTheme } from "../../JsonSchema/JSONSchemaAssertion";
+import { assertAndSanitizeMainTheme } from "../../JsonSchema/JSONSchemaAssertion";
 
 interface IProps {
   open: boolean;
@@ -83,24 +82,17 @@ export function ThemeEditorModal(props: IProps): React.ReactElement {
   }
 
   function onThemeChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    const currentTheme = { ...Settings.theme };
     let themeData: unknown;
     try {
       themeData = JSON.parse(event.target.value);
-      assertMainTheme(themeData);
-      for (const key of getRecordKeys(themeData)) {
-        if (!currentTheme[key]) {
-          throw new Error(`Invalid key "${key}"`);
-        }
-        currentTheme[key] = themeData[key];
-      }
+      assertAndSanitizeMainTheme(themeData);
     } catch (error) {
       console.error(error);
       console.error("Theme data is invalid. Data:", event.target.value);
       dialogBoxCreate(`Invalid theme. Errors: ${error}.`);
       return;
     }
-    Object.assign(Settings.theme, currentTheme);
+    Object.assign(Settings.theme, themeData);
     ThemeEvents.emit();
     setCustomTheme(themeData);
   }
