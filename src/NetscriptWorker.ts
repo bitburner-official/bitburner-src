@@ -34,7 +34,7 @@ import { parseCommand } from "./Terminal/Parser";
 import { Terminal } from "./Terminal";
 import { ScriptArg } from "@nsdefs";
 import { CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/NetscriptHelpers";
-import { handleUnknownError } from "./Netscript/ErrorMessages";
+import { handleUnknownError } from "./utils/ErrorHandler";
 import { isLegacyScript, legacyScriptExtension, resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
 import { root } from "./Paths/Directory";
 
