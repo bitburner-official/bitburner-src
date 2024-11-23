@@ -24,7 +24,7 @@ import { SnackbarEvents } from "./ui/React/Snackbar";
 import * as ExportBonus from "./ExportBonus";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
-import { Reviver, constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "./utils/JSONReviver";
+import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, type IReviverValue } from "./utils/JSONReviver";
 import { save } from "./db";
 import { AwardNFG, v1APIBreak } from "./utils/v1APIBreak";
 import { AugmentationName, LocationName, ToastVariant } from "@enums";
@@ -47,6 +47,7 @@ import { showAPIBreaks } from "./utils/APIBreaks/APIBreak";
 import { breakInfos261 } from "./utils/APIBreaks/2.6.1";
 import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { isObject } from "./utils/helpers/typeAssertion";
+import { Reviver } from "./utils/GenericReviver";
 
 /* SaveObject.js
  *  Defines the object used to save/load games

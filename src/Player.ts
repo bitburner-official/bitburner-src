@@ -1,6 +1,6 @@
 import { sanitizeExploits } from "./Exploits/Exploit";
 
-import { Reviver } from "./utils/JSONReviver";
+import { Reviver } from "./utils/GenericReviver";
 
 import type { PlayerObject } from "./PersonObjects/Player/PlayerObject";
 

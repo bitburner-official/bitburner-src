@@ -7,7 +7,7 @@ import { HacknetServer } from "../Hacknet/HacknetServer";
 import { IMinMaxRange } from "../types";
 import { createRandomIp } from "../utils/IPAddress";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
-import { Reviver } from "../utils/JSONReviver";
+import { Reviver } from "../utils/GenericReviver";
 import { SpecialServers } from "./data/SpecialServers";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { IPAddress, isIPAddress } from "../Types/strings";

@@ -1,5 +1,5 @@
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { Reviver } from "../utils/JSONReviver";
+import { Reviver } from "../utils/GenericReviver";
 import { BaseGift } from "./BaseGift";
 
 import { StaneksGift } from "./StaneksGift";

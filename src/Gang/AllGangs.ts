@@ -1,5 +1,5 @@
 import { FactionName } from "@enums";
-import { Reviver } from "../utils/JSONReviver";
+import { Reviver } from "../utils/GenericReviver";
 
 interface GangTerritory {
   power: number;
