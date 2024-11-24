@@ -16,6 +16,7 @@ export function Reviver(_key: string, value: unknown): any {
     // Known missing constructors with special handling.
     switch (value.ctor) {
       case "AllServersMap": // Reviver removed in v0.43.1
+      case "Message": // Reviver removed in v1.6.4
       case "Industry": // No longer part of save data since v2.3.0
       case "Employee": // Entire object removed from game in v2.2.0 (employees abstracted)
       case "Company": // Reviver removed in v2.6.1
