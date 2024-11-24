@@ -409,7 +409,11 @@ function createAutoexec(server: BaseServer): RunningScript | null {
  * into worker scripts so that they will start running
  */
 export function loadAllRunningScripts(): void {
-  const skipScriptLoad = window.location.href.toLowerCase().includes("?noscripts");
+  /**
+   * Accept all parameters containing "?noscript". The "standard" parameter is "?noScripts", but new players may not
+   * notice the "s" character at the end of "noScripts".
+   */
+  const skipScriptLoad = window.location.href.toLowerCase().includes("?noscript");
   if (skipScriptLoad) {
     Terminal.warn("Skipped loading player scripts during startup");
     console.info("Skipping the load of any scripts during startup");
