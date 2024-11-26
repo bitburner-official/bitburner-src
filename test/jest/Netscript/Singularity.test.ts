@@ -104,7 +104,6 @@ describe("b1tflum3", () => {
       expect(() => {
         ns.singularity.b1tflum3(nextBN, undefined, {
           ...ns.getResetInfo().bitNodeOptions,
-          sourceFileOverrides: new Map(),
           intelligenceOverride: -1,
         });
       }).toThrow();
@@ -116,7 +115,6 @@ describe("b1tflum3", () => {
         ns.singularity.b1tflum3(nextBN, undefined, {
           ...ns.getResetInfo().bitNodeOptions,
           sourceFileOverrides: [] as unknown as Map<number, number>,
-          intelligenceOverride: -1,
         });
       }).toThrow();
       expectFailToB1tflum3();
@@ -204,7 +202,6 @@ describe("destroyW0r1dD43m0n", () => {
       expect(() => {
         ns.singularity.destroyW0r1dD43m0n(nextBN, undefined, {
           ...ns.getResetInfo().bitNodeOptions,
-          sourceFileOverrides: new Map(),
           intelligenceOverride: -1,
         });
       }).toThrow();
@@ -216,7 +213,6 @@ describe("destroyW0r1dD43m0n", () => {
         ns.singularity.destroyW0r1dD43m0n(nextBN, undefined, {
           ...ns.getResetInfo().bitNodeOptions,
           sourceFileOverrides: [] as unknown as Map<number, number>,
-          intelligenceOverride: -1,
         });
       }).toThrow();
       expectFailToDestroyWD();
