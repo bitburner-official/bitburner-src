@@ -7,16 +7,18 @@ import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
 import { Player, setPlayer } from "../../../src/Player";
 import { RunningScript } from "../../../src/Script/RunningScript";
-import { GetServerOrThrow } from "../../../src/Server/AllServers";
+import { GetServerOrThrow, initForeignServers, prestigeAllServers } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { initSourceFiles } from "../../../src/SourceFile/SourceFiles";
 import { FormatsNeedToChange } from "../../../src/ui/formatNumber";
 import { Router } from "../../../src/ui/GameRoot";
 
 function setupBasicTestingEnvironment(): void {
+  prestigeAllServers();
   setPlayer(new PlayerObject());
   Player.init();
   Player.sourceFiles.set(4, 3);
+  initForeignServers(Player.getHomeComputer());
 }
 
 function setNumBlackOpsComplete(value: number): void {
