@@ -16,13 +16,19 @@ import { Reviver } from "../utils/GenericReviver";
 import { NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
+import { JsonSchemaValidator } from "../JsonSchema/JsonSchemaValidator";
+import { Player } from "../Player";
 
-export let StockMarket: IStockMarket = {
-  lastUpdate: 0,
-  Orders: {},
-  storedCycles: 0,
-  ticksUntilCycle: 0,
-} as IStockMarket; // Maps full stock name -> Stock object
+export function getDefaultEmptyStockMarket(): IStockMarket {
+  return {
+    lastUpdate: 0,
+    Orders: {},
+    storedCycles: 0,
+    ticksUntilCycle: 0,
+  } as IStockMarket;
+}
+
+export let StockMarket = getDefaultEmptyStockMarket(); // Maps full stock name -> Stock object
 // Gross type, needs to be addressed
 export const SymbolToStockMap: Record<string, Stock> = {}; // Maps symbol -> Stock object
 
@@ -130,23 +136,35 @@ export function cancelOrder(params: ICancelOrderParams, ctx?: NetscriptContext):
 }
 
 export function loadStockMarket(saveString: string): void {
-  if (saveString === "") {
-    StockMarket = {
-      lastUpdate: 0,
-      Orders: {},
-      storedCycles: 0,
-      ticksUntilCycle: 0,
-    } as IStockMarket;
-  } else StockMarket = JSON.parse(saveString, Reviver);
+  let stockMarketData: unknown;
+  let validate;
+  try {
+    stockMarketData = JSON.parse(saveString, Reviver);
+    validate = JsonSchemaValidator.StockMarket;
+    if (!validate(stockMarketData)) {
+      console.error("validate.errors:", validate.errors);
+      // validate.errors is an array of objects, so we need to use JSON.stringify.
+      throw new Error(JSON.stringify(validate.errors));
+    }
+  } catch (error) {
+    console.error(error);
+    console.error("Invalid StockMarketSave:", saveString);
+    deleteStockMarket();
+    if (Player.hasWseAccount) {
+      initStockMarket();
+    }
+    const errorMessage = `Cannot load data of StockMarket. StockMarket is reset.`;
+    setTimeout(() => {
+      dialogBoxCreate(errorMessage);
+    }, 1000);
+    return;
+  }
+  // Typecasting here is fine because we validated the loaded data.
+  StockMarket = stockMarketData as IStockMarket;
 }
 
 export function deleteStockMarket(): void {
-  StockMarket = {
-    lastUpdate: 0,
-    Orders: {},
-    storedCycles: 0,
-    ticksUntilCycle: 0,
-  } as IStockMarket;
+  StockMarket = getDefaultEmptyStockMarket();
 }
 
 export function initStockMarket(): void {

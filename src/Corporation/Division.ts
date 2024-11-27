@@ -67,7 +67,7 @@ export class Division {
   aiCoreFactor = 0;
   advertisingFactor = 0;
 
-  productionMult = 0; //Production multiplier
+  productionMult = 1; //Production multiplier
 
   //Financials
   lastCycleRevenue = 0;

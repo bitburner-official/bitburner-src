@@ -53,6 +53,7 @@ import { resolveTeamCasualties, type OperationTeam } from "./Actions/TeamCasualt
 import { shuffleArray } from "../Infiltration/ui/BribeGame";
 import { objectAssert } from "../utils/helpers/typeAssertion";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+import { loadActionIdentifier } from "./utils/loadActionIdentifier";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -1427,6 +1428,25 @@ export class Bladeburner implements OperationTeam {
     const contractsData = value.data.contracts;
     const operationsData = value.data.operations;
     const bladeburner = Generic_fromJSON(Bladeburner, value.data, Bladeburner.keysToLoad);
+
+    /**
+     * Handle migration from pre-v2.6.1 versions:
+     * - pre-v2.6.1:
+     *   - action is an instance of the ActionIdentifier class. It cannot be null.
+     *   - action.type is a number.
+     * - 2.6.1:
+     *   - action is a nullable plain object. ActionIdentifier is a "type".
+     *   - action.type is a string.
+     */
+    if (bladeburner.action && typeof bladeburner.action.type === "number") {
+      bladeburner.action = loadActionIdentifier(bladeburner.action);
+      if (bladeburner.automateActionHigh) {
+        bladeburner.automateActionHigh = loadActionIdentifier(bladeburner.automateActionHigh);
+      }
+      if (bladeburner.automateActionLow) {
+        bladeburner.automateActionLow = loadActionIdentifier(bladeburner.automateActionLow);
+      }
+    }
     // Loading this way allows better typesafety and also allows faithfully reconstructing contracts/operations
     // even from save data that is missing a lot of static info about the objects.
     loadContractsData(contractsData, bladeburner.contracts);
