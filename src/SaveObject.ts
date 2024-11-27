@@ -16,7 +16,7 @@ import { SnackbarEvents } from "./ui/React/Snackbar";
 import * as ExportBonus from "./ExportBonus";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
-import { Reviver, constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "./utils/JSONReviver";
+import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, type IReviverValue } from "./utils/JSONReviver";
 import { save } from "./db";
 import { ToastVariant } from "@enums";
 import { pushGameSaved } from "./Electron";
@@ -28,6 +28,7 @@ import { downloadContentAsFile } from "./utils/FileUtils";
 import { handleGetSaveDataInfoError } from "./Netscript/ErrorMessages";
 import { isObject, objectAssert } from "./utils/helpers/typeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
+import { Reviver } from "./utils/GenericReviver";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
