@@ -109,7 +109,7 @@ export const CONSTANTS = {
 
   // Also update Documentation/doc/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v2.7.0 Dev: Last updated 25 November 2024
+## v2.7.0 Dev: Last updated 27 November 2024
 
 ### MAJOR ADDITIONS
 
@@ -230,6 +230,7 @@ export const CONSTANTS = {
 - Add error cause to exception alert and Recovery mode UI (@catloversg)
 - Fix ramOverride check (@jonhartnett)
 - Accept "noscript" as parameter for skipping loading scripts (@catloversg)
+- Fix: Multiple issues with migrating older savegames (@catloversg)
 
 ### SPOILER CHANGES
 
@@ -274,6 +275,7 @@ export const CONSTANTS = {
 - Remove WD from Hashnet server list if TRP not installed (@gmcew)
 - Deduct karma when successfully completing action involving killing (@catloversg)
 - Fix: Hashserver UI shows wrong server list when purchasing upgrades (@catloversg)
+- Fix wrong initial productionMult of new division (@catloversg)
 
 ### CODEBASE/REFACTOR
 
@@ -326,5 +328,7 @@ export const CONSTANTS = {
 - Fix: Wrong usage of delete operator in Settings.load (@catloversg)
 - Mitigate cyclic dependency between Jsonable classes (@catloversg)
 - Fix: Generic Reviver does not handle Message class (@catloversg)
+- Add tests for b1tflum3 and destroyW0r1dD43m0n API (@catloversg)
+- Multiple large refactors to savegame loading for better validation and safety (@catloversg)
 `,
 } as const;
