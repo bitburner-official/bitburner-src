@@ -2,7 +2,7 @@ import React from "react";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import Typography from "@mui/material/Typography";
 import { parseUnknownError } from "../ErrorHelper";
-import { cyrb53 } from "../StringHelperFunctions";
+import { cyrb53 } from "../HashUtils";
 import { commitHash } from "./commitHash";
 
 const errorSet = new Set<string>();

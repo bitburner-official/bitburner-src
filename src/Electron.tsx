@@ -12,7 +12,7 @@ import { CONSTANTS } from "./Constants";
 import { commitHash } from "./utils/helpers/commitHash";
 import { resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
-import { handleGetSaveDataInfoError } from "./Netscript/ErrorMessages";
+import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 
 interface IReturnWebStatus extends IReturnStatus {
   data?: Record<string, unknown>;
