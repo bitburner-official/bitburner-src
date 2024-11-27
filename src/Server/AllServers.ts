@@ -7,7 +7,7 @@ import { HacknetServer } from "../Hacknet/HacknetServer";
 import { IMinMaxRange } from "../types";
 import { createRandomIp } from "../utils/IPAddress";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
-import { Reviver } from "../utils/JSONReviver";
+import { Reviver } from "../utils/GenericReviver";
 import { SpecialServers } from "./data/SpecialServers";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { IPAddress, isIPAddress } from "../Types/strings";
@@ -42,6 +42,25 @@ export function GetServer(s: string): BaseServer | null {
   }
 
   return null;
+}
+
+/**
+ * In our codebase, we usually have to call GetServer() like this:
+ * ```
+ * const server = GetServer(hostname);
+ * if (!server) {
+ *   throw new Error("Error message");
+ * }
+ * // Use server
+ * ```
+ * With this utility function, we don't need to write boilerplate code.
+ */
+export function GetServerOrThrow(serverId: string): BaseServer {
+  const server = GetServer(serverId);
+  if (!server) {
+    throw new Error(`Server ${serverId} does not exist.`);
+  }
+  return server;
 }
 
 //Get server by IP or hostname. Returns null if invalid or unreachable.

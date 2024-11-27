@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 
 import type { Page } from "../ui/Router";
 import { commitHash } from "./helpers/commitHash";

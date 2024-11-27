@@ -12,7 +12,7 @@ import { CONSTANTS } from "../Constants";
 import { formatMoney } from "../ui/formatNumber";
 
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { Reviver } from "../utils/JSONReviver";
+import { Reviver } from "../utils/GenericReviver";
 import { NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";

@@ -286,7 +286,7 @@ export const serverMetadata: IServerMetadata[] = [
   },
   {
     hackDifficulty: 99,
-    hostname: "fulcrumassets",
+    hostname: SpecialServers.FulcrumSecretTechnologies,
     moneyAvailable: 1e6,
     networkLayer: 15,
     numOpenPortsRequired: 5,
@@ -1428,7 +1428,7 @@ export const serverMetadata: IServerMetadata[] = [
   },
   {
     hackDifficulty: 0,
-    hostname: "run4theh111z",
+    hostname: SpecialServers.BitRunnersServer,
     literature: [LiteratureName.SimulatedReality, LiteratureName.TheNewGod],
     maxRamExponent: {
       max: 9,
@@ -1447,7 +1447,7 @@ export const serverMetadata: IServerMetadata[] = [
   },
   {
     hackDifficulty: 0,
-    hostname: "I.I.I.I",
+    hostname: SpecialServers.TheBlackHandServer,
     literature: [LiteratureName.DemocracyIsDead],
     maxRamExponent: {
       max: 8,
@@ -1456,7 +1456,7 @@ export const serverMetadata: IServerMetadata[] = [
     moneyAvailable: 0,
     networkLayer: 5,
     numOpenPortsRequired: 3,
-    organizationName: "I.I.I.I",
+    organizationName: SpecialServers.TheBlackHandServer,
     requiredHackingSkill: {
       max: 365,
       min: 340,
@@ -1466,7 +1466,7 @@ export const serverMetadata: IServerMetadata[] = [
   },
   {
     hackDifficulty: 0,
-    hostname: "avmnite-02h",
+    hostname: SpecialServers.NiteSecServer,
     literature: [LiteratureName.DemocracyIsDead],
     maxRamExponent: {
       max: 7,
@@ -1485,12 +1485,12 @@ export const serverMetadata: IServerMetadata[] = [
   },
   {
     hackDifficulty: 0,
-    hostname: ".",
+    hostname: SpecialServers.TheDarkArmyServer,
     maxRamExponent: 4,
     moneyAvailable: 0,
     networkLayer: 13,
     numOpenPortsRequired: 4,
-    organizationName: ".",
+    organizationName: SpecialServers.TheDarkArmyServer,
     requiredHackingSkill: {
       max: 550,
       min: 505,
@@ -1500,7 +1500,7 @@ export const serverMetadata: IServerMetadata[] = [
   },
   {
     hackDifficulty: 0,
-    hostname: "CSEC",
+    hostname: SpecialServers.CyberSecServer,
     literature: [LiteratureName.DemocracyIsDead],
     maxRamExponent: 3,
     moneyAvailable: 0,
@@ -1516,7 +1516,7 @@ export const serverMetadata: IServerMetadata[] = [
   },
   {
     hackDifficulty: 0,
-    hostname: "The-Cave",
+    hostname: SpecialServers.DaedalusServer,
     literature: [LiteratureName.AlphaOmega],
     moneyAvailable: 0,
     networkLayer: 15,
@@ -1528,10 +1528,10 @@ export const serverMetadata: IServerMetadata[] = [
   },
   {
     hackDifficulty: 0,
-    hostname: "w0r1d_d43m0n",
+    hostname: SpecialServers.WorldDaemon,
     moneyAvailable: 0,
     numOpenPortsRequired: 5,
-    organizationName: "w0r1d_d43m0n",
+    organizationName: SpecialServers.WorldDaemon,
     requiredHackingSkill: 3000,
     serverGrowth: 0,
     specialName: SpecialServers.WorldDaemon,

@@ -3,7 +3,7 @@ import { EventEmitter } from "../../utils/EventEmitter";
 import { Modal } from "./Modal";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { cyrb53 } from "../../utils/StringHelperFunctions";
+import { cyrb53 } from "../../utils/HashUtils";
 
 export const AlertEvents = new EventEmitter<[string | JSX.Element]>();
 

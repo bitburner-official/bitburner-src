@@ -1,7 +1,6 @@
 /* Generic Reviver, toJSON, and fromJSON functions used for saving and loading objects */
-import { ObjectValidator, validateObject } from "./Validator";
+import { ObjectValidator } from "./Validator";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
-import { loadActionIdentifier } from "../Bladeburner/utils/loadActionIdentifier";
 import { objectAssert } from "./helpers/typeAssertion";
 
 type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
@@ -14,42 +13,10 @@ export interface IReviverValue<T = unknown> {
   data: T;
 }
 
-function isReviverValue(value: unknown): value is IReviverValue {
+export function isReviverValue(value: unknown): value is IReviverValue {
   return (
     typeof value === "object" && value !== null && "ctor" in value && typeof value.ctor === "string" && "data" in value
   );
-}
-
-/**
- * A generic "smart reviver" function.
- * Looks for object values with a `ctor` property and a `data` property.
- * If it finds them, and finds a matching constructor, it hands
- * off to that `fromJSON` function, passing in the value. */
-export function Reviver(_key: string, value: unknown): any {
-  if (!isReviverValue(value)) return value;
-  const ctor = constructorsForReviver[value.ctor];
-  if (!ctor) {
-    // Known missing constructors with special handling.
-    switch (value.ctor) {
-      case "AllServersMap": // Reviver removed in v0.43.1
-      case "Industry": // No longer part of save data since v2.3.0
-      case "Employee": // Entire object removed from game in v2.2.0 (employees abstracted)
-      case "Company": // Reviver removed in v2.6.1
-      case "Faction": // Reviver removed in v2.6.1
-        console.warn(`Legacy load type ${value.ctor} converted to expected format while loading.`);
-        return value.data;
-      case "ActionIdentifier": // No longer a class as of v2.6.1
-        return loadActionIdentifier(value.data);
-    }
-    // Missing constructor with no special handling. Throw error.
-    throw new Error(`Could not locate constructor named ${value.ctor}. If the save data is valid, this is a bug.`);
-  }
-
-  const obj = ctor.fromJSON(value);
-  if (ctor.validationData !== undefined) {
-    validateObject(obj, ctor.validationData);
-  }
-  return obj;
 }
 
 export const constructorsForReviver: Partial<Record<string, JsonableClass>> = { JSONSet, JSONMap };
@@ -95,20 +62,20 @@ export function Generic_fromJSON<T extends Record<string, any>>(
   const obj = new ctor();
   // If keys were provided, just load the provided keys (if they are in the data)
   if (keys) {
-    /**
-     * The type of key is "keyof T", but the type of data is Record<string, unknown>. TypeScript won't allow us to use
-     * key as the index of data, so we need to typecast here.
-     */
-    for (const key of keys as string[]) {
-      const val = data[key];
+    for (const key of keys) {
+      // This cast is safe (T has string keys), but still needed because "keyof T" cannot be used to index data.
+      const val = data[key as string];
       if (val !== undefined) {
-        // @ts-expect-error -- TypeScript won't allow this action: Type 'T' is generic and can only be indexed for reading.
-        obj[key] = val;
+        // This is an unsafe assignment. We may load data with wrong types at runtime.
+        obj[key] = val as T[keyof T];
       }
     }
     return obj;
   }
   // No keys provided: load every key in data
-  for (const [key, val] of Object.entries(data) as [keyof T, T[keyof T]][]) obj[key] = val;
+  for (const [key, val] of Object.entries(data) as [keyof T, T[keyof T]][]) {
+    // This is an unsafe assignment. We may load data with wrong types at runtime.
+    obj[key] = val;
+  }
   return obj;
 }
