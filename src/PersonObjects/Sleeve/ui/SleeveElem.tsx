@@ -1,5 +1,5 @@
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CrimeType, FactionWorkType } from "@enums";
 import { CONSTANTS } from "../../../Constants";
 import { Player } from "@player";
@@ -9,7 +9,7 @@ import { Sleeve } from "../Sleeve";
 import { MoreStatsModal } from "./MoreStatsModal";
 import { SleeveAugmentationsModal } from "./SleeveAugmentationsModal";
 import { EarningsElement, StatsElement } from "./StatsElement";
-import { TaskSelector } from "./TaskSelector";
+import { calculateABC, TaskSelector } from "./TaskSelector";
 import { TravelModal } from "./TravelModal";
 import { findCrime } from "../../../Crime/CrimeHelpers";
 import { SleeveWorkType } from "../Work/Work";
@@ -84,6 +84,10 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
   const [augmentationsOpen, setAugmentationsOpen] = useState(false);
 
   const [abc, setABC] = useState(["Idle", "------", "------"]);
+
+  useEffect(() => {
+    setABC(calculateABC(props.sleeve));
+  }, [props.sleeve, props.sleeve.currentWork]);
 
   function setTask(): void {
     switch (abc[0]) {

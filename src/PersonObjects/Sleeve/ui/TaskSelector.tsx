@@ -1,6 +1,6 @@
 import type { Sleeve } from "../Sleeve";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 import { Player } from "@player";
@@ -42,7 +42,7 @@ const bladeburnerSelectorOptions: string[] = [
 
 interface IProps {
   sleeve: Sleeve;
-  setABC: (abc: string[]) => void;
+  setABC: (abc: [string, string, string]) => void;
 }
 
 interface ITaskDetails {
@@ -247,7 +247,7 @@ const canDo: {
   Synchronize: (sleeve: Sleeve) => sleeve.sync < 100,
 };
 
-function getABC(sleeve: Sleeve): [string, string, string] {
+export function calculateABC(sleeve: Sleeve): [string, string, string] {
   const work = sleeve.currentWork;
   if (work === null) return ["Idle", "------", "------"];
   switch (work.type) {
@@ -290,10 +290,16 @@ function getABC(sleeve: Sleeve): [string, string, string] {
 }
 
 export function TaskSelector(props: IProps): React.ReactElement {
-  const abc = getABC(props.sleeve);
-  const [s0, setS0] = useState(abc[0]);
-  const [s1, setS1] = useState(abc[1]);
-  const [s2, setS2] = useState(abc[2]);
+  const [s0, setS0] = useState("Idle");
+  const [s1, setS1] = useState("------");
+  const [s2, setS2] = useState("------");
+
+  useEffect(() => {
+    const abc = calculateABC(props.sleeve);
+    setS0(abc[0]);
+    setS1(abc[1]);
+    setS2(abc[2]);
+  }, [props.sleeve, props.sleeve.currentWork]);
 
   const validActions = Object.keys(canDo).filter((k) => (canDo[k] as (sleeve: Sleeve) => boolean)(props.sleeve));
 
