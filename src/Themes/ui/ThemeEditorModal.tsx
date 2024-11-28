@@ -94,7 +94,7 @@ export function ThemeEditorModal(props: IProps): React.ReactElement {
     }
     Object.assign(Settings.theme, themeData);
     ThemeEvents.emit();
-    setCustomTheme(themeData);
+    setCustomTheme(Settings.theme);
   }
 
   function onColorChange(name: keyof ITheme, value: string): void {

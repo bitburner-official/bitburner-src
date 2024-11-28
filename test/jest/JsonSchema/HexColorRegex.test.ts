@@ -1,7 +1,8 @@
-import { hexColorRegex } from "../../../src/JsonSchema/Data/ThemeSchema";
+import { editorThemeHexColorRegex, themeHexColorRegex } from "../../../src/JsonSchema/Data/ThemeSchema";
 
-const validHexColors = ["#FF0011", "FF0011", "#FF001122", "FF001122", "#FFF", "FFF"];
-const invalidHexColors = [
+const validThemeHexColors = ["#FF0011", "#FF001122", "#FFF"];
+
+const invalidThemeHexColors = [
   "qwe",
   "",
   "0",
@@ -9,6 +10,9 @@ const invalidHexColors = [
   String(undefined),
   String(NaN),
   String(Infinity),
+  "FF0011",
+  "FF001122",
+  "FFF",
   "#F",
   "F",
   "#FF",
@@ -23,18 +27,65 @@ const invalidHexColors = [
   "##FFF",
 ];
 
-describe("Valid", () => {
-  for (const validHexColor of validHexColors) {
-    test(validHexColor, () => {
-      expect(hexColorRegex.test(validHexColor)).toStrictEqual(true);
-    });
-  }
+const validEditorThemeHexColors = ["FF0011", "FF001122", "FFF"];
+
+const invalidEditorThemeHexColors = [
+  "qwe",
+  "",
+  "0",
+  String(null),
+  String(undefined),
+  String(NaN),
+  String(Infinity),
+  "#FF0011",
+  "#FF001122",
+  "#FFF",
+  "#F",
+  "F",
+  "#FF",
+  "FF",
+  "#FFFF",
+  "FFFF",
+  "#FFFFF",
+  "FFFFF",
+  "#FF00112",
+  "FF00112",
+  "##FF0011",
+  "##FFF",
+];
+
+describe("Theme", () => {
+  describe("Valid", () => {
+    for (const validHexColor of validThemeHexColors) {
+      test(`Theme: Valid: ${validHexColor}`, () => {
+        expect(themeHexColorRegex.test(validHexColor)).toStrictEqual(true);
+      });
+    }
+  });
+
+  describe("Invalid", () => {
+    for (const invalidHexColor of invalidThemeHexColors) {
+      test(`Theme: Invalid: ${invalidHexColor}`, () => {
+        expect(themeHexColorRegex.test(invalidHexColor)).toStrictEqual(false);
+      });
+    }
+  });
 });
 
-describe("Invalid", () => {
-  for (const invalidHexColor of invalidHexColors) {
-    test(invalidHexColor, () => {
-      expect(hexColorRegex.test(invalidHexColor)).toStrictEqual(false);
-    });
-  }
+describe("Editor theme", () => {
+  describe("Valid", () => {
+    for (const validHexColor of validEditorThemeHexColors) {
+      test(`Editor theme: Valid: ${validHexColor}`, () => {
+        expect(editorThemeHexColorRegex.test(validHexColor)).toStrictEqual(true);
+      });
+    }
+  });
+
+  describe("Invalid", () => {
+    for (const invalidHexColor of invalidEditorThemeHexColors) {
+      test(`Editor theme: Invalid: ${invalidHexColor}`, () => {
+        expect(editorThemeHexColorRegex.test(invalidHexColor)).toStrictEqual(false);
+      });
+    }
+  });
 });

@@ -4,11 +4,14 @@ import { getRecordKeys } from "../../Types/Record";
 
 /**
  * VS code has a regex for checking hex colors at: https://github.com/microsoft/vscode/blob/1dd8c77ac79508a047235ceee0cba7ba7f049425/src/vs/editor/common/languages/supports/tokenization.ts#L153.
- * That regex does not take 3-character hex colors (e.g., #fff) into account, so we have to tweak it. Explanation:
-
+ *
+ * We have to tweak it:
+ * - "#" must be the first character.
+ * - Allow 3-character hex colors (e.g., #fff).
+ *
+ * Explanation:
 ^ asserts position at start of the string
-# matches the character # with index 3510 (2316 or 438) literally (case sensitive)
-  ? matches the previous token between zero and one times, as many times as possible, giving back as needed (greedy)
+# matches the character # with index 35 (base 10) literally (case sensitive)
 1st Capturing Group ((([0-9A-Fa-f]{6})([0-9A-Fa-f]{2})?)|([0-9A-Fa-f]{3}))
   1st Alternative (([0-9A-Fa-f]{6})([0-9A-Fa-f]{2})?)
     2nd Capturing Group (([0-9A-Fa-f]{6})([0-9A-Fa-f]{2})?)
@@ -33,9 +36,14 @@ import { getRecordKeys } from "../../Types/Record";
         A-F matches a single character in the range between A (index 65) and F (index 70) (case sensitive)
         a-f matches a single character in the range between a (index 97) and f (index 102) (case sensitive)
 $ asserts position at the end of the string
-
  */
-export const hexColorRegex = /^#?((([0-9A-Fa-f]{6})([0-9A-Fa-f]{2})?)|([0-9A-Fa-f]{3}))$/;
+export const themeHexColorRegex = /^#((([0-9A-Fa-f]{6})([0-9A-Fa-f]{2})?)|([0-9A-Fa-f]{3}))$/;
+
+/**
+ * This regex is based on themeHexColorRegex. It removes the part of "#". When processing data of editor themes, we
+ * always add "#" to the hex value, so valid hex values cannot include "#" character.
+ */
+export const editorThemeHexColorRegex = /^((([0-9A-Fa-f]{6})([0-9A-Fa-f]{2})?)|([0-9A-Fa-f]{3}))$/;
 
 function getThemeSchemaProperties() {
   const result: Record<keyof ITheme, { type: string; pattern?: string }> = {
@@ -155,7 +163,7 @@ function getThemeSchemaProperties() {
     },
   };
   for (const key of getRecordKeys(result)) {
-    result[key].pattern = hexColorRegex.source;
+    result[key].pattern = themeHexColorRegex.source;
   }
   return result;
 }
@@ -175,15 +183,15 @@ export const EditorThemeSchema = {
       properties: {
         accent: {
           type: "string",
-          pattern: hexColorRegex.source,
+          pattern: editorThemeHexColorRegex.source,
         },
         bg: {
           type: "string",
-          pattern: hexColorRegex.source,
+          pattern: editorThemeHexColorRegex.source,
         },
         fg: {
           type: "string",
-          pattern: hexColorRegex.source,
+          pattern: editorThemeHexColorRegex.source,
         },
       },
     },
@@ -192,39 +200,39 @@ export const EditorThemeSchema = {
       properties: {
         tag: {
           type: "string",
-          pattern: hexColorRegex.source,
+          pattern: editorThemeHexColorRegex.source,
         },
         entity: {
           type: "string",
-          pattern: hexColorRegex.source,
+          pattern: editorThemeHexColorRegex.source,
         },
         string: {
           type: "string",
-          pattern: hexColorRegex.source,
+          pattern: editorThemeHexColorRegex.source,
         },
         regexp: {
           type: "string",
-          pattern: hexColorRegex.source,
+          pattern: editorThemeHexColorRegex.source,
         },
         markup: {
           type: "string",
-          pattern: hexColorRegex.source,
+          pattern: editorThemeHexColorRegex.source,
         },
         keyword: {
           type: "string",
-          pattern: hexColorRegex.source,
+          pattern: editorThemeHexColorRegex.source,
         },
         comment: {
           type: "string",
-          pattern: hexColorRegex.source,
+          pattern: editorThemeHexColorRegex.source,
         },
         constant: {
           type: "string",
-          pattern: hexColorRegex.source,
+          pattern: editorThemeHexColorRegex.source,
         },
         error: {
           type: "string",
-          pattern: hexColorRegex.source,
+          pattern: editorThemeHexColorRegex.source,
         },
       },
     },
@@ -233,22 +241,22 @@ export const EditorThemeSchema = {
       properties: {
         line: {
           type: "string",
-          pattern: hexColorRegex.source,
+          pattern: editorThemeHexColorRegex.source,
         },
         panel: {
           type: "object",
           properties: {
             bg: {
               type: "string",
-              pattern: hexColorRegex.source,
+              pattern: editorThemeHexColorRegex.source,
             },
             selected: {
               type: "string",
-              pattern: hexColorRegex.source,
+              pattern: editorThemeHexColorRegex.source,
             },
             border: {
               type: "string",
-              pattern: hexColorRegex.source,
+              pattern: editorThemeHexColorRegex.source,
             },
           },
         },
@@ -257,7 +265,7 @@ export const EditorThemeSchema = {
           properties: {
             bg: {
               type: "string",
-              pattern: hexColorRegex.source,
+              pattern: editorThemeHexColorRegex.source,
             },
           },
         },
