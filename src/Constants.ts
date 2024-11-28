@@ -109,7 +109,7 @@ export const CONSTANTS = {
 
   // Also update Documentation/doc/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v2.7.0 Dev: Last updated 27 November 2024
+## v2.7.0 Dev: Last updated 28 November 2024
 
 ### MAJOR ADDITIONS
 
@@ -275,7 +275,8 @@ export const CONSTANTS = {
 - Remove WD from Hashnet server list if TRP not installed (@gmcew)
 - Deduct karma when successfully completing action involving killing (@catloversg)
 - Fix: Hashserver UI shows wrong server list when purchasing upgrades (@catloversg)
-- Fix wrong initial productionMult of new division (@catloversg)
+- Fix: Wrong initial productionMult of new division (@catloversg)
+- Fix: Sleeves UI shows and sets wrong task (@catloversg)
 
 ### CODEBASE/REFACTOR
 
@@ -330,5 +331,6 @@ export const CONSTANTS = {
 - Fix: Generic Reviver does not handle Message class (@catloversg)
 - Add tests for b1tflum3 and destroyW0r1dD43m0n API (@catloversg)
 - Multiple large refactors to savegame loading for better validation and safety (@catloversg)
+- Enable new lint rules (@catloversg)
 `,
 } as const;
