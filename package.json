@@ -10,7 +10,7 @@
     "url": "https://github.com/bitburner-official/bitburner-src/issues"
   },
   "dependencies": {
-    "@babel/standalone": "^7.24.4",
+    "@babel/standalone": "^7.26.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@material-ui/core": "^4.12.4",
@@ -18,7 +18,7 @@
     "@mui/material": "^5.14.12",
     "@mui/styles": "^5.14.12",
     "@mui/system": "^5.14.12",
-    "@swc/wasm-web": "^1.4.14",
+    "@swc/wasm-web": "^1.9.3",
     "@types/estree": "^1.0.2",
     "@types/react-syntax-highlighter": "^15.5.8",
     "acorn": "^8.11.3",
@@ -58,7 +58,7 @@
     "@microsoft/api-documenter": "~7.23.38",
     "@microsoft/api-extractor": "^7.47.5",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
-    "@swc/core": "^1.4.14",
+    "@swc/core": "^1.9.3",
     "@types/babel__standalone": "^7.1.7",
     "@types/bcryptjs": "^2.4.4",
     "@types/escodegen": "^0.0.7",
