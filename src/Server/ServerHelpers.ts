@@ -213,6 +213,7 @@ export function prestigeHomeComputer(homeComp: Server): void {
           homeComp.runningScriptMap.keys(),
         )}`,
       ),
+      true,
     );
     for (const [scriptKey, byPidMap] of homeComp.runningScriptMap) {
       console.error(`script key: ${scriptKey}: ${byPidMap.size} scripts`, byPidMap);

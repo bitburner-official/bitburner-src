@@ -283,6 +283,7 @@ export function startWorkerScript(runningScript: RunningScript, server: BaseServ
       new Error(
         `Tried to launch a worker script on a different server ${server.hostname} than the runningScript's server ${runningScript.server}`,
       ),
+      true,
     );
     return 0;
   }
