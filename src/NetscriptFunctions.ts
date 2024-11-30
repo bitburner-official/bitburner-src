@@ -568,6 +568,17 @@ export const ns: InternalAPI<NSFull> = {
 
       LogBoxEvents.emit(runningScriptObj);
     },
+  renderTail:
+    (ctx) =>
+    (_pid = ctx.workerScript.scriptRef.pid) => {
+      const pid = helpers.number(ctx, "pid", _pid);
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.tailProps?.rerender();
+    },
   moveTail:
     (ctx) =>
     (_x, _y, _pid = ctx.workerScript.scriptRef.pid) => {

@@ -148,6 +148,7 @@ export async function main(ns) {
 |  [readPort(portNumber)](./bitburner.ns.readport.md) | Read data from a port. |
 |  [relaysmtp(host)](./bitburner.ns.relaysmtp.md) | Runs relaySMTP.exe on a server. |
 |  [renamePurchasedServer(hostname, newName)](./bitburner.ns.renamepurchasedserver.md) | Rename a purchased server. |
+|  [renderTail(pid)](./bitburner.ns.rendertail.md) | Render a tail window. |
 |  [resizeTail(width, height, pid)](./bitburner.ns.resizetail.md) | Resize a tail window. |
 |  [rm(name, host)](./bitburner.ns.rm.md) | Delete a file. |
 |  [run(script, threadOrOptions, args)](./bitburner.ns.run.md) | Start another script on the current server. |

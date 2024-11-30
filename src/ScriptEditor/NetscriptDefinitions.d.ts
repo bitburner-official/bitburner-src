@@ -6375,6 +6375,19 @@ export interface NS {
   tail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
 
   /**
+   * Render a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Tail windows are rendered at an interval defined in game settings. This function renders the tail window of the
+   * specified script immediately.
+   *
+   * @param pid - Optional. PID of the script having its tail rendered. If omitted, the current script is used.
+   */
+  renderTail(pid?: number): void;
+
+  /**
    * Move a tail window.
    * @remarks
    * RAM cost: 0 GB
