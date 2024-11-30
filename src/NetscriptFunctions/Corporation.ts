@@ -644,15 +644,19 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx);
       const unlockName = getEnumHelper("CorpUnlockName").nsGetMember(ctx, _unlockName, "unlockName");
       const corporation = getCorporation();
-      const message = corporation.purchaseUnlock(unlockName);
-      if (message) throw new Error(`Could not unlock ${unlockName}: ${message}`);
+      const result = corporation.purchaseUnlock(unlockName);
+      if (!result.success) {
+        throw new Error(`Could not unlock ${unlockName}: ${result.message}`);
+      }
     },
     levelUpgrade: (ctx) => (_upgradeName) => {
       checkAccess(ctx);
       const upgradeName = getEnumHelper("CorpUpgradeName").nsGetMember(ctx, _upgradeName, "upgradeName");
       const corporation = getCorporation();
-      const message = corporation.purchaseUpgrade(upgradeName, 1);
-      if (message) throw new Error(`Could not upgrade ${upgradeName}: ${message}`);
+      const result = corporation.purchaseUpgrade(upgradeName, 1);
+      if (!result.success) {
+        throw new Error(`Could not upgrade ${upgradeName}: ${result.message}`);
+      }
     },
     issueDividends: (ctx) => (_rate) => {
       checkAccess(ctx);
@@ -701,6 +705,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         nextState: corporation.state.nextName,
         prevState: corporation.state.prevName,
         divisions: [...corporation.divisions.keys()],
+        valuation: corporation.valuation,
       };
       setDeprecatedProperties(data, {
         state: {
@@ -767,12 +772,12 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     bribe: (ctx) => (_factionName, _amountCash) => {
       checkAccess(ctx);
       const factionName = getEnumHelper("FactionName").nsGetMember(ctx, _factionName);
-      const amountCash = helpers.number(ctx, "amountCash", _amountCash);
-      if (isNaN(amountCash) || amountCash <= 0) {
-        throw new Error("Invalid value for amount field! Must be numeric and greater than 0.");
+      const amountCash = helpers.positiveNumber(ctx, "amountCash", _amountCash);
+      const result = bribe(getCorporation(), amountCash, factionName);
+      if (!result.success) {
+        helpers.log(ctx, () => result.message);
       }
-
-      return bribe(getCorporation(), amountCash, factionName) > 0;
+      return result.success;
     },
     getBonusTime: (ctx) => () => {
       checkAccess(ctx);

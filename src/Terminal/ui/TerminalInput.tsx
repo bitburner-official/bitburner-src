@@ -86,7 +86,7 @@ export function TerminalInput(): React.ReactElement {
   function getSearchSuggestionPrespace() {
     const currentPrefix = `[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> `;
     const prefixLength = `${currentPrefix}${value}`.length;
-    return Array(prefixLength).fill(" ");
+    return Array<string>(prefixLength).fill(" ");
   }
 
   function modifyInput(mod: Modification): void {
@@ -206,7 +206,7 @@ export function TerminalInput(): React.ReactElement {
     return () => document.removeEventListener("keydown", keyDown);
   });
 
-  async function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): Promise<void> {
+  async function onKeyDown(event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> {
     const ref = terminalInput.current;
 
     // Run command or insert newline
@@ -427,7 +427,11 @@ export function TerminalInput(): React.ReactElement {
             setPossibilities([]);
             resetSearch();
           },
-          onKeyDown: onKeyDown,
+          onKeyDown: (event) => {
+            onKeyDown(event).catch((error) => {
+              console.error(error);
+            });
+          },
         }}
       ></TextField>
       <Popper

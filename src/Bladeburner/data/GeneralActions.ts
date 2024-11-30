@@ -32,6 +32,7 @@ export const GeneralActions: Record<BladeburnerGeneralActionName, GeneralAction>
     desc:
       "Attempt to recruit members for your Bladeburner team. These members can help you conduct operations.\n\n" +
       "Does NOT require stamina.",
+    successScaling: "Success chance is affected by Charisma.",
   }),
   [BladeburnerGeneralActionName.Diplomacy]: new GeneralAction({
     name: BladeburnerGeneralActionName.Diplomacy,

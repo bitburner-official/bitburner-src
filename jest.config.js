@@ -2,7 +2,7 @@ module.exports = {
   roots: ["<rootDir>/src/", "<rootDir>/test/"],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
   transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
+    "^.+\\.(js|jsx|ts|tsx|cjs|mjs)$": "<rootDir>/test/jest/config/babelTransform.js",
   },
   transformIgnorePatterns: ["node_modules/(?!react-markdown)/"],
   testPathIgnorePatterns: [".cypress", "node_modules", "dist"],
@@ -15,7 +15,7 @@ module.exports = {
     ".*?raw$": "<rootDir>/test/__mocks__/fileMock.js",
     "@player": "<rootDir>/src/Player",
     "@enums": "<rootDir>/src/Enums",
-    "@nsdefs": "<rootDir>/src/ScriptEditor/NetscriptDefinitions",
+    "@nsdefs": "<rootDir>/src/ScriptEditor/NetscriptDefinitions.d.ts",
     "^monaco-editor$": "<rootDir>/test/__mocks__/NullMock.js",
     "^monaco-vim$": "<rootDir>/test/__mocks__/NullMock.js",
     "/utils/Protections$": "<rootDir>/test/__mocks__/NullMock.js",

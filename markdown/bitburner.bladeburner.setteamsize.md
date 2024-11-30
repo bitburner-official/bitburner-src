@@ -22,7 +22,7 @@ setTeamSize(
 |  --- | --- | --- |
 |  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) \| \`${[BladeburnerActionType](./bitburner.bladeburneractiontype.md)<!-- -->}\` | Type of action. |
 |  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) \| \`${[BladeburnerActionName](./bitburner.bladeburneractionname.md)<!-- -->}\` | Name of action. Must be an exact match. |
-|  size | number | Number of team members to set. Will be converted using Math.round(). |
+|  size | number | Number of team members to set. Must be a non-negative integer. |
 
 **Returns:**
 

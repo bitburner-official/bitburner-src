@@ -66,7 +66,7 @@ class NSProxyHandler<API extends GenericAPI<API>> {
 
     const descriptor = Object.getOwnPropertyDescriptor(this.ns, key);
     if (!descriptor) return descriptor;
-    const field = descriptor.value;
+    const field: unknown = descriptor.value;
 
     if (typeof field === "function") {
       const arrayPath = [...this.tree, key];
@@ -74,7 +74,7 @@ class NSProxyHandler<API extends GenericAPI<API>> {
       const ctx = { workerScript: this.ws, function: key, functionPath };
       // Only do the context-binding once, instead of each time the function
       // is called.
-      const func: any = field(ctx);
+      const func = field(ctx) as (...args: unknown[]) => unknown;
       const wrappedFunction = function (...args: unknown[]): unknown {
         // What remains *must* be called every time.
         helpers.checkEnvFlags(ctx);

@@ -18,9 +18,6 @@ export class StaneksGift extends BaseGift {
   isBonusCharging = false;
   justCharged = true;
   storedCycles = 0;
-  constructor() {
-    super();
-  }
 
   baseSize(): number {
     return StanekConstants.BaseSize + currentNodeMults.StaneksGiftExtraSize + Player.activeSourceFileLvl(13);

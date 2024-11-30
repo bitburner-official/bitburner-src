@@ -18,7 +18,7 @@ export const InterfacePage = (): React.ReactElement => {
         checked={Settings.DisableASCIIArt}
         onChange={(newValue) => (Settings.DisableASCIIArt = newValue)}
         text="Disable ascii art"
-        tooltip={<>If this is set all ASCII art will be disabled.</>}
+        tooltip={<>If this is set, all ASCII arts will be disabled.</>}
       />
       <OptionSwitch
         checked={Settings.DisableTextEffects}
@@ -35,13 +35,13 @@ export const InterfacePage = (): React.ReactElement => {
         checked={Settings.DisableOverviewProgressBars}
         onChange={(newValue) => (Settings.DisableOverviewProgressBars = newValue)}
         text="Disable Overview Progress Bars"
-        tooltip={<>If this is set, the progress bars in the character overview will be hidden.</>}
+        tooltip={<>If this is set, progress bars in the character overview will be hidden.</>}
       />
       <OptionSwitch
         checked={Settings.ShowMiddleNullTimeUnit}
         onChange={(newValue) => (Settings.ShowMiddleNullTimeUnit = newValue)}
-        text="Show all intermediary times unit, even when null."
-        tooltip={<>ex : 1 hours 13 seconds becomes 1 hours 0 minutes 13 seconds.</>}
+        text="Show all intermediary time units, even when null."
+        tooltip={<>Example: 1 hour 13 seconds becomes 1 hour 0 minutes 13 seconds.</>}
       />
       <Tooltip
         title={

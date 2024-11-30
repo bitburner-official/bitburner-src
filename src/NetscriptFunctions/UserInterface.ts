@@ -4,7 +4,7 @@ import { ThemeEvents } from "../Themes/ui/Theme";
 import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
 import { CONSTANTS } from "../Constants";
-import { hash } from "../hash/hash";
+import { commitHash } from "../utils/helpers/commitHash";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { Terminal } from "../../src/Terminal";
 import { helpers } from "../Netscript/NetscriptHelpers";
@@ -82,14 +82,14 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
     setStyles: (ctx) => (newStyles) => {
       const styleValidator: Record<string, string | number | undefined> = {};
       assertObjectType(ctx, "newStyles", newStyles, styleValidator);
-      const currentStyles = { ...Settings.styles };
+      const currentStyles: Record<string, unknown> = { ...Settings.styles };
       const errors: string[] = [];
       for (const key of Object.keys(newStyles)) {
-        if (!(currentStyles as any)[key]) {
+        if (!currentStyles[key]) {
           // Invalid key
           errors.push(`Invalid key "${key}"`);
         } else {
-          (currentStyles as any)[key] = newStyles[key];
+          currentStyles[key] = newStyles[key];
         }
       }
 
@@ -116,7 +116,7 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
 
     getGameInfo: () => () => {
       const version = CONSTANTS.VersionString;
-      const commit = hash();
+      const commit = commitHash();
       const platform = navigator.userAgent.toLowerCase().includes(" electron/") ? "Steam" : "Browser";
 
       const gameInfo = {

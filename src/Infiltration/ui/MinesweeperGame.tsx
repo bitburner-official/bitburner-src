@@ -135,7 +135,7 @@ export function MinesweeperGame(props: IMinigameProps): React.ReactElement {
 
             return (
               <Typography
-                key={`${item}${uniqueId()}`}
+                key={uniqueId()}
                 sx={{
                   color: color,
                   border: `2px solid ${item.current ? Settings.theme.infolight : Settings.theme.primary}`,
@@ -165,9 +165,9 @@ function fieldEquals(a: boolean[][], b: boolean[][]): boolean {
 }
 
 function generateEmptyField(difficulty: Difficulty): boolean[][] {
-  const field = [];
+  const field: boolean[][] = [];
   for (let i = 0; i < Math.round(difficulty.height); i++) {
-    field.push(new Array(Math.round(difficulty.width)).fill(false));
+    field.push(new Array<boolean>(Math.round(difficulty.width)).fill(false));
   }
   return field;
 }

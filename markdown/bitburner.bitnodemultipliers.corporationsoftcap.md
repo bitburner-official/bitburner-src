@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.CorporationSoftcap property
 
-Influences the money gain from dividends of corporations created by the player.
+Influences profits from corporation dividends and selling shares.
 
 **Signature:**
 

@@ -4,6 +4,8 @@
 
 ## AutocompleteData.enums property
 
+Netscript Enums
+
 **Signature:**
 
 ```typescript

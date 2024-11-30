@@ -17,5 +17,5 @@ string\[\]
 
 ## Remarks
 
-RAM cost: 2 GB
+RAM cost: 0 GB
 

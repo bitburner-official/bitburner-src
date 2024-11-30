@@ -19,5 +19,5 @@ all locations that can be infiltrated.
 
 ## Remarks
 
-RAM cost: 5 GB
+RAM cost: 0 GB
 

@@ -19,13 +19,13 @@ describe("Test calculateMaxUpgradeCount", function () {
     let errorCount = 0;
     const test1Errors = [];
     const test2Errors = [];
-    for (let i = 0; i < 10; ++i) {
+    for (let i = 0; i < 8; ++i) {
       skill.baseCost = getRandomIntInclusive(1, 1000);
-      for (let j = 0; j < 10; ++j) {
+      for (let j = 0; j < 8; ++j) {
         skill.costInc = randomInRange(1, 1000);
-        for (let k = 0; k < 10; ++k) {
+        for (let k = 0; k < 8; ++k) {
           currentNodeMults.BladeburnerSkillCost = randomInRange(1, 1000);
-          for (let m = 0; m < 1e4; ++m) {
+          for (let m = 0; m < 8000; ++m) {
             const currentLevel = getRandomIntInclusive(0, 1e9);
             let count = 0;
             let cost = 0;

@@ -250,7 +250,10 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     setTeamSize: (ctx) => (type, name, _size) => {
       const bladeburner = getBladeburner(ctx);
       const action = getAction(ctx, type, name);
-      const size = helpers.positiveInteger(ctx, "size", _size);
+      const size = helpers.integer(ctx, "size", _size);
+      if (size < 0) {
+        throw helpers.errorMessage(ctx, "size must be a non-negative integer", "TYPE");
+      }
       if (size > bladeburner.teamSize) {
         helpers.log(ctx, () => `Failed to set team size due to not enough team members.`);
         return -1;

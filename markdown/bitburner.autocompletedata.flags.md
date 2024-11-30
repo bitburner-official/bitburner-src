@@ -4,6 +4,8 @@
 
 ## AutocompleteData.flags() method
 
+Parses the flags schema on the already inputted flags
+
 **Signature:**
 
 ```typescript

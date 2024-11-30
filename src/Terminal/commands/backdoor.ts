@@ -29,5 +29,12 @@ export function backdoor(args: (string | number | boolean)[], server: BaseServer
     );
     return;
   }
+
+  if (server.backdoorInstalled) {
+    Terminal.warn(
+      `You have already installed a backdoor on this server. You can check the "Backdoor" status via the "analyze" command.`,
+    );
+  }
+
   Terminal.startBackdoor();
 }

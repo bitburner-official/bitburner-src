@@ -76,7 +76,7 @@ export class Script implements ContentFile {
     const ramCalc = calculateRamUsage(this.code, this.filename, this.server, otherScripts);
     if (ramCalc.cost && ramCalc.cost >= RamCostConstants.Base) {
       this.ramUsage = roundToTwo(ramCalc.cost);
-      this.ramUsageEntries = ramCalc.entries as RamUsageEntry[];
+      this.ramUsageEntries = ramCalc.entries;
       this.ramCalculationError = null;
       return;
     }

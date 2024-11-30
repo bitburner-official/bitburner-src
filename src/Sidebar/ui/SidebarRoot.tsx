@@ -52,7 +52,7 @@ import { AugmentationName } from "@enums";
 
 import { ProgramsSeen } from "../../Programs/ui/ProgramsRoot";
 import { InvitationsSeen } from "../../Faction/ui/FactionsRoot";
-import { hash } from "../../hash/hash";
+import { commitHash } from "../../utils/helpers/commitHash";
 import { Locations } from "../../Locations/Locations";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { playerHasDiscoveredGo } from "../../Go/effects/effect";
@@ -277,7 +277,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             </ListItemIcon>
             <ListItemText
               primary={
-                <Tooltip title={hash()}>
+                <Tooltip title={commitHash()}>
                   <Typography>Bitburner v{CONSTANTS.VersionString}</Typography>
                 </Tooltip>
               }

@@ -3,7 +3,6 @@ import * as monaco from "monaco-editor";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
@@ -22,7 +21,7 @@ import { useBoolean } from "../../ui/React/hooks";
 import { Settings } from "../../Settings/Settings";
 import { OptionsModal, OptionsModalProps } from "./OptionsModal";
 import { useScriptEditorContext } from "./ScriptEditorContext";
-import { getNsApiDocumentationUrl } from "../../utils/StringHelperFunctions";
+import { NsApiDocumentationLink } from "../../ui/React/NsApiDocumentationLink";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
@@ -36,7 +35,10 @@ export function Toolbar({ editor, onSave }: IProps) {
   const [optionsOpen, { on: openOptions, off: closeOptions }] = useBoolean(false);
 
   function beautify(): void {
-    editor?.getAction("editor.action.formatDocument")?.run();
+    editor
+      ?.getAction("editor.action.formatDocument")
+      ?.run()
+      .catch((error) => console.error(error));
   }
 
   const { ram, ramEntries, isUpdatingRAM, options, saveOptions } = useScriptEditorContext();
@@ -71,9 +73,7 @@ export function Toolbar({ editor, onSave }: IProps) {
           Terminal (Ctrl/Cmd + b)
         </Button>
         <Typography>
-          <Link target="_blank" href={getNsApiDocumentationUrl()}>
-            Documentation
-          </Link>
+          <NsApiDocumentationLink />
         </Typography>
       </Box>
       <OptionsModal

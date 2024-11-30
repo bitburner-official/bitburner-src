@@ -73,7 +73,7 @@ import { unalias } from "./commands/unalias";
 import { vim } from "./commands/vim";
 import { weaken } from "./commands/weaken";
 import { wget } from "./commands/wget";
-import { hash } from "../hash/hash";
+import { commitHash } from "../utils/helpers/commitHash";
 import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
 import { clear } from "./commands/clear";
@@ -139,7 +139,7 @@ export class Terminal {
   commandHistoryIndex = 0;
 
   outputHistory: (Output | Link | RawOutput)[] = [
-    new Output(`Bitburner v${CONSTANTS.VersionString} (${hash()})`, "primary"),
+    new Output(`Bitburner v${CONSTANTS.VersionString} (${commitHash()})`, "primary"),
   ];
 
   // True if a Coding Contract prompt is opened
@@ -613,7 +613,7 @@ export class Terminal {
   }
 
   clear(): void {
-    this.outputHistory = [new Output(`Bitburner v${CONSTANTS.VersionString} (${hash()})`, "primary")];
+    this.outputHistory = [new Output(`Bitburner v${CONSTANTS.VersionString} (${commitHash()})`, "primary")];
     TerminalEvents.emit();
     TerminalClearEvents.emit();
   }

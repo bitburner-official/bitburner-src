@@ -74,7 +74,15 @@ interface ResetInfo {
   currentNode: number;
   /** A map of owned augmentations to their levels. Keyed by the augmentation name. Map values are the augmentation level (e.g. for NeuroFlux governor). */
   ownedAugs: Map<string, number>;
-  /** A map of owned SF to their levels. Keyed by the SF number. Map values are the SF level. */
+  /**
+   * A map of owned source files. Its keys are the SF numbers. Its values are the active SF levels. This map takes
+   * BitNode options into account.
+   *
+   * For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 1. In this
+   * case, this map contains this entry: Key: 1 => Value: 1.
+   *
+   * If the active level of a source file is 0, that source file won't be included in the result.
+   */
   ownedSF: Map<number, number>;
   /** Current BitNode options */
   bitNodeOptions: BitNodeOptions;
@@ -245,6 +253,13 @@ interface RunningScript {
   onlineRunningTime: number;
   /** Process ID. Must be an integer */
   pid: number;
+  /**
+   * Process ID of the parent process.
+   *
+   * If this script was started by another script, this will be the PID of that script.
+   * If this script was started directly through the terminal, the value will be 0.
+   */
+  parent: number;
   /**
    * How much RAM this script uses for ONE thread.
    * Also known as "static RAM usage," this value does not change once the
@@ -653,15 +668,17 @@ interface BitNodeMultipliers {
   CharismaLevelMultiplier: number;
   /** Influences the experience gained for each ability when a player completes a class. */
   ClassGymExpGain: number;
-  /** Influences the amount of money gained from completing Coding Contracts */
+  /** Influences the amount of money gained from completing Coding Contracts. */
   CodingContractMoney: number;
   /** Influences the experience gained for each ability when the player completes working their job. */
   CompanyWorkExpGain: number;
   /** Influences how much money the player earns when completing working their job. */
   CompanyWorkMoney: number;
-  /** Influences the amount of divisions a corporation can have at the same time*/
+  /** Influences how much rep the player gains when performing work for a company. */
+  CompanyWorkRepGain: number;
+  /** Influences the amount of divisions a corporation can have at the same time. */
   CorporationDivisions: number;
-  /** Influences the money gain from dividends of corporations created by the player. */
+  /** Influences profits from corporation dividends and selling shares. */
   CorporationSoftcap: number;
   /** Influences the valuation of corporations created by the player. */
   CorporationValuation: number;
@@ -669,6 +686,8 @@ interface BitNodeMultipliers {
   CrimeExpGain: number;
   /** Influences the base money gained when the player commits a crime. */
   CrimeMoney: number;
+  /** Influences the success chance of committing crimes */
+  CrimeSuccessRate: number;
   /** Influences how many Augmentations you need in order to get invited to the Daedalus faction */
   DaedalusAugsRequirement: number;
   /** Influences how quickly the player's defense level (not exp) scales */
@@ -679,7 +698,7 @@ interface BitNodeMultipliers {
   FactionPassiveRepGain: number;
   /** Influences the experience gained for each ability when the player completes work for a Faction. */
   FactionWorkExpGain: number;
-  /** Influences how much rep the player gains when performing work for a faction. */
+  /** Influences how much rep the player gains when performing work for a faction or donating to it. */
   FactionWorkRepGain: number;
   /** Influences how much it costs to unlock the stock market's 4S Market Data API */
   FourSigmaMarketDataApiCost: number;
@@ -687,12 +706,20 @@ interface BitNodeMultipliers {
   FourSigmaMarketDataCost: number;
   /** Influences the respect gain and money gain of your gang. */
   GangSoftcap: number;
+  /** Percentage of unique augs that the gang has. */
+  GangUniqueAugs: number;
+  /** Percentage multiplier on the effect of the IPvGO rewards  **/
+  GoPower: number;
   /** Influences the experienced gained when hacking a server. */
   HackExpGain: number;
   /** Influences how quickly the player's hacking level (not experience) scales */
   HackingLevelMultiplier: number;
-  /** Influences how much money is produced by Hacknet Nodes
-   *  and the hash rate of Hacknet Servers (unlocked in BitNode-9) */
+  /** Influences how quickly the player's hack(), grow() and weaken() calls run */
+  HackingSpeedMultiplier: number;
+  /**
+   * Influences how much money is produced by Hacknet Nodes.
+   * Influences the hash rate of Hacknet Servers (unlocked in BitNode-9)
+   */
   HacknetNodeMoney: number;
   /** Influences how much money it costs to upgrade your home computer's RAM */
   HomeComputerRamCost: number;
@@ -700,22 +727,28 @@ interface BitNodeMultipliers {
   InfiltrationMoney: number;
   /** Influences how much rep the player can gain from factions when selling stolen documents and secrets */
   InfiltrationRep: number;
-  /** Influences how much money can be stolen from a server when the player
-   *  performs a hack against it through the Terminal. */
+  /**
+   * Influences how much money can be stolen from a server when the player performs a hack against it through
+   * the Terminal.
+   */
   ManualHackMoney: number;
   /** Influence how much it costs to purchase a server */
   PurchasedServerCost: number;
+  /** Influence how much it costs to purchase a server */
+  PurchasedServerSoftcap: number;
   /** Influences the maximum number of purchased servers you can have */
   PurchasedServerLimit: number;
   /** Influences the maximum allowed RAM for a purchased server */
   PurchasedServerMaxRam: number;
-  /** Influences cost of any purchased server at or above 128GB */
-  PurchasedServerSoftcap: number;
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
   RepToDonateToFaction: number;
-  /** Influences how much the money on a server can be reduced when a script performs a hack against it. */
+  /** Influences how much money can be stolen from a server when a script performs a hack against it. */
   ScriptHackMoney: number;
-  /** Influences how much of the money stolen by a scripted hack will be added to the player's money. */
+  /**
+   * The amount of money actually gained when a script hacks a server. This is
+   * different than the above because you can reduce the amount of money but
+   * not gain that same amount.
+   */
   ScriptHackMoneyGain: number;
   /** Influences the growth percentage per cycle against a server. */
   ServerGrowthRate: number;
@@ -729,9 +762,9 @@ interface BitNodeMultipliers {
   ServerWeakenRate: number;
   /** Influences how quickly the player's strength level (not exp) scales */
   StrengthLevelMultiplier: number;
-  /** Influences the power of the gift */
+  /** Influences the power of the gift. */
   StaneksGiftPowerMultiplier: number;
-  /** Influences the size of the gift */
+  /** Influences the size of the gift. */
   StaneksGiftExtraSize: number;
   /** Influences the hacking skill required to backdoor the world daemon. */
   WorldDaemonDifficulty: number;
@@ -1622,83 +1655,107 @@ export interface TIX {
 }
 
 /**
- * Study
- * @remarks
- * An object representing the current study task
+ * Base interface of all tasks.
+ *
  * @public
  */
-export interface StudyTask {
-  type: "CLASS";
+export interface BaseTask {
+  /**
+   * The number of game engine cycles has passed since this task started. 1 engine cycle = 200ms.
+   */
   cyclesWorked: number;
+}
+
+/**
+ * Study
+ *
+ * @remarks
+ * An object representing the current study task
+ *
+ * @public
+ */
+export interface StudyTask extends BaseTask {
+  type: "CLASS";
   classType: string;
   location: LocationName | `${LocationName}`;
 }
+
 /**
  * Company Work
+ *
  * @remarks
  * An object representing the current work for a company
+ *
  * @public
  */
-export interface CompanyWorkTask {
+export interface CompanyWorkTask extends BaseTask {
   type: "COMPANY";
-  cyclesWorked: number;
   companyName: CompanyName;
 }
 
 /**
  * Create Program
+ *
  * @remarks
  * An object representing the status of the program being created
+ *
  * @public
  */
-export interface CreateProgramWorkTask {
+export interface CreateProgramWorkTask extends BaseTask {
   type: "CREATE_PROGRAM";
-  cyclesWorked: number;
   programName: string;
 }
 
 /**
  * Crime
+ *
  * @remarks
  * An object representing the crime being committed
+ *
  * @public
  */
-export interface CrimeTask {
+export interface CrimeTask extends BaseTask {
   type: "CRIME";
-  cyclesWorked: number;
   crimeType: CrimeType;
 }
 
 /**
  * Faction Work
+ *
  * @remarks
  * An object representing the current work for a faction
+ *
  * @public
  */
-export interface FactionWorkTask {
+export interface FactionWorkTask extends BaseTask {
   type: "FACTION";
-  cyclesWorked: number;
   factionWorkType: FactionWorkType;
   factionName: string;
 }
 
 /**
- * Faction Work
+ * Grafting Work
+ *
  * @remarks
- * An object representing the current grafting status
+ * An object representing the current grafting task
+ *
  * @public
  */
-export interface GraftingTask {
+export interface GraftingTask extends BaseTask {
   type: "GRAFTING";
-  cyclesWorked: number;
   augmentation: string;
+  /**
+   * This promise resolves when the task is complete.
+   */
   completion: Promise<void>;
 }
 
 /**
  * Task
+ *
  * @remarks
  * Represents any task, such as studying, working for a faction etc.
+ *
  * @public
  */
 export type Task = StudyTask | CompanyWorkTask | CreateProgramWorkTask | CrimeTask | FactionWorkTask | GraftingTask;
@@ -1873,7 +1930,7 @@ export interface Singularity {
    *
    * Returns a boolean indicating whether or not the player is currently performing an
    * ‘action’. These actions include working for a company/faction, studying at a university,
-   * working out at a gym, creating a program, committing a crime, or carrying out a Hacking Mission.
+   * working out at a gym, creating a program, committing a crime, etc.
    *
    * @returns True if the player is currently performing an ‘action’, false otherwise.
    */
@@ -2269,6 +2326,10 @@ export interface Singularity {
    * Attempts to donate money to the specified faction in exchange for reputation.
    * Returns true if you successfully donate the money, and false otherwise.
    *
+   * You cannot donate to your gang's faction.
+   *
+   * The specified faction must offer at least 1 type of work. You can use {@link Singularity.getFactionWorkTypes | getFactionWorkTypes} to get the list of work types of a faction.
+   *
    * @param faction - Name of faction to donate to.
    * @param amount - Amount of money to donate.
    * @returns True if the money was donated, and false otherwise.
@@ -2382,7 +2443,12 @@ export interface Singularity {
    * RAM cost: 5 GB
    *
    *
-   * Returns an array of source files
+   * Returns an array of source files. This function takes BitNode options into account.
+   *
+   * For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 1. In this
+   * case, this function returns {"n":1,"lvl":1}.
+   *
+   * If the active level of a source file is 0, that source file won't be included in the result.
    *
    * @returns Array containing an object with number and level of the source file.
    */
@@ -3175,7 +3241,7 @@ export interface Bladeburner {
   /**
    * List all contracts.
    * @remarks
-   * RAM cost: 0.4 GB
+   * RAM cost: 0 GB
    *
    * Returns an array of strings containing the names of all Bladeburner contracts.
    *
@@ -3186,7 +3252,7 @@ export interface Bladeburner {
   /**
    * List all operations.
    * @remarks
-   * RAM cost: 0.4 GB
+   * RAM cost: 0 GB
    *
    * Returns an array of strings containing the names of all Bladeburner operations.
    *
@@ -3197,7 +3263,7 @@ export interface Bladeburner {
   /**
    * List all black ops.
    * @remarks
-   * RAM cost: 0.4 GB
+   * RAM cost: 0 GB
    *
    * Returns an array of strings containing the names of all Bladeburner Black Ops.
    *
@@ -3220,7 +3286,7 @@ export interface Bladeburner {
   /**
    * List all general actions.
    * @remarks
-   * RAM cost: 0.4 GB
+   * RAM cost: 0 GB
    *
    * Returns an array of strings containing the names of all general Bladeburner actions.
    *
@@ -3231,7 +3297,7 @@ export interface Bladeburner {
   /**
    * List all skills.
    * @remarks
-   * RAM cost: 0.4 GB
+   * RAM cost: 0 GB
    *
    * Returns an array of strings containing the names of all general Bladeburner skills.
    *
@@ -3531,7 +3597,15 @@ export interface Bladeburner {
    *
    * This function returns the number of skill points needed to upgrade the specified skill the specified number of times.
    *
-   * The function returns Infinity if the sum of the current level and count exceeds the maximum level.
+   * The function may return 0 or Infinity in special cases:
+   *
+   * - Return 0 if the current skill level is too high and the specified count is too small. In normal situations, you
+   * don't need to worry about this case. It only happens when involved numbers surpass Number.MAX_SAFE_INTEGER and be
+   * affected by the floating-point inaccuracy.
+   *
+   * - Return Infinity if the sum of the current level and count exceeds the maximum level.
+   *
+   * {@link BladeburnerFormulas.skillMaxUpgradeCount | skillMaxUpgradeCount} is the inverse function of this one.
    *
    * @param skillName - Name of skill. Case-sensitive and must be an exact match.
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
@@ -3585,7 +3659,7 @@ export interface Bladeburner {
    *
    * @param type - Type of action.
    * @param name - Name of action. Must be an exact match.
-   * @param size - Number of team members to set. Will be converted using Math.round().
+   * @param size - Number of team members to set. Must be a non-negative integer.
    * @returns Number of Bladeburner team members you assigned to the specified action.
    */
   setTeamSize(
@@ -3851,7 +3925,7 @@ export interface CodingContract {
   /**
    * List all contract types.
    * @remarks
-   * RAM cost: 2 GB
+   * RAM cost: 0 GB
    */
   getContractTypes(): string[];
 }
@@ -3996,7 +4070,7 @@ export interface Gang {
   /**
    * List member task names.
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * Get the name of all valid tasks that Gang members can be assigned to.
    *
@@ -4033,7 +4107,7 @@ export interface Gang {
   /**
    * List equipment names.
    * @remarks
-   * RAM cost: 1 GB
+   * RAM cost: 0 GB
    *
    * Get the name of all possible equipment/upgrades you can purchase for your Gang Members.
    * This includes Augmentations.
@@ -4218,6 +4292,8 @@ type SimpleOpponentStats = {
 export interface GoAnalysis {
   /**
    * Shows if each point on the board is a valid move for the player.
+   * By default, analyzes the current board state.
+   * Takes an optional boardState (and an optional prior-move boardState, if desired) to analyze a custom board.
    *
    * The true/false validity of each move can be retrieved via the X and Y coordinates of the move.
    *      `const validMoves = ns.go.analysis.getValidMoves();`
@@ -4228,92 +4304,98 @@ export interface GoAnalysis {
    * string represents a vertical column on the board. In other words, the printed example above can be understood to
    * be rotated 90 degrees clockwise compared to the board UI as shown in the IPvGO subnet tab.
    *
+   * Also note that, when given a custom board state, only one prior move can be analyzed. This means that the superko rules
+   *  (no duplicate board states in the full game history) is not supported; you will have to implement your own analysis for that.
+   *
    * @remarks
    * RAM cost: 8 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    */
-  getValidMoves(): boolean[][];
+  getValidMoves(boardState?: string[], priorBoardState?: string[]): boolean[][];
 
   /**
    * Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points
    * are also given chain IDs to represent continuous empty space. Dead nodes are given the value `null.`
    *
+   * Takes an optional boardState argument; by default uses the current board state.
+   *
    * The data from getChains() can be used with the data from getBoardState() to see which player (or empty) each chain is
    *
    * For example, a 5x5 board might look like this. There is a large chain #1 on the left side, smaller chains
    * 2 and 3 on the right, and a large chain 0 taking up the center of the board.
-   *
-   * ```js
-   * [
-   *   [   0,0,0,3,4],
-   *   [   1,0,0,3,3],
-   *   [   1,1,0,0,0],
-   *   [null,1,0,2,2],
-   *   [null,1,0,2,5],
-   * ]
-   * ```
+   * <pre lang="javascript">
+   *       [
+   *         [   0,0,0,3,4],
+   *         [   1,0,0,3,3],
+   *         [   1,1,0,0,0],
+   *         [null,1,0,2,2],
+   *         [null,1,0,2,5],
+   *       ]
+   * </pre>
    *
    * @remarks
    * RAM cost: 16 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    *
    */
-  getChains(): (number | null)[][];
+  getChains(boardState?: string[]): (number | null)[][];
 
   /**
    * Returns a number for each point, representing how many open nodes its network/chain is connected to.
    * Empty nodes and dead nodes are shown as -1 liberties.
    *
+   * Takes an optional boardState argument; by default uses the current board state.
+   *
    * For example, a 5x5 board might look like this. The chain in the top-left touches 5 total empty nodes, and the one
    * in the center touches four. The group in the bottom-right only has one liberty; it is in danger of being captured!
-   *
-   * ```js
-   * [
-   *   [-1, 5,-1,-1, 2],
-   *   [ 5, 5,-1,-1,-1],
-   *   [-1,-1, 4,-1,-1],
-   *   [ 3,-1,-1, 3, 1],
-   *   [ 3,-1,-1, 3, 1],
-   * ]
-   * ```
+   * <pre lang="javascript">
+   *      [
+   *         [-1, 5,-1,-1, 2],
+   *         [ 5, 5,-1,-1,-1],
+   *         [-1,-1, 4,-1,-1],
+   *         [ 3,-1,-1, 3, 1],
+   *         [ 3,-1,-1, 3, 1],
+   *      ]
+   * </pre>
    *
    * @remarks
    * RAM cost: 16 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    */
-  getLiberties(): number[][];
+  getLiberties(boardState?: string[]): number[][];
 
   /**
-   * Returns 'X', 'O', or '?' for each empty point to indicate which player controls that empty point.
+   * Returns 'X' for black, 'O' for white, or '?' for each empty point to indicate which player controls that empty point.
    * If no single player fully encircles the empty space, it is shown as contested with '?'.
    * "#" are dead nodes that are not part of the subnet.
+   *
+   * Takes an optional boardState argument; by default uses the current board state.
    *
    * Filled points of any color are indicated with '.'
    *
    * In this example, white encircles some space in the top-left, black encircles some in the top-right, and between their routers is contested space in the center:
-   *
-   * ```js
-   * [
-   *   "OO..?",
-   *   "OO.?.",
-   *   "O.?.X",
-   *   ".?.XX",
-   *   "?..X#",
-   * ]
-   * ```
+   * <pre lang="javascript">
+   *   [
+   *      "OO..?",
+   *      "OO.?.",
+   *      "O.?.X",
+   *      ".?.XX",
+   *      "?..X#",
+   *   ]
+   * </pre>
    *
    * @remarks
    * RAM cost: 16 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    */
-  getControlledEmptyNodes(): string[];
+  getControlledEmptyNodes(boardState?: string[]): string[];
 
   /**
    * Displays the game history, captured nodes, and gained bonuses for each opponent you have played against.
    *
    * The details are keyed by opponent name, in this structure:
    *
-   * ```js
+   * <pre lang="javascript">
    * {
    *   <OpponentName>: {
    *     wins: number,
@@ -4325,7 +4407,7 @@ export interface GoAnalysis {
    *     bonusDescription: string,
    *   }
    * }
-   * ```
+   * </pre>
    */
   getStats(): Partial<Record<GoOpponent, SimpleOpponentStats>>;
 }
@@ -4338,16 +4420,27 @@ export interface GoAnalysis {
 export interface GoCheat {
   /**
    * Returns your chance of successfully playing one of the special moves in the ns.go.cheat API.
-   * Scales with your crime success rate stat.
+   * Scales up with your crime success rate stat.
+   * Scales down with the number of times you've attempted to cheat in the current game.
    *
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
+   *
+   * @param cheatCount - Optional override for the number of cheats already attempted. Defaults to the number of cheats attempted in the current game.
    *
    * @remarks
    * RAM cost: 1 GB
    * Requires BitNode 14.2 to use
    */
-  getCheatSuccessChance(): number;
+  getCheatSuccessChance(cheatCount?: number): number;
+  /**
+   * Returns the number of times you've attempted to cheat in the current game.
+   *
+   * @remarks
+   * RAM cost: 1 GB
+   * Requires BitNode 14.2 to use
+   */
+  getCheatCount(): number;
   /**
    * Attempts to remove an existing router, leaving an empty node behind.
    *
@@ -4509,15 +4602,13 @@ export interface Go {
    *
    * For example, a 5x5 board might look like this:
    *
-   * ```js
-   * [
-   *   "XX.O.",
-   *   "X..OO",
-   *   ".XO..",
-   *   "XXO.#",
-   *   ".XO.#",
-   * ]
-   * ```
+   [<br/>  
+      "XX.O.",<br/>  
+      "X..OO",<br/>  
+      ".XO..",<br/>  
+      "XXO.#",<br/>  
+      ".XO.#",<br/>  
+   ]
    *
    * Each string represents a vertical column on the board, and each character in the string represents a point.
    *
@@ -4537,15 +4628,13 @@ export interface Go {
    *
    * For example, a single 5x5 prior move board might look like this:
    *
-   * ```js
-   * [
-   *   "XX.O.",
-   *   "X..OO",
-   *   ".XO..",
-   *   "XXO.#",
-   *   ".XO.#",
-   * ]
-   * ```
+   [<br/>  
+      "XX.O.",<br/>  
+      "X..OO",<br/>  
+      ".XO..",<br/>  
+      "XXO.#",<br/>  
+      ".XO.#",<br/>  
+   ]
    */
   getMoveHistory(): string[][];
 
@@ -4579,7 +4668,7 @@ export interface Go {
    * This will reset your win streak if the current game is not complete and you have already made moves.
    *
    *
-   * Note that some factions will have a few routers on the subnet at this state.
+   * Note that some factions will have a few routers already on the subnet after a reset.
    *
    * opponent is "Netburners" or "Slum Snakes" or "The Black Hand" or "Tetrads" or "Daedalus" or "Illuminati" or "????????????" or "No AI",
    *
@@ -5310,7 +5399,11 @@ interface BladeburnerFormulas {
    * @param skillPoints - Number of skill points to upgrade the skill. It must be a positive number.
    * @returns Number of times that you can upgrade the skill.
    */
-  skillMaxUpgradeCount(name: string, level: number, skillPoints: number): number;
+  skillMaxUpgradeCount(
+    name: BladeburnerSkillName | `${BladeburnerSkillName}`,
+    level: number,
+    skillPoints: number,
+  ): number;
 }
 
 /**
@@ -5503,7 +5596,7 @@ interface Infiltration {
   /**
    * Get all locations that can be infiltrated.
    * @remarks
-   * RAM cost: 5 GB
+   * RAM cost: 0 GB
    *
    * @returns all locations that can be infiltrated.
    */
@@ -5858,7 +5951,8 @@ export interface NS {
    *
    * This function returns the decimal number of script threads you need when running the hack command
    * to steal the specified amount of money from the target server.
-   * If hackAmount is less than zero or greater than the amount of money available on the server,
+   * If hackAmount is less than zero, greater than the amount of money available on the server,
+   * or your hacking level is below the required level for the target server,
    * then this function returns -1.
    *
    *
@@ -6168,8 +6262,9 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * Re-enables logging for the given function. If `ALL` is passed into this function as an argument, it will revert the
-   * effect of disableLog("ALL").
+   * Logging can be enabled for all functions by passing `ALL` as the argument.
+   *
+   * For specific interfaces, use the form "namespace.functionName". (e.g. "ui.setTheme")
    *
    * @example
    * ```js
@@ -6580,6 +6675,14 @@ export interface NS {
    * @param args - Additional arguments to pass into the new script that is being run.
    */
   spawn(script: string, threadOrOptions?: number | SpawnOptions, ...args: ScriptArg[]): void;
+
+  /**
+   * Returns the currently running script.
+   * @remarks
+   * RAM cost: 0 GB
+   */
+  self(): RunningScript;
+
   /**
    * Terminate the script with the provided PID.
    * @remarks
@@ -7547,15 +7650,21 @@ export interface NS {
   formatPercent(n: number, fractionalDigits?: number, suffixStart?: number): string;
 
   /**
-   * Format a number using the numeral library. This function is deprecated and will be removed in 2.4.
-   * @deprecated Use ns.formatNumber, formatRam, or formatPercent instead. Will be removed in 2.4.
+   * Format a number using the numeral library. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   *
+   * Use alternatives:
+   *
+   * - NS APIs: ns.formatNumber, ns.formatRam, ns.formatPercent
+   *
+   * - JS built-in objects/functions: Intl.NumberFormat, Intl.PluralRules, Intl.Locale, etc.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
    * Converts a number into a string with the specified format options.
    * See http://numeraljs.com/#format for documentation on format strings supported.
-   *
-   * This function is deprecated and will be removed in 2.3.
    *
    * @param n - Number to format.
    * @param format - Formatting options. See http://numeraljs.com/#format for valid formats.
@@ -8835,7 +8944,14 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
   goPublic(numShares: number): boolean;
 
   /**
-   * Bribe a faction.
+   * Bribe a faction. You must satisfy these conditions:
+   *
+   * - The corporation valuation must be greater than or equal to a threshold. You can use
+   * {@link Corporation.getCorporation | getCorporation} and {@link Corporation.getConstants | getConstants} to get this
+   * information.
+   *
+   * - The specified faction must offer at least 1 type of work. You can use
+   * {@link Singularity.getFactionWorkTypes | getFactionWorkTypes} to get the list of work types of a faction.
    *
    * @remarks
    * RAM cost: 20 GB
@@ -9096,6 +9212,8 @@ interface CorporationInfo {
   prevState: CorpStateName;
   /** Array of all division names */
   divisions: string[];
+  /** Corporation valuation */
+  valuation: number;
 }
 
 /**
@@ -9492,6 +9610,8 @@ interface UserInterfaceTheme {
  */
 interface IStyleSettings {
   fontFamily: string;
+  fontSize: number;
+  tailFontSize: number;
   lineHeight: number;
 }
 
@@ -9510,11 +9630,22 @@ interface GameInfo {
  * @public
  */
 interface AutocompleteData {
+  /** All server hostnames */
   servers: string[];
+  /** All scripts on the current server */
   scripts: string[];
+  /** All text files on the current server */
   txts: string[];
+  /** Netscript Enums */
   enums: NSEnums;
+  /** Parses the flags schema on the already inputted flags */
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
+  /** The hostname of the server the script would be running on */
+  hostname: string;
+  /** The filename of the script about to be run */
+  filename: string;
+  /** The processes running on the host */
+  processes: ProcessInfo[];
 }
 
 /**

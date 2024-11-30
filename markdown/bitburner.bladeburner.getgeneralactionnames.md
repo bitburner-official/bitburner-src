@@ -19,7 +19,7 @@ Array of strings containing the names of all general Bladeburner actions.
 
 ## Remarks
 
-RAM cost: 0.4 GB
+RAM cost: 0 GB
 
 Returns an array of strings containing the names of all general Bladeburner actions.
 

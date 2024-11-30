@@ -12,6 +12,8 @@ export function createContracts(): Record<BladeburnerContractName, Contract> {
         "engage. Stealth is of the utmost importance.\n\n" +
         "Successfully completing Tracking contracts will slightly improve your Synthoid population estimate for whatever " +
         "city you are currently in.",
+      successScaling:
+        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Charisma. Unaffected by Hacking skill.",
       baseDifficulty: 125,
       difficultyFac: 1.02,
       rewardFac: 1.041,
@@ -45,6 +47,8 @@ export function createContracts(): Record<BladeburnerContractName, Contract> {
         "Hunt down and capture fugitive Synthoids. These Synthoids are wanted alive.\n\n" +
         "Successfully completing a Bounty Hunter contract will lower the population in your current city, and will also " +
         "increase its chaos level.",
+      successScaling:
+        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Charisma. Unaffected by Hacking skill.",
       baseDifficulty: 250,
       difficultyFac: 1.04,
       rewardFac: 1.085,
@@ -78,6 +82,7 @@ export function createContracts(): Record<BladeburnerContractName, Contract> {
         "Hunt down and retire (kill) rogue Synthoids.\n\n" +
         "Successfully completing a Retirement contract will lower the population in your current city, and will also " +
         "increase its chaos level.",
+      successScaling: "Affected by combat stats. Minor bonus from Charisma. Unaffected by Hacking skill.",
       baseDifficulty: 200,
       difficultyFac: 1.03,
       rewardFac: 1.065,

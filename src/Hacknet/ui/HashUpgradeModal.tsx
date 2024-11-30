@@ -24,7 +24,7 @@ export function HashUpgradeModal(props: IProps): React.ReactElement {
   }
 
   return (
-    <Modal open={props.open} onClose={props.onClose}>
+    <Modal open={props.open} onClose={props.onClose} removeFocus={false}>
       <>
         <Typography>Spend your hashes on a variety of different upgrades</Typography>
         <Typography>

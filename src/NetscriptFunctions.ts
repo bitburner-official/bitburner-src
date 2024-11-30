@@ -20,11 +20,12 @@ import {
   GymType,
   JobName,
   JobField,
-  LiteratureName,
+  type LiteratureName,
   LocationName,
   ToastVariant,
   UniversityClassType,
   CompanyName,
+  type MessageFilename,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer, DeleteServer, AddToAllServers, createUniqueRandomIp } from "./Server/AllServers";
@@ -145,8 +146,19 @@ export const ns: InternalAPI<NSFull> = {
   stock: NetscriptStockMarket(),
   grafting: NetscriptGrafting(),
   hacknet: NetscriptHacknet(),
-  sprintf: () => sprintf,
-  vsprintf: () => vsprintf,
+  sprintf:
+    (ctx) =>
+    (_format, ...args) => {
+      const format = helpers.string(ctx, "format", _format);
+      return sprintf(format, ...(args as unknown[]));
+    },
+  vsprintf: (ctx) => (_format, _args) => {
+    const format = helpers.string(ctx, "format", _format);
+    if (!Array.isArray(_args)) {
+      throw helpers.errorMessage(ctx, `args must be an array.`);
+    }
+    return vsprintf(format, _args);
+  },
   scan: (ctx) => (_hostname) => {
     const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
     const server = helpers.getServer(ctx, hostname);
@@ -542,7 +554,7 @@ export const ns: InternalAPI<NSFull> = {
         return [] as string[];
       }
 
-      return runningScriptObj.logs.map((x) => "" + x);
+      return runningScriptObj.logs.map((x) => String(x));
     },
   tail:
     (ctx) =>
@@ -776,6 +788,11 @@ export const ns: InternalAPI<NSFull> = {
         throw new ScriptDeath(ctx.workerScript);
       }
     },
+  self: (ctx) => () => {
+    const runningScript = helpers.getRunningScript(ctx, ctx.workerScript.pid);
+    if (runningScript == null) throw helpers.errorMessage(ctx, "Cannot find running script. This is a bug.");
+    return helpers.createPublicRunningScript(runningScript, ctx.workerScript);
+  },
   kill:
     (ctx) =>
     (scriptID, hostname = ctx.workerScript.hostname, ...scriptArgs) => {
@@ -1158,7 +1175,8 @@ export const ns: InternalAPI<NSFull> = {
     if (!path) return false;
     if (hasScriptExtension(path)) return server.scripts.has(path);
     if (hasTextExtension(path)) return server.textFiles.has(path);
-    if (path.endsWith(".lit") || path.endsWith(".msg")) return server.messages.includes(path as any);
+    if (path.endsWith(".lit") || path.endsWith(".msg"))
+      return server.messages.includes(path as LiteratureName | MessageFilename);
     if (hasContractExtension(path)) return !!server.contracts.find(({ fn }) => fn === path);
     const lowerPath = path.toLowerCase();
     return server.programs.map((programName) => programName.toLowerCase()).includes(lowerPath);
@@ -1491,7 +1509,11 @@ export const ns: InternalAPI<NSFull> = {
       const ident = helpers.scriptIdentifier(ctx, fn, hostname, args);
       const runningScript = helpers.getRunningScript(ctx, ident);
       if (runningScript === null) return null;
-      return helpers.createPublicRunningScript(runningScript, ctx.workerScript);
+      // Need to look this up again, because we only have ident-based lookup
+      // for RunningScript.
+      const ws = workerScripts.get(runningScript.pid);
+      // We don't check for null, since it's fine to pass null as the 2nd arg.
+      return helpers.createPublicRunningScript(runningScript, ws);
     },
   ramOverride: (ctx) => (_ram) => {
     const newRam = roundToTwo(helpers.number(ctx, "ram", _ram || 0));
@@ -1502,7 +1524,7 @@ export const ns: InternalAPI<NSFull> = {
       return rs.ramUsage;
     }
     const newServerRamUsed = roundToTwo(server.ramUsed + (newRam - rs.ramUsage) * rs.threads);
-    if (newServerRamUsed >= server.maxRam) {
+    if (newServerRamUsed > server.maxRam) {
       // Can't allocate more RAM.
       return rs.ramUsage;
     }
@@ -1626,7 +1648,8 @@ export const ns: InternalAPI<NSFull> = {
   nFormat: (ctx) => (_n, _format) => {
     deprecationWarning(
       "ns.nFormat",
-      "Use ns.formatNumber, formatRam, formatPercent, or js builtins like Intl.NumberFormat instead.",
+      "Use ns.formatNumber, ns.formatRam, ns.formatPercent, or JS built-in objects/functions (e.g., Intl namespace) instead. " +
+        "Check the NS API documentation for details.",
     );
     const n = helpers.number(ctx, "n", _n);
     const format = helpers.string(ctx, "format", _format);
@@ -1815,7 +1838,11 @@ export const ns: InternalAPI<NSFull> = {
     lastNodeReset: Player.lastNodeReset,
     currentNode: Player.bitNodeN,
     ownedAugs: new Map(Player.augmentations.map((aug) => [aug.name, aug.level])),
-    ownedSF: new Map(Player.sourceFiles),
+    ownedSF: new Map(
+      [...Player.activeSourceFiles].filter(([__, activeLevel]) => {
+        return activeLevel > 0;
+      }),
+    ),
     bitNodeOptions: {
       ...Player.bitNodeOptions,
       sourceFileOverrides: new Map(Player.bitNodeOptions.sourceFileOverrides),
@@ -1861,7 +1888,7 @@ function getFunctionNames(obj: object, prefix: string): string[] {
     } else if (typeof value === "function") {
       functionNames.push(prefix + key);
     } else if (typeof value === "object") {
-      functionNames.push(...getFunctionNames(value, `${prefix}${key}.`));
+      functionNames.push(...getFunctionNames(value as object, `${prefix}${key}.`));
     }
   }
   return functionNames;

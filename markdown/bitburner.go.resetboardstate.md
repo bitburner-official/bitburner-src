@@ -6,7 +6,7 @@
 
 Gets new IPvGO subnet with the specified size owned by the listed faction, ready for the player to make a move. This will reset your win streak if the current game is not complete and you have already made moves.
 
-Note that some factions will have a few routers on the subnet at this state.
+Note that some factions will have a few routers already on the subnet after a reset.
 
 opponent is "Netburners" or "Slum Snakes" or "The Black Hand" or "Tetrads" or "Daedalus" or "Illuminati" or "????????????" or "No AI",
 

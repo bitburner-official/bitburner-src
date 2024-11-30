@@ -82,7 +82,7 @@ Product's rating is limited to product's effective rating by quality of input ma
 
 RP is important for product's rating. Do not deplete RP pool, especially right before completing new product.
 
-Check this [section](./unlocks-upgrade-research.md) for more advices about researches.
+Check this [section](./unlocks-upgrade-research.md) for more advice about research upgrades.
 
 Office setup is important to efficiently develop new product. There are multiple setups for different purposes:
 
@@ -91,13 +91,13 @@ Office setup is important to efficiently develop new product. There are multiple
 - Profit. This setup prioritizes profit. It's best at the end of a round, before accepting offer.
 - Profit-Progress. This setup provides good balance between current profit and development speed of new product. It's best after accepting last offer.
 
-All the setups above can be calculated by an optimizer. However, that optimizer is hard to implement correctly and efficiently. If you are a newbie, you can skip this optimization and spread employees equally across non-R&D jobs. It's not optimal, but you can still reach the endgame after couple hours if you follow other important advices.
+All the setups above can be calculated by an optimizer. However, that optimizer is hard to implement correctly and efficiently. If you are a newbie, you can skip this optimization and spread employees equally across non-R&D jobs. It's not optimal, but you can still reach the endgame after couple hours if you follow other important advice.
 
 There are 2 types of office: main office and support office. Main office is where you develop new product. Support office is where you assign a large number of employees to R&D job to increase RP. The most common setup is 1 main office and 5 support offices. The most important office is the main office, its budget must be much higher than support offices' budget.
 
 The purpose of investment offer is to get large funds and quickly grow the corporation. Better product brings more profit, and higher profit means higher offer. However, it takes a long time to develop early product(s). Sometimes, spending more time to develop better product before accepting offer can harm your overall growth. You must find a good number of products to develop before accepting offer.
 
-Miscellaneous advices:
+Miscellaneous advice:
 
 - Buy tea / throw party every cycle.
 - `DesignInvestment` and `AdvertisingInvestment` scale very badly (the exponent is 0.1). It's fine to spend 1% of your current funds for them.

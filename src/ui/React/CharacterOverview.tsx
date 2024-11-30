@@ -38,7 +38,7 @@ type RowName = SkillRowName | "HP" | "Money";
 const OverviewEventEmitter = new EventEmitter();
 
 // These values aren't displayed, they're just used for comparison to check if state has changed
-const valUpdaters: Record<RowName, () => any> = {
+const valUpdaters: Record<RowName, () => unknown> = {
   HP: () => Player.hp.current + "|" + Player.hp.max, // This isn't displayed, it's just compared for updates.
   Money: () => Player.money,
   Hack: () => Player.skills.hacking,
@@ -378,6 +378,7 @@ function Work(): React.ReactElement {
 
   if (isFactionWork(Player.currentWork)) {
     const factionWork = Player.currentWork;
+    details = <>Doing {factionWork.factionWorkType} work</>;
     header = (
       <>
         Working for <strong>{factionWork.factionName}</strong>
@@ -395,11 +396,7 @@ function Work(): React.ReactElement {
     const companyWork = Player.currentWork;
     const job = Player.jobs[companyWork.companyName];
     if (!job) return <></>;
-    details = (
-      <>
-        {job} at <strong>{companyWork.companyName}</strong>
-      </>
-    );
+    details = <>{job}</>;
 
     header = (
       <>

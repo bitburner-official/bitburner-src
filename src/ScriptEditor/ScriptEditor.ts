@@ -14,6 +14,7 @@ import { NetscriptExtra } from "../NetscriptFunctions/Extra";
 import * as enums from "../Enums";
 import { ns } from "../NetscriptFunctions";
 import { isLegacyScript } from "../Paths/ScriptFilePath";
+import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 
 /** Event emitter used for tracking when changes have been made to a content file. */
 export const fileEditEvents = new EventEmitter<[hostname: string, filename: ContentFilePath]>();
@@ -36,7 +37,9 @@ export class ScriptEditor {
       for (const [apiKey, apiValue] of Object.entries(apiLayer)) {
         if (apiLayer === api && apiKey in hiddenAPI) continue;
         apiKeys.push(apiKey);
-        if (typeof apiValue === "object") populate(apiValue);
+        if (typeof apiValue === "object") {
+          populate(apiValue as object);
+        }
       }
     }
     populate();
@@ -44,23 +47,25 @@ export class ScriptEditor {
     (async function () {
       // We have to improve the default js language otherwise theme sucks
       const jsLanguage = monaco.languages.getLanguages().find((l) => l.id === "javascript");
-      // Unsupported function is not exposed in monaco public API.
-      const l = await (jsLanguage as any).loader();
+      if (!jsLanguage) {
+        return;
+      }
+      const loader = await jsLanguage.loader();
       // replaced the bare tokens with regexes surrounded by \b, e.g. \b{token}\b which matches a word-break on either side
       // this prevents the highlighter from highlighting pieces of variables that start with a reserved token name
-      l.language.tokenizer.root.unshift([new RegExp("\\bns\\b"), { token: "ns" }]);
+      loader.language.tokenizer.root.unshift([new RegExp("\\bns\\b"), { token: "ns" }]);
       for (const symbol of apiKeys)
-        l.language.tokenizer.root.unshift([new RegExp(`\\b${symbol}\\b`), { token: "netscriptfunction" }]);
+        loader.language.tokenizer.root.unshift([new RegExp(`\\b${symbol}\\b`), { token: "netscriptfunction" }]);
       const otherKeywords = ["let", "const", "var", "function", "arguments"];
       const otherKeyvars = ["true", "false", "null", "undefined"];
       otherKeywords.forEach((k) =>
-        l.language.tokenizer.root.unshift([new RegExp(`\\b${k}\\b`), { token: "otherkeywords" }]),
+        loader.language.tokenizer.root.unshift([new RegExp(`\\b${k}\\b`), { token: "otherkeywords" }]),
       );
       otherKeyvars.forEach((k) =>
-        l.language.tokenizer.root.unshift([new RegExp(`\\b${k}\\b`), { token: "otherkeyvars" }]),
+        loader.language.tokenizer.root.unshift([new RegExp(`\\b${k}\\b`), { token: "otherkeyvars" }]),
       );
-      l.language.tokenizer.root.unshift([new RegExp("\\bthis\\b"), { token: "this" }]);
-    })();
+      loader.language.tokenizer.root.unshift([new RegExp("\\bthis\\b"), { token: "this" }]);
+    })().catch((e) => exceptionAlert(e));
 
     // Add ts definitions for API
     const source = netscriptDefinitions.replace(/export /g, "");
@@ -112,16 +117,20 @@ export class ScriptEditor {
       // returns a reject promise if the language worker is not loaded yet, so we wait to
       // call it until the language gets loaded.
       const languageWorker = new Promise<(...uris: monaco.Uri[]) => unknown>((resolve) =>
-        monaco.languages.onLanguage(language, () => getLanguageWorker().then(resolve)),
+        monaco.languages.onLanguage(language, () => {
+          getLanguageWorker()
+            .then(resolve)
+            .catch((error) => exceptionAlert(error));
+        }),
       );
-      // Whenever a model is created, arange for it synced to the language server.
+      // Whenever a model is created, arrange for it to be synced to the language server.
       monaco.editor.onDidCreateModel((model) => {
         if (language === "typescript" && isLegacyScript(model.uri.path)) {
           // Don't sync legacy scripts to typescript worker.
           return;
         }
         if (["javascript", "typescript"].includes(model.getLanguageId())) {
-          languageWorker.then((cb) => cb(model.uri));
+          languageWorker.then((resolve) => resolve(model.uri)).catch((error) => exceptionAlert(error));
         }
       });
     }

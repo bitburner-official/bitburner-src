@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -6,13 +6,13 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 import { CompanyName } from "@enums";
 import { Companies } from "../../Company/Companies";
 import { Adjuster } from "./Adjuster";
-import { isMember } from "../../utils/EnumHelper";
+import { getEnumHelper } from "../../utils/EnumHelper";
 import { getRecordValues } from "../../Types/Record";
 import { MaxFavor } from "../../Faction/formulas/favor";
 
@@ -20,10 +20,10 @@ const largeAmountOfReputation = 1e12;
 
 export function CompaniesDev(): React.ReactElement {
   const [companyName, setCompanyName] = useState(CompanyName.ECorp);
-  function setCompanyDropdown(event: SelectChangeEvent): void {
-    if (!isMember("CompanyName", event.target.value)) return;
-    setCompanyName(event.target.value);
-  }
+  const companies = useMemo<CompanyName[]>(() => {
+    return getRecordValues(Companies).map((company) => company.name);
+  }, []);
+
   function resetCompanyRep(): void {
     Companies[companyName].playerReputation = 0;
   }
@@ -87,13 +87,18 @@ export function CompaniesDev(): React.ReactElement {
                 <Typography>Company:</Typography>
               </td>
               <td colSpan={3}>
-                <Select id="dev-companies-dropdown" onChange={setCompanyDropdown} value={companyName}>
-                  {Object.values(Companies).map((company) => (
-                    <MenuItem key={company.name} value={company.name}>
-                      {company.name}
-                    </MenuItem>
-                  ))}
-                </Select>
+                <Autocomplete
+                  style={{ width: "350px" }}
+                  options={companies}
+                  value={companyName}
+                  renderInput={(params) => <TextField {...params} />}
+                  onChange={(_, companyName) => {
+                    if (!companyName || !getEnumHelper("CompanyName").isMember(companyName)) {
+                      return;
+                    }
+                    setCompanyName(companyName);
+                  }}
+                ></Autocomplete>
               </td>
             </tr>
             <tr>

@@ -31,8 +31,10 @@ export function LevelableUpgrade({ upgradeName, mult, rerender }: IProps): React
   const tooltip = data.desc;
   function onClick(): void {
     if (corp.funds < cost) return;
-    const message = corp.purchaseUpgrade(upgradeName, amount);
-    if (message) dialogBoxCreate(`Could not upgrade ${upgradeName} ${amount} times:\n${message}`);
+    const result = corp.purchaseUpgrade(upgradeName, amount);
+    if (!result.success) {
+      dialogBoxCreate(`Could not upgrade ${upgradeName} ${amount} times:\n${result.message}`);
+    }
     rerender();
   }
 

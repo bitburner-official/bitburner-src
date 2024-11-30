@@ -39,8 +39,8 @@ export function NewDivisionTab(props: IProps): React.ReactElement {
     if (disabledText) return;
     try {
       createDivision(corp, industry, name);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
       return;
     }
 

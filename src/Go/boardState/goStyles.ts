@@ -24,7 +24,7 @@ const fadeLoop = keyframes`
     }
 `;
 
-export const pointStyle = makeStyles<void, Size | Point | Structure | Highlight>({ uniqId: "pointStyle" })(
+export const pointStyle = makeStyles<unknown, Size | Point | Structure | Highlight>({ uniqId: "pointStyle" })(
   (theme: Theme, _, classes) => ({
     hover: {},
     valid: {},
@@ -396,7 +396,7 @@ export const pointStyle = makeStyles<void, Size | Point | Structure | Highlight>
   }),
 );
 
-export const boardStyles = makeStyles<void, Size | "background">({ uniqId: "boardStyles" })(
+export const boardStyles = makeStyles<unknown, Size | "background">({ uniqId: "boardStyles" })(
   (theme: Theme, _, classes) => ({
     tab: {
       paddingTop: 0,

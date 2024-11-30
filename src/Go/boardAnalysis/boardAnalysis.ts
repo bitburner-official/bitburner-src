@@ -645,6 +645,16 @@ export function boardFromSimpleBoard(simpleBoard: SimpleBoard): Board {
   );
 }
 
+/**
+ * Creates a Board object from the given simpleBoard string array
+ * Also updates the board object with the analytics (liberties/chains) from the simple board
+ */
+export const updatedBoardFromSimpleBoard = (simpleBoard: SimpleBoard): Board => {
+  const board = boardFromSimpleBoard(simpleBoard);
+  updateChains(board);
+  return board;
+};
+
 export function boardStateFromSimpleBoard(
   simpleBoard: SimpleBoard,
   ai = GoOpponent.Daedalus,
@@ -686,16 +696,14 @@ export function getPreviousMove(): [number, number] | null {
     return null;
   }
 
-  for (const rowIndexString in Go.currentGame.board) {
-    const row = Go.currentGame.board[+rowIndexString] ?? [];
-    for (const pointIndexString in row) {
-      const point = row[+pointIndexString];
-      const priorColor = point && priorBoard && getColorOnBoardString(priorBoard, point.x, point.y);
+  for (const [rowIndex, row] of Go.currentGame.board.entries()) {
+    for (const [pointIndex, point] of row.entries()) {
+      const priorColor = point && getColorOnBoardString(priorBoard, point.x, point.y);
       const currentColor = point?.color;
       const isPreviousPlayer = currentColor === Go.currentGame.previousPlayer;
       const isChanged = priorColor !== currentColor;
       if (priorColor && currentColor && isPreviousPlayer && isChanged) {
-        return [+rowIndexString, +pointIndexString];
+        return [rowIndex, pointIndex];
       }
     }
   }

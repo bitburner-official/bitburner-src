@@ -33,6 +33,7 @@ import { useCallback } from "react";
 import { type AST, getFileType, parseAST } from "../../utils/ScriptTransformer";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
 import { hasScriptExtension, isLegacyScript } from "../../Paths/ScriptFilePath";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 interface IProps {
   // Map of filename -> code
@@ -87,7 +88,7 @@ function Root(props: IProps): React.ReactElement {
       }
       const cleanCode = currentScript.code.replace(/\s/g, "");
       const ns1 = "while(true){hack('n00dles');}";
-      const ns2 = `exportasyncfunctionmain(ns){while(true){awaitns.hack('n00dles');}}`;
+      const ns2 = `/**@param{NS}ns*/exportasyncfunctionmain(ns){while(true){awaitns.hack("n00dles");}}`;
       if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
         dialogBoxCreate("Please copy and paste the code from the tutorial!");
         return;
@@ -105,7 +106,9 @@ function Root(props: IProps): React.ReactElement {
     const server = GetServer(currentScript.hostname);
     if (server === null) throw new Error("Server should not be null but it is.");
     server.writeToContentFile(currentScript.path, currentScript.code);
-    if (Settings.SaveGameOnFileSave) saveObject.saveGame();
+    if (Settings.SaveGameOnFileSave) {
+      saveObject.saveGame().catch((error) => exceptionAlert(error));
+    }
     rerender();
   }, [rerender]);
 
@@ -161,6 +164,32 @@ function Root(props: IProps): React.ReactElement {
     }
   }
 
+  function loadAllServerScripts(): void {
+    if (!currentScript) {
+      return;
+    }
+
+    const server = GetServer(currentScript.hostname);
+    if (!server) {
+      return;
+    }
+
+    server.scripts.forEach((s) => {
+      const uri = monaco.Uri.from({
+        scheme: "file",
+        path: `${s.server}/${s.filename}`,
+      });
+
+      const model = monaco.editor.getModel(uri);
+      if (model !== null && !model.isDisposed()) {
+        // there's already a model, don't overwrite
+        return;
+      }
+
+      makeModel(server.hostname, s.filename, s.code);
+    });
+  }
+
   const debouncedCodeParsing = debounce((newCode: string) => {
     let server;
     if (!currentScript || !hasScriptExtension(currentScript.path) || !(server = GetServer(currentScript.hostname))) {
@@ -183,6 +212,7 @@ function Root(props: IProps): React.ReactElement {
   }, 300);
 
   const parseCode = (newCode: string) => {
+    loadAllServerScripts();
     startUpdatingRAM();
     debouncedCodeParsing(newCode);
   };
@@ -258,7 +288,9 @@ function Root(props: IProps): React.ReactElement {
     if (!server) throw new Error("Server should not be null but it is.");
     // This server helper already handles overwriting, etc.
     server.writeToContentFile(scriptToSave.path, scriptToSave.code);
-    if (Settings.SaveGameOnFileSave) saveObject.saveGame();
+    if (Settings.SaveGameOnFileSave) {
+      saveObject.saveGame().catch((error) => exceptionAlert(error));
+    }
   }
 
   function currentTabIndex(): number | undefined {

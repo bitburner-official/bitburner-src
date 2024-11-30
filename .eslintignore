@@ -7,6 +7,7 @@ node_modules/
 dist
 input
 assets
+coverage
 doc
 markdown
 electron

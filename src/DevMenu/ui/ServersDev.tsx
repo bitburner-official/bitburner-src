@@ -7,16 +7,15 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { GetServer, GetAllServers } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
-import MenuItem from "@mui/material/MenuItem";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 export function ServersDev(): React.ReactElement {
-  const [server, setServer] = useState("home");
-  function setServerDropdown(event: SelectChangeEvent): void {
-    setServer(event.target.value);
-  }
+  const [server, setServer] = useState<string>("home");
+  const servers = GetAllServers().map((server) => server.hostname);
+
   function rootServer(): void {
     const s = GetServer(server);
     if (s === null) return;
@@ -112,13 +111,18 @@ export function ServersDev(): React.ReactElement {
                 <Typography>Server:</Typography>
               </td>
               <td colSpan={2}>
-                <Select id="dev-servers-dropdown" onChange={setServerDropdown} value={server}>
-                  {GetAllServers().map((server) => (
-                    <MenuItem key={server.hostname} value={server.hostname}>
-                      {server.hostname}
-                    </MenuItem>
-                  ))}
-                </Select>
+                <Autocomplete
+                  style={{ width: "250px" }}
+                  options={servers}
+                  value={server}
+                  renderInput={(params) => <TextField {...params} />}
+                  onChange={(_, server) => {
+                    if (!server || GetServer(server) === null) {
+                      return;
+                    }
+                    setServer(server);
+                  }}
+                ></Autocomplete>
               </td>
             </tr>
             <tr>

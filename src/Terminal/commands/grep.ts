@@ -383,13 +383,19 @@ function writeToTerminal(
   if (options.isVerbose) Terminal.print(verboseInfo);
 }
 
-function checkOutFile(outFileStr: string, options: Options, server: BaseServer): ContentFilePath | void {
-  if (!outFileStr) return;
+function checkOutFile(outFileStr: string, options: Options, server: BaseServer): ContentFilePath | null {
+  if (!outFileStr) {
+    return null;
+  }
   const outFilePath = Terminal.getFilepath(outFileStr);
   if (!outFilePath || !hasTextExtension(outFilePath)) {
-    return Terminal.error(ERR.badOutFile(outFileStr));
+    Terminal.error(ERR.badOutFile(outFileStr));
+    return null;
   }
-  if (!options.isOverWrite && server.textFiles.has(outFilePath)) return Terminal.error(ERR.outFileExists(outFileStr));
+  if (!options.isOverWrite && server.textFiles.has(outFilePath)) {
+    Terminal.error(ERR.outFileExists(outFileStr));
+    return null;
+  }
   return outFilePath;
 }
 
@@ -433,7 +439,8 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     if (options.isPipeIn) files.length = 0;
     if (!options.isQuiet) writeToTerminal(prettyResult, options, results, files, pattern);
     if (params.outfile && outFilePath) server.writeToContentFile(outFilePath, rawResult.join("\n"));
-  } catch (e) {
-    Terminal.error("grep processing error: " + e);
+  } catch (error) {
+    console.error(error);
+    Terminal.error(`grep processing error: ${error}`);
   }
 }

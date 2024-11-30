@@ -92,7 +92,7 @@ Special upgrades:
 | Advert    | 1e9            | 1.06                 | Awareness/Popularity |
 
 &nbsp;  
-Advices:
+Advice:
 
 - DreamSense is useless. Never buy it.
 - Round 1:
@@ -102,7 +102,7 @@ Advices:
   - SmartFactories, SmartStorage and Warehouse are the most important upgrades in this round.
   - Only buy 1 Office level and a couple of Advert levels for Agriculture division.
   - Do not buy Office/Advert for Chemical division.
-- Check this [section](./general-advice.md) for more advices, especially for round 3+.
+- Check this [section](./general-advice.md) for more advice, especially for round 3+.
 
 ## Research
 
@@ -128,7 +128,7 @@ Research list:
 
 | **Name**                      | **Cost** | **Description**                                                                                                                               |
 | ----------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| Hi-Tech R&D Laboratory        | 5000     | Top priority. Increase RP gain rate. It is the prerequisite of all other researches.                                                          |
+| Hi-Tech R&D Laboratory        | 5000     | Top priority. Increase RP gain rate. It is the prerequisite of all other research upgrades.                                                   |
 | Market-TA.I                   | 20000    | Useless. It is the prerequisite of Market-TA.II.                                                                                              |
 | Market-TA.II                  | 50000    | Top priority if you don't write custom script. Check this [section](./optimal-selling-price-market-ta2.md) to see how to write custom script. |
 | Automatic Drug Administration | 10000    | It is the prerequisite of Go-Juice and CPH4 Injections.                                                                                       |
@@ -150,21 +150,21 @@ Research list:
 | HRBuddy-Training              | 20000    | Useless.                                                                                                                                      |
 
 &nbsp;  
-Advices:
+Advice:
 
-- Do not deplete entire RP pool to buy research. You should only buy research if it costs less than half of the RP pool. Personally, my conditions for buying researches are:
+- Do not deplete entire RP pool to buy research. You should only buy research if it costs less than half of the RP pool. Personally, my conditions for buying research upgrades are:
   - For energy/morale and employee's stats: if it costs less than 20% of RP pool.
   - For production: if it costs less than 10% of RP pool.
 - If you don't have a custom Market-TA2 script, you must prioritize Market-TA1 and Market-TA2. Market-TA1 is useless, the only reason to buy it is because it's the prerequisite of Market-TA2. If you buy them, you should stock up on RP and buy them together. However, I recommend implementing a custom Market-TA2 ASAP. Market-TA1 and Market-TA2 cost 70000 RP, that's a huge number of RP at the start of round 3+. **Implementing a custom Market-TA2 script is the best optimization in round 3+.**
-- After that, you should prioritize researches for higher maximum energy/morale and employee's stats over production. Researches for production are nice to have, but it's much less important than energy/morale/employee's stats.
+- After that, you should prioritize research upgrades for higher maximum energy/morale and employee's stats over production. Research upgrades for production are nice to have, but it's much less important than energy/morale/employee's stats.
 - My research order for higher maximum energy/morale and employee's stats: Overclock → Sti.mu → Automatic Drug Administration → Go-Juice → CPH4 Injections.
-- Do not buy these useless researches:
+- Do not buy these useless ones:
   - uPgrade: Dashboard
   - AutoBrew
   - AutoPartyManager
   - HRBuddy-Recruitment
   - HRBuddy-Training
-- In most cases, uPgrade: Capacity.I and uPgrade: Capacity.II are useless. New products are usually much better than the old ones, so there is no point in increasing the maximum number of products. The only exception is when you reach the endgame. In the endgame, new products are only marginally better than the old ones, so having more product slots may be beneficial. However, even in the endgame, those researches may do more harm than good. In the endgame, the warehouse's size and high-quality input materials are serious bottlenecks. Having more product slots means that you need more free space in the warehouse and more units of input materials. In some cases, increasing product slots actually reduces the overall profit. You need to fine-tune it per use case.
+- In most cases, uPgrade: Capacity.I and uPgrade: Capacity.II are useless. New products are usually much better than the old ones, so there is no point in increasing the maximum number of products. The only exception is when you reach the endgame. In the endgame, new products are only marginally better than the old ones, so having more product slots may be beneficial. However, even in the endgame, those research upgrades may do more harm than good. In the endgame, the warehouse's size and high-quality input materials are serious bottlenecks. Having more product slots means that you need more free space in the warehouse and more units of input materials. In some cases, increasing product slots actually reduces the overall profit. You need to fine-tune it per use case.
 
 You can exchange hashes for RP if you have SF9. This number of RP is added to all divisions.
 

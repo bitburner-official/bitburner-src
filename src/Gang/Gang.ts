@@ -18,7 +18,7 @@ import { GangConstants } from "./data/Constants";
 import { GangMemberTasks } from "./GangMemberTasks";
 import { IAscensionResult } from "./IAscensionResult";
 
-import { AllGangs } from "./AllGangs";
+import { AllGangs, getClashWinChance } from "./AllGangs";
 import { GangMember } from "./GangMember";
 
 import { WorkerScript } from "../Netscript/WorkerScript";
@@ -97,9 +97,6 @@ export class Gang {
 
   /** Main process function called by the engine loop every game cycle */
   process(numCycles = 1): void {
-    if (isNaN(numCycles)) {
-      console.error(`NaN passed into Gang.process(): ${numCycles}`);
-    }
     this.storedCycles += numCycles;
     if (this.storedCycles < GangConstants.minCyclesToProcess) return;
 
@@ -112,7 +109,7 @@ export class Gang {
       this.processTerritoryAndPowerGains(cycles);
       this.storedCycles -= cycles;
     } catch (e: unknown) {
-      console.error(`Exception caught when processing Gang: ${e}`);
+      exceptionAlert(e, true);
     }
 
     // Handle "nextUpdate" resolver after this update
@@ -236,11 +233,7 @@ export class Gang {
           if (!(Math.random() < this.territoryClashChance)) continue;
         }
 
-        const thisPwr = AllGangs[thisGang].power;
-        const otherPwr = AllGangs[otherGang].power;
-        const thisChance = thisPwr / (thisPwr + otherPwr);
-
-        if (Math.random() < thisChance) {
+        if (Math.random() < getClashWinChance(thisGang, otherGang)) {
           if (AllGangs[otherGang].territory <= 0) return;
           const territoryGain = calculateTerritoryGain(thisGang, otherGang);
           AllGangs[thisGang].territory += territoryGain;

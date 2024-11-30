@@ -1,6 +1,6 @@
 import type { PromisePair } from "../Types/Promises";
 import type { BlackOperation, Contract, GeneralAction, Operation } from "./Actions";
-import type { ActionIdentifier, Action, Attempt } from "./Types";
+import type { Action, ActionIdFor, ActionIdentifier, Attempt } from "./Types";
 import type { Person } from "../PersonObjects/Person";
 import type { Skills as PersonSkills } from "../PersonObjects/Skills";
 
@@ -37,7 +37,6 @@ import { Settings } from "../Settings/Settings";
 import { formatTime } from "../utils/helpers/formatTime";
 import { joinFaction } from "../Faction/FactionHelpers";
 import { isSleeveInfiltrateWork } from "../PersonObjects/Sleeve/Work/SleeveInfiltrateWork";
-import { isSleeveSupportWork } from "../PersonObjects/Sleeve/Work/SleeveSupportWork";
 import { WorkStats, newWorkStats } from "../Work/WorkStats";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { PartialRecord, createEnumKeyedRecord, getRecordEntries } from "../Types/Record";
@@ -49,10 +48,16 @@ import { BlackOperations } from "./data/BlackOperations";
 import { GeneralActions } from "./data/GeneralActions";
 import { PlayerObject } from "../PersonObjects/Player/PlayerObject";
 import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
+import { autoCompleteTypeShorthand } from "./utils/terminalShorthands";
+import { resolveTeamCasualties, type OperationTeam } from "./Actions/TeamCasualties";
+import { shuffleArray } from "../Infiltration/ui/BribeGame";
+import { objectAssert } from "../utils/helpers/typeAssertion";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+import { loadActionIdentifier } from "./utils/loadActionIdentifier";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
-export class Bladeburner {
+export class Bladeburner implements OperationTeam {
   numHosp = 0;
   moneyLost = 0;
   rank = 0;
@@ -62,7 +67,9 @@ export class Bladeburner {
   totalSkillPoints = 0;
 
   teamSize = 0;
-  sleeveSize = 0;
+  get sleeveSize() {
+    return Player.sleevesSupportingBladeburner().length;
+  }
   teamLost = 0;
 
   storedCycles = 0;
@@ -101,6 +108,7 @@ export class Bladeburner {
   automateThreshLow = 0;
   consoleHistory: string[] = [];
   consoleLogs: string[] = ["Bladeburner Console", "Type 'help' to see console commands"];
+  getTeamCasualtiesRoll = getRandomIntInclusive;
 
   constructor() {
     this.contracts = createContracts();
@@ -150,21 +158,17 @@ export class Bladeburner {
   /** Attempts to perform a skill upgrade, gives a message on both success and failure */
   upgradeSkill(skillName: BladeburnerSkillName, count = 1): Attempt<{ message: string }> {
     const currentSkillLevel = this.skills[skillName] ?? 0;
-    const actualCount = currentSkillLevel + count - currentSkillLevel;
-    if (actualCount === 0) {
-      return {
-        message: `Cannot upgrade ${skillName}: Due to floating-point inaccuracy and the small value of specified "count", your skill cannot be upgraded.`,
-      };
-    }
-    const availability = Skills[skillName].canUpgrade(this, actualCount);
+    const availability = Skills[skillName].canUpgrade(this, count);
     if (!availability.available) {
       return { message: `Cannot upgrade ${skillName}: ${availability.error}` };
     }
     this.skillPoints -= availability.cost;
-    this.setSkillLevel(skillName, currentSkillLevel + actualCount);
+    this.setSkillLevel(skillName, currentSkillLevel + availability.actualCount);
     return {
       success: true,
-      message: `Upgraded skill ${skillName} by ${actualCount} level${actualCount > 1 ? "s" : ""}`,
+      message: `Upgraded skill ${skillName} by ${availability.actualCount} level${
+        availability.actualCount > 1 ? "s" : ""
+      }`,
     };
   }
 
@@ -433,61 +437,53 @@ export class Bladeburner {
         highLow = true;
       }
 
-      let actionId: ActionIdentifier;
-      switch (type) {
-        case "stamina":
-          // For stamina, the "name" variable is actually the stamina threshold
-          if (isNaN(parseFloat(name))) {
-            this.postToConsole("Invalid value specified for stamina threshold (must be numeric): " + name);
+      if (type === "stamina") {
+        // For stamina, the "name" variable is actually the stamina threshold
+        if (isNaN(parseFloat(name))) {
+          this.postToConsole("Invalid value specified for stamina threshold (must be numeric): " + name);
+        } else {
+          if (highLow) {
+            this.automateThreshHigh = Number(name);
           } else {
-            if (highLow) {
-              this.automateThreshHigh = Number(name);
-            } else {
-              this.automateThreshLow = Number(name);
-            }
-            this.log("Automate (" + (highLow ? "HIGH" : "LOW") + ") stamina threshold set to " + name);
+            this.automateThreshLow = Number(name);
           }
-          return;
-        case "general":
-        case "gen": {
-          if (!getEnumHelper("BladeburnerGeneralActionName").isMember(name)) {
+          this.log("Automate (" + (highLow ? "HIGH" : "LOW") + ") stamina threshold set to " + name);
+        }
+        return;
+      }
+
+      const actionId = autoCompleteTypeShorthand(type, name);
+
+      if (actionId === null) {
+        switch (type) {
+          case "general":
+          case "gen": {
             this.postToConsole("Invalid General Action name specified: " + name);
             return;
           }
-          actionId = { type: BladeburnerActionType.General, name };
-          break;
-        }
-        case "contract":
-        case "contracts": {
-          if (!getEnumHelper("BladeburnerContractName").isMember(name)) {
+          case "contract":
+          case "contracts": {
             this.postToConsole("Invalid Contract name specified: " + name);
             return;
           }
-          actionId = { type: BladeburnerActionType.Contract, name };
-          break;
-        }
-        case "ops":
-        case "op":
-        case "operations":
-        case "operation":
-          if (!getEnumHelper("BladeburnerOperationName").isMember(name)) {
+          case "ops":
+          case "op":
+          case "operations":
+          case "operation":
             this.postToConsole("Invalid Operation name specified: " + name);
             return;
-          }
-          actionId = { type: BladeburnerActionType.Operation, name };
-          break;
-        default:
-          this.postToConsole("Invalid use of automate command.");
-          return;
+          default:
+            this.postToConsole("Invalid use of automate command.");
+            return;
+        }
       }
+
       if (highLow) {
         this.automateActionHigh = actionId;
       } else {
         this.automateActionLow = actionId;
       }
       this.log("Automate (" + (highLow ? "HIGH" : "LOW") + ") action set to " + name);
-
-      return;
     }
   }
 
@@ -710,16 +706,10 @@ export class Bladeburner {
     return charismaEff;
   }
 
-  getRecruitmentSuccessChance(person: Person): number {
-    return Math.pow(person.skills.charisma, 0.45) / (this.teamSize - this.sleeveSize + 1);
-  }
-
   sleeveSupport(joining: boolean): void {
     if (joining) {
-      this.sleeveSize += 1;
       this.teamSize += 1;
     } else {
-      this.sleeveSize -= 1;
       this.teamSize -= 1;
     }
   }
@@ -757,31 +747,20 @@ export class Bladeburner {
     }
   }
 
+  killRandomSupportingSleeves(n: number) {
+    const sup = [...Player.sleevesSupportingBladeburner()]; // Explicit shallow copy
+    shuffleArray(sup);
+    sup.slice(0, Math.min(sup.length, n)).forEach((sleeve) => sleeve.kill());
+  }
+
   completeOperation(success: boolean): void {
     if (this.action?.type !== BladeburnerActionType.Operation) {
       throw new Error("completeOperation() called even though current action is not an Operation");
     }
     const action = this.getActionObject(this.action);
-
-    // Calculate team losses
-    const teamCount = action.teamCount;
-    if (teamCount >= 1) {
-      const maxLosses = success ? Math.ceil(teamCount / 2) : Math.floor(teamCount);
-      const losses = getRandomIntInclusive(0, maxLosses);
-      this.teamSize -= losses;
-      if (this.teamSize < this.sleeveSize) {
-        const sup = Player.sleeves.filter((x) => isSleeveSupportWork(x.currentWork));
-        for (let i = 0; i > this.teamSize - this.sleeveSize; i--) {
-          const r = Math.floor(Math.random() * sup.length);
-          sup[r].takeDamage(sup[r].hp.max);
-          sup.splice(r, 1);
-        }
-        this.teamSize += this.sleeveSize;
-      }
-      this.teamLost += losses;
-      if (this.logging.ops && losses > 0) {
-        this.log("Lost " + formatNumberNoSuffix(losses, 0) + " team members during this " + action.name);
-      }
+    const deaths = resolveTeamCasualties(action, this, success);
+    if (this.logging.ops && deaths > 0) {
+      this.log("Lost " + formatNumberNoSuffix(deaths, 0) + " team members during this " + action.name);
     }
 
     const city = this.getCurrentCity();
@@ -845,7 +824,7 @@ export class Bladeburner {
         city.changeChaosByPercentage(getRandomIntInclusive(-5, 5));
         break;
       default:
-        throw new Error("Invalid Action name in completeOperation: " + this.action.name);
+        throwIfReachable(action.name);
     }
   }
 
@@ -945,6 +924,14 @@ export class Bladeburner {
               }
             }
             isOperation ? this.completeOperation(true) : this.completeContract(true, action);
+            /**
+             * If the player successfully completes a contract/operation involving killing, we deduct their karma by 1.
+             * The amount of reduction must be a small, flat value because the action time of contract/operation can be
+             * reduced to 1 second.
+             */
+            if (action.isKill) {
+              Player.karma -= 1;
+            }
           } else {
             retValue = this.getActionStats(action, person, false);
             ++action.failures;
@@ -998,9 +985,7 @@ export class Bladeburner {
           this.stamina = 0;
         }
 
-        // Team loss variables
-        const teamCount = action.teamCount;
-        let teamLossMax;
+        let deaths;
 
         if (action.attempt(this, person)) {
           retValue = this.getActionStats(action, person, true);
@@ -1010,12 +995,22 @@ export class Bladeburner {
             rankGain = addOffset(action.rankGain * currentNodeMults.BladeburnerRank, 10);
             this.changeRank(person, rankGain);
           }
-          teamLossMax = Math.ceil(teamCount / 2);
+
+          deaths = resolveTeamCasualties(action, this, true);
 
           if (this.logging.blackops) {
             this.log(
               `${person.whoAmI()}: ${action.name} successful! Gained ${formatNumberNoSuffix(rankGain, 1)} rank.`,
             );
+          }
+          /**
+           * If the player successfully completes a BlackOp involving killing, we deduct their karma by 15. The amount
+           * of reduction is higher than contract/operation because the number of BlackOps is small. It won't affect the
+           * balance. -15 karma is the same amount of karma for "heist" crime, which is the crime giving the highest
+           * "negative karma".
+           */
+          if (action.isKill) {
+            Player.karma -= 15;
           }
         } else {
           retValue = this.getActionStats(action, person, false);
@@ -1034,7 +1029,8 @@ export class Bladeburner {
               this.moneyLost += cost;
             }
           }
-          teamLossMax = Math.floor(teamCount);
+
+          deaths = resolveTeamCasualties(action, this, false);
 
           if (this.logging.blackops) {
             this.log(
@@ -1048,25 +1044,10 @@ export class Bladeburner {
 
         this.resetAction(); // Stop regardless of success or fail
 
-        // Calculate team losses
-        if (teamCount >= 1) {
-          const losses = getRandomIntInclusive(1, teamLossMax);
-          this.teamSize -= losses;
-          if (this.teamSize < this.sleeveSize) {
-            const sup = Player.sleeves.filter((x) => isSleeveSupportWork(x.currentWork));
-            for (let i = 0; i > this.teamSize - this.sleeveSize; i--) {
-              const r = Math.floor(Math.random() * sup.length);
-              sup[r].takeDamage(sup[r].hp.max);
-              sup.splice(r, 1);
-            }
-            this.teamSize += this.sleeveSize;
-          }
-          this.teamLost += losses;
-          if (this.logging.blackops) {
-            this.log(
-              `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(losses, 0)} team members during ${action.name}.`,
-            );
-          }
+        if (this.logging.blackops && deaths > 0) {
+          this.log(
+            `${person.whoAmI()}:  You lost ${formatNumberNoSuffix(deaths, 0)} team members during ${action.name}.`,
+          );
         }
         break;
       }
@@ -1406,10 +1387,10 @@ export class Bladeburner {
   }
 
   /** Return the action based on an ActionIdentifier, discriminating types when possible */
-  getActionObject(actionId: ActionIdentifier & { type: BladeburnerActionType.BlackOp }): BlackOperation;
-  getActionObject(actionId: ActionIdentifier & { type: BladeburnerActionType.Operation }): Operation;
-  getActionObject(actionId: ActionIdentifier & { type: BladeburnerActionType.Contract }): Contract;
-  getActionObject(actionId: ActionIdentifier & { type: BladeburnerActionType.General }): GeneralAction;
+  getActionObject(actionId: ActionIdFor<BlackOperation>): BlackOperation;
+  getActionObject(actionId: ActionIdFor<Operation>): Operation;
+  getActionObject(actionId: ActionIdFor<Contract>): Contract;
+  getActionObject(actionId: ActionIdFor<GeneralAction>): GeneralAction;
   getActionObject(actionId: ActionIdentifier): Action;
   getActionObject(actionId: ActionIdentifier): Action {
     switch (actionId.type) {
@@ -1427,36 +1408,8 @@ export class Bladeburner {
   /** Fuzzy matching for action identifiers. Should be removed in 3.0 */
   getActionFromTypeAndName(type: string, name: string): Action | null {
     if (!type || !name) return null;
-    const convertedType = type.toLowerCase().trim();
-    switch (convertedType) {
-      case "contract":
-      case "contracts":
-      case "contr":
-        if (!getEnumHelper("BladeburnerContractName").isMember(name)) return null;
-        return this.contracts[name];
-      case "operation":
-      case "operations":
-      case "op":
-      case "ops":
-        if (!getEnumHelper("BladeburnerOperationName").isMember(name)) return null;
-        return this.operations[name];
-      case "blackoperation":
-      case "black operation":
-      case "black operations":
-      case "black op":
-      case "black ops":
-      case "blackop":
-      case "blackops":
-        if (!getEnumHelper("BladeburnerBlackOpName").isMember(name)) return null;
-        return BlackOperations[name];
-      case "general":
-      case "general action":
-      case "gen": {
-        if (!getEnumHelper("BladeburnerGeneralActionName").isMember(name)) return null;
-        return GeneralActions[name];
-      }
-    }
-    return null;
+    const id = autoCompleteTypeShorthand(type, name);
+    return id ? this.getActionObject(id) : null;
   }
 
   static keysToSave = getKeyList(Bladeburner, { removedKeys: ["skillMultipliers"] });
@@ -1470,10 +1423,30 @@ export class Bladeburner {
 
   /** Initializes a Bladeburner object from a JSON save state. */
   static fromJSON(value: IReviverValue): Bladeburner {
+    objectAssert(value.data);
     // operations and contracts are not loaded directly from the save, we load them in using a different method
-    const contractsData = value.data?.contracts;
-    const operationsData = value.data?.operations;
+    const contractsData = value.data.contracts;
+    const operationsData = value.data.operations;
     const bladeburner = Generic_fromJSON(Bladeburner, value.data, Bladeburner.keysToLoad);
+
+    /**
+     * Handle migration from pre-v2.6.1 versions:
+     * - pre-v2.6.1:
+     *   - action is an instance of the ActionIdentifier class. It cannot be null.
+     *   - action.type is a number.
+     * - 2.6.1:
+     *   - action is a nullable plain object. ActionIdentifier is a "type".
+     *   - action.type is a string.
+     */
+    if (bladeburner.action && typeof bladeburner.action.type === "number") {
+      bladeburner.action = loadActionIdentifier(bladeburner.action);
+      if (bladeburner.automateActionHigh) {
+        bladeburner.automateActionHigh = loadActionIdentifier(bladeburner.automateActionHigh);
+      }
+      if (bladeburner.automateActionLow) {
+        bladeburner.automateActionLow = loadActionIdentifier(bladeburner.automateActionLow);
+      }
+    }
     // Loading this way allows better typesafety and also allows faithfully reconstructing contracts/operations
     // even from save data that is missing a lot of static info about the objects.
     loadContractsData(contractsData, bladeburner.contracts);

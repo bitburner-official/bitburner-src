@@ -75,11 +75,11 @@ export const RamCostConstants = {
   StanekPlace: 5,
   StanekFragmentAt: 2,
   StanekDeleteAt: 0.15,
+  StanekAcceptGift: 2,
+
   InfiltrationCalculateDifficulty: 2.5,
   InfiltrationCalculateRewards: 2.5,
-  InfiltrationGetLocations: 5,
   InfiltrationGetInfiltrations: 15,
-  StanekAcceptGift: 2,
 
   CycleTiming: 1,
 } as const;
@@ -235,10 +235,10 @@ const gang = {
   getRecruitsAvailable: RamCostConstants.GangApiBase / 4,
   respectForNextRecruit: RamCostConstants.GangApiBase / 4,
   recruitMember: RamCostConstants.GangApiBase / 2,
-  getTaskNames: RamCostConstants.GangApiBase / 4,
+  getTaskNames: 0,
   getTaskStats: RamCostConstants.GangApiBase / 4,
   setMemberTask: RamCostConstants.GangApiBase / 2,
-  getEquipmentNames: RamCostConstants.GangApiBase / 4,
+  getEquipmentNames: 0,
   getEquipmentCost: RamCostConstants.GangApiBase / 2,
   getEquipmentType: RamCostConstants.GangApiBase / 2,
   getEquipmentStats: RamCostConstants.GangApiBase / 2,
@@ -272,6 +272,7 @@ const go = {
   },
   cheat: {
     getCheatSuccessChance: 1,
+    getCheatCount: 1,
     removeRouter: 8,
     playTwoMoves: 8,
     repairOfflineNode: 8,
@@ -282,13 +283,13 @@ const go = {
 // Bladeburner API
 const bladeburner = {
   inBladeburner: RamCostConstants.BladeburnerApiBase / 4,
-  getContractNames: RamCostConstants.BladeburnerApiBase / 10,
-  getOperationNames: RamCostConstants.BladeburnerApiBase / 10,
-  getBlackOpNames: RamCostConstants.BladeburnerApiBase / 10,
+  getContractNames: 0,
+  getOperationNames: 0,
+  getBlackOpNames: 0,
   getNextBlackOp: RamCostConstants.BladeburnerApiBase / 2,
   getBlackOpRank: RamCostConstants.BladeburnerApiBase / 2,
-  getGeneralActionNames: RamCostConstants.BladeburnerApiBase / 10,
-  getSkillNames: RamCostConstants.BladeburnerApiBase / 10,
+  getGeneralActionNames: 0,
+  getSkillNames: 0,
   startAction: RamCostConstants.BladeburnerApiBase,
   stopBladeburnerAction: RamCostConstants.BladeburnerApiBase / 2,
   getCurrentAction: RamCostConstants.BladeburnerApiBase / 4,
@@ -323,7 +324,7 @@ const bladeburner = {
 } as const;
 
 const infiltration = {
-  getPossibleLocations: RamCostConstants.InfiltrationGetLocations,
+  getPossibleLocations: 0,
   getInfiltration: RamCostConstants.InfiltrationGetInfiltrations,
 } as const;
 
@@ -335,7 +336,7 @@ const codingcontract = {
   getDescription: RamCostConstants.CodingContractBase / 2,
   getNumTriesRemaining: RamCostConstants.CodingContractBase / 5,
   createDummyContract: RamCostConstants.CodingContractBase / 5,
-  getContractTypes: RamCostConstants.CodingContractBase / 5,
+  getContractTypes: 0,
 } as const;
 
 // Duplicate Sleeve API
@@ -520,6 +521,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   run: RamCostConstants.Run,
   exec: RamCostConstants.Exec,
   spawn: RamCostConstants.Spawn,
+  self: 0,
   kill: RamCostConstants.Kill,
   killall: RamCostConstants.Kill,
   exit: 0,

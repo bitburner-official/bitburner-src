@@ -24,6 +24,7 @@ import {
   handlePassTurn,
   makePlayerMove,
   resetBoardState,
+  validateBoardState,
   validateMove,
   validateTurn,
 } from "../Go/effects/netscriptGoImplementation";
@@ -78,26 +79,37 @@ export function NetscriptGo(): InternalAPI<NSGo> {
       return resetBoardState(logger(ctx), error(ctx), opponent, boardSize);
     },
     analysis: {
-      getValidMoves: () => () => {
-        return getValidMoves();
+      getValidMoves: (ctx) => (_boardState, _priorBoardState) => {
+        const State = validateBoardState(error(ctx), _boardState, _priorBoardState);
+        return getValidMoves(State);
       },
-      getChains: () => () => {
-        return getChains();
+      getChains: (ctx) => (_boardState) => {
+        const State = validateBoardState(error(ctx), _boardState);
+        return getChains(State?.board);
       },
-      getLiberties: () => () => {
-        return getLiberties();
+      getLiberties: (ctx) => (_boardState) => {
+        const State = validateBoardState(error(ctx), _boardState);
+        return getLiberties(State?.board);
       },
-      getControlledEmptyNodes: () => () => {
-        return getControlledEmptyNodes();
+      getControlledEmptyNodes: (ctx) => (_boardState) => {
+        const State = validateBoardState(error(ctx), _boardState);
+        return getControlledEmptyNodes(State?.board);
       },
       getStats: () => () => {
         return getStats();
       },
     },
     cheat: {
-      getCheatSuccessChance: (ctx: NetscriptContext) => () => {
+      getCheatSuccessChance:
+        (ctx: NetscriptContext) =>
+        (_cheatCount = Go.currentGame.cheatCount) => {
+          checkCheatApiAccess(error(ctx));
+          const cheatCount = helpers.number(ctx, "cheatCount", _cheatCount);
+          return cheatSuccessChance(cheatCount);
+        },
+      getCheatCount: (ctx: NetscriptContext) => () => {
         checkCheatApiAccess(error(ctx));
-        return cheatSuccessChance(Go.currentGame.cheatCount);
+        return Go.currentGame.cheatCount;
       },
       removeRouter:
         (ctx: NetscriptContext) =>

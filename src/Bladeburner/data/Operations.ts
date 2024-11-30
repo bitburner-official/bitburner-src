@@ -12,6 +12,7 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
         "As a field agent, investigate and identify Synthoid populations, movements, and operations.\n\n" +
         "Successful Investigation ops will increase the accuracy of your synthoid data.\n\n" +
         "You will NOT lose HP from failed Investigation ops.",
+      successScaling: "Significantly affected by Hacking skill and Charisma. Minor bonus from combat stats.",
       baseDifficulty: 400,
       difficultyFac: 1.03,
       rewardFac: 1.07,
@@ -44,6 +45,8 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Conduct undercover operations to identify hidden and underground Synthoid communities and organizations.\n\n" +
         "Successful Undercover ops will increase the accuracy of your synthoid data.",
+      successScaling:
+        "Affected by Hacking skill, Dexterity, Agility and Charisma. Minor bonus from Defense and Strength.",
       baseDifficulty: 500,
       difficultyFac: 1.04,
       rewardFac: 1.09,
@@ -75,6 +78,8 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
     [BladeburnerOperationName.Sting]: new Operation({
       name: BladeburnerOperationName.Sting,
       desc: "Conduct a sting operation to bait and capture particularly notorious Synthoid criminals.",
+      successScaling:
+        "Significantly affected by Hacking skill and Dexterity. Major bonus from Charisma. Minor bonus from combat stats.",
       baseDifficulty: 650,
       difficultyFac: 1.04,
       rewardFac: 1.095,
@@ -107,6 +112,7 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Lead an assault on a known Synthoid community. Note that there must be an existing Synthoid community in your " +
         "current city in order for this Operation to be successful.",
+      successScaling: "Affected by combat stats. Minor bonus from Hacking skill. Unaffected by Charisma.",
       baseDifficulty: 800,
       difficultyFac: 1.045,
       rewardFac: 1.1,
@@ -143,6 +149,8 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Lead a covert operation to retire Synthoids. The objective is to complete the task without drawing any " +
         "attention. Stealth and discretion are key.",
+      successScaling:
+        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill. Unaffected by Charisma.",
       baseDifficulty: 1000,
       difficultyFac: 1.05,
       rewardFac: 1.11,
@@ -176,6 +184,9 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       desc:
         "Assassinate Synthoids that have been identified as important, high-profile social and political leaders in the " +
         "Synthoid communities.",
+      successScaling:
+        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill.\n" +
+        "Unaffected by Charisma.",
       baseDifficulty: 1500,
       difficultyFac: 1.06,
       rewardFac: 1.14,
