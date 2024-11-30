@@ -10,6 +10,7 @@ import { scaleWorkStats } from "../../../Work/WorkStats";
 import { getKeyList } from "../../../utils/helpers/getKeyList";
 import { loadActionIdentifier } from "../../../Bladeburner/utils/loadActionIdentifier";
 import { invalidWork } from "../../../Work/InvalidWork";
+import { objectAssert } from "../../../utils/helpers/typeAssertion";
 
 interface SleeveBladeburnerWorkParams {
   actionId: ActionIdentifier & { type: BladeburnerActionType.General | BladeburnerActionType.Contract };
@@ -98,8 +99,21 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
 
   /** Initializes a BladeburnerWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveBladeburnerWork {
-    const actionId = loadActionIdentifier(value.data?.actionId);
-    if (!actionId) return invalidWork();
+    objectAssert(value.data);
+    let actionId = loadActionIdentifier(value.data?.actionId);
+    if (!actionId) {
+      /**
+       * In pre-v2.6.1 versions, "name" and "type" of actionId are saved directly in "actionName" and "actionType", not
+       * in the actionId object.
+       */
+      if (!value.data["actionName"]) {
+        return invalidWork();
+      }
+      actionId = loadActionIdentifier({ name: value.data["actionName"], type: value.data["actionType"] });
+      if (!actionId) {
+        return invalidWork();
+      }
+    }
     value.data.actionId = actionId;
     return Generic_fromJSON(SleeveBladeburnerWork, value.data, SleeveBladeburnerWork.savedKeys);
   }

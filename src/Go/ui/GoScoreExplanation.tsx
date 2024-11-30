@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const GoScoreExplanation = ({ open, onClose }: Props): React.ReactElement => {
-  const { classes } = boardStyles();
+  const { classes } = boardStyles({});
 
   return (
     <Modal open={open} onClose={onClose}>

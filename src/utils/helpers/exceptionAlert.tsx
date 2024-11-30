@@ -1,8 +1,9 @@
 import React from "react";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import Typography from "@mui/material/Typography";
-import { getErrorMetadata } from "../ErrorHelper";
-import { cyrb53 } from "../StringHelperFunctions";
+import { parseUnknownError } from "../ErrorHelper";
+import { cyrb53 } from "../HashUtils";
+import { commitHash } from "./commitHash";
 
 const errorSet = new Set<string>();
 
@@ -17,31 +18,43 @@ const errorSet = new Set<string>();
  */
 export function exceptionAlert(error: unknown, showOnlyOnce = false): void {
   console.error(error);
-  const errorAsString = String(error);
-  const errorStackTrace = error instanceof Error ? error.stack : undefined;
+  const errorData = parseUnknownError(error);
   if (showOnlyOnce) {
     // Calculate the "id" of the error.
-    const errorId = cyrb53(errorAsString + errorStackTrace);
+    const errorId = cyrb53(errorData.errorAsString + errorData.stack);
     // Check if we showed it
     if (errorSet.has(errorId)) {
       return;
-    } else {
-      errorSet.add(errorId);
     }
+    errorSet.add(errorId);
   }
-  const errorMetadata = getErrorMetadata(error);
 
   dialogBoxCreate(
     <>
-      Caught an exception: {errorAsString}
+      Caught an exception: {errorData.errorAsString}
       <br />
       <br />
-      {errorStackTrace && (
+      {errorData.stack && (
         <Typography component="div" style={{ whiteSpace: "pre-wrap" }}>
-          Stack: {errorStackTrace}
+          Stack: {errorData.stack}
         </Typography>
       )}
-      Commit: {errorMetadata.version.commitHash}
+      {errorData.causeAsString && (
+        <>
+          <br />
+          <Typography component="div" style={{ whiteSpace: "pre-wrap" }}>
+            Error cause: {errorData.causeAsString}
+            {errorData.causeStack && (
+              <>
+                <br />
+                Cause stack: {errorData.causeStack}
+              </>
+            )}
+          </Typography>
+        </>
+      )}
+      <br />
+      Commit: {commitHash()}
       <br />
       UserAgent: {navigator.userAgent}
       <br />

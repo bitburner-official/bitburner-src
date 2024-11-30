@@ -13,9 +13,9 @@ declare const importActual: (typeof EvaluatorConfig)["doImport"];
 // Replace Blob/ObjectURL functions, because they don't work natively in Jest
 global.Blob = class extends Blob {
   code: string;
-  constructor(blobParts?: BlobPart[], options?: BlobPropertyBag) {
+  constructor(blobParts?: BlobPart[], __options?: BlobPropertyBag) {
     super();
-    this.code = (blobParts ?? [])[0] + "";
+    this.code = String((blobParts ?? [])[0]);
   }
 };
 global.URL.revokeObjectURL = function () {};
@@ -77,11 +77,11 @@ test.each([
   },
 ])("Netscript execution: $name", async function ({ expected: expectedLog, scripts }) {
   global.URL.createObjectURL = function (blob) {
-    return "data:text/javascript," + encodeURIComponent(blob.code);
+    return "data:text/javascript," + encodeURIComponent((blob as unknown as { code: string }).code);
   };
 
   let server = {} as Server;
-  let eventDelete = () => {};
+  const eventDelete = () => {};
   let alertDelete = () => {};
   try {
     const alerted = new Promise((resolve) => {
@@ -98,7 +98,7 @@ test.each([
 
     const ramUsage = script.getRamUsage(server.scripts);
     if (!ramUsage) throw new Error(`ramUsage calculated to be ${ramUsage}`);
-    const runningScript = new RunningScript(script, ramUsage as number);
+    const runningScript = new RunningScript(script, ramUsage);
     const pid = startWorkerScript(runningScript, server);
     expect(pid).toBeGreaterThan(0);
     // Manually attach an atExit to the now-created WorkerScript, so we can
@@ -107,6 +107,7 @@ test.each([
     expect(ws).toBeDefined();
     const result = await Promise.race([
       alerted,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- ws was asserted above
       new Promise<void>((resolve) => (ws!.atExit = new Map([["default", resolve]]))),
     ]);
     // If an error alert was thrown, we catch it here.

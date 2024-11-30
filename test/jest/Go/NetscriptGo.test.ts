@@ -53,7 +53,7 @@ describe("Netscript Go API unit tests", () => {
         throw new Error("Invalid");
       });
 
-      await makePlayerMove(mockLogger, mockError, 0, 0).catch((_) => _);
+      await makePlayerMove(mockLogger, mockError, 0, 0).catch(() => {});
 
       expect(mockError).toHaveBeenCalledWith("Invalid move: 0 0. That node is already occupied by a piece.");
     });
@@ -95,7 +95,7 @@ describe("Netscript Go API unit tests", () => {
   });
 
   describe("getGameState() tests", () => {
-    it("should correctly retrieve the current game state", async () => {
+    it("should correctly retrieve the current game state", () => {
       const board = ["OXX..", ".....", "..#..", "...XX", "...X."];
       const boardState = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.black);
       boardState.previousBoards = ["OX.........#.....XX...X."];
@@ -240,7 +240,7 @@ describe("Netscript Go API unit tests", () => {
     });
   });
   describe("cheatPlayTwoMoves() tests", () => {
-    it("should handle invalid moves", async () => {
+    it("should handle invalid moves", () => {
       const board = ["XOO..", ".....", ".....", ".....", "....."];
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockError = jest.fn();
@@ -289,7 +289,7 @@ describe("Netscript Go API unit tests", () => {
     });
   });
   describe("cheatRemoveRouter() tests", () => {
-    it("should handle invalid moves", async () => {
+    it("should handle invalid moves", () => {
       const board = ["XOO..", ".....", ".....", ".....", "....."];
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockError = jest.fn();
@@ -327,7 +327,7 @@ describe("Netscript Go API unit tests", () => {
     });
   });
   describe("cheatRepairOfflineNode() tests", () => {
-    it("should handle invalid moves", async () => {
+    it("should handle invalid moves", () => {
       const board = ["XOO..", ".....", ".....", ".....", "....#"];
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockError = jest.fn();

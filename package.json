@@ -1,7 +1,7 @@
 {
   "name": "bitburner",
   "license": "SEE LICENSE IN license.txt",
-  "version": "2.6.3",
+  "version": "2.7.0",
   "main": "electron-main.js",
   "author": {
     "name": "Daniel Xie, hydroflame, et al."
@@ -24,6 +24,7 @@
     "acorn": "^8.11.3",
     "acorn-jsx-walk": "^2.0.0",
     "acorn-walk": "^8.3.2",
+    "ajv": "^8.17.1",
     "arg": "^5.0.2",
     "bcryptjs": "^2.4.3",
     "better-react-mathjax": "^2.0.3",
@@ -70,6 +71,7 @@
     "@types/react-beautiful-dnd": "^13.1.5",
     "@types/react-dom": "^17.0.21",
     "@types/react-resizable": "^3.0.5",
+    "@types/sprintf-js": "^1.1.4",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.9.1",
     "babel-jest": "^29.7.0",

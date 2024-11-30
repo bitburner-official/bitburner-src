@@ -10,6 +10,7 @@ import { Page } from "./ui/Router";
 import { prestigeSourceFile } from "./Prestige";
 import { getDefaultBitNodeOptions, setBitNodeOptions } from "./BitNode/BitNodeUtils";
 import { prestigeWorkerScripts } from "./NetscriptWorker";
+import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 
 function giveSourceFile(bitNodeNumber: number): void {
   const sourceFileKey = "SourceFile" + bitNodeNumber.toString();
@@ -76,14 +77,7 @@ export function enterBitNode(
   try {
     setBitNodeOptions(bitNodeOptions);
   } catch (error) {
-    dialogBoxCreate(
-      <>
-        Invalid BitNode options. This is a bug. Please report it to developers.
-        <br />
-        <br />
-        {error instanceof Error ? error.stack : String(error)}
-      </>,
-    );
+    exceptionAlert(error);
     // Use default options
     setBitNodeOptions(getDefaultBitNodeOptions());
   }

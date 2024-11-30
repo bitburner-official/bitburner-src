@@ -11,7 +11,7 @@ export type Move = {
   createsLife?: boolean;
 };
 
-type MoveType =
+export type MoveType =
   | "capture"
   | "defendCapture"
   | "eyeMove"
@@ -25,8 +25,20 @@ type MoveType =
   | "corner"
   | "random";
 
-type MoveFunction = () => Promise<Move | null>;
-export type MoveOptions = Record<MoveType, MoveFunction>;
+export type MoveOptions = {
+  readonly eyeMove: () => Move | null;
+  readonly random: () => Move | null;
+  readonly defendCapture: () => Promise<Move | null>;
+  readonly corner: () => Move | null;
+  readonly defend: () => Move | null;
+  readonly pattern: () => Promise<Move | null>;
+  readonly capture: () => Promise<Move | null>;
+  readonly growth: () => Move | null;
+  readonly eyeBlock: () => Move | null;
+  readonly surround: () => Move | null;
+  readonly expansion: () => Move | null;
+  readonly jump: () => Move | null;
+};
 
 export type EyeMove = {
   point: PointState;

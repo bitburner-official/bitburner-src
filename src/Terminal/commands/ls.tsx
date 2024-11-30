@@ -33,6 +33,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
   }
   let flags: LSFlags;
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     flags = libarg(
       {
         "-l": Boolean,

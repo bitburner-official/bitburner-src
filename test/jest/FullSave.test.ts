@@ -10,13 +10,15 @@ import { Companies } from "../../src/Company/Companies";
 
 describe("Check Save File Continuity", () => {
   establishInitialConditions();
-  // Calling getSaveString forces save info to update
-  saveObject.getSaveData();
+  beforeAll(async () => {
+    // Calling getSaveString forces save info to update
+    await saveObject.getSaveData();
+  });
 
   const savesToTest = ["FactionsSave", "PlayerSave", "CompaniesSave", "GoSave"] as const;
   for (const saveToTest of savesToTest) {
     test(`${saveToTest} continuity`, () => {
-      const parsed = JSON.parse(saveObject[saveToTest]);
+      const parsed: unknown = JSON.parse(saveObject[saveToTest]);
       expect(parsed).toMatchSnapshot();
     });
   }

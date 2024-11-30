@@ -38,7 +38,7 @@ import { useBoolean } from "../hooks";
 
 import { ComparisonIcon } from "./ComparisonIcon";
 import { SaveData } from "../../../types";
-import { handleGetSaveDataInfoError } from "../../../Netscript/ErrorMessages";
+import { handleGetSaveDataInfoError } from "../../../utils/ErrorHandler";
 
 const useStyles = makeStyles()((theme: Theme) => ({
   root: {
