@@ -26,6 +26,7 @@ import {
 } from "./helpers";
 import { PositiveInteger, Result } from "../types";
 import { Factions } from "../Faction/Factions";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 
 export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): boolean {
   const checkResult = canCreateCorporation(selfFund, restart);
@@ -39,10 +40,8 @@ export function createCorporation(corporationName: string, selfFund: boolean, re
     case CreatingCorporationCheckResult.DisabledBySoftCap:
       // In order to maintaining backward compatibility, we have to throw an error in these cases.
       throw new Error(checkResult);
-    default: {
-      // Verify if switch statement is exhaustive
-      checkResult satisfies never;
-    }
+    default:
+      throwIfReachable(checkResult);
   }
 
   if (!corporationName) {

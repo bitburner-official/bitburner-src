@@ -6,6 +6,7 @@ import { CorpUpgrade } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { CreatingCorporationCheckResult } from "@enums";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 
 export function convertCreatingCorporationCheckResultToMessage(checkResult: CreatingCorporationCheckResult): string {
   switch (checkResult) {
@@ -19,10 +20,8 @@ export function convertCreatingCorporationCheckResultToMessage(checkResult: Crea
       return "You cannot use seed money outside BitNode 3";
     case CreatingCorporationCheckResult.DisabledBySoftCap:
       return "You cannot create a corporation in this BitNode";
-    default: {
-      // Verify if switch statement is exhaustive
-      checkResult satisfies never;
-    }
+    default:
+      throwIfReachable(checkResult);
   }
   return String(checkResult);
 }
