@@ -21,6 +21,9 @@ export function check(args: (string | number | boolean)[], server: BaseServer): 
       Terminal.error(`No script named ${scriptName} is running on the server`);
       return;
     }
-    runningScripts.values().next().value.displayLog();
+    const next = runningScripts.values().next();
+    if (!next.done) {
+      next.value.displayLog();
+    }
   }
 }

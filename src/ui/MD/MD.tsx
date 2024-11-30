@@ -46,7 +46,7 @@ export function MD(props: { pageFilePath: FilePath; top: number }): React.ReactE
       remarkPlugins={[remarkGfm, remarkMath]}
       rehypePlugins={[rehypeMathjax]}
     >
-      {String(pageContent)}
+      {pageContent}
     </ReactMarkdown>
   );
 }

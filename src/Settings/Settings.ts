@@ -3,6 +3,46 @@ import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
 import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
+import { objectAssert } from "../utils/helpers/typeAssertion";
+
+/**
+ * This function won't be able to catch **all** invalid hostnames, and it's still fine. In order to validate a hostname
+ * properly, we need to import a good validation library or write one by ourselves. I think that it's unnecessary.
+ *
+ * Some invalid hostnames that we don't catch:
+ * - Invalid/missing TLD: "abc".
+ * - Use space character: "a a.com"
+ * - Use non-http schemes in the hostname: "ftp://a.com"
+ * - etc.
+ */
+export function isValidConnectionHostname(hostname: string): boolean {
+  /**
+   * We expect a hostname, but the player may mistakenly put other unexpected things. We will try to catch common mistakes:
+   * - Specify a scheme: http or https.
+   * - Specify a port.
+   * - Specify a pathname or search params.
+   */
+  try {
+    // Check scheme.
+    if (hostname.startsWith("http://") || hostname.startsWith("https://")) {
+      return false;
+    }
+    // Parse to a URL with a default scheme.
+    const url = new URL(`http://${hostname}`);
+    // Check port, pathname, and search params.
+    if (url.port !== "" || url.pathname !== "/" || url.search !== "") {
+      return false;
+    }
+  } catch (e) {
+    console.error(`Invalid hostname: ${hostname}`, e);
+    return false;
+  }
+  return true;
+}
+
+export function isValidConnectionPort(port: number): boolean {
+  return Number.isFinite(port) && port > 0 && port <= 65535;
+}
 
 /** The current options the player has customized to their play style. */
 export const Settings = {
@@ -98,7 +138,7 @@ export const Settings = {
   MonacoFontFamily: "JetBrainsMono",
   /** Text size for script editor. */
   MonacoFontSize: 20,
-  /** Whether to use font ligatures */
+  /** Whether to use font ligatures in the script editor */
   MonacoFontLigatures: false,
   /** Whether to use Vim mod by default in the script editor */
   MonacoDefaultToVim: false,
@@ -118,12 +158,27 @@ export const Settings = {
   disableSuffixes: false,
 
   load(saveString: string) {
-    const save = JSON.parse(saveString);
+    const save: unknown = JSON.parse(saveString);
+    objectAssert(save);
     save.theme && Object.assign(Settings.theme, save.theme);
     save.styles && Object.assign(Settings.styles, save.styles);
     save.overview && Object.assign(Settings.overview, save.overview);
     save.EditorTheme && Object.assign(Settings.EditorTheme, save.EditorTheme);
-    delete save.theme, save.styles, save.overview, save.EditorTheme;
-    Object.assign(Settings, save);
+    Object.assign(Settings, save, {
+      theme: Settings.theme,
+      styles: Settings.styles,
+      overview: Settings.overview,
+      EditorTheme: Settings.EditorTheme,
+    });
+    /**
+     * The hostname and port of RFA have not been validated properly, so the save data may contain invalid data. In that
+     * case, we set them to the default value.
+     */
+    if (!isValidConnectionHostname(Settings.RemoteFileApiAddress)) {
+      Settings.RemoteFileApiAddress = "localhost";
+    }
+    if (!isValidConnectionPort(Settings.RemoteFileApiPort)) {
+      Settings.RemoteFileApiPort = 0;
+    }
   },
 };

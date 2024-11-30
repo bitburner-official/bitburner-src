@@ -1,6 +1,6 @@
 import type { GoScore } from "../Types";
 import React from "react";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, Box } from "@mui/material";
 
 import { GoOpponent, GoColor } from "@enums";
 import { Modal } from "../../ui/React/Modal";
@@ -13,11 +13,19 @@ interface Props {
   onClose: () => void;
   finalScore: GoScore;
   newSubnet: () => void;
+  showScoreExplanation: () => void;
   opponent: GoOpponent;
 }
 
-export const GoScoreModal = ({ open, onClose, finalScore, newSubnet, opponent }: Props): React.ReactElement => {
-  const { classes } = boardStyles();
+export const GoScoreModal = ({
+  open,
+  onClose,
+  finalScore,
+  newSubnet,
+  showScoreExplanation,
+  opponent,
+}: Props): React.ReactElement => {
+  const { classes } = boardStyles({});
 
   const blackScore = finalScore[GoColor.black];
   const whiteScore = finalScore[GoColor.white];
@@ -47,7 +55,10 @@ export const GoScoreModal = ({ open, onClose, finalScore, newSubnet, opponent }:
           ) : (
             ""
           )}
-          <Button onClick={newSubnet}>New Subnet</Button>
+          <Box className={classes.inlineFlexBox}>
+            <Button onClick={showScoreExplanation}>Score Explanation</Button>
+            <Button onClick={newSubnet}>New Subnet</Button>
+          </Box>
         </div>
       </>
     </Modal>

@@ -9,14 +9,14 @@ Get black op required rank.
 **Signature:**
 
 ```typescript
-getBlackOpRank(name: string): number;
+getBlackOpRank(name: BladeburnerBlackOpName): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  name | string | Name of BlackOp. Must be an exact match. |
+|  name | [BladeburnerBlackOpName](./bitburner.bladeburnerblackopname.md) | Name of BlackOp. Must be an exact match. |
 
 **Returns:**
 

@@ -1,24 +1,35 @@
 import type { Bladeburner } from "../Bladeburner";
-import type { Availability, ActionIdentifier } from "../Types";
+import type { ActionIdFor, Availability } from "../Types";
 
-import { BladeActionType, BladeBlackOpName } from "@enums";
+import { BladeburnerActionType, BladeburnerBlackOpName } from "@enums";
 import { ActionClass, ActionParams } from "./Action";
 import { operationSkillSuccessBonus, operationTeamSuccessBonus } from "./Operation";
+import { getEnumHelper } from "../../utils/EnumHelper";
+import type { TeamActionWithCasualties } from "./TeamCasualties";
 
 interface BlackOpParams {
-  name: BladeBlackOpName;
+  name: BladeburnerBlackOpName;
   reqdRank: number;
   n: number;
 }
 
-export class BlackOperation extends ActionClass {
-  type: BladeActionType.blackOp = BladeActionType.blackOp;
-  name: BladeBlackOpName;
+export class BlackOperation extends ActionClass implements TeamActionWithCasualties {
+  readonly type: BladeburnerActionType.BlackOp = BladeburnerActionType.BlackOp;
+  readonly name: BladeburnerBlackOpName;
   n: number;
   reqdRank: number;
   teamCount = 0;
-  get id(): ActionIdentifier {
-    return { type: this.type, name: this.name };
+
+  get id() {
+    return BlackOperation.createId(this.name);
+  }
+
+  static createId(name: BladeburnerBlackOpName): ActionIdFor<BlackOperation> {
+    return { type: BladeburnerActionType.BlackOp, name };
+  }
+
+  static IsAcceptedName(name: unknown): name is BladeburnerBlackOpName {
+    return getEnumHelper("BladeburnerBlackOpName").isMember(name);
   }
 
   constructor(params: ActionParams & BlackOpParams) {
@@ -44,6 +55,10 @@ export class BlackOperation extends ActionClass {
   }
 
   getChaosSuccessFactor(): number {
+    return 1;
+  }
+
+  getMinimumCasualties(): number {
     return 1;
   }
 

@@ -4,7 +4,7 @@
 
 ## Corporation.issueDividends() method
 
-Issue dividends
+Issue dividends.
 
 **Signature:**
 
@@ -21,4 +21,8 @@ issueDividends(rate: number): void;
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

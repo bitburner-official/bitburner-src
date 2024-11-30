@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.getProduct() method
 
-Get product data
+Get product data.
 
 **Signature:**
 
@@ -24,5 +24,9 @@ getProduct(divisionName: string, cityName: CityName | `${CityName}`, productName
 
 [Product](./bitburner.product.md)
 
-product data
+Product data
+
+## Remarks
+
+RAM cost: 10 GB
 

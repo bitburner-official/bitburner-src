@@ -43,8 +43,8 @@ export function BuybackSharesModal(props: IProps): React.ReactElement {
       props.onClose();
       props.rerender();
       setShares(NaN);
-    } catch (err) {
-      dialogBoxCreate(`${err}`);
+    } catch (error) {
+      dialogBoxCreate(String(error));
     }
   }
 

@@ -12,12 +12,12 @@ import { getHospitalizationCost } from "../../Hospital/Hospital";
 import { Money } from "../../ui/React/Money";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 
 export function HospitalLocation(): React.ReactElement {
   /** Stores button styling that sets them all to block display */
   const btnStyle = { display: "block" };
-  const rerender = useRerender(200);
+  const rerender = useCycleRerender();
 
   function getHealed(e: React.MouseEvent<HTMLElement>): void {
     if (!e.isTrusted) {

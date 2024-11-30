@@ -6,12 +6,13 @@ import type { Skills as PersonSkills } from "../../PersonObjects/Skills";
 import { addOffset } from "../../utils/helpers/addOffset";
 import { BladeburnerConstants } from "../data/Constants";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
-import { BladeMultName } from "../Enums";
+import { BladeburnerMultName } from "../Enums";
 import { getRecordKeys } from "../../Types/Record";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 
 export interface ActionParams {
   desc: string;
+  successScaling?: string;
   baseDifficulty?: number;
   rewardFac?: number;
   rankGain?: number;
@@ -25,6 +26,7 @@ export interface ActionParams {
 
 export abstract class ActionClass {
   desc = "";
+  successScaling = "";
   // For LevelableActions, the base difficulty can be increased based on action level
   baseDifficulty = 100;
 
@@ -61,6 +63,7 @@ export abstract class ActionClass {
   constructor(params: ActionParams | null = null) {
     if (!params) return;
     this.desc = params.desc;
+    if (params.successScaling) this.successScaling = params.successScaling;
     if (params.baseDifficulty) this.baseDifficulty = addOffset(params.baseDifficulty, 10);
 
     if (params.rankGain) this.rankGain = params.rankGain;
@@ -100,7 +103,7 @@ export abstract class ActionClass {
   getActionTime(bladeburner: Bladeburner, person: Person): number {
     const difficulty = this.getDifficulty();
     let baseTime = difficulty / BladeburnerConstants.DifficultyToTimeFactor;
-    const skillFac = bladeburner.getSkillMult(BladeMultName.actionTime); // Always < 1
+    const skillFac = bladeburner.getSkillMult(BladeburnerMultName.ActionTime); // Always < 1
 
     const effAgility = bladeburner.getEffectiveSkillLevel(person, "agility");
     const effDexterity = bladeburner.getEffectiveSkillLevel(person, "dexterity");
@@ -140,6 +143,7 @@ export abstract class ActionClass {
     function clamp(x: number): number {
       return Math.max(0, Math.min(x, 1));
     }
+
     const est = this.getSuccessChance(bladeburner, person, { est: true });
     const real = this.getSuccessChance(bladeburner, person);
     const diff = Math.abs(real - est);
@@ -175,10 +179,10 @@ export abstract class ActionClass {
     difficulty *= this.getChaosSuccessFactor(inst);
 
     // Factor skill multipliers into success chance
-    competence *= inst.getSkillMult(BladeMultName.successChanceAll);
+    competence *= inst.getSkillMult(BladeburnerMultName.SuccessChanceAll);
     competence *= this.getActionTypeSkillSuccessBonus(inst);
-    if (this.isStealth) competence *= inst.getSkillMult(BladeMultName.successChanceStealth);
-    if (this.isKill) competence *= inst.getSkillMult(BladeMultName.successChanceKill);
+    if (this.isStealth) competence *= inst.getSkillMult(BladeburnerMultName.SuccessChanceStealth);
+    if (this.isKill) competence *= inst.getSkillMult(BladeburnerMultName.SuccessChanceKill);
 
     // Augmentation multiplier
     competence *= person.mults.bladeburner_success_chance;

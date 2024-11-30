@@ -4,7 +4,7 @@
 
 ## Corporation.expandIndustry() method
 
-Expand to a new industry
+Expand to a new industry.
 
 **Signature:**
 
@@ -22,4 +22,8 @@ expandIndustry(industryType: CorpIndustryName, divisionName: string): void;
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

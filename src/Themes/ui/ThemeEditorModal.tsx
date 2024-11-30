@@ -18,6 +18,7 @@ import { UserInterfaceTheme } from "@nsdefs";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { ThemeCollaborate } from "./ThemeCollaborate";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 interface IProps {
   open: boolean;
@@ -81,15 +82,22 @@ export function ThemeEditorModal(props: IProps): React.ReactElement {
 
   function onThemeChange(event: React.ChangeEvent<HTMLInputElement>): void {
     try {
-      const importedTheme = JSON.parse(event.target.value);
-      if (typeof importedTheme !== "object") return;
+      const importedTheme = JSON.parse(event.target.value) as typeof Settings.theme;
+      if (importedTheme == null) {
+        throw new Error("Theme data must not be null or undefined.");
+      }
+      if (typeof importedTheme !== "object") {
+        throw new Error(`Theme data is invalid.`);
+      }
       setCustomTheme(importedTheme);
       for (const key of Object.keys(importedTheme)) {
         Settings.theme[key] = importedTheme[key];
       }
       ThemeEvents.emit();
-    } catch (err) {
-      // ignore
+    } catch (error) {
+      console.error(`Theme data is invalid. Data: ${event.target.value}.`);
+      console.error(error);
+      dialogBoxCreate(`Invalid theme. ${error}`);
     }
   }
 

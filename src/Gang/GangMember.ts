@@ -100,12 +100,6 @@ export class GangMember {
   }
 
   getTask(): GangMemberTask {
-    // TODO unplanned: transfer that to a save file migration function
-    // Backwards compatibility
-    if ((this.task as any) instanceof GangMemberTask) {
-      this.task = (this.task as any).name;
-    }
-
     if (Object.hasOwn(GangMemberTasks, this.task)) {
       return GangMemberTasks[this.task];
     }

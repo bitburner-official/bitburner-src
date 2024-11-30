@@ -4,7 +4,7 @@
 
 ## Corporation.getUpgradeLevel() method
 
-Get the level of a levelable upgrade
+Get the level of a levelable upgrade.
 
 **Signature:**
 
@@ -22,5 +22,9 @@ getUpgradeLevel(upgradeName: string): number;
 
 number
 
-the level of the upgrade
+The level of the upgrade
+
+## Remarks
+
+RAM cost: 10 GB
 

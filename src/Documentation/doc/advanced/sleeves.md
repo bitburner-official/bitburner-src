@@ -51,9 +51,13 @@ Shock affects the amount of experience earned by the sleeve.
 Sleeve shock slowly decreases over time.
 You can further increase the rate at which it decreases by assigning sleeves to the `Shock Recovery` task.
 
-Let `X` be the sleeve's shock and `Y` be the sleeve's synchronization.
-When the sleeve earns experience by performing a task, the sleeve gains `X%` of the amount of experience normally earned by the task.
-The player’s original host consciousness and all of the player's other sleeves earn `Y%` of the experience that the sleeve gained, or `X\*Y %` of the normal experience amount.
+Let `X` be the sleeve's recovery ratio (calculated as `(100 - shock) / 100`), and `Y` be the sleeve's synchronization ratio (calculated as `synchronize / 100`).
+When performing a task would give you `A` experience normally, the sleeve gains `A * X` experience instead.
+
+The player’s original host consciousness earns a fraction of the experience the sleeve gained, namely `A * X * Y`.
+
+Other sleeves also earn the experience. However, their own shock affects this gain.
+Let `Z` be the receiving sleeve's recovery ratio. It earns `A * X * Y * Z` experience.
 
 ## Augmentations
 

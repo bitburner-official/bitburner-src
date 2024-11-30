@@ -18,7 +18,8 @@ import { dialogBoxCreate } from "./React/DialogBox";
 import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 
-import { Page, PageWithContext, IRouter, ComplexPage, PageContext } from "./Router";
+import type { PageWithContext, IRouter, ComplexPage, PageContext } from "./Router";
+import { Page } from "./Router";
 import { Overview } from "./React/Overview";
 import { SidebarRoot } from "../Sidebar/ui/SidebarRoot";
 import { AugmentationsRoot } from "../Augmentation/ui/AugmentationsRoot";
@@ -74,6 +75,7 @@ import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
 import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
+import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 
 const htmlLocation = location;
 
@@ -90,20 +92,18 @@ const useStyles = makeStyles()((theme: Theme) => ({
   },
 }));
 
-const uninitialized = (): void => {
-  throw new Error("Router called before initialization - uninitialized");
-};
-
 const MAX_PAGES_IN_HISTORY = 10;
 
 export let Router: IRouter = {
-  isInitialized: false,
   page: () => {
-    throw new Error("Router called before initialization - page");
+    return Page.LoadingScreen;
   },
-  allowRouting: uninitialized,
-  toPage: () => {
-    throw new Error("Router called before initialization - toPage");
+  allowRouting: () => {
+    throw new Error("Router called before initialization - allowRouting");
+  },
+  hidingMessages: () => true,
+  toPage: (page: Page) => {
+    throw new Error(`Router called before initialization - toPage(${page})`);
   },
   back: () => {
     throw new Error("Router called before initialization - back");
@@ -155,18 +155,32 @@ export function GameRoot(): React.ReactElement {
     for (const server of GetAllServers()) {
       server.runningScriptMap.clear();
     }
-    saveObject.saveGame();
-    setTimeout(() => htmlLocation.reload(), 2000);
+    saveObject
+      .saveGame()
+      .then(() => {
+        setTimeout(() => htmlLocation.reload(), 2000);
+      })
+      .catch((error) => {
+        exceptionAlert(error);
+      });
   }
 
   function attemptedForbiddenRouting(name: string) {
     console.error(`Routing is currently disabled - Attempted router.${name}()`);
   }
 
+  const hiddenPages = new Set([
+    Page.Recovery,
+    Page.ImportSave,
+    Page.BitVerse,
+    Page.Infiltration,
+    Page.BladeburnerCinematic,
+  ]);
+
   Router = {
-    isInitialized: true,
     page: () => pageWithContext.page,
     allowRouting: (value: boolean) => setAllowRoutingCalls(value),
+    hidingMessages: () => hiddenPages.has(pageWithContext.page),
     toPage: (page: Page, context?: PageContext<ComplexPage>) => {
       if (!allowRoutingCalls) return attemptedForbiddenRouting("toPage");
       switch (page) {
@@ -199,32 +213,28 @@ export function GameRoot(): React.ReactElement {
 
   let mainPage = <Typography>Cannot load</Typography>;
   let withSidebar = true;
-  let withPopups = true;
+  const hidePopups = Router.hidingMessages();
   let bypassGame = false;
   switch (pageWithContext.page) {
     case Page.Recovery: {
       mainPage = <RecoveryRoot softReset={softReset} />;
       withSidebar = false;
-      withPopups = false;
       bypassGame = true;
       break;
     }
     case Page.BitVerse: {
       mainPage = <BitverseRoot flume={pageWithContext.flume} quick={pageWithContext.quick} />;
       withSidebar = false;
-      withPopups = false;
       break;
     }
     case Page.Infiltration: {
       mainPage = <InfiltrationRoot location={pageWithContext.location} />;
       withSidebar = false;
-      withPopups = false;
       break;
     }
     case Page.BladeburnerCinematic: {
       mainPage = <BladeburnerCinematic />;
       withSidebar = false;
-      withPopups = false;
       break;
     }
     case Page.Work: {
@@ -330,11 +340,13 @@ export function GameRoot(): React.ReactElement {
     case Page.Options: {
       mainPage = (
         <GameOptionsRoot
-          save={() => saveObject.saveGame()}
+          save={() => {
+            saveObject.saveGame().catch((error) => exceptionAlert(error));
+          }}
           export={() => {
             // Apply the export bonus before saving the game
             onExport();
-            saveObject.exportGame();
+            saveObject.exportGame().catch((error) => exceptionAlert(error));
           }}
           forceKill={killAllScripts}
           softReset={softReset}
@@ -353,7 +365,7 @@ export function GameRoot(): React.ReactElement {
           exportGameFn={() => {
             // Apply the export bonus before saving the game
             onExport();
-            saveObject.exportGame();
+            saveObject.exportGame().catch((error) => exceptionAlert(error));
           }}
           installAugmentationsFn={() => {
             installAugmentations();
@@ -377,13 +389,12 @@ export function GameRoot(): React.ReactElement {
     case Page.ImportSave: {
       mainPage = <ImportSave saveData={pageWithContext.saveData} automatic={!!pageWithContext.automatic} />;
       withSidebar = false;
-      withPopups = false;
       bypassGame = true;
     }
   }
 
   return (
-    <MathJaxContext version={3} src={"dist/ext/MathJax-3.2.2/es5/tex-chtml.js"}>
+    <MathJaxContext version={3} src={__webpack_public_path__ + "mathjax/tex-chtml.js"}>
       <ErrorBoundary key={errorBoundaryKey} softReset={softReset}>
         <BypassWrapper content={bypassGame ? mainPage : null}>
           <HistoryProvider>
@@ -393,7 +404,9 @@ export function GameRoot(): React.ReactElement {
                   !ITutorial.isRunning ? (
                     <CharacterOverview
                       parentOpen={parentOpen}
-                      save={() => saveObject.saveGame()}
+                      save={() => {
+                        saveObject.saveGame().catch((error) => exceptionAlert(error));
+                      }}
                       killScripts={killAllScripts}
                     />
                   ) : (
@@ -410,11 +423,11 @@ export function GameRoot(): React.ReactElement {
                 <Box className={classes.root}>{mainPage}</Box>
               )}
               <Unclickable />
-              <LogBoxManager hidden={!withPopups} />
-              <AlertManager hidden={!withPopups} />
-              <PromptManager hidden={!withPopups} />
-              <FactionInvitationManager hidden={!withPopups} />
-              <Snackbar hidden={!withPopups} />
+              <LogBoxManager hidden={hidePopups} />
+              <AlertManager hidden={hidePopups} />
+              <PromptManager hidden={hidePopups} />
+              <FactionInvitationManager hidden={hidePopups} />
+              <Snackbar hidden={hidePopups} />
               <Apr1 />
             </SnackbarProvider>
           </HistoryProvider>

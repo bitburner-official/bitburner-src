@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-// @ts-expect-error This library does not have types.
 import * as MonacoVim from "monaco-vim";
 import type { editor } from "monaco-editor";
 type IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
@@ -18,8 +17,7 @@ interface IProps {
 }
 
 export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, onSave }: IProps) {
-  // monaco-vim does not have types, so this is an any
-  const [vimEditor, setVimEditor] = useState<any>(null);
+  const [vimEditor, setVimEditor] = useState<ReturnType<typeof MonacoVim.initVimMode> | null>(null);
 
   const statusBarRef = useRef<React.ReactElement | null>(null);
   const rerender = useRerender();
@@ -30,7 +28,6 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
   useEffect(() => {
     // setup monaco-vim
     if (vim && editor && !vimEditor) {
-      // Using try/catch because MonacoVim does not have types.
       try {
         setVimEditor(MonacoVim.initVimMode(editor, statusBarRef, StatusBar, rerender));
         MonacoVim.VimMode.Vim.defineEx("write", "w", function () {
@@ -65,8 +62,7 @@ export function useVimEditor({ editor, vim, onOpenNextTab, onOpenPreviousTab, on
         MonacoVim.VimMode.Vim.mapCommand("gT", "action", "prevTabs", {}, { context: "normal" });
         editor.focus();
       } catch (e) {
-        console.error("An error occurred while loading monaco-vim:");
-        console.error(e);
+        console.error("An error occurred while loading monaco-vim:", e);
       }
     } else if (!vim) {
       // When vim mode is disabled

@@ -1,6 +1,8 @@
 import { GetServer } from "../../Server/AllServers";
 import { editor, Uri } from "monaco-editor";
 import { OpenScript } from "./OpenScript";
+import { getFileType, FileType } from "../../utils/ScriptTransformer";
+import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 
 function getServerCode(scripts: OpenScript[], index: number): string | null {
   const openScript = scripts[index];
@@ -26,7 +28,29 @@ function makeModel(hostname: string, filename: string, code: string) {
     scheme: "file",
     path: `${hostname}/${filename}`,
   });
-  const language = filename.endsWith(".txt") ? "plaintext" : filename.endsWith(".json") ? "json" : "javascript";
+  let language;
+  const fileType = getFileType(filename);
+  switch (fileType) {
+    case FileType.PLAINTEXT:
+      language = "plaintext";
+      break;
+    case FileType.JSON:
+      language = "json";
+      break;
+    case FileType.JS:
+    case FileType.JSX:
+      language = "javascript";
+      break;
+    case FileType.TS:
+    case FileType.TSX:
+      language = "typescript";
+      break;
+    case FileType.NS1:
+      language = "javascript";
+      break;
+    default:
+      throwIfReachable(fileType);
+  }
   //if somehow a model already exist return it
   return editor.getModel(uri) ?? editor.createModel(code, language, uri);
 }

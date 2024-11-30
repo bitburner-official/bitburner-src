@@ -7,7 +7,7 @@ import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 export function tail(commandArray: (string | number | boolean)[], server: BaseServer): void {
   try {
     if (commandArray.length < 1) {
-      Terminal.error("Incorrect number of arguments. Usage: tail [script] [arg1] [arg2]...");
+      Terminal.error("Incorrect number of arguments. Usage: tail [pid] or tail [scriptname] [arg1] [arg2]...");
     } else if (typeof commandArray[0] === "string") {
       const [rawName, ...args] = commandArray;
       const path = Terminal.getFilepath(rawName);
@@ -23,16 +23,20 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
       }
       // Just use the first one (if there are multiple with the same
       // arguments, they can't be distinguished except by pid).
-      LogBoxEvents.emit(candidates.values().next().value);
+      const next = candidates.values().next();
+      if (!next.done) {
+        LogBoxEvents.emit(next.value);
+      }
     } else if (typeof commandArray[0] === "number") {
-      const runningScript = findRunningScriptByPid(commandArray[0], server);
+      const runningScript = findRunningScriptByPid(commandArray[0]);
       if (runningScript == null) {
-        Terminal.error(`No script with PID ${commandArray[0]} is running on the server`);
+        Terminal.error(`No script with PID ${commandArray[0]} is running`);
         return;
       }
       LogBoxEvents.emit(runningScript);
     }
-  } catch (e) {
-    Terminal.error(e + "");
+  } catch (error) {
+    console.error(error);
+    Terminal.error(String(error));
   }
 }

@@ -12,6 +12,7 @@ import { KeyHandler } from "./KeyHandler";
 
 interface Difficulty {
   [key: string]: number;
+
   timer: number;
   size: number;
 }
@@ -106,7 +107,7 @@ export function BribeGame(props: IMinigameProps): React.ReactElement {
   );
 }
 
-function shuffleArray(array: string[]): void {
+export function shuffleArray(array: unknown[]): void {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const temp = array[i];

@@ -1,60 +1,13 @@
 import type { FactionName } from "@enums";
-import { codingContractTypesMetadata, DescriptionFunc, GeneratorFunc, SolverFunc } from "./data/codingcontracttypes";
+import { codingContractTypesMetadata } from "./data/codingcontracttypes";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
 import { CodingContractEvent } from "./ui/React/CodingContractModal";
 import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
-
-/* Represents different types of problems that a Coding Contract can have */
-class CodingContractType {
-  /** Function that generates a description of the problem */
-  desc: DescriptionFunc;
-
-  /** Number that generally represents the problem's difficulty. Bigger numbers = harder */
-  difficulty: number;
-
-  /** A function that randomly generates a valid 'data' for the problem */
-  generate: GeneratorFunc;
-
-  /** Name of the type of problem */
-  name: string;
-
-  /** The maximum number of tries the player gets on this kind of problem before it self-destructs */
-  numTries: number;
-
-  /** Stores a function that checks if the provided answer is correct */
-  solver: SolverFunc;
-
-  constructor(
-    name: string,
-    desc: DescriptionFunc,
-    gen: GeneratorFunc,
-    solver: SolverFunc,
-    diff: number,
-    numTries: number,
-  ) {
-    this.name = name;
-    this.desc = desc;
-    this.generate = gen;
-    this.solver = solver;
-    this.difficulty = diff;
-    this.numTries = numTries;
-  }
-}
+import { objectAssert } from "./utils/helpers/typeAssertion";
 
 /* Contract Types */
-export const CodingContractTypes: Record<string, CodingContractType> = {};
-
-for (const md of codingContractTypesMetadata) {
-  CodingContractTypes[md.name] = new CodingContractType(
-    md.name,
-    md.desc,
-    md.gen,
-    md.solver,
-    md.difficulty,
-    md.numTries,
-  );
-}
+export const CodingContractTypes = Object.fromEntries(codingContractTypesMetadata.map((x) => [x.name, x]));
 
 // Numeric enum
 /** Enum representing the different types of rewards a Coding Contract can give */
@@ -95,8 +48,8 @@ export type ICodingContractReward =
  * The player receives a reward if the problem is solved correctly
  */
 export class CodingContract {
-  /* Relevant data for the contract's problem */
-  data: unknown;
+  /* Relevant state for the contract's problem */
+  state: unknown;
 
   /* Contract's filename */
   fn: ContractFilePath;
@@ -120,16 +73,17 @@ export class CodingContract {
 
     this.fn = path;
     this.type = type;
-    this.data = CodingContractTypes[type].generate();
+    this.state = CodingContractTypes[type].generate();
     this.reward = reward;
   }
 
   getData(): unknown {
-    return this.data;
+    const func = CodingContractTypes[this.type].getData;
+    return func ? func(this.state) : this.state;
   }
 
   getDescription(): string {
-    return CodingContractTypes[this.type].desc(this.data);
+    return CodingContractTypes[this.type].desc(this.getData()).replaceAll("&nbsp;", " ");
   }
 
   getDifficulty(): number {
@@ -137,15 +91,15 @@ export class CodingContract {
   }
 
   getMaxNumTries(): number {
-    return CodingContractTypes[this.type].numTries;
+    return CodingContractTypes[this.type].numTries ?? 10;
   }
 
   getType(): string {
-    return CodingContractTypes[this.type].name;
+    return this.type;
   }
 
   isSolution(solution: string): boolean {
-    return CodingContractTypes[this.type].solver(this.data, solution);
+    return CodingContractTypes[this.type].solver(this.state, solution);
   }
 
   /** Creates a popup to prompt the player to solve the problem */
@@ -174,6 +128,12 @@ export class CodingContract {
 
   /** Initializes a CodingContract from a JSON save state. */
   static fromJSON(value: IReviverValue): CodingContract {
+    objectAssert(value.data);
+    // In previous versions, there was a data field instead of a state field.
+    if ("data" in value.data) {
+      value.data.state = value.data.data;
+      delete value.data.data;
+    }
     return Generic_fromJSON(CodingContract, value.data);
   }
 }

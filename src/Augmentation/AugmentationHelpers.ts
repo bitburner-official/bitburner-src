@@ -12,6 +12,7 @@ import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { mergeMultipliers } from "../PersonObjects/Multipliers";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
+import { prestigeWorkerScripts } from "../NetscriptWorker";
 
 const soaAugmentationNames = [
   AugmentationName.BeautyOfAphrodite,
@@ -26,7 +27,7 @@ const soaAugmentationNames = [
 ];
 
 export function getBaseAugmentationPriceMultiplier(): number {
-  return CONSTANTS.MultipleAugMultiplier * [1, 0.96, 0.94, 0.93][Player.sourceFileLvl(11)];
+  return CONSTANTS.MultipleAugMultiplier * [1, 0.96, 0.94, 0.93][Player.activeSourceFileLvl(11)];
 }
 export function getGenericAugmentationPriceMultiplier(): number {
   const queuedNonSoAAugmentationList = Player.queuedAugmentations.filter((augmentation) => {
@@ -67,6 +68,10 @@ export function installAugmentations(force?: boolean): boolean {
     dialogBoxCreate("You have not purchased any Augmentations to install!");
     return false;
   }
+
+  // We must kill all scripts before installing augmentations.
+  prestigeWorkerScripts();
+
   let augmentationList = "";
   let nfgIndex = -1;
   for (let i = Player.queuedAugmentations.length - 1; i >= 0; i--) {
@@ -93,7 +98,7 @@ export function installAugmentations(force?: boolean): boolean {
     augmentationList += aug.name + level + "\n";
   }
   Player.queuedAugmentations = [];
-  if (!force) {
+  if (!force && augmentationList !== "") {
     dialogBoxCreate(
       "You slowly drift to sleep as scientists put you under in order " +
         "to install the following Augmentations:\n" +

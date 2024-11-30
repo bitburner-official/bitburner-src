@@ -98,12 +98,9 @@ export function findRunningScripts(
   return server.runningScriptMap.get(scriptKey(path, args)) ?? null;
 }
 
-//Returns a RunningScript object matching the pid on the
-//designated server, and false otherwise
-export function findRunningScriptByPid(pid: number, server: BaseServer): RunningScript | null {
+//Returns a RunningScript object with the given pid, or null
+export function findRunningScriptByPid(pid: number): RunningScript | null {
   const ws = workerScripts.get(pid);
-  // Return null if no ws found or if it's on a different server.
   if (!ws) return null;
-  if (ws.scriptRef.server !== server.hostname) return null;
   return ws.scriptRef;
 }

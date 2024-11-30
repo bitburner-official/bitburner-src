@@ -28,6 +28,7 @@ import { initCircadianModulator } from "./Augmentation/Augmentations";
 import { Go } from "./Go/Go";
 import { calculateExp } from "./PersonObjects/formulas/skill";
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
+import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string) {
@@ -47,6 +48,9 @@ function setInitialExpForPlayer() {
 
 // Prestige by purchasing augmentation
 export function prestigeAugmentation(): void {
+  // We must kill all scripts before doing anything else.
+  prestigeWorkerScripts();
+
   initBitNodeMultipliers();
 
   // Maintain invites to factions with the 'keepOnInstall' flag, and rumors about others
@@ -63,9 +67,6 @@ export function prestigeAugmentation(): void {
   Player.prestigeAugmentation();
   Go.prestigeAugmentation();
 
-  // Delete all Worker Scripts objects
-  prestigeWorkerScripts();
-
   const homeComp = Player.getHomeComputer();
   // Delete all servers except home computer
   prestigeAllServers();
@@ -79,11 +80,11 @@ export function prestigeAugmentation(): void {
     const aug = Augmentations[ownedAug.name];
     Player.gainMoney(aug.startingMoney, "other");
     for (const program of aug.programs) {
-      homeComp.programs.push(program);
+      homeComp.pushProgram(program);
     }
   }
-  if (Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) {
-    homeComp.programs.push(CompletedProgramName.formulas);
+  if (canAccessBitNodeFeature(5)) {
+    homeComp.pushProgram(CompletedProgramName.formulas);
   }
 
   // Re-create foreign servers
@@ -146,7 +147,7 @@ export function prestigeAugmentation(): void {
   if (Player.bitNodeN === 8) {
     Player.money = BitNode8StartingMoney;
   }
-  if (Player.bitNodeN === 8 || Player.sourceFileLvl(8) > 0) {
+  if (canAccessBitNodeFeature(8)) {
     Player.hasWseAccount = true;
     Player.hasTixApiAccess = true;
   }
@@ -169,7 +170,7 @@ export function prestigeAugmentation(): void {
   // Bitnode 13: Church of the Machine God
   if (Player.hasAugmentation(AugmentationName.StaneksGift1, true)) {
     joinFaction(Factions[FactionName.ChurchOfTheMachineGod]);
-  } else if (Player.bitNodeN != 13) {
+  } else if (Player.bitNodeN !== 13) {
     if (Player.augmentations.some((a) => a.name !== AugmentationName.NeuroFluxGovernor)) {
       Factions[FactionName.ChurchOfTheMachineGod].isBanned = true;
     }
@@ -187,12 +188,13 @@ export function prestigeAugmentation(): void {
 
 // Prestige by destroying Bit Node and gaining a Source File
 export function prestigeSourceFile(isFlume: boolean): void {
+  // We must kill all scripts before doing anything else.
+  prestigeWorkerScripts();
+
   initBitNodeMultipliers();
 
   Player.prestigeSourceFile();
   Go.prestigeSourceFile();
-
-  prestigeWorkerScripts(); // Delete all Worker Scripts objects
 
   const homeComp = Player.getHomeComputer();
 
@@ -215,9 +217,9 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // Re-create foreign servers
   initForeignServers(Player.getHomeComputer());
 
-  if (Player.sourceFileLvl(9) >= 2) {
+  if (Player.activeSourceFileLvl(9) >= 2) {
     homeComp.setMaxRam(128);
-  } else if (Player.sourceFileLvl(1) > 0) {
+  } else if (Player.activeSourceFileLvl(1) > 0) {
     homeComp.setMaxRam(32);
   } else {
     homeComp.setMaxRam(8);
@@ -234,10 +236,10 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
 
   // Give levels of NeuroFluxGovernor for Source-File 12. Must be done here before Augmentations are recalculated
-  if (Player.sourceFileLvl(12) > 0) {
+  if (Player.activeSourceFileLvl(12) > 0) {
     Player.augmentations.push({
       name: AugmentationName.NeuroFluxGovernor,
-      level: Player.sourceFileLvl(12),
+      level: Player.activeSourceFileLvl(12),
     });
   }
 
@@ -246,8 +248,8 @@ export function prestigeSourceFile(isFlume: boolean): void {
   Player.reapplyAllAugmentations();
   Player.reapplyAllSourceFiles();
 
-  if (Player.sourceFileLvl(5) > 0 || Player.bitNodeN === 5) {
-    homeComp.programs.push(CompletedProgramName.formulas);
+  if (canAccessBitNodeFeature(5)) {
+    homeComp.pushProgram(CompletedProgramName.formulas);
   }
 
   // BitNode 3: Corporatocracy
@@ -255,8 +257,9 @@ export function prestigeSourceFile(isFlume: boolean): void {
     // Easiest way to comply with type constraint, instead of revalidating the enum member's file path
     homeComp.messages.push(LiteratureName.CorporationManagementHandbook);
     delayedDialog(
-      "You received a copy of the Corporation Management Handbook on your home computer. " +
-        "Read it if you need help getting started with Corporations!",
+      "You received a copy of the Corporation Management Handbook on your home computer. It's a short introduction for " +
+        "managing Corporation.\n\nYou should check the in-game Corporation documentation in the Documentation tab " +
+        "(Documentation -> Advanced Mechanics -> Corporation). It's the most useful and up-to-date resource for managing Corporation.",
     );
   }
 
@@ -269,7 +272,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   if (Player.bitNodeN === 8) {
     Player.money = BitNode8StartingMoney;
   }
-  if (Player.bitNodeN === 8 || Player.sourceFileLvl(8) > 0) {
+  if (Player.bitNodeN === 8 || Player.activeSourceFileLvl(8) > 0) {
     Player.hasWseAccount = true;
     Player.hasTixApiAccess = true;
   }
@@ -282,7 +285,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
 
   // BitNode 12: The Recursion
-  if (Player.bitNodeN === 12 && Player.sourceFileLvl(12) > 100) {
+  if (Player.bitNodeN === 12 && Player.activeSourceFileLvl(12) > 100) {
     delayedDialog("Saynt_Garmo is watching you");
   }
 
@@ -301,7 +304,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
 
   // Source-File 9 (level 3) effect
   // also now applies when entering bn9 until install
-  if (Player.sourceFileLvl(9) >= 3 || Player.bitNodeN === 9) {
+  if ((Player.activeSourceFileLvl(9) >= 3 || Player.bitNodeN === 9) && !Player.bitNodeOptions.disableHacknetServer) {
     const hserver = Player.createHacknetServer();
 
     hserver.level = 100;
@@ -319,11 +322,19 @@ export function prestigeSourceFile(isFlume: boolean): void {
   staneksGift.prestigeSourceFile();
 
   // Gain int exp
-  if (Player.sourceFileLvl(5) !== 0 && !isFlume) Player.gainIntelligenceExp(300);
+  if (Player.activeSourceFileLvl(5) !== 0 && !isFlume) {
+    Player.gainIntelligenceExp(300);
+  }
 
   // Clear recent scripts
   recentScripts.splice(0, recentScripts.length);
   resetPidCounter();
 
   setInitialExpForPlayer();
+
+  if (!isFlume && Player.sourceFiles.size === 1 && Player.sourceFileLvl(1) === 1) {
+    delayedDialog(
+      "Congratulations on destroying your first BitNode! Make sure to check the Documentation tab. Many pages are unlocked now.",
+    );
+  }
 }

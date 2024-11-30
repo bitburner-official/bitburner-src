@@ -7,12 +7,13 @@ import { HacknetServer } from "../Hacknet/HacknetServer";
 import { IMinMaxRange } from "../types";
 import { createRandomIp } from "../utils/IPAddress";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
-import { Reviver } from "../utils/JSONReviver";
+import { Reviver } from "../utils/GenericReviver";
 import { SpecialServers } from "./data/SpecialServers";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
+import { objectAssert } from "../utils/helpers/typeAssertion";
 
 /**
  * Map of all Servers that exist in the game
@@ -22,24 +23,10 @@ import "../Script/RunningScript"; // For reviver side-effect
 let AllServers: Record<string, Server | HacknetServer> = {};
 
 function GetServerByIP(ip: string): BaseServer | undefined {
-  for (const key of Object.keys(AllServers)) {
-    const server = AllServers[key];
+  for (const server of Object.values(AllServers)) {
     if (server.ip !== ip) continue;
     return server;
   }
-}
-
-//Returns server object with corresponding hostname
-//    Relatively slow, would rather not use this a lot
-function GetServerByHostname(hostname: string): BaseServer | null {
-  for (const key of Object.keys(AllServers)) {
-    const server = AllServers[key];
-    if (server.hostname == hostname) {
-      return server;
-    }
-  }
-
-  return null;
 }
 
 //Get server by IP or hostname. Returns null if invalid
@@ -48,15 +35,40 @@ export function GetServer(s: string): BaseServer | null {
     const server = AllServers[s];
     if (server) return server;
   }
-
-  if (!isIPAddress(s)) return GetServerByHostname(s);
-
+  if (!isIPAddress(s)) return null;
   const ipserver = GetServerByIP(s);
   if (ipserver !== undefined) {
     return ipserver;
   }
 
   return null;
+}
+
+/**
+ * In our codebase, we usually have to call GetServer() like this:
+ * ```
+ * const server = GetServer(hostname);
+ * if (!server) {
+ *   throw new Error("Error message");
+ * }
+ * // Use server
+ * ```
+ * With this utility function, we don't need to write boilerplate code.
+ */
+export function GetServerOrThrow(serverId: string): BaseServer {
+  const server = GetServer(serverId);
+  if (!server) {
+    throw new Error(`Server ${serverId} does not exist.`);
+  }
+  return server;
+}
+
+//Get server by IP or hostname. Returns null if invalid or unreachable.
+export function GetReachableServer(s: string): BaseServer | null {
+  const server = GetServer(s);
+  if (server === null) return server;
+  if (server.serversOnNetwork.length === 0) return null;
+  return server;
 }
 
 export function GetAllServers(): BaseServer[] {
@@ -71,6 +83,7 @@ export function DeleteServer(serverkey: string): void {
   for (const key of Object.keys(AllServers)) {
     const server = AllServers[key];
     if (server.ip !== serverkey && server.hostname !== serverkey) continue;
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete AllServers[key];
     break;
   }
@@ -108,6 +121,7 @@ export function AddToAllServers(server: Server | HacknetServer): void {
 
 export const renameServer = (hostname: string, newName: string): void => {
   AllServers[newName] = AllServers[hostname];
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   delete AllServers[hostname];
 };
 
@@ -196,13 +210,22 @@ export function initForeignServers(homeComputer: Server): void {
 
 export function prestigeAllServers(): void {
   for (const member of Object.keys(AllServers)) {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete AllServers[member];
   }
   AllServers = {};
 }
 
 export function loadAllServers(saveString: string): void {
-  AllServers = JSON.parse(saveString, Reviver);
+  const allServersData: unknown = JSON.parse(saveString, Reviver);
+  objectAssert(allServersData);
+  for (const [serverName, server] of Object.entries(allServersData)) {
+    if (!(server instanceof Server) && !(server instanceof HacknetServer)) {
+      throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer.`);
+    }
+  }
+  // We validated the data above, so it's safe to typecast here.
+  AllServers = allServersData as typeof AllServers;
 }
 
 export function saveAllServers(): string {

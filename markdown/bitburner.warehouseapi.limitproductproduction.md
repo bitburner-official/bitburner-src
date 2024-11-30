@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.limitProductProduction() method
 
-Limit Product Production.
+Limit product production.
 
 **Signature:**
 
@@ -24,4 +24,8 @@ limitProductProduction(divisionName: string, city: CityName | `${CityName}`, pro
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

@@ -1,10 +1,17 @@
-import { Play, SimpleBoard, SimpleOpponentStats } from "../Types";
+import { Board, BoardState, Play, SimpleBoard, SimpleOpponentStats } from "../Types";
 
 import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
 import { Go, GoEvents } from "../Go";
-import { getNewBoardState, makeMove, passTurn, updateCaptures, updateChains } from "../boardState/boardState";
-import { makeAIMove } from "../boardAnalysis/goAI";
+import {
+  getNewBoardState,
+  getNewBoardStateFromSimpleBoard,
+  makeMove,
+  passTurn,
+  updateCaptures,
+  updateChains,
+} from "../boardState/boardState";
+import { makeAIMove, resetAI } from "../boardAnalysis/goAI";
 import {
   evaluateIfMoveIsValid,
   getControlledSpace,
@@ -150,8 +157,8 @@ export async function getOpponentNextMove(logOpponentMove = true, logger: (s: st
 /**
  * Returns a grid of booleans indicating if the coordinates at that location are a valid move for the player (black pieces)
  */
-export function getValidMoves() {
-  const boardState = Go.currentGame;
+export function getValidMoves(_boardState?: BoardState) {
+  const boardState = _boardState || Go.currentGame;
   // Map the board matrix into true/false values
   return boardState.board.map((column, x) =>
     column.reduce((validityArray: boolean[], point, y) => {
@@ -165,10 +172,11 @@ export function getValidMoves() {
 /**
  * Returns a grid with an ID for each contiguous chain of same-state nodes (excluding dead/offline nodes)
  */
-export function getChains() {
+export function getChains(_board?: Board) {
+  const board = _board || Go.currentGame.board;
   const chains: string[] = [];
   // Turn the internal chain IDs into nice consecutive numbers for display to the player
-  return Go.currentGame.board.map((column) =>
+  return board.map((column) =>
     column.reduce((chainIdArray: (number | null)[], point) => {
       if (!point) {
         chainIdArray.push(null);
@@ -186,8 +194,9 @@ export function getChains() {
 /**
  * Returns a grid of numbers representing the number of open-node connections each player-owned chain has.
  */
-export function getLiberties() {
-  return Go.currentGame.board.map((column) =>
+export function getLiberties(_board?: Board) {
+  const board = _board || Go.currentGame.board;
+  return board.map((column) =>
     column.reduce((libertyArray: number[], point) => {
       libertyArray.push(point?.liberties?.length || -1);
       return libertyArray;
@@ -198,8 +207,8 @@ export function getLiberties() {
 /**
  * Returns a grid indicating which player, if any, controls the empty nodes by fully encircling it with their routers
  */
-export function getControlledEmptyNodes() {
-  const board = Go.currentGame.board;
+export function getControlledEmptyNodes(_board?: Board) {
+  const board = _board || Go.currentGame.board;
   const controlled = getControlledSpace(board);
   return controlled.map((column, x: number) =>
     column.reduce((ownedPoints: string, owner: GoColor, y: number) => {
@@ -292,6 +301,7 @@ export function resetBoardState(
   }
 
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
+  resetAI(false);
   GoEvents.emit(); // Trigger a Go UI rerender
   logger(`New game started: ${opponent}, ${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);
@@ -321,10 +331,70 @@ export function getStats() {
   return statDetails;
 }
 
+const boardValidity = {
+  valid: "",
+  badShape: "Invalid boardState: Board must be a square",
+  badType: "Invalid boardState: Board must be an array of strings",
+  badSize: "Invalid boardState: Board must be 5, 7, 9, 13, or 19 in size",
+  badCharacters:
+    'Invalid board state: unknown characters found. "X" represents black pieces, "O" white, "." empty points, and "#" offline nodes.',
+  failedToCreateBoard: "Invalid board state: Failed to create board",
+} as const;
+
+/**
+ * Validate the given SimpleBoard and prior board state (if present) and turn it into a full BoardState with updated analytics
+ */
+export function validateBoardState(
+  error: (s: string) => void,
+  _boardState?: unknown,
+  _priorBoardState?: unknown,
+): BoardState | undefined {
+  const simpleBoard = getSimpleBoardFromUnknown(error, _boardState);
+  const priorSimpleBoard = getSimpleBoardFromUnknown(error, _priorBoardState);
+
+  if (!_boardState || !simpleBoard) {
+    return undefined;
+  }
+
+  try {
+    return getNewBoardStateFromSimpleBoard(simpleBoard, priorSimpleBoard);
+  } catch (e) {
+    error(boardValidity.failedToCreateBoard);
+  }
+}
+
+/**
+ * Check that the given boardState is a valid SimpleBoard, and return it if it is.
+ */
+function getSimpleBoardFromUnknown(error: (arg0: string) => void, _boardState: unknown): SimpleBoard | undefined {
+  if (!_boardState) {
+    return undefined;
+  }
+  if (!Array.isArray(_boardState)) {
+    error(boardValidity.badType);
+  }
+  if ((_boardState as unknown[]).find((row) => typeof row !== "string")) {
+    error(boardValidity.badType);
+  }
+
+  const boardState = _boardState as string[];
+
+  if (boardState.find((row) => row.length !== boardState.length)) {
+    error(boardValidity.badShape);
+  }
+  if (![5, 7, 9, 13, 19].includes(boardState.length)) {
+    error(boardValidity.badSize);
+  }
+  if (boardState.find((row) => row.match(/[^XO#.]/))) {
+    error(boardValidity.badCharacters);
+  }
+  return boardState as SimpleBoard;
+}
+
 /** Validate singularity access by throwing an error if the player does not have access. */
 export function checkCheatApiAccess(error: (s: string) => void): void {
-  const hasSourceFile = Player.sourceFileLvl(14) > 1;
-  const isBitnodeFourteenTwo = Player.sourceFileLvl(14) === 1 && Player.bitNodeN === 14;
+  const hasSourceFile = Player.activeSourceFileLvl(14) > 1;
+  const isBitnodeFourteenTwo = Player.activeSourceFileLvl(14) === 1 && Player.bitNodeN === 14;
   if (!hasSourceFile && !isBitnodeFourteenTwo) {
     error(
       `The go.cheat API requires Source-File 14.2 to run, a power up you obtain later in the game.
@@ -387,7 +457,7 @@ export async function determineCheatSuccess(
  * 15: +31,358,645%
  */
 export function cheatSuccessChance(cheatCount: number) {
-  const sourceFileBonus = Player.sourceFileLvl(14) === 3 ? 0.25 : 0;
+  const sourceFileBonus = Player.activeSourceFileLvl(14) === 3 ? 0.25 : 0;
   const cheatCountScalar = (0.7 - 0.02 * cheatCount) ** cheatCount;
   return Math.max(Math.min(0.6 * cheatCountScalar * Player.mults.crime_success + sourceFileBonus, 1), 0);
 }
@@ -402,7 +472,11 @@ export function cheatRemoveRouter(
   successRngOverride?: number,
   ejectRngOverride?: number,
 ): Promise<Play> {
-  const point = Go.currentGame.board[x][y]!;
+  const point = Go.currentGame.board[x][y];
+  if (!point) {
+    logger(`Cheat failed. The point ${x},${y} is already offline.`);
+    return Go.nextTurn;
+  }
   return determineCheatSuccess(
     logger,
     () => {
@@ -428,8 +502,13 @@ export function cheatPlayTwoMoves(
   successRngOverride?: number,
   ejectRngOverride?: number,
 ): Promise<Play> {
-  const point1 = Go.currentGame.board[x1][y1]!;
-  const point2 = Go.currentGame.board[x2][y2]!;
+  const point1 = Go.currentGame.board[x1][y1];
+  const point2 = Go.currentGame.board[x2][y2];
+
+  if (!point1 || !point2) {
+    logger(`Cheat failed. One of the points ${x1},${y1} or ${x2},${y2} is already offline.`);
+    return Go.nextTurn;
+  }
 
   return determineCheatSuccess(
     logger,

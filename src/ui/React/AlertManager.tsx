@@ -3,7 +3,7 @@ import { EventEmitter } from "../../utils/EventEmitter";
 import { Modal } from "./Modal";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { sha256 } from "js-sha256";
+import { cyrb53 } from "../../utils/HashUtils";
 
 export const AlertEvents = new EventEmitter<[string | JSX.Element]>();
 
@@ -17,8 +17,8 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
   useEffect(
     () =>
       AlertEvents.subscribe((text: string | JSX.Element) => {
+        const hash = getMessageHash(text);
         setAlerts((old) => {
-          const hash = getMessageHash(text);
           if (old.some((a) => a.hash === hash)) {
             return old;
           }
@@ -47,8 +47,25 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
   const alertMessage = alerts[0]?.text || "No alert to show";
 
   function getMessageHash(text: string | JSX.Element): string {
-    if (typeof text === "string") return sha256(text);
-    return sha256(JSON.stringify(text.props));
+    if (typeof text === "string") {
+      return cyrb53(text);
+    }
+    /**
+     * JSON.stringify may throw an error in edge cases. One possible error is "TypeError: Converting circular structure
+     * to JSON". It may happen in very special cases. This is the flow of one of them:
+     * - An error occurred in GameRoot.tsx and we show a warning popup by calling "exceptionAlert" without delaying.
+     * - "exceptionAlert" constructs a React element and passes it via "dialogBoxCreate" -> "AlertEvents.emit".
+     * - When we receive the final React element here, the element's "props" property may contain a circular structure.
+     */
+    let textPropsAsString;
+    try {
+      textPropsAsString = JSON.stringify(text.props);
+    } catch (e) {
+      console.error(e);
+      // Use the current timestamp as the fallback value.
+      textPropsAsString = Date.now().toString();
+    }
+    return cyrb53(textPropsAsString);
   }
 
   function close(): void {

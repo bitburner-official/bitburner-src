@@ -9,15 +9,18 @@ Get the maximum level of an action.
 **Signature:**
 
 ```typescript
-getActionMaxLevel(type: string, name: string): number;
+getActionMaxLevel(
+    type: BladeburnerActionType | `${BladeburnerActionType}`,
+    name: BladeburnerActionName | `${BladeburnerActionName}`,
+  ): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  type | string | Type of action. |
-|  name | string | Name of action. Must be an exact match. |
+|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) \| \`${[BladeburnerActionType](./bitburner.bladeburneractiontype.md)<!-- -->}\` | Type of action. |
+|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) \| \`${[BladeburnerActionName](./bitburner.bladeburneractionname.md)<!-- -->}\` | Name of action. Must be an exact match. |
 
 **Returns:**
 

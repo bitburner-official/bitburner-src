@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.setProductMarketTA2() method
 
-Set market TA 2 for a product.
+Set Market-TA2 for a product.
 
 **Signature:**
 
@@ -18,9 +18,13 @@ setProductMarketTA2(divisionName: string, productName: string, on: boolean): voi
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
 |  productName | string | Name of the product |
-|  on | boolean | market ta enabled |
+|  on | boolean | Use true to enable, false otherwise. |
 
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

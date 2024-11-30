@@ -18,7 +18,9 @@ import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 import { CorruptableText } from "../../ui/React/CorruptableText";
-import { makeAIMove, resolveCurrentTurn } from "../boardAnalysis/goAI";
+import { makeAIMove, resetAI, resolveCurrentTurn } from "../boardAnalysis/goAI";
+import { GoScoreExplanation } from "./GoScoreExplanation";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 interface GoGameboardWrapperProps {
   showInstructions: () => void;
@@ -44,17 +46,25 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   const traditional = Settings.GoTraditionalStyle;
   const [showPriorMove, setShowPriorMove] = useState(false);
   const [scoreOpen, setScoreOpen] = useState(false);
+  const [scoreExplanationOpen, setScoreExplanationOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  const { classes } = boardStyles();
+  const { classes } = boardStyles({});
   const boardSize = boardState.board[0].length;
   const currentPlayer = boardState.previousPlayer === GoColor.white ? GoColor.black : GoColor.white;
   const waitingOnAI = boardState.previousPlayer === GoColor.black && boardState.ai !== GoOpponent.none;
   const score = getScore(boardState);
 
+  // Disable showing prior move if there are no prior moves (if a new game is started while looking at a prior move)
+  useEffect(() => {
+    if (boardState.previousBoards.length === 0) {
+      setShowPriorMove(false);
+    }
+  }, [boardState.previousBoards.length]);
+
   // Do not implement useCallback for this function without ensuring GoGameboard still rerenders for every move
   // Currently this function changing is what triggers a GoGameboard rerender, which is needed
-  async function clickHandler(x: number, y: number) {
+  function clickHandler(x: number, y: number) {
     if (showPriorMove) {
       SnackbarEvents.emit(
         `Currently showing a past board state. Please disable "Show previous move" to continue.`,
@@ -85,7 +95,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     const didUpdateBoard = makeMove(boardState, x, y, currentPlayer);
     if (didUpdateBoard) {
       rerender();
-      takeAiTurn(boardState);
+      takeAiTurn(boardState).catch((error) => exceptionAlert(error));
     }
   }
 
@@ -104,7 +114,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     }
 
     setTimeout(() => {
-      takeAiTurn(boardState);
+      takeAiTurn(boardState).catch((error) => exceptionAlert(error));
     }, 100);
   }
 
@@ -137,11 +147,13 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   function resetState(newBoardSize = boardSize, newOpponent = Go.currentGame.ai) {
     setScoreOpen(false);
     setSearchOpen(false);
+    setShowPriorMove(false);
     if (boardState.previousPlayer !== null && boardState.previousBoards.length) {
       resetWinstreak(boardState.ai, false);
     }
 
     Go.currentGame = getNewBoardState(newBoardSize, newOpponent, true);
+    resetAI(false);
     rerender();
     resolveCurrentTurn();
   }
@@ -156,9 +168,8 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   }
 
   function showPreviousMove(newValue: boolean) {
-    if (boardState.previousBoards.length) {
-      setShowPriorMove(newValue);
-    }
+    // Only show prior move if there is previous moves to show
+    setShowPriorMove(!!boardState.previousBoards.length && newValue);
   }
 
   function setTraditional(newValue: boolean) {
@@ -203,7 +214,9 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
         newSubnet={() => newSubnet()}
         finalScore={score}
         opponent={Go.currentGame.ai}
-      ></GoScoreModal>
+        showScoreExplanation={() => setScoreExplanationOpen(true)}
+      />
+      <GoScoreExplanation onClose={() => setScoreExplanationOpen(false)} open={scoreExplanationOpen} />
       <div className={classes.boardFrame}>
         {traditional ? (
           ""

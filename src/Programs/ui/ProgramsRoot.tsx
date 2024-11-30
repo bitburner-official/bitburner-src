@@ -11,12 +11,12 @@ import { Settings } from "../../Settings/Settings";
 
 import { Programs } from "../Programs";
 import { CreateProgramWork, isCreateProgramWork } from "../../Work/CreateProgramWork";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 
 export const ProgramsSeen = new Set<string>();
 
 export function ProgramsRoot(): React.ReactElement {
-  useRerender(200);
+  useCycleRerender();
 
   const programs = [...Object.values(Programs)]
     .filter((prog) => {

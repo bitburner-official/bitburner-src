@@ -1,7 +1,7 @@
-import React from "react";
+import type React from "react";
 
-import { Page } from "../ui/Router";
-import { hash } from "../hash/hash";
+import type { Page } from "../ui/Router";
+import { commitHash } from "./helpers/commitHash";
 import { CONSTANTS } from "../Constants";
 
 enum GameEnv {
@@ -16,7 +16,7 @@ enum Platform {
 
 interface GameVersion {
   version: string;
-  hash: string;
+  commitHash: string;
 
   toDisplay: () => string;
 }
@@ -30,7 +30,7 @@ interface BrowserFeatures {
 }
 
 interface IErrorMetadata {
-  error: Error;
+  error: Record<string, unknown>;
   errorInfo?: React.ErrorInfo;
   page?: Page;
 
@@ -54,13 +54,40 @@ export interface IErrorData {
 
 export const newIssueUrl = `https://github.com/bitburner-official/bitburner-src/issues/new`;
 
-function getErrorMetadata(error: Error, errorInfo?: React.ErrorInfo, page?: Page): IErrorMetadata {
+export function parseUnknownError(error: unknown): {
+  errorAsString: string;
+  stack?: string;
+  causeAsString?: string;
+  causeStack?: string;
+} {
+  const errorAsString = String(error);
+  let stack: string | undefined = undefined;
+  let causeAsString: string | undefined = undefined;
+  let causeStack: string | undefined = undefined;
+  if (error instanceof Error) {
+    stack = error.stack;
+    if (error.cause != null) {
+      causeAsString = String(error.cause);
+      if (error.cause instanceof Error) {
+        causeStack = error.cause.stack;
+      }
+    }
+  }
+  return {
+    errorAsString,
+    stack,
+    causeAsString,
+    causeStack,
+  };
+}
+
+export function getErrorMetadata(error: unknown, errorInfo?: React.ErrorInfo, page?: Page): IErrorMetadata {
   const isElectron = navigator.userAgent.toLowerCase().includes(" electron/");
   const env = process.env.NODE_ENV === "development" ? GameEnv.Development : GameEnv.Production;
   const version: GameVersion = {
     version: CONSTANTS.VersionString,
-    hash: hash(),
-    toDisplay: () => `v${CONSTANTS.VersionString} (${hash()})`,
+    commitHash: commitHash(),
+    toDisplay: () => `v${CONSTANTS.VersionString} (${commitHash()})`,
   };
   const features: BrowserFeatures = {
     userAgent: navigator.userAgent,
@@ -70,26 +97,40 @@ function getErrorMetadata(error: Error, errorInfo?: React.ErrorInfo, page?: Page
     doNotTrack: navigator.doNotTrack,
     indexedDb: !!window.indexedDB,
   };
+  const errorObj = typeof error === "object" && error !== null ? (error as Record<string, unknown>) : {};
   const metadata: IErrorMetadata = {
     platform: isElectron ? Platform.Steam : Platform.Browser,
     environment: env,
     version,
     features,
-    error,
+    error: errorObj,
     errorInfo,
     page,
   };
   return metadata;
 }
 
-export function getErrorForDisplay(error: Error, errorInfo?: React.ErrorInfo, page?: Page): IErrorData {
+export function getErrorForDisplay(error: unknown, errorInfo?: React.ErrorInfo, page?: Page): IErrorData {
   const metadata = getErrorMetadata(error, errorInfo, page);
-  const fileName = (metadata.error as any).fileName;
+  const errorData = parseUnknownError(error);
+  const fileName = String(metadata.error.fileName);
   const features =
     `lang=${metadata.features.language} cookiesEnabled=${metadata.features.cookiesEnabled.toString()}` +
     ` doNotTrack=${metadata.features.doNotTrack ?? "null"} indexedDb=${metadata.features.indexedDb.toString()}`;
 
   const title = `${metadata.error.name}: ${metadata.error.message} (at "${metadata.page}")`;
+  let causeAndCauseStack = errorData.causeAsString
+    ? `
+### Error cause: ${errorData.causeAsString}
+`
+    : "";
+  if (errorData.causeStack) {
+    causeAndCauseStack += `Cause stack:
+\`\`\`
+${errorData.causeStack}
+\`\`\`
+`;
+  }
   const body = `
 ## ${title}
 
@@ -103,7 +144,7 @@ Please fill this information with details if relevant.
 
 ### Environment
 
-* Error: ${metadata.error.toString() ?? "n/a"}
+* Error: ${errorData.errorAsString ?? "n/a"}
 * Page: ${metadata.page ?? "n/a"}
 * Version: ${metadata.version.toDisplay()}
 * Environment: ${GameEnv[metadata.environment]}
@@ -112,16 +153,16 @@ Please fill this information with details if relevant.
 * Features: ${features}
 * Source: ${fileName ?? "n/a"}
 
-${
-  metadata.environment === GameEnv.Development
-    ? `
 ### Stack Trace
 \`\`\`
-${metadata.errorInfo?.componentStack.toString().trim()}
+${errorData.stack}
 \`\`\`
-`
-    : ""
-}
+${causeAndCauseStack}
+### React Component Stack
+\`\`\`
+${metadata.errorInfo?.componentStack}
+\`\`\`
+
 ### Save
 \`\`\`
 Copy your save here if possible

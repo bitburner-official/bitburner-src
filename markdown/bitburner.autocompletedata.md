@@ -16,14 +16,17 @@ interface AutocompleteData
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [enums](./bitburner.autocompletedata.enums.md) |  | [NSEnums](./bitburner.nsenums.md) |  |
-|  [scripts](./bitburner.autocompletedata.scripts.md) |  | string\[\] |  |
-|  [servers](./bitburner.autocompletedata.servers.md) |  | string\[\] |  |
-|  [txts](./bitburner.autocompletedata.txts.md) |  | string\[\] |  |
+|  [enums](./bitburner.autocompletedata.enums.md) |  | [NSEnums](./bitburner.nsenums.md) | Netscript Enums |
+|  [filename](./bitburner.autocompletedata.filename.md) |  | string | The filename of the script about to be run |
+|  [hostname](./bitburner.autocompletedata.hostname.md) |  | string | The hostname of the server the script would be running on |
+|  [processes](./bitburner.autocompletedata.processes.md) |  | [ProcessInfo](./bitburner.processinfo.md)<!-- -->\[\] | The processes running on the host |
+|  [scripts](./bitburner.autocompletedata.scripts.md) |  | string\[\] | All scripts on the current server |
+|  [servers](./bitburner.autocompletedata.servers.md) |  | string\[\] | All server hostnames |
+|  [txts](./bitburner.autocompletedata.txts.md) |  | string\[\] | All text files on the current server |
 
 ## Methods
 
 |  Method | Description |
 |  --- | --- |
-|  [flags(schema)](./bitburner.autocompletedata.flags.md) |  |
+|  [flags(schema)](./bitburner.autocompletedata.flags.md) | Parses the flags schema on the already inputted flags |
 

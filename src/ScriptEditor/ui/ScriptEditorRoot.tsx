@@ -30,6 +30,10 @@ import { NoOpenScripts } from "./NoOpenScripts";
 import { ScriptEditorContextProvider, useScriptEditorContext } from "./ScriptEditorContext";
 import { useVimEditor } from "./useVimEditor";
 import { useCallback } from "react";
+import { type AST, getFileType, parseAST } from "../../utils/ScriptTransformer";
+import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
+import { hasScriptExtension, isLegacyScript } from "../../Paths/ScriptFilePath";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 interface IProps {
   // Map of filename -> code
@@ -44,7 +48,21 @@ function Root(props: IProps): React.ReactElement {
   const rerender = useRerender();
   const editorRef = useRef<IStandaloneCodeEditor | null>(null);
 
-  const { updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
+  // This is the workaround for a bug in monaco-editor: https://github.com/microsoft/monaco-editor/issues/4455
+  const removeOutlineOfEditor = useCallback(() => {
+    if (!editorRef.current) {
+      return;
+    }
+    const containerDomNode = editorRef.current.getContainerDomNode();
+    const elements = containerDomNode.getElementsByClassName("monaco-editor");
+    if (elements.length === 0) {
+      return;
+    }
+    const editorElement = elements[0];
+    (editorElement as HTMLElement).style.outline = "none";
+  }, [editorRef]);
+
+  const { showRAMError, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
 
   let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
 
@@ -70,7 +88,7 @@ function Root(props: IProps): React.ReactElement {
       }
       const cleanCode = currentScript.code.replace(/\s/g, "");
       const ns1 = "while(true){hack('n00dles');}";
-      const ns2 = `exportasyncfunctionmain(ns){while(true){awaitns.hack('n00dles');}}`;
+      const ns2 = `/**@param{NS}ns*/exportasyncfunctionmain(ns){while(true){awaitns.hack("n00dles");}}`;
       if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
         dialogBoxCreate("Please copy and paste the code from the tutorial!");
         return;
@@ -88,7 +106,9 @@ function Root(props: IProps): React.ReactElement {
     const server = GetServer(currentScript.hostname);
     if (server === null) throw new Error("Server should not be null but it is.");
     server.writeToContentFile(currentScript.path, currentScript.code);
-    if (Settings.SaveGameOnFileSave) saveObject.saveGame();
+    if (Settings.SaveGameOnFileSave) {
+      saveObject.saveGame().catch((error) => exceptionAlert(error));
+    }
     rerender();
   }, [rerender]);
 
@@ -112,11 +132,14 @@ function Root(props: IProps): React.ReactElement {
     return () => document.removeEventListener("keydown", keydown);
   }, [save]);
 
-  function infLoop(newCode: string): void {
-    if (editorRef.current === null || currentScript === null) return;
-    if (!decorations) decorations = editorRef.current.createDecorationsCollection();
-    if (!currentScript.path.endsWith(".js")) return;
-    const possibleLines = checkInfiniteLoop(newCode);
+  function infLoop(ast: AST, code: string): void {
+    if (editorRef.current === null || currentScript === null || isLegacyScript(currentScript.path)) {
+      return;
+    }
+    if (!decorations) {
+      decorations = editorRef.current.createDecorationsCollection();
+    }
+    const possibleLines = checkInfiniteLoop(ast, code);
     if (possibleLines.length !== 0) {
       decorations.set(
         possibleLines.map((awaitWarning) => ({
@@ -131,25 +154,65 @@ function Root(props: IProps): React.ReactElement {
             glyphMarginClassName: "myGlyphMarginClass",
             glyphMarginHoverMessage: {
               value:
-                "Possible infinite loop, await something. If this is a false-positive, use `// @ignore-infinite` to suppress.",
+                "Possible infinite loop, await something. If this is a false positive, use `// @ignore-infinite` to suppress.",
             },
           },
         })),
       );
-    } else decorations.clear();
+    } else {
+      decorations.clear();
+    }
+  }
+
+  function loadAllServerScripts(): void {
+    if (!currentScript) {
+      return;
+    }
+
+    const server = GetServer(currentScript.hostname);
+    if (!server) {
+      return;
+    }
+
+    server.scripts.forEach((s) => {
+      const uri = monaco.Uri.from({
+        scheme: "file",
+        path: `${s.server}/${s.filename}`,
+      });
+
+      const model = monaco.editor.getModel(uri);
+      if (model !== null && !model.isDisposed()) {
+        // there's already a model, don't overwrite
+        return;
+      }
+
+      makeModel(server.hostname, s.filename, s.code);
+    });
   }
 
   const debouncedCodeParsing = debounce((newCode: string) => {
-    infLoop(newCode);
-    updateRAM(
-      !currentScript || currentScript.isTxt ? null : newCode,
-      currentScript && currentScript.path,
-      currentScript && GetServer(currentScript.hostname),
-    );
+    let server;
+    if (!currentScript || !hasScriptExtension(currentScript.path) || !(server = GetServer(currentScript.hostname))) {
+      showRAMError();
+      return;
+    }
+    let ast;
+    try {
+      ast = parseAST(newCode, getFileType(currentScript.path));
+    } catch (error) {
+      showRAMError({
+        errorCode: RamCalculationErrorCode.SyntaxError,
+        errorMessage: error instanceof Error ? error.message : String(error),
+      });
+      return;
+    }
+    infLoop(ast, newCode);
+    updateRAM(ast, currentScript.path, server);
     finishUpdatingRAM();
   }, 300);
 
   const parseCode = (newCode: string) => {
+    loadAllServerScripts();
     startUpdatingRAM();
     debouncedCodeParsing(newCode);
   };
@@ -225,7 +288,9 @@ function Root(props: IProps): React.ReactElement {
     if (!server) throw new Error("Server should not be null but it is.");
     // This server helper already handles overwriting, etc.
     server.writeToContentFile(scriptToSave.path, scriptToSave.code);
-    if (Settings.SaveGameOnFileSave) saveObject.saveGame();
+    if (Settings.SaveGameOnFileSave) {
+      saveObject.saveGame().catch((error) => exceptionAlert(error));
+    }
   }
 
   function currentTabIndex(): number | undefined {
@@ -259,6 +324,7 @@ function Root(props: IProps): React.ReactElement {
       parseCode(currentScript.code);
       editorRef.current.focus();
     }
+    removeOutlineOfEditor();
   }
 
   function onTabClose(index: number): void {
@@ -305,6 +371,7 @@ function Root(props: IProps): React.ReactElement {
       }
     }
     rerender();
+    removeOutlineOfEditor();
   }
 
   function onTabUpdate(index: number): void {

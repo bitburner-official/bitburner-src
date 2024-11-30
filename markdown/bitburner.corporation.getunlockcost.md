@@ -4,7 +4,7 @@
 
 ## Corporation.getUnlockCost() method
 
-Gets the cost to unlock a one time unlockable upgrade
+Get the cost to unlock a one-time unlockable upgrade.
 
 **Signature:**
 
@@ -22,5 +22,9 @@ getUnlockCost(upgradeName: string): number;
 
 number
 
-cost of the upgrade
+Cost of the upgrade
+
+## Remarks
+
+RAM cost: 10 GB
 

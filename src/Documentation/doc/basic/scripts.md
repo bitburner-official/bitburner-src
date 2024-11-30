@@ -1,4 +1,4 @@
-# Before you start -
+# Before you start
 
 It is highly recommended that you have a basic familiarity with programming concepts like [`for`/`while` loops](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for), [conditionals like `if`/`else`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/if...else), [`functions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions),[`arrays`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) and [`variables`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) before starting to write scripts - but you can start with basic skills and learn with practice.
 
@@ -114,7 +114,7 @@ Check how much [RAM](ram.md) a script requires to run with "n" threads
 **nano [script]**
 
 Create/Edit a script.
-The name of a script must end with `.js`, but you can also create `.txt` files.
+The name of a script must end with a script extension (.js, .jsx, .ts, .tsx, .script). You can also create a text file with a text extension (.txt, .json).
 
 **ps**
 

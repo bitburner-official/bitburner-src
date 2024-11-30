@@ -40,7 +40,11 @@ export class Remote {
 }
 
 function handleMessageEvent(this: WebSocket, e: MessageEvent): void {
-  const msg: RFAMessage = JSON.parse(e.data);
+  /**
+   * Validating e.data and the result of JSON.parse() is too troublesome, so we typecast them here. If the data is
+   * invalid, it means the RFA "client" (the tool that the player is using) is buggy, but that's not our problem.
+   */
+  const msg = JSON.parse(e.data as string) as RFAMessage;
 
   if (!msg.method || !RFARequestHandler[msg.method]) {
     const response = new RFAMessage({ error: "Unknown message received", id: msg.id });

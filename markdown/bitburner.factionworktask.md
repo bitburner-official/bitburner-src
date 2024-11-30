@@ -9,8 +9,9 @@ Faction Work
 **Signature:**
 
 ```typescript
-export interface FactionWorkTask 
+export interface FactionWorkTask extends BaseTask 
 ```
+**Extends:** [BaseTask](./bitburner.basetask.md)
 
 ## Remarks
 
@@ -20,7 +21,6 @@ An object representing the current work for a faction
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [cyclesWorked](./bitburner.factionworktask.cyclesworked.md) |  | number |  |
 |  [factionName](./bitburner.factionworktask.factionname.md) |  | string |  |
 |  [factionWorkType](./bitburner.factionworktask.factionworktype.md) |  | [FactionWorkType](./bitburner.factionworktype.md) |  |
 |  [type](./bitburner.factionworktask.type.md) |  | "FACTION" |  |

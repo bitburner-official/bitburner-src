@@ -10,10 +10,10 @@ import { Overview } from "./Overview";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 
 export function CorporationRoot(): React.ReactElement {
-  const rerender = useRerender(200);
+  const rerender = useCycleRerender();
   const [divisionName, setDivisionName] = useState<string | number>("Overview");
 
   const corporation = Player.corporation;

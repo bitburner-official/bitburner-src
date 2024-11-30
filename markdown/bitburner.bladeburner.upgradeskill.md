@@ -9,14 +9,14 @@ Upgrade skill.
 **Signature:**
 
 ```typescript
-upgradeSkill(skillName: string, count?: number): boolean;
+upgradeSkill(skillName: BladeburnerSkillName | `${BladeburnerSkillName}`, count?: number): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  skillName | string | Name of skill to be upgraded. Case-sensitive and must be an exact match. |
+|  skillName | [BladeburnerSkillName](./bitburner.bladeburnerskillname.md) \| \`${[BladeburnerSkillName](./bitburner.bladeburnerskillname.md)<!-- -->}\` | Name of skill to be upgraded. Case-sensitive and must be an exact match. |
 |  count | number | _(Optional)_ Number of times to upgrade the skill. Defaults to 1 if not specified. |
 
 **Returns:**

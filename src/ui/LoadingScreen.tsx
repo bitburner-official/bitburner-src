@@ -9,19 +9,22 @@ import { GameRoot } from "./GameRoot";
 
 import { CONSTANTS } from "../Constants";
 import { ActivateRecoveryMode } from "./React/RecoveryRoot";
-import { hash } from "../hash/hash";
+import { commitHash } from "../utils/helpers/commitHash";
 import { pushGameReady } from "../Electron";
+import initSwc from "@swc/wasm-web";
 
 export function LoadingScreen(): React.ReactElement {
   const [show, setShow] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  const version = `v${CONSTANTS.VersionString} (${hash()})`;
+  const version = `v${CONSTANTS.VersionString} (${commitHash()})`;
   if (process.env.NODE_ENV === "development") {
     document.title = `[dev] Bitburner ${version}`;
   } else {
     document.title = `Bitburner ${version}`;
   }
+
+  document.body.style.fontVariantLigatures = "none";
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -31,20 +34,18 @@ export function LoadingScreen(): React.ReactElement {
   });
 
   useEffect(() => {
-    load().then(async (saveData) => {
-      try {
-        await Engine.load(saveData);
-      } catch (error) {
+    load()
+      .then((saveData) => Promise.all([initSwc(), Engine.load(saveData)]))
+      .then(() => {
+        pushGameReady();
+        setLoaded(true);
+      })
+      .catch(async (error) => {
         console.error(error);
         ActivateRecoveryMode(error);
         await Engine.load("");
         setLoaded(true);
-        return;
-      }
-
-      pushGameReady();
-      setLoaded(true);
-    });
+      });
   }, []);
 
   return loaded ? (

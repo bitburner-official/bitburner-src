@@ -1,28 +1,46 @@
 import React, { useState } from "react";
 import { Button, Link, TextField, Tooltip, Typography } from "@mui/material";
 import { GameOptionsPage } from "./GameOptionsPage";
-import { Settings } from "../../Settings/Settings";
+import { isValidConnectionHostname, isValidConnectionPort, Settings } from "../../Settings/Settings";
 import { ConnectionBauble } from "./ConnectionBauble";
 import { isRemoteFileApiConnectionLive, newRemoteFileApiConnection } from "../../RemoteFileAPI/RemoteFileAPI";
 
 export const RemoteAPIPage = (): React.ReactElement => {
+  const [remoteFileApiHostname, setRemoteFileApiHostname] = useState(Settings.RemoteFileApiAddress);
   const [remoteFileApiPort, setRemoteFileApiPort] = useState(Settings.RemoteFileApiPort);
-  const [remoteFileApiAddress, setRemoteFileApiAddress] = useState(Settings.RemoteFileApiAddress);
 
-  function handleRemoteFileApiPortChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setRemoteFileApiPort(Number(event.target.value));
-    Settings.RemoteFileApiPort = Number(event.target.value);
+  function handleRemoteFileApiHostnameChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    let newValue = event.target.value.trim();
+    // Empty string will be automatically changed to "localhost".
+    if (newValue === "") {
+      newValue = "localhost";
+    }
+    if (!isValidConnectionHostname(newValue)) {
+      return;
+    }
+    setRemoteFileApiHostname(newValue);
+    Settings.RemoteFileApiAddress = newValue;
   }
 
-  function handleRemoteFileApiAddressChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setRemoteFileApiAddress(String(event.target.value));
-    Settings.RemoteFileApiAddress = String(event.target.value);
+  function handleRemoteFileApiPortChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    let newValue = event.target.value.trim();
+    // Empty string will be automatically changed to "0".
+    if (newValue === "") {
+      newValue = "0";
+    }
+    const port = Number.parseInt(newValue);
+    // Disallow invalid ports but still allow the player to set port to 0. Setting it to 0 means that RFA is disabled.
+    if (port !== 0 && !isValidConnectionPort(port)) {
+      return;
+    }
+    setRemoteFileApiPort(port);
+    Settings.RemoteFileApiPort = port;
   }
 
   return (
     <GameOptionsPage title="Remote API">
       <Typography>
-        These settings control the Remote API for bitburner. This is typically used to write scripts using an external
+        These settings control the Remote API for Bitburner. This is typically used to write scripts using an external
         text editor and then upload files to the home server.
       </Typography>
       <Typography>
@@ -37,18 +55,17 @@ export const RemoteAPIPage = (): React.ReactElement => {
       <Tooltip
         title={
           <Typography>
-            This address is used to connect to a Remote API, please ensure that it matches with your Remote API address.
-            Default localhost.
+            This hostname is used to connect to a Remote API, please ensure that it matches with your Remote API
+            hostname. Default: localhost.
           </Typography>
         }
       >
         <TextField
-          key={"remoteAPIAddress"}
           InputProps={{
-            startAdornment: <Typography>Address:&nbsp;</Typography>,
+            startAdornment: <Typography>Hostname:&nbsp;</Typography>,
           }}
-          value={remoteFileApiAddress}
-          onChange={handleRemoteFileApiAddressChange}
+          value={remoteFileApiHostname}
+          onChange={handleRemoteFileApiHostnameChange}
           placeholder="localhost"
           size={"medium"}
         />
@@ -63,10 +80,9 @@ export const RemoteAPIPage = (): React.ReactElement => {
         }
       >
         <TextField
-          key={"remoteAPIPort"}
           InputProps={{
             startAdornment: (
-              <Typography color={remoteFileApiPort > 0 && remoteFileApiPort <= 65535 ? "success" : "error"}>
+              <Typography color={isValidConnectionPort(remoteFileApiPort) ? "success" : "error"}>
                 Port:&nbsp;
               </Typography>
             ),

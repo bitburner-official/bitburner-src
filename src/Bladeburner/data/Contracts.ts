@@ -1,17 +1,19 @@
-import { BladeContractName } from "@enums";
+import { BladeburnerContractName } from "@enums";
 import { Contract } from "../Actions/Contract";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 import { assertLoadingType } from "../../utils/TypeAssertion";
 
-export function createContracts(): Record<BladeContractName, Contract> {
+export function createContracts(): Record<BladeburnerContractName, Contract> {
   return {
-    [BladeContractName.tracking]: new Contract({
-      name: BladeContractName.tracking,
+    [BladeburnerContractName.Tracking]: new Contract({
+      name: BladeburnerContractName.Tracking,
       desc:
         "Identify and locate Synthoids. This contract involves reconnaissance and information-gathering ONLY. Do NOT " +
         "engage. Stealth is of the utmost importance.\n\n" +
         "Successfully completing Tracking contracts will slightly improve your Synthoid population estimate for whatever " +
         "city you are currently in.",
+      successScaling:
+        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Charisma. Unaffected by Hacking skill.",
       baseDifficulty: 125,
       difficultyFac: 1.02,
       rewardFac: 1.041,
@@ -39,12 +41,14 @@ export function createContracts(): Record<BladeContractName, Contract> {
       growthFunction: () => getRandomIntInclusive(5, 75) / 10,
       minCount: 25,
     }),
-    [BladeContractName.bountyHunter]: new Contract({
-      name: BladeContractName.bountyHunter,
+    [BladeburnerContractName.BountyHunter]: new Contract({
+      name: BladeburnerContractName.BountyHunter,
       desc:
         "Hunt down and capture fugitive Synthoids. These Synthoids are wanted alive.\n\n" +
         "Successfully completing a Bounty Hunter contract will lower the population in your current city, and will also " +
         "increase its chaos level.",
+      successScaling:
+        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Charisma. Unaffected by Hacking skill.",
       baseDifficulty: 250,
       difficultyFac: 1.04,
       rewardFac: 1.085,
@@ -72,12 +76,13 @@ export function createContracts(): Record<BladeContractName, Contract> {
       growthFunction: () => getRandomIntInclusive(5, 75) / 10,
       minCount: 5,
     }),
-    [BladeContractName.retirement]: new Contract({
-      name: BladeContractName.retirement,
+    [BladeburnerContractName.Retirement]: new Contract({
+      name: BladeburnerContractName.Retirement,
       desc:
         "Hunt down and retire (kill) rogue Synthoids.\n\n" +
         "Successfully completing a Retirement contract will lower the population in your current city, and will also " +
         "increase its chaos level.",
+      successScaling: "Affected by combat stats. Minor bonus from Charisma. Unaffected by Hacking skill.",
       baseDifficulty: 200,
       difficultyFac: 1.03,
       rewardFac: 1.065,
@@ -108,12 +113,12 @@ export function createContracts(): Record<BladeContractName, Contract> {
   };
 }
 
-export function loadContractsData(data: unknown, contracts: Record<BladeContractName, Contract>) {
+export function loadContractsData(data: unknown, contracts: Record<BladeburnerContractName, Contract>) {
   // loading data as "unknown" and typechecking it down is probably not necessary
   // but this will prevent crashes even with malformed savedata
   if (!data || typeof data !== "object") return;
-  assertLoadingType<Record<BladeContractName, unknown>>(data);
-  for (const contractName of Object.values(BladeContractName)) {
+  assertLoadingType<Record<BladeburnerContractName, unknown>>(data);
+  for (const contractName of Object.values(BladeburnerContractName)) {
     const loadedContract = data[contractName];
     if (!(loadedContract instanceof Contract)) continue;
     contracts[contractName].loadData(loadedContract);

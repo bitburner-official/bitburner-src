@@ -3,7 +3,7 @@ import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation
 import { Player } from "@player";
 import { GetAllServers } from "../Server/AllServers";
 import { resolveTextFilePath } from "../Paths/TextFilePath";
-import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
+import { resolveScriptFilePath, type ScriptFilePath } from "../Paths/ScriptFilePath";
 
 const detect: [string, string][] = [
   ["getHackTime", "returns milliseconds"],
@@ -126,18 +126,29 @@ export function v1APIBreak(): void {
     home.writeToTextFile(textPath, txt);
   }
 
+  const backupFiles = new Map<ScriptFilePath, string>();
   for (const server of GetAllServers()) {
+    backupFiles.clear();
     for (const script of server.scripts.values()) {
-      if (!hasChanges(script.code)) continue;
-      // Sanitize first before combining
-      const oldFilename = resolveScriptFilePath(script.filename);
-      const filename = resolveScriptFilePath("BACKUP_" + oldFilename);
-      if (!filename) {
-        console.error(`Unexpected error resolving backup path for ${script.filename}`);
+      if (!hasChanges(script.code)) {
         continue;
       }
-      server.writeToScriptFile(filename, script.code);
+      // Sanitize first before combining
+      const oldFilename = resolveScriptFilePath(script.filename);
+      if (!oldFilename) {
+        console.error(`Cannot resolve path for ${script.filename}`);
+        continue;
+      }
+      const filename = resolveScriptFilePath("BACKUP_" + oldFilename);
+      if (!filename) {
+        console.error(`Cannot resolve backup path for ${script.filename}`);
+        continue;
+      }
+      backupFiles.set(filename, script.code);
       script.code = convert(script.code);
+    }
+    for (const [filename, code] of backupFiles.entries()) {
+      server.writeToScriptFile(filename, code);
     }
   }
 }

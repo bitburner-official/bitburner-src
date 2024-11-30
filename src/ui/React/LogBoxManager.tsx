@@ -212,7 +212,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
   function run(): void {
     const server = GetServer(script.server);
     if (server === null) return;
-    const s = findRunningScriptByPid(script.pid, server);
+    const s = findRunningScriptByPid(script.pid);
     if (s === null) {
       const baseScript = server.scripts.get(script.filename);
       if (!baseScript) {
@@ -298,7 +298,16 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
     return !(bounds.right < 0 || bounds.bottom < 0 || bounds.left > innerWidth || bounds.top > outerWidth);
   };
 
-  const onDrag = (e: DraggableEvent): void | false => {
+  /**
+   * The returned type of onDrag is a bit weird here. The Draggable component expects an onDrag that returns "void | false".
+   * In that component's internal code, it checks for the explicit "false" value. If onDrag returns false, the component
+   * cancels the dragging.
+   *
+   * That's why they use "void | false" as the returned type. However, in TypeScript, "void" is not supposed to be used
+   * like that. ESLint will complain "void is not valid as a constituent in a union type". Please check its documentation
+   * for the reason. In order to solve this problem, I changed the returned type to "undefined | false".
+   */
+  const onDrag = (e: DraggableEvent): undefined | false => {
     e.preventDefault();
     // bound to body
     if (
@@ -398,7 +407,19 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {script.logs.map(
                   (line: React.ReactNode, i: number): React.ReactNode =>
-                    typeof line !== "string" ? line : <ANSIITypography key={i} text={line} color={lineColor(line)} />,
+                    typeof line !== "string" ? (
+                      line
+                    ) : (
+                      <ANSIITypography
+                        key={i}
+                        text={line}
+                        color={lineColor(line)}
+                        styles={{
+                          display: "inline-block",
+                          fontSize: Settings.styles.tailFontSize,
+                        }}
+                      />
+                    ),
                 )}
               </div>
             </Paper>

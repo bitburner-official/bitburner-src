@@ -19,7 +19,7 @@ import { Page } from "../../ui/Router";
 import { Player } from "@player";
 import { QuitJobModal } from "../../Company/ui/QuitJobModal";
 import { CompanyWork } from "../../Work/CompanyWork";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 import { companyNameAsLocationName } from "../../Company/utils";
 import { JobSummary } from "../../Company/ui/JobSummary";
 import { StatsTable } from "../../ui/React/StatsTable";
@@ -32,7 +32,7 @@ interface IProps {
 
 export function CompanyLocation(props: IProps): React.ReactElement {
   const [quitOpen, setQuitOpen] = useState(false);
-  const rerender = useRerender(200);
+  const rerender = useCycleRerender();
 
   /**
    * We'll keep a reference to the Company that this component is being rendered for,

@@ -14,7 +14,7 @@ import type {
   CompanyReputationRequirement,
   EmployedByRequirement,
   JobTitleRequirement,
-  KarmaRequiremennt,
+  KarmaRequirement,
   MoneyRequirement,
   NumAugmentationsRequirement,
   PeopleKilledRequirement,
@@ -27,6 +27,7 @@ import type {
   NotRequirement,
   SomeRequirement,
   EveryRequirement,
+  BitNodeRequirement,
 } from "@nsdefs";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
 
@@ -172,7 +173,7 @@ export const haveKarma = (n: number): PlayerCondition => ({
     else if (n < -10) return "A history of violence";
     else return "Street cred";
   },
-  toJSON(): KarmaRequiremennt {
+  toJSON(): KarmaRequirement {
     return { type: "karma", karma: n };
   },
   isSatisfied(p: PlayerObject): boolean {
@@ -275,6 +276,18 @@ export const haveBladeburnerRank = (n: number): PlayerCondition => ({
   },
 });
 
+export const inBitNode = (n: number): PlayerCondition => ({
+  toString(): string {
+    return `In BitNode ${n}`;
+  },
+  toJSON(): BitNodeRequirement {
+    return { type: "bitNodeN", bitNodeN: n };
+  },
+  isSatisfied(p: PlayerObject): boolean {
+    return p.bitNodeN == n;
+  },
+});
+
 export const haveSourceFile = (n: number): PlayerCondition => ({
   toString(): string {
     return `In BitNode ${n} or have SourceFile ${n}`;
@@ -289,7 +302,7 @@ export const haveSourceFile = (n: number): PlayerCondition => ({
     };
   },
   isSatisfied(p: PlayerObject): boolean {
-    return p.bitNodeN == n || p.sourceFileLvl(n) > 0;
+    return p.bitNodeN == n || p.activeSourceFileLvl(n) > 0;
   },
 });
 

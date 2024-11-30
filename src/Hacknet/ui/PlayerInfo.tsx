@@ -55,7 +55,7 @@ export function PlayerInfo(props: IProps): React.ReactElement {
   return (
     <Paper sx={{ display: "inline-block", padding: "0.5em 1em", margin: "0.5em 0" }}>
       <Typography variant="h6">Hacknet Summary</Typography>
-      <StatsTable rows={rows} />
+      <StatsTable rows={rows} textAlign="left" />
     </Paper>
   );
 }

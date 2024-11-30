@@ -9,14 +9,14 @@ Get cost to upgrade skill.
 **Signature:**
 
 ```typescript
-getSkillUpgradeCost(skillName: string, count?: number): number;
+getSkillUpgradeCost(skillName: BladeburnerSkillName | `${BladeburnerSkillName}`, count?: number): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  skillName | string | Name of skill. Case-sensitive and must be an exact match. |
+|  skillName | [BladeburnerSkillName](./bitburner.bladeburnerskillname.md) \| \`${[BladeburnerSkillName](./bitburner.bladeburnerskillname.md)<!-- -->}\` | Name of skill. Case-sensitive and must be an exact match. |
 |  count | number | _(Optional)_ Number of times to upgrade the skill. Defaults to 1 if not specified. |
 
 **Returns:**
@@ -31,5 +31,11 @@ RAM cost: 4 GB
 
 This function returns the number of skill points needed to upgrade the specified skill the specified number of times.
 
-The function returns -1 if an invalid skill name is passed in, and Infinity if the count overflows the maximum level.
+The function may return 0 or Infinity in special cases:
+
+- Return 0 if the current skill level is too high and the specified count is too small. In normal situations, you don't need to worry about this case. It only happens when involved numbers surpass Number.MAX\_SAFE\_INTEGER and be affected by the floating-point inaccuracy.
+
+- Return Infinity if the sum of the current level and count exceeds the maximum level.
+
+[skillMaxUpgradeCount](./bitburner.bladeburnerformulas.skillmaxupgradecount.md) is the inverse function of this one.
 

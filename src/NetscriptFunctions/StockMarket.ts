@@ -167,10 +167,8 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       checkTixApiAccess(ctx);
-      if (Player.bitNodeN !== 8) {
-        if (Player.sourceFileLvl(8) <= 1) {
-          throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 2.");
-        }
+      if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 1) {
+        throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 2.");
       }
       const stock = getStockFromSymbol(ctx, symbol);
       const res = shortStock(stock, shares, ctx, {});
@@ -181,10 +179,8 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       checkTixApiAccess(ctx);
-      if (Player.bitNodeN !== 8) {
-        if (Player.sourceFileLvl(8) <= 1) {
-          throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 2.");
-        }
+      if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 1) {
+        throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 2.");
       }
       const stock = getStockFromSymbol(ctx, symbol);
       const res = sellShort(stock, shares, ctx, {});
@@ -198,10 +194,8 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       const type = helpers.string(ctx, "type", _type);
       const pos = helpers.string(ctx, "pos", _pos);
       checkTixApiAccess(ctx);
-      if (Player.bitNodeN !== 8) {
-        if (Player.sourceFileLvl(8) <= 2) {
-          throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 3.");
-        }
+      if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 2) {
+        throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 3.");
       }
       const stock = getStockFromSymbol(ctx, symbol);
 
@@ -238,10 +232,8 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       const type = helpers.string(ctx, "type", _type);
       const pos = helpers.string(ctx, "pos", _pos);
       checkTixApiAccess(ctx);
-      if (Player.bitNodeN !== 8) {
-        if (Player.sourceFileLvl(8) <= 2) {
-          throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 3.");
-        }
+      if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 2) {
+        throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 3.");
       }
       const stock = getStockFromSymbol(ctx, symbol);
       if (isNaN(shares) || isNaN(price)) {
@@ -281,10 +273,8 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     getOrders: (ctx) => () => {
       checkTixApiAccess(ctx);
-      if (Player.bitNodeN !== 8) {
-        if (Player.sourceFileLvl(8) <= 2) {
-          throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or have Source-File 8 Level 3.");
-        }
+      if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 2) {
+        throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or have Source-File 8 Level 3.");
       }
 
       const orders: StockOrder = {};
@@ -328,6 +318,11 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       return forecast / 100; // Convert from percentage to decimal
     },
     purchase4SMarketData: (ctx) => () => {
+      if (Player.bitNodeOptions.disable4SData) {
+        helpers.log(ctx, () => "4S Market Data is disabled.");
+        return false;
+      }
+
       if (Player.has4SData) {
         helpers.log(ctx, () => "Already purchased 4S Market Data.");
         return true;
@@ -344,6 +339,11 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       return true;
     },
     purchase4SMarketDataTixApi: (ctx) => () => {
+      if (Player.bitNodeOptions.disable4SData) {
+        helpers.log(ctx, () => "4S Market Data is disabled.");
+        return false;
+      }
+
       checkTixApiAccess(ctx);
 
       if (Player.has4SDataTixApi) {

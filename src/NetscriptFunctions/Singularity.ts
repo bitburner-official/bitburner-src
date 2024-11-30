@@ -1,15 +1,7 @@
-import type { Singularity as ISingularity, Task as ITask } from "@nsdefs";
+import type { Singularity as ISingularity } from "@nsdefs";
 
 import { Player } from "@player";
-import {
-  AugmentationName,
-  CityName,
-  FactionName,
-  FactionWorkType,
-  GymType,
-  LocationName,
-  UniversityClassType,
-} from "@enums";
+import { AugmentationName, CityName, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
 import { Augmentations } from "../Augmentation/Augmentations";
@@ -59,6 +51,7 @@ import { ServerConstants } from "../Server/data/Constants";
 import { blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
 import { calculateFavorAfterResetting } from "../Faction/formulas/favor";
+import { validBitNodes } from "../BitNode/BitNodeUtils";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -95,7 +88,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
       return res;
     },
-    getOwnedSourceFiles: () => () => [...Player.sourceFiles].map(([n, lvl]) => ({ n, lvl })),
+    getOwnedSourceFiles: () => () => {
+      return [...Player.activeSourceFiles]
+        .filter(([__, activeLevel]) => {
+          return activeLevel > 0;
+        })
+        .map(([n, lvl]) => ({ n, lvl }));
+    },
     getAugmentationFactions: (ctx) => (_augName) => {
       helpers.checkSingularityAccess(ctx);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
@@ -558,14 +557,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const baseserver = Player.getCurrentServer();
       if (!(baseserver instanceof Server)) {
-        helpers.log(ctx, () => "cannot backdoor this kind of server");
-        return Promise.resolve();
+        throw helpers.errorMessage(ctx, "Cannot backdoor this kind of server.");
       }
       const server = baseserver;
       const installTime = (calculateHackingTime(server, Player) / 4) * 1000;
 
       // No root access or skill level too low
-      const canHack = netscriptCanHack(server);
+      const canHack = netscriptCanHack(server, "backdoor");
       if (!canHack.res) {
         throw helpers.errorMessage(ctx, canHack.msg || "");
       }
@@ -628,7 +626,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // Check if we're at max cores
       const homeComputer = Player.getHomeComputer();
-      if (homeComputer.cpuCores >= 8) {
+      if (Player.bitNodeOptions.restrictHomePCUpgrade || homeComputer.cpuCores >= 8) {
         helpers.log(ctx, () => `Your home computer is at max cores.`);
         return false;
       }
@@ -659,7 +657,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       // Check if we're at max RAM
       const homeComputer = Player.getHomeComputer();
-      if (homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam) {
+      if (
+        (Player.bitNodeOptions.restrictHomePCUpgrade && homeComputer.maxRam >= 128) ||
+        homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam
+      ) {
         helpers.log(ctx, () => `Your home computer is at max RAM.`);
         return false;
       }
@@ -964,8 +965,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(ctx, () => `You can't donate to '${facName}' because you are managing a gang for it`);
         return false;
       }
-      if (faction.name === FactionName.ChurchOfTheMachineGod || faction.name === FactionName.Bladeburners) {
-        helpers.log(ctx, () => `You can't donate to '${facName}' because they do not accept donations`);
+      if (!faction.getInfo().offersWork()) {
+        helpers.log(ctx, () => `You can't donate to '${facName}' because this faction does not offer any type of work`);
         return false;
       }
       if (typeof amt !== "number" || amt <= 0 || isNaN(amt)) {
@@ -1021,6 +1022,9 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         if (!create.req()) {
           helpers.log(ctx, () => `Hacking level is too low to create '${p.name}' (level ${create.level} req)`);
           return false;
+        }
+        if (Player.currentWork) {
+          Player.finishWork(true);
         }
 
         Player.startWork(
@@ -1137,38 +1141,47 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
       return item.price;
     },
-    b1tflum3: (ctx) => (_nextBN, _cbScript) => {
+    b1tflum3: (ctx) => (_nextBN, _cbScript, _bitNodeOptions) => {
       helpers.checkSingularityAccess(ctx);
       const nextBN = helpers.number(ctx, "nextBN", _nextBN);
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
-      enterBitNode(true, Player.bitNodeN, nextBN);
-      if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
+      if (cbScript === null) {
+        throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
+      }
+      enterBitNode(true, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
+      if (cbScript) {
+        setTimeout(() => runAfterReset(cbScript), 500);
+      }
     },
-    destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript) => {
+    destroyW0r1dD43m0n: (ctx) => (_nextBN, _cbScript, _bitNodeOptions) => {
       helpers.checkSingularityAccess(ctx);
       const nextBN = helpers.number(ctx, "nextBN", _nextBN);
-      if (nextBN > 14 || nextBN < 1 || !Number.isInteger(nextBN)) {
-        throw new Error(`Invalid bitnode specified: ${_nextBN}`);
+      if (!validBitNodes.includes(nextBN)) {
+        throw new Error(`Invalid BitNode: ${_nextBN}.`);
       }
       const cbScript = _cbScript
         ? resolveScriptFilePath(helpers.string(ctx, "cbScript", _cbScript), ctx.workerScript.name)
         : false;
-      if (cbScript === null) throw helpers.errorMessage(ctx, `Could not resolve file path: ${_cbScript}`);
+      if (cbScript === null) {
+        throw helpers.errorMessage(ctx, `Could not resolve file path. callbackScript is null.`);
+      }
 
       const wd = GetServer(SpecialServers.WorldDaemon);
       if (!(wd instanceof Server)) {
         throw new Error("WorldDaemon is not a normal server. This is a bug. Please contact developers.");
       }
       const hackingRequirements = () => {
-        if (Player.skills.hacking < wd.requiredHackingSkill) return false;
-        if (!wd.hasAdminRights) return false;
+        if (Player.skills.hacking < wd.requiredHackingSkill || !wd.hasAdminRights) {
+          return false;
+        }
         return true;
       };
       const bladeburnerRequirements = () => {
-        if (!Player.bladeburner) return false;
+        if (!Player.bladeburner) {
+          return false;
+        }
         return Player.bladeburner.numBlackOpsComplete >= blackOpsArray.length;
       };
 
@@ -1179,13 +1192,15 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
       wd.backdoorInstalled = true;
       calculateAchievements();
-      enterBitNode(false, Player.bitNodeN, nextBN);
-      if (cbScript) setTimeout(() => runAfterReset(cbScript), 500);
+      enterBitNode(false, Player.bitNodeN, nextBN, helpers.validateBitNodeOptions(ctx, _bitNodeOptions));
+      if (cbScript) {
+        setTimeout(() => runAfterReset(cbScript), 500);
+      }
     },
     getCurrentWork: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
       if (!Player.currentWork) return null;
-      return Player.currentWork.APICopy() as ITask;
+      return Player.currentWork.APICopy();
     },
     exportGame: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);

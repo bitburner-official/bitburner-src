@@ -5,56 +5,13 @@ import { GetAllServers } from "../Server/AllServers";
 import { parseCommand, parseCommands } from "./Parser";
 import { HelpTexts } from "./HelpText";
 import { compile } from "../NetscriptJSEvaluator";
-import { Flags } from "../NetscriptFunctions/Flags";
+import { Flags, type Schema } from "../NetscriptFunctions/Flags";
 import { AutocompleteData } from "@nsdefs";
 import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
-import { resolveScriptFilePath } from "../Paths/ScriptFilePath";
+import { isLegacyScript, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { enums } from "../NetscriptFunctions";
-
-// TODO: this shouldn't be hardcoded in two places with no typechecks to verify equivalence
-// An array of all Terminal commands
-const gameCommands = [
-  "alias",
-  "analyze",
-  "backdoor",
-  "cat",
-  "cd",
-  "changelog",
-  "check",
-  "clear",
-  "cls",
-  "connect",
-  "cp",
-  "download",
-  "expr",
-  "free",
-  "grow",
-  "hack",
-  "help",
-  "home",
-  "hostname",
-  "ifconfig",
-  "kill",
-  "killall",
-  "ls",
-  "lscpu",
-  "mem",
-  "mv",
-  "nano",
-  "ps",
-  "rm",
-  "run",
-  "scan-analyze",
-  "scan",
-  "scp",
-  "sudov",
-  "tail",
-  "theme",
-  "top",
-  "vim",
-  "weaken",
-];
+import { TerminalCommands } from "./Terminal";
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal
@@ -123,9 +80,14 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
 
   const addAliases = () => addGeneric({ iterable: Aliases.keys() });
   const addGlobalAliases = () => addGeneric({ iterable: GlobalAliases.keys() });
-  const addCommands = () => addGeneric({ iterable: gameCommands });
+  const addCommands = () => addGeneric({ iterable: Object.keys(TerminalCommands) });
   const addDarkwebItems = () => addGeneric({ iterable: Object.values(DarkWebItems).map((item) => item.program) });
-  const addServerNames = () => addGeneric({ iterable: GetAllServers().map((server) => server.hostname) });
+  const addServerNames = () =>
+    addGeneric({
+      iterable: GetAllServers()
+        .filter((server) => server.serversOnNetwork.length !== 0)
+        .map((server) => server.hostname),
+    });
   const addScripts = () => addGeneric({ iterable: currServ.scripts.keys(), usePathing: true });
   const addTextFiles = () => addGeneric({ iterable: currServ.textFiles.keys(), usePathing: true });
   const addCodingContracts = () => {
@@ -299,7 +261,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     }
     const filepath = resolveScriptFilePath(filename, baseDir);
     if (!filepath) return; // Not a script path.
-    if (filepath.endsWith(".script")) return; // Doesn't work with ns1.
+    if (isLegacyScript(filepath)) return; // Doesn't work with ns1.
     const script = currServ.scripts.get(filepath);
     if (!script) return; // Doesn't exist.
 
@@ -314,10 +276,22 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     if (!loadedModule || !loadedModule.autocomplete) return; // Doesn't have an autocomplete function.
 
     const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
-    const flags = libarg(runArgs, {
-      permissive: true,
-      argv: command.slice(2),
-    });
+    let flags = {
+      _: [],
+    };
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
+      flags = libarg(runArgs, {
+        permissive: true,
+        argv: command.slice(2),
+      });
+    } catch (error) {
+      /**
+       * This error can only happen when the player specifies "-t" or "--ram-override", then presses [Tab] without
+       * giving a number. We don't need to show an error here.
+       */
+      console.warn(error);
+    }
     const flagFunc = Flags(flags._);
     const autocompleteData: AutocompleteData = {
       servers: GetAllServers()
@@ -326,9 +300,9 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       scripts: [...currServ.scripts.keys()],
       txts: [...currServ.textFiles.keys()],
       enums: enums,
-      flags: (schema: unknown) => {
+      flags: (schema: Schema) => {
         if (!Array.isArray(schema)) throw new Error("flags require an array of array");
-        pos2 = schema.map((f: unknown) => {
+        pos2 = schema.map((f) => {
           if (!Array.isArray(f)) throw new Error("flags require an array of array");
           if (f[0].length === 1) return "-" + f[0];
           return "--" + f[0];
@@ -339,6 +313,17 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
           return {};
         }
       },
+      hostname: currServ.hostname,
+      filename: script.filename,
+      processes: Array.from(currServ.runningScriptMap.values(), (m) =>
+        Array.from(m.values(), (r) => ({
+          pid: r.pid,
+          filename: r.filename,
+          threads: r.threads,
+          args: r.args.slice(),
+          temporary: r.temporary,
+        })),
+      ).flat(),
     };
     let pos: string[] = [];
     let pos2: string[] = [];

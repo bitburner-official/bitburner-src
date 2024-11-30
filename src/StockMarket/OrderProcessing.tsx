@@ -17,6 +17,7 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Settings } from "../Settings/Settings";
 
 import * as React from "react";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 
 export interface IProcessOrderRefs {
   stockMarket: IStockMarket;
@@ -50,8 +51,8 @@ export function processOrders(
     return; // Newly created, so no orders to process
   }
   let stockOrders = orderBook[stock.symbol];
-  if (stockOrders == null || !(stockOrders.constructor === Array)) {
-    console.error(`Invalid Order book for ${stock.symbol} in processOrders(): ${stockOrders}`);
+  if (stockOrders == null || !Array.isArray(stockOrders)) {
+    console.error(`Invalid Order book for ${stock.symbol} in processOrders(). stockOrders: ${stockOrders}`);
     stockOrders = [];
     return;
   }
@@ -88,8 +89,7 @@ export function processOrders(
           }
           break;
         default:
-          console.warn(`Invalid order type: ${order.type}`);
-          return;
+          throwIfReachable(order.type);
       }
     }
   }
@@ -137,8 +137,7 @@ function executeOrder(order: Order, refs: IProcessOrderRefs): void {
       }
       break;
     default:
-      console.warn(`Invalid order type: ${order.type}`);
-      return;
+      throwIfReachable(order.type);
   }
 
   // Position type, for logging/message purposes

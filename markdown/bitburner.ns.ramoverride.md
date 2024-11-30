@@ -28,7 +28,7 @@ The new static RAM limit, which will be the old one if it wasn't changed. This m
 
 RAM cost: 0 GB
 
-This acts analagously to the ramOverride parameter in runOptions, but for changing RAM in the current running script. The static RAM allocation (the amount of RAM used by ONE thread) will be adjusted to the given value, if possible. This can fail if the number is less than the current dynamic RAM limit, or if adjusting upward would require more RAM than is available on the server.
+This acts analogously to the ramOverride parameter in runOptions, but for changing RAM in the current running script. The static RAM allocation (the amount of RAM used by ONE thread) will be adjusted to the given value, if possible. This can fail if the number is less than the current dynamic RAM limit, or if adjusting upward would require more RAM than is available on the server.
 
 RAM usage will be rounded to the nearest hundredth of a GB, which is the granularity of all RAM calculations.
 

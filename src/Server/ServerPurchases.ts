@@ -47,7 +47,7 @@ export const getPurchasedServerUpgradeCost = (hostname: string, ram: number): nu
   if (isNaN(ram) || !isPowerOfTwo(ram) || !(Math.sign(ram) === 1))
     throw new Error(`${ram} is not a positive power of 2`);
   if (server.maxRam >= ram)
-    throw new Error(`'${hostname}' current ram (${server.maxRam}) is not bigger than new ram (${ram})`);
+    throw new Error(`The new ram of '${hostname}' (${ram}) must be bigger than its current ram (${server.maxRam}).`);
   return getPurchaseServerCost(ram) - getPurchaseServerCost(server.maxRam);
 };
 
@@ -164,7 +164,10 @@ export function purchaseRamForHomeComputer(): void {
   }
 
   const homeComputer = Player.getHomeComputer();
-  if (homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam) {
+  if (
+    (Player.bitNodeOptions.restrictHomePCUpgrade && homeComputer.maxRam >= 128) ||
+    homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam
+  ) {
     dialogBoxCreate(`You cannot upgrade your home computer RAM because it is at its maximum possible value`);
     return;
   }

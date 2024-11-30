@@ -24,6 +24,8 @@ import {
   iTutorialEnd,
 } from "../../InteractiveTutorial";
 import { useRerender } from "../React/hooks";
+import { Settings } from "../../Settings/Settings";
+import { NsApiDocumentationLink } from "../React/NsApiDocumentationLink";
 
 interface IContent {
   content: React.ReactElement;
@@ -318,7 +320,10 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{"[home /]> nano"}</Typography>
 
-          <Typography>Scripts must end with the .js extension. Let's make a script now by entering </Typography>
+          <Typography>
+            Scripts must end with a script extension (.js, .jsx, .ts, .tsx, .script). Let's make a script now by
+            entering
+          </Typography>
           <Typography classes={{ root: classes.textfield }}>{`[home /]> nano ${tutorialScriptName}`}</Typography>
         </>
       ),
@@ -335,10 +340,11 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography classes={{ root: classes.code }}>
             {
               <CopyableText
-                value={`export async function main(ns) {
-	while(true) {
-		await ns.hack('n00dles');
-	}
+                value={`/** @param {NS} ns */
+export async function main(ns) {
+  while (true) {
+    await ns.hack("n00dles");
+  }
 }`}
               />
             }
@@ -346,6 +352,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography>
             For anyone with basic programming experience, this code should be straightforward. This script will
             continuously hack the n00dles server.
+            <br />
+            <br />
+            To access <NsApiDocumentationLink />, press the link at the bottom.
             <br />
             <br />
             To save and close the script editor, press the button at the bottom.
@@ -522,13 +531,27 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     },
     [iTutorialSteps.DocumentationPageInfo as number]: {
       content: (
-        <Typography>
-          This page contains a lot of different documentation about the game's content and mechanics. I know it's a lot,
-          but I highly suggest you read (or at least skim) through this before you start playing.
+        <Typography component="div">
+          This page contains a lot of different documentation about the game's contents and mechanics. I know it's a
+          lot, but I highly suggest you read (or at least skim) through this before you start playing. Some pages are
+          inaccessible at the start and will be unlocked later.
           <br />
           <br />
-          The Beginner's Guide contains the guide for new players, navigating you through most of early game.
+          You should at least check these pages:
+          <ul>
+            <li>
+              The Beginner's guide contains the guide for new players, navigating you through most of the early game.
+            </li>
+            <li>The NS API documentation contains reference materials for all NS APIs.</li>
+          </ul>
+          <Typography fontWeight="fontWeightBold">
+            This documentation page is the best place to get up-to-date information, especially when you get stuck. If
+            you have a question and cannot find the answer here, please ask us on Discord.
+          </Typography>
           <br />
+          <Typography color={Settings.theme.warning}>
+            The documentation at readthedocs is outdated and unmaintained. Do not use them!
+          </Typography>
           <br />
           That's the end of the tutorial. Hope you enjoy the game!
         </Typography>

@@ -25,8 +25,9 @@ import {
   UniversityClassType,
   CompanyName,
   FactionName,
-  BladeActionType,
-  BladeGeneralActionName,
+  BladeburnerActionType,
+  BladeburnerGeneralActionName,
+  AugmentationName,
 } from "@enums";
 
 import { Factions } from "../../Faction/Factions";
@@ -41,9 +42,13 @@ import { SleeveInfiltrateWork } from "./Work/SleeveInfiltrateWork";
 import { SleeveSupportWork } from "./Work/SleeveSupportWork";
 import { SleeveBladeburnerWork } from "./Work/SleeveBladeburnerWork";
 import { SleeveCrimeWork } from "./Work/SleeveCrimeWork";
-import * as sleeveMethods from "./SleeveMethods";
 import { calculateIntelligenceBonus } from "../formulas/intelligence";
 import { getEnumHelper } from "../../utils/EnumHelper";
+import { Multipliers, mergeMultipliers } from "../Multipliers";
+import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
+import { Augmentations } from "../../Augmentation/Augmentations";
+import { getAugCost } from "../../Augmentation/AugmentationHelpers";
+import type { MoneySource } from "../../utils/MoneySourceTracker";
 
 export class Sleeve extends Person implements SleevePerson {
   currentWork: SleeveWork | null = null;
@@ -75,8 +80,93 @@ export class Sleeve extends Person implements SleevePerson {
     this.shockRecovery();
   }
 
-  applyAugmentation = sleeveMethods.applyAugmentation;
-  findPurchasableAugs = sleeveMethods.findPurchasableAugs;
+  /** Updates this object's multipliers for the given augmentation */
+  applyAugmentation(aug: Augmentation): void {
+    this.mults = mergeMultipliers(this.mults, aug.mults);
+  }
+
+  findPurchasableAugs(): Augmentation[] {
+    // You can only purchase Augmentations that are actually available from
+    // your factions. I.e. you must be in a faction that has the Augmentation
+    // and you must also have enough rep in that faction in order to purchase it.
+
+    const ownedAugNames = this.augmentations.map((e) => e.name);
+    const availableAugs: Augmentation[] = [];
+
+    // Helper function that helps filter out augs that are already owned
+    // and augs that aren't allowed for sleeves
+    function isAvailableForSleeve(aug: Augmentation): boolean {
+      if (ownedAugNames.includes(aug.name)) return false;
+      if (availableAugs.includes(aug)) return false;
+      if (aug.isSpecial) return false;
+
+      type MultKey = keyof Multipliers;
+      const validMults: MultKey[] = [
+        "hacking",
+        "strength",
+        "defense",
+        "dexterity",
+        "agility",
+        "charisma",
+        "hacking_exp",
+        "strength_exp",
+        "defense_exp",
+        "dexterity_exp",
+        "agility_exp",
+        "charisma_exp",
+        "company_rep",
+        "faction_rep",
+        "crime_money",
+        "crime_success",
+        "work_money",
+      ];
+      for (const mult of validMults) {
+        if (aug.mults[mult] !== 1) return true;
+      }
+
+      return false;
+    }
+
+    // If player is in a gang, then we return all augs that the player
+    // has enough reputation for (since that gang offers all augs)
+    if (Player.gang) {
+      const fac = Player.getGangFaction();
+      const gangAugs = getFactionAugmentationsFiltered(fac);
+
+      for (const augName of gangAugs) {
+        const aug = Augmentations[augName];
+        if (!isAvailableForSleeve(aug)) continue;
+
+        if (fac.playerReputation > getAugCost(aug).repCost) {
+          availableAugs.push(aug);
+        }
+      }
+    }
+
+    for (const facName of Player.factions) {
+      if (facName === FactionName.Bladeburners) continue;
+      if (facName === FactionName.Netburners) continue;
+      const fac = Factions[facName];
+      if (!fac) continue;
+
+      for (const augName of fac.augmentations) {
+        const aug = Augmentations[augName];
+        if (!isAvailableForSleeve(aug)) continue;
+
+        if (fac.playerReputation > getAugCost(aug).repCost) {
+          availableAugs.push(aug);
+        }
+      }
+    }
+
+    // Add the stanek sleeve aug
+    if (!ownedAugNames.includes(AugmentationName.ZOE) && Player.factions.includes(FactionName.ChurchOfTheMachineGod)) {
+      const aug = Augmentations[AugmentationName.ZOE];
+      availableAugs.push(aug);
+    }
+
+    return availableAugs;
+  }
 
   shockBonus(): number {
     return (100 - this.shock) / 100;
@@ -392,7 +482,7 @@ export class Sleeve extends Person implements SleevePerson {
       case "Training":
         this.startWork(
           new SleeveBladeburnerWork({
-            actionId: { type: BladeActionType.general, name: BladeGeneralActionName.training },
+            actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.Training },
           }),
         );
         return true;
@@ -400,28 +490,28 @@ export class Sleeve extends Person implements SleevePerson {
       case "Field Analysis":
         this.startWork(
           new SleeveBladeburnerWork({
-            actionId: { type: BladeActionType.general, name: BladeGeneralActionName.fieldAnalysis },
+            actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.FieldAnalysis },
           }),
         );
         return true;
       case "Recruitment":
         this.startWork(
           new SleeveBladeburnerWork({
-            actionId: { type: BladeActionType.general, name: BladeGeneralActionName.recruitment },
+            actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.Recruitment },
           }),
         );
         return true;
       case "Diplomacy":
         this.startWork(
           new SleeveBladeburnerWork({
-            actionId: { type: BladeActionType.general, name: BladeGeneralActionName.diplomacy },
+            actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.Diplomacy },
           }),
         );
         return true;
       case "Hyperbolic Regeneration Chamber":
         this.startWork(
           new SleeveBladeburnerWork({
-            actionId: { type: BladeActionType.general, name: BladeGeneralActionName.hyperbolicRegen },
+            actionId: { type: BladeburnerActionType.General, name: BladeburnerGeneralActionName.HyperbolicRegen },
           }),
         );
         return true;
@@ -433,11 +523,22 @@ export class Sleeve extends Person implements SleevePerson {
         this.startWork(new SleeveSupportWork());
         return true;
       case "Take on contracts":
-        if (!getEnumHelper("BladeContractName").isMember(contract)) return false;
-        this.startWork(new SleeveBladeburnerWork({ actionId: { type: BladeActionType.contract, name: contract } }));
+        if (!getEnumHelper("BladeburnerContractName").isMember(contract)) return false;
+        this.startWork(
+          new SleeveBladeburnerWork({ actionId: { type: BladeburnerActionType.Contract, name: contract } }),
+        );
         return true;
     }
     return false;
+  }
+
+  travelCostMoneySource(): MoneySource {
+    return "sleeves";
+  }
+
+  /** Sleeves are immortal, but we damage them for max hp so they get shocked */
+  kill() {
+    return this.takeDamage(this.hp.max);
   }
 
   takeDamage(amt: number): boolean {

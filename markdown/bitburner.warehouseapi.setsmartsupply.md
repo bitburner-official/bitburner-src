@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.setSmartSupply() method
 
-Set smart supply
+Set smart supply.
 
 **Signature:**
 
@@ -18,9 +18,13 @@ setSmartSupply(divisionName: string, city: CityName | `${CityName}`, enabled: bo
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
-|  enabled | boolean | smart supply enabled |
+|  enabled | boolean | Use true to enable, false otherwise. |
 
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

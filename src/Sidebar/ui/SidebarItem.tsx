@@ -18,7 +18,7 @@ export interface ICreateProps {
 export interface SidebarItemProps extends ICreateProps {
   clickFn: () => void;
   flash: boolean;
-  classes: any;
+  classes: Record<"listitem" | "active", string>;
   sidebarOpen: boolean;
 }
 

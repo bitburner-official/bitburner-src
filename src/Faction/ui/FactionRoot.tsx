@@ -20,7 +20,7 @@ import { CovenantPurchasesRoot } from "../../PersonObjects/Sleeve/ui/CovenantPur
 import { FactionName, FactionWorkType } from "@enums";
 import { GangButton } from "./GangButton";
 import { FactionWork } from "../../Work/FactionWork";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 import { repNeededToDonate } from "../formulas/donation";
 
 type FactionRootProps = {
@@ -36,7 +36,7 @@ const hackingContractsInfo =
 const fieldWorkInfo =
   "Carry out field missions for your faction. " +
   "Your effectiveness, which determines how much " +
-  "reputation you gain for this faction, is based on all of your stats equally . " +
+  "reputation you gain for this faction, is based on all of your stats equally. " +
   "You will gain exp for all stats.";
 const securityWorkInfo =
   "Serve in a security detail for your faction. " +
@@ -97,7 +97,7 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
     startWork();
   }
 
-  // We have a special flag for whether the player this faction is the player's
+  // We have a special flag for whether this faction is the player's
   // gang faction because if the player has a gang, they cannot do any other action
   const isPlayersGang = Player.gang && Player.getGangName() === faction.name;
 
@@ -147,7 +147,7 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
 }
 
 export function FactionRoot({ faction }: FactionRootProps): React.ReactElement {
-  const rerender = useRerender(200);
+  const rerender = useCycleRerender();
 
   if (!Player.factions.includes(faction.name)) {
     return (

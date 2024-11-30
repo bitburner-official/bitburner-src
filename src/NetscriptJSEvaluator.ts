@@ -4,13 +4,12 @@
  */
 import * as walk from "acorn-walk";
 import { parse } from "acorn";
+import type * as acorn from "acorn";
 
-import { LoadedModule, ScriptURL, ScriptModule } from "./Script/LoadedModule";
-import { Script } from "./Script/Script";
-import { ScriptFilePath, resolveScriptFilePath } from "./Paths/ScriptFilePath";
-
-// Acorn type def is straight up incomplete so we have to fill with our own.
-export type Node = any;
+import { LoadedModule, type ScriptURL, type ScriptModule } from "./Script/LoadedModule";
+import type { Script } from "./Script/Script";
+import type { ScriptFilePath } from "./Paths/ScriptFilePath";
+import { FileType, getFileType, getModuleScript, transformScript } from "./utils/ScriptTransformer";
 
 // Makes a blob that contains the code of a given script.
 function makeScriptBlob(code: string): Blob {
@@ -29,7 +28,7 @@ function makeScriptBlob(code: string): Blob {
 // config object to provide a hook point.
 export const config = {
   doImport(url: ScriptURL): Promise<ScriptModule> {
-    return import(/*webpackIgnore:true*/ url);
+    return import(/*webpackIgnore:true*/ url) as Promise<ScriptModule>;
   },
 };
 
@@ -82,35 +81,71 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     return script.mod;
   }
 
+  let scriptCode;
+  const fileType = getFileType(script.filename);
+  switch (fileType) {
+    case FileType.JS:
+      scriptCode = script.code;
+      break;
+    case FileType.JSX:
+    case FileType.TS:
+    case FileType.TSX:
+      scriptCode = transformScript(script.code, fileType);
+      break;
+    default:
+      throw new Error(`Invalid file type: ${fileType}. Filename: ${script.filename}, server: ${script.server}.`);
+  }
+  if (!scriptCode) {
+    throw new Error(`Cannot transform script. Filename: ${script.filename}, server: ${script.server}.`);
+  }
+
   // Inspired by: https://stackoverflow.com/a/43834063/91401
-  const ast = parse(script.code, { sourceType: "module", ecmaVersion: "latest", ranges: true });
-  interface importNode {
+  const ast = parse(scriptCode, { sourceType: "module", ecmaVersion: "latest", ranges: true });
+  interface ImportNode {
     filename: string;
     start: number;
     end: number;
   }
-  const importNodes: importNode[] = [];
+  const importNodes: ImportNode[] = [];
   // Walk the nodes of this tree and find any import declaration statements.
   walk.simple(ast, {
-    ImportDeclaration(node: Node) {
+    ImportDeclaration(node: acorn.ImportDeclaration) {
       // Push this import onto the stack to replace
-      if (!node.source) return;
+      if (!node.source) {
+        return;
+      }
+      if (typeof node.source.value !== "string" || !node.source.range) {
+        console.error("Invalid node when walking ImportDeclaration in generateLoadedModule. node:", node);
+        return;
+      }
       importNodes.push({
         filename: node.source.value,
         start: node.source.range[0] + 1,
         end: node.source.range[1] - 1,
       });
     },
-    ExportNamedDeclaration(node: Node) {
-      if (!node.source) return;
+    ExportNamedDeclaration(node: acorn.ExportNamedDeclaration) {
+      if (!node.source) {
+        return;
+      }
+      if (typeof node.source.value !== "string" || !node.source.range) {
+        console.error("Invalid node when walking ExportNamedDeclaration in generateLoadedModule. node:", node);
+        return;
+      }
       importNodes.push({
         filename: node.source.value,
         start: node.source.range[0] + 1,
         end: node.source.range[1] - 1,
       });
     },
-    ExportAllDeclaration(node: Node) {
-      if (!node.source) return;
+    ExportAllDeclaration(node: acorn.ExportAllDeclaration) {
+      if (!node.source) {
+        return;
+      }
+      if (typeof node.source.value !== "string" || !node.source.range) {
+        console.error("Invalid node when walking ExportAllDeclaration in generateLoadedModule. node:", node);
+        return;
+      }
       importNodes.push({
         filename: node.source.value,
         start: node.source.range[0] + 1,
@@ -121,15 +156,10 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
   // Sort the nodes from last start index to first. This replaces the last import with a blob first,
   // preventing the ranges for other imports from being shifted.
   importNodes.sort((a, b) => b.start - a.start);
-  let newCode = script.code;
+  let newCode = scriptCode;
   // Loop through each node and replace the script name with a blob url.
   for (const node of importNodes) {
-    const filename = resolveScriptFilePath(node.filename, script.filename, ".js");
-    if (!filename) throw new Error(`Failed to parse import: ${node.filename}`);
-
-    // Find the corresponding script.
-    const importedScript = scripts.get(filename);
-    if (!importedScript) continue;
+    const importedScript = getModuleScript(node.filename, script.filename, scripts);
 
     seenStack.push(script);
     importedScript.mod = generateLoadedModule(importedScript, scripts, seenStack);

@@ -49,8 +49,8 @@ export class GraftingWork extends Work {
   process(cycles: number): boolean {
     const focusBonus = Player.focusPenalty();
     this.cyclesWorked += cycles;
-    this.unitRate = CONSTANTS.MilliPerCycle * cycles * graftingIntBonus() * focusBonus;
-    this.unitCompleted += this.unitRate;
+    this.unitRate = CONSTANTS.MilliPerCycle * graftingIntBonus() * focusBonus;
+    this.unitCompleted += this.unitRate * cycles;
     return this.unitCompleted >= this.unitNeeded();
   }
 
@@ -58,6 +58,14 @@ export class GraftingWork extends Work {
     const augName = this.augmentation;
     if (!cancelled) {
       applyAugmentation({ name: augName, level: 1 });
+
+      // Remove this augmentation from the list of queued augmentations.
+      for (let i = 0; i < Player.queuedAugmentations.length; ++i) {
+        if (Player.queuedAugmentations[i].name === augName) {
+          Player.queuedAugmentations.splice(i, 1);
+          break;
+        }
+      }
 
       if (!Player.hasAugmentation(AugmentationName.CongruityImplant, true)) {
         Player.entropy += 1;

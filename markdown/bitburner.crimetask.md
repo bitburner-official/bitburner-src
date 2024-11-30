@@ -9,18 +9,18 @@ Crime
 **Signature:**
 
 ```typescript
-export interface CrimeTask 
+export interface CrimeTask extends BaseTask 
 ```
+**Extends:** [BaseTask](./bitburner.basetask.md)
 
 ## Remarks
 
-An object representing the crime being commited
+An object representing the crime being committed
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [crimeType](./bitburner.crimetask.crimetype.md) |  | [CrimeType](./bitburner.crimetype.md) |  |
-|  [cyclesWorked](./bitburner.crimetask.cyclesworked.md) |  | number |  |
 |  [type](./bitburner.crimetask.type.md) |  | "CRIME" |  |
 

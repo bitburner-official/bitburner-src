@@ -1,20 +1,29 @@
 /**
  * Implements RAM Calculation functionality.
  *
- * Uses the acorn.js library to parse a script's code into an AST and
- * recursively walk through that AST, calculating RAM usage along
- * the way
+ * Uses acorn-walk to recursively walk through the AST, calculating RAM usage along the way.
  */
 import * as walk from "acorn-walk";
-import acorn, { parse } from "acorn";
+import type * as acorn from "acorn";
+import { extendAcornWalkForTypeScriptNodes } from "../ThirdParty/acorn-typescript-walk";
+import { extend as extendAcornWalkForJsxNodes } from "acorn-jsx-walk";
 
 import { RamCalculationErrorCode } from "./RamCalculationErrorCodes";
 
 import { RamCosts, RamCostConstants } from "../Netscript/RamCostGenerator";
-import { Script } from "./Script";
-import { Node } from "../NetscriptJSEvaluator";
-import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
-import { ServerName } from "../Types/strings";
+import type { Script } from "./Script";
+import type { ScriptFilePath } from "../Paths/ScriptFilePath";
+import type { ServerName } from "../Types/strings";
+import { roundToTwo } from "../utils/helpers/roundToTwo";
+import {
+  type AST,
+  type FileTypeFeature,
+  getFileType,
+  getFileTypeFeature,
+  getModuleScript,
+  parseAST,
+  ModuleResolutionError,
+} from "../utils/ScriptTransformer";
 
 export interface RamUsageEntry {
   type: "ns" | "dom" | "fn" | "misc";
@@ -38,11 +47,22 @@ export type RamCalculationFailure = {
 
 export type RamCalculation = RamCalculationSuccess | RamCalculationFailure;
 
+// Extend acorn-walk to support TypeScript nodes.
+extendAcornWalkForTypeScriptNodes(walk.base);
+
+// Extend acorn-walk to support JSX nodes.
+extendAcornWalkForJsxNodes(walk.base);
+
 // These special strings are used to reference the presence of a given logical
 // construct within a user script.
 const specialReferenceIF = "__SPECIAL_referenceIf";
 const specialReferenceFOR = "__SPECIAL_referenceFor";
 const specialReferenceWHILE = "__SPECIAL_referenceWhile";
+
+// This special string is used to signal that RAM is being overriden for a script.
+// It doesn't apply when importing that script.
+// The nature of the name guarantees it can never be conflated with a valid identifier.
+const specialReferenceRAM = ".^SPECIAL_ramOverride";
 
 // The global scope of a script is registered under this key during parsing.
 const memCheckGlobalKey = ".__GLOBAL__";
@@ -55,17 +75,18 @@ function getNumericCost(cost: number | (() => number)): number {
 /**
  * Parses code into an AST and walks through it recursively to calculate
  * RAM usage. Also accounts for imported modules.
- * @param otherScripts - All other scripts on the server. Used to account for imported scripts
- * @param code - The code being parsed
- * @param scriptname - The name of the script that ram needs to be added to
+ * @param ast - AST of the code being parsed
+ * @param scriptName - The name of the script that ram needs to be added to
  * @param server - Servername of the scripts for Error Message
+ * @param fileTypeFeature
+ * @param otherScripts - All other scripts on the server. Used to account for imported scripts
  * */
 function parseOnlyRamCalculate(
-  otherScripts: Map<ScriptFilePath, Script>,
-  code: string,
-  scriptname: ScriptFilePath,
+  ast: AST,
+  scriptName: ScriptFilePath,
   server: ServerName,
-  ns1?: boolean,
+  fileTypeFeature: FileTypeFeature,
+  otherScripts: Map<ScriptFilePath, Script>,
 ): RamCalculation {
   /**
    * Maps dependent identifiers to their dependencies.
@@ -77,7 +98,7 @@ function parseOnlyRamCalculate(
    * We walk the dependency graph to calculate RAM usage, given that some identifiers
    * reference Netscript functions which have a RAM cost.
    */
-  let dependencyMap: Record<string, string[]> = {};
+  let dependencyMap: Record<string, Set<string>> = {};
 
   // Scripts we've parsed.
   const completedParses = new Set();
@@ -85,14 +106,14 @@ function parseOnlyRamCalculate(
   // Scripts we've discovered that need to be parsed.
   const parseQueue: ScriptFilePath[] = [];
   // Parses a chunk of code with a given module name, and updates parseQueue and dependencyMap.
-  function parseCode(code: string, moduleName: ScriptFilePath): void {
-    const result = parseOnlyCalculateDeps(code, moduleName, ns1);
+  function parseCode(ast: AST, moduleName: ScriptFilePath, fileTypeFeatureOfModule: FileTypeFeature): void {
+    const result = parseOnlyCalculateDeps(ast, moduleName, fileTypeFeatureOfModule, otherScripts);
     completedParses.add(moduleName);
 
     // Add any additional modules to the parse queue;
-    for (let i = 0; i < result.additionalModules.length; ++i) {
-      if (!completedParses.has(result.additionalModules[i])) {
-        parseQueue.push(result.additionalModules[i]);
+    for (const additionalModule of result.additionalModules) {
+      if (!completedParses.has(additionalModule) && !parseQueue.includes(additionalModule)) {
+        parseQueue.push(additionalModule);
       }
     }
 
@@ -101,37 +122,65 @@ function parseOnlyRamCalculate(
   }
 
   // Parse the initial module, which is the "main" script that is being run
-  const initialModule = scriptname;
-  parseCode(code, initialModule);
+  const initialModule = scriptName;
+  parseCode(ast, initialModule, fileTypeFeature);
 
   // Process additional modules, which occurs if the "main" script has any imports
   while (parseQueue.length > 0) {
     const nextModule = parseQueue.shift();
-    if (nextModule === undefined) throw new Error("nextModule should not be undefined");
-    if (nextModule.startsWith("https://") || nextModule.startsWith("http://")) continue;
+
+    if (nextModule === undefined) {
+      throw new Error("nextModule should not be undefined");
+    }
+    if (nextModule.startsWith("https://") || nextModule.startsWith("http://")) {
+      continue;
+    }
 
     const script = otherScripts.get(nextModule);
     if (!script) {
       return {
         errorCode: RamCalculationErrorCode.ImportError,
-        errorMessage: `File: "${nextModule}" not found on server: ${server}`,
+        errorMessage: `"${nextModule}" does not exist on server: ${server}`,
       };
     }
-
-    parseCode(script.code, nextModule);
+    const scriptFileType = getFileType(script.filename);
+    let moduleAST;
+    try {
+      moduleAST = parseAST(script.code, scriptFileType);
+    } catch (error) {
+      return {
+        errorCode: RamCalculationErrorCode.ImportError,
+        errorMessage: `Cannot parse module: ${nextModule}. Filename: ${script.filename}. Reason: ${
+          error instanceof Error ? error.message : String(error)
+        }.`,
+      };
+    }
+    parseCode(moduleAST, nextModule, getFileTypeFeature(scriptFileType));
   }
 
   // Finally, walk the reference map and generate a ram cost. The initial set of keys to scan
   // are those that start with the name of the main script.
-  let ram = RamCostConstants.Base;
+  let ram: number = RamCostConstants.Base;
   const detailedCosts: RamUsageEntry[] = [{ type: "misc", name: "baseCost", cost: RamCostConstants.Base }];
   const unresolvedRefs = Object.keys(dependencyMap).filter((s) => s.startsWith(initialModule));
   const resolvedRefs = new Set();
   const loadedFns: Record<string, boolean> = {};
   while (unresolvedRefs.length > 0) {
     const ref = unresolvedRefs.shift();
-    if (ref === undefined) throw new Error("ref should not be undefined");
+    if (ref === undefined) {
+      throw new Error("ref should not be undefined");
+    }
 
+    if (ref.endsWith(specialReferenceRAM)) {
+      if (ref !== initialModule + specialReferenceRAM) {
+        // All RAM override tokens that *aren't* for the main module should be discarded.
+        continue;
+      }
+      // This is a RAM override for the main module. We can end ram calculation immediately.
+      const [first] = dependencyMap[ref];
+      const override = Number(first);
+      return { cost: override, entries: [{ type: "misc", name: "override", cost: override }] };
+    }
     // Check if this is one of the special keys, and add the appropriate ram cost if so.
     if (ref === "hacknet" && !resolvedRefs.has("hacknet")) {
       ram += RamCostConstants.HacknetNodes;
@@ -153,13 +202,17 @@ function parseOnlyRamCalculate(
       const prefix = ref.slice(0, ref.length - 2);
       for (const ident of Object.keys(dependencyMap).filter((k) => k.startsWith(prefix))) {
         for (const dep of dependencyMap[ident] || []) {
-          if (!resolvedRefs.has(dep)) unresolvedRefs.push(dep);
+          if (!resolvedRefs.has(dep)) {
+            unresolvedRefs.push(dep);
+          }
         }
       }
     } else {
       // An exact reference. Add all dependencies of this ref.
       for (const dep of dependencyMap[ref] || []) {
-        if (!resolvedRefs.has(dep)) unresolvedRefs.push(dep);
+        if (!resolvedRefs.has(dep)) {
+          unresolvedRefs.push(dep);
+        }
       }
     }
 
@@ -177,15 +230,19 @@ function parseOnlyRamCalculate(
         prefix: string,
         obj: object,
         ref: string,
-      ): { func: () => number | number; refDetail: string } | undefined => {
-        if (!obj) return;
+      ): { func: (() => number) | number; refDetail: string } | undefined => {
+        if (!obj) {
+          return;
+        }
         const elem = Object.entries(obj).find(([key]) => key === ref);
         if (elem !== undefined && (typeof elem[1] === "function" || typeof elem[1] === "number")) {
-          return { func: elem[1], refDetail: `${prefix}${ref}` };
+          return { func: elem[1] as (() => number) | number, refDetail: `${prefix}${ref}` };
         }
         for (const [key, value] of Object.entries(obj)) {
-          const found = findFunc(`${key}.`, value, ref);
-          if (found) return found;
+          const found = findFunc(`${key}.`, value as object, ref);
+          if (found) {
+            return found;
+          }
         }
         return undefined;
       };
@@ -206,14 +263,7 @@ function parseOnlyRamCalculate(
   return { cost: ram, entries: detailedCosts.filter((e) => e.cost > 0) };
 }
 
-export function checkInfiniteLoop(code: string): number[] {
-  let ast: acorn.Node;
-  try {
-    ast = parse(code, { sourceType: "module", ecmaVersion: "latest" });
-  } catch (e) {
-    // If code cannot be parsed, do not provide infinite loop detection warning
-    return [];
-  }
+export function checkInfiniteLoop(ast: AST, code: string): number[] {
   function nodeHasTrueTest(node: acorn.Node): boolean {
     return node.type === "Literal" && "raw" in node && (node.raw === "true" || node.raw === "1");
   }
@@ -234,10 +284,10 @@ export function checkInfiniteLoop(code: string): number[] {
 
   const possibleLines: number[] = [];
   walk.recursive(
-    ast,
+    ast as acorn.Node, // Pretend that ast is an acorn node
     {},
     {
-      WhileStatement: (node: Node, st: unknown, walkDeeper: walk.WalkerCallback<any>) => {
+      WhileStatement: (node: acorn.WhileStatement, st: unknown, walkDeeper: walk.WalkerCallback<any>) => {
         const previousLines = code.slice(0, node.start).trimEnd().split("\n");
         const lineNumber = previousLines.length + 1;
         if (previousLines[previousLines.length - 1].match(/^\s*\/\/\s*@ignore-infinite/)) {
@@ -266,8 +316,12 @@ interface ParseDepsResult {
  * for RAM usage calculations. It also returns an array of additional modules
  * that need to be parsed (i.e. are 'import'ed scripts).
  */
-function parseOnlyCalculateDeps(code: string, currentModule: ScriptFilePath, ns1?: boolean): ParseDepsResult {
-  const ast = parse(code, { sourceType: "module", ecmaVersion: "latest" });
+function parseOnlyCalculateDeps(
+  ast: AST,
+  currentModule: ScriptFilePath,
+  fileTypeFeature: FileTypeFeature,
+  otherScripts: Map<ScriptFilePath, Script>,
+): ParseDepsResult {
   // Everything from the global scope goes in ".". Everything else goes in ".function", where only
   // the outermost layer of functions counts.
   const globalKey = currentModule + memCheckGlobalKey;
@@ -299,40 +353,91 @@ function parseOnlyCalculateDeps(code: string, currentModule: ScriptFilePath, ns1
     key: string;
   }
 
+  function checkRamOverride(node: acorn.BlockStatement) {
+    // To trigger a syntactic RAM override, the first statement must be a call
+    // to ns.ramOverride() (or something that looks similar).
+    if (!node.body || !node.body.length) return;
+    const statement = node.body[0];
+    if (statement.type !== "ExpressionStatement") return;
+    const expr = statement.expression;
+    if (expr.type !== "CallExpression") return;
+    if (!expr.arguments || expr.arguments.length !== 1) return;
+
+    /**
+     * This function is called with expr.callee. expr.callee can be Expression or Super. In its implementation, the
+     * "node" parameter can be reassigned to node.property if "node" is MemberExpression. node.property may be
+     * PrivateIdentifier, so we need to add that type to the type list of "node".
+     */
+    function findIdentifier(node: acorn.Expression | acorn.Super | acorn.PrivateIdentifier) {
+      for (;;) {
+        // Find the identifier node attached to the call
+        switch (node.type) {
+          case "ParenthesizedExpression":
+          case "ChainExpression":
+            node = node.expression;
+            break;
+          case "MemberExpression":
+            node = node.property;
+            break;
+          default:
+            return node;
+        }
+      }
+    }
+    const idNode = findIdentifier(expr.callee);
+    if (idNode.type !== "Identifier" || idNode.name !== "ramOverride") return;
+
+    // For the time being, we only handle simple literals for the argument.
+    // If needed, this could be extended to simple constant expressions.
+    const literal = expr.arguments[0];
+    if (literal.type !== "Literal") return;
+    const value = literal.value;
+    if (typeof value !== "number") return;
+
+    // Finally, we know the syntax checks out for applying the RAM override.
+    // But the value might be illegal.
+    if (!isFinite(value) || value < RamCostConstants.Base) return;
+
+    // This is an unusual arrangement; the "function name" here is our special
+    // case, and it is "depending on" the stringified value of our ram override
+    // (which is not any kind of identifier).
+    dependencyMap[currentModule + specialReferenceRAM] = new Set([roundToTwo(value).toString()]);
+  }
+
   // If we discover a dependency identifier, state.key is the dependent identifier.
   // walkDeeper is for doing recursive walks of expressions in composites that we handle.
   function commonVisitors(): walk.RecursiveVisitors<State> {
     return {
-      Identifier: (node: Node, st: State) => {
+      Identifier: (node: acorn.Identifier, st: State) => {
         if (objectPrototypeProperties.includes(node.name)) {
           return;
         }
         addRef(st.key, node.name);
       },
-      WhileStatement: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+      WhileStatement: (node: acorn.WhileStatement, st: State, walkDeeper: walk.WalkerCallback<State>) => {
         addRef(st.key, specialReferenceWHILE);
         node.test && walkDeeper(node.test, st);
         node.body && walkDeeper(node.body, st);
       },
-      DoWhileStatement: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+      DoWhileStatement: (node: acorn.DoWhileStatement, st: State, walkDeeper: walk.WalkerCallback<State>) => {
         addRef(st.key, specialReferenceWHILE);
         node.test && walkDeeper(node.test, st);
         node.body && walkDeeper(node.body, st);
       },
-      ForStatement: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+      ForStatement: (node: acorn.ForStatement, st: State, walkDeeper: walk.WalkerCallback<State>) => {
         addRef(st.key, specialReferenceFOR);
         node.init && walkDeeper(node.init, st);
         node.test && walkDeeper(node.test, st);
         node.update && walkDeeper(node.update, st);
         node.body && walkDeeper(node.body, st);
       },
-      IfStatement: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+      IfStatement: (node: acorn.IfStatement, st: State, walkDeeper: walk.WalkerCallback<State>) => {
         addRef(st.key, specialReferenceIF);
         node.test && walkDeeper(node.test, st);
         node.consequent && walkDeeper(node.consequent, st);
         node.alternate && walkDeeper(node.alternate, st);
       },
-      MemberExpression: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
+      MemberExpression: (node: acorn.MemberExpression, st: State, walkDeeper: walk.WalkerCallback<State>) => {
         node.object && walkDeeper(node.object, st);
         node.property && walkDeeper(node.property, st);
       },
@@ -340,17 +445,21 @@ function parseOnlyCalculateDeps(code: string, currentModule: ScriptFilePath, ns1
   }
 
   walk.recursive<State>(
-    ast,
+    ast as acorn.Node, // Pretend that ast is an acorn node
     { key: globalKey },
     Object.assign(
       {
-        ImportDeclaration: (node: Node, st: State) => {
-          const importModuleName = resolveScriptFilePath(node.source.value, currentModule, ns1 ? ".script" : ".js");
-          if (!importModuleName)
-            throw new Error(
-              `ScriptFilePath couldnt be resolved in ImportDeclaration. Value: ${node.source.value}  ScriptFilePath: ${currentModule}`,
-            );
-
+        ImportDeclaration: (node: acorn.ImportDeclaration, st: State) => {
+          const rawImportModuleName = node.source.value;
+          if (typeof rawImportModuleName !== "string") {
+            console.error("Invalid node when walking ImportDeclaration in parseOnlyCalculateDeps. node:", node);
+            return;
+          }
+          // Skip these modules. They are popular path aliases of NetscriptDefinitions.d.ts.
+          if (fileTypeFeature.isTypeScript && (rawImportModuleName === "@nsdefs" || rawImportModuleName === "@ns")) {
+            return;
+          }
+          const importModuleName = getModuleScript(rawImportModuleName, currentModule, otherScripts).filename;
           additionalModules.push(importModuleName);
 
           // This module's global scope refers to that module's global scope, no matter how we
@@ -361,7 +470,11 @@ function parseOnlyCalculateDeps(code: string, currentModule: ScriptFilePath, ns1
 
           for (let i = 0; i < node.specifiers.length; ++i) {
             const spec = node.specifiers[i];
-            if (spec.imported !== undefined && spec.local !== undefined) {
+            /**
+             * spec can be ImportSpecifier, ImportDefaultSpecifier, or ImportNamespaceSpecifier. "imported" only exists
+             * in ImportSpecifier. "imported" can be Identifier or Literal. imported.name only exists in Identifier.
+             */
+            if (spec.type === "ImportSpecifier" && spec.imported.type === "Identifier" && spec.local !== undefined) {
               // We depend on specific things.
               internalToExternal[spec.local.name] = importModuleName + "." + spec.imported.name;
             } else {
@@ -372,27 +485,43 @@ function parseOnlyCalculateDeps(code: string, currentModule: ScriptFilePath, ns1
             }
           }
         },
-        FunctionDeclaration: (node: Node) => {
+        FunctionDeclaration: (node: acorn.FunctionDeclaration) => {
+          if (node.id?.name === "main") {
+            checkRamOverride(node.body);
+          }
           // node.id will be null when using 'export default'. Add a module name indicating the default export.
           const key = currentModule + "." + (node.id === null ? "__SPECIAL_DEFAULT_EXPORT__" : node.id.name);
           walk.recursive(node, { key: key }, commonVisitors());
         },
-        ExportNamedDeclaration: (node: Node, st: State, walkDeeper: walk.WalkerCallback<State>) => {
-          if (node.declaration !== null) {
+        ExportNamedDeclaration: (
+          node: acorn.ExportNamedDeclaration,
+          st: State,
+          walkDeeper: walk.WalkerCallback<State>,
+        ) => {
+          if (node.declaration != null) {
             // if this is true, the statement is not a named export, but rather a exported function/variable
             walkDeeper(node.declaration, st);
             return;
           }
 
           for (const specifier of node.specifiers) {
+            /**
+             * specifier.exported can be Identifier or Literal. specifier.exported.name only exists in Identifier.
+             */
+            if (specifier.exported.type === "Literal") {
+              continue;
+            }
             const exportedDepName = currentModule + "." + specifier.exported.name;
-
-            if (node.source !== null) {
+            /**
+             * We need to use specifier.local.name and node.source.value. Before doing that, we need to check if they
+             * exist. local.name only exists in Identifier.
+             */
+            if (node.source != null && typeof node.source.value === "string" && specifier.local.type === "Identifier") {
               // if this is true, we are re-exporting something
-              addRef(exportedDepName, specifier.local.name, node.source.value);
-              additionalModules.push(node.source.value);
-            } else if (specifier.exported.name !== specifier.local.name) {
-              // this makes sure we are not refering to ourselves
+              addRef(exportedDepName, specifier.local.name, node.source.value as ScriptFilePath);
+              additionalModules.push(node.source.value as ScriptFilePath);
+            } else if (specifier.local.type === "Identifier" && specifier.exported.name !== specifier.local.name) {
+              // this makes sure we are not referring to ourselves
               // if this is not true, we don't need to add anything
               addRef(exportedDepName, specifier.local.name);
             }
@@ -407,27 +536,31 @@ function parseOnlyCalculateDeps(code: string, currentModule: ScriptFilePath, ns1
 }
 
 /**
- * Calculate's a scripts RAM Usage
- * @param {string} code - The script's code
- * @param {ScriptFilePath} scriptname - The script's name. Used to resolve relative paths
- * @param {Script[]} otherScripts - All other scripts on the server.
- *                                  Used to account for imported scripts
- * @param {ServerName} server - Servername of the scripts for Error Message
- * @param {boolean} ns1 - Deprecated: is the fileExtension .script or .js
+ * Calculate RAM usage of a script
+ *
+ * @param input - Code's AST or code of the script
+ * @param scriptName - The script's name. Used to resolve relative paths
+ * @param server - Servername of the scripts for Error Message
+ * @param otherScripts - Other scripts on the server
+ * @returns
  */
 export function calculateRamUsage(
-  code: string,
-  scriptname: ScriptFilePath,
-  otherScripts: Map<ScriptFilePath, Script>,
+  input: AST | string,
+  scriptName: ScriptFilePath,
   server: ServerName,
-  ns1?: boolean,
+  otherScripts: Map<ScriptFilePath, Script>,
 ): RamCalculation {
   try {
-    return parseOnlyRamCalculate(otherScripts, code, scriptname, server, ns1);
-  } catch (e) {
+    const fileType = getFileType(scriptName);
+    const ast = typeof input === "string" ? parseAST(input, fileType) : input;
+    return parseOnlyRamCalculate(ast, scriptName, server, getFileTypeFeature(fileType), otherScripts);
+  } catch (error) {
     return {
-      errorCode: RamCalculationErrorCode.SyntaxError,
-      errorMessage: e instanceof Error ? e.message : undefined,
+      errorCode:
+        error instanceof ModuleResolutionError
+          ? RamCalculationErrorCode.ImportError
+          : RamCalculationErrorCode.SyntaxError,
+      errorMessage: error instanceof Error ? error.message : String(error),
     };
   }
 }

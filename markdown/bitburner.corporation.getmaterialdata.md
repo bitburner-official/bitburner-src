@@ -4,7 +4,7 @@
 
 ## Corporation.getMaterialData() method
 
-Get constant data for a specific material
+Get constant data of a material.
 
 **Signature:**
 
@@ -16,9 +16,15 @@ getMaterialData(materialName: CorpMaterialName): CorpMaterialConstantData;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  materialName | [CorpMaterialName](./bitburner.corpmaterialname.md) |  |
+|  materialName | [CorpMaterialName](./bitburner.corpmaterialname.md) | Name of the material |
 
 **Returns:**
 
 [CorpMaterialConstantData](./bitburner.corpmaterialconstantdata.md)
+
+Material data
+
+## Remarks
+
+RAM cost: 10 GB
 

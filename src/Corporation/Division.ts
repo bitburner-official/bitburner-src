@@ -16,6 +16,8 @@ import { PartialRecord, getRecordEntries, getRecordKeys, getRecordValues } from 
 import { Material } from "./Material";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import { calculateMarkupMultiplier } from "./helpers";
+import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 
 interface DivisionParams {
   name: string;
@@ -65,7 +67,7 @@ export class Division {
   aiCoreFactor = 0;
   advertisingFactor = 0;
 
-  productionMult = 0; //Production multiplier
+  productionMult = 1; //Production multiplier
 
   //Financials
   lastCycleRevenue = 0;
@@ -375,7 +377,7 @@ export class Division {
           // buy them
           for (const [matName, [buyAmt]] of getRecordEntries(smartBuy)) {
             const mat = warehouse.materials[matName];
-            if (mat.stored + buyAmt != 0) {
+            if (mat.stored + buyAmt !== 0) {
               mat.quality = (mat.quality * mat.stored + 1 * buyAmt) / (mat.stored + buyAmt);
               mat.averagePrice = (mat.averagePrice * mat.stored + mat.marketPrice * buyAmt) / (mat.stored + buyAmt);
             } else {
@@ -451,6 +453,21 @@ export class Division {
                 const reqMatQtyNeeded = reqMat * prod * producableFrac;
                 // producableFrac already takes into account that we have enough stored
                 // Math.max is used here to avoid stored becoming negative (which can lead to NaNs)
+                /**
+                 * material.stored can become negative due to floating-point inaccuracy.
+                 *
+                 * Let's check this situation: Tobacco: 1 Plants -> 1 Product. In this situation, we have:
+                 * - reqQty = 1
+                 * - producableFrac = material.stored / prod
+                 * - reqMatQtyNeeded = prod * material.stored / prod
+                 *
+                 * Due to floating-point inaccuracy, "prod * material.stored / prod" may be slightly greater than
+                 * "material.stored". Example numbers from a real test run:
+                 * - warehouse.materials[reqMatName].stored: 942118
+                 * - prod: 176915618.50773352
+                 * - producableFrac: 0.005325239274783516
+                 * - reqMatQtyNeeded: 942118.0000000001
+                 */
                 warehouse.materials[reqMatName].stored = Math.max(
                   0,
                   warehouse.materials[reqMatName].stored - reqMatQtyNeeded,
@@ -522,25 +539,30 @@ export class Division {
             // The amount gets re-multiplied later, so this is the correct
             // amount to calculate with for "MAX".
             const adjustedQty = mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles);
-            if (typeof mat.desiredSellAmount === "string") {
-              //Dynamically evaluated
-              let tmp = mat.desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
-              tmp = tmp.replace(/PROD/g, mat.productionAmount.toString());
-              try {
-                sellAmt = eval(tmp);
-              } catch (e) {
-                dialogBoxCreate(
-                  `Error evaluating your sell amount for material ${mat.name} in ${this.name}'s ${city} office. The sell amount is being set to zero`,
-                );
-                sellAmt = 0;
+            /**
+             * desiredSellAmount is usually a string, but it also can be a number in old versions. eval requires a
+             * string, so we convert it to a string here, replace placeholders, and then pass it to eval.
+             */
+            let temp = String(mat.desiredSellAmount);
+            temp = temp.replace(/MAX/g, adjustedQty.toString());
+            temp = temp.replace(/PROD/g, mat.productionAmount.toString());
+            temp = temp.replace(/INV/g, mat.stored.toString());
+            try {
+              // Typecasting here is fine. We will validate the result immediately after this line.
+              sellAmt = eval?.(temp) as number;
+              if (typeof sellAmt !== "number" || !Number.isFinite(sellAmt)) {
+                throw new Error(`Evaluated value is not a valid number: ${sellAmt}`);
               }
-            } else {
-              sellAmt = mat.desiredSellAmount;
+            } catch (error) {
+              dialogBoxCreate(
+                `Error evaluating your sell amount for material ${mat.name} in ${this.name}'s ${city} office. Error: ${error}.`,
+              );
+              continue;
             }
 
             // Determine the cost that the material will be sold at
             const markupLimit = mat.getMarkupLimit();
-            let sCost;
+            let sCost: number;
             if (mat.marketTa2) {
               // Reverse engineer the 'maxSell' formula
               // 1. Set 'maxSell' = sellAmt
@@ -574,11 +596,29 @@ export class Division {
               sCost = optimalPrice;
             } else if (mat.marketTa1) {
               sCost = mat.marketPrice + markupLimit;
-            } else if (typeof mat.desiredSellPrice === "string") {
-              sCost = mat.desiredSellPrice.replace(/MP/g, mat.marketPrice.toString());
-              sCost = eval(sCost);
             } else {
-              sCost = mat.desiredSellPrice;
+              // If the player does not set the price, desiredSellPrice will be an empty string.
+              if (mat.desiredSellPrice === "") {
+                continue;
+              }
+              /**
+               * desiredSellPrice is usually a string, but it also can be a number in old versions. eval requires a
+               * string, so we convert it to a string here, replace the placeholder MP, and then pass it to eval later.
+               */
+              const temp = String(mat.desiredSellPrice).replace(/MP/g, mat.marketPrice.toString());
+              try {
+                // Typecasting here is fine. We will validate the result immediately after this line.
+                sCost = eval?.(temp) as number;
+                if (typeof sCost !== "number" || !Number.isFinite(sCost)) {
+                  throw new Error(`Evaluated value is not a valid number: ${sCost}`);
+                }
+              } catch (error) {
+                dialogBoxCreate(
+                  `Error evaluating your sell price for material ${mat.name} in ${this.name}'s ${city} office. ` +
+                    `The sell amount is being set to zero. Error: ${error}`,
+                );
+                continue;
+              }
             }
             mat.uiMarketPrice = sCost;
 
@@ -642,16 +682,14 @@ export class Division {
                 amtStr = amtStr.replace(/IINV/g, `(${tempMaterial.stored})`);
                 let amt = 0;
                 try {
-                  amt = eval(amtStr);
+                  // Typecasting here is fine. We will validate the result immediately after this line.
+                  amt = eval?.(amtStr) as number;
+                  if (typeof amt !== "number" || !Number.isFinite(amt)) {
+                    throw new Error(`Evaluated value is not a valid number: ${amt}`);
+                  }
                 } catch (e) {
                   dialogBoxCreate(
                     `Calculating export for ${mat.name} in ${this.name}'s ${city} division failed with error: ${e}`,
-                  );
-                  continue;
-                }
-                if (isNaN(amt)) {
-                  dialogBoxCreate(
-                    `Error calculating export amount for ${mat.name} in ${this.name}'s ${city} division.`,
                   );
                   continue;
                 }
@@ -704,8 +742,7 @@ export class Division {
         case "START":
           break;
         default:
-          console.error(`Invalid state: ${state}`);
-          break;
+          throwIfReachable(state);
       } //End switch(this.state)
       this.updateWarehouseSizeUsed(warehouse);
     }
@@ -797,7 +834,27 @@ export class Division {
             let avgQlt = 1;
             for (const [reqMatName, reqQty] of getRecordEntries(product.requiredMaterials)) {
               const reqMatQtyNeeded = reqQty * prod * producableFrac;
-              warehouse.materials[reqMatName].stored -= reqMatQtyNeeded;
+              // producableFrac already takes into account that we have enough stored
+              // Math.max is used here to avoid stored becoming negative (which can lead to NaNs)
+              /**
+               * material.stored can become negative due to floating-point inaccuracy.
+               *
+               * Let's check this situation: Tobacco: 1 Plants -> 1 Product. In this situation, we have:
+               * - reqQty = 1
+               * - producableFrac = material.stored / prod
+               * - reqMatQtyNeeded = prod * material.stored / prod
+               *
+               * Due to floating-point inaccuracy, "prod * material.stored / prod" may be slightly greater than
+               * "material.stored". Example numbers from a real test run:
+               * - warehouse.materials[reqMatName].stored: 942118
+               * - prod: 176915618.50773352
+               * - producableFrac: 0.005325239274783516
+               * - reqMatQtyNeeded: 942118.0000000001
+               */
+              warehouse.materials[reqMatName].stored = Math.max(
+                0,
+                warehouse.materials[reqMatName].stored - reqMatQtyNeeded,
+              );
               warehouse.materials[reqMatName].productionAmount -=
                 reqMatQtyNeeded / (corpConstants.secondsPerMarketCycle * marketCycles);
               avgQlt += warehouse.materials[reqMatName].quality;
@@ -834,35 +891,43 @@ export class Division {
           const marketFactor = this.getMarketFactor(product); //Competition + demand
 
           // Parse player sell-amount input (needed for TA.II and selling)
-          let sellAmt: number | string;
+          let sellAmt: number;
           // The amount gets re-multiplied later, so this is the correct
           // amount to calculate with for "MAX".
           const adjustedQty = product.cityData[city].stored / (corpConstants.secondsPerMarketCycle * marketCycles);
-          const desiredSellAmount = product.cityData[city].desiredSellAmount;
-          if (typeof desiredSellAmount === "string") {
-            //Sell amount is dynamically evaluated
-            let tmp: number | string = desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
-            tmp = tmp.replace(/PROD/g, product.cityData[city].productionAmount.toString());
-            try {
-              tmp = eval(tmp);
-              if (typeof tmp !== "number") throw "";
-            } catch (e) {
-              dialogBoxCreate(
-                `Error evaluating your sell price expression for ${product.name} in ${this.name}'s ${city} office. Sell price is being set to MAX`,
-              );
-              tmp = product.maxSellAmount;
+          /**
+           * desiredSellAmount is usually a string, but it also can be a number in old versions. eval requires a
+           * string, so we convert it to a string here, replace placeholders, and then pass it to eval.
+           */
+          const desiredSellAmount = String(product.cityData[city].desiredSellAmount);
+          let temp = desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
+          temp = temp.replace(/PROD/g, product.cityData[city].productionAmount.toString());
+          temp = temp.replace(/INV/g, product.cityData[city].stored.toString());
+          try {
+            // Typecasting here is fine. We will validate the result immediately after this line.
+            sellAmt = eval?.(temp) as number;
+            if (typeof sellAmt !== "number" || !Number.isFinite(sellAmt)) {
+              throw new Error(`Evaluated value is not a valid number: ${sellAmt}`);
             }
-            sellAmt = tmp;
-          } else if (desiredSellAmount && desiredSellAmount > 0) {
-            sellAmt = desiredSellAmount;
-          } else sellAmt = adjustedQty;
+          } catch (error) {
+            dialogBoxCreate(
+              `Error evaluating your sell amount for ${product.name} in ${this.name}'s ${city} office. Error: ${error}.`,
+            );
+            // break the case "SALE"
+            break;
+          }
 
-          if (sellAmt < 0) sellAmt = 0;
+          if (sellAmt < 0) {
+            sellAmt = 0;
+          }
+          if (product.markup === 0) {
+            exceptionAlert(new Error("product.markup is 0"));
+            product.markup = 1;
+          }
 
           // Calculate Sale Cost (sCost), which could be dynamically evaluated
           const markupLimit = Math.max(product.cityData[city].effectiveRating, 0.001) / product.markup;
           let sCost: number;
-          const sellPrice = product.cityData[city].desiredSellPrice;
           if (product.marketTa2) {
             // Reverse engineer the 'maxSell' formula
             // 1. Set 'maxSell' = sellAmt
@@ -895,16 +960,29 @@ export class Division {
             sCost = optimalPrice;
           } else if (product.marketTa1) {
             sCost = product.cityData[city].productionCost + markupLimit;
-          } else if (typeof sellPrice === "string") {
-            let sCostString = sellPrice;
-            if (product.markup === 0) {
-              console.error(`mku is zero, reverting to 1 to avoid Infinity`);
-              product.markup = 1;
-            }
-            sCostString = sCostString.replace(/MP/g, product.cityData[city].productionCost.toString());
-            sCost = eval(sCostString);
           } else {
-            sCost = sellPrice;
+            // If the player does not set the price, desiredSellPrice will be an empty string.
+            if (product.cityData[city].desiredSellPrice === "") {
+              // break the case "SALE"
+              break;
+            }
+            const temp = String(product.cityData[city].desiredSellPrice).replace(
+              /MP/g,
+              product.cityData[city].productionCost.toString(),
+            );
+            try {
+              // Typecasting here is fine. We will validate the result immediately after this line.
+              sCost = eval?.(temp) as number;
+              if (typeof sCost !== "number" || !Number.isFinite(sCost)) {
+                throw new Error(`Evaluated value is not a valid number: ${sCost}`);
+              }
+            } catch (error) {
+              dialogBoxCreate(
+                `Error evaluating your sell price for product ${product.name} in ${this.name}'s ${city} office. Error: ${error}.`,
+              );
+              // break the case "SALE"
+              break;
+            }
           }
           product.uiMarketPrice[city] = sCost;
 
@@ -936,8 +1014,7 @@ export class Division {
         case "EXPORT":
           break;
         default:
-          console.error(`Invalid State: ${state}`);
-          break;
+          throwIfReachable(state);
       } //End switch(this.state)
       this.updateWarehouseSizeUsed(warehouse);
     }

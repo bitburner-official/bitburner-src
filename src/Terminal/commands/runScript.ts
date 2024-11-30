@@ -7,7 +7,7 @@ import libarg from "arg";
 import { formatRam } from "../../ui/formatNumber";
 import { ScriptArg } from "@nsdefs";
 import { isPositiveInteger } from "../../types";
-import { ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { ScriptFilePath, isLegacyScript } from "../../Paths/ScriptFilePath";
 import { sendDeprecationNotice } from "./common/deprecation";
 import { roundToTwo } from "../../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../../Netscript/RamCostGenerator";
@@ -18,10 +18,22 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   if (!script) return Terminal.error(`Script ${path} does not exist on this server.`);
 
   const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
-  const flags = libarg(runArgs, {
-    permissive: true,
-    argv: commandArgs,
-  });
+  let flags: {
+    _: ScriptArg[];
+    "--tail": boolean;
+    "-t": string;
+    "--ram-override": string;
+  };
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
+    flags = libarg(runArgs, {
+      permissive: true,
+      argv: commandArgs,
+    });
+  } catch (error) {
+    Terminal.error(`Invalid arguments. ${error}.`);
+    return;
+  }
   const tailFlag = flags["--tail"] === true;
   const numThreads = parseFloat(flags["-t"] ?? 1);
   const ramOverride = flags["--ram-override"] != null ? roundToTwo(parseFloat(flags["--ram-override"])) : null;
@@ -36,7 +48,7 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   if (!server.hasAdminRights) return Terminal.error("Need root access to run script");
 
   // Todo: Switch out arg for something with typescript support
-  const args = flags._ as ScriptArg[];
+  const args = flags._;
 
   const singleRamUsage = ramOverride ?? script.getRamUsage(server.scripts);
   if (!singleRamUsage) {
@@ -61,7 +73,7 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
   const success = startWorkerScript(runningScript, server);
   if (!success) return Terminal.error(`Failed to start script`);
 
-  if (path.endsWith(".script")) {
+  if (isLegacyScript(path)) {
     sendDeprecationNotice();
   }
   Terminal.print(

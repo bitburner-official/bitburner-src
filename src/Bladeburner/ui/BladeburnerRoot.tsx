@@ -5,10 +5,10 @@ import { AllPages } from "./AllPages";
 
 import { Player } from "@player";
 import { Box } from "@mui/material";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 
 export function BladeburnerRoot(): React.ReactElement {
-  useRerender(200);
+  useCycleRerender();
   const bladeburner = Player.bladeburner;
   if (!bladeburner) return <></>;
   return (

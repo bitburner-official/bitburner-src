@@ -1,10 +1,16 @@
 import type { NetscriptContext } from "./APIWrapper";
-import type { RunningScript as IRunningScript, Person as IPerson, Server as IServer, ScriptArg } from "@nsdefs";
+import type {
+  RunningScript as IRunningScript,
+  Person as IPerson,
+  Server as IServer,
+  ScriptArg,
+  BitNodeOptions,
+} from "@nsdefs";
 import type { WorkerScript } from "./WorkerScript";
 
 import React from "react";
 import { killWorkerScript } from "./killWorkerScript";
-import { GetAllServers, GetServer } from "../Server/AllServers";
+import { GetServer } from "../Server/AllServers";
 import { Player } from "@player";
 import { ScriptDeath } from "./ScriptDeath";
 import { formatExp, formatMoney, formatRam, formatThreads } from "../ui/formatNumber";
@@ -41,6 +47,8 @@ import {
   PositiveNumber,
   PositiveSafeInteger,
   isPositiveSafeInteger,
+  isInteger,
+  type Integer,
 } from "../types";
 import { Engine } from "../engine";
 import { resolveFilePath, FilePath } from "../Paths/FilePath";
@@ -49,12 +57,20 @@ import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
 import { basicErrorMessage, errorMessage, log } from "./ErrorMessages";
 import { assertString, debugType } from "./TypeAssertion";
+import {
+  canAccessBitNodeFeature,
+  getDefaultBitNodeOptions,
+  validateSourceFileOverrides,
+} from "../BitNode/BitNodeUtils";
+import { JSONMap } from "../Types/Jsonable";
 
 export const helpers = {
   string,
   number,
+  integer,
   positiveInteger,
   positiveSafeInteger,
+  positiveNumber,
   scriptArgs,
   runOptions,
   spawnOptions,
@@ -83,6 +99,7 @@ export const helpers = {
   getCannotFindRunningScriptErrorMessage,
   createPublicRunningScript,
   failOnHacknetServer,
+  validateBitNodeOptions,
 };
 
 /** RunOptions with non-optional, type-validated members, for passing between internal functions. */
@@ -119,14 +136,23 @@ function number(ctx: NetscriptContext, argName: string, v: unknown): number {
     if (isNaN(v)) throw errorMessage(ctx, `'${argName}' is NaN.`);
     return v;
   }
-  throw errorMessage(ctx, `'${argName}' should be a number. ${debugType(v)}`, "TYPE");
+  throw errorMessage(ctx, `'${argName}' must be a number. ${debugType(v)}`, "TYPE");
+}
+
+/** Convert provided value v for argument argName to an integer, throwing if it looks like something else. */
+function integer(ctx: NetscriptContext, argName: string, v: unknown): Integer {
+  const n = number(ctx, argName, v);
+  if (!isInteger(n)) {
+    throw errorMessage(ctx, `${argName} must be an integer, was ${n}`, "TYPE");
+  }
+  return n;
 }
 
 /** Convert provided value v for argument argName to a positive integer, throwing if it looks like something else. */
 function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): PositiveInteger {
   const n = number(ctx, argName, v);
   if (!isPositiveInteger(n)) {
-    throw errorMessage(ctx, `${argName} should be a positive integer, was ${n}`, "TYPE");
+    throw errorMessage(ctx, `${argName} must be a positive integer, was ${n}`, "TYPE");
   }
   return n;
 }
@@ -135,7 +161,7 @@ function positiveInteger(ctx: NetscriptContext, argName: string, v: unknown): Po
 function positiveSafeInteger(ctx: NetscriptContext, argName: string, v: unknown): PositiveSafeInteger {
   const n = number(ctx, argName, v);
   if (!isPositiveSafeInteger(n)) {
-    throw errorMessage(ctx, `${argName} should be a positive safe integer, was ${n}`, "TYPE");
+    throw errorMessage(ctx, `${argName} must be a positive safe integer, was ${n}`, "TYPE");
   }
   return n;
 }
@@ -144,7 +170,7 @@ function positiveSafeInteger(ctx: NetscriptContext, argName: string, v: unknown)
 function positiveNumber(ctx: NetscriptContext, argName: string, v: unknown): PositiveNumber {
   const n = number(ctx, argName, v);
   if (!isPositiveNumber(n)) {
-    throw errorMessage(ctx, `${argName} should be a positive number, was ${n}`, "TYPE");
+    throw errorMessage(ctx, `${argName} must be a positive number, was ${n}`, "TYPE");
   }
   return n;
 }
@@ -203,10 +229,23 @@ function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteS
   return result;
 }
 
+function mapToString(map: Map<unknown, unknown>): string {
+  const formattedMap = [...map]
+    .map((m) => {
+      return `${String(m[0])} => ${String(m[1])}`;
+    })
+    .join("; ");
+  return `< Map: ${formattedMap} >`;
+}
+
+function setToString(set: Set<unknown>): string {
+  return `< Set: ${[...set].join("; ")} >`;
+}
+
 /** Convert multiple arguments for tprint or print into a single string. */
 function argsToString(args: unknown[]): string {
   // Reduce array of args into a single output string
-  return args.reduce((out, arg) => {
+  return args.reduce((out: string, arg) => {
     if (arg === null) {
       return (out += "null");
     }
@@ -217,24 +256,35 @@ function argsToString(args: unknown[]): string {
 
     // Handle Map formatting, since it does not JSON stringify or toString in a helpful way
     // output is  "< Map: key1 => value1; key2 => value2 >"
-    if (nativeArg instanceof Map && [...nativeArg].length) {
-      const formattedMap = [...nativeArg]
-        .map((m) => {
-          return `${m[0]} => ${m[1]}`;
-        })
-        .join("; ");
-      return (out += `< Map: ${formattedMap} >`);
+    if (nativeArg instanceof Map) {
+      return (out += mapToString(nativeArg));
     }
     // Handle Set formatting, since it does not JSON stringify or toString in a helpful way
     if (nativeArg instanceof Set) {
-      return (out += `< Set: ${[...nativeArg].join("; ")} >`);
+      return (out += setToString(nativeArg));
     }
     if (typeof nativeArg === "object") {
-      return (out += JSON.stringify(nativeArg));
+      return (out += JSON.stringify(nativeArg, (_, value: unknown) => {
+        /**
+         * If the property is a promise, we will return a string that clearly states that it's a promise object, not a
+         * normal object. If we don't do that, all promises will be serialized into "{}".
+         */
+        if (value instanceof Promise) {
+          // eslint-disable-next-line @typescript-eslint/no-base-to-string -- "[object Promise]" is exactly the string that we want.
+          return value.toString();
+        }
+        if (value instanceof Map) {
+          return mapToString(value);
+        }
+        if (value instanceof Set) {
+          return setToString(value);
+        }
+        return value;
+      }));
     }
 
-    return (out += `${nativeArg}`);
-  }, "") as string;
+    return (out += String(nativeArg));
+  }, "");
 }
 
 function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOptions {
@@ -247,6 +297,7 @@ function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOp
     return result;
   }
   if (typeof opts !== "object") {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     throw errorMessage(ctx, `BasicHGWOptions must be an object if specified, was ${opts}`);
   }
   // Safe assertion since threadOrOption type has been narrowed to a non-null object
@@ -279,7 +330,7 @@ function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOp
 
 /** Validate singularity access by throwing an error if the player does not have access. */
 function checkSingularityAccess(ctx: NetscriptContext): void {
-  if (Player.bitNodeN !== 4 && Player.sourceFileLvl(4) === 0) {
+  if (!canAccessBitNodeFeature(4)) {
     throw errorMessage(
       ctx,
       `This singularity function requires Source-File 4 to run. A power up you obtain later in the game.
@@ -329,6 +380,7 @@ function netscriptDelay(ctx: NetscriptContext, time: number): Promise<void> {
 
 /** Adds to dynamic ram cost when calling new ns functions from a script */
 function updateDynamicRam(ctx: NetscriptContext, ramCost: number): void {
+  if (ramCost === 0) return;
   const ws = ctx.workerScript;
   const fnName = ctx.function;
   if (ws.dynamicLoadedFns[fnName]) return;
@@ -635,21 +687,16 @@ export function getRunningScriptsByArgs(
   return findRunningScripts(path, scriptArgs, server);
 }
 
-function getRunningScriptByPid(pid: number): RunningScript | null {
-  for (const server of GetAllServers()) {
-    const runningScript = findRunningScriptByPid(pid, server);
-    if (runningScript) return runningScript;
-  }
-  return null;
-}
-
 function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): RunningScript | null {
   if (typeof ident === "number") {
-    return getRunningScriptByPid(ident);
+    return findRunningScriptByPid(ident);
   } else {
     const scripts = getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
-    if (scripts === null) return null;
-    return scripts.values().next().value;
+    if (scripts === null) {
+      return null;
+    }
+    const next = scripts.values().next();
+    return !next.done ? next.value : null;
   }
 }
 
@@ -681,7 +728,7 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
     args: runningScript.args.slice(),
     dynamicRamUsage: workerScript && roundToTwo(workerScript.dynamicRamUsage),
     filename: runningScript.filename,
-    logs: runningScript.logs.map((x) => "" + x),
+    logs: runningScript.logs.map((x) => String(x)),
     offlineExpGained: runningScript.offlineExpGained,
     offlineMoneyMade: runningScript.offlineMoneyMade,
     offlineRunningTime: runningScript.offlineRunningTime,
@@ -689,6 +736,7 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
     onlineMoneyMade: runningScript.onlineMoneyMade,
     onlineRunningTime: runningScript.onlineRunningTime,
     pid: runningScript.pid,
+    parent: runningScript.parent,
     ramUsage: runningScript.ramUsage,
     server: runningScript.server,
     tailProperties:
@@ -731,4 +779,49 @@ let customElementKey = 0;
  */
 export function wrapUserNode(value: unknown) {
   return <CustomBoundary key={`PlayerContent${customElementKey++}`}>{value}</CustomBoundary>;
+}
+
+function validateBitNodeOptions(ctx: NetscriptContext, bitNodeOptions: unknown): BitNodeOptions {
+  const result = getDefaultBitNodeOptions();
+  if (bitNodeOptions == null) {
+    return result;
+  }
+  if (typeof bitNodeOptions !== "object") {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    throw errorMessage(ctx, `bitNodeOptions must be an object if it's specified. It was ${bitNodeOptions}.`);
+  }
+  const options = bitNodeOptions as Unknownify<BitNodeOptions>;
+  if (!(options.sourceFileOverrides instanceof Map)) {
+    throw errorMessage(ctx, `sourceFileOverrides must be a Map.`);
+  }
+  const validationResultForSourceFileOverrides = validateSourceFileOverrides(
+    /**
+     * Cast the type from Map<any, any> to Map<number, number> to satisfy the lint rule. The validation logic in
+     * validateSourceFileOverrides will check the data.
+     */
+    options.sourceFileOverrides as Map<number, number>,
+    true,
+  );
+  if (!validationResultForSourceFileOverrides.valid) {
+    throw errorMessage(
+      ctx,
+      `sourceFileOverrides is invalid. Reason: ${validationResultForSourceFileOverrides.message}`,
+    );
+  }
+
+  result.sourceFileOverrides = new JSONMap(options.sourceFileOverrides);
+  if (options.intelligenceOverride !== undefined) {
+    result.intelligenceOverride = positiveInteger(ctx, "intelligenceOverride", options.intelligenceOverride);
+  } else {
+    result.intelligenceOverride = undefined;
+  }
+  result.restrictHomePCUpgrade = !!options.restrictHomePCUpgrade;
+  result.disableGang = !!options.disableGang;
+  result.disableCorporation = !!options.disableCorporation;
+  result.disableBladeburner = !!options.disableBladeburner;
+  result.disable4SData = !!options.disable4SData;
+  result.disableHacknetServer = !!options.disableHacknetServer;
+  result.disableSleeveExpAndAugmentation = !!options.disableSleeveExpAndAugmentation;
+
+  return result;
 }

@@ -20,12 +20,13 @@ import {
   GymType,
   JobName,
   JobField,
-  LiteratureName,
+  type LiteratureName,
   LocationName,
   ToastVariant,
   UniversityClassType,
   CompanyName,
   FactionName,
+  type MessageFilename,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer, DeleteServer, AddToAllServers, createUniqueRandomIp } from "./Server/AllServers";
@@ -112,6 +113,7 @@ import { ServerConstants } from "./Server/data/Constants";
 import { assertFunction } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
+import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
 
 export const enums: NSEnums = {
   CityName,
@@ -146,8 +148,19 @@ export const ns: InternalAPI<NSFull> = {
   stock: NetscriptStockMarket(),
   grafting: NetscriptGrafting(),
   hacknet: NetscriptHacknet(),
-  sprintf: () => sprintf,
-  vsprintf: () => vsprintf,
+  sprintf:
+    (ctx) =>
+    (_format, ...args) => {
+      const format = helpers.string(ctx, "format", _format);
+      return sprintf(format, ...(args as unknown[]));
+    },
+  vsprintf: (ctx) => (_format, _args) => {
+    const format = helpers.string(ctx, "format", _format);
+    if (!Array.isArray(_args)) {
+      throw helpers.errorMessage(ctx, `args must be an array.`);
+    }
+    return vsprintf(format, _args);
+  },
   scan: (ctx) => (_hostname) => {
     const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
     const server = helpers.getServer(ctx, hostname);
@@ -262,13 +275,7 @@ export const ns: InternalAPI<NSFull> = {
 
     const server = helpers.getServer(ctx, hostname);
     if (!(server instanceof Server)) {
-      helpers.log(ctx, () => "Cannot be executed on this server.");
-      return Promise.resolve(0);
-    }
-
-    const host = GetServer(ctx.workerScript.hostname);
-    if (host === null) {
-      throw new Error("Workerscript host is null");
+      throw helpers.errorMessage(ctx, "Cannot be executed on this server.");
     }
 
     // No root access or skill level too low
@@ -287,6 +294,10 @@ export const ns: InternalAPI<NSFull> = {
         )} (t=${formatThreads(threads)}).`,
     );
     return helpers.netscriptDelay(ctx, growTime * 1000).then(function () {
+      const host = GetServer(ctx.workerScript.hostname);
+      if (host === null) {
+        throw helpers.errorMessage(ctx, `Cannot find host of WorkerScript. Hostname: ${ctx.workerScript.hostname}.`);
+      }
       const moneyBefore = server.moneyAvailable <= 0 ? 1 : server.moneyAvailable;
       processSingleServerGrowth(server, threads, host.cpuCores);
       const moneyAfter = server.moneyAvailable;
@@ -361,8 +372,7 @@ export const ns: InternalAPI<NSFull> = {
 
     const server = helpers.getServer(ctx, hostname);
     if (!(server instanceof Server)) {
-      helpers.log(ctx, () => "Cannot be executed on this server.");
-      return Promise.resolve(0);
+      throw helpers.errorMessage(ctx, "Cannot be executed on this server.");
     }
 
     // No root access or skill level too low
@@ -383,8 +393,7 @@ export const ns: InternalAPI<NSFull> = {
     return helpers.netscriptDelay(ctx, weakenTime * 1000).then(function () {
       const host = GetServer(ctx.workerScript.hostname);
       if (host === null) {
-        helpers.log(ctx, () => "Server is null, did it die?");
-        return Promise.resolve(0);
+        throw helpers.errorMessage(ctx, `Cannot find host of WorkerScript. Hostname: ${ctx.workerScript.hostname}.`);
       }
       const weakenAmt = getWeakenEffect(threads, host.cpuCores);
       server.weaken(weakenAmt);
@@ -496,37 +505,46 @@ export const ns: InternalAPI<NSFull> = {
   },
   disableLog: (ctx) => (_fn) => {
     const fn = helpers.string(ctx, "fn", _fn);
-    if (fn === "ALL") {
-      for (const fn of Object.keys(possibleLogs)) {
-        ctx.workerScript.disableLogs[fn] = true;
-      }
-      helpers.log(ctx, () => `Disabled logging for all functions`);
-    } else if (possibleLogs[fn] === undefined) {
+    if (possibleLogs[fn] === undefined) {
       throw helpers.errorMessage(ctx, `Invalid argument: ${fn}.`);
+    }
+    if (fn === "ALL") {
+      ctx.workerScript.disableLogs = allDisabled;
+      // No need to log here, it's been disabled.
     } else {
-      ctx.workerScript.disableLogs[fn] = true;
-      helpers.log(ctx, () => `Disabled logging for ${fn}`);
+      // We don't track individual log entries when all are disabled.
+      if (!ctx.workerScript.disableLogs["ALL"]) {
+        ctx.workerScript.disableLogs[fn] = true;
+        helpers.log(ctx, () => `Disabled logging for ${fn}`);
+      }
     }
   },
   enableLog: (ctx) => (_fn) => {
     const fn = helpers.string(ctx, "fn", _fn);
-    if (fn === "ALL") {
-      for (const fn of Object.keys(possibleLogs)) {
-        delete ctx.workerScript.disableLogs[fn];
-      }
-      helpers.log(ctx, () => `Enabled logging for all functions`);
-    } else if (possibleLogs[fn] === undefined) {
+    if (possibleLogs[fn] === undefined) {
       throw helpers.errorMessage(ctx, `Invalid argument: ${fn}.`);
     }
-    delete ctx.workerScript.disableLogs[fn];
-    helpers.log(ctx, () => `Enabled logging for ${fn}`);
+    if (fn === "ALL") {
+      ctx.workerScript.disableLogs = {};
+      helpers.log(ctx, () => `Enabled logging for all functions`);
+    } else {
+      if (ctx.workerScript.disableLogs["ALL"]) {
+        // As an optimization, we normally store only that key, but we have to
+        // expand it out to all keys at this point.
+        // Conveniently, possibleLogs serves as a model for "all keys disabled."
+        ctx.workerScript.disableLogs = Object.assign({}, possibleLogs, { ALL: false, [fn]: false });
+      } else {
+        ctx.workerScript.disableLogs[fn] = false;
+      }
+      helpers.log(ctx, () => `Enabled logging for ${fn}`);
+    }
   },
   isLogEnabled: (ctx) => (_fn) => {
     const fn = helpers.string(ctx, "fn", _fn);
     if (possibleLogs[fn] === undefined) {
       throw helpers.errorMessage(ctx, `Invalid argument: ${fn}.`);
     }
-    return !ctx.workerScript.disableLogs[fn];
+    return ctx.workerScript.shouldLog(fn);
   },
   getScriptLogs:
     (ctx) =>
@@ -538,7 +556,7 @@ export const ns: InternalAPI<NSFull> = {
         return [] as string[];
       }
 
-      return runningScriptObj.logs.map((x) => "" + x);
+      return runningScriptObj.logs.map((x) => String(x));
     },
   tail:
     (ctx) =>
@@ -772,6 +790,11 @@ export const ns: InternalAPI<NSFull> = {
         throw new ScriptDeath(ctx.workerScript);
       }
     },
+  self: (ctx) => () => {
+    const runningScript = helpers.getRunningScript(ctx, ctx.workerScript.pid);
+    if (runningScript == null) throw helpers.errorMessage(ctx, "Cannot find running script. This is a bug.");
+    return helpers.createPublicRunningScript(runningScript, ctx.workerScript);
+  },
   kill:
     (ctx) =>
     (scriptID, hostname = ctx.workerScript.hostname, ...scriptArgs) => {
@@ -820,16 +843,16 @@ export const ns: InternalAPI<NSFull> = {
     },
   killall:
     (ctx) =>
-    (_hostname = ctx.workerScript.hostname, _safetyguard = true) => {
+    (_hostname = ctx.workerScript.hostname, _safetyGuard = true) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
-      const safetyguard = !!_safetyguard;
+      const safetyGuard = !!_safetyGuard;
       const server = helpers.getServer(ctx, hostname);
 
       let scriptsKilled = 0;
 
       for (const byPid of server.runningScriptMap.values()) {
         for (const pid of byPid.keys()) {
-          if (safetyguard && pid == ctx.workerScript.pid) continue;
+          if (safetyGuard && pid == ctx.workerScript.pid) continue;
           killWorkerScriptByPid(pid);
           ++scriptsKilled;
         }
@@ -974,13 +997,19 @@ export const ns: InternalAPI<NSFull> = {
   },
   getBitNodeMultipliers:
     (ctx) =>
-    (_n = Player.bitNodeN, _lvl = Player.sourceFileLvl(Player.bitNodeN) + 1) => {
-      if (Player.sourceFileLvl(5) <= 0 && Player.bitNodeN !== 5)
+    (_n = Player.bitNodeN, _lvl = Player.activeSourceFileLvl(Player.bitNodeN) + 1) => {
+      if (!canAccessBitNodeFeature(5)) {
         throw helpers.errorMessage(ctx, "Requires Source-File 5 to run.");
+      }
+      // TODO v3.0: check n and lvl with helpers.number() and Number.isInteger().
       const n = Math.round(helpers.number(ctx, "n", _n));
       const lvl = Math.round(helpers.number(ctx, "lvl", _lvl));
-      if (n < 1 || n > 14) throw new Error("n must be between 1 and 14");
-      if (lvl < 1) throw new Error("lvl must be >= 1");
+      if (!validBitNodes.includes(n)) {
+        throw new Error(`Invalid BitNode: ${n}.`);
+      }
+      if (lvl < 1) {
+        throw new Error("SF level must be greater than or equal to 1.");
+      }
 
       return Object.assign({}, getBitNodeMultipliers(n, lvl));
     },
@@ -1148,7 +1177,8 @@ export const ns: InternalAPI<NSFull> = {
     if (!path) return false;
     if (hasScriptExtension(path)) return server.scripts.has(path);
     if (hasTextExtension(path)) return server.textFiles.has(path);
-    if (path.endsWith(".lit") || path.endsWith(".msg")) return server.messages.includes(path as any);
+    if (path.endsWith(".lit") || path.endsWith(".msg"))
+      return server.messages.includes(path as LiteratureName | MessageFilename);
     if (hasContractExtension(path)) return !!server.contracts.find(({ fn }) => fn === path);
     const lowerPath = path.toLowerCase();
     return server.programs.map((programName) => programName.toLowerCase()).includes(lowerPath);
@@ -1481,7 +1511,11 @@ export const ns: InternalAPI<NSFull> = {
       const ident = helpers.scriptIdentifier(ctx, fn, hostname, args);
       const runningScript = helpers.getRunningScript(ctx, ident);
       if (runningScript === null) return null;
-      return helpers.createPublicRunningScript(runningScript, ctx.workerScript);
+      // Need to look this up again, because we only have ident-based lookup
+      // for RunningScript.
+      const ws = workerScripts.get(runningScript.pid);
+      // We don't check for null, since it's fine to pass null as the 2nd arg.
+      return helpers.createPublicRunningScript(runningScript, ws);
     },
   ramOverride: (ctx) => (_ram) => {
     const newRam = roundToTwo(helpers.number(ctx, "ram", _ram || 0));
@@ -1492,7 +1526,7 @@ export const ns: InternalAPI<NSFull> = {
       return rs.ramUsage;
     }
     const newServerRamUsed = roundToTwo(server.ramUsed + (newRam - rs.ramUsage) * rs.threads);
-    if (newServerRamUsed >= server.maxRam) {
+    if (newServerRamUsed > server.maxRam) {
       // Can't allocate more RAM.
       return rs.ramUsage;
     }
@@ -1616,7 +1650,8 @@ export const ns: InternalAPI<NSFull> = {
   nFormat: (ctx) => (_n, _format) => {
     deprecationWarning(
       "ns.nFormat",
-      "Use ns.formatNumber, formatRam, formatPercent, or js builtins like Intl.NumberFormat instead.",
+      "Use ns.formatNumber, ns.formatRam, ns.formatPercent, or JS built-in objects/functions (e.g., Intl namespace) instead. " +
+        "Check the NS API documentation for details.",
     );
     const n = helpers.number(ctx, "n", _n);
     const format = helpers.string(ctx, "format", _format);
@@ -1628,7 +1663,11 @@ export const ns: InternalAPI<NSFull> = {
     return convertTimeMsToTimeElapsedString(milliseconds, milliPrecision);
   },
   getTimeSinceLastAug: () => () => {
-    deprecationWarning("ns.getTimeSinceLastAug()", "Use ns.getResetInfo().lastAugReset instead.");
+    deprecationWarning(
+      "ns.getTimeSinceLastAug()",
+      "Use `Date.now() - ns.getResetInfo().lastAugReset` instead. Please note that ns.getResetInfo().lastAugReset does NOT return the " +
+        "same value as ns.getTimeSinceLastAug(). Check the NS API documentation for details.",
+    );
     return Player.playtimeSinceLastAug;
   },
   alert: (ctx) => (_message) => {
@@ -1801,7 +1840,15 @@ export const ns: InternalAPI<NSFull> = {
     lastNodeReset: Player.lastNodeReset,
     currentNode: Player.bitNodeN,
     ownedAugs: new Map(Player.augmentations.map((aug) => [aug.name, aug.level])),
-    ownedSF: new Map(Player.sourceFiles),
+    ownedSF: new Map(
+      [...Player.activeSourceFiles].filter(([__, activeLevel]) => {
+        return activeLevel > 0;
+      }),
+    ),
+    bitNodeOptions: {
+      ...Player.bitNodeOptions,
+      sourceFileOverrides: new Map(Player.bitNodeOptions.sourceFileOverrides),
+    },
   }),
   getFunctionRamCost: (ctx) => (_name) => {
     const name = helpers.string(ctx, "name", _name);
@@ -1827,7 +1874,13 @@ export function NetscriptFunctions(ws: WorkerScript): NSFull {
   return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid, enums });
 }
 
-const possibleLogs = Object.fromEntries([...getFunctionNames(ns, "")].map((a) => [a, true]));
+const possibleLogs = Object.fromEntries(getFunctionNames(ns, "").map((a) => [a, true]));
+possibleLogs.ALL = true;
+
+// We reuse this object for *all* scripts that disable all keys, to prevent memory growth.
+// Any script that needs a custom set of values will use a fresh object.
+const allDisabled = { ALL: true } as const;
+
 /** Provides an array of all function names on a nested object */
 function getFunctionNames(obj: object, prefix: string): string[] {
   const functionNames: string[] = [];
@@ -1837,7 +1890,7 @@ function getFunctionNames(obj: object, prefix: string): string[] {
     } else if (typeof value === "function") {
       functionNames.push(prefix + key);
     } else if (typeof value === "object") {
-      functionNames.push(...getFunctionNames(value, `${prefix}${key}.`));
+      functionNames.push(...getFunctionNames(value as object, `${prefix}${key}.`));
     }
   }
   return functionNames;

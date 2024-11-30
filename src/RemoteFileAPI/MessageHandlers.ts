@@ -12,13 +12,13 @@ import {
   isFileData,
 } from "./MessageDefinitions";
 
-import libSource from "!!raw-loader!../ScriptEditor/NetscriptDefinitions.d.ts";
+import libSource from "../ScriptEditor/NetscriptDefinitions.d.ts?raw";
 
 function error(errorMsg: string, { id }: RFAMessage): RFAMessage {
   return new RFAMessage({ error: errorMsg, id: id });
 }
 
-export const RFARequestHandler: Record<string, (message: RFAMessage) => void | RFAMessage> = {
+export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessage> = {
   pushFile: function (msg: RFAMessage): RFAMessage {
     if (!isFileData(msg.params)) return error("Misses parameters", msg);
 
@@ -109,7 +109,7 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => void | R
   },
 
   getDefinitionFile: function (msg: RFAMessage): RFAMessage {
-    return new RFAMessage({ result: libSource + "", id: msg.id });
+    return new RFAMessage({ result: libSource, id: msg.id });
   },
 
   getAllServers: function (msg: RFAMessage): RFAMessage {

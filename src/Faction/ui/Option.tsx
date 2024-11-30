@@ -1,7 +1,6 @@
 /**
- * React component for a selectable option on the Faction UI. These
- * options including working for the faction, hacking missions, purchasing
- * augmentations, etc.
+ * React component for a selectable option on the Faction UI. These options including working for the faction,
+ * purchasing augmentations, etc.
  */
 import * as React from "react";
 

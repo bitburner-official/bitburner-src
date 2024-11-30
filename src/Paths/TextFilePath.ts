@@ -1,7 +1,7 @@
 import { Directory } from "./Directory";
 import { FilePath, resolveFilePath } from "./FilePath";
 
-/** Filepath with the additional constraint of having a .js extension */
+/** Filepath with the additional constraint of having a text extension */
 type WithTextExtension = string & { __fileType: "Text" };
 export type TextFilePath = FilePath & WithTextExtension;
 

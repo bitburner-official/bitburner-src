@@ -2,7 +2,7 @@
 
 In Bitburner "Programs" refer specifically to the list of `.exe` files found in the Programs tab of the side menu.
 
-Unlike `.js` [scripts](scripts.md) you write for yourself with JavaScript, Programs are supplied to you by Bitburner and are only "programs" in name; they do not require or allow you to access actual lines of code. Instead once you have a Program you will be able to use it directly as a function in the [Terminal](terminal.md) or scripts.
+Unlike [scripts](scripts.md) you write for yourself with JavaScript, Programs are supplied to you by Bitburner and are only "programs" in name; they do not require or allow you to access actual lines of code. Instead once you have a Program you will be able to use it directly as a function in the [Terminal](terminal.md) or scripts.
 
     [n00dles /]>  run BruteSSH.exe
     [n00dles /]>  scan-analyze 10

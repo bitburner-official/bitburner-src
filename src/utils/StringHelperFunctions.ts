@@ -1,11 +1,12 @@
 import { Settings } from "../Settings/Settings";
+import { CONSTANTS } from "../Constants";
 
 /*
 Converts a date representing time in milliseconds to a string with the format H hours M minutes and S seconds
 e.g.    10000 -> "10 seconds"
         120000 -> "2 minutes and 0 seconds"
 */
-function convertTimeMsToTimeElapsedString(time: number, showMilli = false): string {
+export function convertTimeMsToTimeElapsedString(time: number, showMilli = false): string {
   const negFlag = time < 0;
   time = Math.abs(Math.floor(time));
   const millisecondsPerSecond = 1000;
@@ -51,7 +52,7 @@ function convertTimeMsToTimeElapsedString(time: number, showMilli = false): stri
 }
 
 // Finds the longest common starting substring in a set of strings
-function longestCommonStart(strings: string[]): string {
+export function longestCommonStart(strings: string[]): string {
   if (!containsAllStrings(strings)) {
     return "";
   }
@@ -72,12 +73,12 @@ function longestCommonStart(strings: string[]): string {
 }
 
 // Returns whether an array contains entirely of string objects
-function containsAllStrings(arr: string[]): boolean {
+export function containsAllStrings(arr: string[]): boolean {
   return arr.every((value) => typeof value === "string");
 }
 
 // Generates a random alphanumeric string with N characters
-function generateRandomString(n: number): string {
+export function generateRandomString(n: number): string {
   let str = "";
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -88,43 +89,25 @@ function generateRandomString(n: number): string {
   return str;
 }
 
-/**
- * Hashes the input string. This is a fast hash, so NOT good for cryptography.
- * This has been ripped off here: https://stackoverflow.com/a/52171480
- * @param str The string that is to be hashed
- * @param seed A seed to randomize the result
- * @returns An hexadecimal string representation of the hashed input
- */
-function cyrb53(str: string, seed = 0): string {
-  let h1 = 0xdeadbeef ^ seed;
-  let h2 = 0x41c6ce57 ^ seed;
-  for (let i = 0, ch; i < str.length; i++) {
-    ch = str.charCodeAt(i);
-    h1 = Math.imul(h1 ^ ch, 2654435761);
-    h2 = Math.imul(h2 ^ ch, 1597334677);
-  }
-  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
-}
-
-function capitalizeFirstLetter(s: string): string {
+export function capitalizeFirstLetter(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-function capitalizeEachWord(s: string): string {
+export function capitalizeEachWord(s: string): string {
   return s
     .split(" ")
     .map((word) => capitalizeFirstLetter(word))
     .join(" ");
 }
 
-export {
-  convertTimeMsToTimeElapsedString,
-  longestCommonStart,
-  containsAllStrings,
-  generateRandomString,
-  cyrb53,
-  capitalizeFirstLetter,
-  capitalizeEachWord,
-};
+export function getNsApiDocumentationUrl(isDevBranch: boolean = CONSTANTS.isDevBranch): string {
+  return `https://github.com/bitburner-official/bitburner-src/blob/${
+    isDevBranch ? "dev" : "stable"
+  }/markdown/bitburner.ns.md`;
+}
+
+export function getKeyFromReactElements(a: string | React.JSX.Element, b: string | React.JSX.Element): string {
+  const keyOfA = typeof a === "string" ? a : a.key ?? "";
+  const keyOfb = typeof b === "string" ? b : b.key ?? "";
+  return keyOfA + keyOfb;
+}

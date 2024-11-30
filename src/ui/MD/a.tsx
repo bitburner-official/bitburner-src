@@ -3,6 +3,8 @@ import { Link } from "@mui/material";
 import { useNavigator } from "../React/Documentation";
 import { CorruptableText } from "../React/CorruptableText";
 import { Player } from "@player";
+import { getNsApiDocumentationUrl } from "../../utils/StringHelperFunctions";
+import { Settings } from "../../Settings/Settings";
 
 export const isSpoiler = (title: string): boolean => title.includes("advanced/") && Player.sourceFileLvl(1) === 0;
 
@@ -13,12 +15,28 @@ export const A = (props: React.PropsWithChildren<{ href?: string }>): React.Reac
   const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     navigator.navigate(ref, event.ctrlKey);
   };
-  if (ref.startsWith("http"))
+  if (ref.startsWith("http")) {
+    let href = ref;
+    // The URL of NS API documentation in index.md always points to the stable branch, so we need to intercept it here
+    // and change it if necessary.
+    if (href === getNsApiDocumentationUrl(false)) {
+      href = getNsApiDocumentationUrl();
+    }
     return (
-      <Link rel="noopener noreferrer" href={props.href} target="_blank">
+      <Link
+        rel="noopener noreferrer"
+        href={href}
+        target="_blank"
+        color={Settings.theme.info}
+        sx={{
+          textDecorationThickness: "3px",
+          textUnderlineOffset: "5px",
+        }}
+      >
         {props.children}
       </Link>
     );
+  }
 
   if (isSpoiler(ref))
     return (
@@ -28,7 +46,7 @@ export const A = (props: React.PropsWithChildren<{ href?: string }>): React.Reac
           cursor: "pointer",
         }}
       >
-        <CorruptableText content={props.children + ""} spoiler={true} />
+        <CorruptableText content={String(props.children)} spoiler={true} />
       </span>
     );
   return (

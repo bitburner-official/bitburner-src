@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.exportMaterial() method
 
-Set material export data
+Set material export data.
 
 **Signature:**
 
@@ -33,4 +33,8 @@ exportMaterial(
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

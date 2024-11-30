@@ -73,7 +73,7 @@ export async function main(ns) {
 |  [formatPercent(n, fractionalDigits, suffixStart)](./bitburner.ns.formatpercent.md) | Format a number as a percentage. |
 |  [formatRam(n, fractionalDigits)](./bitburner.ns.formatram.md) | Format a number as an amount of ram. |
 |  [ftpcrack(host)](./bitburner.ns.ftpcrack.md) | Runs FTPCrack.exe on a server. |
-|  [getBitNodeMultipliers(n, lvl)](./bitburner.ns.getbitnodemultipliers.md) | Get the current Bitnode multipliers. |
+|  [getBitNodeMultipliers(n, lvl)](./bitburner.ns.getbitnodemultipliers.md) | Get the current BitNode multipliers. |
 |  [getFavorToDonate()](./bitburner.ns.getfavortodonate.md) | Returns the amount of Faction favor required to be able to donate to a faction. |
 |  [getFunctionRamCost(name)](./bitburner.ns.getfunctionramcost.md) | Get the ram cost of a netscript function. |
 |  [getGrowTime(host)](./bitburner.ns.getgrowtime.md) | Get the execution time of a grow() call. |
@@ -129,12 +129,12 @@ export async function main(ns) {
 |  [isRunning(script, host, args)](./bitburner.ns.isrunning.md) | Check if a script is running. |
 |  [kill(pid)](./bitburner.ns.kill.md) | Terminate the script with the provided PID. |
 |  [kill(filename, hostname, args)](./bitburner.ns.kill_1.md) | Terminate the script(s) with the provided filename, hostname, and script arguments. |
-|  [killall(host, safetyguard)](./bitburner.ns.killall.md) | Terminate all scripts on a server. |
+|  [killall(host, safetyGuard)](./bitburner.ns.killall.md) | Terminate all scripts on a server. |
 |  [ls(host, substring)](./bitburner.ns.ls.md) | List files on a server. |
 |  [moveTail(x, y, pid)](./bitburner.ns.movetail.md) | Move a tail window. |
 |  [mv(host, source, destination)](./bitburner.ns.mv.md) | Move a file on the target server. |
 |  [nextPortWrite(port)](./bitburner.ns.nextportwrite.md) | Listen for a port write. |
-|  [nFormat(n, format)](./bitburner.ns.nformat.md) | Format a number using the numeral library. This function is deprecated and will be removed in 2.4. |
+|  [nFormat(n, format)](./bitburner.ns.nformat.md) | Format a number using the numeral library. This function is deprecated and will be removed in a later version. |
 |  [nuke(host)](./bitburner.ns.nuke.md) | Runs NUKE.exe on a server. |
 |  [peek(portNumber)](./bitburner.ns.peek.md) | Get a copy of the data from a port without popping it. |
 |  [print(args)](./bitburner.ns.print.md) | Prints one or more values or variables to the script’s logs. |
@@ -155,6 +155,7 @@ export async function main(ns) {
 |  [scp(files, destination, source)](./bitburner.ns.scp.md) | Copy file between servers. |
 |  [scriptKill(script, host)](./bitburner.ns.scriptkill.md) | Kill all scripts with a filename. |
 |  [scriptRunning(script, host)](./bitburner.ns.scriptrunning.md) | Check if any script with a filename is running. |
+|  [self()](./bitburner.ns.self.md) | Returns the currently running script. |
 |  [serverExists(host)](./bitburner.ns.serverexists.md) | Returns a boolean denoting whether or not the specified server exists. |
 |  [setTitle(title, pid)](./bitburner.ns.settitle.md) | Set the title of the tail window of a script. |
 |  [share()](./bitburner.ns.share.md) | Share the server's ram with your factions. |

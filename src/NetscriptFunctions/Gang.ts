@@ -4,7 +4,7 @@ import type { GangMember } from "../Gang/GangMember";
 import type { GangMemberTask } from "../Gang/GangMemberTask";
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
-import { GangPromise } from "../Gang/Gang";
+import { GangPromise, RecruitmentResult } from "../Gang/Gang";
 import { Player } from "@player";
 import { FactionName } from "@enums";
 import { GangConstants } from "../Gang/data/Constants";
@@ -160,7 +160,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
     },
     canRecruitMember: (ctx) => () => {
       const gang = getGang(ctx);
-      return gang.canRecruitMember();
+      return gang.canRecruitMember() === RecruitmentResult.Success;
     },
     getRecruitsAvailable: (ctx) => () => {
       const gang = getGang(ctx);
@@ -173,20 +173,13 @@ export function NetscriptGang(): InternalAPI<IGang> {
     recruitMember: (ctx) => (_memberName) => {
       const memberName = helpers.string(ctx, "memberName", _memberName);
       const gang = getGang(ctx);
-      const recruited = gang.recruitMember(memberName);
-      if (memberName === "") {
-        ctx.workerScript.log("gang.recruitMember", () => `Failed to recruit Gang Member. Name must be provided.`);
+      const result = gang.recruitMember(memberName);
+      if (result !== RecruitmentResult.Success) {
+        ctx.workerScript.log("gang.recruitMember", () => `Failed to recruit gang member '${memberName}'. ${result}.`);
         return false;
-      } else if (recruited) {
-        ctx.workerScript.log("gang.recruitMember", () => `Successfully recruited Gang Member '${memberName}'`);
-        return recruited;
-      } else {
-        ctx.workerScript.log(
-          "gang.recruitMember",
-          () => `Failed to recruit Gang Member '${memberName}'. Name already used.`,
-        );
-        return recruited;
       }
+      ctx.workerScript.log("gang.recruitMember", () => `Successfully recruited gang member '${memberName}'`);
+      return true;
     },
     getTaskNames: (ctx) => () => {
       const gang = getGang(ctx);

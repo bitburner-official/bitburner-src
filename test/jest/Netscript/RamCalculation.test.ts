@@ -72,7 +72,6 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     extraLayerCost = 0,
   ) {
     const code = `${fnPath.join(".")}();\n`.repeat(3);
-    const filename = "testfile.js" as ScriptFilePath;
     const fnName = fnPath[fnPath.length - 1];
     const server = "testserver";
 
@@ -80,7 +79,7 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
     expect(getRamCost(fnPath, true)).toEqual(expectedRamCost);
 
     // Static ram check
-    const staticCost = calculateRamUsage(code, filename, new Map(), server).cost;
+    const staticCost = calculateRamUsage(code, `${fnName}.js` as ScriptFilePath, server, new Map()).cost;
     expect(staticCost).toBeCloseTo(Math.min(baseCost + expectedRamCost + extraLayerCost, maxCost));
 
     // reset workerScript for dynamic check
@@ -104,7 +103,9 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
       throw new Error(`Invalid function specified: [${fnPath.toString()}]`);
     }
 
-    expect(workerScript.dynamicLoadedFns).toHaveProperty(fnName);
+    if (expectedRamCost !== 0) {
+      expect(workerScript.dynamicLoadedFns).toHaveProperty(fnName);
+    }
     expect(workerScript.dynamicRamUsage).toBeCloseTo(Math.min(expectedRamCost + baseCost, maxCost), 5);
     expect(workerScript.dynamicRamUsage).toBeCloseTo(scriptRef.ramUsage - extraLayerCost, 5);
   }
@@ -168,5 +169,19 @@ describe("Netscript RAM Calculation/Generation Tests", function () {
         });
       });
     }
+  });
+
+  describe("ramOverride checks", () => {
+    test.each([
+      ["ns.ramOverride(5)", 5],
+      ["ramOverride(5)", 5],
+      ["ns.ramOverride(5 * 1024)", baseCost], // Constant expressions are not handled yet
+    ])("%s", (code, expected) => {
+      const fullCode = `export function main(ns) { ${code} }`;
+
+      const result = calculateRamUsage(fullCode, "testfile.js", new Map(), "testserver");
+      expect(result.errorMessage).toBe(undefined);
+      expect(result.cost).toBe(expected);
+    });
   });
 });

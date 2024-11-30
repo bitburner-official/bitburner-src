@@ -15,7 +15,7 @@ import { makeStyles } from "tss-react/mui";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 import { calculateFavorAfterResetting } from "../formulas/favor";
 
 interface IProps {
@@ -42,7 +42,7 @@ function DefaultAssignment(): React.ReactElement {
 }
 
 export function Info(props: IProps): React.ReactElement {
-  useRerender(200);
+  useCycleRerender();
   const { classes } = useStyles();
 
   const Assignment = props.factionInfo.assignment ?? DefaultAssignment;
@@ -61,9 +61,7 @@ export function Info(props: IProps): React.ReactElement {
                 faction favor after installing an Augmentation.
               </Typography>
               <MathJax>{"\\(\\huge{r = \\text{total faction reputation}}\\)"}</MathJax>
-              <MathJax>
-                {"\\(\\huge{favor=1+\\left\\lfloor\\log_{1.02}\\left(\\frac{r+25000}{25500}\\right)\\right\\rfloor}\\)"}
-              </MathJax>
+              <MathJax>{"\\(\\huge{favor=\\log_{1.02}\\left(1+\\frac{r}{25000}\\right)}\\)"}</MathJax>
             </>
           }
         >
@@ -82,7 +80,7 @@ export function Info(props: IProps): React.ReactElement {
               <Typography>
                 Faction favor increases the rate at which you earn reputation for this faction by 1% per favor. Faction
                 favor is gained whenever you install an Augmentation. The amount of favor you gain depends on the total
-                amount of reputation you earned with this faction. Across all resets.
+                amount of reputation you earned with this faction across all resets.
               </Typography>
 
               <MathJax>{"\\(\\huge{r = reputation}\\)"}</MathJax>
@@ -91,7 +89,7 @@ export function Info(props: IProps): React.ReactElement {
           }
         >
           <Typography>
-            Faction Favor: <Favor favor={Math.floor(props.faction.favor)} />
+            Faction Favor: <Favor favor={props.faction.favor} />
           </Typography>
         </Tooltip>
       </Box>

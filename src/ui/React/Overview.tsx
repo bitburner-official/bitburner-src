@@ -94,7 +94,11 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
         triggerMouseEvent(node, "mousedown");
         triggerMouseEvent(document, "mousemove");
         triggerMouseEvent(node, "mouseup");
-        triggerMouseEvent(node, "click");
+        // According to a comment in the above GitHub issue, apparently mousemove is important,
+        // but click probably isn't. This click causes a runtime error in Safari (NotAllowedError),
+        // but not Chromium. If further errors occur, a more thorough fix, possibly using
+        // navigator.userActivation.isActive, might be necessary.
+        // triggerMouseEvent(node, "click");
       }, 100),
     [],
   );
@@ -111,8 +115,7 @@ export function Overview({ children, mode }: IProps): React.ReactElement {
   }, [fakeDrag]);
 
   const triggerMouseEvent = (node: HTMLDivElement | Document, eventType: string): void => {
-    const clickEvent = document.createEvent("MouseEvents");
-    clickEvent.initEvent(eventType, true, true);
+    const clickEvent = new MouseEvent(eventType, { bubbles: true, cancelable: true });
     node.dispatchEvent(clickEvent);
   };
 

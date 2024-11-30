@@ -26,7 +26,7 @@ import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { Info } from "@mui/icons-material";
 import { Link } from "@mui/material";
 import { AlertEvents } from "../../ui/React/AlertManager";
-import { useRerender } from "../../ui/React/hooks";
+import { useCycleRerender } from "../../ui/React/hooks";
 
 const NeuroFluxDisplay = (): React.ReactElement => {
   const level = Player.augmentations.find((e) => e.name === AugmentationName.NeuroFluxGovernor)?.level ?? 0;
@@ -85,7 +85,7 @@ interface IProps {
 
 export function AugmentationsRoot(props: IProps): React.ReactElement {
   const [installOpen, setInstallOpen] = useState(false);
-  const rerender = useRerender(200);
+  const rerender = useCycleRerender();
 
   function doExport(): void {
     props.exportGameFn();

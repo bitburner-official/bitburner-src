@@ -15,6 +15,7 @@ import { Settings } from "../../Settings/Settings";
 import { MoneyRate } from "../../ui/React/MoneyRate";
 import { StatsRow } from "../../ui/React/StatsRow";
 import { useStyles } from "../../ui/React/CharacterOverview";
+import { getKeyFromReactElements } from "../../utils/StringHelperFunctions";
 
 interface IProps {
   member: GangMember;
@@ -103,7 +104,7 @@ export function GangMemberStats(props: IProps): React.ReactElement {
               </TableCell>
             </TableRow>
             {data.map(([a, b]) => (
-              <TableRow key={a.toString() + b.toString()}>
+              <TableRow key={getKeyFromReactElements(a, b)}>
                 <TableCell classes={{ root: classes.cellNone }}>
                   <Typography>{a}</Typography>
                 </TableCell>

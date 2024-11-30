@@ -2,7 +2,7 @@ import type { Sleeve } from "../Sleeve";
 import type { ActionIdentifier } from "../../../Bladeburner/Types";
 import type { PromisePair } from "../../../Types/Promises";
 import { Player } from "@player";
-import { BladeActionType, BladeGeneralActionName } from "@enums";
+import { BladeburnerActionType, BladeburnerGeneralActionName } from "@enums";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../../../utils/JSONReviver";
 import { applySleeveGains, SleeveWorkClass, SleeveWorkType } from "./Work";
 import { CONSTANTS } from "../../../Constants";
@@ -10,9 +10,10 @@ import { scaleWorkStats } from "../../../Work/WorkStats";
 import { getKeyList } from "../../../utils/helpers/getKeyList";
 import { loadActionIdentifier } from "../../../Bladeburner/utils/loadActionIdentifier";
 import { invalidWork } from "../../../Work/InvalidWork";
+import { objectAssert } from "../../../utils/helpers/typeAssertion";
 
 interface SleeveBladeburnerWorkParams {
-  actionId: ActionIdentifier & { type: BladeActionType.general | BladeActionType.contract };
+  actionId: ActionIdentifier & { type: BladeburnerActionType.General | BladeburnerActionType.Contract };
 }
 
 export const isSleeveBladeburnerWork = (w: SleeveWorkClass | null): w is SleeveBladeburnerWork =>
@@ -22,12 +23,15 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
   type: SleeveWorkType.BLADEBURNER = SleeveWorkType.BLADEBURNER;
   tasksCompleted = 0;
   cyclesWorked = 0;
-  actionId: ActionIdentifier & { type: BladeActionType.general | BladeActionType.contract };
+  actionId: ActionIdentifier & { type: BladeburnerActionType.General | BladeburnerActionType.Contract };
   nextCompletionPair: PromisePair<void> = { promise: null, resolve: null };
 
   constructor(params?: SleeveBladeburnerWorkParams) {
     super();
-    this.actionId = params?.actionId ?? { type: BladeActionType.general, name: BladeGeneralActionName.fieldAnalysis };
+    this.actionId = params?.actionId ?? {
+      type: BladeburnerActionType.General,
+      name: BladeburnerGeneralActionName.FieldAnalysis,
+    };
   }
 
   cyclesNeeded(sleeve: Sleeve): number {
@@ -48,13 +52,13 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
   process(sleeve: Sleeve, cycles: number) {
     if (!Player.bladeburner) return sleeve.stopWork();
     this.cyclesWorked += cycles;
-    if (this.actionId.type === BladeActionType.contract) {
+    if (this.actionId.type === BladeburnerActionType.Contract) {
       const action = Player.bladeburner.getActionObject(this.actionId);
       if (action.count < 1) return sleeve.stopWork();
     }
 
     while (this.cyclesWorked >= this.cyclesNeeded(sleeve)) {
-      if (this.actionId.type === BladeActionType.contract) {
+      if (this.actionId.type === BladeburnerActionType.Contract) {
         const action = Player.bladeburner.getActionObject(this.actionId);
         if (action.count < 1) return sleeve.stopWork();
       }
@@ -67,6 +71,7 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
       this.finish();
     }
   }
+
   get nextCompletion(): Promise<void> {
     if (!this.nextCompletionPair.promise)
       this.nextCompletionPair.promise = new Promise((r) => (this.nextCompletionPair.resolve = r));
@@ -94,8 +99,21 @@ export class SleeveBladeburnerWork extends SleeveWorkClass {
 
   /** Initializes a BladeburnerWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveBladeburnerWork {
-    const actionId = loadActionIdentifier(value.data?.actionId);
-    if (!actionId) return invalidWork();
+    objectAssert(value.data);
+    let actionId = loadActionIdentifier(value.data?.actionId);
+    if (!actionId) {
+      /**
+       * In pre-v2.6.1 versions, "name" and "type" of actionId are saved directly in "actionName" and "actionType", not
+       * in the actionId object.
+       */
+      if (!value.data["actionName"]) {
+        return invalidWork();
+      }
+      actionId = loadActionIdentifier({ name: value.data["actionName"], type: value.data["actionType"] });
+      if (!actionId) {
+        return invalidWork();
+      }
+    }
     value.data.actionId = actionId;
     return Generic_fromJSON(SleeveBladeburnerWork, value.data, SleeveBladeburnerWork.savedKeys);
   }

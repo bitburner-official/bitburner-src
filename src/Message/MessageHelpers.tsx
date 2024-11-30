@@ -3,12 +3,12 @@ import { Message } from "./Message";
 import { AugmentationName, CompletedProgramName, FactionName, MessageFilename } from "@enums";
 import { Router } from "../ui/GameRoot";
 import { Player } from "@player";
-import { Page } from "../ui/Router";
 import { GetServer } from "../Server/AllServers";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Settings } from "../Settings/Settings";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Server } from "../Server/Server";
+import { knowAboutBitverse } from "../BitNode/BitNodeUtils";
 
 //Sends message to player, including a pop up
 function sendMessage(name: MessageFilename, forced = false): void {
@@ -53,7 +53,7 @@ function recvd(name: MessageFilename): boolean {
 
 //Checks if any of the 'timed' messages should be sent
 function checkForMessagesToSend(): void {
-  if (Router.page() === Page.BitVerse) return;
+  if (Router.hidingMessages()) return;
 
   if (Player.hasAugmentation(AugmentationName.TheRedPill, true)) {
     //Get the world daemon required hacking level
@@ -64,9 +64,9 @@ function checkForMessagesToSend(): void {
     //If the daemon can be hacked, send the player icarus.msg
     if (
       Player.skills.hacking >= worldDaemon.requiredHackingSkill &&
-      (Player.sourceFiles.size === 0 || !recvd(MessageFilename.RedPill))
+      (!knowAboutBitverse() || !recvd(MessageFilename.RedPill))
     ) {
-      sendMessage(MessageFilename.RedPill, Player.sourceFiles.size === 0);
+      sendMessage(MessageFilename.RedPill, !knowAboutBitverse());
     }
     //If the daemon cannot be hacked, send the player truthgazer.msg a single time.
     else if (!recvd(MessageFilename.TruthGazer)) {
@@ -74,10 +74,7 @@ function checkForMessagesToSend(): void {
     }
   } else if (!recvd(MessageFilename.Jumper0) && Player.skills.hacking >= 25) {
     sendMessage(MessageFilename.Jumper0);
-    const homeComp = Player.getHomeComputer();
-    if (!homeComp.programs.includes(CompletedProgramName.flight)) {
-      homeComp.programs.push(CompletedProgramName.flight);
-    }
+    Player.getHomeComputer().pushProgram(CompletedProgramName.flight);
   } else if (!recvd(MessageFilename.Jumper1) && Player.skills.hacking >= 40) {
     sendMessage(MessageFilename.Jumper1);
   } else if (!recvd(MessageFilename.CyberSecTest) && Player.skills.hacking >= 50) {

@@ -22,9 +22,11 @@ export const Literatures: Record<LiteratureName, Literature> = {
       "Netscript command to copy your scripts onto these servers and then run them.",
   }),
   [LiteratureName.CorporationManagementHandbook]: new Literature({
-    title: "The Complete Handbook for Creating a Successful Corporation",
+    title: "Short Introduction for Creating a Successful Corporation",
     filename: LiteratureName.CorporationManagementHandbook,
     text:
+      "You should check the in-game Corporation documentation in the Documentation tab (Documentation -> Advanced Mechanics -> Corporation). " +
+      "It's the most useful and up-to-date resource for managing Corporation.<br><br>" +
       "<u>Getting Started with Corporations</u><br>" +
       "To get started, visit the City Hall in Sector-12 in order to create a Corporation. This requires $150b of your own money, " +
       "but this $150b will get put into your Corporation's funds. If you're in BitNode 3 you also have option to get seed money from " +

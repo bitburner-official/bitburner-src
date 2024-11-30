@@ -4,6 +4,8 @@
 
 ## AutocompleteData.servers property
 
+All server hostnames
+
 **Signature:**
 
 ```typescript

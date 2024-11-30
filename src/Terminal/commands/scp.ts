@@ -1,6 +1,6 @@
 import { Terminal } from "../../Terminal";
 import { BaseServer } from "../../Server/BaseServer";
-import { GetServer } from "../../Server/AllServers";
+import { GetReachableServer } from "../../Server/AllServers";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 import { isMember } from "../../utils/EnumHelper";
@@ -14,7 +14,7 @@ export function scp(args: (string | number | boolean)[], server: BaseServer): vo
 
   // Validate destination server
   const destHostname = String(args.pop());
-  const destServer = GetServer(destHostname);
+  const destServer = GetReachableServer(destHostname);
   if (!destServer) return Terminal.error(`Invalid destination server: ${destHostname}`);
 
   // Validate filepaths
@@ -36,7 +36,7 @@ export function scp(args: (string | number | boolean)[], server: BaseServer): vo
     // Error for invalid filetype
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
       return Terminal.error(
-        `scp failed: ${path} has invalid extension. scp only works for scripts (.js or .script), text files (.txt), and literature files (.lit)`,
+        `scp failed: ${path} has invalid extension. scp only works for scripts (.js, .jsx, .ts, .tsx, .script), text files (.txt, .json), and literature files (.lit)`,
       );
     }
     const sourceContentFile = server.getContentFile(path);

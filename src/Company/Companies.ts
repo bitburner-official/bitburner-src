@@ -1,7 +1,7 @@
 // Constructs all CompanyPosition objects using the metadata in data/companypositions.ts
 import { getCompaniesMetadata } from "./data/CompaniesMetadata";
 import { Company } from "./Company";
-import { Reviver } from "../utils/JSONReviver";
+import { Reviver } from "../utils/GenericReviver";
 import { assertLoadingType } from "../utils/TypeAssertion";
 import { CompanyName } from "./Enums";
 import { PartialRecord, createEnumKeyedRecord } from "../Types/Record";

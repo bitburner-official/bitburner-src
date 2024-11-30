@@ -1,20 +1,21 @@
 import React, { useContext, useState } from "react";
 
-import { Settings } from "../../Settings/Settings";
-import { calculateRamUsage } from "../../Script/RamCalculations";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
-import { formatRam } from "../../ui/formatNumber";
-import { useBoolean } from "../../ui/React/hooks";
+import { calculateRamUsage, type RamCalculationFailure } from "../../Script/RamCalculations";
 import { BaseServer } from "../../Server/BaseServer";
+import { Settings } from "../../Settings/Settings";
+import { useBoolean } from "../../ui/React/hooks";
+import { formatRam } from "../../ui/formatNumber";
 
-import { Options } from "./Options";
-import { FilePath } from "../../Paths/FilePath";
-import { hasScriptExtension } from "../../Paths/ScriptFilePath";
+import type { AST } from "../../utils/ScriptTransformer";
+import type { Options } from "./Options";
+import { type ScriptFilePath } from "../../Paths/ScriptFilePath";
 
 export interface ScriptEditorContextShape {
   ram: string;
   ramEntries: string[][];
-  updateRAM: (newCode: string | null, filename: FilePath | null, server: BaseServer | null) => void;
+  showRAMError: (error?: RamCalculationFailure) => void;
+  updateRAM: (ast: AST, path: ScriptFilePath, server: BaseServer) => void;
 
   isUpdatingRAM: boolean;
   startUpdatingRAM: () => void;
@@ -30,13 +31,30 @@ export function ScriptEditorContextProvider({ children }: { children: React.Reac
   const [ram, setRAM] = useState("RAM: ???");
   const [ramEntries, setRamEntries] = useState<string[][]>([["???", ""]]);
 
-  const updateRAM: ScriptEditorContextShape["updateRAM"] = (newCode, filename, server) => {
-    if (newCode == null || filename == null || server == null || !hasScriptExtension(filename)) {
+  const showRAMError: ScriptEditorContextShape["showRAMError"] = (error) => {
+    if (!error) {
       setRAM("N/A");
       setRamEntries([["N/A", ""]]);
       return;
     }
-    const ramUsage = calculateRamUsage(newCode, filename, server.scripts, server.hostname);
+    let errorType;
+    switch (error.errorCode) {
+      case RamCalculationErrorCode.SyntaxError:
+        errorType = "Syntax Error";
+        break;
+      case RamCalculationErrorCode.ImportError:
+        errorType = "Import Error";
+        break;
+      default:
+        errorType = "Unknown Error";
+        break;
+    }
+    setRAM(`RAM: ${errorType}`);
+    setRamEntries([[errorType, error.errorMessage ?? ""]]);
+  };
+
+  const updateRAM: ScriptEditorContextShape["updateRAM"] = (ast, path, server) => {
+    const ramUsage = calculateRamUsage(ast, path, server.hostname, server.scripts);
     if (ramUsage.cost && ramUsage.cost > 0) {
       const entries = ramUsage.entries?.sort((a, b) => b.cost - a.cost) ?? [];
       const entriesDisp = [];
@@ -50,18 +68,10 @@ export function ScriptEditorContextProvider({ children }: { children: React.Reac
     }
 
     if (ramUsage.errorCode !== undefined) {
-      setRamEntries([["Syntax Error", ramUsage.errorMessage ?? ""]]);
-      switch (ramUsage.errorCode) {
-        case RamCalculationErrorCode.ImportError:
-          setRAM("RAM: Import Error");
-          break;
-        case RamCalculationErrorCode.SyntaxError:
-          setRAM("RAM: Syntax Error");
-          break;
-      }
+      showRAMError(ramUsage);
     } else {
-      setRAM("RAM: Syntax Error");
-      setRamEntries([["Syntax Error", ""]]);
+      setRAM("RAM: Unknown Error");
+      setRamEntries([["Unknown Error", ""]]);
     }
   };
 
@@ -96,7 +106,17 @@ export function ScriptEditorContextProvider({ children }: { children: React.Reac
 
   return (
     <ScriptEditorContext.Provider
-      value={{ ram, ramEntries, updateRAM, isUpdatingRAM, startUpdatingRAM, finishUpdatingRAM, options, saveOptions }}
+      value={{
+        ram,
+        ramEntries,
+        showRAMError,
+        updateRAM,
+        isUpdatingRAM,
+        startUpdatingRAM,
+        finishUpdatingRAM,
+        options,
+        saveOptions,
+      }}
     >
       {children}
     </ScriptEditorContext.Provider>

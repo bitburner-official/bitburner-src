@@ -4,7 +4,7 @@
 
 ## Corporation.levelUpgrade() method
 
-Level an upgrade.
+Level up an upgrade.
 
 **Signature:**
 
@@ -21,4 +21,8 @@ levelUpgrade(upgradeName: string): void;
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 
