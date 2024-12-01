@@ -559,6 +559,10 @@ export class Division {
               );
               continue;
             }
+            // sellAmt must be a non-negative number.
+            if (sellAmt < 0) {
+              sellAmt = 0;
+            }
 
             // Determine the cost that the material will be sold at
             const markupLimit = mat.getMarkupLimit();
@@ -638,7 +642,7 @@ export class Division {
             sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;
             sellAmt = Math.min(mat.stored, sellAmt);
             if (sellAmt < 0) {
-              console.warn(`sellAmt calculated to be negative for ${matName} in ${city}`);
+              console.error(`sellAmt calculated to be negative for ${matName} in ${city}`);
               mat.actualSellAmount = 0;
               continue;
             }
@@ -916,10 +920,11 @@ export class Division {
             // break the case "SALE"
             break;
           }
-
+          // sellAmt must be a non-negative number.
           if (sellAmt < 0) {
             sellAmt = 0;
           }
+
           if (product.markup === 0) {
             exceptionAlert(new Error("product.markup is 0"));
             product.markup = 1;
@@ -997,9 +1002,16 @@ export class Division {
             businessFactor *
             advertisingFactor *
             this.getSalesMultiplier();
+
           sellAmt = Math.min(product.maxSellAmount, sellAmt);
           sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;
           sellAmt = Math.min(product.cityData[city].stored, sellAmt); //data[0] is qty
+          if (sellAmt < 0) {
+            console.error(`sellAmt calculated to be negative for ${product.name} in ${city}`);
+            product.cityData[city].actualSellAmount = 0;
+            // break the case "SALE"
+            break;
+          }
           if (sellAmt && sCost >= 0) {
             product.cityData[city].stored -= sellAmt; //data[0] is qty
             totalProfit += sellAmt * sCost;
