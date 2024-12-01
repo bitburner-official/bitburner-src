@@ -606,7 +606,11 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       (_corporationName, _selfFund = true): boolean => {
         const corporationName = helpers.string(ctx, "corporationName", _corporationName);
         const selfFund = !!_selfFund;
-        return createCorporation(corporationName, selfFund, false);
+        const result = createCorporation(corporationName, selfFund, false);
+        if (!result.success) {
+          helpers.log(ctx, () => result.message);
+        }
+        return result.success;
       },
     getConstants: () => () => {
       /* TODO 2.2: possibly just rework the whole corp constants structure to be more readable, and just use

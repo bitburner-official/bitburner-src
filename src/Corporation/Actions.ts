@@ -23,42 +23,47 @@ import {
   issueNewSharesFailureReason,
   costOfCreatingCorporation,
   canCreateCorporation,
+  convertCreatingCorporationCheckResultToMessage,
 } from "./helpers";
 import { PositiveInteger, Result } from "../types";
 import { Factions } from "../Faction/Factions";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+import { formatMoney } from "../ui/formatNumber";
 
-export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): boolean {
+export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): Result {
   const checkResult = canCreateCorporation(selfFund, restart);
   switch (checkResult) {
     case CreatingCorporationCheckResult.Success:
       break;
     case CreatingCorporationCheckResult.NoSf3OrDisabled:
     case CreatingCorporationCheckResult.CorporationExists:
-      return false;
+      return { success: false, message: convertCreatingCorporationCheckResultToMessage(checkResult) };
     case CreatingCorporationCheckResult.UseSeedMoneyOutsideBN3:
     case CreatingCorporationCheckResult.DisabledBySoftCap:
       // In order to maintain backward compatibility, we have to throw an error in these cases.
-      throw new Error(checkResult);
+      throw new Error(convertCreatingCorporationCheckResultToMessage(checkResult));
     default:
       throwIfReachable(checkResult);
   }
 
   if (!corporationName) {
-    return false;
+    return { success: false, message: "Corporation name cannot be an empty string." };
   }
 
   if (selfFund) {
     const cost = costOfCreatingCorporation(restart);
     if (!Player.canAfford(cost)) {
-      return false;
+      return {
+        success: false,
+        message: `You don't have enough money to create a corporation. It costs ${formatMoney(cost)}.`,
+      };
     }
     Player.startCorporation(corporationName, false);
     Player.loseMoney(cost, "corporation");
   } else {
     Player.startCorporation(corporationName, true);
   }
-  return true;
+  return { success: true };
 }
 
 export function createDivision(corporation: Corporation, industry: IndustryType, name: string): void {
