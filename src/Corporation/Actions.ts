@@ -38,7 +38,7 @@ export function createCorporation(corporationName: string, selfFund: boolean, re
       return false;
     case CreatingCorporationCheckResult.UseSeedMoneyOutsideBN3:
     case CreatingCorporationCheckResult.DisabledBySoftCap:
-      // In order to maintaining backward compatibility, we have to throw an error in these cases.
+      // In order to maintain backward compatibility, we have to throw an error in these cases.
       throw new Error(checkResult);
     default:
       throwIfReachable(checkResult);
