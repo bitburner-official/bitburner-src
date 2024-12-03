@@ -728,8 +728,8 @@ interface BitNodeMultipliers {
   /** Influences how much rep the player can gain from factions when selling stolen documents and secrets */
   InfiltrationRep: number;
   /**
-   * Influences how much money can be stolen from a server when the player performs a hack against it through
-   * the Terminal.
+   * Influences how much money is stolen from a server when the player performs a hack against it through
+   * the terminal.
    */
   ManualHackMoney: number;
   /** Influence how much it costs to purchase a server */
@@ -742,11 +742,11 @@ interface BitNodeMultipliers {
   PurchasedServerMaxRam: number;
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
   RepToDonateToFaction: number;
-  /** Influences how much money can be stolen from a server when a script performs a hack against it. */
+  /** Influences how much money is stolen from a server when a script performs a hack against it. */
   ScriptHackMoney: number;
   /**
-   * The amount of money actually gained when a script hacks a server. This is
-   * different than the above because you can reduce the amount of money but
+   * Influences how much money the player actually gains when a script hacks a server. This is different from
+   * ScriptHackMoney. When a script hacks a server, the amount of money in that server is reduced, but the player does
    * not gain that same amount.
    */
   ScriptHackMoneyGain: number;

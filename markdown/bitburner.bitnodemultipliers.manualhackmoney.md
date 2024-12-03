@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.ManualHackMoney property
 
-Influences how much money can be stolen from a server when the player performs a hack against it through the Terminal.
+Influences how much money is stolen from a server when the player performs a hack against it through the terminal.
 
 **Signature:**
 

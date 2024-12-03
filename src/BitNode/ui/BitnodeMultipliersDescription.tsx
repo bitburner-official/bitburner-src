@@ -1,6 +1,15 @@
 import React from "react";
-import { uniqueId } from "lodash";
-import { Box, Collapse, ListItemButton, ListItemText, Paper, Table, TableBody, Typography } from "@mui/material";
+import {
+  Box,
+  Collapse,
+  ListItemButton,
+  ListItemText,
+  Paper,
+  Table,
+  TableBody,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
@@ -70,6 +79,7 @@ type IBNMultRows = PartialRecord<
     name: string;
     content?: string;
     color?: string;
+    tooltipText?: string;
   }
 >;
 
@@ -82,14 +92,26 @@ interface IBNMultTableProps {
 const BNMultTable = (props: IBNMultTableProps): React.ReactElement => {
   const rowsArray = getRecordEntries(props.rowData)
     .filter(([key]) => props.mults[key] !== defaultMultipliers[key])
-    .map(([key, value]) => (
-      <StatsRow
-        key={uniqueId()}
-        name={value.name}
-        data={{ content: value.content ?? `${(props.mults[key] * 100).toFixed(3)}%` }}
-        color={value.color ?? Settings.theme.primary}
-      />
-    ));
+    .map(([key, value]) => {
+      const name = value.tooltipText ? (
+        <Tooltip title={<span>{value.tooltipText}</span>}>
+          <span>
+            {value.name}
+            <sup>(*)</sup>
+          </span>
+        </Tooltip>
+      ) : (
+        value.name
+      );
+      return (
+        <StatsRow
+          key={`${props.sectionName}-${value.name}`}
+          name={name}
+          data={{ content: value.content ?? `${(props.mults[key] * 100).toFixed(3)}%` }}
+          color={value.color ?? Settings.theme.primary}
+        />
+      );
+    });
 
   return rowsArray.length > 0 ? (
     <span style={{ display: "inline-block", width: "100%", marginBottom: "16px" }}>
@@ -241,16 +263,20 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
     ServerStartingSecurity: { name: "Server Starting Security" },
     ServerWeakenRate: { name: "Server Weaken Rate" },
     ManualHackMoney: {
-      name: "Manual Hack Money",
+      name: "Stolen Money From Manual Hack",
       color: Settings.theme.money,
+      tooltipText:
+        "Influences how much money is stolen from a server when the player performs a hack against it through the terminal",
     },
     ScriptHackMoney: {
-      name: "Script Hack Money",
+      name: "Stolen Money From Script Hack",
       color: Settings.theme.money,
+      tooltipText: "Influences how much money is stolen from a server when a script performs a hack against it",
     },
     ScriptHackMoneyGain: {
-      name: "Money Gained From Hack",
+      name: "Money Gained From Script Hack",
       color: Settings.theme.money,
+      tooltipText: `Influences how much money the player actually gains when a script hacks a server. This is different from "Stolen Money From Script Hack". When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount.`,
     },
   };
 
