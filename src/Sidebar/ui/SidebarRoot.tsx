@@ -1,5 +1,4 @@
 import React, { useMemo, useCallback, useState, useEffect, useRef } from "react";
-import { KEYCODE } from "../../utils/helpers/keyCodes";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
 import { makeStyles } from "tss-react/mui";
 import MuiDrawer from "@mui/material/Drawer";

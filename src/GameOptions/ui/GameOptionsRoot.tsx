@@ -1,5 +1,5 @@
 import { Box, Container, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GameOptionsSidebar } from "./GameOptionsSidebar";
 import { GameplayPage } from "./GameplayPage";
 import { InterfacePage } from "./InterfacePage";
