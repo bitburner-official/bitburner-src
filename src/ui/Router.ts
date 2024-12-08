@@ -2,7 +2,7 @@ import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 import type { TextFilePath } from "../Paths/TextFilePath";
 import type { Faction } from "../Faction/Faction";
 import type { Location } from "../Locations/Location";
-import { SaveData } from "../types";
+import type { SaveData } from "../types";
 
 // This enum doesn't need enum helper support for now
 /**

@@ -4,6 +4,7 @@ import { defaultStyles } from "../Themes/Styles";
 import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
 import { objectAssert } from "../utils/helpers/typeAssertion";
+import { defaultKeyBinding } from "../utils/KeyBindingUtils";
 
 /**
  * This function won't be able to catch **all** invalid hostnames, and it's still fine. In order to validate a hostname
@@ -156,6 +157,8 @@ export const Settings = {
   useEngineeringNotation: false,
   /** Whether to disable suffixes and always use exponential form (scientific or engineering). */
   disableSuffixes: false,
+  /** Key bindings */
+  KeyBindings: structuredClone(defaultKeyBinding),
 
   load(saveString: string) {
     const save: unknown = JSON.parse(saveString);
@@ -164,11 +167,13 @@ export const Settings = {
     save.styles && Object.assign(Settings.styles, save.styles);
     save.overview && Object.assign(Settings.overview, save.overview);
     save.EditorTheme && Object.assign(Settings.EditorTheme, save.EditorTheme);
+    save.KeyBindings && Object.assign(Settings.KeyBindings, save.KeyBindings);
     Object.assign(Settings, save, {
       theme: Settings.theme,
       styles: Settings.styles,
       overview: Settings.overview,
       EditorTheme: Settings.EditorTheme,
+      KeyBindings: Settings.KeyBindings,
     });
     /**
      * The hostname and port of RFA have not been validated properly, so the save data may contain invalid data. In that

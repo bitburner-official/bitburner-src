@@ -76,6 +76,7 @@ export enum KEYCODE {
   //CTRL: 17, // Check by `&& event.ctrlKey`
   //ALT: 18, // Check by `&& event.altKey`
   ENTER = "Enter",
+  NUMPAD_ENTER = "NumpadEnter",
   ESC = "Escape",
   TAB = "Tab",
   SPACE = "Space",
