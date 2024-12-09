@@ -9,6 +9,8 @@ import { Box, ListItemButton, Paper, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import Tooltip from "@mui/material/Tooltip";
+import TextField from "@mui/material/TextField";
+import Search from "@mui/icons-material/Search";
 import React, { useState } from "react";
 import { OwnedAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
@@ -23,8 +25,21 @@ export function InstalledAugmentations(): React.ReactElement {
 
   const [selectedAug, setSelectedAug] = useState(sourceAugs[0]);
 
+  const [filterText, setFilterText] = useState("");
+  const matches = (s1: string, s2: string) => s1.toLowerCase().includes(s2.toLowerCase());
+  const filteredSourceAugs = sourceAugs.filter((aug) => {
+    if (filterText === "") {
+      return true;
+    }
+    return (
+      matches(Augmentations[aug.name].name, filterText) ||
+      matches(Augmentations[aug.name].info, filterText) ||
+      matches(Augmentations[aug.name].stats, filterText)
+    );
+  });
+
   if (Settings.OwnedAugmentationsOrder === OwnedAugmentationsOrderSetting.Alphabetically) {
-    sourceAugs.sort((aug1, aug2) => {
+    filteredSourceAugs.sort((aug1, aug2) => {
       return aug1.name.localeCompare(aug2.name);
     });
   }
@@ -59,8 +74,16 @@ export function InstalledAugmentations(): React.ReactElement {
       {sourceAugs.length > 0 ? (
         <Paper sx={{ display: "grid", gridTemplateColumns: "1fr 3fr" }}>
           <Box>
+            <TextField
+              style={{ width: "100%" }}
+              value={filterText}
+              onChange={(e) => {
+                setFilterText(e.target.value);
+              }}
+              InputProps={{ startAdornment: <Search /> }}
+            />
             <List sx={{ height: 400, overflowY: "scroll", borderRight: `1px solid ${Settings.theme.welllight}` }}>
-              {sourceAugs.map((k, i) => (
+              {filteredSourceAugs.map((k, i) => (
                 <ListItemButton key={i + 1} onClick={() => setSelectedAug(k)} selected={selectedAug === k}>
                   <Typography>{k.name}</Typography>
                 </ListItemButton>
