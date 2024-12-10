@@ -593,7 +593,7 @@ export async function main(ns) {
         <br />
         <br />
         <Button onClick={iTutorialEnd}>
-          {step !== iTutorialSteps.DocumentationPageInfo ? "SKIP TUTORIAL" : "FINISH TUTORIAL"}
+          {step !== iTutorialSteps.DocumentationPageInfo ? "Skip Tutorial" : "Finish Tutorial"}
         </Button>
       </Paper>
     </>
