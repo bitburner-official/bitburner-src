@@ -415,7 +415,6 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
                         text={line}
                         color={lineColor(line)}
                         styles={{
-                          display: "inline-block",
                           fontSize: Settings.styles.tailFontSize,
                         }}
                       />
