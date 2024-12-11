@@ -636,7 +636,8 @@ export class Terminal {
       if (n00dlesServ == null) {
         throw new Error("Could not get n00dles server");
       }
-      const errorMessageForBadCommand = "Bad command. Please follow the tutorial.";
+      const errorMessageForBadCommand =
+        "Bad command. Please follow the tutorial or click 'Skip Tutorial' if you'd like to skip it.";
       switch (ITutorial.currStep) {
         case iTutorialSteps.TerminalHelp:
           if (commandArray.length === 1 && commandArray[0] == "help") {
