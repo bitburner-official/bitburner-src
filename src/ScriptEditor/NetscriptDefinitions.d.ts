@@ -5396,7 +5396,7 @@ interface BladeburnerFormulas {
    *
    * @param name - Skill name. It's case-sensitive and must be an exact match.
    * @param level - Skill level. It must be a non-negative number.
-   * @param skillPoints - Number of skill points to upgrade the skill. It must be a positive number.
+   * @param skillPoints - Number of skill points to upgrade the skill. It must be a non-negative number.
    * @returns Number of times that you can upgrade the skill.
    */
   skillMaxUpgradeCount(
