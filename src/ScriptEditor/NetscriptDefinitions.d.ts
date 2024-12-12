@@ -4265,6 +4265,7 @@ export interface Gang {
 
 /** @public */
 type GoOpponent =
+  | "No AI"
   | "Netburners"
   | "Slum Snakes"
   | "The Black Hand"
@@ -4661,7 +4662,7 @@ export interface Go {
   /**
    * Returns the name of the opponent faction in the current subnet.
    */
-  getOpponent(): GoOpponent | "No AI";
+  getOpponent(): GoOpponent;
 
   /**
    * Gets new IPvGO subnet with the specified size owned by the listed faction, ready for the player to make a move.
