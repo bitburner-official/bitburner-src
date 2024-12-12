@@ -9646,6 +9646,13 @@ interface AutocompleteData {
   filename: string;
   /** The processes running on the host */
   processes: ProcessInfo[];
+  /**
+   * The raw command string that you have typed until you press [Tab] to use the autocomplete feature.
+   *
+   * For example, if you type `[Space]run test.js[Space][Space][Space][Press tab to use autocomplete]`, "command" will
+   * contain all space characters (1 space character before "run" and 3 space characters after ".js").
+   */
+  command: string;
 }
 
 /**
