@@ -637,7 +637,7 @@ export class Terminal {
         throw new Error("Could not get n00dles server");
       }
       const errorMessageForBadCommand =
-        "Bad command. Please follow the tutorial or click 'Skip Tutorial' if you'd like to skip it.";
+        "Bad command. Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it.";
       switch (ITutorial.currStep) {
         case iTutorialSteps.TerminalHelp:
           if (commandArray.length === 1 && commandArray[0] == "help") {
@@ -778,7 +778,7 @@ export class Terminal {
           }
           break;
         default:
-          this.error("Please follow the tutorial or click 'Skip Tutorial' if you'd like to skip it");
+          this.error("Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it");
           return;
       }
     }
