@@ -209,6 +209,14 @@ export function acceptInvestmentOffer(corporation: Corporation): void {
 
 export function convertPriceString(price: string): string {
   /**
+   * This is a common error. We should check it to get a "user-friendly" error message. If we pass an empty string to
+   * eval(), it will return undefined, and the "is-it-a-valid-number" following check will throw an unhelpful error
+   * message.
+   */
+  if (price === "") {
+    throw new Error("Price cannot be an empty string.");
+  }
+  /**
    * Replace invalid characters. Only accepts:
    * - Digit characters
    * - 4 most basic algebraic operations (+ - * /)
@@ -239,6 +247,14 @@ export function convertPriceString(price: string): string {
 }
 
 export function convertAmountString(amount: string): string {
+  /**
+   * This is a common error. We should check it to get a "user-friendly" error message. If we pass an empty string to
+   * eval(), it will return undefined, and the "is-it-a-valid-number" following check will throw an unhelpful error
+   * message.
+   */
+  if (amount === "") {
+    throw new Error("Amount cannot be an empty string.");
+  }
   /**
    * Replace invalid characters. Only accepts:
    * - Digit characters
