@@ -344,17 +344,17 @@ interface CrimeStats {
   time: number;
   /** Description of the crime activity */
   type: string;
-  /** hacking level impact on success change of the crime */
+  /** Impact of hacking level on success chance of the crime */
   hacking_success_weight: number;
-  /** strength level impact on success change of the crime */
+  /** Impact of strength level on success chance of the crime */
   strength_success_weight: number;
-  /** defense level impact on success change of the crime */
+  /** Impact of defense level on success chance of the crime */
   defense_success_weight: number;
-  /** dexterity level impact on success change of the crime */
+  /** Impact of dexterity level on success chance of the crime */
   dexterity_success_weight: number;
-  /** agility level impact on success change of the crime */
+  /** Impact of agility level on success chance of the crime */
   agility_success_weight: number;
-  /** charisma level impact on success change of the crime */
+  /** Impact of charisma level on success chance of the crime */
   charisma_success_weight: number;
   /** hacking exp gained from crime */
   hacking_exp: number;
