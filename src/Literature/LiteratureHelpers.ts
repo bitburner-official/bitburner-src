@@ -11,6 +11,6 @@ export function showLiterature(fn: LiteratureName): void {
   for (const factionName of litObj.factionRumors) {
     Player.receiveRumor(factionName);
   }
-  const txt = `<i>${litObj.title}</i><br><br>${litObj.text}`;
+  const txt = `<i>${litObj.title}</i><br><br>${litObj.text.replaceAll('\n','')}`;
   dialogBoxCreate(txt, true);
 }
