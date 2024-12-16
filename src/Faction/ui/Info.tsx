@@ -17,6 +17,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { calculateFavorAfterResetting } from "../formulas/favor";
+import { Player } from "@player";
 
 interface IProps {
   faction: Faction;
@@ -33,9 +34,10 @@ const useStyles = makeStyles()({
 function DefaultAssignment(): React.ReactElement {
   return (
     <Typography>
-      Perform work/carry out assignments for your faction to help further its cause! By doing so you will earn
-      reputation for your faction. You will also gain reputation passively over time, although at a very slow rate.
-      Earning reputation will allow you to purchase Augmentations through this faction, which are powerful upgrades that
+      Perform work/carry out assignments for your faction to help further its cause! By doing so, you will earn
+      reputation for your faction.&nbsp;
+      {Player.bitNodeN !== 2 && <>You will also gain reputation passively over time, although at a very slow rate. </>}
+      Earning reputation will allow you to purchase augmentations through this faction, which are powerful upgrades that
       enhance your abilities.
     </Typography>
   );
