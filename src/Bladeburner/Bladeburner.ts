@@ -829,24 +829,25 @@ export class Bladeburner implements OperationTeam {
   }
 
   completeContract(success: boolean, action: Contract): void {
+    if (!success) {
+      return;
+    }
     const city = this.getCurrentCity();
-    if (success) {
-      switch (action.name) {
-        case BladeburnerContractName.Tracking:
-          // Increase estimate accuracy by a relatively small amount
-          city.improvePopulationEstimateByCount(
-            getRandomIntInclusive(100, 1e3) * this.getSkillMult(BladeburnerMultName.SuccessChanceEstimate),
-          );
-          break;
-        case BladeburnerContractName.BountyHunter:
-          city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
-          city.changeChaosByCount(0.02);
-          break;
-        case BladeburnerContractName.Retirement:
-          city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
-          city.changeChaosByCount(0.04);
-          break;
-      }
+    switch (action.name) {
+      case BladeburnerContractName.Tracking:
+        // Increase estimate accuracy by a relatively small amount
+        city.improvePopulationEstimateByCount(
+          getRandomIntInclusive(100, 1e3) * this.getSkillMult(BladeburnerMultName.SuccessChanceEstimate),
+        );
+        break;
+      case BladeburnerContractName.BountyHunter:
+        city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
+        city.changeChaosByCount(0.02);
+        break;
+      case BladeburnerContractName.Retirement:
+        city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
+        city.changeChaosByCount(0.04);
+        break;
     }
   }
 

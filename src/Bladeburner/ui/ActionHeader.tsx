@@ -2,7 +2,7 @@ import type { Bladeburner } from "../Bladeburner";
 import type { Action } from "../Types";
 
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 import { CopyableText } from "../../ui/React/CopyableText";
 import { createProgressBarText } from "../../utils/helpers/createProgressBarText";
 import { StartButton } from "./StartButton";
@@ -13,6 +13,8 @@ import { formatNumberNoSuffix } from "../../ui/formatNumber";
 import { BlackOperation, Operation } from "../Actions";
 import { BladeburnerConstants } from "../data/Constants";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
+import WarningIcon from "@mui/icons-material/Warning";
+import { Settings } from "../../Settings/Settings";
 
 interface ActionHeaderProps {
   bladeburner: Bladeburner;
@@ -87,6 +89,13 @@ export function ActionHeader({ bladeburner, action, rerender }: ActionHeaderProp
   return (
     <Box display="flex" flexDirection="row" alignItems="center">
       <CopyableText value={action.name} />
+      {action.warning && (
+        <Tooltip title={action.warning} sx={{ marginLeft: "10px" }}>
+          <Typography color={Settings.theme.warning}>
+            <WarningIcon />
+          </Typography>
+        </Tooltip>
+      )}
       <StartButton bladeburner={bladeburner} action={action} rerender={rerender} />
       {allowTeam && <TeamSizeButton bladeburner={bladeburner} action={action} />}
     </Box>
