@@ -20,5 +20,5 @@ export function showLiterature(fn: LiteratureName): void {
       {litObj.text}
     </>
   );
-  dialogBoxCreate(txt, true);
+  dialogBoxCreate(txt);
 }
