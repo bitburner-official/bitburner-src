@@ -5005,15 +5005,21 @@ export interface Grafting {
   getAugmentationGraftTime(augName: string): number;
 
   /**
-   * Retrieves a list of Augmentations that can be grafted.
+   * Retrieves a list of augmentations that can be grafted.
    *
    * @remarks
    * RAM cost: 5 GB
    *
-   * Note that this function returns a list of currently graftable Augmentations,
-   * based off of the Augmentations that you already own.
+   * Note:
    *
-   * @returns An array of graftable Augmentations.
+   * - This function returns a list of currently graftable augmentations, based on the augmentations that you already
+   * own.
+   *
+   * - This function does not check your current money and prerequisite augmentations. For example, it returns
+   * "Augmented Targeting II" even when you don't have enough money to graft that augmentation or don't have the
+   * prerequisite augmentation ("Augmented Targeting I").
+   *
+   * @returns An array of graftable augmentations.
    */
   getGraftableAugmentations(): string[];
 
