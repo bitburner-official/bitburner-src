@@ -26,9 +26,19 @@ interface IProps {
   MaxLevel: number;
 }
 
+// Use a module-scope variable to save the faction choice.
+let defaultFactionChoice: FactionName | "none" = "none";
+
 export function Victory(props: IProps): React.ReactElement {
-  const defaultFaction = isFactionWork(Player.currentWork) ? Player.currentWork.factionName : "none";
-  const [factionName, setFactionName] = useState(defaultFaction);
+  /**
+   * Use the working faction as the default choice in 2 cases:
+   * - The player has not chosen a faction.
+   * - The current default choice is not in the faction list. It may happen after the player "prestiges".
+   */
+  if (defaultFactionChoice === "none" || !Player.factions.includes(defaultFactionChoice)) {
+    defaultFactionChoice = isFactionWork(Player.currentWork) ? Player.currentWork.factionName : "none";
+  }
+  const [factionName, setFactionName] = useState<string>(defaultFactionChoice);
 
   function quitInfiltration(): void {
     handleInfiltrators();
@@ -48,8 +58,11 @@ export function Victory(props: IProps): React.ReactElement {
   }
 
   function trade(): void {
-    if (!getEnumHelper("FactionName").isMember(factionName)) return;
+    if (!getEnumHelper("FactionName").isMember(factionName)) {
+      return;
+    }
     Factions[factionName].playerReputation += repGain;
+    defaultFactionChoice = factionName;
     quitInfiltration();
   }
 
@@ -81,7 +94,7 @@ export function Victory(props: IProps): React.ReactElement {
       <Box sx={{ width: "fit-content" }}>
         <Box sx={{ width: "100%" }}>
           <Select value={factionName} onChange={changeDropdown} sx={{ mr: 1 }}>
-            {defaultFaction === "none" && (
+            {defaultFactionChoice === "none" && (
               <MenuItem key={"none"} value={"none"}>
                 {"none"}
               </MenuItem>
@@ -94,7 +107,7 @@ export function Victory(props: IProps): React.ReactElement {
                 </MenuItem>
               ))}
           </Select>
-          <Button onClick={trade}>
+          <Button disabled={factionName === "none"} onClick={trade}>
             Trade for&nbsp;
             <Reputation reputation={repGain} />
             &nbsp;reputation
