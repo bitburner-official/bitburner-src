@@ -34,9 +34,8 @@ export function LoadingScreen(): React.ReactElement {
   });
 
   useEffect(() => {
-    initSwc()
-      .then(() => load())
-      .then((saveData) => Engine.load(saveData))
+    Promise.all([initSwc(), load()])
+      .then(([__, saveData]) => Engine.load(saveData))
       .then(() => {
         pushGameReady();
         setLoaded(true);
