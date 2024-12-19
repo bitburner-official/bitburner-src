@@ -35,7 +35,6 @@ import {
   numCycleForGrowthCorrected,
   processSingleServerGrowth,
   safelyCreateUniqueServer,
-  getCoreBonus,
   getWeakenEffect,
 } from "./Server/ServerHelpers";
 import {
@@ -89,8 +88,7 @@ import { SnackbarEvents } from "./ui/React/Snackbar";
 import { matchScriptPathExact } from "./utils/helpers/scriptKey";
 
 import { Flags } from "./NetscriptFunctions/Flags";
-import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
-import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
+import { calculateCurrentShareBonus, ShareBonusTime, startSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
 import { InternalAPI, setRemovedFunctions, NSProxy } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
@@ -418,19 +416,17 @@ export const ns: InternalAPI<NSFull> = {
       return getWeakenEffect(threads, cores);
     },
   share: (ctx) => () => {
-    const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
-    const coreBonus = getCoreBonus(cores);
-    helpers.log(ctx, () => "Sharing this computer.");
-    const end = StartSharing(
-      ctx.workerScript.scriptRef.threads * calculateIntelligenceBonus(Player.skills.intelligence, 2) * coreBonus,
-    );
-    return helpers.netscriptDelay(ctx, 10000).finally(function () {
-      helpers.log(ctx, () => "Finished sharing this computer.");
+    const threads = ctx.workerScript.scriptRef.threads;
+    const hostname = ctx.workerScript.hostname;
+    helpers.log(ctx, () => `Sharing ${threads} threads on ${hostname}.`);
+    const end = startSharing(threads, helpers.getServer(ctx, hostname).cpuCores);
+    return helpers.netscriptDelay(ctx, ShareBonusTime).finally(function () {
+      helpers.log(ctx, () => `Finished sharing ${threads} threads on ${hostname}.`);
       end();
     });
   },
   getSharePower: () => () => {
-    return CalculateShareMult();
+    return calculateCurrentShareBonus();
   },
   print:
     (ctx) =>
