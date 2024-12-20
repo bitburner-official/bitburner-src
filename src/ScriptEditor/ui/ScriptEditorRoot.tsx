@@ -217,6 +217,51 @@ function Root(props: IProps): React.ReactElement {
     debouncedCodeParsing(newCode);
   };
 
+  function openFile(hostname: string, filename: ContentFilePath, code?: string) {
+    if (!editorRef.current) {
+      return;
+    }
+    if (!code) {
+      const server = GetServer(hostname);
+      if (!server) throw new Error(`Server "${hostname}" should not be null but it is.`);
+      code = server.getContentFile(filename)?.content;
+      if (!code) {
+        return;
+      }
+    }
+
+    // Check if file is already opened
+    const openScript = openScripts.find((script) => script.path === filename && script.hostname === hostname);
+    if (openScript) {
+      // Script is already opened
+      if (openScript.model === undefined || openScript.model === null || openScript.model.isDisposed()) {
+        openScript.regenerateModel();
+      }
+
+      currentScript = openScript;
+      editorRef.current.setModel(openScript.model);
+      editorRef.current.setPosition(openScript.lastPosition);
+      editorRef.current.revealLineInCenter(openScript.lastPosition.lineNumber);
+      parseCode(openScript.code);
+      return openScript;
+    } else {
+      // Open script
+      const newScript = new OpenScript(
+        filename,
+        code,
+        hostname,
+        new monaco.Position(0, 0),
+        makeModel(hostname, filename, code),
+        props.vim,
+      );
+      openScripts.push(newScript);
+      currentScript = newScript;
+      editorRef.current.setModel(newScript.model);
+      parseCode(newScript.code);
+      return newScript;
+    }
+  }
+
   // When the editor is mounted
   function onMount(editor: IStandaloneCodeEditor): void {
     // Required when switching between site navigation (e.g. from Script Editor -> Terminal and back)
@@ -233,38 +278,8 @@ function Root(props: IProps): React.ReactElement {
       editorRef.current.focus();
       return;
     }
-    const files = props.files;
 
-    for (const [filename, code] of files) {
-      // Check if file is already opened
-      const openScript = openScripts.find((script) => script.path === filename && script.hostname === props.hostname);
-      if (openScript) {
-        // Script is already opened
-        if (openScript.model === undefined || openScript.model === null || openScript.model.isDisposed()) {
-          openScript.regenerateModel();
-        }
-
-        currentScript = openScript;
-        editorRef.current.setModel(openScript.model);
-        editorRef.current.setPosition(openScript.lastPosition);
-        editorRef.current.revealLineInCenter(openScript.lastPosition.lineNumber);
-        parseCode(openScript.code);
-      } else {
-        // Open script
-        const newScript = new OpenScript(
-          filename,
-          code,
-          props.hostname,
-          new monaco.Position(0, 0),
-          makeModel(props.hostname, filename, code),
-          props.vim,
-        );
-        openScripts.push(newScript);
-        currentScript = newScript;
-        editorRef.current.setModel(newScript.model);
-        parseCode(newScript.code);
-      }
-    }
+    props.files.forEach((code, filename) => openFile(props.hostname, filename, code));
 
     editorRef.current.focus();
   }
@@ -345,7 +360,7 @@ function Root(props: IProps): React.ReactElement {
         },
       });
     }
-    //unmounting the editor will dispose all, doesnt hurt to dispose on close aswell
+
     closingScript.model.dispose();
     openScripts.splice(index, 1);
     if (openScripts.length === 0) {
@@ -477,7 +492,7 @@ function Root(props: IProps): React.ReactElement {
           onTabUpdate={onTabUpdate}
         />
         <div style={{ flex: "0 0 5px" }} />
-        <Editor onMount={onMount} onChange={updateCode} onUnmount={onUnmountEditor} />
+        <Editor onMount={onMount} onChange={updateCode} onUnmount={onUnmountEditor} openFile={openFile} />
 
         {statusBarRef.current}
 

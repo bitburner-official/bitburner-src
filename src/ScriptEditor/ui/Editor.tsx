@@ -4,6 +4,11 @@ import * as monaco from "monaco-editor";
 
 import { useScriptEditorContext } from "./ScriptEditorContext";
 import { scriptEditor } from "../ScriptEditor";
+import { ContentFilePath } from "../../Paths/ContentFile";
+import { hasScriptExtension } from "../../Paths/ScriptFilePath";
+import { hasTextExtension } from "../../Paths/TextFilePath";
+import { asFilePath } from "../../Paths/FilePath";
+import { OpenScript } from "./OpenScript";
 
 interface EditorProps {
   /** Function to be ran after mounting editor */
@@ -12,12 +17,12 @@ interface EditorProps {
   onChange: (newCode?: string) => void;
   /** This function is called before unmounting the editor */
   onUnmount: () => void;
+  openFile: (hostname: string, filename: ContentFilePath) => OpenScript | undefined;
 }
 
-export function Editor({ onMount, onChange, onUnmount }: EditorProps) {
+export function Editor({ onMount, onChange, onUnmount, openFile }: EditorProps) {
   const containerDiv = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const subscription = useRef<monaco.IDisposable | null>(null);
 
   const { options } = useScriptEditorContext();
 
@@ -37,15 +42,45 @@ export function Editor({ onMount, onChange, onUnmount }: EditorProps) {
 
     // After initializing monaco editor
     onMount(editorRef.current);
-    subscription.current = editorRef.current.onDidChangeModelContent(() => {
-      onChange(editorRef.current?.getValue());
-    });
+
+    const disposables: monaco.IDisposable[] = [];
+
+    disposables.push(
+      editorRef.current.onDidChangeModelContent(() => {
+        onChange(editorRef.current?.getValue());
+      }),
+    );
+    // Register a hook for requests from the editor to open a file (e.g. "go to definition")
+    disposables.push(
+      monaco.editor.registerEditorOpener({
+        async openCodeEditor(source, resource, selectionOrPosition) {
+          if (resource.scheme !== "file" || resource.authority === null) {
+            return false;
+          }
+          const path = asFilePath(resource.path.slice(1));
+          if (!hasScriptExtension(path) && !hasTextExtension(path)) {
+            return false;
+          }
+          const openScript = openFile(resource.authority, path);
+          if (openScript) {
+            if (monaco.Position.isIPosition(selectionOrPosition)) {
+              editorRef.current?.setPosition(selectionOrPosition);
+              editorRef.current?.revealPositionInCenter(selectionOrPosition, monaco.editor.ScrollType.Immediate);
+            } else if (monaco.Range.isIRange(selectionOrPosition)) {
+              editorRef.current?.setSelection(selectionOrPosition);
+              editorRef.current?.revealRangeInCenter(selectionOrPosition, monaco.editor.ScrollType.Immediate);
+            }
+            return true;
+          }
+          return false;
+        },
+      }),
+    );
 
     // Unmounting
     return () => {
       onUnmount();
-      subscription.current?.dispose();
-      monaco.editor.getModels().forEach((model) => model.dispose());
+      disposables.forEach((d) => d.dispose());
       editorRef.current?.dispose();
     };
     // this eslint ignore instruction can potentially cause unobvious bugs
