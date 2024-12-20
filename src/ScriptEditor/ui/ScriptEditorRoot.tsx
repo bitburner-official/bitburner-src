@@ -174,10 +174,10 @@ function Root(props: IProps): React.ReactElement {
       return;
     }
 
-    server.scripts.forEach((s) => {
+    server.scripts.forEach((script) => {
       const uri = monaco.Uri.from({
         scheme: "file",
-        path: `${s.server}/${s.filename}`,
+        path: `${script.server}/${script.filename}`,
       });
 
       const model = monaco.editor.getModel(uri);
@@ -186,7 +186,23 @@ function Root(props: IProps): React.ReactElement {
         return;
       }
 
-      makeModel(server.hostname, s.filename, s.code);
+      /**
+       * We use openScripts to store all opened files when the player opens them in the editor. When they edit code,
+       * the changed code is in openScripts, regardless of whether they save it. When the player switches from the
+       * editor tab to another tab, all models are disposed, so the next time they open the editor, this function will
+       * load all scripts. However, if the player did not save their code, loaded scripts would not contain changed
+       * code. Therefore, for each loaded script, we need to check if it is in openScripts. If it is, we use the script
+       * content in openScripts.
+       */
+      let code = script.code;
+      for (const openScript of openScripts) {
+        if (openScript.hostname !== script.server || openScript.path !== script.filename) {
+          continue;
+        }
+        code = openScript.code;
+      }
+
+      makeModel(server.hostname, script.filename, code);
     });
   }
 
