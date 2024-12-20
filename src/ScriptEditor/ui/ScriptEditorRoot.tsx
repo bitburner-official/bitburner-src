@@ -176,7 +176,7 @@ function Root(props: IProps): React.ReactElement {
 
     server.scripts.forEach((s) => {
       const uri = monaco.Uri.from({
-        scheme: "file",
+        scheme: "memory",
         path: `${s.server}/${s.filename}`,
       });
 

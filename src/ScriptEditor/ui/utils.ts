@@ -25,7 +25,7 @@ function reorder(list: unknown[], startIndex: number, endIndex: number): void {
 }
 function makeModel(hostname: string, filename: string, code: string) {
   const uri = Uri.from({
-    scheme: "file",
+    scheme: "memory",
     path: `${hostname}/${filename}`,
   });
   let language;
