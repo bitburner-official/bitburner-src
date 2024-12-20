@@ -212,13 +212,13 @@ function Root(props: IProps): React.ReactElement {
   }, 300);
 
   const parseCode = (newCode: string) => {
-    loadAllServerScripts();
     startUpdatingRAM();
     debouncedCodeParsing(newCode);
   };
 
   // When the editor is mounted
   function onMount(editor: IStandaloneCodeEditor): void {
+    loadAllServerScripts();
     // Required when switching between site navigation (e.g. from Script Editor -> Terminal and back)
     // the `useEffect()` for vim mode is called before editor is mounted.
     editorRef.current = editor;
@@ -299,6 +299,7 @@ function Root(props: IProps): React.ReactElement {
   }
 
   function onTabClick(index: number): void {
+    loadAllServerScripts();
     if (currentScript !== null) {
       // Save the current position of the cursor.
       const currentPosition = editorRef.current?.getPosition();
