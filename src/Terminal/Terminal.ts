@@ -263,14 +263,18 @@ export class Terminal {
       Engine.Counters.checkFactionInvitations = 0;
       Engine.checkCounters();
 
-      let moneyGained = calculatePercentMoneyHacked(server, Player) * currentNodeMults.ManualHackMoney;
-      moneyGained = Math.floor(server.moneyAvailable * moneyGained);
+      let moneyDrained = Math.floor(server.moneyAvailable * calculatePercentMoneyHacked(server, Player));
 
-      if (moneyGained <= 0) {
-        moneyGained = 0;
+      if (moneyDrained <= 0) {
+        moneyDrained = 0;
       } // Safety check
 
-      server.moneyAvailable -= moneyGained;
+      server.moneyAvailable -= moneyDrained;
+      if (server.moneyAvailable < 0) {
+        server.moneyAvailable = 0;
+      }
+
+      const moneyGained = moneyDrained * currentNodeMults.ManualHackMoney;
       Player.gainMoney(moneyGained, "hacking");
       Player.gainHackingExp(expGainedOnSuccess);
       if (expGainedOnSuccess > 1) {
