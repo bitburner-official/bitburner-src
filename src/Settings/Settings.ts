@@ -4,6 +4,7 @@ import { defaultStyles } from "../Themes/Styles";
 import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
 import { objectAssert } from "../utils/helpers/typeAssertion";
+import { Result } from "../types";
 
 /**
  * This function won't be able to catch **all** invalid hostnames, and it's still fine. In order to validate a hostname
@@ -15,7 +16,14 @@ import { objectAssert } from "../utils/helpers/typeAssertion";
  * - Use non-http schemes in the hostname: "ftp://a.com"
  * - etc.
  */
-export function isValidConnectionHostname(hostname: string): boolean {
+export function isValidConnectionHostname(hostname: string): Result {
+  // Return a user-friendly error message.
+  if (hostname === "") {
+    return {
+      success: false,
+      message: "Hostname cannot be empty",
+    };
+  }
   /**
    * We expect a hostname, but the player may mistakenly put other unexpected things. We will try to catch common mistakes:
    * - Specify a scheme: http or https.
@@ -25,23 +33,36 @@ export function isValidConnectionHostname(hostname: string): boolean {
   try {
     // Check scheme.
     if (hostname.startsWith("http://") || hostname.startsWith("https://")) {
-      return false;
+      return {
+        success: false,
+        message: "Do not specify scheme (e.g., http, https)",
+      };
     }
     // Parse to a URL with a default scheme.
     const url = new URL(`http://${hostname}`);
     // Check port, pathname, and search params.
     if (url.port !== "" || url.pathname !== "/" || url.search !== "") {
-      return false;
+      return {
+        success: false,
+        message: "Do not specify port, pathname, or search parameters",
+      };
     }
-  } catch (e) {
-    console.error(`Invalid hostname: ${hostname}`, e);
-    return false;
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: `Invalid hostname: ${hostname}`,
+    };
   }
-  return true;
+  return { success: true };
 }
 
-export function isValidConnectionPort(port: number): boolean {
-  return Number.isFinite(port) && port > 0 && port <= 65535;
+export function isValidConnectionPort(port: number): Result {
+  // 0 is a special value for port. It's an invalid port, but the player can use it to disable RFA.
+  if (!Number.isFinite(port) || port < 0 || port > 65535) {
+    return { success: false, message: "Invalid port" };
+  }
+  return { success: true };
 }
 
 /** The current options the player has customized to their play style. */
@@ -174,10 +195,10 @@ export const Settings = {
      * The hostname and port of RFA have not been validated properly, so the save data may contain invalid data. In that
      * case, we set them to the default value.
      */
-    if (!isValidConnectionHostname(Settings.RemoteFileApiAddress)) {
+    if (!isValidConnectionHostname(Settings.RemoteFileApiAddress).success) {
       Settings.RemoteFileApiAddress = "localhost";
     }
-    if (!isValidConnectionPort(Settings.RemoteFileApiPort)) {
+    if (!isValidConnectionPort(Settings.RemoteFileApiPort).success) {
       Settings.RemoteFileApiPort = 0;
     }
   },
