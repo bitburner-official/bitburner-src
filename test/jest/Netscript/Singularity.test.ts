@@ -1,17 +1,20 @@
 import { installAugmentations } from "../../../src/Augmentation/AugmentationHelpers";
 import { blackOpsArray } from "../../../src/Bladeburner/data/BlackOperations";
-import { AugmentationName } from "../../../src/Enums";
+import { AugmentationName, FactionName } from "@enums";
 import { WorkerScript } from "../../../src/Netscript/WorkerScript";
 import { NetscriptFunctions, type NSFull } from "../../../src/NetscriptFunctions";
 import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
 import { PlayerObject } from "../../../src/PersonObjects/Player/PlayerObject";
-import { Player, setPlayer } from "../../../src/Player";
+import { Player, setPlayer } from "@player";
+import { prestigeSourceFile } from "../../../src/Prestige";
 import { RunningScript } from "../../../src/Script/RunningScript";
 import { GetServerOrThrow, initForeignServers, prestigeAllServers } from "../../../src/Server/AllServers";
 import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { initSourceFiles } from "../../../src/SourceFile/SourceFiles";
 import { FormatsNeedToChange } from "../../../src/ui/formatNumber";
 import { Router } from "../../../src/ui/GameRoot";
+import { Factions } from "../../../src/Faction/Factions";
+import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
 
 function setupBasicTestingEnvironment(): void {
   prestigeAllServers();
@@ -216,6 +219,121 @@ describe("destroyW0r1dD43m0n", () => {
         });
       }).toThrow();
       expectFailToDestroyWD();
+    });
+  });
+});
+
+describe("purchaseAugmentation", () => {
+  beforeEach(() => {
+    setupBasicTestingEnvironment();
+    prestigeSourceFile(true);
+    Player.money = 1e100;
+    Player.factions.push(FactionName.CyberSec);
+    Factions[FactionName.CyberSec].playerReputation = 1e10;
+    Player.factions.push(FactionName.Illuminati);
+  });
+
+  describe("Success", () => {
+    const expectQueuedAugmentation = (augmentationName: AugmentationName, level: number) => {
+      expect(
+        Player.queuedAugmentations.find((augmentation) => augmentation.name === augmentationName)?.level,
+      ).toStrictEqual(level);
+    };
+    test("NFG", () => {
+      const ns = getNS();
+      expect(
+        ns.singularity.purchaseAugmentation(FactionName.CyberSec, AugmentationName.NeuroFluxGovernor),
+      ).toStrictEqual(true);
+      expectQueuedAugmentation(AugmentationName.NeuroFluxGovernor, 1);
+    });
+    // Check if the level of NFG is increased properly.
+    test("Upgrade NFG", () => {
+      Player.augmentations.push(new PlayerOwnedAugmentation(AugmentationName.NeuroFluxGovernor));
+      const ns = getNS();
+      expect(
+        ns.singularity.purchaseAugmentation(FactionName.CyberSec, AugmentationName.NeuroFluxGovernor),
+      ).toStrictEqual(true);
+      expectQueuedAugmentation(AugmentationName.NeuroFluxGovernor, 2);
+    });
+    test("Normal augmentation", () => {
+      const ns = getNS();
+      expect(
+        ns.singularity.purchaseAugmentation(FactionName.CyberSec, AugmentationName.CranialSignalProcessorsG1),
+      ).toStrictEqual(true);
+      expectQueuedAugmentation(AugmentationName.CranialSignalProcessorsG1, 1);
+    });
+    test("Normal augmentation with prerequisite", () => {
+      Player.augmentations.push(new PlayerOwnedAugmentation(AugmentationName.CranialSignalProcessorsG1));
+      const ns = getNS();
+      expect(
+        ns.singularity.purchaseAugmentation(FactionName.CyberSec, AugmentationName.CranialSignalProcessorsG2),
+      ).toStrictEqual(true);
+      expectQueuedAugmentation(AugmentationName.CranialSignalProcessorsG2, 1);
+    });
+    test("Buy 0-money-cost augmentation with negative money", () => {
+      Player.money = -1000;
+      Player.factions.push(FactionName.Daedalus);
+      Factions[FactionName.Daedalus].playerReputation = 1e10;
+      const ns = getNS();
+      expect(ns.singularity.purchaseAugmentation(FactionName.Daedalus, AugmentationName.TheRedPill)).toStrictEqual(
+        true,
+      );
+      expectQueuedAugmentation(AugmentationName.TheRedPill, 1);
+    });
+  });
+
+  describe("Failure", () => {
+    const expectNoQueuedAugmentation = (augmentationName: AugmentationName) => {
+      expect(Player.queuedAugmentations.find((augmentation) => augmentation.name === augmentationName)).toStrictEqual(
+        undefined,
+      );
+    };
+    test("Not a member of specified faction", () => {
+      const ns = getNS();
+      expect(
+        ns.singularity.purchaseAugmentation(FactionName.Daedalus, AugmentationName.NeuroFluxGovernor),
+      ).toStrictEqual(false);
+      expectNoQueuedAugmentation(AugmentationName.NeuroFluxGovernor);
+    });
+    test("Faction does not have specified augmentation", () => {
+      const ns = getNS();
+      expect(ns.singularity.purchaseAugmentation(FactionName.CyberSec, AugmentationName.QLink)).toStrictEqual(false);
+      expectNoQueuedAugmentation(AugmentationName.QLink);
+    });
+    test("Purchase installed augmentation", () => {
+      Player.augmentations.push(new PlayerOwnedAugmentation(AugmentationName.CranialSignalProcessorsG1));
+      const ns = getNS();
+      expect(
+        ns.singularity.purchaseAugmentation(FactionName.CyberSec, AugmentationName.CranialSignalProcessorsG1),
+      ).toStrictEqual(false);
+      expectNoQueuedAugmentation(AugmentationName.CranialSignalProcessorsG1);
+    });
+    test("Purchase queued augmentation", () => {
+      Player.queuedAugmentations.push(new PlayerOwnedAugmentation(AugmentationName.CranialSignalProcessorsG1));
+      const ns = getNS();
+      expect(
+        ns.singularity.purchaseAugmentation(FactionName.CyberSec, AugmentationName.CranialSignalProcessorsG1),
+      ).toStrictEqual(false);
+    });
+    test("Not have prerequisite augmentation", () => {
+      const ns = getNS();
+      expect(
+        ns.singularity.purchaseAugmentation(FactionName.CyberSec, AugmentationName.CranialSignalProcessorsG2),
+      ).toStrictEqual(false);
+      expectNoQueuedAugmentation(AugmentationName.CranialSignalProcessorsG2);
+    });
+    test("Not enough money", () => {
+      Player.money = 1000;
+      const ns = getNS();
+      expect(
+        ns.singularity.purchaseAugmentation(FactionName.CyberSec, AugmentationName.CranialSignalProcessorsG1),
+      ).toStrictEqual(false);
+      expectNoQueuedAugmentation(AugmentationName.CranialSignalProcessorsG1);
+    });
+    test("Not enough reputation", () => {
+      const ns = getNS();
+      expect(ns.singularity.purchaseAugmentation(FactionName.Illuminati, AugmentationName.QLink)).toStrictEqual(false);
+      expectNoQueuedAugmentation(AugmentationName.QLink);
     });
   });
 });
