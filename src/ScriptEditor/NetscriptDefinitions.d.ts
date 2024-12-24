@@ -858,11 +858,6 @@ interface GangOtherInfoObject {
   territory: number;
 }
 
-/** @public */
-interface GangOtherInfo {
-  [key: string]: GangOtherInfoObject;
-}
-
 /**
  * Object representing data representing a gang member task.
  * @public
@@ -4022,7 +4017,7 @@ export interface Gang {
    *
    * @returns Object containing territory and power information about all gangs.
    */
-  getOtherGangInformation(): GangOtherInfo;
+  getOtherGangInformation(): Record<string, GangOtherInfoObject>;
 
   /**
    * Get information about a specific gang member.
