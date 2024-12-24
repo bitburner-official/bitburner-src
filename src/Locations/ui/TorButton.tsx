@@ -46,14 +46,12 @@ export function TorButton(props: IProps): React.ReactElement {
     props.rerender();
   }
 
-  if (Player.hasTorRouter()) {
-    return <Button>TOR Router - Purchased</Button>;
-  }
+  const hasTorRouter = Player.hasTorRouter();
 
   return (
-    <Button disabled={!Player.canAfford(CONSTANTS.TorRouterCost)} onClick={buy}>
+    <Button disabled={!Player.canAfford(CONSTANTS.TorRouterCost) || hasTorRouter} onClick={buy}>
       Purchase TOR router -&nbsp;
-      <Money money={CONSTANTS.TorRouterCost} forPurchase={true} />
+      {hasTorRouter ? "Purchased" : <Money money={CONSTANTS.TorRouterCost} forPurchase={true} />}
     </Button>
   );
 }

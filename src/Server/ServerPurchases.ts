@@ -101,7 +101,12 @@ export function getPurchaseServerMaxRam(): number {
 }
 
 // Manually purchase a server (NOT through Netscript)
-export function purchaseServer(hostname: string, ram: number, cost: number): void {
+export function purchaseServer(hostname: string, ram: number): void {
+  const cost = getPurchaseServerCost(ram);
+  if (cost === Infinity) {
+    return;
+  }
+
   //Check if player has enough money
   if (!Player.canAfford(cost)) {
     dialogBoxCreate("You don't have enough money to purchase this server!");
