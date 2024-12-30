@@ -394,7 +394,10 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.errorMessage(ctx, `Cannot find host of WorkerScript. Hostname: ${ctx.workerScript.hostname}.`);
       }
       const weakenAmt = getWeakenEffect(threads, host.cpuCores);
+      const securityBeforeWeaken = server.hackDifficulty;
       server.weaken(weakenAmt);
+      const securityAfterWeaken = server.hackDifficulty;
+      const securityReduction = securityBeforeWeaken - securityAfterWeaken;
       ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
       const expGain = calculateHackingExpGain(server, Player) * threads;
       helpers.log(
@@ -407,7 +410,7 @@ export const ns: InternalAPI<NSFull> = {
       ctx.workerScript.scriptRef.onlineExpGained += expGain;
       Player.gainHackingExp(expGain);
       // Account for hidden multiplier in Server.weaken()
-      return Promise.resolve(weakenAmt);
+      return Promise.resolve(securityReduction);
     });
   },
   weakenAnalyze:
