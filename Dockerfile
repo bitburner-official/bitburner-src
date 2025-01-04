@@ -5,7 +5,10 @@ FROM node:lts-alpine AS builder
 WORKDIR /app
 
 # Install necessary tools, including git
-RUN apk add --no-cache git
+RUN apk update && \
+    apk add --no-cache git && \
+    apk add bash
+
 # Copy dependencies
 COPY package.json package-lock.json ./
 COPY tools/ ./tools
@@ -17,14 +20,16 @@ RUN npm ci
 COPY . .
 
 # Build the application
-# Pass the build mode as a build argument (default to production)
-ARG BUILD_MODE=production
-RUN npx webpack --mode ${BUILD_MODE}
-
-# Prepare the build artifacts
-RUN mkdir -p .app && \
-    cp index.html favicon.ico .app && \
-    cp -r dist .app
+# Pass the build mode as a build argument
+ARG BUILD_MODE
+# Use shell logic to determine which version to install
+RUN if [ "$BUILD_MODE" = "dev" ]; then \
+    echo "Installing development version"; \
+    npm run build:dev; \
+    else \
+    echo "Installing production version"; \
+    npm run build; \
+    fi
 
 # Stage 2: Serve the application using Nginx
 FROM nginx:stable-alpine AS runtime
