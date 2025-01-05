@@ -298,24 +298,23 @@ export const ns: InternalAPI<NSFull> = {
       }
       const moneyBefore = server.moneyAvailable;
       const growth = processSingleServerGrowth(server, threads, host.cpuCores);
-      const growthPercentForLogging = growth !== 0 ? growth - 1 : 0;
       const moneyAfter = server.moneyAvailable;
       ctx.workerScript.scriptRef.recordGrow(server.hostname, threads);
       const expGain = calculateHackingExpGain(server, Player) * threads;
       helpers.log(
         ctx,
         () =>
-          `Available money on '${server.hostname}' grown by ${formatPercent(
-            growthPercentForLogging,
-            6,
-          )}. Gained ${formatExp(expGain)} hacking exp (t=${formatThreads(threads)}).`,
+          `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)}. Gained ${formatExp(
+            expGain,
+          )} hacking exp (t=${formatThreads(threads)}).`,
       );
       ctx.workerScript.scriptRef.onlineExpGained += expGain;
       Player.gainHackingExp(expGain);
       if (stock) {
         influenceStockThroughServerGrow(server, moneyAfter - moneyBefore);
       }
-      return Promise.resolve(growth);
+      // growth can only be 1 if server.moneyMax is 0. In that case, this API returns 0.
+      return Promise.resolve(growth !== 1 ? growth : 0);
     });
   },
   growthAnalyze:

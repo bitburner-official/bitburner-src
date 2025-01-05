@@ -307,15 +307,13 @@ export class Terminal {
     const expGain = calculateHackingExpGain(server, Player);
     const oldSec = server.hackDifficulty;
     const growth = processSingleServerGrowth(server, 25, server.cpuCores);
-    const growthPercentForLogging = growth !== 0 ? growth - 1 : 0;
     const newSec = server.hackDifficulty;
 
     Player.gainHackingExp(expGain);
     this.print(
-      `Available money on '${server.hostname}' grown by ${formatPercent(
-        growthPercentForLogging,
-        6,
-      )}. Gained ${formatExp(expGain)} hacking exp.`,
+      `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)}. Gained ${formatExp(
+        expGain,
+      )} hacking exp.`,
     );
     this.print(
       `Security increased on '${server.hostname}' from ${formatSecurity(oldSec)} to ${formatSecurity(newSec)}`,

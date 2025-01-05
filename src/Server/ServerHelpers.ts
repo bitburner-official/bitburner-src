@@ -190,7 +190,7 @@ export function processSingleServerGrowth(server: Server, threads: number, cores
   }
   // Prevent returning NaN. This happens when server.moneyMax is 0.
   if (server.moneyAvailable === 0 && oldMoneyAvailable === 0) {
-    return 0;
+    return 1;
   }
   // Prevent returning Infinity. If server's money before growing is 0, we "pretend" that it's 1.
   if (oldMoneyAvailable === 0) {

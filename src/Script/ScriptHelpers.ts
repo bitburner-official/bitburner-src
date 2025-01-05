@@ -49,8 +49,7 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
         throw new Error("trying to grow a non-normal server");
       }
       const growth = processSingleServerGrowth(server, timesGrown, host.cpuCores);
-      const growthPercentForLogging = growth !== 0 ? growth - 1 : 0;
-      runningScript.log(`'${server.hostname}' grown by ${formatPercent(growthPercentForLogging, 6)} while offline`);
+      runningScript.log(`'${server.hostname}' grown by ${formatPercent(growth - 1, 6)} while offline`);
     }
   }
 
