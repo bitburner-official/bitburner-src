@@ -19,7 +19,7 @@ export function CoresButton(props: IProps): React.ReactElement {
   const cost = Player.getUpgradeHomeCoresCost();
 
   function buy(): void {
-    // Do NOT reuse reachMaxCore
+    // Do NOT reuse reachMaxCore - it is cached (and possibly stale) at button creation time
     if (Player.bitNodeOptions.restrictHomePCUpgrade || homeComputer.cpuCores >= 8) {
       return;
     }
