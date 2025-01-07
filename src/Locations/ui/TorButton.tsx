@@ -32,7 +32,7 @@ export function purchaseTorRouter(): void {
   dialogBoxCreate(
     "You have purchased a TOR router!\n" +
       "You now have access to the dark web from your home computer.\n" +
-      "Use the buy command in the terminal to purchase programs.",
+      `Use the "buy" command in the terminal to purchase programs.`,
   );
 }
 
