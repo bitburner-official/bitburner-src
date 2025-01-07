@@ -174,7 +174,9 @@ export function EarningsElement(props: IProps): React.ReactElement {
       <TableBody>
         <TableRow>
           <TableCell classes={{ root: classes.cellNone }}>
-            <Typography variant="h6">Earnings {props.sleeve.storedCycles > 50 ? "(overclock)" : ""}</Typography>
+            <Typography variant="h6">
+              Earnings {props.sleeve.storedCycles > 50 ? "(Boosted by bonus time)" : ""}
+            </Typography>
           </TableCell>
         </TableRow>
         {data.map(([a, b]) => (
