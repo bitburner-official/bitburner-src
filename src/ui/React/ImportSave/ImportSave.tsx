@@ -110,7 +110,6 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
 
   const handleImport = async (): Promise<void> => {
     await saveObject.importGame(props.saveData, true);
-    pushImportResult(true);
   };
 
   useEffect(() => {
@@ -389,12 +388,16 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
 
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <ButtonGroup>
-          <Button onClick={handleGoBack} sx={{ my: 2 }} startIcon={<ArrowBackIcon />} color="secondary">
-            Take me back!
-          </Button>
-          <Button onClick={openImportModal} sx={{ my: 2 }} startIcon={<DirectionsRunIcon />} color="warning">
-            Proceed with import
-          </Button>
+          <Tooltip title="Continue with current save">
+            <Button onClick={handleGoBack} sx={{ my: 2 }} startIcon={<ArrowBackIcon />} color="secondary">
+              Take me back!
+            </Button>
+          </Tooltip>
+          <Tooltip title="Import newer save and reload">
+            <Button onClick={openImportModal} sx={{ my: 2 }} startIcon={<DirectionsRunIcon />} color="warning">
+              Proceed with import
+            </Button>
+          </Tooltip>
         </ButtonGroup>
         <ConfirmationModal
           open={isImportModalOpen}
