@@ -120,7 +120,7 @@ export function ProgramsRoot(): React.ReactElement {
                 {Player.hasProgram(program.name) || hackingLevelRemaining === 0 || (
                   <Tooltip title={<>Unlocks after you gain {hackingLevelRemaining} more hacking levels</>}>
                     <Typography color={Settings.theme.hack}>
-                      <b>Unlocks at hacking levels:</b> {Player.skills.hacking + hackingLevelRemaining}
+                      <b>Unlocks at hacking level:</b> {Player.skills.hacking + hackingLevelRemaining}
                     </Typography>
                   </Tooltip>
                 )}
