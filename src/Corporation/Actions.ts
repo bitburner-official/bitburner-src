@@ -10,7 +10,7 @@ import { OfficeSpace } from "./OfficeSpace";
 import { Material } from "./Material";
 import { Product } from "./Product";
 import { Warehouse } from "./Warehouse";
-import { FactionName, IndustryType } from "@enums";
+import { CreatingCorporationCheckResult, FactionName, IndustryType } from "@enums";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
 import { CityName } from "@enums";
@@ -22,39 +22,48 @@ import {
   buybackSharesFailureReason,
   issueNewSharesFailureReason,
   costOfCreatingCorporation,
+  canCreateCorporation,
+  convertCreatingCorporationCheckResultToMessage,
 } from "./helpers";
 import { PositiveInteger, Result } from "../types";
-import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Factions } from "../Faction/Factions";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+import { formatMoney } from "../ui/formatNumber";
 
-export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): boolean {
-  if (!Player.canAccessCorporation()) {
-    return false;
+export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): Result {
+  const checkResult = canCreateCorporation(selfFund, restart);
+  switch (checkResult) {
+    case CreatingCorporationCheckResult.Success:
+      break;
+    case CreatingCorporationCheckResult.NoSf3OrDisabled:
+    case CreatingCorporationCheckResult.CorporationExists:
+      return { success: false, message: convertCreatingCorporationCheckResultToMessage(checkResult) };
+    case CreatingCorporationCheckResult.UseSeedMoneyOutsideBN3:
+    case CreatingCorporationCheckResult.DisabledBySoftCap:
+      // In order to maintain backward compatibility, we have to throw an error in these cases.
+      throw new Error(convertCreatingCorporationCheckResultToMessage(checkResult));
+    default:
+      throwIfReachable(checkResult);
   }
-  if (Player.corporation && !restart) {
-    return false;
-  }
+
   if (!corporationName) {
-    return false;
-  }
-  if (Player.bitNodeN !== 3 && !selfFund) {
-    throw new Error("Cannot use seed funds outside of BitNode 3");
-  }
-  if (currentNodeMults.CorporationSoftcap < 0.15) {
-    throw new Error(`You cannot create a corporation in BitNode ${Player.bitNodeN}`);
+    return { success: false, message: "Corporation name cannot be an empty string." };
   }
 
   if (selfFund) {
     const cost = costOfCreatingCorporation(restart);
     if (!Player.canAfford(cost)) {
-      return false;
+      return {
+        success: false,
+        message: `You don't have enough money to create a corporation. It costs ${formatMoney(cost)}.`,
+      };
     }
     Player.startCorporation(corporationName, false);
     Player.loseMoney(cost, "corporation");
   } else {
     Player.startCorporation(corporationName, true);
   }
-  return true;
+  return { success: true };
 }
 
 export function createDivision(corporation: Corporation, industry: IndustryType, name: string): void {
@@ -200,6 +209,14 @@ export function acceptInvestmentOffer(corporation: Corporation): void {
 
 export function convertPriceString(price: string): string {
   /**
+   * This is a common error. We should check it to get a "user-friendly" error message. If we pass an empty string to
+   * eval(), it will return undefined, and the "is-it-a-valid-number" following check will throw an unhelpful error
+   * message.
+   */
+  if (price === "") {
+    throw new Error("Price cannot be an empty string.");
+  }
+  /**
    * Replace invalid characters. Only accepts:
    * - Digit characters
    * - 4 most basic algebraic operations (+ - * /)
@@ -230,6 +247,14 @@ export function convertPriceString(price: string): string {
 }
 
 export function convertAmountString(amount: string): string {
+  /**
+   * This is a common error. We should check it to get a "user-friendly" error message. If we pass an empty string to
+   * eval(), it will return undefined, and the "is-it-a-valid-number" following check will throw an unhelpful error
+   * message.
+   */
+  if (amount === "") {
+    throw new Error("Amount cannot be an empty string.");
+  }
   /**
    * Replace invalid characters. Only accepts:
    * - Digit characters

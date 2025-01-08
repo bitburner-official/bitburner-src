@@ -1,14 +1,12 @@
 node_modules/
 
-.git
-.gitattributes
-.gitignore
+test/
+dist/
+.app/
+
+.github
 .editorconfig
 
 .dockerignore
 Dockerfile
 docker-compose.yml
-
-*.md
-Quotes.txt
-netscript_tests/

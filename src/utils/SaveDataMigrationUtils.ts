@@ -480,7 +480,7 @@ Error: ${e}`,
       );
   }
   if (ver < 33) {
-    // 2.3.2 fixed what should be the last issue with scripts having the wrong server assigned..
+    // 2.4.0 fixed what should be the last issue with scripts having the wrong server assigned
     for (const server of GetAllServers()) {
       for (const script of server.scripts.values()) {
         if (script.server !== server.hostname) {

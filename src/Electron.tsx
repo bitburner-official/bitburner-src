@@ -182,7 +182,7 @@ function initElectronBridge(): void {
   });
   bridge.receive("push-save-request", (params: unknown) => {
     if (typeof params !== "object") throw new Error("Error trying to push save request");
-    const { save, automatic = false } = params as { save: string; automatic: boolean };
+    const { save, automatic = false } = params as { save: SaveData; automatic: boolean };
     window.appSaveFns.pushSaveData(save, automatic);
   });
   bridge.receive("trigger-save", () => {

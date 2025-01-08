@@ -400,6 +400,7 @@ const grafting = {
 
 const corporation = {
   hasCorporation: 0,
+  canCreateCorporation: 0,
   createCorporation: RamCostConstants.CorporationAction,
   hasUnlock: RamCostConstants.CorporationInfo,
   getUnlockCost: RamCostConstants.CorporationInfo,
@@ -601,6 +602,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   resizeTail: 0,
   closeTail: 0,
   setTitle: 0,
+  setTailFontSize: 0,
   clearPort: 0,
   openDevMenu: 0,
   alert: 0,

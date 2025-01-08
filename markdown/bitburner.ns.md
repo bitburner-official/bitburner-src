@@ -157,6 +157,7 @@ export async function main(ns) {
 |  [scriptRunning(script, host)](./bitburner.ns.scriptrunning.md) | Check if any script with a filename is running. |
 |  [self()](./bitburner.ns.self.md) | Returns the currently running script. |
 |  [serverExists(host)](./bitburner.ns.serverexists.md) | Returns a boolean denoting whether or not the specified server exists. |
+|  [setTailFontSize(pixel, fn, host, args)](./bitburner.ns.settailfontsize.md) | Set the font size of the tail window of a script. |
 |  [setTitle(title, pid)](./bitburner.ns.settitle.md) | Set the title of the tail window of a script. |
 |  [share()](./bitburner.ns.share.md) | Share the server's ram with your factions. |
 |  [sleep(millis)](./bitburner.ns.sleep.md) | Suspends the script for n milliseconds. |

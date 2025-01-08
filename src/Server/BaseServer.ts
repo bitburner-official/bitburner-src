@@ -25,6 +25,7 @@ import { Settings } from "../Settings/Settings";
 
 import type { ScriptKey } from "../utils/helpers/scriptKey";
 import { objectAssert } from "../utils/helpers/typeAssertion";
+import { clampNumber } from "../utils/helpers/clampNumber";
 
 interface IConstructorParams {
   adminRights?: boolean;
@@ -232,7 +233,7 @@ export abstract class BaseServer implements IServer {
   }
 
   updateRamUsed(ram: number): void {
-    this.ramUsed = ram;
+    this.ramUsed = clampNumber(ram, 0, this.maxRam);
   }
 
   pushProgram(program: ProgramFilePath | CompletedProgramName): void {

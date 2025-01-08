@@ -63,6 +63,7 @@ import {
   validateSourceFileOverrides,
 } from "../BitNode/BitNodeUtils";
 import { JSONMap } from "../Types/Jsonable";
+import { Settings } from "../Settings/Settings";
 
 export const helpers = {
   string,
@@ -747,6 +748,7 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
             y: logProps.y,
             width: logProps.width,
             height: logProps.height,
+            fontSize: logProps.fontSize ?? Settings.styles.tailFontSize,
           },
     title: runningScript.title,
     threads: runningScript.threads,

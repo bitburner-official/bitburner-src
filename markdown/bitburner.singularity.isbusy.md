@@ -15,11 +15,29 @@ isBusy(): boolean;
 
 boolean
 
-True if the player is currently performing an ‘action’, false otherwise.
+True if the player is currently performing an action, false otherwise.
 
 ## Remarks
 
 RAM cost: 0.5 GB \* 16/4/1
 
-Returns a boolean indicating whether or not the player is currently performing an ‘action’. These actions include working for a company/faction, studying at a university, working out at a gym, creating a program, committing a crime, etc.
+Returns a boolean indicating if the player is currently performing an action. These actions include:
+
+- Studying at a university
+
+- Working out at a gym
+
+- Working for a company/faction
+
+- Creating a program
+
+- Committing a crime
+
+- Grafting an augmentation
+
+Note:
+
+- This function returns true when the UI is showing the infiltration UI or the BitVerse.
+
+- This function does not take Bladeburner actions into account. You can use [getCurrentAction](./bitburner.bladeburner.getcurrentaction.md) to check if you are performing a Bladeburner action.
 

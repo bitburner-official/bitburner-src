@@ -70,7 +70,7 @@ export function initBitNodes() {
         {FactionName.TheDarkArmy}, {FactionName.SpeakersForTheDead}, {FactionName.NiteSec}, and{" "}
         {FactionName.TheBlackHand}) give the player the ability to form and manage their own gang, which can earn the
         player money and reputation with the corresponding faction. The gang faction offers more augmentations than
-        other factions, and in BitNode-2, it offers a way to destroy the BitNode.
+        other factions, and in BitNode-2, it offers The Red Pill.
         <br />
         <br />
         Destroying this BitNode will give you Source-File 2, or if you already have this Source-File, it will upgrade

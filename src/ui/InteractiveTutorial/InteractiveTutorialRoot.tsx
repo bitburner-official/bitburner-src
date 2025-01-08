@@ -60,6 +60,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             This tutorial will show you the basics of the game. You may skip the tutorial at any time.
             <br />
             <br />
+            You can replay this tutorial by going to the Options tab and pressing "Reset tutorial".
+            <br />
+            <br />
             You can also collapse this panel to temporarily hide this tutorial.
           </Typography>
         </>
@@ -593,7 +596,7 @@ export async function main(ns) {
         <br />
         <br />
         <Button onClick={iTutorialEnd}>
-          {step !== iTutorialSteps.DocumentationPageInfo ? "SKIP TUTORIAL" : "FINISH TUTORIAL"}
+          {step !== iTutorialSteps.DocumentationPageInfo ? "Exit Tutorial" : "Finish Tutorial"}
         </Button>
       </Paper>
     </>
