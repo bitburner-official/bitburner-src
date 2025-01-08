@@ -4,7 +4,11 @@
 
 ## Corporation.createCorporation() method
 
-Create a Corporation.
+Create a Corporation. You should use [canCreateCorporation](./bitburner.corporation.cancreatecorporation.md) to check if you are unsure you can do it, because it throws an error in these cases:
+
+- Use seed money outside BitNode 3.
+
+- Be in a BitNode that has CorporationSoftcap (a BitNode modifier) less than 0.15.
 
 **Signature:**
 
@@ -16,7 +20,7 @@ createCorporation(corporationName: string, selfFund: boolean): boolean;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  corporationName | string | Name of the corporation |
+|  corporationName | string | Name of the corporation. It must be a non-empty string. |
 |  selfFund | boolean | If you want to self-fund. Defaults to true, false will only work in BitNode 3. |
 
 **Returns:**
@@ -28,10 +32,4 @@ true if created and false if not
 ## Remarks
 
 RAM cost: 20 GB
-
-This function throws an error if:
-
-- Use seed money outside BitNode 3.
-
-- Be in a BitNode that has CorporationSoftcap (a BN modifier) less than 0.15. Use [getBitNodeMultipliers](./bitburner.ns.getbitnodemultipliers.md) to get the value of this modifier.
 

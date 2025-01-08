@@ -263,14 +263,18 @@ export class Terminal {
       Engine.Counters.checkFactionInvitations = 0;
       Engine.checkCounters();
 
-      let moneyGained = calculatePercentMoneyHacked(server, Player) * currentNodeMults.ManualHackMoney;
-      moneyGained = Math.floor(server.moneyAvailable * moneyGained);
+      let moneyDrained = Math.floor(server.moneyAvailable * calculatePercentMoneyHacked(server, Player));
 
-      if (moneyGained <= 0) {
-        moneyGained = 0;
+      if (moneyDrained <= 0) {
+        moneyDrained = 0;
       } // Safety check
 
-      server.moneyAvailable -= moneyGained;
+      server.moneyAvailable -= moneyDrained;
+      if (server.moneyAvailable < 0) {
+        server.moneyAvailable = 0;
+      }
+
+      const moneyGained = moneyDrained * currentNodeMults.ManualHackMoney;
       Player.gainMoney(moneyGained, "hacking");
       Player.gainHackingExp(expGainedOnSuccess);
       if (expGainedOnSuccess > 1) {
@@ -636,12 +640,14 @@ export class Terminal {
       if (n00dlesServ == null) {
         throw new Error("Could not get n00dles server");
       }
+      const errorMessageForBadCommand =
+        "Bad command. Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it.";
       switch (ITutorial.currStep) {
         case iTutorialSteps.TerminalHelp:
           if (commandArray.length === 1 && commandArray[0] == "help") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -649,7 +655,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] == "ls") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -657,7 +663,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] == "scan") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -665,7 +671,7 @@ export class Terminal {
           if (commandArray.length == 1 && commandArray[0] == "scan-analyze") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -673,7 +679,7 @@ export class Terminal {
           if (commandArray.length == 2 && commandArray[0] == "scan-analyze" && commandArray[1] === 2) {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -689,7 +695,7 @@ export class Terminal {
               return;
             }
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -697,7 +703,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "analyze") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -705,7 +711,7 @@ export class Terminal {
           if (commandArray.length == 2 && commandArray[0] == "run" && commandArray[1] == "NUKE.exe") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -713,13 +719,13 @@ export class Terminal {
           if (commandArray.length == 1 && commandArray[0] == "hack") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalHackingMechanics:
           if (commandArray.length !== 1 || !["grow", "weaken", "hack"].includes(commandArray[0] + "")) {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -727,7 +733,7 @@ export class Terminal {
           if (commandArray.length == 1 && commandArray[0] == "home") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -739,7 +745,7 @@ export class Terminal {
           ) {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -747,7 +753,7 @@ export class Terminal {
           if (commandArray.length == 1 && commandArray[0] == "free") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -759,7 +765,7 @@ export class Terminal {
           ) {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -771,12 +777,12 @@ export class Terminal {
           ) {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         default:
-          this.error("Please follow the tutorial, or click 'EXIT' if you'd like to skip it");
+          this.error("Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it");
           return;
       }
     }

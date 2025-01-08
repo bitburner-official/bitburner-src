@@ -30,11 +30,11 @@ export function CorruptableText(props: CorruptableTextProps): JSX.Element {
   const [content, setContent] = useState(props.content);
 
   useEffect(() => {
+    setContent(props.content);
+
     if (Settings.DisableTextEffects) {
       return;
     }
-
-    setContent(props.content);
 
     let counter = 5;
     const timers: number[] = [];
