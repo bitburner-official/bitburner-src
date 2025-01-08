@@ -313,8 +313,7 @@ export const ns: InternalAPI<NSFull> = {
       if (stock) {
         influenceStockThroughServerGrow(server, moneyAfter - moneyBefore);
       }
-      // growth can only be 1 if server.moneyMax is 0. In that case, this API returns 0.
-      return Promise.resolve(growth !== 1 ? growth : 0);
+      return Promise.resolve(server.moneyMax === 0 ? 0 : growth);
     });
   },
   growthAnalyze:
