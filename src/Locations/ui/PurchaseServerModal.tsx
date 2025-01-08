@@ -21,7 +21,7 @@ export function PurchaseServerModal(props: IProps): React.ReactElement {
   const [hostname, setHostname] = useState("");
 
   function tryToPurchaseServer(): void {
-    purchaseServer(hostname, props.ram, props.cost);
+    purchaseServer(hostname, props.ram);
     props.onClose();
   }
 

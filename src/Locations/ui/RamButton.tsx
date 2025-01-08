@@ -19,12 +19,9 @@ interface IProps {
 
 export function RamButton(props: IProps): React.ReactElement {
   const homeComputer = Player.getHomeComputer();
-  if (
+  const reachMaxRam =
     (Player.bitNodeOptions.restrictHomePCUpgrade && homeComputer.maxRam >= 128) ||
-    homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam
-  ) {
-    return <Button>Upgrade 'home' RAM - MAX</Button>;
-  }
+    homeComputer.maxRam >= ServerConstants.HomeComputerMaxRam;
 
   const cost = Player.getUpgradeHomeRamCost();
 
@@ -47,10 +44,16 @@ export function RamButton(props: IProps): React.ReactElement {
           <i>"More RAM means more scripts on 'home'"</i>
         </Typography>
         <br />
-        <Button disabled={!Player.canAfford(cost)} onClick={buy}>
-          Upgrade 'home' RAM ({formatRam(homeComputer.maxRam)} -&gt;&nbsp;
-          {formatRam(homeComputer.maxRam * 2)}) -&nbsp;
-          <Money money={cost} forPurchase={true} />
+        <Button disabled={!Player.canAfford(cost) || reachMaxRam} onClick={buy}>
+          Upgrade 'home' RAM&nbsp;
+          {reachMaxRam ? (
+            "- Max"
+          ) : (
+            <>
+              ({formatRam(homeComputer.maxRam)} -&gt; {formatRam(homeComputer.maxRam * 2)}) -&nbsp;
+              <Money money={cost} forPurchase={true} />
+            </>
+          )}
         </Button>
       </span>
     </Tooltip>

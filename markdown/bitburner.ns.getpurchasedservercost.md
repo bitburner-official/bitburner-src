@@ -22,7 +22,7 @@ getPurchasedServerCost(ram: number): number;
 
 number
 
-The cost to purchase a server with the specified amount of ram.
+The cost to purchase a server with the specified amount of ram, or returns Infinity if ram is not a valid amount.
 
 ## Remarks
 

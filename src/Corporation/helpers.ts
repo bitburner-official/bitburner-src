@@ -4,6 +4,43 @@ import { formatShares } from "../ui/formatNumber";
 import { Corporation } from "./Corporation";
 import { CorpUpgrade } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
+import { CreatingCorporationCheckResult } from "@enums";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+
+export function convertCreatingCorporationCheckResultToMessage(checkResult: CreatingCorporationCheckResult): string {
+  switch (checkResult) {
+    case CreatingCorporationCheckResult.Success:
+      return "Success";
+    case CreatingCorporationCheckResult.NoSf3OrDisabled:
+      return "You don't have SF3 or Corporation is disabled by an advanced option";
+    case CreatingCorporationCheckResult.CorporationExists:
+      return "Corporation exists";
+    case CreatingCorporationCheckResult.UseSeedMoneyOutsideBN3:
+      return "You cannot use seed money outside BitNode 3";
+    case CreatingCorporationCheckResult.DisabledBySoftCap:
+      return "You cannot create a corporation in this BitNode";
+    default:
+      throwIfReachable(checkResult);
+  }
+  return String(checkResult);
+}
+
+export function canCreateCorporation(selfFund: boolean, restart: boolean): CreatingCorporationCheckResult {
+  if (!Player.canAccessCorporation()) {
+    return CreatingCorporationCheckResult.NoSf3OrDisabled;
+  }
+  if (Player.corporation && !restart) {
+    return CreatingCorporationCheckResult.CorporationExists;
+  }
+  if (Player.bitNodeN !== 3 && !selfFund) {
+    return CreatingCorporationCheckResult.UseSeedMoneyOutsideBN3;
+  }
+  if (currentNodeMults.CorporationSoftcap < 0.15) {
+    return CreatingCorporationCheckResult.DisabledBySoftCap;
+  }
+  return CreatingCorporationCheckResult.Success;
+}
 
 export function costOfCreatingCorporation(restart: boolean): number {
   if (restart && !Player.corporation?.seedFunded) {

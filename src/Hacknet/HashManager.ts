@@ -123,8 +123,8 @@ export class HashManager {
   }
 
   /**
-   * Returns boolean indicating whether or not the upgrade was successfully purchased
-   * Note that this does NOT actually implement the effect
+   * Returns boolean indicating whether or not the upgrade was successfully purchased.
+   * Note that this function does NOT actually implement the effect.
    */
   upgrade(upgName: string, count = 1): boolean {
     const upg = HashUpgrades[upgName];

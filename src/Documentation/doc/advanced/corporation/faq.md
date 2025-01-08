@@ -16,11 +16,11 @@ No.
 
 No.
 
-#### Why can I not buy back anything? It's ridiculous.
+#### Why can I not buy back my shares?
 
-You can only buy back shares that were issued. The shares that were owned by the government (when we use seed money) and investors cannot be bought back.
+You can buy back shares that were issued. Shares that were given to the government (when you use seed money) and investors (when you take investment offers) cannot be bought back.
 
-One thing to remember: this is a game, not real life. In this game, you always have total control over your corporation. When your profit hits exponential growth, the share percentage means nothing. If your corporation's profit is 1e90/s and you only have 1% shares, you still have 1e88/s.
+You always have total control over your corporation, so you don't have to worry about "ownership". When your profit hits exponential growth, the share percentage means nothing. If your corporation's profit is 1e90/s and you only have 1% shares, you still get 1e88/s.
 
 #### My corporation generates profit. Why does my money not increase?
 
@@ -137,9 +137,9 @@ They are used for calculating `employeeProductionByJob`, then that property is u
 
 #### What do Interns do?
 
-Don't bother with that job. Its only purpose is to maintain energy and morale. A tea/party script can do it for you, and it is very simple to implement.
+They maintain energy and morale. You should only use them if you don't want to write scripts. A tea/party script can maintain energy and morale for you, and it is very simple to implement. It's recommended to implement that script instead of wasting employees on the "Intern" job.
 
-#### Everybody tells me to use 1/9 as Intern ratio, but when I use it, energy and morale still drop.
+#### I use 1/9 as Intern ratio, but energy and morale still drop.
 
 You can only use that ratio when your corporation works fine (funds > 0 or profit > 0). If it does not, use 1/6.
 
