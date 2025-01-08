@@ -11,6 +11,7 @@ import { Server as IServer } from "@nsdefs";
 import { workerScripts } from "../Netscript/WorkerScripts";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 import { serverMetadata } from "./data/servers";
+import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 
 /**
  * Constructs a new server, while also ensuring that the new server
@@ -206,9 +207,16 @@ export function prestigeHomeComputer(homeComp: Server): void {
   homeComp.messages.push(LiteratureName.HackersStartingHandbook);
   if (homeComp.runningScriptMap.size !== 0) {
     // Temporary verbose logging section to gather data on a bug
-    console.error("Some runningScripts were still present on home during prestige");
+    exceptionAlert(
+      new Error(
+        `Some runningScripts were still present on home during prestige. runningScripts: ${Array.from(
+          homeComp.runningScriptMap.keys(),
+        )}`,
+      ),
+      true,
+    );
     for (const [scriptKey, byPidMap] of homeComp.runningScriptMap) {
-      console.error(`script key: ${scriptKey}: ${byPidMap.size} scripts`);
+      console.error(`script key: ${scriptKey}: ${byPidMap.size} scripts`, byPidMap);
       for (const pid of byPidMap.keys()) {
         if (workerScripts.has(pid)) killWorkerScriptByPid(pid);
       }

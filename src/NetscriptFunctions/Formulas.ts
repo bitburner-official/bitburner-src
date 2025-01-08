@@ -52,6 +52,7 @@ import { getEnumHelper } from "../utils/EnumHelper";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { Skills } from "../Bladeburner/data/Skills";
+import type { PositiveNumber } from "../types";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
@@ -433,15 +434,21 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         const name = getEnumHelper("BladeburnerSkillName").nsGetMember(ctx, _name, "name");
         const level = helpers.number(ctx, "level", _level);
-        if (level < 0) {
-          throw new Error(`Level must be a non-negative number.`);
+        if (!Number.isFinite(level) || level < 0) {
+          throw new Error(`Level must be a finite, non-negative number. Its value is ${level}.`);
         }
-        const skillPoints = helpers.positiveNumber(ctx, "skillPoints", _skillPoints);
+        const skillPoints = helpers.number(ctx, "skillPoints", _skillPoints);
+        if (!Number.isFinite(skillPoints) || skillPoints < 0) {
+          throw new Error(`SkillPoints must be a finite, non-negative number. Its value is ${skillPoints}.`);
+        }
         const skill = Skills[name];
         if (level >= skill.maxLvl) {
           return 0;
         }
-        return skill.calculateMaxUpgradeCount(level, skillPoints);
+        if (skillPoints === 0) {
+          return 0;
+        }
+        return skill.calculateMaxUpgradeCount(level, skillPoints as PositiveNumber);
       },
     },
   };

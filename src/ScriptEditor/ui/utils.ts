@@ -23,11 +23,17 @@ function reorder(list: unknown[], startIndex: number, endIndex: number): void {
   const [removed] = list.splice(startIndex, 1);
   list.splice(endIndex, 0, removed);
 }
-function makeModel(hostname: string, filename: string, code: string) {
+
+function makeModel(hostname: string, filename: string, code: string): editor.ITextModel {
   const uri = Uri.from({
-    scheme: "file",
+    scheme: "memory",
     path: `${hostname}/${filename}`,
   });
+  // If there is a model with this URI and it's not disposed, return it.
+  const model = editor.getModel(uri);
+  if (model && !model.isDisposed()) {
+    return model;
+  }
   let language;
   const fileType = getFileType(filename);
   switch (fileType) {
@@ -51,8 +57,7 @@ function makeModel(hostname: string, filename: string, code: string) {
     default:
       throwIfReachable(fileType);
   }
-  //if somehow a model already exist return it
-  return editor.getModel(uri) ?? editor.createModel(code, language, uri);
+  return editor.createModel(code, language, uri);
 }
 
 export { getServerCode, dirty, reorder, makeModel };

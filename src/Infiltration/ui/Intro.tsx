@@ -68,7 +68,7 @@ export function Intro(props: IProps): React.ReactElement {
         </Typography>
 
         <Typography variant="h6">
-          <b>Maximum Level: </b>
+          <b>Maximum clearance level: </b>
           {props.MaxLevel}
         </Typography>
         <Typography

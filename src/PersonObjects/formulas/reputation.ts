@@ -1,6 +1,6 @@
 import { CONSTANTS } from "../../Constants";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-import { CalculateShareMult } from "../../NetworkShare/Share";
+import { calculateCurrentShareBonus } from "../../NetworkShare/Share";
 import { Person as IPerson } from "@nsdefs";
 import { calculateIntelligenceBonus } from "./intelligence";
 
@@ -18,7 +18,7 @@ export function getHackingWorkRepGain(p: IPerson, favor: number): number {
     p.mults.faction_rep *
     calculateIntelligenceBonus(p.skills.intelligence, 1) *
     mult(favor) *
-    CalculateShareMult()
+    calculateCurrentShareBonus()
   );
 }
 
@@ -29,7 +29,7 @@ export function getFactionSecurityWorkRepGain(p: IPerson, favor: number): number
         p.skills.defense +
         p.skills.dexterity +
         p.skills.agility +
-        (p.skills.hacking + p.skills.intelligence) * CalculateShareMult())) /
+        (p.skills.hacking + p.skills.intelligence) * calculateCurrentShareBonus())) /
     CONSTANTS.MaxSkillLevel /
     4.5;
   return t * p.mults.faction_rep * mult(favor) * calculateIntelligenceBonus(p.skills.intelligence, 1);
@@ -43,7 +43,7 @@ export function getFactionFieldWorkRepGain(p: IPerson, favor: number): number {
         p.skills.dexterity +
         p.skills.agility +
         p.skills.charisma +
-        (p.skills.hacking + p.skills.intelligence) * CalculateShareMult())) /
+        (p.skills.hacking + p.skills.intelligence) * calculateCurrentShareBonus())) /
     CONSTANTS.MaxSkillLevel /
     5.5;
   return t * p.mults.faction_rep * mult(favor) * calculateIntelligenceBonus(p.skills.intelligence, 1);

@@ -9,9 +9,8 @@ export function createContracts(): Record<BladeburnerContractName, Contract> {
       name: BladeburnerContractName.Tracking,
       desc:
         "Identify and locate Synthoids. This contract involves reconnaissance and information-gathering ONLY. Do NOT " +
-        "engage. Stealth is of the utmost importance.\n\n" +
-        "Successfully completing Tracking contracts will slightly improve your Synthoid population estimate for whatever " +
-        "city you are currently in.",
+        "engage. Stealth is of the utmost importance.\n" +
+        "Successfully completing this contract will slightly improve the Synthoid population estimate of your current city.",
       successScaling:
         "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Charisma. Unaffected by Hacking skill.",
       baseDifficulty: 125,
@@ -44,9 +43,8 @@ export function createContracts(): Record<BladeburnerContractName, Contract> {
     [BladeburnerContractName.BountyHunter]: new Contract({
       name: BladeburnerContractName.BountyHunter,
       desc:
-        "Hunt down and capture fugitive Synthoids. These Synthoids are wanted alive.\n\n" +
-        "Successfully completing a Bounty Hunter contract will lower the population in your current city, and will also " +
-        "increase its chaos level.",
+        "Hunt down and capture fugitive Synthoids. These Synthoids are wanted alive.\n" +
+        "Successfully completing this contract will decrease the Synthoid population of your current city and increase its chaos level.",
       successScaling:
         "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Charisma. Unaffected by Hacking skill.",
       baseDifficulty: 250,
@@ -79,9 +77,8 @@ export function createContracts(): Record<BladeburnerContractName, Contract> {
     [BladeburnerContractName.Retirement]: new Contract({
       name: BladeburnerContractName.Retirement,
       desc:
-        "Hunt down and retire (kill) rogue Synthoids.\n\n" +
-        "Successfully completing a Retirement contract will lower the population in your current city, and will also " +
-        "increase its chaos level.",
+        "Hunt down and retire (kill) rogue Synthoids.\n" +
+        "Successfully completing this contract will decrease the Synthoid population of your current city and increase its chaos level.",
       successScaling: "Affected by combat stats. Minor bonus from Charisma. Unaffected by Hacking skill.",
       baseDifficulty: 200,
       difficultyFac: 1.03,

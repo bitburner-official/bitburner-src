@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.ScriptHackMoneyGain property
 
-The amount of money actually gained when a script hacks a server. This is different than the above because you can reduce the amount of money but not gain that same amount.
+Influences how much money the player actually gains when a script hacks a server. This is different from ScriptHackMoney. When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount.
 
 **Signature:**
 
