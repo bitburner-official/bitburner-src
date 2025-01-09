@@ -9,6 +9,7 @@ import { Crimes } from "../../../Crime/Crimes";
 import { Factions } from "../../../Faction/Factions";
 import { getEnumHelper } from "../../../utils/EnumHelper";
 import { SleeveWorkType } from "../Work/Work";
+import { getRecordKeys } from "../../../Types/Record";
 
 const universitySelectorOptions: string[] = [
   "Computer Science",
@@ -216,18 +217,7 @@ const tasks: {
   },
 };
 
-const canDo: {
-  [key: string]: undefined | ((sleeve: Sleeve) => boolean);
-  ["Idle"]: (sleeve: Sleeve) => boolean;
-  ["Work for Company"]: (sleeve: Sleeve) => boolean;
-  ["Work for Faction"]: (sleeve: Sleeve) => boolean;
-  ["Commit Crime"]: (sleeve: Sleeve) => boolean;
-  ["Take University Course"]: (sleeve: Sleeve) => boolean;
-  ["Workout at Gym"]: (sleeve: Sleeve) => boolean;
-  ["Perform Bladeburner Actions"]: (sleeve: Sleeve) => boolean;
-  ["Shock Recovery"]: (sleeve: Sleeve) => boolean;
-  ["Synchronize"]: (sleeve: Sleeve) => boolean;
-} = {
+const canDo = {
   Idle: () => true,
   "Work for Company": (sleeve: Sleeve) => possibleJobs(sleeve).length > 0,
   "Work for Faction": (sleeve: Sleeve) => possibleFactions(sleeve).length > 0,
@@ -238,20 +228,14 @@ const canDo: {
   "Perform Bladeburner Actions": () => !!Player.bladeburner,
   "Shock Recovery": (sleeve: Sleeve) => sleeve.shock > 0,
   Synchronize: (sleeve: Sleeve) => sleeve.sync < 100,
-};
+} as const;
 
 export function TaskSelector(props: IProps): React.ReactElement {
   const s0 = props.abc[0];
   const s1 = props.abc[1];
   const s2 = props.abc[2];
 
-  const validActions = Object.keys(canDo).filter((taskType) => {
-    const canDoTask = canDo[taskType];
-    if (canDoTask === undefined) {
-      return false;
-    }
-    return canDoTask(props.sleeve);
-  });
+  const validActions = getRecordKeys(canDo).filter((taskType) => canDo[taskType](props.sleeve));
 
   const detailsF = tasks[s0];
   if (detailsF === undefined) {
