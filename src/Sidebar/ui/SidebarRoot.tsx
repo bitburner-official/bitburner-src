@@ -38,7 +38,9 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"; // Achievements
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PublicIcon from "@mui/icons-material/Public";
 import LiveHelpIcon from "@mui/icons-material/LiveHelp";
-import BorderInnerSharp from "@mui/icons-material/BorderInnerSharp";
+import BorderInnerSharpIcon from "@mui/icons-material/BorderInnerSharp"; // IPvGO
+import CallMerge from "@mui/icons-material/CallMerge"; // Grafting
+
 
 import { Router } from "../../ui/GameRoot";
 import { Page, isSimplePage } from "../../ui/Router";
@@ -48,7 +50,7 @@ import { CONSTANTS } from "../../Constants";
 import { iTutorialSteps, iTutorialNextStep, ITutorial } from "../../InteractiveTutorial";
 import { getAvailableCreatePrograms } from "../../Programs/ProgramHelpers";
 import { Settings } from "../../Settings/Settings";
-import { AugmentationName } from "@enums";
+import { AugmentationName, CityName } from "@enums";
 
 import { ProgramsSeen } from "../../Programs/ui/ProgramsRoot";
 import { InvitationsSeen } from "../../Faction/ui/FactionsRoot";
@@ -151,6 +153,8 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     Player.exploits.length > 0;
 
   const canOpenSleeves = Player.sleeves.length > 0;
+  const canOpenGrafting = Player.canAccessGrafting() && Player.city === CityName.NewTokyo;
+
 
   const canCorporation = !!Player.corporation;
   const canGang = !!Player.gang;
@@ -318,7 +322,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canOpenFactions && {
               key_: Page.Factions,
               icon: ContactsIcon,
-              active: [Page.Factions as Page, Page.Faction].includes(props.page),
+              active: [Page.Factions, Page.Faction].includes(props.page),
               count: invitationsCount,
             },
             canOpenAugmentations && {
@@ -328,6 +332,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             },
             { key_: Page.Hacknet, icon: AccountTreeIcon },
             canOpenSleeves && { key_: Page.Sleeves, icon: PeopleAltIcon },
+            canOpenGrafting && { key_: Page.Grafting, icon: CallMerge },
           ]}
         />
         <Divider />
@@ -343,7 +348,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             {
               key_: Page.City,
               icon: LocationCityIcon,
-              active: [Page.City as Page, Page.Grafting, Page.Location].includes(props.page),
+              active: [Page.City, Page.Location].includes(props.page),
             },
             { key_: Page.Travel, icon: AirplanemodeActiveIcon },
             canJob && { key_: Page.Job, icon: WorkIcon },
@@ -351,7 +356,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canBladeburner && { key_: Page.Bladeburner, icon: FormatBoldIcon },
             canCorporation && { key_: Page.Corporation, icon: BusinessIcon },
             canGang && { key_: Page.Gang, icon: SportsMmaIcon },
-            canIPvGO && { key_: Page.Go, icon: BorderInnerSharp },
+            canIPvGO && { key_: Page.Go, icon: BorderInnerSharpIcon },
           ]}
         />
         <Divider />
