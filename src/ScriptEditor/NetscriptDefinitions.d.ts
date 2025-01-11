@@ -3260,6 +3260,15 @@ export type BladeburnerActionTypeForSleeve =
  */
 export interface Bladeburner {
   /**
+   * Check if you have access to the Bladeburner API.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @returns true if you have access to the Bladeburner API, false otherwise.
+   */
+  checkBladeburnerAPIAccess(): boolean;
+
+  /**
    * List all contracts.
    * @remarks
    * RAM cost: 0 GB
@@ -3772,6 +3781,15 @@ export interface Bladeburner {
    * @returns Array containing current stamina and max stamina.
    */
   getStamina(): [number, number];
+
+  /**
+   * Check if the player is eligible to join the Bladeburner faction.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @returns True if the player is eligible to join the Bladeburner faction, false otherwise.
+   */
+  isEligible(): boolean;
 
   /**
    * Join the Bladeburner faction.
@@ -4628,12 +4646,12 @@ export interface Go {
    *
    * For example, a 5x5 board might look like this:
    *
-   [<br/>  
-      "XX.O.",<br/>  
-      "X..OO",<br/>  
-      ".XO..",<br/>  
-      "XXO.#",<br/>  
-      ".XO.#",<br/>  
+   [<br/>
+   "XX.O.",<br/>
+   "X..OO",<br/>
+   ".XO..",<br/>
+   "XXO.#",<br/>
+   ".XO.#",<br/>
    ]
    *
    * Each string represents a vertical column on the board, and each character in the string represents a point.
@@ -4654,12 +4672,12 @@ export interface Go {
    *
    * For example, a single 5x5 prior move board might look like this:
    *
-   [<br/>  
-      "XX.O.",<br/>  
-      "X..OO",<br/>  
-      ".XO..",<br/>  
-      "XXO.#",<br/>  
-      ".XO.#",<br/>  
+   [<br/>
+   "XX.O.",<br/>
+   "X..OO",<br/>
+   ".XO..",<br/>
+   "XXO.#",<br/>
+   ".XO.#",<br/>
    ]
    */
   getMoveHistory(): string[][];
@@ -5492,9 +5510,19 @@ interface ActiveFragment {
  */
 interface Stanek {
   /**
+   * Check if Stanek's Gift is installed.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @returns true if Stanek's Gift is installed, false otherwise.
+   */
+  checkStanekAPIAccess(): boolean;
+
+  /**
    * Stanek's Gift width.
    * @remarks
    * RAM cost: 0.4 GB
+   *
    * @returns The width of the gift.
    */
   giftWidth(): number;
@@ -5502,6 +5530,7 @@ interface Stanek {
    * Stanek's Gift height.
    * @remarks
    * RAM cost: 0.4 GB
+   *
    * @returns The height of the gift.
    */
   giftHeight(): number;
@@ -5510,6 +5539,7 @@ interface Stanek {
    * Charge a fragment, increasing its power.
    * @remarks
    * RAM cost: 0.4 GB
+   *
    * @param rootX - Root X against which to align the top left of the fragment.
    * @param rootY - Root Y against which to align the top left of the fragment.
    * @returns Promise that lasts until the charge action is over.
@@ -5586,6 +5616,15 @@ interface Stanek {
    * @returns The fragment at [rootX, rootY], if any.
    */
   removeFragment(rootX: number, rootY: number): boolean;
+
+  /**
+   * Check if player is eligible for Stanek's Gift.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @returns true if the player can receive Stanek's Gift.
+   */
+  isEligible(): boolean;
 
   /**
    * Accept Stanek's Gift by joining the Church of the Machine God

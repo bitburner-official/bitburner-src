@@ -20,6 +20,7 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 
 |  Method | Description |
 |  --- | --- |
+|  [checkBladeburnerAPIAccess()](./bitburner.bladeburner.checkbladeburnerapiaccess.md) | Check if you have access to the Bladeburner API. |
 |  [getActionAutolevel(type, name)](./bitburner.bladeburner.getactionautolevel.md) | Get whether an action is set to autolevel. |
 |  [getActionCountRemaining(type, name)](./bitburner.bladeburner.getactioncountremaining.md) | Get action count remaining. |
 |  [getActionCurrentLevel(type, name)](./bitburner.bladeburner.getactioncurrentlevel.md) | Get the current level of an action. |
@@ -49,6 +50,7 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [getStamina()](./bitburner.bladeburner.getstamina.md) | Get Bladeburner stamina. |
 |  [getTeamSize(type, name)](./bitburner.bladeburner.getteamsize.md) | Get team size. |
 |  [inBladeburner()](./bitburner.bladeburner.inbladeburner.md) | Returns whether player is a member of Bladeburner division. Does not require API access. |
+|  [isEligible()](./bitburner.bladeburner.iseligible.md) | Check if the player is eligible to join the Bladeburner faction. |
 |  [joinBladeburnerDivision()](./bitburner.bladeburner.joinbladeburnerdivision.md) | Join the Bladeburner division. |
 |  [joinBladeburnerFaction()](./bitburner.bladeburner.joinbladeburnerfaction.md) | Join the Bladeburner faction. |
 |  [nextUpdate()](./bitburner.bladeburner.nextupdate.md) | Sleep until the next Bladeburner update has happened. |
@@ -59,4 +61,3 @@ You have to be employed in the Bladeburner division and be in BitNode-7 or have 
 |  [stopBladeburnerAction()](./bitburner.bladeburner.stopbladeburneraction.md) | Stop current action. |
 |  [switchCity(city)](./bitburner.bladeburner.switchcity.md) | Travel to another city in Bladeburner. |
 |  [upgradeSkill(skillName, count)](./bitburner.bladeburner.upgradeskill.md) | Upgrade skill. |
-

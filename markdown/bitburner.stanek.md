@@ -20,11 +20,12 @@ interface Stanek
 |  [activeFragments()](./bitburner.stanek.activefragments.md) | List of fragments in Stanek's Gift. |
 |  [canPlaceFragment(rootX, rootY, rotation, fragmentId)](./bitburner.stanek.canplacefragment.md) | Check if fragment can be placed at specified location. |
 |  [chargeFragment(rootX, rootY)](./bitburner.stanek.chargefragment.md) | Charge a fragment, increasing its power. |
+|  [checkStanekAPIAccess()](./bitburner.stanek.checkstanekapiaccess.md) | Check if Stanek's Gift is installed. |
 |  [clearGift()](./bitburner.stanek.cleargift.md) | Clear the board of all fragments. |
 |  [fragmentDefinitions()](./bitburner.stanek.fragmentdefinitions.md) | List possible fragments. |
 |  [getFragment(rootX, rootY)](./bitburner.stanek.getfragment.md) | Get placed fragment at location. |
 |  [giftHeight()](./bitburner.stanek.giftheight.md) | Stanek's Gift height. |
 |  [giftWidth()](./bitburner.stanek.giftwidth.md) | Stanek's Gift width. |
+|  [isEligible()](./bitburner.stanek.iseligible.md) | Check if player is eligible for Stanek's Gift. |
 |  [placeFragment(rootX, rootY, rotation, fragmentId)](./bitburner.stanek.placefragment.md) | Place fragment on Stanek's Gift. |
 |  [removeFragment(rootX, rootY)](./bitburner.stanek.removefragment.md) | Remove fragment at location. |
-
