@@ -35,7 +35,6 @@ import {
   numCycleForGrowthCorrected,
   processSingleServerGrowth,
   safelyCreateUniqueServer,
-  getCoreBonus,
   getWeakenEffect,
 } from "./Server/ServerHelpers";
 import {
@@ -89,8 +88,7 @@ import { SnackbarEvents } from "./ui/React/Snackbar";
 import { matchScriptPathExact } from "./utils/helpers/scriptKey";
 
 import { Flags } from "./NetscriptFunctions/Flags";
-import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
-import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
+import { calculateCurrentShareBonus, ShareBonusTime, startSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
 import { InternalAPI, setRemovedFunctions, NSProxy } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
@@ -296,16 +294,15 @@ export const ns: InternalAPI<NSFull> = {
       if (host === null) {
         throw helpers.errorMessage(ctx, `Cannot find host of WorkerScript. Hostname: ${ctx.workerScript.hostname}.`);
       }
-      const moneyBefore = server.moneyAvailable <= 0 ? 1 : server.moneyAvailable;
-      processSingleServerGrowth(server, threads, host.cpuCores);
+      const moneyBefore = server.moneyAvailable;
+      const growth = processSingleServerGrowth(server, threads, host.cpuCores);
       const moneyAfter = server.moneyAvailable;
       ctx.workerScript.scriptRef.recordGrow(server.hostname, threads);
       const expGain = calculateHackingExpGain(server, Player) * threads;
-      const logGrowPercent = moneyAfter / moneyBefore - 1;
       helpers.log(
         ctx,
         () =>
-          `Available money on '${server.hostname}' grown by ${formatPercent(logGrowPercent, 6)}. Gained ${formatExp(
+          `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)}. Gained ${formatExp(
             expGain,
           )} hacking exp (t=${formatThreads(threads)}).`,
       );
@@ -314,7 +311,7 @@ export const ns: InternalAPI<NSFull> = {
       if (stock) {
         influenceStockThroughServerGrow(server, moneyAfter - moneyBefore);
       }
-      return Promise.resolve(moneyAfter / moneyBefore);
+      return Promise.resolve(server.moneyMax === 0 ? 0 : growth);
     });
   },
   growthAnalyze:
@@ -394,7 +391,10 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.errorMessage(ctx, `Cannot find host of WorkerScript. Hostname: ${ctx.workerScript.hostname}.`);
       }
       const weakenAmt = getWeakenEffect(threads, host.cpuCores);
+      const securityBeforeWeaken = server.hackDifficulty;
       server.weaken(weakenAmt);
+      const securityAfterWeaken = server.hackDifficulty;
+      const securityReduction = securityBeforeWeaken - securityAfterWeaken;
       ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
       const expGain = calculateHackingExpGain(server, Player) * threads;
       helpers.log(
@@ -407,7 +407,7 @@ export const ns: InternalAPI<NSFull> = {
       ctx.workerScript.scriptRef.onlineExpGained += expGain;
       Player.gainHackingExp(expGain);
       // Account for hidden multiplier in Server.weaken()
-      return Promise.resolve(weakenAmt);
+      return Promise.resolve(securityReduction);
     });
   },
   weakenAnalyze:
@@ -418,19 +418,17 @@ export const ns: InternalAPI<NSFull> = {
       return getWeakenEffect(threads, cores);
     },
   share: (ctx) => () => {
-    const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
-    const coreBonus = getCoreBonus(cores);
-    helpers.log(ctx, () => "Sharing this computer.");
-    const end = StartSharing(
-      ctx.workerScript.scriptRef.threads * calculateIntelligenceBonus(Player.skills.intelligence, 2) * coreBonus,
-    );
-    return helpers.netscriptDelay(ctx, 10000).finally(function () {
-      helpers.log(ctx, () => "Finished sharing this computer.");
+    const threads = ctx.workerScript.scriptRef.threads;
+    const hostname = ctx.workerScript.hostname;
+    helpers.log(ctx, () => `Sharing ${threads} threads on ${hostname}.`);
+    const end = startSharing(threads, helpers.getServer(ctx, hostname).cpuCores);
+    return helpers.netscriptDelay(ctx, ShareBonusTime).finally(function () {
+      helpers.log(ctx, () => `Finished sharing ${threads} threads on ${hostname}.`);
       end();
     });
   },
   getSharePower: () => () => {
-    return CalculateShareMult();
+    return calculateCurrentShareBonus();
   },
   print:
     (ctx) =>
@@ -612,6 +610,18 @@ export const ns: InternalAPI<NSFull> = {
       }
       runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
       runningScriptObj.tailProps?.rerender();
+    },
+  setTailFontSize:
+    (ctx) =>
+    (_pixel, scriptID, hostname, ...scriptArgs) => {
+      const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
+      const runningScriptObj = helpers.getRunningScript(ctx, ident);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
+        return;
+      }
+      if (_pixel === undefined) runningScriptObj.tailProps?.setFontSize(undefined);
+      else runningScriptObj.tailProps?.setFontSize(helpers.number(ctx, "pixel", _pixel));
     },
   nuke: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);

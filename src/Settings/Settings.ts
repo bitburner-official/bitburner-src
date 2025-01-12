@@ -5,10 +5,16 @@ import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
 import { objectAssert } from "../utils/helpers/typeAssertion";
 import { Result } from "../types";
+import {
+  assertAndSanitizeEditorTheme,
+  assertAndSanitizeMainTheme,
+  assertAndSanitizeStyles,
+} from "../JsonSchema/JSONSchemaAssertion";
 
 /**
- * This function won't be able to catch **all** invalid hostnames, and it's still fine. In order to validate a hostname
- * properly, we need to import a good validation library or write one by ourselves. I think that it's unnecessary.
+ * This function won't be able to catch **all** invalid hostnames. In order to validate a hostname properly, we need to
+ * import a good validation library or write one by ourselves. Considering that we only need to catch common mistakes,
+ * it's not worth the effort.
  *
  * Some invalid hostnames that we don't catch:
  * - Invalid/missing TLD: "abc".
@@ -181,15 +187,33 @@ export const Settings = {
   load(saveString: string) {
     const save: unknown = JSON.parse(saveString);
     objectAssert(save);
-    save.theme && Object.assign(Settings.theme, save.theme);
-    save.styles && Object.assign(Settings.styles, save.styles);
     save.overview && Object.assign(Settings.overview, save.overview);
-    save.EditorTheme && Object.assign(Settings.EditorTheme, save.EditorTheme);
+    try {
+      // Sanitize theme data. Invalid theme data may crash the game or make it stuck in the loading page.
+      assertAndSanitizeMainTheme(save.theme);
+      Object.assign(Settings.theme, save.theme);
+    } catch (error) {
+      console.error(error);
+    }
+    try {
+      // Sanitize editor theme data. Invalid editor theme data may crash the game when the player opens the script editor.
+      assertAndSanitizeEditorTheme(save.EditorTheme);
+      Object.assign(Settings.EditorTheme, save.EditorTheme);
+    } catch (error) {
+      console.error(error);
+    }
+    try {
+      // Sanitize styles.
+      assertAndSanitizeStyles(save.styles);
+      Object.assign(Settings.styles, save.styles);
+    } catch (error) {
+      console.error(error);
+    }
     Object.assign(Settings, save, {
-      theme: Settings.theme,
-      styles: Settings.styles,
       overview: Settings.overview,
+      theme: Settings.theme,
       EditorTheme: Settings.EditorTheme,
+      styles: Settings.styles,
     });
     /**
      * The hostname and port of RFA have not been validated properly, so the save data may contain invalid data. In that

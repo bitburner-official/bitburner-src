@@ -37,6 +37,7 @@ import { CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/Netscri
 import { handleUnknownError } from "./utils/ErrorHandler";
 import { isLegacyScript, legacyScriptExtension, resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
 import { root } from "./Paths/Directory";
+import { getErrorMessageWithStackAndCause } from "./utils/ErrorHelper";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 
 export const NetscriptPorts = new Map<PortNumber, Port>();
@@ -349,10 +350,14 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
       killWorkerScript(workerScript);
       workerScript.log("", () => "Script finished running");
     })
-    .catch(function (e) {
-      handleUnknownError(e, workerScript);
+    .catch(function (error) {
+      handleUnknownError(error, workerScript);
       killWorkerScript(workerScript);
-      workerScript.log("", () => (e instanceof ScriptDeath ? "Script killed." : "Script crashed due to an error."));
+      workerScript.log("", () =>
+        error instanceof ScriptDeath
+          ? "Script killed."
+          : getErrorMessageWithStackAndCause(error, "Script crashed due to an error: "),
+      );
     })
     .finally(() => {
       // The earnings are transferred to the parent if it still exists.

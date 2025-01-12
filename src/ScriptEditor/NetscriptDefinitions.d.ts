@@ -192,6 +192,8 @@ interface TailProperties {
   width: number;
   /** Height of the log window content area */
   height: number;
+  /** The font size of the tail window. Defaults to the font size set in the style editor. */
+  fontSize: number;
 }
 
 /**
@@ -856,11 +858,6 @@ interface GangOtherInfoObject {
   power: number;
   /** Gang territory, in decimal form */
   territory: number;
-}
-
-/** @public */
-interface GangOtherInfo {
-  [key: string]: GangOtherInfoObject;
 }
 
 /**
@@ -3446,10 +3443,14 @@ export interface Bladeburner {
    *
    * Returns the remaining count of the specified action.
    *
-   * Note that this is meant to be used for Contracts and Operations.
-   * This function will return ‘Infinity’ for actions such as Training and Field Analysis.
-   * This function will return 1 for BlackOps not yet completed regardless of whether
-   * the player has the required rank to attempt the mission or not.
+   * Note:
+   *
+   * - This function is meant to be used for Contracts and Operations. It returns Infinity for General actions
+   * (Training, Field Analysis, etc.). It returns 1 for BlackOps not yet completed, regardless of whether the player has
+   * the required rank to attempt the mission.
+   *
+   * - With Contracts and Operations, the returned value is a floating-point number. The UI shows the rounded-down
+   * value.
    *
    * @param type - Type of action.
    * @param name - Name of action. Must be an exact match.
@@ -4022,7 +4023,7 @@ export interface Gang {
    *
    * @returns Object containing territory and power information about all gangs.
    */
-  getOtherGangInformation(): GangOtherInfo;
+  getOtherGangInformation(): Record<string, GangOtherInfoObject>;
 
   /**
    * Get information about a specific gang member.
@@ -6469,6 +6470,25 @@ export interface NS {
   setTitle(title: string | ReactNode, pid?: number): void;
 
   /**
+   * Set the font size of the tail window of a script.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This overwrites the tail font size and forces an update of the tail window's contents.
+   *
+   * If ran without a filename or pid, this will affect the current script's tail window.
+   *
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to target the tail window from another script.
+   * Remember that scripts are uniquely identified by both their names and arguments.
+   *
+   * @param pixel - Optional. The new font size in pixels. If omitted, the default tail font size is used.
+   * @param fn - Optional. Filename or PID of the target script. If omitted, the current script is used.
+   * @param host - Optional. Hostname of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param args - Arguments for the target script.
+   */
+  setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
+
+  /**
    * Get the list of servers connected to a server.
    * @remarks
    * RAM cost: 0.2 GB
@@ -7164,7 +7184,7 @@ export interface NS {
    * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs $${ns.formatNumber(cost)}`);
    * ```
    * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns The cost to purchase a server with the specified amount of ram.
+   * @returns The cost to purchase a server with the specified amount of ram, or returns Infinity if ram is not a valid amount.
    */
   getPurchasedServerCost(ram: number): number;
 
@@ -7214,7 +7234,7 @@ export interface NS {
    *
    * @param hostname - Hostname of the server to upgrade.
    * @param ram - Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns The price to upgrade.
+   * @returns The price to upgrade or -1 if either input is not valid, i.e. hostname is not the name of a purchased server or ram is not a valid amount.
    */
   getPurchasedServerUpgradeCost(hostname: string, ram: number): number;
 
@@ -9599,7 +9619,6 @@ interface InvestmentOffer {
  * @public
  */
 interface UserInterfaceTheme {
-  [key: string]: string | undefined;
   primarylight: string;
   primary: string;
   primarydark: string;
@@ -9633,6 +9652,11 @@ interface UserInterfaceTheme {
   backgroundprimary: string;
   backgroundsecondary: string;
   button: string;
+  maplocation: string;
+  bnlvl0: string;
+  bnlvl1: string;
+  bnlvl2: string;
+  bnlvl3: string;
 }
 
 /**

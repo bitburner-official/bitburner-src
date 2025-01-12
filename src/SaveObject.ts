@@ -19,7 +19,7 @@ import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, type IReviverValue } from "./utils/JSONReviver";
 import { save } from "./db";
 import { ToastVariant } from "@enums";
-import { pushGameSaved } from "./Electron";
+import { pushGameSaved, pushImportResult } from "./Electron";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
 import { SaveData } from "./types";
 import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
@@ -236,6 +236,11 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
     }
     try {
       await save(saveData);
+      /**
+       * Notify Electron code that the player imported a save file. "restoreIfNewerExists" will be disabled for a brief
+       * period of time.
+       */
+      pushImportResult(true);
     } catch (error) {
       console.error(error);
       dialogBoxCreate(`Cannot import save data: ${error}`);
