@@ -42,6 +42,7 @@ const useStyles = makeStyles()({
 
 interface IProps {
   workerScript: WorkerScript;
+  tabIndex?: number;  // Added this prop to accept tabIndex
 }
 
 export function WorkerScriptAccordion(props: IProps): React.ReactElement {
@@ -65,7 +66,8 @@ export function WorkerScriptAccordion(props: IProps): React.ReactElement {
 
   return (
     <>
-      <ListItemButton onClick={() => setOpen((old) => !old)} component={Paper}>
+      {/* Pass tabIndex to ListItemButton to make it focusable via keyboard */}
+      <ListItemButton onClick={() => setOpen((old) => !old)} component={Paper} tabIndex={props.tabIndex}>
         <ListItemText
           primary={
             <Typography style={{ wordWrap: "break-word" }}>

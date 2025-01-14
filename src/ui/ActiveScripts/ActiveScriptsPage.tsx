@@ -146,7 +146,7 @@ export function ActiveScriptsPage(): React.ReactElement {
       </div>
       <List dense={true}>
         {dataToShow.map(([server, scripts]) => (
-          <ServerAccordion key={server.hostname} server={server} scripts={scripts} />
+          <ServerAccordion key={server.hostname} server={server} scripts={scripts} tabIndex={0} />
         ))}
       </List>
     </>

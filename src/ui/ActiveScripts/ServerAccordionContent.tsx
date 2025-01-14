@@ -9,16 +9,19 @@ import { FirstPage, KeyboardArrowLeft, KeyboardArrowRight, LastPage } from "@mui
 
 interface ServerActiveScriptsProps {
   scripts: WorkerScript[];
+  tabIndex?: number;  // Added tabIndex prop here
 }
 
 export function ServerAccordionContent({ scripts }: ServerActiveScriptsProps): React.ReactElement {
   const [page, setPage] = useState(0);
+
   if (scripts.length === 0) {
     console.error(`Attempted to display a server in active scripts when there were no matching scripts to show`);
     return <></>;
   }
   const scriptsPerPage = Settings.ActiveScriptsScriptPageSize;
   const lastPage = Math.ceil(scripts.length / scriptsPerPage) - 1;
+
   function changePage(n: number) {
     if (!Number.isInteger(n) || n > lastPage || n < 0) return;
     setPage(n);
@@ -35,7 +38,9 @@ export function ServerAccordionContent({ scripts }: ServerActiveScriptsProps): R
           component="span"
           marginRight="auto"
         >{`Displaying scripts ${firstScriptNumber}-${lastScriptNumber} of ${scripts.length}`}</Typography>
-        <IconButton onClick={() => changePage(0)} disabled={page === 0}>
+
+        {/* Navigation buttons */}
+        <IconButton onClick={() => changePage(0)} disabled={page === 0} tabIndex={0} aria-label="First Page">
           <FirstPage />
         </IconButton>
         <IconButton onClick={() => changePage(page - 1)} disabled={page === 0}>
@@ -48,9 +53,11 @@ export function ServerAccordionContent({ scripts }: ServerActiveScriptsProps): R
           <LastPage />
         </IconButton>
       </div>
+
+      {/* Scripts list */}
       <List dense disablePadding>
         {scripts.slice(page * scriptsPerPage, page * scriptsPerPage + scriptsPerPage).map((ws) => (
-          <WorkerScriptAccordion key={ws.pid} workerScript={ws} />
+          <WorkerScriptAccordion key={ws.pid} workerScript={ws} tabIndex={0} />
         ))}
       </List>
     </>
