@@ -13,6 +13,16 @@ import { longestCommonStart } from "../../utils/StringHelperFunctions";
 const useStyles = makeStyles()((theme: Theme) => ({
   input: {
     backgroundColor: theme.colors.backgroundprimary,
+    border: "2px solid transparent",
+    borderRadius: "4px",
+    padding: theme.spacing(1),
+    fontSize: "1rem",
+    color: theme.palette.text.primary,
+    transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+  },
+  focusedInput: {
+     borderColor: theme.palette.primary.main, // Highlights color when focused
+     boxShadow: `0 0 5px ${theme.palette.primary.main}`, // Subtle glow effect
   },
   nopadding: {
     padding: theme.spacing(0),
@@ -44,6 +54,7 @@ export function TerminalInput(): React.ReactElement {
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const [searchResultsIndex, setSearchResultsIndex] = useState(0);
   const [autofilledValue, setAutofilledValue] = useState(false);
+  const [isFocused, setIsFocused] = useState(false); // New state for focus feedback
   const { classes } = useStyles();
 
   // If we have no data in the current terminal history, let's initialize it from the player save
@@ -70,6 +81,14 @@ export function TerminalInput(): React.ReactElement {
     }
   }
 
+  function handleFocus(): void {
+      setIsFocused(true); // Set focus state to true
+    }
+
+    function handleBlur(): void {
+      setIsFocused(false); // Set focus state to false
+    }
+
   function handleValueChange(event: React.ChangeEvent<HTMLInputElement>): void {
     saveValue(event.target.value);
     setPossibilities([]);
@@ -77,10 +96,11 @@ export function TerminalInput(): React.ReactElement {
     setAutofilledValue(false);
   }
 
-  function resetSearch(isAutofilled = false) {
+  function resetSearch(clearFocus?: boolean): void {
+    //Edited to ensure resetSearch clears all autocomplete and search states
     setSearchResults([]);
-    setAutofilledValue(isAutofilled);
     setSearchResultsIndex(0);
+    if (clearFocus) setIsFocused(false);
   }
 
   function getSearchSuggestionPrespace() {
@@ -209,16 +229,35 @@ export function TerminalInput(): React.ReactElement {
   async function onKeyDown(event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> {
     const ref = terminalInput.current;
 
-    // Run command or insert newline
+    // Execute command or insert newline when Enter is pressed
     if (event.key === KEY.ENTER) {
       event.preventDefault();
+      if (!ref) return;
+
       const command = searchResults.length ? searchResults[searchResultsIndex] : value;
+
+      // Print the command to the terminal
       Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${command}`);
-      if (command) {
-        Terminal.executeCommands(command);
-        saveValue("");
-        resetSearch();
+
+      if (command.trim()) {
+        try {
+          // Execute the command
+          Terminal.executeCommands(command);
+
+          // Clear the input field after execution
+          saveValue("");
+          resetSearch();
+        } catch (error) {
+          console.error("Error executing terminal command:", error);
+          Terminal.print("Error executing command. Check console for details.");
+        }
+      } else {
+        // Handle empty command, for example display a hint or do nothing
+        Terminal.print("No command entered.");
       }
+
+      // Ensure terminal remains focused after execution
+      if (ref) ref.focus();
       return;
     }
 
@@ -251,6 +290,9 @@ export function TerminalInput(): React.ReactElement {
     if (event.key === KEY.L && event.ctrlKey) {
       event.preventDefault();
       Terminal.clear();
+
+      // Ensure focus feedback remains after clearing
+      if (ref) ref.focus();
     }
 
     // Select previous command.
@@ -405,34 +447,39 @@ export function TerminalInput(): React.ReactElement {
     <>
       <TextField
         fullWidth
-        color={Terminal.action === null ? "primary" : "secondary"}
-        autoFocus
-        disabled={Terminal.action !== null}
-        autoComplete="off"
-        value={value}
-        classes={{ root: classes.preformatted }}
-        onChange={handleValueChange}
-        inputRef={terminalInput}
-        InputProps={{
-          // for players to hook in
-          id: "terminal-input",
-          className: classes.input,
-          startAdornment: (
-            <Typography color={Terminal.action === null ? "primary" : "secondary"} flexShrink={0}>
-              [{Player.getCurrentServer().hostname}&nbsp;/{Terminal.cwd()}]&gt;&nbsp;
-            </Typography>
-          ),
-          spellCheck: false,
-          onBlur: () => {
-            setPossibilities([]);
-            resetSearch();
-          },
-          onKeyDown: (event) => {
-            onKeyDown(event).catch((error) => {
-              console.error(error);
-            });
-          },
-        }}
+          color={Terminal.action === null ? "primary" : "secondary"}
+          autoFocus
+          disabled={Terminal.action !== null}
+          autoComplete="off"
+          value={value}
+          classes={{ root: `${classes.input} ${isFocused ? classes.focusedInput : ""}` }}
+          onChange={handleValueChange}
+          inputRef={terminalInput}
+          InputProps={{
+            // for players to hook in
+            id: "terminal-input",
+            className: classes.input,
+            startAdornment: (
+              <Typography color={Terminal.action === null ? "primary" : "secondary"} flexShrink={0}>
+                [{Player.getCurrentServer().hostname}&nbsp;/{Terminal.cwd()}]&gt;&nbsp;
+              </Typography>
+            ),
+            spellCheck: false,
+            onBlur: () => {
+              setIsFocused(false); // Clear focus feedback on blur
+              setPossibilities([]);
+              resetSearch();
+            },
+            onFocus: () => {
+              setIsFocused(true); // Indicate terminal is focused
+            },
+            onKeyDown: (event) => {
+              onKeyDown(event).catch((error) => {
+                console.error(error);
+              });
+            },
+            tabIndex: 0,
+          }}
       ></TextField>
       <Popper
         open={possibilities.length > 0}
