@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme: Theme) => ({
     borderRadius: "4px",
     padding: theme.spacing(1),
     fontSize: "1rem",
-    color: theme.palette.text.primary,
+    color: '#04ce04',
     transition: "border-color 0.2s ease, box-shadow 0.2s ease",
   },
   focusedInput: {
