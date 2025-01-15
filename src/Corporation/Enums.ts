@@ -109,3 +109,11 @@ export type CorpProductResearchName = Member<typeof CorpProductResearchName>;
 
 export const CorpResearchName = { ...CorpProductResearchName, ...CorpBaseResearchName };
 export type CorpResearchName = Member<typeof CorpResearchName>;
+
+export enum CreatingCorporationCheckResult {
+  Success = "Success",
+  NoSf3OrDisabled = "NoSf3OrDisabled",
+  CorporationExists = "CorporationExists",
+  UseSeedMoneyOutsideBN3 = "UseSeedMoneyOutsideBN3",
+  DisabledBySoftCap = "DisabledBySoftCap",
+}

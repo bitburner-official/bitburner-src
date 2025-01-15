@@ -13,12 +13,13 @@ import HistoryIcon from "@mui/icons-material/History";
 import { Color, ColorPicker } from "material-ui-color";
 import { ThemeEvents } from "./Theme";
 import { Settings } from "../../Settings/Settings";
-import { defaultTheme } from "../Themes";
+import { defaultTheme, type ITheme } from "../Themes";
 import { UserInterfaceTheme } from "@nsdefs";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { ThemeCollaborate } from "./ThemeCollaborate";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { assertAndSanitizeMainTheme } from "../../JsonSchema/JSONSchemaAssertion";
 
 interface IProps {
   open: boolean;
@@ -26,9 +27,9 @@ interface IProps {
 }
 
 interface IColorEditorProps {
-  name: string;
+  name: keyof ITheme;
   color: string | undefined;
-  onColorChange: (name: string, value: string) => void;
+  onColorChange: (name: keyof ITheme, value: string) => void;
   defaultColor: string;
 }
 
@@ -70,7 +71,7 @@ function ColorEditor({ name, onColorChange, color, defaultColor }: IColorEditorP
 }
 
 export function ThemeEditorModal(props: IProps): React.ReactElement {
-  const [customTheme, setCustomTheme] = useState<Record<string, string | undefined>>({
+  const [customTheme, setCustomTheme] = useState<Record<keyof ITheme, string | undefined>>({
     ...Settings.theme,
   });
 
@@ -81,27 +82,22 @@ export function ThemeEditorModal(props: IProps): React.ReactElement {
   }
 
   function onThemeChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    let themeData: unknown;
     try {
-      const importedTheme = JSON.parse(event.target.value) as typeof Settings.theme;
-      if (importedTheme == null) {
-        throw new Error("Theme data must not be null or undefined.");
-      }
-      if (typeof importedTheme !== "object") {
-        throw new Error(`Theme data is invalid.`);
-      }
-      setCustomTheme(importedTheme);
-      for (const key of Object.keys(importedTheme)) {
-        Settings.theme[key] = importedTheme[key];
-      }
-      ThemeEvents.emit();
+      themeData = JSON.parse(event.target.value);
+      assertAndSanitizeMainTheme(themeData);
     } catch (error) {
-      console.error(`Theme data is invalid. Data: ${event.target.value}.`);
       console.error(error);
-      dialogBoxCreate(`Invalid theme. ${error}`);
+      console.error("Theme data is invalid. Data:", event.target.value);
+      dialogBoxCreate(`Invalid theme. Errors: ${error}.`);
+      return;
     }
+    Object.assign(Settings.theme, themeData);
+    ThemeEvents.emit();
+    setCustomTheme(Settings.theme);
   }
 
-  function onColorChange(name: string, value: string): void {
+  function onColorChange(name: keyof ITheme, value: string): void {
     setCustomTheme((old: Record<string, string | undefined>) => {
       old[name] = value;
       return old;

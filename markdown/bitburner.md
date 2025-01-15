@@ -16,6 +16,7 @@
 |  [BladeburnerSkillName](./bitburner.bladeburnerskillname.md) | Skill names type of Bladeburner |
 |  [CityName](./bitburner.cityname.md) | Names of all cities |
 |  [CompanyName](./bitburner.companyname.md) | Names of all companies |
+|  [CreatingCorporationCheckResult](./bitburner.creatingcorporationcheckresult.md) |  |
 |  [CrimeType](./bitburner.crimetype.md) |  |
 |  [FactionWorkType](./bitburner.factionworktype.md) |  |
 |  [GymLocationName](./bitburner.gymlocationname.md) | Locations of gym |
@@ -78,7 +79,6 @@
 |  [GangMemberAscension](./bitburner.gangmemberascension.md) |  |
 |  [GangMemberInfo](./bitburner.gangmemberinfo.md) |  |
 |  [GangMemberInstall](./bitburner.gangmemberinstall.md) |  |
-|  [GangOtherInfo](./bitburner.gangotherinfo.md) |  |
 |  [GangOtherInfoObject](./bitburner.gangotherinfoobject.md) |  |
 |  [GangTaskStats](./bitburner.gangtaskstats.md) | Object representing data representing a gang member task. |
 |  [GangTerritory](./bitburner.gangterritory.md) |  |

@@ -110,6 +110,14 @@ export function FAQModal({ open, onClose }: IProps): React.ReactElement {
           Memory can only be increased by purchasing upgrades from {FactionName.TheCovenant}. It is a persistent stat,
           meaning it never gets resets back to 1. The maximum possible value for a sleeve's memory is 100.
         </Typography>
+        <br />
+        <br />
+        <Typography variant="h4">What is bonus time?</Typography>
+        <br />
+        <Typography>
+          Sleeves accumulate bonus time when they idle or when you open the game after being offline. They use bonus
+          time to reduce the time requirement of their tasks so that they can complete their tasks faster.
+        </Typography>
       </>
     </Modal>
   );

@@ -14,16 +14,18 @@ interface IProps {
 
 export function CoresButton(props: IProps): React.ReactElement {
   const homeComputer = Player.getHomeComputer();
-  const maxCores = Player.bitNodeOptions.restrictHomePCUpgrade || homeComputer.cpuCores >= 8;
-  if (maxCores) {
-    return <Button>Upgrade 'home' cores - MAX</Button>;
-  }
+  const reachMaxCore = Player.bitNodeOptions.restrictHomePCUpgrade || homeComputer.cpuCores >= 8;
 
   const cost = Player.getUpgradeHomeCoresCost();
 
   function buy(): void {
-    if (maxCores) return;
-    if (!Player.canAfford(cost)) return;
+    // Do NOT reuse reachMaxCore - it is cached (and possibly stale) at button creation time
+    if (Player.bitNodeOptions.restrictHomePCUpgrade || homeComputer.cpuCores >= 8) {
+      return;
+    }
+    if (!Player.canAfford(cost)) {
+      return;
+    }
     Player.loseMoney(cost, "servers");
     homeComputer.cpuCores++;
     props.rerender();
@@ -37,9 +39,16 @@ export function CoresButton(props: IProps): React.ReactElement {
           <i>"Cores increase the effectiveness of grow() and weaken() on 'home'"</i>
         </Typography>
         <br />
-        <Button disabled={!Player.canAfford(cost)} onClick={buy}>
-          Upgrade 'home' cores ({homeComputer.cpuCores} -&gt; {homeComputer.cpuCores + 1}) -&nbsp;
-          <Money money={cost} forPurchase={true} />
+        <Button disabled={!Player.canAfford(cost) || reachMaxCore} onClick={buy}>
+          Upgrade 'home' cores&nbsp;
+          {reachMaxCore ? (
+            "- Max"
+          ) : (
+            <>
+              ({homeComputer.cpuCores} -&gt; {homeComputer.cpuCores + 1}) -&nbsp;
+              <Money money={cost} forPurchase={true} />
+            </>
+          )}
         </Button>
       </span>
     </Tooltip>

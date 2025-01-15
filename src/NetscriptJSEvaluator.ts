@@ -82,6 +82,9 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     return script.mod;
   }
 
+  if (script.code === "") {
+    throw new Error(`Script content is an empty string. Filename: ${script.filename}, server: ${script.server}.`);
+  }
   let scriptCode;
   let sourceMap;
   const fileType = getFileType(script.filename);

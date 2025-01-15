@@ -41,7 +41,7 @@ export const HashUpgradesMetadata: HashUpgradeParams[] = [
     desc:
       "Use hashes to decrease the minimum security of a single server by 2%. " +
       "Note that a server's minimum security cannot go below 1. This effect persists " +
-      "until you install Augmentations (since servers are reset at that time)",
+      "until you install augmentations (since servers are reset at that time).",
     hasTargetServer: true,
     name: "Reduce Minimum Security",
     value: 0.98,
@@ -51,7 +51,7 @@ export const HashUpgradesMetadata: HashUpgradeParams[] = [
     desc: (
       <>
         Use hashes to increase the maximum amount of money on a single server by 2%. This effect persists until you
-        install Augmentations (since servers are reset at that time). Note that a server's maximum money is soft capped
+        install augmentations (since servers are reset at that time). Note that a server's maximum money is soft capped
         above <Money money={10e12} />
       </>
     ),
@@ -63,7 +63,7 @@ export const HashUpgradesMetadata: HashUpgradeParams[] = [
     costPerLevel: 50,
     desc:
       "Use hashes to improve the experience earned when studying at a university by 20%. " +
-      "This effect persists until you install Augmentations",
+      "This effect persists until you install augmentations.",
     name: "Improve Studying",
     effectText: (level: number): JSX.Element | null => <>Improves studying by {level * 20}%</>,
     value: 20, // Improves studying by value%
@@ -72,17 +72,17 @@ export const HashUpgradesMetadata: HashUpgradeParams[] = [
     costPerLevel: 50,
     desc:
       "Use hashes to improve the experience earned when training at the gym by 20%. This effect " +
-      "persists until you install Augmentations",
+      "persists until you install augmentations.",
     name: "Improve Gym Training",
     effectText: (level: number): JSX.Element | null => <>Improves training by {level * 20}%</>,
     value: 20, // Improves training by value%
   },
   {
     costPerLevel: 200,
-    desc: "Exchange hashes for 1k Scientific Research in all of your Corporation's Industries",
+    desc: "Exchange hashes for 1k Scientific Research in all of your corporation's divisions",
     name: "Exchange for Corporation Research",
     effectText: (level: number): JSX.Element | null => (
-      <>Acquired a total of {formatInt(level * 1000)} Scientific Research in your industries.</>
+      <>Acquired a total of {formatInt(level * 1000)} Scientific Research in your divisions.</>
     ),
     value: 1000,
   },
@@ -113,7 +113,7 @@ export const HashUpgradesMetadata: HashUpgradeParams[] = [
   },
   {
     costPerLevel: 200,
-    desc: "Use hashes to increase the favor with a company by 5. This effect is permanent.",
+    desc: "Use hashes to increase the favor with a company by 5. This effect persists until you enter a new BitNode.",
     hasTargetCompany: true,
     name: "Company Favor",
     value: 5,

@@ -4,7 +4,7 @@
 
 ## Corporation.hasCorporation() method
 
-Returns whether the player has a corporation. Does not require API access.
+Return whether the player has a corporation. Does not require API access.
 
 **Signature:**
 

@@ -12,7 +12,7 @@ import Typography from "@mui/material/Typography";
 
 import SettingsIcon from "@mui/icons-material/Settings";
 
-import { makeTheme, sanitizeTheme } from "./themes";
+import { makeTheme } from "./themes";
 
 import { Modal } from "../../ui/React/Modal";
 import { Page } from "../../ui/Router";
@@ -54,7 +54,6 @@ export function Toolbar({ editor, onSave }: IProps) {
   };
 
   const onThemeChange = () => {
-    sanitizeTheme(Settings.EditorTheme);
     monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
   };
 

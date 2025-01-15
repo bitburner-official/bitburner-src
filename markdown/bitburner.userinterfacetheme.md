@@ -19,6 +19,10 @@ interface UserInterfaceTheme
 |  [backgroundprimary](./bitburner.userinterfacetheme.backgroundprimary.md) |  | string |  |
 |  [backgroundsecondary](./bitburner.userinterfacetheme.backgroundsecondary.md) |  | string |  |
 |  [black](./bitburner.userinterfacetheme.black.md) |  | string |  |
+|  [bnlvl0](./bitburner.userinterfacetheme.bnlvl0.md) |  | string |  |
+|  [bnlvl1](./bitburner.userinterfacetheme.bnlvl1.md) |  | string |  |
+|  [bnlvl2](./bitburner.userinterfacetheme.bnlvl2.md) |  | string |  |
+|  [bnlvl3](./bitburner.userinterfacetheme.bnlvl3.md) |  | string |  |
 |  [button](./bitburner.userinterfacetheme.button.md) |  | string |  |
 |  [cha](./bitburner.userinterfacetheme.cha.md) |  | string |  |
 |  [combat](./bitburner.userinterfacetheme.combat.md) |  | string |  |
@@ -32,6 +36,7 @@ interface UserInterfaceTheme
 |  [infodark](./bitburner.userinterfacetheme.infodark.md) |  | string |  |
 |  [infolight](./bitburner.userinterfacetheme.infolight.md) |  | string |  |
 |  [int](./bitburner.userinterfacetheme.int.md) |  | string |  |
+|  [maplocation](./bitburner.userinterfacetheme.maplocation.md) |  | string |  |
 |  [money](./bitburner.userinterfacetheme.money.md) |  | string |  |
 |  [primary](./bitburner.userinterfacetheme.primary.md) |  | string |  |
 |  [primarydark](./bitburner.userinterfacetheme.primarydark.md) |  | string |  |

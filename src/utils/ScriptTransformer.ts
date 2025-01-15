@@ -151,7 +151,8 @@ export function transformScript(
   const result = transformSync(code, {
     jsc: {
       parser: parserConfig,
-      target: "es2020",
+      // @ts-expect-error -- jsc supports "esnext" target, but the definition in wasm-web.d.ts is outdated. Ref: https://github.com/swc-project/swc/issues/9495
+      target: "esnext",
     },
     sourceMaps: true,
   });

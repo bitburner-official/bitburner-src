@@ -58,7 +58,7 @@ export function CovenantPurchasesRoot(props: IProps): React.ReactElement {
   const upgradePanels = [];
   for (let i = 0; i < Player.sleeves.length; ++i) {
     const sleeve = Player.sleeves[i];
-    upgradePanels.push(<CovenantSleeveMemoryUpgrade index={i} rerender={rerender} sleeve={sleeve} />);
+    upgradePanels.push(<CovenantSleeveMemoryUpgrade key={i} index={i} rerender={rerender} sleeve={sleeve} />);
   }
 
   return (

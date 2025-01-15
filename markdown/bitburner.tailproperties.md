@@ -15,6 +15,7 @@ interface TailProperties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
+|  [fontSize](./bitburner.tailproperties.fontsize.md) |  | number | The font size of the tail window. Defaults to the font size set in the style editor. |
 |  [height](./bitburner.tailproperties.height.md) |  | number | Height of the log window content area |
 |  [width](./bitburner.tailproperties.width.md) |  | number | Width of the log window content area |
 |  [x](./bitburner.tailproperties.x.md) |  | number | X-coordinate of the log window |

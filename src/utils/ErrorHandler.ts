@@ -2,6 +2,7 @@ import { basicErrorMessage } from "../Netscript/ErrorMessages";
 import { ScriptDeath } from "../Netscript/ScriptDeath";
 import type { WorkerScript } from "../Netscript/WorkerScript";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
+import { getErrorMessageWithStackAndCause } from "./ErrorHelper";
 
 /** Generate an error dialog when workerscript is known */
 export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, initialText = "") {
@@ -18,7 +19,7 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
   } else if (e instanceof Error) {
     // Ignore any cancellation errors from Monaco that get here
     if (e.name === "Canceled" && e.message === "Canceled") return;
-    const msg = `${e.message}${e.stack ? `\nstack:\n${e.stack.toString()}` : ""}`;
+    const msg = getErrorMessageWithStackAndCause(e);
     e = ws ? basicErrorMessage(ws, msg) : `RUNTIME ERROR:\n\n${msg}`;
   }
   if (typeof e !== "string") {

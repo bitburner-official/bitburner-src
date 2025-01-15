@@ -49,7 +49,7 @@ const AugPreReqsChecklist = (props: IProps): React.ReactElement => {
 
   return (
     <Typography color={Settings.theme.money}>
-      <b>Pre-Requisites:</b>
+      <b>Prerequisites:</b>
       <br />
       {aug.prereqs.map((preAug) => (
         <span key={preAug} style={{ display: "flex", alignItems: "center" }}>
@@ -99,13 +99,18 @@ export const GraftingRoot = (): React.ReactElement => {
       <Typography>
         You find yourself in a secret laboratory, owned by a mysterious researcher.
         <br />
-        The scientist explains that they've been studying Augmentation grafting, the process of applying Augmentations
+        The scientist explains that they've been studying augmentation grafting, the process of applying augmentations
         without requiring a body reset.
         <br />
         <br />
-        Through legally questionable connections, the scientist has access to a vast array of Augmentation blueprints,
-        even private designs. They offer to build and graft the Augmentations to you, in exchange for both a hefty sum
+        Through legally questionable connections, the scientist has access to a vast array of augmentation blueprints,
+        even private designs. They offer to build and graft the augmentations to you, in exchange for both a hefty sum
         of money, and being a lab rat.
+        <br />
+        <br />
+        Some augmentations have prerequisites. You normally must install the prerequisites before being able to buy and
+        install those augmentations. With grafting, you only need to buy ("queue") those prerequisites. You can also
+        graft the prerequisites.
       </Typography>
 
       <Box sx={{ my: 3 }}>
@@ -181,7 +186,7 @@ export const GraftingRoot = (): React.ReactElement => {
                       <>
                         <br />
                         <br />
-                        Additionally, grafting an Augmentation will increase the potency of the Entropy virus.
+                        Additionally, grafting an augmentation will increase the potency of the Entropy virus.
                       </>
                     )}
                   </Typography>
@@ -223,7 +228,7 @@ export const GraftingRoot = (): React.ReactElement => {
             </Box>
           </Paper>
         ) : (
-          <Typography>All Augmentations owned</Typography>
+          <Typography>All augmentations owned</Typography>
         )}
       </Box>
 
@@ -240,12 +245,12 @@ export const GraftingRoot = (): React.ReactElement => {
         </Paper>
 
         <Typography>
-          When installed on an unconscious individual, Augmentations are scanned by the body on awakening, eliminating
-          hidden malware. However, grafted Augmentations do not provide this security measure.
+          When installed on an unconscious individual, augmentations are scanned by the body on awakening, eliminating
+          hidden malware. However, grafted augmentations do not provide this security measure.
           <br />
           <br />
-          Individuals who tested Augmentation grafting have reported symptoms of an unknown virus, which they've dubbed
-          "Entropy". This virus seems to grow more potent with each grafted Augmentation...
+          Individuals who tested augmentation grafting have reported symptoms of an unknown virus, which they've dubbed
+          "Entropy". This virus seems to grow more potent with each grafted augmentation ...
         </Typography>
       </Box>
     </Container>
