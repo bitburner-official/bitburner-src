@@ -43,7 +43,7 @@ Calculation of material and product is pretty similar, so I'll call them "item" 
 - Business factor:
   - `BusinessProduction = 1 + office.employeeProductionByJob["Business"]`
 
-$${BusinessFactor = (BusinessProduction)}^{0.26} + \left({BusinessProduction}\ast{0.001}\right)$$
+$${BusinessFactor = (BusinessProduction)}^{0.26} + \left({BusinessProduction}\ast{0.0001}\right)$$
 
 - Advert factor:
 
