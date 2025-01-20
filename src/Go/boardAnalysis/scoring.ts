@@ -56,7 +56,6 @@ export function endGoGame(boardState: BoardState) {
 
   if (score[GoColor.black].sum < score[GoColor.white].sum) {
     resetWinstreak(boardState.ai, true);
-    statusToUpdate.nodePower += Math.floor(score[GoColor.black].sum * 0.25);
   } else {
     statusToUpdate.wins++;
     statusToUpdate.oldWinStreak = statusToUpdate.winStreak;
