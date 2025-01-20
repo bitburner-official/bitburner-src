@@ -9,7 +9,10 @@ Returns a promise that resolves with the success or failure state of your last m
 **Signature:**
 
 ```typescript
-opponentNextTurn(logOpponentMove?: boolean): Promise<{
+opponentNextTurn(
+    logOpponentMove?: boolean,
+    playAsWhite = false,
+  ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
@@ -21,6 +24,7 @@ opponentNextTurn(logOpponentMove?: boolean): Promise<{
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  logOpponentMove | boolean | _(Optional)_ optional, defaults to true. if false prevents logging opponent move |
+|  playAsWhite | (not declared) | _(Optional)_ optional. If true, waits to get the next move the black player makes. Intended to be used when playing as white when the opponent is set to "No AI" |
 
 **Returns:**
 

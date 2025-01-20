@@ -6,12 +6,15 @@
 
 Make a move on the IPvGO subnet game board, and await the opponent's response. x:0 y:0 represents the bottom-left corner of the board in the UI.
 
+playAsWhite is optional, and attempts to make a move as the white player. Only can be used when playing against "No AI".
+
 **Signature:**
 
 ```typescript
 makeMove(
     x: number,
     y: number,
+    playAsWhite = false,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -25,6 +28,7 @@ makeMove(
 |  --- | --- | --- |
 |  x | number |  |
 |  y | number |  |
+|  playAsWhite | (not declared) | _(Optional)_ |
 
 **Returns:**
 

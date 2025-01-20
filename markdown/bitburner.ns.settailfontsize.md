@@ -31,8 +31,6 @@ RAM cost: 0 GB
 
 This overwrites the tail font size and forces an update of the tail window's contents.
 
-The font size is saved across restarts.
-
 If ran without a filename or pid, this will affect the current script's tail window.
 
 Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to target the tail window from another script. Remember that scripts are uniquely identified by both their names and arguments.
