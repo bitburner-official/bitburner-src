@@ -43,13 +43,7 @@ export function validateMove(error: (s: string) => void, x: number, y: number, m
   const moveColor = check.playAsWhite ? GoColor.white : GoColor.black;
 
   if (check.playAsWhite) {
-    if (Go.currentGame.ai !== GoOpponent.none) {
-      error(`${moveString} ${GoValidity.invalid}. You can only make moves as white when playing against 'No AI'`);
-    }
-
-    if (Go.currentGame.previousPlayer === GoColor.white) {
-      error(`${moveString} ${GoValidity.notYourTurn}. You cannot make a move as white until the opponent has played.`);
-    }
+    validatePlayAsWhite(error);
   }
 
   const boardSize = Go.currentGame.board.length;
@@ -98,6 +92,16 @@ export function validateMove(error: (s: string) => void, x: number, y: number, m
   }
   if (point && check.requireOfflineNode) {
     error(`The node ${x},${y} is not offline, so you cannot repair the node.`);
+  }
+}
+
+export function validatePlayAsWhite(error: (s: string) => void) {
+  if (Go.currentGame.ai !== GoOpponent.none) {
+    error(`${GoValidity.invalid}. You can only pass or play as white when playing against 'No AI'`);
+  }
+
+  if (Go.currentGame.previousPlayer === GoColor.white) {
+    error(`${GoValidity.notYourTurn}. You cannot pass as white until the opponent has played.`);
   }
 }
 

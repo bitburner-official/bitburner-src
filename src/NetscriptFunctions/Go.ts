@@ -26,6 +26,7 @@ import {
   resetBoardState,
   validateBoardState,
   validateMove,
+  validatePlayAsWhite,
 } from "../Go/effects/netscriptGoImplementation";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { errorMessage } from "../Netscript/ErrorMessages";
@@ -51,6 +52,9 @@ export function NetscriptGo(): InternalAPI<NSGo> {
     passTurn:
       (ctx: NetscriptContext) =>
       async (passAsWhite): Promise<Play> => {
+        if (passAsWhite) {
+          validatePlayAsWhite(error(ctx));
+        }
         return handlePassTurn(logger(ctx), !!passAsWhite);
       },
     opponentNextTurn: (ctx: NetscriptContext) => async (logOpponentMove, playAsWhite) => {
