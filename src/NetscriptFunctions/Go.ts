@@ -26,7 +26,6 @@ import {
   resetBoardState,
   validateBoardState,
   validateMove,
-  validateTurn,
 } from "../Go/effects/netscriptGoImplementation";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { errorMessage } from "../Netscript/ErrorMessages";
@@ -43,19 +42,19 @@ export function NetscriptGo(): InternalAPI<NSGo> {
   return {
     makeMove:
       (ctx: NetscriptContext) =>
-      (_x, _y): Promise<Play> => {
+      (_x, _y, playAsWhite): Promise<Play> => {
         const x = helpers.number(ctx, "x", _x);
         const y = helpers.number(ctx, "y", _y);
-        validateMove(error(ctx), x, y, "makeMove");
-        return makePlayerMove(logger(ctx), error(ctx), x, y);
+        validateMove(error(ctx), x, y, "makeMove", { playAsWhite });
+        return makePlayerMove(logger(ctx), error(ctx), x, y, !!playAsWhite);
       },
-    passTurn: (ctx: NetscriptContext) => async (): Promise<Play> => {
-      validateTurn(error(ctx), "passTurn()");
-      return handlePassTurn(logger(ctx));
-    },
-    opponentNextTurn: (ctx: NetscriptContext) => async (_logOpponentMove) => {
-      const logOpponentMove = typeof _logOpponentMove === "boolean" ? _logOpponentMove : true;
-      return getOpponentNextMove(logOpponentMove, logger(ctx));
+    passTurn:
+      (ctx: NetscriptContext) =>
+      async (passAsWhite): Promise<Play> => {
+        return handlePassTurn(logger(ctx), !!passAsWhite);
+      },
+    opponentNextTurn: (ctx: NetscriptContext) => async (logOpponentMove, playAsWhite) => {
+      return getOpponentNextMove(!!logOpponentMove, logger(ctx), !!playAsWhite);
     },
     getBoardState: () => () => {
       return simpleBoardFromBoard(Go.currentGame.board);
@@ -79,9 +78,9 @@ export function NetscriptGo(): InternalAPI<NSGo> {
       return resetBoardState(logger(ctx), error(ctx), opponent, boardSize);
     },
     analysis: {
-      getValidMoves: (ctx) => (_boardState, _priorBoardState) => {
+      getValidMoves: (ctx) => (_boardState, _priorBoardState, playAsWhite) => {
         const State = validateBoardState(error(ctx), _boardState, _priorBoardState);
-        return getValidMoves(State);
+        return getValidMoves(State, !!playAsWhite);
       },
       getChains: (ctx) => (_boardState) => {
         const State = validateBoardState(error(ctx), _boardState);

@@ -11,7 +11,7 @@ import {
   updateCaptures,
   updateChains,
 } from "../boardState/boardState";
-import { makeAIMove, resetAI } from "../boardAnalysis/goAI";
+import { makeAIMove, updateTurnPromises } from "../boardAnalysis/goAI";
 import {
   evaluateIfMoveIsValid,
   getControlledSpace,
@@ -35,8 +35,22 @@ export function validateMove(error: (s: string) => void, x: number, y: number, m
     onlineNode: true,
     requireOfflineNode: false,
     suicide: true,
+    playAsWhite: false,
     ...settings,
   };
+
+  const moveString = `${methodName} ${x},${y}: `;
+  const moveColor = check.playAsWhite ? GoColor.white : GoColor.black;
+
+  if (check.playAsWhite) {
+    if (Go.currentGame.ai !== GoOpponent.none) {
+      error(`${moveString} ${GoValidity.invalid}. You can only make moves as white when playing against 'No AI'`);
+    }
+
+    if (Go.currentGame.previousPlayer === GoColor.white) {
+      error(`${moveString} ${GoValidity.notYourTurn}. You cannot make a move as white until the opponent has played.`);
+    }
+  }
 
   const boardSize = Go.currentGame.board.length;
   if (x < 0 || x >= boardSize) {
@@ -46,10 +60,9 @@ export function validateMove(error: (s: string) => void, x: number, y: number, m
     error(`Invalid row number (y = ${y}), row must be a number 0 through ${boardSize - 1}`);
   }
 
-  const moveString = `${methodName} ${x},${y}: `;
-  validateTurn(error, moveString);
+  validateTurn(error, moveString, moveColor);
 
-  const validity = evaluateIfMoveIsValid(Go.currentGame, x, y, GoColor.black);
+  const validity = evaluateIfMoveIsValid(Go.currentGame, x, y, moveColor);
   const point = Go.currentGame.board[x][y];
   if (!point && check.onlineNode) {
     error(
@@ -88,8 +101,8 @@ export function validateMove(error: (s: string) => void, x: number, y: number, m
   }
 }
 
-export function validateTurn(error: (s: string) => void, moveString = "") {
-  if (Go.currentGame.previousPlayer === GoColor.black) {
+export function validateTurn(error: (s: string) => void, moveString = "", color = GoColor.black) {
+  if (Go.currentGame.previousPlayer === color) {
     error(
       `${moveString} ${GoValidity.notYourTurn}. Do you have multiple scripts running, or did you forget to await makeMove() or opponentNextTurn()`,
     );
@@ -104,25 +117,33 @@ export function validateTurn(error: (s: string) => void, moveString = "") {
 /**
  * Pass player's turn and await the opponent's response (or logs the end of the game if both players pass)
  */
-export async function handlePassTurn(logger: (s: string) => void) {
-  passTurn(Go.currentGame, GoColor.black);
+export async function handlePassTurn(logger: (s: string) => void, passAsWhite = false) {
+  const color = passAsWhite ? GoColor.white : GoColor.black;
+  passTurn(Go.currentGame, color);
   logger("Go turn passed.");
 
   if (Go.currentGame.previousPlayer === null) {
     logEndGame(logger);
-    return getOpponentNextMove(false, logger);
+    return getOpponentNextMove(false, logger, passAsWhite);
   } else {
-    return makeAIMove(Go.currentGame);
+    return makeAIMove(Go.currentGame, true, passAsWhite);
   }
 }
 
 /**
  * Validates and applies the player's router placement
  */
-export async function makePlayerMove(logger: (s: string) => void, error: (s: string) => void, x: number, y: number) {
+export async function makePlayerMove(
+  logger: (s: string) => void,
+  error: (s: string) => void,
+  x: number,
+  y: number,
+  playAsWhite = false,
+) {
   const boardState = Go.currentGame;
-  const validity = evaluateIfMoveIsValid(boardState, x, y, GoColor.black);
-  const moveWasMade = makeMove(boardState, x, y, GoColor.black);
+  const color = playAsWhite ? GoColor.white : GoColor.black;
+  const validity = evaluateIfMoveIsValid(boardState, x, y, color);
+  const moveWasMade = makeMove(boardState, x, y, color);
 
   if (validity !== GoValidity.valid || !moveWasMade) {
     error(`Invalid move: ${x} ${y}. ${validity}.`);
@@ -130,16 +151,17 @@ export async function makePlayerMove(logger: (s: string) => void, error: (s: str
 
   GoEvents.emit();
   logger(`Go move played: ${x}, ${y}`);
-  return makeAIMove(boardState);
+  return makeAIMove(boardState, true, playAsWhite);
 }
 
 /**
   Returns the promise that provides the opponent's move, once it finishes thinking.
  */
-export async function getOpponentNextMove(logOpponentMove = true, logger: (s: string) => void) {
+export async function getOpponentNextMove(logOpponentMove = true, logger: (s: string) => void, playAsWhite = false) {
+  const nextMovePromise = playAsWhite ? "nextTurnForWhite" : "nextTurn";
   // Only asynchronously log the opponent move if not disabled by the player
   if (logOpponentMove) {
-    return Go.nextTurn.then((move) => {
+    return Go[nextMovePromise].then((move) => {
       if (move.type === GoPlayType.gameOver) {
         logEndGame(logger);
       } else if (move.type === GoPlayType.pass) {
@@ -151,18 +173,25 @@ export async function getOpponentNextMove(logOpponentMove = true, logger: (s: st
     });
   }
 
-  return Go.nextTurn;
+  return Go[nextMovePromise];
 }
 
 /**
- * Returns a grid of booleans indicating if the coordinates at that location are a valid move for the player (black pieces)
+ * Returns a grid of booleans indicating if the coordinates at that location are a valid move for the player
  */
-export function getValidMoves(_boardState?: BoardState) {
+export function getValidMoves(_boardState?: BoardState, playAsWhite = false) {
   const boardState = _boardState || Go.currentGame;
+  const color = playAsWhite ? GoColor.white : GoColor.black;
+
+  // If the game is over, or if it is not your turn, there are no valid moves
+  if (!boardState.previousPlayer || boardState.previousPlayer === color) {
+    return boardState.board.map((): boolean[] => Array(boardState.board.length).fill(false) as boolean[]);
+  }
+
   // Map the board matrix into true/false values
   return boardState.board.map((column, x) =>
     column.reduce((validityArray: boolean[], point, y) => {
-      const isValid = evaluateIfMoveIsValid(boardState, x, y, GoColor.black) === GoValidity.valid;
+      const isValid = evaluateIfMoveIsValid(boardState, x, y, color) === GoValidity.valid;
       validityArray.push(isValid);
       return validityArray;
     }, []),
@@ -227,6 +256,13 @@ export function getControlledEmptyNodes(_board?: Board) {
       return ownedPoints + ".";
     }, ""),
   );
+}
+
+/**
+ * Returns all previous board states as SimpleBoards
+ */
+export function getHistory(): string[][] {
+  return Go.currentGame.previousBoards.map((boardString): string[] => simpleBoardFromBoardString(boardString));
 }
 
 /**
@@ -301,7 +337,7 @@ export function resetBoardState(
   }
 
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
-  resetAI(false);
+  updateTurnPromises();
   GoEvents.emit(); // Trigger a Go UI rerender
   logger(`New game started: ${opponent}, ${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);

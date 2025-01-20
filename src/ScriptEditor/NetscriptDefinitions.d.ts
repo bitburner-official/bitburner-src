@@ -4333,11 +4333,13 @@ export interface GoAnalysis {
    * Also note that, when given a custom board state, only one prior move can be analyzed. This means that the superko rules
    *  (no duplicate board states in the full game history) is not supported; you will have to implement your own analysis for that.
    *
+   *  playAsWhite is optional, and gets the current valid moves for the white player. Intended to be used when playing as white when the opponent is set to "No AI"
+   *
    * @remarks
    * RAM cost: 8 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    */
-  getValidMoves(boardState?: string[], priorBoardState?: string[]): boolean[][];
+  getValidMoves(boardState?: string[], priorBoardState?: string[], playAsWhite): boolean[][];
 
   /**
    * Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points
@@ -4572,6 +4574,8 @@ export interface Go {
    *  Make a move on the IPvGO subnet game board, and await the opponent's response.
    *  x:0 y:0 represents the bottom-left corner of the board in the UI.
    *
+   * playAsWhite is optional, and attempts to make a move as the white player. Only can be used when playing against "No AI".
+   *
    * @remarks
    * RAM cost: 4 GB
    *
@@ -4580,6 +4584,7 @@ export interface Go {
   makeMove(
     x: number,
     y: number,
+    playAsWhite = false,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4593,13 +4598,15 @@ export interface Go {
    * This can also be used if you pick up the game in a state where the opponent needs to play next. For example: if BitBurner was
    * closed while waiting for the opponent to make a move, you may need to call passTurn() to get them to play their move on game start.
    *
+   * passAsWhite is optional, and attempts to pass while playing as the white player. Only can be used when playing against "No AI".
+   *
    * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    *
    * @remarks
    * RAM cost: 0 GB
    *
    */
-  passTurn(): Promise<{
+  passTurn(passAsWhite = false): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
@@ -4610,13 +4617,17 @@ export interface Go {
    *  x:0 y:0 represents the bottom-left corner of the board in the UI.
    *
    * @param logOpponentMove - optional, defaults to true. if false prevents logging opponent move
+   * @param playAsWhite - optional. If true, waits to get the next move the black player makes. Intended to be used when playing as white when the opponent is set to "No AI"
    *
    * @remarks
    * RAM cost: 0 GB
    *
    * @returns a promise that contains if your last move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    */
-  opponentNextTurn(logOpponentMove?: boolean): Promise<{
+  opponentNextTurn(
+    logOpponentMove?: boolean,
+    playAsWhite = false,
+  ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;

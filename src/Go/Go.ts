@@ -11,6 +11,7 @@ export class GoObject {
   currentGame: BoardState = getNewBoardState(7);
   stats: PartialRecord<GoOpponent, OpponentStats> = {};
   nextTurn: Promise<Play> = Promise.resolve({ type: GoPlayType.gameOver, x: null, y: null });
+  nextTurnForWhite: Promise<Play> = Promise.resolve({ type: GoPlayType.gameOver, x: null, y: null });
   storedCycles: number = 0;
 
   prestigeAugmentation() {

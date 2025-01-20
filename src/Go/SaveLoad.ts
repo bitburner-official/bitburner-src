@@ -1,7 +1,7 @@
 import type { BoardState, OpponentStats, SimpleBoard } from "./Types";
 import type { PartialRecord } from "../Types/Record";
 
-import { Truthy } from "lodash";
+import { cloneDeep, Truthy } from "lodash";
 import { GoColor, GoOpponent, GoPlayType } from "@enums";
 import { Go } from "./Go";
 import { boardStateFromSimpleBoard, getPreviousMove, simpleBoardFromBoard } from "./boardAnalysis/boardAnalysis";
@@ -9,7 +9,7 @@ import { assertLoadingType } from "../utils/TypeAssertion";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { boardSizes } from "./Constants";
 import { isInteger, isNumber } from "../types";
-import { makeAIMove } from "./boardAnalysis/goAI";
+import { makeAIMove, updateTurnPromises } from "./boardAnalysis/goAI";
 
 type PreviousGameSaveData = { ai: GoOpponent; board: SimpleBoard; previousPlayer: GoColor | null } | null;
 type CurrentGameSaveData = PreviousGameSaveData & {
@@ -88,7 +88,7 @@ export function loadGo(data: unknown): boolean {
       showError(new Error(`Error while making first IPvGO AI move: ${error}`, { cause: error }));
     });
   }
-  // If it's not the AI's turn and we're not in gameover status, initialize nextTurn promise based on the previous move/pass
+  // If it's not the AI's turn (and we're not in gameover status), initialize nextTurn promise based on the previous move/pass
   else if (currentGame.previousPlayer) {
     const previousMove = getPreviousMove();
     Go.nextTurn = Promise.resolve(
@@ -96,6 +96,10 @@ export function loadGo(data: unknown): boolean {
         ? { type: GoPlayType.move, x: previousMove[0], y: previousMove[1] }
         : { type: GoPlayType.pass, x: null, y: null },
     );
+    Go.nextTurnForWhite = cloneDeep(Go.nextTurn);
+    if (currentGame.ai === GoOpponent.none) {
+      updateTurnPromises();
+    }
   }
   return true;
 }
