@@ -105,7 +105,9 @@ export function NetscriptGo(): InternalAPI<NSGo> {
     cheat: {
       getCheatSuccessChance: (ctx: NetscriptContext) => (_cheatCount, playAsWhite) => {
         checkCheatApiAccess(error(ctx));
-        const cheatCount = helpers.number(ctx, "cheatCount", _cheatCount);
+        const normalizedCheatCount =
+          _cheatCount ?? (playAsWhite ? Go.currentGame.cheatCountForWhite : Go.currentGame.cheatCount);
+        const cheatCount = helpers.number(ctx, "cheatCount", normalizedCheatCount);
         return cheatSuccessChance(cheatCount, !!playAsWhite);
       },
       getCheatCount: (ctx: NetscriptContext) => (playAsWhite) => {

@@ -4461,7 +4461,7 @@ export interface GoCheat {
    * RAM cost: 1 GB
    * Requires BitNode 14.2 to use
    */
-  getCheatSuccessChance(cheatCount?: number, playAsWhite: boolean): number;
+  getCheatSuccessChance(cheatCount?: number, playAsWhite?: boolean): number;
   /**
    * Returns the number of times you've attempted to cheat in the current game.
    * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
@@ -4470,7 +4470,7 @@ export interface GoCheat {
    * RAM cost: 1 GB
    * Requires BitNode 14.2 to use
    */
-  getCheatCount(playAsWhite: boolean): number;
+  getCheatCount(playAsWhite?: boolean): number;
   /**
    * Attempts to remove an existing router, leaving an empty node behind.
    *
@@ -4493,7 +4493,7 @@ export interface GoCheat {
   removeRouter(
     x: number,
     y: number,
-    playAsWhite: boolean,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4526,7 +4526,7 @@ export interface GoCheat {
     y1: number,
     x2: number,
     y2: number,
-    playAsWhite: boolean,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4554,7 +4554,7 @@ export interface GoCheat {
   repairOfflineNode(
     x: number,
     y: number,
-    playAsWhite: boolean,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4583,7 +4583,7 @@ export interface GoCheat {
   destroyNode(
     x: number,
     y: number,
-    playAsWhite: boolean,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
