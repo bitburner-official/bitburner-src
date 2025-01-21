@@ -26,10 +26,10 @@ import {
   resetBoardState,
   validateBoardState,
   validateMove,
-  validatePlayAsWhite,
 } from "../Go/effects/netscriptGoImplementation";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { errorMessage } from "../Netscript/ErrorMessages";
+import { GoOpponent, GoValidity } from "@enums";
 
 const logger = (ctx: NetscriptContext) => (message: string) => helpers.log(ctx, () => message);
 const error = (ctx: NetscriptContext) => (message: string) => {
@@ -52,8 +52,8 @@ export function NetscriptGo(): InternalAPI<NSGo> {
     passTurn:
       (ctx: NetscriptContext) =>
       async (passAsWhite): Promise<Play> => {
-        if (passAsWhite) {
-          validatePlayAsWhite(error(ctx));
+        if (Go.currentGame.ai !== GoOpponent.none) {
+          error(ctx)(`${GoValidity.invalid}. You can only pass or play as white when playing against 'No AI'`);
         }
         return handlePassTurn(logger(ctx), !!passAsWhite);
       },

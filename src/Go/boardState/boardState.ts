@@ -2,7 +2,7 @@ import { Board, BoardState, Move, Neighbor, PointState, SimpleBoard } from "../T
 
 import { GoColor, GoOpponent, GoValidity } from "@enums";
 import { bitverseBoardShape } from "../Constants";
-import { getExpansionMoveArray } from "../boardAnalysis/goAI";
+import { getExpansionMoveArray, updateTurnPromises } from "../boardAnalysis/goAI";
 import {
   boardFromSimpleBoard,
   boardStringFromBoard,
@@ -144,6 +144,9 @@ export function passTurn(boardState: BoardState, player: GoColor, allowEndGame =
 
   if (boardState.passCount >= 2 && allowEndGame) {
     endGoGame(boardState);
+  }
+  if (boardState.ai === GoOpponent.none) {
+    updateTurnPromises();
   }
 }
 
