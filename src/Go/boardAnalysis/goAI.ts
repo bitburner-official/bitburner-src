@@ -113,9 +113,9 @@ export function makeAIMove(
  */
 export function updateTurnPromises() {
   if (Go.currentGame.previousPlayer === null) {
-    Go.nextTurn = Promise.resolve({ type: GoPlayType.gameOver, x: null, y: null });
     resolveCurrentTurnForWhite();
     resolveCurrentTurn();
+    Go.nextTurn = Promise.resolve({ type: GoPlayType.gameOver, x: null, y: null });
     Go.nextTurnForWhite = getNonAIMovePromise(true);
     return;
   }
@@ -128,15 +128,15 @@ export function updateTurnPromises() {
   );
 
   if (Go.currentGame.previousPlayer === GoColor.white) {
+    resolveCurrentTurn();
     Go.nextTurn = previousTurnPromise;
     Go.nextTurnForWhite = getNonAIMovePromise(true);
-    resolveCurrentTurn();
   }
 
   if (Go.currentGame.previousPlayer === GoColor.black) {
+    resolveCurrentTurnForWhite();
     Go.nextTurnForWhite = previousTurnPromise;
     Go.nextTurn = getNonAIMovePromise();
-    resolveCurrentTurnForWhite();
   }
 }
 
