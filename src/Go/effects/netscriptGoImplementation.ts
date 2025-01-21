@@ -483,7 +483,7 @@ export async function determineCheatSuccess(
     state.cheatCount++;
   }
   Go.currentGame.previousPlayer = playerColor;
-  updateCaptures(Go.currentGame.board, playerColor);
+  updateCaptures(Go.currentGame.board, playerColor, true);
 
   return makeAIMove(state, true, playAsWhite);
 }
