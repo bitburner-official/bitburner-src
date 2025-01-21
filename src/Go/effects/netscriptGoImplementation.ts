@@ -506,7 +506,7 @@ export async function determineCheatSuccess(
  * 15: +31,358,645%
  */
 export function cheatSuccessChance(cheatCountOverride: number, playAsWhite = false) {
-  const cheatCount = cheatCountOverride ?? playAsWhite ? Go.currentGame.cheatCountForWhite : Go.currentGame.cheatCount;
+  const cheatCount = cheatCountOverride ?? (playAsWhite ? Go.currentGame.cheatCountForWhite : Go.currentGame.cheatCount);
   const sourceFileBonus = Player.activeSourceFileLvl(14) === 3 ? 0.25 : 0;
   const cheatCountScalar = (0.7 - 0.02 * cheatCount) ** cheatCount;
   return Math.max(Math.min(0.6 * cheatCountScalar * Player.mults.crime_success + sourceFileBonus, 1), 0);
