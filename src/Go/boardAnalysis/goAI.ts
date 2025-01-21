@@ -113,9 +113,10 @@ export function makeAIMove(
  */
 export function updateTurnPromises() {
   if (Go.currentGame.previousPlayer === null) {
-    Go.nextTurn = Go.nextTurnForWhite = Promise.resolve({ type: GoPlayType.gameOver, x: null, y: null });
+    Go.nextTurn = Promise.resolve({ type: GoPlayType.gameOver, x: null, y: null });
     resolveCurrentTurnForWhite();
     resolveCurrentTurn();
+    Go.nextTurnForWhite = getNonAIMovePromise(true);
     return;
   }
 
