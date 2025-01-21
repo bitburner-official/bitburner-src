@@ -9,7 +9,6 @@ import {
   makeMove,
   passTurn,
   updateCaptures,
-  updateChains,
 } from "../boardState/boardState";
 import { makeAIMove, updateTurnPromises } from "../boardAnalysis/goAI";
 import {
@@ -453,18 +452,21 @@ export async function determineCheatSuccess(
   callback: () => void,
   successRngOverride?: number,
   ejectRngOverride?: number,
+  playAsWhite = false,
 ): Promise<Play> {
   const state = Go.currentGame;
   const rng = new WHRNG(Player.totalPlaytime);
   state.passCount = 0;
+  const priorCheatCount = playAsWhite ? state.cheatCountForWhite : state.cheatCount;
+  const playerColor = playAsWhite ? GoColor.white : GoColor.black;
 
   // If cheat is successful, run callback
-  if ((successRngOverride ?? rng.random()) <= cheatSuccessChance(state.cheatCount)) {
+  if ((successRngOverride ?? rng.random()) <= cheatSuccessChance(state.cheatCount, playAsWhite)) {
     callback();
     GoEvents.emit();
   }
   // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly losing
-  else if (state.cheatCount && (ejectRngOverride ?? rng.random()) < 0.1) {
+  else if (priorCheatCount && (ejectRngOverride ?? rng.random()) < 0.1 && state.ai !== GoOpponent.none) {
     logger(`Cheat failed! You have been ejected from the subnet.`);
     endGoGame(state);
     return Go.nextTurn;
@@ -472,11 +474,18 @@ export async function determineCheatSuccess(
   // If the cheat fails, your turn is skipped
   else {
     logger(`Cheat failed. Your turn has been skipped.`);
-    passTurn(state, GoColor.black, false);
+    passTurn(state, playerColor, false);
   }
 
-  state.cheatCount++;
-  return makeAIMove(state);
+  if (playAsWhite) {
+    state.cheatCountForWhite++;
+  } else {
+    state.cheatCount++;
+  }
+  Go.currentGame.previousPlayer = playerColor;
+  updateCaptures(Go.currentGame.board, playerColor);
+
+  return makeAIMove(state, true, playAsWhite);
 }
 
 /**
@@ -496,7 +505,8 @@ export async function determineCheatSuccess(
  * 12: +534,704%
  * 15: +31,358,645%
  */
-export function cheatSuccessChance(cheatCount: number) {
+export function cheatSuccessChance(cheatCountOverride: number, playAsWhite = false) {
+  const cheatCount = cheatCountOverride ?? playAsWhite ? Go.currentGame.cheatCountForWhite : Go.currentGame.cheatCount;
   const sourceFileBonus = Player.activeSourceFileLvl(14) === 3 ? 0.25 : 0;
   const cheatCountScalar = (0.7 - 0.02 * cheatCount) ** cheatCount;
   return Math.max(Math.min(0.6 * cheatCountScalar * Player.mults.crime_success + sourceFileBonus, 1), 0);
@@ -511,6 +521,7 @@ export function cheatRemoveRouter(
   y: number,
   successRngOverride?: number,
   ejectRngOverride?: number,
+  playAsWhite = false,
 ): Promise<Play> {
   const point = Go.currentGame.board[x][y];
   if (!point) {
@@ -521,12 +532,11 @@ export function cheatRemoveRouter(
     logger,
     () => {
       point.color = GoColor.empty;
-      updateChains(Go.currentGame.board);
-      Go.currentGame.previousPlayer = GoColor.black;
       logger(`Cheat successful. The point ${x},${y} was cleared.`);
     },
     successRngOverride,
     ejectRngOverride,
+    playAsWhite,
   );
 }
 
@@ -541,6 +551,7 @@ export function cheatPlayTwoMoves(
   y2: number,
   successRngOverride?: number,
   ejectRngOverride?: number,
+  playAsWhite = false,
 ): Promise<Play> {
   const point1 = Go.currentGame.board[x1][y1];
   const point2 = Go.currentGame.board[x2][y2];
@@ -549,19 +560,19 @@ export function cheatPlayTwoMoves(
     logger(`Cheat failed. One of the points ${x1},${y1} or ${x2},${y2} is already offline.`);
     return Go.nextTurn;
   }
+  const playerColor = playAsWhite ? GoColor.white : GoColor.black;
 
   return determineCheatSuccess(
     logger,
     () => {
-      point1.color = GoColor.black;
-      point2.color = GoColor.black;
-      updateCaptures(Go.currentGame.board, GoColor.black);
-      Go.currentGame.previousPlayer = GoColor.black;
+      point1.color = playerColor;
+      point2.color = playerColor;
 
       logger(`Cheat successful. Two go moves played: ${x1},${y1} and ${x2},${y2}`);
     },
     successRngOverride,
     ejectRngOverride,
+    playAsWhite,
   );
 }
 
@@ -571,6 +582,7 @@ export function cheatRepairOfflineNode(
   y: number,
   successRngOverride?: number,
   ejectRngOverride?: number,
+  playAsWhite = false,
 ): Promise<Play> {
   return determineCheatSuccess(
     logger,
@@ -582,12 +594,11 @@ export function cheatRepairOfflineNode(
         color: GoColor.empty,
         x,
       };
-      updateChains(Go.currentGame.board);
-      Go.currentGame.previousPlayer = GoColor.black;
       logger(`Cheat successful. The point ${x},${y} was repaired.`);
     },
     successRngOverride,
     ejectRngOverride,
+    playAsWhite,
   );
 }
 
@@ -597,16 +608,16 @@ export function cheatDestroyNode(
   y: number,
   successRngOverride?: number,
   ejectRngOverride?: number,
+  playAsWhite = false,
 ): Promise<Play> {
   return determineCheatSuccess(
     logger,
     () => {
       Go.currentGame.board[x][y] = null;
-      updateChains(Go.currentGame.board);
-      Go.currentGame.previousPlayer = GoColor.black;
       logger(`Cheat successful. The point ${x},${y} was destroyed.`);
     },
     successRngOverride,
     ejectRngOverride,
+    playAsWhite,
   );
 }

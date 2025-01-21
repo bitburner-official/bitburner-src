@@ -4455,20 +4455,22 @@ export interface GoCheat {
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
    * @param cheatCount - Optional override for the number of cheats already attempted. Defaults to the number of cheats attempted in the current game.
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    *
    * @remarks
    * RAM cost: 1 GB
    * Requires BitNode 14.2 to use
    */
-  getCheatSuccessChance(cheatCount?: number): number;
+  getCheatSuccessChance(cheatCount?: number, playAsWhite: boolean): number;
   /**
    * Returns the number of times you've attempted to cheat in the current game.
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    *
    * @remarks
    * RAM cost: 1 GB
    * Requires BitNode 14.2 to use
    */
-  getCheatCount(): number;
+  getCheatCount(playAsWhite: boolean): number;
   /**
    * Attempts to remove an existing router, leaving an empty node behind.
    *
@@ -4476,6 +4478,11 @@ export interface GoCheat {
    *
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
+   *
+   *
+   * @param x - x coordinate of router to remove
+   * @param y - y coordinate of router to remove
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    *
    * @remarks
    * RAM cost: 8 GB
@@ -4486,6 +4493,7 @@ export interface GoCheat {
   removeRouter(
     x: number,
     y: number,
+    playAsWhite: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4500,6 +4508,13 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
+   *
+   * @param x1 - x coordinate of first move to make
+   * @param y1 - y coordinate of first move to make
+   * @param x2 - x coordinate of second move to make
+   * @param y2 - y coordinate of second move to make
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+   *
    * @remarks
    * RAM cost: 8 GB
    * Requires BitNode 14.2 to use
@@ -4511,6 +4526,7 @@ export interface GoCheat {
     y1: number,
     x2: number,
     y2: number,
+    playAsWhite: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4525,6 +4541,10 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
+   * @param x - x coordinate of offline node to repair
+   * @param y - y coordinate of offline node to repair
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+   *
    * @remarks
    * RAM cost: 8 GB
    * Requires BitNode 14.2 to use
@@ -4534,6 +4554,7 @@ export interface GoCheat {
   repairOfflineNode(
     x: number,
     y: number,
+    playAsWhite: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4549,6 +4570,10 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
+   * @param x - x coordinate of empty node to destroy
+   * @param y - y coordinate of empty node to destroy
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+   *
    * @remarks
    * RAM cost: 8 GB
    * Requires BitNode 14.2 to use
@@ -4558,6 +4583,7 @@ export interface GoCheat {
   destroyNode(
     x: number,
     y: number,
+    playAsWhite: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;

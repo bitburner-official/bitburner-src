@@ -14,6 +14,7 @@ import { makeAIMove, updateTurnPromises } from "./boardAnalysis/goAI";
 type PreviousGameSaveData = { ai: GoOpponent; board: SimpleBoard; previousPlayer: GoColor | null } | null;
 type CurrentGameSaveData = PreviousGameSaveData & {
   cheatCount: number;
+  cheatCountForWhite: number;
   passCount: number;
 };
 
@@ -38,6 +39,7 @@ export function getGoSave(): SaveFormat {
       board: simpleBoardFromBoard(Go.currentGame.board),
       previousPlayer: Go.currentGame.previousPlayer,
       cheatCount: Go.currentGame.cheatCount,
+      cheatCountForWhite: Go.currentGame.cheatCount,
       passCount: Go.currentGame.passCount,
     },
     stats: Go.stats,
@@ -117,13 +119,16 @@ function loadCurrentGame(currentGame: unknown): BoardState | string {
   const board = loadSimpleBoard(currentGame.board, requiredSize);
   if (typeof board === "string") return board;
   const previousPlayer = getEnumHelper("GoColor").getMember(currentGame.previousPlayer) ?? null;
-  if (!isInteger(currentGame.cheatCount) || currentGame.cheatCount < 0)
-    return "invalid number for currentGame.cheatCount";
+  const normalizedCheatCount = isInteger(currentGame.cheatCount) ? Math.max(0, currentGame.cheatCount || 0) : 0;
+  const normalizedCheatCountForWhite = isInteger(currentGame.cheatCountForWhite)
+    ? Math.max(0, currentGame.cheatCountForWhite || 0)
+    : 0;
   if (!isInteger(currentGame.passCount) || currentGame.passCount < 0) return "invalid number for currentGame.passCount";
 
   const boardState = boardStateFromSimpleBoard(board, ai);
   boardState.previousPlayer = previousPlayer;
-  boardState.cheatCount = currentGame.cheatCount;
+  boardState.cheatCount = normalizedCheatCount;
+  boardState.cheatCountForWhite = normalizedCheatCountForWhite;
   boardState.passCount = currentGame.passCount;
   boardState.previousBoards = [];
   return boardState;
