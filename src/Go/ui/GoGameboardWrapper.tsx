@@ -162,8 +162,6 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     Go.currentGame = getNewBoardState(newBoardSize, newOpponent, true);
     updateTurnPromises();
     rerender();
-    resolveCurrentTurn();
-    resolveCurrentTurnForWhite();
   }
 
   function getPriorMove() {

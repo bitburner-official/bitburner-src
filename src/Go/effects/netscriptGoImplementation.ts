@@ -38,7 +38,7 @@ export function validateMove(error: (s: string) => void, x: number, y: number, m
     ...settings,
   };
 
-  const moveString = `${methodName} ${x},${y}: `;
+  const moveString = `${methodName} ${x},${y}${check.playAsWhite ? " (White) " : ""}: `;
   const moveColor = check.playAsWhite ? GoColor.white : GoColor.black;
 
   if (check.playAsWhite) {
@@ -96,11 +96,11 @@ export function validateMove(error: (s: string) => void, x: number, y: number, m
 
 export function validatePlayAsWhite(error: (s: string) => void) {
   if (Go.currentGame.ai !== GoOpponent.none) {
-    error(`${GoValidity.invalid}. You can only pass or play as white when playing against 'No AI'`);
+    error(`${GoValidity.invalid}. You can only play as white when playing against 'No AI'`);
   }
 
   if (Go.currentGame.previousPlayer === GoColor.white) {
-    error(`${GoValidity.notYourTurn}. You cannot pass as white until the opponent has played.`);
+    error(`${GoValidity.notYourTurn}. You cannot play or pass as white until the opponent has played.`);
   }
 }
 
@@ -153,7 +153,7 @@ export async function makePlayerMove(
   }
 
   GoEvents.emit();
-  logger(`Go move played: ${x}, ${y}`);
+  logger(`Go move played: ${x}, ${y}${playAsWhite ? " (White)" : ""}`);
   return makeAIMove(boardState, true, playAsWhite);
 }
 
@@ -164,6 +164,7 @@ export async function getOpponentNextMove(logOpponentMove = true, logger: (s: st
   const nextMovePromise = playAsWhite ? "nextTurnForWhite" : "nextTurn";
   // Only asynchronously log the opponent move if not disabled by the player
   if (logOpponentMove) {
+    logger("Waiting for opponent to make their move...");
     return Go[nextMovePromise].then((move) => {
       if (move.type === GoPlayType.gameOver) {
         logEndGame(logger);
