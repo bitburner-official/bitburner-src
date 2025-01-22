@@ -124,6 +124,7 @@ export async function handlePassTurn(logger: (s: string) => void, passAsWhite = 
   const color = passAsWhite ? GoColor.white : GoColor.black;
   passTurn(Go.currentGame, color);
   logger("Go turn passed.");
+  GoEvents.emit();
 
   if (Go.currentGame.previousPlayer === null) {
     logEndGame(logger);
