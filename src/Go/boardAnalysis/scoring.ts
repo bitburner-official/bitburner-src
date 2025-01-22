@@ -4,7 +4,7 @@ import { Player } from "@player";
 import { GoOpponent, GoColor } from "@enums";
 import { newOpponentStats } from "../Constants";
 import { getAllChains, getPlayerNeighbors } from "./boardAnalysis";
-import { getKomi, resolveCurrentTurn, resolveCurrentTurnForWhite } from "./goAI";
+import { getKomi, updateTurnPromises } from "./goAI";
 import { getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "../effects/effect";
 import { isNotNullish } from "../boardState/boardState";
 import { Factions } from "../../Faction/Factions";
@@ -46,8 +46,6 @@ export function endGoGame(boardState: BoardState) {
   if (boardState.previousPlayer === null) {
     return;
   }
-  resolveCurrentTurn();
-  resolveCurrentTurnForWhite();
 
   boardState.previousPlayer = null;
   const statusToUpdate = getOpponentStats(boardState.ai);
@@ -85,6 +83,7 @@ export function endGoGame(boardState: BoardState) {
   statusToUpdate.nodes += score[GoColor.black].sum;
   Go.currentGame = boardState;
   Go.previousGame = boardState;
+  updateTurnPromises();
   GoEvents.emit();
 
   // Update multipliers with new bonuses, once at the end of the game
