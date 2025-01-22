@@ -127,13 +127,13 @@ export function updateTurnPromises() {
       : { type: GoPlayType.pass, x: null, y: null },
   );
 
-  if (Go.currentGame.previousPlayer === GoColor.white) {
+  if (Go.currentGame.previousPlayer !== GoColor.black) {
     resolveCurrentTurn();
     Go.nextTurn = previousTurnPromise;
     Go.nextTurnForWhite = getNonAIMovePromise(true);
   }
 
-  if (Go.currentGame.previousPlayer === GoColor.black) {
+  if (Go.currentGame.previousPlayer !== GoColor.white) {
     resolveCurrentTurnForWhite();
     Go.nextTurnForWhite = previousTurnPromise;
     Go.nextTurn = getNonAIMovePromise();

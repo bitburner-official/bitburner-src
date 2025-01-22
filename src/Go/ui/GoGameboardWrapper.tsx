@@ -18,7 +18,7 @@ import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 import { CorruptableText } from "../../ui/React/CorruptableText";
-import { makeAIMove, resolveCurrentTurn, resolveCurrentTurnForWhite, updateTurnPromises } from "../boardAnalysis/goAI";
+import { makeAIMove, updateTurnPromises } from "../boardAnalysis/goAI";
 import { GoScoreExplanation } from "./GoScoreExplanation";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
@@ -121,14 +121,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   async function takeAiTurn(boardState: BoardState) {
     // Instead of making an AI move on the "No AI" opponent, notify any scripts waiting for their turn and then halt
     if (Go.currentGame.ai === GoOpponent.none) {
-      // Halt and notify any scripts playing as black, if present
-      if (boardState.previousPlayer === GoColor.white) {
-        resolveCurrentTurn();
-      }
-      // Halt and notify any scripts playing as white, if present
-      if (boardState.previousPlayer === GoColor.black) {
-        resolveCurrentTurnForWhite();
-      }
+      updateTurnPromises();
       return;
     }
 
