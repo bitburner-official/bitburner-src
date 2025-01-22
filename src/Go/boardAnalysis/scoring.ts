@@ -9,7 +9,7 @@ import { getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "..
 import { isNotNullish } from "../boardState/boardState";
 import { Factions } from "../../Faction/Factions";
 import { getEnumHelper } from "../../utils/EnumHelper";
-import { Go } from "../Go";
+import { Go, GoEvents } from "../Go";
 
 /**
  * Returns the score of the current board.
@@ -85,6 +85,7 @@ export function endGoGame(boardState: BoardState) {
   statusToUpdate.nodes += score[GoColor.black].sum;
   Go.currentGame = boardState;
   Go.previousGame = boardState;
+  GoEvents.emit();
 
   // Update multipliers with new bonuses, once at the end of the game
   Player.applyEntropy(Player.entropy);

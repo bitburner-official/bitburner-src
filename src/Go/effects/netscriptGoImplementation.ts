@@ -464,7 +464,6 @@ export async function determineCheatSuccess(
   // If cheat is successful, run callback
   if ((successRngOverride ?? rng.random()) <= cheatSuccessChance(state.cheatCount, playAsWhite)) {
     callback();
-    GoEvents.emit();
   }
   // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly losing
   else if (priorCheatCount && (ejectRngOverride ?? rng.random()) < 0.1 && state.ai !== GoOpponent.none) {
@@ -485,6 +484,7 @@ export async function determineCheatSuccess(
   }
   Go.currentGame.previousPlayer = playerColor;
   updateCaptures(Go.currentGame.board, playerColor, true);
+  GoEvents.emit();
 
   return makeAIMove(state, true, playAsWhite);
 }
