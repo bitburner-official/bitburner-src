@@ -103,12 +103,10 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     if (boardState.previousPlayer === GoColor.white) {
       passTurn(boardState, GoColor.black);
       rerender();
-    }
-    else if (boardState.previousPlayer === GoColor.black && boardState.ai === GoOpponent.none) {
+    } else if (boardState.previousPlayer === GoColor.black && boardState.ai === GoOpponent.none) {
       passTurn(boardState, GoColor.white);
       rerender();
-    }
-    else if (boardState.previousPlayer === null) {
+    } else if (boardState.previousPlayer === null) {
       setScoreOpen(true);
       return;
     }
