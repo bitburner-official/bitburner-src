@@ -3,7 +3,7 @@ import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
 import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
-import { objectAssert } from "../utils/TypeAssertion";
+import { assertObject } from "../utils/TypeAssertion";
 import { Result } from "../types";
 import {
   assertAndSanitizeEditorTheme,
@@ -186,7 +186,7 @@ export const Settings = {
 
   load(saveString: string) {
     const save: unknown = JSON.parse(saveString);
-    objectAssert(save);
+    assertObject(save);
     save.overview && Object.assign(Settings.overview, save.overview);
     try {
       // Sanitize theme data. Invalid theme data may crash the game or make it stuck in the loading page.

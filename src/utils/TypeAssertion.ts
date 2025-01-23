@@ -46,7 +46,7 @@ export function isObject(v: unknown): v is Record<string, unknown> {
 }
 
 /** For non-objects, and for array/null, throws an error with the friendlyType of v. */
-export function objectAssert(v: unknown): asserts v is Record<string, unknown> {
+export function assertObject(v: unknown): asserts v is Record<string, unknown> {
   const type = getFriendlyType(v);
   if (type !== "object") {
     console.error("The value is not an object. Value:", v);
@@ -58,7 +58,7 @@ export function objectAssert(v: unknown): asserts v is Record<string, unknown> {
 }
 
 /** For non-string, throws an error with the friendlyType of v. */
-export function stringAssert(v: unknown): asserts v is string {
+export function assertString(v: unknown): asserts v is string {
   const type = getFriendlyType(v);
   if (type !== "string") {
     console.error("The value is not a string. Value:", v);
@@ -67,7 +67,7 @@ export function stringAssert(v: unknown): asserts v is string {
 }
 
 /** For non-array, throws an error with the friendlyType of v. */
-export function arrayAssert(v: unknown): asserts v is unknown[] {
+export function assertArray(v: unknown): asserts v is unknown[] {
   if (!Array.isArray(v)) {
     console.error("The value is not an array. Value:", v);
     const type = getFriendlyType(v);
@@ -101,10 +101,10 @@ export const debugType = (v: unknown): string => {
  * This function should be used to assert strings provided by the player. It uses a specialized utility function that
  * provides a stack trace pointing to the player's invalid caller.
  */
-export function assertString(ctx: NetscriptContext, argName: string, v: unknown): asserts v is string {
+export function assertStringWithNSContext(ctx: NetscriptContext, argName: string, v: unknown): asserts v is string {
   if (typeof v !== "string") throw errorMessage(ctx, `${argName} expected to be a string. ${debugType(v)}`, "TYPE");
 }
 
-export function assertFunction(ctx: NetscriptContext, argName: string, v: unknown): asserts v is () => void {
+export function assertFunctionWithNSContext(ctx: NetscriptContext, argName: string, v: unknown): asserts v is () => void {
   if (typeof v !== "function") throw errorMessage(ctx, `${argName} expected to be a function ${debugType(v)}`, "TYPE");
 }

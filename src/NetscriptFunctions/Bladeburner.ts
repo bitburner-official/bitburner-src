@@ -15,7 +15,7 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { Skills } from "../Bladeburner/data/Skills";
-import { assertString } from "../utils/TypeAssertion";
+import { assertStringWithNSContext } from "../utils/TypeAssertion";
 import { BlackOperations, blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { checkSleeveAPIAccess, checkSleeveNumber } from "../NetscriptFunctions/Sleeve";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
@@ -37,8 +37,8 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   };
   function getAction(ctx: NetscriptContext, type: unknown, name: unknown): Action {
     const bladeburner = Player.bladeburner;
-    assertString(ctx, "type", type);
-    assertString(ctx, "name", name);
+    assertStringWithNSContext(ctx, "type", type);
+    assertStringWithNSContext(ctx, "name", name);
     if (bladeburner === null) throw new Error("Must have joined bladeburner");
     const action = bladeburner.getActionFromTypeAndName(type, name);
     if (!action) throw helpers.errorMessage(ctx, `Invalid action type='${type}', name='${name}'`);

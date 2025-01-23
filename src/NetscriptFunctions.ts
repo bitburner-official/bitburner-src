@@ -94,7 +94,7 @@ import { InternalAPI, setRemovedFunctions, NSProxy } from "./Netscript/APIWrappe
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
-import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/TypeAssertion";
+import { assert, assertArray, assertString, assertObject } from "./utils/TypeAssertion";
 import { escapeRegExp } from "lodash";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
@@ -107,7 +107,7 @@ import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
 import { ServerConstants } from "./Server/data/Constants";
-import { assertFunction } from "./utils/TypeAssertion";
+import { assertFunctionWithNSContext } from "./utils/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
@@ -1694,11 +1694,11 @@ export const ns: InternalAPI<NSFull> = {
     const options: { type?: string; choices?: string[] } = {};
     _options ??= options;
     const txt = helpers.string(ctx, "txt", _txt);
-    assert(_options, objectAssert, (type) =>
+    assert(_options, assertObject, (type) =>
       helpers.errorMessage(ctx, `Invalid type for options: ${type}. Should be object.`, "TYPE"),
     );
     if (_options.type !== undefined) {
-      assert(_options.type, stringAssert, (type) =>
+      assert(_options.type, assertString, (type) =>
         helpers.errorMessage(ctx, `Invalid type for options.type: ${type}. Should be string.`, "TYPE"),
       );
       options.type = _options.type;
@@ -1710,7 +1710,7 @@ export const ns: InternalAPI<NSFull> = {
         );
       }
       if (options.type === "select") {
-        assert(_options.choices, arrayAssert, (type) =>
+        assert(_options.choices, assertArray, (type) =>
           helpers.errorMessage(
             ctx,
             `Invalid type for options.choices: ${type}. If options.type is "select", options.choices must be an array.`,
@@ -1811,7 +1811,7 @@ export const ns: InternalAPI<NSFull> = {
   }),
   atExit: (ctx) => (callback, _id) => {
     const id = _id ? helpers.string(ctx, "id", _id) : "default";
-    assertFunction(ctx, "callback", callback);
+    assertFunctionWithNSContext(ctx, "callback", callback);
     ctx.workerScript.atExit.set(id, callback);
   },
   mv: (ctx) => (_host, _source, _destination) => {
