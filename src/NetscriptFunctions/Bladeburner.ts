@@ -15,7 +15,7 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { Skills } from "../Bladeburner/data/Skills";
-import { assertString } from "../Netscript/TypeAssertion";
+import { assertString } from "../utils/TypeAssertion";
 import { BlackOperations, blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { checkSleeveAPIAccess, checkSleeveNumber } from "../NetscriptFunctions/Sleeve";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";

@@ -3,7 +3,7 @@ import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
 import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
-import { objectAssert } from "../utils/helpers/typeAssertion";
+import { objectAssert } from "../utils/TypeAssertion";
 import { Result } from "../types";
 import {
   assertAndSanitizeEditorTheme,

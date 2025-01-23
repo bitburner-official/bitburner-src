@@ -10,7 +10,7 @@ import { scaleWorkStats } from "../../../Work/WorkStats";
 import { getKeyList } from "../../../utils/helpers/getKeyList";
 import { loadActionIdentifier } from "../../../Bladeburner/utils/loadActionIdentifier";
 import { invalidWork } from "../../../Work/InvalidWork";
-import { objectAssert } from "../../../utils/helpers/typeAssertion";
+import { objectAssert } from "../../../utils/TypeAssertion";
 
 interface SleeveBladeburnerWorkParams {
   actionId: ActionIdentifier & { type: BladeburnerActionType.General | BladeburnerActionType.Contract };

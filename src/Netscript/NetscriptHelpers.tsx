@@ -56,7 +56,7 @@ import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
 import { basicErrorMessage, errorMessage, log } from "./ErrorMessages";
-import { assertString, debugType } from "./TypeAssertion";
+import { assertString, debugType } from "../utils/TypeAssertion";
 import {
   canAccessBitNodeFeature,
   getDefaultBitNodeOptions,

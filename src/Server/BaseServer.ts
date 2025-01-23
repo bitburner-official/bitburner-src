@@ -24,7 +24,7 @@ import lodash from "lodash";
 import { Settings } from "../Settings/Settings";
 
 import type { ScriptKey } from "../utils/helpers/scriptKey";
-import { objectAssert } from "../utils/helpers/typeAssertion";
+import { objectAssert } from "../utils/TypeAssertion";
 import { clampNumber } from "../utils/helpers/clampNumber";
 
 interface IConstructorParams {

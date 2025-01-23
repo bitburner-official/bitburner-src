@@ -26,7 +26,7 @@ import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString
 import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
 import { downloadContentAsFile } from "./utils/FileUtils";
 import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
-import { isObject, objectAssert } from "./utils/helpers/typeAssertion";
+import { isObject, objectAssert } from "./utils/TypeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
 import { Reviver } from "./utils/GenericReviver";
 

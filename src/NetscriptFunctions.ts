@@ -94,7 +94,7 @@ import { InternalAPI, setRemovedFunctions, NSProxy } from "./Netscript/APIWrappe
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
-import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
+import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/TypeAssertion";
 import { escapeRegExp } from "lodash";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
@@ -107,7 +107,7 @@ import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
 import { ServerConstants } from "./Server/data/Constants";
-import { assertFunction } from "./Netscript/TypeAssertion";
+import { assertFunction } from "./utils/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";

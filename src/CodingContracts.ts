@@ -4,7 +4,7 @@ import { codingContractTypesMetadata } from "./data/codingcontracttypes";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
 import { CodingContractEvent } from "./ui/React/CodingContractModal";
 import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
-import { objectAssert } from "./utils/helpers/typeAssertion";
+import { objectAssert } from "./utils/TypeAssertion";
 
 /* Contract Types */
 export const CodingContractTypes = Object.fromEntries(codingContractTypesMetadata.map((x) => [x.name, x]));

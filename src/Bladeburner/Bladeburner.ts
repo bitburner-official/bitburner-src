@@ -51,7 +51,7 @@ import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
 import { autoCompleteTypeShorthand } from "./utils/terminalShorthands";
 import { resolveTeamCasualties, type OperationTeam } from "./Actions/TeamCasualties";
 import { shuffleArray } from "../Infiltration/ui/BribeGame";
-import { objectAssert } from "../utils/helpers/typeAssertion";
+import { objectAssert } from "../utils/TypeAssertion";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { loadActionIdentifier } from "./utils/loadActionIdentifier";
 

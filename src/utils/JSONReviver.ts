@@ -1,7 +1,7 @@
 /* Generic Reviver, toJSON, and fromJSON functions used for saving and loading objects */
 import { ObjectValidator } from "./Validator";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
-import { objectAssert } from "./helpers/typeAssertion";
+import { objectAssert } from "./TypeAssertion";
 
 type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
   fromJSON: (value: IReviverValue) => unknown;

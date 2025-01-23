@@ -13,7 +13,7 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
-import { objectAssert } from "../utils/helpers/typeAssertion";
+import { objectAssert } from "../utils/TypeAssertion";
 
 /**
  * Map of all Servers that exist in the game

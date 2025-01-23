@@ -7,7 +7,7 @@ import { Sleeve } from "../Sleeve";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
 import { Locations } from "../../../Locations/Locations";
 import { isMember } from "../../../utils/EnumHelper";
-import { objectAssert } from "../../../utils/helpers/typeAssertion";
+import { objectAssert } from "../../../utils/TypeAssertion";
 
 export const isSleeveClassWork = (w: SleeveWorkClass | null): w is SleeveClassWork =>
   w !== null && w.type === SleeveWorkType.CLASS;

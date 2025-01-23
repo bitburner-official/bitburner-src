@@ -1,4 +1,4 @@
-import { arrayAssert } from "../utils/helpers/typeAssertion";
+import { arrayAssert } from "../utils/TypeAssertion";
 import type { IReviverValue } from "../utils/JSONReviver";
 // Versions of js builtin classes that can be converted to and from JSON for use in save files
 
