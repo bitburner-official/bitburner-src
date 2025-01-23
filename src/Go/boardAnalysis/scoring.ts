@@ -120,7 +120,8 @@ function getColoredPieceCount(boardState: BoardState, color: GoColor) {
  */
 function getTerritoryScores(board: Board) {
   const emptyTerritoryChains = getAllChains(board).filter(
-    (chain) => chain?.[0]?.color === GoColor.empty && chain.length <= board.length * 2);
+    (chain) => chain?.[0]?.color === GoColor.empty && chain.length <= board.length * 2,
+  );
 
   return emptyTerritoryChains.reduce(
     (scores, currentChain) => {
