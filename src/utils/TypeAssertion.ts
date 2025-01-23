@@ -105,6 +105,10 @@ export function assertStringWithNSContext(ctx: NetscriptContext, argName: string
   if (typeof v !== "string") throw errorMessage(ctx, `${argName} expected to be a string. ${debugType(v)}`, "TYPE");
 }
 
-export function assertFunctionWithNSContext(ctx: NetscriptContext, argName: string, v: unknown): asserts v is () => void {
+export function assertFunctionWithNSContext(
+  ctx: NetscriptContext,
+  argName: string,
+  v: unknown,
+): asserts v is () => void {
   if (typeof v !== "function") throw errorMessage(ctx, `${argName} expected to be a function ${debugType(v)}`, "TYPE");
 }
