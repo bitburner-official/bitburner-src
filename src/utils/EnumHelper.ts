@@ -2,7 +2,7 @@ import type { Member } from "../types";
 import type { NetscriptContext } from "../Netscript/APIWrapper";
 
 import * as allEnums from "../Enums";
-import { assertStringWithNSContext } from "../utils/TypeAssertion";
+import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
 import { errorMessage } from "../Netscript/ErrorMessages";
 import { getRandomIntInclusive } from "./helpers/getRandomIntInclusive";
 import { getRecordValues } from "../Types/Record";
