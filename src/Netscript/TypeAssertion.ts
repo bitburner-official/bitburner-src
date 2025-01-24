@@ -1,5 +1,5 @@
-import type { NetscriptContext } from "../Netscript/APIWrapper";
-import { errorMessage } from "../Netscript/ErrorMessages";
+import type { NetscriptContext } from "./APIWrapper";
+import { errorMessage } from "./ErrorMessages";
 
 const userFriendlyString = (v: unknown): string => {
   const clip = (s: string): string => {
