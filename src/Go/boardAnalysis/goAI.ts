@@ -38,10 +38,10 @@ export function makeAIMove(
   // If AI is already taking their turn, return the existing turn.
   if (isAiThinking) {
     if (scriptPlayingAsWhite && currentTurnResolverAsWhite) {
-      return Go.nextTurnForWhite;
+      return Go.nextTurn[GoColor.white];
     }
     if (!scriptPlayingAsWhite && currentTurnResolver) {
-      return Go.nextTurn;
+      return Go.nextTurn[GoColor.black];
     }
   }
   isAiThinking = true;
@@ -51,10 +51,10 @@ export function makeAIMove(
   if (boardState.ai === GoOpponent.none) {
     updateTurnPromises();
   }
-  // If an AI is in use, find the faction's move in response, and resolve the Go.nextTurn promise once it is found and played.
+  // If an AI is in use, find the faction's move in response, and resolve the Go.nextTurn[GoColor.black] promise once it is found and played.
   else {
     const currentMoveCount = Go.currentGame.previousBoards.length;
-    Go.nextTurn = getMove(boardState, GoColor.white, Go.currentGame.ai, useOfflineCycles).then(
+    Go.nextTurn[GoColor.black] = getMove(boardState, GoColor.white, Go.currentGame.ai, useOfflineCycles).then(
       async (play): Promise<Play> => {
         if (boardState !== Go.currentGame) {
           //Stale game
@@ -97,15 +97,15 @@ export function makeAIMove(
   // Once the AI moves (or the player/script playing as white on a "No AI" board),
   // clear the isAiThinking semaphore and update the board UI.
 
-  const nextMovePromise = scriptPlayingAsWhite ? "nextTurnForWhite" : "nextTurn";
-  Go[nextMovePromise] = Go[nextMovePromise].finally(() => {
+  const playerColor = scriptPlayingAsWhite ? GoColor.white : GoColor.black;
+  Go.nextTurn[playerColor] = Go.nextTurn[playerColor].finally(() => {
     if (!encounteredError) {
       isAiThinking = false;
     }
     GoEvents.emit();
   });
 
-  return Go[nextMovePromise];
+  return Go.nextTurn[playerColor];
 }
 
 /**
@@ -115,8 +115,8 @@ export function updateTurnPromises() {
   if (Go.currentGame.previousPlayer === null) {
     resolveCurrentTurnForWhite();
     resolveCurrentTurn();
-    Go.nextTurn = Promise.resolve({ type: GoPlayType.gameOver, x: null, y: null });
-    Go.nextTurnForWhite = getNonAIMovePromise(true);
+    Go.nextTurn[GoColor.black] = Promise.resolve({ type: GoPlayType.gameOver, x: null, y: null });
+    Go.nextTurn[GoColor.white] = getNonAIMovePromise(true);
     return;
   }
 
@@ -129,14 +129,14 @@ export function updateTurnPromises() {
 
   if (Go.currentGame.previousPlayer !== GoColor.black) {
     resolveCurrentTurn();
-    Go.nextTurn = previousTurnPromise;
-    Go.nextTurnForWhite = getNonAIMovePromise(true);
+    Go.nextTurn[GoColor.black] = previousTurnPromise;
+    Go.nextTurn[GoColor.white] = getNonAIMovePromise(true);
   }
 
   if (Go.currentGame.previousPlayer !== GoColor.white) {
     resolveCurrentTurnForWhite();
-    Go.nextTurnForWhite = previousTurnPromise;
-    Go.nextTurn = getNonAIMovePromise();
+    Go.nextTurn[GoColor.white] = previousTurnPromise;
+    Go.nextTurn[GoColor.black] = getNonAIMovePromise();
   }
 }
 
@@ -164,7 +164,7 @@ function getNonAIMovePromise(playingAsWhite = false): Promise<Play> {
  * This is used for players manually playing against their script on the no-ai board.
  */
 export function resolveCurrentTurn() {
-  // Call the resolve function on Go.nextTurn, if it exists
+  // Call the resolve function on Go.nextTurn[GoColor.black], if it exists
   currentTurnResolver?.();
   currentTurnResolver = null;
 }
@@ -174,7 +174,7 @@ export function resolveCurrentTurn() {
  * This is used for players manually playing against their script on the no-ai board.
  */
 export function resolveCurrentTurnForWhite() {
-  // Call the resolve function on Go.nextTurnForWhite, if it exists
+  // Call the resolve function on Go.nextTurn[GoColor.white], if it exists
   currentTurnResolverAsWhite?.();
   currentTurnResolverAsWhite = null;
 }

@@ -1,7 +1,7 @@
 import type { BoardState, OpponentStats, SimpleBoard } from "./Types";
 import type { PartialRecord } from "../Types/Record";
 
-import { cloneDeep, Truthy } from "lodash";
+import { Truthy } from "lodash";
 import { GoColor, GoOpponent, GoPlayType } from "@enums";
 import { Go } from "./Go";
 import { boardStateFromSimpleBoard, getPreviousMove, simpleBoardFromBoard } from "./boardAnalysis/boardAnalysis";
@@ -93,13 +93,13 @@ export function loadGo(data: unknown): boolean {
   // If it's not the AI's turn (and we're not in gameover status), initialize nextTurn promise based on the previous move/pass
   else if (currentGame.previousPlayer) {
     const previousMove = getPreviousMove();
-    Go.nextTurn = Promise.resolve(
+    Go.nextTurn[GoColor.black] = Promise.resolve(
       previousMove
         ? { type: GoPlayType.move, x: previousMove[0], y: previousMove[1] }
         : { type: GoPlayType.pass, x: null, y: null },
     );
-    Go.nextTurnForWhite = cloneDeep(Go.nextTurn);
     if (currentGame.ai === GoOpponent.none) {
+      Go.nextTurn[GoColor.white] = Go.nextTurn[GoColor.black];
       updateTurnPromises();
     }
   }

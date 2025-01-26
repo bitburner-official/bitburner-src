@@ -162,11 +162,11 @@ export async function makePlayerMove(
   Returns the promise that provides the opponent's move, once it finishes thinking.
  */
 export async function getOpponentNextMove(logOpponentMove = true, logger: (s: string) => void, playAsWhite = false) {
-  const nextMovePromise = playAsWhite ? "nextTurnForWhite" : "nextTurn";
+  const playerColor = playAsWhite ? GoColor.white : GoColor.black;
   // Only asynchronously log the opponent move if not disabled by the player
   if (logOpponentMove) {
     logger("Waiting for opponent to make their move...");
-    return Go[nextMovePromise].then((move) => {
+    return Go.nextTurn[playerColor].then((move) => {
       if (move.type === GoPlayType.gameOver) {
         logEndGame(logger);
       } else if (move.type === GoPlayType.pass) {
@@ -178,7 +178,7 @@ export async function getOpponentNextMove(logOpponentMove = true, logger: (s: st
     });
   }
 
-  return Go[nextMovePromise];
+  return Go.nextTurn[playerColor];
 }
 
 /**
@@ -470,7 +470,7 @@ export async function determineCheatSuccess(
   else if (priorCheatCount && (ejectRngOverride ?? rng.random()) < 0.1 && state.ai !== GoOpponent.none) {
     logger(`Cheat failed! You have been ejected from the subnet.`);
     endGoGame(state);
-    return Go.nextTurn;
+    return Go.nextTurn[GoColor.black];
   }
   // If the cheat fails, your turn is skipped
   else {
@@ -529,7 +529,7 @@ export function cheatRemoveRouter(
   const point = Go.currentGame.board[x][y];
   if (!point) {
     logger(`Cheat failed. The point ${x},${y} is already offline.`);
-    return Go.nextTurn;
+    return Go.nextTurn[GoColor.black];
   }
   return determineCheatSuccess(
     logger,
@@ -561,7 +561,7 @@ export function cheatPlayTwoMoves(
 
   if (!point1 || !point2) {
     logger(`Cheat failed. One of the points ${x1},${y1} or ${x2},${y2} is already offline.`);
-    return Go.nextTurn;
+    return Go.nextTurn[GoColor.black];
   }
   const playerColor = playAsWhite ? GoColor.white : GoColor.black;
 
