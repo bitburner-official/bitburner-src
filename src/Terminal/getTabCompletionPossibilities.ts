@@ -37,7 +37,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
   const requiredMatch = currentText.toLowerCase();
 
   // If a relative directory is included in the path, this will store what the absolute path needs to start with to be valid
-  let pathingRequiredMatch = currentText.toLowerCase();
+  let pathingRequiredMatch = currentText;
 
   /** The directory portion of the current input */
   let relativeDir = "";
@@ -49,9 +49,9 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     // No valid terminal inputs contain a / that does not indicate a path
     if (path === null) return [];
     baseDir = path;
-    pathingRequiredMatch = currentText.replace(/^.*\//, path).toLowerCase();
+    pathingRequiredMatch = currentText.replace(/^.*\//, path);
   } else if (baseDir !== root) {
-    pathingRequiredMatch = (baseDir + currentText).toLowerCase();
+    pathingRequiredMatch = (baseDir + currentText);
   }
 
   const possibilities: string[] = [];
