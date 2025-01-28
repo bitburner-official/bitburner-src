@@ -37,6 +37,8 @@ import { CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/Netscri
 import { handleUnknownError } from "./utils/ErrorHandler";
 import { isLegacyScript, legacyScriptExtension, resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
 import { root } from "./Paths/Directory";
+import { getErrorMessageWithStackAndCause } from "./utils/ErrorHelper";
+import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 
 export const NetscriptPorts = new Map<PortNumber, Port>();
 
@@ -278,8 +280,11 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
 export function startWorkerScript(runningScript: RunningScript, server: BaseServer, parent?: WorkerScript): number {
   if (server.hostname !== runningScript.server) {
     // Temporarily adding a check here to see if this ever triggers
-    console.error(
-      `Tried to launch a worker script on a different server ${server.hostname} than the runningScript's server ${runningScript.server}`,
+    exceptionAlert(
+      new Error(
+        `Tried to launch a worker script on a different server ${server.hostname} than the runningScript's server ${runningScript.server}`,
+      ),
+      true,
     );
     return 0;
   }
@@ -345,10 +350,14 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
       killWorkerScript(workerScript);
       workerScript.log("", () => "Script finished running");
     })
-    .catch(function (e) {
-      handleUnknownError(e, workerScript);
+    .catch(function (error) {
+      handleUnknownError(error, workerScript);
       killWorkerScript(workerScript);
-      workerScript.log("", () => (e instanceof ScriptDeath ? "Script killed." : "Script crashed due to an error."));
+      workerScript.log("", () =>
+        error instanceof ScriptDeath
+          ? "main() terminated."
+          : getErrorMessageWithStackAndCause(error, "Script crashed due to an error: "),
+      );
     })
     .finally(() => {
       // The earnings are transferred to the parent if it still exists.

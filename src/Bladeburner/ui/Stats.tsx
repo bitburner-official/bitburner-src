@@ -13,6 +13,8 @@ import { Factions } from "../../Faction/Factions";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { TravelModal } from "./TravelModal";
+import WarningIcon from "@mui/icons-material/Warning";
+import { Settings } from "../../Settings/Settings";
 
 interface StatsProps {
   bladeburner: Bladeburner;
@@ -27,6 +29,35 @@ export function Stats({ bladeburner }: StatsProps): React.ReactElement {
   function openFaction(): void {
     const success = bladeburner.joinFaction();
     if (success) Router.toPage(Page.Faction, { faction: Factions[FactionName.Bladeburners] });
+  }
+
+  let populationTextColor = Settings.theme.primary;
+  let populationWarning: string | null = null;
+  /**
+   * The initial population is randomized between 1e9 and 1.5e9. If it drops below 1e9, the success chance is reduced.
+   * We use 2 thresholds:
+   * - 8e8: The success chance is reduced by ~15%. On average, random events usually do not reduce the population to
+   * this low number.
+   * - 1e8: The success chance is reduced by ~80%. If the population is reduced to this number, it's very likely that
+   * the player is performing actions that decrease the population by percentage.
+   */
+  if (bladeburner.getCurrentCity().pop <= 1e8) {
+    populationTextColor = Settings.theme.error;
+    populationWarning = "extremely low";
+  } else if (bladeburner.getCurrentCity().pop < 9e8) {
+    populationTextColor = Settings.theme.warning;
+    populationWarning = "low";
+  }
+
+  let chaosTextColor = Settings.theme.primary;
+  let chaosWarning: string | null = null;
+  // When chaos is 1e4, the success chance is reduced by ~99%.
+  if (bladeburner.getCurrentCity().chaos >= 1e4) {
+    chaosTextColor = Settings.theme.error;
+    chaosWarning = "extremely high";
+  } else if (bladeburner.getCurrentCity().chaos >= BladeburnerConstants.ChaosThreshold) {
+    chaosTextColor = Settings.theme.warning;
+    chaosWarning = "high";
   }
 
   return (
@@ -96,13 +127,30 @@ export function Stats({ bladeburner }: StatsProps): React.ReactElement {
         <Box display="flex">
           <Tooltip
             title={
-              <Typography>
-                This is your Bladeburner division's estimate of how many Synthoids exist in your current city. An
-                accurate population count increases success rate estimates.
+              <Typography component="div">
+                <Typography>
+                  This is your Bladeburner division's estimate of how many Synthoids exist in your current city. An
+                  accurate population estimate increases success rate estimates.
+                </Typography>
+                <br />
+                <Typography>
+                  You should be careful with actions that decrease Synthoid population by percentage. Those actions can
+                  kill a large number of Synthoids in a short amount of time. Low population count decreases the success
+                  chance of most actions. If the population count is too low, you will need to move to another city.
+                </Typography>
+                {populationWarning && (
+                  <>
+                    <br />
+                    The intelligence agency notifies us that Synthoid population is {populationWarning}.
+                  </>
+                )}
               </Typography>
             }
           >
-            <Typography>Est. Synthoid Population: {formatPopulation(bladeburner.getCurrentCity().popEst)}</Typography>
+            <Typography color={populationTextColor} display="flex">
+              Est. Synthoid Population: {formatPopulation(bladeburner.getCurrentCity().popEst)}
+              {populationWarning && <WarningIcon sx={{ marginLeft: "10px" }} />}
+            </Typography>
           </Tooltip>
         </Box>
         <Box display="flex">
@@ -120,13 +168,24 @@ export function Stats({ bladeburner }: StatsProps): React.ReactElement {
         <Box display="flex">
           <Tooltip
             title={
-              <Typography>
-                The city's chaos level due to tensions and conflicts between humans and Synthoids. Having too high of a
-                chaos level can make contracts and operations harder.
+              <Typography component="div">
+                <Typography>
+                  Tensions and conflicts between humans and Synthoids increase the city's chaos level. High chaos level
+                  makes contracts and operations harder.
+                </Typography>
+                {chaosWarning && (
+                  <>
+                    <br />
+                    Chaos level is {chaosWarning}.
+                  </>
+                )}
               </Typography>
             }
           >
-            <Typography>City Chaos: {formatBigNumber(bladeburner.getCurrentCity().chaos)}</Typography>
+            <Typography color={chaosTextColor} display="flex">
+              City Chaos: {formatBigNumber(bladeburner.getCurrentCity().chaos)}
+              {chaosWarning && <WarningIcon sx={{ marginLeft: "10px" }} />}
+            </Typography>
           </Tooltip>
         </Box>
         <br />

@@ -51,14 +51,14 @@ interface BitNodeMultipliers
 |  [HomeComputerRamCost](./bitburner.bitnodemultipliers.homecomputerramcost.md) |  | number | Influences how much money it costs to upgrade your home computer's RAM |
 |  [InfiltrationMoney](./bitburner.bitnodemultipliers.infiltrationmoney.md) |  | number | Influences how much money is gained when the player infiltrates a company. |
 |  [InfiltrationRep](./bitburner.bitnodemultipliers.infiltrationrep.md) |  | number | Influences how much rep the player can gain from factions when selling stolen documents and secrets |
-|  [ManualHackMoney](./bitburner.bitnodemultipliers.manualhackmoney.md) |  | number | Influences how much money can be stolen from a server when the player performs a hack against it through the Terminal. |
+|  [ManualHackMoney](./bitburner.bitnodemultipliers.manualhackmoney.md) |  | number | Influences how much money the player actually gains when they hack a server via the terminal. This is different from ScriptHackMoney. When the player hack a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount. |
 |  [PurchasedServerCost](./bitburner.bitnodemultipliers.purchasedservercost.md) |  | number | Influence how much it costs to purchase a server |
 |  [PurchasedServerLimit](./bitburner.bitnodemultipliers.purchasedserverlimit.md) |  | number | Influences the maximum number of purchased servers you can have |
 |  [PurchasedServerMaxRam](./bitburner.bitnodemultipliers.purchasedservermaxram.md) |  | number | Influences the maximum allowed RAM for a purchased server |
 |  [PurchasedServerSoftcap](./bitburner.bitnodemultipliers.purchasedserversoftcap.md) |  | number | Influence how much it costs to purchase a server |
 |  [RepToDonateToFaction](./bitburner.bitnodemultipliers.reptodonatetofaction.md) |  | number | Influences the minimum favor the player must have with a faction before they can donate to gain rep. |
-|  [ScriptHackMoney](./bitburner.bitnodemultipliers.scripthackmoney.md) |  | number | Influences how much money can be stolen from a server when a script performs a hack against it. |
-|  [ScriptHackMoneyGain](./bitburner.bitnodemultipliers.scripthackmoneygain.md) |  | number | The amount of money actually gained when a script hacks a server. This is different than the above because you can reduce the amount of money but not gain that same amount. |
+|  [ScriptHackMoney](./bitburner.bitnodemultipliers.scripthackmoney.md) |  | number | Influences how much money is stolen from a server when the player performs a hack against it. |
+|  [ScriptHackMoneyGain](./bitburner.bitnodemultipliers.scripthackmoneygain.md) |  | number | Influences how much money the player actually gains when a script hacks a server. This is different from ScriptHackMoney. When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount. |
 |  [ServerGrowthRate](./bitburner.bitnodemultipliers.servergrowthrate.md) |  | number | Influences the growth percentage per cycle against a server. |
 |  [ServerMaxMoney](./bitburner.bitnodemultipliers.servermaxmoney.md) |  | number | Influences the maximum money that a server can grow to. |
 |  [ServerStartingMoney](./bitburner.bitnodemultipliers.serverstartingmoney.md) |  | number | Influences the initial money that a server starts with. |

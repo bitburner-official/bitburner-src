@@ -64,7 +64,7 @@ Destroying this BitNode will give you Source-File 1, or if you already have this
 
 Organized crime groups quickly filled the void of power left behind from the collapse of Western government in the 2050s. As society and civilization broke down, people quickly succumbed to the innate human impulse of evil and savagery. The organized crime factions quickly rose to the top of the modern world.
 
-Certain factions (Slum Snakes, Tetrads, The Syndicate, The Dark Army, Speakers for the Dead, NiteSec, and The Black Hand) give the player the ability to form and manage their own gang, which can earn the player money and reputation with the corresponding faction. The gang faction offers more augmentations than other factions, and in BitNode-2, it offers a way to destroy the BitNode.
+Certain factions (Slum Snakes, Tetrads, The Syndicate, The Dark Army, Speakers for the Dead, NiteSec, and The Black Hand) give the player the ability to form and manage their own gang, which can earn the player money and reputation with the corresponding faction. The gang faction offers more augmentations than other factions, and in BitNode-2, it offers The Red Pill.
 
 Destroying this BitNode will give you Source-File 2, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to form gangs in other BitNodes once your karma decreases to a certain value. It also increases your crime success rate, crime money, and charisma multipliers by:
 

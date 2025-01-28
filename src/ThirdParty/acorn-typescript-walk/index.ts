@@ -85,4 +85,25 @@ export function extendAcornWalkForTypeScriptNodes(base: any) {
   base.TSModuleDeclaration = (node: any, state: any, callback: any) => {
     callback(node.body, state);
   };
+  /**
+   * Override the behavior of acorn-walk. When parsing a function, the function body is expected. However, the function
+   * body may not exist in TypeScript code (e.g., abstract methods within an abstract class).
+   *
+   * The following code was copied from acorn-walk. There are 2 changes:
+   * - Use const instead of let in the loop.
+   * - Check node.body before using it.
+   *
+   * Ref: https://github.com/acornjs/acorn/blob/a707bfefd73515efd759b7638c30281d775cd043/acorn-walk/src/index.js#L262
+   */
+  base.Function = (node: any, st: any, c: any) => {
+    if (node.id) {
+      c(node.id, st, "Pattern");
+    }
+    for (const param of node.params) {
+      c(param, st, "Pattern");
+    }
+    if (node.body) {
+      c(node.body, st, node.expression ? "Expression" : "Statement");
+    }
+  };
 }

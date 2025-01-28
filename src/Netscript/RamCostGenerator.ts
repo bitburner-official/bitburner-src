@@ -333,6 +333,7 @@ const codingcontract = {
   attempt: RamCostConstants.CodingContractBase,
   getContractType: RamCostConstants.CodingContractBase / 2,
   getData: RamCostConstants.CodingContractBase / 2,
+  getContract: RamCostConstants.CodingContractBase * (3 / 2),
   getDescription: RamCostConstants.CodingContractBase / 2,
   getNumTriesRemaining: RamCostConstants.CodingContractBase / 5,
   createDummyContract: RamCostConstants.CodingContractBase / 5,
@@ -400,6 +401,7 @@ const grafting = {
 
 const corporation = {
   hasCorporation: 0,
+  canCreateCorporation: 0,
   createCorporation: RamCostConstants.CorporationAction,
   hasUnlock: RamCostConstants.CorporationInfo,
   getUnlockCost: RamCostConstants.CorporationInfo,
@@ -598,9 +600,11 @@ export const RamCosts: RamCostTree<NSFull> = {
   tail: 0,
   toast: 0,
   moveTail: 0,
+  renderTail: 0,
   resizeTail: 0,
   closeTail: 0,
   setTitle: 0,
+  setTailFontSize: 0,
   clearPort: 0,
   openDevMenu: 0,
   alert: 0,

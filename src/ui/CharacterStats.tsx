@@ -109,7 +109,9 @@ function CurrentBitNode(): React.ReactElement {
         <Typography variant="h5">
           BitNode {Player.bitNodeN}: {BitNodes[index].name} (Level {lvl})
         </Typography>
-        <Typography sx={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}>{BitNodes[index].info}</Typography>
+        <Typography component="div" sx={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}>
+          {BitNodes[index].info}
+        </Typography>
       </Paper>
     );
   }

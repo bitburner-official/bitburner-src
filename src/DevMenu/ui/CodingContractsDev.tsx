@@ -10,12 +10,15 @@ import Button from "@mui/material/Button";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { generateContract, generateRandomContract, generateRandomContractOnHome } from "../../CodingContractGenerator";
-import { CodingContractTypes } from "../../CodingContracts";
+import { isCodingContractName } from "../../data/codingcontracttypes";
+import { CodingContractName } from "@enums";
 
 export function CodingContractsDev(): React.ReactElement {
-  const [codingcontract, setCodingcontract] = useState("Find Largest Prime Factor");
+  const [codingcontract, setCodingcontract] = useState(CodingContractName.FindLargestPrimeFactor);
   function setCodingcontractDropdown(event: SelectChangeEvent): void {
-    setCodingcontract(event.target.value);
+    const value = event.target.value;
+    if (!isCodingContractName(value)) return;
+    setCodingcontract(value);
   }
 
   function specificContract(): void {
@@ -42,9 +45,9 @@ export function CodingContractsDev(): React.ReactElement {
             <tr>
               <td>
                 <Select onChange={setCodingcontractDropdown} value={codingcontract}>
-                  {Object.values(CodingContractTypes).map((cc) => (
-                    <MenuItem key={cc.name} value={cc.name}>
-                      {cc.name}
+                  {Object.values(CodingContractName).map((name) => (
+                    <MenuItem key={name} value={name}>
+                      {name}
                     </MenuItem>
                   ))}
                 </Select>

@@ -59,7 +59,8 @@ import file56 from "./doc/programming/game_frozen.md?raw";
 import file57 from "./doc/programming/go_algorithms.md?raw";
 import file58 from "./doc/programming/hackingalgorithms.md?raw";
 import file59 from "./doc/programming/learn.md?raw";
-import file60 from "./doc/programming/remote_api.md?raw";
+import file60 from "./doc/programming/react.md?raw";
+import file61 from "./doc/programming/remote_api.md?raw";
 
 import type { Document } from "./root.ts";
 
@@ -124,4 +125,5 @@ AllPages["programming/game_frozen.md"] = file56;
 AllPages["programming/go_algorithms.md"] = file57;
 AllPages["programming/hackingalgorithms.md"] = file58;
 AllPages["programming/learn.md"] = file59;
-AllPages["programming/remote_api.md"] = file60;
+AllPages["programming/react.md"] = file60;
+AllPages["programming/remote_api.md"] = file61;

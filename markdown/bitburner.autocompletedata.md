@@ -16,6 +16,7 @@ interface AutocompleteData
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
+|  [command](./bitburner.autocompletedata.command.md) |  | string | <p>The raw command string that you have typed until you press \[Tab\] to use the autocomplete feature.</p><p>For example, if you type <code>[Space]run test.js[Space][Space][Space][Press tab to use autocomplete]</code>, "command" will contain all space characters (1 space character before "run" and 3 space characters after ".js").</p> |
 |  [enums](./bitburner.autocompletedata.enums.md) |  | [NSEnums](./bitburner.nsenums.md) | Netscript Enums |
 |  [filename](./bitburner.autocompletedata.filename.md) |  | string | The filename of the script about to be run |
 |  [hostname](./bitburner.autocompletedata.hostname.md) |  | string | The hostname of the server the script would be running on |

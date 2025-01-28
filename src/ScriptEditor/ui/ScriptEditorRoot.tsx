@@ -3,9 +3,12 @@ import type { ContentFilePath } from "../../Paths/ContentFile";
 import React, { useEffect, useRef } from "react";
 import * as monaco from "monaco-editor";
 
-import { Editor } from "./Editor";
+import type * as acorn from "acorn";
+import * as walk from "acorn-walk";
+import { extendAcornWalkForTypeScriptNodes } from "../../ThirdParty/acorn-typescript-walk";
+import { extend as extendAcornWalkForJsxNodes } from "acorn-jsx-walk";
 
-type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
+import { Editor } from "./Editor";
 
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
@@ -30,10 +33,19 @@ import { NoOpenScripts } from "./NoOpenScripts";
 import { ScriptEditorContextProvider, useScriptEditorContext } from "./ScriptEditorContext";
 import { useVimEditor } from "./useVimEditor";
 import { useCallback } from "react";
-import { type AST, getFileType, parseAST } from "../../utils/ScriptTransformer";
+import { type AST, getFileType, getModuleScript, parseAST } from "../../utils/ScriptTransformer";
 import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
-import { hasScriptExtension, isLegacyScript } from "../../Paths/ScriptFilePath";
+import { hasScriptExtension, isLegacyScript, type ScriptFilePath } from "../../Paths/ScriptFilePath";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
+import type { BaseServer } from "../../Server/BaseServer";
+
+// Extend acorn-walk to support TypeScript nodes.
+extendAcornWalkForTypeScriptNodes(walk.base);
+
+// Extend acorn-walk to support JSX nodes.
+extendAcornWalkForJsxNodes(walk.base);
+
+type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
 interface IProps {
   // Map of filename -> code
@@ -61,6 +73,91 @@ function Root(props: IProps): React.ReactElement {
     const editorElement = elements[0];
     (editorElement as HTMLElement).style.outline = "none";
   }, [editorRef]);
+
+  /**
+   * The TypeScript compiler needs time to perform type-checking, so in some edge cases, the editor shows the 2792 error
+   * ("Cannot find module") even after we created the required models. For example, let's say "ts.ts" script imports
+   * "sum" function from "sum.js". The flow is like this:
+   * - The player opens "ts.ts". The editor opens with a model for "ts.ts".
+   * - TSC starts performing type-checking. This action is asynchronous.
+   * - makeModelsForImports is called to dynamically create models for imported modules. We create a model for "sum.js".
+   * After this model is created, it's synced to both language workers (check "onDidCreateModel" code in
+   * src\ScriptEditor\ScriptEditor.ts).
+   * - Before the model of "sum.js" is synced properly, TSC finishes typechecking. At this point, it cannot find
+   * relevant data of "sum.js", so it thinks that "sum.js" is not loaded.
+   * - The editor shows an error marker at the import code of "sum.js".
+   *
+   * The error markers will disappear when the player edits the code (the model is updated when the code is changed), so
+   * this is not a big problem. Nonetheless, we will still work around this problem to minimize the chance of showing
+   * wrong error markers. In order to do that, we check error markers after a short delay (2 seconds); if there is a
+   * false-positive error marker, we will reload the model. Reloading the model will force the type-checking to run
+   * again.
+   */
+  const reloadModelOfCurrentScript = debounce(() => {
+    if (!currentScript || !editorRef.current) {
+      return;
+    }
+    const markers = monaco.editor.getModelMarkers({
+      resource: currentScript.model.uri,
+    });
+    let needToReloadModel = false;
+    for (const marker of markers) {
+      // 2792: "Cannot find module" error
+      if (marker.code !== "2792") {
+        continue;
+      }
+      needToReloadModel = true;
+      break;
+    }
+    if (needToReloadModel) {
+      const currentModel = editorRef.current.getModel();
+      currentModel?.setValue(currentModel.getValue());
+    }
+  }, 2000);
+
+  function makeModelsForImports(ast: AST, server: BaseServer): void {
+    if (!currentScript) {
+      return;
+    }
+    // Skipping processing if the current file is not a script or it's a legacy script.
+    if (!hasScriptExtension(currentScript.path) || isLegacyScript(currentScript.path)) {
+      return;
+    }
+    // Dynamically load imported scripts.
+    walk.simple(
+      ast as acorn.Node, // Pretend that ast is an acorn node
+      {
+        ImportDeclaration: (node: acorn.ImportDeclaration) => {
+          if (typeof node.source.value !== "string" || !currentScript) {
+            return;
+          }
+          const importedScript = getModuleScript(
+            node.source.value,
+            currentScript.path as ScriptFilePath,
+            server.scripts,
+          );
+          /**
+           * We use openScripts to store all opened files when the player opens them in the editor. When they edit code,
+           * the changed code is in openScripts, regardless of whether they save it. When the player switches from the
+           * editor tab to another tab, all models are disposed, so the next time they open the editor, this function
+           * will load imported scripts. However, if the player did not save their code, loaded scripts would not
+           * contain changed code. Therefore, for each loaded script, we need to check if it is in openScripts. If it
+           * is, we use the script content in openScripts.
+           */
+          let code = importedScript.code;
+          for (const openScript of openScripts) {
+            if (openScript.hostname !== importedScript.server || openScript.path !== importedScript.filename) {
+              continue;
+            }
+            code = openScript.code;
+          }
+          makeModel(importedScript.server, importedScript.filename, code);
+        },
+      },
+    );
+    // Reload the model to force the type-checking to run again.
+    reloadModelOfCurrentScript();
+  }
 
   const { showRAMError, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
 
@@ -164,32 +261,6 @@ function Root(props: IProps): React.ReactElement {
     }
   }
 
-  function loadAllServerScripts(): void {
-    if (!currentScript) {
-      return;
-    }
-
-    const server = GetServer(currentScript.hostname);
-    if (!server) {
-      return;
-    }
-
-    server.scripts.forEach((s) => {
-      const uri = monaco.Uri.from({
-        scheme: "file",
-        path: `${s.server}/${s.filename}`,
-      });
-
-      const model = monaco.editor.getModel(uri);
-      if (model !== null && !model.isDisposed()) {
-        // there's already a model, don't overwrite
-        return;
-      }
-
-      makeModel(server.hostname, s.filename, s.code);
-    });
-  }
-
   const debouncedCodeParsing = debounce((newCode: string) => {
     let server;
     if (!currentScript || !hasScriptExtension(currentScript.path) || !(server = GetServer(currentScript.hostname))) {
@@ -199,6 +270,7 @@ function Root(props: IProps): React.ReactElement {
     let ast;
     try {
       ast = parseAST(newCode, getFileType(currentScript.path));
+      makeModelsForImports(ast, server);
     } catch (error) {
       showRAMError({
         errorCode: RamCalculationErrorCode.SyntaxError,
@@ -212,7 +284,6 @@ function Root(props: IProps): React.ReactElement {
   }, 300);
 
   const parseCode = (newCode: string) => {
-    loadAllServerScripts();
     startUpdatingRAM();
     debouncedCodeParsing(newCode);
   };
@@ -223,8 +294,8 @@ function Root(props: IProps): React.ReactElement {
     // the `useEffect()` for vim mode is called before editor is mounted.
     editorRef.current = editor;
 
+    // Open current script. This happens when the player switch tabs and open the editor tab.
     if (props.files.size === 0 && currentScript !== null) {
-      // Open currentscript
       currentScript.regenerateModel();
       editorRef.current.setModel(currentScript.model);
       editorRef.current.setPosition(currentScript.lastPosition);
@@ -233,9 +304,9 @@ function Root(props: IProps): React.ReactElement {
       editorRef.current.focus();
       return;
     }
-    const files = props.files;
 
-    for (const [filename, code] of files) {
+    // This happens when the player opens scripts by using nano/vim.
+    for (const [filename, code] of props.files) {
       // Check if file is already opened
       const openScript = openScripts.find((script) => script.path === filename && script.hostname === props.hostname);
       if (openScript) {

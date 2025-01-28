@@ -56,13 +56,14 @@ import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
 import { basicErrorMessage, errorMessage, log } from "./ErrorMessages";
-import { assertString, debugType } from "./TypeAssertion";
+import { assertStringWithNSContext, debugType } from "./TypeAssertion";
 import {
   canAccessBitNodeFeature,
   getDefaultBitNodeOptions,
   validateSourceFileOverrides,
 } from "../BitNode/BitNodeUtils";
 import { JSONMap } from "../Types/Jsonable";
+import { Settings } from "../Settings/Settings";
 
 export const helpers = {
   string,
@@ -123,7 +124,7 @@ export interface CompleteHGWOptions {
 /** Convert a provided value v for argument argName to string. If it wasn't originally a string or number, throw. */
 function string(ctx: NetscriptContext, argName: string, v: unknown): string {
   if (typeof v === "number") v = v + ""; // cast to string;
-  assertString(ctx, argName, v);
+  assertStringWithNSContext(ctx, argName, v);
   return v;
 }
 
@@ -641,7 +642,7 @@ function gangTask(ctx: NetscriptContext, t: unknown): GangMemberTask {
 }
 
 export function filePath(ctx: NetscriptContext, argName: string, filename: unknown): FilePath {
-  assertString(ctx, argName, filename);
+  assertStringWithNSContext(ctx, argName, filename);
   const path = resolveFilePath(filename, ctx.workerScript.name);
   if (path) return path;
   throw errorMessage(ctx, `Invalid ${argName}, was not a valid path: ${filename}`);
@@ -747,6 +748,7 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
             y: logProps.y,
             width: logProps.width,
             height: logProps.height,
+            fontSize: logProps.fontSize ?? Settings.styles.tailFontSize,
           },
     title: runningScript.title,
     threads: runningScript.threads,

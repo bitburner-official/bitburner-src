@@ -324,6 +324,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
           temporary: r.temporary,
         })),
       ).flat(),
+      command: terminalText,
     };
     let pos: string[] = [];
     let pos2: string[] = [];

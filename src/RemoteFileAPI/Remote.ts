@@ -3,6 +3,10 @@ import { RFARequestHandler } from "./MessageHandlers";
 import { SnackbarEvents } from "../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 
+function showErrorMessage(address: string, detail: string) {
+  SnackbarEvents.emit(`Error with websocket ${address}, details: ${detail}`, ToastVariant.ERROR, 5000);
+}
+
 export class Remote {
   connection?: WebSocket;
   static protocol = "ws";
@@ -20,11 +24,14 @@ export class Remote {
 
   public startConnection(): void {
     const address = Remote.protocol + "://" + this.ipaddr + ":" + this.port;
-    this.connection = new WebSocket(address);
-
-    this.connection.addEventListener("error", (e: Event) =>
-      SnackbarEvents.emit(`Error with websocket ${address}, details: ${JSON.stringify(e)}`, ToastVariant.ERROR, 5000),
-    );
+    try {
+      this.connection = new WebSocket(address);
+    } catch (error) {
+      console.error(error);
+      showErrorMessage(address, String(error));
+      return;
+    }
+    this.connection.addEventListener("error", (e: Event) => showErrorMessage(address, JSON.stringify(e)));
     this.connection.addEventListener("message", handleMessageEvent);
     this.connection.addEventListener("open", () =>
       SnackbarEvents.emit(
