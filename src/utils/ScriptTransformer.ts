@@ -123,12 +123,11 @@ export function getModuleScript(
 /**
  * This function must be synchronous to avoid race conditions. Check https://github.com/bitburner-official/bitburner-src/pull/1173#issuecomment-2026940461
  * for more information.
- *
- * @param code
- * @param fileType
- * @returns
  */
-export function transformScript(code: string, fileType: FileType): string | null | undefined {
+export function transformScript(
+  code: string,
+  fileType: FileType,
+): { scriptCode: string; sourceMap: string | undefined } {
   if (supportedFileTypes.every((v) => v !== fileType)) {
     throw new Error(`Invalid file type: ${fileType}`);
   }
@@ -149,11 +148,16 @@ export function transformScript(code: string, fileType: FileType): string | null
       parserConfig.jsx = true;
     }
   }
-  return transformSync(code, {
+  const result = transformSync(code, {
     jsc: {
       parser: parserConfig,
       // @ts-expect-error -- jsc supports "esnext" target, but the definition in wasm-web.d.ts is outdated. Ref: https://github.com/swc-project/swc/issues/9495
       target: "esnext",
     },
-  }).code;
+    sourceMaps: true,
+  });
+  return {
+    scriptCode: result.code,
+    sourceMap: result.map,
+  };
 }

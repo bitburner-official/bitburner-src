@@ -23,9 +23,10 @@ export function killWorkerScript(ws: WorkerScript): boolean {
   return true;
 }
 
-export function killWorkerScriptByPid(pid: number): boolean {
+export function killWorkerScriptByPid(pid: number, killer?: WorkerScript): boolean {
   const ws = workerScripts.get(pid);
   if (ws instanceof WorkerScript) {
+    ws.log("", () => (killer ? `Script killed by script ${killer.name} with PID ${killer.pid}` : "Script killed."));
     stopAndCleanUpWorkerScript(ws);
     return true;
   }

@@ -17,13 +17,6 @@ interface Skills {
   intelligence: number;
 }
 
-// TODO: provide same treatment to CodingContractData as for SleeveTask (actual types)
-/**
- * Coding contract data will differ depending on coding contract.
- * @public
- */
-type CodingContractData = any;
-
 /** @public */
 type ScriptArg = string | number | boolean;
 
@@ -192,6 +185,8 @@ interface TailProperties {
   width: number;
   /** Height of the log window content area */
   height: number;
+  /** The font size of the tail window. Defaults to the font size set in the style editor. */
+  fontSize: number;
 }
 
 /**
@@ -856,11 +851,6 @@ interface GangOtherInfoObject {
   power: number;
   /** Gang territory, in decimal form */
   territory: number;
-}
-
-/** @public */
-interface GangOtherInfo {
-  [key: string]: GangOtherInfoObject;
 }
 
 /**
@@ -3446,10 +3436,14 @@ export interface Bladeburner {
    *
    * Returns the remaining count of the specified action.
    *
-   * Note that this is meant to be used for Contracts and Operations.
-   * This function will return ‘Infinity’ for actions such as Training and Field Analysis.
-   * This function will return 1 for BlackOps not yet completed regardless of whether
-   * the player has the required rank to attempt the mission or not.
+   * Note:
+   *
+   * - This function is meant to be used for Contracts and Operations. It returns Infinity for General actions
+   * (Training, Field Analysis, etc.). It returns 1 for BlackOps not yet completed, regardless of whether the player has
+   * the required rank to attempt the mission.
+   *
+   * - With Contracts and Operations, the returned value is a floating-point number. The UI shows the rounded-down
+   * value.
    *
    * @param type - Type of action.
    * @param name - Name of action. Must be an exact match.
@@ -3863,7 +3857,9 @@ export interface CodingContract {
    *
    * @example
    * ```js
-   * const reward = ns.codingcontract.attempt(yourSolution, filename, hostname);
+   * const reward = ns.codingcontract.attempt("[solution, as, a, string]", filename, hostname);
+   * // or
+   * const reward = ns.codingcontract.attempt(["answer", "as", "an", "array"], filename, hostname);
    * if (reward) {
    *   ns.tprint(`Contract solved successfully! Reward: ${reward}`);
    * } else {
@@ -3871,13 +3867,13 @@ export interface CodingContract {
    * }
    * ```
    *
-   * @param answer - Attempted solution for the contract.
+   * @param answer - Attempted solution for the contract. This can be a string formatted like submitting manually, or the answer in the format of the specific contract type.
    * @param filename - Filename of the contract.
    * @param host - Hostname of the server containing the contract. Optional. Defaults to current server if not
    *   provided.
    * @returns A reward description string on success, or an empty string on failure.
    */
-  attempt(answer: string | number | any[], filename: string, host?: string): string;
+  attempt(answer: any, filename: string, host?: string): string;
 
   /**
    * Get the type of a coding contract.
@@ -3891,7 +3887,7 @@ export interface CodingContract {
    * @param host - Hostname of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns Name describing the type of problem posed by the Coding Contract.
    */
-  getContractType(filename: string, host?: string): string;
+  getContractType(filename: string, host?: string): `${CodingContractName}`;
 
   /**
    * Get the description.
@@ -3919,7 +3915,31 @@ export interface CodingContract {
    * @param host - Host of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns The specified contract’s data, data type depends on contract type.
    */
-  getData(filename: string, host?: string): CodingContractData;
+  getData(filename: string, host?: string): any;
+
+  /**
+   * Get various data about a specific contract.
+   * @remarks
+   * RAM cost: 15 GB
+   *
+   * The returned object includes the type, data, description as well as methods for getting the number of tries remaining and submitting your answer.
+   * Depending on the type of the contract, the data is typed differently.
+   * Using type-narrowing, you can get the correct type of the data:
+   *
+   * @example
+   * ```js
+   * const contract = ns.codingcontract.getContract(fileName, hostName);
+   * if (contract.type === ns.enums.CodingContractName.FindLargestPrimeFactor) {
+   *   const data = contract.data;
+   *   // ^? data: number
+   * }
+   * ```
+   *
+   * @param filename - Filename of the contract.
+   * @param host - Host of the server containing the contract. Optional. Default to the current server if not provided.
+   * @returns An object containing various data about the contract specified.
+   */
+  getContract(filename: string, host?: string): CodingContractObject;
 
   /**
    * Get the number of attempts remaining.
@@ -3951,7 +3971,7 @@ export interface CodingContract {
    * @remarks
    * RAM cost: 0 GB
    */
-  getContractTypes(): string[];
+  getContractTypes(): `${CodingContractName}`[];
 }
 
 /**
@@ -4022,7 +4042,7 @@ export interface Gang {
    *
    * @returns Object containing territory and power information about all gangs.
    */
-  getOtherGangInformation(): GangOtherInfo;
+  getOtherGangInformation(): Record<string, GangOtherInfoObject>;
 
   /**
    * Get information about a specific gang member.
@@ -6406,6 +6426,19 @@ export interface NS {
   tail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
 
   /**
+   * Render a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Tail windows are rendered at an interval defined in game settings. This function renders the tail window of the
+   * specified script immediately.
+   *
+   * @param pid - Optional. PID of the script having its tail rendered. If omitted, the current script is used.
+   */
+  renderTail(pid?: number): void;
+
+  /**
    * Move a tail window.
    * @remarks
    * RAM cost: 0 GB
@@ -6469,6 +6502,25 @@ export interface NS {
   setTitle(title: string | ReactNode, pid?: number): void;
 
   /**
+   * Set the font size of the tail window of a script.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This overwrites the tail font size and forces an update of the tail window's contents.
+   *
+   * If ran without a filename or pid, this will affect the current script's tail window.
+   *
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to target the tail window from another script.
+   * Remember that scripts are uniquely identified by both their names and arguments.
+   *
+   * @param pixel - Optional. The new font size in pixels. If omitted, the default tail font size is used.
+   * @param fn - Optional. Filename or PID of the target script. If omitted, the current script is used.
+   * @param host - Optional. Hostname of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param args - Arguments for the target script.
+   */
+  setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
+
+  /**
    * Get the list of servers connected to a server.
    * @remarks
    * RAM cost: 0.2 GB
@@ -6523,8 +6575,9 @@ export interface NS {
    * ns.nuke("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  nuke(host: string): void;
+  nuke(host: string): boolean;
 
   /**
    * Runs BruteSSH.exe on a server.
@@ -6538,8 +6591,9 @@ export interface NS {
    * ns.brutessh("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  brutessh(host: string): void;
+  brutessh(host: string): boolean;
 
   /**
    * Runs FTPCrack.exe on a server.
@@ -6553,8 +6607,9 @@ export interface NS {
    * ns.ftpcrack("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  ftpcrack(host: string): void;
+  ftpcrack(host: string): boolean;
 
   /**
    * Runs relaySMTP.exe on a server.
@@ -6568,8 +6623,9 @@ export interface NS {
    * ns.relaysmtp("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  relaysmtp(host: string): void;
+  relaysmtp(host: string): boolean;
 
   /**
    * Runs HTTPWorm.exe on a server.
@@ -6583,8 +6639,9 @@ export interface NS {
    * ns.httpworm("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  httpworm(host: string): void;
+  httpworm(host: string): boolean;
 
   /**
    * Runs SQLInject.exe on a server.
@@ -6598,8 +6655,9 @@ export interface NS {
    * ns.sqlinject("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  sqlinject(host: string): void;
+  sqlinject(host: string): boolean;
 
   /**
    * Start another script on the current server.
@@ -7164,7 +7222,7 @@ export interface NS {
    * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs $${ns.formatNumber(cost)}`);
    * ```
    * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns The cost to purchase a server with the specified amount of ram.
+   * @returns The cost to purchase a server with the specified amount of ram, or returns Infinity if ram is not a valid amount.
    */
   getPurchasedServerCost(ram: number): number;
 
@@ -7214,7 +7272,7 @@ export interface NS {
    *
    * @param hostname - Hostname of the server to upgrade.
    * @param ram - Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns The price to upgrade.
+   * @returns The price to upgrade or -1 if either input is not valid, i.e. hostname is not the name of a purchased server or ram is not a valid amount.
    */
   getPurchasedServerUpgradeCost(hostname: string, ram: number): number;
 
@@ -7885,13 +7943,18 @@ export interface NS {
   getMoneySources(): MoneySources;
 
   /**
-   * Add callback function when the script dies
+   * Add a callback to be executed when the script dies.
    * @remarks
    * RAM cost: 0 GB
    *
    * NS2 exclusive
    *
-   * Add callback to be executed when the script dies.
+   * Each script can only register one callback per callback ID.
+   * If another callback is registered with the same callback ID
+   * the previous callback with that ID is forgotten and will not be executed when the script dies.
+   *
+   * @param f - A function to execute when the script dies.
+   * @param id - Callback ID. Optional, defaults to `"default"`.
    */
   atExit(f: () => void, id?: string): void;
 
@@ -8287,6 +8350,85 @@ declare enum CompanyName {
   NoodleBar = "Noodle Bar",
 }
 
+declare enum CodingContractName {
+  FindLargestPrimeFactor = "Find Largest Prime Factor",
+  SubarrayWithMaximumSum = "Subarray with Maximum Sum",
+  TotalWaysToSum = "Total Ways to Sum",
+  TotalWaysToSumII = "Total Ways to Sum II",
+  SpiralizeMatrix = "Spiralize Matrix",
+  ArrayJumpingGame = "Array Jumping Game",
+  ArrayJumpingGameII = "Array Jumping Game II",
+  MergeOverlappingIntervals = "Merge Overlapping Intervals",
+  GenerateIPAddresses = "Generate IP Addresses",
+  AlgorithmicStockTraderI = "Algorithmic Stock Trader I",
+  AlgorithmicStockTraderII = "Algorithmic Stock Trader II",
+  AlgorithmicStockTraderIII = "Algorithmic Stock Trader III",
+  AlgorithmicStockTraderIV = "Algorithmic Stock Trader IV",
+  MinimumPathSumInATriangle = "Minimum Path Sum in a Triangle",
+  UniquePathsInAGridI = "Unique Paths in a Grid I",
+  UniquePathsInAGridII = "Unique Paths in a Grid II",
+  ShortestPathInAGrid = "Shortest Path in a Grid",
+  SanitizeParenthesesInExpression = "Sanitize Parentheses in Expression",
+  FindAllValidMathExpressions = "Find All Valid Math Expressions",
+  HammingCodesIntegerToEncodedBinary = "HammingCodes: Integer to Encoded Binary",
+  HammingCodesEncodedBinaryToInteger = "HammingCodes: Encoded Binary to Integer",
+  Proper2ColoringOfAGraph = "Proper 2-Coloring of a Graph",
+  CompressionIRLECompression = "Compression I: RLE Compression",
+  CompressionIILZDecompression = "Compression II: LZ Decompression",
+  CompressionIIILZCompression = "Compression III: LZ Compression",
+  EncryptionICaesarCipher = "Encryption I: Caesar Cipher",
+  EncryptionIIVigenereCipher = "Encryption II: Vigenère Cipher",
+  SquareRoot = "Square Root",
+}
+
+export type CodingContractSignatures = {
+  [CodingContractName.FindLargestPrimeFactor]: [number, number];
+  [CodingContractName.SubarrayWithMaximumSum]: [number[], number];
+  [CodingContractName.TotalWaysToSum]: [number, number];
+  [CodingContractName.TotalWaysToSumII]: [[number, number[]], number];
+  [CodingContractName.SpiralizeMatrix]: [number[][], number[]];
+  [CodingContractName.ArrayJumpingGame]: [number[], 1 | 0];
+  [CodingContractName.ArrayJumpingGameII]: [number[], number];
+  [CodingContractName.MergeOverlappingIntervals]: [[number, number][], [number, number][]];
+  [CodingContractName.GenerateIPAddresses]: [string, string[]];
+  [CodingContractName.AlgorithmicStockTraderI]: [number[], number];
+  [CodingContractName.AlgorithmicStockTraderII]: [number[], number];
+  [CodingContractName.AlgorithmicStockTraderIII]: [number[], number];
+  [CodingContractName.AlgorithmicStockTraderIV]: [[number, number[]], number];
+  [CodingContractName.MinimumPathSumInATriangle]: [number[][], number];
+  [CodingContractName.UniquePathsInAGridI]: [[number, number], number];
+  [CodingContractName.UniquePathsInAGridII]: [(1 | 0)[][], number];
+  [CodingContractName.ShortestPathInAGrid]: [(1 | 0)[][], string];
+  [CodingContractName.SanitizeParenthesesInExpression]: [string, string[]];
+  [CodingContractName.FindAllValidMathExpressions]: [[string, number], string[]];
+  [CodingContractName.HammingCodesIntegerToEncodedBinary]: [number, string];
+  [CodingContractName.HammingCodesEncodedBinaryToInteger]: [string, number];
+  [CodingContractName.Proper2ColoringOfAGraph]: [[number, [number, number][]], (1 | 0)[]];
+  [CodingContractName.CompressionIRLECompression]: [string, string];
+  [CodingContractName.CompressionIILZDecompression]: [string, string];
+  [CodingContractName.CompressionIIILZCompression]: [string, string];
+  [CodingContractName.EncryptionICaesarCipher]: [[string, number], string];
+  [CodingContractName.EncryptionIIVigenereCipher]: [[string, string], string];
+  [CodingContractName.SquareRoot]: [bigint, bigint, [string, string]];
+};
+
+export type CodingContractData<T extends string> = T extends `${keyof CodingContractSignatures}`
+  ? CodingContractSignatures[T][0]
+  : any;
+export type CodingContractAnswer<T extends string> = T extends `${keyof CodingContractSignatures}`
+  ? CodingContractSignatures[T][1]
+  : any;
+
+export type CodingContractObject = {
+  [T in keyof CodingContractSignatures]: {
+    type: T;
+    data: CodingContractSignatures[T][0];
+    submit: (answer: CodingContractSignatures[T][1] | string) => string;
+    description: string;
+    numTriesRemaining: () => number;
+  };
+}[keyof CodingContractSignatures];
+
 /** @public */
 export type NSEnums = {
   CityName: typeof CityName;
@@ -8299,6 +8441,7 @@ export type NSEnums = {
   ToastVariant: typeof ToastVariant;
   UniversityClassType: typeof UniversityClassType;
   CompanyName: typeof CompanyName;
+  CodingContractName: typeof CodingContractName;
 };
 
 /**
@@ -9599,7 +9742,6 @@ interface InvestmentOffer {
  * @public
  */
 interface UserInterfaceTheme {
-  [key: string]: string | undefined;
   primarylight: string;
   primary: string;
   primarydark: string;
@@ -9633,6 +9775,11 @@ interface UserInterfaceTheme {
   backgroundprimary: string;
   backgroundsecondary: string;
   button: string;
+  maplocation: string;
+  bnlvl0: string;
+  bnlvl1: string;
+  bnlvl2: string;
+  bnlvl3: string;
 }
 
 /**

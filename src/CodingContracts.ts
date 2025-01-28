@@ -1,13 +1,10 @@
-import type { FactionName } from "@enums";
-import { codingContractTypesMetadata } from "./data/codingcontracttypes";
+import { FactionName, CodingContractName } from "@enums";
+import { CodingContractTypes } from "./data/codingcontracttypes";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
 import { CodingContractEvent } from "./ui/React/CodingContractModal";
 import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
-import { objectAssert } from "./utils/helpers/typeAssertion";
-
-/* Contract Types */
-export const CodingContractTypes = Object.fromEntries(codingContractTypesMetadata.map((x) => [x.name, x]));
+import { assertObject } from "./utils/TypeAssertion";
 
 // Numeric enum
 /** Enum representing the different types of rewards a Coding Contract can give */
@@ -62,9 +59,13 @@ export class CodingContract {
   tries = 0;
 
   /* String representing the contract's type. Must match type in ContractTypes */
-  type: string;
+  type: CodingContractName;
 
-  constructor(fn = "default.cct", type = "Find Largest Prime Factor", reward: ICodingContractReward | null = null) {
+  constructor(
+    fn = "default.cct",
+    type = CodingContractName.FindLargestPrimeFactor,
+    reward: ICodingContractReward | null = null,
+  ) {
     const path = resolveContractFilePath(fn);
     if (!path) throw new Error(`Bad file path while creating a coding contract: ${fn}`);
     if (!CodingContractTypes[type]) {
@@ -94,12 +95,22 @@ export class CodingContract {
     return CodingContractTypes[this.type].numTries ?? 10;
   }
 
-  getType(): string {
+  getType(): CodingContractName {
     return this.type;
   }
 
-  isSolution(solution: string): boolean {
-    return CodingContractTypes[this.type].solver(this.state, solution);
+  /** Checks if the answer is in the correct format. */
+  isValid(answer: unknown): boolean {
+    if (typeof answer === "string") answer = CodingContractTypes[this.type].convertAnswer(answer);
+    return CodingContractTypes[this.type].validateAnswer(answer);
+  }
+
+  isSolution(solution: unknown): boolean {
+    const type = CodingContractTypes[this.type];
+    if (typeof solution === "string") solution = type.convertAnswer(solution);
+    if (!this.isValid(solution)) return false;
+
+    return type.solver(this.state, solution);
   }
 
   /** Creates a popup to prompt the player to solve the problem */
@@ -128,7 +139,7 @@ export class CodingContract {
 
   /** Initializes a CodingContract from a JSON save state. */
   static fromJSON(value: IReviverValue): CodingContract {
-    objectAssert(value.data);
+    assertObject(value.data);
     // In previous versions, there was a data field instead of a state field.
     if ("data" in value.data) {
       value.data.state = value.data.data;

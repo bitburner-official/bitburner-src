@@ -1,10 +1,4 @@
 import { OrderType, PositionType } from "@enums";
-import { getKeyList } from "../../utils/helpers/getKeyList";
-import { Stock } from "../../StockMarket/Stock";
-import { Order } from "../../StockMarket/Order";
-
-const stockObjectProperties = getKeyList(Stock);
-const orderObjectProperties = getKeyList(Order);
 
 /**
  * It's intentional to not use JSONSchemaType here. The data structure of StockMarket is not suitable for the usage of
@@ -98,7 +92,26 @@ export const StockMarketSchema = {
           type: "number",
         },
       },
-      required: [...stockObjectProperties],
+      required: [
+        "b",
+        "cap",
+        "lastPrice",
+        "maxShares",
+        "mv",
+        "name",
+        "otlkMag",
+        "otlkMagForecast",
+        "playerAvgPx",
+        "playerAvgShortPx",
+        "playerShares",
+        "playerShortShares",
+        "price",
+        "shareTxForMovement",
+        "shareTxUntilMovement",
+        "spreadPerc",
+        "symbol",
+        "totalShares",
+      ],
     },
   },
   properties: {
@@ -129,7 +142,7 @@ export const StockMarketSchema = {
                 enum: [OrderType.LimitBuy, OrderType.LimitSell, OrderType.StopBuy, OrderType.StopSell],
               },
             },
-            required: [...orderObjectProperties],
+            required: ["pos", "price", "shares", "stockSymbol", "type"],
           },
         },
       },

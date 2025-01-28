@@ -56,7 +56,7 @@ export async function main(ns) {
 |  --- | --- |
 |  [alert(msg)](./bitburner.ns.alert.md) | Open up a message box. |
 |  [asleep(millis)](./bitburner.ns.asleep.md) | Suspends the script for n milliseconds. Doesn't block with concurrent calls. |
-|  [atExit(f, id)](./bitburner.ns.atexit.md) | Add callback function when the script dies |
+|  [atExit(f, id)](./bitburner.ns.atexit.md) | Add a callback to be executed when the script dies. |
 |  [brutessh(host)](./bitburner.ns.brutessh.md) | Runs BruteSSH.exe on a server. |
 |  [clear(handle)](./bitburner.ns.clear.md) | Clear data from a file. |
 |  [clearLog()](./bitburner.ns.clearlog.md) | Clears the script’s logs. |
@@ -148,6 +148,7 @@ export async function main(ns) {
 |  [readPort(portNumber)](./bitburner.ns.readport.md) | Read data from a port. |
 |  [relaysmtp(host)](./bitburner.ns.relaysmtp.md) | Runs relaySMTP.exe on a server. |
 |  [renamePurchasedServer(hostname, newName)](./bitburner.ns.renamepurchasedserver.md) | Rename a purchased server. |
+|  [renderTail(pid)](./bitburner.ns.rendertail.md) | Render a tail window. |
 |  [resizeTail(width, height, pid)](./bitburner.ns.resizetail.md) | Resize a tail window. |
 |  [rm(name, host)](./bitburner.ns.rm.md) | Delete a file. |
 |  [run(script, threadOrOptions, args)](./bitburner.ns.run.md) | Start another script on the current server. |
@@ -157,6 +158,7 @@ export async function main(ns) {
 |  [scriptRunning(script, host)](./bitburner.ns.scriptrunning.md) | Check if any script with a filename is running. |
 |  [self()](./bitburner.ns.self.md) | Returns the currently running script. |
 |  [serverExists(host)](./bitburner.ns.serverexists.md) | Returns a boolean denoting whether or not the specified server exists. |
+|  [setTailFontSize(pixel, fn, host, args)](./bitburner.ns.settailfontsize.md) | Set the font size of the tail window of a script. |
 |  [setTitle(title, pid)](./bitburner.ns.settitle.md) | Set the title of the tail window of a script. |
 |  [share()](./bitburner.ns.share.md) | Share the server's ram with your factions. |
 |  [sleep(millis)](./bitburner.ns.sleep.md) | Suspends the script for n milliseconds. |

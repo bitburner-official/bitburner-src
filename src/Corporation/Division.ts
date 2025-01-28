@@ -275,6 +275,211 @@ export class Division {
     }
   }
 
+  processSaleState(
+    marketCycles: number,
+    item: Material | Product,
+    corporation: Corporation,
+    office: OfficeSpace,
+    warehouse: Warehouse,
+  ): number {
+    let revenue = 0;
+    const city = office.city;
+    const isMaterial = item instanceof Material;
+
+    if (isMaterial) {
+      if ((typeof item.desiredSellPrice === "number" && item.desiredSellPrice < 0) || item.desiredSellAmount === 0) {
+        item.actualSellAmount = 0;
+        return 0;
+      }
+    } else {
+      item.cityData[city].productionCost = 0;
+      for (const [reqMatName, reqQty] of getRecordEntries(item.requiredMaterials)) {
+        item.cityData[city].productionCost += reqQty * warehouse.materials[reqMatName].marketPrice;
+      }
+      // With products, the production cost is increased for labor
+      item.cityData[city].productionCost *= corpConstants.baseProductProfitMult;
+    }
+
+    let stored;
+    let desiredSellAmount;
+    let desiredSellPrice;
+    let productionAmount;
+    let name;
+    let marketTa1;
+    let marketTa2;
+    let marketPrice;
+    let markupLimit;
+    let qualityAndEffectiveRatingFactor;
+    if (isMaterial) {
+      stored = item.stored;
+      desiredSellAmount = item.desiredSellAmount;
+      desiredSellPrice = item.desiredSellPrice;
+      productionAmount = item.productionAmount;
+      name = item.name;
+      marketTa1 = item.marketTa1;
+      marketTa2 = item.marketTa2;
+      marketPrice = item.marketPrice;
+      markupLimit = item.getMarkupLimit();
+      qualityAndEffectiveRatingFactor = item.quality + 0.001;
+    } else {
+      stored = item.cityData[city].stored;
+      desiredSellAmount = item.cityData[city].desiredSellAmount;
+      desiredSellPrice = item.cityData[city].desiredSellPrice;
+      productionAmount = item.cityData[city].productionAmount;
+      name = item.name;
+      marketTa1 = item.marketTa1;
+      marketTa2 = item.marketTa2;
+      marketPrice = item.cityData[city].productionCost;
+      if (item.markup === 0) {
+        exceptionAlert(new Error(`Markup of product ${item.name} is 0`));
+        item.markup = 1;
+      }
+      markupLimit = Math.max(item.cityData[city].effectiveRating, 0.001) / item.markup;
+      qualityAndEffectiveRatingFactor = 0.5 * Math.pow(item.cityData[city].effectiveRating, 0.65);
+    }
+
+    // Sale multipliers
+    const businessFactor = this.getBusinessFactor(office); // Business employee productivity
+    const advertisingFactor = this.getAdvertisingFactors()[0]; // Awareness + popularity
+    const marketFactor = this.getMarketFactor(item); // Competition + demand
+
+    // Parse player sell-amount input (needed for TA.II and selling)
+    let sellAmt: number;
+    // The amount gets re-multiplied later, so this is the correct
+    // amount to calculate with for "MAX".
+    const adjustedQty = stored / (corpConstants.secondsPerMarketCycle * marketCycles);
+    /**
+     * desiredSellAmount is usually a string, but it also can be a number in old versions. eval requires a
+     * string, so we convert it to a string here, replace placeholders, and then pass it to eval.
+     */
+    let temp = String(desiredSellAmount);
+    temp = temp.replace(/MAX/g, adjustedQty.toString());
+    temp = temp.replace(/PROD/g, productionAmount.toString());
+    temp = temp.replace(/INV/g, stored.toString());
+    try {
+      // Typecasting here is fine. We will validate the result immediately after this line.
+      sellAmt = eval?.(temp) as number;
+      if (typeof sellAmt !== "number" || !Number.isFinite(sellAmt)) {
+        throw new Error(`Evaluated value is not a valid number: ${sellAmt}`);
+      }
+    } catch (error) {
+      dialogBoxCreate(
+        `Error evaluating your sell amount for ${name} in ${this.name}'s ${city} office. Error: ${error}.`,
+      );
+      return 0;
+    }
+    // sellAmt must be a non-negative number.
+    if (sellAmt < 0) {
+      sellAmt = 0;
+    }
+
+    // Calculate Sale Cost (sCost), which could be dynamically evaluated
+    let sCost: number;
+    if (marketTa2) {
+      // Reverse engineer the 'maxSell' formula
+      // 1. Set 'maxSell' = sellAmt
+      // 2. Substitute formula for 'markup'
+      // 3. Solve for 'sCost'
+      const sqrtDenominator =
+        qualityAndEffectiveRatingFactor *
+        marketFactor *
+        businessFactor *
+        corporation.getSalesMult() *
+        advertisingFactor *
+        this.getSalesMultiplier();
+      const denominator = Math.sqrt(sellAmt / sqrtDenominator);
+      let optimalPrice;
+      if (sqrtDenominator === 0 || denominator === 0) {
+        if (sellAmt === 0) {
+          optimalPrice = 0; // Nothing to sell
+        } else {
+          optimalPrice = marketPrice + markupLimit;
+          console.warn(`In Corporation, found illegal 0s when trying to calculate MarketTA2 sale cost`);
+        }
+      } else {
+        optimalPrice = markupLimit / denominator + marketPrice;
+      }
+
+      // Store this "optimal price" in a property so we don't have to re-calculate it for the UI.
+      sCost = optimalPrice;
+    } else if (marketTa1) {
+      sCost = marketPrice + markupLimit;
+    } else {
+      // If the player does not set the price, desiredSellPrice will be an empty string.
+      if (desiredSellPrice === "") {
+        return 0;
+      }
+      /**
+       * desiredSellPrice is usually a string, but it also can be a number in old versions. eval requires a
+       * string, so we convert it to a string here, replace the placeholder MP, and then pass it to eval later.
+       */
+      const temp = String(desiredSellPrice).replace(/MP/g, marketPrice.toString());
+      try {
+        // Typecasting here is fine. We will validate the result immediately after this line.
+        sCost = eval?.(temp) as number;
+        if (typeof sCost !== "number" || !Number.isFinite(sCost)) {
+          throw new Error(`Evaluated value is not a valid number: ${sCost}`);
+        }
+      } catch (error) {
+        dialogBoxCreate(
+          `Error evaluating your sell price for ${name} in ${this.name}'s ${city} office. ` +
+            `The sell amount is being set to zero. Error: ${error}`,
+        );
+        return 0;
+      }
+    }
+    if (isMaterial) {
+      item.uiMarketPrice = sCost;
+    } else {
+      item.uiMarketPrice[city] = sCost;
+    }
+
+    const markupMultiplier = calculateMarkupMultiplier(sCost, marketPrice, markupLimit);
+
+    // Calculate how much of the material sells (per second)
+    const maxSellPerCycle =
+      qualityAndEffectiveRatingFactor *
+      marketFactor *
+      markupMultiplier *
+      businessFactor *
+      corporation.getSalesMult() *
+      advertisingFactor *
+      this.getSalesMultiplier();
+    if (isMaterial) {
+      item.maxSellPerCycle = maxSellPerCycle;
+    } else {
+      item.maxSellAmount = maxSellPerCycle;
+    }
+
+    sellAmt = Math.min(maxSellPerCycle, sellAmt);
+    sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;
+    sellAmt = Math.min(stored, sellAmt);
+    const setActualSellAmount = (value: number) => {
+      if (isMaterial) {
+        item.actualSellAmount = value;
+      } else {
+        item.cityData[city].actualSellAmount = value;
+      }
+    };
+    if (sellAmt < 0) {
+      console.error(`sellAmt calculated to be negative for ${name} in ${this.name}'s ${city}`);
+      setActualSellAmount(0);
+      return 0;
+    }
+    if (sellAmt && sCost >= 0) {
+      if (isMaterial) {
+        item.stored -= sellAmt;
+      } else {
+        item.cityData[city].stored -= sellAmt;
+      }
+      revenue += sellAmt * sCost;
+      setActualSellAmount(sellAmt / (corpConstants.secondsPerMarketCycle * marketCycles));
+    } else {
+      setActualSellAmount(0);
+    }
+    return revenue;
+  }
+
   //Process production, purchase, and import/export of materials
   processMaterials(marketCycles = 1, corporation: Corporation): [number, number] {
     const state = corporation.state.nextName;
@@ -523,133 +728,9 @@ export class Division {
 
         case "SALE":
           /* Process sale of materials */
-          for (const [matName, mat] of getRecordEntries(warehouse.materials)) {
-            if ((typeof mat.desiredSellPrice === "number" && mat.desiredSellPrice < 0) || mat.desiredSellAmount === 0) {
-              mat.actualSellAmount = 0;
-              continue;
-            }
-
-            // Sale multipliers
-            const businessFactor = this.getBusinessFactor(office); //Business employee productivity
-            const advertisingFactor = this.getAdvertisingFactors()[0]; //Awareness + popularity
-            const marketFactor = this.getMarketFactor(mat); //Competition + demand
-
-            // Parse player sell-amount input (needed for TA.II and selling)
-            let sellAmt: number;
-            // The amount gets re-multiplied later, so this is the correct
-            // amount to calculate with for "MAX".
-            const adjustedQty = mat.stored / (corpConstants.secondsPerMarketCycle * marketCycles);
-            /**
-             * desiredSellAmount is usually a string, but it also can be a number in old versions. eval requires a
-             * string, so we convert it to a string here, replace placeholders, and then pass it to eval.
-             */
-            let temp = String(mat.desiredSellAmount);
-            temp = temp.replace(/MAX/g, adjustedQty.toString());
-            temp = temp.replace(/PROD/g, mat.productionAmount.toString());
-            temp = temp.replace(/INV/g, mat.stored.toString());
-            try {
-              // Typecasting here is fine. We will validate the result immediately after this line.
-              sellAmt = eval?.(temp) as number;
-              if (typeof sellAmt !== "number" || !Number.isFinite(sellAmt)) {
-                throw new Error(`Evaluated value is not a valid number: ${sellAmt}`);
-              }
-            } catch (error) {
-              dialogBoxCreate(
-                `Error evaluating your sell amount for material ${mat.name} in ${this.name}'s ${city} office. Error: ${error}.`,
-              );
-              continue;
-            }
-
-            // Determine the cost that the material will be sold at
-            const markupLimit = mat.getMarkupLimit();
-            let sCost: number;
-            if (mat.marketTa2) {
-              // Reverse engineer the 'maxSell' formula
-              // 1. Set 'maxSell' = sellAmt
-              // 2. Substitute formula for 'markup'
-              // 3. Solve for 'sCost'
-              const numerator = markupLimit;
-              const sqrtNumerator = sellAmt;
-              const sqrtDenominator =
-                (mat.quality + 0.001) *
-                marketFactor *
-                businessFactor *
-                corporation.getSalesMult() *
-                advertisingFactor *
-                this.getSalesMultiplier();
-              const denominator = Math.sqrt(sqrtNumerator / sqrtDenominator);
-              let optimalPrice;
-              if (sqrtDenominator === 0 || denominator === 0) {
-                if (sqrtNumerator === 0) {
-                  optimalPrice = 0; // Nothing to sell
-                } else {
-                  optimalPrice = mat.marketPrice + markupLimit;
-                  console.warn(`In Corporation, found illegal 0s when trying to calculate MarketTA2 sale cost`);
-                }
-              } else {
-                optimalPrice = numerator / denominator + mat.marketPrice;
-              }
-
-              // We'll store this "Optimal Price" in a property so that we don't have
-              // to re-calculate it for the UI
-
-              sCost = optimalPrice;
-            } else if (mat.marketTa1) {
-              sCost = mat.marketPrice + markupLimit;
-            } else {
-              // If the player does not set the price, desiredSellPrice will be an empty string.
-              if (mat.desiredSellPrice === "") {
-                continue;
-              }
-              /**
-               * desiredSellPrice is usually a string, but it also can be a number in old versions. eval requires a
-               * string, so we convert it to a string here, replace the placeholder MP, and then pass it to eval later.
-               */
-              const temp = String(mat.desiredSellPrice).replace(/MP/g, mat.marketPrice.toString());
-              try {
-                // Typecasting here is fine. We will validate the result immediately after this line.
-                sCost = eval?.(temp) as number;
-                if (typeof sCost !== "number" || !Number.isFinite(sCost)) {
-                  throw new Error(`Evaluated value is not a valid number: ${sCost}`);
-                }
-              } catch (error) {
-                dialogBoxCreate(
-                  `Error evaluating your sell price for material ${mat.name} in ${this.name}'s ${city} office. ` +
-                    `The sell amount is being set to zero. Error: ${error}`,
-                );
-                continue;
-              }
-            }
-            mat.uiMarketPrice = sCost;
-
-            const markupMultiplier = calculateMarkupMultiplier(sCost, mat.marketPrice, markupLimit);
-
-            // Calculate how much of the material sells (per second)
-            mat.maxSellPerCycle =
-              (mat.quality + 0.001) *
-              marketFactor *
-              markupMultiplier *
-              businessFactor *
-              corporation.getSalesMult() *
-              advertisingFactor *
-              this.getSalesMultiplier();
-
-            sellAmt = Math.min(mat.maxSellPerCycle, sellAmt);
-            sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;
-            sellAmt = Math.min(mat.stored, sellAmt);
-            if (sellAmt < 0) {
-              console.warn(`sellAmt calculated to be negative for ${matName} in ${city}`);
-              mat.actualSellAmount = 0;
-              continue;
-            }
-            if (sellAmt && sCost >= 0) {
-              mat.stored -= sellAmt;
-              revenue += sellAmt * sCost;
-              mat.actualSellAmount = sellAmt / (corpConstants.secondsPerMarketCycle * marketCycles);
-            } else {
-              mat.actualSellAmount = 0;
-            }
-          } //End processing of sale of materials
+          for (const material of getRecordValues(warehouse.materials)) {
+            revenue += this.processSaleState(marketCycles, material, corporation, office, warehouse);
+          }
           break;
 
         case "EXPORT":
@@ -875,140 +956,9 @@ export class Division {
             (prod * producableFrac) / (corpConstants.secondsPerMarketCycle * marketCycles);
           break;
         }
-        case "SALE": {
-          //Process sale of Products
-          product.cityData[city].productionCost = 0; //Estimated production cost
-          for (const [reqMatName, reqQty] of getRecordEntries(product.requiredMaterials)) {
-            product.cityData[city].productionCost += reqQty * warehouse.materials[reqMatName].marketPrice;
-          }
-
-          // Since its a product, its production cost is increased for labor
-          product.cityData[city].productionCost *= corpConstants.baseProductProfitMult;
-
-          // Sale multipliers
-          const businessFactor = this.getBusinessFactor(office); //Business employee productivity
-          const advertisingFactor = this.getAdvertisingFactors()[0]; //Awareness + popularity
-          const marketFactor = this.getMarketFactor(product); //Competition + demand
-
-          // Parse player sell-amount input (needed for TA.II and selling)
-          let sellAmt: number;
-          // The amount gets re-multiplied later, so this is the correct
-          // amount to calculate with for "MAX".
-          const adjustedQty = product.cityData[city].stored / (corpConstants.secondsPerMarketCycle * marketCycles);
-          /**
-           * desiredSellAmount is usually a string, but it also can be a number in old versions. eval requires a
-           * string, so we convert it to a string here, replace placeholders, and then pass it to eval.
-           */
-          const desiredSellAmount = String(product.cityData[city].desiredSellAmount);
-          let temp = desiredSellAmount.replace(/MAX/g, adjustedQty.toString());
-          temp = temp.replace(/PROD/g, product.cityData[city].productionAmount.toString());
-          temp = temp.replace(/INV/g, product.cityData[city].stored.toString());
-          try {
-            // Typecasting here is fine. We will validate the result immediately after this line.
-            sellAmt = eval?.(temp) as number;
-            if (typeof sellAmt !== "number" || !Number.isFinite(sellAmt)) {
-              throw new Error(`Evaluated value is not a valid number: ${sellAmt}`);
-            }
-          } catch (error) {
-            dialogBoxCreate(
-              `Error evaluating your sell amount for ${product.name} in ${this.name}'s ${city} office. Error: ${error}.`,
-            );
-            // break the case "SALE"
-            break;
-          }
-
-          if (sellAmt < 0) {
-            sellAmt = 0;
-          }
-          if (product.markup === 0) {
-            exceptionAlert(new Error("product.markup is 0"));
-            product.markup = 1;
-          }
-
-          // Calculate Sale Cost (sCost), which could be dynamically evaluated
-          const markupLimit = Math.max(product.cityData[city].effectiveRating, 0.001) / product.markup;
-          let sCost: number;
-          if (product.marketTa2) {
-            // Reverse engineer the 'maxSell' formula
-            // 1. Set 'maxSell' = sellAmt
-            // 2. Substitute formula for 'markup'
-            // 3. Solve for 'sCost', product.pCost = sCost
-            const numerator = markupLimit;
-            const sqrtNumerator = sellAmt;
-            const sqrtDenominator =
-              0.5 *
-              Math.pow(product.cityData[city].effectiveRating, 0.65) *
-              marketFactor *
-              corporation.getSalesMult() *
-              businessFactor *
-              advertisingFactor *
-              this.getSalesMultiplier();
-            const denominator = Math.sqrt(sqrtNumerator / sqrtDenominator);
-            let optimalPrice;
-            if (sqrtDenominator === 0 || denominator === 0) {
-              if (sqrtNumerator === 0) {
-                optimalPrice = 0; // Nothing to sell
-              } else {
-                optimalPrice = product.cityData[city].productionCost + markupLimit;
-                console.warn(`In Corporation, found illegal 0s when trying to calculate MarketTA2 sale cost`);
-              }
-            } else {
-              optimalPrice = numerator / denominator + product.cityData[city].productionCost;
-            }
-
-            // Store this "optimal Price" in a property so we don't have to re-calculate for UI
-            sCost = optimalPrice;
-          } else if (product.marketTa1) {
-            sCost = product.cityData[city].productionCost + markupLimit;
-          } else {
-            // If the player does not set the price, desiredSellPrice will be an empty string.
-            if (product.cityData[city].desiredSellPrice === "") {
-              // break the case "SALE"
-              break;
-            }
-            const temp = String(product.cityData[city].desiredSellPrice).replace(
-              /MP/g,
-              product.cityData[city].productionCost.toString(),
-            );
-            try {
-              // Typecasting here is fine. We will validate the result immediately after this line.
-              sCost = eval?.(temp) as number;
-              if (typeof sCost !== "number" || !Number.isFinite(sCost)) {
-                throw new Error(`Evaluated value is not a valid number: ${sCost}`);
-              }
-            } catch (error) {
-              dialogBoxCreate(
-                `Error evaluating your sell price for product ${product.name} in ${this.name}'s ${city} office. Error: ${error}.`,
-              );
-              // break the case "SALE"
-              break;
-            }
-          }
-          product.uiMarketPrice[city] = sCost;
-
-          const markupMultiplier = calculateMarkupMultiplier(sCost, product.cityData[city].productionCost, markupLimit);
-
-          product.maxSellAmount =
-            0.5 *
-            Math.pow(product.cityData[city].effectiveRating, 0.65) *
-            marketFactor *
-            corporation.getSalesMult() *
-            markupMultiplier *
-            businessFactor *
-            advertisingFactor *
-            this.getSalesMultiplier();
-          sellAmt = Math.min(product.maxSellAmount, sellAmt);
-          sellAmt = sellAmt * corpConstants.secondsPerMarketCycle * marketCycles;
-          sellAmt = Math.min(product.cityData[city].stored, sellAmt); //data[0] is qty
-          if (sellAmt && sCost >= 0) {
-            product.cityData[city].stored -= sellAmt; //data[0] is qty
-            totalProfit += sellAmt * sCost;
-            product.cityData[city].actualSellAmount = sellAmt / (corpConstants.secondsPerMarketCycle * marketCycles); //data[2] is sell property
-          } else {
-            product.cityData[city].actualSellAmount = 0; //data[2] is sell property
-          }
+        case "SALE":
+          totalProfit += this.processSaleState(marketCycles, product, corporation, office, warehouse);
           break;
-        }
         case "START":
         case "PURCHASE":
         case "EXPORT":

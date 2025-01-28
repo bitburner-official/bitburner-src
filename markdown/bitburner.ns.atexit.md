@@ -4,7 +4,7 @@
 
 ## NS.atExit() method
 
-Add callback function when the script dies
+Add a callback to be executed when the script dies.
 
 **Signature:**
 
@@ -16,8 +16,8 @@ atExit(f: () => void, id?: string): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  f | () =&gt; void |  |
-|  id | string | _(Optional)_ |
+|  f | () =&gt; void | A function to execute when the script dies. |
+|  id | string | _(Optional)_ Callback ID. Optional, defaults to <code>&quot;default&quot;</code>. |
 
 **Returns:**
 
@@ -29,5 +29,5 @@ RAM cost: 0 GB
 
 NS2 exclusive
 
-Add callback to be executed when the script dies.
+Each script can only register one callback per callback ID. If another callback is registered with the same callback ID the previous callback with that ID is forgotten and will not be executed when the script dies.
 

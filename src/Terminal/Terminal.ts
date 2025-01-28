@@ -263,14 +263,18 @@ export class Terminal {
       Engine.Counters.checkFactionInvitations = 0;
       Engine.checkCounters();
 
-      let moneyGained = calculatePercentMoneyHacked(server, Player) * currentNodeMults.ManualHackMoney;
-      moneyGained = Math.floor(server.moneyAvailable * moneyGained);
+      let moneyDrained = Math.floor(server.moneyAvailable * calculatePercentMoneyHacked(server, Player));
 
-      if (moneyGained <= 0) {
-        moneyGained = 0;
+      if (moneyDrained <= 0) {
+        moneyDrained = 0;
       } // Safety check
 
-      server.moneyAvailable -= moneyGained;
+      server.moneyAvailable -= moneyDrained;
+      if (server.moneyAvailable < 0) {
+        server.moneyAvailable = 0;
+      }
+
+      const moneyGained = moneyDrained * currentNodeMults.ManualHackMoney;
       Player.gainMoney(moneyGained, "hacking");
       Player.gainHackingExp(expGainedOnSuccess);
       if (expGainedOnSuccess > 1) {
@@ -306,12 +310,12 @@ export class Terminal {
     if (!(server instanceof Server)) throw new Error("server should be normal server");
     const expGain = calculateHackingExpGain(server, Player);
     const oldSec = server.hackDifficulty;
-    const growth = processSingleServerGrowth(server, 25, server.cpuCores) - 1;
+    const growth = processSingleServerGrowth(server, 25, server.cpuCores);
     const newSec = server.hackDifficulty;
 
     Player.gainHackingExp(expGain);
     this.print(
-      `Available money on '${server.hostname}' grown by ${formatPercent(growth, 6)}. Gained ${formatExp(
+      `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)}. Gained ${formatExp(
         expGain,
       )} hacking exp.`,
     );

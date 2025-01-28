@@ -22,6 +22,7 @@ import { GangButton } from "./GangButton";
 import { FactionWork } from "../../Work/FactionWork";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { repNeededToDonate } from "../formulas/donation";
+import { ShareOption } from "./ShareOption";
 
 type FactionRootProps = {
   faction: Faction;
@@ -45,7 +46,7 @@ const securityWorkInfo =
   "You will gain exp for all combat stats and hacking.";
 const augmentationsInfo =
   "As your reputation with this faction rises, you will " +
-  "unlock Augmentations, which you can purchase to enhance " +
+  "unlock augmentations, which you can purchase to enhance " +
   "your abilities.";
 const sleevePurchasesInfo = "Purchase Duplicate Sleeves and upgrades. These are permanent!";
 
@@ -131,6 +132,7 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
       {!isPlayersGang && factionInfo.offersWork() && (
         <DonateOption faction={faction} rerender={rerender} favorToDonate={favorToDonate} disabled={!canDonate} />
       )}
+      {!isPlayersGang && factionInfo.offersWork() && <ShareOption rerender={rerender} />}
       <Option buttonText={"Purchase Augmentations"} infoText={augmentationsInfo} onClick={onAugmentations} />
       {canPurchaseSleeves && (
         <>

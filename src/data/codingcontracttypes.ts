@@ -4,10 +4,11 @@ import { randomBigIntExclusive } from "../utils/helpers/randomBigIntExclusive";
 import { comprGenChar, comprLZGenerate, comprLZEncode, comprLZDecode } from "../utils/CompressionContracts";
 import { HammingEncode, HammingDecode, HammingEncodeProperly } from "../utils/HammingCodeTools";
 import { filterTruthy } from "../utils/helpers/ArrayHelpers";
+import { CodingContractSignatures } from "@nsdefs";
 
 // This is the base interface, but should not be used for
 // typechecking individual entries. Use the two types below for that.
-interface CodingContractType<Data, State = Data> {
+interface CodingContractType<Data, Answer, State = Data> {
   /**
    * Function that returns a string with the problem's description.
    * Requires the 'data' of a Contract as input
@@ -26,20 +27,28 @@ interface CodingContractType<Data, State = Data> {
    * that can be copy-pasted to user code to solve the problem.
    */
   getData?: (state: State) => Data;
-  /** Name of the problem. Used to request contracts of this type. */
-  name: string;
   /** How many tries you get. Defaults to 10. */
   numTries?: number;
-  /** Function that checks if the provided solution is correct. */
-  solver: (state: State, answer: string) => boolean;
+  /** Function that checks whether the players answer is correct. */
+  solver: (state: State, answer: Answer) => boolean;
+  /** Function that converts string answers to the expected answer format. */
+  convertAnswer: (answer: string) => Answer | null;
+  /** Function that validates the format of the provided answer. */
+  validateAnswer: (answer: unknown) => answer is Answer;
 }
 
 // This simple alias uses State == Data, and omits getData since it won't be used in this case.
-type CodingContractSimpleType<Data> = Omit<CodingContractType<Data, Data>, "getData">;
+type CodingContractSimpleType<Data, Answer> = Omit<CodingContractType<Data, Answer, Data>, "getData">;
 
 // This alias has unique State and Data, and requires getData.
-type CodingContractComplexType<Data, State> = Omit<CodingContractType<Data, State>, "getData"> & {
+type CodingContractComplexType<Data, Answer, State> = Omit<CodingContractType<Data, Answer, State>, "getData"> & {
   getData: (state: State) => Data;
+};
+
+type CodingContractDefinitions<Signatures extends Record<string, [unknown, unknown] | [unknown, unknown, unknown]>> = {
+  [T in keyof Signatures]: Signatures[T] extends [unknown, unknown, unknown]
+    ? CodingContractComplexType<Signatures[T][0], Signatures[T][1], Signatures[T][2]>
+    : CodingContractSimpleType<Signatures[T][0], Signatures[T][1]>;
 };
 
 /* Helper functions for Coding Contract implementations */
@@ -78,11 +87,41 @@ function convert2DArrayToString(arr: number[][]): string {
   return components.join(",").replace(/\s/g, "");
 }
 
-// Because functions are contravariant with their parameters, we can't consider
-// arbitrary CodingContractTypes as CodingContractType<unknown> directly.
-// So we use CodingContractType<any> here, which at least validates the shape.
-export const codingContractTypesMetadata: CodingContractType<any>[] = [
-  {
+export enum CodingContractName {
+  FindLargestPrimeFactor = "Find Largest Prime Factor",
+  SubarrayWithMaximumSum = "Subarray with Maximum Sum",
+  TotalWaysToSum = "Total Ways to Sum",
+  TotalWaysToSumII = "Total Ways to Sum II",
+  SpiralizeMatrix = "Spiralize Matrix",
+  ArrayJumpingGame = "Array Jumping Game",
+  ArrayJumpingGameII = "Array Jumping Game II",
+  MergeOverlappingIntervals = "Merge Overlapping Intervals",
+  GenerateIPAddresses = "Generate IP Addresses",
+  AlgorithmicStockTraderI = "Algorithmic Stock Trader I",
+  AlgorithmicStockTraderII = "Algorithmic Stock Trader II",
+  AlgorithmicStockTraderIII = "Algorithmic Stock Trader III",
+  AlgorithmicStockTraderIV = "Algorithmic Stock Trader IV",
+  MinimumPathSumInATriangle = "Minimum Path Sum in a Triangle",
+  UniquePathsInAGridI = "Unique Paths in a Grid I",
+  UniquePathsInAGridII = "Unique Paths in a Grid II",
+  ShortestPathInAGrid = "Shortest Path in a Grid",
+  SanitizeParenthesesInExpression = "Sanitize Parentheses in Expression",
+  FindAllValidMathExpressions = "Find All Valid Math Expressions",
+  HammingCodesIntegerToEncodedBinary = "HammingCodes: Integer to Encoded Binary",
+  HammingCodesEncodedBinaryToInteger = "HammingCodes: Encoded Binary to Integer",
+  Proper2ColoringOfAGraph = "Proper 2-Coloring of a Graph",
+  CompressionIRLECompression = "Compression I: RLE Compression",
+  CompressionIILZDecompression = "Compression II: LZ Decompression",
+  CompressionIIILZCompression = "Compression III: LZ Compression",
+  EncryptionICaesarCipher = "Encryption I: Caesar Cipher",
+  EncryptionIIVigenereCipher = "Encryption II: Vigenère Cipher",
+  SquareRoot = "Square Root",
+}
+export const isCodingContractName = (v: unknown): v is CodingContractName =>
+  Object.values(CodingContractName).some((a) => a === v);
+
+export const CodingContractDefinitions: CodingContractDefinitions<CodingContractSignatures> = {
+  [CodingContractName.FindLargestPrimeFactor]: {
     desc: (n: number): string => {
       return ["A prime factor is a factor that is a prime number.", `What is the largest prime factor of ${n}?`].join(
         " ",
@@ -92,8 +131,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
     generate: (): number => {
       return getRandomIntInclusive(500, 1e9);
     },
-    name: "Find Largest Prime Factor",
-    solver: (data: number, ans: string): boolean => {
+    solver: (data, answer) => {
       let fac = 2;
       let n: number = data;
       while (n > (fac - 1) * (fac - 1)) {
@@ -103,10 +141,12 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         ++fac;
       }
 
-      return (n === 1 ? fac - 1 : n) === parseInt(ans, 10);
+      return (n === 1 ? fac - 1 : n) === answer;
     },
-  } satisfies CodingContractSimpleType<number>,
-  {
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
+  },
+  [CodingContractName.SubarrayWithMaximumSum]: {
     desc: (n: number[]): string => {
       return [
         "Given the following integer array, find the contiguous subarray",
@@ -126,17 +166,18 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return arr;
     },
-    name: "Subarray with Maximum Sum",
-    solver: (data: number[], ans: string): boolean => {
+    solver: (data, answer) => {
       const nums: number[] = data.slice();
       for (let i = 1; i < nums.length; i++) {
         nums[i] = Math.max(nums[i], nums[i] + nums[i - 1]);
       }
 
-      return parseInt(ans, 10) === Math.max(...nums);
+      return Math.max(...nums) === answer;
     },
-  } satisfies CodingContractSimpleType<number[]>,
-  {
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
+  },
+  [CodingContractName.TotalWaysToSum]: {
     desc: (n: number): string => {
       return [
         "It is possible write four as a sum in exactly four different ways:\n\n",
@@ -152,8 +193,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
     generate: (): number => {
       return getRandomIntInclusive(8, 100);
     },
-    name: "Total Ways to Sum",
-    solver: (data: number, ans: string): boolean => {
+    solver: (data, answer) => {
       if (typeof data !== "number") throw new Error("solver expected number");
       const ways: number[] = [1];
       ways.length = data + 1;
@@ -164,10 +204,12 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         }
       }
 
-      return ways[data] === parseInt(ans, 10);
+      return ways[data] === answer;
     },
-  } satisfies CodingContractSimpleType<number>,
-  {
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
+  },
+  [CodingContractName.TotalWaysToSumII]: {
     desc: (data: [number, number[]]): string => {
       const n: number = data[0];
       const s: number[] = data[1];
@@ -195,8 +237,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       }
       return [n, s];
     },
-    name: "Total Ways to Sum II",
-    solver: (data: [number, number[]], ans: string): boolean => {
+    solver: (data, answer) => {
       // https://www.geeksforgeeks.org/coin-change-dp-7/?ref=lbp
       const n = data[0];
       const s = data[1];
@@ -208,10 +249,12 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
           ways[j] += ways[j - s[i]];
         }
       }
-      return ways[n] === parseInt(ans, 10);
+      return ways[n] === answer;
     },
-  } satisfies CodingContractSimpleType<[number, number[]]>,
-  {
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
+  },
+  [CodingContractName.SpiralizeMatrix]: {
     desc: (n: number[][]): string => {
       let d: string = [
         "Given the following array of arrays of numbers representing a 2D matrix,",
@@ -268,8 +311,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return matrix;
     },
-    name: "Spiralize Matrix",
-    solver: (data: number[][], ans: string): boolean => {
+    solver: (data, answer) => {
       const spiral: number[] = [];
       const m: number = data.length;
       const n: number = data[0].length;
@@ -321,21 +363,16 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         }
       }
 
-      const sanitizedPlayerAns = removeBracketsFromArrayString(ans).replace(/\s/g, "");
-      const playerAns = sanitizedPlayerAns.split(",").map((s) => parseInt(s));
-      if (spiral.length !== playerAns.length) {
-        return false;
-      }
-      for (let i = 0; i < spiral.length; ++i) {
-        if (spiral[i] !== playerAns[i]) {
-          return false;
-        }
-      }
-
-      return true;
+      return spiral.length === answer.length && spiral.every((n, i) => n === answer[i]);
     },
-  } satisfies CodingContractSimpleType<number[][]>,
-  {
+    convertAnswer: (ans) => {
+      const sanitized = removeBracketsFromArrayString(ans).replace(/\s/g, "").split(",");
+      return sanitized.map((s) => parseInt(s));
+    },
+    validateAnswer: (ans): ans is number[] =>
+      typeof ans === "object" && Array.isArray(ans) && ans.every((n) => typeof n === "number"),
+  },
+  [CodingContractName.ArrayJumpingGame]: {
     desc: (arr: number[]): string => {
       return [
         "You are given the following array of integers:\n\n",
@@ -365,19 +402,24 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return arr;
     },
-    name: "Array Jumping Game",
     numTries: 1,
-    solver: (data: number[], ans: string): boolean => {
+    solver: (data, answer) => {
       const n: number = data.length;
       let i = 0;
       for (let reach = 0; i < n && i <= reach; ++i) {
         reach = Math.max(i + data[i], reach);
       }
       const solution: boolean = i === n;
-      return (ans === "1" && solution) || (ans === "0" && !solution);
+      return (solution ? 1 : 0) === answer;
     },
-  } satisfies CodingContractSimpleType<number[]>,
-  {
+    convertAnswer: (ans) => {
+      const num = parseInt(ans);
+      if (num === 0 || num === 1) return num;
+      return null;
+    },
+    validateAnswer: (ans): ans is 1 | 0 => typeof ans === "number" && (ans === 0 || ans === 1),
+  },
+  [CodingContractName.ArrayJumpingGameII]: {
     desc: (arr: number[]): string => {
       return [
         "You are given the following array of integers:\n\n",
@@ -408,9 +450,8 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return arr;
     },
-    name: "Array Jumping Game II",
     numTries: 3,
-    solver: (data: number[], ans: string): boolean => {
+    solver: (data, answer) => {
       const n: number = data.length;
       let reach = 0;
       let jumps = 0;
@@ -430,10 +471,12 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         lastJump = jumpedFrom;
         jumps++;
       }
-      return jumps === parseInt(ans, 10);
+      return jumps === answer;
     },
-  } satisfies CodingContractSimpleType<number[]>,
-  {
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
+  },
+  [CodingContractName.MergeOverlappingIntervals]: {
     desc: (arr: number[][]): string => {
       return [
         "Given the following array of arrays of numbers representing a list of",
@@ -448,8 +491,8 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       ].join(" ");
     },
     difficulty: 3,
-    generate: (): number[][] => {
-      const intervals: number[][] = [];
+    generate: (): [number, number][] => {
+      const intervals: [number, number][] = [];
       const numIntervals: number = getRandomIntInclusive(3, 20);
       for (let i = 0; i < numIntervals; ++i) {
         const start: number = getRandomIntInclusive(1, 25);
@@ -459,15 +502,14 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return intervals;
     },
-    name: "Merge Overlapping Intervals",
     numTries: 15,
-    solver: (data: number[][], ans: string): boolean => {
-      const intervals: number[][] = data.slice();
-      intervals.sort((a: number[], b: number[]) => {
+    solver: (data, answer) => {
+      const intervals: [number, number][] = data.slice();
+      intervals.sort((a: [number, number], b: [number, number]) => {
         return a[0] - b[0];
       });
 
-      const result: number[][] = [];
+      const result: [number, number][] = [];
       let start: number = intervals[0][0];
       let end: number = intervals[0][1];
       for (const interval of intervals) {
@@ -481,13 +523,27 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       }
       result.push([start, end]);
 
-      const sanitizedResult: string = convert2DArrayToString(result);
-      const sanitizedAns: string = ans.replace(/\s/g, "");
-
-      return sanitizedResult === sanitizedAns || sanitizedResult === removeBracketsFromArrayString(sanitizedAns);
+      return result.length === answer.length && result.every((a, i) => a[0] === answer[i][0] && a[1] === answer[i][1]);
     },
-  } satisfies CodingContractSimpleType<number[][]>,
-  {
+    convertAnswer: (ans) => {
+      const arrayRegex = /\[\d+,\d+\]/g;
+      const matches = ans.replace(/\s/g, "").match(arrayRegex);
+      if (matches === null) return null;
+      const arr = matches.map((a) =>
+        removeBracketsFromArrayString(a)
+          .split(",")
+          .map((n) => parseInt(n)),
+      );
+      // An inline function is needed here, so that TS knows this returns true if it matches the type
+      if (((a: number[][]): a is [number, number][] => a.every((n) => n.length === 2))(arr)) return arr;
+      return null;
+    },
+    validateAnswer: (ans): ans is [number, number][] =>
+      typeof ans === "object" &&
+      Array.isArray(ans) &&
+      ans.every((a) => Array.isArray(a) && a.length === 2 && a.every((n) => typeof n === "number")),
+  },
+  [CodingContractName.GenerateIPAddresses]: {
     desc: (data: string): string => {
       return [
         "Given the following string containing only digits, return",
@@ -512,8 +568,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return str;
     },
-    name: "Generate IP Addresses",
-    solver: (data: string, ans: string): boolean => {
+    solver: (data, answer) => {
       const ret: string[] = [];
       for (let a = 1; a <= 3; ++a) {
         for (let b = 1; b <= 3; ++b) {
@@ -536,23 +591,16 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         }
       }
 
-      const sanitizedAns: string = removeBracketsFromArrayString(ans).replace(/\s/g, "");
-      const ansArr: string[] = sanitizedAns
-        .split(",")
-        .map((ip) => ip.replace(/^(?<quote>['"])([\d.]*)\k<quote>$/g, "$2"));
-      if (ansArr.length !== ret.length) {
-        return false;
-      }
-      for (const ipInAns of ansArr) {
-        if (!ret.includes(ipInAns)) {
-          return false;
-        }
-      }
-
-      return true;
+      return ret.length === answer.length && ret.every((ip) => answer.includes(ip));
     },
-  } satisfies CodingContractSimpleType<string>,
-  {
+    convertAnswer: (ans) => {
+      const sanitized = removeBracketsFromArrayString(ans).replace(/\s/g, "");
+      return sanitized.split(",").map((ip) => ip.replace(/^(?<quote>['"])([\d.]*)\k<quote>$/g, "$2"));
+    },
+    validateAnswer: (ans): ans is string[] =>
+      typeof ans === "object" && Array.isArray(ans) && ans.every((s) => typeof s === "string"),
+  },
+  [CodingContractName.AlgorithmicStockTraderI]: {
     desc: (data: number[]): string => {
       return [
         "You are given the following array of stock prices (which are numbers)",
@@ -575,9 +623,8 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return arr;
     },
-    name: "Algorithmic Stock Trader I",
     numTries: 5,
-    solver: (data: number[], ans: string): boolean => {
+    solver: (data, answer) => {
       let maxCur = 0;
       let maxSoFar = 0;
       for (let i = 1; i < data.length; ++i) {
@@ -585,10 +632,12 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         maxSoFar = Math.max(maxCur, maxSoFar);
       }
 
-      return maxSoFar.toString() === ans;
+      return maxSoFar === answer;
     },
-  } satisfies CodingContractSimpleType<number[]>,
-  {
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
+  },
+  [CodingContractName.AlgorithmicStockTraderII]: {
     desc: (data: number[]): string => {
       return [
         "You are given the following array of stock prices (which are numbers)",
@@ -613,17 +662,18 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return arr;
     },
-    name: "Algorithmic Stock Trader II",
-    solver: (data: number[], ans: string): boolean => {
+    solver: (data, answer) => {
       let profit = 0;
       for (let p = 1; p < data.length; ++p) {
         profit += Math.max(data[p] - data[p - 1], 0);
       }
 
-      return profit.toString() === ans;
+      return profit === answer;
     },
-  } satisfies CodingContractSimpleType<number[]>,
-  {
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
+  },
+  [CodingContractName.AlgorithmicStockTraderIII]: {
     desc: (data: number[]): string => {
       return [
         "You are given the following array of stock prices (which are numbers)",
@@ -648,8 +698,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return arr;
     },
-    name: "Algorithmic Stock Trader III",
-    solver: (data: number[], ans: string): boolean => {
+    solver: (data, answer) => {
       let hold1 = Number.MIN_SAFE_INTEGER;
       let hold2 = Number.MIN_SAFE_INTEGER;
       let release1 = 0;
@@ -661,10 +710,12 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         hold1 = Math.max(hold1, price * -1);
       }
 
-      return release2.toString() === ans;
+      return release2 === answer;
     },
-  } satisfies CodingContractSimpleType<number[]>,
-  {
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
+  },
+  [CodingContractName.AlgorithmicStockTraderIV]: {
     desc: (data: [number, number[]]): string => {
       const k = data[0];
       const prices = data[1];
@@ -694,14 +745,13 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return [k, prices];
     },
-    name: "Algorithmic Stock Trader IV",
-    solver: (data: [number, number[]], ans: string): boolean => {
+    solver: (data, answer) => {
       const k: number = data[0];
       const prices: number[] = data[1];
 
       const len = prices.length;
       if (len < 2) {
-        return parseInt(ans) === 0;
+        return answer === 0;
       }
       if (k > len / 2) {
         let res = 0;
@@ -709,7 +759,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
           res += Math.max(prices[i] - prices[i - 1], 0);
         }
 
-        return parseInt(ans) === res;
+        return res === answer;
       }
 
       const hold: number[] = [];
@@ -730,10 +780,12 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         }
       }
 
-      return parseInt(ans) === rele[k];
+      return rele[k] === answer;
     },
-  } satisfies CodingContractSimpleType<[number, number[]]>,
-  {
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
+  },
+  [CodingContractName.MinimumPathSumInATriangle]: {
     desc: (data: number[][]): string => {
       function createTriangleRecurse(data: number[][], level = 0): string {
         const numLevels: number = data.length;
@@ -786,8 +838,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return triangle;
     },
-    name: "Minimum Path Sum in a Triangle",
-    solver: (data: number[][], ans: string): boolean => {
+    solver: (data, answer) => {
       const n: number = data.length;
       const dp: number[] = data[n - 1].slice();
       for (let i = n - 2; i > -1; --i) {
@@ -796,10 +847,12 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         }
       }
 
-      return dp[0] === parseInt(ans);
+      return dp[0] === answer;
     },
-  } satisfies CodingContractSimpleType<number[][]>,
-  {
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
+  },
+  [CodingContractName.UniquePathsInAGridI]: {
     desc: (data: number[]): string => {
       const numRows = data[0];
       const numColumns = data[1];
@@ -816,14 +869,13 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       ].join(" ");
     },
     difficulty: 3,
-    generate: (): number[] => {
+    generate: (): [number, number] => {
       const numRows: number = getRandomIntInclusive(2, 14);
       const numColumns: number = getRandomIntInclusive(2, 14);
 
       return [numRows, numColumns];
     },
-    name: "Unique Paths in a Grid I",
-    solver: (data: number[], ans: string): boolean => {
+    solver: (data, answer) => {
       const n: number = data[0]; // Number of rows
       const m: number = data[1]; // Number of columns
       const currentRow: number[] = [];
@@ -838,10 +890,12 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         }
       }
 
-      return parseInt(ans) === currentRow[n - 1];
+      return currentRow[n - 1] === answer;
     },
-  } satisfies CodingContractSimpleType<number[]>,
-  {
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
+  },
+  [CodingContractName.UniquePathsInAGridII]: {
     desc: (data: number[][]): string => {
       let gridString = "";
       for (const line of data) {
@@ -859,11 +913,11 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       ].join(" ");
     },
     difficulty: 5,
-    generate: (): number[][] => {
+    generate: (): (1 | 0)[][] => {
       const numRows: number = getRandomIntInclusive(2, 12);
       const numColumns: number = getRandomIntInclusive(2, 12);
 
-      const grid: number[][] = [];
+      const grid: (1 | 0)[][] = [];
       grid.length = numRows;
       for (let i = 0; i < numRows; ++i) {
         grid[i] = [];
@@ -889,8 +943,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return grid;
     },
-    name: "Unique Paths in a Grid II",
-    solver: (data: number[][], ans: string): boolean => {
+    solver: (data, answer) => {
       const obstacleGrid: number[][] = [];
       obstacleGrid.length = data.length;
       for (let i = 0; i < obstacleGrid.length; ++i) {
@@ -909,11 +962,12 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         }
       }
 
-      return obstacleGrid[obstacleGrid.length - 1][obstacleGrid[0].length - 1] === parseInt(ans);
+      return obstacleGrid[obstacleGrid.length - 1][obstacleGrid[0].length - 1] === answer;
     },
-  } satisfies CodingContractSimpleType<number[][]>,
-  {
-    name: "Shortest Path in a Grid",
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
+  },
+  [CodingContractName.ShortestPathInAGrid]: {
     desc: (data: number[][]): string => {
       return [
         "You are located in the top-left corner of the following grid:\n\n",
@@ -938,15 +992,15 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       ].join(" ");
     },
     difficulty: 7,
-    generate: (): number[][] => {
+    generate: (): (1 | 0)[][] => {
       const height = getRandomIntInclusive(6, 12);
       const width = getRandomIntInclusive(6, 12);
       const dstY = height - 1;
       const dstX = width - 1;
       const minPathLength = dstY + dstX; // Math.abs(dstY - srcY) + Math.abs(dstX - srcX)
 
-      const grid: number[][] = new Array<number[]>(height);
-      for (let y = 0; y < height; y++) grid[y] = new Array<number>(width).fill(0);
+      const grid: (1 | 0)[][] = new Array<(1 | 0)[]>(height);
+      for (let y = 0; y < height; y++) grid[y] = new Array<1 | 0>(width).fill(0);
 
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
@@ -963,7 +1017,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return grid;
     },
-    solver: (data: number[][], ans: string): boolean => {
+    solver: (data, answer) => {
       const width = data[0].length;
       const height = data.length;
       const dstY = height - 1;
@@ -1005,17 +1059,12 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         }
       }
 
-      // No path at all?
-      if (distance[dstY][dstX] == Infinity) return ans == "";
+      if (!Number.isFinite(distance[dstY][dstX])) return answer === "";
+      if (answer.length > distance[dstY][dstX]) return false;
 
-      // There is a solution, require that the answer path is as short as the shortest
-      // path we found
-      if (ans.length > distance[dstY][dstX]) return false;
-
-      // Further verify that the answer path is a valid path
       let ansX = 0;
       let ansY = 0;
-      for (const direction of ans) {
+      for (const direction of answer.split("")) {
         switch (direction) {
           case "U":
             ansY -= 1;
@@ -1030,16 +1079,17 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
             ansX += 1;
             break;
           default:
-            return false; // Invalid character
+            return false;
         }
-        if (!validPosition(ansY, ansX)) return false;
       }
 
-      // Path was valid, finally verify that the answer path brought us to the end coordinates
-      return ansY == dstY && ansX == dstX;
+      return ansX === dstX && ansY === dstY;
     },
-  } satisfies CodingContractSimpleType<number[][]>,
-  {
+    convertAnswer: (ans) => ans.replace(/\s/g, ""),
+    validateAnswer: (ans): ans is string =>
+      typeof ans === "string" && ans.split("").every((c) => ["U", "D", "L", "R"].includes(c)),
+  },
+  [CodingContractName.SanitizeParenthesesInExpression]: {
     desc: (data: string): string => {
       return [
         "Given the following string:\n\n",
@@ -1078,8 +1128,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return chars.join("");
     },
-    name: "Sanitize Parentheses in Expression",
-    solver: (data: string, ans: string): boolean => {
+    solver: (data, answer) => {
       let left = 0;
       let right = 0;
       const res: string[] = [];
@@ -1128,25 +1177,17 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       dfs(0, 0, left, right, data, "", res);
 
-      const sanitizedPlayerAns: string = removeBracketsFromArrayString(ans);
-      const sanitizedPlayerAnsArr: string[] = sanitizedPlayerAns.split(",");
-      for (let i = 0; i < sanitizedPlayerAnsArr.length; ++i) {
-        sanitizedPlayerAnsArr[i] = removeQuotesFromString(sanitizedPlayerAnsArr[i].replace(/\s/g, ""));
-      }
-
-      if (sanitizedPlayerAnsArr.length !== res.length) {
-        return false;
-      }
-      for (const resultInAnswer of res) {
-        if (!sanitizedPlayerAnsArr.includes(resultInAnswer)) {
-          return false;
-        }
-      }
-
-      return true;
+      if (res.length !== answer.length) return false;
+      return res.every((sol) => answer.includes(sol));
     },
-  } satisfies CodingContractSimpleType<string>,
-  {
+    convertAnswer: (ans) => {
+      const sanitized = removeBracketsFromArrayString(ans).split(",");
+      return sanitized.map((s) => removeQuotesFromString(s.replace(/\s/g, "")));
+    },
+    validateAnswer: (ans): ans is string[] =>
+      typeof ans === "object" && Array.isArray(ans) && ans.every((s) => typeof s === "string"),
+  },
+  [CodingContractName.FindAllValidMathExpressions]: {
     desc: (data: [string, number]): string => {
       const digits: string = data[0];
       const target: number = data[1];
@@ -1189,8 +1230,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return [digits, target];
     },
-    name: "Find All Valid Math Expressions",
-    solver: (data: [string, number], ans: string): boolean => {
+    solver: (data, answer) => {
       const num = data[0];
       const target = data[1];
 
@@ -1226,40 +1266,22 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         }
       }
 
-      const sanitizedPlayerAns: string = removeBracketsFromArrayString(ans);
-      // Don't include any "" entries in the parsed array
-      const sanitizedPlayerAnsArr: string[] = filterTruthy(sanitizedPlayerAns.split(","));
-      for (let i = 0; i < sanitizedPlayerAnsArr.length; ++i) {
-        sanitizedPlayerAnsArr[i] = removeQuotesFromString(sanitizedPlayerAnsArr[i].replace(/\s/g, ""));
-      }
-
-      if (num == null || num.length === 0) {
-        if (sanitizedPlayerAnsArr.length === 0) {
-          return true;
-        }
-        if (sanitizedPlayerAnsArr.length === 1 && sanitizedPlayerAnsArr[0] === "") {
-          return true;
-        }
-        return false;
-      }
-
       const result: string[] = [];
       helper(result, "", num, target, 0, 0, 0);
-      // Prevent player from providing extra wrong answers and still receiving credit
-      if (result.length !== sanitizedPlayerAnsArr.length) return false;
 
-      const resultsSet = new Set(result);
-      for (const expr of sanitizedPlayerAnsArr) {
-        if (!resultsSet.has(expr)) {
-          return false;
-        }
-      }
+      if (result.length !== answer.length) return false;
 
-      return true;
+      const solutions = new Set(answer);
+      return result.every((sol) => solutions.has(sol));
     },
-  } satisfies CodingContractSimpleType<[string, number]>,
-  {
-    name: "HammingCodes: Integer to Encoded Binary",
+    convertAnswer: (ans) => {
+      const sanitized = removeBracketsFromArrayString(ans).split(",");
+      return filterTruthy(sanitized).map((s) => removeQuotesFromString(s.replace(/\s/g, "")));
+    },
+    validateAnswer: (ans): ans is string[] =>
+      typeof ans === "object" && Array.isArray(ans) && ans.every((s) => typeof s === "string"),
+  },
+  [CodingContractName.HammingCodesIntegerToEncodedBinary]: {
     difficulty: 5,
     desc: (n: number): string => {
       return [
@@ -1286,12 +1308,13 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       const y = Math.pow(2, getRandomIntInclusive(1, 57));
       return getRandomIntInclusive(Math.min(x, y), Math.max(x, y));
     },
-    solver: (data: number, ans: string): boolean => {
-      return ans === HammingEncode(data);
+    solver: (data, answer) => {
+      return HammingEncode(data) === answer;
     },
-  } satisfies CodingContractSimpleType<number>,
-  {
-    name: "HammingCodes: Encoded Binary to Integer",
+    convertAnswer: (ans) => ans,
+    validateAnswer: (ans): ans is string => typeof ans === "string",
+  },
+  [CodingContractName.HammingCodesEncodedBinaryToInteger]: {
     difficulty: 8,
     desc: (n: string): string => {
       return [
@@ -1329,12 +1352,13 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
       }
       return _buildArray.join("");
     },
-    solver: (data: string, ans: string): boolean => {
-      return parseInt(ans, 10) === HammingDecode(data);
+    solver: (data, answer) => {
+      return HammingDecode(data) === answer;
     },
-  } satisfies CodingContractSimpleType<string>,
-  {
-    name: "Proper 2-Coloring of a Graph",
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
+  },
+  [CodingContractName.Proper2ColoringOfAGraph]: {
     difficulty: 7,
     numTries: 5,
     desc: (data: [number, [number, number][]]): string => {
@@ -1407,7 +1431,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return [n + m, edges];
     },
-    solver: (data: [number, [number, number][]], ans: string): boolean => {
+    solver: (data, answer) => {
       //Helper function to get neighbourhood of a vertex
       function neighbourhood(vertex: number): number[] {
         const adjLeft = data[1].filter(([a]) => a == vertex).map(([, b]) => b);
@@ -1415,75 +1439,52 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         return adjLeft.concat(adjRight);
       }
 
-      //Sanitize player input
-      const sanitizedPlayerAns = removeBracketsFromArrayString(ans);
+      const coloring: (1 | 0 | undefined)[] = Array<1 | 0 | undefined>(data[0]).fill(undefined);
+      while (coloring.some((val) => val === undefined)) {
+        //Color a vertex in the graph
+        const initialVertex: number = coloring.findIndex((val) => val === undefined);
+        coloring[initialVertex] = 0;
+        const frontier: number[] = [initialVertex];
 
-      //Case where the player believes there is no solution.
-      //Attempt to construct one to check if this is correct.
-      if (sanitizedPlayerAns === "") {
-        //Verify that there is no solution by attempting to create a proper 2-coloring.
-        const coloring: (number | undefined)[] = Array<number | undefined>(data[0]).fill(undefined);
-        while (coloring.some((val) => val === undefined)) {
-          //Color a vertex in the graph
-          const initialVertex: number = coloring.findIndex((val) => val === undefined);
-          coloring[initialVertex] = 0;
-          const frontier: number[] = [initialVertex];
+        //Propagate the coloring throughout the component containing v greedily
+        while (frontier.length > 0) {
+          const v: number = frontier.pop() || 0;
+          const neighbors: number[] = neighbourhood(v);
 
-          //Propagate the coloring throughout the component containing v greedily
-          while (frontier.length > 0) {
-            const v: number = frontier.pop() || 0;
-            const neighbors: number[] = neighbourhood(v);
+          //For each vertex u adjacent to v
+          for (const u of neighbors) {
+            //Set the color of u to the opposite of v's color if it is new,
+            //then add u to the frontier to continue the algorithm.
+            if (coloring[u] === undefined) {
+              if (coloring[v] === 0) coloring[u] = 1;
+              else coloring[u] = 0;
 
-            //For each vertex u adjacent to v
-            for (const u of neighbors) {
-              //Set the color of u to the opposite of v's color if it is new,
-              //then add u to the frontier to continue the algorithm.
-              if (coloring[u] === undefined) {
-                if (coloring[v] === 0) coloring[u] = 1;
-                else coloring[u] = 0;
+              frontier.push(u);
+            }
 
-                frontier.push(u);
-              }
-
-              //Assert u,v do not have the same color
-              else if (coloring[u] === coloring[v]) {
-                //If u,v do have the same color, no proper 2-coloring exists, meaning
-                //the player was correct to say there is no proper 2-coloring of the graph.
-                return true;
-              }
+            //Assert u,v do not have the same color
+            else if (coloring[u] === coloring[v]) {
+              //If u,v do have the same color, no proper 2-coloring exists
+              return answer.length === 0;
             }
           }
         }
-
-        //If this code is reached, there exists a proper 2-coloring of the input
-        //graph, and thus the player was incorrect in submitting no answer.
-        return false;
       }
 
-      //Solution provided case
-      const sanitizedPlayerAnsArr: string[] = sanitizedPlayerAns.split(",");
-      const coloring: number[] = sanitizedPlayerAnsArr.map((val) => parseInt(val));
-      if (coloring.length == data[0]) {
-        const edges = data[1];
-        const validColors = [0, 1];
-        //Check that the provided solution is a proper 2-coloring
-        return edges.every(([a, b]) => {
-          const aColor = coloring[a];
-          const bColor = coloring[b];
-          return (
-            validColors.includes(aColor) && //Enforce the first endpoint is color 0 or 1
-            validColors.includes(bColor) && //Enforce the second endpoint is color 0 or 1
-            aColor != bColor //Enforce the endpoints are different colors
-          );
-        });
-      }
-
-      //Return false if the coloring is the wrong size
-      else return false;
+      return data[1].every(([a, b]) => answer[a] !== answer[b]);
     },
-  } satisfies CodingContractSimpleType<[number, [number, number][]]>,
-  {
-    name: "Compression I: RLE Compression",
+    convertAnswer: (ans) => {
+      const sanitized = removeBracketsFromArrayString(ans).replace(/\s/g, "");
+      if (sanitized === "") return [];
+      const arr = sanitized.split(",").map((s) => parseInt(s, 10));
+      // An inline function is needed here, so that TS knows this returns true if it matches the type
+      if (((a): a is (1 | 0)[] => !a.some((n) => n !== 1 && n !== 0))(arr)) return arr;
+      return null;
+    },
+    validateAnswer: (ans): ans is (1 | 0)[] =>
+      typeof ans === "object" && Array.isArray(ans) && !ans.some((a) => a !== 1 && a !== 0),
+  },
+  [CodingContractName.CompressionIRLECompression]: {
     difficulty: 2,
     desc: (plaintext: string): string => {
       return [
@@ -1525,43 +1526,26 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
 
       return plain.substring(0, length);
     },
-    solver: (plain: string, ans: string): boolean => {
-      if (ans.length % 2 !== 0) {
-        return false;
-      }
+    solver: (plain, answer) => {
+      if (plain.length === 0) return answer === "";
 
-      let ans_plain = "";
-      for (let i = 0; i + 1 < ans.length; i += 2) {
-        const length = ans.charCodeAt(i) - 0x30;
-        if (length < 0 || length > 9) {
-          return false;
+      let out = "";
+      let count = 1;
+      for (let i = 1; i < plain.length; i++) {
+        if (count < 9 && plain[i] === plain[i - 1]) {
+          count++;
+          continue;
         }
-
-        ans_plain += ans[i + 1].repeat(length);
+        out += count + plain[i - 1];
+        count = 1;
       }
-      if (ans_plain !== plain) {
-        return false;
-      }
-
-      let length = 0;
-      for (let i = 0; i < plain.length; ) {
-        let run_length = 1;
-        while (i + run_length < plain.length && plain[i + run_length] === plain[i]) {
-          ++run_length;
-        }
-        i += run_length;
-
-        while (run_length > 0) {
-          run_length -= 9;
-          length += 2;
-        }
-      }
-
-      return ans.length <= length;
+      out += count + plain[plain.length - 1];
+      return out === answer;
     },
-  } satisfies CodingContractSimpleType<string>,
-  {
-    name: "Compression II: LZ Decompression",
+    convertAnswer: (ans) => ans.replace(/\s/g, ""),
+    validateAnswer: (ans): ans is string => typeof ans === "string",
+  },
+  [CodingContractName.CompressionIILZDecompression]: {
     difficulty: 4,
     desc: (compressed: string): string => {
       return [
@@ -1590,12 +1574,13 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
     generate: (): string => {
       return comprLZEncode(comprLZGenerate());
     },
-    solver: (compr: string, ans: string): boolean => {
-      return ans === comprLZDecode(compr);
+    solver: (compr, answer) => {
+      return (comprLZDecode(compr) ?? "") === answer;
     },
-  } satisfies CodingContractSimpleType<string>,
-  {
-    name: "Compression III: LZ Compression",
+    convertAnswer: (ans) => ans.replace(/\s/g, ""),
+    validateAnswer: (ans): ans is string => typeof ans === "string",
+  },
+  [CodingContractName.CompressionIIILZCompression]: {
     difficulty: 10,
     desc: (plaintext: string): string => {
       return [
@@ -1627,11 +1612,13 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
     generate: (): string => {
       return comprLZGenerate();
     },
-    solver: (plain: string, ans: string): boolean => {
-      return comprLZDecode(ans) === plain && ans.length <= comprLZEncode(plain).length;
+    solver: (plain, answer) => {
+      return answer.length <= comprLZEncode(plain).length && comprLZDecode(answer) === plain;
     },
-  } satisfies CodingContractSimpleType<string>,
-  {
+    convertAnswer: (ans) => ans.replace(/\s/g, ""),
+    validateAnswer: (ans): ans is string => typeof ans === "string",
+  },
+  [CodingContractName.EncryptionICaesarCipher]: {
     desc: (data: [string, number]): string => {
       return [
         "Caesar cipher is one of the simplest encryption technique.",
@@ -1683,17 +1670,18 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         Math.floor(Math.random() * 25 + 1),
       ];
     },
-    name: "Encryption I: Caesar Cipher",
-    solver: (data: [string, number], ans: string): boolean => {
+    solver: (data, answer) => {
       // data = [plaintext, shift value]
       // build char array, shifting via map and join to final results
       const cipher = [...data[0]]
         .map((a) => (a === " " ? a : String.fromCharCode(((a.charCodeAt(0) - 65 - data[1] + 26) % 26) + 65)))
         .join("");
-      return cipher === ans;
+      return cipher === answer;
     },
-  } satisfies CodingContractSimpleType<[string, number]>,
-  {
+    convertAnswer: (ans) => ans,
+    validateAnswer: (ans): ans is string => typeof ans === "string",
+  },
+  [CodingContractName.EncryptionIIVigenereCipher]: {
     desc: (data: [string, string]): string => {
       return [
         "Vigenère cipher is a type of polyalphabetic substitution. It uses ",
@@ -1847,8 +1835,7 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
         keys.sort(() => Math.random() - 0.5)[0],
       ];
     },
-    name: "Encryption II: Vigenère Cipher",
-    solver: (data: [string, string], ans: string): boolean => {
+    solver: (data, answer) => {
       // data = [plaintext, keyword]
       // build char array, shifting via map and corresponding keyword letter and join to final results
       const cipher = [...data[0]]
@@ -1858,11 +1845,12 @@ export const codingContractTypesMetadata: CodingContractType<any>[] = [
             : String.fromCharCode(((a.charCodeAt(0) - 2 * 65 + data[1].charCodeAt(i % data[1].length)) % 26) + 65);
         })
         .join("");
-      return cipher === ans;
+      return cipher === answer;
     },
-  } satisfies CodingContractSimpleType<[string, string]>,
-  {
-    name: "Square Root",
+    convertAnswer: (ans) => ans,
+    validateAnswer: (ans): ans is string => typeof ans === "string",
+  },
+  [CodingContractName.SquareRoot]: {
     difficulty: 5,
     desc(data: bigint): string {
       return `You are given a ~200 digit BigInt. Find the square root of this number, to the nearest integer.\n
@@ -1893,8 +1881,17 @@ ${data}`;
       const ans = BigInt(state[0]);
       return ans * ans + BigInt(state[1]);
     },
-    solver(state: [string, string], ans: string): boolean {
-      return state[0] === ans;
+    solver: (state, answer) => {
+      return state[0] === answer.toString();
     },
-  } satisfies CodingContractComplexType<bigint, [string, string]>,
-];
+    convertAnswer: (ans) => BigInt(ans),
+    validateAnswer: (ans): ans is bigint => typeof ans === "bigint",
+  },
+};
+
+// This untyped variant is easier to work with when the specific type is not known.
+// The specific shape is already checked by the CodingContractDefinitions type, so it is safe to assert the type.
+export const CodingContractTypes = CodingContractDefinitions as Record<
+  CodingContractName,
+  CodingContractType<unknown, unknown, unknown>
+>;

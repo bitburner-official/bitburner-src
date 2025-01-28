@@ -7,7 +7,7 @@ import { Sleeve } from "../Sleeve";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
 import { Locations } from "../../../Locations/Locations";
 import { isMember } from "../../../utils/EnumHelper";
-import { objectAssert } from "../../../utils/helpers/typeAssertion";
+import { assertObject } from "../../../utils/TypeAssertion";
 
 export const isSleeveClassWork = (w: SleeveWorkClass | null): w is SleeveClassWork =>
   w !== null && w.type === SleeveWorkType.CLASS;
@@ -55,7 +55,7 @@ export class SleeveClassWork extends SleeveWorkClass {
 
   /** Initializes a ClassWork object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveClassWork {
-    objectAssert(value.data);
+    assertObject(value.data);
     if (typeof value.data.classType !== "string" || !(value.data.classType in Classes)) {
       value.data.classType = "Computer Science";
     }

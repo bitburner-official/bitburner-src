@@ -15,7 +15,7 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { Skills } from "../Bladeburner/data/Skills";
-import { assertString } from "../Netscript/TypeAssertion";
+import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
 import { BlackOperations, blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { checkSleeveAPIAccess, checkSleeveNumber } from "../NetscriptFunctions/Sleeve";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
@@ -26,7 +26,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     return;
   };
   const getBladeburner = function (ctx: NetscriptContext): Bladeburner {
-    const apiAccess = canAccessBitNodeFeature(7);
+    const apiAccess = canAccessBitNodeFeature(7) || canAccessBitNodeFeature(6);
     if (!apiAccess) {
       throw helpers.errorMessage(ctx, "You have not unlocked the Bladeburner API.", "API ACCESS");
     }
@@ -37,8 +37,8 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   };
   function getAction(ctx: NetscriptContext, type: unknown, name: unknown): Action {
     const bladeburner = Player.bladeburner;
-    assertString(ctx, "type", type);
-    assertString(ctx, "name", name);
+    assertStringWithNSContext(ctx, "type", type);
+    assertStringWithNSContext(ctx, "name", name);
     if (bladeburner === null) throw new Error("Must have joined bladeburner");
     const action = bladeburner.getActionFromTypeAndName(type, name);
     if (!action) throw helpers.errorMessage(ctx, `Invalid action type='${type}', name='${name}'`);
@@ -307,7 +307,9 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       return !!attempt.success;
     },
     joinBladeburnerDivision: (ctx) => () => {
-      if (!canAccessBitNodeFeature(7) || Player.bitNodeOptions.disableBladeburner) {
+      if (!canAccessBitNodeFeature(7) && !canAccessBitNodeFeature(6)) {
+        return false; //Does not have bitnode 6 or 7
+      } else if (Player.bitNodeOptions.disableBladeburner) {
         return false;
       }
       if (currentNodeMults.BladeburnerRank === 0) {
