@@ -121,7 +121,7 @@ export function purchaseAugmentation(faction: Faction, augmentation: Augmentatio
   Player.queueAugmentation(augmentation.name);
   Player.loseMoney(augCosts.moneyCost, "augmentations");
 
-  if (!singularity) {
+  if (!singularity && !Settings.SuppressBuyAugmentationConfirmation) {
     dialogBoxCreate(
       `You purchased ${augmentation.name}. Its enhancements will not take effect until they are installed. ` +
         "To install your augmentations, go to the 'Augmentations' tab on the left-hand navigation menu. " +
