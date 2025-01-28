@@ -20,7 +20,8 @@ export type NSEnums = {
   UniversityClassType: typeof UniversityClassType;
   CompanyName: typeof CompanyName;
   FactionName: typeof FactionName;
+  CodingContractName: typeof CodingContractName;
 };
 ```
-**References:** [CityName](./bitburner.cityname.md)<!-- -->, [CrimeType](./bitburner.crimetype.md)<!-- -->, [FactionWorkType](./bitburner.factionworktype.md)<!-- -->, [GymType](./bitburner.gymtype.md)<!-- -->, [JobName](./bitburner.jobname.md)<!-- -->, [JobField](./bitburner.jobfield.md)<!-- -->, [LocationName](./bitburner.locationname.md)<!-- -->, [ToastVariant](./bitburner.toastvariant.md)<!-- -->, [UniversityClassType](./bitburner.universityclasstype.md)<!-- -->, [CompanyName](./bitburner.companyname.md)<!-- -->, [FactionName](./bitburner.factionname.md)
+**References:** [CityName](./bitburner.cityname.md)<!-- -->, [CrimeType](./bitburner.crimetype.md)<!-- -->, [FactionWorkType](./bitburner.factionworktype.md)<!-- -->, [GymType](./bitburner.gymtype.md)<!-- -->, [JobName](./bitburner.jobname.md)<!-- -->, [JobField](./bitburner.jobfield.md)<!-- -->, [LocationName](./bitburner.locationname.md)<!-- -->, [ToastVariant](./bitburner.toastvariant.md)<!-- -->, [UniversityClassType](./bitburner.universityclasstype.md)<!-- -->, [CompanyName](./bitburner.companyname.md)<!-- -->, [FactionName](./bitburner.factionname.md)<!-- -->, [CodingContractName](./bitburner.codingcontractname.md)
 

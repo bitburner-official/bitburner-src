@@ -8350,7 +8350,12 @@ declare enum CompanyName {
   NoodleBar = "Noodle Bar",
 }
 
-/** Names of all factions
+/**
+ * Names of all factions.
+ *
+ * Warning: Spoiler ahead. This enum contains names of **all** factions. If you do not want to know what all the
+ * factions are, you should not check this enum. Some factions are only accessible in the endgame.
+ *
  * @public */
 declare enum FactionName {
   Illuminati = "Illuminati",
