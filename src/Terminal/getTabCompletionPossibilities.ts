@@ -51,8 +51,8 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     baseDir = path;
     pathingRequiredMatch = currentText.replace(/^.*\//, path);
   } else if (baseDir !== root) {
-    pathingRequiredMatch = (baseDir + currentText);
-  } else{
+    pathingRequiredMatch = baseDir + currentText;
+  } else {
     pathingRequiredMatch = currentText.toLowerCase();
   }
 
