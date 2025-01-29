@@ -53,7 +53,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
   } else if (baseDir !== root) {
     pathingRequiredMatch = baseDir + currentText;
   } else {
-    pathingRequiredMatch = currentText.toLowerCase();
+    pathingRequiredMatch = currentText;
   }
 
   const possibilities: string[] = [];
@@ -73,10 +73,23 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
   function addGeneric({ iterable, usePathing, ignoreCurrent }: AddAllGenericOptions) {
     const requiredStart = usePathing ? pathingRequiredMatch : requiredMatch;
     for (const member of iterable) {
+      // const name = usePathing ? member.substring(0, member.lastIndexOf("/")) + member.substring(member.lastIndexOf("/")).toLowerCase() : member.toLowerCase();
+      // if (ignoreCurrent && member.length <= requiredStart.length) continue;
+      // if (name.startsWith(requiredStart)) { // removed member.lower()
+      //   possibilities.push(usePathing ? relativeDir + member.substring(baseDir.length) : member);
+      // }
       if (ignoreCurrent && member.length <= requiredStart.length) continue;
-      if (member.toLowerCase().startsWith(requiredStart)) {
-        possibilities.push(usePathing ? relativeDir + member.substring(baseDir.length) : member);
-      }
+      if(usePathing){
+        if(member.startsWith(requiredStart)){
+          possibilities.push(usePathing ? relativeDir + member.substring(baseDir.length) : member);
+        }
+        else{
+          const name = member.substring(0, member.lastIndexOf("/")) + member.substring(member.lastIndexOf("/")).toLowerCase()
+          const start_lowered = pathingRequiredMatch.substring(0, slashIndex) + pathingRequiredMatch.substring(slashIndex).toLocaleLowerCase();
+          if (name.startsWith(start_lowered)) { // removed member.lower()
+            possibilities.push(usePathing ? relativeDir + member.substring(baseDir.length) : member);
+          }
+        }
     }
   }
 
