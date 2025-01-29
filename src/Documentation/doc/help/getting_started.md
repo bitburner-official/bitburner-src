@@ -117,7 +117,7 @@ The `getServerMaxMoney()` function is used to find this value
     const securityThresh = ns.getServerMinSecurityLevel(target);
 
 This third command defines a numerical value representing the minimum security level the target [Server](../basic/servers.md) can have.
-If the target [Server](../basic/servers.md)'s security level is higher than this value, then our [Script](../basic/scripts.md) will `weaken()` the [Script](../basic/scripts.md) before doing anything else.
+If the target [Server](../basic/servers.md)'s security level is higher than this value, then our [Script](../basic/scripts.md) will `weaken()` the server before doing anything else.
 
     if (ns.fileExists("BruteSSH.exe", "home")) {
         ns.brutessh(target);

@@ -12,7 +12,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { Player } from "@player";
-import { AugmentationName, LocationName } from "@enums";
+import { AugmentationName, CodingContractName, LocationName } from "@enums";
 import { AddToAllServers, createUniqueRandomIp, GetAllServers, GetServer, renameServer } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 import { AwardNFG, v1APIBreak } from "./v1APIBreak";
@@ -168,8 +168,8 @@ export function evaluateVersionCompatibility(ver: string | number): void {
       for (const contract of server.contracts) {
         //Rename old "HammingCodes: Integer to encoded Binary" contracts
         //to "HammingCodes: Integer to Encoded Binary"
-        if (contract.type == "HammingCodes: Integer to encoded Binary") {
-          contract.type = "HammingCodes: Integer to Encoded Binary";
+        if ((contract.type as string) == "HammingCodes: Integer to encoded Binary") {
+          contract.type = CodingContractName.HammingCodesIntegerToEncodedBinary;
         }
       }
     }

@@ -9,7 +9,7 @@ Runs SQLInject.exe on a server.
 **Signature:**
 
 ```typescript
-sqlinject(host: string): void;
+sqlinject(host: string): boolean;
 ```
 
 ## Parameters
@@ -20,7 +20,9 @@ sqlinject(host: string): void;
 
 **Returns:**
 
-void
+boolean
+
+True if the player runs the program successfully, and false otherwise.
 
 ## Remarks
 

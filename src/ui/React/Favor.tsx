@@ -9,7 +9,7 @@ const useStyles = makeStyles()((theme: Theme) => ({
   },
 }));
 
-export function Favor({ favor }: { favor: number | string }): React.ReactElement {
+export function Favor({ favor }: { favor: number }): React.ReactElement {
   const { classes } = useStyles();
-  return <span className={classes.favor}>{typeof favor === "number" ? formatFavor(favor) : favor}</span>;
+  return <span className={classes.favor}>{formatFavor(favor)}</span>;
 }

@@ -1,7 +1,7 @@
 import type { Singularity as ISingularity } from "@nsdefs";
 
 import { Player } from "@player";
-import { AugmentationName, CityName, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
+import { CityName, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
 import { Augmentations } from "../Augmentation/Augmentations";
@@ -163,50 +163,17 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
-      const fac = Factions[facName];
-      const aug = Augmentations[augName];
+      const faction = Factions[facName];
+      const augmentation = Augmentations[augName];
 
-      const factionAugs = getFactionAugmentationsFiltered(fac);
-
-      if (!Player.factions.includes(facName)) {
-        helpers.log(ctx, () => `You can't purchase augmentations from '${facName}' because you aren't a member`);
+      const result = purchaseAugmentation(faction, augmentation, true);
+      if (!result.success) {
+        helpers.log(ctx, () => result.message);
         return false;
       }
-
-      if (!factionAugs.includes(augName)) {
-        helpers.log(ctx, () => `Faction '${facName}' does not have the '${augName}' augmentation.`);
-        return false;
-      }
-
-      const isNeuroflux = aug.name === AugmentationName.NeuroFluxGovernor;
-      if (!isNeuroflux) {
-        for (let j = 0; j < Player.queuedAugmentations.length; ++j) {
-          if (Player.queuedAugmentations[j].name === aug.name) {
-            helpers.log(ctx, () => `You already have the '${augName}' augmentation.`);
-            return false;
-          }
-        }
-        for (let j = 0; j < Player.augmentations.length; ++j) {
-          if (Player.augmentations[j].name === aug.name) {
-            helpers.log(ctx, () => `You already have the '${augName}' augmentation.`);
-            return false;
-          }
-        }
-      }
-
-      if (fac.playerReputation < getAugCost(aug).repCost) {
-        helpers.log(ctx, () => `You do not have enough reputation with '${fac.name}'.`);
-        return false;
-      }
-
-      const res = purchaseAugmentation(aug, fac, true);
-      helpers.log(ctx, () => res);
-      if (res.startsWith("You purchased")) {
-        Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 10);
-        return true;
-      } else {
-        return false;
-      }
+      helpers.log(ctx, () => `You purchased ${augName}.`);
+      Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 10);
+      return true;
     },
     softReset: (ctx) => (_cbScript) => {
       helpers.checkSingularityAccess(ctx);

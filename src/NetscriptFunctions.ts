@@ -14,6 +14,7 @@ import { Terminal } from "./Terminal";
 import { Player } from "@player";
 import {
   CityName,
+  CodingContractName,
   CompletedProgramName,
   CrimeType,
   FactionWorkType,
@@ -25,6 +26,7 @@ import {
   ToastVariant,
   UniversityClassType,
   CompanyName,
+  FactionName,
   type MessageFilename,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
@@ -35,7 +37,6 @@ import {
   numCycleForGrowthCorrected,
   processSingleServerGrowth,
   safelyCreateUniqueServer,
-  getCoreBonus,
   getWeakenEffect,
 } from "./Server/ServerHelpers";
 import {
@@ -89,14 +90,13 @@ import { SnackbarEvents } from "./ui/React/Snackbar";
 import { matchScriptPathExact } from "./utils/helpers/scriptKey";
 
 import { Flags } from "./NetscriptFunctions/Flags";
-import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
-import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
+import { calculateCurrentShareBonus, ShareBonusTime, startSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
 import { InternalAPI, setRemovedFunctions, NSProxy } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
-import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
+import { assert, assertArray, assertString, assertObject } from "./utils/TypeAssertion";
 import { escapeRegExp } from "lodash";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
@@ -109,7 +109,7 @@ import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
 import { ServerConstants } from "./Server/data/Constants";
-import { assertFunction } from "./Netscript/TypeAssertion";
+import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
@@ -125,6 +125,8 @@ export const enums: NSEnums = {
   ToastVariant,
   UniversityClassType,
   CompanyName,
+  FactionName,
+  CodingContractName,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
@@ -296,16 +298,15 @@ export const ns: InternalAPI<NSFull> = {
       if (host === null) {
         throw helpers.errorMessage(ctx, `Cannot find host of WorkerScript. Hostname: ${ctx.workerScript.hostname}.`);
       }
-      const moneyBefore = server.moneyAvailable <= 0 ? 1 : server.moneyAvailable;
-      processSingleServerGrowth(server, threads, host.cpuCores);
+      const moneyBefore = server.moneyAvailable;
+      const growth = processSingleServerGrowth(server, threads, host.cpuCores);
       const moneyAfter = server.moneyAvailable;
       ctx.workerScript.scriptRef.recordGrow(server.hostname, threads);
       const expGain = calculateHackingExpGain(server, Player) * threads;
-      const logGrowPercent = moneyAfter / moneyBefore - 1;
       helpers.log(
         ctx,
         () =>
-          `Available money on '${server.hostname}' grown by ${formatPercent(logGrowPercent, 6)}. Gained ${formatExp(
+          `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)}. Gained ${formatExp(
             expGain,
           )} hacking exp (t=${formatThreads(threads)}).`,
       );
@@ -314,7 +315,7 @@ export const ns: InternalAPI<NSFull> = {
       if (stock) {
         influenceStockThroughServerGrow(server, moneyAfter - moneyBefore);
       }
-      return Promise.resolve(moneyAfter / moneyBefore);
+      return Promise.resolve(server.moneyMax === 0 ? 0 : growth);
     });
   },
   growthAnalyze:
@@ -394,7 +395,10 @@ export const ns: InternalAPI<NSFull> = {
         throw helpers.errorMessage(ctx, `Cannot find host of WorkerScript. Hostname: ${ctx.workerScript.hostname}.`);
       }
       const weakenAmt = getWeakenEffect(threads, host.cpuCores);
+      const securityBeforeWeaken = server.hackDifficulty;
       server.weaken(weakenAmt);
+      const securityAfterWeaken = server.hackDifficulty;
+      const securityReduction = securityBeforeWeaken - securityAfterWeaken;
       ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
       const expGain = calculateHackingExpGain(server, Player) * threads;
       helpers.log(
@@ -407,7 +411,7 @@ export const ns: InternalAPI<NSFull> = {
       ctx.workerScript.scriptRef.onlineExpGained += expGain;
       Player.gainHackingExp(expGain);
       // Account for hidden multiplier in Server.weaken()
-      return Promise.resolve(weakenAmt);
+      return Promise.resolve(securityReduction);
     });
   },
   weakenAnalyze:
@@ -418,19 +422,17 @@ export const ns: InternalAPI<NSFull> = {
       return getWeakenEffect(threads, cores);
     },
   share: (ctx) => () => {
-    const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
-    const coreBonus = getCoreBonus(cores);
-    helpers.log(ctx, () => "Sharing this computer.");
-    const end = StartSharing(
-      ctx.workerScript.scriptRef.threads * calculateIntelligenceBonus(Player.skills.intelligence, 2) * coreBonus,
-    );
-    return helpers.netscriptDelay(ctx, 10000).finally(function () {
-      helpers.log(ctx, () => "Finished sharing this computer.");
+    const threads = ctx.workerScript.scriptRef.threads;
+    const hostname = ctx.workerScript.hostname;
+    helpers.log(ctx, () => `Sharing ${threads} threads on ${hostname}.`);
+    const end = startSharing(threads, helpers.getServer(ctx, hostname).cpuCores);
+    return helpers.netscriptDelay(ctx, ShareBonusTime).finally(function () {
+      helpers.log(ctx, () => `Finished sharing ${threads} threads on ${hostname}.`);
       end();
     });
   },
   getSharePower: () => () => {
-    return CalculateShareMult();
+    return calculateCurrentShareBonus();
   },
   print:
     (ctx) =>
@@ -568,6 +570,17 @@ export const ns: InternalAPI<NSFull> = {
 
       LogBoxEvents.emit(runningScriptObj);
     },
+  renderTail:
+    (ctx) =>
+    (_pid = ctx.workerScript.scriptRef.pid) => {
+      const pid = helpers.number(ctx, "pid", _pid);
+      const runningScriptObj = helpers.getRunningScript(ctx, pid);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+        return;
+      }
+      runningScriptObj.tailProps?.rerender();
+    },
   moveTail:
     (ctx) =>
     (_x, _y, _pid = ctx.workerScript.scriptRef.pid) => {
@@ -612,6 +625,18 @@ export const ns: InternalAPI<NSFull> = {
       }
       runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
       runningScriptObj.tailProps?.rerender();
+    },
+  setTailFontSize:
+    (ctx) =>
+    (_pixel, scriptID, hostname, ...scriptArgs) => {
+      const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
+      const runningScriptObj = helpers.getRunningScript(ctx, ident);
+      if (runningScriptObj == null) {
+        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
+        return;
+      }
+      if (_pixel === undefined) runningScriptObj.tailProps?.setFontSize(undefined);
+      else runningScriptObj.tailProps?.setFontSize(helpers.number(ctx, "pixel", _pixel));
     },
   nuke: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -801,7 +826,7 @@ export const ns: InternalAPI<NSFull> = {
       const killByPid = typeof ident === "number";
       if (killByPid) {
         // Kill by pid
-        res = killWorkerScriptByPid(ident);
+        res = killWorkerScriptByPid(ident, ctx.workerScript);
       } else {
         // Kill by filename/hostname
         if (scriptID === undefined) {
@@ -816,7 +841,7 @@ export const ns: InternalAPI<NSFull> = {
 
         res = true;
         for (const pid of byPid.keys()) {
-          res &&= killWorkerScriptByPid(pid);
+          res &&= killWorkerScriptByPid(pid, ctx.workerScript);
         }
       }
 
@@ -851,7 +876,7 @@ export const ns: InternalAPI<NSFull> = {
       for (const byPid of server.runningScriptMap.values()) {
         for (const pid of byPid.keys()) {
           if (safetyGuard && pid == ctx.workerScript.pid) continue;
-          killWorkerScriptByPid(pid);
+          killWorkerScriptByPid(pid, ctx.workerScript);
           ++scriptsKilled;
         }
       }
@@ -1484,7 +1509,7 @@ export const ns: InternalAPI<NSFull> = {
       if (!pattern.test(key)) continue;
       suc = true;
       for (const pid of byPid.keys()) {
-        killWorkerScriptByPid(pid);
+        killWorkerScriptByPid(pid, ctx.workerScript);
       }
     }
     return suc;
@@ -1684,11 +1709,11 @@ export const ns: InternalAPI<NSFull> = {
     const options: { type?: string; choices?: string[] } = {};
     _options ??= options;
     const txt = helpers.string(ctx, "txt", _txt);
-    assert(_options, objectAssert, (type) =>
+    assert(_options, assertObject, (type) =>
       helpers.errorMessage(ctx, `Invalid type for options: ${type}. Should be object.`, "TYPE"),
     );
     if (_options.type !== undefined) {
-      assert(_options.type, stringAssert, (type) =>
+      assert(_options.type, assertString, (type) =>
         helpers.errorMessage(ctx, `Invalid type for options.type: ${type}. Should be string.`, "TYPE"),
       );
       options.type = _options.type;
@@ -1700,7 +1725,7 @@ export const ns: InternalAPI<NSFull> = {
         );
       }
       if (options.type === "select") {
-        assert(_options.choices, arrayAssert, (type) =>
+        assert(_options.choices, assertArray, (type) =>
           helpers.errorMessage(
             ctx,
             `Invalid type for options.choices: ${type}. If options.type is "select", options.choices must be an array.`,
@@ -1801,7 +1826,7 @@ export const ns: InternalAPI<NSFull> = {
   }),
   atExit: (ctx) => (callback, _id) => {
     const id = _id ? helpers.string(ctx, "id", _id) : "default";
-    assertFunction(ctx, "callback", callback);
+    assertFunctionWithNSContext(ctx, "callback", callback);
     ctx.workerScript.atExit.set(id, callback);
   },
   mv: (ctx) => (_host, _source, _destination) => {

@@ -1,6 +1,6 @@
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { CrimeType, FactionWorkType } from "@enums";
+import React, { useEffect, useState } from "react";
+import { BladeburnerActionType, CrimeType, FactionWorkType, GymType } from "@enums";
 import { CONSTANTS } from "../../../Constants";
 import { Player } from "@player";
 import { formatPercent, formatInt } from "../../../ui/formatNumber";
@@ -12,7 +12,7 @@ import { EarningsElement, StatsElement } from "./StatsElement";
 import { TaskSelector } from "./TaskSelector";
 import { TravelModal } from "./TravelModal";
 import { findCrime } from "../../../Crime/CrimeHelpers";
-import { SleeveWorkType } from "../Work/Work";
+import { type SleeveWork, SleeveWorkType } from "../Work/Work";
 import { getEnumHelper } from "../../../utils/EnumHelper";
 
 function getWorkDescription(sleeve: Sleeve, progress: number): string {
@@ -74,6 +74,51 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
   }
 }
 
+function calculateABC(work: SleeveWork | null): [string, string, string] {
+  if (work === null) {
+    return ["Idle", "------", "------"];
+  }
+  switch (work.type) {
+    case SleeveWorkType.COMPANY:
+      return ["Work for Company", work.companyName, "------"];
+    case SleeveWorkType.FACTION: {
+      const workNames = {
+        [FactionWorkType.field]: "Field Work",
+        [FactionWorkType.hacking]: "Hacking Contracts",
+        [FactionWorkType.security]: "Security Work",
+      };
+      return ["Work for Faction", work.factionName, workNames[work.factionWorkType] ?? ""];
+    }
+    case SleeveWorkType.BLADEBURNER:
+      if (work.actionId.type === BladeburnerActionType.Contract) {
+        return ["Perform Bladeburner Actions", "Take on contracts", work.actionId.name];
+      }
+      return ["Perform Bladeburner Actions", work.actionId.name, "------"];
+    case SleeveWorkType.CLASS: {
+      if (!work.isGym()) {
+        return ["Take University Course", work.classType, work.location];
+      }
+      const gymNames: Record<GymType, string> = {
+        [GymType.strength]: "Train Strength",
+        [GymType.defense]: "Train Defense",
+        [GymType.dexterity]: "Train Dexterity",
+        [GymType.agility]: "Train Agility",
+      };
+      return ["Workout at Gym", gymNames[work.classType as GymType], work.location];
+    }
+    case SleeveWorkType.CRIME:
+      return ["Commit Crime", getEnumHelper("CrimeType").getMember(work.crimeType, { alwaysMatch: true }), "------"];
+    case SleeveWorkType.SUPPORT:
+      return ["Perform Bladeburner Actions", "Support main sleeve", "------"];
+    case SleeveWorkType.INFILTRATE:
+      return ["Perform Bladeburner Actions", "Infiltrate Synthoids", "------"];
+    case SleeveWorkType.RECOVERY:
+      return ["Shock Recovery", "------", "------"];
+    case SleeveWorkType.SYNCHRO:
+      return ["Synchronize", "------", "------"];
+  }
+}
+
 interface SleeveElemProps {
   sleeve: Sleeve;
   rerender: () => void;
@@ -83,7 +128,19 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
   const [travelOpen, setTravelOpen] = useState(false);
   const [augmentationsOpen, setAugmentationsOpen] = useState(false);
 
-  const [abc, setABC] = useState(["Idle", "------", "------"]);
+  /**
+   * "abc" contains values of 3 dropdown inputs. It will be set when:
+   * - The player selects a task and its options.
+   * - The sleeve's current task is set by non-UI things (e.g., NS API).
+   */
+  const [abc, setABC] = useState(calculateABC(props.sleeve.currentWork));
+
+  /**
+   * Update abc if the sleeve's current task is set by non-UI things.
+   */
+  useEffect(() => {
+    setABC(calculateABC(props.sleeve.currentWork));
+  }, [props.sleeve.currentWork]);
 
   function setTask(): void {
     switch (abc[0]) {
@@ -169,7 +226,7 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
         </span>
         <span>
           <EarningsElement sleeve={props.sleeve} />
-          <TaskSelector sleeve={props.sleeve} setABC={setABC} />
+          <TaskSelector sleeve={props.sleeve} abc={abc} setABC={setABC} />
           <Button onClick={setTask} sx={{ width: "100%" }}>
             Set Task
           </Button>

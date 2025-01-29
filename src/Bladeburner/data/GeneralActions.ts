@@ -16,7 +16,7 @@ export const GeneralActions: Record<BladeburnerGeneralActionName, GeneralAction>
     desc:
       "Mine and analyze Synthoid-related data. This improves the Bladeburner unit's intelligence on Synthoid locations " +
       "and activities. Completing this action will improve the accuracy of your Synthoid population estimated in the " +
-      "current city.\n\n" +
+      "current city.\n" +
       "Does NOT require stamina.",
   }),
   [BladeburnerGeneralActionName.Recruitment]: new GeneralAction({
@@ -30,7 +30,7 @@ export const GeneralActions: Record<BladeburnerGeneralActionName, GeneralAction>
       return Math.pow(person.skills.charisma, 0.45) / (bladeburner.teamSize - bladeburner.sleeveSize + 1);
     },
     desc:
-      "Attempt to recruit members for your Bladeburner team. These members can help you conduct operations.\n\n" +
+      "Attempt to recruit members for your Bladeburner team. These members can help you conduct operations.\n" +
       "Does NOT require stamina.",
     successScaling: "Success chance is affected by Charisma.",
   }),
@@ -38,8 +38,8 @@ export const GeneralActions: Record<BladeburnerGeneralActionName, GeneralAction>
     name: BladeburnerGeneralActionName.Diplomacy,
     getActionTime: () => 60,
     desc:
-      "Improve diplomatic relations with the Synthoid population. Completing this action will reduce the Chaos level in " +
-      "your current city.\n\n" +
+      "Improve diplomatic relations with the Synthoid population. Completing this action will reduce the chaos level of " +
+      "your current city.\n" +
       "Does NOT require stamina.",
   }),
   [BladeburnerGeneralActionName.HyperbolicRegen]: new GeneralAction({
@@ -54,6 +54,8 @@ export const GeneralActions: Record<BladeburnerGeneralActionName, GeneralAction>
     getActionTime: () => 60,
     desc:
       "Purposefully stir trouble in the synthoid community in order to gain a political edge. This will generate " +
-      "additional contracts and operations, at the cost of increased Chaos.",
+      "additional contracts and operations at the cost of increasing the chaos level of all cities.\n" +
+      "Does NOT require stamina.",
+    warning: "This action increases chaos of all cities by percentage.",
   }),
 };

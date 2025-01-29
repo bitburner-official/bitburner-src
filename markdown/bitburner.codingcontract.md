@@ -18,6 +18,7 @@ export interface CodingContract
 |  --- | --- |
 |  [attempt(answer, filename, host)](./bitburner.codingcontract.attempt.md) | Attempts a coding contract, returning a reward string on success or empty string on failure. |
 |  [createDummyContract(type)](./bitburner.codingcontract.createdummycontract.md) | Generate a dummy contract. |
+|  [getContract(filename, host)](./bitburner.codingcontract.getcontract.md) | Get various data about a specific contract. |
 |  [getContractType(filename, host)](./bitburner.codingcontract.getcontracttype.md) | Get the type of a coding contract. |
 |  [getContractTypes()](./bitburner.codingcontract.getcontracttypes.md) | List all contract types. |
 |  [getData(filename, host)](./bitburner.codingcontract.getdata.md) | Get the input data. |

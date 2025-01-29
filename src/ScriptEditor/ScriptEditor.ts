@@ -2,13 +2,7 @@ import type { ContentFilePath } from "../Paths/ContentFile";
 
 import { EventEmitter } from "../utils/EventEmitter";
 import * as monaco from "monaco-editor";
-import { loadThemes, makeTheme, sanitizeTheme } from "./ui/themes";
-import netscriptDefinitions from "./NetscriptDefinitions.d.ts?raw";
-// We use a relative paths here to
-// - bypass the exports in @types/react's package.json
-// - to prevent typescript from complaining about importing a delcaration file.
-import reactTypes from "../../node_modules/@types/react/index.d.ts?raw";
-import reactDomTypes from "../../node_modules/@types/react-dom/index.d.ts?raw";
+import { loadThemes, makeTheme } from "./ui/themes";
 import { Settings } from "../Settings/Settings";
 import { NetscriptExtra } from "../NetscriptFunctions/Extra";
 import * as enums from "../Enums";
@@ -67,15 +61,10 @@ export class ScriptEditor {
       loader.language.tokenizer.root.unshift([new RegExp("\\bthis\\b"), { token: "this" }]);
     })().catch((e) => exceptionAlert(e));
 
-    // Add ts definitions for API
-    const source = netscriptDefinitions.replace(/export /g, "");
     for (const [language, languageDefaults, getLanguageWorker] of [
       ["javascript", monaco.languages.typescript.javascriptDefaults, monaco.languages.typescript.getJavaScriptWorker],
       ["typescript", monaco.languages.typescript.typescriptDefaults, monaco.languages.typescript.getTypeScriptWorker],
     ] as const) {
-      languageDefaults.addExtraLib(source, "netscript.d.ts");
-      languageDefaults.addExtraLib(reactTypes, "react.d.ts");
-      languageDefaults.addExtraLib(reactDomTypes, "react-dom.d.ts");
       languageDefaults.setCompilerOptions({
         ...languageDefaults.getCompilerOptions(),
         // We allow direct importing of `.ts`/`.tsx` files, so tell the typescript language server that.
@@ -143,7 +132,6 @@ export class ScriptEditor {
     });
     // Load themes
     loadThemes(monaco.editor.defineTheme);
-    sanitizeTheme(Settings.EditorTheme);
     monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
   }
 }

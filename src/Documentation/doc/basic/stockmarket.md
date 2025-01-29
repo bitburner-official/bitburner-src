@@ -14,11 +14,24 @@ So these concepts below should seem similar, but won't be exactly the same.
 
 ## Positions: Long vs Short
 
+First off, note that _all_ transactions have a flat commission fee, so
+high-frequency trading is not a good strategy.
+
 When making a transaction on the stock market, there are two types of positions: Long and Short.
 A Long position is the typical scenario where you buy a stock and earn a profit if the price of that stock increases.
 Meanwhile, a Short position is the exact opposite.
-In a Short position, you purchase shares of a stock and earn a profit if the price of that stock decreases.
-This is also called 'shorting' a stock.
+
+In a Short position, you borrow shares of a stock to sell and earn a profit if the price of that stock decreases.
+This is also called 'shorting' a stock. The proceeds from the sale are held as
+collateral, called 'margin'. You also have to add additional margin equal to
+the current value of the stock - this is the cost to 'purchase' the short.
+
+When you close a short position, you buy back the shares to pay back the securities loan.
+You then get the margin back, minus whatever was used to repurchase the shares.
+So, your profit is still the change in price times the number of shares.
+Beware that, unlike Long positions which have unlimited upside and limited
+downside, shorts have limited upside and unlimited downside, and selling a
+sufficiently underwater short can cause your money to go negative.
 
 Shorting stocks is not available immediately, and must be unlocked later in the game.
 

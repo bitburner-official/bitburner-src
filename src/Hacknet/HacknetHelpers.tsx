@@ -520,15 +520,14 @@ export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 
         break;
       }
       case "Improve Studying": {
-        // Multiplier handled by HashManager
+        // Multiplier is handled by HashManager
         break;
       }
       case "Improve Gym Training": {
-        // Multiplier handled by HashManager
+        // Multiplier is handled by HashManager
         break;
       }
       case "Exchange for Corporation Research": {
-        // This will throw if player doesn't have a corporation
         const corp = Player.corporation;
         if (corp === null) {
           Player.hashManager.refundUpgrade(upgName, count);
@@ -540,7 +539,6 @@ export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 
         break;
       }
       case "Exchange for Bladeburner Rank": {
-        // This will throw if player isn't in Bladeburner
         const bladeburner = Player.bladeburner;
         if (bladeburner === null) {
           Player.hashManager.refundUpgrade(upgName, count);
@@ -550,7 +548,6 @@ export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 
         break;
       }
       case "Exchange for Bladeburner SP": {
-        // This will throw if player isn't in Bladeburner
         const bladeburner = Player.bladeburner;
         if (bladeburner === null) {
           Player.hashManager.refundUpgrade(upgName, count);

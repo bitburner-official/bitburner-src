@@ -17,7 +17,13 @@ export function basicErrorMessage(ws: WorkerScript | ScriptDeath, msg: string, t
   return `${type} ERROR\n${ws.name}@${ws.hostname} (PID - ${ws.pid})\n\n${msg}`;
 }
 
-/** Creates an error message string with a stack trace. */
+/**
+ * Creates an error message string with a stack trace.
+ *
+ * When the player provides invalid input, we try to provide a stack trace that points to the player's invalid caller,
+ * but we don't have an error instance with a stack trace. In order to get that stack trace, we create a new error
+ * instance, then remove "unrelated" traces (code in our codebase) and leave only traces of the player's code.
+ */
 export function errorMessage(ctx: NetscriptContext, msg: string, type = "RUNTIME"): string {
   const errstack = new Error().stack;
   if (errstack === undefined) throw new Error("how did we not throw an error?");

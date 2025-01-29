@@ -29,6 +29,7 @@ import { Go } from "./Go/Go";
 import { calculateExp } from "./PersonObjects/formulas/skill";
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
+import { pendingUIShareJobIds } from "./NetworkShare/Share";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string) {
@@ -74,6 +75,9 @@ export function prestigeAugmentation(): void {
   // Reset home computer (only the programs) and add to AllServers
   AddToAllServers(homeComp);
   prestigeHomeComputer(homeComp);
+
+  // Clear all pending share jobs created via UI
+  pendingUIShareJobIds.length = 0;
 
   // Receive starting money and programs from installed augmentations
   for (const ownedAug of Player.augmentations) {
@@ -211,6 +215,10 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // Reset home computer (only the programs) and add to AllServers
   AddToAllServers(homeComp);
   prestigeHomeComputer(homeComp);
+
+  // Clear all pending share jobs created via UI
+  pendingUIShareJobIds.length = 0;
+
   // Ram usage needs to be cleared for bitnode-level resets, due to possible change in singularity cost.
   for (const script of homeComp.scripts.values()) script.ramUsage = null;
 

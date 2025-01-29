@@ -48,8 +48,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
 
     getGraftableAugmentations: (ctx) => () => {
       checkGraftingAPIAccess(ctx);
-      const graftableAugs = getGraftingAvailableAugs();
-      return graftableAugs;
+      return getGraftingAvailableAugs();
     },
 
     graftAugmentation:

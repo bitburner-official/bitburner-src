@@ -2,7 +2,7 @@ import type { Member } from "../types";
 import type { NetscriptContext } from "../Netscript/APIWrapper";
 
 import * as allEnums from "../Enums";
-import { assertString } from "../Netscript/TypeAssertion";
+import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
 import { errorMessage } from "../Netscript/ErrorMessages";
 import { getRandomIntInclusive } from "./helpers/getRandomIntInclusive";
 import { getRecordValues } from "../Types/Record";
@@ -43,7 +43,7 @@ class EnumHelper<EnumObj extends object, EnumMember extends Member<EnumObj> & st
     if (match) return match;
 
     // No match found, create error message
-    assertString(ctx, argName, toValidate);
+    assertStringWithNSContext(ctx, argName, toValidate);
     let allowableValues = `Allowable values: ${this.valueArray.map((val) => `"${val}"`).join(", ")}`;
     // Don't display all possibilities for large enums
     if (this.valueArray.length > 10) {

@@ -81,6 +81,21 @@ export function parseUnknownError(error: unknown): {
   };
 }
 
+export function getErrorMessageWithStackAndCause(error: unknown, prefix = ""): string {
+  const errorData = parseUnknownError(error);
+  let errorMessage = `${prefix}${errorData.errorAsString}`;
+  if (errorData.stack) {
+    errorMessage += `\nStack: ${errorData.stack}`;
+  }
+  if (errorData.causeAsString) {
+    errorMessage += `\nError cause: ${errorData.causeAsString}`;
+    if (errorData.causeStack) {
+      errorMessage += `\nCause stack: ${errorData.causeStack}`;
+    }
+  }
+  return errorMessage;
+}
+
 export function getErrorMetadata(error: unknown, errorInfo?: React.ErrorInfo, page?: Page): IErrorMetadata {
   const isElectron = navigator.userAgent.toLowerCase().includes(" electron/");
   const env = process.env.NODE_ENV === "development" ? GameEnv.Development : GameEnv.Production;

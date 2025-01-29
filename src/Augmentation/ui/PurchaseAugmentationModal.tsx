@@ -40,7 +40,7 @@ export function PurchaseAugmentationModal({ aug, faction, onClose, open }: IProp
       <Button
         autoFocus
         onClick={() => {
-          purchaseAugmentation(aug, faction);
+          purchaseAugmentation(faction, aug);
           onClose();
         }}
       >
