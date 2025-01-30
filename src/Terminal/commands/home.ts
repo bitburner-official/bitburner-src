@@ -1,4 +1,4 @@
-import { root } from "../../Paths/Directory";
+import { connectServer } from "../../Server/ServerHelpers";
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
 
@@ -7,9 +7,6 @@ export function home(args: (string | number | boolean)[]): void {
     Terminal.error("Incorrect usage of home command. Usage: home");
     return;
   }
-  Player.getCurrentServer().isConnectedTo = false;
-  Player.currentServer = Player.getHomeComputer().hostname;
-  Player.getCurrentServer().isConnectedTo = true;
+  connectServer(Player.getHomeComputer());
   Terminal.print("Connected to home");
-  Terminal.setcwd(root);
 }

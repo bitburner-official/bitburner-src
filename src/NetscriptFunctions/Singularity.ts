@@ -24,7 +24,7 @@ import { Companies } from "../Company/Companies";
 import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
-import { getServerOnNetwork } from "../Server/ServerHelpers";
+import { connectServer, getServerOnNetwork } from "../Server/ServerHelpers";
 import { Terminal } from "../Terminal";
 import { calculateHackingTime } from "../Hacking";
 import { Server } from "../Server/Server";
@@ -52,6 +52,7 @@ import { blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
 import { calculateFavorAfterResetting } from "../Faction/formulas/favor";
 import { validBitNodes } from "../BitNode/BitNodeUtils";
+import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -479,40 +480,34 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         throw helpers.errorMessage(ctx, `Invalid hostname: '${hostname}'`);
       }
 
-      //Home case
-      if (hostname === "home") {
-        Player.getCurrentServer().isConnectedTo = false;
-        Player.currentServer = Player.getHomeComputer().hostname;
-        Player.getCurrentServer().isConnectedTo = true;
-        Terminal.setcwd(root);
-        return true;
-      }
-
-      //Adjacent server case
+      // Adjacent servers
       const server = Player.getCurrentServer();
       for (let i = 0; i < server.serversOnNetwork.length; i++) {
         const other = getServerOnNetwork(server, i);
-        if (other === null) continue;
-        if (other.hostname == hostname) {
-          Player.getCurrentServer().isConnectedTo = false;
-          Player.currentServer = target.hostname;
-          Player.getCurrentServer().isConnectedTo = true;
-          Terminal.setcwd(root);
+        if (other === null) {
+          exceptionAlert(
+            new Error(
+              `${server.serversOnNetwork[i]} is on the network of ${server.hostname}, but we cannot find its data.`,
+            ),
+          );
+          return false;
+        }
+        if (other.hostname === hostname) {
+          connectServer(other);
           return true;
         }
       }
 
-      //Backdoor case
-      const other = GetServer(hostname);
-      if (other !== null && other instanceof Server && other.backdoorInstalled) {
-        Player.getCurrentServer().isConnectedTo = false;
-        Player.currentServer = target.hostname;
-        Player.getCurrentServer().isConnectedTo = true;
-        Terminal.setcwd(root);
+      /**
+       * Backdoored + owned servers (home, private servers, or hacknet servers). With home computer, purchasedByPlayer
+       * is true.
+       */
+      if (target.backdoorInstalled || target.purchasedByPlayer) {
+        connectServer(target);
         return true;
       }
 
-      //Failure case
+      // Failure case
       return false;
     },
     manualHack: (ctx) => () => {

@@ -8,12 +8,18 @@ import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { Factions } from "../../../src/Faction/Factions";
 import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
 import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "./Utilities";
+import { connectServer } from "../../../src/Server/ServerHelpers";
+import type { NSFull } from "../../../src/NetscriptFunctions";
 
 function setNumBlackOpsComplete(value: number): void {
   if (!Player.bladeburner) {
     throw new Error("Invalid Bladeburner data");
   }
   Player.bladeburner.numBlackOpsComplete = value;
+}
+
+function connectServerWithHostname(hostname: string) {
+  connectServer(GetServerOrThrow(hostname));
 }
 
 const nextBN = 3;
@@ -294,6 +300,60 @@ describe("purchaseAugmentation", () => {
       const ns = getNS();
       expect(ns.singularity.purchaseAugmentation(FactionName.Illuminati, AugmentationName.QLink)).toStrictEqual(false);
       expectNoQueuedAugmentation(AugmentationName.QLink);
+    });
+  });
+});
+
+describe("connect", () => {
+  beforeEach(() => {
+    setupBasicTestingEnvironment();
+    Player.sourceFiles.set(9, 3);
+    prestigeSourceFile(true);
+    Player.money = 1e100;
+  });
+
+  describe("Success", () => {
+    const expectConnectSuccessfully = (ns: NSFull, targetHostname: string) => {
+      expect(ns.singularity.connect(targetHostname)).toStrictEqual(true);
+      expect(Player.getCurrentServer().hostname).toStrictEqual(targetHostname);
+    };
+    test("Built-in adjacent server", () => {
+      expectConnectSuccessfully(getNS(), "n00dles");
+    });
+    test("Home", () => {
+      connectServerWithHostname(SpecialServers.DaedalusServer);
+      expectConnectSuccessfully(getNS(), "home");
+    });
+    test("Private server", () => {
+      const ns = getNS();
+      ns.purchaseServer("pserver-0", 8);
+      connectServerWithHostname(SpecialServers.DaedalusServer);
+      expectConnectSuccessfully(ns, "pserver-0");
+    });
+    test("Hacknet server", () => {
+      const ns = getNS();
+      ns.hacknet.purchaseNode();
+      connectServerWithHostname(SpecialServers.DaedalusServer);
+      expectConnectSuccessfully(ns, "hacknet-server-0");
+    });
+    test("Backdoored server", () => {
+      const ns = getNS();
+      connectServerWithHostname(SpecialServers.DaedalusServer);
+      GetServerOrThrow("n00dles").backdoorInstalled = true;
+      expectConnectSuccessfully(ns, "n00dles");
+    });
+  });
+
+  describe("Failure", () => {
+    test("Non-existent server", () => {
+      const ns = getNS();
+      expect(() => ns.singularity.connect("abc")).toThrow();
+      expect(Player.getCurrentServer().hostname).not.toStrictEqual("abc");
+    });
+    test("Non-adjacent server", () => {
+      const ns = getNS();
+      expect(ns.singularity.connect(SpecialServers.DaedalusServer)).toStrictEqual(false);
+      expect(Player.getCurrentServer().hostname).not.toStrictEqual(SpecialServers.DaedalusServer);
     });
   });
 });
