@@ -379,6 +379,13 @@ const stanek = {
 
 // UI API
 const ui = {
+  openTail: 0,
+  renderTail: 0,
+  moveTail: 0,
+  resizeTail: 0,
+  closeTail: 0,
+  setTailTitle: 0,
+  setTailFontSize: 0,
   getTheme: 0,
   setTheme: 0,
   resetTheme: 0,
@@ -600,7 +607,6 @@ export const RamCosts: RamCostTree<NSFull> = {
   tail: 0,
   toast: 0,
   moveTail: 0,
-  renderTail: 0,
   resizeTail: 0,
   closeTail: 0,
   setTitle: 0,
