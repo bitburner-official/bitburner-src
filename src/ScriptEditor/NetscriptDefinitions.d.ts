@@ -5668,6 +5668,136 @@ interface Infiltration {
  */
 interface UserInterface {
   /**
+   * Open the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Opens a script’s logs. This is functionally the same as the tail Terminal command.
+   *
+   * If the function is called with no arguments, it will open the current script’s logs.
+   *
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get the logs from another script.
+   * Remember that scripts are uniquely identified by both their names and arguments.
+   *
+   * @example
+   * ```js
+   * //Open logs from foo.js on the current server that was run with no args
+   * ns.tail("foo.js");
+   *
+   * //Get logs from foo.js on the foodnstuff server that was run with no args
+   * ns.tail("foo.js", "foodnstuff");
+   *
+   * //Get logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
+   * ns.tail("foo.js", "foodnstuff", 1, "test");
+   * ```
+   * @param fn - Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed.
+   * @param host - Optional. Hostname of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param args - Arguments for the script being tailed.
+   */
+  openTail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
+
+  /**
+   * Render a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Tail windows are rendered at an interval defined in game settings. This function renders the tail window of the
+   * specified script immediately.
+   *
+   * @param pid - Optional. PID of the script having its tail rendered. If omitted, the current script is used.
+   */
+  renderTail(pid?: number): void;
+
+  /**
+   * Move a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Moves a tail window. Coordinates are in screen space pixels (top left is 0,0).
+   *
+   * @param x - x coordinate.
+   * @param y - y coordinate.
+   * @param pid - Optional. PID of the script having its tail moved. If omitted, the current script is used.
+   */
+  moveTail(x: number, y: number, pid?: number): void;
+
+  /**
+   * Resize a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Resize a tail window. Size are in pixel.
+   *
+   * @param width - Width of the window.
+   * @param height - Height of the window.
+   * @param pid - Optional. PID of the script having its tail resized. If omitted, the current script is used.
+   */
+  resizeTail(width: number, height: number, pid?: number): void;
+
+  /**
+   * Close the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Closes a script’s logs. This is functionally the same as pressing the "Close" button on the tail window.
+   *
+   * If the function is called with no arguments, it will close the current script’s logs.
+   *
+   * Otherwise, the pid argument can be used to close the logs from another script.
+   *
+   * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
+   */
+  closeTail(pid?: number): void;
+
+  /**
+   * Set the title of the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This sets the title to the given string, and also forces an update of the
+   * tail window's contents.
+   *
+   * The title is saved across restarts, but only if it is a simple string.
+   *
+   * If the pid is unspecified, it will modify the current script’s logs.
+   *
+   * Otherwise, the pid argument can be used to change the logs from another script.
+   *
+   * It is possible to pass any React Node instead of a string.
+   * See {@link ReactElement} and {@link ReactNode} types for additional info.
+   *
+   * @param title - The new title for the tail window.
+   * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
+   */
+  setTailTitle(title: string | ReactNode, pid?: number): void;
+
+  /**
+   * Set the font size of the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This overwrites the tail font size and forces an update of the tail window's contents.
+   *
+   * If ran without a filename or pid, this will affect the current script's tail window.
+   *
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to target the tail window from another script.
+   * Remember that scripts are uniquely identified by both their names and arguments.
+   *
+   * @param pixel - Optional. The new font size in pixels. If omitted, the default tail font size is used.
+   * @param fn - Optional. Filename or PID of the target script. If omitted, the current script is used.
+   * @param host - Optional. Hostname of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param args - Arguments for the target script.
+   */
+  setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
+
+  /**
    * Get the current window size
    * @remarks
    * RAM cost: 0 GB
@@ -6397,7 +6527,11 @@ export interface NS {
   getRecentScripts(): RecentScript[];
 
   /**
-   * Open the tail window of a script.
+   * Open the tail window of a script. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.openTail | ns.ui.openTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6426,20 +6560,11 @@ export interface NS {
   tail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
 
   /**
-   * Render a tail window.
+   * Move a tail window. This function is deprecated and will be removed in a later version.
    *
-   * @remarks
-   * RAM cost: 0 GB
+   * @deprecated
+   * Use {@link UserInterface.moveTail | ns.ui.moveTail} instead.
    *
-   * Tail windows are rendered at an interval defined in game settings. This function renders the tail window of the
-   * specified script immediately.
-   *
-   * @param pid - Optional. PID of the script having its tail rendered. If omitted, the current script is used.
-   */
-  renderTail(pid?: number): void;
-
-  /**
-   * Move a tail window.
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6452,7 +6577,11 @@ export interface NS {
   moveTail(x: number, y: number, pid?: number): void;
 
   /**
-   * Resize a tail window.
+   * Resize a tail window. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.resizeTail | ns.ui.resizeTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6465,7 +6594,11 @@ export interface NS {
   resizeTail(width: number, height: number, pid?: number): void;
 
   /**
-   * Close the tail window of a script.
+   * Close the tail window of a script. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.closeTail | ns.ui.closeTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6480,7 +6613,11 @@ export interface NS {
   closeTail(pid?: number): void;
 
   /**
-   * Set the title of the tail window of a script.
+   * Set the title of the tail window of a script. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.setTailTitle | ns.ui.setTailTitle} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6502,7 +6639,11 @@ export interface NS {
   setTitle(title: string | ReactNode, pid?: number): void;
 
   /**
-   * Set the font size of the tail window of a script.
+   * Set the font size of the tail window of a script. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.setTailFontSize | ns.ui.setTailFontSize} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
