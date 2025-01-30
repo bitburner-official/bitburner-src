@@ -419,7 +419,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       `cities, most notably ${CityName.Aevum}. We suspect that Synthoids have infiltrated the ranks of these criminal ` +
       "factions and are trying to stage another Synthoid uprising.\n\n" +
       "The best way to deal with this is to prevent it before it even happens. The goal of " +
-      `${BladeburnerBlackOpName.OperationWallace} is to destroy ${FactionName.TheDarkArmy} and Syndicate factions in ` +
+      `${BladeburnerBlackOpName.OperationWallace} is to destroy ${FactionName.TheDarkArmy} and ${FactionName.TheSyndicate} factions in ` +
       `${CityName.Aevum} immediately. Leave no survivors.`,
   }),
   [BladeburnerBlackOpName.OperationShoulderOfOrion]: new BlackOperation({
