@@ -22,13 +22,16 @@ export const V2Modal = (): React.ReactElement => {
         You should also take a look at{" "}
         <a
           target="_"
-          href="https://github.com/bitburner-official/bitburner-src/blob/dev/doc/source/v2.0.0_migration.rst"
+          href="https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/migrations/v2.md"
         >
           {" "}
           the migration guide
         </a>{" "}
         as well as{" "}
-        <a target="_" href="https://github.com/bitburner-official/bitburner-src/blob/dev/doc/source/changelog.rst">
+        <a
+          target="_"
+          href="https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md"
+        >
           the changelog
         </a>
       </Typography>
