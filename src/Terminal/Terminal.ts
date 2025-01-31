@@ -17,7 +17,7 @@ import { GetServer } from "../Server/AllServers";
 
 import { checkIfConnectedToDarkweb } from "../DarkWeb/DarkWeb";
 import { iTutorialNextStep, iTutorialSteps, ITutorial } from "../InteractiveTutorial";
-import { processSingleServerGrowth, getWeakenEffect, connectServer } from "../Server/ServerHelpers";
+import { processSingleServerGrowth, getWeakenEffect } from "../Server/ServerHelpers";
 import { parseCommand, parseCommands } from "./Parser";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Settings } from "../Settings/Settings";
@@ -79,7 +79,7 @@ import { changelog } from "./commands/changelog";
 import { clear } from "./commands/clear";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Engine } from "../engine";
-import { Directory, resolveDirectory } from "../Paths/Directory";
+import { Directory, resolveDirectory, root } from "../Paths/Directory";
 import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
@@ -586,16 +586,21 @@ export class Terminal {
     printOutput(root);
   }
 
-  connectToServer(hostname: string): void {
+  connectToServer(hostname: string, singularity = false): void {
     const server = GetServer(hostname);
-    if (server == null) {
+    if (server === null) {
       this.error("Invalid server. Connection failed.");
       return;
     }
-    connectServer(server);
-    this.print("Connected to " + server.hostname);
-    if (Player.getCurrentServer().hostname == "darkweb") {
-      checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
+    Player.getCurrentServer().isConnectedTo = false;
+    Player.currentServer = hostname;
+    Player.getCurrentServer().isConnectedTo = true;
+    this.setcwd(root);
+    if (!singularity) {
+      this.print("Connected to " + server.hostname);
+      if (Player.getCurrentServer().hostname == "darkweb") {
+        checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
+      }
     }
   }
 

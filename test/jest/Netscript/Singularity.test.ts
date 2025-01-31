@@ -8,7 +8,7 @@ import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { Factions } from "../../../src/Faction/Factions";
 import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAugmentation";
 import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "./Utilities";
-import { connectServer } from "../../../src/Server/ServerHelpers";
+import { Terminal } from "../../../src/Terminal";
 import type { NSFull } from "../../../src/NetscriptFunctions";
 
 function setNumBlackOpsComplete(value: number): void {
@@ -16,10 +16,6 @@ function setNumBlackOpsComplete(value: number): void {
     throw new Error("Invalid Bladeburner data");
   }
   Player.bladeburner.numBlackOpsComplete = value;
-}
-
-function connectServerWithHostname(hostname: string) {
-  connectServer(GetServerOrThrow(hostname));
 }
 
 const nextBN = 3;
@@ -321,24 +317,24 @@ describe("connect", () => {
       expectConnectSuccessfully(getNS(), "n00dles");
     });
     test("Home", () => {
-      connectServerWithHostname(SpecialServers.DaedalusServer);
+      Terminal.connectToServer(SpecialServers.DaedalusServer);
       expectConnectSuccessfully(getNS(), "home");
     });
     test("Private server", () => {
       const ns = getNS();
       ns.purchaseServer("pserver-0", 8);
-      connectServerWithHostname(SpecialServers.DaedalusServer);
+      Terminal.connectToServer(SpecialServers.DaedalusServer);
       expectConnectSuccessfully(ns, "pserver-0");
     });
     test("Hacknet server", () => {
       const ns = getNS();
       ns.hacknet.purchaseNode();
-      connectServerWithHostname(SpecialServers.DaedalusServer);
+      Terminal.connectToServer(SpecialServers.DaedalusServer);
       expectConnectSuccessfully(ns, "hacknet-server-0");
     });
     test("Backdoored server", () => {
       const ns = getNS();
-      connectServerWithHostname(SpecialServers.DaedalusServer);
+      Terminal.connectToServer(SpecialServers.DaedalusServer);
       GetServerOrThrow("n00dles").backdoorInstalled = true;
       expectConnectSuccessfully(ns, "n00dles");
     });

@@ -12,8 +12,6 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 import { serverMetadata } from "./data/servers";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
-import { Terminal } from "../Terminal";
-import { root } from "../Paths/Directory";
 
 /**
  * Constructs a new server, while also ensuring that the new server
@@ -272,11 +270,4 @@ export function getCoreBonus(cores = 1): number {
 export function getWeakenEffect(threads: number, cores: number): number {
   const coreBonus = getCoreBonus(cores);
   return ServerConstants.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
-}
-
-export function connectServer(server: BaseServer): void {
-  Player.getCurrentServer().isConnectedTo = false;
-  Player.currentServer = server.hostname;
-  Player.getCurrentServer().isConnectedTo = true;
-  Terminal.setcwd(root);
 }

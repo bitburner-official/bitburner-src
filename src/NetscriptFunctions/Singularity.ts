@@ -24,7 +24,7 @@ import { Companies } from "../Company/Companies";
 import { Factions } from "../Faction/Factions";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { convertTimeMsToTimeElapsedString } from "../utils/StringHelperFunctions";
-import { connectServer, getServerOnNetwork } from "../Server/ServerHelpers";
+import { getServerOnNetwork } from "../Server/ServerHelpers";
 import { Terminal } from "../Terminal";
 import { calculateHackingTime } from "../Hacking";
 import { Server } from "../Server/Server";
@@ -492,7 +492,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           return false;
         }
         if (other.hostname === hostname) {
-          connectServer(other);
+          Terminal.connectToServer(hostname);
           return true;
         }
       }
@@ -502,7 +502,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
        * is true.
        */
       if (target.backdoorInstalled || target.purchasedByPlayer) {
-        connectServer(target);
+        Terminal.connectToServer(hostname);
         return true;
       }
 
