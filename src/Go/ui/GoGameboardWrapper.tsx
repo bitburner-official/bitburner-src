@@ -115,7 +115,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
       return;
     }
 
-    if (move.type === GoPlayType.gameOver || move.x === null || move.y === null) {
+    if (boardState.previousPlayer === null) {
       setScoreOpen(true);
     }
   }

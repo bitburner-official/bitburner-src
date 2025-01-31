@@ -126,11 +126,11 @@ export function handleNextTurn(boardState: BoardState, useOfflineCycles = true):
  */
 export function resetAI(endOfGame = false) {
   for (const playerPromise of Object.values(playerPromises)) {
-    if ((endOfGame || Go.currentGame.previousPlayer) && playerPromise.resolver) {
+    if (playerPromise.resolver) {
       playerPromise.resolver(gameOver);
       playerPromise.resolver = null;
     }
-    if (!playerPromise.resolver) {
+    if (!endOfGame && !playerPromise.resolver) {
       createPromise(playerPromise);
     }
   }
