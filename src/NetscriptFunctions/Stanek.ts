@@ -14,13 +14,24 @@ import { helpers } from "../Netscript/NetscriptHelpers";
 import { getCoreBonus } from "../Server/ServerHelpers";
 
 export function NetscriptStanek(): InternalAPI<IStanek> {
+  function hasAugmentation() {
+    return Player.hasAugmentation(AugmentationName.StaneksGift1, true);
+  }
+
   function checkStanekAPIAccess(ctx: NetscriptContext): void {
-    if (!Player.hasAugmentation(AugmentationName.StaneksGift1, true)) {
+    if (!hasAugmentation) {
       throw helpers.errorMessage(ctx, "Stanek's Gift is not installed");
     }
   }
 
+  function getAugmentations() {
+    return [...Player.augmentations, ...Player.queuedAugmentations].filter(
+      (a) => a.name !== AugmentationName.NeuroFluxGovernor,
+    );
+  }
+
   return {
+    checkStanekAPIAccess: () => hasAugmentation,
     giftWidth: (ctx) => () => {
       checkStanekAPIAccess(ctx);
       return staneksGift.width();
@@ -107,14 +118,16 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
       checkStanekAPIAccess(ctx);
       return staneksGift.delete(rootX, rootY);
     },
+    isEligible: () => () => {
+      // You already accepted Stanek's gift. You can use stanek API of course
+      if (hasAugmentation()) return true;
+      if (!Player.canAccessCotMG()) return false;
+      return getAugmentations().length === 0;
+    },
     acceptGift: (ctx) => () => {
       const cotmgFaction = Factions[FactionName.ChurchOfTheMachineGod];
-      // Check if the player is eligible to join the church
       if (Player.canAccessCotMG()) {
-        const augs = [...Player.augmentations, ...Player.queuedAugmentations].filter(
-          (a) => a.name !== AugmentationName.NeuroFluxGovernor,
-        );
-        if (augs.length == 0) {
+        if (getAugmentations().length == 0) {
           // Join the CotMG factionn
           joinFaction(cotmgFaction);
           // Install the first Stanek aug

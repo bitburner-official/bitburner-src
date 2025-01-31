@@ -283,6 +283,7 @@ const go = {
 
 // Bladeburner API
 const bladeburner = {
+  checkBladeburnerAPIAccess: 0,
   inBladeburner: RamCostConstants.BladeburnerApiBase / 4,
   getContractNames: 0,
   getOperationNames: 0,
@@ -318,6 +319,7 @@ const bladeburner = {
   getCity: RamCostConstants.BladeburnerApiBase,
   switchCity: RamCostConstants.BladeburnerApiBase,
   getStamina: RamCostConstants.BladeburnerApiBase,
+  isEligible: 0,
   joinBladeburnerFaction: RamCostConstants.BladeburnerApiBase,
   joinBladeburnerDivision: RamCostConstants.BladeburnerApiBase,
   getBonusTime: 0,
@@ -365,6 +367,7 @@ const sleeve = {
 
 // Stanek API
 const stanek = {
+  checkStanekAPIAccess: 0,
   giftWidth: RamCostConstants.StanekWidth,
   giftHeight: RamCostConstants.StanekHeight,
   chargeFragment: RamCostConstants.StanekCharge,
@@ -375,6 +378,7 @@ const stanek = {
   placeFragment: RamCostConstants.StanekPlace,
   getFragment: RamCostConstants.StanekFragmentAt,
   removeFragment: RamCostConstants.StanekDeleteAt,
+  isEligible: 0,
   acceptGift: RamCostConstants.StanekAcceptGift,
 } as const;
 

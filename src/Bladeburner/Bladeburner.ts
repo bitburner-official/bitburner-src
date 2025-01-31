@@ -224,10 +224,14 @@ export class Bladeburner implements OperationTeam {
     this.joinFaction();
   }
 
+  isEligible(): boolean {
+    return this.rank >= BladeburnerConstants.RankNeededForFaction;
+  }
+
   joinFaction(): Attempt<{ message: string }> {
     const faction = Factions[FactionName.Bladeburners];
     if (faction.isMember) return { success: true, message: `Already a member of ${FactionName.Bladeburners} faction` };
-    if (this.rank >= BladeburnerConstants.RankNeededForFaction) {
+    if (this.isEligible()) {
       joinFaction(faction);
       return { success: true, message: `Joined ${FactionName.Bladeburners} faction` };
     }
@@ -402,15 +406,15 @@ export class Bladeburner implements OperationTeam {
         this.postToConsole("Automation: " + (this.automateEnabled ? "enabled" : "disabled"));
         this.postToConsole(
           "When your stamina drops to " +
-            formatNumberNoSuffix(this.automateThreshLow, 0) +
-            ", you will automatically switch to " +
-            (this.automateActionLow?.name ?? "Idle") +
-            ". When your stamina recovers to " +
-            formatNumberNoSuffix(this.automateThreshHigh, 0) +
-            ", you will automatically " +
-            "switch to " +
-            (this.automateActionHigh?.name ?? "Idle") +
-            ".",
+          formatNumberNoSuffix(this.automateThreshLow, 0) +
+          ", you will automatically switch to " +
+          (this.automateActionLow?.name ?? "Idle") +
+          ". When your stamina recovers to " +
+          formatNumberNoSuffix(this.automateThreshHigh, 0) +
+          ", you will automatically " +
+          "switch to " +
+          (this.automateActionHigh?.name ?? "Idle") +
+          ".",
         );
       } else if (flag.toLowerCase().includes("en")) {
         if (!this.automateActionLow || !this.automateActionHigh) {
@@ -635,8 +639,8 @@ export class Bladeburner implements OperationTeam {
       if (this.logging.events) {
         this.log(
           "Intelligence indicates that a large number of Synthoids migrated from " +
-            sourceCityName +
-            " to some other city",
+          sourceCityName +
+          " to some other city",
         );
       }
     } else if (chance <= 0.7) {
@@ -920,7 +924,7 @@ export class Bladeburner implements OperationTeam {
               } else if (!isOperation && this.logging.contracts) {
                 this.log(
                   `${person.whoAmI()}: ${action.name} contract successfully completed! Gained ` +
-                    `${formatBigNumber(gain)} rank and ${formatMoney(moneyGain)}.`,
+                  `${formatBigNumber(gain)} rank and ${formatMoney(moneyGain)}.`,
                 );
               }
             }
@@ -1069,17 +1073,17 @@ export class Bladeburner implements OperationTeam {
             if (this.logging.general) {
               this.log(
                 `${person.whoAmI()}: ` +
-                  "Training completed. Gained: " +
-                  formatExp(strExpGain) +
-                  " str exp, " +
-                  formatExp(defExpGain) +
-                  " def exp, " +
-                  formatExp(dexExpGain) +
-                  " dex exp, " +
-                  formatExp(agiExpGain) +
-                  " agi exp, " +
-                  formatBigNumber(staminaGain) +
-                  " max stamina.",
+                "Training completed. Gained: " +
+                formatExp(strExpGain) +
+                " str exp, " +
+                formatExp(defExpGain) +
+                " def exp, " +
+                formatExp(dexExpGain) +
+                " dex exp, " +
+                formatExp(agiExpGain) +
+                " agi exp, " +
+                formatBigNumber(staminaGain) +
+                " max stamina.",
               );
             }
             break;
@@ -1107,9 +1111,9 @@ export class Bladeburner implements OperationTeam {
             if (this.logging.general) {
               this.log(
                 `${person.whoAmI()}: ` +
-                  `Field analysis completed. Gained ${formatBigNumber(rankGain)} rank, ` +
-                  `${formatExp(hackingExpGain)} hacking exp, and ` +
-                  `${formatExp(charismaExpGain)} charisma exp.`,
+                `Field analysis completed. Gained ${formatBigNumber(rankGain)} rank, ` +
+                `${formatExp(hackingExpGain)} hacking exp, and ` +
+                `${formatExp(charismaExpGain)} charisma exp.`,
               );
             }
             break;
@@ -1123,9 +1127,9 @@ export class Bladeburner implements OperationTeam {
               if (this.logging.general) {
                 this.log(
                   `${person.whoAmI()}: ` +
-                    "Successfully recruited a team member! Gained " +
-                    formatExp(expGain) +
-                    " charisma exp.",
+                  "Successfully recruited a team member! Gained " +
+                  formatExp(expGain) +
+                  " charisma exp.",
                 );
               }
             } else {
@@ -1134,9 +1138,9 @@ export class Bladeburner implements OperationTeam {
               if (this.logging.general) {
                 this.log(
                   `${person.whoAmI()}: ` +
-                    "Failed to recruit a team member. Gained " +
-                    formatExp(expGain) +
-                    " charisma exp.",
+                  "Failed to recruit a team member. Gained " +
+                  formatExp(expGain) +
+                  " charisma exp.",
                 );
               }
             }
@@ -1289,8 +1293,8 @@ export class Bladeburner implements OperationTeam {
     // Min value of maxStamina is an arbitrarily small positive value. It must not be 0 to avoid NaN stamina penalty.
     const maxStamina = clampNumber(
       (baseStamina + this.staminaBonus) *
-        this.getSkillMult(BladeburnerMultName.Stamina) *
-        Player.mults.bladeburner_max_stamina,
+      this.getSkillMult(BladeburnerMultName.Stamina) *
+      Player.mults.bladeburner_max_stamina,
       1e-9,
     );
     if (this.maxStamina === maxStamina) {
