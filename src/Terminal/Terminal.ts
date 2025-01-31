@@ -594,7 +594,7 @@ export class Terminal {
     }
     Player.getCurrentServer().isConnectedTo = false;
     Player.currentServer = hostname;
-    Player.getCurrentServer().isConnectedTo = true;
+    server.isConnectedTo = true;
     this.setcwd(root);
     if (!singularity) {
       this.print("Connected to " + server.hostname);
