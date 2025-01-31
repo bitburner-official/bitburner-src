@@ -492,7 +492,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           return false;
         }
         if (other.hostname === hostname) {
-          Terminal.connectToServer(hostname);
+          Terminal.connectToServer(hostname, true);
           return true;
         }
       }
@@ -502,7 +502,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
        * is true.
        */
       if (target.backdoorInstalled || target.purchasedByPlayer) {
-        Terminal.connectToServer(hostname);
+        Terminal.connectToServer(hostname, true);
         return true;
       }
 

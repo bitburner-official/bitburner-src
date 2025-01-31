@@ -310,10 +310,13 @@ describe("connect", () => {
 
   describe("Success", () => {
     const expectConnectSuccessfully = (ns: NSFull, targetHostname: string) => {
+      const currentServerBeforeConnecting = Player.getCurrentServer();
       expect(ns.singularity.connect(targetHostname)).toStrictEqual(true);
-      const currentServer = Player.getCurrentServer();
-      expect(currentServer.hostname).toStrictEqual(targetHostname);
-      expect(currentServer.isConnectedTo).toStrictEqual(true);
+      expect(currentServerBeforeConnecting.isConnectedTo).toStrictEqual(false);
+
+      const currentServerAfterConnecting = Player.getCurrentServer();
+      expect(currentServerAfterConnecting.hostname).toStrictEqual(targetHostname);
+      expect(currentServerAfterConnecting.isConnectedTo).toStrictEqual(true);
     };
     test("Built-in adjacent server", () => {
       expectConnectSuccessfully(getNS(), "n00dles");
