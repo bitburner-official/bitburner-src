@@ -113,6 +113,8 @@ export const Settings = {
   RemoteFileApiAddress: "localhost",
   /** Port the Remote File API client will try to connect to. 0 to disable. */
   RemoteFileApiPort: 0,
+  /** Use wss instead of ws when connecting to RFA clients */
+  UseWssForRemoteFileApi: false,
   /** Whether to save the game when the player saves any file. */
   SaveGameOnFileSave: true,
   /** Whether to hide the confirmation dialog for augmentation purchases. */
@@ -179,7 +181,7 @@ export const Settings = {
   hideTrailingDecimalZeros: false,
   /** Whether to hide thousands separators. */
   hideThousandsSeparator: false,
-  /** Whether to use engineering notation instead of scientific for exponentials. */
+  /** Whether to use engineering notation instead of scientific for exponential form. */
   useEngineeringNotation: false,
   /** Whether to disable suffixes and always use exponential form (scientific or engineering). */
   disableSuffixes: false,

@@ -4,6 +4,7 @@ import { GameOptionsPage } from "./GameOptionsPage";
 import { isValidConnectionHostname, isValidConnectionPort, Settings } from "../../Settings/Settings";
 import { ConnectionBauble } from "./ConnectionBauble";
 import { isRemoteFileApiConnectionLive, newRemoteFileApiConnection } from "../../RemoteFileAPI/RemoteFileAPI";
+import { OptionSwitch } from "../../ui/React/OptionSwitch";
 
 export const RemoteAPIPage = (): React.ReactElement => {
   const [remoteFileApiHostname, setRemoteFileApiHostname] = useState(Settings.RemoteFileApiAddress);
@@ -106,6 +107,12 @@ export const RemoteAPIPage = (): React.ReactElement => {
           {portError && <Typography color={Settings.theme.error}>{portError}</Typography>}
         </div>
       </Tooltip>
+      <OptionSwitch
+        checked={Settings.UseWssForRemoteFileApi}
+        onChange={(newValue) => (Settings.UseWssForRemoteFileApi = newValue)}
+        text="Use wss"
+        tooltip={<>Use wss instead of ws when connecting to RFA clients.</>}
+      />
       <Button disabled={!isValidHostname || !isValidPort} onClick={newRemoteFileApiConnection}>
         Connect
       </Button>
