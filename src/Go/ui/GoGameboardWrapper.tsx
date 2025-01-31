@@ -18,7 +18,7 @@ import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 import { CorruptableText } from "../../ui/React/CorruptableText";
-import { makeAIMove, updateTurnPromises } from "../boardAnalysis/goAI";
+import { handleNextTurn, resetAI } from "../boardAnalysis/goAI";
 import { GoScoreExplanation } from "./GoScoreExplanation";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
@@ -94,46 +94,29 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
     const didUpdateBoard = makeMove(boardState, x, y, currentPlayer);
     if (didUpdateBoard) {
-      rerender();
       takeAiTurn(boardState).catch((error) => exceptionAlert(error));
     }
   }
 
   function passPlayerTurn() {
-    if (boardState.previousPlayer === GoColor.white) {
-      passTurn(boardState, GoColor.black);
-      rerender();
-    } else if (boardState.previousPlayer === GoColor.black && boardState.ai === GoOpponent.none) {
-      passTurn(boardState, GoColor.white);
-      rerender();
-    } else if (boardState.previousPlayer === null) {
+    if (boardState.previousPlayer === null) {
       setScoreOpen(true);
       return;
     }
-
-    setTimeout(() => {
-      takeAiTurn(boardState).catch((error) => exceptionAlert(error));
-    }, 100);
+    passTurn(boardState, boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black);
+    takeAiTurn(boardState).catch((error) => exceptionAlert(error));
   }
 
   async function takeAiTurn(boardState: BoardState) {
-    // Instead of making an AI move on the "No AI" opponent, notify any scripts waiting for their turn and then halt
-    if (Go.currentGame.ai === GoOpponent.none) {
-      updateTurnPromises();
-      return;
-    }
-
-    const move = await makeAIMove(boardState, false);
+    const move = await handleNextTurn(boardState, false);
 
     if (move.type === GoPlayType.pass) {
       SnackbarEvents.emit(`The opponent passes their turn; It is now your turn to move.`, ToastVariant.WARNING, 4000);
-      rerender();
       return;
     }
 
     if (move.type === GoPlayType.gameOver || move.x === null || move.y === null) {
       setScoreOpen(true);
-      return;
     }
   }
 
@@ -150,9 +133,9 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
       resetWinstreak(boardState.ai, false);
     }
 
+    resetAI();
     Go.currentGame = getNewBoardState(newBoardSize, newOpponent, true);
-    updateTurnPromises();
-    rerender();
+    handleNextTurn(Go.currentGame);
   }
 
   function getPriorMove() {

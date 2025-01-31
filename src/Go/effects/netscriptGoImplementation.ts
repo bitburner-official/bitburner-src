@@ -10,7 +10,7 @@ import {
   passTurn,
   updateCaptures,
 } from "../boardState/boardState";
-import { makeAIMove, updateTurnPromises } from "../boardAnalysis/goAI";
+import { getNextTurn, handleNextTurn, resetAI } from "../boardAnalysis/goAI";
 import {
   evaluateIfMoveIsValid,
   getControlledSpace,
@@ -124,14 +124,10 @@ export function handlePassTurn(logger: (s: string) => void, passAsWhite = false)
   const color = passAsWhite ? GoColor.white : GoColor.black;
   passTurn(Go.currentGame, color);
   logger("Go turn passed.");
-  GoEvents.emit();
-
   if (Go.currentGame.previousPlayer === null) {
     logEndGame(logger);
-    return getOpponentNextMove(logger, false, passAsWhite);
-  } else {
-    return makeAIMove(Go.currentGame, true, passAsWhite);
   }
+  return handleNextTurn(Go.currentGame, true);
 }
 
 /**
@@ -153,9 +149,8 @@ export function makePlayerMove(
     error(`Invalid move: ${x} ${y}. ${validity}.`);
   }
 
-  GoEvents.emit();
   logger(`Go move played: ${x}, ${y}${playAsWhite ? " (White)" : ""}`);
-  return makeAIMove(boardState, true, playAsWhite);
+  return handleNextTurn(boardState, true);
 }
 
 /**
@@ -163,10 +158,10 @@ export function makePlayerMove(
  */
 export function getOpponentNextMove(logger: (s: string) => void, logOpponentMove = true, playAsWhite = false) {
   const playerColor = playAsWhite ? GoColor.white : GoColor.black;
+  const nextTurn = getNextTurn(playerColor);
   // Only asynchronously log the opponent move if not disabled by the player
   if (logOpponentMove) {
-    logger("Waiting for opponent to make their move...");
-    return Go.nextTurn[playerColor].then((move) => {
+    return nextTurn.then((move) => {
       if (move.type === GoPlayType.gameOver) {
         logEndGame(logger);
       } else if (move.type === GoPlayType.pass) {
@@ -178,7 +173,7 @@ export function getOpponentNextMove(logger: (s: string) => void, logOpponentMove
     });
   }
 
-  return Go.nextTurn[playerColor];
+  return nextTurn;
 }
 
 /**
@@ -341,9 +336,9 @@ export function resetBoardState(
     resetWinstreak(oldBoardState.ai, false);
   }
 
+  resetAI();
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
-  updateTurnPromises();
-  GoEvents.emit(); // Trigger a Go UI rerender
+  handleNextTurn(Go.currentGame);
   logger(`New game started: ${opponent}, ${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);
 }
@@ -470,10 +465,9 @@ export function determineCheatSuccess(
   else if (priorCheatCount && (ejectRngOverride ?? rng.random()) < 0.1 && state.ai !== GoOpponent.none) {
     logger(`Cheat failed! You have been ejected from the subnet.`);
     endGoGame(state);
-    return Go.nextTurn[GoColor.black];
-  }
-  // If the cheat fails, your turn is skipped
-  else {
+    return handleNextTurn(state, true);
+  } else {
+    // If the cheat fails, your turn is skipped
     logger(`Cheat failed. Your turn has been skipped.`);
     passTurn(state, playerColor, false);
   }
@@ -485,9 +479,8 @@ export function determineCheatSuccess(
   }
   Go.currentGame.previousPlayer = playerColor;
   updateCaptures(Go.currentGame.board, playerColor, true);
-  GoEvents.emit();
 
-  return makeAIMove(state, true, playAsWhite);
+  return handleNextTurn(state, true);
 }
 
 /**
