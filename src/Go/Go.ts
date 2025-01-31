@@ -1,6 +1,6 @@
-import type { BoardState, OpponentStats, Play } from "./Types";
+import type { BoardState, OpponentStats } from "./Types";
 
-import { GoColor, GoPlayType, type GoOpponent } from "@enums";
+import type { GoOpponent } from "@enums";
 import { getRecordValues, PartialRecord } from "../Types/Record";
 import { resetAI } from "./boardAnalysis/goAI";
 import { getNewBoardState } from "./boardState/boardState";

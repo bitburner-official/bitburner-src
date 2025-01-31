@@ -14,22 +14,21 @@ import {
   getAllEyes,
   getAllEyesByChainId,
   getAllNeighboringChains,
-  getAllValidMoves,
-  getPreviousMove,
   getPreviousMoveDetails,
 } from "./boardAnalysis";
 import { findDisputedTerritory } from "./controlledTerritory";
 import { findAnyMatchedPatterns } from "./patternMatching";
 import { WHRNG } from "../../Casino/RNG";
 import { Go, GoEvents } from "../Go";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 type PlayerPromise = {
   nextTurn: Promise<Play>;
   resolver: ((play?: Play) => void) | null;
 };
 
-const gameOver = { type: GoPlayType.gameOver, x: null, y: null} as const;
-let playerPromises: Record<GoColor.black | GoColor.white, PlayerPromise> = {
+const gameOver = { type: GoPlayType.gameOver, x: null, y: null } as const;
+const playerPromises: Record<GoColor.black | GoColor.white, PlayerPromise> = {
   [GoColor.black]: { nextTurn: Promise.resolve(gameOver), resolver: null },
   [GoColor.white]: { nextTurn: Promise.resolve(gameOver), resolver: null },
 };
@@ -73,8 +72,8 @@ export function handleNextTurn(boardState: BoardState, useOfflineCycles = true):
   // If an AI is in use, find the faction's move in response, and recursively call handleNextTurn to resolve the nextTurn promise once it is found and played.
   if (boardState.ai !== GoOpponent.none && currentColor == GoColor.white) {
     const currentMoveCount = Go.currentGame.previousBoards.length;
-    getMove(boardState, currentColor, Go.currentGame.ai, useOfflineCycles).then(
-      async (play) => {
+    getMove(boardState, currentColor, Go.currentGame.ai, useOfflineCycles)
+      .then(async (play) => {
         if (currentMoveCount !== Go.currentGame.previousBoards.length || boardState !== Go.currentGame) {
           //Stale game
           return;
@@ -83,8 +82,7 @@ export function handleNextTurn(boardState: BoardState, useOfflineCycles = true):
         // Handle AI passing
         if (play.type === GoPlayType.pass) {
           passTurn(boardState, currentColor);
-          handleNextTurn(boardState, useOfflineCycles);
-          return;
+          return handleNextTurn(boardState, useOfflineCycles);
         }
 
         // Handle AI making a move
@@ -105,9 +103,9 @@ export function handleNextTurn(boardState: BoardState, useOfflineCycles = true):
         // Recursively update promises for the next turn. This can't create an
         // infinite loop because the recursion is happenning asynchronously from a
         // delayed promise.
-        handleNextTurn(boardState, useOfflineCycles);
-      }
-    );
+        return handleNextTurn(boardState, useOfflineCycles);
+      })
+      .catch((error) => exceptionAlert(error));
   }
 
   // If we haven't resolved currentPromise yet (for instance, at game start),

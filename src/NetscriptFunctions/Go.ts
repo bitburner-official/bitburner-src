@@ -50,7 +50,8 @@ export function NetscriptGo(): InternalAPI<NSGo> {
         return makePlayerMove(logger(ctx), error(ctx), x, y, !!playAsWhite);
       },
     passTurn:
-      (ctx: NetscriptContext) => (passAsWhite): Promise<Play> => {
+      (ctx: NetscriptContext) =>
+      (passAsWhite): Promise<Play> => {
         if (Go.currentGame.ai !== GoOpponent.none) {
           error(ctx)(`${GoValidity.invalid}. You can only pass or play as white when playing against 'No AI'`);
         }

@@ -135,7 +135,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
     resetAI();
     Go.currentGame = getNewBoardState(newBoardSize, newOpponent, true);
-    handleNextTurn(Go.currentGame);
+    handleNextTurn(Go.currentGame).catch((error) => exceptionAlert(error));
   }
 
   function getPriorMove() {

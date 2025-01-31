@@ -2,7 +2,7 @@ import { Board, BoardState, Play, SimpleBoard, SimpleOpponentStats } from "../Ty
 
 import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
-import { Go, GoEvents } from "../Go";
+import { Go } from "../Go";
 import {
   getNewBoardState,
   getNewBoardStateFromSimpleBoard,
@@ -22,6 +22,7 @@ import { endGoGame, getOpponentStats, getScore, resetWinstreak } from "../boardA
 import { WHRNG } from "../../Casino/RNG";
 import { getRecordKeys } from "../../Types/Record";
 import { CalculateEffect, getEffectTypeForFaction } from "./effect";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 /**
  * Check the move based on the current settings
@@ -338,7 +339,7 @@ export function resetBoardState(
 
   resetAI();
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
-  handleNextTurn(Go.currentGame);
+  handleNextTurn(Go.currentGame).catch((error) => exceptionAlert(error));
   logger(`New game started: ${opponent}, ${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);
 }

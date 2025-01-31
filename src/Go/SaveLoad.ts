@@ -2,9 +2,9 @@ import type { BoardState, OpponentStats, SimpleBoard } from "./Types";
 import type { PartialRecord } from "../Types/Record";
 
 import { Truthy } from "lodash";
-import { GoColor, GoOpponent, GoPlayType } from "@enums";
+import { GoColor, GoOpponent } from "@enums";
 import { Go } from "./Go";
-import { boardStateFromSimpleBoard, getPreviousMove, simpleBoardFromBoard } from "./boardAnalysis/boardAnalysis";
+import { boardStateFromSimpleBoard, simpleBoardFromBoard } from "./boardAnalysis/boardAnalysis";
 import { assertLoadingType } from "../utils/TypeAssertion";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { boardSizes } from "./Constants";
