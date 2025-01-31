@@ -50,15 +50,14 @@ export function NetscriptGo(): InternalAPI<NSGo> {
         return makePlayerMove(logger(ctx), error(ctx), x, y, !!playAsWhite);
       },
     passTurn:
-      (ctx: NetscriptContext) =>
-      async (passAsWhite): Promise<Play> => {
+      (ctx: NetscriptContext) => (passAsWhite): Promise<Play> => {
         if (Go.currentGame.ai !== GoOpponent.none) {
           error(ctx)(`${GoValidity.invalid}. You can only pass or play as white when playing against 'No AI'`);
         }
         return handlePassTurn(logger(ctx), !!passAsWhite);
       },
     opponentNextTurn: (ctx: NetscriptContext) => async (logOpponentMove, playAsWhite) => {
-      return getOpponentNextMove(!!logOpponentMove, logger(ctx), !!playAsWhite);
+      return getOpponentNextMove(logger(ctx), !!logOpponentMove, !!playAsWhite);
     },
     getBoardState: () => () => {
       return simpleBoardFromBoard(Go.currentGame.board);
@@ -128,7 +127,7 @@ export function NetscriptGo(): InternalAPI<NSGo> {
             playAsWhite: playAsWhite,
           });
 
-          return cheatRemoveRouter(logger(ctx), x, y, undefined, undefined, !!playAsWhite);
+          return cheatRemoveRouter(logger(ctx), error(ctx), x, y, undefined, undefined, !!playAsWhite);
         },
       playTwoMoves:
         (ctx: NetscriptContext) =>
@@ -149,7 +148,7 @@ export function NetscriptGo(): InternalAPI<NSGo> {
             playAsWhite,
           });
 
-          return cheatPlayTwoMoves(logger(ctx), x1, y1, x2, y2, undefined, undefined, !!playAsWhite);
+          return cheatPlayTwoMoves(logger(ctx), error(ctx), x1, y1, x2, y2, undefined, undefined, !!playAsWhite);
         },
       repairOfflineNode:
         (ctx: NetscriptContext) =>

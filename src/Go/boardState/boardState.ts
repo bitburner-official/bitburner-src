@@ -155,7 +155,18 @@ export function passTurn(boardState: BoardState, player: GoColor, allowEndGame =
  * Modifies the board in place.
  */
 export function applyHandicap(board: Board, handicap: number): void {
-  const availableMoves = getEmptySpaces(board);
+  const availableMoves = [];
+  for (const column of board) {
+    for (const point of column) {
+      if (point) {
+        if (point.color !== GoColor.empty) {
+          // Game is in progress, don't apply handicap
+          return;
+        }
+        availableMoves.push(point);
+      }
+    }
+  }
   const handicapMoveOptions = getExpansionMoveArray(board, availableMoves);
   const handicapMoves: Move[] = [];
 

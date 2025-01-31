@@ -691,7 +691,7 @@ export function getColorOnBoardString(boardString: string, x: number, y: number)
 
 /** Find a move made by the previous player, if present. */
 export function getPreviousMove(): [number, number] | null {
-  const priorBoard = Go.currentGame?.previousBoards[0];
+  const priorBoard = Go.currentGame.previousBoards[0];
   if (Go.currentGame.passCount || !priorBoard) {
     return null;
   }
@@ -725,7 +725,7 @@ export function getPreviousMoveDetails(): Play {
   }
 
   return {
-    type: !priorMove && Go.currentGame?.passCount ? GoPlayType.pass : GoPlayType.gameOver,
+    type: Go.currentGame.previousPlayer ? GoPlayType.pass : GoPlayType.gameOver,
     x: null,
     y: null,
   };
