@@ -7,6 +7,7 @@ import { Achievement, PlayerAchievement } from "./Achievements";
 import { Settings } from "../Settings/Settings";
 import { getFiltersFromHex } from "../ThirdParty/colorUtils";
 import { CorruptableText } from "../ui/React/CorruptableText";
+import { pluralize } from "../utils/I18nUtils";
 
 interface IProps {
   achievements: Achievement[];
@@ -101,7 +102,8 @@ export function AchievementList({ achievements, playerAchievements }: IProps): J
             </AccordionSummary>
             <AccordionDetails>
               <Typography sx={{ mt: 1 }}>
-                {unavailable.length} additional achievements hidden behind content you don't have access to.
+                {pluralize(unavailable.length, "additional achievement")} hidden behind content you don't have access
+                to.
               </Typography>
             </AccordionDetails>
           </Accordion>
