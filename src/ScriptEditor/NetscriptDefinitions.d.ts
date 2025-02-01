@@ -6639,29 +6639,6 @@ export interface NS {
   setTitle(title: string | ReactNode, pid?: number): void;
 
   /**
-   * Set the font size of the tail window of a script. This function is deprecated and will be removed in a later version.
-   *
-   * @deprecated
-   * Use {@link UserInterface.setTailFontSize | ns.ui.setTailFontSize} instead.
-   *
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * This overwrites the tail font size and forces an update of the tail window's contents.
-   *
-   * If ran without a filename or pid, this will affect the current script's tail window.
-   *
-   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to target the tail window from another script.
-   * Remember that scripts are uniquely identified by both their names and arguments.
-   *
-   * @param pixel - Optional. The new font size in pixels. If omitted, the default tail font size is used.
-   * @param fn - Optional. Filename or PID of the target script. If omitted, the current script is used.
-   * @param host - Optional. Hostname of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
-   * @param args - Arguments for the target script.
-   */
-  setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
-
-  /**
    * Get the list of servers connected to a server.
    * @remarks
    * RAM cost: 0.2 GB

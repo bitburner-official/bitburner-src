@@ -587,12 +587,6 @@ export const ns: InternalAPI<NSFull> = {
       deprecationWarning("ns.setTitle", "Use ns.ui.setTailTitle instead.");
       ns.ui.setTailTitle(ctx)(title, _pid);
     },
-  setTailFontSize:
-    (ctx) =>
-    (_pixel, scriptID, hostname, ...scriptArgs) => {
-      deprecationWarning("ns.setTailFontSize", "Use ns.ui.setTailFontSize instead.");
-      ns.ui.setTailFontSize(ctx)(_pixel, scriptID, hostname, ...scriptArgs);
-    },
   nuke: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
 
