@@ -1,9 +1,10 @@
 const pluralRules = new Intl.PluralRules("en-US");
 
 export function pluralize(count: number, singular: string, plural?: string, skipCountInReturnedValue = false): string {
+  const countText = !skipCountInReturnedValue ? `${count} ` : "";
   const pluralRule = pluralRules.select(count);
   if (pluralRule === "one") {
-    return `${!skipCountInReturnedValue ? `${count} ` : ""}${singular}`;
+    return countText + singular;
   }
-  return `${!skipCountInReturnedValue ? `${count} ` : ""}${plural !== undefined ? plural : `${singular}s`}`;
+  return countText + (plural !== undefined ? plural : `${singular}s`);
 }
