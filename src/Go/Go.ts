@@ -1,7 +1,8 @@
-import type { BoardState, OpponentStats, Play } from "./Types";
+import type { BoardState, OpponentStats } from "./Types";
 
-import { GoColor, GoPlayType, type GoOpponent } from "@enums";
+import type { GoOpponent } from "@enums";
 import { getRecordValues, PartialRecord } from "../Types/Record";
+import { resetAI } from "./boardAnalysis/goAI";
 import { getNewBoardState } from "./boardState/boardState";
 import { EventEmitter } from "../utils/EventEmitter";
 
@@ -10,10 +11,6 @@ export class GoObject {
   previousGame: BoardState | null = null;
   currentGame: BoardState = getNewBoardState(7);
   stats: PartialRecord<GoOpponent, OpponentStats> = {};
-  nextTurn: { [GoColor.black]: Promise<Play>; [GoColor.white]: Promise<Play> } = {
-    [GoColor.black]: Promise.resolve({ type: GoPlayType.gameOver, x: null, y: null }),
-    [GoColor.white]: Promise.resolve({ type: GoPlayType.gameOver, x: null, y: null }),
-  };
   storedCycles: number = 0;
 
   prestigeAugmentation() {
@@ -24,6 +21,7 @@ export class GoObject {
     }
   }
   prestigeSourceFile() {
+    resetAI();
     this.previousGame = null;
     this.currentGame = getNewBoardState(7);
     this.stats = {};

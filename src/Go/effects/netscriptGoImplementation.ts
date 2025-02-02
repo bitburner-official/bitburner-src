@@ -2,7 +2,7 @@ import { Board, BoardState, OpponentStats, Play, SimpleBoard, SimpleOpponentStat
 
 import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
-import { Go, GoEvents } from "../Go";
+import { Go } from "../Go";
 import {
   getNewBoardState,
   getNewBoardStateFromSimpleBoard,
@@ -10,7 +10,7 @@ import {
   passTurn,
   updateCaptures,
 } from "../boardState/boardState";
-import { makeAIMove, updateTurnPromises } from "../boardAnalysis/goAI";
+import { getNextTurn, handleNextTurn, resetAI } from "../boardAnalysis/goAI";
 import {
   evaluateIfMoveIsValid,
   getControlledSpace,
@@ -22,12 +22,13 @@ import { endGoGame, getOpponentStats, getScore, resetWinstreak } from "../boardA
 import { WHRNG } from "../../Casino/RNG";
 import { getRecordKeys } from "../../Types/Record";
 import { CalculateEffect, getEffectTypeForFaction } from "./effect";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { newOpponentStats } from "../Constants";
 
 /**
  * Check the move based on the current settings
  */
-export function validateMove(error: (s: string) => void, x: number, y: number, methodName = "", settings = {}) {
+export function validateMove(error: (s: string) => never, x: number, y: number, methodName = "", settings = {}): void {
   const check = {
     emptyNode: true,
     requireNonEmptyNode: false,
@@ -36,14 +37,20 @@ export function validateMove(error: (s: string) => void, x: number, y: number, m
     requireOfflineNode: false,
     suicide: true,
     playAsWhite: false,
+    pass: false,
     ...settings,
   };
 
-  const moveString = `${methodName} ${x},${y}${check.playAsWhite ? " (White) " : ""}: `;
+  const moveString = methodName + (check.pass ? "" : ` ${x},${y}`) + (check.playAsWhite ? " (White)" : "") + ": ";
   const moveColor = check.playAsWhite ? GoColor.white : GoColor.black;
 
   if (check.playAsWhite) {
     validatePlayAsWhite(error);
+  }
+  validateTurn(error, moveString, moveColor);
+
+  if (check.pass) {
+    return;
   }
 
   const boardSize = Go.currentGame.board.length;
@@ -53,8 +60,6 @@ export function validateMove(error: (s: string) => void, x: number, y: number, m
   if (y < 0 || y >= boardSize) {
     error(`Invalid row number (y = ${y}), row must be a number 0 through ${boardSize - 1}`);
   }
-
-  validateTurn(error, moveString, moveColor);
 
   const validity = evaluateIfMoveIsValid(Go.currentGame, x, y, moveColor);
   const point = Go.currentGame.board[x][y];
@@ -95,7 +100,7 @@ export function validateMove(error: (s: string) => void, x: number, y: number, m
   }
 }
 
-export function validatePlayAsWhite(error: (s: string) => void) {
+function validatePlayAsWhite(error: (s: string) => never) {
   if (Go.currentGame.ai !== GoOpponent.none) {
     error(`${GoValidity.invalid}. You can only play as white when playing against 'No AI'`);
   }
@@ -105,7 +110,7 @@ export function validatePlayAsWhite(error: (s: string) => void) {
   }
 }
 
-export function validateTurn(error: (s: string) => void, moveString = "", color = GoColor.black) {
+function validateTurn(error: (s: string) => never, moveString = "", color = GoColor.black) {
   if (Go.currentGame.previousPlayer === color) {
     error(
       `${moveString} ${GoValidity.notYourTurn}. Do you have multiple scripts running, or did you forget to await makeMove() or opponentNextTurn()`,
@@ -121,26 +126,22 @@ export function validateTurn(error: (s: string) => void, moveString = "", color 
 /**
  * Pass player's turn and await the opponent's response (or logs the end of the game if both players pass)
  */
-export async function handlePassTurn(logger: (s: string) => void, passAsWhite = false) {
+export function handlePassTurn(logger: (s: string) => void, passAsWhite = false) {
   const color = passAsWhite ? GoColor.white : GoColor.black;
   passTurn(Go.currentGame, color);
   logger("Go turn passed.");
-  GoEvents.emit();
-
   if (Go.currentGame.previousPlayer === null) {
     logEndGame(logger);
-    return getOpponentNextMove(false, logger, passAsWhite);
-  } else {
-    return makeAIMove(Go.currentGame, true, passAsWhite);
   }
+  return handleNextTurn(Go.currentGame, true);
 }
 
 /**
  * Validates and applies the player's router placement
  */
-export async function makePlayerMove(
+export function makePlayerMove(
   logger: (s: string) => void,
-  error: (s: string) => void,
+  error: (s: string) => never,
   x: number,
   y: number,
   playAsWhite = false,
@@ -154,20 +155,19 @@ export async function makePlayerMove(
     error(`Invalid move: ${x} ${y}. ${validity}.`);
   }
 
-  GoEvents.emit();
   logger(`Go move played: ${x}, ${y}${playAsWhite ? " (White)" : ""}`);
-  return makeAIMove(boardState, true, playAsWhite);
+  return handleNextTurn(boardState, true);
 }
 
 /**
   Returns the promise that provides the opponent's move, once it finishes thinking.
  */
-export async function getOpponentNextMove(logOpponentMove = true, logger: (s: string) => void, playAsWhite = false) {
+export function getOpponentNextMove(logger: (s: string) => void, logOpponentMove = true, playAsWhite = false) {
   const playerColor = playAsWhite ? GoColor.white : GoColor.black;
+  const nextTurn = getNextTurn(playerColor);
   // Only asynchronously log the opponent move if not disabled by the player
   if (logOpponentMove) {
-    logger("Waiting for opponent to make their move...");
-    return Go.nextTurn[playerColor].then((move) => {
+    return nextTurn.then((move) => {
       if (move.type === GoPlayType.gameOver) {
         logEndGame(logger);
       } else if (move.type === GoPlayType.pass) {
@@ -179,7 +179,7 @@ export async function getOpponentNextMove(logOpponentMove = true, logger: (s: st
     });
   }
 
-  return Go.nextTurn[playerColor];
+  return nextTurn;
 }
 
 /**
@@ -342,9 +342,9 @@ export function resetBoardState(
     resetWinstreak(oldBoardState.ai, false);
   }
 
+  resetAI();
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
-  updateTurnPromises();
-  GoEvents.emit(); // Trigger a Go UI rerender
+  handleNextTurn(Go.currentGame).catch((error) => exceptionAlert(error));
   logger(`New game started: ${opponent}, ${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);
 }
@@ -408,7 +408,7 @@ const boardValidity = {
  * Validate the given SimpleBoard and prior board state (if present) and turn it into a full BoardState with updated analytics
  */
 export function validateBoardState(
-  error: (s: string) => void,
+  error: (s: string) => never,
   _boardState?: unknown,
   _priorBoardState?: unknown,
 ): BoardState | undefined {
@@ -429,7 +429,7 @@ export function validateBoardState(
 /**
  * Check that the given boardState is a valid SimpleBoard, and return it if it is.
  */
-function getSimpleBoardFromUnknown(error: (arg0: string) => void, _boardState: unknown): SimpleBoard | undefined {
+function getSimpleBoardFromUnknown(error: (arg0: string) => never, _boardState: unknown): SimpleBoard | undefined {
   if (!_boardState) {
     return undefined;
   }
@@ -455,7 +455,7 @@ function getSimpleBoardFromUnknown(error: (arg0: string) => void, _boardState: u
 }
 
 /** Validate singularity access by throwing an error if the player does not have access. */
-export function checkCheatApiAccess(error: (s: string) => void): void {
+export function checkCheatApiAccess(error: (s: string) => never): void {
   const hasSourceFile = Player.activeSourceFileLvl(14) > 1;
   const isBitnodeFourteenTwo = Player.activeSourceFileLvl(14) === 1 && Player.bitNodeN === 14;
   if (!hasSourceFile && !isBitnodeFourteenTwo) {
@@ -471,7 +471,7 @@ export function checkCheatApiAccess(error: (s: string) => void): void {
  *
  * If it fails, determines if the player's turn is skipped, or if the player is ejected from the subnet.
  */
-export async function determineCheatSuccess(
+export function determineCheatSuccess(
   logger: (s: string) => void,
   callback: () => void,
   successRngOverride?: number,
@@ -492,10 +492,9 @@ export async function determineCheatSuccess(
   else if (priorCheatCount && (ejectRngOverride ?? rng.random()) < 0.1 && state.ai !== GoOpponent.none) {
     logger(`Cheat failed! You have been ejected from the subnet.`);
     endGoGame(state);
-    return Go.nextTurn[GoColor.black];
-  }
-  // If the cheat fails, your turn is skipped
-  else {
+    return handleNextTurn(state, true);
+  } else {
+    // If the cheat fails, your turn is skipped
     logger(`Cheat failed. Your turn has been skipped.`);
     passTurn(state, playerColor, false);
   }
@@ -507,9 +506,8 @@ export async function determineCheatSuccess(
   }
   Go.currentGame.previousPlayer = playerColor;
   updateCaptures(Go.currentGame.board, playerColor, true);
-  GoEvents.emit();
 
-  return makeAIMove(state, true, playAsWhite);
+  return handleNextTurn(state, true);
 }
 
 /**
@@ -542,6 +540,7 @@ export function cheatSuccessChance(cheatCountOverride: number, playAsWhite = fal
  */
 export function cheatRemoveRouter(
   logger: (s: string) => void,
+  error: (s: string) => never,
   x: number,
   y: number,
   successRngOverride?: number,
@@ -550,8 +549,7 @@ export function cheatRemoveRouter(
 ): Promise<Play> {
   const point = Go.currentGame.board[x][y];
   if (!point) {
-    logger(`Cheat failed. The point ${x},${y} is already offline.`);
-    return Go.nextTurn[GoColor.black];
+    error(`Cheat failed. The point ${x},${y} is already offline.`);
   }
   return determineCheatSuccess(
     logger,
@@ -570,6 +568,7 @@ export function cheatRemoveRouter(
  */
 export function cheatPlayTwoMoves(
   logger: (s: string) => void,
+  error: (s: string) => never,
   x1: number,
   y1: number,
   x2: number,
@@ -582,8 +581,7 @@ export function cheatPlayTwoMoves(
   const point2 = Go.currentGame.board[x2][y2];
 
   if (!point1 || !point2) {
-    logger(`Cheat failed. One of the points ${x1},${y1} or ${x2},${y2} is already offline.`);
-    return Go.nextTurn[GoColor.black];
+    error(`Cheat failed. One of the points ${x1},${y1} or ${x2},${y2} is already offline.`);
   }
   const playerColor = playAsWhite ? GoColor.white : GoColor.black;
 
