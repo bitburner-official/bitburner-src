@@ -24,6 +24,7 @@ import {
   handlePassTurn,
   makePlayerMove,
   resetBoardState,
+  resetStats,
   validateBoardState,
   validateMove,
 } from "../Go/effects/netscriptGoImplementation";
@@ -98,6 +99,11 @@ export function NetscriptGo(): InternalAPI<NSGo> {
       getStats: () => () => {
         return getStats();
       },
+      resetStats:
+        () =>
+        (resetAll = false) => {
+          resetStats(!!resetAll);
+        },
     },
     cheat: {
       getCheatSuccessChance: (ctx: NetscriptContext) => (_cheatCount, playAsWhite) => {

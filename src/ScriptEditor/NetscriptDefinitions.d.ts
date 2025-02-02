@@ -4438,6 +4438,12 @@ export interface GoAnalysis {
    * </pre>
    */
   getStats(): Partial<Record<GoOpponent, SimpleOpponentStats>>;
+
+  /**
+   * Reset all win/loss and winstreak records for the No AI opponent.
+   * @param resetAll if true, reset win/loss records for all opponents. Leaves node power and bonuses unchanged.
+   */
+  resetStats(resetAll = false): void;
 }
 
 /**
