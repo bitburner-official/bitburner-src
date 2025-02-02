@@ -49,9 +49,7 @@ describe("Netscript Go API unit tests", () => {
       const board = ["XOO..", ".....", ".....", ".....", "....."];
       Go.currentGame = boardStateFromSimpleBoard(board, GoOpponent.Daedalus, GoColor.white);
       const mockLogger = jest.fn();
-      const mockError = jest.fn(() => {
-        throw new Error("Invalid");
-      });
+      const mockError = jest.fn();
 
       await makePlayerMove(mockLogger, mockError, 0, 0).catch(() => {});
 
