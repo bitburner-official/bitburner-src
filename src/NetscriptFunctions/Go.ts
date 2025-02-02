@@ -24,6 +24,7 @@ import {
   handlePassTurn,
   makePlayerMove,
   resetBoardState,
+  resetStats,
   validateBoardState,
   validateMove,
 } from "../Go/effects/netscriptGoImplementation";
@@ -52,7 +53,7 @@ export function NetscriptGo(): InternalAPI<NSGo> {
     passTurn:
       (ctx: NetscriptContext) =>
       async (passAsWhite): Promise<Play> => {
-        if (Go.currentGame.ai !== GoOpponent.none) {
+        if (Go.currentGame.ai !== GoOpponent.none && !!passAsWhite) {
           error(ctx)(`${GoValidity.invalid}. You can only pass or play as white when playing against 'No AI'`);
         }
         return handlePassTurn(logger(ctx), !!passAsWhite);
@@ -101,6 +102,11 @@ export function NetscriptGo(): InternalAPI<NSGo> {
       getStats: () => () => {
         return getStats();
       },
+      resetStats:
+        () =>
+        (resetAll = false) => {
+          resetStats(!!resetAll);
+        },
     },
     cheat: {
       getCheatSuccessChance: (ctx: NetscriptContext) => (_cheatCount, playAsWhite) => {

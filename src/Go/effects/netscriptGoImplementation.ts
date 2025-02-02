@@ -1,4 +1,4 @@
-import { Board, BoardState, Play, SimpleBoard, SimpleOpponentStats } from "../Types";
+import { Board, BoardState, OpponentStats, Play, SimpleBoard, SimpleOpponentStats } from "../Types";
 
 import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
@@ -22,6 +22,7 @@ import { endGoGame, getOpponentStats, getScore, resetWinstreak } from "../boardA
 import { WHRNG } from "../../Casino/RNG";
 import { getRecordKeys } from "../../Types/Record";
 import { CalculateEffect, getEffectTypeForFaction } from "./effect";
+import { newOpponentStats } from "../Constants";
 
 /**
  * Check the move based on the current settings
@@ -370,6 +371,27 @@ export function getStats() {
   }
 
   return statDetails;
+}
+
+/**
+ * Reset all win/loss numbers for the No AI opponent.
+ * @param resetAll if true, reset win/loss records for all opponents. This leaves node power and bonuses unchanged.
+ */
+export function resetStats(resetAll = false) {
+  if (resetAll) {
+    for (const opponent of getRecordKeys(Go.stats)) {
+      Go.stats[opponent] = {
+        ...(Go.stats[opponent] as OpponentStats),
+        wins: 0,
+        losses: 0,
+        winStreak: 0,
+        oldWinStreak: 0,
+        highestWinStreak: 0,
+      };
+    }
+  } else {
+    Go.stats[GoOpponent.none] = newOpponentStats();
+  }
 }
 
 const boardValidity = {

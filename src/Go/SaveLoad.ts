@@ -13,6 +13,7 @@ import { makeAIMove, updateTurnPromises } from "./boardAnalysis/goAI";
 
 type PreviousGameSaveData = { ai: GoOpponent; board: SimpleBoard; previousPlayer: GoColor | null } | null;
 type CurrentGameSaveData = PreviousGameSaveData & {
+  previousBoard?: string;
   cheatCount: number;
   cheatCountForWhite: number;
   passCount: number;
@@ -37,6 +38,7 @@ export function getGoSave(): SaveFormat {
     currentGame: {
       ai: Go.currentGame.ai,
       board: simpleBoardFromBoard(Go.currentGame.board),
+      previousBoard: Go.currentGame.previousBoards[0] ?? "",
       previousPlayer: Go.currentGame.previousPlayer,
       cheatCount: Go.currentGame.cheatCount,
       cheatCountForWhite: Go.currentGame.cheatCount,
@@ -124,13 +126,14 @@ function loadCurrentGame(currentGame: unknown): BoardState | string {
     ? Math.max(0, currentGame.cheatCountForWhite || 0)
     : 0;
   if (!isInteger(currentGame.passCount) || currentGame.passCount < 0) return "invalid number for currentGame.passCount";
+  const previousBoards = typeof currentGame.previousBoard === "string" ? [currentGame.previousBoard] : [];
 
   const boardState = boardStateFromSimpleBoard(board, ai);
   boardState.previousPlayer = previousPlayer;
   boardState.cheatCount = normalizedCheatCount;
   boardState.cheatCountForWhite = normalizedCheatCountForWhite;
   boardState.passCount = currentGame.passCount;
-  boardState.previousBoards = [];
+  boardState.previousBoards = previousBoards;
   return boardState;
 }
 
