@@ -16,7 +16,7 @@ Warning: if you fail to play a cheat move, your turn will be skipped. After your
 removeRouter(
     x: number,
     y: number,
-    playAsWhite?: boolean,
+    playAsWhite = false,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -30,7 +30,7 @@ removeRouter(
 |  --- | --- | --- |
 |  x | number | x coordinate of router to remove |
 |  y | number | y coordinate of router to remove |
-|  playAsWhite | boolean | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
+|  playAsWhite | (not declared) | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
 
 **Returns:**
 
