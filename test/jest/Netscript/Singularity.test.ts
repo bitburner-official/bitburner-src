@@ -1,6 +1,6 @@
 import { installAugmentations } from "../../../src/Augmentation/AugmentationHelpers";
 import { blackOpsArray } from "../../../src/Bladeburner/data/BlackOperations";
-import { AugmentationName, FactionName } from "@enums";
+import { AugmentationName, CompanyName, FactionName, JobField, JobName } from "@enums";
 import { Player } from "@player";
 import { prestigeSourceFile } from "../../../src/Prestige";
 import { GetServerOrThrow } from "../../../src/Server/AllServers";
@@ -10,6 +10,10 @@ import { PlayerOwnedAugmentation } from "../../../src/Augmentation/PlayerOwnedAu
 import { getNS, initGameEnvironment, setupBasicTestingEnvironment } from "./Utilities";
 import { Terminal } from "../../../src/Terminal";
 import type { NSFull } from "../../../src/NetscriptFunctions";
+import { Companies } from "../../../src/Company/Companies";
+import { CompanyPositions } from "../../../src/Company/CompanyPositions";
+
+const nextBN = 3;
 
 function setNumBlackOpsComplete(value: number): void {
   if (!Player.bladeburner) {
@@ -18,7 +22,25 @@ function setNumBlackOpsComplete(value: number): void {
   Player.bladeburner.numBlackOpsComplete = value;
 }
 
-const nextBN = 3;
+function gainTonsOfExp() {
+  Player.exp.hacking = 1e100;
+  Player.exp.strength = 1e100;
+  Player.exp.defense = 1e100;
+  Player.exp.dexterity = 1e100;
+  Player.exp.agility = 1e100;
+  Player.exp.charisma = 1e100;
+  Player.updateSkillLevels();
+}
+
+function resetExp() {
+  Player.exp.hacking = 0;
+  Player.exp.strength = 0;
+  Player.exp.defense = 0;
+  Player.exp.dexterity = 0;
+  Player.exp.agility = 0;
+  Player.exp.charisma = 0;
+  Player.updateSkillLevels();
+}
 
 beforeAll(() => {
   initGameEnvironment();
@@ -355,6 +377,72 @@ describe("connect", () => {
       const ns = getNS();
       expect(ns.singularity.connect(SpecialServers.DaedalusServer)).toStrictEqual(false);
       expect(Player.getCurrentServer().hostname).not.toStrictEqual(SpecialServers.DaedalusServer);
+    });
+  });
+});
+
+describe("applyToCompany", () => {
+  beforeEach(() => {
+    setupBasicTestingEnvironment();
+    prestigeSourceFile(true);
+    gainTonsOfExp();
+  });
+
+  describe("Success", () => {
+    test("Apply to entry position", () => {
+      const ns = getNS();
+      Companies[CompanyName.MegaCorp].playerReputation = 0;
+      expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(JobName.software0);
+    });
+    test("Apply and be promoted to next position", () => {
+      const ns = getNS();
+      const nextPosition = CompanyPositions["Junior Software Engineer"];
+      Companies[CompanyName.MegaCorp].playerReputation = nextPosition.requiredReputation;
+      expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(JobName.software1);
+    });
+    test("Apply and be promoted to highest position", () => {
+      const ns = getNS();
+      Companies[CompanyName.MegaCorp].playerReputation = 1e10;
+      expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(JobName.software7);
+    });
+    test("Apply then apply again to be promoted to highest position", () => {
+      const ns = getNS();
+      Companies[CompanyName.MegaCorp].playerReputation = 0;
+      expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(JobName.software0);
+      Companies[CompanyName.MegaCorp].playerReputation = 1e10;
+      expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(JobName.software7);
+    });
+  });
+
+  describe("Failure", () => {
+    test("Not qualified", () => {
+      resetExp();
+      const ns = getNS();
+      expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(null);
+    });
+    test("Invalid field", () => {
+      const ns = getNS();
+      expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.agent)).toStrictEqual(null);
+    });
+    test("Already at highest position", () => {
+      const ns = getNS();
+      Companies[CompanyName.MegaCorp].playerReputation = 1e10;
+      expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(JobName.software7);
+      expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(null);
+    });
+    test("Already at highest available position", () => {
+      const ns = getNS();
+      Companies[CompanyName.WatchdogSecurity].playerReputation = 1e10;
+      // Watchdog Security only offers up to software5 (Head of Engineering).
+      expect(ns.singularity.applyToCompany(CompanyName.WatchdogSecurity, JobField.software)).toStrictEqual(
+        JobName.software5,
+      );
+      expect(ns.singularity.applyToCompany(CompanyName.WatchdogSecurity, JobField.software)).toStrictEqual(null);
+    });
+    test("Not qualified for promotion", () => {
+      const ns = getNS();
+      expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(JobName.software0);
+      expect(ns.singularity.applyToCompany(CompanyName.MegaCorp, JobField.software)).toStrictEqual(null);
     });
   });
 });

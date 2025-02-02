@@ -714,13 +714,17 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const company = Companies[companyName];
       const entryPos = CompanyPositions[JobTracks[field][0]];
 
-      const jobName = Player.applyForJob(company, entryPos, true);
-      if (jobName) {
-        helpers.log(ctx, () => `You were offered a new job at '${companyName}' with position '${jobName}'`);
-      } else {
-        helpers.log(ctx, () => `You failed to get a new job/promotion at '${companyName}' in the '${field}' field.`);
+      const result = Player.applyForJob(company, entryPos);
+      if (!result.success) {
+        helpers.log(
+          ctx,
+          () =>
+            `You failed to get a new job/promotion at '${companyName}' in the '${field}' field. Reason: ${result.message}`,
+        );
+        return null;
       }
-      return jobName;
+      helpers.log(ctx, () => `You were offered a new job at '${companyName}' with position '${result.jobName}'.`);
+      return result.jobName;
     },
     quitJob: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
