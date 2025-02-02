@@ -124,7 +124,7 @@ export function handleNextTurn(boardState: BoardState, useOfflineCycles = true):
  * endGoGame()), which is why it is important to call this *before* resetting
  * the board state.
  */
-export function resetAI(endOfGame = false) {
+export function resetAI(endOfGame = false): void {
   for (const playerPromise of Object.values(playerPromises)) {
     if (playerPromise.resolver) {
       playerPromise.resolver(gameOver);

@@ -1,10 +1,11 @@
 import type { BoardState, OpponentStats } from "./Types";
 
 import type { GoOpponent } from "@enums";
-import { getRecordValues, PartialRecord } from "../Types/Record";
+import { getRecordKeys, PartialRecord } from "../Types/Record";
 import { resetAI } from "./boardAnalysis/goAI";
 import { getNewBoardState } from "./boardState/boardState";
 import { EventEmitter } from "../utils/EventEmitter";
+import { newOpponentStats } from "./Constants";
 
 export class GoObject {
   // Todo: Make previous game a slimmer interface
@@ -14,10 +15,8 @@ export class GoObject {
   storedCycles: number = 0;
 
   prestigeAugmentation() {
-    for (const stats of getRecordValues(this.stats)) {
-      stats.nodePower = 0;
-      stats.nodes = 0;
-      stats.winStreak = 0;
+    for (const opponent of getRecordKeys(Go.stats)) {
+      Go.stats[opponent] = newOpponentStats();
     }
   }
   prestigeSourceFile() {
