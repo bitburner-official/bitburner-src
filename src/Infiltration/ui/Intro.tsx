@@ -3,15 +3,23 @@ import { Box, Button, Container, Paper, Tooltip, Typography } from "@mui/materia
 import React from "react";
 import { Location } from "../../Locations/Location";
 import { Settings } from "../../Settings/Settings";
-import { formatHp, formatNumberNoSuffix } from "../../ui/formatNumber";
+import { formatHp, formatMoney, formatNumberNoSuffix, formatReputation } from "../../ui/formatNumber";
 import { Player } from "@player";
 import { calculateDamageAfterFailingInfiltration } from "../utils";
+import {
+  calculateInfiltratorsRepReward,
+  calculateSellInformationCashReward,
+  calculateTradeInformationRepReward,
+} from "../formulas/victory";
+import { Factions } from "../../Faction/Factions";
+import { FactionName } from "../../Faction/Enums";
 
 interface IProps {
   Location: Location;
   StartingDifficulty: number;
   Difficulty: number;
   MaxLevel: number;
+  Reward: number;
   start: () => void;
   cancel: () => void;
 }
@@ -53,6 +61,10 @@ function coloredArrow(difficulty: number): JSX.Element {
 }
 
 export function Intro(props: IProps): React.ReactElement {
+  const repGain = calculateTradeInformationRepReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
+  const moneyGain = calculateSellInformationCashReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
+  const soaRepGain = calculateInfiltratorsRepReward(Factions[FactionName.ShadowsOfAnarchy], props.StartingDifficulty);
+
   return (
     <Container sx={{ alignItems: "center" }}>
       <Paper sx={{ p: 1, mb: 1, display: "grid", justifyItems: "center" }}>
@@ -71,6 +83,21 @@ export function Intro(props: IProps): React.ReactElement {
           <b>Maximum clearance level: </b>
           {props.MaxLevel}
         </Typography>
+
+        <br />
+        <Typography variant="h6">
+          <b>Reward: </b>
+        </Typography>
+        <Typography component="div">
+          <ul style={{ marginTop: 0 }}>
+            <li>Reputation: {formatReputation(repGain)}</li>
+            <li>Money: {formatMoney(moneyGain)}</li>
+            {Player.factions.includes(FactionName.ShadowsOfAnarchy) && (
+              <li>SoA reputation: {formatReputation(soaRepGain)}</li>
+            )}
+          </ul>
+        </Typography>
+
         <Typography
           variant="h6"
           sx={{
@@ -90,7 +117,7 @@ export function Intro(props: IProps): React.ReactElement {
             <Tooltip
               title={
                 <Typography color="error">
-                  This location is too heavily guarded for your current stats. It is recommended that you try training,
+                  This location is too heavily guarded for your current stats. It is recommended that you try training
                   or finding an easier location.
                 </Typography>
               }

@@ -9,11 +9,11 @@ List all contract types.
 **Signature:**
 
 ```typescript
-getContractTypes(): string[];
+getContractTypes(): `${CodingContractName}`[];
 ```
 **Returns:**
 
-string\[\]
+\`${[CodingContractName](./bitburner.codingcontractname.md)<!-- -->}\`\[\]
 
 ## Remarks
 

@@ -17,13 +17,6 @@ interface Skills {
   intelligence: number;
 }
 
-// TODO: provide same treatment to CodingContractData as for SleeveTask (actual types)
-/**
- * Coding contract data will differ depending on coding contract.
- * @public
- */
-type CodingContractData = any;
-
 /** @public */
 type ScriptArg = string | number | boolean;
 
@@ -1800,6 +1793,14 @@ export interface BitNodeBooleanOptions {
  * @public
  */
 export interface Singularity {
+  /**
+   * This function returns the save data.
+   *
+   * @remarks
+   * RAM cost: 1 GB * 16/4/1
+   */
+  getSaveData(): Promise<Uint8Array>;
+
   /**
    * Backup game save.
    * @remarks
@@ -3864,7 +3865,9 @@ export interface CodingContract {
    *
    * @example
    * ```js
-   * const reward = ns.codingcontract.attempt(yourSolution, filename, hostname);
+   * const reward = ns.codingcontract.attempt("[solution, as, a, string]", filename, hostname);
+   * // or
+   * const reward = ns.codingcontract.attempt(["answer", "as", "an", "array"], filename, hostname);
    * if (reward) {
    *   ns.tprint(`Contract solved successfully! Reward: ${reward}`);
    * } else {
@@ -3872,13 +3875,13 @@ export interface CodingContract {
    * }
    * ```
    *
-   * @param answer - Attempted solution for the contract.
+   * @param answer - Attempted solution for the contract. This can be a string formatted like submitting manually, or the answer in the format of the specific contract type.
    * @param filename - Filename of the contract.
    * @param host - Hostname of the server containing the contract. Optional. Defaults to current server if not
    *   provided.
    * @returns A reward description string on success, or an empty string on failure.
    */
-  attempt(answer: string | number | any[], filename: string, host?: string): string;
+  attempt(answer: any, filename: string, host?: string): string;
 
   /**
    * Get the type of a coding contract.
@@ -3892,7 +3895,7 @@ export interface CodingContract {
    * @param host - Hostname of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns Name describing the type of problem posed by the Coding Contract.
    */
-  getContractType(filename: string, host?: string): string;
+  getContractType(filename: string, host?: string): `${CodingContractName}`;
 
   /**
    * Get the description.
@@ -3920,7 +3923,31 @@ export interface CodingContract {
    * @param host - Host of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns The specified contract’s data, data type depends on contract type.
    */
-  getData(filename: string, host?: string): CodingContractData;
+  getData(filename: string, host?: string): any;
+
+  /**
+   * Get various data about a specific contract.
+   * @remarks
+   * RAM cost: 15 GB
+   *
+   * The returned object includes the type, data, description as well as methods for getting the number of tries remaining and submitting your answer.
+   * Depending on the type of the contract, the data is typed differently.
+   * Using type-narrowing, you can get the correct type of the data:
+   *
+   * @example
+   * ```js
+   * const contract = ns.codingcontract.getContract(fileName, hostName);
+   * if (contract.type === ns.enums.CodingContractName.FindLargestPrimeFactor) {
+   *   const data = contract.data;
+   *   // ^? data: number
+   * }
+   * ```
+   *
+   * @param filename - Filename of the contract.
+   * @param host - Host of the server containing the contract. Optional. Default to the current server if not provided.
+   * @returns An object containing various data about the contract specified.
+   */
+  getContract(filename: string, host?: string): CodingContractObject;
 
   /**
    * Get the number of attempts remaining.
@@ -3952,7 +3979,7 @@ export interface CodingContract {
    * @remarks
    * RAM cost: 0 GB
    */
-  getContractTypes(): string[];
+  getContractTypes(): `${CodingContractName}`[];
 }
 
 /**
@@ -5692,6 +5719,136 @@ interface Infiltration {
  */
 interface UserInterface {
   /**
+   * Open the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Opens a script’s logs. This is functionally the same as the tail Terminal command.
+   *
+   * If the function is called with no arguments, it will open the current script’s logs.
+   *
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get the logs from another script.
+   * Remember that scripts are uniquely identified by both their names and arguments.
+   *
+   * @example
+   * ```js
+   * //Open logs from foo.js on the current server that was run with no args
+   * ns.tail("foo.js");
+   *
+   * //Get logs from foo.js on the foodnstuff server that was run with no args
+   * ns.tail("foo.js", "foodnstuff");
+   *
+   * //Get logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
+   * ns.tail("foo.js", "foodnstuff", 1, "test");
+   * ```
+   * @param fn - Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed.
+   * @param host - Optional. Hostname of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param args - Arguments for the script being tailed.
+   */
+  openTail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
+
+  /**
+   * Render a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Tail windows are rendered at an interval defined in game settings. This function renders the tail window of the
+   * specified script immediately.
+   *
+   * @param pid - Optional. PID of the script having its tail rendered. If omitted, the current script is used.
+   */
+  renderTail(pid?: number): void;
+
+  /**
+   * Move a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Moves a tail window. Coordinates are in screen space pixels (top left is 0,0).
+   *
+   * @param x - x coordinate.
+   * @param y - y coordinate.
+   * @param pid - Optional. PID of the script having its tail moved. If omitted, the current script is used.
+   */
+  moveTail(x: number, y: number, pid?: number): void;
+
+  /**
+   * Resize a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Resize a tail window. Size are in pixel.
+   *
+   * @param width - Width of the window.
+   * @param height - Height of the window.
+   * @param pid - Optional. PID of the script having its tail resized. If omitted, the current script is used.
+   */
+  resizeTail(width: number, height: number, pid?: number): void;
+
+  /**
+   * Close the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Closes a script’s logs. This is functionally the same as pressing the "Close" button on the tail window.
+   *
+   * If the function is called with no arguments, it will close the current script’s logs.
+   *
+   * Otherwise, the pid argument can be used to close the logs from another script.
+   *
+   * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
+   */
+  closeTail(pid?: number): void;
+
+  /**
+   * Set the title of the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This sets the title to the given string, and also forces an update of the
+   * tail window's contents.
+   *
+   * The title is saved across restarts, but only if it is a simple string.
+   *
+   * If the pid is unspecified, it will modify the current script’s logs.
+   *
+   * Otherwise, the pid argument can be used to change the logs from another script.
+   *
+   * It is possible to pass any React Node instead of a string.
+   * See {@link ReactElement} and {@link ReactNode} types for additional info.
+   *
+   * @param title - The new title for the tail window.
+   * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
+   */
+  setTailTitle(title: string | ReactNode, pid?: number): void;
+
+  /**
+   * Set the font size of the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This overwrites the tail font size and forces an update of the tail window's contents.
+   *
+   * If ran without a filename or pid, this will affect the current script's tail window.
+   *
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to target the tail window from another script.
+   * Remember that scripts are uniquely identified by both their names and arguments.
+   *
+   * @param pixel - Optional. The new font size in pixels. If omitted, the default tail font size is used.
+   * @param fn - Optional. Filename or PID of the target script. If omitted, the current script is used.
+   * @param host - Optional. Hostname of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param args - Arguments for the target script.
+   */
+  setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
+
+  /**
    * Get the current window size
    * @remarks
    * RAM cost: 0 GB
@@ -6421,7 +6578,11 @@ export interface NS {
   getRecentScripts(): RecentScript[];
 
   /**
-   * Open the tail window of a script.
+   * Open the tail window of a script. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.openTail | ns.ui.openTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6450,7 +6611,11 @@ export interface NS {
   tail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
 
   /**
-   * Move a tail window.
+   * Move a tail window. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.moveTail | ns.ui.moveTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6463,7 +6628,11 @@ export interface NS {
   moveTail(x: number, y: number, pid?: number): void;
 
   /**
-   * Resize a tail window.
+   * Resize a tail window. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.resizeTail | ns.ui.resizeTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6476,7 +6645,11 @@ export interface NS {
   resizeTail(width: number, height: number, pid?: number): void;
 
   /**
-   * Close the tail window of a script.
+   * Close the tail window of a script. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.closeTail | ns.ui.closeTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6491,7 +6664,11 @@ export interface NS {
   closeTail(pid?: number): void;
 
   /**
-   * Set the title of the tail window of a script.
+   * Set the title of the tail window of a script. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.setTailTitle | ns.ui.setTailTitle} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6511,25 +6688,6 @@ export interface NS {
    * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
    */
   setTitle(title: string | ReactNode, pid?: number): void;
-
-  /**
-   * Set the font size of the tail window of a script.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * This overwrites the tail font size and forces an update of the tail window's contents.
-   *
-   * If ran without a filename or pid, this will affect the current script's tail window.
-   *
-   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to target the tail window from another script.
-   * Remember that scripts are uniquely identified by both their names and arguments.
-   *
-   * @param pixel - Optional. The new font size in pixels. If omitted, the default tail font size is used.
-   * @param fn - Optional. Filename or PID of the target script. If omitted, the current script is used.
-   * @param host - Optional. Hostname of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
-   * @param args - Arguments for the target script.
-   */
-  setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
 
   /**
    * Get the list of servers connected to a server.
@@ -6586,8 +6744,9 @@ export interface NS {
    * ns.nuke("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  nuke(host: string): void;
+  nuke(host: string): boolean;
 
   /**
    * Runs BruteSSH.exe on a server.
@@ -6601,8 +6760,9 @@ export interface NS {
    * ns.brutessh("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  brutessh(host: string): void;
+  brutessh(host: string): boolean;
 
   /**
    * Runs FTPCrack.exe on a server.
@@ -6616,8 +6776,9 @@ export interface NS {
    * ns.ftpcrack("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  ftpcrack(host: string): void;
+  ftpcrack(host: string): boolean;
 
   /**
    * Runs relaySMTP.exe on a server.
@@ -6631,8 +6792,9 @@ export interface NS {
    * ns.relaysmtp("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  relaysmtp(host: string): void;
+  relaysmtp(host: string): boolean;
 
   /**
    * Runs HTTPWorm.exe on a server.
@@ -6646,8 +6808,9 @@ export interface NS {
    * ns.httpworm("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  httpworm(host: string): void;
+  httpworm(host: string): boolean;
 
   /**
    * Runs SQLInject.exe on a server.
@@ -6661,8 +6824,9 @@ export interface NS {
    * ns.sqlinject("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  sqlinject(host: string): void;
+  sqlinject(host: string): boolean;
 
   /**
    * Start another script on the current server.
@@ -7948,13 +8112,18 @@ export interface NS {
   getMoneySources(): MoneySources;
 
   /**
-   * Add callback function when the script dies
+   * Add a callback to be executed when the script dies.
    * @remarks
    * RAM cost: 0 GB
    *
    * NS2 exclusive
    *
-   * Add callback to be executed when the script dies.
+   * Each script can only register one callback per callback ID.
+   * If another callback is registered with the same callback ID
+   * the previous callback with that ID is forgotten and will not be executed when the script dies.
+   *
+   * @param f - A function to execute when the script dies.
+   * @param id - Callback ID. Optional, defaults to `"default"`.
    */
   atExit(f: () => void, id?: string): void;
 
@@ -8350,6 +8519,129 @@ declare enum CompanyName {
   NoodleBar = "Noodle Bar",
 }
 
+/**
+ * Names of all factions.
+ *
+ * Warning: Spoiler ahead. This enum contains names of **all** factions. If you do not want to know what all the
+ * factions are, you should not check this enum. Some factions are only accessible in the endgame.
+ *
+ * @public */
+declare enum FactionName {
+  Illuminati = "Illuminati",
+  Daedalus = "Daedalus",
+  TheCovenant = "The Covenant",
+  ECorp = "ECorp",
+  MegaCorp = "MegaCorp",
+  BachmanAssociates = "Bachman & Associates",
+  BladeIndustries = "Blade Industries",
+  NWO = "NWO",
+  ClarkeIncorporated = "Clarke Incorporated",
+  OmniTekIncorporated = "OmniTek Incorporated",
+  FourSigma = "Four Sigma",
+  KuaiGongInternational = "KuaiGong International",
+  FulcrumSecretTechnologies = "Fulcrum Secret Technologies",
+  BitRunners = "BitRunners",
+  TheBlackHand = "The Black Hand",
+  NiteSec = "NiteSec",
+  Aevum = "Aevum",
+  Chongqing = "Chongqing",
+  Ishima = "Ishima",
+  NewTokyo = "New Tokyo",
+  Sector12 = "Sector-12",
+  Volhaven = "Volhaven",
+  SpeakersForTheDead = "Speakers for the Dead",
+  TheDarkArmy = "The Dark Army",
+  TheSyndicate = "The Syndicate",
+  Silhouette = "Silhouette",
+  Tetrads = "Tetrads",
+  SlumSnakes = "Slum Snakes",
+  Netburners = "Netburners",
+  TianDiHui = "Tian Di Hui",
+  CyberSec = "CyberSec",
+  Bladeburners = "Bladeburners",
+  ChurchOfTheMachineGod = "Church of the Machine God",
+  ShadowsOfAnarchy = "Shadows of Anarchy",
+}
+
+declare enum CodingContractName {
+  FindLargestPrimeFactor = "Find Largest Prime Factor",
+  SubarrayWithMaximumSum = "Subarray with Maximum Sum",
+  TotalWaysToSum = "Total Ways to Sum",
+  TotalWaysToSumII = "Total Ways to Sum II",
+  SpiralizeMatrix = "Spiralize Matrix",
+  ArrayJumpingGame = "Array Jumping Game",
+  ArrayJumpingGameII = "Array Jumping Game II",
+  MergeOverlappingIntervals = "Merge Overlapping Intervals",
+  GenerateIPAddresses = "Generate IP Addresses",
+  AlgorithmicStockTraderI = "Algorithmic Stock Trader I",
+  AlgorithmicStockTraderII = "Algorithmic Stock Trader II",
+  AlgorithmicStockTraderIII = "Algorithmic Stock Trader III",
+  AlgorithmicStockTraderIV = "Algorithmic Stock Trader IV",
+  MinimumPathSumInATriangle = "Minimum Path Sum in a Triangle",
+  UniquePathsInAGridI = "Unique Paths in a Grid I",
+  UniquePathsInAGridII = "Unique Paths in a Grid II",
+  ShortestPathInAGrid = "Shortest Path in a Grid",
+  SanitizeParenthesesInExpression = "Sanitize Parentheses in Expression",
+  FindAllValidMathExpressions = "Find All Valid Math Expressions",
+  HammingCodesIntegerToEncodedBinary = "HammingCodes: Integer to Encoded Binary",
+  HammingCodesEncodedBinaryToInteger = "HammingCodes: Encoded Binary to Integer",
+  Proper2ColoringOfAGraph = "Proper 2-Coloring of a Graph",
+  CompressionIRLECompression = "Compression I: RLE Compression",
+  CompressionIILZDecompression = "Compression II: LZ Decompression",
+  CompressionIIILZCompression = "Compression III: LZ Compression",
+  EncryptionICaesarCipher = "Encryption I: Caesar Cipher",
+  EncryptionIIVigenereCipher = "Encryption II: Vigenère Cipher",
+  SquareRoot = "Square Root",
+}
+
+export type CodingContractSignatures = {
+  [CodingContractName.FindLargestPrimeFactor]: [number, number];
+  [CodingContractName.SubarrayWithMaximumSum]: [number[], number];
+  [CodingContractName.TotalWaysToSum]: [number, number];
+  [CodingContractName.TotalWaysToSumII]: [[number, number[]], number];
+  [CodingContractName.SpiralizeMatrix]: [number[][], number[]];
+  [CodingContractName.ArrayJumpingGame]: [number[], 1 | 0];
+  [CodingContractName.ArrayJumpingGameII]: [number[], number];
+  [CodingContractName.MergeOverlappingIntervals]: [[number, number][], [number, number][]];
+  [CodingContractName.GenerateIPAddresses]: [string, string[]];
+  [CodingContractName.AlgorithmicStockTraderI]: [number[], number];
+  [CodingContractName.AlgorithmicStockTraderII]: [number[], number];
+  [CodingContractName.AlgorithmicStockTraderIII]: [number[], number];
+  [CodingContractName.AlgorithmicStockTraderIV]: [[number, number[]], number];
+  [CodingContractName.MinimumPathSumInATriangle]: [number[][], number];
+  [CodingContractName.UniquePathsInAGridI]: [[number, number], number];
+  [CodingContractName.UniquePathsInAGridII]: [(1 | 0)[][], number];
+  [CodingContractName.ShortestPathInAGrid]: [(1 | 0)[][], string];
+  [CodingContractName.SanitizeParenthesesInExpression]: [string, string[]];
+  [CodingContractName.FindAllValidMathExpressions]: [[string, number], string[]];
+  [CodingContractName.HammingCodesIntegerToEncodedBinary]: [number, string];
+  [CodingContractName.HammingCodesEncodedBinaryToInteger]: [string, number];
+  [CodingContractName.Proper2ColoringOfAGraph]: [[number, [number, number][]], (1 | 0)[]];
+  [CodingContractName.CompressionIRLECompression]: [string, string];
+  [CodingContractName.CompressionIILZDecompression]: [string, string];
+  [CodingContractName.CompressionIIILZCompression]: [string, string];
+  [CodingContractName.EncryptionICaesarCipher]: [[string, number], string];
+  [CodingContractName.EncryptionIIVigenereCipher]: [[string, string], string];
+  [CodingContractName.SquareRoot]: [bigint, bigint, [string, string]];
+};
+
+export type CodingContractData<T extends string> = T extends `${keyof CodingContractSignatures}`
+  ? CodingContractSignatures[T][0]
+  : any;
+export type CodingContractAnswer<T extends string> = T extends `${keyof CodingContractSignatures}`
+  ? CodingContractSignatures[T][1]
+  : any;
+
+export type CodingContractObject = {
+  [T in keyof CodingContractSignatures]: {
+    type: T;
+    data: CodingContractSignatures[T][0];
+    submit: (answer: CodingContractSignatures[T][1] | string) => string;
+    description: string;
+    numTriesRemaining: () => number;
+  };
+}[keyof CodingContractSignatures];
+
 /** @public */
 export type NSEnums = {
   CityName: typeof CityName;
@@ -8362,6 +8654,8 @@ export type NSEnums = {
   ToastVariant: typeof ToastVariant;
   UniversityClassType: typeof UniversityClassType;
   CompanyName: typeof CompanyName;
+  FactionName: typeof FactionName;
+  CodingContractName: typeof CodingContractName;
 };
 
 /**

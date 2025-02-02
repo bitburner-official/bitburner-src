@@ -15,9 +15,11 @@
 |  [BladeburnerOperationName](./bitburner.bladeburneroperationname.md) | Operation names of Bladeburner |
 |  [BladeburnerSkillName](./bitburner.bladeburnerskillname.md) | Skill names type of Bladeburner |
 |  [CityName](./bitburner.cityname.md) | Names of all cities |
+|  [CodingContractName](./bitburner.codingcontractname.md) |  |
 |  [CompanyName](./bitburner.companyname.md) | Names of all companies |
 |  [CreatingCorporationCheckResult](./bitburner.creatingcorporationcheckresult.md) |  |
 |  [CrimeType](./bitburner.crimetype.md) |  |
+|  [FactionName](./bitburner.factionname.md) | <p>Names of all factions.</p><p>Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you do not want to know what all the factions are, you should not check this enum. Some factions are only accessible in the endgame.</p> |
 |  [FactionWorkType](./bitburner.factionworktype.md) |  |
 |  [GymLocationName](./bitburner.gymlocationname.md) | Locations of gym |
 |  [GymType](./bitburner.gymtype.md) |  |
@@ -164,7 +166,10 @@
 |  --- | --- |
 |  [BladeburnerActionName](./bitburner.bladeburneractionname.md) |  |
 |  [BladeburnerActionTypeForSleeve](./bitburner.bladeburneractiontypeforsleeve.md) |  |
-|  [CodingContractData](./bitburner.codingcontractdata.md) | Coding contract data will differ depending on coding contract. |
+|  [CodingContractAnswer](./bitburner.codingcontractanswer.md) |  |
+|  [CodingContractData](./bitburner.codingcontractdata.md) |  |
+|  [CodingContractObject](./bitburner.codingcontractobject.md) |  |
+|  [CodingContractSignatures](./bitburner.codingcontractsignatures.md) |  |
 |  [CorpEmployeePosition](./bitburner.corpemployeeposition.md) |  |
 |  [CorpIndustryName](./bitburner.corpindustryname.md) |  |
 |  [CorpMaterialName](./bitburner.corpmaterialname.md) |  |

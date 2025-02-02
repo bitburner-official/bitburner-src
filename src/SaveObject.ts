@@ -26,7 +26,7 @@ import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString
 import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
 import { downloadContentAsFile } from "./utils/FileUtils";
 import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
-import { isObject, objectAssert } from "./utils/helpers/typeAssertion";
+import { isObject, assertObject } from "./utils/TypeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
 import { Reviver } from "./utils/GenericReviver";
 
@@ -99,7 +99,7 @@ export type BitburnerSaveObjectType = {
  * If saveObject has these properties, we check if their values are strings.
  */
 function assertBitburnerSaveObjectType(saveObject: unknown): asserts saveObject is BitburnerSaveObjectType {
-  objectAssert(saveObject);
+  assertObject(saveObject);
 
   const mandatoryKeysOfSaveObj = [
     "PlayerSave",

@@ -14,6 +14,7 @@ import { Terminal } from "./Terminal";
 import { Player } from "@player";
 import {
   CityName,
+  CodingContractName,
   CompletedProgramName,
   CrimeType,
   FactionWorkType,
@@ -25,6 +26,7 @@ import {
   ToastVariant,
   UniversityClassType,
   CompanyName,
+  FactionName,
   type MessageFilename,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
@@ -64,7 +66,6 @@ import {
 } from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { roundToTwo } from "./utils/helpers/roundToTwo";
-import { LogBoxEvents, LogBoxCloserEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { NetscriptGang } from "./NetscriptFunctions/Gang";
 import { NetscriptGo } from "./NetscriptFunctions/Go";
@@ -94,7 +95,7 @@ import { InternalAPI, setRemovedFunctions, NSProxy } from "./Netscript/APIWrappe
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
-import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
+import { assert, assertArray, assertString, assertObject } from "./utils/TypeAssertion";
 import { escapeRegExp } from "lodash";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
@@ -107,7 +108,7 @@ import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
 import { ServerConstants } from "./Server/data/Constants";
-import { assertFunction } from "./Netscript/TypeAssertion";
+import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
@@ -123,6 +124,8 @@ export const enums: NSEnums = {
   ToastVariant,
   UniversityClassType,
   CompanyName,
+  FactionName,
+  CodingContractName,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
@@ -557,71 +560,32 @@ export const ns: InternalAPI<NSFull> = {
   tail:
     (ctx) =>
     (scriptID, hostname, ...scriptArgs) => {
-      const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
-      const runningScriptObj = helpers.getRunningScript(ctx, ident);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
-        return;
-      }
-
-      LogBoxEvents.emit(runningScriptObj);
+      deprecationWarning("ns.tail", "Use ns.ui.openTail instead.");
+      ns.ui.openTail(ctx)(scriptID, hostname, ...scriptArgs);
     },
   moveTail:
     (ctx) =>
     (_x, _y, _pid = ctx.workerScript.scriptRef.pid) => {
-      const x = helpers.number(ctx, "x", _x);
-      const y = helpers.number(ctx, "y", _y);
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
-      runningScriptObj.tailProps?.setPosition(x, y);
+      deprecationWarning("ns.moveTail", "Use ns.ui.moveTail instead.");
+      ns.ui.moveTail(ctx)(_x, _y, _pid);
     },
   resizeTail:
     (ctx) =>
     (_w, _h, _pid = ctx.workerScript.scriptRef.pid) => {
-      const w = helpers.number(ctx, "w", _w);
-      const h = helpers.number(ctx, "h", _h);
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
-      runningScriptObj.tailProps?.setSize(w, h);
+      deprecationWarning("ns.resizeTail", "Use ns.ui.resizeTail instead.");
+      ns.ui.resizeTail(ctx)(_w, _h, _pid);
     },
   closeTail:
     (ctx) =>
     (_pid = ctx.workerScript.scriptRef.pid) => {
-      const pid = helpers.number(ctx, "pid", _pid);
-      //Emit an event to tell the game to close the tail window if it exists
-      LogBoxCloserEvents.emit(pid);
+      deprecationWarning("ns.closeTail", "Use ns.ui.closeTail instead.");
+      ns.ui.closeTail(ctx)(_pid);
     },
   setTitle:
     (ctx) =>
     (title, _pid = ctx.workerScript.scriptRef.pid) => {
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
-      runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
-      runningScriptObj.tailProps?.rerender();
-    },
-  setTailFontSize:
-    (ctx) =>
-    (_pixel, scriptID, hostname, ...scriptArgs) => {
-      const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
-      const runningScriptObj = helpers.getRunningScript(ctx, ident);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
-        return;
-      }
-      if (_pixel === undefined) runningScriptObj.tailProps?.setFontSize(undefined);
-      else runningScriptObj.tailProps?.setFontSize(helpers.number(ctx, "pixel", _pixel));
+      deprecationWarning("ns.setTitle", "Use ns.ui.setTailTitle instead.");
+      ns.ui.setTailTitle(ctx)(title, _pid);
     },
   nuke: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -1694,11 +1658,11 @@ export const ns: InternalAPI<NSFull> = {
     const options: { type?: string; choices?: string[] } = {};
     _options ??= options;
     const txt = helpers.string(ctx, "txt", _txt);
-    assert(_options, objectAssert, (type) =>
+    assert(_options, assertObject, (type) =>
       helpers.errorMessage(ctx, `Invalid type for options: ${type}. Should be object.`, "TYPE"),
     );
     if (_options.type !== undefined) {
-      assert(_options.type, stringAssert, (type) =>
+      assert(_options.type, assertString, (type) =>
         helpers.errorMessage(ctx, `Invalid type for options.type: ${type}. Should be string.`, "TYPE"),
       );
       options.type = _options.type;
@@ -1710,7 +1674,7 @@ export const ns: InternalAPI<NSFull> = {
         );
       }
       if (options.type === "select") {
-        assert(_options.choices, arrayAssert, (type) =>
+        assert(_options.choices, assertArray, (type) =>
           helpers.errorMessage(
             ctx,
             `Invalid type for options.choices: ${type}. If options.type is "select", options.choices must be an array.`,
@@ -1811,7 +1775,7 @@ export const ns: InternalAPI<NSFull> = {
   }),
   atExit: (ctx) => (callback, _id) => {
     const id = _id ? helpers.string(ctx, "id", _id) : "default";
-    assertFunction(ctx, "callback", callback);
+    assertFunctionWithNSContext(ctx, "callback", callback);
     ctx.workerScript.atExit.set(id, callback);
   },
   mv: (ctx) => (_host, _source, _destination) => {

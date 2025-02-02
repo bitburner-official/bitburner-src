@@ -250,7 +250,7 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
           if (!Settings.SuppressBuyAugmentationConfirmation) {
             showModal(true);
           } else {
-            purchaseAugmentation(aug, faction);
+            purchaseAugmentation(faction, aug);
             rerender();
           }
         }}

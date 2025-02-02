@@ -5,6 +5,7 @@ import { ContentFile, ContentFilePath, allContentFiles } from "../../Paths/Conte
 import { Settings } from "../../Settings/Settings";
 import { help } from "../commands/help";
 import { Output } from "../OutputTypes";
+import { pluralize } from "../../utils/I18nUtils";
 
 type LineParser = (options: Options, filename: string, line: string, i: number) => ParsedLine;
 
@@ -290,12 +291,9 @@ class Results {
 
   getVerboseInfo(files: ContentFile[], pattern: string | RegExp, options: Options): string {
     if (!options.isVerbose) return "";
-    const suffix = (pre: string, num: number) => pre + (num === 1 ? "" : "s");
     const totalLines = this.results.length;
     const matchCount = Math.abs((options.isInvertMatch ? totalLines : 0) - this.numMatches);
-    const inputStr = options.isPipeIn
-      ? "piped from terminal "
-      : `in ${files.length} ${suffix("file", files.length)}:\n`;
+    const inputStr = options.isPipeIn ? "piped from terminal " : `in ${pluralize(files.length, "file")}:\n`;
     const filesStr = files
       .map((file, i) => `${i % 2 ? WHITE : ""}${file.filename}(${file.content.split("\n").length}loc)${DEFAULT}`)
       .join(", ");
@@ -304,9 +302,9 @@ class Results {
       `\n${
         (this.params.maxMatches ? this.params.maxMatches : matchCount) + (options.isInvertMatch ? " INVERTED" : "")
       } `,
-      suffix("line", matchCount) + " matched ",
+      pluralize(matchCount, "line", undefined, true) + " matched ",
       `against PATTERN "${pattern.toString()}" `,
-      `in ${totalLines} ${suffix("line", totalLines)}, `,
+      `in ${pluralize(totalLines, "line")}, `,
       inputStr,
       `${filesStr}`,
     ].join("");

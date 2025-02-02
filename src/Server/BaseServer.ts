@@ -24,7 +24,7 @@ import lodash from "lodash";
 import { Settings } from "../Settings/Settings";
 
 import type { ScriptKey } from "../utils/helpers/scriptKey";
-import { objectAssert } from "../utils/helpers/typeAssertion";
+import { assertObject } from "../utils/TypeAssertion";
 import { clampNumber } from "../utils/helpers/clampNumber";
 
 interface IConstructorParams {
@@ -295,7 +295,7 @@ export abstract class BaseServer implements IServer {
     // RunningScripts are stored as a simple array, both for backward compatibility,
     // compactness, and ease of filtering them here.
     const result = Generic_toJSON(ctorName, this, keys);
-    objectAssert(result.data);
+    assertObject(result.data);
     if (Settings.ExcludeRunningScriptsFromSave) {
       result.data.runningScripts = [];
       return result;
@@ -316,7 +316,7 @@ export abstract class BaseServer implements IServer {
   // Initializes a Server Object from a JSON save state
   // Called by subclasses, not Reviver.
   static fromJSONBase<T extends BaseServer>(value: IReviverValue, ctor: new () => T, keys: readonly (keyof T)[]): T {
-    objectAssert(value.data);
+    assertObject(value.data);
     const server = Generic_fromJSON(ctor, value.data, keys);
     if (value.data.runningScripts != null && Array.isArray(value.data.runningScripts)) {
       server.savedScripts = value.data.runningScripts;

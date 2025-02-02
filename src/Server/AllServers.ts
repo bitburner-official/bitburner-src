@@ -13,7 +13,7 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
-import { objectAssert } from "../utils/helpers/typeAssertion";
+import { assertObject } from "../utils/TypeAssertion";
 
 /**
  * Map of all Servers that exist in the game
@@ -218,7 +218,7 @@ export function prestigeAllServers(): void {
 
 export function loadAllServers(saveString: string): void {
   const allServersData: unknown = JSON.parse(saveString, Reviver);
-  objectAssert(allServersData);
+  assertObject(allServersData);
   for (const [serverName, server] of Object.entries(allServersData)) {
     if (!(server instanceof Server) && !(server instanceof HacknetServer)) {
       throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer.`);

@@ -1,5 +1,6 @@
 import { Settings } from "../Settings/Settings";
 import { CONSTANTS } from "../Constants";
+import { pluralize } from "./I18nUtils";
 
 /*
 Converts a date representing time in milliseconds to a string with the format H hours M minutes and S seconds
@@ -38,13 +39,13 @@ export function convertTimeMsToTimeElapsedString(time: number, showMilli = false
 
   let res = "";
   if (days > 0) {
-    res += `${days} day${days === 1 ? "" : "s"} `;
+    res += `${pluralize(days, "day")} `;
   }
   if (hours > 0 || (Settings.ShowMiddleNullTimeUnit && res != "")) {
-    res += `${hours} hour${hours === 1 ? "" : "s"} `;
+    res += `${pluralize(hours, "hour")} `;
   }
   if (minutes > 0 || (Settings.ShowMiddleNullTimeUnit && res != "")) {
-    res += `${minutes} minute${minutes === 1 ? "" : "s"} `;
+    res += `${pluralize(minutes, "minute")} `;
   }
   res += `${seconds} second${!showMilli && secTruncMinutes === 1 ? "" : "s"}`;
 

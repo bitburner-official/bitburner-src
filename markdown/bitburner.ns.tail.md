@@ -4,7 +4,12 @@
 
 ## NS.tail() method
 
-Open the tail window of a script.
+> Warning: This API is now obsolete.
+> 
+> Use [ns.ui.openTail](./bitburner.userinterface.opentail.md) instead.
+> 
+
+Open the tail window of a script. This function is deprecated and will be removed in a later version.
 
 **Signature:**
 
