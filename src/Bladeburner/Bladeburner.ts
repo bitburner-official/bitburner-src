@@ -136,9 +136,10 @@ export class Bladeburner implements OperationTeam {
       this.resetAction();
       return { success: true, message: "Stopped current Bladeburner action" };
     }
-    if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
+    if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) {
+      Player.finishWork(true);
+    }
     const action = this.getActionObject(actionId);
-    // This switch statement is just for handling error cases, it does not have to be exhaustive
     const availability = action.getAvailability(this);
     if (!availability.available) {
       return { message: `Could not start action ${action.name}: ${availability.error}` };

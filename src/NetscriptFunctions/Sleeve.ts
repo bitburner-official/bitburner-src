@@ -8,7 +8,6 @@ import { Augmentations } from "../Augmentation/Augmentations";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
-import { SleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
 import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyWork";
 import { helpers } from "../Netscript/NetscriptHelpers";
@@ -259,11 +258,17 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       const action = helpers.string(ctx, "action", _action);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
+      if (!Player.bladeburner) {
+        helpers.log(ctx, () => "You must be a member of the Bladeburner division to use this API.");
+        return false;
+      }
       let contract: BladeburnerContractName | undefined = undefined;
       if (action === "Take on contracts") {
         contract = getEnumHelper("BladeburnerContractName").nsGetMember(ctx, _contract);
         for (let i = 0; i < Player.sleeves.length; ++i) {
-          if (i === sleeveNumber) continue;
+          if (i === sleeveNumber) {
+            continue;
+          }
           const otherWork = Player.sleeves[i].currentWork;
           if (otherWork?.type === SleeveWorkType.BLADEBURNER && otherWork.actionId.name === contract) {
             throw helpers.errorMessage(
@@ -273,7 +278,11 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
           }
         }
         const actionId: ActionIdentifier = { type: BladeburnerActionType.Contract, name: contract };
-        Player.sleeves[sleeveNumber].startWork(new SleeveBladeburnerWork({ actionId }));
+        const availability = Player.bladeburner.getActionObject(actionId).getAvailability(Player.bladeburner);
+        if (!availability.available) {
+          helpers.log(ctx, () => `Could not start action ${contract}: ${availability.error}`);
+          return false;
+        }
       }
       return Player.sleeves[sleeveNumber].bladeburner(action, contract);
     },
