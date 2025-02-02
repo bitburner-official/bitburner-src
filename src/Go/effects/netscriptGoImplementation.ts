@@ -27,7 +27,7 @@ import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 /**
  * Check the move based on the current settings
  */
-export function validateMove(error: (s: string) => never, x: number, y: number, methodName = "", settings = {}) {
+export function validateMove(error: (s: string) => never, x: number, y: number, methodName = "", settings = {}): void {
   const check = {
     emptyNode: true,
     requireNonEmptyNode: false,
@@ -36,14 +36,20 @@ export function validateMove(error: (s: string) => never, x: number, y: number, 
     requireOfflineNode: false,
     suicide: true,
     playAsWhite: false,
+    pass: false,
     ...settings,
   };
 
-  const moveString = `${methodName} ${x},${y}${check.playAsWhite ? " (White) " : ""}: `;
+  const moveString = methodName + (check.pass ? "" : ` ${x},${y}`) + (check.playAsWhite ? " (White)" : "") + ": ";
   const moveColor = check.playAsWhite ? GoColor.white : GoColor.black;
 
   if (check.playAsWhite) {
     validatePlayAsWhite(error);
+  }
+  validateTurn(error, moveString, moveColor);
+
+  if (check.pass) {
+    return;
   }
 
   const boardSize = Go.currentGame.board.length;
@@ -53,8 +59,6 @@ export function validateMove(error: (s: string) => never, x: number, y: number, 
   if (y < 0 || y >= boardSize) {
     error(`Invalid row number (y = ${y}), row must be a number 0 through ${boardSize - 1}`);
   }
-
-  validateTurn(error, moveString, moveColor);
 
   const validity = evaluateIfMoveIsValid(Go.currentGame, x, y, moveColor);
   const point = Go.currentGame.board[x][y];
@@ -95,7 +99,7 @@ export function validateMove(error: (s: string) => never, x: number, y: number, 
   }
 }
 
-export function validatePlayAsWhite(error: (s: string) => never) {
+function validatePlayAsWhite(error: (s: string) => never) {
   if (Go.currentGame.ai !== GoOpponent.none) {
     error(`${GoValidity.invalid}. You can only play as white when playing against 'No AI'`);
   }
@@ -105,7 +109,7 @@ export function validatePlayAsWhite(error: (s: string) => never) {
   }
 }
 
-export function validateTurn(error: (s: string) => never, moveString = "", color = GoColor.black) {
+function validateTurn(error: (s: string) => never, moveString = "", color = GoColor.black) {
   if (Go.currentGame.previousPlayer === color) {
     error(
       `${moveString} ${GoValidity.notYourTurn}. Do you have multiple scripts running, or did you forget to await makeMove() or opponentNextTurn()`,
