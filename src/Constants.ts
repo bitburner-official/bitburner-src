@@ -109,7 +109,7 @@ export const CONSTANTS = {
 
   // Also update Documentation/doc/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v2.7.1 dev branch: Last updated 3 February 2024
+## v2.7.1 dev branch: Last updated 3 February 2025
 
 ### MAJOR CHANGES
 
