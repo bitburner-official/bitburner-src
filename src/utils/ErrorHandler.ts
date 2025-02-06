@@ -12,7 +12,9 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
   }
   if (ws && typeof e === "string") {
     const headerText = basicErrorMessage(ws, "", "");
-    if (!e.includes(headerText)) e = basicErrorMessage(ws, e);
+    if (!e.includes(headerText)) {
+      e = basicErrorMessage(ws, e);
+    }
   } else if (e instanceof SyntaxError) {
     const msg = `${e.message} (sorry we can't be more helpful)`;
     e = ws ? basicErrorMessage(ws, msg, "SYNTAX") : `SYNTAX ERROR:\n\n${msg}`;
@@ -24,14 +26,8 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
     if (ws) {
       console.error(`An error was thrown in your script. Hostname: ${ws.hostname}, script name: ${ws.name}.`);
     }
-    /**
-     * If e is an instance of Error, we print it to the console. This is especially useful when debugging a TypeScript
-     * script. The stack trace in the error popup contains only the trace of the transpiled code. Even with a source
-     * map, parsing it to get the relevant info from the original TypeScript file is complicated. The built-in developer
-     * tool of browsers will do that for us if we print the error to the console.
-     */
     console.error(e);
-    const msg = getErrorMessageWithStackAndCause(e);
+    const msg = getErrorMessageWithStackAndCause(e, "", ws);
     e = ws ? basicErrorMessage(ws, msg) : `RUNTIME ERROR:\n\n${msg}`;
   }
   if (typeof e !== "string") {

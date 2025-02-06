@@ -3,6 +3,7 @@ import type React from "react";
 import type { Page } from "../ui/Router";
 import { commitHash } from "./helpers/commitHash";
 import { CONSTANTS } from "../Constants";
+import { type LiteWorkerScript, parseStackTrace } from "./StackTraceUtils";
 
 enum GameEnv {
   Production,
@@ -54,7 +55,10 @@ export interface IErrorData {
 
 export const newIssueUrl = `https://github.com/bitburner-official/bitburner-src/issues/new`;
 
-export function parseUnknownError(error: unknown): {
+export function parseUnknownError(
+  error: unknown,
+  ws: LiteWorkerScript | null,
+): {
   errorAsString: string;
   stack?: string;
   causeAsString?: string;
@@ -65,11 +69,19 @@ export function parseUnknownError(error: unknown): {
   let causeAsString: string | undefined = undefined;
   let causeStack: string | undefined = undefined;
   if (error instanceof Error) {
-    stack = error.stack;
+    if (ws) {
+      stack = parseStackTrace(error, ws);
+    } else {
+      stack = error.stack;
+    }
     if (error.cause != null) {
       causeAsString = String(error.cause);
       if (error.cause instanceof Error) {
-        causeStack = error.cause.stack;
+        if (ws) {
+          causeStack = parseStackTrace(error.cause, ws);
+        } else {
+          causeStack = error.cause.stack;
+        }
       }
     }
   }
@@ -81,8 +93,8 @@ export function parseUnknownError(error: unknown): {
   };
 }
 
-export function getErrorMessageWithStackAndCause(error: unknown, prefix = ""): string {
-  const errorData = parseUnknownError(error);
+export function getErrorMessageWithStackAndCause(error: unknown, prefix = "", ws: LiteWorkerScript | null): string {
+  const errorData = parseUnknownError(error, ws);
   let errorMessage = `${prefix}${errorData.errorAsString}`;
   if (errorData.stack) {
     errorMessage += `\nStack: ${errorData.stack}`;
@@ -127,7 +139,7 @@ export function getErrorMetadata(error: unknown, errorInfo?: React.ErrorInfo, pa
 
 export function getErrorForDisplay(error: unknown, errorInfo?: React.ErrorInfo, page?: Page): IErrorData {
   const metadata = getErrorMetadata(error, errorInfo, page);
-  const errorData = parseUnknownError(error);
+  const errorData = parseUnknownError(error, null);
   const fileName = String(metadata.error.fileName);
   const features =
     `lang=${metadata.features.language} cookiesEnabled=${metadata.features.cookiesEnabled.toString()}` +

@@ -13,9 +13,11 @@ export interface ScriptModule {
 export class LoadedModule {
   url: ScriptURL;
   module: Promise<ScriptModule>;
+  sourceMap?: string;
 
-  constructor(url: ScriptURL, module: Promise<ScriptModule>) {
+  constructor(url: ScriptURL, module: Promise<ScriptModule>, sourceMap?: string) {
     this.url = url;
     this.module = module;
+    this.sourceMap = sourceMap;
   }
 }

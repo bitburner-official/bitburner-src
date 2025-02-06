@@ -356,7 +356,7 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
       workerScript.log("", () =>
         error instanceof ScriptDeath
           ? "main() terminated."
-          : getErrorMessageWithStackAndCause(error, "Script crashed due to an error: "),
+          : getErrorMessageWithStackAndCause(error, "Script crashed due to an error:\n", workerScript),
       );
     })
     .finally(() => {
