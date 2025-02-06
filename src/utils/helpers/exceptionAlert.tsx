@@ -18,7 +18,7 @@ const errorSet = new Set<string>();
  */
 export function exceptionAlert(error: unknown, showOnlyOnce = false): void {
   console.error(error);
-  const errorData = parseUnknownError(error);
+  const errorData = parseUnknownError(error, null);
   if (showOnlyOnce) {
     // Calculate the "id" of the error.
     const errorId = cyrb53(errorData.errorAsString + errorData.stack);
