@@ -111,7 +111,14 @@ function Root(props: IProps): React.ReactElement {
     }
     if (needToReloadModel) {
       const currentModel = editorRef.current.getModel();
+      // Save the current cursor position. The position resets when the model is changed.
+      const currentPosition = editorRef.current.getPosition();
+      // Reload the model.
       currentModel?.setValue(currentModel.getValue());
+      // Restore the saved position.
+      if (currentPosition) {
+        editorRef.current.setPosition(currentPosition);
+      }
     }
   }, 2000);
 
