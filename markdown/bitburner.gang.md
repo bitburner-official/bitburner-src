@@ -30,6 +30,7 @@ If you are not in BitNode-2, then you must have Source-File 2 in order to use th
 |  [getEquipmentNames()](./bitburner.gang.getequipmentnames.md) | List equipment names. |
 |  [getEquipmentStats(equipName)](./bitburner.gang.getequipmentstats.md) | Get stats of an equipment. |
 |  [getEquipmentType(equipName)](./bitburner.gang.getequipmenttype.md) | Get type of an equipment. |
+|  [getGainExperience(numCycles, member)](./bitburner.gang.getgainexperience.md) | returns list of all exp gains per stat based on passed parameters |
 |  [getGangInformation()](./bitburner.gang.getganginformation.md) | Get information about your gang. |
 |  [getInstallResult(memberName)](./bitburner.gang.getinstallresult.md) | Get the effect of an install on ascension multipliers without installing. |
 |  [getMemberInformation(name)](./bitburner.gang.getmemberinformation.md) | Get information about a specific gang member. |
