@@ -2,6 +2,7 @@ import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { Gang } from "../Gang";
 import { GangMember } from "../GangMember";
 import { GangMemberTask } from "../GangMemberTask";
+import { GangMemberTasks } from "../GangMemberTasks";
 
 export interface FormulaGang {
   respect: number;
@@ -80,8 +81,16 @@ export function calculateAscensionPointsGain(exp: number): number {
 export function calculateAscensionMult(points: number): number {
   return Math.max(Math.pow(points / 2000, 0.5), 1);
 }
- 
-export function calculateGainExperience(numCycles: number , member: GangMember, task: GangMemberTask): number[]{
+
+//FUNCTION RETURNS TOTAL EXP GAINED FOR EACH STAT BASED ON THE PARAMS PROVIDED CYCLES, MEMBER, AND TASK
+//RETURNS A LIST OF THOSE TOTAL VALUES IN THIS ORDER [hackExp, strExp, defExp, dexExp, agiExp, chaExp]
+//IF THERE ARE NO TASKS ASSIGNED EMPTY ARRAY IS RETURNED
+export function calculateGainExperience(numCycles: number , member: GangMember): number[] | string {
+  const task = member.getTask();
+
+  if (task === GangMemberTasks.Unassigned) 
+    return "There is no task currently assigned.";
+  
   let hackExp = 0;
   let strExp = 0;
   let defExp = 0;
