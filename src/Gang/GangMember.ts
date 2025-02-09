@@ -150,35 +150,42 @@ export class GangMember {
   gainExperience(numCycles = 1): void {
     const task = this.getTask();
     if (task === GangMemberTasks.Unassigned) return;
+
     const difficultyMult = Math.pow(task.difficulty, 0.9);
     const difficultyPerCycles = difficultyMult * numCycles;
     const weightDivisor = 1500;
     const expMult = this.expMult();
+
     this.hack_exp +=
       (task.hackWeight / weightDivisor) *
       difficultyPerCycles *
       expMult.hack *
       this.calculateAscensionMult(this.hack_asc_points);
+
     this.str_exp +=
       (task.strWeight / weightDivisor) *
       difficultyPerCycles *
       expMult.str *
       this.calculateAscensionMult(this.str_asc_points);
+
     this.def_exp +=
       (task.defWeight / weightDivisor) *
       difficultyPerCycles *
       expMult.def *
       this.calculateAscensionMult(this.def_asc_points);
+
     this.dex_exp +=
       (task.dexWeight / weightDivisor) *
       difficultyPerCycles *
       expMult.dex *
       this.calculateAscensionMult(this.dex_asc_points);
+
     this.agi_exp +=
       (task.agiWeight / weightDivisor) *
       difficultyPerCycles *
       expMult.agi *
       this.calculateAscensionMult(this.agi_asc_points);
+
     this.cha_exp +=
       (task.chaWeight / weightDivisor) *
       difficultyPerCycles *

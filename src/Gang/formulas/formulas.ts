@@ -1,4 +1,5 @@
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
+import { Gang } from "../Gang";
 import { GangMember } from "../GangMember";
 import { GangMemberTask } from "../GangMemberTask";
 
@@ -79,3 +80,55 @@ export function calculateAscensionPointsGain(exp: number): number {
 export function calculateAscensionMult(points: number): number {
   return Math.max(Math.pow(points / 2000, 0.5), 1);
 }
+ 
+export function calculateGainExperience(numCycles: number , member: GangMember, task: GangMemberTask): number[]{
+  let hackExp = 0;
+  let strExp = 0;
+  let defExp = 0;
+  let dexExp = 0;
+  let agiExp = 0;
+  let chaExp = 0;
+
+  const difficultyMult = Math.pow(task.difficulty, 0.9);
+  const difficultyPerCycles = difficultyMult * numCycles;
+  const weightDivisor = 1500;
+  const expMult = member.expMult();
+
+  hackExp +=
+    (task.hackWeight / weightDivisor) *
+    difficultyPerCycles *
+    expMult.hack *
+    member.calculateAscensionMult(member.hack_asc_points);
+
+  strExp +=
+    (task.strWeight / weightDivisor) *
+    difficultyPerCycles *
+    expMult.str *
+    member.calculateAscensionMult(member.str_asc_points);
+
+  defExp +=
+    (task.defWeight / weightDivisor) *
+    difficultyPerCycles *
+    expMult.def *
+    member.calculateAscensionMult(member.def_asc_points);
+
+  dexExp +=
+    (task.dexWeight / weightDivisor) *
+    difficultyPerCycles *
+    expMult.dex *
+    member.calculateAscensionMult(member.dex_asc_points);
+
+  agiExp +=
+    (task.agiWeight / weightDivisor) *
+    difficultyPerCycles *
+    expMult.agi *
+    member.calculateAscensionMult(member.agi_asc_points);
+
+  chaExp +=
+    (task.chaWeight / weightDivisor) *
+    difficultyPerCycles *
+    expMult.cha *
+    member.calculateAscensionMult(member.cha_asc_points);
+ 
+  return [hackExp, strExp, defExp, agiExp, chaExp];
+  }

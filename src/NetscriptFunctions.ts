@@ -112,6 +112,7 @@ import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
+import { calculateGainExperience } from "./Gang/formulas/formulas";
 
 export const enums: NSEnums = {
   CityName,
