@@ -37,6 +37,7 @@ interface GangMemberInfo
 |  [dex\_mult](./bitburner.gangmemberinfo.dex_mult.md) |  | number | Dexterity multiplier from equipment |
 |  [dex](./bitburner.gangmemberinfo.dex.md) |  | number | Dexterity skill level |
 |  [earnedRespect](./bitburner.gangmemberinfo.earnedrespect.md) |  | number | Amount of Respect earned by member since they last Ascended |
+|  [expGain](./bitburner.gangmemberinfo.expgain.md) |  | object \| undefined | PerCycle Exp object for each stat for this gang member |
 |  [hack\_asc\_mult](./bitburner.gangmemberinfo.hack_asc_mult.md) |  | number | Hack multiplier from ascensions |
 |  [hack\_asc\_points](./bitburner.gangmemberinfo.hack_asc_points.md) |  | number | Total Hack Ascension points accumulated |
 |  [hack\_exp](./bitburner.gangmemberinfo.hack_exp.md) |  | number | Current hack experience |

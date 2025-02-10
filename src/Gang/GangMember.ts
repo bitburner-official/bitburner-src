@@ -13,6 +13,7 @@ import {
   calculateWantedLevelGain,
   calculateAscensionMult,
   calculateAscensionPointsGain,
+  calculateMemberExperience,
 } from "./formulas/formulas";
 
 interface IMults {
@@ -146,8 +147,7 @@ export class GangMember {
       cha: (this.cha_mult - 1) / 4 + 1,
     };
   }
-
-  gainExperience(numCycles = 1): void {
+  gainExperience(numCycles = 1): number | undefined {
     const task = this.getTask();
     if (task === GangMemberTasks.Unassigned) return;
 
@@ -191,6 +191,19 @@ export class GangMember {
       difficultyPerCycles *
       expMult.cha *
       this.calculateAscensionMult(this.cha_asc_points);
+  }
+
+  //getter for calculating member experience that would occur upon current task completion returns object
+  //If the member current has no tasks assigned returns udefined.
+  getMemberExperience(member: GangMember): object | undefined {
+    const numCycles = 1;
+    const task = member.getTask();
+    if (member === undefined) {
+      return;
+    } else if (task === GangMemberTasks.Unassigned) {
+      return;
+    }
+    return calculateMemberExperience(numCycles, member, task);
   }
 
   earnRespect(numCycles = 1, gang: Gang): number {

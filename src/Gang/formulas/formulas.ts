@@ -1,7 +1,6 @@
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { GangMember } from "../GangMember";
 import { GangMemberTask } from "../GangMemberTask";
-import { GangMemberTasks } from "../GangMemberTasks";
 
 export interface FormulaGang {
   respect: number;
@@ -73,69 +72,66 @@ export function calculateMoneyGain(gang: FormulaGang, member: GangMember, task: 
   return Math.pow(5 * task.baseMoney * statWeight * territoryMult * respectMult, territoryPenalty);
 }
 
-export function calculateAscensionPointsGain(exp: number): number {
-  return Math.max(exp - 1000, 0);
-}
-
-export function calculateAscensionMult(points: number): number {
-  return Math.max(Math.pow(points / 2000, 0.5), 1);
-}
-
-//FUNCTION RETURNS TOTAL EXP GAINED FOR EACH STAT BASED ON THE PARAMS PROVIDED CYCLES, MEMBER, AND TASK
-//RETURNS A LIST OF THOSE TOTAL VALUES IN THIS ORDER [hackExp, strExp, defExp, dexExp, agiExp, chaExp]
-//IF THERE ARE NO TASKS ASSIGNED EMPTY ARRAY IS RETURNED
-export function getGainExperience(numCycles: number, member: GangMember): number[] | string {
-  const task = member.getTask();
-
-  if (task === GangMemberTasks.Unassigned) return "There is no task currently assigned.";
-
-  let hackExp = 0;
-  let strExp = 0;
-  let defExp = 0;
-  let dexExp = 0;
-  let agiExp = 0;
-  let chaExp = 0;
+//Calculates memberEXP based on member passed and task passed that the member currently has assigned.
+//@returns object containing all exp values that would be gain on task compeletion.
+export function calculateMemberExperience(numCycles: number, member: GangMember, task: GangMemberTask): object {
+  const expValues = {
+    hackEXP: 0,
+    strEXP: 0,
+    defEXP: 0,
+    dexEXP: 0,
+    agiEXP: 0,
+    chaEXP: 0,
+  };
 
   const difficultyMult = Math.pow(task.difficulty, 0.9);
   const difficultyPerCycles = difficultyMult * numCycles;
   const weightDivisor = 1500;
   const expMult = member.expMult();
 
-  hackExp +=
+  expValues.hackEXP +=
     (task.hackWeight / weightDivisor) *
     difficultyPerCycles *
     expMult.hack *
     member.calculateAscensionMult(member.hack_asc_points);
 
-  strExp +=
+  expValues.strEXP +=
     (task.strWeight / weightDivisor) *
     difficultyPerCycles *
     expMult.str *
     member.calculateAscensionMult(member.str_asc_points);
 
-  defExp +=
+  expValues.defEXP +=
     (task.defWeight / weightDivisor) *
     difficultyPerCycles *
     expMult.def *
     member.calculateAscensionMult(member.def_asc_points);
 
-  dexExp +=
+  expValues.dexEXP +=
     (task.dexWeight / weightDivisor) *
     difficultyPerCycles *
     expMult.dex *
     member.calculateAscensionMult(member.dex_asc_points);
 
-  agiExp +=
+  expValues.agiEXP +=
     (task.agiWeight / weightDivisor) *
     difficultyPerCycles *
     expMult.agi *
     member.calculateAscensionMult(member.agi_asc_points);
 
-  chaExp +=
+  expValues.chaEXP +=
     (task.chaWeight / weightDivisor) *
     difficultyPerCycles *
     expMult.cha *
     member.calculateAscensionMult(member.cha_asc_points);
 
-  return [hackExp, strExp, defExp, agiExp, chaExp];
+  return expValues;
+}
+
+export function calculateAscensionPointsGain(exp: number): number {
+  return Math.max(exp - 1000, 0);
+}
+
+export function calculateAscensionMult(points: number): number {
+  return Math.max(Math.pow(points / 2000, 0.5), 1);
 }

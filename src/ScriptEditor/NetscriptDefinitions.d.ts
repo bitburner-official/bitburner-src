@@ -1,7 +1,4 @@
 /** All netscript definitions */
-
-import { GangMember } from "src/Gang/GangMember";
-
 /** @public */
 interface HP {
   current: number;
@@ -1006,6 +1003,8 @@ interface GangMemberInfo {
   wantedLevelGain: number;
   /** Per Cycle Income for this gang member */
   moneyGain: number;
+  /**PerCycle Exp object for each stat for this gang member */
+  expGain: object | undefined;
 }
 
 /** @public */
@@ -4315,16 +4314,6 @@ export interface Gang {
    * ```
    */
   nextUpdate(): Promise<number>;
-  /**
-   * returns list of all exp gains per stat based on passed parameters
-   * @remarks
-   * RAM cost: 0
-   * 
-   *@returns List of exp gains for each stat based on amount of cycles given
-   *List is returned in this exact order  [hackExp, strExp, defExp, dexExp, agiExp, chaExp]
-   *if a gang member is passed with no current tasks assigned will return a string that says that their is no task currently assigned
-   */
-  getGainExperience(numCycles: number, member: GangMember): number[] | string
 }
 
 /** @public */
