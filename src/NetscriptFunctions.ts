@@ -66,7 +66,6 @@ import {
 } from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { roundToTwo } from "./utils/helpers/roundToTwo";
-import { LogBoxEvents, LogBoxCloserEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { NetscriptGang } from "./NetscriptFunctions/Gang";
 import { NetscriptGo } from "./NetscriptFunctions/Go";
@@ -561,82 +560,32 @@ export const ns: InternalAPI<NSFull> = {
   tail:
     (ctx) =>
     (scriptID, hostname, ...scriptArgs) => {
-      const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
-      const runningScriptObj = helpers.getRunningScript(ctx, ident);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
-        return;
-      }
-
-      LogBoxEvents.emit(runningScriptObj);
-    },
-  renderTail:
-    (ctx) =>
-    (_pid = ctx.workerScript.scriptRef.pid) => {
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
-      runningScriptObj.tailProps?.rerender();
+      deprecationWarning("ns.tail", "Use ns.ui.openTail instead.");
+      ns.ui.openTail(ctx)(scriptID, hostname, ...scriptArgs);
     },
   moveTail:
     (ctx) =>
     (_x, _y, _pid = ctx.workerScript.scriptRef.pid) => {
-      const x = helpers.number(ctx, "x", _x);
-      const y = helpers.number(ctx, "y", _y);
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
-      runningScriptObj.tailProps?.setPosition(x, y);
+      deprecationWarning("ns.moveTail", "Use ns.ui.moveTail instead.");
+      ns.ui.moveTail(ctx)(_x, _y, _pid);
     },
   resizeTail:
     (ctx) =>
     (_w, _h, _pid = ctx.workerScript.scriptRef.pid) => {
-      const w = helpers.number(ctx, "w", _w);
-      const h = helpers.number(ctx, "h", _h);
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
-      runningScriptObj.tailProps?.setSize(w, h);
+      deprecationWarning("ns.resizeTail", "Use ns.ui.resizeTail instead.");
+      ns.ui.resizeTail(ctx)(_w, _h, _pid);
     },
   closeTail:
     (ctx) =>
     (_pid = ctx.workerScript.scriptRef.pid) => {
-      const pid = helpers.number(ctx, "pid", _pid);
-      //Emit an event to tell the game to close the tail window if it exists
-      LogBoxCloserEvents.emit(pid);
+      deprecationWarning("ns.closeTail", "Use ns.ui.closeTail instead.");
+      ns.ui.closeTail(ctx)(_pid);
     },
   setTitle:
     (ctx) =>
     (title, _pid = ctx.workerScript.scriptRef.pid) => {
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
-      runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
-      runningScriptObj.tailProps?.rerender();
-    },
-  setTailFontSize:
-    (ctx) =>
-    (_pixel, scriptID, hostname, ...scriptArgs) => {
-      const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
-      const runningScriptObj = helpers.getRunningScript(ctx, ident);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
-        return;
-      }
-      if (_pixel === undefined) runningScriptObj.tailProps?.setFontSize(undefined);
-      else runningScriptObj.tailProps?.setFontSize(helpers.number(ctx, "pixel", _pixel));
+      deprecationWarning("ns.setTitle", "Use ns.ui.setTailTitle instead.");
+      ns.ui.setTailTitle(ctx)(title, _pid);
     },
   nuke: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);

@@ -1,15 +1,15 @@
 import type { Board, BoardState, PointState } from "../Types";
 
 import { Player } from "@player";
-import { GoOpponent, GoColor, GoPlayType } from "@enums";
+import { GoOpponent, GoColor } from "@enums";
 import { newOpponentStats } from "../Constants";
 import { getAllChains, getPlayerNeighbors } from "./boardAnalysis";
-import { getKomi } from "./goAI";
+import { getKomi, resetAI } from "./goAI";
 import { getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "../effects/effect";
 import { isNotNullish } from "../boardState/boardState";
 import { Factions } from "../../Faction/Factions";
 import { getEnumHelper } from "../../utils/EnumHelper";
-import { Go } from "../Go";
+import { Go, GoEvents } from "../Go";
 
 /**
  * Returns the score of the current board.
@@ -46,11 +46,6 @@ export function endGoGame(boardState: BoardState) {
   if (boardState.previousPlayer === null) {
     return;
   }
-  Go.nextTurn = Promise.resolve({
-    type: GoPlayType.gameOver,
-    x: null,
-    y: null,
-  });
 
   boardState.previousPlayer = null;
   const statusToUpdate = getOpponentStats(boardState.ai);
@@ -59,7 +54,6 @@ export function endGoGame(boardState: BoardState) {
 
   if (score[GoColor.black].sum < score[GoColor.white].sum) {
     resetWinstreak(boardState.ai, true);
-    statusToUpdate.nodePower += Math.floor(score[GoColor.black].sum * 0.25);
   } else {
     statusToUpdate.wins++;
     statusToUpdate.oldWinStreak = statusToUpdate.winStreak;
@@ -89,6 +83,8 @@ export function endGoGame(boardState: BoardState) {
   statusToUpdate.nodes += score[GoColor.black].sum;
   Go.currentGame = boardState;
   Go.previousGame = boardState;
+  resetAI(true);
+  GoEvents.emit();
 
   // Update multipliers with new bonuses, once at the end of the game
   Player.applyEntropy(Player.entropy);
@@ -123,7 +119,9 @@ function getColoredPieceCount(boardState: BoardState, color: GoColor) {
  * Finds all empty spaces fully surrounded by a single player's stones
  */
 function getTerritoryScores(board: Board) {
-  const emptyTerritoryChains = getAllChains(board).filter((chain) => chain?.[0]?.color === GoColor.empty);
+  const emptyTerritoryChains = getAllChains(board).filter(
+    (chain) => chain?.[0]?.color === GoColor.empty && chain.length <= board.length * 2,
+  );
 
   return emptyTerritoryChains.reduce(
     (scores, currentChain) => {

@@ -2,6 +2,7 @@ import { RFAMessage } from "./MessageDefinitions";
 import { RFARequestHandler } from "./MessageHandlers";
 import { SnackbarEvents } from "../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
+import { Settings } from "../Settings/Settings";
 
 function showErrorMessage(address: string, detail: string) {
   SnackbarEvents.emit(`Error with websocket ${address}, details: ${detail}`, ToastVariant.ERROR, 5000);
@@ -9,7 +10,6 @@ function showErrorMessage(address: string, detail: string) {
 
 export class Remote {
   connection?: WebSocket;
-  static protocol = "ws";
   ipaddr: string;
   port: number;
 
@@ -23,7 +23,7 @@ export class Remote {
   }
 
   public startConnection(): void {
-    const address = Remote.protocol + "://" + this.ipaddr + ":" + this.port;
+    const address = (Settings.UseWssForRemoteFileApi ? "wss" : "ws") + "://" + this.ipaddr + ":" + this.port;
     try {
       this.connection = new WebSocket(address);
     } catch (error) {

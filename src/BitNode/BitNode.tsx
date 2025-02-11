@@ -931,6 +931,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         StrengthLevelMultiplier: 0.5,
         DexterityLevelMultiplier: 0.5,
         AgilityLevelMultiplier: 0.5,
+        DefenseLevelMultiplier: 0.5,
 
         AugmentationMoneyCost: 1.5,
 

@@ -25,7 +25,7 @@ export function SuccessChance({ bladeburner, action }: SuccessChanceProps): Reac
       <Tooltip title={action.successScaling ? <Typography>{action.successScaling}</Typography> : ""}>
         <Typography component="span" sx={{ marginRight: "15px" }}>
           Estimated success chance: {chance}
-          {action.successScaling && <InfoIcon sx={{ fontSize: "1.1rem", marginLeft: "10px" }} />}
+          {action.successScaling && <InfoIcon sx={{ fontSize: "1.1em", marginLeft: "10px" }} />}
         </Typography>
       </Tooltip>
       {action.isStealth ? <StealthIcon /> : <></>}

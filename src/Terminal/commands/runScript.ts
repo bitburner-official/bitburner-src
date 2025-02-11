@@ -11,6 +11,7 @@ import { ScriptFilePath, isLegacyScript } from "../../Paths/ScriptFilePath";
 import { sendDeprecationNotice } from "./common/deprecation";
 import { roundToTwo } from "../../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../../Netscript/RamCostGenerator";
+import { pluralize } from "../../utils/I18nUtils";
 
 export function runScript(path: ScriptFilePath, commandArgs: (string | number | boolean)[], server: BaseServer): void {
   // This takes in the absolute filepath, see "run.ts"
@@ -77,7 +78,9 @@ export function runScript(path: ScriptFilePath, commandArgs: (string | number | 
     sendDeprecationNotice();
   }
   Terminal.print(
-    `Running script with ${numThreads} thread(s), pid ${runningScript.pid} and args: ${JSON.stringify(args)}.`,
+    `Running script with ${pluralize(numThreads, "thread")}, pid ${runningScript.pid} and args: ${JSON.stringify(
+      args,
+    )}.`,
   );
   if (tailFlag) {
     LogBoxEvents.emit(runningScript);

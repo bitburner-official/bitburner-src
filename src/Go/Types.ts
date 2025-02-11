@@ -53,6 +53,7 @@ export type BoardState = {
   ai: GoOpponent;
   passCount: number;
   cheatCount: number;
+  cheatCountForWhite: number;
 };
 
 export type PointState = {

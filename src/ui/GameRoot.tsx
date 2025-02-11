@@ -34,6 +34,7 @@ import { GameOptionsRoot } from "../GameOptions/ui/GameOptionsRoot";
 import { SleeveRoot } from "../PersonObjects/Sleeve/ui/SleeveRoot";
 import { HacknetRoot } from "../Hacknet/ui/HacknetRoot";
 import { GenericLocation } from "../Locations/ui/GenericLocation";
+import { JobRoot } from "../Locations/ui/JobRoot";
 import { LocationCity } from "../Locations/ui/City";
 import { ProgramsRoot } from "../Programs/ui/ProgramsRoot";
 import { ScriptEditorRoot } from "../ScriptEditor/ui/ScriptEditorRoot";
@@ -59,7 +60,6 @@ import { AlertManager } from "./React/AlertManager";
 import { PromptManager } from "./React/PromptManager";
 import { FactionInvitationManager } from "../Faction/ui/FactionInvitationManager";
 import { calculateAchievements } from "../Achievements/Achievements";
-
 import { RecoveryMode, RecoveryRoot } from "./React/RecoveryRoot";
 import { AchievementsRoot } from "../Achievements/AchievementsRoot";
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -333,8 +333,10 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.Job:
+      mainPage = <JobRoot />;
+      break;
     case Page.Location: {
-      mainPage = <GenericLocation loc={pageWithContext.location} />;
+      mainPage = <GenericLocation loc={pageWithContext.location} showBackButton={true} />;
       break;
     }
     case Page.Options: {

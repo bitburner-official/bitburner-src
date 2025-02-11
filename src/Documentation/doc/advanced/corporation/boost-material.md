@@ -99,7 +99,7 @@ $$w\ast s_{4} = \frac{S - 500\ast\left( \frac{s_{4}}{c_{4}}\ast\left( c_{1} + c_
 
 Define: $k = 0.002$
 
-$$\begin{cases}\frac{\partial F}{\partial x} = \left( k\ast c_{1}\ast(1 + k\ast x)^{c_{1} - 1} \right)\ast(1 + k\ast y)^{c_{2}}\ast(1 + k\ast z)^{c_{3}}\ast(1 + k\ast w)^{c_{4}} = \lambda\ast s_{1} \newline \frac{\partial F}{\partial y} = (1 + k\ast x)^{c_{1}}\ast\left( k\ast c_{1}\ast(1 + k\ast y)^{c_{2} - 1} \right)\ast(1 + k\ast z)^{c_{3}}\ast(1 + k\ast w)^{c_{4}} = \lambda\ast s_{2} \end{cases}$$
+$$\begin{cases}\frac{\partial F}{\partial x} = \left( k\ast c_{1}\ast(1 + k\ast x)^{c_{1} - 1} \right)\ast(1 + k\ast y)^{c_{2}}\ast(1 + k\ast z)^{c_{3}}\ast(1 + k\ast w)^{c_{4}} = \lambda\ast s_{1} \newline \frac{\partial F}{\partial y} = (1 + k\ast x)^{c_{1}}\ast\left( k\ast c_{2}\ast(1 + k\ast y)^{c_{2} - 1} \right)\ast(1 + k\ast z)^{c_{3}}\ast(1 + k\ast w)^{c_{4}} = \lambda\ast s_{2} \end{cases}$$
 
 ≡
 

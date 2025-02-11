@@ -586,19 +586,21 @@ export class Terminal {
     printOutput(root);
   }
 
-  connectToServer(server: string): void {
-    const serv = GetServer(server);
-    if (serv == null) {
+  connectToServer(hostname: string, singularity = false): void {
+    const server = GetServer(hostname);
+    if (server === null) {
       this.error("Invalid server. Connection failed.");
       return;
     }
     Player.getCurrentServer().isConnectedTo = false;
-    Player.currentServer = serv.hostname;
-    Player.getCurrentServer().isConnectedTo = true;
-    this.print("Connected to " + serv.hostname);
+    Player.currentServer = hostname;
+    server.isConnectedTo = true;
     this.setcwd(root);
-    if (Player.getCurrentServer().hostname == "darkweb") {
-      checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
+    if (!singularity) {
+      this.print("Connected to " + server.hostname);
+      if (Player.getCurrentServer().hostname == "darkweb") {
+        checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
+      }
     }
   }
 

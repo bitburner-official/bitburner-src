@@ -15,7 +15,8 @@ export function checkIfConnectedToDarkweb(): void {
     Terminal.print(
       "You are now connected to the dark web. From the dark web you can purchase illegal items. " +
         "Use the 'buy -l' command to display a list of all the items you can buy. Use 'buy [item-name]' " +
-        "to purchase an item. Use 'buy -a' to purchase all unowned items.",
+        "to purchase an item. Use 'buy -a' to purchase all unowned items. You can use the 'buy' command anywhere, " +
+        "not only when connecting to the 'darkweb' server.",
     );
   }
 }

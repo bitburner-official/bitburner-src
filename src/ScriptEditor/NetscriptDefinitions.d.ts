@@ -1794,6 +1794,14 @@ export interface BitNodeBooleanOptions {
  */
 export interface Singularity {
   /**
+   * This function returns the save data.
+   *
+   * @remarks
+   * RAM cost: 1 GB * 16/4/1
+   */
+  getSaveData(): Promise<Uint8Array>;
+
+  /**
    * Backup game save.
    * @remarks
    * RAM cost: 1 GB * 16/4/1
@@ -4352,11 +4360,13 @@ export interface GoAnalysis {
    * Also note that, when given a custom board state, only one prior move can be analyzed. This means that the superko rules
    *  (no duplicate board states in the full game history) is not supported; you will have to implement your own analysis for that.
    *
+   *  playAsWhite is optional, and gets the current valid moves for the white player. Intended to be used when playing as white when the opponent is set to "No AI"
+   *
    * @remarks
    * RAM cost: 8 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    */
-  getValidMoves(boardState?: string[], priorBoardState?: string[]): boolean[][];
+  getValidMoves(boardState?: string[], priorBoardState?: string[], playAsWhite = false): boolean[][];
 
   /**
    * Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points
@@ -4455,6 +4465,12 @@ export interface GoAnalysis {
    * </pre>
    */
   getStats(): Partial<Record<GoOpponent, SimpleOpponentStats>>;
+
+  /**
+   * Reset all win/loss and winstreak records for the No AI opponent.
+   * @param resetAll if true, reset win/loss records for all opponents. Leaves node power and bonuses unchanged.
+   */
+  resetStats(resetAll = false): void;
 }
 
 /**
@@ -4472,20 +4488,22 @@ export interface GoCheat {
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
    * @param cheatCount - Optional override for the number of cheats already attempted. Defaults to the number of cheats attempted in the current game.
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    *
    * @remarks
    * RAM cost: 1 GB
    * Requires BitNode 14.2 to use
    */
-  getCheatSuccessChance(cheatCount?: number): number;
+  getCheatSuccessChance(cheatCount?: number, playAsWhite = false): number;
   /**
    * Returns the number of times you've attempted to cheat in the current game.
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    *
    * @remarks
    * RAM cost: 1 GB
    * Requires BitNode 14.2 to use
    */
-  getCheatCount(): number;
+  getCheatCount(playAsWhite = false): number;
   /**
    * Attempts to remove an existing router, leaving an empty node behind.
    *
@@ -4493,6 +4511,11 @@ export interface GoCheat {
    *
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
+   *
+   *
+   * @param x - x coordinate of router to remove
+   * @param y - y coordinate of router to remove
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    *
    * @remarks
    * RAM cost: 8 GB
@@ -4503,6 +4526,7 @@ export interface GoCheat {
   removeRouter(
     x: number,
     y: number,
+    playAsWhite = false,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4517,6 +4541,13 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
+   *
+   * @param x1 - x coordinate of first move to make
+   * @param y1 - y coordinate of first move to make
+   * @param x2 - x coordinate of second move to make
+   * @param y2 - y coordinate of second move to make
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+   *
    * @remarks
    * RAM cost: 8 GB
    * Requires BitNode 14.2 to use
@@ -4528,6 +4559,7 @@ export interface GoCheat {
     y1: number,
     x2: number,
     y2: number,
+    playAsWhite = false,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4542,6 +4574,10 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
+   * @param x - x coordinate of offline node to repair
+   * @param y - y coordinate of offline node to repair
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+   *
    * @remarks
    * RAM cost: 8 GB
    * Requires BitNode 14.2 to use
@@ -4551,6 +4587,7 @@ export interface GoCheat {
   repairOfflineNode(
     x: number,
     y: number,
+    playAsWhite = false,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4566,6 +4603,10 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
+   * @param x - x coordinate of empty node to destroy
+   * @param y - y coordinate of empty node to destroy
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+   *
    * @remarks
    * RAM cost: 8 GB
    * Requires BitNode 14.2 to use
@@ -4575,6 +4616,7 @@ export interface GoCheat {
   destroyNode(
     x: number,
     y: number,
+    playAsWhite = false,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4591,6 +4633,8 @@ export interface Go {
    *  Make a move on the IPvGO subnet game board, and await the opponent's response.
    *  x:0 y:0 represents the bottom-left corner of the board in the UI.
    *
+   * playAsWhite is optional, and attempts to make a move as the white player. Only can be used when playing against "No AI".
+   *
    * @remarks
    * RAM cost: 4 GB
    *
@@ -4599,6 +4643,7 @@ export interface Go {
   makeMove(
     x: number,
     y: number,
+    playAsWhite = false,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4612,13 +4657,15 @@ export interface Go {
    * This can also be used if you pick up the game in a state where the opponent needs to play next. For example: if BitBurner was
    * closed while waiting for the opponent to make a move, you may need to call passTurn() to get them to play their move on game start.
    *
+   * passAsWhite is optional, and attempts to pass while playing as the white player. Only can be used when playing against "No AI".
+   *
    * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    *
    * @remarks
    * RAM cost: 0 GB
    *
    */
-  passTurn(): Promise<{
+  passTurn(passAsWhite = false): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
@@ -4629,13 +4676,17 @@ export interface Go {
    *  x:0 y:0 represents the bottom-left corner of the board in the UI.
    *
    * @param logOpponentMove - optional, defaults to true. if false prevents logging opponent move
+   * @param playAsWhite - optional. If true, waits to get the next move the black player makes. Intended to be used when playing as white when the opponent is set to "No AI"
    *
    * @remarks
    * RAM cost: 0 GB
    *
    * @returns a promise that contains if your last move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    */
-  opponentNextTurn(logOpponentMove?: boolean): Promise<{
+  opponentNextTurn(
+    logOpponentMove?: boolean,
+    playAsWhite = false,
+  ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
@@ -5668,6 +5719,136 @@ interface Infiltration {
  */
 interface UserInterface {
   /**
+   * Open the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Opens a script’s logs. This is functionally the same as the tail Terminal command.
+   *
+   * If the function is called with no arguments, it will open the current script’s logs.
+   *
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get the logs from another script.
+   * Remember that scripts are uniquely identified by both their names and arguments.
+   *
+   * @example
+   * ```js
+   * //Open logs from foo.js on the current server that was run with no args
+   * ns.tail("foo.js");
+   *
+   * //Get logs from foo.js on the foodnstuff server that was run with no args
+   * ns.tail("foo.js", "foodnstuff");
+   *
+   * //Get logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
+   * ns.tail("foo.js", "foodnstuff", 1, "test");
+   * ```
+   * @param fn - Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed.
+   * @param host - Optional. Hostname of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param args - Arguments for the script being tailed.
+   */
+  openTail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
+
+  /**
+   * Render a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Tail windows are rendered at an interval defined in game settings. This function renders the tail window of the
+   * specified script immediately.
+   *
+   * @param pid - Optional. PID of the script having its tail rendered. If omitted, the current script is used.
+   */
+  renderTail(pid?: number): void;
+
+  /**
+   * Move a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Moves a tail window. Coordinates are in screen space pixels (top left is 0,0).
+   *
+   * @param x - x coordinate.
+   * @param y - y coordinate.
+   * @param pid - Optional. PID of the script having its tail moved. If omitted, the current script is used.
+   */
+  moveTail(x: number, y: number, pid?: number): void;
+
+  /**
+   * Resize a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Resize a tail window. Size are in pixel.
+   *
+   * @param width - Width of the window.
+   * @param height - Height of the window.
+   * @param pid - Optional. PID of the script having its tail resized. If omitted, the current script is used.
+   */
+  resizeTail(width: number, height: number, pid?: number): void;
+
+  /**
+   * Close the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Closes a script’s logs. This is functionally the same as pressing the "Close" button on the tail window.
+   *
+   * If the function is called with no arguments, it will close the current script’s logs.
+   *
+   * Otherwise, the pid argument can be used to close the logs from another script.
+   *
+   * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
+   */
+  closeTail(pid?: number): void;
+
+  /**
+   * Set the title of the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This sets the title to the given string, and also forces an update of the
+   * tail window's contents.
+   *
+   * The title is saved across restarts, but only if it is a simple string.
+   *
+   * If the pid is unspecified, it will modify the current script’s logs.
+   *
+   * Otherwise, the pid argument can be used to change the logs from another script.
+   *
+   * It is possible to pass any React Node instead of a string.
+   * See {@link ReactElement} and {@link ReactNode} types for additional info.
+   *
+   * @param title - The new title for the tail window.
+   * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
+   */
+  setTailTitle(title: string | ReactNode, pid?: number): void;
+
+  /**
+   * Set the font size of the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This overwrites the tail font size and forces an update of the tail window's contents.
+   *
+   * If ran without a filename or pid, this will affect the current script's tail window.
+   *
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to target the tail window from another script.
+   * Remember that scripts are uniquely identified by both their names and arguments.
+   *
+   * @param pixel - Optional. The new font size in pixels. If omitted, the default tail font size is used.
+   * @param fn - Optional. Filename or PID of the target script. If omitted, the current script is used.
+   * @param host - Optional. Hostname of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param args - Arguments for the target script.
+   */
+  setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
+
+  /**
    * Get the current window size
    * @remarks
    * RAM cost: 0 GB
@@ -6397,7 +6578,11 @@ export interface NS {
   getRecentScripts(): RecentScript[];
 
   /**
-   * Open the tail window of a script.
+   * Open the tail window of a script. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.openTail | ns.ui.openTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6426,20 +6611,11 @@ export interface NS {
   tail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
 
   /**
-   * Render a tail window.
+   * Move a tail window. This function is deprecated and will be removed in a later version.
    *
-   * @remarks
-   * RAM cost: 0 GB
+   * @deprecated
+   * Use {@link UserInterface.moveTail | ns.ui.moveTail} instead.
    *
-   * Tail windows are rendered at an interval defined in game settings. This function renders the tail window of the
-   * specified script immediately.
-   *
-   * @param pid - Optional. PID of the script having its tail rendered. If omitted, the current script is used.
-   */
-  renderTail(pid?: number): void;
-
-  /**
-   * Move a tail window.
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6452,7 +6628,11 @@ export interface NS {
   moveTail(x: number, y: number, pid?: number): void;
 
   /**
-   * Resize a tail window.
+   * Resize a tail window. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.resizeTail | ns.ui.resizeTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6465,7 +6645,11 @@ export interface NS {
   resizeTail(width: number, height: number, pid?: number): void;
 
   /**
-   * Close the tail window of a script.
+   * Close the tail window of a script. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.closeTail | ns.ui.closeTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6480,7 +6664,11 @@ export interface NS {
   closeTail(pid?: number): void;
 
   /**
-   * Set the title of the tail window of a script.
+   * Set the title of the tail window of a script. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.setTailTitle | ns.ui.setTailTitle} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6500,25 +6688,6 @@ export interface NS {
    * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
    */
   setTitle(title: string | ReactNode, pid?: number): void;
-
-  /**
-   * Set the font size of the tail window of a script.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * This overwrites the tail font size and forces an update of the tail window's contents.
-   *
-   * If ran without a filename or pid, this will affect the current script's tail window.
-   *
-   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to target the tail window from another script.
-   * Remember that scripts are uniquely identified by both their names and arguments.
-   *
-   * @param pixel - Optional. The new font size in pixels. If omitted, the default tail font size is used.
-   * @param fn - Optional. Filename or PID of the target script. If omitted, the current script is used.
-   * @param host - Optional. Hostname of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
-   * @param args - Arguments for the target script.
-   */
-  setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
 
   /**
    * Get the list of servers connected to a server.

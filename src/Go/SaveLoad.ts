@@ -2,18 +2,20 @@ import type { BoardState, OpponentStats, SimpleBoard } from "./Types";
 import type { PartialRecord } from "../Types/Record";
 
 import { Truthy } from "lodash";
-import { GoColor, GoOpponent, GoPlayType } from "@enums";
+import { GoColor, GoOpponent } from "@enums";
 import { Go } from "./Go";
-import { boardStateFromSimpleBoard, getPreviousMove, simpleBoardFromBoard } from "./boardAnalysis/boardAnalysis";
+import { boardStateFromSimpleBoard, simpleBoardFromBoard } from "./boardAnalysis/boardAnalysis";
 import { assertLoadingType } from "../utils/TypeAssertion";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { boardSizes } from "./Constants";
 import { isInteger, isNumber } from "../types";
-import { makeAIMove } from "./boardAnalysis/goAI";
+import { handleNextTurn, resetAI } from "./boardAnalysis/goAI";
 
 type PreviousGameSaveData = { ai: GoOpponent; board: SimpleBoard; previousPlayer: GoColor | null } | null;
 type CurrentGameSaveData = PreviousGameSaveData & {
+  previousBoard?: string;
   cheatCount: number;
+  cheatCountForWhite: number;
   passCount: number;
 };
 
@@ -36,8 +38,10 @@ export function getGoSave(): SaveFormat {
     currentGame: {
       ai: Go.currentGame.ai,
       board: simpleBoardFromBoard(Go.currentGame.board),
+      previousBoard: Go.currentGame.previousBoards[0] ?? "",
       previousPlayer: Go.currentGame.previousPlayer,
       cheatCount: Go.currentGame.cheatCount,
+      cheatCountForWhite: Go.currentGame.cheatCount,
       passCount: Go.currentGame.passCount,
     },
     stats: Go.stats,
@@ -82,21 +86,10 @@ export function loadGo(data: unknown): boolean {
   Go.stats = stats;
   Go.storeCycles(loadStoredCycles(parsedData.storedCycles));
 
-  // If it's the AI's turn, initiate their turn, which will populate nextTurn
-  if (currentGame.previousPlayer === GoColor.black && currentGame.ai !== GoOpponent.none) {
-    makeAIMove(currentGame).catch((error) => {
-      showError(new Error(`Error while making first IPvGO AI move: ${error}`, { cause: error }));
-    });
-  }
-  // If it's not the AI's turn and we're not in gameover status, initialize nextTurn promise based on the previous move/pass
-  else if (currentGame.previousPlayer) {
-    const previousMove = getPreviousMove();
-    Go.nextTurn = Promise.resolve(
-      previousMove
-        ? { type: GoPlayType.move, x: previousMove[0], y: previousMove[1] }
-        : { type: GoPlayType.pass, x: null, y: null },
-    );
-  }
+  resetAI();
+  handleNextTurn(currentGame).catch((error) => {
+    showError(new Error(`Error while initializing first IPvGO move: ${error}`, { cause: error }));
+  });
   return true;
 }
 
@@ -113,15 +106,19 @@ function loadCurrentGame(currentGame: unknown): BoardState | string {
   const board = loadSimpleBoard(currentGame.board, requiredSize);
   if (typeof board === "string") return board;
   const previousPlayer = getEnumHelper("GoColor").getMember(currentGame.previousPlayer) ?? null;
-  if (!isInteger(currentGame.cheatCount) || currentGame.cheatCount < 0)
-    return "invalid number for currentGame.cheatCount";
+  const normalizedCheatCount = isInteger(currentGame.cheatCount) ? Math.max(0, currentGame.cheatCount || 0) : 0;
+  const normalizedCheatCountForWhite = isInteger(currentGame.cheatCountForWhite)
+    ? Math.max(0, currentGame.cheatCountForWhite || 0)
+    : 0;
   if (!isInteger(currentGame.passCount) || currentGame.passCount < 0) return "invalid number for currentGame.passCount";
+  const previousBoards = typeof currentGame.previousBoard === "string" ? [currentGame.previousBoard] : [];
 
   const boardState = boardStateFromSimpleBoard(board, ai);
   boardState.previousPlayer = previousPlayer;
-  boardState.cheatCount = currentGame.cheatCount;
+  boardState.cheatCount = normalizedCheatCount;
+  boardState.cheatCountForWhite = normalizedCheatCountForWhite;
   boardState.passCount = currentGame.passCount;
-  boardState.previousBoards = [];
+  boardState.previousBoards = previousBoards;
   return boardState;
 }
 

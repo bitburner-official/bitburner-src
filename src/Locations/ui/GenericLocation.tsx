@@ -33,9 +33,10 @@ import { getEnumHelper } from "../../utils/EnumHelper";
 
 interface IProps {
   loc: Location;
+  showBackButton: boolean;
 }
 
-export function GenericLocation({ loc }: IProps): React.ReactElement {
+export function GenericLocation({ loc, showBackButton }: IProps): React.ReactElement {
   /**
    * Determine what needs to be rendered for this location based on the locations
    * type. Returns an array of React components that should be rendered
@@ -93,7 +94,7 @@ export function GenericLocation({ loc }: IProps): React.ReactElement {
 
   return (
     <>
-      <Button onClick={() => Router.toPage(Page.City)}>Return to World</Button>
+      {showBackButton && <Button onClick={() => Router.toPage(Page.City)}>Return to World</Button>}
       <Typography variant="h4" sx={{ mt: 1 }}>
         {backdoorInstalled && serverMeta ? (
           <Tooltip title={`Backdoor installed on ${serverMeta.hostname}.`}>
