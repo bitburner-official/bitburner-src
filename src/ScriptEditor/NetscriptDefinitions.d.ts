@@ -917,6 +917,21 @@ interface GangTerritory {
   /** Wanted gain impact on task scaling */
   wanted: number;
 }
+/** @public */
+interface GangMemberExpGain {
+  /** Hack EXP gain for a member after a given task*/
+  hackEXP: number;
+  /** Str EXP gain for a member after a given task*/
+  strEXP: number;
+  /** Def EXP gain for a member after a given task*/
+  defEXP: number;
+  /** Dex EXP gain for a member after a given task*/
+  dexEXP: number;
+  /** Agi EXP gain for a member after a given task*/
+  agiEXP: number;
+  /** Cha EXP gain for a member after a given task*/
+  chaEXP: number;
+}
 
 /** @public */
 interface GangMemberInfo {
@@ -1003,8 +1018,8 @@ interface GangMemberInfo {
   wantedLevelGain: number;
   /** Per Cycle Income for this gang member */
   moneyGain: number;
-  /**PerCycle Exp object for each stat for this gang member */
-  expGain: object | undefined;
+  /** Per Cycle Exp object for each stat for this gang member */
+  expGain: GangMemberExpGain | null;
 }
 
 /** @public */
