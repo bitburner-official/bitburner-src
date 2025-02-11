@@ -181,7 +181,6 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     // servers; it will be listed under the first server it was compiled for.
     // We don't include this in the cache key, so that other instances of the
     // script dedupe properly.
-    // If we change how sourceURL is constructed, we need to update parseStackTrace in src\utils\StackTraceUtils.ts.
     const sourceURL = `${script.server}/${script.filename}`;
     let adjustedCode = newCode + `\n//# sourceURL=${sourceURL}`;
     if (sourceMap) {
@@ -209,7 +208,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     // directly return the module, without even attempting to fetch, due to the way
     // modules work.
     URL.revokeObjectURL(url);
-    script.mod = new LoadedModule(url, module, sourceMap);
+    script.mod = new LoadedModule(url, module, sourceURL, sourceMap);
     moduleCache.set(newCode, new WeakRef(script.mod));
     cleanup.register(script.mod, newCode);
   }

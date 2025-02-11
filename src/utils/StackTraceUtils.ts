@@ -3,8 +3,8 @@ import { type RawSourceMap, SourceMapConsumer } from "source-map-js";
 
 /**
  * parseStackTrace uses some properties of workerScript, but the dependency chain of WorkerScript is long. In order to
- * avoid worsening the dependency chain of parseStackTrace's callers, we create this minimal version of WorkerScript's
- * type. It violates the DRY principle, but it's worth the trouble:
+ * avoid worsening the dependency chain of parseStackTrace's callers, we use this minimal version of WorkerScript's type
+ * instead of importing WorkerScript. It violates the DRY principle, but it's worth the trouble:
  * - We rarely change WorkerScript.
  * - The entire codebase is riddled with massive dependency chains. We should avoid worsening the situation.
  */
@@ -16,6 +16,7 @@ export type LiteWorkerScript = {
       {
         filename: string;
         mod: {
+          sourceUrl: string;
           sourceMap?: string;
         } | null;
       }
@@ -49,60 +50,127 @@ export type LiteWorkerScript = {
 export function parseStackTrace(error: Error, workerScript: LiteWorkerScript): string {
   const stackFrames = ErrorStackParser.parse(error);
   const stackLines = [error.message];
-  // Cache of found source maps.
-  const sourceMaps = new Map<string, string>();
+  const cache = new Map<string, { fileName: string; sourceMap?: string }>();
   for (const stackFrame of stackFrames) {
     if (!stackFrame.fileName) {
       continue;
     }
     /**
-     * Filename in the stack line is actually `${hostname}/${filename}`. Check sourceURL in generateLoadedModule
-     * (src\NetscriptJSEvaluator.ts).
+     * Due to how we cache modules, fileName in stackFrame may be wrong. Let's say that we have test.ts and
+     * test-clone.ts. They have the same code:
+     *
+     * export async function main(ns: NS) {
+     *   throw new Error("test error");
+     * }
+     *
+     * If we run test.ts first, then run test-clone.ts, they generate the same error stack trace:
+     *
+     * Error: test error
+     *   at main (test.ts:2:9)
+     *   at startNetscript2Script (NetscriptWorker.ts:91:9)
+     *
+     * Even when we run test-clone.ts, fileName in stackFrame still points to test.ts. In order to solve this problem,
+     * we loop through workerScript.scriptRef.dependencies and find the correct script. This property contains directly
+     * or indirectly imports, including the script itself. In the previous example:
+     *
+     * test.ts: stackFrame.fileName is test.ts. workerScript.scriptRef.dependencies contains a Script instance:
+     * - filename: "test.ts"
+     * - mod: {
+     *   sourceUrl: "home/test.ts"
+     * }
+     *
+     * test-clone.ts: stackFrame.fileName is test.ts. workerScript.scriptRef.dependencies contains a Script instance:
+     * - filename: "test-clone.ts"
+     * - mod.sourceUrl: "home/test.ts"
+     *
+     * Both sourceUrl point to "home/test.ts", but filename is the correct value.
+     *
+     * Note that this solution still fails to find the correct filename in edge cases. For example:
+     *
+     * lib-edge-1.ts and lib-edge-2.ts with same code:
+     *
+     * export function test1(): void {
+     * }
+     * export function test2(): void {
+     *   throw new Error("test error test2");
+     * }
+     * export async function main(ns: NS) {
+     *   ns.print("lib-edge");
+     * }
+     *
+     * b.ts:
+     *
+     * import { test1 } from "./lib-edge-1";
+     * import { test2 } from "./lib-edge-2";
+     * export async function main(ns: NS) {
+     *   test1();
+     *   test2();
+     * }
+     *
+     * Run b.ts:
+     *   at test2 (home/lib-edge-1.ts:4:8) -> Wrong filename
+     *   at main (home/b.ts:5:2)
+     *
+     * When we run b.ts, "dependencies" contains:
+     * - Script 1:
+     *   - filename: "lib-edge-1.ts"
+     *   - mod.sourceUrl: "home/lib-edge-1.ts"
+     * - Script 2:
+     *   - filename: "b.ts"
+     *   - mod.sourceUrl: "home/b.ts"
+     *
+     * b.ts imports both lib-edge-1.ts and lib-edge-2.ts, but they have the same code, so "dependencies" only contains
+     * the module of lib-edge-1.ts and b.ts.
+     *
+     * Without changing how we cache modules, we don't have enough information to perfectly deduce the correct filename
+     * in all cases, unless we perform AST analysis in this function. It only affects edge cases, so we can accept it as
+     * a known limitation.
      */
-    if (!stackFrame.fileName.startsWith(workerScript.hostname)) {
-      continue;
+    let fileName;
+    let sourceMap;
+    const cachedValue = cache.get(stackFrame.fileName);
+    if (!cachedValue) {
+      // Find correct fileName.
+      for (const script of workerScript.scriptRef.dependencies.values()) {
+        if (script.mod === null) {
+          continue;
+        }
+        // console.log("scrip", script);
+        if (script.mod.sourceUrl !== stackFrame.fileName) {
+          continue;
+        }
+        fileName = script.filename;
+        sourceMap = script.mod.sourceMap;
+        // Put it in the cache.
+        cache.set(stackFrame.fileName, { fileName, sourceMap });
+        break;
+      }
+    } else {
+      // Reuse cached value.
+      fileName = cachedValue.fileName;
+      sourceMap = cachedValue.sourceMap;
     }
-    const fileName = stackFrame.fileName.replace(`${workerScript.hostname}/`, "");
+
+    // This only happens when the current stackFrame points to our codebase.
     if (!fileName) {
+      console.warn(stackFrame.fileName);
       continue;
     }
+
     let line = stackFrame.lineNumber;
     let column = stackFrame.columnNumber;
-    if (line !== undefined && column !== undefined) {
-      let sourceMap = sourceMaps.get(fileName);
-      // If the source map is not in the cache, we try to find it.
-      if (!sourceMap) {
-        /**
-         * workerScript.scriptRef.dependencies contains directly or indirectly import, including the script itself.
-         * Check Script in src\Script\Script.ts.
-         */
-        for (const script of workerScript.scriptRef.dependencies.values()) {
-          // Find the current script in workerScript.scriptRef.dependencies.
-          if (script.filename !== fileName) {
-            continue;
-          }
-          // Check if sourceMap exists.
-          if (script.mod?.sourceMap) {
-            sourceMap = script.mod.sourceMap;
-            // Put it in the cache.
-            sourceMaps.set(fileName, sourceMap);
-          }
-          break;
-        }
-      }
-      // Parse the source map if it exists.
-      if (sourceMap) {
-        /**
-         * SourceMap is generated by SWC, so we assume that it's valid. Validating it with ajv is unnecessary. If there
-         * are bugs in SWC or source-map-js, the try-catch block will ensure that the game won't crash.
-         */
-        try {
-          const sourceMapConsumer = new SourceMapConsumer(JSON.parse(sourceMap) as RawSourceMap);
-          ({ line, column } = sourceMapConsumer.originalPositionFor({ line, column }));
-        } catch (errorParsingSourceMap) {
-          console.error(errorParsingSourceMap);
-          console.error(`Cannot parse map of ${fileName} in ${workerScript.hostname}. Source map: ${sourceMap}`);
-        }
+    if (line !== undefined && column !== undefined && sourceMap !== undefined) {
+      // console.log("stackFrame", stackFrame);
+      /**
+       * SourceMap is generated by SWC, so we assume that it's valid. Validating it with ajv is unnecessary. If there
+       * are bugs in SWC or source-map-js, the try-catch block will ensure that the game won't crash.
+       */
+      try {
+        const sourceMapConsumer = new SourceMapConsumer(JSON.parse(sourceMap) as RawSourceMap);
+        ({ line, column } = sourceMapConsumer.originalPositionFor({ line, column }));
+      } catch (errorParsingSourceMap) {
+        console.error(errorParsingSourceMap);
+        console.error(`Cannot parse map of ${fileName} in ${workerScript.hostname}. Source map: ${sourceMap}`);
       }
     }
     stackLines.push(`    at ${stackFrame.functionName} (${workerScript.hostname}/${fileName}:${line}:${column})`);
