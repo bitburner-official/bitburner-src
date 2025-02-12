@@ -273,7 +273,7 @@ export class Gang {
    * @param numCycles The number of cycles to process. */
   processExperienceGains(numCycles: number): void {
     for (const member of this.members) {
-      member.gainExperience(numCycles, null);
+      member.gainExperience(numCycles);
       member.updateSkillLevels();
     }
   }

@@ -79,6 +79,7 @@
 |  [GangFormulas](./bitburner.gangformulas.md) | Gang formulas |
 |  [GangGenInfo](./bitburner.ganggeninfo.md) | Gang general info. |
 |  [GangMemberAscension](./bitburner.gangmemberascension.md) |  |
+|  [GangMemberExpGain](./bitburner.gangmemberexpgain.md) |  |
 |  [GangMemberInfo](./bitburner.gangmemberinfo.md) |  |
 |  [GangMemberInstall](./bitburner.gangmemberinstall.md) |  |
 |  [GangOtherInfoObject](./bitburner.gangotherinfoobject.md) |  |

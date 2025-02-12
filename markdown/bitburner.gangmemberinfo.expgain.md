@@ -4,10 +4,10 @@
 
 ## GangMemberInfo.expGain property
 
-PerCycle Exp object for each stat for this gang member
+Per Cycle Exp object for each stat for this gang member returned as a object containing each stats value returns null in the even that the member does not have a given task.
 
 **Signature:**
 
 ```typescript
-expGain: object | undefined;
+expGain: GangMemberExpGain | null;
 ```

@@ -1018,7 +1018,9 @@ interface GangMemberInfo {
   wantedLevelGain: number;
   /** Per Cycle Income for this gang member */
   moneyGain: number;
-  /** Per Cycle Exp object for each stat for this gang member */
+  /** Per Cycle Exp object for each stat for this gang member returned as a object containing each stats value
+   * returns null in the even that the member does not have a given task.
+   */
   expGain: GangMemberExpGain | null;
 }
 
