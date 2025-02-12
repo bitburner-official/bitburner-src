@@ -156,7 +156,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
         respectGain: member.calculateRespectGain(gang),
         wantedLevelGain: member.calculateWantedLevelGain(gang),
         moneyGain: member.calculateMoneyGain(gang),
-        expGain: member.getGangMemberExpGain(1),
+        expGain: member.getGangMemberExpGain(),
       };
     },
     canRecruitMember: (ctx) => () => {
