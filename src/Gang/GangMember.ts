@@ -151,7 +151,7 @@ export class GangMember {
 
   // Grabs the GangMemberExpGain object based on the passed paramters to be exported to the getMemberInfo API
   // if nothing is provided to the member it returns null
-  getGangMemberExpGain(numCycles = 1): GangMemberExpGain | null { 
+  getGangMemberExpGain(numCycles = 1): GangMemberExpGain | null {
     const task = this.getTask();
     if (task == GangMemberTasks.Unassigned) {
       return null;
