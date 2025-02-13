@@ -208,10 +208,10 @@ export class GangMember {
     return expValues;
   }
 
-  gainExperience(): void {
+  gainExperience(numCycles: number): void {
     // Do the calculations if our function returns null meaning no task is assigned
     // then we return otherwise we add our exp gains to our total values
-    const gains = this.calculateExpGain();
+    const gains = this.calculateExpGain(numCycles);
     if (gains === null) {
       return;
     }
