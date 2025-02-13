@@ -1,6 +1,6 @@
 import type { Gang as IGang, EquipmentStats, GangOtherInfoObject } from "@nsdefs";
 import type { Gang } from "../Gang/Gang";
-import { GangMember } from "../Gang/GangMember";
+import type { GangMember } from "../Gang/GangMember";
 import type { GangMemberTask } from "../Gang/GangMemberTask";
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
@@ -156,7 +156,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
         respectGain: member.calculateRespectGain(gang),
         wantedLevelGain: member.calculateWantedLevelGain(gang),
         moneyGain: member.calculateMoneyGain(gang),
-        expGain: member.getGangMemberExpGain(),
+        expGain: member.calculateExpGain(),
       };
     },
     canRecruitMember: (ctx) => () => {

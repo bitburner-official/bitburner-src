@@ -13,7 +13,6 @@ import {
   calculateWantedLevelGain,
   calculateAscensionMult,
   calculateAscensionPointsGain,
-  calculateExpGain,
 } from "./formulas/formulas";
 import { GangMemberExpGain } from "@nsdefs";
 
@@ -149,21 +148,73 @@ export class GangMember {
     };
   }
 
-  // Grabs the GangMemberExpGain object based on the passed paramters to be exported to the getMemberInfo API
-  // if nothing is provided to the member it returns null
-  getGangMemberExpGain(numCycles = 1): GangMemberExpGain | null {
+  // Calculate our gain for each stat based on each modifier of member
+  // if no task is assigned to that member we return null, other wise we
+  // return an object containing our per-cycle gains for each stat.
+  calculateExpGain(numCycles = 1): GangMemberExpGain | null {
     const task = this.getTask();
-    if (task == GangMemberTasks.Unassigned) {
-      return null;
-    }
-    return calculateExpGain(numCycles, this, task);
+    if (task === GangMemberTasks.Unassigned) return null;
+
+    const expValues = {
+      hackEXP: 0,
+      strEXP: 0,
+      defEXP: 0,
+      dexEXP: 0,
+      agiEXP: 0,
+      chaEXP: 0,
+    };
+
+    const difficultyMult = Math.pow(task.difficulty, 0.9);
+    const difficultyPerCycles = difficultyMult * numCycles;
+    const weightDivisor = 1500;
+    const expMult = this.expMult();
+
+    expValues.hackEXP +=
+      (task.hackWeight / weightDivisor) *
+      difficultyPerCycles *
+      expMult.hack *
+      this.calculateAscensionMult(this.hack_asc_points);
+
+    expValues.strEXP +=
+      (task.strWeight / weightDivisor) *
+      difficultyPerCycles *
+      expMult.str *
+      this.calculateAscensionMult(this.str_asc_points);
+
+    expValues.defEXP +=
+      (task.defWeight / weightDivisor) *
+      difficultyPerCycles *
+      expMult.def *
+      this.calculateAscensionMult(this.def_asc_points);
+
+    expValues.dexEXP +=
+      (task.dexWeight / weightDivisor) *
+      difficultyPerCycles *
+      expMult.dex *
+      this.calculateAscensionMult(this.dex_asc_points);
+
+    expValues.agiEXP +=
+      (task.agiWeight / weightDivisor) *
+      difficultyPerCycles *
+      expMult.agi *
+      this.calculateAscensionMult(this.agi_asc_points);
+
+    expValues.chaEXP +=
+      (task.chaWeight / weightDivisor) *
+      difficultyPerCycles *
+      expMult.cha *
+      this.calculateAscensionMult(this.cha_asc_points);
+
+    return expValues;
   }
 
-  gainExperience(numCycles = 1): void {
-    const task = this.getTask();
-    if (task === GangMemberTasks.Unassigned) return;
-
-    const gains = calculateExpGain(numCycles, this, task);
+  gainExperience(): void {
+    // Do the calculations if our function returns null meaning no task is assigned
+    // then we return otherwise we add our exp gains to our total values
+    const gains = this.calculateExpGain();
+    if (gains === null) {
+      return;
+    }
 
     this.hack_exp += gains.hackEXP;
     this.str_exp += gains.strEXP;

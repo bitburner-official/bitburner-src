@@ -1,7 +1,6 @@
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { GangMember } from "../GangMember";
 import { GangMemberTask } from "../GangMemberTask";
-import { GangMemberExpGain } from "@nsdefs";
 
 export interface FormulaGang {
   respect: number;
@@ -71,60 +70,6 @@ export function calculateMoneyGain(gang: FormulaGang, member: GangMember, task: 
   const respectMult = calculateWantedPenalty(gang);
   const territoryPenalty = (0.2 * gang.territory + 0.8) * currentNodeMults.GangSoftcap;
   return Math.pow(5 * task.baseMoney * statWeight * territoryMult * respectMult, territoryPenalty);
-}
-
-export function calculateExpGain(numCycles = 1, member: GangMember, task: GangMemberTask): GangMemberExpGain {
-  const expValues = {
-    hackEXP: 0,
-    strEXP: 0,
-    defEXP: 0,
-    dexEXP: 0,
-    agiEXP: 0,
-    chaEXP: 0,
-  };
-
-  const difficultyMult = Math.pow(task.difficulty, 0.9);
-  const difficultyPerCycles = difficultyMult * numCycles;
-  const weightDivisor = 1500;
-  const expMult = member.expMult();
-
-  expValues.hackEXP +=
-    (task.hackWeight / weightDivisor) *
-    difficultyPerCycles *
-    expMult.hack *
-    member.calculateAscensionMult(member.hack_asc_points);
-
-  expValues.strEXP +=
-    (task.strWeight / weightDivisor) *
-    difficultyPerCycles *
-    expMult.str *
-    member.calculateAscensionMult(member.str_asc_points);
-
-  expValues.defEXP +=
-    (task.defWeight / weightDivisor) *
-    difficultyPerCycles *
-    expMult.def *
-    member.calculateAscensionMult(member.def_asc_points);
-
-  expValues.dexEXP +=
-    (task.dexWeight / weightDivisor) *
-    difficultyPerCycles *
-    expMult.dex *
-    member.calculateAscensionMult(member.dex_asc_points);
-
-  expValues.agiEXP +=
-    (task.agiWeight / weightDivisor) *
-    difficultyPerCycles *
-    expMult.agi *
-    member.calculateAscensionMult(member.agi_asc_points);
-
-  expValues.chaEXP +=
-    (task.chaWeight / weightDivisor) *
-    difficultyPerCycles *
-    expMult.cha *
-    member.calculateAscensionMult(member.cha_asc_points);
-
-  return expValues;
 }
 
 export function calculateAscensionPointsGain(exp: number): number {
