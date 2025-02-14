@@ -3,11 +3,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Settings } from "../../Settings/Settings";
 import { getRecordKeys } from "../../Types/Record";
 import { Modal } from "../../ui/React/Modal";
-import { SimplePage } from "../../ui/Router";
-import { KEYCODE } from "../../utils/helpers/keyCodes";
+import { SimplePage } from "../../ui/Enums";
+import { KEY } from "../../utils/KeyboardEventKey";
 import {
   convertKeyboardEventToKeyCombination,
-  defaultKeyBinding,
+  DefaultKeyBindings,
   determineKeyBindingTypes,
   getKeyCombination,
   isKeyCombinationPressed,
@@ -38,60 +38,59 @@ function determineConflictKeys(
       currentKeyBinding.alt === newCombination.alt &&
       currentKeyBinding.shift === newCombination.shift &&
       currentKeyBinding.meta === newCombination.meta &&
-      currentKeyBinding.code === newCombination.code
+      currentKeyBinding.key === newCombination.key
     ) {
       conflicts.delete(keyBindingType);
     }
   }
   // Common single-key hotkeys.
   if (
-    isKeyCombinationPressed(newCombination, { code: KEYCODE.ESC }) ||
-    isKeyCombinationPressed(newCombination, { code: KEYCODE.ENTER }) ||
-    isKeyCombinationPressed(newCombination, { code: KEYCODE.NUMPAD_ENTER }) ||
-    isKeyCombinationPressed(newCombination, { code: KEYCODE.TAB })
+    isKeyCombinationPressed(newCombination, { key: KEY.ESC }) ||
+    isKeyCombinationPressed(newCombination, { key: KEY.ENTER }) ||
+    isKeyCombinationPressed(newCombination, { key: KEY.TAB })
   ) {
     conflicts.add("Common hotkeys");
   }
   // Copy - Paste - Cut
   if (window.navigator.userAgent.includes("Mac")) {
     if (
-      isKeyCombinationPressed(newCombination, { meta: true, code: KEYCODE.C }) ||
-      isKeyCombinationPressed(newCombination, { meta: true, code: KEYCODE.V }) ||
-      isKeyCombinationPressed(newCombination, { meta: true, code: KEYCODE.X })
+      isKeyCombinationPressed(newCombination, { meta: true, key: KEY.C }) ||
+      isKeyCombinationPressed(newCombination, { meta: true, key: KEY.V }) ||
+      isKeyCombinationPressed(newCombination, { meta: true, key: KEY.X })
     ) {
       conflicts.add("Common hotkeys");
     }
   } else {
     if (
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.C }) ||
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.V }) ||
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.X })
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.C }) ||
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.V }) ||
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.X })
     ) {
       conflicts.add("Common hotkeys");
     }
   }
   // Terminal-ClearScreen
-  if (isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.L })) {
+  if (isKeyCombinationPressed(newCombination, { control: true, key: KEY.L })) {
     conflicts.add("Terminal-ClearScreen");
   }
   // Bash hotkeys
   if (
     Settings.EnableBashHotkeys &&
-    (isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.M }) ||
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.P }) ||
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.C }) ||
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.A }) ||
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.E }) ||
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.B }) ||
-      isKeyCombinationPressed(newCombination, { alt: true, code: KEYCODE.B }) ||
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.F }) ||
-      isKeyCombinationPressed(newCombination, { alt: true, code: KEYCODE.F }) ||
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.H }) ||
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.D }) ||
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.W }) ||
-      isKeyCombinationPressed(newCombination, { alt: true, code: KEYCODE.D }) ||
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.U }) ||
-      isKeyCombinationPressed(newCombination, { control: true, code: KEYCODE.K }))
+    (isKeyCombinationPressed(newCombination, { control: true, key: KEY.M }) ||
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.P }) ||
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.C }) ||
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.A }) ||
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.E }) ||
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.B }) ||
+      isKeyCombinationPressed(newCombination, { alt: true, key: KEY.B }) ||
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.F }) ||
+      isKeyCombinationPressed(newCombination, { alt: true, key: KEY.F }) ||
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.H }) ||
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.D }) ||
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.W }) ||
+      isKeyCombinationPressed(newCombination, { alt: true, key: KEY.D }) ||
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.U }) ||
+      isKeyCombinationPressed(newCombination, { control: true, key: KEY.K }))
   ) {
     conflicts.add("Bash hotkeys");
   }
@@ -145,7 +144,16 @@ function SettingUpKeyBindingModal({
         ? determineConflictKeys(keyBindingType, isPrimary, currentKeyCombination)
         : new Set<string>(),
     );
-    // Add/remove handler and emit an event that notifies subscribers if the player is setting up key bindings.
+    /**
+     * Add/remove handlers and emit an event that notifies subscribers if the player is setting up key bindings. When
+     * they are doing that, we need to stop processing key events. For example, if they are setting key bindings and
+     * they press Alt+T, we need to save that setting instead of going to the terminal.
+     * 
+     * The action of going to a different page is handled in src\Sidebar\ui\SidebarRoot.tsx. When checking simple cases
+     * (focusing on working, in BitVerse, etc.), we can use the Player object and Router.page(). However, checking if
+     * the player is setting key bindings is not easy for code in SidebarRoot, especially if we want to decouple their
+     * logic and keep the dependency chain simple. It's best to do that by using the event system.
+     */
     if (open) {
       document.addEventListener("keydown", handler);
       KeyBindingEvents.emit(KeyBindingEventType.StartSettingUp);
@@ -160,7 +168,7 @@ function SettingUpKeyBindingModal({
     setConflicts(new Set());
   };
   const onClickDefault = () => {
-    const defaultKeyCombination = getKeyCombination(defaultKeyBinding, keyBindingType, true);
+    const defaultKeyCombination = getKeyCombination(DefaultKeyBindings, keyBindingType, true);
     setCombination(defaultKeyCombination);
     setConflicts(
       defaultKeyCombination
@@ -247,15 +255,9 @@ export function KeyBindingPage(): React.ReactElement {
           On non-Apple keyboards, the "Windows" key (other names: win, start, super, meta, etc.) is shown as ⊞. On Apple
           keyboards, the command key is shown as ⌘.
         </Typography>
-        <br />
-        <Typography>
-          Do NOT use the right Alt key and the AltGr key, especially if you don't use the US keyboard layout. On many
-          keyboard layouts, those keys cause problems with key bindings.
-        </Typography>
       </>,
     );
   };
-  knowAboutBitverse();
 
   return (
     <GameOptionsPage title="Key Binding">

@@ -1,7 +1,7 @@
 import { getRecordEntries } from "../Types/Record";
-import { ComplexPage, SimplePage } from "../ui/Router";
+import { ComplexPage, SimplePage } from "../ui/Enums";
 import { EventEmitter } from "./EventEmitter";
-import { KEYCODE } from "./helpers/keyCodes";
+import { KEY } from "./KeyboardEventKey";
 
 export enum ScriptEditorAction {
   Save = "ScriptEditor-Save",
@@ -17,7 +17,7 @@ export const SpoilerKeyBindingTypes = [
   SimplePage.Gang,
 ] as const;
 
-export const KeyBindingTypes = [
+export const GoToPageKeyBindingTypes = [
   SimplePage.Terminal,
   ComplexPage.ScriptEditor,
   SimplePage.ActiveScripts,
@@ -35,10 +35,16 @@ export const KeyBindingTypes = [
   ComplexPage.Documentation,
   SimplePage.Achievements,
   SimplePage.Options,
-  ScriptEditorAction.Save,
-  ScriptEditorAction.GoToTerminal,
   ...SpoilerKeyBindingTypes,
 ] as const;
+
+export const ScriptEditorActionBindingTypes = [ScriptEditorAction.Save, ScriptEditorAction.GoToTerminal];
+
+export const KeyBindingTypes = [...GoToPageKeyBindingTypes, ...ScriptEditorActionBindingTypes] as const;
+
+export type GoToPageKeyBindingType = (typeof GoToPageKeyBindingTypes)[number];
+
+export type ScriptEditorActionBindingType = (typeof ScriptEditorActionBindingTypes)[number];
 
 export type KeyBindingType = (typeof KeyBindingTypes)[number];
 
@@ -47,18 +53,16 @@ export type KeyCombination = {
   alt: boolean;
   shift: boolean;
   meta: boolean;
-  code: string;
   key: string;
 };
 
-export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, KeyCombination | null]> = {
+export const DefaultKeyBindings: Record<KeyBindingType, [KeyCombination | null, KeyCombination | null]> = {
   [SimplePage.Terminal]: [
     {
       control: false,
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyT",
       key: "t",
     },
     null,
@@ -69,7 +73,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyE",
       key: "e",
     },
     null,
@@ -80,7 +83,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyS",
       key: "s",
     },
     null,
@@ -91,7 +93,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyP",
       key: "p",
     },
     null,
@@ -103,7 +104,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyC",
       key: "c",
     },
     null,
@@ -114,7 +114,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyF",
       key: "f",
     },
     null,
@@ -125,7 +124,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyA",
       key: "a",
     },
     null,
@@ -136,7 +134,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyH",
       key: "h",
     },
     null,
@@ -149,7 +146,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyW",
       key: "w",
     },
     null,
@@ -160,7 +156,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyR",
       key: "r",
     },
     null,
@@ -171,7 +166,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyJ",
       key: "j",
     },
     null,
@@ -183,7 +177,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyB",
       key: "b",
     },
     null,
@@ -195,7 +188,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyG",
       key: "g",
     },
     null,
@@ -208,7 +200,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyU",
       key: "u",
     },
     null,
@@ -220,7 +211,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: true,
       shift: false,
       meta: false,
-      code: "KeyO",
       key: "o",
     },
     null,
@@ -231,7 +221,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: false,
       shift: false,
       meta: false,
-      code: "KeyS",
       key: "s",
     },
     {
@@ -239,7 +228,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: false,
       shift: false,
       meta: true,
-      code: "KeyS",
       key: "s",
     },
   ],
@@ -249,7 +237,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: false,
       shift: false,
       meta: false,
-      code: "KeyB",
       key: "b",
     },
     {
@@ -257,7 +244,6 @@ export const defaultKeyBinding: Record<KeyBindingType, [KeyCombination | null, K
       alt: false,
       shift: false,
       meta: true,
-      code: "KeyB",
       key: "b",
     },
   ],
@@ -285,7 +271,7 @@ export function parseKeyCombinationToString(keyCombination: KeyCombination | nul
       result += "⊞ + ";
     }
   }
-  if (keyCombination.code === KEYCODE.SPACE) {
+  if (keyCombination.key === KEY.SPACE) {
     result += "Space";
   } else {
     result += keyCombination.key;
@@ -308,7 +294,7 @@ export function parseKeyCombinationsToString(keyCombinations: (KeyCombination | 
 }
 
 export function getKeyCombination(
-  keyBindings: typeof defaultKeyBinding,
+  keyBindings: typeof DefaultKeyBindings,
   keyBindingType: KeyBindingType,
   isPrimary: boolean,
 ): KeyCombination | null {
@@ -321,13 +307,12 @@ export function convertKeyboardEventToKeyCombination(event: KeyboardEvent): KeyC
     alt: event.altKey,
     shift: event.shiftKey,
     meta: event.metaKey,
-    code: event.code,
     key: event.key,
   };
 }
 
 export function determineKeyBindingTypes(
-  keyBindings: typeof defaultKeyBinding,
+  keyBindings: typeof DefaultKeyBindings,
   keyCombination: KeyCombination,
 ): Set<KeyBindingType> {
   const result = new Set<KeyBindingType>();
@@ -339,7 +324,7 @@ export function determineKeyBindingTypes(
         combination.alt !== keyCombination.alt ||
         combination.shift !== keyCombination.shift ||
         combination.meta !== keyCombination.meta ||
-        combination.code !== keyCombination.code
+        combination.key !== keyCombination.key
       ) {
         continue;
       }
@@ -356,7 +341,7 @@ export function isKeyCombinationPressed(
     alt?: boolean;
     shift?: boolean;
     meta?: boolean;
-    code: string;
+    key: string;
   },
 ): boolean {
   for (const key of ["control", "alt", "shift", "meta"] as const) {
@@ -369,7 +354,7 @@ export function isKeyCombinationPressed(
     requiredCombination.alt === keyCombination.alt &&
     requiredCombination.shift === keyCombination.shift &&
     requiredCombination.meta === keyCombination.meta &&
-    requiredCombination.code === keyCombination.code
+    requiredCombination.key === keyCombination.key
   );
 }
 

@@ -41,7 +41,8 @@ import BorderInnerSharpIcon from "@mui/icons-material/BorderInnerSharp"; // IPvG
 import BiotechIcon from "@mui/icons-material/Biotech"; // Grafting
 
 import { Router } from "../../ui/GameRoot";
-import { ComplexPage, Page, SimplePage, isSimplePage } from "../../ui/Router";
+import { ComplexPage, SimplePage } from "../../ui/Enums";
+import { Page, isSimplePage } from "../../ui/Router";
 import { SidebarAccordion } from "./SidebarAccordion";
 import { Player } from "@player";
 import { CONSTANTS } from "../../Constants";
@@ -60,6 +61,7 @@ import { knowAboutBitverse } from "../../BitNode/BitNodeUtils";
 import {
   convertKeyboardEventToKeyCombination,
   determineKeyBindingTypes,
+  type GoToPageKeyBindingType,
   KeyBindingEvents,
   KeyBindingEventType,
   ScriptEditorAction,
@@ -189,8 +191,11 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     [flash],
   );
 
+  /**
+   * We use "keyBindingType is GoToPageKeyBindingType" to narrow down the type of keyBindingType.
+   */
   const canGoToPage = useCallback(
-    (keyBindingType: KeyBindingType) => {
+    (keyBindingType: KeyBindingType): keyBindingType is GoToPageKeyBindingType => {
       switch (keyBindingType) {
         case SimplePage.Terminal:
         case ComplexPage.ScriptEditor:
@@ -214,8 +219,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         case SimplePage.Sleeves:
           return canOpenSleeves;
         case SimplePage.Grafting:
-          // TODO: Change this after PR 1809 is merged.
-          return false;
+          return canOpenGrafting;
         case ComplexPage.Job:
           return canJob;
         case SimplePage.StockMarket:
@@ -241,6 +245,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
       canOpenFactions,
       canOpenAugmentations,
       canOpenSleeves,
+      canOpenGrafting,
       canJob,
       canStockMarket,
       canBladeburner,
@@ -281,9 +286,6 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
         convertKeyboardEventToKeyCombination(event),
       );
       for (const keyBindingType of keyBindingTypes) {
-        if (keyBindingType === ScriptEditorAction.Save || keyBindingType === ScriptEditorAction.GoToTerminal) {
-          continue;
-        }
         if (!canGoToPage(keyBindingType)) {
           continue;
         }

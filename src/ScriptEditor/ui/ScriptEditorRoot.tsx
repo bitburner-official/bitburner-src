@@ -226,25 +226,18 @@ function Root(props: IProps): React.ReactElement {
       if (Settings.DisableHotkeys) {
         return;
       }
-      if (event.getModifierState(event.key)) {
-        return;
-      }
       const keyBindingTypes = determineKeyBindingTypes(
         Settings.KeyBindings,
         convertKeyboardEventToKeyCombination(event),
       );
-      for (const keyBindingType of keyBindingTypes) {
-        switch (keyBindingType) {
-          case ScriptEditorAction.Save:
-            event.preventDefault();
-            event.stopPropagation();
-            save();
-            break;
-          case ScriptEditorAction.GoToTerminal:
-            event.preventDefault();
-            Router.toPage(Page.Terminal);
-            break;
-        }
+      if (keyBindingTypes.has(ScriptEditorAction.Save)) {
+        event.preventDefault();
+        event.stopPropagation();
+        save();
+      }
+      if (keyBindingTypes.has(ScriptEditorAction.GoToTerminal)) {
+        event.preventDefault();
+        Router.toPage(Page.Terminal);
       }
     }
     document.addEventListener("keydown", keydown);

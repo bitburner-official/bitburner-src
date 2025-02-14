@@ -3,11 +3,12 @@ import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
 import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
-import { defaultKeyBinding } from "../utils/KeyBindingUtils";
+import { DefaultKeyBindings } from "../utils/KeyBindingUtils";
 import { assertObject } from "../utils/TypeAssertion";
 import { Result } from "../types";
 import {
   assertAndSanitizeEditorTheme,
+  assertAndSanitizeKeyBindings,
   assertAndSanitizeMainTheme,
   assertAndSanitizeStyles,
 } from "../JsonSchema/JSONSchemaAssertion";
@@ -187,7 +188,7 @@ export const Settings = {
   /** Whether to disable suffixes and always use exponential form (scientific or engineering). */
   disableSuffixes: false,
   /** Key bindings */
-  KeyBindings: structuredClone(defaultKeyBinding),
+  KeyBindings: structuredClone(DefaultKeyBindings),
 
   load(saveString: string) {
     const save: unknown = JSON.parse(saveString);
@@ -214,7 +215,13 @@ export const Settings = {
     } catch (error) {
       console.error(error);
     }
-    save.KeyBindings && Object.assign(Settings.KeyBindings, save.KeyBindings);
+    try {
+      // Sanitize key bindings.
+      assertAndSanitizeKeyBindings(save.KeyBindings);
+      Object.assign(Settings.KeyBindings, save.KeyBindings);
+    } catch (error) {
+      console.error(error);
+    }
     Object.assign(Settings, save, {
       overview: Settings.overview,
       theme: Settings.theme,

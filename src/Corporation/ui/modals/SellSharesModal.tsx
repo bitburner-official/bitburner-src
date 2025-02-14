@@ -8,7 +8,7 @@ import * as corpConstants from "../../data/Constants";
 import Typography from "@mui/material/Typography";
 import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import { sellShares } from "../../Actions";
-import { KEY } from "../../../utils/helpers/keyCodes";
+import { KEY } from "../../../utils/KeyboardEventKey";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import { sellSharesFailureReason } from "../../helpers";
 

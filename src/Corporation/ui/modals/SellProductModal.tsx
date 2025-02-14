@@ -8,7 +8,7 @@ import { Modal } from "../../../ui/React/Modal";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 
 import * as actions from "../../Actions";
-import { KEY } from "../../../utils/helpers/keyCodes";
+import { KEY } from "../../../utils/KeyboardEventKey";
 
 interface IProps {
   open: boolean;
