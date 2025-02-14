@@ -13,13 +13,13 @@ import { createProgressBarText } from "../../utils/helpers/createProgressBarText
 interface ServerAccordionProps {
   server: BaseServer;
   scripts: WorkerScript[];
+  tabIndex?: number; // Ensure tabIndex is part of the props
 }
 
-export function ServerAccordion({ server, scripts }: ServerAccordionProps): React.ReactElement {
+export function ServerAccordion({ server, scripts, tabIndex }: ServerAccordionProps): React.ReactElement {
   const [open, setOpen] = React.useState(false);
 
   // Accordion's header text
-  // TODO: calculate the longest hostname length rather than hard coding it
   const longestHostnameLength = 18;
   const paddedName = `${server.hostname}${" ".repeat(longestHostnameLength)}`.slice(
     0,
@@ -33,13 +33,15 @@ export function ServerAccordion({ server, scripts }: ServerAccordionProps): Reac
 
   return (
     <Paper>
-      <ListItemButton onClick={() => setOpen((old) => !old)}>
+      {/* Make ListItemButton focusable with tabIndex */}
+      <ListItemButton onClick={() => setOpen((old) => !old)} tabIndex={tabIndex}>
         <ListItemText primary={<Typography style={{ whiteSpace: "pre-wrap" }}>{headerTxt}</Typography>} />
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>
       <Box mx={2}>
         <Collapse in={open} timeout={0} unmountOnExit>
-          <ServerAccordionContent scripts={scripts} />
+          {/* Pass tabIndex to ServerAccordionContent */}
+          <ServerAccordionContent scripts={scripts} tabIndex={tabIndex} />
         </Collapse>
       </Box>
     </Paper>
