@@ -63,32 +63,64 @@ export function getFileTypeFeature(fileType: FileType): FileTypeFeature {
   return result;
 }
 
-export function parseAST(code: string, fileType: FileType): AST {
+export function parseAST(scriptName: string, hostname: string, code: string, fileType: FileType): AST {
   const fileTypeFeature = getFileTypeFeature(fileType);
   let ast: AST;
-  /**
-   * acorn is much faster than babel-parser, especially when parsing many big JS files, so we use it to parse the AST of
-   * JS code. babel-parser is only useful when we have to parse JSX and TypeScript.
-   */
-  if (fileType === FileType.JS) {
-    ast = acorn.parse(code, { sourceType: "module", ecmaVersion: "latest" });
-  } else {
-    const plugins = [];
-    if (fileTypeFeature.isReact) {
-      plugins.push("jsx");
+  try {
+    /**
+     * acorn is much faster than babel-parser, especially when parsing many big JS files, so we use it to parse the AST of
+     * JS code. babel-parser is only useful when we have to parse JSX and TypeScript.
+     */
+    if (fileType === FileType.JS) {
+      ast = acorn.parse(code, { sourceType: "module", ecmaVersion: "latest" });
+    } else {
+      const plugins = [];
+      if (fileTypeFeature.isReact) {
+        plugins.push("jsx");
+      }
+      if (fileTypeFeature.isTypeScript) {
+        plugins.push("typescript");
+      }
+      ast = babel.packages.parser.parse(code, {
+        sourceType: "module",
+        ecmaVersion: "latest",
+        /**
+         * The usage of the "estree" plugin is mandatory. We use acorn-walk to walk the AST. acorn-walk only supports the
+         * ESTree AST format, but babel-parser uses the Babel AST format by default.
+         */
+        plugins: [["estree", { classFeatures: true }], ...plugins],
+      }).program;
     }
-    if (fileTypeFeature.isTypeScript) {
-      plugins.push("typescript");
-    }
-    ast = babel.packages.parser.parse(code, {
-      sourceType: "module",
-      ecmaVersion: "latest",
+  } catch (error) {
+    /**
+     * The message of syntax errors may be cryptic for players without programming experience. For example, some players
+     * asked us what "Unexpected token" means. Therefore, we will catch the error here and provide a user-friendly error
+     * message.
+     */
+    if (error instanceof SyntaxError) {
+      let errorLocation = "unknown";
       /**
-       * The usage of the "estree" plugin is mandatory. We use acorn-walk to walk the AST. acorn-walk only supports the
-       * ESTree AST format, but babel-parser uses the Babel AST format by default.
+       * Some browsers (e.g., Firefox, Chrome) add the "loc" property to the error object. This property provides the
+       * line and column numbers of the error.
        */
-      plugins: [["estree", { classFeatures: true }], ...plugins],
-    }).program;
+      if (
+        "loc" in error &&
+        error.loc &&
+        typeof error.loc === "object" &&
+        "line" in error.loc &&
+        "column" in error.loc
+      ) {
+        errorLocation = `Line ${error.loc.line}, Column: ${error.loc.column}`;
+      }
+      throw new Error(
+        `Syntax error in ${scriptName}, server: ${hostname}. Error location: ${errorLocation}. Error message: ${error.message}.`,
+        {
+          cause: error,
+        },
+      );
+    } else {
+      throw error;
+    }
   }
   return ast;
 }

@@ -276,7 +276,7 @@ function Root(props: IProps): React.ReactElement {
     }
     let ast;
     try {
-      ast = parseAST(newCode, getFileType(currentScript.path));
+      ast = parseAST(currentScript.path, currentScript.hostname, newCode, getFileType(currentScript.path));
       makeModelsForImports(ast, server);
     } catch (error) {
       showRAMError({
