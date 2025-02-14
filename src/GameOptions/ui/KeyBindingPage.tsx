@@ -148,7 +148,7 @@ function SettingUpKeyBindingModal({
      * Add/remove handlers and emit an event that notifies subscribers if the player is setting up key bindings. When
      * they are doing that, we need to stop processing key events. For example, if they are setting key bindings and
      * they press Alt+T, we need to save that setting instead of going to the terminal.
-     * 
+     *
      * The action of going to a different page is handled in src\Sidebar\ui\SidebarRoot.tsx. When checking simple cases
      * (focusing on working, in BitVerse, etc.), we can use the Player object and Router.page(). However, checking if
      * the player is setting key bindings is not easy for code in SidebarRoot, especially if we want to decouple their
