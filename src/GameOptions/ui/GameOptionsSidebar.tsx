@@ -290,8 +290,8 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
             Reddit
           </Button>
         </Box>
-        <Typography>Save ID: {Player.identifier}</Typography>
       </Box>
+      <Typography>Save ID: {Player.identifier}</Typography>
       <FileDiagnosticModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
 
       <ConfirmationModal
