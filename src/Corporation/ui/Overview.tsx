@@ -15,7 +15,7 @@ import * as corpConstants from "../data/Constants";
 import { CorpUnlocks } from "../data/CorporationUnlocks";
 
 import { CONSTANTS } from "../../Constants";
-import { formatCorpMultiplier, formatPercent, formatShares } from "../../ui/formatNumber";
+import { formatCorpMultiplier, formatNumber, formatPercent, formatShares } from "../../ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { Money } from "../../ui/React/Money";
 import { MoneyRate } from "../../ui/React/MoneyRate";
@@ -277,20 +277,37 @@ function PublicButtons({ rerender }: IPublicButtonsProps): React.ReactElement {
 function BribeButton(): React.ReactElement {
   const corp = useCorporation();
   const [open, setOpen] = useState(false);
-  const canBribe =
-    corp.valuation >= corpConstants.bribeThreshold &&
-    Player.factions.filter((f) => Factions[f].getInfo().offersWork()).length > 0;
+  const isValuationHighEnough = corp.valuation >= corpConstants.bribeThreshold;
+  const isMemberOfBribableFaction = Player.factions.filter((f) => Factions[f].getInfo().offersWork()).length > 0;
+  const canBribe = isValuationHighEnough && isMemberOfBribableFaction;
+  const errorMessages = [];
+  if (!isValuationHighEnough) {
+    errorMessages.push(
+      `Your corporation is not powerful enough to bribe faction leaders. The corporation valuation is below the threshold. Threshold: ${formatNumber(
+        corpConstants.bribeThreshold,
+      )}.`,
+    );
+  }
+  if (!isMemberOfBribableFaction) {
+    errorMessages.push(
+      `You are not a member of any bribable factions. You can only bribe factions that offer at least 1 type of work.`,
+    );
+  }
 
   function openBribe(): void {
-    if (!canBribe) return;
+    if (!canBribe) {
+      return;
+    }
     setOpen(true);
   }
 
   return (
     <>
       <ButtonWithTooltip
-        normalTooltip={"Use your Corporations power and influence to bribe Faction leaders in exchange for reputation"}
-        disabledTooltip={canBribe ? "" : "Your Corporation is not powerful enough to bribe Faction leaders"}
+        normalTooltip={"Use your corporation's power and influence to bribe faction leaders in exchange for reputation"}
+        disabledTooltip={
+          canBribe ? "" : errorMessages.map((error, index) => <Typography key={index}>{error}</Typography>)
+        }
         onClick={openBribe}
       >
         Bribe Factions
