@@ -28,7 +28,7 @@ import {
 import { PositiveInteger, Result } from "../types";
 import { Factions } from "../Faction/Factions";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
-import { formatMoney } from "../ui/formatNumber";
+import { formatMoney, formatNumber } from "../ui/formatNumber";
 
 export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): Result {
   const checkResult = canCreateCorporation(selfFund, restart);
@@ -641,7 +641,9 @@ export function bribe(
   if (corporation.valuation < corpConstants.bribeThreshold) {
     return {
       success: false,
-      message: `The corporation valuation is below the threshold. Threshold: ${corpConstants.bribeThreshold}.`,
+      message: `The corporation valuation is below the threshold. Threshold: ${formatNumber(
+        corpConstants.bribeThreshold,
+      )}.`,
     };
   }
   if (!Player.factions.includes(factionName)) {
