@@ -6737,7 +6737,16 @@ export interface NS {
    * @remarks
    * RAM cost: 0.05 GB
    *
-   * Running NUKE.exe on a target server gives you root access which means you can execute scripts on said server. NUKE.exe must exist on your home computer.
+   * Running NUKE.exe on a target server gives you root access which means you can execute scripts on said server.
+   * NUKE.exe must exist on your home computer.
+   *
+   * Each server has a different number of required open ports. If that number is greater than 0, you have to open its
+   * ports before nuking it.
+   * You can check the requirement with {@link NS.getServerNumPortsRequired | getServerNumPortsRequired} or
+   * {@link Server.numOpenPortsRequired | getServer().numOpenPortsRequired}.
+   *
+   * Note that the server's required hacking level is not a requirement of nuking. You can nuke a server as long as you
+   * open enough ports, regardless of your hacking level.
    *
    * @example
    * ```js
