@@ -25,7 +25,7 @@ import { PromptEvent } from "../../ui/React/PromptManager";
 
 import { useRerender } from "../../ui/React/hooks";
 
-import { dirty, getServerCode, makeModel } from "./utils";
+import { isUnsavedFile, getServerCode, makeModel } from "./utils";
 import { OpenScript } from "./OpenScript";
 import { Tabs } from "./Tabs";
 import { Toolbar } from "./Toolbar";
@@ -38,6 +38,9 @@ import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
 import { hasScriptExtension, isLegacyScript, type ScriptFilePath } from "../../Paths/ScriptFilePath";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import type { BaseServer } from "../../Server/BaseServer";
+import { SpecialServers } from "../../Server/data/SpecialServers";
+import { SnackbarEvents } from "../../ui/React/Snackbar";
+import { ToastVariant } from "@enums";
 
 // Extend acorn-walk to support TypeScript nodes.
 extendAcornWalkForTypeScriptNodes(walk.base);
@@ -206,13 +209,7 @@ function Root(props: IProps): React.ReactElement {
 
       return;
     }
-
-    const server = GetServer(currentScript.hostname);
-    if (server === null) throw new Error("Server should not be null but it is.");
-    server.writeToContentFile(currentScript.path, currentScript.code);
-    if (Settings.SaveGameOnFileSave) {
-      saveObject.saveGame().catch((error) => exceptionAlert(error));
-    }
+    saveScript(currentScript);
     rerender();
   }, [rerender]);
 
@@ -363,7 +360,13 @@ function Root(props: IProps): React.ReactElement {
 
   function saveScript(scriptToSave: OpenScript): void {
     const server = GetServer(scriptToSave.hostname);
-    if (!server) throw new Error("Server should not be null but it is.");
+    if (!server) {
+      throw new Error("Server should not be null but it is.");
+    }
+    // Show a warning message if the file is on a non-home server.
+    if (scriptToSave.hostname !== SpecialServers.Home) {
+      SnackbarEvents.emit("You saved a file on a non-home server!", ToastVariant.WARNING, 3000);
+    }
     // This server helper already handles overwriting, etc.
     server.writeToContentFile(scriptToSave.path, scriptToSave.code);
     if (Settings.SaveGameOnFileSave) {
@@ -411,7 +414,7 @@ function Root(props: IProps): React.ReactElement {
     const savedScriptCode = closingScript.code;
     const wasCurrentScript = openScripts[index] === currentScript;
 
-    if (dirty(openScripts, index)) {
+    if (isUnsavedFile(openScripts, index)) {
       PromptEvent.emit({
         txt: `Do you want to save changes to ${closingScript.path} on ${closingScript.hostname}?`,
         resolve: (result: boolean | string) => {

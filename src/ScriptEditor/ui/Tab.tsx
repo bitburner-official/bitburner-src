@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { DraggableProvided } from "react-beautiful-dnd";
+import { makeStyles } from "tss-react/mui";
 
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 import SyncIcon from "@mui/icons-material/Sync";
 import CloseIcon from "@mui/icons-material/Close";
@@ -11,20 +13,42 @@ import { Settings } from "../../Settings/Settings";
 
 interface IProps {
   provided: DraggableProvided;
-  title: string;
+  fullPath: string;
   isActive: boolean;
   isExternal: boolean;
+  isUnsaved: boolean;
 
   onClick: () => void;
   onClose: () => void;
   onUpdate: () => void;
 }
 
+const useStyles = makeStyles()(() => ({
+  blink: {
+    "@keyframes blinker": {
+      "0%": {
+        opacity: 1,
+      },
+      "50%": {
+        opacity: 0.4,
+      },
+      "100%": {
+        opacity: 1,
+      },
+    },
+    animationName: "blinker",
+    animationDuration: "2s",
+    animationTimingFunction: "ease",
+    animationIterationCount: "infinite",
+  },
+}));
+
 const tabMargin = 5;
 const tabIconWidth = 25;
 const tabIconHeight = 38.5;
 
-export function Tab({ provided, title, isActive, isExternal, onClick, onClose, onUpdate }: IProps) {
+export function Tab({ provided, fullPath, isActive, isExternal, isUnsaved, onClick, onClose, onUpdate }: IProps) {
+  const { classes } = useStyles();
   const colorProps = isActive
     ? {
         background: Settings.theme.button,
@@ -37,8 +61,35 @@ export function Tab({ provided, title, isActive, isExternal, onClick, onClose, o
         color: Settings.theme.secondary,
       };
 
+  let tabTitle;
+  let tooltipTitle;
+  if (isUnsaved) {
+    // Show a blinking "*" character to notify the player that this file is dirtied.
+    tabTitle = (
+      <>
+        <Typography component="span" className={classes.blink} color={Settings.theme.warning}>
+          *{" "}
+        </Typography>
+        {fullPath}
+      </>
+    );
+  } else {
+    tabTitle = fullPath;
+  }
+
   if (isExternal) {
-    colorProps.color = Settings.theme.info;
+    colorProps.color = Settings.theme.warning;
+    // Show a warning message if this file is on a non-home server.
+    tooltipTitle = (
+      <Typography component="span" color={Settings.theme.warning}>
+        {tabTitle}
+        <br />
+        This file is on a non-home server. You will lose all files on non-home servers when they are deleted or
+        recreated (install augmentations, soft reset, deleted by NS APIs, etc.).
+      </Typography>
+    );
+  } else {
+    tooltipTitle = tabTitle;
   }
   const iconButtonStyle = {
     maxWidth: tabIconWidth,
@@ -71,20 +122,23 @@ export function Tab({ provided, title, isActive, isExternal, onClick, onClose, o
         border: "1px solid " + Settings.theme.well,
       }}
     >
-      <Tooltip title={title}>
+      <Tooltip title={tooltipTitle}>
         <Button
           onClick={onClick}
           onMouseDown={(e) => {
             e.preventDefault();
-            if (e.button === 1) onClose();
+            if (e.button === 1) {
+              onClose();
+            }
           }}
+          className={isExternal ? classes.blink : ""}
           style={{
             minHeight: tabIconHeight,
             overflow: "hidden",
             ...colorProps,
           }}
         >
-          <span style={{ overflow: "hidden", direction: "rtl", textOverflow: "ellipsis" }}>{title}</span>
+          <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{tabTitle}</span>
         </Button>
       </Tooltip>
       <Tooltip title="Overwrite editor content with saved file content">
