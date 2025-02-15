@@ -1451,7 +1451,7 @@ export interface TIX {
    * Place order for stocks.
    * @remarks
    * RAM cost: 2.5 GB
-   * Places an order on the stock market. This function only works for Limit and Stop Orders.
+   * Places a limit or stop order on the stock market. This function only works for Limit and Stop Orders.
    *
    * The ability to place limit and stop orders is **not** immediately available to the player and
    * must be unlocked later on in the game.
@@ -1459,10 +1459,16 @@ export interface TIX {
    * Returns true if the order is successfully placed, and false otherwise.
    *
    * @param sym - Stock symbol.
-   * @param shares - Number of shares for order. Must be positive. Will be rounded to the nearest integer.
+   * @param shares - Number of shares for the order. Must be positive. Will be rounded to the nearest integer.
    * @param price - Execution price for the order.
-   * @param type - Type of order.
-   * @param pos - Specifies whether the order is a “Long” or “Short” position.
+   * @param type - Type of order. Valid values are:
+   *               - "Limit Buy"
+   *               - "Limit Sell"
+   *               - "Stop Buy"
+   *               - "Stop Sell"
+   * @param pos - Specifies whether the order is a “Long” or “Short” position. Valid values are:
+   *             - "Long"
+   *             - "Short"
    * @returns True if the order is successfully placed, and false otherwise.
    */
   placeOrder(sym: string, shares: number, price: number, type: string, pos: string): boolean;
