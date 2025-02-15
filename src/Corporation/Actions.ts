@@ -632,16 +632,22 @@ export function bribe(
   fundsForBribing: number,
   factionName: FactionName,
 ): Result<{ reputationGain: number }> {
+  if (!Number.isFinite(fundsForBribing) || fundsForBribing <= 0 || corporation.funds < fundsForBribing) {
+    return {
+      success: false,
+      message: "Invalid amount of cash for bribing.",
+    };
+  }
   if (corporation.valuation < corpConstants.bribeThreshold) {
     return {
       success: false,
       message: `The corporation valuation is below the threshold. Threshold: ${corpConstants.bribeThreshold}.`,
     };
   }
-  if (!Number.isFinite(fundsForBribing) || fundsForBribing <= 0 || corporation.funds < fundsForBribing) {
+  if (!Player.factions.includes(factionName)) {
     return {
       success: false,
-      message: "Invalid amount of cash for bribing",
+      message: `You are not a member of ${factionName}.`,
     };
   }
   const faction = Factions[factionName];

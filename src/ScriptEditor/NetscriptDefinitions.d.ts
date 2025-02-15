@@ -9338,6 +9338,8 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * {@link Corporation.getCorporation | getCorporation} and {@link Corporation.getConstants | getConstants} to get this
    * information.
    *
+   * - You must be a member of the specified faction.
+   *
    * - The specified faction must offer at least 1 type of work. You can use
    * {@link Singularity.getFactionWorkTypes | getFactionWorkTypes} to get the list of work types of a faction.
    *
