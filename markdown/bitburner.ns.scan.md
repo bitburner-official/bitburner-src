@@ -41,7 +41,7 @@ home
 ----CSEC
 ------omega-net
 ```
-ns.scan("home"): \["n00dles", "joesguns"\]: "home" is the root, so it does have a parent node.
+ns.scan("home"): \["n00dles", "joesguns"\]: "home" is the root, so it does not have a parent node.
 
 ns.scan("n00dles"): \["home"\]: "home" is the parent node of "n00dles".
 
