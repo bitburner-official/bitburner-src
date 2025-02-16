@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { DraggableProvided } from "react-beautiful-dnd";
-import { makeStyles } from "tss-react/mui";
 
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
@@ -23,32 +22,11 @@ interface IProps {
   onUpdate: () => void;
 }
 
-const useStyles = makeStyles()(() => ({
-  blink: {
-    "@keyframes blinker": {
-      "0%": {
-        opacity: 1,
-      },
-      "50%": {
-        opacity: 0.4,
-      },
-      "100%": {
-        opacity: 1,
-      },
-    },
-    animationName: "blinker",
-    animationDuration: "2s",
-    animationTimingFunction: "ease",
-    animationIterationCount: "infinite",
-  },
-}));
-
 const tabMargin = 5;
 const tabIconWidth = 25;
 const tabIconHeight = 38.5;
 
 export function Tab({ provided, fullPath, isActive, isExternal, isUnsaved, onClick, onClose, onUpdate }: IProps) {
-  const { classes } = useStyles();
   const colorProps = isActive
     ? {
         background: Settings.theme.button,
@@ -67,7 +45,7 @@ export function Tab({ provided, fullPath, isActive, isExternal, isUnsaved, onCli
     // Show a blinking "*" character to notify the player that this file is dirtied.
     tabTitle = (
       <>
-        <Typography component="span" className={classes.blink} color={Settings.theme.warning}>
+        <Typography component="span" color={Settings.theme.warning}>
           *{" "}
         </Typography>
         {fullPath}
@@ -131,7 +109,6 @@ export function Tab({ provided, fullPath, isActive, isExternal, isUnsaved, onCli
               onClose();
             }
           }}
-          className={isExternal ? classes.blink : ""}
           style={{
             minHeight: tabIconHeight,
             overflow: "hidden",
