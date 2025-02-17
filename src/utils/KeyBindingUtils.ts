@@ -258,7 +258,11 @@ export function parseKeyCombinationToString(keyCombination: KeyCombination | nul
     result += "Ctrl + ";
   }
   if (keyCombination.alt) {
-    result += "Alt + ";
+    if (window.navigator.userAgent.includes("Mac")) {
+      result += "Option + ";
+    } else {
+      result += "Alt + ";
+    }
   }
   if (keyCombination.shift) {
     result += "Shift + ";
