@@ -785,7 +785,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     },
     getBonusTime: (ctx) => () => {
       checkAccess(ctx);
-      return Math.round(getCorporation().storedCycles / 5) * 1000;
+      return getCorporation().storedCycles * 200;
     },
     nextUpdate: (ctx) => () => {
       checkAccess(ctx);

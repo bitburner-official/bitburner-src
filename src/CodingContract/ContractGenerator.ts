@@ -1,17 +1,17 @@
-import { CodingContract, CodingContractRewardType, ICodingContractReward } from "./CodingContracts";
-import { CodingContractTypes } from "./data/codingcontracttypes";
-import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
-import { Factions } from "./Faction/Factions";
+import { CodingContract, CodingContractRewardType, ICodingContractReward } from "./Contract";
+import { CodingContractTypes } from "./ContractTypes";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
+import { Factions } from "../Faction/Factions";
 import { Player } from "@player";
 import { CodingContractName } from "@enums";
-import { GetServer, GetAllServers } from "./Server/AllServers";
-import { SpecialServers } from "./Server/data/SpecialServers";
-import { Server } from "./Server/Server";
-import { BaseServer } from "./Server/BaseServer";
+import { GetServer, GetAllServers } from "../Server/AllServers";
+import { SpecialServers } from "../Server/data/SpecialServers";
+import { Server } from "../Server/Server";
+import { BaseServer } from "../Server/BaseServer";
 
-import { getRandomIntInclusive } from "./utils/helpers/getRandomIntInclusive";
-import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
-import { clampNumber } from "./utils/helpers/clampNumber";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
+import { ContractFilePath, resolveContractFilePath } from "../Paths/ContractFilePath";
+import { clampNumber } from "../utils/helpers/clampNumber";
 
 export function tryGeneratingRandomContract(numberOfTries: number): void {
   /**

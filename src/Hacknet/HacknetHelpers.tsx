@@ -16,7 +16,7 @@ import { HacknetServer } from "./HacknetServer";
 import { HashManager } from "./HashManager";
 import { HashUpgrades } from "./HashUpgrades";
 
-import { generateRandomContract } from "../CodingContractGenerator";
+import { generateRandomContract } from "../CodingContract/ContractGenerator";
 import { iTutorialSteps, iTutorialNextStep, ITutorial } from "../InteractiveTutorial";
 import { Player } from "@player";
 import { GetServer } from "../Server/AllServers";

@@ -1,10 +1,10 @@
 import { FactionName, CodingContractName } from "@enums";
-import { CodingContractTypes } from "./data/codingcontracttypes";
+import { CodingContractTypes } from "./ContractTypes";
 
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
-import { CodingContractEvent } from "./ui/React/CodingContractModal";
-import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
-import { assertObject } from "./utils/TypeAssertion";
+import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { CodingContractEvent } from "../ui/React/CodingContractModal";
+import { ContractFilePath, resolveContractFilePath } from "../Paths/ContractFilePath";
+import { assertObject } from "../utils/TypeAssertion";
 
 // Numeric enum
 /** Enum representing the different types of rewards a Coding Contract can give */

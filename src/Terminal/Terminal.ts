@@ -6,7 +6,7 @@ import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
 import { CompletedProgramName } from "@enums";
-import { CodingContractResult } from "../CodingContracts";
+import { CodingContractResult } from "../CodingContract/Contract";
 import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
 
 import { TextFile } from "../TextFile";

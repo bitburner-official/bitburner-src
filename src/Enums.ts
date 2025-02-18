@@ -14,4 +14,4 @@ export * from "./Programs/Enums";
 export * from "./StockMarket/Enums";
 export * from "./ui/Enums";
 export * from "./Work/Enums";
-export { CodingContractName } from "./data/codingcontracttypes";
+export * from "./CodingContract/Enums";

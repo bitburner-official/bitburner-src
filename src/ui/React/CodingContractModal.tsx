@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { KEY } from "../../utils/KeyboardEventKey";
 
-import { CodingContract } from "../../CodingContracts";
-import { CodingContractTypes } from "../../data/codingcontracttypes";
+import { CodingContract } from "../../CodingContract/Contract";
+import { CodingContractTypes } from "../../CodingContract/ContractTypes";
 import { CopyableText } from "./CopyableText";
 import { Modal } from "./Modal";
 import { EventEmitter } from "../../utils/EventEmitter";

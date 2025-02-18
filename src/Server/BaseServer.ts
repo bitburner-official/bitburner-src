@@ -3,7 +3,7 @@ import type { CompletedProgramName, LiteratureName, MessageFilename } from "@enu
 import type { IPAddress, ServerName } from "../Types/strings";
 import type { FilePath } from "../Paths/FilePath";
 
-import { CodingContract } from "../CodingContracts";
+import { CodingContract } from "../CodingContract/Contract";
 import { RunningScript } from "../Script/RunningScript";
 import { Script } from "../Script/Script";
 import { TextFile } from "../TextFile";

@@ -37,7 +37,7 @@ import {
   calculateAscensionPointsGain,
 } from "../Gang/formulas/formulas";
 import { favorToRep as calculateFavorToRep, repToFavor as calculateRepToFavor } from "../Faction/formulas/favor";
-import { repFromDonation } from "../Faction/formulas/donation";
+import { repFromDonation, donationForRep } from "../Faction/formulas/donation";
 import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
@@ -127,6 +127,12 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const person = helpers.person(ctx, _player);
         checkFormulasAccess(ctx);
         return repFromDonation(amount, person);
+      },
+      donationForRep: (ctx) => (_reputation, _player) => {
+        const reputation = helpers.number(ctx, "reputation", _reputation);
+        const person = helpers.person(ctx, _player);
+        checkFormulasAccess(ctx);
+        return donationForRep(reputation, person);
       },
     },
     skills: {

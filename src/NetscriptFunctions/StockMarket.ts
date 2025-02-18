@@ -396,7 +396,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     getBonusTime: (ctx) => () => {
       checkTixApiAccess(ctx);
-      return Math.round(StockMarket.storedCycles / 5) * 1000;
+      return StockMarket.storedCycles * 200;
     },
     nextUpdate: (ctx) => () => {
       checkTixApiAccess(ctx);

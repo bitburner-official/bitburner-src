@@ -16,7 +16,7 @@ import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
 import { PlayerOwnedAugmentation } from "../../Augmentation/PlayerOwnedAugmentation";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-import { CodingContractRewardType, ICodingContractReward } from "../../CodingContracts";
+import { CodingContractRewardType, ICodingContractReward } from "../../CodingContract/Contract";
 import { Company } from "../../Company/Company";
 import { Companies } from "../../Company/Companies";
 import { getNextCompanyPositionHelper } from "../../Company/GetNextCompanyPosition";

@@ -5209,6 +5209,13 @@ interface ReputationFormulas {
    * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    */
   repFromDonation(amount: number, player: Person): number;
+
+  /**
+   * Calculate the donation needed to gain an amount of reputation.
+   * @param reputation - Amount of reputation
+   * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
+   */
+  donationForRep(reputation: number, player: Person): number;
 }
 
 /**
@@ -6698,6 +6705,33 @@ export interface NS {
    * node way from the specified target server. The hostnames in the returned
    * array are strings.
    *
+   * The server network is a tree graph with the home server at the root. The parent node is always the first item of
+   * the returned array.
+   *
+   * For example, let's say the network looks like this:
+   *
+   * ```
+   * home
+   * --n00dles
+   * --joesguns
+   * ----CSEC
+   * ------omega-net
+   * ```
+   *
+   * ns.scan("home"): ["n00dles", "joesguns"]: "home" is the root, so it does not have a parent node.
+   *
+   * ns.scan("n00dles"): ["home"]: "home" is the parent node of "n00dles".
+   *
+   * ns.scan("joesguns"): ["home", "CSEC"]: "home" is the parent node of "joesguns".
+   *
+   * ns.scan("CSEC"): ["joesguns", "omega-net"]: "joesguns" is the parent node of "CSEC".
+   *
+   * ns.scan("omega-net"): ["CSEC"]: "CSEC" is the parent node of "omega-net".
+   *
+   * If you run the "scan-analyze" command at home, it won't show all servers due to its limited maximum depth. You can
+   * use this function with BFS (Breadth-first search) or DFS (Depth-first search) to traverse the network and discover
+   * all servers.
+   *
    * @example
    * ```js
    * // All servers that are one hop from the current server.
@@ -6737,7 +6771,16 @@ export interface NS {
    * @remarks
    * RAM cost: 0.05 GB
    *
-   * Running NUKE.exe on a target server gives you root access which means you can execute scripts on said server. NUKE.exe must exist on your home computer.
+   * Running NUKE.exe on a target server gives you root access which means you can execute scripts on said server.
+   * NUKE.exe must exist on your home computer.
+   *
+   * Each server has a different number of required open ports. If that number is greater than 0, you have to open its
+   * ports before nuking it.
+   * You can check the requirement with {@link NS.getServerNumPortsRequired | getServerNumPortsRequired} or
+   * {@link Server.numOpenPortsRequired | getServer().numOpenPortsRequired}.
+   *
+   * Note that the server's required hacking level is not a requirement of nuking. You can nuke a server as long as you
+   * open enough ports, regardless of your hacking level.
    *
    * @example
    * ```js
@@ -9337,6 +9380,8 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * - The corporation valuation must be greater than or equal to a threshold. You can use
    * {@link Corporation.getCorporation | getCorporation} and {@link Corporation.getConstants | getConstants} to get this
    * information.
+   *
+   * - You must be a member of the specified faction.
    *
    * - The specified faction must offer at least 1 type of work. You can use
    * {@link Singularity.getFactionWorkTypes | getFactionWorkTypes} to get the list of work types of a faction.

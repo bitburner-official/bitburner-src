@@ -334,7 +334,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     getBonusTime: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
-      return Math.round(bladeburner.storedCycles / 5) * 1000;
+      return bladeburner.storedCycles * 200;
     },
     nextUpdate: (ctx) => () => {
       checkBladeburnerAccess(ctx);

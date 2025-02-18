@@ -331,7 +331,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
     },
     getBonusTime: (ctx) => () => {
       const gang = getGang(ctx);
-      return Math.round(gang.storedCycles / 5) * 1000;
+      return gang.storedCycles * 200;
     },
     nextUpdate: (ctx) => () => {
       getGang(ctx);

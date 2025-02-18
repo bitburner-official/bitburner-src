@@ -1,11 +1,11 @@
 import { Player } from "@player";
-import { CodingContract } from "../CodingContracts";
+import { CodingContract } from "../CodingContract/Contract";
 import { CodingContractObject, CodingContract as ICodingContract } from "@nsdefs";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { CodingContractName } from "@enums";
-import { generateDummyContract } from "../CodingContractGenerator";
-import { isCodingContractName } from "../data/codingcontracttypes";
+import { generateDummyContract } from "../CodingContract/ContractGenerator";
+import { isCodingContractName } from "../CodingContract/ContractTypes";
 import { type BaseServer } from "../Server/BaseServer";
 
 export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
