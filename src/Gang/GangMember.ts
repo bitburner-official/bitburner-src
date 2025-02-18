@@ -156,12 +156,12 @@ export class GangMember {
     if (task === GangMemberTasks.Unassigned) return null;
 
     const expValues = {
-      hackEXP: 0,
-      strEXP: 0,
-      defEXP: 0,
-      dexEXP: 0,
-      agiEXP: 0,
-      chaEXP: 0,
+      hack_EXP: 0,
+      str_EXP: 0,
+      def_EXP: 0,
+      dex_EXP: 0,
+      agi_EXP: 0,
+      cha_EXP: 0,
     };
 
     const difficultyMult = Math.pow(task.difficulty, 0.9);
@@ -169,37 +169,37 @@ export class GangMember {
     const weightDivisor = 1500;
     const expMult = this.expMult();
 
-    expValues.hackEXP +=
+    expValues.hack_EXP +=
       (task.hackWeight / weightDivisor) *
       difficultyPerCycles *
       expMult.hack *
       this.calculateAscensionMult(this.hack_asc_points);
 
-    expValues.strEXP +=
+    expValues.str_EXP +=
       (task.strWeight / weightDivisor) *
       difficultyPerCycles *
       expMult.str *
       this.calculateAscensionMult(this.str_asc_points);
 
-    expValues.defEXP +=
+    expValues.def_EXP +=
       (task.defWeight / weightDivisor) *
       difficultyPerCycles *
       expMult.def *
       this.calculateAscensionMult(this.def_asc_points);
 
-    expValues.dexEXP +=
+    expValues.dex_EXP +=
       (task.dexWeight / weightDivisor) *
       difficultyPerCycles *
       expMult.dex *
       this.calculateAscensionMult(this.dex_asc_points);
 
-    expValues.agiEXP +=
+    expValues.agi_EXP +=
       (task.agiWeight / weightDivisor) *
       difficultyPerCycles *
       expMult.agi *
       this.calculateAscensionMult(this.agi_asc_points);
 
-    expValues.chaEXP +=
+    expValues.cha_EXP +=
       (task.chaWeight / weightDivisor) *
       difficultyPerCycles *
       expMult.cha *
@@ -216,12 +216,12 @@ export class GangMember {
       return;
     }
 
-    this.hack_exp += gains.hackEXP;
-    this.str_exp += gains.strEXP;
-    this.def_exp += gains.defEXP;
-    this.dex_exp += gains.dexEXP;
-    this.agi_exp += gains.agiEXP;
-    this.cha_exp += gains.chaEXP;
+    this.hack_exp += gains.hack_EXP;
+    this.str_exp += gains.str_EXP;
+    this.def_exp += gains.def_EXP;
+    this.dex_exp += gains.dex_EXP;
+    this.agi_exp += gains.agi_EXP;
+    this.cha_exp += gains.cha_EXP;
   }
 
   earnRespect(numCycles = 1, gang: Gang): number {

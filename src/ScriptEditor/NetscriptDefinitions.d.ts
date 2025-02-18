@@ -920,17 +920,17 @@ interface GangTerritory {
 /** @public */
 interface GangMemberExpGain {
   /** Hack EXP gain for a member after a given task*/
-  hackEXP: number;
+  hack_EXP: number;
   /** Str EXP gain for a member after a given task*/
-  strEXP: number;
+  str_EXP: number;
   /** Def EXP gain for a member after a given task*/
-  defEXP: number;
+  def_EXP: number;
   /** Dex EXP gain for a member after a given task*/
-  dexEXP: number;
+  dex_EXP: number;
   /** Agi EXP gain for a member after a given task*/
-  agiEXP: number;
+  agi_EXP: number;
   /** Cha EXP gain for a member after a given task*/
-  chaEXP: number;
+  cha_EXP: number;
 }
 
 /** @public */
@@ -1018,7 +1018,8 @@ interface GangMemberInfo {
   wantedLevelGain: number;
   /** Per Cycle Income for this gang member */
   moneyGain: number;
-  /** Per Cycle Exp object for each stat for this gang member returned as a object containing each stats value
+  /** Per Cycle Exp object for each stat for this gang member returned as a object containing each stats value.
+   *
    * returns null in the even that the member does not have a given task.
    */
   expGain: GangMemberExpGain | null;

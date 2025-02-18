@@ -15,10 +15,10 @@ interface GangMemberExpGain
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [agiEXP](./bitburner.gangmemberexpgain.agiexp.md) |  | number | Agi EXP gain for a member after a given task |
-|  [chaEXP](./bitburner.gangmemberexpgain.chaexp.md) |  | number | Cha EXP gain for a member after a given task |
-|  [defEXP](./bitburner.gangmemberexpgain.defexp.md) |  | number | Def EXP gain for a member after a given task |
-|  [dexEXP](./bitburner.gangmemberexpgain.dexexp.md) |  | number | Dex EXP gain for a member after a given task |
-|  [hackEXP](./bitburner.gangmemberexpgain.hackexp.md) |  | number | Hack EXP gain for a member after a given task |
-|  [strEXP](./bitburner.gangmemberexpgain.strexp.md) |  | number | Str EXP gain for a member after a given task |
+|  [agi\_EXP](./bitburner.gangmemberexpgain.agi_exp.md) |  | number | Agi EXP gain for a member after a given task |
+|  [cha\_EXP](./bitburner.gangmemberexpgain.cha_exp.md) |  | number | Cha EXP gain for a member after a given task |
+|  [def\_EXP](./bitburner.gangmemberexpgain.def_exp.md) |  | number | Def EXP gain for a member after a given task |
+|  [dex\_EXP](./bitburner.gangmemberexpgain.dex_exp.md) |  | number | Dex EXP gain for a member after a given task |
+|  [hack\_EXP](./bitburner.gangmemberexpgain.hack_exp.md) |  | number | Hack EXP gain for a member after a given task |
+|  [str\_EXP](./bitburner.gangmemberexpgain.str_exp.md) |  | number | Str EXP gain for a member after a given task |
 
