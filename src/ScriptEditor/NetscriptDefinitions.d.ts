@@ -920,17 +920,17 @@ interface GangTerritory {
 /** @public */
 interface GangMemberExpGain {
   /** Hack EXP gain for a member after a given task*/
-  hack_EXP: number;
+  hack_exp: number;
   /** Str EXP gain for a member after a given task*/
-  str_EXP: number;
+  str_exp: number;
   /** Def EXP gain for a member after a given task*/
-  def_EXP: number;
+  def_exp: number;
   /** Dex EXP gain for a member after a given task*/
-  dex_EXP: number;
+  dex_exp: number;
   /** Agi EXP gain for a member after a given task*/
-  agi_EXP: number;
+  agi_exp: number;
   /** Cha EXP gain for a member after a given task*/
-  cha_EXP: number;
+  cha_exp: number;
 }
 
 /** @public */
