@@ -146,6 +146,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           </Typography>
 
           <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
+          <Typography> ( "ls" is short for "list" )</Typography>
         </>
       ),
       canNext: false,
@@ -156,7 +157,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
           <Typography>
             {" "}
-            is a basic command that shows files on the computer. Right now, it shows that you have a program called{" "}
+            is a basic command that lists the files on the computer. Right now, it shows that you have a program called{" "}
             NUKE.exe on your computer. We'll get to what this does later. <br />
             <br />
             Using your home computer's terminal, you can connect to other machines throughout the world. Let's do that
