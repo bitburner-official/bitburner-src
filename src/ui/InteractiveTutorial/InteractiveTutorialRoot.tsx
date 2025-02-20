@@ -146,7 +146,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           </Typography>
 
           <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
-          <Typography> ( "ls" is short for "list" )</Typography>
+          <Typography>
+            <br />( "ls" is short for "list" )
+          </Typography>
         </>
       ),
       canNext: false,
