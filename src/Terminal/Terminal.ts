@@ -805,8 +805,8 @@ export class Terminal {
     const f = TerminalCommands[commandName.toLowerCase()];
     if (!f) {
       const similarCommands = findSimilarCommands(commandName);
-      const didYouMeanString = similarCommands.length ? `Did you mean: ${similarCommands.join(" or ")}?` : "";
-      return this.error(`Command ${commandName} not found. ${didYouMeanString}`);
+      const didYouMeanString = similarCommands.length ? ` Did you mean: ${similarCommands.join(" or ")}?` : "";
+      return this.error(`Command ${commandName} not found.${didYouMeanString}`);
     }
 
     f(commandArray, currentServer);
