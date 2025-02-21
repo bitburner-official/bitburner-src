@@ -831,5 +831,5 @@ function findSimilarCommands(command: string): string[] {
     return diff === 1;
   });
   const subset = commands.filter((c) => c.includes(command)).sort((a, b) => a.length - b.length);
-  return [...offByOneLetter, ...subset].slice(0, 3);
+  return Array.from(new Set([...offByOneLetter, ...subset])).slice(0, 3);
 }
