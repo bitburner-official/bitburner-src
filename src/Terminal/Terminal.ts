@@ -824,6 +824,7 @@ export class Terminal {
 function findSimilarCommands(command: string): string[] {
   const commands = Object.keys(TerminalCommands);
   const offByOneLetter = commands.filter((c) => {
+    if (c.length !== command.length) return false;
     let diff = 0;
     for (let i = 0; i < c.length; i++) {
       if (c[i] !== command[i]) diff++;
