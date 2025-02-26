@@ -99,7 +99,7 @@
     "rehype-mathjax": "^4.0.3",
     "remark-math": "^5.1.1",
     "style-loader": "^3.3.3",
-    "typescript": "^5.2.2",
+    "typescript": "^5.7.3",
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.1.0"

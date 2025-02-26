@@ -234,7 +234,7 @@ export class Division {
       //If this industry has a warehouse in this city, process the market
       //for every material this industry requires or produces
       if (this.warehouses[city]) {
-        const wh = this.warehouses[city] as Warehouse; // Warehouse type is known due to if check above
+        const wh = this.warehouses[city];
         for (const name of Object.keys(reqMats) as CorpMaterialName[]) {
           if (Object.hasOwn(reqMats, name)) {
             wh.materials[name].processMarket();
