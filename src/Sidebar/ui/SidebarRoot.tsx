@@ -66,6 +66,7 @@ import {
   KeyBindingEventType,
   ScriptEditorAction,
   type KeyBindingType,
+  CurrentKeyBindings,
 } from "../../utils/KeyBindingUtils";
 import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 
@@ -281,10 +282,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
       if ((Player.currentWork && Player.focus) || Router.page() === Page.BitVerse) {
         return;
       }
-      const keyBindingTypes = determineKeyBindingTypes(
-        Settings.KeyBindings,
-        convertKeyboardEventToKeyCombination(event),
-      );
+      const keyBindingTypes = determineKeyBindingTypes(CurrentKeyBindings, convertKeyboardEventToKeyCombination(event));
       for (const keyBindingType of keyBindingTypes) {
         if (!canGoToPage(keyBindingType)) {
           continue;

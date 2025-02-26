@@ -1,4 +1,4 @@
-import { getRecordEntries } from "../Types/Record";
+import { getRecordEntries, PartialRecord } from "../Types/Record";
 import { ComplexPage, SimplePage } from "../ui/Enums";
 import { EventEmitter } from "./EventEmitter";
 import { KEY } from "./KeyboardEventKey";
@@ -55,6 +55,11 @@ export type KeyCombination = {
   meta: boolean;
   key: string;
 };
+
+export type PlayerDefinedKeyBindingsType = PartialRecord<
+  KeyBindingType,
+  [KeyCombination | null, KeyCombination | null]
+>;
 
 export const DefaultKeyBindings: Record<KeyBindingType, [KeyCombination | null, KeyCombination | null]> = {
   [SimplePage.Terminal]: [
@@ -248,6 +253,30 @@ export const DefaultKeyBindings: Record<KeyBindingType, [KeyCombination | null, 
     },
   ],
 };
+
+// This is the set of key bindings merged from DefaultKeyBindings and Settings.KeyBindings.
+export const CurrentKeyBindings = structuredClone(DefaultKeyBindings);
+
+/**
+ * In order to avoid a circular dependency, do not use Settings.KeyBindings directly in this function. We need to pass
+ * it as a parameter.
+ */
+export function mergePlayerDefinedKeyBindings(bindings: PlayerDefinedKeyBindingsType): void {
+  for (const [action, keyCombinations] of getRecordEntries(bindings)) {
+    CurrentKeyBindings[action][0] = keyCombinations[0];
+    CurrentKeyBindings[action][1] = keyCombinations[1];
+  }
+}
+
+export function areDifferentKeyCombinations(combination1: KeyCombination, combination2: KeyCombination) {
+  return (
+    combination1.control !== combination2.control ||
+    combination1.alt !== combination2.alt ||
+    combination1.shift !== combination2.shift ||
+    combination1.meta !== combination2.meta ||
+    combination1.key !== combination2.key
+  );
+}
 
 export function parseKeyCombinationToString(keyCombination: KeyCombination | null): string {
   if (!keyCombination) {

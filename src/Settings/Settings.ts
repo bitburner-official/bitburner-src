@@ -3,7 +3,6 @@ import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
 import { CursorStyle, CursorBlinking, WordWrapOptions } from "../ScriptEditor/ui/Options";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
-import { DefaultKeyBindings } from "../utils/KeyBindingUtils";
 import { assertObject } from "../utils/TypeAssertion";
 import { Result } from "../types";
 import {
@@ -12,6 +11,7 @@ import {
   assertAndSanitizeMainTheme,
   assertAndSanitizeStyles,
 } from "../JsonSchema/JSONSchemaAssertion";
+import { mergePlayerDefinedKeyBindings, type PlayerDefinedKeyBindingsType } from "../utils/KeyBindingUtils";
 
 /**
  * This function won't be able to catch **all** invalid hostnames. In order to validate a hostname properly, we need to
@@ -187,8 +187,11 @@ export const Settings = {
   useEngineeringNotation: false,
   /** Whether to disable suffixes and always use exponential form (scientific or engineering). */
   disableSuffixes: false,
-  /** Key bindings */
-  KeyBindings: structuredClone(DefaultKeyBindings),
+  /**
+   * Player-defined key bindings. Don't use this property directly. It must be merged with DefaultKeyBindings in
+   * src\utils\KeyBindingUtils.ts.
+   */
+  KeyBindings: {} as PlayerDefinedKeyBindingsType,
 
   load(saveString: string) {
     const save: unknown = JSON.parse(saveString);
@@ -239,5 +242,8 @@ export const Settings = {
     if (!isValidConnectionPort(Settings.RemoteFileApiPort).success) {
       Settings.RemoteFileApiPort = 0;
     }
+
+    // Merge Settings.KeyBindings with DefaultKeyBindings.
+    mergePlayerDefinedKeyBindings(Settings.KeyBindings);
   },
 };

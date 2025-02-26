@@ -6,7 +6,9 @@ import { Modal } from "../../ui/React/Modal";
 import { SimplePage } from "../../ui/Enums";
 import { KEY } from "../../utils/KeyboardEventKey";
 import {
+  areDifferentKeyCombinations,
   convertKeyboardEventToKeyCombination,
+  CurrentKeyBindings,
   DefaultKeyBindings,
   determineKeyBindingTypes,
   getKeyCombination,
@@ -14,6 +16,7 @@ import {
   isSpoilerKeyBindingType,
   KeyBindingEvents,
   KeyBindingEventType,
+  mergePlayerDefinedKeyBindings,
   parseKeyCombinationToString,
   SpoilerKeyBindingTypes,
   type KeyBindingType,
@@ -28,10 +31,10 @@ function determineConflictKeys(
   isPrimary: boolean,
   newCombination: KeyCombination,
 ): Set<string> {
-  const conflicts: Set<string> = determineKeyBindingTypes(Settings.KeyBindings, newCombination);
+  const conflicts: Set<string> = determineKeyBindingTypes(CurrentKeyBindings, newCombination);
   // Check if the new combination is the same as the current key binding.
   if (conflicts.has(keyBindingType)) {
-    const currentKeyBinding = getKeyCombination(Settings.KeyBindings, keyBindingType, isPrimary);
+    const currentKeyBinding = getKeyCombination(CurrentKeyBindings, keyBindingType, isPrimary);
     if (
       currentKeyBinding &&
       currentKeyBinding.control === newCombination.control &&
@@ -107,6 +110,22 @@ function determineConflictKeys(
   return conflicts;
 }
 
+export function isCustomKeyCombination(keyBindingType: KeyBindingType, isPrimary: boolean): boolean {
+  const slot = isPrimary ? 0 : 1;
+  // Check if the player sets a binding.
+  if (!Settings.KeyBindings[keyBindingType] || !Settings.KeyBindings[keyBindingType][slot]) {
+    return false;
+  }
+  // If there is not a default binding, this binding is a custom one.
+  if (!DefaultKeyBindings[keyBindingType][slot]) {
+    return true;
+  }
+  return areDifferentKeyCombinations(
+    DefaultKeyBindings[keyBindingType][slot],
+    Settings.KeyBindings[keyBindingType][slot],
+  );
+}
+
 function SettingUpKeyBindingModal({
   open,
   onClose,
@@ -118,7 +137,7 @@ function SettingUpKeyBindingModal({
   keyBindingType: KeyBindingType;
   isPrimary: boolean;
 }): React.ReactElement {
-  const [combination, setCombination] = useState(getKeyCombination(Settings.KeyBindings, keyBindingType, isPrimary));
+  const [combination, setCombination] = useState(getKeyCombination(CurrentKeyBindings, keyBindingType, isPrimary));
   const [conflicts, setConflicts] = useState(
     combination ? determineConflictKeys(keyBindingType, isPrimary, combination) : new Set<string>(),
   );
@@ -137,7 +156,7 @@ function SettingUpKeyBindingModal({
   );
 
   useEffect(() => {
-    const currentKeyCombination = getKeyCombination(Settings.KeyBindings, keyBindingType, isPrimary);
+    const currentKeyCombination = getKeyCombination(CurrentKeyBindings, keyBindingType, isPrimary);
     setCombination(currentKeyCombination);
     setConflicts(
       currentKeyCombination
@@ -150,9 +169,9 @@ function SettingUpKeyBindingModal({
      * they press Alt+T, we need to save that setting instead of going to the terminal.
      *
      * The action of going to a different page is handled in src\Sidebar\ui\SidebarRoot.tsx. When checking simple cases
-     * (focusing on working, in BitVerse, etc.), we can use the Player object and Router.page(). However, checking if
-     * the player is setting key bindings is not easy for code in SidebarRoot, especially if we want to decouple their
-     * logic and keep the dependency chain simple. It's best to do that by using the event system.
+     * (focusing on working, being in BitVerse, etc.), we can use the Player object and Router.page(). However, checking
+     * if the player is setting key bindings is not easy for code in SidebarRoot, especially if we want to decouple
+     * their logic and keep the dependency chain simple. It's best to do that by using the event system.
      */
     if (open) {
       document.addEventListener("keydown", handler);
@@ -168,7 +187,7 @@ function SettingUpKeyBindingModal({
     setConflicts(new Set());
   };
   const onClickDefault = () => {
-    const defaultKeyCombination = getKeyCombination(DefaultKeyBindings, keyBindingType, true);
+    const defaultKeyCombination = getKeyCombination(DefaultKeyBindings, keyBindingType, isPrimary);
     setCombination(defaultKeyCombination);
     setConflicts(
       defaultKeyCombination
@@ -177,7 +196,12 @@ function SettingUpKeyBindingModal({
     );
   };
   const onClickOK = () => {
+    if (!Settings.KeyBindings[keyBindingType]) {
+      Settings.KeyBindings[keyBindingType] = structuredClone(DefaultKeyBindings[keyBindingType]);
+    }
     Settings.KeyBindings[keyBindingType][isPrimary ? 0 : 1] = combination;
+    // Merge Settings.KeyBindings with DefaultKeyBindings.
+    mergePlayerDefinedKeyBindings(Settings.KeyBindings);
     onClose();
   };
   const onClickCancel = () => {
@@ -259,45 +283,65 @@ export function KeyBindingPage(): React.ReactElement {
     );
   };
 
+  const keyBindingRows = getRecordKeys(CurrentKeyBindings)
+    .filter(
+      (keyBindingType) =>
+        knowAboutBitverse() || !(SpoilerKeyBindingTypes as unknown as string[]).includes(keyBindingType),
+    )
+    .map((keyBindingType) => {
+      const primaryKeyCombination = CurrentKeyBindings[keyBindingType][0] ? (
+        parseKeyCombinationToString(CurrentKeyBindings[keyBindingType][0])
+      ) : (
+        // Use a non-breaking space to make the button fit to the parent td element.
+        <>&nbsp;</>
+      );
+      const secondaryKeyCombination = CurrentKeyBindings[keyBindingType][1] ? (
+        parseKeyCombinationToString(CurrentKeyBindings[keyBindingType][1])
+      ) : (
+        // Use a non-breaking space to make the button fit to the parent td element.
+        <>&nbsp;</>
+      );
+      return (
+        <tr key={keyBindingType}>
+          <td>
+            <Typography minWidth="250px">{keyBindingType}</Typography>
+          </td>
+          <td>
+            <Button
+              sx={{
+                minWidth: "250px",
+                color: `${
+                  isCustomKeyCombination(keyBindingType, true) ? Settings.theme.warning : Settings.theme.primary
+                }`,
+              }}
+              onClick={() => showModal(keyBindingType, true)}
+            >
+              {primaryKeyCombination}
+            </Button>
+          </td>
+          <td>
+            <Button
+              sx={{
+                minWidth: "250px",
+                color: `${
+                  isCustomKeyCombination(keyBindingType, false) ? Settings.theme.warning : Settings.theme.primary
+                }`,
+              }}
+              onClick={() => showModal(keyBindingType, false)}
+            >
+              {secondaryKeyCombination}
+            </Button>
+          </td>
+        </tr>
+      );
+    });
+
   return (
     <GameOptionsPage title="Key Binding">
       <Button onClick={onClickHowToUse}>How to use</Button>
       <br />
       <table>
-        <tbody>
-          {getRecordKeys(Settings.KeyBindings)
-            .filter(
-              (keyBindingType) =>
-                knowAboutBitverse() || !(SpoilerKeyBindingTypes as unknown as string[]).includes(keyBindingType),
-            )
-            .map((keyBindingType) => (
-              <tr key={keyBindingType}>
-                <td>
-                  <Typography minWidth="250px">{keyBindingType}</Typography>
-                </td>
-                <td>
-                  <Button sx={{ minWidth: "250px" }} onClick={() => showModal(keyBindingType, true)}>
-                    {Settings.KeyBindings[keyBindingType][0] ? (
-                      parseKeyCombinationToString(Settings.KeyBindings[keyBindingType][0])
-                    ) : (
-                      // Use a non-breaking space to make the button fit to the parent td element.
-                      <>&nbsp;</>
-                    )}
-                  </Button>
-                </td>
-                <td>
-                  <Button sx={{ minWidth: "250px" }} onClick={() => showModal(keyBindingType, false)}>
-                    {Settings.KeyBindings[keyBindingType][1] ? (
-                      parseKeyCombinationToString(Settings.KeyBindings[keyBindingType][1])
-                    ) : (
-                      // Use a non-breaking space to make the button fit to the parent td element.
-                      <>&nbsp;</>
-                    )}
-                  </Button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
+        <tbody>{keyBindingRows}</tbody>
       </table>
       <SettingUpKeyBindingModal
         open={popupOpen}

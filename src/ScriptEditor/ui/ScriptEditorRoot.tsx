@@ -40,6 +40,7 @@ import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import type { BaseServer } from "../../Server/BaseServer";
 import {
   convertKeyboardEventToKeyCombination,
+  CurrentKeyBindings,
   determineKeyBindingTypes,
   ScriptEditorAction,
 } from "../../utils/KeyBindingUtils";
@@ -223,10 +224,7 @@ function Root(props: IProps): React.ReactElement {
       if (Settings.DisableHotkeys) {
         return;
       }
-      const keyBindingTypes = determineKeyBindingTypes(
-        Settings.KeyBindings,
-        convertKeyboardEventToKeyCombination(event),
-      );
+      const keyBindingTypes = determineKeyBindingTypes(CurrentKeyBindings, convertKeyboardEventToKeyCombination(event));
       if (keyBindingTypes.has(ScriptEditorAction.Save)) {
         event.preventDefault();
         event.stopPropagation();

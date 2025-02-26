@@ -22,7 +22,7 @@ import { Settings } from "../../Settings/Settings";
 import { OptionsModal, OptionsModalProps } from "./OptionsModal";
 import { useScriptEditorContext } from "./ScriptEditorContext";
 import { NsApiDocumentationLink } from "../../ui/React/NsApiDocumentationLink";
-import { parseKeyCombinationsToString, ScriptEditorAction } from "../../utils/KeyBindingUtils";
+import { CurrentKeyBindings, parseKeyCombinationsToString, ScriptEditorAction } from "../../utils/KeyBindingUtils";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
@@ -68,10 +68,10 @@ export function Toolbar({ editor, onSave }: IProps) {
         <Button color={isUpdatingRAM ? "secondary" : "primary"} sx={{ mx: 1 }} onClick={openRAMInfo}>
           {ram}
         </Button>
-        <Tooltip title={parseKeyCombinationsToString(Settings.KeyBindings[ScriptEditorAction.Save])}>
+        <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.Save])}>
           <Button onClick={onSave}>Save</Button>
         </Tooltip>
-        <Tooltip title={parseKeyCombinationsToString(Settings.KeyBindings[ScriptEditorAction.GoToTerminal])}>
+        <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.GoToTerminal])}>
           <Button sx={{ mx: 1 }} onClick={() => Router.toPage(Page.Terminal)}>
             Terminal
           </Button>
