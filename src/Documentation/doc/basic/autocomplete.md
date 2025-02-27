@@ -39,7 +39,7 @@ AutocompleteData is an object with the following properties;
     enums:      // the ns.enums object with various in-game strings.
     filename:   // the name of the script file containing the autocomplete function.
     hostname:   // the name of the host server the script would be running on.
-    processes:  // a list of processes running on the current server.
+    processes:  // list of all processes running on the current server.
     servers:    // list of all servers in the game.
     txts:       // list of all text files on the current server.
     scripts:    // list of all scripts on the current server.
