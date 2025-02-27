@@ -34,6 +34,7 @@ export function getNewBoardState(
     ai: ai,
     passCount: 0,
     cheatCount: 0,
+    cheatCountForWhite: 0,
     board: Array.from({ length: boardSize }, (_, x) =>
       Array.from({ length: boardSize }, (_, y) =>
         !boardToCopy || boardToCopy?.[x]?.[y]
@@ -151,7 +152,18 @@ export function passTurn(boardState: BoardState, player: GoColor, allowEndGame =
  * Modifies the board in place.
  */
 export function applyHandicap(board: Board, handicap: number): void {
-  const availableMoves = getEmptySpaces(board);
+  const availableMoves = [];
+  for (const column of board) {
+    for (const point of column) {
+      if (point) {
+        if (point.color !== GoColor.empty) {
+          // Game is in progress, don't apply handicap
+          return;
+        }
+        availableMoves.push(point);
+      }
+    }
+  }
   const handicapMoveOptions = getExpansionMoveArray(board, availableMoves);
   const handicapMoves: Move[] = [];
 

@@ -47,6 +47,7 @@
 - [Learn to program](programming/learn.md)
 - [Remote API](programming/remote_api.md)
 - [Game frozen or stuck?](programming/game_frozen.md)
+- [React](programming/react.md)
 - [Tools & Resources](help/tools_and_resources.md)
 - [Changelog](changelog.md)
 - [Changelog - Legacy v1](changelog-v1.md)

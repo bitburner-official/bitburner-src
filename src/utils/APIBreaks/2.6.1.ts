@@ -24,6 +24,6 @@ export const breakInfos261: APIBreakInfo[] = [
       "ns.bladeburner.getActionTime:\n" +
       'Previously returned -1 when called with type "Idle" and name "". This is no longer valid usage and will result in an error.\n\n' +
       "See the related changes for ns.bladeburner.getCurrentAction, which were shown earlier in these API break details.\n" +
-      "In most cases, the fixes for ns.bladeburner.getCurrentAction will fix this group of isses as well.",
+      "In most cases, the fixes for ns.bladeburner.getCurrentAction will fix this group of issues as well.",
   },
 ];

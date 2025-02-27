@@ -41,6 +41,7 @@ export interface Achievement {
   Name?: string;
   Description?: string;
   Secret?: boolean;
+  NotInSteam?: boolean;
   Condition: () => boolean;
   Visible?: () => boolean;
   AdditionalUnlock?: string[]; // IDs of achievements that should be awarded when awarding this one

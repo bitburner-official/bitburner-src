@@ -156,6 +156,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
         respectGain: member.calculateRespectGain(gang),
         wantedLevelGain: member.calculateWantedLevelGain(gang),
         moneyGain: member.calculateMoneyGain(gang),
+        expGain: member.calculateExpGain(),
       };
     },
     canRecruitMember: (ctx) => () => {
@@ -331,7 +332,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
     },
     getBonusTime: (ctx) => () => {
       const gang = getGang(ctx);
-      return Math.round(gang.storedCycles / 5) * 1000;
+      return gang.storedCycles * 200;
     },
     nextUpdate: (ctx) => () => {
       getGang(ctx);

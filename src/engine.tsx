@@ -2,7 +2,7 @@ import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions"
 import { AugmentationName, ToastVariant } from "@enums";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { initSourceFiles } from "./SourceFile/SourceFiles";
-import { tryGeneratingRandomContract } from "./CodingContractGenerator";
+import { tryGeneratingRandomContract } from "./CodingContract/ContractGenerator";
 import { CONSTANTS } from "./Constants";
 import { Factions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
@@ -160,7 +160,7 @@ const Engine: {
     updateActiveScriptsDisplay: 5,
     createProgramNotifications: 10,
     augmentationsNotifications: 10,
-    checkFactionInvitations: 100,
+    checkFactionInvitations: 10,
     passiveFactionGrowth: 5,
     messages: 150,
     mechanicProcess: 5, // Process Bladeburner
@@ -188,7 +188,7 @@ const Engine: {
       for (const invitedFaction of invitedFactions) {
         inviteToFaction(invitedFaction);
       }
-      Engine.Counters.checkFactionInvitations = 100;
+      Engine.Counters.checkFactionInvitations = 10;
     }
 
     if (Engine.Counters.passiveFactionGrowth <= 0) {

@@ -1,5 +1,4 @@
 /** All netscript definitions */
-
 /** @public */
 interface HP {
   current: number;
@@ -16,13 +15,6 @@ interface Skills {
   charisma: number;
   intelligence: number;
 }
-
-// TODO: provide same treatment to CodingContractData as for SleeveTask (actual types)
-/**
- * Coding contract data will differ depending on coding contract.
- * @public
- */
-type CodingContractData = any;
 
 /** @public */
 type ScriptArg = string | number | boolean;
@@ -192,6 +184,8 @@ interface TailProperties {
   width: number;
   /** Height of the log window content area */
   height: number;
+  /** The font size of the tail window. Defaults to the font size set in the style editor. */
+  fontSize: number;
 }
 
 /**
@@ -858,11 +852,6 @@ interface GangOtherInfoObject {
   territory: number;
 }
 
-/** @public */
-interface GangOtherInfo {
-  [key: string]: GangOtherInfoObject;
-}
-
 /**
  * Object representing data representing a gang member task.
  * @public
@@ -927,6 +916,21 @@ interface GangTerritory {
   respect: number;
   /** Wanted gain impact on task scaling */
   wanted: number;
+}
+/** @public */
+interface GangMemberExpGain {
+  /** Hack EXP gain for a member after a given task*/
+  hack_exp: number;
+  /** Str EXP gain for a member after a given task*/
+  str_exp: number;
+  /** Def EXP gain for a member after a given task*/
+  def_exp: number;
+  /** Dex EXP gain for a member after a given task*/
+  dex_exp: number;
+  /** Agi EXP gain for a member after a given task*/
+  agi_exp: number;
+  /** Cha EXP gain for a member after a given task*/
+  cha_exp: number;
 }
 
 /** @public */
@@ -1014,6 +1018,11 @@ interface GangMemberInfo {
   wantedLevelGain: number;
   /** Per Cycle Income for this gang member */
   moneyGain: number;
+  /** Per Cycle Exp object for each stat for this gang member.
+   *
+   * null in the event that the member does not have a given task.
+   */
+  expGain: GangMemberExpGain | null;
 }
 
 /** @public */
@@ -1803,6 +1812,14 @@ export interface BitNodeBooleanOptions {
  * @public
  */
 export interface Singularity {
+  /**
+   * This function returns the save data.
+   *
+   * @remarks
+   * RAM cost: 1 GB * 16/4/1
+   */
+  getSaveData(): Promise<Uint8Array>;
+
   /**
    * Backup game save.
    * @remarks
@@ -3446,10 +3463,14 @@ export interface Bladeburner {
    *
    * Returns the remaining count of the specified action.
    *
-   * Note that this is meant to be used for Contracts and Operations.
-   * This function will return ‘Infinity’ for actions such as Training and Field Analysis.
-   * This function will return 1 for BlackOps not yet completed regardless of whether
-   * the player has the required rank to attempt the mission or not.
+   * Note:
+   *
+   * - This function is meant to be used for Contracts and Operations. It returns Infinity for General actions
+   * (Training, Field Analysis, etc.). It returns 1 for BlackOps not yet completed, regardless of whether the player has
+   * the required rank to attempt the mission.
+   *
+   * - With Contracts and Operations, the returned value is a floating-point number. The UI shows the rounded-down
+   * value.
    *
    * @param type - Type of action.
    * @param name - Name of action. Must be an exact match.
@@ -3863,7 +3884,9 @@ export interface CodingContract {
    *
    * @example
    * ```js
-   * const reward = ns.codingcontract.attempt(yourSolution, filename, hostname);
+   * const reward = ns.codingcontract.attempt("[solution, as, a, string]", filename, hostname);
+   * // or
+   * const reward = ns.codingcontract.attempt(["answer", "as", "an", "array"], filename, hostname);
    * if (reward) {
    *   ns.tprint(`Contract solved successfully! Reward: ${reward}`);
    * } else {
@@ -3871,13 +3894,13 @@ export interface CodingContract {
    * }
    * ```
    *
-   * @param answer - Attempted solution for the contract.
+   * @param answer - Attempted solution for the contract. This can be a string formatted like submitting manually, or the answer in the format of the specific contract type.
    * @param filename - Filename of the contract.
    * @param host - Hostname of the server containing the contract. Optional. Defaults to current server if not
    *   provided.
    * @returns A reward description string on success, or an empty string on failure.
    */
-  attempt(answer: string | number | any[], filename: string, host?: string): string;
+  attempt(answer: any, filename: string, host?: string): string;
 
   /**
    * Get the type of a coding contract.
@@ -3891,7 +3914,7 @@ export interface CodingContract {
    * @param host - Hostname of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns Name describing the type of problem posed by the Coding Contract.
    */
-  getContractType(filename: string, host?: string): string;
+  getContractType(filename: string, host?: string): `${CodingContractName}`;
 
   /**
    * Get the description.
@@ -3919,7 +3942,31 @@ export interface CodingContract {
    * @param host - Host of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns The specified contract’s data, data type depends on contract type.
    */
-  getData(filename: string, host?: string): CodingContractData;
+  getData(filename: string, host?: string): any;
+
+  /**
+   * Get various data about a specific contract.
+   * @remarks
+   * RAM cost: 15 GB
+   *
+   * The returned object includes the type, data, description as well as methods for getting the number of tries remaining and submitting your answer.
+   * Depending on the type of the contract, the data is typed differently.
+   * Using type-narrowing, you can get the correct type of the data:
+   *
+   * @example
+   * ```js
+   * const contract = ns.codingcontract.getContract(fileName, hostName);
+   * if (contract.type === ns.enums.CodingContractName.FindLargestPrimeFactor) {
+   *   const data = contract.data;
+   *   // ^? data: number
+   * }
+   * ```
+   *
+   * @param filename - Filename of the contract.
+   * @param host - Host of the server containing the contract. Optional. Default to the current server if not provided.
+   * @returns An object containing various data about the contract specified.
+   */
+  getContract(filename: string, host?: string): CodingContractObject;
 
   /**
    * Get the number of attempts remaining.
@@ -3951,7 +3998,7 @@ export interface CodingContract {
    * @remarks
    * RAM cost: 0 GB
    */
-  getContractTypes(): string[];
+  getContractTypes(): `${CodingContractName}`[];
 }
 
 /**
@@ -4022,7 +4069,7 @@ export interface Gang {
    *
    * @returns Object containing territory and power information about all gangs.
    */
-  getOtherGangInformation(): GangOtherInfo;
+  getOtherGangInformation(): Record<string, GangOtherInfoObject>;
 
   /**
    * Get information about a specific gang member.
@@ -4332,11 +4379,13 @@ export interface GoAnalysis {
    * Also note that, when given a custom board state, only one prior move can be analyzed. This means that the superko rules
    *  (no duplicate board states in the full game history) is not supported; you will have to implement your own analysis for that.
    *
+   *  playAsWhite is optional, and gets the current valid moves for the white player. Intended to be used when playing as white when the opponent is set to "No AI"
+   *
    * @remarks
    * RAM cost: 8 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    */
-  getValidMoves(boardState?: string[], priorBoardState?: string[]): boolean[][];
+  getValidMoves(boardState?: string[], priorBoardState?: string[], playAsWhite = false): boolean[][];
 
   /**
    * Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points
@@ -4435,6 +4484,12 @@ export interface GoAnalysis {
    * </pre>
    */
   getStats(): Partial<Record<GoOpponent, SimpleOpponentStats>>;
+
+  /**
+   * Reset all win/loss and winstreak records for the No AI opponent.
+   * @param resetAll if true, reset win/loss records for all opponents. Leaves node power and bonuses unchanged.
+   */
+  resetStats(resetAll = false): void;
 }
 
 /**
@@ -4452,20 +4507,22 @@ export interface GoCheat {
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
    * @param cheatCount - Optional override for the number of cheats already attempted. Defaults to the number of cheats attempted in the current game.
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    *
    * @remarks
    * RAM cost: 1 GB
    * Requires BitNode 14.2 to use
    */
-  getCheatSuccessChance(cheatCount?: number): number;
+  getCheatSuccessChance(cheatCount?: number, playAsWhite = false): number;
   /**
    * Returns the number of times you've attempted to cheat in the current game.
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    *
    * @remarks
    * RAM cost: 1 GB
    * Requires BitNode 14.2 to use
    */
-  getCheatCount(): number;
+  getCheatCount(playAsWhite = false): number;
   /**
    * Attempts to remove an existing router, leaving an empty node behind.
    *
@@ -4473,6 +4530,11 @@ export interface GoCheat {
    *
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
+   *
+   *
+   * @param x - x coordinate of router to remove
+   * @param y - y coordinate of router to remove
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    *
    * @remarks
    * RAM cost: 8 GB
@@ -4483,6 +4545,7 @@ export interface GoCheat {
   removeRouter(
     x: number,
     y: number,
+    playAsWhite = false,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4497,6 +4560,13 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
+   *
+   * @param x1 - x coordinate of first move to make
+   * @param y1 - y coordinate of first move to make
+   * @param x2 - x coordinate of second move to make
+   * @param y2 - y coordinate of second move to make
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+   *
    * @remarks
    * RAM cost: 8 GB
    * Requires BitNode 14.2 to use
@@ -4508,6 +4578,7 @@ export interface GoCheat {
     y1: number,
     x2: number,
     y2: number,
+    playAsWhite = false,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4522,6 +4593,10 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
+   * @param x - x coordinate of offline node to repair
+   * @param y - y coordinate of offline node to repair
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+   *
    * @remarks
    * RAM cost: 8 GB
    * Requires BitNode 14.2 to use
@@ -4531,6 +4606,7 @@ export interface GoCheat {
   repairOfflineNode(
     x: number,
     y: number,
+    playAsWhite = false,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4546,6 +4622,10 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
+   * @param x - x coordinate of empty node to destroy
+   * @param y - y coordinate of empty node to destroy
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+   *
    * @remarks
    * RAM cost: 8 GB
    * Requires BitNode 14.2 to use
@@ -4555,6 +4635,7 @@ export interface GoCheat {
   destroyNode(
     x: number,
     y: number,
+    playAsWhite = false,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4571,6 +4652,8 @@ export interface Go {
    *  Make a move on the IPvGO subnet game board, and await the opponent's response.
    *  x:0 y:0 represents the bottom-left corner of the board in the UI.
    *
+   * playAsWhite is optional, and attempts to make a move as the white player. Only can be used when playing against "No AI".
+   *
    * @remarks
    * RAM cost: 4 GB
    *
@@ -4579,6 +4662,7 @@ export interface Go {
   makeMove(
     x: number,
     y: number,
+    playAsWhite = false,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4592,13 +4676,15 @@ export interface Go {
    * This can also be used if you pick up the game in a state where the opponent needs to play next. For example: if BitBurner was
    * closed while waiting for the opponent to make a move, you may need to call passTurn() to get them to play their move on game start.
    *
+   * passAsWhite is optional, and attempts to pass while playing as the white player. Only can be used when playing against "No AI".
+   *
    * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    *
    * @remarks
    * RAM cost: 0 GB
    *
    */
-  passTurn(): Promise<{
+  passTurn(passAsWhite = false): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
@@ -4609,13 +4695,17 @@ export interface Go {
    *  x:0 y:0 represents the bottom-left corner of the board in the UI.
    *
    * @param logOpponentMove - optional, defaults to true. if false prevents logging opponent move
+   * @param playAsWhite - optional. If true, waits to get the next move the black player makes. Intended to be used when playing as white when the opponent is set to "No AI"
    *
    * @remarks
    * RAM cost: 0 GB
    *
    * @returns a promise that contains if your last move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    */
-  opponentNextTurn(logOpponentMove?: boolean): Promise<{
+  opponentNextTurn(
+    logOpponentMove?: boolean,
+    playAsWhite = false,
+  ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
@@ -5138,6 +5228,13 @@ interface ReputationFormulas {
    * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    */
   repFromDonation(amount: number, player: Person): number;
+
+  /**
+   * Calculate the donation needed to gain an amount of reputation.
+   * @param reputation - Amount of reputation
+   * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
+   */
+  donationForRep(reputation: number, player: Person): number;
 }
 
 /**
@@ -5647,6 +5744,136 @@ interface Infiltration {
  * @public
  */
 interface UserInterface {
+  /**
+   * Open the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Opens a script’s logs. This is functionally the same as the tail Terminal command.
+   *
+   * If the function is called with no arguments, it will open the current script’s logs.
+   *
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to get the logs from another script.
+   * Remember that scripts are uniquely identified by both their names and arguments.
+   *
+   * @example
+   * ```js
+   * //Open logs from foo.js on the current server that was run with no args
+   * ns.tail("foo.js");
+   *
+   * //Get logs from foo.js on the foodnstuff server that was run with no args
+   * ns.tail("foo.js", "foodnstuff");
+   *
+   * //Get logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
+   * ns.tail("foo.js", "foodnstuff", 1, "test");
+   * ```
+   * @param fn - Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed.
+   * @param host - Optional. Hostname of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param args - Arguments for the script being tailed.
+   */
+  openTail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
+
+  /**
+   * Render a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Tail windows are rendered at an interval defined in game settings. This function renders the tail window of the
+   * specified script immediately.
+   *
+   * @param pid - Optional. PID of the script having its tail rendered. If omitted, the current script is used.
+   */
+  renderTail(pid?: number): void;
+
+  /**
+   * Move a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Moves a tail window. Coordinates are in screen space pixels (top left is 0,0).
+   *
+   * @param x - x coordinate.
+   * @param y - y coordinate.
+   * @param pid - Optional. PID of the script having its tail moved. If omitted, the current script is used.
+   */
+  moveTail(x: number, y: number, pid?: number): void;
+
+  /**
+   * Resize a tail window.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Resize a tail window. Size are in pixel.
+   *
+   * @param width - Width of the window.
+   * @param height - Height of the window.
+   * @param pid - Optional. PID of the script having its tail resized. If omitted, the current script is used.
+   */
+  resizeTail(width: number, height: number, pid?: number): void;
+
+  /**
+   * Close the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Closes a script’s logs. This is functionally the same as pressing the "Close" button on the tail window.
+   *
+   * If the function is called with no arguments, it will close the current script’s logs.
+   *
+   * Otherwise, the pid argument can be used to close the logs from another script.
+   *
+   * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
+   */
+  closeTail(pid?: number): void;
+
+  /**
+   * Set the title of the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This sets the title to the given string, and also forces an update of the
+   * tail window's contents.
+   *
+   * The title is saved across restarts, but only if it is a simple string.
+   *
+   * If the pid is unspecified, it will modify the current script’s logs.
+   *
+   * Otherwise, the pid argument can be used to change the logs from another script.
+   *
+   * It is possible to pass any React Node instead of a string.
+   * See {@link ReactElement} and {@link ReactNode} types for additional info.
+   *
+   * @param title - The new title for the tail window.
+   * @param pid - Optional. PID of the script having its tail closed. If omitted, the current script is used.
+   */
+  setTailTitle(title: string | ReactNode, pid?: number): void;
+
+  /**
+   * Set the font size of the tail window of a script.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This overwrites the tail font size and forces an update of the tail window's contents.
+   *
+   * If ran without a filename or pid, this will affect the current script's tail window.
+   *
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to target the tail window from another script.
+   * Remember that scripts are uniquely identified by both their names and arguments.
+   *
+   * @param pixel - Optional. The new font size in pixels. If omitted, the default tail font size is used.
+   * @param fn - Optional. Filename or PID of the target script. If omitted, the current script is used.
+   * @param host - Optional. Hostname of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param args - Arguments for the target script.
+   */
+  setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
+
   /**
    * Get the current window size
    * @remarks
@@ -6377,7 +6604,11 @@ export interface NS {
   getRecentScripts(): RecentScript[];
 
   /**
-   * Open the tail window of a script.
+   * Open the tail window of a script. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.openTail | ns.ui.openTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6406,7 +6637,11 @@ export interface NS {
   tail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
 
   /**
-   * Move a tail window.
+   * Move a tail window. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.moveTail | ns.ui.moveTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6419,7 +6654,11 @@ export interface NS {
   moveTail(x: number, y: number, pid?: number): void;
 
   /**
-   * Resize a tail window.
+   * Resize a tail window. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.resizeTail | ns.ui.resizeTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6432,7 +6671,11 @@ export interface NS {
   resizeTail(width: number, height: number, pid?: number): void;
 
   /**
-   * Close the tail window of a script.
+   * Close the tail window of a script. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.closeTail | ns.ui.closeTail} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6447,7 +6690,11 @@ export interface NS {
   closeTail(pid?: number): void;
 
   /**
-   * Set the title of the tail window of a script.
+   * Set the title of the tail window of a script. This function is deprecated and will be removed in a later version.
+   *
+   * @deprecated
+   * Use {@link UserInterface.setTailTitle | ns.ui.setTailTitle} instead.
+   *
    * @remarks
    * RAM cost: 0 GB
    *
@@ -6476,6 +6723,33 @@ export interface NS {
    * Returns an array containing the hostnames of all servers that are one
    * node way from the specified target server. The hostnames in the returned
    * array are strings.
+   *
+   * The server network is a tree graph with the home server at the root. The parent node is always the first item of
+   * the returned array.
+   *
+   * For example, let's say the network looks like this:
+   *
+   * ```
+   * home
+   * --n00dles
+   * --joesguns
+   * ----CSEC
+   * ------omega-net
+   * ```
+   *
+   * ns.scan("home"): ["n00dles", "joesguns"]: "home" is the root, so it does not have a parent node.
+   *
+   * ns.scan("n00dles"): ["home"]: "home" is the parent node of "n00dles".
+   *
+   * ns.scan("joesguns"): ["home", "CSEC"]: "home" is the parent node of "joesguns".
+   *
+   * ns.scan("CSEC"): ["joesguns", "omega-net"]: "joesguns" is the parent node of "CSEC".
+   *
+   * ns.scan("omega-net"): ["CSEC"]: "CSEC" is the parent node of "omega-net".
+   *
+   * If you run the "scan-analyze" command at home, it won't show all servers due to its limited maximum depth. You can
+   * use this function with BFS (Breadth-first search) or DFS (Depth-first search) to traverse the network and discover
+   * all servers.
    *
    * @example
    * ```js
@@ -6516,15 +6790,25 @@ export interface NS {
    * @remarks
    * RAM cost: 0.05 GB
    *
-   * Running NUKE.exe on a target server gives you root access which means you can execute scripts on said server. NUKE.exe must exist on your home computer.
+   * Running NUKE.exe on a target server gives you root access which means you can execute scripts on said server.
+   * NUKE.exe must exist on your home computer.
+   *
+   * Each server has a different number of required open ports. If that number is greater than 0, you have to open its
+   * ports before nuking it.
+   * You can check the requirement with {@link NS.getServerNumPortsRequired | getServerNumPortsRequired} or
+   * {@link Server.numOpenPortsRequired | getServer().numOpenPortsRequired}.
+   *
+   * Note that the server's required hacking level is not a requirement of nuking. You can nuke a server as long as you
+   * open enough ports, regardless of your hacking level.
    *
    * @example
    * ```js
    * ns.nuke("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  nuke(host: string): void;
+  nuke(host: string): boolean;
 
   /**
    * Runs BruteSSH.exe on a server.
@@ -6538,8 +6822,9 @@ export interface NS {
    * ns.brutessh("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  brutessh(host: string): void;
+  brutessh(host: string): boolean;
 
   /**
    * Runs FTPCrack.exe on a server.
@@ -6553,8 +6838,9 @@ export interface NS {
    * ns.ftpcrack("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  ftpcrack(host: string): void;
+  ftpcrack(host: string): boolean;
 
   /**
    * Runs relaySMTP.exe on a server.
@@ -6568,8 +6854,9 @@ export interface NS {
    * ns.relaysmtp("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  relaysmtp(host: string): void;
+  relaysmtp(host: string): boolean;
 
   /**
    * Runs HTTPWorm.exe on a server.
@@ -6583,8 +6870,9 @@ export interface NS {
    * ns.httpworm("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  httpworm(host: string): void;
+  httpworm(host: string): boolean;
 
   /**
    * Runs SQLInject.exe on a server.
@@ -6598,8 +6886,9 @@ export interface NS {
    * ns.sqlinject("foodnstuff");
    * ```
    * @param host - Hostname of the target server.
+   * @returns True if the player runs the program successfully, and false otherwise.
    */
-  sqlinject(host: string): void;
+  sqlinject(host: string): boolean;
 
   /**
    * Start another script on the current server.
@@ -7164,7 +7453,7 @@ export interface NS {
    * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs $${ns.formatNumber(cost)}`);
    * ```
    * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns The cost to purchase a server with the specified amount of ram.
+   * @returns The cost to purchase a server with the specified amount of ram, or returns Infinity if ram is not a valid amount.
    */
   getPurchasedServerCost(ram: number): number;
 
@@ -7214,7 +7503,7 @@ export interface NS {
    *
    * @param hostname - Hostname of the server to upgrade.
    * @param ram - Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
-   * @returns The price to upgrade.
+   * @returns The price to upgrade or -1 if either input is not valid, i.e. hostname is not the name of a purchased server or ram is not a valid amount.
    */
   getPurchasedServerUpgradeCost(hostname: string, ram: number): number;
 
@@ -7885,13 +8174,18 @@ export interface NS {
   getMoneySources(): MoneySources;
 
   /**
-   * Add callback function when the script dies
+   * Add a callback to be executed when the script dies.
    * @remarks
    * RAM cost: 0 GB
    *
    * NS2 exclusive
    *
-   * Add callback to be executed when the script dies.
+   * Each script can only register one callback per callback ID.
+   * If another callback is registered with the same callback ID
+   * the previous callback with that ID is forgotten and will not be executed when the script dies.
+   *
+   * @param f - A function to execute when the script dies.
+   * @param id - Callback ID. Optional, defaults to `"default"`.
    */
   atExit(f: () => void, id?: string): void;
 
@@ -8287,6 +8581,129 @@ declare enum CompanyName {
   NoodleBar = "Noodle Bar",
 }
 
+/**
+ * Names of all factions.
+ *
+ * Warning: Spoiler ahead. This enum contains names of **all** factions. If you do not want to know what all the
+ * factions are, you should not check this enum. Some factions are only accessible in the endgame.
+ *
+ * @public */
+declare enum FactionName {
+  Illuminati = "Illuminati",
+  Daedalus = "Daedalus",
+  TheCovenant = "The Covenant",
+  ECorp = "ECorp",
+  MegaCorp = "MegaCorp",
+  BachmanAssociates = "Bachman & Associates",
+  BladeIndustries = "Blade Industries",
+  NWO = "NWO",
+  ClarkeIncorporated = "Clarke Incorporated",
+  OmniTekIncorporated = "OmniTek Incorporated",
+  FourSigma = "Four Sigma",
+  KuaiGongInternational = "KuaiGong International",
+  FulcrumSecretTechnologies = "Fulcrum Secret Technologies",
+  BitRunners = "BitRunners",
+  TheBlackHand = "The Black Hand",
+  NiteSec = "NiteSec",
+  Aevum = "Aevum",
+  Chongqing = "Chongqing",
+  Ishima = "Ishima",
+  NewTokyo = "New Tokyo",
+  Sector12 = "Sector-12",
+  Volhaven = "Volhaven",
+  SpeakersForTheDead = "Speakers for the Dead",
+  TheDarkArmy = "The Dark Army",
+  TheSyndicate = "The Syndicate",
+  Silhouette = "Silhouette",
+  Tetrads = "Tetrads",
+  SlumSnakes = "Slum Snakes",
+  Netburners = "Netburners",
+  TianDiHui = "Tian Di Hui",
+  CyberSec = "CyberSec",
+  Bladeburners = "Bladeburners",
+  ChurchOfTheMachineGod = "Church of the Machine God",
+  ShadowsOfAnarchy = "Shadows of Anarchy",
+}
+
+declare enum CodingContractName {
+  FindLargestPrimeFactor = "Find Largest Prime Factor",
+  SubarrayWithMaximumSum = "Subarray with Maximum Sum",
+  TotalWaysToSum = "Total Ways to Sum",
+  TotalWaysToSumII = "Total Ways to Sum II",
+  SpiralizeMatrix = "Spiralize Matrix",
+  ArrayJumpingGame = "Array Jumping Game",
+  ArrayJumpingGameII = "Array Jumping Game II",
+  MergeOverlappingIntervals = "Merge Overlapping Intervals",
+  GenerateIPAddresses = "Generate IP Addresses",
+  AlgorithmicStockTraderI = "Algorithmic Stock Trader I",
+  AlgorithmicStockTraderII = "Algorithmic Stock Trader II",
+  AlgorithmicStockTraderIII = "Algorithmic Stock Trader III",
+  AlgorithmicStockTraderIV = "Algorithmic Stock Trader IV",
+  MinimumPathSumInATriangle = "Minimum Path Sum in a Triangle",
+  UniquePathsInAGridI = "Unique Paths in a Grid I",
+  UniquePathsInAGridII = "Unique Paths in a Grid II",
+  ShortestPathInAGrid = "Shortest Path in a Grid",
+  SanitizeParenthesesInExpression = "Sanitize Parentheses in Expression",
+  FindAllValidMathExpressions = "Find All Valid Math Expressions",
+  HammingCodesIntegerToEncodedBinary = "HammingCodes: Integer to Encoded Binary",
+  HammingCodesEncodedBinaryToInteger = "HammingCodes: Encoded Binary to Integer",
+  Proper2ColoringOfAGraph = "Proper 2-Coloring of a Graph",
+  CompressionIRLECompression = "Compression I: RLE Compression",
+  CompressionIILZDecompression = "Compression II: LZ Decompression",
+  CompressionIIILZCompression = "Compression III: LZ Compression",
+  EncryptionICaesarCipher = "Encryption I: Caesar Cipher",
+  EncryptionIIVigenereCipher = "Encryption II: Vigenère Cipher",
+  SquareRoot = "Square Root",
+}
+
+export type CodingContractSignatures = {
+  [CodingContractName.FindLargestPrimeFactor]: [number, number];
+  [CodingContractName.SubarrayWithMaximumSum]: [number[], number];
+  [CodingContractName.TotalWaysToSum]: [number, number];
+  [CodingContractName.TotalWaysToSumII]: [[number, number[]], number];
+  [CodingContractName.SpiralizeMatrix]: [number[][], number[]];
+  [CodingContractName.ArrayJumpingGame]: [number[], 1 | 0];
+  [CodingContractName.ArrayJumpingGameII]: [number[], number];
+  [CodingContractName.MergeOverlappingIntervals]: [[number, number][], [number, number][]];
+  [CodingContractName.GenerateIPAddresses]: [string, string[]];
+  [CodingContractName.AlgorithmicStockTraderI]: [number[], number];
+  [CodingContractName.AlgorithmicStockTraderII]: [number[], number];
+  [CodingContractName.AlgorithmicStockTraderIII]: [number[], number];
+  [CodingContractName.AlgorithmicStockTraderIV]: [[number, number[]], number];
+  [CodingContractName.MinimumPathSumInATriangle]: [number[][], number];
+  [CodingContractName.UniquePathsInAGridI]: [[number, number], number];
+  [CodingContractName.UniquePathsInAGridII]: [(1 | 0)[][], number];
+  [CodingContractName.ShortestPathInAGrid]: [(1 | 0)[][], string];
+  [CodingContractName.SanitizeParenthesesInExpression]: [string, string[]];
+  [CodingContractName.FindAllValidMathExpressions]: [[string, number], string[]];
+  [CodingContractName.HammingCodesIntegerToEncodedBinary]: [number, string];
+  [CodingContractName.HammingCodesEncodedBinaryToInteger]: [string, number];
+  [CodingContractName.Proper2ColoringOfAGraph]: [[number, [number, number][]], (1 | 0)[]];
+  [CodingContractName.CompressionIRLECompression]: [string, string];
+  [CodingContractName.CompressionIILZDecompression]: [string, string];
+  [CodingContractName.CompressionIIILZCompression]: [string, string];
+  [CodingContractName.EncryptionICaesarCipher]: [[string, number], string];
+  [CodingContractName.EncryptionIIVigenereCipher]: [[string, string], string];
+  [CodingContractName.SquareRoot]: [bigint, bigint, [string, string]];
+};
+
+export type CodingContractData<T extends string> = T extends `${keyof CodingContractSignatures}`
+  ? CodingContractSignatures[T][0]
+  : any;
+export type CodingContractAnswer<T extends string> = T extends `${keyof CodingContractSignatures}`
+  ? CodingContractSignatures[T][1]
+  : any;
+
+export type CodingContractObject = {
+  [T in keyof CodingContractSignatures]: {
+    type: T;
+    data: CodingContractSignatures[T][0];
+    submit: (answer: CodingContractSignatures[T][1] | string) => string;
+    description: string;
+    numTriesRemaining: () => number;
+  };
+}[keyof CodingContractSignatures];
+
 /** @public */
 export type NSEnums = {
   CityName: typeof CityName;
@@ -8299,6 +8716,8 @@ export type NSEnums = {
   ToastVariant: typeof ToastVariant;
   UniversityClassType: typeof UniversityClassType;
   CompanyName: typeof CompanyName;
+  FactionName: typeof FactionName;
+  CodingContractName: typeof CodingContractName;
 };
 
 /**
@@ -8981,6 +9400,8 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * {@link Corporation.getCorporation | getCorporation} and {@link Corporation.getConstants | getConstants} to get this
    * information.
    *
+   * - You must be a member of the specified faction.
+   *
    * - The specified faction must offer at least 1 type of work. You can use
    * {@link Singularity.getFactionWorkTypes | getFactionWorkTypes} to get the list of work types of a faction.
    *
@@ -9599,7 +10020,6 @@ interface InvestmentOffer {
  * @public
  */
 interface UserInterfaceTheme {
-  [key: string]: string | undefined;
   primarylight: string;
   primary: string;
   primarydark: string;
@@ -9633,6 +10053,11 @@ interface UserInterfaceTheme {
   backgroundprimary: string;
   backgroundsecondary: string;
   button: string;
+  maplocation: string;
+  bnlvl0: string;
+  bnlvl1: string;
+  bnlvl2: string;
+  bnlvl3: string;
 }
 
 /**

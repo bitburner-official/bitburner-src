@@ -28,7 +28,7 @@ import {
 import { PositiveInteger, Result } from "../types";
 import { Factions } from "../Faction/Factions";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
-import { formatMoney } from "../ui/formatNumber";
+import { formatMoney, formatNumber } from "../ui/formatNumber";
 
 export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): Result {
   const checkResult = canCreateCorporation(selfFund, restart);
@@ -632,16 +632,24 @@ export function bribe(
   fundsForBribing: number,
   factionName: FactionName,
 ): Result<{ reputationGain: number }> {
-  if (corporation.valuation < corpConstants.bribeThreshold) {
-    return {
-      success: false,
-      message: `The corporation valuation is below the threshold. Threshold: ${corpConstants.bribeThreshold}.`,
-    };
-  }
   if (!Number.isFinite(fundsForBribing) || fundsForBribing <= 0 || corporation.funds < fundsForBribing) {
     return {
       success: false,
-      message: "Invalid amount of cash for bribing",
+      message: "Invalid amount of cash for bribing.",
+    };
+  }
+  if (corporation.valuation < corpConstants.bribeThreshold) {
+    return {
+      success: false,
+      message: `The corporation valuation is below the threshold. Threshold: ${formatNumber(
+        corpConstants.bribeThreshold,
+      )}.`,
+    };
+  }
+  if (!Player.factions.includes(factionName)) {
+    return {
+      success: false,
+      message: `You are not a member of ${factionName}.`,
     };
   }
   const faction = Factions[factionName];

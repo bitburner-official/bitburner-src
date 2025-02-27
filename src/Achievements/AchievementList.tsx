@@ -1,12 +1,14 @@
 import React from "react";
 
-import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
+import { AchievementCategory } from "./AchievementCategory";
 import { AchievementEntry } from "./AchievementEntry";
 import { Achievement, PlayerAchievement } from "./Achievements";
 import { Settings } from "../Settings/Settings";
 import { getFiltersFromHex } from "../ThirdParty/colorUtils";
 import { CorruptableText } from "../ui/React/CorruptableText";
+import { pluralize } from "../utils/I18nUtils";
 
 interface IProps {
   achievements: Achievement[];
@@ -52,79 +54,48 @@ export function AchievementList({ achievements, playerAchievements }: IProps): J
         }}
       >
         {unlocked.length > 0 && (
-          <Accordion defaultExpanded disableGutters square>
-            <AccordionSummary>
-              <Typography variant="h5" sx={{ my: 1 }}>
-                Acquired ({unlocked.length}/{data.length})
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ pt: 2 }}>
-              {unlocked.map((item) => (
-                <AchievementEntry
-                  key={`unlocked_${item.achievement.ID}`}
-                  achievement={item.achievement}
-                  unlockedOn={item.unlockedOn}
-                  cssFiltersUnlocked={cssPrimary}
-                  cssFiltersLocked={cssSecondary}
-                />
-              ))}
-            </AccordionDetails>
-          </Accordion>
+          <AchievementCategory title="Acquired" achievements={unlocked} allAchievements={data} usePadding={true}>
+            {unlocked.map((item) => (
+              <AchievementEntry
+                key={`unlocked_${item.achievement.ID}`}
+                achievement={item.achievement}
+                unlockedOn={item.unlockedOn}
+                cssFiltersUnlocked={cssPrimary}
+                cssFiltersLocked={cssSecondary}
+              />
+            ))}
+          </AchievementCategory>
         )}
-
         {locked.length > 0 && (
-          <Accordion disableGutters square>
-            <AccordionSummary>
-              <Typography variant="h5" color="secondary">
-                Locked ({locked.length} remaining)
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ pt: 2 }}>
-              {locked.map((item) => (
-                <AchievementEntry
-                  key={`locked_${item.achievement.ID}`}
-                  achievement={item.achievement}
-                  cssFiltersUnlocked={cssPrimary}
-                  cssFiltersLocked={cssSecondary}
-                />
-              ))}
-            </AccordionDetails>
-          </Accordion>
+          <AchievementCategory title="Locked" achievements={locked} usePadding={true}>
+            {locked.map((item) => (
+              <AchievementEntry
+                key={`locked_${item.achievement.ID}`}
+                achievement={item.achievement}
+                cssFiltersUnlocked={cssPrimary}
+                cssFiltersLocked={cssSecondary}
+              />
+            ))}
+          </AchievementCategory>
         )}
-
         {unavailable.length > 0 && (
-          <Accordion disableGutters square>
-            <AccordionSummary>
-              <Typography variant="h5" color="secondary">
-                Unavailable ({unavailable.length} remaining)
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography sx={{ mt: 1 }}>
-                {unavailable.length} additional achievements hidden behind content you don't have access to.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
+          <AchievementCategory title="Unavailable" achievements={unavailable}>
+            <Typography sx={{ mt: 1 }}>
+              {pluralize(unavailable.length, "additional achievement")} hidden behind content you don't have access to.
+            </Typography>
+          </AchievementCategory>
         )}
-
         {secret.length > 0 && (
-          <Accordion disableGutters square>
-            <AccordionSummary>
-              <Typography variant="h5" color="secondary">
-                Secret ({secret.length} remaining)
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography color="secondary" sx={{ mt: 1 }}>
-                {secret.map((item) => (
-                  <span key={`secret_${item.achievement.ID}`}>
-                    <CorruptableText content={item.achievement.ID} spoiler={true}></CorruptableText>
-                    <br />
-                  </span>
-                ))}
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
+          <AchievementCategory title="Secret" achievements={secret}>
+            <Typography color="secondary" sx={{ mt: 1 }}>
+              {secret.map((item) => (
+                <span key={`secret_${item.achievement.ID}`}>
+                  <CorruptableText content={item.achievement.ID} spoiler={true}></CorruptableText>
+                  <br />
+                </span>
+              ))}
+            </Typography>
+          </AchievementCategory>
         )}
       </Box>
     </Box>

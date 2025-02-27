@@ -4,10 +4,12 @@
 
 ## CodingContractData type
 
-Coding contract data will differ depending on coding contract.
-
 **Signature:**
 
 ```typescript
-type CodingContractData = any;
+export type CodingContractData<T extends string> = T extends `${keyof CodingContractSignatures}`
+  ? CodingContractSignatures[T][0]
+  : any;
 ```
+**References:** [CodingContractSignatures](./bitburner.codingcontractsignatures.md)
+

@@ -51,9 +51,10 @@ import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
 import { autoCompleteTypeShorthand } from "./utils/terminalShorthands";
 import { resolveTeamCasualties, type OperationTeam } from "./Actions/TeamCasualties";
 import { shuffleArray } from "../Infiltration/ui/BribeGame";
-import { objectAssert } from "../utils/helpers/typeAssertion";
+import { assertObject } from "../utils/TypeAssertion";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { loadActionIdentifier } from "./utils/loadActionIdentifier";
+import { pluralize } from "../utils/I18nUtils";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -136,9 +137,10 @@ export class Bladeburner implements OperationTeam {
       this.resetAction();
       return { success: true, message: "Stopped current Bladeburner action" };
     }
-    if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
+    if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) {
+      Player.finishWork(true);
+    }
     const action = this.getActionObject(actionId);
-    // This switch statement is just for handling error cases, it does not have to be exhaustive
     const availability = action.getAvailability(this);
     if (!availability.available) {
       return { message: `Could not start action ${action.name}: ${availability.error}` };
@@ -166,9 +168,7 @@ export class Bladeburner implements OperationTeam {
     this.setSkillLevel(skillName, currentSkillLevel + availability.actualCount);
     return {
       success: true,
-      message: `Upgraded skill ${skillName} by ${availability.actualCount} level${
-        availability.actualCount > 1 ? "s" : ""
-      }`,
+      message: `Upgraded skill ${skillName} by ${pluralize(availability.actualCount, "level")}`,
     };
   }
 
@@ -1424,7 +1424,7 @@ export class Bladeburner implements OperationTeam {
 
   /** Initializes a Bladeburner object from a JSON save state. */
   static fromJSON(value: IReviverValue): Bladeburner {
-    objectAssert(value.data);
+    assertObject(value.data);
     // operations and contracts are not loaded directly from the save, we load them in using a different method
     const contractsData = value.data.contracts;
     const operationsData = value.data.operations;

@@ -188,6 +188,14 @@ export function processSingleServerGrowth(server: Server, threads: number, cores
     usedCycles = Math.min(Math.max(0, Math.ceil(usedCycles)), threads);
     server.fortify(2 * ServerConstants.ServerFortifyAmount * usedCycles);
   }
+  // Prevent returning NaN. This happens when server.moneyMax is 0.
+  if (server.moneyAvailable === 0 && oldMoneyAvailable === 0) {
+    return 1;
+  }
+  // Prevent returning Infinity. If server's money before growing is 0, we "pretend" that it's 1.
+  if (oldMoneyAvailable === 0) {
+    return server.moneyAvailable;
+  }
   return server.moneyAvailable / oldMoneyAvailable;
 }
 

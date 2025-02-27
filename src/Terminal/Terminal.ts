@@ -6,7 +6,7 @@ import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
 import { CompletedProgramName } from "@enums";
-import { CodingContractResult } from "../CodingContracts";
+import { CodingContractResult } from "../CodingContract/Contract";
 import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
 
 import { TextFile } from "../TextFile";
@@ -263,14 +263,18 @@ export class Terminal {
       Engine.Counters.checkFactionInvitations = 0;
       Engine.checkCounters();
 
-      let moneyGained = calculatePercentMoneyHacked(server, Player) * currentNodeMults.ManualHackMoney;
-      moneyGained = Math.floor(server.moneyAvailable * moneyGained);
+      let moneyDrained = Math.floor(server.moneyAvailable * calculatePercentMoneyHacked(server, Player));
 
-      if (moneyGained <= 0) {
-        moneyGained = 0;
+      if (moneyDrained <= 0) {
+        moneyDrained = 0;
       } // Safety check
 
-      server.moneyAvailable -= moneyGained;
+      server.moneyAvailable -= moneyDrained;
+      if (server.moneyAvailable < 0) {
+        server.moneyAvailable = 0;
+      }
+
+      const moneyGained = moneyDrained * currentNodeMults.ManualHackMoney;
       Player.gainMoney(moneyGained, "hacking");
       Player.gainHackingExp(expGainedOnSuccess);
       if (expGainedOnSuccess > 1) {
@@ -306,12 +310,12 @@ export class Terminal {
     if (!(server instanceof Server)) throw new Error("server should be normal server");
     const expGain = calculateHackingExpGain(server, Player);
     const oldSec = server.hackDifficulty;
-    const growth = processSingleServerGrowth(server, 25, server.cpuCores) - 1;
+    const growth = processSingleServerGrowth(server, 25, server.cpuCores);
     const newSec = server.hackDifficulty;
 
     Player.gainHackingExp(expGain);
     this.print(
-      `Available money on '${server.hostname}' grown by ${formatPercent(growth, 6)}. Gained ${formatExp(
+      `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)}. Gained ${formatExp(
         expGain,
       )} hacking exp.`,
     );
@@ -582,19 +586,21 @@ export class Terminal {
     printOutput(root);
   }
 
-  connectToServer(server: string): void {
-    const serv = GetServer(server);
-    if (serv == null) {
+  connectToServer(hostname: string, singularity = false): void {
+    const server = GetServer(hostname);
+    if (server === null) {
       this.error("Invalid server. Connection failed.");
       return;
     }
     Player.getCurrentServer().isConnectedTo = false;
-    Player.currentServer = serv.hostname;
-    Player.getCurrentServer().isConnectedTo = true;
-    this.print("Connected to " + serv.hostname);
+    Player.currentServer = hostname;
+    server.isConnectedTo = true;
     this.setcwd(root);
-    if (Player.getCurrentServer().hostname == "darkweb") {
-      checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
+    if (!singularity) {
+      this.print("Connected to " + server.hostname);
+      if (Player.getCurrentServer().hostname == "darkweb") {
+        checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
+      }
     }
   }
 

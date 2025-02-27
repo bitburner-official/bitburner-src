@@ -12,7 +12,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { Player } from "@player";
-import { AugmentationName, LocationName } from "@enums";
+import { AugmentationName, CodingContractName, LocationName } from "@enums";
 import { AddToAllServers, createUniqueRandomIp, GetAllServers, GetServer, renameServer } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 import { AwardNFG, v1APIBreak } from "./v1APIBreak";
@@ -24,6 +24,8 @@ import { safelyCreateUniqueServer } from "../Server/ServerHelpers";
 import { v2APIBreak } from "./v2APIBreak";
 import { Terminal } from "../Terminal";
 import { getRecordValues } from "../Types/Record";
+import { ServerName } from "../Types/strings";
+import { ContentFilePath, ContentFile, ContentFileMap } from "../Paths/ContentFile";
 import { exportMaterial } from "../Corporation/Actions";
 import { getGoSave, loadGo } from "../Go/SaveLoad";
 import { showAPIBreaks } from "./APIBreaks/APIBreak";
@@ -35,6 +37,25 @@ function convert(code: string, changes: [RegExp, string][]): string {
     code = code.replace(change[0], change[1]);
   }
   return code;
+}
+
+/** Function for removing whitespace from filenames. See 41 for usage */
+function removeWhitespace(hostname: ServerName, file: ContentFile, files: ContentFileMap): void {
+  let filename = file.filename.replace(/\s+/g, "-") as ContentFilePath;
+  // avoid filename conflicts
+  if (files.has(filename)) {
+    const idx = filename.lastIndexOf(".");
+    const path = filename.slice(0, idx);
+    const ext = filename.slice(idx);
+    let i = 1;
+    do {
+      filename = `${path}-${i++}${ext}` as ContentFilePath;
+    } while (files.has(filename));
+  }
+  console.warn(`Renamed "${file.filename}" to "${filename}" on ${hostname}.`);
+  files.delete(file.filename);
+  file.filename = filename;
+  files.set(file.filename, file);
 }
 
 // Makes necessary changes to the loaded/imported data to ensure
@@ -168,8 +189,8 @@ export function evaluateVersionCompatibility(ver: string | number): void {
       for (const contract of server.contracts) {
         //Rename old "HammingCodes: Integer to encoded Binary" contracts
         //to "HammingCodes: Integer to Encoded Binary"
-        if (contract.type == "HammingCodes: Integer to encoded Binary") {
-          contract.type = "HammingCodes: Integer to Encoded Binary";
+        if ((contract.type as string) == "HammingCodes: Integer to encoded Binary") {
+          contract.type = CodingContractName.HammingCodesIntegerToEncodedBinary;
         }
       }
     }
@@ -506,5 +527,22 @@ Error: ${e}`,
   }
   if (ver < 39) {
     showAPIBreaks("2.6.1", ...breakInfos261);
+  }
+  if (ver <= 41) {
+    // All whitespace except for spaces was allowed in filenames
+    let found = false;
+    for (const server of GetAllServers()) {
+      for (const script of server.scripts.values()) {
+        if (!/\s/.test(script.filename)) continue;
+        removeWhitespace(server.hostname, script, server.scripts);
+        found = true;
+      }
+      for (const textFile of server.textFiles.values()) {
+        if (!/\s/.test(textFile.filename)) continue;
+        removeWhitespace(server.hostname, textFile, server.textFiles);
+        found = true;
+      }
+    }
+    if (found) Terminal.error("Filenames with whitespace found and corrected, see console for details.");
   }
 }

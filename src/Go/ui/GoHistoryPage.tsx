@@ -63,18 +63,22 @@ export const GoHistoryPage = (): React.ReactElement => {
               <Table sx={{ display: "table", mb: 1, width: "100%" }}>
                 <TableBody>
                   <TableRow>
-                    <TableCell className={classes.cellNone}>Wins:</TableCell>
+                    <TableCell className={classes.cellNone}>
+                      Wins:{faction === GoOpponent.none ? " (Black / White)" : ""}
+                    </TableCell>
                     <TableCell className={classes.cellNone}>
                       {data.wins} / {data.losses + data.wins}
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell className={classes.cellNone}>Current winstreak:</TableCell>
+                    <TableCell className={classes.cellNone}>
+                      Current winstreak{faction === GoOpponent.none ? " for black" : ""}:
+                    </TableCell>
                     <TableCell className={classes.cellNone}>{data.winStreak}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className={`${classes.cellNone} ${classes.cellBottomPadding}`}>
-                      Highest winstreak:
+                      Highest winstreak{faction === GoOpponent.none ? " for black" : ""}:
                     </TableCell>
                     <TableCell className={`${classes.cellNone} ${classes.cellBottomPadding}`}>
                       {data.highestWinStreak}

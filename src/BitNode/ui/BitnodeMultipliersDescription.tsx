@@ -337,7 +337,7 @@ function BladeburnerMults({ mults }: IMultsProps): React.ReactElement {
 function StanekMults({ mults }: IMultsProps): React.ReactElement {
   if (!Player.canAccessCotMG()) return <></>;
 
-  const extraSize = mults.StaneksGiftExtraSize.toFixed(3);
+  const extraSize = mults.StaneksGiftExtraSize.toFixed(5);
   const rows: IBNMultRows = {
     StaneksGiftPowerMultiplier: { name: "Gift Power" },
     StaneksGiftExtraSize: {

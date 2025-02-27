@@ -17,12 +17,19 @@ interface UserInterface
 |  Method | Description |
 |  --- | --- |
 |  [clearTerminal()](./bitburner.userinterface.clearterminal.md) | Clear the Terminal window, as if the player ran <code>clear</code> in the terminal |
+|  [closeTail(pid)](./bitburner.userinterface.closetail.md) | Close the tail window of a script. |
 |  [getGameInfo()](./bitburner.userinterface.getgameinfo.md) | Gets the current game information (version, commit, ...) |
 |  [getStyles()](./bitburner.userinterface.getstyles.md) | Get the current styles |
 |  [getTheme()](./bitburner.userinterface.gettheme.md) | Get the current theme |
+|  [moveTail(x, y, pid)](./bitburner.userinterface.movetail.md) | Move a tail window. |
+|  [openTail(fn, host, args)](./bitburner.userinterface.opentail.md) | Open the tail window of a script. |
+|  [renderTail(pid)](./bitburner.userinterface.rendertail.md) | Render a tail window. |
 |  [resetStyles()](./bitburner.userinterface.resetstyles.md) | Resets the player's styles to the default values |
 |  [resetTheme()](./bitburner.userinterface.resettheme.md) | Resets the player's theme to the default values |
+|  [resizeTail(width, height, pid)](./bitburner.userinterface.resizetail.md) | Resize a tail window. |
 |  [setStyles(newStyles)](./bitburner.userinterface.setstyles.md) | Sets the current styles |
+|  [setTailFontSize(pixel, fn, host, args)](./bitburner.userinterface.settailfontsize.md) | Set the font size of the tail window of a script. |
+|  [setTailTitle(title, pid)](./bitburner.userinterface.settailtitle.md) | Set the title of the tail window of a script. |
 |  [setTheme(newTheme)](./bitburner.userinterface.settheme.md) | Sets the current theme |
 |  [windowSize()](./bitburner.userinterface.windowsize.md) | Get the current window size |
 

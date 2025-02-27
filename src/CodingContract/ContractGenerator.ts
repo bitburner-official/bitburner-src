@@ -1,20 +1,17 @@
-import {
-  CodingContract,
-  CodingContractRewardType,
-  CodingContractTypes,
-  ICodingContractReward,
-} from "./CodingContracts";
-import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
-import { Factions } from "./Faction/Factions";
+import { CodingContract, CodingContractRewardType, ICodingContractReward } from "./Contract";
+import { CodingContractTypes } from "./ContractTypes";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
+import { Factions } from "../Faction/Factions";
 import { Player } from "@player";
-import { GetServer, GetAllServers } from "./Server/AllServers";
-import { SpecialServers } from "./Server/data/SpecialServers";
-import { Server } from "./Server/Server";
-import { BaseServer } from "./Server/BaseServer";
+import { CodingContractName } from "@enums";
+import { GetServer, GetAllServers } from "../Server/AllServers";
+import { SpecialServers } from "../Server/data/SpecialServers";
+import { Server } from "../Server/Server";
+import { BaseServer } from "../Server/BaseServer";
 
-import { getRandomIntInclusive } from "./utils/helpers/getRandomIntInclusive";
-import { ContractFilePath, resolveContractFilePath } from "./Paths/ContractFilePath";
-import { clampNumber } from "./utils/helpers/clampNumber";
+import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
+import { ContractFilePath, resolveContractFilePath } from "../Paths/ContractFilePath";
+import { clampNumber } from "../utils/helpers/clampNumber";
 
 export function tryGeneratingRandomContract(numberOfTries: number): void {
   /**
@@ -104,7 +101,7 @@ export function generateRandomContractOnHome(): void {
   serv.addContract(contract);
 }
 
-export const generateDummyContract = (problemType: string): string => {
+export const generateDummyContract = (problemType: CodingContractName): string => {
   if (!CodingContractTypes[problemType]) throw new Error(`Invalid problem type: '${problemType}'`);
   const serv = Player.getHomeComputer();
 
@@ -116,7 +113,7 @@ export const generateDummyContract = (problemType: string): string => {
 };
 
 interface IGenerateContractParams {
-  problemType?: string;
+  problemType?: CodingContractName;
   server?: string;
   fn?: ContractFilePath;
 }
@@ -176,8 +173,8 @@ function sanitizeRewardType(rewardType: CodingContractRewardType): CodingContrac
   return type;
 }
 
-function getRandomProblemType(): string {
-  const problemTypes = Object.keys(CodingContractTypes);
+function getRandomProblemType(): CodingContractName {
+  const problemTypes = Object.values(CodingContractName);
   const randIndex = getRandomIntInclusive(0, problemTypes.length - 1);
 
   return problemTypes[randIndex];

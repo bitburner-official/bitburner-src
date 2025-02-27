@@ -17,8 +17,13 @@ export const InterfacePage = (): React.ReactElement => {
       <OptionSwitch
         checked={Settings.DisableASCIIArt}
         onChange={(newValue) => (Settings.DisableASCIIArt = newValue)}
-        text="Disable ascii art"
-        tooltip={<>If this is set, all ASCII arts will be disabled.</>}
+        text="Disable ASCII art"
+        tooltip={
+          <>
+            If this is set, ASCII art for UI elements will be disabled. This setting does not affect ASCII art in the
+            description of factions.
+          </>
+        }
       />
       <OptionSwitch
         checked={Settings.DisableTextEffects}

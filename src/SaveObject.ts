@@ -19,14 +19,14 @@ import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, type IReviverValue } from "./utils/JSONReviver";
 import { save } from "./db";
 import { ToastVariant } from "@enums";
-import { pushGameSaved } from "./Electron";
+import { pushGameSaved, pushImportResult } from "./Electron";
 import { getGoSave, loadGo } from "./Go/SaveLoad";
 import { SaveData } from "./types";
 import { SaveDataError, canUseBinaryFormat, decodeSaveData, encodeJsonSaveString } from "./utils/SaveDataUtils";
 import { isBinaryFormat } from "../electron/saveDataBinaryFormat";
 import { downloadContentAsFile } from "./utils/FileUtils";
 import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
-import { isObject, objectAssert } from "./utils/helpers/typeAssertion";
+import { isObject, assertObject } from "./utils/TypeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
 import { Reviver } from "./utils/GenericReviver";
 
@@ -99,7 +99,7 @@ export type BitburnerSaveObjectType = {
  * If saveObject has these properties, we check if their values are strings.
  */
 function assertBitburnerSaveObjectType(saveObject: unknown): asserts saveObject is BitburnerSaveObjectType {
-  objectAssert(saveObject);
+  assertObject(saveObject);
 
   const mandatoryKeysOfSaveObj = [
     "PlayerSave",
@@ -236,6 +236,11 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
     }
     try {
       await save(saveData);
+      /**
+       * Notify Electron code that the player imported a save file. "restoreIfNewerExists" will be disabled for a brief
+       * period of time.
+       */
+      pushImportResult(true);
     } catch (error) {
       console.error(error);
       dialogBoxCreate(`Cannot import save data: ${error}`);

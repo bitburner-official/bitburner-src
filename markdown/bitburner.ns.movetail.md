@@ -4,7 +4,12 @@
 
 ## NS.moveTail() method
 
-Move a tail window.
+> Warning: This API is now obsolete.
+> 
+> Use [ns.ui.moveTail](./bitburner.userinterface.movetail.md) instead.
+> 
+
+Move a tail window. This function is deprecated and will be removed in a later version.
 
 **Signature:**
 

@@ -39,6 +39,7 @@ export class LogBoxProperties {
   y = window.innerHeight * 0.3;
   width = 500;
   height = 500;
+  fontSize: number | undefined = undefined;
 
   rerender: () => void;
   rootRef: React.RefObject<Draggable>;
@@ -65,6 +66,11 @@ export class LogBoxProperties {
   setSize(width: number, height: number): void {
     this.width = width;
     this.height = height;
+    this.rerender();
+  }
+
+  setFontSize(size?: number): void {
+    this.fontSize = size;
     this.rerender();
   }
 
@@ -415,7 +421,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
                         text={line}
                         color={lineColor(line)}
                         styles={{
-                          fontSize: Settings.styles.tailFontSize,
+                          fontSize: propsRef.current.fontSize ?? Settings.styles.tailFontSize,
                         }}
                       />
                     ),

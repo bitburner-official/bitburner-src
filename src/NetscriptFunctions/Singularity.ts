@@ -1,7 +1,7 @@
 import type { Singularity as ISingularity } from "@nsdefs";
 
 import { Player } from "@player";
-import { AugmentationName, CityName, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
+import { CityName, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
 import { Augmentations } from "../Augmentation/Augmentations";
@@ -44,7 +44,6 @@ import { findEnumMember } from "../utils/helpers/enum";
 import { Engine } from "../engine";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { ScriptFilePath, resolveScriptFilePath } from "../Paths/ScriptFilePath";
-import { root } from "../Paths/Directory";
 import { getRecordEntries } from "../Types/Record";
 import { JobTracks } from "../Company/data/JobTracks";
 import { ServerConstants } from "../Server/data/Constants";
@@ -52,6 +51,7 @@ import { blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
 import { calculateFavorAfterResetting } from "../Faction/formulas/favor";
 import { validBitNodes } from "../BitNode/BitNodeUtils";
+import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -163,50 +163,17 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
-      const fac = Factions[facName];
-      const aug = Augmentations[augName];
+      const faction = Factions[facName];
+      const augmentation = Augmentations[augName];
 
-      const factionAugs = getFactionAugmentationsFiltered(fac);
-
-      if (!Player.factions.includes(facName)) {
-        helpers.log(ctx, () => `You can't purchase augmentations from '${facName}' because you aren't a member`);
+      const result = purchaseAugmentation(faction, augmentation, true);
+      if (!result.success) {
+        helpers.log(ctx, () => result.message);
         return false;
       }
-
-      if (!factionAugs.includes(augName)) {
-        helpers.log(ctx, () => `Faction '${facName}' does not have the '${augName}' augmentation.`);
-        return false;
-      }
-
-      const isNeuroflux = aug.name === AugmentationName.NeuroFluxGovernor;
-      if (!isNeuroflux) {
-        for (let j = 0; j < Player.queuedAugmentations.length; ++j) {
-          if (Player.queuedAugmentations[j].name === aug.name) {
-            helpers.log(ctx, () => `You already have the '${augName}' augmentation.`);
-            return false;
-          }
-        }
-        for (let j = 0; j < Player.augmentations.length; ++j) {
-          if (Player.augmentations[j].name === aug.name) {
-            helpers.log(ctx, () => `You already have the '${augName}' augmentation.`);
-            return false;
-          }
-        }
-      }
-
-      if (fac.playerReputation < getAugCost(aug).repCost) {
-        helpers.log(ctx, () => `You do not have enough reputation with '${fac.name}'.`);
-        return false;
-      }
-
-      const res = purchaseAugmentation(aug, fac, true);
-      helpers.log(ctx, () => res);
-      if (res.startsWith("You purchased")) {
-        Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 10);
-        return true;
-      } else {
-        return false;
-      }
+      helpers.log(ctx, () => `You purchased ${augName}.`);
+      Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain * 10);
+      return true;
     },
     softReset: (ctx) => (_cbScript) => {
       helpers.checkSingularityAccess(ctx);
@@ -512,40 +479,34 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         throw helpers.errorMessage(ctx, `Invalid hostname: '${hostname}'`);
       }
 
-      //Home case
-      if (hostname === "home") {
-        Player.getCurrentServer().isConnectedTo = false;
-        Player.currentServer = Player.getHomeComputer().hostname;
-        Player.getCurrentServer().isConnectedTo = true;
-        Terminal.setcwd(root);
-        return true;
-      }
-
-      //Adjacent server case
+      // Adjacent servers
       const server = Player.getCurrentServer();
       for (let i = 0; i < server.serversOnNetwork.length; i++) {
         const other = getServerOnNetwork(server, i);
-        if (other === null) continue;
-        if (other.hostname == hostname) {
-          Player.getCurrentServer().isConnectedTo = false;
-          Player.currentServer = target.hostname;
-          Player.getCurrentServer().isConnectedTo = true;
-          Terminal.setcwd(root);
+        if (other === null) {
+          exceptionAlert(
+            new Error(
+              `${server.serversOnNetwork[i]} is on the network of ${server.hostname}, but we cannot find its data.`,
+            ),
+          );
+          return false;
+        }
+        if (other.hostname === hostname) {
+          Terminal.connectToServer(hostname, true);
           return true;
         }
       }
 
-      //Backdoor case
-      const other = GetServer(hostname);
-      if (other !== null && other instanceof Server && other.backdoorInstalled) {
-        Player.getCurrentServer().isConnectedTo = false;
-        Player.currentServer = target.hostname;
-        Player.getCurrentServer().isConnectedTo = true;
-        Terminal.setcwd(root);
+      /**
+       * Backdoored + owned servers (home, private servers, or hacknet servers). With home computer, purchasedByPlayer
+       * is true.
+       */
+      if (target.backdoorInstalled || target.purchasedByPlayer) {
+        Terminal.connectToServer(hostname, true);
         return true;
       }
 
-      //Failure case
+      // Failure case
       return false;
     },
     manualHack: (ctx) => () => {
@@ -753,13 +714,17 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const company = Companies[companyName];
       const entryPos = CompanyPositions[JobTracks[field][0]];
 
-      const jobName = Player.applyForJob(company, entryPos, true);
-      if (jobName) {
-        helpers.log(ctx, () => `You were offered a new job at '${companyName}' with position '${jobName}'`);
-      } else {
-        helpers.log(ctx, () => `You failed to get a new job/promotion at '${companyName}' in the '${field}' field.`);
+      const result = Player.applyForJob(company, entryPos);
+      if (!result.success) {
+        helpers.log(
+          ctx,
+          () =>
+            `You failed to get a new job/promotion at '${companyName}' in the '${field}' field. Reason: ${result.message}`,
+        );
+        return null;
       }
-      return jobName;
+      helpers.log(ctx, () => `You were offered a new job at '${companyName}' with position '${result.jobName}'.`);
+      return result.jobName;
     },
     quitJob: (ctx) => (_companyName) => {
       helpers.checkSingularityAccess(ctx);
@@ -1201,6 +1166,17 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       if (!Player.currentWork) return null;
       return Player.currentWork.APICopy();
+    },
+    getSaveData: (ctx) => async () => {
+      helpers.checkSingularityAccess(ctx);
+      const saveData = await saveObject.getSaveData();
+      if (typeof saveData === "string") {
+        // saveData is the base64-encoded json save string. A base64-encoded string only uses ASCII characters, so it's
+        // fine to use new TextEncoder().encode() to encode it to a Uint8Array.
+        return new TextEncoder().encode(saveData);
+      }
+      // saveData is the compressed json save string.
+      return saveData;
     },
     exportGame: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);

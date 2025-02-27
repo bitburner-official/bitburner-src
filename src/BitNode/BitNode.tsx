@@ -70,7 +70,7 @@ export function initBitNodes() {
         {FactionName.TheDarkArmy}, {FactionName.SpeakersForTheDead}, {FactionName.NiteSec}, and{" "}
         {FactionName.TheBlackHand}) give the player the ability to form and manage their own gang, which can earn the
         player money and reputation with the corresponding faction. The gang faction offers more augmentations than
-        other factions, and in BitNode-2, it offers a way to destroy the BitNode.
+        other factions, and in BitNode-2, it offers The Red Pill.
         <br />
         <br />
         Destroying this BitNode will give you Source-File 2, or if you already have this Source-File, it will upgrade
@@ -201,8 +201,8 @@ export function initBitNodes() {
         <br />
         Destroying this BitNode will give you Source-File 6, or if you already have this Source-File, it will upgrade
         its level up to a maximum of 3. This Source-File allows you to access the NSA's {FactionName.Bladeburners}{" "}
-        division in other BitNodes. In addition, this Source-File will raise both the level and experience gain rate of
-        all your combat stats by:
+        division and Netscript API in other BitNodes. In addition, this Source-File will raise both the level and
+        experience gain rate of all your combat stats by:
         <ul>
           <li>Level 1: 8%</li>
           <li>Level 2: 12%</li>
@@ -236,7 +236,7 @@ export function initBitNodes() {
         <ul>
           <li>Level 1: 8%</li>
           <li>Level 2: 12%</li>
-          <li>Level 3: 14%</li>
+          <li>Level 3: 14% and begin with The Blade's Simulacrum</li>
         </ul>
       </>
     ),
@@ -931,6 +931,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         StrengthLevelMultiplier: 0.5,
         DexterityLevelMultiplier: 0.5,
         AgilityLevelMultiplier: 0.5,
+        DefenseLevelMultiplier: 0.5,
 
         AugmentationMoneyCost: 1.5,
 

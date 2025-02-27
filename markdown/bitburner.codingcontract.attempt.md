@@ -9,14 +9,14 @@ Attempts a coding contract, returning a reward string on success or empty string
 **Signature:**
 
 ```typescript
-attempt(answer: string | number | any[], filename: string, host?: string): string;
+attempt(answer: any, filename: string, host?: string): string;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  answer | string \| number \| any\[\] | Attempted solution for the contract. |
+|  answer | any | Attempted solution for the contract. This can be a string formatted like submitting manually, or the answer in the format of the specific contract type. |
 |  filename | string | Filename of the contract. |
 |  host | string | _(Optional)_ Hostname of the server containing the contract. Optional. Defaults to current server if not provided. |
 
@@ -36,7 +36,9 @@ Attempts to solve the Coding Contract with the provided solution.
 
 
 ```js
-const reward = ns.codingcontract.attempt(yourSolution, filename, hostname);
+const reward = ns.codingcontract.attempt("[solution, as, a, string]", filename, hostname);
+// or
+const reward = ns.codingcontract.attempt(["answer", "as", "an", "array"], filename, hostname);
 if (reward) {
   ns.tprint(`Contract solved successfully! Reward: ${reward}`);
 } else {

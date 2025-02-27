@@ -23,10 +23,18 @@ export const debugType = (v: unknown): string => {
   return `Is of type '${typeof v}', value: ${userFriendlyString(v)}`;
 };
 
-export function assertString(ctx: NetscriptContext, argName: string, v: unknown): asserts v is string {
+/**
+ * This function should be used to assert strings provided by the player. It uses a specialized utility function that
+ * provides a stack trace pointing to the player's invalid caller.
+ */
+export function assertStringWithNSContext(ctx: NetscriptContext, argName: string, v: unknown): asserts v is string {
   if (typeof v !== "string") throw errorMessage(ctx, `${argName} expected to be a string. ${debugType(v)}`, "TYPE");
 }
 
-export function assertFunction(ctx: NetscriptContext, argName: string, v: unknown): asserts v is () => void {
+export function assertFunctionWithNSContext(
+  ctx: NetscriptContext,
+  argName: string,
+  v: unknown,
+): asserts v is () => void {
   if (typeof v !== "function") throw errorMessage(ctx, `${argName} expected to be a function ${debugType(v)}`, "TYPE");
 }

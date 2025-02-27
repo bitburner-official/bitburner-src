@@ -20,6 +20,7 @@ import { SFC32RNG } from "../Casino/RNG";
 import { isFactionWork } from "../Work/FactionWork";
 import { getAugCost } from "../Augmentation/AugmentationHelpers";
 import { getRecordKeys } from "../Types/Record";
+import type { Result } from "../types";
 
 export function inviteToFaction(faction: Faction): void {
   if (faction.alreadyInvited || faction.isMember) return;
@@ -58,52 +59,76 @@ export function hasAugmentationPrereqs(aug: Augmentation): boolean {
   return aug.prereqs.every((aug) => Player.hasAugmentation(aug));
 }
 
-export function purchaseAugmentation(aug: Augmentation, fac: Faction, sing = false): string {
-  const hasPrereqs = hasAugmentationPrereqs(aug);
-  const augCosts = getAugCost(aug);
-  if (!hasPrereqs) {
-    const txt = `You must first purchase or install ${aug.prereqs
-      .filter((req) => !Player.hasAugmentation(req))
-      .join(",")} before you can purchase this one.`;
-    if (sing) {
-      return txt;
-    } else {
-      dialogBoxCreate(txt);
-    }
-  } else if (augCosts.moneyCost !== 0 && Player.money < augCosts.moneyCost) {
-    const txt = "You don't have enough money to purchase " + aug.name;
-    if (sing) {
-      return txt;
-    }
-    dialogBoxCreate(txt);
-  } else if (fac.playerReputation < augCosts.repCost) {
-    const txt = "You don't have enough faction reputation to purchase " + aug.name;
-    if (sing) {
-      return txt;
-    }
-    dialogBoxCreate(txt);
-  } else if (augCosts.moneyCost === 0 || Player.money >= augCosts.moneyCost) {
-    Player.queueAugmentation(aug.name);
+function checkIfPlayerCanPurchaseAugmentation(faction: Faction, augmentation: Augmentation): Result {
+  if (!Player.factions.includes(faction.name)) {
+    return {
+      success: false,
+      message: `You can't purchase augmentations from '${faction.name}' because you aren't a member.`,
+    };
+  }
 
-    Player.loseMoney(augCosts.moneyCost, "augmentations");
+  if (!getFactionAugmentationsFiltered(faction).includes(augmentation.name)) {
+    return {
+      success: false,
+      message: `Faction '${faction.name}' does not have the '${augmentation.name}' augmentation.`,
+    };
+  }
 
-    if (sing) {
-      return "You purchased " + aug.name;
-    } else if (!Settings.SuppressBuyAugmentationConfirmation) {
-      dialogBoxCreate(
-        `You purchased ${aug.name}. Its enhancements will not take effect until they are installed. ` +
-          "To install your augmentations, go to the 'Augmentations' tab on the left-hand navigation menu. " +
-          "Purchasing additional augmentations will now be more expensive.",
-      );
+  if (augmentation.name !== AugmentationName.NeuroFluxGovernor) {
+    for (const queuedAugmentation of Player.queuedAugmentations) {
+      if (queuedAugmentation.name === augmentation.name) {
+        return { success: false, message: `You already purchased the '${augmentation.name}' augmentation.` };
+      }
     }
-  } else {
+    for (const installedAugmentation of Player.augmentations) {
+      if (installedAugmentation.name === augmentation.name) {
+        return { success: false, message: `You already installed the '${augmentation.name}' augmentation.` };
+      }
+    }
+  }
+
+  if (!hasAugmentationPrereqs(augmentation)) {
+    return {
+      success: false,
+      message: `You must first purchase or install ${augmentation.prereqs
+        .filter((req) => !Player.hasAugmentation(req))
+        .join(",")} before you can purchase this one.`,
+    };
+  }
+
+  const augCosts = getAugCost(augmentation);
+  if (augCosts.moneyCost !== 0 && Player.money < augCosts.moneyCost) {
+    return { success: false, message: `You don't have enough money to purchase ${augmentation.name}.` };
+  }
+
+  if (faction.playerReputation < augCosts.repCost) {
+    return { success: false, message: `You don't have enough faction reputation to purchase ${augmentation.name}.` };
+  }
+
+  return { success: true };
+}
+
+export function purchaseAugmentation(faction: Faction, augmentation: Augmentation, singularity = false): Result {
+  const result = checkIfPlayerCanPurchaseAugmentation(faction, augmentation);
+  if (!result.success) {
+    if (!singularity) {
+      dialogBoxCreate(result.message);
+    }
+    return { success: false, message: result.message };
+  }
+
+  const augCosts = getAugCost(augmentation);
+  Player.queueAugmentation(augmentation.name);
+  Player.loseMoney(augCosts.moneyCost, "augmentations");
+
+  if (!singularity && !Settings.SuppressBuyAugmentationConfirmation) {
     dialogBoxCreate(
-      "Hmm, something went wrong when trying to purchase an Augmentation. " +
-        "Please report this to the game developer with an explanation of how to " +
-        "reproduce this.",
+      `You purchased ${augmentation.name}. Its enhancements will not take effect until they are installed. ` +
+        "To install your augmentations, go to the 'Augmentations' tab on the left-hand navigation menu. " +
+        "Purchasing additional augmentations will now be more expensive.",
     );
   }
-  return "";
+  return { success: true };
 }
 
 export function processPassiveFactionRepGain(numCycles: number): void {

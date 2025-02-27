@@ -286,11 +286,14 @@ function getMenu(window) {
           click: () => {
             dialog
               .showMessageBox({
-                type: "info",
+                type: "warning",
                 title: "Bitburner > API Server Information",
                 message: "The API Server is used to write script files to your in-game home.",
                 detail:
-                  "There is an official Visual Studio Code extension that makes use of that feature.\n\n" +
+                  `WARNING: This feature is deprecated. It may be removed in future versions.\n\n` +
+                  `You should use external tools that support our Remote API feature. For details, please check the "Remote API" page in the in-game documentation. You can also check the "external-editors" channel in our Discord server for more information and support.\n\n` +
+                  "--------------------------------------------------------------------------------\n\n" +
+                  "There is an official Visual Studio Code extension that makes use of the API Server feature.\n\n" +
                   "It allows you to write your script file in an external IDE and have them pushed over to the game automatically.\n" +
                   "If you want more information, head over to: https://github.com/bitburner-official/bitburner-vscode.",
                 buttons: ["Dismiss", "Open Extension Link (GitHub)"],

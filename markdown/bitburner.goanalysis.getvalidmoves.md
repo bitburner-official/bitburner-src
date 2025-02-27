@@ -14,10 +14,12 @@ Note that the \[0\]\[0\] point is shown on the bottom-left on the visual board (
 
 Also note that, when given a custom board state, only one prior move can be analyzed. This means that the superko rules (no duplicate board states in the full game history) is not supported; you will have to implement your own analysis for that.
 
+playAsWhite is optional, and gets the current valid moves for the white player. Intended to be used when playing as white when the opponent is set to "No AI"
+
 **Signature:**
 
 ```typescript
-getValidMoves(boardState?: string[], priorBoardState?: string[]): boolean[][];
+getValidMoves(boardState?: string[], priorBoardState?: string[], playAsWhite = false): boolean[][];
 ```
 
 ## Parameters
@@ -26,6 +28,7 @@ getValidMoves(boardState?: string[], priorBoardState?: string[]): boolean[][];
 |  --- | --- | --- |
 |  boardState | string\[\] | _(Optional)_ |
 |  priorBoardState | string\[\] | _(Optional)_ |
+|  playAsWhite | (not declared) | _(Optional)_ |
 
 **Returns:**
 

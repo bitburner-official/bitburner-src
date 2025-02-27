@@ -215,6 +215,7 @@ const singularity = {
   installAugmentations: SF4Cost(RamCostConstants.SingularityFn3),
   isFocused: SF4Cost(0.1),
   setFocus: SF4Cost(0.1),
+  getSaveData: SF4Cost(RamCostConstants.SingularityFn1 / 2),
   exportGame: SF4Cost(RamCostConstants.SingularityFn1 / 2),
   exportGameBonus: SF4Cost(RamCostConstants.SingularityFn1 / 4),
   b1tflum3: SF4Cost(16),
@@ -269,6 +270,7 @@ const go = {
     getLiberties: 16,
     getControlledEmptyNodes: 16,
     getStats: 0,
+    resetStats: 0,
   },
   cheat: {
     getCheatSuccessChance: 1,
@@ -333,6 +335,7 @@ const codingcontract = {
   attempt: RamCostConstants.CodingContractBase,
   getContractType: RamCostConstants.CodingContractBase / 2,
   getData: RamCostConstants.CodingContractBase / 2,
+  getContract: RamCostConstants.CodingContractBase * (3 / 2),
   getDescription: RamCostConstants.CodingContractBase / 2,
   getNumTriesRemaining: RamCostConstants.CodingContractBase / 5,
   createDummyContract: RamCostConstants.CodingContractBase / 5,
@@ -378,6 +381,13 @@ const stanek = {
 
 // UI API
 const ui = {
+  openTail: 0,
+  renderTail: 0,
+  moveTail: 0,
+  resizeTail: 0,
+  closeTail: 0,
+  setTailTitle: 0,
+  setTailFontSize: 0,
   getTheme: 0,
   setTheme: 0,
   resetTheme: 0,
@@ -622,6 +632,7 @@ export const RamCosts: RamCostTree<NSFull> = {
       calculateFavorToRep: 0,
       calculateRepToFavor: 0,
       repFromDonation: 0,
+      donationForRep: 0,
     },
     skills: {
       calculateSkill: 0,

@@ -5,46 +5,105 @@ import { defaultTheme } from "../Themes/Themes";
 import { defaultStyles } from "../Themes/Styles";
 import { CONSTANTS } from "../Constants";
 import { commitHash } from "../utils/helpers/commitHash";
-import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import { InternalAPI } from "../Netscript/APIWrapper";
 import { Terminal } from "../../src/Terminal";
-import { helpers } from "../Netscript/NetscriptHelpers";
-import { errorMessage } from "../Netscript/ErrorMessages";
-
-/** Will probably remove the below function in favor of a different approach to object type assertion.
- *  This method cannot be used to handle optional properties. */
-export function assertObjectType<T extends object>(
-  ctx: NetscriptContext,
-  name: string,
-  obj: unknown,
-  desiredObject: T,
-): asserts obj is T {
-  if (typeof obj !== "object" || obj === null) {
-    throw errorMessage(
-      ctx,
-      `Type ${obj === null ? "null" : typeof obj} provided for ${name}. Must be an object.`,
-      "TYPE",
-    );
-  }
-  for (const [key, val] of Object.entries(desiredObject)) {
-    if (!Object.hasOwn(obj, key)) {
-      throw errorMessage(ctx, `Object provided for argument ${name} is missing required property ${key}.`, "TYPE");
-    }
-    const objVal = (obj as Record<string, unknown>)[key];
-    if (typeof val !== typeof objVal) {
-      throw errorMessage(
-        ctx,
-        `Incorrect type ${typeof objVal} provided for property ${key} on ${name} argument. Should be type ${typeof val}.`,
-        "TYPE",
-      );
-    }
-  }
-}
+import { helpers, wrapUserNode } from "../Netscript/NetscriptHelpers";
+import { assertAndSanitizeMainTheme, assertAndSanitizeStyles } from "../JsonSchema/JSONSchemaAssertion";
+import { LogBoxCloserEvents, LogBoxEvents } from "../ui/React/LogBoxManager";
 
 export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
   return {
+    openTail:
+      (ctx) =>
+      (scriptID, hostname, ...scriptArgs) => {
+        const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
+        const runningScriptObj = helpers.getRunningScript(ctx, ident);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
+          return;
+        }
+
+        LogBoxEvents.emit(runningScriptObj);
+      },
+
+    renderTail:
+      (ctx) =>
+      (_pid = ctx.workerScript.scriptRef.pid) => {
+        const pid = helpers.number(ctx, "pid", _pid);
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        runningScriptObj.tailProps?.rerender();
+      },
+
+    moveTail:
+      (ctx) =>
+      (_x, _y, _pid = ctx.workerScript.scriptRef.pid) => {
+        const x = helpers.number(ctx, "x", _x);
+        const y = helpers.number(ctx, "y", _y);
+        const pid = helpers.number(ctx, "pid", _pid);
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        runningScriptObj.tailProps?.setPosition(x, y);
+      },
+
+    resizeTail:
+      (ctx) =>
+      (_w, _h, _pid = ctx.workerScript.scriptRef.pid) => {
+        const w = helpers.number(ctx, "w", _w);
+        const h = helpers.number(ctx, "h", _h);
+        const pid = helpers.number(ctx, "pid", _pid);
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        runningScriptObj.tailProps?.setSize(w, h);
+      },
+
+    closeTail:
+      (ctx) =>
+      (_pid = ctx.workerScript.scriptRef.pid) => {
+        const pid = helpers.number(ctx, "pid", _pid);
+        //Emit an event to tell the game to close the tail window if it exists
+        LogBoxCloserEvents.emit(pid);
+      },
+
+    setTailTitle:
+      (ctx) =>
+      (title, _pid = ctx.workerScript.scriptRef.pid) => {
+        const pid = helpers.number(ctx, "pid", _pid);
+        const runningScriptObj = helpers.getRunningScript(ctx, pid);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
+          return;
+        }
+        runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
+        runningScriptObj.tailProps?.rerender();
+      },
+
+    setTailFontSize:
+      (ctx) =>
+      (_pixel, scriptID, hostname, ...scriptArgs) => {
+        const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
+        const runningScriptObj = helpers.getRunningScript(ctx, ident);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
+          return;
+        }
+        if (_pixel === undefined) runningScriptObj.tailProps?.setFontSize(undefined);
+        else runningScriptObj.tailProps?.setFontSize(helpers.number(ctx, "pixel", _pixel));
+      },
+
     windowSize: () => () => {
       return [window.innerWidth, window.innerHeight];
     },
+
     getTheme: () => () => {
       return { ...Settings.theme };
     },
@@ -54,52 +113,37 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
     },
 
     setTheme: (ctx) => (newTheme) => {
-      const themeValidator: Record<string, string | undefined> = {};
-      assertObjectType(ctx, "newTheme", newTheme, themeValidator);
-      const hex = /^(#)((?:[A-Fa-f0-9]{2}){3,4}|(?:[A-Fa-f0-9]{3}))$/;
-      const currentTheme = { ...Settings.theme };
-      const errors: string[] = [];
-      for (const key of Object.keys(newTheme)) {
-        if (!currentTheme[key]) {
-          // Invalid key
-          errors.push(`Invalid key "${key}"`);
-        } else if (!hex.test(newTheme[key] ?? "")) {
-          errors.push(`Invalid color "${key}": ${newTheme[key]}`);
-        } else {
-          currentTheme[key] = newTheme[key];
-        }
+      let newData: unknown;
+      try {
+        /**
+         * assertAndSanitizeMainTheme may mutate its parameter, so we have to clone the user-provided data here.
+         */
+        newData = structuredClone(newTheme);
+        assertAndSanitizeMainTheme(newData);
+      } catch (error) {
+        helpers.log(ctx, () => `Failed to set theme. Errors: ${error}`);
+        return;
       }
-
-      if (errors.length === 0) {
-        Object.assign(Settings.theme, currentTheme);
-        ThemeEvents.emit();
-        helpers.log(ctx, () => `Successfully set theme`);
-      } else {
-        helpers.log(ctx, () => `Failed to set theme. Errors: ${errors.join(", ")}`);
-      }
+      Object.assign(Settings.theme, newData);
+      ThemeEvents.emit();
+      helpers.log(ctx, () => `Successfully set theme`);
     },
 
     setStyles: (ctx) => (newStyles) => {
-      const styleValidator: Record<string, string | number | undefined> = {};
-      assertObjectType(ctx, "newStyles", newStyles, styleValidator);
-      const currentStyles: Record<string, unknown> = { ...Settings.styles };
-      const errors: string[] = [];
-      for (const key of Object.keys(newStyles)) {
-        if (!currentStyles[key]) {
-          // Invalid key
-          errors.push(`Invalid key "${key}"`);
-        } else {
-          currentStyles[key] = newStyles[key];
-        }
+      let newData: unknown;
+      try {
+        /**
+         * assertAndSanitizeStyles may mutate its parameter, so we have to clone the user-provided data here.
+         */
+        newData = structuredClone(newStyles);
+        assertAndSanitizeStyles(newData);
+      } catch (error) {
+        helpers.log(ctx, () => `Failed to set styles. Errors: ${error}`);
+        return;
       }
-
-      if (errors.length === 0) {
-        Object.assign(Settings.styles, currentStyles);
-        ThemeEvents.emit();
-        helpers.log(ctx, () => `Successfully set styles`);
-      } else {
-        helpers.log(ctx, () => `Failed to set styles. Errors: ${errors.join(", ")}`);
-      }
+      Object.assign(Settings.styles, newData);
+      ThemeEvents.emit();
+      helpers.log(ctx, () => `Successfully set styles`);
     },
 
     resetTheme: (ctx) => () => {

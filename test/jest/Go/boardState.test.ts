@@ -19,6 +19,7 @@ describe("Board analysis utility tests", () => {
       ai: GoOpponent.Illuminati,
       passCount: 0,
       cheatCount: 0,
+      cheatCountForWhite: 0,
     });
     expect(result.board?.length).toEqual(5);
   });

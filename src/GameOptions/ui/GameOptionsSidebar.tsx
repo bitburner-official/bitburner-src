@@ -25,6 +25,7 @@ import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { OptionsTabName } from "./GameOptionsRoot";
+import { Player } from "@player";
 
 interface IProps {
   tab: OptionsTabName;
@@ -255,8 +256,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
             gridTemplateAreas: `"credits credits"
             "bug bug"
         "discord reddit"
-        "tut tut"
-        "plaza plaza"`,
+        "tut tut"`,
             gridTemplateColumns: "1fr 1fr",
             my: 1,
           }}
@@ -291,6 +291,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           </Button>
         </Box>
       </Box>
+      <Typography>Save ID: {Player.identifier}</Typography>
       <FileDiagnosticModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
 
       <ConfirmationModal

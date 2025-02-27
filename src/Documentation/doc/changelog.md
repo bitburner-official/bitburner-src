@@ -70,6 +70,8 @@
 - Fix typo in Corporation documentation (@catloversg)
 - Add more information for deprecated nFormat API (@catloversg)
 - Clarify FactionWorkRepGain multiplier (@catloversg)
+- Improve FAQ and handbook (.lit file) of Corporation (@catloversg)
+- Clarify prerequisites of augmentations when grafting (@catloversg)
 
 ### MISC
 
@@ -167,6 +169,8 @@
 - Deduct karma when successfully completing action involving killing (@catloversg)
 - Fix: Hashserver UI shows wrong server list when purchasing upgrades (@catloversg)
 - Fix wrong initial productionMult of new division (@catloversg)
+- Add new API (ns.corporation.canCreateCorporation) to check if player can create corporation (@catloversg)
+- Print error message when player cannot create corporation (@catloversg)
 
 ### CODEBASE/REFACTOR
 
@@ -221,6 +225,9 @@
 - Fix: Generic Reviver does not handle Message class (@catloversg)
 - Add tests for b1tflum3 and destroyW0r1dD43m0n API (@catloversg)
 - Multiple large refactors to savegame loading for better validation and safety (@catloversg)
+- Enable new lint rules (@catloversg)
+- Show error dialog when finding out old bugs in pre-v2.4.0 (@catloversg)
+- Use "esnext" target when transforming code with swc (@catloversg)
 
 ## v2.6.2 Release: 3 July 2024
 
