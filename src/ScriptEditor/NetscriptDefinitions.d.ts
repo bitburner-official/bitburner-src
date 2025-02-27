@@ -2610,7 +2610,7 @@ export interface Singularity {
    *
    * @param cbScript - This is a script that will automatically be run after Augmentations are installed (after the reset). This script will be run with no arguments and 1 thread. It must be located on your home computer.
    */
-  softReset(cbScript: string): void;
+  softReset(cbScript?: string): void;
 
   /**
    * Go to a location.
