@@ -428,11 +428,11 @@ export function WorkInProgressRoot(): React.ReactElement {
       buttons: {
         cancel: () => {
           Player.finishWork(true);
-          Router.toPage(Page.Job, { location: Locations[comp.name] });
+          Router.toPage(Page.Job);
         },
         unfocus: () => {
           Player.stopFocusing();
-          Router.toPage(Page.Job, { location: Locations[comp.name] });
+          Router.toPage(Page.Job);
         },
       },
       title: (

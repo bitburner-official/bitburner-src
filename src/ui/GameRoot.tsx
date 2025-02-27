@@ -336,7 +336,7 @@ export function GameRoot(): React.ReactElement {
       mainPage = <JobRoot />;
       break;
     case Page.Location: {
-      mainPage = <GenericLocation loc={pageWithContext.location} showBackButton={true} />;
+      mainPage = <GenericLocation location={pageWithContext.location} showBackButton={true} />;
       break;
     }
     case Page.Options: {

@@ -30,64 +30,83 @@ import { Page } from "../../ui/Router";
 import { serverMetadata } from "../../Server/data/servers";
 import { Tooltip } from "@mui/material";
 import { getEnumHelper } from "../../utils/EnumHelper";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 interface IProps {
-  loc: Location;
+  location: Location;
   showBackButton: boolean;
 }
 
-export function GenericLocation({ loc, showBackButton }: IProps): React.ReactElement {
-  /**
-   * Determine what needs to be rendered for this location based on the locations
-   * type. Returns an array of React components that should be rendered
-   */
-  function getLocationSpecificContent(): React.ReactNode[] {
-    const content: React.ReactNode[] = [];
+/**
+ * Determine what needs to be rendered for this location based on the locations
+ * type. Returns an array of React components that should be rendered
+ */
+function getLocationSpecificContent(location: Location): React.ReactNode[] {
+  const content: React.ReactNode[] = [];
 
-    if (loc.types.includes(LocationType.Company)) {
-      if (!getEnumHelper("CompanyName").isMember(loc.name)) {
-        throw new Error(`Location name ${loc.name} is for a company but is not a company name.`);
-      }
-      content.push(<CompanyLocation key="CompanyLocation" companyName={loc.name} />);
+  if (location.types.includes(LocationType.Company)) {
+    if (!getEnumHelper("CompanyName").isMember(location.name)) {
+      throw new Error(`Location name ${location.name} is for a company but is not a company name.`);
     }
-
-    if (loc.types.includes(LocationType.Gym)) {
-      content.push(<GymLocation key="GymLocation" loc={loc} />);
-    }
-
-    if (loc.types.includes(LocationType.Hospital)) {
-      content.push(<HospitalLocation key="HospitalLocation" />);
-    }
-
-    if (loc.types.includes(LocationType.Slums)) {
-      content.push(<SlumsLocation key="SlumsLocation" />);
-    }
-
-    if (loc.types.includes(LocationType.Special)) {
-      content.push(<SpecialLocation key="SpecialLocation" loc={loc} />);
-    }
-
-    if (loc.types.includes(LocationType.TechVendor)) {
-      content.push(<TechVendorLocation key="TechVendorLocation" loc={loc} />);
-    }
-
-    if (loc.types.includes(LocationType.TravelAgency)) {
-      content.push(<TravelAgencyRoot key="TravelAgencyRoot" />);
-    }
-
-    if (loc.types.includes(LocationType.University)) {
-      content.push(<UniversityLocation key="UniversityLocation" loc={loc} />);
-    }
-
-    if (loc.types.includes(LocationType.Casino)) {
-      content.push(<CasinoLocation key="CasinoLocation" />);
-    }
-
-    return content;
+    content.push(<CompanyLocation key="CompanyLocation" companyName={location.name} />);
   }
 
-  const locContent: React.ReactNode[] = getLocationSpecificContent();
-  const serverMeta = serverMetadata.find((s) => s.specialName === loc.name);
+  if (location.types.includes(LocationType.Gym)) {
+    content.push(<GymLocation key="GymLocation" loc={location} />);
+  }
+
+  if (location.types.includes(LocationType.Hospital)) {
+    content.push(<HospitalLocation key="HospitalLocation" />);
+  }
+
+  if (location.types.includes(LocationType.Slums)) {
+    content.push(<SlumsLocation key="SlumsLocation" />);
+  }
+
+  if (location.types.includes(LocationType.Special)) {
+    content.push(<SpecialLocation key="SpecialLocation" loc={location} />);
+  }
+
+  if (location.types.includes(LocationType.TechVendor)) {
+    content.push(<TechVendorLocation key="TechVendorLocation" loc={location} />);
+  }
+
+  if (location.types.includes(LocationType.TravelAgency)) {
+    content.push(<TravelAgencyRoot key="TravelAgencyRoot" />);
+  }
+
+  if (location.types.includes(LocationType.University)) {
+    content.push(<UniversityLocation key="UniversityLocation" loc={location} />);
+  }
+
+  if (location.types.includes(LocationType.Casino)) {
+    content.push(<CasinoLocation key="CasinoLocation" />);
+  }
+
+  return content;
+}
+
+export function GenericLocation({ location, showBackButton }: IProps): React.ReactElement {
+  /**
+   * location can be undefined if GenericLocation is used like this:
+   *
+   * <GenericLocation location={Locations["unknown"]} showBackButton={true} />
+   *
+   * We need to check it before using.
+   */
+  if (location == null) {
+    exceptionAlert(new Error(`GenericLocation is used with invalid location.`), true);
+    /**
+     * Return to the Terminal tab. We put the call of Router.toPage() inside setTimeout to avoid updating GameRoot while
+     * rendering this component.
+     */
+    setTimeout(() => {
+      Router.toPage(Page.Terminal);
+    }, 100);
+    return <></>;
+  }
+  const locationContent: React.ReactNode[] = getLocationSpecificContent(location);
+  const serverMeta = serverMetadata.find((s) => s.specialName === location.name);
   const server = GetServer(serverMeta ? serverMeta.hostname : "");
 
   const backdoorInstalled = server !== null && isBackdoorInstalled(server);
@@ -99,14 +118,14 @@ export function GenericLocation({ loc, showBackButton }: IProps): React.ReactEle
         {backdoorInstalled && serverMeta ? (
           <Tooltip title={`Backdoor installed on ${serverMeta.hostname}.`}>
             <span>
-              <CorruptableText content={loc.name} spoiler={false} />
+              <CorruptableText content={location.name} spoiler={false} />
             </span>
           </Tooltip>
         ) : (
-          loc.name
+          location.name
         )}
       </Typography>
-      {locContent}
+      {locationContent}
     </>
   );
 }
