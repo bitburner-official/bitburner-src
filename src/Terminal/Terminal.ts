@@ -53,6 +53,7 @@ import { help } from "./commands/help";
 import { history } from "./commands/history";
 import { home } from "./commands/home";
 import { hostname } from "./commands/hostname";
+import { ipaddr } from "./commands/ipaddr"
 import { kill } from "./commands/kill";
 import { killall } from "./commands/killall";
 import { ls } from "./commands/ls";
@@ -110,6 +111,7 @@ export const TerminalCommands: Record<string, (args: (string | number | boolean)
   history: history,
   home: home,
   hostname: hostname,
+  ipaddr: ipaddr,
   kill: kill,
   killall: killall,
   ls: ls,
