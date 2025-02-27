@@ -2111,12 +2111,14 @@ export interface Singularity {
    * @remarks
    * RAM cost: 3 GB * 16/4/1
    *
+   * This function quits the current work if it's from the provided company.
    *
-   * This function will finish work with the company provided and quit any jobs.
+   * This function affects you and all sleeves. If a sleeve is working for this company, it will stop working and be
+   * idle.
    *
    * @param companyName - Name of the company.
    */
-  quitJob(companyName?: CompanyName | `${CompanyName}`): void;
+  quitJob(companyName: CompanyName | `${CompanyName}`): void;
 
   /**
    * Apply for a job at a company.

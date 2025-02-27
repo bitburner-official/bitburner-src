@@ -9,14 +9,14 @@ Quit jobs by company.
 **Signature:**
 
 ```typescript
-quitJob(companyName?: CompanyName | `${CompanyName}`): void;
+quitJob(companyName: CompanyName | `${CompanyName}`): void;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  companyName | [CompanyName](./bitburner.companyname.md) \| \`${[CompanyName](./bitburner.companyname.md)<!-- -->}\` | _(Optional)_ Name of the company. |
+|  companyName | [CompanyName](./bitburner.companyname.md) \| \`${[CompanyName](./bitburner.companyname.md)<!-- -->}\` | Name of the company. |
 
 **Returns:**
 
@@ -26,5 +26,7 @@ void
 
 RAM cost: 3 GB \* 16/4/1
 
-This function will finish work with the company provided and quit any jobs.
+This function quits the current work if it's from the provided company.
+
+This function affects you and all sleeves. If a sleeve is working for this company, it will stop working and be idle.
 
