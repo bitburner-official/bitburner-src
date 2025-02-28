@@ -1564,7 +1564,11 @@ export const ns: InternalAPI<NSFull> = {
       total += script.scriptRef.onlineMoneyMade / script.scriptRef.onlineRunningTime;
     }
 
-    return [total, Player.scriptProdSinceLastAug / (Player.playtimeSinceLastAug / 1000)];
+    let incomeFromScriptsSinceLastAug = Player.scriptProdSinceLastAug / (Player.playtimeSinceLastAug / 1000);
+    if (Number.isFinite(incomeFromScriptsSinceLastAug)) {
+      incomeFromScriptsSinceLastAug = 0;
+    }
+    return [total, incomeFromScriptsSinceLastAug];
   },
   getScriptIncome:
     (ctx) =>
