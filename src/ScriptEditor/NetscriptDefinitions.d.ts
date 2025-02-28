@@ -1,5 +1,4 @@
 /** All netscript definitions */
-
 /** @public */
 interface HP {
   current: number;
@@ -918,6 +917,21 @@ interface GangTerritory {
   /** Wanted gain impact on task scaling */
   wanted: number;
 }
+/** @public */
+interface GangMemberExpGain {
+  /** Hack EXP gain for a member after a given task*/
+  hack_exp: number;
+  /** Str EXP gain for a member after a given task*/
+  str_exp: number;
+  /** Def EXP gain for a member after a given task*/
+  def_exp: number;
+  /** Dex EXP gain for a member after a given task*/
+  dex_exp: number;
+  /** Agi EXP gain for a member after a given task*/
+  agi_exp: number;
+  /** Cha EXP gain for a member after a given task*/
+  cha_exp: number;
+}
 
 /** @public */
 interface GangMemberInfo {
@@ -1004,6 +1018,11 @@ interface GangMemberInfo {
   wantedLevelGain: number;
   /** Per Cycle Income for this gang member */
   moneyGain: number;
+  /** Per Cycle Exp object for each stat for this gang member.
+   *
+   * null in the event that the member does not have a given task.
+   */
+  expGain: GangMemberExpGain | null;
 }
 
 /** @public */
@@ -2111,12 +2130,14 @@ export interface Singularity {
    * @remarks
    * RAM cost: 3 GB * 16/4/1
    *
+   * This function quits the current work if it's from the provided company.
    *
-   * This function will finish work with the company provided and quit any jobs.
+   * This function affects you and all sleeves. If a sleeve is working for this company, it will stop working and be
+   * idle.
    *
    * @param companyName - Name of the company.
    */
-  quitJob(companyName?: CompanyName | `${CompanyName}`): void;
+  quitJob(companyName: CompanyName | `${CompanyName}`): void;
 
   /**
    * Apply for a job at a company.
@@ -2610,7 +2631,7 @@ export interface Singularity {
    *
    * @param cbScript - This is a script that will automatically be run after Augmentations are installed (after the reset). This script will be run with no arguments and 1 thread. It must be located on your home computer.
    */
-  softReset(cbScript: string): void;
+  softReset(cbScript?: string): void;
 
   /**
    * Go to a location.

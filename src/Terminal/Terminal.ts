@@ -656,6 +656,9 @@ export class Terminal {
         case iTutorialSteps.TerminalLs:
           if (commandArray.length === 1 && commandArray[0] == "ls") {
             iTutorialNextStep();
+          } else if (commandArray[0] == "1s") {
+            this.error("Command '1s' not found. Did you mean 'ls' with a lowercase L?");
+            return;
           } else {
             this.error(errorMessageForBadCommand);
             return;
@@ -800,7 +803,11 @@ export class Terminal {
     commandArray.shift();
 
     const f = TerminalCommands[commandName.toLowerCase()];
-    if (!f) return this.error(`Command ${commandName} not found`);
+    if (!f) {
+      const similarCommands = findSimilarCommands(commandName);
+      const didYouMeanString = similarCommands.length ? ` Did you mean: ${similarCommands.join(" or ")}?` : "";
+      return this.error(`Command ${commandName} not found.${didYouMeanString}`);
+    }
 
     f(commandArray, currentServer);
   }
@@ -812,4 +819,18 @@ export class Terminal {
       totalTicks: 50,
     });
   }
+}
+
+function findSimilarCommands(command: string): string[] {
+  const commands = Object.keys(TerminalCommands);
+  const offByOneLetter = commands.filter((c) => {
+    if (c.length !== command.length) return false;
+    let diff = 0;
+    for (let i = 0; i < c.length; i++) {
+      if (c[i] !== command[i]) diff++;
+    }
+    return diff === 1;
+  });
+  const subset = commands.filter((c) => c.includes(command)).sort((a, b) => a.length - b.length);
+  return Array.from(new Set([...offByOneLetter, ...subset])).slice(0, 3);
 }
