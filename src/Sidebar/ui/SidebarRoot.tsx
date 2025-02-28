@@ -163,9 +163,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
 
   const clickPage = useCallback(
     (page: Page) => {
-      if (page === Page.Job) {
-        Router.toPage(page);
-      } else if (page == Page.ScriptEditor || page == Page.Documentation) {
+      if (page == Page.ScriptEditor || page == Page.Documentation) {
         Router.toPage(page, {});
       } else if (isSimplePage(page)) {
         Router.toPage(page);
