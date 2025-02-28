@@ -831,7 +831,7 @@ interface GangGenInfo {
   respectGainRate: number;
   /** Amount of Respect needed for next gang recruit, if possible */
   respectForNextRecruit: number;
-  /** Amount of territory held, in decimal form */
+  /** Amount of territory held, in the range 0-1 */
   territory: number;
   /** Clash chance */
   territoryClashChance: number;
@@ -849,7 +849,7 @@ interface GangGenInfo {
 interface GangOtherInfoObject {
   /** Gang power */
   power: number;
-  /** Gang territory, in decimal form */
+  /** Gang territory, in the range 0-1 */
   territory: number;
 }
 
