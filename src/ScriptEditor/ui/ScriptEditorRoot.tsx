@@ -38,6 +38,12 @@ import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
 import { hasScriptExtension, isLegacyScript, type ScriptFilePath } from "../../Paths/ScriptFilePath";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import type { BaseServer } from "../../Server/BaseServer";
+import {
+  convertKeyboardEventToKeyCombination,
+  CurrentKeyBindings,
+  determineKeyBindingTypes,
+  ScriptEditorAction,
+} from "../../utils/KeyBindingUtils";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
@@ -215,18 +221,18 @@ function Root(props: IProps): React.ReactElement {
 
   useEffect(() => {
     function keydown(event: KeyboardEvent): void {
-      if (Settings.DisableHotkeys) return;
-      //Ctrl + b
-      if (event.code == "KeyB" && (event.ctrlKey || event.metaKey)) {
-        event.preventDefault();
-        Router.toPage(Page.Terminal);
+      if (Settings.DisableHotkeys) {
+        return;
       }
-
-      // CTRL/CMD + S
-      if (event.code == "KeyS" && (event.ctrlKey || event.metaKey)) {
+      const keyBindingTypes = determineKeyBindingTypes(CurrentKeyBindings, convertKeyboardEventToKeyCombination(event));
+      if (keyBindingTypes.has(ScriptEditorAction.Save)) {
         event.preventDefault();
         event.stopPropagation();
         save();
+      }
+      if (keyBindingTypes.has(ScriptEditorAction.GoToTerminal)) {
+        event.preventDefault();
+        Router.toPage(Page.Terminal);
       }
     }
     document.addEventListener("keydown", keydown);

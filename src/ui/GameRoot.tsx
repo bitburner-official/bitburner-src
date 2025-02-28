@@ -18,7 +18,8 @@ import { dialogBoxCreate } from "./React/DialogBox";
 import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 
-import type { PageWithContext, IRouter, ComplexPage, PageContext } from "./Router";
+import type { ComplexPage } from "./Enums";
+import type { PageWithContext, IRouter, PageContext } from "./Router";
 import { Page } from "./Router";
 import { Overview } from "./React/Overview";
 import { SidebarRoot } from "../Sidebar/ui/SidebarRoot";

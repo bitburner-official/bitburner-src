@@ -61,7 +61,9 @@ function getFormatter(
   formatList = digitFormats,
   options: Intl.NumberFormatOptions = {},
 ): Intl.NumberFormat {
-  if (formatList[fractionalDigits]) return formatList[fractionalDigits] as Intl.NumberFormat;
+  if (formatList[fractionalDigits]) {
+    return formatList[fractionalDigits];
+  }
   return (formatList[fractionalDigits] = makeFormatter(fractionalDigits, options));
 }
 

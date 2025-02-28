@@ -1,7 +1,7 @@
 import type { Bladeburner } from "../Bladeburner";
 
 import React, { useState, useRef, useEffect } from "react";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 
 import { Box, List, ListItem, Paper, TextField, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";

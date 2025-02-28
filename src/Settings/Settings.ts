@@ -7,9 +7,11 @@ import { assertObject } from "../utils/TypeAssertion";
 import { Result } from "../types";
 import {
   assertAndSanitizeEditorTheme,
+  assertAndSanitizeKeyBindings,
   assertAndSanitizeMainTheme,
   assertAndSanitizeStyles,
 } from "../JsonSchema/JSONSchemaAssertion";
+import { mergePlayerDefinedKeyBindings, type PlayerDefinedKeyBindingsType } from "../utils/KeyBindingUtils";
 
 /**
  * This function won't be able to catch **all** invalid hostnames. In order to validate a hostname properly, we need to
@@ -185,6 +187,11 @@ export const Settings = {
   useEngineeringNotation: false,
   /** Whether to disable suffixes and always use exponential form (scientific or engineering). */
   disableSuffixes: false,
+  /**
+   * Player-defined key bindings. Don't use this property directly. It must be merged with DefaultKeyBindings in
+   * src\utils\KeyBindingUtils.ts.
+   */
+  KeyBindings: {} as PlayerDefinedKeyBindingsType,
 
   load(saveString: string) {
     const save: unknown = JSON.parse(saveString);
@@ -211,11 +218,27 @@ export const Settings = {
     } catch (error) {
       console.error(error);
     }
+    /**
+     * KeyBindings data does not exist in old save files. Technically, this check is unnecessary. If KeyBindings is
+     * undefined, assertAndSanitizeKeyBindings will throw an error, and that error will be caught here. However, it
+     * means that there will be an error logged in the console every time the player loads an old save file, and this
+     * logged error is kind of a "false positive" one.
+     */
+    if (save.KeyBindings !== undefined) {
+      try {
+        // Sanitize key bindings.
+        assertAndSanitizeKeyBindings(save.KeyBindings);
+        Object.assign(Settings.KeyBindings, save.KeyBindings);
+      } catch (error) {
+        console.error(error);
+      }
+    }
     Object.assign(Settings, save, {
       overview: Settings.overview,
       theme: Settings.theme,
       EditorTheme: Settings.EditorTheme,
       styles: Settings.styles,
+      KeyBindings: Settings.KeyBindings,
     });
     /**
      * The hostname and port of RFA have not been validated properly, so the save data may contain invalid data. In that
@@ -227,5 +250,8 @@ export const Settings = {
     if (!isValidConnectionPort(Settings.RemoteFileApiPort).success) {
       Settings.RemoteFileApiPort = 0;
     }
+
+    // Merge Settings.KeyBindings with DefaultKeyBindings.
+    mergePlayerDefinedKeyBindings(Settings.KeyBindings);
   },
 };

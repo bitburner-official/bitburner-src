@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { KEY } from "../../../utils/helpers/keyCodes";
+import { KEY } from "../../../utils/KeyboardEventKey";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import { CityName } from "@enums";
 import { getRecordKeys } from "../../../Types/Record";

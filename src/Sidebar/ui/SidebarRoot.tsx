@@ -1,5 +1,4 @@
-import React, { useMemo, useCallback, useState, useEffect } from "react";
-import { KEYCODE } from "../../utils/helpers/keyCodes";
+import React, { useMemo, useCallback, useState, useEffect, useRef } from "react";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
 import { makeStyles } from "tss-react/mui";
 import MuiDrawer from "@mui/material/Drawer";
@@ -42,6 +41,7 @@ import BorderInnerSharpIcon from "@mui/icons-material/BorderInnerSharp"; // IPvG
 import BiotechIcon from "@mui/icons-material/Biotech"; // Grafting
 
 import { Router } from "../../ui/GameRoot";
+import { ComplexPage, SimplePage } from "../../ui/Enums";
 import { Page, isSimplePage } from "../../ui/Router";
 import { SidebarAccordion } from "./SidebarAccordion";
 import { Player } from "@player";
@@ -57,6 +57,17 @@ import { commitHash } from "../../utils/helpers/commitHash";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { playerHasDiscoveredGo } from "../../Go/effects/effect";
 import { knowAboutBitverse } from "../../BitNode/BitNodeUtils";
+import {
+  convertKeyboardEventToKeyCombination,
+  determineKeyBindingTypes,
+  type GoToPageKeyBindingType,
+  KeyBindingEvents,
+  KeyBindingEventType,
+  ScriptEditorAction,
+  type KeyBindingType,
+  CurrentKeyBindings,
+} from "../../utils/KeyBindingUtils";
+import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 
 const RotatedDoubleArrowIcon = React.forwardRef(function RotatedDoubleArrowIcon(
   props: { color: "primary" | "secondary" | "error" },
@@ -108,6 +119,7 @@ const useStyles = makeStyles()((theme: Theme) => ({
 }));
 
 export function SidebarRoot(props: { page: Page }): React.ReactElement {
+  const isSettingUpKeyBindings = useRef(false);
   useCycleRerender();
 
   let flash: Page | null = null;
@@ -177,81 +189,109 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     [flash],
   );
 
+  /**
+   * We use "keyBindingType is GoToPageKeyBindingType" to narrow down the type of keyBindingType.
+   */
+  const canGoToPage = useCallback(
+    (keyBindingType: KeyBindingType): keyBindingType is GoToPageKeyBindingType => {
+      switch (keyBindingType) {
+        case SimplePage.Terminal:
+        case ComplexPage.ScriptEditor:
+        case SimplePage.ActiveScripts:
+        case SimplePage.CreateProgram:
+        case SimplePage.Stats:
+        case SimplePage.Hacknet:
+        case SimplePage.City:
+        case SimplePage.Travel:
+        case SimplePage.Milestones:
+        case ComplexPage.Documentation:
+        case SimplePage.Achievements:
+        case SimplePage.Options:
+          return true;
+        case SimplePage.StaneksGift:
+          return canStaneksGift;
+        case SimplePage.Factions:
+          return canOpenFactions;
+        case SimplePage.Augmentations:
+          return canOpenAugmentations;
+        case SimplePage.Sleeves:
+          return canOpenSleeves;
+        case SimplePage.Grafting:
+          return canOpenGrafting;
+        case SimplePage.Job:
+          return canJob;
+        case SimplePage.StockMarket:
+          return canStockMarket;
+        case SimplePage.Bladeburner:
+          return canBladeburner;
+        case SimplePage.Corporation:
+          return canCorporation;
+        case SimplePage.Gang:
+          return canGang;
+        case SimplePage.Go:
+          return canIPvGO;
+        case ScriptEditorAction.Save:
+        case ScriptEditorAction.GoToTerminal:
+          return false;
+        default:
+          throwIfReachable(keyBindingType);
+      }
+      return false;
+    },
+    [
+      canStaneksGift,
+      canOpenFactions,
+      canOpenAugmentations,
+      canOpenSleeves,
+      canOpenGrafting,
+      canJob,
+      canStockMarket,
+      canBladeburner,
+      canCorporation,
+      canGang,
+      canIPvGO,
+    ],
+  );
+
   useEffect(() => {
-    // Shortcuts to navigate through the game
-    //  Alt-t - Terminal
-    //  Alt-c - Character
-    //  Alt-e - Script editor
-    //  Alt-s - Active scripts
-    //  Alt-h - Hacknet Nodes
-    //  Alt-w - City
-    //  Alt-j - Job
-    //  Alt-r - Travel Agency of current city
-    //  Alt-p - Create program
-    //  Alt-f - Factions
-    //  Alt-a - Augmentations
-    //  Alt-u - Tutorial
-    //  Alt-o - Options
-    //  Alt-b - Bladeburner
-    //  Alt-g - Gang
+    const clearSubscription = KeyBindingEvents.subscribe((eventType) => {
+      if (eventType === KeyBindingEventType.StartSettingUp) {
+        isSettingUpKeyBindings.current = true;
+      }
+      if (eventType === KeyBindingEventType.StopSettingUp) {
+        isSettingUpKeyBindings.current = false;
+      }
+    });
+    return clearSubscription;
+  }, []);
+
+  useEffect(() => {
     function handleShortcuts(this: Document, event: KeyboardEvent): void {
-      if (Settings.DisableHotkeys) return;
-      if ((Player.currentWork && Player.focus) || Router.page() === Page.BitVerse) return;
-      if (event.code === KEYCODE.T && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Terminal);
-      } else if (event.code === KEYCODE.C && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Stats);
-      } else if (event.code === KEYCODE.E && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.ScriptEditor);
-      } else if (event.code === KEYCODE.S && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.ActiveScripts);
-      } else if (event.code === KEYCODE.H && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Hacknet);
-      } else if (event.code === KEYCODE.W && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.City);
-      } else if (event.code === KEYCODE.J && event.altKey && !event.ctrlKey && !event.metaKey && canJob) {
-        // ctrl/cmd + alt + j is shortcut to open Chrome dev tools
-        event.preventDefault();
-        clickPage(Page.Job);
-      } else if (event.code === KEYCODE.R && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Travel);
-      } else if (event.code === KEYCODE.P && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.CreateProgram);
-      } else if (event.code === KEYCODE.F && event.altKey) {
-        if (props.page == Page.Terminal && Settings.EnableBashHotkeys) {
-          return;
+      if (Settings.DisableHotkeys) {
+        return;
+      }
+      if (event.getModifierState(event.key)) {
+        return;
+      }
+      if (isSettingUpKeyBindings.current) {
+        return;
+      }
+      if ((Player.currentWork && Player.focus) || Router.page() === Page.BitVerse) {
+        return;
+      }
+      const keyBindingTypes = determineKeyBindingTypes(CurrentKeyBindings, convertKeyboardEventToKeyCombination(event));
+      for (const keyBindingType of keyBindingTypes) {
+        if (!canGoToPage(keyBindingType)) {
+          continue;
         }
         event.preventDefault();
-        clickPage(Page.Factions);
-      } else if (event.code === KEYCODE.A && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Augmentations);
-      } else if (event.code === KEYCODE.U && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Documentation);
-      } else if (event.code === KEYCODE.O && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Options);
-      } else if (event.code === KEYCODE.B && event.altKey && Player.bladeburner) {
-        event.preventDefault();
-        clickPage(Page.Bladeburner);
-      } else if (event.code === KEYCODE.G && event.altKey && Player.gang) {
-        event.preventDefault();
-        clickPage(Page.Gang);
+        clickPage(keyBindingType);
       }
     }
 
     document.addEventListener("keydown", handleShortcuts);
     return () => document.removeEventListener("keydown", handleShortcuts);
-  }, [canJob, clickPage, props.page]);
+  }, [canGoToPage, clickPage, props.page]);
 
   const { classes } = useStyles();
   const [open, setOpen] = useState(Settings.IsSidebarOpened);

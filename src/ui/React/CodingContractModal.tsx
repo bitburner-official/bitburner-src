@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 
 import { CodingContract } from "../../CodingContract/Contract";
 import { CodingContractTypes } from "../../CodingContract/ContractTypes";
