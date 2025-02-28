@@ -57,7 +57,7 @@
     "@babel/preset-react": "^7.22.15",
     "@babel/preset-typescript": "^7.23.0",
     "@microsoft/api-documenter": "~7.23.38",
-    "@microsoft/api-extractor": "^7.47.5",
+    "@microsoft/api-extractor": "^7.51.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
     "@swc/core": "^1.9.3",
     "@types/babel__standalone": "^7.1.7",
