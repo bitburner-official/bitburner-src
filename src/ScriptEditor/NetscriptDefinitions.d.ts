@@ -6839,6 +6839,22 @@ export interface NS {
    */
   scan(host?: string): string[];
 
+  /**
+   * Get the list of servers connected to a server.
+   * @remarks
+   * RAM cost: 0.2 GB
+   * 
+   * Returns an array containing the IP addresses of all servers that are one
+   * node way from the specified target server. The IP addresses in the returned
+   * array are strings.
+   * 
+   * Works identically to {@link NS.scan | ns.scan}.
+   * 
+   * @param host - Optional.  Hostname of the server to scan, default to current server.
+   * @returns Returns an array of IP addresses
+   */
+  scanByIP(host?: string): string[];
+
   /** Returns whether the player has access to the darkweb.
    * @remarks
    * RAM cost: 0.05GB
@@ -7229,6 +7245,15 @@ export interface NS {
   getHostname(): string;
 
   /**
+   * Returns a string with the IP address of the server that the script is running on.
+   * 
+   * @remarks
+   * RAM cost: 0.05 GB
+   * @returns IP address of the server that the script runs on.
+   */
+  getIP(): string
+
+  /**
    * Returns the player’s current hacking level.
    *
    * @remarks
@@ -7403,6 +7428,15 @@ export interface NS {
    * @returns The number of open ports required to successfully run NUKE.exe on the specified server.
    */
   getServerNumPortsRequired(host: string): number;
+
+  /**
+   * Given a hostname, returns an IP address,
+   * Given an IP address, returns a hostname
+   * 
+   * @remarks RAM cost: 0.05 GB
+   * @param host - Hostname or IP address of target server.
+   */
+  dnsLookup(host: string): string
 
   /**
    * Returns a boolean denoting whether or not the specified server exists.
@@ -7618,6 +7652,14 @@ export interface NS {
    * @returns Returns an array with the hostnames of all of the servers you have purchased.
    */
   getPurchasedServers(): string[];
+
+  /**
+   * Returns an array with the IP addresses of all of the servers you have purchased.
+   *
+   * @remarks 1.05 GB
+   * @returns Returns an array with the IP addresses of all of the servers you have purchased.
+   */
+  getPurchasedServersByIP(): string[]
 
   /**
    * Returns the maximum number of servers you can purchase.

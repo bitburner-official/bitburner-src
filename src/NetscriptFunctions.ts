@@ -112,6 +112,7 @@ import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
+import { isIPAddress } from "./Types/strings";
 
 export const enums: NSEnums = {
   CityName,
@@ -172,6 +173,20 @@ export const ns: InternalAPI<NSFull> = {
       out.push(entry);
     }
     helpers.log(ctx, () => `returned ${server.serversOnNetwork.length} connections for ${server.hostname}`);
+    return out;
+  },
+  scanByIP: (ctx) => (_hostname) => {
+    const hostname = _hostname ?  helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
+    const server = helpers.getServer(ctx, hostname);
+    const out: string[] = [];
+    for (let i = 0; i < server.serversOnNetwork.length; i++) {
+      const s = getServerOnNetwork(server, i);
+      if (s === null) continue;
+      const entry = s.ip;
+      if (entry === null) continue;
+      out.push(entry);
+    }
+    helpers.log(ctx, () => `returned ${server.serversOnNetwork.length} connections for ${server.ip}`);
     return out;
   },
   hasTorRouter: () => () => Player.hasTorRouter(),
@@ -945,6 +960,11 @@ export const ns: InternalAPI<NSFull> = {
     return server.hasAdminRights;
   },
   getHostname: (ctx) => () => ctx.workerScript.hostname,
+  getIP: (ctx) => () => {
+    const hostname = ctx.workerScript.hostname;
+    const server = helpers.getServer(ctx, hostname);
+    return server.ip;
+  },
   getHackingLevel: (ctx) => () => {
     Player.updateSkillLevels();
     helpers.log(ctx, () => `returned ${Player.skills.hacking}`);
@@ -1135,6 +1155,11 @@ export const ns: InternalAPI<NSFull> = {
     const server = helpers.getServer(ctx, hostname);
     helpers.log(ctx, () => `returned ${formatRam(server.ramUsed)}`);
     return server.ramUsed;
+  },
+  dnsLookup: (ctx) => (_host) => {
+    const identifier = helpers.string(ctx, "host", _host);
+    const server = helpers.getServer(ctx, identifier);
+    return isIPAddress(identifier) ? server.hostname : server.ip;
   },
   serverExists: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -1349,6 +1374,14 @@ export const ns: InternalAPI<NSFull> = {
     const res: string[] = [];
     Player.purchasedServers.forEach(function (hostname) {
       res.push(hostname);
+    });
+    return res;
+  },
+  getPurchasedServersByIP: (ctx) => (): string[] => {
+    const res: string[] = [];
+    Player.purchasedServers.forEach(function (hostname) {
+      const server = helpers.getServer(ctx, hostname)
+      res.push(server.ip)
     });
     return res;
   },
