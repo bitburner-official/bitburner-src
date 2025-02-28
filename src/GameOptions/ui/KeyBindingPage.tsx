@@ -289,49 +289,36 @@ export function KeyBindingPage(): React.ReactElement {
         knowAboutBitverse() || !(SpoilerKeyBindingTypes as unknown as string[]).includes(keyBindingType),
     )
     .map((keyBindingType) => {
-      const primaryKeyCombination = CurrentKeyBindings[keyBindingType][0] ? (
-        parseKeyCombinationToString(CurrentKeyBindings[keyBindingType][0])
-      ) : (
-        // Use a non-breaking space to make the button fit to the parent td element.
-        <>&nbsp;</>
-      );
-      const secondaryKeyCombination = CurrentKeyBindings[keyBindingType][1] ? (
-        parseKeyCombinationToString(CurrentKeyBindings[keyBindingType][1])
-      ) : (
-        // Use a non-breaking space to make the button fit to the parent td element.
-        <>&nbsp;</>
-      );
       return (
         <tr key={keyBindingType}>
           <td>
             <Typography minWidth="250px">{keyBindingType}</Typography>
           </td>
-          <td>
-            <Button
-              sx={{
-                minWidth: "250px",
-                color: `${
-                  isCustomKeyCombination(keyBindingType, true) ? Settings.theme.warning : Settings.theme.primary
-                }`,
-              }}
-              onClick={() => showModal(keyBindingType, true)}
-            >
-              {primaryKeyCombination}
-            </Button>
-          </td>
-          <td>
-            <Button
-              sx={{
-                minWidth: "250px",
-                color: `${
-                  isCustomKeyCombination(keyBindingType, false) ? Settings.theme.warning : Settings.theme.primary
-                }`,
-              }}
-              onClick={() => showModal(keyBindingType, false)}
-            >
-              {secondaryKeyCombination}
-            </Button>
-          </td>
+          {[0, 1].map((value) => {
+            const isPrimary = value === 0;
+            return (
+              <td key={`${keyBindingType}-${value}`}>
+                <Button
+                  sx={{
+                    minWidth: "250px",
+                    color: `${
+                      isCustomKeyCombination(keyBindingType, isPrimary)
+                        ? Settings.theme.warning
+                        : Settings.theme.primary
+                    }`,
+                  }}
+                  onClick={() => showModal(keyBindingType, isPrimary)}
+                >
+                  {CurrentKeyBindings[keyBindingType][value] ? (
+                    parseKeyCombinationToString(CurrentKeyBindings[keyBindingType][value])
+                  ) : (
+                    // Use a non-breaking space to make the button fit to the parent td element.
+                    <>&nbsp;</>
+                  )}
+                </Button>
+              </td>
+            );
+          })}
         </tr>
       );
     });
