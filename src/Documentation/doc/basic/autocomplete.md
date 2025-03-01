@@ -1,24 +1,24 @@
 # Autocomplete
 
-The BitBurner terminal offers tab-completion, where pressing tab after typing a script name offers suggestions for arguments to pass to the script.
+The BitBurner terminal offers tab-completion, where pressing tab after typing a command offers suggestions for arguments to pass. You can customize this behavior for your scripts.
 
 This relies on an exported function named "autocomplete" that is placed _outside_ of main, in the base scope of the script.
-
-```
-  autocomplete(data, args)
-  data (Object) – general data about the game you might want to autocomplete.
-  args (string[]) – current arguments. Minus run script.js
-```
 
 This function must return an array, the contents of which make up the autocomplete options.
 
 A basic example as a complete script;
 
 ```javascript
+/**
+ * @param {AutocompleteData} data - context about the game, useful when autocompleting
+ * @param {string[]} args - current arguments, not including "run script.js"
+ * @returns {string[]} - the array of possible autocomplete options
+ */
 export function autocomplete(data, args) {
   return ["argument0", "argument1", "argument2"];
 }
 
+/** @param {NS} ns */
 export function main(ns) {
   const args = ns.args;
   ns.tprint(args[0], args[1], args[2]);
@@ -50,6 +50,11 @@ AutocompleteData is an object with the following properties;
 Here is a more complete example, utilising and returning information from the AutocompleteData object.
 
 ```javascript
+/**
+ * @param {AutocompleteData} data - context about the game, useful when autocompleting
+ * @param {string[]} args - current arguments, not including "run script.js"
+ * @returns {string[]} - the array of possible autocomplete options
+ */
 export function autocomplete(data, args) {
   const scripts = data.scripts;
   const servers = data.servers;
@@ -63,13 +68,18 @@ export function autocomplete(data, args) {
 
 ## args
 
-The args array is also passed to the autocomplete function as a second parameter. Similar to ns.args in normal scripts, this array contains the arguments already passed to a script.
+The args array is also passed to the autocomplete function as a second parameter. Similar to ns.args passed to `main` in normal scripts, this array contains the arguments currently inputted into the terminal.
 
 This can be used to remove already passed arguments from the autocomplete suggestions.
 
 For example;
 
 ```javascript
+/**
+ * @param {AutocompleteData} data - context about the game, useful when autocompleting
+ * @param {string[]} args - current arguments, not including "run script.js"
+ * @returns {string[]} - the array of possible autocomplete options
+ */
 export function autocomplete(data, args) {
   const servers = data.servers;
   const serversWithArgsRemoved = servers.filter((server) => !args.includes(server));
@@ -78,11 +88,10 @@ export function autocomplete(data, args) {
 }
 ```
 
-Using this autocomplete function, typing `run script.js` and pressing tab would suggest every server for autocomplete.
-
-If that script is typed again like `run script.js n00dles` then n00dles would not be suggested.
+In that example typing `run script.js` and pressing tab would initially suggest every server for autocomplete. Then if "n00dles" is added to the arguments and tab is pressed again, "n00dles" would no longer be suggested in subsequent autocomplete calls.
 
 # Notes
 
-- The autocomplete function is run separately from main, and does not receive an `ns` context as a parameter. This means no regular `ns` game commands will work in autocomplete functions.
-- If a multi-element array is returned, multiple options are displayed. If a single-element array is returned than that string is auto-filled to the command line. This is handy for the "--tail" run argument, for example.
+- The autocomplete function in the file is called each time the tab key is pressed following `run file.js` or `./file.js` in the terminal.
+- The autocomplete function is separate from `main`, and does not receive an `ns` context as a parameter. This means no `ns` game commands will work in autocomplete functions.
+- If a multi-element array is returned then multiple options are displayed. If a single-element array is returned then that element is auto-filled to the terminal. This is handy for the "--tail" run argument, for example.
