@@ -276,11 +276,12 @@ const Engine: {
       tryGeneratingRandomContract(timeOffline / CONSTANTS.MillisecondsPerTenMinutes);
 
       let offlineReputation = 0;
-      const offlineHackingIncome =
+      let offlineHackingIncome =
         (Player.moneySourceA.hacking / Player.playtimeSinceLastAug) * timeOffline * CONSTANTS.OfflineHackingIncome;
-      if (Number.isFinite(offlineHackingIncome)) {
-        Player.gainMoney(offlineHackingIncome, "hacking");
+      if (!Number.isFinite(offlineHackingIncome)) {
+        offlineHackingIncome = 0;
       }
+      Player.gainMoney(offlineHackingIncome, "hacking");
       // Process offline progress
 
       loadAllRunningScripts(); // This also takes care of offline production for those scripts

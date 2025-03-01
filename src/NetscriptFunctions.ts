@@ -1565,7 +1565,7 @@ export const ns: InternalAPI<NSFull> = {
     }
 
     let incomeFromScriptsSinceLastAug = Player.scriptProdSinceLastAug / (Player.playtimeSinceLastAug / 1000);
-    if (Number.isFinite(incomeFromScriptsSinceLastAug)) {
+    if (!Number.isFinite(incomeFromScriptsSinceLastAug)) {
       incomeFromScriptsSinceLastAug = 0;
     }
     return [total, incomeFromScriptsSinceLastAug];
