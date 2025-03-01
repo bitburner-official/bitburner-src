@@ -1573,7 +1573,7 @@ export interface TIX {
    * @remarks
    * RAM cost: 2.5 GB
    * Volatility represents the maximum percentage by which a stock’s price can change every tick.
-   * The volatility is returned as a decimal value, NOT a percentage
+   * The volatility is returned in the range 0-1.
    * (e.g. if a stock has a volatility of 3%, then this function will return 0.03, NOT 3).
    *
    * In order to use this function, you must first purchase access to the Four Sigma (4S) Market Data TIX API.
@@ -1588,7 +1588,7 @@ export interface TIX {
    * tick.
    * @remarks
    * RAM cost: 2.5 GB
-   * The probability is returned as a decimal value, NOT a percentage
+   * The probability is returned in the range 0-1.
    * (e.g. if a stock has a 60% chance of increasing, then this function will return 0.6, NOT 60).
    *
    * In other words, if this function returned 0.30 for a stock, then this means that the stock’s price has a
@@ -3423,8 +3423,8 @@ export interface Bladeburner {
    * RAM cost: 4 GB
    *
    * Returns the estimated success chance for the specified action.
-   * This chance is returned as a decimal value, NOT a percentage
-   * (e.g. if you have an estimated success chance of 80%, then this function will return 0.80, NOT 80).
+   * This chance is returned in the range 0-1.
+   * (e.g. if you have an estimated success chance of 80%, then this function will return 0.8, NOT 80).
    * Returns 2 values, value[0] - MIN Chance, value[1] - MAX Chance
    *
    * @param type - Type of action.
@@ -4291,7 +4291,7 @@ export interface Gang {
    * @remarks
    * RAM cost: 4 GB
    *
-   * Returns the chance you have to win a clash with the specified gang. The chance is returned in decimal form, not percentage
+   * Returns the chance you have to win a clash with the specified gang. The chance is returned in the range 0-1.
    *
    * @param gangName - Target gang
    * @returns Chance you have to win a clash with the specified gang.
@@ -6272,7 +6272,7 @@ export interface NS {
    *
    * Returns the chance you have of successfully hacking the specified server.
    *
-   * This returned value is in decimal form, not percentage.
+   * This returned value is in the range 0-1.
    *
    * Like other basic hacking analysis functions, this calculation uses the current status of the player and server.
    * To calculate using hypothetical server or player status, obtain access to the Formulas API and use {@link HackingFormulas.hackChance | formulas.hacking.hackChance}.
