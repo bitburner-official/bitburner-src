@@ -12,7 +12,7 @@ import { Player } from "@player";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { isPowerOfTwo } from "../utils/helpers/isPowerOfTwo";
 import { workerScripts } from "../Netscript/WorkerScripts";
-import { isIPAddress } from "src/Types/strings";
+import { isIPAddress } from "../Types/strings";
 
 // Returns the cost of purchasing a server with the given RAM
 // Returns Infinity for invalid 'ram' arguments
