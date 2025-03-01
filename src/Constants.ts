@@ -4,7 +4,7 @@
  * Constants for specific mechanics or features will NOT be here.
  */
 export const CONSTANTS = {
-  VersionString: "2.7.1dev",
+  VersionString: "2.8.0dev",
   isDevBranch: true,
   VersionNumber: 41,
 
@@ -109,7 +109,7 @@ export const CONSTANTS = {
 
   // Also update Documentation/doc/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v2.7.1 dev branch: Last updated 28 February 2025
+## v2.8.0 dev branch: Last updated 01 March 2025
 
 ### MAJOR CHANGES
 

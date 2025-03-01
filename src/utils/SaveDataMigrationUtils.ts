@@ -528,7 +528,7 @@ Error: ${e}`,
   if (ver < 39) {
     showAPIBreaks("2.6.1", ...breakInfos261);
   }
-  if (ver <= 41) {
+  if (ver < 42) {
     // All whitespace except for spaces was allowed in filenames
     let found = false;
     for (const server of GetAllServers()) {
