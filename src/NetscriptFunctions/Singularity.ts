@@ -474,16 +474,16 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       const server = Player.getCurrentServer();
       cat([filename], server);
     },
-    connect: (ctx) => (_hostname) => {
+    connect: (ctx) => (_host) => {
       helpers.checkSingularityAccess(ctx);
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      if (!hostname) {
-        throw helpers.errorMessage(ctx, `Invalid hostname: '${hostname}'`);
+      const host = helpers.string(ctx, "host", _host);
+      if (!host) {
+        throw helpers.errorMessage(ctx, `Invalid hostname: '${host}'`);
       }
 
-      const target = GetServer(hostname);
+      const target = GetServer(host);
       if (target == null) {
-        throw helpers.errorMessage(ctx, `Invalid hostname: '${hostname}'`);
+        throw helpers.errorMessage(ctx, `Invalid hostname: '${host}'`);
       }
 
       // Adjacent servers
@@ -498,8 +498,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           );
           return false;
         }
-        if (other.hostname === hostname) {
-          Terminal.connectToServer(hostname, true);
+        if (other.hostname === target.hostname) {
+          Terminal.connectToServer(host, true);
           return true;
         }
       }
@@ -509,7 +509,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
        * is true.
        */
       if (target.backdoorInstalled || target.purchasedByPlayer) {
-        Terminal.connectToServer(hostname, true);
+        Terminal.connectToServer(host, true);
         return true;
       }
 
