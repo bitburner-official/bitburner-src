@@ -232,6 +232,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
           return canIPvGO;
         case ScriptEditorAction.Save:
         case ScriptEditorAction.GoToTerminal:
+        case ScriptEditorAction.Run:
           return false;
         default:
           throwIfReachable(keyBindingType);

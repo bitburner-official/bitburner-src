@@ -29,9 +29,10 @@ type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 interface IProps {
   editor: IStandaloneCodeEditor | null;
   onSave: () => void;
+  onRun: () => void;
 }
 
-export function Toolbar({ editor, onSave }: IProps) {
+export function Toolbar({ editor, onSave, onRun }: IProps) {
   const [ramInfoOpen, { on: openRAMInfo, off: closeRAMInfo }] = useBoolean(false);
   const [optionsOpen, { on: openOptions, off: closeOptions }] = useBoolean(false);
 
@@ -74,6 +75,11 @@ export function Toolbar({ editor, onSave }: IProps) {
         <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.GoToTerminal])}>
           <Button sx={{ mx: 1 }} onClick={() => Router.toPage(Page.Terminal)}>
             Terminal
+          </Button>
+        </Tooltip>
+        <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.Run])}>
+          <Button sx={{ mr: 1 }} onClick={onRun}>
+            Run
           </Button>
         </Tooltip>
         <Typography>

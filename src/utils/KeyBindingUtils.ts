@@ -6,6 +6,7 @@ import { KEY } from "./KeyboardEventKey";
 export enum ScriptEditorAction {
   Save = "ScriptEditor-Save",
   GoToTerminal = "ScriptEditor-GoToTerminal",
+  Run = "ScriptEditor-Run",
 }
 
 export const SpoilerKeyBindingTypes = [
@@ -220,7 +221,7 @@ export const DefaultKeyBindings: Record<KeyBindingType, [KeyCombination | null, 
     },
     null,
   ],
-  "ScriptEditor-Save": [
+  [ScriptEditorAction.Save]: [
     {
       control: true,
       alt: false,
@@ -236,7 +237,7 @@ export const DefaultKeyBindings: Record<KeyBindingType, [KeyCombination | null, 
       key: "S",
     },
   ],
-  "ScriptEditor-GoToTerminal": [
+  [ScriptEditorAction.GoToTerminal]: [
     {
       control: true,
       alt: false,
@@ -251,6 +252,16 @@ export const DefaultKeyBindings: Record<KeyBindingType, [KeyCombination | null, 
       meta: true,
       key: "B",
     },
+  ],
+  [ScriptEditorAction.Run]: [
+    {
+      control: true,
+      alt: false,
+      shift: false,
+      meta: false,
+      key: "Q",
+    },
+    null,
   ],
 };
 

@@ -47,6 +47,8 @@ import {
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
+import { Player } from "@player";
+import { Terminal } from "../../Terminal";
 
 // Extend acorn-walk to support TypeScript nodes.
 extendAcornWalkForTypeScriptNodes(walk.base);
@@ -219,6 +221,32 @@ function Root(props: IProps): React.ReactElement {
     rerender();
   }, [rerender]);
 
+  const run = useCallback(() => {
+    if (currentScript === null) {
+      return;
+    }
+    // Check if the current script's server is valid.
+    const server = GetServer(currentScript.hostname);
+    if (server === null) {
+      return;
+    }
+
+    // Always save before doing anything else.
+    save();
+
+    // Check if the player can run scripts on this server.
+    if (!server.hasAdminRights) {
+      dialogBoxCreate(`You do not have root access on ${server.hostname} server.`);
+      return;
+    }
+    // Connect to the current script's server if needed.
+    if (Player.currentServer !== currentScript.hostname) {
+      Terminal.connectToServer(currentScript.hostname);
+    }
+    // Run the script as if the player runs it manually in the terminal.
+    Terminal.executeCommand(`run ${currentScript.path}`);
+  }, [save]);
+
   useEffect(() => {
     function keydown(event: KeyboardEvent): void {
       if (Settings.DisableHotkeys) {
@@ -234,10 +262,14 @@ function Root(props: IProps): React.ReactElement {
         event.preventDefault();
         Router.toPage(Page.Terminal);
       }
+      if (keyBindingTypes.has(ScriptEditorAction.Run)) {
+        event.preventDefault();
+        run();
+      }
     }
     document.addEventListener("keydown", keydown);
     return () => document.removeEventListener("keydown", keydown);
-  }, [save]);
+  }, [save, run]);
 
   function infLoop(ast: AST, code: string): void {
     if (editorRef.current === null || currentScript === null || isLegacyScript(currentScript.path)) {
@@ -568,7 +600,7 @@ function Root(props: IProps): React.ReactElement {
 
         {statusBarRef.current}
 
-        <Toolbar onSave={save} editor={editorRef.current} />
+        <Toolbar onSave={save} onRun={run} editor={editorRef.current} />
       </div>
       {!currentScript && <NoOpenScripts />}
     </>
