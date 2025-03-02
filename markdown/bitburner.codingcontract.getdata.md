@@ -17,7 +17,7 @@ getData(filename: string, host?: string): any;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  filename | string | Filename of the contract. |
-|  host | string | _(Optional)_ Host of the server containing the contract. Optional. Defaults to current server if not provided. |
+|  host | string | _(Optional)_ Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided. |
 
 **Returns:**
 

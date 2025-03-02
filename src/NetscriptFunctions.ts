@@ -176,7 +176,7 @@ export const ns: InternalAPI<NSFull> = {
     return out;
   },
   scanByIP: (ctx) => (_host) => {
-    const host = _host ?  helpers.string(ctx, "hostname", _host) : ctx.workerScript.hostname;
+    const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
     const server = helpers.getServer(ctx, host);
     const out: string[] = [];
     for (let i = 0; i < server.serversOnNetwork.length; i++) {
@@ -1380,8 +1380,8 @@ export const ns: InternalAPI<NSFull> = {
   getPurchasedServersByIP: (ctx) => (): string[] => {
     const res: string[] = [];
     Player.purchasedServers.forEach(function (hostname) {
-      const server = helpers.getServer(ctx, hostname)
-      res.push(server.ip)
+      const server = helpers.getServer(ctx, hostname);
+      res.push(server.ip);
     });
     return res;
   },

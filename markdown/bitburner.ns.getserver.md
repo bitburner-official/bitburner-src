@@ -16,7 +16,7 @@ getServer(host?: string): Server;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | _(Optional)_ Optional. Hostname for the requested server object. |
+|  host | string | _(Optional)_ Optional. Hostname/IP for the requested server object. |
 
 **Returns:**
 

@@ -16,7 +16,7 @@ weaken(host: string, opts?: BasicHGWOptions): Promise<number>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | Hostname of the target server to weaken. |
+|  host | string | Hostname/IP of the target server to weaken. |
 |  opts | [BasicHGWOptions](./bitburner.basichgwoptions.md) | _(Optional)_ Optional parameters for configuring function behavior. |
 
 **Returns:**

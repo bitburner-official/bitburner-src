@@ -16,7 +16,7 @@ scan(host?: string): string[];
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | _(Optional)_ Optional. Hostname of the server to scan, default to current server. |
+|  host | string | _(Optional)_ Optional. Hostname/IP of the server to scan, default to current server. |
 
 **Returns:**
 

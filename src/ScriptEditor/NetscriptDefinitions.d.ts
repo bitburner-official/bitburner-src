@@ -6843,13 +6843,13 @@ export interface NS {
    * Get the list of servers connected to a server.
    * @remarks
    * RAM cost: 0.2 GB
-   * 
+   *
    * Returns an array containing the IP addresses of all servers that are one
    * node way from the specified target server. The IP addresses in the returned
    * array are strings.
-   * 
+   *
    * Works identically to {@link NS.scan | ns.scan}.
-   * 
+   *
    * @param host - Optional.  Hostname/IP of the server to scan, default to current server.
    * @returns Returns an array of IP addresses
    */
@@ -7246,12 +7246,12 @@ export interface NS {
 
   /**
    * Returns a string with the IP address of the server that the script is running on.
-   * 
+   *
    * @remarks
    * RAM cost: 0.05 GB
    * @returns IP address of the server that the script runs on.
    */
-  getIP(): string
+  getIP(): string;
 
   /**
    * Returns the player’s current hacking level.
@@ -7432,11 +7432,11 @@ export interface NS {
   /**
    * Given a hostname, returns an IP address,
    * Given an IP address, returns a hostname
-   * 
+   *
    * @remarks RAM cost: 0 GB
    * @param host - Hostname/IP of target server.
    */
-  dnsLookup(host: string): string
+  dnsLookup(host: string): string;
 
   /**
    * Returns a boolean denoting whether or not the specified server exists.
@@ -7659,7 +7659,7 @@ export interface NS {
    * @remarks 1.05 GB
    * @returns Returns an array with the IP addresses of all of the servers you have purchased.
    */
-  getPurchasedServersByIP(): string[]
+  getPurchasedServersByIP(): string[];
 
   /**
    * Returns the maximum number of servers you can purchase.
