@@ -6782,7 +6782,7 @@ export interface NS {
   setTitle(title: string | ReactNode, pid?: number): void;
 
   /**
-   * Get the list of servers connected to a server.
+   * Get the list of hostnames connected to a server.
    * @remarks
    * RAM cost: 0.2 GB
    *
@@ -6840,7 +6840,7 @@ export interface NS {
   scan(host?: string): string[];
 
   /**
-   * Get the list of servers connected to a server.
+   * Get the list of IPs connected to a server.
    * @remarks
    * RAM cost: 0.2 GB
    *
@@ -7430,8 +7430,7 @@ export interface NS {
   getServerNumPortsRequired(host: string): number;
 
   /**
-   * Given a hostname, returns an IP address,
-   * Given an IP address, returns a hostname
+   * Given a hostname, returns its IP address; or given an IP address, returns its hostname.
    *
    * @remarks RAM cost: 0 GB
    * @param host - Hostname/IP of target server.

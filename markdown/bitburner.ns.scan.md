@@ -4,7 +4,7 @@
 
 ## NS.scan() method
 
-Get the list of servers connected to a server.
+Get the list of hostnames connected to a server.
 
 **Signature:**
 

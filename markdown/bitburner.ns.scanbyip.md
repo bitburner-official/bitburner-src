@@ -4,7 +4,7 @@
 
 ## NS.scanByIP() method
 
-Get the list of servers connected to a server.
+Get the list of IPs connected to a server.
 
 **Signature:**
 

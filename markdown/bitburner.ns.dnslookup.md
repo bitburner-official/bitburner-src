@@ -4,7 +4,7 @@
 
 ## NS.dnsLookup() method
 
-Given a hostname, returns an IP address, Given an IP address, returns a hostname
+Given a hostname, returns its IP address; or given an IP address, returns its hostname.
 
 **Signature:**
 

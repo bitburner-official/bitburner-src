@@ -64,7 +64,7 @@ export async function main(ns) {
 |  [closeTail(pid)](./bitburner.ns.closetail.md) | Close the tail window of a script. This function is deprecated and will be removed in a later version. |
 |  [deleteServer(host)](./bitburner.ns.deleteserver.md) | Delete a purchased server. |
 |  [disableLog(fn)](./bitburner.ns.disablelog.md) | Disables logging for the given NS function. |
-|  [dnsLookup(host)](./bitburner.ns.dnslookup.md) | Given a hostname, returns an IP address, Given an IP address, returns a hostname |
+|  [dnsLookup(host)](./bitburner.ns.dnslookup.md) | Given a hostname, returns its IP address; or given an IP address, returns its hostname. |
 |  [enableLog(fn)](./bitburner.ns.enablelog.md) | Enables logging for the given NS function. |
 |  [exec(script, host, threadOrOptions, args)](./bitburner.ns.exec.md) | Start another script on any server. |
 |  [exit()](./bitburner.ns.exit.md) | Terminates the current script immediately. |
@@ -154,8 +154,8 @@ export async function main(ns) {
 |  [resizeTail(width, height, pid)](./bitburner.ns.resizetail.md) | Resize a tail window. This function is deprecated and will be removed in a later version. |
 |  [rm(name, host)](./bitburner.ns.rm.md) | Delete a file. |
 |  [run(script, threadOrOptions, args)](./bitburner.ns.run.md) | Start another script on the current server. |
-|  [scan(host)](./bitburner.ns.scan.md) | Get the list of servers connected to a server. |
-|  [scanByIP(host)](./bitburner.ns.scanbyip.md) | Get the list of servers connected to a server. |
+|  [scan(host)](./bitburner.ns.scan.md) | Get the list of hostnames connected to a server. |
+|  [scanByIP(host)](./bitburner.ns.scanbyip.md) | Get the list of IPs connected to a server. |
 |  [scp(files, destination, source)](./bitburner.ns.scp.md) | Copy file between servers. |
 |  [scriptKill(script, host)](./bitburner.ns.scriptkill.md) | Kill all scripts with a filename. |
 |  [scriptRunning(script, host)](./bitburner.ns.scriptrunning.md) | Check if any script with a filename is running. |
