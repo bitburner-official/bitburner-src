@@ -39,6 +39,7 @@ import { isLegacyScript, legacyScriptExtension, resolveScriptFilePath, ScriptFil
 import { root } from "./Paths/Directory";
 import { getErrorMessageWithStackAndCause } from "./utils/ErrorHelper";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
+import { Result } from "./types";
 
 export const NetscriptPorts = new Map<PortNumber, Port>();
 
@@ -451,18 +452,65 @@ export function loadAllRunningScripts(): void {
   }
 }
 
+export function createRunningScriptInstance(
+  server: BaseServer,
+  scriptPath: ScriptFilePath,
+  ramOverride: number | null | undefined,
+  threads: number,
+  args: ScriptArg[],
+): Result<{ runningScript: RunningScript }> {
+  const script = server.scripts.get(scriptPath);
+  if (!script) {
+    return {
+      success: false,
+      message: `Script ${scriptPath} does not exist on ${server.hostname}.`,
+    };
+  }
+
+  if (!server.hasAdminRights) {
+    return {
+      success: false,
+      message: `You do not have root access on ${server.hostname}.`,
+    };
+  }
+
+  const singleRamUsage = ramOverride ?? script.getRamUsage(server.scripts);
+  if (!singleRamUsage) {
+    return {
+      success: false,
+      message: `Cannot calculate RAM usage of ${scriptPath}. Reason: ${script.ramCalculationError}`,
+    };
+  }
+  const ramUsage = singleRamUsage * threads;
+  const ramAvailable = server.maxRam - server.ramUsed;
+  if (ramUsage > ramAvailable + 0.001) {
+    return {
+      success: false,
+      message: `Cannot run ${scriptPath} (t=${threads}) on ${server.hostname}. This script requires ${formatRam(
+        ramUsage,
+      )} of RAM.`,
+    };
+  }
+
+  const runningScript = new RunningScript(script, singleRamUsage, args);
+  return {
+    success: true,
+    runningScript,
+  };
+}
+
 /** Run a script from inside another script (run(), exec(), spawn(), etc.) */
 export function runScriptFromScript(
   caller: string,
-  host: BaseServer,
-  scriptname: ScriptFilePath,
+  server: BaseServer,
+  scriptPath: ScriptFilePath,
   args: ScriptArg[],
   workerScript: WorkerScript,
   runOpts: CompleteRunOptions,
 ): number {
-  const script = host.scripts.get(scriptname);
-  if (!script) {
-    workerScript.log(caller, () => `Could not find script '${scriptname}' on '${host.hostname}'`);
+  const result = createRunningScriptInstance(server, scriptPath, runOpts.ramOverride, runOpts.threads, args);
+  if (!result.success) {
+    workerScript.log(caller, () => result.message);
     return 0;
   }
 
@@ -471,49 +519,24 @@ export function runScriptFromScript(
     runOpts.preventDuplicates &&
     getRunningScriptsByArgs(
       { workerScript, function: "runScriptFromScript", functionPath: "internal.runScriptFromScript" },
-      scriptname,
-      host.hostname,
+      scriptPath,
+      server.hostname,
       args,
     ) !== null
   ) {
-    workerScript.log(caller, () => `'${scriptname}' is already running on '${host.hostname}'`);
+    workerScript.log(caller, () => `'${scriptPath}' is already running on '${server.hostname}'`);
     return 0;
   }
 
-  const singleRamUsage = runOpts.ramOverride ?? script.getRamUsage(host.scripts);
-  if (!singleRamUsage) {
-    workerScript.log(caller, () => `Ram usage could not be calculated for ${scriptname}`);
-    return 0;
-  }
-
-  // Check if admin rights on host, fail if not.
-  if (!host.hasAdminRights) {
-    workerScript.log(caller, () => `You do not have root access on '${host.hostname}'`);
-    return 0;
-  }
-
-  // Calculate ram usage including thread count
-  const ramUsage = singleRamUsage * runOpts.threads;
-
-  // Check if there is enough ram to run the script, fail if not.
-  const ramAvailable = host.maxRam - host.ramUsed;
-  if (ramUsage > ramAvailable + 0.001) {
-    workerScript.log(
-      caller,
-      () =>
-        `Cannot run script '${scriptname}' (t=${runOpts.threads}) on '${host.hostname}' because there is not enough available RAM!`,
-    );
-    return 0;
-  }
   // Able to run script
   workerScript.log(
     caller,
-    () => `'${scriptname}' on '${host.hostname}' with ${runOpts.threads} threads and args: ${arrayToString(args)}.`,
+    () => `'${scriptPath}' on '${server.hostname}' with ${runOpts.threads} threads and args: ${arrayToString(args)}.`,
   );
-  const runningScriptObj = new RunningScript(script, singleRamUsage, args);
+  const runningScriptObj = result.runningScript;
   runningScriptObj.parent = workerScript.pid;
   runningScriptObj.threads = runOpts.threads;
   runningScriptObj.temporary = runOpts.temporary;
 
-  return startWorkerScript(runningScriptObj, host, workerScript);
+  return startWorkerScript(runningScriptObj, server, workerScript);
 }

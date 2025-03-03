@@ -47,8 +47,7 @@ import {
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
-import { Player } from "@player";
-import { Terminal } from "../../Terminal";
+import { createRunningScriptInstance, startWorkerScript } from "../../NetscriptWorker";
 
 // Extend acorn-walk to support TypeScript nodes.
 extendAcornWalkForTypeScriptNodes(walk.base);
@@ -225,6 +224,11 @@ function Root(props: IProps): React.ReactElement {
     if (currentScript === null) {
       return;
     }
+    // Check if "currentScript" is a script. It may be a text file.
+    if (!hasScriptExtension(currentScript.path)) {
+      dialogBoxCreate(`Cannot run ${currentScript.path}. It is not a script.`);
+      return;
+    }
     // Check if the current script's server is valid.
     const server = GetServer(currentScript.hostname);
     if (server === null) {
@@ -239,12 +243,13 @@ function Root(props: IProps): React.ReactElement {
       dialogBoxCreate(`You do not have root access on ${server.hostname} server.`);
       return;
     }
-    // Connect to the current script's server if needed.
-    if (Player.currentServer !== currentScript.hostname) {
-      Terminal.connectToServer(currentScript.hostname);
+
+    const result = createRunningScriptInstance(server, currentScript.path, null, 1, []);
+    if (!result.success) {
+      dialogBoxCreate(result.message);
+      return;
     }
-    // Run the script as if the player runs it manually in the terminal.
-    Terminal.executeCommand(`run ${currentScript.path}`);
+    startWorkerScript(result.runningScript, server);
   }, [save]);
 
   useEffect(() => {
