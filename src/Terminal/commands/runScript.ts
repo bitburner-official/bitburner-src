@@ -11,7 +11,11 @@ import { roundToTwo } from "../../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../../Netscript/RamCostGenerator";
 import { pluralize } from "../../utils/I18nUtils";
 
-export function runScript(scriptPath: ScriptFilePath, commandArgs: (string | number | boolean)[], server: BaseServer): void {
+export function runScript(
+  scriptPath: ScriptFilePath,
+  commandArgs: (string | number | boolean)[],
+  server: BaseServer,
+): void {
   const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
   let flags: {
     _: ScriptArg[];
