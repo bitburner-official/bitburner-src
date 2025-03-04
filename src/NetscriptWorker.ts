@@ -508,6 +508,7 @@ export function runScriptFromScript(
   workerScript: WorkerScript,
   runOpts: CompleteRunOptions,
 ): number {
+  // This does not adjust server RAM usage or change any state, so it is safe to call before performing other checks
   const result = createRunningScriptInstance(server, scriptPath, runOpts.ramOverride, runOpts.threads, args);
   if (!result.success) {
     workerScript.log(caller, () => result.message);
