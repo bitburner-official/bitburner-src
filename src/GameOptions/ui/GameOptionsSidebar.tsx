@@ -299,7 +299,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
         open={confirmResetOpen}
         onClose={() => setConfirmResetOpen(false)}
         onConfirm={props.reactivateTutorial}
-        confirmationText={"Reset your stats and money to start the tutorial? Home scripts will not be reset."}
+        confirmationText={"Restart the tutorial? Running scripts will be killed."}
         additionalButton={<Button onClick={() => setConfirmResetOpen(false)}>Cancel</Button>}
       />
     </Box>
