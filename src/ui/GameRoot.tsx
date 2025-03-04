@@ -356,7 +356,7 @@ export function GameRoot(): React.ReactElement {
           reactivateTutorial={() => {
             prestigeWorkerScripts();
             Player.getHomeComputer().pushProgram(CompletedProgramName.nuke);
-            Player.currentServer = SpecialServers.Home;
+            Terminal.connectToServer(SpecialServers.Home);
             Router.toPage(Page.Terminal);
             iTutorialStart();
           }}
