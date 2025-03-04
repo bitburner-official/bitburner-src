@@ -7,12 +7,11 @@ import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { saveObject } from "../SaveObject";
 import { onExport } from "../ExportBonus";
-import { LocationName } from "@enums";
+import { CompletedProgramName, LocationName } from "@enums";
 import { ITutorial, iTutorialStart } from "../InteractiveTutorial";
 import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutorialRoot";
 import { ITutorialEvents } from "./InteractiveTutorial/ITutorialEvents";
 
-import { prestigeAugmentation } from "../Prestige";
 import { prestigeWorkerScripts } from "../NetscriptWorker";
 import { dialogBoxCreate } from "./React/DialogBox";
 import { GetAllServers } from "../Server/AllServers";
@@ -77,6 +76,7 @@ import { GoRoot } from "../Go/ui/GoRoot";
 import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { SpecialServers } from "src/Server/data/SpecialServers";
 
 const htmlLocation = location;
 
@@ -354,7 +354,8 @@ export function GameRoot(): React.ReactElement {
           forceKill={killAllScripts}
           softReset={softReset}
           reactivateTutorial={() => {
-            prestigeAugmentation();
+            Player.getHomeComputer().pushProgram(CompletedProgramName.nuke);
+            Player.currentServer = SpecialServers.Home;
             Router.toPage(Page.Terminal);
             iTutorialStart();
           }}
