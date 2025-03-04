@@ -354,6 +354,7 @@ export function GameRoot(): React.ReactElement {
           forceKill={killAllScripts}
           softReset={softReset}
           reactivateTutorial={() => {
+            prestigeWorkerScripts()
             Player.getHomeComputer().pushProgram(CompletedProgramName.nuke);
             Player.currentServer = SpecialServers.Home;
             Router.toPage(Page.Terminal);
