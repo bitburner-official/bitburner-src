@@ -238,12 +238,6 @@ function Root(props: IProps): React.ReactElement {
     // Always save before doing anything else.
     save();
 
-    // Check if the player can run scripts on this server.
-    if (!server.hasAdminRights) {
-      dialogBoxCreate(`You do not have root access on ${server.hostname} server.`);
-      return;
-    }
-
     const result = createRunningScriptInstance(server, currentScript.path, null, 1, []);
     if (!result.success) {
       dialogBoxCreate(result.message);
