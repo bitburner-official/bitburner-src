@@ -76,7 +76,7 @@ import { GoRoot } from "../Go/ui/GoRoot";
 import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
-import { SpecialServers } from "src/Server/data/SpecialServers";
+import { SpecialServers } from "../Server/data/SpecialServers";
 
 const htmlLocation = location;
 
