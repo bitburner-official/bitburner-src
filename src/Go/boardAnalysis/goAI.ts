@@ -403,7 +403,9 @@ async function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): Promi
     return moves.corner()?.point ?? null;
   }
 
-  const hasMoves = [moves.eyeMove(), moves.eyeBlock(), moves.growth(), moves.defend(), surround].filter((m) => m).length;
+  const hasMoves = [moves.eyeMove(), moves.eyeBlock(), moves.growth(), moves.defend(), surround].filter(
+    (m) => m,
+  ).length;
   const usePattern = rng > 0.25 || !hasMoves;
 
   if ((await moves.pattern()) && usePattern) {
