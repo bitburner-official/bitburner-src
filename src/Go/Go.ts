@@ -7,12 +7,17 @@ import { getNewBoardState } from "./boardState/boardState";
 import { EventEmitter } from "../utils/EventEmitter";
 import { newOpponentStats } from "./Constants";
 
+export const getEmptyHighlightedPoints = (size: number) => {
+  return Array.from({ length: size }, () => Array.from({ length: size }, () => null));
+};
+
 export class GoObject {
   // Todo: Make previous game a slimmer interface
   previousGame: BoardState | null = null;
   currentGame: BoardState = getNewBoardState(7);
   stats: PartialRecord<GoOpponent, OpponentStats> = {};
   storedCycles: number = 0;
+  highlightedPoints: (PointHighlight | null)[][] = getEmptyHighlightedPoints(7);
 
   prestigeAugmentation() {
     for (const opponent of getRecordKeys(Go.stats)) {
@@ -41,3 +46,8 @@ export const Go = new GoObject();
 
 /** Event emitter to allow the UI to subscribe to Go gameplay updates in order to trigger rerenders properly */
 export const GoEvents = new EventEmitter();
+
+export type PointHighlight = {
+  color: string;
+  text: string;
+};

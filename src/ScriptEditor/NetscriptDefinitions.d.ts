@@ -4492,6 +4492,26 @@ export interface GoAnalysis {
    * @param resetAll if true, reset win/loss records for all opponents. Leaves node power and bonuses unchanged.
    */
   resetStats(resetAll = false): void;
+
+  /**
+   * Adds a colored circle indicator to the specified point. These indicators are removed once a move is played.
+   * @param x the x coordinate to highlight
+   * @param y the y coordinate to highlight
+   * @param color optional: the color to use for the circle. Can be given an RGB string like "#FFF000", or "none" to clear it, or one of
+   *    these color names from the selected theme: "hack" (green), "hp" (red), "money" (yellow), "int" (blue), "cha" (purple)
+   * @param text optional: text to add to the node (replaces the default A.1 or B5 seen on hover). Should be kept short to fit well.
+   */
+  highlightPoint(x, y, color = "", text = ""): void;
+
+  /**
+   * Removes the highlight color and text from the specified node.
+   * @param x the x coordinate to remove highlight from
+   * @param y the y coordinate to remove highlight from
+   */
+  clearPointHighlight(x, y): void;
+
+  /** Removes all highlights from the board. */
+  clearAllPointHighlights(): void;
 }
 
 /**

@@ -6,12 +6,15 @@ import { Go } from "../Go/Go";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { simpleBoardFromBoard } from "../Go/boardAnalysis/boardAnalysis";
 import {
+  addPointHighlight,
   cheatDestroyNode,
   cheatPlayTwoMoves,
   cheatRemoveRouter,
   cheatRepairOfflineNode,
   cheatSuccessChance,
   checkCheatApiAccess,
+  clearAllPointHighlights,
+  clearPointHighlight,
   getChains,
   getControlledEmptyNodes,
   getCurrentPlayer,
@@ -104,6 +107,19 @@ export function NetscriptGo(): InternalAPI<NSGo> {
         (resetAll = false) => {
           resetStats(!!resetAll);
         },
+      highlightPoint: (ctx) => (_x, _y, _color, _text) => {
+        const x = helpers.number(ctx, "x", _x);
+        const y = helpers.number(ctx, "y", _y);
+        const color = helpers.string(ctx, "color", _color ?? "");
+        const text = helpers.string(ctx, "text", _text ?? "");
+        addPointHighlight(x, y, color, text);
+      },
+      clearPointHighlight: (ctx) => (_x, _y) => {
+        const x = helpers.number(ctx, "x", _x);
+        const y = helpers.number(ctx, "y", _y);
+        clearPointHighlight(x, y);
+      },
+      clearAllPointHighlights: () => () => clearAllPointHighlights(),
     },
     cheat: {
       getCheatSuccessChance: (ctx: NetscriptContext) => (_cheatCount, playAsWhite) => {

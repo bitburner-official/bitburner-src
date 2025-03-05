@@ -271,6 +271,9 @@ const go = {
     getControlledEmptyNodes: 16,
     getStats: 0,
     resetStats: 0,
+    highlightPoint: 0,
+    clearPointHighlight: 0,
+    clearAllPointHighlights: 0,
   },
   cheat: {
     getCheatSuccessChance: 1,

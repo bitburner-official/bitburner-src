@@ -2,7 +2,7 @@ import { Board, BoardState, OpponentStats, Play, SimpleBoard, SimpleOpponentStat
 
 import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
-import { Go } from "../Go";
+import { getEmptyHighlightedPoints, Go, GoEvents } from "../Go";
 import {
   getNewBoardState,
   getNewBoardStateFromSimpleBoard,
@@ -344,6 +344,7 @@ export function resetBoardState(
 
   resetAI();
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
+  clearAllPointHighlights();
   handleNextTurn(Go.currentGame).catch((error) => exceptionAlert(error));
   logger(`New game started: ${opponent}, ${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);
@@ -424,6 +425,21 @@ export function validateBoardState(
   } catch (e) {
     error(boardValidity.failedToCreateBoard);
   }
+}
+
+export function addPointHighlight(x: number, y: number, color: string, text: string) {
+  Go.highlightedPoints[x][y] = { color, text };
+  GoEvents.emit();
+}
+
+export function clearPointHighlight(x: number, y: number) {
+  Go.highlightedPoints[x][y] = { color: "", text: "" };
+  GoEvents.emit();
+}
+
+export function clearAllPointHighlights() {
+  Go.highlightedPoints = getEmptyHighlightedPoints(Go.currentGame.board.length);
+  GoEvents.emit();
 }
 
 /**

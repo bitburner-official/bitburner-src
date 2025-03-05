@@ -21,6 +21,7 @@ import { CorruptableText } from "../../ui/React/CorruptableText";
 import { handleNextTurn, resetAI } from "../boardAnalysis/goAI";
 import { GoScoreExplanation } from "./GoScoreExplanation";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
+import { clearAllPointHighlights } from "../effects/netscriptGoImplementation";
 
 interface GoGameboardWrapperProps {
   showInstructions: () => void;
@@ -135,6 +136,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
     resetAI();
     Go.currentGame = getNewBoardState(newBoardSize, newOpponent, true);
+    clearAllPointHighlights();
     handleNextTurn(Go.currentGame).catch((error) => exceptionAlert(error));
   }
 
@@ -223,6 +225,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
             traditional={traditional}
             clickHandler={clickHandler}
             hover={!showPriorMove}
+            highlightedPoints={Go.highlightedPoints}
           />
         </div>
         <Box className={classes.inlineFlexBox}>
