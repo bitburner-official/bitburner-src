@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
-import { CityName, CorpUnlockName } from "@enums";
+import { CorpUnlockName } from "@enums";
+import type { CityName } from "@nsdefs";
 import * as corpConstants from "../data/Constants";
 import { Product } from "../Product";
 import { DiscontinueProductModal } from "./modals/DiscontinueProductModal";

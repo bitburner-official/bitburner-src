@@ -1,8 +1,7 @@
-// React Component for displaying an Industry's warehouse information
-// (right-side panel in the Industry UI)
 import React, { useState } from "react";
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
-import { CityName, CorpUnlockName } from "@enums";
+import { CorpUnlockName } from "@enums";
+import type { CityName } from "@nsdefs";
 import { Material } from "../Material";
 import { Warehouse } from "../Warehouse";
 import { ExportModal } from "./modals/ExportModal";

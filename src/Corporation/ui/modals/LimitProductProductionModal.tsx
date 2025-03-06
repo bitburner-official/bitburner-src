@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import type { CityName } from "@enums";
+import type { CityName } from "@nsdefs";
 import type { Product } from "../../Product";
 import * as actions from "../../Actions";
 import { Modal } from "../../../ui/React/Modal";

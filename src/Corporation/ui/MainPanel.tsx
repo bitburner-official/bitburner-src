@@ -6,7 +6,7 @@ import React from "react";
 import { CityTabs } from "./CityTabs";
 import { Context, useCorporation } from "./Context";
 
-import { CityName } from "@enums";
+import { CityNameEnum } from "@enums";
 
 interface IProps {
   divisionName: string;
@@ -19,7 +19,7 @@ export function MainPanel(props: IProps): React.ReactElement {
   if (!division) throw new Error("Cannot find division");
   return (
     <Context.Division.Provider value={division}>
-      <CityTabs rerender={props.rerender} city={CityName.Sector12} />
+      <CityTabs rerender={props.rerender} city={CityNameEnum.Sector12} />
     </Context.Division.Provider>
   );
 }

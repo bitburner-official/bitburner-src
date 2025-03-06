@@ -2,8 +2,8 @@ import type { Corporation } from "./Corporation";
 import type { Division } from "./Division";
 
 import { Player } from "@player";
-import { CorpMaterialName, CorpSmartSupplyOption } from "@nsdefs";
-import { CityName, CorpUnlockName } from "@enums";
+import { CityName, CorpMaterialName, CorpSmartSupplyOption } from "@nsdefs";
+import { CityNameEnum, CorpUnlockName } from "@enums";
 import { Material } from "./Material";
 import { MaterialInfo } from "./MaterialInfo";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
@@ -21,7 +21,7 @@ export class Warehouse {
   level = 1;
 
   // City that this Warehouse is in
-  city = CityName.Sector12;
+  city: CityName = CityNameEnum.Sector12;
 
   // Map of Materials held by this Warehouse
   materials = createFullRecordFromEntries(materialNames.map((matName) => [matName, new Material({ name: matName })]));

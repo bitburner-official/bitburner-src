@@ -1,4 +1,5 @@
-import { LocationName, CityName } from "@enums";
+import { LocationName } from "@enums";
+import type { CityName } from "@nsdefs";
 
 /** Class representing a City in the game */
 export class City {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import * as corpConstants from "../data/Constants";
-import { CityName } from "@enums";
+import { CityNameEnum } from "@enums";
+import type { CityName } from "@nsdefs";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { purchaseOffice } from "../Actions";
 import { MoneyCost } from "./MoneyCost";
@@ -17,7 +18,7 @@ interface IProps {
 export function ExpandNewCity(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
-  const possibleCities = Object.values(CityName).filter((cityName) => !(cityName in division.offices));
+  const possibleCities = Object.values(CityNameEnum).filter((cityName) => !(cityName in division.offices));
   const [city, setCity] = useState(possibleCities[0]);
 
   const disabledText = corp.funds < corpConstants.officeInitialCost ? "Insufficient corporation funds" : "";

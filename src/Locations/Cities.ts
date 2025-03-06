@@ -1,5 +1,5 @@
 import { City } from "./City";
-import { CityName } from "@enums";
+import { CityNameEnum } from "@enums";
 import { createEnumKeyedRecord } from "../Types/Record";
 
-export const Cities = createEnumKeyedRecord(CityName, (name) => new City(name));
+export const Cities = createEnumKeyedRecord(CityNameEnum, (name) => new City(name));

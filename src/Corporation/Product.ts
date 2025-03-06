@@ -1,7 +1,7 @@
 import type { Division } from "./Division";
 
-import { CorpMaterialName } from "@nsdefs";
-import { CityName, CorpEmployeeJob } from "@enums";
+import { CityName, CorpMaterialName } from "@nsdefs";
+import { CityNameEnum, CorpEmployeeJob } from "@enums";
 import { IndustriesData } from "./data/IndustryData";
 import { MaterialInfo } from "./MaterialInfo";
 
@@ -34,7 +34,7 @@ export class Product {
   /** Whether the development for this product is finished yet */
   finished = false;
   developmentProgress = 0; // Creation progress - A number between 0-100 representing percentage
-  creationCity = CityName.Sector12; // City in which the product is/was being created
+  creationCity: CityName = CityNameEnum.Sector12; // City in which the product is/was being created
   designInvestment = 0; // How much money was invested into designing this Product
   advertisingInvestment = 0; // How much money was invested into advertising this Product
 
@@ -64,7 +64,7 @@ export class Product {
   };
 
   // data that is stored per city
-  cityData = createEnumKeyedRecord(CityName, () => ({
+  cityData = createEnumKeyedRecord(CityNameEnum, () => ({
     /** Amount of product stored in warehouse */
     stored: 0,
     /** Amount of this product produced per cycle in this city */
@@ -92,7 +92,7 @@ export class Product {
   // Flags that signal whether automatic sale pricing through Market TA is enabled
   marketTa1 = false;
   marketTa2 = false;
-  uiMarketPrice = createEnumKeyedRecord(CityName, () => 0);
+  uiMarketPrice = createEnumKeyedRecord(CityNameEnum, () => 0);
 
   /** Effective number that "MAX" represents in a sell amount */
   maxSellAmount = 0;

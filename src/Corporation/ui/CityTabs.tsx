@@ -4,7 +4,8 @@ import type { OfficeSpace } from "../OfficeSpace";
 
 import React, { useState } from "react";
 import { Tab, Tabs } from "@mui/material";
-import { CityName } from "@enums";
+import { CityNameEnum } from "@enums";
+import type { CityName } from "@nsdefs";
 import { Division } from "./Division";
 import { ExpandNewCity } from "./ExpandNewCity";
 import { useDivision } from "./Context";
@@ -25,14 +26,14 @@ export function CityTabs(props: IProps): React.ReactElement {
   } else {
     const office = division.offices[city];
     if (!office) {
-      setCity(CityName.Sector12);
+      setCity(CityNameEnum.Sector12);
       return <></>;
     }
     mainContent = (
       <Division rerender={props.rerender} city={city} warehouse={division.warehouses[city]} office={office} />
     );
   }
-  const canExpand = Object.values(CityName).length > getRecordKeys(division.offices).length;
+  const canExpand = Object.values(CityNameEnum).length > getRecordKeys(division.offices).length;
   function handleChange(event: React.SyntheticEvent, tab: CityName | "Expand"): void {
     setCity(tab);
   }

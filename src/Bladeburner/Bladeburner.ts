@@ -12,9 +12,10 @@ import {
   BladeburnerMultName,
   BladeburnerOperationName,
   BladeburnerSkillName,
-  CityName,
+  CityNameEnum,
   FactionName,
 } from "@enums";
+import type { CityName } from "@nsdefs";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { formatHp, formatNumberNoSuffix, formatSleeveShock } from "../ui/formatNumber";
@@ -83,8 +84,8 @@ export class Bladeburner implements OperationTeam {
 
   action: ActionIdentifier | null = null;
 
-  cities = createEnumKeyedRecord(CityName, (name) => new City(name));
-  city = CityName.Sector12;
+  cities = createEnumKeyedRecord(CityNameEnum, (name) => new City(name));
+  city: CityName = CityNameEnum.Sector12;
   // Todo: better types for all these Record<string, etc> types. Will need custom types or enums for the named string categories (e.g. skills).
   skills: PartialRecord<BladeburnerSkillName, number> = {};
   skillMultipliers: PartialRecord<BladeburnerMultName, number> = {};
@@ -524,7 +525,7 @@ export class Bladeburner implements OperationTeam {
   }
 
   triggerMigration(sourceCityName: CityName): void {
-    const cityHelper = getEnumHelper("CityName");
+    const cityHelper = getEnumHelper("CityNameEnum");
     let destCityName = cityHelper.random();
     while (destCityName === sourceCityName) destCityName = cityHelper.random();
 
@@ -562,7 +563,7 @@ export class Bladeburner implements OperationTeam {
 
   randomEvent(): void {
     const chance = Math.random();
-    const cityHelper = getEnumHelper("CityName");
+    const cityHelper = getEnumHelper("CityNameEnum");
 
     // Choose random source/destination city for events
     const sourceCityName = cityHelper.random();
@@ -1186,7 +1187,7 @@ export class Bladeburner implements OperationTeam {
             if (this.logging.general) {
               this.log(`${person.whoAmI()}: Incited violence in the synthoid communities.`);
             }
-            for (const cityName of Object.values(CityName)) {
+            for (const cityName of Object.values(CityNameEnum)) {
               const city = this.cities[cityName];
               city.changeChaosByCount(10);
               city.changeChaosByCount(city.chaos / Math.log10(city.chaos));
@@ -1351,7 +1352,7 @@ export class Bladeburner implements OperationTeam {
       }
 
       // Chaos goes down very slowly
-      for (const cityName of Object.values(CityName)) {
+      for (const cityName of Object.values(CityNameEnum)) {
         const city = this.cities[cityName];
         if (!city) throw new Error("Invalid city when processing passive chaos reduction in Bladeburner.process");
         city.chaos -= 0.0001 * seconds;

@@ -2,7 +2,8 @@ import type { Bladeburner } from "../Bladeburner";
 
 import React from "react";
 import { Button, Typography } from "@mui/material";
-import { CityName } from "@enums";
+import { CityNameEnum } from "@enums";
+import type { CityName } from "@nsdefs";
 import { WorldMap } from "../../ui/React/WorldMap";
 import { Modal } from "../../ui/React/Modal";
 import { Settings } from "../../Settings/Settings";
@@ -27,7 +28,7 @@ export function TravelModal({ bladeburner, open, onClose }: TravelModalProps): R
           for your Bladeburner duties does not affect your location in the game otherwise.
         </Typography>
         {Settings.DisableASCIIArt ? (
-          Object.values(CityName).map((city) => (
+          Object.values(CityNameEnum).map((city) => (
             <Button key={city} onClick={() => travel(city)}>
               {city}
             </Button>

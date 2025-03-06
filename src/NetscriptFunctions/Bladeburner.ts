@@ -273,17 +273,17 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     getCityEstimatedPopulation: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
-      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
+      const cityName = getEnumHelper("CityNameEnum").nsGetMember(ctx, _cityName);
       return bladeburner.cities[cityName].popEst;
     },
     getCityCommunities: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
-      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
+      const cityName = getEnumHelper("CityNameEnum").nsGetMember(ctx, _cityName);
       return bladeburner.cities[cityName].comms;
     },
     getCityChaos: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
-      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
+      const cityName = getEnumHelper("CityNameEnum").nsGetMember(ctx, _cityName);
       return bladeburner.cities[cityName].chaos;
     },
     getCity: (ctx) => () => {
@@ -292,7 +292,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     switchCity: (ctx) => (_cityName) => {
       const bladeburner = getBladeburner(ctx);
-      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
+      const cityName = getEnumHelper("CityNameEnum").nsGetMember(ctx, _cityName);
       bladeburner.city = cityName;
       return true;
     },

@@ -1,5 +1,5 @@
 import { BlackOperation } from "../Actions/BlackOperation";
-import { BladeburnerBlackOpName, CityName, FactionName } from "@enums";
+import { BladeburnerBlackOpName, CityNameEnum, FactionName } from "@enums";
 
 export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
   [BladeburnerBlackOpName.OperationTyphoon]: new BlackOperation({
@@ -103,7 +103,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "their works discuss Synthoids and pose a threat to society. The publications are spreading rapidly in China and " +
       "other Eastern countries.\n\n" +
       "Samizdat has done a good job of keeping hidden and anonymous. However, we've just received intelligence that " +
-      `their base of operations is in ${CityName.Ishima}'s underground sewer systems. Your task is to investigate the ` +
+      `their base of operations is in ${CityNameEnum.Ishima}'s underground sewer systems. Your task is to investigate the ` +
       "sewer systems, and eliminate Samizdat. They must never publish anything again.",
   }),
   [BladeburnerBlackOpName.OperationTitan]: new BlackOperation({
@@ -138,7 +138,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "know, Titan Laboratories' management has no knowledge about this. We don't know what the Synthoids are up to, " +
       "but the research that they could be conducting using Titan Laboratories' vast resources is potentially very " +
       "dangerous.\n\n" +
-      `Your goal is to enter and destroy the Bioengineering department's facility in ${CityName.Aevum}. The task is not ` +
+      `Your goal is to enter and destroy the Bioengineering department's facility in ${CityNameEnum.Aevum}. The task is not ` +
       "just to retire the Synthoids there, but also to destroy any information or research at the facility that is " +
       "relevant to the Synthoids and their goals.",
   }),
@@ -239,7 +239,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     desc:
       "The CIA has just encountered a new security threat. A new criminal group, lead by a shadowy operative who calls " +
       "himself Juggernaut, has been smuggling drugs and weapons (including suspected bioweapons) into " +
-      `${CityName.Sector12}. We also have reason to believe they tried to break into one of Universal Energy's ` +
+      `${CityNameEnum.Sector12}. We also have reason to believe they tried to break into one of Universal Energy's ` +
       "facilities in order to cause a city-wide blackout. The CIA suspects that Juggernaut is a heavily-augmented " +
       "Synthoid, and have thus enlisted our help.\n\n" +
       "Your mission is to eradicate Juggernaut and his followers.",
@@ -378,7 +378,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     },
     isKill: true,
     desc:
-      `A week ago ${FactionName.BladeIndustries} reported a small break-in at one of their ${CityName.Aevum} ` +
+      `A week ago ${FactionName.BladeIndustries} reported a small break-in at one of their ${CityNameEnum.Aevum} ` +
       `Augmentation storage facilities. We figured out that ${FactionName.TheDarkArmy} was behind the heist, and didn't think ` +
       "any more of it. However, we've just discovered that several known MK-VI Synthoids were part of that break-in group.\n\n" +
       "We cannot have Synthoids upgrading their already-enhanced abilities with Augmentations. Your task is to hunt " +
@@ -416,11 +416,11 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       `${FactionName.TheDarkArmy} was well aware that there were Synthoids amongst their ranks. Even worse, we believe ` +
       `that ${FactionName.TheDarkArmy} is working together with other criminal organizations such as ` +
       `${FactionName.TheSyndicate} and that they are planning some sort of large-scale takeover of multiple major ` +
-      `cities, most notably ${CityName.Aevum}. We suspect that Synthoids have infiltrated the ranks of these criminal ` +
+      `cities, most notably ${CityNameEnum.Aevum}. We suspect that Synthoids have infiltrated the ranks of these criminal ` +
       "factions and are trying to stage another Synthoid uprising.\n\n" +
       "The best way to deal with this is to prevent it before it even happens. The goal of " +
       `${BladeburnerBlackOpName.OperationWallace} is to destroy ${FactionName.TheDarkArmy} and ${FactionName.TheSyndicate} factions in ` +
-      `${CityName.Aevum} immediately. Leave no survivors.`,
+      `${CityNameEnum.Aevum} immediately. Leave no survivors.`,
   }),
   [BladeburnerBlackOpName.OperationShoulderOfOrion]: new BlackOperation({
     name: BladeburnerBlackOpName.OperationShoulderOfOrion,
@@ -490,7 +490,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "organic human brains means that the supercomputer may be able to reason abstractly and become self-aware.\n\n" +
       "I do not need to remind you why sentient-level AIs pose a serious threat to all of mankind.\n\n" +
       `The research for this project is being conducted at one of ${FactionName.FulcrumSecretTechnologies} secret ` +
-      `facilities in ${CityName.Aevum}, codenamed 'Alpha Ranch'. Infiltrate the compound, delete and destroy the work, ` +
+      `facilities in ${CityNameEnum.Aevum}, codenamed 'Alpha Ranch'. Infiltrate the compound, delete and destroy the work, ` +
       "and then find and kill the project lead.",
   }),
   [BladeburnerBlackOpName.OperationMorpheus]: new BlackOperation({
@@ -523,7 +523,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     desc:
       "DreamSense Technologies is an advertising company that uses special technology to transmit their ads into the " +
       "people's dreams and subconscious. They do this using broadcast transmitter towers. Based on information from our " +
-      `agents and informants in ${CityName.Chongqing}, we have reason to believe that one of the broadcast towers there ` +
+      `agents and informants in ${CityNameEnum.Chongqing}, we have reason to believe that one of the broadcast towers there ` +
       "has been compromised by Synthoids and is being used to spread pro-Synthoid propaganda.\n\n" +
       "The mission is to destroy this broadcast tower. Speed and stealth are of the utmost importance for this.",
   }),
@@ -556,9 +556,9 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     isKill: true,
     desc:
       "Our analysts have uncovered a gathering of MK-VI Synthoids that have taken up residence in the " +
-      `${CityName.Sector12} Slums. We don't know if they are rogue Synthoids from the Uprising, but we do know that they ` +
+      `${CityNameEnum.Sector12} Slums. We don't know if they are rogue Synthoids from the Uprising, but we do know that they ` +
       "have been stockpiling weapons, money, and other resources. This makes them dangerous.\n\n" +
-      `This is a full-scale assault operation to find and retire all of these Synthoids in the ${CityName.Sector12} ` +
+      `This is a full-scale assault operation to find and retire all of these Synthoids in the ${CityNameEnum.Sector12} ` +
       "Slums.",
   }),
   [BladeburnerBlackOpName.OperationAnnihilus]: new BlackOperation({
@@ -590,7 +590,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
     isKill: true,
     desc:
       "Our superiors have ordered us to eradicate everything and everyone in an underground facility located in " +
-      `${CityName.Aevum}. They tell us that the facility houses many dangerous Synthoids and belongs to a terrorist ` +
+      `${CityNameEnum.Aevum}. They tell us that the facility houses many dangerous Synthoids and belongs to a terrorist ` +
       `organization called '${FactionName.TheCovenant}'. We have no prior intelligence about this organization, so you ` +
       "are going in blind.",
   }),
@@ -628,7 +628,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       "ones from the Uprising.\n\n" +
       `${FactionName.OmniTekIncorporated} has also told us they believe someone has triggered this malfunction in a ` +
       "large group of MK-VI Synthoids, and that these newly-radicalized Synthoids are now amassing in " +
-      `${CityName.Volhaven} to form a terrorist group called Ultron.\n\n` +
+      `${CityNameEnum.Volhaven} to form a terrorist group called Ultron.\n\n` +
       "Intelligence suggests Ultron is heavily armed and that their members are augmented. We believe Ultron is making " +
       "moves to take control of and weaponize DeltaOne's Tactical High-Energy Satellite Laser Array (THESLA).\n\n" +
       "Your task is to find and destroy Ultron.",

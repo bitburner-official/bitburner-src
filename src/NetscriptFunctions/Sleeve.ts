@@ -92,7 +92,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
     },
     travel: (ctx) => (_sleeveNumber, _cityName) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
+      const cityName = getEnumHelper("CityNameEnum").nsGetMember(ctx, _cityName);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
       if (!Player.sleeves[sleeveNumber].travel(cityName)) {

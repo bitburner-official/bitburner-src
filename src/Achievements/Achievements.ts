@@ -1,7 +1,7 @@
 import {
   AugmentationName,
   BladeburnerSkillName,
-  CityName,
+  CityNameEnum,
   CompletedProgramName,
   CorpUnlockName,
   FactionName,
@@ -304,7 +304,7 @@ export const achievements: Record<string, Achievement> = {
   TRAVEL: {
     ...achievementData.TRAVEL,
     Icon: "TRAVEL",
-    Condition: () => Player.city !== CityName.Sector12,
+    Condition: () => Player.city !== CityNameEnum.Sector12,
   },
   WORKOUT: {
     ...achievementData.WORKOUT,

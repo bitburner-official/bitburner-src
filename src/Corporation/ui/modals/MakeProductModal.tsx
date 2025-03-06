@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Modal } from "../../../ui/React/Modal";
 import { IndustriesData } from "../../data/IndustryData";
-import { IndustryType } from "@enums";
+import { CityNameEnum, IndustryType } from "@enums";
+import type { CityName } from "@nsdefs";
 import * as actions from "../../Actions";
 import { useCorporation, useDivision } from "../Context";
 import Typography from "@mui/material/Typography";
@@ -12,7 +13,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { KEY } from "../../../utils/KeyboardEventKey";
 import { NumberInput } from "../../../ui/React/NumberInput";
-import { CityName } from "@enums";
 import { getRecordKeys } from "../../../Types/Record";
 
 interface IProps {
@@ -36,7 +36,7 @@ export function MakeProductModal(props: IProps): React.ReactElement {
   const corp = useCorporation();
   const division = useDivision();
   const availableCities = getRecordKeys(division.offices);
-  const [city, setCity] = useState(availableCities.length > 0 ? availableCities[0] : CityName.Sector12);
+  const [city, setCity] = useState(availableCities.length > 0 ? availableCities[0] : CityNameEnum.Sector12);
   const [name, setName] = useState("");
   const [design, setDesign] = useState<number>(NaN);
   const [marketing, setMarketing] = useState<number>(NaN);

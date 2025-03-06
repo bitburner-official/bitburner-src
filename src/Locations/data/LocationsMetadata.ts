@@ -2,12 +2,12 @@
  * Metadata for constructing Location objects for all Locations
  * in the game
  */
-import { CityName, LocationName, LocationType } from "@enums";
+import { CityNameEnum, LocationName, LocationType } from "@enums";
 import { IConstructorParams } from "../Location";
 
 export const LocationsMetadata: IConstructorParams[] = [
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     infiltrationData: {
       maxClearanceLevel: 12,
       startingSecurityLevel: 8.18,
@@ -16,7 +16,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     infiltrationData: {
       maxClearanceLevel: 15,
       startingSecurityLevel: 8.19,
@@ -25,7 +25,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     infiltrationData: {
       maxClearanceLevel: 18,
       startingSecurityLevel: 9.55,
@@ -34,14 +34,14 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     costMult: 3,
     expMult: 2,
     name: LocationName.AevumCrushFitnessGym,
     types: [LocationType.Gym],
   },
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     infiltrationData: {
       maxClearanceLevel: 37,
       startingSecurityLevel: 17.02,
@@ -52,7 +52,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     techVendorMinRam: 128,
   },
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     infiltrationData: {
       maxClearanceLevel: 25,
       startingSecurityLevel: 15.54,
@@ -63,7 +63,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     techVendorMinRam: 256,
   },
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     infiltrationData: {
       maxClearanceLevel: 12,
       startingSecurityLevel: 7.89,
@@ -72,7 +72,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     infiltrationData: {
       maxClearanceLevel: 6,
       startingSecurityLevel: 3.29,
@@ -83,7 +83,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     techVendorMinRam: 8,
   },
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     infiltrationData: {
       maxClearanceLevel: 6,
       startingSecurityLevel: 5.35,
@@ -92,7 +92,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     infiltrationData: {
       maxClearanceLevel: 5,
       startingSecurityLevel: 5.02,
@@ -101,21 +101,21 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     costMult: 10,
     expMult: 5,
     name: LocationName.AevumSnapFitnessGym,
     types: [LocationType.Gym],
   },
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     costMult: 4,
     expMult: 3,
     name: LocationName.AevumSummitUniversity,
     types: [LocationType.University],
   },
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     infiltrationData: {
       maxClearanceLevel: 7,
       startingSecurityLevel: 5.85,
@@ -124,12 +124,12 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Aevum,
+    city: CityNameEnum.Aevum,
     name: LocationName.AevumCasino,
     types: [LocationType.Casino],
   },
   {
-    city: CityName.Chongqing,
+    city: CityNameEnum.Chongqing,
     infiltrationData: {
       maxClearanceLevel: 25,
       startingSecurityLevel: 16.25,
@@ -138,7 +138,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Chongqing,
+    city: CityNameEnum.Chongqing,
     infiltrationData: {
       maxClearanceLevel: 18,
       startingSecurityLevel: 12.59,
@@ -147,7 +147,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Ishima,
+    city: CityNameEnum.Ishima,
     infiltrationData: {
       maxClearanceLevel: 12,
       startingSecurityLevel: 5.02,
@@ -156,7 +156,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Ishima,
+    city: CityNameEnum.Ishima,
     infiltrationData: {
       maxClearanceLevel: 10,
       startingSecurityLevel: 3.2,
@@ -167,7 +167,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     techVendorMinRam: 4,
   },
   {
-    city: CityName.Ishima,
+    city: CityNameEnum.Ishima,
     infiltrationData: {
       maxClearanceLevel: 25,
       startingSecurityLevel: 5.38,
@@ -178,7 +178,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     techVendorMinRam: 32,
   },
   {
-    city: CityName.NewTokyo,
+    city: CityNameEnum.NewTokyo,
     infiltrationData: {
       maxClearanceLevel: 17,
       startingSecurityLevel: 7.18,
@@ -187,7 +187,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company, LocationType.Special],
   },
   {
-    city: CityName.NewTokyo,
+    city: CityNameEnum.NewTokyo,
     infiltrationData: {
       maxClearanceLevel: 20,
       startingSecurityLevel: 5.9,
@@ -196,7 +196,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.NewTokyo,
+    city: CityNameEnum.NewTokyo,
     infiltrationData: {
       maxClearanceLevel: 5,
       startingSecurityLevel: 2.5,
@@ -205,7 +205,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company, LocationType.Special],
   },
   {
-    city: CityName.NewTokyo,
+    city: CityNameEnum.NewTokyo,
     infiltrationData: {
       maxClearanceLevel: 25,
       startingSecurityLevel: 5.52,
@@ -214,12 +214,12 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company, LocationType.Special],
   },
   {
-    city: CityName.NewTokyo,
+    city: CityNameEnum.NewTokyo,
     name: LocationName.NewTokyoArcade,
     types: [LocationType.Special],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     infiltrationData: {
       maxClearanceLevel: 10,
       startingSecurityLevel: 3.62,
@@ -230,7 +230,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     techVendorMinRam: 2,
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     infiltrationData: {
       maxClearanceLevel: 25,
       startingSecurityLevel: 10.59,
@@ -239,12 +239,12 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     name: LocationName.Sector12CIA,
     types: [LocationType.Company, LocationType.Special],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     infiltrationData: {
       maxClearanceLevel: 15,
       startingSecurityLevel: 4.66,
@@ -253,12 +253,12 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     name: LocationName.Sector12CityHall,
     types: [LocationType.Special],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     infiltrationData: {
       maxClearanceLevel: 12,
       startingSecurityLevel: 5.9,
@@ -267,12 +267,12 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     name: LocationName.Sector12FoodNStuff,
     types: [LocationType.Company],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     infiltrationData: {
       maxClearanceLevel: 25,
       startingSecurityLevel: 8.18,
@@ -281,7 +281,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     infiltrationData: {
       maxClearanceLevel: 17,
       startingSecurityLevel: 6.02,
@@ -290,14 +290,14 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     expMult: 1,
     costMult: 1,
     name: LocationName.Sector12IronGym,
     types: [LocationType.Gym],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     infiltrationData: {
       maxClearanceLevel: 5,
       startingSecurityLevel: 3.13,
@@ -306,7 +306,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     infiltrationData: {
       maxClearanceLevel: 31,
       startingSecurityLevel: 16.36,
@@ -315,26 +315,26 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     name: LocationName.Sector12NSA,
     types: [LocationType.Company, LocationType.Special],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     costMult: 20,
     expMult: 10,
     name: LocationName.Sector12PowerhouseGym,
     types: [LocationType.Gym],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     costMult: 3,
     expMult: 2,
     name: LocationName.Sector12RothmanUniversity,
     types: [LocationType.University],
   },
   {
-    city: CityName.Sector12,
+    city: CityNameEnum.Sector12,
     infiltrationData: {
       maxClearanceLevel: 12,
       startingSecurityLevel: 5.9,
@@ -343,7 +343,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Volhaven,
+    city: CityNameEnum.Volhaven,
     infiltrationData: {
       maxClearanceLevel: 15,
       startingSecurityLevel: 3.59,
@@ -354,7 +354,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     techVendorMinRam: 8,
   },
   {
-    city: CityName.Volhaven,
+    city: CityNameEnum.Volhaven,
     infiltrationData: {
       maxClearanceLevel: 18,
       startingSecurityLevel: 7.28,
@@ -363,7 +363,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Volhaven,
+    city: CityNameEnum.Volhaven,
     infiltrationData: {
       maxClearanceLevel: 15,
       startingSecurityLevel: 4.35,
@@ -372,14 +372,14 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Volhaven,
+    city: CityNameEnum.Volhaven,
     costMult: 7,
     expMult: 4,
     name: LocationName.VolhavenMilleniumFitnessGym,
     types: [LocationType.Gym],
   },
   {
-    city: CityName.Volhaven,
+    city: CityNameEnum.Volhaven,
     infiltrationData: {
       maxClearanceLevel: 50,
       startingSecurityLevel: 8.53,
@@ -388,7 +388,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Volhaven,
+    city: CityNameEnum.Volhaven,
     infiltrationData: {
       maxClearanceLevel: 25,
       startingSecurityLevel: 7.74,
@@ -399,7 +399,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     techVendorMinRam: 128,
   },
   {
-    city: CityName.Volhaven,
+    city: CityNameEnum.Volhaven,
     infiltrationData: {
       maxClearanceLevel: 22,
       startingSecurityLevel: 6,
@@ -408,7 +408,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Volhaven,
+    city: CityNameEnum.Volhaven,
     infiltrationData: {
       maxClearanceLevel: 18,
       startingSecurityLevel: 4.77,
@@ -417,7 +417,7 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.Company],
   },
   {
-    city: CityName.Volhaven,
+    city: CityNameEnum.Volhaven,
     costMult: 5,
     expMult: 4,
     name: LocationName.VolhavenZBInstituteOfTechnology,
@@ -444,12 +444,12 @@ export const LocationsMetadata: IConstructorParams[] = [
     types: [LocationType.StockMarket],
   },
   {
-    city: CityName.Chongqing,
+    city: CityNameEnum.Chongqing,
     name: LocationName.ChongqingChurchOfTheMachineGod,
     types: [LocationType.Special],
   },
   {
-    city: CityName.Ishima,
+    city: CityNameEnum.Ishima,
     name: LocationName.IshimaGlitch,
     types: [LocationType.Special],
   },

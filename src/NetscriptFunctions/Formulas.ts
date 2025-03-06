@@ -26,7 +26,14 @@ import {
   calculateGrowTime,
   calculateWeakenTime,
 } from "../Hacking";
-import { CityName, CompletedProgramName, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
+import {
+  CityNameEnum,
+  CompletedProgramName,
+  FactionWorkType,
+  GymType,
+  LocationName,
+  UniversityClassType,
+} from "@enums";
 import { Formulas as IFormulas, Player as IPlayer, Person as IPerson } from "@nsdefs";
 import {
   calculateRespectGain,
@@ -93,7 +100,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       skills: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
       exp: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
       mults: defaultMultipliers(),
-      city: CityName.Sector12,
+      city: CityNameEnum.Sector12,
       // Player-specific
       numPeopleKilled: 0,
       money: 0,
@@ -109,7 +116,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       skills: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
       exp: { hacking: 0, strength: 0, defense: 0, dexterity: 0, agility: 0, charisma: 0, intelligence: 0 },
       mults: defaultMultipliers(),
-      city: CityName.Sector12,
+      city: CityNameEnum.Sector12,
     }),
     reputation: {
       calculateFavorToRep: (ctx) => (_favor) => {

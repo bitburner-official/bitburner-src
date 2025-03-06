@@ -1,4 +1,4 @@
-import type { CityName } from "@enums";
+import type { CityName } from "@nsdefs";
 import type { Division } from "../../Division";
 import type { Product } from "../../Product";
 

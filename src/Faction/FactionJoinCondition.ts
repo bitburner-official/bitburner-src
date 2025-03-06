@@ -1,4 +1,4 @@
-import { CompanyName, JobName, CityName, AugmentationName, LiteratureName, MessageFilename } from "@enums";
+import { CompanyName, JobName, AugmentationName, LiteratureName, MessageFilename } from "@enums";
 import { ServerName } from "../Types/strings";
 import { Server } from "../Server/Server";
 import { GetServer } from "../Server/AllServers";
@@ -28,6 +28,7 @@ import type {
   SomeRequirement,
   EveryRequirement,
   BitNodeRequirement,
+  CityName,
 } from "@nsdefs";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
 

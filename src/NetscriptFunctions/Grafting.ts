@@ -2,7 +2,7 @@ import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 
 import { Player } from "@player";
 import { Grafting as IGrafting } from "@nsdefs";
-import { AugmentationName, CityName } from "@enums";
+import { AugmentationName, CityNameEnum } from "@enums";
 import { Augmentations } from "../Augmentation/Augmentations";
 import { hasAugmentationPrereqs } from "../Faction/FactionHelpers";
 import { GraftableAugmentation } from "../PersonObjects/Grafting/GraftableAugmentation";
@@ -57,7 +57,7 @@ export function NetscriptGrafting(): InternalAPI<IGrafting> {
         const augName = getEnumHelper("AugmentationName").nsGetMember(ctx, _augName);
         const focus = !!_focus;
         checkGraftingAPIAccess(ctx);
-        if (Player.city !== CityName.NewTokyo) {
+        if (Player.city !== CityNameEnum.NewTokyo) {
           throw helpers.errorMessage(ctx, "You must be in New Tokyo to begin grafting an Augmentation.");
         }
         if (!isValidGraftingAugName(augName)) {

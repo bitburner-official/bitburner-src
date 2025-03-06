@@ -17,7 +17,7 @@ import { Person } from "../Person";
 import { CONSTANTS } from "../../Constants";
 import {
   ClassType,
-  CityName,
+  CityNameEnum,
   CrimeType,
   FactionWorkType,
   GymType,
@@ -248,7 +248,7 @@ export class Sleeve extends Person implements SleevePerson {
     this.shockRecovery();
 
     // Reset Location
-    this.city = CityName.Sector12;
+    this.city = CityNameEnum.Sector12;
 
     // Reset sleeve-related stats
     this.shock = 100;
@@ -292,17 +292,17 @@ export class Sleeve extends Person implements SleevePerson {
     let loc: LocationName | undefined;
     switch (universityName.toLowerCase()) {
       case LocationName.AevumSummitUniversity.toLowerCase(): {
-        if (this.city !== CityName.Aevum) return false;
+        if (this.city !== CityNameEnum.Aevum) return false;
         loc = LocationName.AevumSummitUniversity;
         break;
       }
       case LocationName.Sector12RothmanUniversity.toLowerCase(): {
-        if (this.city !== CityName.Sector12) return false;
+        if (this.city !== CityNameEnum.Sector12) return false;
         loc = LocationName.Sector12RothmanUniversity;
         break;
       }
       case LocationName.VolhavenZBInstituteOfTechnology.toLowerCase(): {
-        if (this.city !== CityName.Volhaven) return false;
+        if (this.city !== CityNameEnum.Volhaven) return false;
         loc = LocationName.VolhavenZBInstituteOfTechnology;
         break;
       }
@@ -418,27 +418,27 @@ export class Sleeve extends Person implements SleevePerson {
     let loc: LocationName | undefined;
     switch (gymName.toLowerCase()) {
       case LocationName.AevumCrushFitnessGym.toLowerCase(): {
-        if (this.city != CityName.Aevum) return false;
+        if (this.city != CityNameEnum.Aevum) return false;
         loc = LocationName.AevumCrushFitnessGym;
         break;
       }
       case LocationName.AevumSnapFitnessGym.toLowerCase(): {
-        if (this.city != CityName.Aevum) return false;
+        if (this.city != CityNameEnum.Aevum) return false;
         loc = LocationName.AevumSnapFitnessGym;
         break;
       }
       case LocationName.Sector12IronGym.toLowerCase(): {
-        if (this.city != CityName.Sector12) return false;
+        if (this.city != CityNameEnum.Sector12) return false;
         loc = LocationName.Sector12IronGym;
         break;
       }
       case LocationName.Sector12PowerhouseGym.toLowerCase(): {
-        if (this.city != CityName.Sector12) return false;
+        if (this.city != CityNameEnum.Sector12) return false;
         loc = LocationName.Sector12PowerhouseGym;
         break;
       }
       case LocationName.VolhavenMilleniumFitnessGym.toLowerCase(): {
-        if (this.city != CityName.Volhaven) return false;
+        if (this.city != CityNameEnum.Volhaven) return false;
         loc = LocationName.VolhavenMilleniumFitnessGym;
         break;
       }
