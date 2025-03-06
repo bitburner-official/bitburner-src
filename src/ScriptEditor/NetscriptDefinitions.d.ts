@@ -8437,7 +8437,7 @@ type CorpIndustryName =
 /** @public */
 type CorpSmartSupplyOption = "leftovers" | "imports" | "none";
 
-type ValueOf<T> = T[keyof T];
+type _ValueOf<T> = T[keyof T];
 
 /** Names of all cities
  * @public */
@@ -8450,7 +8450,7 @@ type CityNameEnum = {
   Volhaven: "Volhaven";
 };
 
-type CityName = ValueOf<CityNameEnum>;
+type CityName = _ValueOf<CityNameEnum>;
 
 /** Names of all locations
  * @public */
