@@ -13,7 +13,7 @@ import { netscriptCanGrow, netscriptCanWeaken } from "./Hacking/netscriptCanHack
 import { Terminal } from "./Terminal";
 import { Player } from "@player";
 import {
-  CityName,
+  CityNameEnum,
   CodingContractName,
   CompletedProgramName,
   CrimeType,
@@ -114,7 +114,7 @@ import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
 
 export const enums: NSEnums = {
-  CityName,
+  CityName: CityNameEnum,
   CrimeType,
   FactionWorkType,
   GymType,

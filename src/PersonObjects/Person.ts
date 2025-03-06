@@ -1,11 +1,11 @@
-import type { Person as IPerson, WorkStats } from "@nsdefs";
+import type { CityName, Person as IPerson, WorkStats } from "@nsdefs";
 import type { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
 import type { IReviverValue } from "../utils/JSONReviver";
 import type { MoneySource } from "../utils/MoneySourceTracker";
 import type { HP } from "./HP";
 import type { Skills } from "./Skills";
 
-import { CityName } from "@enums";
+import { CityNameEnum } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { CONSTANTS } from "../Constants";
 import { Player } from "../Player";
@@ -41,7 +41,7 @@ export abstract class Person implements IPerson {
   queuedAugmentations: PlayerOwnedAugmentation[] = [];
 
   /** City that the person is in */
-  city: CityName = CityName.Sector12;
+  city: CityName = CityNameEnum.Sector12;
 
   gainHackingExp(exp: number): void {
     if (isNaN(exp)) {

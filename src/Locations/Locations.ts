@@ -4,7 +4,7 @@
  */
 import { Cities } from "./Cities";
 import { Location, IConstructorParams } from "./Location";
-import { CityName } from "@enums";
+import { CityNameEnum } from "@enums";
 import { LocationsMetadata } from "./data/LocationsMetadata";
 
 export const Locations: Record<string, Location> = {};
@@ -28,7 +28,7 @@ function constructLocation(p: IConstructorParams): Location {
 }
 
 // First construct all cities
-Cities[CityName.Aevum].asciiArt = `
+Cities[CityNameEnum.Aevum].asciiArt = `
    [aevum police headquarters]       26                                         
                                    o                                            
            I                        \\  [bachman & associates]                  
@@ -64,7 +64,7 @@ Cities[CityName.Aevum].asciiArt = `
                       67 o                                                      
                                                                                 
                                     [the slums] P                               `;
-Cities[CityName.Chongqing].asciiArt = `
+Cities[CityNameEnum.Chongqing].asciiArt = `
                                     |                                           
                                  75 o                                           
                                      \\                                         
@@ -87,7 +87,7 @@ Cities[CityName.Chongqing].asciiArt = `
                                     |                                           
                                     x 82                                        
              [the slums] D                                                      `;
-Cities[CityName.Ishima].asciiArt = `
+Cities[CityNameEnum.Ishima].asciiArt = `
                                           o 59                                  
                   o        o              |                                     
  [storm tech.]    |        |              G [world stock exchange]              
@@ -112,7 +112,7 @@ Cities[CityName.Ishima].asciiArt = `
     o      50                  52                                               
               [omega soft.]                                                     
                                        [the slums] E                            `;
-Cities[CityName.NewTokyo].asciiArt = `
+Cities[CityNameEnum.NewTokyo].asciiArt = `
                                                                                 
                                                                                 
                   o                                                             
@@ -140,7 +140,7 @@ Cities[CityName.NewTokyo].asciiArt = `
                                                                                 
                                            G  [the slums]                       
                                                                                 `;
-Cities[CityName.Sector12].asciiArt = `
+Cities[CityNameEnum.Sector12].asciiArt = `
           78                                                     o 97           
           o                               [icarus microsystems] /               
           N [powerhouse gym]  o                                I                
@@ -170,7 +170,7 @@ Cities[CityName.Sector12].asciiArt = `
        85 o--G--------K--------S-------o 88                [the slums] R        
                                                                                 
           [foodnstuff]     [travel agency]                                      `;
-Cities[CityName.Volhaven].asciiArt = `
+Cities[CityNameEnum.Volhaven].asciiArt = `
                                  [omnia cybersystems]                           
                    17         66               68                               
                   o            o------G-------o                                 
@@ -210,7 +210,7 @@ for (const metadata of LocationsMetadata) {
   const cityName = loc.city;
   if (cityName === null) {
     // Generic location, add to all cities
-    for (const city of Object.values(CityName)) {
+    for (const city of Object.values(CityNameEnum)) {
       Cities[city].addLocation(loc.name);
     }
   } else {

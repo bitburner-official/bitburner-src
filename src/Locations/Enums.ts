@@ -66,14 +66,14 @@ export enum LocationName {
 }
 
 /** Names of all cities */
-export enum CityName {
-  Aevum = "Aevum",
-  Chongqing = "Chongqing",
-  Sector12 = "Sector-12",
-  NewTokyo = "New Tokyo",
-  Ishima = "Ishima",
-  Volhaven = "Volhaven",
-}
+export const CityNameEnum = {
+  Aevum: "Aevum",
+  Chongqing: "Chongqing",
+  Sector12: "Sector-12",
+  NewTokyo: "New Tokyo",
+  Ishima: "Ishima",
+  Volhaven: "Volhaven",
+} as const;
 
 export enum LocationType {
   Company = "Company",

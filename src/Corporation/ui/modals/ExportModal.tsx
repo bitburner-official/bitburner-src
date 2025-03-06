@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CityName } from "@enums";
+import type { CityName } from "@nsdefs";
 import { dialogBoxCreate } from "../../../ui/React/DialogBox";
 import { Material } from "../../Material";
 import { Export } from "../../Export";

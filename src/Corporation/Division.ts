@@ -1,5 +1,5 @@
-import { CorpMaterialName, CorpResearchName, CorpStateName } from "@nsdefs";
-import { CityName, CorpEmployeeJob, IndustryType } from "@enums";
+import { CityName, CorpMaterialName, CorpResearchName, CorpStateName } from "@nsdefs";
+import { CityNameEnum, CorpEmployeeJob, IndustryType } from "@enums";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { IndustryResearchTrees, IndustriesData } from "./data/IndustryData";
 import * as corpConstants from "./data/Constants";
@@ -89,13 +89,13 @@ export class Division {
     this.type = params.type;
     this.name = params.name;
     // Add default starting
-    this.warehouses[CityName.Sector12] = new Warehouse({
-      loc: CityName.Sector12,
+    this.warehouses[CityNameEnum.Sector12] = new Warehouse({
+      loc: CityNameEnum.Sector12,
       division: this,
       size: corpConstants.warehouseInitialSize,
     });
-    this.offices[CityName.Sector12] = new OfficeSpace({
-      city: CityName.Sector12,
+    this.offices[CityNameEnum.Sector12] = new OfficeSpace({
+      city: CityNameEnum.Sector12,
       size: corpConstants.officeInitialSize,
     });
 
@@ -138,7 +138,7 @@ export class Division {
   calculateRecoupableValue(): number {
     let price = this.startingCost;
     for (const city of getRecordKeys(this.offices)) {
-      if (city === CityName.Sector12) continue;
+      if (city === CityNameEnum.Sector12) continue;
       price += corpConstants.officeInitialCost;
       if (this.warehouses[city]) price += corpConstants.warehouseInitialCost;
     }
@@ -180,7 +180,7 @@ export class Division {
 
       // Process offices (and the employees in them)
       let employeeSalary = 0;
-      for (const officeLoc of Object.values(CityName)) {
+      for (const officeLoc of Object.values(CityNameEnum)) {
         const office = this.offices[officeLoc];
         if (office) employeeSalary += office.process(marketCycles, corporation, this);
       }
@@ -230,7 +230,7 @@ export class Division {
       prodMats = this.producedMaterials;
 
     //Only 'process the market' for materials that this industry deals with
-    for (const city of Object.values(CityName)) {
+    for (const city of Object.values(CityNameEnum)) {
       //If this industry has a warehouse in this city, process the market
       //for every material this industry requires or produces
       if (this.warehouses[city]) {

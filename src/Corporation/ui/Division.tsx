@@ -2,7 +2,7 @@
 // This Industry component does NOT include the city tabs at the top
 import React from "react";
 import { Box } from "@mui/material";
-import { CityName } from "@enums";
+import type { CityName } from "@nsdefs";
 import { DivisionOffice } from "./DivisionOffice";
 import { DivisionOverview } from "./DivisionOverview";
 import { DivisionWarehouse } from "./DivisionWarehouse";

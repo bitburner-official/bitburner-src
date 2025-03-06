@@ -1,6 +1,6 @@
 import {
   AugmentationName,
-  CityName,
+  CityNameEnum,
   CompanyName,
   CompletedProgramName,
   FactionName,
@@ -96,7 +96,7 @@ export function prestigeAugmentation(this: PlayerObject): void {
 
   this.money = 1000 + CONSTANTS.Donations;
 
-  this.city = CityName.Sector12;
+  this.city = CityNameEnum.Sector12;
   this.location = LocationName.TravelAgency;
 
   this.jobs = {};

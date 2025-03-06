@@ -1,4 +1,5 @@
-import { CityName } from "@enums";
+import { CityNameEnum } from "@enums";
+import type { CityName } from "@nsdefs";
 import { BladeburnerConstants } from "./data/Constants";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
@@ -12,7 +13,7 @@ export class City {
   comms = 0; // Number of communities
   chaos = 0;
 
-  constructor(name = CityName.Sector12) {
+  constructor(name: CityName = CityNameEnum.Sector12) {
     this.name = name;
 
     // Synthoid population and estimate

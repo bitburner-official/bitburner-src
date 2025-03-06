@@ -1,7 +1,7 @@
 import type { Singularity as ISingularity } from "@nsdefs";
 
 import { Player } from "@player";
-import { CityName, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
+import { CityNameEnum, FactionWorkType, GymType, LocationName, UniversityClassType } from "@enums";
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
 import { Augmentations } from "../Augmentation/Augmentations";
@@ -240,30 +240,31 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
         switch (universityName.toLowerCase()) {
           case LocationName.AevumSummitUniversity.toLowerCase():
-            if (Player.city != CityName.Aevum) {
+            if (Player.city != CityNameEnum.Aevum) {
               helpers.log(
                 ctx,
-                () => `You cannot study at 'Summit University' because you are not in '${CityName.Aevum}'.`,
+                () => `You cannot study at 'Summit University' because you are not in '${CityNameEnum.Aevum}'.`,
               );
               return false;
             }
             Player.gotoLocation(LocationName.AevumSummitUniversity);
             break;
           case LocationName.Sector12RothmanUniversity.toLowerCase():
-            if (Player.city != CityName.Sector12) {
+            if (Player.city != CityNameEnum.Sector12) {
               helpers.log(
                 ctx,
-                () => `You cannot study at 'Rothman University' because you are not in '${CityName.Sector12}'.`,
+                () => `You cannot study at 'Rothman University' because you are not in '${CityNameEnum.Sector12}'.`,
               );
               return false;
             }
             Player.gotoLocation(LocationName.Sector12RothmanUniversity);
             break;
           case LocationName.VolhavenZBInstituteOfTechnology.toLowerCase():
-            if (Player.city != CityName.Volhaven) {
+            if (Player.city != CityNameEnum.Volhaven) {
               helpers.log(
                 ctx,
-                () => `You cannot study at 'ZB Institute of Technology' because you are not in '${CityName.Volhaven}'.`,
+                () =>
+                  `You cannot study at 'ZB Institute of Technology' because you are not in '${CityNameEnum.Volhaven}'.`,
               );
               return false;
             }
@@ -307,55 +308,55 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
         switch (gymName.toLowerCase()) {
           case LocationName.AevumCrushFitnessGym.toLowerCase():
-            if (Player.city != CityName.Aevum) {
+            if (Player.city != CityNameEnum.Aevum) {
               helpers.log(
                 ctx,
                 () =>
-                  `You cannot workout at '${LocationName.AevumCrushFitnessGym}' because you are not in '${CityName.Aevum}'.`,
+                  `You cannot workout at '${LocationName.AevumCrushFitnessGym}' because you are not in '${CityNameEnum.Aevum}'.`,
               );
               return false;
             }
             Player.gotoLocation(LocationName.AevumCrushFitnessGym);
             break;
           case LocationName.AevumSnapFitnessGym.toLowerCase():
-            if (Player.city != CityName.Aevum) {
+            if (Player.city != CityNameEnum.Aevum) {
               helpers.log(
                 ctx,
                 () =>
-                  `You cannot workout at '${LocationName.AevumSnapFitnessGym}' because you are not in '${CityName.Aevum}'.`,
+                  `You cannot workout at '${LocationName.AevumSnapFitnessGym}' because you are not in '${CityNameEnum.Aevum}'.`,
               );
               return false;
             }
             Player.gotoLocation(LocationName.AevumSnapFitnessGym);
             break;
           case LocationName.Sector12IronGym.toLowerCase():
-            if (Player.city != CityName.Sector12) {
+            if (Player.city != CityNameEnum.Sector12) {
               helpers.log(
                 ctx,
                 () =>
-                  `You cannot workout at '${LocationName.Sector12IronGym}' because you are not in '${CityName.Sector12}'.`,
+                  `You cannot workout at '${LocationName.Sector12IronGym}' because you are not in '${CityNameEnum.Sector12}'.`,
               );
               return false;
             }
             Player.gotoLocation(LocationName.Sector12IronGym);
             break;
           case LocationName.Sector12PowerhouseGym.toLowerCase():
-            if (Player.city != CityName.Sector12) {
+            if (Player.city != CityNameEnum.Sector12) {
               helpers.log(
                 ctx,
                 () =>
-                  `You cannot workout at '${LocationName.Sector12PowerhouseGym}' because you are not in '${CityName.Sector12}'.`,
+                  `You cannot workout at '${LocationName.Sector12PowerhouseGym}' because you are not in '${CityNameEnum.Sector12}'.`,
               );
               return false;
             }
             Player.gotoLocation(LocationName.Sector12PowerhouseGym);
             break;
           case LocationName.VolhavenMilleniumFitnessGym.toLowerCase():
-            if (Player.city != CityName.Volhaven) {
+            if (Player.city != CityNameEnum.Volhaven) {
               helpers.log(
                 ctx,
                 () =>
-                  `You cannot workout at '${LocationName.VolhavenMilleniumFitnessGym}' because you are not in '${CityName.Volhaven}'.`,
+                  `You cannot workout at '${LocationName.VolhavenMilleniumFitnessGym}' because you are not in '${CityNameEnum.Volhaven}'.`,
               );
               return false;
             }
@@ -380,15 +381,15 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
 
     travelToCity: (ctx) => (_cityName) => {
       helpers.checkSingularityAccess(ctx);
-      const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
+      const cityName = getEnumHelper("CityNameEnum").nsGetMember(ctx, _cityName);
 
       switch (cityName) {
-        case CityName.Aevum:
-        case CityName.Chongqing:
-        case CityName.Sector12:
-        case CityName.NewTokyo:
-        case CityName.Ishima:
-        case CityName.Volhaven:
+        case CityNameEnum.Aevum:
+        case CityNameEnum.Chongqing:
+        case CityNameEnum.Sector12:
+        case CityNameEnum.NewTokyo:
+        case CityNameEnum.Ishima:
+        case CityNameEnum.Volhaven:
           if (!Player.travel(cityName)) {
             helpers.log(ctx, () => "Not enough money to travel.");
             return false;

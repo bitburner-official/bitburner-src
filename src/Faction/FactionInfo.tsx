@@ -1,5 +1,5 @@
 import React from "react";
-import { FactionName, CompanyName, CityName, LiteratureName, MessageFilename, LocationName } from "@enums";
+import { FactionName, CompanyName, CityNameEnum, LiteratureName, MessageFilename, LocationName } from "@enums";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
@@ -483,20 +483,20 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   // City factions, essentially governments
   [FactionName.Aevum]: new FactionInfo({
     infoText: <>The Silicon City.</>,
-    rumorText: <>Wealthy residents of {CityName.Aevum} may be invited to work for the Silicon City.</>,
+    rumorText: <>Wealthy residents of {CityNameEnum.Aevum} may be invited to work for the Silicon City.</>,
     enemies: [FactionName.Chongqing, FactionName.NewTokyo, FactionName.Ishima, FactionName.Volhaven],
-    inviteReqs: [locatedInCity(CityName.Aevum), haveMoney(40e6)],
-    rumorReqs: [locatedInCity(CityName.Aevum), haveMoney(20e6)],
+    inviteReqs: [locatedInCity(CityNameEnum.Aevum), haveMoney(40e6)],
+    rumorReqs: [locatedInCity(CityNameEnum.Aevum), haveMoney(20e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
   [FactionName.Chongqing]: new FactionInfo({
     infoText: <>Serve the People.</>,
-    rumorText: <>Wealthy residents of {CityName.Chongqing} may be invited to serve the people.</>,
+    rumorText: <>Wealthy residents of {CityNameEnum.Chongqing} may be invited to serve the people.</>,
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
-    inviteReqs: [locatedInCity(CityName.Chongqing), haveMoney(20e6)],
-    rumorReqs: [locatedInCity(CityName.Chongqing), haveMoney(10e6)],
+    inviteReqs: [locatedInCity(CityNameEnum.Chongqing), haveMoney(20e6)],
+    rumorReqs: [locatedInCity(CityNameEnum.Chongqing), haveMoney(10e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -504,31 +504,31 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.Ishima]: new FactionInfo({
     infoText: <>The East Asian Order of the Future.</>,
     rumorText: (
-      <>Wealthy residents of {CityName.Ishima} may be invited to work for the East Asian Order of the Future.</>
+      <>Wealthy residents of {CityNameEnum.Ishima} may be invited to work for the East Asian Order of the Future.</>
     ),
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
-    inviteReqs: [locatedInCity(CityName.Ishima), haveMoney(30e6)],
-    rumorReqs: [locatedInCity(CityName.Ishima), haveMoney(15e6)],
+    inviteReqs: [locatedInCity(CityNameEnum.Ishima), haveMoney(30e6)],
+    rumorReqs: [locatedInCity(CityNameEnum.Ishima), haveMoney(15e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
   [FactionName.NewTokyo]: new FactionInfo({
     infoText: <>Asia's World City.</>,
-    rumorText: <>Wealthy residents of {CityName.NewTokyo} may be invited to work for Asia's World City.</>,
+    rumorText: <>Wealthy residents of {CityNameEnum.NewTokyo} may be invited to work for Asia's World City.</>,
     enemies: [FactionName.Sector12, FactionName.Aevum, FactionName.Volhaven],
-    inviteReqs: [locatedInCity(CityName.NewTokyo), haveMoney(20e6)],
-    rumorReqs: [locatedInCity(CityName.NewTokyo), haveMoney(10e6)],
+    inviteReqs: [locatedInCity(CityNameEnum.NewTokyo), haveMoney(20e6)],
+    rumorReqs: [locatedInCity(CityNameEnum.NewTokyo), haveMoney(10e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
   }),
   [FactionName.Sector12]: new FactionInfo({
     infoText: <>The City of the Future.</>,
-    rumorText: <>Wealthy residents of {CityName.Sector12} may be invited to work for the City of the Future.</>,
+    rumorText: <>Wealthy residents of {CityNameEnum.Sector12} may be invited to work for the City of the Future.</>,
     enemies: [FactionName.Chongqing, FactionName.NewTokyo, FactionName.Ishima, FactionName.Volhaven],
-    inviteReqs: [locatedInCity(CityName.Sector12), haveMoney(15e6)],
-    rumorReqs: [locatedInCity(CityName.Sector12), haveMoney(7.5e6)],
+    inviteReqs: [locatedInCity(CityNameEnum.Sector12), haveMoney(15e6)],
+    rumorReqs: [locatedInCity(CityNameEnum.Sector12), haveMoney(7.5e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -536,11 +536,11 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
   [FactionName.Volhaven]: new FactionInfo({
     infoText: <>Benefit, Honor, and Glory.</>,
     rumorText: (
-      <>Wealthy residents of {CityName.Volhaven} may be invited to work for the city's Benefit, Honor, and Glory.</>
+      <>Wealthy residents of {CityNameEnum.Volhaven} may be invited to work for the city's Benefit, Honor, and Glory.</>
     ),
     enemies: [FactionName.Chongqing, FactionName.Sector12, FactionName.NewTokyo, FactionName.Aevum, FactionName.Ishima],
-    inviteReqs: [locatedInCity(CityName.Volhaven), haveMoney(50e6)],
-    rumorReqs: [locatedInCity(CityName.Volhaven), haveMoney(25e6)],
+    inviteReqs: [locatedInCity(CityNameEnum.Volhaven), haveMoney(50e6)],
+    rumorReqs: [locatedInCity(CityNameEnum.Volhaven), haveMoney(25e6)],
     offerHackingWork: true,
     offerFieldWork: true,
     offerSecurityWork: true,
@@ -566,9 +566,9 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
 
   [FactionName.TheDarkArmy]: new FactionInfo({
     infoText: <>The World doesn't care about right or wrong. It only cares about power.</>,
-    rumorText: <>A ruthless criminal organization based in {CityName.Chongqing}</>,
+    rumorText: <>A ruthless criminal organization based in {CityNameEnum.Chongqing}</>,
     inviteReqs: [
-      locatedInCity(CityName.Chongqing),
+      locatedInCity(CityNameEnum.Chongqing),
       notEmployedBy(CompanyName.CIA),
       notEmployedBy(CompanyName.NSA),
       haveSkill("hacking", 300),
@@ -577,7 +577,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       haveKarma(-45),
     ],
     rumorReqs: [
-      locatedInCity(CityName.Chongqing),
+      locatedInCity(CityNameEnum.Chongqing),
       haveSkill("hacking", 150),
       haveCombatSkills(150),
       haveKilledPeople(1),
@@ -591,7 +591,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>Honor holds you back.</>,
     rumorText: <>An elite criminal organization that operates in the western hemisphere</>,
     inviteReqs: [
-      locatedInSomeCity(CityName.Aevum, CityName.Sector12),
+      locatedInSomeCity(CityNameEnum.Aevum, CityNameEnum.Sector12),
       notEmployedBy(CompanyName.CIA),
       notEmployedBy(CompanyName.NSA),
       haveMoney(10e6),
@@ -600,7 +600,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       haveKarma(-90),
     ],
     rumorReqs: [
-      locatedInSomeCity(CityName.Aevum, CityName.Sector12),
+      locatedInSomeCity(CityNameEnum.Aevum, CityNameEnum.Sector12),
       haveCombatSkills(100),
       someCondition([haveKarma(-90), haveFile(LiteratureName.Sector12Crime)]),
     ],
@@ -635,12 +635,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>Following the mandate of Heaven and carrying out the way.</>,
     rumorText: <>A notorious East Asian criminal organization</>,
     inviteReqs: [
-      locatedInSomeCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
+      locatedInSomeCity(CityNameEnum.Chongqing, CityNameEnum.NewTokyo, CityNameEnum.Ishima),
       haveCombatSkills(75),
       haveKarma(-18),
     ],
     rumorReqs: [
-      locatedInSomeCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
+      locatedInSomeCity(CityNameEnum.Chongqing, CityNameEnum.NewTokyo, CityNameEnum.Ishima),
       haveCombatSkills(50),
       someCondition([haveKarma(-18), haveFile(LiteratureName.NewTriads)]),
     ],
@@ -670,12 +670,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     infoText: <>Obey Heaven and work righteously.</>,
     rumorText: <>A Chinese honor society with the motto: “Obey Heaven and work righteously.”</>,
     inviteReqs: [
-      locatedInSomeCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
+      locatedInSomeCity(CityNameEnum.Chongqing, CityNameEnum.NewTokyo, CityNameEnum.Ishima),
       haveSkill("hacking", 50),
       haveMoney(1e6),
     ],
     rumorReqs: [
-      locatedInSomeCity(CityName.Chongqing, CityName.NewTokyo, CityName.Ishima),
+      locatedInSomeCity(CityNameEnum.Chongqing, CityNameEnum.NewTokyo, CityNameEnum.Ishima),
       haveSkill("hacking", 25),
       haveMoney(0.5e6),
     ],
@@ -745,12 +745,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     {"        `..`                 "}<br /><br />
     Many cultures predict an end to humanity in the near future, a final
     Armageddon that will end the world; but we disagree.</>),
-    rumorText: <>Trouble is brewing in {CityName.Chongqing}.</>,
+    rumorText: <>Trouble is brewing in {CityNameEnum.Chongqing}.</>,
     inviteReqs: [
       haveSourceFile(13),
       haveAugmentations(0),
       {
-        toString: () => `Investigate the dilapidated church in ${CityName.Chongqing}`,
+        toString: () => `Investigate the dilapidated church in ${CityNameEnum.Chongqing}`,
         toJSON: () => ({ type: "location", location: LocationName.ChongqingChurchOfTheMachineGod }),
         isSatisfied: (p: PlayerObject) => {
           return [...p.factions, ...p.factionInvitations].includes(FactionName.ChurchOfTheMachineGod);

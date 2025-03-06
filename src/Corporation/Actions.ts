@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { CorpResearchName, CorpSmartSupplyOption } from "@nsdefs";
+import { CityName, CorpResearchName, CorpSmartSupplyOption } from "@nsdefs";
 
 import { MaterialInfo } from "./MaterialInfo";
 import { Corporation } from "./Corporation";
@@ -13,7 +13,7 @@ import { Warehouse } from "./Warehouse";
 import { CreatingCorporationCheckResult, FactionName, IndustryType } from "@enums";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
-import { CityName } from "@enums";
+import { CityNameEnum } from "@enums";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { getRecordValues } from "../Types/Record";
 import {
@@ -299,7 +299,7 @@ export function sellProduct(product: Product, city: CityName, amt: string, price
   const convertedAmount = convertAmountString(amt.toUpperCase());
 
   if (all) {
-    for (const cityName of Object.values(CityName)) {
+    for (const cityName of Object.values(CityNameEnum)) {
       product.cityData[cityName].desiredSellAmount = convertedAmount;
       product.cityData[cityName].desiredSellPrice = convertedPrice;
     }

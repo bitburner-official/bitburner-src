@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Typography } from "@mui/material";
-import { CityName } from "@enums";
+import { CityNameEnum } from "@enums";
+import type { CityName } from "@nsdefs";
 import { Sleeve } from "../Sleeve";
 import { CONSTANTS } from "../../../Constants";
 import { Money } from "../../../ui/React/Money";
@@ -36,7 +37,7 @@ export function TravelModal(props: TravelModalProps): React.ReactElement {
           also set your current sleeve task to idle.
         </Typography>
         {Settings.DisableASCIIArt ? (
-          Object.values(CityName).map((city) => (
+          Object.values(CityNameEnum).map((city) => (
             <Button key={city} onClick={() => travel(city)}>
               {city}
             </Button>

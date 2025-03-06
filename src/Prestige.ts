@@ -1,4 +1,4 @@
-import { AugmentationName, CityName, CompletedProgramName, FactionName, LiteratureName, CompanyName } from "@enums";
+import { AugmentationName, CityNameEnum, CompletedProgramName, FactionName, LiteratureName, CompanyName } from "@enums";
 import { Augmentations } from "./Augmentation/Augmentations";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { Companies } from "./Company/Companies";
@@ -288,7 +288,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // BitNode 10: Digital Carbon
   if (Player.bitNodeN === 10) {
     delayedDialog(
-      `Seek out ${FactionName.TheCovenant} if you'd like to purchase a new sleeve or two! And see what ${CompanyName.VitaLife} in ${CityName.NewTokyo} has to offer for you`,
+      `Seek out ${FactionName.TheCovenant} if you'd like to purchase a new sleeve or two! And see what ${CompanyName.VitaLife} in ${CityNameEnum.NewTokyo} has to offer for you`,
     );
   }
 
@@ -298,7 +298,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
 
   if (Player.bitNodeN === 13) {
-    delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`);
+    delayedDialog(`Trouble is brewing in ${CityNameEnum.Chongqing}`);
   }
 
   // Reset Stock market, gang, and corporation

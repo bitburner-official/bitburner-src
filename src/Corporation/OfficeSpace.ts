@@ -1,4 +1,5 @@
-import { CityName, CorpEmployeeJob } from "@enums";
+import { CityNameEnum, CorpEmployeeJob } from "@enums";
+import type { CityName } from "@nsdefs";
 import * as corpConstants from "./data/Constants";
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { Division } from "./Division";
@@ -13,7 +14,7 @@ interface IParams {
 }
 
 export class OfficeSpace {
-  city = CityName.Sector12;
+  city: CityName = CityNameEnum.Sector12;
   size = 1;
 
   maxEnergy = 100;

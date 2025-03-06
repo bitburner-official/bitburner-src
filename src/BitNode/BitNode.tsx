@@ -1,6 +1,6 @@
 import React from "react";
 import { Player } from "@player";
-import { CityName, FactionName } from "@enums";
+import { CityNameEnum, FactionName } from "@enums";
 import { BitNodeMultipliers, replaceCurrentNodeMults } from "./BitNodeMultipliers";
 
 class BitNode {
@@ -406,7 +406,7 @@ export function initBitNodes() {
         <br />
         <br />
         Their leader, Allison "Mother" Stanek is said to have created her own augmentation whose power goes beyond any
-        other. Find her in {CityName.Chongqing} and gain her trust.
+        other. Find her in {CityNameEnum.Chongqing} and gain her trust.
         <br />
         <br />
         Destroying this BitNode will give you Source-File 13, or if you already have this Source-File, it will upgrade

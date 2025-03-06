@@ -15,7 +15,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Adjuster } from "./Adjuster";
 import { Player } from "@player";
-import { BladeburnerSkillName, CityName } from "@enums";
+import { BladeburnerSkillName, CityNameEnum } from "@enums";
 import { Skills as AllSkills } from "../../Bladeburner/data/Skills";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { getEnumHelper } from "../../utils/EnumHelper";
@@ -47,13 +47,13 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
   const addTonsBladeburnerCycles = () => (bladeburner.storedCycles += bigNumber);
 
   // Chaos functions
-  const wipeAllChaos = () => Object.values(CityName).forEach((city) => (bladeburner.cities[city].chaos = 0));
+  const wipeAllChaos = () => Object.values(CityNameEnum).forEach((city) => (bladeburner.cities[city].chaos = 0));
   const wipeActiveCityChaos = () => (bladeburner.cities[bladeburner.city].chaos = 0);
   const addAllChaos = (modify: number) => (chaos: number) => {
-    Object.values(CityName).forEach((city) => bladeburner.cities[city].changeChaosByCount(chaos * modify));
+    Object.values(CityNameEnum).forEach((city) => bladeburner.cities[city].changeChaosByCount(chaos * modify));
   };
   const addTonsAllChaos = () => {
-    Object.values(CityName).forEach((city) => bladeburner.cities[city].changeChaosByCount(bigNumber));
+    Object.values(CityNameEnum).forEach((city) => bladeburner.cities[city].changeChaosByCount(bigNumber));
   };
 
   // Skill functions

@@ -4,7 +4,8 @@ import React from "react";
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 import { Player } from "@player";
-import { BladeburnerActionType, BladeburnerContractName, CityName, FactionName, LocationName } from "@enums";
+import { BladeburnerActionType, BladeburnerContractName, CityNameEnum, FactionName, LocationName } from "@enums";
+import type { CityName } from "@nsdefs";
 import { Crimes } from "../../../Crime/Crimes";
 import { Factions } from "../../../Faction/Factions";
 import { getEnumHelper } from "../../../utils/EnumHelper";
@@ -162,13 +163,13 @@ const tasks: {
   "Take University Course": (sleeve: Sleeve): ITaskDetails => {
     let universities: string[] = [];
     switch (sleeve.city) {
-      case CityName.Aevum:
+      case CityNameEnum.Aevum:
         universities = [LocationName.AevumSummitUniversity];
         break;
-      case CityName.Sector12:
+      case CityNameEnum.Sector12:
         universities = [LocationName.Sector12RothmanUniversity];
         break;
-      case CityName.Volhaven:
+      case CityNameEnum.Volhaven:
         universities = [LocationName.VolhavenZBInstituteOfTechnology];
         break;
       default:
@@ -181,13 +182,13 @@ const tasks: {
   "Workout at Gym": (sleeve: Sleeve): ITaskDetails => {
     let gyms: string[] = [];
     switch (sleeve.city) {
-      case CityName.Aevum:
+      case CityNameEnum.Aevum:
         gyms = [LocationName.AevumCrushFitnessGym, LocationName.AevumSnapFitnessGym];
         break;
-      case CityName.Sector12:
+      case CityNameEnum.Sector12:
         gyms = [LocationName.Sector12IronGym, LocationName.Sector12PowerhouseGym];
         break;
-      case CityName.Volhaven:
+      case CityNameEnum.Volhaven:
         gyms = [LocationName.VolhavenMilleniumFitnessGym];
         break;
       default:
@@ -223,8 +224,9 @@ const canDo = {
   "Work for Faction": (sleeve: Sleeve) => possibleFactions(sleeve).length > 0,
   "Commit Crime": () => true,
   "Take University Course": (sleeve: Sleeve) =>
-    [CityName.Aevum, CityName.Sector12, CityName.Volhaven].includes(sleeve.city),
-  "Workout at Gym": (sleeve: Sleeve) => [CityName.Aevum, CityName.Sector12, CityName.Volhaven].includes(sleeve.city),
+    ([CityNameEnum.Aevum, CityNameEnum.Sector12, CityNameEnum.Volhaven] as CityName[]).includes(sleeve.city),
+  "Workout at Gym": (sleeve: Sleeve) =>
+    ([CityNameEnum.Aevum, CityNameEnum.Sector12, CityNameEnum.Volhaven] as CityName[]).includes(sleeve.city),
   "Perform Bladeburner Actions": () => !!Player.bladeburner,
   "Shock Recovery": (sleeve: Sleeve) => sleeve.shock > 0,
   Synchronize: (sleeve: Sleeve) => sleeve.sync < 100,

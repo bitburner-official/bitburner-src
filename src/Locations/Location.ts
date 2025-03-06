@@ -1,4 +1,5 @@
-import { CityName, LocationName, LocationType } from "@enums";
+import { LocationName, LocationType } from "@enums";
+import type { CityName } from "@nsdefs";
 
 interface IInfiltrationMetadata {
   maxClearanceLevel: number;

@@ -1,4 +1,4 @@
-import { CityName, FactionName, CompanyName, LiteratureName } from "@enums";
+import { CityNameEnum, FactionName, CompanyName, LiteratureName } from "@enums";
 import { Literature } from "./Literature";
 import { Typography } from "@mui/material";
 import React from "react";
@@ -396,13 +396,13 @@ export const Literatures: Record<LiteratureName, Literature> = {
     ),
   }),
   [LiteratureName.Sector12Crime]: new Literature({
-    title: `Figures Show Rising Crime Rates in ${CityName.Sector12}`,
+    title: `Figures Show Rising Crime Rates in ${CityNameEnum.Sector12}`,
     filename: LiteratureName.Sector12Crime,
     factionRumors: [FactionName.TheSyndicate, FactionName.SlumSnakes],
     text: (
       <Typography>
         A recent study by analytics company Wilson Inc. shows a significant rise in criminal activity in
-        {CityName.Sector12}. Perhaps the most alarming part of the statistic is that most of the rise is in violent
+        {CityNameEnum.Sector12}. Perhaps the most alarming part of the statistic is that most of the rise is in violent
         crime such as homicide and assault. According to the study, the city saw a total of 21,406 reported homicides in
         2076, which is over a 20% increase compared to 2075.
         <br />
