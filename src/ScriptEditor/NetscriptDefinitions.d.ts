@@ -2657,6 +2657,15 @@ export interface Singularity {
   getCurrentServer(): string;
 
   /**
+   * Displays the content of a file on the currently connected server.
+   * @remarks
+   * RAM cost: 0.5 * 16/4/1
+   *
+   * @param filename - Name of the file to display, including its extension.
+   */
+  cat(filename: string): void;
+
+  /**
    * Connect to a server.
    * @remarks
    * RAM cost: 2 GB * 16/4/1

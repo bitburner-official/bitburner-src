@@ -52,6 +52,12 @@ import { calculateEffectiveRequiredReputation } from "../Company/utils";
 import { calculateFavorAfterResetting } from "../Faction/formulas/favor";
 import { validBitNodes } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { showMessage } from "../Message/MessageHelpers";
+import { showLiterature } from "../Literature/LiteratureHelpers";
+import { dialogBoxCreate } from "../ui/React/DialogBox";
+import { hasScriptExtension } from "../Paths/ScriptFilePath";
+import { hasTextExtension } from "../Paths/TextFilePath";
+import { isMember } from "../utils/EnumHelper";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -466,6 +472,27 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     getCurrentServer: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
       return Player.getCurrentServer().hostname;
+    },
+    cat: (ctx) => (_filename) => {
+      const path = helpers.filePath(ctx, "filename", _filename);
+      const server = helpers.getServer(ctx, Player.currentServer);
+      if (hasScriptExtension(path) || hasTextExtension(path)) {
+        const file = server.getContentFile(path);
+        if (!file) return Terminal.error(`No file at path ${path}`);
+        return dialogBoxCreate(`${file.filename}\n\n${file.content}`);
+      }
+      if (!path.endsWith(".msg") && !path.endsWith(".lit")) {
+        return Terminal.error(
+          "Invalid file extension. Filename must end with .msg, .lit, a script extension (.js, .jsx, .ts, .tsx, .script) or a text extension (.txt, .json)",
+        );
+      }
+      if (isMember("MessageFilename", path)) {
+        if (server.messages.includes(path)) return showMessage(path);
+      }
+      if (isMember("LiteratureName", path)) {
+        if (server.messages.includes(path)) return showLiterature(path);
+      }
+      Terminal.error(`No file at path ${path}`);
     },
     connect: (ctx) => (_hostname) => {
       helpers.checkSingularityAccess(ctx);
