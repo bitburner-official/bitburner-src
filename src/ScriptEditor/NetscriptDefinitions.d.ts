@@ -8441,7 +8441,7 @@ type _ValueOf<T> = T[keyof T];
 
 /** Names of all cities
  * @public */
-type CityNameEnum = {
+type CityNameEnumType = {
   Aevum: "Aevum";
   Chongqing: "Chongqing";
   Sector12: "Sector-12";
@@ -8450,7 +8450,7 @@ type CityNameEnum = {
   Volhaven: "Volhaven";
 };
 
-type CityName = _ValueOf<CityNameEnum>;
+type CityName = _ValueOf<CityNameEnumType>;
 
 /** Names of all locations
  * @public */
@@ -8712,7 +8712,7 @@ export type CodingContractObject = {
 
 /** @public */
 type NSEnums = {
-  CityName: CityNameEnum;
+  CityName: CityNameEnumType;
   CrimeType: typeof CrimeType;
   FactionWorkType: typeof FactionWorkType;
   GymType: typeof GymType;
