@@ -1,3 +1,8 @@
+/**
+ * @public
+ */
+type _ValueOf<T> = T[keyof T];
+
 /** All netscript definitions */
 /** @public */
 interface HP {
@@ -8437,10 +8442,11 @@ type CorpIndustryName =
 /** @public */
 type CorpSmartSupplyOption = "leftovers" | "imports" | "none";
 
-type _ValueOf<T> = T[keyof T];
-
-/** Names of all cities
- * @public */
+/**
+ * Names of all cities
+ *
+ * @public
+ */
 type CityNameEnumType = {
   Aevum: "Aevum";
   Chongqing: "Chongqing";
@@ -8450,6 +8456,7 @@ type CityNameEnumType = {
   Volhaven: "Volhaven";
 };
 
+/** @public */
 type CityName = _ValueOf<CityNameEnumType>;
 
 /** Names of all locations
