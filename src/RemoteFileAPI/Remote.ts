@@ -60,5 +60,10 @@ function handleMessageEvent(this: WebSocket, e: MessageEvent): void {
   }
   const response = RFARequestHandler[msg.method](msg);
   if (!response) return;
+
+  if (response instanceof Promise) {
+    void response.then((data) => this.send(JSON.stringify(data)));
+    return;
+  }
   this.send(JSON.stringify(response));
 }
