@@ -419,6 +419,7 @@ export function initBitNodes() {
         <br />
         Each level of this Source-File increases the size of Stanek's Gift.
         <br />
+        <br />
         Due to the effect of Source-File 7.3, you must accept Stanek's Gift before joining the Bladeburner division if
         you have that Source-File.
       </>
