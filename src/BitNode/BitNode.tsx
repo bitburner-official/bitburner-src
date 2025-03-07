@@ -1,6 +1,6 @@
 import React from "react";
 import { Player } from "@player";
-import { CityName, FactionName } from "@enums";
+import { AugmentationName, CityName, FactionName } from "@enums";
 import { BitNodeMultipliers, replaceCurrentNodeMults } from "./BitNodeMultipliers";
 
 class BitNode {
@@ -236,7 +236,10 @@ export function initBitNodes() {
         <ul>
           <li>Level 1: 8%</li>
           <li>Level 2: 12%</li>
-          <li>Level 3: 14% and begin with The Blade's Simulacrum</li>
+          <li>
+            Level 3: 14% and immediately receive "{AugmentationName.BladesSimulacrum}" augmentation after joining the
+            Bladeburner division
+          </li>
         </ul>
       </>
     ),
@@ -415,6 +418,9 @@ export function initBitNodes() {
         <br />
         <br />
         Each level of this Source-File increases the size of Stanek's Gift.
+        <br />
+        Due to the effect of Source-File 7.3, you must accept Stanek's Gift before joining the Bladeburner division if
+        you have that Source-File.
       </>
     ),
   );

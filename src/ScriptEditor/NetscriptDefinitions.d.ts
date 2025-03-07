@@ -3816,6 +3816,9 @@ export interface Bladeburner {
    *
    * Attempts to join the Bladeburner division.
    *
+   * If you have SF 7.3, you will immediately receive "The Blade's Simulacrum" augmentation and won't be able to accept
+   * Stanek's Gift after joining. If you want to accept Stanek's Gift, you must do that before calling this API.
+   *
    * Returns true if you successfully join the Bladeburner division, or if you are already a member.
    *
    * Returns false otherwise.

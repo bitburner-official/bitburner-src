@@ -138,7 +138,7 @@ Destroying this BitNode will give you Source-File 7, or if you already have this
 
 - Level 1: 8%
 - Level 2: 12%
-- Level 3: 14%
+- Level 3: Level 3: 14% and immediately receive "The Blade's Simulacrum" augmentation after joining the Bladeburner division
 
 ### BitNode 8: Ghost of Wall Street
 
@@ -227,6 +227,8 @@ Their leader, Allison "Mother" Stanek is said to have created her own augmentati
 Destroying this BitNode will give you Source-File 13, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File lets the Church of the Machine God appear in other BitNodes.
 
 Each level of this Source-File increases the size of Stanek's Gift.
+
+Due to the effect of Source-File 7.3, you must accept Stanek's Gift before joining the Bladeburner division if you have that Source-File.
 
 ### BitNode 14: IPvGO Subnet Takeover
 
