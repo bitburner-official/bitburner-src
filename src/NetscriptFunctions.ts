@@ -161,32 +161,23 @@ export const ns: InternalAPI<NSFull> = {
     }
     return vsprintf(format, _args);
   },
-  scan: (ctx) => (_host) => {
+  scan: (ctx) => (_host, _returnOpts) => {
     const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+    const returnOpts = helpers.hostReturnOptions(_returnOpts);
     const server = helpers.getServer(ctx, host);
     const out: string[] = [];
     for (let i = 0; i < server.serversOnNetwork.length; i++) {
       const s = getServerOnNetwork(server, i);
       if (s === null) continue;
-      const entry = s.hostname;
+      const entry = helpers.returnServerID(s, returnOpts);
       if (entry === null) continue;
       out.push(entry);
     }
-    helpers.log(ctx, () => `returned ${server.serversOnNetwork.length} connections for ${server.hostname}`);
-    return out;
-  },
-  scanByIP: (ctx) => (_host) => {
-    const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
-    const server = helpers.getServer(ctx, host);
-    const out: string[] = [];
-    for (let i = 0; i < server.serversOnNetwork.length; i++) {
-      const s = getServerOnNetwork(server, i);
-      if (s === null) continue;
-      const entry = s.ip;
-      if (entry === null) continue;
-      out.push(entry);
-    }
-    helpers.log(ctx, () => `returned ${server.serversOnNetwork.length} connections for ${server.ip}`);
+    helpers.log(
+      ctx,
+      () =>
+        `returned ${server.serversOnNetwork.length} connections for ${isIPAddress(host) ? server.ip : server.hostname}`,
+    );
     return out;
   },
   hasTorRouter: () => () => Player.hasTorRouter(),
@@ -1157,9 +1148,9 @@ export const ns: InternalAPI<NSFull> = {
     return server.ramUsed;
   },
   dnsLookup: (ctx) => (_host) => {
-    const identifier = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, identifier);
-    return isIPAddress(identifier) ? server.hostname : server.ip;
+    const host = helpers.string(ctx, "host", _host);
+    const server = helpers.getServer(ctx, host);
+    return isIPAddress(host) ? server.hostname : server.ip;
   },
   serverExists: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
@@ -1370,21 +1361,18 @@ export const ns: InternalAPI<NSFull> = {
     helpers.log(ctx, () => `Could not find server ${hostname} as a purchased server. This is a bug. Report to dev.`);
     return false;
   },
-  getPurchasedServers: () => (): string[] => {
-    const res: string[] = [];
-    Player.purchasedServers.forEach(function (hostname) {
-      res.push(hostname);
-    });
-    return res;
-  },
-  getPurchasedServersByIP: (ctx) => (): string[] => {
-    const res: string[] = [];
-    Player.purchasedServers.forEach(function (hostname) {
-      const server = helpers.getServer(ctx, hostname);
-      res.push(server.ip);
-    });
-    return res;
-  },
+  getPurchasedServers:
+    (ctx) =>
+    (_returnOpts): string[] => {
+      const returnOpts = helpers.hostReturnOptions(_returnOpts);
+      const res: string[] = [];
+      Player.purchasedServers.forEach(function (hostname) {
+        const server = helpers.getServer(ctx, hostname);
+        const id = helpers.returnServerID(server, returnOpts);
+        res.push(id);
+      });
+      return res;
+    },
   writePort: (ctx) => (_portNumber, data) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);
     return writePort(portNumber, data);

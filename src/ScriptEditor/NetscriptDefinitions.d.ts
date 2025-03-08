@@ -384,6 +384,16 @@ interface BasicHGWOptions {
 }
 
 /**
+ * Options to control how a server identifier (hostname or IP address) is returned.
+ * Affects the behavior of {@link NS.scan | scan}, {@link NS.getPurchasedServers | getPurchasedServers}, and {@link Singularity.getCurrentServer | getCurrentServer}
+ * @public
+ */
+interface HostReturnOptions {
+  /** If set to `true`, returns IP addresses instead of hostnames. Defaults to `false`. */
+  returnByIP?: boolean;
+}
+
+/**
  * Return value of {@link Sleeve.getSleevePurchasableAugs | getSleevePurchasableAugs}
  * @public
  */
@@ -2648,13 +2658,14 @@ export interface Singularity {
 
   /**
    * Get the current server.
+   * Returns the hostname by default.
    * @remarks
    * RAM cost: 2 GB * 16/4/1
    *
-   *
-   * @returns Name of the current server.
+   * @param returnOpts - Optional. Controls whether the function returns an IP.
+   * @returns Hostname or IP address of the current server.
    */
-  getCurrentServer(): string;
+  getCurrentServer(returnOpts?: HostReturnOptions): string;
 
   /**
    * Displays the content of a file on the currently connected server.
@@ -6782,13 +6793,13 @@ export interface NS {
   setTitle(title: string | ReactNode, pid?: number): void;
 
   /**
-   * Get the list of hostnames connected to a server.
+   * Get the list of hostnames or IP addresses connected to a server.
    * @remarks
    * RAM cost: 0.2 GB
    *
-   * Returns an array containing the hostnames of all servers that are one
-   * node way from the specified target server. The hostnames in the returned
-   * array are strings.
+   * Returns an array containing the hostnames or IP addresses of all servers that are one
+   * node way from the specified target server. The hostnames/IPs in the returned
+   * array are strings. Returns hostnames by default.
    *
    * The server network is a tree graph with the home server at the root. The parent node is always the first item of
    * the returned array.
@@ -6825,6 +6836,12 @@ export interface NS {
    * for (let i = 0; i < neighbor.length; i++) {
    *     ns.tprint(neighbor[i]);
    * }
+   * // All servers that are one hop from the current server, but by IP address.
+   * ns.tprint("IPs of current server's neighbors.");
+   * let neighbor = ns.scan(null, { returnByIP: true });
+   * for (let i = 0; i < neighbor.length; i++) {
+   *     ns.tprint(neighbor[i]);
+   * }
    * // All neighbors of n00dles.
    * const target = "n00dles";
    * neighbor = ns.scan(target);
@@ -6835,25 +6852,10 @@ export interface NS {
    * ```
    *
    * @param host - Optional. Hostname/IP of the server to scan, default to current server.
+   * @param returnOpts - Optional. Controls whether the function returns IPs.
    * @returns Returns an array of hostnames.
    */
-  scan(host?: string): string[];
-
-  /**
-   * Get the list of IPs connected to a server.
-   * @remarks
-   * RAM cost: 0.2 GB
-   *
-   * Returns an array containing the IP addresses of all servers that are one
-   * node way from the specified target server. The IP addresses in the returned
-   * array are strings.
-   *
-   * Works identically to {@link NS.scan | ns.scan}.
-   *
-   * @param host - Optional.  Hostname/IP of the server to scan, default to current server.
-   * @returns Returns an array of IP addresses
-   */
-  scanByIP(host?: string): string[];
+  scan(host?: string, returnOpts?: HostReturnOptions): string[];
 
   /** Returns whether the player has access to the darkweb.
    * @remarks
@@ -7645,20 +7647,15 @@ export interface NS {
   deleteServer(host: string): boolean;
 
   /**
-   * Returns an array with the hostnames of all of the servers you have purchased.
+   * Returns an array with the hostnames or IP addresses of all of the servers you have purchased.
+   * Returns hostnames by default.
    *
    * @remarks 1.05 GB
-   * @returns Returns an array with the hostnames of all of the servers you have purchased.
-   */
-  getPurchasedServers(): string[];
-
-  /**
-   * Returns an array with the IP addresses of all of the servers you have purchased.
    *
-   * @remarks 1.05 GB
-   * @returns Returns an array with the IP addresses of all of the servers you have purchased.
+   * @param returnOpts - Optional. Controls whether the function returns IPs
+   * @returns Returns an array with the hostnames or IP addresses of all of the servers you have purchased.
    */
-  getPurchasedServersByIP(): string[];
+  getPurchasedServers(returnOpts?: HostReturnOptions): string[];
 
   /**
    * Returns the maximum number of servers you can purchase.

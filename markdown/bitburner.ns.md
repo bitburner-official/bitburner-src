@@ -90,8 +90,7 @@ export async function main(ns) {
 |  [getPurchasedServerCost(ram)](./bitburner.ns.getpurchasedservercost.md) | Get cost of purchasing a server. |
 |  [getPurchasedServerLimit()](./bitburner.ns.getpurchasedserverlimit.md) | Returns the maximum number of servers you can purchase. |
 |  [getPurchasedServerMaxRam()](./bitburner.ns.getpurchasedservermaxram.md) | Returns the maximum RAM that a purchased server can have. |
-|  [getPurchasedServers()](./bitburner.ns.getpurchasedservers.md) | Returns an array with the hostnames of all of the servers you have purchased. |
-|  [getPurchasedServersByIP()](./bitburner.ns.getpurchasedserversbyip.md) | Returns an array with the IP addresses of all of the servers you have purchased. |
+|  [getPurchasedServers(returnOpts)](./bitburner.ns.getpurchasedservers.md) | Returns an array with the hostnames or IP addresses of all of the servers you have purchased. Returns hostnames by default. |
 |  [getPurchasedServerUpgradeCost(host, ram)](./bitburner.ns.getpurchasedserverupgradecost.md) | Get cost of upgrading a purchased server to the given ram. |
 |  [getRecentScripts()](./bitburner.ns.getrecentscripts.md) | Get an array of recently killed scripts across all servers. |
 |  [getResetInfo()](./bitburner.ns.getresetinfo.md) | Get information about resets. |
@@ -154,8 +153,7 @@ export async function main(ns) {
 |  [resizeTail(width, height, pid)](./bitburner.ns.resizetail.md) | Resize a tail window. This function is deprecated and will be removed in a later version. |
 |  [rm(name, host)](./bitburner.ns.rm.md) | Delete a file. |
 |  [run(script, threadOrOptions, args)](./bitburner.ns.run.md) | Start another script on the current server. |
-|  [scan(host)](./bitburner.ns.scan.md) | Get the list of hostnames connected to a server. |
-|  [scanByIP(host)](./bitburner.ns.scanbyip.md) | Get the list of IPs connected to a server. |
+|  [scan(host, returnOpts)](./bitburner.ns.scan.md) | Get the list of hostnames or IP addresses connected to a server. |
 |  [scp(files, destination, source)](./bitburner.ns.scp.md) | Copy file between servers. |
 |  [scriptKill(script, host)](./bitburner.ns.scriptkill.md) | Kill all scripts with a filename. |
 |  [scriptRunning(script, host)](./bitburner.ns.scriptrunning.md) | Check if any script with a filename is running. |

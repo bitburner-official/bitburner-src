@@ -464,9 +464,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 5000);
       return true;
     },
-    getCurrentServer: (ctx) => () => {
+    getCurrentServer: (ctx) => (_returnOpts) => {
       helpers.checkSingularityAccess(ctx);
-      return Player.getCurrentServer().hostname;
+      const returnOpts = helpers.hostReturnOptions(_returnOpts);
+      const server = Player.getCurrentServer();
+      return helpers.returnServerID(server, returnOpts);
     },
     cat: (ctx) => (_filename) => {
       helpers.checkSingularityAccess(ctx);
@@ -478,12 +480,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const host = helpers.string(ctx, "host", _host);
       if (!host) {
-        throw helpers.errorMessage(ctx, `Invalid hostname: '${host}'`);
+        throw helpers.errorMessage(ctx, `Invalid server: '${host}'`);
       }
 
       const target = GetServer(host);
       if (target == null) {
-        throw helpers.errorMessage(ctx, `Invalid hostname: '${host}'`);
+        throw helpers.errorMessage(ctx, `Invalid server: '${host}'`);
       }
 
       // Adjacent servers

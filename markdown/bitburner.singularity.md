@@ -45,7 +45,7 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [getCompanyRep(companyName)](./bitburner.singularity.getcompanyrep.md) | Get company reputation. |
 |  [getCrimeChance(crime)](./bitburner.singularity.getcrimechance.md) | Get chance to successfully commit a crime. |
 |  [getCrimeStats(crime)](./bitburner.singularity.getcrimestats.md) | Get stats related to a crime. |
-|  [getCurrentServer()](./bitburner.singularity.getcurrentserver.md) | Get the current server. |
+|  [getCurrentServer(returnOpts)](./bitburner.singularity.getcurrentserver.md) | Get the current server. Returns the hostname by default. |
 |  [getCurrentWork()](./bitburner.singularity.getcurrentwork.md) | Get the current work the player is doing. |
 |  [getDarkwebProgramCost(programName)](./bitburner.singularity.getdarkwebprogramcost.md) | Check the price of an exploit on the dark web |
 |  [getDarkwebPrograms()](./bitburner.singularity.getdarkwebprograms.md) | Get a list of programs offered on the dark web. |
