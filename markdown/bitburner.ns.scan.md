@@ -66,7 +66,7 @@ for (let i = 0; i < neighbor.length; i++) {
 }
 // All servers that are one hop from the current server, but by IP address.
 ns.tprint("IPs of current server's neighbors.");
-let neighbor = ns.scan(null, { returnByIP: true });
+let neighbor = ns.scan(undefined, { returnByIP: true });
 for (let i = 0; i < neighbor.length; i++) {
     ns.tprint(neighbor[i]);
 }
