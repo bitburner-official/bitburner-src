@@ -6838,7 +6838,7 @@ export interface NS {
    * }
    * // All servers that are one hop from the current server, but by IP address.
    * ns.tprint("IPs of current server's neighbors.");
-   * let neighbor = ns.scan(undefined, { returnByIP: true });
+   * let neighbor = ns.scan(null, { returnByIP: true });
    * for (let i = 0; i < neighbor.length; i++) {
    *     ns.tprint(neighbor[i]);
    * }
@@ -6855,7 +6855,7 @@ export interface NS {
    * @param returnOpts - Optional. Controls whether the function returns IPs.
    * @returns Returns an array of hostnames.
    */
-  scan(host?: string, returnOpts?: HostReturnOptions): string[];
+  scan(host?: string | null, returnOpts?: HostReturnOptions): string[];
 
   /** Returns whether the player has access to the darkweb.
    * @remarks

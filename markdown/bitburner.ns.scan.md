@@ -9,14 +9,14 @@ Get the list of hostnames or IP addresses connected to a server.
 **Signature:**
 
 ```typescript
-scan(host?: string, returnOpts?: HostReturnOptions): string[];
+scan(host?: string | null, returnOpts?: HostReturnOptions): string[];
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | _(Optional)_ Optional. Hostname/IP of the server to scan, default to current server. |
+|  host | string \| null | _(Optional)_ Optional. Hostname/IP of the server to scan, default to current server. |
 |  returnOpts | [HostReturnOptions](./bitburner.hostreturnoptions.md) | _(Optional)_ Optional. Controls whether the function returns IPs. |
 
 **Returns:**
@@ -66,7 +66,7 @@ for (let i = 0; i < neighbor.length; i++) {
 }
 // All servers that are one hop from the current server, but by IP address.
 ns.tprint("IPs of current server's neighbors.");
-let neighbor = ns.scan(undefined, { returnByIP: true });
+let neighbor = ns.scan(null, { returnByIP: true });
 for (let i = 0; i < neighbor.length; i++) {
     ns.tprint(neighbor[i]);
 }
