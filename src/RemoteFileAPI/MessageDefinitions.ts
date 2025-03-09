@@ -26,6 +26,7 @@ type ResultType =
   | RFAServerData[]
   | {
       identifier: string;
+      binary: boolean;
       save: SaveData;
     };
 type FileMetadata = FileData | FileContent | FileLocation | FileServer;

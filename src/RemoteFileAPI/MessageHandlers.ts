@@ -116,14 +116,29 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
 
   getSaveFile: async function (msg: RFAMessage): Promise<RFAMessage> {
     const saveData = await saveObject.getSaveData();
+
+    if (typeof saveData === "string") {
+      return new RFAMessage({
+        result: {
+          identifier: Player.identifier,
+          binary: false,
+          save: saveData,
+        },
+        id: msg.id,
+      });
+    }
+
     // We can't serialize the Uint8Array directly, so we convert every integer to a character and make a string out of the array
     // The external editor can simply recreate the save by converting each char back to their char code
-    const converted =
-      typeof saveData === "string" ? saveData : saveData.reduce((acc, cur) => acc + String.fromCharCode(cur), "");
+    let converted = "";
+    for (let i = 0; i < saveData.length; i++) {
+      converted += String.fromCharCode(saveData[i]);
+    }
 
     return new RFAMessage({
       result: {
         identifier: Player.identifier,
+        binary: true,
         save: converted,
       },
       id: msg.id,
