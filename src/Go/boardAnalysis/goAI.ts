@@ -62,10 +62,10 @@ export function handleNextTurn(boardState: BoardState, useOfflineCycles = true):
   const previousPromise = playerPromises[currentColor];
   const currentPromise = playerPromises[currentColor === GoColor.black ? GoColor.white : GoColor.black];
   // If we've already handled this turn, return the existing promise.
-  if (previousPromise.resolver === null) {
+  if (previousPromise.resolver === null && currentPromise.resolver) {
     return currentPromise.nextTurn;
   }
-  previousPromise.resolver();
+  previousPromise?.resolver?.();
   previousPromise.resolver = null;
   GoEvents.emit();
 
