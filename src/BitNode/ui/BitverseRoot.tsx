@@ -74,12 +74,12 @@ function BitNodePortal(props: IPortalProps): React.ReactElement {
               BitNode-{bitNode.number.toString()}: {bitNode.name}
             </strong>
             <br />
-            {bitNode.desc}
+            {bitNode.tagline}
           </Typography>
         }
       >
         {Settings.DisableASCIIArt ? (
-          <Button onClick={() => setPortalOpen(true)} sx={{ m: 2 }} aria-description={bitNode.desc}>
+          <Button onClick={() => setPortalOpen(true)} sx={{ m: 2 }} aria-description={bitNode.tagline}>
             <Typography>
               BitNode-{bitNode.number.toString()}: {bitNode.name}
             </Typography>
@@ -89,7 +89,7 @@ function BitNodePortal(props: IPortalProps): React.ReactElement {
             onClick={() => setPortalOpen(true)}
             className={cssClass}
             aria-label={`BitNode-${bitNode.number.toString()}: ${bitNode.name}`}
-            aria-description={bitNode.desc}
+            aria-description={bitNode.tagline}
           >
             O
           </IconButton>
@@ -183,7 +183,7 @@ export function BitverseRoot(props: IProps): React.ReactElement {
       <>
         {Object.values(BitNodes)
           .filter((node) => {
-            return node.desc !== "COMING SOON";
+            return node.tagline !== "COMING SOON";
           })
           .map((node) => {
             return (
