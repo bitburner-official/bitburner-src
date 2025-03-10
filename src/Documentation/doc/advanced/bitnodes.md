@@ -122,7 +122,7 @@ In the middle of the 21st century, OmniTek Incorporated began designing and manu
 
 In this BitNode, you will be able to access the Bladeburner division at the NSA, which provides a new mechanic for progression.
 
-Destroying this BitNode will give you Source-File 6, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to access the NSA's Bladeburner division and Netscript API in other BitNodes. In addition, this Source-File will raise both the level and experience gain rate of all your combat stats by:
+Destroying this BitNode will give you Source-File 6, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to access the NSA's Bladeburner division in other BitNodes. In addition, this Source-File will raise both the level and experience gain rate of all your combat stats by:
 
 - Level 1: 8%
 - Level 2: 12%
@@ -134,7 +134,7 @@ In the middle of the 21st century, you were doing cutting-edge work at OmniTek I
 
 In this BitNode, you will be able to access the Bladeburner division at the NSA, which provides a new mechanic for progression.
 
-Destroying this BitNode will give you Source-File 7, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to access the NSA's Bladeburner division and Netscript API in other BitNodes. In addition, this Source-File will increase all of your Bladeburner multipliers by:
+Destroying this BitNode will give you Source-File 7, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to access the NSA's Bladeburner division in other BitNodes. In addition, this Source-File will increase all of your Bladeburner multipliers by:
 
 - Level 1: 8%
 - Level 2: 12%

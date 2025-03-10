@@ -247,8 +247,8 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File allows you to access the NSA's Bladeburner division and Netscript API in other BitNodes. In
-        addition, this Source-File will raise both the level and experience gain rate of all your combat stats by:
+        This Source-File allows you to access the NSA's Bladeburner division in other BitNodes. In addition, this
+        Source-File will raise both the level and experience gain rate of all your combat stats by:
         <ul>
           <li>Level 1: 8%</li>
           <li>Level 2: 12%</li>
@@ -281,8 +281,8 @@ export function initBitNodes() {
     ),
     (
       <>
-        This Source-File allows you to access the NSA's Bladeburner division and Netscript API in other BitNodes. In
-        addition, this Source-File will increase all of your Bladeburner multipliers by:
+        This Source-File allows you to access the NSA's Bladeburner division in other BitNodes. In addition, this
+        Source-File will increase all of your Bladeburner multipliers by:
         <ul>
           <li>Level 1: 8%</li>
           <li>Level 2: 12%</li>
