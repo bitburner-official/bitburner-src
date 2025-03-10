@@ -193,8 +193,13 @@ As soon as possible, it greatly increases your profit because it can find the op
 
 #### What is the difference between Market-TA1 and Market-TA2?
 
-Market-TA1: set a price that ensures that you can sell all produced goods in storage.  
-Market-TA2: set the highest possible price that ensures that you can sell all produced goods in storage.
+If you set the price of the material/product too much higher than the market price, you will get a penalty modifier that makes the material/product not be able to be sold as much as it should be.
+
+Market-TA1: Set a price higher than the market price while ensuring that you don't get the penalty modifier.
+
+Market-TA2: Set the highest possible price while ensuring that you don't get the penalty modifier.
+
+With products, the price set by Market-TA2 is usually several orders of magnitude higher than Market-TA1.
 
 #### I bought Market-TA2, but it does not set the optimal price for me.
 
@@ -203,6 +208,12 @@ You have to enable it.
 #### Is there a workaround for Market-TA2? Waiting for RP takes too long.
 
 Yes, you can reimplement Market-TA2. Implementing a custom Market-TA2 script is the best optimization in round 3+. Check this [section](./optimal-selling-price-market-ta2.md) to see how to do it.
+
+### Why can I not sell all produced goods in the storage even after Market-TA2 sets the optimal price?
+
+In the SALE state, the game calculates `MaxSalesVolume` of the material/product. This is the number of items that can be sold in this state. This value is the product of many multipliers, and one of those multipliers is the penalty modifier mentioned above. Market-TA1 and Market-TA2 only guarantee that this multiplier does not affect you negatively (keep the penalty modifier being 1). They do not increase `MaxSalesVolume` and help you sell more items.
+
+Check this [section](./optimal-selling-price-market-ta2.md) for more information and tips on how to increase `MaxSalesVolume`.
 
 #### How do I discard materials/products?
 

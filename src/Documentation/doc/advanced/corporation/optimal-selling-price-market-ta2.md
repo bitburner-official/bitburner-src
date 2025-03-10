@@ -25,11 +25,11 @@ $$ProductMarkupLimit = \frac{Max(ProductEffectiveRating,0.001)}{ProductMarkup}$$
 
 Define:
 
-$$ExpectedSalesVolume = \frac{ProducedUnits}{10}$$
+$$ExpectedSalesVolume = \frac{StoredUnits}{10}$$
 
-- This means we want to sell all produced units.
+- This means we want to sell all stored units.
 
-In cycle's SALE state, game calculates `MaxSalesVolume` of material/product. If we set price too high, `MaxSalesVolume` is penalized. In order to maximize profit, we have to set the highest possible price while `MaxSalesVolume` is still equal to `ExpectedSalesVolume`. This is what Market-TA2 does.
+In the SALE state, the game calculates `MaxSalesVolume` of material/product. If we set the price too high, `MaxSalesVolume` is penalized. In order to maximize the profit, we have to set the highest possible price while `MaxSalesVolume` is still equal to `ExpectedSalesVolume`. This is what Market-TA2 does.
 
 Calculation of material and product is pretty similar, so I'll call them "item" and use 1 formula.
 
@@ -71,11 +71,19 @@ $$MarketFactor = Max\left(0.1,{Demand\ast(100 - Competition)}\ast{0.01}\right)$$
 
 $$MarkupMultiplier = \begin{cases}\frac{MarketPrice}{SellingPrice}, & SellingPrice > 0 \newline 10^{12}, & SellingPrice \leq 0 \end{cases}$$
 
+In order to increase `MaxSalesVolume`, you can:
+
+- Improve the quality of materials and the effective rating of products.
+- Use more Business employees.
+- Increase the level of Advert.
+- Increase the level of ABC SalesBots.
+- Set the price lower than the market price. Note that you should NOT do this in most cases. If you need to do this, it means that your strategy is seriously flawed, and you need to fix it.
+
 ## Optimal selling price
 
-As we can see with previous part, `MarkupMultiplier` is basically a penalty modifier if we set `SellingPrice` greater than `(MarketPrice + MarkupLimit)`, and we'll always do this. This means we need to find out highest possible `SellingPrice` while `MaxSalesVolume` is still equal to `ExpectedSalesVolume`.
+As we can see with the previous part, `MarkupMultiplier` is basically a penalty modifier if we set `SellingPrice` greater than `(MarketPrice + MarkupLimit)`, and we'll always do this. This means we need to find out highest possible `SellingPrice` while `MaxSalesVolume` is still equal to `ExpectedSalesVolume`.
 
-This is the reason why we should not bother with Market-TA1. It simply sets `SellingPrice = MarketPrice + MarkupLimit`. This means Market-TA1 sets a "safe" `SellingPrice` for us, it guarantees that we won't be penalized due to too high price. However, this "safe" `SellingPrice` is too low, and we can find a much higher `SellingPrice`.
+This is the reason why we should not bother with Market-TA1. It simply sets `SellingPrice = MarketPrice + MarkupLimit`. This means Market-TA1 only sets a "safe" `SellingPrice` for us and guarantees that we are not penalized due to setting the price too high. However, this "safe" `SellingPrice` is too low, and we can find a much higher `SellingPrice`.
 
 Formula:
 
@@ -99,11 +107,11 @@ $$\frac{MarkupLimit}{SellingPrice - MarketPrice} = \sqrt{\frac{ExpectedSalesVolu
 
 $$SellingPrice = \frac{MarkupLimit\ast\sqrt{M}}{\sqrt{ExpectedSalesVolume}} + MarketPrice$$
 
-In order to use this formula, we need `MarkupLimit`. With product, we need `ProductMarkup` to calculate `MarkupLimit`, but `ProductMarkup` is inaccessible via NS API. We have two solutions:
+In order to use this formula, we need `MarkupLimit`. With products, we need `ProductMarkup` to calculate `MarkupLimit`, but `ProductMarkup` is inaccessible via NS API. We have two solutions:
 
-- Calculate approximation value. Check previous section to see how to do this.
+- Calculate the approximation value. Check the previous section to see how to do this.
 - Calculate `MarkupLimit` directly:
-  - Set `SellingPrice` to a very high value, it must be so high that we cannot sell all produced units (`MaxSalesVolume < ExpectedSalesVolume`). This forces the game applies the penalty modifier that contains `MarkupLimit`.
+  - Set `SellingPrice` to a very high value. It must be so high that we cannot sell all produced units (`MaxSalesVolume < ExpectedSalesVolume`). This forces the game to apply the penalty modifier that contains `MarkupLimit`.
   - Wait for 1 cycle to get `ActualSalesVolume`. It's `product.actualSellAmount` and `material.actualSellAmount`.
-  - Use `ActualSalesVolume` in place of `ExpectedSalesVolume` in previous formula: $MarkupLimit = (SellingPrice - MarketPrice)\ast\sqrt{\frac{ActualSalesVolume}{M}}$
+  - Use `ActualSalesVolume` in place of `ExpectedSalesVolume` in the previous formula: $MarkupLimit = (SellingPrice - MarketPrice)\ast\sqrt{\frac{ActualSalesVolume}{M}}$
   - Calculate `ProductMarkup` from `MarkupLimit`, save `ProductMarkup` to reuse later. `ProductMarkup` never changes.
