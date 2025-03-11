@@ -37,12 +37,21 @@ const useStyles = makeStyles()(() => ({
   },
 }));
 
+function BitVerseMapRow({ children }: { children: React.ReactNode }): React.ReactElement {
+  return (
+    <Typography component={"div"} sx={{ lineHeight: "1em", whiteSpace: "pre" }}>
+      {children}
+    </Typography>
+  );
+}
+
 interface IPortalProps {
   n: number;
   level: number;
   destroyedBitNode: number;
   flume: boolean;
 }
+
 function BitNodePortal(props: IPortalProps): React.ReactElement {
   const [portalOpen, setPortalOpen] = useState(false);
   const { classes } = useStyles();
@@ -233,31 +242,31 @@ export function BitverseRoot(props: IProps): React.ReactElement {
   return (
     // prettier-ignore
     <>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>                          O                          </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>             |  O  O      |      O  O  |             </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>        O    |  | /     __|       \ |  |    O        </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>      O |    O  | |  O /  |  O    | |  O    | O      </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>    | | |    |  |_/  |/   |   \_  \_|  |    | | |    </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>  O | | | <BitNodePortal n={14} level={n(14)} flume={props.flume} destroyedBitNode={destroyed} />  |  | O__/    |   / \__ |  |  O | | | O  </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>  | | | | |  |  |   /    /|  O  /  \|  |  | | | | |  </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>O | | |  \|  |  O  /   _/ |    /    O  |  |/  | | | O</Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>| | | |O  /  |  | O   /   |   O   O |  |  \  O| | | |</Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>| | |/  \/  / __| | |/ \  |   \   | |__ \  \/  \| | |</Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}> \| O   |  |_/    |\|   \ <BitNodePortal n={13} level={n(13)} flume={props.flume} destroyedBitNode={destroyed} />    \__|    \_|  |   O |/ </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>  | |   |_/       | |    \|    /  |       \_|   | |  </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>   \|   /          \|     |   /  /          \   |/   </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>    |  <BitNodePortal n={10} level={n(10)} flume={props.flume} destroyedBitNode={destroyed} />            |     |  /  |            <BitNodePortal n={11} level={n(11)} flume={props.flume} destroyedBitNode={destroyed} />  |    </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>  <BitNodePortal n={9} level={n(9)} flume={props.flume} destroyedBitNode={destroyed} /> |  |            |     |     |            |  | <BitNodePortal n={12} level={n(12)} flume={props.flume} destroyedBitNode={destroyed} />  </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>  | |  |            /    / \    \            |  | |  </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>   \|  |           /  <BitNodePortal n={7} level={n(7)} flume={props.flume} destroyedBitNode={destroyed} /> /   \ <BitNodePortal n={8} level={n(8)} flume={props.flume} destroyedBitNode={destroyed} />  \           |  |/   </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>    \  |          /  / |     | \  \          |  /    </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>     \ \JUMP <BitNodePortal n={5} level={n(5)} flume={props.flume} destroyedBitNode={destroyed} />3R |  |  |     |  |  | R3<BitNodePortal n={6} level={n(6)} flume={props.flume} destroyedBitNode={destroyed} /> PMUJ/ /     </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>      \||    |   |  |  |     |  |  |   |    ||/      </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>       \|     \_ |  |  |     |  |  | _/     |/       </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>        \       \| /    \   /    \ |/       /        </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>         <BitNodePortal n={1} level={n(1)} flume={props.flume} destroyedBitNode={destroyed} />       |/   <BitNodePortal n={2} level={n(2)} flume={props.flume} destroyedBitNode={destroyed} />  | |  <BitNodePortal n={3} level={n(3)} flume={props.flume} destroyedBitNode={destroyed} />   \|       <BitNodePortal n={4} level={n(4)} flume={props.flume} destroyedBitNode={destroyed} />         </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>         |       |    |  | |  |    |       |         </Typography>
-      <Typography sx={{lineHeight: '1em',whiteSpace: 'pre'}}>          \JUMP3R|JUMP|3R| |R3|PMUJ|R3PMUJ/          </Typography>
+      <BitVerseMapRow>                          O                          </BitVerseMapRow>
+      <BitVerseMapRow>             |  O  O      |      O  O  |             </BitVerseMapRow>
+      <BitVerseMapRow>        O    |  | /     __|       \ |  |    O        </BitVerseMapRow>
+      <BitVerseMapRow>      O |    O  | |  O /  |  O    | |  O    | O      </BitVerseMapRow>
+      <BitVerseMapRow>    | | |    |  |_/  |/   |   \_  \_|  |    | | |    </BitVerseMapRow>
+      <BitVerseMapRow>  O | | | <BitNodePortal n={14} level={n(14)} flume={props.flume} destroyedBitNode={destroyed} />  |  | O__/    |   / \__ |  |  O | | | O  </BitVerseMapRow>
+      <BitVerseMapRow>  | | | | |  |  |   /    /|  O  /  \|  |  | | | | |  </BitVerseMapRow>
+      <BitVerseMapRow>O | | |  \|  |  O  /   _/ |    /    O  |  |/  | | | O</BitVerseMapRow>
+      <BitVerseMapRow>| | | |O  /  |  | O   /   |   O   O |  |  \  O| | | |</BitVerseMapRow>
+      <BitVerseMapRow>| | |/  \/  / __| | |/ \  |   \   | |__ \  \/  \| | |</BitVerseMapRow>
+      <BitVerseMapRow> \| O   |  |_/    |\|   \ <BitNodePortal n={13} level={n(13)} flume={props.flume} destroyedBitNode={destroyed} />    \__|    \_|  |   O |/ </BitVerseMapRow>
+      <BitVerseMapRow>  | |   |_/       | |    \|    /  |       \_|   | |  </BitVerseMapRow>
+      <BitVerseMapRow>   \|   /          \|     |   /  /          \   |/   </BitVerseMapRow>
+      <BitVerseMapRow>    |  <BitNodePortal n={10} level={n(10)} flume={props.flume} destroyedBitNode={destroyed} />            |     |  /  |            <BitNodePortal n={11} level={n(11)} flume={props.flume} destroyedBitNode={destroyed} />  |    </BitVerseMapRow>
+      <BitVerseMapRow>  <BitNodePortal n={9} level={n(9)} flume={props.flume} destroyedBitNode={destroyed} /> |  |            |     |     |            |  | <BitNodePortal n={12} level={n(12)} flume={props.flume} destroyedBitNode={destroyed} />  </BitVerseMapRow>
+      <BitVerseMapRow>  | |  |            /    / \    \            |  | |  </BitVerseMapRow>
+      <BitVerseMapRow>   \|  |           /  <BitNodePortal n={7} level={n(7)} flume={props.flume} destroyedBitNode={destroyed} /> /   \ <BitNodePortal n={8} level={n(8)} flume={props.flume} destroyedBitNode={destroyed} />  \           |  |/   </BitVerseMapRow>
+      <BitVerseMapRow>    \  |          /  / |     | \  \          |  /    </BitVerseMapRow>
+      <BitVerseMapRow>     \ \JUMP <BitNodePortal n={5} level={n(5)} flume={props.flume} destroyedBitNode={destroyed} />3R |  |  |     |  |  | R3<BitNodePortal n={6} level={n(6)} flume={props.flume} destroyedBitNode={destroyed} /> PMUJ/ /     </BitVerseMapRow>
+      <BitVerseMapRow>      \||    |   |  |  |     |  |  |   |    ||/      </BitVerseMapRow>
+      <BitVerseMapRow>       \|     \_ |  |  |     |  |  | _/     |/       </BitVerseMapRow>
+      <BitVerseMapRow>        \       \| /    \   /    \ |/       /        </BitVerseMapRow>
+      <BitVerseMapRow>         <BitNodePortal n={1} level={n(1)} flume={props.flume} destroyedBitNode={destroyed} />       |/   <BitNodePortal n={2} level={n(2)} flume={props.flume} destroyedBitNode={destroyed} />  | |  <BitNodePortal n={3} level={n(3)} flume={props.flume} destroyedBitNode={destroyed} />   \|       <BitNodePortal n={4} level={n(4)} flume={props.flume} destroyedBitNode={destroyed} />         </BitVerseMapRow>
+      <BitVerseMapRow>         |       |    |  | |  |    |       |         </BitVerseMapRow>
+      <BitVerseMapRow>          \JUMP3R|JUMP|3R| |R3|PMUJ|R3PMUJ/          </BitVerseMapRow>
       <br />
       <br />
       <br />
