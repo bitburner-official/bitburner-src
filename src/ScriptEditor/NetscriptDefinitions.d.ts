@@ -7465,7 +7465,7 @@ export interface NS {
   /**
    * Purchase a server.
    * @remarks
-   * 2.25 GB
+   * RAM cost: 2.25 GB
    *
    * Purchase a server with the specified hostname and amount of RAM.
    *
@@ -8691,13 +8691,6 @@ export type CodingContractSignatures = {
   [CodingContractName.EncryptionIIVigenereCipher]: [[string, string], string];
   [CodingContractName.SquareRoot]: [bigint, bigint, [string, string]];
 };
-
-export type CodingContractData<T extends string> = T extends `${keyof CodingContractSignatures}`
-  ? CodingContractSignatures[T][0]
-  : any;
-export type CodingContractAnswer<T extends string> = T extends `${keyof CodingContractSignatures}`
-  ? CodingContractSignatures[T][1]
-  : any;
 
 export type CodingContractObject = {
   [T in keyof CodingContractSignatures]: {

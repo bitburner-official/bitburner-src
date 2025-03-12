@@ -27,7 +27,7 @@ The hostname of the newly purchased server.
 
 ## Remarks
 
-2.25 GB
+RAM cost: 2.25 GB
 
 Purchase a server with the specified hostname and amount of RAM.
 
