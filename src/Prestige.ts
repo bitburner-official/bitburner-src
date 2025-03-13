@@ -32,8 +32,8 @@ import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { pendingUIShareJobIds } from "./NetworkShare/Share";
 
 const BitNode8StartingMoney = 250e6;
-function delayedDialog(message: string, cancellable = true) {
-  setTimeout(() => dialogBoxCreate(message, false, cancellable), 200);
+function delayedDialog(message: string, canBeDismissedEasily = true) {
+  setTimeout(() => dialogBoxCreate(message, { html: false, canBeDismissedEasily }), 200);
 }
 
 function setInitialExpForPlayer() {

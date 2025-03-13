@@ -1648,7 +1648,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   alert: (ctx) => (_message) => {
     const message = helpers.string(ctx, "message", _message);
-    dialogBoxCreate(message, true);
+    dialogBoxCreate(message, { html: true, canBeDismissedEasily: true });
   },
   toast:
     (ctx) =>

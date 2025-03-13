@@ -11,20 +11,27 @@ export const AlertEvents = new EventEmitter<[string | JSX.Element, boolean?]>();
 interface Alert {
   text: string | JSX.Element;
   hash: string;
-  cancellable: boolean;
+  /**
+   * If it's true, the player can dismiss the modal by pressing the Esc button or clicking on the backdrop.
+   *
+   * Note that there are 2 different behaviors when pressing the Esc button, depending on whether the player focused on
+   * the modal. If they focused on the modal and canBeDismissedEasily is false, the modal would not be dismissed. If
+   * they did not, pressing the Esc button would always dismiss **all** popups in the queue maintained by this manager.
+   */
+  canBeDismissedEasily: boolean;
 }
 
 export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElement {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   useEffect(
     () =>
-      AlertEvents.subscribe((text: string | JSX.Element, cancellable = true) => {
+      AlertEvents.subscribe((text: string | JSX.Element, canBeDismissedEasily = true) => {
         const hash = getMessageHash(text);
         setAlerts((old) => {
           if (old.some((a) => a.hash === hash)) {
             return old;
           }
-          return [...old, { text, hash, cancellable }];
+          return [...old, { text, hash, canBeDismissedEasily }];
         });
       }),
     [],
@@ -32,17 +39,17 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
 
   useEffect(() => {
     function handle(this: Document, event: KeyboardEvent): void {
-      if (event.code !== "Escape" || alerts.length === 0 || !alerts[0].cancellable) {
+      if (event.code !== "Escape") {
         return;
       }
-      close();
+      setAlerts([]);
     }
     document.addEventListener("keydown", handle);
     return () => document.removeEventListener("keydown", handle);
   }, [alerts]);
 
   const alertMessage = alerts[0]?.text || "No alert to show";
-  const cancellable = alerts[0]?.cancellable;
+  const canBeDismissedEasily = alerts[0]?.canBeDismissedEasily;
 
   function getMessageHash(text: string | JSX.Element): string {
     if (typeof text === "string") {
@@ -73,11 +80,11 @@ export function AlertManager({ hidden }: { hidden: boolean }): React.ReactElemen
   }
 
   return (
-    <Modal open={!hidden && alerts.length > 0} onClose={close} cancellable={cancellable}>
+    <Modal open={!hidden && alerts.length > 0} onClose={close} canBeDismissedEasily={canBeDismissedEasily}>
       <Box overflow="scroll" sx={{ overflowWrap: "break-word", whiteSpace: "pre-line" }}>
         <Typography component={"span"}>{alertMessage}</Typography>
       </Box>
-      {!cancellable && (
+      {!canBeDismissedEasily && (
         <Button onClick={close} sx={{ marginTop: "10px" }}>
           OK
         </Button>
