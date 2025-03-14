@@ -438,7 +438,7 @@ function getCornerMove(board: Board) {
   if (isCornerAvailableForMove(board, cornerMax, cornerMax, boardEdge, boardEdge)) {
     return board[cornerMax][cornerMax];
   }
-  if (isCornerAvailableForMove(board, 0, cornerMax, cornerMax, boardEdge)) {
+  if (isCornerAvailableForMove(board, 0, cornerMax, 2, boardEdge)) {
     return board[2][cornerMax];
   }
   if (isCornerAvailableForMove(board, 0, 0, 2, 2)) {
