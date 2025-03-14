@@ -388,13 +388,14 @@ const Engine: {
       // No save found, start new game
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
-      Engine.start(); // Run main game loop and Scripts loop
       Player.init();
       initForeignServers(Player.getHomeComputer());
       Player.reapplyAllAugmentations();
 
       // Start interactive tutorial
       iTutorialStart();
+
+      Engine.start(); // Run main game loop and Scripts loop
     }
 
     // Expose internal objects/functions in the dev build
