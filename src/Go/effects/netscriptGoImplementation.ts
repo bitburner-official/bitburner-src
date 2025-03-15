@@ -2,7 +2,7 @@ import { Board, BoardState, OpponentStats, Play, SimpleBoard, SimpleOpponentStat
 
 import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
-import { Go } from "../Go";
+import { Go, GoEvents } from "../Go";
 import {
   getNewBoardState,
   getNewBoardStateFromSimpleBoard,
@@ -262,6 +262,17 @@ export function getControlledEmptyNodes(_board?: Board) {
       return ownedPoints + ".";
     }, ""),
   );
+}
+
+export function setTestingBoardState(board: Board) {
+  resetBoardState(
+    () => {},
+    () => {},
+    GoOpponent.none,
+    board.length,
+  );
+  Go.currentGame.board = board;
+  GoEvents.emit();
 }
 
 /**

@@ -4495,6 +4495,17 @@ export interface GoAnalysis {
    * @param resetAll if true, reset win/loss records for all opponents. Leaves node power and bonuses unchanged.
    */
   resetStats(resetAll = false): void;
+
+  /**
+   * Starts a new game against the "No AI" opponent, and sets the initial board size, pieces, and offline nodes to the given board state.
+   * "X" represent black pieces, "O" white, and "." empty points. "#" are dead nodes that are not part of the subnet.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @param boardState - The initial board state to use for the new game, in the format used by getBoardState().
+   */
+  setTestingBoardState(boardState: string[]): void;
 }
 
 /**

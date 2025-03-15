@@ -25,6 +25,7 @@ import {
   makePlayerMove,
   resetBoardState,
   resetStats,
+  setTestingBoardState,
   validateBoardState,
   validateMove,
 } from "../Go/effects/netscriptGoImplementation";
@@ -104,6 +105,14 @@ export function NetscriptGo(): InternalAPI<NSGo> {
         (resetAll = false) => {
           resetStats(!!resetAll);
         },
+      setTestingBoardState: (ctx) => (_boardState) => {
+        const State = validateBoardState(error(ctx), _boardState);
+        if (!State) {
+          error(ctx)("Invalid board state passed to setTestingBoardState()");
+          return;
+        }
+        return setTestingBoardState(State.board);
+      },
     },
     cheat: {
       getCheatSuccessChance: (ctx: NetscriptContext) => (_cheatCount, playAsWhite) => {
