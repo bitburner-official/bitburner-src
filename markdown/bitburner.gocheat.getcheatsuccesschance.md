@@ -11,7 +11,7 @@ Warning: if you fail to play a cheat move, your turn will be skipped. After your
 **Signature:**
 
 ```typescript
-getCheatSuccessChance(cheatCount?: number, playAsWhite = false): number;
+getCheatSuccessChance(cheatCount?: number, playAsWhite?: boolean): number;
 ```
 
 ## Parameters
@@ -19,11 +19,13 @@ getCheatSuccessChance(cheatCount?: number, playAsWhite = false): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  cheatCount | number | _(Optional)_ Optional override for the number of cheats already attempted. Defaults to the number of cheats attempted in the current game. |
-|  playAsWhite | (not declared) | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
+|  playAsWhite | boolean | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
 
 **Returns:**
 
 number
+
+Your chance of successfully playing a cheat move.
 
 ## Remarks
 

@@ -4384,13 +4384,18 @@ export interface GoAnalysis {
    * Also note that, when given a custom board state, only one prior move can be analyzed. This means that the superko rules
    *  (no duplicate board states in the full game history) is not supported; you will have to implement your own analysis for that.
    *
-   *  playAsWhite is optional, and gets the current valid moves for the white player. Intended to be used when playing as white when the opponent is set to "No AI"
+   *  The current valid moves for white can also be seen by simply calling `ns.go.analysis.getValidMoves(true)` .
    *
    * @remarks
    * RAM cost: 8 GB
-   * (This is intentionally expensive; you can derive this info from just getBoardState() )
+   * (This is intentionally expensive; you can derive this info from just getBoardState() and getMoveHistory() )
+   *
+   *  @param boardState - Optional. The board state to analyze, in the string[] format used by getBoardState(). Defaults to the current board state. Alternatively can be simply "true" to get current valid moves for white.
+   *  @param priorBoardState - Optional. The move before the board state to analyze, in the format used by getBoardState(). Defaults to the current board's prior move state.
+   *  @param playAsWhite - Optional. Whether to analyze the board state as if the white player is the current player. Defaults to false. Intended to be used when playing as white when the opponent is set to "No AI".
+   *  @returns A 2D array of booleans indicating the validity of each move.
    */
-  getValidMoves(boardState?: string[], priorBoardState?: string[], playAsWhite = false): boolean[][];
+  getValidMoves(boardState?: string[] | boolean, priorBoardState?: string[], playAsWhite?: boolean): boolean[][];
 
   /**
    * Returns an ID for each point. All points that share an ID are part of the same network (or "chain"). Empty points
@@ -4416,6 +4421,9 @@ export interface GoAnalysis {
    * RAM cost: 16 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
    *
+   * @param boardState - Optional. The current board state, as an array of strings. Defaults to the current board state.
+   * @returns A 2D array of numbers identifying the chain ID of each point.
+   *
    */
   getChains(boardState?: string[]): (number | null)[][];
 
@@ -4440,6 +4448,9 @@ export interface GoAnalysis {
    * @remarks
    * RAM cost: 16 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
+   *
+   * @param boardState - Optional. The current board state, as an array of strings. Defaults to the current board state.
+   * @returns A 2D array of numbers counting the liberties of each point.
    */
   getLiberties(boardState?: string[]): number[][];
 
@@ -4466,6 +4477,9 @@ export interface GoAnalysis {
    * @remarks
    * RAM cost: 16 GB
    * (This is intentionally expensive; you can derive this info from just getBoardState() )
+   *
+   * @param boardState - Optional. The current board state, as an array of strings. Defaults to the current board state.
+   * @returns A 2D array of characters indicating the player who controls each empty point.
    */
   getControlledEmptyNodes(boardState?: string[]): string[];
 
@@ -4487,14 +4501,16 @@ export interface GoAnalysis {
    *   }
    * }
    * </pre>
+   *
+   * @returns A dictionary of opponent stats keyed by opponent name.
    */
   getStats(): Partial<Record<GoOpponent, SimpleOpponentStats>>;
 
   /**
    * Reset all win/loss and winstreak records for the No AI opponent.
-   * @param resetAll if true, reset win/loss records for all opponents. Leaves node power and bonuses unchanged.
+   * @param resetAll - Optional. if true, reset win/loss records for all opponents. Leaves node power and bonuses unchanged. Defaults to false.
    */
-  resetStats(resetAll = false): void;
+  resetStats(resetAll?: boolean): void;
 }
 
 /**
@@ -4511,23 +4527,26 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
+   * @remarks
+   * RAM cost: 1 GB
+   * Requires BitNode 14.2 to use
+   *
    * @param cheatCount - Optional override for the number of cheats already attempted. Defaults to the number of cheats attempted in the current game.
    * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
-   *
-   * @remarks
-   * RAM cost: 1 GB
-   * Requires BitNode 14.2 to use
+   * @returns Your chance of successfully playing a cheat move.
    */
-  getCheatSuccessChance(cheatCount?: number, playAsWhite = false): number;
+  getCheatSuccessChance(cheatCount?: number, playAsWhite?: boolean): number;
   /**
    * Returns the number of times you've attempted to cheat in the current game.
-   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    *
    * @remarks
    * RAM cost: 1 GB
    * Requires BitNode 14.2 to use
+   *
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
+   * @returns The number of times you've attempted to cheat in the current game.
    */
-  getCheatCount(playAsWhite = false): number;
+  getCheatCount(playAsWhite?: boolean): number;
   /**
    * Attempts to remove an existing router, leaving an empty node behind.
    *
@@ -4536,21 +4555,19 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
-   *
-   * @param x - x coordinate of router to remove
-   * @param y - y coordinate of router to remove
-   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
-   *
    * @remarks
    * RAM cost: 8 GB
    * Requires BitNode 14.2 to use
    *
+   * @param x - x coordinate of router to remove
+   * @param y - y coordinate of router to remove
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    */
   removeRouter(
     x: number,
     y: number,
-    playAsWhite = false,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4565,17 +4582,15 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
+   * @remarks
+   * RAM cost: 8 GB
+   * Requires BitNode 14.2 to use
    *
    * @param x1 - x coordinate of first move to make
    * @param y1 - y coordinate of first move to make
    * @param x2 - x coordinate of second move to make
    * @param y2 - y coordinate of second move to make
    * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
-   *
-   * @remarks
-   * RAM cost: 8 GB
-   * Requires BitNode 14.2 to use
-   *
    * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    */
   playTwoMoves(
@@ -4583,7 +4598,7 @@ export interface GoCheat {
     y1: number,
     x2: number,
     y2: number,
-    playAsWhite = false,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4598,20 +4613,19 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
-   * @param x - x coordinate of offline node to repair
-   * @param y - y coordinate of offline node to repair
-   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
-   *
    * @remarks
    * RAM cost: 8 GB
    * Requires BitNode 14.2 to use
    *
+   * @param x - x coordinate of offline node to repair
+   * @param y - y coordinate of offline node to repair
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    */
   repairOfflineNode(
     x: number,
     y: number,
-    playAsWhite = false,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4627,20 +4641,19 @@ export interface GoCheat {
    * Warning: if you fail to play a cheat move, your turn will be skipped. After your first cheat attempt, if you fail, there is a
    * small (~10%) chance you will instantly be ejected from the subnet.
    *
-   * @param x - x coordinate of empty node to destroy
-   * @param y - y coordinate of empty node to destroy
-   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
-   *
    * @remarks
    * RAM cost: 8 GB
    * Requires BitNode 14.2 to use
    *
+   * @param x - x coordinate of empty node to destroy
+   * @param y - y coordinate of empty node to destroy
+   * @param playAsWhite - Optional override for playing as white. Can only be used when playing on a 'No AI' board.
    * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    */
   destroyNode(
     x: number,
     y: number,
-    playAsWhite = false,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4657,17 +4670,18 @@ export interface Go {
    *  Make a move on the IPvGO subnet game board, and await the opponent's response.
    *  x:0 y:0 represents the bottom-left corner of the board in the UI.
    *
-   * playAsWhite is optional, and attempts to make a move as the white player. Only can be used when playing against "No AI".
-   *
    * @remarks
    * RAM cost: 4 GB
    *
+   * @param x - x coordinate of move to make
+   * @param y - y coordinate of move to make
+   * @param playAsWhite - optional. If true, attempts to play as white and then wait for black's move. Can only be used when playing as white when the opponent is set to "No AI"
    * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    */
   makeMove(
     x: number,
     y: number,
-    playAsWhite = false,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4681,15 +4695,14 @@ export interface Go {
    * This can also be used if you pick up the game in a state where the opponent needs to play next. For example: if BitBurner was
    * closed while waiting for the opponent to make a move, you may need to call passTurn() to get them to play their move on game start.
    *
-   * passAsWhite is optional, and attempts to pass while playing as the white player. Only can be used when playing against "No AI".
-   *
-   * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
-   *
    * @remarks
    * RAM cost: 0 GB
    *
+   * @param passAsWhite - optional. If true, attempts to pass as white and then wait for black's move. Only can be used when playing against "No AI".
+   * @returns a promise that contains the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
+   *
    */
-  passTurn(passAsWhite = false): Promise<{
+  passTurn(passAsWhite?: boolean): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
@@ -4699,17 +4712,16 @@ export interface Go {
    *  Returns a promise that resolves with the success or failure state of your last move, and the AI's response, if applicable.
    *  x:0 y:0 represents the bottom-left corner of the board in the UI.
    *
-   * @param logOpponentMove - optional, defaults to true. if false prevents logging opponent move
-   * @param playAsWhite - optional. If true, waits to get the next move the black player makes. Intended to be used when playing as white when the opponent is set to "No AI"
-   *
    * @remarks
    * RAM cost: 0 GB
    *
+   * @param logOpponentMove - optional, defaults to true. if false prevents logging opponent move
+   * @param playAsWhite - optional. If true, waits to get the next move the black player makes. Intended to be used when playing as white when the opponent is set to "No AI"
    * @returns a promise that contains if your last move was valid and successful, the opponent move's x and y coordinates (or pass) in response, or an indication if the game has ended
    */
   opponentNextTurn(
     logOpponentMove?: boolean,
-    playAsWhite = false,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -4787,15 +4799,14 @@ export interface Go {
    * Gets new IPvGO subnet with the specified size owned by the listed faction, ready for the player to make a move.
    * This will reset your win streak if the current game is not complete and you have already made moves.
    *
-   *
    * Note that some factions will have a few routers already on the subnet after a reset.
-   *
-   * opponent is "Netburners" or "Slum Snakes" or "The Black Hand" or "Tetrads" or "Daedalus" or "Illuminati" or "????????????" or "No AI",
-   *
-   * @returns a simplified version of the board state as an array of strings representing the board columns. See ns.Go.getBoardState() for full details
    *
    * @remarks
    * RAM cost: 0 GB
+   *
+   * @param opponent - The opponent faction to play against. "Netburners" | "Slum Snakes" | "The Black Hand" | "Tetrads" | "Daedalus" | "Illuminati" | "????????????" | "No AI"
+   * @param boardSize - The size of the board to play on. Must be 5, 7, 9, or 13.
+   * @returns a simplified version of the board state as an array of strings representing the board columns. See ns.Go.getBoardState() for full details
    */
   resetBoardState(opponent: GoOpponent, boardSize: 5 | 7 | 9 | 13): string[] | undefined;
 

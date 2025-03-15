@@ -16,7 +16,7 @@ Warning: if you fail to play a cheat move, your turn will be skipped. After your
 destroyNode(
     x: number,
     y: number,
-    playAsWhite = false,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -30,7 +30,7 @@ destroyNode(
 |  --- | --- | --- |
 |  x | number | x coordinate of empty node to destroy |
 |  y | number | y coordinate of empty node to destroy |
-|  playAsWhite | (not declared) | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
+|  playAsWhite | boolean | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
 
 **Returns:**
 

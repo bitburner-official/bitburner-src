@@ -32,9 +32,11 @@ import { getEnumHelper } from "../utils/EnumHelper";
 import { errorMessage } from "../Netscript/ErrorMessages";
 
 const logger = (ctx: NetscriptContext) => (message: string) => helpers.log(ctx, () => message);
-const error = (ctx: NetscriptContext) => (message: string) => {
-  throw errorMessage(ctx, message);
-};
+const error =
+  (ctx: NetscriptContext) =>
+  (message: string): never => {
+    throw errorMessage(ctx, message);
+  };
 
 /**
  * Go API implementation
@@ -43,20 +45,24 @@ export function NetscriptGo(): InternalAPI<NSGo> {
   return {
     makeMove:
       (ctx: NetscriptContext) =>
-      (_x, _y, playAsWhite): Promise<Play> => {
+      (_x, _y, _playAsWhite): Promise<Play> => {
         const x = helpers.number(ctx, "x", _x);
         const y = helpers.number(ctx, "y", _y);
+        const playAsWhite = helpers.boolean(ctx, "playAsWhite", _playAsWhite ?? false);
         validateMove(error(ctx), x, y, "makeMove", { playAsWhite });
-        return makePlayerMove(logger(ctx), error(ctx), x, y, !!playAsWhite);
+        return makePlayerMove(logger(ctx), error(ctx), x, y, playAsWhite);
       },
     passTurn:
       (ctx: NetscriptContext) =>
-      (playAsWhite): Promise<Play> => {
+      (_playAsWhite): Promise<Play> => {
+        const playAsWhite = helpers.boolean(ctx, "playAsWhite", _playAsWhite ?? false);
         validateMove(error(ctx), -1, -1, "passTurn", { playAsWhite, pass: true });
-        return handlePassTurn(logger(ctx), !!playAsWhite);
+        return handlePassTurn(logger(ctx), playAsWhite);
       },
-    opponentNextTurn: (ctx: NetscriptContext) => async (logOpponentMove, playAsWhite) => {
-      return getOpponentNextMove(logger(ctx), !!logOpponentMove, !!playAsWhite);
+    opponentNextTurn: (ctx: NetscriptContext) => async (_logOpponentMove, _playAsWhite) => {
+      const logOpponentMove = helpers.boolean(ctx, "logOpponentMove", _logOpponentMove ?? false);
+      const playAsWhite = helpers.boolean(ctx, "playAsWhite", _playAsWhite ?? false);
+      return getOpponentNextMove(logger(ctx), logOpponentMove, playAsWhite);
     },
     getBoardState: () => () => {
       return simpleBoardFromBoard(Go.currentGame.board);
@@ -80,9 +86,13 @@ export function NetscriptGo(): InternalAPI<NSGo> {
       return resetBoardState(logger(ctx), error(ctx), opponent, boardSize);
     },
     analysis: {
-      getValidMoves: (ctx) => (_boardState, _priorBoardState, playAsWhite) => {
+      getValidMoves: (ctx) => (_boardState, _priorBoardState, _playAsWhite) => {
+        if (_boardState == true) {
+          return getValidMoves(undefined, true);
+        }
+        const playAsWhite = helpers.boolean(ctx, "playAsWhite", _playAsWhite ?? false);
         const State = validateBoardState(error(ctx), _boardState, _priorBoardState);
-        return getValidMoves(State, !!playAsWhite);
+        return getValidMoves(State, playAsWhite);
       },
       getChains: (ctx) => (_boardState) => {
         const State = validateBoardState(error(ctx), _boardState);
@@ -100,29 +110,33 @@ export function NetscriptGo(): InternalAPI<NSGo> {
         return getStats();
       },
       resetStats:
-        () =>
-        (resetAll = false) => {
-          resetStats(!!resetAll);
+        (ctx) =>
+        (_resetAll = false) => {
+          const resetAll = helpers.boolean(ctx, "resetAll", _resetAll ?? false);
+          resetStats(resetAll);
         },
     },
     cheat: {
-      getCheatSuccessChance: (ctx: NetscriptContext) => (_cheatCount, playAsWhite) => {
+      getCheatSuccessChance: (ctx: NetscriptContext) => (_cheatCount, _playAsWhite) => {
         checkCheatApiAccess(error(ctx));
+        const playAsWhite = helpers.boolean(ctx, "playAsWhite", _playAsWhite ?? false);
         const normalizedCheatCount =
           _cheatCount ?? (playAsWhite ? Go.currentGame.cheatCountForWhite : Go.currentGame.cheatCount);
         const cheatCount = helpers.number(ctx, "cheatCount", normalizedCheatCount);
-        return cheatSuccessChance(cheatCount, !!playAsWhite);
+        return cheatSuccessChance(cheatCount, playAsWhite);
       },
-      getCheatCount: (ctx: NetscriptContext) => (playAsWhite) => {
+      getCheatCount: (ctx: NetscriptContext) => (_playAsWhite) => {
         checkCheatApiAccess(error(ctx));
+        const playAsWhite = helpers.boolean(ctx, "playAsWhite", _playAsWhite ?? false);
         return playAsWhite ? Go.currentGame.cheatCountForWhite : Go.currentGame.cheatCount;
       },
       removeRouter:
         (ctx: NetscriptContext) =>
-        (_x, _y, playAsWhite): Promise<Play> => {
+        (_x, _y, _playAsWhite): Promise<Play> => {
           checkCheatApiAccess(error(ctx));
           const x = helpers.number(ctx, "x", _x);
           const y = helpers.number(ctx, "y", _y);
+          const playAsWhite = helpers.boolean(ctx, "playAsWhite", _playAsWhite ?? false);
           validateMove(error(ctx), x, y, "removeRouter", {
             emptyNode: false,
             requireNonEmptyNode: true,
@@ -131,14 +145,15 @@ export function NetscriptGo(): InternalAPI<NSGo> {
             playAsWhite: playAsWhite,
           });
 
-          return cheatRemoveRouter(logger(ctx), error(ctx), x, y, undefined, undefined, !!playAsWhite);
+          return cheatRemoveRouter(logger(ctx), error(ctx), x, y, undefined, undefined, playAsWhite);
         },
       playTwoMoves:
         (ctx: NetscriptContext) =>
-        (_x1, _y1, _x2, _y2, playAsWhite): Promise<Play> => {
+        (_x1, _y1, _x2, _y2, _playAsWhite): Promise<Play> => {
           checkCheatApiAccess(error(ctx));
           const x1 = helpers.number(ctx, "x", _x1);
           const y1 = helpers.number(ctx, "y", _y1);
+          const playAsWhite = helpers.boolean(ctx, "playAsWhite", _playAsWhite ?? false);
           validateMove(error(ctx), x1, y1, "playTwoMoves", {
             repeat: false,
             suicide: false,
@@ -152,14 +167,15 @@ export function NetscriptGo(): InternalAPI<NSGo> {
             playAsWhite,
           });
 
-          return cheatPlayTwoMoves(logger(ctx), error(ctx), x1, y1, x2, y2, undefined, undefined, !!playAsWhite);
+          return cheatPlayTwoMoves(logger(ctx), error(ctx), x1, y1, x2, y2, undefined, undefined, playAsWhite);
         },
       repairOfflineNode:
         (ctx: NetscriptContext) =>
-        (_x, _y, playAsWhite): Promise<Play> => {
+        (_x, _y, _playAsWhite): Promise<Play> => {
           checkCheatApiAccess(error(ctx));
           const x = helpers.number(ctx, "x", _x);
           const y = helpers.number(ctx, "y", _y);
+          const playAsWhite = helpers.boolean(ctx, "playAsWhite", _playAsWhite ?? false);
           validateMove(error(ctx), x, y, "repairOfflineNode", {
             emptyNode: false,
             repeat: false,
@@ -169,14 +185,15 @@ export function NetscriptGo(): InternalAPI<NSGo> {
             playAsWhite,
           });
 
-          return cheatRepairOfflineNode(logger(ctx), x, y, undefined, undefined, !!playAsWhite);
+          return cheatRepairOfflineNode(logger(ctx), x, y, undefined, undefined, playAsWhite);
         },
       destroyNode:
         (ctx: NetscriptContext) =>
-        (_x, _y, playAsWhite): Promise<Play> => {
+        (_x, _y, _playAsWhite): Promise<Play> => {
           checkCheatApiAccess(error(ctx));
           const x = helpers.number(ctx, "x", _x);
           const y = helpers.number(ctx, "y", _y);
+          const playAsWhite = helpers.boolean(ctx, "playAsWhite", _playAsWhite ?? false);
           validateMove(error(ctx), x, y, "destroyNode", {
             repeat: false,
             onlineNode: true,
@@ -184,7 +201,7 @@ export function NetscriptGo(): InternalAPI<NSGo> {
             playAsWhite,
           });
 
-          return cheatDestroyNode(logger(ctx), x, y, undefined, undefined, !!playAsWhite);
+          return cheatDestroyNode(logger(ctx), x, y, undefined, undefined, playAsWhite);
         },
     },
   };

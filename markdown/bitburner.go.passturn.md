@@ -8,12 +8,10 @@ Pass the player's turn rather than making a move, and await the opponent's respo
 
 This can also be used if you pick up the game in a state where the opponent needs to play next. For example: if BitBurner was closed while waiting for the opponent to make a move, you may need to call passTurn() to get them to play their move on game start.
 
-passAsWhite is optional, and attempts to pass while playing as the white player. Only can be used when playing against "No AI".
-
 **Signature:**
 
 ```typescript
-passTurn(passAsWhite = false): Promise<{
+passTurn(passAsWhite?: boolean): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
@@ -24,7 +22,7 @@ passTurn(passAsWhite = false): Promise<{
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  passAsWhite | (not declared) | _(Optional)_ |
+|  passAsWhite | boolean | _(Optional)_ optional. If true, attempts to pass as white and then wait for black's move. Only can be used when playing against "No AI". |
 
 **Returns:**
 
