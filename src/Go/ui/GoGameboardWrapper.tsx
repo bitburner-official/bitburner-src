@@ -18,7 +18,7 @@ import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 import { CorruptableText } from "../../ui/React/CorruptableText";
-import { handleNextTurn, resetAI } from "../boardAnalysis/goAI";
+import { handleNextTurn, resetGoPromises } from "../boardAnalysis/goAI";
 import { GoScoreExplanation } from "./GoScoreExplanation";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
@@ -133,9 +133,8 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
       resetWinstreak(boardState.ai, false);
     }
 
-    resetAI();
     Go.currentGame = getNewBoardState(newBoardSize, newOpponent, true);
-    handleNextTurn(Go.currentGame).catch((error) => exceptionAlert(error));
+    resetGoPromises();
   }
 
   function getPriorMove() {

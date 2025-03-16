@@ -40,6 +40,11 @@ export function getNextTurn(color: GoColor.black | GoColor.white): Promise<Play>
   return playerPromises[color].nextTurn;
 }
 
+export function resetGoPromises(): void {
+  resetAI();
+  handleNextTurn().catch((error) => exceptionAlert(error, true));
+}
+
 /**
  * Does common processing in response to a move being made.
  *

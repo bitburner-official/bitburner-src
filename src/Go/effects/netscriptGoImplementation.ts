@@ -10,7 +10,7 @@ import {
   passTurn,
   updateCaptures,
 } from "../boardState/boardState";
-import { getNextTurn, handleNextTurn, resetAI } from "../boardAnalysis/goAI";
+import { getNextTurn, handleNextTurn, resetGoPromises } from "../boardAnalysis/goAI";
 import {
   evaluateIfMoveIsValid,
   getControlledSpace,
@@ -22,7 +22,6 @@ import { endGoGame, getOpponentStats, getScore, resetWinstreak } from "../boardA
 import { WHRNG } from "../../Casino/RNG";
 import { getRecordKeys } from "../../Types/Record";
 import { CalculateEffect, getEffectTypeForFaction } from "./effect";
-import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { newOpponentStats } from "../Constants";
 
 /**
@@ -342,9 +341,8 @@ export function resetBoardState(
     resetWinstreak(oldBoardState.ai, false);
   }
 
-  resetAI();
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
-  handleNextTurn(Go.currentGame).catch((error) => exceptionAlert(error));
+  resetGoPromises();
   logger(`New game started: ${opponent}, ${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);
 }
