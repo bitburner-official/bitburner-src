@@ -47,6 +47,7 @@ import { SaveData } from "./types";
 import { Go } from "./Go/Go";
 import { EventEmitter } from "./utils/EventEmitter";
 import { Companies } from "./Company/Companies";
+import { handleNextTurn, resetAI } from "./Go/boardAnalysis/goAI";
 
 declare global {
   // This property is only available in the dev build
@@ -391,6 +392,8 @@ const Engine: {
       Player.init();
       initForeignServers(Player.getHomeComputer());
       Player.reapplyAllAugmentations();
+      resetAI();
+      handleNextTurn().catch((error) => exceptionAlert(error, true));
 
       // Start interactive tutorial
       iTutorialStart();

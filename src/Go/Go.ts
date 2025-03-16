@@ -2,10 +2,11 @@ import type { BoardState, OpponentStats } from "./Types";
 
 import type { GoOpponent } from "@enums";
 import { getRecordKeys, PartialRecord } from "../Types/Record";
-import { resetAI } from "./boardAnalysis/goAI";
+import { handleNextTurn, resetAI } from "./boardAnalysis/goAI";
 import { getNewBoardState } from "./boardState/boardState";
 import { EventEmitter } from "../utils/EventEmitter";
 import { newOpponentStats } from "./Constants";
+import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 
 export class GoObject {
   // Todo: Make previous game a slimmer interface
@@ -24,6 +25,8 @@ export class GoObject {
     this.previousGame = null;
     this.currentGame = getNewBoardState(7);
     this.stats = {};
+    resetAI();
+    handleNextTurn().catch((error) => exceptionAlert(error, true));
   }
 
   /**
