@@ -26,3 +26,22 @@ Promise&lt;any&gt;
 
 RAM cost: 0 GB
 
+## Example
+
+File: script.js
+
+```js
+export async function main(ns){
+   const script = await ns.import("./scriptToImport.js");
+   script.log(ns, "Message from an imported script!")
+}
+
+```
+File: scriptToImport.js
+
+```js
+export async function log(ns, message){
+   ns.tprint(message);
+}
+```
+
