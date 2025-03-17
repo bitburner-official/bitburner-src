@@ -14,7 +14,7 @@ playAsWhite is optional, and attempts to make a move as the white player. Only c
 makeMove(
     x: number,
     y: number,
-    playAsWhite = false,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -28,7 +28,7 @@ makeMove(
 |  --- | --- | --- |
 |  x | number |  |
 |  y | number |  |
-|  playAsWhite | (not declared) | _(Optional)_ |
+|  playAsWhite | boolean | _(Optional)_ |
 
 **Returns:**
 

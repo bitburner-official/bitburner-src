@@ -18,7 +18,7 @@ playTwoMoves(
     y1: number,
     x2: number,
     y2: number,
-    playAsWhite = false,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -34,7 +34,7 @@ playTwoMoves(
 |  y1 | number | y coordinate of first move to make |
 |  x2 | number | x coordinate of second move to make |
 |  y2 | number | y coordinate of second move to make |
-|  playAsWhite | (not declared) | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
+|  playAsWhite | boolean | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
 
 **Returns:**
 

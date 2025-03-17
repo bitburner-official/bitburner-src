@@ -19,7 +19,7 @@ playAsWhite is optional, and gets the current valid moves for the white player. 
 **Signature:**
 
 ```typescript
-getValidMoves(boardState?: string[], priorBoardState?: string[], playAsWhite = false): boolean[][];
+getValidMoves(boardState?: string[], priorBoardState?: string[], playAsWhite?: boolean): boolean[][];
 ```
 
 ## Parameters
@@ -28,7 +28,7 @@ getValidMoves(boardState?: string[], priorBoardState?: string[], playAsWhite = f
 |  --- | --- | --- |
 |  boardState | string\[\] | _(Optional)_ |
 |  priorBoardState | string\[\] | _(Optional)_ |
-|  playAsWhite | (not declared) | _(Optional)_ |
+|  playAsWhite | boolean | _(Optional)_ |
 
 **Returns:**
 

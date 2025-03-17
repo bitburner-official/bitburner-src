@@ -13,7 +13,7 @@ passAsWhite is optional, and attempts to pass while playing as the white player.
 **Signature:**
 
 ```typescript
-passTurn(passAsWhite = false): Promise<{
+passTurn(passAsWhite?: boolean): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
@@ -24,7 +24,7 @@ passTurn(passAsWhite = false): Promise<{
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  passAsWhite | (not declared) | _(Optional)_ |
+|  passAsWhite | boolean | _(Optional)_ |
 
 **Returns:**
 
