@@ -8302,25 +8302,25 @@ export interface NS {
    * Dynamically import a script.
    * Only scripts located from the same server can be imported.
    * A dynamic import will not adjust RAM usage. This must be done manually with {@link NS.ramOverride|ramOverride}.
-   * 
+   *
    * @example
-   * 
+   *
    * File: script.js
    * ```js
    * export async function main(ns){
    *    const script = await ns.import("./scriptToImport.js");
    *    script.log(ns, "Message from an imported script!")
    * }
-   * 
+   *
    * ```
-   * 
+   *
    * File: scriptToImport.js
    * ```js
    * export async function log(ns, message){
    *    ns.tprint(message);
    * }
    * ```
-   * 
+   *
    * @remarks
    * RAM cost: 0 GB
    */
