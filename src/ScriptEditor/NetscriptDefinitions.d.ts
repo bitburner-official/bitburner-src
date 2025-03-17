@@ -4504,8 +4504,9 @@ export interface GoAnalysis {
    * RAM cost: 4 GB
    *
    * @param boardState - The initial board state to use for the new game, in the format used by getBoardState().
+   * @param komi - Optional komi value to set for the game. Defaults to 5.5.
    */
-  setTestingBoardState(boardState: string[]): void;
+  setTestingBoardState(boardState: string[], komi?: number): void;
 }
 
 /**

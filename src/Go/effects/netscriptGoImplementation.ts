@@ -264,7 +264,7 @@ export function getControlledEmptyNodes(_board?: Board) {
   );
 }
 
-export function setTestingBoardState(board: Board) {
+export function setTestingBoardState(board: Board, komi?: number) {
   resetBoardState(
     () => {},
     () => {},
@@ -272,6 +272,9 @@ export function setTestingBoardState(board: Board) {
     board.length,
   );
   Go.currentGame.board = board;
+  if (komi != undefined) {
+    Go.currentGame.komiOverride = komi;
+  }
   GoEvents.emit();
 }
 

@@ -105,13 +105,14 @@ export function NetscriptGo(): InternalAPI<NSGo> {
         (resetAll = false) => {
           resetStats(!!resetAll);
         },
-      setTestingBoardState: (ctx) => (_boardState) => {
+      setTestingBoardState: (ctx) => (_boardState, _komi) => {
         const State = validateBoardState(error(ctx), _boardState);
         if (!State) {
           error(ctx)("Invalid board state passed to setTestingBoardState()");
           return;
         }
-        return setTestingBoardState(State.board);
+        const komi: number | undefined = _komi !== undefined ? helpers.number(ctx, "komi", _komi) : undefined;
+        return setTestingBoardState(State.board, komi);
       },
     },
     cheat: {
