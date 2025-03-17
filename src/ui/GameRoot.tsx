@@ -77,6 +77,7 @@ import { GoRoot } from "../Go/ui/GoRoot";
 import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { DarkWebRoot } from "../DarkWeb/ui/DarkWebRoot";
 
 const htmlLocation = location;
 
@@ -379,6 +380,10 @@ export function GameRoot(): React.ReactElement {
     }
     case Page.Go: {
       mainPage = <GoRoot />;
+      break;
+    }
+    case Page.DarkWeb: {
+      mainPage = <DarkWebRoot />;
       break;
     }
     case Page.Achievements: {

@@ -38,6 +38,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox"; // Character
 import PublicIcon from "@mui/icons-material/Public"; // World
 import LiveHelpIcon from "@mui/icons-material/LiveHelp"; // Help
 import BorderInnerSharpIcon from "@mui/icons-material/BorderInnerSharp"; // IPvGO
+import ShareIcon from "@mui/icons-material/Share"; // DarkWeb
 import BiotechIcon from "@mui/icons-material/Biotech"; // Grafting
 
 import { Router } from "../../ui/GameRoot";
@@ -393,6 +394,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canCorporation && { key_: Page.Corporation, icon: BusinessIcon },
             canGang && { key_: Page.Gang, icon: SportsMmaIcon },
             canIPvGO && { key_: Page.Go, icon: BorderInnerSharpIcon },
+            { key_: Page.DarkWeb, icon: ShareIcon },
           ]}
         />
         <Divider />
