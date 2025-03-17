@@ -1,3 +1,5 @@
+import { Player } from "@player";
+import { AugmentationName } from "@enums";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reviver } from "../utils/GenericReviver";
 import { BaseGift } from "./BaseGift";
@@ -48,4 +50,13 @@ export function calculateGrid(gift: BaseGift): number[][] {
   }
 
   return newGrid;
+}
+
+export function canAcceptStaneksGift(): boolean {
+  return (
+    Player.canAccessCotMG() &&
+    [...Player.augmentations, ...Player.queuedAugmentations].filter(
+      (a) => a.name !== AugmentationName.NeuroFluxGovernor,
+    ).length === 0
+  );
 }

@@ -3816,6 +3816,9 @@ export interface Bladeburner {
    *
    * Attempts to join the Bladeburner division.
    *
+   * If you have SF 7.3, you will immediately receive "The Blade's Simulacrum" augmentation and won't be able to accept
+   * Stanek's Gift after joining. If you want to accept Stanek's Gift, you must do that before calling this API.
+   *
    * Returns true if you successfully join the Bladeburner division, or if you are already a member.
    *
    * Returns false otherwise.
@@ -7482,7 +7485,7 @@ export interface NS {
   /**
    * Purchase a server.
    * @remarks
-   * 2.25 GB
+   * RAM cost: 2.25 GB
    *
    * Purchase a server with the specified hostname and amount of RAM.
    *
@@ -8708,13 +8711,6 @@ export type CodingContractSignatures = {
   [CodingContractName.EncryptionIIVigenereCipher]: [[string, string], string];
   [CodingContractName.SquareRoot]: [bigint, bigint, [string, string]];
 };
-
-export type CodingContractData<T extends string> = T extends `${keyof CodingContractSignatures}`
-  ? CodingContractSignatures[T][0]
-  : any;
-export type CodingContractAnswer<T extends string> = T extends `${keyof CodingContractSignatures}`
-  ? CodingContractSignatures[T][1]
-  : any;
 
 export type CodingContractObject = {
   [T in keyof CodingContractSignatures]: {

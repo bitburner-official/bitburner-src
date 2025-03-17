@@ -167,8 +167,6 @@
 |  --- | --- |
 |  [BladeburnerActionName](./bitburner.bladeburneractionname.md) |  |
 |  [BladeburnerActionTypeForSleeve](./bitburner.bladeburneractiontypeforsleeve.md) |  |
-|  [CodingContractAnswer](./bitburner.codingcontractanswer.md) |  |
-|  [CodingContractData](./bitburner.codingcontractdata.md) |  |
 |  [CodingContractObject](./bitburner.codingcontractobject.md) |  |
 |  [CodingContractSignatures](./bitburner.codingcontractsignatures.md) |  |
 |  [CorpEmployeePosition](./bitburner.corpemployeeposition.md) |  |

@@ -95,7 +95,7 @@ export function PortalModal(props: IProps): React.ReactElement {
       <Typography variant="h4">
         BitNode-{props.n}: {bitNode.name}
       </Typography>
-      <Typography variant="h5">{bitNode.desc}</Typography>
+      <Typography variant="h5">{bitNode.tagline}</Typography>
       <br />
       <Typography>
         Source-File Level: {props.level} / {maxSourceFileLevel}

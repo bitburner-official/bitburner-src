@@ -17,7 +17,11 @@ import { SleeveWorkType } from "../PersonObjects/Sleeve/Work/Work";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
 
 export const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
-  if (Player.bitNodeN !== 10 && !Player.sourceFileLvl(10)) {
+  /**
+   * Don't change sourceFileLvl to activeSourceFileLvl. The ability to control Sleeves (via both UI and APIs) is a
+   * permanent benefit.
+   */
+  if (Player.bitNodeN !== 10 && Player.sourceFileLvl(10) <= 0) {
     throw helpers.errorMessage(
       ctx,
       "You do not currently have access to the Sleeve API. This is either because you are not in BitNode-10 or because you do not have Source-File 10",

@@ -1007,7 +1007,7 @@ export const ns: InternalAPI<NSFull> = {
       baseDifficulty: server.baseDifficulty,
       hackDifficulty: server.hackDifficulty,
       minDifficulty: server.minDifficulty,
-      moneyAvailable: server.moneyAvailable,
+      moneyAvailable: server.hostname === "home" ? Player.money : server.moneyAvailable,
       moneyMax: server.moneyMax,
       numOpenPortsRequired: server.numOpenPortsRequired,
       openPortCount: server.openPortCount,

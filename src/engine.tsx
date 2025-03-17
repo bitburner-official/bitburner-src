@@ -47,6 +47,7 @@ import { SaveData } from "./types";
 import { Go } from "./Go/Go";
 import { EventEmitter } from "./utils/EventEmitter";
 import { Companies } from "./Company/Companies";
+import { resetGoPromises } from "./Go/boardAnalysis/goAI";
 
 declare global {
   // This property is only available in the dev build
@@ -388,13 +389,15 @@ const Engine: {
       // No save found, start new game
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
-      Engine.start(); // Run main game loop and Scripts loop
       Player.init();
       initForeignServers(Player.getHomeComputer());
       Player.reapplyAllAugmentations();
+      resetGoPromises();
 
       // Start interactive tutorial
       iTutorialStart();
+
+      Engine.start(); // Run main game loop and Scripts loop
     }
 
     // Expose internal objects/functions in the dev build
