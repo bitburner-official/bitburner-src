@@ -1838,7 +1838,7 @@ export const ns: InternalAPI<NSFull> = {
   printRaw: (ctx) => (value) => {
     ctx.workerScript.print(wrapUserNode(value));
   },
-  import: (ctx) => (value) => {
+  importFrom: (ctx) => (value) => {
     const path = helpers.scriptPath(ctx, "path", value);
     const server = ctx.workerScript.getServer();
     const script = server.getContentFile(path);

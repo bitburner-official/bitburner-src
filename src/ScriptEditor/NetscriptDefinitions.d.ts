@@ -8308,7 +8308,7 @@ export interface NS {
    * File: script.js
    * ```js
    * export async function main(ns){
-   *    const script = await ns.import("./scriptToImport.js");
+   *    const script = await ns.importFrom("./scriptToImport.js");
    *    script.log(ns, "Message from an imported script!")
    * }
    *
@@ -8324,7 +8324,7 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    */
-  import(path: string): Promise<any>;
+  importFrom(path: string): Promise<any>;
 
   enums: NSEnums;
 }
