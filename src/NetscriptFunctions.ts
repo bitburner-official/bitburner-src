@@ -1838,9 +1838,9 @@ export const ns: InternalAPI<NSFull> = {
   printRaw: (ctx) => (value) => {
     ctx.workerScript.print(wrapUserNode(value));
   },
-  importFrom: (ctx) => (value) => {
+  dynamicImport: (ctx) => async (value) => {
     const path = helpers.scriptPath(ctx, "path", value);
-    const server = ctx.workerScript.getServer();
+    const server = helpers.getServer(ctx, ctx.workerScript.hostname);
     const script = server.getContentFile(path);
 
     if (!script) throw helpers.errorMessage(ctx, `Script was not found\nPath: ${path}`);
