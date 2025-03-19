@@ -70,7 +70,7 @@ const fixAlign = (align: React.CSSProperties["textAlign"]): TableCellProps["alig
   if (align === "end") return "inherit";
   if (align === "start") return "inherit";
   if (align === "match-parent") return "inherit";
-  return align as TableCellProps["align"];
+  return align;
 };
 
 export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.ReactElement => {
