@@ -1,0 +1,81 @@
+import React, {useEffect, useState} from "react";
+import { Modal } from "../../ui/React/Modal";
+import { DarkWebServer } from "../models/DarkWebServer";
+import { Container, Typography, TextField, Button } from "@mui/material";
+import { getIcon } from "./DWServerComponent";
+import { sleep } from "../../Go/boardAnalysis/goAI";
+
+export type DWPasswordPromptModalProps = {
+  open: boolean;
+  onClose: () => void;
+  server: DarkWebServer;
+}
+
+export const DWPasswordPromptModal = ({open, onClose, server }: DWPasswordPromptModalProps): React.ReactElement => {
+  const [inputPassword, setInputPassword] = useState("");
+  const [password, setPassword] = useState<string | null>(null);
+  const [enableSubmit, setEnableSubmit] = useState(true);
+  const [response, setResponse] = useState("Submit a password to login...");
+
+  useEffect(() => {
+    async function attemptPassword(passwordAttempted: string): Promise<void> {
+      setEnableSubmit(false);
+      setResponse("Checking password...");
+      await sleep(500);
+      const response = server.passwordChecker(passwordAttempted);
+      setResponse(JSON.stringify(response, null, 4));
+      if (!response.success) {
+        setEnableSubmit(true);
+      }
+    }
+    if (password  != null) {
+      void attemptPassword(password);
+    }
+  }, [password, server]);
+
+  const handleSubmit = (e: React.FormEvent, passwordAttempted: string): void => {
+    e.preventDefault();
+    if (server.unlocked) {
+      onClose();
+      return;
+    }
+    setPassword(passwordAttempted);
+  }
+
+  return (
+    <Modal open={open} onClose={onClose}>
+      <>
+        <Container sx={{ width: "40vw" }}>
+          {React.createElement(getIcon(server.icon), { color: "secondary" })}
+          <Typography variant="h5" color={server.unlocked ? "primary" : "secondary"}>
+            {server.name}
+          </Typography>
+          <br />
+          <form onSubmit={(e) => handleSubmit(e, inputPassword)}>
+            <TextField
+              id="pw-input"
+              label="Password"
+              type="text"
+              value={inputPassword}
+              onChange={(e) => setInputPassword(e.target.value)}
+              variant="outlined"
+              autoComplete="off"
+              autoFocus={true}
+            />
+          </form>
+          <br />
+          <Button onClick={() => setPassword(inputPassword)} disabled={!enableSubmit}>Submit Password</Button>
+          <br />
+          <br />
+          <Container sx={{ height: "200px" }}>
+            <div style={{ color: "white", whiteSpace: "pre-wrap"}}>
+            <pre>
+              {response}
+            </pre>
+            </div>
+          </Container>
+        </Container>
+      </>
+    </Modal>
+);
+}
