@@ -8,7 +8,9 @@ The "best" order can vary between players, depending on what you like to do any 
 
 ## tl;dr
 
-Go for BN-1 again for good bonuses. BN-5 offers a lot of good stuff too but is a little harder.
+Go for BN-1 again for good bonuses.
+BN-5 offers a lot of good stuff for hackers but is a little harder.
+
 
 ## Good early BitNodes
 
@@ -21,14 +23,18 @@ This mechanic provides both a good source of income and a large supply of [Augme
 Using the mechanic in other [BitNodes](../advanced/bitnodes.md) requires a sufficiently low karma which requires a significant time investment or [Sleeves](../advanced/sleeves.md).
 
 BN-5 grants [Intelligence](../advanced/intelligence.md), a stat that persists between [BitNodes](../advanced/bitnodes.md).
-The [Source-File](../advanced/sourcefiles.md) bonuses are very helpful for [hacking](../basic/hacking.md) and also give `Formulas.exe` and.
-Because of all the benefits this [BitNode](../advanced/bitnodes.md) provides
+The [Source-File](../advanced/sourcefiles.md) bonuses are very helpful for [hacking](../basic/hacking.md) and also give `Formulas.exe`.
+Because of all the benefits this [BitNode](../advanced/bitnodes.md) provides, it's definitely worth getting early.
 
 ## Depends on your priorities
 
-BN-4
+BN-4 gives access to the [Singularity API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.singularity.md).
+This mechanic allows the automation of many actions directly affecting the player.
+Due to the [RAM](../basic/ram.md) cost, it's strongly recommended to complete BN-4.3 before using the [Singularity API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.singularity.md) in other [BitNodes](../advanced/bitnodes.md).
 
-BN-6
+BN-6 introduces the [Bladeburner](../advanced/bladeburners.md) mechanic and its corresponding [Bladeburner API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.bladeburner.md).
+
+
 
 ## Save these for later
 
@@ -37,13 +43,15 @@ This mechanic can provide effectively limitless wealth and [Faction](../basic/fa
 Using the mechanic in other [BitNodes](../advanced/bitnodes.md) requires $150 billion so another source of starting wealth is still needed.
 Overall, this [BitNode](../advanced/bitnodes.md) is considered an advanced one even if there are no particular [BitNodes](../advanced/bitnodes.md) that should go before it.
 
-BN-7 used to
+BN-7 used to give access to the [Bladeburner API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.bladeburner.md), but now it doesn't.
+Because of that change this [BitNode](../advanced/bitnodes.md) is relatively low priority.
 
-BN-9
+BN-9 introduces the [Hacknet Server](../advanced/hacknetservers.md) mechanic.
 
 BN-11 doesn't have any new mechanics associated with it beyond a mild bonus to work income.
 The [Source-File](../advanced/sourcefiles.md) makes buying large numbers of [Augmentations](../basic/augmentations.md) cheaper but isn't worth going out of your way for.
 Overall, this [BitNode](../advanced/bitnodes.md) is very difficult for not much in return.
 
 BN-12 is BN-1, just a little bit harder each time you complete it.
-The reason this isn't an early recommendation is that the [Source-File](../advanced/sourcefiles.md) is relatively weak.
+This requires a variety of strategies using different mechanics as the penalties grow.
+The reason this isn't an early recommendation is that the [Source-File](../advanced/sourcefiles.md) is relatively weak for the increasing amount of effort required.
