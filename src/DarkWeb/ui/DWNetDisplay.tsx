@@ -1,31 +1,33 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Container, Typography } from "@mui/material";
-import {
-  getDefaultPasswordServer,
-  getEchoVulnServer,
-  getMastermindHintServer,
-  getNoPasswordServer, getTimingAttackServer,
-} from "../models/DarkWebServer";
 import { DWServerComponent } from "./DWServerComponent";
-
-const NET_WIDTH = 5;
-const NET_HEIGHT = 5;
+import { DarkWebNetwork, populateDarkWebNetwork } from "../models/DarkWebNetwork";
+import { useRerender } from "../../ui/React/hooks";
+import { DWSpacerComponent } from "./DWSpacerComponent";
 
 export function DWNetDisplay(): React.ReactElement {
 
-  const servers = [
-    getNoPasswordServer(1, 1),
-    getEchoVulnServer(1, 1),
-    getDefaultPasswordServer(1,1),
-    getMastermindHintServer(1,1),
-    getTimingAttackServer(1,1),
-  ]
+  const rerender = useRerender();
+
+  useEffect(() => {
+    populateDarkWebNetwork();
+    rerender();
+  }, [rerender]);
+
 
   return (
     <Container maxWidth="lg" sx={{ mx: 0 }}>
       <Typography variant={"h6"}>Dark Web</Typography>
-      <Container maxWidth="lg" sx={{ mx: 0 }}>
-        {servers.map((server, index) => ( <DWServerComponent server={server} key={index} /> ))}
+      <Container maxWidth="lg" sx={{ mx: 0, position: "relative" }}>
+        {DarkWebNetwork.map((row, i) => (
+          <Container key={i} sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }} disableGutters>
+            {row.map((server, j) => ( server ?
+              <DWServerComponent server={server} key={`${i},${j}`} /> :
+              <DWSpacerComponent key={`${i},${j}`}/>
+              ))}
+          </Container>
+        )
+        )}
       </Container>
     </Container>
   );

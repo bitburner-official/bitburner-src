@@ -2,8 +2,8 @@ import React, {useEffect, useState} from "react";
 import { Modal } from "../../ui/React/Modal";
 import { DarkWebServer } from "../models/DarkWebServer";
 import { Container, Typography, TextField, Button } from "@mui/material";
-import { getIcon } from "./DWServerComponent";
 import { sleep } from "../../Go/boardAnalysis/goAI";
+import { getIcon } from "../controllers/ServerIcon";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -13,8 +13,8 @@ export type DWPasswordPromptModalProps = {
 
 export const DWPasswordPromptModal = ({open, onClose, server }: DWPasswordPromptModalProps): React.ReactElement => {
   const [inputPassword, setInputPassword] = useState("");
-  const [password, setPassword] = useState<string | null>(null);
-  const [enableSubmit, setEnableSubmit] = useState(true);
+  const [password, setPassword] = useState<string>("?");
+  const [enableSubmit, setEnableSubmit] = useState(!server.unlocked);
   const [response, setResponse] = useState("Submit a password to login...");
 
   useEffect(() => {
@@ -22,16 +22,14 @@ export const DWPasswordPromptModal = ({open, onClose, server }: DWPasswordPrompt
       setEnableSubmit(false);
       setResponse("Checking password...");
       await sleep(500);
-      const response = server.passwordChecker(passwordAttempted);
+      const response = server.passwordChecker(passwordAttempted, server);
       setResponse(JSON.stringify(response, null, 4));
       if (!response.success) {
         setEnableSubmit(true);
       }
     }
-    if (password  != null) {
-      void attemptPassword(password);
-    }
-  }, [password, server]);
+    open && void attemptPassword(password);
+  }, [password, server, open]);
 
   const handleSubmit = (e: React.FormEvent, passwordAttempted: string): void => {
     e.preventDefault();
