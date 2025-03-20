@@ -1,4 +1,4 @@
-# What BitNodes are best to begin with?
+# Which BitNode should I try next?
 
 After destroying their first [BitNode](bitnodes.md), many players wonder which [BitNode](bitnodes.md) they should tackle next.
 This guide hopefully helps answer that question.
@@ -6,14 +6,15 @@ As a player, you are not forced to tackle the [BitNodes](bitnodes.md) in any par
 You are free to choose whichever ones you want.
 The "best" order can vary between players, depending on what you like to do any what kind of player you are.
 
-Note: It's common to refer to specific iterations of a given [BitNode](bitnodes.md) by a decimal.
-BN9.2 is the second iteration of BitNode 9 and leads to [Source-File](sourcefiles.md) 9 level 2 when completed.
-
 ## tl;dr
 
-Go for BN1 again for good bonuses.
-BN5 offers a lot of good stuff for hackers but is a little harder.
-BN2 offers a new mechanic that gives consistent cash and augs.
+BN1, BN2 and BN5 are great starters.
+BN4 and BN6 are also good to do early if their mechanics appeal to you.
+BN10 has interesting mechanics if you can generate lots of money.
+BN9, BN13 and BN14 are tough but have interesting new mechanics
+BN3 has a very tough mechanic to automate with unparalleled power.
+BN7, BN8 and BN11 are tough with little to benefit newer players.
+BN12 is easy to start but quickly ramps up in difficulty.
 
 ## Good early BitNodes
 
@@ -46,25 +47,33 @@ BN10 unlocks two new mechanics: [Sleeves](sleeves.md) and [Grafting](grafting.md
 Both are very useful to have but require large amounts of money to use to their fullest extent.
 Each [Source-File](sourcefiles.md) grants an additional sleeve and up to five additional sleeves may be purchased from a faction only in this BitNode.
 
-## Save these for later
+## Tough but has new mechanics
 
 BN3 makes available the [Corporation](corporations.md) mechanic.
 This mechanic can provide effectively limitless wealth and [Faction](../basic/factions.md) [Reputation](../basic/reputation.md), but is very complex and documentation-dependent.
 Using the mechanic in other [BitNodes](bitnodes.md) requires $150 billion so another source of starting wealth is still needed.
 Overall, this [BitNode](bitnodes.md) is considered an advanced one even if there are no particular [BitNodes](bitnodes.md) that should go before it.
 
+BN9 introduces the [Hacknet Server](hacknetservers.md) mechanic to replace the [Hacknet Nodes](../basic/hacknet_nodes.md) mechanic.
+[Hacknet Servers](hacknetservers.md) generate hashes instead of money directly and these hashes can be traded for various benefits.
+Players who find [RAM](../basic/ram.md) tight at the beginning of a [BitNode](bitnodes.md) will find BN9.2's bonus to start with 128GiB in their home machine.
+
+BN13 introduces [Stanek's Gift](stanek.md), a powerful augmentation that can provide bonuses to skills, [hacknet](../basic/hacknet_nodes.md) production and costs, working and [crime](../basic/crimes.md) gains, and [hacking](../basic/hacking.md) power and speed.
+These bonuses are versatile but not enough to offset the challenge of the BitNode itself.
+
+BN14 is a relatively new BitNode focused on [IPvGO](../programming/go_algorithms.md).
+Automating the mechanic is challenging but it provides a wide variety of bonuses.
+
+## Save these for later
+
 BN7 used to give access to the [Bladeburner API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.bladeburner.md), but now it doesn't.
 Because of that change this [BitNode](bitnodes.md) is relatively low priority and should definitely happen after BN6.
 The benefit for completing BN7.3 is an aug that lets the player perform [Bladeburner](bladeburners.md) and non-Bladeburner actions at the same time.
-It's nice but you can get it conventionally through the Bladeburner faction.
 
 BN8 focuses on the stock market to the point that there's no other way to make money.
 Completing at least BN10.1 is highly recommended in order to have [Grafting](grafting.md).
 This ensures that you don't need to install [Augmentations](../basic/augmentations.md) and lose market gains realized so far.
-
-BN9 introduces the [Hacknet Server](hacknetservers.md) mechanic to replace the [Hacknet Nodes](../basic/hacknet_nodes.md) mechanic.
-[Hacknet Servers](hacknetservers.md) generate hashes instead of money directly and these hashes can be traded for various benefits.
-Players who find [RAM](../basic/ram.md) tight at the beginning of a [BitNode](bitnodes.md) will find BN9.2's bonus to start with 128GiB in their home machine.
+Having a good hacking script can also help in order to manipulate the market.
 
 BN11 doesn't have any new mechanics associated with it beyond a mild bonus to work income.
 The [Source-File](sourcefiles.md) makes buying large numbers of [Augmentations](../basic/augmentations.md) cheaper but isn't worth going out of your way for.
@@ -73,5 +82,3 @@ Overall, this [BitNode](bitnodes.md) is very difficult for not much in return.
 BN12 is BN1, just a little bit harder each time you complete it and continuing forever.
 This requires a variety of strategies using different mechanics as the penalties grow.
 The reason this isn't an early recommendation is that the [Source-File](sourcefiles.md) is relatively weak for the increasing amount of effort required.
-
-BN13 introduces [Stanek's Gift](stanek.md)
