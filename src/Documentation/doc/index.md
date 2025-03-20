@@ -27,6 +27,7 @@
 
 ## Advanced Mechanics
 
+- [Which BitNode should I try next?](advanced/bitnode_recommendations.md)
 - [Hacking algorithms](programming/hackingalgorithms.md)
 - [List of factions and their requirements](advanced/faction_list.md)
 - [Offline scripts and bonus time](advanced/offlineandbonustime.md)
