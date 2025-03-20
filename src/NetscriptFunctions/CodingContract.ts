@@ -84,7 +84,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       // asserting type here is required, since it is not feasible to properly type getData
       return {
         type: contract.type,
-        data: contract.getData(),
+        data: structuredClone(contract.getData()),
         submit: (answer: unknown) => {
           helpers.checkEnvFlags(ctx);
           return attemptContract(ctx, server, contract, answer);
