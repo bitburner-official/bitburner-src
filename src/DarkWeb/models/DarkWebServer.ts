@@ -12,6 +12,12 @@ export type PasswordResponse = {
   charsMatchingButMisplaced?: number;
 }
 
+export type DwebConnection = {
+  id: string,
+  x: number,
+  y: number,
+}
+
 export class DarkWebServer {
     name: string;
     id: string;
@@ -23,7 +29,7 @@ export class DarkWebServer {
     unlocked: boolean = false;
     x: number;
     y: number;
-    connections: string[] = [];
+    connections: DwebConnection[] = [];
 
     constructor(options: Partial<DarkWebServer> & {
       passwordChecker: (attemptedPassword: string, server: DarkWebServer) => PasswordResponse,

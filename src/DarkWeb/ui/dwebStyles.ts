@@ -6,8 +6,8 @@ export type dwColors = typeof dwColors[number];
 
 export const DW_SERVER_WIDTH = 200;
 export const DW_SERVER_HEIGHT = 130;
-export const DW_SERVER_GAP_X = 20;
-export const DW_SERVER_GAP_Y = 70;
+export const DW_SERVER_GAP_TOP = 120;
+export const DW_SERVER_GAP_LEFT = 60;
 export const MAP_BORDER_WIDTH = 300;
 
 export const dwebStyles = makeStyles<unknown, dwColors>({ uniqId: "dwebStyles" })(

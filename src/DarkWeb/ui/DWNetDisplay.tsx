@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, PointerEventHandler} from "react";
 import { Container, Typography } from "@mui/material";
-import { DWServerComponent } from "./DWServerComponent";
+import { DWServerComponent, getPixelPosition } from "./DWServerComponent";
 import { DarkWebNetwork, populateDarkWebNetwork } from "../models/DarkWebNetwork";
 import { useRerender } from "../../ui/React/hooks";
 
@@ -11,11 +11,33 @@ export function DWNetDisplay(): React.ReactElement {
 
   const rerender = useRerender();
   const draggableBackground = useRef<HTMLDivElement>(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     populateDarkWebNetwork();
     rerender();
+    drawOnCanvas();
   }, [rerender]);
+
+  const drawOnCanvas = () => {
+    for (const server of DarkWebNetwork.flat()) {
+      if (!server) { continue; }
+      const ctx = canvas.current?.getContext("2d");
+      if (ctx == null) { return; }
+      // draw a line between each server and its connected servers
+
+      for (const connectedServer of server.connections) {
+        if (!connectedServer) { continue; }
+        ctx.strokeStyle = "blue";
+        ctx.beginPath();
+        const startPosition = getPixelPosition(server.x, server.y);
+        const endPosition = getPixelPosition(connectedServer.x, connectedServer.y);
+        ctx.moveTo(startPosition.left, startPosition.top );
+        ctx.lineTo(endPosition.left, endPosition.top);
+        ctx.stroke();
+      }
+    }
+  }
 
 
   const handleDragStart: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
@@ -53,7 +75,7 @@ export function DWNetDisplay(): React.ReactElement {
                style={{position: "relative", width: `${DW_NET_WIDTH}px`, height: `${DW_NET_HEIGHT}px`}}
                id={"draggableBackgroundTarget"}
           >
-            <canvas id="dwebCanvas" width={DW_NET_WIDTH} height={DW_NET_HEIGHT} style={{position: "absolute", zIndex: -1}}></canvas>
+            <canvas ref={canvas} id="dwebCanvas" width={DW_NET_WIDTH} height={DW_NET_HEIGHT} style={{position: "absolute", zIndex: -1}}></canvas>
             {DarkWebNetwork.map((row, i) => (
                 row.map((server, j) => ( server ?
                     <DWServerComponent server={server} key={`${i},${j}`}/> : ""
