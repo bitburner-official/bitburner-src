@@ -68,6 +68,9 @@ https://discord.com/channels/415207508303544321/459097632896188436/1345773862263
 
 ## Idea scratch space
 
+* islands in the network? can only be reached with a moving server? 
+  * tunnels that scripts could go through but not the terminal?
+
 * man in the middle attack?
     * listen / intercept messages?
     * Will they just fill up a percent bar to gain a char in the password?
@@ -88,8 +91,10 @@ https://discord.com/channels/415207508303544321/459097632896188436/1345773862263
     * what will they do? just spam a toast? infinite loop? kill your script? delete your script?
 
 
-* api unreliability? small chance to sever connection on each failed password check?
-    * increases with server difficulty? Decreases with cha?
+* api unreliability?
+    * small chance for api to crash script, requiring fallbacks or health monitors 
+    * small chance to sever connection on each failed password check?
+        * increases with server difficulty? Decreases with cha?
 
 
 * enemy scripts?
@@ -97,6 +102,9 @@ https://discord.com/channels/415207508303544321/459097632896188436/1345773862263
   * Sometimes servers are full because of bloated, idle, non-player scripts
 
 
+* build new connections?
+* Hubs or superconnections?
+* treasure chest server?
 
 common dog's names vulnerability:
 rex fido spot rover lassie spike max

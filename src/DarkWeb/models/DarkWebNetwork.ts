@@ -1,20 +1,21 @@
 import { DarkWebServer } from "./DarkWebServer";
 import { getDarkWebServer } from "../controllers/DarkWebServerGenerator";
 
-const NET_WIDTH = 4;
-const NET_HEIGHT = 5;
+const NET_WIDTH = 6;
+const NET_HEIGHT = 15;
+
 const HORIZONTAL_CONNECTION_CHANCE = 0.4;
 const VERTICAL_CONNECTION_CHANCE = 0.6;
 const SERVER_DENSITY = 0.6;
 
-const getEmptyNetwork = (): (DarkWebServer | null)[][] => new Array(NET_HEIGHT).fill(null).map(() => (new Array(NET_WIDTH)).fill(null) as (DarkWebServer | null)[]);
+const getEmptyNetwork = (): (DarkWebServer | null)[][] => new Array(NET_WIDTH).fill(null).map(() => (new Array(NET_HEIGHT)).fill(null) as (DarkWebServer | null)[]);
 
 export const DarkWebNetwork: (DarkWebServer | null)[][] = getEmptyNetwork();
 
 export const populateDarkWebNetwork = () => {
   clearDarkWebNetwork();
-  for (let i = 0; i < NET_HEIGHT; i++) {
-    for (let j = 0; j < NET_WIDTH; j++) {
+  for (let i = 0; i < NET_WIDTH; i++) {
+    for (let j = 0; j < NET_HEIGHT; j++) {
       if (Math.random() > SERVER_DENSITY) {
         continue;
       }
@@ -25,8 +26,8 @@ export const populateDarkWebNetwork = () => {
 }
 
 export const clearDarkWebNetwork = () => {
-  for (let i = 0; i < NET_HEIGHT; i++) {
-    for (let j = 0; j < NET_WIDTH; j++) {
+  for (let i = 0; i < NET_WIDTH; i++) {
+    for (let j = 0; j < NET_HEIGHT; j++) {
       DarkWebNetwork[i][j] = null;
     }
   }
