@@ -7,12 +7,12 @@ export const getDarkWebServer = (difficulty: number, chaRequired: number, x: num
   } else {
     return getComplexServer(difficulty, chaRequired, x, y);
   }
-}
+};
 
 export const getName = (difficulty: number): string => {
   // TODO: Implement
   return `${getResponseTime()}.${getResponseTime(difficulty * 5)}.0.${getResponseTime()}`;
-}
+};
 
 const getSimpleServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
   const rng = Math.random();
@@ -23,22 +23,21 @@ const getSimpleServer = (difficulty: number, chaRequired: number, x: number, y: 
     return getNoPasswordServer(difficulty, chaRequired, x, y);
   }
   return getDefaultPasswordServer(difficulty, chaRequired, x, y);
-
-}
+};
 
 const getComplexServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
   if (Math.random() < 0.5) {
     return getMastermindHintServer(difficulty, chaRequired, x, y);
   }
   return getTimingAttackServer(difficulty, chaRequired, x, y);
-}
+};
 
 const getGenericSuccess = (responseTime = 0) => ({
   success: true,
   status: 200,
   msg: "Success",
-  responseTime: getResponseTime(responseTime)
-})
+  responseTime: getResponseTime(responseTime),
+});
 
 export const getEchoVulnServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
   return new DarkWebServer({
@@ -60,13 +59,12 @@ export const getEchoVulnServer = (difficulty: number, chaRequired: number, x: nu
           msg: `Incorrect, the password is ${server.password}`,
           responseTime: getResponseTime(),
           passwordLength: server.password.length,
-          passwordFormat: "numeric"
-        }
+          passwordFormat: "numeric",
+        };
       }
-    }
+    },
   });
-
-}
+};
 
 export const getNoPasswordServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
   return new DarkWebServer({
@@ -86,14 +84,19 @@ export const getNoPasswordServer = (difficulty: number, chaRequired: number, x: 
           success: false,
           status: 401,
           msg: `Hint: there is no password`,
-          responseTime: getResponseTime()
-        }
+          responseTime: getResponseTime(),
+        };
       }
-    }
-  })
-}
+    },
+  });
+};
 
-export const getDefaultPasswordServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
+export const getDefaultPasswordServer = (
+  difficulty: number,
+  chaRequired: number,
+  x: number,
+  y: number,
+): DarkWebServer => {
   return new DarkWebServer({
     name: getName(difficulty),
     icon: getRandomIcon(),
@@ -113,14 +116,19 @@ export const getDefaultPasswordServer = (difficulty: number, chaRequired: number
           msg: `Incorrect. (The password is the default password.)`,
           responseTime: getResponseTime(),
           passwordLength: server.password.length,
-          passwordFormat: "default"
-        }
+          passwordFormat: "default",
+        };
       }
-    }
-  })
-}
+    },
+  });
+};
 
-export const getMastermindHintServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
+export const getMastermindHintServer = (
+  difficulty: number,
+  chaRequired: number,
+  x: number,
+  y: number,
+): DarkWebServer => {
   return new DarkWebServer({
     name: getName(difficulty),
     icon: getRandomIcon(),
@@ -138,17 +146,19 @@ export const getMastermindHintServer = (difficulty: number, chaRequired: number,
         return {
           success: false,
           status: 401,
-          msg: `Hint: ${mastermindResponse.exactCharacters} symbols match, ${mastermindResponse.misplacedCharacters} ${mastermindResponse.misplacedCharacters == 1 ? "is" : "are"} close.`,
+          msg: `Hint: ${mastermindResponse.exactCharacters} symbols match, ${mastermindResponse.misplacedCharacters} ${
+            mastermindResponse.misplacedCharacters == 1 ? "is" : "are"
+          } close.`,
           charsMatchingAndCorrectlyLocated: mastermindResponse.exactCharacters,
           charsMatchingButMisplaced: mastermindResponse.misplacedCharacters,
           responseTime: getResponseTime(),
           passwordLength: server.password.length,
-          passwordFormat: `numeric`
-        }
+          passwordFormat: `numeric`,
+        };
       }
-    }
-  })
-}
+    },
+  });
+};
 
 export const getTimingAttackServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
   const length = 3 + difficulty;
@@ -172,12 +182,12 @@ export const getTimingAttackServer = (difficulty: number, chaRequired: number, x
           msg: `Incorrect.`,
           responseTime: requestTime,
           passwordLength: server.password.length,
-          passwordFormat: `numeric`
-        }
+          passwordFormat: `numeric`,
+        };
       }
-    }
-  })
-}
+    },
+  });
+};
 
 // TODO: arithmetic string server (eval bait)
 
@@ -187,8 +197,7 @@ export const getTimingAttackServer = (difficulty: number, chaRequired: number, x
 
 // TODO: eval pwn server
 
-
-const getResponseTime = (additionalPasses = 0) => Math.floor(95 + (Math.random() * 12) + additionalPasses * 25);
+const getResponseTime = (additionalPasses = 0) => Math.floor(95 + Math.random() * 12 + additionalPasses * 25);
 
 const getMastermindResponse = (password: string, attemptedPassword: string) => {
   const exactCorrectChars = password.split("").filter((digit, i) => digit === attemptedPassword[i]);
@@ -196,20 +205,21 @@ const getMastermindResponse = (password: string, attemptedPassword: string) => {
   const remainingPasswordChars = password.split("").filter((digit, i) => digit !== attemptedPassword[i]);
   const remainingAttemptedPasswordChars = attemptedPassword.split("").filter((digit, i) => digit !== password[i]);
 
-  const misplacedCorrectChars = remainingAttemptedPasswordChars
-    .filter((digit, i) => {
-      const isNotExactlyCorrect = digit !== remainingPasswordChars[i];
-      const isPresentInPassword = remainingPasswordChars.includes(digit);
-      const countInAttemptedPasswordThusFar = remainingAttemptedPasswordChars.slice(0, i).filter((prevDigit) => prevDigit === digit).length
-      const countInPassword = remainingPasswordChars.filter((prevDigit) => prevDigit === digit).length;
-      return isNotExactlyCorrect && isPresentInPassword && countInAttemptedPasswordThusFar <= countInPassword;
-    });
+  const misplacedCorrectChars = remainingAttemptedPasswordChars.filter((digit, i) => {
+    const isNotExactlyCorrect = digit !== remainingPasswordChars[i];
+    const isPresentInPassword = remainingPasswordChars.includes(digit);
+    const countInAttemptedPasswordThusFar = remainingAttemptedPasswordChars
+      .slice(0, i)
+      .filter((prevDigit) => prevDigit === digit).length;
+    const countInPassword = remainingPasswordChars.filter((prevDigit) => prevDigit === digit).length;
+    return isNotExactlyCorrect && isPresentInPassword && countInAttemptedPasswordThusFar <= countInPassword;
+  });
 
   return {
     exactCharacters: exactCorrectChars.length,
     misplacedCharacters: misplacedCorrectChars.length,
-  }
-}
+  };
+};
 
 const getSharedChars = (password: string, attemptedPassword: string): number => {
   for (let i = 0; i < password.length; i++) {
@@ -218,23 +228,33 @@ const getSharedChars = (password: string, attemptedPassword: string): number => 
     }
   }
   return password.length;
-}
+};
 
-const getPassword = (length: number, allowNumbers = true, allowLetters = false, allowSpecial = false, allowUnicode = false): string => {
+const getPassword = (
+  length: number,
+  allowNumbers = true,
+  allowLetters = false,
+  allowSpecial = false,
+  allowUnicode = false,
+): string => {
   const numbers = "0123456789";
   const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const special = "!@#$%^&*()_+-=[]{}|;:,.<>?";
   const unicode = "¼░╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿";
 
-  const characters = (allowNumbers ? numbers : "") + (allowLetters ? letters : "") + (allowSpecial ? special : "") + (allowUnicode ? unicode : "");
+  const characters =
+    (allowNumbers ? numbers : "") +
+    (allowLetters ? letters : "") +
+    (allowSpecial ? special : "") +
+    (allowUnicode ? unicode : "");
   let password = "";
   for (let i = 0; i < length; i++) {
     password += characters[Math.floor(Math.random() * characters.length)];
   }
   return password;
-}
+};
 
 const getRandomIcon = (): Icon => {
   const icons = Object.values(Icon);
   return <Icon>icons[Math.floor(Math.random() * icons.length)];
-}
+};

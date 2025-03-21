@@ -8,7 +8,8 @@ const HORIZONTAL_CONNECTION_CHANCE = 0.4;
 const VERTICAL_CONNECTION_CHANCE = 0.6;
 const SERVER_DENSITY = 0.6;
 
-const getEmptyNetwork = (): (DarkWebServer | null)[][] => new Array(NET_HEIGHT).fill(null).map(() => (new Array(NET_WIDTH)).fill(null) as (DarkWebServer | null)[]);
+const getEmptyNetwork = (): (DarkWebServer | null)[][] =>
+  new Array(NET_HEIGHT).fill(null).map(() => new Array(NET_WIDTH).fill(null) as (DarkWebServer | null)[]);
 
 export const DarkWebNetwork: (DarkWebServer | null)[][] = getEmptyNetwork();
 
@@ -19,11 +20,11 @@ export const populateDarkWebNetwork = () => {
       if (Math.random() > SERVER_DENSITY) {
         continue;
       }
-      const server = getDarkWebServer(j, 10*j, i, j);
+      const server = getDarkWebServer(j, 10 * j, i, j);
       addServerToNetwork(server, i, j, true);
     }
   }
-}
+};
 
 export const clearDarkWebNetwork = () => {
   for (let i = 0; i < NET_HEIGHT; i++) {
@@ -31,7 +32,7 @@ export const clearDarkWebNetwork = () => {
       DarkWebNetwork[i][j] = null;
     }
   }
-}
+};
 
 export const addServerToNetwork = (server: DarkWebServer, x: number, y: number, addConnections = false) => {
   if (DarkWebNetwork[x]?.[y] === undefined) {
@@ -48,8 +49,7 @@ export const addServerToNetwork = (server: DarkWebServer, x: number, y: number, 
   if (addConnections) {
     addRandomConnections(server);
   }
-}
-
+};
 
 export const addRandomConnections = (server: DarkWebServer) => {
   const x = server.x;
@@ -69,7 +69,7 @@ export const addRandomConnections = (server: DarkWebServer) => {
       connectServers(server, neighbor);
     }
   });
-}
+};
 
 export const connectServers = (server1: DarkWebServer, server2: DarkWebServer) => {
   server1.connections.push({
@@ -82,7 +82,7 @@ export const connectServers = (server1: DarkWebServer, server2: DarkWebServer) =
     x: server1.x,
     y: server1.y,
   });
-}
+};
 
 export const getNeighborsOnRow = (x: number, y: number): DarkWebServer[] => {
   const neighbors: DarkWebServer[] = [];
@@ -95,14 +95,14 @@ export const getNeighborsOnRow = (x: number, y: number): DarkWebServer[] => {
     neighbors.push(rightNeighbor);
   }
   return neighbors;
-}
+};
 
 export const getServersOnColumnBelow = (x: number): DarkWebServer[] => {
-  return DarkWebNetwork[x-1]?.filter(notNull<DarkWebServer>) ?? [];
-}
+  return DarkWebNetwork[x - 1]?.filter(notNull<DarkWebServer>) ?? [];
+};
 
 export const getServersOnColumnAbove = (x: number): DarkWebServer[] => {
-  return DarkWebNetwork[x+1]?.filter(notNull<DarkWebServer>) ?? [];
-}
+  return DarkWebNetwork[x + 1]?.filter(notNull<DarkWebServer>) ?? [];
+};
 
-const notNull = <T,>(value: T | null): value is T => value !== null;
+const notNull = <T>(value: T | null): value is T => value !== null;

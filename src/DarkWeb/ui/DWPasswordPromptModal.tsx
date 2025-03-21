@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "../../ui/React/Modal";
 import { DarkWebServer } from "../models/DarkWebServer";
 import { Container, Typography, TextField, Button } from "@mui/material";
@@ -9,9 +9,9 @@ export type DWPasswordPromptModalProps = {
   open: boolean;
   onClose: () => void;
   server: DarkWebServer;
-}
+};
 
-export const DWPasswordPromptModal = ({open, onClose, server }: DWPasswordPromptModalProps): React.ReactElement => {
+export const DWPasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptModalProps): React.ReactElement => {
   const [inputPassword, setInputPassword] = useState("");
   const [password, setPassword] = useState<string>("?");
   const [enableSubmit, setEnableSubmit] = useState(!server.unlocked);
@@ -38,7 +38,7 @@ export const DWPasswordPromptModal = ({open, onClose, server }: DWPasswordPrompt
       return;
     }
     setPassword(passwordAttempted);
-  }
+  };
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -62,18 +62,18 @@ export const DWPasswordPromptModal = ({open, onClose, server }: DWPasswordPrompt
             />
           </form>
           <br />
-          <Button onClick={() => setPassword(inputPassword)} disabled={!enableSubmit}>Submit Password</Button>
+          <Button onClick={() => setPassword(inputPassword)} disabled={!enableSubmit}>
+            Submit Password
+          </Button>
           <br />
           <br />
           <Container sx={{ height: "200px" }}>
-            <div style={{ color: "white", whiteSpace: "pre-wrap"}}>
-            <pre>
-              {response}
-            </pre>
+            <div style={{ color: "white", whiteSpace: "pre-wrap" }}>
+              <pre>{response}</pre>
             </div>
           </Container>
         </Container>
       </>
     </Modal>
-);
-}
+  );
+};

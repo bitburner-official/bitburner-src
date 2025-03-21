@@ -17,7 +17,6 @@ import {
   SvgIconComponent,
 } from "@mui/icons-material";
 
-
 export enum Icon {
   ConnectedTv = "ConnectedTv",
   LaptopMac = "LaptopMac",
@@ -69,4 +68,4 @@ export const getIcon = (name: Icon): SvgIconComponent => {
     default:
       return ConnectedTv;
   }
-}
+};
