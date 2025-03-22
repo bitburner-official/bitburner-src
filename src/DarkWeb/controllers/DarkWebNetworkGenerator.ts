@@ -1,6 +1,6 @@
 import { DarkWebServer } from "../models/DarkWebServer";
 import { getDarkWebServer } from "./DarkWebServerGenerator";
-import { DarkWebNetwork } from "../models/DarkWebState";
+import { DarkWebEvents, DarkWebNetwork } from "../models/DarkWebState";
 
 const NET_WIDTH = 6;
 const NET_DEPTH = 15;
@@ -32,6 +32,27 @@ export const clearDarkWebNetwork = () => {
     }
   }
 };
+
+export const moveServer = (server: DarkWebServer) => {
+  for (let i = 0; i < 10; i++) { // max 10 attempts
+    const newX = Math.floor(Math.random() * NET_DEPTH);
+    const newY = Math.floor(Math.random() * NET_WIDTH);
+    if (DarkWebNetwork[newX][newY] !== null) {
+      continue;
+    }
+    server.connections.forEach((conn) => {
+      const connectedServer = DarkWebNetwork[conn.x][conn.y];
+      if (connectedServer) {
+        disconnectServers(server, connectedServer);
+      }
+    });
+
+    DarkWebNetwork[server.x][server.y] = null;
+    addServerToNetwork(server, newX, newY, true);
+    DarkWebEvents.emit();
+    return true;
+  }
+}
 
 export const addServerToNetwork = (server: DarkWebServer, x: number, y: number, addConnections = false) => {
   if (DarkWebNetwork[x]?.[y] === undefined) {
@@ -82,6 +103,11 @@ export const connectServers = (server1: DarkWebServer, server2: DarkWebServer) =
     y: server1.y,
   });
 };
+
+export const disconnectServers = (server1: DarkWebServer, server2: DarkWebServer) => {
+  server1.connections = server1.connections.filter((conn) => conn.id !== server2.id);
+  server2.connections = server2.connections.filter((conn) => conn.id !== server1.id);
+}
 
 export const getNeighborsOnRow = (x: number, y: number): DarkWebServer[] => {
   const neighbors: DarkWebServer[] = [];

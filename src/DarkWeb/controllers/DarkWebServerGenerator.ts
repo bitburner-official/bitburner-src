@@ -80,7 +80,7 @@ export const getSortedEchoVulnServer = (difficulty: number, chaRequired: number,
     icon: getRandomIcon(),
     difficulty: difficulty,
     chaRequired: chaRequired,
-    password: getPassword(4).split("").sort().join(""),
+    password: getPassword(4),
     x,
     y,
     passwordChecker: (attemptedPassword: string, server: DarkWebServer) => {
@@ -104,13 +104,12 @@ export const getSortedEchoVulnServer = (difficulty: number, chaRequired: number,
 }
 
 export const getNoPasswordServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
-  const password = getPassword(Math.floor(3+(difficulty/2)));
   return DWebServerBuilder({
     name: getName(difficulty),
     icon: getRandomIcon(),
     difficulty: difficulty,
     chaRequired: chaRequired,
-    password: password,
+    password: "",
     x,
     y,
     passwordChecker: (attemptedPassword: string, server: DarkWebServer) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, PointerEventHandler } from "react";
+import React, { useEffect, useRef, PointerEventHandler,WheelEventHandler, useState } from "react";
 import { Container, Typography } from "@mui/material";
 import { DWServerComponent, getPixelPosition } from "./DWServerComponent";
 import { useRerender } from "../../ui/React/hooks";
@@ -12,6 +12,8 @@ export function DWNetDisplayWrapper(): React.ReactElement {
   const rerender = useRerender();
   const draggableBackground = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
+  const [zoomIndex, setZoomIndex] = useState(5);
+  const zoomOptions = [0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5];
 
   useEffect(() => {
     DarkWebEvents.subscribe(() => {
@@ -19,26 +21,31 @@ export function DWNetDisplayWrapper(): React.ReactElement {
       drawOnCanvas();
     });
     drawOnCanvas();
+    draggableBackground?.current?.addEventListener('wheel', e => e.preventDefault())
   }, [rerender]);
 
   const drawOnCanvas = () => {
+    const ctx = canvas.current?.getContext("2d");
+    if (ctx == null || !canvas.current) {
+      console.error("Could not get canvas context");
+      return;
+    }
+    ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
+
+
     for (const server of DarkWebNetwork.flat()) {
       if (!server) {
         continue;
       }
-      const ctx = canvas.current?.getContext("2d");
-      if (ctx == null) {
-        return;
-      }
-      // draw a line between each server and its connected servers
 
+      // draw a line between each server and its connected servers
       for (const connectedServer of server.connections) {
         if (!connectedServer) {
           continue;
         }
+        ctx.beginPath();
         ctx.strokeStyle =
           server.unlocked || DarkWebNetwork[connectedServer.x][connectedServer.y]?.unlocked ? "green" : "grey";
-        ctx.beginPath();
         const startPosition = getPixelPosition(server.x, server.y);
         const endPosition = getPixelPosition(connectedServer.x, connectedServer.y);
         ctx.moveTo(startPosition.left + DW_SERVER_WIDTH / 2, startPosition.top + DW_SERVER_HEIGHT / 2);
@@ -69,6 +76,29 @@ export function DWNetDisplayWrapper(): React.ReactElement {
     }
   };
 
+  // noinspection TypeScriptValidateTypes
+  const handleZoom: WheelEventHandler<HTMLDivElement> = (wheelEvent) => {
+    wheelEvent.stopPropagation();
+    const target = wheelEvent.target as HTMLDivElement;
+    if (!draggableBackground?.current) {
+      return;
+    }
+    const direction = wheelEvent.deltaY < 0 ? 1 : -1;
+    setZoomIndex(Math.max(Math.min(zoomIndex + direction, zoomOptions.length - 1), 0));
+
+    if (!target?.parentElement?.getBoundingClientRect()) {
+      return;
+    }
+    // TODO: scroll toward the mouse cursor location?
+    // const width = target?.parentElement?.getBoundingClientRect()?.width;
+    // const height = target?.parentElement?.getBoundingClientRect()?.height;
+    // const deltaX = wheelEvent.pageX - target?.parentElement?.getBoundingClientRect()?.x;
+    // const deltaY = wheelEvent.pageY - target?.parentElement?.getBoundingClientRect()?.y;
+    // // adjust the draggableBackground scrollLeft and scrollTop to make the zoom center around the mouse position
+    // draggableBackground.current.scrollLeft += width * 0.5;
+    // draggableBackground.current.scrollTop += height * 0.5;
+  }
+
   return (
     <Container maxWidth="lg" sx={{ mx: 0 }}>
       <Typography variant={"h6"}>Dark Web</Typography>
@@ -84,9 +114,10 @@ export function DWNetDisplayWrapper(): React.ReactElement {
         onPointerDown={handleDragStart}
         onPointerUp={handleDragEnd}
         onPointerMove={handleDrag}
+        onWheel={handleZoom}
       >
         <div
-          style={{ position: "relative", width: `${DW_NET_WIDTH}px`, height: `${DW_NET_HEIGHT}px` }}
+          style={{ position: "relative", width: `${DW_NET_WIDTH}px`, height: `${DW_NET_HEIGHT}px`, zoom: zoomOptions[zoomIndex] }}
           id={"draggableBackgroundTarget"}
         >
           <canvas
