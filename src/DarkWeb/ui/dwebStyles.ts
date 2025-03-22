@@ -20,6 +20,7 @@ export const dwebStyles = makeStyles<unknown, dwColors>({ uniqId: "dwebStyles" }
     padding: "8px",
     borderRadius: "4px",
     zIndex: 10,
+    backgroundColor: theme.colors.backgroundsecondary,
   },
   inlineFlexBox: {
     display: "inline-flex",
@@ -29,6 +30,11 @@ export const dwebStyles = makeStyles<unknown, dwColors>({ uniqId: "dwebStyles" }
   },
   eighty: {
     width: "80%",
+  },
+  authButton: {
+    ["&:disabled"]: {
+      opacity: 0.5,
+    },
   },
   hack: {
     borderColor: theme.colors.hack,

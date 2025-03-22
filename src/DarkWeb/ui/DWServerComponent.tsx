@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Typography, Button, Box } from "@mui/material";
 import { SvgIconComponent } from "@mui/icons-material";
 import { DarkWebServer } from "../models/DarkWebServer";
@@ -12,6 +12,7 @@ import {
   dwebStyles,
   MAP_BORDER_WIDTH,
 } from "./dwebStyles";
+import { DarkWebEvents, DarkWebNetwork } from "../models/DarkWebState";
 
 export type DWServerProps = {
   server: DarkWebServer;
@@ -24,8 +25,20 @@ export const getPixelPosition = (top: number, left: number) => ({
 
 export function DWServerComponent({ server }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);
+  const [enableAuth, setEnableAuth] = useState(server.unlocked || server.x === 0);
   const { classes } = dwebStyles({});
   const color = server.unlocked ? classes.success : classes.rep;
+
+
+  useEffect(() => {
+    DarkWebEvents.subscribe(() => {
+      setEnableAuth(
+        server.unlocked ||
+        server.x === 0 ||
+        server.connections.some((neighbor) => DarkWebNetwork[neighbor.x][neighbor.y]?.unlocked),
+      );
+    });
+  });
 
   const authButtonHandler = () => {
     setOpen(true);
@@ -54,12 +67,18 @@ export function DWServerComponent({ server }: DWServerProps): React.ReactElement
             {server.name}
           </Typography>
         </Box>
-        {/*<Typography color="secondary">Cha required: {server.chaRequired}</Typography>*/}
         <Typography color="secondary">
-          Coords: {server.x}, {server.y}
+          x:{server.x} y:{server.y}; Cha:{server.chaRequired}
         </Typography>
         <br />
-        <Button variant="contained" color="primary" onClick={authButtonHandler} sx={{ marginLeft: "23px" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={authButtonHandler}
+          sx={{ marginLeft: "23px" }}
+          disabled={!enableAuth}
+          className={classes.authButton}
+        >
           Authenticate
         </Button>
       </Container>

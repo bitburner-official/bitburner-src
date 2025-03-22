@@ -4,6 +4,7 @@ import { DarkWebServer } from "../models/DarkWebServer";
 import { Container, Typography, TextField, Button } from "@mui/material";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 import { getIcon } from "../controllers/ServerIcon";
+import { DarkWebEvents } from "../models/DarkWebState";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -18,17 +19,19 @@ export const DWPasswordPromptModal = ({ open, onClose, server }: DWPasswordPromp
   const [response, setResponse] = useState("Submit a password to login...");
 
   useEffect(() => {
-    async function attemptPassword(passwordAttempted: string): Promise<void> {
+    async function attemptPassword(passwordAttempted: string, skipSleep = false): Promise<void> {
       setEnableSubmit(false);
       setResponse("Checking password...");
-      await sleep(500);
+      await sleep(skipSleep ? 0 : 500);
       const response = server.passwordChecker(passwordAttempted, server);
       setResponse(JSON.stringify(response, null, 4));
-      if (!response.success) {
+      if (response.success) {
+        DarkWebEvents.emit("server-unlocked", server);
+      } else {
         setEnableSubmit(true);
       }
     }
-    open && void attemptPassword(password);
+    open && void attemptPassword(password, password === "?");
   }, [password, server, open]);
 
   const handleSubmit = (e: React.FormEvent, passwordAttempted: string): void => {

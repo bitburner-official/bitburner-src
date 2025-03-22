@@ -1,20 +1,23 @@
 import React, { useEffect, useRef, PointerEventHandler } from "react";
 import { Container, Typography } from "@mui/material";
 import { DWServerComponent, getPixelPosition } from "./DWServerComponent";
-import { DarkWebNetwork, populateDarkWebNetwork } from "../models/DarkWebNetwork";
 import { useRerender } from "../../ui/React/hooks";
+import { DarkWebEvents, DarkWebNetwork } from "../models/DarkWebState";
+import { DW_SERVER_HEIGHT, DW_SERVER_WIDTH } from "./dwebStyles";
 
 export const DW_NET_WIDTH = 2000;
 export const DW_NET_HEIGHT = 4000;
 
-export function DWNetDisplay(): React.ReactElement {
+export function DWNetDisplayWrapper(): React.ReactElement {
   const rerender = useRerender();
   const draggableBackground = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    populateDarkWebNetwork();
-    rerender();
+    DarkWebEvents.subscribe(() => {
+      rerender();
+      drawOnCanvas();
+    });
     drawOnCanvas();
   }, [rerender]);
 
@@ -33,12 +36,13 @@ export function DWNetDisplay(): React.ReactElement {
         if (!connectedServer) {
           continue;
         }
-        ctx.strokeStyle = "blue";
+        ctx.strokeStyle =
+          server.unlocked || DarkWebNetwork[connectedServer.x][connectedServer.y]?.unlocked ? "green" : "grey";
         ctx.beginPath();
         const startPosition = getPixelPosition(server.x, server.y);
         const endPosition = getPixelPosition(connectedServer.x, connectedServer.y);
-        ctx.moveTo(startPosition.left, startPosition.top);
-        ctx.lineTo(endPosition.left, endPosition.top);
+        ctx.moveTo(startPosition.left + DW_SERVER_WIDTH / 2, startPosition.top + DW_SERVER_HEIGHT / 2);
+        ctx.lineTo(endPosition.left + DW_SERVER_WIDTH / 2, endPosition.top + DW_SERVER_HEIGHT / 2);
         ctx.stroke();
       }
     }

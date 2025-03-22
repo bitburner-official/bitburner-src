@@ -1,33 +1,32 @@
-import { DarkWebServer } from "./DarkWebServer";
-import { getDarkWebServer } from "../controllers/DarkWebServerGenerator";
+import { DarkWebServer } from "../models/DarkWebServer";
+import { getDarkWebServer } from "./DarkWebServerGenerator";
+import { DarkWebNetwork } from "../models/DarkWebState";
 
 const NET_WIDTH = 6;
-const NET_HEIGHT = 15;
+const NET_DEPTH = 15;
 
-const HORIZONTAL_CONNECTION_CHANCE = 0.4;
-const VERTICAL_CONNECTION_CHANCE = 0.6;
+const HORIZONTAL_CONNECTION_CHANCE = 0.6;
+const VERTICAL_CONNECTION_CHANCE = 0.4;
 const SERVER_DENSITY = 0.6;
 
-const getEmptyNetwork = (): (DarkWebServer | null)[][] =>
-  new Array(NET_HEIGHT).fill(null).map(() => new Array(NET_WIDTH).fill(null) as (DarkWebServer | null)[]);
-
-export const DarkWebNetwork: (DarkWebServer | null)[][] = getEmptyNetwork();
+export const getEmptyNetwork = (): (DarkWebServer | null)[][] =>
+  new Array(NET_DEPTH).fill(null).map(() => new Array(NET_WIDTH).fill(null) as (DarkWebServer | null)[]);
 
 export const populateDarkWebNetwork = () => {
   clearDarkWebNetwork();
-  for (let i = 0; i < NET_HEIGHT; i++) {
+  for (let i = 0; i < NET_DEPTH; i++) {
     for (let j = 0; j < NET_WIDTH; j++) {
       if (Math.random() > SERVER_DENSITY) {
         continue;
       }
-      const server = getDarkWebServer(j, 10 * j, i, j);
+      const server = getDarkWebServer(i, 10 * i, i, j);
       addServerToNetwork(server, i, j, true);
     }
   }
 };
 
 export const clearDarkWebNetwork = () => {
-  for (let i = 0; i < NET_HEIGHT; i++) {
+  for (let i = 0; i < NET_DEPTH; i++) {
     for (let j = 0; j < NET_WIDTH; j++) {
       DarkWebNetwork[i][j] = null;
     }
@@ -64,7 +63,7 @@ export const addRandomConnections = (server: DarkWebServer) => {
   const serversAbove = getServersOnColumnAbove(x);
   const serversBelow = getServersOnColumnBelow(x);
   [...serversAbove, ...serversBelow].forEach((neighbor) => {
-    const distance = Math.abs(neighbor.x - x);
+    const distance = Math.abs(neighbor.x - x) + 1;
     if (Math.random() < VERTICAL_CONNECTION_CHANCE / distance) {
       connectServers(server, neighbor);
     }
