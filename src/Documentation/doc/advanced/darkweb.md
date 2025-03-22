@@ -10,20 +10,21 @@ This is currently a design document, but eventually will be the in-game player d
 ## Gameplay:
 
 - The dark web and the servers on it are not reliable
-
   - Servers will sometimes move around the dark web, severing old connections and adding new ones
   - The darkweb can be circular (it is not a tree) and it also may not be fully connected sometimes
   - Servers will occasionally go offline, sometimes permanently, and new servers will periodically be added
   - Players will need to build redundancy or fallback systems to handle failing servers or connections
   - Some servers change their generated names or IPs occasionally, requiring the player to mark them somehow
 
-- Players will sometimes discover things on servers they gain access to
 
+- Players will sometimes discover things on servers they gain access to
   - Hints to different types of security vulnerabilities
   - Passwords for other servers in a note
   - Hints to parts of servers' passwords (or simple cipher / encoded password)
   - CCTs
   - caches with (small) money or xp rewards, or small rep gains for active factions
+  - Opportunities to buy passwords to servers they have not yet cracked
+
 
 - Player will solve simple pasword/auth puzzles to gain access to servers (which can be automated)
   - puzzle: password that is openly visible, or not required at all
@@ -32,6 +33,7 @@ This is currently a design document, but eventually will be the in-game player d
   - vulnerability: "timing" attacks (the listed response time increases based on how many correct chars you submit)
   - puzzle: simple parsing. the password is the value of this short math expression in a string
   - The player will need to find, store, and re-use those passwords
+
 
 ## Scripting
 
@@ -43,6 +45,7 @@ This is currently a design document, but eventually will be the in-game player d
   - harder servers have a min cha requirement?
   - phishing success chance based off of cha?
 
+
 ## Rewards:
 
 - Start with tor router permanently?
@@ -52,10 +55,12 @@ This is currently a design document, but eventually will be the in-game player d
 - Cha contributes to megacorp job rep (needed to later join megacorp factions)
 - Small amounts of negative karma gain for breaking into servers?
 
+
 ## Community feedback:
 
 https://discord.com/channels/415207508303544321/459097632896188436/1350613323737071727
 https://discord.com/channels/415207508303544321/459097632896188436/1345773862263984208
+https://discord.com/channels/415207508303544321/415213435974975508/1352628138261086339
 
 ## Idea scratch space
 

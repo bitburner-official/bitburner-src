@@ -17,4 +17,4 @@ setInterval(() => {
     return;
   }
   moveServer(server);
-}, 20000)
+}, 2000)

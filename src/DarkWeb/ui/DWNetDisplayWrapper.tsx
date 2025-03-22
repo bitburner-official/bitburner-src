@@ -5,8 +5,8 @@ import { useRerender } from "../../ui/React/hooks";
 import { DarkWebEvents, DarkWebNetwork } from "../models/DarkWebState";
 import { DW_SERVER_HEIGHT, DW_SERVER_WIDTH } from "./dwebStyles";
 
-export const DW_NET_WIDTH = 2000;
-export const DW_NET_HEIGHT = 4000;
+export const DW_NET_WIDTH = 4000;
+export const DW_NET_HEIGHT = 6000;
 
 export function DWNetDisplayWrapper(): React.ReactElement {
   const rerender = useRerender();
