@@ -1,8 +1,8 @@
-import { DarkWebServer } from "../models/DarkWebServer";
+import { DarkWebServer, DWebServerBuilder } from "../models/DarkWebServer";
 import { Icon } from "./ServerIcon";
 
 export const getDarkWebServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
-  if (difficulty <= 2) {
+  if (difficulty <= 2 || Math.random() < 0.1) {
     return getSimpleServer(difficulty, chaRequired, x, y);
   } else {
     return getComplexServer(difficulty, chaRequired, x, y);
@@ -16,18 +16,24 @@ export const getName = (difficulty: number): string => {
 
 const getSimpleServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
   const rng = Math.random();
-  if (rng < 0.3) {
+  if (rng < 0.25) {
     return getEchoVulnServer(difficulty, chaRequired, x, y);
   }
-  if (rng < 6) {
+  if (rng < 5) {
     return getNoPasswordServer(difficulty, chaRequired, x, y);
+  }
+  if (rng < 0.75) {
+    return getSortedEchoVulnServer(difficulty, chaRequired, x, y);
   }
   return getDefaultPasswordServer(difficulty, chaRequired, x, y);
 };
 
 const getComplexServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
-  if (Math.random() < 0.5) {
+  if (Math.random() < 0.4) {
     return getMastermindHintServer(difficulty, chaRequired, x, y);
+  }
+  if (Math.random() < 0.6) {
+    return getSortedEchoVulnServer(difficulty, chaRequired, x, y);
   }
   return getTimingAttackServer(difficulty, chaRequired, x, y);
 };
@@ -40,7 +46,7 @@ const getGenericSuccess = (responseTime = 0) => ({
 });
 
 export const getEchoVulnServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
-  return new DarkWebServer({
+  return DWebServerBuilder({
     name: getName(difficulty),
     icon: getRandomIcon(),
     difficulty: difficulty,
@@ -49,6 +55,8 @@ export const getEchoVulnServer = (difficulty: number, chaRequired: number, x: nu
     x,
     y,
     passwordChecker: (attemptedPassword: string, server: DarkWebServer) => {
+      const hintTemplates = ["The password is", "The PIN is", "Remember to use", "It's set to", "The key is", "The secret is"];
+      const hint = hintTemplates[Math.floor(Math.random() * hintTemplates.length)];
       if (attemptedPassword === server.password) {
         server.unlocked = true;
         return getGenericSuccess();
@@ -56,26 +64,28 @@ export const getEchoVulnServer = (difficulty: number, chaRequired: number, x: nu
         return {
           success: false,
           status: 401,
-          msg: `Incorrect, the password is ${server.password}`,
+          msg: `Incorrect. ${hint} ${server.password}`,
           responseTime: getResponseTime(),
           passwordLength: server.password.length,
-          passwordFormat: "numeric",
+          passwordFormat: getPasswordType(server.password),
         };
       }
     },
   });
 };
 
-export const getNoPasswordServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
-  return new DarkWebServer({
+export const getSortedEchoVulnServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
+  return DWebServerBuilder({
     name: getName(difficulty),
     icon: getRandomIcon(),
     difficulty: difficulty,
     chaRequired: chaRequired,
-    password: "",
+    password: getPassword(4).split("").sort().join(""),
     x,
     y,
     passwordChecker: (attemptedPassword: string, server: DarkWebServer) => {
+      const hintTemplates = ["The password contains", "The key is made from", "I accidentally sorted the password", "The PIN uses"]
+      const hint = hintTemplates[Math.floor(Math.random() * hintTemplates.length)];
       if (attemptedPassword === server.password) {
         server.unlocked = true;
         return getGenericSuccess();
@@ -83,7 +93,37 @@ export const getNoPasswordServer = (difficulty: number, chaRequired: number, x: 
         return {
           success: false,
           status: 401,
-          msg: `Hint: there is no password`,
+          msg: `Incorrect. ${hint}: ${server.password.split("").sort().join("")}`,
+          responseTime: getResponseTime(),
+          passwordLength: server.password.length,
+          passwordFormat: getPasswordType(server.password),
+        };
+      }
+    },
+  });
+}
+
+export const getNoPasswordServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
+  const password = getPassword(Math.floor(3+(difficulty/2)));
+  return DWebServerBuilder({
+    name: getName(difficulty),
+    icon: getRandomIcon(),
+    difficulty: difficulty,
+    chaRequired: chaRequired,
+    password: password,
+    x,
+    y,
+    passwordChecker: (attemptedPassword: string, server: DarkWebServer) => {
+      const hintTemplates = ["The password is not set", "There is no password", "The PIN is empty", "Did I set a code?", "I didn't set a password"];
+      const hint = hintTemplates[Math.floor(Math.random() * hintTemplates.length)];
+      if (attemptedPassword === server.password) {
+        server.unlocked = true;
+        return getGenericSuccess();
+      } else {
+        return {
+          success: false,
+          status: 401,
+          msg: `Hint: ${hint}`,
           responseTime: getResponseTime(),
         };
       }
@@ -96,16 +136,19 @@ export const getDefaultPasswordServer = (
   chaRequired: number,
   x: number,
   y: number,
+  rainbowTable = ["admin", "password", "0000"],
+  hintTemplates = ["The password is the default password", "It's still the default", "The default password is set", "I never changed the password", "It's still the factory settings"],
 ): DarkWebServer => {
-  return new DarkWebServer({
+  return DWebServerBuilder({
     name: getName(difficulty),
     icon: getRandomIcon(),
     difficulty: difficulty,
     chaRequired: chaRequired,
-    password: ["admin", "password", "0000"][Math.floor(Math.random() * 3)],
+    password: rainbowTable[Math.floor(Math.random() * 3)],
     x,
     y,
     passwordChecker: (attemptedPassword: string, server: DarkWebServer) => {
+      const hint = hintTemplates[Math.floor(Math.random() * hintTemplates.length)];
       if (attemptedPassword.toLowerCase() === server.password) {
         server.unlocked = true;
         return getGenericSuccess();
@@ -113,10 +156,10 @@ export const getDefaultPasswordServer = (
         return {
           success: false,
           status: 401,
-          msg: `Incorrect. (The password is the default password.)`,
+          msg: `Incorrect. (${hint})`,
           responseTime: getResponseTime(),
           passwordLength: server.password.length,
-          passwordFormat: "default",
+          passwordFormat: getPasswordType(server.password),
         };
       }
     },
@@ -129,7 +172,7 @@ export const getMastermindHintServer = (
   x: number,
   y: number,
 ): DarkWebServer => {
-  return new DarkWebServer({
+  return DWebServerBuilder({
     name: getName(difficulty),
     icon: getRandomIcon(),
     difficulty: difficulty,
@@ -153,7 +196,7 @@ export const getMastermindHintServer = (
           charsMatchingButMisplaced: mastermindResponse.misplacedCharacters,
           responseTime: getResponseTime(),
           passwordLength: server.password.length,
-          passwordFormat: `numeric`,
+          passwordFormat: getPasswordType(server.password),
         };
       }
     },
@@ -162,7 +205,7 @@ export const getMastermindHintServer = (
 
 export const getTimingAttackServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
   const length = 3 + difficulty;
-  return new DarkWebServer({
+  return DWebServerBuilder({
     name: getName(difficulty),
     icon: getRandomIcon(),
     difficulty: difficulty,
@@ -171,6 +214,7 @@ export const getTimingAttackServer = (difficulty: number, chaRequired: number, x
     x,
     y,
     passwordChecker: function (attemptedPassword: string, server: DarkWebServer) {
+      const hintTemplates = ["I thought about it for some time, but that is not the password.", "I spent a while on it, but that's not right", "I considered it for a bit, but that's not it", "I spent some time on it, but that's not the password"];
       const requestTime = getResponseTime(getSharedChars(server.password, attemptedPassword));
       if (attemptedPassword === server.password) {
         server.unlocked = true;
@@ -179,19 +223,23 @@ export const getTimingAttackServer = (difficulty: number, chaRequired: number, x
         return {
           success: false,
           status: 401,
-          msg: `Incorrect.`,
+          msg: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
           responseTime: requestTime,
           passwordLength: server.password.length,
-          passwordFormat: `numeric`,
+          passwordFormat: getPasswordType(server.password),
         };
       }
     },
   });
 };
 
+// TODO: abstract rainbow table generator
+
 // TODO: arithmetic string server (eval bait)
 
-// TODO: basic cypher server
+// TODO: verbal description of simple math problem (nth root of x)
+
+// TODO: basic cypher server?
 
 // TODO: simple rainbow table server (dog's name, cat's name, etc)
 
@@ -254,7 +302,27 @@ const getPassword = (
   return password;
 };
 
-const getRandomIcon = (): Icon => {
+export const getPasswordType = (password: string): string => {
+  const numbers = "0123456789";
+  const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const passwordArr = password.split("");
+
+  if (passwordArr.every((char) => numbers.includes(char))) {
+    return "numeric";
+  }
+  if (passwordArr.every((char) => letters.includes(char))) {
+    return "alphabetic";
+  }
+  if (passwordArr.every((char) => numbers.includes(char) || letters.includes(char))) {
+    return "alphanumeric";
+  }
+  if (passwordArr.every((char) => char.charCodeAt(0) < 128)) {
+    return "ASCII";
+  }
+  return "unicode";
+}
+
+export const getRandomIcon = (): Icon => {
   const icons = Object.values(Icon);
   return <Icon>icons[Math.floor(Math.random() * icons.length)];
 };

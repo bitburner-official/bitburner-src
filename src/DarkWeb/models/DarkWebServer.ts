@@ -1,4 +1,4 @@
-import { getName } from "../controllers/DarkWebServerGenerator";
+import { getName, getRandomIcon } from "../controllers/DarkWebServerGenerator";
 import { Icon } from "../controllers/ServerIcon";
 
 export type PasswordResponse = {
@@ -18,7 +18,7 @@ export type DwebConnection = {
   y: number;
 };
 
-export class DarkWebServer {
+export type DarkWebServer = {
   name: string;
   id: string;
   icon: Icon;
@@ -26,27 +26,22 @@ export class DarkWebServer {
   chaRequired: number;
   password: string;
   passwordChecker: (attemptedPassword: string, server: DarkWebServer) => PasswordResponse;
-  unlocked: boolean = false;
+  unlocked: boolean;
   x: number;
   y: number;
-  connections: DwebConnection[] = [];
-
-  constructor(
-    options: Partial<DarkWebServer> & {
-      passwordChecker: (attemptedPassword: string, server: DarkWebServer) => PasswordResponse;
-      x: number;
-      y: number;
-    },
-  ) {
-    this.difficulty = options.difficulty ?? 1;
-    this.name = options.name ?? getName(this.difficulty);
-    this.icon = options.icon ?? Icon.ConnectedTv;
-    this.chaRequired = options.chaRequired ?? this.difficulty * 10;
-    this.password = options.password ?? "";
-    this.passwordChecker = options.passwordChecker;
-    this.unlocked = options.unlocked ?? false;
-    this.id = Math.random().toString(16).slice(2);
-    this.x = options.x;
-    this.y = options.y;
-  }
+  connections: DwebConnection[];
 }
+
+export const DWebServerBuilder = (options: Partial<DarkWebServer>): DarkWebServer => <DarkWebServer>({
+  name: options.name ?? getName(options.difficulty ?? 1),
+  icon: options.icon ?? getRandomIcon(),
+  difficulty: options.difficulty ?? 1,
+  chaRequired: options.chaRequired ?? (options.difficulty ?? 1) * 10,
+  password: options.password ?? "",
+  passwordChecker: options.passwordChecker,
+  unlocked: options.unlocked ?? false,
+  id: Math.random().toString(16).slice(2),
+  x: options.x,
+  y: options.y,
+  connections: options.connections ?? [],
+});
