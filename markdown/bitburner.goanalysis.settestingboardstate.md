@@ -9,7 +9,7 @@ Starts a new game against the "No AI" opponent, and sets the initial board size,
 **Signature:**
 
 ```typescript
-setTestingBoardState(boardState: string[]): void;
+setTestingBoardState(boardState: string[], komi?: number): void;
 ```
 
 ## Parameters
@@ -17,6 +17,7 @@ setTestingBoardState(boardState: string[]): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  boardState | string\[\] | The initial board state to use for the new game, in the format used by getBoardState(). |
+|  komi | number | _(Optional)_ Optional komi value to set for the game. Defaults to 5.5. |
 
 **Returns:**
 
