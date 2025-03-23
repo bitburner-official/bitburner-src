@@ -120,9 +120,9 @@ It will also raise all of your hacking-related multipliers by:
 
 In the middle of the 21st century, OmniTek Incorporated began designing and manufacturing advanced synthetic androids, or Synthoids for short. They achieved a major technological breakthrough in the sixth generation of their Synthoid design, called MK-VI, by developing a hyper-intelligent AI. Many argue that this was the first sentient AI ever created. This resulted in Synthoid models that were stronger, faster, and more intelligent than the humans that had created them.
 
-In this BitNode, you will be able to access the Bladeburners division at the NSA, which provides a new mechanic for progression.
+In this BitNode, you will be able to access the Bladeburner division at the NSA, which provides a new mechanic for progression.
 
-Destroying this BitNode will give you Source-File 6, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to access the NSA's Bladeburners division in other BitNodes. In addition, this Source-File will raise both the level and experience gain rate of all your combat stats by:
+Destroying this BitNode will give you Source-File 6, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to access the NSA's Bladeburner division in other BitNodes. In addition, this Source-File will raise both the level and experience gain rate of all your combat stats by:
 
 - Level 1: 8%
 - Level 2: 12%
@@ -132,9 +132,9 @@ Destroying this BitNode will give you Source-File 6, or if you already have this
 
 In the middle of the 21st century, you were doing cutting-edge work at OmniTek Incorporated as part of the AI design team for advanced synthetic androids, or Synthoids for short. You helped achieve a major technological breakthrough in the sixth generation of the company's Synthoid design, called MK-VI, by developing a hyper-intelligent AI. Many argue that this was the first sentient AI ever created. This resulted in Synthoid models that were stronger, faster, and more intelligent than the humans that had created them.
 
-In this BitNode, you will be able to access the Bladeburners API, which allows you to access Bladeburners functionality through Netscript.
+In this BitNode, you will be able to access the Bladeburner division at the NSA, which provides a new mechanic for progression.
 
-Destroying this BitNode will give you Source-File 7, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to access the Bladeburners Netscript API in other BitNodes. In addition, this Source-File will increase all of your Bladeburners multipliers by:
+Destroying this BitNode will give you Source-File 7, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to access the NSA's Bladeburner division in other BitNodes. In addition, this Source-File will increase all of your Bladeburner multipliers by:
 
 - Level 1: 8%
 - Level 2: 12%

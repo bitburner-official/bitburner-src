@@ -169,6 +169,7 @@ const singularity = {
   getCurrentServer: SF4Cost(RamCostConstants.SingularityFn1),
   getCompanyPositionInfo: SF4Cost(RamCostConstants.SingularityFn1),
   getCompanyPositions: SF4Cost(RamCostConstants.SingularityFn1),
+  cat: SF4Cost(RamCostConstants.SingularityFn1 / 4),
   connect: SF4Cost(RamCostConstants.SingularityFn1),
   manualHack: SF4Cost(RamCostConstants.SingularityFn1),
   installBackdoor: SF4Cost(RamCostConstants.SingularityFn1),
@@ -271,6 +272,7 @@ const go = {
     getControlledEmptyNodes: 16,
     getStats: 0,
     resetStats: 0,
+    setTestingBoardState: 4,
   },
   cheat: {
     getCheatSuccessChance: 1,

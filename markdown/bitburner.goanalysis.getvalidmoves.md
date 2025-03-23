@@ -14,27 +14,29 @@ Note that the \[0\]\[0\] point is shown on the bottom-left on the visual board (
 
 Also note that, when given a custom board state, only one prior move can be analyzed. This means that the superko rules (no duplicate board states in the full game history) is not supported; you will have to implement your own analysis for that.
 
-playAsWhite is optional, and gets the current valid moves for the white player. Intended to be used when playing as white when the opponent is set to "No AI"
+The current valid moves for white can also be seen by simply calling `ns.go.analysis.getValidMoves(true)` .
 
 **Signature:**
 
 ```typescript
-getValidMoves(boardState?: string[], priorBoardState?: string[], playAsWhite = false): boolean[][];
+getValidMoves(boardState?: string[] | boolean, priorBoardState?: string[], playAsWhite?: boolean): boolean[][];
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  boardState | string\[\] | _(Optional)_ |
-|  priorBoardState | string\[\] | _(Optional)_ |
-|  playAsWhite | (not declared) | _(Optional)_ |
+|  boardState | string\[\] \| boolean | _(Optional)_ Optional. The board state to analyze, in the string\[\] format used by getBoardState(). Defaults to the current board state. Alternatively can be simply "true" to get current valid moves for white. |
+|  priorBoardState | string\[\] | _(Optional)_ Optional. The move before the board state to analyze, in the format used by getBoardState(). Defaults to the current board's prior move state. |
+|  playAsWhite | boolean | _(Optional)_ Optional. Whether to analyze the board state as if the white player is the current player. Defaults to false. Intended to be used when playing as white when the opponent is set to "No AI". |
 
 **Returns:**
 
 boolean\[\]\[\]
 
+A 2D array of booleans indicating the validity of each move.
+
 ## Remarks
 
-RAM cost: 8 GB (This is intentionally expensive; you can derive this info from just getBoardState() )
+RAM cost: 8 GB (This is intentionally expensive; you can derive this info from just getBoardState() and getMoveHistory() )
 

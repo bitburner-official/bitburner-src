@@ -32,5 +32,5 @@ export function JobRoot(): React.ReactElement {
     );
   }
 
-  return <Box sx={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, 28em)" }}>{jobs}</Box>;
+  return <Box sx={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, 30em)" }}>{jobs}</Box>;
 }

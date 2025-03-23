@@ -35,6 +35,7 @@ export function getNewBoardState(
     passCount: 0,
     cheatCount: 0,
     cheatCountForWhite: 0,
+    komiOverride: null,
     board: Array.from({ length: boardSize }, (_, x) =>
       Array.from({ length: boardSize }, (_, y) =>
         !boardToCopy || boardToCopy?.[x]?.[y]

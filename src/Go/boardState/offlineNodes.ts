@@ -15,7 +15,7 @@ export function addObstacles(boardState: BoardState) {
   const shouldAddCenterBreak = !shouldRemoveCorner && !shouldRemoveRows && random(0, 3);
   const obstacleTypeCount = +shouldRemoveCorner + +shouldRemoveRows + +shouldAddCenterBreak;
 
-  const edgeDeadCount = random(0, (getScale(boardState.board) + 2 - obstacleTypeCount) * 1.5);
+  const edgeDeadCount = random(1, (getScale(boardState.board) + 2 - obstacleTypeCount) * 1.5);
 
   if (shouldRemoveCorner) {
     boardState.board = addDeadCorners(boardState.board, random);
