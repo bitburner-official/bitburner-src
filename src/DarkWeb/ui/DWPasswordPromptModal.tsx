@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "../../ui/React/Modal";
-import { DarkWebServer } from "../models/DarkWebServer";
+import { checkPassword, DarkWebServer } from "../models/DarkWebServer";
 import { Container, Typography, TextField, Button } from "@mui/material";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 import { getIcon } from "../controllers/ServerIcon";
@@ -23,7 +23,7 @@ export const DWPasswordPromptModal = ({ open, onClose, server }: DWPasswordPromp
       setEnableSubmit(false);
       setResponse("Checking password...");
       await sleep(skipSleep ? 0 : 500);
-      const response = server.passwordChecker(passwordAttempted, server);
+      const response = checkPassword(passwordAttempted, server);
       setResponse(JSON.stringify(response, null, 4));
       if (response.success) {
         DarkWebEvents.emit("server-unlocked", server);
