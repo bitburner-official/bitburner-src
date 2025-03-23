@@ -73,6 +73,7 @@ export const helpers = {
   positiveSafeInteger,
   positiveNumber,
   scriptArgs,
+  boolean,
   runOptions,
   spawnOptions,
   argsToString,
@@ -179,6 +180,14 @@ function positiveNumber(ctx: NetscriptContext, argName: string, v: unknown): Pos
 function scriptArgs(ctx: NetscriptContext, args: unknown) {
   if (!isScriptArgs(args)) throw errorMessage(ctx, "'args' is not an array of script args", "TYPE");
   return args;
+}
+
+/** Converts the provided value for v to a boolean, throwing if it is not  */
+function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
+  if (typeof v !== "boolean") {
+    throw errorMessage(ctx, `${argName} must be a boolean, was ${v}`, "TYPE");
+  }
+  return v;
 }
 
 function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRunOptions {

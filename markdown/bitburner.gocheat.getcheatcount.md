@@ -9,18 +9,20 @@ Returns the number of times you've attempted to cheat in the current game.
 **Signature:**
 
 ```typescript
-getCheatCount(playAsWhite = false): number;
+getCheatCount(playAsWhite?: boolean): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  playAsWhite | (not declared) | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
+|  playAsWhite | boolean | _(Optional)_ Optional override for playing as white. Can only be used when playing on a 'No AI' board. |
 
 **Returns:**
 
 number
+
+The number of times you've attempted to cheat in the current game.
 
 ## Remarks
 
