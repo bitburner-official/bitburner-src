@@ -271,6 +271,7 @@ const go = {
     getControlledEmptyNodes: 16,
     getStats: 0,
     resetStats: 0,
+    setTestingBoardState: 4,
   },
   cheat: {
     getCheatSuccessChance: 1,

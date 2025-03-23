@@ -558,6 +558,11 @@ export class Sleeve extends Person implements SleevePerson {
   }
 
   static recalculateNumOwned() {
+    /**
+     * Don't change sourceFileLvl to activeSourceFileLvl. The number of sleeves is a permanent effect. It's too
+     * troublesome for the player if they lose Sleeves and have to go BN10 to buy them again when they override the
+     * level of SF 10.
+     */
     const numSleeves =
       Math.min(3, Player.sourceFileLvl(10) + (Player.bitNodeN === 10 ? 1 : 0)) + Player.sleevesFromCovenant;
     while (Player.sleeves.length > numSleeves) {

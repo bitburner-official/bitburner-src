@@ -71,7 +71,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
       return;
     }
     if (
-      Player.sourceFileLvl(7) >= 3 &&
+      Player.activeSourceFileLvl(7) >= 3 &&
       canAcceptStaneksGift() &&
       !Player.hasAugmentation(AugmentationName.StaneksGift1)
     ) {
