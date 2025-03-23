@@ -1,5 +1,7 @@
-import { getName, getPasswordType, getRandomIcon, Minigames } from "../controllers/DarkWebServerGenerator";
+import { getName, getPasswordType, Minigames } from "../controllers/DarkWebServerGenerator";
 import { Icon } from "../controllers/ServerIcon";
+import { IConstructorParams, Server } from "../../Server/Server";
+import { AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
 
 export type PasswordResponse = {
   success: boolean;
@@ -12,60 +14,56 @@ export type PasswordResponse = {
   data2?: number;
 };
 
-export type DwebConnection = {
-  id: string;
+export type DarkWebData = {
+  icon: Icon;
+  password: string;
+  minigameType: Minigames;
+  passwordHint: string;
   x: number;
   y: number;
 };
 
-export type DarkWebServer = {
-  name: string;
-  icon: Icon;
-  password: string;
-  minigameType: Minigames;
+export const DWebServerBuilder = (options: DarkWebData, name: string = getName(1), difficulty: number = 1): Server => {
+  const darkWebData = {
+    icon: options.icon ?? Icon.ConnectedTv,
+    password: options.password,
+    minigameType: options.minigameType,
+    passwordHint: options.passwordHint,
+    x: options.x ?? -1,
+    y: options.y ?? -1,
+  };
 
-  passwordHint: string;
+  const params: IConstructorParams = {
+    hostname: name,
+    ip: createUniqueRandomIp(),
+    organizationName: "darkweb",
+    requiredHackingSkill: difficulty, // TODO
+    hackDifficulty: difficulty, // TODO
+    moneyAvailable: 0,
+    numOpenPortsRequired: 5, // TODO
+    serverGrowth: 1,
+    adminRights: false,
+    darkWebData: darkWebData,
+  };
+  const standardServer = new Server(params);
+  standardServer.backdoorInstalled = true; // TODO: remove once testing is done
+  AddToAllServers(standardServer);
+  console.log("Added ", name, " to standard network");
 
+  return standardServer;
+};
 
-  id: string;
-
-  x: number;
-  y: number;
-
-  difficulty: number;
-  chaRequired: number;
-  unlocked: boolean;
-  connections: DwebConnection[];
-}
-
-export const DWebServerBuilder = (options: Partial<DarkWebServer> & { minigameType: Minigames, password: string, passwordHint: string }): DarkWebServer => <DarkWebServer>({
-  name: options.name ?? getName(options.difficulty ?? 1),
-  icon: options.icon ?? getRandomIcon(),
-  password: options.password ?? "",
-  passwordHint: options.passwordHint ?? "",
-  minigameType: options.minigameType,
-
-
-  id: Math.random().toString(16).slice(2),
-
-  x: options.x,
-  y: options.y,
-
-  difficulty: options.difficulty ?? 1,
-  chaRequired: options.chaRequired ?? (options.difficulty ?? 1) * 10,
-  unlocked: options.unlocked ?? false,
-  connections: options.connections ?? [],
-});
-
-
-export const checkPassword = (attemptedPassword: string, server: DarkWebServer): PasswordResponse => {
-  if (server.password === attemptedPassword) {
-    server.unlocked = true;
+export const checkPassword = (attemptedPassword: string, server: Server): PasswordResponse => {
+  const darkWebData = server.darkWebData;
+  if (!darkWebData) {
+    throw new Error("Dark web server missing dark web data");
+  }
+  if (darkWebData.password === attemptedPassword) {
+    server.hasAdminRights = true;
     // TODO: admin access
     return getGenericSuccess();
-  }
-  else if (server.minigameType === Minigames.MastermindHint) {
-    const { exactCharacters, misplacedCharacters } = getMastermindResponse(server.password, attemptedPassword);
+  } else if (darkWebData.minigameType === Minigames.MastermindHint) {
+    const { exactCharacters, misplacedCharacters } = getMastermindResponse(darkWebData.password, attemptedPassword);
     return {
       success: false,
       status: 401,
@@ -75,23 +73,23 @@ export const checkPassword = (attemptedPassword: string, server: DarkWebServer):
       data: exactCharacters,
       data2: misplacedCharacters,
       responseTime: getResponseTime(),
-      passwordLength: server.password.length,
-      passwordFormat: getPasswordType(server.password),
+      passwordLength: darkWebData.password.length,
+      passwordFormat: getPasswordType(darkWebData.password),
     };
-  }
-  else {
-    const sharedChars = server.minigameType === Minigames.TimingAttack ? getSharedChars(server.password, attemptedPassword) : 0;
+  } else {
+    const sharedChars =
+      darkWebData.minigameType === Minigames.TimingAttack ? getSharedChars(darkWebData.password, attemptedPassword) : 0;
     const responseTime = getResponseTime(sharedChars);
     return {
       success: false,
       status: 401,
-      msg: server.passwordHint,
+      msg: darkWebData.passwordHint,
       responseTime: responseTime,
-      passwordLength: server.password.length,
-      passwordFormat: getPasswordType(server.password),
+      passwordLength: darkWebData.password.length,
+      passwordFormat: getPasswordType(darkWebData.password),
     };
   }
-}
+};
 
 const getMastermindResponse = (password: string, attemptedPassword: string) => {
   const exactCorrectChars = password.split("").filter((digit, i) => digit === attemptedPassword[i]);

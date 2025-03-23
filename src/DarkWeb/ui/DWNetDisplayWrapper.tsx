@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, PointerEventHandler,WheelEventHandler, useState } from "react";
+import React, { useEffect, useRef, PointerEventHandler, WheelEventHandler, useState } from "react";
 import { Container, Typography } from "@mui/material";
 import { DWServerComponent, getPixelPosition } from "./DWServerComponent";
 import { useRerender } from "../../ui/React/hooks";
 import { DarkWebEvents, DarkWebNetwork } from "../models/DarkWebState";
 import { DW_SERVER_HEIGHT, DW_SERVER_WIDTH } from "./dwebStyles";
+import { GetServer } from "../../Server/AllServers";
 
 export const DW_NET_WIDTH = 4000;
 export const DW_NET_HEIGHT = 6000;
@@ -23,7 +24,7 @@ export function DWNetDisplayWrapper(): React.ReactElement {
       }
     });
     drawOnCanvas();
-    draggableBackground?.current?.addEventListener('wheel', e => e.preventDefault())
+    draggableBackground?.current?.addEventListener("wheel", (e) => e.preventDefault());
   }, [rerender]);
 
   const drawOnCanvas = () => {
@@ -34,22 +35,23 @@ export function DWNetDisplayWrapper(): React.ReactElement {
     }
     ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
 
-
     for (const server of DarkWebNetwork.flat()) {
       if (!server) {
         continue;
       }
 
       // draw a line between each server and its connected servers
-      for (const connectedServer of server.connections) {
-        if (!connectedServer) {
+      for (const connectedServerName of server.serversOnNetwork) {
+        const connectedServer = GetServer(connectedServerName);
+        const darkWebData = server.darkWebData;
+        const connectedDarkWebData = connectedServer?.darkWebData;
+        if (!connectedServer || !connectedDarkWebData || !darkWebData) {
           continue;
         }
         ctx.beginPath();
-        ctx.strokeStyle =
-          server.unlocked || DarkWebNetwork[connectedServer.x][connectedServer.y]?.unlocked ? "green" : "grey";
-        const startPosition = getPixelPosition(server.x, server.y);
-        const endPosition = getPixelPosition(connectedServer.x, connectedServer.y);
+        ctx.strokeStyle = server.hasAdminRights || connectedServer.hasAdminRights ? "green" : "grey";
+        const startPosition = getPixelPosition(darkWebData.x, darkWebData.y);
+        const endPosition = getPixelPosition(connectedDarkWebData.x, connectedDarkWebData.y);
         ctx.moveTo(startPosition.left + DW_SERVER_WIDTH / 2, startPosition.top + DW_SERVER_HEIGHT / 2);
         ctx.lineTo(endPosition.left + DW_SERVER_WIDTH / 2, endPosition.top + DW_SERVER_HEIGHT / 2);
         ctx.stroke();
@@ -78,7 +80,6 @@ export function DWNetDisplayWrapper(): React.ReactElement {
     }
   };
 
-  // noinspection TypeScriptValidateTypes
   const handleZoom: WheelEventHandler<HTMLDivElement> = (wheelEvent) => {
     wheelEvent.stopPropagation();
     const target = wheelEvent.target as HTMLDivElement;
@@ -99,7 +100,7 @@ export function DWNetDisplayWrapper(): React.ReactElement {
     // // adjust the draggableBackground scrollLeft and scrollTop to make the zoom center around the mouse position
     // draggableBackground.current.scrollLeft += width * 0.5;
     // draggableBackground.current.scrollTop += height * 0.5;
-  }
+  };
 
   return (
     <Container maxWidth="lg" sx={{ mx: 0 }}>
@@ -119,7 +120,12 @@ export function DWNetDisplayWrapper(): React.ReactElement {
         onWheel={handleZoom}
       >
         <div
-          style={{ position: "relative", width: `${DW_NET_WIDTH}px`, height: `${DW_NET_HEIGHT}px`, zoom: zoomOptions[zoomIndex] }}
+          style={{
+            position: "relative",
+            width: `${DW_NET_WIDTH}px`,
+            height: `${DW_NET_HEIGHT}px`,
+            zoom: zoomOptions[zoomIndex],
+          }}
           id={"draggableBackgroundTarget"}
         >
           <canvas

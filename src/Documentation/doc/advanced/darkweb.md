@@ -17,7 +17,6 @@ This is currently a design document, but eventually will be the in-game player d
   - Players will need to build redundancy or fallback systems to handle failing servers or connections
   - Some servers change their generated names or IPs occasionally, requiring the player to mark them somehow?
 
-
 - Players will sometimes discover things on servers they gain access to
   - Hints to different types of security vulnerabilities
   - Passwords for other servers in a note
@@ -26,7 +25,6 @@ This is currently a design document, but eventually will be the in-game player d
   - caches with (small) money or xp rewards, or small rep gains for active factions
   - Opportunities to buy passwords to servers they have not yet cracked
 
-
 - Player will solve simple pasword/auth puzzles to gain access to servers (which can be automated)
   - puzzle: password that is openly visible, or not required at all
   - puzzle: mastermind/wordle style password guessing with feedback
@@ -34,7 +32,6 @@ This is currently a design document, but eventually will be the in-game player d
   - vulnerability: "timing" attacks (the listed "response time" increases based on how many correct chars you submit)
   - puzzle: simple parsing. the password is the value of this short math expression in a string
   - The player will need to find, store, and re-use those passwords
-
 
 ## Scripting
 
@@ -46,7 +43,6 @@ This is currently a design document, but eventually will be the in-game player d
   - harder servers have a min cha requirement?
   - phishing success chance based off of cha?
 
-
 ## Rewards:
 
 - Start with tor router permanently?
@@ -57,18 +53,21 @@ This is currently a design document, but eventually will be the in-game player d
 - Small amounts of negative karma gain for breaking into servers?
 - Caches with port openers, money, or xp
 
-
 ## TODO:
-- Add type ID to DW server objects, based on puzzle
+- connect dwnetwork to darkweb legacy server?
+
+- Return puzzle id in network response
+- return puzzle data in network response
 - Prevent moving servers from getting state updates?
-- Simplify/unify server representation to prevent duplication in darkweb and AllServers
+- prevent open server from being moved
+
 - support saving darkweb network
 - Harden existing commands against loops in network? or exclude darkweb from them?
 - Limit ns commands from use on darkweb servers
-- Support servers being renamed
+
+- Support servers being renamed occasionally?
 
 - Limit darkweb stuff to when feature is enabled (bitnode? own tor router?)
-
 
 ## Community feedback:
 
@@ -82,29 +81,35 @@ https://discord.com/channels/415207508303544321/415213435974975508/1352628138261
 - tunnels that scripts could go through but not the terminal?
 
 - man in the middle attack?
+
   - listen / intercept messages?
   - Will they just fill up a percent bar to gain a char in the password?
 
 - phishing attack?
+
   - what will this look like?
   - Failing severs the connection?
   - success chance scales off of cha?
 
 - simple ciphers or basic password encoding?
+
   - sha1 with no key & no salt?
   - base64 encoding?
   - found in notes on servers sometimes
   - found in password hints sometimes
 
 - servers with code injection if you blindly eval() their expression instead of building a parser
+
   - what will they do? just spam a toast? infinite loop? kill your script? delete your script?
 
 - api unreliability?
+
   - small chance for api to crash script, requiring fallbacks or health monitors
   - small chance to sever connection on each failed password check?
     - increases with server difficulty? Decreases with cha?
 
 - enemy scripts?
+
   - Sometimes player script is overwritten by nothing but an empty script that occasionally logs something ominous
   - Sometimes servers are full because of bloated, idle, non-player scripts
 

@@ -89,6 +89,16 @@ export function DeleteServer(serverkey: string): void {
   }
 }
 
+export const connectServers = (server1: Server, server2: Server) => {
+  server1.serversOnNetwork.push(server2.hostname);
+  server2.serversOnNetwork.push(server1.hostname);
+};
+
+export const disconnectServers = (server1: Server, server2: Server) => {
+  server1.serversOnNetwork = server1.serversOnNetwork.filter((conn) => conn !== server2.hostname);
+  server2.serversOnNetwork = server2.serversOnNetwork.filter((conn) => conn !== server1.hostname);
+};
+
 export function ipExists(ip: string): boolean {
   for (const hostName in AllServers) {
     if (AllServers[hostName].ip === ip) {
@@ -188,16 +198,12 @@ export function initForeignServers(homeComputer: Server): void {
   }
 
   /* Create a randomized network for all the foreign servers */
-  const linkComputers = (server1: Server, server2: Server): void => {
-    server1.serversOnNetwork.push(server2.hostname);
-    server2.serversOnNetwork.push(server1.hostname);
-  };
 
   const getRandomArrayItem = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
   const linkNetworkLayers = (network1: Server[], selectServer: () => Server): void => {
     for (const server of network1) {
-      linkComputers(server, selectServer());
+      connectServers(server, selectServer());
     }
   };
 

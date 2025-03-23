@@ -1,19 +1,20 @@
-import { DarkWebServer, DWebServerBuilder } from "../models/DarkWebServer";
+import { DWebServerBuilder } from "../models/DarkWebData";
 import { Icon } from "./ServerIcon";
+import { Server } from "../../Server/Server";
 
 export enum Minigames {
   EchoVuln,
   SortedEchoVuln,
-  NoPassword ,
+  NoPassword,
   DefaultPassword,
   MastermindHint,
   TimingAttack,
   LargestPrimeFactor,
   RomanNumeral,
-  DogNames
+  DogNames,
 }
 
-export const getDarkWebServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
+export const getDarkWebServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
   if (difficulty <= 2 || Math.random() < 0.1) {
     const serverBuilders = [getEchoVulnServer, getNoPasswordServer, getSortedEchoVulnServer, getDefaultPasswordServer];
     return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, chaRequired, x, y);
@@ -24,7 +25,7 @@ export const getDarkWebServer = (difficulty: number, chaRequired: number, x: num
       getDefaultPasswordServer,
       getSortedEchoVulnServer,
       getDogNameServer,
-      getRomanNumeralServer
+      getRomanNumeralServer,
     ];
     return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, chaRequired, x, y);
   }
@@ -33,149 +34,193 @@ export const getDarkWebServer = (difficulty: number, chaRequired: number, x: num
     getLargestPrimeFactorServer,
     getMastermindHintServer,
     getRomanNumeralServer,
-    getSortedEchoVulnServer
+    getSortedEchoVulnServer,
   ];
   return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, chaRequired, x, y);
 };
 
 export const getName = (difficulty: number): string => {
   // TODO: Implement
-  return `${getResponseTime()}.${getResponseTime(difficulty * 5)}.0.${getResponseTime()}`;
+  return `${getResponseTime(Math.random() * 5)}.${getResponseTime(difficulty * 5)}.0.${getResponseTime(
+    Math.random() * 5,
+  )}`;
 };
 
-export const getEchoVulnServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
-  const hintTemplates = ["The password is", "The PIN is", "Remember to use", "It's set to", "The key is", "The secret is"];
+export const getEchoVulnServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+  const hintTemplates = [
+    "The password is",
+    "The PIN is",
+    "Remember to use",
+    "It's set to",
+    "The key is",
+    "The secret is",
+  ];
   const password = getPassword(3);
   const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${password}`;
-  return DWebServerBuilder({
-    name: getName(difficulty),
-    icon: getRandomIcon(),
-    minigameType: Minigames.EchoVuln,
-    difficulty: difficulty,
-    chaRequired: chaRequired,
-    password,
-    passwordHint: hint,
-    x,
-    y,
-  });
+  return DWebServerBuilder(
+    {
+      icon: getRandomIcon(),
+      minigameType: Minigames.EchoVuln,
+      password,
+      passwordHint: hint,
+      x,
+      y,
+    },
+    getName(difficulty),
+    difficulty,
+  );
 };
 
-export const getSortedEchoVulnServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
-  const hintTemplates = ["The password contains", "The key is made from", "I accidentally sorted the password", "The PIN uses"]
-  const password = getPassword(3 + (difficulty / 2))
-  const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${password.split("").sort().join("")}`;
-  return DWebServerBuilder({
-    name: getName(difficulty),
-    icon: getRandomIcon(),
-    minigameType: Minigames.SortedEchoVuln,
-    difficulty: difficulty,
-    chaRequired: chaRequired,
-    password: password,
-    passwordHint: hint,
-    x,
-    y,
-  });
-}
-
-export const getDictionaryAttackServer = (difficulty: number, chaRequired: number, x: number, y: number, dictionary: string[], hintTemplates: string[], minigameType: Minigames): DarkWebServer => {
-  return DWebServerBuilder({
-    name: getName(difficulty),
-    icon: getRandomIcon(),
-    difficulty: difficulty,
-    minigameType,
-    chaRequired: chaRequired,
-    password: dictionary[Math.floor(Math.random() * dictionary.length)],
-    passwordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
-    x,
-    y,
-  });
+export const getSortedEchoVulnServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+  const hintTemplates = [
+    "The password contains",
+    "The key is made from",
+    "I accidentally sorted the password",
+    "The PIN uses",
+  ];
+  const password = getPassword(3 + difficulty / 2);
+  const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${password
+    .split("")
+    .sort()
+    .join("")}`;
+  return DWebServerBuilder(
+    {
+      icon: getRandomIcon(),
+      minigameType: Minigames.SortedEchoVuln,
+      password: password,
+      passwordHint: hint,
+      x,
+      y,
+    },
+    getName(difficulty),
+    difficulty,
+  );
 };
 
-export const getNoPasswordServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
-  const hintTemplates = ["The password is not set", "There is no password", "The PIN is empty", "Did I set a code?", "I didn't set a password"];
-  return getDictionaryAttackServer(difficulty, chaRequired, x, y, [""], hintTemplates, Minigames.NoPassword);
-};
-
-export const getDefaultPasswordServer = (difficulty: number, chaRequired: number, x: number, y: number,): DarkWebServer => {
-  const dictionary = ["admin", "password", "0000", "12345"];
-  const hintTemplates = ["The password is the default password", "It's still the default", "The default password is set", "I never changed the password", "It's still the factory settings"];
-  return getDictionaryAttackServer(difficulty, chaRequired, x, y, dictionary, hintTemplates, Minigames.DefaultPassword);
-};
-
-export const getDogNameServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
-  const dictionary = ["fido", "spot", "rover", "max"];
-  const hintTemplates = ["It's my dog's name", "It's the dog's name", "my first dog's name"];
-  return getDictionaryAttackServer(difficulty, chaRequired, x, y, dictionary, hintTemplates, Minigames.DogNames);
-}
-
-export const getMastermindHintServer = (
+export const getDictionaryAttackServer = (
   difficulty: number,
   chaRequired: number,
   x: number,
   y: number,
-): DarkWebServer => {
-  return DWebServerBuilder({
-    name: getName(difficulty),
-    icon: getRandomIcon(),
-    minigameType: Minigames.MastermindHint,
-    difficulty: difficulty,
-    chaRequired: chaRequired,
-    password: getPassword(2 + difficulty),
-    passwordHint: "", // dynamic hint
-    x,
-    y,
-  });
+  dictionary: string[],
+  hintTemplates: string[],
+  minigameType: Minigames,
+): Server => {
+  return DWebServerBuilder(
+    {
+      icon: getRandomIcon(),
+      minigameType,
+      password: dictionary[Math.floor(Math.random() * dictionary.length)],
+      passwordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
+      x,
+      y,
+    },
+    getName(difficulty),
+    difficulty,
+  );
 };
 
-export const getTimingAttackServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
-  const hintTemplates = ["I thought about it for some time, but that is not the password.", "I spent a while on it, but that's not right", "I considered it for a bit, but that's not it", "I spent some time on it, but that's not the password"];
+export const getNoPasswordServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+  const hintTemplates = [
+    "The password is not set",
+    "There is no password",
+    "The PIN is empty",
+    "Did I set a code?",
+    "I didn't set a password",
+  ];
+  return getDictionaryAttackServer(difficulty, chaRequired, x, y, [""], hintTemplates, Minigames.NoPassword);
+};
+
+export const getDefaultPasswordServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+  const dictionary = ["admin", "password", "0000", "12345"];
+  const hintTemplates = [
+    "The password is the default password",
+    "It's still the default",
+    "The default password is set",
+    "I never changed the password",
+    "It's still the factory settings",
+  ];
+  return getDictionaryAttackServer(difficulty, chaRequired, x, y, dictionary, hintTemplates, Minigames.DefaultPassword);
+};
+
+export const getDogNameServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+  const dictionary = ["fido", "spot", "rover", "max"];
+  const hintTemplates = ["It's my dog's name", "It's the dog's name", "my first dog's name"];
+  return getDictionaryAttackServer(difficulty, chaRequired, x, y, dictionary, hintTemplates, Minigames.DogNames);
+};
+
+export const getMastermindHintServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+  return DWebServerBuilder(
+    {
+      icon: getRandomIcon(),
+      minigameType: Minigames.MastermindHint,
+      password: getPassword(2 + difficulty),
+      passwordHint: "", // dynamic hint
+      x,
+      y,
+    },
+    getName(difficulty),
+    difficulty,
+  );
+};
+
+export const getTimingAttackServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+  const hintTemplates = [
+    "I thought about it for some time, but that is not the password.",
+    "I spent a while on it, but that's not right",
+    "I considered it for a bit, but that's not it",
+    "I spent some time on it, but that's not the password",
+  ];
   const length = 3 + difficulty;
-  return DWebServerBuilder({
-    name: getName(difficulty),
-    icon: getRandomIcon(),
-    minigameType: Minigames.TimingAttack,
-    difficulty: difficulty,
-    chaRequired: chaRequired,
-    password: getPassword(length, true, false),
-    passwordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
-    x,
-    y,
-  });
+  return DWebServerBuilder(
+    {
+      icon: getRandomIcon(),
+      minigameType: Minigames.TimingAttack,
+      password: getPassword(length, true, false),
+      passwordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
+      x,
+      y,
+    },
+    getName(difficulty),
+    difficulty,
+  );
 };
 
-export const getRomanNumeralServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
-  const password = Math.floor(Math.random() * 10 * (10* (difficulty + 1)));
+export const getRomanNumeralServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+  const password = Math.floor(Math.random() * 10 * (10 * (difficulty + 1)));
   const encodedPassword = romanNumeralEncoder(password);
-  return DWebServerBuilder({
-    name: getName(difficulty),
-    icon: getRandomIcon(),
-    minigameType: Minigames.RomanNumeral,
-    difficulty: difficulty,
-    chaRequired: chaRequired,
-    password: `${password}`,
-    passwordHint: `The password is the value of the number ${encodedPassword}`,
-    x,
-    y,
-  });
-}
+  return DWebServerBuilder(
+    {
+      icon: getRandomIcon(),
+      minigameType: Minigames.RomanNumeral,
+      password: `${password}`,
+      passwordHint: `The password is the value of the number ${encodedPassword}`,
+      x,
+      y,
+    },
+    getName(difficulty),
+    difficulty,
+  );
+};
 
-export const getLargestPrimeFactorServer = (difficulty: number, chaRequired: number, x: number, y: number): DarkWebServer => {
+export const getLargestPrimeFactorServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
   const largestPrimePasswordDetails = getLargestPrimeFactorPassword(difficulty);
-  return DWebServerBuilder({
-    name: getName(difficulty),
-    icon: getRandomIcon(),
-    minigameType: Minigames.LargestPrimeFactor,
-    difficulty: difficulty,
-    chaRequired: chaRequired,
-    password: `${largestPrimePasswordDetails.largestPrime}`,
-    passwordHint: `The password is the largest prime factor of ${largestPrimePasswordDetails.password}`,
-    x,
-    y,
-  });
-}
+  return DWebServerBuilder(
+    {
+      icon: getRandomIcon(),
+      minigameType: Minigames.LargestPrimeFactor,
+      password: `${largestPrimePasswordDetails.largestPrime}`,
+      passwordHint: `The password is the largest prime factor of ${largestPrimePasswordDetails.password}`,
+      x,
+      y,
+    },
+    getName(difficulty),
+    difficulty,
+  );
+};
 
 // TODO: change passwordChecker to failure response object
-    // TODO: how to do interactive prompts? by server type ID lookup?
+// TODO: how to do interactive prompts? by server type ID lookup?
 
 // TODO: arithmetic string server (eval bait)
 
@@ -188,7 +233,6 @@ export const getLargestPrimeFactorServer = (difficulty: number, chaRequired: num
 // TODO: eval pwn server
 
 const getResponseTime = (additionalPasses = 0) => Math.floor(95 + Math.random() * 12 + additionalPasses * 25);
-
 
 const getPassword = (
   length: number,
@@ -232,7 +276,7 @@ export const getPasswordType = (password: string): string => {
     return "ASCII";
   }
   return "unicode";
-}
+};
 
 export const getRandomIcon = (): Icon => {
   const icons = Object.values(Icon);
@@ -266,23 +310,24 @@ const romanNumeralEncoder = (input: number): string => {
     }
   }
   return result;
-}
+};
 
 const getLargestPrimeFactorPassword = (difficulty = 1) => {
   const factorCount = 2 + Math.max(5, Math.floor(difficulty / 2));
   const smallPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
-  const largePrimes = [10007, 10009, 10037, 10039, 10061, 10067, 10069, 10079, 10091, 10159, 10163, 10169, 10177, 10181, 10193, 10211, 10223, 10243, 10247, 10253, 10259, 10267, 343051, 426799, 464279, 532993, 982097, 987929, 993893, 997609];
+  const largePrimes = [
+    10007, 10009, 10037, 10039, 10061, 10067, 10069, 10079, 10091, 10159, 10163, 10169, 10177, 10181, 10193, 10211,
+    10223, 10243, 10247, 10253, 10259, 10267, 343051, 426799, 464279, 532993, 982097, 987929, 993893, 997609,
+  ];
 
   const largePrimeIndex = Math.ceil(Math.random() * (largePrimes.length - 1));
-  let number = 1;
+  let number = largePrimes[Math.random() * largePrimes.length];
   for (let i = 1; i <= factorCount; i++) {
-    const primeSource = i % 3 === 0 ? smallPrimes : largePrimes;
-    number *= primeSource[Math.floor(Math.random() * smallPrimes.length)];
+    number *= smallPrimes[Math.floor(Math.random() * smallPrimes.length)];
   }
 
   return {
     largestPrime: largePrimes[largePrimeIndex],
     password: number,
-  }
-
-}
+  };
+};

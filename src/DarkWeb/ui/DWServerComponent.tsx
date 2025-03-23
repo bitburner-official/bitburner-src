@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Typography, Button, Box } from "@mui/material";
 import { SvgIconComponent } from "@mui/icons-material";
-import { DarkWebServer } from "../models/DarkWebServer";
 import { DWPasswordPromptModal } from "./DWPasswordPromptModal";
 import { getIcon } from "../controllers/ServerIcon";
 import {
@@ -12,10 +11,12 @@ import {
   dwebStyles,
   MAP_BORDER_WIDTH,
 } from "./dwebStyles";
-import { DarkWebEvents, DarkWebNetwork } from "../models/DarkWebState";
+import { DarkWebEvents } from "../models/DarkWebState";
+import { Server } from "../../Server/Server";
+import { GetServer } from "../../Server/AllServers";
 
 export type DWServerProps = {
-  server: DarkWebServer;
+  server: Server;
 };
 
 export const getPixelPosition = (top: number, left: number) => ({
@@ -25,17 +26,21 @@ export const getPixelPosition = (top: number, left: number) => ({
 
 export function DWServerComponent({ server }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const [enableAuth, setEnableAuth] = useState(server.unlocked || server.x === 0);
+  const [enableAuth, setEnableAuth] = useState(server.hasAdminRights || server.darkWebData?.x === 0);
   const { classes } = dwebStyles({});
-  const color = server.unlocked ? classes.success : classes.rep;
-
+  const color = server.hasAdminRights ? classes.success : classes.rep;
+  const darkWebData = server.darkWebData;
+  if (!darkWebData) {
+    throw new Error("Dark web server missing dark web data");
+  }
 
   useEffect(() => {
     DarkWebEvents.subscribe(() => {
+      // TODO: skip if component is not mounted
       setEnableAuth(
-        server.unlocked ||
-        server.x === 0 ||
-        server.connections.some((neighbor) => DarkWebNetwork[neighbor.x][neighbor.y]?.unlocked),
+        server.hasAdminRights ||
+          darkWebData?.x === 0 ||
+          server.serversOnNetwork.some((neighbor) => GetServer(neighbor)?.hasAdminRights),
       );
     });
   });
@@ -52,10 +57,10 @@ export function DWServerComponent({ server }: DWServerProps): React.ReactElement
     };
   };
 
-  const icon: SvgIconComponent = getIcon(server.icon);
+  const icon: SvgIconComponent = getIcon(darkWebData.icon);
   return (
     <Container
-      sx={getServerPositionStyles(server.x, server.y)}
+      sx={getServerPositionStyles(darkWebData.x, darkWebData.y)}
       className={`${color} ${classes.DWServer}`}
       disableGutters
     >
@@ -63,12 +68,12 @@ export function DWServerComponent({ server }: DWServerProps): React.ReactElement
       <Container maxWidth="lg" sx={{ mx: 1, padding: 0, margin: 0 }} disableGutters>
         <Box className={`${classes.inlineFlexBox}`}>
           {React.createElement(icon, { color: "secondary" })}
-          <Typography color={server.unlocked ? "primary" : "secondary"} sx={{ padding: 0 }}>
-            {server.name}
+          <Typography color={server.hasAdminRights ? "primary" : "secondary"} sx={{ padding: 0 }}>
+            {server.hostname}
           </Typography>
         </Box>
         <Typography color="secondary">
-          x:{server.x} y:{server.y}; Cha:{server.chaRequired}
+          x:{darkWebData.x} y:{darkWebData.y}; Cha:{server.requiredHackingSkill}
         </Typography>
         <br />
         <Button

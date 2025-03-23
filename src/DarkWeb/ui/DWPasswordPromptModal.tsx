@@ -1,22 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "../../ui/React/Modal";
-import { checkPassword, DarkWebServer } from "../models/DarkWebServer";
+import { checkPassword } from "../models/DarkWebData";
 import { Container, Typography, TextField, Button } from "@mui/material";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 import { getIcon } from "../controllers/ServerIcon";
 import { DarkWebEvents } from "../models/DarkWebState";
+import { Server } from "../../Server/Server";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
   onClose: () => void;
-  server: DarkWebServer;
+  server: Server;
 };
 
 export const DWPasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptModalProps): React.ReactElement => {
   const [inputPassword, setInputPassword] = useState("");
   const [password, setPassword] = useState<string>("?");
-  const [enableSubmit, setEnableSubmit] = useState(!server.unlocked);
+  const [enableSubmit, setEnableSubmit] = useState(!server.hasAdminRights);
   const [response, setResponse] = useState("Submit a password to login...");
+
+  const darkWebData = server.darkWebData;
+  if (!darkWebData) {
+    throw new Error("Dark web server missing dark web data");
+  }
 
   useEffect(() => {
     async function attemptPassword(passwordAttempted: string, skipSleep = false): Promise<void> {
@@ -36,7 +42,7 @@ export const DWPasswordPromptModal = ({ open, onClose, server }: DWPasswordPromp
 
   const handleSubmit = (e: React.FormEvent, passwordAttempted: string): void => {
     e.preventDefault();
-    if (server.unlocked) {
+    if (server.hasAdminRights) {
       onClose();
       return;
     }
@@ -47,9 +53,9 @@ export const DWPasswordPromptModal = ({ open, onClose, server }: DWPasswordPromp
     <Modal open={open} onClose={onClose}>
       <>
         <Container sx={{ width: "40vw" }}>
-          {React.createElement(getIcon(server.icon), { color: "secondary" })}
-          <Typography variant="h5" color={server.unlocked ? "primary" : "secondary"}>
-            {server.name}
+          {React.createElement(getIcon(darkWebData.icon), { color: "secondary" })}
+          <Typography variant="h5" color={server.hasAdminRights ? "primary" : "secondary"}>
+            {server.hostname}
           </Typography>
           <br />
           <form onSubmit={(e) => handleSubmit(e, inputPassword)}>
