@@ -51,7 +51,7 @@ interface BitNodeMultipliers
 |  [HomeComputerRamCost](./bitburner.bitnodemultipliers.homecomputerramcost.md) |  | number | Influences how much money it costs to upgrade your home computer's RAM |
 |  [InfiltrationMoney](./bitburner.bitnodemultipliers.infiltrationmoney.md) |  | number | Influences how much money is gained when the player infiltrates a company. |
 |  [InfiltrationRep](./bitburner.bitnodemultipliers.infiltrationrep.md) |  | number | Influences how much rep the player can gain from factions when selling stolen documents and secrets |
-|  [ManualHackMoney](./bitburner.bitnodemultipliers.manualhackmoney.md) |  | number | Influences how much money the player actually gains when they hack a server via the terminal. This is different from ScriptHackMoney. When the player hack a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount. |
+|  [ManualHackMoney](./bitburner.bitnodemultipliers.manualhackmoney.md) |  | number | Influences how much money the player actually gains when they hack a server via the terminal. This is different from ScriptHackMoney. When the player hacks a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount. |
 |  [PurchasedServerCost](./bitburner.bitnodemultipliers.purchasedservercost.md) |  | number | Influence how much it costs to purchase a server |
 |  [PurchasedServerLimit](./bitburner.bitnodemultipliers.purchasedserverlimit.md) |  | number | Influences the maximum number of purchased servers you can have |
 |  [PurchasedServerMaxRam](./bitburner.bitnodemultipliers.purchasedservermaxram.md) |  | number | Influences the maximum allowed RAM for a purchased server |

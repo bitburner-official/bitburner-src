@@ -723,7 +723,7 @@ interface BitNodeMultipliers {
   InfiltrationRep: number;
   /**
    * Influences how much money the player actually gains when they hack a server via the terminal. This is different
-   * from ScriptHackMoney. When the player hack a server via the terminal, the amount of money in that server is
+   * from ScriptHackMoney. When the player hacks a server via the terminal, the amount of money in that server is
    * reduced, but they do not gain that same amount.
    */
   ManualHackMoney: number;

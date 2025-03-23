@@ -25,11 +25,14 @@ import { canAccessBitNodeFeature } from "../BitNodeUtils";
 interface IProps {
   n: number;
   level?: number;
+  hideMultsIfCannotAccessFeature: boolean;
 }
 
-export function BitnodeMultiplierDescription({ n, level }: IProps): React.ReactElement {
+export function BitNodeMultiplierDescription({ n, level, hideMultsIfCannotAccessFeature }: IProps): React.ReactElement {
   const [open, setOpen] = React.useState(false);
-  if (n === 1) return <></>;
+  if (n === 1) {
+    return <></>;
+  }
 
   return (
     <Box component={Paper} sx={{ mt: 1, p: 1 }}>
@@ -38,13 +41,17 @@ export function BitnodeMultiplierDescription({ n, level }: IProps): React.ReactE
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>
       <Collapse in={open}>
-        <BitNodeMultipliersDisplay n={n} level={level} />
+        <BitNodeMultipliersDisplay
+          n={n}
+          level={level}
+          hideMultsIfCannotAccessFeature={hideMultsIfCannotAccessFeature}
+        />
       </Collapse>
     </Box>
   );
 }
 
-export const BitNodeMultipliersDisplay = ({ n, level }: IProps): React.ReactElement => {
+export const BitNodeMultipliersDisplay = ({ n, level, hideMultsIfCannotAccessFeature }: IProps): React.ReactElement => {
   // If a level argument has been provided, use that as the multiplier level
   // If not, then we have to assume that we want the next level up from the
   // current node's source file, so we get the min of that, the SF's max level,
@@ -64,10 +71,10 @@ export const BitNodeMultipliersDisplay = ({ n, level }: IProps): React.ReactElem
       <CrimeMults n={n} mults={mults} />
       <InfiltrationMults n={n} mults={mults} />
       <CompanyMults n={n} mults={mults} />
-      <GangMults n={n} mults={mults} />
-      <CorporationMults n={n} mults={mults} />
-      <BladeburnerMults n={n} mults={mults} />
-      <StanekMults n={n} mults={mults} />
+      <GangMults n={n} mults={mults} hideMultsIfCannotAccessFeature={hideMultsIfCannotAccessFeature} />
+      <CorporationMults n={n} mults={mults} hideMultsIfCannotAccessFeature={hideMultsIfCannotAccessFeature} />
+      <BladeburnerMults n={n} mults={mults} hideMultsIfCannotAccessFeature={hideMultsIfCannotAccessFeature} />
+      <StanekMults n={n} mults={mults} hideMultsIfCannotAccessFeature={hideMultsIfCannotAccessFeature} />
       <GoMults n={n} mults={mults} />
     </Box>
   );
@@ -128,6 +135,10 @@ const BNMultTable = (props: IBNMultTableProps): React.ReactElement => {
 interface IMultsProps {
   n: number;
   mults: BitNodeMultipliers;
+}
+
+interface IEndGameMultsProps extends IMultsProps {
+  hideMultsIfCannotAccessFeature: boolean;
 }
 
 function GeneralMults({ mults }: IMultsProps): React.ReactElement {
@@ -265,7 +276,7 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
     ManualHackMoney: {
       name: "Money Gained From Manual Hack",
       color: Settings.theme.money,
-      tooltipText: `Influences how much money the player actually gains when they hack a server via the terminal. This is different from "Stolen Money From Hack". When the player hack a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount.`,
+      tooltipText: `Influences how much money the player actually gains when they hack a server via the terminal. This is different from "Stolen Money From Hack". When the player hacks a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount.`,
     },
     ScriptHackMoney: {
       name: "Stolen Money From Hack",
@@ -315,8 +326,10 @@ function InfiltrationMults({ mults }: IMultsProps): React.ReactElement {
   return <BNMultTable sectionName="Infiltration" rowData={rows} mults={mults} />;
 }
 
-function BladeburnerMults({ mults }: IMultsProps): React.ReactElement {
-  if (!Player.canAccessBladeburner()) return <></>;
+function BladeburnerMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps): React.ReactElement {
+  if (!Player.canAccessBladeburner() && hideMultsIfCannotAccessFeature) {
+    return <></>;
+  }
 
   if (mults.BladeburnerRank === 0) {
     const rows: IBNMultRows = {
@@ -334,8 +347,10 @@ function BladeburnerMults({ mults }: IMultsProps): React.ReactElement {
   return <BNMultTable sectionName="Bladeburner" rowData={rows} mults={mults} />;
 }
 
-function StanekMults({ mults }: IMultsProps): React.ReactElement {
-  if (!Player.canAccessCotMG()) return <></>;
+function StanekMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps): React.ReactElement {
+  if (!Player.canAccessCotMG() && hideMultsIfCannotAccessFeature) {
+    return <></>;
+  }
 
   const extraSize = mults.StaneksGiftExtraSize.toFixed(5);
   const rows: IBNMultRows = {
@@ -349,8 +364,10 @@ function StanekMults({ mults }: IMultsProps): React.ReactElement {
   return <BNMultTable sectionName="Stanek's Gift" rowData={rows} mults={mults} />;
 }
 
-function GangMults({ mults }: IMultsProps): React.ReactElement {
-  if (!canAccessBitNodeFeature(2)) return <></>;
+function GangMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps): React.ReactElement {
+  if (!canAccessBitNodeFeature(2) && hideMultsIfCannotAccessFeature) {
+    return <></>;
+  }
 
   const rows: IBNMultRows = {
     GangSoftcap: {
@@ -363,8 +380,10 @@ function GangMults({ mults }: IMultsProps): React.ReactElement {
   return <BNMultTable sectionName="Gang" rowData={rows} mults={mults} />;
 }
 
-function CorporationMults({ mults }: IMultsProps): React.ReactElement {
-  if (!Player.canAccessCorporation()) return <></>;
+function CorporationMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps): React.ReactElement {
+  if (!Player.canAccessCorporation() && hideMultsIfCannotAccessFeature) {
+    return <></>;
+  }
 
   if (mults.CorporationSoftcap < 0.15) {
     const rows: IBNMultRows = {
