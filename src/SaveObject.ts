@@ -29,6 +29,8 @@ import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { isObject, assertObject } from "./utils/TypeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
 import { Reviver } from "./utils/GenericReviver";
+import { populateDarkWebNetwork } from "./DarkWeb/controllers/DarkWebNetworkGenerator";
+import { startDarkwebMovement } from "./DarkWeb/models/DarkWebState";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -352,6 +354,9 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   loadCompanies(saveObj.CompaniesSave);
   loadFactions(saveObj.FactionsSave, Player);
   loadGo(saveObj.GoSave);
+
+  populateDarkWebNetwork();
+  startDarkwebMovement();
   try {
     loadAliases(saveObj.AliasesSave);
   } catch (e) {

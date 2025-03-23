@@ -11,10 +11,11 @@ This is currently a design document, but eventually will be the in-game player d
 
 - The dark web and the servers on it are not reliable
   - Servers will sometimes move around the dark web, severing old connections and adding new ones
-  - The darkweb can be circular (it is not a tree) and it also may not be fully connected sometimes
+  - The darkweb can be circular (it is not a tree) and it also will not be fully connected
+  - Some areas can only be accessed by "hitching a ride" on a server that moved there
   - Servers will occasionally go offline, sometimes permanently, and new servers will periodically be added
   - Players will need to build redundancy or fallback systems to handle failing servers or connections
-  - Some servers change their generated names or IPs occasionally, requiring the player to mark them somehow
+  - Some servers change their generated names or IPs occasionally, requiring the player to mark them somehow?
 
 
 - Players will sometimes discover things on servers they gain access to
@@ -29,8 +30,8 @@ This is currently a design document, but eventually will be the in-game player d
 - Player will solve simple pasword/auth puzzles to gain access to servers (which can be automated)
   - puzzle: password that is openly visible, or not required at all
   - puzzle: mastermind/wordle style password guessing with feedback
-  - vulnerability: simple rainbow table attacks like "it's the default password" or "my dog's name"
-  - vulnerability: "timing" attacks (the listed response time increases based on how many correct chars you submit)
+  - vulnerability: simple dictionary attacks like "it's the default password" or "my dog's name"
+  - vulnerability: "timing" attacks (the listed "response time" increases based on how many correct chars you submit)
   - puzzle: simple parsing. the password is the value of this short math expression in a string
   - The player will need to find, store, and re-use those passwords
 
@@ -52,8 +53,21 @@ This is currently a design document, but eventually will be the in-game player d
 - Cha stat gains from doing darkweb stuff
 - Cha contributes slightly to rep gains from faction work?
 - Cha contributes (more?) to regular jobs' pay
-- Cha contributes to megacorp job rep (needed to later join megacorp factions)
+- Cha contributes (more?) to job rep (needed to later join megacorp factions)
 - Small amounts of negative karma gain for breaking into servers?
+- Caches with port openers, money, or xp
+
+
+## TODO:
+- Add type ID to DW server objects, based on puzzle
+- Prevent moving servers from getting state updates?
+- Simplify/unify server representation to prevent duplication in darkweb and AllServers
+- support saving darkweb network
+- Harden existing commands against loops in network? or exclude darkweb from them?
+- Limit ns commands from use on darkweb servers
+- Support servers being renamed
+
+- Limit darkweb stuff to when feature is enabled (bitnode? own tor router?)
 
 
 ## Community feedback:
@@ -65,45 +79,40 @@ https://discord.com/channels/415207508303544321/415213435974975508/1352628138261
 ## Idea scratch space
 
 - islands in the network? can only be reached with a moving server?
-
-  - tunnels that scripts could go through but not the terminal?
+- tunnels that scripts could go through but not the terminal?
 
 - man in the middle attack?
-
   - listen / intercept messages?
   - Will they just fill up a percent bar to gain a char in the password?
 
 - phishing attack?
-
   - what will this look like?
   - Failing severs the connection?
   - success chance scales off of cha?
 
 - simple ciphers or basic password encoding?
-
   - sha1 with no key & no salt?
   - base64 encoding?
   - found in notes on servers sometimes
   - found in password hints sometimes
 
 - servers with code injection if you blindly eval() their expression instead of building a parser
-
   - what will they do? just spam a toast? infinite loop? kill your script? delete your script?
 
 - api unreliability?
-
   - small chance for api to crash script, requiring fallbacks or health monitors
   - small chance to sever connection on each failed password check?
     - increases with server difficulty? Decreases with cha?
 
 - enemy scripts?
-
   - Sometimes player script is overwritten by nothing but an empty script that occasionally logs something ominous
   - Sometimes servers are full because of bloated, idle, non-player scripts
 
 - build new connections?
 - Hubs or superconnections?
 - treasure chest server?
+
+- standard network viewer?
 
 common dog's names vulnerability:
 rex fido spot rover lassie spike max

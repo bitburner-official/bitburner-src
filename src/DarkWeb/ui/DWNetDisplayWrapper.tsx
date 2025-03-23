@@ -17,8 +17,10 @@ export function DWNetDisplayWrapper(): React.ReactElement {
 
   useEffect(() => {
     DarkWebEvents.subscribe(() => {
-      rerender();
-      drawOnCanvas();
+      if (canvas.current) {
+        rerender();
+        drawOnCanvas();
+      }
     });
     drawOnCanvas();
     draggableBackground?.current?.addEventListener('wheel', e => e.preventDefault())
