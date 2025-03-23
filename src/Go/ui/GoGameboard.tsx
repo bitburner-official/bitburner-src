@@ -7,23 +7,15 @@ import { GoOpponent, GoColor } from "@enums";
 import { getSizeClass, GoPoint } from "./GoPoint";
 import { boardStyles } from "../boardState/goStyles";
 import { getAllValidMoves, getControlledSpace } from "../boardAnalysis/boardAnalysis";
-import { PointHighlight } from "../Go";
 
 interface GoGameboardProps {
   boardState: BoardState;
   traditional: boolean;
   clickHandler: (x: number, y: number) => unknown;
   hover: boolean;
-  highlightedPoints?: (PointHighlight | null)[][];
 }
 
-export function GoGameboard({
-  boardState,
-  traditional,
-  clickHandler,
-  hover,
-  highlightedPoints,
-}: GoGameboardProps): React.ReactElement {
+export function GoGameboard({ boardState, traditional, clickHandler, hover }: GoGameboardProps): React.ReactElement {
   const currentPlayer =
     boardState.ai !== GoOpponent.none || boardState.previousPlayer === GoColor.white ? GoColor.black : GoColor.white;
 
@@ -60,7 +52,7 @@ export function GoGameboard({
                     hover={hover}
                     valid={pointIsValid(xIndex, yIndex)}
                     emptyPointOwner={ownedEmptyNodes[xIndex]?.[yIndex]}
-                    pointHighlight={highlightedPoints?.[xIndex]?.[yIndex]}
+                    pointHighlight={boardState.highlightedPoints[xIndex][yIndex]}
                   />
                 </Grid>
               );

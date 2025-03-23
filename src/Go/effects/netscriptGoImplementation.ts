@@ -440,17 +440,17 @@ export function validateBoardState(
 }
 
 export function addPointHighlight(x: number, y: number, color: string, text: string) {
-  Go.highlightedPoints[x][y] = { color, text };
+  Go.currentGame.highlightedPoints[x][y] = { color, text };
   GoEvents.emit();
 }
 
 export function clearPointHighlight(x: number, y: number) {
-  Go.highlightedPoints[x][y] = { color: "", text: "" };
+  Go.currentGame.highlightedPoints[x][y] = null;
   GoEvents.emit();
 }
 
 export function clearAllPointHighlights() {
-  Go.highlightedPoints = getEmptyHighlightedPoints(Go.currentGame.board.length);
+  Go.currentGame.highlightedPoints = getEmptyHighlightedPoints(Go.currentGame.board.length);
   GoEvents.emit();
 }
 

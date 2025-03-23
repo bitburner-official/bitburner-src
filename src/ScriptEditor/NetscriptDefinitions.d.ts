@@ -4541,7 +4541,7 @@ export interface GoAnalysis {
    *    these color names from the selected theme: "hack" (green), "hp" (red), "money" (yellow), "int" (blue), "cha" (purple)
    * @param text optional: text to add to the node (replaces the default A.1 or B5 seen on hover). Should be kept short to fit well.
    */
-  highlightPoint(x, y, color = "", text = ""): void;
+  highlightPoint(x, y, color, text): void;
 
   /**
    * Removes the highlight color and text from the specified node.

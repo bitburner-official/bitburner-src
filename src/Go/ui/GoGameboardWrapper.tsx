@@ -224,7 +224,6 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
             traditional={traditional}
             clickHandler={clickHandler}
             hover={!showPriorMove}
-            highlightedPoints={Go.highlightedPoints}
           />
         </div>
         <Box className={classes.inlineFlexBox}>

@@ -17,7 +17,6 @@ export class GoObject {
   currentGame: BoardState = getNewBoardState(7);
   stats: PartialRecord<GoOpponent, OpponentStats> = {};
   storedCycles: number = 0;
-  highlightedPoints: (PointHighlight | null)[][] = getEmptyHighlightedPoints(7);
 
   prestigeAugmentation() {
     for (const opponent of getRecordKeys(Go.stats)) {

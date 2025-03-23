@@ -1,4 +1,5 @@
 import type { GoColor, GoOpponent, GoPlayType } from "@enums";
+import { PointHighlight } from "./Go";
 
 export type Board = (PointState | null)[][];
 
@@ -55,6 +56,7 @@ export type BoardState = {
   cheatCount: number;
   cheatCountForWhite: number;
   komiOverride: number | null;
+  highlightedPoints: (PointHighlight | null)[][];
 };
 
 export type PointState = {

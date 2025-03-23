@@ -16,8 +16,8 @@ interface GoPointProps {
   traditional: boolean;
   hover: boolean;
   valid: boolean;
-  emptyPointOwner?: GoColor;
-  pointHighlight?: PointHighlight | null;
+  emptyPointOwner: GoColor | undefined;
+  pointHighlight: PointHighlight | null;
 }
 
 export function GoPoint({

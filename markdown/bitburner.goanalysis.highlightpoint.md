@@ -9,7 +9,7 @@ Adds a colored circle indicator to the specified point. These indicators are rem
 **Signature:**
 
 ```typescript
-highlightPoint(x, y, color = "", text = ""): void;
+highlightPoint(x, y, color, text): void;
 ```
 
 ## Parameters
@@ -18,8 +18,8 @@ highlightPoint(x, y, color = "", text = ""): void;
 |  --- | --- | --- |
 |  x | (not declared) | the x coordinate to highlight |
 |  y | (not declared) | the y coordinate to highlight |
-|  color | (not declared) | _(Optional)_ optional: the color to use for the circle. Can be given an RGB string like "\#FFF000", or "none" to clear it, or one of these color names from the selected theme: "hack" (green), "hp" (red), "money" (yellow), "int" (blue), "cha" (purple) |
-|  text | (not declared) | _(Optional)_ optional: text to add to the node (replaces the default A.1 or B5 seen on hover). Should be kept short to fit well. |
+|  color | (not declared) | optional: the color to use for the circle. Can be given an RGB string like "\#FFF000", or "none" to clear it, or one of these color names from the selected theme: "hack" (green), "hp" (red), "money" (yellow), "int" (blue), "cha" (purple) |
+|  text | (not declared) | optional: text to add to the node (replaces the default A.1 or B5 seen on hover). Should be kept short to fit well. |
 
 **Returns:**
 
