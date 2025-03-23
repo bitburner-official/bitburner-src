@@ -15,7 +15,6 @@ import {
 import { endGoGame } from "../boardAnalysis/scoring";
 import { addObstacles, resetCoordinates, rotate90Degrees } from "./offlineNodes";
 import { clearAllPointHighlights } from "../effects/netscriptGoImplementation";
-import { getEmptyHighlightedPoints } from "../Go";
 
 /** Generates a new BoardState object with the given opponent and size. Optionally use an existing board. */
 export function getNewBoardState(
@@ -38,7 +37,7 @@ export function getNewBoardState(
     cheatCount: 0,
     cheatCountForWhite: 0,
     komiOverride: null,
-    highlightedPoints: getEmptyHighlightedPoints(boardSize),
+    highlightedPoints: Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null)),
     board: Array.from({ length: boardSize }, (_, x) =>
       Array.from({ length: boardSize }, (_, y) =>
         !boardToCopy || boardToCopy?.[x]?.[y]

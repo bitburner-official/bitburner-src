@@ -7,7 +7,7 @@ import { getNewBoardState } from "./boardState/boardState";
 import { EventEmitter } from "../utils/EventEmitter";
 import { newOpponentStats } from "./Constants";
 
-export const getEmptyHighlightedPoints = (size: number) => {
+export const getEmptyHighlightedPoints = (size: number = 7) => {
   return Array.from({ length: size }, () => Array.from({ length: size }, () => null));
 };
 
