@@ -154,7 +154,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                 </Tooltip>
               )}
 
-              {!props.faction.isMember && facInfo.enemies.length > 0 && (
+              {facInfo.enemies.length > 0 && (
                 <Tooltip
                   title={
                     <Typography component="div">
@@ -164,7 +164,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                           <li key={enemy}>{enemy}</li>
                         ))}
                       </ul>
-                      Joining this Faction will prevent you from joining its enemies
+                      {!props.faction.isMember && <>Joining this Faction will prevent you from joining its enemies</>}
                     </Typography>
                   }
                 >
