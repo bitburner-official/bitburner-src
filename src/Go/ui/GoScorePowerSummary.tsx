@@ -99,9 +99,8 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: Props) => {
         <Tooltip
           title={
             <>
-              Win streaks against a faction will give you +1 favor to that faction <br /> at certain numbers of wins (up
-              to a max of {getMaxFavor()} favor), <br />
-              if you are currently a member of that faction
+              Two wins in a row against a faction will give you +1 favor to that faction <br />
+              (up to a max of {getMaxFavor()} favor), if you are a member of that faction
             </>
           }
         >
