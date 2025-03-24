@@ -402,7 +402,7 @@ export function resetStats(resetAll = false) {
       };
     }
   } else {
-    Go.stats[GoOpponent.none] = newOpponentStats();
+    Go.prestigeAugmentation();
   }
 }
 
