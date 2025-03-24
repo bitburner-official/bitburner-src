@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Container, Typography, Button, Box } from "@mui/material";
 import { SvgIconComponent } from "@mui/icons-material";
 import { DWPasswordPromptModal } from "./DWPasswordPromptModal";
@@ -11,12 +11,11 @@ import {
   dwebStyles,
   MAP_BORDER_WIDTH,
 } from "./dwebStyles";
-import { DarkWebEvents } from "../models/DarkWebState";
 import { Server } from "../../Server/Server";
-import { GetServer } from "../../Server/AllServers";
 
 export type DWServerProps = {
   server: Server;
+  enableAuth: boolean;
 };
 
 export const getPixelPosition = (top: number, left: number) => ({
@@ -24,26 +23,14 @@ export const getPixelPosition = (top: number, left: number) => ({
   left: (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * left + MAP_BORDER_WIDTH,
 });
 
-export function DWServerComponent({ server }: DWServerProps): React.ReactElement {
+export function DWServerComponent({ server, enableAuth }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const [enableAuth, setEnableAuth] = useState(server.hasAdminRights || server.darkWebData?.x === 0);
   const { classes } = dwebStyles({});
   const color = server.hasAdminRights ? classes.success : classes.rep;
   const darkWebData = server.darkWebData;
   if (!darkWebData) {
     throw new Error("Dark web server missing dark web data");
   }
-
-  useEffect(() => {
-    DarkWebEvents.subscribe(() => {
-      // TODO: skip if component is not mounted
-      setEnableAuth(
-        server.hasAdminRights ||
-          darkWebData?.x === 0 ||
-          server.serversOnNetwork.some((neighbor) => GetServer(neighbor)?.hasAdminRights),
-      );
-    });
-  });
 
   const authButtonHandler = () => {
     setOpen(true);

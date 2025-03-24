@@ -1,5 +1,5 @@
 import { EventEmitter } from "../../utils/EventEmitter";
-import { moveServer } from "../controllers/DarkWebNetworkGenerator";
+import { addGuaranteedConnection, getDarkWebServers, moveServer } from "../controllers/DarkWebNetworkGenerator";
 import { Server } from "../../Server/Server";
 
 export const NET_WIDTH = 6;
@@ -14,11 +14,15 @@ export const DarkWebEvents = new EventEmitter();
 
 export const startDarkwebMovement = () =>
   setInterval(() => {
-    const x = Math.floor(Math.random() * DarkWebNetwork.length);
-    const y = Math.floor(Math.random() * DarkWebNetwork[0].length);
-    const server = DarkWebNetwork[x][y];
-    if (server === null) {
+    const servers = getDarkWebServers();
+    if (servers.length === 0) {
       return;
     }
-    moveServer(server);
+
+    const server1 = servers[Math.floor(Math.random() * servers.length)];
+    moveServer(server1);
+
+    const server2 = servers[Math.floor(Math.random() * servers.length)];
+    addGuaranteedConnection(server2);
+
   }, 2000);

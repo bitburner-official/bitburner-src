@@ -34,9 +34,10 @@ export const moveServer = (server: Server) => {
     throw new Error("Server missing dark web data");
   }
 
+  // max 10 attempts to move the server
   for (let i = 0; i < 10; i++) {
-    // max 10 attempts
-    const newX = Math.floor(Math.random() * NET_DEPTH);
+    // Limit depth movement to +-2 spaces
+    const newX = Math.min(Math.max(Math.floor(Math.random() * 4 + darkWebData.x - 2), 0), NET_DEPTH - 1);
     const newY = Math.floor(Math.random() * NET_WIDTH);
     if (DarkWebNetwork[newX][newY] !== null) {
       continue;
@@ -72,6 +73,7 @@ export const addServerToNetwork = (server: Server, x: number, y: number, addConn
 
   if (addConnections) {
     addRandomConnections(server);
+    addGuaranteedConnection(server);
   }
 };
 
@@ -89,8 +91,8 @@ export const addRandomConnections = (server: Server) => {
     }
   });
 
-  const serversAbove = getServersOnColumnAbove(x);
-  const serversBelow = getServersOnColumnBelow(x);
+  const serversAbove = getServersOnRowAbove(x);
+  const serversBelow = getServersOnRowBelow(x);
   [...serversAbove, ...serversBelow].forEach((neighbor) => {
     const distance = Math.abs(neighbor.darkWebData?.x ?? x - x) + 1;
     if (Math.random() < VERTICAL_CONNECTION_CHANCE / distance) {
@@ -98,6 +100,21 @@ export const addRandomConnections = (server: Server) => {
     }
   });
 };
+
+export const addGuaranteedConnection = (server: Server) => {
+  const darkWebData = server.darkWebData;
+  if (!darkWebData) {
+    throw new Error("Server missing dark web data");
+  }
+
+  const neighbors = getAllAdjacentNeighbors(darkWebData.x ?? 0, darkWebData.y ?? 0);
+  if (neighbors.length === 0) {
+    return;
+  }
+  const neighbor = neighbors[Math.floor(Math.random() * neighbors.length)];
+  connectServers(server, neighbor);
+}
+
 
 export const getNeighborsOnRow = (x: number, y: number): Server[] => {
   const neighbors: Server[] = [];
@@ -112,12 +129,31 @@ export const getNeighborsOnRow = (x: number, y: number): Server[] => {
   return neighbors;
 };
 
-export const getServersOnColumnBelow = (x: number): Server[] => {
-  return DarkWebNetwork[x - 1]?.filter(notNull<Server>) ?? [];
+export const getServersOnRowBelow = (x: number, close = false): Server[] => {
+  const rowBelow = DarkWebNetwork[x - 1]?.filter(notNull<Server>) ?? [];
+  if (close) {
+    return rowBelow.filter((server) => Math.abs(server.darkWebData?.y ?? 0 - x) <= 1);
+  }
+  return rowBelow;
 };
 
-export const getServersOnColumnAbove = (x: number): Server[] => {
-  return DarkWebNetwork[x + 1]?.filter(notNull<Server>) ?? [];
+export const getServersOnRowAbove = (x: number, close = false): Server[] => {
+  const rowAbove = DarkWebNetwork[x + 1]?.filter(notNull<Server>) ?? [];
+  if (close) {
+    return rowAbove.filter((server) => Math.abs(server.darkWebData?.y ?? 0 - x) <= 1);
+  }
+  return rowAbove;
 };
+
+export const getDarkWebServers = (): Server[] => {
+  return DarkWebNetwork.flat().filter(notNull<Server>);
+};
+
+const getAllAdjacentNeighbors = (x: number, y: number): Server[] => {
+  const rowAbove = getServersOnRowAbove(x, true);
+  const rowBelow = getServersOnRowBelow(x, true);
+  const neighborsOnRow = getNeighborsOnRow(x, y);
+  return [...rowAbove, ...rowBelow, ...neighborsOnRow];
+}
 
 const notNull = <T>(value: T | null): value is T => value !== null;

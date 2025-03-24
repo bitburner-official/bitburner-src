@@ -5,6 +5,7 @@ import { useRerender } from "../../ui/React/hooks";
 import { DarkWebEvents, DarkWebNetwork } from "../models/DarkWebState";
 import { DW_SERVER_HEIGHT, DW_SERVER_WIDTH } from "./dwebStyles";
 import { GetServer } from "../../Server/AllServers";
+import { Server } from "../../Server/Server";
 
 export const DW_NET_WIDTH = 4000;
 export const DW_NET_HEIGHT = 6000;
@@ -58,6 +59,10 @@ export function DWNetDisplayWrapper(): React.ReactElement {
       }
     }
   };
+
+  const allowAuth = (server: Server) =>  server.hasAdminRights ||
+      server?.darkWebData?.x === 0 ||
+      server.serversOnNetwork.some((neighbor) => GetServer(neighbor)?.hasAdminRights);
 
   const handleDragStart: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
     const target = pointerEvent.target as HTMLDivElement;
@@ -136,7 +141,8 @@ export function DWNetDisplayWrapper(): React.ReactElement {
             style={{ position: "absolute", zIndex: -1 }}
           ></canvas>
           {DarkWebNetwork.map((row, i) =>
-            row.map((server, j) => (server ? <DWServerComponent server={server} key={`${i},${j}`} /> : "")),
+            row.map((server, j) => (server ?
+              <DWServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} /> : "")),
           )}
         </div>
       </div>
