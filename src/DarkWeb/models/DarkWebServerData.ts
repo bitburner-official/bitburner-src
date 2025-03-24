@@ -3,32 +3,36 @@ import { Icon } from "../controllers/ServerIcon";
 import { IConstructorParams, Server } from "../../Server/Server";
 import { AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
 
+export const SUCCESS_STATUS = 200;
+export const AUTH_FAILURE_STATUS = 401;
+
 export type PasswordResponse = {
-  success: boolean;
   status: number;
   msg: string;
   responseTime: number;
   passwordLength?: number;
   passwordFormat?: string;
-  data?: number;
-  data2?: number;
+  data?: string;
+  modelId?: number;
 };
 
-export type DarkWebData = {
+export type DarkWebServerData = {
   icon: Icon;
   password: string;
   minigameType: Minigames;
   passwordHint: string;
+  passwordHintData?: string;
   x: number;
   y: number;
 };
 
-export const DWebServerBuilder = (options: DarkWebData, name: string = getName(1), difficulty: number = 1): Server => {
+export const DWebServerBuilder = (options: DarkWebServerData, name: string = getName(1), difficulty: number = 1): Server => {
   const darkWebData = {
     icon: options.icon ?? Icon.ConnectedTv,
     password: options.password,
     minigameType: options.minigameType,
     passwordHint: options.passwordHint,
+    passwordHintData: options.passwordHintData ?? "",
     x: options.x ?? -1,
     y: options.y ?? -1,
   };
@@ -65,28 +69,27 @@ export const checkPassword = (attemptedPassword: string, server: Server): Passwo
   } else if (darkWebData.minigameType === Minigames.MastermindHint) {
     const { exactCharacters, misplacedCharacters } = getMastermindResponse(darkWebData.password, attemptedPassword);
     return {
-      success: false,
-      status: 401,
+      status: AUTH_FAILURE_STATUS,
       msg: `Hint: ${exactCharacters} symbols match, ${misplacedCharacters} ${
         misplacedCharacters == 1 ? "is" : "are"
       } close.`,
-      data: exactCharacters,
-      data2: misplacedCharacters,
+      data: `${exactCharacters},${misplacedCharacters}`,
       responseTime: getResponseTime(),
       passwordLength: darkWebData.password.length,
       passwordFormat: getPasswordType(darkWebData.password),
+      modelId: darkWebData.minigameType,
     };
   } else {
     const sharedChars =
       darkWebData.minigameType === Minigames.TimingAttack ? getSharedChars(darkWebData.password, attemptedPassword) : 0;
     const responseTime = getResponseTime(sharedChars);
     return {
-      success: false,
-      status: 401,
+      status: AUTH_FAILURE_STATUS,
       msg: darkWebData.passwordHint,
-      responseTime: responseTime,
+      data: darkWebData.passwordHintData,
       passwordLength: darkWebData.password.length,
       passwordFormat: getPasswordType(darkWebData.password),
+      responseTime: responseTime,
     };
   }
 };
@@ -114,9 +117,8 @@ const getMastermindResponse = (password: string, attemptedPassword: string) => {
 };
 
 const getGenericSuccess = (responseTime = 0) => ({
-  success: true,
-  status: 200,
-  msg: "Success",
+  status: SUCCESS_STATUS,
+  msg: "Success! Access granted.",
   responseTime: getResponseTime(responseTime),
 });
 

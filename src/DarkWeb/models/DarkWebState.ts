@@ -3,7 +3,7 @@ import { addGuaranteedConnection, getDarkWebServers, moveServer } from "../contr
 import { Server } from "../../Server/Server";
 
 export const NET_WIDTH = 6;
-export const NET_DEPTH = 12;
+export const NET_DEPTH = 16;
 
 export const DarkWebNetwork: (Server | null)[][] = new Array(NET_DEPTH)
   .fill(null)

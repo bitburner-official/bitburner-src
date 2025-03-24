@@ -1,4 +1,4 @@
-import { DWebServerBuilder } from "../models/DarkWebData";
+import { DWebServerBuilder } from "../models/DarkWebServerData";
 import { Icon } from "./ServerIcon";
 import { Server } from "../../Server/Server";
 
@@ -79,16 +79,15 @@ export const getSortedEchoVulnServer = (difficulty: number, chaRequired: number,
     "The PIN uses",
   ];
   const password = getPassword(3 + difficulty / 2);
-  const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${password
-    .split("")
-    .sort()
-    .join("")}`;
+  const sortedPassword = password.split("").sort().join("");
+  const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${sortedPassword}`;
   return DWebServerBuilder(
     {
       icon: getRandomIcon(),
       minigameType: Minigames.SortedEchoVuln,
       password: password,
       passwordHint: hint,
+      passwordHintData: sortedPassword,
       x,
       y,
     },
@@ -195,6 +194,7 @@ export const getRomanNumeralServer = (difficulty: number, chaRequired: number, x
       minigameType: Minigames.RomanNumeral,
       password: `${password}`,
       passwordHint: `The password is the value of the number ${encodedPassword}`,
+      passwordHintData: encodedPassword,
       x,
       y,
     },
@@ -211,6 +211,7 @@ export const getLargestPrimeFactorServer = (difficulty: number, chaRequired: num
       minigameType: Minigames.LargestPrimeFactor,
       password: `${largestPrimePasswordDetails.largestPrime}`,
       passwordHint: `The password is the largest prime factor of ${largestPrimePasswordDetails.password}`,
+      passwordHintData: `${largestPrimePasswordDetails.password}`,
       x,
       y,
     },

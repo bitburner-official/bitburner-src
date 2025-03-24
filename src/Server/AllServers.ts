@@ -89,7 +89,7 @@ export function DeleteServer(serverkey: string): void {
   }
 }
 
-export const connectServers = (server1: Server, server2: Server) => {
+export const connectServers = (server1: BaseServer, server2: BaseServer) => {
   server1.serversOnNetwork.push(server2.hostname);
   server2.serversOnNetwork.push(server1.hostname);
 };

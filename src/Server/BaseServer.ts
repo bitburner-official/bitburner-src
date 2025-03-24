@@ -26,7 +26,7 @@ import { Settings } from "../Settings/Settings";
 import type { ScriptKey } from "../utils/helpers/scriptKey";
 import { assertObject } from "../utils/TypeAssertion";
 import { clampNumber } from "../utils/helpers/clampNumber";
-import { DarkWebData } from "../DarkWeb/models/DarkWebData";
+import { DarkWebServerData } from "../DarkWeb/models/DarkWebServerData";
 
 interface IConstructorParams {
   adminRights?: boolean;
@@ -50,7 +50,7 @@ export abstract class BaseServer implements IServer {
   cpuCores = 1;
 
   // Holds properties only used for darkweb servers
-  darkWebData?: DarkWebData;
+  darkWebData?: DarkWebServerData;
 
   // Flag indicating whether the FTP port is open
   ftpPortOpen = false;

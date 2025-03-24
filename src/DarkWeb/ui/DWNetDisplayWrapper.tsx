@@ -3,7 +3,6 @@ import { Container, Typography } from "@mui/material";
 import { DWServerComponent, getPixelPosition } from "./DWServerComponent";
 import { useRerender } from "../../ui/React/hooks";
 import { DarkWebEvents, DarkWebNetwork } from "../models/DarkWebState";
-import { DW_SERVER_HEIGHT, DW_SERVER_WIDTH } from "./dwebStyles";
 import { GetServer } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
 
@@ -51,10 +50,10 @@ export function DWNetDisplayWrapper(): React.ReactElement {
         }
         ctx.beginPath();
         ctx.strokeStyle = server.hasAdminRights || connectedServer.hasAdminRights ? "green" : "grey";
-        const startPosition = getPixelPosition(darkWebData.x, darkWebData.y);
-        const endPosition = getPixelPosition(connectedDarkWebData.x, connectedDarkWebData.y);
-        ctx.moveTo(startPosition.left + DW_SERVER_WIDTH / 2, startPosition.top + DW_SERVER_HEIGHT / 2);
-        ctx.lineTo(endPosition.left + DW_SERVER_WIDTH / 2, endPosition.top + DW_SERVER_HEIGHT / 2);
+        const startPosition = getPixelPosition(darkWebData.x, darkWebData.y, true);
+        const endPosition = getPixelPosition(connectedDarkWebData.x, connectedDarkWebData.y, true);
+        ctx.moveTo(startPosition.left , startPosition.top);
+        ctx.lineTo(endPosition.left, endPosition.top);
         ctx.stroke();
       }
     }

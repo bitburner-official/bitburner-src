@@ -6,12 +6,13 @@ import { Server } from "../../Server/Server";
 const HORIZONTAL_CONNECTION_CHANCE = 0.6;
 const VERTICAL_CONNECTION_CHANCE = 0.4;
 const SERVER_DENSITY = 0.6;
+const AIR_GAP_DEPTH = 8;
 
 export const populateDarkWebNetwork = () => {
   clearDarkWebNetwork();
   for (let i = 0; i < NET_DEPTH; i++) {
     for (let j = 0; j < NET_WIDTH; j++) {
-      if (Math.random() > SERVER_DENSITY) {
+      if (Math.random() > SERVER_DENSITY || isOnAirGap(i)) {
         continue;
       }
       const server = getDarkWebServer(i, 10 * i, i, j);
@@ -37,7 +38,12 @@ export const moveServer = (server: Server) => {
   // max 10 attempts to move the server
   for (let i = 0; i < 10; i++) {
     // Limit depth movement to +-2 spaces
-    const newX = Math.min(Math.max(Math.floor(Math.random() * 4 + darkWebData.x - 2), 0), NET_DEPTH - 1);
+    let newX = Math.min(Math.max(Math.floor(Math.random() * 5 + darkWebData.x - 2), 0), NET_DEPTH - 1);
+    // simple "air gaps" in the network
+    if (isOnAirGap(newX)) {
+      newX += Math.random() < 0.5 ? -1 : 1;
+    }
+
     const newY = Math.floor(Math.random() * NET_WIDTH);
     if (DarkWebNetwork[newX][newY] !== null) {
       continue;
@@ -56,7 +62,7 @@ export const moveServer = (server: Server) => {
   }
 };
 
-export const addServerToNetwork = (server: Server, x: number, y: number, addConnections = false) => {
+export const addServerToNetwork = (server: Server, x: number, y: number, addConnections = true) => {
   if (DarkWebNetwork[x]?.[y] === undefined) {
     throw new Error("Invalid coordinates");
   }
@@ -71,9 +77,17 @@ export const addServerToNetwork = (server: Server, x: number, y: number, addConn
   server.darkWebData.x = x;
   server.darkWebData.y = y;
 
-  if (addConnections) {
-    addRandomConnections(server);
-    addGuaranteedConnection(server);
+  if (!addConnections) {
+    return;
+  }
+  addRandomConnections(server);
+  addGuaranteedConnection(server);
+  if (server.darkWebData.x === 0) {
+    const darkwebRoot = GetServer("darkweb");
+    if (!darkwebRoot) {
+      throw new Error("Could not find darkweb root server");
+    }
+    connectServers(server, darkwebRoot);
   }
 };
 
@@ -155,5 +169,7 @@ const getAllAdjacentNeighbors = (x: number, y: number): Server[] => {
   const neighborsOnRow = getNeighborsOnRow(x, y);
   return [...rowAbove, ...rowBelow, ...neighborsOnRow];
 }
+
+const isOnAirGap = (x: number): boolean => !!x && !(x % AIR_GAP_DEPTH);
 
 const notNull = <T>(value: T | null): value is T => value !== null;

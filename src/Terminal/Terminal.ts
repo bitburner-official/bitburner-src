@@ -545,7 +545,7 @@ export class Terminal {
     }
 
     const ignoreServer = (s: BaseServer, d: number): boolean =>
-      (!all && s.purchasedByPlayer && s.hostname != "home") || d > depth || (!all && s instanceof HacknetServer);
+      (!all && s.purchasedByPlayer && s.hostname != "home") || d > depth || (!all && s instanceof HacknetServer) || !!s.darkWebData;
 
     const makeNode = (parent: string, s: BaseServer, d = 1): Node => ({
       hostname: s.hostname,

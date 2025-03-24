@@ -6,15 +6,15 @@ import {
   getDefaultPasswordServer,
   getMastermindHintServer,
   getTimingAttackServer,
-} from "../../../src/DarkWeb/models/DarkWebData";
-import { DarkWebData } from "../../../src/DarkWeb/models/DarkWebData";
+} from "../../../src/DarkWeb/models/DarkWebServerData";
+import { DarkWebServerData } from "../../../src/DarkWeb/models/DarkWebServerData";
 
 describe("DarkwebServer Tests", () => {
   const difficulty = 1;
   const chaRequired = 10;
 
   test("getEchoVulnServer creates a server and checks password correctly", () => {
-    const server: DarkWebData = getEchoVulnServer(difficulty, chaRequired, 0, 0);
+    const server: DarkWebServerData = getEchoVulnServer(difficulty, chaRequired, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = server.passwordChecker("wrongPassword", server.password);
     expect(failedAttemptResponse.success).toBe(false);
@@ -28,7 +28,7 @@ describe("DarkwebServer Tests", () => {
   });
 
   test("getNoPasswordServer creates a server with no password", () => {
-    const server: DarkWebData = getNoPasswordServer(difficulty, chaRequired, 0, 0);
+    const server: DarkWebServerData = getNoPasswordServer(difficulty, chaRequired, 0, 0);
     expect(server).toBeDefined();
     expect(server.password).toBe("");
 
@@ -43,7 +43,7 @@ describe("DarkwebServer Tests", () => {
   });
 
   test("getDefaultPasswordServer creates a server with default password", () => {
-    const server: DarkWebData = getDefaultPasswordServer(difficulty, chaRequired, 0, 0);
+    const server: DarkWebServerData = getDefaultPasswordServer(difficulty, chaRequired, 0, 0);
     expect(server).toBeDefined();
     expect(["admin", "password", "0000"].includes(server.password)).toBe(true);
 
@@ -60,7 +60,7 @@ describe("DarkwebServer Tests", () => {
 
   test("getMastermindHintServer creates a server with mastermind hint", () => {
     const password = "11223334";
-    const server: DarkWebData = getMastermindHintServer(difficulty, chaRequired, 0, 0);
+    const server: DarkWebServerData = getMastermindHintServer(difficulty, chaRequired, 0, 0);
     expect(server).toBeDefined();
 
     const failedAttemptResponse1 = server.passwordChecker("", password);
@@ -107,7 +107,7 @@ describe("DarkwebServer Tests", () => {
   });
 
   test("getTimingAttackServer creates a server with timing attack vulnerability", () => {
-    const server: DarkWebData = getTimingAttackServer(difficulty, chaRequired, 0, 0);
+    const server: DarkWebServerData = getTimingAttackServer(difficulty, chaRequired, 0, 0);
     expect(server).toBeDefined();
 
     const wrongPasswordWithTwoMatchingDigits = server.password.substring(0, 2) + "     ";

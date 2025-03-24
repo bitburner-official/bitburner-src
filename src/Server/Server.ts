@@ -7,7 +7,7 @@ import { createRandomString } from "../utils/helpers/createRandomString";
 import { createRandomIp } from "../utils/IPAddress";
 import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { IPAddress } from "../Types/strings";
-import { DarkWebData } from "../DarkWeb/models/DarkWebData";
+import { DarkWebServerData } from "../DarkWeb/models/DarkWebServerData";
 
 export interface IConstructorParams {
   adminRights?: boolean;
@@ -22,7 +22,7 @@ export interface IConstructorParams {
   purchasedByPlayer?: boolean;
   requiredHackingSkill?: number;
   serverGrowth?: number;
-  darkWebData?: DarkWebData;
+  darkWebData?: DarkWebServerData;
 }
 
 export class Server extends BaseServer {

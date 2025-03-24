@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Container, Typography, Button, Box } from "@mui/material";
 import { SvgIconComponent } from "@mui/icons-material";
 import { DWPasswordPromptModal } from "./DWPasswordPromptModal";
@@ -18,9 +18,9 @@ export type DWServerProps = {
   enableAuth: boolean;
 };
 
-export const getPixelPosition = (top: number, left: number) => ({
-  top: (DW_SERVER_GAP_TOP + DW_SERVER_HEIGHT) * top + MAP_BORDER_WIDTH,
-  left: (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * left + MAP_BORDER_WIDTH,
+export const getPixelPosition = (top: number, left: number, centered = false) => ({
+  top: (DW_SERVER_GAP_TOP + DW_SERVER_HEIGHT) * top + MAP_BORDER_WIDTH + (centered ? DW_SERVER_HEIGHT / 2 : 0),
+  left: (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * left + MAP_BORDER_WIDTH + (centered ? DW_SERVER_WIDTH / 2 : 0),
 });
 
 export function DWServerComponent({ server, enableAuth }: DWServerProps): React.ReactElement {

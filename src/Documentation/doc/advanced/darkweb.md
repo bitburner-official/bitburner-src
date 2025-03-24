@@ -54,20 +54,30 @@ This is currently a design document, but eventually will be the in-game player d
 - Caches with port openers, money, or xp
 
 ## TODO:
-- connect dwnetwork to darkweb legacy server?
+
+- connect to darkweb server
+- display darkweb on network map
 
 - Return puzzle id in network response
 - return puzzle data in network response
-- Prevent moving servers from getting state updates?
 - prevent open server from being moved
+
+
+- Generate interesting server names
+
+- basic rewards on servers
+- Clue notes on servers
+
+- Support servers being renamed occasionally?
 
 - support saving darkweb network
 - Harden existing commands against loops in network? or exclude darkweb from them?
 - Limit ns commands from use on darkweb servers
 
-- Support servers being renamed occasionally?
-
 - Limit darkweb stuff to when feature is enabled (bitnode? own tor router?)
+- Darkweb server difficulty? port crackers required?
+
+- start with root access to "darkweb" server
 
 ## Community feedback:
 
