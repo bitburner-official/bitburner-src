@@ -4755,12 +4755,12 @@ export interface Go {
    *
    * For example, a 5x5 board might look like this:
    *
-   [<br/>  
-      "XX.O.",<br/>  
-      "X..OO",<br/>  
-      ".XO..",<br/>  
-      "XXO.#",<br/>  
-      ".XO.#",<br/>  
+   [<br/>
+      "XX.O.",<br/>
+      "X..OO",<br/>
+      ".XO..",<br/>
+      "XXO.#",<br/>
+      ".XO.#",<br/>
    ]
    *
    * Each string represents a vertical column on the board, and each character in the string represents a point.
@@ -4781,12 +4781,12 @@ export interface Go {
    *
    * For example, a single 5x5 prior move board might look like this:
    *
-   [<br/>  
-      "XX.O.",<br/>  
-      "X..OO",<br/>  
-      ".XO..",<br/>  
-      "XXO.#",<br/>  
-      ".XO.#",<br/>  
+   [<br/>
+      "XX.O.",<br/>
+      "X..OO",<br/>
+      ".XO..",<br/>
+      "XXO.#",<br/>
+      ".XO.#",<br/>
    ]
    */
   getMoveHistory(): string[][];
@@ -8631,7 +8631,7 @@ declare enum FactionName {
   TheCovenant = "The Covenant",
   ECorp = "ECorp",
   MegaCorp = "MegaCorp",
-  BachmanAssociates = "Bachman & Associates",
+  BachmanAndAssociates = "Bachman & Associates",
   BladeIndustries = "Blade Industries",
   NWO = "NWO",
   ClarkeIncorporated = "Clarke Incorporated",

@@ -11,7 +11,7 @@ Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you
 **Signature:**
 
 ```typescript
-declare enum FactionName 
+declare enum FactionName
 ```
 
 ## Enumeration Members
@@ -19,7 +19,7 @@ declare enum FactionName
 |  Member | Value | Description |
 |  --- | --- | --- |
 |  Aevum | <code>&quot;Aevum&quot;</code> |  |
-|  BachmanAssociates | <code>&quot;Bachman &amp; Associates&quot;</code> |  |
+|  BachmanAndAssociates | <code>&quot;Bachman &amp; Associates&quot;</code> |  |
 |  BitRunners | <code>&quot;BitRunners&quot;</code> |  |
 |  Bladeburners | <code>&quot;Bladeburners&quot;</code> |  |
 |  BladeIndustries | <code>&quot;Blade Industries&quot;</code> |  |
@@ -52,4 +52,3 @@ declare enum FactionName
 |  TheSyndicate | <code>&quot;The Syndicate&quot;</code> |  |
 |  TianDiHui | <code>&quot;Tian Di Hui&quot;</code> |  |
 |  Volhaven | <code>&quot;Volhaven&quot;</code> |  |
-
