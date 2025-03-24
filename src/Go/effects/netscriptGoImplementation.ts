@@ -22,7 +22,6 @@ import { endGoGame, getOpponentStats, getScore, resetWinstreak } from "../boardA
 import { WHRNG } from "../../Casino/RNG";
 import { getRecordKeys } from "../../Types/Record";
 import { CalculateEffect, getEffectTypeForFaction } from "./effect";
-import { newOpponentStats } from "../Constants";
 
 /**
  * Check the move based on the current settings
