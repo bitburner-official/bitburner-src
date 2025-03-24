@@ -117,6 +117,8 @@ https://discord.com/channels/415207508303544321/415213435974975508/1352628138261
   - small chance for api to crash script, requiring fallbacks or health monitors
   - small chance to sever connection on each failed password check?
     - increases with server difficulty? Decreases with cha?
+  - log server moved / connection broken vs server is gone
+  - identify server remaining uptime?
 
 - enemy scripts?
 

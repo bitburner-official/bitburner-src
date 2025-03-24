@@ -1,6 +1,13 @@
 import { DWebServerBuilder } from "../models/DarkWebServerData";
 import { Icon } from "./ServerIcon";
 import { Server } from "../../Server/Server";
+import {
+  commonPasswordDictionary,
+  defaultSettingsDictionary, EUCountries,
+  letters,
+  numbers,
+  special, unicode,
+} from "../models/dictionaryData";
 
 export enum Minigames {
   EchoVuln,
@@ -12,12 +19,14 @@ export enum Minigames {
   LargestPrimeFactor,
   RomanNumeral,
   DogNames,
+  GuessNumber,
+  CommonPasswordDictionary
 }
 
-export const getDarkWebServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+export const getDarkWebServer = (difficulty: number, x: number, y: number): Server => {
   if (difficulty <= 2 || Math.random() < 0.1) {
     const serverBuilders = [getEchoVulnServer, getNoPasswordServer, getSortedEchoVulnServer, getDefaultPasswordServer];
-    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, chaRequired, x, y);
+    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty,x, y);
   }
   if (difficulty <= 6 || Math.random() < 0.1) {
     const serverBuilders = [
@@ -26,8 +35,9 @@ export const getDarkWebServer = (difficulty: number, chaRequired: number, x: num
       getSortedEchoVulnServer,
       getDogNameServer,
       getRomanNumeralServer,
+      getGuessNumberServer,
     ];
-    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, chaRequired, x, y);
+    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty,x, y);
   }
   const serverBuilders = [
     getTimingAttackServer,
@@ -35,8 +45,11 @@ export const getDarkWebServer = (difficulty: number, chaRequired: number, x: num
     getMastermindHintServer,
     getRomanNumeralServer,
     getSortedEchoVulnServer,
+    getGuessNumberServer,
+    getLargeDictionaryServer,
+    getEuCountryDictionaryServer,
   ];
-  return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, chaRequired, x, y);
+  return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty,x, y);
 };
 
 export const getName = (difficulty: number): string => {
@@ -46,7 +59,7 @@ export const getName = (difficulty: number): string => {
   )}`;
 };
 
-export const getEchoVulnServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+export const getEchoVulnServer = (difficulty: number, x: number, y: number): Server => {
   const hintTemplates = [
     "The password is",
     "The PIN is",
@@ -71,12 +84,12 @@ export const getEchoVulnServer = (difficulty: number, chaRequired: number, x: nu
   );
 };
 
-export const getSortedEchoVulnServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+export const getSortedEchoVulnServer = (difficulty: number, x: number, y: number): Server => {
   const hintTemplates = [
-    "The password contains",
+    "The password is shuffled",
     "The key is made from",
     "I accidentally sorted the password",
-    "The PIN uses",
+    "The PIN uses these",
   ];
   const password = getPassword(3 + difficulty / 2);
   const sortedPassword = password.split("").sort().join("");
@@ -98,7 +111,6 @@ export const getSortedEchoVulnServer = (difficulty: number, chaRequired: number,
 
 export const getDictionaryAttackServer = (
   difficulty: number,
-  chaRequired: number,
   x: number,
   y: number,
   dictionary: string[],
@@ -119,7 +131,7 @@ export const getDictionaryAttackServer = (
   );
 };
 
-export const getNoPasswordServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+export const getNoPasswordServer = (difficulty: number, x: number, y: number): Server => {
   const hintTemplates = [
     "The password is not set",
     "There is no password",
@@ -127,11 +139,10 @@ export const getNoPasswordServer = (difficulty: number, chaRequired: number, x: 
     "Did I set a code?",
     "I didn't set a password",
   ];
-  return getDictionaryAttackServer(difficulty, chaRequired, x, y, [""], hintTemplates, Minigames.NoPassword);
+  return getDictionaryAttackServer(difficulty,x, y, [""], hintTemplates, Minigames.NoPassword);
 };
 
-export const getDefaultPasswordServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
-  const dictionary = ["admin", "password", "0000", "12345"];
+export const getDefaultPasswordServer = (difficulty: number, x: number, y: number): Server => {
   const hintTemplates = [
     "The password is the default password",
     "It's still the default",
@@ -139,16 +150,16 @@ export const getDefaultPasswordServer = (difficulty: number, chaRequired: number
     "I never changed the password",
     "It's still the factory settings",
   ];
-  return getDictionaryAttackServer(difficulty, chaRequired, x, y, dictionary, hintTemplates, Minigames.DefaultPassword);
+  return getDictionaryAttackServer(difficulty,x, y, defaultSettingsDictionary, hintTemplates, Minigames.DefaultPassword);
 };
 
-export const getDogNameServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+export const getDogNameServer = (difficulty: number, x: number, y: number): Server => {
   const dictionary = ["fido", "spot", "rover", "max"];
   const hintTemplates = ["It's my dog's name", "It's the dog's name", "my first dog's name"];
-  return getDictionaryAttackServer(difficulty, chaRequired, x, y, dictionary, hintTemplates, Minigames.DogNames);
+  return getDictionaryAttackServer(difficulty,x, y, dictionary, hintTemplates, Minigames.DogNames);
 };
 
-export const getMastermindHintServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+export const getMastermindHintServer = (difficulty: number, x: number, y: number): Server => {
   return DWebServerBuilder(
     {
       icon: getRandomIcon(),
@@ -163,7 +174,7 @@ export const getMastermindHintServer = (difficulty: number, chaRequired: number,
   );
 };
 
-export const getTimingAttackServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+export const getTimingAttackServer = (difficulty: number, x: number, y: number): Server => {
   const hintTemplates = [
     "I thought about it for some time, but that is not the password.",
     "I spent a while on it, but that's not right",
@@ -185,7 +196,7 @@ export const getTimingAttackServer = (difficulty: number, chaRequired: number, x
   );
 };
 
-export const getRomanNumeralServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+export const getRomanNumeralServer = (difficulty: number, x: number, y: number): Server => {
   const password = Math.floor(Math.random() * 10 * (10 * (difficulty + 1)));
   const encodedPassword = romanNumeralEncoder(password);
   return DWebServerBuilder(
@@ -203,7 +214,7 @@ export const getRomanNumeralServer = (difficulty: number, chaRequired: number, x
   );
 };
 
-export const getLargestPrimeFactorServer = (difficulty: number, chaRequired: number, x: number, y: number): Server => {
+export const getLargestPrimeFactorServer = (difficulty: number, x: number, y: number): Server => {
   const largestPrimePasswordDetails = getLargestPrimeFactorPassword(difficulty);
   return DWebServerBuilder(
     {
@@ -220,16 +231,43 @@ export const getLargestPrimeFactorServer = (difficulty: number, chaRequired: num
   );
 };
 
-// TODO: change passwordChecker to failure response object
-// TODO: how to do interactive prompts? by server type ID lookup?
+export const getGuessNumberServer = (difficulty: number,  x: number, y: number): Server => {
+  const password = `${Math.floor(Math.random() * 10 * (15 * (difficulty + 1)))}`;
+  const maxNumber = 10 ** (password.length +1);
+  return DWebServerBuilder(
+    {
+      icon: getRandomIcon(),
+      minigameType: Minigames.GuessNumber,
+      password: password,
+      passwordHint: `The password is a number between 0 and ${maxNumber}`,
+      x,
+      y,
+    },
+    getName(difficulty),
+    difficulty,
+  );
+}
+
+export const getLargeDictionaryServer = (difficulty: number, x: number, y: number): Server => {
+  return getDictionaryAttackServer(difficulty, x, y, commonPasswordDictionary, ["It's a common password"], Minigames.CommonPasswordDictionary);
+}
+
+export const getEuCountryDictionaryServer = (difficulty: number, x: number, y: number): Server => {
+  return getDictionaryAttackServer(difficulty, x, y, EUCountries, ["My favorite EU country"], Minigames.CommonPasswordDictionary);
+}
+
+// offset every other row
+
+// TODO: most common item in array server
+// TODO: more leetcode array manipulation servers
 
 // TODO: arithmetic string server (eval bait)
+
+// TODO: more guess and check servers
 
 // TODO: verbal description of simple math problem (nth root of x)
 
 // TODO: basic cypher server?
-
-// TODO: simple dictionary attack servers (dog's name, cat's name, etc)
 
 // TODO: eval pwn server
 
@@ -242,10 +280,6 @@ const getPassword = (
   allowSpecial = false,
   allowUnicode = false,
 ): string => {
-  const numbers = "0123456789";
-  const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const special = "!@#$%^&*()_+-=[]{}|;:,.<>?";
-  const unicode = "¼░╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿";
 
   const characters =
     (allowNumbers ? numbers : "") +
@@ -260,8 +294,6 @@ const getPassword = (
 };
 
 export const getPasswordType = (password: string): string => {
-  const numbers = "0123456789";
-  const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const passwordArr = password.split("");
 
   if (passwordArr.every((char) => numbers.includes(char))) {

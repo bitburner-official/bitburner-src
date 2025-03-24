@@ -14,7 +14,7 @@ export type DWPasswordPromptModalProps = {
 };
 
 export const DWPasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptModalProps): React.ReactElement => {
-  const [inputPassword, setInputPassword] = useState("");
+  const [inputPassword, setInputPassword] = useState(server.hasAdminRights ? server.darkWebData?.password ?? "" : "");
   const [password, setPassword] = useState<string>("?");
   const [enableSubmit, setEnableSubmit] = useState(!server.hasAdminRights);
   const [response, setResponse] = useState("Submit a password to login...");

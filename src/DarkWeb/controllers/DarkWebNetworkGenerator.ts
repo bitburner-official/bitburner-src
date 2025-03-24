@@ -15,7 +15,7 @@ export const populateDarkWebNetwork = () => {
       if (Math.random() > SERVER_DENSITY || isOnAirGap(i)) {
         continue;
       }
-      const server = getDarkWebServer(i, 10 * i, i, j);
+      const server = getDarkWebServer(i, i, j);
       addServerToNetwork(server, i, j, true);
     }
   }

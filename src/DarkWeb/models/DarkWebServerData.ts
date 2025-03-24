@@ -52,7 +52,6 @@ export const DWebServerBuilder = (options: DarkWebServerData, name: string = get
   const standardServer = new Server(params);
   standardServer.backdoorInstalled = true; // TODO: remove once testing is done
   AddToAllServers(standardServer);
-  console.log("Added ", name, " to standard network");
 
   return standardServer;
 };
@@ -79,6 +78,17 @@ export const checkPassword = (attemptedPassword: string, server: Server): Passwo
       passwordFormat: getPasswordType(darkWebData.password),
       modelId: darkWebData.minigameType,
     };
+  } else if (darkWebData.minigameType === Minigames.GuessNumber) {
+    const hintData = +attemptedPassword > +darkWebData.password ? "Lower" : "Higher";
+    return {
+      status: AUTH_FAILURE_STATUS,
+      msg: darkWebData.passwordHint,
+      data: hintData,
+      responseTime: getResponseTime(),
+      passwordLength: darkWebData.password.length,
+      passwordFormat: getPasswordType(darkWebData.password),
+      modelId: darkWebData.minigameType,
+    }
   } else {
     const sharedChars =
       darkWebData.minigameType === Minigames.TimingAttack ? getSharedChars(darkWebData.password, attemptedPassword) : 0;

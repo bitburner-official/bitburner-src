@@ -18,10 +18,18 @@ export type DWServerProps = {
   enableAuth: boolean;
 };
 
-export const getPixelPosition = (top: number, left: number, centered = false) => ({
-  top: (DW_SERVER_GAP_TOP + DW_SERVER_HEIGHT) * top + MAP_BORDER_WIDTH + (centered ? DW_SERVER_HEIGHT / 2 : 0),
-  left: (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * left + MAP_BORDER_WIDTH + (centered ? DW_SERVER_WIDTH / 2 : 0),
-});
+export const getPixelPosition = (top: number, left: number, centered = false) => {
+  const widthOfServers = (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * left;
+  const centeredOffsetHorizontal = centered ? DW_SERVER_WIDTH / 2 : 0;
+  const staggeredHorizontalOffset = top % 2 ? DW_SERVER_WIDTH / 2 : 0;
+  const heightOfServers = (DW_SERVER_GAP_TOP + DW_SERVER_HEIGHT) * top;
+  const centeredOffsetVertical = centered ? DW_SERVER_HEIGHT / 2 : 0;
+
+  return {
+    top: heightOfServers + MAP_BORDER_WIDTH + centeredOffsetVertical,
+    left: widthOfServers + MAP_BORDER_WIDTH + centeredOffsetHorizontal + staggeredHorizontalOffset,
+  }
+};
 
 export function DWServerComponent({ server, enableAuth }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);
