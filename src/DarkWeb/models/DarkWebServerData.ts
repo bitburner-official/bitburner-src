@@ -2,6 +2,7 @@ import { getName, getPasswordType, Minigames } from "../controllers/DarkWebServe
 import { Icon } from "../controllers/ServerIcon";
 import { IConstructorParams, Server } from "../../Server/Server";
 import { AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
+import { BaseServer } from "../../Server/BaseServer";
 
 export const SUCCESS_STATUS = 200;
 export const AUTH_FAILURE_STATUS = 401;
@@ -56,7 +57,7 @@ export const DWebServerBuilder = (options: DarkWebServerData, name: string = get
   return standardServer;
 };
 
-export const checkPassword = (attemptedPassword: string, server: Server): PasswordResponse => {
+export const checkPassword = (attemptedPassword: string, server: BaseServer): PasswordResponse => {
   const darkWebData = server.darkWebData;
   if (!darkWebData) {
     throw new Error("Dark web server missing dark web data");

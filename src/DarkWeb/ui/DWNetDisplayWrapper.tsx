@@ -5,6 +5,7 @@ import { useRerender } from "../../ui/React/hooks";
 import { DarkWebEvents, DarkWebNetwork } from "../models/DarkWebState";
 import { GetServer } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
+import { SpecialServers } from "../../Server/data/SpecialServers";
 
 export const DW_NET_WIDTH = 4000;
 export const DW_NET_HEIGHT = 6000;
@@ -43,15 +44,13 @@ export function DWNetDisplayWrapper(): React.ReactElement {
       // draw a line between each server and its connected servers
       for (const connectedServerName of server.serversOnNetwork) {
         const connectedServer = GetServer(connectedServerName);
-        const darkWebData = server.darkWebData;
-        const connectedDarkWebData = connectedServer?.darkWebData;
-        if (!connectedServer || !connectedDarkWebData || !darkWebData) {
+        if (!connectedServer) {
           continue;
         }
         ctx.beginPath();
         ctx.strokeStyle = server.hasAdminRights || connectedServer.hasAdminRights ? "green" : "grey";
-        const startPosition = getPixelPosition(darkWebData.x, darkWebData.y, true);
-        const endPosition = getPixelPosition(connectedDarkWebData.x, connectedDarkWebData.y, true);
+        const startPosition = getPixelPosition(server, true);
+        const endPosition = getPixelPosition(connectedServer, true);
         ctx.moveTo(startPosition.left , startPosition.top);
         ctx.lineTo(endPosition.left, endPosition.top);
         ctx.stroke();
@@ -60,8 +59,13 @@ export function DWNetDisplayWrapper(): React.ReactElement {
   };
 
   const allowAuth = (server: Server) =>  server.hasAdminRights ||
-      server?.darkWebData?.x === 0 ||
       server.serversOnNetwork.some((neighbor) => GetServer(neighbor)?.hasAdminRights);
+
+  const darkWebRoot = GetServer(SpecialServers.DarkWeb);
+  if (!darkWebRoot) {
+    throw new Error("Could not find darkweb root server");
+  }
+  darkWebRoot.hasAdminRights = true; // TODO: move this somewhere that makes more sense
 
   const handleDragStart: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
     const target = pointerEvent.target as HTMLDivElement;
@@ -139,6 +143,7 @@ export function DWNetDisplayWrapper(): React.ReactElement {
             height={DW_NET_HEIGHT}
             style={{ position: "absolute", zIndex: -1 }}
           ></canvas>
+          <DWServerComponent server={darkWebRoot} enableAuth={true} />
           {DarkWebNetwork.map((row, i) =>
             row.map((server, j) => (server ?
               <DWServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} /> : "")),

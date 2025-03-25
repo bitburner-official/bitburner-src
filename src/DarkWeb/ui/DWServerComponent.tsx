@@ -1,29 +1,41 @@
 import React, { useState } from "react";
-import { Container, Typography, Button, Box } from "@mui/material";
-import { SvgIconComponent } from "@mui/icons-material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { DWPasswordPromptModal } from "./DWPasswordPromptModal";
-import { getIcon } from "../controllers/ServerIcon";
+import { getIcon, Icon } from "../controllers/ServerIcon";
 import {
-  DW_SERVER_GAP_TOP,
   DW_SERVER_GAP_LEFT,
+  DW_SERVER_GAP_TOP,
   DW_SERVER_HEIGHT,
   DW_SERVER_WIDTH,
   dwebStyles,
   MAP_BORDER_WIDTH,
 } from "./dwebStyles";
-import { Server } from "../../Server/Server";
+import { SpecialServers } from "../../Server/data/SpecialServers";
+import { BaseServer } from "../../Server/BaseServer";
+import { NET_WIDTH } from "../models/DarkWebState";
 
 export type DWServerProps = {
-  server: Server;
+  server: BaseServer;
   enableAuth: boolean;
 };
 
-export const getPixelPosition = (top: number, left: number, centered = false) => {
-  const widthOfServers = (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * left;
+export const getPixelPosition = (server: BaseServer, centered = false) => {
+
   const centeredOffsetHorizontal = centered ? DW_SERVER_WIDTH / 2 : 0;
-  const staggeredHorizontalOffset = top % 2 ? DW_SERVER_WIDTH / 2 : 0;
-  const heightOfServers = (DW_SERVER_GAP_TOP + DW_SERVER_HEIGHT) * top;
   const centeredOffsetVertical = centered ? DW_SERVER_HEIGHT / 2 : 0;
+
+  if (server.hostname === SpecialServers.DarkWeb){
+    return {
+      top: MAP_BORDER_WIDTH * 0.2 + (centered ? centeredOffsetVertical : 0),
+      left: (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * NET_WIDTH * 0.5 + (centered ? centeredOffsetHorizontal : 0),
+    }
+  }
+
+  const coords = getCoordinates(server);
+
+  const widthOfServers = (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * coords.y;
+  const staggeredHorizontalOffset = coords.x % 2 ? DW_SERVER_WIDTH / 2 : 0;
+  const heightOfServers = (DW_SERVER_GAP_TOP + DW_SERVER_HEIGHT) * coords.x;
 
   return {
     top: heightOfServers + MAP_BORDER_WIDTH + centeredOffsetVertical,
@@ -31,31 +43,38 @@ export const getPixelPosition = (top: number, left: number, centered = false) =>
   }
 };
 
+const getCoordinates = (server: BaseServer) => {
+  const darkWebData = server.darkWebData;
+  if (!darkWebData) {
+    throw new Error("Server missing dark web data");
+  }
+  return {
+    x: darkWebData.x,
+    y: darkWebData.y,
+  }
+}
+
 export function DWServerComponent({ server, enableAuth }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);
   const { classes } = dwebStyles({});
   const color = server.hasAdminRights ? classes.success : classes.rep;
-  const darkWebData = server.darkWebData;
-  if (!darkWebData) {
-    throw new Error("Dark web server missing dark web data");
-  }
+  const icon = getIcon(server.darkWebData?.icon ?? Icon.Terminal);
 
   const authButtonHandler = () => {
     setOpen(true);
   };
 
-  const getServerPositionStyles = (i: number, j: number) => {
-    const position = getPixelPosition(i, j);
+  const getServerPositionStyles = (server: BaseServer) => {
+    const position = getPixelPosition(server);
     return {
       top: `${position.top}px`,
       left: `${position.left}px`,
     };
   };
 
-  const icon: SvgIconComponent = getIcon(darkWebData.icon);
   return (
     <Container
-      sx={getServerPositionStyles(darkWebData.x, darkWebData.y)}
+      sx={getServerPositionStyles(server)}
       className={`${color} ${classes.DWServer}`}
       disableGutters
     >
@@ -68,10 +87,10 @@ export function DWServerComponent({ server, enableAuth }: DWServerProps): React.
           </Typography>
         </Box>
         <Typography color="secondary">
-          x:{darkWebData.x} y:{darkWebData.y}; Cha:{server.requiredHackingSkill}
+          x:{server.darkWebData?.x ?? ""} y:{server.darkWebData?.y ?? ""}; Cha:{server.requiredHackingSkill}
         </Typography>
         <br />
-        <Button
+        {server.hostname == SpecialServers.DarkWeb ? "" :  <Button
           variant="contained"
           color="primary"
           onClick={authButtonHandler}
@@ -80,7 +99,7 @@ export function DWServerComponent({ server, enableAuth }: DWServerProps): React.
           className={classes.authButton}
         >
           Authenticate
-        </Button>
+        </Button>}
       </Container>
     </Container>
   );

@@ -2,6 +2,7 @@ import { getDarkWebServer } from "./DarkWebServerGenerator";
 import { DarkWebEvents, DarkWebNetwork, NET_DEPTH, NET_WIDTH } from "../models/DarkWebState";
 import { connectServers, disconnectServers, GetServer } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
+import { SpecialServers } from "../../Server/data/SpecialServers";
 
 const HORIZONTAL_CONNECTION_CHANCE = 0.6;
 const VERTICAL_CONNECTION_CHANCE = 0.4;
@@ -83,11 +84,11 @@ export const addServerToNetwork = (server: Server, x: number, y: number, addConn
   addRandomConnections(server);
   addGuaranteedConnection(server);
   if (server.darkWebData.x === 0) {
-    const darkwebRoot = GetServer("darkweb");
-    if (!darkwebRoot) {
+    const darkWebRoot = GetServer(SpecialServers.DarkWeb);
+    if (!darkWebRoot) {
       throw new Error("Could not find darkweb root server");
     }
-    connectServers(server, darkwebRoot);
+    connectServers(server, darkWebRoot);
   }
 };
 
