@@ -12,7 +12,7 @@ import {
 } from "./dwebStyles";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
-import { NET_WIDTH } from "../models/DarkWebState";
+import { DarkWebState, NET_WIDTH } from "../models/DarkWebState";
 
 export type DWServerProps = {
   server: BaseServer;
@@ -61,7 +61,13 @@ export function DWServerComponent({ server, enableAuth }: DWServerProps): React.
   const icon = getIcon(server.darkWebData?.icon ?? Icon.Terminal);
 
   const authButtonHandler = () => {
+    DarkWebState.openServer = server;
     setOpen(true);
+  };
+
+  const handleClose = () => {
+    DarkWebState.openServer = null;
+    setOpen(false);
   };
 
   const getServerPositionStyles = (server: BaseServer) => {
@@ -78,7 +84,7 @@ export function DWServerComponent({ server, enableAuth }: DWServerProps): React.
       className={`${color} ${classes.DWServer}`}
       disableGutters
     >
-      <DWPasswordPromptModal open={open} onClose={() => setOpen(false)} server={server} />
+      <DWPasswordPromptModal open={open} onClose={handleClose} server={server} />
       <Container maxWidth="lg" sx={{ mx: 1, padding: 0, margin: 0 }} disableGutters>
         <Box className={`${classes.inlineFlexBox}`}>
           {React.createElement(icon, { color: "secondary" })}

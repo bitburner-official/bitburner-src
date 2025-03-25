@@ -2,7 +2,7 @@ import React, { useEffect, useRef, PointerEventHandler, WheelEventHandler, useSt
 import { Container, Typography } from "@mui/material";
 import { DWServerComponent, getPixelPosition } from "./DWServerComponent";
 import { useRerender } from "../../ui/React/hooks";
-import { DarkWebEvents, DarkWebNetwork } from "../models/DarkWebState";
+import { DarkWebEvents, DarkWebState } from "../models/DarkWebState";
 import { GetServer } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
 import { SpecialServers } from "../../Server/data/SpecialServers";
@@ -36,7 +36,7 @@ export function DWNetDisplayWrapper(): React.ReactElement {
     }
     ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
 
-    for (const server of DarkWebNetwork.flat()) {
+    for (const server of DarkWebState.DarkWebNetwork.flat()) {
       if (!server) {
         continue;
       }
@@ -144,7 +144,7 @@ export function DWNetDisplayWrapper(): React.ReactElement {
             style={{ position: "absolute", zIndex: -1 }}
           ></canvas>
           <DWServerComponent server={darkWebRoot} enableAuth={true} />
-          {DarkWebNetwork.map((row, i) =>
+          {DarkWebState.DarkWebNetwork.map((row, i) =>
             row.map((server, j) => (server ?
               <DWServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} /> : "")),
           )}

@@ -55,29 +55,26 @@ This is currently a design document, but eventually will be the in-game player d
 
 ## TODO:
 
-- connect to darkweb server
-- display darkweb on network map
-
-- Return puzzle id in network response
-- return puzzle data in network response
-- prevent open server from being moved
-
-
 - Generate interesting server names
 
-- basic rewards on servers
+- basic cache rewards on servers
 - Clue notes on servers
 
-- Support servers being renamed occasionally?
+- File/status viewer for darkweb servers?
+
+- reward caches?
+
+- Support servers being renamed occasionally
 
 - support saving darkweb network
 - Harden existing commands against loops in network? or exclude darkweb from them?
 - Limit ns commands from use on darkweb servers
 
-- Limit darkweb stuff to when feature is enabled (bitnode? own tor router?)
+
 - Darkweb server difficulty? port crackers required?
 
-- start with root access to "darkweb" server
+- Limit darkweb stuff to when feature is enabled (bitnode? own tor router?)
+- start more cleanly with root access to "darkweb" server
 
 ## Community feedback:
 

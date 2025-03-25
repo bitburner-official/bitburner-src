@@ -23,17 +23,19 @@ export type DarkWebServerData = {
   minigameType: Minigames;
   passwordHint: string;
   passwordHintData?: string;
+  difficulty: number;
   x: number;
   y: number;
 };
 
-export const DWebServerBuilder = (options: DarkWebServerData, name: string = getName(1), difficulty: number = 1): Server => {
+export const DWebServerBuilder = (options: DarkWebServerData, name: string = getName(1)): Server => {
   const darkWebData = {
     icon: options.icon ?? Icon.ConnectedTv,
     password: options.password,
     minigameType: options.minigameType,
     passwordHint: options.passwordHint,
     passwordHintData: options.passwordHintData ?? "",
+    difficulty: options.difficulty ?? 1,
     x: options.x ?? -1,
     y: options.y ?? -1,
   };
@@ -42,11 +44,11 @@ export const DWebServerBuilder = (options: DarkWebServerData, name: string = get
     hostname: name,
     ip: createUniqueRandomIp(),
     organizationName: "darkweb",
-    requiredHackingSkill: difficulty, // TODO
-    hackDifficulty: difficulty, // TODO
+    maxRam: 16,
+    requiredHackingSkill: Math.floor(((darkWebData.difficulty +1) * Math.random() * 10) ** 1.5),
+    hackDifficulty: 5,
     moneyAvailable: 0,
-    numOpenPortsRequired: 5, // TODO
-    serverGrowth: 1,
+    numOpenPortsRequired: 69,
     adminRights: false,
     darkWebData: darkWebData,
   };

@@ -76,11 +76,11 @@ export const getEchoVulnServer = (difficulty: number, x: number, y: number): Ser
       minigameType: Minigames.EchoVuln,
       password,
       passwordHint: hint,
+      difficulty,
       x,
       y,
     },
     getName(difficulty),
-    difficulty,
   );
 };
 
@@ -101,11 +101,11 @@ export const getSortedEchoVulnServer = (difficulty: number, x: number, y: number
       password: password,
       passwordHint: hint,
       passwordHintData: sortedPassword,
+      difficulty,
       x,
       y,
     },
     getName(difficulty),
-    difficulty,
   );
 };
 
@@ -123,11 +123,11 @@ export const getDictionaryAttackServer = (
       minigameType,
       password: dictionary[Math.floor(Math.random() * dictionary.length)],
       passwordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
+      difficulty,
       x,
       y,
     },
     getName(difficulty),
-    difficulty,
   );
 };
 
@@ -166,11 +166,11 @@ export const getMastermindHintServer = (difficulty: number, x: number, y: number
       minigameType: Minigames.MastermindHint,
       password: getPassword(2 + difficulty),
       passwordHint: "", // dynamic hint
+      difficulty,
       x,
       y,
     },
     getName(difficulty),
-    difficulty,
   );
 };
 
@@ -188,11 +188,11 @@ export const getTimingAttackServer = (difficulty: number, x: number, y: number):
       minigameType: Minigames.TimingAttack,
       password: getPassword(length, true, false),
       passwordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
+      difficulty,
       x,
       y,
     },
     getName(difficulty),
-    difficulty,
   );
 };
 
@@ -206,11 +206,11 @@ export const getRomanNumeralServer = (difficulty: number, x: number, y: number):
       password: `${password}`,
       passwordHint: `The password is the value of the number ${encodedPassword}`,
       passwordHintData: encodedPassword,
+      difficulty,
       x,
       y,
     },
     getName(difficulty),
-    difficulty,
   );
 };
 
@@ -223,11 +223,11 @@ export const getLargestPrimeFactorServer = (difficulty: number, x: number, y: nu
       password: `${largestPrimePasswordDetails.largestPrime}`,
       passwordHint: `The password is the largest prime factor of ${largestPrimePasswordDetails.password}`,
       passwordHintData: `${largestPrimePasswordDetails.password}`,
+      difficulty,
       x,
       y,
     },
     getName(difficulty),
-    difficulty,
   );
 };
 
@@ -240,11 +240,11 @@ export const getGuessNumberServer = (difficulty: number,  x: number, y: number):
       minigameType: Minigames.GuessNumber,
       password: password,
       passwordHint: `The password is a number between 0 and ${maxNumber}`,
+      difficulty,
       x,
       y,
     },
     getName(difficulty),
-    difficulty,
   );
 }
 
