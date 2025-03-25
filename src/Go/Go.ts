@@ -39,6 +39,21 @@ export class GoObject {
       this.storedCycles += offlineCycles ?? 0;
     }
   }
+
+  addPointHighlight(x: number, y: number, color: string, text: string) {
+    this.currentGame.highlightedPoints[x][y] = { color, text };
+    GoEvents.emit();
+  }
+
+  clearPointHighlight(x: number, y: number) {
+    this.currentGame.highlightedPoints[x][y] = null;
+    GoEvents.emit();
+  }
+
+  clearAllPointHighlights() {
+    this.currentGame.highlightedPoints = getEmptyHighlightedPoints(Go.currentGame.board.length);
+    GoEvents.emit();
+  }
 }
 
 export const Go = new GoObject();

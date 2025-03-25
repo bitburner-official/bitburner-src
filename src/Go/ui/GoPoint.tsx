@@ -74,6 +74,7 @@ export function GoPoint({
     ? colorClasses[pointHighlight.color as keyof typeof colorClasses] ?? ""
     : "";
   const rawColorStyle = !highlightClass && pointHighlight?.color ? `${pointHighlight.color}` : "";
+  const outlineWidth = rawColorStyle ? "2px" : "1px";
   const highlightText = pointHighlight?.text ?? "";
 
   const mainClassName = `${classes.point} ${sizeClass} ${traditional ? classes.traditional : classes.cyberStyle} ${
@@ -89,7 +90,7 @@ export function GoPoint({
           <div className={hasEastLiberty ? `${classes.eastLiberty} ${colorLiberty}` : classes.liberty}></div>
           <div className={hasSouthLiberty ? `${classes.southLiberty} ${colorLiberty}` : classes.liberty}></div>
           <div className={hasWestLiberty ? `${classes.westLiberty} ${colorLiberty}` : classes.liberty}></div>
-          <div className={`${classes.innerPoint} `} style={{ outlineColor: rawColorStyle }}>
+          <div className={`${classes.innerPoint} `} style={{ outlineColor: rawColorStyle, outlineWidth: outlineWidth }}>
             <div
               className={`${pointClass} ${player !== GoColor.empty ? classes.filledPoint : emptyPointColorClass}`}
             ></div>

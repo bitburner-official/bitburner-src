@@ -14,7 +14,7 @@ import {
 } from "../boardAnalysis/boardAnalysis";
 import { endGoGame } from "../boardAnalysis/scoring";
 import { addObstacles, resetCoordinates, rotate90Degrees } from "./offlineNodes";
-import { clearAllPointHighlights } from "../effects/netscriptGoImplementation";
+import { Go } from "../Go";
 
 /** Generates a new BoardState object with the given opponent and size. Optionally use an existing board. */
 export function getNewBoardState(
@@ -125,7 +125,7 @@ export function makeMove(boardState: BoardState, x: number, y: number, player: G
 
   // Add move to board history
   boardState.previousBoards.unshift(boardStringFromBoard(boardState.board));
-  clearAllPointHighlights();
+  Go.clearAllPointHighlights();
 
   point.color = player;
   boardState.previousPlayer = player;
@@ -143,7 +143,7 @@ export function passTurn(boardState: BoardState, player: GoColor, allowEndGame =
   if (boardState.previousPlayer === null || boardState.previousPlayer === player) {
     return;
   }
-  clearAllPointHighlights();
+  Go.clearAllPointHighlights();
 
   boardState.previousPlayer = boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
   boardState.passCount++;

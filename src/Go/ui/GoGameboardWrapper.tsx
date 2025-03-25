@@ -21,7 +21,6 @@ import { CorruptableText } from "../../ui/React/CorruptableText";
 import { handleNextTurn, resetGoPromises } from "../boardAnalysis/goAI";
 import { GoScoreExplanation } from "./GoScoreExplanation";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
-import { clearAllPointHighlights } from "../effects/netscriptGoImplementation";
 
 interface GoGameboardWrapperProps {
   showInstructions: () => void;
@@ -136,7 +135,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
     Go.currentGame = getNewBoardState(newBoardSize, newOpponent, true);
     resetGoPromises();
-    clearAllPointHighlights();
+    Go.clearAllPointHighlights();
   }
 
   function getPriorMove() {

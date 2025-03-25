@@ -154,7 +154,7 @@ export const pointStyle = makeStyles<unknown, Size | Point | Structure | Highlig
           },
         },
         [`& .${classes.coordinates}`]: {
-          fontSize: "0.9vw",
+          fontSize: "0.7vw",
         },
       },
       [`&.${classes.thirteenByThirteen}`]: {
@@ -169,7 +169,7 @@ export const pointStyle = makeStyles<unknown, Size | Point | Structure | Highlig
           },
         },
         [`& .${classes.coordinates}`]: {
-          fontSize: "0.9vw",
+          fontSize: "0.7vw",
         },
       },
       [`&.${classes.nineByNine}`]: {
