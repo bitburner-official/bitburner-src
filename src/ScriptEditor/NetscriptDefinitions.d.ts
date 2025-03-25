@@ -3825,6 +3825,8 @@ export interface Bladeburner {
    *
    * Attempts to join the Bladeburner division.
    *
+   * Requirements: All combat stats must be at least level 100.
+   *
    * If you have SF 7.3, you will immediately receive "The Blade's Simulacrum" augmentation and won't be able to accept
    * Stanek's Gift after joining. If you want to accept Stanek's Gift, you must do that before calling this API.
    *
@@ -4028,6 +4030,10 @@ export interface Gang {
    * RAM cost: 1GB
    *
    * Create a gang with the specified faction.
+   *
+   * Outside BitNode 2, your karma must be less than or equal to 54000.
+   *
+   * @param faction - Name of the faction that you want to create a gang with. This faction must allow this action, and you must be its member.
    * @returns True if the gang was created, false otherwise.
    */
   createGang(faction: string): boolean;
@@ -5724,6 +5730,9 @@ interface Stanek {
    * Accept Stanek's Gift by joining the Church of the Machine God
    * @remarks
    * RAM cost: 2 GB
+   *
+   * The church only accepts those who have not purchased or installed any augmentations. "NeuroFlux Governor"
+   * augmentation is the only exception.
    *
    * @returns true if the player is a member of the church and has the gift installed,
    * false otherwise.

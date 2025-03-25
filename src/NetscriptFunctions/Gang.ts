@@ -39,9 +39,26 @@ export function NetscriptGang(): InternalAPI<IGang> {
   return {
     createGang: (ctx) => (_faction) => {
       const faction = getEnumHelper("FactionName").nsGetMember(ctx, _faction);
-      if (!Player.canAccessGang() || !GangConstants.Names.includes(faction)) return false;
-      if (Player.gang) return false;
-      if (!Player.factions.includes(faction)) return false;
+      if (Player.gang) {
+        return false;
+      }
+      const checkResult = Player.canAccessGang();
+      if (!checkResult.success) {
+        helpers.log(ctx, () => checkResult.message);
+        return false;
+      }
+      if (!GangConstants.Names.includes(faction)) {
+        helpers.log(
+          ctx,
+          () =>
+            `${faction} does not allow creating a gang. You can only do that with ${GangConstants.Names.join(", ")}.`,
+        );
+        return false;
+      }
+      if (!Player.factions.includes(faction)) {
+        helpers.log(ctx, () => `You are not a member of ${faction}.`);
+        return false;
+      }
 
       const isHacking = faction === FactionName.NiteSec || faction === FactionName.TheBlackHand;
       Player.startGang(faction, isHacking);
