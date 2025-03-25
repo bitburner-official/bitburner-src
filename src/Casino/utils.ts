@@ -6,3 +6,18 @@ export function trusted(f: () => void): (event: React.MouseEvent<HTMLElement>) =
     f();
   };
 }
+
+export class PlayLockManager {
+  lastPlay: number;
+  delay: number;
+  constructor(delay: number) {
+    this.lastPlay = Date.now();
+    this.delay = delay;
+  }
+  play() {
+    this.lastPlay = Date.now();
+  }
+  isLocked(): boolean {
+    return Date.now() - this.delay <= this.lastPlay;
+  }
+}

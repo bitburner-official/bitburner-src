@@ -7,7 +7,7 @@ import React, { useState } from "react";
 
 import { BadRNG } from "./RNG";
 import { win, reachedLimit } from "./Game";
-import { trusted } from "./utils";
+import { PlayLockManager, trusted } from "./utils";
 
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -16,6 +16,9 @@ import Box from "@mui/material/Box";
 
 const minPlay = 0;
 const maxPlay = 10e3;
+
+const uiDelay = 250;
+const playLockManager = new PlayLockManager(uiDelay);
 
 export function CoinFlip(): React.ReactElement {
   const [investment, setInvestment] = useState(1000);
@@ -38,7 +41,10 @@ export function CoinFlip(): React.ReactElement {
   }
 
   function play(guess: string): void {
-    if (reachedLimit()) return;
+    if (reachedLimit() || playLockManager.isLocked()) {
+      return;
+    }
+    playLockManager.play();
     const v = BadRNG.random();
     let letter: string;
     if (v < 0.5) {
@@ -58,7 +64,7 @@ export function CoinFlip(): React.ReactElement {
     setStatus(correct ? " win!" : "lose!");
     setPlayLock(true);
 
-    setTimeout(() => setPlayLock(false), 250);
+    setTimeout(() => setPlayLock(false), uiDelay);
     if (correct) {
       win(investment);
     } else {

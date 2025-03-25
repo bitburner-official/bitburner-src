@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Money } from "../ui/React/Money";
 import { win, reachedLimit } from "./Game";
 import { WHRNG } from "./RNG";
-import { trusted } from "./utils";
+import { PlayLockManager, trusted } from "./utils";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -106,6 +106,9 @@ function Single(s: number): Strategy {
   };
 }
 
+const uiDelay = 1600;
+const playLockManager = new PlayLockManager(uiDelay);
+
 export function Roulette(): React.ReactElement {
   const [rng] = useState(new WHRNG(new Date().getTime()));
   const [investment, setInvestment] = useState(1000);
@@ -146,8 +149,11 @@ export function Roulette(): React.ReactElement {
   }
 
   function play(strategy: Strategy): void {
-    if (reachedLimit()) return;
+    if (reachedLimit() || playLockManager.isLocked()) {
+      return;
+    }
 
+    playLockManager.play();
     setCanPlay(false);
     setLock(false);
     setStatus("playing");
@@ -187,7 +193,7 @@ export function Roulette(): React.ReactElement {
       setN(n);
 
       reachedLimit();
-    }, 1600);
+    }, uiDelay);
   }
 
   return (
