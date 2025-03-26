@@ -1,4 +1,9 @@
-import { getName, getPasswordType, getRandomIcon, Minigames } from "../controllers/DarkWebServerGenerator";
+import {
+  getName,
+  getPasswordType,
+  getRandomIcon,
+  Minigames,
+} from "../controllers/DarkWebServerGenerator";
 import { Icon } from "../controllers/ServerIcon";
 import { IConstructorParams, Server } from "../../Server/Server";
 import { AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
@@ -91,9 +96,18 @@ export const checkPassword = (attemptedPassword: string, server: BaseServer): Pa
     return getFailureResponse("Beep Boop", `${binaryRepresentation}`, darkWebData);
   }else if (darkWebData.minigameType === Minigames.SpiceLevel) {
     const exactChars = getExactCorrectChars(darkWebData.password, attemptedPassword);
-    const pepperRepresentation = exactChars.map((val) => val ? "🌶️" : "").join("");
+    const pepperRepresentation = exactChars.map((val) => val ? "🌶️" : "").join("") || "0";
     return getFailureResponse("Not spicy enough", `${pepperRepresentation}/${darkWebData.password.length}`, darkWebData);
-  } else {
+  } else if (darkWebData.minigameType === Minigames.ConvertToBase10) {
+    const parsedAttemptedPassword = parseFloat(attemptedPassword);
+    if (!isNaN(parsedAttemptedPassword) && Math.abs(parsedAttemptedPassword - darkWebData.password) < 0.1) {
+      // ignore small rounding errors
+      return getGenericSuccess();
+    }
+    return getFailureResponse(darkWebData.passwordHint, darkWebData.passwordHintData ?? "", darkWebData);
+  }
+
+  else {
     const sharedChars =
       darkWebData.minigameType === Minigames.TimingAttack ? getSharedChars(darkWebData.password, attemptedPassword) : 0;
     return getFailureResponse(darkWebData.passwordHint, darkWebData.passwordHintData ?? "", darkWebData, sharedChars);

@@ -25,40 +25,37 @@ export enum Minigames {
   Synchronize,
   BinaryEncodedFeedback,
   SpiceLevel,
+  ConvertToBase10,
 }
 
 export const getDarkWebServer = (difficulty: number, x: number, y: number): Server => {
-  if (difficulty <= 2 || Math.random() < 0.1) {
-    const serverBuilders = [getEchoVulnServer, getNoPasswordServer, getSortedEchoVulnServer, getDefaultPasswordServer];
-    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty,x, y);
-  }
-  if (difficulty <= 6 || Math.random() < 0.1) {
-    const serverBuilders = [
-      getMastermindHintServer,
-      getDefaultPasswordServer,
-      getSortedEchoVulnServer,
-      getDogNameServer,
-      getRomanNumeralServer,
-      getGuessNumberServer,
-      getYesn_tServer,
-      getBinaryEncodedFeedbackServer,
-      getSpiceLevelServer,
-    ];
-    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty,x, y);
-  }
-  const serverBuilders = [
-    getTimingAttackServer,
-    getLargestPrimeFactorServer,
+  const easyServers = [getEchoVulnServer, getSortedEchoVulnServer, getDefaultPasswordServer];
+  const mediumServers = [
     getMastermindHintServer,
+    getDefaultPasswordServer,
+    getDogNameServer,
     getRomanNumeralServer,
-    getSortedEchoVulnServer,
     getGuessNumberServer,
+    getYesn_tServer,
+    getSpiceLevelServer,
+    getConvertToBase10Server,
+  ]
+  const hardServers = [
+    getLargestPrimeFactorServer,
     getLargeDictionaryServer,
     getEuCountryDictionaryServer,
-    getYesn_tServer,
+    getTimingAttackServer,
     getBinaryEncodedFeedbackServer,
-    getSpiceLevelServer,
-  ];
+  ]
+  if (difficulty <= 2) {
+    const serverBuilders = [getNoPasswordServer, ...easyServers];
+    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty,x, y);
+  }
+  if (difficulty <= 8) {
+    const serverBuilders = [...easyServers, ...mediumServers];
+    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty,x, y);
+  }
+  const serverBuilders = [getSortedEchoVulnServer, ...mediumServers, ...hardServers];
   return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty,x, y);
 };
 
@@ -314,7 +311,28 @@ export const getSpiceLevelServer = (difficulty: number, x: number, y: number): S
   );
 }
 
-
+export const getConvertToBase10Server = (difficulty: number, x: number, y: number): Server => {
+  const password = Math.floor(Math.random() * 10 * (10 * (difficulty + 1)));
+  const bases = [2,3,4,5,6,7,8,9,11,12,13,14,15,16];
+  let base = bases[Math.floor(Math.random() * bases.length)];
+  if (difficulty > 12) {
+    base += bases[Math.floor(Math.random() * bases.length)] / 10;
+  }
+  const encodedPassword = encodeNumberInBaseN(password, base);
+  return DWebServerBuilder(
+    {
+      icon: getRandomIcon(),
+      minigameType: Minigames.ConvertToBase10,
+      password: `${password}`,
+      passwordHint: `the password is the base ${base} number ${encodedPassword} in base 10`,
+      passwordHintData: `${base},${encodedPassword}`,
+      difficulty,
+      x,
+      y,
+    },
+    getName(difficulty),
+  );
+}
 
 // TODO: most common item in array server
 // TODO: more leetcode array manipulation servers
@@ -329,6 +347,46 @@ export const getSpiceLevelServer = (difficulty: number, x: number, y: number): S
 // TODO: basic cypher server?
 
 // TODO: eval pwn server
+
+
+export const encodeNumberInBaseN = (decimalNumber: number, base: number) => {
+  const characters = [...numbers.split(""), "A", "B", "C", "D", "E", "F"];
+  let digits = Math.floor(Math.log(decimalNumber) / Math.log(base));
+  let remaining = decimalNumber;
+  let result: string = "";
+
+  while (remaining >= 0.1) {
+    if (digits === -1) {
+      result += ".";
+    }
+    const place = Math.floor(remaining / (base ** digits));
+    result += characters[place];
+    remaining -= place * (base ** digits);
+    digits -= 1;
+  }
+
+  return result;
+}
+
+export const parseBaseNNumberString = (numberString: string, base: number): number => {
+  const characters = [...numbers.split(""), "A", "B", "C", "D", "E", "F"];
+  let result = 0;
+  let index = 0;
+  let digit = numberString.split(".")[0].length -1;
+
+  while(index < numberString.length) {
+    const currentDigit = numberString[index];
+    if (currentDigit === ".") {
+      index += 1;
+      continue;
+    }
+    result += characters.indexOf(currentDigit) * (base ** digit);
+    index += 1;
+    digit -= 1;
+  }
+
+  return result;
+}
 
 const getResponseTime = (additionalPasses = 0) => Math.floor(95 + Math.random() * 12 + additionalPasses * 25);
 

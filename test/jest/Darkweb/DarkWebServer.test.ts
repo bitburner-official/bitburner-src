@@ -1,16 +1,14 @@
-// noinspection TypeScriptUnresolvedReference
-
 import {
   getEchoVulnServer,
   getNoPasswordServer,
   getDefaultPasswordServer,
   getMastermindHintServer,
-  getTimingAttackServer,
+  getTimingAttackServer, encodeNumberInBaseN, parseBaseNNumberString, getConvertToBase10Server,
 } from "../../../src/DarkWeb/controllers/DarkWebServerGenerator";
 import { checkPassword, SUCCESS_STATUS, AUTH_FAILURE_STATUS } from "../../../src/DarkWeb/models/DarkWebServerData";
 import { defaultSettingsDictionary } from "../../../src/DarkWeb/models/dictionaryData";
 
-describe("DarkwebServer Tests", () => {
+describe("DarkWebServer Tests", () => {
   const difficulty = 1;
 
   test("getEchoVulnServer creates a server and checks password correctly", () => {
@@ -136,5 +134,37 @@ describe("DarkwebServer Tests", () => {
 
     expect(checkPassword(server.darkWebData.password, server).status).toBe(SUCCESS_STATUS);
     expect(server.hasAdminRights).toBe(true);
+  });
+
+  test(" getConvertToBase10Server creates a server with a correct password hint", () => {
+
+    const server = getConvertToBase10Server(20, 0, 0);
+    expect(server).toBeDefined();
+    const failedAttemptResponse = checkPassword("wrongPassword", server);
+    expect(failedAttemptResponse.status).toBe(AUTH_FAILURE_STATUS);
+    const [base, numberString] = failedAttemptResponse.data.split(",");
+
+    expect(numberString).toBe(encodeNumberInBaseN(+server.darkWebData?.password, base));
+
+    const attemptedPassword = parseBaseNNumberString(numberString, base);
+
+    const result = checkPassword(`${attemptedPassword}`, server);
+
+    expect(result.status).toBe(SUCCESS_STATUS);
+  });
+
+
+
+  test("encodeNumberInBaseN and parseBaseNNumberString encode/decode numbers correctly", () => {
+
+    expect(encodeNumberInBaseN(15, 5.5)).toBe("24");
+    expect(encodeNumberInBaseN(16, 5.5)).toBe("25");
+    expect(encodeNumberInBaseN(17, 5.5)).toBe("30.24");
+
+    expect(parseBaseNNumberString("24", 5.5)).toBe(15);
+    expect(parseBaseNNumberString("25", 5.5)).toBe(16);
+
+    const aprox = parseBaseNNumberString("30.24", 5.5)
+    expect(Math.abs(aprox - 17) < 0.1).toBe(true);
   });
 });
