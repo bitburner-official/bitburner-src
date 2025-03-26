@@ -55,14 +55,18 @@ This is currently a design document, but eventually will be the in-game player d
 
 ## TODO:
 
+- packet sniffing (mostly garbage data, sometimes has password)
+  - sniffed data includes fake passwords, html, rickroll, random garbage
+
 - Generate interesting server names
 
 - basic cache rewards on servers
-- Clue notes on servers
+- Clue notes on servers (passwords for another server, hints to password tables, hints to vulnerabilities, partial passwords?)
 
 - File/status viewer for darkweb servers?
 
 - reward caches?
+  - stock market unlocks?
 
 - Support servers being renamed occasionally
 

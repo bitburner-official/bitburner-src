@@ -20,7 +20,11 @@ export enum Minigames {
   RomanNumeral,
   DogNames,
   GuessNumber,
-  CommonPasswordDictionary
+  CommonPasswordDictionary,
+  Yesn_t,
+  Synchronize,
+  BinaryEncodedFeedback,
+  SpiceLevel,
 }
 
 export const getDarkWebServer = (difficulty: number, x: number, y: number): Server => {
@@ -36,6 +40,9 @@ export const getDarkWebServer = (difficulty: number, x: number, y: number): Serv
       getDogNameServer,
       getRomanNumeralServer,
       getGuessNumberServer,
+      getYesn_tServer,
+      getBinaryEncodedFeedbackServer,
+      getSpiceLevelServer,
     ];
     return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty,x, y);
   }
@@ -48,6 +55,9 @@ export const getDarkWebServer = (difficulty: number, x: number, y: number): Serv
     getGuessNumberServer,
     getLargeDictionaryServer,
     getEuCountryDictionaryServer,
+    getYesn_tServer,
+    getBinaryEncodedFeedbackServer,
+    getSpiceLevelServer,
   ];
   return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty,x, y);
 };
@@ -181,7 +191,7 @@ export const getTimingAttackServer = (difficulty: number, x: number, y: number):
     "I considered it for a bit, but that's not it",
     "I spent some time on it, but that's not the password",
   ];
-  const length = 3 + difficulty;
+  const length = 3 + (difficulty/3);
   return DWebServerBuilder(
     {
       icon: getRandomIcon(),
@@ -256,7 +266,55 @@ export const getEuCountryDictionaryServer = (difficulty: number, x: number, y: n
   return getDictionaryAttackServer(difficulty, x, y, EUCountries, ["My favorite EU country"], Minigames.CommonPasswordDictionary);
 }
 
-// offset every other row
+export const getYesn_tServer = (difficulty: number, x: number, y: number): Server => {
+  const password = getPassword(3 + (difficulty/3), true, difficulty > 8, false, false);
+  return DWebServerBuilder(
+    {
+      icon: getRandomIcon(),
+      minigameType: Minigames.Yesn_t,
+      password,
+      passwordHint: "",
+      difficulty,
+      x,
+      y,
+    },
+    getName(difficulty),
+  );
+}
+
+export const getBinaryEncodedFeedbackServer = (difficulty: number, x: number, y: number): Server => {
+  const password = getPassword(3 + (difficulty/3), true, difficulty > 8, false, false);
+  return DWebServerBuilder(
+    {
+      icon: getRandomIcon(),
+      minigameType: Minigames.BinaryEncodedFeedback,
+      password,
+      passwordHint: "",
+      difficulty,
+      x,
+      y,
+    },
+    getName(difficulty),
+  );
+}
+
+export const getSpiceLevelServer = (difficulty: number, x: number, y: number): Server => {
+  const password = getPassword(3 + (difficulty/3), true, difficulty > 8, false, false);
+  return DWebServerBuilder(
+    {
+      icon: getRandomIcon(),
+      minigameType: Minigames.SpiceLevel,
+      password,
+      passwordHint: "",
+      difficulty,
+      x,
+      y,
+    },
+    getName(difficulty),
+  );
+}
+
+
 
 // TODO: most common item in array server
 // TODO: more leetcode array manipulation servers
@@ -264,6 +322,7 @@ export const getEuCountryDictionaryServer = (difficulty: number, x: number, y: n
 // TODO: arithmetic string server (eval bait)
 
 // TODO: more guess and check servers
+// warmer / colder server ?
 
 // TODO: verbal description of simple math problem (nth root of x)
 
