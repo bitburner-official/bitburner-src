@@ -6,6 +6,7 @@ import { DarkWebEvents, DarkWebState } from "../models/DarkWebState";
 import { GetServer } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
 import { SpecialServers } from "../../Server/data/SpecialServers";
+import { BaseServer } from "../../Server/BaseServer";
 
 export const DW_NET_WIDTH = 4000;
 export const DW_NET_HEIGHT = 6000;
@@ -58,7 +59,7 @@ export function DWNetDisplayWrapper(): React.ReactElement {
     }
   };
 
-  const allowAuth = (server: Server) =>  server.hasAdminRights ||
+  const allowAuth = (server: BaseServer) =>  server.hasAdminRights ||
       server.serversOnNetwork.some((neighbor) => GetServer(neighbor)?.hasAdminRights);
 
   const darkWebRoot = GetServer(SpecialServers.DarkWeb);

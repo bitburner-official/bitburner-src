@@ -94,7 +94,7 @@ export const connectServers = (server1: BaseServer, server2: BaseServer) => {
   server2.serversOnNetwork.push(server1.hostname);
 };
 
-export const disconnectServers = (server1: Server, server2: Server) => {
+export const disconnectServers = (server1: BaseServer, server2: BaseServer) => {
   server1.serversOnNetwork = server1.serversOnNetwork.filter((conn) => conn !== server2.hostname);
   server2.serversOnNetwork = server2.serversOnNetwork.filter((conn) => conn !== server1.hostname);
 };

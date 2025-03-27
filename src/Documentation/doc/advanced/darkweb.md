@@ -55,12 +55,15 @@ This is currently a design document, but eventually will be the in-game player d
 
 ## TODO:
 
+- add/remove/balance servers periodically
+
+- cha xp on password attempt or success
+
 - packet sniffing (mostly garbage data, sometimes has password)
   - sniffed data includes fake passwords, html, rickroll, random garbage
 
 - Generate interesting server names
 
-- basic cache rewards on servers
 - Clue notes on servers (passwords for another server, hints to password tables, hints to vulnerabilities, partial passwords?)
 
 - File/status viewer for darkweb servers?
@@ -70,8 +73,11 @@ This is currently a design document, but eventually will be the in-game player d
 
 - Support servers being renamed occasionally
 
-- support saving darkweb network
 - Harden existing commands against loops in network? or exclude darkweb from them?
+  - ns.scan
+  - exec (run? spawn?)
+  - ns.scp & scp
+  - hack against, run hack on +weak +grow
 - Limit ns commands from use on darkweb servers
 
 

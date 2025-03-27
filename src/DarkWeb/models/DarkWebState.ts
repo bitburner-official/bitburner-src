@@ -8,7 +8,7 @@ export const NET_DEPTH = 16;
 
 export type DarkWebState = {
   openServer: BaseServer | null;
-  DarkWebNetwork: (Server | null)[][];
+  DarkWebNetwork: (BaseServer | null)[][];
 }
 
 export const DarkWebState : DarkWebState = {

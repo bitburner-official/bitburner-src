@@ -6,7 +6,7 @@ import { sleep } from "../../Go/boardAnalysis/goAI";
 import { getIcon, Icon } from "../controllers/ServerIcon";
 import { DarkWebEvents } from "../models/DarkWebState";
 import { BaseServer } from "../../Server/BaseServer";
-import { getRewardFromCache } from "../models/effcts";
+import { getRewardFromCache, handleSuccessfulAuth } from "../models/effects";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -30,7 +30,6 @@ export const DWPasswordPromptModal = ({ open, onClose, server }: DWPasswordPromp
       setResponse(JSON.stringify(response, null, 4));
       if (response.status == SUCCESS_STATUS) {
         DarkWebEvents.emit("server-unlocked", server);
-        getRewardFromCache(server.darkWebData?.difficulty);
       } else {
         setEnableSubmit(true);
       }

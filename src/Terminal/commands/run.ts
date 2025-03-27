@@ -5,7 +5,7 @@ import { runProgram } from "./runProgram";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasContractExtension } from "../../Paths/ContractFilePath";
 import { hasProgramExtension } from "../../Paths/ProgramFilePath";
-import { getRewardFromCache, hasCacheFileExtension } from "../../DarkWeb/models/effcts";
+import { hasCacheFileExtension } from "../../DarkWeb/models/effects";
 
 export function run(args: (string | number | boolean)[], server: BaseServer): void {
   // Run a program or a script
@@ -28,7 +28,7 @@ export function run(args: (string | number | boolean)[], server: BaseServer): vo
   } else if (hasProgramExtension(path)) {
     return runProgram(path, args, server);
   } else if (hasCacheFileExtension(path)) {
-    return getRewardFromCache(server.darkWebData?.difficulty);
+    return Terminal.startAction(6, "c",server);
   }
   Terminal.error(`Invalid file extension. Only .js, .jsx, .ts, .tsx, .script, .cct, and .exe files can be run.`);
 }

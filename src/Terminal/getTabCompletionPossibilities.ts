@@ -93,6 +93,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
   const addCodingContracts = () => {
     addGeneric({ iterable: currServ.contracts.map((contract) => contract.fn), usePathing: true });
   };
+  const addCaches = () => addGeneric({ iterable: currServ.caches, usePathing: true });
 
   const addLiterature = () => {
     addGeneric({ iterable: currServ.messages.filter((message) => message.endsWith(".lit")), usePathing: true });
@@ -222,6 +223,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       if (onFirstCommandArg) {
         addPrograms();
         addCodingContracts();
+        addCaches();
         addScripts();
       } else {
         const options = await scriptAutocomplete();

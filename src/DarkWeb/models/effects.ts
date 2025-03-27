@@ -3,17 +3,40 @@ import { CompletedProgramName, ToastVariant } from "@enums";
 import { CreateProgramWork } from "../../Work/CreateProgramWork";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { formatMoney, formatNumber } from "../../ui/formatNumber";
-import { tryGeneratingRandomContract } from "../../CodingContract/ContractGenerator";
+import { generateContract, tryGeneratingRandomContract } from "../../CodingContract/ContractGenerator";
+import { BaseServer } from "../../Server/BaseServer";
+import { FilePath, resolveFilePath } from "../../Paths/FilePath";
+
+export const handleSuccessfulAuth = (server: BaseServer) => {
+  server.hasAdminRights = true;
+
+  // TODO: clue notes
+
+
+  // TODO: balance coding contract chance
+  if (Math.random() < 0.1) {
+    generateContract({ server: server.hostname })
+  }
+
+  // TODO: balance cache chance
+  if (Math.random() < 0.5) {
+    const cacheFilename = resolveFilePath(`reward-${Math.random().toString().substring(2, 7)}.cache` as FilePath);
+    if (!cacheFilename) {
+      throw new Error(`Failed to resolve cache filename`);
+    }
+    server.caches.push(cacheFilename);
+  }
+}
 
 export const hasCacheFileExtension = (path: string) => {
   return path.endsWith(".cache");
 }
 
-export const getRewardFromCache = (difficulty: number = 1) => {
+export const getRewardFromCache = (server: BaseServer) => {
   Player.karma -= 5; // TODO: adjust balance
   const rewards = [getMoneyReward, getXpReward, getNextPortOpener, getCCTReward];
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
-  reward(difficulty);
+  reward(server.darkWebData?.difficulty ?? 1);
 }
 
 export const getCCTReward = (difficulty: number) => {
@@ -23,17 +46,25 @@ export const getCCTReward = (difficulty: number) => {
 }
 
 export const getMoneyReward = (difficulty: number) => {
-  const augCount = Player.augmentations.length;
-  const reward = (difficulty + 1) * 1e7 * (1.05 ** augCount) * Player.mults.crime_money; // TODO: adjust balance
+  const reward = (1.2 ** difficulty) * 1e7 * getMultiplierFromCharisma() * Player.mults.crime_money; // TODO: adjust balance
   Player.gainMoney(reward, "other");
   SnackbarEvents.emit(`You have discovered a cache with ${formatMoney(reward)}`, ToastVariant.SUCCESS, 4000);
 }
 
 export const getXpReward = (difficulty: number) => {
   const augCount = Player.augmentations.length;
-  const reward =  (difficulty + 1) * 100 * (1.04 ** augCount) * Player.mults.charisma_exp; // TODO: adjust balance
+  const reward =  (1.2 ** difficulty) * 100 * (1.04 ** augCount) * Player.mults.charisma_exp; // TODO: adjust balance
   Player.gainCharismaExp(reward);
   SnackbarEvents.emit(`You have discovered a cache with ${formatNumber(reward, 0)} cha XP`, ToastVariant.SUCCESS, 4000);
+}
+
+/**
+ * Returns a small multiplier based on charisma. gives ~1.2 at 2000 charisma and ~1.6 at 10000 charisma. Caps at 2.1 at infinite cha
+ */
+export const getMultiplierFromCharisma = () => {
+  const charisma = Player.skills.charisma;
+  const growthRate = 0.0002; // Adjust this value to control the growth rate
+  return 1 + (0.5) * (1 - Math.exp(-growthRate* charisma)) + (0.6) * (1 - Math.exp(-growthRate * 0.2 * charisma));
 }
 
 
@@ -60,5 +91,5 @@ export const getNextPortOpener = (difficulty: number) => {
     }
   }
 
-  return getRewardFromCache(difficulty);
+  return getXpReward(difficulty);
 }

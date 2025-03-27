@@ -8,6 +8,7 @@ import { Icon } from "../controllers/ServerIcon";
 import { IConstructorParams, Server } from "../../Server/Server";
 import { AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
 import { BaseServer } from "../../Server/BaseServer";
+import { handleSuccessfulAuth } from "./effects";
 
 export const SUCCESS_STATUS = 200;
 export const AUTH_FAILURE_STATUS = 401;
@@ -57,11 +58,10 @@ export const DWebServerBuilder = (options: DarkWebServerData, name: string = get
     adminRights: false,
     darkWebData: darkWebData,
   };
-  const standardServer = new Server(params);
-  standardServer.backdoorInstalled = true; // TODO: remove once testing is done
-  AddToAllServers(standardServer);
+  const server = new Server(params);
+  AddToAllServers(server);
 
-  return standardServer;
+  return server;
 };
 
 export const checkPassword = (attemptedPassword: string, server: BaseServer): PasswordResponse => {
@@ -70,7 +70,7 @@ export const checkPassword = (attemptedPassword: string, server: BaseServer): Pa
     throw new Error("Dark web server missing dark web data");
   }
   if (darkWebData.password === attemptedPassword) {
-    server.hasAdminRights = true;
+    handleSuccessfulAuth(server)
     return getGenericSuccess();
   } else if (darkWebData.minigameType === Minigames.MastermindHint) {
     const { exactCharacters, misplacedCharacters } = getMastermindResponse(darkWebData.password, attemptedPassword);
@@ -100,8 +100,8 @@ export const checkPassword = (attemptedPassword: string, server: BaseServer): Pa
     return getFailureResponse("Not spicy enough", `${pepperRepresentation}/${darkWebData.password.length}`, darkWebData);
   } else if (darkWebData.minigameType === Minigames.ConvertToBase10) {
     const parsedAttemptedPassword = parseFloat(attemptedPassword);
-    if (!isNaN(parsedAttemptedPassword) && Math.abs(parsedAttemptedPassword - darkWebData.password) < 0.1) {
-      // ignore small rounding errors
+    if (!isNaN(parsedAttemptedPassword) && Math.abs(parsedAttemptedPassword - +darkWebData.password) < 0.3) {
+      // ignore small rounding errors during base conversion and back
       return getGenericSuccess();
     }
     return getFailureResponse(darkWebData.passwordHint, darkWebData.passwordHintData ?? "", darkWebData);
