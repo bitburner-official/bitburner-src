@@ -208,7 +208,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     // directly return the module, without even attempting to fetch, due to the way
     // modules work.
     URL.revokeObjectURL(url);
-    script.mod = new LoadedModule(url, module);
+    script.mod = new LoadedModule(url, module, sourceURL, sourceMap);
     moduleCache.set(newCode, new WeakRef(script.mod));
     cleanup.register(script.mod, newCode);
   }

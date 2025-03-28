@@ -12,7 +12,9 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
   }
   if (ws && typeof e === "string") {
     const headerText = basicErrorMessage(ws, "", "");
-    if (!e.includes(headerText)) e = basicErrorMessage(ws, e);
+    if (!e.includes(headerText)) {
+      e = basicErrorMessage(ws, e);
+    }
   } else if (e instanceof SyntaxError) {
     const msg = `${e.message} (sorry we can't be more helpful)`;
     e = ws ? basicErrorMessage(ws, msg, "SYNTAX") : `SYNTAX ERROR:\n\n${msg}`;
@@ -21,17 +23,36 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
     if (e.name === "Canceled" && e.message === "Canceled") {
       return;
     }
+    const msg = getErrorMessageWithStackAndCause(e, "", ws);
+    /**
+     * Print the error to console. This is useful when the player wants to check the stack trace after closing the error
+     * dialog and relevant tail windows.
+     */
     if (ws) {
       console.error(`An error was thrown in your script. Hostname: ${ws.hostname}, script name: ${ws.name}.`);
+      /**
+       * With scripts contain inline source map (e.g., transformed TypeScript/JSX scripts), the built-in developer tool
+       * of browsers uses the inline source map and show the original lines/columns in the stack trace. However, due to
+       * how we cache module, filenames in the stack trace may be wrong. For more information, please check
+       * parseStackTrace in src\utils\StackTraceUtils.ts.
+       *
+       * getErrorMessageWithStackAndCause uses parseStackTrace to recover correct debug information (file name, lines,
+       * columns).
+       */
+      console.error(msg);
+    } else {
+      /**
+       * This happens when there is:
+       * - Uncaught async error in the player's script. [1]
+       * - Uncaught async error in our codebase or our dependencies. [2]
+       *
+       * In both cases, we don't have access to a WorkerScript instance, so printing the error as-is is fine. Doing that
+       * is also useful for [2]. Occasionally, our dependencies have bugs (especially monaco), so having the stack trace
+       * is good for debugging.
+       */
+      console.error(e);
+      console.error("check this", msg);
     }
-    /**
-     * If e is an instance of Error, we print it to the console. This is especially useful when debugging a TypeScript
-     * script. The stack trace in the error popup contains only the trace of the transpiled code. Even with a source
-     * map, parsing it to get the relevant info from the original TypeScript file is complicated. The built-in developer
-     * tool of browsers will do that for us if we print the error to the console.
-     */
-    console.error(e);
-    const msg = getErrorMessageWithStackAndCause(e);
     e = ws ? basicErrorMessage(ws, msg) : `RUNTIME ERROR:\n\n${msg}`;
   }
   if (typeof e !== "string") {
