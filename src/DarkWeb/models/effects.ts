@@ -19,7 +19,8 @@ export const handleSuccessfulAuth = (server: BaseServer) => {
   }
 
   // TODO: balance cache chance
-  if (Math.random() < 0.5) {
+  const chance =  0.2 * (1.03 ** (server.darkWebData?.difficulty ?? 1))
+  if (Math.random() < chance) {
     const cacheFilename = resolveFilePath(`reward-${Math.random().toString().substring(2, 7)}.cache` as FilePath);
     if (!cacheFilename) {
       throw new Error(`Failed to resolve cache filename`);
@@ -33,7 +34,7 @@ export const hasCacheFileExtension = (path: string) => {
 }
 
 export const getRewardFromCache = (server: BaseServer) => {
-  Player.karma -= 5; // TODO: adjust balance
+  Player.karma -= 5; // TODO: adjust karma balance
   const rewards = [getMoneyReward, getXpReward, getNextPortOpener, getCCTReward];
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
   reward(server.darkWebData?.difficulty ?? 1);

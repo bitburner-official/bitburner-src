@@ -57,6 +57,8 @@ This is currently a design document, but eventually will be the in-game player d
 
 - add/remove/balance servers periodically
 
+- hide servers not yet explored near
+
 - cha xp on password attempt or success
 
 - packet sniffing (mostly garbage data, sometimes has password)
@@ -81,9 +83,10 @@ This is currently a design document, but eventually will be the in-game player d
 - Limit ns commands from use on darkweb servers
 
 
-- bonus time / server scrambler
+- bonus time?
+- server scrambler when offline?
 
-- Darkweb server difficulty? port crackers required?
+- Darkweb server difficulty?
 
 - Limit darkweb stuff to when feature is enabled (bitnode? own tor router?)
 - start more cleanly with root access to "darkweb" server
@@ -95,6 +98,13 @@ https://discord.com/channels/415207508303544321/459097632896188436/1345773862263
 https://discord.com/channels/415207508303544321/415213435974975508/1352628138261086339
 
 ## Idea scratch space
+
+- honeypot servers
+  - rickroll?
+  - glitchy UI?
+  - scripts crash?
+  - accept all passwords?
+  - Edit scripts running on them?
 
 - islands in the network? can only be reached with a moving server?
 - tunnels that scripts could go through but not the terminal?

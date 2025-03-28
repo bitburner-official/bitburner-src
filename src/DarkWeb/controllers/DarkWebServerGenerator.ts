@@ -3,7 +3,7 @@ import { Icon } from "./ServerIcon";
 import { Server } from "../../Server/Server";
 import {
   commonPasswordDictionary,
-  defaultSettingsDictionary, EUCountries,
+  defaultSettingsDictionary, dogNameDictionary, EUCountries,
   letters,
   numbers,
   special, unicode,
@@ -21,6 +21,7 @@ export enum Minigames {
   DogNames,
   GuessNumber,
   CommonPasswordDictionary,
+  EUCountryDictionary,
   Yesn_t,
   Synchronize,
   BinaryEncodedFeedback,
@@ -161,9 +162,8 @@ export const getDefaultPasswordServer = (difficulty: number, x: number, y: numbe
 };
 
 export const getDogNameServer = (difficulty: number, x: number, y: number): Server => {
-  const dictionary = ["fido", "spot", "rover", "max"];
   const hintTemplates = ["It's my dog's name", "It's the dog's name", "my first dog's name"];
-  return getDictionaryAttackServer(difficulty,x, y, dictionary, hintTemplates, Minigames.DogNames);
+  return getDictionaryAttackServer(difficulty,x, y, dogNameDictionary, hintTemplates, Minigames.DogNames);
 };
 
 export const getMastermindHintServer = (difficulty: number, x: number, y: number): Server => {
@@ -260,7 +260,7 @@ export const getLargeDictionaryServer = (difficulty: number, x: number, y: numbe
 }
 
 export const getEuCountryDictionaryServer = (difficulty: number, x: number, y: number): Server => {
-  return getDictionaryAttackServer(difficulty, x, y, EUCountries, ["My favorite EU country"], Minigames.CommonPasswordDictionary);
+  return getDictionaryAttackServer(difficulty, x, y, EUCountries, ["My favorite EU country"], Minigames.EUCountryDictionary);
 }
 
 export const getYesn_tServer = (difficulty: number, x: number, y: number): Server => {
@@ -340,7 +340,7 @@ export const getConvertToBase10Server = (difficulty: number, x: number, y: numbe
 // TODO: arithmetic string server (eval bait)
 
 // TODO: more guess and check servers
-// warmer / colder server ?
+// TODO: warmer / colder server ?
 
 // TODO: verbal description of simple math problem (nth root of x)
 
@@ -387,6 +387,94 @@ export const parseBaseNNumberString = (numberString: string, base: number): numb
 
   return result;
 }
+
+// example:  4 + 5 * ( 6 + 7 ) / 2
+export const parseSimpleArithmeticExpression = (expression: string): number => {
+
+  const tokens = expression.split("");
+
+  // Identify parentheses
+  let currentDepth = 0;
+  const depth = tokens.map((token) => {
+    if (token === "(") {
+      currentDepth += 1;
+    } else if (token === ")") {
+      currentDepth -= 1;
+      return currentDepth + 1
+    }
+    return currentDepth;
+  })
+  const depth1Start = depth.indexOf(1);
+  // find the last 1 before the first 0 after depth1Start
+  const firstZeroAfterDepth1Start = depth.indexOf(0, depth1Start);
+  const depth1End = firstZeroAfterDepth1Start === -1 ? depth.length -1 : firstZeroAfterDepth1Start -1;
+  if (depth1Start !== -1) {
+    const subExpression = tokens.slice(depth1Start + 1, depth1End).join("");
+    const result = parseSimpleArithmeticExpression(subExpression);
+    tokens.splice(depth1Start, depth1End - depth1Start + 1, result.toString());
+    return parseSimpleArithmeticExpression(tokens.join(""));
+  }
+
+  // handle multiplication and division
+  let remainingExpression = tokens.join("");
+  const multiplicationDivisionRegex = /(-?\d*\.?\d+) *([*\/]) *(-?\d*\.?\d+)/;
+  let match = remainingExpression.match(multiplicationDivisionRegex);
+
+  while(match) {
+    const [__, left, operator, right] = match;
+    const result = operator === "*" ? parseFloat(left) * parseFloat(right) : parseFloat(left) / parseFloat(right);
+    const resultString = Math.abs(result) < 0.000001 ? result.toFixed(20) : result.toString();
+    remainingExpression = remainingExpression.replace(match[0], resultString);
+    match = remainingExpression.match(multiplicationDivisionRegex);
+  }
+
+  // handle addition and subtraction
+  const additionSubtractionRegex = /(-?\d*\.?\d+) *([+-]) *(-?\d*\.?\d+)/;
+  match = remainingExpression.match(additionSubtractionRegex);
+
+  while(match) {
+    const [__, left, operator, right] = match;
+    const result = operator === "+" ? parseFloat(left) + parseFloat(right) : parseFloat(left) - parseFloat(right);
+    remainingExpression = remainingExpression.replace(match[0], result.toString());
+    match = remainingExpression.match(additionSubtractionRegex);
+  }
+
+  return parseFloat(remainingExpression);
+}
+
+export const generateSimpleArithmeticExpression = (difficulty: number): string => {
+
+  const operators = ["+", "-", "*", "/"];
+  const operatorCount = Math.floor(difficulty / 4);
+  const expression = [];
+  for (let i = 0; i < operatorCount; i++) {
+    expression.push(Math.ceil(Math.random() * 98));
+    expression.push(operators[Math.floor(Math.random() * operators.length)]);
+
+    if (difficulty > 5 && Math.random() < difficulty / (difficulty + 50)) {
+      expression.push("(");
+      expression.push(generateSimpleArithmeticExpression(difficulty / 2));
+      expression.push(")");
+      expression.push(operators[Math.floor(Math.random() * operators.length)]);
+    }
+  }
+  expression.push(Math.ceil(Math.random() * 98));
+
+  const result = expression.join(" ");
+
+  try{
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const calc = parseFloat(eval(result));
+    if (Math.abs(calc) < 0.1) {
+      return generateSimpleArithmeticExpression(difficulty);
+    }
+  } catch(__) {
+    return generateSimpleArithmeticExpression(difficulty);
+  }
+
+  return result;
+}
+
 
 const getResponseTime = (additionalPasses = 0) => Math.floor(95 + Math.random() * 12 + additionalPasses * 25);
 

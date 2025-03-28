@@ -3,7 +3,11 @@ import {
   getNoPasswordServer,
   getDefaultPasswordServer,
   getMastermindHintServer,
-  getTimingAttackServer, encodeNumberInBaseN, parseBaseNNumberString, getConvertToBase10Server,
+  getTimingAttackServer,
+  encodeNumberInBaseN,
+  parseBaseNNumberString,
+  getConvertToBase10Server,
+  parseSimpleArithmeticExpression, generateSimpleArithmeticExpression,
 } from "../../../src/DarkWeb/controllers/DarkWebServerGenerator";
 import { checkPassword, SUCCESS_STATUS, AUTH_FAILURE_STATUS } from "../../../src/DarkWeb/models/DarkWebServerData";
 import { defaultSettingsDictionary } from "../../../src/DarkWeb/models/dictionaryData";
@@ -166,5 +170,20 @@ describe("DarkWebServer Tests", () => {
 
     const aprox = parseBaseNNumberString("30.24", 5.5)
     expect(Math.abs(aprox - 17) < 0.1).toBe(true);
+  });
+
+  test("parseSimpleArithmeticExpression parses expressions correctly", () => {
+    expect(parseSimpleArithmeticExpression("1 + 2")).toBe(3);
+    expect(parseSimpleArithmeticExpression("1 - 2")).toBe(-1);
+    expect(parseSimpleArithmeticExpression("5 + 1 * 3")).toBe(8);
+    expect(parseSimpleArithmeticExpression("5 * ( 6 + 7 )")).toBe(65);
+    expect(parseSimpleArithmeticExpression("4 + 5 * ( 6 + 7 ) / 2")).toBe(36.5);
+    expect(parseSimpleArithmeticExpression("1 + 3 * ( 4 / 5 ) / 2 + 4 ")).toBe(6.2);
+    expect(Math.abs(parseSimpleArithmeticExpression("1 + 3 * ((4 / 5) / 2 ) * 3 + 4 "))- 8.6 < 0.01 ).toBe(true);
+    expect(Math.abs(parseSimpleArithmeticExpression("23 * ( 41 + 76 + 32 * 27 * 6 ) - 34 - 49 + 93 - ( 11 / 41 - 62 / 6 + 5 ) * 19 - 0"))- 122029.235 < 0.9 ).toBe(true);
+    expect(parseSimpleArithmeticExpression("48 - 38 * 24 + ( 72 / 8 * 4 ) - 76 * 61 * 16")).toBe(-75004);
+    expect(Math.ceil(parseSimpleArithmeticExpression("8 / 15 / 91 / ( 54 * 10 * 84 ) - 77 * 83 + ( 83 * 75 / 8 ) + 54"))).toBe(-5558);
+    expect(parseSimpleArithmeticExpression("37 / 8 / 81 / ( 1 + ( 80 * 31 ) - 26 - 53 ) / 52 / ( 18 * 72 / 78 ) * 83 * ( 21 * 88 + 96 ) + 23")).toBeCloseTo(24.61, -1);
+    expect(parseSimpleArithmeticExpression("94 / ( 76 * 63 * ( 89 * 33 ) + 70 ) * 13 * 73 * 61 * 81 * 74")).toBeCloseTo(2319.425);
   });
 });
