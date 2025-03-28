@@ -14,6 +14,7 @@ import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
+import { populateDarkWebNetwork } from "../DarkWeb/controllers/DarkWebNetworkGenerator";
 
 /**
  * Map of all Servers that exist in the game
@@ -212,6 +213,8 @@ export function initForeignServers(homeComputer: Server): void {
   for (let i = 1; i < networkLayers.length; i++) {
     linkNetworkLayers(networkLayers[i], () => getRandomArrayItem(networkLayers[i - 1]));
   }
+
+  populateDarkWebNetwork(); // TODO: make this conditional
 }
 
 export function prestigeAllServers(): void {

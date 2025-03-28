@@ -81,6 +81,8 @@ This is currently a design document, but eventually will be the in-game player d
 - Limit ns commands from use on darkweb servers
 
 
+- bonus time / server scrambler
+
 - Darkweb server difficulty? port crackers required?
 
 - Limit darkweb stuff to when feature is enabled (bitnode? own tor router?)

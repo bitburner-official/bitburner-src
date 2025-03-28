@@ -46,9 +46,10 @@ export const DWebServerBuilder = (options: DarkWebServerData, name: string = get
     y: options.y ?? -1,
   };
 
+  const ip = createUniqueRandomIp();
   const params: IConstructorParams = {
-    hostname: name,
-    ip: createUniqueRandomIp(),
+    hostname: ip,
+    ip: ip,
     organizationName: "darkweb",
     maxRam: 16,
     requiredHackingSkill: Math.floor(((darkWebData.difficulty +1) * Math.random() * 10) ** 1.5),

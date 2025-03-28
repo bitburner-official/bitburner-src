@@ -1,13 +1,12 @@
 import { getDarkWebServer } from "./DarkWebServerGenerator";
-import { DarkWebEvents, DarkWebState, NET_DEPTH, NET_WIDTH } from "../models/DarkWebState";
+import { DarkWebEvents, DarkWebState, NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarkWebState";
 import { connectServers, DeleteServer, disconnectServers, GetAllServers, GetServer } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
 
-const HORIZONTAL_CONNECTION_CHANCE = 0.6;
-const VERTICAL_CONNECTION_CHANCE = 0.4;
-const SERVER_DENSITY = 0.6;
+const HORIZONTAL_CONNECTION_CHANCE = 0.5;
+const VERTICAL_CONNECTION_CHANCE = 0.3;
 const AIR_GAP_DEPTH = 8;
 
 export const populateDarkWebNetwork = () => {
@@ -17,15 +16,10 @@ export const populateDarkWebNetwork = () => {
   }
 
   clearDarkWebNetwork();
-  for (let i = 0; i < NET_DEPTH; i++) {
-    for (let j = 0; j < NET_WIDTH; j++) {
-      if (Math.random() > SERVER_DENSITY || isOnAirGap(i)) {
-        continue;
-      }
-      const server = getDarkWebServer(i, i, j);
-      addServerToNetwork(server, i, j, true);
-    }
+  while (getDarkWebServers().length < NET_DEPTH * NET_WIDTH * SERVER_DENSITY) {
+    addRandomServer();
   }
+
 };
 
 export const clearDarkWebNetwork = () => {
@@ -42,8 +36,18 @@ export const loadDarkWebNetwork = () => {
   const darkWebServers = GetAllServers().filter(s => s.darkWebData);
   for (const server of darkWebServers) {
     if (server.darkWebData) {
+      disconnectServer(server);
       addServerToNetwork(server, server.darkWebData.x, server.darkWebData.y, true);
     }
+  }
+}
+
+export const addRandomServer = () => {
+  const difficulty = Math.floor(Math.random() * NET_DEPTH);
+  const newServer = getDarkWebServer(difficulty, -1, -1);
+  const success = moveServer(newServer);
+  if (!success) {
+    DeleteServer(newServer.hostname);
   }
 }
 
@@ -68,16 +72,15 @@ export const moveServer = (server: BaseServer) => {
 
     const newY = Math.floor(Math.random() * NET_WIDTH);
     if (DarkWebState.DarkWebNetwork[newX][newY] !== null) {
+      console.log(`attempted to place on ${newX}, ${newY} but it was occupied`);
       continue;
     }
-    server.serversOnNetwork.forEach((conn) => {
-      const connectedServer = GetServer(conn);
-      if (connectedServer) {
-        disconnectServers(server, connectedServer as Server);
-      }
-    });
 
-    DarkWebState.DarkWebNetwork[darkWebData.x][darkWebData.y] = null;
+    disconnectServer(server);
+
+    if (DarkWebState.DarkWebNetwork[darkWebData.x]?.[darkWebData.y]) {
+      DarkWebState.DarkWebNetwork[darkWebData.x][darkWebData.y] = null;
+    }
     addServerToNetwork(server, newX, newY, true);
     DarkWebEvents.emit();
     return true;
@@ -87,13 +90,16 @@ export const moveServer = (server: BaseServer) => {
 
 export const addServerToNetwork = (server: BaseServer, x: number, y: number, addConnections = true) => {
   if (DarkWebState.DarkWebNetwork[x]?.[y] === undefined) {
-    throw new Error("Invalid coordinates");
+    console.error("Invalid coordinates");
+    return;
   }
   if (DarkWebState.DarkWebNetwork[x][y]?.hostname) {
-    throw new Error("Server already exists at this location");
+    console.error("Server already exists at this location");
+    return;
   }
   if (!server.darkWebData) {
-    throw new Error("Server missing dark web data");
+    console.error("Server missing dark web data");
+    return;
   }
 
   DarkWebState.DarkWebNetwork[x][y] = server;
@@ -113,6 +119,15 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number, add
     connectServers(server, darkWebRoot);
   }
 };
+
+export const disconnectServer = (server: BaseServer) => {
+  server.serversOnNetwork.forEach((conn) => {
+    const connectedServer = GetServer(conn);
+    if (connectedServer) {
+      disconnectServers(server, connectedServer as Server);
+    }
+  });
+}
 
 export const addRandomConnections = (server: BaseServer) => {
   const darkWebData = server.darkWebData;
