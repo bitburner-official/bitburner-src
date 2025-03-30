@@ -29,6 +29,19 @@ interface IProps {
   resetError?: () => void;
 }
 
+function exportSaveFile(): void {
+  load()
+    .then((content) => {
+      const epochTime = Math.round(Date.now() / 1000);
+      const extension = isBinaryFormat(content) ? "json.gz" : "json";
+      const filename = `RECOVERY_BITBURNER_${epochTime}.${extension}`;
+      downloadContentAsFile(content, filename);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+}
+
 export function RecoveryRoot({ softReset, errorData, resetError }: IProps): React.ReactElement {
   function recover(): void {
     if (resetError) resetError();
@@ -46,14 +59,7 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
   }
 
   useEffect(() => {
-    load()
-      .then((content) => {
-        const epochTime = Math.round(Date.now() / 1000);
-        const extension = isBinaryFormat(content) ? "json.gz" : "json";
-        const filename = `RECOVERY_BITBURNER_${epochTime}.${extension}`;
-        downloadContentAsFile(content, filename);
-      })
-      .catch((err) => console.error(err));
+    exportSaveFile();
   }, []);
 
   let instructions;
@@ -104,6 +110,9 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
         </Box>
       )}
       {instructions}
+      <br />
+      <Button onClick={exportSaveFile}>Export save file</Button>
+      <br />
       <br />
       <Typography>You can disable the recovery mode, but the game may not work correctly.</Typography>
       <ButtonGroup sx={{ my: 2 }}>
