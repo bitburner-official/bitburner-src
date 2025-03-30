@@ -308,7 +308,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     joinBladeburnerDivision: (ctx) => () => {
       if (!canAccessBitNodeFeature(7) && !canAccessBitNodeFeature(6)) {
-        helpers.log(ctx, () => "You do not have Source-File 6 and Source-File 7.");
+        helpers.log(ctx, () => "You do not have Source-File 6 or Source-File 7.");
         return false;
       }
       if (Player.bitNodeOptions.disableBladeburner) {
