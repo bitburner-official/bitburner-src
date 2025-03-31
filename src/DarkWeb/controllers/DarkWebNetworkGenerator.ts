@@ -4,7 +4,7 @@ import {
 import { connectServers, DeleteServer, GetAllServers, GetServer } from "../../Server/AllServers";
 import {
   addGuaranteedConnection,
-  addRandomServers,
+  addRandomServers, balanceServers,
   disconnectServer,
   getDarkWebServers,
   getNeighborsOnRow, getServersOnRowAbove, getServersOnRowBelow,
@@ -46,6 +46,7 @@ export const loadDarkWebNetwork = () => {
       addServerToNetwork(server, server.darkWebData.x, server.darkWebData.y, true);
     }
   }
+  balanceServers();
 }
 
 export const addRandomConnections = (server: BaseServer) => {

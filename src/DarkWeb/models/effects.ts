@@ -7,8 +7,10 @@ import { generateContract, tryGeneratingRandomContract } from "../../CodingContr
 import { BaseServer } from "../../Server/BaseServer";
 import { FilePath, resolveFilePath } from "../../Paths/FilePath";
 
-export const handleSuccessfulAuth = (server: BaseServer) => {
+export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
   server.hasAdminRights = true;
+  Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
+
 
   // TODO: clue notes
 
@@ -21,11 +23,17 @@ export const handleSuccessfulAuth = (server: BaseServer) => {
   // TODO: balance cache chance
   const chance =  0.2 * (1.03 ** (server.darkWebData?.difficulty ?? 1))
   if (Math.random() < chance) {
-    const cacheFilename = resolveFilePath(`reward-${Math.random().toString().substring(2, 7)}.cache` as FilePath);
+    const cachePrefixes = ["wallet", "secrets", "ledger", "stash", "vault", "bankdata", "do_not_open"];
+    const prefix = cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
+    const cacheFilename = resolveFilePath(`${prefix}_${Math.random().toString().substring(2, 5)}.cache` as FilePath);
     if (cacheFilename) {
       server.caches.push(cacheFilename);
     }
   }
+}
+
+export const handleFailedAuth = (server: BaseServer, threads: number) => {
+  Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, false));
 }
 
 export const hasCacheFileExtension = (path: string) => {
@@ -93,4 +101,15 @@ export const getNextPortOpener = (difficulty: number) => {
   }
 
   return getXpReward(difficulty);
+}
+
+// TODO: balance xp gain
+export const calculatePasswordAttemptChaGain = (server: BaseServer, threads: number = 1, success = false) => {
+  if (!server.darkWebData || !threads) return 0;
+  const baseXpGain = 3;
+  const difficultyBase = 1.12;
+  const xpGain = baseXpGain + difficultyBase ** server.darkWebData.difficulty;
+  const alreadyHackedMult = server.hasAdminRights ? 0.05 : 1;
+  const successMult = success && !server.hasAdminRights ? 5 : 1;
+  return xpGain * alreadyHackedMult * successMult * threads * Player.mults.charisma_exp;
 }

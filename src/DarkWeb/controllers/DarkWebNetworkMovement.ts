@@ -7,6 +7,8 @@ import {
   addServerToNetwork,
   AIR_GAP_DEPTH,
 } from "./DarkWebNetworkGenerator";
+import { stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
+import { workerScripts } from "../../Netscript/WorkerScripts";
 
 
 export const mutateDarkWeb = () => {
@@ -16,42 +18,48 @@ export const mutateDarkWeb = () => {
   }
 
   if (Math.random() < 0.1) {
-    // remove servers
+    // remove some servers
     deleteRandomServers(Math.random() * 3 + 1);
-
   }
 
   if (Math.random() < 0.1) {
-    //Add servers
+    // Add some servers
     const serversToAdd = Math.random() * 3 + 1;
     for (let i = 0; i < serversToAdd; i++) {
       addRandomServers();
     }
+    return;
   }
 
-  // move server
-  const server1 = servers[Math.floor(Math.random() * servers.length)];
-  moveServer(server1);
+  if (Math.random() < 0.2) {
+    // restart a server
+    const server = servers[Math.floor(Math.random() * servers.length)];
+    restartServer(server);
+  }
 
-  // add connections
-  const server2 = servers[Math.floor(Math.random() * servers.length)];
-  addGuaranteedConnection(server2);
-  addGuaranteedConnection(server2);
+  if (Math.random() < 0.5) {
+    // move a server
+    const server1 = servers[Math.floor(Math.random() * servers.length)];
+    moveServer(server1);
+  }
 
-  // sever all connections
-  const server3 = servers[Math.floor(Math.random() * servers.length)];
-  disconnectServer(server3);
+  if (Math.random() < 0.5) {
+    // add a couple connections
+    const server2 = servers[Math.floor(Math.random() * servers.length)];
+    addGuaranteedConnection(server2);
+    addGuaranteedConnection(server2);
+  }
+
+  if (Math.random() < 0.5) {
+    // delink all connections from a server
+    const server3 = servers[Math.floor(Math.random() * servers.length)];
+    disconnectServer(server3);
+  }
 
 
   if (Math.random() < 0.1) {
     // balance network to stay at a certain density
-    if (getDarkWebServers().length > NET_DEPTH * NET_WIDTH * SERVER_DENSITY) {
-      const serversToRemove = getDarkWebServers().length - NET_DEPTH * NET_WIDTH * SERVER_DENSITY;
-      deleteRandomServers(serversToRemove);
-    } else {
-      const serversToAdd = NET_DEPTH * NET_WIDTH * SERVER_DENSITY - getDarkWebServers().length;
-      addRandomServers(serversToAdd);
-    }
+    balanceServers();
   }
 }
 
@@ -73,6 +81,16 @@ export const addRandomServers = (count = 1) => {
     if (!success) {
       DeleteServer(newServer.hostname);
     }
+  }
+}
+
+export const balanceServers = () => {
+  if (getDarkWebServers().length > NET_DEPTH * NET_WIDTH * SERVER_DENSITY) {
+    const serversToRemove = getDarkWebServers().length - NET_DEPTH * NET_WIDTH * SERVER_DENSITY;
+    deleteRandomServers(serversToRemove);
+  } else {
+    const serversToAdd = NET_DEPTH * NET_WIDTH * SERVER_DENSITY - getDarkWebServers().length;
+    addRandomServers(serversToAdd);
   }
 }
 
@@ -120,6 +138,25 @@ export const disconnectServer = (server: BaseServer) => {
       disconnectServers(server, connectedServer as Server);
     }
   });
+}
+
+export const restartServer = (server: BaseServer) => {
+  const runningScripts = server.runningScriptMap;
+
+  for (const scripts of runningScripts.values()) {
+    for (const scriptInstance of scripts.values()) {
+      const ws = workerScripts.get(scriptInstance.pid);
+      if (ws) {
+        ws.log("", () => `Script killed by server restart`);
+        stopAndCleanUpWorkerScript(ws);
+        return true;
+      }
+    }
+
+  }
+  disconnectServer(server);
+  addGuaranteedConnection(server);
+  addGuaranteedConnection(server);
 }
 
 export const addGuaranteedConnection = (server: BaseServer) => {

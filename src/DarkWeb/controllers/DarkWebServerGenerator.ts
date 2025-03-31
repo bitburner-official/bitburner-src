@@ -27,6 +27,7 @@ export enum Minigames {
   BinaryEncodedFeedback,
   SpiceLevel,
   ConvertToBase10,
+  parsedExpression,
 }
 
 export const getDarkWebServer = (difficulty: number, x: number, y: number): Server => {
@@ -47,6 +48,7 @@ export const getDarkWebServer = (difficulty: number, x: number, y: number): Serv
     getEuCountryDictionaryServer,
     getTimingAttackServer,
     getBinaryEncodedFeedbackServer,
+    getParseArethmeticExpressionServer,
   ]
   if (difficulty <= 2) {
     const serverBuilders = [getNoPasswordServer, ...easyServers];
@@ -326,6 +328,24 @@ export const getConvertToBase10Server = (difficulty: number, x: number, y: numbe
       password: `${password}`,
       passwordHint: `the password is the base ${base} number ${encodedPassword} in base 10`,
       passwordHintData: `${base},${encodedPassword}`,
+      difficulty,
+      x,
+      y,
+    },
+    getName(difficulty),
+  );
+}
+
+export const getParseArethmeticExpressionServer = (difficulty: number, x: number, y: number): Server => {
+  const expression = generateSimpleArithmeticExpression(difficulty);
+  const result = parseSimpleArithmeticExpression(expression);
+  return DWebServerBuilder(
+    {
+      icon: getRandomIcon(),
+      minigameType: Minigames.parsedExpression,
+      password: `${result}`,
+      passwordHint: `The password is the evaluation of this expression`,
+      passwordHintData: expression,
       difficulty,
       x,
       y,

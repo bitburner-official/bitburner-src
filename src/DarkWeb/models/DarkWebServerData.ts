@@ -8,7 +8,7 @@ import { Icon } from "../controllers/ServerIcon";
 import { IConstructorParams, Server } from "../../Server/Server";
 import { AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
 import { BaseServer } from "../../Server/BaseServer";
-import { handleSuccessfulAuth } from "./effects";
+import { handleFailedAuth, handleSuccessfulAuth } from "./effects";
 
 export const SUCCESS_STATUS = 200;
 export const AUTH_FAILURE_STATUS = 401;
@@ -65,15 +65,18 @@ export const DWebServerBuilder = (options: DarkWebServerData, name: string = get
   return server;
 };
 
-export const checkPassword = (attemptedPassword: string, server: BaseServer): PasswordResponse => {
+export const checkPassword = (attemptedPassword: string, server: BaseServer, threads: number): PasswordResponse => {
   const darkWebData = server.darkWebData;
   if (!darkWebData) {
     throw new Error("Dark web server missing dark web data");
   }
   if (darkWebData.password === attemptedPassword) {
-    handleSuccessfulAuth(server)
+    handleSuccessfulAuth(server, threads)
     return getGenericSuccess();
-  } else if (darkWebData.minigameType === Minigames.MastermindHint) {
+  }
+  handleFailedAuth(server, threads);
+
+  if (darkWebData.minigameType === Minigames.MastermindHint) {
     const { exactCharacters, misplacedCharacters } = getMastermindResponse(darkWebData.password, attemptedPassword);
     const message = `Hint: ${exactCharacters} symbols match, ${misplacedCharacters} ${
           misplacedCharacters == 1 ? "is" : "are"
@@ -99,15 +102,15 @@ export const checkPassword = (attemptedPassword: string, server: BaseServer): Pa
     const exactChars = getExactCorrectChars(darkWebData.password, attemptedPassword);
     const pepperRepresentation = exactChars.map((val) => val ? "🌶️" : "").join("") || "0";
     return getFailureResponse("Not spicy enough", `${pepperRepresentation}/${darkWebData.password.length}`, darkWebData);
-  } else if (darkWebData.minigameType === Minigames.ConvertToBase10) {
+  } else if (darkWebData.minigameType === Minigames.ConvertToBase10 || darkWebData.minigameType === Minigames.parsedExpression) {
     const parsedAttemptedPassword = parseFloat(attemptedPassword);
-    if (!isNaN(parsedAttemptedPassword) && Math.abs(parsedAttemptedPassword - +darkWebData.password) < 0.3) {
-      // ignore small rounding errors during base conversion and back
+    if (!isNaN(parsedAttemptedPassword) && Math.abs((parsedAttemptedPassword - +darkWebData.password) / +darkWebData.password ) < 0.001) {
+      // ignore small rounding errors during floating point operations
+      handleSuccessfulAuth(server, threads)
       return getGenericSuccess();
     }
     return getFailureResponse(darkWebData.passwordHint, darkWebData.passwordHintData ?? "", darkWebData);
   }
-
   else {
     const sharedChars =
       darkWebData.minigameType === Minigames.TimingAttack ? getSharedChars(darkWebData.password, attemptedPassword) : 0;

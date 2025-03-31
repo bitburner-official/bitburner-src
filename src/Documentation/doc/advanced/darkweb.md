@@ -55,15 +55,7 @@ This is currently a design document, but eventually will be the in-game player d
 
 ## TODO:
 
-- add/remove/balance servers periodically
-  - whole swaths of servers added or removed sometimes
-  - servers "restart" sometimes?
-  - servers renamed occasionally?
-
-- hide servers not yet explored near? (later upgrade?)
-- show all servers button
-
-- cha xp on password attempt or success
+- servers renamed occasionally?
 
 - packet sniffing 
   - mostly garbage data, sometimes has password
@@ -89,10 +81,9 @@ This is currently a design document, but eventually will be the in-game player d
   - ns.scp & scp
   - hack against, run hack on +weak +grow
 
-
-
-- change arithmatic symbols to break eval() injection?
+  
 - add code injection to break eval()
+- change arithmatic symbols to break eval() injection?
 
 
 - Generate interesting server names
@@ -100,6 +91,7 @@ This is currently a design document, but eventually will be the in-game player d
 - bonus time?
 - server scrambler when offline?
 
+- slow down net mutations
 
 - Limit darkweb stuff to when feature is enabled (bitnode? own tor router?)
 - start more cleanly with root access to "darkweb" server
@@ -108,6 +100,8 @@ This is currently a design document, but eventually will be the in-game player d
 ## TODO later:
 
 - Darkweb server cha difficulty balance?
+
+- Bitnode multipliers
 
 ## Community feedback:
 
@@ -174,14 +168,12 @@ https://discord.com/channels/415207508303544321/415213435974975508/1352628138261
   - Sometimes player script is overwritten by nothing but an empty script that occasionally logs something ominous
   - Sometimes servers are full because of bloated, idle, non-player scripts
 
-- build new connections?
+
 - Hubs or superconnections?
 - treasure chest server?
 
 - standard network viewer?
 
-common dog's names vulnerability:
-rex fido spot rover lassie spike max
+- hide servers not yet explored near? (later upgrade?)
+- show all servers button
 
-common default passwords / rainbow table ideas:
-https://github.com/danielmiessler/SecLists/blob/master/Passwords/Default-Credentials/default-passwords.txt

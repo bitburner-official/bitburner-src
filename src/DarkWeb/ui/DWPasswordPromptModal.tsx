@@ -26,7 +26,7 @@ export const DWPasswordPromptModal = ({ open, onClose, server }: DWPasswordPromp
       setEnableSubmit(false);
       setResponse("Checking password...");
       await sleep(skipSleep ? 0 : 500);
-      const response = checkPassword(passwordAttempted, server);
+      const response = checkPassword(passwordAttempted, server, skipSleep ? 0 : 4);
       setResponse(JSON.stringify(response, null, 4));
       if (response.status == SUCCESS_STATUS) {
         DarkWebEvents.emit("server-unlocked", server);

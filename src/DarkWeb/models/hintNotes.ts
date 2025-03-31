@@ -4,6 +4,7 @@ export const tutorials = [
   "I've heard there are valuable .cache files to find.",
   "I ran this .cache and it had crazy stuff in it!",
   "My scripts went down again when their server went offline. I'll have to do something about that.",
+  "Darkweb servers are known to reboot sometimes, requiring scripts to be restarted",
   ];
 
 export const puzzleHints = [

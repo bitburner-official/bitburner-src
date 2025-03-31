@@ -5,7 +5,7 @@ import { mutateDarkWeb } from "../controllers/DarkWebNetworkMovement";
 
 export const NET_WIDTH = 8;
 export const NET_DEPTH = 16;
-export const SERVER_DENSITY = 0.6;
+export const SERVER_DENSITY = 0.55;
 
 
 /** Event emitter to allow the UI to subscribe to Go gameplay updates in order to trigger rerenders properly */
