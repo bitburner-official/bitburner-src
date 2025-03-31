@@ -10,7 +10,7 @@ function enableAchievementsInterval(window) {
 
   // This is backward but the game fills in an array called `document.achievements` and we retrieve it from
   // here. Hey if it works it works.
-  const steamAchievements = steamworksClient.apps.achievements();
+  const steamAchievements = steamworksClient.achievement.names();
   log.silly(`All Steam achievements ${JSON.stringify(steamAchievements)}`);
   const playerAchieved = steamAchievements.filter((achievement) => {
     return steamworksClient.achievement.isActivated(achievement);
