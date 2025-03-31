@@ -4,7 +4,12 @@ import type { Play } from "../Go/Types";
 
 import { Go } from "../Go/Go";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { simpleBoardFromBoard } from "../Go/boardAnalysis/boardAnalysis";
+import {
+  addPointHighlight,
+  clearAllPointHighlights,
+  clearPointHighlight,
+  simpleBoardFromBoard,
+} from "../Go/boardAnalysis/boardAnalysis";
 import {
   cheatDestroyNode,
   cheatPlayTwoMoves,
@@ -130,14 +135,14 @@ export function NetscriptGo(): InternalAPI<NSGo> {
         const y = helpers.number(ctx, "y", _y);
         const color = helpers.string(ctx, "color", _color ?? "");
         const text = helpers.string(ctx, "text", _text ?? "");
-        Go.addPointHighlight(x, y, color, text);
+        addPointHighlight(Go.currentGame, x, y, color, text);
       },
       clearPointHighlight: (ctx) => (_x, _y) => {
         const x = helpers.number(ctx, "x", _x);
         const y = helpers.number(ctx, "y", _y);
-        Go.clearPointHighlight(x, y);
+        clearPointHighlight(Go.currentGame, x, y);
       },
-      clearAllPointHighlights: () => () => Go.clearAllPointHighlights(),
+      clearAllPointHighlights: () => () => clearAllPointHighlights(Go.currentGame),
     },
     cheat: {
       getCheatSuccessChance: (ctx: NetscriptContext) => (_cheatCount, _playAsWhite) => {

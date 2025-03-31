@@ -7,7 +7,7 @@ import { columnIndexes } from "../Constants";
 import { findNeighbors } from "../boardState/boardState";
 import { boardStyles, pointStyle } from "../boardState/goStyles";
 import { findAdjacentLibertiesAndAlliesForPoint, getColorOnBoardString } from "../boardAnalysis/boardAnalysis";
-import { PointHighlight } from "../Go";
+import { PointHighlight } from "../Types";
 
 interface GoPointProps {
   state: BoardState;

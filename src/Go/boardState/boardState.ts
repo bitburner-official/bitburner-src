@@ -6,6 +6,7 @@ import { getExpansionMoveArray } from "../boardAnalysis/goAI";
 import {
   boardFromSimpleBoard,
   boardStringFromBoard,
+  clearAllPointHighlights,
   evaluateIfMoveIsValid,
   findAllCapturedChains,
   findLibertiesForChain,
@@ -14,7 +15,6 @@ import {
 } from "../boardAnalysis/boardAnalysis";
 import { endGoGame } from "../boardAnalysis/scoring";
 import { addObstacles, resetCoordinates, rotate90Degrees } from "./offlineNodes";
-import { Go } from "../Go";
 
 /** Generates a new BoardState object with the given opponent and size. Optionally use an existing board. */
 export function getNewBoardState(
@@ -125,7 +125,7 @@ export function makeMove(boardState: BoardState, x: number, y: number, player: G
 
   // Add move to board history
   boardState.previousBoards.unshift(boardStringFromBoard(boardState.board));
-  Go.clearAllPointHighlights();
+  clearAllPointHighlights(boardState);
 
   point.color = player;
   boardState.previousPlayer = player;
@@ -143,7 +143,7 @@ export function passTurn(boardState: BoardState, player: GoColor, allowEndGame =
   if (boardState.previousPlayer === null || boardState.previousPlayer === player) {
     return;
   }
-  Go.clearAllPointHighlights();
+  clearAllPointHighlights(boardState);
 
   boardState.previousPlayer = boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
   boardState.passCount++;
