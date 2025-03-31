@@ -4,7 +4,7 @@
 
 ## Corporation.hasCorporation() method
 
-Returns whether the player has a corporation. Does not require API access.
+Return whether the player has a corporation. Does not require API access.
 
 **Signature:**
 
@@ -15,5 +15,9 @@ hasCorporation(): boolean;
 
 boolean
 
-whether the player has a corporation
+Whether the player has a corporation
+
+## Remarks
+
+RAM cost: 0 GB
 

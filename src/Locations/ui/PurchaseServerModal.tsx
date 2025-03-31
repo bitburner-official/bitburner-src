@@ -7,7 +7,7 @@ import { Player } from "@player";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 
 interface IProps {
   open: boolean;
@@ -21,7 +21,7 @@ export function PurchaseServerModal(props: IProps): React.ReactElement {
   const [hostname, setHostname] = useState("");
 
   function tryToPurchaseServer(): void {
-    purchaseServer(hostname, props.ram, props.cost);
+    purchaseServer(hostname, props.ram);
     props.onClose();
   }
 

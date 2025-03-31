@@ -11,7 +11,7 @@ import { useCorporation, useDivision } from "../Context";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { KEY } from "../../../utils/helpers/keyCodes";
+import { KEY } from "../../../utils/KeyboardEventKey";
 
 interface IBulkPurchaseTextProps {
   warehouse: Warehouse;
@@ -67,8 +67,8 @@ function BulkPurchaseSection(props: IBPProps): React.ReactElement {
   function bulkPurchase(): void {
     try {
       actions.bulkPurchase(corp, division, props.warehouse, props.mat, parseFloat(buyAmt));
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
     }
     props.onClose();
   }
@@ -119,8 +119,8 @@ export function PurchaseMaterialModal(props: IProps): React.ReactElement {
     if (buyAmt === null) return;
     try {
       actions.buyMaterial(division, props.mat, buyAmt);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
     }
 
     props.onClose();

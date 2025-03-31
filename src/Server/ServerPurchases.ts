@@ -47,7 +47,7 @@ export const getPurchasedServerUpgradeCost = (hostname: string, ram: number): nu
   if (isNaN(ram) || !isPowerOfTwo(ram) || !(Math.sign(ram) === 1))
     throw new Error(`${ram} is not a positive power of 2`);
   if (server.maxRam >= ram)
-    throw new Error(`'${hostname}' current ram (${server.maxRam}) is not bigger than new ram (${ram})`);
+    throw new Error(`The new ram of '${hostname}' (${ram}) must be bigger than its current ram (${server.maxRam}).`);
   return getPurchaseServerCost(ram) - getPurchaseServerCost(server.maxRam);
 };
 
@@ -101,7 +101,12 @@ export function getPurchaseServerMaxRam(): number {
 }
 
 // Manually purchase a server (NOT through Netscript)
-export function purchaseServer(hostname: string, ram: number, cost: number): void {
+export function purchaseServer(hostname: string, ram: number): void {
+  const cost = getPurchaseServerCost(ram);
+  if (cost === Infinity) {
+    return;
+  }
+
   //Check if player has enough money
   if (!Player.canAfford(cost)) {
     dialogBoxCreate("You don't have enough money to purchase this server!");

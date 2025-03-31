@@ -14,17 +14,20 @@ import { Terminal } from "./Terminal";
 import { Player } from "@player";
 import {
   CityName,
+  CodingContractName,
   CompletedProgramName,
   CrimeType,
   FactionWorkType,
   GymType,
   JobName,
   JobField,
-  LiteratureName,
+  type LiteratureName,
   LocationName,
   ToastVariant,
   UniversityClassType,
   CompanyName,
+  FactionName,
+  type MessageFilename,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer, DeleteServer, AddToAllServers, createUniqueRandomIp } from "./Server/AllServers";
@@ -34,7 +37,6 @@ import {
   numCycleForGrowthCorrected,
   processSingleServerGrowth,
   safelyCreateUniqueServer,
-  getCoreBonus,
   getWeakenEffect,
 } from "./Server/ServerHelpers";
 import {
@@ -64,7 +66,6 @@ import {
 } from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { roundToTwo } from "./utils/helpers/roundToTwo";
-import { LogBoxEvents, LogBoxCloserEvents } from "./ui/React/LogBoxManager";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { NetscriptGang } from "./NetscriptFunctions/Gang";
 import { NetscriptGo } from "./NetscriptFunctions/Go";
@@ -88,14 +89,13 @@ import { SnackbarEvents } from "./ui/React/Snackbar";
 import { matchScriptPathExact } from "./utils/helpers/scriptKey";
 
 import { Flags } from "./NetscriptFunctions/Flags";
-import { calculateIntelligenceBonus } from "./PersonObjects/formulas/intelligence";
-import { CalculateShareMult, StartSharing } from "./NetworkShare/Share";
+import { calculateCurrentShareBonus, ShareBonusTime, startSharing } from "./NetworkShare/Share";
 import { recentScripts } from "./Netscript/RecentScripts";
 import { InternalAPI, setRemovedFunctions, NSProxy } from "./Netscript/APIWrapper";
 import { INetscriptExtra } from "./NetscriptFunctions/Extra";
 import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
-import { assert, arrayAssert, stringAssert, objectAssert } from "./utils/helpers/typeAssertion";
+import { assert, assertArray, assertString, assertObject } from "./utils/TypeAssertion";
 import { escapeRegExp } from "lodash";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
@@ -108,7 +108,7 @@ import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
 import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
 import { ServerConstants } from "./Server/data/Constants";
-import { assertFunction } from "./Netscript/TypeAssertion";
+import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
@@ -124,6 +124,8 @@ export const enums: NSEnums = {
   ToastVariant,
   UniversityClassType,
   CompanyName,
+  FactionName,
+  CodingContractName,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);
@@ -145,8 +147,19 @@ export const ns: InternalAPI<NSFull> = {
   stock: NetscriptStockMarket(),
   grafting: NetscriptGrafting(),
   hacknet: NetscriptHacknet(),
-  sprintf: () => sprintf,
-  vsprintf: () => vsprintf,
+  sprintf:
+    (ctx) =>
+    (_format, ...args) => {
+      const format = helpers.string(ctx, "format", _format);
+      return sprintf(format, ...(args as unknown[]));
+    },
+  vsprintf: (ctx) => (_format, _args) => {
+    const format = helpers.string(ctx, "format", _format);
+    if (!Array.isArray(_args)) {
+      throw helpers.errorMessage(ctx, `args must be an array.`);
+    }
+    return vsprintf(format, _args);
+  },
   scan: (ctx) => (_hostname) => {
     const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
     const server = helpers.getServer(ctx, hostname);
@@ -261,13 +274,7 @@ export const ns: InternalAPI<NSFull> = {
 
     const server = helpers.getServer(ctx, hostname);
     if (!(server instanceof Server)) {
-      helpers.log(ctx, () => "Cannot be executed on this server.");
-      return Promise.resolve(0);
-    }
-
-    const host = GetServer(ctx.workerScript.hostname);
-    if (host === null) {
-      throw new Error("Workerscript host is null");
+      throw helpers.errorMessage(ctx, "Cannot be executed on this server.");
     }
 
     // No root access or skill level too low
@@ -286,16 +293,19 @@ export const ns: InternalAPI<NSFull> = {
         )} (t=${formatThreads(threads)}).`,
     );
     return helpers.netscriptDelay(ctx, growTime * 1000).then(function () {
-      const moneyBefore = server.moneyAvailable <= 0 ? 1 : server.moneyAvailable;
-      processSingleServerGrowth(server, threads, host.cpuCores);
+      const host = GetServer(ctx.workerScript.hostname);
+      if (host === null) {
+        throw helpers.errorMessage(ctx, `Cannot find host of WorkerScript. Hostname: ${ctx.workerScript.hostname}.`);
+      }
+      const moneyBefore = server.moneyAvailable;
+      const growth = processSingleServerGrowth(server, threads, host.cpuCores);
       const moneyAfter = server.moneyAvailable;
       ctx.workerScript.scriptRef.recordGrow(server.hostname, threads);
       const expGain = calculateHackingExpGain(server, Player) * threads;
-      const logGrowPercent = moneyAfter / moneyBefore - 1;
       helpers.log(
         ctx,
         () =>
-          `Available money on '${server.hostname}' grown by ${formatPercent(logGrowPercent, 6)}. Gained ${formatExp(
+          `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)}. Gained ${formatExp(
             expGain,
           )} hacking exp (t=${formatThreads(threads)}).`,
       );
@@ -304,7 +314,7 @@ export const ns: InternalAPI<NSFull> = {
       if (stock) {
         influenceStockThroughServerGrow(server, moneyAfter - moneyBefore);
       }
-      return Promise.resolve(moneyAfter / moneyBefore);
+      return Promise.resolve(server.moneyMax === 0 ? 0 : growth);
     });
   },
   growthAnalyze:
@@ -360,8 +370,7 @@ export const ns: InternalAPI<NSFull> = {
 
     const server = helpers.getServer(ctx, hostname);
     if (!(server instanceof Server)) {
-      helpers.log(ctx, () => "Cannot be executed on this server.");
-      return Promise.resolve(0);
+      throw helpers.errorMessage(ctx, "Cannot be executed on this server.");
     }
 
     // No root access or skill level too low
@@ -382,11 +391,13 @@ export const ns: InternalAPI<NSFull> = {
     return helpers.netscriptDelay(ctx, weakenTime * 1000).then(function () {
       const host = GetServer(ctx.workerScript.hostname);
       if (host === null) {
-        helpers.log(ctx, () => "Server is null, did it die?");
-        return Promise.resolve(0);
+        throw helpers.errorMessage(ctx, `Cannot find host of WorkerScript. Hostname: ${ctx.workerScript.hostname}.`);
       }
       const weakenAmt = getWeakenEffect(threads, host.cpuCores);
+      const securityBeforeWeaken = server.hackDifficulty;
       server.weaken(weakenAmt);
+      const securityAfterWeaken = server.hackDifficulty;
+      const securityReduction = securityBeforeWeaken - securityAfterWeaken;
       ctx.workerScript.scriptRef.recordWeaken(server.hostname, threads);
       const expGain = calculateHackingExpGain(server, Player) * threads;
       helpers.log(
@@ -399,7 +410,7 @@ export const ns: InternalAPI<NSFull> = {
       ctx.workerScript.scriptRef.onlineExpGained += expGain;
       Player.gainHackingExp(expGain);
       // Account for hidden multiplier in Server.weaken()
-      return Promise.resolve(weakenAmt);
+      return Promise.resolve(securityReduction);
     });
   },
   weakenAnalyze:
@@ -410,19 +421,17 @@ export const ns: InternalAPI<NSFull> = {
       return getWeakenEffect(threads, cores);
     },
   share: (ctx) => () => {
-    const cores = helpers.getServer(ctx, ctx.workerScript.hostname).cpuCores;
-    const coreBonus = getCoreBonus(cores);
-    helpers.log(ctx, () => "Sharing this computer.");
-    const end = StartSharing(
-      ctx.workerScript.scriptRef.threads * calculateIntelligenceBonus(Player.skills.intelligence, 2) * coreBonus,
-    );
-    return helpers.netscriptDelay(ctx, 10000).finally(function () {
-      helpers.log(ctx, () => "Finished sharing this computer.");
+    const threads = ctx.workerScript.scriptRef.threads;
+    const hostname = ctx.workerScript.hostname;
+    helpers.log(ctx, () => `Sharing ${threads} threads on ${hostname}.`);
+    const end = startSharing(threads, helpers.getServer(ctx, hostname).cpuCores);
+    return helpers.netscriptDelay(ctx, ShareBonusTime).finally(function () {
+      helpers.log(ctx, () => `Finished sharing ${threads} threads on ${hostname}.`);
       end();
     });
   },
   getSharePower: () => () => {
-    return CalculateShareMult();
+    return calculateCurrentShareBonus();
   },
   print:
     (ctx) =>
@@ -495,37 +504,46 @@ export const ns: InternalAPI<NSFull> = {
   },
   disableLog: (ctx) => (_fn) => {
     const fn = helpers.string(ctx, "fn", _fn);
-    if (fn === "ALL") {
-      for (const fn of Object.keys(possibleLogs)) {
-        ctx.workerScript.disableLogs[fn] = true;
-      }
-      helpers.log(ctx, () => `Disabled logging for all functions`);
-    } else if (possibleLogs[fn] === undefined) {
+    if (possibleLogs[fn] === undefined) {
       throw helpers.errorMessage(ctx, `Invalid argument: ${fn}.`);
+    }
+    if (fn === "ALL") {
+      ctx.workerScript.disableLogs = allDisabled;
+      // No need to log here, it's been disabled.
     } else {
-      ctx.workerScript.disableLogs[fn] = true;
-      helpers.log(ctx, () => `Disabled logging for ${fn}`);
+      // We don't track individual log entries when all are disabled.
+      if (!ctx.workerScript.disableLogs["ALL"]) {
+        ctx.workerScript.disableLogs[fn] = true;
+        helpers.log(ctx, () => `Disabled logging for ${fn}`);
+      }
     }
   },
   enableLog: (ctx) => (_fn) => {
     const fn = helpers.string(ctx, "fn", _fn);
-    if (fn === "ALL") {
-      for (const fn of Object.keys(possibleLogs)) {
-        delete ctx.workerScript.disableLogs[fn];
-      }
-      helpers.log(ctx, () => `Enabled logging for all functions`);
-    } else if (possibleLogs[fn] === undefined) {
+    if (possibleLogs[fn] === undefined) {
       throw helpers.errorMessage(ctx, `Invalid argument: ${fn}.`);
     }
-    delete ctx.workerScript.disableLogs[fn];
-    helpers.log(ctx, () => `Enabled logging for ${fn}`);
+    if (fn === "ALL") {
+      ctx.workerScript.disableLogs = {};
+      helpers.log(ctx, () => `Enabled logging for all functions`);
+    } else {
+      if (ctx.workerScript.disableLogs["ALL"]) {
+        // As an optimization, we normally store only that key, but we have to
+        // expand it out to all keys at this point.
+        // Conveniently, possibleLogs serves as a model for "all keys disabled."
+        ctx.workerScript.disableLogs = Object.assign({}, possibleLogs, { ALL: false, [fn]: false });
+      } else {
+        ctx.workerScript.disableLogs[fn] = false;
+      }
+      helpers.log(ctx, () => `Enabled logging for ${fn}`);
+    }
   },
   isLogEnabled: (ctx) => (_fn) => {
     const fn = helpers.string(ctx, "fn", _fn);
     if (possibleLogs[fn] === undefined) {
       throw helpers.errorMessage(ctx, `Invalid argument: ${fn}.`);
     }
-    return !ctx.workerScript.disableLogs[fn];
+    return ctx.workerScript.shouldLog(fn);
   },
   getScriptLogs:
     (ctx) =>
@@ -537,64 +555,37 @@ export const ns: InternalAPI<NSFull> = {
         return [] as string[];
       }
 
-      return runningScriptObj.logs.map((x) => "" + x);
+      return runningScriptObj.logs.map((x) => String(x));
     },
   tail:
     (ctx) =>
     (scriptID, hostname, ...scriptArgs) => {
-      const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
-      const runningScriptObj = helpers.getRunningScript(ctx, ident);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
-        return;
-      }
-
-      LogBoxEvents.emit(runningScriptObj);
+      deprecationWarning("ns.tail", "Use ns.ui.openTail instead.");
+      ns.ui.openTail(ctx)(scriptID, hostname, ...scriptArgs);
     },
   moveTail:
     (ctx) =>
     (_x, _y, _pid = ctx.workerScript.scriptRef.pid) => {
-      const x = helpers.number(ctx, "x", _x);
-      const y = helpers.number(ctx, "y", _y);
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
-      runningScriptObj.tailProps?.setPosition(x, y);
+      deprecationWarning("ns.moveTail", "Use ns.ui.moveTail instead.");
+      ns.ui.moveTail(ctx)(_x, _y, _pid);
     },
   resizeTail:
     (ctx) =>
     (_w, _h, _pid = ctx.workerScript.scriptRef.pid) => {
-      const w = helpers.number(ctx, "w", _w);
-      const h = helpers.number(ctx, "h", _h);
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
-      runningScriptObj.tailProps?.setSize(w, h);
+      deprecationWarning("ns.resizeTail", "Use ns.ui.resizeTail instead.");
+      ns.ui.resizeTail(ctx)(_w, _h, _pid);
     },
   closeTail:
     (ctx) =>
     (_pid = ctx.workerScript.scriptRef.pid) => {
-      const pid = helpers.number(ctx, "pid", _pid);
-      //Emit an event to tell the game to close the tail window if it exists
-      LogBoxCloserEvents.emit(pid);
+      deprecationWarning("ns.closeTail", "Use ns.ui.closeTail instead.");
+      ns.ui.closeTail(ctx)(_pid);
     },
   setTitle:
     (ctx) =>
     (title, _pid = ctx.workerScript.scriptRef.pid) => {
-      const pid = helpers.number(ctx, "pid", _pid);
-      const runningScriptObj = helpers.getRunningScript(ctx, pid);
-      if (runningScriptObj == null) {
-        helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(pid));
-        return;
-      }
-      runningScriptObj.title = typeof title === "string" ? title : wrapUserNode(title);
-      runningScriptObj.tailProps?.rerender();
+      deprecationWarning("ns.setTitle", "Use ns.ui.setTailTitle instead.");
+      ns.ui.setTailTitle(ctx)(title, _pid);
     },
   nuke: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -771,6 +762,11 @@ export const ns: InternalAPI<NSFull> = {
         throw new ScriptDeath(ctx.workerScript);
       }
     },
+  self: (ctx) => () => {
+    const runningScript = helpers.getRunningScript(ctx, ctx.workerScript.pid);
+    if (runningScript == null) throw helpers.errorMessage(ctx, "Cannot find running script. This is a bug.");
+    return helpers.createPublicRunningScript(runningScript, ctx.workerScript);
+  },
   kill:
     (ctx) =>
     (scriptID, hostname = ctx.workerScript.hostname, ...scriptArgs) => {
@@ -779,7 +775,7 @@ export const ns: InternalAPI<NSFull> = {
       const killByPid = typeof ident === "number";
       if (killByPid) {
         // Kill by pid
-        res = killWorkerScriptByPid(ident);
+        res = killWorkerScriptByPid(ident, ctx.workerScript);
       } else {
         // Kill by filename/hostname
         if (scriptID === undefined) {
@@ -794,7 +790,7 @@ export const ns: InternalAPI<NSFull> = {
 
         res = true;
         for (const pid of byPid.keys()) {
-          res &&= killWorkerScriptByPid(pid);
+          res &&= killWorkerScriptByPid(pid, ctx.workerScript);
         }
       }
 
@@ -829,7 +825,7 @@ export const ns: InternalAPI<NSFull> = {
       for (const byPid of server.runningScriptMap.values()) {
         for (const pid of byPid.keys()) {
           if (safetyGuard && pid == ctx.workerScript.pid) continue;
-          killWorkerScriptByPid(pid);
+          killWorkerScriptByPid(pid, ctx.workerScript);
           ++scriptsKilled;
         }
       }
@@ -1011,7 +1007,7 @@ export const ns: InternalAPI<NSFull> = {
       baseDifficulty: server.baseDifficulty,
       hackDifficulty: server.hackDifficulty,
       minDifficulty: server.minDifficulty,
-      moneyAvailable: server.moneyAvailable,
+      moneyAvailable: server.hostname === "home" ? Player.money : server.moneyAvailable,
       moneyMax: server.moneyMax,
       numOpenPortsRequired: server.numOpenPortsRequired,
       openPortCount: server.openPortCount,
@@ -1153,7 +1149,8 @@ export const ns: InternalAPI<NSFull> = {
     if (!path) return false;
     if (hasScriptExtension(path)) return server.scripts.has(path);
     if (hasTextExtension(path)) return server.textFiles.has(path);
-    if (path.endsWith(".lit") || path.endsWith(".msg")) return server.messages.includes(path as any);
+    if (path.endsWith(".lit") || path.endsWith(".msg"))
+      return server.messages.includes(path as LiteratureName | MessageFilename);
     if (hasContractExtension(path)) return !!server.contracts.find(({ fn }) => fn === path);
     const lowerPath = path.toLowerCase();
     return server.programs.map((programName) => programName.toLowerCase()).includes(lowerPath);
@@ -1461,7 +1458,7 @@ export const ns: InternalAPI<NSFull> = {
       if (!pattern.test(key)) continue;
       suc = true;
       for (const pid of byPid.keys()) {
-        killWorkerScriptByPid(pid);
+        killWorkerScriptByPid(pid, ctx.workerScript);
       }
     }
     return suc;
@@ -1486,7 +1483,11 @@ export const ns: InternalAPI<NSFull> = {
       const ident = helpers.scriptIdentifier(ctx, fn, hostname, args);
       const runningScript = helpers.getRunningScript(ctx, ident);
       if (runningScript === null) return null;
-      return helpers.createPublicRunningScript(runningScript, ctx.workerScript);
+      // Need to look this up again, because we only have ident-based lookup
+      // for RunningScript.
+      const ws = workerScripts.get(runningScript.pid);
+      // We don't check for null, since it's fine to pass null as the 2nd arg.
+      return helpers.createPublicRunningScript(runningScript, ws);
     },
   ramOverride: (ctx) => (_ram) => {
     const newRam = roundToTwo(helpers.number(ctx, "ram", _ram || 0));
@@ -1497,7 +1498,7 @@ export const ns: InternalAPI<NSFull> = {
       return rs.ramUsage;
     }
     const newServerRamUsed = roundToTwo(server.ramUsed + (newRam - rs.ramUsage) * rs.threads);
-    if (newServerRamUsed >= server.maxRam) {
+    if (newServerRamUsed > server.maxRam) {
       // Can't allocate more RAM.
       return rs.ramUsage;
     }
@@ -1563,7 +1564,11 @@ export const ns: InternalAPI<NSFull> = {
       total += script.scriptRef.onlineMoneyMade / script.scriptRef.onlineRunningTime;
     }
 
-    return [total, Player.scriptProdSinceLastAug / (Player.playtimeSinceLastAug / 1000)];
+    let incomeFromScriptsSinceLastAug = Player.scriptProdSinceLastAug / (Player.playtimeSinceLastAug / 1000);
+    if (!Number.isFinite(incomeFromScriptsSinceLastAug)) {
+      incomeFromScriptsSinceLastAug = 0;
+    }
+    return [total, incomeFromScriptsSinceLastAug];
   },
   getScriptIncome:
     (ctx) =>
@@ -1621,7 +1626,8 @@ export const ns: InternalAPI<NSFull> = {
   nFormat: (ctx) => (_n, _format) => {
     deprecationWarning(
       "ns.nFormat",
-      "Use ns.formatNumber, formatRam, formatPercent, or js builtins like Intl.NumberFormat instead.",
+      "Use ns.formatNumber, ns.formatRam, ns.formatPercent, or JS built-in objects/functions (e.g., Intl namespace) instead. " +
+        "Check the NS API documentation for details.",
     );
     const n = helpers.number(ctx, "n", _n);
     const format = helpers.string(ctx, "format", _format);
@@ -1642,7 +1648,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   alert: (ctx) => (_message) => {
     const message = helpers.string(ctx, "message", _message);
-    dialogBoxCreate(message, true);
+    dialogBoxCreate(message, { html: true, canBeDismissedEasily: true });
   },
   toast:
     (ctx) =>
@@ -1656,11 +1662,11 @@ export const ns: InternalAPI<NSFull> = {
     const options: { type?: string; choices?: string[] } = {};
     _options ??= options;
     const txt = helpers.string(ctx, "txt", _txt);
-    assert(_options, objectAssert, (type) =>
+    assert(_options, assertObject, (type) =>
       helpers.errorMessage(ctx, `Invalid type for options: ${type}. Should be object.`, "TYPE"),
     );
     if (_options.type !== undefined) {
-      assert(_options.type, stringAssert, (type) =>
+      assert(_options.type, assertString, (type) =>
         helpers.errorMessage(ctx, `Invalid type for options.type: ${type}. Should be string.`, "TYPE"),
       );
       options.type = _options.type;
@@ -1672,7 +1678,7 @@ export const ns: InternalAPI<NSFull> = {
         );
       }
       if (options.type === "select") {
-        assert(_options.choices, arrayAssert, (type) =>
+        assert(_options.choices, assertArray, (type) =>
           helpers.errorMessage(
             ctx,
             `Invalid type for options.choices: ${type}. If options.type is "select", options.choices must be an array.`,
@@ -1773,7 +1779,7 @@ export const ns: InternalAPI<NSFull> = {
   }),
   atExit: (ctx) => (callback, _id) => {
     const id = _id ? helpers.string(ctx, "id", _id) : "default";
-    assertFunction(ctx, "callback", callback);
+    assertFunctionWithNSContext(ctx, "callback", callback);
     ctx.workerScript.atExit.set(id, callback);
   },
   mv: (ctx) => (_host, _source, _destination) => {
@@ -1810,7 +1816,11 @@ export const ns: InternalAPI<NSFull> = {
     lastNodeReset: Player.lastNodeReset,
     currentNode: Player.bitNodeN,
     ownedAugs: new Map(Player.augmentations.map((aug) => [aug.name, aug.level])),
-    ownedSF: new Map(Player.sourceFiles),
+    ownedSF: new Map(
+      [...Player.activeSourceFiles].filter(([__, activeLevel]) => {
+        return activeLevel > 0;
+      }),
+    ),
     bitNodeOptions: {
       ...Player.bitNodeOptions,
       sourceFileOverrides: new Map(Player.bitNodeOptions.sourceFileOverrides),
@@ -1840,7 +1850,13 @@ export function NetscriptFunctions(ws: WorkerScript): NSFull {
   return NSProxy(ws, ns, [], { args: ws.args.slice(), pid: ws.pid, enums });
 }
 
-const possibleLogs = Object.fromEntries([...getFunctionNames(ns, "")].map((a) => [a, true]));
+const possibleLogs = Object.fromEntries(getFunctionNames(ns, "").map((a) => [a, true]));
+possibleLogs.ALL = true;
+
+// We reuse this object for *all* scripts that disable all keys, to prevent memory growth.
+// Any script that needs a custom set of values will use a fresh object.
+const allDisabled = { ALL: true } as const;
+
 /** Provides an array of all function names on a nested object */
 function getFunctionNames(obj: object, prefix: string): string[] {
   const functionNames: string[] = [];
@@ -1850,7 +1866,7 @@ function getFunctionNames(obj: object, prefix: string): string[] {
     } else if (typeof value === "function") {
       functionNames.push(prefix + key);
     } else if (typeof value === "object") {
-      functionNames.push(...getFunctionNames(value, `${prefix}${key}.`));
+      functionNames.push(...getFunctionNames(value as object, `${prefix}${key}.`));
     }
   }
   return functionNames;

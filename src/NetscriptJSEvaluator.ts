@@ -4,14 +4,13 @@
  */
 import * as walk from "acorn-walk";
 import { parse } from "acorn";
+import type * as acorn from "acorn";
+import { fromObject } from "convert-source-map";
 
 import { LoadedModule, type ScriptURL, type ScriptModule } from "./Script/LoadedModule";
 import type { Script } from "./Script/Script";
 import type { ScriptFilePath } from "./Paths/ScriptFilePath";
 import { FileType, getFileType, getModuleScript, transformScript } from "./utils/ScriptTransformer";
-
-// Acorn type def is straight up incomplete so we have to fill with our own.
-export type Node = any;
 
 // Makes a blob that contains the code of a given script.
 function makeScriptBlob(code: string): Blob {
@@ -30,7 +29,7 @@ function makeScriptBlob(code: string): Blob {
 // config object to provide a hook point.
 export const config = {
   doImport(url: ScriptURL): Promise<ScriptModule> {
-    return import(/*webpackIgnore:true*/ url);
+    return import(/*webpackIgnore:true*/ url) as Promise<ScriptModule>;
   },
 };
 
@@ -83,7 +82,11 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     return script.mod;
   }
 
+  if (script.code === "") {
+    throw new Error(`Script content is an empty string. Filename: ${script.filename}, server: ${script.server}.`);
+  }
   let scriptCode;
+  let sourceMap;
   const fileType = getFileType(script.filename);
   switch (fileType) {
     case FileType.JS:
@@ -92,7 +95,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     case FileType.JSX:
     case FileType.TS:
     case FileType.TSX:
-      scriptCode = transformScript(script.code, fileType);
+      ({ scriptCode, sourceMap } = transformScript(script.code, fileType));
       break;
     default:
       throw new Error(`Invalid file type: ${fileType}. Filename: ${script.filename}, server: ${script.server}.`);
@@ -103,33 +106,51 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
 
   // Inspired by: https://stackoverflow.com/a/43834063/91401
   const ast = parse(scriptCode, { sourceType: "module", ecmaVersion: "latest", ranges: true });
-  interface importNode {
+  interface ImportNode {
     filename: string;
     start: number;
     end: number;
   }
-  const importNodes: importNode[] = [];
+  const importNodes: ImportNode[] = [];
   // Walk the nodes of this tree and find any import declaration statements.
   walk.simple(ast, {
-    ImportDeclaration(node: Node) {
+    ImportDeclaration(node: acorn.ImportDeclaration) {
       // Push this import onto the stack to replace
-      if (!node.source) return;
+      if (!node.source) {
+        return;
+      }
+      if (typeof node.source.value !== "string" || !node.source.range) {
+        console.error("Invalid node when walking ImportDeclaration in generateLoadedModule. node:", node);
+        return;
+      }
       importNodes.push({
         filename: node.source.value,
         start: node.source.range[0] + 1,
         end: node.source.range[1] - 1,
       });
     },
-    ExportNamedDeclaration(node: Node) {
-      if (!node.source) return;
+    ExportNamedDeclaration(node: acorn.ExportNamedDeclaration) {
+      if (!node.source) {
+        return;
+      }
+      if (typeof node.source.value !== "string" || !node.source.range) {
+        console.error("Invalid node when walking ExportNamedDeclaration in generateLoadedModule. node:", node);
+        return;
+      }
       importNodes.push({
         filename: node.source.value,
         start: node.source.range[0] + 1,
         end: node.source.range[1] - 1,
       });
     },
-    ExportAllDeclaration(node: Node) {
-      if (!node.source) return;
+    ExportAllDeclaration(node: acorn.ExportAllDeclaration) {
+      if (!node.source) {
+        return;
+      }
+      if (typeof node.source.value !== "string" || !node.source.range) {
+        console.error("Invalid node when walking ExportAllDeclaration in generateLoadedModule. node:", node);
+        return;
+      }
       importNodes.push({
         filename: node.source.value,
         start: node.source.range[0] + 1,
@@ -160,7 +181,19 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     // servers; it will be listed under the first server it was compiled for.
     // We don't include this in the cache key, so that other instances of the
     // script dedupe properly.
-    const adjustedCode = newCode + `\n//# sourceURL=${script.server}/${script.filename}`;
+    const sourceURL = `${script.server}/${script.filename}`;
+    let adjustedCode = newCode + `\n//# sourceURL=${sourceURL}`;
+    if (sourceMap) {
+      let inlineSourceMap;
+      try {
+        inlineSourceMap = fromObject({ ...JSON.parse(sourceMap), sources: [sourceURL], sourceRoot: "/" }).toComment();
+      } catch (error) {
+        console.warn(`Cannot generate inline source map for ${script.filename} in ${script.server}`, error);
+      }
+      if (inlineSourceMap) {
+        adjustedCode += `\n${inlineSourceMap}`;
+      }
+    }
     // At this point we have the full code and can construct a new blob / assign the URL.
 
     const url = URL.createObjectURL(makeScriptBlob(adjustedCode)) as ScriptURL;

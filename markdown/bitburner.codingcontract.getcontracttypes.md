@@ -9,13 +9,13 @@ List all contract types.
 **Signature:**
 
 ```typescript
-getContractTypes(): string[];
+getContractTypes(): `${CodingContractName}`[];
 ```
 **Returns:**
 
-string\[\]
+\`${[CodingContractName](./bitburner.codingcontractname.md)<!-- -->}\`\[\]
 
 ## Remarks
 
-RAM cost: 2 GB
+RAM cost: 0 GB
 

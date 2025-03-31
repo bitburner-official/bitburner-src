@@ -11,7 +11,7 @@ import { generateNextPid } from "./Netscript/Pid";
 import { CONSTANTS } from "./Constants";
 import { Interpreter } from "./ThirdParty/JSInterpreter";
 import { NetscriptFunctions } from "./NetscriptFunctions";
-import { compile, Node } from "./NetscriptJSEvaluator";
+import { compile } from "./NetscriptJSEvaluator";
 import { Port, PortNumber } from "./NetscriptPort";
 import { RunningScript } from "./Script/RunningScript";
 import { scriptCalculateOfflineProduction } from "./Script/ScriptHelpers";
@@ -28,14 +28,18 @@ import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { roundToTwo } from "./utils/helpers/roundToTwo";
 
 import { parse } from "acorn";
+import type * as acorn from "acorn";
 import { simple as walksimple } from "acorn-walk";
 import { parseCommand } from "./Terminal/Parser";
 import { Terminal } from "./Terminal";
 import { ScriptArg } from "@nsdefs";
 import { CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/NetscriptHelpers";
-import { handleUnknownError } from "./Netscript/ErrorMessages";
+import { handleUnknownError } from "./utils/ErrorHandler";
 import { isLegacyScript, legacyScriptExtension, resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
 import { root } from "./Paths/Directory";
+import { getErrorMessageWithStackAndCause } from "./utils/ErrorHelper";
+import { exceptionAlert } from "./utils/helpers/exceptionAlert";
+import { Result } from "./types";
 
 export const NetscriptPorts = new Map<PortNumber, Port>();
 
@@ -55,6 +59,9 @@ async function startNetscript2Script(workerScript: WorkerScript): Promise<void> 
   if (!ns) throw `${script.filename} cannot be run because the NS object hasn't been constructed properly.`;
 
   const loadedModule = await compile(script, scripts);
+
+  // if for whatever reason the stopFlag is already set we abort
+  if (workerScript.env.stopFlag) return;
 
   if (!loadedModule) throw `${script.filename} cannot be run because the script module won't load`;
   const mainFunc = loadedModule.main;
@@ -89,6 +96,7 @@ async function startNetscript1Script(workerScript: WorkerScript): Promise<void> 
           try {
             // Sent a resolver function as an extra arg. See createAsyncFunction JSInterpreter.js:3209
             const callback = args.pop() as (value: unknown) => void;
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call -- NS1 is deprecated.
             const result = await entry(...args.map((arg) => int.pseudoToNative(arg)));
             return callback(int.nativeToPseudo(result));
           } catch (e: unknown) {
@@ -102,6 +110,7 @@ async function startNetscript1Script(workerScript: WorkerScript): Promise<void> 
       } else {
         // new object layer, e.g. bladeburner
         int.setProperty(intLayer, name, int.nativeToPseudo({}));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument -- NS1 is deprecated.
         wrapNS1Layer(int, (intLayer as BasicObject).properties[name], nsLayer[name]);
       }
     }
@@ -136,7 +145,7 @@ async function startNetscript1Script(workerScript: WorkerScript): Promise<void> 
 */
 function processNetscript1Imports(code: string, workerScript: WorkerScript): { code: string; lineOffset: number } {
   //allowReserved prevents 'import' from throwing error in ES5
-  const ast: Node = parse(code, {
+  const ast = parse(code, {
     ecmaVersion: 9,
     allowReserved: true,
     sourceType: "module",
@@ -156,9 +165,9 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
 
   // Walk over the tree and process ImportDeclaration nodes
   walksimple(ast, {
-    ImportDeclaration: (node: Node) => {
+    ImportDeclaration: (node: acorn.ImportDeclaration) => {
       hasImports = true;
-      const scriptName = resolveScriptFilePath(node.source.value, root, legacyScriptExtension);
+      const scriptName = resolveScriptFilePath(node.source.value as string, root, legacyScriptExtension);
       if (!scriptName) throw new Error("'Import' failed due to invalid path: " + scriptName);
       const script = getScript(scriptName);
       if (!script) throw new Error("'Import' failed due to script not found: " + scriptName);
@@ -172,9 +181,12 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
         // import * as namespace from script
         const namespace = node.specifiers[0].local.name;
         const fnNames: string[] = []; //Names only
-        const fnDeclarations: Node[] = []; //FunctionDeclaration Node objects
+        const fnDeclarations: acorn.Node[] = []; //FunctionDeclaration Node objects
         walksimple(scriptAst, {
-          FunctionDeclaration: (node: Node) => {
+          FunctionDeclaration: (node: acorn.FunctionDeclaration | acorn.AnonymousFunctionDeclaration) => {
+            if (!node.id) {
+              return;
+            }
             fnNames.push(node.id.name);
             fnDeclarations.push(node);
           },
@@ -184,7 +196,7 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
         generatedCode += `var ${namespace};\n(function (namespace) {\n`;
 
         //Add the function declarations
-        fnDeclarations.forEach((fn: Node) => {
+        fnDeclarations.forEach((fn) => {
           generatedCode += generate(fn);
           generatedCode += "\n";
         });
@@ -202,14 +214,17 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
 
         //Get array of all fns to import
         const fnsToImport: string[] = [];
-        node.specifiers.forEach((e: Node) => {
+        node.specifiers.forEach((e) => {
           fnsToImport.push(e.local.name);
         });
 
         //Walk through script and get FunctionDeclaration code for all specified fns
-        const fnDeclarations: Node[] = [];
+        const fnDeclarations: acorn.Node[] = [];
         walksimple(scriptAst, {
-          FunctionDeclaration: (node: Node) => {
+          FunctionDeclaration: (node: acorn.FunctionDeclaration | acorn.AnonymousFunctionDeclaration) => {
+            if (!node.id) {
+              return;
+            }
             if (fnsToImport.includes(node.id.name)) {
               fnDeclarations.push(node);
             }
@@ -217,7 +232,7 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
         });
 
         //Convert FunctionDeclarations into code
-        fnDeclarations.forEach((fn: Node) => {
+        fnDeclarations.forEach((fn) => {
           generatedCode += generate(fn);
           generatedCode += "\n";
         });
@@ -266,8 +281,11 @@ function processNetscript1Imports(code: string, workerScript: WorkerScript): { c
 export function startWorkerScript(runningScript: RunningScript, server: BaseServer, parent?: WorkerScript): number {
   if (server.hostname !== runningScript.server) {
     // Temporarily adding a check here to see if this ever triggers
-    console.error(
-      `Tried to launch a worker script on a different server ${server.hostname} than the runningScript's server ${runningScript.server}`,
+    exceptionAlert(
+      new Error(
+        `Tried to launch a worker script on a different server ${server.hostname} than the runningScript's server ${runningScript.server}`,
+      ),
+      true,
     );
     return 0;
   }
@@ -327,21 +345,27 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
 
   // Start the script's execution using the correct function for file type
   (isLegacyScript(workerScript.name) ? startNetscript1Script : startNetscript2Script)(workerScript)
-    // Once the code finishes (either resolved or rejected, doesnt matter), set its
+    // Once the code finishes (either resolved or rejected, doesn't matter), set its
     // running status to false
     .then(function () {
-      // On natural death, the earnings are transferred to the parent if it still exists.
+      killWorkerScript(workerScript);
+      workerScript.log("", () => "Script finished running");
+    })
+    .catch(function (error) {
+      handleUnknownError(error, workerScript);
+      killWorkerScript(workerScript);
+      workerScript.log("", () =>
+        error instanceof ScriptDeath
+          ? "main() terminated."
+          : getErrorMessageWithStackAndCause(error, "Script crashed due to an error: "),
+      );
+    })
+    .finally(() => {
+      // The earnings are transferred to the parent if it still exists.
       if (parent && !parent.env.stopFlag) {
         parent.scriptRef.onlineExpGained += runningScriptObj.onlineExpGained;
         parent.scriptRef.onlineMoneyMade += runningScriptObj.onlineMoneyMade;
       }
-      killWorkerScript(workerScript);
-      workerScript.log("", () => "Script finished running");
-    })
-    .catch(function (e) {
-      handleUnknownError(e, workerScript);
-      workerScript.log("", () => (e instanceof ScriptDeath ? "Script killed." : "Script crashed due to an error."));
-      killWorkerScript(workerScript);
     });
   return true;
 }
@@ -395,7 +419,11 @@ function createAutoexec(server: BaseServer): RunningScript | null {
  * into worker scripts so that they will start running
  */
 export function loadAllRunningScripts(): void {
-  const skipScriptLoad = window.location.href.toLowerCase().includes("?noscripts");
+  /**
+   * Accept all parameters containing "?noscript". The "standard" parameter is "?noScripts", but new players may not
+   * notice the "s" character at the end of "noScripts".
+   */
+  const skipScriptLoad = window.location.href.toLowerCase().includes("?noscript");
   if (skipScriptLoad) {
     Terminal.warn("Skipped loading player scripts during startup");
     console.info("Skipping the load of any scripts during startup");
@@ -424,18 +452,66 @@ export function loadAllRunningScripts(): void {
   }
 }
 
+export function createRunningScriptInstance(
+  server: BaseServer,
+  scriptPath: ScriptFilePath,
+  ramOverride: number | null | undefined,
+  threads: number,
+  args: ScriptArg[],
+): Result<{ runningScript: RunningScript }> {
+  const script = server.scripts.get(scriptPath);
+  if (!script) {
+    return {
+      success: false,
+      message: `Script ${scriptPath} does not exist on ${server.hostname}.`,
+    };
+  }
+
+  if (!server.hasAdminRights) {
+    return {
+      success: false,
+      message: `You do not have root access on ${server.hostname}.`,
+    };
+  }
+
+  const singleRamUsage = ramOverride ?? script.getRamUsage(server.scripts);
+  if (!singleRamUsage) {
+    return {
+      success: false,
+      message: `Cannot calculate RAM usage of ${scriptPath}. Reason: ${script.ramCalculationError}`,
+    };
+  }
+  const ramUsage = singleRamUsage * threads;
+  const ramAvailable = server.maxRam - server.ramUsed;
+  if (ramUsage > ramAvailable + 0.001) {
+    return {
+      success: false,
+      message: `Cannot run ${scriptPath} (t=${threads}) on ${server.hostname}. This script requires ${formatRam(
+        ramUsage,
+      )} of RAM.`,
+    };
+  }
+
+  const runningScript = new RunningScript(script, singleRamUsage, args);
+  return {
+    success: true,
+    runningScript,
+  };
+}
+
 /** Run a script from inside another script (run(), exec(), spawn(), etc.) */
 export function runScriptFromScript(
   caller: string,
-  host: BaseServer,
-  scriptname: ScriptFilePath,
+  server: BaseServer,
+  scriptPath: ScriptFilePath,
   args: ScriptArg[],
   workerScript: WorkerScript,
   runOpts: CompleteRunOptions,
 ): number {
-  const script = host.scripts.get(scriptname);
-  if (!script) {
-    workerScript.log(caller, () => `Could not find script '${scriptname}' on '${host.hostname}'`);
+  // This does not adjust server RAM usage or change any state, so it is safe to call before performing other checks
+  const result = createRunningScriptInstance(server, scriptPath, runOpts.ramOverride, runOpts.threads, args);
+  if (!result.success) {
+    workerScript.log(caller, () => result.message);
     return 0;
   }
 
@@ -444,48 +520,24 @@ export function runScriptFromScript(
     runOpts.preventDuplicates &&
     getRunningScriptsByArgs(
       { workerScript, function: "runScriptFromScript", functionPath: "internal.runScriptFromScript" },
-      scriptname,
-      host.hostname,
+      scriptPath,
+      server.hostname,
       args,
     ) !== null
   ) {
-    workerScript.log(caller, () => `'${scriptname}' is already running on '${host.hostname}'`);
+    workerScript.log(caller, () => `'${scriptPath}' is already running on '${server.hostname}'`);
     return 0;
   }
 
-  const singleRamUsage = runOpts.ramOverride ?? script.getRamUsage(host.scripts);
-  if (!singleRamUsage) {
-    workerScript.log(caller, () => `Ram usage could not be calculated for ${scriptname}`);
-    return 0;
-  }
-
-  // Check if admin rights on host, fail if not.
-  if (!host.hasAdminRights) {
-    workerScript.log(caller, () => `You do not have root access on '${host.hostname}'`);
-    return 0;
-  }
-
-  // Calculate ram usage including thread count
-  const ramUsage = singleRamUsage * runOpts.threads;
-
-  // Check if there is enough ram to run the script, fail if not.
-  const ramAvailable = host.maxRam - host.ramUsed;
-  if (ramUsage > ramAvailable + 0.001) {
-    workerScript.log(
-      caller,
-      () =>
-        `Cannot run script '${scriptname}' (t=${runOpts.threads}) on '${host.hostname}' because there is not enough available RAM!`,
-    );
-    return 0;
-  }
   // Able to run script
   workerScript.log(
     caller,
-    () => `'${scriptname}' on '${host.hostname}' with ${runOpts.threads} threads and args: ${arrayToString(args)}.`,
+    () => `'${scriptPath}' on '${server.hostname}' with ${runOpts.threads} threads and args: ${arrayToString(args)}.`,
   );
-  const runningScriptObj = new RunningScript(script, singleRamUsage, args);
+  const runningScriptObj = result.runningScript;
+  runningScriptObj.parent = workerScript.pid;
   runningScriptObj.threads = runOpts.threads;
   runningScriptObj.temporary = runOpts.temporary;
 
-  return startWorkerScript(runningScriptObj, host, workerScript);
+  return startWorkerScript(runningScriptObj, server, workerScript);
 }

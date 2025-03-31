@@ -24,3 +24,7 @@ number
 
 Number of times you have hired AdVert.
 
+## Remarks
+
+RAM cost: 10 GB
+

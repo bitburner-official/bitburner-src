@@ -26,6 +26,7 @@ import { isSleeveFactionWork } from "../Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../Work/SleeveCompanyWork";
 import { isSleeveCrimeWork } from "../Work/SleeveCrimeWork";
 import { canAccessBitNodeFeature } from "../../../BitNode/BitNodeUtils";
+import { getKeyFromReactElements } from "../../../utils/StringHelperFunctions";
 
 const CYCLES_PER_SEC = 1000 / CONSTANTS.MilliPerCycle;
 
@@ -173,11 +174,13 @@ export function EarningsElement(props: IProps): React.ReactElement {
       <TableBody>
         <TableRow>
           <TableCell classes={{ root: classes.cellNone }}>
-            <Typography variant="h6">Earnings {props.sleeve.storedCycles > 50 ? "(overclock)" : ""}</Typography>
+            <Typography variant="h6">
+              Earnings {props.sleeve.storedCycles > 50 ? "(Boosted by bonus time)" : ""}
+            </Typography>
           </TableCell>
         </TableRow>
         {data.map(([a, b]) => (
-          <TableRow key={a.toString() + b.toString()}>
+          <TableRow key={getKeyFromReactElements(a, b)}>
             <TableCell classes={{ root: classes.cellNone }}>
               <Typography>{a}</Typography>
             </TableCell>

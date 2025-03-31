@@ -4,7 +4,12 @@
 
 ## NS.setTitle() method
 
-Set the title of the tail window of a script.
+> Warning: This API is now obsolete.
+> 
+> Use [ns.ui.setTailTitle](./bitburner.userinterface.settailtitle.md) instead.
+> 
+
+Set the title of the tail window of a script. This function is deprecated and will be removed in a later version.
 
 **Signature:**
 

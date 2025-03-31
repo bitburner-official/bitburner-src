@@ -4,7 +4,7 @@
 
 ## OfficeAPI.getOffice() method
 
-Get data about an office
+Get data about an office.
 
 **Signature:**
 
@@ -24,4 +24,8 @@ getOffice(divisionName: string, city: CityName | `${CityName}`): Office;
 [Office](./bitburner.office.md)
 
 Office data
+
+## Remarks
+
+RAM cost: 10 GB
 

@@ -19,3 +19,5 @@ getStats(): Partial<Record<GoOpponent, SimpleOpponentStats>>;
 
 Partial&lt;Record&lt;[GoOpponent](./bitburner.goopponent.md)<!-- -->, [SimpleOpponentStats](./bitburner.simpleopponentstats.md)<!-- -->&gt;&gt;
 
+A dictionary of opponent stats keyed by opponent name.
+

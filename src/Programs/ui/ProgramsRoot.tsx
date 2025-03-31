@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { find } from "lodash";
-import { Box, Typography, Button, Container, Paper } from "@mui/material";
+import { Box, Typography, Button, Container, Paper, Tooltip } from "@mui/material";
 import { Check, Lock, Create } from "@mui/icons-material";
 
 import { Player } from "@player";
@@ -72,6 +72,7 @@ export function ProgramsRoot(): React.ReactElement {
           const create = program.create;
           if (create === null) return <></>;
           const curCompletion = getProgCompletion(program.name);
+          const hackingLevelRemaining = getHackingLevelRemaining(create.level);
 
           return (
             <Box
@@ -116,10 +117,12 @@ export function ProgramsRoot(): React.ReactElement {
                       Create program
                     </Button>
                   ))}
-                {Player.hasProgram(program.name) || getHackingLevelRemaining(create.level) === 0 || (
-                  <Typography color={Settings.theme.hack}>
-                    <b>Unlocks in:</b> {getHackingLevelRemaining(create.level)} hacking levels
-                  </Typography>
+                {Player.hasProgram(program.name) || hackingLevelRemaining === 0 || (
+                  <Tooltip title={<>Unlocks after you gain {hackingLevelRemaining} more hacking levels</>}>
+                    <Typography color={Settings.theme.hack}>
+                      <b>Unlocks at hacking level:</b> {Player.skills.hacking + hackingLevelRemaining}
+                    </Typography>
+                  </Tooltip>
                 )}
                 {curCompletion !== -1 && (
                   <Typography color={Settings.theme.infolight}>

@@ -25,8 +25,10 @@ export function Unlock(props: UnlockProps): React.ReactElement {
 
   function onClick(): void {
     // corp.unlock handles displaying a dialog on failure
-    const message = corp.purchaseUnlock(props.name);
-    if (message) dialogBoxCreate(`Error while attempting to purchase ${props.name}:\n${message}`);
+    const result = corp.purchaseUnlock(props.name);
+    if (!result.success) {
+      dialogBoxCreate(`Error while attempting to purchase ${props.name}:\n${result.message}`);
+    }
     // Rerenders the parent, which should remove this item if the purchase was successful
     props.rerender();
   }

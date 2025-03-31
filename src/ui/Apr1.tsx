@@ -45,9 +45,12 @@ export function Apr1(): React.ReactElement {
   const [n, setN] = useState(0);
 
   useEffect(() => {
+    if (!open) {
+      return;
+    }
     const id = setInterval(() => setN((n) => (n + 1) % frames.length), 100);
     return () => clearInterval(id);
-  }, []);
+  }, [open]);
 
   useEffect(
     () =>

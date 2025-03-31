@@ -25,6 +25,7 @@ interface RunningScript
 |  [onlineExpGained](./bitburner.runningscript.onlineexpgained.md) |  | number | Total amount of hacking experience earned from this script when online |
 |  [onlineMoneyMade](./bitburner.runningscript.onlinemoneymade.md) |  | number | Total amount of money made by this script when online |
 |  [onlineRunningTime](./bitburner.runningscript.onlinerunningtime.md) |  | number | Number of seconds that this script has been running online |
+|  [parent](./bitburner.runningscript.parent.md) |  | number | <p>Process ID of the parent process.</p><p>If this script was started by another script, this will be the PID of that script. If this script was started directly through the terminal, the value will be 0.</p> |
 |  [pid](./bitburner.runningscript.pid.md) |  | number | Process ID. Must be an integer |
 |  [ramUsage](./bitburner.runningscript.ramusage.md) |  | number | How much RAM this script uses for ONE thread. Also known as "static RAM usage," this value does not change once the script is started, unless you call ns.ramOverride(). |
 |  [server](./bitburner.runningscript.server.md) |  | string | Hostname of the server on which this script runs |

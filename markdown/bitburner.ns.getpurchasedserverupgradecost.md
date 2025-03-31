@@ -23,7 +23,7 @@ getPurchasedServerUpgradeCost(hostname: string, ram: number): number;
 
 number
 
-The price to upgrade.
+The price to upgrade or -1 if either input is not valid, i.e. hostname is not the name of a purchased server or ram is not a valid amount.
 
 ## Remarks
 

@@ -12,6 +12,7 @@ Make a move on the IPvGO subnet game board, and await the opponent's response. x
 makeMove(
     x: number,
     y: number,
+    playAsWhite?: boolean,
   ): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
@@ -23,8 +24,9 @@ makeMove(
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  x | number |  |
-|  y | number |  |
+|  x | number | x coordinate of move to make |
+|  y | number | y coordinate of move to make |
+|  playAsWhite | boolean | _(Optional)_ optional. If true, attempts to play as white and then wait for black's move. Can only be used when playing as white when the opponent is set to "No AI" |
 
 **Returns:**
 

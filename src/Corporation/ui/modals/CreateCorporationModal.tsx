@@ -11,6 +11,7 @@ import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import TextField from "@mui/material/TextField";
 import { createCorporation } from "../../Actions";
 import { costOfCreatingCorporation } from "../../helpers";
+import { exceptionAlert } from "../../../utils/helpers/exceptionAlert";
 
 interface IProps {
   open: boolean;
@@ -34,7 +35,13 @@ export function CreateCorporationModal(props: IProps): React.ReactElement {
   }
 
   function createCorporationWithUI(corporationName: string, selfFund: boolean): void {
-    if (!createCorporation(corporationName, selfFund, props.restart)) {
+    const result = createCorporation(corporationName, selfFund, props.restart);
+    if (!result.success) {
+      /**
+       * This should not happen. We always check if the player can create a corporation before enabling UI elements
+       * needed to do that.
+       */
+      exceptionAlert(new Error(result.message));
       return;
     }
     props.onClose();

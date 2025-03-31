@@ -1,10 +1,6 @@
-import { KEY } from "../utils/helpers/keyCodes";
+import { KEY } from "../utils/KeyboardEventKey";
 import { Player } from "@player";
 import { AugmentationName } from "@enums";
-
-export function random(min: number, max: number): number {
-  return Math.random() * (max - min) + min;
-}
 
 export const upArrowSymbol = "↑";
 export const downArrowSymbol = "↓";

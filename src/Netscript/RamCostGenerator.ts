@@ -75,14 +75,14 @@ export const RamCostConstants = {
   StanekPlace: 5,
   StanekFragmentAt: 2,
   StanekDeleteAt: 0.15,
-  InfiltrationCalculateDifficulty: 2.5,
-  InfiltrationCalculateRewards: 2.5,
-  InfiltrationGetLocations: 5,
-  InfiltrationGetInfiltrations: 15,
   StanekAcceptGift: 2,
 
+  InfiltrationCalculateDifficulty: 2.5,
+  InfiltrationCalculateRewards: 2.5,
+  InfiltrationGetInfiltrations: 15,
+
   CycleTiming: 1,
-};
+} as const;
 
 function SF4Cost(cost: number): () => number {
   return () => {
@@ -169,6 +169,7 @@ const singularity = {
   getCurrentServer: SF4Cost(RamCostConstants.SingularityFn1),
   getCompanyPositionInfo: SF4Cost(RamCostConstants.SingularityFn1),
   getCompanyPositions: SF4Cost(RamCostConstants.SingularityFn1),
+  cat: SF4Cost(RamCostConstants.SingularityFn1 / 4),
   connect: SF4Cost(RamCostConstants.SingularityFn1),
   manualHack: SF4Cost(RamCostConstants.SingularityFn1),
   installBackdoor: SF4Cost(RamCostConstants.SingularityFn1),
@@ -215,6 +216,7 @@ const singularity = {
   installAugmentations: SF4Cost(RamCostConstants.SingularityFn3),
   isFocused: SF4Cost(0.1),
   setFocus: SF4Cost(0.1),
+  getSaveData: SF4Cost(RamCostConstants.SingularityFn1 / 2),
   exportGame: SF4Cost(RamCostConstants.SingularityFn1 / 2),
   exportGameBonus: SF4Cost(RamCostConstants.SingularityFn1 / 4),
   b1tflum3: SF4Cost(16),
@@ -235,10 +237,10 @@ const gang = {
   getRecruitsAvailable: RamCostConstants.GangApiBase / 4,
   respectForNextRecruit: RamCostConstants.GangApiBase / 4,
   recruitMember: RamCostConstants.GangApiBase / 2,
-  getTaskNames: RamCostConstants.GangApiBase / 4,
+  getTaskNames: 0,
   getTaskStats: RamCostConstants.GangApiBase / 4,
   setMemberTask: RamCostConstants.GangApiBase / 2,
-  getEquipmentNames: RamCostConstants.GangApiBase / 4,
+  getEquipmentNames: 0,
   getEquipmentCost: RamCostConstants.GangApiBase / 2,
   getEquipmentType: RamCostConstants.GangApiBase / 2,
   getEquipmentStats: RamCostConstants.GangApiBase / 2,
@@ -269,9 +271,12 @@ const go = {
     getLiberties: 16,
     getControlledEmptyNodes: 16,
     getStats: 0,
+    resetStats: 0,
+    setTestingBoardState: 4,
   },
   cheat: {
     getCheatSuccessChance: 1,
+    getCheatCount: 1,
     removeRouter: 8,
     playTwoMoves: 8,
     repairOfflineNode: 8,
@@ -282,13 +287,13 @@ const go = {
 // Bladeburner API
 const bladeburner = {
   inBladeburner: RamCostConstants.BladeburnerApiBase / 4,
-  getContractNames: RamCostConstants.BladeburnerApiBase / 10,
-  getOperationNames: RamCostConstants.BladeburnerApiBase / 10,
-  getBlackOpNames: RamCostConstants.BladeburnerApiBase / 10,
+  getContractNames: 0,
+  getOperationNames: 0,
+  getBlackOpNames: 0,
   getNextBlackOp: RamCostConstants.BladeburnerApiBase / 2,
   getBlackOpRank: RamCostConstants.BladeburnerApiBase / 2,
-  getGeneralActionNames: RamCostConstants.BladeburnerApiBase / 10,
-  getSkillNames: RamCostConstants.BladeburnerApiBase / 10,
+  getGeneralActionNames: 0,
+  getSkillNames: 0,
   startAction: RamCostConstants.BladeburnerApiBase,
   stopBladeburnerAction: RamCostConstants.BladeburnerApiBase / 2,
   getCurrentAction: RamCostConstants.BladeburnerApiBase / 4,
@@ -323,7 +328,7 @@ const bladeburner = {
 } as const;
 
 const infiltration = {
-  getPossibleLocations: RamCostConstants.InfiltrationGetLocations,
+  getPossibleLocations: 0,
   getInfiltration: RamCostConstants.InfiltrationGetInfiltrations,
 } as const;
 
@@ -332,10 +337,11 @@ const codingcontract = {
   attempt: RamCostConstants.CodingContractBase,
   getContractType: RamCostConstants.CodingContractBase / 2,
   getData: RamCostConstants.CodingContractBase / 2,
+  getContract: RamCostConstants.CodingContractBase * (3 / 2),
   getDescription: RamCostConstants.CodingContractBase / 2,
   getNumTriesRemaining: RamCostConstants.CodingContractBase / 5,
   createDummyContract: RamCostConstants.CodingContractBase / 5,
-  getContractTypes: RamCostConstants.CodingContractBase / 5,
+  getContractTypes: 0,
 } as const;
 
 // Duplicate Sleeve API
@@ -377,6 +383,13 @@ const stanek = {
 
 // UI API
 const ui = {
+  openTail: 0,
+  renderTail: 0,
+  moveTail: 0,
+  resizeTail: 0,
+  closeTail: 0,
+  setTailTitle: 0,
+  setTailFontSize: 0,
   getTheme: 0,
   setTheme: 0,
   resetTheme: 0,
@@ -398,19 +411,17 @@ const grafting = {
 } as const;
 
 const corporation = {
-  hasCorporation: 0, // This one is free
-  getConstants: 0,
-  getBonusTime: 0,
-  nextUpdate: RamCostConstants.CycleTiming,
-  getIndustryData: RamCostConstants.CorporationInfo,
-  getMaterialData: RamCostConstants.CorporationInfo,
-  issueNewShares: RamCostConstants.CorporationAction,
+  hasCorporation: 0,
+  canCreateCorporation: 0,
   createCorporation: RamCostConstants.CorporationAction,
   hasUnlock: RamCostConstants.CorporationInfo,
   getUnlockCost: RamCostConstants.CorporationInfo,
   getUpgradeLevel: RamCostConstants.CorporationInfo,
   getUpgradeLevelCost: RamCostConstants.CorporationInfo,
   getInvestmentOffer: RamCostConstants.CorporationInfo,
+  getConstants: 0,
+  getIndustryData: RamCostConstants.CorporationInfo,
+  getMaterialData: RamCostConstants.CorporationInfo,
   acceptInvestmentOffer: RamCostConstants.CorporationAction,
   goPublic: RamCostConstants.CorporationAction,
   bribe: RamCostConstants.CorporationAction,
@@ -421,8 +432,13 @@ const corporation = {
   purchaseUnlock: RamCostConstants.CorporationAction,
   levelUpgrade: RamCostConstants.CorporationAction,
   issueDividends: RamCostConstants.CorporationAction,
+  issueNewShares: RamCostConstants.CorporationAction,
   buyBackShares: RamCostConstants.CorporationAction,
   sellShares: RamCostConstants.CorporationAction,
+  getBonusTime: 0,
+  nextUpdate: RamCostConstants.CycleTiming,
+  sellDivision: RamCostConstants.CorporationAction,
+  // Warehouse API
   sellMaterial: RamCostConstants.CorporationAction,
   sellProduct: RamCostConstants.CorporationAction,
   discontinueProduct: RamCostConstants.CorporationAction,
@@ -446,6 +462,7 @@ const corporation = {
   limitProductProduction: RamCostConstants.CorporationAction,
   getUpgradeWarehouseCost: RamCostConstants.CorporationInfo,
   hasWarehouse: RamCostConstants.CorporationInfo,
+  // Warehouse API
   hireEmployee: RamCostConstants.CorporationAction,
   upgradeOfficeSize: RamCostConstants.CorporationAction,
   throwParty: RamCostConstants.CorporationAction,
@@ -459,7 +476,6 @@ const corporation = {
   hasResearched: RamCostConstants.CorporationInfo,
   setAutoJobAssignment: RamCostConstants.CorporationAction,
   getOfficeSizeUpgradeCost: RamCostConstants.CorporationInfo,
-  sellDivision: RamCostConstants.CorporationAction,
 } as const;
 
 /** RamCosts guaranteed to match ns structure 1:1 (aside from args and enums).
@@ -517,6 +533,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   run: RamCostConstants.Run,
   exec: RamCostConstants.Exec,
   spawn: RamCostConstants.Spawn,
+  self: 0,
   kill: RamCostConstants.Kill,
   killall: RamCostConstants.Kill,
   exit: 0,
@@ -549,11 +566,11 @@ export const RamCosts: RamCostTree<NSFull> = {
   getPurchasedServerMaxRam: RamCostConstants.GetPurchasedServerMaxRam,
   getPurchasedServerCost: RamCostConstants.GetPurchaseServer,
   getPurchasedServerUpgradeCost: 0.1,
+  getPurchasedServers: 1.05,
   upgradePurchasedServer: 0.25,
   renamePurchasedServer: 0,
   purchaseServer: RamCostConstants.PurchaseServer,
   deleteServer: RamCostConstants.PurchaseServer,
-  getPurchasedServers: RamCostConstants.PurchaseServer,
   write: 0,
   tryWritePort: 0,
   read: 0,
@@ -617,6 +634,7 @@ export const RamCosts: RamCostTree<NSFull> = {
       calculateFavorToRep: 0,
       calculateRepToFavor: 0,
       repFromDonation: 0,
+      donationForRep: 0,
     },
     skills: {
       calculateSkill: 0,
@@ -666,6 +684,9 @@ export const RamCosts: RamCostTree<NSFull> = {
       universityGains: 0,
       factionGains: 0,
       companyGains: 0,
+    },
+    bladeburner: {
+      skillMaxUpgradeCount: 0,
     },
   },
 } as const;

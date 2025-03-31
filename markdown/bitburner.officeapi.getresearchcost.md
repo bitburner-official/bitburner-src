@@ -4,7 +4,7 @@
 
 ## OfficeAPI.getResearchCost() method
 
-Get the cost to unlock research
+Get the cost to unlock a research.
 
 **Signature:**
 
@@ -23,5 +23,9 @@ getResearchCost(divisionName: string, researchName: string): number;
 
 number
 
-cost
+Cost
+
+## Remarks
+
+RAM cost: 10 GB
 

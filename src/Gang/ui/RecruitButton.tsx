@@ -5,6 +5,8 @@ import { useGang } from "./Context";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import { RecruitmentResult } from "../Gang";
+import { pluralize } from "../../utils/I18nUtils";
 
 interface IProps {
   onRecruit: () => void;
@@ -16,7 +18,7 @@ export function RecruitButton(props: IProps): React.ReactElement {
   const [open, setOpen] = useState(false);
   const recruitsAvailable = gang.getRecruitsAvailable();
 
-  if (!gang.canRecruitMember()) {
+  if (gang.canRecruitMember() !== RecruitmentResult.Success) {
     const respectNeeded = gang.respectForNextRecruit();
     return (
       <Box display="flex" alignItems="center" sx={{ mx: 1 }}>
@@ -34,9 +36,7 @@ export function RecruitButton(props: IProps): React.ReactElement {
     <>
       <Box display="flex" alignItems="center" sx={{ mx: 1 }}>
         <Button onClick={() => setOpen(true)}>Recruit Gang Member</Button>
-        <Typography sx={{ ml: 1 }}>
-          Can recruit {recruitsAvailable} more gang member{recruitsAvailable === 1 ? "" : "s"}
-        </Typography>
+        <Typography sx={{ ml: 1 }}>Can recruit {pluralize(recruitsAvailable, "more gang member")}</Typography>
       </Box>
       <RecruitModal open={open} onClose={() => setOpen(false)} onRecruit={props.onRecruit} />
     </>

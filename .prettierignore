@@ -3,6 +3,7 @@ package.json
 dist
 doc/build
 doc/source
+coverage
 .build
 .package
 .app

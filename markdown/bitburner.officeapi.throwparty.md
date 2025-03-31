@@ -4,7 +4,7 @@
 
 ## OfficeAPI.throwParty() method
 
-Throw a party for your employees
+Throw a party for your employees.
 
 **Signature:**
 
@@ -25,4 +25,8 @@ throwParty(divisionName: string, city: CityName | `${CityName}`, costPerEmployee
 number
 
 Multiplier for morale, or zero on failure
+
+## Remarks
+
+RAM cost: 20 GB
 

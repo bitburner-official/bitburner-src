@@ -8,18 +8,30 @@
 
 |  Enumeration | Description |
 |  --- | --- |
+|  [BladeburnerActionType](./bitburner.bladeburneractiontype.md) | Action types of Bladeburner |
+|  [BladeburnerBlackOpName](./bitburner.bladeburnerblackopname.md) | Black Operation names of Bladeburner |
+|  [BladeburnerContractName](./bitburner.bladeburnercontractname.md) | Contract names of Bladeburner |
+|  [BladeburnerGeneralActionName](./bitburner.bladeburnergeneralactionname.md) | General action names of Bladeburner |
+|  [BladeburnerOperationName](./bitburner.bladeburneroperationname.md) | Operation names of Bladeburner |
+|  [BladeburnerSkillName](./bitburner.bladeburnerskillname.md) | Skill names type of Bladeburner |
 |  [CityName](./bitburner.cityname.md) | Names of all cities |
+|  [CodingContractName](./bitburner.codingcontractname.md) |  |
 |  [CompanyName](./bitburner.companyname.md) | Names of all companies |
+|  [CreatingCorporationCheckResult](./bitburner.creatingcorporationcheckresult.md) |  |
 |  [CrimeType](./bitburner.crimetype.md) |  |
+|  [FactionName](./bitburner.factionname.md) | <p>Names of all factions.</p><p>Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you do not want to know what all the factions are, you should not check this enum. Some factions are only accessible in the endgame.</p> |
 |  [FactionWorkType](./bitburner.factionworktype.md) |  |
+|  [GymLocationName](./bitburner.gymlocationname.md) | Locations of gym |
 |  [GymType](./bitburner.gymtype.md) |  |
 |  [JobField](./bitburner.jobfield.md) |  |
 |  [JobName](./bitburner.jobname.md) |  |
 |  [LocationName](./bitburner.locationname.md) | Names of all locations |
 |  [OrderType](./bitburner.ordertype.md) |  |
 |  [PositionType](./bitburner.positiontype.md) |  |
+|  [SpecialBladeburnerActionTypeForSleeve](./bitburner.specialbladeburneractiontypeforsleeve.md) | These special Bladeburner action types are only for Sleeve |
 |  [ToastVariant](./bitburner.toastvariant.md) |  |
 |  [UniversityClassType](./bitburner.universityclasstype.md) |  |
+|  [UniversityLocationName](./bitburner.universitylocationname.md) | Locations of university |
 
 ## Interfaces
 
@@ -29,6 +41,7 @@
 |  [AugmentPair](./bitburner.augmentpair.md) | Return value of [getSleevePurchasableAugs](./bitburner.sleeve.getsleevepurchasableaugs.md) |
 |  [AutocompleteData](./bitburner.autocompletedata.md) | Used for autocompletion |
 |  [BackdoorRequirement](./bitburner.backdoorrequirement.md) | Player must have installed a backdoor on this server. |
+|  [BaseTask](./bitburner.basetask.md) | Base interface of all tasks. |
 |  [BasicHGWOptions](./bitburner.basichgwoptions.md) | Options to affect the behavior of [hack](./bitburner.ns.hack.md)<!-- -->, [grow](./bitburner.ns.grow.md)<!-- -->, and [weaken](./bitburner.ns.weaken.md)<!-- -->. |
 |  [BitNodeBooleanOptions](./bitburner.bitnodebooleanoptions.md) | <p>restrictHomePCUpgrade: The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max core: 1.</p><p>disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy augmentations for them.</p> |
 |  [BitNodeMultipliers](./bitburner.bitnodemultipliers.md) | All multipliers affecting the difficulty of the current challenge. |
@@ -36,6 +49,7 @@
 |  [BitNodeRequirement](./bitburner.bitnoderequirement.md) | Player must be located in this BitNode. |
 |  [Bladeburner](./bitburner.bladeburner.md) | Bladeburner API |
 |  [BladeburnerCurAction](./bitburner.bladeburnercuraction.md) | Bladeburner current action. |
+|  [BladeburnerFormulas](./bitburner.bladeburnerformulas.md) | Bladeburner formulas |
 |  [BladeburnerRankRequirement](./bitburner.bladeburnerrankrequirement.md) | Player must have at least this rank in the Bladeburner Division. |
 |  [CityRequirement](./bitburner.cityrequirement.md) | Player must be located in this city. |
 |  [CodingContract](./bitburner.codingcontract.md) | Coding Contract API |
@@ -65,9 +79,9 @@
 |  [GangFormulas](./bitburner.gangformulas.md) | Gang formulas |
 |  [GangGenInfo](./bitburner.ganggeninfo.md) | Gang general info. |
 |  [GangMemberAscension](./bitburner.gangmemberascension.md) |  |
+|  [GangMemberExpGain](./bitburner.gangmemberexpgain.md) |  |
 |  [GangMemberInfo](./bitburner.gangmemberinfo.md) |  |
 |  [GangMemberInstall](./bitburner.gangmemberinstall.md) |  |
-|  [GangOtherInfo](./bitburner.gangotherinfo.md) |  |
 |  [GangOtherInfoObject](./bitburner.gangotherinfoobject.md) |  |
 |  [GangTaskStats](./bitburner.gangtaskstats.md) | Object representing data representing a gang member task. |
 |  [GangTerritory](./bitburner.gangterritory.md) |  |
@@ -75,7 +89,7 @@
 |  [GoAnalysis](./bitburner.goanalysis.md) | Tools to analyze the IPvGO subnet. |
 |  [GoCheat](./bitburner.gocheat.md) | Illicit and dangerous IPvGO tools. Not for the faint of heart. Requires BitNode 14.2 to use. |
 |  [Grafting](./bitburner.grafting.md) | Grafting API |
-|  [GraftingTask](./bitburner.graftingtask.md) | Faction Work |
+|  [GraftingTask](./bitburner.graftingtask.md) | Grafting Work |
 |  [HackingFormulas](./bitburner.hackingformulas.md) | Hacking formulas |
 |  [HackingMultipliers](./bitburner.hackingmultipliers.md) | Hack related multipliers. |
 |  [Hacknet](./bitburner.hacknet.md) | Hacknet API |
@@ -151,7 +165,10 @@
 
 |  Type Alias | Description |
 |  --- | --- |
-|  [CodingContractData](./bitburner.codingcontractdata.md) | Coding contract data will differ depending on coding contract. |
+|  [BladeburnerActionName](./bitburner.bladeburneractionname.md) |  |
+|  [BladeburnerActionTypeForSleeve](./bitburner.bladeburneractiontypeforsleeve.md) |  |
+|  [CodingContractObject](./bitburner.codingcontractobject.md) |  |
+|  [CodingContractSignatures](./bitburner.codingcontractsignatures.md) |  |
 |  [CorpEmployeePosition](./bitburner.corpemployeeposition.md) |  |
 |  [CorpIndustryName](./bitburner.corpindustryname.md) |  |
 |  [CorpMaterialName](./bitburner.corpmaterialname.md) |  |

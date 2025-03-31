@@ -1,4 +1,4 @@
-# Before you start -
+# Before you start
 
 It is highly recommended that you have a basic familiarity with programming concepts like [`for`/`while` loops](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for), [conditionals like `if`/`else`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/if...else), [`functions`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions),[`arrays`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) and [`variables`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) before starting to write scripts - but you can start with basic skills and learn with practice.
 

@@ -43,7 +43,8 @@ export function mem(args: (string | number | boolean)[], server: BaseServer): vo
       // Let's warn the user that he might need to save his script again to generate the detailed entries
       Terminal.warn("You might have to open & save this script to see the detailed RAM usage information.");
     }
-  } catch (e) {
-    Terminal.error(e + "");
+  } catch (error) {
+    console.error(error);
+    Terminal.error(String(error));
   }
 }

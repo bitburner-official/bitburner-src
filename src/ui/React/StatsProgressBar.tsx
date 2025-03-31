@@ -30,10 +30,10 @@ export function StatsProgressBar({
   const tooltip = (
     <Typography sx={{ textAlign: "right" }}>
       <strong>Progress:</strong>&nbsp;
-      {formatExp(current)} / {formatExp(max - min)}
+      {formatExp(current)} ({progress.toFixed(2)}%)
       <br />
       <strong>Remaining:</strong>&nbsp;
-      {formatExp(remaining)} ({progress.toFixed(2)}%)
+      {formatExp(remaining)} / {formatExp(max - min)}
     </Typography>
   );
 

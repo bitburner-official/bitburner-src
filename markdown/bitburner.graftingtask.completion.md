@@ -4,6 +4,8 @@
 
 ## GraftingTask.completion property
 
+This promise resolves when the task is complete.
+
 **Signature:**
 
 ```typescript

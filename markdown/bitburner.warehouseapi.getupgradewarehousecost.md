@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.getUpgradeWarehouseCost() method
 
-Gets the cost to upgrade a warehouse to the next level
+Get the cost to upgrade a warehouse to the next level.
 
 **Signature:**
 
@@ -18,11 +18,15 @@ getUpgradeWarehouseCost(divisionName: string, city: CityName | `${CityName}`, am
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
-|  amt | number | _(Optional)_ amount of upgrades. Optional, defaults to 1 |
+|  amt | number | _(Optional)_ Amount of upgrades. Optional. Defaults to 1. |
 
 **Returns:**
 
 number
 
-cost to upgrade
+Cost to upgrade
+
+## Remarks
+
+RAM cost: 10 GB
 

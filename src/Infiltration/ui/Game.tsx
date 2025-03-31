@@ -1,5 +1,5 @@
 import { Button, Container, Paper, Typography } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FactionName, ToastVariant } from "@enums";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
@@ -16,6 +16,8 @@ import { Victory } from "./Victory";
 import { WireCuttingGame } from "./WireCuttingGame";
 import { calculateDamageAfterFailingInfiltration } from "../utils";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
+import { PlayerEventType, PlayerEvents } from "../../PersonObjects/Player/PlayerEvents";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 type GameProps = {
   StartingDifficulty: number;
@@ -150,6 +152,17 @@ export function Game(props: GameProps): React.ReactElement {
       </Typography>
     );
   }
+
+  useEffect(() => {
+    const clearSubscription = PlayerEvents.subscribe((eventType) => {
+      if (eventType !== PlayerEventType.Hospitalized) {
+        return;
+      }
+      cancel();
+      dialogBoxCreate("Infiltration was cancelled because you were hospitalized");
+    });
+    return clearSubscription;
+  }, []);
 
   return (
     <Container>

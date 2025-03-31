@@ -13,13 +13,16 @@ describe("Board analysis utility tests", () => {
       .filter((p) => p === "O").length;
     expect(whitePieceCount).toEqual(1);
     expect(result).toEqual({
-      board: expect.any(Object),
+      board: result.board, // This board state is different every run, due to random offline nodes and handicap placement
       previousPlayer: GoColor.white,
       previousBoards: [],
       ai: GoOpponent.Illuminati,
       passCount: 0,
       cheatCount: 0,
+      cheatCountForWhite: 0,
+      komiOverride: null,
     });
+    expect(result.board?.length).toEqual(5);
   });
 
   it("Correctly applies the board size and handicap for the special opponent", () => {

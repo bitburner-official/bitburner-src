@@ -30,7 +30,7 @@ export function knowAboutBitverse(): boolean {
 
 export function getDefaultBitNodeOptions(): BitNodeOptions {
   return {
-    sourceFileOverrides: new Map<number, number>(),
+    sourceFileOverrides: new JSONMap<number, number>(),
     intelligenceOverride: undefined,
     restrictHomePCUpgrade: false,
     disableGang: false,

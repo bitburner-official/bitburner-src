@@ -25,6 +25,7 @@ import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { OptionsTabName } from "./GameOptionsRoot";
+import { Player } from "@player";
 
 interface IProps {
   tab: OptionsTabName;
@@ -90,6 +91,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
     try {
       await saveObject.importGame(importData.saveData);
     } catch (e: unknown) {
+      console.error(e);
       SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);
     }
 
@@ -114,6 +116,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           <SideBarTab sideBarProps={props} tabName="Numeric Display" />
           <SideBarTab sideBarProps={props} tabName="Misc" />
           <SideBarTab sideBarProps={props} tabName="Remote API" />
+          <SideBarTab sideBarProps={props} tabName="Key Binding" />
         </List>
       </Paper>
       <Box
@@ -154,13 +157,27 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
         >
           <Button onClick={startImport} startIcon={<Upload />} sx={{ gridArea: "import" }}>
             Import Game
-            <input ref={importInput} id="import-game-file-selector" type="file" hidden onChange={onImport} />
+            <input
+              ref={importInput}
+              id="import-game-file-selector"
+              type="file"
+              hidden
+              onChange={(event) => {
+                onImport(event).catch((error) => {
+                  console.error(error);
+                });
+              }}
+            />
           </Button>
         </Tooltip>
         <ConfirmationModal
           open={importSaveOpen}
           onClose={() => setImportSaveOpen(false)}
-          onConfirm={() => confirmedImportGame()}
+          onConfirm={() => {
+            confirmedImportGame().catch((error) => {
+              console.error(error);
+            });
+          }}
           additionalButton={<Button onClick={compareSaveGame}>Compare Save</Button>}
           confirmationText={
             <>
@@ -240,8 +257,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
             gridTemplateAreas: `"credits credits"
             "bug bug"
         "discord reddit"
-        "tut tut"
-        "plaza plaza"`,
+        "tut tut"`,
             gridTemplateColumns: "1fr 1fr",
             my: 1,
           }}
@@ -276,13 +292,14 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           </Button>
         </Box>
       </Box>
+      <Typography>Save ID: {Player.identifier}</Typography>
       <FileDiagnosticModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
 
       <ConfirmationModal
         open={confirmResetOpen}
         onClose={() => setConfirmResetOpen(false)}
         onConfirm={props.reactivateTutorial}
-        confirmationText={"Reset your stats and money to start the tutorial? Home scripts will not be reset."}
+        confirmationText={"Restart the tutorial? Running scripts will be killed."}
         additionalButton={<Button onClick={() => setConfirmResetOpen(false)}>Cancel</Button>}
       />
     </Box>

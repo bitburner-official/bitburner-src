@@ -24,6 +24,8 @@ import {
   iTutorialEnd,
 } from "../../InteractiveTutorial";
 import { useRerender } from "../React/hooks";
+import { Settings } from "../../Settings/Settings";
+import { NsApiDocumentationLink } from "../React/NsApiDocumentationLink";
 
 interface IContent {
   content: React.ReactElement;
@@ -56,6 +58,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
             This tutorial will show you the basics of the game. You may skip the tutorial at any time.
+            <br />
+            <br />
+            You can replay this tutorial by going to the Options tab and pressing "Reset tutorial".
             <br />
             <br />
             You can also collapse this panel to temporarily hide this tutorial.
@@ -141,6 +146,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           </Typography>
 
           <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
+          <Typography>
+            <br />( "ls" is short for "list" )
+          </Typography>
         </>
       ),
       canNext: false,
@@ -151,7 +159,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
           <Typography>
             {" "}
-            is a basic command that shows files on the computer. Right now, it shows that you have a program called{" "}
+            is a basic command that lists the files on the computer. Right now, it shows that you have a program called{" "}
             NUKE.exe on your computer. We'll get to what this does later. <br />
             <br />
             Using your home computer's terminal, you can connect to other machines throughout the world. Let's do that
@@ -338,10 +346,11 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography classes={{ root: classes.code }}>
             {
               <CopyableText
-                value={`export async function main(ns) {
-	while(true) {
-		await ns.hack('n00dles');
-	}
+                value={`/** @param {NS} ns */
+export async function main(ns) {
+  while (true) {
+    await ns.hack("n00dles");
+  }
 }`}
               />
             }
@@ -349,6 +358,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography>
             For anyone with basic programming experience, this code should be straightforward. This script will
             continuously hack the n00dles server.
+            <br />
+            <br />
+            To access <NsApiDocumentationLink />, press the link at the bottom.
             <br />
             <br />
             To save and close the script editor, press the button at the bottom.
@@ -525,13 +537,27 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     },
     [iTutorialSteps.DocumentationPageInfo as number]: {
       content: (
-        <Typography>
-          This page contains a lot of different documentation about the game's content and mechanics. I know it's a lot,
-          but I highly suggest you read (or at least skim) through this before you start playing.
+        <Typography component="div">
+          This page contains a lot of different documentation about the game's contents and mechanics. I know it's a
+          lot, but I highly suggest you read (or at least skim) through this before you start playing. Some pages are
+          inaccessible at the start and will be unlocked later.
           <br />
           <br />
-          The Beginner's Guide contains the guide for new players, navigating you through most of early game.
+          You should at least check these pages:
+          <ul>
+            <li>
+              The Beginner's guide contains the guide for new players, navigating you through most of the early game.
+            </li>
+            <li>The NS API documentation contains reference materials for all NS APIs.</li>
+          </ul>
+          <Typography fontWeight="fontWeightBold">
+            This documentation page is the best place to get up-to-date information, especially when you get stuck. If
+            you have a question and cannot find the answer here, please ask us on Discord.
+          </Typography>
           <br />
+          <Typography color={Settings.theme.warning}>
+            The documentation at readthedocs is outdated and unmaintained. Do not use them!
+          </Typography>
           <br />
           That's the end of the tutorial. Hope you enjoy the game!
         </Typography>
@@ -573,7 +599,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <br />
         <br />
         <Button onClick={iTutorialEnd}>
-          {step !== iTutorialSteps.DocumentationPageInfo ? "SKIP TUTORIAL" : "FINISH TUTORIAL"}
+          {step !== iTutorialSteps.DocumentationPageInfo ? "Exit Tutorial" : "Finish Tutorial"}
         </Button>
       </Paper>
     </>

@@ -2,7 +2,8 @@ import type { Bladeburner } from "../Bladeburner";
 import type { BlackOperation } from "../Actions/BlackOperation";
 
 import React from "react";
-import { Paper, Typography } from "@mui/material";
+import { Paper, Typography, Tooltip } from "@mui/material";
+import { Info } from "@mui/icons-material";
 
 import { Player } from "@player";
 import { formatNumberNoSuffix } from "../../ui/formatNumber";
@@ -22,7 +23,11 @@ export function BlackOpElem({ bladeburner, action }: BlackOpElemProps): React.Re
   if (isCompleted) {
     return (
       <Paper sx={{ my: 1, p: 1 }}>
-        <Typography>{action.name} (COMPLETED)</Typography>
+        <Tooltip title={action.desc}>
+          <Typography>
+            {action.name} (COMPLETED) <Info sx={{ fontSize: "1.1em" }} />
+          </Typography>
+        </Tooltip>
       </Paper>
     );
   }

@@ -27,8 +27,9 @@ function SSoption(props: ISSoptionProps): React.ReactElement {
       const matName = props.matName;
       const material = props.warehouse.materials[matName];
       setSmartSupplyOption(props.warehouse, material, newValue);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
+      return;
     }
     setChecked(newValue);
   }
@@ -40,15 +41,16 @@ function SSoption(props: ISSoptionProps): React.ReactElement {
       const matName = props.matName;
       const material = props.warehouse.materials[matName];
       setSmartSupplyOption(props.warehouse, material, newValue);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
+      return;
     }
     setChecked(newValue);
   }
 
   return (
     <>
-      label={<Typography>{props.warehouse.materials[props.matName].name}</Typography>}
+      {<Typography>{props.warehouse.materials[props.matName].name}</Typography>}
       <FormControlLabel
         control={<Switch checked={value == "leftovers"} onChange={onLOChange} />}
         label={<Typography>{"Use leftovers"}</Typography>}

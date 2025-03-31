@@ -8,7 +8,9 @@ import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { prestigeSourceFile } from "./Prestige";
-import { setBitNodeOptions } from "./BitNode/BitNodeUtils";
+import { getDefaultBitNodeOptions, setBitNodeOptions } from "./BitNode/BitNodeUtils";
+import { prestigeWorkerScripts } from "./NetscriptWorker";
+import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 
 function giveSourceFile(bitNodeNumber: number): void {
   const sourceFileKey = "SourceFile" + bitNodeNumber.toString();
@@ -56,6 +58,9 @@ export function enterBitNode(
   newBitNode: number,
   bitNodeOptions: BitNodeOptions,
 ): void {
+  // We must kill all scripts before setting up BitNode data and performing the prestige.
+  prestigeWorkerScripts();
+
   if (!isFlume) {
     giveSourceFile(destroyedBitNode);
   } else if (Player.sourceFileLvl(5) === 0 && newBitNode !== 5) {
@@ -69,12 +74,19 @@ export function enterBitNode(
   Player.bitNodeN = newBitNode;
 
   // Set BitNode options
-  setBitNodeOptions(bitNodeOptions);
+  try {
+    setBitNodeOptions(bitNodeOptions);
+  } catch (error) {
+    exceptionAlert(error);
+    // Use default options
+    setBitNodeOptions(getDefaultBitNodeOptions());
+  }
+
+  prestigeSourceFile(isFlume);
 
   if (newBitNode === 6) {
     Router.toPage(Page.BladeburnerCinematic);
   } else {
     Router.toPage(Page.Terminal);
   }
-  prestigeSourceFile(isFlume);
 }

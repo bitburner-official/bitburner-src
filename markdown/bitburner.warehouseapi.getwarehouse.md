@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.getWarehouse() method
 
-Get warehouse data
+Get warehouse data.
 
 **Signature:**
 
@@ -23,5 +23,9 @@ getWarehouse(divisionName: string, city: CityName | `${CityName}`): Warehouse;
 
 [Warehouse](./bitburner.warehouse.md)
 
-warehouse data
+Warehouse data
+
+## Remarks
+
+RAM cost: 10 GB
 

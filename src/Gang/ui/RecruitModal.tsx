@@ -5,7 +5,8 @@ import { useGang } from "./Context";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
+import { RecruitmentResult } from "../Gang";
 
 interface IRecruitPopupProps {
   open: boolean;
@@ -18,13 +19,14 @@ export function RecruitModal(props: IRecruitPopupProps): React.ReactElement {
   const gang = useGang();
   const [name, setName] = useState("");
 
-  const disabled = name === "" || !gang.canRecruitMember();
+  const disabled = name === "" || gang.canRecruitMember() !== RecruitmentResult.Success;
   function recruit(): void {
-    if (disabled) return;
-    // At this point, the only way this can fail is if you already
-    // have a gang member with the same name
-    if (!gang.recruitMember(name) && name !== "") {
-      dialogBoxCreate("You already have a gang member with this name!");
+    if (disabled) {
+      return;
+    }
+    const result = gang.recruitMember(name);
+    if (result !== RecruitmentResult.Success) {
+      dialogBoxCreate(result);
       return;
     }
 

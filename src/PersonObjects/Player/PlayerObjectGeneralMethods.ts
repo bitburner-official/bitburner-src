@@ -16,7 +16,7 @@ import type { ProgramFilePath } from "../../Paths/ProgramFilePath";
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
 import { PlayerOwnedAugmentation } from "../../Augmentation/PlayerOwnedAugmentation";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-import { CodingContractRewardType, ICodingContractReward } from "../../CodingContracts";
+import { CodingContractRewardType, ICodingContractReward } from "../../CodingContract/Contract";
 import { Company } from "../../Company/Company";
 import { Companies } from "../../Company/Companies";
 import { getNextCompanyPositionHelper } from "../../Company/GetNextCompanyPosition";
@@ -52,6 +52,8 @@ import { isMember } from "../../utils/EnumHelper";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 import { AlertEvents } from "../../ui/React/AlertManager";
 import { Augmentations } from "../../Augmentation/Augmentations";
+import { PlayerEventType, PlayerEvents } from "./PlayerEvents";
+import { Result } from "../../types";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -269,8 +271,9 @@ export function hospitalize(this: PlayerObject, suppressNotification: boolean): 
   this.loseMoney(cost, "hospitalization");
   this.hp.current = this.hp.max;
   if (!suppressNotification) {
-    SnackbarEvents.emit(`You've been Hospitalized for ${formatMoney(cost)}`, ToastVariant.SUCCESS, 2000);
+    SnackbarEvents.emit(`You've been hospitalized for ${formatMoney(cost)}`, ToastVariant.SUCCESS, 2000);
   }
+  PlayerEvents.emit(PlayerEventType.Hospitalized);
   return cost;
 }
 
@@ -286,22 +289,25 @@ export function applyForJob(
   this: PlayerObject,
   company: Company,
   position: CompanyPosition,
-  sing = false,
-): JobName | null {
-  if (!company) return null;
+): Result<{ jobName: JobName }> {
+  if (!company) {
+    return { success: false, message: `Invalid company: ${company}.` };
+  }
 
   // Start searching the job track from the provided point (which may not be the entry position)
   let pos = position;
   if (!this.isQualified(company, pos)) {
-    if (!sing) {
-      dialogBoxCreate(`Unfortunately, you do not qualify for this position.\n${getJobRequirementText(company, pos)}`);
-    }
-    return null;
+    return {
+      success: false,
+      message: `Unfortunately, you do not qualify for this position.\n${getJobRequirementText(company, pos)}`,
+    };
   }
 
   if (!company.hasPosition(pos)) {
-    console.error(`Company ${company.name} does not have position ${pos}. Player.applyToCompany() failed.`);
-    return null;
+    return {
+      success: false,
+      message: `Company ${company.name} does not have position ${pos.name}.`,
+    };
   }
 
   let nextPos = getNextCompanyPositionHelper(pos);
@@ -310,31 +316,27 @@ export function applyForJob(
     nextPos = getNextCompanyPositionHelper(pos);
   }
 
-  //Check if player already has the assigned job
+  // Check if player already has the assigned job
   if (this.jobs[company.name] === pos.name) {
-    if (!sing) {
-      const nextPos = getNextCompanyPositionHelper(pos);
-      if (nextPos == null) {
-        dialogBoxCreate(`You are already ${pos.name}! No promotion available`);
-      } else if (!company.hasPosition(nextPos)) {
-        dialogBoxCreate(
-          `You already have the highest ${pos.field} position available at ${company.name}! No promotion available`,
-        );
-      } else {
-        dialogBoxCreate(
-          `Unfortunately, you do not qualify for a promotion.\n${getJobRequirementText(company, nextPos)}`,
-        );
-      }
+    let errorMessage;
+    const nextPos = getNextCompanyPositionHelper(pos);
+    if (nextPos === null) {
+      errorMessage = `You are already ${pos.name}! No promotion available.`;
+    } else if (!company.hasPosition(nextPos)) {
+      errorMessage = `You already have the highest ${pos.field} position available at ${company.name}! No promotion available.`;
+    } else {
+      errorMessage = `Unfortunately, you do not qualify for a promotion.\n${getJobRequirementText(company, nextPos)}`;
     }
-    return null;
+    return { success: false, message: errorMessage };
   }
 
   this.jobs[company.name] = pos.name;
 
-  if (!sing) {
-    dialogBoxCreate(`${pos.hiredText} at ${company.name}!`);
-  }
-  return pos.name;
+  return {
+    success: true,
+    message: `${pos.hiredText} at ${company.name}!`,
+    jobName: pos.name,
+  };
 }
 
 /**
@@ -375,6 +377,7 @@ export function quitJob(this: PlayerObject, company: CompanyName, suppressDialog
       }
     }
   }
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   delete this.jobs[company];
 }
 

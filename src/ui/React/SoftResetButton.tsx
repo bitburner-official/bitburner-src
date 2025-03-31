@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Button, Tooltip } from "@mui/material";
 import { ConfirmationModal } from "./ConfirmationModal";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import { knowAboutBitverse } from "../../BitNode/BitNodeUtils";
 
 interface IProps {
   color?: "primary" | "warning" | "error";
@@ -32,7 +33,7 @@ export function SoftResetButton({
   - Install Augmentations if you have any purchased
   - Reset servers, programs, recent scripts and terminal 
   - Scripts on your home server will stop, but aren't deleted
-  - Stop some special mechanics like Bladeburner tasks
+  - Stop some special mechanics (crime, study, ${knowAboutBitverse() ? `Bladeburner action, Grafting task, ` : ""}etc.)
   - You will not lose overall progress or access to special mechanics
 
 Are you sure? 

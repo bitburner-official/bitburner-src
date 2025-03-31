@@ -1,13 +1,19 @@
 import React from "react";
 import { Player } from "@player";
-import { CityName, FactionName } from "@enums";
+import { AugmentationName, CityName, FactionName } from "@enums";
 import { BitNodeMultipliers, replaceCurrentNodeMults } from "./BitNodeMultipliers";
 
 class BitNode {
   // A short description, or tagline, about the BitNode
-  desc: string;
+  tagline: string;
 
-  // A long, detailed overview of the BitNode
+  // Overview of the BitNode
+  description: JSX.Element;
+
+  // SF description
+  sfDescription: JSX.Element;
+
+  // Full detail of this BitNode. This property is a combination of description and sfDescription.
   info: JSX.Element;
 
   // Name of BitNode
@@ -18,12 +24,25 @@ class BitNode {
 
   difficulty: 0 | 1 | 2;
 
-  constructor(n: number, difficulty: 0 | 1 | 2, name: string, desc = "", info: JSX.Element = <></>) {
+  constructor(
+    n: number,
+    difficulty: 0 | 1 | 2,
+    name: string,
+    tagline = "",
+    description: JSX.Element,
+    sfDescription: JSX.Element,
+  ) {
     this.number = n;
     this.difficulty = difficulty;
     this.name = name;
-    this.desc = desc;
-    this.info = info;
+    this.tagline = tagline;
+    this.description = description;
+    this.sfDescription = sfDescription;
+    this.info = (
+      <>
+        {this.description} {this.sfDescription}
+      </>
+    );
   }
 }
 
@@ -44,8 +63,13 @@ export function initBitNodes() {
         <br />
         <br />
         Destroying this BitNode will give you Source-File 1, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3. This Source-File lets the player start with 32GB of RAM on their home computer
-        when entering a new BitNode and increases all of the player's multipliers by:
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File lets the player start with 32GB of RAM on their home computer when entering a new BitNode and
+        increases all of the player's multipliers by:
         <ul>
           <li>Level 1: 16%</li>
           <li>Level 2: 24%</li>
@@ -70,13 +94,17 @@ export function initBitNodes() {
         {FactionName.TheDarkArmy}, {FactionName.SpeakersForTheDead}, {FactionName.NiteSec}, and{" "}
         {FactionName.TheBlackHand}) give the player the ability to form and manage their own gang, which can earn the
         player money and reputation with the corresponding faction. The gang faction offers more augmentations than
-        other factions, and in BitNode-2, it offers a way to destroy the BitNode.
+        other factions, and in BitNode-2, it offers The Red Pill.
         <br />
         <br />
         Destroying this BitNode will give you Source-File 2, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3. This Source-File allows you to form gangs in other BitNodes once your karma
-        decreases to a certain value. It also increases your crime success rate, crime money, and charisma multipliers
-        by:
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File allows you to form gangs in other BitNodes once your karma decreases to a certain value. It
+        also increases your crime success rate, crime money, and charisma multipliers by:
         <ul>
           <li>Level 1: 24%</li>
           <li>Level 2: 36%</li>
@@ -105,9 +133,14 @@ export function initBitNodes() {
         <br />
         <br />
         Destroying this BitNode will give you Source-File 3, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3. This Source-File lets you create corporations on other BitNodes (although some
-        BitNodes will disable this mechanic) and level 3 permanently unlocks the full API. This Source-File also
-        increases your charisma and company salary multipliers by:
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File lets you create corporations on other BitNodes (although some BitNodes will disable this
+        mechanic) and level 3 permanently unlocks the full API. This Source-File also increases your charisma and
+        company salary multipliers by:
         <ul>
           <li>Level 1: 8%</li>
           <li>Level 2: 12%</li>
@@ -133,8 +166,13 @@ export function initBitNodes() {
         <br />
         <br />
         Destroying this BitNode will give you Source-File 4, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3. This Source-File lets you access and use the Singularity functions in other
-        BitNodes. Each level of this Source-File reduces the RAM cost of singularity functions:
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File lets you access and use the Singularity functions in other BitNodes. Each level of this
+        Source-File reduces the RAM cost of singularity functions:
         <ul>
           <li>Level 1: 16x</li>
           <li>Level 2: 4x</li>
@@ -156,10 +194,14 @@ export function initBitNodes() {
         <br />
         <br />
         Destroying this BitNode will give you Source-File 5, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3. This Source-File grants you a new stat called Intelligence. Intelligence is
-        unique because it is permanent and persistent (it never gets reset back to 1). However, gaining Intelligence
-        experience is much slower than other stats. Higher Intelligence levels will boost your production for many
-        actions in the game.
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File grants you a new stat called Intelligence. Intelligence is unique because it is permanent and
+        persistent (it never gets reset back to 1). However, gaining Intelligence experience is much slower than other
+        stats. Higher Intelligence levels will boost your production for many actions in the game.
         <br />
         <br />
         In addition, this Source-File will unlock:
@@ -195,14 +237,18 @@ export function initBitNodes() {
         intelligent than the humans that had created them.
         <br />
         <br />
-        In this BitNode, you will be able to access the {FactionName.Bladeburners} division at the NSA, which provides a
-        new mechanic for progression.
+        In this BitNode, you will be able to access the Bladeburner division at the NSA, which provides a new mechanic
+        for progression.
         <br />
         <br />
         Destroying this BitNode will give you Source-File 6, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3. This Source-File allows you to access the NSA's {FactionName.Bladeburners}{" "}
-        division in other BitNodes. In addition, this Source-File will raise both the level and experience gain rate of
-        all your combat stats by:
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File allows you to access the NSA's Bladeburner division in other BitNodes. In addition, this
+        Source-File will raise both the level and experience gain rate of all your combat stats by:
         <ul>
           <li>Level 1: 8%</li>
           <li>Level 2: 12%</li>
@@ -225,18 +271,25 @@ export function initBitNodes() {
         models that were stronger, faster, and more intelligent than the humans that had created them.
         <br />
         <br />
-        In this BitNode, you will be able to access the {FactionName.Bladeburners} API, which allows you to access{" "}
-        {FactionName.Bladeburners} functionality through Netscript.
+        In this BitNode, you will be able to access the Bladeburner division at the NSA, which provides a new mechanic
+        for progression.
         <br />
         <br />
         Destroying this BitNode will give you Source-File 7, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3. This Source-File allows you to access the {FactionName.Bladeburners} Netscript
-        API in other BitNodes. In addition, this Source-File will increase all of your {FactionName.Bladeburners}{" "}
-        multipliers by:
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File allows you to access the NSA's Bladeburner division in other BitNodes. In addition, this
+        Source-File will increase all of your Bladeburner multipliers by:
         <ul>
           <li>Level 1: 8%</li>
           <li>Level 2: 12%</li>
-          <li>Level 3: 14%</li>
+          <li>
+            Level 3: 14% and immediately receive "{AugmentationName.BladesSimulacrum}" augmentation after joining the
+            Bladeburner division
+          </li>
         </ul>
       </>
     ),
@@ -258,7 +311,12 @@ export function initBitNodes() {
           <li>You can short stocks and place different types of orders (limit/stop).</li>
         </ul>
         Destroying this BitNode will give you Source-File 8, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3. This Source-File grants the following benefits:
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File grants the following benefits:
         <ul>
           <li>Level 1: Permanent access to WSE and TIX API</li>
           <li>Level 2: Ability to short stocks in other BitNodes</li>
@@ -291,7 +349,12 @@ export function initBitNodes() {
         <br />
         <br />
         Destroying this BitNode will give you Source-File 9, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3. This Source-File grants the following benefits:
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File grants the following benefits:
         <ul>
           <li>Level 1: Permanently unlocks the Hacknet Server in other BitNodes</li>
           <li>Level 2: You start with 128GB of RAM on your home computer when entering a new BitNode</li>
@@ -335,8 +398,13 @@ export function initBitNodes() {
           </li>
         </ul>
         Destroying this BitNode will give you Source-File 10, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3. This Source-File unlocks Sleeve and Grafting API in other BitNodes. Each level
-        of this Source-File also grants you a Sleeve.
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File unlocks Sleeve and Grafting API in other BitNodes. Each level of this Source-File also grants
+        you a Sleeve.
       </>
     ),
   );
@@ -360,9 +428,14 @@ export function initBitNodes() {
         <br />
         <br />
         Destroying this BitNode will give you Source-File 11, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3. This Source-File makes it so that company favor increases BOTH the player's
-        salary and reputation gain rate at that company by 1% per favor (rather than just the reputation gain). This
-        Source-File also increases the player's company salary and reputation gain multipliers by:
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File makes it so that company favor increases BOTH the player's salary and reputation gain rate at
+        that company by 1% per favor (rather than just the reputation gain). This Source-File also increases the
+        player's company salary and reputation gain multipliers by:
         <ul>
           <li>Level 1: 32%</li>
           <li>Level 2: 48%</li>
@@ -389,10 +462,10 @@ export function initBitNodes() {
         <br />
         Every time this BitNode is destroyed, it becomes slightly harder. Destroying this BitNode will give you
         Source-File 12, or if you already have this Source-File, it will upgrade its level. There is no maximum level
-        for Source-File 12. Each level of Source-File 12 lets you start any BitNodes with NeuroFlux Governor equal to
-        the level of this source file.
+        for Source-File 12.
       </>
     ),
+    <>This Source-File lets you start any BitNodes with Neuroflux Governor equal to the level of this Source-File.</>,
   );
   BitNodes.BitNode13 = new BitNode(
     13,
@@ -410,11 +483,19 @@ export function initBitNodes() {
         <br />
         <br />
         Destroying this BitNode will give you Source-File 13, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3. This Source-File lets the {FactionName.ChurchOfTheMachineGod} appear in other
-        BitNodes.
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File lets the {FactionName.ChurchOfTheMachineGod} appear in other BitNodes.
         <br />
         <br />
         Each level of this Source-File increases the size of Stanek's Gift.
+        <br />
+        <br />
+        Due to the effect of Source-File 7.3, you must accept Stanek's Gift before joining the Bladeburner division if
+        you have that Source-File.
       </>
     ),
   );
@@ -433,7 +514,12 @@ export function initBitNodes() {
         <br />
         <br />
         Destroying this BitNode will give you Source-File 14, or if you already have this Source-File, it will upgrade
-        its level up to a maximum of 3. This Source-File grants the following benefits:
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File grants the following benefits:
         <ul>
           <li>Level 1: 100% increased stat multipliers from Node Power</li>
           <li>Level 2: Permanently unlocks the go.cheat API</li>
@@ -931,6 +1017,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         StrengthLevelMultiplier: 0.5,
         DexterityLevelMultiplier: 0.5,
         AgilityLevelMultiplier: 0.5,
+        DefenseLevelMultiplier: 0.5,
 
         AugmentationMoneyCost: 1.5,
 

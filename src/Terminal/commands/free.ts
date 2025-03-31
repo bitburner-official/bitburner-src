@@ -14,6 +14,8 @@ export function free(args: (string | number | boolean)[], server: BaseServer): v
   const usedPercent = formatPercent(server.ramUsed / server.maxRam);
 
   Terminal.print(`Total:     ${" ".repeat(maxLength - ram.length)}${ram}`);
-  Terminal.print(`Used:      ${" ".repeat(maxLength - used.length)}${used} (${usedPercent})`);
+  Terminal.print(
+    `Used:      ${" ".repeat(maxLength - used.length)}${used}` + (server.maxRam > 0 ? ` (${usedPercent})` : ""),
+  );
   Terminal.print(`Available: ${" ".repeat(maxLength - avail.length)}${avail}`);
 }

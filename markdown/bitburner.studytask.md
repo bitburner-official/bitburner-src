@@ -9,8 +9,9 @@ Study
 **Signature:**
 
 ```typescript
-export interface StudyTask 
+export interface StudyTask extends BaseTask 
 ```
+**Extends:** [BaseTask](./bitburner.basetask.md)
 
 ## Remarks
 
@@ -21,7 +22,6 @@ An object representing the current study task
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [classType](./bitburner.studytask.classtype.md) |  | string |  |
-|  [cyclesWorked](./bitburner.studytask.cyclesworked.md) |  | number |  |
 |  [location](./bitburner.studytask.location.md) |  | [LocationName](./bitburner.locationname.md) \| \`${[LocationName](./bitburner.locationname.md)<!-- -->}\` |  |
 |  [type](./bitburner.studytask.type.md) |  | "CLASS" |  |
 

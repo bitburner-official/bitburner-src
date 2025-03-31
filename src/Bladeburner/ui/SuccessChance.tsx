@@ -7,6 +7,8 @@ import { Player } from "@player";
 import { formatPercent } from "../../ui/formatNumber";
 import { StealthIcon } from "./StealthIcon";
 import { KillIcon } from "./KillIcon";
+import InfoIcon from "@mui/icons-material/Info";
+import { Tooltip, Typography } from "@mui/material";
 
 interface SuccessChanceProps {
   bladeburner: Bladeburner;
@@ -20,7 +22,13 @@ export function SuccessChance({ bladeburner, action }: SuccessChanceProps): Reac
 
   return (
     <>
-      Estimated success chance: {chance} {action.isStealth ? <StealthIcon /> : <></>}
+      <Tooltip title={action.successScaling ? <Typography>{action.successScaling}</Typography> : ""}>
+        <Typography component="span" sx={{ marginRight: "15px" }}>
+          Estimated success chance: {chance}
+          {action.successScaling && <InfoIcon sx={{ fontSize: "1.1em", marginLeft: "10px" }} />}
+        </Typography>
+      </Tooltip>
+      {action.isStealth ? <StealthIcon /> : <></>}
       {action.isKill ? <KillIcon /> : <></>}
     </>
   );

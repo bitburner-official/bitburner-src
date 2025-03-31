@@ -44,9 +44,18 @@ interface ModalProps {
   children: React.ReactNode;
   sx?: SxProps<Theme>;
   removeFocus?: boolean;
+  // If it's true, the player can dismiss the modal by pressing the Esc button or clicking on the backdrop.
+  canBeDismissedEasily?: boolean;
 }
 
-export const Modal = ({ open, onClose, children, sx, removeFocus = true }: ModalProps): React.ReactElement => {
+export const Modal = ({
+  open,
+  onClose,
+  children,
+  sx,
+  removeFocus = true,
+  canBeDismissedEasily = true,
+}: ModalProps): React.ReactElement => {
   const { classes } = useStyles();
   const [content, setContent] = useState(children);
   useEffect(() => {
@@ -61,7 +70,12 @@ export const Modal = ({ open, onClose, children, sx, removeFocus = true }: Modal
       disableEnforceFocus
       disableAutoFocus={removeFocus}
       open={open}
-      onClose={onClose}
+      onClose={() => {
+        if (!canBeDismissedEasily) {
+          return;
+        }
+        onClose();
+      }}
       closeAfterTransition
       className={classes.modal}
       sx={sx}

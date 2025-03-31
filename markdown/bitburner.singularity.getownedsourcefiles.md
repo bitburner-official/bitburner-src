@@ -21,5 +21,9 @@ Array containing an object with number and level of the source file.
 
 RAM cost: 5 GB
 
-Returns an array of source files
+Returns an array of source files. This function takes BitNode options into account.
+
+For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 1. In this case, this function returns {<!-- -->"n":1,"lvl":1<!-- -->}<!-- -->.
+
+If the active level of a source file is 0, that source file won't be included in the result.
 

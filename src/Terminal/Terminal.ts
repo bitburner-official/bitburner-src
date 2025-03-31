@@ -6,7 +6,7 @@ import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
 import { CompletedProgramName } from "@enums";
-import { CodingContractResult } from "../CodingContracts";
+import { CodingContractResult } from "../CodingContract/Contract";
 import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
 
 import { TextFile } from "../TextFile";
@@ -73,7 +73,7 @@ import { unalias } from "./commands/unalias";
 import { vim } from "./commands/vim";
 import { weaken } from "./commands/weaken";
 import { wget } from "./commands/wget";
-import { hash } from "../hash/hash";
+import { commitHash } from "../utils/helpers/commitHash";
 import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
 import { clear } from "./commands/clear";
@@ -139,7 +139,7 @@ export class Terminal {
   commandHistoryIndex = 0;
 
   outputHistory: (Output | Link | RawOutput)[] = [
-    new Output(`Bitburner v${CONSTANTS.VersionString} (${hash()})`, "primary"),
+    new Output(`Bitburner v${CONSTANTS.VersionString} (${commitHash()})`, "primary"),
   ];
 
   // True if a Coding Contract prompt is opened
@@ -263,14 +263,18 @@ export class Terminal {
       Engine.Counters.checkFactionInvitations = 0;
       Engine.checkCounters();
 
-      let moneyGained = calculatePercentMoneyHacked(server, Player) * currentNodeMults.ManualHackMoney;
-      moneyGained = Math.floor(server.moneyAvailable * moneyGained);
+      let moneyDrained = Math.floor(server.moneyAvailable * calculatePercentMoneyHacked(server, Player));
 
-      if (moneyGained <= 0) {
-        moneyGained = 0;
+      if (moneyDrained <= 0) {
+        moneyDrained = 0;
       } // Safety check
 
-      server.moneyAvailable -= moneyGained;
+      server.moneyAvailable -= moneyDrained;
+      if (server.moneyAvailable < 0) {
+        server.moneyAvailable = 0;
+      }
+
+      const moneyGained = moneyDrained * currentNodeMults.ManualHackMoney;
       Player.gainMoney(moneyGained, "hacking");
       Player.gainHackingExp(expGainedOnSuccess);
       if (expGainedOnSuccess > 1) {
@@ -306,12 +310,12 @@ export class Terminal {
     if (!(server instanceof Server)) throw new Error("server should be normal server");
     const expGain = calculateHackingExpGain(server, Player);
     const oldSec = server.hackDifficulty;
-    const growth = processSingleServerGrowth(server, 25, server.cpuCores) - 1;
+    const growth = processSingleServerGrowth(server, 25, server.cpuCores);
     const newSec = server.hackDifficulty;
 
     Player.gainHackingExp(expGain);
     this.print(
-      `Available money on '${server.hostname}' grown by ${formatPercent(growth, 6)}. Gained ${formatExp(
+      `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)}. Gained ${formatExp(
         expGain,
       )} hacking exp.`,
     );
@@ -582,19 +586,21 @@ export class Terminal {
     printOutput(root);
   }
 
-  connectToServer(server: string): void {
-    const serv = GetServer(server);
-    if (serv == null) {
+  connectToServer(hostname: string, singularity = false): void {
+    const server = GetServer(hostname);
+    if (server === null) {
       this.error("Invalid server. Connection failed.");
       return;
     }
     Player.getCurrentServer().isConnectedTo = false;
-    Player.currentServer = serv.hostname;
-    Player.getCurrentServer().isConnectedTo = true;
-    this.print("Connected to " + serv.hostname);
+    Player.currentServer = hostname;
+    server.isConnectedTo = true;
     this.setcwd(root);
-    if (Player.getCurrentServer().hostname == "darkweb") {
-      checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
+    if (!singularity) {
+      this.print("Connected to " + server.hostname);
+      if (Player.getCurrentServer().hostname == "darkweb") {
+        checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
+      }
     }
   }
 
@@ -613,7 +619,7 @@ export class Terminal {
   }
 
   clear(): void {
-    this.outputHistory = [new Output(`Bitburner v${CONSTANTS.VersionString} (${hash()})`, "primary")];
+    this.outputHistory = [new Output(`Bitburner v${CONSTANTS.VersionString} (${commitHash()})`, "primary")];
     TerminalEvents.emit();
     TerminalClearEvents.emit();
   }
@@ -636,20 +642,25 @@ export class Terminal {
       if (n00dlesServ == null) {
         throw new Error("Could not get n00dles server");
       }
+      const errorMessageForBadCommand =
+        "Bad command. Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it.";
       switch (ITutorial.currStep) {
         case iTutorialSteps.TerminalHelp:
           if (commandArray.length === 1 && commandArray[0] == "help") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalLs:
           if (commandArray.length === 1 && commandArray[0] == "ls") {
             iTutorialNextStep();
+          } else if (commandArray[0] == "1s") {
+            this.error("Command '1s' not found. Did you mean 'ls' with a lowercase L?");
+            return;
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -657,7 +668,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] == "scan") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -665,7 +676,7 @@ export class Terminal {
           if (commandArray.length == 1 && commandArray[0] == "scan-analyze") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -673,7 +684,7 @@ export class Terminal {
           if (commandArray.length == 2 && commandArray[0] == "scan-analyze" && commandArray[1] === 2) {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -689,7 +700,7 @@ export class Terminal {
               return;
             }
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -697,7 +708,7 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "analyze") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -705,7 +716,7 @@ export class Terminal {
           if (commandArray.length == 2 && commandArray[0] == "run" && commandArray[1] == "NUKE.exe") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -713,13 +724,13 @@ export class Terminal {
           if (commandArray.length == 1 && commandArray[0] == "hack") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalHackingMechanics:
           if (commandArray.length !== 1 || !["grow", "weaken", "hack"].includes(commandArray[0] + "")) {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -727,7 +738,7 @@ export class Terminal {
           if (commandArray.length == 1 && commandArray[0] == "home") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -739,7 +750,7 @@ export class Terminal {
           ) {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -747,7 +758,7 @@ export class Terminal {
           if (commandArray.length == 1 && commandArray[0] == "free") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -759,7 +770,7 @@ export class Terminal {
           ) {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -771,12 +782,12 @@ export class Terminal {
           ) {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         default:
-          this.error("Please follow the tutorial, or click 'EXIT' if you'd like to skip it");
+          this.error("Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it");
           return;
       }
     }
@@ -792,7 +803,11 @@ export class Terminal {
     commandArray.shift();
 
     const f = TerminalCommands[commandName.toLowerCase()];
-    if (!f) return this.error(`Command ${commandName} not found`);
+    if (!f) {
+      const similarCommands = findSimilarCommands(commandName);
+      const didYouMeanString = similarCommands.length ? ` Did you mean: ${similarCommands.join(" or ")}?` : "";
+      return this.error(`Command ${commandName} not found.${didYouMeanString}`);
+    }
 
     f(commandArray, currentServer);
   }
@@ -804,4 +819,18 @@ export class Terminal {
       totalTicks: 50,
     });
   }
+}
+
+function findSimilarCommands(command: string): string[] {
+  const commands = Object.keys(TerminalCommands);
+  const offByOneLetter = commands.filter((c) => {
+    if (c.length !== command.length) return false;
+    let diff = 0;
+    for (let i = 0; i < c.length; i++) {
+      if (c[i] !== command[i]) diff++;
+    }
+    return diff === 1;
+  });
+  const subset = commands.filter((c) => c.includes(command)).sort((a, b) => a.length - b.length);
+  return Array.from(new Set([...offByOneLetter, ...subset])).slice(0, 3);
 }

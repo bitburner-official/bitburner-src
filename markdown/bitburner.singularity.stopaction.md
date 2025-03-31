@@ -15,17 +15,27 @@ stopAction(): boolean;
 
 boolean
 
-True if the player’s action was ended, false if the player was not performing an action.
+True if the player’s action is stopped, false if the player is not performing an action.
 
 ## Remarks
 
 RAM cost: 1 GB \* 16/4/1
 
-This function is used to end whatever ‘action’ the player is currently performing. The player will receive whatever money/experience/etc. he has earned from that action.
+This function stops the action the player is currently performing. The player will receive rewards (money, experience, etc.) they have earned from that action.
 
 The actions that can be stopped with this function are:
 
-\* Studying at a university \* Working out at a gym \* Working for a company/faction \* Creating a program \* Committing a crime
+- Studying at a university
 
-This function will return true if the player’s action was ended. It will return false if the player was not performing an action when this function was called.
+- Working out at a gym
+
+- Working for a company/faction
+
+- Creating a program
+
+- Committing a crime
+
+- Grafting an augmentation
+
+This function will return true if the player's action is stopped. It will return false if the player is not performing an action when this function is called.
 

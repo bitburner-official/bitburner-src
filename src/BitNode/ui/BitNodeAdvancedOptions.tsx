@@ -354,6 +354,11 @@ export function BitNodeAdvancedOptions({
       </ListItemButton>
       <Collapse in={open}>
         <Box sx={{ padding: "0 1rem" }}>
+          <Typography>
+            These options enable unique gameplay that is intended for experienced players. If you are a new player, you
+            can safely ignore these options and come back to try them later.
+          </Typography>
+          <br />
           <OptionSwitch
             checked={bitNodeBooleanOptions.restrictHomePCUpgrade}
             onChange={(value) => {
@@ -369,7 +374,7 @@ export function BitNodeAdvancedOptions({
               callbacks.setBooleanOption("disableGang", value);
             }}
             text="Disable Gang"
-            tooltip="Disable Gang"
+            tooltip="Disable Gang, regardless of BitNode and SF level"
           />
           <OptionSwitch
             disabled={getSfLevel(3) === 0 && targetBitNode !== 3}
@@ -378,7 +383,7 @@ export function BitNodeAdvancedOptions({
               callbacks.setBooleanOption("disableCorporation", value);
             }}
             text="Disable Corporation"
-            tooltip="Disable Corporation"
+            tooltip="Disable Corporation, regardless of BitNode and SF level"
           />
           <OptionSwitch
             disabled={getSfLevel(6) === 0 && getSfLevel(7) === 0 && targetBitNode !== 6 && targetBitNode !== 7}
@@ -387,7 +392,7 @@ export function BitNodeAdvancedOptions({
               callbacks.setBooleanOption("disableBladeburner", value);
             }}
             text="Disable Bladeburner"
-            tooltip="Disable Bladeburner"
+            tooltip="Disable Bladeburner, regardless of BitNode and SF level"
           />
           <OptionSwitch
             checked={bitNodeBooleanOptions.disable4SData}
@@ -395,7 +400,7 @@ export function BitNodeAdvancedOptions({
               callbacks.setBooleanOption("disable4SData", value);
             }}
             text="Disable 4S Market Data"
-            tooltip="Disable 4S Market Data"
+            tooltip="Disable 4S Market Data, regardless of BitNode and SF level"
           />
           <OptionSwitch
             disabled={getSfLevel(9) === 0 && targetBitNode !== 9}
@@ -404,7 +409,7 @@ export function BitNodeAdvancedOptions({
               callbacks.setBooleanOption("disableHacknetServer", value);
             }}
             text="Disable Hacknet Server"
-            tooltip="Hacknet Node is re-enabled in place of Hacknet Server."
+            tooltip="Disable Hacknet Server, regardless of BitNode and SF level. Hacknet Node is re-enabled in place of Hacknet Server."
           />
           <OptionSwitch
             disabled={getSfLevel(10) === 0 && targetBitNode !== 10}

@@ -9,17 +9,17 @@ List all black ops.
 **Signature:**
 
 ```typescript
-getBlackOpNames(): string[];
+getBlackOpNames(): BladeburnerBlackOpName[];
 ```
 **Returns:**
 
-string\[\]
+[BladeburnerBlackOpName](./bitburner.bladeburnerblackopname.md)<!-- -->\[\]
 
 Array of strings containing the names of all Bladeburner Black Ops.
 
 ## Remarks
 
-RAM cost: 0.4 GB
+RAM cost: 0 GB
 
 Returns an array of strings containing the names of all Bladeburner Black Ops.
 

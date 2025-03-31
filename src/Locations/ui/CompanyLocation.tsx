@@ -50,7 +50,6 @@ export function CompanyLocation(props: IProps): React.ReactElement {
 
   /** Name of company position that player holds, if applicable */
   const jobTitle = Player.jobs[props.companyName] ? Player.jobs[props.companyName] : null;
-  const hasMoreJobs = Object.keys(Player.jobs).length > 1;
 
   /**
    * CompanyPosition object for the job that the player holds at this company, if applicable
@@ -86,29 +85,11 @@ export function CompanyLocation(props: IProps): React.ReactElement {
     }
   }
 
-  function switchLoc(num: number): void {
-    let targetNum = Object.keys(Player.jobs).findIndex((x) => x == props.companyName);
-    if (targetNum === -1) return;
-    targetNum += num;
-    if (targetNum >= Object.keys(Player.jobs).length) {
-      targetNum = 0;
-    } else if (targetNum < 0) {
-      targetNum = Object.keys(Player.jobs).length - 1;
-    }
-    Router.toPage(Page.Job, { location: Locations[Object.keys(Player.jobs)[targetNum]] });
-  }
-
   const isEmployedHere = currentPosition != null;
 
   return (
     <>
       <Box sx={{ display: "grid", width: "fit-content", minWidth: "25em" }}>
-        {isEmployedHere && hasMoreJobs && (
-          <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-            <Button onClick={() => switchLoc(-1)}>Previous Job</Button>
-            <Button onClick={() => switchLoc(1)}>Next Job</Button>
-          </Box>
-        )}
         {isEmployedHere && (
           <Paper sx={{ p: "0.5em 1em", mt: 2, mb: 2 }}>
             <JobSummary company={company} position={currentPosition} />

@@ -1,11 +1,4 @@
 import type { BlackOperation, Contract, GeneralAction, Operation } from "./Actions";
-import type {
-  BladeActionType,
-  BladeBlackOpName,
-  BladeContractName,
-  BladeOperationName,
-  BladeGeneralActionName,
-} from "@enums";
 
 export interface SuccessChanceParams {
   /** Whether the success chance should be based on estimated statistics */
@@ -21,11 +14,12 @@ type AttemptFailure = { success?: undefined; message: string };
 export type Attempt<T extends object = object> = AttemptSuccess<T> | AttemptFailure;
 
 export type Action = Contract | Operation | BlackOperation | GeneralAction;
+export type ActionIdFor<ActionType extends Action> = Pick<ActionType, "type" | "name">;
 
 export type ActionIdentifier =
-  | { type: BladeActionType.blackOp; name: BladeBlackOpName }
-  | { type: BladeActionType.contract; name: BladeContractName }
-  | { type: BladeActionType.operation; name: BladeOperationName }
-  | { type: BladeActionType.general; name: BladeGeneralActionName };
+  | ActionIdFor<Contract>
+  | ActionIdFor<Operation>
+  | ActionIdFor<BlackOperation>
+  | ActionIdFor<GeneralAction>;
 
 export type LevelableAction = Contract | Operation;

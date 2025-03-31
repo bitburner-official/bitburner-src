@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.ScriptHackMoney property
 
-Influences how much the money on a server can be reduced when a script performs a hack against it.
+Influences how much money is stolen from a server when the player performs a hack against it.
 
 **Signature:**
 

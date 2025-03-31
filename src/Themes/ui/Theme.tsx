@@ -114,6 +114,7 @@ export function refreshTheme(): void {
     },
     typography: {
       fontFamily: Settings.styles.fontFamily,
+      fontSize: Settings.styles.fontSize,
       button: {
         textTransform: "none",
       },
@@ -391,6 +392,16 @@ export function refreshTheme(): void {
           },
           standardInfo: {
             color: Settings.theme.infolight,
+          },
+        },
+      },
+      MuiAutocomplete: {
+        styleOverrides: {
+          option: {
+            color: Settings.theme.primary,
+          },
+          inputRoot: {
+            height: "100%",
           },
         },
       },

@@ -9,7 +9,7 @@ Get the input data.
 **Signature:**
 
 ```typescript
-getData(filename: string, host?: string): CodingContractData;
+getData(filename: string, host?: string): any;
 ```
 
 ## Parameters
@@ -21,7 +21,7 @@ getData(filename: string, host?: string): CodingContractData;
 
 **Returns:**
 
-[CodingContractData](./bitburner.codingcontractdata.md)
+any
 
 The specified contract’s data, data type depends on contract type.
 

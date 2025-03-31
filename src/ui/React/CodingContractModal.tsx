@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 
-import { CodingContract, CodingContractTypes } from "../../CodingContracts";
+import { CodingContract } from "../../CodingContract/Contract";
+import { CodingContractTypes } from "../../CodingContract/ContractTypes";
 import { CopyableText } from "./CopyableText";
 import { Modal } from "./Modal";
 import { EventEmitter } from "../../utils/EventEmitter";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { pluralize } from "../../utils/I18nUtils";
 
 interface CodingContractProps {
   c: CodingContract;
@@ -56,14 +58,15 @@ export function CodingContractModal(): React.ReactElement {
 
   const contractType = CodingContractTypes[contract.c.type];
   const description = [];
-  for (const [i, value] of contractType.desc(contract.c.data).split("\n").entries())
+  for (const [i, value] of contractType.desc(contract.c.getData()).split("\n").entries())
     description.push(<span key={i} dangerouslySetInnerHTML={{ __html: value + "<br />" }}></span>);
   return (
     <Modal open={contract !== null} onClose={close}>
       <CopyableText variant="h4" value={contract.c.type} />
       <Typography>
-        You are attempting to solve a Coding Contract. You have {contract.c.getMaxNumTries() - contract.c.tries} tries
-        remaining, after which the contract will self-destruct.
+        You are attempting to solve a Coding Contract. You have{" "}
+        {pluralize(contract.c.getMaxNumTries() - contract.c.tries, "try", "tries")} remaining, after which the contract
+        will self-destruct.
       </Typography>
       <br />
       <Typography>{description}</Typography>

@@ -9,14 +9,14 @@ Soft reset the game.
 **Signature:**
 
 ```typescript
-softReset(cbScript: string): void;
+softReset(cbScript?: string): void;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  cbScript | string | This is a script that will automatically be run after Augmentations are installed (after the reset). This script will be run with no arguments and 1 thread. It must be located on your home computer. |
+|  cbScript | string | _(Optional)_ This is a script that will automatically be run after Augmentations are installed (after the reset). This script will be run with no arguments and 1 thread. It must be located on your home computer. |
 
 **Returns:**
 

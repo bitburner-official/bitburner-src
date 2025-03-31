@@ -42,7 +42,8 @@ export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactEleme
         <br />
         <br />
         Like normal operations, you may use a team for Black Ops. Failing a black op will incur heavy HP and rank
-        losses.
+        losses. Black Ops success significantly affected by combat stats. Many Ops benefit from Hacking skill.
+        Unaffected by Charisma.
       </Typography>
       {bladeburner.numBlackOpsComplete >= blackOpsArray.length ? (
         <Button sx={{ my: 1, p: 1 }} onClick={finishBitNode}>

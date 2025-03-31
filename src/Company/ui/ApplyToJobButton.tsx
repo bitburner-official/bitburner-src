@@ -9,6 +9,7 @@ import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { JobSummary } from "./JobSummary";
 import { Requirement } from "../../ui/Components/Requirement";
 import { getJobRequirements } from "../GetJobRequirements";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 interface ApplyToJobProps {
   company: Company;
@@ -47,7 +48,10 @@ export function ApplyToJobButton({ company, position, qualified }: ApplyToJobPro
   );
 
   function applyForJob(): void {
-    Player.applyForJob(company, position);
+    const result = Player.applyForJob(company, position);
+    if (result.message) {
+      dialogBoxCreate(result.message);
+    }
   }
 
   return (

@@ -20,18 +20,29 @@ interface IProps {
   onClose: () => void;
 }
 
-interface FontFamilyProps {
-  value: React.CSSProperties["fontFamily"];
-  onChange: (newValue: React.CSSProperties["fontFamily"], error?: string) => void;
+interface StyleFieldProps<T extends keyof React.CSSProperties> {
+  name: string;
+  type: "string" | "number";
+  value: React.CSSProperties[T];
+  onChange: (newValue: React.CSSProperties[T], error?: string) => void;
 }
 
-function FontFamilyField({ value, onChange }: FontFamilyProps): React.ReactElement {
+function StyleField<T extends keyof React.CSSProperties>({
+  value,
+  onChange,
+  name,
+  type,
+}: StyleFieldProps<T>): React.ReactElement {
   const [errorText, setErrorText] = useState<string | undefined>();
-  const [fontFamily, setFontFamily] = useState<React.CSSProperties["fontFamily"]>(value);
+  const [fieldValue, setFieldValue] = useState<React.CSSProperties[T]>(value);
 
-  const update = (newValue: React.CSSProperties["fontFamily"]) => {
-    const errorText = newValue ? "" : "Must have a value";
-    setFontFamily(newValue);
+  const update = (newValue: React.CSSProperties[T]) => {
+    const errorText = !newValue
+      ? "Must have a value"
+      : type === "number" && Number.isNaN(Number(newValue))
+      ? "Must be a number"
+      : "";
+    setFieldValue(newValue);
     setErrorText(errorText);
     onChange(newValue, errorText);
   };
@@ -39,41 +50,12 @@ function FontFamilyField({ value, onChange }: FontFamilyProps): React.ReactEleme
   return (
     <TextField
       sx={{ my: 1 }}
-      label={"Font-Family"}
+      label={name}
       error={!!errorText}
-      value={fontFamily}
+      value={fieldValue}
       helperText={errorText}
-      onChange={(event) => update(event.target.value)}
+      onChange={(event) => update(event.target.value as React.CSSProperties[T])}
       fullWidth
-    />
-  );
-}
-
-interface LineHeightProps {
-  value: React.CSSProperties["lineHeight"];
-  onChange: (newValue: React.CSSProperties["lineHeight"], error?: string) => void;
-}
-
-function LineHeightField({ value, onChange }: LineHeightProps): React.ReactElement {
-  const [errorText, setErrorText] = useState<string | undefined>();
-  const [lineHeight, setLineHeight] = useState<React.CSSProperties["lineHeight"]>(value);
-
-  const update = (newValue: React.CSSProperties["lineHeight"]) => {
-    const errorText = !newValue ? "Must have a value" : isNaN(Number(newValue)) ? "Must be a number" : "";
-
-    setLineHeight(newValue);
-    setErrorText(errorText);
-    onChange(newValue, errorText);
-  };
-
-  return (
-    <TextField
-      sx={{ my: 1 }}
-      label={"Line Height"}
-      error={!!errorText}
-      value={lineHeight}
-      helperText={errorText}
-      onChange={(event) => update(event.target.value)}
     />
   );
 }
@@ -114,12 +96,37 @@ export function StyleEditorModal(props: IProps): React.ReactElement {
         <strong>NOT recommended</strong>.
       </Typography>
       <Paper sx={{ p: 2, my: 2 }}>
-        <FontFamilyField
+        <StyleField<"fontFamily">
+          name="Font Family"
+          type="string"
           value={customStyle.fontFamily}
           onChange={(value, error) => update({ ...customStyle, fontFamily: value ?? "" }, error)}
         />
         <br />
-        <LineHeightField
+        <StyleField<"fontSize">
+          name="Font Size"
+          type="number"
+          value={customStyle.fontSize * (16 / 14)}
+          onChange={(value, error) =>
+            // MUI has an internal font size of 14, which then gets translated to 16px inside the typography.
+            // The font size that "overwrites" the tail font size is directly added by the styling. This value is in pixels.
+            // The inputs need to match, as two differently scaling inputs are hard to work with.
+            // To the user, both inputs are in pixels. The value MUI uses to set the font size needs to have this weird
+            // scaling of 16 to 14, so it will correctly scale back to 16px.
+            update({ ...customStyle, fontSize: Math.max(5, (Number(value) ?? 8) * (14 / 16)) }, error)
+          }
+        />
+        <br />
+        <StyleField<"fontSize">
+          name="Tail Font Size"
+          type="number"
+          value={customStyle.tailFontSize}
+          onChange={(value, error) => update({ ...customStyle, tailFontSize: Number(value) ?? 0 }, error)}
+        />
+        <br />
+        <StyleField<"lineHeight">
+          name="Line Height"
+          type="number"
           value={customStyle.lineHeight}
           onChange={(value, error) => update({ ...customStyle, lineHeight: Number(value) ?? 0 }, error)}
         />

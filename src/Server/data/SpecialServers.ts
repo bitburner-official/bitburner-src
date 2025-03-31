@@ -1,18 +1,5 @@
 /* Holds IP of Special Servers */
-export const SpecialServers: {
-  [key: string]: string | undefined;
-
-  Home: string;
-  FulcrumSecretTechnologies: string;
-  CyberSecServer: string;
-  NiteSecServer: string;
-  TheBlackHandServer: string;
-  BitRunnersServer: string;
-  TheDarkArmyServer: string;
-  DaedalusServer: string;
-  WorldDaemon: string;
-  DarkWeb: string;
-} = {
+export const SpecialServers = {
   Home: "home",
   FulcrumSecretTechnologies: "fulcrumassets",
   CyberSecServer: "CSEC",
@@ -23,4 +10,4 @@ export const SpecialServers: {
   DaedalusServer: "The-Cave",
   WorldDaemon: "w0r1d_d43m0n",
   DarkWeb: "darkweb",
-};
+} as const;

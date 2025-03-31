@@ -4,7 +4,12 @@
 
 ## NS.resizeTail() method
 
-Resize a tail window.
+> Warning: This API is now obsolete.
+> 
+> Use [ns.ui.resizeTail](./bitburner.userinterface.resizetail.md) instead.
+> 
+
+Resize a tail window. This function is deprecated and will be removed in a later version.
 
 **Signature:**
 

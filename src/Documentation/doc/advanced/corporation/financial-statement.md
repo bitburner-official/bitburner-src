@@ -73,7 +73,7 @@ Analyses:
   - `Funds` are usually depleted to improve divisions.
   - `NumberOfOfficesAndWarehouses` is the exponent of the multiplier, it can be increased by creating [dummy division](./miscellany.md). It is an easy way to get higher offer in round 3+, when we have enough funds to do that.
   - `AssetDelta` is multiplied by 315000, so it is the main source of offer.
-- Assuming that we can sell all produced units and not buy more boost materials, `AssetDelta` is delta of funds, and delta of funds is delta of profit. This is why we try our best to improve profit.
+- Assuming that we can sell all produced units and not buy more boost materials, `AssetDelta` is the delta of funds, and the delta of funds is profit. This is why we try our best to improve profit.
 
 ## Dividend
 

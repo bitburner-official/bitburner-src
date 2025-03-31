@@ -11,7 +11,7 @@ import { ActionLevel } from "./ActionLevel";
 import { Autolevel } from "./Autolevel";
 import { formatBigNumber } from "../../ui/formatNumber";
 import { useRerender } from "../../ui/React/hooks";
-import { BladeActionType } from "@enums";
+import { BladeburnerActionType } from "@enums";
 import { ActionHeader } from "./ActionHeader";
 
 interface OperationElemProps {
@@ -21,7 +21,8 @@ interface OperationElemProps {
 
 export function OperationElem({ bladeburner, action }: OperationElemProps): React.ReactElement {
   const rerender = useRerender();
-  const isActive = bladeburner.action?.type === BladeActionType.operation && action.name === bladeburner.action?.name;
+  const isActive =
+    bladeburner.action?.type === BladeburnerActionType.Operation && action.name === bladeburner.action?.name;
   const actionTime = action.getActionTime(bladeburner, Player);
 
   return (

@@ -4,7 +4,7 @@
 
 ## Corporation.getDivision() method
 
-Get division data
+Get division data.
 
 **Signature:**
 
@@ -23,4 +23,8 @@ getDivision(divisionName: string): Division;
 [Division](./bitburner.division.md)
 
 Division data
+
+## Remarks
+
+RAM cost: 10 GB
 

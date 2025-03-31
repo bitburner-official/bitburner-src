@@ -1,29 +1,29 @@
-import type { BladeMultName, BladeSkillName } from "@enums";
+import type { BladeburnerMultName, BladeburnerSkillName } from "@enums";
 
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Bladeburner } from "./Bladeburner";
 import { Availability } from "./Types";
-import { PositiveInteger, isPositiveInteger } from "../types";
+import { PositiveInteger, PositiveNumber, isPositiveInteger } from "../types";
 import { PartialRecord, getRecordEntries } from "../Types/Record";
 
 interface SkillParams {
-  name: BladeSkillName;
+  name: BladeburnerSkillName;
   desc: string;
   baseCost?: number;
   costInc?: number;
   maxLvl?: number;
-  mults: PartialRecord<BladeMultName, number>;
+  mults: PartialRecord<BladeburnerMultName, number>;
 }
 
 export class Skill {
-  name: BladeSkillName;
+  name: BladeburnerSkillName;
   desc: string;
   // Cost is in Skill Points
   baseCost: number;
   // Additive cost increase per level
   costInc: number;
   maxLvl: number;
-  mults: PartialRecord<BladeMultName, number> = {};
+  mults: PartialRecord<BladeburnerMultName, number> = {};
 
   constructor(params: SkillParams) {
     this.name = params.name;
@@ -40,9 +40,6 @@ export class Skill {
      * The cost of the next level: (baseCost + currentLevel * costInc) * mult. The cost needs to be an integer, so we
      * need to use Math.floor or Math.round.
      *
-     * Note: there is no notation for Math.round, so I use \lceil and \rceil as alternatives for non-existent \lround
-     * and \rround. When you see \lceil and \rceil, it means Math.round, not Math.ceil.
-     *
      * In order to calculate the cost of "count" levels, we need to run a loop. "count" can be a big number, so it's
      * infeasible to calculate the cost in that way. We need to find the closed forms of:
      *
@@ -52,7 +49,7 @@ export class Skill {
      * Or:
      *
      * [2]:
-     * $$Cost = \sum_{i = CurrentLevel}^{CurrentLevel+Count-1}\lceil ((BaseCost + i \ast CostInc) \ast Mult) \rceil$$
+     * $$Cost = \sum_{i = CurrentLevel}^{CurrentLevel+Count-1} \mathrm{Round}((BaseCost + i \ast CostInc) \ast Mult)$$
      *
      * It's really hard to find the closed forms of those two equations, so we switch to these equations:
      *
@@ -62,7 +59,7 @@ export class Skill {
      * Or
      *
      * [4]:
-     * $$Cost = \lceil\sum_{i = CurrentLevel}^{CurrentLevel+Count-1} ((BaseCost + i \ast CostInc) \ast Mult) \rceil$$
+     * $$Cost = \mathrm{Round}(\sum_{i = CurrentLevel}^{CurrentLevel+Count-1} ((BaseCost + i \ast CostInc) \ast Mult))$$
      *
      * This means that we do the flooring/rounding at the end instead of each iterative step.
      *
@@ -73,7 +70,7 @@ export class Skill {
      *
      * The closed form of [4]:
      *
-     * $$Cost = \lceil Count \ast Mult \ast (BaseCost + (CostInc \ast (CurrentLevel + \frac{Count - 1}{2}))) \rceil$$
+     * $$Cost = \mathrm{Round}(Count \ast Mult \ast (BaseCost + (CostInc \ast (CurrentLevel + \frac{Count - 1}{2}))))$$
      *
      */
     return Math.round(
@@ -83,22 +80,83 @@ export class Skill {
     );
   }
 
-  canUpgrade(bladeburner: Bladeburner, count = 1): Availability<{ cost: number }> {
+  calculateMaxUpgradeCount(currentLevel: number, cost: PositiveNumber): number {
+    /**
+     * Define:
+     * - x = count
+     * - a = currentNodeMults.BladeburnerSkillCost
+     * - b = this.baseCost
+     * - c = this.costInc
+     * - d = currentLevel
+     * - y = cost
+     *
+     * We have:
+     *
+     * $$ y = \mathrm{Round}(x \ast a \ast (b + c \ast (d + \frac{x - 1}{2})))$$
+     *
+     * To simplify the calculation, let's ignore the Math.round part:
+     *
+     * $$ y = x \ast a \ast (b + c \ast (d + \frac{x - 1}{2}))$$
+     *
+     * Solve for x in terms of y:
+     *
+     * Define:
+     *
+     * $$ m = -b - c \ast d + \frac{c}{2} $$
+     *
+     * $$ Delta = \sqrt{{m ^ 2} + \frac{2 \ast c \ast y}{a}} $$
+     *
+     * Solutions:
+     *
+     * $$ x_1 = \frac{m + Delta}{c} $$
+     *
+     * $$ x_2 = \frac{m - Delta}{c} $$
+     *
+     * $a$, $c$ and $y$ are always greater than 0, so $x_2$ is always less than 0. Therefore, $x_1$ is the only
+     * solution.
+     */
+    const m = -this.baseCost - this.costInc * currentLevel + this.costInc / 2;
+    const delta = Math.sqrt(m * m + (2 * this.costInc * cost) / currentNodeMults.BladeburnerSkillCost);
+    const result = Math.round((m + delta) / this.costInc);
+    /**
+     * Due to floating-point rounding and edge-cases, we cannot ensure that rounding x_1 will give us the correct
+     * integer. In other words, we cannot be sure that x_1 is within 0.5 of the integer value we want. However, we can
+     * be sure that it is within 1 of the value we want, which means that checking the numbers above and below the
+     * rounded value are sufficient to find our correct integer.
+     */
+    const costOfResultPlus1 = this.calculateCost(currentLevel, (result + 1) as PositiveInteger);
+    if (costOfResultPlus1 <= cost) {
+      return result + 1;
+    }
+    const costOfResult = this.calculateCost(currentLevel, result as PositiveInteger);
+    if (costOfResult <= cost) {
+      return result;
+    }
+    return result - 1;
+  }
+
+  canUpgrade(bladeburner: Bladeburner, count = 1): Availability<{ actualCount: number; cost: number }> {
     const currentLevel = bladeburner.skills[this.name] ?? 0;
-    if (!isPositiveInteger(count)) {
-      return { error: `Invalid upgrade count ${count}` };
+    const actualCount = currentLevel + count - currentLevel;
+    if (actualCount === 0) {
+      return {
+        error: `Cannot upgrade ${this.name}: Due to floating-point inaccuracy and the small value of specified "count", your skill cannot be upgraded.`,
+      };
     }
-    if (currentLevel + count > this.maxLvl) {
-      return { error: `Upgraded level ${currentLevel + count} exceeds max` };
+    if (!isPositiveInteger(actualCount)) {
+      return { error: `Invalid upgrade count ${actualCount}` };
     }
-    const cost = this.calculateCost(currentLevel, count);
+    if (currentLevel + actualCount > this.maxLvl) {
+      return { error: `Upgraded level ${currentLevel + actualCount} exceeds max` };
+    }
+    const cost = this.calculateCost(currentLevel, actualCount);
     if (cost > bladeburner.skillPoints) {
       return { error: `Insufficient skill points for upgrade` };
     }
-    return { available: true, cost };
+    return { available: true, actualCount, cost };
   }
 
-  getMultiplier(name: BladeMultName): number {
+  getMultiplier(name: BladeburnerMultName): number {
     return this.mults[name] ?? 0;
   }
 }

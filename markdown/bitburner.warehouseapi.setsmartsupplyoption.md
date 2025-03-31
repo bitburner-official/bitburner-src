@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.setSmartSupplyOption() method
 
-Set whether smart supply uses leftovers before buying
+Set whether smart supply uses leftovers before buying.
 
 **Signature:**
 
@@ -24,9 +24,13 @@ setSmartSupplyOption(
 |  divisionName | string | Name of the division |
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
 |  materialName | string | Name of the material |
-|  option | [CorpSmartSupplyOption](./bitburner.corpsmartsupplyoption.md) | smart supply option, "leftovers" to use leftovers, "imports" to use only imported materials, "none" to not use materials from store |
+|  option | [CorpSmartSupplyOption](./bitburner.corpsmartsupplyoption.md) | Smart supply option. Set "leftovers" to use leftovers, "imports" to use only imported materials, and "none" to not use stored materials. |
 
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

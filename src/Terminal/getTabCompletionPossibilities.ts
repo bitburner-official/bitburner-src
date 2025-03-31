@@ -5,7 +5,7 @@ import { GetAllServers } from "../Server/AllServers";
 import { parseCommand, parseCommands } from "./Parser";
 import { HelpTexts } from "./HelpText";
 import { compile } from "../NetscriptJSEvaluator";
-import { Flags } from "../NetscriptFunctions/Flags";
+import { Flags, type Schema } from "../NetscriptFunctions/Flags";
 import { AutocompleteData } from "@nsdefs";
 import libarg from "arg";
 import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
@@ -276,10 +276,22 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     if (!loadedModule || !loadedModule.autocomplete) return; // Doesn't have an autocomplete function.
 
     const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
-    const flags = libarg(runArgs, {
-      permissive: true,
-      argv: command.slice(2),
-    });
+    let flags = {
+      _: [],
+    };
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
+      flags = libarg(runArgs, {
+        permissive: true,
+        argv: command.slice(2),
+      });
+    } catch (error) {
+      /**
+       * This error can only happen when the player specifies "-t" or "--ram-override", then presses [Tab] without
+       * giving a number. We don't need to show an error here.
+       */
+      console.warn(error);
+    }
     const flagFunc = Flags(flags._);
     const autocompleteData: AutocompleteData = {
       servers: GetAllServers()
@@ -288,9 +300,9 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       scripts: [...currServ.scripts.keys()],
       txts: [...currServ.textFiles.keys()],
       enums: enums,
-      flags: (schema: unknown) => {
+      flags: (schema: Schema) => {
         if (!Array.isArray(schema)) throw new Error("flags require an array of array");
-        pos2 = schema.map((f: unknown) => {
+        pos2 = schema.map((f) => {
           if (!Array.isArray(f)) throw new Error("flags require an array of array");
           if (f[0].length === 1) return "-" + f[0];
           return "--" + f[0];
@@ -301,6 +313,18 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
           return {};
         }
       },
+      hostname: currServ.hostname,
+      filename: script.filename,
+      processes: Array.from(currServ.runningScriptMap.values(), (m) =>
+        Array.from(m.values(), (r) => ({
+          pid: r.pid,
+          filename: r.filename,
+          threads: r.threads,
+          args: r.args.slice(),
+          temporary: r.temporary,
+        })),
+      ).flat(),
+      command: terminalText,
     };
     let pos: string[] = [];
     let pos2: string[] = [];

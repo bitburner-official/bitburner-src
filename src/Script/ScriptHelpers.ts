@@ -33,19 +33,23 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
       if (runningScript.dataMap[hostname][2] == 0 || runningScript.dataMap[hostname][2] == null) {
         continue;
       }
-      const serv = GetServer(hostname);
-      if (serv == null) {
+      const server = GetServer(hostname);
+      if (server == null) {
         continue;
       }
       const timesGrown = Math.round(
         ((0.5 * runningScript.dataMap[hostname][2]) / runningScript.onlineRunningTime) * timePassed,
       );
-      runningScript.log(`Called on ${serv.hostname} ${timesGrown} times while offline`);
+      runningScript.log(`Called on ${server.hostname} ${timesGrown} times while offline`);
       const host = GetServer(runningScript.server);
-      if (host === null) throw new Error("getServer of null key?");
-      if (!(serv instanceof Server)) throw new Error("trying to grow a non-normal server");
-      const growth = processSingleServerGrowth(serv, timesGrown, host.cpuCores);
-      runningScript.log(`'${serv.hostname}' grown by ${formatPercent(growth - 1, 6)} while offline`);
+      if (host === null) {
+        throw new Error("getServer of null key?");
+      }
+      if (!(server instanceof Server)) {
+        throw new Error("trying to grow a non-normal server");
+      }
+      const growth = processSingleServerGrowth(server, timesGrown, host.cpuCores);
+      runningScript.log(`'${server.hostname}' grown by ${formatPercent(growth - 1, 6)} while offline`);
     }
   }
 
@@ -54,8 +58,11 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
   const expGain = confidence * (runningScript.onlineExpGained / runningScript.onlineRunningTime) * timePassed;
   Player.gainHackingExp(expGain);
 
-  const moneyGain =
+  let moneyGain =
     (runningScript.onlineMoneyMade / Player.playtimeSinceLastAug) * timePassed * CONSTANTS.OfflineHackingIncome;
+  if (!Number.isFinite(moneyGain)) {
+    moneyGain = 0;
+  }
   // money is given to player during engine load
   Player.scriptProdSinceLastAug += moneyGain;
 
@@ -98,12 +105,9 @@ export function findRunningScripts(
   return server.runningScriptMap.get(scriptKey(path, args)) ?? null;
 }
 
-//Returns a RunningScript object matching the pid on the
-//designated server, and false otherwise
-export function findRunningScriptByPid(pid: number, server: BaseServer): RunningScript | null {
+//Returns a RunningScript object with the given pid, or null
+export function findRunningScriptByPid(pid: number): RunningScript | null {
   const ws = workerScripts.get(pid);
-  // Return null if no ws found or if it's on a different server.
   if (!ws) return null;
-  if (ws.scriptRef.server !== server.hostname) return null;
   return ws.scriptRef;
 }

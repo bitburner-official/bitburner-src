@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.PurchasedServerSoftcap property
 
-Influences cost of any purchased server at or above 128GB
+Influence how much it costs to purchase a server
 
 **Signature:**
 

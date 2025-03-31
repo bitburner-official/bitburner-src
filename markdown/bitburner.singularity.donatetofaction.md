@@ -31,3 +31,7 @@ RAM cost: 5 GB \* 16/4/1
 
 Attempts to donate money to the specified faction in exchange for reputation. Returns true if you successfully donate the money, and false otherwise.
 
+You cannot donate to your gang's faction.
+
+The specified faction must offer at least 1 type of work. You can use [getFactionWorkTypes](./bitburner.singularity.getfactionworktypes.md) to get the list of work types of a faction.
+

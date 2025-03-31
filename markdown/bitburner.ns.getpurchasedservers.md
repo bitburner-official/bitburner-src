@@ -19,5 +19,5 @@ Returns an array with the hostnames of all of the servers you have purchased.
 
 ## Remarks
 
-2.25 GB
+1.05 GB
 

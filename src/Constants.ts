@@ -4,9 +4,9 @@
  * Constants for specific mechanics or features will NOT be here.
  */
 export const CONSTANTS = {
-  VersionString: "2.6.3dev",
+  VersionString: "3.0.0dev",
   isDevBranch: true,
-  VersionNumber: 40,
+  VersionNumber: 42,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -76,6 +76,8 @@ export const CONSTANTS = {
   MillisecondsPerQuarterHour: 900000,
   GameCyclesPerQuarterHour: 900000 / 200,
 
+  MillisecondsPerTenMinutes: 600000,
+
   MillisecondsPerFiveMinutes: 300000,
   GameCyclesPerFiveMinutes: 300000 / 200,
 
@@ -100,23 +102,29 @@ export const CONSTANTS = {
   EntropyEffect: 0.98,
 
   // Number of blood, plasma, or platelet donations the developer has verified. Boosts NFG.
-  Donations: 151,
+  Donations: 179,
 
   // Only use this if a backdoor is installed in the company's server
   CompanyRequiredReputationMultiplier: 0.75,
 
-  // Also update doc/source/changelog.rst
+  // Also update Documentation/doc/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v2.6.3 Dev: Last updated 3 July 2024
+## v3.0.0 dev changelog (Updated 3/5/2025, currently no changes from 2.8)
 
-See 2.6.2 changelog at https://github.com/bitburner-official/bitburner-src/blob/v2.6.2/src/Documentation/doc/changelog.md
+### MAJOR CHANGES
 
-### CHANGES
+### UI
 
-- No changes yet since 2.6.2 release
+### MISC
 
-### OTHER
+### DOCUMENTATION
 
-- Nerf noodle bar
+### SPOILER CHANGES - UI
+
+### SPOILER CHANGES - MISC
+
+### SPOILER CHANGES - DOCUMENTATION
+
+### CODEBASE/REFACTOR
 `,
 } as const;

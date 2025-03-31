@@ -23,7 +23,7 @@ interface GangGenInfo
 |  [respect](./bitburner.ganggeninfo.respect.md) |  | number | Gang's respect |
 |  [respectForNextRecruit](./bitburner.ganggeninfo.respectfornextrecruit.md) |  | number | Amount of Respect needed for next gang recruit, if possible |
 |  [respectGainRate](./bitburner.ganggeninfo.respectgainrate.md) |  | number | Respect earned per game cycle |
-|  [territory](./bitburner.ganggeninfo.territory.md) |  | number | Amount of territory held |
+|  [territory](./bitburner.ganggeninfo.territory.md) |  | number | Amount of territory held, in the range 0-1 |
 |  [territoryClashChance](./bitburner.ganggeninfo.territoryclashchance.md) |  | number | Clash chance |
 |  [territoryWarfareEngaged](./bitburner.ganggeninfo.territorywarfareengaged.md) |  | boolean | Indicating if territory clashes are enabled |
 |  [wantedLevel](./bitburner.ganggeninfo.wantedlevel.md) |  | number | Gang's wanted level |

@@ -4,7 +4,7 @@
 
 ## WarehouseAPI.setMaterialMarketTA1() method
 
-Set market TA 1 for a material.
+Set Market-TA1 for a material.
 
 **Signature:**
 
@@ -19,9 +19,13 @@ setMaterialMarketTA1(divisionName: string, city: CityName | `${CityName}`, mater
 |  divisionName | string | Name of the division |
 |  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
 |  materialName | string | Name of the material |
-|  on | boolean | market ta enabled |
+|  on | boolean | Use true to enable, false otherwise. |
 
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 20 GB
 

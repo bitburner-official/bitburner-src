@@ -9,6 +9,7 @@
 
 ```typescript
 type GoOpponent =
+  | "No AI"
   | "Netburners"
   | "Slum Snakes"
   | "The Black Hand"

@@ -9,15 +9,19 @@ Take university class.
 **Signature:**
 
 ```typescript
-universityCourse(universityName: string, courseName: string, focus?: boolean): boolean;
+universityCourse(
+    universityName: UniversityLocationName | `${UniversityLocationName}`,
+    courseName: UniversityClassType | `${UniversityClassType}`,
+    focus?: boolean,
+  ): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  universityName | string | Name of university. You must be in the correct city for whatever university you specify. |
-|  courseName | string | Name of course. |
+|  universityName | [UniversityLocationName](./bitburner.universitylocationname.md) \| \`${[UniversityLocationName](./bitburner.universitylocationname.md)<!-- -->}\` | Name of university. You must be in the correct city for whatever university you specify. |
+|  courseName | [UniversityClassType](./bitburner.universityclasstype.md) \| \`${[UniversityClassType](./bitburner.universityclasstype.md)<!-- -->}\` | Name of course. |
 |  focus | boolean | _(Optional)_ Acquire player focus on this class. Optional. Defaults to true. |
 
 **Returns:**

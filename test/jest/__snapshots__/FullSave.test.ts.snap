@@ -40,7 +40,9 @@ exports[`Check Save File Continuity GoSave continuity 1`] = `
       ".......",
     ],
     "cheatCount": 0,
+    "cheatCountForWhite": 0,
     "passCount": 0,
+    "previousBoard": "",
     "previousPlayer": "White",
   },
   "previousGame": null,
@@ -274,7 +276,6 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "rank": 2000,
         "skillPoints": 666,
         "skills": {},
-        "sleeveSize": 0,
         "stamina": 1,
         "staminaBonus": 0,
         "storedCycles": 0,
@@ -450,7 +451,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
     "lastSave": 0,
     "lastUpdate": 1687611703623,
     "location": "Travel Agency",
-    "money": 1151,
+    "money": 1179,
     "moneySourceA": {
       "ctor": "MoneySourceTracker",
       "data": {

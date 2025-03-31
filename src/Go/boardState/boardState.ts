@@ -1,15 +1,16 @@
-import type { Board, BoardState, Move, Neighbor, PointState } from "../Types";
+import { Board, BoardState, Move, Neighbor, PointState, SimpleBoard } from "../Types";
 
-import { GoOpponent, GoColor, GoValidity } from "@enums";
+import { GoColor, GoOpponent, GoValidity } from "@enums";
 import { bitverseBoardShape } from "../Constants";
 import { getExpansionMoveArray } from "../boardAnalysis/goAI";
 import {
+  boardFromSimpleBoard,
+  boardStringFromBoard,
   evaluateIfMoveIsValid,
   findAllCapturedChains,
   findLibertiesForChain,
   getAllChains,
-  boardFromSimpleBoard,
-  boardStringFromBoard,
+  updatedBoardFromSimpleBoard,
 } from "../boardAnalysis/boardAnalysis";
 import { endGoGame } from "../boardAnalysis/scoring";
 import { addObstacles, resetCoordinates, rotate90Degrees } from "./offlineNodes";
@@ -33,6 +34,8 @@ export function getNewBoardState(
     ai: ai,
     passCount: 0,
     cheatCount: 0,
+    cheatCountForWhite: 0,
+    komiOverride: null,
     board: Array.from({ length: boardSize }, (_, x) =>
       Array.from({ length: boardSize }, (_, y) =>
         !boardToCopy || boardToCopy?.[x]?.[y]
@@ -57,6 +60,32 @@ export function getNewBoardState(
     applyHandicap(newBoardState.board, handicap);
   }
   return newBoardState;
+}
+
+/**
+ * Generates a new BoardState object from a given SimpleBoard string array, and an optional prior move board state
+ */
+export function getNewBoardStateFromSimpleBoard(
+  simpleBoard: SimpleBoard,
+  priorSimpleBoard?: SimpleBoard,
+  ai: GoOpponent = GoOpponent.Netburners,
+): BoardState {
+  const newState = getNewBoardState(simpleBoard.length, ai, false, updatedBoardFromSimpleBoard(simpleBoard));
+  if (priorSimpleBoard) {
+    newState.previousBoards.push(priorSimpleBoard.join(""));
+
+    // Identify the previous player based on the difference in pieces
+    const priorWhitePieces = priorSimpleBoard.join("").match(/O/g)?.length ?? 0;
+    const priorBlackPieces = priorSimpleBoard.join("").match(/X/g)?.length ?? 0;
+    const currentWhitePieces = simpleBoard.join("").match(/O/g)?.length ?? 0;
+    const currentBlackPieces = simpleBoard.join("").match(/X/g)?.length ?? 0;
+    if (priorWhitePieces - priorBlackPieces > currentWhitePieces - currentBlackPieces) {
+      newState.previousPlayer = GoColor.black;
+    }
+  }
+
+  updateCaptures(newState.board, newState.previousPlayer ?? GoColor.white);
+  return newState;
 }
 
 /**
@@ -124,7 +153,18 @@ export function passTurn(boardState: BoardState, player: GoColor, allowEndGame =
  * Modifies the board in place.
  */
 export function applyHandicap(board: Board, handicap: number): void {
-  const availableMoves = getEmptySpaces(board);
+  const availableMoves = [];
+  for (const column of board) {
+    for (const point of column) {
+      if (point) {
+        if (point.color !== GoColor.empty) {
+          // Game is in progress, don't apply handicap
+          return;
+        }
+        availableMoves.push(point);
+      }
+    }
+  }
   const handicapMoveOptions = getExpansionMoveArray(board, availableMoves);
   const handicapMoves: Move[] = [];
 
