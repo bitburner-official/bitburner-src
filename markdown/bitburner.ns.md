@@ -64,6 +64,7 @@ export async function main(ns) {
 |  [closeTail(pid)](./bitburner.ns.closetail.md) | Close the tail window of a script. This function is deprecated and will be removed in a later version. |
 |  [deleteServer(host)](./bitburner.ns.deleteserver.md) | Delete a purchased server. |
 |  [disableLog(fn)](./bitburner.ns.disablelog.md) | Disables logging for the given NS function. |
+|  [dynamicImport(path)](./bitburner.ns.dynamicimport.md) | Dynamically import a script. Only scripts located on the same server can be imported. A dynamic import will not adjust RAM usage. This must be done manually with [ramOverride](./bitburner.ns.ramoverride.md)<!-- -->. |
 |  [enableLog(fn)](./bitburner.ns.enablelog.md) | Enables logging for the given NS function. |
 |  [exec(script, hostname, threadOrOptions, args)](./bitburner.ns.exec.md) | Start another script on any server. |
 |  [exit()](./bitburner.ns.exit.md) | Terminates the current script immediately. |
@@ -125,7 +126,6 @@ export async function main(ns) {
 |  [hasRootAccess(host)](./bitburner.ns.hasrootaccess.md) | Check if you have root access on a server. |
 |  [hasTorRouter()](./bitburner.ns.hastorrouter.md) | Returns whether the player has access to the darkweb. |
 |  [httpworm(host)](./bitburner.ns.httpworm.md) | Runs HTTPWorm.exe on a server. |
-|  [import(path)](./bitburner.ns.import.md) | Dynamically import a script. Only scripts located from the same server can be imported. A dynamic import will not adjust RAM usage. This must be done manually with [ramOverride](./bitburner.ns.ramoverride.md)<!-- -->. |
 |  [isLogEnabled(fn)](./bitburner.ns.islogenabled.md) | Checks the status of the logging for the given NS function. |
 |  [isRunning(script, host, args)](./bitburner.ns.isrunning.md) | Check if a script is running. |
 |  [kill(pid)](./bitburner.ns.kill.md) | Terminate the script with the provided PID. |
