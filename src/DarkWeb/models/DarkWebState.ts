@@ -4,7 +4,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { mutateDarkWeb } from "../controllers/DarkWebNetworkMovement";
 
 export const NET_WIDTH = 8;
-export const NET_DEPTH = 16;
+export const NET_DEPTH = 3;
 export const SERVER_DENSITY = 0.55;
 
 

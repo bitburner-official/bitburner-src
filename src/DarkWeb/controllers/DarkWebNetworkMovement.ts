@@ -9,6 +9,7 @@ import {
 } from "./DarkWebNetworkGenerator";
 import { stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
 import { workerScripts } from "../../Netscript/WorkerScripts";
+import { SpecialServers } from "../../Server/data/SpecialServers";
 
 
 export const mutateDarkWeb = () => {
@@ -67,9 +68,14 @@ const deleteRandomServers = (count = 1) => {
   for (let i = 0; i < count; i++) {
     const servers = getDarkWebServers();
     const serverToDelete = servers[Math.floor(Math.random() * servers.length)];
-    disconnectServer(serverToDelete);
+    const server = GetServer(serverToDelete.hostname);
+    if (!server || server === DarkWebState.openServer || server.isConnectedTo) {
+      return false;
+    }
+    disconnectServer(serverToDelete, true);
     DeleteServer(serverToDelete.hostname);
   }
+  sanitizeDarkwebNetwork();
 }
 
 
@@ -92,6 +98,7 @@ export const balanceServers = () => {
     const serversToAdd = NET_DEPTH * NET_WIDTH * SERVER_DENSITY - getDarkWebServers().length;
     addRandomServers(serversToAdd);
   }
+  sanitizeDarkwebNetwork();
 }
 
 export const moveServer = (server: BaseServer) => {
@@ -99,13 +106,12 @@ export const moveServer = (server: BaseServer) => {
   if (!darkWebData) {
     throw new Error("Server missing dark web data");
   }
-  // Do not try to move the server that is open in the UI
-  if (server === DarkWebState.openServer) {
+  // Do not try to move the server that is open in the UI or the terminal
+  if (server === DarkWebState.openServer || server.isConnectedTo) {
     return false;
   }
 
-  // max 10 attempts to move the server
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 30; i++) {
     // Limit depth movement to +-3 spaces
     let newX = Math.min(Math.max(Math.floor(Math.random() * 6 + darkWebData.difficulty - 3), 0), NET_DEPTH - 1);
     // simple "air gaps" in the network
@@ -118,12 +124,13 @@ export const moveServer = (server: BaseServer) => {
       continue;
     }
 
-    disconnectServer(server);
+    disconnectServer(server, true);
 
     if (DarkWebState.DarkWebNetwork[darkWebData.x]?.[darkWebData.y]) {
       DarkWebState.DarkWebNetwork[darkWebData.x][darkWebData.y] = null;
     }
     addServerToNetwork(server, newX, newY, true);
+    sanitizeDarkwebNetwork();
     DarkWebEvents.emit();
     return true;
   }
@@ -131,16 +138,23 @@ export const moveServer = (server: BaseServer) => {
 };
 
 
-export const disconnectServer = (server: BaseServer) => {
+export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) => {
+  if (server === DarkWebState.openServer || server.isConnectedTo) {
+    return false;
+  }
   server.serversOnNetwork.forEach((conn) => {
     const connectedServer = GetServer(conn);
-    if (connectedServer) {
+    const isOkToDisconnect = disconnectDarkweb || connectedServer?.hostname === SpecialServers.DarkWeb;
+    if (connectedServer && isOkToDisconnect) {
       disconnectServers(server, connectedServer as Server);
     }
   });
 }
 
 export const restartServer = (server: BaseServer) => {
+  if (server === DarkWebState.openServer || server.isConnectedTo) {
+    return false;
+  }
   const runningScripts = server.runningScriptMap;
 
   for (const scripts of runningScripts.values()) {
@@ -207,12 +221,45 @@ export const getDarkWebServers = (): BaseServer[] => {
   return DarkWebState.DarkWebNetwork.flat().filter(notNull<BaseServer>);
 };
 
-const getAllAdjacentNeighbors = (x: number, y: number): BaseServer[] => {
+export const getAllAdjacentNeighbors = (x: number, y: number): BaseServer[] => {
   const rowAbove = getServersOnRowAbove(x, true);
   const rowBelow = getServersOnRowBelow(x, true);
   const neighborsOnRow = getNeighborsOnRow(x, y);
   return [...rowAbove, ...rowBelow, ...neighborsOnRow];
 }
+
+
+export const sanitizeDarkwebNetwork = () => {
+  const darkweb = GetServer(SpecialServers.DarkWeb);
+  if (!darkweb) {
+    return;
+  }
+  const servers = [...getDarkWebServers(), darkweb];
+  for (const server of servers) {
+    if (!GetServer(server.hostname)) {
+      DarkWebState.DarkWebNetwork[server.darkWebData?.x ?? 0][server.darkWebData?.y ?? 0] = null;
+      disconnectServer(server, true);
+      DeleteServer(server.hostname);
+      continue;
+    }
+
+    for (const conn of server.serversOnNetwork) {
+      const connection = GetServer(conn);
+      if (!connection) {
+        server.serversOnNetwork = server.serversOnNetwork.filter((c) => c !== conn);
+        continue;
+      }
+      if (!connection.serversOnNetwork.includes(server.hostname)) {
+        server.serversOnNetwork = server.serversOnNetwork.filter((c) => c !== connection.hostname);
+      }
+    }
+
+    if (server.darkWebData?.x === 0 && darkweb) {
+      connectServers(server, darkweb);
+    }
+  }
+}
+
 
 const isOnAirGap = (x: number): boolean => !!x && !(x % AIR_GAP_DEPTH);
 

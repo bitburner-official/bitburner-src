@@ -36,13 +36,17 @@ export const clearDarkWebNetwork = () => {
       DarkWebState.DarkWebNetwork[i][j] = null;
     }
   }
+  const darkwebRoot = GetServer(SpecialServers.DarkWeb);
+  if (darkwebRoot) {
+    darkwebRoot.serversOnNetwork = []
+  }
 };
 
 export const loadDarkWebNetwork = () => {
   const darkWebServers = GetAllServers().filter(s => s.darkWebData);
   for (const server of darkWebServers) {
     if (server.darkWebData) {
-      disconnectServer(server);
+      disconnectServer(server, true);
       addServerToNetwork(server, server.darkWebData.x, server.darkWebData.y, true);
     }
   }
@@ -96,6 +100,7 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number, add
   }
   addRandomConnections(server);
   addGuaranteedConnection(server);
+
   if (server.darkWebData.x === 0) {
     const darkWebRoot = GetServer(SpecialServers.DarkWeb);
     if (!darkWebRoot) {

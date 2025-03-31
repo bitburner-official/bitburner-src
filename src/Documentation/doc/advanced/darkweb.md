@@ -70,8 +70,11 @@ This is currently a design document, but eventually will be the in-game player d
 
 - File/status viewer for darkweb servers?
 
-- reward caches?
-  - stock market unlocks?
+
+- server that returns yes/no in its failure response
+  - yes, the password has X as one of its factors
+- server that returns a string in response to the attempt?
+  - result: (encoded attempt) expectation: (encoded password)
 
 
 - Harden existing commands against loops in network? or exclude darkweb from them?
@@ -88,16 +91,22 @@ This is currently a design document, but eventually will be the in-game player d
 
 - Generate interesting server names
 
+- WEBSTORM
+  - removes ~1/2 of servers
+  - reboots remaining servers
+  - adds a couple new servers
+  - Runs on a timer, or when logging in after being online for a while?
+
+
+
+## TODO later:
+
 - bonus time?
-- server scrambler when offline?
 
 - slow down net mutations
 
 - Limit darkweb stuff to when feature is enabled (bitnode? own tor router?)
 - start more cleanly with root access to "darkweb" server
-
-
-## TODO later:
 
 - Darkweb server cha difficulty balance?
 

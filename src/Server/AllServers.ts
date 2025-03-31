@@ -91,6 +91,7 @@ export function DeleteServer(serverkey: string): void {
 }
 
 export const connectServers = (server1: BaseServer, server2: BaseServer) => {
+  if (server1.serversOnNetwork.includes(server2.hostname)) return;
   server1.serversOnNetwork.push(server2.hostname);
   server2.serversOnNetwork.push(server1.hostname);
 };

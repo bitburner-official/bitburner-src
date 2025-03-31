@@ -1,11 +1,16 @@
 import { Player } from "@player";
-import { CompletedProgramName, ToastVariant } from "@enums";
+import { CompletedProgramName, LiteratureName, ToastVariant } from "@enums";
 import { CreateProgramWork } from "../../Work/CreateProgramWork";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { formatMoney, formatNumber } from "../../ui/formatNumber";
 import { generateContract, tryGeneratingRandomContract } from "../../CodingContract/ContractGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { FilePath, resolveFilePath } from "../../Paths/FilePath";
+import { cachePrefixes, commonPasswordDictionary, passwordFileNames } from "./dictionaryData";
+import { hintLiterature } from "./hintNotes";
+import { TextFilePath } from "../../Paths/TextFilePath";
+import { GetServer } from "../../Server/AllServers";
+import { getAllAdjacentNeighbors } from "../controllers/DarkWebNetworkMovement";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
   server.hasAdminRights = true;
@@ -13,7 +18,7 @@ export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
 
 
   // TODO: clue notes
-
+  addClue(server);
 
   // TODO: balance coding contract chance
   if (Math.random() < 0.1) {
@@ -23,7 +28,6 @@ export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
   // TODO: balance cache chance
   const chance =  0.2 * (1.03 ** (server.darkWebData?.difficulty ?? 1))
   if (Math.random() < chance) {
-    const cachePrefixes = ["wallet", "secrets", "ledger", "stash", "vault", "bankdata", "do_not_open"];
     const prefix = cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
     const cacheFilename = resolveFilePath(`${prefix}_${Math.random().toString().substring(2, 5)}.cache` as FilePath);
     if (cacheFilename) {
@@ -99,6 +103,16 @@ export const getNextPortOpener = (difficulty: number) => {
       return true;
     }
   }
+  if(!Player.hasWseAccount) {
+    Player.hasWseAccount = true;
+    SnackbarEvents.emit(`You have discovered a stolen WSE Account`, ToastVariant.SUCCESS, 4000);
+    return true;
+  }
+  if (!Player.hasTixApiAccess) {
+    Player.hasTixApiAccess = true;
+    SnackbarEvents.emit(`You have discovered a TIX API access exploit`, ToastVariant.SUCCESS, 4000);
+    return true;
+  }
 
   return getXpReward(difficulty);
 }
@@ -112,4 +126,52 @@ export const calculatePasswordAttemptChaGain = (server: BaseServer, threads: num
   const alreadyHackedMult = server.hasAdminRights ? 0.05 : 1;
   const successMult = success && !server.hasAdminRights ? 5 : 1;
   return xpGain * alreadyHackedMult * successMult * threads * Player.mults.charisma_exp;
+}
+
+// TODO: balance password clue spawn rate
+const addClue = (server: BaseServer) => {
+  if (!server.darkWebData) return;
+
+  // Basic mechanics hints
+  if ((Math.random() < 0.5 && server.darkWebData.difficulty <= 3) || Math.random() < 0.05) {
+    const hint: LiteratureName = hintLiterature[Math.floor(Math.random() * hintLiterature.length)];
+    if (hint) {
+      server.messages.push(hint);
+    }
+  }
+
+  // some entries from the common password dictionary
+  if (Math.random() < 0.1) {
+    const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
+    const start = Math.floor(Math.random() * commonPasswordDictionary.length - 6);
+    const commonPasswords = commonPasswordDictionary.slice(start, start + 6).join(", ");
+    server.writeToTextFile(hintFileName as TextFilePath, `Some common passwords include ${commonPasswords}`);
+    return;
+  }
+
+  // connected neighboring server's password (does not include server name)
+  if (Math.random() < 0.1) {
+    const passwordHintName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
+    const neighboringServerName = server.serversOnNetwork.find((s) => {
+      const server = GetServer(s);
+      return server && server?.darkWebData && !server?.hasAdminRights && server.darkWebData.password;
+    });
+    const neighboringServer = neighboringServerName ? GetServer(neighboringServerName) : null;
+    if (neighboringServer) {
+      server.writeToTextFile(passwordHintName as TextFilePath, `Remember this password: ${neighboringServer.darkWebData?.password}`);
+      return;
+    }
+  }
+
+  // non-connected nearby server's password (includes server name)
+  if (Math.random() < 0.1) {
+    const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
+    const targetServer = getAllAdjacentNeighbors(server.darkWebData.x, server.darkWebData.y).find((neighbor) =>
+      neighbor && neighbor?.darkWebData && !neighbor?.hasAdminRights && neighbor.darkWebData.password && !server.serversOnNetwork.includes(neighbor.hostname));
+
+    if (targetServer) {
+      server.writeToTextFile(hintFileName as TextFilePath, `Server: ${targetServer?.hostname} Password: ${targetServer?.darkWebData?.password}`);
+    }
+    return;
+  }
 }

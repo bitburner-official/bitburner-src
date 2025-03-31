@@ -1,18 +1,14 @@
-import { defaultSettingsDictionary, dogNameDictionary } from "./dictionaryData";
+import { LiteratureName } from "@enums";
+export const hintLiterature: LiteratureName[] = [
+  LiteratureName.CacheHint1,
+  LiteratureName.CacheHint2,
+  LiteratureName.ServerOfflineHint,
+  LiteratureName.DarkWebRebootHint,
+  LiteratureName.PasswordServerHint,
+  LiteratureName.TimingServerHint,
+  LiteratureName.BinaryServerHint,
+  LiteratureName.DogNameHint,
+  LiteratureName.FactoryDefaultHint];
 
-export const tutorials = [
-  "I've heard there are valuable .cache files to find.",
-  "I ran this .cache and it had crazy stuff in it!",
-  "My scripts went down again when their server went offline. I'll have to do something about that.",
-  "Darkweb servers are known to reboot sometimes, requiring scripts to be restarted",
-  ];
-
-export const puzzleHints = [
-  "Some servers will tell you if you get some chars in the password correct.",
-  "I found a server that takes longer to respond if you get some chars in the password correct.",
-  "Some servers only respond with raw binary data. I wonder what each bit represents?",
-  `what should I name my dog? ${dogNameDictionary.join(", ")}?`,
-  `The factory default is usually one of ${defaultSettingsDictionary.join(", ")}.`,
-  ];
 
 // TODO: longer dictionary parts in hint from commonPasswordDictionary

@@ -8,6 +8,9 @@ export const defaultSettingsDictionary = ["admin", "password", "0000", "12345"];
 
 export const dogNameDictionary = ["fido", "spot", "rover", "max"];
 
+export const cachePrefixes = ["wallet", "secrets", "ledger", "stash", "vault", "bankdata", "do_not_open"];
+export const passwordFileNames = ["secrets", "password", "key", "credentials", "login", "admin", "root", "access"];
+
 export const EUCountries = [
   "Austria",
   "Belgium",

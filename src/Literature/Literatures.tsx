@@ -2,6 +2,7 @@ import { CityName, FactionName, CompanyName, LiteratureName } from "@enums";
 import { Literature } from "./Literature";
 import { Typography } from "@mui/material";
 import React from "react";
+import { defaultSettingsDictionary, dogNameDictionary } from "../DarkWeb/models/dictionaryData";
 
 export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.HackersStartingHandbook]: new Literature({
@@ -675,5 +676,86 @@ export const Literatures: Record<LiteratureName, Literature> = {
     title: "The Secret War",
     filename: LiteratureName.TheSecretWar,
     text: <Typography></Typography>,
+  }),
+  [LiteratureName.CacheHint1]: new Literature({
+    title: "eGeoCacheing?",
+    filename: LiteratureName.CacheHint1,
+    text: (
+      <Typography>
+        I've heard there are valuable .cache files to find out in the dark web.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.CacheHint2]: new Literature({
+    title: "Cache the Flag",
+    filename: LiteratureName.CacheHint2,
+    text: (
+      <Typography>
+        I ran this .cache file I found and it had crazy stuff in it!
+      </Typography>
+    ),
+  }),
+  [LiteratureName.ServerOfflineHint]: new Literature({
+    title: "Server offline again",
+    filename: LiteratureName.ServerOfflineHint,
+    text: (
+      <Typography>
+        My scripts went down again when their server went offline. I'll have to do something about that.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.DarkWebRebootHint]: new Literature({
+    title: "Darkweb server rebooted",
+    filename: LiteratureName.DarkWebRebootHint,
+    text: (
+      <Typography>
+        Darkweb servers are known to reboot sometimes, requiring scripts to be restarted.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.PasswordServerHint]: new Literature({
+    title: "Partial Password Jutsu",
+    filename: LiteratureName.PasswordServerHint,
+    text: (
+      <Typography>
+        There is a type of server that will tell you if you get some parts of the password correct.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.TimingServerHint]: new Literature({
+    title: "Timing Attack",
+    filename: LiteratureName.TimingServerHint,
+    text: (
+      <Typography>
+        I found a server that takes much longer to respond if you get some characters in the password correct.
+      </Typography>
+    ),
+  }),
+  [LiteratureName.BinaryServerHint]: new Literature({
+    title: "Raw Data?",
+    filename: LiteratureName.BinaryServerHint,
+    text: (
+      <Typography>
+        Some servers only respond with raw binary data. I wonder what each bit represents?
+      </Typography>
+    ),
+  }),
+  [LiteratureName.DogNameHint]: new Literature({
+    title: "Dog Name Ideas",
+    filename: LiteratureName.DogNameHint,
+    text: (
+      <Typography>
+        What should I name my dog? Maybe {dogNameDictionary.join(", ")}?
+      </Typography>
+    ),
+  }),
+  [LiteratureName.FactoryDefaultHint]: new Literature({
+    title: "Factory Default",
+    filename: LiteratureName.FactoryDefaultHint,
+    text: (
+      <Typography>
+        The factory default is usually one of {defaultSettingsDictionary.join(", ")}.
+      </Typography>
+    ),
   }),
 };
