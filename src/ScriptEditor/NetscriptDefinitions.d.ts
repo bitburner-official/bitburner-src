@@ -7963,11 +7963,22 @@ export interface NS {
    * Converts a number into a numeric string with the specified format options.
    * This is the same function that the game itself uses to display numbers. The format also depends on the Numeric
    * Display settings (all options on the "Numeric Display" options page)
-   * To format ram or percentages, see {@link NS.formatRam | formatRam} and {@link NS.formatPercent | formatPercent}
+   * To format ram or percentages, see {@link NS.formatRam | formatRam} and {@link NS.formatPercent | formatPercent}.
+   *
+   * This function has some quirky undocumented behaviors. This is a non-exhaustive list of those behaviors:
+   *
+   * - "Infinity" and "-Infinity" are returned as "∞" and "-∞", respectively.
+   *
+   * - If you disable the suffix form in the settings page or the absolute value is greater than or equal to 1e33, this
+   * function will use the exponential form. This means that, if Math.abs(n) >= 1e33, the returned value is always in
+   * the exponential form, regardless of the setting.
+   *
+   * Note that the behaviors listed above are "undocumented", in the sense that we don't make any guarantee about
+   * backward compatibility. You must not rely on those behaviors.
    *
    * @param n - Number to format.
    * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 3.
-   * @param suffixStart - How high a number must be before a suffix will be added. Optional, defaults to 1000.
+   * @param suffixStart - How high a number must be before a suffix will be added. Optional, defaults to 1000. Must be greater than or equal to 1000 if specified.
    * @param isInteger - Whether the number represents an integer. Integers do not display fractional digits until a suffix is present. Optional, defaults to false.
    * @returns Formatted number.
    */
@@ -10116,7 +10127,12 @@ interface GameInfo {
  * @public
  */
 interface AutocompleteData {
-  /** All server hostnames */
+  /**
+   * All server hostnames.
+   *
+   * Some servers are hidden until you satisfy their requirements. This array does not contain those servers if you do
+   * not satisfy their requirements.
+   */
   servers: string[];
   /** All scripts on the current server */
   scripts: string[];

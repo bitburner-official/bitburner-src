@@ -40,7 +40,7 @@ AutocompleteData is an object with the following properties;
     filename:   // the name of the script file containing the autocomplete function.
     hostname:   // the name of the host server the script would be running on.
     processes:  // list of all processes running on the current server.
-    servers:    // list of all servers in the game.
+    servers:    // list of all servers in the game. Some servers are hidden until you satisfy their requirements. This array does not contain those servers if you do not satisfy their requirements.
     txts:       // list of all text files on the current server.
     scripts:    // list of all scripts on the current server.
     flags:      // the same flags function as passed with ns. Calling this function adds all the flags as autocomplete arguments.
