@@ -8,7 +8,7 @@ export const hintLiterature: LiteratureName[] = [
   LiteratureName.TimingServerHint,
   LiteratureName.BinaryServerHint,
   LiteratureName.DogNameHint,
-  LiteratureName.FactoryDefaultHint];
-
+  LiteratureName.FactoryDefaultHint,
+];
 
 // TODO: longer dictionary parts in hint from commonPasswordDictionary

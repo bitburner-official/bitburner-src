@@ -29,10 +29,9 @@ export function DWNetDisplayWrapper(): React.ReactElement {
     draggableBackground?.current?.addEventListener("wheel", (e) => e.preventDefault());
   }, [rerender]);
 
-  const allowAuth = (server: BaseServer | null) =>  !!server && (server.hasAdminRights ||
-      server.serversOnNetwork.some((neighbor) => GetServer(neighbor)?.hasAdminRights));
-
-
+  const allowAuth = (server: BaseServer | null) =>
+    !!server &&
+    (server.hasAdminRights || server.serversOnNetwork.some((neighbor) => GetServer(neighbor)?.hasAdminRights));
 
   const darkWebRoot = GetServer(SpecialServers.DarkWeb);
   if (!darkWebRoot) {
@@ -83,7 +82,6 @@ export function DWNetDisplayWrapper(): React.ReactElement {
     // draggableBackground.current.scrollTop += height * 0.5;
   };
 
-
   return (
     <Container maxWidth="lg" sx={{ mx: 0 }}>
       <Typography variant={"h6"}>Dark Web</Typography>
@@ -119,8 +117,9 @@ export function DWNetDisplayWrapper(): React.ReactElement {
           ></canvas>
           <DWServerComponent server={darkWebRoot} enableAuth={true} />
           {DarkWebState.DarkWebNetwork.map((row, i) =>
-            row.map((server, j) => (server ?
-              <DWServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)}/> : "")),
+            row.map((server, j) =>
+              server ? <DWServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} /> : "",
+            ),
           )}
         </div>
       </div>

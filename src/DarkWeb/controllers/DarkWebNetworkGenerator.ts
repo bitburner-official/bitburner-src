@@ -1,13 +1,14 @@
-import {
-  DarkWebState, NET_DEPTH, NET_WIDTH, SERVER_DENSITY,
-} from "../models/DarkWebState";
+import { DarkWebState, NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarkWebState";
 import { connectServers, DeleteServer, GetAllServers, GetServer } from "../../Server/AllServers";
 import {
   addGuaranteedConnection,
-  addRandomServers, balanceServers,
+  addRandomServers,
+  balanceServers,
   disconnectServer,
   getDarkWebServers,
-  getNeighborsOnRow, getServersOnRowAbove, getServersOnRowBelow,
+  getNeighborsOnRow,
+  getServersOnRowAbove,
+  getServersOnRowBelow,
 } from "./DarkWebNetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
@@ -38,12 +39,12 @@ export const clearDarkWebNetwork = () => {
   }
   const darkwebRoot = GetServer(SpecialServers.DarkWeb);
   if (darkwebRoot) {
-    darkwebRoot.serversOnNetwork = []
+    darkwebRoot.serversOnNetwork = [];
   }
 };
 
 export const loadDarkWebNetwork = () => {
-  const darkWebServers = GetAllServers().filter(s => s.darkWebData);
+  const darkWebServers = GetAllServers().filter((s) => s.darkWebData);
   for (const server of darkWebServers) {
     if (server.darkWebData) {
       disconnectServer(server, true);
@@ -51,7 +52,7 @@ export const loadDarkWebNetwork = () => {
     }
   }
   balanceServers();
-}
+};
 
 export const addRandomConnections = (server: BaseServer) => {
   const darkWebData = server.darkWebData;

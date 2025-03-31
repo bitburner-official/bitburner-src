@@ -1,9 +1,4 @@
-import {
-  getName,
-  getPasswordType,
-  getRandomIcon,
-  Minigames,
-} from "../controllers/DarkWebServerGenerator";
+import { getName, getPasswordType, getRandomIcon, Minigames } from "../controllers/DarkWebServerGenerator";
 import { Icon } from "../controllers/ServerIcon";
 import { IConstructorParams, Server } from "../../Server/Server";
 import { AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
@@ -52,7 +47,7 @@ export const DWebServerBuilder = (options: DarkWebServerData, name: string = get
     ip: ip,
     organizationName: "darkweb",
     maxRam: 16,
-    requiredHackingSkill: Math.floor(((darkWebData.difficulty +1) * Math.random() * 10) ** 1.5),
+    requiredHackingSkill: Math.floor(((darkWebData.difficulty + 1) * Math.random() * 10) ** 1.5),
     hackDifficulty: 5,
     moneyAvailable: 0,
     numOpenPortsRequired: 69,
@@ -71,7 +66,7 @@ export const checkPassword = (attemptedPassword: string, server: BaseServer, thr
     throw new Error("Dark web server missing dark web data");
   }
   if (darkWebData.password === attemptedPassword) {
-    handleSuccessfulAuth(server, threads)
+    handleSuccessfulAuth(server, threads);
     return getGenericSuccess();
   }
   handleFailedAuth(server, threads);
@@ -79,39 +74,54 @@ export const checkPassword = (attemptedPassword: string, server: BaseServer, thr
   if (darkWebData.minigameType === Minigames.MastermindHint) {
     const { exactCharacters, misplacedCharacters } = getMastermindResponse(darkWebData.password, attemptedPassword);
     const message = `Hint: ${exactCharacters} symbols match, ${misplacedCharacters} ${
-          misplacedCharacters == 1 ? "is" : "are"
-        } close.`;
+      misplacedCharacters == 1 ? "is" : "are"
+    } close.`;
     return getFailureResponse(message, `${exactCharacters},${misplacedCharacters}`, darkWebData);
   } else if (darkWebData.minigameType === Minigames.GuessNumber) {
     const hintData = +attemptedPassword > +darkWebData.password ? "Lower" : "Higher";
     return getFailureResponse(darkWebData.passwordHint, hintData, darkWebData);
   } else if (darkWebData.minigameType === Minigames.Yesn_t) {
-    const response = attemptedPassword.split("").map((char, i) => char === darkWebData.password[i] ? "yes" : "yesn't").join(",");
+    const response = attemptedPassword
+      .split("")
+      .map((char, i) => (char === darkWebData.password[i] ? "yes" : "yesn't"))
+      .join(",");
     return getFailureResponse("that wasn't right", response, darkWebData);
   } else if (darkWebData.minigameType === Minigames.Synchronize) {
     const exactChars = getExactCorrectCharsCount(darkWebData.password, attemptedPassword);
     const closeChars = getMisplacedCorrectCharsCount(darkWebData.password, attemptedPassword);
-    const syncDecimal = ((exactChars + closeChars * 0.5) / darkWebData.password.length) * 100
+    const syncDecimal = ((exactChars + closeChars * 0.5) / darkWebData.password.length) * 100;
     const responseData = `${Math.round(syncDecimal * 10) / 10}`;
     return getFailureResponse(`Synchronization status: ${responseData}%`, responseData, darkWebData);
-  }else if (darkWebData.minigameType === Minigames.BinaryEncodedFeedback) {
+  } else if (darkWebData.minigameType === Minigames.BinaryEncodedFeedback) {
     const exactChars = getExactCorrectChars(darkWebData.password, attemptedPassword);
-    const binaryRepresentation = exactChars.reduce((acc, val, i) => acc + (val ? 2 ** (attemptedPassword.length - i): 0), 0);
+    const binaryRepresentation = exactChars.reduce(
+      (acc, val, i) => acc + (val ? 2 ** (attemptedPassword.length - i) : 0),
+      0,
+    );
     return getFailureResponse("Beep Boop", `${binaryRepresentation}`, darkWebData);
-  }else if (darkWebData.minigameType === Minigames.SpiceLevel) {
+  } else if (darkWebData.minigameType === Minigames.SpiceLevel) {
     const exactChars = getExactCorrectChars(darkWebData.password, attemptedPassword);
-    const pepperRepresentation = exactChars.map((val) => val ? "🌶️" : "").join("") || "0";
-    return getFailureResponse("Not spicy enough", `${pepperRepresentation}/${darkWebData.password.length}`, darkWebData);
-  } else if (darkWebData.minigameType === Minigames.ConvertToBase10 || darkWebData.minigameType === Minigames.parsedExpression) {
+    const pepperRepresentation = exactChars.map((val) => (val ? "🌶️" : "")).join("") || "0";
+    return getFailureResponse(
+      "Not spicy enough",
+      `${pepperRepresentation}/${darkWebData.password.length}`,
+      darkWebData,
+    );
+  } else if (
+    darkWebData.minigameType === Minigames.ConvertToBase10 ||
+    darkWebData.minigameType === Minigames.parsedExpression
+  ) {
     const parsedAttemptedPassword = parseFloat(attemptedPassword);
-    if (!isNaN(parsedAttemptedPassword) && Math.abs((parsedAttemptedPassword - +darkWebData.password) / +darkWebData.password ) < 0.001) {
+    if (
+      !isNaN(parsedAttemptedPassword) &&
+      Math.abs((parsedAttemptedPassword - +darkWebData.password) / +darkWebData.password) < 0.001
+    ) {
       // ignore small rounding errors during floating point operations
-      handleSuccessfulAuth(server, threads)
+      handleSuccessfulAuth(server, threads);
       return getGenericSuccess();
     }
     return getFailureResponse(darkWebData.passwordHint, darkWebData.passwordHintData ?? "", darkWebData);
-  }
-  else {
+  } else {
     const sharedChars =
       darkWebData.minigameType === Minigames.TimingAttack ? getSharedChars(darkWebData.password, attemptedPassword) : 0;
     return getFailureResponse(darkWebData.passwordHint, darkWebData.passwordHintData ?? "", darkWebData, sharedChars);
@@ -125,7 +135,7 @@ const getFailureResponse = (msg: string, data: string, darkWebData: DarkWebServe
   passwordLength: darkWebData.password.length,
   passwordFormat: getPasswordType(darkWebData.password),
   responseTime: getResponseTime(extraDelay),
-  modelId: darkWebData.minigameType
+  modelId: darkWebData.minigameType,
 });
 
 const getMastermindResponse = (password: string, attemptedPassword: string) => {
@@ -138,10 +148,10 @@ const getMastermindResponse = (password: string, attemptedPassword: string) => {
 const getExactCorrectChars = (password: string, attemptedPassword: string) =>
   password.split("").map((digit, i: number) => digit === attemptedPassword[i]);
 
-const getExactCorrectCharsCount = (password: string, attemptedPassword: string) => getExactCorrectChars(password, attemptedPassword).filter((isCorrect) => isCorrect).length;
+const getExactCorrectCharsCount = (password: string, attemptedPassword: string) =>
+  getExactCorrectChars(password, attemptedPassword).filter((isCorrect) => isCorrect).length;
 
 const getMisplacedCorrectCharsCount = (password: string, attemptedPassword: string) => {
-
   // filter out exact correct chars from both the attempted and correct password, to simplify checking for duplicate counts
   const remainingPasswordChars = password.split("").filter((digit, i) => digit !== attemptedPassword[i]);
   const remainingAttemptedPasswordChars = attemptedPassword.split("").filter((digit, i) => digit !== password[i]);
@@ -157,8 +167,7 @@ const getMisplacedCorrectCharsCount = (password: string, attemptedPassword: stri
   });
 
   return misplacedCorrectChars.length;
-}
-
+};
 
 const getGenericSuccess = (responseTime = 0) => ({
   status: SUCCESS_STATUS,

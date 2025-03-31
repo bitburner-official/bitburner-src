@@ -6,7 +6,6 @@ import { sleep } from "../../Go/boardAnalysis/goAI";
 import { getIcon, Icon } from "../controllers/ServerIcon";
 import { DarkWebEvents } from "../models/DarkWebState";
 import { BaseServer } from "../../Server/BaseServer";
-import { getRewardFromCache, handleSuccessfulAuth } from "../models/effects";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;

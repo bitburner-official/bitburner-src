@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { DWPasswordPromptModal } from "./DWPasswordPromptModal";
 import { getIcon, Icon } from "../controllers/ServerIcon";
-import {
-  dwebStyles,
-} from "./dwebStyles";
+import { dwebStyles } from "./dwebStyles";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
 import { DarkWebState } from "../models/DarkWebState";
@@ -40,11 +38,7 @@ export function DWServerComponent({ server, enableAuth }: DWServerProps): React.
   };
 
   return (
-    <Container
-      sx={getServerPositionStyles(server)}
-      className={`${color} ${classes.DWServer}`}
-      disableGutters
-    >
+    <Container sx={getServerPositionStyles(server)} className={`${color} ${classes.DWServer}`} disableGutters>
       <DWPasswordPromptModal open={open} onClose={handleClose} server={server} />
       <Container maxWidth="lg" sx={{ mx: 1, padding: 0, margin: 0 }} disableGutters>
         <Box className={`${classes.inlineFlexBox}`}>
@@ -57,16 +51,20 @@ export function DWServerComponent({ server, enableAuth }: DWServerProps): React.
           x:{server.darkWebData?.x ?? ""} y:{server.darkWebData?.y ?? ""}; Cha:{server.requiredHackingSkill}
         </Typography>
         <br />
-        {server.hostname == SpecialServers.DarkWeb ? "" :  <Button
-          variant="contained"
-          color="primary"
-          onClick={authButtonHandler}
-          sx={{ marginLeft: "23px" }}
-          disabled={!enableAuth}
-          className={classes.authButton}
-        >
-          Authenticate
-        </Button>}
+        {server.hostname == SpecialServers.DarkWeb ? (
+          ""
+        ) : (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={authButtonHandler}
+            sx={{ marginLeft: "23px" }}
+            disabled={!enableAuth}
+            className={classes.authButton}
+          >
+            Authenticate
+          </Button>
+        )}
       </Container>
     </Container>
   );

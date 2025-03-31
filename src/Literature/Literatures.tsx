@@ -680,20 +680,12 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.CacheHint1]: new Literature({
     title: "eGeoCacheing?",
     filename: LiteratureName.CacheHint1,
-    text: (
-      <Typography>
-        I've heard there are valuable .cache files to find out in the dark web.
-      </Typography>
-    ),
+    text: <Typography>I've heard there are valuable .cache files to find out in the dark web.</Typography>,
   }),
   [LiteratureName.CacheHint2]: new Literature({
     title: "Cache the Flag",
     filename: LiteratureName.CacheHint2,
-    text: (
-      <Typography>
-        I ran this .cache file I found and it had crazy stuff in it!
-      </Typography>
-    ),
+    text: <Typography>I ran this .cache file I found and it had crazy stuff in it!</Typography>,
   }),
   [LiteratureName.ServerOfflineHint]: new Literature({
     title: "Server offline again",
@@ -707,11 +699,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.DarkWebRebootHint]: new Literature({
     title: "Darkweb server rebooted",
     filename: LiteratureName.DarkWebRebootHint,
-    text: (
-      <Typography>
-        Darkweb servers are known to reboot sometimes, requiring scripts to be restarted.
-      </Typography>
-    ),
+    text: <Typography>Darkweb servers are known to reboot sometimes, requiring scripts to be restarted.</Typography>,
   }),
   [LiteratureName.PasswordServerHint]: new Literature({
     title: "Partial Password Jutsu",
@@ -734,28 +722,16 @@ export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.BinaryServerHint]: new Literature({
     title: "Raw Data?",
     filename: LiteratureName.BinaryServerHint,
-    text: (
-      <Typography>
-        Some servers only respond with raw binary data. I wonder what each bit represents?
-      </Typography>
-    ),
+    text: <Typography>Some servers only respond with raw binary data. I wonder what each bit represents?</Typography>,
   }),
   [LiteratureName.DogNameHint]: new Literature({
     title: "Dog Name Ideas",
     filename: LiteratureName.DogNameHint,
-    text: (
-      <Typography>
-        What should I name my dog? Maybe {dogNameDictionary.join(", ")}?
-      </Typography>
-    ),
+    text: <Typography>What should I name my dog? Maybe {dogNameDictionary.join(", ")}?</Typography>,
   }),
   [LiteratureName.FactoryDefaultHint]: new Literature({
     title: "Factory Default",
     filename: LiteratureName.FactoryDefaultHint,
-    text: (
-      <Typography>
-        The factory default is usually one of {defaultSettingsDictionary.join(", ")}.
-      </Typography>
-    ),
+    text: <Typography>The factory default is usually one of {defaultSettingsDictionary.join(", ")}.</Typography>,
   }),
 };

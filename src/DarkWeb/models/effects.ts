@@ -16,17 +16,16 @@ export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
   server.hasAdminRights = true;
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
 
-
   // TODO: clue notes
   addClue(server);
 
   // TODO: balance coding contract chance
   if (Math.random() < 0.1) {
-    generateContract({ server: server.hostname })
+    generateContract({ server: server.hostname });
   }
 
   // TODO: balance cache chance
-  const chance =  0.2 * (1.03 ** (server.darkWebData?.difficulty ?? 1))
+  const chance = 0.2 * 1.03 ** (server.darkWebData?.difficulty ?? 1);
   if (Math.random() < chance) {
     const prefix = cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
     const cacheFilename = resolveFilePath(`${prefix}_${Math.random().toString().substring(2, 5)}.cache` as FilePath);
@@ -34,41 +33,41 @@ export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
       server.caches.push(cacheFilename);
     }
   }
-}
+};
 
 export const handleFailedAuth = (server: BaseServer, threads: number) => {
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, false));
-}
+};
 
 export const hasCacheFileExtension = (path: string) => {
   return path.endsWith(".cache");
-}
+};
 
 export const getRewardFromCache = (server: BaseServer) => {
   Player.karma -= 10; // TODO: adjust karma balance
   const rewards = [getMoneyReward, getXpReward, getNextPortOpener, getCCTReward];
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
   reward(server.darkWebData?.difficulty ?? 1);
-}
+};
 
 export const getCCTReward = (difficulty: number) => {
   const contractCount = Math.min((difficulty + 1) / 4, 4);
-  tryGeneratingRandomContract( contractCount );
+  tryGeneratingRandomContract(contractCount);
   SnackbarEvents.emit(`New coding contracts are now available on the network`, ToastVariant.SUCCESS, 4000);
-}
+};
 
 export const getMoneyReward = (difficulty: number) => {
-  const reward = (1.2 ** difficulty) * 1e7 * getMultiplierFromCharisma(4) * Player.mults.crime_money; // TODO: adjust balance
+  const reward = 1.2 ** difficulty * 1e7 * getMultiplierFromCharisma(4) * Player.mults.crime_money; // TODO: adjust balance
   Player.gainMoney(reward, "other");
   SnackbarEvents.emit(`You have discovered a cache with ${formatMoney(reward)}`, ToastVariant.SUCCESS, 4000);
-}
+};
 
 export const getXpReward = (difficulty: number) => {
   const augCount = Player.augmentations.length;
-  const reward =  (1.2 ** difficulty) * 100 * (1.04 ** augCount) * Player.mults.charisma_exp; // TODO: adjust balance
+  const reward = 1.2 ** difficulty * 100 * 1.04 ** augCount * Player.mults.charisma_exp; // TODO: adjust balance
   Player.gainCharismaExp(reward);
   SnackbarEvents.emit(`You have discovered a cache with ${formatNumber(reward, 0)} cha XP`, ToastVariant.SUCCESS, 4000);
-}
+};
 
 /**
  * Returns a small multiplier based on charisma.
@@ -77,9 +76,10 @@ export const getXpReward = (difficulty: number) => {
 export const getMultiplierFromCharisma = (scalar = 1) => {
   const charisma = Player.skills.charisma;
   const growthRate = 0.0002; // Adjust this value to control the growth rate
-  return 1 + ((0.5) * (1 - Math.exp(-growthRate* charisma)) + (0.6) * (1 - Math.exp(-growthRate * 0.2 * charisma)) * scalar);
-}
-
+  return (
+    1 + (0.5 * (1 - Math.exp(-growthRate * charisma)) + 0.6 * (1 - Math.exp(-growthRate * 0.2 * charisma)) * scalar)
+  );
+};
 
 export const getNextPortOpener = (difficulty: number) => {
   const currentPlayerWork = (Player.currentWork as CreateProgramWork)?.programName;
@@ -93,7 +93,7 @@ export const getNextPortOpener = (difficulty: number) => {
     CompletedProgramName.deepScan2,
     CompletedProgramName.httpWorm,
     CompletedProgramName.sqlInject,
-    CompletedProgramName.formulas
+    CompletedProgramName.formulas,
   ];
 
   for (const program of programs) {
@@ -103,7 +103,7 @@ export const getNextPortOpener = (difficulty: number) => {
       return true;
     }
   }
-  if(!Player.hasWseAccount) {
+  if (!Player.hasWseAccount) {
     Player.hasWseAccount = true;
     SnackbarEvents.emit(`You have discovered a stolen WSE Account`, ToastVariant.SUCCESS, 4000);
     return true;
@@ -115,7 +115,7 @@ export const getNextPortOpener = (difficulty: number) => {
   }
 
   return getXpReward(difficulty);
-}
+};
 
 // TODO: balance xp gain
 export const calculatePasswordAttemptChaGain = (server: BaseServer, threads: number = 1, success = false) => {
@@ -126,7 +126,7 @@ export const calculatePasswordAttemptChaGain = (server: BaseServer, threads: num
   const alreadyHackedMult = server.hasAdminRights ? 0.05 : 1;
   const successMult = success && !server.hasAdminRights ? 5 : 1;
   return xpGain * alreadyHackedMult * successMult * threads * Player.mults.charisma_exp;
-}
+};
 
 // TODO: balance password clue spawn rate
 const addClue = (server: BaseServer) => {
@@ -158,7 +158,10 @@ const addClue = (server: BaseServer) => {
     });
     const neighboringServer = neighboringServerName ? GetServer(neighboringServerName) : null;
     if (neighboringServer) {
-      server.writeToTextFile(passwordHintName as TextFilePath, `Remember this password: ${neighboringServer.darkWebData?.password}`);
+      server.writeToTextFile(
+        passwordHintName as TextFilePath,
+        `Remember this password: ${neighboringServer.darkWebData?.password}`,
+      );
       return;
     }
   }
@@ -166,12 +169,21 @@ const addClue = (server: BaseServer) => {
   // non-connected nearby server's password (includes server name)
   if (Math.random() < 0.1) {
     const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
-    const targetServer = getAllAdjacentNeighbors(server.darkWebData.x, server.darkWebData.y).find((neighbor) =>
-      neighbor && neighbor?.darkWebData && !neighbor?.hasAdminRights && neighbor.darkWebData.password && !server.serversOnNetwork.includes(neighbor.hostname));
+    const targetServer = getAllAdjacentNeighbors(server.darkWebData.x, server.darkWebData.y).find(
+      (neighbor) =>
+        neighbor &&
+        neighbor?.darkWebData &&
+        !neighbor?.hasAdminRights &&
+        neighbor.darkWebData.password &&
+        !server.serversOnNetwork.includes(neighbor.hostname),
+    );
 
     if (targetServer) {
-      server.writeToTextFile(hintFileName as TextFilePath, `Server: ${targetServer?.hostname} Password: ${targetServer?.darkWebData?.password}`);
+      server.writeToTextFile(
+        hintFileName as TextFilePath,
+        `Server: ${targetServer?.hostname} Password: ${targetServer?.darkWebData?.password}`,
+      );
     }
     return;
   }
-}
+};

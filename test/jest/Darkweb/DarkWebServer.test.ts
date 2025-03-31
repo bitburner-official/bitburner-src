@@ -7,7 +7,8 @@ import {
   encodeNumberInBaseN,
   parseBaseNNumberString,
   getConvertToBase10Server,
-  parseSimpleArithmeticExpression, generateSimpleArithmeticExpression,
+  parseSimpleArithmeticExpression,
+  generateSimpleArithmeticExpression,
 } from "../../../src/DarkWeb/controllers/DarkWebServerGenerator";
 import { checkPassword, SUCCESS_STATUS, AUTH_FAILURE_STATUS } from "../../../src/DarkWeb/models/DarkWebServerData";
 import { defaultSettingsDictionary } from "../../../src/DarkWeb/models/dictionaryData";
@@ -36,7 +37,6 @@ describe("DarkWebServer Tests", () => {
     expect(failedAttemptResponse.passwordLength).toBe(server.darkWebData.password.length);
     expect(server.hasAdminRights).toBe(false);
 
-    
     expect(checkPassword(server.darkWebData.password, server).status).toBe(SUCCESS_STATUS);
     expect(server.hasAdminRights).toBe(true);
   });
@@ -45,17 +45,16 @@ describe("DarkWebServer Tests", () => {
     const server = getDefaultPasswordServer(difficulty, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = checkPassword("wrongPassword", server);
-    
+
     expect(failedAttemptResponse.status).toBe(AUTH_FAILURE_STATUS);
     expect(failedAttemptResponse.passwordLength).toBe(server.darkWebData.password.length);
     expect(server.hasAdminRights).toBe(false);
-    
+
     expect(defaultSettingsDictionary.includes(server.darkWebData.password)).toBe(true);
 
     expect(checkPassword(server.darkWebData.password, server).status).toBe(SUCCESS_STATUS);
     expect(server.hasAdminRights).toBe(true);
   });
-
 
   test("getMastermindHintServer creates a server with mastermind hint", () => {
     const password = "11223334";
@@ -111,7 +110,7 @@ describe("DarkWebServer Tests", () => {
 
     const wrongPasswordWithTwoMatchingDigits = server.darkWebData.password.substring(0, 2) + "     ";
     const failedAttemptResponse = checkPassword(wrongPasswordWithTwoMatchingDigits, server);
-    
+
     expect(failedAttemptResponse.status).toBe(401);
     expect(server.hasAdminRights).toBe(false);
     expect(failedAttemptResponse.passwordLength).toBe(server.darkWebData.password.length);
@@ -141,7 +140,6 @@ describe("DarkWebServer Tests", () => {
   });
 
   test(" getConvertToBase10Server creates a server with a correct password hint", () => {
-
     const server = getConvertToBase10Server(20, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = checkPassword("wrongPassword", server);
@@ -157,10 +155,7 @@ describe("DarkWebServer Tests", () => {
     expect(result.status).toBe(SUCCESS_STATUS);
   });
 
-
-
   test("encodeNumberInBaseN and parseBaseNNumberString encode/decode numbers correctly", () => {
-
     expect(encodeNumberInBaseN(15, 5.5)).toBe("24");
     expect(encodeNumberInBaseN(16, 5.5)).toBe("25");
     expect(encodeNumberInBaseN(17, 5.5)).toBe("30.24");
@@ -168,7 +163,7 @@ describe("DarkWebServer Tests", () => {
     expect(parseBaseNNumberString("24", 5.5)).toBe(15);
     expect(parseBaseNNumberString("25", 5.5)).toBe(16);
 
-    const aprox = parseBaseNNumberString("30.24", 5.5)
+    const aprox = parseBaseNNumberString("30.24", 5.5);
     expect(Math.abs(aprox - 17) < 0.1).toBe(true);
   });
 
@@ -179,11 +174,27 @@ describe("DarkWebServer Tests", () => {
     expect(parseSimpleArithmeticExpression("5 * ( 6 + 7 )")).toBe(65);
     expect(parseSimpleArithmeticExpression("4 + 5 * ( 6 + 7 ) / 2")).toBe(36.5);
     expect(parseSimpleArithmeticExpression("1 + 3 * ( 4 / 5 ) / 2 + 4 ")).toBe(6.2);
-    expect(Math.abs(parseSimpleArithmeticExpression("1 + 3 * ((4 / 5) / 2 ) * 3 + 4 "))- 8.6 < 0.01 ).toBe(true);
-    expect(Math.abs(parseSimpleArithmeticExpression("23 * ( 41 + 76 + 32 * 27 * 6 ) - 34 - 49 + 93 - ( 11 / 41 - 62 / 6 + 5 ) * 19 - 0"))- 122029.235 < 0.9 ).toBe(true);
+    expect(Math.abs(parseSimpleArithmeticExpression("1 + 3 * ((4 / 5) / 2 ) * 3 + 4 ")) - 8.6 < 0.01).toBe(true);
+    expect(
+      Math.abs(
+        parseSimpleArithmeticExpression(
+          "23 * ( 41 + 76 + 32 * 27 * 6 ) - 34 - 49 + 93 - ( 11 / 41 - 62 / 6 + 5 ) * 19 - 0",
+        ),
+      ) -
+        122029.235 <
+        0.9,
+    ).toBe(true);
     expect(parseSimpleArithmeticExpression("48 - 38 * 24 + ( 72 / 8 * 4 ) - 76 * 61 * 16")).toBe(-75004);
-    expect(Math.ceil(parseSimpleArithmeticExpression("8 / 15 / 91 / ( 54 * 10 * 84 ) - 77 * 83 + ( 83 * 75 / 8 ) + 54"))).toBe(-5558);
-    expect(parseSimpleArithmeticExpression("37 / 8 / 81 / ( 1 + ( 80 * 31 ) - 26 - 53 ) / 52 / ( 18 * 72 / 78 ) * 83 * ( 21 * 88 + 96 ) + 23")).toBeCloseTo(24.61, -1);
-    expect(parseSimpleArithmeticExpression("94 / ( 76 * 63 * ( 89 * 33 ) + 70 ) * 13 * 73 * 61 * 81 * 74")).toBeCloseTo(2319.425);
+    expect(
+      Math.ceil(parseSimpleArithmeticExpression("8 / 15 / 91 / ( 54 * 10 * 84 ) - 77 * 83 + ( 83 * 75 / 8 ) + 54")),
+    ).toBe(-5558);
+    expect(
+      parseSimpleArithmeticExpression(
+        "37 / 8 / 81 / ( 1 + ( 80 * 31 ) - 26 - 53 ) / 52 / ( 18 * 72 / 78 ) * 83 * ( 21 * 88 + 96 ) + 23",
+      ),
+    ).toBeCloseTo(24.61, -1);
+    expect(parseSimpleArithmeticExpression("94 / ( 76 * 63 * ( 89 * 33 ) + 70 ) * 13 * 73 * 61 * 81 * 74")).toBeCloseTo(
+      2319.425,
+    );
   });
 });

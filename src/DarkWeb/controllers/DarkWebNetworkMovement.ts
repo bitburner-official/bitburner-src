@@ -3,14 +3,10 @@ import { DarkWebEvents, DarkWebState, NET_DEPTH, NET_WIDTH, SERVER_DENSITY } fro
 import { getDarkWebServer } from "./DarkWebServerGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
-import {
-  addServerToNetwork,
-  AIR_GAP_DEPTH,
-} from "./DarkWebNetworkGenerator";
+import { addServerToNetwork, AIR_GAP_DEPTH } from "./DarkWebNetworkGenerator";
 import { stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-
 
 export const mutateDarkWeb = () => {
   const servers = getDarkWebServers();
@@ -57,12 +53,11 @@ export const mutateDarkWeb = () => {
     disconnectServer(server3);
   }
 
-
   if (Math.random() < 0.1) {
     // balance network to stay at a certain density
     balanceServers();
   }
-}
+};
 
 const deleteRandomServers = (count = 1) => {
   for (let i = 0; i < count; i++) {
@@ -76,8 +71,7 @@ const deleteRandomServers = (count = 1) => {
     DeleteServer(serverToDelete.hostname);
   }
   sanitizeDarkwebNetwork();
-}
-
+};
 
 export const addRandomServers = (count = 1) => {
   for (let i = 0; i < count; i++) {
@@ -88,7 +82,7 @@ export const addRandomServers = (count = 1) => {
       DeleteServer(newServer.hostname);
     }
   }
-}
+};
 
 export const balanceServers = () => {
   if (getDarkWebServers().length > NET_DEPTH * NET_WIDTH * SERVER_DENSITY) {
@@ -99,7 +93,7 @@ export const balanceServers = () => {
     addRandomServers(serversToAdd);
   }
   sanitizeDarkwebNetwork();
-}
+};
 
 export const moveServer = (server: BaseServer) => {
   const darkWebData = server.darkWebData;
@@ -137,7 +131,6 @@ export const moveServer = (server: BaseServer) => {
   return false;
 };
 
-
 export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) => {
   if (server === DarkWebState.openServer || server.isConnectedTo) {
     return false;
@@ -149,7 +142,7 @@ export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) 
       disconnectServers(server, connectedServer as Server);
     }
   });
-}
+};
 
 export const restartServer = (server: BaseServer) => {
   if (server === DarkWebState.openServer || server.isConnectedTo) {
@@ -166,12 +159,11 @@ export const restartServer = (server: BaseServer) => {
         return true;
       }
     }
-
   }
   disconnectServer(server);
   addGuaranteedConnection(server);
   addGuaranteedConnection(server);
-}
+};
 
 export const addGuaranteedConnection = (server: BaseServer) => {
   const darkWebData = server.darkWebData;
@@ -185,8 +177,7 @@ export const addGuaranteedConnection = (server: BaseServer) => {
   }
   const neighbor = neighbors[Math.floor(Math.random() * neighbors.length)];
   connectServers(server, neighbor);
-}
-
+};
 
 export const getNeighborsOnRow = (x: number, y: number): BaseServer[] => {
   const neighbors: BaseServer[] = [];
@@ -226,8 +217,7 @@ export const getAllAdjacentNeighbors = (x: number, y: number): BaseServer[] => {
   const rowBelow = getServersOnRowBelow(x, true);
   const neighborsOnRow = getNeighborsOnRow(x, y);
   return [...rowAbove, ...rowBelow, ...neighborsOnRow];
-}
-
+};
 
 export const sanitizeDarkwebNetwork = () => {
   const darkweb = GetServer(SpecialServers.DarkWeb);
@@ -258,8 +248,7 @@ export const sanitizeDarkwebNetwork = () => {
       connectServers(server, darkweb);
     }
   }
-}
-
+};
 
 const isOnAirGap = (x: number): boolean => !!x && !(x % AIR_GAP_DEPTH);
 

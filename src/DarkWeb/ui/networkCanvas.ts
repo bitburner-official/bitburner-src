@@ -33,7 +33,7 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
       ctx.strokeStyle = server.hasAdminRights || connectedServer.hasAdminRights ? "green" : "grey";
       const startPosition = getPixelPosition(server, true);
       const endPosition = getPixelPosition(connectedServer, true);
-      ctx.moveTo(startPosition.left , startPosition.top);
+      ctx.moveTo(startPosition.left, startPosition.top);
       ctx.lineTo(endPosition.left, endPosition.top);
       ctx.stroke();
     }
@@ -41,15 +41,14 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
 };
 
 export const getPixelPosition = (server: BaseServer, centered = false) => {
-
   const centeredOffsetHorizontal = centered ? DW_SERVER_WIDTH / 2 : 0;
   const centeredOffsetVertical = centered ? DW_SERVER_HEIGHT / 2 : 0;
 
-  if (server.hostname === SpecialServers.DarkWeb){
+  if (server.hostname === SpecialServers.DarkWeb) {
     return {
       top: MAP_BORDER_WIDTH * 0.2 + (centered ? centeredOffsetVertical : 0),
       left: (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * NET_WIDTH * 0.5 + (centered ? centeredOffsetHorizontal : 0),
-    }
+    };
   }
 
   const coords = getCoordinates(server);
@@ -61,7 +60,7 @@ export const getPixelPosition = (server: BaseServer, centered = false) => {
   return {
     top: heightOfServers + MAP_BORDER_WIDTH + centeredOffsetVertical,
     left: widthOfServers + MAP_BORDER_WIDTH + centeredOffsetHorizontal + staggeredHorizontalOffset,
-  }
+  };
 };
 
 const getCoordinates = (server: BaseServer) => {
@@ -72,7 +71,5 @@ const getCoordinates = (server: BaseServer) => {
   return {
     x: darkWebData.x,
     y: darkWebData.y,
-  }
-}
-
-
+  };
+};

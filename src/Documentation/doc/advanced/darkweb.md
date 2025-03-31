@@ -10,6 +10,7 @@ This is currently a design document, but eventually will be the in-game player d
 ## Gameplay:
 
 - The dark web and the servers on it are not reliable
+
   - Servers will sometimes move around the dark web, severing old connections and adding new ones
   - The darkweb can be circular (it is not a tree) and it also will not be fully connected
   - Some areas can only be accessed by "hitching a ride" on a server that moved there
@@ -18,6 +19,7 @@ This is currently a design document, but eventually will be the in-game player d
   - Some servers change their generated names or IPs occasionally, requiring the player to mark them somehow?
 
 - Players will sometimes discover things on servers they gain access to
+
   - Hints to different types of security vulnerabilities
   - Passwords for other servers in a note
   - Hints to parts of servers' passwords (or simple cipher / encoded password)
@@ -57,25 +59,25 @@ This is currently a design document, but eventually will be the in-game player d
 
 - servers renamed occasionally?
 
-- packet sniffing 
+- packet sniffing
+
   - mostly garbage data, sometimes has password
   - sniffed data includes fake passwords, html, rickroll, random garbage, lorem ipsum, silly google searches
 
-
 - Clue notes on servers
+
   - passwords for another server
-  - hints to password tables, 
+  - hints to password tables,
   - hints to vulnerabilities,
   - partial passwords?
 
 - File/status viewer for darkweb servers?
 
-
 - server that returns yes/no in its failure response
   - yes, the password has X as one of its factors
 - server that returns a string in response to the attempt?
-  - result: (encoded attempt) expectation: (encoded password)
 
+  - result: (encoded attempt) expectation: (encoded password)
 
 - Harden existing commands against loops in network? or exclude darkweb from them?
 - Limit ns commands from use on darkweb servers
@@ -83,11 +85,8 @@ This is currently a design document, but eventually will be the in-game player d
   - exec (run? spawn?)
   - ns.scp & scp
   - hack against, run hack on +weak +grow
-
-  
 - add code injection to break eval()
 - change arithmatic symbols to break eval() injection?
-
 
 - Generate interesting server names
 
@@ -96,8 +95,6 @@ This is currently a design document, but eventually will be the in-game player d
   - reboots remaining servers
   - adds a couple new servers
   - Runs on a timer, or when logging in after being online for a while?
-
-
 
 ## TODO later:
 
@@ -118,29 +115,30 @@ https://discord.com/channels/415207508303544321/459097632896188436/1350613323737
 https://discord.com/channels/415207508303544321/459097632896188436/1345773862263984208
 https://discord.com/channels/415207508303544321/415213435974975508/1352628138261086339
 
-
 ## Idea scratch space
 
-- database server 
+- database server
+
   - basic "encryption" on its txt file
   - contains user data file with multiple user passwords?
 
 - honeypot servers
+
   - black hole - kill any script that tries to scp stuff onto it
   - rickroll reward cache
   - "ad virus" - logs adds to the toast or to terminal. Can be removed from player's home server?
 
   - packet sniffing shows signature things for honeypots
+
     - empty string for black hole
     - lyrics for rickroll?
     - totally normal server .jpeg
 
   - glitchy UI?
   - scripts crash?
-  - 
+  -
   - accept all passwords?
   - Edit scripts running on them?
-
 
 - man in the middle attack?
 
@@ -177,7 +175,6 @@ https://discord.com/channels/415207508303544321/415213435974975508/1352628138261
   - Sometimes player script is overwritten by nothing but an empty script that occasionally logs something ominous
   - Sometimes servers are full because of bloated, idle, non-player scripts
 
-
 - Hubs or superconnections?
 - treasure chest server?
 
@@ -185,4 +182,3 @@ https://discord.com/channels/415207508303544321/415213435974975508/1352628138261
 
 - hide servers not yet explored near? (later upgrade?)
 - show all servers button
-

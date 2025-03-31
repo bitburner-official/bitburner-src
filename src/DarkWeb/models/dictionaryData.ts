@@ -3,7 +3,6 @@ export const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 export const special = "!@#$%^&*()_+-=[]{}|;:,.<>?";
 export const unicode = "¼░╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿";
 
-
 export const defaultSettingsDictionary = ["admin", "password", "0000", "12345"];
 
 export const dogNameDictionary = ["fido", "spot", "rover", "max"];
@@ -135,4 +134,4 @@ export const commonPasswordDictionary = [
   "thunder",
   "taylor",
   "matrix",
-]
+];

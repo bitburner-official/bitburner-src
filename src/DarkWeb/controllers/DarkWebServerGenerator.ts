@@ -3,10 +3,13 @@ import { Icon } from "./ServerIcon";
 import { Server } from "../../Server/Server";
 import {
   commonPasswordDictionary,
-  defaultSettingsDictionary, dogNameDictionary, EUCountries,
+  defaultSettingsDictionary,
+  dogNameDictionary,
+  EUCountries,
   letters,
   numbers,
-  special, unicode,
+  special,
+  unicode,
 } from "../models/dictionaryData";
 
 export enum Minigames {
@@ -41,7 +44,7 @@ export const getDarkWebServer = (difficulty: number, x: number, y: number): Serv
     getYesn_tServer,
     getSpiceLevelServer,
     getConvertToBase10Server,
-  ]
+  ];
   const hardServers = [
     getLargestPrimeFactorServer,
     getLargeDictionaryServer,
@@ -49,17 +52,17 @@ export const getDarkWebServer = (difficulty: number, x: number, y: number): Serv
     getTimingAttackServer,
     getBinaryEncodedFeedbackServer,
     getParseArethmeticExpressionServer,
-  ]
+  ];
   if (difficulty <= 2) {
     const serverBuilders = [getNoPasswordServer, ...easyServers];
-    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty,x, y);
+    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, x, y);
   }
   if (difficulty <= 8) {
     const serverBuilders = [...easyServers, ...mediumServers];
-    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty,x, y);
+    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, x, y);
   }
   const serverBuilders = [getSortedEchoVulnServer, ...mediumServers, ...hardServers];
-  return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty,x, y);
+  return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, x, y);
 };
 
 export const getName = (difficulty: number): string => {
@@ -149,7 +152,7 @@ export const getNoPasswordServer = (difficulty: number, x: number, y: number): S
     "Did I set a code?",
     "I didn't set a password",
   ];
-  return getDictionaryAttackServer(difficulty,x, y, [""], hintTemplates, Minigames.NoPassword);
+  return getDictionaryAttackServer(difficulty, x, y, [""], hintTemplates, Minigames.NoPassword);
 };
 
 export const getDefaultPasswordServer = (difficulty: number, x: number, y: number): Server => {
@@ -160,12 +163,19 @@ export const getDefaultPasswordServer = (difficulty: number, x: number, y: numbe
     "I never changed the password",
     "It's still the factory settings",
   ];
-  return getDictionaryAttackServer(difficulty,x, y, defaultSettingsDictionary, hintTemplates, Minigames.DefaultPassword);
+  return getDictionaryAttackServer(
+    difficulty,
+    x,
+    y,
+    defaultSettingsDictionary,
+    hintTemplates,
+    Minigames.DefaultPassword,
+  );
 };
 
 export const getDogNameServer = (difficulty: number, x: number, y: number): Server => {
   const hintTemplates = ["It's my dog's name", "It's the dog's name", "my first dog's name"];
-  return getDictionaryAttackServer(difficulty,x, y, dogNameDictionary, hintTemplates, Minigames.DogNames);
+  return getDictionaryAttackServer(difficulty, x, y, dogNameDictionary, hintTemplates, Minigames.DogNames);
 };
 
 export const getMastermindHintServer = (difficulty: number, x: number, y: number): Server => {
@@ -190,7 +200,7 @@ export const getTimingAttackServer = (difficulty: number, x: number, y: number):
     "I considered it for a bit, but that's not it",
     "I spent some time on it, but that's not the password",
   ];
-  const length = 3 + (difficulty/3);
+  const length = 3 + difficulty / 3;
   return DWebServerBuilder(
     {
       icon: getRandomIcon(),
@@ -240,9 +250,9 @@ export const getLargestPrimeFactorServer = (difficulty: number, x: number, y: nu
   );
 };
 
-export const getGuessNumberServer = (difficulty: number,  x: number, y: number): Server => {
+export const getGuessNumberServer = (difficulty: number, x: number, y: number): Server => {
   const password = `${Math.floor(Math.random() * 10 * (15 * (difficulty + 1)))}`;
-  const maxNumber = 10 ** (password.length +1);
+  const maxNumber = 10 ** (password.length + 1);
   return DWebServerBuilder(
     {
       icon: getRandomIcon(),
@@ -255,18 +265,32 @@ export const getGuessNumberServer = (difficulty: number,  x: number, y: number):
     },
     getName(difficulty),
   );
-}
+};
 
 export const getLargeDictionaryServer = (difficulty: number, x: number, y: number): Server => {
-  return getDictionaryAttackServer(difficulty, x, y, commonPasswordDictionary, ["It's a common password"], Minigames.CommonPasswordDictionary);
-}
+  return getDictionaryAttackServer(
+    difficulty,
+    x,
+    y,
+    commonPasswordDictionary,
+    ["It's a common password"],
+    Minigames.CommonPasswordDictionary,
+  );
+};
 
 export const getEuCountryDictionaryServer = (difficulty: number, x: number, y: number): Server => {
-  return getDictionaryAttackServer(difficulty, x, y, EUCountries, ["My favorite EU country"], Minigames.EUCountryDictionary);
-}
+  return getDictionaryAttackServer(
+    difficulty,
+    x,
+    y,
+    EUCountries,
+    ["My favorite EU country"],
+    Minigames.EUCountryDictionary,
+  );
+};
 
 export const getYesn_tServer = (difficulty: number, x: number, y: number): Server => {
-  const password = getPassword(3 + (difficulty/3), true, difficulty > 8, false, false);
+  const password = getPassword(3 + difficulty / 3, true, difficulty > 8, false, false);
   return DWebServerBuilder(
     {
       icon: getRandomIcon(),
@@ -279,10 +303,10 @@ export const getYesn_tServer = (difficulty: number, x: number, y: number): Serve
     },
     getName(difficulty),
   );
-}
+};
 
 export const getBinaryEncodedFeedbackServer = (difficulty: number, x: number, y: number): Server => {
-  const password = getPassword(3 + (difficulty/3), true, difficulty > 8, false, false);
+  const password = getPassword(3 + difficulty / 3, true, difficulty > 8, false, false);
   return DWebServerBuilder(
     {
       icon: getRandomIcon(),
@@ -295,10 +319,10 @@ export const getBinaryEncodedFeedbackServer = (difficulty: number, x: number, y:
     },
     getName(difficulty),
   );
-}
+};
 
 export const getSpiceLevelServer = (difficulty: number, x: number, y: number): Server => {
-  const password = getPassword(3 + (difficulty/3), true, difficulty > 8, false, false);
+  const password = getPassword(3 + difficulty / 3, true, difficulty > 8, false, false);
   return DWebServerBuilder(
     {
       icon: getRandomIcon(),
@@ -311,11 +335,11 @@ export const getSpiceLevelServer = (difficulty: number, x: number, y: number): S
     },
     getName(difficulty),
   );
-}
+};
 
 export const getConvertToBase10Server = (difficulty: number, x: number, y: number): Server => {
   const password = Math.floor(Math.random() * 10 * (10 * (difficulty + 1)));
-  const bases = [2,3,4,5,6,7,8,9,11,12,13,14,15,16];
+  const bases = [2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16];
   let base = bases[Math.floor(Math.random() * bases.length)];
   if (difficulty > 12) {
     base += bases[Math.floor(Math.random() * bases.length)] / 10;
@@ -334,7 +358,7 @@ export const getConvertToBase10Server = (difficulty: number, x: number, y: numbe
     },
     getName(difficulty),
   );
-}
+};
 
 export const getParseArethmeticExpressionServer = (difficulty: number, x: number, y: number): Server => {
   const expression = generateSimpleArithmeticExpression(difficulty);
@@ -352,7 +376,7 @@ export const getParseArethmeticExpressionServer = (difficulty: number, x: number
     },
     getName(difficulty),
   );
-}
+};
 
 // TODO: most common item in array server
 // TODO: more leetcode array manipulation servers
@@ -368,7 +392,6 @@ export const getParseArethmeticExpressionServer = (difficulty: number, x: number
 
 // TODO: eval pwn server
 
-
 export const encodeNumberInBaseN = (decimalNumber: number, base: number) => {
   const characters = [...numbers.split(""), "A", "B", "C", "D", "E", "F"];
   let digits = Math.floor(Math.log(decimalNumber) / Math.log(base));
@@ -379,38 +402,37 @@ export const encodeNumberInBaseN = (decimalNumber: number, base: number) => {
     if (digits === -1) {
       result += ".";
     }
-    const place = Math.floor(remaining / (base ** digits));
+    const place = Math.floor(remaining / base ** digits);
     result += characters[place];
-    remaining -= place * (base ** digits);
+    remaining -= place * base ** digits;
     digits -= 1;
   }
 
   return result;
-}
+};
 
 export const parseBaseNNumberString = (numberString: string, base: number): number => {
   const characters = [...numbers.split(""), "A", "B", "C", "D", "E", "F"];
   let result = 0;
   let index = 0;
-  let digit = numberString.split(".")[0].length -1;
+  let digit = numberString.split(".")[0].length - 1;
 
-  while(index < numberString.length) {
+  while (index < numberString.length) {
     const currentDigit = numberString[index];
     if (currentDigit === ".") {
       index += 1;
       continue;
     }
-    result += characters.indexOf(currentDigit) * (base ** digit);
+    result += characters.indexOf(currentDigit) * base ** digit;
     index += 1;
     digit -= 1;
   }
 
   return result;
-}
+};
 
 // example:  4 + 5 * ( 6 + 7 ) / 2
 export const parseSimpleArithmeticExpression = (expression: string): number => {
-
   const tokens = expression.split("");
 
   // Identify parentheses
@@ -420,14 +442,14 @@ export const parseSimpleArithmeticExpression = (expression: string): number => {
       currentDepth += 1;
     } else if (token === ")") {
       currentDepth -= 1;
-      return currentDepth + 1
+      return currentDepth + 1;
     }
     return currentDepth;
-  })
+  });
   const depth1Start = depth.indexOf(1);
   // find the last 1 before the first 0 after depth1Start
   const firstZeroAfterDepth1Start = depth.indexOf(0, depth1Start);
-  const depth1End = firstZeroAfterDepth1Start === -1 ? depth.length -1 : firstZeroAfterDepth1Start -1;
+  const depth1End = firstZeroAfterDepth1Start === -1 ? depth.length - 1 : firstZeroAfterDepth1Start - 1;
   if (depth1Start !== -1) {
     const subExpression = tokens.slice(depth1Start + 1, depth1End).join("");
     const result = parseSimpleArithmeticExpression(subExpression);
@@ -439,10 +461,10 @@ export const parseSimpleArithmeticExpression = (expression: string): number => {
   let remainingExpression = tokens.join("");
 
   // breakdown and explanation for this regex: https://regex101.com/r/mZhiBn/1
-  const multiplicationDivisionRegex = /(-?\d*\.?\d+) *([*\/]) *(-?\d*\.?\d+)/;
+  const multiplicationDivisionRegex = /(-?\d*\.?\d+) *([*/]) *(-?\d*\.?\d+)/;
   let match = remainingExpression.match(multiplicationDivisionRegex);
 
-  while(match) {
+  while (match) {
     const [__, left, operator, right] = match;
     const result = operator === "*" ? parseFloat(left) * parseFloat(right) : parseFloat(left) / parseFloat(right);
     const resultString = Math.abs(result) < 0.000001 ? result.toFixed(20) : result.toString();
@@ -454,7 +476,7 @@ export const parseSimpleArithmeticExpression = (expression: string): number => {
   const additionSubtractionRegex = /(-?\d*\.?\d+) *([+-]) *(-?\d*\.?\d+)/;
   match = remainingExpression.match(additionSubtractionRegex);
 
-  while(match) {
+  while (match) {
     const [__, left, operator, right] = match;
     const result = operator === "+" ? parseFloat(left) + parseFloat(right) : parseFloat(left) - parseFloat(right);
     remainingExpression = remainingExpression.replace(match[0], result.toString());
@@ -462,10 +484,9 @@ export const parseSimpleArithmeticExpression = (expression: string): number => {
   }
 
   return parseFloat(remainingExpression);
-}
+};
 
 export const generateSimpleArithmeticExpression = (difficulty: number): string => {
-
   const operators = ["+", "-", "*", "/"];
   const operatorCount = Math.floor(difficulty / 4);
   const expression = [];
@@ -484,19 +505,18 @@ export const generateSimpleArithmeticExpression = (difficulty: number): string =
 
   const result = expression.join(" ");
 
-  try{
+  try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const calc = parseFloat(eval(result));
     if (Math.abs(calc) < 0.1) {
       return generateSimpleArithmeticExpression(difficulty);
     }
-  } catch(__) {
+  } catch (__) {
     return generateSimpleArithmeticExpression(difficulty);
   }
 
   return result;
-}
-
+};
 
 const getResponseTime = (additionalPasses = 0) => Math.floor(95 + Math.random() * 12 + additionalPasses * 25);
 
@@ -507,7 +527,6 @@ const getPassword = (
   allowSpecial = false,
   allowUnicode = false,
 ): string => {
-
   const characters =
     (allowNumbers ? numbers : "") +
     (allowLetters ? letters : "") +
