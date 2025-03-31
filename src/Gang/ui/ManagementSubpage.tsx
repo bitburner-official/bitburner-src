@@ -7,11 +7,20 @@ import { Typography } from "@mui/material";
 /** React Component for the subpage that manages gang members, the main page. */
 export function ManagementSubpage(): React.ReactElement {
   const gang = useGang();
+  const checkResult = gang.isTooWeak();
   return (
     <>
       <Typography variant="h4" color="primary">
         {gang.facName} (your Gang)
       </Typography>
+      {gang.territoryWarfareEngaged && checkResult.success && (
+        <Typography variant="h5" color="error">
+          {checkResult.message}
+          <br />
+          You should disable "Engage in Territory Clashes" in the Territory tab and improve your gang power before
+          enabling it again.
+        </Typography>
+      )}
       <Typography>
         <br />
         If a gang member is not earning much money or respect, the task you assigned might be too difficult. Consider

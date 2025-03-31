@@ -39,36 +39,15 @@ export function TerritorySubpage(): React.ReactElement {
             <Switch
               checked={gang.territoryWarfareEngaged}
               onChange={(event) => {
-                let canWinAtLeastOneGang = false;
-                for (const gangName of Object.keys(AllGangs)) {
-                  if (gang.facName === gangName) {
-                    continue;
-                  }
-                  if (getClashWinChance(gang.facName, gangName) >= 0.5) {
-                    canWinAtLeastOneGang = true;
-                    break;
-                  }
-                }
-                /**
-                 * tooLowGangPower is a special check. Before the first tick of territory clash, the power of all gangs
-                 * is 1, so the win chance of the player's gang against all gangs is 50%. If the player tries to enable
-                 * the clash in this short time frame, canWinAtLeastOneGang is true, but their gang will still be
-                 * crushed after the first clash tick.
-                 */
-                const tooLowGangPower = gang.getPower() < 2;
-                const needToBeWarned = !canWinAtLeastOneGang || tooLowGangPower;
                 /**
                  * Show a confirmation popup if the player tries to enable the territory clash when their gang is too
                  * weak and cannot win any other gangs.
                  */
-                if (event.target.checked && needToBeWarned) {
-                  let message = "Your gang is too weak.";
-                  if (!canWinAtLeastOneGang) {
-                    message += " Its win chances against all other gangs are below 50%.";
-                  }
+                const checkResult = gang.isTooWeak();
+                if (event.target.checked && checkResult.success) {
                   PromptEvent.emit({
                     txt:
-                      message +
+                      checkResult.message +
                       "\nOn average, you will always lose territory when being engaged in clashes.\n\nDo you really want to engage in territory clashes?",
                     resolve: (value: string | boolean) => {
                       if (value === true) {
