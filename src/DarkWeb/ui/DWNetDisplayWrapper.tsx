@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, PointerEventHandler, WheelEventHandler, useState } from "react";
+import React, { PointerEventHandler, useEffect, useRef, useState, WheelEventHandler } from "react";
 import { Container, Typography } from "@mui/material";
-import { DWServerComponent, getPixelPosition } from "./DWServerComponent";
+import { DWServerComponent } from "./DWServerComponent";
 import { useRerender } from "../../ui/React/hooks";
 import { DarkWebEvents, DarkWebState } from "../models/DarkWebState";
 import { GetServer } from "../../Server/AllServers";
-import { Server } from "../../Server/Server";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
+import { drawOnCanvas } from "./networkCanvas";
 
 export const DW_NET_WIDTH = 4000;
 export const DW_NET_HEIGHT = 6000;
@@ -22,45 +22,17 @@ export function DWNetDisplayWrapper(): React.ReactElement {
     DarkWebEvents.subscribe(() => {
       if (canvas.current) {
         rerender();
-        drawOnCanvas();
+        drawOnCanvas(canvas.current);
       }
     });
-    drawOnCanvas();
+    canvas.current && drawOnCanvas(canvas.current);
     draggableBackground?.current?.addEventListener("wheel", (e) => e.preventDefault());
   }, [rerender]);
 
-  const drawOnCanvas = () => {
-    const ctx = canvas.current?.getContext("2d");
-    if (ctx == null || !canvas.current) {
-      console.error("Could not get canvas context");
-      return;
-    }
-    ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
+  const allowAuth = (server: BaseServer | null) =>  !!server && (server.hasAdminRights ||
+      server.serversOnNetwork.some((neighbor) => GetServer(neighbor)?.hasAdminRights));
 
-    for (const server of DarkWebState.DarkWebNetwork.flat()) {
-      if (!server) {
-        continue;
-      }
 
-      // draw a line between each server and its connected servers
-      for (const connectedServerName of server.serversOnNetwork) {
-        const connectedServer = GetServer(connectedServerName);
-        if (!connectedServer) {
-          continue;
-        }
-        ctx.beginPath();
-        ctx.strokeStyle = server.hasAdminRights || connectedServer.hasAdminRights ? "green" : "grey";
-        const startPosition = getPixelPosition(server, true);
-        const endPosition = getPixelPosition(connectedServer, true);
-        ctx.moveTo(startPosition.left , startPosition.top);
-        ctx.lineTo(endPosition.left, endPosition.top);
-        ctx.stroke();
-      }
-    }
-  };
-
-  const allowAuth = (server: BaseServer) =>  server.hasAdminRights ||
-      server.serversOnNetwork.some((neighbor) => GetServer(neighbor)?.hasAdminRights);
 
   const darkWebRoot = GetServer(SpecialServers.DarkWeb);
   if (!darkWebRoot) {
@@ -111,6 +83,7 @@ export function DWNetDisplayWrapper(): React.ReactElement {
     // draggableBackground.current.scrollTop += height * 0.5;
   };
 
+
   return (
     <Container maxWidth="lg" sx={{ mx: 0 }}>
       <Typography variant={"h6"}>Dark Web</Typography>
@@ -147,7 +120,7 @@ export function DWNetDisplayWrapper(): React.ReactElement {
           <DWServerComponent server={darkWebRoot} enableAuth={true} />
           {DarkWebState.DarkWebNetwork.map((row, i) =>
             row.map((server, j) => (server ?
-              <DWServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} /> : "")),
+              <DWServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)}/> : "")),
           )}
         </div>
       </div>

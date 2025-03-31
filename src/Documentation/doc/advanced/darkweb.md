@@ -56,40 +56,58 @@ This is currently a design document, but eventually will be the in-game player d
 ## TODO:
 
 - add/remove/balance servers periodically
+  - whole swaths of servers added or removed sometimes
+  - servers "restart" sometimes?
+  - servers renamed occasionally?
 
-- hide servers not yet explored near
+- hide servers not yet explored near? (later upgrade?)
+- show all servers button
 
 - cha xp on password attempt or success
 
-- packet sniffing (mostly garbage data, sometimes has password)
-  - sniffed data includes fake passwords, html, rickroll, random garbage
+- packet sniffing 
+  - mostly garbage data, sometimes has password
+  - sniffed data includes fake passwords, html, rickroll, random garbage, lorem ipsum, silly google searches
 
-- Generate interesting server names
 
-- Clue notes on servers (passwords for another server, hints to password tables, hints to vulnerabilities, partial passwords?)
+- Clue notes on servers
+  - passwords for another server
+  - hints to password tables, 
+  - hints to vulnerabilities,
+  - partial passwords?
 
 - File/status viewer for darkweb servers?
 
 - reward caches?
   - stock market unlocks?
 
-- Support servers being renamed occasionally
 
 - Harden existing commands against loops in network? or exclude darkweb from them?
+- Limit ns commands from use on darkweb servers
   - ns.scan
   - exec (run? spawn?)
   - ns.scp & scp
   - hack against, run hack on +weak +grow
-- Limit ns commands from use on darkweb servers
 
+
+
+- change arithmatic symbols to break eval() injection?
+- add code injection to break eval()
+
+
+- Generate interesting server names
 
 - bonus time?
 - server scrambler when offline?
 
-- Darkweb server difficulty?
 
 - Limit darkweb stuff to when feature is enabled (bitnode? own tor router?)
 - start more cleanly with root access to "darkweb" server
+
+
+## TODO later:
+
+- Darkweb server cha difficulty balance?
 
 ## Community feedback:
 
@@ -97,17 +115,29 @@ https://discord.com/channels/415207508303544321/459097632896188436/1350613323737
 https://discord.com/channels/415207508303544321/459097632896188436/1345773862263984208
 https://discord.com/channels/415207508303544321/415213435974975508/1352628138261086339
 
+
 ## Idea scratch space
 
+- database server 
+  - basic "encryption" on its txt file
+  - contains user data file with multiple user passwords?
+
 - honeypot servers
-  - rickroll?
+  - black hole - kill any script that tries to scp stuff onto it
+  - rickroll reward cache
+  - "ad virus" - logs adds to the toast or to terminal. Can be removed from player's home server?
+
+  - packet sniffing shows signature things for honeypots
+    - empty string for black hole
+    - lyrics for rickroll?
+    - totally normal server .jpeg
+
   - glitchy UI?
   - scripts crash?
+  - 
   - accept all passwords?
   - Edit scripts running on them?
 
-- islands in the network? can only be reached with a moving server?
-- tunnels that scripts could go through but not the terminal?
 
 - man in the middle attack?
 

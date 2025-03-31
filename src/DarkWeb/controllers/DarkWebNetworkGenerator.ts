@@ -1,5 +1,11 @@
 import { getDarkWebServer } from "./DarkWebServerGenerator";
-import { DarkWebEvents, DarkWebState, NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarkWebState";
+import {
+  DarkWebEvents,
+  DarkWebState,
+  NET_DEPTH,
+  NET_WIDTH,
+  SERVER_DENSITY,
+} from "../models/DarkWebState";
 import { connectServers, DeleteServer, disconnectServers, GetAllServers, GetServer } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
 import { SpecialServers } from "../../Server/data/SpecialServers";
@@ -19,7 +25,6 @@ export const populateDarkWebNetwork = () => {
   while (getDarkWebServers().length < NET_DEPTH * NET_WIDTH * SERVER_DENSITY) {
     addRandomServer();
   }
-
 };
 
 export const clearDarkWebNetwork = () => {

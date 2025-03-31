@@ -417,6 +417,8 @@ export const parseSimpleArithmeticExpression = (expression: string): number => {
 
   // handle multiplication and division
   let remainingExpression = tokens.join("");
+
+  // breakdown and explanation for this regex: https://regex101.com/r/mZhiBn/1
   const multiplicationDivisionRegex = /(-?\d*\.?\d+) *([*\/]) *(-?\d*\.?\d+)/;
   let match = remainingExpression.match(multiplicationDivisionRegex);
 

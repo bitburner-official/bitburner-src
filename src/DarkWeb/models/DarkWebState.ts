@@ -1,7 +1,8 @@
 import { EventEmitter } from "../../utils/EventEmitter";
 import {
   addGuaranteedConnection,
-  addRandomServer, disconnectServer,
+  addRandomServer,
+  disconnectServer,
   getDarkWebServers,
   moveServer,
 } from "../controllers/DarkWebNetworkGenerator";
@@ -13,6 +14,10 @@ export const NET_WIDTH = 8;
 export const NET_DEPTH = 16;
 export const SERVER_DENSITY = 0.6;
 
+
+/** Event emitter to allow the UI to subscribe to Go gameplay updates in order to trigger rerenders properly */
+export const DarkWebEvents = new EventEmitter();
+
 export type DarkWebState = {
   openServer: BaseServer | null;
   DarkWebNetwork: (BaseServer | null)[][];
@@ -23,11 +28,8 @@ export const DarkWebState : DarkWebState = {
 
   DarkWebNetwork: new Array(NET_DEPTH)
     .fill(null)
-    .map(() => new Array(NET_WIDTH).fill(null) as (Server | null)[])
+    .map(() => new Array(NET_WIDTH).fill(null) as (Server | null)[]),
 }
-
-/** Event emitter to allow the UI to subscribe to Go gameplay updates in order to trigger rerenders properly */
-export const DarkWebEvents = new EventEmitter();
 
 export const startDarkwebMovement = () =>
   setInterval(() => {

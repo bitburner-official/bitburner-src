@@ -3,56 +3,17 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import { DWPasswordPromptModal } from "./DWPasswordPromptModal";
 import { getIcon, Icon } from "../controllers/ServerIcon";
 import {
-  DW_SERVER_GAP_LEFT,
-  DW_SERVER_GAP_TOP,
-  DW_SERVER_HEIGHT,
-  DW_SERVER_WIDTH,
   dwebStyles,
-  MAP_BORDER_WIDTH,
 } from "./dwebStyles";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
-import { DarkWebState, NET_WIDTH } from "../models/DarkWebState";
+import { DarkWebState } from "../models/DarkWebState";
+import { getPixelPosition } from "./networkCanvas";
 
 export type DWServerProps = {
   server: BaseServer;
   enableAuth: boolean;
 };
-
-export const getPixelPosition = (server: BaseServer, centered = false) => {
-
-  const centeredOffsetHorizontal = centered ? DW_SERVER_WIDTH / 2 : 0;
-  const centeredOffsetVertical = centered ? DW_SERVER_HEIGHT / 2 : 0;
-
-  if (server.hostname === SpecialServers.DarkWeb){
-    return {
-      top: MAP_BORDER_WIDTH * 0.2 + (centered ? centeredOffsetVertical : 0),
-      left: (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * NET_WIDTH * 0.5 + (centered ? centeredOffsetHorizontal : 0),
-    }
-  }
-
-  const coords = getCoordinates(server);
-
-  const widthOfServers = (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * coords.y;
-  const staggeredHorizontalOffset = coords.x % 2 ? DW_SERVER_WIDTH / 2 : 0;
-  const heightOfServers = (DW_SERVER_GAP_TOP + DW_SERVER_HEIGHT) * coords.x;
-
-  return {
-    top: heightOfServers + MAP_BORDER_WIDTH + centeredOffsetVertical,
-    left: widthOfServers + MAP_BORDER_WIDTH + centeredOffsetHorizontal + staggeredHorizontalOffset,
-  }
-};
-
-const getCoordinates = (server: BaseServer) => {
-  const darkWebData = server.darkWebData;
-  if (!darkWebData) {
-    throw new Error("Server missing dark web data");
-  }
-  return {
-    x: darkWebData.x,
-    y: darkWebData.y,
-  }
-}
 
 export function DWServerComponent({ server, enableAuth }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);

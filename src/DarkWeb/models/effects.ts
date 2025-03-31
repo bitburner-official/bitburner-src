@@ -22,10 +22,9 @@ export const handleSuccessfulAuth = (server: BaseServer) => {
   const chance =  0.2 * (1.03 ** (server.darkWebData?.difficulty ?? 1))
   if (Math.random() < chance) {
     const cacheFilename = resolveFilePath(`reward-${Math.random().toString().substring(2, 7)}.cache` as FilePath);
-    if (!cacheFilename) {
-      throw new Error(`Failed to resolve cache filename`);
+    if (cacheFilename) {
+      server.caches.push(cacheFilename);
     }
-    server.caches.push(cacheFilename);
   }
 }
 
@@ -34,7 +33,7 @@ export const hasCacheFileExtension = (path: string) => {
 }
 
 export const getRewardFromCache = (server: BaseServer) => {
-  Player.karma -= 5; // TODO: adjust karma balance
+  Player.karma -= 10; // TODO: adjust karma balance
   const rewards = [getMoneyReward, getXpReward, getNextPortOpener, getCCTReward];
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
   reward(server.darkWebData?.difficulty ?? 1);
@@ -47,7 +46,7 @@ export const getCCTReward = (difficulty: number) => {
 }
 
 export const getMoneyReward = (difficulty: number) => {
-  const reward = (1.2 ** difficulty) * 1e7 * getMultiplierFromCharisma() * Player.mults.crime_money; // TODO: adjust balance
+  const reward = (1.2 ** difficulty) * 1e7 * getMultiplierFromCharisma(4) * Player.mults.crime_money; // TODO: adjust balance
   Player.gainMoney(reward, "other");
   SnackbarEvents.emit(`You have discovered a cache with ${formatMoney(reward)}`, ToastVariant.SUCCESS, 4000);
 }
@@ -60,12 +59,13 @@ export const getXpReward = (difficulty: number) => {
 }
 
 /**
- * Returns a small multiplier based on charisma. gives ~1.2 at 2000 charisma and ~1.6 at 10000 charisma. Caps at 2.1 at infinite cha
+ * Returns a small multiplier based on charisma.
+ * With scalar at 1 it gives ~1.2 at 2000 charisma and ~1.6 at 10000 charisma. Caps at 2.1 at infinite cha
  */
-export const getMultiplierFromCharisma = () => {
+export const getMultiplierFromCharisma = (scalar = 1) => {
   const charisma = Player.skills.charisma;
   const growthRate = 0.0002; // Adjust this value to control the growth rate
-  return 1 + (0.5) * (1 - Math.exp(-growthRate* charisma)) + (0.6) * (1 - Math.exp(-growthRate * 0.2 * charisma));
+  return 1 + ((0.5) * (1 - Math.exp(-growthRate* charisma)) + (0.6) * (1 - Math.exp(-growthRate * 0.2 * charisma)) * scalar);
 }
 
 
