@@ -57,6 +57,10 @@ This is currently a design document, but eventually will be the in-game player d
 
 ## TODO:
 
+- make darkwebserver extend baseServer
+
+- range of passwords in hint from roman numeral
+
 - servers renamed occasionally?
 
 - packet sniffing
@@ -64,19 +68,11 @@ This is currently a design document, but eventually will be the in-game player d
   - mostly garbage data, sometimes has password
   - sniffed data includes fake passwords, html, rickroll, random garbage, lorem ipsum, silly google searches
 
-- Clue notes on servers
-
-  - passwords for another server
-  - hints to password tables,
-  - hints to vulnerabilities,
-  - partial passwords?
-
 - File/status viewer for darkweb servers?
 
 - server that returns yes/no in its failure response
   - yes, the password has X as one of its factors
 - server that returns a string in response to the attempt?
-
   - result: (encoded attempt) expectation: (encoded password)
 
 - Harden existing commands against loops in network? or exclude darkweb from them?
@@ -97,6 +93,10 @@ This is currently a design document, but eventually will be the in-game player d
   - Runs on a timer, or when logging in after being online for a while?
 
 ## TODO later:
+
+- more Clue notes on servers
+  - hints to vulnerabilities,
+  - partial passwords?
 
 - bonus time?
 
