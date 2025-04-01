@@ -4,7 +4,7 @@ import { makeStyles } from "tss-react/mui";
 export const dwColors = ["hack", "hp", "money", "int", "cha", "rep", "success"] as const;
 export type dwColors = (typeof dwColors)[number];
 
-export const DW_SERVER_WIDTH = 200;
+export const DW_SERVER_WIDTH = 240;
 export const DW_SERVER_HEIGHT = 130;
 export const DW_SERVER_GAP_TOP = 120;
 export const DW_SERVER_GAP_LEFT = 60;
@@ -21,6 +21,13 @@ export const dwebStyles = makeStyles<unknown, dwColors>({ uniqId: "dwebStyles" }
     borderRadius: "4px",
     zIndex: 10,
     backgroundColor: theme.colors.backgroundsecondary,
+  },
+  ServerName: {
+    padding: 0,
+    width: "86%",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
   },
   inlineFlexBox: {
     display: "inline-flex",

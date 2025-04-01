@@ -57,13 +57,12 @@ This is currently a design document, but eventually will be the in-game player d
 
 # requirements for MVP:
 
-- Generate interesting server names
-
 - Darkweb server cha difficulty balance?
 
 - Darkweb api
   - scp
   - exec
+  - scan?
   - attempt password
 
 ## TODO:

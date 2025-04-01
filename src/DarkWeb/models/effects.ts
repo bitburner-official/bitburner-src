@@ -13,8 +13,8 @@ import { GetServer } from "../../Server/AllServers";
 import { getAllAdjacentNeighbors } from "../controllers/DarkWebNetworkMovement";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
-  server.hasAdminRights = true;
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
+  server.hasAdminRights = true;
 
   // TODO: clue notes
   addClue(server);
@@ -124,7 +124,7 @@ export const calculatePasswordAttemptChaGain = (server: BaseServer, threads: num
   const difficultyBase = 1.12;
   const xpGain = baseXpGain + difficultyBase ** server.darkWebData.difficulty;
   const alreadyHackedMult = server.hasAdminRights ? 0.05 : 1;
-  const successMult = success && !server.hasAdminRights ? 5 : 1;
+  const successMult = success && !server.hasAdminRights ? 30 : 1;
   return xpGain * alreadyHackedMult * successMult * threads * Player.mults.charisma_exp;
 };
 

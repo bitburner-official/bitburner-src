@@ -1,9 +1,16 @@
-import { getName, getPasswordType, getRandomIcon, Minigames } from "../controllers/DarkWebServerGenerator";
+import { getPasswordType, getRandomIcon, Minigames } from "../controllers/DarkWebServerGenerator";
 import { Icon } from "../controllers/ServerIcon";
 import { IConstructorParams, Server } from "../../Server/Server";
-import { AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
+import { AddToAllServers, createUniqueRandomIp, GetServer } from "../../Server/AllServers";
 import { BaseServer } from "../../Server/BaseServer";
 import { handleFailedAuth, handleSuccessfulAuth } from "./effects";
+import {
+  commonPasswordDictionary, connectors, l33t,
+  loreNames,
+  presetNames,
+  ServerNamePrefixes,
+  ServerNameSuffixes,
+} from "./dictionaryData";
 
 export const SUCCESS_STATUS = 200;
 export const AUTH_FAILURE_STATUS = 401;
@@ -29,7 +36,7 @@ export type DarkWebServerData = {
   y: number;
 };
 
-export const DWebServerBuilder = (options: DarkWebServerData, name: string = getName(1)): Server => {
+export const DWebServerBuilder = (options: DarkWebServerData, name: string = getName()): Server => {
   const darkWebData = {
     icon: options.icon ?? getRandomIcon(),
     password: options.password,
@@ -41,13 +48,14 @@ export const DWebServerBuilder = (options: DarkWebServerData, name: string = get
     y: options.y ?? -1,
   };
 
-  const ip = createUniqueRandomIp();
+  const scalar = 1 + darkWebData.difficulty * 3;
+
   const params: IConstructorParams = {
-    hostname: ip,
-    ip: ip,
+    hostname: name,
+    ip: createUniqueRandomIp(),
     organizationName: "darkweb",
     maxRam: 16,
-    requiredHackingSkill: Math.floor(((darkWebData.difficulty + 1) * Math.random() * 10) ** 1.5),
+    requiredHackingSkill: Math.ceil((scalar) ** 2 + Math.random() * scalar * 3),
     hackDifficulty: 5,
     moneyAvailable: 0,
     numOpenPortsRequired: 69,
@@ -185,3 +193,70 @@ const getSharedChars = (password: string, attemptedPassword: string): number => 
   }
   return password.length;
 };
+
+
+export const getName = (): string => {
+  return decorateName(getBaseName());
+};
+
+const getBaseName = (): string => {
+  if (Math.random() < 0.05) {
+    return commonPasswordDictionary[Math.floor(Math.random() * commonPasswordDictionary.length)];
+  }
+
+  if (Math.random() < 0.2) {
+    return loreNames[Math.floor(Math.random() * loreNames.length)];
+  }
+
+  if (Math.random() < 0.3) {
+    return presetNames[Math.floor(Math.random() * presetNames.length)];
+  }
+
+  const prefix = ServerNamePrefixes[Math.floor(Math.random() * ServerNamePrefixes.length)];
+  const suffix = ServerNameSuffixes[Math.floor(Math.random() * ServerNameSuffixes.length)];
+  const connector = connectors[Math.floor(Math.random() * connectors.length)];
+  return `${prefix}${connector}${suffix}`;
+}
+
+const decorateName = (name: string): string => {
+  let updatedName = name;
+  do {
+    const connector = connectors[Math.floor(Math.random() * connectors.length)];
+
+    if (Math.random() < 0.3) {
+      updatedName = l33tifyName(name)
+    }
+
+    if (Math.random() < 0.05) {
+      updatedName = updatedName.split("").reverse().join("");
+    }
+
+    if (Math.random() < 0.1) {
+      const randomSuffix = ServerNameSuffixes[Math.floor(Math.random() * ServerNameSuffixes.length)];
+      updatedName = `${updatedName}${connector}${randomSuffix}`;
+    }
+
+    if (Math.random() < 0.1) {
+      const randomPrefix = ServerNamePrefixes[Math.floor(Math.random() * ServerNamePrefixes.length)];
+      updatedName = `${randomPrefix}${connector}${updatedName}`;
+    }
+
+    if (Math.random() < 0.05) {
+      updatedName = `${updatedName}:${Math.floor(Math.random() * 10000)}`;
+    }
+
+  } while (GetServer(updatedName) !== null);
+
+  return updatedName;
+}
+
+const l33tifyName = (name: string): string => {
+  let updatedName = name;
+  const amount = Math.random() * 3 + 1;
+  for (let i = 0; i < amount; i++) {
+    const char = Object.keys(l33t)[Math.floor(Math.random() * Object.keys(l33t).length)];
+    const replacement: string = l33t[char] ?? "";
+    updatedName = updatedName.replaceAll(char, replacement);
+  }
+  return updatedName;
+}

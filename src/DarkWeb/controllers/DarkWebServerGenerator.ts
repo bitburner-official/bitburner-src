@@ -65,13 +65,6 @@ export const getDarkWebServer = (difficulty: number, x: number, y: number): Serv
   return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, x, y);
 };
 
-export const getName = (difficulty: number): string => {
-  // TODO: Implement
-  return `${getResponseTime(Math.random() * 5)}.${getResponseTime(difficulty * 5)}.0.${getResponseTime(
-    Math.random() * 5,
-  )}`;
-};
-
 export const getEchoVulnServer = (difficulty: number, x: number, y: number): Server => {
   const hintTemplates = [
     "The password is",
@@ -93,7 +86,6 @@ export const getEchoVulnServer = (difficulty: number, x: number, y: number): Ser
       x,
       y,
     },
-    getName(difficulty),
   );
 };
 
@@ -118,7 +110,6 @@ export const getSortedEchoVulnServer = (difficulty: number, x: number, y: number
       x,
       y,
     },
-    getName(difficulty),
   );
 };
 
@@ -140,7 +131,6 @@ export const getDictionaryAttackServer = (
       x,
       y,
     },
-    getName(difficulty),
   );
 };
 
@@ -189,7 +179,6 @@ export const getMastermindHintServer = (difficulty: number, x: number, y: number
       x,
       y,
     },
-    getName(difficulty),
   );
 };
 
@@ -211,7 +200,6 @@ export const getTimingAttackServer = (difficulty: number, x: number, y: number):
       x,
       y,
     },
-    getName(difficulty),
   );
 };
 
@@ -229,7 +217,6 @@ export const getRomanNumeralServer = (difficulty: number, x: number, y: number):
       x,
       y,
     },
-    getName(difficulty),
   );
 };
 
@@ -246,7 +233,6 @@ export const getLargestPrimeFactorServer = (difficulty: number, x: number, y: nu
       x,
       y,
     },
-    getName(difficulty),
   );
 };
 
@@ -263,7 +249,6 @@ export const getGuessNumberServer = (difficulty: number, x: number, y: number): 
       x,
       y,
     },
-    getName(difficulty),
   );
 };
 
@@ -301,7 +286,6 @@ export const getYesn_tServer = (difficulty: number, x: number, y: number): Serve
       x,
       y,
     },
-    getName(difficulty),
   );
 };
 
@@ -317,7 +301,6 @@ export const getBinaryEncodedFeedbackServer = (difficulty: number, x: number, y:
       x,
       y,
     },
-    getName(difficulty),
   );
 };
 
@@ -333,7 +316,6 @@ export const getSpiceLevelServer = (difficulty: number, x: number, y: number): S
       x,
       y,
     },
-    getName(difficulty),
   );
 };
 
@@ -356,7 +338,6 @@ export const getConvertToBase10Server = (difficulty: number, x: number, y: numbe
       x,
       y,
     },
-    getName(difficulty),
   );
 };
 
@@ -374,7 +355,6 @@ export const getParseArethmeticExpressionServer = (difficulty: number, x: number
       x,
       y,
     },
-    getName(difficulty),
   );
 };
 
@@ -517,8 +497,6 @@ export const generateSimpleArithmeticExpression = (difficulty: number): string =
 
   return result;
 };
-
-const getResponseTime = (additionalPasses = 0) => Math.floor(95 + Math.random() * 12 + additionalPasses * 25);
 
 const getPassword = (
   length: number,

@@ -1,5 +1,5 @@
 import React, { PointerEventHandler, useEffect, useRef, useState, WheelEventHandler } from "react";
-import { Container, Typography } from "@mui/material";
+import { Container, Typography, Button } from "@mui/material";
 import { DWServerComponent } from "./DWServerComponent";
 import { useRerender } from "../../ui/React/hooks";
 import { DarkWebEvents, DarkWebState } from "../models/DarkWebState";
@@ -7,15 +7,16 @@ import { GetServer } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
 import { drawOnCanvas } from "./networkCanvas";
+import { clearDarkWebNetwork, populateDarkWebNetwork } from "../controllers/DarkWebNetworkGenerator";
 
-export const DW_NET_WIDTH = 4000;
+export const DW_NET_WIDTH = 3600;
 export const DW_NET_HEIGHT = 6000;
 
 export function DWNetDisplayWrapper(): React.ReactElement {
   const rerender = useRerender();
   const draggableBackground = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
-  const [zoomIndex, setZoomIndex] = useState(5);
+  const [zoomIndex, setZoomIndex] = useState(4);
   const zoomOptions = [0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5];
 
   useEffect(() => {
@@ -123,6 +124,7 @@ export function DWNetDisplayWrapper(): React.ReactElement {
           )}
         </div>
       </div>
+      <Button onClick={() => {clearDarkWebNetwork(); populateDarkWebNetwork()}} variant={"contained"}>Generate New Web</Button>
     </Container>
   );
 }

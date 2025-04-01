@@ -43,7 +43,7 @@ export function DWServerComponent({ server, enableAuth }: DWServerProps): React.
       <Container maxWidth="lg" sx={{ mx: 1, padding: 0, margin: 0 }} disableGutters>
         <Box className={`${classes.inlineFlexBox}`}>
           {React.createElement(icon, { color: "secondary" })}
-          <Typography color={server.hasAdminRights ? "primary" : "secondary"} sx={{ padding: 0 }}>
+          <Typography color={server.hasAdminRights ? "primary" : "secondary"} className={classes.ServerName}>
             {server.hostname}
           </Typography>
         </Box>

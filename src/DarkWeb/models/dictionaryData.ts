@@ -1,3 +1,5 @@
+import { FactionName, LocationName } from "@enums";
+
 export const numbers = "0123456789";
 export const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 export const special = "!@#$%^&*()_+-=[]{}|;:,.<>?";
@@ -135,3 +137,108 @@ export const commonPasswordDictionary = [
   "taylor",
   "matrix",
 ];
+
+export const loreNames = [...Object.values(FactionName), ...Object.values(LocationName)]
+  .map(n => n.replaceAll(" ", "_").toLowerCase())
+
+
+export const presetNames = [
+  "localhost",
+  "h0me",
+  "d0s_slippers",
+  "omuretsu",
+  "cat_lover",
+  "laptop",
+  "grandma's_phone",
+  "smart_tv",
+  "smart_fridge",
+  "smart_toaster",
+  "smart_doorbell",
+  "pl0x_server",
+  "bitcoin_miner",
+  "m1n3cr4ft_server",
+  "n0t_a_bot",
+  "n0t_a_server",
+  "bitburner",
+  "",
+  "..",
+  "...",
+  "....",
+  "echo_chamber",
+  "firewall",
+  "(╯°□°)╯︵ ┻━┻",
+  "¯\\_(ツ)_/¯",
+  "༼ つ ◕_◕ ༽つ",
+]
+
+export const ServerNamePrefixes = [
+  "neo",
+  "bit",
+  "hydro",
+  "apex",
+  "zenith",
+  "granny's",
+  "quantum",
+  "hyper",
+  "ultra",
+  "meta",
+  "cyber",
+  "digital",
+  "net",
+  "dark",
+  "light",
+  "blade",
+  "cell",
+  "hacker",
+  "crack",
+  "zero_day",
+  "neon",
+  "echo",
+  "cryptic",
+  "crypto",
+  "data",
+  "terminal",
+  "byte",
+  "giga",
+  "rogue",
+  ];
+
+export const ServerNameSuffixes = [
+  "corp",
+  "sys",
+  "net",
+  "web",
+  "inc",
+  "tech",
+  "com",
+  "org",
+  "blade",
+  "anonymous",
+  "security",
+  "solutions",
+  "industries",
+  "systems",
+  "networks",
+  "services",
+  "matrix",
+  "grid",
+  "citadel",
+  "phantom",
+  "oasis",
+  "sanctuary",
+  "genesis",
+  "hub",
+  ]
+
+export const connectors = ["", ".", "-", "_", "/", "~", ":", "*", "::"];
+
+export const l33t: Record<string, string> = {
+  a: "4",
+  b: "🅱️",
+  e: "3",
+  i: "1",
+  l: "1",
+  o: "0",
+  s: "5",
+  t: "7",
+}
