@@ -38,6 +38,8 @@
 - Warn player if they are editing and saving files on non-home servers (#1968) (@catloversg)
 - Improve performance of April Fools Easter egg (#1977) (@catloversg)
 - Add disambiguation to the confusing "1s / ls" tutorial step (#1972) (@ficocelliguy)
+- Fix: Multiple problems with Job tab (#1976) (@catloversg)
+- Add "Run" action to run current script in editor (#1987) (@catloversg)
 
 ### MISC
 
@@ -72,6 +74,7 @@
 - Show user-friendly error message when there is syntax error in scripts (#1963) (@catloversg)
 - Do not round return value of getBonusTime APIs (#1961) (@catloversg)
 - JetBrains Mono font shows wrong glyphs (#1971) (@catloversg)
+- Fix: Some calculations return NaN due to Player.playtimeSinceLastAug being 0 in edge cases (#1985) (@catloversg)
 
 ### DOCUMENTATION
 
@@ -88,6 +91,8 @@
 - Replace outdated links for v2 migration guide and changelog (#1934) (@catloversg)
 - Clarify ns.nuke (#1969) (@catloversg)
 - Clarify ns.scan (#1965) (@catloversg)
+- Clarify values returned in range 0-1 (#1986) (@catloversg)
+- Add docs for autocomplete (#1981) (@muesli4brekkies)
 
 ### SPOILER CHANGES - UI
 
@@ -125,6 +130,7 @@
 - Fix typo in proof of boost material optimizer (#1938) (@catloversg)
 - Clarify ns.singularity.softReset (#1980) (@catloversg)
 - Clarify ns.singularity.quitJob (#1979) (@catloversg)
+- Clarify value of gang territory (#1978) (@catloversg)
 
 ### CODEBASE/REFACTOR
 
@@ -143,6 +149,9 @@
 - Move coding contract code to a separate folder (#1932) (@G4mingJon4s)
 - Update webpack and katex (#1975) (@catloversg)
 - Update api-extractor (#1982) (@catloversg)
+- Refactor KeyBindingPage (#1984) (@catloversg)
+- Make minor change in migration code for version 2.8 (#1989) (@d0sboots)
+- Refactor duplicate code in updateSkillLevels (#1988) (@d0sboots)
 
 ## v2.7.0: 8 December 2024
 
