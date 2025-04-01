@@ -147,6 +147,10 @@ export abstract class Person implements IPerson {
       console.error("ERROR: NaN passed into Player.gainIntelligenceExp()");
       return;
     }
+    /**
+     * Don't change sourceFileLvl to activeSourceFileLvl. When the player has int level, the ability to gain more int is
+     * a permanent benefit.
+     */
     if (Player.sourceFileLvl(5) > 0 || this.skills.intelligence > 0 || Player.bitNodeN === 5) {
       this.exp.intelligence += exp;
       this.skills.intelligence = Math.floor(this.calculateSkill(this.exp.intelligence, 1));

@@ -52,6 +52,12 @@ export function Info(props: IProps): React.ReactElement {
   return (
     <>
       <Typography classes={{ root: classes.noformat }}>{props.factionInfo.infoText}</Typography>
+      {props.factionInfo.enemies.length > 0 && (
+        <Typography component="div">
+          <br />
+          This faction is enemies with: {props.factionInfo.enemies.join(", ")}.
+        </Typography>
+      )}
       <Typography>-------------------------</Typography>
       <Box display="flex">
         <Tooltip

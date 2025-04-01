@@ -22,6 +22,7 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  --- | --- |
 |  [applyToCompany(companyName, field)](./bitburner.singularity.applytocompany.md) | Apply for a job at a company. |
 |  [b1tflum3(nextBN, callbackScript, bitNodeOptions)](./bitburner.singularity.b1tflum3.md) | b1t\_flum3 into a different BN. |
+|  [cat(filename)](./bitburner.singularity.cat.md) | Displays the content of a file on the currently connected server. |
 |  [checkFactionInvitations()](./bitburner.singularity.checkfactioninvitations.md) | List all current faction invitations. |
 |  [commitCrime(crime, focus)](./bitburner.singularity.commitcrime.md) | Commit a crime. |
 |  [connect(hostname)](./bitburner.singularity.connect.md) | Connect to a server. |

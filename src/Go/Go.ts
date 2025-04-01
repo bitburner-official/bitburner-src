@@ -2,7 +2,7 @@ import type { BoardState, OpponentStats } from "./Types";
 
 import type { GoOpponent } from "@enums";
 import { getRecordKeys, PartialRecord } from "../Types/Record";
-import { resetAI } from "./boardAnalysis/goAI";
+import { resetGoPromises } from "./boardAnalysis/goAI";
 import { getNewBoardState } from "./boardState/boardState";
 import { EventEmitter } from "../utils/EventEmitter";
 import { newOpponentStats } from "./Constants";
@@ -20,10 +20,10 @@ export class GoObject {
     }
   }
   prestigeSourceFile() {
-    resetAI();
     this.previousGame = null;
     this.currentGame = getNewBoardState(7);
     this.stats = {};
+    resetGoPromises();
   }
 
   /**

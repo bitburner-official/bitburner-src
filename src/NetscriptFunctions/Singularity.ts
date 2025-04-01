@@ -52,6 +52,7 @@ import { calculateEffectiveRequiredReputation } from "../Company/utils";
 import { calculateFavorAfterResetting } from "../Faction/formulas/favor";
 import { validBitNodes } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { cat } from "../Terminal/commands/cat";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -466,6 +467,12 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     getCurrentServer: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
       return Player.getCurrentServer().hostname;
+    },
+    cat: (ctx) => (_filename) => {
+      helpers.checkSingularityAccess(ctx);
+      const filename = helpers.string(ctx, "filename", _filename);
+      const server = Player.getCurrentServer();
+      cat([filename], server);
     },
     connect: (ctx) => (_hostname) => {
       helpers.checkSingularityAccess(ctx);

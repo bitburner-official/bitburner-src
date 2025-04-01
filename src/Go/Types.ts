@@ -54,6 +54,7 @@ export type BoardState = {
   passCount: number;
   cheatCount: number;
   cheatCountForWhite: number;
+  komiOverride: number | null;
 };
 
 export type PointState = {

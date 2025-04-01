@@ -27,7 +27,7 @@ type PlayerPromise = {
   resolver: ((play?: Play) => void) | null;
 };
 
-const gameOver = { type: GoPlayType.gameOver, x: null, y: null } as const;
+const gameOver: Play = { type: GoPlayType.gameOver, x: null, y: null } as const;
 const playerPromises: Record<GoColor.black | GoColor.white, PlayerPromise> = {
   [GoColor.black]: { nextTurn: Promise.resolve(gameOver), resolver: null },
   [GoColor.white]: { nextTurn: Promise.resolve(gameOver), resolver: null },
@@ -38,6 +38,11 @@ resetAI();
 
 export function getNextTurn(color: GoColor.black | GoColor.white): Promise<Play> {
   return playerPromises[color].nextTurn;
+}
+
+export function resetGoPromises(): void {
+  resetAI();
+  handleNextTurn().catch((error) => exceptionAlert(error, true));
 }
 
 /**
@@ -51,7 +56,7 @@ export function getNextTurn(color: GoColor.black | GoColor.white): Promise<Play>
  * handling and dispatches common events.
  * @returns the nextTurn promise for the player who just moved
  */
-export function handleNextTurn(boardState: BoardState, useOfflineCycles = true): Promise<Play> {
+export function handleNextTurn(boardState: BoardState = Go.currentGame, useOfflineCycles = true): Promise<Play> {
   const previousColor = boardState.previousPlayer;
   if (previousColor === null) {
     // The game is over. We shouldn't get here in most circumstances,
@@ -855,8 +860,11 @@ function getMoveOptions(boardState: BoardState, player: GoColor, rng: number, sm
 /**
  * Gets the starting score for white.
  */
-export function getKomi(opponent: GoOpponent) {
-  return opponentDetails[opponent].komi;
+export function getKomi(state: BoardState): number {
+  if (state.komiOverride !== null) {
+    return state.komiOverride;
+  }
+  return opponentDetails[state.ai].komi;
 }
 
 /**

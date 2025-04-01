@@ -20,6 +20,7 @@ describe("Board analysis utility tests", () => {
       passCount: 0,
       cheatCount: 0,
       cheatCountForWhite: 0,
+      komiOverride: null,
     });
     expect(result.board?.length).toEqual(5);
   });

@@ -240,7 +240,7 @@ export function PurchasableAugmentation(props: IPurchasableAugProps): React.Reac
         {props.owned || (
           <Box sx={{ display: "grid", alignItems: "center", gridTemplateColumns: "1fr 1fr" }}>
             <Requirement
-              fulfilled={cost === 0 || Player.money > cost}
+              fulfilled={cost === 0 || Player.money >= cost}
               value={formatMoney(cost)}
               color={Settings.theme.money}
               incompleteColor={Settings.theme.error}

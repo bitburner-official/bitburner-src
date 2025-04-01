@@ -83,11 +83,11 @@ export function DWNetDisplayWrapper(): React.ReactElement {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mx: 0 }}>
+    <Container sx={{ mx: 0 }} disableGutters>
       <Typography variant={"h6"}>Dark Web</Typography>
       <div
         style={{
-          width: "calc(90vw - 250px)",
+          width: "100%",
           height: "90vh",
           overflow: "scroll",
           position: "relative",

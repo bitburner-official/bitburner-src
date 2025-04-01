@@ -55,6 +55,17 @@ This is currently a design document, but eventually will be the in-game player d
 - Small amounts of negative karma gain for breaking into servers?
 - Caches with port openers, money, or xp
 
+# requirements for MVP:
+
+- Generate interesting server names
+
+- Darkweb server cha difficulty balance?
+
+- Darkweb api
+  - scp
+  - exec
+  - attempt password
+
 ## TODO:
 
 - make darkwebserver extend baseServer
@@ -68,6 +79,7 @@ This is currently a design document, but eventually will be the in-game player d
   - mostly garbage data, sometimes has password
   - sniffed data includes fake passwords, html, rickroll, random garbage, lorem ipsum, silly google searches
 
+- make full server a button w/ hover effect
 - File/status viewer for darkweb servers?
 
 - server that returns yes/no in its failure response
@@ -80,11 +92,8 @@ This is currently a design document, but eventually will be the in-game player d
   - ns.scan
   - exec (run? spawn?)
   - ns.scp & scp
-  - hack against, run hack on +weak +grow
 - add code injection to break eval()
 - change arithmatic symbols to break eval() injection?
-
-- Generate interesting server names
 
 - WEBSTORM
   - removes ~1/2 of servers
