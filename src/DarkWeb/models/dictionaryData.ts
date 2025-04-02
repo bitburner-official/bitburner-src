@@ -219,6 +219,7 @@ export const ServerNameSuffixes = [
   "com",
   "org",
   "blade",
+  "flame",
   "anonymous",
   "security",
   "solutions",

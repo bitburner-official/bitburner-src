@@ -38,6 +38,10 @@ export type DnetServerData = {
   y: number;
 };
 
+export const isDarknetServer = (server: BaseServer): boolean => {
+  return server.darknetData !== undefined;
+}
+
 export const DnetServerBuilder = (options: DnetServerData, name: string = getName()): Server => {
   const darknetData = {
     icon: options.icon ?? getRandomIcon(),
@@ -73,7 +77,12 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
 export const checkPassword = (attemptedPassword: string, server: BaseServer, threads: number): PasswordResponse => {
   const darknetData = server.darknetData;
   if (!darknetData) {
-    throw new Error("Dark web server missing dark web data");
+    return {
+      responseTime: 0,
+      status: AUTH_FAILURE_STATUS,
+      msg: "This server is not a darknet server",
+      modelId: 0
+    };
   }
   if (darknetData.password === attemptedPassword) {
     handleSuccessfulAuth(server, threads);

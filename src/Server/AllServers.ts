@@ -15,6 +15,7 @@ import { IPAddress, isIPAddress } from "../Types/strings";
 import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
 import { populateDarknet } from "../DarkWeb/controllers/DarknetNetworkGenerator";
+import { isDarknetServer } from "../DarkWeb/models/DnetServerData";
 
 /**
  * Map of all Servers that exist in the game
@@ -72,10 +73,12 @@ export function GetReachableServer(s: string): BaseServer | null {
   return server;
 }
 
-export function GetAllServers(): BaseServer[] {
+export function GetAllServers(showDarkweb = false): BaseServer[] {
   const servers: BaseServer[] = [];
   for (const key of Object.keys(AllServers)) {
-    servers.push(AllServers[key]);
+    if (showDarkweb || !isDarknetServer(AllServers[key])) {
+      servers.push(AllServers[key]);
+    }
   }
   return servers;
 }

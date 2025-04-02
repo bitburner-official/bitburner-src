@@ -1539,6 +1539,7 @@ export const serverMetadata: IServerMetadata[] = [
   {
     hostname: SpecialServers.DarkWeb,
     moneyAvailable: 0,
+    maxRamExponent: 4,
     numOpenPortsRequired: 5,
     organizationName: SpecialServers.DarkWeb,
     requiredHackingSkill: 1,

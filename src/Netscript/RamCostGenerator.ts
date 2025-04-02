@@ -224,7 +224,11 @@ const singularity = {
   getCurrentWork: SF4Cost(0.5),
 } as const;
 
-const dn = {} as const;
+const dn = {
+  authenticate: 2,
+  openCache: 4,
+  scan: 0.2,
+} as const;
 
 // Gang API
 const gang = {

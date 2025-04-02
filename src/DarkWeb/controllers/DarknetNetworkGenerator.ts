@@ -18,7 +18,7 @@ export const VERTICAL_CONNECTION_CHANCE = 0.3;
 export const AIR_GAP_DEPTH = 8;
 
 export const populateDarknet = () => {
-  if (GetAllServers().find((s) => s.darknetData)) {
+  if (GetAllServers(true).find((s) => s.darknetData)) {
     loadDarknet();
     return;
   }
@@ -44,7 +44,7 @@ export const clearDarknet = () => {
 };
 
 export const loadDarknet = () => {
-  const darkWebServers = GetAllServers().filter((s) => s.darknetData);
+  const darkWebServers = GetAllServers(true).filter((s) => s.darknetData);
   for (const server of darkWebServers) {
     if (server.darknetData) {
       disconnectServer(server, true);

@@ -168,12 +168,12 @@ export const ns: InternalAPI<NSFull> = {
     const out: string[] = [];
     for (let i = 0; i < server.serversOnNetwork.length; i++) {
       const s = getServerOnNetwork(server, i);
-      if (s === null) continue;
+      if (s === null || s.darknetData) continue;
       const entry = s.hostname;
       if (entry === null) continue;
       out.push(entry);
     }
-    helpers.log(ctx, () => `returned ${server.serversOnNetwork.length} connections for ${server.hostname}`);
+    helpers.log(ctx, () => `returned ${out.length} connections for ${server.hostname}`);
     return out;
   },
   hasTorRouter: () => () => Player.hasTorRouter(),

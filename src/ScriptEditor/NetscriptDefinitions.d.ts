@@ -4016,12 +4016,63 @@ export interface CodingContract {
 }
 
 /**
+ * Response to an authentication attempt.
+ * @param status - Status code of the response. 200 for success, 401 for failure.
+ * @param msg - Message describing the result of the authentication attempt.
+ * @param responseTime - Time in milliseconds it took to process the request on the server.
+ * @param passwordLength - Length of the correct password.
+ * @param passwordFormat - Format of the correct password.
+ * @param data - Feedback returned from the authentication attempt. Model specific.
+ * @param modelId - ID of the model that was used to authenticate. Similar models tend to share vulnerabilities.
+ *
+ * @public
+ */
+type PasswordResponse = {
+  status: number;
+  msg: string;
+  responseTime: number;
+  passwordLength?: number;
+  passwordFormat?: string;
+  data?: string;
+  modelId?: number;
+};
+
+/**
  * Darknet API
  * @remarks
  * If you are not in BitNode-15, then you must have Source-File 15 in order to use this API.
  * @public
  */
-export interface Darknet {}
+export interface Darknet {
+
+  /**
+   * Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected
+   * to the server that the script is running on.
+   * @param hostname - name of the target server (connected to the current server) to try a password.
+   * @param password - password to attempt to authenticate with.
+   * @returns a promise that resolves to a {@link PasswordResponse} object.
+   */
+  authenticate(hostname: string, password: string): Promise<PasswordResponse>;
+
+  /**
+   * Opens a .cache file on the current server to acquire its valuable contents.
+   * @param filename - the cache file to open.
+   */
+  openCache(filename: string): void;
+
+  /**
+   * Get the list of darkweb servers connected to a server (or the current server if no hostname is provided).
+   * If `showAll` is true, instead returns ALL hostnames connected to the server, including non-darkweb servers.
+   *
+   * @remarks
+   * RAM cost: 0.2 GB
+   *
+   * @param hostname - optional. Name of the server to get the list of servers connected to. Defaults to the current server if not provided.
+   * @param showAll - optional. If true, show all servers (not just darknet ones) connected to the specified server. Defaults to false.
+   * @returns an array of hostnames.
+   */
+  scan(hostname?: string, showAll?: boolean): string[];
+}
 
 /**
  * Gang API

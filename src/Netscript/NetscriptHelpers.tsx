@@ -461,7 +461,7 @@ function scriptIdentifier(
  * @param {string} hostname - Hostname of the server
  * @returns {BaseServer} The specified server as a BaseServer
  */
-function getServer(ctx: NetscriptContext, hostname: string) {
+export function getServer(ctx: NetscriptContext, hostname: string) {
   const server = GetServer(hostname);
   if (server == null || (server.serversOnNetwork.length == 0 && server.hostname != "home")) {
     const str = hostname === "" ? "'' (empty string)" : "'" + hostname + "'";

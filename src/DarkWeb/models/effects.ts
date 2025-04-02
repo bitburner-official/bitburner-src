@@ -1,4 +1,5 @@
 import { Player } from "@player";
+import { Person as IPerson } from "@nsdefs";
 import { CompletedProgramName, LiteratureName, ToastVariant } from "@enums";
 import { CreateProgramWork } from "../../Work/CreateProgramWork";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
@@ -11,12 +12,13 @@ import { hintLiterature } from "./hintNotes";
 import { TextFilePath } from "../../Paths/TextFilePath";
 import { GetServer } from "../../Server/AllServers";
 import { getAllAdjacentNeighbors } from "../controllers/DarknetNetworkMovement";
+import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
+import { isDarknetServer } from "./DnetServerData";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
   server.hasAdminRights = true;
 
-  // TODO: clue notes
   addClue(server);
 
   // TODO: balance coding contract chance
@@ -36,15 +38,41 @@ export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
 };
 
 export const handleFailedAuth = (server: BaseServer, threads: number) => {
+  // TODO: chance to sever connection or crash script
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, false));
 };
+
+/**
+ * Returns the time it takes to authenticate on a server in milliseconds
+ * @param server - the target server to attempt a password on
+ * @param person - the player's character
+ * @param threads - the number of threads used for the password attempt (which speeds up the process)
+ */
+export const calculateAuthenticationTime = (server: BaseServer, person: IPerson, threads: number = 1) => {
+  if (!isDarknetServer(server)) return 0;
+
+  const chaRequired = server.hackDifficulty ?? 1;
+  const difficulty = server.darknetData?.difficulty ?? 1;
+
+  const baseDiff = (difficulty + 1) * 100;
+  const diffFactor = 5;
+  const baseTime = 500;
+
+  const threadsFactor = 1 + 0.3 * (threads -1);
+  const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 50);
+
+  const time = baseTime * skillFactor / threadsFactor;
+
+  return Math.max(time * calculateIntelligenceBonus(person.skills.intelligence, 0.25), 100);
+}
+
 
 export const hasCacheFileExtension = (path: string) => {
   return path.endsWith(".cache");
 };
 
 export const getRewardFromCache = (server: BaseServer) => {
-  Player.karma -= 10; // TODO: adjust karma balance
+  Player.karma -= 50; // TODO: adjust karma balance
   const rewards = [getMoneyReward, getXpReward, getNextPortOpener, getCCTReward];
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
   reward(server.darknetData?.difficulty ?? 1);
