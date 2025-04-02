@@ -11,6 +11,14 @@ import { errorMessage } from "../Netscript/ErrorMessages";
 import { formatNumber } from "../ui/formatNumber";
 import { GetServer } from "../Server/AllServers";
 import { BaseServer } from "../Server/BaseServer";
+import { runScriptFromScript } from "../NetscriptWorker";
+import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
+
+export const failForDarknetServer = (ctx: NetscriptContext, targetServer: BaseServer, alternativeMethodName: string) => {
+  if (isDarknetServer(targetServer)) {
+    throw new Error(`${ctx.function}: Writing to a darknet server requires a password and a direct connection. Use ${alternativeMethodName} from an adjacent server.`);
+  }
+}
 
 const logger = (ctx: NetscriptContext) => (message: string) => helpers.log(ctx, () => message);
 const error =
@@ -43,6 +51,20 @@ function expectDarknetServer(ctx: NetscriptContext, hostname: string) {
 
 }
 
+function expectAuthenticated(ctx: NetscriptContext, server: BaseServer, password: string, requireDarkwebServer = false) {
+  const authStatus = server.hasAdminRights;
+  if (!authStatus) {
+    throw new Error(`Server ${server.hostname} requires authentication`);
+  }
+  if (requireDarkwebServer && server.hostname !== SpecialServers.DarkWeb) {
+    expectDarknetServer(ctx, server.hostname);
+  }
+  const result = checkPassword(password, server, 0);
+  if (result.status !== SUCCESS_STATUS) {
+    throw new Error(`Authentication failed on ${server.hostname} whilst attempting to ${ctx.function}: Incorrect password (${password})`);
+  }
+}
+
 
 export function NetscriptDarknet(): InternalAPI<NSDnet> {
   return {
@@ -54,8 +76,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           const targetServer = getConnectedServer(ctx, targetHostname);
           const threads = ctx.workerScript.scriptRef.threads;
           const networkDelay = calculateAuthenticationTime(targetServer, Player, threads);
-          logger(ctx)(`Attempting to authenticate on ${targetServer.hostname} with password '${password}'...`);
-          logger(ctx)(`(Estimated time: ${formatNumber(networkDelay/1000, 1)}s)`);
+          logger(ctx)(`Connecting to ${targetServer.hostname} with password '${password}'... (Est: ${formatNumber(networkDelay/1000, 1)}s)`);
 
           return helpers.netscriptDelay(ctx, networkDelay)
             .then(() => {
@@ -87,7 +108,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           getRewardFromCache(currentServer);
         },
 
-    scan: (ctx) => (_hostname, _showAll): string[] => {
+    scan: (ctx: NetscriptContext) => (_hostname, _showAll): string[] => {
       const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
       const showAll = _showAll ? helpers.boolean(ctx, "showAll", _showAll) : false;
       const server = helpers.getServer(ctx, hostname);
@@ -101,5 +122,53 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       helpers.log(ctx, () => `returned ${out.length} connections for ${server.hostname}`);
       return out;
     },
+
+    exec:
+      (ctx: NetscriptContext) =>
+        (_scriptname, _hostname, _password, _thread_or_opt = 1, ..._args): number => {
+          const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
+          const hostname = helpers.string(ctx, "hostname", _hostname);
+          const password = helpers.string(ctx, "hostname", _password);
+          const runOpts = helpers.runOptions(ctx, _thread_or_opt);
+          const args = helpers.scriptArgs(ctx, _args);
+          const server = getConnectedServer(ctx, hostname);
+          expectAuthenticated(ctx, server, password);
+          return runScriptFromScript("dn.exec", server, path, args, ctx.workerScript, runOpts);
+        },
+
+    scp: (ctx: NetscriptContext) => (_files, _destination, _password) => {
+      const destination = helpers.string(ctx, "destination", _destination);
+      const destServer = getConnectedServer(ctx, destination);
+      const sourceServer = helpers.getServer(ctx, ctx.workerScript.hostname);
+      const password = helpers.string(ctx, "password", _password);
+      const files = Array.isArray(_files) ? _files : [_files];
+      expectAuthenticated(ctx, destServer, password);
+      return helpers.scp(ctx, files, sourceServer, destServer);
+    },
+
+    killall:
+      (ctx) =>
+        (_hostname = ctx.workerScript.hostname, _password, _safetyGuard = true) => {
+          const hostname = helpers.string(ctx, "hostname", _hostname);
+          const password = helpers.string(ctx, "password", _password);
+          const safetyGuard = helpers.boolean(ctx, "safetyGuard", _safetyGuard);
+          const server = getConnectedServer(ctx, hostname);
+          if (hostname !== ctx.workerScript.hostname) {
+            expectAuthenticated(ctx, server, password);
+          }
+
+          let scriptsKilled = 0;
+
+          for (const byPid of server.runningScriptMap.values()) {
+            for (const pid of byPid.keys()) {
+              if (safetyGuard && pid == ctx.workerScript.pid) continue;
+              killWorkerScriptByPid(pid, ctx.workerScript);
+              ++scriptsKilled;
+            }
+          }
+          helpers.log(ctx, () => `Killing all scripts on '${server.hostname}'.`);
+
+          return scriptsKilled > 0;
+        },
   };
 }

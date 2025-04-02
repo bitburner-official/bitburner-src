@@ -228,6 +228,9 @@ const dn = {
   authenticate: 2,
   openCache: 4,
   scan: 0.2,
+  exec: 1.3,
+  scp: 0.6,
+  killall: 0.5,
 } as const;
 
 // Gang API

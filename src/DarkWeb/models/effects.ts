@@ -16,6 +16,8 @@ import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelli
 import { isDarknetServer } from "./DnetServerData";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
+  if (!threads) return;
+
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
   server.hasAdminRights = true;
 

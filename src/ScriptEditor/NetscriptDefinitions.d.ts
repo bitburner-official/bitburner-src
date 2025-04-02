@@ -4072,6 +4072,12 @@ export interface Darknet {
    * @returns an array of hostnames.
    */
   scan(hostname?: string, showAll?: boolean): string[];
+
+  exec(script: string, hostname: string, password: string, threadOrOptions?: number | RunOptions, ...args: ScriptArg[]): number;
+
+  scp(files: string | string[], destination: string, password: string): boolean;
+
+  killall(host?: string, password?: string, safetyGuard?: boolean): boolean;
 }
 
 /**
