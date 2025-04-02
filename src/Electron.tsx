@@ -5,13 +5,10 @@ import { Terminal } from "./Terminal";
 import { SnackbarEvents } from "./ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { IReturnStatus, SaveData } from "./types";
-import { GetServer } from "./Server/AllServers";
 import { ImportPlayerData, ElectronGameData, saveObject } from "./SaveObject";
 import { exportScripts } from "./Terminal/commands/download";
 import { CONSTANTS } from "./Constants";
 import { commitHash } from "./utils/helpers/commitHash";
-import { resolveFilePath } from "./Paths/FilePath";
-import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 
 interface IReturnWebStatus extends IReturnStatus {
@@ -49,53 +46,10 @@ export function initElectron(): void {
   if (userAgent.includes(" electron/")) {
     // Electron-specific code
     document.achievements = [];
-    initWebserver();
     initAppNotifier();
     initSaveFunctions();
     initElectronBridge();
   }
-}
-
-function initWebserver(): void {
-  document.getFiles = function (): IReturnWebStatus {
-    const home = GetServer("home");
-    if (home === null) return { res: false, msg: "Home server does not exist." };
-    return {
-      res: true,
-      data: {
-        files: [...home.scripts.values()].map((script) => ({
-          filename: script.filename,
-          code: script.code,
-          ramUsage: script.ramUsage,
-        })),
-      },
-    };
-  };
-
-  document.deleteFile = function (filename: string): IReturnWebStatus {
-    const path = resolveFilePath(filename);
-    if (!path) return { res: false, msg: "Invalid file path." };
-    const home = GetServer("home");
-    if (!home) return { res: false, msg: "Home server does not exist." };
-    return home.removeFile(path);
-  };
-
-  document.saveFile = function (filename: string, code: string): IReturnWebStatus {
-    const path = resolveFilePath(filename);
-    if (!path) return { res: false, msg: "Invalid file path." };
-    if (!hasScriptExtension(path)) return { res: false, msg: "Invalid file extension: must be a script" };
-
-    code = decodeURIComponent(escape(atob(code)));
-    const home = GetServer("home");
-    if (!home) return { res: false, msg: "Home server does not exist." };
-
-    const { overwritten } = home.writeToScriptFile(path, code);
-    const script = home.scripts.get(path);
-    if (!script) return { res: false, msg: "Somehow failed to get script after writing it. This is a bug." };
-
-    const ramUsage = script.getRamUsage(home.scripts);
-    return { res: true, data: { overwritten, ramUsage } };
-  };
 }
 
 // Expose certain alert functions to allow the wrapper to sends message to the game

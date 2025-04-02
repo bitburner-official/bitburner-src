@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { app, shell, BrowserWindow } = require("electron");
-const log = require("electron-log");
 const utils = require("./utils");
 const achievements = require("./achievements");
 const menu = require("./menu");
-const api = require("./api-server");
 const path = require("path");
 const { windowTracker } = require("./windowTracker");
 
@@ -63,13 +61,6 @@ async function createWindow(killall) {
 
   achievements.enableAchievementsInterval(window);
   utils.attachUnresponsiveAppHandler(window);
-
-  try {
-    await api.initialize(window);
-  } catch (error) {
-    log.error(error);
-    utils.showErrorBox("Error starting http server", error);
-  }
 
   menu.refreshMenu(window);
   setStopProcessHandler(app, window);

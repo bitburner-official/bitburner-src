@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { app, ipcMain } = require("electron");
-const zlib = require("zlib");
 const path = require("path");
 const fs = require("fs/promises");
-const { promisify } = require("util");
-const gzip = promisify(zlib.gzip);
-const gunzip = promisify(zlib.gunzip);
 
 const greenworks = require("./greenworks");
 const log = require("electron-log");
