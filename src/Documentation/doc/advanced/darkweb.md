@@ -63,6 +63,9 @@ This is currently a design document, but eventually will be the in-game player d
   - scp
   - exec
   - scan?
+  - killall?
+  - ls?
+  - ps?
   - attempt password
 
 ## TODO:
