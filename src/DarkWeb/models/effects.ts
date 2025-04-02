@@ -10,7 +10,7 @@ import { cachePrefixes, commonPasswordDictionary, passwordFileNames } from "./di
 import { hintLiterature } from "./hintNotes";
 import { TextFilePath } from "../../Paths/TextFilePath";
 import { GetServer } from "../../Server/AllServers";
-import { getAllAdjacentNeighbors } from "../controllers/DarkWebNetworkMovement";
+import { getAllAdjacentNeighbors } from "../controllers/DarknetNetworkMovement";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
@@ -25,7 +25,7 @@ export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
   }
 
   // TODO: balance cache chance
-  const chance = 0.2 * 1.03 ** (server.darkWebData?.difficulty ?? 1);
+  const chance = 0.2 * 1.03 ** (server.darknetData?.difficulty ?? 1);
   if (Math.random() < chance) {
     const prefix = cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
     const cacheFilename = resolveFilePath(`${prefix}_${Math.random().toString().substring(2, 5)}.cache` as FilePath);
@@ -47,7 +47,7 @@ export const getRewardFromCache = (server: BaseServer) => {
   Player.karma -= 10; // TODO: adjust karma balance
   const rewards = [getMoneyReward, getXpReward, getNextPortOpener, getCCTReward];
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
-  reward(server.darkWebData?.difficulty ?? 1);
+  reward(server.darknetData?.difficulty ?? 1);
 };
 
 export const getCCTReward = (difficulty: number) => {
@@ -119,10 +119,10 @@ export const getNextPortOpener = (difficulty: number) => {
 
 // TODO: balance xp gain
 export const calculatePasswordAttemptChaGain = (server: BaseServer, threads: number = 1, success = false) => {
-  if (!server.darkWebData || !threads) return 0;
+  if (!server.darknetData || !threads) return 0;
   const baseXpGain = 3;
   const difficultyBase = 1.12;
-  const xpGain = baseXpGain + difficultyBase ** server.darkWebData.difficulty;
+  const xpGain = baseXpGain + difficultyBase ** server.darknetData.difficulty;
   const alreadyHackedMult = server.hasAdminRights ? 0.05 : 1;
   const successMult = success && !server.hasAdminRights ? 10 : 1;
   return xpGain * alreadyHackedMult * successMult * threads * Player.mults.charisma_exp;
@@ -130,10 +130,10 @@ export const calculatePasswordAttemptChaGain = (server: BaseServer, threads: num
 
 // TODO: balance password clue spawn rate
 const addClue = (server: BaseServer) => {
-  if (!server.darkWebData) return;
+  if (!server.darknetData) return;
 
   // Basic mechanics hints
-  if ((Math.random() < 0.5 && server.darkWebData.difficulty <= 3) || Math.random() < 0.05) {
+  if ((Math.random() < 0.5 && server.darknetData.difficulty <= 3) || Math.random() < 0.05) {
     const hint: LiteratureName = hintLiterature[Math.floor(Math.random() * hintLiterature.length)];
     if (hint) {
       server.messages.push(hint);
@@ -154,13 +154,13 @@ const addClue = (server: BaseServer) => {
     const passwordHintName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
     const neighboringServerName = server.serversOnNetwork.find((s) => {
       const server = GetServer(s);
-      return server && server?.darkWebData && !server?.hasAdminRights && server.darkWebData.password;
+      return server && server?.darknetData && !server?.hasAdminRights && server.darknetData.password;
     });
     const neighboringServer = neighboringServerName ? GetServer(neighboringServerName) : null;
     if (neighboringServer) {
       server.writeToTextFile(
         passwordHintName as TextFilePath,
-        `Remember this password: ${neighboringServer.darkWebData?.password}`,
+        `Remember this password: ${neighboringServer.darknetData?.password}`,
       );
       return;
     }
@@ -169,19 +169,19 @@ const addClue = (server: BaseServer) => {
   // non-connected nearby server's password (includes server name)
   if (Math.random() < 0.1) {
     const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
-    const targetServer = getAllAdjacentNeighbors(server.darkWebData.x, server.darkWebData.y).find(
+    const targetServer = getAllAdjacentNeighbors(server.darknetData.x, server.darknetData.y).find(
       (neighbor) =>
         neighbor &&
-        neighbor?.darkWebData &&
+        neighbor?.darknetData &&
         !neighbor?.hasAdminRights &&
-        neighbor.darkWebData.password &&
+        neighbor.darknetData.password &&
         !server.serversOnNetwork.includes(neighbor.hostname),
     );
 
     if (targetServer) {
       server.writeToTextFile(
         hintFileName as TextFilePath,
-        `Server: ${targetServer?.hostname} Password: ${targetServer?.darkWebData?.password}`,
+        `Server: ${targetServer?.hostname} Password: ${targetServer?.darknetData?.password}`,
       );
     }
     return;

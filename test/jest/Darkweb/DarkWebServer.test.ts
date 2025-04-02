@@ -9,8 +9,8 @@ import {
   getConvertToBase10Server,
   parseSimpleArithmeticExpression,
   generateSimpleArithmeticExpression,
-} from "../../../src/DarkWeb/controllers/DarkWebServerGenerator";
-import { checkPassword, SUCCESS_STATUS, AUTH_FAILURE_STATUS } from "../../../src/DarkWeb/models/DarkWebServerData";
+} from "../../../src/DarkWeb/controllers/DarknetServerGenerator";
+import { checkPassword, SUCCESS_STATUS, AUTH_FAILURE_STATUS } from "../../../src/DarkWeb/models/DnetServerData";
 import { defaultSettingsDictionary } from "../../../src/DarkWeb/models/dictionaryData";
 
 describe("DarkWebServer Tests", () => {
@@ -21,11 +21,11 @@ describe("DarkWebServer Tests", () => {
     expect(server).toBeDefined();
     const failedAttemptResponse = checkPassword("wrongPassword", server);
     expect(failedAttemptResponse.status).toBe(401);
-    expect(failedAttemptResponse.passwordLength).toBe(server.darkWebData.password.length);
-    expect(failedAttemptResponse.msg.includes(server.darkWebData.password)).toBe(true);
+    expect(failedAttemptResponse.passwordLength).toBe(server.darknetData.password.length);
+    expect(failedAttemptResponse.msg.includes(server.darknetData.password)).toBe(true);
     expect(server.hasAdminRights).toBe(false);
 
-    expect(checkPassword(server.darkWebData.password, server).status).toBe(SUCCESS_STATUS);
+    expect(checkPassword(server.darknetData.password, server).status).toBe(SUCCESS_STATUS);
     expect(server.hasAdminRights).toBe(true);
   });
 
@@ -34,10 +34,10 @@ describe("DarkWebServer Tests", () => {
     expect(server).toBeDefined();
     const failedAttemptResponse = checkPassword("wrongPassword", server);
     expect(failedAttemptResponse.status).toBe(AUTH_FAILURE_STATUS);
-    expect(failedAttemptResponse.passwordLength).toBe(server.darkWebData.password.length);
+    expect(failedAttemptResponse.passwordLength).toBe(server.darknetData.password.length);
     expect(server.hasAdminRights).toBe(false);
 
-    expect(checkPassword(server.darkWebData.password, server).status).toBe(SUCCESS_STATUS);
+    expect(checkPassword(server.darknetData.password, server).status).toBe(SUCCESS_STATUS);
     expect(server.hasAdminRights).toBe(true);
   });
 
@@ -47,24 +47,24 @@ describe("DarkWebServer Tests", () => {
     const failedAttemptResponse = checkPassword("wrongPassword", server);
 
     expect(failedAttemptResponse.status).toBe(AUTH_FAILURE_STATUS);
-    expect(failedAttemptResponse.passwordLength).toBe(server.darkWebData.password.length);
+    expect(failedAttemptResponse.passwordLength).toBe(server.darknetData.password.length);
     expect(server.hasAdminRights).toBe(false);
 
-    expect(defaultSettingsDictionary.includes(server.darkWebData.password)).toBe(true);
+    expect(defaultSettingsDictionary.includes(server.darknetData.password)).toBe(true);
 
-    expect(checkPassword(server.darkWebData.password, server).status).toBe(SUCCESS_STATUS);
+    expect(checkPassword(server.darknetData.password, server).status).toBe(SUCCESS_STATUS);
     expect(server.hasAdminRights).toBe(true);
   });
 
   test("getMastermindHintServer creates a server with mastermind hint", () => {
     const password = "11223334";
     const server = getMastermindHintServer(difficulty, 0, 0);
-    server.darkWebData.password = password;
+    server.darknetData.password = password;
     expect(server).toBeDefined();
 
     const failedAttemptResponse1 = checkPassword("", server);
     expect(failedAttemptResponse1.status).toBe(AUTH_FAILURE_STATUS);
-    expect(failedAttemptResponse1.passwordLength).toBe(server.darkWebData.password.length);
+    expect(failedAttemptResponse1.passwordLength).toBe(server.darknetData.password.length);
     expect(server.hasAdminRights).toBe(false);
     const correctCount1 = failedAttemptResponse1.data.split(",")[0];
     const closeCount1 = failedAttemptResponse1.data.split(",")[1];
@@ -100,7 +100,7 @@ describe("DarkWebServer Tests", () => {
     expect(correctCount5).toBe("2");
     expect(closeCount5).toBe("6");
 
-    expect(checkPassword(server.darkWebData.password, server).status).toBe(SUCCESS_STATUS);
+    expect(checkPassword(server.darknetData.password, server).status).toBe(SUCCESS_STATUS);
     expect(server.hasAdminRights).toBe(true);
   });
 
@@ -108,16 +108,16 @@ describe("DarkWebServer Tests", () => {
     const server = getTimingAttackServer(difficulty, 0, 0);
     expect(server).toBeDefined();
 
-    const wrongPasswordWithTwoMatchingDigits = server.darkWebData.password.substring(0, 2) + "     ";
+    const wrongPasswordWithTwoMatchingDigits = server.darknetData.password.substring(0, 2) + "     ";
     const failedAttemptResponse = checkPassword(wrongPasswordWithTwoMatchingDigits, server);
 
     expect(failedAttemptResponse.status).toBe(401);
     expect(server.hasAdminRights).toBe(false);
-    expect(failedAttemptResponse.passwordLength).toBe(server.darkWebData.password.length);
+    expect(failedAttemptResponse.passwordLength).toBe(server.darknetData.password.length);
     expect(failedAttemptResponse.responseTime >= 95 + 25 * 2).toBe(true);
     expect(failedAttemptResponse.responseTime <= 95 + 12 + 25 * 2).toBe(true);
 
-    const wrongPasswordWithThreeMatchingDigits = server.darkWebData.password.substring(0, 3) + "    ";
+    const wrongPasswordWithThreeMatchingDigits = server.darknetData.password.substring(0, 3) + "    ";
     const failedAttemptResponse2 = checkPassword(wrongPasswordWithThreeMatchingDigits, server);
     expect(failedAttemptResponse2.status).toBe(AUTH_FAILURE_STATUS);
     expect(failedAttemptResponse2.responseTime >= 95 + 25 * 3).toBe(true);
@@ -128,14 +128,14 @@ describe("DarkWebServer Tests", () => {
     expect(failedAttemptResponse3.responseTime >= 95).toBe(true);
     expect(failedAttemptResponse3.responseTime <= 95 + 12).toBe(true);
 
-    const wrongPasswordWithFourMatchingDigits = server.darkWebData.password.substring(0, 4) + "   ";
+    const wrongPasswordWithFourMatchingDigits = server.darknetData.password.substring(0, 4) + "   ";
     const failedAttemptResponse4 = checkPassword(wrongPasswordWithFourMatchingDigits, server);
     expect(failedAttemptResponse4.status).toBe(AUTH_FAILURE_STATUS);
     expect(server.hasAdminRights).toBe(false);
     expect(failedAttemptResponse4.responseTime >= 95 + 25 * 4).toBe(true);
     expect(failedAttemptResponse4.responseTime <= 95 + 12 + 25 * 4).toBe(true);
 
-    expect(checkPassword(server.darkWebData.password, server).status).toBe(SUCCESS_STATUS);
+    expect(checkPassword(server.darknetData.password, server).status).toBe(SUCCESS_STATUS);
     expect(server.hasAdminRights).toBe(true);
   });
 
@@ -146,7 +146,7 @@ describe("DarkWebServer Tests", () => {
     expect(failedAttemptResponse.status).toBe(AUTH_FAILURE_STATUS);
     const [base, numberString] = failedAttemptResponse.data.split(",");
 
-    expect(numberString).toBe(encodeNumberInBaseN(+server.darkWebData?.password, base));
+    expect(numberString).toBe(encodeNumberInBaseN(+server.darknetData?.password, base));
 
     const attemptedPassword = parseBaseNNumberString(numberString, base);
 

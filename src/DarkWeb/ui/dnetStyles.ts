@@ -10,7 +10,7 @@ export const DW_SERVER_GAP_TOP = 120;
 export const DW_SERVER_GAP_LEFT = 60;
 export const MAP_BORDER_WIDTH = 300;
 
-export const dwebStyles = makeStyles<unknown, dwColors>({ uniqId: "dwebStyles" })((theme: Theme, __, __classes) => ({
+export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" })((theme: Theme, __, __classes) => ({
   DWServer: {
     width: `${DW_SERVER_WIDTH}px`,
     height: `${DW_SERVER_HEIGHT}px`,

@@ -112,6 +112,7 @@ import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
+import { NetscriptDarknet } from "./NetscriptFunctions/Darknet";
 
 export const enums: NSEnums = {
   CityName,
@@ -136,6 +137,7 @@ export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
   gang: NetscriptGang(),
   go: NetscriptGo(),
+  dn: NetscriptDarknet(),
   bladeburner: NetscriptBladeburner(),
   codingcontract: NetscriptCodingContract(),
   sleeve: NetscriptSleeve(),

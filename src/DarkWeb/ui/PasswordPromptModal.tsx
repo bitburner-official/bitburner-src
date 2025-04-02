@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "../../ui/React/Modal";
-import { checkPassword, SUCCESS_STATUS } from "../models/DarkWebServerData";
+import { checkPassword, SUCCESS_STATUS } from "../models/DnetServerData";
 import { Container, Typography, TextField, Button } from "@mui/material";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 import { getIcon, Icon } from "../controllers/ServerIcon";
-import { DarkWebEvents } from "../models/DarkWebState";
+import { DarknetEvents } from "../models/DarknetState";
 import { BaseServer } from "../../Server/BaseServer";
 
 export type DWPasswordPromptModalProps = {
@@ -13,12 +13,12 @@ export type DWPasswordPromptModalProps = {
   server: BaseServer;
 };
 
-export const DWPasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptModalProps): React.ReactElement => {
-  const [inputPassword, setInputPassword] = useState(server.hasAdminRights ? server.darkWebData?.password ?? "" : "");
+export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptModalProps): React.ReactElement => {
+  const [inputPassword, setInputPassword] = useState(server.hasAdminRights ? server.darknetData?.password ?? "" : "");
   const [password, setPassword] = useState<string>("?");
   const [enableSubmit, setEnableSubmit] = useState(!server.hasAdminRights);
   const [response, setResponse] = useState("Submit a password to login...");
-  const icon = getIcon(server.darkWebData?.icon ?? Icon.Terminal);
+  const icon = getIcon(server.darknetData?.icon ?? Icon.Terminal);
 
   useEffect(() => {
     async function attemptPassword(passwordAttempted: string, skipSleep = false): Promise<void> {
@@ -28,7 +28,7 @@ export const DWPasswordPromptModal = ({ open, onClose, server }: DWPasswordPromp
       const response = checkPassword(passwordAttempted, server, skipSleep ? 0 : 4);
       setResponse(JSON.stringify(response, null, 4));
       if (response.status == SUCCESS_STATUS) {
-        DarkWebEvents.emit("server-unlocked", server);
+        DarknetEvents.emit("server-unlocked", server);
       } else {
         setEnableSubmit(true);
       }

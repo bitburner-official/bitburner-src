@@ -552,7 +552,7 @@ export class Terminal {
       (!all && s.purchasedByPlayer && s.hostname != "home") ||
       d > depth ||
       (!all && s instanceof HacknetServer) ||
-      !!s.darkWebData;
+      !!s.darknetData;
 
     const makeNode = (parent: string, s: BaseServer, d = 1): Node => ({
       hostname: s.hostname,

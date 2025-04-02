@@ -1,15 +1,15 @@
 import { connectServers, DeleteServer, disconnectServers, GetServer } from "../../Server/AllServers";
-import { DarkWebEvents, DarkWebState, NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarkWebState";
-import { getDarkWebServer } from "./DarkWebServerGenerator";
+import { DarknetEvents, DarknetState, NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarknetState";
+import { getDarknetServer } from "./DarknetServerGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
-import { addServerToNetwork, AIR_GAP_DEPTH } from "./DarkWebNetworkGenerator";
+import { addServerToNetwork, AIR_GAP_DEPTH } from "./DarknetNetworkGenerator";
 import { stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 
-export const mutateDarkWeb = () => {
-  const servers = getDarkWebServers();
+export const mutateDarknet = () => {
+  const servers = getDarknetServers();
   if (servers.length === 0) {
     return;
   }
@@ -61,10 +61,10 @@ export const mutateDarkWeb = () => {
 
 const deleteRandomServers = (count = 1) => {
   for (let i = 0; i < count; i++) {
-    const servers = getDarkWebServers();
+    const servers = getDarknetServers();
     const serverToDelete = servers[Math.floor(Math.random() * servers.length)];
     const server = GetServer(serverToDelete.hostname);
-    if (!server || server === DarkWebState.openServer || server.isConnectedTo) {
+    if (!server || server === DarknetState.openServer || server.isConnectedTo) {
       return false;
     }
     disconnectServer(serverToDelete, true);
@@ -76,7 +76,7 @@ const deleteRandomServers = (count = 1) => {
 export const addRandomServers = (count = 1) => {
   for (let i = 0; i < count; i++) {
     const difficulty = Math.floor(Math.random() * NET_DEPTH);
-    const newServer = getDarkWebServer(difficulty, -1, -1);
+    const newServer = getDarknetServer(difficulty, -1, -1);
     const success = moveServer(newServer);
     if (!success) {
       DeleteServer(newServer.hostname);
@@ -85,54 +85,54 @@ export const addRandomServers = (count = 1) => {
 };
 
 export const balanceServers = () => {
-  if (getDarkWebServers().length > NET_DEPTH * NET_WIDTH * SERVER_DENSITY) {
-    const serversToRemove = getDarkWebServers().length - NET_DEPTH * NET_WIDTH * SERVER_DENSITY;
+  if (getDarknetServers().length > NET_DEPTH * NET_WIDTH * SERVER_DENSITY) {
+    const serversToRemove = getDarknetServers().length - NET_DEPTH * NET_WIDTH * SERVER_DENSITY;
     deleteRandomServers(serversToRemove);
   } else {
-    const serversToAdd = NET_DEPTH * NET_WIDTH * SERVER_DENSITY - getDarkWebServers().length;
+    const serversToAdd = NET_DEPTH * NET_WIDTH * SERVER_DENSITY - getDarknetServers().length;
     addRandomServers(serversToAdd);
   }
   sanitizeDarkwebNetwork();
 };
 
 export const moveServer = (server: BaseServer) => {
-  const darkWebData = server.darkWebData;
-  if (!darkWebData) {
+  const darknetData = server.darknetData;
+  if (!darknetData) {
     throw new Error("Server missing dark web data");
   }
   // Do not try to move the server that is open in the UI or the terminal
-  if (server === DarkWebState.openServer || server.isConnectedTo) {
+  if (server === DarknetState.openServer || server.isConnectedTo) {
     return false;
   }
 
   for (let i = 0; i < 30; i++) {
     // Limit depth movement to +-3 spaces
-    let newX = Math.min(Math.max(Math.floor(Math.random() * 6 + darkWebData.difficulty - 3), 0), NET_DEPTH - 1);
+    let newX = Math.min(Math.max(Math.floor(Math.random() * 6 + darknetData.difficulty - 3), 0), NET_DEPTH - 1);
     // simple "air gaps" in the network
     if (isOnAirGap(newX)) {
       newX += Math.random() < 0.5 ? -1 : 1;
     }
 
     const newY = Math.floor(Math.random() * NET_WIDTH);
-    if (DarkWebState.DarkWebNetwork[newX][newY] !== null) {
+    if (DarknetState.Network[newX][newY] !== null) {
       continue;
     }
 
     disconnectServer(server, true);
 
-    if (DarkWebState.DarkWebNetwork[darkWebData.x]?.[darkWebData.y]) {
-      DarkWebState.DarkWebNetwork[darkWebData.x][darkWebData.y] = null;
+    if (DarknetState.Network[darknetData.x]?.[darknetData.y]) {
+      DarknetState.Network[darknetData.x][darknetData.y] = null;
     }
     addServerToNetwork(server, newX, newY, true);
     sanitizeDarkwebNetwork();
-    DarkWebEvents.emit();
+    DarknetEvents.emit();
     return true;
   }
   return false;
 };
 
 export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) => {
-  if (server === DarkWebState.openServer || server.isConnectedTo) {
+  if (server === DarknetState.openServer || server.isConnectedTo) {
     return false;
   }
   server.serversOnNetwork.forEach((conn) => {
@@ -145,7 +145,7 @@ export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) 
 };
 
 export const restartServer = (server: BaseServer) => {
-  if (server === DarkWebState.openServer || server.isConnectedTo) {
+  if (server === DarknetState.openServer || server.isConnectedTo) {
     return false;
   }
   const runningScripts = server.runningScriptMap;
@@ -166,12 +166,12 @@ export const restartServer = (server: BaseServer) => {
 };
 
 export const addGuaranteedConnection = (server: BaseServer) => {
-  const darkWebData = server.darkWebData;
-  if (!darkWebData) {
+  const darknetData = server.darknetData;
+  if (!darknetData) {
     throw new Error("Server missing dark web data");
   }
 
-  const neighbors = getAllAdjacentNeighbors(darkWebData.x ?? 0, darkWebData.y ?? 0);
+  const neighbors = getAllAdjacentNeighbors(darknetData.x ?? 0, darknetData.y ?? 0);
   if (neighbors.length === 0) {
     return;
   }
@@ -181,8 +181,8 @@ export const addGuaranteedConnection = (server: BaseServer) => {
 
 export const getNeighborsOnRow = (x: number, y: number): BaseServer[] => {
   const neighbors: BaseServer[] = [];
-  const leftNeighbor = DarkWebState.DarkWebNetwork[x][y - 1];
-  const rightNeighbor = DarkWebState.DarkWebNetwork[x][y + 1];
+  const leftNeighbor = DarknetState.Network[x][y - 1];
+  const rightNeighbor = DarknetState.Network[x][y + 1];
   if (leftNeighbor) {
     neighbors.push(leftNeighbor);
   }
@@ -193,23 +193,23 @@ export const getNeighborsOnRow = (x: number, y: number): BaseServer[] => {
 };
 
 export const getServersOnRowBelow = (x: number, close = false): BaseServer[] => {
-  const rowBelow = DarkWebState.DarkWebNetwork[x - 1]?.filter(notNull<BaseServer>) ?? [];
+  const rowBelow = DarknetState.Network[x - 1]?.filter(notNull<BaseServer>) ?? [];
   if (close) {
-    return rowBelow.filter((server) => Math.abs(server.darkWebData?.y ?? 0 - x) <= 1);
+    return rowBelow.filter((server) => Math.abs(server.darknetData?.y ?? 0 - x) <= 1);
   }
   return rowBelow;
 };
 
 export const getServersOnRowAbove = (x: number, close = false): BaseServer[] => {
-  const rowAbove = DarkWebState.DarkWebNetwork[x + 1]?.filter(notNull<BaseServer>) ?? [];
+  const rowAbove = DarknetState.Network[x + 1]?.filter(notNull<BaseServer>) ?? [];
   if (close) {
-    return rowAbove.filter((server) => Math.abs(server.darkWebData?.y ?? 0 - x) <= 1);
+    return rowAbove.filter((server) => Math.abs(server.darknetData?.y ?? 0 - x) <= 1);
   }
   return rowAbove;
 };
 
-export const getDarkWebServers = (): BaseServer[] => {
-  return DarkWebState.DarkWebNetwork.flat().filter(notNull<BaseServer>);
+export const getDarknetServers = (): BaseServer[] => {
+  return DarknetState.Network.flat().filter(notNull<BaseServer>);
 };
 
 export const getAllAdjacentNeighbors = (x: number, y: number): BaseServer[] => {
@@ -224,10 +224,10 @@ export const sanitizeDarkwebNetwork = () => {
   if (!darkweb) {
     return;
   }
-  const servers = [...getDarkWebServers(), darkweb];
+  const servers = [...getDarknetServers(), darkweb];
   for (const server of servers) {
     if (!GetServer(server.hostname)) {
-      DarkWebState.DarkWebNetwork[server.darkWebData?.x ?? 0][server.darkWebData?.y ?? 0] = null;
+      DarknetState.Network[server.darknetData?.x ?? 0][server.darknetData?.y ?? 0] = null;
       disconnectServer(server, true);
       DeleteServer(server.hostname);
       continue;
@@ -244,7 +244,7 @@ export const sanitizeDarkwebNetwork = () => {
       }
     }
 
-    if (server.darkWebData?.x === 0 && darkweb) {
+    if (server.darknetData?.x === 0 && darkweb) {
       connectServers(server, darkweb);
     }
   }

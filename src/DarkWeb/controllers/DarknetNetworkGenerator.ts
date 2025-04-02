@@ -1,15 +1,15 @@
-import { DarkWebState, NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarkWebState";
+import { DarknetState, NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarknetState";
 import { connectServers, DeleteServer, GetAllServers, GetServer } from "../../Server/AllServers";
 import {
   addGuaranteedConnection,
   addRandomServers,
   balanceServers,
   disconnectServer,
-  getDarkWebServers,
+  getDarknetServers,
   getNeighborsOnRow,
   getServersOnRowAbove,
   getServersOnRowBelow,
-} from "./DarkWebNetworkMovement";
+} from "./DarknetNetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 
@@ -17,24 +17,24 @@ export const HORIZONTAL_CONNECTION_CHANCE = 0.5;
 export const VERTICAL_CONNECTION_CHANCE = 0.3;
 export const AIR_GAP_DEPTH = 8;
 
-export const populateDarkWebNetwork = () => {
-  if (GetAllServers().find((s) => s.darkWebData)) {
-    loadDarkWebNetwork();
+export const populateDarknet = () => {
+  if (GetAllServers().find((s) => s.darknetData)) {
+    loadDarknet();
     return;
   }
 
-  clearDarkWebNetwork();
-  while (getDarkWebServers().length < NET_DEPTH * NET_WIDTH * SERVER_DENSITY) {
+  clearDarknet();
+  while (getDarknetServers().length < NET_DEPTH * NET_WIDTH * SERVER_DENSITY) {
     addRandomServers();
   }
 };
 
-export const clearDarkWebNetwork = () => {
+export const clearDarknet = () => {
   for (let i = 0; i < NET_DEPTH; i++) {
     for (let j = 0; j < NET_WIDTH; j++) {
-      const server = DarkWebState.DarkWebNetwork[i][j];
+      const server = DarknetState.Network[i][j];
       DeleteServer(server?.hostname ?? "");
-      DarkWebState.DarkWebNetwork[i][j] = null;
+      DarknetState.Network[i][j] = null;
     }
   }
   const darkwebRoot = GetServer(SpecialServers.DarkWeb);
@@ -43,24 +43,24 @@ export const clearDarkWebNetwork = () => {
   }
 };
 
-export const loadDarkWebNetwork = () => {
-  const darkWebServers = GetAllServers().filter((s) => s.darkWebData);
+export const loadDarknet = () => {
+  const darkWebServers = GetAllServers().filter((s) => s.darknetData);
   for (const server of darkWebServers) {
-    if (server.darkWebData) {
+    if (server.darknetData) {
       disconnectServer(server, true);
-      addServerToNetwork(server, server.darkWebData.x, server.darkWebData.y, true);
+      addServerToNetwork(server, server.darknetData.x, server.darknetData.y, true);
     }
   }
   balanceServers();
 };
 
 export const addRandomConnections = (server: BaseServer) => {
-  const darkWebData = server.darkWebData;
-  if (!darkWebData) {
+  const darknetData = server.darknetData;
+  if (!darknetData) {
     throw new Error("Server missing dark web data");
   }
-  const x = darkWebData.x;
-  const y = darkWebData.y;
+  const x = darknetData.x;
+  const y = darknetData.y;
   const horizontalNeighbors = getNeighborsOnRow(x, y);
   horizontalNeighbors.forEach((neighbor) => {
     if (Math.random() < HORIZONTAL_CONNECTION_CHANCE) {
@@ -71,7 +71,7 @@ export const addRandomConnections = (server: BaseServer) => {
   const serversAbove = getServersOnRowAbove(x);
   const serversBelow = getServersOnRowBelow(x);
   [...serversAbove, ...serversBelow].forEach((neighbor) => {
-    const distance = Math.abs(neighbor.darkWebData?.x ?? x - x) + 1;
+    const distance = Math.abs(neighbor.darknetData?.x ?? x - x) + 1;
     if (Math.random() < VERTICAL_CONNECTION_CHANCE / distance) {
       connectServers(server, neighbor);
     }
@@ -79,22 +79,22 @@ export const addRandomConnections = (server: BaseServer) => {
 };
 
 export const addServerToNetwork = (server: BaseServer, x: number, y: number, addConnections = true) => {
-  if (DarkWebState.DarkWebNetwork[x]?.[y] === undefined) {
+  if (DarknetState.Network[x]?.[y] === undefined) {
     console.error("Invalid coordinates");
     return;
   }
-  if (DarkWebState.DarkWebNetwork[x][y]?.hostname) {
+  if (DarknetState.Network[x][y]?.hostname) {
     console.error("Server already exists at this location");
     return;
   }
-  if (!server.darkWebData) {
+  if (!server.darknetData) {
     console.error("Server missing dark web data");
     return;
   }
 
-  DarkWebState.DarkWebNetwork[x][y] = server;
-  server.darkWebData.x = x;
-  server.darkWebData.y = y;
+  DarknetState.Network[x][y] = server;
+  server.darknetData.x = x;
+  server.darknetData.y = y;
 
   if (!addConnections) {
     return;
@@ -102,7 +102,7 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number, add
   addRandomConnections(server);
   addGuaranteedConnection(server);
 
-  if (server.darkWebData.x === 0) {
+  if (server.darknetData.x === 0) {
     const darkWebRoot = GetServer(SpecialServers.DarkWeb);
     if (!darkWebRoot) {
       throw new Error("Could not find darkweb root server");

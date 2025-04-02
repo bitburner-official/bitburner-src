@@ -1,11 +1,13 @@
-import { getPasswordType, getRandomIcon, Minigames } from "../controllers/DarkWebServerGenerator";
+import { getPasswordType, getRandomIcon, Minigames } from "../controllers/DarknetServerGenerator";
 import { Icon } from "../controllers/ServerIcon";
 import { IConstructorParams, Server } from "../../Server/Server";
 import { AddToAllServers, createUniqueRandomIp, GetServer } from "../../Server/AllServers";
 import { BaseServer } from "../../Server/BaseServer";
 import { handleFailedAuth, handleSuccessfulAuth } from "./effects";
 import {
-  commonPasswordDictionary, connectors, l33t,
+  commonPasswordDictionary,
+  connectors,
+  l33t,
   loreNames,
   presetNames,
   ServerNamePrefixes,
@@ -25,7 +27,7 @@ export type PasswordResponse = {
   modelId?: number;
 };
 
-export type DarkWebServerData = {
+export type DnetServerData = {
   icon: Icon;
   password: string;
   minigameType: Minigames;
@@ -36,8 +38,8 @@ export type DarkWebServerData = {
   y: number;
 };
 
-export const DWebServerBuilder = (options: DarkWebServerData, name: string = getName()): Server => {
-  const darkWebData = {
+export const DnetServerBuilder = (options: DnetServerData, name: string = getName()): Server => {
+  const darknetData = {
     icon: options.icon ?? getRandomIcon(),
     password: options.password,
     minigameType: options.minigameType,
@@ -48,19 +50,19 @@ export const DWebServerBuilder = (options: DarkWebServerData, name: string = get
     y: options.y ?? -1,
   };
 
-  const scalar = 1 + darkWebData.difficulty * 3;
+  const scalar = 1 + darknetData.difficulty * 3;
 
   const params: IConstructorParams = {
     hostname: name,
     ip: createUniqueRandomIp(),
     organizationName: "darkweb",
     maxRam: 16,
-    requiredHackingSkill: Math.ceil((scalar) ** 2 + Math.random() * scalar * 3),
+    requiredHackingSkill: Math.ceil(scalar ** 2 + Math.random() * scalar * 3),
     hackDifficulty: 5,
     moneyAvailable: 0,
     numOpenPortsRequired: 69,
     adminRights: false,
-    darkWebData: darkWebData,
+    darknetData: darknetData,
   };
   const server = new Server(params);
   AddToAllServers(server);
@@ -69,81 +71,81 @@ export const DWebServerBuilder = (options: DarkWebServerData, name: string = get
 };
 
 export const checkPassword = (attemptedPassword: string, server: BaseServer, threads: number): PasswordResponse => {
-  const darkWebData = server.darkWebData;
-  if (!darkWebData) {
+  const darknetData = server.darknetData;
+  if (!darknetData) {
     throw new Error("Dark web server missing dark web data");
   }
-  if (darkWebData.password === attemptedPassword) {
+  if (darknetData.password === attemptedPassword) {
     handleSuccessfulAuth(server, threads);
     return getGenericSuccess();
   }
   handleFailedAuth(server, threads);
 
-  if (darkWebData.minigameType === Minigames.MastermindHint) {
-    const { exactCharacters, misplacedCharacters } = getMastermindResponse(darkWebData.password, attemptedPassword);
+  if (darknetData.minigameType === Minigames.MastermindHint) {
+    const { exactCharacters, misplacedCharacters } = getMastermindResponse(darknetData.password, attemptedPassword);
     const message = `Hint: ${exactCharacters} symbols match, ${misplacedCharacters} ${
       misplacedCharacters == 1 ? "is" : "are"
     } close.`;
-    return getFailureResponse(message, `${exactCharacters},${misplacedCharacters}`, darkWebData);
-  } else if (darkWebData.minigameType === Minigames.GuessNumber) {
-    const hintData = +attemptedPassword > +darkWebData.password ? "Lower" : "Higher";
-    return getFailureResponse(darkWebData.passwordHint, hintData, darkWebData);
-  } else if (darkWebData.minigameType === Minigames.Yesn_t) {
+    return getFailureResponse(message, `${exactCharacters},${misplacedCharacters}`, darknetData);
+  } else if (darknetData.minigameType === Minigames.GuessNumber) {
+    const hintData = +attemptedPassword > +darknetData.password ? "Lower" : "Higher";
+    return getFailureResponse(darknetData.passwordHint, hintData, darknetData);
+  } else if (darknetData.minigameType === Minigames.Yesn_t) {
     const response = attemptedPassword
       .split("")
-      .map((char, i) => (char === darkWebData.password[i] ? "yes" : "yesn't"))
+      .map((char, i) => (char === darknetData.password[i] ? "yes" : "yesn't"))
       .join(",");
-    return getFailureResponse("that wasn't right", response, darkWebData);
-  } else if (darkWebData.minigameType === Minigames.Synchronize) {
-    const exactChars = getExactCorrectCharsCount(darkWebData.password, attemptedPassword);
-    const closeChars = getMisplacedCorrectCharsCount(darkWebData.password, attemptedPassword);
-    const syncDecimal = ((exactChars + closeChars * 0.5) / darkWebData.password.length) * 100;
+    return getFailureResponse("that wasn't right", response, darknetData);
+  } else if (darknetData.minigameType === Minigames.Synchronize) {
+    const exactChars = getExactCorrectCharsCount(darknetData.password, attemptedPassword);
+    const closeChars = getMisplacedCorrectCharsCount(darknetData.password, attemptedPassword);
+    const syncDecimal = ((exactChars + closeChars * 0.5) / darknetData.password.length) * 100;
     const responseData = `${Math.round(syncDecimal * 10) / 10}`;
-    return getFailureResponse(`Synchronization status: ${responseData}%`, responseData, darkWebData);
-  } else if (darkWebData.minigameType === Minigames.BinaryEncodedFeedback) {
-    const exactChars = getExactCorrectChars(darkWebData.password, attemptedPassword);
+    return getFailureResponse(`Synchronization status: ${responseData}%`, responseData, darknetData);
+  } else if (darknetData.minigameType === Minigames.BinaryEncodedFeedback) {
+    const exactChars = getExactCorrectChars(darknetData.password, attemptedPassword);
     const binaryRepresentation = exactChars.reduce(
       (acc, val, i) => acc + (val ? 2 ** (attemptedPassword.length - i) : 0),
       0,
     );
-    return getFailureResponse("Beep Boop", `${binaryRepresentation}`, darkWebData);
-  } else if (darkWebData.minigameType === Minigames.SpiceLevel) {
-    const exactChars = getExactCorrectChars(darkWebData.password, attemptedPassword);
+    return getFailureResponse("Beep Boop", `${binaryRepresentation}`, darknetData);
+  } else if (darknetData.minigameType === Minigames.SpiceLevel) {
+    const exactChars = getExactCorrectChars(darknetData.password, attemptedPassword);
     const pepperRepresentation = exactChars.map((val) => (val ? "🌶️" : "")).join("") || "0";
     return getFailureResponse(
       "Not spicy enough",
-      `${pepperRepresentation}/${darkWebData.password.length}`,
-      darkWebData,
+      `${pepperRepresentation}/${darknetData.password.length}`,
+      darknetData,
     );
   } else if (
-    darkWebData.minigameType === Minigames.ConvertToBase10 ||
-    darkWebData.minigameType === Minigames.parsedExpression
+    darknetData.minigameType === Minigames.ConvertToBase10 ||
+    darknetData.minigameType === Minigames.parsedExpression
   ) {
     const parsedAttemptedPassword = parseFloat(attemptedPassword);
     if (
       !isNaN(parsedAttemptedPassword) &&
-      Math.abs((parsedAttemptedPassword - +darkWebData.password) / +darkWebData.password) < 0.001
+      Math.abs((parsedAttemptedPassword - +darknetData.password) / +darknetData.password) < 0.001
     ) {
       // ignore small rounding errors during floating point operations
       handleSuccessfulAuth(server, threads);
       return getGenericSuccess();
     }
-    return getFailureResponse(darkWebData.passwordHint, darkWebData.passwordHintData ?? "", darkWebData);
+    return getFailureResponse(darknetData.passwordHint, darknetData.passwordHintData ?? "", darknetData);
   } else {
     const sharedChars =
-      darkWebData.minigameType === Minigames.TimingAttack ? getSharedChars(darkWebData.password, attemptedPassword) : 0;
-    return getFailureResponse(darkWebData.passwordHint, darkWebData.passwordHintData ?? "", darkWebData, sharedChars);
+      darknetData.minigameType === Minigames.TimingAttack ? getSharedChars(darknetData.password, attemptedPassword) : 0;
+    return getFailureResponse(darknetData.passwordHint, darknetData.passwordHintData ?? "", darknetData, sharedChars);
   }
 };
 
-const getFailureResponse = (msg: string, data: string, darkWebData: DarkWebServerData, extraDelay = 0) => ({
+const getFailureResponse = (msg: string, data: string, darknetData: DnetServerData, extraDelay = 0) => ({
   status: AUTH_FAILURE_STATUS,
   msg,
   data,
-  passwordLength: darkWebData.password.length,
-  passwordFormat: getPasswordType(darkWebData.password),
+  passwordLength: darknetData.password.length,
+  passwordFormat: getPasswordType(darknetData.password),
   responseTime: getResponseTime(extraDelay),
-  modelId: darkWebData.minigameType,
+  modelId: darknetData.minigameType,
 });
 
 const getMastermindResponse = (password: string, attemptedPassword: string) => {
@@ -194,7 +196,6 @@ const getSharedChars = (password: string, attemptedPassword: string): number => 
   return password.length;
 };
 
-
 export const getName = (): string => {
   return decorateName(getBaseName());
 };
@@ -216,7 +217,7 @@ const getBaseName = (): string => {
   const suffix = ServerNameSuffixes[Math.floor(Math.random() * ServerNameSuffixes.length)];
   const connector = connectors[Math.floor(Math.random() * connectors.length)];
   return `${prefix}${connector}${suffix}`;
-}
+};
 
 const decorateName = (name: string): string => {
   let updatedName = name;
@@ -224,7 +225,7 @@ const decorateName = (name: string): string => {
     const connector = connectors[Math.floor(Math.random() * connectors.length)];
 
     if (Math.random() < 0.3) {
-      updatedName = l33tifyName(name)
+      updatedName = l33tifyName(name);
     }
 
     if (Math.random() < 0.05) {
@@ -244,11 +245,10 @@ const decorateName = (name: string): string => {
     if (Math.random() < 0.05) {
       updatedName = `${updatedName}:${Math.floor(Math.random() * 10000)}`;
     }
-
   } while (GetServer(updatedName) !== null);
 
   return updatedName;
-}
+};
 
 const l33tifyName = (name: string): string => {
   let updatedName = name;
@@ -259,4 +259,4 @@ const l33tifyName = (name: string): string => {
     updatedName = updatedName.replaceAll(char, replacement);
   }
   return updatedName;
-}
+};

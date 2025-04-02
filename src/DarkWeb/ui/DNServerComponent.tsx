@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Box, Button, Container, Typography } from "@mui/material";
-import { DWPasswordPromptModal } from "./DWPasswordPromptModal";
+import { PasswordPromptModal } from "./PasswordPromptModal";
 import { getIcon, Icon } from "../controllers/ServerIcon";
-import { dwebStyles } from "./dwebStyles";
+import { dnetStyles } from "./dnetStyles";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
-import { DarkWebState } from "../models/DarkWebState";
+import { DarknetState } from "../models/DarknetState";
 import { getPixelPosition } from "./networkCanvas";
 
 export type DWServerProps = {
@@ -13,19 +13,19 @@ export type DWServerProps = {
   enableAuth: boolean;
 };
 
-export function DWServerComponent({ server, enableAuth }: DWServerProps): React.ReactElement {
+export function DNServerComponent({ server, enableAuth }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const { classes } = dwebStyles({});
+  const { classes } = dnetStyles({});
   const color = server.hasAdminRights ? classes.success : classes.rep;
-  const icon = getIcon(server.darkWebData?.icon ?? Icon.Terminal);
+  const icon = getIcon(server.darknetData?.icon ?? Icon.Terminal);
 
   const authButtonHandler = () => {
-    DarkWebState.openServer = server;
+    DarknetState.openServer = server;
     setOpen(true);
   };
 
   const handleClose = () => {
-    DarkWebState.openServer = null;
+    DarknetState.openServer = null;
     setOpen(false);
   };
 
@@ -39,7 +39,7 @@ export function DWServerComponent({ server, enableAuth }: DWServerProps): React.
 
   return (
     <Container sx={getServerPositionStyles(server)} className={`${color} ${classes.DWServer}`} disableGutters>
-      <DWPasswordPromptModal open={open} onClose={handleClose} server={server} />
+      <PasswordPromptModal open={open} onClose={handleClose} server={server} />
       <Container maxWidth="lg" sx={{ mx: 1, padding: 0, margin: 0 }} disableGutters>
         <Box className={`${classes.inlineFlexBox}`}>
           {React.createElement(icon, { color: "secondary" })}
@@ -48,7 +48,7 @@ export function DWServerComponent({ server, enableAuth }: DWServerProps): React.
           </Typography>
         </Box>
         <Typography color="secondary">
-          x:{server.darkWebData?.x ?? ""} y:{server.darkWebData?.y ?? ""}; Cha:{server.requiredHackingSkill}
+          x:{server.darknetData?.x ?? ""} y:{server.darknetData?.y ?? ""}; Cha:{server.requiredHackingSkill}
         </Typography>
         <br />
         {server.hostname == SpecialServers.DarkWeb ? (

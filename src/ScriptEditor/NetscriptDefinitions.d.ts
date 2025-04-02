@@ -4016,6 +4016,14 @@ export interface CodingContract {
 }
 
 /**
+ * Darknet API
+ * @remarks
+ * If you are not in BitNode-15, then you must have Source-File 15 in order to use this API.
+ * @public
+ */
+export interface Darknet {}
+
+/**
  * Gang API
  * @remarks
  * If you are not in BitNode-2, then you must have Source-File 2 in order to use this API.
@@ -6029,6 +6037,12 @@ export interface NS {
    * @remarks RAM cost: 0 GB
    */
   readonly codingcontract: CodingContract;
+
+  /**
+   * Namespace for darknet functions. Contains spoilers.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly dn: Darknet;
 
   /**
    * Namespace for gang functions. Contains spoilers.

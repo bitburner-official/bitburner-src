@@ -1,4 +1,4 @@
-import { DarkWebState, NET_WIDTH } from "../models/DarkWebState";
+import { DarknetState, NET_WIDTH } from "../models/DarknetState";
 import { GetServer } from "../../Server/AllServers";
 import { BaseServer } from "../../Server/BaseServer";
 import {
@@ -7,7 +7,7 @@ import {
   DW_SERVER_HEIGHT,
   DW_SERVER_WIDTH,
   MAP_BORDER_WIDTH,
-} from "./dwebStyles";
+} from "./dnetStyles";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 
 export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
@@ -18,7 +18,7 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   }
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  for (const server of DarkWebState.DarkWebNetwork.flat()) {
+  for (const server of DarknetState.Network.flat()) {
     if (!server) {
       continue;
     }
@@ -64,12 +64,12 @@ export const getPixelPosition = (server: BaseServer, centered = false) => {
 };
 
 const getCoordinates = (server: BaseServer) => {
-  const darkWebData = server.darkWebData;
-  if (!darkWebData) {
+  const darknetData = server.darknetData;
+  if (!darknetData) {
     throw new Error("Server missing dark web data");
   }
   return {
-    x: darkWebData.x,
-    y: darkWebData.y,
+    x: darknetData.x,
+    y: darknetData.y,
   };
 };

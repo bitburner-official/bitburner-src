@@ -138,9 +138,9 @@ export const commonPasswordDictionary = [
   "matrix",
 ];
 
-export const loreNames = [...Object.values(FactionName), ...Object.values(LocationName)]
-  .map(n => n.replaceAll(" ", "_").toLowerCase())
-
+export const loreNames = [...Object.values(FactionName), ...Object.values(LocationName)].map((n) =>
+  n.replaceAll(" ", "_").toLowerCase(),
+);
 
 export const presetNames = [
   "localhost",
@@ -169,7 +169,13 @@ export const presetNames = [
   "(╯°□°)╯︵ ┻━┻",
   "¯\\_(ツ)_/¯",
   "༼ つ ◕_◕ ༽つ",
-]
+  "bungo",
+  "microhard",
+  "groogle",
+  "facebucks",
+  "tweeter",
+  "sun_megasystems",
+];
 
 export const ServerNamePrefixes = [
   "neo",
@@ -201,7 +207,7 @@ export const ServerNamePrefixes = [
   "byte",
   "giga",
   "rogue",
-  ];
+];
 
 export const ServerNameSuffixes = [
   "corp",
@@ -228,7 +234,7 @@ export const ServerNameSuffixes = [
   "sanctuary",
   "genesis",
   "hub",
-  ]
+];
 
 export const connectors = ["", ".", "-", "_", "/", "~", ":", "*", "::"];
 
@@ -241,4 +247,4 @@ export const l33t: Record<string, string> = {
   o: "0",
   s: "5",
   t: "7",
-}
+};

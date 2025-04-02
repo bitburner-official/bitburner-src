@@ -224,6 +224,8 @@ const singularity = {
   getCurrentWork: SF4Cost(0.5),
 } as const;
 
+const dn = {} as const;
+
 // Gang API
 const gang = {
   createGang: RamCostConstants.GangApiBase / 4,
@@ -489,6 +491,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   singularity,
   gang,
   go,
+  dn,
   bladeburner,
   infiltration,
   codingcontract,

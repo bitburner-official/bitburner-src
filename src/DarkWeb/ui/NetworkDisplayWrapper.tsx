@@ -1,18 +1,18 @@
 import React, { PointerEventHandler, useEffect, useRef, useState, WheelEventHandler } from "react";
 import { Container, Typography, Button } from "@mui/material";
-import { DWServerComponent } from "./DWServerComponent";
+import { DNServerComponent } from "./DNServerComponent";
 import { useRerender } from "../../ui/React/hooks";
-import { DarkWebEvents, DarkWebState } from "../models/DarkWebState";
+import { DarknetEvents, DarknetState } from "../models/DarknetState";
 import { GetServer } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
 import { drawOnCanvas } from "./networkCanvas";
-import { clearDarkWebNetwork, populateDarkWebNetwork } from "../controllers/DarkWebNetworkGenerator";
+import { clearDarknet, populateDarknet } from "../controllers/DarknetNetworkGenerator";
 
 export const DW_NET_WIDTH = 3600;
 export const DW_NET_HEIGHT = 6000;
 
-export function DWNetDisplayWrapper(): React.ReactElement {
+export function NetworkDisplayWrapper(): React.ReactElement {
   const rerender = useRerender();
   const draggableBackground = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -20,7 +20,7 @@ export function DWNetDisplayWrapper(): React.ReactElement {
   const zoomOptions = [0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5];
 
   useEffect(() => {
-    DarkWebEvents.subscribe(() => {
+    DarknetEvents.subscribe(() => {
       if (canvas.current) {
         rerender();
         drawOnCanvas(canvas.current);
@@ -116,15 +116,23 @@ export function DWNetDisplayWrapper(): React.ReactElement {
             height={DW_NET_HEIGHT}
             style={{ position: "absolute", zIndex: -1 }}
           ></canvas>
-          <DWServerComponent server={darkWebRoot} enableAuth={true} />
-          {DarkWebState.DarkWebNetwork.map((row, i) =>
+          <DNServerComponent server={darkWebRoot} enableAuth={true} />
+          {DarknetState.Network.map((row, i) =>
             row.map((server, j) =>
-              server ? <DWServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} /> : "",
+              server ? <DNServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} /> : "",
             ),
           )}
         </div>
       </div>
-      <Button onClick={() => {clearDarkWebNetwork(); populateDarkWebNetwork()}} variant={"contained"}>Generate New Web</Button>
+      <Button
+        onClick={() => {
+          clearDarknet();
+          populateDarknet();
+        }}
+        variant={"contained"}
+      >
+        Generate New Web
+      </Button>
     </Container>
   );
 }

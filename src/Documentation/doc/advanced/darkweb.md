@@ -45,6 +45,15 @@ This is currently a design document, but eventually will be the in-game player d
   - harder servers have a min cha requirement?
   - phishing success chance based off of cha?
 
+# Real-life problems to solve
+
+- Environment unreliability
+  - servers will sometimes restart or go offline, sometimes permanently
+  - scripts will sometimes die
+- Central data storage and retrieval (passwords)
+- Building self-replicating web-crawlers
+- Version control: how to handle when two different versions of a script meet, each trying to clear servers and replicate
+
 ## Rewards:
 
 - Start with tor router permanently?
@@ -57,8 +66,6 @@ This is currently a design document, but eventually will be the in-game player d
 
 # requirements for MVP:
 
-- Darkweb server cha difficulty balance?
-
 - Darkweb api
   - scp
   - exec
@@ -66,15 +73,19 @@ This is currently a design document, but eventually will be the in-game player d
   - killall?
   - ls?
   - ps?
+  - connect or other singularity stuff?
   - attempt password
 
 ## TODO:
 
 - make darkwebserver extend baseServer
 
+- colorful servers?
+
 - range of passwords in hint from roman numeral
 
 - servers renamed occasionally?
+- scripts go down sometimes?
 
 - packet sniffing
 
@@ -87,6 +98,7 @@ This is currently a design document, but eventually will be the in-game player d
 - server that returns yes/no in its failure response
   - yes, the password has X as one of its factors
 - server that returns a string in response to the attempt?
+
   - result: (encoded attempt) expectation: (encoded password)
 
 - Harden existing commands against loops in network? or exclude darkweb from them?
@@ -98,18 +110,31 @@ This is currently a design document, but eventually will be the in-game player d
 - change arithmatic symbols to break eval() injection?
 
 - WEBSTORM
+
   - removes ~1/2 of servers
   - reboots remaining servers
   - adds a couple new servers
   - Runs on a timer, or when logging in after being online for a while?
+  - upgrade to harden scripts against restarts?
+
+- reward that scales password attempt speed?
+- reward that speeds up packet sniffing speed?
+
+- Attempt to make connection?
+  - chance to put current server offline?
+  - chance to move the target server
+  - only nearby servers are valid
 
 ## TODO later:
 
 - more Clue notes on servers
+
   - hints to vulnerabilities,
   - partial passwords?
 
 - bonus time?
+
+- Darkweb server cha difficulty balance?
 
 - slow down net mutations
 
@@ -127,6 +152,12 @@ https://discord.com/channels/415207508303544321/459097632896188436/1345773862263
 https://discord.com/channels/415207508303544321/415213435974975508/1352628138261086339
 
 ## Idea scratch space
+
+- final boss with special cache
+
+  - unique augs?
+  - interactive proof problem?
+  - T14m4t the m0th3r
 
 - database server
 
@@ -146,8 +177,12 @@ https://discord.com/channels/415207508303544321/415213435974975508/1352628138261
     - totally normal server .jpeg
 
   - glitchy UI?
+  - grey plague?
+  - stat debuff?
   - scripts crash?
-  -
+  - rickroll?
+  - "virus" file saved on home computer?
+
   - accept all passwords?
   - Edit scripts running on them?
 

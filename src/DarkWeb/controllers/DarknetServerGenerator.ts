@@ -1,4 +1,4 @@
-import { DWebServerBuilder } from "../models/DarkWebServerData";
+import { DnetServerBuilder } from "../models/DnetServerData";
 import { Icon } from "./ServerIcon";
 import { Server } from "../../Server/Server";
 import {
@@ -33,7 +33,7 @@ export enum Minigames {
   parsedExpression,
 }
 
-export const getDarkWebServer = (difficulty: number, x: number, y: number): Server => {
+export const getDarknetServer = (difficulty: number, x: number, y: number): Server => {
   const easyServers = [getEchoVulnServer, getSortedEchoVulnServer, getDefaultPasswordServer];
   const mediumServers = [
     getMastermindHintServer,
@@ -76,17 +76,15 @@ export const getEchoVulnServer = (difficulty: number, x: number, y: number): Ser
   ];
   const password = getPassword(3);
   const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${password}`;
-  return DWebServerBuilder(
-    {
-      icon: getRandomIcon(),
-      minigameType: Minigames.EchoVuln,
-      password,
-      passwordHint: hint,
-      difficulty,
-      x,
-      y,
-    },
-  );
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.EchoVuln,
+    password,
+    passwordHint: hint,
+    difficulty,
+    x,
+    y,
+  });
 };
 
 export const getSortedEchoVulnServer = (difficulty: number, x: number, y: number): Server => {
@@ -99,18 +97,16 @@ export const getSortedEchoVulnServer = (difficulty: number, x: number, y: number
   const password = getPassword(3 + difficulty / 2);
   const sortedPassword = password.split("").sort().join("");
   const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${sortedPassword}`;
-  return DWebServerBuilder(
-    {
-      icon: getRandomIcon(),
-      minigameType: Minigames.SortedEchoVuln,
-      password: password,
-      passwordHint: hint,
-      passwordHintData: sortedPassword,
-      difficulty,
-      x,
-      y,
-    },
-  );
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.SortedEchoVuln,
+    password: password,
+    passwordHint: hint,
+    passwordHintData: sortedPassword,
+    difficulty,
+    x,
+    y,
+  });
 };
 
 export const getDictionaryAttackServer = (
@@ -121,17 +117,15 @@ export const getDictionaryAttackServer = (
   hintTemplates: string[],
   minigameType: Minigames,
 ): Server => {
-  return DWebServerBuilder(
-    {
-      icon: getRandomIcon(),
-      minigameType,
-      password: dictionary[Math.floor(Math.random() * dictionary.length)],
-      passwordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
-      difficulty,
-      x,
-      y,
-    },
-  );
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType,
+    password: dictionary[Math.floor(Math.random() * dictionary.length)],
+    passwordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
+    difficulty,
+    x,
+    y,
+  });
 };
 
 export const getNoPasswordServer = (difficulty: number, x: number, y: number): Server => {
@@ -169,17 +163,15 @@ export const getDogNameServer = (difficulty: number, x: number, y: number): Serv
 };
 
 export const getMastermindHintServer = (difficulty: number, x: number, y: number): Server => {
-  return DWebServerBuilder(
-    {
-      icon: getRandomIcon(),
-      minigameType: Minigames.MastermindHint,
-      password: getPassword(2 + difficulty),
-      passwordHint: "", // dynamic hint
-      difficulty,
-      x,
-      y,
-    },
-  );
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.MastermindHint,
+    password: getPassword(2 + difficulty),
+    passwordHint: "", // dynamic hint
+    difficulty,
+    x,
+    y,
+  });
 };
 
 export const getTimingAttackServer = (difficulty: number, x: number, y: number): Server => {
@@ -190,66 +182,58 @@ export const getTimingAttackServer = (difficulty: number, x: number, y: number):
     "I spent some time on it, but that's not the password",
   ];
   const length = 3 + difficulty / 3;
-  return DWebServerBuilder(
-    {
-      icon: getRandomIcon(),
-      minigameType: Minigames.TimingAttack,
-      password: getPassword(length, true, false),
-      passwordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
-      difficulty,
-      x,
-      y,
-    },
-  );
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.TimingAttack,
+    password: getPassword(length, true, false),
+    passwordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
+    difficulty,
+    x,
+    y,
+  });
 };
 
 export const getRomanNumeralServer = (difficulty: number, x: number, y: number): Server => {
   const password = Math.floor(Math.random() * 10 * (10 * (difficulty + 1)));
   const encodedPassword = romanNumeralEncoder(password);
-  return DWebServerBuilder(
-    {
-      icon: getRandomIcon(),
-      minigameType: Minigames.RomanNumeral,
-      password: `${password}`,
-      passwordHint: `The password is the value of the number ${encodedPassword}`,
-      passwordHintData: encodedPassword,
-      difficulty,
-      x,
-      y,
-    },
-  );
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.RomanNumeral,
+    password: `${password}`,
+    passwordHint: `The password is the value of the number ${encodedPassword}`,
+    passwordHintData: encodedPassword,
+    difficulty,
+    x,
+    y,
+  });
 };
 
 export const getLargestPrimeFactorServer = (difficulty: number, x: number, y: number): Server => {
   const largestPrimePasswordDetails = getLargestPrimeFactorPassword(difficulty);
-  return DWebServerBuilder(
-    {
-      icon: getRandomIcon(),
-      minigameType: Minigames.LargestPrimeFactor,
-      password: `${largestPrimePasswordDetails.largestPrime}`,
-      passwordHint: `The password is the largest prime factor of ${largestPrimePasswordDetails.password}`,
-      passwordHintData: `${largestPrimePasswordDetails.password}`,
-      difficulty,
-      x,
-      y,
-    },
-  );
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.LargestPrimeFactor,
+    password: `${largestPrimePasswordDetails.largestPrime}`,
+    passwordHint: `The password is the largest prime factor of ${largestPrimePasswordDetails.password}`,
+    passwordHintData: `${largestPrimePasswordDetails.password}`,
+    difficulty,
+    x,
+    y,
+  });
 };
 
 export const getGuessNumberServer = (difficulty: number, x: number, y: number): Server => {
   const password = `${Math.floor(Math.random() * 10 * (15 * (difficulty + 1)))}`;
   const maxNumber = 10 ** (password.length + 1);
-  return DWebServerBuilder(
-    {
-      icon: getRandomIcon(),
-      minigameType: Minigames.GuessNumber,
-      password: password,
-      passwordHint: `The password is a number between 0 and ${maxNumber}`,
-      difficulty,
-      x,
-      y,
-    },
-  );
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.GuessNumber,
+    password: password,
+    passwordHint: `The password is a number between 0 and ${maxNumber}`,
+    difficulty,
+    x,
+    y,
+  });
 };
 
 export const getLargeDictionaryServer = (difficulty: number, x: number, y: number): Server => {
@@ -276,47 +260,41 @@ export const getEuCountryDictionaryServer = (difficulty: number, x: number, y: n
 
 export const getYesn_tServer = (difficulty: number, x: number, y: number): Server => {
   const password = getPassword(3 + difficulty / 3, true, difficulty > 8, false, false);
-  return DWebServerBuilder(
-    {
-      icon: getRandomIcon(),
-      minigameType: Minigames.Yesn_t,
-      password,
-      passwordHint: "",
-      difficulty,
-      x,
-      y,
-    },
-  );
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.Yesn_t,
+    password,
+    passwordHint: "",
+    difficulty,
+    x,
+    y,
+  });
 };
 
 export const getBinaryEncodedFeedbackServer = (difficulty: number, x: number, y: number): Server => {
   const password = getPassword(3 + difficulty / 3, true, difficulty > 8, false, false);
-  return DWebServerBuilder(
-    {
-      icon: getRandomIcon(),
-      minigameType: Minigames.BinaryEncodedFeedback,
-      password,
-      passwordHint: "",
-      difficulty,
-      x,
-      y,
-    },
-  );
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.BinaryEncodedFeedback,
+    password,
+    passwordHint: "",
+    difficulty,
+    x,
+    y,
+  });
 };
 
 export const getSpiceLevelServer = (difficulty: number, x: number, y: number): Server => {
   const password = getPassword(3 + difficulty / 3, true, difficulty > 8, false, false);
-  return DWebServerBuilder(
-    {
-      icon: getRandomIcon(),
-      minigameType: Minigames.SpiceLevel,
-      password,
-      passwordHint: "",
-      difficulty,
-      x,
-      y,
-    },
-  );
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.SpiceLevel,
+    password,
+    passwordHint: "",
+    difficulty,
+    x,
+    y,
+  });
 };
 
 export const getConvertToBase10Server = (difficulty: number, x: number, y: number): Server => {
@@ -327,35 +305,31 @@ export const getConvertToBase10Server = (difficulty: number, x: number, y: numbe
     base += bases[Math.floor(Math.random() * bases.length)] / 10;
   }
   const encodedPassword = encodeNumberInBaseN(password, base);
-  return DWebServerBuilder(
-    {
-      icon: getRandomIcon(),
-      minigameType: Minigames.ConvertToBase10,
-      password: `${password}`,
-      passwordHint: `the password is the base ${base} number ${encodedPassword} in base 10`,
-      passwordHintData: `${base},${encodedPassword}`,
-      difficulty,
-      x,
-      y,
-    },
-  );
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.ConvertToBase10,
+    password: `${password}`,
+    passwordHint: `the password is the base ${base} number ${encodedPassword} in base 10`,
+    passwordHintData: `${base},${encodedPassword}`,
+    difficulty,
+    x,
+    y,
+  });
 };
 
 export const getParseArethmeticExpressionServer = (difficulty: number, x: number, y: number): Server => {
   const expression = generateSimpleArithmeticExpression(difficulty);
   const result = parseSimpleArithmeticExpression(expression);
-  return DWebServerBuilder(
-    {
-      icon: getRandomIcon(),
-      minigameType: Minigames.parsedExpression,
-      password: `${result}`,
-      passwordHint: `The password is the evaluation of this expression`,
-      passwordHintData: expression,
-      difficulty,
-      x,
-      y,
-    },
-  );
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.parsedExpression,
+    password: `${result}`,
+    passwordHint: `The password is the evaluation of this expression`,
+    passwordHintData: expression,
+    difficulty,
+    x,
+    y,
+  });
 };
 
 // TODO: most common item in array server
