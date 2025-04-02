@@ -9,34 +9,26 @@ import { workerScripts } from "./Netscript/WorkerScripts";
 import { generateNextPid } from "./Netscript/Pid";
 
 import { CONSTANTS } from "./Constants";
-import { Interpreter } from "./ThirdParty/JSInterpreter";
 import { NetscriptFunctions } from "./NetscriptFunctions";
 import { compile } from "./NetscriptJSEvaluator";
 import { Port, PortNumber } from "./NetscriptPort";
 import { RunningScript } from "./Script/RunningScript";
 import { scriptCalculateOfflineProduction } from "./Script/ScriptHelpers";
-import { Script } from "./Script/Script";
 import { GetAllServers } from "./Server/AllServers";
 import { BaseServer } from "./Server/BaseServer";
 import { Settings } from "./Settings/Settings";
-
-import { generate } from "escodegen";
 
 import { dialogBoxCreate } from "./ui/React/DialogBox";
 import { formatRam } from "./ui/formatNumber";
 import { arrayToString } from "./utils/helpers/ArrayHelpers";
 import { roundToTwo } from "./utils/helpers/roundToTwo";
 
-import { parse } from "acorn";
-import type * as acorn from "acorn";
-import { simple as walksimple } from "acorn-walk";
 import { parseCommand } from "./Terminal/Parser";
 import { Terminal } from "./Terminal";
 import { ScriptArg } from "@nsdefs";
 import { CompleteRunOptions, getRunningScriptsByArgs } from "./Netscript/NetscriptHelpers";
 import { handleUnknownError } from "./utils/ErrorHandler";
-import { isLegacyScript, legacyScriptExtension, resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
-import { root } from "./Paths/Directory";
+import { isLegacyScript, resolveScriptFilePath, ScriptFilePath } from "./Paths/ScriptFilePath";
 import { getErrorMessageWithStackAndCause } from "./utils/ErrorHelper";
 import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 import { Result } from "./types";
@@ -70,207 +62,6 @@ async function startNetscript2Script(workerScript: WorkerScript): Promise<void> 
     throw `${script.filename} cannot be run because it does not have a main function.`;
   // Explicitly called from a variable so that we don't bind "this".
   await mainFunc(ns);
-}
-
-async function startNetscript1Script(workerScript: WorkerScript): Promise<void> {
-  const code = workerScript.code;
-  let errorToThrow: unknown;
-
-  //Process imports
-  let codeWithImports, codeLineOffset;
-  try {
-    const importProcessingRes = processNetscript1Imports(code, workerScript);
-    codeWithImports = importProcessingRes.code;
-    codeLineOffset = importProcessingRes.lineOffset;
-  } catch (e: unknown) {
-    throw `Error processing Imports in ${workerScript.name}@${workerScript.hostname}:\n\n${e}`;
-  }
-
-  //TODO unplanned: Make NS1 wrapping type safe instead of using BasicObject.
-  type BasicObject = Record<string, any>;
-  const wrappedNS = NetscriptFunctions(workerScript);
-  function wrapNS1Layer(int: Interpreter, intLayer: unknown, nsLayer = wrappedNS as BasicObject) {
-    for (const [name, entry] of Object.entries(nsLayer)) {
-      if (typeof entry === "function") {
-        const wrapper = async (...args: unknown[]) => {
-          try {
-            // Sent a resolver function as an extra arg. See createAsyncFunction JSInterpreter.js:3209
-            const callback = args.pop() as (value: unknown) => void;
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call -- NS1 is deprecated.
-            const result = await entry(...args.map((arg) => int.pseudoToNative(arg)));
-            return callback(int.nativeToPseudo(result));
-          } catch (e: unknown) {
-            errorToThrow = e;
-          }
-        };
-        int.setProperty(intLayer, name, int.createAsyncFunction(wrapper));
-      } else if (Array.isArray(entry) || typeof entry !== "object") {
-        // args, strings on enums, etc
-        int.setProperty(intLayer, name, int.nativeToPseudo(entry));
-      } else {
-        // new object layer, e.g. bladeburner
-        int.setProperty(intLayer, name, int.nativeToPseudo({}));
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument -- NS1 is deprecated.
-        wrapNS1Layer(int, (intLayer as BasicObject).properties[name], nsLayer[name]);
-      }
-    }
-  }
-
-  let interpreter: Interpreter;
-  try {
-    interpreter = new Interpreter(codeWithImports, wrapNS1Layer, codeLineOffset);
-  } catch (e: unknown) {
-    throw `Syntax ERROR in ${workerScript.name}@${workerScript.hostname}:\n\n${String(e)}`;
-  }
-
-  let more = true;
-  while (more) {
-    if (errorToThrow) throw errorToThrow;
-    if (workerScript.env.stopFlag) return;
-    for (let i = 0; more && i < 3; i++) more = interpreter.step();
-    if (more) await new Promise((r) => setTimeout(r, Settings.CodeInstructionRunTime));
-  }
-}
-
-/*  Since the JS Interpreter used for Netscript 1.0 only supports ES5, the keyword
-    'import' throws an error. However, since we want to support import functionality
-    we'll implement it ourselves by parsing the Nodes in the AST out.
-
-    @param code - The script's code
-    @returns {Object} {
-        code: Newly-generated code with imported functions
-        lineOffset: Net number of lines of code added/removed due to imported functions
-                    Should typically be positive
-    }
-*/
-function processNetscript1Imports(code: string, workerScript: WorkerScript): { code: string; lineOffset: number } {
-  //allowReserved prevents 'import' from throwing error in ES5
-  const ast = parse(code, {
-    ecmaVersion: 9,
-    allowReserved: true,
-    sourceType: "module",
-  });
-
-  const server = workerScript.getServer();
-  if (server == null) {
-    throw new Error("Failed to find underlying Server object for script");
-  }
-
-  function getScript(scriptName: ScriptFilePath): Script | null {
-    return server.scripts.get(scriptName) ?? null;
-  }
-
-  let generatedCode = ""; // Generated Javascript Code
-  let hasImports = false;
-
-  // Walk over the tree and process ImportDeclaration nodes
-  walksimple(ast, {
-    ImportDeclaration: (node: acorn.ImportDeclaration) => {
-      hasImports = true;
-      const scriptName = resolveScriptFilePath(node.source.value as string, root, legacyScriptExtension);
-      if (!scriptName) throw new Error("'Import' failed due to invalid path: " + scriptName);
-      const script = getScript(scriptName);
-      if (!script) throw new Error("'Import' failed due to script not found: " + scriptName);
-      const scriptAst = parse(script.code, {
-        ecmaVersion: 9,
-        allowReserved: true,
-        sourceType: "module",
-      });
-
-      if (node.specifiers.length === 1 && node.specifiers[0].type === "ImportNamespaceSpecifier") {
-        // import * as namespace from script
-        const namespace = node.specifiers[0].local.name;
-        const fnNames: string[] = []; //Names only
-        const fnDeclarations: acorn.Node[] = []; //FunctionDeclaration Node objects
-        walksimple(scriptAst, {
-          FunctionDeclaration: (node: acorn.FunctionDeclaration | acorn.AnonymousFunctionDeclaration) => {
-            if (!node.id) {
-              return;
-            }
-            fnNames.push(node.id.name);
-            fnDeclarations.push(node);
-          },
-        });
-
-        //Now we have to generate the code that would create the namespace
-        generatedCode += `var ${namespace};\n(function (namespace) {\n`;
-
-        //Add the function declarations
-        fnDeclarations.forEach((fn) => {
-          generatedCode += generate(fn);
-          generatedCode += "\n";
-        });
-
-        //Add functions to namespace
-        fnNames.forEach((fnName) => {
-          generatedCode += "namespace." + fnName + " = " + fnName;
-          generatedCode += "\n";
-        });
-
-        //Finish
-        generatedCode += `})(${namespace} || (" + namespace + " = {}));\n`;
-      } else {
-        //import {...} from script
-
-        //Get array of all fns to import
-        const fnsToImport: string[] = [];
-        node.specifiers.forEach((e) => {
-          fnsToImport.push(e.local.name);
-        });
-
-        //Walk through script and get FunctionDeclaration code for all specified fns
-        const fnDeclarations: acorn.Node[] = [];
-        walksimple(scriptAst, {
-          FunctionDeclaration: (node: acorn.FunctionDeclaration | acorn.AnonymousFunctionDeclaration) => {
-            if (!node.id) {
-              return;
-            }
-            if (fnsToImport.includes(node.id.name)) {
-              fnDeclarations.push(node);
-            }
-          },
-        });
-
-        //Convert FunctionDeclarations into code
-        fnDeclarations.forEach((fn) => {
-          generatedCode += generate(fn);
-          generatedCode += "\n";
-        });
-      }
-    },
-  });
-
-  //If there are no imports, just return the original code
-  if (!hasImports) {
-    return { code: code, lineOffset: 0 };
-  }
-
-  //Remove ImportDeclarations from AST. These ImportDeclarations must be in top-level
-  let linesRemoved = 0;
-  if (ast.type !== "Program" || ast.body == null) {
-    throw new Error("Code could not be properly parsed");
-  }
-  for (let i = ast.body.length - 1; i >= 0; --i) {
-    if (ast.body[i].type === "ImportDeclaration") {
-      ast.body.splice(i, 1);
-      ++linesRemoved;
-    }
-  }
-
-  //Calculated line offset
-  const lineOffset = (generatedCode.match(/\n/g) || []).length - linesRemoved;
-
-  //Convert the AST back into code
-  code = generate(ast);
-
-  //Add the imported code and re-generate in ES5 (JS Interpreter for NS1 only supports ES5);
-  code = generatedCode + code;
-
-  const res = {
-    code: code,
-    lineOffset: lineOffset,
-  };
-  return res;
 }
 
 /**
@@ -310,6 +101,10 @@ export function startWorkerScript(runningScript: RunningScript, server: BaseServ
  * returns {boolean} indicating whether or not the workerScript was successfully added
  */
 function createAndAddWorkerScript(runningScriptObj: RunningScript, server: BaseServer, parent?: WorkerScript): boolean {
+  if (isLegacyScript(runningScriptObj.filename)) {
+    deferredError(`Running .script files is unsupported.`);
+    return false;
+  }
   const ramUsage = roundToTwo(runningScriptObj.ramUsage * runningScriptObj.threads);
   const ramAvailable = server.maxRam - server.ramUsed;
   // Check failure conditions before generating the workersScript and return false
@@ -344,7 +139,7 @@ Otherwise, this can also occur if you have attempted to launch a script from a t
   workerScripts.set(pid, workerScript);
 
   // Start the script's execution using the correct function for file type
-  (isLegacyScript(workerScript.name) ? startNetscript1Script : startNetscript2Script)(workerScript)
+  startNetscript2Script(workerScript)
     // Once the code finishes (either resolved or rejected, doesn't matter), set its
     // running status to false
     .then(function () {

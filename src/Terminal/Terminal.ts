@@ -598,7 +598,7 @@ export class Terminal {
     this.setcwd(root);
     if (!singularity) {
       this.print("Connected to " + server.hostname);
-      if (Player.getCurrentServer().hostname == "darkweb") {
+      if (Player.getCurrentServer().hostname === "darkweb") {
         checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
       }
     }
@@ -646,7 +646,7 @@ export class Terminal {
         "Bad command. Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it.";
       switch (ITutorial.currStep) {
         case iTutorialSteps.TerminalHelp:
-          if (commandArray.length === 1 && commandArray[0] == "help") {
+          if (commandArray.length === 1 && commandArray[0] === "help") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -654,9 +654,9 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalLs:
-          if (commandArray.length === 1 && commandArray[0] == "ls") {
+          if (commandArray.length === 1 && commandArray[0] === "ls") {
             iTutorialNextStep();
-          } else if (commandArray[0] == "1s") {
+          } else if (commandArray[0] === "1s") {
             this.error("Command '1s' not found. Did you mean 'ls' with a lowercase L?");
             return;
           } else {
@@ -665,7 +665,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalScan:
-          if (commandArray.length === 1 && commandArray[0] == "scan") {
+          if (commandArray.length === 1 && commandArray[0] === "scan") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -673,7 +673,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalScanAnalyze1:
-          if (commandArray.length == 1 && commandArray[0] == "scan-analyze") {
+          if (commandArray.length === 1 && commandArray[0] === "scan-analyze") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -681,7 +681,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalScanAnalyze2:
-          if (commandArray.length == 2 && commandArray[0] == "scan-analyze" && commandArray[1] === 2) {
+          if (commandArray.length === 2 && commandArray[0] === "scan-analyze" && commandArray[1] === 2) {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -689,10 +689,10 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalConnect:
-          if (commandArray.length == 2) {
+          if (commandArray.length === 2) {
             if (
-              commandArray[0] == "connect" &&
-              (commandArray[1] == "n00dles" || commandArray[1] == n00dlesServ.hostname)
+              commandArray[0] === "connect" &&
+              (commandArray[1] === "n00dles" || commandArray[1] === n00dlesServ.hostname)
             ) {
               iTutorialNextStep();
             } else {
@@ -713,7 +713,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalNuke:
-          if (commandArray.length == 2 && commandArray[0] == "run" && commandArray[1] == "NUKE.exe") {
+          if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "NUKE.exe") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -721,7 +721,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalManualHack:
-          if (commandArray.length == 1 && commandArray[0] == "hack") {
+          if (commandArray.length === 1 && commandArray[0] === "hack") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -735,7 +735,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalGoHome:
-          if (commandArray.length == 1 && commandArray[0] == "home") {
+          if (commandArray.length === 1 && commandArray[0] === "home") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -743,11 +743,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalCreateScript:
-          if (
-            commandArray.length == 2 &&
-            commandArray[0] == "nano" &&
-            (commandArray[1] == "n00dles.script" || commandArray[1] == "n00dles.js")
-          ) {
+          if (commandArray.length === 2 && commandArray[0] === "nano" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -755,7 +751,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalFree:
-          if (commandArray.length == 1 && commandArray[0] == "free") {
+          if (commandArray.length === 1 && commandArray[0] === "free") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -763,11 +759,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalRunScript:
-          if (
-            commandArray.length == 2 &&
-            commandArray[0] == "run" &&
-            (commandArray[1] == "n00dles.script" || commandArray[1] == "n00dles.js")
-          ) {
+          if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -775,11 +767,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.ActiveScriptsToTerminal:
-          if (
-            commandArray.length == 2 &&
-            commandArray[0] == "tail" &&
-            (commandArray[1] == "n00dles.script" || commandArray[1] == "n00dles.js")
-          ) {
+          if (commandArray.length === 2 && commandArray[0] === "tail" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
