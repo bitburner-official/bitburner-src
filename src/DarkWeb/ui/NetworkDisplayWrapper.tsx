@@ -1,5 +1,5 @@
 import React, { PointerEventHandler, useEffect, useRef, useState, WheelEventHandler } from "react";
-import { Container, Typography, Button } from "@mui/material";
+import { Container, Typography, Button, Box } from "@mui/material";
 import { DNServerComponent } from "./DNServerComponent";
 import { useRerender } from "../../ui/React/hooks";
 import { DarknetEvents, DarknetState } from "../models/DarknetState";
@@ -8,6 +8,8 @@ import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
 import { drawOnCanvas } from "./networkCanvas";
 import { clearDarknet, populateDarknet } from "../controllers/DarknetNetworkGenerator";
+import { WEBSTORM } from "../controllers/DarknetNetworkMovement";
+import { dnetStyles } from "./dnetStyles";
 
 export const DW_NET_WIDTH = 3600;
 export const DW_NET_HEIGHT = 6000;
@@ -18,6 +20,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [zoomIndex, setZoomIndex] = useState(4);
   const zoomOptions = [0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5];
+  const { classes } = dnetStyles({});
 
   useEffect(() => {
     DarknetEvents.subscribe(() => {
@@ -124,15 +127,23 @@ export function NetworkDisplayWrapper(): React.ReactElement {
           )}
         </div>
       </div>
-      <Button
-        onClick={() => {
-          clearDarknet();
-          populateDarknet();
-        }}
-        variant={"contained"}
-      >
-        Generate New Web
-      </Button>
+      <Box className={`${classes.inlineFlexBox}`}>
+        <Button
+          onClick={() => {
+            clearDarknet();
+            populateDarknet();
+          }}
+          variant={"contained"}
+        >
+          Generate New Web
+        </Button>
+        <Button
+          onClick={() => void WEBSTORM()}
+          variant={"contained"}
+        >
+          START WEBSTORM
+        </Button>
+      </Box>
     </Container>
   );
 }

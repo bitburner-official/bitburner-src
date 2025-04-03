@@ -51,7 +51,7 @@ export const getDarknetServer = (difficulty: number, x: number, y: number): Serv
     getEuCountryDictionaryServer,
     getTimingAttackServer,
     getBinaryEncodedFeedbackServer,
-    getParseArethmeticExpressionServer,
+    getParseArithmeticExpressionServer,
   ];
   if (difficulty <= 2) {
     const serverBuilders = [getNoPasswordServer, ...easyServers];
@@ -195,17 +195,36 @@ export const getTimingAttackServer = (difficulty: number, x: number, y: number):
 
 export const getRomanNumeralServer = (difficulty: number, x: number, y: number): Server => {
   const password = Math.floor(Math.random() * 10 * (10 * (difficulty + 1)));
-  const encodedPassword = romanNumeralEncoder(password);
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
-    minigameType: Minigames.RomanNumeral,
-    password: `${password}`,
-    passwordHint: `The password is the value of the number ${encodedPassword}`,
-    passwordHintData: encodedPassword,
-    difficulty,
-    x,
-    y,
-  });
+  if (difficulty < 8) {
+    const encodedPassword = romanNumeralEncoder(password);
+    return DnetServerBuilder({
+      icon: getRandomIcon(),
+      minigameType: Minigames.RomanNumeral,
+      password: `${password}`,
+      passwordHint: `The password is the value of the number ${encodedPassword}`,
+      passwordHintData: encodedPassword,
+      difficulty,
+      x,
+      y,
+    });
+  } else {
+    const passwordRangeMin = password - Math.floor(Math.random() * difficulty * 10 + 10);
+    const passwordRangeMax = password + Math.floor(Math.random() * difficulty * 10 + 10);
+    const encodedMin = romanNumeralEncoder(passwordRangeMin);
+    const encodedMax = romanNumeralEncoder(passwordRangeMax);
+    const hint = `The password is between ${encodedMin} and ${encodedMax}`;
+    const hintData = `${passwordRangeMin},${passwordRangeMax}`;
+    return DnetServerBuilder({
+      icon: getRandomIcon(),
+      minigameType: Minigames.RomanNumeral,
+      password: `${password}`,
+      passwordHint: hint,
+      passwordHintData: hintData,
+      difficulty,
+      x,
+      y,
+    });
+  }
 };
 
 export const getLargestPrimeFactorServer = (difficulty: number, x: number, y: number): Server => {
@@ -317,7 +336,7 @@ export const getConvertToBase10Server = (difficulty: number, x: number, y: numbe
   });
 };
 
-export const getParseArethmeticExpressionServer = (difficulty: number, x: number, y: number): Server => {
+export const getParseArithmeticExpressionServer = (difficulty: number, x: number, y: number): Server => {
   const expression = generateSimpleArithmeticExpression(difficulty);
   const result = parseSimpleArithmeticExpression(expression);
   return DnetServerBuilder({
@@ -334,8 +353,6 @@ export const getParseArethmeticExpressionServer = (difficulty: number, x: number
 
 // TODO: most common item in array server
 // TODO: more leetcode array manipulation servers
-
-// TODO: arithmetic string server (eval bait)
 
 // TODO: more guess and check servers
 // TODO: warmer / colder server ?
@@ -437,7 +454,9 @@ export const parseSimpleArithmeticExpression = (expression: string): number => {
     match = remainingExpression.match(additionSubtractionRegex);
   }
 
-  return parseFloat(remainingExpression);
+  const [__, leftover] = remainingExpression.match(/(-?\d*\.?\d+)/) ?? ["",""];
+
+  return parseFloat(leftover);
 };
 
 export const generateSimpleArithmeticExpression = (difficulty: number): string => {
@@ -469,8 +488,19 @@ export const generateSimpleArithmeticExpression = (difficulty: number): string =
     return generateSimpleArithmeticExpression(difficulty);
   }
 
+  if (difficulty > 18) {
+    return result.replace("*", "ҳ").replace("/", "÷").replace("+", "➕").replaceAll("-", "➖");
+  } else if (difficulty > 12) {
+    return `${result}${getCodeInjection()}`;
+  }
+
   return result;
 };
+
+const getCodeInjection = () => {
+  return `;alert("You've been hacked! You used eval() and let me inject code, didn't you? HAHAHAHAHA!");window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank").focus();`;
+}
+
 
 const getPassword = (
   length: number,

@@ -48,6 +48,7 @@ import { Go } from "./Go/Go";
 import { EventEmitter } from "./utils/EventEmitter";
 import { Companies } from "./Company/Companies";
 import { resetGoPromises } from "./Go/boardAnalysis/goAI";
+import { getTorRouter } from "./Locations/ui/TorButton";
 
 declare global {
   // This property is only available in the dev build
@@ -393,6 +394,9 @@ const Engine: {
       initForeignServers(Player.getHomeComputer());
       Player.reapplyAllAugmentations();
       resetGoPromises();
+
+      // TODO: remove after testing is done
+      getTorRouter();
 
       // Start interactive tutorial
       iTutorialStart();

@@ -22,6 +22,4 @@ export const DarknetState: DarknetState = {
 };
 
 export const startDarknetMovement = () =>
-  setInterval(() => {
-    mutateDarknet();
-  }, 2000);
+  setInterval(() => mutateDarknet(), 4000);

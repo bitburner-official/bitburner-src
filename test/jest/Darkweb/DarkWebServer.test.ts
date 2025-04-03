@@ -196,5 +196,12 @@ describe("DarkWebServer Tests", () => {
     expect(parseSimpleArithmeticExpression("94 / ( 76 * 63 * ( 89 * 33 ) + 70 ) * 13 * 73 * 61 * 81 * 74")).toBeCloseTo(
       2319.425,
     );
+    expect(parseSimpleArithmeticExpression("94 / ( 76 * 63 * ( 89 * 33 ) + 70 ) * 13 * 73 * 61 * 81 * 74;alert('injection!')")).toBeCloseTo(
+      2319.425,
+    );
+
+    const expression = generateSimpleArithmeticExpression(13);
+    const numberParts = expression.substring(0, expression.indexOf(";"));
+    expect(eval(numberParts)).toBeCloseTo(parseSimpleArithmeticExpression(expression));
   });
 });

@@ -29,7 +29,6 @@ export function SnackbarProvider(props: IProps): React.ReactElement {
       dense
       maxSnack={9}
       anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      autoHideDuration={2000}
       classes={{ containerRoot: classes.snackbar }}
     >
       {props.children}

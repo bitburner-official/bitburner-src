@@ -67,8 +67,9 @@ This is currently a design document, but eventually will be the in-game player d
 # requirements for MVP:
 
 - Darkweb api
-  - connect or other singularity stuff?
-  - Documentation 
+  - Documentation
+
+- start with crash course?
 
 ## TODO:
 
@@ -76,13 +77,10 @@ This is currently a design document, but eventually will be the in-game player d
 
 - colorful servers?
 
-- range of passwords in hint from roman numeral
-
 - servers renamed occasionally?
 - scripts go down sometimes?
 
 - packet sniffing
-
   - mostly garbage data, sometimes has password
   - sniffed data includes fake passwords, html, rickroll, random garbage, lorem ipsum, silly google searches
 
@@ -91,25 +89,15 @@ This is currently a design document, but eventually will be the in-game player d
 
 - server that returns yes/no in its failure response
   - yes, the password has X as one of its factors
+  - 
 - server that returns a string in response to the attempt?
-
   - result: (encoded attempt) expectation: (encoded password)
 
-- Harden existing commands against loops in network? or exclude darkweb from them?
-- Limit ns commands from use on darkweb servers
-  - ns.scan
-  - exec (run? spawn?)
-  - ns.scp & scp
-- add code injection to break eval()
-- change arithmatic symbols to break eval() injection?
 
 - WEBSTORM
-
-  - removes ~1/2 of servers
-  - reboots remaining servers
-  - adds a couple new servers
   - Runs on a timer, or when logging in after being online for a while?
   - upgrade to harden scripts against restarts?
+
 
 - reward that scales password attempt speed?
 - reward that speeds up packet sniffing speed?
@@ -161,7 +149,7 @@ https://discord.com/channels/415207508303544321/415213435974975508/1352628138261
 - honeypot servers
 
   - black hole - kill any script that tries to scp stuff onto it
-  - rickroll reward cache
+  - rickroll reward cache (`Apr1Events.emit();`)
   - "ad virus" - logs adds to the toast or to terminal. Can be removed from player's home server?
 
   - packet sniffing shows signature things for honeypots

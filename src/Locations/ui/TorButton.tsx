@@ -22,6 +22,15 @@ export function purchaseTorRouter(): void {
   }
   Player.loseMoney(CONSTANTS.TorRouterCost, "other");
 
+  getTorRouter();
+  dialogBoxCreate(
+    "You have purchased a TOR router!\n" +
+      "You now have access to the dark web from your home computer.\n" +
+      `Use the "buy" command in the terminal to purchase programs.`,
+  );
+}
+
+export function getTorRouter(): void {
   const darkweb = GetServer(SpecialServers.DarkWeb);
   if (!darkweb) {
     throw new Error("Dark web is not a server.");
@@ -29,11 +38,6 @@ export function purchaseTorRouter(): void {
 
   Player.getHomeComputer().serversOnNetwork.push(darkweb.hostname);
   darkweb.serversOnNetwork.push(Player.getHomeComputer().hostname);
-  dialogBoxCreate(
-    "You have purchased a TOR router!\n" +
-      "You now have access to the dark web from your home computer.\n" +
-      `Use the "buy" command in the terminal to purchase programs.`,
-  );
 }
 
 interface IProps {

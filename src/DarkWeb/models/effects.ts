@@ -217,3 +217,13 @@ const addClue = (server: BaseServer) => {
     return;
   }
 };
+
+export const hasDarknetAccess = () => {
+  return true;
+
+  //TODO: enable this later
+  const hasSF15 = !!Player.sourceFiles.get(15);
+  const isInBN15 = Player.bitNodeN == 15;
+
+  return hasSF15 || isInBN15;
+}

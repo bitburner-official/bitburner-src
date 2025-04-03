@@ -8,6 +8,9 @@ import {  stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { WorkerScript } from "../../Netscript/WorkerScript";
+import { SnackbarEvents } from "../../ui/React/Snackbar";
+import { ToastVariant } from "@enums";
+import { sleep } from "../../Go/boardAnalysis/goAI";
 
 export const mutateDarknet = () => {
   const servers = getDarknetServers();
@@ -58,7 +61,40 @@ export const mutateDarknet = () => {
     // balance network to stay at a certain density
     balanceServers();
   }
+  sanitizeDarkwebNetwork();
 };
+
+export const WEBSTORM = async () => {
+  SnackbarEvents.emit(`DARKNET WEBSTORM APPROACHING`, ToastVariant.ERROR, 5000);
+  await sleep(5000);
+
+  const serversToDelete = getDarknetServers().length * 0.6  + (Math.random() * NET_DEPTH - 6);
+  deleteRandomServers(serversToDelete);
+  restartAllServers();
+
+  await sleep(5000);
+  addRandomServers(NET_WIDTH);
+  await sleep(5000);
+  addRandomServers(NET_WIDTH);
+  await sleep(10000);
+  balanceServers();
+}
+
+// TODO: launch this if the player has been offline for long enough
+export const applyOfflineWebstorm = () => {
+  const serversToDelete = getDarknetServers().length * 0.5  + (Math.random() * NET_DEPTH - 4);
+  deleteRandomServers(serversToDelete);
+  restartAllServers();
+
+  balanceServers();
+}
+
+export const restartAllServers = () => {
+  const servers = getDarknetServers();
+  for (const server of servers) {
+    restartServer(server);
+  }
+}
 
 const deleteRandomServers = (count = 1) => {
   for (let i = 0; i < count; i++) {
@@ -70,10 +106,22 @@ const deleteRandomServers = (count = 1) => {
     }
     killScripts(serverToDelete);
     disconnectServer(serverToDelete, true);
-    DeleteServer(serverToDelete.hostname);
+    deleteServer(serverToDelete);
   }
   sanitizeDarkwebNetwork();
 };
+
+const deleteServer = (server: BaseServer) => {
+  if (server === DarknetState.openServer || server.isConnectedTo) {
+    return false;
+  }
+  killScripts(server);
+  disconnectServer(server, true);
+  if (server.darknetData && DarknetState.Network[server.darknetData.x][server.darknetData.y]) {
+    DarknetState.Network[server.darknetData.x][server.darknetData.y] = null;
+  }
+  DeleteServer(server.hostname);
+}
 
 export const addRandomServers = (count = 1) => {
   for (let i = 0; i < count; i++) {
@@ -81,9 +129,10 @@ export const addRandomServers = (count = 1) => {
     const newServer = getDarknetServer(difficulty, -1, -1);
     const success = moveServer(newServer);
     if (!success) {
-      DeleteServer(newServer.hostname);
+      deleteServer(newServer);
     }
   }
+  sanitizeDarkwebNetwork();
 };
 
 export const balanceServers = () => {
@@ -126,8 +175,6 @@ export const moveServer = (server: BaseServer) => {
       DarknetState.Network[darknetData.x][darknetData.y] = null;
     }
     addServerToNetwork(server, newX, newY, true);
-    sanitizeDarkwebNetwork();
-    DarknetEvents.emit();
     return true;
   }
   return false;
@@ -249,7 +296,7 @@ export const sanitizeDarkwebNetwork = () => {
     if (!GetServer(server.hostname)) {
       DarknetState.Network[server.darknetData?.x ?? 0][server.darknetData?.y ?? 0] = null;
       disconnectServer(server, true);
-      DeleteServer(server.hostname);
+      deleteServer(server);
       continue;
     }
 
@@ -268,6 +315,7 @@ export const sanitizeDarkwebNetwork = () => {
       connectServers(server, darkweb);
     }
   }
+  DarknetEvents.emit();
 };
 
 const isOnAirGap = (x: number): boolean => !!x && !(x % AIR_GAP_DEPTH);

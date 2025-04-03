@@ -16,6 +16,8 @@ import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
 import { populateDarknet } from "../DarkWeb/controllers/DarknetNetworkGenerator";
 import { isDarknetServer } from "../DarkWeb/models/DnetServerData";
+import { hasDarknetAccess } from "../DarkWeb/models/effects";
+import { getTorRouter } from "../Locations/ui/TorButton";
 
 /**
  * Map of all Servers that exist in the game
@@ -218,7 +220,10 @@ export function initForeignServers(homeComputer: Server): void {
     linkNetworkLayers(networkLayers[i], () => getRandomArrayItem(networkLayers[i - 1]));
   }
 
-  populateDarknet(); // TODO: make this conditional
+  if(hasDarknetAccess()) {
+    getTorRouter();
+    populateDarknet();
+  }
 }
 
 export function prestigeAllServers(): void {
