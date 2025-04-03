@@ -4048,6 +4048,10 @@ export interface Darknet {
   /**
    * Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected
    * to the server that the script is running on.
+   *
+   * @remarks
+   * RAM cost: 2 GB
+   *
    * @param hostname - name of the target server (connected to the current server) to try a password.
    * @param password - password to attempt to authenticate with.
    * @returns a promise that resolves to a {@link PasswordResponse} object.
@@ -4056,6 +4060,10 @@ export interface Darknet {
 
   /**
    * Opens a .cache file on the current server to acquire its valuable contents.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
    * @param filename - the cache file to open.
    */
   openCache(filename: string): void;
@@ -4073,11 +4081,61 @@ export interface Darknet {
    */
   scan(hostname?: string, showAll?: boolean): string[];
 
-  exec(script: string, hostname: string, password: string, threadOrOptions?: number | RunOptions, ...args: ScriptArg[]): number;
+  /**
+   * Runs a script on the given server. The target server has to be connected to the current server and have been authenticated.
+   * @remarks
+   * RAM cost: 1.3 GB
+   *
+   * @param script - Filename of script to execute. This file must already exist on the target server.
+   * @param hostname - Hostname of the `target server` on which to execute the script.
+   * @param password - Password to authenticate with the target server. Not required for running scripts on the current server.
+   * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
+   * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument threadOrOptions must be filled in with a value.
+   * @returns Returns the PID of a successfully started script, and 0 otherwise.
+   */
+  exec(script: string, hostname: string, password?: string, threadOrOptions?: number | RunOptions, ...args: ScriptArg[]): number;
 
+  /**
+   * Copies the given script to the target server. The target server has to be connected to the current server and have been authenticated.
+   * @remarks
+   * RAM cost: 0.6 GB
+   *
+   * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
+   * @param destination - Hostname of the destination server, which is the server to which the file will be copied.
+   * @param password - Password to authenticate with the destination server.
+   */
   scp(files: string | string[], destination: string, password: string): boolean;
 
+  /**
+   * Terminate all scripts on a server.
+   * @remarks
+   * RAM cost: 0.5 GB
+   *
+   * Kills all running scripts on the specified server. This function returns true
+   * if any scripts were killed, and false otherwise. In other words, it will return
+   * true if there are any scripts running on the target server.
+   * If no host is defined, it will kill all scripts, where the script is running.
+   *
+   * @param host - IP or hostname of the server on which to kill all scripts. If not specified, it will be the current server by default
+   * @param password - Password to authenticate with the target server. Not required for running scripts on the current server.
+   * @param safetyGuard - Skips the script that calls this function
+   * @returns True if any scripts were killed, and false otherwise.
+   */
   killall(host?: string, password?: string, safetyGuard?: boolean): boolean;
+
+  /**
+   * List running scripts on a server.
+   *
+   * @remarks
+   * RAM cost: 0.2 GB
+   *
+   * Returns an array with general information about all scripts running on the specified target server.
+
+   * @param host - Host address of the target server. If not specified, it will be the current server by default.
+   * @param password - Password to authenticate with the target server. Not required for running scripts on the current server.
+   * @returns Array with general information about all scripts running on the specified target server.
+   */
+  ps(host?: string, password?: string): ProcessInfo[];
 }
 
 /**

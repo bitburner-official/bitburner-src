@@ -13,9 +13,10 @@ import { GetServer } from "../Server/AllServers";
 import { BaseServer } from "../Server/BaseServer";
 import { runScriptFromScript } from "../NetscriptWorker";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
+import { ProcessInfo } from "@nsdefs";
 
 export const failForDarknetServer = (ctx: NetscriptContext, targetServer: BaseServer, alternativeMethodName: string) => {
-  if (isDarknetServer(targetServer)) {
+  if (isDarknetServer(targetServer) && targetServer.hostname !== ctx.workerScript.hostname) {
     throw new Error(`${ctx.function}: Writing to a darknet server requires a password and a direct connection. Use ${alternativeMethodName} from an adjacent server.`);
   }
 }
@@ -33,7 +34,7 @@ function getConnectedServer(ctx: NetscriptContext, hostname: string, requireDark
   if (!targetServer) {
     return error(ctx)(`Could not find hostname: ${hostname}. It may have gone offline.`);
   }
-  if (!currentServer.serversOnNetwork.includes(targetServer.hostname)) {
+  if (!currentServer.serversOnNetwork.includes(targetServer.hostname) && currentServer.hostname !== hostname) {
     return error(ctx)(`Target server ${hostname} is not connected to current server ${currentServer.hostname}`);
   }
   if (requireDarknet) {
@@ -56,6 +57,9 @@ function expectAuthenticated(ctx: NetscriptContext, server: BaseServer, password
   if (!authStatus) {
     throw new Error(`Server ${server.hostname} requires authentication`);
   }
+  if (ctx.workerScript.hostname === server.hostname) {
+    return;
+  }
   if (requireDarkwebServer && server.hostname !== SpecialServers.DarkWeb) {
     expectDarknetServer(ctx, server.hostname);
   }
@@ -70,7 +74,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
   return {
     authenticate:
       (ctx: NetscriptContext) =>
-        (_hostname: unknown, _password: unknown): Promise<PasswordResponse> => {
+        (_hostname, _password): Promise<PasswordResponse> => {
           const targetHostname = helpers.string(ctx, "hostname", _hostname);
           const password = helpers.string(ctx, "password", _password);
           const targetServer = getConnectedServer(ctx, targetHostname);
@@ -92,7 +96,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         },
     openCache:
       (ctx: NetscriptContext) =>
-        (_fileName: unknown): void => {
+        (_fileName): void => {
           const fileName = helpers.string(ctx, "fileName", _fileName);
           if (!hasCacheFileExtension(fileName)) {
             throw new Error(`Invalid cache file. (File must end in .cache) : ${fileName}`);
@@ -169,6 +173,28 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           helpers.log(ctx, () => `Killing all scripts on '${server.hostname}'.`);
 
           return scriptsKilled > 0;
+        },
+
+    ps:
+      (ctx) =>
+        (_hostname = ctx.workerScript.hostname, _password = null) => {
+          const hostname = helpers.string(ctx, "hostname", _hostname);
+          const password = helpers.string(ctx, "password", _password);
+          const server = getConnectedServer(ctx, hostname);
+          expectAuthenticated(ctx, server, password);
+          const processes: ProcessInfo[] = [];
+          for (const byPid of server.runningScriptMap.values()) {
+            for (const script of byPid.values()) {
+              processes.push({
+                filename: script.filename,
+                threads: script.threads,
+                args: script.args.slice(),
+                pid: script.pid,
+                temporary: script.temporary,
+              });
+            }
+          }
+          return processes;
         },
   };
 }

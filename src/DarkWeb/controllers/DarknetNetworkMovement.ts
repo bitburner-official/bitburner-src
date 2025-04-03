@@ -4,9 +4,10 @@ import { getDarknetServer } from "./DarknetServerGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
 import { addServerToNetwork, AIR_GAP_DEPTH } from "./DarknetNetworkGenerator";
-import { stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
+import {  stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { SpecialServers } from "../../Server/data/SpecialServers";
+import { WorkerScript } from "../../Netscript/WorkerScript";
 
 export const mutateDarknet = () => {
   const servers = getDarknetServers();
@@ -67,6 +68,7 @@ const deleteRandomServers = (count = 1) => {
     if (!server || server === DarknetState.openServer || server.isConnectedTo) {
       return false;
     }
+    killScripts(serverToDelete);
     disconnectServer(serverToDelete, true);
     DeleteServer(serverToDelete.hostname);
   }
@@ -130,6 +132,24 @@ export const moveServer = (server: BaseServer) => {
   }
   return false;
 };
+
+export const killScripts = (server: BaseServer) => {
+  for (const byPid of server.runningScriptMap.values()) {
+    for (const runningScript of byPid.values()) {
+      killWorkerScriptWithMessage(runningScript.pid, "Server shut down.");
+    }
+  }
+}
+
+export function killWorkerScriptWithMessage(pid: number, message: string): boolean {
+  const ws = workerScripts.get(pid);
+  if (ws instanceof WorkerScript) {
+    ws.log("", () => message ?? "Script killed.");
+    stopAndCleanUpWorkerScript(ws);
+    return true;
+  }
+  return false;
+}
 
 export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) => {
   if (server === DarknetState.openServer || server.isConnectedTo) {

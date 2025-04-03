@@ -27,6 +27,11 @@ export const populateDarknet = () => {
   while (getDarknetServers().length < NET_DEPTH * NET_WIDTH * SERVER_DENSITY) {
     addRandomServers();
   }
+  const updatedServers = GetAllServers(true).filter((s) => s.darknetData);
+  for (let i = 0; i < NET_DEPTH; i++) {
+    const server = updatedServers[Math.floor(Math.random() * updatedServers.length)];
+    addGuaranteedConnection(server);
+  }
 };
 
 export const clearDarknet = () => {
@@ -52,6 +57,12 @@ export const loadDarknet = () => {
     }
   }
   balanceServers();
+
+  const updatedServers = GetAllServers(true).filter((s) => s.darknetData);
+  for (let i = 0; i < NET_DEPTH; i++) {
+    const server = updatedServers[Math.floor(Math.random() * updatedServers.length)];
+    addGuaranteedConnection(server);
+  }
 };
 
 export const addRandomConnections = (server: BaseServer) => {

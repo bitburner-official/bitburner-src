@@ -67,14 +67,8 @@ This is currently a design document, but eventually will be the in-game player d
 # requirements for MVP:
 
 - Darkweb api
-  - scp
-  - exec
-  - scan?
-  - killall?
-  - ls?
-  - ps?
   - connect or other singularity stuff?
-  - attempt password
+  - Documentation 
 
 ## TODO:
 

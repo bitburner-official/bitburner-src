@@ -878,6 +878,7 @@ export const ns: InternalAPI<NSFull> = {
     (_hostname = ctx.workerScript.hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const server = helpers.getServer(ctx, hostname);
+      failForDarknetServer(ctx, server, "ns.dn.ps()");
       const processes: ProcessInfo[] = [];
       for (const byPid of server.runningScriptMap.values()) {
         for (const script of byPid.values()) {
