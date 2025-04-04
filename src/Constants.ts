@@ -4,8 +4,8 @@
  * Constants for specific mechanics or features will NOT be here.
  */
 export const CONSTANTS = {
-  VersionString: "2.8.1",
-  isDevBranch: false,
+  VersionString: "3.0.0dev",
+  isDevBranch: true,
   VersionNumber: 43,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
@@ -109,64 +109,24 @@ export const CONSTANTS = {
 
   // Also update Documentation/doc/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v2.8.1: 4 April 2025
+## v3.0.0 developement version: last updated 4 April 2025
 
 ### MAJOR CHANGES
 
-### UI
+No changes since 2.8.1 release version
 
-- Increase width of each job in "Job" tab (#2017) (@catloversg)
-- Fix: Cannot buy augmentations via UI when money is equal to cost (#2039) (@catloversg)
-- Do not close scripts in editor when their servers are deleted (#2049) (@catloversg)
-- Add button for exporting save file in recovery screen (#2060) (@catloversg)
-- Show faction enemies even after joining (#2046) (@catloversg)
+### UI
 
 ### MISC
 
-- Correctly initialize board from save when there are no prior moves (#1995) (@ficocelliguy)
-- Fix first-time Go initialization (#2012) (@d0sboots)
-- Add support for getting the save file through the RFA (#2004) (@G4mingJon4s)
-- ns.getServer("home").moneyAvailable returns player's money (#2024) (@NagaOuroboros)
-- Fix: Game crashes when loading new save in edge cases (#2026) (@catloversg)
-- Ensure that IPvGO promises are initialized correctly on a new save and on fluming (#2032) (@ficocelliguy)
-- Ensure there is always at least one offline node (#2030) (@ficocelliguy)
-- Fix: Player can manipulate internal state of coding contract (#2040) (@catloversg)
-- Fix: Player can win more than casino's limit (#2042) (@catloversg)
-- Add new analysis method to set a custom testing board state (#2029) (@ficocelliguy)
-- IPvGO: Improve type checking and documentation (#2028) (@ficocelliguy)
-- Restarting the tutorial doesn't soft reset your game (#1992) (@paulcdejean)
-- Fix exploit where favor limit from IPvGO was removed on augmentation (#2050) (@ficocelliguy)
-- Add support for highlighting nodes and adding small text (#1996) (@ficocelliguy)
-
 ### DOCUMENTATION
-
-- Update TSDoc of ns.purchaseServer and CodingContract types (#2023) (@catloversg)
-- IPvGO: Clarify how favor is gained from wins (#2051) (@ficocelliguy)
-- Clarify AutocompleteData.server and ns.formatNumber (#2062) (@catloversg)
 
 ### SPOILER CHANGES - UI
 
-- Make SF description in Augmentations tab and BitVerse always be the same (#2013) (@catloversg)
-- Make BN-hint popups harder to be dismissed accidentally (#2021) (@catloversg)
-- Warn player if they enable territory clash when gang power is too low (#2061) (@catloversg)
-
 ### SPOILER CHANGES - MISC
 
-- Warn player that they cannot accept Stanek's Gift after joining Bladeburner with SF7.3 (#2005) (@catloversg)
-- Disable effect of SF7.3 and SF10 if player disables them with advanced options (#2019) (@catloversg)
-- Add ns.singularity.cat (#1999) (@NagaOuroboros)
-
 ### SPOILER CHANGES - DOCUMENTATION
-- Clarify effect of Bladeburner augmentation and Stanek's Gift fragment (#2058) (@catloversg)
-- Clarify conditions of activating Gang, Bladeburner, Stanek's Gift (#2053) (@catloversg)
-- Clarify Market-TA1, Market-TA2, MaxSalesVolume (#2014) (@catloversg)
 
 ### CODEBASE/REFACTOR
-
-- Suppress false-positive console errors caused by RamCalculation.test.ts (#2002) (@catloversg)
-- Fix React warnings in BitVerse (#2020) (@catloversg)
-- "getCornerMove" coordinates corrected (#2027) (@wasniahC)
-- CI: Pin commit id of tj-actions/changed-files (#2031) (@catloversg)
-- Add mathjax-full and csstype as direct dependencies (#2037) (@ficocelliguy)
 `,
 } as const;
