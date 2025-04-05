@@ -3,13 +3,13 @@ This is currently a design document, but eventually will be the in-game player d
 ## Goals:
 
 - Add (slightly simplified) real-life problems that programmers face for the player to solve
-- Add a number of much smaller and simpler coding puzzles than CCTs, but with a similar minigame/leetcode feel
+- Add a number of much smaller and simpler coding puzzles than CCTs, (puzzles, not research projects)
 - Flesh out the dark web, which doesn't do hardly anything currently
 - Add benefits to the under-utilized charisma stat, both in the DarkWeb mechanics and outside of them
 
 ## Gameplay:
 
-- The dark web and the servers on it are not reliable
+- The darknet and the servers on it are not reliable
 
   - Servers will sometimes move around the dark web, severing old connections and adding new ones
   - The darkweb can be circular (it is not a tree) and it also will not be fully connected
@@ -27,7 +27,7 @@ This is currently a design document, but eventually will be the in-game player d
   - caches with (small) money or xp rewards, or small rep gains for active factions
   - Opportunities to buy passwords to servers they have not yet cracked
 
-- Player will solve simple pasword/auth puzzles to gain access to servers (which can be automated)
+- Player will solve simple password/auth puzzles to gain access to servers (which can be automated)
   - puzzle: password that is openly visible, or not required at all
   - puzzle: mastermind/wordle style password guessing with feedback
   - vulnerability: simple dictionary attacks like "it's the default password" or "my dog's name"
@@ -67,6 +67,7 @@ This is currently a design document, but eventually will be the in-game player d
 # requirements for MVP:
 
 - Darkweb api
+
   - Documentation
 
 - start with crash course?
@@ -81,6 +82,7 @@ This is currently a design document, but eventually will be the in-game player d
 - scripts go down sometimes?
 
 - packet sniffing
+
   - mostly garbage data, sometimes has password
   - sniffed data includes fake passwords, html, rickroll, random garbage, lorem ipsum, silly google searches
 
@@ -89,15 +91,14 @@ This is currently a design document, but eventually will be the in-game player d
 
 - server that returns yes/no in its failure response
   - yes, the password has X as one of its factors
-  - 
 - server that returns a string in response to the attempt?
+
   - result: (encoded attempt) expectation: (encoded password)
 
-
 - WEBSTORM
+
   - Runs on a timer, or when logging in after being online for a while?
   - upgrade to harden scripts against restarts?
-
 
 - reward that scales password attempt speed?
 - reward that speeds up packet sniffing speed?
@@ -116,12 +117,7 @@ This is currently a design document, but eventually will be the in-game player d
 
 - bonus time?
 
-- Darkweb server cha difficulty balance?
-
 - slow down net mutations
-
-- Limit darkweb stuff to when feature is enabled (bitnode? own tor router?)
-- start more cleanly with root access to "darkweb" server
 
 - Darkweb server cha difficulty balance?
 
@@ -135,10 +131,15 @@ https://discord.com/channels/415207508303544321/415213435974975508/1352628138261
 
 ## Idea scratch space
 
+retrieving passwords from other parts of the game?
+
+stock market boosts? grow and hack?
+
 - final boss with special cache
 
   - unique augs?
   - interactive proof problem?
+  - blind maze solving?
   - T14m4t the m0th3r
 
 - database server
@@ -185,10 +186,6 @@ https://discord.com/channels/415207508303544321/415213435974975508/1352628138261
   - base64 encoding?
   - found in notes on servers sometimes
   - found in password hints sometimes
-
-- servers with code injection if you blindly eval() their expression instead of building a parser
-
-  - what will they do? just spam a toast? infinite loop? kill your script? delete your script?
 
 - api unreliability?
 

@@ -40,7 +40,7 @@ export type DnetServerData = {
 
 export const isDarknetServer = (server: BaseServer): boolean => {
   return server.darknetData !== undefined;
-}
+};
 
 export const DnetServerBuilder = (options: DnetServerData, name: string = getName()): Server => {
   const darknetData = {
@@ -81,7 +81,7 @@ export const checkPassword = (attemptedPassword: string, server: BaseServer, thr
       responseTime: 0,
       status: AUTH_FAILURE_STATUS,
       msg: "This server is not a darknet server",
-      modelId: 0
+      modelId: 0,
     };
   }
   if (darknetData.password === attemptedPassword) {
@@ -126,6 +126,13 @@ export const checkPassword = (attemptedPassword: string, server: BaseServer, thr
       `${pepperRepresentation}/${darknetData.password.length}`,
       darknetData,
     );
+  } else if (darknetData.minigameType === Minigames.divisibilityTest) {
+    const password = parseInt(darknetData.password);
+    const attemptedDivisor = parseInt(attemptedPassword);
+    if (isNaN(attemptedDivisor) || password % attemptedDivisor) {
+      return getFailureResponse(`Password is not divisible by ${attemptedPassword}`, "false", darknetData);
+    }
+    return getFailureResponse(`Password IS divisible by ${attemptedPassword}`, "true", darknetData);
   } else if (
     darknetData.minigameType === Minigames.ConvertToBase10 ||
     darknetData.minigameType === Minigames.parsedExpression

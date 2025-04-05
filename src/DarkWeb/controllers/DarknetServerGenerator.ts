@@ -31,6 +31,7 @@ export enum Minigames {
   SpiceLevel,
   ConvertToBase10,
   parsedExpression,
+  divisibilityTest,
 }
 
 export const getDarknetServer = (difficulty: number, x: number, y: number): Server => {
@@ -44,6 +45,7 @@ export const getDarknetServer = (difficulty: number, x: number, y: number): Serv
     getYesn_tServer,
     getSpiceLevelServer,
     getConvertToBase10Server,
+    getDivisibilityTestServer,
   ];
   const hardServers = [
     getLargestPrimeFactorServer,
@@ -351,6 +353,28 @@ export const getParseArithmeticExpressionServer = (difficulty: number, x: number
   });
 };
 
+export const getDivisibilityTestServer = (difficulty: number, x: number, y: number): Server => {
+  let password = Math.floor(Math.random() * 12 * (difficulty + 1));
+  for (let i = 0; i < difficulty; i++) {
+    if (Math.random() < 0.5) {
+      password *= Math.ceil(Math.random() * 5);
+    } else if (Math.random() < 0.7) {
+      password *= smallPrimes[Math.floor(Math.random() * smallPrimes.length)];
+    } else {
+      password *= largePrimes[Math.floor(Math.random() * largePrimes.length)];
+    }
+  }
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.divisibilityTest,
+    password: `${password}`,
+    passwordHint: `The password is divisible by 3`,
+    difficulty,
+    x,
+    y,
+  });
+};
+
 // TODO: most common item in array server
 // TODO: more leetcode array manipulation servers
 
@@ -454,7 +478,7 @@ export const parseSimpleArithmeticExpression = (expression: string): number => {
     match = remainingExpression.match(additionSubtractionRegex);
   }
 
-  const [__, leftover] = remainingExpression.match(/(-?\d*\.?\d+)/) ?? ["",""];
+  const [__, leftover] = remainingExpression.match(/(-?\d*\.?\d+)/) ?? ["", ""];
 
   return parseFloat(leftover);
 };
@@ -499,8 +523,7 @@ export const generateSimpleArithmeticExpression = (difficulty: number): string =
 
 const getCodeInjection = () => {
   return `;alert("You've been hacked! You used eval() and let me inject code, didn't you? HAHAHAHAHA!");window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank").focus();`;
-}
-
+};
 
 const getPassword = (
   length: number,
@@ -573,13 +596,14 @@ const romanNumeralEncoder = (input: number): string => {
   return result;
 };
 
+const smallPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
+const largePrimes = [
+  10007, 10009, 10037, 10039, 10061, 10067, 10069, 10079, 10091, 10159, 10163, 10169, 10177, 10181, 10193, 10211, 10223,
+  10243, 10247, 10253, 10259, 10267, 343051, 426799, 464279, 532993, 982097, 987929, 993893, 997609,
+];
+
 const getLargestPrimeFactorPassword = (difficulty = 1) => {
   const factorCount = 2 + Math.max(5, Math.floor(difficulty / 2));
-  const smallPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
-  const largePrimes = [
-    10007, 10009, 10037, 10039, 10061, 10067, 10069, 10079, 10091, 10159, 10163, 10169, 10177, 10181, 10193, 10211,
-    10223, 10243, 10247, 10253, 10259, 10267, 343051, 426799, 464279, 532993, 982097, 987929, 993893, 997609,
-  ];
 
   const largePrimeIndex = Math.ceil(Math.random() * (largePrimes.length - 1));
   let number = largePrimes[Math.random() * largePrimes.length];

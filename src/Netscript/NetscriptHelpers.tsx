@@ -896,4 +896,3 @@ function scp(ctx: NetscriptContext, files: unknown[], sourceServer: BaseServer, 
   }
   return noFailures;
 }
-

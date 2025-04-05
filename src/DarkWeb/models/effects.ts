@@ -19,8 +19,9 @@ export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
   if (!threads) return;
 
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
-  server.hasAdminRights = true;
+  if (server.hasAdminRights) return;
 
+  server.hasAdminRights = true;
   addClue(server);
 
   // TODO: balance coding contract chance
@@ -60,14 +61,13 @@ export const calculateAuthenticationTime = (server: BaseServer, person: IPerson,
   const diffFactor = 5;
   const baseTime = 500;
 
-  const threadsFactor = 1 + 0.3 * (threads -1);
+  const threadsFactor = 1 + 0.3 * (threads - 1);
   const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 50);
 
-  const time = baseTime * skillFactor / threadsFactor;
+  const time = (baseTime * skillFactor) / threadsFactor;
 
   return Math.max(time * calculateIntelligenceBonus(person.skills.intelligence, 0.25), 100);
-}
-
+};
 
 export const hasCacheFileExtension = (path: string) => {
   return path.endsWith(".cache");
@@ -163,7 +163,7 @@ const addClue = (server: BaseServer) => {
   if (!server.darknetData) return;
 
   // Basic mechanics hints
-  if ((Math.random() < 0.5 && server.darknetData.difficulty <= 3) || Math.random() < 0.05) {
+  if ((Math.random() < 0.7 && server.darknetData.difficulty <= 3) || Math.random() < 0.1) {
     const hint: LiteratureName = hintLiterature[Math.floor(Math.random() * hintLiterature.length)];
     if (hint) {
       server.messages.push(hint);
@@ -226,4 +226,4 @@ export const hasDarknetAccess = () => {
   const isInBN15 = Player.bitNodeN == 15;
 
   return hasSF15 || isInBN15;
-}
+};

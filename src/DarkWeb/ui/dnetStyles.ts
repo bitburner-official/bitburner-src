@@ -22,6 +22,13 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     zIndex: 10,
     backgroundColor: theme.colors.backgroundsecondary,
   },
+  NetWrapper: {
+    width: "100%",
+    height: "90vh",
+    overflow: "scroll",
+    position: "relative",
+    border: "solid 1px slategray",
+  },
   ServerName: {
     padding: 0,
     width: "86%",

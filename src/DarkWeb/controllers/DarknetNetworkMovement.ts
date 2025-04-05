@@ -4,7 +4,7 @@ import { getDarknetServer } from "./DarknetServerGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
 import { addServerToNetwork, AIR_GAP_DEPTH } from "./DarknetNetworkGenerator";
-import {  stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
+import { stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { WorkerScript } from "../../Netscript/WorkerScript";
@@ -13,6 +13,9 @@ import { ToastVariant } from "@enums";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 
 export const mutateDarknet = () => {
+  if (!DarknetState.isMutating) {
+    return;
+  }
   const servers = getDarknetServers();
   if (servers.length === 0) {
     return;
@@ -65,36 +68,41 @@ export const mutateDarknet = () => {
 };
 
 export const WEBSTORM = async () => {
+  DarknetState.isMutating = false;
   SnackbarEvents.emit(`DARKNET WEBSTORM APPROACHING`, ToastVariant.ERROR, 5000);
   await sleep(5000);
 
-  const serversToDelete = getDarknetServers().length * 0.6  + (Math.random() * NET_DEPTH - 6);
+  const serversToDelete = getDarknetServers().length * 0.6 + (Math.random() * NET_DEPTH - 6);
   deleteRandomServers(serversToDelete);
   restartAllServers();
 
-  await sleep(5000);
+  await sleep(8000);
   addRandomServers(NET_WIDTH);
-  await sleep(5000);
+  await sleep(8000);
   addRandomServers(NET_WIDTH);
-  await sleep(10000);
+  await sleep(8000);
+  addRandomServers(NET_WIDTH);
+  await sleep(16000);
   balanceServers();
-}
+  await sleep(5000);
+  DarknetState.isMutating = true;
+};
 
 // TODO: launch this if the player has been offline for long enough
 export const applyOfflineWebstorm = () => {
-  const serversToDelete = getDarknetServers().length * 0.5  + (Math.random() * NET_DEPTH - 4);
+  const serversToDelete = getDarknetServers().length * 0.5 + (Math.random() * NET_DEPTH - 4);
   deleteRandomServers(serversToDelete);
   restartAllServers();
 
   balanceServers();
-}
+};
 
 export const restartAllServers = () => {
   const servers = getDarknetServers();
   for (const server of servers) {
     restartServer(server);
   }
-}
+};
 
 const deleteRandomServers = (count = 1) => {
   for (let i = 0; i < count; i++) {
@@ -121,7 +129,7 @@ const deleteServer = (server: BaseServer) => {
     DarknetState.Network[server.darknetData.x][server.darknetData.y] = null;
   }
   DeleteServer(server.hostname);
-}
+};
 
 export const addRandomServers = (count = 1) => {
   for (let i = 0; i < count; i++) {
@@ -186,7 +194,7 @@ export const killScripts = (server: BaseServer) => {
       killWorkerScriptWithMessage(runningScript.pid, "Server shut down.");
     }
   }
-}
+};
 
 export function killWorkerScriptWithMessage(pid: number, message: string): boolean {
   const ws = workerScripts.get(pid);

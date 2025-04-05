@@ -11,15 +11,16 @@ export const SERVER_DENSITY = 0.4;
 export const DarknetEvents = new EventEmitter();
 
 export type DarknetState = {
+  isMutating: boolean;
   openServer: BaseServer | null;
   Network: (BaseServer | null)[][];
 };
 
 export const DarknetState: DarknetState = {
+  isMutating: true,
   openServer: null,
 
   Network: new Array(NET_DEPTH).fill(null).map(() => new Array(NET_WIDTH).fill(null) as (Server | null)[]),
 };
 
-export const startDarknetMovement = () =>
-  setInterval(() => mutateDarknet(), 4000);
+export const startDarknetMovement = () => setInterval(() => mutateDarknet(), 4000);

@@ -220,7 +220,7 @@ export function initForeignServers(homeComputer: Server): void {
     linkNetworkLayers(networkLayers[i], () => getRandomArrayItem(networkLayers[i - 1]));
   }
 
-  if(hasDarknetAccess()) {
+  if (hasDarknetAccess()) {
     getTorRouter();
     populateDarknet();
   }

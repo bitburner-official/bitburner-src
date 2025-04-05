@@ -232,6 +232,7 @@ const dn = {
   scp: 0.6,
   killall: 0.5,
   ps: 0.2,
+  getServer: 2,
 } as const;
 
 // Gang API

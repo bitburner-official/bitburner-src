@@ -18,8 +18,8 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const rerender = useRerender();
   const draggableBackground = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
-  const [zoomIndex, setZoomIndex] = useState(4);
-  const zoomOptions = [0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5];
+  const [zoomIndex, setZoomIndex] = useState(6);
+  const zoomOptions = [0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5];
   const { classes } = dnetStyles({});
 
   useEffect(() => {
@@ -87,16 +87,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   };
 
   return (
-    <Container sx={{ mx: 0 }} disableGutters>
+    <Container maxWidth={false} disableGutters>
       <Typography variant={"h6"}>Dark Web</Typography>
       <div
-        style={{
-          width: "100%",
-          height: "90vh",
-          overflow: "scroll",
-          position: "relative",
-          border: "solid 1px blue",
-        }}
+        className={classes.NetWrapper}
         ref={draggableBackground}
         onPointerDown={handleDragStart}
         onPointerUp={handleDragEnd}
@@ -137,10 +131,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         >
           Generate New Web
         </Button>
-        <Button
-          onClick={() => void WEBSTORM()}
-          variant={"contained"}
-        >
+        <Button onClick={() => void WEBSTORM()} variant={"contained"}>
           START WEBSTORM
         </Button>
       </Box>
