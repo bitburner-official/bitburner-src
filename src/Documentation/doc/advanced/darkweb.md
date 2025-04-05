@@ -58,11 +58,13 @@ This is currently a design document, but eventually will be the in-game player d
 
 - Start with tor router permanently?
 - Cha stat gains from doing darkweb stuff
-- Cha contributes slightly to rep gains from faction work?
+- Small amounts of negative karma gain
+- Caches with port openers, money, or xp
+
+- Cha contributes [very slightly] to rep gains from faction work
 - Cha contributes (more?) to regular jobs' pay
 - Cha contributes (more?) to job rep (needed to later join megacorp factions)
-- Small amounts of negative karma gain for breaking into servers?
-- Caches with port openers, money, or xp
+- Cha boosts the stock manipulation effects of hack and grow
 
 # requirements for MVP:
 
@@ -73,6 +75,14 @@ This is currently a design document, but eventually will be the in-game player d
 - start with crash course?
 
 ## TODO:
+
+- ub3r_l4byr1nth server
+  - maze navigation via password attempts
+  - special cache: gives augments
+  - can give TRP
+  - treasure chests in maze?
+  - traps or monsters in maze?
+  - grue?
 
 - make darkwebserver extend baseServer
 

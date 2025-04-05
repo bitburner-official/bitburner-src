@@ -119,13 +119,13 @@ const deleteRandomServers = (count = 1) => {
   sanitizeDarkwebNetwork();
 };
 
-const deleteServer = (server: BaseServer) => {
+export const deleteServer = (server: BaseServer) => {
   if (server === DarknetState.openServer || server.isConnectedTo) {
     return false;
   }
   killScripts(server);
   disconnectServer(server, true);
-  if (server.darknetData && DarknetState.Network[server.darknetData.x][server.darknetData.y]) {
+  if (server.darknetData && DarknetState.Network[server.darknetData.x]?.[server.darknetData.y]) {
     DarknetState.Network[server.darknetData.x][server.darknetData.y] = null;
   }
   DeleteServer(server.hostname);
@@ -242,8 +242,8 @@ export const restartServer = (server: BaseServer) => {
 
 export const addGuaranteedConnection = (server: BaseServer) => {
   const darknetData = server.darknetData;
-  if (!darknetData) {
-    throw new Error("Server missing dark web data");
+  if (!darknetData || server.hostname === SpecialServers.Labyrinth) {
+    return;
   }
 
   const neighbors = getAllAdjacentNeighbors(darknetData.x ?? 0, darknetData.y ?? 0);

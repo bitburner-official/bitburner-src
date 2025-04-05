@@ -1,7 +1,6 @@
 import {
   generateMaze,
-  getCoordinateSurroundings,
-  getRandomOpenCoordinate,
+  getRandomOpenCoordinate, getSurroundingsVisualized,
 } from "../../../src/DarkWeb/models/labyrinth";
 
 describe("Labyrinth Tests", () => {
@@ -12,9 +11,7 @@ describe("Labyrinth Tests", () => {
 
     console.log(maze.map((row) => row.map((x) => `${x}${x}`).join("")).join("\n"));
 
-    console.log(getCoordinateSurroundings(maze, 1, 1));
-
-    console.log(getRandomOpenCoordinate(maze));
+    console.log(getSurroundingsVisualized(maze, 1, 1));
 
     expect(maze).toHaveLength(height + 1);
     expect(maze[0]).toHaveLength(width + 1);

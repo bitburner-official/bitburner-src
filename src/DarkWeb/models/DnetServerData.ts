@@ -1,5 +1,5 @@
 import { getPasswordType, getRandomIcon, Minigames } from "../controllers/DarknetServerGenerator";
-import { Icon } from "../controllers/ServerIcon";
+import { Icon, labIcon } from "../controllers/ServerIcon";
 import { IConstructorParams, Server } from "../../Server/Server";
 import { AddToAllServers, createUniqueRandomIp, GetServer } from "../../Server/AllServers";
 import { BaseServer } from "../../Server/BaseServer";
@@ -13,6 +13,8 @@ import {
   ServerNamePrefixes,
   ServerNameSuffixes,
 } from "./dictionaryData";
+import { SpecialServers } from "../../Server/data/SpecialServers";
+import { handleLabyrinthPassword } from "./labyrinth";
 
 export const SUCCESS_STATUS = 200;
 export const AUTH_FAILURE_STATUS = 401;
@@ -28,7 +30,7 @@ export type PasswordResponse = {
 };
 
 export type DnetServerData = {
-  icon: Icon;
+  icon: Icon | typeof labIcon;
   password: string;
   minigameType: Minigames;
   passwordHint: string;
@@ -60,9 +62,9 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
     hostname: name,
     ip: createUniqueRandomIp(),
     organizationName: "darkweb",
-    maxRam: 16,
+    maxRam: 8 * 2 ** Math.floor(darknetData.difficulty / 4),
     requiredHackingSkill: Math.ceil(scalar ** 2 + Math.random() * scalar * 3),
-    hackDifficulty: 5,
+    hackDifficulty: 20,
     moneyAvailable: 0,
     numOpenPortsRequired: 69,
     adminRights: false,
@@ -74,7 +76,7 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
   return server;
 };
 
-export const checkPassword = (attemptedPassword: string, server: BaseServer, threads: number = 1): PasswordResponse => {
+export const checkPassword = (attemptedPassword: string, server: BaseServer, threads: number = 1, pid?: number): PasswordResponse => {
   const darknetData = server.darknetData;
   if (!darknetData) {
     return {
@@ -84,6 +86,10 @@ export const checkPassword = (attemptedPassword: string, server: BaseServer, thr
       modelId: 0,
     };
   }
+  if (server.hostname === SpecialServers.Labyrinth) {
+    return handleLabyrinthPassword(attemptedPassword, server, threads, pid);
+  }
+
   if (darknetData.password === attemptedPassword) {
     handleSuccessfulAuth(server, threads);
     return getGenericSuccess();

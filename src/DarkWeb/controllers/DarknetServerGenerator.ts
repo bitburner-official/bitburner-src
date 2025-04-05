@@ -32,6 +32,7 @@ export enum Minigames {
   ConvertToBase10,
   parsedExpression,
   divisibilityTest,
+  labyrinth,
 }
 
 export const getDarknetServer = (difficulty: number, x: number, y: number): Server => {

@@ -11,8 +11,8 @@ import { clearDarknet, populateDarknet } from "../controllers/DarknetNetworkGene
 import { WEBSTORM } from "../controllers/DarknetNetworkMovement";
 import { dnetStyles } from "./dnetStyles";
 
-export const DW_NET_WIDTH = 3600;
-export const DW_NET_HEIGHT = 6000;
+export const DW_NET_WIDTH = 6000;
+export const DW_NET_HEIGHT = 8000;
 
 export function NetworkDisplayWrapper(): React.ReactElement {
   const rerender = useRerender();
@@ -41,7 +41,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   if (!darkWebRoot) {
     throw new Error("Could not find darkweb root server");
   }
-  darkWebRoot.hasAdminRights = true; // TODO: move this somewhere that makes more sense
+  const labyrinth = GetServer(SpecialServers.Labyrinth);
+  if (!labyrinth) {
+    throw new Error("Could not find labyrinth server");
+  }
 
   const handleDragStart: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
     const target = pointerEvent.target as HTMLDivElement;
@@ -103,6 +106,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             width: `${DW_NET_WIDTH}px`,
             height: `${DW_NET_HEIGHT}px`,
             zoom: zoomOptions[zoomIndex],
+            cursor: "grab",
           }}
           id={"draggableBackgroundTarget"}
         >
@@ -119,6 +123,8 @@ export function NetworkDisplayWrapper(): React.ReactElement {
               server ? <DNServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} /> : "",
             ),
           )}
+
+          <DNServerComponent server={labyrinth} enableAuth={true /*allowAuth(labyrinth)  TODO */} />
         </div>
       </div>
       <Box className={`${classes.inlineFlexBox}`}>

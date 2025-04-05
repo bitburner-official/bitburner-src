@@ -99,7 +99,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         );
 
         return helpers.netscriptDelay(ctx, networkDelay).then(() => {
-          const result = checkPassword(password, targetServer, threads);
+          const result = checkPassword(password, targetServer, threads, ctx.workerScript.pid);
           if (!isDarknetServer(targetServer)) {
             logger(ctx)(`Authentication on ${targetServer.hostname} failed. (Target server is not a darknet server)`);
           } else {

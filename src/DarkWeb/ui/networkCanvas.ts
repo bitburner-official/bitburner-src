@@ -1,4 +1,4 @@
-import { DarknetState, NET_WIDTH } from "../models/DarknetState";
+import { DarknetState, NET_DEPTH, NET_WIDTH } from "../models/DarknetState";
 import { GetServer } from "../../Server/AllServers";
 import { BaseServer } from "../../Server/BaseServer";
 import {
@@ -47,6 +47,11 @@ export const getPixelPosition = (server: BaseServer, centered = false) => {
   if (server.hostname === SpecialServers.DarkWeb) {
     return {
       top: MAP_BORDER_WIDTH * 0.2 + (centered ? centeredOffsetVertical : 0),
+      left: (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * NET_WIDTH * 0.5 + (centered ? centeredOffsetHorizontal : 0),
+    };
+  } else if (server.hostname === SpecialServers.Labyrinth) {
+    return {
+      top: MAP_BORDER_WIDTH + centeredOffsetVertical + (DW_SERVER_GAP_TOP + DW_SERVER_HEIGHT) * NET_DEPTH + DW_SERVER_GAP_TOP,
       left: (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * NET_WIDTH * 0.5 + (centered ? centeredOffsetHorizontal : 0),
     };
   }

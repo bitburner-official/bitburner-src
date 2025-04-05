@@ -32,11 +32,7 @@ export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
   // TODO: balance cache chance
   const chance = 0.2 * 1.03 ** (server.darknetData?.difficulty ?? 1);
   if (Math.random() < chance) {
-    const prefix = cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
-    const cacheFilename = resolveFilePath(`${prefix}_${Math.random().toString().substring(2, 5)}.cache` as FilePath);
-    if (cacheFilename) {
-      server.caches.push(cacheFilename);
-    }
+    addCacheToServer(server);
   }
 };
 
@@ -61,7 +57,7 @@ export const calculateAuthenticationTime = (server: BaseServer, person: IPerson,
   const diffFactor = 5;
   const baseTime = 500;
 
-  const threadsFactor = 1 + 0.3 * (threads - 1);
+  const threadsFactor = 1 + 0.2 * (threads - 1);
   const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 50);
 
   const time = (baseTime * skillFactor) / threadsFactor;
@@ -71,6 +67,14 @@ export const calculateAuthenticationTime = (server: BaseServer, person: IPerson,
 
 export const hasCacheFileExtension = (path: string) => {
   return path.endsWith(".cache");
+};
+
+export const addCacheToServer = (server: BaseServer) => {
+  const prefix = cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
+  const cacheFilename = resolveFilePath(`${prefix}_${Math.random().toString().substring(2, 5)}.cache` as FilePath);
+  if (cacheFilename) {
+    server.caches.push(cacheFilename);
+  }
 };
 
 export const getRewardFromCache = (server: BaseServer) => {

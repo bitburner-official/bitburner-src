@@ -1,9 +1,15 @@
 import { DarknetState, NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarknetState";
-import { connectServers, DeleteServer, GetAllServers, GetServer } from "../../Server/AllServers";
+import {
+  AddToAllServers,
+  connectServers,
+  createUniqueRandomIp,
+  GetAllServers,
+  GetServer,
+} from "../../Server/AllServers";
 import {
   addGuaranteedConnection,
   addRandomServers,
-  balanceServers,
+  balanceServers, deleteServer,
   disconnectServer,
   getDarknetServers,
   getNeighborsOnRow,
@@ -12,18 +18,28 @@ import {
 } from "./DarknetNetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
+import { IConstructorParams, Server } from "../../Server/Server";
+import { DnetServerData } from "../models/DnetServerData";
+import { Minigames } from "./DarknetServerGenerator";
+import { labIcon } from "./ServerIcon";
 
 export const HORIZONTAL_CONNECTION_CHANCE = 0.5;
 export const VERTICAL_CONNECTION_CHANCE = 0.3;
 export const AIR_GAP_DEPTH = 8;
 
 export const populateDarknet = () => {
+  const darkWebRoot = GetServer(SpecialServers.DarkWeb);
+  if (darkWebRoot) {
+    darkWebRoot.hasAdminRights = true;
+  }
+
   if (GetAllServers(true).find((s) => s.darknetData)) {
     loadDarknet();
     return;
   }
 
   clearDarknet();
+  addLabyrinth();
   while (getDarknetServers().length < NET_DEPTH * NET_WIDTH * SERVER_DENSITY) {
     addRandomServers();
   }
@@ -38,7 +54,8 @@ export const clearDarknet = () => {
   for (let i = 0; i < NET_DEPTH; i++) {
     for (let j = 0; j < NET_WIDTH; j++) {
       const server = DarknetState.Network[i][j];
-      DeleteServer(server?.hostname ?? "");
+      if (!server) continue;
+      deleteServer(server);
       DarknetState.Network[i][j] = null;
     }
   }
@@ -46,12 +63,16 @@ export const clearDarknet = () => {
   if (darkwebRoot) {
     darkwebRoot.serversOnNetwork = [];
   }
+  const labyrinth = GetServer(SpecialServers.Labyrinth);
+  if (labyrinth) {
+    deleteServer(labyrinth);
+  }
 };
 
 export const loadDarknet = () => {
   const darkWebServers = GetAllServers(true).filter((s) => s.darknetData);
   for (const server of darkWebServers) {
-    if (server.darknetData) {
+    if (server.darknetData && server.hostname !== SpecialServers.Labyrinth) {
       disconnectServer(server, true);
       addServerToNetwork(server, server.darknetData.x, server.darknetData.y, true);
     }
@@ -67,8 +88,8 @@ export const loadDarknet = () => {
 
 export const addRandomConnections = (server: BaseServer) => {
   const darknetData = server.darknetData;
-  if (!darknetData) {
-    throw new Error("Server missing dark web data");
+  if (!darknetData || server.hostname === SpecialServers.Labyrinth) {
+    return;
   }
   const x = darknetData.x;
   const y = darknetData.y;
@@ -115,9 +136,43 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number, add
 
   if (server.darknetData.x === 0) {
     const darkWebRoot = GetServer(SpecialServers.DarkWeb);
-    if (!darkWebRoot) {
-      throw new Error("Could not find darkweb root server");
+    if (darkWebRoot) {
+      connectServers(server, darkWebRoot);
     }
-    connectServers(server, darkWebRoot);
+  }
+  if (server.darknetData.x === NET_DEPTH - 1) {
+    const labyrinth = GetServer(SpecialServers.Labyrinth);
+    if (labyrinth) {
+      connectServers(server, labyrinth);
+    }
   }
 };
+
+// Creates a special server at the bottom of the dark net
+export const addLabyrinth = () => {
+  const darknetData: DnetServerData = {
+    icon: labIcon,
+    password: "",
+    passwordHint: "Find the exit",
+    minigameType: Minigames.labyrinth,
+    difficulty: 50,
+    x: -1,
+    y: -1,
+  };
+
+  const params: IConstructorParams = {
+    hostname: SpecialServers.Labyrinth,
+    ip: createUniqueRandomIp(),
+    organizationName: "darkweb",
+    maxRam: 128,
+    requiredHackingSkill: 3000, // TODO: bitnode multiplier
+    hackDifficulty: 5,
+    moneyAvailable: 0,
+    numOpenPortsRequired: 69,
+    adminRights: false,
+    darknetData,
+  };
+  const server = new Server(params);
+  AddToAllServers(server);
+}
+

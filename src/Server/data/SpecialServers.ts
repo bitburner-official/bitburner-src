@@ -10,4 +10,5 @@ export const SpecialServers = {
   DaedalusServer: "The-Cave",
   WorldDaemon: "w0r1d_d43m0n",
   DarkWeb: "darkweb",
+  Labyrinth: "ub3r_l4byr1nth",
 } as const;

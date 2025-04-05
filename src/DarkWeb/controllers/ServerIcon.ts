@@ -14,6 +14,7 @@ import {
   LiveTv,
   Subtitles,
   Web,
+  ExitToApp,
   SvgIconComponent,
 } from "@mui/icons-material";
 
@@ -35,7 +36,9 @@ export enum Icon {
   Web = "Web",
 }
 
-export const getIcon = (name: Icon): SvgIconComponent => {
+export const labIcon: string = "ExitToApp";
+
+export const getIcon = (name: Icon | typeof labIcon): SvgIconComponent => {
   switch (name) {
     case "LaptopMac":
       return LaptopMac;
@@ -65,6 +68,8 @@ export const getIcon = (name: Icon): SvgIconComponent => {
       return Subtitles;
     case "Web":
       return Web;
+    case "ExitToApp":
+      return ExitToApp;
     default:
       return ConnectedTv;
   }

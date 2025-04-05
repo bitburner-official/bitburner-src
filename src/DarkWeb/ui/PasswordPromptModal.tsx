@@ -73,8 +73,8 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
           <br />
           <br />
           <Container sx={{ height: "200px" }}>
-            <div style={{ color: "white", whiteSpace: "pre-wrap" }}>
-              <pre>{response}</pre>
+            <div style={{ color: "white" }}>
+              <pre style={{ whiteSpace: "pre-wrap" }}>{response}</pre>
             </div>
           </Container>
         </Container>
