@@ -3,10 +3,10 @@ import { Box, Button, Container, Typography, SvgIcon } from "@mui/material";
 import { PasswordPromptModal } from "./PasswordPromptModal";
 import { getIcon, Icon } from "../controllers/ServerIcon";
 import { dnetStyles } from "./dnetStyles";
-import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
 import { DarknetState } from "../models/DarknetState";
 import { getPixelPosition } from "./networkCanvas";
+import { ServerSummary } from "./ServerSummary";
 
 export type DWServerProps = {
   server: BaseServer;
@@ -55,14 +55,7 @@ export function DNServerComponent({ server, enableAuth }: DWServerProps): React.
           x:{server.darknetData?.x ?? ""} y:{server.darknetData?.y ?? ""}; Cha:{server.requiredHackingSkill}
         </Typography>
         <br />
-        {server.hostname == SpecialServers.DarkWeb ? (
-          ""
-        ) : enableAuth ? (
-          <Typography
-          >
-            {server.hasAdminRights ? "Open Server" : "[ auth required ]"}
-          </Typography>
-        ) : (<Typography color="secondary">(no connection)</Typography>)}
+        <ServerSummary server={server} enableAuth={enableAuth} />
       </Container>
     </Button>
     </>

@@ -65,8 +65,14 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     width: "100%",
     justifyContent: "space-between",
   },
-  eighty: {
-    width: "80%",
+  gold: {
+    color: theme.colors.money,
+  },
+  paddingRight: {
+    paddingRight: "3px",
+  },
+  white: {
+    color: theme.colors.white,
   },
   authButton: {
     ["&:disabled"]: {

@@ -79,8 +79,6 @@ This is currently a design document, but eventually will be the in-game player d
 
 - unlocked server viewer
 
-- unlocked server status icons (cache, notes, scripts)
-
 ## TODO:
 
 - ub3r_l4byr1nth server

@@ -62,6 +62,10 @@ export const getDarknetServer = (difficulty: number, x: number, y: number): Serv
     const serverBuilders = [getNoPasswordServer, ...easyServers];
     return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, x, y);
   }
+  if (difficulty <= 4) {
+    const serverBuilders = [getNoPasswordServer, ...easyServers, ...easyServers, ...mediumServers];
+    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, x, y);
+  }
   if (difficulty <= 8) {
     const serverBuilders = [...easyServers, ...mediumServers];
     return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, x, y);
@@ -171,7 +175,7 @@ export const getMastermindHintServer = (difficulty: number, x: number, y: number
   return DnetServerBuilder({
     icon: getRandomIcon(),
     minigameType: Minigames.MastermindHint,
-    password: getPassword(2 + difficulty),
+    password: getPassword(2 + difficulty / 3),
     passwordHint: "", // dynamic hint
     difficulty,
     x,
@@ -247,7 +251,7 @@ export const getLargestPrimeFactorServer = (difficulty: number, x: number, y: nu
 };
 
 export const getGuessNumberServer = (difficulty: number, x: number, y: number): Server => {
-  const password = `${Math.floor(Math.random() * 10 * (15 * (difficulty + 1)))}`;
+  const password = `${Math.floor(Math.random() * 10 * (difficulty + 3) / 3)}`;
   const maxNumber = 10 ** (password.length + 1);
   return DnetServerBuilder({
     icon: getRandomIcon(),
