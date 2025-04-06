@@ -39,25 +39,27 @@ export function DNServerComponent({ server, enableAuth }: DWServerProps): React.
 
   return (
     <>
-    {open ? <PasswordPromptModal open={open} onClose={handleClose} server={server} /> : ""}
-    <Button sx={getServerPositionStyles(server)}
-            className={`${color} ${classes.DWServer}`}
-            onClick={authButtonHandler}
-            disabled={!enableAuth}>
-      <Container maxWidth="lg" className={classes.serverContainer} disableGutters>
-        <Box className={classes.inlineFlexBox}>
-          <SvgIcon component={icon} color="secondary" />
-          <Typography color={server.hasAdminRights ? "primary" : "secondary"} className={classes.ServerName}>
-            {server.hostname}
+      {open ? <PasswordPromptModal open={open} onClose={handleClose} server={server} /> : ""}
+      <Button
+        sx={getServerPositionStyles(server)}
+        className={`${color} ${classes.DWServer}`}
+        onClick={authButtonHandler}
+        disabled={!enableAuth}
+      >
+        <Container maxWidth="lg" className={classes.serverContainer} disableGutters>
+          <Box className={classes.inlineFlexBox}>
+            <SvgIcon component={icon} color="secondary" />
+            <Typography color={server.hasAdminRights ? "primary" : "secondary"} className={classes.ServerName}>
+              {server.hostname}
+            </Typography>
+          </Box>
+          <Typography color="secondary">
+            x:{server.darknetData?.x ?? ""} y:{server.darknetData?.y ?? ""}; Cha:{server.requiredHackingSkill}
           </Typography>
-        </Box>
-        <Typography color="secondary">
-          x:{server.darknetData?.x ?? ""} y:{server.darknetData?.y ?? ""}; Cha:{server.requiredHackingSkill}
-        </Typography>
-        <br />
-        <ServerSummary server={server} enableAuth={enableAuth} />
-      </Container>
-    </Button>
+          <br />
+          <ServerSummary server={server} enableAuth={enableAuth} />
+        </Container>
+      </Button>
     </>
   );
 }

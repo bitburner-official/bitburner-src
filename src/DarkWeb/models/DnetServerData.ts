@@ -76,7 +76,12 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
   return server;
 };
 
-export const checkPassword = (attemptedPassword: string, server: BaseServer, threads: number = 1, pid?: number): PasswordResponse => {
+export const checkPassword = (
+  attemptedPassword: string,
+  server: BaseServer,
+  threads: number = 1,
+  pid?: number,
+): PasswordResponse => {
   const darknetData = server.darknetData;
   if (!darknetData) {
     return {

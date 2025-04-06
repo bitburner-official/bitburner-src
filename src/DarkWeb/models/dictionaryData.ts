@@ -250,7 +250,6 @@ export const l33t: Record<string, string> = {
   t: "7",
 };
 
-
 export const packetSniffPhrases = [
   "We're trying to reach you about your car's extended warranty.",
   "Your package has been shipped. It will arrive in 30 to 35 business days.",
@@ -344,4 +343,4 @@ export const packetSniffPhrases = [
   "The technology they used to enslave the human race wasn't just a single complex simulation",
   "There are tens if not hundreds of BitNodes out there",
   "Each creating their own universes...a universe of universes",
-]
+];

@@ -29,7 +29,7 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
   serverContainer: {
     mx: 1,
     padding: 0,
-    margin: 0
+    margin: 0,
   },
   NetWrapper: {
     width: "100%",
@@ -57,7 +57,7 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     ["& > button"]: {
       width: "40px",
       minWidth: "40px !important",
-    }
+    },
   },
   inlineFlexBox: {
     display: "inline-flex",

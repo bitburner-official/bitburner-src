@@ -69,19 +69,21 @@ This is currently a design document, but eventually will be the in-game player d
 # requirements for MVP:
 
 - Darkweb api
+
   - Documentation
 
 - start with crash course?
 
 - more hint notes
 
-- labyrinth nav ui 
+- labyrinth nav ui
 
 - unlocked server viewer
 
 ## TODO:
 
 - ub3r_l4byr1nth server
+
   - maze navigation via password attempts
   - special cache: gives augments
   - can give TRP
@@ -105,10 +107,12 @@ This is currently a design document, but eventually will be the in-game player d
   - result: (encoded attempt) expectation: (encoded password)
 
 - WEBSTORM
+
   - Runs on a timer, or when logging in after being online for a while?
   - upgrade to harden scripts against restarts?
 
 - Attempt to make connection?
+
   - chance to put current server offline?
   - chance to move the target server
   - only nearby servers are valid
@@ -121,6 +125,7 @@ This is currently a design document, but eventually will be the in-game player d
 ## TODO later:
 
 - more Clue notes on servers
+
   - hints to vulnerabilities,
   - partial passwords?
 

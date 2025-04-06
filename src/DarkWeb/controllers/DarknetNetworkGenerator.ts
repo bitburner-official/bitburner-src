@@ -9,7 +9,8 @@ import {
 import {
   addGuaranteedConnection,
   addRandomServers,
-  balanceServers, deleteServer,
+  balanceServers,
+  deleteServer,
   disconnectServer,
   getDarknetServers,
   getNeighborsOnRow,
@@ -174,5 +175,4 @@ export const addLabyrinth = () => {
   };
   const server = new Server(params);
   AddToAllServers(server);
-}
-
+};

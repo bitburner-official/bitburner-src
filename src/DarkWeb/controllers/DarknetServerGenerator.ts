@@ -251,7 +251,7 @@ export const getLargestPrimeFactorServer = (difficulty: number, x: number, y: nu
 };
 
 export const getGuessNumberServer = (difficulty: number, x: number, y: number): Server => {
-  const password = `${Math.floor(Math.random() * 10 * (difficulty + 3) / 3)}`;
+  const password = `${Math.floor((Math.random() * 10 * (difficulty + 3)) / 3)}`;
   const maxNumber = 10 ** (password.length + 1);
   return DnetServerBuilder({
     icon: getRandomIcon(),
@@ -392,7 +392,7 @@ export const getPacketSnifferServer = (difficulty: number, x: number, y: number)
     x,
     y,
   });
-}
+};
 
 // TODO: most common item in array server
 // TODO: more leetcode array manipulation servers

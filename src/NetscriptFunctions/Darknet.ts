@@ -243,6 +243,6 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       const networkDelay = calculateAuthenticationTime(server, Player, ctx.workerScript.scriptRef.threads) * 4;
 
       return helpers.netscriptDelay(ctx, networkDelay).then(() => capturePackets(server));
-    }
+    },
   };
 }

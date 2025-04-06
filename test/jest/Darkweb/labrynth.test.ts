@@ -1,6 +1,7 @@
 import {
   generateMaze,
-  getRandomOpenCoordinate, getSurroundingsVisualized,
+  getRandomOpenCoordinate,
+  getSurroundingsVisualized,
 } from "../../../src/DarkWeb/models/labyrinth";
 
 describe("Labyrinth Tests", () => {

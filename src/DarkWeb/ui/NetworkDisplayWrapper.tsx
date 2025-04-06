@@ -97,27 +97,31 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const zoomOut = () => {
     setZoomIndex(Math.max(Math.min(zoomIndex + 1, zoomOptions.length - 1), 0));
     rerender();
-  }
+  };
 
   const zoomIn = () => {
     setZoomIndex(Math.max(Math.min(zoomIndex - 1, zoomOptions.length - 1), 0));
     rerender();
-  }
+  };
 
   const isWithinScreen = (server: BaseServer) => {
     const { left, top } = getPixelPosition(server, true);
     const buffer = 600;
     const visibleAreaLeftEdge = (draggableBackground.current?.scrollLeft ?? 0) / zoomOptions[zoomIndex];
     const visibleAreaTopEdge = (draggableBackground.current?.scrollTop ?? 0) / zoomOptions[zoomIndex];
-    const visibleAreaRightEdge = visibleAreaLeftEdge + (((draggableBackground.current?.clientWidth ?? 0) / (zoomOptions[zoomIndex] ** 2)) || window.innerWidth);
-    const visibleAreaBottomEdge = visibleAreaTopEdge + (((draggableBackground.current?.clientHeight ?? 0) / (zoomOptions[zoomIndex] ** 2)) || window.innerHeight);
+    const visibleAreaRightEdge =
+      visibleAreaLeftEdge +
+      ((draggableBackground.current?.clientWidth ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerWidth);
+    const visibleAreaBottomEdge =
+      visibleAreaTopEdge +
+      ((draggableBackground.current?.clientHeight ?? 0) / zoomOptions[zoomIndex] ** 2 || window.innerHeight);
     return (
       left >= visibleAreaLeftEdge - buffer &&
       left <= visibleAreaRightEdge + buffer &&
       top >= visibleAreaTopEdge - buffer &&
       top <= visibleAreaBottomEdge + buffer
     );
-  }
+  };
 
   return (
     <Container maxWidth={false} disableGutters>
@@ -150,7 +154,11 @@ export function NetworkDisplayWrapper(): React.ReactElement {
           <DNServerComponent server={darkWebRoot} enableAuth={true} />
           {DarknetState.Network.map((row, i) =>
             row.map((server, j) =>
-              server && isWithinScreen(server) ? <DNServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} /> : "",
+              server && isWithinScreen(server) ? (
+                <DNServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} />
+              ) : (
+                ""
+              ),
             ),
           )}
 
@@ -158,8 +166,12 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         </div>
       </div>
       <div className={classes.zoomContainer}>
-        <Button className={classes.button} onClick={() => zoomOut()}><ZoomIn /></Button>
-        <Button className={classes.button} onClick={() => zoomIn()}><ZoomOut /></Button>
+        <Button className={classes.button} onClick={() => zoomOut()}>
+          <ZoomIn />
+        </Button>
+        <Button className={classes.button} onClick={() => zoomIn()}>
+          <ZoomOut />
+        </Button>
       </div>
       <Box className={`${classes.inlineFlexBox}`}>
         <Button

@@ -16,7 +16,7 @@ export type DarknetState = {
   openServer: BaseServer | null;
   Network: (BaseServer | null)[][];
   labyrinth: string[][];
-  labLocations: Record<number, [number, number]>
+  labLocations: Record<number, [number, number]>;
 };
 
 export const DarknetState: DarknetState = {
@@ -26,7 +26,7 @@ export const DarknetState: DarknetState = {
   Network: new Array(NET_DEPTH).fill(null).map(() => new Array(NET_WIDTH).fill(null) as (Server | null)[]),
 
   labyrinth: generateMaze(),
-  labLocations: {}
+  labLocations: {},
 };
 
 export const startDarknetMovement = () => setInterval(() => mutateDarknet(), 4000);
