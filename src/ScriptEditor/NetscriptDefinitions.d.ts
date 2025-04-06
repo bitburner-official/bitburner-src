@@ -4186,7 +4186,7 @@ export interface Darknet {
   getServer(host?: string): DarknetServer;
 
   /**
-   * Listens for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
+   * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
    *
    * @remarks
    * RAM cost: 6 GB
@@ -4194,7 +4194,7 @@ export interface Darknet {
    * @param host - the hostname of the server to listen to.
    * @returns A string containing the network traffic captured.
    */
-  packetCapture(host: string): string;
+  packetCapture(host: string): Promise<string>;
 }
 
 /**

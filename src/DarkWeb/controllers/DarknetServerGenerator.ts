@@ -32,6 +32,7 @@ export enum Minigames {
   ConvertToBase10,
   parsedExpression,
   divisibilityTest,
+  packetSniffer,
   labyrinth,
 }
 
@@ -47,6 +48,7 @@ export const getDarknetServer = (difficulty: number, x: number, y: number): Serv
     getSpiceLevelServer,
     getConvertToBase10Server,
     getDivisibilityTestServer,
+    getPacketSnifferServer,
   ];
   const hardServers = [
     getLargestPrimeFactorServer,
@@ -375,6 +377,18 @@ export const getDivisibilityTestServer = (difficulty: number, x: number, y: numb
     y,
   });
 };
+
+export const getPacketSnifferServer = (difficulty: number, x: number, y: number): Server => {
+  return DnetServerBuilder({
+    icon: getRandomIcon(),
+    minigameType: Minigames.packetSniffer,
+    password: getPassword(3 + difficulty / 3, true, difficulty > 8, false, false),
+    passwordHint: "(I'm busy browsing social media at the cafe)",
+    difficulty,
+    x,
+    y,
+  });
+}
 
 // TODO: most common item in array server
 // TODO: more leetcode array manipulation servers

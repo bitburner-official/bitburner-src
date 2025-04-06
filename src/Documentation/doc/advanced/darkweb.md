@@ -68,12 +68,14 @@ This is currently a design document, but eventually will be the in-game player d
 
 # requirements for MVP:
 
-- Darkweb api
+-zoom buttons
 
+- Darkweb api
   - Documentation
 
 - start with crash course?
-more hint notes
+
+- more hint notes
 
 ## TODO:
 

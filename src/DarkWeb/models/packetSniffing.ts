@@ -3,6 +3,7 @@ import { commonPasswordDictionary, letters, packetSniffPhrases } from "./diction
 import {
   generateSimpleArithmeticExpression,
   getPassword,
+  Minigames,
   romanNumeralEncoder,
 } from "../controllers/DarknetServerGenerator";
 import { getName } from "./DnetServerData";
@@ -13,8 +14,11 @@ export const capturePackets = (server: BaseServer) => {
   if (!server.darknetData) {
     return "A great silence stretches across the network. No unsecured packets are here to capture.";
   }
+  const BASE_PASSWORD_INCLUSION_RATE = 0.2;
+  const DIFFICULTY_MODIFIER = 0.9;
   const difficulty = server.darknetData.difficulty;
-  const passwordInclusionChance = 0.25 * 0.90 ** difficulty;
+  const vulnerability = server.darknetData.minigameType === Minigames.packetSniffer ? 5 : 1;
+  const passwordInclusionChance = BASE_PASSWORD_INCLUSION_RATE * vulnerability * (DIFFICULTY_MODIFIER ** difficulty);
 
   if (Math.random() < passwordInclusionChance) {
     const intro = Math.floor(Math.random() * 124);

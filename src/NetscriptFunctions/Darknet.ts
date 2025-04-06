@@ -239,7 +239,10 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
     packetCapture: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
       const server = getConnectedServer(ctx, hostname, false);
-      return capturePackets(server);
+
+      const networkDelay = calculateAuthenticationTime(server, Player, ctx.workerScript.scriptRef.threads) * 4;
+
+      return helpers.netscriptDelay(ctx, networkDelay).then(() => capturePackets(server));
     }
   };
 }
