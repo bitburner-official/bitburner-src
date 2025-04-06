@@ -4179,10 +4179,22 @@ export interface Darknet {
    *
    * @remarks
    * RAM cost: 2 GB
+   *
    * @param host - Optional. Hostname for the requested server object.
    * @returns The requested server object.
    */
   getServer(host?: string): DarknetServer;
+
+  /**
+   * Listens for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
+   *
+   * @remarks
+   * RAM cost: 6 GB
+   *
+   * @param host - the hostname of the server to listen to.
+   * @returns A string containing the network traffic captured.
+   */
+  packetCapture(host: string): string;
 }
 
 /**

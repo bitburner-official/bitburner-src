@@ -233,6 +233,7 @@ const dn = {
   killall: 0.5,
   ps: 0.2,
   getServer: 2,
+  packetCapture: 6,
 } as const;
 
 // Gang API

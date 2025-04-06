@@ -526,7 +526,7 @@ const getCodeInjection = () => {
   return `;alert("You've been hacked! You used eval() and let me inject code, didn't you? HAHAHAHAHA!");window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank").focus();`;
 };
 
-const getPassword = (
+export const getPassword = (
   length: number,
   allowNumbers = true,
   allowLetters = false,
@@ -568,7 +568,7 @@ export const getRandomIcon = (): Icon => {
   return <Icon>icons[Math.floor(Math.random() * icons.length)];
 };
 
-const romanNumeralEncoder = (input: number): string => {
+export const romanNumeralEncoder = (input: number): string => {
   const romanNumerals: { [key: number]: string } = {
     1: "I",
     4: "IV",

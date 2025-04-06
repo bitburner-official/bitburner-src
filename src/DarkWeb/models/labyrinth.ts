@@ -2,7 +2,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { AUTH_FAILURE_STATUS, PasswordResponse, SUCCESS_STATUS } from "./DnetServerData";
 import { Minigames } from "../controllers/DarknetServerGenerator";
 import { DarknetState } from "./DarknetState";
-import { addCacheToServer, calculatePasswordAttemptChaGain, handleSuccessfulAuth } from "./effects";
+import { addCacheToServer, calculatePasswordAttemptChaGain } from "./effects";
 import { Player } from "@player";
 
 const MAZE_WIDTH = 30;

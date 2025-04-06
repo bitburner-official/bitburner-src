@@ -14,6 +14,7 @@ import { BaseServer } from "../Server/BaseServer";
 import { runScriptFromScript } from "../NetscriptWorker";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 import { ProcessInfo } from "@nsdefs";
+import { capturePackets } from "../DarkWeb/models/packetSniffing";
 
 export const failForDarknetServer = (
   ctx: NetscriptContext,
@@ -235,5 +236,10 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         modelId: server.darknetData?.minigameType ?? -1,
       };
     },
+    packetCapture: (ctx) => (_hostname) => {
+      const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+      const server = getConnectedServer(ctx, hostname, false);
+      return capturePackets(server);
+    }
   };
 }

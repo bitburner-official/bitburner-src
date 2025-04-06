@@ -73,6 +73,7 @@ This is currently a design document, but eventually will be the in-game player d
   - Documentation
 
 - start with crash course?
+more hint notes
 
 ## TODO:
 

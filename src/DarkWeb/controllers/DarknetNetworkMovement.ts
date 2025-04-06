@@ -11,6 +11,7 @@ import { WorkerScript } from "../../Netscript/WorkerScript";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { sleep } from "../../Go/boardAnalysis/goAI";
+import { capturePackets } from "../models/packetSniffing";
 
 export const mutateDarknet = () => {
   if (!DarknetState.isMutating) {
