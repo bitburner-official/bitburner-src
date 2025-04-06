@@ -68,14 +68,18 @@ This is currently a design document, but eventually will be the in-game player d
 
 # requirements for MVP:
 
--zoom buttons
-
 - Darkweb api
   - Documentation
 
 - start with crash course?
 
 - more hint notes
+
+- labyrinth nav ui 
+
+- unlocked server viewer
+
+- unlocked server status icons (cache, notes, scripts)
 
 ## TODO:
 
@@ -94,12 +98,6 @@ This is currently a design document, but eventually will be the in-game player d
 - servers renamed occasionally?
 - scripts go down sometimes?
 
-- packet sniffing
-
-  - mostly garbage data, sometimes has password
-  - sniffed data includes fake passwords, html, rickroll, random garbage, lorem ipsum, silly google searches
-
-- make full server a button w/ hover effect
 - File/status viewer for darkweb servers?
 
 - server that returns yes/no in its failure response
@@ -109,24 +107,27 @@ This is currently a design document, but eventually will be the in-game player d
   - result: (encoded attempt) expectation: (encoded password)
 
 - WEBSTORM
-
   - Runs on a timer, or when logging in after being online for a while?
   - upgrade to harden scripts against restarts?
-
-- reward that scales password attempt speed?
-- reward that speeds up packet sniffing speed?
 
 - Attempt to make connection?
   - chance to put current server offline?
   - chance to move the target server
   - only nearby servers are valid
 
+- New augments?
+  - Some given by lab
+  - Some in various factions
+  - Give cha? what else?
+
 ## TODO later:
 
 - more Clue notes on servers
-
   - hints to vulnerabilities,
   - partial passwords?
+
+- reward that scales password attempt speed?
+- reward that speeds up packet sniffing speed?
 
 - bonus time?
 

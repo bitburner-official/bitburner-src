@@ -20,7 +20,16 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     padding: "8px",
     borderRadius: "4px",
     zIndex: 10,
-    backgroundColor: theme.colors.backgroundsecondary,
+    cursor: "auto",
+    backgroundColor: "#000",
+    ["&:hover"]: {
+      backgroundColor: "#333",
+    },
+  },
+  serverContainer: {
+    mx: 1,
+    padding: 0,
+    margin: 0
   },
   NetWrapper: {
     width: "100%",
@@ -35,6 +44,20 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     overflow: "hidden",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
+  },
+  button: {
+    color: theme.colors.white,
+  },
+  zoomContainer: {
+    position: "absolute",
+    top: "calc(90vh - 38px)",
+    right: "7px",
+    display: "grid",
+    zIndex: 20,
+    ["& > button"]: {
+      width: "40px",
+      minWidth: "40px !important",
+    }
   },
   inlineFlexBox: {
     display: "inline-flex",

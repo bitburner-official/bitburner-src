@@ -1,12 +1,13 @@
 import React, { PointerEventHandler, useEffect, useRef, useState, WheelEventHandler } from "react";
 import { Container, Typography, Button, Box } from "@mui/material";
+import { ZoomIn, ZoomOut } from "@mui/icons-material";
 import { DNServerComponent } from "./DNServerComponent";
 import { useRerender } from "../../ui/React/hooks";
 import { DarknetEvents, DarknetState } from "../models/DarknetState";
 import { GetServer } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
-import { drawOnCanvas } from "./networkCanvas";
+import { drawOnCanvas, getPixelPosition } from "./networkCanvas";
 import { clearDarknet, populateDarknet } from "../controllers/DarknetNetworkGenerator";
 import { WEBSTORM } from "../controllers/DarknetNetworkMovement";
 import { dnetStyles } from "./dnetStyles";
@@ -58,6 +59,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     if (target.id === "draggableBackgroundTarget") {
       draggableBackground.current?.releasePointerCapture(pointerEvent.pointerId);
     }
+    rerender();
   };
 
   const handleDrag: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
@@ -73,8 +75,11 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     if (!draggableBackground?.current) {
       return;
     }
-    const direction = wheelEvent.deltaY < 0 ? 1 : -1;
-    setZoomIndex(Math.max(Math.min(zoomIndex + direction, zoomOptions.length - 1), 0));
+    if (wheelEvent.deltaY < 0) {
+      zoomOut();
+    } else {
+      zoomIn();
+    }
 
     if (!target?.parentElement?.getBoundingClientRect()) {
       return;
@@ -88,6 +93,31 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     // draggableBackground.current.scrollLeft += width * 0.5;
     // draggableBackground.current.scrollTop += height * 0.5;
   };
+
+  const zoomOut = () => {
+    setZoomIndex(Math.max(Math.min(zoomIndex + 1, zoomOptions.length - 1), 0));
+    rerender();
+  }
+
+  const zoomIn = () => {
+    setZoomIndex(Math.max(Math.min(zoomIndex - 1, zoomOptions.length - 1), 0));
+    rerender();
+  }
+
+  const isWithinScreen = (server: BaseServer) => {
+    const { left, top } = getPixelPosition(server, true);
+    const buffer = 600;
+    const visibleAreaLeftEdge = (draggableBackground.current?.scrollLeft ?? 0) / zoomOptions[zoomIndex];
+    const visibleAreaTopEdge = (draggableBackground.current?.scrollTop ?? 0) / zoomOptions[zoomIndex];
+    const visibleAreaRightEdge = visibleAreaLeftEdge + (((draggableBackground.current?.clientWidth ?? 0) / (zoomOptions[zoomIndex] ** 2)) || window.innerWidth);
+    const visibleAreaBottomEdge = visibleAreaTopEdge + (((draggableBackground.current?.clientHeight ?? 0) / (zoomOptions[zoomIndex] ** 2)) || window.innerHeight);
+    return (
+      left >= visibleAreaLeftEdge - buffer &&
+      left <= visibleAreaRightEdge + buffer &&
+      top >= visibleAreaTopEdge - buffer &&
+      top <= visibleAreaBottomEdge + buffer
+    );
+  }
 
   return (
     <Container maxWidth={false} disableGutters>
@@ -120,12 +150,16 @@ export function NetworkDisplayWrapper(): React.ReactElement {
           <DNServerComponent server={darkWebRoot} enableAuth={true} />
           {DarknetState.Network.map((row, i) =>
             row.map((server, j) =>
-              server ? <DNServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} /> : "",
+              server && isWithinScreen(server) ? <DNServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} /> : "",
             ),
           )}
 
           <DNServerComponent server={labyrinth} enableAuth={true /*allowAuth(labyrinth)  TODO */} />
         </div>
+      </div>
+      <div className={classes.zoomContainer}>
+        <Button className={classes.button} onClick={() => zoomOut()}><ZoomIn /></Button>
+        <Button className={classes.button} onClick={() => zoomIn()}><ZoomOut /></Button>
       </div>
       <Box className={`${classes.inlineFlexBox}`}>
         <Button
@@ -134,10 +168,11 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             populateDarknet();
           }}
           variant={"contained"}
+          className={classes.button}
         >
           Generate New Web
         </Button>
-        <Button onClick={() => void WEBSTORM()} variant={"contained"}>
+        <Button onClick={() => void WEBSTORM()} variant={"contained"} className={classes.button}>
           START WEBSTORM
         </Button>
       </Box>

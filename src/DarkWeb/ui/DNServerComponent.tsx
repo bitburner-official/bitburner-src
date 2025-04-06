@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Typography, SvgIcon } from "@mui/material";
 import { PasswordPromptModal } from "./PasswordPromptModal";
 import { getIcon, Icon } from "../controllers/ServerIcon";
 import { dnetStyles } from "./dnetStyles";
@@ -38,11 +38,15 @@ export function DNServerComponent({ server, enableAuth }: DWServerProps): React.
   };
 
   return (
-    <Container sx={getServerPositionStyles(server)} className={`${color} ${classes.DWServer}`} disableGutters>
-      <PasswordPromptModal open={open} onClose={handleClose} server={server} />
-      <Container maxWidth="lg" sx={{ mx: 1, padding: 0, margin: 0 }} disableGutters>
-        <Box className={`${classes.inlineFlexBox}`}>
-          {React.createElement(icon, { color: "secondary" })}
+    <>
+    {open ? <PasswordPromptModal open={open} onClose={handleClose} server={server} /> : ""}
+    <Button sx={getServerPositionStyles(server)}
+            className={`${color} ${classes.DWServer}`}
+            onClick={authButtonHandler}
+            disabled={!enableAuth}>
+      <Container maxWidth="lg" className={classes.serverContainer} disableGutters>
+        <Box className={classes.inlineFlexBox}>
+          <SvgIcon component={icon} color="secondary" />
           <Typography color={server.hasAdminRights ? "primary" : "secondary"} className={classes.ServerName}>
             {server.hostname}
           </Typography>
@@ -53,19 +57,14 @@ export function DNServerComponent({ server, enableAuth }: DWServerProps): React.
         <br />
         {server.hostname == SpecialServers.DarkWeb ? (
           ""
-        ) : (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={authButtonHandler}
-            sx={{ marginLeft: "23px" }}
-            disabled={!enableAuth}
-            className={classes.authButton}
+        ) : enableAuth ? (
+          <Typography
           >
-            Authenticate
-          </Button>
-        )}
+            {server.hasAdminRights ? "Open Server" : "[ auth required ]"}
+          </Typography>
+        ) : (<Typography color="secondary">(no connection)</Typography>)}
       </Container>
-    </Container>
+    </Button>
+    </>
   );
 }

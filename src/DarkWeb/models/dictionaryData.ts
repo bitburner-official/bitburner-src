@@ -324,6 +324,10 @@ export const packetSniffPhrases = [
   "My scripts went down again when their server went offline. I'll have to do something about that.",
   "Darknet server rebooting in 3... 2... 1...",
   "The webstorm approaches. There is no escape.",
+  "Search query: How to tune a piano",
+  "Search query: How drain a leaky water-cooled computer",
+  "Search query: How to make a perfect cup of coffee",
+  "Search query: How to fix a server that keeps losing money for some reason",
 
   "Many decades ago, a humanoid extraterrestrial species descended on the Earth...violently",
   "Our species fought back, but it was futile. They had technology far beyond our own",

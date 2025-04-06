@@ -19,7 +19,7 @@ import file16 from "./doc/advanced/corporation/unlocks-upgrade-research.md?raw";
 import file17 from "./doc/advanced/corporation/warehouse.md?raw";
 import file18 from "./doc/advanced/corporation/wilson-analytics-advert.md?raw";
 import file19 from "./doc/advanced/corporations.md?raw";
-import file20 from "./doc/advanced/darkweb.md?raw";
+import file20 from "./doc/advanced/darknet.md?raw";
 import file21 from "./doc/advanced/faction_list.md?raw";
 import file22 from "./doc/advanced/gang.md?raw";
 import file23 from "./doc/advanced/grafting.md?raw";
