@@ -4096,8 +4096,9 @@ export interface Darknet {
    * RAM cost: 4 GB
    *
    * @param filename - the cache file to open.
+   * @param suppressToast - optional. If true, suppresses the toast notification that appears when opening a cache file.
    */
-  openCache(filename: string): void;
+  openCache(filename: string, suppressToast?: bool): void;
 
   /**
    * Get the list of darkweb servers connected to a server (or the current server if no hostname is provided).

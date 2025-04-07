@@ -115,8 +115,9 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       },
     openCache:
       (ctx: NetscriptContext) =>
-      (_fileName): void => {
+      (_fileName, _suppressToast): void => {
         const fileName = helpers.string(ctx, "fileName", _fileName);
+        const suppressToast = _suppressToast ? helpers.boolean(ctx, "suppressToast", _suppressToast) : false;
         if (!hasCacheFileExtension(fileName)) {
           throw new Error(`Invalid cache file. (File must end in .cache) : ${fileName}`);
         }
@@ -127,8 +128,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         }
 
         currentServer.caches = currentServer.caches.filter((cache) => cache !== fileName);
-
-        getRewardFromCache(currentServer);
+        getRewardFromCache(currentServer, suppressToast);
       },
 
     scan:

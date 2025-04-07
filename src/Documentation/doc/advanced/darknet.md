@@ -2,15 +2,14 @@ This is currently a design document, but eventually will be the in-game player d
 
 ## Goals:
 
-- Add (slightly simplified) real-life problems that programmers face for the player to solve
-- Add a number of much smaller and simpler coding puzzles than CCTs, (puzzles, not research projects)
-- Flesh out the dark web, which doesn't do hardly anything currently
-- Add benefits to the under-utilized charisma stat, both in the DarkWeb mechanics and outside of them
+- Add a variety of (simplified) real-life problems for the player to solve
+- Add a number of much smaller and simpler coding problems than CCTs (puzzles, not research projects)
+- Flesh out the dark web (which doesn't do hardly anything currently) with a new, shifting, non-tree network
+- Add benefits to the under-utilized charisma stat
 
 ## Gameplay:
 
 - The darknet and the servers on it are not reliable
-
   - Servers will sometimes move around the dark web, severing old connections and adding new ones
   - The darkweb can be circular (it is not a tree) and it also will not be fully connected
   - Some areas can only be accessed by "hitching a ride" on a server that moved there
@@ -19,13 +18,10 @@ This is currently a design document, but eventually will be the in-game player d
   - Some servers change their generated names or IPs occasionally, requiring the player to mark them somehow?
 
 - Players will sometimes discover things on servers they gain access to
-
-  - Hints to different types of security vulnerabilities
-  - Passwords for other servers in a note
-  - Hints to parts of servers' passwords (or simple cipher / encoded password)
+  - Hints to different types of security vulnerabilities in .lit files
+  - Hints for passwords for other servers in text files
   - CCTs
-  - caches with (small) money or xp rewards, or small rep gains for active factions
-  - Opportunities to buy passwords to servers they have not yet cracked
+  - caches with (small) money or xp rewards, or sometimes programs or even TIX access
 
 - Player will solve simple password/auth puzzles to gain access to servers (which can be automated)
   - puzzle: password that is openly visible, or not required at all
@@ -40,26 +36,26 @@ This is currently a design document, but eventually will be the in-game player d
 - Some API methods will only work if you are adjacent to (or running on) the target server
   - mapping the network and deploying scripts is important
   - dealing with moving servers or changing connections is important
+  - no "spooky action at a distance" remotely run from the safety of home!
 - Some API methods will scale off of charisma (and give cha xp)
-  - Lower time awaited to submit a password guess with higher charisma?
-  - harder servers have a min cha requirement?
-  - phishing success chance based off of cha?
+  - e.g. Lower time taken to submit a password guess with higher charisma
 
 # Real-life problems to solve
 
-- Environment unreliability
-  - servers will sometimes restart or go offline, sometimes permanently
-  - scripts will sometimes die
-- Central data storage and retrieval (passwords)
+- Environment unreliability hardening: servers will sometimes restart or go offline, sometimes permanently
+- Central data storage and retrieval
 - Building self-replicating web-crawlers
 - Version control: how to handle when two different versions of a script meet, each trying to clear servers and replicate
+- text parsing, looking for useful data
+- Designing simple algorithms to reduce the number of password guesses required
+- Cyclic graph traversal
 
 ## Rewards:
 
-- Start with tor router permanently?
+- Start with tor router permanently
 - Cha stat gains from doing darkweb stuff
 - Small amounts of negative karma gain
-- Caches with port openers, money, or xp
+- Caches with port openers, money, xp, programs, or stock market access
 
 - Cha contributes [very slightly] to rep gains from faction work
 - Cha contributes (more?) to regular jobs' pay
@@ -68,10 +64,7 @@ This is currently a design document, but eventually will be the in-game player d
 
 # requirements for MVP:
 
-- change cache to return a string, and be able to suppress toast
-
 - Darkweb api
-
   - Documentation
 
 - start with crash course?
@@ -80,12 +73,11 @@ This is currently a design document, but eventually will be the in-game player d
 
 - labyrinth nav ui
 
-- unlocked server viewer
+- unlocked server viewer: polish?
 
 ## TODO:
 
 - ub3r_l4byr1nth server
-
   - maze navigation via password attempts
   - special cache: gives augments
   - can give TRP
@@ -104,8 +96,8 @@ This is currently a design document, but eventually will be the in-game player d
 
 - server that returns yes/no in its failure response
   - yes, the password has X as one of its factors
-- server that returns a string in response to the attempt?
 
+- server that returns a string in response to the attempt?
   - result: (encoded attempt) expectation: (encoded password)
 
 - WEBSTORM
@@ -147,10 +139,14 @@ This is currently a design document, but eventually will be the in-game player d
 https://discord.com/channels/415207508303544321/459097632896188436/1350613323737071727
 https://discord.com/channels/415207508303544321/459097632896188436/1345773862263984208
 https://discord.com/channels/415207508303544321/415213435974975508/1352628138261086339
+https://discord.com/channels/415207508303544321/415207839246581781/1358753789435314176
+https://discord.com/channels/415207508303544321/415207923506216971/1174839532131188736
 
 ## Idea scratch space
 
 retrieving passwords from other parts of the game?
+
+- Opportunities to buy passwords to servers not yet cracked?
 
 stock market boosts? grow and hack?
 
@@ -225,4 +221,4 @@ stock market boosts? grow and hack?
 - standard network viewer?
 
 - hide servers not yet explored near? (later upgrade?)
-- show all servers button
+  - show all servers button / upgrade

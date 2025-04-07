@@ -429,7 +429,7 @@ export class Terminal {
       this.finishAnalyze(this.action.server, cancelled);
     } else if (this.action.action === "c") {
       this.action.server.caches.pop();
-      getRewardFromCache(this.action.server);
+      this.print(getRewardFromCache(this.action.server, true));
     }
 
     if (cancelled) {

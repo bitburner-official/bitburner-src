@@ -1,6 +1,6 @@
 import { Player } from "@player";
 import { Person as IPerson } from "@nsdefs";
-import { CompletedProgramName, LiteratureName, ToastVariant } from "@enums";
+import { AugmentationName, CompletedProgramName, LiteratureName, ToastVariant } from "@enums";
 import { CreateProgramWork } from "../../Work/CreateProgramWork";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { formatMoney, formatNumber } from "../../ui/formatNumber";
@@ -14,6 +14,7 @@ import { GetServer } from "../../Server/AllServers";
 import { getAllAdjacentNeighbors } from "../controllers/DarknetNetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { isDarknetServer } from "./DnetServerData";
+import { SpecialServers } from "../../Server/data/SpecialServers";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
   if (!threads) return;
@@ -77,30 +78,33 @@ export const addCacheToServer = (server: BaseServer) => {
   }
 };
 
-export const getRewardFromCache = (server: BaseServer) => {
-  Player.karma -= 50; // TODO: adjust karma balance
+export const getRewardFromCache = (server: BaseServer, suppressToast = false): string => {
+  Player.karma -= 30; // TODO: adjust karma balance
+  if (server.hostname == SpecialServers.Labyrinth) {
+    return getLabReward(server, suppressToast);
+  }
   const rewards = [getMoneyReward, getXpReward, getNextPortOpener, getCCTReward];
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
-  reward(server.darknetData?.difficulty ?? 1);
+  return reward(server.darknetData?.difficulty ?? 1, suppressToast);
 };
 
 export const getCCTReward = (difficulty: number) => {
   const contractCount = Math.min((difficulty + 1) / 4, 4);
   tryGeneratingRandomContract(contractCount);
-  SnackbarEvents.emit(`New coding contracts are now available on the network`, ToastVariant.SUCCESS, 4000);
+  return `New coding contracts are now available on the network`;
 };
 
 export const getMoneyReward = (difficulty: number) => {
   const reward = 1.2 ** difficulty * 1e7 * getMultiplierFromCharisma(4) * Player.mults.crime_money; // TODO: adjust balance
   Player.gainMoney(reward, "other");
-  SnackbarEvents.emit(`You have discovered a cache with ${formatMoney(reward)}`, ToastVariant.SUCCESS, 4000);
+  return `You have discovered a cache with ${formatMoney(reward)}`;
 };
 
 export const getXpReward = (difficulty: number) => {
   const augCount = Player.augmentations.length;
   const reward = 1.2 ** difficulty * 100 * 1.04 ** augCount * Player.mults.charisma_exp; // TODO: adjust balance
   Player.gainCharismaExp(reward);
-  SnackbarEvents.emit(`You have discovered a cache with ${formatNumber(reward, 0)} cha XP`, ToastVariant.SUCCESS, 4000);
+  return `You have discovered a cache with ${formatNumber(reward, 0)} cha XP`;
 };
 
 /**
@@ -115,7 +119,7 @@ export const getMultiplierFromCharisma = (scalar = 1) => {
   );
 };
 
-export const getNextPortOpener = (difficulty: number) => {
+export const getNextPortOpener = (difficulty: number, suppressToast = false) => {
   const currentPlayerWork = (Player.currentWork as CreateProgramWork)?.programName;
   const programs = [
     CompletedProgramName.serverProfiler,
@@ -133,23 +137,40 @@ export const getNextPortOpener = (difficulty: number) => {
   for (const program of programs) {
     if (!Player.hasProgram(program) && currentPlayerWork !== program) {
       Player.getHomeComputer().pushProgram(program);
-      SnackbarEvents.emit(`You have discovered the program ${program}`, ToastVariant.SUCCESS, 4000);
-      return true;
+      const result = `You have discovered the program ${program}`;
+      !suppressToast && SnackbarEvents.emit(`You have discovered the program ${program}`, ToastVariant.SUCCESS, 4000);
+      return result;
     }
   }
   if (!Player.hasWseAccount) {
     Player.hasWseAccount = true;
-    SnackbarEvents.emit(`You have discovered a stolen WSE Account`, ToastVariant.SUCCESS, 4000);
-    return true;
+    const result = `You have discovered a stolen WSE Account`;
+    !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
+    return result;
   }
   if (!Player.hasTixApiAccess) {
     Player.hasTixApiAccess = true;
-    SnackbarEvents.emit(`You have discovered a TIX API access exploit`, ToastVariant.SUCCESS, 4000);
-    return true;
+    const result = `You have discovered a stolen TIX API access point`;
+    !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
+    return result;
+  }
+  if (!Player.has4SData) {
+    Player.has4SData = true;
+    const result = `You have discovered a cache of stolen 4S Data`;
+    !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
+    return result;
   }
 
   return getXpReward(difficulty);
 };
+
+const getLabReward = (_server: BaseServer, suppressToast = false) => {
+  // TODO: balance this (more augments first? only TRP on BN 15?)
+  Player.queueAugmentation(AugmentationName.TheRedPill);
+  const result = `You have discovered a cache with the Red Pill`;
+  !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
+  return result;
+}
 
 // TODO: balance xp gain
 export const calculatePasswordAttemptChaGain = (server: BaseServer, threads: number = 1, success = false) => {
