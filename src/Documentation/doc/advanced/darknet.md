@@ -68,6 +68,8 @@ This is currently a design document, but eventually will be the in-game player d
 
 # requirements for MVP:
 
+- change cache to return a string, and be able to suppress toast
+
 - Darkweb api
 
   - Documentation

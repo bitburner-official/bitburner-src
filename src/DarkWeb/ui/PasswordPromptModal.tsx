@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "../../ui/React/Modal";
 import { checkPassword, SUCCESS_STATUS } from "../models/DnetServerData";
-import { Container, Typography, TextField, Button } from "@mui/material";
+import { Container, Typography, TextField, Button, SvgIcon } from "@mui/material";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 import { getIcon, Icon } from "../controllers/ServerIcon";
 import { DarknetEvents } from "../models/DarknetState";
 import { BaseServer } from "../../Server/BaseServer";
+import { ServerSummary } from "./ServerSummary";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -49,34 +50,46 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
     <Modal open={open} onClose={onClose}>
       <>
         <Container sx={{ width: "40vw" }}>
-          {React.createElement(icon, { color: "secondary" })}
+          <SvgIcon component={icon} color="secondary" />
           <Typography variant="h5" color={server.hasAdminRights ? "primary" : "secondary"}>
             {server.hostname}
           </Typography>
           <br />
-          <form onSubmit={(e) => handleSubmit(e, inputPassword)}>
-            <TextField
-              id="pw-input"
-              label="Password"
-              type="text"
-              value={inputPassword}
-              onChange={(e) => setInputPassword(e.target.value)}
-              variant="outlined"
-              autoComplete="off"
-              autoFocus={true}
-            />
-          </form>
-          <br />
-          <Button onClick={() => setPassword(inputPassword)} disabled={!enableSubmit}>
-            Submit Password
-          </Button>
-          <br />
-          <br />
-          <Container sx={{ height: "200px" }}>
-            <div style={{ color: "white" }}>
-              <pre style={{ whiteSpace: "pre-wrap" }}>{response}</pre>
-            </div>
-          </Container>
+          {server.hasAdminRights ? ( <>
+            <Typography>Password: {inputPassword}</Typography>
+              <br/>
+              <br/>
+              <div style={{maxWidth: "200px"}}>
+                <ServerSummary server={server} enableAuth={true}/>
+              </div> </>
+          ) : (
+            <>
+            <form onSubmit={(e) => handleSubmit(e, inputPassword)}>
+              <TextField
+                id="pw-input"
+                label="Password"
+                type="text"
+                value={inputPassword}
+                onChange={(e) => setInputPassword(e.target.value)}
+                variant="outlined"
+                autoComplete="off"
+                autoFocus={!server.hasAdminRights}
+                disabled={server.hasAdminRights}
+              />
+            </form>
+            <br />
+            <Button onClick={() => setPassword(inputPassword)} disabled={!enableSubmit}>
+              Submit Password
+            </Button>
+            <br />
+            <br />
+            <Container sx={{ height: "200px" }}>
+              <div style={{ color: "white" }}>
+                <pre style={{ whiteSpace: "pre-wrap" }}>{response}</pre>
+              </div>
+            </Container>
+            </>
+          )}
         </Container>
       </>
     </Modal>
