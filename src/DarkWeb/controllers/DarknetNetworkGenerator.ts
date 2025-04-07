@@ -153,7 +153,7 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number, add
 export const addLabyrinth = () => {
   const darknetData: DnetServerData = {
     icon: labIcon,
-    password: "",
+    password: "!!the:masterwork:of:daedalus!!",
     passwordHint: "Find the exit",
     minigameType: Minigames.labyrinth,
     difficulty: 50,

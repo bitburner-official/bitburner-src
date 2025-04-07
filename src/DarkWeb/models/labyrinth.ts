@@ -5,8 +5,8 @@ import { DarknetState } from "./DarknetState";
 import { addCacheToServer, calculatePasswordAttemptChaGain } from "./effects";
 import { Player } from "@player";
 
-const MAZE_WIDTH = 30;
-const MAZE_HEIGHT = 20;
+const MAZE_WIDTH = 40;
+const MAZE_HEIGHT =  30;
 
 const NORTH = [0, -1];
 const EAST = [1, 0];
@@ -50,17 +50,25 @@ export const generateMaze = (width: number = MAZE_WIDTH, height: number = MAZE_H
   return maze;
 };
 
-export const getCoordinateSurroundings = (maze: string[][], x: number, y: number) => {
-  const surroundings = [NORTH, EAST, SOUTH, WEST];
-  return surroundings.map(([dx, dy]) => maze[y + dy]?.[x + dx]);
-};
+export const getSurroundingsVisualized = (maze: string[][], x: number, y: number, range = 1, showPlayer = false, showEnd = false) => {
+  let result = ""
+  for (let i = y - range; i <= y + range; i++) {
+    for (let j = x - range; j <= x + range; j++) {
+      if (i === y && j === x && showPlayer) {
+        result += "@";
+        continue;
+      }
+      if (i === maze.length - 2 && j === maze[0].length - 2 && showEnd) {
+        result += "X";
+        continue;
+      }
+      result += maze[i]?.[j] ?? PATH;
+    }
+    result += "\n";
+  }
 
-export const getSurroundingsVisualized = (maze: string[][], x: number, y: number) => {
-  const northRow = `${maze[y - 1]?.[x - 1] ?? PATH}${maze[y - 1]?.[x] ?? PATH}${maze[y - 1]?.[x + 1] ?? PATH}`;
-  const centerRow = `${maze[y]?.[x - 1] ?? PATH}${maze[y]?.[x] ?? PATH}${maze[y]?.[x + 1] ?? PATH}`;
-  const southRow = `${maze[y + 1]?.[x - 1] ?? PATH}${maze[y + 1]?.[x] ?? PATH}${maze[y + 1]?.[x + 1] ?? PATH}`;
-  return `${northRow}\n${centerRow}\n${southRow}`;
-};
+  return result;
+}
 
 export const getRandomOpenCoordinate = (maze: string[][]) => {
   const openCoordinates: [number, number][] = [];
@@ -90,11 +98,41 @@ export const handleLabyrinthPassword = (
   }
 
   const [initialX, initialY] = DarknetState.labLocations[pid] ?? [1, 1];
-  const end = [DarknetState.labyrinth.length - 1, DarknetState.labyrinth[0].length - 1];
-
+  const end = [DarknetState.labyrinth.length - 2, DarknetState.labyrinth[0].length - 2];
   const [dx, dy] = getDirectionFromInput(attemptedPassword);
-
   const newLocation: [number, number] = [initialX + dx * 2, initialY + dy * 2];
+
+  // TODO: interact with traps or monsters
+
+  const potentialWall: [number, number] = [initialX + dx, initialY + dy];
+  if (DarknetState.labyrinth[potentialWall[1]]?.[potentialWall[0]] !== PATH) {
+    const surroundings = getSurroundingsVisualized(DarknetState.labyrinth, initialX, initialY);
+    const status = {
+      coords: [initialX, initialY],
+      north: surroundings[0][1] === PATH,
+      east: surroundings[1][2] === PATH,
+      south: surroundings[2][1] === PATH,
+      west: surroundings[1][0] === PATH,
+    };
+
+    return {
+      status: AUTH_FAILURE_STATUS,
+      msg: `You cannot go that way. You are still at ${newLocation[0]},${newLocation[1]}.`,
+      data: JSON.stringify(status),
+      modelId: Minigames.labyrinth,
+      responseTime: 0,
+    };
+  }
+
+  if (!dx && !dy) {
+    return {
+      status: AUTH_FAILURE_STATUS,
+      msg: `You don't know how to do that. Try a direction such as "NORTH"`,
+      modelId: Minigames.labyrinth,
+      responseTime: 0,
+    };
+  }
+
   DarknetState.labLocations[pid] = newLocation;
 
   if (newLocation[0] == end[0] && newLocation[1] == end[1]) {
@@ -110,21 +148,6 @@ export const handleLabyrinthPassword = (
     };
   }
 
-  // TODO: interact with traps or monsters
-
-  if (!dx && !dy) {
-    return {
-      status: AUTH_FAILURE_STATUS,
-      msg: `You don't know how to do that. Try a direction such as "NORTH"`,
-      modelId: Minigames.labyrinth,
-      responseTime: 0,
-    };
-  }
-
-  // TODO: check if the new location is a wall
-
-  // TODO: display the output nicely in the UI
-
   const surroundings = getSurroundingsVisualized(DarknetState.labyrinth, newLocation[0], newLocation[1]);
   const status = {
     coords: [newLocation[0], newLocation[1]],
@@ -136,7 +159,7 @@ export const handleLabyrinthPassword = (
 
   return {
     status: AUTH_FAILURE_STATUS,
-    msg: "You have moved to a new location:\n\n" + surroundings,
+    msg: `You have moved to a new location: ${newLocation[0]},${newLocation[1]}.`,
     data: JSON.stringify(status),
     modelId: Minigames.labyrinth,
     responseTime: 0,

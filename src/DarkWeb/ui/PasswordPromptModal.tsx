@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useRerender } from "../../ui/React/hooks";
 import { Modal } from "../../ui/React/Modal";
-import { checkPassword, SUCCESS_STATUS } from "../models/DnetServerData";
+import { checkPassword, PasswordResponse, SUCCESS_STATUS } from "../models/DnetServerData";
 import { Container, Typography, TextField, Button, SvgIcon } from "@mui/material";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 import { getIcon, Icon } from "../controllers/ServerIcon";
-import { DarknetEvents } from "../models/DarknetState";
+import { DarknetEvents, DarknetState } from "../models/DarknetState";
 import { BaseServer } from "../../Server/BaseServer";
 import { ServerSummary } from "./ServerSummary";
+import { SpecialServers } from "../../Server/data/SpecialServers";
+import { LabyrinthSummary } from "./LabyrinthSummary";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -15,11 +18,16 @@ export type DWPasswordPromptModalProps = {
 };
 
 export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptModalProps): React.ReactElement => {
+  const rerender = useRerender();
   const [inputPassword, setInputPassword] = useState(server.hasAdminRights ? server.darknetData?.password ?? "" : "");
   const [password, setPassword] = useState<string>("?");
   const [enableSubmit, setEnableSubmit] = useState(!server.hasAdminRights);
   const [response, setResponse] = useState("Submit a password to login...");
+  const [rawResponse, setRawResponse] = useState<PasswordResponse | null>(null);
+  const [needsPasswordSubmit, setNeedsPasswordSubmit] = useState(true);
   const icon = getIcon(server.darknetData?.icon ?? Icon.Terminal);
+  const passwordInput = useRef<HTMLInputElement>(null);
+  const location = DarknetState.labLocations[-1];
 
   useEffect(() => {
     async function attemptPassword(passwordAttempted: string, skipSleep = false): Promise<void> {
@@ -27,15 +35,21 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
       setResponse("Checking password...");
       await sleep(skipSleep ? 0 : 500);
       const response = checkPassword(passwordAttempted, server, skipSleep ? 0 : 4);
+      setRawResponse(response);
       setResponse(JSON.stringify(response, null, 4));
       if (response.status == SUCCESS_STATUS) {
         DarknetEvents.emit("server-unlocked", server);
       } else {
         setEnableSubmit(true);
+        passwordInput.current?.focus();
+        passwordInput.current?.querySelector("input")?.select()
       }
     }
-    open && !server.hasAdminRights && void attemptPassword(password, password === "?");
-  }, [password, server, open]);
+    if (needsPasswordSubmit && open && !server.hasAdminRights) {
+      void attemptPassword(password, password === "?");
+      setNeedsPasswordSubmit(false);
+    }
+  }, [password, server, open, location, needsPasswordSubmit]);
 
   const handleSubmit = (e: React.FormEvent, passwordAttempted: string): void => {
     e.preventDefault();
@@ -44,6 +58,8 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
       return;
     }
     setPassword(passwordAttempted);
+    setNeedsPasswordSubmit(true);
+    rerender();
   };
 
   return (
@@ -56,9 +72,12 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
           </Typography>
           <br />
           {server.hasAdminRights ? ( <>
-            <Typography>Password: {inputPassword}</Typography>
+            <Typography>Password: {server.darknetData?.password ?? ""}</Typography>
               <br/>
               <br/>
+              {server.hostname === SpecialServers.Labyrinth ? (
+                <Typography>You have successfully navigated the labyrinth! Congratulations!</Typography>
+              ) : ""}
               <div style={{maxWidth: "200px"}}>
                 <ServerSummary server={server} enableAuth={true}/>
               </div> </>
@@ -66,6 +85,7 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
             <>
             <form onSubmit={(e) => handleSubmit(e, inputPassword)}>
               <TextField
+                ref={passwordInput}
                 id="pw-input"
                 label="Password"
                 type="text"
@@ -83,13 +103,16 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
             </Button>
             <br />
             <br />
-            <Container sx={{ height: "200px" }}>
-              <div style={{ color: "white" }}>
-                <pre style={{ whiteSpace: "pre-wrap" }}>{response}</pre>
-              </div>
-            </Container>
+              {server.hostname === SpecialServers.Labyrinth ? (
+                <LabyrinthSummary response={rawResponse} loadingText={response} /> ) : (
+                <Container sx={{ height: "200px" }}>
+                  <div style={{ color: "white" }}>
+                    <pre style={{ whiteSpace: "pre-wrap" }}>{response}</pre>
+                  </div>
+                </Container>
+              )}
             </>
-          )}
+            )}
         </Container>
       </>
     </Modal>

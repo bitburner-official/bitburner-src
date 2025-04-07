@@ -48,6 +48,10 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
   button: {
     color: theme.colors.white,
   },
+  maze: {
+    color: theme.colors.white,
+    lineHeight: 0.55,
+  },
   zoomContainer: {
     position: "absolute",
     top: "calc(90vh - 38px)",

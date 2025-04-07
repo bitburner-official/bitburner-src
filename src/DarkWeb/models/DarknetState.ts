@@ -26,7 +26,7 @@ export const DarknetState: DarknetState = {
   Network: new Array(NET_DEPTH).fill(null).map(() => new Array(NET_WIDTH).fill(null) as (Server | null)[]),
 
   labyrinth: generateMaze(),
-  labLocations: {},
+  labLocations: { "-1": [1, 1] },
 };
 
 export const startDarknetMovement = () => setInterval(() => mutateDarknet(), 4000);
