@@ -164,7 +164,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             ),
           )}
 
-          <DNServerComponent server={labyrinth} enableAuth={true /*allowAuth(labyrinth)  TODO */} />
+          <DNServerComponent server={labyrinth} enableAuth={allowAuth(labyrinth)} />
         </div>
       </div>
       <div className={classes.zoomContainer}>
