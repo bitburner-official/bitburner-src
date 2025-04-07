@@ -224,6 +224,18 @@ const singularity = {
   getCurrentWork: SF4Cost(0.5),
 } as const;
 
+const dnet = {
+  authenticate: 2,
+  openCache: 4,
+  scan: 0.2,
+  exec: 1.3,
+  scp: 0.6,
+  killall: 0.5,
+  ps: 0.2,
+  getServer: 2,
+  packetCapture: 6,
+} as const;
+
 // Gang API
 const gang = {
   createGang: RamCostConstants.GangApiBase / 4,
@@ -492,6 +504,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   singularity,
   gang,
   go,
+  dnet,
   bladeburner,
   infiltration,
   codingcontract,

@@ -20,4 +20,13 @@ export enum LiteratureName {
   TheNewGod = "the-new-god.lit",
   NewTriads = "new-triads.lit",
   TheSecretWar = "the-secret-war.lit",
+  CacheHint1 = "cache-note-1.lit",
+  CacheHint2 = "cache-note-2.lit",
+  ServerOfflineHint = "server-offline-problem.lit",
+  DarkWebRebootHint = "darkweb-rebooted-again.lit",
+  PasswordServerHint = "partial-password-jutsu.lit",
+  TimingServerHint = "timing-attack.lit",
+  BinaryServerHint = "raw_data.lit",
+  DogNameHint = "dog-name-ideas.lit",
+  FactoryDefaultHint = "factory-default.lit",
 }

@@ -7,6 +7,8 @@ import { TextFilePath, hasTextExtension } from "../../../Paths/TextFilePath";
 import { getGlobbedFileMap } from "../../../Paths/GlobbedFiles";
 import { sendDeprecationNotice } from "./deprecation";
 import { getFileType, getFileTypeFeature } from "../../../utils/ScriptTransformer";
+import { hasContractExtension } from "../../../Paths/ContractFilePath";
+import { hasCacheFileExtension } from "../../../DarkWeb/models/effects";
 
 // 2.3: Globbing implementation was removed from this file. Globbing will be reintroduced as broader functionality and integrated here.
 
@@ -58,7 +60,8 @@ export function commonEditor(
     const path = Terminal.getFilepath(pattern);
     if (!path) return Terminal.error(`Invalid file path ${arg}`);
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
-      return Terminal.error(`${command}: Only scripts or text files can be edited. Invalid file type: ${arg}`);
+      const hint = hasContractExtension(path) || hasCacheFileExtension(path) ? " (Try using 'run')" : "";
+      return Terminal.error(`${command}: Only scripts or text files can be edited. Invalid file type: ${arg}${hint}`);
     }
     if (isLegacyScript(path)) {
       hasLegacyScript = true;

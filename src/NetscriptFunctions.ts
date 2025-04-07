@@ -99,10 +99,9 @@ import { assert, assertArray, assertString, assertObject } from "./utils/TypeAss
 import { escapeRegExp } from "lodash";
 import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
-import { FilePath, resolveFilePath } from "./Paths/FilePath";
+import { resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
 import { hasTextExtension } from "./Paths/TextFilePath";
-import { ContentFilePath } from "./Paths/ContentFile";
 import { hasContractExtension } from "./Paths/ContractFilePath";
 import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
@@ -112,6 +111,7 @@ import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
+import { failForDarknetServer, NetscriptDarknet } from "./NetscriptFunctions/Darknet";
 
 export const enums: NSEnums = {
   CityName,
@@ -136,6 +136,7 @@ export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
   gang: NetscriptGang(),
   go: NetscriptGo(),
+  dnet: NetscriptDarknet(),
   bladeburner: NetscriptBladeburner(),
   codingcontract: NetscriptCodingContract(),
   sleeve: NetscriptSleeve(),
@@ -166,12 +167,12 @@ export const ns: InternalAPI<NSFull> = {
     const out: string[] = [];
     for (let i = 0; i < server.serversOnNetwork.length; i++) {
       const s = getServerOnNetwork(server, i);
-      if (s === null) continue;
+      if (s === null || s.darknetData) continue;
       const entry = s.hostname;
       if (entry === null) continue;
       out.push(entry);
     }
-    helpers.log(ctx, () => `returned ${server.serversOnNetwork.length} connections for ${server.hostname}`);
+    helpers.log(ctx, () => `returned ${out.length} connections for ${server.hostname}`);
     return out;
   },
   hasTorRouter: () => () => Player.hasTorRouter(),
@@ -722,6 +723,7 @@ export const ns: InternalAPI<NSFull> = {
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const server = helpers.getServer(ctx, hostname);
+      failForDarknetServer(ctx, server, "ns.dnet.exec()");
       return runScriptFromScript("exec", server, path, args, ctx.workerScript, runOpts);
     },
   spawn:
@@ -819,6 +821,7 @@ export const ns: InternalAPI<NSFull> = {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const safetyGuard = !!_safetyGuard;
       const server = helpers.getServer(ctx, hostname);
+      failForDarknetServer(ctx, server, "ns.dnet.killall()");
 
       let scriptsKilled = 0;
 
@@ -843,60 +846,9 @@ export const ns: InternalAPI<NSFull> = {
     const source = helpers.string(ctx, "source", _source ?? ctx.workerScript.hostname);
     const destServer = helpers.getServer(ctx, destination);
     const sourceServer = helpers.getServer(ctx, source);
+    failForDarknetServer(ctx, destServer, "ns.dnet.scp()");
     const files = Array.isArray(_files) ? _files : [_files];
-    const lits: FilePath[] = [];
-    const contentFiles: ContentFilePath[] = [];
-    //First loop through filenames to find all errors before moving anything.
-    for (const file of files) {
-      const path = helpers.filePath(ctx, "files", file);
-      if (hasScriptExtension(path) || hasTextExtension(path)) {
-        contentFiles.push(path);
-        continue;
-      }
-      if (!path.endsWith(".lit")) {
-        throw helpers.errorMessage(ctx, "Only works for scripts, .lit and .txt files.");
-      }
-      lits.push(path);
-    }
-
-    let noFailures = true;
-    // --- Scripts and Text Files---
-    for (const contentFilePath of contentFiles) {
-      const sourceContentFile = sourceServer.getContentFile(contentFilePath);
-      if (!sourceContentFile) {
-        helpers.log(ctx, () => `File '${contentFilePath}' does not exist.`);
-        noFailures = false;
-        continue;
-      }
-      // Overwrite script if it already exists
-      const result = destServer.writeToContentFile(contentFilePath, sourceContentFile.content);
-      helpers.log(ctx, () => `Copied file ${contentFilePath} from ${sourceServer.hostname} to ${destServer.hostname}`);
-      if (result.overwritten) {
-        helpers.log(ctx, () => `Warning: ${contentFilePath} was overwritten on ${destServer.hostname}`);
-      }
-    }
-
-    // --- Literature Files ---
-    for (const litFilePath of lits) {
-      const sourceMessage = sourceServer.messages.find((message) => message === litFilePath);
-      if (!sourceMessage) {
-        helpers.log(ctx, () => `File '${litFilePath}' does not exist.`);
-        noFailures = false;
-        continue;
-      }
-
-      const destMessage = destServer.messages.find((message) => message === litFilePath);
-      if (destMessage) {
-        helpers.log(ctx, () => `File '${litFilePath}' was already on '${destServer.hostname}'.`);
-        continue;
-      }
-
-      // It exists in sourceServer.messages, so it's a valid name.
-      destServer.messages.push(litFilePath as LiteratureName);
-      helpers.log(ctx, () => `File '${litFilePath}' copied over to '${destServer.hostname}'.`);
-      continue;
-    }
-    return noFailures;
+    return helpers.scp(ctx, files, sourceServer, destServer);
   },
   ls: (ctx) => (_hostname, _substring) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
@@ -925,6 +877,7 @@ export const ns: InternalAPI<NSFull> = {
     (_hostname = ctx.workerScript.hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const server = helpers.getServer(ctx, hostname);
+      failForDarknetServer(ctx, server, "ns.dnet.ps()");
       const processes: ProcessInfo[] = [];
       for (const byPid of server.runningScriptMap.values()) {
         for (const script of byPid.values()) {

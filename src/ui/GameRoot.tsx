@@ -78,6 +78,7 @@ import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { SpecialServers } from "../Server/data/SpecialServers";
+import { DWRoot } from "../DarkWeb/ui/DWRoot";
 
 const htmlLocation = location;
 
@@ -382,6 +383,10 @@ export function GameRoot(): React.ReactElement {
     }
     case Page.Go: {
       mainPage = <GoRoot />;
+      break;
+    }
+    case Page.DarkWeb: {
+      mainPage = <DWRoot />;
       break;
     }
     case Page.Achievements: {

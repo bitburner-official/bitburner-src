@@ -7,6 +7,7 @@ import { createRandomString } from "../utils/helpers/createRandomString";
 import { createRandomIp } from "../utils/IPAddress";
 import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { IPAddress } from "../Types/strings";
+import { DnetServerData } from "../DarkWeb/models/DnetServerData";
 
 export interface IConstructorParams {
   adminRights?: boolean;
@@ -21,6 +22,7 @@ export interface IConstructorParams {
   purchasedByPlayer?: boolean;
   requiredHackingSkill?: number;
   serverGrowth?: number;
+  darknetData?: DnetServerData;
 }
 
 export class Server extends BaseServer {
@@ -85,6 +87,9 @@ export class Server extends BaseServer {
 
     //Port information, required for porthacking servers to get admin rights
     this.numOpenPortsRequired = params.numOpenPortsRequired != null ? params.numOpenPortsRequired : 5;
+
+    // Darkweb data
+    this.darknetData = params.darknetData;
   }
 
   /** Ensures that the server's difficulty (server security) doesn't get too high */

@@ -14,6 +14,10 @@ import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
+import { populateDarknet } from "../DarkWeb/controllers/DarknetNetworkGenerator";
+import { isDarknetServer } from "../DarkWeb/models/DnetServerData";
+import { hasDarknetAccess } from "../DarkWeb/models/effects";
+import { getTorRouter } from "../Locations/ui/TorButton";
 
 /**
  * Map of all Servers that exist in the game
@@ -71,10 +75,12 @@ export function GetReachableServer(s: string): BaseServer | null {
   return server;
 }
 
-export function GetAllServers(): BaseServer[] {
+export function GetAllServers(showDarkweb = false): BaseServer[] {
   const servers: BaseServer[] = [];
   for (const key of Object.keys(AllServers)) {
-    servers.push(AllServers[key]);
+    if (showDarkweb || !isDarknetServer(AllServers[key])) {
+      servers.push(AllServers[key]);
+    }
   }
   return servers;
 }
@@ -88,6 +94,17 @@ export function DeleteServer(serverkey: string): void {
     break;
   }
 }
+
+export const connectServers = (server1: BaseServer, server2: BaseServer) => {
+  if (server1.serversOnNetwork.includes(server2.hostname)) return;
+  server1.serversOnNetwork.push(server2.hostname);
+  server2.serversOnNetwork.push(server1.hostname);
+};
+
+export const disconnectServers = (server1: BaseServer, server2: BaseServer) => {
+  server1.serversOnNetwork = server1.serversOnNetwork.filter((conn) => conn !== server2.hostname);
+  server2.serversOnNetwork = server2.serversOnNetwork.filter((conn) => conn !== server1.hostname);
+};
 
 export function ipExists(ip: string): boolean {
   for (const hostName in AllServers) {
@@ -188,16 +205,12 @@ export function initForeignServers(homeComputer: Server): void {
   }
 
   /* Create a randomized network for all the foreign servers */
-  const linkComputers = (server1: Server, server2: Server): void => {
-    server1.serversOnNetwork.push(server2.hostname);
-    server2.serversOnNetwork.push(server1.hostname);
-  };
 
   const getRandomArrayItem = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
   const linkNetworkLayers = (network1: Server[], selectServer: () => Server): void => {
     for (const server of network1) {
-      linkComputers(server, selectServer());
+      connectServers(server, selectServer());
     }
   };
 
@@ -205,6 +218,11 @@ export function initForeignServers(homeComputer: Server): void {
   linkNetworkLayers(networkLayers[0], () => homeComputer);
   for (let i = 1; i < networkLayers.length; i++) {
     linkNetworkLayers(networkLayers[i], () => getRandomArrayItem(networkLayers[i - 1]));
+  }
+
+  if (hasDarknetAccess()) {
+    getTorRouter();
+    populateDarknet();
   }
 }
 

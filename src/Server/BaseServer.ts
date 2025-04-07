@@ -26,6 +26,7 @@ import { Settings } from "../Settings/Settings";
 import type { ScriptKey } from "../utils/helpers/scriptKey";
 import { assertObject } from "../utils/TypeAssertion";
 import { clampNumber } from "../utils/helpers/clampNumber";
+import { DnetServerData } from "../DarkWeb/models/DnetServerData";
 
 interface IConstructorParams {
   adminRights?: boolean;
@@ -42,11 +43,17 @@ interface writeResult {
 
 /** Abstract Base Class for any Server object */
 export abstract class BaseServer implements IServer {
+  // Random reward caches on this server
+  caches: FilePath[] = [];
+
   // Coding Contract files on this server
   contracts: CodingContract[] = [];
 
   // How many CPU cores this server has.
   cpuCores = 1;
+
+  // Holds properties only used for darkweb servers
+  darknetData?: DnetServerData;
 
   // Flag indicating whether the FTP port is open
   ftpPortOpen = false;

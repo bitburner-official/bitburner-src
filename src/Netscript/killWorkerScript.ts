@@ -34,7 +34,7 @@ export function killWorkerScriptByPid(pid: number, killer?: WorkerScript): boole
   return false;
 }
 
-function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
+export function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   // Only clean up once.
   // Important: Only this function can set stopFlag!
   if (ws.env.stopFlag) return;

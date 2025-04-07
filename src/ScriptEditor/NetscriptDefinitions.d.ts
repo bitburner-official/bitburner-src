@@ -4018,6 +4018,189 @@ export interface CodingContract {
 }
 
 /**
+ * Response to an authentication attempt.
+ * @property status - Status code of the response. 200 for success, 401 for failure.
+ * @property msg - Message describing the result of the authentication attempt.
+ * @property responseTime - Time in milliseconds it took to process the request on the server.
+ * @property passwordLength - Length of the correct password.
+ * @property passwordFormat - Format of the correct password.
+ * @property data - Feedback returned from the authentication attempt. Model specific.
+ * @property modelId - ID of the model that was used to authenticate. Similar models tend to share vulnerabilities.
+ *
+ * @public
+ */
+type PasswordResponse = {
+  status: number;
+  msg: string;
+  responseTime: number;
+  passwordLength?: number;
+  passwordFormat?: string;
+  data?: string;
+  modelId?: number;
+};
+
+/**
+ * Darknet server information.
+ * @property hostname - Name of the server.
+ * @property ip - IP address of the server.
+ * @property hasAdminRights - Whether the player has admin rights on the server.
+ * @property isConnectedTo - Whether the server is connected to the current server.
+ * @property ramUsed - Amount of RAM used on the server.
+ * @property maxRam - Maximum amount of RAM on the server.
+ * @property organizationName - Name of the organization that owns the server.
+ * @property purchasedByPlayer - Whether the server was purchased by the player.
+ * @property backdoorInstalled - Whether the server has a backdoor installed.
+ * @property moneyAvailable - Amount of money available on the server.
+ * @property moneyMax - Maximum amount of money on the server.
+ * @property charismaLevel - Charisma level of the server.
+ * @property modelId - ID of the server model.
+ */
+type DarknetServer = {
+  hostname: string;
+  ip: string;
+  hasAdminRights: boolean;
+  isConnectedTo: boolean;
+  ramUsed: number;
+  maxRam: number;
+  organizationName: string;
+  purchasedByPlayer: boolean;
+  backdoorInstalled: boolean;
+  moneyAvailable: number;
+  moneyMax: number;
+  charismaLevel: number;
+  modelId: number;
+};
+
+/**
+ * Darknet API
+ * @remarks
+ * If you are not in BitNode-15, then you must have Source-File 15 in order to use this API.
+ * @public
+ */
+export interface Darknet {
+  /**
+   * Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected
+   * to the server that the script is running on.
+   *
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * @param hostname - name of the target server (connected to the current server) to try a password.
+   * @param password - password to attempt to authenticate with.
+   * @returns a promise that resolves to a {@link PasswordResponse} object.
+   */
+  authenticate(hostname: string, password: string): Promise<PasswordResponse>;
+
+  /**
+   * Opens a .cache file on the current server to acquire its valuable contents.
+   *
+   * @remarks
+   * RAM cost: 4 GB
+   *
+   * @param filename - the cache file to open.
+   * @param suppressToast - optional. If true, suppresses the toast notification that appears when opening a cache file.
+   */
+  openCache(filename: string, suppressToast?: boolean): void;
+
+  /**
+   * Get the list of darkweb servers connected to a server (or the current server if no hostname is provided).
+   * If `showAll` is true, instead returns ALL hostnames connected to the server, including non-darkweb servers.
+   *
+   * @remarks
+   * RAM cost: 0.2 GB
+   *
+   * @param hostname - optional. Name of the server to get the list of servers connected to. Defaults to the current server if not provided.
+   * @param showAll - optional. If true, show all servers (not just darknet ones) connected to the specified server. Defaults to false.
+   * @returns an array of hostnames.
+   */
+  scan(hostname?: string, showAll?: boolean): string[];
+
+  /**
+   * Runs a script on the given server. The target server has to be connected to the current server and have been authenticated.
+   * @remarks
+   * RAM cost: 1.3 GB
+   *
+   * @param script - Filename of script to execute. This file must already exist on the target server.
+   * @param hostname - Hostname of the `target server` on which to execute the script.
+   * @param password - Password to authenticate with the target server. Not required for running scripts on the current server.
+   * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
+   * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument threadOrOptions must be filled in with a value.
+   * @returns Returns the PID of a successfully started script, and 0 otherwise.
+   */
+  exec(
+    script: string,
+    hostname: string,
+    password?: string,
+    threadOrOptions?: number | RunOptions,
+    ...args: ScriptArg[]
+  ): number;
+
+  /**
+   * Copies the given script to the target server. The target server has to be connected to the current server and have been authenticated.
+   * @remarks
+   * RAM cost: 0.6 GB
+   *
+   * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
+   * @param destination - Hostname of the destination server, which is the server to which the file will be copied.
+   * @param password - Password to authenticate with the destination server.
+   */
+  scp(files: string | string[], destination: string, password: string): boolean;
+
+  /**
+   * Terminate all scripts on a server.
+   * @remarks
+   * RAM cost: 0.5 GB
+   *
+   * Kills all running scripts on the specified server. This function returns true
+   * if any scripts were killed, and false otherwise. In other words, it will return
+   * true if there are any scripts running on the target server.
+   * If no host is defined, it will kill all scripts, where the script is running.
+   *
+   * @param host - IP or hostname of the server on which to kill all scripts. If not specified, it will be the current server by default
+   * @param password - Password to authenticate with the target server. Not required for running scripts on the current server.
+   * @param safetyGuard - Skips the script that calls this function
+   * @returns True if any scripts were killed, and false otherwise.
+   */
+  killall(host?: string, password?: string, safetyGuard?: boolean): boolean;
+
+  /**
+   * List running scripts on a server.
+   *
+   * @remarks
+   * RAM cost: 0.2 GB
+   *
+   * Returns an array with general information about all scripts running on the specified target server.
+
+   * @param host - Host address of the target server. If not specified, it will be the current server by default.
+   * @param password - Password to authenticate with the target server. Not required for running scripts on the current server.
+   * @returns Array with general information about all scripts running on the specified target server.
+   */
+  ps(host?: string, password?: string): ProcessInfo[];
+
+  /**
+   * Returns a server object for the given server. Defaults to the running script's server if host is not specified.
+   *
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * @param host - Optional. Hostname for the requested server object.
+   * @returns The requested server object.
+   */
+  getServer(host?: string): DarknetServer;
+
+  /**
+   * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
+   *
+   * @remarks
+   * RAM cost: 6 GB
+   *
+   * @param host - the hostname of the server to listen to.
+   * @returns A string containing the network traffic captured.
+   */
+  packetCapture(host: string): Promise<string>;
+}
+
+/**
  * Gang API
  * @remarks
  * If you are not in BitNode-2, then you must have Source-File 2 in order to use this API.
@@ -6058,6 +6241,12 @@ export interface NS {
    * @remarks RAM cost: 0 GB
    */
   readonly codingcontract: CodingContract;
+
+  /**
+   * Namespace for darknet functions. Contains spoilers.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly dnet: Darknet;
 
   /**
    * Namespace for gang functions. Contains spoilers.

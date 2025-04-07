@@ -84,6 +84,7 @@ import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
+import { getRewardFromCache } from "../DarkWeb/models/effects";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -233,7 +234,7 @@ export class Terminal {
     this.startAction(1, "a", server);
   }
 
-  startAction(n: number, action: "h" | "b" | "a" | "g" | "w", server?: BaseServer): void {
+  startAction(n: number, action: "h" | "b" | "a" | "g" | "w" | "c", server?: BaseServer): void {
     this.action = new TTimer(n, action, server);
   }
 
@@ -426,6 +427,9 @@ export class Terminal {
       this.finishBackdoor(this.action.server, cancelled);
     } else if (this.action.action === "a") {
       this.finishAnalyze(this.action.server, cancelled);
+    } else if (this.action.action === "c") {
+      this.action.server.caches.pop();
+      this.print(getRewardFromCache(this.action.server, true));
     }
 
     if (cancelled) {
@@ -545,7 +549,10 @@ export class Terminal {
     }
 
     const ignoreServer = (s: BaseServer, d: number): boolean =>
-      (!all && s.purchasedByPlayer && s.hostname != "home") || d > depth || (!all && s instanceof HacknetServer);
+      (!all && s.purchasedByPlayer && s.hostname != "home") ||
+      d > depth ||
+      (!all && s instanceof HacknetServer) ||
+      !!s.darknetData;
 
     const makeNode = (parent: string, s: BaseServer, d = 1): Node => ({
       hostname: s.hostname,
