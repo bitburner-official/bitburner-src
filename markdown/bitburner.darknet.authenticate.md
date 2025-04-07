@@ -25,3 +25,7 @@ Promise&lt;[PasswordResponse](./bitburner.passwordresponse.md)<!-- -->&gt;
 
 a promise that resolves to a [PasswordResponse](./bitburner.passwordresponse.md) object.
 
+## Remarks
+
+RAM cost: 2 GB
+

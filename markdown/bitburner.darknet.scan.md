@@ -9,7 +9,7 @@ Get the list of darkweb servers connected to a server (or the current server if 
 **Signature:**
 
 ```typescript
-scan(hostname?: string, showAll?: boolean): void;
+scan(hostname?: string, showAll?: boolean): string[];
 ```
 
 ## Parameters
@@ -21,7 +21,7 @@ scan(hostname?: string, showAll?: boolean): void;
 
 **Returns:**
 
-void
+string\[\]
 
 an array of hostnames.
 

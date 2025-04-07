@@ -1,4 +1,65 @@
-This is currently a design document, but eventually will be the in-game player documentation for the DarkWeb mechanics.
+# The Darkweb Network
+
+(work-in-progress documentation)
+
+The internet is the largest datastream in the world, and thus the most heavily surveiled. Not everyone wants their actions followed, though.
+
+Leaving the internet behind and turning to the dark web, however, comes with its risks... and potential rewards. A person with the right know-how (and enough charm to survive on their wits alone) can find their way into less-than-secure computers connected to that unregulated network. A person like you, perhaps.
+
+### Network structure
+
+Unlike the traditional BitBurner network, the darknet is constantly changing. Servers may sometimes restart, change its connections to other servers, or even go offline indefinitely. The network is also not a simple tree. It contains loops of connections, lost servers, and disconnected islands to explore.
+
+In addition, servers on the darknet are not freely accessible from anywhere. Generally, they can only be interacted with or modified if you (or your script) is running on a directly connected nearby server. This means you will need to find a way to make deployers that can roam the network, or duplicate themselves. 
+
+In some cases, the only way to get to some places is to hitch a ride on a server when it moves to another part of the network.
+
+
+### Gaining server access
+
+The servers cannot be broken into with a few scripts you can buy off-of-the-shelf. You must find a way to crack the password of each one to run scripts on it and pass through it. Fortunately, each server provides some hints and feedback as you attempt to guess the password, and you will find that similar models of computer have similar vulnerabilities. You will need those passwords later, so make sure to store them somewhere you won't lose if a server goes offline! If you aren't sure how to guess a server's auth codes, look around for notes on darkweb servers you have already unlocked; they may have hints for how to solve some of the puzzles (and sometimes other helpful data, too.)
+
+
+Darknet servers require a password to interact with. You can use `await ns.dnet.authenticate(hostname, password)` to see if a password is correct. (Remember to await it, network requests take time!) The higher your charisma, the faster you can smooth-talk your way through these vulnerable servers' passwords. Using more threads also speeds up this process. However, it may be faster to divide up the work across multiple scripts, if you can coordinate them.
+
+
+### Taking advantage of stolen credentials
+
+Once you figure out the password for a server, you can use that in the darknet API to write to that server. For example, you might want to copy and run a script to that server like this:
+```js
+ns.dnet.scp("crawler.js", hostName, password);
+ns.dnet.exec("crawler.js", hostName, password);
+```
+Remember that you must be in a directly connected server to write to a target! Use `ns.dnet.scan()` to see the darknet servers connected to your current server.
+
+
+### Treasure!
+
+Sometimes you will find valuable data in .cache files on servers you unlock. They can contain money or experience, darkweb programs, or even stock market access keys. They can be opened via `run` from the terminal, or `ns.dnet.openCache(fileName)` from a script on that server.
+
+
+### Alternate approaches
+
+If you get stuck on a puzzle, you can try to brute-force it. Most servers will tell you their password length and format, allowing you to try each of the possibilities. It's not likely to be fast, but it's an option.
+
+
+If you don't want to wait on that, you can social-engineer your way around it. Not everyone uses secure internet connections, and a lot of interesting things can be pulled from their network traffic... including passwords. `await ns.dnet.packetCapture(hostName)` will let you spend some time scraping data from outgoing packets from that server. Most of what you overhear will be useless, but the password will eventually be inside some of that garbage, sooner or later. (It may take a long time to stumble upon the password on higher-difficulty servers, though!)
+
+
+### Other helpful API methods
+
+`ns.dnet.getServer(hostName)` can give you relevant details about a darknet server, notably its modelId (which is key to identifying its vulnerabilities)
+
+`ns.dnet.ps(hostname, password)` will give you the list of running scripts on a nearby connected server. Don't forget to provide the password!
+
+`ns.dnet.killall(hostname, password)` will let you cleanly kill all scripts on a nearby connected server. If called without arguments, it kills all other scripts on the current server instead.
+
+
+==========================
+
+# Darkweb network expansion project
+Design document and workspace
+
 
 ## Goals:
 
@@ -71,14 +132,11 @@ This is currently a design document, but eventually will be the in-game player d
 
 - more hint notes
 
-- labyrinth nav ui
-
 - unlocked server viewer: polish?
 
 ## TODO:
 
 - ub3r_l4byr1nth server
-  - maze navigation via password attempts
   - special cache: gives augments
   - can give TRP
   - treasure chests in maze?

@@ -9,7 +9,7 @@ Opens a .cache file on the current server to acquire its valuable contents.
 **Signature:**
 
 ```typescript
-openCache(filename: string): void;
+openCache(filename: string, suppressToast?: boolean): void;
 ```
 
 ## Parameters
@@ -17,8 +17,13 @@ openCache(filename: string): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  filename | string | the cache file to open. |
+|  suppressToast | boolean | _(Optional)_ optional. If true, suppresses the toast notification that appears when opening a cache file. |
 
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 4 GB
 

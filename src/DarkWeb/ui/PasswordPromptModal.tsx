@@ -72,7 +72,7 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
           </Typography>
           <br />
           {server.hasAdminRights ? ( <>
-            <Typography>Password: {server.darknetData?.password ?? ""}</Typography>
+            <Typography>Password: "{server.darknetData?.password ?? ""}"</Typography>
               <br/>
               <br/>
               {server.hostname === SpecialServers.Labyrinth ? (

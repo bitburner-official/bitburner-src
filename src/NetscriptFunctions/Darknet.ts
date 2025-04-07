@@ -158,7 +158,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const args = helpers.scriptArgs(ctx, _args);
         const server = getConnectedServer(ctx, hostname);
         expectAuthenticated(ctx, server, password);
-        return runScriptFromScript("dn.exec", server, path, args, ctx.workerScript, runOpts);
+        return runScriptFromScript("dnet.exec", server, path, args, ctx.workerScript, runOpts);
       },
 
     scp: (ctx: NetscriptContext) => (_files, _destination, _password) => {
@@ -219,7 +219,8 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       },
     getServer: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-      const server = getConnectedServer(ctx, hostname, true);
+      const server = helpers.server(ctx, hostname);
+      const dnetServer = expectDarknetServer(ctx, server.hostname);
       return {
         hostname: server.hostname,
         ip: server.ip,
@@ -233,7 +234,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         moneyAvailable: 0,
         moneyMax: 0,
         charismaLevel: server.requiredHackingSkill ?? 0,
-        modelId: server.darknetData?.minigameType ?? -1,
+        modelId: dnetServer?.darknetData?.minigameType ?? -1,
       };
     },
     packetCapture: (ctx) => (_hostname) => {

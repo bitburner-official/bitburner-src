@@ -1,5 +1,5 @@
 import React, { PointerEventHandler, useEffect, useRef, useState, WheelEventHandler } from "react";
-import { Container, Typography, Button, Box } from "@mui/material";
+import { Container, Typography, Button, Box, Link } from "@mui/material";
 import { ZoomIn, ZoomOut } from "@mui/icons-material";
 import { DNServerComponent } from "./DNServerComponent";
 import { useRerender } from "../../ui/React/hooks";
@@ -11,6 +11,8 @@ import { drawOnCanvas, getPixelPosition } from "./networkCanvas";
 import { clearDarknet, populateDarknet } from "../controllers/DarknetNetworkGenerator";
 import { WEBSTORM } from "../controllers/DarknetNetworkMovement";
 import { dnetStyles } from "./dnetStyles";
+import { Router } from "../../ui/GameRoot";
+import { Page } from "../../ui/Router";
 
 export const DW_NET_WIDTH = 6000;
 export const DW_NET_HEIGHT = 8000;
@@ -174,6 +176,12 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         </Button>
       </div>
       <Box className={`${classes.inlineFlexBox}`}>
+        <Link
+          style={{ cursor: "pointer" }}
+          onClick={() => Router.toPage(Page.Documentation, { docPage: "advanced/darknet.md" })}
+        >
+          Darknet Documentation
+        </Link>
         <Button
           onClick={() => {
             clearDarknet();
@@ -182,10 +190,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
           variant={"contained"}
           className={classes.button}
         >
-          Generate New Web
+          Generate New Web (for testing)
         </Button>
         <Button onClick={() => void WEBSTORM()} variant={"contained"} className={classes.button}>
-          START WEBSTORM
+          START WEBSTORM (for testing)
         </Button>
       </Box>
     </Container>

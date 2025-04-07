@@ -136,7 +136,7 @@ export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
   gang: NetscriptGang(),
   go: NetscriptGo(),
-  dn: NetscriptDarknet(),
+  dnet: NetscriptDarknet(),
   bladeburner: NetscriptBladeburner(),
   codingcontract: NetscriptCodingContract(),
   sleeve: NetscriptSleeve(),
@@ -723,7 +723,7 @@ export const ns: InternalAPI<NSFull> = {
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const server = helpers.getServer(ctx, hostname);
-      failForDarknetServer(ctx, server, "ns.dn.exec()");
+      failForDarknetServer(ctx, server, "ns.dnet.exec()");
       return runScriptFromScript("exec", server, path, args, ctx.workerScript, runOpts);
     },
   spawn:
@@ -821,7 +821,7 @@ export const ns: InternalAPI<NSFull> = {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const safetyGuard = !!_safetyGuard;
       const server = helpers.getServer(ctx, hostname);
-      failForDarknetServer(ctx, server, "ns.dn.killall()");
+      failForDarknetServer(ctx, server, "ns.dnet.killall()");
 
       let scriptsKilled = 0;
 
@@ -846,7 +846,7 @@ export const ns: InternalAPI<NSFull> = {
     const source = helpers.string(ctx, "source", _source ?? ctx.workerScript.hostname);
     const destServer = helpers.getServer(ctx, destination);
     const sourceServer = helpers.getServer(ctx, source);
-    failForDarknetServer(ctx, destServer, "ns.dn.scp()");
+    failForDarknetServer(ctx, destServer, "ns.dnet.scp()");
     const files = Array.isArray(_files) ? _files : [_files];
     return helpers.scp(ctx, files, sourceServer, destServer);
   },
@@ -877,7 +877,7 @@ export const ns: InternalAPI<NSFull> = {
     (_hostname = ctx.workerScript.hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const server = helpers.getServer(ctx, hostname);
-      failForDarknetServer(ctx, server, "ns.dn.ps()");
+      failForDarknetServer(ctx, server, "ns.dnet.ps()");
       const processes: ProcessInfo[] = [];
       for (const byPid of server.runningScriptMap.values()) {
         for (const script of byPid.values()) {

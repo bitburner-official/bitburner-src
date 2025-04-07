@@ -41,6 +41,7 @@
 - [Grafting](advanced/grafting.md)
 - [Stanek's Gift](advanced/stanek.md)
 - [IPvGO](programming/go_algorithms.md)
+- [Darkweb Network](advanced/darknet.md)
 
 ## Resources
 
