@@ -37,7 +37,6 @@ export enum Minigames {
 }
 
 export const getDarknetServer = (difficulty: number, x: number, y: number): Server => {
-  return getMastermindHintServer(difficulty, x, y); // TODO: remove
   const easyServers = [getEchoVulnServer, getSortedEchoVulnServer, getDefaultPasswordServer];
   const mediumServers = [
     getMastermindHintServer,

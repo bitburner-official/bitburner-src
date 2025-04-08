@@ -857,6 +857,7 @@ export const ns: InternalAPI<NSFull> = {
 
     const allFilenames = [
       ...server.contracts.map((contract) => contract.fn),
+      ...server.caches,
       ...server.messages,
       ...server.programs,
       ...server.scripts.keys(),
