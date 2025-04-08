@@ -45,8 +45,6 @@ If you don't want to wait on that, you can social-engineer your way around it. N
 
 `ns.dnet.getServer(hostName)` can give you relevant details about a darknet server, notably its modelId (which is key to identifying its vulnerabilities)
 
-`ns.dnet.ps(hostname, password)` will give you the list of running scripts on a nearby connected server. Don't forget to provide the password!
-
 `ns.dnet.killall(hostname, password)` will let you cleanly kill all scripts on a nearby connected server. If called without arguments, it kills all other scripts on the current server instead.
 
 ==========================
@@ -119,7 +117,10 @@ Design document and workspace
 - Cha contributes (more?) to job rep (needed to later join megacorp factions)
 - Cha boosts the stock manipulation effects of hack and grow
 
-# requirements for MVP:
+
+## TODO:
+
+
 
 - occasional changing hostnames
 
@@ -128,9 +129,7 @@ Design document and workspace
 - more hint notes
 
 - unlocked server viewer: polish?
-
-## TODO:
-
+- 
 - ub3r_l4byr1nth server
 
   - special cache: gives augments

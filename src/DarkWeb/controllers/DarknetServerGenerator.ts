@@ -103,7 +103,7 @@ export const getSortedEchoVulnServer = (difficulty: number, x: number, y: number
     "I accidentally sorted the password",
     "The PIN uses these",
   ];
-  const password = getPassword(3 + difficulty / 2);
+  const password = getPassword(3 + difficulty / 6);
   const sortedPassword = password.split("").sort().join("");
   const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${sortedPassword}`;
   return DnetServerBuilder({
@@ -175,7 +175,7 @@ export const getMastermindHintServer = (difficulty: number, x: number, y: number
   return DnetServerBuilder({
     icon: getRandomIcon(),
     minigameType: Minigames.MastermindHint,
-    password: getPassword(2 + difficulty / 3),
+    password: getPassword(2 + difficulty / 4),
     passwordHint: "", // dynamic hint
     difficulty,
     x,
@@ -287,7 +287,7 @@ export const getEuCountryDictionaryServer = (difficulty: number, x: number, y: n
 };
 
 export const getYesn_tServer = (difficulty: number, x: number, y: number): Server => {
-  const password = getPassword(3 + difficulty / 3, true, difficulty > 8, false, false);
+  const password = getPassword(3 + difficulty / 2, true, difficulty > 8, false, false);
   return DnetServerBuilder({
     icon: getRandomIcon(),
     minigameType: Minigames.Yesn_t,

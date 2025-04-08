@@ -112,6 +112,7 @@ import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
 import { failForDarknetServer, NetscriptDarknet } from "./NetscriptFunctions/Darknet";
+import { FileType, getFileType } from "./utils/ScriptTransformer";
 
 export const enums: NSEnums = {
   CityName,
@@ -846,8 +847,10 @@ export const ns: InternalAPI<NSFull> = {
     const source = helpers.string(ctx, "source", _source ?? ctx.workerScript.hostname);
     const destServer = helpers.getServer(ctx, destination);
     const sourceServer = helpers.getServer(ctx, source);
-    failForDarknetServer(ctx, destServer, "ns.dnet.scp()");
     const files = Array.isArray(_files) ? _files : [_files];
+    if (files.some((file) => [FileType.JS, FileType.TS, FileType.JSX, FileType.TSX, FileType.NS1].includes(getFileType(file)))) {
+      failForDarknetServer(ctx, destServer, "ns.dnet.scp()");
+    }
     return helpers.scp(ctx, files, sourceServer, destServer);
   },
   ls: (ctx) => (_hostname, _substring) => {
@@ -878,7 +881,6 @@ export const ns: InternalAPI<NSFull> = {
     (_hostname = ctx.workerScript.hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const server = helpers.getServer(ctx, hostname);
-      failForDarknetServer(ctx, server, "ns.dnet.ps()");
       const processes: ProcessInfo[] = [];
       for (const byPid of server.runningScriptMap.values()) {
         for (const script of byPid.values()) {

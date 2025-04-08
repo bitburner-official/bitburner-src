@@ -231,7 +231,6 @@ const dnet = {
   exec: 1.3,
   scp: 0.6,
   killall: 0.5,
-  ps: 0.2,
   getServer: 2,
   packetCapture: 6,
   getIp: 0.5,

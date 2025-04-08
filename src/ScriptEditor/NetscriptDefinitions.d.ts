@@ -4164,20 +4164,6 @@ export interface Darknet {
   killall(host?: string, password?: string, safetyGuard?: boolean): boolean;
 
   /**
-   * List running scripts on a server.
-   *
-   * @remarks
-   * RAM cost: 0.2 GB
-   *
-   * Returns an array with general information about all scripts running on the specified target server.
-
-   * @param host - Host address of the target server. If not specified, it will be the current server by default.
-   * @param password - Password to authenticate with the target server. Not required for running scripts on the current server.
-   * @returns Array with general information about all scripts running on the specified target server.
-   */
-  ps(host?: string, password?: string): ProcessInfo[];
-
-  /**
    * Returns a server object for the given server. Defaults to the running script's server if host is not specified.
    *
    * @remarks

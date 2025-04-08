@@ -4,7 +4,7 @@
 
 ## Darknet.killall() method
 
-Terminate all scripts on a server.
+Terminate all scripts on a server. The target server has to be connected to the current server and have been authenticated.
 
 **Signature:**
 

@@ -21,6 +21,8 @@ type DarknetServer = {
   backdoorInstalled: boolean;
   moneyAvailable: number;
   moneyMax: number;
+  passwordHintExample: string;
+  passwordDataExample: string;
   charismaLevel: number;
   modelId: number;
 };

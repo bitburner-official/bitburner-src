@@ -4,7 +4,7 @@
 
 ## PasswordResponse type
 
-Response to an authentication attempt.  status - Status code of the response. 200 for success, 401 for failure.  msg - Message describing the result of the authentication attempt.  responseTime - Time in milliseconds it took to process the request on the server.  passwordLength - Length of the correct password.  passwordFormat - Format of the correct password.  data - Feedback returned from the authentication attempt. Model specific.  modelId - ID of the model that was used to authenticate. Similar models tend to share vulnerabilities.
+Response to an authentication attempt.  status - Status code of the response. 200 for success, 401 for failure.  msg - Message describing the result of the authentication attempt.  passwordLength - Length of the correct password.  passwordFormat - Format of the correct password.  data - Feedback returned from the authentication attempt. Model specific.  modelId - ID of the model that was used to authenticate. Similar models tend to share vulnerabilities.
 
 **Signature:**
 
@@ -12,7 +12,6 @@ Response to an authentication attempt.  status - Status code of the response. 20
 type PasswordResponse = {
   status: number;
   msg: string;
-  responseTime: number;
   passwordLength?: number;
   passwordFormat?: string;
   data?: string;

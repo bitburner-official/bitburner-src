@@ -6,6 +6,8 @@ import { hasTextExtension } from "../../Paths/TextFilePath";
 import { isMember } from "../../utils/EnumHelper";
 import { LiteratureName } from "@enums";
 import { ContentFile } from "../../Paths/ContentFile";
+import { FileType, getFileType } from "../../utils/ScriptTransformer";
+import { failForDarknetServer } from "../../NetscriptFunctions/Darknet";
 
 export function scp(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length < 2) {
@@ -42,6 +44,16 @@ export function scp(args: (string | number | boolean)[], server: BaseServer): vo
     const sourceContentFile = server.getContentFile(path);
     if (!sourceContentFile) return Terminal.error(`scp failed: ${path} does not exist on server ${server.hostname}`);
     files.push(sourceContentFile);
+  }
+
+  if (destServer.darknetData && !server.serversOnNetwork.includes(destHostname) &&
+    filenames.some((fileName) =>
+      ([FileType.JS, FileType.TS, FileType.JSX, FileType.TSX, FileType.NS1] as FileType[]).includes(getFileType(fileName))
+    ))
+  {
+    return Terminal.error(
+      `scp failed: executable scripts cannot be copied to darkweb servers except from adjacent servers.`,
+    );
   }
 
   // Actually copy the files (no more errors possible)
