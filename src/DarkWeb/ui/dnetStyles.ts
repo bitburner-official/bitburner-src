@@ -52,6 +52,13 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     color: theme.colors.white,
     lineHeight: 0.55,
   },
+  hiddenInput: {
+    width: 0,
+    height: 0,
+    padding: 0,
+    margin: 0,
+    opacity: 0,
+  },
   zoomContainer: {
     position: "absolute",
     top: "calc(90vh - 38px)",

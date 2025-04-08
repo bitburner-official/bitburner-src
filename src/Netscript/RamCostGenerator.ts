@@ -234,6 +234,7 @@ const dnet = {
   ps: 0.2,
   getServer: 2,
   packetCapture: 6,
+  getIp: 0.5,
 } as const;
 
 // Gang API

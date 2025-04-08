@@ -121,6 +121,8 @@ Design document and workspace
 
 # requirements for MVP:
 
+- occasional changing hostnames
+
 - start with crash course?
 
 - more hint notes
@@ -158,6 +160,7 @@ Design document and workspace
 
   - Runs on a timer, or when logging in after being online for a while?
   - upgrade to harden scripts against restarts?
+  - some actions delay or impend the webstorm?
 
 - Attempt to make connection?
 
@@ -197,6 +200,8 @@ https://discord.com/channels/415207508303544321/415207839246581781/1358753789435
 https://discord.com/channels/415207508303544321/415207923506216971/1174839532131188736
 
 ## Idea scratch space
+
+Inspections run on a couple servers periodically, requiring scripts be shut down and files removed temporarily? What would the dangers be?
 
 retrieving passwords from other parts of the game?
 

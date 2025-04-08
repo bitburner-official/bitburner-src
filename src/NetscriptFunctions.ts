@@ -942,9 +942,10 @@ export const ns: InternalAPI<NSFull> = {
   getServer: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
     const server = helpers.getServer(ctx, hostname);
+    const isDarkweb = server?.darknetData;
     return {
       hostname: server.hostname,
-      ip: server.ip,
+      ip: isDarkweb ? "??.?.?.?" : server.ip,
       sshPortOpen: server.sshPortOpen,
       ftpPortOpen: server.ftpPortOpen,
       smtpPortOpen: server.smtpPortOpen,

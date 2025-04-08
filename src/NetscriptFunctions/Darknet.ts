@@ -82,16 +82,23 @@ function expectAuthenticated(
   }
 }
 
+function expectPassword(ctx: NetscriptContext, hostname: string, _password: unknown) {
+  if (ctx.workerScript.hostname !== hostname) {
+    return helpers.string(ctx, "password", _password);
+  }
+  return ctx.workerScript.getServer().darknetData?.password ?? "";
+}
+
 export function NetscriptDarknet(): InternalAPI<NSDnet> {
   return {
     authenticate:
       (ctx: NetscriptContext) =>
       (_hostname, _password): Promise<PasswordResponse> => {
         const targetHostname = helpers.string(ctx, "hostname", _hostname);
-        const password = helpers.string(ctx, "password", _password);
+        const password = expectPassword(ctx, targetHostname, _password);
         const targetServer = getConnectedServer(ctx, targetHostname);
         const threads = ctx.workerScript.scriptRef.threads;
-        const networkDelay = calculateAuthenticationTime(targetServer, Player, threads);
+        const networkDelay = calculateAuthenticationTime(targetServer, Player, threads, password);
         logger(ctx)(
           `Connecting to ${targetServer.hostname} with password '${password}'... (Est: ${formatNumber(
             networkDelay / 1000,
@@ -150,10 +157,10 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
 
     exec:
       (ctx: NetscriptContext) =>
-      (_scriptname, _hostname, _password, _thread_or_opt = 1, ..._args): number => {
-        const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
+      (_script, _hostname, _password, _thread_or_opt = 1, ..._args): number => {
+        const path = helpers.scriptPath(ctx, "script", _script);
         const hostname = helpers.string(ctx, "hostname", _hostname);
-        const password = helpers.string(ctx, "hostname", _password);
+        const password = helpers.string(ctx, "password", _password);
         const runOpts = helpers.runOptions(ctx, _thread_or_opt);
         const args = helpers.scriptArgs(ctx, _args);
         const server = getConnectedServer(ctx, hostname);
@@ -175,12 +182,10 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (ctx) =>
       (_hostname = ctx.workerScript.hostname, _password, _safetyGuard = true) => {
         const hostname = helpers.string(ctx, "hostname", _hostname);
-        const password = helpers.string(ctx, "password", _password);
+        const password = expectPassword(ctx, hostname, _password);
         const safetyGuard = helpers.boolean(ctx, "safetyGuard", _safetyGuard);
         const server = getConnectedServer(ctx, hostname);
-        if (hostname !== ctx.workerScript.hostname) {
-          expectAuthenticated(ctx, server, password);
-        }
+        expectAuthenticated(ctx, server, password);
 
         let scriptsKilled = 0;
 
@@ -200,7 +205,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (ctx) =>
       (_hostname = ctx.workerScript.hostname, _password = null) => {
         const hostname = helpers.string(ctx, "hostname", _hostname);
-        const password = helpers.string(ctx, "password", _password);
+        const password = expectPassword(ctx, hostname, _password);
         const server = getConnectedServer(ctx, hostname);
         expectAuthenticated(ctx, server, password);
         const processes: ProcessInfo[] = [];
@@ -220,9 +225,10 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
     getServer: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
       const server = expectDarknetServer(ctx, hostname);
+      const examplePasswordResponse = checkPassword("?", server, 0);
       return {
         hostname: server.hostname,
-        ip: server.ip,
+        ip: "??.?.?.?",
         hasAdminRights: server.hasAdminRights,
         isConnectedTo: server.isConnectedTo,
         ramUsed: server.ramUsed,
@@ -232,9 +238,23 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         backdoorInstalled: server.backdoorInstalled ?? false,
         moneyAvailable: 0,
         moneyMax: 0,
+        passwordHintExample: examplePasswordResponse.msg,
+        passwordDataExample: examplePasswordResponse.data ?? "",
         charismaLevel: server.requiredHackingSkill ?? 0,
         modelId: server?.darknetData?.minigameType ?? -1,
       };
+    },
+    getIp: (ctx) => (_hostname, _password) => {
+      if (!_hostname) {
+        const currentServer = ctx.workerScript.getServer();
+        expectAuthenticated(ctx, currentServer, currentServer.darknetData?.password ?? "");
+        return currentServer.ip;
+      }
+      const hostname = helpers.string(ctx, "hostname", _hostname);
+      const password = expectPassword(ctx, hostname, _password);
+      const server = getConnectedServer(ctx, hostname);
+      expectAuthenticated(ctx, server, password);
+      return server.ip;
     },
     packetCapture: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);

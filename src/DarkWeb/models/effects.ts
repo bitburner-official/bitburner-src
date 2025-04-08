@@ -13,8 +13,9 @@ import { TextFilePath } from "../../Paths/TextFilePath";
 import { GetServer } from "../../Server/AllServers";
 import { getAllAdjacentNeighbors } from "../controllers/DarknetNetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
-import { isDarknetServer } from "./DnetServerData";
+import { getSharedChars, isDarknetServer } from "./DnetServerData";
 import { SpecialServers } from "../../Server/data/SpecialServers";
+import { Minigames } from "../controllers/DarknetServerGenerator";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
   if (!threads) return;
@@ -46,13 +47,20 @@ export const handleFailedAuth = (server: BaseServer, threads: number) => {
  * Returns the time it takes to authenticate on a server in milliseconds
  * @param server - the target server to attempt a password on
  * @param person - the player's character
+ * @param attemptedPassword - the password being attempted
  * @param threads - the number of threads used for the password attempt (which speeds up the process)
  */
-export const calculateAuthenticationTime = (server: BaseServer, person: IPerson, threads: number = 1) => {
+export const calculateAuthenticationTime = (
+  server: BaseServer,
+  person: IPerson,
+  threads: number = 1,
+  attemptedPassword: string = "",
+) => {
   if (!isDarknetServer(server)) return 0;
+  const darknetData = server.darknetData;
 
   const chaRequired = server.hackDifficulty ?? 1;
-  const difficulty = server.darknetData?.difficulty ?? 1;
+  const difficulty = darknetData?.difficulty ?? 1;
 
   const baseDiff = (difficulty + 1) * 100;
   const diffFactor = 5;
@@ -63,7 +71,14 @@ export const calculateAuthenticationTime = (server: BaseServer, person: IPerson,
 
   const time = (baseTime * skillFactor) / threadsFactor;
 
-  return Math.max(time * calculateIntelligenceBonus(person.skills.intelligence, 0.25), 100);
+  // Add extra time for timing attack server, per correct character
+  const sharedChars =
+    darknetData?.minigameType === Minigames.TimingAttack
+      ? getSharedChars(darknetData?.password ?? "", attemptedPassword)
+      : 0;
+  const sharedCharsExtraTime = sharedChars * 150;
+
+  return Math.max(time * calculateIntelligenceBonus(person.skills.intelligence, 0.25), 100) + sharedCharsExtraTime;
 };
 
 export const hasCacheFileExtension = (path: string) => {
@@ -91,20 +106,20 @@ export const getRewardFromCache = (server: BaseServer, suppressToast = false): s
 export const getCCTReward = (difficulty: number) => {
   const contractCount = Math.min((difficulty + 1) / 4, 4);
   tryGeneratingRandomContract(contractCount);
-  return `New coding contracts are now available on the network`;
+  return `New coding contracts are now available on the network!`;
 };
 
 export const getMoneyReward = (difficulty: number) => {
   const reward = 1.2 ** difficulty * 1e7 * getMultiplierFromCharisma(4) * Player.mults.crime_money; // TODO: adjust balance
   Player.gainMoney(reward, "other");
-  return `You have discovered a cache with ${formatMoney(reward)}`;
+  return `You have discovered a cache with ${formatMoney(reward)}.`;
 };
 
 export const getXpReward = (difficulty: number) => {
   const augCount = Player.augmentations.length;
   const reward = 1.2 ** difficulty * 100 * 1.04 ** augCount * Player.mults.charisma_exp; // TODO: adjust balance
   Player.gainCharismaExp(reward);
-  return `You have discovered a cache with ${formatNumber(reward, 0)} cha XP`;
+  return `You have discovered a cache with ${formatNumber(reward, 0)} cha XP.`;
 };
 
 /**
@@ -138,25 +153,25 @@ export const getNextPortOpener = (difficulty: number, suppressToast = false) => 
     if (!Player.hasProgram(program) && currentPlayerWork !== program) {
       Player.getHomeComputer().pushProgram(program);
       const result = `You have discovered the program ${program}`;
-      !suppressToast && SnackbarEvents.emit(`You have discovered the program ${program}`, ToastVariant.SUCCESS, 4000);
+      !suppressToast && SnackbarEvents.emit(`You have discovered the program ${program}!`, ToastVariant.SUCCESS, 4000);
       return result;
     }
   }
   if (!Player.hasWseAccount) {
     Player.hasWseAccount = true;
-    const result = `You have discovered a stolen WSE Account`;
+    const result = `You have discovered a stolen WSE Account!`;
     !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
     return result;
   }
   if (!Player.hasTixApiAccess) {
     Player.hasTixApiAccess = true;
-    const result = `You have discovered a stolen TIX API access point`;
+    const result = `You have discovered a stolen TIX API access point!`;
     !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
     return result;
   }
   if (!Player.has4SData) {
     Player.has4SData = true;
-    const result = `You have discovered a cache of stolen 4S Data`;
+    const result = `You have discovered a cache of stolen 4S Data!`;
     !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
     return result;
   }
@@ -165,9 +180,9 @@ export const getNextPortOpener = (difficulty: number, suppressToast = false) => 
 };
 
 const getLabReward = (_server: BaseServer, suppressToast = false) => {
-  // TODO: balance this (more augments first? only TRP on BN 15?)
+  // TODO: balance this (more augments first? only TRP on BN 15)
   Player.queueAugmentation(AugmentationName.TheRedPill);
-  const result = `You have discovered a cache with the Red Pill`;
+  const result = `You have discovered a cache with the Red Pill augmentation!`;
   !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
   return result;
 };
@@ -244,9 +259,8 @@ const addClue = (server: BaseServer) => {
 };
 
 export const hasDarknetAccess = () => {
-  return true;
+  return true; //TODO: enable this later
 
-  //TODO: enable this later
   const hasSF15 = !!Player.sourceFiles.get(15);
   const isInBN15 = Player.bitNodeN == 15;
 

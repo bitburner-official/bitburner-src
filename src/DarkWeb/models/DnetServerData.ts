@@ -22,11 +22,11 @@ export const AUTH_FAILURE_STATUS = 401;
 export type PasswordResponse = {
   status: number;
   msg: string;
-  responseTime: number;
   passwordLength?: number;
   passwordFormat?: string;
   data?: string;
   modelId?: number;
+  responseTime?: number;
 };
 
 export type DnetServerData = {
@@ -85,7 +85,6 @@ export const checkPassword = (
   const darknetData = server.darknetData;
   if (!darknetData) {
     return {
-      responseTime: 0,
       status: AUTH_FAILURE_STATUS,
       msg: "This server is not a darknet server",
       modelId: 0,
@@ -159,19 +158,16 @@ export const checkPassword = (
     }
     return getFailureResponse(darknetData.passwordHint, darknetData.passwordHintData ?? "", darknetData);
   } else {
-    const sharedChars =
-      darknetData.minigameType === Minigames.TimingAttack ? getSharedChars(darknetData.password, attemptedPassword) : 0;
-    return getFailureResponse(darknetData.passwordHint, darknetData.passwordHintData ?? "", darknetData, sharedChars);
+    return getFailureResponse(darknetData.passwordHint, darknetData.passwordHintData ?? "", darknetData);
   }
 };
 
-const getFailureResponse = (msg: string, data: string, darknetData: DnetServerData, extraDelay = 0) => ({
+const getFailureResponse = (msg: string, data: string, darknetData: DnetServerData) => ({
   status: AUTH_FAILURE_STATUS,
   msg,
   data,
   passwordLength: darknetData.password.length,
   passwordFormat: getPasswordType(darknetData.password),
-  responseTime: getResponseTime(extraDelay),
   modelId: darknetData.minigameType,
 });
 
@@ -213,7 +209,7 @@ const getGenericSuccess = (responseTime = 0) => ({
 
 const getResponseTime = (additionalPasses = 0) => Math.floor(95 + Math.random() * 12 + additionalPasses * 25);
 
-const getSharedChars = (password: string, attemptedPassword: string): number => {
+export const getSharedChars = (password: string, attemptedPassword: string): number => {
   for (let i = 0; i < password.length; i++) {
     if (password[i] !== attemptedPassword[i]) {
       return i;

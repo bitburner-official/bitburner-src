@@ -252,7 +252,7 @@ export const getLargestPrimeFactorServer = (difficulty: number, x: number, y: nu
 
 export const getGuessNumberServer = (difficulty: number, x: number, y: number): Server => {
   const password = `${Math.floor((Math.random() * 10 * (difficulty + 3)) / 3)}`;
-  const maxNumber = 10 ** (password.length + 1);
+  const maxNumber = 10 ** password.length;
   return DnetServerBuilder({
     icon: getRandomIcon(),
     minigameType: Minigames.GuessNumber,
@@ -532,7 +532,7 @@ export const generateSimpleArithmeticExpression = (difficulty: number): string =
   }
 
   if (difficulty > 18) {
-    return result.replace("*", "ҳ").replace("/", "÷").replace("+", "➕").replaceAll("-", "➖");
+    return result.replaceAll("*", "ҳ").replaceAll("/", "÷").replaceAll("+", "➕").replaceAll("-", "➖");
   } else if (difficulty > 12) {
     return `${result}${getCodeInjection()}`;
   }

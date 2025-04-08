@@ -23,6 +23,8 @@ import { IConstructorParams, Server } from "../../Server/Server";
 import { DnetServerData } from "../models/DnetServerData";
 import { Minigames } from "./DarknetServerGenerator";
 import { labIcon } from "./ServerIcon";
+import { Player } from "@player";
+import { Terminal } from "../../Terminal";
 
 export const HORIZONTAL_CONNECTION_CHANCE = 0.5;
 export const VERTICAL_CONNECTION_CHANCE = 0.3;
@@ -32,6 +34,7 @@ export const populateDarknet = () => {
   const darkWebRoot = GetServer(SpecialServers.DarkWeb);
   if (darkWebRoot) {
     darkWebRoot.hasAdminRights = true;
+    darkWebRoot.maxRam = 16; // TODO: make this more graceful?
   }
 
   if (GetAllServers(true).find((s) => s.darknetData)) {
@@ -52,6 +55,7 @@ export const populateDarknet = () => {
 };
 
 export const clearDarknet = () => {
+  movePlayerIfNeeded();
   for (let i = 0; i < NET_DEPTH; i++) {
     for (let j = 0; j < NET_WIDTH; j++) {
       const server = DarknetState.Network[i][j];
@@ -67,6 +71,13 @@ export const clearDarknet = () => {
   const labyrinth = GetServer(SpecialServers.Labyrinth);
   if (labyrinth) {
     deleteServer(labyrinth);
+  }
+};
+
+export const movePlayerIfNeeded = () => {
+  const connectedServer = Player.getCurrentServer();
+  if (connectedServer.darknetData) {
+    Terminal.connectToServer("home");
   }
 };
 

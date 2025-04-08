@@ -4021,7 +4021,6 @@ export interface CodingContract {
  * Response to an authentication attempt.
  * @property status - Status code of the response. 200 for success, 401 for failure.
  * @property msg - Message describing the result of the authentication attempt.
- * @property responseTime - Time in milliseconds it took to process the request on the server.
  * @property passwordLength - Length of the correct password.
  * @property passwordFormat - Format of the correct password.
  * @property data - Feedback returned from the authentication attempt. Model specific.
@@ -4032,7 +4031,6 @@ export interface CodingContract {
 type PasswordResponse = {
   status: number;
   msg: string;
-  responseTime: number;
   passwordLength?: number;
   passwordFormat?: string;
   data?: string;
@@ -4067,6 +4065,8 @@ type DarknetServer = {
   backdoorInstalled: boolean;
   moneyAvailable: number;
   moneyMax: number;
+  passwordHintExample: string;
+  passwordDataExample: string;
   charismaLevel: number;
   modelId: number;
 };
@@ -4147,7 +4147,7 @@ export interface Darknet {
   scp(files: string | string[], destination: string, password: string): boolean;
 
   /**
-   * Terminate all scripts on a server.
+   * Terminate all scripts on a server. The target server has to be connected to the current server and have been authenticated.
    * @remarks
    * RAM cost: 0.5 GB
    *
@@ -4187,6 +4187,14 @@ export interface Darknet {
    * @returns The requested server object.
    */
   getServer(host?: string): DarknetServer;
+
+  /**
+   * Get the IP address of a server. The target server has to be connected to the current server and have been authenticated.
+   *
+   * @param host - The target's hostname. Optional for checking the IP of the current server
+   * @param password - The target's password. Optional for checking the IP of the current server
+   */
+  getIp(host?: string, password?: string): string;
 
   /**
    * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.

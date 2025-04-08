@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
-      - run: npm run build
+      - run: npm run build:dev # TODO: Remove :dev once testing is complete
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ".app"

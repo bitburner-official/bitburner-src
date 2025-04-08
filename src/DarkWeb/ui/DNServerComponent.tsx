@@ -18,6 +18,7 @@ export function DNServerComponent({ server, enableAuth }: DWServerProps): React.
   const { classes } = dnetStyles({});
   const color = server.hasAdminRights ? classes.success : classes.rep;
   const icon = getIcon(server.darknetData?.icon ?? Icon.Terminal);
+  const ip = server.hasAdminRights ? server.ip ?? "" : "??.?.?.?";
 
   const authButtonHandler = () => {
     DarknetState.openServer = server;
@@ -54,7 +55,7 @@ export function DNServerComponent({ server, enableAuth }: DWServerProps): React.
             </Typography>
           </Box>
           <Typography color="secondary">
-            {server.ip ?? ""}  cha:{server.requiredHackingSkill}
+            {ip} cha:{server.requiredHackingSkill}
           </Typography>
           <br />
           <ServerSummary server={server} enableAuth={enableAuth} />

@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRerender } from "../../ui/React/hooks";
 import { Modal } from "../../ui/React/Modal";
-import { checkPassword, PasswordResponse, SUCCESS_STATUS } from "../models/DnetServerData";
-import { Container, Typography, TextField, Button, SvgIcon } from "@mui/material";
+import { checkPassword, getSharedChars, PasswordResponse, SUCCESS_STATUS } from "../models/DnetServerData";
+import { Button, Container, SvgIcon, TextField, Typography } from "@mui/material";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 import { getIcon, Icon } from "../controllers/ServerIcon";
 import { DarknetEvents, DarknetState } from "../models/DarknetState";
@@ -10,6 +10,8 @@ import { BaseServer } from "../../Server/BaseServer";
 import { ServerSummary } from "./ServerSummary";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { LabyrinthSummary } from "./LabyrinthSummary";
+import { Minigames } from "../controllers/DarknetServerGenerator";
+import { dnetStyles } from "./dnetStyles";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -27,24 +29,42 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
   const [needsPasswordSubmit, setNeedsPasswordSubmit] = useState(true);
   const icon = getIcon(server.darknetData?.icon ?? Icon.Terminal);
   const passwordInput = useRef<HTMLInputElement>(null);
+  const focusTarget = useRef<HTMLInputElement>(null);
   const location = DarknetState.labLocations[-1];
+  const { classes } = dnetStyles({});
 
   useEffect(() => {
     async function attemptPassword(passwordAttempted: string, skipSleep = false): Promise<void> {
       setEnableSubmit(false);
       setResponse("Checking password...");
-      await sleep(skipSleep ? 0 : 500);
+
+      const darknetData = server.darknetData;
+      const sharedChars =
+        darknetData?.minigameType === Minigames.TimingAttack
+          ? getSharedChars(darknetData?.password ?? "", passwordAttempted)
+          : 0;
+      const extraTime = sharedChars * 150;
+      await sleep(skipSleep ? 0 : 500 + extraTime);
+
       const response = checkPassword(passwordAttempted, server, skipSleep ? 0 : 4);
       setRawResponse(response);
+      if (darknetData?.minigameType === Minigames.TimingAttack) {
+        response.responseTime = 500 + extraTime;
+      }
       setResponse(JSON.stringify(response, null, 4));
+
       if (response.status == SUCCESS_STATUS) {
         DarknetEvents.emit("server-unlocked", server);
+        await sleep(50);
+        focusTarget.current?.focus();
       } else {
         setEnableSubmit(true);
         passwordInput.current?.focus();
         passwordInput.current?.querySelector("input")?.select();
       }
     }
+
+    // Only call the password checker once per submit
     if (needsPasswordSubmit && open && !server.hasAdminRights) {
       void attemptPassword(password, password === "?");
       setNeedsPasswordSubmit(false);
@@ -63,9 +83,10 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={onClose} removeFocus={false}>
       <>
         <Container sx={{ width: "40vw" }}>
+          <input ref={focusTarget} className={classes.hiddenInput}></input>
           <SvgIcon component={icon} color="secondary" />
           <Typography variant="h5" color={server.hasAdminRights ? "primary" : "secondary"}>
             {server.hostname}

@@ -41,13 +41,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     (server.hasAdminRights || server.serversOnNetwork.some((neighbor) => GetServer(neighbor)?.hasAdminRights));
 
   const darkWebRoot = GetServer(SpecialServers.DarkWeb);
-  if (!darkWebRoot) {
-    throw new Error("Could not find darkweb root server");
-  }
   const labyrinth = GetServer(SpecialServers.Labyrinth);
-  if (!labyrinth) {
-    throw new Error("Could not find labyrinth server");
-  }
 
   const handleDragStart: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
     const target = pointerEvent.target as HTMLDivElement;
@@ -153,7 +147,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             height={DW_NET_HEIGHT}
             style={{ position: "absolute", zIndex: -1 }}
           ></canvas>
-          <DNServerComponent server={darkWebRoot} enableAuth={true} />
+          {darkWebRoot ? <DNServerComponent server={darkWebRoot} enableAuth={true} /> : ""}
           {DarknetState.Network.map((row, i) =>
             row.map((server, j) =>
               server && isWithinScreen(server) ? (
@@ -164,7 +158,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             ),
           )}
 
-          <DNServerComponent server={labyrinth} enableAuth={allowAuth(labyrinth)} />
+          {labyrinth ? <DNServerComponent server={labyrinth} enableAuth={allowAuth(labyrinth)} /> : ""}
         </div>
       </div>
       <div className={classes.zoomContainer}>
