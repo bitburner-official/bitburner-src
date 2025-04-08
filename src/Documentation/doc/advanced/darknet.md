@@ -121,12 +121,6 @@ Design document and workspace
 
 # requirements for MVP:
 
-- show cache name in ls and tab completion
-
-- Darkweb api
-
-  - Documentation
-
 - start with crash course?
 
 - more hint notes

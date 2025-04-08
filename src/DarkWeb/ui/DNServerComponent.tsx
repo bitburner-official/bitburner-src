@@ -54,7 +54,7 @@ export function DNServerComponent({ server, enableAuth }: DWServerProps): React.
             </Typography>
           </Box>
           <Typography color="secondary">
-            x:{server.darknetData?.x ?? ""} y:{server.darknetData?.y ?? ""}; Cha:{server.requiredHackingSkill}
+            {server.ip ?? ""}  cha:{server.requiredHackingSkill}
           </Typography>
           <br />
           <ServerSummary server={server} enableAuth={enableAuth} />
