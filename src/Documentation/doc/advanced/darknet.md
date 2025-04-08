@@ -121,8 +121,6 @@ Design document and workspace
 
 # requirements for MVP:
 
-misplaced chars bug: 2435, 3423
-
 - Darkweb api
 
   - Documentation

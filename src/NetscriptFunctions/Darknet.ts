@@ -219,8 +219,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       },
     getServer: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-      const server = helpers.server(ctx, hostname);
-      const dnetServer = expectDarknetServer(ctx, server.hostname);
+      const server = expectDarknetServer(ctx, hostname);
       return {
         hostname: server.hostname,
         ip: server.ip,
@@ -234,7 +233,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         moneyAvailable: 0,
         moneyMax: 0,
         charismaLevel: server.requiredHackingSkill ?? 0,
-        modelId: dnetServer?.darknetData?.minigameType ?? -1,
+        modelId: server?.darknetData?.minigameType ?? -1,
       };
     },
     packetCapture: (ctx) => (_hostname) => {
