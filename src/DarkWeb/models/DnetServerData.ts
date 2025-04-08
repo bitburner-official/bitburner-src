@@ -194,13 +194,12 @@ const getMisplacedCorrectCharsCount = (password: string, attemptedPassword: stri
   const remainingAttemptedPasswordChars = attemptedPassword.split("").filter((digit, i) => digit !== password[i]);
 
   const misplacedCorrectChars = remainingAttemptedPasswordChars.filter((digit, i) => {
-    const isNotExactlyCorrect = digit !== remainingPasswordChars[i];
     const isPresentInPassword = remainingPasswordChars.includes(digit);
     const countInAttemptedPasswordThusFar = remainingAttemptedPasswordChars
       .slice(0, i)
       .filter((prevDigit) => prevDigit === digit).length;
     const countInPassword = remainingPasswordChars.filter((prevDigit) => prevDigit === digit).length;
-    return isNotExactlyCorrect && isPresentInPassword && countInAttemptedPasswordThusFar <= countInPassword;
+    return isPresentInPassword && countInAttemptedPasswordThusFar < countInPassword;
   });
 
   return misplacedCorrectChars.length;

@@ -170,7 +170,7 @@ const getLabReward = (_server: BaseServer, suppressToast = false) => {
   const result = `You have discovered a cache with the Red Pill`;
   !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
   return result;
-}
+};
 
 // TODO: balance xp gain
 export const calculatePasswordAttemptChaGain = (server: BaseServer, threads: number = 1, success = false) => {

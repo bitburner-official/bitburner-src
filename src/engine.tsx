@@ -397,7 +397,7 @@ const Engine: {
 
       // TODO: remove after testing is done
       getTorRouter();
-      Player.sourceFiles.set(1,3)
+      Player.sourceFiles.set(1, 3);
 
       // Start interactive tutorial
       iTutorialStart();

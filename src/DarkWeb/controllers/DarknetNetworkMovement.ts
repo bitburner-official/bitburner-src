@@ -106,7 +106,7 @@ export const restartAllServers = () => {
 
 const deleteRandomServers = (count = 1) => {
   for (let i = 0; i < count; i++) {
-    const servers = getDarknetServers();
+    const servers = getDarknetServers().filter((server) => server.hostname !== SpecialServers.Labyrinth);
     const serverToDelete = servers[Math.floor(Math.random() * servers.length)];
     const server = GetServer(serverToDelete.hostname);
     if (!server || server === DarknetState.openServer || server.isConnectedTo) {

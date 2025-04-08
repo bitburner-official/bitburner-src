@@ -12,6 +12,7 @@ import {
 } from "../../../src/DarkWeb/controllers/DarknetServerGenerator";
 import { checkPassword, SUCCESS_STATUS, AUTH_FAILURE_STATUS } from "../../../src/DarkWeb/models/DnetServerData";
 import { defaultSettingsDictionary } from "../../../src/DarkWeb/models/dictionaryData";
+import { BaseServer } from "../../../src/Server/BaseServer";
 
 describe("DarkWebServer Tests", () => {
   const difficulty = 1;
@@ -61,44 +62,55 @@ describe("DarkWebServer Tests", () => {
     const server = getMastermindHintServer(difficulty, 0, 0);
     server.darknetData.password = password;
     expect(server).toBeDefined();
+    //
+    // const failedAttemptResponse1 = checkPassword("", server);
+    // expect(failedAttemptResponse1.status).toBe(AUTH_FAILURE_STATUS);
+    // expect(failedAttemptResponse1.passwordLength).toBe(server.darknetData.password.length);
+    // expect(server.hasAdminRights).toBe(false);
+    // const correctCount1 = failedAttemptResponse1.data.split(",")[0];
+    // const closeCount1 = failedAttemptResponse1.data.split(",")[1];
+    // expect(correctCount1).toBe("0");
+    // expect(closeCount1).toBe("0");
+    //
+    // const failedAttemptResponse2 = checkPassword("123", server);
+    // expect(failedAttemptResponse2.status).toBe(AUTH_FAILURE_STATUS);
+    // const correctCount2 = failedAttemptResponse2.data.split(",")[0];
+    // const closeCount2 = failedAttemptResponse2.data.split(",")[1];
+    // expect(correctCount2).toBe("1");
+    // expect(closeCount2).toBe("2");
+    //
+    // const failedAttemptResponse3 = checkPassword("11111111", server);
+    // expect(failedAttemptResponse3.status).toBe(AUTH_FAILURE_STATUS);
+    // const correctCount3 = failedAttemptResponse3.data.split(",")[0];
+    // const closeCount3 = failedAttemptResponse3.data.split(",")[1];
+    // expect(correctCount3).toBe("2");
+    // expect(closeCount3).toBe("0");
+    //
+    // const failedAttemptResponse4 = checkPassword("1122334", server);
+    // expect(failedAttemptResponse4.status).toBe(AUTH_FAILURE_STATUS);
+    // const correctCount4 = failedAttemptResponse4.data.split(",")[0];
+    // const closeCount4 = failedAttemptResponse4.data.split(",")[1];
+    // expect(correctCount4).toBe("6");
+    // expect(closeCount4).toBe("1");
+    //
+    // const failedAttemptResponse5 = checkPassword("22114333", server);
+    // expect(failedAttemptResponse5.status).toBe(AUTH_FAILURE_STATUS);
+    // expect(server.hasAdminRights).toBe(false);
+    // const correctCount5 = failedAttemptResponse5.data.split(",")[0];
+    // const closeCount5 = failedAttemptResponse5.data.split(",")[1];
+    // expect(correctCount5).toBe("2");
+    // expect(closeCount5).toBe("6");
 
-    const failedAttemptResponse1 = checkPassword("", server);
-    expect(failedAttemptResponse1.status).toBe(AUTH_FAILURE_STATUS);
-    expect(failedAttemptResponse1.passwordLength).toBe(server.darknetData.password.length);
+    const failedAttemptResponse6 = checkPassword("3423", {
+      ...server,
+      darknetData: { ...server.darknetData, password: "2435" },
+    } as BaseServer);
+    expect(failedAttemptResponse6.status).toBe(AUTH_FAILURE_STATUS);
     expect(server.hasAdminRights).toBe(false);
-    const correctCount1 = failedAttemptResponse1.data.split(",")[0];
-    const closeCount1 = failedAttemptResponse1.data.split(",")[1];
-    expect(correctCount1).toBe("0");
-    expect(closeCount1).toBe("0");
-
-    const failedAttemptResponse2 = checkPassword("123", server);
-    expect(failedAttemptResponse2.status).toBe(AUTH_FAILURE_STATUS);
-    const correctCount2 = failedAttemptResponse2.data.split(",")[0];
-    const closeCount2 = failedAttemptResponse2.data.split(",")[1];
-    expect(correctCount2).toBe("1");
-    expect(closeCount2).toBe("2");
-
-    const failedAttemptResponse3 = checkPassword("11111111", server);
-    expect(failedAttemptResponse3.status).toBe(AUTH_FAILURE_STATUS);
-    const correctCount3 = failedAttemptResponse3.data.split(",")[0];
-    const closeCount3 = failedAttemptResponse3.data.split(",")[1];
-    expect(correctCount3).toBe("2");
-    expect(closeCount3).toBe("0");
-
-    const failedAttemptResponse4 = checkPassword("1122334", server);
-    expect(failedAttemptResponse4.status).toBe(AUTH_FAILURE_STATUS);
-    const correctCount4 = failedAttemptResponse4.data.split(",")[0];
-    const closeCount4 = failedAttemptResponse4.data.split(",")[1];
-    expect(correctCount4).toBe("6");
-    expect(closeCount4).toBe("1");
-
-    const failedAttemptResponse5 = checkPassword("22114333", server);
-    expect(failedAttemptResponse5.status).toBe(AUTH_FAILURE_STATUS);
-    expect(server.hasAdminRights).toBe(false);
-    const correctCount5 = failedAttemptResponse5.data.split(",")[0];
-    const closeCount5 = failedAttemptResponse5.data.split(",")[1];
-    expect(correctCount5).toBe("2");
-    expect(closeCount5).toBe("6");
+    const correctCount6 = failedAttemptResponse6.data.split(",")[0];
+    const closeCount6 = failedAttemptResponse6.data.split(",")[1];
+    expect(correctCount6).toBe("1");
+    expect(closeCount6).toBe("2");
 
     expect(checkPassword(server.darknetData.password, server).status).toBe(SUCCESS_STATUS);
     expect(server.hasAdminRights).toBe(true);
@@ -165,6 +177,9 @@ describe("DarkWebServer Tests", () => {
 
     const aprox = parseBaseNNumberString("30.24", 5.5);
     expect(Math.abs(aprox - 17) < 0.1).toBe(true);
+
+    expect(encodeNumberInBaseN(7, 2)).toBe("111");
+    expect(encodeNumberInBaseN(112, 2)).toBe("1110000");
   });
 
   test("parseSimpleArithmeticExpression parses expressions correctly", () => {

@@ -42,7 +42,7 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
       } else {
         setEnableSubmit(true);
         passwordInput.current?.focus();
-        passwordInput.current?.querySelector("input")?.select()
+        passwordInput.current?.querySelector("input")?.select();
       }
     }
     if (needsPasswordSubmit && open && !server.hasAdminRights) {
@@ -71,40 +71,45 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
             {server.hostname}
           </Typography>
           <br />
-          {server.hasAdminRights ? ( <>
-            <Typography>Password: "{server.darknetData?.password ?? ""}"</Typography>
-              <br/>
-              <br/>
+          {server.hasAdminRights ? (
+            <>
+              <Typography>Password: "{server.darknetData?.password ?? ""}"</Typography>
+              <br />
+              <br />
               {server.hostname === SpecialServers.Labyrinth ? (
                 <Typography>You have successfully navigated the labyrinth! Congratulations!</Typography>
-              ) : ""}
-              <div style={{maxWidth: "200px"}}>
-                <ServerSummary server={server} enableAuth={true}/>
-              </div> </>
+              ) : (
+                ""
+              )}
+              <div style={{ maxWidth: "200px" }}>
+                <ServerSummary server={server} enableAuth={true} />
+              </div>{" "}
+            </>
           ) : (
             <>
-            <form onSubmit={(e) => handleSubmit(e, inputPassword)}>
-              <TextField
-                ref={passwordInput}
-                id="pw-input"
-                label="Password"
-                type="text"
-                value={inputPassword}
-                onChange={(e) => setInputPassword(e.target.value)}
-                variant="outlined"
-                autoComplete="off"
-                autoFocus={!server.hasAdminRights}
-                disabled={server.hasAdminRights}
-              />
-            </form>
-            <br />
-            <Button onClick={() => setPassword(inputPassword)} disabled={!enableSubmit}>
-              Submit Password
-            </Button>
-            <br />
-            <br />
+              <form onSubmit={(e) => handleSubmit(e, inputPassword)}>
+                <TextField
+                  ref={passwordInput}
+                  id="pw-input"
+                  label="Password"
+                  type="text"
+                  value={inputPassword}
+                  onChange={(e) => setInputPassword(e.target.value)}
+                  variant="outlined"
+                  autoComplete="off"
+                  autoFocus={!server.hasAdminRights}
+                  disabled={server.hasAdminRights}
+                />
+              </form>
+              <br />
+              <Button onClick={(e) => handleSubmit(e, inputPassword)} disabled={!enableSubmit}>
+                Submit Password
+              </Button>
+              <br />
+              <br />
               {server.hostname === SpecialServers.Labyrinth ? (
-                <LabyrinthSummary response={rawResponse} loadingText={response} /> ) : (
+                <LabyrinthSummary response={rawResponse} loadingText={response} />
+              ) : (
                 <Container sx={{ height: "200px" }}>
                   <div style={{ color: "white" }}>
                     <pre style={{ whiteSpace: "pre-wrap" }}>{response}</pre>
@@ -112,7 +117,7 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
                 </Container>
               )}
             </>
-            )}
+          )}
         </Container>
       </>
     </Modal>

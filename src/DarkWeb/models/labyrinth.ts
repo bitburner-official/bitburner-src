@@ -6,7 +6,7 @@ import { addCacheToServer, calculatePasswordAttemptChaGain } from "./effects";
 import { Player } from "@player";
 
 const MAZE_WIDTH = 40;
-const MAZE_HEIGHT =  30;
+const MAZE_HEIGHT = 30;
 
 const NORTH = [0, -1];
 const EAST = [1, 0];
@@ -50,8 +50,15 @@ export const generateMaze = (width: number = MAZE_WIDTH, height: number = MAZE_H
   return maze;
 };
 
-export const getSurroundingsVisualized = (maze: string[][], x: number, y: number, range = 1, showPlayer = false, showEnd = false) => {
-  let result = ""
+export const getSurroundingsVisualized = (
+  maze: string[][],
+  x: number,
+  y: number,
+  range = 1,
+  showPlayer = false,
+  showEnd = false,
+) => {
+  let result = "";
   for (let i = y - range; i <= y + range; i++) {
     for (let j = x - range; j <= x + range; j++) {
       if (i === y && j === x && showPlayer) {
@@ -68,7 +75,7 @@ export const getSurroundingsVisualized = (maze: string[][], x: number, y: number
   }
 
   return result;
-}
+};
 
 export const getRandomOpenCoordinate = (maze: string[][]) => {
   const openCoordinates: [number, number][] = [];

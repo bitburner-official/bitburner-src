@@ -37,6 +37,7 @@ export enum Minigames {
 }
 
 export const getDarknetServer = (difficulty: number, x: number, y: number): Server => {
+  return getMastermindHintServer(difficulty, x, y); // TODO: remove
   const easyServers = [getEchoVulnServer, getSortedEchoVulnServer, getDefaultPasswordServer];
   const mediumServers = [
     getMastermindHintServer,
@@ -222,7 +223,7 @@ export const getRomanNumeralServer = (difficulty: number, x: number, y: number):
     const encodedMin = romanNumeralEncoder(passwordRangeMin);
     const encodedMax = romanNumeralEncoder(passwordRangeMax);
     const hint = `The password is between ${encodedMin} and ${encodedMax}`;
-    const hintData = `${passwordRangeMin},${passwordRangeMax}`;
+    const hintData = `${encodedMin},${encodedMax}`;
     return DnetServerBuilder({
       icon: getRandomIcon(),
       minigameType: Minigames.RomanNumeral,
@@ -412,7 +413,7 @@ export const encodeNumberInBaseN = (decimalNumber: number, base: number) => {
   let remaining = decimalNumber;
   let result: string = "";
 
-  while (remaining >= 0.1) {
+  while (remaining >= 0.1 || digits >= 0) {
     if (digits === -1) {
       result += ".";
     }
