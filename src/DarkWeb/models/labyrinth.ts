@@ -100,6 +100,7 @@ export const handleLabyrinthPassword = (
       msg: `You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.`,
       modelId: Minigames.labyrinth,
       status: AUTH_FAILURE_STATUS,
+      passwordLength: -1,
     };
   }
 
@@ -126,6 +127,7 @@ export const handleLabyrinthPassword = (
       msg: `You cannot go that way. You are still at ${newLocation[0]},${newLocation[1]}.`,
       data: JSON.stringify(status),
       modelId: Minigames.labyrinth,
+      passwordLength: -1,
     };
   }
 
@@ -134,6 +136,7 @@ export const handleLabyrinthPassword = (
       status: AUTH_FAILURE_STATUS,
       msg: `You don't know how to do that. Try a direction such as "NORTH"`,
       modelId: Minigames.labyrinth,
+      passwordLength: -1,
     };
   }
 
@@ -148,6 +151,7 @@ export const handleLabyrinthPassword = (
       status: SUCCESS_STATUS,
       msg: "You have successfully navigated the labyrinth! Congratulations",
       modelId: Minigames.labyrinth,
+      passwordLength: -1,
     };
   }
 
@@ -165,6 +169,7 @@ export const handleLabyrinthPassword = (
     msg: `You have moved to a new location: ${newLocation[0]},${newLocation[1]}.`,
     data: JSON.stringify(status),
     modelId: Minigames.labyrinth,
+    passwordLength: -1,
   };
 };
 

@@ -117,8 +117,33 @@ Design document and workspace
 - Cha contributes (more?) to job rep (needed to later join megacorp factions)
 - Cha boosts the stock manipulation effects of hack and grow
 
-
 ## TODO:
+
+`dnet.authenticate: Target server hydro:hyper-inc is not connected to current server home`
+This error needs to tell the player what to do, not what's wrong.
+ns.dnet.authenticate, the status codes should be explained
+
+return 410 instead of throwing when the link is gone ?
+
+Also needs to do something reasonable on darknet (as do all api methods)
+
+have a clear immediate reward from tier 1 that isn't just cha XP
+
+formulas: auth response time or estimates given CHA level
+
+sake of suspense: perhaps hide the network past current+3 levels
+
+Extra password hints in packet sniffing? or extra password attempt feedback?
+
+- access only to connected or backdoored server for dnet exec
+
+- add Stasis Link mechanic
+
+  - Limited resource
+  - Cap can be raised somehow
+  - Prevents server from mutating
+  - Backdoors server
+  - Can be removed to free up resource for somewhere else
 
 - mini version of darknet on pre- bn15?
 
@@ -131,7 +156,7 @@ Design document and workspace
 - more hint notes
 
 - unlocked server viewer: polish?
-- 
+-
 - ub3r_l4byr1nth server
 
   - special cache: gives augments
@@ -162,6 +187,7 @@ Design document and workspace
   - Runs on a timer, or when logging in after being online for a while?
   - upgrade to harden scripts against restarts?
   - some actions delay or impend the webstorm?
+  - webstorm needs indicator when starting and when recovering
 
 - Attempt to make connection?
 

@@ -131,10 +131,10 @@ export const deleteServer = (server: BaseServer) => {
   DeleteServer(server.hostname);
 };
 
-export const addRandomServers = (count = 1) => {
+export const addRandomServers = (count = 1, difficulty?: number) => {
   for (let i = 0; i < count; i++) {
-    const difficulty = Math.floor(Math.random() * NET_DEPTH);
-    const newServer = getDarknetServer(difficulty, -1, -1);
+    const diff = difficulty ?? Math.floor(Math.random() * NET_DEPTH);
+    const newServer = getDarknetServer(diff, -1, -1);
     const success = moveServer(newServer);
     if (!success) {
       deleteServer(newServer);

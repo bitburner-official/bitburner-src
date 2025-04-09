@@ -1,7 +1,6 @@
 import React from "react";
 import { Tooltip, Container, Typography, SvgIcon } from "@mui/material";
 import { BaseServer } from "../../Server/BaseServer";
-import { SpecialServers } from "../../Server/data/SpecialServers";
 import { dnetStyles } from "./dnetStyles";
 import { Code, Description, Inventory2, Terminal } from "@mui/icons-material";
 import { RunningScript } from "../../Script/RunningScript";
@@ -14,9 +13,6 @@ export type ServerSummaryProps = {
 export function ServerSummary({ server, enableAuth }: ServerSummaryProps): React.ReactElement {
   const { classes } = dnetStyles({});
 
-  if (server.hostname === SpecialServers.DarkWeb) {
-    return <></>;
-  }
   if (!server.hasAdminRights && enableAuth) {
     return <Typography>[ auth required ]</Typography>;
   }

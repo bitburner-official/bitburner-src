@@ -22,7 +22,7 @@ export const AUTH_FAILURE_STATUS = 401;
 export type PasswordResponse = {
   status: number;
   msg: string;
-  passwordLength?: number;
+  passwordLength: number;
   passwordFormat?: string;
   data?: string;
   modelId?: number;
@@ -82,12 +82,17 @@ export const checkPassword = (
   threads: number = 1,
   pid?: number,
 ): PasswordResponse => {
+  if (server.hostname === SpecialServers.DarkWeb) {
+    return handleDarwebSpecialServerAuth(attemptedPassword, server, threads);
+  }
+
   const darknetData = server.darknetData;
   if (!darknetData) {
     return {
       status: AUTH_FAILURE_STATUS,
       msg: "This server is not a darknet server",
       modelId: 0,
+      passwordLength: -1,
     };
   }
   if (server.hostname === SpecialServers.Labyrinth) {
@@ -162,6 +167,29 @@ export const checkPassword = (
   }
 };
 
+const handleDarwebSpecialServerAuth = (
+  attemptedPassword: string,
+  server: BaseServer,
+  threads: number = 1,
+): PasswordResponse => {
+  if (attemptedPassword === "leekspin") {
+    handleSuccessfulAuth(server, threads);
+    return getGenericSuccess();
+  } else {
+    handleFailedAuth(server, threads);
+    return getFailureResponse("Incorrect password. It's 'leekspin'", "leekspin", {
+      difficulty: 0,
+      icon: Icon.Terminal,
+      minigameType: Minigames.EchoVuln,
+      x: -1,
+      y: -1,
+      password: "leekspin",
+      passwordHint: "Incorrect password. It's 'leekspin'",
+      passwordHintData: "leekspin",
+    });
+  }
+};
+
 const getFailureResponse = (msg: string, data: string, darknetData: DnetServerData) => ({
   status: AUTH_FAILURE_STATUS,
   msg,
@@ -205,6 +233,7 @@ const getGenericSuccess = (responseTime = 0) => ({
   status: SUCCESS_STATUS,
   msg: "Success! Access granted.",
   responseTime: getResponseTime(responseTime),
+  passwordLength: -1,
 });
 
 const getResponseTime = (additionalPasses = 0) => Math.floor(95 + Math.random() * 12 + additionalPasses * 25);

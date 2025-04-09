@@ -12,7 +12,6 @@ import {
   balanceServers,
   deleteServer,
   disconnectServer,
-  getDarknetServers,
   getNeighborsOnRow,
   getServersOnRowAbove,
   getServersOnRowBelow,
@@ -44,9 +43,14 @@ export const populateDarknet = () => {
 
   clearDarknet();
   addLabyrinth();
-  while (getDarknetServers().length < NET_DEPTH * NET_WIDTH * SERVER_DENSITY) {
-    addRandomServers();
-  }
+  // TODO: improve early net generation
+  addRandomServers(NET_DEPTH * NET_WIDTH * SERVER_DENSITY - 10);
+  addRandomServers(5 - DarknetState.Network[0].length);
+  addRandomServers(5 - DarknetState.Network[1].length);
+  addRandomServers(4 - DarknetState.Network[2].length);
+  addRandomServers(4 - DarknetState.Network[3].length);
+  balanceServers();
+
   const updatedServers = GetAllServers(true).filter((s) => s.darknetData);
   for (let i = 0; i < NET_DEPTH; i++) {
     const server = updatedServers[Math.floor(Math.random() * updatedServers.length)];

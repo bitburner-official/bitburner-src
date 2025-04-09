@@ -3,7 +3,12 @@ import type { Darknet as NSDnet } from "@nsdefs";
 import { getServer, helpers } from "../Netscript/NetscriptHelpers";
 import { checkPassword, isDarknetServer, PasswordResponse, SUCCESS_STATUS } from "../DarkWeb/models/DnetServerData";
 import { SpecialServers } from "../Server/data/SpecialServers";
-import { calculateAuthenticationTime, getRewardFromCache, hasCacheFileExtension } from "../DarkWeb/models/effects";
+import {
+  calculateAuthenticationTime,
+  calculatePasswordAttemptChaGain,
+  getRewardFromCache,
+  hasCacheFileExtension,
+} from "../DarkWeb/models/effects";
 import { Player } from "@player";
 import type { FilePath } from "../Paths/FilePath";
 import { getServerOnNetwork } from "../Server/ServerHelpers";
@@ -44,7 +49,9 @@ function getConnectedServer(ctx: NetscriptContext, hostname: string): BaseServer
     return targetServer;
   }
   if (!currentServer.serversOnNetwork.includes(targetServer.hostname) && currentServer.hostname !== hostname) {
-    return error(ctx)(`Target server ${hostname} is not connected to current server ${currentServer.hostname}`);
+    return error(ctx)(
+      `Target server ${hostname} is not connected to current server ${currentServer.hostname}. Try running this script on an adjacent server.`,
+    );
   }
   return targetServer;
 }
@@ -101,6 +108,9 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const targetServer = getConnectedServer(ctx, targetHostname);
         const threads = ctx.workerScript.scriptRef.threads;
         const networkDelay = calculateAuthenticationTime(targetServer, Player, threads, password);
+        if (!isDarknetServer(targetServer) && targetServer.hostname !== SpecialServers.DarkWeb) {
+          logger(ctx)(`Authentication on ${targetServer.hostname} failed. (Target server is not a darknet server)`);
+        }
         logger(ctx)(
           `Connecting to ${targetServer.hostname} with password '${password}'... (Est: ${formatNumber(
             networkDelay / 1000,
@@ -110,15 +120,11 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
 
         return helpers.netscriptDelay(ctx, networkDelay).then(() => {
           const result = checkPassword(password, targetServer, threads, ctx.workerScript.pid);
-          if (!isDarknetServer(targetServer)) {
-            logger(ctx)(`Authentication on ${targetServer.hostname} failed. (Target server is not a darknet server)`);
-          } else {
-            logger(ctx)(
-              `Authentication on ${targetServer.hostname} ${
-                result.status === SUCCESS_STATUS ? "succeeded" : "failed."
-              }`,
-            );
-          }
+          const success = result.status === SUCCESS_STATUS;
+          const xp = formatNumber(calculatePasswordAttemptChaGain(targetServer, threads, success), 1);
+          logger(ctx)(
+            `Authentication on ${targetServer.hostname} ${success ? "succeeded" : `failed. (Gained ${xp} cha xp)`}`,
+          );
           return result;
         });
       },
@@ -241,8 +247,11 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       const server = getConnectedServer(ctx, hostname);
 
       const networkDelay = calculateAuthenticationTime(server, Player, ctx.workerScript.scriptRef.threads) * 4;
-
-      return helpers.netscriptDelay(ctx, networkDelay).then(() => capturePackets(server));
+      const xp = formatNumber(calculatePasswordAttemptChaGain(server, ctx.workerScript.scriptRef.threads), 1);
+      logger(ctx)(`Captured some outgoing transmissions from ${hostname}. (Gained ${xp} cha xp)`);
+      return helpers.netscriptDelay(ctx, networkDelay).then(() => {
+        return capturePackets(server);
+      });
     },
   };
 }

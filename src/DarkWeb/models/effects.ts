@@ -33,7 +33,7 @@ export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
 
   // TODO: balance cache chance
   const chance = 0.2 * 1.03 ** (server.darknetData?.difficulty ?? 1);
-  if (Math.random() < chance) {
+  if (Math.random() < chance && (server.darknetData?.difficulty ?? 0 > 3)) {
     addCacheToServer(server);
   }
 };
@@ -67,9 +67,10 @@ export const calculateAuthenticationTime = (
   const baseTime = 500;
 
   const threadsFactor = 1 + 0.2 * (threads - 1);
-  const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 50);
+  const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 100);
+  const noobFactor = Math.min(0.5 + difficulty / 4, 1);
 
-  const time = (baseTime * skillFactor) / threadsFactor;
+  const time = (baseTime * skillFactor * noobFactor) / threadsFactor;
 
   // Add extra time for timing attack server, per correct character
   const sharedChars =
@@ -193,7 +194,7 @@ export const calculatePasswordAttemptChaGain = (server: BaseServer, threads: num
   const baseXpGain = 3;
   const difficultyBase = 1.12;
   const xpGain = baseXpGain + difficultyBase ** server.darknetData.difficulty;
-  const alreadyHackedMult = server.hasAdminRights ? 0.05 : 1;
+  const alreadyHackedMult = server.hasAdminRights ? 0.2 : 1;
   const successMult = success && !server.hasAdminRights ? 10 : 1;
   return xpGain * alreadyHackedMult * successMult * threads * Player.mults.charisma_exp;
 };
