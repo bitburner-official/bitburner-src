@@ -62,7 +62,7 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
     hostname: name,
     ip: createUniqueRandomIp(),
     organizationName: "darkweb",
-    maxRam: 8 * 2 ** Math.floor(darknetData.difficulty / 4),
+    maxRam: 16 * 2 ** Math.floor(darknetData.difficulty / 4),
     requiredHackingSkill: Math.ceil(scalar ** 2 + Math.random() * scalar * 3),
     hackDifficulty: 20,
     moneyAvailable: 0,
