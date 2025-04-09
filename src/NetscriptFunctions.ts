@@ -112,7 +112,6 @@ import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
 import { failForDarknetServer, NetscriptDarknet } from "./NetscriptFunctions/Darknet";
-import { FileType, getFileType } from "./utils/ScriptTransformer";
 
 export const enums: NSEnums = {
   CityName,
@@ -848,9 +847,7 @@ export const ns: InternalAPI<NSFull> = {
     const destServer = helpers.getServer(ctx, destination);
     const sourceServer = helpers.getServer(ctx, source);
     const files = Array.isArray(_files) ? _files : [_files];
-    if (files.some((file) => [FileType.JS, FileType.TS, FileType.JSX, FileType.TSX, FileType.NS1].includes(getFileType(file)))) {
-      failForDarknetServer(ctx, destServer, "ns.dnet.scp()");
-    }
+    failForDarknetServer(ctx, destServer, "ns.dnet.scp()");
     return helpers.scp(ctx, files, sourceServer, destServer);
   },
   ls: (ctx) => (_hostname, _substring) => {

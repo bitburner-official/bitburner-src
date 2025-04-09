@@ -103,7 +103,7 @@ export const getSortedEchoVulnServer = (difficulty: number, x: number, y: number
     "I accidentally sorted the password",
     "The PIN uses these",
   ];
-  const password = getPassword(3 + difficulty / 6);
+  const password = getPassword(2 + difficulty / 6);
   const sortedPassword = password.split("").sort().join("");
   const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${sortedPassword}`;
   return DnetServerBuilder({
@@ -300,7 +300,7 @@ export const getYesn_tServer = (difficulty: number, x: number, y: number): Serve
 };
 
 export const getBinaryEncodedFeedbackServer = (difficulty: number, x: number, y: number): Server => {
-  const password = getPassword(3 + difficulty / 3, true, difficulty > 8, false, false);
+  const password = getPassword(2 + difficulty / 5, true, difficulty > 8, false, false);
   return DnetServerBuilder({
     icon: getRandomIcon(),
     minigameType: Minigames.BinaryEncodedFeedback,

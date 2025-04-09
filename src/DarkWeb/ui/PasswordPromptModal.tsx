@@ -96,15 +96,22 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
             <>
               <Typography>Password: "{server.darknetData?.password ?? ""}"</Typography>
               <br />
-              <br />
               {server.hostname === SpecialServers.Labyrinth ? (
-                <Typography>You have successfully navigated the labyrinth! Congratulations!</Typography>
-              ) : (
+                <><br /><Typography>You have successfully navigated the labyrinth! Congratulations!</Typography></>
+                ) : (
                 ""
               )}
+              <Typography color="secondary">
+                {server.ip} cha:{server.requiredHackingSkill}
+              </Typography>
+              <Typography color="secondary">
+                ram:{server.maxRam}GB  model:{server.darknetData?.minigameType}
+              </Typography>
+              <br />
               <div style={{ maxWidth: "200px" }}>
                 <ServerSummary server={server} enableAuth={true} />
-              </div>{" "}
+              </div>
+              {" "}
             </>
           ) : (
             <>

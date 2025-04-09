@@ -14,7 +14,6 @@ import { BaseServer } from "../Server/BaseServer";
 import { runScriptFromScript } from "../NetscriptWorker";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 import { capturePackets } from "../DarkWeb/models/packetSniffing";
-import { FileType, getFileType } from "../utils/ScriptTransformer";
 
 export const failForDarknetServer = (
   ctx: NetscriptContext,
@@ -35,7 +34,7 @@ const error =
     throw errorMessage(ctx, message);
   };
 
-function getConnectedServer(ctx: NetscriptContext, hostname: string, requireDarknet = true): BaseServer {
+function getConnectedServer(ctx: NetscriptContext, hostname: string): BaseServer {
   const currentServer = ctx.workerScript.getServer();
   const targetServer = GetServer(hostname);
   if (!targetServer) {
@@ -46,9 +45,6 @@ function getConnectedServer(ctx: NetscriptContext, hostname: string, requireDark
   }
   if (!currentServer.serversOnNetwork.includes(targetServer.hostname) && currentServer.hostname !== hostname) {
     return error(ctx)(`Target server ${hostname} is not connected to current server ${currentServer.hostname}`);
-  }
-  if (requireDarknet) {
-    expectDarknetServer(ctx, hostname);
   }
   return targetServer;
 }
@@ -169,7 +165,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const password = helpers.string(ctx, "password", _password);
         const runOpts = helpers.runOptions(ctx, _thread_or_opt);
         const args = helpers.scriptArgs(ctx, _args);
-        const server = getConnectedServer(ctx, hostname);
+        const server = helpers.getServer(ctx, hostname);
         expectAuthenticated(ctx, server, password);
         return runScriptFromScript("dnet.exec", server, path, args, ctx.workerScript, runOpts);
       },
@@ -180,11 +176,6 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       const sourceServer = helpers.getServer(ctx, ctx.workerScript.hostname);
       const password = helpers.string(ctx, "password", _password);
       const files = Array.isArray(_files) ? _files : [_files];
-
-      if (files.some((file: string) => ([FileType.JS, FileType.TS, FileType.JSX, FileType.TSX, FileType.NS1] as FileType[]).includes(getFileType(file))) && destServer.darknetData) {
-        getConnectedServer(ctx, destination, false);
-      }
-
       expectAuthenticated(ctx, destServer, password);
       return helpers.scp(ctx, files, sourceServer, destServer);
     },
@@ -195,7 +186,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const hostname = helpers.string(ctx, "hostname", _hostname);
         const password = expectPassword(ctx, hostname, _password);
         const safetyGuard = helpers.boolean(ctx, "safetyGuard", _safetyGuard);
-        const server = getConnectedServer(ctx, hostname);
+        const server = helpers.getServer(ctx, hostname);
         expectAuthenticated(ctx, server, password);
 
         let scriptsKilled = 0;
@@ -247,7 +238,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
     },
     packetCapture: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-      const server = getConnectedServer(ctx, hostname, false);
+      const server = getConnectedServer(ctx, hostname);
 
       const networkDelay = calculateAuthenticationTime(server, Player, ctx.workerScript.scriptRef.threads) * 4;
 

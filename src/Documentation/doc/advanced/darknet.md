@@ -120,7 +120,9 @@ Design document and workspace
 
 ## TODO:
 
+- mini version of darknet on pre- bn15?
 
+- very occasional un-backdooring?
 
 - occasional changing hostnames
 

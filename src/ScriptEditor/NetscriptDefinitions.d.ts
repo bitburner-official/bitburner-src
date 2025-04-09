@@ -4116,7 +4116,7 @@ export interface Darknet {
   scan(hostname?: string, showAll?: boolean): string[];
 
   /**
-   * Runs a script on the given server. The target server has to be connected to the current server and have been authenticated.
+   * Runs a script on the given server. The target server has to have been authenticated.
    * @remarks
    * RAM cost: 1.3 GB
    *
@@ -4136,7 +4136,7 @@ export interface Darknet {
   ): number;
 
   /**
-   * Copies the given script to the target server. The target server has to be connected to the current server and have been authenticated.
+   * Copies the given script to the target server. The target server has to have been authenticated.
    * @remarks
    * RAM cost: 0.6 GB
    *
@@ -4147,7 +4147,7 @@ export interface Darknet {
   scp(files: string | string[], destination: string, password: string): boolean;
 
   /**
-   * Terminate all scripts on a server. The target server has to be connected to the current server and have been authenticated.
+   * Terminate all scripts on a server. The target server has to have been authenticated.
    * @remarks
    * RAM cost: 0.5 GB
    *
@@ -4175,7 +4175,7 @@ export interface Darknet {
   getServer(host?: string): DarknetServer;
 
   /**
-   * Get the IP address of a server. The target server has to be connected to the current server and have been authenticated.
+   * Get the IP address of a server. The target server has to have been authenticated.
    *
    * @param host - The target's hostname. Optional for checking the IP of the current server
    * @param password - The target's password. Optional for checking the IP of the current server
@@ -4184,6 +4184,7 @@ export interface Darknet {
 
   /**
    * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
+   * The target server must be directly connected to the server that the script is running on.
    *
    * @remarks
    * RAM cost: 6 GB
