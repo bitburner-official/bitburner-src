@@ -8408,6 +8408,34 @@ export interface NS {
    */
   getSharePower(): number;
 
+  /**
+   * Dynamically import a script.
+   * Only scripts located on the same server can be imported.
+   * A dynamic import will not adjust RAM usage. This must be done manually with {@link NS.ramOverride|ramOverride}.
+   *
+   * @example
+   *
+   * File: script.js
+   * ```js
+   * export async function main(ns){
+   *    const script = await ns.dynamicImport("./scriptToImport.js");
+   *    script.log(ns, "Message from an imported script!")
+   * }
+   *
+   * ```
+   *
+   * File: scriptToImport.js
+   * ```js
+   * export async function log(ns, message){
+   *    ns.tprint(message);
+   * }
+   * ```
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   */
+  dynamicImport(path: string): Promise<any>;
+
   enums: NSEnums;
 }
 

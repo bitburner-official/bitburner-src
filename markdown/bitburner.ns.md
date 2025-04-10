@@ -65,6 +65,7 @@ export async function main(ns) {
 |  [deleteServer(host)](./bitburner.ns.deleteserver.md) | Delete a purchased server. |
 |  [disableLog(fn)](./bitburner.ns.disablelog.md) | Disables logging for the given NS function. |
 |  [dnsLookup(host)](./bitburner.ns.dnslookup.md) | Given a hostname, returns its IP address; or given an IP address, returns its hostname. |
+|  [dynamicImport(path)](./bitburner.ns.dynamicimport.md) | Dynamically import a script. Only scripts located on the same server can be imported. A dynamic import will not adjust RAM usage. This must be done manually with [ramOverride](./bitburner.ns.ramoverride.md)<!-- -->. |
 |  [enableLog(fn)](./bitburner.ns.enablelog.md) | Enables logging for the given NS function. |
 |  [exec(script, host, threadOrOptions, args)](./bitburner.ns.exec.md) | Start another script on any server. |
 |  [exit()](./bitburner.ns.exit.md) | Terminates the current script immediately. |

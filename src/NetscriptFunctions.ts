@@ -113,6 +113,8 @@ import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
 import { isIPAddress } from "./Types/strings";
+import { compile } from "./NetscriptJSEvaluator";
+import { Script } from "./Script/Script";
 
 export const enums: NSEnums = {
   CityName,
@@ -1856,6 +1858,17 @@ export const ns: InternalAPI<NSFull> = {
   },
   printRaw: (ctx) => (value) => {
     ctx.workerScript.print(wrapUserNode(value));
+  },
+  dynamicImport: (ctx) => async (value) => {
+    const path = helpers.scriptPath(ctx, "path", value);
+    const server = helpers.getServer(ctx, ctx.workerScript.hostname);
+    const script = server.getContentFile(path);
+
+    if (!script) throw helpers.errorMessage(ctx, `Script was not found\nPath: ${path}`);
+
+    //We validated the path as ScriptFilePath and made sure script is not null
+    //Script **must** be a script at this point
+    return compile(script as Script, server.scripts);
   },
   flags: Flags,
   heart: { break: () => () => Player.karma },
