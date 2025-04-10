@@ -7434,7 +7434,7 @@ export interface NS {
   /**
    * Given a hostname, returns its IP address; or given an IP address, returns its hostname.
    *
-   * @remarks RAM cost: 0 GB
+   * @remarks RAM cost: 0.05 GB
    * @param host - Hostname/IP of target server.
    */
   dnsLookup(host: string): string;

@@ -563,7 +563,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   getServerNumPortsRequired: RamCostConstants.GetServer,
   getServerMaxRam: RamCostConstants.GetServerMaxRam,
   getServerUsedRam: RamCostConstants.GetServerUsedRam,
-  dnsLookup: 0,
+  dnsLookup: 0.05,
   serverExists: RamCostConstants.GetServer,
   fileExists: RamCostConstants.FileExists,
   isRunning: RamCostConstants.IsRunning,

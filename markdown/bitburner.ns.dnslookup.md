@@ -24,5 +24,5 @@ string
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.05 GB
 
