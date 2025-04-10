@@ -117,23 +117,64 @@ Design document and workspace
 - Cha contributes (more?) to job rep (needed to later join megacorp factions)
 - Cha boosts the stock manipulation effects of hack and grow
 
+
+## patches:
+
+* added more lore and partial password hint files to servers. Most servers should not be empty now.
+
+* auth gives response codes based on what happened instead of throwing
+  * "200 Success" | "401 Unauthorized" | "404 Not Found" | "408 Request Timeout" | "301 Moved Permanently"
+
+* some hints to the password, or extra info from the last password attempted, can sometimes appear in packet capture
+
+* clicking on a server name in the UI modal copies the hostname to clipboard
+
+* small bugfixes
+
+
 ## TODO:
 
-`dnet.authenticate: Target server hydro:hyper-inc is not connected to current server home`
-This error needs to tell the player what to do, not what's wrong.
-ns.dnet.authenticate, the status codes should be explained
+* auth should be cheaper
 
-return 410 instead of throwing when the link is gone ?
+darkweb has multiple connections to home?
 
-Also needs to do something reasonable on darknet (as do all api methods)
+- auth creates session with PID
+- exec etc do not need password
+- session token can be retrieved once session starts
+  - auth via token is cheaper & faster
+  - session token lasts 10 minutes
+
+
+- backdooring increases darknet instability
+  - backdoored servers more likely to restart and/or loose auth, removing backdoor, balancing risk level
+  - low number (1 backdoor per X depth explored, or less than low const): no effect
+  - lv 1 instability: small debuff to auth() time
+  - lv 2: sometimes auth fails with timeout
+  - lv 3: more server restarts on the darknet
+  - lv 4: It's hard to sustain this many backdoors without a lot of upkeep due to them going offline or resetting. More connection severing on the darknet. player starts taking damage sometimes. creepypasta appears on player terminal, signed by the darknet. 
+  - lv 5: ports and file writes and other ns methods sometimes fail silently, or return garbage data. hard mode that is effectively opt-in
+
+
+backdoored and stasis link'd servers need visual indicators
+
+
+packet capture shows extra password hints, sometimes mastermind one? sometimes a digit/char contained? sometimes something else?
+
+Make network wider at deeper parts?
+
+
+preventDuplicates on the run options is very powerful here, and almost necessary to stop sepuku on the player's machine. Should be emphasised in the docs
+
+a button to kill all darknet scripts
+
+The differences between nuked, authenticated and connected get difficult to keep track of on the swarm.
+
 
 have a clear immediate reward from tier 1 that isn't just cha XP
 
 formulas: auth response time or estimates given CHA level
 
 sake of suspense: perhaps hide the network past current+3 levels
-
-Extra password hints in packet sniffing? or extra password attempt feedback?
 
 - access only to connected or backdoored server for dnet exec
 
@@ -156,9 +197,8 @@ Extra password hints in packet sniffing? or extra password attempt feedback?
 - more hint notes
 
 - unlocked server viewer: polish?
--
-- ub3r_l4byr1nth server
 
+- ub3r_l4byr1nth server
   - special cache: gives augments
   - can give TRP
   - treasure chests in maze?
@@ -201,11 +241,6 @@ Extra password hints in packet sniffing? or extra password attempt feedback?
   - Give cha? what else?
 
 ## TODO later:
-
-- more Clue notes on servers
-
-  - hints to vulnerabilities,
-  - partial passwords?
 
 - reward that scales password attempt speed?
 - reward that speeds up packet sniffing speed?

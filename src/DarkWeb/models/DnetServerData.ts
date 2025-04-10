@@ -16,13 +16,21 @@ import {
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { handleLabyrinthPassword } from "./labyrinth";
 
-export const SUCCESS_STATUS = 200;
-export const AUTH_FAILURE_STATUS = 401;
+export const ResponseStatus = {
+  SUCCESS: "200 Success",
+  AUTH_FAILURE: "401 Unauthorized",
+  NOT_FOUND: "404 Not Found",
+  TIMEOUT: "408 Request Timeout",
+  MOVED_PERMANENTLY: "301 Moved Permanently",
+  I_AM_A_TEAPOT: "418 I'm a teapot",
+} as const;
+
+export type ResponseStatus = (typeof ResponseStatus)[keyof typeof ResponseStatus];
 
 export type PasswordResponse = {
-  status: number;
+  status: ResponseStatus;
   msg: string;
-  passwordLength: number;
+  passwordLength?: number;
   passwordFormat?: string;
   data?: string;
   modelId?: number;
@@ -40,12 +48,16 @@ export type DnetServerData = {
   y: number;
 };
 
+export type DnetServer = DnetServerData & {
+  lastPasswordAttempted?: string
+}
+
 export const isDarknetServer = (server: BaseServer): boolean => {
   return server.darknetData !== undefined;
 };
 
 export const DnetServerBuilder = (options: DnetServerData, name: string = getName()): Server => {
-  const darknetData = {
+  const darknetData: DnetServer = {
     icon: options.icon ?? getRandomIcon(),
     password: options.password,
     minigameType: options.minigameType,
@@ -54,6 +66,7 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
     difficulty: options.difficulty ?? 1,
     x: options.x ?? -1,
     y: options.y ?? -1,
+    lastPasswordAttempted: undefined,
   };
 
   const scalar = 1 + darknetData.difficulty * 3;
@@ -85,16 +98,17 @@ export const checkPassword = (
   if (server.hostname === SpecialServers.DarkWeb) {
     return handleDarwebSpecialServerAuth(attemptedPassword, server, threads);
   }
-
-  const darknetData = server.darknetData;
-  if (!darknetData) {
+  if (!server.darknetData) {
     return {
-      status: AUTH_FAILURE_STATUS,
+      status: ResponseStatus.AUTH_FAILURE,
       msg: "This server is not a darknet server",
       modelId: 0,
-      passwordLength: -1,
+      
     };
   }
+  server.darknetData.lastPasswordAttempted = attemptedPassword;
+
+  const darknetData = server.darknetData;
   if (server.hostname === SpecialServers.Labyrinth) {
     return handleLabyrinthPassword(attemptedPassword, server, threads, pid);
   }
@@ -177,7 +191,7 @@ const handleDarwebSpecialServerAuth = (
     return getGenericSuccess();
   } else {
     handleFailedAuth(server, threads);
-    return getFailureResponse("Incorrect password. It's 'leekspin'", "leekspin", {
+    return getFailureResponse("The passkey is 'leekspin'", "", {
       difficulty: 0,
       icon: Icon.Terminal,
       minigameType: Minigames.EchoVuln,
@@ -185,13 +199,13 @@ const handleDarwebSpecialServerAuth = (
       y: -1,
       password: "leekspin",
       passwordHint: "Incorrect password. It's 'leekspin'",
-      passwordHintData: "leekspin",
+      passwordHintData: "",
     });
   }
 };
 
 const getFailureResponse = (msg: string, data: string, darknetData: DnetServerData) => ({
-  status: AUTH_FAILURE_STATUS,
+  status: ResponseStatus.AUTH_FAILURE,
   msg,
   data,
   passwordLength: darknetData.password.length,
@@ -206,7 +220,7 @@ const getMastermindResponse = (password: string, attemptedPassword: string) => {
   };
 };
 
-const getExactCorrectChars = (password: string, attemptedPassword: string) =>
+export const getExactCorrectChars = (password: string, attemptedPassword: string) =>
   password.split("").map((digit, i: number) => digit === attemptedPassword[i]);
 
 const getExactCorrectCharsCount = (password: string, attemptedPassword: string) =>
@@ -230,10 +244,10 @@ const getMisplacedCorrectCharsCount = (password: string, attemptedPassword: stri
 };
 
 const getGenericSuccess = (responseTime = 0) => ({
-  status: SUCCESS_STATUS,
+  status: ResponseStatus.SUCCESS,
   msg: "Success! Access granted.",
   responseTime: getResponseTime(responseTime),
-  passwordLength: -1,
+  
 });
 
 const getResponseTime = (additionalPasses = 0) => Math.floor(95 + Math.random() * 12 + additionalPasses * 25);

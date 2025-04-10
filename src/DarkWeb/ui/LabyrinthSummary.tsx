@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { PasswordResponse, SUCCESS_STATUS } from "../models/DnetServerData";
+import { PasswordResponse, ResponseStatus } from "../models/DnetServerData";
 import { DarknetState } from "../models/DarknetState";
 import { getSurroundingsVisualized } from "../models/labyrinth";
 import { dnetStyles } from "./dnetStyles";
@@ -14,7 +14,7 @@ export const LabyrinthSummary = ({ response, loadingText }: LabyrinthSummaryProp
   const { classes } = dnetStyles({});
 
   // victory message
-  if (!response || response?.status == SUCCESS_STATUS) {
+  if (!response || response?.status == ResponseStatus.SUCCESS) {
     return <Typography>{response?.msg}</Typography>;
   }
 

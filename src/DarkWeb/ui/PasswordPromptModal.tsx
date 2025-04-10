@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRerender } from "../../ui/React/hooks";
 import { Modal } from "../../ui/React/Modal";
-import { checkPassword, getSharedChars, PasswordResponse, SUCCESS_STATUS } from "../models/DnetServerData";
+import { checkPassword, getSharedChars, PasswordResponse, ResponseStatus } from "../models/DnetServerData";
 import { Button, Container, SvgIcon, TextField, Typography } from "@mui/material";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 import { getIcon, Icon } from "../controllers/ServerIcon";
@@ -12,6 +12,8 @@ import { SpecialServers } from "../../Server/data/SpecialServers";
 import { LabyrinthSummary } from "./LabyrinthSummary";
 import { Minigames } from "../controllers/DarknetServerGenerator";
 import { dnetStyles } from "./dnetStyles";
+import { ToastVariant } from "@enums";
+import { SnackbarEvents } from "../../ui/React/Snackbar";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -53,7 +55,7 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
       }
       setResponse(JSON.stringify(response, null, 4));
 
-      if (response.status == SUCCESS_STATUS) {
+      if (response.status === ResponseStatus.SUCCESS) {
         DarknetEvents.emit("server-unlocked", server);
         await sleep(50);
         focusTarget.current?.focus();
@@ -82,13 +84,19 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
     rerender();
   };
 
+  const copyHostname = (): void => {
+    void navigator.clipboard.writeText(server.hostname);
+    SnackbarEvents.emit(`Copied "${server.hostname}" to clipboard`, ToastVariant.SUCCESS, 2000);
+  }
+
+
   return (
     <Modal open={open} onClose={onClose} removeFocus={false}>
       <>
         <Container sx={{ width: "40vw" }}>
           <input ref={focusTarget} className={classes.hiddenInput}></input>
           <SvgIcon component={icon} color="secondary" />
-          <Typography variant="h5" color={server.hasAdminRights ? "primary" : "secondary"}>
+          <Typography variant="h5" color={server.hasAdminRights ? "primary" : "secondary"} onClick={copyHostname}>
             {server.hostname}
           </Typography>
           <br />

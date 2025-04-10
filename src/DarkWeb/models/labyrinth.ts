@@ -1,5 +1,5 @@
 import { BaseServer } from "../../Server/BaseServer";
-import { AUTH_FAILURE_STATUS, PasswordResponse, SUCCESS_STATUS } from "./DnetServerData";
+import { PasswordResponse, ResponseStatus } from "./DnetServerData";
 import { Minigames } from "../controllers/DarknetServerGenerator";
 import { DarknetState } from "./DarknetState";
 import { addCacheToServer, calculatePasswordAttemptChaGain } from "./effects";
@@ -99,8 +99,8 @@ export const handleLabyrinthPassword = (
     return {
       msg: `You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.`,
       modelId: Minigames.labyrinth,
-      status: AUTH_FAILURE_STATUS,
-      passwordLength: -1,
+      status: ResponseStatus.AUTH_FAILURE,
+      
     };
   }
 
@@ -123,20 +123,20 @@ export const handleLabyrinthPassword = (
     };
 
     return {
-      status: AUTH_FAILURE_STATUS,
+      status: ResponseStatus.AUTH_FAILURE,
       msg: `You cannot go that way. You are still at ${newLocation[0]},${newLocation[1]}.`,
       data: JSON.stringify(status),
       modelId: Minigames.labyrinth,
-      passwordLength: -1,
+      
     };
   }
 
   if (!dx && !dy) {
     return {
-      status: AUTH_FAILURE_STATUS,
+      status: ResponseStatus.AUTH_FAILURE,
       msg: `You don't know how to do that. Try a direction such as "NORTH"`,
       modelId: Minigames.labyrinth,
-      passwordLength: -1,
+      
     };
   }
 
@@ -148,10 +148,10 @@ export const handleLabyrinthPassword = (
     addCacheToServer(server);
 
     return {
-      status: SUCCESS_STATUS,
+      status: ResponseStatus.SUCCESS,
       msg: "You have successfully navigated the labyrinth! Congratulations",
       modelId: Minigames.labyrinth,
-      passwordLength: -1,
+      
     };
   }
 
@@ -165,11 +165,10 @@ export const handleLabyrinthPassword = (
   };
 
   return {
-    status: AUTH_FAILURE_STATUS,
+    status: ResponseStatus.AUTH_FAILURE,
     msg: `You have moved to a new location: ${newLocation[0]},${newLocation[1]}.`,
     data: JSON.stringify(status),
     modelId: Minigames.labyrinth,
-    passwordLength: -1,
   };
 };
 

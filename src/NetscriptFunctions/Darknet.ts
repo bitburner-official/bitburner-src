@@ -1,7 +1,7 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import type { Darknet as NSDnet } from "@nsdefs";
 import { getServer, helpers } from "../Netscript/NetscriptHelpers";
-import { checkPassword, isDarknetServer, PasswordResponse, SUCCESS_STATUS } from "../DarkWeb/models/DnetServerData";
+import { checkPassword, isDarknetServer, PasswordResponse, ResponseStatus } from "../DarkWeb/models/DnetServerData";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import {
   calculateAuthenticationTime,
@@ -14,7 +14,7 @@ import type { FilePath } from "../Paths/FilePath";
 import { getServerOnNetwork } from "../Server/ServerHelpers";
 import { errorMessage } from "../Netscript/ErrorMessages";
 import { formatNumber } from "../ui/formatNumber";
-import { GetServer } from "../Server/AllServers";
+import { GetAllServers, GetServer } from "../Server/AllServers";
 import { BaseServer } from "../Server/BaseServer";
 import { runScriptFromScript } from "../NetscriptWorker";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
@@ -39,6 +39,8 @@ const error =
     throw errorMessage(ctx, message);
   };
 
+const isDirectConnected = (currentServer: BaseServer, targetServer: BaseServer): boolean => currentServer.serversOnNetwork.includes(targetServer.hostname) || currentServer.hostname === targetServer.hostname;
+
 function getConnectedServer(ctx: NetscriptContext, hostname: string): BaseServer {
   const currentServer = ctx.workerScript.getServer();
   const targetServer = GetServer(hostname);
@@ -48,7 +50,7 @@ function getConnectedServer(ctx: NetscriptContext, hostname: string): BaseServer
   if (!targetServer.darknetData) {
     return targetServer;
   }
-  if (!currentServer.serversOnNetwork.includes(targetServer.hostname) && currentServer.hostname !== hostname) {
+  if (!isDirectConnected(currentServer, targetServer)) {
     return error(ctx)(
       `Target server ${hostname} is not connected to current server ${currentServer.hostname}. Try running this script on an adjacent server.`,
     );
@@ -84,7 +86,7 @@ function expectAuthenticated(
     return;
   }
   const result = checkPassword(password, server, 0);
-  if (result.status !== SUCCESS_STATUS) {
+  if (result.status !== ResponseStatus.SUCCESS) {
     throw new Error(
       `Authentication failed on ${server.hostname} whilst attempting to ${ctx.function}: Incorrect password (${password})`,
     );
@@ -105,11 +107,26 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (_hostname, _password): Promise<PasswordResponse> => {
         const targetHostname = helpers.string(ctx, "hostname", _hostname);
         const password = expectPassword(ctx, targetHostname, _password);
-        const targetServer = getConnectedServer(ctx, targetHostname);
+        const currentServer = ctx.workerScript.getServer();
+        const targetServer = GetAllServers(true).find(s => s.hostname == targetHostname)
+        if (!targetServer) {
+          return Promise.resolve({
+            status: ResponseStatus.NOT_FOUND,
+            msg: `Target server ${targetHostname} does not exist. It may have gone offline.`,
+          } as PasswordResponse)
+        }
+
         const threads = ctx.workerScript.scriptRef.threads;
         const networkDelay = calculateAuthenticationTime(targetServer, Player, threads, password);
         if (!isDarknetServer(targetServer) && targetServer.hostname !== SpecialServers.DarkWeb) {
-          logger(ctx)(`Authentication on ${targetServer.hostname} failed. (Target server is not a darknet server)`);
+          error(ctx)(`Authentication on ${targetServer.hostname} failed. (Target server is not a darknet server)`);
+        }
+
+        if (!isDirectConnected(currentServer, targetServer)) {
+          return Promise.resolve({
+            status: ResponseStatus.MOVED_PERMANENTLY,
+            msg: `Target server ${targetHostname} is not connected to the current server ${currentServer.hostname}. It may have moved`,
+          } as PasswordResponse)
         }
         logger(ctx)(
           `Connecting to ${targetServer.hostname} with password '${password}'... (Est: ${formatNumber(
@@ -120,7 +137,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
 
         return helpers.netscriptDelay(ctx, networkDelay).then(() => {
           const result = checkPassword(password, targetServer, threads, ctx.workerScript.pid);
-          const success = result.status === SUCCESS_STATUS;
+          const success = result.status === ResponseStatus.SUCCESS;
           const xp = formatNumber(calculatePasswordAttemptChaGain(targetServer, threads, success), 1);
           logger(ctx)(
             `Authentication on ${targetServer.hostname} ${success ? "succeeded" : `failed. (Gained ${xp} cha xp)`}`,

@@ -7,7 +7,13 @@ import { formatMoney, formatNumber } from "../../ui/formatNumber";
 import { generateContract, tryGeneratingRandomContract } from "../../CodingContract/ContractGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { FilePath, resolveFilePath } from "../../Paths/FilePath";
-import { cachePrefixes, commonPasswordDictionary, passwordFileNames } from "./dictionaryData";
+import {
+  cachePrefixes,
+  commonPasswordDictionary,
+  notebookFileNames,
+  packetSniffPhrases,
+  passwordFileNames,
+} from "./dictionaryData";
 import { hintLiterature } from "./hintNotes";
 import { TextFilePath } from "../../Paths/TextFilePath";
 import { GetServer } from "../../Server/AllServers";
@@ -240,24 +246,44 @@ const addClue = (server: BaseServer) => {
   // non-connected nearby server's password (includes server name)
   if (Math.random() < 0.1) {
     const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
-    const targetServer = getAllAdjacentNeighbors(server.darknetData.x, server.darknetData.y).find(
-      (neighbor) =>
-        neighbor &&
-        neighbor?.darknetData &&
-        !neighbor?.hasAdminRights &&
-        neighbor.darknetData.password &&
-        !server.serversOnNetwork.includes(neighbor.hostname),
-    );
-
-    if (targetServer) {
-      server.writeToTextFile(
-        hintFileName as TextFilePath,
-        `Server: ${targetServer?.hostname} Password: ${targetServer?.darknetData?.password}`,
-      );
+    const targetServer = getRandomNearbyServer(server, true);
+    if (targetServer?.darknetData) {
+      const contents = `Server: ${targetServer?.hostname} Password: ${targetServer?.darknetData?.password}`;
+      server.writeToTextFile(hintFileName as TextFilePath, contents);
+      return;
     }
+  }
+
+  if (Math.random() < 0.4) {
+    const hintFileName = notebookFileNames[Math.floor(Math.random() * notebookFileNames.length)] + ".txt";
+    const loreNote = packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)];
+    server.writeToTextFile(hintFileName as TextFilePath, loreNote);
     return;
   }
+
+  if (Math.random() < 0.7) {
+    const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
+    const targetServer = getRandomNearbyServer(server);
+    if (targetServer?.darknetData) {
+      const [containedChar1, containedChar2] = getTwoCharsInPassword(targetServer.darknetData.password);
+      const hint = `The password for ${targetServer.hostname} contains ${containedChar1} and ${containedChar2}`;
+      server.writeToTextFile(hintFileName as TextFilePath, hint);
+      return;
+    }
+  }
 };
+
+const getRandomNearbyServer = (server: BaseServer, disconnected = false) => {
+  if (!server.darknetData) return null;
+  return getAllAdjacentNeighbors(server.darknetData.x, server.darknetData.y).find(
+    (neighbor) =>
+      neighbor &&
+      neighbor?.darknetData &&
+      !neighbor?.hasAdminRights &&
+      neighbor.darknetData.password &&
+      (!disconnected || !server.serversOnNetwork.includes(neighbor.hostname)),
+  );
+}
 
 export const hasDarknetAccess = () => {
   return true; //TODO: enable this later
@@ -267,3 +293,15 @@ export const hasDarknetAccess = () => {
 
   return hasSF15 || isInBN15;
 };
+
+
+export const getTwoCharsInPassword = (password: string) => {
+  const index1 = Math.floor(Math.random() * password.length);
+  const containedChar1 = password[index1];
+  let index2 = Math.floor(Math.random() * password.length);
+  if (index2 === index1) {
+    index2 = (index2 + 1) % password.length;
+  }
+  const containedChar2 = password[index2];
+  return [containedChar1, containedChar2];
+}

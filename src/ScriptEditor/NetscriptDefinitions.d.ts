@@ -4017,6 +4017,8 @@ export interface CodingContract {
   getContractTypes(): `${CodingContractName}`[];
 }
 
+type ResponseStatus = "200 Success" | "401 Unauthorized" | "404 Not Found" | "408 Request Timeout" | "301 Moved Permanently" | "418 I'm a teapot";
+
 /**
  * Response to an authentication attempt.
  * @property status - Status code of the response. 200 for success, 401 for failure.
@@ -4029,7 +4031,7 @@ export interface CodingContract {
  * @public
  */
 type PasswordResponse = {
-  status: number;
+  status: ResponseStatus;
   msg: string;
   passwordLength?: number;
   passwordFormat?: string;
@@ -4087,7 +4089,7 @@ export interface Darknet {
    *
    * @param hostname - name of the target server (connected to the current server) to try a password.
    * @param password - password to attempt to authenticate with.
-   * @returns a promise that resolves to a {@link PasswordResponse} object.
+   * @returns a promise that resolves to a {@link PasswordResponse} object. The response will have a `status` of "200 Success" | "401 Unauthorized" | "404 Not Found" | "408 Request Timeout" | "301 Moved Permanently"
    */
   authenticate(hostname: string, password: string): Promise<PasswordResponse>;
 

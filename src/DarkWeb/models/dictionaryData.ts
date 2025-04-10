@@ -11,6 +11,7 @@ export const dogNameDictionary = ["fido", "spot", "rover", "max"];
 
 export const cachePrefixes = ["wallet", "secrets", "ledger", "stash", "vault", "bankdata", "do_not_open"];
 export const passwordFileNames = ["secrets", "password", "key", "credentials", "login", "admin", "root", "access"];
+export const notebookFileNames = ["thoughts", "notes", "journal", "search_history", "dreams", "THE_TRUTH"];
 
 export const EUCountries = [
   "Austria",

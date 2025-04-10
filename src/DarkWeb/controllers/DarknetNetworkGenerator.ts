@@ -70,7 +70,7 @@ export const clearDarknet = () => {
   }
   const darkwebRoot = GetServer(SpecialServers.DarkWeb);
   if (darkwebRoot) {
-    darkwebRoot.serversOnNetwork = [];
+    darkwebRoot.serversOnNetwork = [Player.getHomeComputer().hostname];
   }
   const labyrinth = GetServer(SpecialServers.Labyrinth);
   if (labyrinth) {
