@@ -3099,7 +3099,7 @@ export interface Hacknet {
    * ```
    * @param upgName - Name of the upgrade of Hacknet Node.
    * @param upgTarget - Object to which upgrade applies. Required for certain upgrades.
-   * @param count - Number of upgrades to buy at once. Defaults to 1 if not specified.
+   * @param count - Number of upgrades to buy at once. Must be a positive integer. Defaults to 1 if not specified.
    * For compatibility reasons, upgTarget must be specified, even if it is not used, in order to specify count.
    * @returns True if the upgrade is successfully purchased, and false otherwise.
    */
