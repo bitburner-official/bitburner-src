@@ -49,10 +49,10 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
   }
 
   return {
-    attempt: (ctx) => (answer, _filename, _hostname?) => {
+    attempt: (ctx) => (answer, _filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, hostname, filename);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const contract = getCodingContract(ctx, host, filename);
 
       if (!contract.isValid(answer))
         throw helpers.errorMessage(
@@ -60,27 +60,27 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
           `Answer is not in the right format for contract '${contract.type}'. Got: ${answer}`,
         );
 
-      const serv = helpers.getServer(ctx, hostname);
+      const serv = helpers.getServer(ctx, host);
       return attemptContract(ctx, serv, contract, answer);
     },
-    getContractType: (ctx) => (_filename, _hostname?) => {
+    getContractType: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, hostname, filename);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const contract = getCodingContract(ctx, host, filename);
       return contract.getType();
     },
-    getData: (ctx) => (_filename, _hostname?) => {
+    getData: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, hostname, filename);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const contract = getCodingContract(ctx, host, filename);
 
       return structuredClone(contract.getData());
     },
-    getContract: (ctx) => (_filename, _hostname?) => {
+    getContract: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
-      const server = helpers.getServer(ctx, hostname);
-      const contract = getCodingContract(ctx, hostname, filename);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const server = helpers.getServer(ctx, host);
+      const contract = getCodingContract(ctx, host, filename);
       // asserting type here is required, since it is not feasible to properly type getData
       return {
         type: contract.type,
@@ -96,16 +96,16 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
         },
       } as CodingContractObject;
     },
-    getDescription: (ctx) => (_filename, _hostname?) => {
+    getDescription: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, hostname, filename);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const contract = getCodingContract(ctx, host, filename);
       return contract.getDescription();
     },
-    getNumTriesRemaining: (ctx) => (_filename, _hostname?) => {
+    getNumTriesRemaining: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, hostname, filename);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const contract = getCodingContract(ctx, host, filename);
       return contract.getMaxNumTries() - contract.tries;
     },
     createDummyContract: (ctx) => (_type) => {

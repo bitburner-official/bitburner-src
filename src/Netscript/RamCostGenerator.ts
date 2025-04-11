@@ -547,6 +547,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   getRecentScripts: RamCostConstants.RecentScripts,
   hasRootAccess: RamCostConstants.HasRootAccess,
   getHostname: RamCostConstants.GetHostname,
+  getIP: RamCostConstants.GetHostname,
   getHackingLevel: RamCostConstants.GetHackingLevel,
   getHackingMultipliers: 0.25,
   getHacknetMultipliers: 0.25,
@@ -562,6 +563,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   getServerNumPortsRequired: RamCostConstants.GetServer,
   getServerMaxRam: RamCostConstants.GetServerMaxRam,
   getServerUsedRam: RamCostConstants.GetServerUsedRam,
+  dnsLookup: 0.05,
   serverExists: RamCostConstants.GetServer,
   fileExists: RamCostConstants.FileExists,
   isRunning: RamCostConstants.IsRunning,
@@ -628,6 +630,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   heart: { break: 0 },
   tprintRaw: 0,
   printRaw: 0,
+  dynamicImport: 0,
 
   formulas: {
     mockServer: 0,

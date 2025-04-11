@@ -53,6 +53,7 @@ import { help } from "./commands/help";
 import { history } from "./commands/history";
 import { home } from "./commands/home";
 import { hostname } from "./commands/hostname";
+import { ipaddr } from "./commands/ipaddr";
 import { kill } from "./commands/kill";
 import { killall } from "./commands/killall";
 import { ls } from "./commands/ls";
@@ -84,6 +85,7 @@ import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
+import { isIPAddress } from "../Types/strings";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -109,6 +111,7 @@ export const TerminalCommands: Record<string, (args: (string | number | boolean)
   history: history,
   home: home,
   hostname: hostname,
+  ipaddr: ipaddr,
   kill: kill,
   killall: killall,
   ls: ls,
@@ -593,11 +596,11 @@ export class Terminal {
       return;
     }
     Player.getCurrentServer().isConnectedTo = false;
-    Player.currentServer = hostname;
+    Player.currentServer = server.hostname;
     server.isConnectedTo = true;
     this.setcwd(root);
     if (!singularity) {
-      this.print("Connected to " + server.hostname);
+      this.print("Connected to " + `${isIPAddress(hostname) ? server.ip : server.hostname}`);
       if (Player.getCurrentServer().hostname === "darkweb") {
         checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
       }

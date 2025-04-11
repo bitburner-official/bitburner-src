@@ -30,7 +30,7 @@ export function connect(args: (string | number | boolean)[], server: BaseServer)
       );
       return;
     }
-    if (other.hostname === hostname) {
+    if (other.hostname === target.hostname) {
       Terminal.connectToServer(hostname);
       return;
     }

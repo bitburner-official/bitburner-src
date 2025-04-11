@@ -24,6 +24,7 @@ export const TerminalHelpText: string[] = [
   "    history [-c]                     Display the terminal history",
   "    home                             Connect to home computer",
   "    hostname                         Displays the hostname of the machine",
+  "    ipaddr                           Displays the IP address of the machine",
   "    kill [script/pid] [args...]      Stops the specified script on the current server ",
   "    killall                          Stops all running scripts on the current machine",
   "    ls [dir] [--grep pattern]        Displays all files on the machine",
@@ -313,6 +314,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
   ],
   hostname: ["Usage: hostname", " ", "Prints the hostname of the current server", " "],
+  ipaddr: ["Usage: ipaddr", " ", "Prints the IP address of the current server", " "],
   kill: [
     "Usage: kill [script name] [args...] or kill [pid]",
     " ",

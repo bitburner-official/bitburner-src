@@ -25,7 +25,7 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [cat(filename)](./bitburner.singularity.cat.md) | Displays the content of a file on the currently connected server. |
 |  [checkFactionInvitations()](./bitburner.singularity.checkfactioninvitations.md) | List all current faction invitations. |
 |  [commitCrime(crime, focus)](./bitburner.singularity.commitcrime.md) | Commit a crime. |
-|  [connect(hostname)](./bitburner.singularity.connect.md) | Connect to a server. |
+|  [connect(host)](./bitburner.singularity.connect.md) | Connect to a server. |
 |  [createProgram(program, focus)](./bitburner.singularity.createprogram.md) | Create a program. |
 |  [destroyW0r1dD43m0n(nextBN, callbackScript, bitNodeOptions)](./bitburner.singularity.destroyw0r1dd43m0n.md) | Destroy the w0r1d\_d43m0n and move on to the next BN. |
 |  [donateToFaction(faction, amount)](./bitburner.singularity.donatetofaction.md) | Donate to a faction. |
@@ -45,7 +45,7 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [getCompanyRep(companyName)](./bitburner.singularity.getcompanyrep.md) | Get company reputation. |
 |  [getCrimeChance(crime)](./bitburner.singularity.getcrimechance.md) | Get chance to successfully commit a crime. |
 |  [getCrimeStats(crime)](./bitburner.singularity.getcrimestats.md) | Get stats related to a crime. |
-|  [getCurrentServer()](./bitburner.singularity.getcurrentserver.md) | Get the current server. |
+|  [getCurrentServer(returnOpts)](./bitburner.singularity.getcurrentserver.md) | Get the current server. Returns the hostname by default. |
 |  [getCurrentWork()](./bitburner.singularity.getcurrentwork.md) | Get the current work the player is doing. |
 |  [getDarkwebProgramCost(programName)](./bitburner.singularity.getdarkwebprogramcost.md) | Check the price of an exploit on the dark web |
 |  [getDarkwebPrograms()](./bitburner.singularity.getdarkwebprograms.md) | Get a list of programs offered on the dark web. |

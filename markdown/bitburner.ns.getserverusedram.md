@@ -16,7 +16,7 @@ getServerUsedRam(host: string): number;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | Hostname of the target server. |
+|  host | string | Hostname/IP of the target server. |
 
 **Returns:**
 

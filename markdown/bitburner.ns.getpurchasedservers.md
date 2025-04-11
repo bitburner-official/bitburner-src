@@ -4,18 +4,25 @@
 
 ## NS.getPurchasedServers() method
 
-Returns an array with the hostnames of all of the servers you have purchased.
+Returns an array with the hostnames or IP addresses of all of the servers you have purchased. Returns hostnames by default.
 
 **Signature:**
 
 ```typescript
-getPurchasedServers(): string[];
+getPurchasedServers(returnOpts?: HostReturnOptions): string[];
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  returnOpts | [HostReturnOptions](./bitburner.hostreturnoptions.md) | _(Optional)_ Optional. Controls whether the function returns IPs |
+
 **Returns:**
 
 string\[\]
 
-Returns an array with the hostnames of all of the servers you have purchased.
+Returns an array with the hostnames or IP addresses of all of the servers you have purchased.
 
 ## Remarks
 
