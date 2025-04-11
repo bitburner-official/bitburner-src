@@ -10,7 +10,7 @@ Scripts you write in Bitburner are real, working JavaScript and can be used to a
 
 Running any script requires in-game [RAM](ram.md), with a minimum cost of 1.6 GB per script.
 More complex scripts and API functions generally require more [RAM](ram.md), which you will gain in many ways.
-Scripts can be run on any [server](server.md) you have root access to, but not all servers you find will have useable RAM.
+Scripts can be run on any [server](servers.md) you have root access to, but not all servers you find will have useable RAM.
 
 ## How Scripts work offline
 
