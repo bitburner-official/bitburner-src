@@ -13,5 +13,5 @@ Intelligence will boost your production for many actions in the game, including:
 - [Infiltration](../basic/infiltration.md)
 - [Crime](../basic/crimes.md) success rate
 - [Bladeburner](bladeburners.md) actions
-- [Reputation](../basic/reputation.md) gain for [Companies](../basic//companies.md) & [Factions](../basic/factions.md)
+- [Reputation](../basic/reputation.md) gain for [Companies](../basic/companies.md) & [Factions](../basic/factions.md)
 - [Augmentation](../basic/augmentations.md) [Grafting](grafting.md) speed
