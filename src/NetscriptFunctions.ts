@@ -1368,11 +1368,11 @@ export const ns: InternalAPI<NSFull> = {
     (_returnOpts): string[] => {
       const returnOpts = helpers.hostReturnOptions(_returnOpts);
       const res: string[] = [];
-      Player.purchasedServers.forEach(function (hostname) {
+      for (const hostname of Player.purchasedServers) {
         const server = helpers.getServer(ctx, hostname);
         const id = helpers.returnServerID(server, returnOpts);
         res.push(id);
-      });
+      }
       return res;
     },
   writePort: (ctx) => (_portNumber, data) => {
