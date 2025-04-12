@@ -29,10 +29,11 @@ import { Go } from "./Go/Go";
 import { calculateExp } from "./PersonObjects/formulas/skill";
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
+import { pendingUIShareJobIds } from "./NetworkShare/Share";
 
 const BitNode8StartingMoney = 250e6;
-function delayedDialog(message: string) {
-  setTimeout(() => dialogBoxCreate(message), 200);
+function delayedDialog(message: string, canBeDismissedEasily = true) {
+  setTimeout(() => dialogBoxCreate(message, { html: false, canBeDismissedEasily }), 200);
 }
 
 function setInitialExpForPlayer() {
@@ -48,6 +49,9 @@ function setInitialExpForPlayer() {
 
 // Prestige by purchasing augmentation
 export function prestigeAugmentation(): void {
+  // We must kill all scripts before doing anything else.
+  prestigeWorkerScripts();
+
   initBitNodeMultipliers();
 
   // Maintain invites to factions with the 'keepOnInstall' flag, and rumors about others
@@ -64,9 +68,6 @@ export function prestigeAugmentation(): void {
   Player.prestigeAugmentation();
   Go.prestigeAugmentation();
 
-  // Delete all Worker Scripts objects
-  prestigeWorkerScripts();
-
   const homeComp = Player.getHomeComputer();
   // Delete all servers except home computer
   prestigeAllServers();
@@ -74,6 +75,9 @@ export function prestigeAugmentation(): void {
   // Reset home computer (only the programs) and add to AllServers
   AddToAllServers(homeComp);
   prestigeHomeComputer(homeComp);
+
+  // Clear all pending share jobs created via UI
+  pendingUIShareJobIds.length = 0;
 
   // Receive starting money and programs from installed augmentations
   for (const ownedAug of Player.augmentations) {
@@ -188,12 +192,13 @@ export function prestigeAugmentation(): void {
 
 // Prestige by destroying Bit Node and gaining a Source File
 export function prestigeSourceFile(isFlume: boolean): void {
+  // We must kill all scripts before doing anything else.
+  prestigeWorkerScripts();
+
   initBitNodeMultipliers();
 
   Player.prestigeSourceFile();
   Go.prestigeSourceFile();
-
-  prestigeWorkerScripts(); // Delete all Worker Scripts objects
 
   const homeComp = Player.getHomeComputer();
 
@@ -210,6 +215,10 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // Reset home computer (only the programs) and add to AllServers
   AddToAllServers(homeComp);
   prestigeHomeComputer(homeComp);
+
+  // Clear all pending share jobs created via UI
+  pendingUIShareJobIds.length = 0;
+
   // Ram usage needs to be cleared for bitnode-level resets, due to possible change in singularity cost.
   for (const script of homeComp.scripts.values()) script.ramUsage = null;
 
@@ -256,14 +265,19 @@ export function prestigeSourceFile(isFlume: boolean): void {
     // Easiest way to comply with type constraint, instead of revalidating the enum member's file path
     homeComp.messages.push(LiteratureName.CorporationManagementHandbook);
     delayedDialog(
-      "You received a copy of the Corporation Management Handbook on your home computer. " +
-        "Read it if you need help getting started with Corporations!",
+      "You received a copy of the Corporation Management Handbook on your home computer. It's a short introduction for " +
+        "managing Corporation.\n\nYou should check the in-game Corporation documentation in the Documentation tab " +
+        "(Documentation -> Advanced Mechanics -> Corporation). It's the most useful and up-to-date resource for managing Corporation.",
+      false,
     );
   }
 
   // BitNode 6: Bladeburners and BitNode 7: Bladeburners 2079
   if (Player.bitNodeN === 6 || Player.bitNodeN === 7) {
-    delayedDialog(`The ${CompanyName.NSA} would like to have a word with you once you're ready.`);
+    delayedDialog(
+      `The ${CompanyName.NSA} would like to have a word with you once you're ready. You should train your combat stats to level 100 before going there.`,
+      false,
+    );
   }
 
   // BitNode 8: Ghost of Wall Street
@@ -279,6 +293,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   if (Player.bitNodeN === 10) {
     delayedDialog(
       `Seek out ${FactionName.TheCovenant} if you'd like to purchase a new sleeve or two! And see what ${CompanyName.VitaLife} in ${CityName.NewTokyo} has to offer for you`,
+      false,
     );
   }
 
@@ -288,7 +303,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
 
   if (Player.bitNodeN === 13) {
-    delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`);
+    delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`, false);
   }
 
   // Reset Stock market, gang, and corporation
@@ -333,6 +348,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   if (!isFlume && Player.sourceFiles.size === 1 && Player.sourceFileLvl(1) === 1) {
     delayedDialog(
       "Congratulations on destroying your first BitNode! Make sure to check the Documentation tab. Many pages are unlocked now.",
+      false,
     );
   }
 }

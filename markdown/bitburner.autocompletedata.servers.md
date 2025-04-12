@@ -4,6 +4,10 @@
 
 ## AutocompleteData.servers property
 
+All server hostnames.
+
+Some servers are hidden until you satisfy their requirements. This array does not contain those servers if you do not satisfy their requirements.
+
 **Signature:**
 
 ```typescript

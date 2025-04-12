@@ -37,7 +37,7 @@ import {
   calculateAscensionPointsGain,
 } from "../Gang/formulas/formulas";
 import { favorToRep as calculateFavorToRep, repToFavor as calculateRepToFavor } from "../Faction/formulas/favor";
-import { repFromDonation } from "../Faction/formulas/donation";
+import { repFromDonation, donationForRep } from "../Faction/formulas/donation";
 import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
@@ -52,6 +52,7 @@ import { getEnumHelper } from "../utils/EnumHelper";
 import { CompanyPositions } from "../Company/CompanyPositions";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { Skills } from "../Bladeburner/data/Skills";
+import type { PositiveNumber } from "../types";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
@@ -126,6 +127,12 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         const person = helpers.person(ctx, _player);
         checkFormulasAccess(ctx);
         return repFromDonation(amount, person);
+      },
+      donationForRep: (ctx) => (_reputation, _player) => {
+        const reputation = helpers.number(ctx, "reputation", _reputation);
+        const person = helpers.person(ctx, _player);
+        checkFormulasAccess(ctx);
+        return donationForRep(reputation, person);
       },
     },
     skills: {
@@ -433,15 +440,21 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         const name = getEnumHelper("BladeburnerSkillName").nsGetMember(ctx, _name, "name");
         const level = helpers.number(ctx, "level", _level);
-        if (level < 0) {
-          throw new Error(`Level must be a non-negative number.`);
+        if (!Number.isFinite(level) || level < 0) {
+          throw new Error(`Level must be a finite, non-negative number. Its value is ${level}.`);
         }
-        const skillPoints = helpers.positiveNumber(ctx, "skillPoints", _skillPoints);
+        const skillPoints = helpers.number(ctx, "skillPoints", _skillPoints);
+        if (!Number.isFinite(skillPoints) || skillPoints < 0) {
+          throw new Error(`SkillPoints must be a finite, non-negative number. Its value is ${skillPoints}.`);
+        }
         const skill = Skills[name];
         if (level >= skill.maxLvl) {
           return 0;
         }
-        return skill.calculateMaxUpgradeCount(level, skillPoints);
+        if (skillPoints === 0) {
+          return 0;
+        }
+        return skill.calculateMaxUpgradeCount(level, skillPoints as PositiveNumber);
       },
     },
   };

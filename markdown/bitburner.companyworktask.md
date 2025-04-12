@@ -9,8 +9,9 @@ Company Work
 **Signature:**
 
 ```typescript
-export interface CompanyWorkTask 
+export interface CompanyWorkTask extends BaseTask 
 ```
+**Extends:** [BaseTask](./bitburner.basetask.md)
 
 ## Remarks
 
@@ -21,6 +22,5 @@ An object representing the current work for a company
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [companyName](./bitburner.companyworktask.companyname.md) |  | [CompanyName](./bitburner.companyname.md) |  |
-|  [cyclesWorked](./bitburner.companyworktask.cyclesworked.md) |  | number |  |
 |  [type](./bitburner.companyworktask.type.md) |  | "COMPANY" |  |
 

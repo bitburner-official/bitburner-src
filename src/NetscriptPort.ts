@@ -47,7 +47,7 @@ export function portHandle(n: PortNumber): NetscriptPort {
   };
 }
 
-export function writePort(n: PortNumber, value: unknown): any {
+export function writePort(n: PortNumber, value: unknown): unknown {
   const port = getPort(n);
   // Primitives don't need to be cloned.
   port.add(isObjectLike(value) ? structuredClone(value) : value);
@@ -63,15 +63,15 @@ export function tryWritePort(n: PortNumber, value: unknown): boolean {
   return true;
 }
 
-export function readPort(n: PortNumber): any {
+export function readPort(n: PortNumber): unknown {
   const port = NetscriptPorts.get(n);
   if (!port || !port.data.length) return emptyPortData;
-  const returnVal = port.data.shift();
+  const returnVal: unknown = port.data.shift();
   if (!port.data.length && !port.resolver) NetscriptPorts.delete(n);
   return returnVal;
 }
 
-export function peekPort(n: PortNumber): any {
+export function peekPort(n: PortNumber): unknown {
   const port = NetscriptPorts.get(n);
   if (!port || !port.data.length) return emptyPortData;
   // Needed to avoid exposing internal objects.

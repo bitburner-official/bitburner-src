@@ -4,7 +4,7 @@
 
 ## BitNodeMultipliers.StaneksGiftExtraSize property
 
-Influences the size of the gift
+Influences the size of the gift.
 
 **Signature:**
 

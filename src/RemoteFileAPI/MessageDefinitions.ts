@@ -1,3 +1,4 @@
+import { SaveData } from "../types";
 import type { BaseServer } from "../Server/BaseServer";
 
 export class RFAMessage {
@@ -17,7 +18,17 @@ export class RFAMessage {
   }
 }
 
-type ResultType = string | number | string[] | FileContent[] | RFAServerData[];
+type ResultType =
+  | string
+  | number
+  | string[]
+  | FileContent[]
+  | RFAServerData[]
+  | {
+      identifier: string;
+      binary: boolean;
+      save: SaveData;
+    };
 type FileMetadata = FileData | FileContent | FileLocation | FileServer;
 
 export interface FileData {

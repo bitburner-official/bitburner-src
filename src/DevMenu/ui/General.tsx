@@ -24,6 +24,7 @@ import { GangConstants } from "../../Gang/data/Constants";
 import { checkForMessagesToSend } from "../../Message/MessageHelpers";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { formatRam } from "../../ui/formatNumber";
+import { resetGangs } from "../../Gang/AllGangs";
 
 export function General({ parentRerender }: { parentRerender: () => void }): React.ReactElement {
   const rerender = useRerender(400);
@@ -87,6 +88,7 @@ export function General({ parentRerender }: { parentRerender: () => void }): Rea
   };
   const stopGang = () => {
     Player.gang = null;
+    resetGangs();
     parentRerender();
   };
   const setGangFactionDropdown = (event: SelectChangeEvent) => {

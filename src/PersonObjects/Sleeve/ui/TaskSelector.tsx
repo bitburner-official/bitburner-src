@@ -1,22 +1,15 @@
 import type { Sleeve } from "../Sleeve";
 
-import React, { useState } from "react";
+import React from "react";
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 import { Player } from "@player";
-import {
-  BladeburnerActionType,
-  BladeburnerContractName,
-  CityName,
-  FactionName,
-  FactionWorkType,
-  GymType,
-  LocationName,
-} from "@enums";
+import { BladeburnerActionType, BladeburnerContractName, CityName, FactionName, LocationName } from "@enums";
 import { Crimes } from "../../../Crime/Crimes";
 import { Factions } from "../../../Faction/Factions";
 import { getEnumHelper } from "../../../utils/EnumHelper";
 import { SleeveWorkType } from "../Work/Work";
+import { getRecordKeys } from "../../../Types/Record";
 
 const universitySelectorOptions: string[] = [
   "Computer Science",
@@ -42,7 +35,8 @@ const bladeburnerSelectorOptions: string[] = [
 
 interface IProps {
   sleeve: Sleeve;
-  setABC: (abc: string[]) => void;
+  abc: [string, string, string];
+  setABC: (abc: [string, string, string]) => void;
 }
 
 interface ITaskDetails {
@@ -223,18 +217,7 @@ const tasks: {
   },
 };
 
-const canDo: {
-  [key: string]: undefined | ((sleeve: Sleeve) => boolean);
-  ["Idle"]: (sleeve: Sleeve) => boolean;
-  ["Work for Company"]: (sleeve: Sleeve) => boolean;
-  ["Work for Faction"]: (sleeve: Sleeve) => boolean;
-  ["Commit Crime"]: (sleeve: Sleeve) => boolean;
-  ["Take University Course"]: (sleeve: Sleeve) => boolean;
-  ["Workout at Gym"]: (sleeve: Sleeve) => boolean;
-  ["Perform Bladeburner Actions"]: (sleeve: Sleeve) => boolean;
-  ["Shock Recovery"]: (sleeve: Sleeve) => boolean;
-  ["Synchronize"]: (sleeve: Sleeve) => boolean;
-} = {
+const canDo = {
   Idle: () => true,
   "Work for Company": (sleeve: Sleeve) => possibleJobs(sleeve).length > 0,
   "Work for Faction": (sleeve: Sleeve) => possibleFactions(sleeve).length > 0,
@@ -245,91 +228,45 @@ const canDo: {
   "Perform Bladeburner Actions": () => !!Player.bladeburner,
   "Shock Recovery": (sleeve: Sleeve) => sleeve.shock > 0,
   Synchronize: (sleeve: Sleeve) => sleeve.sync < 100,
-};
-
-function getABC(sleeve: Sleeve): [string, string, string] {
-  const work = sleeve.currentWork;
-  if (work === null) return ["Idle", "------", "------"];
-  switch (work.type) {
-    case SleeveWorkType.COMPANY:
-      return ["Work for Company", work.companyName, "------"];
-    case SleeveWorkType.FACTION: {
-      const workNames = {
-        [FactionWorkType.field]: "Field Work",
-        [FactionWorkType.hacking]: "Hacking Contracts",
-        [FactionWorkType.security]: "Security Work",
-      };
-      return ["Work for Faction", work.factionName, workNames[work.factionWorkType] ?? ""];
-    }
-    case SleeveWorkType.BLADEBURNER:
-      if (work.actionId.type === BladeburnerActionType.Contract) {
-        return ["Perform Bladeburner Actions", "Take on contracts", work.actionId.name];
-      }
-      return ["Perform Bladeburner Actions", work.actionId.name, "------"];
-    case SleeveWorkType.CLASS: {
-      if (!work.isGym()) return ["Take University Course", work.classType, work.location];
-      const gymNames: Record<GymType, string> = {
-        [GymType.strength]: "Train Strength",
-        [GymType.defense]: "Train Defense",
-        [GymType.dexterity]: "Train Dexterity",
-        [GymType.agility]: "Train Agility",
-      };
-      return ["Workout at Gym", gymNames[work.classType as GymType], work.location];
-    }
-    case SleeveWorkType.CRIME:
-      return ["Commit Crime", getEnumHelper("CrimeType").getMember(work.crimeType, { alwaysMatch: true }), "------"];
-    case SleeveWorkType.SUPPORT:
-      return ["Perform Bladeburner Actions", "Support main sleeve", "------"];
-    case SleeveWorkType.INFILTRATE:
-      return ["Perform Bladeburner Actions", "Infiltrate Synthoids", "------"];
-    case SleeveWorkType.RECOVERY:
-      return ["Shock Recovery", "------", "------"];
-    case SleeveWorkType.SYNCHRO:
-      return ["Synchronize", "------", "------"];
-  }
-}
+} as const;
 
 export function TaskSelector(props: IProps): React.ReactElement {
-  const abc = getABC(props.sleeve);
-  const [s0, setS0] = useState(abc[0]);
-  const [s1, setS1] = useState(abc[1]);
-  const [s2, setS2] = useState(abc[2]);
+  const s0 = props.abc[0];
+  const s1 = props.abc[1];
+  const s2 = props.abc[2];
 
-  const validActions = Object.keys(canDo).filter((k) => (canDo[k] as (sleeve: Sleeve) => boolean)(props.sleeve));
+  const validActions = getRecordKeys(canDo).filter((taskType) => canDo[taskType](props.sleeve));
 
   const detailsF = tasks[s0];
-  if (detailsF === undefined) throw new Error(`No function for task '${s0}'`);
+  if (detailsF === undefined) {
+    throw new Error(`No function for task '${s0}'`);
+  }
   const details = detailsF(props.sleeve);
   const details2 = details.second(s1);
 
   if (details.first.length > 0 && !details.first.includes(s1)) {
-    setS1(details.first[0]);
     props.setABC([s0, details.first[0], s2]);
   }
   if (details2.length > 0 && !details2.includes(s2)) {
-    setS2(details2[0]);
     props.setABC([s0, s1, details2[0]]);
   }
 
   function onS0Change(event: SelectChangeEvent): void {
     const n = event.target.value;
     const detailsF = tasks[n];
-    if (detailsF === undefined) throw new Error(`No function for task '${s0}'`);
+    if (detailsF === undefined) {
+      throw new Error(`No function for task '${s0}'`);
+    }
     const details = detailsF(props.sleeve);
     const details2 = details.second(details.first[0]) ?? ["------"];
-    setS2(details2[0]);
-    setS1(details.first[0]);
-    setS0(n);
     props.setABC([n, details.first[0], details2[0]]);
   }
 
   function onS1Change(event: SelectChangeEvent): void {
-    setS1(event.target.value);
     props.setABC([s0, event.target.value, s2]);
   }
 
   function onS2Change(event: SelectChangeEvent): void {
-    setS2(event.target.value);
     props.setABC([s0, s1, event.target.value]);
   }
 

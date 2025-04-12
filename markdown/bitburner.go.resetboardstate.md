@@ -6,9 +6,7 @@
 
 Gets new IPvGO subnet with the specified size owned by the listed faction, ready for the player to make a move. This will reset your win streak if the current game is not complete and you have already made moves.
 
-Note that some factions will have a few routers on the subnet at this state.
-
-opponent is "Netburners" or "Slum Snakes" or "The Black Hand" or "Tetrads" or "Daedalus" or "Illuminati" or "????????????" or "No AI",
+Note that some factions will have a few routers already on the subnet after a reset.
 
 **Signature:**
 
@@ -20,8 +18,8 @@ resetBoardState(opponent: GoOpponent, boardSize: 5 | 7 | 9 | 13): string[] | und
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  opponent | [GoOpponent](./bitburner.goopponent.md) |  |
-|  boardSize | 5 \| 7 \| 9 \| 13 |  |
+|  opponent | [GoOpponent](./bitburner.goopponent.md) | The opponent faction to play against. "Netburners" \| "Slum Snakes" \| "The Black Hand" \| "Tetrads" \| "Daedalus" \| "Illuminati" \| "????????????" \| "No AI" |
+|  boardSize | 5 \| 7 \| 9 \| 13 | The size of the board to play on. Must be 5, 7, 9, or 13. |
 
 **Returns:**
 

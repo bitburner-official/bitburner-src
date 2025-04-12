@@ -11,12 +11,19 @@ This can also be used if you pick up the game in a state where the opponent need
 **Signature:**
 
 ```typescript
-passTurn(): Promise<{
+passTurn(passAsWhite?: boolean): Promise<{
     type: "move" | "pass" | "gameOver";
     x: number | null;
     y: number | null;
   }>;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  passAsWhite | boolean | _(Optional)_ optional. If true, attempts to pass as white and then wait for black's move. Only can be used when playing against "No AI". |
+
 **Returns:**
 
 Promise&lt;{ type: "move" \| "pass" \| "gameOver"; x: number \| null; y: number \| null; }&gt;

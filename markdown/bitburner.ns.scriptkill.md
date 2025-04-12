@@ -17,7 +17,7 @@ scriptKill(script: string, host: string): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  script | string | Filename of script to kill. This is case-sensitive. |
-|  host | string | Hostname of target server. |
+|  host | string | Hostname/IP of target server. |
 
 **Returns:**
 

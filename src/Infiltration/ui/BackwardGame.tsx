@@ -2,7 +2,7 @@ import { Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 import { BlinkingCursor } from "./BlinkingCursor";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";

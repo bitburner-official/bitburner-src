@@ -1,7 +1,6 @@
 import type { WorkerScript } from "./WorkerScript";
 import { ScriptDeath } from "./ScriptDeath";
 import type { NetscriptContext } from "./APIWrapper";
-import { dialogBoxCreate } from "../ui/React/DialogBox";
 
 /** Log a message to a script's logs */
 export function log(ctx: NetscriptContext, message: () => string) {
@@ -18,7 +17,13 @@ export function basicErrorMessage(ws: WorkerScript | ScriptDeath, msg: string, t
   return `${type} ERROR\n${ws.name}@${ws.hostname} (PID - ${ws.pid})\n\n${msg}`;
 }
 
-/** Creates an error message string with a stack trace. */
+/**
+ * Creates an error message string with a stack trace.
+ *
+ * When the player provides invalid input, we try to provide a stack trace that points to the player's invalid caller,
+ * but we don't have an error instance with a stack trace. In order to get that stack trace, we create a new error
+ * instance, then remove "unrelated" traces (code in our codebase) and leave only traces of the player's code.
+ */
 export function errorMessage(ctx: NetscriptContext, msg: string, type = "RUNTIME"): string {
   const errstack = new Error().stack;
   if (errstack === undefined) throw new Error("how did we not throw an error?");
@@ -73,44 +78,4 @@ export function errorMessage(ctx: NetscriptContext, msg: string, type = "RUNTIME
     if (lineMatch && lio !== -1) return { line: lineMatch[1], func: line.slice(0, lio) };
     return null;
   }
-}
-
-/** Generate an error dialog when workerscript is known */
-export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, initialText = "") {
-  if (e instanceof ScriptDeath) {
-    // No dialog for ScriptDeath
-    return;
-  }
-  if (ws && typeof e === "string") {
-    const headerText = basicErrorMessage(ws, "", "");
-    if (!e.includes(headerText)) e = basicErrorMessage(ws, e);
-  } else if (e instanceof SyntaxError) {
-    const msg = `${e.message} (sorry we can't be more helpful)`;
-    e = ws ? basicErrorMessage(ws, msg, "SYNTAX") : `SYNTAX ERROR:\n\n${msg}`;
-  } else if (e instanceof Error) {
-    // Ignore any cancellation errors from Monaco that get here
-    if (e.name === "Canceled" && e.message === "Canceled") return;
-    const msg = `${e.message}${e.stack ? `\nstack:\n${e.stack.toString()}` : ""}`;
-    e = ws ? basicErrorMessage(ws, msg) : `RUNTIME ERROR:\n\n${msg}`;
-  }
-  if (typeof e !== "string") {
-    console.error("Unexpected error:", e);
-    const msg = `Unexpected type of error thrown. This error was likely thrown manually within a script.
-      Error has been logged to the console.\n\nType of error: ${typeof e}\nValue of error: ${e}`;
-    e = ws ? basicErrorMessage(ws, msg, "UNKNOWN") : msg;
-  }
-  dialogBoxCreate(initialText + e);
-}
-
-/** Use this handler to handle the error when we call getSaveData function */
-export function handleGetSaveDataError(error: unknown) {
-  console.error(error);
-  let errorMessage = `Cannot get save data. Error: ${error}.`;
-  if (error instanceof RangeError) {
-    errorMessage += " This may be because the save data is too large.";
-  }
-  if (error instanceof Error && error.stack) {
-    errorMessage += `\nStack:\n${error.stack}`;
-  }
-  dialogBoxCreate(errorMessage);
 }

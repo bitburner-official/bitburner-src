@@ -12,6 +12,8 @@ import { clampNumber } from "../../utils/helpers/clampNumber";
 
 export interface ActionParams {
   desc: string;
+  warning?: string;
+  successScaling?: string;
   baseDifficulty?: number;
   rewardFac?: number;
   rankGain?: number;
@@ -25,6 +27,8 @@ export interface ActionParams {
 
 export abstract class ActionClass {
   desc = "";
+  warning = "";
+  successScaling = "";
   // For LevelableActions, the base difficulty can be increased based on action level
   baseDifficulty = 100;
 
@@ -61,6 +65,8 @@ export abstract class ActionClass {
   constructor(params: ActionParams | null = null) {
     if (!params) return;
     this.desc = params.desc;
+    if (params.warning) this.warning = params.warning;
+    if (params.successScaling) this.successScaling = params.successScaling;
     if (params.baseDifficulty) this.baseDifficulty = addOffset(params.baseDifficulty, 10);
 
     if (params.rankGain) this.rankGain = params.rankGain;
@@ -140,6 +146,7 @@ export abstract class ActionClass {
     function clamp(x: number): number {
       return Math.max(0, Math.min(x, 1));
     }
+
     const est = this.getSuccessChance(bladeburner, person, { est: true });
     const real = this.getSuccessChance(bladeburner, person);
     const diff = Math.abs(real - est);

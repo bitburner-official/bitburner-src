@@ -45,9 +45,12 @@ export function Apr1(): React.ReactElement {
   const [n, setN] = useState(0);
 
   useEffect(() => {
+    if (!open) {
+      return;
+    }
     const id = setInterval(() => setN((n) => (n + 1) % frames.length), 100);
     return () => clearInterval(id);
-  }, []);
+  }, [open]);
 
   useEffect(
     () =>
@@ -62,15 +65,6 @@ export function Apr1(): React.ReactElement {
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
       <pre style={{ color: "#0f0" }}>{frames[n]}</pre>
-      <div style={{ display: "none" }}>
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/a3Z7zEc7AXQ?autoplay=1"
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        ></iframe>
-      </div>
     </Modal>
   );
 }

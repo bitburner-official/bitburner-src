@@ -1,10 +1,11 @@
 import type { Person } from "../../PersonObjects/Person";
 import type { Bladeburner } from "../Bladeburner";
-import type { ActionIdentifier } from "../Types";
+import type { ActionIdFor } from "../Types";
 
 import { BladeburnerActionType, BladeburnerGeneralActionName } from "@enums";
 import { ActionClass, ActionParams } from "./Action";
 import { clampNumber } from "../../utils/helpers/clampNumber";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 type GeneralActionParams = ActionParams & {
   name: BladeburnerGeneralActionName;
@@ -13,10 +14,19 @@ type GeneralActionParams = ActionParams & {
 };
 
 export class GeneralAction extends ActionClass {
-  type: BladeburnerActionType.General = BladeburnerActionType.General;
-  name: BladeburnerGeneralActionName;
-  get id(): ActionIdentifier {
-    return { type: this.type, name: this.name };
+  readonly type: BladeburnerActionType.General = BladeburnerActionType.General;
+  readonly name: BladeburnerGeneralActionName;
+
+  get id() {
+    return GeneralAction.createId(this.name);
+  }
+
+  static IsAcceptedName(name: unknown): name is BladeburnerGeneralActionName {
+    return getEnumHelper("BladeburnerGeneralActionName").isMember(name);
+  }
+
+  static createId(name: BladeburnerGeneralActionName): ActionIdFor<GeneralAction> {
+    return { type: BladeburnerActionType.General, name };
   }
 
   constructor(params: GeneralActionParams) {

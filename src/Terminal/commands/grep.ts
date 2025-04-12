@@ -5,6 +5,7 @@ import { ContentFile, ContentFilePath, allContentFiles } from "../../Paths/Conte
 import { Settings } from "../../Settings/Settings";
 import { help } from "../commands/help";
 import { Output } from "../OutputTypes";
+import { pluralize } from "../../utils/I18nUtils";
 
 type LineParser = (options: Options, filename: string, line: string, i: number) => ParsedLine;
 
@@ -290,12 +291,9 @@ class Results {
 
   getVerboseInfo(files: ContentFile[], pattern: string | RegExp, options: Options): string {
     if (!options.isVerbose) return "";
-    const suffix = (pre: string, num: number) => pre + (num === 1 ? "" : "s");
     const totalLines = this.results.length;
     const matchCount = Math.abs((options.isInvertMatch ? totalLines : 0) - this.numMatches);
-    const inputStr = options.isPipeIn
-      ? "piped from terminal "
-      : `in ${files.length} ${suffix("file", files.length)}:\n`;
+    const inputStr = options.isPipeIn ? "piped from terminal " : `in ${pluralize(files.length, "file")}:\n`;
     const filesStr = files
       .map((file, i) => `${i % 2 ? WHITE : ""}${file.filename}(${file.content.split("\n").length}loc)${DEFAULT}`)
       .join(", ");
@@ -304,9 +302,9 @@ class Results {
       `\n${
         (this.params.maxMatches ? this.params.maxMatches : matchCount) + (options.isInvertMatch ? " INVERTED" : "")
       } `,
-      suffix("line", matchCount) + " matched ",
+      pluralize(matchCount, "line", undefined, true) + " matched ",
       `against PATTERN "${pattern.toString()}" `,
-      `in ${totalLines} ${suffix("line", totalLines)}, `,
+      `in ${pluralize(totalLines, "line")}, `,
       inputStr,
       `${filesStr}`,
     ].join("");
@@ -383,13 +381,19 @@ function writeToTerminal(
   if (options.isVerbose) Terminal.print(verboseInfo);
 }
 
-function checkOutFile(outFileStr: string, options: Options, server: BaseServer): ContentFilePath | void {
-  if (!outFileStr) return;
+function checkOutFile(outFileStr: string, options: Options, server: BaseServer): ContentFilePath | null {
+  if (!outFileStr) {
+    return null;
+  }
   const outFilePath = Terminal.getFilepath(outFileStr);
   if (!outFilePath || !hasTextExtension(outFilePath)) {
-    return Terminal.error(ERR.badOutFile(outFileStr));
+    Terminal.error(ERR.badOutFile(outFileStr));
+    return null;
   }
-  if (!options.isOverWrite && server.textFiles.has(outFilePath)) return Terminal.error(ERR.outFileExists(outFileStr));
+  if (!options.isOverWrite && server.textFiles.has(outFilePath)) {
+    Terminal.error(ERR.outFileExists(outFileStr));
+    return null;
+  }
   return outFilePath;
 }
 
@@ -433,7 +437,8 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     if (options.isPipeIn) files.length = 0;
     if (!options.isQuiet) writeToTerminal(prettyResult, options, results, files, pattern);
     if (params.outfile && outFilePath) server.writeToContentFile(outFilePath, rawResult.join("\n"));
-  } catch (e) {
-    Terminal.error("grep processing error: " + e);
+  } catch (error) {
+    console.error(error);
+    Terminal.error(`grep processing error: ${error}`);
   }
 }

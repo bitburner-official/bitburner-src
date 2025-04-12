@@ -3,6 +3,7 @@
 .vscode
 Changelog.txt
 Netburner.txt
+/coverage
 /doc/build
 /node_modules
 /electron/node_modules

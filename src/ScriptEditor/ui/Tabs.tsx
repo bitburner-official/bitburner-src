@@ -13,9 +13,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useBoolean, useRerender } from "../../ui/React/hooks";
 import { Settings } from "../../Settings/Settings";
 
-import { dirty, reorder } from "./utils";
+import { isUnsavedFile, reorder } from "./utils";
 import { OpenScript } from "./OpenScript";
 import { Tab } from "./Tab";
+import { SpecialServers } from "../../Server/data/SpecialServers";
 
 const tabsMaxWidth = 1640;
 const searchWidth = 180;
@@ -119,22 +120,16 @@ export function Tabs({ scripts, currentScript, onTabClick, onTabClose, onTabUpda
               {filteredScripts.map(({ script, originalIndex }, index) => {
                 const { path: fileName, hostname } = script;
                 const isActive = currentScript?.path === script.path && currentScript.hostname === script.hostname;
-
-                const title = `${hostname}:~${fileName.startsWith("/") ? "" : "/"}${fileName} ${dirty(scripts, index)}`;
-
+                const fullPath = `${hostname}:/${fileName}`;
                 return (
-                  <Draggable
-                    key={fileName + hostname}
-                    draggableId={fileName + hostname}
-                    index={index}
-                    disableInteractiveElementBlocking
-                  >
+                  <Draggable key={fullPath} draggableId={fullPath} index={index} disableInteractiveElementBlocking>
                     {(provided) => (
                       <Tab
                         provided={provided}
-                        title={title}
+                        fullPath={fullPath}
                         isActive={isActive}
-                        isExternal={hostname !== "home"}
+                        isExternal={hostname !== SpecialServers.Home}
+                        isUnsaved={isUnsavedFile(scripts, index)}
                         onClick={() => onTabClick(originalIndex)}
                         onClose={() => onTabClose(originalIndex)}
                         onUpdate={() => onTabUpdate(originalIndex)}

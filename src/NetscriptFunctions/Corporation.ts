@@ -56,7 +56,7 @@ import {
 } from "../Corporation/Actions";
 import { CorpUnlocks } from "../Corporation/data/CorporationUnlocks";
 import { CorpUpgrades } from "../Corporation/data/CorporationUpgrades";
-import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, CityName } from "@enums";
+import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, CityName, CreatingCorporationCheckResult } from "@enums";
 import { IndustriesData, IndustryResearchTrees } from "../Corporation/data/IndustryData";
 import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
@@ -64,7 +64,12 @@ import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { MaterialInfo } from "../Corporation/MaterialInfo";
-import { calculateOfficeSizeUpgradeCost, calculateUpgradeCost } from "../Corporation/helpers";
+import {
+  calculateOfficeSizeUpgradeCost,
+  calculateUpgradeCost,
+  canCreateCorporation,
+  convertCreatingCorporationCheckResultToMessage,
+} from "../Corporation/helpers";
 import { PositiveInteger } from "../types";
 import { getRecordKeys } from "../Types/Record";
 
@@ -588,6 +593,25 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     ...warehouseAPI,
     ...officeAPI,
     hasCorporation: () => () => !!Player.corporation,
+    canCreateCorporation: (ctx) => (_selfFund) => {
+      const selfFund = !!_selfFund;
+      const checkResult = canCreateCorporation(selfFund, false);
+      if (checkResult !== CreatingCorporationCheckResult.Success) {
+        helpers.log(ctx, () => convertCreatingCorporationCheckResultToMessage(checkResult));
+      }
+      return checkResult;
+    },
+    createCorporation:
+      (ctx) =>
+      (_corporationName, _selfFund = true): boolean => {
+        const corporationName = helpers.string(ctx, "corporationName", _corporationName);
+        const selfFund = !!_selfFund;
+        const result = createCorporation(corporationName, selfFund, false);
+        if (!result.success) {
+          helpers.log(ctx, () => result.message);
+        }
+        return result.success;
+      },
     getConstants: () => () => {
       /* TODO 2.2: possibly just rework the whole corp constants structure to be more readable, and just use
        *           structuredClone to provide it directly to player.
@@ -624,15 +648,19 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       checkAccess(ctx);
       const unlockName = getEnumHelper("CorpUnlockName").nsGetMember(ctx, _unlockName, "unlockName");
       const corporation = getCorporation();
-      const message = corporation.purchaseUnlock(unlockName);
-      if (message) throw new Error(`Could not unlock ${unlockName}: ${message}`);
+      const result = corporation.purchaseUnlock(unlockName);
+      if (!result.success) {
+        throw new Error(`Could not unlock ${unlockName}: ${result.message}`);
+      }
     },
     levelUpgrade: (ctx) => (_upgradeName) => {
       checkAccess(ctx);
       const upgradeName = getEnumHelper("CorpUpgradeName").nsGetMember(ctx, _upgradeName, "upgradeName");
       const corporation = getCorporation();
-      const message = corporation.purchaseUpgrade(upgradeName, 1);
-      if (message) throw new Error(`Could not upgrade ${upgradeName}: ${message}`);
+      const result = corporation.purchaseUpgrade(upgradeName, 1);
+      if (!result.success) {
+        throw new Error(`Could not upgrade ${upgradeName}: ${result.message}`);
+      }
     },
     issueDividends: (ctx) => (_rate) => {
       checkAccess(ctx);
@@ -681,6 +709,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         nextState: corporation.state.nextName,
         prevState: corporation.state.prevName,
         divisions: [...corporation.divisions.keys()],
+        valuation: corporation.valuation,
       };
       setDeprecatedProperties(data, {
         state: {
@@ -691,13 +720,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       });
       return data;
     },
-    createCorporation:
-      (ctx) =>
-      (_corporationName, _selfFund = true): boolean => {
-        const corporationName = helpers.string(ctx, "corporationName", _corporationName);
-        const selfFund = !!_selfFund;
-        return createCorporation(corporationName, selfFund, false);
-      },
     hasUnlock: (ctx) => (_unlockName) => {
       checkAccess(ctx);
       const unlockName = getEnumHelper("CorpUnlockName").nsGetMember(ctx, _unlockName, "unlockName");
@@ -754,16 +776,16 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     bribe: (ctx) => (_factionName, _amountCash) => {
       checkAccess(ctx);
       const factionName = getEnumHelper("FactionName").nsGetMember(ctx, _factionName);
-      const amountCash = helpers.number(ctx, "amountCash", _amountCash);
-      if (isNaN(amountCash) || amountCash <= 0) {
-        throw new Error("Invalid value for amount field! Must be numeric and greater than 0.");
+      const amountCash = helpers.positiveNumber(ctx, "amountCash", _amountCash);
+      const result = bribe(getCorporation(), amountCash, factionName);
+      if (!result.success) {
+        helpers.log(ctx, () => result.message);
       }
-
-      return bribe(getCorporation(), amountCash, factionName) > 0;
+      return result.success;
     },
     getBonusTime: (ctx) => () => {
       checkAccess(ctx);
-      return Math.round(getCorporation().storedCycles / 5) * 1000;
+      return getCorporation().storedCycles * 200;
     },
     nextUpdate: (ctx) => () => {
       checkAccess(ctx);

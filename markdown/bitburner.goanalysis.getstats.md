@@ -8,19 +8,7 @@ Displays the game history, captured nodes, and gained bonuses for each opponent 
 
 The details are keyed by opponent name, in this structure:
 
-```js
-{
-  <OpponentName>: {
-    wins: number,
-    losses: number,
-    winStreak: number,
-    highestWinStreak: number,
-    favor: number,
-    bonusPercent: number,
-    bonusDescription: string,
-  }
-}
-```
+<pre lang="javascript"> { <OpponentName>: { wins: number, losses: number, winStreak: number, highestWinStreak: number, favor: number, bonusPercent: number, bonusDescription: string, } } </pre>
 
 **Signature:**
 
@@ -30,4 +18,6 @@ getStats(): Partial<Record<GoOpponent, SimpleOpponentStats>>;
 **Returns:**
 
 Partial&lt;Record&lt;[GoOpponent](./bitburner.goopponent.md)<!-- -->, [SimpleOpponentStats](./bitburner.simpleopponentstats.md)<!-- -->&gt;&gt;
+
+A dictionary of opponent stats keyed by opponent name.
 

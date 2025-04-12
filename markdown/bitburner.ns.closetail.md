@@ -4,7 +4,12 @@
 
 ## NS.closeTail() method
 
-Close the tail window of a script.
+> Warning: This API is now obsolete.
+> 
+> Use [ns.ui.closeTail](./bitburner.userinterface.closetail.md) instead.
+> 
+
+Close the tail window of a script. This function is deprecated and will be removed in a later version.
 
 **Signature:**
 

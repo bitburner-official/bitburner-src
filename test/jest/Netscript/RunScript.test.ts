@@ -1,21 +1,30 @@
 import type { Script } from "../../../src/Script/Script";
 import type { ScriptFilePath } from "../../../src/Paths/ScriptFilePath";
-import { startWorkerScript } from "../../../src/NetscriptWorker";
+import { runScriptFromScript, startWorkerScript } from "../../../src/NetscriptWorker";
 import { workerScripts } from "../../../src/Netscript/WorkerScripts";
 import { config as EvaluatorConfig } from "../../../src/NetscriptJSEvaluator";
 import { Server } from "../../../src/Server/Server";
 import { RunningScript } from "../../../src/Script/RunningScript";
-import { AddToAllServers, DeleteServer } from "../../../src/Server/AllServers";
+import { AddToAllServers, DeleteServer, GetServerOrThrow } from "../../../src/Server/AllServers";
 import { AlertEvents } from "../../../src/ui/React/AlertManager";
+import { initGameEnvironment, setupBasicTestingEnvironment } from "./Utilities";
+import { Terminal } from "../../../src/Terminal";
+import { runScript } from "../../../src/Terminal/commands/runScript";
+import { Player } from "@player";
+import { resetPidCounter } from "../../../src/Netscript/Pid";
+import { SpecialServers } from "../../../src/Server/data/SpecialServers";
+import { WorkerScript } from "../../../src/Netscript/WorkerScript";
+import { NetscriptFunctions } from "../../../src/NetscriptFunctions";
+import type { PositiveInteger } from "../../../src/types";
 
 declare const importActual: (typeof EvaluatorConfig)["doImport"];
 
 // Replace Blob/ObjectURL functions, because they don't work natively in Jest
 global.Blob = class extends Blob {
   code: string;
-  constructor(blobParts?: BlobPart[], options?: BlobPropertyBag) {
+  constructor(blobParts?: BlobPart[], __options?: BlobPropertyBag) {
     super();
-    this.code = (blobParts ?? [])[0] + "";
+    this.code = String((blobParts ?? [])[0]);
   }
 };
 global.URL.revokeObjectURL = function () {};
@@ -24,31 +33,13 @@ global.URL.revokeObjectURL = function () {};
 // and tends to crash even if you do.
 EvaluatorConfig.doImport = importActual;
 
-test.each([
-  {
-    name: "NS1 test /w import",
-    expected: ["false home 8", "Script finished running"],
-    scripts: [
-      {
-        name: "import.script",
-        code: `
-        export function getInfo() {
-          return stock.has4SData();
-        }
-      `,
-      },
-      {
-        name: "simple_test.script",
-        code: `
-        import { getInfo } from "import.script";
+global.URL.createObjectURL = function (blob) {
+  return "data:text/javascript," + encodeURIComponent((blob as unknown as { code: string }).code);
+};
 
-        var access = getInfo();
-        var server = getServer();
-        printf("%s %s %d", access, server.hostname, server.maxRam);
-      `,
-      },
-    ],
-  },
+initGameEnvironment();
+
+test.each([
   {
     name: "NS2 test /w import",
     expected: ["false home 8", "Script finished running"],
@@ -76,12 +67,8 @@ test.each([
     ],
   },
 ])("Netscript execution: $name", async function ({ expected: expectedLog, scripts }) {
-  global.URL.createObjectURL = function (blob) {
-    return "data:text/javascript," + encodeURIComponent(blob.code);
-  };
-
   let server = {} as Server;
-  let eventDelete = () => {};
+  const eventDelete = () => {};
   let alertDelete = () => {};
   try {
     const alerted = new Promise((resolve) => {
@@ -98,7 +85,7 @@ test.each([
 
     const ramUsage = script.getRamUsage(server.scripts);
     if (!ramUsage) throw new Error(`ramUsage calculated to be ${ramUsage}`);
-    const runningScript = new RunningScript(script, ramUsage as number);
+    const runningScript = new RunningScript(script, ramUsage);
     const pid = startWorkerScript(runningScript, server);
     expect(pid).toBeGreaterThan(0);
     // Manually attach an atExit to the now-created WorkerScript, so we can
@@ -107,6 +94,7 @@ test.each([
     expect(ws).toBeDefined();
     const result = await Promise.race([
       alerted,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- ws was asserted above
       new Promise<void>((resolve) => (ws!.atExit = new Map([["default", resolve]]))),
     ]);
     // If an error alert was thrown, we catch it here.
@@ -117,4 +105,171 @@ test.each([
     if (server) DeleteServer(server.hostname);
     alertDelete();
   }
+});
+
+const testScriptPath = "test.js" as ScriptFilePath;
+const parentTestScriptPath = "parent_script.js" as ScriptFilePath;
+const runOptions = {
+  threads: 1 as PositiveInteger,
+  temporary: false,
+  preventDuplicates: false,
+};
+
+describe("runScript and runScriptFromScript", () => {
+  let alertDelete: () => void;
+  let alerted: Promise<unknown>;
+
+  beforeEach(() => {
+    setupBasicTestingEnvironment();
+    Terminal.clear();
+    resetPidCounter();
+
+    alerted = new Promise((resolve) => {
+      alertDelete = AlertEvents.subscribe((x) => resolve(x));
+    });
+  });
+  afterEach(() => {
+    alertDelete();
+  });
+
+  describe("runScript", () => {
+    describe("Success", () => {
+      test("Normal", async () => {
+        Player.getHomeComputer().writeToScriptFile(
+          testScriptPath,
+          `export async function main(ns) {
+             const server = ns.getServer("home");
+             ns.print(server.hostname);
+           }`,
+        );
+        runScript(testScriptPath, [], Player.getHomeComputer());
+        const workerScript = workerScripts.get(1);
+        if (!workerScript) {
+          throw new Error(`Invalid worker script`);
+        }
+        const result = await Promise.race([
+          alerted,
+          new Promise<void>((resolve) => (workerScript.atExit = new Map([["default", resolve]]))),
+        ]);
+        expect(result).not.toBeDefined();
+        expect(workerScript.scriptRef.logs[0]).toStrictEqual(SpecialServers.Home);
+      });
+    });
+    describe("Failure", () => {
+      test("Script does not exist", () => {
+        runScript(testScriptPath, [], Player.getHomeComputer());
+        expect((Terminal.outputHistory[1] as { text: string }).text).toContain(
+          `Script ${testScriptPath} does not exist on home`,
+        );
+      });
+      test("No root access", () => {
+        const server = GetServerOrThrow("n00dles");
+        server.writeToScriptFile(
+          testScriptPath,
+          `export async function main(ns) {
+           }`,
+        );
+        runScript(testScriptPath, [], server);
+        expect((Terminal.outputHistory[1] as { text: string }).text).toContain(
+          `You do not have root access on ${server.hostname}`,
+        );
+      });
+      test("Cannot calculate RAM", () => {
+        Player.getHomeComputer().writeToScriptFile(
+          testScriptPath,
+          `export async function main(ns) {
+             {
+           }`,
+        );
+        runScript(testScriptPath, [], Player.getHomeComputer());
+        expect((Terminal.outputHistory[1] as { text: string }).text).toContain(
+          `Cannot calculate RAM usage of ${testScriptPath}`,
+        );
+      });
+      test("Not enough RAM", () => {
+        Player.getHomeComputer().writeToScriptFile(
+          testScriptPath,
+          `export async function main(ns) {
+             ns.ramOverride(1024);
+           }`,
+        );
+        runScript(testScriptPath, [], Player.getHomeComputer());
+        expect((Terminal.outputHistory[1] as { text: string }).text).toContain("This script requires 1.02TB of RAM");
+      });
+      test("Thrown error in main function", async () => {
+        /**
+         * Suppress console.error(). When there is a thrown error in the player's script, we print it to the console. In
+         * this test, we intentionally throw an error, so we can ignore it.
+         */
+        jest.spyOn(console, "error").mockImplementation(jest.fn());
+        const errorMessage = `Test error ${Date.now()}`;
+        Player.getHomeComputer().writeToScriptFile(
+          testScriptPath,
+          `export async function main(ns) {
+             throw new Error("${errorMessage}");
+           }`,
+        );
+        runScript(testScriptPath, [], Player.getHomeComputer());
+        const workerScript = workerScripts.get(1);
+        if (!workerScript) {
+          throw new Error(`Invalid worker script`);
+        }
+        const result = await Promise.race([
+          alerted,
+          new Promise<void>((resolve) => (workerScript.atExit = new Map([["default", resolve]]))),
+        ]);
+        expect(result).toBeDefined();
+        expect(workerScript.scriptRef.logs[0]).toContain(errorMessage);
+      });
+    });
+  });
+
+  describe("runScriptFromScript", () => {
+    let parentWorkerScript: WorkerScript;
+    beforeEach(() => {
+      // Set up parentWorkerScript for passing to runScriptFromScript.
+      const home = GetServerOrThrow(SpecialServers.Home);
+      home.writeToScriptFile(parentTestScriptPath, "");
+      const script = home.scripts.get(parentTestScriptPath);
+      if (!script) {
+        throw new Error("Invalid script");
+      }
+      const runningScript = new RunningScript(script, 4);
+      parentWorkerScript = new WorkerScript(runningScript, 1, NetscriptFunctions);
+      home.runScript(runningScript);
+    });
+
+    describe("Success", () => {
+      test("Normal", async () => {
+        Player.getHomeComputer().writeToScriptFile(
+          testScriptPath,
+          `export async function main(ns) {
+             const server = ns.getServer("home");
+             ns.print(server.hostname);
+           }`,
+        );
+        runScriptFromScript("run", Player.getHomeComputer(), testScriptPath, [], parentWorkerScript, runOptions);
+        const workerScript = workerScripts.get(1);
+        if (!workerScript) {
+          throw new Error(`Invalid worker script`);
+        }
+        const result = await Promise.race([
+          alerted,
+          new Promise<void>((resolve) => (workerScript.atExit = new Map([["default", resolve]]))),
+        ]);
+
+        expect(result).not.toBeDefined();
+        expect(workerScript.scriptRef.logs[0]).toStrictEqual(SpecialServers.Home);
+      });
+    });
+    describe("Failure", () => {
+      test("Prevent duplicates", () => {
+        runScriptFromScript("run", Player.getHomeComputer(), parentTestScriptPath, [], parentWorkerScript, {
+          ...runOptions,
+          preventDuplicates: true,
+        });
+        expect(parentWorkerScript.scriptRef.logs[0]).toContain("is already running");
+      });
+    });
+  });
 });

@@ -58,7 +58,7 @@ export function CovenantPurchasesRoot(props: IProps): React.ReactElement {
   const upgradePanels = [];
   for (let i = 0; i < Player.sleeves.length; ++i) {
     const sleeve = Player.sleeves[i];
-    upgradePanels.push(<CovenantSleeveMemoryUpgrade index={i} rerender={rerender} sleeve={sleeve} />);
+    upgradePanels.push(<CovenantSleeveMemoryUpgrade key={i} index={i} rerender={rerender} sleeve={sleeve} />);
   }
 
   return (
@@ -67,7 +67,7 @@ export function CovenantPurchasesRoot(props: IProps): React.ReactElement {
         {Player.sleevesFromCovenant < MaxSleevesFromCovenant && (
           <>
             <Typography>
-              Purchase an additional Sleeves. These Duplicate Sleeves are permanent (they persist through BitNodes). You
+              Purchase an additional Sleeve. These Duplicate Sleeves are permanent (they persist through BitNodes). You
               can purchase a total of {MaxSleevesFromCovenant} from {FactionName.TheCovenant}.
             </Typography>
             <Button disabled={purchaseDisabled} onClick={purchaseOnClick}>

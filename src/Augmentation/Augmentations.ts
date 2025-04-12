@@ -85,7 +85,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: Infinity,
       moneyCost: Infinity,
       info:
-        "A chip containing the psyche of the greatest BitRunner to ever exists. " +
+        "A chip containing the psyche of the greatest BitRunner to ever exist. " +
         "Installing this relic significantly increases ALL of your stats. " +
         "However, it may have unintended consequence on the users mental well-being.",
       stats: "Grants access to unimaginable power.",
@@ -389,7 +389,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: Infinity,
       moneyCost: 50e12,
       info:
-        "Developed by a pioneer in Grafting research, this implant generates pulses of stability which seem to have a nullifying effect versus the Entropy virus.\n\n" +
+        "Developed by a pioneer in Grafting research, this implant generates pulses of stability which seem to have a nullifying effect against the Entropy virus.\n\n" +
         "Note: For unknown reasons, the lowercase 'v' appears to be an integral component to its functionality.",
       stats: "This Augmentation removes the Entropy virus, and prevents it from affecting you again.",
       factions: [],
@@ -400,7 +400,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "The thoracic cavity is equipped with a small chamber designed " +
         "to hold and sustain hydrogen plasma. The plasma is used to generate " +
-        "fusion power through nuclear fusion, providing limitless amounts of clean " +
+        "power through nuclear fusion, providing limitless amounts of clean " +
         "energy for the body.",
       strength: 1.35,
       defense: 1.35,
@@ -758,7 +758,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 5e5,
       moneyCost: 3.75e9,
       info:
-        "An upgrade to the Bionic Arms augmentation. It infuses the " +
+        "An upgrade to the 'Bionic Arms' augmentation. It infuses the " +
         "prosthetic arms with an advanced graphene material " +
         "to make them stronger and lighter.",
       prereqs: [AugmentationName.BionicArms],
@@ -883,7 +883,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "exactly the implant does, but they promise that it will greatly " +
         "enhance your abilities.",
       hacking_grow: 3,
-      stats: "",
+      stats:
+        `Many hackers say that they can spoof money much better than normal after installing this augmentation. ` +
+        `A leaked document from ${FactionName.ECorp} contains this weird message: "vnmehidi's gorw oprwe si ebesaccisl aiv sliguntayir".`,
       factions: [FactionName.ECorp],
     },
     [AugmentationName.HuntOfArtemis]: {
@@ -937,7 +939,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1.5e5,
       moneyCost: 2.75e9,
       info:
-        "A bionic eye implant that grants sight capabilities far beyond those of a natural human. " +
+        "A bionic eye implant that enhances the user's sight far beyond that of a natural human. " +
         "Embedded circuitry within the implant provides the ability to detect heat and movement " +
         "through solid objects such as walls, thus providing 'x-ray vision'-like capabilities.",
       dexterity: 1.4,
@@ -1012,7 +1014,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info:
-        "Extra-ocular neurons taken from old martial art master. Injecting them gives the user the ability to " +
+        "Extra-ocular neurons taken from old martial arts master. Injecting them gives the user the ability to " +
         "predict the enemy's movement.",
       stats:
         "This augmentation makes the Slash minigame easier by showing you via an indicator when the sentinel is distracted.",
@@ -1252,7 +1254,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 6.25e3,
       moneyCost: 2.5e6,
       info:
-        "A thermo-powered artificial nutrition generator. Endogenously " +
+        "A thermal-powered artificial nutrition generator. Endogenously " +
         "synthesizes glucose, amino acids, and vitamins, and redistributes them " +
         "across the body. The device is powered by the body's naturally wasted " +
         "energy in the form of heat.",
@@ -1759,8 +1761,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 5.5e8,
       info:
         "A highly advanced bionic hand. This prosthetic not only " +
-        "enhances strength and dexterity, but is also embedded " +
-        "with hardware and firmware that lets the user connect to, access, and hack " +
+        "enhances the user's strength and dexterity, but is also embedded " +
+        "with hardware and firmware that lets them connect to, access, and hack " +
         "devices and machines by just touching them.",
       strength: 1.15,
       dexterity: 1.15,
@@ -1822,7 +1824,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       moneyCost: 1e6,
       info:
         `A copy of the WKS harmonizer from the MIA leader of the ${FactionName.ShadowsOfAnarchy} ` +
-        "injects *Γ-based cells that provides general enhancement to the body.",
+        "injects *Γ-based cells that provide general enhancement to the body.",
       stats:
         "This augmentation makes many aspects of infiltration easier and more productive via increased timer and rewards, reduced damage taken, etc.",
       isSpecial: true,
@@ -1887,7 +1889,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "Zoë's Omnicerebrum Ënhancer for sleeves inserts an omnicerebrum into your sleeve. " +
         "An omnicerebrum is a near perfect simulation of the human brain, allowing it to take advantage of a larger variety of augments. " +
-        "But you should know about this BitRunner, since you have one of these yourself!",
+        "But you should know about this, BitRunner, since you have one of these yourself!",
       stats: "Allows sleeves to benefit from Stanek's Gift, but is less powerful if several are installed.",
       factions: [
         /*Technically in FactionNames.ChurchOfTheMachineGod but not really for display reasons */

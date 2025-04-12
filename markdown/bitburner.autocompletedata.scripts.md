@@ -4,6 +4,8 @@
 
 ## AutocompleteData.scripts property
 
+All scripts on the current server
+
 **Signature:**
 
 ```typescript

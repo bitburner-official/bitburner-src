@@ -21,3 +21,5 @@ true if the player is a member of the church and has the gift installed, false o
 
 RAM cost: 2 GB
 
+The church only accepts those who have not purchased or installed any augmentations. "NeuroFlux Governor" augmentation is the only exception.
+

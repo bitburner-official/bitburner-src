@@ -37,10 +37,11 @@ export function GangButton({ faction }: IProps): React.ReactElement {
       description: "Manage a gang for this Faction. Gangs will earn you money and faction reputation",
     };
   } else {
+    const checkResult = Player.canAccessGang();
     data = {
-      enabled: Player.canAccessGang(),
+      enabled: checkResult.success,
       title: "Create Gang",
-      tooltip: !Player.canAccessGang() ? (
+      tooltip: !checkResult.success ? (
         <Typography>Unlocked when reaching {GangConstants.GangKarmaRequirement} karma</Typography>
       ) : (
         ""

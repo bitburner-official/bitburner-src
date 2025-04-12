@@ -44,7 +44,8 @@ export function kill(args: (string | number | boolean)[], server: BaseServer): v
     if (killed >= 5) {
       Terminal.print(`... killed ${killed} instances total`);
     }
-  } catch (e) {
-    Terminal.error(e + "");
+  } catch (error) {
+    console.error(error);
+    Terminal.error(String(error));
   }
 }

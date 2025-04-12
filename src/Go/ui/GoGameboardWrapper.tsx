@@ -9,7 +9,12 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { getNewBoardState, getStateCopy, makeMove, passTurn, updateCaptures } from "../boardState/boardState";
 import { bitverseArt, weiArt } from "../boardState/asciiArt";
 import { getScore, resetWinstreak } from "../boardAnalysis/scoring";
-import { boardFromBoardString, evaluateIfMoveIsValid, getAllValidMoves } from "../boardAnalysis/boardAnalysis";
+import {
+  boardFromBoardString,
+  clearAllPointHighlights,
+  evaluateIfMoveIsValid,
+  getAllValidMoves,
+} from "../boardAnalysis/boardAnalysis";
 import { useRerender } from "../../ui/React/hooks";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { boardStyles } from "../boardState/goStyles";
@@ -18,8 +23,9 @@ import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 import { CorruptableText } from "../../ui/React/CorruptableText";
-import { makeAIMove, resolveCurrentTurn } from "../boardAnalysis/goAI";
+import { handleNextTurn, resetGoPromises } from "../boardAnalysis/goAI";
 import { GoScoreExplanation } from "./GoScoreExplanation";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 interface GoGameboardWrapperProps {
   showInstructions: () => void;
@@ -48,15 +54,22 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   const [scoreExplanationOpen, setScoreExplanationOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  const { classes } = boardStyles();
+  const { classes } = boardStyles({});
   const boardSize = boardState.board[0].length;
   const currentPlayer = boardState.previousPlayer === GoColor.white ? GoColor.black : GoColor.white;
   const waitingOnAI = boardState.previousPlayer === GoColor.black && boardState.ai !== GoOpponent.none;
   const score = getScore(boardState);
 
+  // Disable showing prior move if there are no prior moves (if a new game is started while looking at a prior move)
+  useEffect(() => {
+    if (boardState.previousBoards.length === 0) {
+      setShowPriorMove(false);
+    }
+  }, [boardState.previousBoards.length]);
+
   // Do not implement useCallback for this function without ensuring GoGameboard still rerenders for every move
   // Currently this function changing is what triggers a GoGameboard rerender, which is needed
-  async function clickHandler(x: number, y: number) {
+  function clickHandler(x: number, y: number) {
     if (showPriorMove) {
       SnackbarEvents.emit(
         `Currently showing a past board state. Please disable "Show previous move" to continue.`,
@@ -86,48 +99,29 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
     const didUpdateBoard = makeMove(boardState, x, y, currentPlayer);
     if (didUpdateBoard) {
-      rerender();
-      takeAiTurn(boardState);
+      takeAiTurn(boardState).catch((error) => exceptionAlert(error));
     }
   }
 
   function passPlayerTurn() {
-    if (boardState.previousPlayer === GoColor.white) {
-      passTurn(boardState, GoColor.black);
-      rerender();
-    }
-    if (boardState.previousPlayer === GoColor.black && boardState.ai === GoOpponent.none) {
-      passTurn(boardState, GoColor.white);
-      rerender();
-    }
     if (boardState.previousPlayer === null) {
       setScoreOpen(true);
       return;
     }
-
-    setTimeout(() => {
-      takeAiTurn(boardState);
-    }, 100);
+    passTurn(boardState, boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black);
+    takeAiTurn(boardState).catch((error) => exceptionAlert(error));
   }
 
   async function takeAiTurn(boardState: BoardState) {
-    // If white is being played manually, halt and notify any scripts playing as black if present, instead of making an AI move
-    if (Go.currentGame.ai === GoOpponent.none) {
-      Go.currentGame.previousPlayer && resolveCurrentTurn();
-      return;
-    }
-
-    const move = await makeAIMove(boardState, false);
+    const move = await handleNextTurn(boardState, false);
 
     if (move.type === GoPlayType.pass) {
       SnackbarEvents.emit(`The opponent passes their turn; It is now your turn to move.`, ToastVariant.WARNING, 4000);
-      rerender();
       return;
     }
 
-    if (move.type === GoPlayType.gameOver || move.x === null || move.y === null) {
+    if (boardState.previousPlayer === null) {
       setScoreOpen(true);
-      return;
     }
   }
 
@@ -139,13 +133,14 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   function resetState(newBoardSize = boardSize, newOpponent = Go.currentGame.ai) {
     setScoreOpen(false);
     setSearchOpen(false);
+    setShowPriorMove(false);
     if (boardState.previousPlayer !== null && boardState.previousBoards.length) {
       resetWinstreak(boardState.ai, false);
     }
 
     Go.currentGame = getNewBoardState(newBoardSize, newOpponent, true);
-    rerender();
-    resolveCurrentTurn();
+    resetGoPromises();
+    clearAllPointHighlights(Go.currentGame);
   }
 
   function getPriorMove() {
@@ -158,9 +153,8 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
   }
 
   function showPreviousMove(newValue: boolean) {
-    if (boardState.previousBoards.length) {
-      setShowPriorMove(newValue);
-    }
+    // Only show prior move if there is previous moves to show
+    setShowPriorMove(!!boardState.previousBoards.length && newValue);
   }
 
   function setTraditional(newValue: boolean) {

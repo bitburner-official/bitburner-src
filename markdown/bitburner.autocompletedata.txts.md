@@ -4,6 +4,8 @@
 
 ## AutocompleteData.txts property
 
+All text files on the current server
+
 **Signature:**
 
 ```typescript

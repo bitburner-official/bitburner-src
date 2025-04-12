@@ -4,7 +4,7 @@
 
 ## CrimeStats.defense\_success\_weight property
 
-defense level impact on success change of the crime
+Impact of defense level on success chance of the crime
 
 **Signature:**
 

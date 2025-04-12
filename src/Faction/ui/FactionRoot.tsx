@@ -22,6 +22,7 @@ import { GangButton } from "./GangButton";
 import { FactionWork } from "../../Work/FactionWork";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { repNeededToDonate } from "../formulas/donation";
+import { ShareOption } from "./ShareOption";
 
 type FactionRootProps = {
   faction: Faction;
@@ -36,7 +37,7 @@ const hackingContractsInfo =
 const fieldWorkInfo =
   "Carry out field missions for your faction. " +
   "Your effectiveness, which determines how much " +
-  "reputation you gain for this faction, is based on all of your stats equally . " +
+  "reputation you gain for this faction, is based on all of your stats equally. " +
   "You will gain exp for all stats.";
 const securityWorkInfo =
   "Serve in a security detail for your faction. " +
@@ -45,7 +46,7 @@ const securityWorkInfo =
   "You will gain exp for all combat stats and hacking.";
 const augmentationsInfo =
   "As your reputation with this faction rises, you will " +
-  "unlock Augmentations, which you can purchase to enhance " +
+  "unlock augmentations, which you can purchase to enhance " +
   "your abilities.";
 const sleevePurchasesInfo = "Purchase Duplicate Sleeves and upgrades. These are permanent!";
 
@@ -97,7 +98,7 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
     startWork();
   }
 
-  // We have a special flag for whether the player this faction is the player's
+  // We have a special flag for whether this faction is the player's
   // gang faction because if the player has a gang, they cannot do any other action
   const isPlayersGang = Player.gang && Player.getGangName() === faction.name;
 
@@ -131,6 +132,7 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
       {!isPlayersGang && factionInfo.offersWork() && (
         <DonateOption faction={faction} rerender={rerender} favorToDonate={favorToDonate} disabled={!canDonate} />
       )}
+      {!isPlayersGang && factionInfo.offersWork() && <ShareOption rerender={rerender} />}
       <Option buttonText={"Purchase Augmentations"} infoText={augmentationsInfo} onClick={onAugmentations} />
       {canPurchaseSleeves && (
         <>

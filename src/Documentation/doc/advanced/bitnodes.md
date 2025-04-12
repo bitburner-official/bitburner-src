@@ -64,7 +64,7 @@ Destroying this BitNode will give you Source-File 1, or if you already have this
 
 Organized crime groups quickly filled the void of power left behind from the collapse of Western government in the 2050s. As society and civilization broke down, people quickly succumbed to the innate human impulse of evil and savagery. The organized crime factions quickly rose to the top of the modern world.
 
-Certain factions (Slum Snakes, Tetrads, The Syndicate, The Dark Army, Speakers for the Dead, NiteSec, and The Black Hand) give the player the ability to form and manage their own gang, which can earn the player money and reputation with the corresponding faction. The gang faction offers more augmentations than other factions, and in BitNode-2, it offers a way to destroy the BitNode.
+Certain factions (Slum Snakes, Tetrads, The Syndicate, The Dark Army, Speakers for the Dead, NiteSec, and The Black Hand) give the player the ability to form and manage their own gang, which can earn the player money and reputation with the corresponding faction. The gang faction offers more augmentations than other factions, and in BitNode-2, it offers The Red Pill.
 
 Destroying this BitNode will give you Source-File 2, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to form gangs in other BitNodes once your karma decreases to a certain value. It also increases your crime success rate, crime money, and charisma multipliers by:
 
@@ -120,9 +120,9 @@ It will also raise all of your hacking-related multipliers by:
 
 In the middle of the 21st century, OmniTek Incorporated began designing and manufacturing advanced synthetic androids, or Synthoids for short. They achieved a major technological breakthrough in the sixth generation of their Synthoid design, called MK-VI, by developing a hyper-intelligent AI. Many argue that this was the first sentient AI ever created. This resulted in Synthoid models that were stronger, faster, and more intelligent than the humans that had created them.
 
-In this BitNode, you will be able to access the Bladeburners division at the NSA, which provides a new mechanic for progression.
+In this BitNode, you will be able to access the Bladeburner division at the NSA, which provides a new mechanic for progression.
 
-Destroying this BitNode will give you Source-File 6, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to access the NSA's Bladeburners division in other BitNodes. In addition, this Source-File will raise both the level and experience gain rate of all your combat stats by:
+Destroying this BitNode will give you Source-File 6, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to access the NSA's Bladeburner division in other BitNodes. In addition, this Source-File will raise both the level and experience gain rate of all your combat stats by:
 
 - Level 1: 8%
 - Level 2: 12%
@@ -132,13 +132,13 @@ Destroying this BitNode will give you Source-File 6, or if you already have this
 
 In the middle of the 21st century, you were doing cutting-edge work at OmniTek Incorporated as part of the AI design team for advanced synthetic androids, or Synthoids for short. You helped achieve a major technological breakthrough in the sixth generation of the company's Synthoid design, called MK-VI, by developing a hyper-intelligent AI. Many argue that this was the first sentient AI ever created. This resulted in Synthoid models that were stronger, faster, and more intelligent than the humans that had created them.
 
-In this BitNode, you will be able to access the Bladeburners API, which allows you to access Bladeburners functionality through Netscript.
+In this BitNode, you will be able to access the Bladeburner division at the NSA, which provides a new mechanic for progression.
 
-Destroying this BitNode will give you Source-File 7, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to access the Bladeburners Netscript API in other BitNodes. In addition, this Source-File will increase all of your Bladeburners multipliers by:
+Destroying this BitNode will give you Source-File 7, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File allows you to access the NSA's Bladeburner division in other BitNodes. In addition, this Source-File will increase all of your Bladeburner multipliers by:
 
 - Level 1: 8%
 - Level 2: 12%
-- Level 3: 14%
+- Level 3: Level 3: 14% and immediately receive "The Blade's Simulacrum" augmentation after joining the Bladeburner division
 
 ### BitNode 8: Ghost of Wall Street
 
@@ -227,6 +227,8 @@ Their leader, Allison "Mother" Stanek is said to have created her own augmentati
 Destroying this BitNode will give you Source-File 13, or if you already have this Source-File, it will upgrade its level up to a maximum of 3. This Source-File lets the Church of the Machine God appear in other BitNodes.
 
 Each level of this Source-File increases the size of Stanek's Gift.
+
+Due to the effect of Source-File 7.3, you must accept Stanek's Gift before joining the Bladeburner division if you have that Source-File.
 
 ### BitNode 14: IPvGO Subnet Takeover
 

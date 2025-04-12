@@ -27,7 +27,7 @@ export class BitNodeMultipliers {
   /** Influences the experience gained for each ability when a player completes a class. */
   ClassGymExpGain = 1;
 
-  /**Influences the amount of money gained from completing Coding Contracts. */
+  /** Influences the amount of money gained from completing Coding Contracts. */
   CodingContractMoney = 1;
 
   /** Influences the experience gained for each ability when the player completes working their job. */
@@ -39,6 +39,12 @@ export class BitNodeMultipliers {
   /** Influences how much rep the player gains when performing work for a company. */
   CompanyWorkRepGain = 1;
 
+  /** Influences the amount of divisions a corporation can have at the same time. */
+  CorporationDivisions = 1;
+
+  /** Influences profits from corporation dividends and selling shares. */
+  CorporationSoftcap = 1;
+
   /** Influences the valuation of corporations created by the player. */
   CorporationValuation = 1;
 
@@ -48,7 +54,7 @@ export class BitNodeMultipliers {
   /** Influences the base money gained when the player commits a crime. */
   CrimeMoney = 1;
 
-  /** influences the success chance of committing crimes */
+  /** Influences the success chance of committing crimes */
   CrimeSuccessRate = 1;
 
   /** Influences how many Augmentations you need in order to get invited to the Daedalus faction */
@@ -66,7 +72,7 @@ export class BitNodeMultipliers {
   /** Influences the experience gained for each ability when the player completes work for a Faction. */
   FactionWorkExpGain = 1;
 
-  /** Influences how much rep the player gains when performing work for a faction. */
+  /** Influences how much rep the player gains when performing work for a faction or donating to it. */
   FactionWorkRepGain = 1;
 
   /** Influences how much it costs to unlock the stock market's 4S Market Data API */
@@ -75,7 +81,7 @@ export class BitNodeMultipliers {
   /** Influences how much it costs to unlock the stock market's 4S Market Data (NOT API) */
   FourSigmaMarketDataCost = 1;
 
-  /** Reduces gangs earning. */
+  /** Influences the respect gain and money gain of your gang. */
   GangSoftcap = 1;
 
   /** Percentage of unique augs that the gang has. */
@@ -109,8 +115,9 @@ export class BitNodeMultipliers {
   InfiltrationRep = 1;
 
   /**
-   * Influences how much money can be stolen from a server when the player performs a hack against it through
-   * the Terminal.
+   * Influences how much money the player actually gains when they hack a server via the terminal. This is different
+   * from ScriptHackMoney. When the player hack a server via the terminal, the amount of money in that server is
+   * reduced, but they do not gain that same amount.
    */
   ManualHackMoney = 1;
 
@@ -129,12 +136,12 @@ export class BitNodeMultipliers {
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
   RepToDonateToFaction = 1;
 
-  /** Influences how much money can be stolen from a server when a script performs a hack against it. */
+  /** Influences how much money is stolen from a server when the player performs a hack against it. */
   ScriptHackMoney = 1;
 
   /**
-   * The amount of money actually gained when script hack a server. This is
-   * different than the above because you can reduce the amount of money but
+   * Influences how much money the player actually gains when a script hacks a server. This is different from
+   * ScriptHackMoney. When a script hacks a server, the amount of money in that server is reduced, but the player does
    * not gain that same amount.
    */
   ScriptHackMoneyGain = 1;
@@ -165,12 +172,6 @@ export class BitNodeMultipliers {
 
   /** Influences the hacking skill required to backdoor the world daemon. */
   WorldDaemonDifficulty = 1;
-
-  /** Influences profits from corporation dividends and selling shares. */
-  CorporationSoftcap = 1;
-
-  /** Influences the amount of divisions a corporation can have have at the same time*/
-  CorporationDivisions = 1;
 
   constructor(a: PartialRecord<keyof BitNodeMultipliers, number> = {}) {
     for (const [key, value] of getRecordEntries(a)) this[key] = clampNumber(value);

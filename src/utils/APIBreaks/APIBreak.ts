@@ -7,6 +7,7 @@ import { GetAllServers } from "../../Server/AllServers";
 import { resolveTextFilePath } from "../../Paths/TextFilePath";
 import { dialogBoxCreate as dialogBoxCreateOriginal } from "../../ui/React/DialogBox";
 import { Terminal } from "../../Terminal";
+import { pluralize } from "../I18nUtils";
 
 // Temporary until fixing alerts manager to store alerts outside of react scope
 const dialogBoxCreate = (text: string) => setTimeout(() => dialogBoxCreateOriginal(text), 2000);
@@ -64,7 +65,9 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
               [...scriptImpactMap]
                 .map(
                   ([filename, lineNumbers]) =>
-                    `${filename}: (Line number${lineNumbers.length > 1 ? "s" : ""}: ${lineNumbers.join(", ")})`,
+                    `${filename}: (${pluralize(lineNumbers.length, "Line number", undefined, true)}: ${lineNumbers.join(
+                      ", ",
+                    )})`,
                 )
                 .join("\n"),
           )

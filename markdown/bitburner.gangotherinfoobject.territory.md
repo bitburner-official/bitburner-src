@@ -4,7 +4,7 @@
 
 ## GangOtherInfoObject.territory property
 
-Gang territory, in decimal form
+Gang territory, in the range 0-1
 
 **Signature:**
 

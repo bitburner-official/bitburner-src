@@ -43,7 +43,7 @@ export function SleeveAugmentationsModal(props: IProps): React.ReactElement {
         augNames={availableAugs.map((aug) => aug.name)}
         ownedAugNames={ownedAugNames}
         canPurchase={(aug) => {
-          return Player.money > aug.baseCost;
+          return Player.money >= aug.baseCost;
         }}
         purchaseAugmentation={(aug) => {
           props.sleeve.tryBuyAugmentation(aug);

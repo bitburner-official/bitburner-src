@@ -16,7 +16,7 @@ import { getRecordKeys } from "../../Types/Record";
 
 export const GoHistoryPage = (): React.ReactElement => {
   useRerender(400);
-  const { classes } = boardStyles();
+  const { classes } = boardStyles({});
   const priorBoard = Go.previousGame ?? getNewBoardState(7);
   const score = getScore(priorBoard);
   const opponent = priorBoard.ai;
@@ -63,18 +63,22 @@ export const GoHistoryPage = (): React.ReactElement => {
               <Table sx={{ display: "table", mb: 1, width: "100%" }}>
                 <TableBody>
                   <TableRow>
-                    <TableCell className={classes.cellNone}>Wins:</TableCell>
+                    <TableCell className={classes.cellNone}>
+                      Wins:{faction === GoOpponent.none ? " (Black / White)" : ""}
+                    </TableCell>
                     <TableCell className={classes.cellNone}>
                       {data.wins} / {data.losses + data.wins}
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell className={classes.cellNone}>Current winstreak:</TableCell>
+                    <TableCell className={classes.cellNone}>
+                      Current winstreak{faction === GoOpponent.none ? " for black" : ""}:
+                    </TableCell>
                     <TableCell className={classes.cellNone}>{data.winStreak}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell className={`${classes.cellNone} ${classes.cellBottomPadding}`}>
-                      Highest winstreak:
+                      Highest winstreak{faction === GoOpponent.none ? " for black" : ""}:
                     </TableCell>
                     <TableCell className={`${classes.cellNone} ${classes.cellBottomPadding}`}>
                       {data.highestWinStreak}
@@ -111,9 +115,8 @@ export const GoHistoryPage = (): React.ReactElement => {
                   <Tooltip
                     title={
                       <>
-                        Win streaks against a faction will give you +1 favor to that faction <br />
-                        at certain numbers of wins (up to a max of {getMaxFavor()} favor), <br />
-                        if you are currently a member of that faction
+                        Two wins in a row against a faction will give you +1 favor to that faction <br />
+                        (up to a max of {getMaxFavor()} favor), if you are a member of that faction <br />
                       </>
                     }
                   >

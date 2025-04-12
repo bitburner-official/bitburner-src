@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 import { downArrowSymbol, getArrow, leftArrowSymbol, rightArrowSymbol, upArrowSymbol } from "../utils";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
@@ -135,7 +135,7 @@ export function MinesweeperGame(props: IMinigameProps): React.ReactElement {
 
             return (
               <Typography
-                key={`${item}${uniqueId()}`}
+                key={uniqueId()}
                 sx={{
                   color: color,
                   border: `2px solid ${item.current ? Settings.theme.infolight : Settings.theme.primary}`,
@@ -165,9 +165,9 @@ function fieldEquals(a: boolean[][], b: boolean[][]): boolean {
 }
 
 function generateEmptyField(difficulty: Difficulty): boolean[][] {
-  const field = [];
+  const field: boolean[][] = [];
   for (let i = 0; i < Math.round(difficulty.height); i++) {
-    field.push(new Array(Math.round(difficulty.width)).fill(false));
+    field.push(new Array<boolean>(Math.round(difficulty.width)).fill(false));
   }
   return field;
 }

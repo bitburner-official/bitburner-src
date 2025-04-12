@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 import { downArrowSymbol, upArrowSymbol } from "../utils";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
@@ -12,6 +12,7 @@ import { KeyHandler } from "./KeyHandler";
 
 interface Difficulty {
   [key: string]: number;
+
   timer: number;
   size: number;
 }
@@ -106,7 +107,7 @@ export function BribeGame(props: IMinigameProps): React.ReactElement {
   );
 }
 
-function shuffleArray(array: string[]): void {
+export function shuffleArray(array: unknown[]): void {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const temp = array[i];

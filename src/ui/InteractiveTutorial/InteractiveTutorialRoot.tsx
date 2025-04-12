@@ -25,6 +25,7 @@ import {
 } from "../../InteractiveTutorial";
 import { useRerender } from "../React/hooks";
 import { Settings } from "../../Settings/Settings";
+import { NsApiDocumentationLink } from "../React/NsApiDocumentationLink";
 
 interface IContent {
   content: React.ReactElement;
@@ -57,6 +58,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             <br />
             <br />
             This tutorial will show you the basics of the game. You may skip the tutorial at any time.
+            <br />
+            <br />
+            You can replay this tutorial by going to the Options tab and pressing "Reset tutorial".
             <br />
             <br />
             You can also collapse this panel to temporarily hide this tutorial.
@@ -142,6 +146,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           </Typography>
 
           <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
+          <Typography>
+            <br />( "ls" is short for "list" )
+          </Typography>
         </>
       ),
       canNext: false,
@@ -152,7 +159,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
           <Typography>
             {" "}
-            is a basic command that shows files on the computer. Right now, it shows that you have a program called{" "}
+            is a basic command that lists the files on the computer. Right now, it shows that you have a program called{" "}
             NUKE.exe on your computer. We'll get to what this does later. <br />
             <br />
             Using your home computer's terminal, you can connect to other machines throughout the world. Let's do that
@@ -276,7 +283,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     },
     [iTutorialSteps.TerminalHackingMechanics as number]: {
       content: (
-        <Typography>
+        <Typography component="div">
           You are now attempting to hack the server. Performing a hack takes time and only has a certain percentage
           chance of success. This time and success chance is determined by a variety of factors, including your hacking
           skill and the server's security level.
@@ -320,8 +327,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography classes={{ root: classes.textfield }}>{"[home /]> nano"}</Typography>
 
           <Typography>
-            Scripts must end with a script extension (.js, .jsx, .ts, .tsx, .script). Let's make a script now by
-            entering
+            Scripts must end with a script extension (.js, .jsx, .ts, .tsx). Let's make a script now by entering
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{`[home /]> nano ${tutorialScriptName}`}</Typography>
         </>
@@ -336,13 +342,14 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             into the text editor: <br />
           </Typography>
 
-          <Typography classes={{ root: classes.code }}>
+          <Typography component="div" classes={{ root: classes.code }}>
             {
               <CopyableText
-                value={`export async function main(ns) {
-	while(true) {
-		await ns.hack('n00dles');
-	}
+                value={`/** @param {NS} ns */
+export async function main(ns) {
+  while (true) {
+    await ns.hack("n00dles");
+  }
 }`}
               />
             }
@@ -350,6 +357,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography>
             For anyone with basic programming experience, this code should be straightforward. This script will
             continuously hack the n00dles server.
+            <br />
+            <br />
+            To access <NsApiDocumentationLink />, press the link at the bottom.
             <br />
             <br />
             To save and close the script editor, press the button at the bottom.
@@ -588,7 +598,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
         <br />
         <br />
         <Button onClick={iTutorialEnd}>
-          {step !== iTutorialSteps.DocumentationPageInfo ? "SKIP TUTORIAL" : "FINISH TUTORIAL"}
+          {step !== iTutorialSteps.DocumentationPageInfo ? "Exit Tutorial" : "Finish Tutorial"}
         </Button>
       </Paper>
     </>

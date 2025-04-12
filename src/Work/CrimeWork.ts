@@ -33,6 +33,12 @@ export class CrimeWork extends Work {
   }
 
   process(cycles = 1): boolean {
+    /**
+     * Crime work is processed in a loop. If the number of cycles is too large, the loop blocks the game engine for too
+     * long. 12960000 is the number of cycles in 30 days (5 * 3600 * 24 * 30). On a very old machine, the loop takes
+     * ~800-1000 ms to process the "shoplift" crime which is the fastest crime (faster crime = more iteration).
+     */
+    cycles = Math.min(cycles, 12960000);
     this.cyclesWorked += cycles;
     const time = Object.values(Crimes).find((c) => c.type === this.crimeType)?.time ?? 0;
     this.unitCompleted += CONSTANTS.MilliPerCycle * cycles;

@@ -382,7 +382,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       `Augmentation storage facilities. We figured out that ${FactionName.TheDarkArmy} was behind the heist, and didn't think ` +
       "any more of it. However, we've just discovered that several known MK-VI Synthoids were part of that break-in group.\n\n" +
       "We cannot have Synthoids upgrading their already-enhanced abilities with Augmentations. Your task is to hunt " +
-      `down associated ${FactionName.TheDarkArmy} members and eliminate them.`,
+      `down associated members of ${FactionName.TheDarkArmy} and eliminate them.`,
   }),
   [BladeburnerBlackOpName.OperationWallace]: new BlackOperation({
     name: BladeburnerBlackOpName.OperationWallace,
@@ -419,7 +419,7 @@ export const BlackOperations: Record<BladeburnerBlackOpName, BlackOperation> = {
       `cities, most notably ${CityName.Aevum}. We suspect that Synthoids have infiltrated the ranks of these criminal ` +
       "factions and are trying to stage another Synthoid uprising.\n\n" +
       "The best way to deal with this is to prevent it before it even happens. The goal of " +
-      `${BladeburnerBlackOpName.OperationWallace} is to destroy ${FactionName.TheDarkArmy} and Syndicate factions in ` +
+      `${BladeburnerBlackOpName.OperationWallace} is to destroy ${FactionName.TheDarkArmy} and ${FactionName.TheSyndicate} factions in ` +
       `${CityName.Aevum} immediately. Leave no survivors.`,
   }),
   [BladeburnerBlackOpName.OperationShoulderOfOrion]: new BlackOperation({

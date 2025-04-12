@@ -2,7 +2,7 @@ import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions"
 import { AugmentationName, ToastVariant } from "@enums";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { initSourceFiles } from "./SourceFile/SourceFiles";
-import { generateRandomContract } from "./CodingContractGenerator";
+import { tryGeneratingRandomContract } from "./CodingContract/ContractGenerator";
 import { CONSTANTS } from "./Constants";
 import { Factions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
@@ -47,6 +47,7 @@ import { SaveData } from "./types";
 import { Go } from "./Go/Go";
 import { EventEmitter } from "./utils/EventEmitter";
 import { Companies } from "./Company/Companies";
+import { resetGoPromises } from "./Go/boardAnalysis/goAI";
 
 declare global {
   // This property is only available in the dev build
@@ -61,15 +62,6 @@ declare global {
       loadGame: typeof loadGame;
     };
   };
-}
-
-// Only show warning if the time diff is greater than this value.
-const thresholdOfTimeDiffForShowingWarningAboutSystemClock = CONSTANTS.MillisecondsPerFiveMinutes;
-
-function showWarningAboutSystemClock(timeDiff: number) {
-  AlertEvents.emit(
-    `Warning: The system clock moved backward: ${convertTimeMsToTimeElapsedString(Math.abs(timeDiff))}.`,
-  );
 }
 
 export const GameCycleEvents = new EventEmitter<[]>();
@@ -169,7 +161,7 @@ const Engine: {
     updateActiveScriptsDisplay: 5,
     createProgramNotifications: 10,
     augmentationsNotifications: 10,
-    checkFactionInvitations: 100,
+    checkFactionInvitations: 10,
     passiveFactionGrowth: 5,
     messages: 150,
     mechanicProcess: 5, // Process Bladeburner
@@ -179,7 +171,10 @@ const Engine: {
 
   decrementAllCounters: function (numCycles = 1) {
     for (const [counterName, counter] of Object.entries(Engine.Counters)) {
-      if (counter === undefined) throw new Error("counter should not be undefined");
+      if (counter === undefined) {
+        exceptionAlert(new Error(`counter value is undefined. counterName: ${counterName}.`), true);
+        continue;
+      }
       Engine.Counters[counterName] = counter - numCycles;
     }
   },
@@ -194,7 +189,7 @@ const Engine: {
       for (const invitedFaction of invitedFactions) {
         inviteToFaction(invitedFaction);
       }
-      Engine.Counters.checkFactionInvitations = 100;
+      Engine.Counters.checkFactionInvitations = 10;
     }
 
     if (Engine.Counters.passiveFactionGrowth <= 0) {
@@ -216,17 +211,14 @@ const Engine: {
         try {
           Player.bladeburner.process();
         } catch (e) {
-          exceptionAlert("Exception caught in Bladeburner.process(): " + e);
+          exceptionAlert(e, true);
         }
       }
       Engine.Counters.mechanicProcess = 5;
     }
 
     if (Engine.Counters.contractGeneration <= 0) {
-      // X% chance of a contract being generated
-      if (Math.random() <= 0.25) {
-        generateRandomContract();
-      }
+      tryGeneratingRandomContract(1);
       Engine.Counters.contractGeneration = 3000;
     }
 
@@ -249,7 +241,7 @@ const Engine: {
         Engine.Counters.autoSaveCounter = 60 * 5; // Let's check back in a bit
       } else {
         Engine.Counters.autoSaveCounter = Settings.AutosaveInterval * 5;
-        saveObject.saveGame(!Settings.SuppressSavedGameToast);
+        saveObject.saveGame(!Settings.SuppressSavedGameToast).catch((error) => console.error(error));
       }
     }
   },
@@ -277,38 +269,19 @@ const Engine: {
       const lastUpdate = Player.lastUpdate;
       let timeOffline = Engine._lastUpdate - lastUpdate;
       if (timeOffline < 0) {
-        if (Math.abs(timeOffline) > thresholdOfTimeDiffForShowingWarningAboutSystemClock) {
-          const timeDiff = timeOffline;
-          setTimeout(() => {
-            showWarningAboutSystemClock(timeDiff);
-          }, 250);
-        }
         timeOffline = 0;
       }
       const numCyclesOffline = Math.floor(timeOffline / CONSTANTS.MilliPerCycle);
 
-      // Calculate the number of chances for a contract the player had whilst offline
-      const contractChancesWhileOffline = Math.floor(timeOffline / (1000 * 60 * 10));
-
-      // Generate coding contracts
-      let numContracts = 0;
-      if (contractChancesWhileOffline > 100) {
-        numContracts += Math.floor(contractChancesWhileOffline * 0.25);
-      }
-      if (contractChancesWhileOffline > 0 && contractChancesWhileOffline <= 100) {
-        for (let i = 0; i < contractChancesWhileOffline; ++i) {
-          if (Math.random() <= 0.25) {
-            numContracts++;
-          }
-        }
-      }
-      for (let i = 0; i < numContracts; i++) {
-        generateRandomContract();
-      }
+      // Generate bonus CCTs
+      tryGeneratingRandomContract(timeOffline / CONSTANTS.MillisecondsPerTenMinutes);
 
       let offlineReputation = 0;
-      const offlineHackingIncome =
+      let offlineHackingIncome =
         (Player.moneySourceA.hacking / Player.playtimeSinceLastAug) * timeOffline * CONSTANTS.OfflineHackingIncome;
+      if (!Number.isFinite(offlineHackingIncome)) {
+        offlineHackingIncome = 0;
+      }
       Player.gainMoney(offlineHackingIncome, "hacking");
       // Process offline progress
 
@@ -416,13 +389,15 @@ const Engine: {
       // No save found, start new game
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
-      Engine.start(); // Run main game loop and Scripts loop
       Player.init();
       initForeignServers(Player.getHomeComputer());
       Player.reapplyAllAugmentations();
+      resetGoPromises();
 
       // Start interactive tutorial
       iTutorialStart();
+
+      Engine.start(); // Run main game loop and Scripts loop
     }
 
     // Expose internal objects/functions in the dev build
@@ -449,9 +424,6 @@ const Engine: {
     const _thisUpdate = new Date().getTime();
     let diff = _thisUpdate - Engine._lastUpdate;
     if (diff < 0) {
-      if (Math.abs(diff) > thresholdOfTimeDiffForShowingWarningAboutSystemClock) {
-        showWarningAboutSystemClock(diff);
-      }
       diff = 0;
       Engine._lastUpdate = _thisUpdate;
       Player.lastUpdate = _thisUpdate;

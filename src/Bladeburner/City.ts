@@ -44,13 +44,17 @@ export class City {
 
   /** @param {number} p - the percentage change, not the multiplier. e.g. pass in p = 5 for 5% */
   improvePopulationEstimateByPercentage(p: number, skillMult = 1): void {
-    p = clampNumber((p * skillMult) / 100);
-    const diff = Math.abs(this.popEst - this.pop);
-    // Change would overshoot actual population -> make estimate accurate
-    if (diff <= p * this.popEst) this.popEst = this.pop;
-    // Otherwise make estimate closer by n
-    else if (this.popEst < this.pop) this.popEst = clampNumber(this.popEst * (1 + p), 1);
-    else this.popEst = clampNumber(this.popEst * (1 - p));
+    const percentage = clampNumber(p * skillMult);
+    const m = percentage / 100;
+    if (this.popEst < this.pop) {
+      // We use an additive factor so we don't get "stuck" at 0.
+      const popGrown = (this.popEst + percentage) * (1 + m);
+      this.popEst = clampNumber(popGrown, 0, this.pop);
+    } else {
+      // We use an subtractive factor so we can reach 0 in finite steps.
+      const popShrunk = (this.popEst - percentage) / (1 + m);
+      this.popEst = clampNumber(popShrunk, this.pop);
+    }
   }
 
   /**

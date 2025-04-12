@@ -9,6 +9,8 @@ import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { prestigeSourceFile } from "./Prestige";
 import { getDefaultBitNodeOptions, setBitNodeOptions } from "./BitNode/BitNodeUtils";
+import { prestigeWorkerScripts } from "./NetscriptWorker";
+import { exceptionAlert } from "./utils/helpers/exceptionAlert";
 
 function giveSourceFile(bitNodeNumber: number): void {
   const sourceFileKey = "SourceFile" + bitNodeNumber.toString();
@@ -56,6 +58,9 @@ export function enterBitNode(
   newBitNode: number,
   bitNodeOptions: BitNodeOptions,
 ): void {
+  // We must kill all scripts before setting up BitNode data and performing the prestige.
+  prestigeWorkerScripts();
+
   if (!isFlume) {
     giveSourceFile(destroyedBitNode);
   } else if (Player.sourceFileLvl(5) === 0 && newBitNode !== 5) {
@@ -72,14 +77,7 @@ export function enterBitNode(
   try {
     setBitNodeOptions(bitNodeOptions);
   } catch (error) {
-    dialogBoxCreate(
-      <>
-        Invalid BitNode options. This is a bug. Please report it to developers.
-        <br />
-        <br />
-        {error instanceof Error ? error.stack : String(error)}
-      </>,
-    );
+    exceptionAlert(error);
     // Use default options
     setBitNodeOptions(getDefaultBitNodeOptions());
   }

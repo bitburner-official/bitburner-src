@@ -5,7 +5,7 @@ import { getTabCompletionPossibilities } from "../../../src/Terminal/getTabCompl
 import { Server } from "../../../src/Server/Server";
 import { AddToAllServers, prestigeAllServers } from "../../../src/Server/AllServers";
 import { LocationName } from "../../../src/Enums";
-import { CodingContract } from "../../../src/CodingContracts";
+import { CodingContract } from "../../../src/CodingContract/Contract";
 import { asFilePath } from "../../../src/Paths/FilePath";
 import { Directory, isAbsolutePath, isDirectoryPath, root } from "../../../src/Paths/Directory";
 import { hasTextExtension } from "../../../src/Paths/TextFilePath";
