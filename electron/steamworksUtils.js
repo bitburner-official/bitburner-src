@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const steamworks = require("./steamworks");
+const steamworks = require("@catloversg/steamworks.js");
 const log = require("electron-log");
 
-/** @typedef {typeof import('./steamworksClient.d')} Client */
-/** @type {undefined | Client} */
 let steamworksClient;
 try {
   // 1812820 is our Steam App ID.
