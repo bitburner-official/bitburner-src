@@ -7,7 +7,6 @@ import { Warehouse } from "../Corporation/Warehouse";
 import { Division } from "../Corporation/Division";
 import { Corporation, CorporationPromise } from "../Corporation/Corporation";
 import { omit } from "lodash";
-import { setDeprecatedProperties } from "../utils/DeprecationHelper";
 import {
   Corporation as NSCorporation,
   Division as NSDivision,
@@ -711,13 +710,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         divisions: [...corporation.divisions.keys()],
         valuation: corporation.valuation,
       };
-      setDeprecatedProperties(data, {
-        state: {
-          identifier: "ns.corporation.getCorporation().state",
-          message: "Use ns.corporation.getCorporation().nextState instead.",
-          value: corporation.state.nextName,
-        },
-      });
       return data;
     },
     hasUnlock: (ctx) => (_unlockName) => {

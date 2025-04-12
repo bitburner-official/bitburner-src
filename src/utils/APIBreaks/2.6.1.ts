@@ -2,7 +2,7 @@ import { APIBreakInfo } from "./APIBreak";
 
 export const breakInfos261: APIBreakInfo[] = [
   {
-    brokenFunctions: ["ns.bladeburner.getCurrentAction"],
+    brokenFunctions: [{ name: "ns.bladeburner.getCurrentAction" }],
     info:
       "ns.bladeburner.getCurrentAction:\n" +
       'When not performing a bladeburner action, previously returned {type: "Idle", name: ""}, now returns null.\n' +
@@ -12,9 +12,9 @@ export const breakInfos261: APIBreakInfo[] = [
   },
   {
     brokenFunctions: [
-      "ns.bladeburner.getActionCountRemaining",
-      "ns.bladeburner.getActionEstimatedSuccessChance",
-      "ns.bladeburner.getActionTime",
+      { name: "ns.bladeburner.getActionCountRemaining" },
+      { name: "ns.bladeburner.getActionEstimatedSuccessChance" },
+      { name: "ns.bladeburner.getActionTime" },
     ],
     info:
       "ns.bladeburner.getActionCountRemaining:\n" +

@@ -30,6 +30,7 @@ import { exportMaterial } from "../Corporation/Actions";
 import { getGoSave, loadGo } from "../Go/SaveLoad";
 import { showAPIBreaks } from "./APIBreaks/APIBreak";
 import { breakInfos261 } from "./APIBreaks/2.6.1";
+import { breakInfos300 } from "./APIBreaks/3.0.0";
 
 /** Function for performing a series of defined replacements. See 0.58.0 for usage */
 function convert(code: string, changes: [RegExp, string][]): string {
@@ -544,5 +545,8 @@ Error: ${e}`,
       }
     }
     if (found) Terminal.error("Filenames with whitespace found and corrected, see console for details.");
+  }
+  if (ver < 44) {
+    showAPIBreaks("3.0.0", ...breakInfos300);
   }
 }

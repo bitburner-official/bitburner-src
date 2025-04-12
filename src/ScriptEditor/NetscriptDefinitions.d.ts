@@ -7990,14 +7990,6 @@ export interface NS {
   getScriptExpGain(script: string, host: string, ...args: ScriptArg[]): number;
 
   /**
-   * Returns the amount of time in milliseconds that have passed since you last installed Augmentations.
-   *
-   * @remarks RAM cost: 0.05 GB
-   * @returns Time in milliseconds that have passed since you last installed Augmentations.
-   */
-  getTimeSinceLastAug(): number;
-
-  /**
    * Format a string.
    *
    * @remarks
@@ -8083,29 +8075,6 @@ export interface NS {
    * @returns Formatted percentage.
    */
   formatPercent(n: number, fractionalDigits?: number, suffixStart?: number): string;
-
-  /**
-   * Format a number using the numeral library. This function is deprecated and will be removed in a later version.
-   *
-   * @deprecated
-   *
-   * Use alternatives:
-   *
-   * - NS APIs: ns.formatNumber, ns.formatRam, ns.formatPercent
-   *
-   * - JS built-in objects/functions: Intl.NumberFormat, Intl.PluralRules, Intl.Locale, etc.
-   *
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Converts a number into a string with the specified format options.
-   * See http://numeraljs.com/#format for documentation on format strings supported.
-   *
-   * @param n - Number to format.
-   * @param format - Formatting options. See http://numeraljs.com/#format for valid formats.
-   * @returns Formatted number.
-   */
-  nFormat(n: number, format: string): string;
 
   /**
    * Format time to a readable string.

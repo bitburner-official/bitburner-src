@@ -10,7 +10,8 @@ import { Terminal } from "../../Terminal";
 import { pluralize } from "../I18nUtils";
 
 // Temporary until fixing alerts manager to store alerts outside of react scope
-const dialogBoxCreate = (text: string) => setTimeout(() => dialogBoxCreateOriginal(text), 2000);
+const dialogBoxCreate = (text: string) =>
+  setTimeout(() => dialogBoxCreateOriginal(text, { html: false, canBeDismissedEasily: false }), 2000);
 
 /** For a single server, map of script filepath to an array of line numbers where impacted functions were detected */
 type ScriptImpactMap = Map<ScriptFilePath, number[]>;
@@ -20,31 +21,49 @@ type ImpactMap = Map<string, ScriptImpactMap>;
 
 export interface APIBreakInfo {
   /** The API functions impacted by the API break */
-  brokenFunctions: string[];
+  brokenFunctions: {
+    name: string;
+    replaceValue?: string;
+  }[];
   /** Info that should be shown to the player, alongside the list of impacted scripts */
   info: string;
 }
 
-function getImpactedLines(script: Script, brokenFunctions: string[]): number[] | null {
+function detectImpactAndMigrateLines(
+  script: Script,
+  brokenFunctions: APIBreakInfo["brokenFunctions"],
+): number[] | null {
   const impactedLines: number[] = [];
-  script.content.split("\n").forEach((line, i) => {
+  const lines = script.content.split("\n");
+  for (let i = 0; i < lines.length; ++i) {
     for (const brokenFunction of brokenFunctions) {
-      if (line.includes(brokenFunction)) return impactedLines.push(i + 1);
+      if (!lines[i].includes(brokenFunction.name)) {
+        continue;
+      }
+      impactedLines.push(i + 1);
+      if (brokenFunction.replaceValue) {
+        lines[i] = lines[i].replaceAll(brokenFunction.name, brokenFunction.replaceValue);
+      }
     }
-  });
+  }
+  script.content = lines.join("\n");
   return impactedLines.length ? impactedLines : null;
 }
 
-/** Returns a map keyed by all ser */
-function getImpactMap(brokenFunctions: string[]): ImpactMap | null {
+/** Returns a map keyed by hostname */
+function detectImpactAndMigrate(brokenFunctions: APIBreakInfo["brokenFunctions"]): ImpactMap | null {
   const returnMap = new Map<string, ScriptImpactMap>();
   for (const server of GetAllServers()) {
     const impactedScripts = new Map<ScriptFilePath, number[]>();
     for (const [filename, script] of server.scripts) {
-      const impactedLines = getImpactedLines(script, brokenFunctions);
-      if (impactedLines) impactedScripts.set(filename, impactedLines);
+      const impactedLines = detectImpactAndMigrateLines(script, brokenFunctions);
+      if (impactedLines) {
+        impactedScripts.set(filename, impactedLines);
+      }
     }
-    if (impactedScripts.size) returnMap.set(server.hostname, impactedScripts);
+    if (impactedScripts.size) {
+      returnMap.set(server.hostname, impactedScripts);
+    }
   }
   return returnMap.size ? returnMap : null;
 }
@@ -53,11 +72,15 @@ function getImpactMap(brokenFunctions: string[]): ImpactMap | null {
 export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
   const details = [];
   for (const breakInfo of breakInfos) {
-    const impactMap = getImpactMap(breakInfo.brokenFunctions);
-    if (!impactMap) continue;
+    const impactMap = detectImpactAndMigrate(breakInfo.brokenFunctions);
+    if (!impactMap) {
+      continue;
+    }
     details.push(
       breakInfo.info +
-        `\n\nUsage of the following functions may have been affected:\n${breakInfo.brokenFunctions.join("\n")}\n\n` +
+        `\n\nUsage of the following functions may have been affected:\n${breakInfo.brokenFunctions
+          .map((func) => func.name)
+          .join("\n")}\n\n` +
         [...impactMap]
           .map(
             ([hostname, scriptImpactMap]) =>
@@ -74,9 +97,13 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
           .join("\n\n"),
     );
   }
-  if (!details.length) return;
+  if (!details.length) {
+    return;
+  }
   const textFileName = resolveTextFilePath(`APIBreakInfo-${version}.txt`);
-  if (!textFileName) throw new Error("Version string created an invalid API break file name");
+  if (!textFileName) {
+    throw new Error("Version string created an invalid API break file name");
+  }
   Player.getHomeComputer().writeToTextFile(
     textFileName,
     `API BREAK INFO FOR ${version}\n\n${details.join("\n\n\n\n")}`,
