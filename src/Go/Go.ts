@@ -5,7 +5,10 @@ import { getRecordKeys, PartialRecord } from "../Types/Record";
 import { resetGoPromises } from "./boardAnalysis/goAI";
 import { getNewBoardState } from "./boardState/boardState";
 import { EventEmitter } from "../utils/EventEmitter";
-import { newOpponentStats } from "./Constants";
+
+export const getEmptyHighlightedPoints = (size: number = 7) => {
+  return Array.from({ length: size }, () => Array.from({ length: size }, () => null));
+};
 
 export class GoObject {
   // Todo: Make previous game a slimmer interface
@@ -16,7 +19,17 @@ export class GoObject {
 
   prestigeAugmentation() {
     for (const opponent of getRecordKeys(Go.stats)) {
-      Go.stats[opponent] = newOpponentStats();
+      const stats = Go.stats[opponent];
+      if (!stats) {
+        continue;
+      }
+      stats.wins = 0;
+      stats.losses = 0;
+      stats.nodes = 0;
+      stats.nodePower = 0;
+      stats.winStreak = 0;
+      stats.oldWinStreak = 0;
+      stats.highestWinStreak = 0;
     }
   }
   prestigeSourceFile() {

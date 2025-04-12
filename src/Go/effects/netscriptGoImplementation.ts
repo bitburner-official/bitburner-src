@@ -12,6 +12,7 @@ import {
 } from "../boardState/boardState";
 import { getNextTurn, handleNextTurn, resetGoPromises } from "../boardAnalysis/goAI";
 import {
+  clearAllPointHighlights,
   evaluateIfMoveIsValid,
   getControlledSpace,
   getPreviousMove,
@@ -357,6 +358,7 @@ export function resetBoardState(
 
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
   resetGoPromises();
+  clearAllPointHighlights(Go.currentGame);
   logger(`New game started: ${opponent}, ${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);
 }

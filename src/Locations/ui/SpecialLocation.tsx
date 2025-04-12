@@ -72,7 +72,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     }
     if (
       Player.activeSourceFileLvl(7) >= 3 &&
-      canAcceptStaneksGift() &&
+      canAcceptStaneksGift().success &&
       !Player.hasAugmentation(AugmentationName.StaneksGift1)
     ) {
       PromptEvent.emit({

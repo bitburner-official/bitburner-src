@@ -16,7 +16,7 @@ getServerBaseSecurityLevel(host: string): number;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | Host of target server. |
+|  host | string | Hostname/IP of target server. |
 
 **Returns:**
 

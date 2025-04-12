@@ -10,10 +10,18 @@ type Point =
   | "filledPoint"
   | "emptyPoint"
   | "broken"
+  | "cyberStyle"
   | "tradStone"
   | "priorStoneTrad";
-type Structure = "coordinates" | "liberty" | "northLiberty" | "eastLiberty" | "westLiberty" | "southLiberty";
-type Highlight = "hover" | "valid" | "priorPoint";
+type Structure =
+  | "coordinates"
+  | "highlightText"
+  | "liberty"
+  | "northLiberty"
+  | "eastLiberty"
+  | "westLiberty"
+  | "southLiberty";
+type Highlight = "hover" | "valid" | "priorPoint" | "hack" | "hp" | "money" | "int" | "cha";
 
 const fadeLoop = keyframes`
     0% {
@@ -29,30 +37,55 @@ export const pointStyle = makeStyles<unknown, Size | Point | Structure | Highlig
     hover: {},
     valid: {},
     priorPoint: {},
+    cyberStyle: {},
+    highlightText: {},
+    hack: {},
+    hp: {},
+    money: {},
+    int: {},
+    cha: {},
     point: {
       position: "relative",
       height: "100%",
       width: "100%",
 
-      [`&.${classes.hover}.${classes.valid}:hover .${classes.innerPoint}`]: {
+      [`&.${classes.hover}.${classes.valid}.${classes.cyberStyle}:hover .${classes.innerPoint}`]: {
         outlineColor: theme.colors.white,
       },
-      [`&.${classes.hover}.${classes.priorPoint} .${classes.innerPoint}`]: {
+      [`&.${classes.hover}.${classes.cyberStyle}.${classes.priorPoint} .${classes.innerPoint}`]: {
         outlineColor: theme.colors.white,
       },
-      [`&.${classes.hover}.${classes.priorPoint} .${classes.priorStoneTrad}.${classes.blackPoint}`]: {
-        outlineColor: theme.colors.white,
-        display: "block",
-      },
-      [`&.${classes.hover}.${classes.priorPoint} .${classes.priorStoneTrad}.${classes.whitePoint}`]: {
-        outlineColor: theme.colors.black,
-        display: "block",
-      },
+      [`&.${classes.hover}.${classes.cyberStyle}.${classes.priorPoint} .${classes.priorStoneTrad}.${classes.blackPoint}`]:
+        {
+          outlineColor: theme.colors.white,
+          display: "block",
+        },
+      [`&.${classes.hover}.${classes.cyberStyle}.${classes.priorPoint} .${classes.priorStoneTrad}.${classes.whitePoint}`]:
+        {
+          outlineColor: theme.colors.black,
+          display: "block",
+        },
       [`&.${classes.hover}:hover .${classes.coordinates}`]: {
         display: "block",
       },
       [`&:hover .${classes.broken}`]: {
         opacity: "0.4",
+      },
+
+      [`&.${classes.hack} .${classes.innerPoint}`]: {
+        outlineColor: theme.colors.hack,
+      },
+      [`&.${classes.hp} .${classes.innerPoint}`]: {
+        outlineColor: theme.colors.hp,
+      },
+      [`&.${classes.money} .${classes.innerPoint}`]: {
+        outlineColor: theme.colors.money,
+      },
+      [`&.${classes.int} .${classes.innerPoint}`]: {
+        outlineColor: theme.colors.int,
+      },
+      [`&.${classes.cha} .${classes.innerPoint}`]: {
+        outlineColor: theme.colors.cha,
       },
     },
     broken: {
@@ -82,7 +115,10 @@ export const pointStyle = makeStyles<unknown, Size | Point | Structure | Highlig
     },
     traditional: {
       [`& .${classes.innerPoint}`]: {
-        display: "none",
+        outlineColor: "transparent",
+        [`& .${classes.emptyPoint}`]: {
+          display: "none",
+        },
       },
       [`& .${classes.broken}`]: {
         backgroundImage: "none",
@@ -118,7 +154,7 @@ export const pointStyle = makeStyles<unknown, Size | Point | Structure | Highlig
           },
         },
         [`& .${classes.coordinates}`]: {
-          fontSize: "0.9vw",
+          fontSize: "0.7vw",
         },
       },
       [`&.${classes.thirteenByThirteen}`]: {
@@ -133,7 +169,7 @@ export const pointStyle = makeStyles<unknown, Size | Point | Structure | Highlig
           },
         },
         [`& .${classes.coordinates}`]: {
-          fontSize: "0.9vw",
+          fontSize: "0.7vw",
         },
       },
       [`&.${classes.nineByNine}`]: {
@@ -379,6 +415,9 @@ export const pointStyle = makeStyles<unknown, Size | Point | Structure | Highlig
       left: "8%",
       zIndex: "10",
       userSelect: "none",
+      [`&.${classes.highlightText}`]: {
+        display: "block",
+      },
     },
     priorStoneTrad: {
       display: "none",

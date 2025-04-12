@@ -308,15 +308,20 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     },
     joinBladeburnerDivision: (ctx) => () => {
       if (!canAccessBitNodeFeature(7) && !canAccessBitNodeFeature(6)) {
-        return false; //Does not have bitnode 6 or 7
-      } else if (Player.bitNodeOptions.disableBladeburner) {
+        helpers.log(ctx, () => "You do not have Source-File 6 or Source-File 7.");
+        return false;
+      }
+      if (Player.bitNodeOptions.disableBladeburner) {
+        helpers.log(ctx, () => "Bladeburner is disabled by advanced options.");
         return false;
       }
       if (currentNodeMults.BladeburnerRank === 0) {
-        return false; // Disabled in this bitnode
+        helpers.log(ctx, () => "Bladeburner is disabled in this BitNode.");
+        return false;
       }
+      // Already member
       if (Player.bladeburner) {
-        return true; // Already member
+        return true;
       }
       if (
         Player.skills.strength < 100 ||
@@ -324,11 +329,15 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         Player.skills.dexterity < 100 ||
         Player.skills.agility < 100
       ) {
-        helpers.log(ctx, () => "You do not meet the requirements for joining the Bladeburner division");
+        helpers.log(
+          ctx,
+          () =>
+            "You do not meet the requirements for joining the Bladeburner division. All combat stats must be at least level 100.",
+        );
         return false;
       }
       Player.startBladeburner();
-      helpers.log(ctx, () => "You have been accepted into the Bladeburner division");
+      helpers.log(ctx, () => "You have been accepted into the Bladeburner division.");
 
       return true;
     },

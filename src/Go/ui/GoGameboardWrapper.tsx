@@ -9,7 +9,12 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { getNewBoardState, getStateCopy, makeMove, passTurn, updateCaptures } from "../boardState/boardState";
 import { bitverseArt, weiArt } from "../boardState/asciiArt";
 import { getScore, resetWinstreak } from "../boardAnalysis/scoring";
-import { boardFromBoardString, evaluateIfMoveIsValid, getAllValidMoves } from "../boardAnalysis/boardAnalysis";
+import {
+  boardFromBoardString,
+  clearAllPointHighlights,
+  evaluateIfMoveIsValid,
+  getAllValidMoves,
+} from "../boardAnalysis/boardAnalysis";
 import { useRerender } from "../../ui/React/hooks";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { boardStyles } from "../boardState/goStyles";
@@ -135,6 +140,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
     Go.currentGame = getNewBoardState(newBoardSize, newOpponent, true);
     resetGoPromises();
+    clearAllPointHighlights(Go.currentGame);
   }
 
   function getPriorMove() {

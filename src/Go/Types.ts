@@ -55,6 +55,7 @@ export type BoardState = {
   cheatCount: number;
   cheatCountForWhite: number;
   komiOverride: number | null;
+  highlightedPoints: (PointHighlight | null)[][];
 };
 
 export type PointState = {
@@ -108,4 +109,9 @@ export type SimpleOpponentStats = {
   favor: number;
   bonusPercent: number;
   bonusDescription: string;
+};
+
+export type PointHighlight = {
+  color: string;
+  text: string;
 };

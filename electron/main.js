@@ -20,7 +20,6 @@ app.on("window-all-closed", () => {
 });
 
 require("./steamworksUtils");
-const api = require("./api-server");
 const gameWindow = require("./gameWindow");
 const achievements = require("./achievements");
 const utils = require("./utils");
@@ -46,9 +45,6 @@ function setStopProcessHandler(window) {
 
     // First we clear the achievement timer
     achievements.disableAchievementsInterval(window);
-
-    // Shutdown the http server
-    api.disable();
 
     // Trigger debounced saves right now before closing
     try {

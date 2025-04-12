@@ -41,30 +41,6 @@ initGameEnvironment();
 
 test.each([
   {
-    name: "NS1 test /w import",
-    expected: ["false home 8", "Script finished running"],
-    scripts: [
-      {
-        name: "import.script",
-        code: `
-        export function getInfo() {
-          return stock.has4SData();
-        }
-      `,
-      },
-      {
-        name: "simple_test.script",
-        code: `
-        import { getInfo } from "import.script";
-
-        var access = getInfo();
-        var server = getServer();
-        printf("%s %s %d", access, server.hostname, server.maxRam);
-      `,
-      },
-    ],
-  },
-  {
     name: "NS2 test /w import",
     expected: ["false home 8", "Script finished running"],
     scripts: [

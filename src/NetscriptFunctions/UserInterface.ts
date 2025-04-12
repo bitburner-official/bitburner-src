@@ -15,8 +15,8 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
   return {
     openTail:
       (ctx) =>
-      (scriptID, hostname, ...scriptArgs) => {
-        const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
+      (scriptID, host, ...scriptArgs) => {
+        const ident = helpers.scriptIdentifier(ctx, scriptID, host, scriptArgs);
         const runningScriptObj = helpers.getRunningScript(ctx, ident);
         if (runningScriptObj == null) {
           helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
@@ -89,8 +89,8 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
 
     setTailFontSize:
       (ctx) =>
-      (_pixel, scriptID, hostname, ...scriptArgs) => {
-        const ident = helpers.scriptIdentifier(ctx, scriptID, hostname, scriptArgs);
+      (_pixel, scriptID, host, ...scriptArgs) => {
+        const ident = helpers.scriptIdentifier(ctx, scriptID, host, scriptArgs);
         const runningScriptObj = helpers.getRunningScript(ctx, ident);
         if (runningScriptObj == null) {
           helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));

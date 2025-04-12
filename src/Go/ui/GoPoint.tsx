@@ -7,6 +7,7 @@ import { columnIndexes } from "../Constants";
 import { findNeighbors } from "../boardState/boardState";
 import { boardStyles, pointStyle } from "../boardState/goStyles";
 import { findAdjacentLibertiesAndAlliesForPoint, getColorOnBoardString } from "../boardAnalysis/boardAnalysis";
+import { PointHighlight } from "../Types";
 
 interface GoPointProps {
   state: BoardState;
@@ -15,11 +16,29 @@ interface GoPointProps {
   traditional: boolean;
   hover: boolean;
   valid: boolean;
-  emptyPointOwner: GoColor;
+  emptyPointOwner: GoColor | undefined;
+  pointHighlight: PointHighlight | null;
 }
 
-export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwner }: GoPointProps): React.ReactElement {
+export function GoPoint({
+  state,
+  x,
+  y,
+  traditional,
+  hover,
+  valid,
+  emptyPointOwner,
+  pointHighlight,
+}: GoPointProps): React.ReactElement {
   const { classes } = pointStyle({});
+  const colorClasses = {
+    hack: classes.hack,
+    hp: classes.hp,
+    money: classes.money,
+    int: classes.int,
+    cha: classes.cha,
+    none: "none",
+  };
 
   const currentPoint = state.board[x]?.[y];
   const player = currentPoint?.color;
@@ -51,9 +70,16 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
       ? classes.libertyBlack
       : "";
 
-  const mainClassName = `${classes.point} ${sizeClass} ${traditional ? classes.traditional : ""} ${
+  const highlightClass: string = pointHighlight?.color
+    ? colorClasses[pointHighlight.color as keyof typeof colorClasses] ?? ""
+    : "";
+  const rawColorStyle = !highlightClass && pointHighlight?.color ? `${pointHighlight.color}` : "";
+  const outlineWidth = rawColorStyle ? "2px" : "1px";
+  const highlightText = pointHighlight?.text ?? "";
+
+  const mainClassName = `${classes.point} ${sizeClass} ${traditional ? classes.traditional : classes.cyberStyle} ${
     hover ? classes.hover : ""
-  } ${valid ? classes.valid : ""} ${isPriorMove ? classes.priorPoint : ""}
+  } ${valid ? classes.valid : ""} ${isPriorMove ? classes.priorPoint : ""} ${highlightClass}
       ${isInAtari ? classes.fadeLoopAnimation : ""}`;
 
   return (
@@ -64,18 +90,22 @@ export function GoPoint({ state, x, y, traditional, hover, valid, emptyPointOwne
           <div className={hasEastLiberty ? `${classes.eastLiberty} ${colorLiberty}` : classes.liberty}></div>
           <div className={hasSouthLiberty ? `${classes.southLiberty} ${colorLiberty}` : classes.liberty}></div>
           <div className={hasWestLiberty ? `${classes.westLiberty} ${colorLiberty}` : classes.liberty}></div>
-          <div className={`${classes.innerPoint} `}>
+          <div className={`${classes.innerPoint} `} style={{ outlineColor: rawColorStyle, outlineWidth: outlineWidth }}>
             <div
               className={`${pointClass} ${player !== GoColor.empty ? classes.filledPoint : emptyPointColorClass}`}
             ></div>
           </div>
           <div className={`${pointClass} ${classes.tradStone}`} />
           {traditional ? <div className={`${pointClass} ${classes.priorStoneTrad}`}></div> : ""}
-          <div className={classes.coordinates}>
-            {columnIndexes[x]}
-            {traditional ? "" : "."}
-            {y + 1}
-          </div>
+          {highlightText ? (
+            <div className={`${classes.highlightText} ${classes.coordinates}`}>{highlightText}</div>
+          ) : (
+            <div className={classes.coordinates}>
+              {columnIndexes[x]}
+              {traditional ? "" : "."}
+              {y + 1}
+            </div>
+          )}
         </>
       ) : (
         <>

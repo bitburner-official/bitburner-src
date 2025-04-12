@@ -283,7 +283,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     },
     [iTutorialSteps.TerminalHackingMechanics as number]: {
       content: (
-        <Typography>
+        <Typography component="div">
           You are now attempting to hack the server. Performing a hack takes time and only has a certain percentage
           chance of success. This time and success chance is determined by a variety of factors, including your hacking
           skill and the server's security level.
@@ -327,8 +327,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography classes={{ root: classes.textfield }}>{"[home /]> nano"}</Typography>
 
           <Typography>
-            Scripts must end with a script extension (.js, .jsx, .ts, .tsx, .script). Let's make a script now by
-            entering
+            Scripts must end with a script extension (.js, .jsx, .ts, .tsx). Let's make a script now by entering
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{`[home /]> nano ${tutorialScriptName}`}</Typography>
         </>
@@ -343,7 +342,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
             into the text editor: <br />
           </Typography>
 
-          <Typography classes={{ root: classes.code }}>
+          <Typography component="div" classes={{ root: classes.code }}>
             {
               <CopyableText
                 value={`/** @param {NS} ns */
