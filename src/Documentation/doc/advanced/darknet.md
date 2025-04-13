@@ -183,6 +183,8 @@ lab: join together multiple mazes?
 scp: add session details to docs
 exec: add session details to docs
 
+- ui methods for setting server description colors, icons etc?
+
 IP stuff for probe
 
 Catlover writeup: https://discord.com/channels/415207508303544321/1358930422607642845/1360131828756775033

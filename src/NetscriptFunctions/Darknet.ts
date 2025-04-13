@@ -288,7 +288,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       const examplePasswordResponse = checkPassword("?", server, 0);
       return {
         hostname: server.hostname,
-        ip: "??.?.?.?",
+        ip: server.ip,
         hasAdminRights: server.hasAdminRights,
         isConnectedTo: server.isConnectedTo,
         ramUsed: server.ramUsed,
