@@ -140,7 +140,7 @@ Design document and workspace
 
 - added isDarknetServer(): free test to see if the given hostname is a darknet server. Returns false if the server is not a darknet server or does not exist (does not throw errors)
 
-- added dnet.stasisLink(): adds or removes a stasis link from the current server. Makes the server connectable remotely (via connectToSession() with the correct password). Also prevents the server form moving or going offline. Does not prevent nearby servers from moving or going offline, though, so connections can still be lost
+- added dnet.stasisLink(): adds or removes a stasis link from the current server. Makes the server connectable remotely (via connectToSession() with the correct password). Also prevents the server form moving or going offline. Does not prevent nearby servers from moving or going offline, though, so connections can still be lost. Takes 30 seconds to apply or remove.
 
 - removed dnet.exec in favor of ns.exec. Exec itself does not need a password, but the target server requires a session with the current script (via authenticate or connectToSession with the right password), root access, and a direct connection or stasis link or backdoor.
 
@@ -173,6 +173,8 @@ Design document and workspace
 ## TODO:
 
 - b1tflumed: darkweb has wrong password?
+
+- long passwords are easier to snoop, because they stand out so much.
 
 ns.dnet.enums.XXX for status codes etc
 

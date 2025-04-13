@@ -51,13 +51,13 @@ export function ServerSummary({ server, enableAuth }: ServerSummaryProps): React
         ""
       )}
       <Tooltip title={<>Data files on server: {fileCount}</>}>
-        <Typography>
+        <Typography color={fileCount ? "primary" : "secondary"}>
           <SvgIcon component={Description} className={classes.paddingRight} />
           {fileCount}
         </Typography>
       </Tooltip>
       <Tooltip title={<>Running scripts on server: {runningScriptCount}</>}>
-        <Typography>
+        <Typography color={runningScriptCount ? "primary" : "secondary"}>
           <SvgIcon component={Terminal} className={classes.paddingRight} />
           {runningScriptCount}
         </Typography>
