@@ -4,7 +4,7 @@
 
 ## Darknet.packetCapture() method
 
-Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
+Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise. The target server must be directly connected to the server that the script is running on.
 
 **Signature:**
 

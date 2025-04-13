@@ -10,11 +10,13 @@ Response to an authentication attempt.  status - Status code of the response. 20
 
 ```typescript
 type PasswordResponse = {
-  status: number;
+  status: ResponseStatus;
   msg: string;
   passwordLength?: number;
-  passwordFormat?: string;
+  passwordFormat?: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode" | undefined;
   data?: string;
   modelId?: number;
 };
 ```
+**References:** [ResponseStatus](./bitburner.responsestatus.md)
+

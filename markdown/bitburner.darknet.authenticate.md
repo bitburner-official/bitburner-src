@@ -6,6 +6,10 @@
 
 Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected to the server that the script is running on.
 
+If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
+
+Response status types: "200 Success" - Authentication was successful. "401 Unauthorized" - Authentication failed. The password is incorrect. "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid. "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability. "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server. "418 I'm a teapot" - The server is a teapot and cannot brew coffee.
+
 **Signature:**
 
 ```typescript
@@ -27,5 +31,5 @@ a promise that resolves to a [PasswordResponse](./bitburner.passwordresponse.md)
 
 ## Remarks
 
-RAM cost: 2 GB
+RAM cost: 0.6 GB
 

@@ -4,12 +4,12 @@
 
 ## Darknet.getIp() method
 
-Get the IP address of a server. The target server has to be connected to the current server and have been authenticated.
+Get the IP address of a server. The target server has to have been authenticated.
 
 **Signature:**
 
 ```typescript
-getIp(host?: string, password?: string): string;
+getIp(host?: string): string;
 ```
 
 ## Parameters
@@ -17,9 +17,12 @@ getIp(host?: string, password?: string): string;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  host | string | _(Optional)_ The target's hostname. Optional for checking the IP of the current server |
-|  password | string | _(Optional)_ The target's password. Optional for checking the IP of the current server |
 
 **Returns:**
 
 string
+
+## Remarks
+
+RAM cost: 0.5 GB
 
