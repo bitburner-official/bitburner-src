@@ -4017,7 +4017,13 @@ export interface CodingContract {
   getContractTypes(): `${CodingContractName}`[];
 }
 
-type ResponseStatus = "200 Success" | "401 Unauthorized" | "404 Not Found" | "408 Request Timeout" | "301 Moved Permanently" | "418 I'm a teapot";
+type ResponseStatus =
+  | "200 Success"
+  | "401 Unauthorized"
+  | "404 Not Found"
+  | "408 Request Timeout"
+  | "301 Moved Permanently"
+  | "418 I'm a teapot";
 
 /**
  * Response to an authentication attempt.
@@ -4034,7 +4040,7 @@ type PasswordResponse = {
   status: ResponseStatus;
   msg: string;
   passwordLength?: number;
-  passwordFormat?: string;
+  passwordFormat?: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode" | undefined;
   data?: string;
   modelId?: number;
 };
@@ -4053,6 +4059,7 @@ type PasswordResponse = {
  * @property moneyAvailable - Amount of money available on the server.
  * @property moneyMax - Maximum amount of money on the server.
  * @property charismaLevel - Charisma level of the server.
+ * @property depth - Depth into the darknet of the server.
  * @property modelId - ID of the server model.
  */
 type DarknetServer = {
@@ -4070,6 +4077,7 @@ type DarknetServer = {
   passwordHintExample: string;
   passwordDataExample: string;
   charismaLevel: number;
+  depth: number;
   modelId: number;
 };
 
@@ -4084,14 +4092,48 @@ export interface Darknet {
    * Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected
    * to the server that the script is running on.
    *
+   * If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
+   *
+   * Response status types:
+   * "200 Success" - Authentication was successful.
+   * "401 Unauthorized" - Authentication failed. The password is incorrect.
+   * "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid.
+   * "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
+   * "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server.
+   * "418 I'm a teapot" - The server is a teapot and cannot brew coffee.
+   *
    * @remarks
-   * RAM cost: 2 GB
+   * RAM cost: 0.6 GB
    *
    * @param hostname - name of the target server (connected to the current server) to try a password.
    * @param password - password to attempt to authenticate with.
-   * @returns a promise that resolves to a {@link PasswordResponse} object. The response will have a `status` of "200 Success" | "401 Unauthorized" | "404 Not Found" | "408 Request Timeout" | "301 Moved Permanently"
+   * @returns a promise that resolves to a {@link PasswordResponse} object.
    */
   authenticate(hostname: string, password: string): Promise<PasswordResponse>;
+
+  /**
+   * Attempts to connect to a darkweb server that you have already authenticated on. The target must either be directly connected to the current server,
+   *   have a stasis link, or be backdoored.
+   *
+   * If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
+   *
+   * Response status types:
+   * "200 Success" - Authentication was successful.
+   * "401 Unauthorized" - Authentication failed. The password is incorrect, or the target server has never had a successful authenticate() by any script.
+   * "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid.
+   * "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
+   * "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server.
+   * "418 I'm a teapot" - The server is a teapot and cannot brew coffee.
+   *
+   * @remarks
+   * RAM cost: 0.05 GB
+   *
+   *
+   * @param hostname - name of the target server to connect to existing session
+   * @param password - the server's password, to verify the session
+   * @returns a promise that resolves to a {@link PasswordResponse} object. The response will have a `status` of "200 Success" | "401 Unauthorized" | "404 Not Found" | "408 Request Timeout" | "301 Moved Permanently"
+   */
+  connectToSession(hostname: string, password: string): Promise<PasswordResponse>;
 
   /**
    * Opens a .cache file on the current server to acquire its valuable contents.
@@ -4105,65 +4147,40 @@ export interface Darknet {
   openCache(filename: string, suppressToast?: boolean): void;
 
   /**
-   * Get the list of darkweb servers connected to a server (or the current server if no hostname is provided).
-   * If `showAll` is true, instead returns ALL hostnames connected to the server, including non-darkweb servers.
+   * Returns a list of all servers connected to the script's current server, including darknet servers.
    *
    * @remarks
    * RAM cost: 0.2 GB
    *
-   * @param hostname - optional. Name of the server to get the list of servers connected to. Defaults to the current server if not provided.
-   * @param showAll - optional. If true, show all servers (not just darknet ones) connected to the specified server. Defaults to false.
-   * @returns an array of hostnames.
+   * @returns An array of strings containing the hostnames of all connected servers.
    */
-  scan(hostname?: string, showAll?: boolean): string[];
+  probe(): string[];
 
   /**
-   * Runs a script on the given server. The target server has to have been authenticated.
-   * @remarks
-   * RAM cost: 1.3 GB
+   * Applies or removes a stasis link to the script's current server. This will allow you to connectToSession() or exec() to the server remotely, even if it is
+   * not directly connected to the server a script is running on. It also allows direct connection to the server via the terminal.
    *
-   * @param script - Filename of script to execute. This file must already exist on the target server.
-   * @param hostname - Hostname of the `target server` on which to execute the script.
-   * @param password - Password to authenticate with the target server. Not required for running scripts on the current server.
-   * @param threadOrOptions - Either an integer number of threads for new script, or a {@link RunOptions} object. Threads defaults to 1.
-   * @param args - Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument threadOrOptions must be filled in with a value.
-   * @returns Returns the PID of a successfully started script, and 0 otherwise.
+   * Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or
+   * going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
+   *
+   * There is a maximum of 2 stasis links that can be applied globally.
+   *
+   * @remarks
+   * RAM cost: 0.3 GB
+   *
+   * @param shouldLink - true to apply a stasis link, false to remove it.
    */
-  exec(
-    script: string,
-    hostname: string,
-    password?: string,
-    threadOrOptions?: number | RunOptions,
-    ...args: ScriptArg[]
-  ): number;
+  setStasisLink(shouldLink: boolean): boolean;
 
   /**
-   * Copies the given script to the target server. The target server has to have been authenticated.
+   * Returns whether the server has a stasis link applied to it.
+   *
    * @remarks
-   * RAM cost: 0.6 GB
+   * RAM cost: 0.1 GB
    *
-   * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
-   * @param destination - Hostname of the destination server, which is the server to which the file will be copied.
-   * @param password - Password to authenticate with the destination server.
+   * @param hostname - the hostname of the server to check.
    */
-  scp(files: string | string[], destination: string, password: string): boolean;
-
-  /**
-   * Terminate all scripts on a server. The target server has to have been authenticated.
-   * @remarks
-   * RAM cost: 0.5 GB
-   *
-   * Kills all running scripts on the specified server. This function returns true
-   * if any scripts were killed, and false otherwise. In other words, it will return
-   * true if there are any scripts running on the target server.
-   * If no host is defined, it will kill all scripts, where the script is running.
-   *
-   * @param host - IP or hostname of the server on which to kill all scripts. If not specified, it will be the current server by default
-   * @param password - Password to authenticate with the target server. Not required for running scripts on the current server.
-   * @param safetyGuard - Skips the script that calls this function
-   * @returns True if any scripts were killed, and false otherwise.
-   */
-  killall(host?: string, password?: string, safetyGuard?: boolean): boolean;
+  hasStasisLink(hostname: string): boolean;
 
   /**
    * Returns a server object for the given server. Defaults to the running script's server if host is not specified.
@@ -4177,12 +4194,27 @@ export interface Darknet {
   getServer(host?: string): DarknetServer;
 
   /**
+   * Returns whether the server is a darknet server. Defaults to the running script's server if host is not specified.
+   *
+   * Returns false if the server does not exist or has gone offline.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param host - Optional. Hostname for the requested server object.
+   * @returns true if the server is a darknet server, false otherwise.
+   */
+  isDarknetServer(host?: string): boolean;
+
+  /**
    * Get the IP address of a server. The target server has to have been authenticated.
    *
+   * @remarks
+   * RAM cost: 0.5 GB
+   *
    * @param host - The target's hostname. Optional for checking the IP of the current server
-   * @param password - The target's password. Optional for checking the IP of the current server
    */
-  getIp(host?: string, password?: string): string;
+  getIp(host?: string): string;
 
   /**
    * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
@@ -4195,6 +4227,17 @@ export interface Darknet {
    * @returns A string containing the network traffic captured.
    */
   packetCapture(host: string): Promise<string>;
+
+  /**
+   * Gets the current Darknet instability.
+   *
+   * @remarks
+   * RAM cost: 0.1 GB
+   *
+   * @returns authenticateDurationIncrease - The increase in the time it takes to authenticate on a server.
+   * @returns authenticateTimeoutChance - The chance that an authentication attempt will timeout.
+   */
+  getCurrentDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
 }
 
 /**

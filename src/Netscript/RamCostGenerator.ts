@@ -225,15 +225,17 @@ const singularity = {
 } as const;
 
 const dnet = {
-  authenticate: 2,
+  authenticate: 0.6,
+  connectToSession: 0.05,
   openCache: 4,
-  scan: 0.2,
-  exec: 1.3,
-  scp: 0.6,
-  killall: 0.5,
+  probe: 0.2,
+  setStasisLink: 0.3,
+  hasStasisLink: 0.1,
   getServer: 2,
+  isDarknetServer: 0,
   packetCapture: 6,
   getIp: 0.5,
+  getCurrentDarknetInstability: 0.1,
 } as const;
 
 // Gang API

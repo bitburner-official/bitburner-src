@@ -21,13 +21,22 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const rerender = useRerender();
   const draggableBackground = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
-  const [zoomIndex, setZoomIndex] = useState(6);
-  const zoomOptions = [0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5];
+  const [zoomIndex, setZoomIndex] = useState(7);
+  const [netDisplayDepth, setNetDisplayDepth] = useState<number>(1);
+  const zoomOptions = [0.12, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5];
   const { classes } = dnetStyles({});
 
   useEffect(() => {
     DarknetEvents.subscribe(() => {
       if (canvas.current) {
+        const deepestServer: number = DarknetState.Network.flat().reduce((deepest, server) => {
+          if (server?.hasAdminRights && server?.darknetData && (server?.darknetData?.x ?? 0 > deepest)) {
+            return server.darknetData.x;
+          }
+          return deepest;
+        }, 1);
+        setNetDisplayDepth(deepestServer + 3);
+
         rerender();
         drawOnCanvas(canvas.current);
       }
@@ -35,6 +44,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     canvas.current && drawOnCanvas(canvas.current);
     draggableBackground?.current?.addEventListener("wheel", (e) => e.preventDefault());
   }, [rerender]);
+
+  useEffect(() => {
+    DarknetEvents.emit();
+  }, []);
 
   const allowAuth = (server: BaseServer | null) =>
     !!server &&
@@ -148,7 +161,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             style={{ position: "absolute", zIndex: -1 }}
           ></canvas>
           {darkWebRoot ? <DNServerComponent server={darkWebRoot} enableAuth={true} /> : ""}
-          {DarknetState.Network.map((row, i) =>
+          {DarknetState.Network.slice(0, netDisplayDepth).map((row, i) =>
             row.map((server, j) =>
               server && isWithinScreen(server) ? (
                 <DNServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} />
@@ -178,7 +191,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         </Link>
         <Button
           onClick={() => {
-            clearDarknet();
+            clearDarknet(true);
             populateDarknet();
           }}
           variant={"contained"}

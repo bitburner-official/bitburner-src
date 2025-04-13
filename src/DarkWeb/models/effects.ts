@@ -17,16 +17,23 @@ import {
 import { hintLiterature } from "./hintNotes";
 import { TextFilePath } from "../../Paths/TextFilePath";
 import { GetServer } from "../../Server/AllServers";
-import { getAllAdjacentNeighbors } from "../controllers/DarknetNetworkMovement";
+import {
+  getAllAdjacentNeighbors,
+  getBackdooredDarkwebServers,
+  getDarknetServers,
+} from "../controllers/DarknetNetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { getSharedChars, isDarknetServer } from "./DnetServerData";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Minigames } from "../controllers/DarknetServerGenerator";
+import { addSessionToServer, NET_WIDTH } from "./DarknetState";
 
-export const handleSuccessfulAuth = (server: BaseServer, threads: number) => {
+export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;
 
   Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, threads, true));
+  addSessionToServer(server, pid);
+
   if (server.hasAdminRights) return;
 
   server.hasAdminRights = true;
@@ -75,8 +82,9 @@ export const calculateAuthenticationTime = (
   const threadsFactor = 1 + 0.2 * (threads - 1);
   const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 100);
   const noobFactor = Math.min(0.5 + difficulty / 4, 1);
+  const backdoorFactor = getBackdoorAuthTimeDebuff();
 
-  const time = (baseTime * skillFactor * noobFactor) / threadsFactor;
+  const time = (baseTime * skillFactor * noobFactor * backdoorFactor) / threadsFactor;
 
   // Add extra time for timing attack server, per correct character
   const sharedChars =
@@ -86,6 +94,15 @@ export const calculateAuthenticationTime = (
   const sharedCharsExtraTime = sharedChars * 150;
 
   return Math.max(time * calculateIntelligenceBonus(person.skills.intelligence, 0.25), 100) + sharedCharsExtraTime;
+};
+
+export const getBackdoorAuthTimeDebuff = () => {
+  const backdooredServerCount = getBackdooredDarkwebServers().length;
+  const serverCount = getDarknetServers().filter((s) => s.hasAdminRights).length;
+  const safeBackdoors = Math.max(serverCount / (NET_WIDTH * 3), 2);
+  const backdoorSurplus = Math.max(0, backdooredServerCount - safeBackdoors);
+
+  return 1.07 ** backdoorSurplus;
 };
 
 export const hasCacheFileExtension = (path: string) => {
@@ -220,7 +237,7 @@ const addClue = (server: BaseServer) => {
   // some entries from the common password dictionary
   if (Math.random() < 0.1) {
     const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
-    const start = Math.floor(Math.random() * commonPasswordDictionary.length - 6);
+    const start = Math.floor(Math.random() * (commonPasswordDictionary.length - 6));
     const commonPasswords = commonPasswordDictionary.slice(start, start + 6).join(", ");
     server.writeToTextFile(hintFileName as TextFilePath, `Some common passwords include ${commonPasswords}`);
     return;
@@ -283,7 +300,7 @@ const getRandomNearbyServer = (server: BaseServer, disconnected = false) => {
       neighbor.darknetData.password &&
       (!disconnected || !server.serversOnNetwork.includes(neighbor.hostname)),
   );
-}
+};
 
 export const hasDarknetAccess = () => {
   return true; //TODO: enable this later
@@ -294,7 +311,6 @@ export const hasDarknetAccess = () => {
   return hasSF15 || isInBN15;
 };
 
-
 export const getTwoCharsInPassword = (password: string) => {
   const index1 = Math.floor(Math.random() * password.length);
   const containedChar1 = password[index1];
@@ -304,4 +320,4 @@ export const getTwoCharsInPassword = (password: string) => {
   }
   const containedChar2 = password[index2];
   return [containedChar1, containedChar2];
-}
+};

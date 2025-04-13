@@ -19,7 +19,7 @@ import {
 import { BaseServer } from "../../Server/BaseServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { IConstructorParams, Server } from "../../Server/Server";
-import { DnetServerData } from "../models/DnetServerData";
+import { DnetServer } from "../models/DnetServerData";
 import { Minigames } from "./DarknetServerGenerator";
 import { labIcon } from "./ServerIcon";
 import { Player } from "@player";
@@ -41,7 +41,7 @@ export const populateDarknet = () => {
     return;
   }
 
-  clearDarknet();
+  clearDarknet(true);
   addLabyrinth();
   // TODO: improve early net generation
   addRandomServers(NET_DEPTH * NET_WIDTH * SERVER_DENSITY - 10);
@@ -58,13 +58,13 @@ export const populateDarknet = () => {
   }
 };
 
-export const clearDarknet = () => {
+export const clearDarknet = (force = false) => {
   movePlayerIfNeeded();
   for (let i = 0; i < NET_DEPTH; i++) {
     for (let j = 0; j < NET_WIDTH; j++) {
       const server = DarknetState.Network[i][j];
       if (!server) continue;
-      deleteServer(server);
+      deleteServer(server, force);
       DarknetState.Network[i][j] = null;
     }
   }
@@ -78,9 +78,9 @@ export const clearDarknet = () => {
   }
 };
 
-export const movePlayerIfNeeded = () => {
+export const movePlayerIfNeeded = (server?: BaseServer) => {
   const connectedServer = Player.getCurrentServer();
-  if (connectedServer.darknetData) {
+  if ((!server && connectedServer.darknetData) || server?.hostname === connectedServer.hostname) {
     Terminal.connectToServer("home");
   }
 };
@@ -166,7 +166,7 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number, add
 
 // Creates a special server at the bottom of the dark net
 export const addLabyrinth = () => {
-  const darknetData: DnetServerData = {
+  const darknetData: DnetServer = {
     icon: labIcon,
     password: "!!the:masterwork:of:daedalus!!",
     passwordHint: "Find the exit",
@@ -174,6 +174,9 @@ export const addLabyrinth = () => {
     difficulty: 50,
     x: -1,
     y: -1,
+    lastPasswordAttempted: "",
+    authenticatedPIDs: [],
+    hasStasisLink: false,
   };
 
   const params: IConstructorParams = {

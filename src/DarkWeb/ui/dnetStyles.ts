@@ -111,4 +111,13 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
   success: {
     borderColor: theme.colors.success,
   },
+  green: {
+    borderColor: "green",
+  },
+  grey: {
+    borderColor: "grey",
+  },
+  goldBorder: {
+    borderColor: "gold",
+  },
 }));

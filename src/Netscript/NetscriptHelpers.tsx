@@ -467,7 +467,7 @@ function scriptIdentifier(
  */
 export function getServer(ctx: NetscriptContext, hostname: string) {
   const server = GetServer(hostname);
-  if (server == null || (server.serversOnNetwork.length == 0 && server.hostname != "home")) {
+  if (server == null || (server.serversOnNetwork.length == 0 && server.hostname != "home" && !server.darknetData)) {
     const str = hostname === "" ? "'' (empty string)" : "'" + hostname + "'";
     throw errorMessage(ctx, `Invalid hostname: ${str}`);
   }

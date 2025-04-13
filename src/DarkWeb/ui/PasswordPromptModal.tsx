@@ -87,8 +87,7 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
   const copyHostname = (): void => {
     void navigator.clipboard.writeText(server.hostname);
     SnackbarEvents.emit(`Copied "${server.hostname}" to clipboard`, ToastVariant.SUCCESS, 2000);
-  }
-
+  };
 
   return (
     <Modal open={open} onClose={onClose} removeFocus={false}>

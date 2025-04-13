@@ -19,18 +19,29 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   for (const server of DarknetState.Network.flat()) {
-    if (!server) {
+    if (!server || (!server.hasAdminRights && !server.serversOnNetwork.find((s) => GetServer(s)?.hasAdminRights))) {
       continue;
     }
 
     // draw a line between each server and its connected servers
     for (const connectedServerName of server.serversOnNetwork) {
       const connectedServer = GetServer(connectedServerName);
-      if (!connectedServer) {
+      if (
+        !connectedServer ||
+        (!connectedServer.hasAdminRights && !connectedServer.serversOnNetwork.find((s) => GetServer(s)?.hasAdminRights))
+      ) {
         continue;
       }
       ctx.beginPath();
-      ctx.strokeStyle = server.hasAdminRights || connectedServer.hasAdminRights ? "green" : "grey";
+      const connectedColor = "green";
+      const disconnectedColor = "grey";
+      const stasisLinkColor = "gold";
+      ctx.strokeStyle =
+        server.darknetData?.hasStasisLink || connectedServer.darknetData?.hasStasisLink
+          ? stasisLinkColor
+          : server.hasAdminRights || connectedServer.hasAdminRights
+          ? connectedColor
+          : disconnectedColor;
       const startPosition = getPixelPosition(server, true);
       const endPosition = getPixelPosition(connectedServer, true);
       ctx.moveTo(startPosition.left, startPosition.top);

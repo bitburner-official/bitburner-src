@@ -328,6 +328,9 @@ export const packetSniffPhrases = [
   "Search query: How drain a leaky water-cooled computer",
   "Search query: How to make a perfect cup of coffee",
   "Search query: How to fix a server that keeps losing money for some reason",
+  "This document specifies a Hyper Text Coffee Pot Control Protocol (HTCPCP), which permits the full request and responses necessary to control all devices capable of making the popular caffeinated hot beverages.",
+  "The deficiency of HTCPCP in addressing the networked production of such a venerable beverage as tea is noteworthy",
+  "The additions to the protocol specified herein permit the requests and responses necessary to control all devices capable of making, arguably, the most popular caffeinated hot beverage.",
 
   "Many decades ago, a humanoid extraterrestrial species descended on the Earth...violently",
   "Our species fought back, but it was futile. They had technology far beyond our own",

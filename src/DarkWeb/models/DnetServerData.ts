@@ -31,7 +31,7 @@ export type PasswordResponse = {
   status: ResponseStatus;
   msg: string;
   passwordLength?: number;
-  passwordFormat?: string;
+  passwordFormat?: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode" | undefined;
   data?: string;
   modelId?: number;
   responseTime?: number;
@@ -49,8 +49,10 @@ export type DnetServerData = {
 };
 
 export type DnetServer = DnetServerData & {
-  lastPasswordAttempted?: string
-}
+  lastPasswordAttempted?: string;
+  authenticatedPIDs: number[];
+  hasStasisLink: boolean;
+};
 
 export const isDarknetServer = (server: BaseServer): boolean => {
   return server.darknetData !== undefined;
@@ -66,7 +68,9 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
     difficulty: options.difficulty ?? 1,
     x: options.x ?? -1,
     y: options.y ?? -1,
-    lastPasswordAttempted: undefined,
+    lastPasswordAttempted: "",
+    authenticatedPIDs: [],
+    hasStasisLink: false,
   };
 
   const scalar = 1 + darknetData.difficulty * 3;
@@ -96,14 +100,13 @@ export const checkPassword = (
   pid?: number,
 ): PasswordResponse => {
   if (server.hostname === SpecialServers.DarkWeb) {
-    return handleDarwebSpecialServerAuth(attemptedPassword, server, threads);
+    return handleDarkwebSpecialServerAuth(attemptedPassword, server, threads);
   }
   if (!server.darknetData) {
     return {
       status: ResponseStatus.AUTH_FAILURE,
       msg: "This server is not a darknet server",
       modelId: 0,
-      
     };
   }
   server.darknetData.lastPasswordAttempted = attemptedPassword;
@@ -114,7 +117,7 @@ export const checkPassword = (
   }
 
   if (darknetData.password === attemptedPassword) {
-    handleSuccessfulAuth(server, threads);
+    handleSuccessfulAuth(server, threads, pid);
     return getGenericSuccess();
   }
   handleFailedAuth(server, threads);
@@ -156,12 +159,12 @@ export const checkPassword = (
       darknetData,
     );
   } else if (darknetData.minigameType === Minigames.divisibilityTest) {
-    const password = parseInt(darknetData.password);
-    const attemptedDivisor = parseInt(attemptedPassword);
+    const password = +darknetData.password;
+    const attemptedDivisor = +attemptedPassword;
     if (isNaN(attemptedDivisor) || password % attemptedDivisor) {
-      return getFailureResponse(`Password is not divisible by ${attemptedPassword}`, "false", darknetData);
+      return getFailureResponse(`Password is not divisible by '${attemptedPassword}'`, "false", darknetData);
     }
-    return getFailureResponse(`Password IS divisible by ${attemptedPassword}`, "true", darknetData);
+    return getFailureResponse(`Password IS divisible by '${attemptedPassword}'`, "true", darknetData);
   } else if (
     darknetData.minigameType === Minigames.ConvertToBase10 ||
     darknetData.minigameType === Minigames.parsedExpression
@@ -181,7 +184,15 @@ export const checkPassword = (
   }
 };
 
-const handleDarwebSpecialServerAuth = (
+export const isAuthenticated = (server: BaseServer, pid: number): boolean => {
+  if (!server.darknetData) {
+    return true;
+  }
+  const { authenticatedPIDs } = server.darknetData;
+  return authenticatedPIDs.includes(pid);
+};
+
+const handleDarkwebSpecialServerAuth = (
   attemptedPassword: string,
   server: BaseServer,
   threads: number = 1,
@@ -247,7 +258,6 @@ const getGenericSuccess = (responseTime = 0) => ({
   status: ResponseStatus.SUCCESS,
   msg: "Success! Access granted.",
   responseTime: getResponseTime(responseTime),
-  
 });
 
 const getResponseTime = (additionalPasses = 0) => Math.floor(95 + Math.random() * 12 + additionalPasses * 25);

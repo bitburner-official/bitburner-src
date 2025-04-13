@@ -123,7 +123,7 @@ describe("DarkWebServer Tests", () => {
     const wrongPasswordWithTwoMatchingDigits = server.darknetData.password.substring(0, 2) + "     ";
     const failedAttemptResponse = checkPassword(wrongPasswordWithTwoMatchingDigits, server);
 
-    expect(failedAttemptResponse.status).toBe(401);
+    expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
     expect(server.hasAdminRights).toBe(false);
     expect(failedAttemptResponse.passwordLength).toBe(server.darknetData.password.length);
     expect(failedAttemptResponse.responseTime >= 95 + 25 * 2).toBe(true);

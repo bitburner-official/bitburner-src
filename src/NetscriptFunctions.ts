@@ -111,7 +111,7 @@ import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
-import { failForDarknetServer, NetscriptDarknet } from "./NetscriptFunctions/Darknet";
+import { expectAuthenticated, expectExecConnection, NetscriptDarknet } from "./NetscriptFunctions/Darknet";
 
 export const enums: NSEnums = {
   CityName,
@@ -723,7 +723,7 @@ export const ns: InternalAPI<NSFull> = {
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const server = helpers.getServer(ctx, hostname);
-      failForDarknetServer(ctx, server, "ns.dnet.exec()");
+      expectExecConnection(ctx, server);
       return runScriptFromScript("exec", server, path, args, ctx.workerScript, runOpts);
     },
   spawn:
@@ -821,7 +821,7 @@ export const ns: InternalAPI<NSFull> = {
       const hostname = helpers.string(ctx, "hostname", _hostname);
       const safetyGuard = !!_safetyGuard;
       const server = helpers.getServer(ctx, hostname);
-      failForDarknetServer(ctx, server, "ns.dnet.killall()");
+      expectAuthenticated(ctx, server);
 
       let scriptsKilled = 0;
 
@@ -847,7 +847,7 @@ export const ns: InternalAPI<NSFull> = {
     const destServer = helpers.getServer(ctx, destination);
     const sourceServer = helpers.getServer(ctx, source);
     const files = Array.isArray(_files) ? _files : [_files];
-    failForDarknetServer(ctx, destServer, "ns.dnet.scp()");
+    expectAuthenticated(ctx, sourceServer);
     return helpers.scp(ctx, files, sourceServer, destServer);
   },
   ls: (ctx) => (_hostname, _substring) => {
@@ -1093,7 +1093,9 @@ export const ns: InternalAPI<NSFull> = {
   serverExists: (ctx) => (_hostname) => {
     const hostname = helpers.string(ctx, "hostname", _hostname);
     const server = GetServer(hostname);
-    return server !== null && (server.serversOnNetwork.length > 0 || server.hostname === "home");
+    return (
+      server !== null && (server.serversOnNetwork.length > 0 || server.hostname === "home" || !!server.darknetData)
+    );
   },
   fileExists: (ctx) => (_filename, _hostname) => {
     const filename = helpers.string(ctx, "filename", _filename);

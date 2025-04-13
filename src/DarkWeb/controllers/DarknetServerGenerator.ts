@@ -361,11 +361,11 @@ export const getParseArithmeticExpressionServer = (difficulty: number, x: number
 };
 
 export const getDivisibilityTestServer = (difficulty: number, x: number, y: number): Server => {
-  let password = Math.floor(Math.random() * 12 * (difficulty + 1));
+  let password = Math.floor(Math.random() * 8 * (difficulty + 1));
   for (let i = 0; i < difficulty; i++) {
     if (Math.random() < 0.5) {
       password *= Math.ceil(Math.random() * 5);
-    } else if (Math.random() < 0.7) {
+    } else if (Math.random() < 0.7 || difficulty < 12) {
       password *= smallPrimes[Math.floor(Math.random() * smallPrimes.length)];
     } else {
       password *= largePrimes[Math.floor(Math.random() * largePrimes.length)];
@@ -563,7 +563,7 @@ export const getPassword = (
   return password;
 };
 
-export const getPasswordType = (password: string): string => {
+export const getPasswordType = (password: string): "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode" => {
   const passwordArr = password.split("");
 
   if (passwordArr.every((char) => numbers.includes(char))) {
@@ -603,7 +603,7 @@ export const romanNumeralEncoder = (input: number): string => {
     1000: "M",
   };
 
-  const keys = Object.keys(romanNumerals).map((key) => parseInt(key));
+  const keys = Object.keys(romanNumerals).map((key) => +key);
   let result = "";
   for (let i = keys.length - 1; i >= 0; i--) {
     const key = keys[i];
@@ -622,9 +622,9 @@ const largePrimes = [
 ];
 
 const getLargestPrimeFactorPassword = (difficulty = 1) => {
-  const factorCount = 2 + Math.max(5, Math.floor(difficulty / 2));
+  const factorCount = 2 + Math.min(8, Math.floor(difficulty / 2));
 
-  const largePrimeIndex = Math.ceil(Math.random() * (largePrimes.length - 1));
+  const largePrimeIndex = Math.floor(Math.random() * (largePrimes.length - 1));
   let number = largePrimes[Math.random() * largePrimes.length];
   for (let i = 1; i <= factorCount; i++) {
     number *= smallPrimes[Math.floor(Math.random() * smallPrimes.length)];

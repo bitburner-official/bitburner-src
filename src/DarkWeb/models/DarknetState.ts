@@ -3,6 +3,7 @@ import { Server } from "../../Server/Server";
 import { BaseServer } from "../../Server/BaseServer";
 import { mutateDarknet } from "../controllers/DarknetNetworkMovement";
 import { generateMaze } from "./labyrinth";
+import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
 
 export const NET_WIDTH = 8;
 export const NET_DEPTH = 23;
@@ -30,3 +31,17 @@ export const DarknetState: DarknetState = {
 };
 
 export const startDarknetMovement = () => setInterval(() => mutateDarknet(), 4000);
+
+export const addSessionToServer = (server: BaseServer, pid: number) => {
+  if (!server?.darknetData) return;
+  removeExpiredSessions(server);
+  if (server.darknetData.authenticatedPIDs.includes(pid)) return;
+  server.darknetData.authenticatedPIDs.push(pid);
+};
+
+const removeExpiredSessions = (server: BaseServer) => {
+  if (!server?.darknetData) return;
+  server.darknetData.authenticatedPIDs = server.darknetData.authenticatedPIDs.filter((pid) =>
+    findRunningScriptByPid(pid),
+  );
+};

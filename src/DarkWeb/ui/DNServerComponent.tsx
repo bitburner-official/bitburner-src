@@ -16,7 +16,11 @@ export type DWServerProps = {
 export function DNServerComponent({ server, enableAuth }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);
   const { classes } = dnetStyles({});
-  const color = server.hasAdminRights ? classes.success : classes.rep;
+  const color = server.darknetData?.hasStasisLink
+    ? classes.goldBorder
+    : server.hasAdminRights
+    ? classes.green
+    : classes.grey;
   const icon = getIcon(server.darknetData?.icon ?? Icon.Terminal);
   const ip = server.hasAdminRights ? server.ip ?? "" : "??.?.?.?";
 

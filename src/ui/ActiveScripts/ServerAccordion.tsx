@@ -20,7 +20,10 @@ export function ServerAccordion({ server, scripts }: ServerAccordionProps): Reac
 
   // Accordion's header text
   const longestHostnameLength = 26;
-  const truncatedHostname = server.hostname.length > longestHostnameLength - 2 ? server.hostname.slice(0, longestHostnameLength) + "..." : server.hostname;
+  const truncatedHostname =
+    server.hostname.length > longestHostnameLength - 2
+      ? server.hostname.slice(0, longestHostnameLength) + "..."
+      : server.hostname;
   const paddedName = `${truncatedHostname}${" ".repeat(longestHostnameLength)}`.slice(
     0,
     Math.max(truncatedHostname.length, longestHostnameLength),

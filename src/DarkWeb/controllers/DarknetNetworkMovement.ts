@@ -1,9 +1,9 @@
-import { connectServers, DeleteServer, disconnectServers, GetServer } from "../../Server/AllServers";
+import { connectServers, DeleteServer, disconnectServers, GetAllServers, GetServer } from "../../Server/AllServers";
 import { DarknetEvents, DarknetState, NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarknetState";
 import { getDarknetServer } from "./DarknetServerGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
-import { addServerToNetwork, AIR_GAP_DEPTH } from "./DarknetNetworkGenerator";
+import { addServerToNetwork, AIR_GAP_DEPTH, movePlayerIfNeeded } from "./DarknetNetworkGenerator";
 import { stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { SpecialServers } from "../../Server/data/SpecialServers";
@@ -33,6 +33,24 @@ export const mutateDarknet = () => {
       addRandomServers();
     }
     return;
+  }
+
+  if (Math.random() < 0.1) {
+    const backdooredServers = getBackdooredDarkwebServers();
+    const server = backdooredServers[Math.floor(Math.random() * backdooredServers.length)];
+    if (server) {
+      restartServer(server);
+      return;
+    }
+  }
+
+  if (Math.random() < 0.05) {
+    const backdooredServers = getBackdooredDarkwebServers();
+    const server = backdooredServers[Math.floor(Math.random() * backdooredServers.length)];
+    if (server) {
+      deleteServer(server);
+      return;
+    }
   }
 
   if (Math.random() < 0.2) {
@@ -108,21 +126,16 @@ const deleteRandomServers = (count = 1) => {
   for (let i = 0; i < count; i++) {
     const servers = getDarknetServers().filter((server) => server.hostname !== SpecialServers.Labyrinth);
     const serverToDelete = servers[Math.floor(Math.random() * servers.length)];
-    const server = GetServer(serverToDelete.hostname);
-    if (!server || server === DarknetState.openServer || server.isConnectedTo) {
-      return false;
-    }
-    killScripts(serverToDelete);
-    disconnectServer(serverToDelete, true);
     deleteServer(serverToDelete);
   }
   sanitizeDarkwebNetwork();
 };
 
-export const deleteServer = (server: BaseServer) => {
-  if (server === DarknetState.openServer || server.isConnectedTo) {
+export const deleteServer = (server: BaseServer, force = false) => {
+  if (isImmutable(server) && !force) {
     return false;
   }
+  movePlayerIfNeeded(server);
   killScripts(server);
   disconnectServer(server, true);
   if (server.darknetData && DarknetState.Network[server.darknetData.x]?.[server.darknetData.y]) {
@@ -151,7 +164,6 @@ export const balanceServers = () => {
     const serversToAdd = NET_DEPTH * NET_WIDTH * SERVER_DENSITY - getDarknetServers().length;
     addRandomServers(serversToAdd);
   }
-  sanitizeDarkwebNetwork();
 };
 
 export const moveServer = (server: BaseServer) => {
@@ -160,7 +172,7 @@ export const moveServer = (server: BaseServer) => {
     throw new Error("Server missing dark web data");
   }
   // Do not try to move the server that is open in the UI or the terminal
-  if (server === DarknetState.openServer || server.isConnectedTo) {
+  if (isImmutable(server)) {
     return false;
   }
 
@@ -207,20 +219,20 @@ export function killWorkerScriptWithMessage(pid: number, message: string): boole
 }
 
 export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) => {
-  if (server === DarknetState.openServer || server.isConnectedTo) {
+  if (isImmutable(server)) {
     return false;
   }
   server.serversOnNetwork.forEach((conn) => {
     const connectedServer = GetServer(conn);
     const isOkToDisconnect = disconnectDarkweb || connectedServer?.hostname === SpecialServers.DarkWeb;
-    if (connectedServer && isOkToDisconnect) {
+    if (connectedServer && isOkToDisconnect && !isImmutable(connectedServer)) {
       disconnectServers(server, connectedServer as Server);
     }
   });
 };
 
 export const restartServer = (server: BaseServer) => {
-  if (server === DarknetState.openServer || server.isConnectedTo) {
+  if (!server?.darknetData || isImmutable(server)) {
     return false;
   }
   const runningScripts = server.runningScriptMap;
@@ -235,6 +247,8 @@ export const restartServer = (server: BaseServer) => {
       }
     }
   }
+  server.darknetData.authenticatedPIDs = [];
+  server.backdoorInstalled = false;
   disconnectServer(server);
   addGuaranteedConnection(server);
   addGuaranteedConnection(server);
@@ -326,6 +340,15 @@ export const sanitizeDarkwebNetwork = () => {
   DarknetEvents.emit();
 };
 
+export const getBackdooredDarkwebServers = (): BaseServer[] =>
+  GetAllServers(true).filter((s) => s && s.darknetData && !s.darknetData.hasStasisLink && s.backdoorInstalled);
+
 const isOnAirGap = (x: number): boolean => !!x && !(x % AIR_GAP_DEPTH);
 
 const notNull = <T>(value: T | null): value is T => value !== null;
+
+const isImmutable = (server?: BaseServer | null) =>
+  !server?.darknetData ||
+  server === DarknetState.openServer ||
+  server.isConnectedTo ||
+  server.darknetData.hasStasisLink;

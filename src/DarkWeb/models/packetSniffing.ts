@@ -42,7 +42,7 @@ const getRandomData = (length: number, server: BaseServer) => {
       result += " " + packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)] + " ";
     } else if (Math.random() < 0.25) {
       result += commonPasswordDictionary[Math.floor(Math.random() * commonPasswordDictionary.length)];
-    }  else if (Math.random() < 0.2) {
+    } else if (Math.random() < 0.2) {
       result += " " + getRandomCharsInPassword(password);
     } else if (Math.random() < 0.8) {
       result += getPassword(password.length, true, !!password.split("").find((c) => letters.includes(c)));
@@ -74,10 +74,13 @@ const getRandomCharsInPassword = (password: string) => {
     `Theres a ${containedChar1}, and maybe a ${containedChar2}...`,
   ];
   return hints[Math.floor(Math.random() * hints.length)];
-}
+};
 
 const getMastermindHint = (lastPassword: string, realPassword: string) => {
   const correctCharPlacement = getExactCorrectChars(realPassword, lastPassword);
-  const rightChars = realPassword.split("").filter((c, i) => correctCharPlacement[i]).slice(0,2);
+  const rightChars = realPassword
+    .split("")
+    .filter((c, i) => correctCharPlacement[i])
+    .slice(0, 2);
   return `The characters ${rightChars.join(", ")} are in the right place. `;
-}
+};

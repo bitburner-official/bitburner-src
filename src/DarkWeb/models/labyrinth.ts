@@ -1,9 +1,11 @@
 import { BaseServer } from "../../Server/BaseServer";
 import { PasswordResponse, ResponseStatus } from "./DnetServerData";
 import { Minigames } from "../controllers/DarknetServerGenerator";
-import { DarknetState } from "./DarknetState";
+import { addSessionToServer, DarknetState } from "./DarknetState";
 import { addCacheToServer, calculatePasswordAttemptChaGain } from "./effects";
 import { Player } from "@player";
+import { GetServer } from "../../Server/AllServers";
+import { SpecialServers } from "../../Server/data/SpecialServers";
 
 const MAZE_WIDTH = 40;
 const MAZE_HEIGHT = 30;
@@ -100,16 +102,36 @@ export const handleLabyrinthPassword = (
       msg: `You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.`,
       modelId: Minigames.labyrinth,
       status: ResponseStatus.AUTH_FAILURE,
-      
     };
   }
 
   const [initialX, initialY] = DarknetState.labLocations[pid] ?? [1, 1];
-  const end = [DarknetState.labyrinth.length - 2, DarknetState.labyrinth[0].length - 2];
+  const end = [DarknetState.labyrinth[0].length - 2, DarknetState.labyrinth.length - 2];
   const [dx, dy] = getDirectionFromInput(attemptedPassword);
   const newLocation: [number, number] = [initialX + dx * 2, initialY + dy * 2];
 
-  // TODO: interact with traps or monsters
+  const labServer = GetServer(SpecialServers.Labyrinth);
+  if (!labServer?.darknetData) {
+    throw new Error("Labyrinth server is missing dark web data");
+  }
+
+  if (labServer.hasAdminRights) {
+    addSessionToServer(labServer, pid);
+    return {
+      status: ResponseStatus.SUCCESS,
+      msg: "You have discovered the end the labyrinth.",
+      modelId: Minigames.labyrinth,
+      data: labServer.darknetData.password,
+    };
+  }
+
+  if (!labServer.hasAdminRights && attemptedPassword === labServer.darknetData.password) {
+    return {
+      status: ResponseStatus.AUTH_FAILURE,
+      msg: `You have decided, after some deliberation, that the best way to beat a maze is to find the end, and not to try and skip it.`,
+      modelId: Minigames.labyrinth,
+    };
+  }
 
   const potentialWall: [number, number] = [initialX + dx, initialY + dy];
   if (DarknetState.labyrinth[potentialWall[1]]?.[potentialWall[0]] !== PATH) {
@@ -127,7 +149,6 @@ export const handleLabyrinthPassword = (
       msg: `You cannot go that way. You are still at ${newLocation[0]},${newLocation[1]}.`,
       data: JSON.stringify(status),
       modelId: Minigames.labyrinth,
-      
     };
   }
 
@@ -136,7 +157,6 @@ export const handleLabyrinthPassword = (
       status: ResponseStatus.AUTH_FAILURE,
       msg: `You don't know how to do that. Try a direction such as "NORTH"`,
       modelId: Minigames.labyrinth,
-      
     };
   }
 
@@ -146,12 +166,13 @@ export const handleLabyrinthPassword = (
     Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, Math.max(threads * 2, 32), true));
     server.hasAdminRights = true;
     addCacheToServer(server);
+    addSessionToServer(labServer, pid);
 
     return {
       status: ResponseStatus.SUCCESS,
       msg: "You have successfully navigated the labyrinth! Congratulations",
       modelId: Minigames.labyrinth,
-      
+      data: labServer.darknetData?.password,
     };
   }
 
@@ -173,16 +194,16 @@ export const handleLabyrinthPassword = (
 };
 
 const getDirectionFromInput = (input: string) => {
-  if (["n", "north", "up"].find((i) => i.includes(input.toLowerCase().trim()))) {
+  if (["n", "north", "up"].find((i) => input.toLowerCase().trim() === i)) {
     return NORTH;
   }
-  if (["e", "east", "right"].find((i) => i.includes(input.toLowerCase().trim()))) {
+  if (["e", "east", "right"].find((i) => input.toLowerCase().trim() === i)) {
     return EAST;
   }
-  if (["s", "south", "down"].find((i) => i.includes(input.toLowerCase().trim()))) {
+  if (["s", "south", "down"].find((i) => input.toLowerCase().trim() === i)) {
     return SOUTH;
   }
-  if (["w", "west", "left"].find((i) => i.includes(input.toLowerCase().trim()))) {
+  if (["w", "west", "left"].find((i) => input.toLowerCase().trim() === i)) {
     return WEST;
   }
 
