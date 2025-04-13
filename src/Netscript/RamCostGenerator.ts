@@ -229,7 +229,7 @@ const dnet = {
   connectToSession: 0.05,
   openCache: 4,
   probe: 0.2,
-  setStasisLink: 0.3,
+  setStasisLink: 12,
   hasStasisLink: 0.1,
   getServer: 2,
   isDarknetServer: 0,

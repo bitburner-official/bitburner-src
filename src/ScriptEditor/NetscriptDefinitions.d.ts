@@ -4158,7 +4158,7 @@ export interface Darknet {
   openCache(filename: string, suppressToast?: boolean): void;
 
   /**
-   * Returns a list of all servers connected to the script's current server, including darknet servers.
+   * Returns a list of all darknet servers connected to the script's current server.
    *
    * @remarks
    * RAM cost: 0.2 GB
@@ -4178,11 +4178,11 @@ export interface Darknet {
    * There is a maximum of 2 stasis links that can be applied globally.
    *
    * @remarks
-   * RAM cost: 0.3 GB
+   * RAM cost: 12 GB
    *
    * @param shouldLink - true to apply a stasis link, false to remove it.
    */
-  setStasisLink(shouldLink: boolean): boolean;
+  setStasisLink(shouldLink: boolean): Promise<boolean>;
 
   /**
    * Returns whether the server has a stasis link applied to it.

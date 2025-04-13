@@ -18,7 +18,6 @@ import {
 } from "../DarkWeb/models/effects";
 import { Player } from "@player";
 import type { FilePath } from "../Paths/FilePath";
-import { getServerOnNetwork } from "../Server/ServerHelpers";
 import { errorMessage } from "../Netscript/ErrorMessages";
 import { formatNumber } from "../ui/formatNumber";
 import { GetAllServers, GetServer } from "../Server/AllServers";
@@ -111,7 +110,7 @@ function expectPassword(ctx: NetscriptContext, hostname: string, _password: unkn
 
 function getTimeoutChance() {
   const backdooredDarknetServerCount = getBackdooredDarkwebServers().length - 2;
-  return Math.min(backdooredDarknetServerCount * 0.03, 0.25);
+  return Math.max(Math.min(backdooredDarknetServerCount * 0.03, 0.5), 0);
 }
 
 export function NetscriptDarknet(): InternalAPI<NSDnet> {
@@ -190,13 +189,14 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
             msg: `Target server ${targetHostname} requires root access before you can connect to a session. Use ns.dnet.authenticate() to gain access.`,
           } as PasswordResponse);
         }
-        if (!targetServer.darknetData) {
+        if (!targetServer.darknetData && targetServer.hostname !== SpecialServers.DarkWeb) {
           return Promise.resolve({
             status: ResponseStatus.I_AM_A_TEAPOT,
             msg: `Target server ${targetHostname} is not a darknet server.`,
           } as PasswordResponse);
         }
-        if (token === targetServer.darknetData.password) {
+        const result = checkPassword(token, targetServer, 0, ctx.workerScript.pid);
+        if (result.status === ResponseStatus.SUCCESS) {
           addSessionToServer(targetServer, ctx.workerScript.pid);
           return Promise.resolve({
             status: ResponseStatus.SUCCESS,
@@ -231,6 +231,9 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       const out: string[] = [];
       for (const neighbor of server.serversOnNetwork) {
         const neighborServer = helpers.getServer(ctx, neighbor);
+        if (!neighborServer.darknetData) {
+          continue;
+        }
         const entry = helpers.returnServerID(neighborServer, returnOpts);
         if (entry) {
           out.push(entry);
@@ -241,27 +244,36 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
     },
     setStasisLink:
       (ctx: NetscriptContext) =>
-      (_shouldLink): boolean => {
+      (_shouldLink): Promise<boolean> => {
         const shouldLink = helpers.boolean(ctx, "shouldLink", _shouldLink);
         const server = ctx.workerScript.getServer();
         if (!server.darknetData) {
           helpers.log(ctx, () => `${server.hostname} was not stasis linked; it is not a darknet server`);
-          return false;
+          return Promise.resolve(false);
         }
 
         const stasisLinkCount = GetAllServers(true).filter((s) => s.darknetData?.hasStasisLink).length;
         if (shouldLink && stasisLinkCount >= STASIS_LINK_LIMIT) {
           helpers.log(ctx, () => `Stasis link limit reached. (${stasisLinkCount}/${STASIS_LINK_LIMIT})`);
-          return false;
+          return Promise.resolve(false);
         }
-        server.darknetData.hasStasisLink = shouldLink;
-        server.backdoorInstalled = shouldLink;
         helpers.log(
           ctx,
           () =>
-            `Stasis link applied to server ${server.hostname}. (${stasisLinkCount}/${STASIS_LINK_LIMIT} links in use)`,
+            `Beginning stasis ${shouldLink ? "" : "removal "}procedure on ${server.hostname}... (Est: 30s)`,
         );
-        return shouldLink;
+        return helpers.netscriptDelay(ctx, 30000).then(() => {
+          if (server.darknetData) {
+            server.darknetData.hasStasisLink = shouldLink;
+          }
+          server.backdoorInstalled = shouldLink;
+          helpers.log(
+            ctx,
+            () =>
+              `Stasis link applied to server ${server.hostname}. (${stasisLinkCount}/${STASIS_LINK_LIMIT} links in use)`,
+          );
+          return shouldLink;
+        });
       },
     hasStasisLink:
       (ctx: NetscriptContext) =>

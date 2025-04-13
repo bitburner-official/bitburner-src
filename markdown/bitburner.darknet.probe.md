@@ -4,7 +4,7 @@
 
 ## Darknet.probe() method
 
-Returns a list of all servers connected to the script's current server, including darknet servers.
+Returns a list of all darknet servers connected to the script's current server.
 
 **Signature:**
 

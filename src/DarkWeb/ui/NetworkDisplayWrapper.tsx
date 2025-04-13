@@ -3,7 +3,7 @@ import { Container, Typography, Button, Box, Link } from "@mui/material";
 import { ZoomIn, ZoomOut } from "@mui/icons-material";
 import { DNServerComponent } from "./DNServerComponent";
 import { useRerender } from "../../ui/React/hooks";
-import { DarknetEvents, DarknetState } from "../models/DarknetState";
+import { DarknetEvents, DarknetState, NET_DEPTH } from "../models/DarknetState";
 import { GetServer } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
@@ -171,7 +171,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             ),
           )}
 
-          {labyrinth ? <DNServerComponent server={labyrinth} enableAuth={allowAuth(labyrinth)} /> : ""}
+          {labyrinth && netDisplayDepth + 4 >= NET_DEPTH ? <DNServerComponent server={labyrinth} enableAuth={allowAuth(labyrinth)} /> : ""}
         </div>
       </div>
       <div className={classes.zoomContainer}>

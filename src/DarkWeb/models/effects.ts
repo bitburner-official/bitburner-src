@@ -27,6 +27,7 @@ import { getSharedChars, isDarknetServer } from "./DnetServerData";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Minigames } from "../controllers/DarknetServerGenerator";
 import { addSessionToServer, NET_WIDTH } from "./DarknetState";
+import { initStockMarket } from "../../StockMarket/StockMarket";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;
@@ -183,6 +184,7 @@ export const getNextPortOpener = (difficulty: number, suppressToast = false) => 
   }
   if (!Player.hasWseAccount) {
     Player.hasWseAccount = true;
+    initStockMarket();
     const result = `You have discovered a stolen WSE Account!`;
     !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
     return result;

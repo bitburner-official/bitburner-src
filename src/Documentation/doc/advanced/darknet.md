@@ -132,7 +132,7 @@ Design document and workspace
 
 - Added connectToSession(). It is similar to authenticate (whitelists the script's PID given the correct password) except it is nearly instant and very cheap, and also works on stasis linked and backdoored servers (not just direct connection). However, it requires root access to the server in addition to the password (meaning you need to have already successfully authenticate()'d on that server from somewhere. It always fails [even if you have the right password] if the server does not have root access gained). It is intended to be used by child scripts or remote scripts, or an error-less way to check a server's status/existence via response codes in the returned object.
 
-- Added probe(). Shows all immediate neighbors (all connected servers, including darknet ones) to the server the script is running on. Cannot be used to probe a remote server, only the script's current server.
+- Added probe(). Shows all connected darknet neighbors to the server the script is running on. Cannot be used to probe a remote server, only the script's current server.
 
 - darknet UI only shows connections to servers connected to servers with root access (the same visibility as probe()). Other nearby servers are visible, too, but you can't see any of their connections or their hostname. They're just to encourage exploration.
 
@@ -144,7 +144,7 @@ Design document and workspace
 
 - removed dnet.exec in favor of ns.exec. Exec itself does not need a password, but the target server requires a session with the current script (via authenticate or connectToSession with the right password), root access, and a direct connection or stasis link or backdoor.
 
-- removed dnet.scp in favor of ns.scp. The SOURCE server requires a session. This means that pulling files FROM the darkweb requires a session, but writing to anywhere is restricted.
+- removed dnet.scp in favor of ns.scp. The destination server requires a session (effectively requiring a backdoor or stasis link for remote scp INTO the darkweb, like exec)
 
 - Backdoored servers are more likely to be targeted for restarts (which remove backdoors) or going offline, which makes them less reliable and naturally reduces their number over time
 - Backdooring too many servers starts to accrue a debuff to authenticate() time taken
@@ -171,6 +171,10 @@ Design document and workspace
 - small bugfixes
 
 ## TODO:
+
+- b1tflumed: darkweb has wrong password?
+
+ns.dnet.enums.XXX for status codes etc
 
 lab: join together multiple mazes?
 
@@ -307,6 +311,10 @@ sake of suspense: perhaps hide the network past current+3 levels
 - session token?
 
 ## TODO later:
+
+- stanek fragments for darkweb
+
+- achievements
 
 - reward that scales password attempt speed?
 - reward that speeds up packet sniffing speed?

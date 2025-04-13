@@ -13,7 +13,7 @@ There is a maximum of 2 stasis links that can be applied globally.
 **Signature:**
 
 ```typescript
-setStasisLink(shouldLink: boolean): boolean;
+setStasisLink(shouldLink: boolean): Promise<boolean>;
 ```
 
 ## Parameters
@@ -24,9 +24,9 @@ setStasisLink(shouldLink: boolean): boolean;
 
 **Returns:**
 
-boolean
+Promise&lt;boolean&gt;
 
 ## Remarks
 
-RAM cost: 0.3 GB
+RAM cost: 12 GB
 

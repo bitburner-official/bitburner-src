@@ -829,8 +829,6 @@ export const ns: InternalAPI<NSFull> = {
       const host = helpers.string(ctx, "host", _host);
       const safetyGuard = !!_safetyGuard;
       const server = helpers.getServer(ctx, host);
-      expectAuthenticated(ctx, server);
-
       let scriptsKilled = 0;
 
       for (const byPid of server.runningScriptMap.values()) {
@@ -855,7 +853,7 @@ export const ns: InternalAPI<NSFull> = {
     const destServer = helpers.getServer(ctx, destination);
     const sourceServer = helpers.getServer(ctx, source);
     const files = Array.isArray(_files) ? _files : [_files];
-    expectAuthenticated(ctx, sourceServer);
+    expectAuthenticated(ctx, destServer);
     return helpers.scp(ctx, files, sourceServer, destServer);
   },
   ls: (ctx) => (_host, _substring) => {
