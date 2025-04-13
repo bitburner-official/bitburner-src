@@ -4163,9 +4163,10 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.2 GB
    *
+   * @param returnOpts - Optional. Controls whether the function returns IPs.
    * @returns An array of strings containing the hostnames of all connected servers.
    */
-  probe(): string[];
+  probe(returnOpts?: HostReturnOptions): string[];
 
   /**
    * Applies or removes a stasis link to the script's current server. This will allow you to connectToSession() or exec() to the server remotely, even if it is

@@ -177,6 +177,8 @@ lab: join together multiple mazes?
 scp: add session details to docs
 exec: add session details to docs
 
+IP stuff for probe
+
 Catlover writeup: https://discord.com/channels/415207508303544321/1358930422607642845/1360131828756775033
 My suggestion: Create many layers and cliques. We are still consistent in the behavior of APIs, but each layer (or clique) has a unique purpose. A very rough guideline:
 Low tier:

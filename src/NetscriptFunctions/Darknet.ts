@@ -225,14 +225,15 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         currentServer.caches = currentServer.caches.filter((cache) => cache !== fileName);
         getRewardFromCache(currentServer, suppressToast);
       },
-    probe: (ctx: NetscriptContext) => (): string[] => {
-      // TODO: IP stuff?
-      const server = ctx.workerScript.getServer();
+    probe: (ctx: NetscriptContext) => (_returnOpts): string[] => {
+      const returnOpts = helpers.hostReturnOptions(_returnOpts);
+      const server: BaseServer = ctx.workerScript.getServer();
       const out: string[] = [];
-      for (let i = 0; i < server.serversOnNetwork.length; i++) {
-        const s = getServerOnNetwork(server, i);
-        if (s) {
-          out.push(s.hostname);
+      for (const neighbor of server.serversOnNetwork) {
+        const neighborServer = helpers.getServer(ctx, neighbor);
+        const entry = helpers.returnServerID(neighborServer, returnOpts);
+        if (entry) {
+          out.push(entry);
         }
       }
       helpers.log(ctx, () => `returned ${out.length} connections for ${server.hostname}`);
