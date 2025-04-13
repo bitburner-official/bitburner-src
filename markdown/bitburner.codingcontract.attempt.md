@@ -18,7 +18,7 @@ attempt(answer: any, filename: string, host?: string): string;
 |  --- | --- | --- |
 |  answer | any | Attempted solution for the contract. This can be a string formatted like submitting manually, or the answer in the format of the specific contract type. |
 |  filename | string | Filename of the contract. |
-|  host | string | _(Optional)_ Hostname of the server containing the contract. Optional. Defaults to current server if not provided. |
+|  host | string | _(Optional)_ Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided. |
 
 **Returns:**
 

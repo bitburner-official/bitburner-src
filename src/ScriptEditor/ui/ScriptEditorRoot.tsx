@@ -188,14 +188,13 @@ function Root(props: IProps): React.ReactElement {
     // this is duplicate code with saving later.
     if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalTypeScript) {
       //Make sure filename + code properly follow tutorial
-      if (currentScript.path !== "n00dles.script" && currentScript.path !== "n00dles.js") {
+      if (currentScript.path !== "n00dles.js") {
         dialogBoxCreate("Don't change the script name for now.");
         return;
       }
       const cleanCode = currentScript.code.replace(/\s/g, "");
-      const ns1 = "while(true){hack('n00dles');}";
-      const ns2 = `/**@param{NS}ns*/exportasyncfunctionmain(ns){while(true){awaitns.hack("n00dles");}}`;
-      if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
+      const expectedCleanCode = `/**@param{NS}ns*/exportasyncfunctionmain(ns){while(true){awaitns.hack("n00dles");}}`;
+      if (!cleanCode.includes(expectedCleanCode)) {
         dialogBoxCreate("Please copy and paste the code from the tutorial!");
         return;
       }

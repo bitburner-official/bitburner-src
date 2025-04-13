@@ -30,5 +30,5 @@ export function run(args: (string | number | boolean)[], server: BaseServer): vo
   } else if (hasCacheFileExtension(path)) {
     return Terminal.startAction(4, "c", server);
   }
-  Terminal.error(`Invalid file extension. Only .js, .jsx, .ts, .tsx, .script, .cct, and .exe files can be run.`);
+  Terminal.error(`Invalid file extension. Only .js, .jsx, .ts, .tsx, .cct, and .exe files can be run.`);
 }

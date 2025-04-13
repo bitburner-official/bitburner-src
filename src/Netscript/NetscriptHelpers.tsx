@@ -79,6 +79,8 @@ export const helpers = {
   boolean,
   runOptions,
   spawnOptions,
+  hostReturnOptions,
+  returnServerID,
   argsToString,
   basicErrorMessage,
   errorMessage,
@@ -124,6 +126,10 @@ export interface CompleteHGWOptions {
   threads: PositiveNumber;
   stock: boolean;
   additionalMsec: number;
+}
+/** HostReturnOptions with non-optional, type-validated members, for passing between internal functions */
+export interface CompleteHostReturnOptions {
+  returnByIP: boolean;
 }
 
 /** Convert a provided value v for argument argName to string. If it wasn't originally a string or number, throw. */
@@ -241,6 +247,20 @@ function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteS
     }
   }
   return result;
+}
+
+function hostReturnOptions(returnOpts: unknown): CompleteHostReturnOptions {
+  const result: CompleteHostReturnOptions = { returnByIP: false };
+  if (typeof returnOpts !== "object" || !returnOpts) return result;
+  // Safe assertion since returnOpts type has been narrowed to a non-null object
+  const { returnByIP } = returnOpts as Unknownify<CompleteHostReturnOptions>;
+  result.returnByIP = !!returnByIP;
+  return result;
+}
+
+/** Returns a server's hostname or IP based on the `returnByIP` field of HostReturnOptions */
+function returnServerID(server: BaseServer, returnOpts: CompleteHostReturnOptions): string {
+  return returnOpts.returnByIP ? server.ip : server.hostname;
 }
 
 function mapToString(map: Map<unknown, unknown>): string {

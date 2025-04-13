@@ -18,7 +18,7 @@ setTailFontSize(pixel?: number, fn?: FilenameOrPID, host?: string, ...args: Scri
 |  --- | --- | --- |
 |  pixel | number | _(Optional)_ Optional. The new font size in pixels. If omitted, the default tail font size is used. |
 |  fn | [FilenameOrPID](./bitburner.filenameorpid.md) | _(Optional)_ Optional. Filename or PID of the target script. If omitted, the current script is used. |
-|  host | string | _(Optional)_ Optional. Hostname of the target script. Defaults to the server this script is running on. If args are specified, this is not optional. |
+|  host | string | _(Optional)_ Optional. Hostname/IP of the target script. Defaults to the server this script is running on. If args are specified, this is not optional. |
 |  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments for the target script. |
 
 **Returns:**

@@ -9,7 +9,7 @@ Start another script on any server.
 **Signature:**
 
 ```typescript
-exec(script: string, hostname: string, threadOrOptions?: number | RunOptions, ...args: ScriptArg[]): number;
+exec(script: string, host: string, threadOrOptions?: number | RunOptions, ...args: ScriptArg[]): number;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ exec(script: string, hostname: string, threadOrOptions?: number | RunOptions, ..
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  script | string | Filename of script to execute. This file must already exist on the target server. |
-|  hostname | string | Hostname of the <code>target server</code> on which to execute the script. |
+|  host | string | Hostname/IP of the <code>target server</code> on which to execute the script. |
 |  threadOrOptions | number \| [RunOptions](./bitburner.runoptions.md) | _(Optional)_ Either an integer number of threads for new script, or a [RunOptions](./bitburner.runoptions.md) object. Threads defaults to 1. |
 |  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Additional arguments to pass into the new script that is being run. Note that if any arguments are being passed into the new script, then the third argument threadOrOptions must be filled in with a value. |
 

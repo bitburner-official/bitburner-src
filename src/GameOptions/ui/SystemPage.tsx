@@ -6,7 +6,6 @@ import { AutoexecInput } from "./AutoexecInput";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 
 export const SystemPage = (): React.ReactElement => {
-  const [execTime, setExecTime] = useState(Settings.CodeInstructionRunTime);
   const [recentScriptsSize, setRecentScriptsSize] = useState(Settings.MaxRecentScriptsCapacity);
   const [logSize, setLogSize] = useState(Settings.MaxLogCapacity);
   const [portSize, setPortSize] = useState(Settings.MaxPortCapacity);
@@ -22,11 +21,6 @@ export const SystemPage = (): React.ReactElement => {
   function handleTerminalSizeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setTerminalSize(newValue as number);
     Settings.MaxTerminalCapacity = newValue as number;
-  }
-
-  function handleExecTimeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
-    setExecTime(newValue as number);
-    Settings.CodeInstructionRunTime = newValue as number;
   }
 
   function handleTailIntervalChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
@@ -62,20 +56,6 @@ export const SystemPage = (): React.ReactElement => {
           }
         />
         <br />
-        <OptionsSlider
-          label=".script exec time (ms)"
-          initialValue={execTime}
-          callback={handleExecTimeChange}
-          step={1}
-          min={5}
-          max={100}
-          tooltip={
-            <>
-              The minimum number of milliseconds it takes to execute an operation in Netscript. Setting this too low can
-              result in poor performance if you have many scripts running.
-            </>
-          }
-        />
         <OptionsSlider
           label="Recently killed scripts size"
           initialValue={recentScriptsSize}

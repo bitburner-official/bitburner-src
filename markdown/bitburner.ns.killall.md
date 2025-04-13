@@ -16,7 +16,7 @@ killall(host?: string, safetyGuard?: boolean): boolean;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | _(Optional)_ IP or hostname of the server on which to kill all scripts. |
+|  host | string | _(Optional)_ Hostname/IP of the server on which to kill all scripts. |
 |  safetyGuard | boolean | _(Optional)_ Skips the script that calls this function |
 
 **Returns:**

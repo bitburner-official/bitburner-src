@@ -16,6 +16,10 @@ export function runScript(
   commandArgs: (string | number | boolean)[],
   server: BaseServer,
 ): void {
+  if (isLegacyScript(scriptPath)) {
+    sendDeprecationNotice();
+    return;
+  }
   const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
   let flags: {
     _: ScriptArg[];
@@ -65,9 +69,6 @@ export function runScript(
     return;
   }
 
-  if (isLegacyScript(scriptPath)) {
-    sendDeprecationNotice();
-  }
   Terminal.print(
     `Running script with ${pluralize(numThreads, "thread")}, pid ${runningScript.pid} and args: ${JSON.stringify(
       args,

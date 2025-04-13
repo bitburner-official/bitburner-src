@@ -7,8 +7,8 @@ import { Page } from "../../../ui/Router";
 
 export function sendDeprecationNotice() {
   return Terminal.printRaw(
-    <Typography sx={{ color: Settings.theme.warning }}>
-      NOTICE: Accessing the Netscript API via .script files is deprecated and will be removed in a future update.{" "}
+    <Typography sx={{ color: Settings.theme.error }}>
+      Running .script files is unsupported.{" "}
       <Link
         style={{ cursor: "pointer" }}
         color="inherit"
