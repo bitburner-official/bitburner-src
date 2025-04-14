@@ -2,45 +2,62 @@ import { APIBreakInfo } from "./APIBreak";
 
 export const breakInfos300: APIBreakInfo[] = [
   {
-    brokenFunctions: [{ name: "ns.nFormat" }],
+    brokenAPIs: [{ name: "ns.nFormat" }],
     info:
       "ns.nFormat() was removed.\n" +
       "Use ns.formatNumber, ns.formatRam, ns.formatPercent, or JS built-in objects/functions (e.g., Intl.NumberFormat, " +
       "Intl.PluralRules, Intl.Locale) instead.",
+    showPopUp: true,
   },
   {
-    brokenFunctions: [
-      { name: "ns.getTimeSinceLastAug()", replaceValue: "(Date.now() - ns.getResetInfo().lastAugReset)" },
-    ],
-    info: "ns.getTimeSinceLastAug() was removed.\n" + "Use Date.now() - ns.getResetInfo().lastAugReset instead.",
-  },
-  {
-    brokenFunctions: [
-      { name: "ns.getPlayer().playtimeSinceLastAug", replaceValue: "(Date.now() - ns.getResetInfo().lastAugReset)" },
-    ],
-    info:
-      "ns.getPlayer().playtimeSinceLastAug was removed.\n" + "Use Date.now() - ns.getResetInfo().lastAugReset instead.",
-  },
-  {
-    brokenFunctions: [
+    brokenAPIs: [
+      {
+        name: "ns.getTimeSinceLastAug",
+        migration: {
+          searchValue: "ns.getTimeSinceLastAug()",
+          replaceValue: "(Date.now() - ns.getResetInfo().lastAugReset)",
+        },
+      },
+      {
+        name: "ns.getPlayer().playtimeSinceLastAug",
+        migration: {
+          searchValue: "ns.getPlayer().playtimeSinceLastAug",
+          replaceValue: "(Date.now() - ns.getResetInfo().lastAugReset)",
+        },
+      },
       {
         name: "ns.getPlayer().playtimeSinceLastBitnode",
-        replaceValue: "(Date.now() - ns.getResetInfo().lastNodeReset)",
+        migration: {
+          searchValue: "ns.getPlayer().playtimeSinceLastBitnode",
+          replaceValue: "(Date.now() - ns.getResetInfo().lastNodeReset)",
+        },
+      },
+      {
+        name: "ns.getPlayer().bitNodeN",
+        migration: {
+          searchValue: "ns.getPlayer().bitNodeN",
+          replaceValue: "ns.getResetInfo().currentNode",
+        },
+      },
+      {
+        name: "ns.corporation.getCorporation().state",
+        migration: {
+          searchValue: "ns.corporation.getCorporation().state",
+          replaceValue: "ns.corporation.getCorporation().nextState",
+        },
       },
     ],
     info:
+      "ns.getTimeSinceLastAug was removed.\n" +
+      "Use Date.now() - ns.getResetInfo().lastAugReset instead.\n\n" +
+      "ns.getPlayer().playtimeSinceLastAug was removed.\n" +
+      "Use Date.now() - ns.getResetInfo().lastAugReset instead.\n\n" +
       "ns.getPlayer().playtimeSinceLastBitnode was removed.\n" +
-      "Use Date.now() - ns.getResetInfo().lastNodeReset instead.",
-  },
-  {
-    brokenFunctions: [{ name: "ns.getPlayer().bitNodeN", replaceValue: "ns.getResetInfo().currentNode" }],
-    info: "ns.getPlayer().bitNodeN was removed.\n" + "Use ns.getResetInfo().currentNode instead",
-  },
-  {
-    brokenFunctions: [
-      { name: "ns.corporation.getCorporation().state", replaceValue: "ns.corporation.getCorporation().nextState" },
-    ],
-    info:
-      "ns.corporation.getCorporation().state was removed.\n" + "Use ns.corporation.getCorporation().nextState instead",
+      "Use Date.now() - ns.getResetInfo().lastNodeReset instead.\n\n" +
+      "ns.getPlayer().bitNodeN was removed.\n" +
+      "Use ns.getResetInfo().currentNode instead\n\n" +
+      "ns.corporation.getCorporation().state was removed.\n" +
+      "Use ns.corporation.getCorporation().nextState instead",
+    showPopUp: false,
   },
 ];

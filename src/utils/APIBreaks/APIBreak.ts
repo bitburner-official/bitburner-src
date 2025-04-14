@@ -21,18 +21,21 @@ type ImpactMap = Map<string, ScriptImpactMap>;
 
 export interface APIBreakInfo {
   /** The API functions impacted by the API break */
-  brokenFunctions: {
+  brokenAPIs: {
     name: string;
-    replaceValue?: string;
+    migration?: {
+      /** We may need to use a custom search value instead of name */
+      searchValue: string | RegExp;
+      replaceValue: string;
+    };
   }[];
   /** Info that should be shown to the player, alongside the list of impacted scripts */
   info: string;
+  /** If broken APIs can be safely migrated, we can skip displaying the notification popup */
+  showPopUp: boolean;
 }
 
-function detectImpactAndMigrateLines(
-  script: Script,
-  brokenFunctions: APIBreakInfo["brokenFunctions"],
-): number[] | null {
+function detectImpactAndMigrateLines(script: Script, brokenFunctions: APIBreakInfo["brokenAPIs"]): number[] | null {
   const impactedLines: number[] = [];
   const lines = script.content.split("\n");
   for (let i = 0; i < lines.length; ++i) {
@@ -41,8 +44,8 @@ function detectImpactAndMigrateLines(
         continue;
       }
       impactedLines.push(i + 1);
-      if (brokenFunction.replaceValue) {
-        lines[i] = lines[i].replaceAll(brokenFunction.name, brokenFunction.replaceValue);
+      if (brokenFunction.migration) {
+        lines[i] = lines[i].replaceAll(brokenFunction.migration.searchValue, brokenFunction.migration.replaceValue);
       }
     }
   }
@@ -51,7 +54,7 @@ function detectImpactAndMigrateLines(
 }
 
 /** Returns a map keyed by hostname */
-function detectImpactAndMigrate(brokenFunctions: APIBreakInfo["brokenFunctions"]): ImpactMap | null {
+function detectImpactAndMigrate(brokenFunctions: APIBreakInfo["brokenAPIs"]): ImpactMap | null {
   const returnMap = new Map<string, ScriptImpactMap>();
   for (const server of GetAllServers()) {
     const impactedScripts = new Map<ScriptFilePath, number[]>();
@@ -70,15 +73,19 @@ function detectImpactAndMigrate(brokenFunctions: APIBreakInfo["brokenFunctions"]
 
 /** Show the player a dialog for their API breaks, and save an info file for the player to review later */
 export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
-  const details = [];
+  const details: {
+    text: string;
+    showPopUp: boolean;
+  }[] = [];
   for (const breakInfo of breakInfos) {
-    const impactMap = detectImpactAndMigrate(breakInfo.brokenFunctions);
+    const impactMap = detectImpactAndMigrate(breakInfo.brokenAPIs);
     if (!impactMap) {
       continue;
     }
-    details.push(
-      breakInfo.info +
-        `\n\nUsage of the following functions may have been affected:\n${breakInfo.brokenFunctions
+    details.push({
+      text:
+        breakInfo.info +
+        `\n\nUsage of the following functions may have been affected:\n${breakInfo.brokenAPIs
           .map((func) => func.name)
           .join("\n")}\n\n` +
         [...impactMap]
@@ -95,7 +102,8 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
                 .join("\n"),
           )
           .join("\n\n"),
-    );
+      showPopUp: breakInfo.showPopUp,
+    });
   }
   if (!details.length) {
     return;
@@ -106,7 +114,7 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
   }
   Player.getHomeComputer().writeToTextFile(
     textFileName,
-    `API BREAK INFO FOR ${version}\n\n${details.join("\n\n\n\n")}`,
+    `API BREAK INFO FOR ${version}\n\n${details.map((detail) => detail.text).join("\n\n\n\n")}`,
   );
   Terminal.warn(`AN API BREAK FROM VERSION ${version} MAY HAVE AFFECTED SOME OF YOUR SCRIPTS.`);
   Terminal.warn(`INFORMATION ABOUT THIS POTENTIAL IMPACT HAS BEEN LOGGED IN ${textFileName} ON YOUR HOME COMPUTER.`);
@@ -115,7 +123,10 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
       "The following dialog boxes will provide details of the potential impact to your scripts.\n" +
       `A file with these details has also been saved on your home computer under filename ${textFileName}.`,
   );
-  details.forEach((detail, i) => {
-    dialogBoxCreate(`API BREAK VERSION ${version} DETAILS ${i + 1} of ${details.length}\n\n${detail}`);
-  });
+  for (const detail of details) {
+    if (!detail.showPopUp) {
+      continue;
+    }
+    dialogBoxCreate(`API BREAK VERSION ${version} DETAILS\n\n${detail.text}`);
+  }
 }
