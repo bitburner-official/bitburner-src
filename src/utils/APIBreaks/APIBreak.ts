@@ -77,6 +77,7 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
     text: string;
     showPopUp: boolean;
   }[] = [];
+  let numberOfPopUps = 0;
   for (const breakInfo of breakInfos) {
     const impactMap = detectImpactAndMigrate(breakInfo.brokenAPIs);
     if (!impactMap) {
@@ -104,6 +105,9 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
           .join("\n\n"),
       showPopUp: breakInfo.showPopUp,
     });
+    if (breakInfo.showPopUp) {
+      ++numberOfPopUps;
+    }
   }
   if (!details.length) {
     return;
@@ -123,10 +127,12 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
       "The following dialog boxes will provide details of the potential impact to your scripts.\n" +
       `A file with these details has also been saved on your home computer under filename ${textFileName}.`,
   );
+  let popUpIndex = 0;
   for (const detail of details) {
     if (!detail.showPopUp) {
       continue;
     }
-    dialogBoxCreate(`API BREAK VERSION ${version} DETAILS\n\n${detail.text}`);
+    dialogBoxCreate(`API BREAK VERSION ${version} DETAILS ${popUpIndex + 1} of ${numberOfPopUps}\n\n${detail.text}`);
+    ++popUpIndex;
   }
 }
