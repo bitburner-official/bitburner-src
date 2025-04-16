@@ -19,8 +19,7 @@ app.on("window-all-closed", () => {
   process.exit(0);
 });
 
-const greenworks = require("./greenworks");
-const api = require("./api-server");
+require("./steamworksUtils");
 const gameWindow = require("./gameWindow");
 const achievements = require("./achievements");
 const utils = require("./utils");
@@ -37,32 +36,15 @@ log.transports.console.level = store.get("console-log-level", "debug");
 
 log.info(`Started app: ${JSON.stringify(process.argv)}`);
 
-// We want to fail gracefully if we cannot connect to Steam
-try {
-  if (greenworks && greenworks.init()) {
-    log.info("Steam API has been initialized.");
-  } else {
-    const error = "Steam API has failed to initialize.";
-    log.warn(error);
-    global.greenworksError = error;
-  }
-} catch (ex) {
-  log.warn(ex.message);
-  global.greenworksError = ex.message;
-}
-
 let isRestoreDisabled = false;
 
-function setStopProcessHandler(app, window) {
+function setStopProcessHandler(window) {
   const closingWindowHandler = async (e) => {
     // We need to prevent the default closing event to add custom logic
     e.preventDefault();
 
     // First we clear the achievement timer
     achievements.disableAchievementsInterval(window);
-
-    // Shutdown the http server
-    api.disable();
 
     // Trigger debounced saves right now before closing
     try {
@@ -119,7 +101,7 @@ function setStopProcessHandler(app, window) {
     }
   };
 
-  const receivedDisableRestoreHandler = async (event, arg) => {
+  const receivedDisableRestoreHandler = (event, arg) => {
     if (!window) return log.warn("Window was undefined in disable import handler");
 
     log.debug(`Disabling auto-restore for ${arg.duration}ms.`);
@@ -130,7 +112,7 @@ function setStopProcessHandler(app, window) {
     }, arg.duration);
   };
 
-  const receivedGameSavedHandler = async (event, arg) => {
+  const receivedGameSavedHandler = (event, arg) => {
     if (!window) return log.warn("Window was undefined in game saved handler");
 
     const { save, ...other } = arg;
@@ -233,15 +215,15 @@ app.on("ready", async () => {
     const window = new BrowserWindow({ show: false });
     await window.loadFile("export.html");
     window.show();
-    setStopProcessHandler(app, window);
+    setStopProcessHandler(window);
     await utils.exportSave(window);
   } else {
     const window = await startWindow(process.argv.includes("--no-scripts"));
-    if (global.greenworksError) {
+    if (global.steamworksError) {
       await dialog.showMessageBox(window, {
         title: "Bitburner",
         message: "Could not connect to Steam",
-        detail: `${global.greenworksError}\n\nYou won't be able to receive achievements until this is resolved and you restart the game.`,
+        detail: `${global.steamworksError.message}\n\nYou won't be able to receive achievements until this is resolved and you restart the game.`,
         type: "warning",
         buttons: ["OK"],
       });

@@ -16,7 +16,7 @@ createGang(faction: string): boolean;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  faction | string |  |
+|  faction | string | Name of the faction that you want to create a gang with. This faction must allow this action, and you must be its member. |
 
 **Returns:**
 
@@ -29,4 +29,6 @@ True if the gang was created, false otherwise.
 RAM cost: 1GB
 
 Create a gang with the specified faction.
+
+Outside BitNode 2, your karma must be less than or equal to 54000.
 

@@ -2,7 +2,7 @@ import { Board, BoardState, OpponentStats, Play, SimpleBoard, SimpleOpponentStat
 
 import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
-import { Go } from "../Go";
+import { Go, GoEvents } from "../Go";
 import {
   getNewBoardState,
   getNewBoardStateFromSimpleBoard,
@@ -10,8 +10,9 @@ import {
   passTurn,
   updateCaptures,
 } from "../boardState/boardState";
-import { getNextTurn, handleNextTurn, resetAI } from "../boardAnalysis/goAI";
+import { getNextTurn, handleNextTurn, resetGoPromises } from "../boardAnalysis/goAI";
 import {
+  clearAllPointHighlights,
   evaluateIfMoveIsValid,
   getControlledSpace,
   getPreviousMove,
@@ -22,7 +23,6 @@ import { endGoGame, getOpponentStats, getScore, resetWinstreak } from "../boardA
 import { WHRNG } from "../../Casino/RNG";
 import { getRecordKeys } from "../../Types/Record";
 import { CalculateEffect, getEffectTypeForFaction } from "./effect";
-import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { newOpponentStats } from "../Constants";
 
 /**
@@ -264,6 +264,20 @@ export function getControlledEmptyNodes(_board?: Board) {
   );
 }
 
+export function setTestingBoardState(board: Board, komi?: number) {
+  resetBoardState(
+    () => {},
+    () => {},
+    GoOpponent.none,
+    board.length,
+  );
+  Go.currentGame.board = board;
+  if (komi != undefined) {
+    Go.currentGame.komiOverride = komi;
+  }
+  GoEvents.emit();
+}
+
 /**
  * Returns all previous board states as SimpleBoards
  */
@@ -342,9 +356,9 @@ export function resetBoardState(
     resetWinstreak(oldBoardState.ai, false);
   }
 
-  resetAI();
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
-  handleNextTurn(Go.currentGame).catch((error) => exceptionAlert(error));
+  resetGoPromises();
+  clearAllPointHighlights(Go.currentGame);
   logger(`New game started: ${opponent}, ${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);
 }

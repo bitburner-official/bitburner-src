@@ -7,19 +7,26 @@ import { Gang } from "../../Gang/Gang";
 import { GangConstants } from "../../Gang/data/Constants";
 import { isFactionWork } from "../../Work/FactionWork";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
+import { Result } from "../../types";
 
-export function canAccessGang(this: PlayerObject): boolean {
+export function canAccessGang(this: PlayerObject): Result {
   if (this.bitNodeOptions.disableGang) {
-    return false;
+    return { success: false, message: "Gang is disabled by advanced options." };
   }
   if (this.bitNodeN === 2) {
-    return true;
+    return { success: true };
   }
   if (this.activeSourceFileLvl(2) === 0) {
-    return false;
+    return { success: false, message: "You do not have Source-File 2." };
+  }
+  if (this.karma > GangConstants.GangKarmaRequirement) {
+    return {
+      success: false,
+      message: `Your karma must be less than or equal to ${GangConstants.GangKarmaRequirement}.`,
+    };
   }
 
-  return this.karma <= GangConstants.GangKarmaRequirement;
+  return { success: true };
 }
 
 export function isAwareOfGang(this: PlayerObject): boolean {

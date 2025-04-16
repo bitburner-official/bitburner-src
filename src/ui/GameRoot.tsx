@@ -7,12 +7,11 @@ import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { saveObject } from "../SaveObject";
 import { onExport } from "../ExportBonus";
-import { LocationName } from "@enums";
+import { CompletedProgramName, LocationName } from "@enums";
 import { ITutorial, iTutorialStart } from "../InteractiveTutorial";
 import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutorialRoot";
 import { ITutorialEvents } from "./InteractiveTutorial/ITutorialEvents";
 
-import { prestigeAugmentation } from "../Prestige";
 import { prestigeWorkerScripts } from "../NetscriptWorker";
 import { dialogBoxCreate } from "./React/DialogBox";
 import { GetAllServers } from "../Server/AllServers";
@@ -41,6 +40,7 @@ import { ProgramsRoot } from "../Programs/ui/ProgramsRoot";
 import { ScriptEditorRoot } from "../ScriptEditor/ui/ScriptEditorRoot";
 import { MilestonesRoot } from "../Milestones/ui/MilestonesRoot";
 import { TerminalRoot } from "../Terminal/ui/TerminalRoot";
+import { Terminal } from "../Terminal";
 import { DocumentationRoot } from "../Documentation/ui/DocumentationRoot";
 import { ActiveScriptsRoot } from "./ActiveScripts/ActiveScriptsRoot";
 import { FactionsRoot } from "../Faction/ui/FactionsRoot";
@@ -77,6 +77,7 @@ import { GoRoot } from "../Go/ui/GoRoot";
 import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { SpecialServers } from "../Server/data/SpecialServers";
 
 const htmlLocation = location;
 
@@ -354,7 +355,9 @@ export function GameRoot(): React.ReactElement {
           forceKill={killAllScripts}
           softReset={softReset}
           reactivateTutorial={() => {
-            prestigeAugmentation();
+            prestigeWorkerScripts();
+            Player.getHomeComputer().pushProgram(CompletedProgramName.nuke);
+            Terminal.connectToServer(SpecialServers.Home);
             Router.toPage(Page.Terminal);
             iTutorialStart();
           }}

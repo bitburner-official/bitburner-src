@@ -32,8 +32,8 @@ import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { pendingUIShareJobIds } from "./NetworkShare/Share";
 
 const BitNode8StartingMoney = 250e6;
-function delayedDialog(message: string) {
-  setTimeout(() => dialogBoxCreate(message), 200);
+function delayedDialog(message: string, canBeDismissedEasily = true) {
+  setTimeout(() => dialogBoxCreate(message, { html: false, canBeDismissedEasily }), 200);
 }
 
 function setInitialExpForPlayer() {
@@ -268,12 +268,16 @@ export function prestigeSourceFile(isFlume: boolean): void {
       "You received a copy of the Corporation Management Handbook on your home computer. It's a short introduction for " +
         "managing Corporation.\n\nYou should check the in-game Corporation documentation in the Documentation tab " +
         "(Documentation -> Advanced Mechanics -> Corporation). It's the most useful and up-to-date resource for managing Corporation.",
+      false,
     );
   }
 
   // BitNode 6: Bladeburners and BitNode 7: Bladeburners 2079
   if (Player.bitNodeN === 6 || Player.bitNodeN === 7) {
-    delayedDialog(`The ${CompanyName.NSA} would like to have a word with you once you're ready.`);
+    delayedDialog(
+      `The ${CompanyName.NSA} would like to have a word with you once you're ready. You should train your combat stats to level 100 before going there.`,
+      false,
+    );
   }
 
   // BitNode 8: Ghost of Wall Street
@@ -289,6 +293,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   if (Player.bitNodeN === 10) {
     delayedDialog(
       `Seek out ${FactionName.TheCovenant} if you'd like to purchase a new sleeve or two! And see what ${CompanyName.VitaLife} in ${CityName.NewTokyo} has to offer for you`,
+      false,
     );
   }
 
@@ -298,7 +303,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
 
   if (Player.bitNodeN === 13) {
-    delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`);
+    delayedDialog(`Trouble is brewing in ${CityName.Chongqing}`, false);
   }
 
   // Reset Stock market, gang, and corporation
@@ -343,6 +348,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   if (!isFlume && Player.sourceFiles.size === 1 && Player.sourceFileLvl(1) === 1) {
     delayedDialog(
       "Congratulations on destroying your first BitNode! Make sure to check the Documentation tab. Many pages are unlocked now.",
+      false,
     );
   }
 }

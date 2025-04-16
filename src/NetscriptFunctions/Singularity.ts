@@ -52,6 +52,7 @@ import { calculateEffectiveRequiredReputation } from "../Company/utils";
 import { calculateFavorAfterResetting } from "../Faction/formulas/favor";
 import { validBitNodes } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { cat } from "../Terminal/commands/cat";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -463,20 +464,28 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 5000);
       return true;
     },
-    getCurrentServer: (ctx) => () => {
+    getCurrentServer: (ctx) => (_returnOpts) => {
       helpers.checkSingularityAccess(ctx);
-      return Player.getCurrentServer().hostname;
+      const returnOpts = helpers.hostReturnOptions(_returnOpts);
+      const server = Player.getCurrentServer();
+      return helpers.returnServerID(server, returnOpts);
     },
-    connect: (ctx) => (_hostname) => {
+    cat: (ctx) => (_filename) => {
       helpers.checkSingularityAccess(ctx);
-      const hostname = helpers.string(ctx, "hostname", _hostname);
-      if (!hostname) {
-        throw helpers.errorMessage(ctx, `Invalid hostname: '${hostname}'`);
+      const filename = helpers.string(ctx, "filename", _filename);
+      const server = Player.getCurrentServer();
+      cat([filename], server);
+    },
+    connect: (ctx) => (_host) => {
+      helpers.checkSingularityAccess(ctx);
+      const host = helpers.string(ctx, "host", _host);
+      if (!host) {
+        throw helpers.errorMessage(ctx, `Invalid server: '${host}'`);
       }
 
-      const target = GetServer(hostname);
+      const target = GetServer(host);
       if (target == null) {
-        throw helpers.errorMessage(ctx, `Invalid hostname: '${hostname}'`);
+        throw helpers.errorMessage(ctx, `Invalid server: '${host}'`);
       }
 
       // Adjacent servers
@@ -491,8 +500,8 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
           );
           return false;
         }
-        if (other.hostname === hostname) {
-          Terminal.connectToServer(hostname, true);
+        if (other.hostname === target.hostname) {
+          Terminal.connectToServer(host, true);
           return true;
         }
       }
@@ -502,7 +511,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
        * is true.
        */
       if (target.backdoorInstalled || target.purchasedByPlayer) {
-        Terminal.connectToServer(hostname, true);
+        Terminal.connectToServer(host, true);
         return true;
       }
 

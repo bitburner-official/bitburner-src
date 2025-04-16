@@ -17,7 +17,7 @@ import { Go, GoEvents } from "../Go";
  *  fully surrounded by their pieces
  */
 export function getScore(boardState: BoardState) {
-  const komi = getKomi(boardState.ai) ?? 6.5;
+  const komi = getKomi(boardState) ?? 6.5;
   const whitePieces = getColoredPieceCount(boardState, GoColor.white);
   const blackPieces = getColoredPieceCount(boardState, GoColor.black);
   const territoryScores = getTerritoryScores(boardState.board);

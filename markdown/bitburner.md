@@ -101,6 +101,7 @@
 |  [HacknetRAMRequirement](./bitburner.hacknetramrequirement.md) | Player's Hacknet devices must have at least this much total RAM. |
 |  [HacknetServerConstants](./bitburner.hacknetserverconstants.md) | Hacknet server related constants |
 |  [HacknetServersFormulas](./bitburner.hacknetserversformulas.md) | Hacknet Server formulas |
+|  [HostReturnOptions](./bitburner.hostreturnoptions.md) | Options to control how a server identifier (hostname or IP address) is returned. Affects the behavior of [scan](./bitburner.ns.scan.md)<!-- -->, [getPurchasedServers](./bitburner.ns.getpurchasedservers.md)<!-- -->, and [getCurrentServer](./bitburner.singularity.getcurrentserver.md) |
 |  [HP](./bitburner.hp.md) |  |
 |  [ILocation](./bitburner.ilocation.md) |  |
 |  [IndustryData](./bitburner.industrydata.md) | Corporation industry information |
@@ -167,8 +168,6 @@
 |  --- | --- |
 |  [BladeburnerActionName](./bitburner.bladeburneractionname.md) |  |
 |  [BladeburnerActionTypeForSleeve](./bitburner.bladeburneractiontypeforsleeve.md) |  |
-|  [CodingContractAnswer](./bitburner.codingcontractanswer.md) |  |
-|  [CodingContractData](./bitburner.codingcontractdata.md) |  |
 |  [CodingContractObject](./bitburner.codingcontractobject.md) |  |
 |  [CodingContractSignatures](./bitburner.codingcontractsignatures.md) |  |
 |  [CorpEmployeePosition](./bitburner.corpemployeeposition.md) |  |

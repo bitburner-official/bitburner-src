@@ -9,7 +9,12 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { getNewBoardState, getStateCopy, makeMove, passTurn, updateCaptures } from "../boardState/boardState";
 import { bitverseArt, weiArt } from "../boardState/asciiArt";
 import { getScore, resetWinstreak } from "../boardAnalysis/scoring";
-import { boardFromBoardString, evaluateIfMoveIsValid, getAllValidMoves } from "../boardAnalysis/boardAnalysis";
+import {
+  boardFromBoardString,
+  clearAllPointHighlights,
+  evaluateIfMoveIsValid,
+  getAllValidMoves,
+} from "../boardAnalysis/boardAnalysis";
 import { useRerender } from "../../ui/React/hooks";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { boardStyles } from "../boardState/goStyles";
@@ -18,7 +23,7 @@ import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
 import { CorruptableText } from "../../ui/React/CorruptableText";
-import { handleNextTurn, resetAI } from "../boardAnalysis/goAI";
+import { handleNextTurn, resetGoPromises } from "../boardAnalysis/goAI";
 import { GoScoreExplanation } from "./GoScoreExplanation";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
@@ -133,9 +138,9 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
       resetWinstreak(boardState.ai, false);
     }
 
-    resetAI();
     Go.currentGame = getNewBoardState(newBoardSize, newOpponent, true);
-    handleNextTurn(Go.currentGame).catch((error) => exceptionAlert(error));
+    resetGoPromises();
+    clearAllPointHighlights(Go.currentGame);
   }
 
   function getPriorMove() {

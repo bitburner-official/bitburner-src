@@ -17,7 +17,7 @@ getContract(filename: string, host?: string): CodingContractObject;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  filename | string | Filename of the contract. |
-|  host | string | _(Optional)_ Host of the server containing the contract. Optional. Default to the current server if not provided. |
+|  host | string | _(Optional)_ Hostname/IP of the server containing the contract. Optional. Default to the current server if not provided. |
 
 **Returns:**
 

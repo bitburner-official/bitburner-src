@@ -149,8 +149,8 @@ export const GoInstructionsPage = (): React.ReactElement => {
               will increase the amount gained, but is not required.
               <br />
               <br />
-              Win streaks against a faction will give you +1 favor to that faction at certain numbers of wins (up to a
-              max of {getMaxFavor()} favor), if you are currently a member of that faction.
+              Two wins in a row against a faction will give you +1 favor to that faction (up to a max of
+              {getMaxFavor()} favor), if you are a member of that faction.
               <br />
               <br />
               For experienced Go players: IPvGO uses the old traditional Go score rules, area scoring, rather than the

@@ -185,7 +185,7 @@ They are not too important. It's fine to spend 1% of your current funds for them
 
 #### Should I buy Market-TA1?
 
-No, wait for Market-TA2. Market-TA1 is useless on its own.
+No, wait for Market-TA2. Market-TA1 is useless in most cases.
 
 #### When should I buy Market-TA2?
 
@@ -193,8 +193,13 @@ As soon as possible, it greatly increases your profit because it can find the op
 
 #### What is the difference between Market-TA1 and Market-TA2?
 
-Market-TA1: set a price that ensures that you can sell all produced goods in storage.  
-Market-TA2: set the highest possible price that ensures that you can sell all produced goods in storage.
+If you set the price of the material/product too much higher than the market price, you will get a penalty modifier that makes the material/product not be able to be sold as much as it should be.
+
+Market-TA1 sets a price higher than the market price while ensuring that you don't get the penalty modifier.
+
+Market-TA2 assumes that you can sell all stored units without any problems and can accept a penalty modifier. If that's the case, it finds the highest possible price.
+
+With products, the price set by Market-TA2 is usually several orders of magnitude higher than Market-TA1.
 
 #### I bought Market-TA2, but it does not set the optimal price for me.
 
@@ -203,6 +208,14 @@ You have to enable it.
 #### Is there a workaround for Market-TA2? Waiting for RP takes too long.
 
 Yes, you can reimplement Market-TA2. Implementing a custom Market-TA2 script is the best optimization in round 3+. Check this [section](./optimal-selling-price-market-ta2.md) to see how to do it.
+
+### Why can I not sell all produced goods in the storage even after using Market-TA1 and Market-TA2?
+
+In the SALE state, the game calculates `MaxSalesVolume` of the material/product. This is the number of items that can be sold in this state. This value is the product of many multipliers, and one of those multipliers is the markup multiplier. When it's higher than 1, it's a bonus multiplier helping you sell more items. When it's lower than 1, it's a penalty modifier making you sell fewer items.
+
+With Market TA1 and Market TA2, the markup multiplier is always less than or equal to 1. In other words, they never help you sell more items than you can. Their job is to help you find a good price that is higher than the market price. If you want to sell more items than you can, you need to set the price below the market price. This is not the job of Market TA1 and Market TA2.
+
+Check this [section](./optimal-selling-price-market-ta2.md) for more information and tips on how to increase `MaxSalesVolume`.
 
 #### How do I discard materials/products?
 

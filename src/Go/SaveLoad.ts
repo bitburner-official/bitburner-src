@@ -111,7 +111,8 @@ function loadCurrentGame(currentGame: unknown): BoardState | string {
     ? Math.max(0, currentGame.cheatCountForWhite || 0)
     : 0;
   if (!isInteger(currentGame.passCount) || currentGame.passCount < 0) return "invalid number for currentGame.passCount";
-  const previousBoards = typeof currentGame.previousBoard === "string" ? [currentGame.previousBoard] : [];
+  const previousBoards =
+    currentGame.previousBoard && typeof currentGame.previousBoard === "string" ? [currentGame.previousBoard] : [];
 
   const boardState = boardStateFromSimpleBoard(board, ai);
   boardState.previousPlayer = previousPlayer;

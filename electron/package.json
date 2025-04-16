@@ -24,8 +24,9 @@
     "buildResources": "public"
   },
   "dependencies": {
-    "electron-store": "^8.1.0",
+    "@catloversg/steamworks.js": "0.0.1",
     "electron-log": "^4.4.8",
+    "electron-store": "^8.1.0",
     "lodash": "^4.17.21"
   }
 }

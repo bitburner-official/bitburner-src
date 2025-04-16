@@ -17,7 +17,7 @@ getScriptExpGain(script: string, host: string, ...args: ScriptArg[]): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  script | string | Filename of script. |
-|  host | string | Server on which script is running. |
+|  host | string | Hostname/IP of the server on which script is running. |
 |  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments that the script is running with. |
 
 **Returns:**

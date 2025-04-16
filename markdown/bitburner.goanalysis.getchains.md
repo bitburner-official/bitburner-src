@@ -22,11 +22,13 @@ getChains(boardState?: string[]): (number | null)[][];
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  boardState | string\[\] | _(Optional)_ |
+|  boardState | string\[\] | _(Optional)_ Optional. The current board state, as an array of strings. Defaults to the current board state. |
 
 **Returns:**
 
 (number \| null)\[\]\[\]
+
+A 2D array of numbers identifying the chain ID of each point.
 
 ## Remarks
 

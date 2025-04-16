@@ -13,12 +13,14 @@ import {
 } from "./MessageDefinitions";
 
 import libSource from "../ScriptEditor/NetscriptDefinitions.d.ts?raw";
+import { saveObject } from "../SaveObject";
+import { Player } from "@player";
 
 function error(errorMsg: string, { id }: RFAMessage): RFAMessage {
   return new RFAMessage({ error: errorMsg, id: id });
 }
 
-export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessage> = {
+export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessage | Promise<RFAMessage>> = {
   pushFile: function (msg: RFAMessage): RFAMessage {
     if (!isFileData(msg.params)) return error("Misses parameters", msg);
 
@@ -110,6 +112,37 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
 
   getDefinitionFile: function (msg: RFAMessage): RFAMessage {
     return new RFAMessage({ result: libSource, id: msg.id });
+  },
+
+  getSaveFile: async function (msg: RFAMessage): Promise<RFAMessage> {
+    const saveData = await saveObject.getSaveData();
+
+    if (typeof saveData === "string") {
+      return new RFAMessage({
+        result: {
+          identifier: Player.identifier,
+          binary: false,
+          save: saveData,
+        },
+        id: msg.id,
+      });
+    }
+
+    // We can't serialize the Uint8Array directly, so we convert every integer to a character and make a string out of the array
+    // The external editor can simply recreate the save by converting each char back to their char code
+    let converted = "";
+    for (let i = 0; i < saveData.length; i++) {
+      converted += String.fromCharCode(saveData[i]);
+    }
+
+    return new RFAMessage({
+      result: {
+        identifier: Player.identifier,
+        binary: true,
+        save: converted,
+      },
+      id: msg.id,
+    });
   },
 
   getAllServers: function (msg: RFAMessage): RFAMessage {

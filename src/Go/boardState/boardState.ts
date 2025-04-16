@@ -6,6 +6,7 @@ import { getExpansionMoveArray } from "../boardAnalysis/goAI";
 import {
   boardFromSimpleBoard,
   boardStringFromBoard,
+  clearAllPointHighlights,
   evaluateIfMoveIsValid,
   findAllCapturedChains,
   findLibertiesForChain,
@@ -35,6 +36,8 @@ export function getNewBoardState(
     passCount: 0,
     cheatCount: 0,
     cheatCountForWhite: 0,
+    komiOverride: null,
+    highlightedPoints: Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null)),
     board: Array.from({ length: boardSize }, (_, x) =>
       Array.from({ length: boardSize }, (_, y) =>
         !boardToCopy || boardToCopy?.[x]?.[y]
@@ -122,6 +125,7 @@ export function makeMove(boardState: BoardState, x: number, y: number, player: G
 
   // Add move to board history
   boardState.previousBoards.unshift(boardStringFromBoard(boardState.board));
+  clearAllPointHighlights(boardState);
 
   point.color = player;
   boardState.previousPlayer = player;
@@ -139,6 +143,8 @@ export function passTurn(boardState: BoardState, player: GoColor, allowEndGame =
   if (boardState.previousPlayer === null || boardState.previousPlayer === player) {
     return;
   }
+  clearAllPointHighlights(boardState);
+
   boardState.previousPlayer = boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
   boardState.passCount++;
 
