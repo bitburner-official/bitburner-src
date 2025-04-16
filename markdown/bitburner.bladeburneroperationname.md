@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-type BladeburnerOperationName = _ValueOf<BladeburnerOperationEnumName>;
+type BladeburnerOperationName = _ValueOf<BladeburnerOperationNameEnumType>;
 ```
-**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [BladeburnerOperationEnumName](./bitburner.bladeburneroperationenumname.md)
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [BladeburnerOperationNameEnumType](./bitburner.bladeburneroperationnameenumtype.md)
 

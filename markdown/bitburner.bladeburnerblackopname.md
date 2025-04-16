@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-type BladeburnerBlackOpName = _ValueOf<BladeburnerBlackOpEnumName>;
+type BladeburnerBlackOpName = _ValueOf<BladeburnerBlackOpNameEnumType>;
 ```
-**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [BladeburnerBlackOpEnumName](./bitburner.bladeburnerblackopenumname.md)
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [BladeburnerBlackOpNameEnumType](./bitburner.bladeburnerblackopnameenumtype.md)
 

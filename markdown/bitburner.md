@@ -151,22 +151,22 @@
 |  [BladeburnerActionName](./bitburner.bladeburneractionname.md) |  |
 |  [BladeburnerActionType](./bitburner.bladeburneractiontype.md) |  |
 |  [BladeburnerActionTypeForSleeve](./bitburner.bladeburneractiontypeforsleeve.md) |  |
-|  [BladeburnerBlackOpEnumName](./bitburner.bladeburnerblackopenumname.md) | Black Operation names of Bladeburner |
 |  [BladeburnerBlackOpName](./bitburner.bladeburnerblackopname.md) |  |
-|  [BladeburnerContractEnumName](./bitburner.bladeburnercontractenumname.md) | Contract names of Bladeburner |
+|  [BladeburnerBlackOpNameEnumType](./bitburner.bladeburnerblackopnameenumtype.md) | Black Operation names of Bladeburner |
 |  [BladeburnerContractName](./bitburner.bladeburnercontractname.md) |  |
-|  [BladeburnerGeneralActionEnumName](./bitburner.bladeburnergeneralactionenumname.md) | General action names of Bladeburner |
+|  [BladeburnerContractNameEnumType](./bitburner.bladeburnercontractnameenumtype.md) | Contract names of Bladeburner |
 |  [BladeburnerGeneralActionName](./bitburner.bladeburnergeneralactionname.md) |  |
-|  [BladeburnerOperationEnumName](./bitburner.bladeburneroperationenumname.md) | Operation names of Bladeburner |
+|  [BladeburnerGeneralActionNameEnumType](./bitburner.bladeburnergeneralactionnameenumtype.md) | General action names of Bladeburner |
 |  [BladeburnerOperationName](./bitburner.bladeburneroperationname.md) |  |
-|  [BladeburnerSkillEnumName](./bitburner.bladeburnerskillenumname.md) | Skill names type of Bladeburner |
+|  [BladeburnerOperationNameEnumType](./bitburner.bladeburneroperationnameenumtype.md) | Operation names of Bladeburner |
 |  [BladeburnerSkillName](./bitburner.bladeburnerskillname.md) |  |
+|  [BladeburnerSkillNameEnumType](./bitburner.bladeburnerskillnameenumtype.md) | Skill names type of Bladeburner |
 |  [CityName](./bitburner.cityname.md) |  |
 |  [CityNameEnumType](./bitburner.citynameenumtype.md) | Names of all cities |
 |  [CodingContractObject](./bitburner.codingcontractobject.md) |  |
 |  [CodingContractSignatures](./bitburner.codingcontractsignatures.md) |  |
-|  [CompanyEnumName](./bitburner.companyenumname.md) | Names of all companies |
 |  [CompanyName](./bitburner.companyname.md) |  |
+|  [CompanyNameEnumType](./bitburner.companynameenumtype.md) | Names of all companies |
 |  [CorpEmployeePosition](./bitburner.corpemployeeposition.md) |  |
 |  [CorpIndustryName](./bitburner.corpindustryname.md) |  |
 |  [CorpMaterialName](./bitburner.corpmaterialname.md) |  |
@@ -179,18 +179,18 @@
 |  [CreatingCorporationCheckResultEnumType](./bitburner.creatingcorporationcheckresultenumtype.md) |  |
 |  [CrimeEnumType](./bitburner.crimeenumtype.md) |  |
 |  [CrimeType](./bitburner.crimetype.md) |  |
-|  [FactionEnumName](./bitburner.factionenumname.md) | <p>Names of all factions.</p><p>Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you do not want to know what all the factions are, you should not check this enum. Some factions are only accessible in the endgame.</p> |
 |  [FactionName](./bitburner.factionname.md) |  |
+|  [FactionNameEnumType](./bitburner.factionnameenumtype.md) | <p>Names of all factions.</p><p>Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you do not want to know what all the factions are, you should not check this enum. Some factions are only accessible in the endgame.</p> |
 |  [FactionWorkEnumType](./bitburner.factionworkenumtype.md) |  |
 |  [FactionWorkType](./bitburner.factionworktype.md) |  |
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
 |  [GoOpponent](./bitburner.goopponent.md) |  |
 |  [GymEnumType](./bitburner.gymenumtype.md) |  |
 |  [GymType](./bitburner.gymtype.md) |  |
-|  [JobEnumField](./bitburner.jobenumfield.md) |  |
-|  [JobEnumName](./bitburner.jobenumname.md) |  |
 |  [JobField](./bitburner.jobfield.md) |  |
+|  [JobFieldEnumType](./bitburner.jobfieldenumtype.md) |  |
 |  [JobName](./bitburner.jobname.md) |  |
+|  [JobNameEnumType](./bitburner.jobnameenumtype.md) |  |
 |  [NSEnums](./bitburner.nsenums.md) |  |
 |  [OrderEnumType](./bitburner.orderenumtype.md) |  |
 |  [OrderType](./bitburner.ordertype.md) |  |

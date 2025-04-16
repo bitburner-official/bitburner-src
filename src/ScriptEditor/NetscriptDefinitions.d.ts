@@ -3194,7 +3194,7 @@ type BladeburnerActionType = _ValueOf<BladeburnerActionEnumType>;
  *
  * @public
  */
-type BladeburnerGeneralActionEnumName = {
+type BladeburnerGeneralActionNameEnumType = {
   Training: "Training";
   FieldAnalysis: "Field Analysis";
   Recruitment: "Recruitment";
@@ -3204,28 +3204,28 @@ type BladeburnerGeneralActionEnumName = {
 };
 
 /** @public */
-type BladeburnerGeneralActionName = _ValueOf<BladeburnerGeneralActionEnumName>;
+type BladeburnerGeneralActionName = _ValueOf<BladeburnerGeneralActionNameEnumType>;
 
 /**
  * Contract names of Bladeburner
  *
  * @public
  */
-type BladeburnerContractEnumName = {
+type BladeburnerContractNameEnumType = {
   Tracking: "Tracking";
   BountyHunter: "Bounty Hunter";
   Retirement: "Retirement";
 };
 
 /** @public */
-type BladeburnerContractName = _ValueOf<BladeburnerContractEnumName>;
+type BladeburnerContractName = _ValueOf<BladeburnerContractNameEnumType>;
 
 /**
  * Operation names of Bladeburner
  *
  * @public
  */
-type BladeburnerOperationEnumName = {
+type BladeburnerOperationNameEnumType = {
   Investigation: "Investigation";
   Undercover: "Undercover Operation";
   Sting: "Sting Operation";
@@ -3235,14 +3235,14 @@ type BladeburnerOperationEnumName = {
 };
 
 /** @public */
-type BladeburnerOperationName = _ValueOf<BladeburnerOperationEnumName>;
+type BladeburnerOperationName = _ValueOf<BladeburnerOperationNameEnumType>;
 
 /**
  * Black Operation names of Bladeburner
  *
  * @public
  */
-type BladeburnerBlackOpEnumName = {
+type BladeburnerBlackOpNameEnumType = {
   OperationTyphoon: "Operation Typhoon";
   OperationZero: "Operation Zero";
   OperationX: "Operation X";
@@ -3267,14 +3267,14 @@ type BladeburnerBlackOpEnumName = {
 };
 
 /** @public */
-type BladeburnerBlackOpName = _ValueOf<BladeburnerBlackOpEnumName>;
+type BladeburnerBlackOpName = _ValueOf<BladeburnerBlackOpNameEnumType>;
 
 /**
  * Skill names type of Bladeburner
  *
  * @public
  */
-type BladeburnerSkillEnumName = {
+type BladeburnerSkillNameEnumType = {
   BladesIntuition: "Blade's Intuition";
   Cloak: "Cloak";
   ShortCircuit: "Short-Circuit";
@@ -3290,7 +3290,7 @@ type BladeburnerSkillEnumName = {
 };
 
 /** @public */
-type BladeburnerSkillName = _ValueOf<BladeburnerSkillEnumName>;
+type BladeburnerSkillName = _ValueOf<BladeburnerSkillNameEnumType>;
 
 /**
  * @public
@@ -3319,7 +3319,7 @@ type SpecialBladeburnerActionTypeForSleeve = _ValueOf<SpecialBladeburnerActionEn
  * @public
  */
 export type BladeburnerActionTypeForSleeve =
-  | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionEnumName["InciteViolence"]>
+  | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionNameEnumType["InciteViolence"]>
   | SpecialBladeburnerActionTypeForSleeve;
 
 /**
@@ -8473,7 +8473,7 @@ type GymEnumType = {
 type GymType = _ValueOf<GymEnumType>;
 
 /** @public */
-type JobEnumName = {
+type JobNameEnumType = {
   software0: "Software Engineering Intern";
   software1: "Junior Software Engineer";
   software2: "Senior Software Engineer";
@@ -8513,10 +8513,10 @@ type JobEnumName = {
 };
 
 /** @public */
-type JobName = _ValueOf<JobEnumName>;
+type JobName = _ValueOf<JobNameEnumType>;
 
 /** @public */
-type JobEnumField = {
+type JobFieldEnumType = {
   software: "Software";
   softwareConsultant: "Software Consultant";
   it: "IT";
@@ -8533,7 +8533,7 @@ type JobEnumField = {
 };
 
 /** @public */
-type JobField = _ValueOf<JobEnumField>;
+type JobField = _ValueOf<JobFieldEnumType>;
 
 // CORP ENUMS - Changed to types
 /** @public */
@@ -8678,7 +8678,7 @@ declare enum GymLocationName {
 
 /** Names of all companies
  * @public */
-type CompanyEnumName = {
+type CompanyNameEnumType = {
   ECorp: "ECorp";
   MegaCorp: "MegaCorp";
   BachmanAndAssociates: "Bachman & Associates";
@@ -8720,7 +8720,7 @@ type CompanyEnumName = {
 };
 
 /** @public */
-type CompanyName = _ValueOf<CompanyEnumName>;
+type CompanyName = _ValueOf<CompanyNameEnumType>;
 
 /**
  * Names of all factions.
@@ -8729,7 +8729,7 @@ type CompanyName = _ValueOf<CompanyEnumName>;
  * factions are, you should not check this enum. Some factions are only accessible in the endgame.
  *
  * @public */
-type FactionEnumName = {
+type FactionNameEnumType = {
   Illuminati: "Illuminati";
   Daedalus: "Daedalus";
   TheCovenant: "The Covenant";
@@ -8767,7 +8767,7 @@ type FactionEnumName = {
 };
 
 /** @public */
-type FactionName = _ValueOf<FactionEnumName>;
+type FactionName = _ValueOf<FactionNameEnumType>;
 
 declare enum CodingContractName {
   FindLargestPrimeFactor = "Find Largest Prime Factor",
@@ -8847,13 +8847,13 @@ type NSEnums = {
   CrimeType: CrimeEnumType;
   FactionWorkType: FactionWorkEnumType;
   GymType: GymEnumType;
-  JobName: JobEnumName;
-  JobField: JobEnumField;
+  JobName: JobNameEnumType;
+  JobField: JobFieldEnumType;
   LocationName: typeof LocationName;
   ToastVariant: ToastVariantEnumType;
   UniversityClassType: UniversityClassEnumType;
-  CompanyName: CompanyEnumName;
-  FactionName: FactionEnumName;
+  CompanyName: CompanyNameEnumType;
+  FactionName: FactionNameEnumType;
   CodingContractName: typeof CodingContractName;
 };
 

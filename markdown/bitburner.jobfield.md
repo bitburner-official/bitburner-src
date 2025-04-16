@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-type JobField = _ValueOf<JobEnumField>;
+type JobField = _ValueOf<JobFieldEnumType>;
 ```
-**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [JobEnumField](./bitburner.jobenumfield.md)
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [JobFieldEnumType](./bitburner.jobfieldenumtype.md)
 

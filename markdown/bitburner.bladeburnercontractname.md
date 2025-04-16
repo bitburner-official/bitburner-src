@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-type BladeburnerContractName = _ValueOf<BladeburnerContractEnumName>;
+type BladeburnerContractName = _ValueOf<BladeburnerContractNameEnumType>;
 ```
-**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [BladeburnerContractEnumName](./bitburner.bladeburnercontractenumname.md)
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [BladeburnerContractNameEnumType](./bitburner.bladeburnercontractnameenumtype.md)
 

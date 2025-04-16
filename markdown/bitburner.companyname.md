@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-type CompanyName = _ValueOf<CompanyEnumName>;
+type CompanyName = _ValueOf<CompanyNameEnumType>;
 ```
-**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [CompanyEnumName](./bitburner.companyenumname.md)
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [CompanyNameEnumType](./bitburner.companynameenumtype.md)
 

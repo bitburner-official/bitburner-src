@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-type JobName = _ValueOf<JobEnumName>;
+type JobName = _ValueOf<JobNameEnumType>;
 ```
-**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [JobEnumName](./bitburner.jobenumname.md)
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [JobNameEnumType](./bitburner.jobnameenumtype.md)
 

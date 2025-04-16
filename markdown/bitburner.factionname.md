@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-type FactionName = _ValueOf<FactionEnumName>;
+type FactionName = _ValueOf<FactionNameEnumType>;
 ```
-**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [FactionEnumName](./bitburner.factionenumname.md)
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [FactionNameEnumType](./bitburner.factionnameenumtype.md)
 

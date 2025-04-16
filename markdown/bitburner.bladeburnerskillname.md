@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-type BladeburnerSkillName = _ValueOf<BladeburnerSkillEnumName>;
+type BladeburnerSkillName = _ValueOf<BladeburnerSkillNameEnumType>;
 ```
-**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [BladeburnerSkillEnumName](./bitburner.bladeburnerskillenumname.md)
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [BladeburnerSkillNameEnumType](./bitburner.bladeburnerskillnameenumtype.md)
 

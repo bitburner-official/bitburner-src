@@ -13,15 +13,15 @@ type NSEnums = {
   CrimeType: CrimeEnumType;
   FactionWorkType: FactionWorkEnumType;
   GymType: GymEnumType;
-  JobName: JobEnumName;
-  JobField: JobEnumField;
+  JobName: JobNameEnumType;
+  JobField: JobFieldEnumType;
   LocationName: typeof LocationName;
   ToastVariant: ToastVariantEnumType;
   UniversityClassType: UniversityClassEnumType;
-  CompanyName: CompanyEnumName;
-  FactionName: FactionEnumName;
+  CompanyName: CompanyNameEnumType;
+  FactionName: FactionNameEnumType;
   CodingContractName: typeof CodingContractName;
 };
 ```
-**References:** [CityNameEnumType](./bitburner.citynameenumtype.md)<!-- -->, [CrimeEnumType](./bitburner.crimeenumtype.md)<!-- -->, [FactionWorkEnumType](./bitburner.factionworkenumtype.md)<!-- -->, [GymEnumType](./bitburner.gymenumtype.md)<!-- -->, [JobEnumName](./bitburner.jobenumname.md)<!-- -->, [JobEnumField](./bitburner.jobenumfield.md)<!-- -->, [LocationName](./bitburner.locationname.md)<!-- -->, [ToastVariantEnumType](./bitburner.toastvariantenumtype.md)<!-- -->, [UniversityClassEnumType](./bitburner.universityclassenumtype.md)<!-- -->, [CompanyEnumName](./bitburner.companyenumname.md)<!-- -->, [FactionEnumName](./bitburner.factionenumname.md)<!-- -->, [CodingContractName](./bitburner.codingcontractname.md)
+**References:** [CityNameEnumType](./bitburner.citynameenumtype.md)<!-- -->, [CrimeEnumType](./bitburner.crimeenumtype.md)<!-- -->, [FactionWorkEnumType](./bitburner.factionworkenumtype.md)<!-- -->, [GymEnumType](./bitburner.gymenumtype.md)<!-- -->, [JobNameEnumType](./bitburner.jobnameenumtype.md)<!-- -->, [JobFieldEnumType](./bitburner.jobfieldenumtype.md)<!-- -->, [LocationName](./bitburner.locationname.md)<!-- -->, [ToastVariantEnumType](./bitburner.toastvariantenumtype.md)<!-- -->, [UniversityClassEnumType](./bitburner.universityclassenumtype.md)<!-- -->, [CompanyNameEnumType](./bitburner.companynameenumtype.md)<!-- -->, [FactionNameEnumType](./bitburner.factionnameenumtype.md)<!-- -->, [CodingContractName](./bitburner.codingcontractname.md)
 

@@ -9,8 +9,8 @@
 
 ```typescript
 export type BladeburnerActionTypeForSleeve =
-  | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionEnumName["InciteViolence"]>
+  | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionNameEnumType["InciteViolence"]>
   | SpecialBladeburnerActionTypeForSleeve;
 ```
-**References:** [BladeburnerGeneralActionName](./bitburner.bladeburnergeneralactionname.md)<!-- -->, [BladeburnerGeneralActionEnumName](./bitburner.bladeburnergeneralactionenumname.md)<!-- -->, [SpecialBladeburnerActionTypeForSleeve](./bitburner.specialbladeburneractiontypeforsleeve.md)
+**References:** [BladeburnerGeneralActionName](./bitburner.bladeburnergeneralactionname.md)<!-- -->, [BladeburnerGeneralActionNameEnumType](./bitburner.bladeburnergeneralactionnameenumtype.md)<!-- -->, [SpecialBladeburnerActionTypeForSleeve](./bitburner.specialbladeburneractiontypeforsleeve.md)
 
