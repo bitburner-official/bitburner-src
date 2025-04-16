@@ -10,7 +10,7 @@
 ```typescript
 type SleeveFactionTask = {
   type: "FACTION";
-  factionWorkType: FactionWorkType | `${FactionWorkType}`;
+  factionWorkType: FactionWorkType;
   factionName: string;
 };
 ```

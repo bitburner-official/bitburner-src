@@ -9,14 +9,14 @@ Get chance to successfully commit a crime.
 **Signature:**
 
 ```typescript
-getCrimeChance(crime: CrimeType | `${CrimeType}`): number;
+getCrimeChance(crime: CrimeType): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  crime | [CrimeType](./bitburner.crimetype.md) \| \`${[CrimeType](./bitburner.crimetype.md)<!-- -->}\` | Name of crime. |
+|  crime | [CrimeType](./bitburner.crimetype.md) | Name of crime. |
 
 **Returns:**
 

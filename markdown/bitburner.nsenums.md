@@ -8,20 +8,20 @@
 **Signature:**
 
 ```typescript
-export type NSEnums = {
-  CityName: typeof CityName;
-  CrimeType: typeof CrimeType;
-  FactionWorkType: typeof FactionWorkType;
-  GymType: typeof GymType;
-  JobName: typeof JobName;
-  JobField: typeof JobField;
+type NSEnums = {
+  CityName: CityNameEnumType;
+  CrimeType: CrimeEnumType;
+  FactionWorkType: FactionWorkEnumType;
+  GymType: GymEnumType;
+  JobName: JobEnumName;
+  JobField: JobEnumField;
   LocationName: typeof LocationName;
-  ToastVariant: typeof ToastVariant;
-  UniversityClassType: typeof UniversityClassType;
-  CompanyName: typeof CompanyName;
-  FactionName: typeof FactionName;
+  ToastVariant: ToastVariantEnumType;
+  UniversityClassType: UniversityClassEnumType;
+  CompanyName: CompanyEnumName;
+  FactionName: FactionEnumName;
   CodingContractName: typeof CodingContractName;
 };
 ```
-**References:** [CityName](./bitburner.cityname.md)<!-- -->, [CrimeType](./bitburner.crimetype.md)<!-- -->, [FactionWorkType](./bitburner.factionworktype.md)<!-- -->, [GymType](./bitburner.gymtype.md)<!-- -->, [JobName](./bitburner.jobname.md)<!-- -->, [JobField](./bitburner.jobfield.md)<!-- -->, [LocationName](./bitburner.locationname.md)<!-- -->, [ToastVariant](./bitburner.toastvariant.md)<!-- -->, [UniversityClassType](./bitburner.universityclasstype.md)<!-- -->, [CompanyName](./bitburner.companyname.md)<!-- -->, [FactionName](./bitburner.factionname.md)<!-- -->, [CodingContractName](./bitburner.codingcontractname.md)
+**References:** [CityNameEnumType](./bitburner.citynameenumtype.md)<!-- -->, [CrimeEnumType](./bitburner.crimeenumtype.md)<!-- -->, [FactionWorkEnumType](./bitburner.factionworkenumtype.md)<!-- -->, [GymEnumType](./bitburner.gymenumtype.md)<!-- -->, [JobEnumName](./bitburner.jobenumname.md)<!-- -->, [JobEnumField](./bitburner.jobenumfield.md)<!-- -->, [LocationName](./bitburner.locationname.md)<!-- -->, [ToastVariantEnumType](./bitburner.toastvariantenumtype.md)<!-- -->, [UniversityClassEnumType](./bitburner.universityclassenumtype.md)<!-- -->, [CompanyEnumName](./bitburner.companyenumname.md)<!-- -->, [FactionEnumName](./bitburner.factionenumname.md)<!-- -->, [CodingContractName](./bitburner.codingcontractname.md)
 

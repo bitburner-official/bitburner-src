@@ -12,7 +12,7 @@ Set a sleeve to take a class at a university.
 setToUniversityCourse(
     sleeveNumber: number,
     universityName: UniversityLocationName | `${UniversityLocationName}`,
-    courseName: UniversityClassType | `${UniversityClassType}`,
+    courseName: UniversityClassType,
   ): boolean;
 ```
 
@@ -22,7 +22,7 @@ setToUniversityCourse(
 |  --- | --- | --- |
 |  sleeveNumber | number | Index of the sleeve to start taking class. |
 |  universityName | [UniversityLocationName](./bitburner.universitylocationname.md) \| \`${[UniversityLocationName](./bitburner.universitylocationname.md)<!-- -->}\` | Name of the university to attend. |
-|  courseName | [UniversityClassType](./bitburner.universityclasstype.md) \| \`${[UniversityClassType](./bitburner.universityclasstype.md)<!-- -->}\` | Name of the course to follow. |
+|  courseName | [UniversityClassType](./bitburner.universityclasstype.md) | Name of the course to follow. |
 
 **Returns:**
 

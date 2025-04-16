@@ -9,7 +9,7 @@ Expand to a new city.
 **Signature:**
 
 ```typescript
-expandCity(divisionName: string, city: CityName | `${CityName}`): void;
+expandCity(divisionName: string, city: CityName): void;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ expandCity(divisionName: string, city: CityName | `${CityName}`): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
+|  city | [CityName](./bitburner.cityname.md) | Name of the city |
 
 **Returns:**
 

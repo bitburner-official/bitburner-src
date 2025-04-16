@@ -10,7 +10,7 @@
 ```typescript
 type SleeveCrimeTask = {
   type: "CRIME";
-  crimeType: CrimeType | `${CrimeType}`;
+  crimeType: CrimeType;
   cyclesWorked: number;
   cyclesNeeded: number;
   tasksCompleted: number;

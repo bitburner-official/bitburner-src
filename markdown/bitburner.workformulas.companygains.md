@@ -7,12 +7,7 @@
 **Signature:**
 
 ```typescript
-companyGains(
-    person: Person,
-    companyName: CompanyName | `${CompanyName}`,
-    workType: JobName | `${JobName}`,
-    favor: number,
-  ): WorkStats;
+companyGains(person: Person, companyName: CompanyName, workType: JobName, favor: number): WorkStats;
 ```
 
 ## Parameters
@@ -20,8 +15,8 @@ companyGains(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  person | [Person](./bitburner.person.md) |  |
-|  companyName | [CompanyName](./bitburner.companyname.md) \| \`${[CompanyName](./bitburner.companyname.md)<!-- -->}\` |  |
-|  workType | [JobName](./bitburner.jobname.md) \| \`${[JobName](./bitburner.jobname.md)<!-- -->}\` |  |
+|  companyName | [CompanyName](./bitburner.companyname.md) |  |
+|  workType | [JobName](./bitburner.jobname.md) |  |
 |  favor | number |  |
 
 **Returns:**

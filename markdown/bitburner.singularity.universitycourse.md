@@ -11,7 +11,7 @@ Take university class.
 ```typescript
 universityCourse(
     universityName: UniversityLocationName | `${UniversityLocationName}`,
-    courseName: UniversityClassType | `${UniversityClassType}`,
+    courseName: UniversityClassType,
     focus?: boolean,
   ): boolean;
 ```
@@ -21,7 +21,7 @@ universityCourse(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  universityName | [UniversityLocationName](./bitburner.universitylocationname.md) \| \`${[UniversityLocationName](./bitburner.universitylocationname.md)<!-- -->}\` | Name of university. You must be in the correct city for whatever university you specify. |
-|  courseName | [UniversityClassType](./bitburner.universityclasstype.md) \| \`${[UniversityClassType](./bitburner.universityclasstype.md)<!-- -->}\` | Name of course. |
+|  courseName | [UniversityClassType](./bitburner.universityclasstype.md) | Name of course. |
 |  focus | boolean | _(Optional)_ Acquire player focus on this class. Optional. Defaults to true. |
 
 **Returns:**
