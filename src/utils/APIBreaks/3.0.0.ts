@@ -49,15 +49,15 @@ export const breakInfos300: APIBreakInfo[] = [
     ],
     info:
       "ns.getTimeSinceLastAug was removed.\n" +
-      "Use Date.now() - ns.getResetInfo().lastAugReset instead.\n\n" +
+      "It has been automatically replaced with Date.now() - ns.getResetInfo().lastAugReset.\n\n" +
       "ns.getPlayer().playtimeSinceLastAug was removed.\n" +
-      "Use Date.now() - ns.getResetInfo().lastAugReset instead.\n\n" +
+      "It has been automatically replaced with Date.now() - ns.getResetInfo().lastAugReset.\n\n" +
       "ns.getPlayer().playtimeSinceLastBitnode was removed.\n" +
-      "Use Date.now() - ns.getResetInfo().lastNodeReset instead.\n\n" +
+      "It has been automatically replaced with Date.now() - ns.getResetInfo().lastNodeReset.\n\n" +
       "ns.getPlayer().bitNodeN was removed.\n" +
-      "Use ns.getResetInfo().currentNode instead\n\n" +
+      "It has been automatically replaced with ns.getResetInfo().currentNode\n\n" +
       "ns.corporation.getCorporation().state was removed.\n" +
-      "Use ns.corporation.getCorporation().nextState instead",
+      "It has been automatically replaced with ns.corporation.getCorporation().nextState",
     showPopUp: false,
   },
 ];
