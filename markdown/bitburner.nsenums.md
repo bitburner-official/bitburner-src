@@ -15,7 +15,7 @@ type NSEnums = {
   GymType: GymEnumType;
   JobName: JobNameEnumType;
   JobField: JobFieldEnumType;
-  LocationName: typeof LocationName;
+  LocationName: LocationNameEnumType;
   ToastVariant: ToastVariantEnumType;
   UniversityClassType: UniversityClassEnumType;
   CompanyName: CompanyNameEnumType;
@@ -23,5 +23,5 @@ type NSEnums = {
   CodingContractName: typeof CodingContractName;
 };
 ```
-**References:** [CityNameEnumType](./bitburner.citynameenumtype.md)<!-- -->, [CrimeEnumType](./bitburner.crimeenumtype.md)<!-- -->, [FactionWorkEnumType](./bitburner.factionworkenumtype.md)<!-- -->, [GymEnumType](./bitburner.gymenumtype.md)<!-- -->, [JobNameEnumType](./bitburner.jobnameenumtype.md)<!-- -->, [JobFieldEnumType](./bitburner.jobfieldenumtype.md)<!-- -->, [LocationName](./bitburner.locationname.md)<!-- -->, [ToastVariantEnumType](./bitburner.toastvariantenumtype.md)<!-- -->, [UniversityClassEnumType](./bitburner.universityclassenumtype.md)<!-- -->, [CompanyNameEnumType](./bitburner.companynameenumtype.md)<!-- -->, [FactionNameEnumType](./bitburner.factionnameenumtype.md)<!-- -->, [CodingContractName](./bitburner.codingcontractname.md)
+**References:** [CityNameEnumType](./bitburner.citynameenumtype.md)<!-- -->, [CrimeEnumType](./bitburner.crimeenumtype.md)<!-- -->, [FactionWorkEnumType](./bitburner.factionworkenumtype.md)<!-- -->, [GymEnumType](./bitburner.gymenumtype.md)<!-- -->, [JobNameEnumType](./bitburner.jobnameenumtype.md)<!-- -->, [JobFieldEnumType](./bitburner.jobfieldenumtype.md)<!-- -->, [LocationNameEnumType](./bitburner.locationnameenumtype.md)<!-- -->, [ToastVariantEnumType](./bitburner.toastvariantenumtype.md)<!-- -->, [UniversityClassEnumType](./bitburner.universityclassenumtype.md)<!-- -->, [CompanyNameEnumType](./bitburner.companynameenumtype.md)<!-- -->, [FactionNameEnumType](./bitburner.factionnameenumtype.md)<!-- -->, [CodingContractName](./bitburner.codingcontractname.md)
 

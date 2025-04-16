@@ -1883,11 +1883,7 @@ export interface Singularity {
    * @param focus - Acquire player focus on this class. Optional. Defaults to true.
    * @returns True if action is successfully started, false otherwise.
    */
-  universityCourse(
-    universityName: UniversityLocationName | `${UniversityLocationName}`,
-    courseName: UniversityClassType,
-    focus?: boolean,
-  ): boolean;
+  universityCourse(universityName: UniversityLocationName, courseName: UniversityClassType, focus?: boolean): boolean;
 
   /**
    * Workout at the gym.
@@ -1909,7 +1905,7 @@ export interface Singularity {
    * @param focus - Acquire player focus on this gym workout. Optional. Defaults to true.
    * @returns True if action is successfully started, false otherwise.
    */
-  gymWorkout(gymName: GymLocationName | `${GymLocationName}`, stat: GymType, focus?: boolean): boolean;
+  gymWorkout(gymName: GymLocationName, stat: GymType, focus?: boolean): boolean;
 
   /**
    * Travel to another city.
@@ -5010,7 +5006,7 @@ export interface Sleeve {
    */
   setToUniversityCourse(
     sleeveNumber: number,
-    universityName: UniversityLocationName | `${UniversityLocationName}`,
+    universityName: UniversityLocationName,
     courseName: UniversityClassType,
   ): boolean;
 
@@ -5026,7 +5022,7 @@ export interface Sleeve {
    * @param stat - Name of the stat to train.
    * @returns True if the sleeve started working out, false otherwise.
    */
-  setToGymWorkout(sleeveNumber: number, gymName: GymLocationName | `${GymLocationName}`, stat: GymType): boolean;
+  setToGymWorkout(sleeveNumber: number, gymName: GymLocationName, stat: GymType): boolean;
 
   /**
    * Make a sleeve travel to another city. The cost for using this function is the same as for a player.
@@ -8586,95 +8582,104 @@ type CityName = _ValueOf<CityNameEnumType>;
 
 /** Names of all locations
  * @public */
-declare enum LocationName {
-  AevumAeroCorp = "AeroCorp",
-  AevumBachmanAndAssociates = "Bachman & Associates",
-  AevumClarkeIncorporated = "Clarke Incorporated",
-  AevumCrushFitnessGym = "Crush Fitness Gym",
-  AevumECorp = "ECorp",
-  AevumFulcrumTechnologies = "Fulcrum Technologies",
-  AevumGalacticCybersystems = "Galactic Cybersystems",
-  AevumNetLinkTechnologies = "NetLink Technologies",
-  AevumPolice = "Aevum Police Headquarters",
-  AevumRhoConstruction = "Rho Construction",
-  AevumSnapFitnessGym = "Snap Fitness Gym",
-  AevumSummitUniversity = "Summit University",
-  AevumWatchdogSecurity = "Watchdog Security",
-  AevumCasino = "Iker Molina Casino",
+type LocationNameEnumType = {
+  AevumAeroCorp: "AeroCorp";
+  AevumBachmanAndAssociates: "Bachman & Associates";
+  AevumClarkeIncorporated: "Clarke Incorporated";
+  AevumCrushFitnessGym: "Crush Fitness Gym";
+  AevumECorp: "ECorp";
+  AevumFulcrumTechnologies: "Fulcrum Technologies";
+  AevumGalacticCybersystems: "Galactic Cybersystems";
+  AevumNetLinkTechnologies: "NetLink Technologies";
+  AevumPolice: "Aevum Police Headquarters";
+  AevumRhoConstruction: "Rho Construction";
+  AevumSnapFitnessGym: "Snap Fitness Gym";
+  AevumSummitUniversity: "Summit University";
+  AevumWatchdogSecurity: "Watchdog Security";
+  AevumCasino: "Iker Molina Casino";
 
-  ChongqingKuaiGongInternational = "KuaiGong International",
-  ChongqingSolarisSpaceSystems = "Solaris Space Systems",
-  ChongqingChurchOfTheMachineGod = "Church of the Machine God",
+  ChongqingKuaiGongInternational: "KuaiGong International";
+  ChongqingSolarisSpaceSystems: "Solaris Space Systems";
+  ChongqingChurchOfTheMachineGod: "Church of the Machine God";
 
-  Sector12AlphaEnterprises = "Alpha Enterprises",
-  Sector12BladeIndustries = "Blade Industries",
-  Sector12CIA = "Central Intelligence Agency",
-  Sector12CarmichaelSecurity = "Carmichael Security",
-  Sector12CityHall = "Sector-12 City Hall",
-  Sector12DeltaOne = "DeltaOne",
-  Sector12FoodNStuff = "FoodNStuff",
-  Sector12FourSigma = "Four Sigma",
-  Sector12IcarusMicrosystems = "Icarus Microsystems",
-  Sector12IronGym = "Iron Gym",
-  Sector12JoesGuns = "Joe's Guns",
-  Sector12MegaCorp = "MegaCorp",
-  Sector12NSA = "National Security Agency",
-  Sector12PowerhouseGym = "Powerhouse Gym",
-  Sector12RothmanUniversity = "Rothman University",
-  Sector12UniversalEnergy = "Universal Energy",
+  Sector12AlphaEnterprises: "Alpha Enterprises";
+  Sector12BladeIndustries: "Blade Industries";
+  Sector12CIA: "Central Intelligence Agency";
+  Sector12CarmichaelSecurity: "Carmichael Security";
+  Sector12CityHall: "Sector-12 City Hall";
+  Sector12DeltaOne: "DeltaOne";
+  Sector12FoodNStuff: "FoodNStuff";
+  Sector12FourSigma: "Four Sigma";
+  Sector12IcarusMicrosystems: "Icarus Microsystems";
+  Sector12IronGym: "Iron Gym";
+  Sector12JoesGuns: "Joe's Guns";
+  Sector12MegaCorp: "MegaCorp";
+  Sector12NSA: "National Security Agency";
+  Sector12PowerhouseGym: "Powerhouse Gym";
+  Sector12RothmanUniversity: "Rothman University";
+  Sector12UniversalEnergy: "Universal Energy";
 
-  NewTokyoDefComm = "DefComm",
-  NewTokyoGlobalPharmaceuticals = "Global Pharmaceuticals",
-  NewTokyoNoodleBar = "Noodle Bar",
-  NewTokyoVitaLife = "VitaLife",
-  NewTokyoArcade = "Arcade",
+  NewTokyoDefComm: "DefComm";
+  NewTokyoGlobalPharmaceuticals: "Global Pharmaceuticals";
+  NewTokyoNoodleBar: "Noodle Bar";
+  NewTokyoVitaLife: "VitaLife";
+  NewTokyoArcade: "Arcade";
 
-  IshimaNovaMedical = "Nova Medical",
-  IshimaOmegaSoftware = "Omega Software",
-  IshimaStormTechnologies = "Storm Technologies",
-  IshimaGlitch = "0x6C1",
+  IshimaNovaMedical: "Nova Medical";
+  IshimaOmegaSoftware: "Omega Software";
+  IshimaStormTechnologies: "Storm Technologies";
+  IshimaGlitch: "0x6C1";
 
-  VolhavenCompuTek = "CompuTek",
-  VolhavenHeliosLabs = "Helios Labs",
-  VolhavenLexoCorp = "LexoCorp",
-  VolhavenMilleniumFitnessGym = "Millenium Fitness Gym",
-  VolhavenNWO = "NWO",
-  VolhavenOmniTekIncorporated = "OmniTek Incorporated",
-  VolhavenOmniaCybersystems = "Omnia Cybersystems",
-  VolhavenSysCoreSecurities = "SysCore Securities",
-  VolhavenZBInstituteOfTechnology = "ZB Institute of Technology",
+  VolhavenCompuTek: "CompuTek";
+  VolhavenHeliosLabs: "Helios Labs";
+  VolhavenLexoCorp: "LexoCorp";
+  VolhavenMilleniumFitnessGym: "Millenium Fitness Gym";
+  VolhavenNWO: "NWO";
+  VolhavenOmniTekIncorporated: "OmniTek Incorporated";
+  VolhavenOmniaCybersystems: "Omnia Cybersystems";
+  VolhavenSysCoreSecurities: "SysCore Securities";
+  VolhavenZBInstituteOfTechnology: "ZB Institute of Technology";
 
-  Hospital = "Hospital",
-  Slums = "The Slums",
-  TravelAgency = "Travel Agency",
-  WorldStockExchange = "World Stock Exchange",
+  Hospital: "Hospital";
+  Slums: "The Slums";
+  TravelAgency: "Travel Agency";
+  WorldStockExchange: "World Stock Exchange";
 
-  Void = "The Void",
-}
+  Void: "The Void";
+};
+
+/** @public */
+type LocationName = _ValueOf<LocationNameEnumType>;
 
 /**
  * Locations of university
  *
  * @public
  */
-declare enum UniversityLocationName {
-  AevumSummitUniversity = LocationName.AevumSummitUniversity,
-  Sector12RothmanUniversity = LocationName.Sector12RothmanUniversity,
-  VolhavenZBInstituteOfTechnology = LocationName.VolhavenZBInstituteOfTechnology,
-}
+type UniversityLocationNameEnumType = {
+  AevumSummitUniversity: LocationNameEnumType["AevumSummitUniversity"];
+  Sector12RothmanUniversity: LocationNameEnumType["Sector12RothmanUniversity"];
+  VolhavenZBInstituteOfTechnology: LocationNameEnumType["VolhavenZBInstituteOfTechnology"];
+};
+
+/** @public */
+type UniversityLocationName = _ValueOf<UniversityLocationNameEnumType>;
 
 /**
  * Locations of gym
  *
  * @public
  */
-declare enum GymLocationName {
-  AevumCrushFitnessGym = LocationName.AevumCrushFitnessGym,
-  AevumSnapFitnessGym = LocationName.AevumSnapFitnessGym,
-  Sector12IronGym = LocationName.Sector12IronGym,
-  Sector12PowerhouseGym = LocationName.Sector12PowerhouseGym,
-  VolhavenMilleniumFitnessGym = LocationName.VolhavenMilleniumFitnessGym,
-}
+type GymLocationNameEnumType = {
+  AevumCrushFitnessGym: LocationNameEnumType["AevumCrushFitnessGym"];
+  AevumSnapFitnessGym: LocationNameEnumType["AevumSnapFitnessGym"];
+  Sector12IronGym: LocationNameEnumType["Sector12IronGym"];
+  Sector12PowerhouseGym: LocationNameEnumType["Sector12PowerhouseGym"];
+  VolhavenMilleniumFitnessGym: LocationNameEnumType["VolhavenMilleniumFitnessGym"];
+};
+
+/** @public */
+type GymLocationName = _ValueOf<GymLocationNameEnumType>;
 
 /** Names of all companies
  * @public */
@@ -8849,7 +8854,7 @@ type NSEnums = {
   GymType: GymEnumType;
   JobName: JobNameEnumType;
   JobField: JobFieldEnumType;
-  LocationName: typeof LocationName;
+  LocationName: LocationNameEnumType;
   ToastVariant: ToastVariantEnumType;
   UniversityClassType: UniversityClassEnumType;
   CompanyName: CompanyNameEnumType;

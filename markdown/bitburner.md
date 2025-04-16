@@ -9,9 +9,6 @@
 |  Enumeration | Description |
 |  --- | --- |
 |  [CodingContractName](./bitburner.codingcontractname.md) |  |
-|  [GymLocationName](./bitburner.gymlocationname.md) | Locations of gym |
-|  [LocationName](./bitburner.locationname.md) | Names of all locations |
-|  [UniversityLocationName](./bitburner.universitylocationname.md) | Locations of university |
 
 ## Interfaces
 
@@ -186,11 +183,15 @@
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
 |  [GoOpponent](./bitburner.goopponent.md) |  |
 |  [GymEnumType](./bitburner.gymenumtype.md) |  |
+|  [GymLocationName](./bitburner.gymlocationname.md) |  |
+|  [GymLocationNameEnumType](./bitburner.gymlocationnameenumtype.md) | Locations of gym |
 |  [GymType](./bitburner.gymtype.md) |  |
 |  [JobField](./bitburner.jobfield.md) |  |
 |  [JobFieldEnumType](./bitburner.jobfieldenumtype.md) |  |
 |  [JobName](./bitburner.jobname.md) |  |
 |  [JobNameEnumType](./bitburner.jobnameenumtype.md) |  |
+|  [LocationName](./bitburner.locationname.md) |  |
+|  [LocationNameEnumType](./bitburner.locationnameenumtype.md) | Names of all locations |
 |  [NSEnums](./bitburner.nsenums.md) |  |
 |  [OrderEnumType](./bitburner.orderenumtype.md) |  |
 |  [OrderType](./bitburner.ordertype.md) |  |
@@ -217,4 +218,6 @@
 |  [ToastVariantEnumType](./bitburner.toastvariantenumtype.md) |  |
 |  [UniversityClassEnumType](./bitburner.universityclassenumtype.md) |  |
 |  [UniversityClassType](./bitburner.universityclasstype.md) |  |
+|  [UniversityLocationName](./bitburner.universitylocationname.md) |  |
+|  [UniversityLocationNameEnumType](./bitburner.universitylocationnameenumtype.md) | Locations of university |
 
