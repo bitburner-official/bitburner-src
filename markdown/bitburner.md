@@ -4,12 +4,6 @@
 
 ## bitburner package
 
-## Enumerations
-
-|  Enumeration | Description |
-|  --- | --- |
-|  [CodingContractName](./bitburner.codingcontractname.md) |  |
-
 ## Interfaces
 
 |  Interface | Description |
@@ -160,6 +154,8 @@
 |  [BladeburnerSkillNameEnumType](./bitburner.bladeburnerskillnameenumtype.md) | Skill names type of Bladeburner |
 |  [CityName](./bitburner.cityname.md) |  |
 |  [CityNameEnumType](./bitburner.citynameenumtype.md) | Names of all cities |
+|  [CodingContractName](./bitburner.codingcontractname.md) |  |
+|  [CodingContractNameEnumType](./bitburner.codingcontractnameenumtype.md) |  |
 |  [CodingContractObject](./bitburner.codingcontractobject.md) |  |
 |  [CodingContractSignatures](./bitburner.codingcontractsignatures.md) |  |
 |  [CompanyName](./bitburner.companyname.md) |  |

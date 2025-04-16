@@ -3926,7 +3926,7 @@ export interface CodingContract {
    * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns Name describing the type of problem posed by the Coding Contract.
    */
-  getContractType(filename: string, host?: string): `${CodingContractName}`;
+  getContractType(filename: string, host?: string): CodingContractName;
 
   /**
    * Get the description.
@@ -4010,7 +4010,7 @@ export interface CodingContract {
    * @remarks
    * RAM cost: 0 GB
    */
-  getContractTypes(): `${CodingContractName}`[];
+  getContractTypes(): CodingContractName[];
 }
 
 /**
@@ -8774,66 +8774,69 @@ type FactionNameEnumType = {
 /** @public */
 type FactionName = _ValueOf<FactionNameEnumType>;
 
-declare enum CodingContractName {
-  FindLargestPrimeFactor = "Find Largest Prime Factor",
-  SubarrayWithMaximumSum = "Subarray with Maximum Sum",
-  TotalWaysToSum = "Total Ways to Sum",
-  TotalWaysToSumII = "Total Ways to Sum II",
-  SpiralizeMatrix = "Spiralize Matrix",
-  ArrayJumpingGame = "Array Jumping Game",
-  ArrayJumpingGameII = "Array Jumping Game II",
-  MergeOverlappingIntervals = "Merge Overlapping Intervals",
-  GenerateIPAddresses = "Generate IP Addresses",
-  AlgorithmicStockTraderI = "Algorithmic Stock Trader I",
-  AlgorithmicStockTraderII = "Algorithmic Stock Trader II",
-  AlgorithmicStockTraderIII = "Algorithmic Stock Trader III",
-  AlgorithmicStockTraderIV = "Algorithmic Stock Trader IV",
-  MinimumPathSumInATriangle = "Minimum Path Sum in a Triangle",
-  UniquePathsInAGridI = "Unique Paths in a Grid I",
-  UniquePathsInAGridII = "Unique Paths in a Grid II",
-  ShortestPathInAGrid = "Shortest Path in a Grid",
-  SanitizeParenthesesInExpression = "Sanitize Parentheses in Expression",
-  FindAllValidMathExpressions = "Find All Valid Math Expressions",
-  HammingCodesIntegerToEncodedBinary = "HammingCodes: Integer to Encoded Binary",
-  HammingCodesEncodedBinaryToInteger = "HammingCodes: Encoded Binary to Integer",
-  Proper2ColoringOfAGraph = "Proper 2-Coloring of a Graph",
-  CompressionIRLECompression = "Compression I: RLE Compression",
-  CompressionIILZDecompression = "Compression II: LZ Decompression",
-  CompressionIIILZCompression = "Compression III: LZ Compression",
-  EncryptionICaesarCipher = "Encryption I: Caesar Cipher",
-  EncryptionIIVigenereCipher = "Encryption II: Vigenère Cipher",
-  SquareRoot = "Square Root",
-}
+type CodingContractNameEnumType = {
+  FindLargestPrimeFactor: "Find Largest Prime Factor";
+  SubarrayWithMaximumSum: "Subarray with Maximum Sum";
+  TotalWaysToSum: "Total Ways to Sum";
+  TotalWaysToSumII: "Total Ways to Sum II";
+  SpiralizeMatrix: "Spiralize Matrix";
+  ArrayJumpingGame: "Array Jumping Game";
+  ArrayJumpingGameII: "Array Jumping Game II";
+  MergeOverlappingIntervals: "Merge Overlapping Intervals";
+  GenerateIPAddresses: "Generate IP Addresses";
+  AlgorithmicStockTraderI: "Algorithmic Stock Trader I";
+  AlgorithmicStockTraderII: "Algorithmic Stock Trader II";
+  AlgorithmicStockTraderIII: "Algorithmic Stock Trader III";
+  AlgorithmicStockTraderIV: "Algorithmic Stock Trader IV";
+  MinimumPathSumInATriangle: "Minimum Path Sum in a Triangle";
+  UniquePathsInAGridI: "Unique Paths in a Grid I";
+  UniquePathsInAGridII: "Unique Paths in a Grid II";
+  ShortestPathInAGrid: "Shortest Path in a Grid";
+  SanitizeParenthesesInExpression: "Sanitize Parentheses in Expression";
+  FindAllValidMathExpressions: "Find All Valid Math Expressions";
+  HammingCodesIntegerToEncodedBinary: "HammingCodes: Integer to Encoded Binary";
+  HammingCodesEncodedBinaryToInteger: "HammingCodes: Encoded Binary to Integer";
+  Proper2ColoringOfAGraph: "Proper 2-Coloring of a Graph";
+  CompressionIRLECompression: "Compression I: RLE Compression";
+  CompressionIILZDecompression: "Compression II: LZ Decompression";
+  CompressionIIILZCompression: "Compression III: LZ Compression";
+  EncryptionICaesarCipher: "Encryption I: Caesar Cipher";
+  EncryptionIIVigenereCipher: "Encryption II: Vigenère Cipher";
+  SquareRoot: "Square Root";
+};
+
+/** @public */
+type CodingContractName = _ValueOf<CodingContractNameEnumType>;
 
 export type CodingContractSignatures = {
-  [CodingContractName.FindLargestPrimeFactor]: [number, number];
-  [CodingContractName.SubarrayWithMaximumSum]: [number[], number];
-  [CodingContractName.TotalWaysToSum]: [number, number];
-  [CodingContractName.TotalWaysToSumII]: [[number, number[]], number];
-  [CodingContractName.SpiralizeMatrix]: [number[][], number[]];
-  [CodingContractName.ArrayJumpingGame]: [number[], 1 | 0];
-  [CodingContractName.ArrayJumpingGameII]: [number[], number];
-  [CodingContractName.MergeOverlappingIntervals]: [[number, number][], [number, number][]];
-  [CodingContractName.GenerateIPAddresses]: [string, string[]];
-  [CodingContractName.AlgorithmicStockTraderI]: [number[], number];
-  [CodingContractName.AlgorithmicStockTraderII]: [number[], number];
-  [CodingContractName.AlgorithmicStockTraderIII]: [number[], number];
-  [CodingContractName.AlgorithmicStockTraderIV]: [[number, number[]], number];
-  [CodingContractName.MinimumPathSumInATriangle]: [number[][], number];
-  [CodingContractName.UniquePathsInAGridI]: [[number, number], number];
-  [CodingContractName.UniquePathsInAGridII]: [(1 | 0)[][], number];
-  [CodingContractName.ShortestPathInAGrid]: [(1 | 0)[][], string];
-  [CodingContractName.SanitizeParenthesesInExpression]: [string, string[]];
-  [CodingContractName.FindAllValidMathExpressions]: [[string, number], string[]];
-  [CodingContractName.HammingCodesIntegerToEncodedBinary]: [number, string];
-  [CodingContractName.HammingCodesEncodedBinaryToInteger]: [string, number];
-  [CodingContractName.Proper2ColoringOfAGraph]: [[number, [number, number][]], (1 | 0)[]];
-  [CodingContractName.CompressionIRLECompression]: [string, string];
-  [CodingContractName.CompressionIILZDecompression]: [string, string];
-  [CodingContractName.CompressionIIILZCompression]: [string, string];
-  [CodingContractName.EncryptionICaesarCipher]: [[string, number], string];
-  [CodingContractName.EncryptionIIVigenereCipher]: [[string, string], string];
-  [CodingContractName.SquareRoot]: [bigint, bigint, [string, string]];
+  "Find Largest Prime Factor": [number, number];
+  "Subarray with Maximum Sum": [number[], number];
+  "Total Ways to Sum": [number, number];
+  "Total Ways to Sum II": [[number, number[]], number];
+  "Spiralize Matrix": [number[][], number[]];
+  "Array Jumping Game": [number[], 1 | 0];
+  "Array Jumping Game II": [number[], number];
+  "Merge Overlapping Intervals": [[number, number][], [number, number][]];
+  "Generate IP Addresses": [string, string[]];
+  "Algorithmic Stock Trader I": [number[], number];
+  "Algorithmic Stock Trader II": [number[], number];
+  "Algorithmic Stock Trader III": [number[], number];
+  "Algorithmic Stock Trader IV": [[number, number[]], number];
+  "Minimum Path Sum in a Triangle": [number[][], number];
+  "Unique Paths in a Grid I": [[number, number], number];
+  "Unique Paths in a Grid II": [(1 | 0)[][], number];
+  "Shortest Path in a Grid": [(1 | 0)[][], string];
+  "Sanitize Parentheses in Expression": [string, string[]];
+  "Find All Valid Math Expressions": [[string, number], string[]];
+  "HammingCodes: Integer to Encoded Binary": [number, string];
+  "HammingCodes: Encoded Binary to Integer": [string, number];
+  "Proper 2-Coloring of a Graph": [[number, [number, number][]], (1 | 0)[]];
+  "Compression I: RLE Compression": [string, string];
+  "Compression II: LZ Decompression": [string, string];
+  "Compression III: LZ Compression": [string, string];
+  "Encryption I: Caesar Cipher": [[string, number], string];
+  "Encryption II: Vigenère Cipher": [[string, string], string];
+  "Square Root": [bigint, bigint, [string, string]];
 };
 
 export type CodingContractObject = {
@@ -8859,7 +8862,7 @@ type NSEnums = {
   UniversityClassType: UniversityClassEnumType;
   CompanyName: CompanyNameEnumType;
   FactionName: FactionNameEnumType;
-  CodingContractName: typeof CodingContractName;
+  CodingContractName: CodingContractNameEnumType;
 };
 
 /**
