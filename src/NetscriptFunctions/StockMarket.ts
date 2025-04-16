@@ -9,7 +9,7 @@ import {
   StockMarketPromise,
 } from "../StockMarket/StockMarket";
 import { getBuyTransactionCost, getSellTransactionGain } from "../StockMarket/StockMarketHelpers";
-import { PositionType, OrderType, StockSymbol } from "@enums";
+import { StockSymbol } from "@enums";
 import {
   getStockMarket4SDataCost,
   getStockMarket4STixApiCost,
@@ -21,6 +21,7 @@ import { StockOrder, TIX } from "@nsdefs";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { StockMarketConstants } from "../StockMarket/data/Constants";
+import { getEnumHelper } from "../utils/EnumHelper";
 
 export function NetscriptStockMarket(): InternalAPI<TIX> {
   /** Checks if the player has TIX API access. Throws an error if the player does not */
@@ -99,22 +100,12 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     getPurchaseCost: (ctx) => (_symbol, _shares, _posType) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       let shares = helpers.number(ctx, "shares", _shares);
-      const posType = helpers.string(ctx, "posType", _posType);
+      const posType = getEnumHelper("PositionType").nsGetMember(ctx, _posType);
       checkTixApiAccess(ctx);
       const stock = getStockFromSymbol(ctx, symbol);
       shares = Math.round(shares);
 
-      let pos;
-      const sanitizedPosType = posType.toLowerCase();
-      if (sanitizedPosType.includes("l")) {
-        pos = PositionType.Long;
-      } else if (sanitizedPosType.includes("s")) {
-        pos = PositionType.Short;
-      } else {
-        return Infinity;
-      }
-
-      const res = getBuyTransactionCost(stock, shares, pos);
+      const res = getBuyTransactionCost(stock, shares, posType);
       if (res == null) {
         return Infinity;
       }
@@ -124,22 +115,12 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     getSaleGain: (ctx) => (_symbol, _shares, _posType) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       let shares = helpers.number(ctx, "shares", _shares);
-      const posType = helpers.string(ctx, "posType", _posType);
+      const posType = getEnumHelper("PositionType").nsGetMember(ctx, _posType);
       checkTixApiAccess(ctx);
       const stock = getStockFromSymbol(ctx, symbol);
       shares = Math.round(shares);
 
-      let pos;
-      const sanitizedPosType = posType.toLowerCase();
-      if (sanitizedPosType.includes("l")) {
-        pos = PositionType.Long;
-      } else if (sanitizedPosType.includes("s")) {
-        pos = PositionType.Short;
-      } else {
-        return 0;
-      }
-
-      const res = getSellTransactionGain(stock, shares, pos);
+      const res = getSellTransactionGain(stock, shares, posType);
       if (res == null) {
         return 0;
       }
@@ -191,46 +172,22 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       const price = helpers.number(ctx, "price", _price);
-      const type = helpers.string(ctx, "type", _type);
-      const pos = helpers.string(ctx, "pos", _pos);
+      const type = getEnumHelper("OrderType").nsGetMember(ctx, _type);
+      const pos = getEnumHelper("PositionType").nsGetMember(ctx, _pos);
       checkTixApiAccess(ctx);
       if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 2) {
         throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 3.");
       }
       const stock = getStockFromSymbol(ctx, symbol);
 
-      let orderType;
-      let orderPos;
-      const ltype = type.toLowerCase();
-      if (ltype.includes("limit") && ltype.includes("buy")) {
-        orderType = OrderType.LimitBuy;
-      } else if (ltype.includes("limit") && ltype.includes("sell")) {
-        orderType = OrderType.LimitSell;
-      } else if (ltype.includes("stop") && ltype.includes("buy")) {
-        orderType = OrderType.StopBuy;
-      } else if (ltype.includes("stop") && ltype.includes("sell")) {
-        orderType = OrderType.StopSell;
-      } else {
-        throw helpers.errorMessage(ctx, `Invalid order type: ${type}`);
-      }
-
-      const lpos = pos.toLowerCase();
-      if (lpos.includes("l")) {
-        orderPos = PositionType.Long;
-      } else if (lpos.includes("s")) {
-        orderPos = PositionType.Short;
-      } else {
-        throw helpers.errorMessage(ctx, `Invalid position type: ${pos}`);
-      }
-
-      return placeOrder(stock, shares, price, orderType, orderPos, ctx);
+      return placeOrder(stock, shares, price, type, pos, ctx);
     },
     cancelOrder: (ctx) => (_symbol, _shares, _price, _type, _pos) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
       const shares = helpers.number(ctx, "shares", _shares);
       const price = helpers.number(ctx, "price", _price);
-      const type = helpers.string(ctx, "type", _type);
-      const pos = helpers.string(ctx, "pos", _pos);
+      const type = getEnumHelper("OrderType").nsGetMember(ctx, _type);
+      const pos = getEnumHelper("PositionType").nsGetMember(ctx, _pos);
       checkTixApiAccess(ctx);
       if (Player.bitNodeN !== 8 && Player.activeSourceFileLvl(8) <= 2) {
         throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or you must have Source-File 8 Level 3.");
@@ -239,37 +196,8 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       if (isNaN(shares) || isNaN(price)) {
         throw helpers.errorMessage(ctx, `Invalid shares or price. Must be numeric. shares=${shares}, price=${price}`);
       }
-      let orderType;
-      let orderPos;
-      const ltype = type.toLowerCase();
-      if (ltype.includes("limit") && ltype.includes("buy")) {
-        orderType = OrderType.LimitBuy;
-      } else if (ltype.includes("limit") && ltype.includes("sell")) {
-        orderType = OrderType.LimitSell;
-      } else if (ltype.includes("stop") && ltype.includes("buy")) {
-        orderType = OrderType.StopBuy;
-      } else if (ltype.includes("stop") && ltype.includes("sell")) {
-        orderType = OrderType.StopSell;
-      } else {
-        throw helpers.errorMessage(ctx, `Invalid order type: ${type}`);
-      }
 
-      const lpos = pos.toLowerCase();
-      if (lpos.includes("l")) {
-        orderPos = PositionType.Long;
-      } else if (lpos.includes("s")) {
-        orderPos = PositionType.Short;
-      } else {
-        throw helpers.errorMessage(ctx, `Invalid position type: ${pos}`);
-      }
-      const params = {
-        stock: stock,
-        shares: shares,
-        price: price,
-        type: orderType,
-        pos: orderPos,
-      };
-      return cancelOrder(params, ctx);
+      return cancelOrder({ stock, shares, price, type, pos }, ctx);
     },
     getOrders: (ctx) => () => {
       checkTixApiAccess(ctx);
@@ -277,7 +205,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
         throw helpers.errorMessage(ctx, "You must either be in BitNode-8 or have Source-File 8 Level 3.");
       }
 
-      const orders: StockOrder = {};
+      const orders: Record<string, StockOrder[]> = {};
 
       const stockMarketOrders = StockMarket.Orders;
       for (const symbol of Object.keys(stockMarketOrders)) {

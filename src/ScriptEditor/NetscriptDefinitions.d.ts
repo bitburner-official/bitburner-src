@@ -419,10 +419,9 @@ declare enum OrderType {
 }
 
 /**
- * Value in map of {@link StockOrder}
  * @public
  */
-interface StockOrderObject {
+interface StockOrder {
   /** Number of shares */
   shares: number;
   /** Price per share */
@@ -431,16 +430,6 @@ interface StockOrderObject {
   type: OrderType;
   /** Order position */
   position: PositionType;
-}
-
-/**
- * Return value of {@link TIX.getOrders | getOrders}
- *
- * Keys are stock symbols, properties are arrays of {@link StockOrderObject}
- * @public
- */
-interface StockOrder {
-  [key: string]: StockOrderObject[];
 }
 
 /** Constants used for the stock market game mechanic.
@@ -1370,10 +1359,10 @@ export interface TIX {
    *
    * @param sym - Stock symbol.
    * @param shares - Number of shares to purchase.
-   * @param posType - Specifies whether the order is a “Long” or “Short” position.
+   * @param positionType - Specifies whether the order is a Long ("L") or Short ("S") position.
    * @returns Cost to buy a given number of shares of a stock.
    */
-  getPurchaseCost(sym: string, shares: number, posType: string): number;
+  getPurchaseCost(sym: string, shares: number, positionType: PositionType): number;
 
   /**
    * Calculate profit of selling stocks.
@@ -1384,10 +1373,10 @@ export interface TIX {
    *
    * @param sym - Stock symbol.
    * @param shares - Number of shares to sell.
-   * @param posType - Specifies whether the order is a “Long” or “Short” position.
+   * @param positionType - Specifies whether the order is a Long ("L") or Short ("S") position.
    * @returns Gain from selling a given number of shares of a stock.
    */
-  getSaleGain(sym: string, shares: number, posType: string): number;
+  getSaleGain(sym: string, shares: number, positionType: PositionType): number;
 
   /**
    * Buy stocks.
@@ -1490,11 +1479,11 @@ export interface TIX {
    * @param sym - Stock symbol.
    * @param shares - Number of shares for order. Must be positive. Will be rounded to the nearest integer.
    * @param price - Execution price for the order.
-   * @param type - Type of order.
-   * @param pos - Specifies whether the order is a “Long” or “Short” position.
+   * @param orderType - Type of order.
+   * @param positionType - Specifies whether the order is a Long ("L") or Short ("S") position.
    * @returns True if the order is successfully placed, and false otherwise.
    */
-  placeOrder(sym: string, shares: number, price: number, type: string, pos: string): boolean;
+  placeOrder(sym: string, shares: number, price: number, orderType: OrderType, positionType: PositionType): boolean;
 
   /**
    * Cancel order for stocks.
@@ -1508,10 +1497,10 @@ export interface TIX {
    * @param sym - Stock symbol.
    * @param shares - Number of shares for order. Must be positive. Will be rounded to the nearest integer.
    * @param price - Execution price for the order.
-   * @param type - Type of order.
-   * @param pos - Specifies whether the order is a “Long” or “Short” position.
+   * @param orderType - Type of order.
+   * @param positionType - Specifies whether the order is a Long ("L") or Short ("S") position.
    */
-  cancelOrder(sym: string, shares: number, price: number, type: string, pos: string): void;
+  cancelOrder(sym: string, shares: number, price: number, orderType: OrderType, positionType: PositionType): void;
 
   /**
    * Returns your order book for the stock market.
@@ -1574,9 +1563,10 @@ export interface TIX {
    *  ],
    * }
    * ```
-   * @returns Object containing information for all the Limit and Stop Orders you have in the stock market.
+   * @returns Object containing information for all the Limit and Stop Orders you have in the stock market. Keys are
+   * stock symbols, and properties are arrays of {@link StockOrder}
    */
-  getOrders(): StockOrder;
+  getOrders(): Record<string, StockOrder[]>;
 
   /**
    * Returns the volatility of the specified stock.

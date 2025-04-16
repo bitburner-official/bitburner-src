@@ -150,8 +150,7 @@
 |  [SpawnOptions](./bitburner.spawnoptions.md) |  |
 |  [Stanek](./bitburner.stanek.md) | Stanek's Gift API. |
 |  [StockMarketConstants](./bitburner.stockmarketconstants.md) | Constants used for the stock market game mechanic. |
-|  [StockOrder](./bitburner.stockorder.md) | <p>Return value of [getOrders](./bitburner.tix.getorders.md)</p><p>Keys are stock symbols, properties are arrays of [StockOrderObject](./bitburner.stockorderobject.md)</p> |
-|  [StockOrderObject](./bitburner.stockorderobject.md) | Value in map of [StockOrder](./bitburner.stockorder.md) |
+|  [StockOrder](./bitburner.stockorder.md) |  |
 |  [StudyTask](./bitburner.studytask.md) | Study |
 |  [TailProperties](./bitburner.tailproperties.md) |  |
 |  [TIX](./bitburner.tix.md) | Stock market API |

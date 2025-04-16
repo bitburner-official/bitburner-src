@@ -35,13 +35,17 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       throw helpers.errorMessage(ctx, "You must be a member of the Bladeburner division to use this API.");
     return bladeburner;
   };
-  function getAction(ctx: NetscriptContext, type: unknown, name: unknown): Action {
+  function getAction(ctx: NetscriptContext, _type: unknown, name: unknown): Action {
     const bladeburner = Player.bladeburner;
-    assertStringWithNSContext(ctx, "type", type);
+    const type = getEnumHelper("BladeburnerActionType").nsGetMember(ctx, _type);
     assertStringWithNSContext(ctx, "name", name);
-    if (bladeburner === null) throw new Error("Must have joined bladeburner");
+    if (bladeburner === null) {
+      throw new Error("Must have joined bladeburner");
+    }
     const action = bladeburner.getActionFromTypeAndName(type, name);
-    if (!action) throw helpers.errorMessage(ctx, `Invalid action type='${type}', name='${name}'`);
+    if (!action) {
+      throw helpers.errorMessage(ctx, `Invalid action type='${_type}', name='${name}'`);
+    }
     return action;
   }
 
