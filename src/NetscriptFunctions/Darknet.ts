@@ -455,7 +455,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
 
           return helpers.netscriptDelay(ctx, waitTime).then(() => {
             const threads = ctx.workerScript.scriptRef.threads;
-            const promotionAmount = threads * ((500 + Player.mults.charisma_exp) / 500);
+            const promotionAmount = threads * ((500 + Player.skills.charisma) / 500);
             DarknetState.stockPromotions[symbol] = (DarknetState.stockPromotions[symbol] ?? 0) + promotionAmount;
 
             const chaXp = Player.mults.charisma_exp * threads * 10 * ((200 + Player.skills.charisma) / 200);
