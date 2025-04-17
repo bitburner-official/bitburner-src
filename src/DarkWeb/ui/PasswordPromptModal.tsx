@@ -118,8 +118,8 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
                 ram:{server.maxRam}GB model:{server.darknetData?.minigameType}
               </Typography>
               <br />
-              <div style={{ maxWidth: "200px" }}>
-                <ServerSummary server={server} enableAuth={true} />
+              <div style={{ maxWidth: "300px" }}>
+                <ServerSummary server={server} enableAuth={true} showDetails={true} />
               </div>{" "}
             </>
           ) : (

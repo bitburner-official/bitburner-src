@@ -22,6 +22,12 @@ export const mutateDarknet = () => {
   }
 
   if (Math.random() < 0.1) {
+    const islands = getIslands();
+    const island = islands[Math.floor(Math.random() * islands.length)];
+    island && addGuaranteedConnection(island);
+  }
+
+  if (Math.random() < 0.1) {
     // remove some servers
     deleteRandomServers(Math.random() * 3 + 1);
   }
@@ -352,3 +358,5 @@ const isImmutable = (server?: BaseServer | null) =>
   server === DarknetState.openServer ||
   server.isConnectedTo ||
   server.darknetData.hasStasisLink;
+
+const getIslands = () => GetAllServers(true).filter((s) => s && s.darknetData && !s.serversOnNetwork.length);

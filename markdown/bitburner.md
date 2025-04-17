@@ -180,6 +180,7 @@
 |  [CorpUnlockName](./bitburner.corpunlockname.md) |  |
 |  [CorpUpgradeName](./bitburner.corpupgradename.md) |  |
 |  [DarknetServer](./bitburner.darknetserver.md) | Darknet server information.  hostname - Name of the server.  ip - IP address of the server.  hasAdminRights - Whether the player has admin rights on the server.  isConnectedTo - Whether the server is connected to the current server.  ramUsed - Amount of RAM used on the server.  maxRam - Maximum amount of RAM on the server.  organizationName - Name of the organization that owns the server.  purchasedByPlayer - Whether the server was purchased by the player.  backdoorInstalled - Whether the server has a backdoor installed.  moneyAvailable - Amount of money available on the server.  moneyMax - Maximum amount of money on the server.  charismaLevel - Charisma level of the server.  depth - Depth into the darknet of the server.  modelId - ID of the server model. |
+|  [FailureResult](./bitburner.failureresult.md) |  |
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
 |  [GoOpponent](./bitburner.goopponent.md) |  |
 |  [NSEnums](./bitburner.nsenums.md) |  |
@@ -187,6 +188,7 @@
 |  [PlayerRequirement](./bitburner.playerrequirement.md) | Structured interface to requirements for joining a faction or company. For fields with numerical value &gt; 0, the player must have at least this value. For fields with numerical value &lt;<!-- -->= 0, the player must have at most this value. For "not", the sub-condition must be failed instead of passed. For "someCondition", at least one sub-condition must be passed. |
 |  [ReactNode](./bitburner.reactnode.md) | <p>A stand-in for the real React.ReactNode. A [ReactElement](./bitburner.reactelement.md) is rendered dynamically with React. number and string are displayed directly. boolean, null, and undefined are ignored and not rendered. An array of ReactNodes will display all members of that array sequentially.</p><p>Use React.createElement to make the ReactElement type, see [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation.</p> |
 |  [ResponseStatus](./bitburner.responsestatus.md) |  |
+|  [Result](./bitburner.result.md) |  |
 |  [ScriptArg](./bitburner.scriptarg.md) |  |
 |  [SimpleOpponentStats](./bitburner.simpleopponentstats.md) |  |
 |  [SleeveBladeburnerTask](./bitburner.sleevebladeburnertask.md) |  |
@@ -199,5 +201,6 @@
 |  [SleeveSupportTask](./bitburner.sleevesupporttask.md) |  |
 |  [SleeveSynchroTask](./bitburner.sleevesynchrotask.md) |  |
 |  [SleeveTask](./bitburner.sleevetask.md) | Object representing a sleeve current task. |
+|  [SuccessResult](./bitburner.successresult.md) |  |
 |  [Task](./bitburner.task.md) | Task |
 

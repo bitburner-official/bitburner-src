@@ -21,6 +21,7 @@ import { StockOrder, TIX } from "@nsdefs";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { StockMarketConstants } from "../StockMarket/data/Constants";
+import { getDarknetVolatilityMult } from "../DarkWeb/models/effects";
 
 export function NetscriptStockMarket(): InternalAPI<TIX> {
   /** Checks if the player has TIX API access. Throws an error if the player does not */
@@ -31,15 +32,6 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     if (!Player.hasTixApiAccess) {
       throw helpers.errorMessage(ctx, `You don't have TIX API Access! Cannot use ${ctx.function}()`);
     }
-  };
-
-  const getStockFromSymbol = function (ctx: NetscriptContext, symbol: string): Stock {
-    const stock = SymbolToStockMap[symbol];
-    if (stock == null) {
-      throw helpers.errorMessage(ctx, `Invalid stock symbol: '${symbol}'`);
-    }
-
-    return stock;
   };
 
   return {
@@ -303,8 +295,9 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
         throw helpers.errorMessage(ctx, "You don't have 4S Market Data TIX API Access!");
       }
       const stock = getStockFromSymbol(ctx, symbol);
+      const volatility = stock.mv * getDarknetVolatilityMult(symbol);
 
-      return stock.mv / 100; // Convert from percentage to decimal
+      return volatility / 100; // Convert from percentage to decimal
     },
     getForecast: (ctx) => (_symbol) => {
       const symbol = helpers.string(ctx, "symbol", _symbol);
@@ -406,3 +399,12 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
   };
 }
+
+export const getStockFromSymbol = function (ctx: NetscriptContext, symbol: string): Stock {
+  const stock = SymbolToStockMap[symbol];
+  if (stock == null) {
+    throw helpers.errorMessage(ctx, `Invalid stock symbol: '${symbol}'`);
+  }
+
+  return stock;
+};

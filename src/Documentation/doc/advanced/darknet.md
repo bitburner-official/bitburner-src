@@ -35,6 +35,8 @@ Remember that you must be in a directly connected server to write to a target! U
 
 Sometimes you will find valuable data in .cache files on servers you unlock. They can contain money or experience, darkweb programs, or even stock market access keys. They can be opened via `run` from the terminal, or `ns.dnet.openCache(fileName)` from a script on that server.
 
+Darknet servers belong to somebody already, and they are often doing stuff on them. When you first authenticate on these servers, often times some (or most!) of the ram will be "in use" by the owner's (clearly wasteful) use, and needs to be... liberated. You can usually find valuable data if you fully clear that ram using `ns.dnet.influence.memoryReallocation()`
+
 ### Alternate approaches
 
 If you get stuck on a puzzle, you can try to brute-force it. Most servers will tell you their password length and format, allowing you to try each of the possibilities. It's not likely to be fast, but it's an option.
@@ -119,6 +121,36 @@ Design document and workspace
 
 ## patches:
 
+### The "have stuff to do with darknet ram" patch!
+
+Darknet servers belong to somebody already, and they are doing stuff on them. When you first find darkweb servers, often times some (or most!) of the ram will be "in use" by the owner's clearly wasteful use and needs to be... liberated.
+
+- added `dnet.influence.memoryReallocation`. It allows players to cleverly swindle away some of the ram in use by the owner. A reward cache can be found if all the occupied ram is reallocated to the player's use. Gains cha xp and grows the ram available to the player.
+- added `dnet.analytics.getExpectedRamBlockRemoved` to see how much ram is expected to be freed up per thread
+
+- added `dnet.influence.promoteStock`. Spreading propaganda about a particular company or stock, while not enough to actually change the market, can increase the stock's volatility as some people buy the hype & others dump. Increases volatility by up to a factor of 3 with enough investment, but erodes over time.
+
+- added `dnet.influence.phishingAttack`. Gains cha xp, and occasionally gains money. Rarely can also generate a new cache reward (time limited, no more than once every 3 minutes). Allows players to gain cha xp using darknet server ram, with some upsides.
+
+- added new method `dnet.analytics.getAuthenticateEstimatedTime` to predict the duration of an auth attempt
+
+- Moved `getCurrentDarknetInstability` to live under new namespace `dnet.analytics`
+- moved `isDarknetServer` to live under new namespace `dnet.analytics`
+
+- added a new mutation: adding a connection to a darknet server that has none currently. This should help reduce isolated servers somewhat. Also increased darknet density slightly.
+
+- attempting auth or packet capture on a server you do not have the charisma level for will incur a significant debuff to completion time.
+
+- setStasisLink now returns a Result
+
+Coming soon:
+
+- rework authenticate() to return a Result promise
+
+- Rework dynamic password feedback to be from a different method that can fetch a handful of results at once, to allow players to build more complex coordination for high efficiency password checking (or just run them in sequence in the same script if they don't want to do that)
+
+---
+
 - Fully removed errors from authenticate() (outside of passing a bool instead of a string type validations). It now returns status codes with text descriptions. The detail below is also included in the docs for authenticate.
   Response status types:
   "200 Success" - Authentication was successful.
@@ -172,7 +204,48 @@ Design document and workspace
 
 ## TODO:
 
-- b1tflumed: darkweb has wrong password?
+if you know the password directly you can just use auth. No cha required
+If you don't know it, you can try and scrape data using heartBleed() or whatever, and get feedback on recent password attempts. Charisma required.
+You can also data capture and hope to find useful password bits or hints
+
+packetCapture moved under`dnet.influence` namespace
+
+Required number of open ports for STASIS: 5
+change analyze output some?
+
+Cha requirement?
+
+connectToSession synchronous?
+
+Result<T> type? ( https://github.com/ficocelliguy/bitburner-src/blob/dev/src/types.ts#L36 )
+define PasswordResponse as Result & PasswordFields
+
+split the status into statusCode and statusMs
+
+stuff like setStasisLink should actually be returning Result though, and being compatible that way would be good.
+
+Idea: sometimes you a key node or something will spawn on a server. You can spend ram and time on that node, from that server or connected ones, and either push it to make the network more stable, or less stable if you want?
+idea: share() gives a small amount of charisma xp
+
+have some job you can do against the server that takes time and has a chance to produce rewards (and cha xp)
+solve multiple password problems?
+
+boost: makes nearby servers hack attempts faster
+Reroute: makes nearby servers more likely to move?
+make a chain to do something?
+
+Repeatable puzzles on servers sometimes?
+crypto mining?
+disk liberation?
+
+risk/reward with analyzing to get more confident and committing to an attempt?
+Grid of blocks that affect one another?
+set relay points?
+dense spots to work around?
+
+multiple labs with different names
+
+phishing emails: scales with crime success chance and crime money?
 
 - long passwords are easier to snoop, because they stand out so much.
 
@@ -218,18 +291,7 @@ darkweb has multiple connections to home?
 
 Small book-keeping request. Usually "data" in the form of enums or constants we typically store in a data folder so it's easier to find.
 
-- backdooring increases darknet instability
-  - backdoored servers more likely to restart and/or loose auth, removing backdoor, balancing risk level
-  - low number (1 backdoor per X depth explored, or less than low const): no effect
-  - lv 1 instability: small debuff to auth() time
-  - lv 2: sometimes auth fails with timeout
-  - lv 3: more server restarts on the darknet
-  - lv 4: It's hard to sustain this many backdoors without a lot of upkeep due to them going offline or resetting. More connection severing on the darknet. player starts taking damage sometimes. creepypasta appears on player terminal, signed by the darknet.
-  - lv 5: ports and file writes and other ns methods sometimes fail silently, or return garbage data. hard mode that is effectively opt-in
-
 backdoored and stasis link'd servers need visual indicators
-
-packet capture shows extra password hints, sometimes mastermind one? sometimes a digit/char contained? sometimes something else?
 
 Make network wider at deeper parts?
 
@@ -237,35 +299,23 @@ preventDuplicates on the run options is very powerful here, and almost necessary
 
 a button to kill all darknet scripts
 
-The differences between nuked, authenticated and connected get difficult to keep track of on the swarm.
-
 have a clear immediate reward from tier 1 that isn't just cha XP
 
 formulas: auth response time or estimates given CHA level
-
-sake of suspense: perhaps hide the network past current+3 levels
-
-- access only to connected or backdoored server for dnet exec
 
 - add Stasis Link mechanic
 
   - Limited resource
   - Cap can be raised somehow
   - Prevents server from mutating
-  - Backdoors server
-  - Can be removed to free up resource for somewhere else
 
 - mini version of darknet on pre- bn15?
-
-- very occasional un-backdooring?
 
 - occasional changing hostnames
 
 - start with crash course?
 
 - more hint notes
-
-- unlocked server viewer: polish?
 
 - ub3r_l4byr1nth server
 
@@ -277,9 +327,6 @@ sake of suspense: perhaps hide the network past current+3 levels
 
 - make darkwebserver extend baseServer
 
-- colorful servers?
-
-- servers renamed occasionally?
 - scripts go down sometimes?
 
 - File/status viewer for darkweb servers?
@@ -291,6 +338,16 @@ sake of suspense: perhaps hide the network past current+3 levels
 - server that returns a string in response to the attempt?
 
   - result: (encoded attempt) expectation: (encoded password)
+
+- backdooring increases darknet instability
+
+  - backdoored servers more likely to restart and/or loose auth, removing backdoor, balancing risk level
+  - low number (1 backdoor per X depth explored, or less than low const): no effect
+  - lv 1 instability: small debuff to auth() time
+  - lv 2: sometimes auth fails with timeout
+  - lv 3: more server restarts on the darknet
+  - lv 4: It's hard to sustain this many backdoors without a lot of upkeep due to them going offline or resetting. More connection severing on the darknet. player starts taking damage sometimes. creepypasta appears on player terminal, signed by the darknet.
+  - lv 5: ports and file writes and other ns methods sometimes fail silently, or return garbage data. hard mode that is effectively opt-in
 
 - WEBSTORM
 
@@ -311,8 +368,6 @@ sake of suspense: perhaps hide the network past current+3 levels
   - Some given by lab
   - Some in various factions
   - Give cha? what else?
-
-- session token?
 
 ## TODO later:
 
@@ -348,13 +403,6 @@ retrieving passwords from other parts of the game?
 - Opportunities to buy passwords to servers not yet cracked?
 
 stock market boosts? grow and hack?
-
-- final boss with special cache
-
-  - unique augs?
-  - interactive proof problem?
-  - blind maze solving?
-  - T14m4t the m0th3r
 
 - database server
 

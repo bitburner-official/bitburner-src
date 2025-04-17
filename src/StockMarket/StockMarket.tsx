@@ -18,6 +18,7 @@ import { helpers } from "../Netscript/NetscriptHelpers";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { JsonSchemaValidator } from "../JsonSchema/JsonSchemaValidator";
 import { Player } from "../Player";
+import { scaleDarknetVolatilityIncreases, getDarknetVolatilityMult } from "../DarkWeb/models/effects";
 
 export function getDefaultEmptyStockMarket(): IStockMarket {
   return {
@@ -213,9 +214,9 @@ function stockMarketCycle(): void {
       stock.b = !stock.b;
       stock.flipForecastForecast();
     }
-
     StockMarket.ticksUntilCycle = StockMarketConstants.TicksPerCycle;
   }
+  scaleDarknetVolatilityIncreases(0.4);
 }
 
 const cyclesPerStockUpdate = StockMarketConstants.msPerStockUpdate / CONSTANTS.MilliPerCycle;
@@ -248,7 +249,8 @@ export function processStockPrices(numCycles = 1): void {
   for (const name of Object.keys(StockMarket)) {
     const stock = StockMarket[name];
     if (!(stock instanceof Stock)) continue;
-    let av = (v * stock.mv) / 100;
+    const volatility = stock.mv * getDarknetVolatilityMult(stock.symbol);
+    let av = (v * volatility) / 100;
     if (isNaN(av)) {
       av = 0.02;
     }

@@ -35,13 +35,7 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
       ctx.beginPath();
       const connectedColor = "green";
       const disconnectedColor = "grey";
-      const stasisLinkColor = "gold";
-      ctx.strokeStyle =
-        server.darknetData?.hasStasisLink || connectedServer.darknetData?.hasStasisLink
-          ? stasisLinkColor
-          : server.hasAdminRights || connectedServer.hasAdminRights
-          ? connectedColor
-          : disconnectedColor;
+      ctx.strokeStyle = server.hasAdminRights || connectedServer.hasAdminRights ? connectedColor : disconnectedColor;
       const startPosition = getPixelPosition(server, true);
       const endPosition = getPixelPosition(connectedServer, true);
       ctx.moveTo(startPosition.left, startPosition.top);

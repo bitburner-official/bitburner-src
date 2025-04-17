@@ -76,6 +76,9 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     width: "100%",
     justifyContent: "space-between",
   },
+  noPadding: {
+    padding: 0,
+  },
   gold: {
     color: theme.colors.money,
   },

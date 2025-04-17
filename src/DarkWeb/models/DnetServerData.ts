@@ -52,6 +52,7 @@ export type DnetServer = DnetServerData & {
   lastPasswordAttempted?: string;
   authenticatedPIDs: number[];
   hasStasisLink: boolean;
+  ramBlock: number;
 };
 
 export const isDarknetServer = (server: BaseServer): boolean => {
@@ -59,7 +60,10 @@ export const isDarknetServer = (server: BaseServer): boolean => {
 };
 
 export const DnetServerBuilder = (options: DnetServerData, name: string = getName()): Server => {
+  const maxRam = 16 * 2 ** Math.floor(options.difficulty / 4);
+  const ramBlock = options.difficulty ? getRamBlock(maxRam) : 0;
   const darknetData: DnetServer = {
+    ramBlock,
     icon: options.icon ?? getRandomIcon(),
     password: options.password,
     minigameType: options.minigameType,
@@ -74,20 +78,23 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
   };
 
   const scalar = 1 + darknetData.difficulty * 3;
+  const levelVariance = Math.floor((Math.random() * 3 - 1) * scalar);
+  const requiredLevel = Math.max(Math.ceil(scalar ** 1.6 + levelVariance), 1);
 
   const params: IConstructorParams = {
     hostname: name,
     ip: createUniqueRandomIp(),
     organizationName: "darkweb",
-    maxRam: 16 * 2 ** Math.floor(darknetData.difficulty / 4),
-    requiredHackingSkill: Math.ceil(scalar ** 2 + Math.random() * scalar * 3),
-    hackDifficulty: 20,
+    maxRam,
+    requiredHackingSkill: requiredLevel,
+    hackDifficulty: 5 + darknetData.difficulty,
     moneyAvailable: 0,
     numOpenPortsRequired: 69,
     adminRights: false,
     darknetData: darknetData,
   };
   const server = new Server(params);
+  server.updateRamUsed(ramBlock);
   AddToAllServers(server);
 
   return server;
@@ -334,4 +341,16 @@ const l33tifyName = (name: string): string => {
     updatedName = updatedName.replaceAll(char, replacement);
   }
   return updatedName;
+};
+
+const getRamBlock = (maxRam: number): number => {
+  if (maxRam <= 16) {
+    return [0, 4][Math.floor(Math.random() * 2)];
+  }
+
+  if (maxRam <= 64) {
+    return [16, 32, maxRam - 8][Math.floor(Math.random() * 3)];
+  }
+
+  return [maxRam, maxRam - 8, maxRam - 16, maxRam - 32][Math.floor(Math.random() * 4)];
 };

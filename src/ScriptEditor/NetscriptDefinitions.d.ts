@@ -4056,6 +4056,10 @@ type PasswordResponse = {
   modelId?: number;
 };
 
+type SuccessResult<T extends object> = { success: true; message?: string } & T;
+type FailureResult = { success: false; message: string };
+export type Result<T extends object = object> = SuccessResult<T> | FailureResult;
+
 /**
  * Darknet server information.
  * @property hostname - Name of the server.
@@ -4182,7 +4186,7 @@ export interface Darknet {
    *
    * @param shouldLink - true to apply a stasis link, false to remove it.
    */
-  setStasisLink(shouldLink: boolean): Promise<boolean>;
+  setStasisLink(shouldLink: boolean): Promise<Result>;
 
   /**
    * Returns whether the server has a stasis link applied to it.
@@ -4206,29 +4210,6 @@ export interface Darknet {
   getServer(host?: string): DarknetServer;
 
   /**
-   * Returns whether the server is a darknet server. Defaults to the running script's server if host is not specified.
-   *
-   * Returns false if the server does not exist or has gone offline.
-   *
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * @param host - Optional. Hostname for the requested server object.
-   * @returns true if the server is a darknet server, false otherwise.
-   */
-  isDarknetServer(host?: string): boolean;
-
-  /**
-   * Get the IP address of a server. The target server has to have been authenticated.
-   *
-   * @remarks
-   * RAM cost: 0.5 GB
-   *
-   * @param host - The target's hostname. Optional for checking the IP of the current server
-   */
-  getIp(host?: string): string;
-
-  /**
    * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
    * The target server must be directly connected to the server that the script is running on.
    *
@@ -4241,15 +4222,100 @@ export interface Darknet {
   packetCapture(host: string): Promise<string>;
 
   /**
-   * Gets the current Darknet instability.
-   *
-   * @remarks
-   * RAM cost: 0.1 GB
-   *
-   * @returns authenticateDurationIncrease - The increase in the time it takes to authenticate on a server.
-   * @returns authenticateTimeoutChance - The chance that an authentication attempt will timeout.
+   * Darknet analysis tools.
    */
-  getCurrentDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
+  analytics: {
+    /**
+     * Gets the current Darknet instability.
+     *
+     * @remarks
+     * RAM cost: 0 GB
+     *
+     * @returns authenticateDurationIncrease - The increase in the time it takes to authenticate on a server.
+     * @returns authenticateTimeoutChance - The chance that an authentication attempt will time out.
+     */
+    getCurrentDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
+
+    /**
+     * Gets the estimated time it will take to authenticate on a server.
+     * @param hostname - Hostname of the server to authenticate on. Defaults to the running script's server if not specified.
+     * @param threads - Number of threads to use for the authentication attempt. Defaults to 1 if not specified.
+     * @param person - Optional. The player object to use for the authentication attempt. Defaults to the current player if not specified.
+     */
+    getAuthenticateEstimatedTime(hostname?: string, threads?: number, person?: Player): number;
+
+    /**
+     * Gets the amount of ram currently "blocked" by the server owner.
+     * This in-use ram can be freed using dnet.influence.memoryReallocation()
+     *
+     * @remarks
+     * RAM cost: 0 GB
+     *
+     * @param hostname - Optional. Hostname of the server to check. Defaults to the running script's server if not specified.
+     */
+    getOwnerAllocatedRam(hostname?: string): number;
+
+    /**
+     * Gets the expected amount of ram that will be freed when dnet.influence.memoryReallocation() is run.
+     *
+     * @remarks
+     * RAM cost: 0 GB
+     *
+     * @param hostname - Optional. Hostname of the server to check. Defaults to the running script's server if not specified.
+     * @param threads - Optional. Number of threads to use for the authentication attempt. Defaults to 1 if not specified.
+     * @param person - Optional. The player object to use for the authentication attempt. Defaults to the current player if not specified.
+     */
+    getExpectedRamBlockRemoved(hostname?: string, threads?: number, person?: Player): number;
+
+    /**
+     * Returns whether the server is a darknet server. Defaults to the running script's server if host is not specified.
+     *
+     * Returns false if the server does not exist or has gone offline.
+     *
+     * @remarks
+     * RAM cost: 0 GB
+     *
+     * @param host - Optional. Hostname for the requested server object.
+     * @returns true if the server is a darknet server, false otherwise.
+     */
+    isDarknetServer(host?: string): boolean;
+  };
+
+  /**
+   * Functions that leverage your charisma for your own gain.
+   */
+  influence: {
+    /**
+     * Spends some time freeing some of the RAM currently blocked by the server owner. Must target a directly connected server.
+     * The amount of ram so absconded scaled with charisma.
+     *
+     * @remarks
+     * RAM cost: 1 GB
+     *
+     * @param hostname - Optional. Hostname of the connected server to free ram from.
+     */
+    memoryReallocation(hostname?: string): Promise<Result>;
+
+    /**
+     * Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but
+     * a savvy investor can take advantage of the chaos. The effect scales with charisma, but degrades over time if left alone.
+     *
+     * @remarks
+     * RAM cost: 2 GB
+     *
+     * @param sym - Stock symbol.
+     */
+    promoteStock(sym: string): Promise<Result>;
+
+    /**
+     * Spends som time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa.
+     *
+     * Most of the time the attempt fails due to spam filters, but success can be increased with crime success rate and charisma stats.
+     *
+     * Very occasionally you can retrieve a cache file from the attempt.
+     */
+    phishingAttack(): Promise<Result>;
+  };
 }
 
 /**

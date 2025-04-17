@@ -171,7 +171,11 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             ),
           )}
 
-          {labyrinth && netDisplayDepth + 4 >= NET_DEPTH ? <DNServerComponent server={labyrinth} enableAuth={allowAuth(labyrinth)} /> : ""}
+          {labyrinth && netDisplayDepth + 4 >= NET_DEPTH ? (
+            <DNServerComponent server={labyrinth} enableAuth={allowAuth(labyrinth)} />
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <div className={classes.zoomContainer}>

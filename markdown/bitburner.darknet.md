@@ -16,17 +16,21 @@ export interface Darknet
 
 If you are not in BitNode-15, then you must have Source-File 15 in order to use this API.
 
+## Properties
+
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [analytics](./bitburner.darknet.analytics.md) |  | { getCurrentDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number }; getAuthenticateEstimatedTime(hostname?: string, threads?: number, person?: [Player](./bitburner.player.md)<!-- -->): number; getOwnerAllocatedRam(hostname?: string): number; getExpectedRamBlockRemoved(hostname?: string, threads?: number, person?: [Player](./bitburner.player.md)<!-- -->): number; isDarknetServer(host?: string): boolean; } | Darknet analysis tools. |
+|  [influence](./bitburner.darknet.influence.md) |  | { memoryReallocation(hostname?: string): Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;; promoteStock(sym: string): Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;; phishingAttack() : Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;; } | Functions that leverage your charisma for your own gain. |
+
 ## Methods
 
 |  Method | Description |
 |  --- | --- |
 |  [authenticate(hostname, password)](./bitburner.darknet.authenticate.md) | <p>Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected to the server that the script is running on.</p><p>If successful, grants the script a session, allowing it to exec() to that server or scp() from it.</p><p>Response status types: "200 Success" - Authentication was successful. "401 Unauthorized" - Authentication failed. The password is incorrect. "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid. "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability. "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server. "418 I'm a teapot" - The server is a teapot and cannot brew coffee.</p> |
 |  [connectToSession(hostname, password)](./bitburner.darknet.connecttosession.md) | <p>Attempts to connect to a darkweb server that you have already authenticated on. The target must either be directly connected to the current server, have a stasis link, or be backdoored.</p><p>If successful, grants the script a session, allowing it to exec() to that server or scp() from it.</p><p>Response status types: "200 Success" - Authentication was successful. "401 Unauthorized" - Authentication failed. The password is incorrect, or the target server has never had a successful authenticate() by any script. "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid. "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability. "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server. "418 I'm a teapot" - The server is a teapot and cannot brew coffee.</p> |
-|  [getCurrentDarknetInstability()](./bitburner.darknet.getcurrentdarknetinstability.md) | Gets the current Darknet instability. |
-|  [getIp(host)](./bitburner.darknet.getip.md) | Get the IP address of a server. The target server has to have been authenticated. |
 |  [getServer(host)](./bitburner.darknet.getserver.md) | Returns a server object for the given server. Defaults to the running script's server if host is not specified. |
 |  [hasStasisLink(hostname)](./bitburner.darknet.hasstasislink.md) | Returns whether the server has a stasis link applied to it. |
-|  [isDarknetServer(host)](./bitburner.darknet.isdarknetserver.md) | <p>Returns whether the server is a darknet server. Defaults to the running script's server if host is not specified.</p><p>Returns false if the server does not exist or has gone offline.</p> |
 |  [openCache(filename, suppressToast)](./bitburner.darknet.opencache.md) | Opens a .cache file on the current server to acquire its valuable contents. |
 |  [packetCapture(host)](./bitburner.darknet.packetcapture.md) | Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise. The target server must be directly connected to the server that the script is running on. |
 |  [probe(returnOpts)](./bitburner.darknet.probe.md) | Returns a list of all darknet servers connected to the script's current server. |

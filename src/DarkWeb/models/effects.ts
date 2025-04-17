@@ -26,8 +26,9 @@ import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelli
 import { getSharedChars, isDarknetServer } from "./DnetServerData";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Minigames } from "../controllers/DarknetServerGenerator";
-import { addSessionToServer, NET_WIDTH } from "./DarknetState";
+import { addSessionToServer, DarknetState, NET_WIDTH } from "./DarknetState";
 import { initStockMarket } from "../../StockMarket/StockMarket";
+import { clampNumber } from "../../utils/helpers/clampNumber";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;
@@ -41,13 +42,13 @@ export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: n
   addClue(server);
 
   // TODO: balance coding contract chance
-  if (Math.random() < 0.1) {
+  if (Math.random() < 0.1 && (server.darknetData?.difficulty ?? 0) > 2) {
     generateContract({ server: server.hostname });
   }
 
   // TODO: balance cache chance
-  const chance = 0.2 * 1.03 ** (server.darknetData?.difficulty ?? 1);
-  if (Math.random() < chance && (server.darknetData?.difficulty ?? 0 > 3)) {
+  const chance = 0.1 * 1.05 ** (server.darknetData?.difficulty ?? 1);
+  if (Math.random() < chance) {
     addCacheToServer(server);
   }
 };
@@ -73,7 +74,7 @@ export const calculateAuthenticationTime = (
   if (!isDarknetServer(server)) return 0;
   const darknetData = server.darknetData;
 
-  const chaRequired = server.hackDifficulty ?? 1;
+  const chaRequired = server.requiredHackingSkill ?? 1;
   const difficulty = darknetData?.difficulty ?? 1;
 
   const baseDiff = (difficulty + 1) * 100;
@@ -84,8 +85,9 @@ export const calculateAuthenticationTime = (
   const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 100);
   const noobFactor = Math.min(0.5 + difficulty / 4, 1);
   const backdoorFactor = getBackdoorAuthTimeDebuff();
+  const underleveledFactor = Player.skills.charisma >= chaRequired ? 1 : 1.5 + chaRequired / Player.skills.charisma;
 
-  const time = (baseTime * skillFactor * noobFactor * backdoorFactor) / threadsFactor;
+  const time = (baseTime * skillFactor * noobFactor * backdoorFactor * underleveledFactor) / threadsFactor;
 
   // Add extra time for timing attack server, per correct character
   const sharedChars =
@@ -119,30 +121,30 @@ export const addCacheToServer = (server: BaseServer) => {
 };
 
 export const getRewardFromCache = (server: BaseServer, suppressToast = false): string => {
-  Player.karma -= 30; // TODO: adjust karma balance
+  const difficulty = server.darknetData?.difficulty ?? 1;
+  Player.karma -= 5 + difficulty * 2; // TODO: adjust karma balance
   if (server.hostname == SpecialServers.Labyrinth) {
     return getLabReward(server, suppressToast);
   }
   const rewards = [getMoneyReward, getXpReward, getNextPortOpener, getCCTReward];
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
-  return reward(server.darknetData?.difficulty ?? 1, suppressToast);
+  return reward(difficulty, suppressToast);
 };
 
-export const getCCTReward = (difficulty: number) => {
-  const contractCount = Math.min((difficulty + 1) / 4, 4);
+export const getCCTReward = () => {
+  const contractCount = [2, 3, 4][Math.floor(Math.random() * 3)];
   tryGeneratingRandomContract(contractCount);
   return `New coding contracts are now available on the network!`;
 };
 
 export const getMoneyReward = (difficulty: number) => {
-  const reward = 1.2 ** difficulty * 1e7 * getMultiplierFromCharisma(4) * Player.mults.crime_money; // TODO: adjust balance
-  Player.gainMoney(reward, "other");
+  const reward = 1.2 ** difficulty * 1e7 * ((200 + Player.skills.charisma) / 200) * Player.mults.crime_money; // TODO: adjust balance
+  Player.gainMoney(reward, "darknet");
   return `You have discovered a cache with ${formatMoney(reward)}.`;
 };
 
 export const getXpReward = (difficulty: number) => {
-  const augCount = Player.augmentations.length;
-  const reward = 1.2 ** difficulty * 100 * 1.04 ** augCount * Player.mults.charisma_exp; // TODO: adjust balance
+  const reward = 1.2 ** difficulty * 500 * Player.mults.charisma_exp; // TODO: adjust balance
   Player.gainCharismaExp(reward);
   return `You have discovered a cache with ${formatNumber(reward, 0)} cha XP.`;
 };
@@ -322,4 +324,27 @@ export const getTwoCharsInPassword = (password: string) => {
   }
   const containedChar2 = password[index2];
   return [containedChar1, containedChar2];
+};
+
+export const getRamBlockRemoved = (server: BaseServer, threads: number = 1, player: IPerson = Player) => {
+  const difficulty = server.darknetData?.difficulty ?? 1;
+  const remainingRamBlock = server.darknetData?.ramBlock ?? 0;
+  const charismaFactor = 1 + player.skills.charisma / 100;
+  const difficultyFactor = 2 * 0.92 ** (difficulty + 1);
+  const baseAmount = 0.02;
+  return clampNumber(baseAmount * difficultyFactor * threads * charismaFactor, 0, remainingRamBlock);
+};
+
+export const getDarknetVolatilityMult = (symbol: string) => {
+  const charges = DarknetState.stockPromotions[symbol] ?? 0;
+  const growthRate = 0.001;
+  return 1 + (0.6 * (1 - Math.exp(-growthRate * charges)) + 1.4 * (1 - Math.exp(-growthRate * 0.15 * charges)));
+};
+
+export const scaleDarknetVolatilityIncreases = (scalar: number) => {
+  for (const symbol in DarknetState.stockPromotions) {
+    if (DarknetState.stockPromotions[symbol] > 0) {
+      DarknetState.stockPromotions[symbol] *= scalar;
+    }
+  }
 };

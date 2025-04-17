@@ -176,11 +176,7 @@ export const ns: InternalAPI<NSFull> = {
       if (entry === null) continue;
       out.push(entry);
     }
-    helpers.log(
-      ctx,
-      () =>
-        `returned ${out.length} connections for ${isIPAddress(host) ? server.ip : server.hostname}`,
-    );
+    helpers.log(ctx, () => `returned ${out.length} connections for ${isIPAddress(host) ? server.ip : server.hostname}`);
     return out;
   },
   hasTorRouter: () => () => Player.hasTorRouter(),
@@ -1109,7 +1105,9 @@ export const ns: InternalAPI<NSFull> = {
   serverExists: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
     const server = GetServer(host);
-    return server !== null && (server.serversOnNetwork.length > 0 || server.hostname === "home" || !!server.darknetData);
+    return (
+      server !== null && (server.serversOnNetwork.length > 0 || server.hostname === "home" || !!server.darknetData)
+    );
   },
   fileExists: (ctx) => (_filename, _host) => {
     const filename = helpers.string(ctx, "filename", _filename);

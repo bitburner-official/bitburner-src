@@ -177,6 +177,7 @@ export const addLabyrinth = () => {
     lastPasswordAttempted: "",
     authenticatedPIDs: [],
     hasStasisLink: false,
+    ramBlock: 0,
   };
 
   const params: IConstructorParams = {

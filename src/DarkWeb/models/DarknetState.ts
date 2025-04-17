@@ -7,7 +7,7 @@ import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
 
 export const NET_WIDTH = 8;
 export const NET_DEPTH = 23;
-export const SERVER_DENSITY = 0.55;
+export const SERVER_DENSITY = 0.65;
 
 /** Event emitter to allow the UI to subscribe to Go gameplay updates in order to trigger rerenders properly */
 export const DarknetEvents = new EventEmitter();
@@ -18,6 +18,8 @@ export type DarknetState = {
   Network: (BaseServer | null)[][];
   labyrinth: string[][];
   labLocations: Record<number, [number, number]>;
+  lastPhishingCacheTime: Date;
+  stockPromotions: Record<string, number>;
 };
 
 export const DarknetState: DarknetState = {
@@ -28,6 +30,8 @@ export const DarknetState: DarknetState = {
 
   labyrinth: generateMaze(),
   labLocations: { "-1": [1, 1] },
+  lastPhishingCacheTime: new Date(),
+  stockPromotions: {},
 };
 
 export const startDarknetMovement = () => setInterval(() => mutateDarknet(), 4000);

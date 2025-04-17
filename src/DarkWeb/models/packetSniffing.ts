@@ -14,9 +14,9 @@ export const capturePackets = (server: BaseServer) => {
   if (!server.darknetData) {
     return "A great silence stretches across the network. No unsecured packets are here to capture.";
   }
-  const BASE_PASSWORD_INCLUSION_RATE = 0.2;
-  const DIFFICULTY_MODIFIER = 0.9;
-  const difficulty = server.darknetData.difficulty;
+  const BASE_PASSWORD_INCLUSION_RATE = 0.18;
+  const DIFFICULTY_MODIFIER = 0.88;
+  const difficulty = server.darknetData.difficulty * 1.3;
   const vulnerability = server.darknetData.minigameType === Minigames.packetSniffer ? 5 : 1;
   const passwordInclusionChance = BASE_PASSWORD_INCLUSION_RATE * vulnerability * DIFFICULTY_MODIFIER ** difficulty;
 

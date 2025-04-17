@@ -13,7 +13,7 @@ There is a maximum of 2 stasis links that can be applied globally.
 **Signature:**
 
 ```typescript
-setStasisLink(shouldLink: boolean): Promise<boolean>;
+setStasisLink(shouldLink: boolean): Promise<Result>;
 ```
 
 ## Parameters
@@ -24,7 +24,7 @@ setStasisLink(shouldLink: boolean): Promise<boolean>;
 
 **Returns:**
 
-Promise&lt;boolean&gt;
+Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;
 
 ## Remarks
 
