@@ -15,6 +15,7 @@ import { makeStyles } from "tss-react/mui";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
+import InfoIcon from "@mui/icons-material/Info";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { calculateFavorAfterResetting } from "../formulas/favor";
 import { knowAboutBitverse } from "../../BitNode/BitNodeUtils";
@@ -27,6 +28,15 @@ interface IProps {
 const useStyles = makeStyles()({
   noformat: {
     whiteSpace: "pre-wrap",
+  },
+  repFavorRow: {
+    display: "flex",
+    alignItems: "center",
+    whiteSpace: "pre-wrap",
+  },
+  infoIcon: {
+    fontSize: "1.1em",
+    marginLeft: "10px",
   },
 });
 
@@ -73,8 +83,9 @@ export function Info(props: IProps): React.ReactElement {
             </>
           }
         >
-          <Typography>
+          <Typography className={classes.repFavorRow}>
             Reputation: <Reputation reputation={props.faction.playerReputation} />
+            <InfoIcon className={classes.infoIcon} />
           </Typography>
         </Tooltip>
       </Box>
@@ -96,8 +107,9 @@ export function Info(props: IProps): React.ReactElement {
             </>
           }
         >
-          <Typography>
+          <Typography className={classes.repFavorRow}>
             Faction Favor: <Favor favor={props.faction.favor} />
+            <InfoIcon className={classes.infoIcon} />
           </Typography>
         </Tooltip>
       </Box>
