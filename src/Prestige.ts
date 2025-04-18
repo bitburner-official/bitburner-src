@@ -25,11 +25,11 @@ import { InvitationsSeen } from "./Faction/ui/FactionsRoot";
 import { CONSTANTS } from "./Constants";
 import { LogBoxClearEvents } from "./ui/React/LogBoxManager";
 import { initCircadianModulator } from "./Augmentation/Augmentations";
-import { Go } from "./Go/Go";
 import { calculateExp } from "./PersonObjects/formulas/skill";
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { pendingUIShareJobIds } from "./NetworkShare/Share";
+import { prestigeGoAugmentation, prestigeGoSourceFile } from "./Go/effects/prestige";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string, canBeDismissedEasily = true) {
@@ -66,7 +66,7 @@ export function prestigeAugmentation(): void {
   }
 
   Player.prestigeAugmentation();
-  Go.prestigeAugmentation();
+  prestigeGoAugmentation();
 
   const homeComp = Player.getHomeComputer();
   // Delete all servers except home computer
@@ -198,7 +198,7 @@ export function prestigeSourceFile(isFlume: boolean): void {
   initBitNodeMultipliers();
 
   Player.prestigeSourceFile();
-  Go.prestigeSourceFile();
+  prestigeGoSourceFile();
 
   const homeComp = Player.getHomeComputer();
 

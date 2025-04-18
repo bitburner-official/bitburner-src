@@ -3,7 +3,7 @@
 // for information on how to calculate this
 
 import { clampNumber } from "../../utils/helpers/clampNumber";
-import { getGoFavorForFaction } from "../../Go/effects/effect";
+import { getGoFavorForFaction } from "../../Go/effects/favor";
 
 export const MaxFavor = 35331;
 // This is the nearest representable value of log(1.02), which is the base of our power.

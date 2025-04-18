@@ -1,6 +1,6 @@
 import type { CompanyName } from "../../Enums";
 
-import React from "react";
+import React, { useMemo } from "react";
 
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -15,9 +15,8 @@ interface IProps {
   value: CompanyName;
 }
 
-const sortedCompanies = getRecordKeys(Companies).sort((a, b) => a.localeCompare(b));
-
 export function CompanyDropdown(props: IProps): React.ReactElement {
+  const sortedCompanies = useMemo(() => getRecordKeys(Companies ?? {}).sort((a, b) => a.localeCompare(b)), []);
   const companies = [];
   for (const company of sortedCompanies) {
     companies.push(

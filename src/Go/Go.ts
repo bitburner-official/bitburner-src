@@ -1,9 +1,7 @@
 import type { BoardState, OpponentStats } from "./Types";
 
-import type { GoOpponent } from "@enums";
-import { getRecordKeys, PartialRecord } from "../Types/Record";
-import { resetGoPromises } from "./boardAnalysis/goAI";
-import { getNewBoardState } from "./boardState/boardState";
+import { GoColor, GoOpponent } from "@enums";
+import { PartialRecord } from "../Types/Record";
 import { EventEmitter } from "../utils/EventEmitter";
 
 export const getEmptyHighlightedPoints = (size: number = 7) => {
@@ -11,33 +9,10 @@ export const getEmptyHighlightedPoints = (size: number = 7) => {
 };
 
 export class GoObject {
-  // Todo: Make previous game a slimmer interface
   previousGame: BoardState | null = null;
-  currentGame: BoardState = getNewBoardState(7);
+  currentGame: BoardState = getEmptyBoardState();
   stats: PartialRecord<GoOpponent, OpponentStats> = {};
   storedCycles: number = 0;
-
-  prestigeAugmentation() {
-    for (const opponent of getRecordKeys(Go.stats)) {
-      const stats = Go.stats[opponent];
-      if (!stats) {
-        continue;
-      }
-      stats.wins = 0;
-      stats.losses = 0;
-      stats.nodes = 0;
-      stats.nodePower = 0;
-      stats.winStreak = 0;
-      stats.oldWinStreak = 0;
-      stats.highestWinStreak = 0;
-    }
-  }
-  prestigeSourceFile() {
-    this.previousGame = null;
-    this.currentGame = getNewBoardState(7);
-    this.stats = {};
-    resetGoPromises();
-  }
 
   /**
    * Stores offline time that is consumed to speed up the AI.
@@ -48,6 +23,28 @@ export class GoObject {
       this.storedCycles += offlineCycles ?? 0;
     }
   }
+}
+
+function getEmptyBoardState() {
+  return {
+    previousBoards: [],
+    previousPlayer: GoColor.white,
+    ai: GoOpponent.Netburners,
+    passCount: 0,
+    cheatCount: 0,
+    cheatCountForWhite: 0,
+    komiOverride: null,
+    highlightedPoints: Array.from({ length: 7 }, () => Array.from({ length: 7 }, () => null)),
+    board: Array.from({ length: 7 }, (_, x) =>
+      Array.from({ length: 7 }, (_, y) => ({
+        color: GoColor.empty,
+        chain: "",
+        liberties: null,
+        x,
+        y,
+      })),
+    ),
+  };
 }
 
 export const Go = new GoObject();

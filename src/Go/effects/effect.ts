@@ -8,7 +8,6 @@ import { defaultMultipliers, mergeMultipliers, Multipliers } from "../../PersonO
 import { formatPercent } from "../../ui/formatNumber";
 import { getOpponentStats } from "../boardAnalysis/scoring";
 import { getRecordEntries, getRecordValues } from "../../Types/Record";
-import { getEnumHelper } from "../../utils/EnumHelper";
 
 /**
  * Calculates the effect size of the given player boost, based on the node power (points based on number of subnet
@@ -131,13 +130,4 @@ export function getWinstreakMultiplier(winStreak: number, previousWinStreak: num
 export function getDifficultyMultiplier(komi: number, boardSize: number) {
   const isTinyBoardVsIlluminati = boardSize === 5 && komi === opponentDetails[GoOpponent.Illuminati].komi;
   return isTinyBoardVsIlluminati ? 8 : (komi + 0.5) * 0.25;
-}
-
-export function getGoFavorForFaction(factionName: string) {
-  const faction = getEnumHelper("FactionName").getMember(factionName);
-  if (!faction) {
-    return 0;
-  }
-  const factionDetails = getOpponentStats(faction as unknown as GoOpponent);
-  return factionDetails?.favor ?? 0;
 }
