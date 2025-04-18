@@ -181,6 +181,19 @@ global.app_handlers = {
 };
 
 app.on("ready", async () => {
+  const gotTheLock = app.requestSingleInstanceLock();
+  if (!gotTheLock) {
+    await dialog.showMessageBox(undefined, {
+      title: "Bitburner",
+      message: "Failed to launch",
+      detail: "Bitburner is already running. Please do not launch the game multiple times.",
+      type: "error",
+      buttons: ["OK"],
+    });
+    app.quit();
+    return;
+  }
+
   // Intercept file protocol requests and only let valid requests through
   protocol.interceptFileProtocol("file", ({ url, method }, callback) => {
     let filePath;
@@ -219,6 +232,14 @@ app.on("ready", async () => {
     await utils.exportSave(window);
   } else {
     const window = await startWindow(process.argv.includes("--no-scripts"));
+    app.on("second-instance", (event, commandLine, workingDirectory, additionalData) => {
+      log.error("A second instance is launched", event, commandLine, workingDirectory, additionalData);
+      // The player tried to run a second instance. We should focus the current window.
+      if (window.isMinimized()) {
+        window.restore();
+      }
+      window.focus();
+    });
     if (global.steamworksError) {
       await dialog.showMessageBox(window, {
         title: "Bitburner",
