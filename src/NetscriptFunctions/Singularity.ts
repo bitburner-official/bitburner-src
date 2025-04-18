@@ -924,7 +924,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const faction = Factions[facName];
-      return calculateFavorAfterResetting(faction.favor, faction.playerReputation) - faction.favor;
+      return calculateFavorAfterResetting(faction.favor, faction.playerReputation, facName) - faction.favor;
     },
     donateToFaction: (ctx) => (_facName, _amt) => {
       helpers.checkSingularityAccess(ctx);

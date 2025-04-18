@@ -76,7 +76,7 @@ export class Faction {
 
   prestigeAugmentation(): void {
     // Gain favor
-    this.setFavor(calculateFavorAfterResetting(this.favor, this.playerReputation));
+    this.setFavor(calculateFavorAfterResetting(this.favor, this.playerReputation, this.name)); // TODO: update this
     // Reset reputation and flags
     this.playerReputation = 0;
     this.alreadyInvited = false;

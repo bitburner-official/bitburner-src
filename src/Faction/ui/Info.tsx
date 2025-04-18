@@ -75,7 +75,13 @@ export function Info(props: IProps): React.ReactElement {
             <>
               <Typography>
                 You will have{" "}
-                <Favor favor={calculateFavorAfterResetting(props.faction.favor, props.faction.playerReputation)} />{" "}
+                <Favor
+                  favor={calculateFavorAfterResetting(
+                    props.faction.favor,
+                    props.faction.playerReputation,
+                    props.faction.name,
+                  )}
+                />{" "}
                 faction favor after installing an Augmentation.
               </Typography>
               <MathJax>{"\\(\\huge{r = \\text{total faction reputation}}\\)"}</MathJax>
