@@ -1103,7 +1103,7 @@ type SleeveCrimeTask = {
 type SleeveFactionTask = {
   type: "FACTION";
   factionWorkType: FactionWorkType | `${FactionWorkType}`;
-  factionName: string;
+  factionName: FactionName;
 };
 
 /** @public */
@@ -1750,7 +1750,7 @@ export interface CrimeTask extends BaseTask {
 export interface FactionWorkTask extends BaseTask {
   type: "FACTION";
   factionWorkType: FactionWorkType;
-  factionName: string;
+  factionName: FactionName;
 }
 
 /**
@@ -2248,7 +2248,7 @@ export interface Singularity {
    * ]
    * ```
    */
-  getFactionInviteRequirements(faction: string): PlayerRequirement[];
+  getFactionInviteRequirements(faction: FactionName): PlayerRequirement[];
 
   /**
    * Get a list of enemies of a faction.
@@ -2262,7 +2262,7 @@ export interface Singularity {
    * @param faction - Name of faction.
    * @returns Array containing the names of all enemies of the faction.
    */
-  getFactionEnemies(faction: string): string[];
+  getFactionEnemies(faction: FactionName): string[];
 
   /**
    * List all current faction invitations.
@@ -2275,7 +2275,7 @@ export interface Singularity {
    *
    * @returns Array with the name of all Factions you currently have outstanding invitations from.
    */
-  checkFactionInvitations(): string[];
+  checkFactionInvitations(): FactionName[];
 
   /**
    * Join a faction.
@@ -2288,7 +2288,7 @@ export interface Singularity {
    * @param faction - Name of faction to join.
    * @returns True if player joined the faction, and false otherwise.
    */
-  joinFaction(faction: string): boolean;
+  joinFaction(faction: FactionName): boolean;
 
   /**
    * Work for a faction.
@@ -2316,7 +2316,7 @@ export interface Singularity {
    * @param focus - Acquire player focus on this work operation. Optional. Defaults to true.
    * @returns True if the player starts working, and false otherwise.
    */
-  workForFaction(faction: string, workType: FactionWorkType | `${FactionWorkType}`, focus?: boolean): boolean;
+  workForFaction(faction: FactionName, workType: FactionWorkType | `${FactionWorkType}`, focus?: boolean): boolean;
 
   /**
    * Get the work types of a faction.
@@ -2328,7 +2328,7 @@ export interface Singularity {
    * @param faction - Name of the faction.
    * @returns The work types of the faction.
    */
-  getFactionWorkTypes(faction: string): FactionWorkType[];
+  getFactionWorkTypes(faction: FactionName): FactionWorkType[];
 
   /**
    * Get faction reputation.
@@ -2341,7 +2341,7 @@ export interface Singularity {
    * @param faction - Name of faction to work for.
    * @returns Amount of reputation you have for the specified faction.
    */
-  getFactionRep(faction: string): number;
+  getFactionRep(faction: FactionName): number;
 
   /**
    * Get faction favor.
@@ -2354,7 +2354,7 @@ export interface Singularity {
    * @param faction - Name of faction.
    * @returns Amount of favor you have for the specified faction.
    */
-  getFactionFavor(faction: string): number;
+  getFactionFavor(faction: FactionName): number;
 
   /**
    * Get faction favor gain.
@@ -2368,7 +2368,7 @@ export interface Singularity {
    * @param faction - Name of faction.
    * @returns Amount of favor you will gain for the specified faction when you reset by installing Augmentations.
    */
-  getFactionFavorGain(faction: string): number;
+  getFactionFavorGain(faction: FactionName): number;
 
   /**
    * Donate to a faction.
@@ -2387,7 +2387,7 @@ export interface Singularity {
    * @param amount - Amount of money to donate.
    * @returns True if the money was donated, and false otherwise.
    */
-  donateToFaction(faction: string, amount: number): boolean;
+  donateToFaction(faction: FactionName, amount: number): boolean;
 
   /**
    * Create a program.
@@ -2520,7 +2520,7 @@ export interface Singularity {
    * @param augName - Name of Augmentation.
    * @returns Array containing the names of all factions.
    */
-  getAugmentationFactions(augName: string): string[];
+  getAugmentationFactions(augName: string): FactionName[];
 
   /**
    * Get a list of augmentation available from a faction.
@@ -2534,7 +2534,7 @@ export interface Singularity {
    * @param faction - Name of faction.
    * @returns Array containing the names of all Augmentations.
    */
-  getAugmentationsFromFaction(faction: string): string[];
+  getAugmentationsFromFaction(faction: FactionName): string[];
 
   /**
    * Get the pre-requisite of an augmentation.
@@ -2597,7 +2597,7 @@ export interface Singularity {
    * @param augmentation - Name of Augmentation to purchase.
    * @returns True if the Augmentation is successfully purchased, and false otherwise.
    */
-  purchaseAugmentation(faction: string, augmentation: string): boolean;
+  purchaseAugmentation(faction: FactionName, augmentation: string): boolean;
 
   /**
    * Get the stats of an augmentation.
@@ -4047,7 +4047,7 @@ export interface Gang {
    * @param faction - Name of the faction that you want to create a gang with. This faction must allow this action, and you must be its member.
    * @returns True if the gang was created, false otherwise.
    */
-  createGang(faction: string): boolean;
+  createGang(faction: FactionName): boolean;
 
   /**
    * Check if you're in a gang.
@@ -4994,7 +4994,7 @@ export interface Sleeve {
    */
   setToFactionWork(
     sleeveNumber: number,
-    factionName: string,
+    factionName: FactionName,
     factionWorkType: FactionWorkType | `${FactionWorkType}`,
   ): boolean | undefined;
 
@@ -9548,7 +9548,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @param amountCash - Amount of money to bribe
    * @returns true if successful, false if not
    */
-  bribe(factionName: string, amountCash: number): boolean;
+  bribe(factionName: FactionName, amountCash: number): boolean;
 
   /**
    * Get corporation data.
