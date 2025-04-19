@@ -1,6 +1,6 @@
 /* eslint-disable no-process-exit */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, dialog, BrowserWindow, ipcMain, protocol } = require("electron");
+const { app, dialog, BrowserWindow, ipcMain, protocol, net } = require("electron");
 
 const log = require("electron-log");
 log.catchErrors();
@@ -182,7 +182,7 @@ global.app_handlers = {
 
 app.on("ready", async () => {
   // Intercept file protocol requests and only let valid requests through
-  protocol.interceptFileProtocol("file", ({ url, method }, callback) => {
+  protocol.handle("file", ({ url, method }) => {
     let filePath;
     let realPath;
     let relativePath;
@@ -197,8 +197,13 @@ app.on("ready", async () => {
       relativePath = path.relative(__dirname, realPath);
       // Only allow access to files in "dist" folder or html files in the same directory
       if (method === "GET" && (relativePath.startsWith("dist") || relativePath.match(/^[a-zA-Z-_]*\.html/))) {
-        callback(realPath);
-        return;
+        /**
+         * By default, requests made by net.fetch go through custom protocol handlers, so we have to explicitly tell it
+         * to bypass those handles; otherwise, it creates an infinite loop.
+         *
+         * Ref: https://github.com/electron/electron/issues/39402
+         */
+        return net.fetch(realPath, { bypassCustomProtocolHandlers: true });
       }
     } catch (error) {
       log.error(error);
@@ -207,7 +212,7 @@ app.on("ready", async () => {
       `Tried to access a page outside the sandbox. Url: ${url}. FilePath: ${filePath}. RealPath: ${realPath}.` +
         ` __dirname: ${__dirname}. RelativePath: ${relativePath}. Method: ${method}.`,
     );
-    callback({ statusCode: 403 });
+    return new Response(null, { status: 403 });
   });
 
   log.info("Application is ready!");
