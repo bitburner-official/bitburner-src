@@ -10,11 +10,10 @@ Functions that leverage your charisma for your own gain.
 
 ```typescript
 influence: {
-
     memoryReallocation(hostname?: string): Promise<Result>;
 
     promoteStock(sym: string): Promise<Result>;
 
-    phishingAttack() : Promise<Result>;
-  }
+    phishingAttack(): Promise<Result>;
+  };
 ```

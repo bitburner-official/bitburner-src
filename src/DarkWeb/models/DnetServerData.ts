@@ -168,7 +168,7 @@ export const checkPassword = (
   } else if (darknetData.minigameType === Minigames.divisibilityTest) {
     const password = +darknetData.password;
     const attemptedDivisor = +attemptedPassword;
-    if (isNaN(attemptedDivisor) || password % attemptedDivisor) {
+    if (isNaN(attemptedDivisor) || password % attemptedDivisor || attemptedPassword === "") {
       return getFailureResponse(`Password is not divisible by '${attemptedPassword}'`, "false", darknetData);
     }
     return getFailureResponse(`Password IS divisible by '${attemptedPassword}'`, "true", darknetData);

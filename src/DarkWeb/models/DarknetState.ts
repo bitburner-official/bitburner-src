@@ -19,7 +19,10 @@ export type DarknetState = {
   labyrinth: string[][];
   labLocations: Record<number, [number, number]>;
   lastPhishingCacheTime: Date;
+  lastStormTime: Date;
   stockPromotions: Record<string, number>;
+  migrationInductionServers: Record<string, number>;
+  webstormTokens: number;
 };
 
 export const DarknetState: DarknetState = {
@@ -31,7 +34,10 @@ export const DarknetState: DarknetState = {
   labyrinth: generateMaze(),
   labLocations: { "-1": [1, 1] },
   lastPhishingCacheTime: new Date(),
+  lastStormTime: new Date(),
   stockPromotions: {},
+  migrationInductionServers: {},
+  webstormTokens: 0,
 };
 
 export const startDarknetMovement = () => setInterval(() => mutateDarknet(), 4000);

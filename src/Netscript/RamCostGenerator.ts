@@ -233,6 +233,8 @@ const dnet = {
   hasStasisLink: 0.1,
   getServer: 2,
   packetCapture: 6,
+  induceServerMigration: 0.5,
+  unleashStormSeed: 0.1,
   influence: {
     memoryReallocation: 1,
     promoteStock: 2,

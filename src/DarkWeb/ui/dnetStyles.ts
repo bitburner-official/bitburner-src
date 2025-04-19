@@ -82,6 +82,9 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
   gold: {
     color: theme.colors.money,
   },
+  red: {
+    color: theme.colors.hp,
+  },
   paddingRight: {
     paddingRight: "3px",
   },

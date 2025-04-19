@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Box, Button, Container, Typography, SvgIcon } from "@mui/material";
 import { PasswordPromptModal } from "./PasswordPromptModal";
 import { getIcon, Icon } from "../controllers/ServerIcon";
-import { dnetStyles } from "./dnetStyles";
 import { BaseServer } from "../../Server/BaseServer";
 import { DarknetState } from "../models/DarknetState";
 import { getPixelPosition } from "./networkCanvas";
@@ -11,11 +10,13 @@ import { ServerSummary } from "./ServerSummary";
 export type DWServerProps = {
   server: BaseServer;
   enableAuth: boolean;
+  classes: {
+    [key: string]: string;
+  };
 };
 
-export function DNServerComponent({ server, enableAuth }: DWServerProps): React.ReactElement {
+export function DNServerComponent({ server, enableAuth, classes }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const { classes } = dnetStyles({});
   const color = server.darknetData?.hasStasisLink
     ? classes.goldBorder
     : server.hasAdminRights

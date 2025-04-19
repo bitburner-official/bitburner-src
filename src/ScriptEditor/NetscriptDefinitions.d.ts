@@ -4222,6 +4222,25 @@ export interface Darknet {
   packetCapture(host: string): Promise<string>;
 
   /**
+   * Increases the chance that connected servers will move to other parts of the darknet, by overloading the connections between them and the current server.
+   * (Does not affect the current server, only nearby ones)
+   *
+   * @remarks
+   * RAM cost: 0.5 GB
+   *
+   */
+  induceServerMigration(): Promise<Result>;
+
+  /**
+   * There are rumors of a mysterious executable sometimes found deep in the dark net...
+   * Run them at your own risk.
+   *
+   * @remarks
+   * RAM cost: 0.1 GB
+   */
+  unleashStormSeed(): Result;
+
+  /**
    * Darknet analysis tools.
    */
   analytics: {

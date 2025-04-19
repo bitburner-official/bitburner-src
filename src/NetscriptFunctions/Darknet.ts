@@ -16,6 +16,7 @@ import {
   getBackdoorAuthTimeDebuff,
   getRamBlockRemoved,
   getRewardFromCache,
+  handleRamBlockClearedRewards,
   hasCacheFileExtension,
 } from "../DarkWeb/models/effects";
 import { Player } from "@player";
@@ -25,10 +26,12 @@ import { formatNumber } from "../ui/formatNumber";
 import { GetAllServers, GetServer } from "../Server/AllServers";
 import { BaseServer } from "../Server/BaseServer";
 import { capturePackets } from "../DarkWeb/models/packetSniffing";
-import { getBackdooredDarkwebServers } from "../DarkWeb/controllers/DarknetNetworkMovement";
+import { getBackdooredDarkwebServers, getServerSafely } from "../DarkWeb/controllers/DarknetNetworkMovement";
 import { addSessionToServer, DarknetState } from "../DarkWeb/models/DarknetState";
 import { Result } from "../types";
 import { getStockFromSymbol } from "./StockMarket";
+import { CompletedProgramName } from "@enums";
+import { handleStormSeed } from "../DarkWeb/controllers/webstorm";
 
 export const STASIS_LINK_LIMIT = 2; // TODO: make this upgradable
 
@@ -125,7 +128,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const targetHostname = helpers.string(ctx, "hostname", _hostname);
         const password = expectPassword(ctx, targetHostname, _password);
         const currentServer = ctx.workerScript.getServer();
-        const targetServer = GetAllServers(true).find((s) => s.hostname === targetHostname);
+        const targetServer = getServerSafely(targetHostname);
         if (!targetServer) {
           return Promise.resolve({
             status: ResponseStatus.NOT_FOUND,
@@ -180,7 +183,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (_hostname, _password): Promise<PasswordResponse> => {
         const targetHostname = helpers.string(ctx, "hostname", _hostname);
         const token = helpers.string(ctx, "password", _password);
-        const targetServer = GetAllServers(true).find((s) => s.hostname === targetHostname);
+        const targetServer = getServerSafely(targetHostname);
         if (!targetServer) {
           return Promise.resolve({
             status: ResponseStatus.NOT_FOUND,
@@ -331,6 +334,53 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         return capturePackets(server);
       });
     },
+    induceServerMigration: (ctx) => (): Promise<Result> => {
+      const server = ctx.workerScript.getServer();
+      if (!server.darknetData) {
+        logger(ctx)(`${server.hostname} is not a darknet server.`);
+        return Promise.resolve({
+          success: false,
+          message: `${server.hostname} is not a darknet server.`,
+        });
+      }
+      logger(ctx)(`Injecting routing instability... (Est: 10s)`);
+
+      return helpers.netscriptDelay(ctx, 10000).then(() => {
+        const xpGained = Player.mults.charisma_exp * 50 * ((200 + Player.skills.charisma) / 200);
+        Player.gainCharismaExp(xpGained);
+
+        const threads = ctx.workerScript.scriptRef.threads;
+        DarknetState.migrationInductionServers[server.hostname] =
+          (DarknetState.migrationInductionServers[server.hostname] ?? 0) + threads;
+
+        const result = `Routing instability induced near ${server.hostname}. (Gained ${formatNumber(xpGained)} cha xp)`;
+        logger(ctx)(result);
+        return {
+          success: true,
+          message: result,
+        };
+      });
+    },
+    unleashStormSeed: (ctx) => (): Result => {
+      const server = ctx.workerScript.getServer();
+      const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
+      if (!hasStormSeed) {
+        const result = `No executable found on ${server.hostname}...`;
+        logger(ctx)(result);
+        return {
+          success: false,
+          message: result,
+        };
+      }
+
+      const result = `The webstorm has been unleashed...`;
+      logger(ctx)(result);
+      handleStormSeed(server);
+      return {
+        success: true,
+        message: result,
+      };
+    },
     analytics: {
       getCurrentDarknetInstability: () => () => {
         return {
@@ -424,7 +474,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
             server.updateRamUsed(server.ramUsed - ramBlockRemoved);
 
             if (server.darknetData.ramBlock <= 0) {
-              addCacheToServer(server);
+              handleRamBlockClearedRewards(server);
             }
 
             const result = `Liberated ${formatNumber(

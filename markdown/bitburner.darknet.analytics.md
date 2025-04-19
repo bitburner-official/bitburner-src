@@ -10,7 +10,6 @@ Darknet analysis tools.
 
 ```typescript
 analytics: {
-
     getCurrentDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
 
     getAuthenticateEstimatedTime(hostname?: string, threads?: number, person?: Player): number;
@@ -20,5 +19,5 @@ analytics: {
     getExpectedRamBlockRemoved(hostname?: string, threads?: number, person?: Player): number;
 
     isDarknetServer(host?: string): boolean;
-  }
+  };
 ```

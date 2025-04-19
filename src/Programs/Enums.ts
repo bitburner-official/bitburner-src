@@ -12,4 +12,5 @@ export enum CompletedProgramName {
   formulas = "Formulas.exe",
   bitFlume = "b1t_flum3.exe",
   flight = "fl1ght.exe",
+  stormSeed = "STORM_SEED.exe",
 }

@@ -14,6 +14,7 @@ import { CompletedProgramName, FactionName } from "@enums";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { knowAboutBitverse } from "../BitNode/BitNodeUtils";
+import { handleStormSeed } from "../DarkWeb/controllers/webstorm";
 
 function requireHackingLevel(lvl: number) {
   return function () {
@@ -319,6 +320,15 @@ export const Programs: Record<CompletedProgramName, Program> = {
 
       Terminal.print("We will contact you.");
       Terminal.print(`-- ${FactionName.Daedalus} --`);
+    },
+  }),
+  [CompletedProgramName.stormSeed]: new Program({
+    name: CompletedProgramName.stormSeed,
+    create: null,
+    run: (): void => {
+      Terminal.print("You can feel a storm approaching...");
+      const connectedServer = Player.getCurrentServer();
+      handleStormSeed(connectedServer);
     },
   }),
 };

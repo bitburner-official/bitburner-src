@@ -149,6 +149,20 @@ export const getXpReward = (difficulty: number) => {
   return `You have discovered a cache with ${formatNumber(reward, 0)} cha XP.`;
 };
 
+export const handleRamBlockClearedRewards = (server: BaseServer) => {
+  addCacheToServer(server);
+  if (Math.random() < 0.3) {
+    addClue(server);
+  }
+
+  const stormSeedChance = 0.15;
+  const timeSinceLastStorm = Date.now() - DarknetState.lastStormTime.getTime();
+  const stormFileExists = getDarknetServers().some((s) => s.programs.includes(CompletedProgramName.stormSeed));
+  if (timeSinceLastStorm > 30 * 60 * 1000 && !stormFileExists && Math.random() < stormSeedChance) {
+    server.programs.push(CompletedProgramName.stormSeed);
+  }
+};
+
 /**
  * Returns a small multiplier based on charisma.
  * With scalar at 1 it gives ~1.2 at 2000 charisma and ~1.6 at 10000 charisma. Caps at 2.1 at infinite cha

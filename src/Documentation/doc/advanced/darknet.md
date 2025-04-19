@@ -121,6 +121,13 @@ Design document and workspace
 
 ## patches:
 
+## The "name needed" patch
+
+- added `induceServerMigration` . Calling this method slowly builds up network instability around the current server, and each call raises the odds that one of the servers connected to the current server will move to another place in the network. This movement has a higher potential range than regular movement.
+
+- Sometimes a mysterious executable can be found on darknet servers. Run it at your own risk.
+- Added `unleashStormSeed` accessor
+
 ### The "have stuff to do with darknet ram" patch!
 
 Darknet servers belong to somebody already, and they are doing stuff on them. When you first find darkweb servers, often times some (or most!) of the ram will be "in use" by the owner's clearly wasteful use and needs to be... liberated.
@@ -203,6 +210,18 @@ Coming soon:
 - small bugfixes
 
 ## TODO:
+
+- webstorm visual indicator
+- screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
+
+coordinating at least one external way of getting dynamic feedback will add a lot of endgame options for players, I think. I'd like the complexity to be more emergent rather than from having half a dozen entrypoints to juggle, but we'll see how that shakes out. It will be an iterative process
+
+I'm experimenting with cha being a soft requirement in this patch, but I may make it a requirement to do the heartbleed() or whatever dynamic-response-scraping process, and possibly other things as well like stasis link. Making cha more important seems very thematic with other parts of the game
+
+lab needs something, for sure. I'm still noodling on it. Possibly will give a sequence of augs, getting more complex in its mazes as you go, until you earn TRP? Maybe TRP is only available there in BN15? Maybe it just gives a daedalus invite instead? that one will be harder to balance until more of the core loop is hammered out. Maybe final version needs to be automated?
+Final lab cannot be played manually
+
+Move analysis functions to Functions.exe
 
 if you know the password directly you can just use auth. No cha required
 If you don't know it, you can try and scrape data using heartBleed() or whatever, and get feedback on recent password attempts. Charisma required.
@@ -370,6 +389,12 @@ formulas: auth response time or estimates given CHA level
   - Give cha? what else?
 
 ## TODO later:
+
+- save darknet tokens and maybe other state?
+
+- change mutations to be on game cycle loop
+
+- remove darknet servers from hashnet dropdown
 
 - stanek fragments for darkweb
 
