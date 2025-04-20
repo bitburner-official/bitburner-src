@@ -225,7 +225,7 @@ app.on("ready", async () => {
       if (method === "GET" && (relativePath.startsWith("dist") || relativePath.match(/^[a-zA-Z-_]*\.html/))) {
         /**
          * By default, requests made by net.fetch go through custom protocol handlers, so we have to explicitly tell it
-         * to bypass those handles; otherwise, it creates an infinite loop.
+         * to bypass those handlers; otherwise, it creates an infinite loop.
          *
          * Ref: https://github.com/electron/electron/issues/39402
          */
