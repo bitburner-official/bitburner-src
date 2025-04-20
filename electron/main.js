@@ -180,6 +180,8 @@ global.app_handlers = {
   stopProcess: setStopProcessHandler,
 };
 
+let window;
+
 app.on("ready", async () => {
   const gotTheLock = app.requestSingleInstanceLock();
   if (!gotTheLock) {
@@ -193,6 +195,17 @@ app.on("ready", async () => {
     app.quit();
     return;
   }
+  app.on("second-instance", (event, commandLine, workingDirectory, additionalData) => {
+    log.error("A second instance is launched", event, commandLine, workingDirectory, additionalData);
+    // The player tried to run a second instance. We should focus the current window.
+    if (!window) {
+      return;
+    }
+    if (window.isMinimized()) {
+      window.restore();
+    }
+    window.focus();
+  });
 
   // Intercept file protocol requests and only let valid requests through
   protocol.interceptFileProtocol("file", ({ url, method }, callback) => {
@@ -225,21 +238,13 @@ app.on("ready", async () => {
 
   log.info("Application is ready!");
   if (process.argv.includes("--export-save")) {
-    const window = new BrowserWindow({ show: false });
+    window = new BrowserWindow({ show: false });
     await window.loadFile("export.html");
     window.show();
     setStopProcessHandler(window);
     await utils.exportSave(window);
   } else {
-    const window = await startWindow(process.argv.includes("--no-scripts"));
-    app.on("second-instance", (event, commandLine, workingDirectory, additionalData) => {
-      log.error("A second instance is launched", event, commandLine, workingDirectory, additionalData);
-      // The player tried to run a second instance. We should focus the current window.
-      if (window.isMinimized()) {
-        window.restore();
-      }
-      window.focus();
-    });
+    window = await startWindow(process.argv.includes("--no-scripts"));
     if (global.steamworksError) {
       await dialog.showMessageBox(window, {
         title: "Bitburner",
