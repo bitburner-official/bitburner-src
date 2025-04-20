@@ -24,6 +24,7 @@ import { Server } from "../Server/Server";
 import { Companies } from "../Company/Companies";
 import { isMember } from "../utils/EnumHelper";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
+import { checkServerOwnership, ServerOwnershipType } from "../Server/ServerHelpers";
 
 // Returns a boolean indicating whether the player has Hacknet Servers
 // (the upgraded form of Hacknet Nodes)
@@ -491,7 +492,14 @@ export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 
             console.error(`Invalid target specified in purchaseHashUpgrade(): ${upgTarget}`);
             throw new Error(`'${upgTarget}' is not a server.`);
           }
-          if (!(target instanceof Server)) throw new Error(`'${upgTarget}' is not a normal server.`);
+          if (!(target instanceof Server)) {
+            throw new Error(`'${upgTarget}' is not a normal server.`);
+          }
+          if (!checkServerOwnership(target, ServerOwnershipType.Foreign)) {
+            throw new Error(
+              `'${upgTarget}' is not a valid target. You can only perform this action on servers that you do not own.`,
+            );
+          }
 
           target.changeMinimumSecurity(upg.value ** count, true);
         } catch (e) {
@@ -507,7 +515,14 @@ export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 
             console.error(`Invalid target specified in purchaseHashUpgrade(): ${upgTarget}`);
             throw new Error(`'${upgTarget}' is not a server.`);
           }
-          if (!(target instanceof Server)) throw new Error(`'${upgTarget}' is not a normal server.`);
+          if (!(target instanceof Server)) {
+            throw new Error(`'${upgTarget}' is not a normal server.`);
+          }
+          if (!checkServerOwnership(target, ServerOwnershipType.Foreign)) {
+            throw new Error(
+              `'${upgTarget}' is not a valid target. You can only perform this action on servers that you do not own.`,
+            );
+          }
 
           //Manually loop the change so as to properly handle the softcap
           for (let i = 0; i < count; i++) {
