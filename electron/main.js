@@ -128,7 +128,7 @@ function setStopProcessHandler(window) {
       if (playtime > minimumPlaytime) {
         saveToCloud(save);
       } else {
-        log.debug(`Auto-save to cloud disabled for save game under ${minimumPlaytime}ms (${playtime}ms)`);
+        log.info(`Auto-save to cloud disabled for save game under ${minimumPlaytime}ms (${playtime}ms)`);
       }
     }
   };
