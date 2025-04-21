@@ -119,6 +119,23 @@ function isCloudEnabled() {
 }
 
 function saveCloudFile(name, content) {
+  /**
+   * Bitburner's Steam Cloud allows only 1 file, so if the player has a save file stored in Steam Cloud, they cannot
+   * save another file. For example, let's say they start playing with SaveID s123. After a few months, they want to
+   * start another run with a clean save file; the new SaveId is s456. In this case, the new s456.json.gz cannot be
+   * saved to Steam Cloud because s123.json.gz exists. In this case, we need to delete the current cloud file before
+   * writing the new file.
+   */
+  const files = steamworksClient.cloud.listFiles();
+  if (files.length !== 0) {
+    const currentCloudFile = getFilenameOfFirstCloudFile();
+    if (currentCloudFile !== name) {
+      log.info(
+        `Found a different cloud file. The current file will be deleted. Current file: ${currentCloudFile}. New file: ${name}.`,
+      );
+      deleteCloudFile();
+    }
+  }
   steamworksClient.cloud.writeFile(name, content);
 }
 
@@ -189,7 +206,7 @@ async function pushSaveDataToSteamCloud(saveData, currentPlayerId) {
   const content = Buffer.from(saveData).toString("base64");
   log.debug(`saveData: ${saveData.length} bytes`);
   log.debug(`Base64 string of saveData: ${content.length} bytes`);
-  log.debug(`Saving to Steam Cloud as ${steamSaveName}`);
+  log.info(`Saving to Steam Cloud as ${steamSaveName}`);
 
   try {
     saveCloudFile(steamSaveName, content);
