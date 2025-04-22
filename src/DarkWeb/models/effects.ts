@@ -96,7 +96,7 @@ export const calculateAuthenticationTime = (
       : 0;
   const sharedCharsExtraTime = sharedChars * 150;
 
-  return Math.max(time * calculateIntelligenceBonus(person.skills.intelligence, 0.25), 100) + sharedCharsExtraTime;
+  return time * calculateIntelligenceBonus(person.skills.intelligence, 0.25) + sharedCharsExtraTime;
 };
 
 export const getBackdoorAuthTimeDebuff = () => {

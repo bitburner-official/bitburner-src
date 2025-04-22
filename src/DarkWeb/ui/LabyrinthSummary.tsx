@@ -1,21 +1,22 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { PasswordResponse, ResponseStatus } from "../models/DnetServerData";
 import { DarknetState } from "../models/DarknetState";
 import { getSurroundingsVisualized } from "../models/labyrinth";
 import { dnetStyles } from "./dnetStyles";
+import { Result } from "@nsdefs";
 
 export type LabyrinthSummaryProps = {
-  response: PasswordResponse | null;
+  result: Result | undefined;
+  lastMovementFeedback: string | undefined;
   loadingText?: string;
 };
 
-export const LabyrinthSummary = ({ response, loadingText }: LabyrinthSummaryProps): React.ReactElement => {
+export const LabyrinthSummary = ({ result, lastMovementFeedback, loadingText }: LabyrinthSummaryProps): React.ReactElement => {
   const { classes } = dnetStyles({});
 
   // victory message
-  if (!response || response?.status == ResponseStatus.SUCCESS) {
-    return <Typography>{response?.msg}</Typography>;
+  if (result?.success) {
+    return <Typography>{"You have successfully navigated the labyrinth! Congratulations."}</Typography>;
   }
 
   // movement message
@@ -32,7 +33,7 @@ export const LabyrinthSummary = ({ response, loadingText }: LabyrinthSummaryProp
 
   return (
     <>
-      <Typography>{loadingText?.includes("{") ? response.msg : "Travelling..."}</Typography>
+      <Typography>{loadingText?.includes("{") ? lastMovementFeedback ?? "" : "Travelling..."}</Typography>
       <Typography>Current Surroundings:</Typography>
       <pre className={classes.maze}>{surroundings}</pre>
       <Typography>

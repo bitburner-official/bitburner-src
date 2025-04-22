@@ -1,6 +1,5 @@
 import { BaseServer } from "../../Server/BaseServer";
 import { PasswordResponse, ResponseStatus } from "./DnetServerData";
-import { Minigames } from "../controllers/DarknetServerGenerator";
 import { addSessionToServer, DarknetState } from "./DarknetState";
 import { addCacheToServer, calculatePasswordAttemptChaGain } from "./effects";
 import { Player } from "@player";
@@ -99,8 +98,8 @@ export const handleLabyrinthPassword = (
 ): PasswordResponse => {
   if (attemptedPassword === "?") {
     return {
-      msg: `You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.`,
-      modelId: Minigames.labyrinth,
+      passwordAttempted: attemptedPassword,
+      message: `You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.`,
       status: ResponseStatus.AUTH_FAILURE,
     };
   }
@@ -118,18 +117,18 @@ export const handleLabyrinthPassword = (
   if (labServer.hasAdminRights) {
     addSessionToServer(labServer, pid);
     return {
+      passwordAttempted: attemptedPassword,
       status: ResponseStatus.SUCCESS,
-      msg: "You have discovered the end the labyrinth.",
-      modelId: Minigames.labyrinth,
+      message: "You have discovered the end the labyrinth.",
       data: labServer.darknetData.password,
     };
   }
 
   if (!labServer.hasAdminRights && attemptedPassword === labServer.darknetData.password) {
     return {
+      passwordAttempted: attemptedPassword,
       status: ResponseStatus.AUTH_FAILURE,
-      msg: `You have decided, after some deliberation, that the best way to beat a maze is to find the end, and not to try and skip it.`,
-      modelId: Minigames.labyrinth,
+      message: `You have decided, after some deliberation, that the best way to beat a maze is to find the end, and not to try and skip it.`,
     };
   }
 
@@ -145,18 +144,18 @@ export const handleLabyrinthPassword = (
     };
 
     return {
+      passwordAttempted: attemptedPassword,
       status: ResponseStatus.AUTH_FAILURE,
-      msg: `You cannot go that way. You are still at ${newLocation[0]},${newLocation[1]}.`,
+      message: `You cannot go that way. You are still at ${newLocation[0]},${newLocation[1]}.`,
       data: JSON.stringify(status),
-      modelId: Minigames.labyrinth,
     };
   }
 
   if (!dx && !dy) {
     return {
+      passwordAttempted: attemptedPassword,
       status: ResponseStatus.AUTH_FAILURE,
-      msg: `You don't know how to do that. Try a direction such as "NORTH"`,
-      modelId: Minigames.labyrinth,
+      message: `You don't know how to do that. Try a direction such as "NORTH"`,
     };
   }
 
@@ -169,10 +168,9 @@ export const handleLabyrinthPassword = (
     addSessionToServer(labServer, pid);
 
     return {
+      passwordAttempted: attemptedPassword,
       status: ResponseStatus.SUCCESS,
-      msg: "You have successfully navigated the labyrinth! Congratulations",
-      modelId: Minigames.labyrinth,
-      data: labServer.darknetData?.password,
+      message: "You have successfully navigated the labyrinth! Congratulations",
     };
   }
 
@@ -186,10 +184,10 @@ export const handleLabyrinthPassword = (
   };
 
   return {
+    passwordAttempted: attemptedPassword,
     status: ResponseStatus.AUTH_FAILURE,
-    msg: `You have moved to a new location: ${newLocation[0]},${newLocation[1]}.`,
+    message: `You have moved to a new location: ${newLocation[0]},${newLocation[1]}.`,
     data: JSON.stringify(status),
-    modelId: Minigames.labyrinth,
   };
 };
 

@@ -1,4 +1,6 @@
 /** All netscript definitions */
+import { PositiveInteger } from "../types";
+
 /** @public */
 interface HP {
   current: number;
@@ -4036,29 +4038,7 @@ type ResponseStatus =
   | "301 Moved Permanently"
   | "418 I'm a teapot";
 
-/**
- * Response to an authentication attempt.
- * @property status - Status code of the response. 200 for success, 401 for failure.
- * @property msg - Message describing the result of the authentication attempt.
- * @property passwordLength - Length of the correct password.
- * @property passwordFormat - Format of the correct password.
- * @property data - Feedback returned from the authentication attempt. Model specific.
- * @property modelId - ID of the model that was used to authenticate. Similar models tend to share vulnerabilities.
- *
- * @public
- */
-type PasswordResponse = {
-  status: ResponseStatus;
-  msg: string;
-  passwordLength?: number;
-  passwordFormat?: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode" | undefined;
-  data?: string;
-  modelId?: number;
-};
-
-type SuccessResult<T extends object> = { success: true; message?: string } & T;
-type FailureResult = { success: false; message: string };
-export type Result<T extends object = object> = SuccessResult<T> | FailureResult;
+export type Result = { success: boolean; message: string }
 
 /**
  * Darknet server information.
@@ -4093,7 +4073,13 @@ type DarknetServer = {
   passwordDataExample: string;
   charismaLevel: number;
   depth: number;
-  modelId: number;
+  modelId: string;
+};
+
+type HeartbleedOptions = {
+  peek: boolean;
+  logsToCapture: PositiveInteger;
+  additionalMsec: number;
 };
 
 /**
@@ -4109,7 +4095,7 @@ export interface Darknet {
    *
    * If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
    *
-   * Response status types:
+   * Response messages:
    * "200 Success" - Authentication was successful.
    * "401 Unauthorized" - Authentication failed. The password is incorrect.
    * "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid.
@@ -4122,9 +4108,10 @@ export interface Darknet {
    *
    * @param hostname - name of the target server (connected to the current server) to try a password.
    * @param password - password to attempt to authenticate with.
+   * @param additionalMsec - optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
    * @returns a promise that resolves to a {@link PasswordResponse} object.
    */
-  authenticate(hostname: string, password: string): Promise<PasswordResponse>;
+  authenticate(hostname: string, password: string, additionalMsec?: number): Promise<Result>;
 
   /**
    * Attempts to connect to a darkweb server that you have already authenticated on. The target must either be directly connected to the current server,
@@ -4132,7 +4119,7 @@ export interface Darknet {
    *
    * If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
    *
-   * Response status types:
+   * Response messages:
    * "200 Success" - Authentication was successful.
    * "401 Unauthorized" - Authentication failed. The password is incorrect, or the target server has never had a successful authenticate() by any script.
    * "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid.
@@ -4148,7 +4135,23 @@ export interface Darknet {
    * @param password - the server's password, to verify the session
    * @returns a promise that resolves to a {@link PasswordResponse} object. The response will have a `status` of "200 Success" | "401 Unauthorized" | "404 Not Found" | "408 Request Timeout" | "301 Moved Permanently"
    */
-  connectToSession(hostname: string, password: string): Promise<PasswordResponse>;
+  connectToSession(hostname: string, password: string): Result;
+
+
+  /**
+   * Uses an exploit to extract log data from a server by sending a malformed heartbeat request.
+   * Retrieves and removes the most recent logs on the server.
+   *
+   * @remarks
+   * RAM cost: 0.6 GB
+   *
+   * @param hostname - the server to target. Must be directly connected to the current server.
+   * @param options - options to modify how the exploit works.
+   *    peek: if true, looks at the most recent log line but does not extract it. Overrides logsToCapture.
+   *    logsToCapture: the number of log lines to remove from the server, up to a max of 8. Default is 1.
+   *    additionalMsec: the number of additional milliseconds to add to the run time of the heartbleed request. Default is 0.
+   */
+  heartbleed(hostname: string, options?: HeartbleedOptions): Promise<string[]>;
 
   /**
    * Opens a .cache file on the current server to acquire its valuable contents.
@@ -4210,6 +4213,16 @@ export interface Darknet {
   getServer(host?: string): DarknetServer;
 
   /**
+   * Returns the server's authentication protocol details.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param host - Hostname of the server to analyze. Defaults to the running script's server if not specified.
+   */
+  getServerAuthDetails(host?: string): {modelId: string, passwordHint: string, data: string};
+
+  /**
    * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
    * The target server must be directly connected to the server that the script is running on.
    *
@@ -4241,100 +4254,48 @@ export interface Darknet {
   unleashStormSeed(): Result;
 
   /**
-   * Darknet analysis tools.
+   * Returns whether the server is a darknet server. Defaults to the running script's server if host is not specified.
+   *
+   * Returns false if the server does not exist or has gone offline.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param host - Optional. Hostname for the requested server object.
+   * @returns true if the server is a darknet server, false otherwise.
    */
-  analytics: {
-    /**
-     * Gets the current Darknet instability.
-     *
-     * @remarks
-     * RAM cost: 0 GB
-     *
-     * @returns authenticateDurationIncrease - The increase in the time it takes to authenticate on a server.
-     * @returns authenticateTimeoutChance - The chance that an authentication attempt will time out.
-     */
-    getCurrentDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
-
-    /**
-     * Gets the estimated time it will take to authenticate on a server.
-     * @param hostname - Hostname of the server to authenticate on. Defaults to the running script's server if not specified.
-     * @param threads - Number of threads to use for the authentication attempt. Defaults to 1 if not specified.
-     * @param person - Optional. The player object to use for the authentication attempt. Defaults to the current player if not specified.
-     */
-    getAuthenticateEstimatedTime(hostname?: string, threads?: number, person?: Player): number;
-
-    /**
-     * Gets the amount of ram currently "blocked" by the server owner.
-     * This in-use ram can be freed using dnet.influence.memoryReallocation()
-     *
-     * @remarks
-     * RAM cost: 0 GB
-     *
-     * @param hostname - Optional. Hostname of the server to check. Defaults to the running script's server if not specified.
-     */
-    getOwnerAllocatedRam(hostname?: string): number;
-
-    /**
-     * Gets the expected amount of ram that will be freed when dnet.influence.memoryReallocation() is run.
-     *
-     * @remarks
-     * RAM cost: 0 GB
-     *
-     * @param hostname - Optional. Hostname of the server to check. Defaults to the running script's server if not specified.
-     * @param threads - Optional. Number of threads to use for the authentication attempt. Defaults to 1 if not specified.
-     * @param person - Optional. The player object to use for the authentication attempt. Defaults to the current player if not specified.
-     */
-    getExpectedRamBlockRemoved(hostname?: string, threads?: number, person?: Player): number;
-
-    /**
-     * Returns whether the server is a darknet server. Defaults to the running script's server if host is not specified.
-     *
-     * Returns false if the server does not exist or has gone offline.
-     *
-     * @remarks
-     * RAM cost: 0 GB
-     *
-     * @param host - Optional. Hostname for the requested server object.
-     * @returns true if the server is a darknet server, false otherwise.
-     */
-    isDarknetServer(host?: string): boolean;
-  };
+  isDarknetServer(host?: string): boolean;
 
   /**
-   * Functions that leverage your charisma for your own gain.
+   * Spends some time freeing some of the RAM currently blocked by the server owner. Must target a directly connected server.
+   * The amount of ram so absconded scaled with charisma.
+   *
+   * @remarks
+   * RAM cost: 1 GB
+   *
+   * @param hostname - Optional. Hostname of the connected server to free ram from.
    */
-  influence: {
-    /**
-     * Spends some time freeing some of the RAM currently blocked by the server owner. Must target a directly connected server.
-     * The amount of ram so absconded scaled with charisma.
-     *
-     * @remarks
-     * RAM cost: 1 GB
-     *
-     * @param hostname - Optional. Hostname of the connected server to free ram from.
-     */
-    memoryReallocation(hostname?: string): Promise<Result>;
+  memoryReallocation(hostname?: string): Promise<Result>;
 
-    /**
-     * Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but
-     * a savvy investor can take advantage of the chaos. The effect scales with charisma, but degrades over time if left alone.
-     *
-     * @remarks
-     * RAM cost: 2 GB
-     *
-     * @param sym - Stock symbol.
-     */
-    promoteStock(sym: string): Promise<Result>;
+  /**
+   * Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but
+   * a savvy investor can take advantage of the chaos. The effect scales with charisma, but degrades over time if left alone.
+   *
+   * @remarks
+   * RAM cost: 2 GB
+   *
+   * @param sym - Stock symbol.
+   */
+  promoteStock(sym: string): Promise<Result>;
 
-    /**
-     * Spends som time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa.
-     *
-     * Most of the time the attempt fails due to spam filters, but success can be increased with crime success rate and charisma stats.
-     *
-     * Very occasionally you can retrieve a cache file from the attempt.
-     */
-    phishingAttack(): Promise<Result>;
-  };
+  /**
+   * Spends som time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa.
+   *
+   * Most of the time the attempt fails due to spam filters, but success can be increased with crime success rate and charisma stats.
+   *
+   * Very occasionally you can retrieve a cache file from the attempt.
+   */
+  phishingAttack(): Promise<Result>;
 }
 
 /**
@@ -5917,6 +5878,13 @@ interface BladeburnerFormulas {
   ): number;
 }
 
+interface DarknetFormulas {
+  getCurrentDarknetInstability(): {authenticateDurationIncrease: number; authenticateTimeoutChance: number};
+  getAuthenticateEstimatedTime(hostname?: string, threads?: number, player?: Person): number;
+  getOwnerAllocatedRam(hostname?: string): number;
+  getExpectedRamBlockRemoved(hostname?: string, threads?: number, player?: Person): number;
+}
+
 /**
  * Formulas API
  * @remarks
@@ -5943,6 +5911,8 @@ export interface Formulas {
   work: WorkFormulas;
   /** Bladeburner formulas */
   bladeburner: BladeburnerFormulas;
+  /** Darknet formulas */
+  dnet: DarknetFormulas
 }
 
 /** @public */

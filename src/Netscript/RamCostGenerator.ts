@@ -225,28 +225,22 @@ const singularity = {
 } as const;
 
 const dnet = {
-  authenticate: 0.6,
+  authenticate: 0.4,
   connectToSession: 0.05,
+  heartbleed: 0.6,
   openCache: 2,
   probe: 0.2,
   setStasisLink: 12,
   hasStasisLink: 0.1,
   getServer: 2,
+  getServerAuthDetails: 0,
   packetCapture: 6,
   induceServerMigration: 0.5,
   unleashStormSeed: 0.1,
-  influence: {
-    memoryReallocation: 1,
-    promoteStock: 2,
-    phishingAttack: 2,
-  },
-  analytics: {
-    getCurrentDarknetInstability: 0,
-    getAuthenticateEstimatedTime: 0,
-    getOwnerAllocatedRam: 0,
-    getExpectedRamBlockRemoved: 0,
-    isDarknetServer: 0,
-  },
+  isDarknetServer: 0,
+  memoryReallocation: 1,
+  promoteStock: 2,
+  phishingAttack: 2,
 } as const;
 
 // Gang API
@@ -720,6 +714,12 @@ export const RamCosts: RamCostTree<NSFull> = {
     bladeburner: {
       skillMaxUpgradeCount: 0,
     },
+    dnet: {
+      getCurrentDarknetInstability: 0,
+      getAuthenticateEstimatedTime: 0,
+      getOwnerAllocatedRam: 0,
+      getExpectedRamBlockRemoved: 0,
+    }
   },
 } as const;
 

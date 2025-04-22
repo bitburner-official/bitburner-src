@@ -23,7 +23,7 @@ describe("DarkWebServer Tests", () => {
     const failedAttemptResponse = checkPassword("wrongPassword", server);
     expect(failedAttemptResponse.status).toBe(401);
     expect(failedAttemptResponse.passwordLength).toBe(server.darknetData.password.length);
-    expect(failedAttemptResponse.msg.includes(server.darknetData.password)).toBe(true);
+    expect(failedAttemptResponse.message.includes(server.darknetData.password)).toBe(true);
     expect(server.hasAdminRights).toBe(false);
 
     expect(checkPassword(server.darknetData.password, server).status).toBe(ResponseStatus.SUCCESS);

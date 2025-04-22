@@ -128,6 +128,28 @@ Design document and workspace
 - Sometimes a mysterious executable can be found on darknet servers. Run it at your own risk.
 - Added `unleashStormSeed` accessor
 
+- added `getServerAuthDetails` to get the static password hint, password format and length, and model ID
+- refactored `authenticate` to return Result type. The dynamic feedback is placed in the server logs, not in the password request, to be retrieved separately.
+
+- Added new `heartbleed` method to extract the most recent server logs. Can peek at the most recent line item, or (destructively) pull up to 8 log entries from the server, starting from the most recent.
+
+- Added additionalMsec support to both authenticate and heartbleed for fancy batch-style use
+
+- Moved these analysis methods to a new `dnet` namespace under formulas
+  getCurrentDarknetInstability
+  getAuthenticateEstimatedTime
+  getOwnerAllocatedRam
+  getExpectedRamBlockRemoved
+
+- removed the remainder of the `analytics` namespace, moved isDarknetServer to base ns.dnet namespace
+- removed the `influence` namespace and moved its contents to base ns.dnet namespace. I didn't like how long the invocations were, and it felt like almost everything would fit there, and it made the api less discoverable
+
+- packetCapture can now rarely show other server's passwords
+
+- model IDs now have evocative names instead of random numbers
+
+
+
 ### The "have stuff to do with darknet ram" patch!
 
 Darknet servers belong to somebody already, and they are doing stuff on them. When you first find darkweb servers, often times some (or most!) of the ram will be "in use" by the owner's clearly wasteful use and needs to be... liberated.
@@ -214,40 +236,30 @@ Coming soon:
 - webstorm visual indicator
 - screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
 
-coordinating at least one external way of getting dynamic feedback will add a lot of endgame options for players, I think. I'd like the complexity to be more emergent rather than from having half a dozen entrypoints to juggle, but we'll see how that shakes out. It will be an iterative process
+- heartbleed to get logs
+- add noise to logs
+- Add noise rate to server info
+- Add alt clues to logs
+- add response time to some logs?
+- heartbleed docs - noise
 
-I'm experimenting with cha being a soft requirement in this patch, but I may make it a requirement to do the heartbleed() or whatever dynamic-response-scraping process, and possibly other things as well like stasis link. Making cha more important seems very thematic with other parts of the game
+add phishing and heartbleed and reallocation to guide
+
+test lab
 
 lab needs something, for sure. I'm still noodling on it. Possibly will give a sequence of augs, getting more complex in its mazes as you go, until you earn TRP? Maybe TRP is only available there in BN15? Maybe it just gives a daedalus invite instead? that one will be harder to balance until more of the core loop is hammered out. Maybe final version needs to be automated?
 Final lab cannot be played manually
 
-Move analysis functions to Functions.exe
-
-if you know the password directly you can just use auth. No cha required
-If you don't know it, you can try and scrape data using heartBleed() or whatever, and get feedback on recent password attempts. Charisma required.
-You can also data capture and hope to find useful password bits or hints
-
-packetCapture moved under`dnet.influence` namespace
 
 Required number of open ports for STASIS: 5
 change analyze output some?
 
-Cha requirement?
-
-connectToSession synchronous?
-
-Result<T> type? ( https://github.com/ficocelliguy/bitburner-src/blob/dev/src/types.ts#L36 )
-define PasswordResponse as Result & PasswordFields
 
 split the status into statusCode and statusMs
 
-stuff like setStasisLink should actually be returning Result though, and being compatible that way would be good.
 
 Idea: sometimes you a key node or something will spawn on a server. You can spend ram and time on that node, from that server or connected ones, and either push it to make the network more stable, or less stable if you want?
 idea: share() gives a small amount of charisma xp
-
-have some job you can do against the server that takes time and has a chance to produce rewards (and cha xp)
-solve multiple password problems?
 
 boost: makes nearby servers hack attempts faster
 Reroute: makes nearby servers more likely to move?
@@ -255,7 +267,6 @@ make a chain to do something?
 
 Repeatable puzzles on servers sometimes?
 crypto mining?
-disk liberation?
 
 risk/reward with analyzing to get more confident and committing to an attempt?
 Grid of blocks that affect one another?
@@ -263,10 +274,6 @@ set relay points?
 dense spots to work around?
 
 multiple labs with different names
-
-phishing emails: scales with crime success chance and crime money?
-
-- long passwords are easier to snoop, because they stand out so much.
 
 ns.dnet.enums.XXX for status codes etc
 
@@ -276,8 +283,6 @@ scp: add session details to docs
 exec: add session details to docs
 
 - ui methods for setting server description colors, icons etc?
-
-IP stuff for probe
 
 Catlover writeup: https://discord.com/channels/415207508303544321/1358930422607642845/1360131828756775033
 My suggestion: Create many layers and cliques. We are still consistent in the behavior of APIs, but each layer (or clique) has a unique purpose. A very rough guideline:
@@ -306,11 +311,9 @@ We need to give the player a way to set up a foothold, at least in low/mid layer
 
 - a macguffin you have to get to be able to access the darkweb ('darkscape navigator'?)
 
-darkweb has multiple connections to home?
-
 Small book-keeping request. Usually "data" in the form of enums or constants we typically store in a data folder so it's easier to find.
 
-backdoored and stasis link'd servers need visual indicators
+backdoored servers need visual indicators
 
 Make network wider at deeper parts?
 
@@ -320,17 +323,10 @@ a button to kill all darknet scripts
 
 have a clear immediate reward from tier 1 that isn't just cha XP
 
-formulas: auth response time or estimates given CHA level
-
 - add Stasis Link mechanic
-
-  - Limited resource
   - Cap can be raised somehow
-  - Prevents server from mutating
 
 - mini version of darknet on pre- bn15?
-
-- occasional changing hostnames
 
 - start with crash course?
 
@@ -346,10 +342,6 @@ formulas: auth response time or estimates given CHA level
 
 - make darkwebserver extend baseServer
 
-- scripts go down sometimes?
-
-- File/status viewer for darkweb servers?
-
 - server that returns yes/no in its failure response
 
   - yes, the password has X as one of its factors
@@ -358,8 +350,6 @@ formulas: auth response time or estimates given CHA level
 
   - result: (encoded attempt) expectation: (encoded password)
 
-- backdooring increases darknet instability
-
   - backdoored servers more likely to restart and/or loose auth, removing backdoor, balancing risk level
   - low number (1 backdoor per X depth explored, or less than low const): no effect
   - lv 1 instability: small debuff to auth() time
@@ -367,14 +357,6 @@ formulas: auth response time or estimates given CHA level
   - lv 3: more server restarts on the darknet
   - lv 4: It's hard to sustain this many backdoors without a lot of upkeep due to them going offline or resetting. More connection severing on the darknet. player starts taking damage sometimes. creepypasta appears on player terminal, signed by the darknet.
   - lv 5: ports and file writes and other ns methods sometimes fail silently, or return garbage data. hard mode that is effectively opt-in
-
-- WEBSTORM
-
-  - Runs on a timer, or when logging in after being online for a while?
-  - upgrade to harden scripts against restarts?
-  - some actions delay or impend the webstorm?
-  - webstorm needs indicator when starting and when recovering
-  - the oncoming of a storm is broadcast on every active packet capture, allowing player to capture on any server to monitor this
 
 - Attempt to make connection?
 
@@ -389,6 +371,8 @@ formulas: auth response time or estimates given CHA level
   - Give cha? what else?
 
 ## TODO later:
+
+stasis link limit upgrade?
 
 - save darknet tokens and maybe other state?
 

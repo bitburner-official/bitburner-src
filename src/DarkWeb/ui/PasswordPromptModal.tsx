@@ -1,11 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useRerender } from "../../ui/React/hooks";
 import { Modal } from "../../ui/React/Modal";
-import { checkPassword, getSharedChars, PasswordResponse, ResponseStatus } from "../models/DnetServerData";
-import { Button, Container, SvgIcon, TextField, Typography } from "@mui/material";
+import {
+  getAuthResult,
+  getSharedChars,
+  PasswordResponse,
+} from "../models/DnetServerData";
+import { Button, Container, Card, SvgIcon, TextField, Typography } from "@mui/material";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 import { getIcon, Icon } from "../controllers/ServerIcon";
-import { DarknetEvents, DarknetState } from "../models/DarknetState";
+import { DarknetEvents } from "../models/DarknetState";
 import { BaseServer } from "../../Server/BaseServer";
 import { ServerSummary } from "./ServerSummary";
 import { SpecialServers } from "../../Server/data/SpecialServers";
@@ -14,6 +18,7 @@ import { Minigames } from "../controllers/DarknetServerGenerator";
 import { dnetStyles } from "./dnetStyles";
 import { ToastVariant } from "@enums";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
+import { Result } from "@nsdefs";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -24,63 +29,49 @@ export type DWPasswordPromptModalProps = {
 export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptModalProps): React.ReactElement => {
   const rerender = useRerender();
   const [inputPassword, setInputPassword] = useState(server.hasAdminRights ? server.darknetData?.password ?? "" : "");
-  const [password, setPassword] = useState<string>("?");
-  const [enableSubmit, setEnableSubmit] = useState(!server.hasAdminRights);
-  const [response, setResponse] = useState("Submit a password to login...");
-  const [rawResponse, setRawResponse] = useState<PasswordResponse | null>(null);
-  const [needsPasswordSubmit, setNeedsPasswordSubmit] = useState(true);
+  const [enableSubmit, setEnableSubmit] = useState(true);
+  const [response, setResponse] = useState("(no response yet)");
+  const [rawResponse, setRawResponse] = useState<{result: Result, response: PasswordResponse} | null>(null);
+
   const icon = getIcon(server.darknetData?.icon ?? Icon.Terminal);
   const passwordInput = useRef<HTMLInputElement>(null);
   const focusTarget = useRef<HTMLInputElement>(null);
-  const location = DarknetState.labLocations[-1];
   const { classes } = dnetStyles({});
 
-  useEffect(() => {
-    async function attemptPassword(passwordAttempted: string, skipSleep = false): Promise<void> {
-      setEnableSubmit(false);
-      setResponse("Checking password...");
+  async function attemptPassword(passwordAttempted: string,): Promise<void> {
+    setEnableSubmit(false);
+    setResponse("Checking password...");
 
-      const darknetData = server.darknetData;
-      const sharedChars =
-        darknetData?.minigameType === Minigames.TimingAttack
-          ? getSharedChars(darknetData?.password ?? "", passwordAttempted)
-          : 0;
-      const extraTime = sharedChars * 150;
-      await sleep(skipSleep ? 0 : 500 + extraTime);
+    const darknetData = server.darknetData;
+    const sharedChars =
+      darknetData?.minigameType === Minigames.TimingAttack
+        ? getSharedChars(darknetData?.password ?? "", passwordAttempted)
+        : 0;
+    const extraTime = sharedChars * 150;
+    await sleep(500 + extraTime);
 
-      const response = checkPassword(passwordAttempted, server, skipSleep ? 0 : 4);
-      setRawResponse(response);
-      if (darknetData?.minigameType === Minigames.TimingAttack) {
-        response.responseTime = 500 + extraTime;
-      }
-      setResponse(JSON.stringify(response, null, 4));
+    const response = getAuthResult(passwordAttempted, server, 4);
+    setRawResponse(response);
+    setResponse(JSON.stringify(response.result, null, 2));
 
-      if (response.status === ResponseStatus.SUCCESS) {
-        DarknetEvents.emit("server-unlocked", server);
-        await sleep(50);
-        focusTarget.current?.focus();
-      } else {
-        setEnableSubmit(true);
-        passwordInput.current?.focus();
-        passwordInput.current?.querySelector("input")?.select();
-      }
+    if (response.result.success) {
+      DarknetEvents.emit("server-unlocked", server);
+      await sleep(50);
+      focusTarget.current?.focus();
+    } else {
+      setEnableSubmit(true);
+      passwordInput.current?.focus();
+      passwordInput.current?.querySelector("input")?.select();
     }
+  }
 
-    // Only call the password checker once per submit
-    if (needsPasswordSubmit && open && !server.hasAdminRights) {
-      void attemptPassword(password, password === "?");
-      setNeedsPasswordSubmit(false);
-    }
-  }, [password, server, open, location, needsPasswordSubmit]);
-
-  const handleSubmit = (e: React.FormEvent, passwordAttempted: string): void => {
+  const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
     if (server.hasAdminRights) {
       onClose();
       return;
     }
-    setPassword(passwordAttempted);
-    setNeedsPasswordSubmit(true);
+    void attemptPassword(inputPassword);
     rerender();
   };
 
@@ -89,10 +80,27 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
     SnackbarEvents.emit(`Copied "${server.hostname}" to clipboard`, ToastVariant.SUCCESS, 2000);
   };
 
+  const decolorProperties = (jsonString: string) => {
+    const result = JSON.parse(jsonString) as PasswordResponse;
+
+    return (<>
+      <span style={{ color: "grey" }}>passwordAttempted: </span>{result?.passwordAttempted ?? ""}<br />
+      <span style={{ color: "grey" }}>status: </span>{result?.status ?? ""}<br />
+      <span style={{ color: "grey" }}>message: </span>{result?.message ?? ""}<br />
+      {result?.data ? (<><span style={{ color: "grey" }}>data: </span>{result.data}<br /></>) : ""}
+    </>)
+
+  }
+
+  const recentLogs = server.darknetData?.serverLogs?.slice(0, 5) ?? [];
+  const recentLogsHtml = recentLogs.map((log, index) => (
+      <pre key={index} color="secondary" style={{borderLeft: "1px solid grey", paddingLeft: "3px"}}>{decolorProperties(log)}</pre>
+    ))
+
   return (
     <Modal open={open} onClose={onClose} removeFocus={false}>
       <>
-        <Container sx={{ width: "40vw" }}>
+        <Container sx={{ width: "calc(min(650px, 80vw))", minHeight: "500px" }}>
           <input ref={focusTarget} className={classes.hiddenInput}></input>
           <SvgIcon component={icon} color="secondary" />
           <Typography variant="h5" color={server.hasAdminRights ? "primary" : "secondary"} onClick={copyHostname}>
@@ -124,35 +132,67 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
             </>
           ) : (
             <>
-              <form onSubmit={(e) => handleSubmit(e, inputPassword)}>
-                <TextField
-                  ref={passwordInput}
-                  id="pw-input"
-                  label="Password"
-                  type="text"
-                  value={inputPassword}
-                  onChange={(e) => setInputPassword(e.target.value)}
-                  variant="outlined"
-                  autoComplete="off"
-                  autoFocus={!server.hasAdminRights}
-                  disabled={server.hasAdminRights}
-                />
-              </form>
               <br />
-              <Button onClick={(e) => handleSubmit(e, inputPassword)} disabled={!enableSubmit}>
-                Submit Password
-              </Button>
-              <br />
+              <div className={classes.inlineFlexBox}>
+                <div>
+                  <form onSubmit={(e) => handleSubmit(e)}>
+                    <TextField
+                      ref={passwordInput}
+                      id="pw-input"
+                      label="Password"
+                      type="text"
+                      value={inputPassword}
+                      onChange={(e) => setInputPassword(e.target.value)}
+                      variant="outlined"
+                      autoComplete="off"
+                      autoFocus={!server.hasAdminRights}
+                      disabled={server.hasAdminRights}
+                    />
+                  </form>
+                  <br />
+                  <Button onClick={(e) => handleSubmit(e)} disabled={!enableSubmit}>
+                    Submit Password
+                  </Button>
+                  <br />
+                  <br />
+                  <br />
+                  <Typography variant="caption" color="secondary">Logs scraped via <pre style={{ display: "inline"}}>heartbleed</pre>:</Typography>
+                </div>
+                <div style={{width: "50%"}}>
+                  <Container disableGutters>
+                    <div style={{ color: "white" }}>
+                      <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
+                        <span
+                          style={{ color: "grey" }}>passwordHint:</span> {server.darknetData?.staticPasswordHint}<br />
+                        {server.darknetData?.passwordHintData ? (
+                          <><span
+                            style={{ color: "grey" }}>passwordHint:</span>{server.darknetData?.passwordHintData}<br /></>
+                        ) : ""}
+                        <span style={{ color: "grey" }}>modelId:</span> {server.darknetData?.minigameType}<br />
+                      </pre>
+                    </div>
+                  </Container>
+                  <br />
+                  <Card style={{ padding: "8px", minHeight: "60px"}}>
+                    <div style={{ color: "white" }}>
+                      <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{response}</pre>
+                    </div>
+                  </Card>
+                </div>
+              </div>
               <br />
               {server.hostname === SpecialServers.Labyrinth ? (
-                <LabyrinthSummary response={rawResponse} loadingText={response} />
+                <LabyrinthSummary result={rawResponse?.result} lastMovementFeedback={rawResponse?.response?.message}
+                                  loadingText={response} />
               ) : (
-                <Container sx={{ height: "200px" }}>
-                  <div style={{ color: "white" }}>
-                    <pre style={{ whiteSpace: "pre-wrap" }}>{response}</pre>
-                  </div>
-                </Container>
-              )}
+                <>
+                  <Card style={{ height: "250px", overflowY: "scroll" }} onScroll={e => e.preventDefault()}>
+                    <div style={{ color: "white", paddingLeft: "10px" }}>
+                      {recentLogsHtml}
+                    </div>
+                  </Card>
+                </>
+                )}
             </>
           )}
         </Container>

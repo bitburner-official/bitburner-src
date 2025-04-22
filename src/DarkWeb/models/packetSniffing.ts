@@ -9,6 +9,7 @@ import {
 import { getExactCorrectChars, getName } from "./DnetServerData";
 import { LocationName } from "@enums";
 import { getTwoCharsInPassword } from "./effects";
+import { getServerSafely } from "../controllers/DarknetNetworkMovement";
 
 export const capturePackets = (server: BaseServer) => {
   if (!server.darknetData) {
@@ -17,7 +18,7 @@ export const capturePackets = (server: BaseServer) => {
   const BASE_PASSWORD_INCLUSION_RATE = 0.18;
   const DIFFICULTY_MODIFIER = 0.88;
   const difficulty = server.darknetData.difficulty * 1.3;
-  const vulnerability = server.darknetData.minigameType === Minigames.packetSniffer ? 5 : 1;
+  const vulnerability = server.darknetData.minigameType === Minigames.packetSniffer ? 8 : 1;
   const passwordInclusionChance = BASE_PASSWORD_INCLUSION_RATE * vulnerability * DIFFICULTY_MODIFIER ** difficulty;
 
   if (Math.random() < passwordInclusionChance) {
@@ -27,6 +28,18 @@ export const capturePackets = (server: BaseServer) => {
       server,
     )}`;
   }
+  if (Math.random() < passwordInclusionChance) {
+    const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
+    const connectedServer = getServerSafely(connectedServerName);
+    if (connectedServer && connectedServer.darknetData) {
+      const intro = Math.floor(Math.random() * 124);
+      return `${getRandomData(intro, server)} ${connectedServerName}:${connectedServer.darknetData.password} ${getRandomData(
+        124 - intro - connectedServer.darknetData.password.length - connectedServerName.length,
+        server,
+      )}`;
+    }
+  }
+
 
   return `${getRandomData(124, server)}`;
 };
@@ -49,7 +62,7 @@ const getRandomData = (length: number, server: BaseServer) => {
     } else if (Math.random() < 0.3) {
       result += generateSimpleArithmeticExpression(Math.floor(Math.random() * 5 + 2));
     } else if (Math.random() < 0.33) {
-      result += " " + getMastermindHint(server.darknetData.lastPasswordAttempted ?? "", password);
+      result += " " + getMastermindHint(server.darknetData.serverLogs[0] || "", password);
     } else if (Math.random() < 0.6) {
       result += " " + getName() + " ";
     } else if (Math.random() < 0.15) {

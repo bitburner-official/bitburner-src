@@ -10,5 +10,3 @@ export const hintLiterature: LiteratureName[] = [
   LiteratureName.DogNameHint,
   LiteratureName.FactoryDefaultHint,
 ];
-
-// TODO: longer dictionary parts in hint from commonPasswordDictionary

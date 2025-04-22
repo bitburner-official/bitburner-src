@@ -11,30 +11,32 @@ import {
   special,
   unicode,
 } from "../models/dictionaryData";
-
-export enum Minigames {
-  EchoVuln,
-  SortedEchoVuln,
-  NoPassword,
-  DefaultPassword,
-  MastermindHint,
-  TimingAttack,
-  LargestPrimeFactor,
-  RomanNumeral,
-  DogNames,
-  GuessNumber,
-  CommonPasswordDictionary,
-  EUCountryDictionary,
-  Yesn_t,
-  Synchronize,
-  BinaryEncodedFeedback,
-  SpiceLevel,
-  ConvertToBase10,
-  parsedExpression,
-  divisibilityTest,
-  packetSniffer,
-  labyrinth,
+// each minigame needs to have a name that sounds like a device or browser or language model and version
+export const Minigames = {
+  EchoVuln: "DeskMemo_3.1",
+  SortedEchoVuln: "PHP 5.4",
+  NoPassword: "ZeroLogon",
+  DefaultPassword: "FreshInstall_1.0",
+  MastermindHint: "DeepGreen",
+  TimingAttack: "2G_cellular",
+  LargestPrimeFactor: "PrimeTime 2",
+  RomanNumeral: "BellaCuore",
+  DogNames: "Laika4",
+  GuessNumber: "AccountsManager_4.2",
+  CommonPasswordDictionary: "TopPass",
+  EUCountryDictionary: "EuroZone Free",
+  Yesn_t: "NIL",
+  Synchronize: "",
+  BinaryEncodedFeedback: "110100100",
+  SpiceLevel: "RateMyPix.Auth",
+  ConvertToBase10: "OctantVoxel",
+  parsedExpression: "MathML",
+  divisibilityTest: "ModuloTerm",
+  packetSniffer: "OpenWebAccessPoint",
+  labyrinth: "_lab_",
 }
+
+export type Minigames = typeof Minigames[keyof typeof Minigames];
 
 export const getDarknetServer = (difficulty: number, x: number, y: number): Server => {
   const easyServers = [getEchoVulnServer, getSortedEchoVulnServer, getDefaultPasswordServer];
@@ -89,7 +91,7 @@ export const getEchoVulnServer = (difficulty: number, x: number, y: number): Ser
     icon: getRandomIcon(),
     minigameType: Minigames.EchoVuln,
     password,
-    passwordHint: hint,
+    staticPasswordHint: hint,
     difficulty,
     x,
     y,
@@ -100,8 +102,8 @@ export const getSortedEchoVulnServer = (difficulty: number, x: number, y: number
   const hintTemplates = [
     "The password is shuffled",
     "The key is made from",
-    "I accidentally sorted the password",
-    "The PIN uses these",
+    "I accidentally sorted the password:",
+    "The PIN uses",
   ];
   const password = getPassword(2 + difficulty / 6);
   const sortedPassword = password.split("").sort().join("");
@@ -110,7 +112,7 @@ export const getSortedEchoVulnServer = (difficulty: number, x: number, y: number
     icon: getRandomIcon(),
     minigameType: Minigames.SortedEchoVuln,
     password: password,
-    passwordHint: hint,
+    staticPasswordHint: hint,
     passwordHintData: sortedPassword,
     difficulty,
     x,
@@ -128,9 +130,9 @@ export const getDictionaryAttackServer = (
 ): Server => {
   return DnetServerBuilder({
     icon: getRandomIcon(),
-    minigameType,
+    minigameType: minigameType,
     password: dictionary[Math.floor(Math.random() * dictionary.length)],
-    passwordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
+    staticPasswordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
     difficulty,
     x,
     y,
@@ -176,7 +178,7 @@ export const getMastermindHintServer = (difficulty: number, x: number, y: number
     icon: getRandomIcon(),
     minigameType: Minigames.MastermindHint,
     password: getPassword(2 + difficulty / 4),
-    passwordHint: "", // dynamic hint
+    staticPasswordHint: "Only a true master may pass",
     difficulty,
     x,
     y,
@@ -195,7 +197,7 @@ export const getTimingAttackServer = (difficulty: number, x: number, y: number):
     icon: getRandomIcon(),
     minigameType: Minigames.TimingAttack,
     password: getPassword(length, true, false),
-    passwordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
+    staticPasswordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
     difficulty,
     x,
     y,
@@ -210,7 +212,7 @@ export const getRomanNumeralServer = (difficulty: number, x: number, y: number):
       icon: getRandomIcon(),
       minigameType: Minigames.RomanNumeral,
       password: `${password}`,
-      passwordHint: `The password is the value of the number ${encodedPassword}`,
+      staticPasswordHint: `The password is the value of the number ${encodedPassword}`,
       passwordHintData: encodedPassword,
       difficulty,
       x,
@@ -227,7 +229,7 @@ export const getRomanNumeralServer = (difficulty: number, x: number, y: number):
       icon: getRandomIcon(),
       minigameType: Minigames.RomanNumeral,
       password: `${password}`,
-      passwordHint: hint,
+      staticPasswordHint: hint,
       passwordHintData: hintData,
       difficulty,
       x,
@@ -242,7 +244,7 @@ export const getLargestPrimeFactorServer = (difficulty: number, x: number, y: nu
     icon: getRandomIcon(),
     minigameType: Minigames.LargestPrimeFactor,
     password: `${largestPrimePasswordDetails.largestPrime}`,
-    passwordHint: `The password is the largest prime factor of ${largestPrimePasswordDetails.password}`,
+    staticPasswordHint: `The password is the largest prime factor of ${largestPrimePasswordDetails.password}`,
     passwordHintData: `${largestPrimePasswordDetails.password}`,
     difficulty,
     x,
@@ -257,7 +259,7 @@ export const getGuessNumberServer = (difficulty: number, x: number, y: number): 
     icon: getRandomIcon(),
     minigameType: Minigames.GuessNumber,
     password: password,
-    passwordHint: `The password is a number between 0 and ${maxNumber}`,
+    staticPasswordHint: `The password is a number between 0 and ${maxNumber}`,
     difficulty,
     x,
     y,
@@ -292,7 +294,7 @@ export const getYesn_tServer = (difficulty: number, x: number, y: number): Serve
     icon: getRandomIcon(),
     minigameType: Minigames.Yesn_t,
     password,
-    passwordHint: "",
+    staticPasswordHint: "",
     difficulty,
     x,
     y,
@@ -305,7 +307,7 @@ export const getBinaryEncodedFeedbackServer = (difficulty: number, x: number, y:
     icon: getRandomIcon(),
     minigameType: Minigames.BinaryEncodedFeedback,
     password,
-    passwordHint: "",
+    staticPasswordHint: "01100111 01101001 01110100 00100000 01100111 01101111 01101111 01100100",
     difficulty,
     x,
     y,
@@ -318,7 +320,7 @@ export const getSpiceLevelServer = (difficulty: number, x: number, y: number): S
     icon: getRandomIcon(),
     minigameType: Minigames.SpiceLevel,
     password,
-    passwordHint: "",
+    staticPasswordHint: "!!🌶️!!",
     difficulty,
     x,
     y,
@@ -337,7 +339,7 @@ export const getConvertToBase10Server = (difficulty: number, x: number, y: numbe
     icon: getRandomIcon(),
     minigameType: Minigames.ConvertToBase10,
     password: `${password}`,
-    passwordHint: `the password is the base ${base} number ${encodedPassword} in base 10`,
+    staticPasswordHint: `the password is the base ${base} number ${encodedPassword} in base 10`,
     passwordHintData: `${base},${encodedPassword}`,
     difficulty,
     x,
@@ -352,7 +354,7 @@ export const getParseArithmeticExpressionServer = (difficulty: number, x: number
     icon: getRandomIcon(),
     minigameType: Minigames.parsedExpression,
     password: `${result}`,
-    passwordHint: `The password is the evaluation of this expression`,
+    staticPasswordHint: `The password is the evaluation of this expression`,
     passwordHintData: expression,
     difficulty,
     x,
@@ -375,7 +377,7 @@ export const getDivisibilityTestServer = (difficulty: number, x: number, y: numb
     icon: getRandomIcon(),
     minigameType: Minigames.divisibilityTest,
     password: `${password}`,
-    passwordHint: `The password is divisible by 3`,
+    staticPasswordHint: `The password is divisible by 1`,
     difficulty,
     x,
     y,
@@ -387,7 +389,7 @@ export const getPacketSnifferServer = (difficulty: number, x: number, y: number)
     icon: getRandomIcon(),
     minigameType: Minigames.packetSniffer,
     password: getPassword(3 + difficulty / 3, true, difficulty > 8, false, false),
-    passwordHint: "(I'm busy browsing social media at the cafe)",
+    staticPasswordHint: "(I'm busy browsing social media at the cafe)",
     difficulty,
     x,
     y,
@@ -398,13 +400,10 @@ export const getPacketSnifferServer = (difficulty: number, x: number, y: number)
 // TODO: more leetcode array manipulation servers
 
 // TODO: more guess and check servers
-// TODO: warmer / colder server ?
 
 // TODO: verbal description of simple math problem (nth root of x)
 
 // TODO: basic cypher server?
-
-// TODO: eval pwn server
 
 export const encodeNumberInBaseN = (decimalNumber: number, base: number) => {
   const characters = [...numbers.split(""), "A", "B", "C", "D", "E", "F"];
