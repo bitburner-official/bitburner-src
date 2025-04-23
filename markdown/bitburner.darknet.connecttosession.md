@@ -8,12 +8,14 @@ Attempts to connect to a darkweb server that you have already authenticated on. 
 
 If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
 
-Response status types: "200 Success" - Authentication was successful. "401 Unauthorized" - Authentication failed. The password is incorrect, or the target server has never had a successful authenticate() by any script. "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid. "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability. "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server. "418 I'm a teapot" - The server is a teapot and cannot brew coffee.
+If not, more detail bay be able to be gleaned by using heartbleed() to look at the resulting logs on the server.
+
+Response messages: "200 Success" - Authentication was successful. "401 Unauthorized" - Authentication failed. The password is incorrect, or the target server has never had a successful authenticate() by any script. "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid. "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability. "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server. "418 I'm a teapot" - The server is a teapot and cannot brew coffee.
 
 **Signature:**
 
 ```typescript
-connectToSession(hostname: string, password: string): Promise<PasswordResponse>;
+connectToSession(hostname: string, password: string): Result;
 ```
 
 ## Parameters
@@ -25,9 +27,9 @@ connectToSession(hostname: string, password: string): Promise<PasswordResponse>;
 
 **Returns:**
 
-Promise&lt;[PasswordResponse](./bitburner.passwordresponse.md)<!-- -->&gt;
+[Result](./bitburner.result.md)
 
-a promise that resolves to a [PasswordResponse](./bitburner.passwordresponse.md) object. The response will have a `status` of "200 Success" \| "401 Unauthorized" \| "404 Not Found" \| "408 Request Timeout" \| "301 Moved Permanently"
+a promise that resolves to a  object. The response will have a `status` of "200 Success" \| "401 Unauthorized" \| "404 Not Found" \| "408 Request Timeout" \| "301 Moved Permanently"
 
 ## Remarks
 

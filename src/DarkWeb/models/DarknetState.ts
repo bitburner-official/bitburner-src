@@ -23,6 +23,13 @@ export type DarknetState = {
   stockPromotions: Record<string, number>;
   migrationInductionServers: Record<string, number>;
   webstormTokens: number;
+  serverState: Record<string, serverState>;
+};
+
+export type serverState = {
+  lastLogTime?: Date;
+  serverLogs: string[];
+  authenticatedPIDs: number[];
 };
 
 export const DarknetState: DarknetState = {
@@ -38,20 +45,32 @@ export const DarknetState: DarknetState = {
   stockPromotions: {},
   migrationInductionServers: {},
   webstormTokens: 0,
+  serverState: {},
 };
 
 export const startDarknetMovement = () => setInterval(() => mutateDarknet(), 4000);
 
+export const getServerState = (hostname: string): serverState => {
+  if (!DarknetState.serverState[hostname]) {
+    DarknetState.serverState[hostname] = {
+      serverLogs: [],
+      lastLogTime: undefined,
+      authenticatedPIDs: [],
+    };
+  }
+  return DarknetState.serverState[hostname];
+};
+
 export const addSessionToServer = (server: BaseServer, pid: number) => {
   if (!server?.darknetData) return;
+  const serverState = getServerState(server.hostname);
   removeExpiredSessions(server);
-  if (server.darknetData.authenticatedPIDs.includes(pid)) return;
-  server.darknetData.authenticatedPIDs.push(pid);
+  if (serverState.authenticatedPIDs.includes(pid)) return;
+  serverState.authenticatedPIDs.push(pid);
 };
 
 const removeExpiredSessions = (server: BaseServer) => {
   if (!server?.darknetData) return;
-  server.darknetData.authenticatedPIDs = server.darknetData.authenticatedPIDs.filter((pid) =>
-    findRunningScriptByPid(pid),
-  );
+  const serverState = getServerState(server.hostname);
+  serverState.authenticatedPIDs = serverState.authenticatedPIDs.filter((pid) => findRunningScriptByPid(pid));
 };

@@ -16,26 +16,29 @@ In some cases, the only way to get to some places is to hitch a ride on a server
 
 ### Gaining server access
 
-The servers cannot be broken into with a few scripts you can buy off-of-the-shelf. You must find a way to crack the password of each one to run scripts on it and pass through it. Fortunately, each server provides some hints and feedback as you attempt to guess the password, and you will find that similar models of computer have similar vulnerabilities. You will need those passwords later, so make sure to store them somewhere you won't lose if a server goes offline! If you aren't sure how to guess a server's auth codes, look around for notes on darkweb servers you have already unlocked; they may have hints for how to solve some of the puzzles (and sometimes other helpful data, too.)
+The servers cannot be broken into with a few scripts you can buy off-of-the-shelf. You must find a way to crack the password of each one to run scripts on it and pass through it. Fortunately, each server's logs give some hints and feedback as you attempt to guess the password, and you will find that similar models of computer have similar vulnerabilities. You will need those passwords later, so make sure to store them somewhere you won't lose if a server goes offline! If you aren't sure how to guess a server's auth codes, look around for notes on darkweb servers you have already unlocked; they may have hints for how to solve some of the puzzles (and sometimes other helpful data, too.)
 
 Darknet servers require a password to interact with. You can use `await ns.dnet.authenticate(hostname, password)` to see if a password is correct. (Remember to await it, network requests take time!) The higher your charisma, the faster you can smooth-talk your way through these vulnerable servers' passwords. Using more threads also speeds up this process. However, it may be faster to divide up the work across multiple scripts, if you can coordinate them.
 
+When you are trying to find the password, you can extract the server's logs using the exploit `await ns.dnet.heartbleed(hostname)`. This will extract the most recent logs from the target server, which in some cases lets you see extra hints or clues to why the password you last tried was not correct. In addition to your authentication attempts, the server's own traffic will register some logs as well. They're often useless, but sometimes have interesting hints or even other server's passwords! (these are the same logs you can see in the Darknet UI when you click on a server.)
+
+`authenticate` can only be used on servers that are directly connected to the server the script is running on, due to the instability of long-distance communication in the darknet. Use `ns.dnet.probe()` to see the darknet servers connected to your current server.
+
+Running `ns.dnet.getServerAuthDetails` will return some information about the given server's model ID and password format, to make it easier to get started finding out the password.
+
 ### Taking advantage of stolen credentials
 
-Once you figure out the password for a server, you can use that in the darknet API to write to that server. For example, you might want to copy and run a script to that server like this:
+Once you figure out the password for a server, the script that ran `authenticate` now has a session with the server, and can edit it using commands like `ns.scp` or `ns.exec`. You'll want that password later, so other scripts can connect, or in case the server restarts & you need to start your scripts again.
 
-```js
-ns.dnet.scp("crawler.js", hostName, password);
-ns.dnet.exec("crawler.js", hostName, password);
-```
-
-Remember that you must be in a directly connected server to write to a target! Use `ns.dnet.scan()` to see the darknet servers connected to your current server.
+Other scripts can then connect to that session using `ns.dnet.connectToSession(hostName, password)` once any script has successfully run `authenticate`. Note that you still need to be directly connected to that server (or have a backdoor or a stasis link applied to that server) for a script to connect to the session.
 
 ### Treasure!
 
 Sometimes you will find valuable data in .cache files on servers you unlock. They can contain money or experience, darkweb programs, or even stock market access keys. They can be opened via `run` from the terminal, or `ns.dnet.openCache(fileName)` from a script on that server.
 
 Darknet servers belong to somebody already, and they are often doing stuff on them. When you first authenticate on these servers, often times some (or most!) of the ram will be "in use" by the owner's (clearly wasteful) use, and needs to be... liberated. You can usually find valuable data if you fully clear that ram using `ns.dnet.influence.memoryReallocation()`
+
+Once you have access to a darknet server, you can begin to use it for your own purposes. One option is to run `ns.dnet.phishingAttack()` to raise your charisma levels and to try and con money out of the less tech-savvy middle managers out there. Occasionally you will even lift .cache data files from the attempt!
 
 ### Alternate approaches
 
@@ -119,17 +122,19 @@ Design document and workspace
 - Cha contributes (more?) to job rep (needed to later join megacorp factions)
 - Cha boosts the stock manipulation effects of hack and grow
 
+---
+
 ## patches:
 
-## The "name needed" patch
+## The "player feedback" patch
 
-- added `induceServerMigration` . Calling this method slowly builds up network instability around the current server, and each call raises the odds that one of the servers connected to the current server will move to another place in the network. This movement has a higher potential range than regular movement.
+- added `induceServerMigration` . Calling this method slowly builds up network instability around the current server, and each call raises the odds that one of the servers connected to the current server will move to another place in the network. This movement has a higher potential range than regular movement, so sometimes a server will go deep into a new area (or way back towards the start!)
 
-- Sometimes a mysterious executable can be found on darknet servers. Run it at your own risk.
-- Added `unleashStormSeed` accessor
+- Sometimes a mysterious executable can be found on darknet servers. Run it at your own risk!
+- Added `unleashStormSeed` accessor for... mysterious nefarious purposes
 
-- added `getServerAuthDetails` to get the static password hint, password format and length, and model ID
 - refactored `authenticate` to return Result type. The dynamic feedback is placed in the server logs, not in the password request, to be retrieved separately.
+- added `getServerAuthDetails` to get the static password hint, password format and length, and model ID
 
 - Added new `heartbleed` method to extract the most recent server logs. Can peek at the most recent line item, or (destructively) pull up to 8 log entries from the server, starting from the most recent.
 
@@ -138,28 +143,27 @@ Design document and workspace
 - Moved these analysis methods to a new `dnet` namespace under formulas
   getCurrentDarknetInstability
   getAuthenticateEstimatedTime
+  getHeartbleedEstimatedTime
   getOwnerAllocatedRam
   getExpectedRamBlockRemoved
 
-- removed the remainder of the `analytics` namespace, moved isDarknetServer to base ns.dnet namespace
-- removed the `influence` namespace and moved its contents to base ns.dnet namespace. I didn't like how long the invocations were, and it felt like almost everything would fit there, and it made the api less discoverable
+- removed the `influence` namespace and moved its contents to base ns.dnet namespace. I didn't like how long the invocations were, and it felt like almost everything would fit there, and it made the api less discoverable.
+- removed the remainder of the `analytics` namespace (moved isDarknetServer to base ns.dnet namespace)
 
 - packetCapture can now rarely show other server's passwords
 
 - model IDs now have evocative names instead of random numbers
 
-
-
 ### The "have stuff to do with darknet ram" patch!
 
 Darknet servers belong to somebody already, and they are doing stuff on them. When you first find darkweb servers, often times some (or most!) of the ram will be "in use" by the owner's clearly wasteful use and needs to be... liberated.
 
-- added `dnet.influence.memoryReallocation`. It allows players to cleverly swindle away some of the ram in use by the owner. A reward cache can be found if all the occupied ram is reallocated to the player's use. Gains cha xp and grows the ram available to the player.
+- added `dnet.memoryReallocation`. It allows players to cleverly swindle away some of the ram in use by the owner. A reward cache can be found if all the occupied ram is reallocated to the player's use. Gains cha xp and grows the ram available to the player.
 - added `dnet.analytics.getExpectedRamBlockRemoved` to see how much ram is expected to be freed up per thread
 
-- added `dnet.influence.promoteStock`. Spreading propaganda about a particular company or stock, while not enough to actually change the market, can increase the stock's volatility as some people buy the hype & others dump. Increases volatility by up to a factor of 3 with enough investment, but erodes over time.
+- added `dnet.promoteStock`. Spreading propaganda about a particular company or stock, while not enough to actually change the market, can increase the stock's volatility as some people buy the hype & others dump. Increases volatility by up to a factor of 3 with enough investment, but erodes over time.
 
-- added `dnet.influence.phishingAttack`. Gains cha xp, and occasionally gains money. Rarely can also generate a new cache reward (time limited, no more than once every 3 minutes). Allows players to gain cha xp using darknet server ram, with some upsides.
+- added `dnet.phishingAttack`. Gains cha xp, and occasionally gains money. Rarely can also generate a new cache reward (time limited, no more than once every 3 minutes). Allows players to gain cha xp using darknet server ram, with some upsides.
 
 - added new method `dnet.analytics.getAuthenticateEstimatedTime` to predict the duration of an auth attempt
 
@@ -236,27 +240,18 @@ Coming soon:
 - webstorm visual indicator
 - screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
 
-- heartbleed to get logs
-- add noise to logs
-- Add noise rate to server info
-- Add alt clues to logs
-- add response time to some logs?
-- heartbleed docs - noise
-
-add phishing and heartbleed and reallocation to guide
-
 test lab
 
-lab needs something, for sure. I'm still noodling on it. Possibly will give a sequence of augs, getting more complex in its mazes as you go, until you earn TRP? Maybe TRP is only available there in BN15? Maybe it just gives a daedalus invite instead? that one will be harder to balance until more of the core loop is hammered out. Maybe final version needs to be automated?
-Final lab cannot be played manually
+- Go over guide looking for misleading info or other out-of-date or missing things
 
+lab needs something, for sure. I'm still noodling on it. Possibly will give a sequence of augs, getting more complex in its mazes as you go, until you earn TRP? Maybe TRP is only available there in BN15? Maybe it just gives a daedalus invite instead? that one will be harder to balance until more of the core loop is hammered out. Maybe final version needs to be automated?
+
+Final lab cannot be played manually?
 
 Required number of open ports for STASIS: 5
 change analyze output some?
 
-
 split the status into statusCode and statusMs
-
 
 Idea: sometimes you a key node or something will spawn on a server. You can spend ram and time on that node, from that server or connected ones, and either push it to make the network more stable, or less stable if you want?
 idea: share() gives a small amount of charisma xp
@@ -324,6 +319,7 @@ a button to kill all darknet scripts
 have a clear immediate reward from tier 1 that isn't just cha XP
 
 - add Stasis Link mechanic
+
   - Cap can be raised somehow
 
 - mini version of darknet on pre- bn15?
@@ -373,8 +369,6 @@ have a clear immediate reward from tier 1 that isn't just cha XP
 ## TODO later:
 
 stasis link limit upgrade?
-
-- save darknet tokens and maybe other state?
 
 - change mutations to be on game cycle loop
 

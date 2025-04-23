@@ -11,7 +11,11 @@ export type LabyrinthSummaryProps = {
   loadingText?: string;
 };
 
-export const LabyrinthSummary = ({ result, lastMovementFeedback, loadingText }: LabyrinthSummaryProps): React.ReactElement => {
+export const LabyrinthSummary = ({
+  result,
+  lastMovementFeedback,
+  loadingText,
+}: LabyrinthSummaryProps): React.ReactElement => {
   const { classes } = dnetStyles({});
 
   // victory message

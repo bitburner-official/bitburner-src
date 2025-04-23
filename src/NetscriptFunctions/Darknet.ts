@@ -1,18 +1,12 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import type { Darknet as NSDnet } from "@nsdefs";
 import { getServer, helpers } from "../Netscript/NetscriptHelpers";
-import {
-  checkPassword, getAuthResult,
-  isAuthenticated,
-  isDarknetServer,
-  ResponseStatus,
-} from "../DarkWeb/models/DnetServerData";
+import { isDarknetServer, ResponseStatus } from "../DarkWeb/models/DnetServerData";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import {
   addCacheToServer,
   calculateAuthenticationTime,
   calculatePasswordAttemptChaGain,
-  getBackdoorAuthTimeDebuff,
   getRamBlockRemoved,
   getRewardFromCache,
   handleRamBlockClearedRewards,
@@ -26,12 +20,13 @@ import { GetAllServers, GetServer } from "../Server/AllServers";
 import { BaseServer } from "../Server/BaseServer";
 import { capturePackets } from "../DarkWeb/models/packetSniffing";
 import { getBackdooredDarkwebServers, getServerSafely } from "../DarkWeb/controllers/DarknetNetworkMovement";
-import { addSessionToServer, DarknetState } from "../DarkWeb/models/DarknetState";
+import { addSessionToServer, DarknetState, getServerState } from "../DarkWeb/models/DarknetState";
 import { getStockFromSymbol } from "./StockMarket";
 import { CompletedProgramName } from "@enums";
 import { handleStormSeed } from "../DarkWeb/controllers/webstorm";
-import { Minigames } from "../DarkWeb/controllers/DarknetServerGenerator";
+import { getPasswordType, Minigames } from "../DarkWeb/controllers/DarknetServerGenerator";
 import { PositiveInteger } from "../types";
+import { checkPassword, getAuthResult, isAuthenticated } from "../DarkWeb/models/authentication";
 
 export const STASIS_LINK_LIMIT = 2; // TODO: make this upgradable
 export type DarknetResult = { success: boolean; message: string };
@@ -110,9 +105,9 @@ export function getTimeoutChance() {
 }
 
 type CompleteHeartbleedOptions = {
-  peek: boolean;
-  logsToCapture: PositiveInteger;
-  additionalMsec: number;
+  peek?: boolean;
+  logsToCapture?: PositiveInteger;
+  additionalMsec?: number;
 };
 
 function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartbleedOptions {
@@ -120,7 +115,7 @@ function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartb
     peek: false,
     logsToCapture: 3 as PositiveInteger,
     additionalMsec: 0,
-  }
+  };
   if (opts == null) {
     return defaults;
   }
@@ -129,8 +124,8 @@ function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartb
   }
   const options = {
     ...defaults,
-    ...opts
-  }
+    ...opts,
+  };
   if (typeof options.peek !== "boolean") {
     return error(ctx)(`Invalid arguments: "options.peek" is not a boolean`);
   }
@@ -147,7 +142,7 @@ function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartb
     peek: options.peek,
     logsToCapture: options.logsToCapture,
     additionalMsec: options.additionalMsec,
-  }
+  };
 }
 
 export function NetscriptDarknet(): InternalAPI<NSDnet> {
@@ -178,12 +173,14 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           logger(ctx)(`Target server ${targetHostname} is not a darknet server.`);
           return Promise.resolve({
             success: false,
-            message:ResponseStatus.I_AM_A_TEAPOT
+            message: ResponseStatus.I_AM_A_TEAPOT,
           });
         }
 
         if (!isDirectConnected(currentServer, targetServer)) {
-          logger(ctx)(`Target server ${targetHostname} is not connected to the current server ${currentServer.hostname}. It may have moved`);
+          logger(ctx)(
+            `Target server ${targetHostname} is not connected to the current server ${currentServer.hostname}. It may have moved`,
+          );
           return Promise.resolve({
             success: false,
             message: ResponseStatus.MOVED_PERMANENTLY,
@@ -207,7 +204,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
             };
           }
 
-          const result = getAuthResult(password, targetServer, threads, ctx.workerScript.pid);
+          const result = getAuthResult(password, targetServer, threads, networkDelay, ctx.workerScript.pid);
           const success = result.result.success;
           const xp = formatNumber(calculatePasswordAttemptChaGain(targetServer, threads, success), 1);
           logger(ctx)(
@@ -230,21 +227,23 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           return {
             success: false,
             message: ResponseStatus.NOT_FOUND,
-          }
+          };
         }
         if (!targetServer.hasAdminRights) {
-          logger(ctx)(`Target server ${targetHostname} requires root access. Use ns.dnet.authenticate() to gain access.`);
+          logger(ctx)(
+            `Target server ${targetHostname} requires root access. Use ns.dnet.authenticate() to gain access.`,
+          );
           return {
             success: false,
             message: ResponseStatus.AUTH_FAILURE,
-          }
+          };
         }
         if (!targetServer.darknetData && targetServer.hostname !== SpecialServers.DarkWeb) {
           logger(ctx)(`Target server ${targetHostname} is not a darknet server.`);
           return {
             success: false,
             message: ResponseStatus.I_AM_A_TEAPOT,
-          }
+          };
         }
         const result = checkPassword(token, targetServer, 0, ctx.workerScript.pid);
         if (result.status === ResponseStatus.SUCCESS) {
@@ -253,49 +252,59 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           return {
             success: true,
             message: ResponseStatus.SUCCESS,
-          }
+          };
         }
-        logger(ctx)(`${targetHostname} does not recognise that password. Use ns.dnet.authenticate() to create a session.`);
+        logger(ctx)(
+          `${targetHostname} does not recognise that password. Use ns.dnet.authenticate() to create a session.`,
+        );
         return {
           success: false,
           message: ResponseStatus.AUTH_FAILURE,
-        }
+        };
       },
-    heartbleed: (ctx: NetscriptContext) => (_hostname, _opts): Promise<string[]> => {
-      const targetHostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-      const options = heartbleedOptions(ctx, _opts);
-      const targetServer = getConnectedServer(ctx, targetHostname);
-      expectAuthenticated(ctx, targetServer);
-      if (!targetServer.darknetData) {
-        logger(ctx)(`${targetHostname} does not seem to be vulnerable to heartbleed.`);
-        return Promise.resolve([]);
-      }
-      const networkDelay = calculateAuthenticationTime(targetServer, Player, ctx.workerScript.scriptRef.threads) * 1.5 + options.additionalMsec;
-      logger(ctx)(`Attempting to extract data from ${targetHostname}... (Est: ${formatNumber(networkDelay / 1000, 1)}s)`);
-
-      if (targetServer.requiredHackingSkill ?? 0 > Player.skills.charisma) {
-        logger(ctx)(`You need a higher charisma level to extract data from ${targetHostname}. (${targetServer.requiredHackingSkill} required)`);
-        return Promise.resolve([]);
-      }
-
-      return helpers.netscriptDelay(ctx, networkDelay).then(() => {
-        const xpGained = Player.mults.charisma_exp * 50 * ((500 + Player.skills.charisma) / 500);
-        Player.gainCharismaExp(xpGained);
+    heartbleed:
+      (ctx: NetscriptContext) =>
+      (_hostname, _opts): Promise<string[]> => {
+        const targetHostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+        const options = heartbleedOptions(ctx, _opts);
+        const targetServer = getConnectedServer(ctx, targetHostname);
         if (!targetServer.darknetData) {
-          logger(ctx)(`Server ${targetHostname} not found. It may have gone offline.`);
-          return [];
+          logger(ctx)(`${targetHostname} does not seem to be vulnerable to heartbleed.`);
+          return Promise.resolve([]);
+        }
+        const networkDelay =
+          calculateAuthenticationTime(targetServer, Player, ctx.workerScript.scriptRef.threads) * 1.5 +
+          (options.additionalMsec ?? 0);
+        logger(ctx)(
+          `Attempting to extract data from ${targetHostname}... (Est: ${formatNumber(networkDelay / 1000, 1)}s)`,
+        );
+
+        if ((targetServer.requiredHackingSkill ?? 0) > Player.skills.charisma) {
+          logger(ctx)(
+            `You need a higher charisma level to extract data from ${targetHostname}. (${targetServer.requiredHackingSkill} required)`,
+          );
+          return Promise.resolve([]);
         }
 
-        logger(ctx)(`Extracted log data from ${targetHostname}... (Gained ${formatNumber(xpGained, 1)} cha xp)`);
-        if (options.peek) {
-          return targetServer.darknetData.serverLogs.slice(0,1) ?? [];
-        }
-        const capturedLogs = targetServer.darknetData.serverLogs.slice(0, options.logsToCapture);
-        targetServer.darknetData.serverLogs = targetServer.darknetData.serverLogs.slice(options.logsToCapture);
+        return helpers.netscriptDelay(ctx, networkDelay).then(() => {
+          const xpGained = Player.mults.charisma_exp * 50 * ((500 + Player.skills.charisma) / 500);
+          Player.gainCharismaExp(xpGained);
+          if (!targetServer.darknetData) {
+            logger(ctx)(`Server ${targetHostname} not found. It may have gone offline.`);
+            return [];
+          }
+          const serverState = getServerState(targetHostname);
 
-        return capturedLogs;
-      });
-    },
+          logger(ctx)(`Extracted log data from ${targetHostname}... (Gained ${formatNumber(xpGained, 1)} cha xp)`);
+          if (options.peek) {
+            return serverState.serverLogs.slice(0, 1) ?? [];
+          }
+          const capturedLogs = serverState.serverLogs.slice(0, options.logsToCapture);
+          serverState.serverLogs = serverState.serverLogs.slice(options.logsToCapture);
+
+          return capturedLogs;
+        });
+      },
     openCache:
       (ctx: NetscriptContext) =>
       (_fileName, _suppressToast): void => {
@@ -384,7 +393,6 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
     getServer: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
       const server = expectDarknetServer(ctx, hostname);
-      const examplePasswordResponse = checkPassword("?", server, 0);
       return {
         hostname: server.hostname,
         ip: server.ip,
@@ -397,8 +405,8 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         backdoorInstalled: server.backdoorInstalled ?? false,
         moneyAvailable: 0,
         moneyMax: 0,
-        passwordHintExample: examplePasswordResponse.message,
-        passwordDataExample: examplePasswordResponse.data ?? "",
+        passwordHintExample: server.darknetData?.staticPasswordHint ?? "",
+        passwordDataExample: server.darknetData?.passwordHintData ?? "",
         charismaLevel: server.requiredHackingSkill ?? 0,
         depth: server?.darknetData?.x ?? -1,
         modelId: server?.darknetData?.minigameType ?? "",
@@ -406,21 +414,32 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
     },
     getServerAuthDetails: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-      const server = helpers.getServer(ctx, hostname);
+      const server = getServerSafely(hostname);
+      if (!server) {
+        logger(ctx)(`Server ${hostname} not found. It may have gone offline.`);
+        return null;
+      }
       if (server.hostname === SpecialServers.DarkWeb) {
         return {
-          modelId: Minigames.EchoVuln ,
+          modelId: Minigames.EchoVuln,
           passwordHint: "The passkey is 'leekspin'",
           data: "",
-        }
+          logTrafficInterval: -1,
+          passwordLength: 8,
+          passwordFormat: getPasswordType("leekspin"),
+        };
       }
       if (!server.darknetData) {
-        return error(ctx)(`${server.hostname} is not a darknet server.`);
+        logger(ctx)(`${server.hostname} is not a darknet server.`);
+        return null;
       }
       return {
-        modelId: server.darknetData.minigameType ,
+        modelId: server.darknetData.minigameType,
         passwordHint: server.darknetData.staticPasswordHint,
         data: server.darknetData.passwordHintData ?? "",
+        logTrafficInterval: server.darknetData.logTrafficInterval,
+        passwordLength: server.darknetData?.password?.length ?? 0,
+        passwordFormat: getPasswordType(server.darknetData.password),
       };
     },
     packetCapture: (ctx) => (_hostname) => {
@@ -486,146 +505,149 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       const targetServer = GetAllServers(true).find((s) => s.hostname === hostname);
       return !!targetServer?.darknetData;
     },
-      memoryReallocation:
-        (ctx) =>
-        (_hostname): Promise<DarknetResult> => {
-          const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-          const server = getConnectedServer(ctx, hostname);
-          expectAuthenticated(ctx, server);
-          if (!server.darknetData) {
-            const result = `Failed. Server ${server.hostname} is not a darknet server.`;
-            logger(ctx)(result);
-            return Promise.resolve({
-              success: false,
-              message: result,
-            });
-          }
-          if (server.darknetData.ramBlock <= 0) {
-            const result = `Failed. Server ${server.hostname} has no host-owned ram left to reallocate.`;
-            logger(ctx)(result);
-            return Promise.resolve({
-              success: false,
-              message: result,
-            });
-          }
+    memoryReallocation:
+      (ctx) =>
+      (_hostname): Promise<DarknetResult> => {
+        const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+        const server = getConnectedServer(ctx, hostname);
+        expectAuthenticated(ctx, server);
+        if (!server.darknetData) {
+          const result = `Failed. Server ${server.hostname} is not a darknet server.`;
+          logger(ctx)(result);
+          return Promise.resolve({
+            success: false,
+            message: result,
+          });
+        }
+        if (server.darknetData.ramBlock <= 0) {
+          const result = `Failed. Server ${server.hostname} has no host-owned ram left to reallocate.`;
+          logger(ctx)(result);
+          return Promise.resolve({
+            success: false,
+            message: result,
+          });
+        }
 
-          logger(ctx)(`Attempting to liberate RAM from '${server.hostname}'s owner ...`);
-          const delayTime = Math.max(8000 * (500 / (500 + Player.skills.charisma)), 200);
+        logger(ctx)(`Attempting to liberate RAM from '${server.hostname}'s owner ...`);
+        const delayTime = Math.max(8000 * (500 / (500 + Player.skills.charisma)), 200);
 
-          return helpers.netscriptDelay(ctx, delayTime).then(() => {
-            if (!server.darknetData || server.darknetData.ramBlock <= 0) {
-              const result = `Server ${server.hostname} has no host-owned ram left to reallocate.`;
-              logger(ctx)(result);
-              return {
-                success: false,
-                message: result,
-              };
-            }
-
-            const threads = ctx.workerScript.scriptRef.threads;
-            const difficulty = server.darknetData.difficulty + 1;
-            const xpGained =
-              Player.mults.charisma_exp * threads * 10 * 1.1 ** difficulty * ((200 + Player.skills.charisma) / 200);
-            Player.gainCharismaExp(xpGained);
-
-            const ramBlockRemoved = getRamBlockRemoved(server, threads);
-            server.darknetData.ramBlock -= ramBlockRemoved;
-            server.updateRamUsed(server.ramUsed - ramBlockRemoved);
-
-            if (server.darknetData.ramBlock <= 0) {
-              handleRamBlockClearedRewards(server);
-            }
-
-            const result = `Liberated ${formatNumber(
-              ramBlockRemoved,
-              4,
-            )}gb of RAM from the server owner's processes. (Gained ${formatNumber(xpGained, 1)} cha xp.)`;
+        return helpers.netscriptDelay(ctx, delayTime).then(() => {
+          if (!server.darknetData || server.darknetData.ramBlock <= 0) {
+            const result = `Server ${server.hostname} has no host-owned ram left to reallocate.`;
             logger(ctx)(result);
             return {
-              success: true,
+              success: false,
               message: result,
             };
-          });
-        },
-      promoteStock:
-        (ctx: NetscriptContext) =>
-        (_symbol): Promise<DarknetResult> => {
-          const symbol = helpers.string(ctx, "symbol", _symbol);
-          const stock = getStockFromSymbol(ctx, symbol);
-          expectDarknetServer(ctx, ctx.workerScript.hostname);
+          }
 
-          const waitTime = Math.max(8000 * (600 / (600 + Player.skills.charisma)), 200);
-          logger(ctx)(
-            `Spreading ${stock.name} stock propaganda to raise volatility... (Est: ${formatNumber(
-              waitTime / 1000,
-              1,
-            )}s)`,
-          );
-
-          return helpers.netscriptDelay(ctx, waitTime).then(() => {
-            const threads = ctx.workerScript.scriptRef.threads;
-            const promotionAmount = threads * ((500 + Player.skills.charisma) / 500);
-            DarknetState.stockPromotions[symbol] = (DarknetState.stockPromotions[symbol] ?? 0) + promotionAmount;
-
-            const chaXp = Player.mults.charisma_exp * threads * 10 * ((200 + Player.skills.charisma) / 200);
-            Player.gainCharismaExp(chaXp);
-
-            const result = `Spread promotion for ${stock.name}. (Gained ${formatNumber(chaXp, 1)} cha xp)`;
-            logger(ctx)(result);
-            return {
-              success: true,
-              message: result,
-            };
-          });
-        },
-      phishingAttack: (ctx: NetscriptContext) => (): Promise<DarknetResult> => {
-        const threads = ctx.workerScript.scriptRef.threads;
-        const waitTime = Math.max(10000 * (400 / (400 + Player.skills.charisma)), 200);
-        expectDarknetServer(ctx, ctx.workerScript.hostname);
-
-        return helpers.netscriptDelay(ctx, waitTime).then(() => {
-          const xpGained = Player.mults.charisma_exp * threads * 50 * ((200 + Player.skills.charisma) / 200);
+          const threads = ctx.workerScript.scriptRef.threads;
+          const difficulty = server.darknetData.difficulty + 1;
+          const xpGained =
+            Player.mults.charisma_exp * threads * 10 * 1.1 ** difficulty * ((200 + Player.skills.charisma) / 200);
           Player.gainCharismaExp(xpGained);
 
-          const timeSinceLastRewardCache = new Date().getTime() - DarknetState.lastPhishingCacheTime.getTime();
-          const rewardCacheChance =
-            0.01 * Player.mults.crime_success * threads * ((400 + Player.skills.charisma) / 400);
-          const moneyRewardChance = 0.05 * Player.mults.crime_success * ((100 + Player.skills.charisma) / 100);
+          const ramBlockRemoved = getRamBlockRemoved(server, threads);
+          server.darknetData.ramBlock -= ramBlockRemoved;
+          server.updateRamUsed(server.ramUsed - ramBlockRemoved);
 
-          if (timeSinceLastRewardCache < 1000 * 60 * 3 && Math.random() < rewardCacheChance) {
-            addCacheToServer(ctx.workerScript.getServer());
-            DarknetState.lastPhishingCacheTime = new Date();
-            const result = `Phishing attack succeeded! Found a cache file. (Gained ${formatNumber(
-              xpGained,
-              1,
-            )} cha xp)`;
-            logger(ctx)(result);
-            return {
-              success: true,
-              message: result,
-            };
-          } else if (Math.random() < moneyRewardChance) {
-            const randomFactor = Math.random() * 0.3 + 0.9;
-            const moneyReward =
-              1e5 * Player.mults.crime_money * threads * ((50 + Player.skills.charisma) / 50) * randomFactor;
-            Player.gainMoney(moneyReward, "darknet");
-            const result = `Phishing attack succeeded! $${formatNumber(
-              moneyReward,
-              2,
-            )} retrieved. (Gained ${formatNumber(xpGained, 1)} cha xp)`;
-            logger(ctx)(result);
-            return {
-              success: true,
-              message: result,
-            };
+          if (server.darknetData.ramBlock <= 0) {
+            handleRamBlockClearedRewards(server);
           }
-          const result = `There were no takers on that phishing attempt. (Gained ${formatNumber(xpGained, 1)} cha xp)`;
+
+          const result = `Liberated ${formatNumber(
+            ramBlockRemoved,
+            4,
+          )}gb of RAM from the server owner's processes. (Gained ${formatNumber(xpGained, 1)} cha xp.)`;
           logger(ctx)(result);
           return {
-            success: false,
+            success: true,
             message: result,
           };
         });
       },
+    getOwnerAllocatedRam:
+      (ctx) =>
+      (_hostname): number => {
+        const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+        const server = getServerSafely(hostname);
+        if (!server?.darknetData) {
+          return 0;
+        }
+        return server.darknetData.ramBlock;
+      },
+    promoteStock:
+      (ctx: NetscriptContext) =>
+      (_symbol): Promise<DarknetResult> => {
+        const symbol = helpers.string(ctx, "symbol", _symbol);
+        const stock = getStockFromSymbol(ctx, symbol);
+        expectDarknetServer(ctx, ctx.workerScript.hostname);
+
+        const waitTime = Math.max(8000 * (600 / (600 + Player.skills.charisma)), 200);
+        logger(ctx)(
+          `Spreading ${stock.name} stock propaganda to raise volatility... (Est: ${formatNumber(waitTime / 1000, 1)}s)`,
+        );
+
+        return helpers.netscriptDelay(ctx, waitTime).then(() => {
+          const threads = ctx.workerScript.scriptRef.threads;
+          const promotionAmount = threads * ((500 + Player.skills.charisma) / 500);
+          DarknetState.stockPromotions[symbol] = (DarknetState.stockPromotions[symbol] ?? 0) + promotionAmount;
+
+          const chaXp = Player.mults.charisma_exp * threads * 10 * ((200 + Player.skills.charisma) / 200);
+          Player.gainCharismaExp(chaXp);
+
+          const result = `Spread promotion for ${stock.name}. (Gained ${formatNumber(chaXp, 1)} cha xp)`;
+          logger(ctx)(result);
+          return {
+            success: true,
+            message: result,
+          };
+        });
+      },
+    phishingAttack: (ctx: NetscriptContext) => (): Promise<DarknetResult> => {
+      const threads = ctx.workerScript.scriptRef.threads;
+      const waitTime = Math.max(10000 * (400 / (400 + Player.skills.charisma)), 200);
+      expectDarknetServer(ctx, ctx.workerScript.hostname);
+
+      return helpers.netscriptDelay(ctx, waitTime).then(() => {
+        const xpGained = Player.mults.charisma_exp * threads * 50 * ((200 + Player.skills.charisma) / 200);
+        Player.gainCharismaExp(xpGained);
+
+        const timeSinceLastRewardCache = new Date().getTime() - DarknetState.lastPhishingCacheTime.getTime();
+        const rewardCacheChance = 0.01 * Player.mults.crime_success * threads * ((400 + Player.skills.charisma) / 400);
+        const moneyRewardChance = 0.05 * Player.mults.crime_success * ((100 + Player.skills.charisma) / 100);
+
+        if (timeSinceLastRewardCache < 1000 * 60 * 3 && Math.random() < rewardCacheChance) {
+          addCacheToServer(ctx.workerScript.getServer());
+          DarknetState.lastPhishingCacheTime = new Date();
+          const result = `Phishing attack succeeded! Found a cache file. (Gained ${formatNumber(xpGained, 1)} cha xp)`;
+          logger(ctx)(result);
+          return {
+            success: true,
+            message: result,
+          };
+        } else if (Math.random() < moneyRewardChance) {
+          const randomFactor = Math.random() * 0.3 + 0.9;
+          const moneyReward =
+            1e5 * Player.mults.crime_money * threads * ((50 + Player.skills.charisma) / 50) * randomFactor;
+          Player.gainMoney(moneyReward, "darknet");
+          const result = `Phishing attack succeeded! $${formatNumber(moneyReward, 2)} retrieved. (Gained ${formatNumber(
+            xpGained,
+            1,
+          )} cha xp)`;
+          logger(ctx)(result);
+          return {
+            success: true,
+            message: result,
+          };
+        }
+        const result = `There were no takers on that phishing attempt. (Gained ${formatNumber(xpGained, 1)} cha xp)`;
+        logger(ctx)(result);
+        return {
+          success: false,
+          message: result,
+        };
+      });
+    },
   };
 }

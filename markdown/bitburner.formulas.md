@@ -21,6 +21,7 @@ You need Formulas.exe on your home computer to use this API.
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [bladeburner](./bitburner.formulas.bladeburner.md) |  | [BladeburnerFormulas](./bitburner.bladeburnerformulas.md) | Bladeburner formulas |
+|  [dnet](./bitburner.formulas.dnet.md) |  | [DarknetFormulas](./bitburner.darknetformulas.md) | Darknet formulas |
 |  [gang](./bitburner.formulas.gang.md) |  | [GangFormulas](./bitburner.gangformulas.md) | Gang formulas |
 |  [hacking](./bitburner.formulas.hacking.md) |  | [HackingFormulas](./bitburner.hackingformulas.md) | Hacking formulas |
 |  [hacknetNodes](./bitburner.formulas.hacknetnodes.md) |  | [HacknetNodesFormulas](./bitburner.hacknetnodesformulas.md) | Hacknet Nodes formulas |

@@ -1,9 +1,8 @@
-import {  getRandomIcon, Minigames } from "../controllers/DarknetServerGenerator";
+import { getRandomIcon, Minigames } from "../controllers/DarknetServerGenerator";
 import { Icon, labIcon } from "../controllers/ServerIcon";
 import { IConstructorParams, Server } from "../../Server/Server";
 import { AddToAllServers, createUniqueRandomIp, GetServer } from "../../Server/AllServers";
 import { BaseServer } from "../../Server/BaseServer";
-import { handleFailedAuth, handleSuccessfulAuth } from "./effects";
 import {
   commonPasswordDictionary,
   connectors,
@@ -13,9 +12,6 @@ import {
   ServerNamePrefixes,
   ServerNameSuffixes,
 } from "./dictionaryData";
-import { SpecialServers } from "../../Server/data/SpecialServers";
-import { handleLabyrinthPassword } from "./labyrinth";
-import { Result } from "@nsdefs";
 
 export const ResponseStatus = {
   SUCCESS: "200 Success",
@@ -48,10 +44,9 @@ export type DnetServerData = {
 };
 
 export type DnetServer = DnetServerData & {
-  serverLogs: string[];
-  authenticatedPIDs: number[];
   hasStasisLink: boolean;
   ramBlock: number;
+  logTrafficInterval: number;
 };
 
 export const isDarknetServer = (server: BaseServer): boolean => {
@@ -71,9 +66,8 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
     difficulty: options.difficulty ?? 1,
     x: options.x ?? -1,
     y: options.y ?? -1,
-    serverLogs: [],
-    authenticatedPIDs: [],
     hasStasisLink: false,
+    logTrafficInterval: 1 + 30 * 0.9 ** options.difficulty,
   };
 
   const scalar = 1 + darknetData.difficulty * 3;
@@ -97,204 +91,6 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
   AddToAllServers(server);
 
   return server;
-};
-
-export const checkPassword = (
-  attemptedPassword: string,
-  server: BaseServer,
-  threads: number = 1,
-  pid?: number,
-): PasswordResponse => {
-  if (server.hostname === SpecialServers.DarkWeb) {
-    return handleDarkwebSpecialServerAuth(attemptedPassword, server, threads);
-  }
-  if (!server.darknetData) {
-    return {
-      status: ResponseStatus.AUTH_FAILURE,
-      message: "This server is not a darknet server",
-      passwordAttempted: attemptedPassword,
-    };
-  }
-
-  const darknetData = server.darknetData;
-  if (server.hostname === SpecialServers.Labyrinth) {
-    return handleLabyrinthPassword(attemptedPassword, server, threads, pid);
-  }
-
-  if (darknetData.password === attemptedPassword) {
-    handleSuccessfulAuth(server, threads, pid);
-    return getGenericSuccess(attemptedPassword);
-  }
-  handleFailedAuth(server, threads);
-
-  if (darknetData.minigameType === Minigames.MastermindHint) {
-    const { exactCharacters, misplacedCharacters } = getMastermindResponse(darknetData.password, attemptedPassword);
-    const message = `Hint: ${exactCharacters} symbols match, ${misplacedCharacters} ${
-      misplacedCharacters == 1 ? "is" : "are"
-    } close.`;
-    return getFailureResponse(attemptedPassword, message, `${exactCharacters},${misplacedCharacters}`);
-  } else if (darknetData.minigameType === Minigames.GuessNumber) {
-    const hintData = +attemptedPassword > +darknetData.password ? "Lower" : "Higher";
-    return getFailureResponse(attemptedPassword, darknetData.staticPasswordHint, hintData);
-  } else if (darknetData.minigameType === Minigames.Yesn_t) {
-    const response = attemptedPassword
-      .split("")
-      .map((char, i) => (char === darknetData.password[i] ? "yes" : "yesn't"))
-      .join(",");
-    return getFailureResponse(attemptedPassword, "that wasn't right", response);
-  } else if (darknetData.minigameType === Minigames.Synchronize) {
-    const exactChars = getExactCorrectCharsCount(darknetData.password, attemptedPassword);
-    const closeChars = getMisplacedCorrectCharsCount(darknetData.password, attemptedPassword);
-    const syncDecimal = ((exactChars + closeChars * 0.5) / darknetData.password.length) * 100;
-    const responseData = `${Math.round(syncDecimal * 10) / 10}`;
-    return getFailureResponse(attemptedPassword, `Synchronization status: ${responseData}%`, responseData);
-  } else if (darknetData.minigameType === Minigames.BinaryEncodedFeedback) {
-    const exactChars = getExactCorrectChars(darknetData.password, attemptedPassword);
-    const binaryRepresentation = exactChars.reduce(
-      (acc, val, i) => acc + (val ? 2 ** (attemptedPassword.length - i) : 0),
-      0,
-    );
-    return getFailureResponse(attemptedPassword, "Beep Boop", `${binaryRepresentation}`);
-  } else if (darknetData.minigameType === Minigames.SpiceLevel) {
-    const exactChars = getExactCorrectChars(darknetData.password, attemptedPassword);
-    const pepperRepresentation = exactChars.map((val) => (val ? "🌶️" : "")).join("") || "0";
-    return getFailureResponse(
-      attemptedPassword,
-      "Not spicy enough",
-      `${pepperRepresentation}/${darknetData.password.length}`,
-    );
-  } else if (darknetData.minigameType === Minigames.divisibilityTest) {
-    const password = +darknetData.password;
-    const attemptedDivisor = +attemptedPassword;
-    if (isNaN(attemptedDivisor) || password % attemptedDivisor || attemptedPassword === "") {
-      return getFailureResponse(attemptedPassword, `Password is not divisible by '${attemptedPassword}'`, "false");
-    }
-    return getFailureResponse(attemptedPassword,`Password IS divisible by '${attemptedPassword}'`, "true");
-  } else if (
-    darknetData.minigameType === Minigames.ConvertToBase10 ||
-    darknetData.minigameType === Minigames.parsedExpression
-  ) {
-    const parsedAttemptedPassword = parseFloat(attemptedPassword);
-    if (
-      !isNaN(parsedAttemptedPassword) &&
-      Math.abs((parsedAttemptedPassword - +darknetData.password) / +darknetData.password) < 0.001
-    ) {
-      // ignore small rounding errors during floating point operations
-      handleSuccessfulAuth(server, threads);
-      return getGenericSuccess(attemptedPassword);
-    }
-    return getFailureResponse(attemptedPassword, darknetData.staticPasswordHint, darknetData.passwordHintData ?? "");
-  } else {
-    return getFailureResponse(attemptedPassword, darknetData.staticPasswordHint, darknetData.passwordHintData ?? "");
-  }
-};
-
-export const getAuthResult = (attemptedPassword: string, server: BaseServer, threads = 1, pid = -1, logActivity=true): {result: Result, response: PasswordResponse} => {
-  const response = checkPassword(attemptedPassword, server, threads, pid);
-  if (logActivity) {
-    logPasswordAttempt(server, response);
-  }
-  if (response.status === ResponseStatus.SUCCESS) {
-    return {
-      result: {
-      success: true,
-      message: ResponseStatus.SUCCESS,
-    },
-      response: response,
-    };
-  }
-  return {
-    result: {
-    success: false,
-    message: ResponseStatus.AUTH_FAILURE,
-  },
-    response: response,
-  };
-};
-
-export const isAuthenticated = (server: BaseServer, pid: number): boolean => {
-  if (!server.darknetData) {
-    return true;
-  }
-  const { authenticatedPIDs } = server.darknetData;
-  return authenticatedPIDs.includes(pid);
-};
-
-
-// TODO: add noise
-export const logPasswordAttempt = (server: BaseServer, passwordResponse: PasswordResponse) => {
-  if (!server.darknetData) {
-    return;
-  }
-  const { serverLogs } = server.darknetData;
-  const logMessage = JSON.stringify(passwordResponse, null, 2);
-  server.darknetData.serverLogs = [logMessage, ...serverLogs].slice(-50); // Keep only the last 50 logs
-}
-
-const handleDarkwebSpecialServerAuth = (
-  attemptedPassword: string,
-  server: BaseServer,
-  threads: number = 1,
-): PasswordResponse => {
-  if (attemptedPassword === "leekspin") {
-    handleSuccessfulAuth(server, threads);
-    return getGenericSuccess(attemptedPassword);
-  } else {
-    handleFailedAuth(server, threads);
-    return getFailureResponse(attemptedPassword, "The passkey is 'leekspin'", "");
-  }
-};
-
-const getFailureResponse = (attemptedPassword: string, message: string, data: string) => ({
-  status: ResponseStatus.AUTH_FAILURE,
-  message,
-  data,
-  passwordAttempted: attemptedPassword,
-});
-
-const getMastermindResponse = (password: string, attemptedPassword: string) => {
-  return {
-    exactCharacters: getExactCorrectCharsCount(password, attemptedPassword),
-    misplacedCharacters: getMisplacedCorrectCharsCount(password, attemptedPassword),
-  };
-};
-
-export const getExactCorrectChars = (password: string, attemptedPassword: string) =>
-  password.split("").map((digit, i: number) => digit === attemptedPassword[i]);
-
-const getExactCorrectCharsCount = (password: string, attemptedPassword: string) =>
-  getExactCorrectChars(password, attemptedPassword).filter((isCorrect) => isCorrect).length;
-
-const getMisplacedCorrectCharsCount = (password: string, attemptedPassword: string) => {
-  // filter out exact correct chars from both the attempted and correct password, to simplify checking for duplicate counts
-  const remainingPasswordChars = password.split("").filter((digit, i) => digit !== attemptedPassword[i]);
-  const remainingAttemptedPasswordChars = attemptedPassword.split("").filter((digit, i) => digit !== password[i]);
-
-  const misplacedCorrectChars = remainingAttemptedPasswordChars.filter((digit, i) => {
-    const isPresentInPassword = remainingPasswordChars.includes(digit);
-    const countInAttemptedPasswordThusFar = remainingAttemptedPasswordChars
-      .slice(0, i)
-      .filter((prevDigit) => prevDigit === digit).length;
-    const countInPassword = remainingPasswordChars.filter((prevDigit) => prevDigit === digit).length;
-    return isPresentInPassword && countInAttemptedPasswordThusFar < countInPassword;
-  });
-
-  return misplacedCorrectChars.length;
-};
-
-const getGenericSuccess = (attemptedPassword: string) => ({
-  status: ResponseStatus.SUCCESS,
-  message: "Success! Access granted.",
-  passwordAttempted: attemptedPassword,
-});
-
-export const getSharedChars = (password: string, attemptedPassword: string): number => {
-  for (let i = 0; i < password.length; i++) {
-    if (password[i] !== attemptedPassword[i]) {
-      return i;
-    }
-  }
-  return password.length;
 };
 
 export const getName = (): string => {

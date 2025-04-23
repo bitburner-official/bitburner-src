@@ -468,36 +468,35 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       },
       getAuthenticateEstimatedTime:
         (ctx) =>
-          (_hostname, _threads, _player): number => {
-            const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-            const threads = helpers.number(ctx, "threads", _threads ?? 1);
-            const person = helpers.person(ctx, _player ?? Player);
-            const server = getConnectedServer(ctx, hostname);
-            return calculateAuthenticationTime(server, person, threads);
-          },
-      getOwnerAllocatedRam:
+        (_hostname, _threads, _player): number => {
+          const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+          const threads = helpers.number(ctx, "threads", _threads ?? 1);
+          const person = helpers.person(ctx, _player ?? Player);
+          const server = getConnectedServer(ctx, hostname);
+          return calculateAuthenticationTime(server, person, threads);
+        },
+      getHeartbleedEstimatedTime:
         (ctx) =>
-          (_hostname): number => {
-            const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-            const server = getConnectedServer(ctx, hostname);
-            if (!server.darknetData) {
-              return 0;
-            }
-            return server.darknetData.ramBlock;
-          },
+        (_hostname, _threads, _player): number => {
+          const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+          const threads = helpers.number(ctx, "threads", _threads ?? 1);
+          const person = helpers.person(ctx, _player ?? Player);
+          const server = getConnectedServer(ctx, hostname);
+          return calculateAuthenticationTime(server, person, threads) * 1.5;
+        },
       getExpectedRamBlockRemoved:
         (ctx) =>
-          (_hostname, _threads, _person): number => {
-            const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-            const threads = helpers.number(ctx, "threads", _threads ?? 1);
-            const person = helpers.person(ctx, _person ?? Player);
-            const server = getConnectedServer(ctx, hostname);
-            if (!server.darknetData) {
-              return 0;
-            }
-            return getRamBlockRemoved(server, threads, person);
-          },
-    }
+        (_hostname, _threads, _person): number => {
+          const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+          const threads = helpers.number(ctx, "threads", _threads ?? 1);
+          const person = helpers.person(ctx, _person ?? Player);
+          const server = getConnectedServer(ctx, hostname);
+          if (!server.darknetData) {
+            return 0;
+          }
+          return getRamBlockRemoved(server, threads, person);
+        },
+    },
   };
 
   // Removed functions

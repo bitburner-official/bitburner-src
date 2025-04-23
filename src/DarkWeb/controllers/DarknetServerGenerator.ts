@@ -34,9 +34,9 @@ export const Minigames = {
   divisibilityTest: "ModuloTerm",
   packetSniffer: "OpenWebAccessPoint",
   labyrinth: "_lab_",
-}
+};
 
-export type Minigames = typeof Minigames[keyof typeof Minigames];
+export type Minigames = (typeof Minigames)[keyof typeof Minigames];
 
 export const getDarknetServer = (difficulty: number, x: number, y: number): Server => {
   const easyServers = [getEchoVulnServer, getSortedEchoVulnServer, getDefaultPasswordServer];

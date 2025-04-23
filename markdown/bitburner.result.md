@@ -7,7 +7,5 @@
 **Signature:**
 
 ```typescript
-export type Result<T extends object = object> = SuccessResult<T> | FailureResult;
+export type Result = { success: boolean; message: string };
 ```
-**References:** [SuccessResult](./bitburner.successresult.md)<!-- -->, [FailureResult](./bitburner.failureresult.md)
-

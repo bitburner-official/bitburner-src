@@ -4038,24 +4038,24 @@ type ResponseStatus =
   | "301 Moved Permanently"
   | "418 I'm a teapot";
 
-export type Result = { success: boolean; message: string }
+export type Result = { success: boolean; message: string };
 
 /**
  * Darknet server information.
- * @property hostname - Name of the server.
- * @property ip - IP address of the server.
- * @property hasAdminRights - Whether the player has admin rights on the server.
- * @property isConnectedTo - Whether the server is connected to the current server.
- * @property ramUsed - Amount of RAM used on the server.
- * @property maxRam - Maximum amount of RAM on the server.
- * @property organizationName - Name of the organization that owns the server.
- * @property purchasedByPlayer - Whether the server was purchased by the player.
- * @property backdoorInstalled - Whether the server has a backdoor installed.
- * @property moneyAvailable - Amount of money available on the server.
- * @property moneyMax - Maximum amount of money on the server.
- * @property charismaLevel - Charisma level of the server.
- * @property depth - Depth into the darknet of the server.
- * @property modelId - ID of the server model.
+ *   hostname - Name of the server.
+ *   ip - IP address of the server.
+ *   hasAdminRights - Whether the player has admin rights on the server.
+ *   isConnectedTo - Whether the server is connected to the current server.
+ *   ramUsed - Amount of RAM used on the server.
+ *   maxRam - Maximum amount of RAM on the server.
+ *   organizationName - Name of the organization that owns the server.
+ *   purchasedByPlayer - Whether the server was purchased by the player.
+ *   backdoorInstalled - Whether the server has a backdoor installed.
+ *   moneyAvailable - Amount of money available on the server.
+ *   moneyMax - Maximum amount of money on the server.
+ *   charismaLevel - Charisma level of the server.
+ *   depth - Depth into the darknet of the server.
+ *   modelId - ID of the server model.
  */
 type DarknetServer = {
   hostname: string;
@@ -4077,9 +4077,9 @@ type DarknetServer = {
 };
 
 type HeartbleedOptions = {
-  peek: boolean;
-  logsToCapture: PositiveInteger;
-  additionalMsec: number;
+  peek?: boolean;
+  logsToCapture?: PositiveInteger;
+  additionalMsec?: number;
 };
 
 /**
@@ -4119,6 +4119,8 @@ export interface Darknet {
    *
    * If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
    *
+   * If not, more detail bay be able to be gleaned by using heartbleed() to look at the resulting logs on the server.
+   *
    * Response messages:
    * "200 Success" - Authentication was successful.
    * "401 Unauthorized" - Authentication failed. The password is incorrect, or the target server has never had a successful authenticate() by any script.
@@ -4137,10 +4139,11 @@ export interface Darknet {
    */
   connectToSession(hostname: string, password: string): Result;
 
-
   /**
    * Uses an exploit to extract log data from a server by sending a malformed heartbeat request.
-   * Retrieves and removes the most recent logs on the server.
+   * Retrieves and removes the most recent logs on the server. This can be used to get more feedback on authentication attempts.
+   *
+   * Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
    *
    * @remarks
    * RAM cost: 0.6 GB
@@ -4219,8 +4222,20 @@ export interface Darknet {
    * RAM cost: 0 GB
    *
    * @param host - Hostname of the server to analyze. Defaults to the running script's server if not specified.
+   * @returns An object containing the server's authentication protocol details, or null if the server is not found.
+   *     modelId: The model ID of the server. Similar models have similar vulnerabilities.
+   *     passwordHint: The password hint for the server.
+   *     data: The data associated with the password hint (if any).
+   *     logTrafficInterval: The interval at which the server periodically adds to its logs, in seconds.
    */
-  getServerAuthDetails(host?: string): {modelId: string, passwordHint: string, data: string};
+  getServerAuthDetails(host?: string): {
+    modelId: string;
+    passwordHint: string;
+    data: string;
+    logTrafficInterval: number;
+    passwordLength: number;
+    passwordFormat: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode";
+  } | null;
 
   /**
    * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
@@ -4276,6 +4291,17 @@ export interface Darknet {
    * @param hostname - Optional. Hostname of the connected server to free ram from.
    */
   memoryReallocation(hostname?: string): Promise<Result>;
+
+  /**
+   * Gets the amount of RAM blocked by the server owner's processes. This ram can be freed for use using memoryReallocation().
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param hostname - Optional. Hostname of the server to check. Defaults to the scripts current server.
+   * @returns The amount of RAM blocked by the server owner's processes.
+   */
+  getOwnerAllocatedRam(hostname?: string): number;
 
   /**
    * Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but
@@ -5062,12 +5088,12 @@ export interface Go {
    *
    * For example, a 5x5 board might look like this:
    *
-   [<br/>  
-      "XX.O.",<br/>  
-      "X..OO",<br/>  
-      ".XO..",<br/>  
-      "XXO.#",<br/>  
-      ".XO.#",<br/>  
+   [<br/>
+      "XX.O.",<br/>
+      "X..OO",<br/>
+      ".XO..",<br/>
+      "XXO.#",<br/>
+      ".XO.#",<br/>
    ]
    *
    * Each string represents a vertical column on the board, and each character in the string represents a point.
@@ -5088,12 +5114,12 @@ export interface Go {
    *
    * For example, a single 5x5 prior move board might look like this:
    *
-   [<br/>  
-      "XX.O.",<br/>  
-      "X..OO",<br/>  
-      ".XO..",<br/>  
-      "XXO.#",<br/>  
-      ".XO.#",<br/>  
+   [<br/>
+      "XX.O.",<br/>
+      "X..OO",<br/>
+      ".XO..",<br/>
+      "XXO.#",<br/>
+      ".XO.#",<br/>
    ]
    */
   getMoveHistory(): string[][];
@@ -5878,10 +5904,43 @@ interface BladeburnerFormulas {
   ): number;
 }
 
+/**
+ * Darknet formulas
+ * @public
+ */
 interface DarknetFormulas {
-  getCurrentDarknetInstability(): {authenticateDurationIncrease: number; authenticateTimeoutChance: number};
+  /**
+   * Gets the current instability of the darknet caused by excessive backdoor-ing of servers.
+   * @remarks
+   * Ram cost: 0 GB
+   *
+   * @returns An object containing the current instability values.
+   *    authenticateDurationIncrease: the increase in time that authentication takes, as a decimal
+   *    authenticateTimeoutChance: the chance that authentication will timeout instead of resolving, as a decimal
+   */
+  getCurrentDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
+
+  /**
+   * Gets the estimated time it will take to authenticate a server.
+   * @param hostname - The hostname of the server to authenticate. Optional, defaults to the current server
+   * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
+   * @param player - The player object. Optional, defaults to the current player status
+   */
   getAuthenticateEstimatedTime(hostname?: string, threads?: number, player?: Person): number;
-  getOwnerAllocatedRam(hostname?: string): number;
+  /**
+   * Gets the estimated time it will take to scrape logs from a server.
+   * @param hostname - The hostname of the server to scrape logs from. Optional, defaults to the current server
+   * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
+   * @param player - The player object. Optional, defaults to the current player status
+   */
+  getHeartbleedEstimatedTime(hostname?: string, threads?: number, player?: Person): number;
+
+  /**
+   * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
+   * @param hostname - The hostname of the server to free ram on. Optional, defaults to the current server
+   * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
+   * @param player - The player object. Optional, defaults to the current player status
+   */
   getExpectedRamBlockRemoved(hostname?: string, threads?: number, player?: Person): number;
 }
 
@@ -5912,7 +5971,7 @@ export interface Formulas {
   /** Bladeburner formulas */
   bladeburner: BladeburnerFormulas;
   /** Darknet formulas */
-  dnet: DarknetFormulas
+  dnet: DarknetFormulas;
 }
 
 /** @public */

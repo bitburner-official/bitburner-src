@@ -8,12 +8,12 @@ Sends a network request to try to authenticate on a darkweb server. The target s
 
 If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
 
-Response status types: "200 Success" - Authentication was successful. "401 Unauthorized" - Authentication failed. The password is incorrect. "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid. "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability. "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server. "418 I'm a teapot" - The server is a teapot and cannot brew coffee.
+Response messages: "200 Success" - Authentication was successful. "401 Unauthorized" - Authentication failed. The password is incorrect. "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid. "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability. "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server. "418 I'm a teapot" - The server is a teapot and cannot brew coffee.
 
 **Signature:**
 
 ```typescript
-authenticate(hostname: string, password: string): Promise<PasswordResponse>;
+authenticate(hostname: string, password: string, additionalMsec?: number): Promise<Result>;
 ```
 
 ## Parameters
@@ -22,12 +22,13 @@ authenticate(hostname: string, password: string): Promise<PasswordResponse>;
 |  --- | --- | --- |
 |  hostname | string | name of the target server (connected to the current server) to try a password. |
 |  password | string | password to attempt to authenticate with. |
+|  additionalMsec | number | _(Optional)_ optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0. |
 
 **Returns:**
 
-Promise&lt;[PasswordResponse](./bitburner.passwordresponse.md)<!-- -->&gt;
+Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;
 
-a promise that resolves to a [PasswordResponse](./bitburner.passwordresponse.md) object.
+a promise that resolves to a  object.
 
 ## Remarks
 

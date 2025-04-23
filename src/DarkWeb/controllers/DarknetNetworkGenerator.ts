@@ -175,10 +175,9 @@ export const addLabyrinth = () => {
     difficulty: 50,
     x: -1,
     y: -1,
-    serverLogs: [],
-    authenticatedPIDs: [],
     hasStasisLink: false,
     ramBlock: 0,
+    logTrafficInterval: Number.MAX_SAFE_INTEGER,
   };
 
   const params: IConstructorParams = {

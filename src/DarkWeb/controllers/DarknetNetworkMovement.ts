@@ -1,5 +1,12 @@
 import { connectServers, DeleteServer, disconnectServers, GetAllServers, GetServer } from "../../Server/AllServers";
-import { DarknetEvents, DarknetState, NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarknetState";
+import {
+  DarknetEvents,
+  DarknetState,
+  getServerState,
+  NET_DEPTH,
+  NET_WIDTH,
+  SERVER_DENSITY,
+} from "../models/DarknetState";
 import { getDarknetServer } from "./DarknetServerGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
@@ -234,7 +241,8 @@ export const restartServer = (server: BaseServer) => {
       }
     }
   }
-  server.darknetData.authenticatedPIDs = [];
+  const serverState = getServerState(server.hostname);
+  serverState.authenticatedPIDs = [];
   server.backdoorInstalled = false;
   disconnectServer(server);
   addGuaranteedConnection(server);

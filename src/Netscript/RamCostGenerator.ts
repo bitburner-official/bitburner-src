@@ -239,6 +239,7 @@ const dnet = {
   unleashStormSeed: 0.1,
   isDarknetServer: 0,
   memoryReallocation: 1,
+  getOwnerAllocatedRam: 0,
   promoteStock: 2,
   phishingAttack: 2,
 } as const;
@@ -717,9 +718,9 @@ export const RamCosts: RamCostTree<NSFull> = {
     dnet: {
       getCurrentDarknetInstability: 0,
       getAuthenticateEstimatedTime: 0,
-      getOwnerAllocatedRam: 0,
+      getHeartbleedEstimatedTime: 0,
       getExpectedRamBlockRemoved: 0,
-    }
+    },
   },
 } as const;
 

@@ -23,12 +23,13 @@ import {
   getDarknetServers,
 } from "../controllers/DarknetNetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
-import { getSharedChars, isDarknetServer } from "./DnetServerData";
+import { isDarknetServer } from "./DnetServerData";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Minigames } from "../controllers/DarknetServerGenerator";
 import { addSessionToServer, DarknetState, NET_WIDTH } from "./DarknetState";
 import { initStockMarket } from "../../StockMarket/StockMarket";
 import { clampNumber } from "../../utils/helpers/clampNumber";
+import { getSharedChars } from "./authentication";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;
