@@ -63,17 +63,18 @@ export interface AchievementData {
 }
 
 function sfAchievements(): Record<string, Achievement> {
-  const achs: Record<string, Achievement> = {};
-  for (let i = 1; i <= 12; i++) {
+  const achievements: Record<string, Achievement> = {};
+  for (let i = 1; i <= 13; i++) {
     const ID = `SF${i}.1`;
-    achs[ID] = {
+    achievements[ID] = {
       ...achievementData[ID],
       Icon: ID,
       Visible: knowAboutBitverse,
       Condition: () => Player.sourceFileLvl(i) >= 1,
+      NotInSteam: i >= 13,
     };
   }
-  return achs;
+  return achievements;
 }
 
 export const achievements: Record<string, Achievement> = {
