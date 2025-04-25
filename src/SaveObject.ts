@@ -265,7 +265,17 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
   }
 
   async getImportDataFromSaveData(saveData: SaveData): Promise<ImportData> {
-    if (!saveData || saveData.length === 0) throw new Error("Invalid save data");
+    if (!saveData || saveData.length === 0) {
+      return Promise.reject("Invalid save data");
+    }
+
+    if (typeof saveData === "string" && saveData.startsWith(`{"ctor"`)) {
+      return Promise.reject(
+        new Error(
+          "Save game is invalid. You must import the original save file. If it's a .gz file, don't decompress it.",
+        ),
+      );
+    }
 
     let decodedSaveData;
     try {
