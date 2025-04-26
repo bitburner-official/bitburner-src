@@ -121,11 +121,11 @@ export const haveAugmentations = (n: number): PlayerCondition => ({
     return { type: "numAugmentations", numAugmentations: n };
   },
   isSatisfied(p: PlayerObject): boolean {
-    if (n == 0) {
+    if (n === 0) {
       const augs = [...p.augmentations, ...p.queuedAugmentations].filter(
         (a) => a.name !== AugmentationName.NeuroFluxGovernor,
       );
-      return augs.length == 0;
+      return augs.length === 0;
     }
     return p.augmentations.length >= n;
   },
@@ -201,7 +201,7 @@ export const locatedInCity = (city: CityName): PlayerCondition => ({
     return { type: "city", city: city };
   },
   isSatisfied(p: PlayerObject): boolean {
-    return p.city == city;
+    return p.city === city;
   },
 });
 
@@ -284,7 +284,7 @@ export const inBitNode = (n: number): PlayerCondition => ({
     return { type: "bitNodeN", bitNodeN: n };
   },
   isSatisfied(p: PlayerObject): boolean {
-    return p.bitNodeN == n;
+    return p.bitNodeN === n;
   },
 });
 
@@ -302,7 +302,7 @@ export const haveSourceFile = (n: number): PlayerCondition => ({
     };
   },
   isSatisfied(p: PlayerObject): boolean {
-    return p.bitNodeN == n || p.activeSourceFileLvl(n) > 0;
+    return p.bitNodeN === n || p.activeSourceFileLvl(n) > 0;
   },
 });
 
@@ -370,7 +370,7 @@ export const someCondition = (conditions: PlayerCondition[]): CompoundPlayerCond
   },
   *[Symbol.iterator](): IterableIterator<PlayerCondition> {
     for (const cond of conditions) {
-      if ("type" in cond && cond.type == "someCondition") {
+      if ("type" in cond && cond.type === "someCondition") {
         // automatically flatten nested OR lists
         yield* cond as CompoundPlayerCondition;
       } else {
@@ -396,7 +396,7 @@ export const everyCondition = (conditions: PlayerCondition[]): CompoundPlayerCon
   },
   *[Symbol.iterator](): IterableIterator<PlayerCondition> {
     for (const cond of conditions) {
-      if ("type" in cond && cond.type == "everyCondition") {
+      if ("type" in cond && cond.type === "everyCondition") {
         // automatically flatten nested AND lists
         yield* cond as CompoundPlayerCondition;
       } else {
