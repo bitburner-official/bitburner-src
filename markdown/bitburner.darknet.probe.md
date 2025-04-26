@@ -9,20 +9,20 @@ Returns a list of all darknet servers connected to the script's current server.
 **Signature:**
 
 ```typescript
-probe(returnOpts?: HostReturnOptions): string[];
+probe(returnByIP?: boolean): string[];
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  returnOpts | [HostReturnOptions](./bitburner.hostreturnoptions.md) | _(Optional)_ Optional. Controls whether the function returns IPs. |
+|  returnByIP | boolean | _(Optional)_ Optional. Controls whether the function returns IPs instead of hostnames. Defaults to false |
 
 **Returns:**
 
 string\[\]
 
-An array of strings containing the hostnames of all connected servers.
+An array of strings containing the hostnames of all servers connected to the current server.
 
 ## Remarks
 

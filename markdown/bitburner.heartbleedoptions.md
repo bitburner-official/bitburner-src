@@ -9,7 +9,7 @@
 ```typescript
 type HeartbleedOptions = {
   peek?: boolean;
-  logsToCapture?: PositiveInteger;
+  logsToCapture?: number;
   additionalMsec?: number;
 };
 ```

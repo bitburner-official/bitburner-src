@@ -28,7 +28,7 @@ authenticate(hostname: string, password: string, additionalMsec?: number): Promi
 
 Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;
 
-a promise that resolves to a  object.
+a promise that resolves to a [Result](./bitburner.result.md) object.
 
 ## Remarks
 

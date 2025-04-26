@@ -25,7 +25,6 @@ import { getStockFromSymbol } from "./StockMarket";
 import { CompletedProgramName } from "@enums";
 import { handleStormSeed } from "../DarkWeb/controllers/webstorm";
 import { getPasswordType, Minigames } from "../DarkWeb/controllers/DarknetServerGenerator";
-import { PositiveInteger } from "../types";
 import { checkPassword, getAuthResult, isAuthenticated } from "../DarkWeb/models/authentication";
 
 export const STASIS_LINK_LIMIT = 2; // TODO: make this upgradable
@@ -106,14 +105,14 @@ export function getTimeoutChance() {
 
 type CompleteHeartbleedOptions = {
   peek?: boolean;
-  logsToCapture?: PositiveInteger;
+  logsToCapture?: number;
   additionalMsec?: number;
 };
 
 function heartbleedOptions(ctx: NetscriptContext, opts: unknown): CompleteHeartbleedOptions {
   const defaults = {
     peek: false,
-    logsToCapture: 3 as PositiveInteger,
+    logsToCapture: 3,
     additionalMsec: 0,
   };
   if (opts == null) {
@@ -325,8 +324,8 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       },
     probe:
       (ctx: NetscriptContext) =>
-      (_returnOpts): string[] => {
-        const returnOpts = helpers.hostReturnOptions(_returnOpts);
+      (_returnByIp): string[] => {
+        const returnByIP = helpers.boolean(ctx, "returnByIP", _returnByIp);
         const server: BaseServer = ctx.workerScript.getServer();
         const out: string[] = [];
         for (const neighbor of server.serversOnNetwork) {
@@ -334,7 +333,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           if (!neighborServer.darknetData) {
             continue;
           }
-          const entry = helpers.returnServerID(neighborServer, returnOpts);
+          const entry = helpers.returnServerID(neighborServer, {returnByIP});
           if (entry) {
             out.push(entry);
           }

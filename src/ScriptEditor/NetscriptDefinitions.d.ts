@@ -1,5 +1,4 @@
 /** All netscript definitions */
-import { PositiveInteger } from "../types";
 
 /** @public */
 interface HP {
@@ -4078,7 +4077,7 @@ type DarknetServer = {
 
 type HeartbleedOptions = {
   peek?: boolean;
-  logsToCapture?: PositiveInteger;
+  logsToCapture?: number;
   additionalMsec?: number;
 };
 
@@ -4109,7 +4108,7 @@ export interface Darknet {
    * @param hostname - name of the target server (connected to the current server) to try a password.
    * @param password - password to attempt to authenticate with.
    * @param additionalMsec - optional. The number of additional milliseconds to add to the run time of the authentication request. Default is 0.
-   * @returns a promise that resolves to a {@link PasswordResponse} object.
+   * @returns a promise that resolves to a {@link Result} object.
    */
   authenticate(hostname: string, password: string, additionalMsec?: number): Promise<Result>;
 
@@ -4135,7 +4134,7 @@ export interface Darknet {
    *
    * @param hostname - name of the target server to connect to existing session
    * @param password - the server's password, to verify the session
-   * @returns a promise that resolves to a {@link PasswordResponse} object. The response will have a `status` of "200 Success" | "401 Unauthorized" | "404 Not Found" | "408 Request Timeout" | "301 Moved Permanently"
+   * @returns a promise that resolves to a {@link Result} object. The response will have a `status` of "200 Success" | "401 Unauthorized" | "404 Not Found" | "408 Request Timeout" | "301 Moved Permanently"
    */
   connectToSession(hostname: string, password: string): Result;
 
@@ -4173,10 +4172,10 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.2 GB
    *
-   * @param returnOpts - Optional. Controls whether the function returns IPs.
-   * @returns An array of strings containing the hostnames of all connected servers.
+   * @param returnByIP - Optional. Controls whether the function returns IPs instead of hostnames. Defaults to false
+   * @returns An array of strings containing the hostnames of all servers connected to the current server.
    */
-  probe(returnOpts?: HostReturnOptions): string[];
+  probe(returnByIP?: boolean): string[];
 
   /**
    * Applies or removes a stasis link to the script's current server. This will allow you to connectToSession() or exec() to the server remotely, even if it is

@@ -237,47 +237,32 @@ Coming soon:
 
 ## TODO:
 
+- ui methods for setting server description colors, icons etc?
+
+Make network wider at deeper parts?
+
 - webstorm visual indicator
 - screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
-
-test lab
-
-- Go over guide looking for misleading info or other out-of-date or missing things
-
-lab needs something, for sure. I'm still noodling on it. Possibly will give a sequence of augs, getting more complex in its mazes as you go, until you earn TRP? Maybe TRP is only available there in BN15? Maybe it just gives a daedalus invite instead? that one will be harder to balance until more of the core loop is hammered out. Maybe final version needs to be automated?
-
-Final lab cannot be played manually?
 
 Required number of open ports for STASIS: 5
 change analyze output some?
 
-split the status into statusCode and statusMs
+- Go over guide looking for misleading info or other out-of-date or missing things
+- starter script
+- preventDuplicates on the run options is very powerful here, and almost necessary to stop sepuku on the player's machine. Should be emphasised in the docs
 
-Idea: sometimes you a key node or something will spawn on a server. You can spend ram and time on that node, from that server or connected ones, and either push it to make the network more stable, or less stable if you want?
-idea: share() gives a small amount of charisma xp
+lab needs something, for sure. I'm still noodling on it. Possibly will give a sequence of augs, getting more complex in its mazes as you go, until you earn TRP? Maybe TRP is only available there in BN15? Maybe it just gives a daedalus invite instead? that one will be harder to balance until more of the core loop is hammered out. Maybe final version needs to be automated?
 
-boost: makes nearby servers hack attempts faster
-Reroute: makes nearby servers more likely to move?
-make a chain to do something?
-
-Repeatable puzzles on servers sometimes?
-crypto mining?
-
-risk/reward with analyzing to get more confident and committing to an attempt?
-Grid of blocks that affect one another?
-set relay points?
-dense spots to work around?
-
-multiple labs with different names
+- join together multiple mazes?
+- Final lab cannot be played manually?
+- multiple labs with different names
 
 ns.dnet.enums.XXX for status codes etc
-
-lab: join together multiple mazes?
+Usually "data" in the form of enums or constants we typically store in a data folder so it's easier to find.
 
 scp: add session details to docs
 exec: add session details to docs
 
-- ui methods for setting server description colors, icons etc?
 
 Catlover writeup: https://discord.com/channels/415207508303544321/1358930422607642845/1360131828756775033
 My suggestion: Create many layers and cliques. We are still consistent in the behavior of APIs, but each layer (or clique) has a unique purpose. A very rough guideline:
@@ -306,15 +291,7 @@ We need to give the player a way to set up a foothold, at least in low/mid layer
 
 - a macguffin you have to get to be able to access the darkweb ('darkscape navigator'?)
 
-Small book-keeping request. Usually "data" in the form of enums or constants we typically store in a data folder so it's easier to find.
 
-backdoored servers need visual indicators
-
-Make network wider at deeper parts?
-
-preventDuplicates on the run options is very powerful here, and almost necessary to stop sepuku on the player's machine. Should be emphasised in the docs
-
-a button to kill all darknet scripts
 
 have a clear immediate reward from tier 1 that isn't just cha XP
 
@@ -405,8 +382,6 @@ retrieving passwords from other parts of the game?
 
 - Opportunities to buy passwords to servers not yet cracked?
 
-stock market boosts? grow and hack?
-
 - database server
 
   - basic "encryption" on its txt file
@@ -439,12 +414,6 @@ stock market boosts? grow and hack?
   - listen / intercept messages?
   - Will they just fill up a percent bar to gain a char in the password?
 
-- phishing attack?
-
-  - what will this look like?
-  - Failing severs the connection?
-  - success chance scales off of cha?
-
 - simple ciphers or basic password encoding?
 
   - sha1 with no key & no salt?
@@ -460,15 +429,7 @@ stock market boosts? grow and hack?
   - log server moved / connection broken vs server is gone
   - identify server remaining uptime?
 
-- enemy scripts?
-
-  - Sometimes player script is overwritten by nothing but an empty script that occasionally logs something ominous
-  - Sometimes servers are full because of bloated, idle, non-player scripts
-
-- Hubs or superconnections?
 - treasure chest server?
 
 - standard network viewer?
 
-- hide servers not yet explored near? (later upgrade?)
-  - show all servers button / upgrade

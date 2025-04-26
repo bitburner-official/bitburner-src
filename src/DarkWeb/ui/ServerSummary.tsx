@@ -2,7 +2,7 @@ import React from "react";
 import { Container, SvgIcon, Tooltip, Typography } from "@mui/material";
 import { BaseServer } from "../../Server/BaseServer";
 import { dnetStyles } from "./dnetStyles";
-import { Code, Description, Inventory2, LockPerson, Terminal, Bolt } from "@mui/icons-material";
+import { Code, Description, Inventory2, LockPerson, Terminal, Bolt, DoorBack } from "@mui/icons-material";
 import { RunningScript } from "../../Script/RunningScript";
 import { formatNumber, formatRam } from "../../ui/formatNumber";
 import { CompletedProgramName } from "@enums";
@@ -31,6 +31,7 @@ export function ServerSummary({ server, enableAuth, showDetails = false }: Serve
     .map((pidMap: Map<number, RunningScript>) => pidMap.size)
     .reduce((a, b) => a + b, 0);
   const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
+  const hasBackdoor = server.backdoorInstalled && !server.darknetData?.hasStasisLink;
   const ramBlockedDetails = formatRam(server.darknetData?.ramBlock ?? 0);
   const ramBlocked = showDetails ? ramBlockedDetails : formatNumber(server.darknetData?.ramBlock ?? 0, 0);
 
@@ -49,7 +50,16 @@ export function ServerSummary({ server, enableAuth, showDetails = false }: Serve
     components.push(
       <Tooltip key="stormSeed" title={<>A mysterious executable has been found here...</>}>
         <Typography>
-          <SvgIcon component={Bolt} className={`${classes.red} ${classes.paddingRight}`} />?
+          <SvgIcon component={Bolt} className={`${classes.gold} ${classes.paddingRight}`} />?
+        </Typography>
+      </Tooltip>,
+    );
+  }
+  if (hasBackdoor) {
+    components.push(
+      <Tooltip key="backdoor" title={<>Backdoor installed. Warning: this increases darknet instability.</>}>
+        <Typography>
+          <SvgIcon component={DoorBack} className={`${classes.red} ${classes.paddingRight}`} />
         </Typography>
       </Tooltip>,
     );
@@ -97,10 +107,11 @@ export function ServerSummary({ server, enableAuth, showDetails = false }: Serve
       </Tooltip>,
     );
   }
+  const componentsToShow = showDetails ? components : components.slice(0, 3);
 
   return (
     <Container className={`${classes.inlineFlexBox} ${classes.noPadding}`} disableGutters>
-      {components}
+      {componentsToShow}
     </Container>
   );
 }

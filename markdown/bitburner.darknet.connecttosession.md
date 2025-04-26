@@ -29,7 +29,7 @@ connectToSession(hostname: string, password: string): Result;
 
 [Result](./bitburner.result.md)
 
-a promise that resolves to a  object. The response will have a `status` of "200 Success" \| "401 Unauthorized" \| "404 Not Found" \| "408 Request Timeout" \| "301 Moved Permanently"
+a promise that resolves to a [Result](./bitburner.result.md) object. The response will have a `status` of "200 Success" \| "401 Unauthorized" \| "404 Not Found" \| "408 Request Timeout" \| "301 Moved Permanently"
 
 ## Remarks
 
