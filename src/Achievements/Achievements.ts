@@ -31,6 +31,8 @@ import { getRecordValues } from "../Types/Record";
 import { ServerConstants } from "../Server/data/Constants";
 import { canAccessBitNodeFeature, isBitNodeFinished, knowAboutBitverse } from "../BitNode/BitNodeUtils";
 import { isLegacyScript } from "../Paths/ScriptFilePath";
+import { Settings } from "../Settings/Settings";
+import { activateSteamAchievements } from "../Electron";
 
 // Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
 const achievementData = (<AchievementDataJson>(<unknown>data)).achievements;
@@ -718,8 +720,16 @@ export function calculateAchievements(): void {
     Player.giveAchievement(id);
   }
 
-  // Write all player's achievements to document for Steam/Electron
-  // This could be replaced by "availableAchievements"
-  // if we don't want to grant the save game achievements to steam but only currently available
-  document.achievements = [...Player.achievements.map((a) => a.ID)];
+  if (Settings.SyncSteamAchievements) {
+    activateSteamAchievements(
+      Player.achievements
+        .map((a) => a.ID)
+        .filter((name) => {
+          if (!achievements[name]) {
+            return false;
+          }
+          return !achievements[name].NotInSteam;
+        }),
+    );
+  }
 }

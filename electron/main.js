@@ -43,8 +43,8 @@ function setStopProcessHandler(window) {
     // We need to prevent the default closing event to add custom logic
     e.preventDefault();
 
-    // First we clear the achievement timer
-    achievements.disableAchievementsInterval(window);
+    // // First we clear the achievement timer
+    // achievements.disableAchievementsInterval(window);
 
     // Trigger debounced saves right now before closing
     try {

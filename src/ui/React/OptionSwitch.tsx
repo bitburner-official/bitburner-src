@@ -1,5 +1,5 @@
 import { FormControlLabel, Switch, Tooltip, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type OptionSwitchProps = {
   checked: boolean;
@@ -23,6 +23,10 @@ export function OptionSwitch({
     setValue(newValue);
     onChange(newValue);
   }
+
+  useEffect(() => {
+    setValue(checked);
+  }, [checked]);
 
   return (
     <>
