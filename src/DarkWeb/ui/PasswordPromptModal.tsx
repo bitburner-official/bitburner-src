@@ -17,6 +17,7 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { Result } from "@nsdefs";
 import { getAuthResult, getSharedChars } from "../models/authentication";
 import { populateServerLogsWithNoise } from "../models/packetSniffing";
+import { isLabyrinthServer } from "../models/labyrinth";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -139,7 +140,7 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
             <>
               <Typography>Password: "{server.darknetData?.password ?? ""}"</Typography>
               <br />
-              {server.hostname === SpecialServers.Labyrinth ? (
+              {isLabyrinthServer(server.hostname) ? (
                 <>
                   <br />
                   <Typography>You have successfully navigated the labyrinth! Congratulations!</Typography>
@@ -222,7 +223,7 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
                 </div>
               </div>
               <br />
-              {server.hostname === SpecialServers.Labyrinth ? (
+              {isLabyrinthServer(server.hostname) ? (
                 <LabyrinthSummary
                   result={rawResponse?.result}
                   lastMovementFeedback={rawResponse?.response?.message}
@@ -233,7 +234,7 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
               )}
             </>
           )}
-          {server.hostname === SpecialServers.Labyrinth ? (
+          {isLabyrinthServer(server.hostname) ? (
             ""
           ) : (
             <>

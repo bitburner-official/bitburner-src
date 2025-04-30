@@ -8,7 +8,7 @@ import {
   calculateAuthenticationTime,
   calculatePasswordAttemptChaGain,
   getRamBlockRemoved,
-  getRewardFromCache,
+  getRewardFromCache, getStasisLinkLimit,
   handleRamBlockClearedRewards,
   hasCacheFileExtension,
 } from "../DarkWeb/models/effects";
@@ -27,7 +27,6 @@ import { handleStormSeed } from "../DarkWeb/controllers/webstorm";
 import { getPasswordType, Minigames } from "../DarkWeb/controllers/DarknetServerGenerator";
 import { checkPassword, getAuthResult, isAuthenticated } from "../DarkWeb/models/authentication";
 
-export const STASIS_LINK_LIMIT = 2; // TODO: make this upgradable
 export type DarknetResult = { success: boolean; message: string };
 
 const logger = (ctx: NetscriptContext) => (message: string) => helpers.log(ctx, () => message);
@@ -355,11 +354,12 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         }
 
         const stasisLinkCount = GetAllServers(true).filter((s) => s.darknetData?.hasStasisLink).length;
-        if (shouldLink && stasisLinkCount >= STASIS_LINK_LIMIT) {
-          helpers.log(ctx, () => `Stasis link limit reached. (${stasisLinkCount}/${STASIS_LINK_LIMIT})`);
+        const stasisLinkLimit = getStasisLinkLimit();
+        if (shouldLink && stasisLinkCount >= stasisLinkLimit) {
+          helpers.log(ctx, () => `Stasis link limit reached. (${stasisLinkCount}/${stasisLinkLimit})`);
           return Promise.resolve({
             success: false,
-            message: `Stasis link limit reached. (${stasisLinkCount}/${STASIS_LINK_LIMIT})`,
+            message: `Stasis link limit reached. (${stasisLinkCount}/${stasisLinkLimit})`,
           });
         }
         helpers.log(
@@ -367,6 +367,17 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           () => `Beginning stasis ${shouldLink ? "" : "removal "}procedure on ${server.hostname}... (Est: 30s)`,
         );
         return helpers.netscriptDelay(ctx, 30000).then(() => {
+
+          const stasisLinkCount = GetAllServers(true).filter((s) => s.darknetData?.hasStasisLink).length;
+          const stasisLinkLimit = getStasisLinkLimit();
+          if (shouldLink && stasisLinkCount >= stasisLinkLimit) {
+            helpers.log(ctx, () => `Stasis link limit reached. (${stasisLinkCount}/${stasisLinkLimit})`);
+            return {
+              success: false,
+              message: `Stasis link limit reached. (${stasisLinkCount}/${stasisLinkLimit})`,
+            };
+          }
+
           if (server.darknetData) {
             server.darknetData.hasStasisLink = shouldLink;
           }
@@ -374,7 +385,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           helpers.log(
             ctx,
             () =>
-              `Stasis link applied to server ${server.hostname}. (${stasisLinkCount}/${STASIS_LINK_LIMIT} links in use)`,
+              `Stasis link applied to server ${server.hostname}. (${stasisLinkCount}/${stasisLinkLimit} links in use)`,
           );
           return {
             success: true,
@@ -389,6 +400,9 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const server = helpers.getServer(ctx, hostname);
         return !!server.darknetData?.hasStasisLink;
       },
+    getStasisLinkLimit: (ctx: NetscriptContext) => (): number => {
+      return getStasisLinkLimit();
+    },
     getServer: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
       const server = expectDarknetServer(ctx, hostname);

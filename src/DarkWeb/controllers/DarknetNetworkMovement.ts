@@ -3,7 +3,6 @@ import {
   DarknetEvents,
   DarknetState,
   getServerState,
-  NET_DEPTH,
   NET_WIDTH,
   SERVER_DENSITY,
 } from "../models/DarknetState";
@@ -15,6 +14,7 @@ import { stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { WorkerScript } from "../../Netscript/WorkerScript";
+import { getNetDepth, isLabyrinthServer } from "../models/labyrinth";
 
 export const mutateDarknet = () => {
   if (!DarknetState.isMutating) {
@@ -115,7 +115,7 @@ export const moveRandomServers = (count = 1) => {
 
 export const deleteRandomServers = (count = 1) => {
   for (let i = 0; i < count; i++) {
-    const servers = getDarknetServers().filter((server) => server.hostname !== SpecialServers.Labyrinth);
+    const servers = getDarknetServers().filter((server) => !isLabyrinthServer(server.hostname));
     const serverToDelete = servers[Math.floor(Math.random() * servers.length)];
     deleteServer(serverToDelete);
   }
@@ -137,7 +137,7 @@ export const deleteServer = (server: BaseServer, force = false) => {
 
 export const addRandomServers = (count = 1, difficulty?: number) => {
   for (let i = 0; i < count; i++) {
-    const diff = difficulty ?? Math.floor(Math.random() * NET_DEPTH);
+    const diff = difficulty ?? Math.floor(Math.random() * getNetDepth());
     const newServer = getDarknetServer(diff, -1, -1);
     const success = moveServer(newServer);
     if (!success) {
@@ -148,11 +148,11 @@ export const addRandomServers = (count = 1, difficulty?: number) => {
 };
 
 export const balanceServers = () => {
-  if (getDarknetServers().length > NET_DEPTH * NET_WIDTH * SERVER_DENSITY) {
-    const serversToRemove = getDarknetServers().length - NET_DEPTH * NET_WIDTH * SERVER_DENSITY;
+  if (getDarknetServers().length > getNetDepth() * NET_WIDTH * SERVER_DENSITY) {
+    const serversToRemove = getDarknetServers().length - getNetDepth() * NET_WIDTH * SERVER_DENSITY;
     deleteRandomServers(serversToRemove);
   } else {
-    const serversToAdd = NET_DEPTH * NET_WIDTH * SERVER_DENSITY - getDarknetServers().length;
+    const serversToAdd = getNetDepth() * NET_WIDTH * SERVER_DENSITY - getDarknetServers().length;
     addRandomServers(serversToAdd);
   }
 };
@@ -171,7 +171,7 @@ export const moveServer = (server: BaseServer, range = 3) => {
     // Limit depth movement to +-3 spaces
     let newX = Math.min(
       Math.max(Math.floor(Math.random() * (2 * range) + darknetData.difficulty - range), 0),
-      NET_DEPTH - 1,
+      getNetDepth() - 1,
     );
     // simple "air gaps" in the network
     if (isOnAirGap(newX)) {
@@ -179,7 +179,7 @@ export const moveServer = (server: BaseServer, range = 3) => {
     }
 
     const newY = Math.floor(Math.random() * NET_WIDTH);
-    if (DarknetState.Network[newX][newY] !== null) {
+    if (DarknetState.Network[newX]?.[newY] !== null) {
       continue;
     }
 
@@ -251,7 +251,7 @@ export const restartServer = (server: BaseServer) => {
 
 export const addGuaranteedConnection = (server: BaseServer) => {
   const darknetData = server.darknetData;
-  if (!darknetData || server.hostname === SpecialServers.Labyrinth) {
+  if (!darknetData || isLabyrinthServer(server.hostname)) {
     return;
   }
 
@@ -265,8 +265,8 @@ export const addGuaranteedConnection = (server: BaseServer) => {
 
 export const getNeighborsOnRow = (x: number, y: number): BaseServer[] => {
   const neighbors: BaseServer[] = [];
-  const leftNeighbor = DarknetState.Network[x][y - 1];
-  const rightNeighbor = DarknetState.Network[x][y + 1];
+  const leftNeighbor = DarknetState.Network[x]?.[y - 1];
+  const rightNeighbor = DarknetState.Network[x]?.[y + 1];
   if (leftNeighbor) {
     neighbors.push(leftNeighbor);
   }
@@ -343,7 +343,7 @@ export const sanitizeDarkwebNetwork = () => {
   }
   const servers = [...getDarknetServers(), darkweb];
   for (const server of servers) {
-    if (!GetServer(server.hostname)) {
+    if (!GetServer(server.hostname) && DarknetState.Network[server.darknetData?.x ?? -1]) {
       DarknetState.Network[server.darknetData?.x ?? 0][server.darknetData?.y ?? 0] = null;
       disconnectServer(server, true);
       deleteServer(server);

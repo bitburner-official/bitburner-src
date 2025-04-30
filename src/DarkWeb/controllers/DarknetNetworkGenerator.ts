@@ -1,4 +1,4 @@
-import { DarknetState, NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarknetState";
+import { DarknetState, NET_WIDTH, SERVER_DENSITY } from "../models/DarknetState";
 import {
   AddToAllServers,
   connectServers,
@@ -24,6 +24,12 @@ import { Minigames } from "./DarknetServerGenerator";
 import { labIcon } from "./ServerIcon";
 import { Player } from "@player";
 import { Terminal } from "../../Terminal";
+import {
+  getLabyrinthChaiRequirement,
+  getLabyrinthDetails,
+  getLabyrinthServerNames, getNetDepth,
+  isLabyrinthServer,
+} from "../models/labyrinth";
 
 export const HORIZONTAL_CONNECTION_CHANCE = 0.5;
 export const VERTICAL_CONNECTION_CHANCE = 0.3;
@@ -44,7 +50,7 @@ export const populateDarknet = () => {
   clearDarknet(true);
   addLabyrinth();
   // TODO: improve early net generation
-  addRandomServers(NET_DEPTH * NET_WIDTH * SERVER_DENSITY - 10);
+  addRandomServers(getNetDepth() * NET_WIDTH * SERVER_DENSITY - 10);
   addRandomServers(5 - DarknetState.Network[0].length);
   addRandomServers(5 - DarknetState.Network[1].length);
   addRandomServers(4 - DarknetState.Network[2].length);
@@ -52,7 +58,7 @@ export const populateDarknet = () => {
   balanceServers();
 
   const updatedServers = GetAllServers(true).filter((s) => s.darknetData);
-  for (let i = 0; i < NET_DEPTH; i++) {
+  for (let i = 0; i < getNetDepth(); i++) {
     const server = updatedServers[Math.floor(Math.random() * updatedServers.length)];
     addGuaranteedConnection(server);
   }
@@ -60,9 +66,9 @@ export const populateDarknet = () => {
 
 export const clearDarknet = (force = false) => {
   movePlayerIfNeeded();
-  for (let i = 0; i < NET_DEPTH; i++) {
+  for (let i = 0; i < getNetDepth(); i++) {
     for (let j = 0; j < NET_WIDTH; j++) {
-      const server = DarknetState.Network[i][j];
+      const server = DarknetState.Network[i]?.[j];
       if (!server) continue;
       deleteServer(server, force);
       DarknetState.Network[i][j] = null;
@@ -72,8 +78,10 @@ export const clearDarknet = (force = false) => {
   if (darkwebRoot) {
     darkwebRoot.serversOnNetwork = [Player.getHomeComputer().hostname];
   }
-  const labyrinth = GetServer(SpecialServers.Labyrinth);
-  if (labyrinth) {
+
+  for (const lab of getLabyrinthServerNames()) {
+    const labyrinth = GetServer(lab);
+    if (!labyrinth) continue;
     deleteServer(labyrinth);
   }
 };
@@ -89,7 +97,7 @@ export const movePlayerIfNeeded = (server?: BaseServer) => {
 export const loadDarknet = () => {
   const darkWebServers = GetAllServers(true).filter((s) => s.darknetData);
   for (const server of darkWebServers) {
-    if (server.darknetData && server.hostname !== SpecialServers.Labyrinth) {
+    if (server.darknetData && !isLabyrinthServer(server.hostname)) {
       disconnectServer(server, true);
       addServerToNetwork(server, server.darknetData.x, server.darknetData.y, true);
     }
@@ -97,7 +105,7 @@ export const loadDarknet = () => {
   balanceServers();
 
   const updatedServers = GetAllServers(true).filter((s) => s.darknetData);
-  for (let i = 0; i < NET_DEPTH; i++) {
+  for (let i = 0; i < getNetDepth(); i++) {
     const server = updatedServers[Math.floor(Math.random() * updatedServers.length)];
     addGuaranteedConnection(server);
   }
@@ -105,7 +113,7 @@ export const loadDarknet = () => {
 
 export const addRandomConnections = (server: BaseServer) => {
   const darknetData = server.darknetData;
-  if (!darknetData || server.hostname === SpecialServers.Labyrinth) {
+  if (!darknetData || isLabyrinthServer(server.hostname)) {
     return;
   }
   const x = darknetData.x;
@@ -157,22 +165,22 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number, add
       connectServers(server, darkWebRoot);
     }
   }
-  if (server.darknetData.x === NET_DEPTH - 1) {
-    const labyrinth = GetServer(SpecialServers.Labyrinth);
+  if (server.darknetData.x === getNetDepth() - 1) {
+    const labyrinth = getLabyrinthDetails().lab;
     if (labyrinth) {
       connectServers(server, labyrinth);
     }
   }
 };
 
-// Creates a special server at the bottom of the dark net
+// Creates all the special servers for use at the bottom of the dark net
 export const addLabyrinth = () => {
   const darknetData: DnetServer = {
     icon: labIcon,
     password: "!!the:masterwork:of:daedalus!!",
     staticPasswordHint: "Find the exit",
     minigameType: Minigames.labyrinth,
-    difficulty: 50,
+    difficulty: 10,
     x: -1,
     y: -1,
     hasStasisLink: false,
@@ -180,18 +188,25 @@ export const addLabyrinth = () => {
     logTrafficInterval: Number.MAX_SAFE_INTEGER,
   };
 
-  const params: IConstructorParams = {
-    hostname: SpecialServers.Labyrinth,
+  const params: Partial<IConstructorParams> = {
     ip: createUniqueRandomIp(),
     organizationName: "darkweb",
     maxRam: 128,
-    requiredHackingSkill: 3000, // TODO: bitnode multiplier
-    hackDifficulty: 5,
+    hackDifficulty: 10,
     moneyAvailable: 0,
     numOpenPortsRequired: 69,
     adminRights: false,
     darknetData,
   };
-  const server = new Server(params);
-  AddToAllServers(server);
+
+  for (const hostname of getLabyrinthServerNames()) {
+    const cha = getLabyrinthChaiRequirement(hostname);
+    const fullParams: IConstructorParams = {
+      ...params,
+      requiredHackingSkill: cha,
+      hostname: hostname,
+    }
+    const server = new Server(fullParams);
+    AddToAllServers(server);
+  }
 };

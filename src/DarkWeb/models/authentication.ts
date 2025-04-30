@@ -1,6 +1,6 @@
 import { BaseServer } from "../../Server/BaseServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { handleLabyrinthPassword } from "./labyrinth";
+import { handleLabyrinthPassword, isLabyrinthServer } from "./labyrinth";
 import { handleFailedAuth, handleSuccessfulAuth } from "./effects";
 import { Minigames } from "../controllers/DarknetServerGenerator";
 import { Result } from "@nsdefs";
@@ -27,7 +27,7 @@ export const checkPassword = (
   }
 
   const darknetData = server.darknetData;
-  if (server.hostname === SpecialServers.Labyrinth) {
+  if (isLabyrinthServer(server.hostname)) {
     return handleLabyrinthPassword(attemptedPassword, server, threads, pid);
   }
 

@@ -237,25 +237,30 @@ Coming soon:
 
 ## TODO:
 
-- ui methods for setting server description colors, icons etc?
+- limit mutations based on depth
+- Link lab size to lab difficulty
+- Update patch notes
+
+- stasis limit based off of augs (test)
+
+- ui methods for setting server description, colors, icons etc?
 
 Make network wider at deeper parts?
 
 - webstorm visual indicator
 - screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
 
-Required number of open ports for STASIS: 5
-change analyze output some?
 
 - Go over guide looking for misleading info or other out-of-date or missing things
 - starter script
-- preventDuplicates on the run options is very powerful here, and almost necessary to stop sepuku on the player's machine. Should be emphasised in the docs
+- preventDuplicates on the run options is very powerful here
 
 lab needs something, for sure. I'm still noodling on it. Possibly will give a sequence of augs, getting more complex in its mazes as you go, until you earn TRP? Maybe TRP is only available there in BN15? Maybe it just gives a daedalus invite instead? that one will be harder to balance until more of the core loop is hammered out. Maybe final version needs to be automated?
 
 - join together multiple mazes?
 - Final lab cannot be played manually?
 - multiple labs with different names
+- each deeper in the 'net
 
 ns.dnet.enums.XXX for status codes etc
 Usually "data" in the form of enums or constants we typically store in a data folder so it's easier to find.
@@ -291,6 +296,9 @@ We need to give the player a way to set up a foothold, at least in low/mid layer
 
 - a macguffin you have to get to be able to access the darkweb ('darkscape navigator'?)
 
+
+Required number of open ports for STASIS: 5
+change analyze output some?
 
 
 have a clear immediate reward from tier 1 that isn't just cha XP

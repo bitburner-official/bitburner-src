@@ -3,7 +3,7 @@ import { Container, Typography, Button, Box, Link } from "@mui/material";
 import { ZoomIn, ZoomOut } from "@mui/icons-material";
 import { DNServerComponent } from "./DNServerComponent";
 import { useRerender } from "../../ui/React/hooks";
-import { DarknetEvents, DarknetState, NET_DEPTH } from "../models/DarknetState";
+import { DarknetEvents, DarknetState } from "../models/DarknetState";
 import { GetServer } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
@@ -13,9 +13,10 @@ import { dnetStyles } from "./dnetStyles";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { WEBSTORM } from "../controllers/webstorm";
+import { getLabyrinthDetails } from "../models/labyrinth";
 
 export const DW_NET_WIDTH = 6000;
-export const DW_NET_HEIGHT = 8000;
+export const DW_NET_HEIGHT = 12000;
 
 export function NetworkDisplayWrapper(): React.ReactElement {
   const rerender = useRerender();
@@ -54,7 +55,9 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     (server.hasAdminRights || server.serversOnNetwork.some((neighbor) => GetServer(neighbor)?.hasAdminRights));
 
   const darkWebRoot = GetServer(SpecialServers.DarkWeb);
-  const labyrinth = GetServer(SpecialServers.Labyrinth);
+  const labDetails = getLabyrinthDetails();
+  const labyrinth = labDetails.lab;
+  const depth = labDetails.depth;
 
   const handleDragStart: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
     const target = pointerEvent.target as HTMLDivElement;
@@ -177,7 +180,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             ),
           )}
 
-          {labyrinth && netDisplayDepth + 4 >= NET_DEPTH ? (
+          {labyrinth && netDisplayDepth > depth ? (
             <DNServerComponent server={labyrinth} enableAuth={allowAuth(labyrinth)} classes={classes} />
           ) : (
             ""

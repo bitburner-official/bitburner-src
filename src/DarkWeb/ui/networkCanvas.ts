@@ -1,4 +1,4 @@
-import { DarknetState, NET_DEPTH, NET_WIDTH } from "../models/DarknetState";
+import { DarknetState, NET_WIDTH } from "../models/DarknetState";
 import { GetServer } from "../../Server/AllServers";
 import { BaseServer } from "../../Server/BaseServer";
 import {
@@ -9,6 +9,7 @@ import {
   MAP_BORDER_WIDTH,
 } from "./dnetStyles";
 import { SpecialServers } from "../../Server/data/SpecialServers";
+import { getNetDepth, isLabyrinthServer } from "../models/labyrinth";
 
 export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   const ctx = canvas?.getContext("2d");
@@ -54,12 +55,12 @@ export const getPixelPosition = (server: BaseServer, centered = false) => {
       top: MAP_BORDER_WIDTH * 0.2 + (centered ? centeredOffsetVertical : 0),
       left: (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * NET_WIDTH * 0.5 + (centered ? centeredOffsetHorizontal : 0),
     };
-  } else if (server.hostname === SpecialServers.Labyrinth) {
+  } else if (isLabyrinthServer(server.hostname)) {
     return {
       top:
         MAP_BORDER_WIDTH +
         centeredOffsetVertical +
-        (DW_SERVER_GAP_TOP + DW_SERVER_HEIGHT) * NET_DEPTH +
+        (DW_SERVER_GAP_TOP + DW_SERVER_HEIGHT) * getNetDepth() +
         DW_SERVER_GAP_TOP,
       left: (DW_SERVER_GAP_LEFT + DW_SERVER_WIDTH) * NET_WIDTH * 0.5 + (centered ? centeredOffsetHorizontal : 0),
     };

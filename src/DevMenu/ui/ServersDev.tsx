@@ -30,7 +30,7 @@ export function ServersDev(): React.ReactElement {
   }
 
   function rootAllServers(): void {
-    for (const s of GetAllServers()) {
+    for (const s of GetAllServers(true)) {
       if (!(s instanceof Server)) return;
       s.hasAdminRights = true;
       s.sshPortOpen = true;
@@ -50,7 +50,7 @@ export function ServersDev(): React.ReactElement {
   }
 
   function backdoorAllServers(): void {
-    for (const s of GetAllServers()) {
+    for (const s of GetAllServers(true)) {
       if (!(s instanceof Server)) return;
       s.backdoorInstalled = true;
     }

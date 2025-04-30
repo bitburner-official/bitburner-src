@@ -1,4 +1,4 @@
-import { DarknetState, NET_DEPTH, NET_WIDTH } from "../models/DarknetState";
+import { DarknetState, NET_WIDTH } from "../models/DarknetState";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { sleep } from "../../Go/boardAnalysis/goAI";
@@ -11,6 +11,7 @@ import {
   deleteRandomServers,
 } from "./DarknetNetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
+import { getNetDepth } from "../models/labyrinth";
 
 export const WEBSTORM = async (suppressToast = false) => {
   DarknetState.isMutating = false;
@@ -19,7 +20,7 @@ export const WEBSTORM = async (suppressToast = false) => {
   }
   await sleep(5000);
 
-  const serversToDelete = getDarknetServers().length * 0.6 + (Math.random() * NET_DEPTH - 6);
+  const serversToDelete = getDarknetServers().length * 0.6 + (Math.random() * getNetDepth() - 6);
   deleteRandomServers(serversToDelete);
   moveRandomServers((getDarknetServers().length - serversToDelete) * 0.6);
   restartAllServers();
@@ -38,7 +39,7 @@ export const WEBSTORM = async (suppressToast = false) => {
 
 // TODO: launch this if the player has been offline for long enough?
 export const applyOfflineWebstorm = () => {
-  const serversToDelete = getDarknetServers().length * 0.5 + (Math.random() * NET_DEPTH - 4);
+  const serversToDelete = getDarknetServers().length * 0.5 + (Math.random() * getNetDepth() - 4);
   deleteRandomServers(serversToDelete);
   restartAllServers();
 

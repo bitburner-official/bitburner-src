@@ -5,6 +5,7 @@ import { addCacheToServer, calculatePasswordAttemptChaGain } from "./effects";
 import { Player } from "@player";
 import { GetServer } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
+import { AugmentationName } from "@enums";
 
 const MAZE_WIDTH = 40;
 const MAZE_HEIGHT = 30;
@@ -109,7 +110,7 @@ export const handleLabyrinthPassword = (
   const [dx, dy] = getDirectionFromInput(attemptedPassword);
   const newLocation: [number, number] = [initialX + dx * 2, initialY + dy * 2];
 
-  const labServer = GetServer(SpecialServers.Labyrinth);
+  const labServer = getLabyrinthDetails().lab;
   if (!labServer?.darknetData) {
     throw new Error("Labyrinth server is missing dark web data");
   }
@@ -164,7 +165,8 @@ export const handleLabyrinthPassword = (
   if (newLocation[0] == end[0] && newLocation[1] == end[1]) {
     Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, Math.max(threads * 2, 32), true));
     server.hasAdminRights = true;
-    addCacheToServer(server);
+    const isSpecialCache = getLabyrinthDetails().nextAug;
+    addCacheToServer(server, isSpecialCache ? "the_great_work" : undefined);
     addSessionToServer(labServer, pid);
 
     return {
@@ -207,3 +209,137 @@ const getDirectionFromInput = (input: string) => {
 
   return [0, 0];
 };
+
+export const getLabyrinthServer = () => {
+  const details = getLabyrinthDetails();
+  return GetServer(`${details.lab}`);
+}
+
+export const getLabyrinthServerNames = () => {
+  const labHostnames: string[] = [SpecialServers.NormalLab,
+    SpecialServers.CruelLab,
+    SpecialServers.MercilessLab,
+    SpecialServers.UberLab,
+    SpecialServers.EternalLab,
+    SpecialServers.FinalLab,];
+
+  return labHostnames;
+}
+
+export const getLabyrinthChaiRequirement = (name: string) => {
+  if (name === SpecialServers.NormalLab) {
+    return 400;
+  }
+  if (name === SpecialServers.CruelLab) {
+    return 1000;
+  }
+  if (name === SpecialServers.MercilessLab) {
+    return 1500;
+  }
+  if (name === SpecialServers.UberLab) {
+    return 3000;
+  }
+  if (name === SpecialServers.EternalLab) {
+    return 3500;
+  }
+  if (name === SpecialServers.FinalLab) {
+    return 4000;
+  }
+  return 0;
+}
+
+export const getNetDepth = () => {
+  const labDetails = getLabyrinthDetails();
+  return labDetails.depth;
+}
+
+export const isLabyrinthServer = (hostName: string) => {
+  const labHostnames: string[] = getLabyrinthServerNames();
+  return labHostnames.includes(hostName);
+}
+
+export const getLabyrinthDetails = () : {
+  lab: BaseServer | null;
+  nextAug: AugmentationName | null;
+  depth: number;
+  manual: boolean;
+} => {
+  // TODO: re-enable this check when BN 15 is implemented
+  // Lab not unlocked yet
+  // if (!Player.sourceFileLvl(15) && Player.bitNodeN !== 15) {
+  //   return {
+  //     lab: null,
+  //     nextAug: null,
+  //     depth: 4,
+  //     manual: false,
+  //   }
+  // }
+
+  // All augs already retrieved
+  if (Player.hasAugmentation(AugmentationName.TheSword)) {
+    return {
+      lab: GetServer(SpecialServers.FinalLab),
+      nextAug: null,
+      depth: 31,
+      manual: false,
+    };
+  }
+
+  // All augs except TheSword already retrieved
+  if (Player.hasAugmentation(AugmentationName.TheLaw)) {
+    return {
+      lab: GetServer(SpecialServers.FinalLab),
+      nextAug: AugmentationName.TheSword,
+      depth: 28,
+      manual: false,
+    };
+  }
+
+  // Next aug after TRP is TheLaw
+  if (Player.hasAugmentation(AugmentationName.TheRedPill)) {
+    return {
+      lab: GetServer(SpecialServers.EternalLab),
+      nextAug: AugmentationName.TheLaw,
+      depth: 25,
+      manual: false,
+    };
+  }
+
+  // Next aug after TheHammer is TheRedPill
+  if (Player.hasAugmentation(AugmentationName.TheHammer)) {
+    return {
+      lab: GetServer(SpecialServers.UberLab),
+      nextAug: AugmentationName.TheRedPill,
+      depth: 21,
+      manual: Player.bitNodeN !== 15, // Manual maze for TRP is only available on BN 15. Write a proper script!
+    };
+  }
+
+  // Next aug after TheBoots is TheHammer
+  if (Player.hasAugmentation(AugmentationName.TheBoots)) {
+    return {
+      lab: GetServer(SpecialServers.MercilessLab),
+      nextAug: AugmentationName.TheHammer,
+      depth: 18,
+      manual: true,
+    };
+  }
+
+  // Next aug after TheWings is TheBoots
+  if (Player.hasAugmentation(AugmentationName.TheBrokenWings)) {
+    return {
+      lab: GetServer(SpecialServers.CruelLab),
+      nextAug: AugmentationName.TheBoots,
+      depth: 12,
+      manual: true,
+    };
+  }
+
+  // First aug is TheBrokenWings
+  return {
+    lab: GetServer(SpecialServers.NormalLab),
+    nextAug: AugmentationName.TheBrokenWings,
+    depth: 7,
+    manual: true,
+  };
+}

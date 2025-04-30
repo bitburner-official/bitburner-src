@@ -4029,6 +4029,10 @@ export interface CodingContract {
   getContractTypes(): `${CodingContractName}`[];
 }
 
+/**
+ * Response statuses used for authenticate and connectToSession methods
+ * @public
+ */
 type ResponseStatus =
   | "200 Success"
   | "401 Unauthorized"
@@ -4041,43 +4045,78 @@ export type Result = { success: boolean; message: string };
 
 /**
  * Darknet server information.
- *   hostname - Name of the server.
- *   ip - IP address of the server.
- *   hasAdminRights - Whether the player has admin rights on the server.
- *   isConnectedTo - Whether the server is connected to the current server.
- *   ramUsed - Amount of RAM used on the server.
- *   maxRam - Maximum amount of RAM on the server.
- *   organizationName - Name of the organization that owns the server.
- *   purchasedByPlayer - Whether the server was purchased by the player.
- *   backdoorInstalled - Whether the server has a backdoor installed.
- *   moneyAvailable - Amount of money available on the server.
- *   moneyMax - Maximum amount of money on the server.
- *   charismaLevel - Charisma level of the server.
- *   depth - Depth into the darknet of the server.
- *   modelId - ID of the server model.
+ * @public
  */
 type DarknetServer = {
+  /** The hostname of the server. */
   hostname: string;
+  /** The IP address of the server. */
   ip: string;
+  /** Whether the player has admin rights on the server. */
   hasAdminRights: boolean;
+  /** Whether the player terminal is currently connected to the server. */
   isConnectedTo: boolean;
+  /** The amount of RAM in use (or blocked) on the server. */
   ramUsed: number;
+  /** The total amount of RAM on the server. */
   maxRam: number;
+  /** The name of the organization that owns the server. */
   organizationName: string;
+  /** Whether the server was purchased by the player. */
   purchasedByPlayer: boolean;
+  /** Whether the server has a backdoor installed. */
   backdoorInstalled: boolean;
+  /** The amount of money available on the server. */
   moneyAvailable: number;
+  /** The maximum amount of money on the server. */
   moneyMax: number;
+  /** An example password hint for the server. */
   passwordHintExample: string;
+  /** The password data for the example hint. */
   passwordDataExample: string;
+  /** The cha level required to use heartBleed() on the server. */
   charismaLevel: number;
+  /** The depth into the darknet of the server. */
   depth: number;
+  /** The model ID of the server. Similar models have similar vulnerabilities */
   modelId: string;
 };
 
+/**
+ * Details about a server's authentication schema
+ * @public
+ */
+type ServerAuthDetails = {
+  /** The model ID of the server. Similar models share vulnerabilities. */
+  modelId: string;
+  /** Static password reminder text set for this server. */
+  passwordHint: string;
+  /** Data from the passwordHint, if any. */
+  data: string;
+  /** The frequency (in seconds) of the server adding its own messages to its logs, visible with heartBleed(). */
+  logTrafficInterval: number;
+  /** The number of characters in the password */
+  passwordLength: number;
+  /** The character set used in the password */
+  passwordFormat: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode";
+}
+
+/**
+ * Response from attempting to scrape logs from a server
+ * @public
+ */
 type HeartbleedOptions = {
+  /**
+   * If true, looks at the most recent log line but does not extract it. (Overrides logsToCapture.)
+   */
   peek?: boolean;
+  /**
+   * The number of log lines to remove from the server, up to a max of 8. Default is 1.
+   */
   logsToCapture?: number;
+  /**
+   * The number of additional milliseconds to add to the run time of the heartbleed request. Default is 0.
+   */
   additionalMsec?: number;
 };
 
@@ -4184,7 +4223,8 @@ export interface Darknet {
    * Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or
    * going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
    *
-   * There is a maximum of 2 stasis links that can be applied globally.
+   * There is a maximum of stasis links that can be applied globally, which can be seen using getStasisLinkLimit().
+   * This limit can be increased by finding special augmentations in the deep darknet.
    *
    * @remarks
    * RAM cost: 12 GB
@@ -4202,6 +4242,12 @@ export interface Darknet {
    * @param hostname - the hostname of the server to check.
    */
   hasStasisLink(hostname: string): boolean;
+
+  /**
+   * Returns the maximum number of stasis links that can be applied globally, based on the player's current status.
+   * Stasis link limit can be increased by finding special augmentations in the deep darknet.
+   */
+  getStasisLinkLimit(): number;
 
   /**
    * Returns a server object for the given server. Defaults to the running script's server if host is not specified.
@@ -4227,14 +4273,7 @@ export interface Darknet {
    *     data: The data associated with the password hint (if any).
    *     logTrafficInterval: The interval at which the server periodically adds to its logs, in seconds.
    */
-  getServerAuthDetails(host?: string): {
-    modelId: string;
-    passwordHint: string;
-    data: string;
-    logTrafficInterval: number;
-    passwordLength: number;
-    passwordFormat: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode";
-  } | null;
+  getServerAuthDetails(host?: string): ServerAuthDetails | null;
 
   /**
    * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.

@@ -30,6 +30,7 @@ import { addSessionToServer, DarknetState, NET_WIDTH } from "./DarknetState";
 import { initStockMarket } from "../../StockMarket/StockMarket";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { getSharedChars } from "./authentication";
+import { getLabyrinthDetails, isLabyrinthServer } from "./labyrinth";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;
@@ -113,8 +114,8 @@ export const hasCacheFileExtension = (path: string) => {
   return path.endsWith(".cache");
 };
 
-export const addCacheToServer = (server: BaseServer) => {
-  const prefix = cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
+export const addCacheToServer = (server: BaseServer, filename?: string) => {
+  const prefix =  filename ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
   const cacheFilename = resolveFilePath(`${prefix}_${Math.random().toString().substring(2, 5)}.cache` as FilePath);
   if (cacheFilename) {
     server.caches.push(cacheFilename);
@@ -124,7 +125,7 @@ export const addCacheToServer = (server: BaseServer) => {
 export const getRewardFromCache = (server: BaseServer, suppressToast = false): string => {
   const difficulty = server.darknetData?.difficulty ?? 1;
   Player.karma -= 5 + difficulty * 2; // TODO: adjust karma balance
-  if (server.hostname == SpecialServers.Labyrinth) {
+  if (isLabyrinthServer(server.hostname)) {
     return getLabReward(server, suppressToast);
   }
   const rewards = [getMoneyReward, getXpReward, getNextPortOpener, getCCTReward];
@@ -222,10 +223,14 @@ export const getNextPortOpener = (difficulty: number, suppressToast = false) => 
   return getXpReward(difficulty);
 };
 
-const getLabReward = (_server: BaseServer, suppressToast = false) => {
-  // TODO: balance this (more augments first? only TRP on BN 15)
-  Player.queueAugmentation(AugmentationName.TheRedPill);
-  const result = `You have discovered a cache with the Red Pill augmentation!`;
+const getLabReward = (server: BaseServer, suppressToast = false) => {
+  const labDetails = getLabyrinthDetails();
+  if (!labDetails.nextAug) {
+    getRewardFromCache(server, suppressToast);
+   return "You have discovered all of the secrets of the lab.";
+  }
+  Player.queueAugmentation(labDetails.nextAug);
+  const result = `You have discovered a cache with the augmentation ${labDetails.nextAug}!`;
   !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
   return result;
 };
@@ -363,3 +368,9 @@ export const scaleDarknetVolatilityIncreases = (scalar: number) => {
     }
   }
 };
+
+export const getStasisLinkLimit = (): number => {
+  const hasTheBrokenWings = Player.hasAugmentation(AugmentationName.TheBrokenWings);
+  const hasTheHammer = Player.hasAugmentation(AugmentationName.TheHammer);
+  return 1 + +hasTheBrokenWings + +hasTheHammer;
+}

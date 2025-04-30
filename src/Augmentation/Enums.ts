@@ -115,9 +115,27 @@ export enum AugmentationName {
   BladeArmorIPU = "BLADE-51b Tesla Armor: IPU Upgrade",
   BladesSimulacrum = "The Blade's Simulacrum",
 
+  // Stanek Augs
   StaneksGift1 = "Stanek's Gift - Genesis",
   StaneksGift2 = "Stanek's Gift - Awakening",
   StaneksGift3 = "Stanek's Gift - Serenity",
+
+  // Charisma augs (needs alphabetization)
+  GoldenTongue = "Golden Tongue Module",
+  Eloquence = "Eloquence Module",
+  Glib = "Glibness Enhancement",
+  Primer = "The Illustrated Primer",
+  Magnetism = "Magnetism Amplifier",
+  SocialDynamo = "Social Dynamics Processor",
+  Wit = "Neural Wit Amplifier",
+
+
+  // Darknet lab augs
+  TheBrokenWings = "The W1ngs of Icarus",
+  TheBoots = "The B00ts of Perseus",
+  TheHammer = "The H4mmer of Daedalus",
+  TheLaw = "The L4w of Bayes",
+  TheSword = "The B1ade of Solomonoff",
 
   // Infiltrators MiniGames
   MightOfAres = "SoA - Might of Ares", // slash
