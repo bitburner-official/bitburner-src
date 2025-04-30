@@ -8797,6 +8797,7 @@ declare enum CodingContractName {
   EncryptionICaesarCipher = "Encryption I: Caesar Cipher",
   EncryptionIIVigenereCipher = "Encryption II: Vigenère Cipher",
   SquareRoot = "Square Root",
+  TotalPrimesInRange = "Total Number of Primes",
 }
 
 export type CodingContractSignatures = {
@@ -8828,6 +8829,7 @@ export type CodingContractSignatures = {
   [CodingContractName.EncryptionICaesarCipher]: [[string, number], string];
   [CodingContractName.EncryptionIIVigenereCipher]: [[string, string], string];
   [CodingContractName.SquareRoot]: [bigint, bigint, [string, string]];
+  [CodingContractName.TotalPrimesInRange]: [number[], number[]];
 };
 
 export type CodingContractObject = {
