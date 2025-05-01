@@ -331,6 +331,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
 
     if (!decodedSaveData || decodedSaveData === "") {
       console.error("decodedSaveData:", decodedSaveData);
+      console.error("saveData:", saveData);
       throw new Error("The save data cannot be decoded.");
     }
 
