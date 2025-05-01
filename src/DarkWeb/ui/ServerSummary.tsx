@@ -2,7 +2,7 @@ import React from "react";
 import { Container, SvgIcon, Tooltip, Typography } from "@mui/material";
 import { BaseServer } from "../../Server/BaseServer";
 import { dnetStyles } from "./dnetStyles";
-import { Code, Description, Inventory2, LockPerson, Terminal, Bolt, DoorBack } from "@mui/icons-material";
+import { Code, Description, Inventory2, LockPerson, Terminal, Bolt, DoorBackSharp } from "@mui/icons-material";
 import { RunningScript } from "../../Script/RunningScript";
 import { formatNumber, formatRam } from "../../ui/formatNumber";
 import { CompletedProgramName } from "@enums";
@@ -59,7 +59,7 @@ export function ServerSummary({ server, enableAuth, showDetails = false }: Serve
     components.push(
       <Tooltip key="backdoor" title={<>Backdoor installed. Warning: this increases darknet instability.</>}>
         <Typography>
-          <SvgIcon component={DoorBack} className={`${classes.red} ${classes.paddingRight}`} />
+          <SvgIcon component={DoorBackSharp} className={`${classes.red} ${classes.paddingRight}`} />
         </Typography>
       </Tooltip>,
     );

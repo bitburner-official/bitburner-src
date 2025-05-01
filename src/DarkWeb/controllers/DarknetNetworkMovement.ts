@@ -25,6 +25,13 @@ export const mutateDarknet = () => {
     return;
   }
 
+  // Limit mutation speed based on size of net
+  const depth = getNetDepth();
+  const depthSpeedFactor = 12/depth
+  if (Math.random() > depthSpeedFactor) {
+    return;
+  }
+
   if (Math.random() < 0.1) {
     const islands = getIslands();
     const island = islands[Math.floor(Math.random() * islands.length)];
@@ -218,8 +225,8 @@ export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) 
   }
   server.serversOnNetwork.forEach((conn) => {
     const connectedServer = GetServer(conn);
-    const isOkToDisconnect = disconnectDarkweb || connectedServer?.hostname === SpecialServers.DarkWeb;
-    if (connectedServer && isOkToDisconnect && !isImmutable(connectedServer)) {
+    const isOkToDisconnect = disconnectDarkweb || connectedServer?.hostname !== SpecialServers.DarkWeb;
+    if (connectedServer && isOkToDisconnect) {
       disconnectServers(server, connectedServer as Server);
     }
   });

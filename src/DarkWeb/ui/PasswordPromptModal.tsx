@@ -17,7 +17,7 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { Result } from "@nsdefs";
 import { getAuthResult, getSharedChars } from "../models/authentication";
 import { populateServerLogsWithNoise } from "../models/packetSniffing";
-import { isLabyrinthServer } from "../models/labyrinth";
+import { getLabyrinthDetails, isLabyrinthServer } from "../models/labyrinth";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -111,8 +111,10 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
     );
   };
 
+  const canEnterLabManually = getLabyrinthDetails().manual;
   populateServerLogsWithNoise(server);
   const serverState = getServerState(server.hostname);
+  const disablePasswordInput = (!canEnterLabManually && isLabyrinthServer(server.hostname)) || server.hasAdminRights;
   const recentLogs = serverState.serverLogs?.slice(0, 5) ?? [];
   const logContent = recentLogs.map((log, index) => (
     <pre
@@ -177,7 +179,7 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
                       variant="outlined"
                       autoComplete="off"
                       autoFocus={!server.hasAdminRights}
-                      disabled={server.hasAdminRights}
+                      disabled={disablePasswordInput}
                     />
                   </form>
                   <br />

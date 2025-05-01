@@ -178,7 +178,7 @@ export const addLabyrinth = () => {
   const darknetData: DnetServer = {
     icon: labIcon,
     password: "!!the:masterwork:of:daedalus!!",
-    staticPasswordHint: "Find the exit",
+    staticPasswordHint: "You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.",
     minigameType: Minigames.labyrinth,
     difficulty: 10,
     x: -1,

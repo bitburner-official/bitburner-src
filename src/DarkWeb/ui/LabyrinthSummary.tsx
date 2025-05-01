@@ -1,7 +1,7 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import { DarknetState } from "../models/DarknetState";
-import { getSurroundingsVisualized } from "../models/labyrinth";
+import { getLabMaze, getSurroundingsVisualized } from "../models/labyrinth";
 import { dnetStyles } from "./dnetStyles";
 import { Result } from "@nsdefs";
 
@@ -25,7 +25,7 @@ export const LabyrinthSummary = ({
 
   // movement message
   const [x, y] = DarknetState.labLocations[-1];
-  const surroundings = getSurroundingsVisualized(DarknetState.labyrinth, x, y, 3, true, true)
+  const surroundings = getSurroundingsVisualized(getLabMaze(), x, y, 3, true, true)
     .split("")
     .map((c) => `${c}${c}${c}`)
     .join("")

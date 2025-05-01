@@ -1855,6 +1855,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Modeled after the winged boots of mythology, this implant somehow provides tireless social energy to the user. " +
         "Its creator, the enigmatic Sculptor, refuses to reveal the details of how it works, and only mutters about 'liveware APIs'. " +
         "Awarded to those who discover the secrets of the labrynth.",
+      stats: "This augmentation increases the speed of authentication and heartbleed by 20%.",
       charisma: 1.1,
       dexterity: 1.1,
       isSpecial: true,
@@ -1896,7 +1897,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "This augmentation enhances the user's ability to deduce optimal strategies and make compelling arguments, " +
         "turning every interaction into a calculated success. The technique is sometimes referred to as Solomonoff's Lightsaber, as it is a " +
         "more powerful version of Occam's razor. "+
-        "Awarded to those who discover the secrets of the labrynth.",
+        "The final augment awarded to those who discover the secrets of the labrynth.",
       charisma: 1.2,
       hacking: 1.16,
       company_rep: 1.1,

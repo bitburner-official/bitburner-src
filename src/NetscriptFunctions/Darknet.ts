@@ -26,6 +26,7 @@ import { CompletedProgramName } from "@enums";
 import { handleStormSeed } from "../DarkWeb/controllers/webstorm";
 import { getPasswordType, Minigames } from "../DarkWeb/controllers/DarknetServerGenerator";
 import { checkPassword, getAuthResult, isAuthenticated } from "../DarkWeb/models/authentication";
+import { getLabMaze, getSurroundingsVisualized, isLabyrinthServer } from "../DarkWeb/models/labyrinth";
 
 export type DarknetResult = { success: boolean; message: string };
 
@@ -208,6 +209,14 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           logger(ctx)(
             `Authentication on ${targetServer.hostname} ${success ? "succeeded" : `failed. (Gained ${xp} cha xp)`}`,
           );
+
+          if (isLabyrinthServer(targetHostname)) {
+            return {
+              success: success,
+              message: result.response.message,
+            }
+          }
+
           return {
             success: success,
             message: success ? ResponseStatus.SUCCESS : ResponseStatus.AUTH_FAILURE,
@@ -294,6 +303,23 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           const serverState = getServerState(targetHostname);
 
           logger(ctx)(`Extracted log data from ${targetHostname}... (Gained ${formatNumber(xpGained, 1)} cha xp)`);
+
+          if (isLabyrinthServer(targetHostname)) {
+            const location = DarknetState.labLocations[ctx.workerScript.pid];
+            if (!location) {
+              return ["A mysterious maze has appeared..."];
+            }
+            const surroundings = getSurroundingsVisualized(getLabMaze(), location[0], location[1]);
+            const status = {
+              coords: [location[0], location[1]],
+              north: surroundings[0][1] === " ",
+              east: surroundings[1][2] === " ",
+              south: surroundings[2][1] === " ",
+              west: surroundings[1][0] === " ",
+            };
+            return [JSON.stringify(status)];
+          }
+
           if (options.peek) {
             return serverState.serverLogs.slice(0, 1) ?? [];
           }
@@ -401,7 +427,9 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         return !!server.darknetData?.hasStasisLink;
       },
     getStasisLinkLimit: (ctx: NetscriptContext) => (): number => {
-      return getStasisLinkLimit();
+      const limit= getStasisLinkLimit();
+      logger(ctx)(`Stasis link limit: ${limit}`);
+      return limit;
     },
     getServer: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
@@ -642,7 +670,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         } else if (Math.random() < moneyRewardChance) {
           const randomFactor = Math.random() * 0.3 + 0.9;
           const moneyReward =
-            1e5 * Player.mults.crime_money * threads * ((50 + Player.skills.charisma) / 50) * randomFactor;
+            2e4 * Player.mults.crime_money * threads * ((50 + Player.skills.charisma) / 50) * randomFactor;
           Player.gainMoney(moneyReward, "darknet");
           const result = `Phishing attack succeeded! $${formatNumber(moneyReward, 2)} retrieved. (Gained ${formatNumber(
             xpGained,

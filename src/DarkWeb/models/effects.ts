@@ -24,7 +24,6 @@ import {
 } from "../controllers/DarknetNetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { isDarknetServer } from "./DnetServerData";
-import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Minigames } from "../controllers/DarknetServerGenerator";
 import { addSessionToServer, DarknetState, NET_WIDTH } from "./DarknetState";
 import { initStockMarket } from "../../StockMarket/StockMarket";
@@ -87,9 +86,10 @@ export const calculateAuthenticationTime = (
   const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 100);
   const noobFactor = Math.min(0.5 + difficulty / 4, 1);
   const backdoorFactor = getBackdoorAuthTimeDebuff();
-  const underleveledFactor = Player.skills.charisma >= chaRequired ? 1 : 1.5 + chaRequired / Player.skills.charisma;
+  const underleveledFactor = person.skills.charisma >= chaRequired ? 1 : 1.5 + chaRequired / person.skills.charisma;
+  const hasBootsFactor = Player.hasAugmentation(AugmentationName.TheBoots) ? 0.8 : 1;
 
-  const time = (baseTime * skillFactor * noobFactor * backdoorFactor * underleveledFactor) / threadsFactor;
+  const time = (baseTime * skillFactor * noobFactor * backdoorFactor * underleveledFactor * hasBootsFactor) / threadsFactor;
 
   // Add extra time for timing attack server, per correct character
   const sharedChars =
@@ -225,12 +225,12 @@ export const getNextPortOpener = (difficulty: number, suppressToast = false) => 
 
 const getLabReward = (server: BaseServer, suppressToast = false) => {
   const labDetails = getLabyrinthDetails();
-  if (!labDetails.nextAug) {
+  if (!labDetails.augReward) {
     getRewardFromCache(server, suppressToast);
    return "You have discovered all of the secrets of the lab.";
   }
-  Player.queueAugmentation(labDetails.nextAug);
-  const result = `You have discovered a cache with the augmentation ${labDetails.nextAug}!`;
+  Player.queueAugmentation(labDetails.augReward);
+  const result = `You have discovered a cache with the augmentation ${labDetails.augReward}!`;
   !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
   return result;
 };

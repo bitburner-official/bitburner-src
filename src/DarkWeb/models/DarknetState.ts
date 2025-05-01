@@ -2,7 +2,6 @@ import { EventEmitter } from "../../utils/EventEmitter";
 import { Server } from "../../Server/Server";
 import { BaseServer } from "../../Server/BaseServer";
 import { mutateDarknet } from "../controllers/DarknetNetworkMovement";
-import { generateMaze } from "./labyrinth";
 import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
 
 export const NET_WIDTH = 8;
@@ -16,7 +15,7 @@ export type DarknetState = {
   isMutating: boolean;
   openServer: BaseServer | null;
   Network: (BaseServer | null)[][];
-  labyrinth: string[][];
+  labyrinth: string[] | null;
   labLocations: Record<number, [number, number]>;
   lastPhishingCacheTime: Date;
   lastStormTime: Date;
@@ -38,7 +37,7 @@ export const DarknetState: DarknetState = {
 
   Network: new Array(MAX_NET_DEPTH).fill(null).map(() => new Array(NET_WIDTH).fill(null) as (Server | null)[]),
 
-  labyrinth: generateMaze(),
+  labyrinth: null,
   labLocations: { "-1": [1, 1] },
   lastPhishingCacheTime: new Date(),
   lastStormTime: new Date(),

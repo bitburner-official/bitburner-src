@@ -46,11 +46,6 @@ If you get stuck on a puzzle, you can try to brute-force it. Most servers will t
 
 If you don't want to wait on that, you can social-engineer your way around it. Not everyone uses secure internet connections, and a lot of interesting things can be pulled from their network traffic... including passwords. `await ns.dnet.packetCapture(hostName)` will let you spend some time scraping data from outgoing packets from that server. Most of what you overhear will be useless, but the password will eventually be inside some of that garbage, sooner or later. (It may take a long time to stumble upon the password on higher-difficulty servers, though!)
 
-### Other helpful API methods
-
-`ns.dnet.getServer(hostName)` can give you relevant details about a darknet server, notably its modelId (which is key to identifying its vulnerabilities)
-
-`ns.dnet.killall(hostname, password)` will let you cleanly kill all scripts on a nearby connected server. If called without arguments, it kills all other scripts on the current server instead.
 
 ==========================
 
@@ -125,6 +120,21 @@ Design document and workspace
 ---
 
 ## patches:
+
+## Labyrinth and augment improvement patch
+
+- Several factions now offer new augments that increase charisma and/or cha xx (including one with a shoutout to Denis in its flavor text for all his help testing.) This should help player progress in reaching charisma requirements. Many of these are not found in hacking factions.
+
+- The Labyrinth now rewards a number of unique augments that increase charisma, auth speed, and maximum stasis links. One such augment is awarded each time a lab is completed. The maze gets larger and more complex as the player progresses.
+
+- The darknet starts out much less deep (depth of ~8) and increases in depth each time the player completes the lab and gets a new augment.
+
+- TRP is found in the fourth lab (out of seven), which requires a charisma of 3000
+
+- Manual lab stops working after the third lab, requiring players to actually solve with a script instead of just using the UI
+
+- Minor UX improvements and bugfixes
+
 
 ## The "player feedback" patch
 
@@ -235,13 +245,14 @@ Coming soon:
 
 - small bugfixes
 
+ =====================================================================================================================================
+
 ## TODO:
 
-- limit mutations based on depth
-- Link lab size to lab difficulty
-- Update patch notes
-
-- stasis limit based off of augs (test)
+- lab cha requirement (in UI too)
+- separate lab modal ui
+- explanation for non-manual lab
+- lab api
 
 - ui methods for setting server description, colors, icons etc?
 

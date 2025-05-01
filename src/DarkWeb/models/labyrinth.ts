@@ -7,9 +7,6 @@ import { GetServer } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { AugmentationName } from "@enums";
 
-const MAZE_WIDTH = 40;
-const MAZE_HEIGHT = 30;
-
 const NORTH = [0, -1];
 const EAST = [1, 0];
 const SOUTH = [0, 1];
@@ -18,16 +15,60 @@ const WEST = [-1, 0];
 const WALL = "█";
 const PATH = " ";
 
+const MULTI_MAZE_THRESHOLD = 5;
+
 /**
  * Generates a maze using the stack-based iterative backtracking algorithm.
  * This builds the maze by moving in random directions, removing walls as it goes through unvisited nodes.
  * If it hits a dead end with only visited nodes, it backtracks to the last node with unvisited neighbors.
  * @param width - the width of the maze
  * @param height - the height of the maze
- * @returns a 2D array representing the maze, where "█" is a wall, " " is a path, "S" is the start, and "E" is the end
+ * @returns a 2D char array representing the maze, where "█" is a wall, " " is a path, "S" is the start, and "E" is the end
  */
-export const generateMaze = (width: number = MAZE_WIDTH, height: number = MAZE_HEIGHT): string[][] => {
-  const maze: string[][] = Array.from({ length: height + 1 }, () => Array(width + 1).fill(WALL) as string[]);
+export const generateMaze = (width: number = 41, height: number = 29): string[] => {
+  // Make a simple maze below the threshold
+  if (width < MULTI_MAZE_THRESHOLD) {
+    return mazeMaker(width, height).map((row => row.join("")));
+  }
+
+  // Stitch together 4 mazes for more interesting geometry
+
+  const halfWidth = Math.ceil(width / 2);
+  const halfHeight = Math.ceil(height / 2);
+
+  // BAbove the threshold, join together 4 mazes and make some breaks in the walls
+  const maze1 = mazeMaker(halfWidth, halfHeight);
+  const maze2 = mazeMaker(halfWidth, halfHeight);
+  const maze3 = mazeMaker(halfWidth, halfHeight);
+  const maze4 = mazeMaker(halfWidth, halfHeight);
+
+  const resultingMazeTopHalf = maze1.map((row, y) => row.slice(0, -1).concat(maze2[y]));
+  const resultingMazeBottomHalf = maze3.map((row, y) => row.slice(0, -1).concat(maze4[y]));
+  const resultingMaze = resultingMazeTopHalf.slice(0, -1).concat(resultingMazeBottomHalf);
+
+  const subWidth = maze1[0].length -1;
+  const subHeight = maze1.length -1;
+
+  // Add gaps in the walls between the mazes
+  const randomTopGap = Math.floor(Math.random() * halfWidth / 4) * 2 + 1;
+  resultingMaze[randomTopGap][subWidth] = "%";
+
+  const randomLeftGap = Math.floor(Math.random() * halfHeight / 4) * 2 + 1;
+  resultingMaze[subHeight][randomLeftGap] = "%";
+
+  const randomBottomGap = Math.floor(Math.random() * halfWidth / 4) * 2 + 1;
+  resultingMaze[height - randomBottomGap -1][subWidth] = "%";
+
+  const randomRightGap = Math.floor(Math.random() * halfHeight / 4) * 2 + 1;
+  resultingMaze[subHeight][width - randomRightGap -1] = "%";
+
+  return resultingMaze.map((row => row.join("")));
+};
+
+const mazeMaker = (setWidth: number, setHeight: number): string[][] => {
+  const width = setWidth % 2 === 0 ? setWidth + 1 : setWidth;
+  const height = setHeight % 2 === 0 ? setHeight + 1 : setHeight;
+  const maze: string[][] = Array.from({ length: height}, () => Array(width).fill(WALL) as string[]);
   const stack: [number, number][] = [];
   stack.push([1, 1]);
   const directions = [NORTH, EAST, SOUTH, WEST];
@@ -53,7 +94,7 @@ export const generateMaze = (width: number = MAZE_WIDTH, height: number = MAZE_H
 };
 
 export const getSurroundingsVisualized = (
-  maze: string[][],
+  maze: string[],
   x: number,
   y: number,
   range = 1,
@@ -97,20 +138,29 @@ export const handleLabyrinthPassword = (
   threads: number,
   pid: number = -1,
 ): PasswordResponse => {
-  if (attemptedPassword === "?") {
+  const labDetails = getLabyrinthDetails();
+
+  if (Player.skills.charisma < labDetails.cha) {
+    const failureMessages = [
+      `You find yourself lost and confused. You need to be more charismatic to navigate the labyrinth.`,
+      `You stumble in the dark. You need more moxie to find your way.`,
+      `You feel the walls closing in. You need to be more charming to escape.`,
+      `You are unable to make any progress. You need more charisma to find the secret.`,
+    ];
     return {
       passwordAttempted: attemptedPassword,
-      message: `You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.`,
       status: ResponseStatus.AUTH_FAILURE,
+      message: failureMessages[Math.floor(Math.random() * failureMessages.length)],
     };
   }
 
+  const maze = getLabMaze();
   const [initialX, initialY] = DarknetState.labLocations[pid] ?? [1, 1];
-  const end = [DarknetState.labyrinth[0].length - 2, DarknetState.labyrinth.length - 2];
+  const end = [maze[0].length - 2, maze.length - 2];
   const [dx, dy] = getDirectionFromInput(attemptedPassword);
   const newLocation: [number, number] = [initialX + dx * 2, initialY + dy * 2];
 
-  const labServer = getLabyrinthDetails().lab;
+  const labServer = labDetails.lab;
   if (!labServer?.darknetData) {
     throw new Error("Labyrinth server is missing dark web data");
   }
@@ -134,8 +184,8 @@ export const handleLabyrinthPassword = (
   }
 
   const potentialWall: [number, number] = [initialX + dx, initialY + dy];
-  if (DarknetState.labyrinth[potentialWall[1]]?.[potentialWall[0]] !== PATH) {
-    const surroundings = getSurroundingsVisualized(DarknetState.labyrinth, initialX, initialY);
+  if (maze[potentialWall[1]]?.[potentialWall[0]] !== PATH) {
+    const surroundings = getSurroundingsVisualized(maze, initialX, initialY);
     const status = {
       coords: [initialX, initialY],
       north: surroundings[0][1] === PATH,
@@ -165,7 +215,7 @@ export const handleLabyrinthPassword = (
   if (newLocation[0] == end[0] && newLocation[1] == end[1]) {
     Player.gainCharismaExp(calculatePasswordAttemptChaGain(server, Math.max(threads * 2, 32), true));
     server.hasAdminRights = true;
-    const isSpecialCache = getLabyrinthDetails().nextAug;
+    const isSpecialCache = getLabyrinthDetails().augReward;
     addCacheToServer(server, isSpecialCache ? "the_great_work" : undefined);
     addSessionToServer(labServer, pid);
 
@@ -176,7 +226,7 @@ export const handleLabyrinthPassword = (
     };
   }
 
-  const surroundings = getSurroundingsVisualized(DarknetState.labyrinth, newLocation[0], newLocation[1]);
+  const surroundings = getSurroundingsVisualized(maze, newLocation[0], newLocation[1]);
   const status = {
     coords: [newLocation[0], newLocation[1]],
     north: surroundings[0][1] === PATH,
@@ -210,42 +260,88 @@ const getDirectionFromInput = (input: string) => {
   return [0, 0];
 };
 
-export const getLabyrinthServer = () => {
-  const details = getLabyrinthDetails();
-  return GetServer(`${details.lab}`);
+type labDetails = {
+  name: string;
+  depth: number;
+  cha: number;
+  augReward: AugmentationName;
+  mazeWidth: number;
+  mazeHeight: number;
+  manual: boolean;
+}
+
+const labData: Record<string, labDetails> = {
+  [SpecialServers.NormalLab]: {
+    name: SpecialServers.NormalLab,
+    depth: 7,
+    cha: 500,
+    augReward: AugmentationName.TheBrokenWings,
+    mazeWidth: 20,
+    mazeHeight: 14,
+    manual: true,
+  },
+  [SpecialServers.CruelLab]: {
+    name: SpecialServers.CruelLab,
+    depth: 12,
+    cha: 1000,
+    augReward: AugmentationName.TheBoots,
+    mazeWidth: 30,
+    mazeHeight: 20,
+    manual: true,
+  },
+  [SpecialServers.MercilessLab]: {
+    name: SpecialServers.MercilessLab,
+    depth: 18,
+    cha: 1500,
+    augReward: AugmentationName.TheHammer,
+    mazeWidth: 40,
+    mazeHeight: 26,
+    manual: true,
+  },
+  [SpecialServers.UberLab]: {
+    name: SpecialServers.UberLab,
+    depth: 21,
+    cha: 3000,
+    augReward: AugmentationName.TheRedPill,
+    mazeWidth: 60,
+    mazeHeight: 40,
+    manual: false,
+  },
+  [SpecialServers.EternalLab]: {
+    name: SpecialServers.EternalLab,
+    depth: 25,
+    cha: 3500,
+    augReward: AugmentationName.TheLaw,
+    mazeWidth: 60,
+    mazeHeight: 40,
+    manual: false,
+  },
+  [SpecialServers.FinalLab]: {
+    name: SpecialServers.FinalLab,
+    depth: 31,
+    cha: 4000,
+    augReward: AugmentationName.TheSword,
+    mazeWidth: 60,
+    mazeHeight: 40,
+    manual: false,
+  },
+} as const;
+
+export const getLabMaze = (): string[] => {
+  if (!DarknetState.labyrinth) {
+    const { mazeWidth, mazeHeight } = getLabyrinthDetails();
+    DarknetState.labyrinth = generateMaze(mazeWidth, mazeHeight);
+  }
+  return DarknetState.labyrinth;
 }
 
 export const getLabyrinthServerNames = () => {
-  const labHostnames: string[] = [SpecialServers.NormalLab,
-    SpecialServers.CruelLab,
-    SpecialServers.MercilessLab,
-    SpecialServers.UberLab,
-    SpecialServers.EternalLab,
-    SpecialServers.FinalLab,];
-
+  const labHostnames: string[] = Object.keys(labData);
   return labHostnames;
 }
 
 export const getLabyrinthChaiRequirement = (name: string) => {
-  if (name === SpecialServers.NormalLab) {
-    return 400;
-  }
-  if (name === SpecialServers.CruelLab) {
-    return 1000;
-  }
-  if (name === SpecialServers.MercilessLab) {
-    return 1500;
-  }
-  if (name === SpecialServers.UberLab) {
-    return 3000;
-  }
-  if (name === SpecialServers.EternalLab) {
-    return 3500;
-  }
-  if (name === SpecialServers.FinalLab) {
-    return 4000;
-  }
-  return 0;
+  return labData[name]?.cha ?? 0;
 }
 
 export const getNetDepth = () => {
@@ -260,86 +356,83 @@ export const isLabyrinthServer = (hostName: string) => {
 
 export const getLabyrinthDetails = () : {
   lab: BaseServer | null;
-  nextAug: AugmentationName | null;
+  augReward: AugmentationName | null;
   depth: number;
   manual: boolean;
+  mazeWidth: number;
+  mazeHeight: number;
+  cha: number;
+  name: string;
 } => {
   // TODO: re-enable this check when BN 15 is implemented
+
   // Lab not unlocked yet
   // if (!Player.sourceFileLvl(15) && Player.bitNodeN !== 15) {
   //   return {
+  //     augReward: null,
+  //     cha: 0,
+  //     mazeHeight: 10,
+  //     mazeWidth: 10,
+  //     name: "",
   //     lab: null,
-  //     nextAug: null,
   //     depth: 4,
-  //     manual: false,
+  //     manual: false
   //   }
   // }
 
   // All augs already retrieved
   if (Player.hasAugmentation(AugmentationName.TheSword)) {
+    const data = labData[SpecialServers.FinalLab];
     return {
       lab: GetServer(SpecialServers.FinalLab),
-      nextAug: null,
-      depth: 31,
+      depth: data.depth,
       manual: false,
-    };
-  }
-
-  // All augs except TheSword already retrieved
-  if (Player.hasAugmentation(AugmentationName.TheLaw)) {
-    return {
-      lab: GetServer(SpecialServers.FinalLab),
-      nextAug: AugmentationName.TheSword,
-      depth: 28,
-      manual: false,
-    };
-  }
-
-  // Next aug after TRP is TheLaw
-  if (Player.hasAugmentation(AugmentationName.TheRedPill)) {
-    return {
-      lab: GetServer(SpecialServers.EternalLab),
-      nextAug: AugmentationName.TheLaw,
-      depth: 25,
-      manual: false,
-    };
-  }
-
-  // Next aug after TheHammer is TheRedPill
-  if (Player.hasAugmentation(AugmentationName.TheHammer)) {
-    return {
-      lab: GetServer(SpecialServers.UberLab),
-      nextAug: AugmentationName.TheRedPill,
-      depth: 21,
-      manual: Player.bitNodeN !== 15, // Manual maze for TRP is only available on BN 15. Write a proper script!
-    };
-  }
-
-  // Next aug after TheBoots is TheHammer
-  if (Player.hasAugmentation(AugmentationName.TheBoots)) {
-    return {
-      lab: GetServer(SpecialServers.MercilessLab),
-      nextAug: AugmentationName.TheHammer,
-      depth: 18,
-      manual: true,
-    };
-  }
-
-  // Next aug after TheWings is TheBoots
-  if (Player.hasAugmentation(AugmentationName.TheBrokenWings)) {
-    return {
-      lab: GetServer(SpecialServers.CruelLab),
-      nextAug: AugmentationName.TheBoots,
-      depth: 12,
-      manual: true,
+      mazeWidth: 10,
+      mazeHeight: 10,
+      augReward: null,
+      cha: 0,
+      name: ""
     };
   }
 
   // First aug is TheBrokenWings
+  let labName: string = SpecialServers.NormalLab;
+
+  // All augs except TheSword already retrieved
+  if (Player.hasAugmentation(AugmentationName.TheLaw)) {
+    labName = SpecialServers.FinalLab;
+  }
+
+  // Next aug after TRP is TheLaw
+  else if (Player.hasAugmentation(AugmentationName.TheRedPill)) {
+    labName = SpecialServers.EternalLab;
+  }
+
+  // Next aug after TheHammer is TheRedPill
+  else if (Player.hasAugmentation(AugmentationName.TheHammer)) {
+    labName = SpecialServers.UberLab;
+  }
+
+  // Next aug after TheBoots is TheHammer
+  else if (Player.hasAugmentation(AugmentationName.TheBoots)) {
+    labName = SpecialServers.MercilessLab;
+  }
+
+  // Next aug after TheWings is TheBoots
+  else if (Player.hasAugmentation(AugmentationName.TheBrokenWings)) {
+    labName = SpecialServers.CruelLab;
+  }
+
+  const labDetails = labData[labName];
+
   return {
-    lab: GetServer(SpecialServers.NormalLab),
-    nextAug: AugmentationName.TheBrokenWings,
-    depth: 7,
-    manual: true,
+    lab: GetServer(labName),
+    augReward: labDetails.augReward,
+    depth: labDetails.depth,
+    manual: manual,
+    mazeWidth: labDetails.mazeWidth,
+    mazeHeight: labDetails.mazeHeight,
+    cha: labDetails.cha,
+    name: labDetails.name,
   };
 }
