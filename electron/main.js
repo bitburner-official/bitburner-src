@@ -21,7 +21,6 @@ app.on("window-all-closed", () => {
 
 require("./steamworksUtils");
 const gameWindow = require("./gameWindow");
-const achievements = require("./achievements");
 const utils = require("./utils");
 const storage = require("./storage");
 const debounce = require("lodash/debounce");
@@ -42,9 +41,6 @@ function setStopProcessHandler(window) {
   const closingWindowHandler = async (e) => {
     // We need to prevent the default closing event to add custom logic
     e.preventDefault();
-
-    // // First we clear the achievement timer
-    // achievements.disableAchievementsInterval(window);
 
     // Trigger debounced saves right now before closing
     try {
