@@ -4,6 +4,8 @@
 
 ## ResponseStatus type
 
+Response statuses used for authenticate and connectToSession methods
+
 **Signature:**
 
 ```typescript

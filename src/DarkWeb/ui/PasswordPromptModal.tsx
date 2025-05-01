@@ -8,7 +8,6 @@ import { getIcon, Icon } from "../controllers/ServerIcon";
 import { DarknetEvents, getServerState } from "../models/DarknetState";
 import { BaseServer } from "../../Server/BaseServer";
 import { ServerSummary } from "./ServerSummary";
-import { SpecialServers } from "../../Server/data/SpecialServers";
 import { LabyrinthSummary } from "./LabyrinthSummary";
 import { getPasswordType, Minigames } from "../controllers/DarknetServerGenerator";
 import { dnetStyles } from "./dnetStyles";

@@ -4,6 +4,8 @@
 
 ## HeartbleedOptions type
 
+Response from attempting to scrape logs from a server
+
 **Signature:**
 
 ```typescript

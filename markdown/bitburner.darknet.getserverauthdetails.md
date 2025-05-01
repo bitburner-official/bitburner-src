@@ -9,14 +9,7 @@ Returns the server's authentication protocol details.
 **Signature:**
 
 ```typescript
-getServerAuthDetails(host?: string): {
-    modelId: string;
-    passwordHint: string;
-    data: string;
-    logTrafficInterval: number;
-    passwordLength: number;
-    passwordFormat: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode";
-  } | null;
+getServerAuthDetails(host?: string): ServerAuthDetails | null;
 ```
 
 ## Parameters
@@ -27,7 +20,7 @@ getServerAuthDetails(host?: string): {
 
 **Returns:**
 
-{ modelId: string; passwordHint: string; data: string; logTrafficInterval: number; passwordLength: number; passwordFormat: "numeric" \| "alphabetic" \| "alphanumeric" \| "ASCII" \| "unicode"; } \| null
+[ServerAuthDetails](./bitburner.serverauthdetails.md) \| null
 
 An object containing the server's authentication protocol details, or null if the server is not found. modelId: The model ID of the server. Similar models have similar vulnerabilities. passwordHint: The password hint for the server. data: The data associated with the password hint (if any). logTrafficInterval: The interval at which the server periodically adds to its logs, in seconds.
 

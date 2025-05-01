@@ -8,7 +8,7 @@ Applies or removes a stasis link to the script's current server. This will allow
 
 Stasis links also prevent the server from going offline or moving. It does not prevent other servers from moving or going offline, though, so it does not guarantee that the stasis link server will never lose connections to other servers.
 
-There is a maximum of 2 stasis links that can be applied globally.
+There is a maximum of stasis links that can be applied globally, which can be seen using getStasisLinkLimit(). This limit can be increased by finding special augmentations in the deep darknet.
 
 **Signature:**
 

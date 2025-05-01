@@ -429,7 +429,7 @@ export const getLabyrinthDetails = () : {
     lab: GetServer(labName),
     augReward: labDetails.augReward,
     depth: labDetails.depth,
-    manual: manual,
+    manual: labDetails.manual,
     mazeWidth: labDetails.mazeWidth,
     mazeHeight: labDetails.mazeHeight,
     cha: labDetails.cha,

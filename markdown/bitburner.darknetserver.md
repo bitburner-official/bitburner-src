@@ -4,7 +4,7 @@
 
 ## DarknetServer type
 
-Darknet server information. hostname - Name of the server. ip - IP address of the server. hasAdminRights - Whether the player has admin rights on the server. isConnectedTo - Whether the server is connected to the current server. ramUsed - Amount of RAM used on the server. maxRam - Maximum amount of RAM on the server. organizationName - Name of the organization that owns the server. purchasedByPlayer - Whether the server was purchased by the player. backdoorInstalled - Whether the server has a backdoor installed. moneyAvailable - Amount of money available on the server. moneyMax - Maximum amount of money on the server. charismaLevel - Charisma level of the server. depth - Depth into the darknet of the server. modelId - ID of the server model.
+Darknet server information.
 
 **Signature:**
 
