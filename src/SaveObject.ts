@@ -298,16 +298,19 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
   }
 
   async getSaveDataFromFile(files: FileList | null): Promise<SaveData> {
-    if (files === null) return Promise.reject(new Error("No file selected"));
+    if (files === null) {
+      throw new Error("No file selected");
+    }
     const file = files[0];
-    if (!file) return Promise.reject(new Error("Invalid file selected"));
+    if (!file) {
+      throw new Error("Invalid file selected");
+    }
 
     const rawData = new Uint8Array(await file.arrayBuffer());
     if (isBinaryFormat(rawData)) {
       return rawData;
-    } else {
-      return new TextDecoder().decode(rawData);
     }
+    return new TextDecoder().decode(rawData);
   }
 
   async getParsedSaveData(saveData: SaveData): Promise<ParsedSaveData> {
@@ -336,7 +339,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
       parsedSaveData = JSON.parse(decodedSaveData);
     } catch (error) {
       console.error("decodedSaveData:", decodedSaveData);
-      return Promise.reject(new Error("The decoded save data is not valid."));
+      throw new Error("The decoded save data is not valid.");
     }
 
     assertParsedSaveData(parsedSaveData);
