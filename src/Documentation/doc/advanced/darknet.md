@@ -249,9 +249,18 @@ Coming soon:
 
 ## TODO:
 
+
+Re: allocated ram and auth details, I think there's something to be said about what dnet.getServer should contain and what not.
+Since getOwnerAllocatedRam is free I'd have expected it to appear in getServer too, along with authDetails.
+That said, I didn't expect getServer to have so much free data.
+(for example I'd be okay with it containing the modelId for auth, but not the actual hint).
+
+labels for icons in detail view on password modal?
+
+
 - lab cha requirement (in UI too)
 - separate lab modal ui
-- explanation for non-manual lab
+- explanation for non-manual lab in UI
 - lab api
 
 - ui methods for setting server description, colors, icons etc?

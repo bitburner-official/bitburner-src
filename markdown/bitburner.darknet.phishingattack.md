@@ -4,11 +4,15 @@
 
 ## Darknet.phishingAttack() method
 
-Spends som time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa.
+Spends some time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa.
 
 Most of the time the attempt fails due to spam filters, but success can be increased with crime success rate and charisma stats.
 
 Very occasionally you can retrieve a cache file from the attempt.
+
+This can only be run from scripts on darknet servers.
+
+The amount of money lifted scales with the number of threads used, if successful.
 
 **Signature:**
 

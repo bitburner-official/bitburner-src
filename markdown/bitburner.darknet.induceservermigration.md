@@ -6,6 +6,8 @@
 
 Increases the chance that connected servers will move to other parts of the darknet, by overloading the connections between them and the current server. (Does not affect the current server, only nearby ones)
 
+Effect scales with threads.
+
 **Signature:**
 
 ```typescript

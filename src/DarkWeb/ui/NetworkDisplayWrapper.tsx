@@ -84,7 +84,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const handleZoom: WheelEventHandler<HTMLDivElement> = (wheelEvent) => {
     wheelEvent.stopPropagation();
     const target = wheelEvent.target as HTMLDivElement;
-    if (!draggableBackground?.current) {
+    if (!draggableBackground?.current || DarknetState.openServer) {
       return;
     }
     if (wheelEvent.deltaY < 0) {

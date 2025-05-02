@@ -84,6 +84,9 @@ const getRandomData = (length: number, server: BaseServer) => {
 };
 
 const getRandomCharsInPassword = (password: string) => {
+  if (!password) {
+    return "There's definitely nothing in that password...";
+  }
   const [containedChar1, containedChar2] = getTwoCharsInPassword(password);
   const hints = [
     `There's definitely a ${containedChar1} and a ${containedChar2}...`,

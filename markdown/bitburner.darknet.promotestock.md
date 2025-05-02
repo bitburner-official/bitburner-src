@@ -4,7 +4,7 @@
 
 ## Darknet.promoteStock() method
 
-Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but a savvy investor can take advantage of the chaos. The effect scales with charisma, but degrades over time if left alone.
+Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but a savvy investor can take advantage of the chaos. The effect scales with charisma and the number of threads used, but degrades over time if left alone.
 
 **Signature:**
 

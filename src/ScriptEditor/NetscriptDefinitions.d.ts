@@ -4129,9 +4129,9 @@ type HeartbleedOptions = {
 export interface Darknet {
   /**
    * Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected
-   * to the server that the script is running on.
+   * to the server that the script is running on. The speed of authentication scales with the number of threads used.
    *
-   * If successful, grants the script a session, allowing it to exec() to that server or scp() from it.
+   * If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files from it.
    *
    * Response messages:
    * "200 Success" - Authentication was successful.
@@ -4182,6 +4182,8 @@ export interface Darknet {
    * Retrieves and removes the most recent logs on the server. This can be used to get more feedback on authentication attempts.
    *
    * Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
+   *
+   * The speed of capture scales with the number of threads used. See {@link ns.formulas.dnet.getHeartbleedEstimatedTime} for more information.
    *
    * @remarks
    * RAM cost: 0.6 GB
@@ -4279,6 +4281,8 @@ export interface Darknet {
    * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
    * The target server must be directly connected to the server that the script is running on.
    *
+   * Using multiple threads speeds up the capture process.
+   *
    * @remarks
    * RAM cost: 6 GB
    *
@@ -4290,6 +4294,8 @@ export interface Darknet {
   /**
    * Increases the chance that connected servers will move to other parts of the darknet, by overloading the connections between them and the current server.
    * (Does not affect the current server, only nearby ones)
+   *
+   * Effect scales with threads.
    *
    * @remarks
    * RAM cost: 0.5 GB
@@ -4321,7 +4327,7 @@ export interface Darknet {
 
   /**
    * Spends some time freeing some of the RAM currently blocked by the server owner. Must target a directly connected server.
-   * The amount of ram so absconded scaled with charisma.
+   * The amount of ram so absconded scaled with charisma and the number of threads used.
    *
    * @remarks
    * RAM cost: 1 GB
@@ -4343,7 +4349,7 @@ export interface Darknet {
 
   /**
    * Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but
-   * a savvy investor can take advantage of the chaos. The effect scales with charisma, but degrades over time if left alone.
+   * a savvy investor can take advantage of the chaos. The effect scales with charisma and the number of threads used, but degrades over time if left alone.
    *
    * @remarks
    * RAM cost: 2 GB
@@ -4353,11 +4359,15 @@ export interface Darknet {
   promoteStock(sym: string): Promise<Result>;
 
   /**
-   * Spends som time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa.
+   * Spends some time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa.
    *
    * Most of the time the attempt fails due to spam filters, but success can be increased with crime success rate and charisma stats.
    *
    * Very occasionally you can retrieve a cache file from the attempt.
+   *
+   * This can only be run from scripts on darknet servers.
+   *
+   * The amount of money lifted scales with the number of threads used, if successful.
    */
   phishingAttack(): Promise<Result>;
 }

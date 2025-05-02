@@ -239,7 +239,7 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
             ""
           ) : (
             <>
-              <Card style={{ height: "250px", overflowY: "scroll" }} onScroll={(e) => e.preventDefault()}>
+              <Card style={{ height: "250px", overflowY: "scroll" }}>
                 <div style={{ color: "white", paddingLeft: "10px" }}>{logContent}</div>
               </Card>
             </>

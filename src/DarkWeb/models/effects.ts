@@ -289,7 +289,7 @@ const addClue = (server: BaseServer) => {
     const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
     const targetServer = getRandomNearbyServer(server, true);
     if (targetServer?.darknetData) {
-      const contents = `Server: ${targetServer?.hostname} Password: ${targetServer?.darknetData?.password}`;
+      const contents = `Server: ${targetServer?.hostname} Password: "${targetServer?.darknetData?.password}"`;
       server.writeToTextFile(hintFileName as TextFilePath, contents);
       return;
     }
@@ -305,7 +305,7 @@ const addClue = (server: BaseServer) => {
   if (Math.random() < 0.7) {
     const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
     const targetServer = getRandomNearbyServer(server);
-    if (targetServer?.darknetData) {
+    if (targetServer?.darknetData?.password) {
       const [containedChar1, containedChar2] = getTwoCharsInPassword(targetServer.darknetData.password);
       const hint = `The password for ${targetServer.hostname} contains ${containedChar1} and ${containedChar2}`;
       server.writeToTextFile(hintFileName as TextFilePath, hint);

@@ -8,6 +8,8 @@ Uses an exploit to extract log data from a server by sending a malformed heartbe
 
 Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
 
+The speed of capture scales with the number of threads used. See  for more information.
+
 **Signature:**
 
 ```typescript

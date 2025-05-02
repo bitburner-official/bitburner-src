@@ -350,7 +350,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
     probe:
       (ctx: NetscriptContext) =>
       (_returnByIp): string[] => {
-        const returnByIP = helpers.boolean(ctx, "returnByIP", _returnByIp);
+        const returnByIP = helpers.boolean(ctx, "returnByIP", _returnByIp ?? false);
         const server: BaseServer = ctx.workerScript.getServer();
         const out: string[] = [];
         for (const neighbor of server.serversOnNetwork) {
