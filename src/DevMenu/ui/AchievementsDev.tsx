@@ -38,11 +38,11 @@ export function AchievementsDev(): React.ReactElement {
     setPlayerAchievements(Player.achievements.map((m) => m.ID));
   }
 
-  function disableEngine(): void {
+  function disableEngineCheck(): void {
     Engine.Counters.achievementsCounter = Number.MAX_VALUE;
   }
 
-  function enableEngine(): void {
+  function enableEngineCheck(): void {
     Engine.Counters.achievementsCounter = 0;
   }
 
@@ -63,8 +63,8 @@ export function AchievementsDev(): React.ReactElement {
                 <ButtonGroup>
                   <Button onClick={grantAllAchievements}>Grant All</Button>
                   <Button onClick={clearAchievements}>Clear</Button>
-                  <Button onClick={disableEngine}>Disable Engine</Button>
-                  <Button onClick={enableEngine}>Enable Engine</Button>
+                  <Button onClick={disableEngineCheck}>Disable Engine Check</Button>
+                  <Button onClick={enableEngineCheck}>Enable Engine Check</Button>
                 </ButtonGroup>
               </td>
             </tr>
