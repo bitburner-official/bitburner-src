@@ -1,11 +1,5 @@
 import { connectServers, DeleteServer, disconnectServers, GetAllServers, GetServer } from "../../Server/AllServers";
-import {
-  DarknetEvents,
-  DarknetState,
-  getServerState,
-  NET_WIDTH,
-  SERVER_DENSITY,
-} from "../models/DarknetState";
+import { DarknetEvents, DarknetState, getServerState, NET_WIDTH, SERVER_DENSITY } from "../models/DarknetState";
 import { getDarknetServer } from "./DarknetServerGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
@@ -27,7 +21,7 @@ export const mutateDarknet = () => {
 
   // Limit mutation speed based on size of net
   const depth = getNetDepth();
-  const depthSpeedFactor = 12/depth
+  const depthSpeedFactor = 12 / depth;
   if (Math.random() > depthSpeedFactor) {
     return;
   }

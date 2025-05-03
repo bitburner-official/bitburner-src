@@ -53,7 +53,7 @@ import { CompanyPositions } from "../Company/CompanyPositions";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { Skills } from "../Bladeburner/data/Skills";
 import type { PositiveNumber } from "../types";
-import { calculateAuthenticationTime, getBackdoorAuthTimeDebuff, getRamBlockRemoved } from "../DarkWeb/models/effects";
+import { calculateAuthenticationTime, getBackdoorAuthTimeDebuff, getRamBlockRemoved } from "../DarkNet/models/effects";
 import { getConnectedServer, getTimeoutChance } from "./Darknet";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {

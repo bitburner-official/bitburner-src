@@ -12,7 +12,7 @@ import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
 import { formatMoney, formatPercent } from "../../ui/formatNumber";
 import Typography from "@mui/material/Typography";
-import { getDarknetVolatilityMult } from "../../DarkWeb/models/effects";
+import { getDarknetVolatilityMult } from "../../DarkNet/models/effects";
 
 interface IProps {
   stock: Stock;

@@ -129,7 +129,6 @@ export enum AugmentationName {
   SocialDynamo = "Social Dynamics Processor",
   Wit = "Neural Wit Amplifier",
 
-
   // Darknet lab augs
   TheBrokenWings = "The W1ngs of Icarus",
   TheBoots = "The B00ts of Perseus",

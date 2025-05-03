@@ -14,9 +14,9 @@ import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
-import { populateDarknet } from "../DarkWeb/controllers/DarknetNetworkGenerator";
-import { isDarknetServer } from "../DarkWeb/models/DnetServerData";
-import { hasDarknetAccess } from "../DarkWeb/models/effects";
+import { populateDarknet } from "../DarkNet/controllers/DarknetNetworkGenerator";
+import { isDarknetServer } from "../DarkNet/models/DnetServerData";
+import { hasDarknetAccess } from "../DarkNet/models/effects";
 import { getTorRouter } from "../Locations/ui/TorButton";
 
 /**

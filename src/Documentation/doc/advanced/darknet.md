@@ -46,7 +46,6 @@ If you get stuck on a puzzle, you can try to brute-force it. Most servers will t
 
 If you don't want to wait on that, you can social-engineer your way around it. Not everyone uses secure internet connections, and a lot of interesting things can be pulled from their network traffic... including passwords. `await ns.dnet.packetCapture(hostName)` will let you spend some time scraping data from outgoing packets from that server. Most of what you overhear will be useless, but the password will eventually be inside some of that garbage, sooner or later. (It may take a long time to stumble upon the password on higher-difficulty servers, though!)
 
-
 ==========================
 
 # Darkweb network expansion project
@@ -134,7 +133,6 @@ Design document and workspace
 - Manual lab stops working after the third lab, requiring players to actually solve with a script instead of just using the UI
 
 - Minor UX improvements and bugfixes
-
 
 ## The "player feedback" patch
 
@@ -245,10 +243,9 @@ Coming soon:
 
 - small bugfixes
 
- =====================================================================================================================================
+=====================================================================================================================================
 
 ## TODO:
-
 
 Re: allocated ram and auth details, I think there's something to be said about what dnet.getServer should contain and what not.
 Since getOwnerAllocatedRam is free I'd have expected it to appear in getServer too, along with authDetails.
@@ -257,10 +254,7 @@ That said, I didn't expect getServer to have so much free data.
 
 labels for icons in detail view on password modal?
 
-
 - lab cha requirement (in UI too)
-- separate lab modal ui
-- explanation for non-manual lab in UI
 - lab api
 
 - ui methods for setting server description, colors, icons etc?
@@ -270,24 +264,15 @@ Make network wider at deeper parts?
 - webstorm visual indicator
 - screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
 
-
 - Go over guide looking for misleading info or other out-of-date or missing things
 - starter script
 - preventDuplicates on the run options is very powerful here
-
-lab needs something, for sure. I'm still noodling on it. Possibly will give a sequence of augs, getting more complex in its mazes as you go, until you earn TRP? Maybe TRP is only available there in BN15? Maybe it just gives a daedalus invite instead? that one will be harder to balance until more of the core loop is hammered out. Maybe final version needs to be automated?
-
-- join together multiple mazes?
-- Final lab cannot be played manually?
-- multiple labs with different names
-- each deeper in the 'net
 
 ns.dnet.enums.XXX for status codes etc
 Usually "data" in the form of enums or constants we typically store in a data folder so it's easier to find.
 
 scp: add session details to docs
 exec: add session details to docs
-
 
 Catlover writeup: https://discord.com/channels/415207508303544321/1358930422607642845/1360131828756775033
 My suggestion: Create many layers and cliques. We are still consistent in the behavior of APIs, but each layer (or clique) has a unique purpose. A very rough guideline:
@@ -316,10 +301,8 @@ We need to give the player a way to set up a foothold, at least in low/mid layer
 
 - a macguffin you have to get to be able to access the darkweb ('darkscape navigator'?)
 
-
 Required number of open ports for STASIS: 5
 change analyze output some?
-
 
 have a clear immediate reward from tier 1 that isn't just cha XP
 
@@ -460,4 +443,3 @@ retrieving passwords from other parts of the game?
 - treasure chest server?
 
 - standard network viewer?
-

@@ -1047,8 +1047,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.Magnetism]: {
       repCost: 1.5e4,
       moneyCost: 2.5e8,
-      info:
-        "A cranial implant that increases the attractive force of the wearer. (Even its inventor isn't quite sure how it works).",
+      info: "A cranial implant that increases the attractive force of the wearer. (Even its inventor isn't quite sure how it works).",
       charisma: 1.1,
       company_rep: 1.1,
       factions: [FactionName.TheBlackHand, FactionName.TheDarkArmy],
@@ -1447,7 +1446,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 2.875e5,
       moneyCost: 3.375e9,
       info:
-        "A cutting-edge knowledgebase entirely built off of nanotech rod-logic, training the user on social engineering. "+
+        "A cutting-edge knowledgebase entirely built off of nanotech rod-logic, training the user on social engineering. " +
         "Thought to be stolen technology, its existance has been a secret until recently.",
       charisma: 1.1,
       charisma_exp: 1.4,
@@ -1868,7 +1867,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "This unique augmentation allows the user to strike stright to the heart of the matter and sweep aside obstacles in the way of their goals. " +
         "Appearing as a simple insignia on the user's forarm, its true function is unknown. It is said to be one of the tools of The Sculptor. " +
-      "Awarded to those who discover the secrets of the labrynth.",
+        "Awarded to those who discover the secrets of the labrynth.",
       stats: "This augmentation increases the stasis link limit by one, as well as strength and charimsa.",
       charisma: 1.12,
       strength: 1.1,
@@ -1879,9 +1878,10 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.TheLaw]: {
       repCost: 1e4,
       moneyCost: 1e6,
-      info: "An advanced neural implant that integrates Bayesian inference algorithms into the brain's decision-making processes. " +
+      info:
+        "An advanced neural implant that integrates Bayesian inference algorithms into the brain's decision-making processes. " +
         "This augmentation enhances the user's ability to assess probabilities, predict outcomes, and adapt strategies in real-time, " +
-        "making them exceptionally persuasive and confident in negotiations and social interactions. "+
+        "making them exceptionally persuasive and confident in negotiations and social interactions. " +
         "Awarded to those who discover the secrets of the labrynth.",
       charisma: 1.15,
       hacking: 1.1,
@@ -1893,10 +1893,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     [AugmentationName.TheSword]: {
       repCost: 1e4,
       moneyCost: 1e6,
-      info: "A cutting-edge neural implant that leverages Solomonoff induction to analyze and predict patterns with unparalleled precision. " +
+      info:
+        "A cutting-edge neural implant that leverages Solomonoff induction to analyze and predict patterns with unparalleled precision. " +
         "This augmentation enhances the user's ability to deduce optimal strategies and make compelling arguments, " +
         "turning every interaction into a calculated success. The technique is sometimes referred to as Solomonoff's Lightsaber, as it is a " +
-        "more powerful version of Occam's razor. "+
+        "more powerful version of Occam's razor. " +
         "The final augment awarded to those who discover the secrets of the labrynth.",
       charisma: 1.2,
       hacking: 1.16,
@@ -1992,10 +1993,11 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
-    [AugmentationName.Wit] : {
+    [AugmentationName.Wit]: {
       repCost: 9e4,
       moneyCost: 1e7,
-      info: "A connective brain implant that greatly increases the user's speech reaction time. " +
+      info:
+        "A connective brain implant that greatly increases the user's speech reaction time. " +
         "This allows the user to think faster and respond quicker in negotiations, and always have the last word.",
       charisma: 1.08,
       charisma_exp: 1.1,

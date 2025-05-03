@@ -78,7 +78,7 @@ import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { SpecialServers } from "../Server/data/SpecialServers";
-import { DWRoot } from "../DarkWeb/ui/DWRoot";
+import { DWRoot } from "../DarkNet/DWRoot";
 
 const htmlLocation = location;
 

@@ -86,7 +86,7 @@ import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
-import { getRewardFromCache } from "../DarkWeb/models/effects";
+import { getRewardFromCache } from "../DarkNet/models/effects";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,

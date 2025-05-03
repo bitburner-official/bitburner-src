@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "@mui/material";
-import { NetworkDisplayWrapper } from "./NetworkDisplayWrapper";
+import { NetworkDisplayWrapper } from "./ui/NetworkDisplayWrapper";
 
 export function DWRoot(): React.ReactElement {
   return (

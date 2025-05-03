@@ -1,32 +1,33 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import type { Darknet as NSDnet } from "@nsdefs";
 import { getServer, helpers } from "../Netscript/NetscriptHelpers";
-import { isDarknetServer, ResponseStatus } from "../DarkWeb/models/DnetServerData";
+import { isDarknetServer, ResponseStatus } from "../DarkNet/models/DnetServerData";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import {
   addCacheToServer,
   calculateAuthenticationTime,
   calculatePasswordAttemptChaGain,
   getRamBlockRemoved,
-  getRewardFromCache, getStasisLinkLimit,
+  getRewardFromCache,
+  getStasisLinkLimit,
   handleRamBlockClearedRewards,
   hasCacheFileExtension,
-} from "../DarkWeb/models/effects";
+} from "../DarkNet/models/effects";
 import { Player } from "@player";
 import type { FilePath } from "../Paths/FilePath";
 import { errorMessage } from "../Netscript/ErrorMessages";
 import { formatNumber } from "../ui/formatNumber";
 import { GetAllServers, GetServer } from "../Server/AllServers";
 import { BaseServer } from "../Server/BaseServer";
-import { capturePackets } from "../DarkWeb/models/packetSniffing";
-import { getBackdooredDarkwebServers, getServerSafely } from "../DarkWeb/controllers/DarknetNetworkMovement";
-import { addSessionToServer, DarknetState, getServerState } from "../DarkWeb/models/DarknetState";
+import { capturePackets } from "../DarkNet/models/packetSniffing";
+import { getBackdooredDarkwebServers, getServerSafely } from "../DarkNet/controllers/DarknetNetworkMovement";
+import { addSessionToServer, DarknetState, getServerState } from "../DarkNet/models/DarknetState";
 import { getStockFromSymbol } from "./StockMarket";
 import { CompletedProgramName } from "@enums";
-import { handleStormSeed } from "../DarkWeb/controllers/webstorm";
-import { getPasswordType, Minigames } from "../DarkWeb/controllers/DarknetServerGenerator";
-import { checkPassword, getAuthResult, isAuthenticated } from "../DarkWeb/models/authentication";
-import { getLabMaze, getSurroundingsVisualized, isLabyrinthServer } from "../DarkWeb/models/labyrinth";
+import { handleStormSeed } from "../DarkNet/controllers/webstorm";
+import { getPasswordType, Minigames } from "../DarkNet/controllers/DarknetServerGenerator";
+import { checkPassword, getAuthResult, isAuthenticated } from "../DarkNet/models/authentication";
+import { getLabMaze, getSurroundingsVisualized, isLabyrinthServer } from "../DarkNet/models/labyrinth";
 
 export type DarknetResult = { success: boolean; message: string };
 
@@ -214,7 +215,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
             return {
               success: success,
               message: result.response.message,
-            }
+            };
           }
 
           return {
@@ -358,7 +359,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           if (!neighborServer.darknetData) {
             continue;
           }
-          const entry = helpers.returnServerID(neighborServer, {returnByIP});
+          const entry = helpers.returnServerID(neighborServer, { returnByIP });
           if (entry) {
             out.push(entry);
           }
@@ -393,7 +394,6 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           () => `Beginning stasis ${shouldLink ? "" : "removal "}procedure on ${server.hostname}... (Est: 30s)`,
         );
         return helpers.netscriptDelay(ctx, 30000).then(() => {
-
           const stasisLinkCount = GetAllServers(true).filter((s) => s.darknetData?.hasStasisLink).length;
           const stasisLinkLimit = getStasisLinkLimit();
           if (shouldLink && stasisLinkCount >= stasisLinkLimit) {
@@ -427,7 +427,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         return !!server.darknetData?.hasStasisLink;
       },
     getStasisLinkLimit: (ctx: NetscriptContext) => (): number => {
-      const limit= getStasisLinkLimit();
+      const limit = getStasisLinkLimit();
       logger(ctx)(`Stasis link limit: ${limit}`);
       return limit;
     },

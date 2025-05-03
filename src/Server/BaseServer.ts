@@ -26,7 +26,7 @@ import { Settings } from "../Settings/Settings";
 import type { ScriptKey } from "../utils/helpers/scriptKey";
 import { assertObject } from "../utils/TypeAssertion";
 import { clampNumber } from "../utils/helpers/clampNumber";
-import { DnetServer } from "../DarkWeb/models/DnetServerData";
+import { DnetServer } from "../DarkNet/models/DnetServerData";
 
 interface IConstructorParams {
   adminRights?: boolean;

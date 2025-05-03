@@ -14,7 +14,7 @@ import { CompletedProgramName, FactionName } from "@enums";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { knowAboutBitverse } from "../BitNode/BitNodeUtils";
-import { handleStormSeed } from "../DarkWeb/controllers/webstorm";
+import { handleStormSeed } from "../DarkNet/controllers/webstorm";
 
 function requireHackingLevel(lvl: number) {
   return function () {

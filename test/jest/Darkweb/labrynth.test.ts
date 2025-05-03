@@ -2,7 +2,7 @@ import {
   generateMaze,
   getRandomOpenCoordinate,
   getSurroundingsVisualized,
-} from "../../../src/DarkWeb/models/labyrinth";
+} from "../../../src/DarkNet/models/labyrinth";
 
 describe("Labyrinth Tests", () => {
   it("should create a maze with the correct size", () => {

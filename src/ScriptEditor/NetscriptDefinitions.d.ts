@@ -4099,7 +4099,7 @@ type ServerAuthDetails = {
   passwordLength: number;
   /** The character set used in the password */
   passwordFormat: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode";
-}
+};
 
 /**
  * Response from attempting to scrape logs from a server

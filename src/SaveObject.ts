@@ -29,9 +29,9 @@ import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { isObject, assertObject } from "./utils/TypeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
 import { Reviver } from "./utils/GenericReviver";
-import { populateDarknet } from "./DarkWeb/controllers/DarknetNetworkGenerator";
-import { startDarknetMovement } from "./DarkWeb/models/DarknetState";
-import { hasDarknetAccess } from "./DarkWeb/models/effects";
+import { populateDarknet } from "./DarkNet/controllers/DarknetNetworkGenerator";
+import { startDarknetMovement } from "./DarkNet/models/DarknetState";
+import { hasDarknetAccess } from "./DarkNet/models/effects";
 
 /* SaveObject.js
  *  Defines the object used to save/load games

@@ -89,7 +89,8 @@ export const calculateAuthenticationTime = (
   const underleveledFactor = person.skills.charisma >= chaRequired ? 1 : 1.5 + chaRequired / person.skills.charisma;
   const hasBootsFactor = Player.hasAugmentation(AugmentationName.TheBoots) ? 0.8 : 1;
 
-  const time = (baseTime * skillFactor * noobFactor * backdoorFactor * underleveledFactor * hasBootsFactor) / threadsFactor;
+  const time =
+    (baseTime * skillFactor * noobFactor * backdoorFactor * underleveledFactor * hasBootsFactor) / threadsFactor;
 
   // Add extra time for timing attack server, per correct character
   const sharedChars =
@@ -115,7 +116,7 @@ export const hasCacheFileExtension = (path: string) => {
 };
 
 export const addCacheToServer = (server: BaseServer, filename?: string) => {
-  const prefix =  filename ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
+  const prefix = filename ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
   const cacheFilename = resolveFilePath(`${prefix}_${Math.random().toString().substring(2, 5)}.cache` as FilePath);
   if (cacheFilename) {
     server.caches.push(cacheFilename);
@@ -227,7 +228,7 @@ const getLabReward = (server: BaseServer, suppressToast = false) => {
   const labDetails = getLabyrinthDetails();
   if (!labDetails.augReward) {
     getRewardFromCache(server, suppressToast);
-   return "You have discovered all of the secrets of the lab.";
+    return "You have discovered all of the secrets of the lab.";
   }
   Player.queueAugmentation(labDetails.augReward);
   const result = `You have discovered a cache with the augmentation ${labDetails.augReward}!`;
@@ -373,4 +374,4 @@ export const getStasisLinkLimit = (): number => {
   const hasTheBrokenWings = Player.hasAugmentation(AugmentationName.TheBrokenWings);
   const hasTheHammer = Player.hasAugmentation(AugmentationName.TheHammer);
   return 1 + +hasTheBrokenWings + +hasTheHammer;
-}
+};

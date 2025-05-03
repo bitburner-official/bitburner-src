@@ -2,7 +2,7 @@ import { CityName, FactionName, CompanyName, LiteratureName } from "@enums";
 import { Literature } from "./Literature";
 import { Typography } from "@mui/material";
 import React from "react";
-import { defaultSettingsDictionary, dogNameDictionary } from "../DarkWeb/models/dictionaryData";
+import { defaultSettingsDictionary, dogNameDictionary } from "../DarkNet/models/dictionaryData";
 
 export const Literatures: Record<LiteratureName, Literature> = {
   [LiteratureName.HackersStartingHandbook]: new Literature({

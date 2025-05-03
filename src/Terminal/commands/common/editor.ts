@@ -8,7 +8,7 @@ import { getGlobbedFileMap } from "../../../Paths/GlobbedFiles";
 import { sendDeprecationNotice } from "./deprecation";
 import { getFileType, getFileTypeFeature } from "../../../utils/ScriptTransformer";
 import { hasContractExtension } from "../../../Paths/ContractFilePath";
-import { hasCacheFileExtension } from "../../../DarkWeb/models/effects";
+import { hasCacheFileExtension } from "../../../DarkNet/models/effects";
 
 // 2.3: Globbing implementation was removed from this file. Globbing will be reintroduced as broader functionality and integrated here.
 

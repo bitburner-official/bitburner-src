@@ -28,7 +28,7 @@ const MULTI_MAZE_THRESHOLD = 5;
 export const generateMaze = (width: number = 41, height: number = 29): string[] => {
   // Make a simple maze below the threshold
   if (width < MULTI_MAZE_THRESHOLD) {
-    return mazeMaker(width, height).map((row => row.join("")));
+    return mazeMaker(width, height).map((row) => row.join(""));
   }
 
   // Stitch together 4 mazes for more interesting geometry
@@ -46,29 +46,29 @@ export const generateMaze = (width: number = 41, height: number = 29): string[] 
   const resultingMazeBottomHalf = maze3.map((row, y) => row.slice(0, -1).concat(maze4[y]));
   const resultingMaze = resultingMazeTopHalf.slice(0, -1).concat(resultingMazeBottomHalf);
 
-  const subWidth = maze1[0].length -1;
-  const subHeight = maze1.length -1;
+  const subWidth = maze1[0].length - 1;
+  const subHeight = maze1.length - 1;
 
   // Add gaps in the walls between the mazes
-  const randomTopGap = Math.floor(Math.random() * halfWidth / 4) * 2 + 1;
+  const randomTopGap = Math.floor((Math.random() * halfWidth) / 4) * 2 + 1;
   resultingMaze[randomTopGap][subWidth] = "%";
 
-  const randomLeftGap = Math.floor(Math.random() * halfHeight / 4) * 2 + 1;
+  const randomLeftGap = Math.floor((Math.random() * halfHeight) / 4) * 2 + 1;
   resultingMaze[subHeight][randomLeftGap] = "%";
 
-  const randomBottomGap = Math.floor(Math.random() * halfWidth / 4) * 2 + 1;
-  resultingMaze[height - randomBottomGap -1][subWidth] = "%";
+  const randomBottomGap = Math.floor((Math.random() * halfWidth) / 4) * 2 + 1;
+  resultingMaze[height - randomBottomGap - 1][subWidth] = "%";
 
-  const randomRightGap = Math.floor(Math.random() * halfHeight / 4) * 2 + 1;
-  resultingMaze[subHeight][width - randomRightGap -1] = "%";
+  const randomRightGap = Math.floor((Math.random() * halfHeight) / 4) * 2 + 1;
+  resultingMaze[subHeight][width - randomRightGap - 1] = "%";
 
-  return resultingMaze.map((row => row.join("")));
+  return resultingMaze.map((row) => row.join(""));
 };
 
 const mazeMaker = (setWidth: number, setHeight: number): string[][] => {
   const width = setWidth % 2 === 0 ? setWidth + 1 : setWidth;
   const height = setHeight % 2 === 0 ? setHeight + 1 : setHeight;
-  const maze: string[][] = Array.from({ length: height}, () => Array(width).fill(WALL) as string[]);
+  const maze: string[][] = Array.from({ length: height }, () => Array(width).fill(WALL) as string[]);
   const stack: [number, number][] = [];
   stack.push([1, 1]);
   const directions = [NORTH, EAST, SOUTH, WEST];
@@ -268,7 +268,7 @@ type labDetails = {
   mazeWidth: number;
   mazeHeight: number;
   manual: boolean;
-}
+};
 
 const labData: Record<string, labDetails> = {
   [SpecialServers.NormalLab]: {
@@ -296,7 +296,7 @@ const labData: Record<string, labDetails> = {
     augReward: AugmentationName.TheHammer,
     mazeWidth: 40,
     mazeHeight: 26,
-    manual: true,
+    manual: false,
   },
   [SpecialServers.UberLab]: {
     name: SpecialServers.UberLab,
@@ -333,28 +333,28 @@ export const getLabMaze = (): string[] => {
     DarknetState.labyrinth = generateMaze(mazeWidth, mazeHeight);
   }
   return DarknetState.labyrinth;
-}
+};
 
 export const getLabyrinthServerNames = () => {
   const labHostnames: string[] = Object.keys(labData);
   return labHostnames;
-}
+};
 
 export const getLabyrinthChaiRequirement = (name: string) => {
   return labData[name]?.cha ?? 0;
-}
+};
 
 export const getNetDepth = () => {
   const labDetails = getLabyrinthDetails();
   return labDetails.depth;
-}
+};
 
 export const isLabyrinthServer = (hostName: string) => {
   const labHostnames: string[] = getLabyrinthServerNames();
   return labHostnames.includes(hostName);
-}
+};
 
-export const getLabyrinthDetails = () : {
+export const getLabyrinthDetails = (): {
   lab: BaseServer | null;
   augReward: AugmentationName | null;
   depth: number;
@@ -391,7 +391,7 @@ export const getLabyrinthDetails = () : {
       mazeHeight: 10,
       augReward: null,
       cha: 0,
-      name: ""
+      name: "",
     };
   }
 
@@ -435,4 +435,4 @@ export const getLabyrinthDetails = () : {
     cha: labDetails.cha,
     name: labDetails.name,
   };
-}
+};

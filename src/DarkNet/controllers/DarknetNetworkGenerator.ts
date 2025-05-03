@@ -27,7 +27,8 @@ import { Terminal } from "../../Terminal";
 import {
   getLabyrinthChaiRequirement,
   getLabyrinthDetails,
-  getLabyrinthServerNames, getNetDepth,
+  getLabyrinthServerNames,
+  getNetDepth,
   isLabyrinthServer,
 } from "../models/labyrinth";
 
@@ -205,7 +206,7 @@ export const addLabyrinth = () => {
       ...params,
       requiredHackingSkill: cha,
       hostname: hostname,
-    }
+    };
     const server = new Server(fullParams);
     AddToAllServers(server);
   }
