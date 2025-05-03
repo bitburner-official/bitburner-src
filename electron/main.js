@@ -1,6 +1,6 @@
 /* eslint-disable no-process-exit */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, dialog, BrowserWindow, ipcMain, protocol } = require("electron");
+const { app, dialog, BrowserWindow, ipcMain, protocol, net } = require("electron");
 
 const log = require("electron-log");
 log.catchErrors();
@@ -19,7 +19,7 @@ app.on("window-all-closed", () => {
   process.exit(0);
 });
 
-const greenworks = require("./greenworks");
+require("./steamworksUtils");
 const gameWindow = require("./gameWindow");
 const achievements = require("./achievements");
 const utils = require("./utils");
@@ -36,23 +36,9 @@ log.transports.console.level = store.get("console-log-level", "debug");
 
 log.info(`Started app: ${JSON.stringify(process.argv)}`);
 
-// We want to fail gracefully if we cannot connect to Steam
-try {
-  if (greenworks && greenworks.init()) {
-    log.info("Steam API has been initialized.");
-  } else {
-    const error = "Steam API has failed to initialize.";
-    log.warn(error);
-    global.greenworksError = error;
-  }
-} catch (ex) {
-  log.warn(ex.message);
-  global.greenworksError = ex.message;
-}
-
 let isRestoreDisabled = false;
 
-function setStopProcessHandler(app, window) {
+function setStopProcessHandler(window) {
   const closingWindowHandler = async (e) => {
     // We need to prevent the default closing event to add custom logic
     e.preventDefault();
@@ -115,7 +101,7 @@ function setStopProcessHandler(app, window) {
     }
   };
 
-  const receivedDisableRestoreHandler = async (event, arg) => {
+  const receivedDisableRestoreHandler = (event, arg) => {
     if (!window) return log.warn("Window was undefined in disable import handler");
 
     log.debug(`Disabling auto-restore for ${arg.duration}ms.`);
@@ -126,7 +112,7 @@ function setStopProcessHandler(app, window) {
     }, arg.duration);
   };
 
-  const receivedGameSavedHandler = async (event, arg) => {
+  const receivedGameSavedHandler = (event, arg) => {
     if (!window) return log.warn("Window was undefined in game saved handler");
 
     const { save, ...other } = arg;
@@ -196,7 +182,7 @@ global.app_handlers = {
 
 app.on("ready", async () => {
   // Intercept file protocol requests and only let valid requests through
-  protocol.interceptFileProtocol("file", ({ url, method }, callback) => {
+  protocol.handle("file", ({ url, method }) => {
     let filePath;
     let realPath;
     let relativePath;
@@ -211,8 +197,13 @@ app.on("ready", async () => {
       relativePath = path.relative(__dirname, realPath);
       // Only allow access to files in "dist" folder or html files in the same directory
       if (method === "GET" && (relativePath.startsWith("dist") || relativePath.match(/^[a-zA-Z-_]*\.html/))) {
-        callback(realPath);
-        return;
+        /**
+         * By default, requests made by net.fetch go through custom protocol handlers, so we have to explicitly tell it
+         * to bypass those handles; otherwise, it creates an infinite loop.
+         *
+         * Ref: https://github.com/electron/electron/issues/39402
+         */
+        return net.fetch(realPath, { bypassCustomProtocolHandlers: true });
       }
     } catch (error) {
       log.error(error);
@@ -221,7 +212,7 @@ app.on("ready", async () => {
       `Tried to access a page outside the sandbox. Url: ${url}. FilePath: ${filePath}. RealPath: ${realPath}.` +
         ` __dirname: ${__dirname}. RelativePath: ${relativePath}. Method: ${method}.`,
     );
-    callback({ statusCode: 403 });
+    return new Response(null, { status: 403 });
   });
 
   log.info("Application is ready!");
@@ -229,15 +220,15 @@ app.on("ready", async () => {
     const window = new BrowserWindow({ show: false });
     await window.loadFile("export.html");
     window.show();
-    setStopProcessHandler(app, window);
+    setStopProcessHandler(window);
     await utils.exportSave(window);
   } else {
     const window = await startWindow(process.argv.includes("--no-scripts"));
-    if (global.greenworksError) {
+    if (global.steamworksError) {
       await dialog.showMessageBox(window, {
         title: "Bitburner",
         message: "Could not connect to Steam",
-        detail: `${global.greenworksError}\n\nYou won't be able to receive achievements until this is resolved and you restart the game.`,
+        detail: `${global.steamworksError.message}\n\nYou won't be able to receive achievements until this is resolved and you restart the game.`,
         type: "warning",
         buttons: ["OK"],
       });

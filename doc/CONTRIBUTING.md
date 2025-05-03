@@ -169,7 +169,7 @@ Saving a file will reload the game automatically.
 
 ### How to build the electron app
 
-Tested on Node v16.13.1 (LTS) on Windows.
+Tested on Node v20.11.1 (LTS) on Windows.
 These steps only work in a Bash-like environment, like MinGW for Windows.
 
 ```sh
@@ -179,10 +179,6 @@ $ npm run build:dev
 
 # Use electron-packager to build the app to the .build/ folder.
 $ npm run electron
-
-# When launching the .exe directly, you'll need the steam_appid.txt file in the root.
-# If not using Windows, change this line accordingly.
-$ cp .build/bitburner-win32-x64/resources/app/steam_appid.txt .build/bitburner-win32-x64/steam_appid.txt
 
 # And run the game...
 $ .build/bitburner-win32-x64/bitburner.exe
