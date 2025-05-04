@@ -7,21 +7,22 @@ export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.To
   [CodingContractName.TotalPrimesInRange]: {
     desc: (data: number[]): string => {
       return [
-        "You are given two numbers. ",
-        `List the prime numbers between them (including those given)\n`,
-        `${data}\n`,
+        `You are given two random non-negative integers: ${data}.\n`,
+        `List the prime numbers between them (including the numbers given).\n`,
+        `For example, given the range of [0,20], the primes in between are [2,3,5,7,11,13,17,19].`,
       ].join(" ");
     },
     difficulty: 2,
     generate: (): number[] => {
-      //low end has a large range to discourage storage of a pre-generated array of primes
-      const low = getRandomIntInclusive(1, 1e5);
-      //high end has a minimum distance from low bound to make entry-by entry prime-checking possible but not ideal.
-      const high = low + getRandomIntInclusive(1e3, 1e5);
+      //The total range of values across all contracts, and minimum range for each contract is intended to make a pre-generated array of primes impractical,
+      //and naive approaches for checking every value for primality slower but possible if well written.
+      const low = getRandomIntInclusive(0, 5e6);
+      const high = low + getRandomIntInclusive(1e5, 1e6);
       return [low, high];
     },
     solver: (data, answer) => {
-      const primes = segmentedSieve(data[0], data[1]);
+      //The result is converted to a set since set.has() is much faster than array.includes();
+      const primes = new Set(segmentedSieve(data[0], data[1]));
       return answer.length === primes.size && answer.every((a) => primes.has(a));
     },
     convertAnswer: (ans) => {
