@@ -6,7 +6,7 @@ Note: You should **NOT** use the option "Save and restore window geometry for ea
 
 Steps:
 
-- Clone `$PROJECT_DIR/assets/Steam/achievements/templates/template.svg`.
+- Clone `$PROJECT_DIR/assets/Steam/achievements/template.svg`.
 - Edit the text.
 - Object -> Align and Distribute ...
   - Relative to: Chose "Page".
