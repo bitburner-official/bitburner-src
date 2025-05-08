@@ -132,8 +132,8 @@ export function purchaseAugmentation(faction: Faction, augmentation: Augmentatio
 }
 
 export function processPassiveFactionRepGain(numCycles: number): void {
-  // Passive gain is disabled in BN2.
-  if (Player.bitNodeN === 2) {
+  // Passive gain is disabled in some BitNodes (e.g., BN2).
+  if (currentNodeMults.FactionPassiveRepGain === 0) {
     return;
   }
   for (const name of getRecordKeys(Factions)) {
