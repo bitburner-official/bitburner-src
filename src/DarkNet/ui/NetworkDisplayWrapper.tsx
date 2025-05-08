@@ -24,6 +24,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [zoomIndex, setZoomIndex] = useState(7);
   const [netDisplayDepth, setNetDisplayDepth] = useState<number>(1);
+  const [visibilityMargin, setVisibilityMargin] = useState<number>(3);
   const zoomOptions = [0.12, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5];
   const { classes } = dnetStyles({});
 
@@ -36,15 +37,15 @@ export function NetworkDisplayWrapper(): React.ReactElement {
           }
           return deepest;
         }, 1);
-        setNetDisplayDepth(deepestServer + 3);
+        setNetDisplayDepth(deepestServer + visibilityMargin);
 
-        rerender();
+        //rerender();
         drawOnCanvas(canvas.current);
       }
     });
     canvas.current && drawOnCanvas(canvas.current);
     draggableBackground?.current?.addEventListener("wheel", (e) => e.preventDefault());
-  }, [rerender]);
+  }, [rerender, visibilityMargin]);
 
   useEffect(() => {
     DarknetEvents.emit();
@@ -212,6 +213,13 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         >
           Generate New Web (for testing)
         </Button>
+        <Button
+          onClick={() => {
+            setVisibilityMargin(visibilityMargin === 3 ? 99 : 3);
+            DarknetEvents.emit();
+          }}
+          className={classes.button}
+        >Toggle Show Full Network</Button>
         <Button onClick={() => void WEBSTORM()} variant={"contained"} className={classes.button}>
           START WEBSTORM (for testing)
         </Button>

@@ -9,7 +9,7 @@ Returns the server's authentication protocol details.
 **Signature:**
 
 ```typescript
-getServerAuthDetails(host?: string): ServerAuthDetails | null;
+getServerAuthDetails(host?: string): ServerAuthDetails;
 ```
 
 ## Parameters
@@ -20,9 +20,9 @@ getServerAuthDetails(host?: string): ServerAuthDetails | null;
 
 **Returns:**
 
-[ServerAuthDetails](./bitburner.serverauthdetails.md) \| null
+[ServerAuthDetails](./bitburner.serverauthdetails.md)
 
-An object containing the server's authentication protocol details, or null if the server is not found. modelId: The model ID of the server. Similar models have similar vulnerabilities. passwordHint: The password hint for the server. data: The data associated with the password hint (if any). logTrafficInterval: The interval at which the server periodically adds to its logs, in seconds.
+An object containing the server's authentication protocol details. isOnline: True if the server is still online. isConnected: True if the server is directly connected to the current server. modelId: The model ID of the server. Similar models have similar vulnerabilities. passwordHint: The password hint for the server. data: The data associated with the password hint (if any). logTrafficInterval: The interval at which the server periodically adds to its logs, in seconds.
 
 ## Remarks
 

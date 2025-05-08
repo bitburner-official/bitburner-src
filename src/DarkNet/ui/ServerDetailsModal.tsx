@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Modal } from "../../ui/React/Modal";
-import { Container, Card, SvgIcon, Typography } from "@mui/material";
+import { Container, Card, SvgIcon, Typography, Tooltip } from "@mui/material";
 import { getIcon, Icon } from "../controllers/ServerIcon";
 import { DarknetEvents, getServerState } from "../models/DarknetState";
 import { BaseServer } from "../../Server/BaseServer";
@@ -9,7 +9,7 @@ import { dnetStyles } from "./dnetStyles";
 import { populateServerLogsWithNoise } from "../models/packetSniffing";
 import { getLabyrinthDetails, isLabyrinthServer } from "../models/labyrinth";
 import { PasswordPrompt } from "./PasswordPrompt";
-import { copyToClipboard, decolorJsonProperties } from "./uiUtilities";
+import { copyToClipboard, decolorJsonProperties, formatToMaxDigits } from "./uiUtilities";
 import { useRerender } from "../../ui/React/hooks";
 
 export type DWPasswordPromptModalProps = {
@@ -18,7 +18,7 @@ export type DWPasswordPromptModalProps = {
   server: BaseServer;
 };
 
-export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptModalProps): React.ReactElement => {
+export const ServerDetailsModal = ({ open, onClose, server }: DWPasswordPromptModalProps): React.ReactElement => {
   const rerender = useRerender();
   const icon = getIcon(server.darknetData?.icon ?? Icon.Terminal);
   const { classes } = dnetStyles({});
@@ -32,6 +32,11 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
   const isLabServer = isLabyrinthServer(server.hostname);
   const canEnterLabManually = getLabyrinthDetails().manual;
   const recentLogs = serverState.serverLogs?.slice(0, 5) ?? [];
+  const ramBlock = server.darknetData?.ramBlock ?? 0;
+  const blockedRamString = ramBlock ? formatToMaxDigits(ramBlock, 1) + "+" : "";
+  const usedRamString = formatToMaxDigits(server.ramUsed - ramBlock, 1);
+  const serverRamString = `ram in use: ${blockedRamString}${usedRamString}/${server.maxRam} GB`
+
   const logContent = recentLogs.map((log, index) => (
     <pre
       key={index}
@@ -70,8 +75,13 @@ export const PasswordPromptModal = ({ open, onClose, server }: DWPasswordPromptM
               <Typography color="secondary">
                 {server.ip} cha:{server.requiredHackingSkill}
               </Typography>
+              <Tooltip title={`Ram blocked by server owner: ${ramBlock} GB. Ram in use by scripts: ${server.ramUsed - ramBlock} GB.`}>
+                <Typography color="secondary">
+                  {serverRamString}
+                </Typography>
+              </Tooltip>
               <Typography color="secondary">
-                ram:{server.maxRam}GB model:{server.darknetData?.minigameType}
+                model:{server.darknetData?.minigameType}
               </Typography>
               <br />
               <div style={{ maxWidth: "300px" }}>

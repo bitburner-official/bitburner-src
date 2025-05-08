@@ -16,7 +16,7 @@ import {
 } from "./dictionaryData";
 import { hintLiterature } from "./hintNotes";
 import { TextFilePath } from "../../Paths/TextFilePath";
-import { GetServer } from "../../Server/AllServers";
+import { GetAllServers, GetServer } from "../../Server/AllServers";
 import {
   getAllAdjacentNeighbors,
   getBackdooredDarkwebServers,
@@ -30,6 +30,7 @@ import { initStockMarket } from "../../StockMarket/StockMarket";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { getSharedChars } from "./authentication";
 import { getLabyrinthDetails, isLabyrinthServer } from "./labyrinth";
+import { Server } from "../../Server/Server";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;
@@ -375,3 +376,10 @@ export const getStasisLinkLimit = (): number => {
   const hasTheHammer = Player.hasAugmentation(AugmentationName.TheHammer);
   return 1 + +hasTheBrokenWings + +hasTheHammer;
 };
+
+export const applyRamBlocks = () => {
+  const servers = GetAllServers(true).filter((server) => server.darknetData && server.darknetData.ramBlock);
+  for (const server of servers) {
+    server.updateRamUsed(server.darknetData?.ramBlock ?? 0);
+  }
+}

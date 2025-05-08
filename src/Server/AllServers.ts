@@ -16,7 +16,7 @@ import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
 import { populateDarknet } from "../DarkNet/controllers/DarknetNetworkGenerator";
 import { isDarknetServer } from "../DarkNet/models/DnetServerData";
-import { hasDarknetAccess } from "../DarkNet/models/effects";
+import { applyRamBlocks, hasDarknetAccess } from "../DarkNet/models/effects";
 import { getTorRouter } from "../Locations/ui/TorButton";
 
 /**
@@ -244,6 +244,9 @@ export function loadAllServers(saveString: string): void {
   }
   // We validated the data above, so it's safe to typecast here.
   AllServers = allServersData as typeof AllServers;
+
+  // Apply blocked ram for darknet servers
+  applyRamBlocks();
 }
 
 export function saveAllServers(): string {

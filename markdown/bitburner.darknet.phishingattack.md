@@ -23,3 +23,7 @@ phishingAttack(): Promise<Result>;
 
 Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;
 
+## Remarks
+
+RAM cost: 2 GB
+

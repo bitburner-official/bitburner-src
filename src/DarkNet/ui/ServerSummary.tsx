@@ -4,8 +4,9 @@ import { BaseServer } from "../../Server/BaseServer";
 import { dnetStyles } from "./dnetStyles";
 import { Code, Description, Inventory2, LockPerson, Terminal, Bolt, DoorBackSharp } from "@mui/icons-material";
 import { RunningScript } from "../../Script/RunningScript";
-import { formatNumber, formatRam } from "../../ui/formatNumber";
+import { formatNumber } from "../../ui/formatNumber";
 import { CompletedProgramName } from "@enums";
+import { formatToMaxDigits } from "./uiUtilities";
 
 export type ServerSummaryProps = {
   server: BaseServer;
@@ -32,7 +33,7 @@ export function ServerSummary({ server, enableAuth, showDetails = false }: Serve
     .reduce((a, b) => a + b, 0);
   const hasStormSeed = server.programs.includes(CompletedProgramName.stormSeed);
   const hasBackdoor = server.backdoorInstalled && !server.darknetData?.hasStasisLink;
-  const ramBlockedDetails = formatRam(server.darknetData?.ramBlock ?? 0);
+  const ramBlockedDetails = formatToMaxDigits(server.darknetData?.ramBlock ?? 0, 2) + "GB";
   const ramBlocked = showDetails ? ramBlockedDetails : formatNumber(server.darknetData?.ramBlock ?? 0, 0);
 
   const components = [];

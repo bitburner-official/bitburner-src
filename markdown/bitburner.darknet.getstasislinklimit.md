@@ -15,3 +15,7 @@ getStasisLinkLimit(): number;
 
 number
 
+## Remarks
+
+RAM cost: 0 GB
+

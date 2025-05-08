@@ -10,11 +10,13 @@ Details about a server's authentication schema
 
 ```typescript
 type ServerAuthDetails = {
+  isOnline: boolean;
+  isConnected: boolean;
   modelId: string;
   passwordHint: string;
   data: string;
   logTrafficInterval: number;
   passwordLength: number;
   passwordFormat: "numeric" | "alphabetic" | "alphanumeric" | "ASCII" | "unicode";
-}
+};
 ```

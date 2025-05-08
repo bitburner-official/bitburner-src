@@ -303,11 +303,15 @@ export const getYesn_tServer = (difficulty: number, x: number, y: number): Serve
 
 export const getBinaryEncodedFeedbackServer = (difficulty: number, x: number, y: number): Server => {
   const password = getPassword(2 + difficulty / 5, true, difficulty > 8, false, false);
+  const binaryEncodedPassword = password
+    .split("")
+    .map((char) => char.charCodeAt(0).toString(2).padStart(8, "0"))
+    .join(" ");
   return DnetServerBuilder({
     icon: getRandomIcon(),
     minigameType: Minigames.BinaryEncodedFeedback,
     password,
-    staticPasswordHint: "01100111 01101001 01110100 00100000 01100111 01101111 01101111 01100100",
+    staticPasswordHint: binaryEncodedPassword,
     difficulty,
     x,
     y,

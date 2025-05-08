@@ -113,20 +113,22 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
           <Container disableGutters>
             <div style={{ color: "white" }}>
               <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
-                <span style={{ color: "grey" }}>hint:</span> {server.darknetData?.staticPasswordHint}
+                <span className={classes.serverDetailsText}>hint:</span> {server.darknetData?.staticPasswordHint}
                 <br />
                 {server.darknetData?.passwordHintData ? (
                   <>
-                    <span style={{ color: "grey" }}>data:</span>
+                    <span className={classes.serverDetailsText}>data:</span>
                     {server.darknetData?.passwordHintData}
                     <br />
                   </>
                 ) : (
                   ""
                 )}
-                <span style={{ color: "grey" }}>length:</span> {server.darknetData?.password?.length}
+                <span className={classes.serverDetailsText}>length:</span> {server.darknetData?.password?.length}
                 <br />
-                <span style={{ color: "grey" }}>format:</span> {getPasswordType(server.darknetData?.password ?? "")}
+                <span className={classes.serverDetailsText}>format:</span> {getPasswordType(server.darknetData?.password ?? "")}
+                <br />
+                <span className={classes.serverDetailsText}>model:</span> {server.darknetData?.minigameType ?? ""}
                 <br />
               </pre>
             </div>

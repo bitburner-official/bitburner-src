@@ -120,6 +120,28 @@ Design document and workspace
 
 ## patches:
 
+## Fixes and polish patch
+
+- added `getStasisLinkedServers` which returns a list of server hostnames (or IPs) that currently have stasis links. (replaced hasStasisLink)
+- Prevent completely ram-blocked servers until deeper in net; added some tiny ram blocks in early servers
+- adjusted getServer to include owner allocated ram, but fewer details from getServerAuthDetails
+- added `isConnected` and `isOnline` to data returned by getServerAuthDetails. getServerAuthDetails no longer returns `null`
+- improved max ram / used ram / blocked ram display & rounding
+
+- heartbleed no longer can throw errors. instead returns a `Result & {logs: string[]}` and will let you know if a server moves
+- prevented errors that can be thrown by probe and a couple other dnet methods
+
+- Rebalanced cha requirements on servers & labs to scale into lab better
+- Improved descriptions of lab augs to include stat bonuses
+
+- modelID is now displayed on password status modal
+- fixed binary encoded password puzzle
+
+- Started on basic BN15 groundwork (shell functionality is in place, mostly placeholders currently. No SF's or BN mults yet)
+- The Red Pill only can be gained from lab in BN15, it's not available through Daedalus
+
+- Added debug button to show full darknet (slightly laggy at the moment, but it works mostly)
+
 ## Labyrinth and augment improvement patch
 
 - Several factions now offer new augments that increase charisma and/or cha xx (including one with a shoutout to Denis in its flavor text for all his help testing.) This should help player progress in reaching charisma requirements. Many of these are not found in hacking factions.
@@ -247,19 +269,25 @@ Coming soon:
 
 ## TODO:
 
-Re: allocated ram and auth details, I think there's something to be said about what dnet.getServer should contain and what not.
-Since getOwnerAllocatedRam is free I'd have expected it to appear in getServer too, along with authDetails.
-That said, I didn't expect getServer to have so much free data.
-(for example I'd be okay with it containing the modelId for auth, but not the actual hint).
+- prevent "NS instance has already been killed" error ?
+- lab placement is wrong?
+
+- BN 15 stuff?
+- hint note for TRP in lab
+- BN description
+- Source files
+- BN Mults for BN15
+- new BN mults for darknet
+
+
+- improve phishing documentation
+- improve phishing somehow else?
 
 labels for icons in detail view on password modal?
 
 - lab cha requirement (in UI too)
 - lab api
 
-- ui methods for setting server description, colors, icons etc?
-
-Make network wider at deeper parts?
 
 - webstorm visual indicator
 - screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
@@ -297,32 +325,17 @@ Require resilient scripts. Running scripts can be terminated randomly.
 Don't rely on foothold. Even foothold can be wiped!
 Git gud.
 
-We need to give the player a way to set up a foothold, at least in low/mid layers. Stasis link looks like a good idea. Backdoor should be "nerfed" heavily. For example, more backdoor = more risk (e.g., server may go offline immediately, may trigger a "scan" on all servers in the same clique, each scanned+backdoored server may go offline, negatively affect volatile servers). Each clique may have a different strategy (e.g., different threshold of backdoor, chance of going offline, performing scan).
-
 - a macguffin you have to get to be able to access the darkweb ('darkscape navigator'?)
 
-Required number of open ports for STASIS: 5
-change analyze output some?
-
 have a clear immediate reward from tier 1 that isn't just cha XP
-
-- add Stasis Link mechanic
-
-  - Cap can be raised somehow
-
-- mini version of darknet on pre- bn15?
 
 - start with crash course?
 
 - more hint notes
 
 - ub3r_l4byr1nth server
-
-  - special cache: gives augments
-  - can give TRP
   - treasure chests in maze?
   - traps or monsters in maze?
-  - grue?
 
 - make darkwebserver extend baseServer
 
@@ -342,21 +355,8 @@ have a clear immediate reward from tier 1 that isn't just cha XP
   - lv 4: It's hard to sustain this many backdoors without a lot of upkeep due to them going offline or resetting. More connection severing on the darknet. player starts taking damage sometimes. creepypasta appears on player terminal, signed by the darknet.
   - lv 5: ports and file writes and other ns methods sometimes fail silently, or return garbage data. hard mode that is effectively opt-in
 
-- Attempt to make connection?
-
-  - chance to put current server offline?
-  - chance to move the target server
-  - only nearby servers are valid
-
-- New augments?
-
-  - Some given by lab
-  - Some in various factions
-  - Give cha? what else?
 
 ## TODO later:
-
-stasis link limit upgrade?
 
 - change mutations to be on game cycle loop
 
@@ -366,16 +366,22 @@ stasis link limit upgrade?
 
 - achievements
 
-- reward that scales password attempt speed?
-- reward that speeds up packet sniffing speed?
-
 - bonus time?
-
-- slow down net mutations
 
 - Darkweb server cha difficulty balance?
 
 - Bitnode multipliers
+
+## Post MVP:
+
+- ui methods for setting server description, colors, icons etc?
+
+- Make network wider at deeper parts?
+
+- Attempt to make connection?
+  - chance to put current server offline?
+  - chance to move the target server
+  - only nearby servers are valid
 
 ## Community feedback:
 

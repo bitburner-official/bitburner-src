@@ -534,6 +534,30 @@ export function initBitNodes() {
       </>
     ),
   );
+  BitNodes.BitNode15 = new BitNode(
+    15,
+    2,
+    "The Secrets of the Dark Net",
+    "", // TODO
+    (
+      <>
+        <br />
+        <br />
+        Destroying this BitNode will give you Source-File 15, or if you already have this Source-File, it will upgrade
+        its level up to a maximum of 3.
+      </>
+    ),
+    (
+      <>
+        This Source-File grants the following benefits:
+        <ul>
+          <li>Level 1: </li>
+          <li>Level 2: </li>
+          <li>Level 3: </li>
+        </ul>
+      </>
+    ),
+  );
 }
 
 export const defaultMultipliers = new BitNodeMultipliers();
@@ -1041,6 +1065,10 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         WorldDaemonDifficulty: 5,
       });
+    }
+
+    case 15: {
+      return new BitNodeMultipliers({}); // TODO
     }
     default: {
       throw new Error("Invalid BitNodeN");

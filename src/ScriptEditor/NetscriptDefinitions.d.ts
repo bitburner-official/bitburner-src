@@ -4060,20 +4060,14 @@ type DarknetServer = {
   ramUsed: number;
   /** The total amount of RAM on the server. */
   maxRam: number;
-  /** The name of the organization that owns the server. */
-  organizationName: string;
-  /** Whether the server was purchased by the player. */
-  purchasedByPlayer: boolean;
+  /** The amount of RAM allocated to the owner of the server. */
+  ownerAllocatedRam: number;
   /** Whether the server has a backdoor installed. */
   backdoorInstalled: boolean;
   /** The amount of money available on the server. */
   moneyAvailable: number;
   /** The maximum amount of money on the server. */
   moneyMax: number;
-  /** An example password hint for the server. */
-  passwordHintExample: string;
-  /** The password data for the example hint. */
-  passwordDataExample: string;
   /** The cha level required to use heartBleed() on the server. */
   charismaLevel: number;
   /** The depth into the darknet of the server. */
@@ -4087,6 +4081,10 @@ type DarknetServer = {
  * @public
  */
 type ServerAuthDetails = {
+  /** True if the server is still online. */
+  isOnline: boolean;
+  /** True if the server is directly connected to the current server */
+  isConnected: boolean;
   /** The model ID of the server. Similar models share vulnerabilities. */
   modelId: string;
   /** Static password reminder text set for this server. */
@@ -4194,13 +4192,13 @@ export interface Darknet {
    *    logsToCapture: the number of log lines to remove from the server, up to a max of 8. Default is 1.
    *    additionalMsec: the number of additional milliseconds to add to the run time of the heartbleed request. Default is 0.
    */
-  heartbleed(hostname: string, options?: HeartbleedOptions): Promise<string[]>;
+  heartbleed(hostname: string, options?: HeartbleedOptions): Promise<Result & {logs: string[]}>;
 
   /**
    * Opens a .cache file on the current server to acquire its valuable contents.
    *
    * @remarks
-   * RAM cost: 4 GB
+   * RAM cost: 2 GB
    *
    * @param filename - the cache file to open.
    * @param suppressToast - optional. If true, suppresses the toast notification that appears when opening a cache file.
@@ -4236,20 +4234,23 @@ export interface Darknet {
   setStasisLink(shouldLink: boolean): Promise<Result>;
 
   /**
-   * Returns whether the server has a stasis link applied to it.
-   *
-   * @remarks
-   * RAM cost: 0.1 GB
-   *
-   * @param hostname - the hostname of the server to check.
-   */
-  hasStasisLink(hostname: string): boolean;
-
-  /**
    * Returns the maximum number of stasis links that can be applied globally, based on the player's current status.
    * Stasis link limit can be increased by finding special augmentations in the deep darknet.
+   *
+   * @remarks
+   * RAM cost: 0 GB
    */
   getStasisLinkLimit(): number;
+
+  /**
+   * Returns the hostnames of servers that have a stasis link applied.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param returnByIP - Optional. If true, returns IPs instead of hostnames.
+   */
+  getStasisLinkedServers(returnByIP?: boolean): string[];
 
   /**
    * Returns a server object for the given server. Defaults to the running script's server if host is not specified.
@@ -4269,13 +4270,15 @@ export interface Darknet {
    * RAM cost: 0 GB
    *
    * @param host - Hostname of the server to analyze. Defaults to the running script's server if not specified.
-   * @returns An object containing the server's authentication protocol details, or null if the server is not found.
+   * @returns An object containing the server's authentication protocol details.
+   *     isOnline: True if the server is still online.
+   *     isConnected: True if the server is directly connected to the current server.
    *     modelId: The model ID of the server. Similar models have similar vulnerabilities.
    *     passwordHint: The password hint for the server.
    *     data: The data associated with the password hint (if any).
    *     logTrafficInterval: The interval at which the server periodically adds to its logs, in seconds.
    */
-  getServerAuthDetails(host?: string): ServerAuthDetails | null;
+  getServerAuthDetails(host?: string): ServerAuthDetails;
 
   /**
    * Spends some time listening for unsecured network traffic on an adjacent server. If you are lucky, the server password may be somewhere in all the noise.
@@ -4368,6 +4371,9 @@ export interface Darknet {
    * This can only be run from scripts on darknet servers.
    *
    * The amount of money lifted scales with the number of threads used, if successful.
+   *
+   * @remarks
+   * RAM cost: 2 GB
    */
   phishingAttack(): Promise<Result>;
 }

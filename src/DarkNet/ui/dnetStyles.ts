@@ -126,4 +126,9 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
   goldBorder: {
     borderColor: "gold",
   },
+  serverDetailsText: {
+    marginLeft: "2em",
+    textIndent: "-2em",
+    color: "grey",
+  }
 }));

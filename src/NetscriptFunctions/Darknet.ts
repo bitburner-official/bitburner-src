@@ -1,5 +1,5 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
-import type { Darknet as NSDnet } from "@nsdefs";
+import type { Darknet as NSDnet, ServerAuthDetails } from "@nsdefs";
 import { getServer, helpers } from "../Netscript/NetscriptHelpers";
 import { isDarknetServer, ResponseStatus } from "../DarkNet/models/DnetServerData";
 import { SpecialServers } from "../Server/data/SpecialServers";
@@ -161,30 +161,30 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const targetServer = getServerSafely(targetHostname);
         if (!targetServer) {
           logger(ctx)(`Target server ${targetHostname} does not exist. It may have gone offline.`);
-          return Promise.resolve({
+          return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
             message: ResponseStatus.NOT_FOUND,
-          });
+          }));
         }
 
         const threads = ctx.workerScript.scriptRef.threads;
         const networkDelay = calculateAuthenticationTime(targetServer, Player, threads, password) + additionalMsec;
         if (!isDarknetServer(targetServer) && targetServer.hostname !== SpecialServers.DarkWeb) {
           logger(ctx)(`Target server ${targetHostname} is not a darknet server.`);
-          return Promise.resolve({
+          return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
             message: ResponseStatus.I_AM_A_TEAPOT,
-          });
+          }));
         }
 
         if (!isDirectConnected(currentServer, targetServer)) {
           logger(ctx)(
             `Target server ${targetHostname} is not connected to the current server ${currentServer.hostname}. It may have moved`,
           );
-          return Promise.resolve({
+          return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
             message: ResponseStatus.MOVED_PERMANENTLY,
-          });
+          }));
         }
         logger(ctx)(
           `Connecting to ${targetServer.hostname} with password '${password}'... (Est: ${formatNumber(
@@ -194,6 +194,13 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         );
 
         return helpers.netscriptDelay(ctx, networkDelay).then(() => {
+          if (!getServerSafely(targetHostname)) {
+            logger(ctx)(`Server ${targetHostname} not found. It may have gone offline.`);
+            return {
+              success: false,
+              message: ResponseStatus.NOT_FOUND,
+            };
+          }
           if (Math.random() < getTimeoutChance()) {
             logger(ctx)(
               `Authentication on ${targetServer.hostname} timed out due to darknet instability. Please try again.`,
@@ -272,13 +279,27 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       },
     heartbleed:
       (ctx: NetscriptContext) =>
-      (_hostname, _opts): Promise<string[]> => {
+      (_hostname, _opts): Promise<DarknetResult & {logs: string[]}> => {
         const targetHostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
         const options = heartbleedOptions(ctx, _opts);
-        const targetServer = getConnectedServer(ctx, targetHostname);
+        const targetServer = getServerSafely(targetHostname);
+        if (!targetServer) {
+          const result = `Target server ${targetHostname} does not exist. It may have gone offline.`;
+          logger(ctx)(result);
+          return helpers.netscriptDelay(ctx, 100).then(() => ({
+            success: false,
+            message: result,
+            logs: [],
+          }));
+        }
         if (!targetServer.darknetData) {
-          logger(ctx)(`${targetHostname} does not seem to be vulnerable to heartbleed.`);
-          return Promise.resolve([]);
+          const result = `${targetHostname} does not seem to be vulnerable to heartbleed.`;
+          logger(ctx)(result);
+          return helpers.netscriptDelay(ctx, 100).then(() => ({
+            success: false,
+            message: result,
+            logs: [],
+          }));
         }
         const networkDelay =
           calculateAuthenticationTime(targetServer, Player, ctx.workerScript.scriptRef.threads) * 1.5 +
@@ -288,18 +309,26 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         );
 
         if ((targetServer.requiredHackingSkill ?? 0) > Player.skills.charisma) {
-          logger(ctx)(
-            `You need a higher charisma level to extract data from ${targetHostname}. (${targetServer.requiredHackingSkill} required)`,
-          );
-          return Promise.resolve([]);
+          const result = `You need a higher charisma level to extract data from ${targetHostname}. (${targetServer.requiredHackingSkill} required)`;
+          logger(ctx)(result);
+          return helpers.netscriptDelay(ctx, 100).then(() => ({
+            success: false,
+            message: result,
+            logs: [],
+          }));
         }
 
         return helpers.netscriptDelay(ctx, networkDelay).then(() => {
           const xpGained = Player.mults.charisma_exp * 50 * ((500 + Player.skills.charisma) / 500);
           Player.gainCharismaExp(xpGained);
-          if (!targetServer.darknetData) {
-            logger(ctx)(`Server ${targetHostname} not found. It may have gone offline.`);
-            return [];
+          if (!getServerSafely(targetHostname)) {
+            const result = `Target server ${targetHostname} does not exist. It may have gone offline.`;
+            logger(ctx)(result);
+            return {
+              success: false,
+              message: result,
+              logs: [],
+            };
           }
           const serverState = getServerState(targetHostname);
 
@@ -308,7 +337,11 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           if (isLabyrinthServer(targetHostname)) {
             const location = DarknetState.labLocations[ctx.workerScript.pid];
             if (!location) {
-              return ["A mysterious maze has appeared..."];
+              return {
+                success: true,
+                message: "A mysterious maze has appeared...",
+                logs: [],
+              };
             }
             const surroundings = getSurroundingsVisualized(getLabMaze(), location[0], location[1]);
             const status = {
@@ -318,16 +351,28 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
               south: surroundings[2][1] === " ",
               west: surroundings[1][0] === " ",
             };
-            return [JSON.stringify(status)];
+            return {
+              success: true,
+              message: `Extracted log data from ${targetHostname}`,
+              logs: [JSON.stringify(status)],
+            };
           }
 
           if (options.peek) {
-            return serverState.serverLogs.slice(0, 1) ?? [];
+            return {
+              success: true,
+              message: `Extracted log data from ${targetHostname}`,
+              logs: serverState.serverLogs.slice(0, 1),
+            };
           }
           const capturedLogs = serverState.serverLogs.slice(0, options.logsToCapture);
           serverState.serverLogs = serverState.serverLogs.slice(options.logsToCapture);
 
-          return capturedLogs;
+          return {
+            success: true,
+            message: `Extracted log data from ${targetHostname}`,
+            logs: capturedLogs,
+          };
         });
       },
     openCache:
@@ -355,8 +400,8 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const server: BaseServer = ctx.workerScript.getServer();
         const out: string[] = [];
         for (const neighbor of server.serversOnNetwork) {
-          const neighborServer = helpers.getServer(ctx, neighbor);
-          if (!neighborServer.darknetData) {
+          const neighborServer = getServerSafely(neighbor);
+          if (!neighborServer?.darknetData) {
             continue;
           }
           const entry = helpers.returnServerID(neighborServer, { returnByIP });
@@ -374,20 +419,20 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const server = ctx.workerScript.getServer();
         if (!server.darknetData) {
           helpers.log(ctx, () => `${server.hostname} was not stasis linked; it is not a darknet server`);
-          return Promise.resolve({
+          return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
             message: `${server.hostname} is not a darknet server.`,
-          });
+          }));
         }
 
         const stasisLinkCount = GetAllServers(true).filter((s) => s.darknetData?.hasStasisLink).length;
         const stasisLinkLimit = getStasisLinkLimit();
         if (shouldLink && stasisLinkCount >= stasisLinkLimit) {
           helpers.log(ctx, () => `Stasis link limit reached. (${stasisLinkCount}/${stasisLinkLimit})`);
-          return Promise.resolve({
+          return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
             message: `Stasis link limit reached. (${stasisLinkCount}/${stasisLinkLimit})`,
-          });
+          }));
         }
         helpers.log(
           ctx,
@@ -419,17 +464,17 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           };
         });
       },
-    hasStasisLink:
-      (ctx: NetscriptContext) =>
-      (_hostname): boolean => {
-        const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-        const server = helpers.getServer(ctx, hostname);
-        return !!server.darknetData?.hasStasisLink;
-      },
     getStasisLinkLimit: (ctx: NetscriptContext) => (): number => {
       const limit = getStasisLinkLimit();
       logger(ctx)(`Stasis link limit: ${limit}`);
       return limit;
+    },
+    getStasisLinkedServers: (ctx: NetscriptContext) => (_returnByIP): string[] => {
+      const returnByIp = helpers.boolean(ctx, "returnByIP", _returnByIP ?? false);
+      const servers = GetAllServers(true).filter((s) => s.darknetData?.hasStasisLink);
+      const serverNames = servers.map((s) => returnByIp ? s.ip : s.hostname);
+      logger(ctx)(`Stasis linked servers: ${serverNames}`);
+      return serverNames;
     },
     getServer: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
@@ -441,13 +486,10 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         isConnectedTo: server.isConnectedTo,
         ramUsed: server.ramUsed,
         maxRam: server.maxRam,
-        organizationName: server.organizationName,
-        purchasedByPlayer: server.purchasedByPlayer,
+        ownerAllocatedRam: server?.darknetData?.ramBlock ?? 0,
         backdoorInstalled: server.backdoorInstalled ?? false,
         moneyAvailable: 0,
         moneyMax: 0,
-        passwordHintExample: server.darknetData?.staticPasswordHint ?? "",
-        passwordDataExample: server.darknetData?.passwordHintData ?? "",
         charismaLevel: server.requiredHackingSkill ?? 0,
         depth: server?.darknetData?.x ?? -1,
         modelId: server?.darknetData?.minigameType ?? "",
@@ -456,12 +498,30 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
     getServerAuthDetails: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
       const server = getServerSafely(hostname);
+      const offlineResponse = {
+        isOnline: false,
+        isConnected: false,
+        modelId: "",
+        passwordHint: "",
+        data: "",
+        logTrafficInterval: -1,
+        passwordLength: -1,
+        passwordFormat: "numeric",
+      } as ServerAuthDetails;
       if (!server) {
         logger(ctx)(`Server ${hostname} not found. It may have gone offline.`);
-        return null;
+        return offlineResponse;
       }
+      if (!server.darknetData) {
+        logger(ctx)(`${server.hostname} is not a darknet server.`);
+        return offlineResponse;
+      }
+      const localServer = ctx.workerScript.getServer();
+      const isConnected = isDirectConnected(localServer, server);
       if (server.hostname === SpecialServers.DarkWeb) {
         return {
+          isOnline: true,
+          isConnected: isConnected,
           modelId: Minigames.EchoVuln,
           passwordHint: "The passkey is 'leekspin'",
           data: "",
@@ -470,11 +530,9 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           passwordFormat: getPasswordType("leekspin"),
         };
       }
-      if (!server.darknetData) {
-        logger(ctx)(`${server.hostname} is not a darknet server.`);
-        return null;
-      }
       return {
+        isOnline: true,
+        isConnected: isConnected,
         modelId: server.darknetData.minigameType,
         passwordHint: server.darknetData.staticPasswordHint,
         data: server.darknetData.passwordHintData ?? "",
@@ -498,10 +556,10 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       const server = ctx.workerScript.getServer();
       if (!server.darknetData) {
         logger(ctx)(`${server.hostname} is not a darknet server.`);
-        return Promise.resolve({
+        return helpers.netscriptDelay(ctx, 100).then(() => ({
           success: false,
           message: `${server.hostname} is not a darknet server.`,
-        });
+        }));
       }
       logger(ctx)(`Injecting routing instability... (Est: 10s)`);
 
@@ -555,18 +613,18 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         if (!server.darknetData) {
           const result = `Failed. Server ${server.hostname} is not a darknet server.`;
           logger(ctx)(result);
-          return Promise.resolve({
+          return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
             message: result,
-          });
+          }));
         }
         if (server.darknetData.ramBlock <= 0) {
           const result = `Failed. Server ${server.hostname} has no host-owned ram left to reallocate.`;
           logger(ctx)(result);
-          return Promise.resolve({
+          return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
             message: result,
-          });
+          }));
         }
 
         logger(ctx)(`Attempting to liberate RAM from '${server.hostname}'s owner ...`);

@@ -12,6 +12,7 @@ import {
   ServerNamePrefixes,
   ServerNameSuffixes,
 } from "./dictionaryData";
+import { getLabyrinthDetails } from "./labyrinth";
 
 export const ResponseStatus = {
   SUCCESS: "200 Success",
@@ -55,7 +56,7 @@ export const isDarknetServer = (server: BaseServer): boolean => {
 
 export const DnetServerBuilder = (options: DnetServerData, name: string = getName()): Server => {
   const maxRam = 16 * 2 ** Math.floor(options.difficulty / 4);
-  const ramBlock = options.difficulty ? getRamBlock(maxRam) : 0;
+  const ramBlock = getRamBlock(maxRam);
   const darknetData: DnetServer = {
     ramBlock,
     icon: options.icon ?? getRandomIcon(),
@@ -70,9 +71,14 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
     logTrafficInterval: 1 + 30 * 0.9 ** options.difficulty,
   };
 
-  const scalar = 1 + darknetData.difficulty * 3;
+
+  const labDifficulty = getLabyrinthDetails().cha;
+  const depth = darknetData.difficulty;
+  const scalar = 1 + depth * 3;
   const levelVariance = Math.floor((Math.random() * 3 - 1) * scalar);
-  const requiredLevel = Math.max(Math.ceil(scalar ** 1.5 + levelVariance), 1);
+  const depthScaling = (labDifficulty/35) * depth;
+  const minLevel = (Math.floor((darknetData.difficulty / 8)) ** 2.2) * 100;
+  const requiredLevel = Math.max(Math.ceil(scalar ** 1.4 + levelVariance + depthScaling + minLevel), 1);
 
   const params: IConstructorParams = {
     hostname: name,
@@ -159,13 +165,16 @@ const l33tifyName = (name: string): string => {
 };
 
 const getRamBlock = (maxRam: number): number => {
-  if (maxRam <= 16) {
-    return [0, 4][Math.floor(Math.random() * 2)];
+  if (maxRam === 16) {
+    return [0, 1, 2][Math.floor(Math.random() * 2)];
+  }
+  if (maxRam <= 32) {
+    return [0, 2, 4][Math.floor(Math.random() * 2)];
   }
 
   if (maxRam <= 64) {
     return [16, 32, maxRam - 8][Math.floor(Math.random() * 3)];
   }
 
-  return [maxRam, maxRam - 8, maxRam - 16, maxRam - 32][Math.floor(Math.random() * 4)];
+  return [maxRam, maxRam - 8, maxRam - 64, maxRam / 2][Math.floor(Math.random() * 4)];
 };

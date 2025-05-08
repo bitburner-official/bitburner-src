@@ -3,6 +3,11 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { PasswordResponse } from "../models/DnetServerData";
 
+export const formatToMaxDigits = (value: number, maxDigits: number): string => {
+  if (value === 0) return "0";
+  return parseFloat((value).toFixed(maxDigits)).toString()
+}
+
 export const copyToClipboard = (text: string): void => {
   void navigator.clipboard.writeText(text);
   SnackbarEvents.emit(`Copied "${text}" to clipboard`, ToastVariant.SUCCESS, 2000);

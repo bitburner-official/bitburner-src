@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Button, Container, Typography, SvgIcon } from "@mui/material";
-import { PasswordPromptModal } from "./PasswordPromptModal";
+import { ServerDetailsModal } from "./ServerDetailsModal";
 import { getIcon, Icon } from "../controllers/ServerIcon";
 import { BaseServer } from "../../Server/BaseServer";
 import { DarknetState } from "../models/DarknetState";
@@ -45,7 +45,7 @@ export function DNServerComponent({ server, enableAuth, classes }: DWServerProps
 
   return (
     <>
-      {open ? <PasswordPromptModal open={open} onClose={handleClose} server={server} /> : ""}
+      {open ? <ServerDetailsModal open={open} onClose={handleClose} server={server} /> : ""}
       <Button
         sx={getServerPositionStyles(server)}
         className={`${color} ${classes.DWServer}`}

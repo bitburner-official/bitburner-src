@@ -1,4 +1,4 @@
-import { DarknetState, NET_WIDTH, SERVER_DENSITY } from "../models/DarknetState";
+import { DarknetState, MAX_NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarknetState";
 import {
   AddToAllServers,
   connectServers,
@@ -43,7 +43,8 @@ export const populateDarknet = () => {
     darkWebRoot.maxRam = 16; // TODO: make this more graceful?
   }
 
-  if (GetAllServers(true).find((s) => s.darknetData)) {
+  const existingDarknetServer = GetAllServers(true).find((s) => s.darknetData);
+  if (existingDarknetServer) {
     loadDarknet();
     return;
   }
@@ -67,7 +68,7 @@ export const populateDarknet = () => {
 
 export const clearDarknet = (force = false) => {
   movePlayerIfNeeded();
-  for (let i = 0; i < getNetDepth(); i++) {
+  for (let i = 0; i < MAX_NET_DEPTH; i++) {
     for (let j = 0; j < NET_WIDTH; j++) {
       const server = DarknetState.Network[i]?.[j];
       if (!server) continue;

@@ -11,6 +11,7 @@ import { GetServer, GetAllServers } from "../../Server/AllServers";
 import { Server } from "../../Server/Server";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import { SpecialServers } from "../../Server/data/SpecialServers";
 
 export function ServersDev(): React.ReactElement {
   const [server, setServer] = useState<string>("home");
@@ -51,7 +52,7 @@ export function ServersDev(): React.ReactElement {
 
   function backdoorAllServers(): void {
     for (const s of GetAllServers(true)) {
-      if (!(s instanceof Server)) return;
+      if (!(s instanceof Server) || s.hostname === SpecialServers.WorldDaemon) return;
       s.backdoorInstalled = true;
     }
   }

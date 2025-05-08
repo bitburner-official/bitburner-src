@@ -58,13 +58,6 @@ export const checkPassword = (
     const syncDecimal = ((exactChars + closeChars * 0.5) / darknetData.password.length) * 100;
     const responseData = `${Math.round(syncDecimal * 10) / 10}`;
     return getFailureResponse(attemptedPassword, `Synchronization status: ${responseData}%`, responseData);
-  } else if (darknetData.minigameType === Minigames.BinaryEncodedFeedback) {
-    const exactChars = getExactCorrectChars(darknetData.password, attemptedPassword);
-    const binaryRepresentation = exactChars.reduce(
-      (acc, val, i) => acc + (val ? 2 ** (attemptedPassword.length - i) : 0),
-      0,
-    );
-    return getFailureResponse(attemptedPassword, "Beep Boop", `${binaryRepresentation}`);
   } else if (darknetData.minigameType === Minigames.SpiceLevel) {
     const exactChars = getExactCorrectChars(darknetData.password, attemptedPassword);
     const pepperRepresentation = exactChars.map((val) => (val ? "🌶️" : "")).join("") || "0";

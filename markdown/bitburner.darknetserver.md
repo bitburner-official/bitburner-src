@@ -16,13 +16,10 @@ type DarknetServer = {
   isConnectedTo: boolean;
   ramUsed: number;
   maxRam: number;
-  organizationName: string;
-  purchasedByPlayer: boolean;
+  ownerAllocatedRam: number;
   backdoorInstalled: boolean;
   moneyAvailable: number;
   moneyMax: number;
-  passwordHintExample: string;
-  passwordDataExample: string;
   charismaLevel: number;
   depth: number;
   modelId: string;

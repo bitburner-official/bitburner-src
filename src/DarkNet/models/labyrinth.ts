@@ -274,7 +274,7 @@ const labData: Record<string, labDetails> = {
   [SpecialServers.NormalLab]: {
     name: SpecialServers.NormalLab,
     depth: 7,
-    cha: 500,
+    cha: 300,
     augReward: AugmentationName.TheBrokenWings,
     mazeWidth: 20,
     mazeHeight: 14,
@@ -283,7 +283,7 @@ const labData: Record<string, labDetails> = {
   [SpecialServers.CruelLab]: {
     name: SpecialServers.CruelLab,
     depth: 12,
-    cha: 1000,
+    cha: 600,
     augReward: AugmentationName.TheBoots,
     mazeWidth: 30,
     mazeHeight: 20,
@@ -301,7 +301,7 @@ const labData: Record<string, labDetails> = {
   [SpecialServers.UberLab]: {
     name: SpecialServers.UberLab,
     depth: 21,
-    cha: 3000,
+    cha: 2500,
     augReward: AugmentationName.TheRedPill,
     mazeWidth: 60,
     mazeHeight: 40,
@@ -310,7 +310,7 @@ const labData: Record<string, labDetails> = {
   [SpecialServers.EternalLab]: {
     name: SpecialServers.EternalLab,
     depth: 25,
-    cha: 3500,
+    cha: 3000,
     augReward: AugmentationName.TheLaw,
     mazeWidth: 60,
     mazeHeight: 40,
@@ -319,7 +319,7 @@ const labData: Record<string, labDetails> = {
   [SpecialServers.FinalLab]: {
     name: SpecialServers.FinalLab,
     depth: 31,
-    cha: 4000,
+    cha: 3200,
     augReward: AugmentationName.TheSword,
     mazeWidth: 60,
     mazeHeight: 40,

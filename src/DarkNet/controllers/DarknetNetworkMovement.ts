@@ -7,7 +7,6 @@ import { addServerToNetwork, AIR_GAP_DEPTH, movePlayerIfNeeded } from "./Darknet
 import { stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { WorkerScript } from "../../Netscript/WorkerScript";
 import { getNetDepth, isLabyrinthServer } from "../models/labyrinth";
 
 export const mutateDarknet = () => {
@@ -205,7 +204,7 @@ export const killScripts = (server: BaseServer) => {
 
 export function killWorkerScriptWithMessage(pid: number, message: string): boolean {
   const ws = workerScripts.get(pid);
-  if (ws instanceof WorkerScript) {
+  if (ws) {
     ws.log("", () => message ?? "Script killed.");
     stopAndCleanUpWorkerScript(ws);
     return true;
@@ -230,18 +229,7 @@ export const restartServer = (server: BaseServer) => {
   if (!server?.darknetData || isImmutable(server)) {
     return false;
   }
-  const runningScripts = server.runningScriptMap;
-
-  for (const scripts of runningScripts.values()) {
-    for (const scriptInstance of scripts.values()) {
-      const ws = workerScripts.get(scriptInstance.pid);
-      if (ws) {
-        ws.log("", () => `Script killed by server restart`);
-        stopAndCleanUpWorkerScript(ws);
-        return true;
-      }
-    }
-  }
+  killScripts(server);
   const serverState = getServerState(server.hostname);
   serverState.authenticatedPIDs = [];
   server.backdoorInstalled = false;

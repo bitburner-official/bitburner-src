@@ -751,7 +751,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     },
     // === G === //
     [AugmentationName.Glib]: {
-      repCost: 1.05e5,
+      repCost: 4.05e4,
       moneyCost: 2.5e9,
       info:
         "An implant that, when activated, makes the speaker sound unbelievably reasonable and plausible to listeners " +
@@ -1443,7 +1443,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       factions: [FactionName.Tetrads, FactionName.TheDarkArmy, FactionName.TheSyndicate, FactionName.NWO],
     },
     [AugmentationName.Primer]: {
-      repCost: 2.875e5,
+      repCost: 1.875e5,
       moneyCost: 3.375e9,
       info:
         "A cutting-edge knowledgebase entirely built off of nanotech rod-logic, training the user on social engineering. " +
@@ -1481,7 +1481,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
     },
     [AugmentationName.SocialDynamo]: {
       repCost: 2.25e5,
-      moneyCost: 5e9,
+      moneyCost: 1.2e9,
       info:
         "Makes the wearer a better leader and mentor by greatly increasing their awareness of social dynamics. " +
         "Not actually a standard implant, but rather a series of training courses and seminars, led by a famous speaker named Denis.",
@@ -1841,7 +1841,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Created by a mysterious figure known only as 'The Sculptor', this augmentation appears as a set of silvery " +
         "metallic patterns on the user's upper back and shoulders. " +
         "Awarded to those who discover the secrets of the labrynth.",
-      stats: "This augmentation increases the stasis link limit by one, as well as charisma and charisma xp.",
+      stats: "This augmentation increases the stasis link limit by one, and raises charisma by 7% and charisma xp by 10%.",
       charisma: 1.07,
       agility: 1.1,
       isSpecial: true,
@@ -1854,7 +1854,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Modeled after the winged boots of mythology, this implant somehow provides tireless social energy to the user. " +
         "Its creator, the enigmatic Sculptor, refuses to reveal the details of how it works, and only mutters about 'liveware APIs'. " +
         "Awarded to those who discover the secrets of the labrynth.",
-      stats: "This augmentation increases the speed of authentication and heartbleed by 20%.",
+      stats: "This augmentation increases the speed of authentication and heartbleed by 20%, and raises charisma and dexterity by 10%.",
       charisma: 1.1,
       dexterity: 1.1,
       isSpecial: true,
@@ -1868,7 +1868,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "This unique augmentation allows the user to strike stright to the heart of the matter and sweep aside obstacles in the way of their goals. " +
         "Appearing as a simple insignia on the user's forarm, its true function is unknown. It is said to be one of the tools of The Sculptor. " +
         "Awarded to those who discover the secrets of the labrynth.",
-      stats: "This augmentation increases the stasis link limit by one, as well as strength and charimsa.",
+      stats: "This augmentation increases the stasis link limit by one, and raises charisma by 12% and strength by 10%.",
       charisma: 1.12,
       strength: 1.1,
       isSpecial: true,
@@ -1883,6 +1883,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "This augmentation enhances the user's ability to assess probabilities, predict outcomes, and adapt strategies in real-time, " +
         "making them exceptionally persuasive and confident in negotiations and social interactions. " +
         "Awarded to those who discover the secrets of the labrynth.",
+      stats: "This augmentation raises charisma by 15%, hacking by 10%, and company rep by 5%.",
       charisma: 1.15,
       hacking: 1.1,
       company_rep: 1.05,
@@ -1899,6 +1900,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "turning every interaction into a calculated success. The technique is sometimes referred to as Solomonoff's Lightsaber, as it is a " +
         "more powerful version of Occam's razor. " +
         "The final augment awarded to those who discover the secrets of the labrynth.",
+      stats: "This augmentation raises charisma by 20%, hacking by 16%, and company rep by 10%.",
       charisma: 1.2,
       hacking: 1.16,
       company_rep: 1.1,
@@ -1994,7 +1996,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       factions: [FactionName.ShadowsOfAnarchy],
     },
     [AugmentationName.Wit]: {
-      repCost: 9e4,
+      repCost: 5e3,
       moneyCost: 1e7,
       info:
         "A connective brain implant that greatly increases the user's speech reaction time. " +
