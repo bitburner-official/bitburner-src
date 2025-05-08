@@ -1841,7 +1841,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Created by a mysterious figure known only as 'The Sculptor', this augmentation appears as a set of silvery " +
         "metallic patterns on the user's upper back and shoulders. " +
         "Awarded to those who discover the secrets of the labrynth.",
-      stats: "This augmentation increases the stasis link limit by one, and raises charisma by 7% and charisma xp by 10%.",
+      stats:
+        "This augmentation increases the stasis link limit by one, and raises charisma by 7% and charisma xp by 10%.",
       charisma: 1.07,
       agility: 1.1,
       isSpecial: true,
@@ -1854,7 +1855,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Modeled after the winged boots of mythology, this implant somehow provides tireless social energy to the user. " +
         "Its creator, the enigmatic Sculptor, refuses to reveal the details of how it works, and only mutters about 'liveware APIs'. " +
         "Awarded to those who discover the secrets of the labrynth.",
-      stats: "This augmentation increases the speed of authentication and heartbleed by 20%, and raises charisma and dexterity by 10%.",
+      stats:
+        "This augmentation increases the speed of authentication and heartbleed by 20%, and raises charisma and dexterity by 10%.",
       charisma: 1.1,
       dexterity: 1.1,
       isSpecial: true,
@@ -1868,7 +1870,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "This unique augmentation allows the user to strike stright to the heart of the matter and sweep aside obstacles in the way of their goals. " +
         "Appearing as a simple insignia on the user's forarm, its true function is unknown. It is said to be one of the tools of The Sculptor. " +
         "Awarded to those who discover the secrets of the labrynth.",
-      stats: "This augmentation increases the stasis link limit by one, and raises charisma by 12% and strength by 10%.",
+      stats:
+        "This augmentation increases the stasis link limit by one, and raises charisma by 12% and strength by 10%.",
       charisma: 1.12,
       strength: 1.1,
       isSpecial: true,

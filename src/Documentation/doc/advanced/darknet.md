@@ -279,7 +279,6 @@ Coming soon:
 - BN Mults for BN15
 - new BN mults for darknet
 
-
 - improve phishing documentation
 - improve phishing somehow else?
 
@@ -287,7 +286,6 @@ labels for icons in detail view on password modal?
 
 - lab cha requirement (in UI too)
 - lab api
-
 
 - webstorm visual indicator
 - screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
@@ -334,6 +332,7 @@ have a clear immediate reward from tier 1 that isn't just cha XP
 - more hint notes
 
 - ub3r_l4byr1nth server
+
   - treasure chests in maze?
   - traps or monsters in maze?
 
@@ -354,7 +353,6 @@ have a clear immediate reward from tier 1 that isn't just cha XP
   - lv 3: more server restarts on the darknet
   - lv 4: It's hard to sustain this many backdoors without a lot of upkeep due to them going offline or resetting. More connection severing on the darknet. player starts taking damage sometimes. creepypasta appears on player terminal, signed by the darknet.
   - lv 5: ports and file writes and other ns methods sometimes fail silently, or return garbage data. hard mode that is effectively opt-in
-
 
 ## TODO later:
 

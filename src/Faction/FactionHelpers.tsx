@@ -188,7 +188,6 @@ export const getFactionAugmentationsFiltered = (faction: Faction): AugmentationN
     return augs.map((a) => a.name);
   }
 
-
   // Remove TRP from daedalus in BN15
   if (Player.bitNodeN === 15 && faction.name == FactionName.Daedalus) {
     return faction.augmentations.filter((aug) => aug !== AugmentationName.TheRedPill);

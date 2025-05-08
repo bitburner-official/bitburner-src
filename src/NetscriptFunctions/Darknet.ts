@@ -279,7 +279,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       },
     heartbleed:
       (ctx: NetscriptContext) =>
-      (_hostname, _opts): Promise<DarknetResult & {logs: string[]}> => {
+      (_hostname, _opts): Promise<DarknetResult & { logs: string[] }> => {
         const targetHostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
         const options = heartbleedOptions(ctx, _opts);
         const targetServer = getServerSafely(targetHostname);
@@ -469,13 +469,15 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       logger(ctx)(`Stasis link limit: ${limit}`);
       return limit;
     },
-    getStasisLinkedServers: (ctx: NetscriptContext) => (_returnByIP): string[] => {
-      const returnByIp = helpers.boolean(ctx, "returnByIP", _returnByIP ?? false);
-      const servers = GetAllServers(true).filter((s) => s.darknetData?.hasStasisLink);
-      const serverNames = servers.map((s) => returnByIp ? s.ip : s.hostname);
-      logger(ctx)(`Stasis linked servers: ${serverNames}`);
-      return serverNames;
-    },
+    getStasisLinkedServers:
+      (ctx: NetscriptContext) =>
+      (_returnByIP): string[] => {
+        const returnByIp = helpers.boolean(ctx, "returnByIP", _returnByIP ?? false);
+        const servers = GetAllServers(true).filter((s) => s.darknetData?.hasStasisLink);
+        const serverNames = servers.map((s) => (returnByIp ? s.ip : s.hostname));
+        logger(ctx)(`Stasis linked servers: ${serverNames}`);
+        return serverNames;
+      },
     getServer: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
       const server = expectDarknetServer(ctx, hostname);

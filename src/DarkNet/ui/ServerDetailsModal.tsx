@@ -35,7 +35,7 @@ export const ServerDetailsModal = ({ open, onClose, server }: DWPasswordPromptMo
   const ramBlock = server.darknetData?.ramBlock ?? 0;
   const blockedRamString = ramBlock ? formatToMaxDigits(ramBlock, 1) + "+" : "";
   const usedRamString = formatToMaxDigits(server.ramUsed - ramBlock, 1);
-  const serverRamString = `ram in use: ${blockedRamString}${usedRamString}/${server.maxRam} GB`
+  const serverRamString = `ram in use: ${blockedRamString}${usedRamString}/${server.maxRam} GB`;
 
   const logContent = recentLogs.map((log, index) => (
     <pre
@@ -75,14 +75,14 @@ export const ServerDetailsModal = ({ open, onClose, server }: DWPasswordPromptMo
               <Typography color="secondary">
                 {server.ip} cha:{server.requiredHackingSkill}
               </Typography>
-              <Tooltip title={`Ram blocked by server owner: ${ramBlock} GB. Ram in use by scripts: ${server.ramUsed - ramBlock} GB.`}>
-                <Typography color="secondary">
-                  {serverRamString}
-                </Typography>
+              <Tooltip
+                title={`Ram blocked by server owner: ${ramBlock} GB. Ram in use by scripts: ${
+                  server.ramUsed - ramBlock
+                } GB.`}
+              >
+                <Typography color="secondary">{serverRamString}</Typography>
               </Tooltip>
-              <Typography color="secondary">
-                model:{server.darknetData?.minigameType}
-              </Typography>
+              <Typography color="secondary">model:{server.darknetData?.minigameType}</Typography>
               <br />
               <div style={{ maxWidth: "300px" }}>
                 <ServerSummary server={server} enableAuth={true} showDetails={true} />

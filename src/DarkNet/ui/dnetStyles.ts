@@ -130,5 +130,5 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     marginLeft: "2em",
     textIndent: "-2em",
     color: "grey",
-  }
+  },
 }));

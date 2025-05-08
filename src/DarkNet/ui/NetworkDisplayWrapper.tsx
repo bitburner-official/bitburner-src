@@ -219,7 +219,9 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             DarknetEvents.emit();
           }}
           className={classes.button}
-        >Toggle Show Full Network</Button>
+        >
+          Toggle Show Full Network
+        </Button>
         <Button onClick={() => void WEBSTORM()} variant={"contained"} className={classes.button}>
           START WEBSTORM (for testing)
         </Button>

@@ -382,4 +382,4 @@ export const applyRamBlocks = () => {
   for (const server of servers) {
     server.updateRamUsed(server.darknetData?.ramBlock ?? 0);
   }
-}
+};

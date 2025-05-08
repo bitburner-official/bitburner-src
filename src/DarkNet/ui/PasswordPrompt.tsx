@@ -126,7 +126,8 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
                 )}
                 <span className={classes.serverDetailsText}>length:</span> {server.darknetData?.password?.length}
                 <br />
-                <span className={classes.serverDetailsText}>format:</span> {getPasswordType(server.darknetData?.password ?? "")}
+                <span className={classes.serverDetailsText}>format:</span>{" "}
+                {getPasswordType(server.darknetData?.password ?? "")}
                 <br />
                 <span className={classes.serverDetailsText}>model:</span> {server.darknetData?.minigameType ?? ""}
                 <br />

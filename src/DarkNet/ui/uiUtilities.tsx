@@ -5,8 +5,8 @@ import { PasswordResponse } from "../models/DnetServerData";
 
 export const formatToMaxDigits = (value: number, maxDigits: number): string => {
   if (value === 0) return "0";
-  return parseFloat((value).toFixed(maxDigits)).toString()
-}
+  return parseFloat(value.toFixed(maxDigits)).toString();
+};
 
 export const copyToClipboard = (text: string): void => {
   void navigator.clipboard.writeText(text);

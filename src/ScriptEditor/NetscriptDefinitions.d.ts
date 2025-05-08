@@ -4192,7 +4192,7 @@ export interface Darknet {
    *    logsToCapture: the number of log lines to remove from the server, up to a max of 8. Default is 1.
    *    additionalMsec: the number of additional milliseconds to add to the run time of the heartbleed request. Default is 0.
    */
-  heartbleed(hostname: string, options?: HeartbleedOptions): Promise<Result & {logs: string[]}>;
+  heartbleed(hostname: string, options?: HeartbleedOptions): Promise<Result & { logs: string[] }>;
 
   /**
    * Opens a .cache file on the current server to acquire its valuable contents.

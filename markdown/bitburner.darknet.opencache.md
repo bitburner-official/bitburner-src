@@ -25,5 +25,5 @@ void
 
 ## Remarks
 
-RAM cost: 4 GB
+RAM cost: 2 GB
 
