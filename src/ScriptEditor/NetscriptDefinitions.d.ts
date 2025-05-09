@@ -5309,6 +5309,15 @@ interface ReputationFormulas {
    * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    */
   donationForRep(reputation: number, player: Person): number;
+
+  /**
+   * Calculate the share power if you call {@link NS.share | ns.share} with the specified number of threads on a server
+   * having the specified number of CPU cores.
+   * @param threads - Number of threads. Must be a positive integer.
+   * @param cpuCores - Number of CPU cores. Must be a positive integer.
+   * @returns The calculated share power.
+   */
+  sharePower(threads: number, cpuCores: number): number;
 }
 
 /**
@@ -8391,7 +8400,8 @@ export interface NS {
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
 
   /**
-   * Share the server's ram with your factions.
+   * Share the server's ram with your factions to increase the reputation gain rate of faction work. This boost is
+   * applied to all faction work of all factions.
    * @remarks
    * RAM cost: 2.4 GB
    *
@@ -8401,8 +8411,8 @@ export interface NS {
   share(): Promise<void>;
 
   /**
-   * Share Power has a multiplicative effect on rep/second while doing work for a faction.
-   * Share Power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
+   * Share power has a multiplicative effect on rep/second while doing work for a faction.
+   * Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
    * @remarks
    * RAM cost: 0.2 GB
    */
