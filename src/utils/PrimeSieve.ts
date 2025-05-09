@@ -1,7 +1,7 @@
 /** Implementation of Sieve of Eratosthenes
  * https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes*/
-export function simpleSieve(max: number): Array<number> {
-  const primes = new Array<number>();
+export function simpleSieve(max: number): number[] {
+  const primes: number[] = [];
   //The array of numbers to check if they're prime is left blank. Blank and resulting prime values are falsey, non-primes are marked truthy.
   const arr = Array(max);
   //We only need to check factors up to the square root of max
