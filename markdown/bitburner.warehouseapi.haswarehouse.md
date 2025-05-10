@@ -9,7 +9,7 @@ Check if you have a warehouse in city.
 **Signature:**
 
 ```typescript
-hasWarehouse(divisionName: string, city: CityName | `${CityName}`): boolean;
+hasWarehouse(divisionName: string, city: CityName): boolean;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ hasWarehouse(divisionName: string, city: CityName | `${CityName}`): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string |  |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` |  |
+|  city | [CityName](./bitburner.cityname.md) |  |
 
 **Returns:**
 
