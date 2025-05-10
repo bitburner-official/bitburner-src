@@ -1,7 +1,6 @@
 import { CodingContractName } from "@enums";
 import { removeBracketsFromArrayString, type CodingContractTypes } from "../ContractTypes";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
-import { segmentedSieve } from "../../utils/PrimeSieve";
 
 export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.TotalPrimesInRange> = {
   [CodingContractName.TotalPrimesInRange]: {
@@ -21,9 +20,61 @@ export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.To
       return [low, high];
     },
     solver: (data, answer) => {
-      //The result is converted to a set since set.has() is much faster than array.includes();
-      const primes = new Set(segmentedSieve(data[0], data[1]));
-      return answer.length === primes.size && answer.every((a) => primes.has(a));
+      /** Simple implementation of Sieve of Eratosthenes
+       * https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes*/
+      function simpleSieve(max: number): number[] {
+        const primes: number[] = [];
+        //The array of numbers to check if they're prime is left blank. Blank and resulting prime values are falsey, non-primes are marked truthy.
+        const arr = Array(max);
+        //We only need to check factors up to the square root of max
+        for (let i = 2; i * i <= max; i++) {
+          //and only the prime factors
+          if (!arr[i]) {
+            //and we can then mark off all subsequent multiples of that prime
+            for (let p = i * i; p <= max; p += i) {
+              arr[p] = 1;
+            }
+          }
+        }
+        //It should be faster to loop over the array again than to check factors all the way to max and mark primes at the same time.
+        for (let i = 2; i <= max; i++) {
+          if (!arr[i]) {
+            primes.push(i);
+          }
+        }
+        return primes;
+      }
+
+      /** Modified Sieve of Eratosthenes to find primes across a range, rather than all primes below a value.*/
+      function primeSieve(low: number, high: number): number {
+        //0 and 1 are not checked, so are removed here.
+        if (low < 2) {
+          low = 2;
+        }
+        let primes: number = 0;
+        //Only store the potential primes in the low to high range instead of 0 to high.
+        const arr = Array(high - low + 1);
+        //Instead of comparing all primes<low and primes<high, we use a filtering prime list. Sqrt(high) is a convenient "mid point".
+        const checks = simpleSieve(Math.ceil(Math.sqrt(high)));
+        for (const i of checks) {
+          //same logic as for the simple sieve to mark off multiples of identified primes, but we only start checking at the first multiple>low.
+          const lim = Math.max(i, Math.ceil(low / i)) * i;
+          for (let j = lim; j <= high; j += i) {
+            arr[j - low] = 1;
+          }
+        }
+        for (let a = 0; a <= high - low; a++) {
+          if (!arr[a]) {
+            //We don't really care what the value of the prime is, just how many we find. This could be easily modified to return the array of primes found if needed...
+            ++primes;
+          }
+        }
+        return primes;
+      }
+
+      //We trust the player generated the appropriate list of primes (or is more accurate at guessing primes than Gauss was at this range) and as such they deserve the reward.
+      const primes = primeSieve(data[0], data[1]);
+      return answer.length === primes;
     },
     convertAnswer: (ans) => {
       const sanitized = removeBracketsFromArrayString(ans).replace(/\s/g, "").split(",");
