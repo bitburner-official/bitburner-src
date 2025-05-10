@@ -29,7 +29,7 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 
 import { getRecordValues } from "../Types/Record";
 import { ServerConstants } from "../Server/data/Constants";
-import { canAccessBitNodeFeature, isBitNodeFinished, knowAboutBitverse } from "../BitNode/BitNodeUtils";
+import { canAccessBitNodeFeature, isBitNodeFinished, knowAboutBitverse, validBitNodes } from "../BitNode/BitNodeUtils";
 import { isLegacyScript } from "../Paths/ScriptFilePath";
 import { Settings } from "../Settings/Settings";
 import { activateSteamAchievements } from "../Electron";
@@ -514,6 +514,13 @@ export const achievements: Record<string, Achievement> = {
     Icon: "2DAYS",
     Visible: knowAboutBitverse,
     Condition: () => isBitNodeFinished() && Player.playtimeSinceLastBitnode < 1000 * 60 * 60 * 24 * 2,
+  },
+  BN_DESTROYER: {
+    ...achievementData.BN_DESTROYER,
+    Icon: "bn-destroyer",
+    Visible: knowAboutBitverse,
+    Condition: () => validBitNodes.every((bn) => Player.sourceFileLvl(bn) >= 3),
+    NotInSteam: true,
   },
   CHALLENGE_BN1: {
     ...achievementData.CHALLENGE_BN1,
