@@ -57,8 +57,8 @@ export function ShareOption({ rerender }: { rerender: () => void }): React.React
       <Typography>
         You can share free RAM of your home computer with your factions to get a bonus multiplier for reputation gain.
         Each time you share your free RAM, you get a boost for {ShareBonusTime / 1000} seconds. After that, you lose the
-        boost and get back your shared RAM. You can share free RAM of other servers that you have admin rights by using
-        ns.share() API.
+        boost and get back your shared RAM. You can share free RAM of other servers that you have admin rights on by
+        using the ns.share() API.
         <br />
         Free RAM on home computer: {formatRam(home.maxRam - home.ramUsed)}.
         <br />

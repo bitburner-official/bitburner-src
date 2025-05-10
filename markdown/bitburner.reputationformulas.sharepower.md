@@ -9,7 +9,7 @@ Calculate the share power if you call [ns.share](./bitburner.ns.share.md) with t
 **Signature:**
 
 ```typescript
-sharePower(threads: number, cpuCores: number): number;
+sharePower(threads: number, cpuCores?: number): number;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ sharePower(threads: number, cpuCores: number): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  threads | number | Number of threads. Must be a positive integer. |
-|  cpuCores | number | Number of CPU cores. Must be a positive integer. |
+|  cpuCores | number | _(Optional)_ Number of CPU cores. Must be a positive integer. The default value is 1. |
 
 **Returns:**
 

@@ -5314,10 +5314,10 @@ interface ReputationFormulas {
    * Calculate the share power if you call {@link NS.share | ns.share} with the specified number of threads on a server
    * having the specified number of CPU cores.
    * @param threads - Number of threads. Must be a positive integer.
-   * @param cpuCores - Number of CPU cores. Must be a positive integer.
+   * @param cpuCores - Number of CPU cores. Must be a positive integer. The default value is 1.
    * @returns The calculated share power.
    */
-  sharePower(threads: number, cpuCores: number): number;
+  sharePower(threads: number, cpuCores?: number): number;
 }
 
 /**

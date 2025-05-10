@@ -29,11 +29,11 @@ export function startSharing(threads: number, cpuCores: number): () => void {
   shareThreads += effectiveThreads;
   return () => {
     /**
-     * Due to floating point inaccuracy, sharePower may be slightly higher or lower than 1 after many times the player
+     * Due to floating point inaccuracy, shareThreads may be slightly higher or lower than 1 after many times the player
      * shares their RAM. We need to make sure that it's not smaller than 1.
      */
     shareThreads = clampNumber(shareThreads - effectiveThreads, 1);
-    // sharePower may be slightly higher than 1. Reset sharePower if it's smaller than a threshold.
+    // shareThreads may be slightly higher than 1. Reset shareThreads if it's smaller than a threshold.
     if (shareThreads < 1.00001) {
       shareThreads = 1;
     }
