@@ -56,14 +56,15 @@
      id="layer1">
     <text
        xml:space="preserve"
-       style="font-size:17.6389px;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#55d400;stroke-width:0.264583"
-       x="34.982018"
-       y="40.175503"
-       id="text1"><tspan
+       style="font-size:17.6389px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#55d400;stroke-width:0.24922"
+       x="33.015541"
+       y="42.263199"
+       id="text1"
+       transform="scale(1.0616446,0.94193481)"><tspan
          sodipodi:role="line"
          id="tspan1"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.6389px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.264583"
-         x="34.982018"
-         y="40.175503">SF13.1</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.6389px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.24922"
+         x="33.015541"
+         y="42.263199">SF13.1</tspan></text>
   </g>
 </svg>

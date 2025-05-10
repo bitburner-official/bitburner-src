@@ -64,14 +64,14 @@
      id="layer1">
     <text
        xml:space="preserve"
-       style="font-weight:bold;font-size:27.3155px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke-width:0.365827"
-       x="14.090266"
-       y="42.156921"
+       style="font-weight:bold;font-size:35.2778px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#000000;fill-opacity:1;stroke-width:0.365827"
+       x="7.1413207"
+       y="42.996178"
        id="text8876"><tspan
          sodipodi:role="line"
          id="tspan8874"
-         style="fill:#000000;fill-opacity:1;stroke-width:0.365827"
-         x="14.090266"
-         y="42.156921">f(x)</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:35.2778px;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#000000;fill-opacity:1;stroke-width:0.365827"
+         x="7.1413207"
+         y="42.996178">f(x)</tspan></text>
   </g>
 </svg>
