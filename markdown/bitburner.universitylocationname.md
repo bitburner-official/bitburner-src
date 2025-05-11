@@ -2,21 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [UniversityLocationName](./bitburner.universitylocationname.md)
 
-## UniversityLocationName enum
+## UniversityLocationName type
 
-Locations of university
 
 **Signature:**
 
 ```typescript
-declare enum UniversityLocationName 
+type UniversityLocationName = _ValueOf<UniversityLocationNameEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  AevumSummitUniversity | <code>LocationName.AevumSummitUniversity</code> |  |
-|  Sector12RothmanUniversity | <code>LocationName.Sector12RothmanUniversity</code> |  |
-|  VolhavenZBInstituteOfTechnology | <code>LocationName.VolhavenZBInstituteOfTechnology</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [UniversityLocationNameEnumType](./bitburner.universitylocationnameenumtype.md)
 

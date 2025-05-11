@@ -9,8 +9,6 @@ import Typography from "@mui/material/Typography";
 import { Player } from "@player";
 import { Adjuster } from "./Adjuster";
 
-// TODO: Update as additional BitNodes get implemented
-
 export function EntropyDev(): React.ReactElement {
   return (
     <Accordion TransitionProps={{ unmountOnExit: true }}>

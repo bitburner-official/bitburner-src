@@ -7,11 +7,7 @@
 **Signature:**
 
 ```typescript
-universityGains(
-    person: Person,
-    classType: UniversityClassType | `${UniversityClassType}`,
-    locationName: LocationName | `${LocationName}`,
-  ): WorkStats;
+universityGains(person: Person, classType: UniversityClassType, locationName: LocationName): WorkStats;
 ```
 
 ## Parameters
@@ -19,8 +15,8 @@ universityGains(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  person | [Person](./bitburner.person.md) |  |
-|  classType | [UniversityClassType](./bitburner.universityclasstype.md) \| \`${[UniversityClassType](./bitburner.universityclasstype.md)<!-- -->}\` |  |
-|  locationName | [LocationName](./bitburner.locationname.md) \| \`${[LocationName](./bitburner.locationname.md)<!-- -->}\` |  |
+|  classType | [UniversityClassType](./bitburner.universityclasstype.md) |  |
+|  locationName | [LocationName](./bitburner.locationname.md) |  |
 
 **Returns:**
 

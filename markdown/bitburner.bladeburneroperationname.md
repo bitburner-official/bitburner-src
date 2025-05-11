@@ -2,24 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [BladeburnerOperationName](./bitburner.bladeburneroperationname.md)
 
-## BladeburnerOperationName enum
+## BladeburnerOperationName type
 
-Operation names of Bladeburner
 
 **Signature:**
 
 ```typescript
-declare enum BladeburnerOperationName 
+type BladeburnerOperationName = _ValueOf<BladeburnerOperationNameEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  Assassination | <code>&quot;Assassination&quot;</code> |  |
-|  Investigation | <code>&quot;Investigation&quot;</code> |  |
-|  Raid | <code>&quot;Raid&quot;</code> |  |
-|  StealthRetirement | <code>&quot;Stealth Retirement Operation&quot;</code> |  |
-|  Sting | <code>&quot;Sting Operation&quot;</code> |  |
-|  Undercover | <code>&quot;Undercover Operation&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [BladeburnerOperationNameEnumType](./bitburner.bladeburneroperationnameenumtype.md)
 

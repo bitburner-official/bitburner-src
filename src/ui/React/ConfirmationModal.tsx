@@ -16,7 +16,7 @@ export function ConfirmationModal(props: IProps): React.ReactElement {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <>
-        <Typography>{props.confirmationText}</Typography>
+        <Typography component={"div"}>{props.confirmationText}</Typography>
         <Button
           onClick={() => {
             props.onConfirm();

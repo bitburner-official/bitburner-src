@@ -10,8 +10,8 @@ Get estimate success chance of an action.
 
 ```typescript
 getActionEstimatedSuccessChance(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
+    type: BladeburnerActionType,
+    name: BladeburnerActionName,
     sleeveNumber?: number,
   ): [number, number];
 ```
@@ -20,8 +20,8 @@ getActionEstimatedSuccessChance(
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) \| \`${[BladeburnerActionType](./bitburner.bladeburneractiontype.md)<!-- -->}\` | Type of action. |
-|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) \| \`${[BladeburnerActionName](./bitburner.bladeburneractionname.md)<!-- -->}\` | Name of action. Must be an exact match. |
+|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) | Type of action. |
+|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) | Name of action. Must be an exact match. |
 |  sleeveNumber | number | _(Optional)_ Optional. Index of the sleeve to retrieve information. |
 
 **Returns:**
