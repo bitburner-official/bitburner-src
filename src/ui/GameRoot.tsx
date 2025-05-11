@@ -61,7 +61,7 @@ import { AlertManager } from "./React/AlertManager";
 import { PromptManager } from "./React/PromptManager";
 import { FactionInvitationManager } from "../Faction/ui/FactionInvitationManager";
 import { calculateAchievements } from "../Achievements/Achievements";
-import { RecoveryMode, RecoveryRoot } from "./React/RecoveryRoot";
+import { ActivateRecoveryMode, RecoveryMode, RecoveryRoot } from "./React/RecoveryRoot";
 import { AchievementsRoot } from "../Achievements/AchievementsRoot";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { ThemeBrowser } from "../Themes/ui/ThemeBrowser";
@@ -116,9 +116,18 @@ function determineStartPage(): PageWithContext {
   if (RecoveryMode) {
     return { page: Page.Recovery };
   }
-  if (isBitNodeFinished()) {
-    // Go to BitVerse UI without animation.
-    return { page: Page.BitVerse, flume: false, quick: true };
+  /**
+   * If the save data contains the server list, but WD data is invalid, isBitNodeFinished() will throw an error, and the
+   * main UI will show a black screen instead of the recovery screen.
+   */
+  try {
+    if (isBitNodeFinished()) {
+      // Go to BitVerse UI without animation.
+      return { page: Page.BitVerse, flume: false, quick: true };
+    }
+  } catch (error) {
+    ActivateRecoveryMode(error);
+    return { page: Page.Recovery };
   }
   if (Player.currentWork !== null) {
     return { page: Page.Work };

@@ -9,14 +9,14 @@ Join a faction.
 **Signature:**
 
 ```typescript
-joinFaction(faction: string): boolean;
+joinFaction(faction: FactionName): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  faction | string | Name of faction to join. |
+|  faction | [FactionName](./bitburner.factionname.md) | Name of faction to join. |
 
 **Returns:**
 

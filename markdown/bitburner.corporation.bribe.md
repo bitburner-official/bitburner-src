@@ -15,14 +15,14 @@ Bribe a faction. You must satisfy these conditions:
 **Signature:**
 
 ```typescript
-bribe(factionName: string, amountCash: number): boolean;
+bribe(factionName: FactionName, amountCash: number): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  factionName | string | Faction name |
+|  factionName | [FactionName](./bitburner.factionname.md) | Faction name |
 |  amountCash | number | Amount of money to bribe |
 
 **Returns:**

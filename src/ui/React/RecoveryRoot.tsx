@@ -14,6 +14,8 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import { isBinaryFormat } from "../../../electron/saveDataBinaryFormat";
 import { InvalidSaveData, UnsupportedSaveData } from "../../utils/SaveDataUtils";
 import { downloadContentAsFile } from "../../utils/FileUtils";
+import { debounce } from "lodash";
+import { Engine } from "../../engine";
 
 export let RecoveryMode = false;
 let sourceError: unknown;
@@ -32,9 +34,8 @@ interface IProps {
 function exportSaveFile(): void {
   load()
     .then((content) => {
-      const epochTime = Math.round(Date.now() / 1000);
       const extension = isBinaryFormat(content) ? "json.gz" : "json";
-      const filename = `RECOVERY_BITBURNER_${epochTime}.${extension}`;
+      const filename = `RECOVERY_BITBURNER_${Date.now()}.${extension}`;
       downloadContentAsFile(content, filename);
     })
     .catch((err) => {
@@ -42,6 +43,25 @@ function exportSaveFile(): void {
     });
 }
 
+const debouncedExportSaveFile = debounce(exportSaveFile, 1000);
+
+const debouncedExportCrashReport = debounce((crashReport: unknown) => {
+  const content = typeof crashReport === "object" ? JSON.stringify(crashReport) : String(crashReport);
+  downloadContentAsFile(content, `CRASH_REPORT_BITBURNER_${Date.now()}.txt`);
+}, 2000);
+
+/**
+ * The recovery screen can be activated in 2 ways:
+ * - Call ActivateRecoveryMode() [1].
+ *   - Before loading the save data: An error is thrown in src\ui\LoadingScreen.tsx (e.g., cannot load SWC wasm files,
+ * cannot access IndexedDB and load the save data, Engine.load() throws an error).
+ *   - isBitNodeFinished() throws an error in src\ui\GameRoot.tsx.
+ * - ErrorBoundary [2]: After loading the save data and GameRoot is rendered, an error is thrown anywhere else.
+ *
+ * [1]: errorData is undefined and sourceError, which is the error thrown in LoadingScreen.tsx, is set via ActivateRecoveryMode().
+ * [2]: RecoveryRoot is rendered twice with 2 different errorData. For more information, please check the comment in
+ * src\ui\ErrorBoundary.tsx.
+ */
 export function RecoveryRoot({ softReset, errorData, resetError }: IProps): React.ReactElement {
   function recover(): void {
     if (resetError) resetError();
@@ -51,16 +71,28 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
   }
   Settings.AutosaveInterval = 0;
 
-  // The architecture around RecoveryRoot is awkward, and it can be invoked in
-  // a number of ways. If we are invoked via a save error, sourceError will be set
-  // and we won't have decoded the information into errorData.
+  // This happens in [1] mentioned above. errorData is undefined, so we need to parse sourceError to get errorData.
   if (errorData == null && sourceError) {
     errorData = getErrorForDisplay(sourceError, undefined, Page.LoadingScreen);
   }
 
   useEffect(() => {
-    exportSaveFile();
-  }, []);
+    // This hook is called twice in [2], so we need to debounce exportSaveFile().
+    debouncedExportSaveFile();
+
+    /**
+     * This hook can be called with 3 types of errorData:
+     * - In [1]: errorData.metadata.page is Page.LoadingScreen
+     * - In [2]:
+     *   - First render: errorData.metadata.errorInfo is undefined
+     *   - Second render: errorData.metadata.errorInfo contains componentStack
+     *
+     * The following check makes sure that we do not write the crash report in the "first render" of [2].
+     */
+    if (errorData && (errorData.metadata.errorInfo || errorData.metadata.page === Page.LoadingScreen)) {
+      debouncedExportCrashReport(errorData.body);
+    }
+  }, [errorData]);
 
   let instructions;
   if (sourceError instanceof UnsupportedSaveData) {
@@ -88,10 +120,17 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
             Post in the #bug-report channel on Discord.
           </Link>
         </Typography>
-        <Typography>Please include your save file.</Typography>
+        <Typography>Please include your save file and the crash report.</Typography>
       </Box>
     );
   }
+
+  /**
+   * If Engine.isRunning is false, it means that the loading process in src\ui\LoadingScreen.tsx failed, and the loaded
+   * data is either empty or corrupted (partially or fully). In this case, there is no reason to allow the player to
+   * disable the recovery mode and go back to the main UI.
+   */
+  const canDisableRecoveryMode = Engine.isRunning;
 
   return (
     <Box sx={{ padding: "8px 16px", minHeight: "100vh", maxWidth: "1200px", boxSizing: "border-box" }}>
@@ -114,13 +153,19 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
       <Button onClick={exportSaveFile}>Export save file</Button>
       <br />
       <br />
-      <Typography>You can disable the recovery mode, but the game may not work correctly.</Typography>
+      {canDisableRecoveryMode && (
+        <Typography>
+          You can disable the recovery mode, but the game may not work correctly, and your save data may be corrupted.
+        </Typography>
+      )}
       <ButtonGroup sx={{ my: 2 }}>
-        <Tooltip title="Disable the recovery mode and attempt to head back to the terminal page. This may or may not work. Ensure you saved the recovery file.">
-          <Button onClick={recover} startIcon={<DirectionsRunIcon />}>
-            Disable Recovery Mode
-          </Button>
-        </Tooltip>
+        {canDisableRecoveryMode && (
+          <Tooltip title="Disable the recovery mode and attempt to head back to the terminal page. This may or may not work. Ensure you saved the recovery file.">
+            <Button onClick={recover} startIcon={<DirectionsRunIcon />}>
+              Disable Recovery Mode
+            </Button>
+          </Tooltip>
+        )}
         <SoftResetButton color="warning" onTriggered={softReset} />
         <DeleteGameButton color="error" />
       </ButtonGroup>

@@ -9,14 +9,14 @@ Work for a faction.
 **Signature:**
 
 ```typescript
-workForFaction(faction: string, workType: FactionWorkType, focus?: boolean): boolean;
+workForFaction(faction: FactionName, workType: FactionWorkType, focus?: boolean): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  faction | string | Name of faction to work for. |
+|  faction | [FactionName](./bitburner.factionname.md) | Name of faction to work for. |
 |  workType | [FactionWorkType](./bitburner.factionworktype.md) | Type of work to perform for the faction. |
 |  focus | boolean | _(Optional)_ Acquire player focus on this work operation. Optional. Defaults to true. |
 

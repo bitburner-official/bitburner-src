@@ -21,7 +21,7 @@ An object representing the current work for a faction
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [factionName](./bitburner.factionworktask.factionname.md) |  | string |  |
+|  [factionName](./bitburner.factionworktask.factionname.md) |  | [FactionName](./bitburner.factionname.md) |  |
 |  [factionWorkType](./bitburner.factionworktask.factionworktype.md) |  | [FactionWorkType](./bitburner.factionworktype.md) |  |
 |  [type](./bitburner.factionworktask.type.md) |  | "FACTION" |  |
 

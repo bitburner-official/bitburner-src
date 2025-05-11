@@ -11,8 +11,8 @@
 type SleeveFactionTask = {
   type: "FACTION";
   factionWorkType: FactionWorkType;
-  factionName: string;
+  factionName: FactionName;
 };
 ```
-**References:** [FactionWorkType](./bitburner.factionworktype.md)
+**References:** [FactionWorkType](./bitburner.factionworktype.md)<!-- -->, [FactionName](./bitburner.factionname.md)
 

@@ -53,6 +53,7 @@ import { CompanyPositions } from "../Company/CompanyPositions";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { Skills } from "../Bladeburner/data/Skills";
 import type { PositiveNumber } from "../types";
+import { calculateEffectiveSharedThreads, calculateShareBonus } from "../NetworkShare/Share";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
@@ -134,6 +135,14 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
         checkFormulasAccess(ctx);
         return donationForRep(reputation, person);
       },
+      sharePower:
+        (ctx) =>
+        (_threads, _cpuCores = 1) => {
+          const threads = helpers.positiveInteger(ctx, "threads", _threads);
+          const cpuCores = helpers.positiveInteger(ctx, "cpuCores", _cpuCores);
+          checkFormulasAccess(ctx);
+          return calculateShareBonus(calculateEffectiveSharedThreads(threads, cpuCores));
+        },
     },
     skills: {
       calculateSkill:
