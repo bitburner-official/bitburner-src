@@ -4,35 +4,6 @@
 
 ## bitburner package
 
-## Enumerations
-
-|  Enumeration | Description |
-|  --- | --- |
-|  [BladeburnerActionType](./bitburner.bladeburneractiontype.md) | Action types of Bladeburner |
-|  [BladeburnerBlackOpName](./bitburner.bladeburnerblackopname.md) | Black Operation names of Bladeburner |
-|  [BladeburnerContractName](./bitburner.bladeburnercontractname.md) | Contract names of Bladeburner |
-|  [BladeburnerGeneralActionName](./bitburner.bladeburnergeneralactionname.md) | General action names of Bladeburner |
-|  [BladeburnerOperationName](./bitburner.bladeburneroperationname.md) | Operation names of Bladeburner |
-|  [BladeburnerSkillName](./bitburner.bladeburnerskillname.md) | Skill names type of Bladeburner |
-|  [CityName](./bitburner.cityname.md) | Names of all cities |
-|  [CodingContractName](./bitburner.codingcontractname.md) |  |
-|  [CompanyName](./bitburner.companyname.md) | Names of all companies |
-|  [CreatingCorporationCheckResult](./bitburner.creatingcorporationcheckresult.md) |  |
-|  [CrimeType](./bitburner.crimetype.md) |  |
-|  [FactionName](./bitburner.factionname.md) | <p>Names of all factions.</p><p>Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you do not want to know what all the factions are, you should not check this enum. Some factions are only accessible in the endgame.</p> |
-|  [FactionWorkType](./bitburner.factionworktype.md) |  |
-|  [GymLocationName](./bitburner.gymlocationname.md) | Locations of gym |
-|  [GymType](./bitburner.gymtype.md) |  |
-|  [JobField](./bitburner.jobfield.md) |  |
-|  [JobName](./bitburner.jobname.md) |  |
-|  [LocationName](./bitburner.locationname.md) | Names of all locations |
-|  [OrderType](./bitburner.ordertype.md) |  |
-|  [PositionType](./bitburner.positiontype.md) |  |
-|  [SpecialBladeburnerActionTypeForSleeve](./bitburner.specialbladeburneractiontypeforsleeve.md) | These special Bladeburner action types are only for Sleeve |
-|  [ToastVariant](./bitburner.toastvariant.md) |  |
-|  [UniversityClassType](./bitburner.universityclasstype.md) |  |
-|  [UniversityLocationName](./bitburner.universitylocationname.md) | Locations of university |
-
 ## Interfaces
 
 |  Interface | Description |
@@ -166,10 +137,29 @@
 
 |  Type Alias | Description |
 |  --- | --- |
+|  [\_ValueOf](./bitburner._valueof.md) |  |
+|  [BladeburnerActionEnumType](./bitburner.bladeburneractionenumtype.md) | Action types of Bladeburner |
 |  [BladeburnerActionName](./bitburner.bladeburneractionname.md) |  |
+|  [BladeburnerActionType](./bitburner.bladeburneractiontype.md) |  |
 |  [BladeburnerActionTypeForSleeve](./bitburner.bladeburneractiontypeforsleeve.md) |  |
+|  [BladeburnerBlackOpName](./bitburner.bladeburnerblackopname.md) |  |
+|  [BladeburnerBlackOpNameEnumType](./bitburner.bladeburnerblackopnameenumtype.md) | Black Operation names of Bladeburner |
+|  [BladeburnerContractName](./bitburner.bladeburnercontractname.md) |  |
+|  [BladeburnerContractNameEnumType](./bitburner.bladeburnercontractnameenumtype.md) | Contract names of Bladeburner |
+|  [BladeburnerGeneralActionName](./bitburner.bladeburnergeneralactionname.md) |  |
+|  [BladeburnerGeneralActionNameEnumType](./bitburner.bladeburnergeneralactionnameenumtype.md) | General action names of Bladeburner |
+|  [BladeburnerOperationName](./bitburner.bladeburneroperationname.md) |  |
+|  [BladeburnerOperationNameEnumType](./bitburner.bladeburneroperationnameenumtype.md) | Operation names of Bladeburner |
+|  [BladeburnerSkillName](./bitburner.bladeburnerskillname.md) |  |
+|  [BladeburnerSkillNameEnumType](./bitburner.bladeburnerskillnameenumtype.md) | Skill names type of Bladeburner |
+|  [CityName](./bitburner.cityname.md) |  |
+|  [CityNameEnumType](./bitburner.citynameenumtype.md) | Names of all cities |
+|  [CodingContractName](./bitburner.codingcontractname.md) |  |
+|  [CodingContractNameEnumType](./bitburner.codingcontractnameenumtype.md) |  |
 |  [CodingContractObject](./bitburner.codingcontractobject.md) |  |
 |  [CodingContractSignatures](./bitburner.codingcontractsignatures.md) |  |
+|  [CompanyName](./bitburner.companyname.md) |  |
+|  [CompanyNameEnumType](./bitburner.companynameenumtype.md) | Names of all companies |
 |  [CorpEmployeePosition](./bitburner.corpemployeeposition.md) |  |
 |  [CorpIndustryName](./bitburner.corpindustryname.md) |  |
 |  [CorpMaterialName](./bitburner.corpmaterialname.md) |  |
@@ -178,10 +168,32 @@
 |  [CorpStateName](./bitburner.corpstatename.md) |  |
 |  [CorpUnlockName](./bitburner.corpunlockname.md) |  |
 |  [CorpUpgradeName](./bitburner.corpupgradename.md) |  |
+|  [CreatingCorporationCheckResult](./bitburner.creatingcorporationcheckresult.md) |  |
+|  [CreatingCorporationCheckResultEnumType](./bitburner.creatingcorporationcheckresultenumtype.md) |  |
+|  [CrimeEnumType](./bitburner.crimeenumtype.md) |  |
+|  [CrimeType](./bitburner.crimetype.md) |  |
+|  [FactionName](./bitburner.factionname.md) |  |
+|  [FactionNameEnumType](./bitburner.factionnameenumtype.md) | <p>Names of all factions.</p><p>Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you do not want to know what all the factions are, you should not check this enum. Some factions are only accessible in the endgame.</p> |
+|  [FactionWorkEnumType](./bitburner.factionworkenumtype.md) |  |
+|  [FactionWorkType](./bitburner.factionworktype.md) |  |
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
 |  [GoOpponent](./bitburner.goopponent.md) |  |
+|  [GymEnumType](./bitburner.gymenumtype.md) |  |
+|  [GymLocationName](./bitburner.gymlocationname.md) |  |
+|  [GymLocationNameEnumType](./bitburner.gymlocationnameenumtype.md) | Locations of gym |
+|  [GymType](./bitburner.gymtype.md) |  |
+|  [JobField](./bitburner.jobfield.md) |  |
+|  [JobFieldEnumType](./bitburner.jobfieldenumtype.md) |  |
+|  [JobName](./bitburner.jobname.md) |  |
+|  [JobNameEnumType](./bitburner.jobnameenumtype.md) |  |
+|  [LocationName](./bitburner.locationname.md) |  |
+|  [LocationNameEnumType](./bitburner.locationnameenumtype.md) | Names of all locations |
 |  [NSEnums](./bitburner.nsenums.md) |  |
+|  [OrderEnumType](./bitburner.orderenumtype.md) |  |
+|  [OrderType](./bitburner.ordertype.md) |  |
 |  [PlayerRequirement](./bitburner.playerrequirement.md) | Structured interface to requirements for joining a faction or company. For fields with numerical value &gt; 0, the player must have at least this value. For fields with numerical value &lt;<!-- -->= 0, the player must have at most this value. For "not", the sub-condition must be failed instead of passed. For "someCondition", at least one sub-condition must be passed. |
+|  [PositionEnumType](./bitburner.positionenumtype.md) |  |
+|  [PositionType](./bitburner.positiontype.md) |  |
 |  [ReactNode](./bitburner.reactnode.md) | <p>A stand-in for the real React.ReactNode. A [ReactElement](./bitburner.reactelement.md) is rendered dynamically with React. number and string are displayed directly. boolean, null, and undefined are ignored and not rendered. An array of ReactNodes will display all members of that array sequentially.</p><p>Use React.createElement to make the ReactElement type, see [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation.</p> |
 |  [ScriptArg](./bitburner.scriptarg.md) |  |
 |  [SimpleOpponentStats](./bitburner.simpleopponentstats.md) |  |
@@ -195,5 +207,13 @@
 |  [SleeveSupportTask](./bitburner.sleevesupporttask.md) |  |
 |  [SleeveSynchroTask](./bitburner.sleevesynchrotask.md) |  |
 |  [SleeveTask](./bitburner.sleevetask.md) | Object representing a sleeve current task. |
+|  [SpecialBladeburnerActionEnumTypeForSleeve](./bitburner.specialbladeburneractionenumtypeforsleeve.md) | These special Bladeburner action types are only for Sleeve |
+|  [SpecialBladeburnerActionTypeForSleeve](./bitburner.specialbladeburneractiontypeforsleeve.md) |  |
 |  [Task](./bitburner.task.md) | Task |
+|  [ToastVariant](./bitburner.toastvariant.md) |  |
+|  [ToastVariantEnumType](./bitburner.toastvariantenumtype.md) |  |
+|  [UniversityClassEnumType](./bitburner.universityclassenumtype.md) |  |
+|  [UniversityClassType](./bitburner.universityclasstype.md) |  |
+|  [UniversityLocationName](./bitburner.universitylocationname.md) |  |
+|  [UniversityLocationNameEnumType](./bitburner.universitylocationnameenumtype.md) | Locations of university |
 

@@ -56,7 +56,7 @@ import {
 } from "../Corporation/Actions";
 import { CorpUnlocks } from "../Corporation/data/CorporationUnlocks";
 import { CorpUpgrades } from "../Corporation/data/CorporationUpgrades";
-import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, CityName, CreatingCorporationCheckResult } from "@enums";
+import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, CityName, CreatingCorporationCheckResultEnum } from "@enums";
 import { IndustriesData, IndustryResearchTrees } from "../Corporation/data/IndustryData";
 import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
@@ -596,7 +596,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     canCreateCorporation: (ctx) => (_selfFund) => {
       const selfFund = !!_selfFund;
       const checkResult = canCreateCorporation(selfFund, false);
-      if (checkResult !== CreatingCorporationCheckResult.Success) {
+      if (checkResult !== CreatingCorporationCheckResultEnum.Success) {
         helpers.log(ctx, () => convertCreatingCorporationCheckResultToMessage(checkResult));
       }
       return checkResult;

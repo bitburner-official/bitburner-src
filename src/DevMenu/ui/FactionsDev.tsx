@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import {
   Accordion,
   AccordionSummary,
@@ -10,8 +10,6 @@ import {
   RadioGroup,
   Radio,
   Box,
-  Autocomplete,
-  TextField,
 } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -28,14 +26,12 @@ import { getRecordValues } from "../../Types/Record";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { useRerender } from "../../ui/React/hooks";
 import { MaxFavor } from "../../Faction/formulas/favor";
+import { FactionChooser } from "./FactionChooser";
 
 const largeAmountOfReputation = 1e12;
 
 export function FactionsDev(): React.ReactElement {
   const [selectedFaction, setSelectedFaction] = useState(Factions[FactionName.Illuminati]);
-  const factions = useMemo(() => {
-    return getRecordValues(Factions).map((faction) => faction.name);
-  }, []);
   const rerender = useRerender();
 
   function receiveInvite(): void {
@@ -146,18 +142,11 @@ export function FactionsDev(): React.ReactElement {
                       <ReplyIcon />
                     </Button>
                   </Tooltip>
-                  <Autocomplete
-                    style={{ marginLeft: "8px", width: "350px" }}
-                    options={factions}
-                    value={selectedFaction.name}
-                    renderInput={(params) => <TextField {...params} style={{ height: "100%" }} />}
-                    onChange={(_, factionName) => {
-                      if (!factionName || !getEnumHelper("FactionName").isMember(factionName)) {
-                        return;
-                      }
-                      setSelectedFaction(Factions[factionName]);
-                    }}
-                  ></Autocomplete>
+                  <FactionChooser
+                    faction={selectedFaction}
+                    onChange={setSelectedFaction}
+                    style={{ marginLeft: "8px" }}
+                  />
                 </Box>
               </td>
             </tr>

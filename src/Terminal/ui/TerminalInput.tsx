@@ -9,6 +9,7 @@ import { Player } from "@player";
 import { getTabCompletionPossibilities } from "../getTabCompletionPossibilities";
 import { Settings } from "../../Settings/Settings";
 import { longestCommonStart } from "../../utils/StringHelperFunctions";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 const useStyles = makeStyles()((theme: Theme) => ({
   input: {
@@ -62,6 +63,23 @@ export function TerminalInput(): React.ReactElement {
   }, [postUpdateValue]);
 
   function saveValue(newValue: string, postUpdate?: () => void): void {
+    /**
+     * There are reports of a crash caused by "value" (the React state) being undefined. It means that a caller of this
+     * function passes undefined to the first parameter. Currently, we don't know which caller does that, so we put this
+     * safety check here to mitigate the crash and gather more debug information.
+     */
+    if (newValue == null) {
+      exceptionAlert(
+        new Error(
+          `saveValue was called with invalid value.\n` +
+            `command: ${command}\nterminalInput.current.value: ${terminalInput.current?.value}\nvalue: ${value}\n` +
+            `possibilities: ${possibilities}\nsearchResults: ${searchResults}\nsearchResultsIndex: ${searchResultsIndex}\n` +
+            `Terminal.commandHistory: ${Terminal.commandHistory}\nTerminal.commandHistoryIndex: ${Terminal.commandHistoryIndex}`,
+        ),
+        true,
+      );
+      return;
+    }
     command = newValue;
     setValue(newValue);
 

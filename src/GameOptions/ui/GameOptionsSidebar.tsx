@@ -26,6 +26,7 @@ import { Page } from "../../ui/Router";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { OptionsTabName } from "./GameOptionsRoot";
 import { Player } from "@player";
+import { OptionSwitch } from "../../ui/React/OptionSwitch";
 
 interface IProps {
   tab: OptionsTabName;
@@ -59,6 +60,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
   const [diagnosticOpen, setDiagnosticOpen] = useState(false);
   const [importSaveOpen, setImportSaveOpen] = useState(false);
   const [importData, setImportData] = useState<ImportData | null>(null);
+  const [syncSteamAchievements, setSyncSteamAchievements] = useState(true);
 
   const [confirmResetOpen, setConfirmResetOpen] = useState(false);
   const [creditsOpen, setCreditsOpen] = useState(false);
@@ -76,6 +78,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
       const data = await saveObject.getImportDataFromSaveData(saveData);
       setImportData(data);
       setImportSaveOpen(true);
+      setSyncSteamAchievements(data.playerData?.syncSteamAchievements ?? true);
     } catch (e: unknown) {
       console.error(e);
       SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);
@@ -89,7 +92,13 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
     if (!importData) return;
 
     try {
-      await saveObject.importGame(importData.saveData);
+      let overrideSettings = undefined;
+      if (syncSteamAchievements !== importData.playerData?.syncSteamAchievements) {
+        overrideSettings = {
+          SyncSteamAchievements: syncSteamAchievements,
+        };
+      }
+      await saveObject.importGame(importData.saveData, overrideSettings);
     } catch (e: unknown) {
       console.error(e);
       SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);
@@ -204,6 +213,18 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
                 </>
               )}
               <br />
+              <br />
+              <OptionSwitch
+                checked={syncSteamAchievements}
+                onChange={(newValue) => setSyncSteamAchievements(newValue)}
+                text="Sync Steam achievements"
+                tooltip={
+                  <>
+                    This setting is only used in the Steam app. If this setting is enabled, the game will automatically
+                    sync your unlocked Steam achievements to Steam Cloud.
+                  </>
+                }
+              />
               <br />
             </>
           }

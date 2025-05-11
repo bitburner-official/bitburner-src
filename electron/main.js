@@ -21,14 +21,13 @@ app.on("window-all-closed", () => {
 
 require("./steamworksUtils");
 const gameWindow = require("./gameWindow");
-const achievements = require("./achievements");
 const utils = require("./utils");
 const storage = require("./storage");
 const debounce = require("lodash/debounce");
 const Store = require("electron-store");
 const store = new Store();
 const path = require("path");
-const { realpathSync } = require("fs");
+const { realpathSync, readFileSync } = require("fs");
 const { fileURLToPath } = require("url");
 
 log.transports.file.level = store.get("file-log-level", "info");
@@ -42,9 +41,6 @@ function setStopProcessHandler(window) {
   const closingWindowHandler = async (e) => {
     // We need to prevent the default closing event to add custom logic
     e.preventDefault();
-
-    // First we clear the achievement timer
-    achievements.disableAchievementsInterval(window);
 
     // Trigger debounced saves right now before closing
     try {
@@ -214,8 +210,8 @@ app.on("ready", async () => {
     let relativePath;
     /**
      * "realpathSync" will throw an error if "filePath" points to a non-existent file. If an error is thrown here, the
-     * electron app will crash immediately. We can use fs.existsSync to check "filePath" before using it, but it's best
-     * to try-catch the entire code block and avoid unexpected issues.
+     * Electron app will not write any error logs, and the request will fail silently. We can use fs.existsSync to check
+     * "filePath" before using it, but it's best to try-catch the entire code block.
      */
     try {
       filePath = fileURLToPath(url);
@@ -223,13 +219,7 @@ app.on("ready", async () => {
       relativePath = path.relative(__dirname, realPath);
       // Only allow access to files in "dist" folder or html files in the same directory
       if (method === "GET" && (relativePath.startsWith("dist") || relativePath.match(/^[a-zA-Z-_]*\.html/))) {
-        /**
-         * By default, requests made by net.fetch go through custom protocol handlers, so we have to explicitly tell it
-         * to bypass those handlers; otherwise, it creates an infinite loop.
-         *
-         * Ref: https://github.com/electron/electron/issues/39402
-         */
-        return net.fetch(realPath, { bypassCustomProtocolHandlers: true });
+        return new Response(readFileSync(realPath));
       }
     } catch (error) {
       log.error(error);

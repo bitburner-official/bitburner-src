@@ -9,7 +9,7 @@ Get the cost to upgrade a warehouse to the next level.
 **Signature:**
 
 ```typescript
-getUpgradeWarehouseCost(divisionName: string, city: CityName | `${CityName}`, amt?: number): number;
+getUpgradeWarehouseCost(divisionName: string, city: CityName, amt?: number): number;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ getUpgradeWarehouseCost(divisionName: string, city: CityName | `${CityName}`, am
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
+|  city | [CityName](./bitburner.cityname.md) | Name of the city |
 |  amt | number | _(Optional)_ Amount of upgrades. Optional. Defaults to 1. |
 
 **Returns:**
