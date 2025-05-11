@@ -1,5 +1,5 @@
 import { CodingContractName } from "@enums";
-import { removeBracketsFromArrayString, type CodingContractTypes } from "../ContractTypes";
+import { CodingContractTypes } from "../ContractTypes";
 import { getRandomIntInclusive } from "../../utils/helpers/getRandomIntInclusive";
 
 export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.TotalPrimesInRange> = {
@@ -7,8 +7,9 @@ export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.To
     desc: (data: number[]): string => {
       return [
         `You are given two random non-negative integers: ${data}.\n`,
-        `List the prime numbers between them (including the numbers given).\n`,
-        `For example, given the range of [0,20], the primes in between are [2,3,5,7,11,13,17,19].`,
+        `Determine the amount of prime numbers between them (including the numbers given).\n\n`,
+        "Example:\n",
+        `The range of [0,20] contains the primes [2,3,5,7,11,13,17,19], resulting in an answer of 8.`,
       ].join(" ");
     },
     difficulty: 2,
@@ -54,10 +55,10 @@ export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.To
         let primes: number = 0;
         //Only store the potential primes in the low to high range instead of 0 to high.
         const arr = Array(high - low + 1);
-        //Instead of comparing all primes<low and primes<high, we use a filtering prime list. Sqrt(high) is a convenient "mid point".
+        //In order to mark off all composite numbers, we need to run up through sqrt(high), since primes squares are the worst case.
         const checks = simpleSieve(Math.ceil(Math.sqrt(high)));
         for (const i of checks) {
-          //same logic as for the simple sieve to mark off multiples of identified primes, but we only start checking at the first multiple>low.
+          //same logic as for the simple sieve to mark off multiples of identified primes, but we only start checking at the first multiple>=low.
           const lim = Math.max(i, Math.ceil(low / i)) * i;
           for (let j = lim; j <= high; j += i) {
             arr[j - low] = 1;
@@ -65,7 +66,7 @@ export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.To
         }
         for (let a = 0; a <= high - low; a++) {
           if (!arr[a]) {
-            //We don't really care what the value of the prime is, just how many we find. This could be easily modified to return the array of primes found if needed...
+            //We don't really care what the value of the prime is, just how many we find.
             ++primes;
           }
         }
@@ -74,13 +75,9 @@ export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.To
 
       //We trust the player generated the appropriate list of primes (or is more accurate at guessing primes than Gauss was at this range) and as such they deserve the reward.
       const primes = primeSieve(data[0], data[1]);
-      return answer.length === primes;
+      return answer === primes;
     },
-    convertAnswer: (ans) => {
-      const sanitized = removeBracketsFromArrayString(ans).replace(/\s/g, "").split(",");
-      return sanitized.map((s) => parseInt(s));
-    },
-    validateAnswer: (ans): ans is number[] =>
-      typeof ans === "object" && Array.isArray(ans) && ans.every((s) => typeof s === "number"),
+    convertAnswer: (ans) => parseInt(ans, 10),
+    validateAnswer: (ans): ans is number => typeof ans === "number",
   },
 };

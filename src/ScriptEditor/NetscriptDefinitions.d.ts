@@ -8838,7 +8838,7 @@ export type CodingContractSignatures = {
   "Encryption I: Caesar Cipher": [[string, number], string];
   "Encryption II: Vigenère Cipher": [[string, string], string];
   "Square Root": [bigint, bigint, [string, string]];
-  "Total Number of Primes": [number[], number[]];
+  "Total Number of Primes": [number[], number];
 };
 
 export type CodingContractObject = {
