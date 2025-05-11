@@ -11,7 +11,7 @@ export const SystemPage = (): React.ReactElement => {
   const [portSize, setPortSize] = useState(Settings.MaxPortCapacity);
   const [terminalSize, setTerminalSize] = useState(Settings.MaxTerminalCapacity);
   const [autosaveInterval, setAutosaveInterval] = useState(Settings.AutosaveInterval);
-  const [tailrenderInterval, setTailRenderInterval] = useState(Settings.TailRenderInterval);
+  const [tailRenderInterval, setTailRenderInterval] = useState(Settings.TailRenderInterval);
 
   function handlePortSizeChange(_event: Event | React.SyntheticEvent, newValue: number | number[]): void {
     setPortSize(newValue as number);
@@ -120,11 +120,11 @@ export const SystemPage = (): React.ReactElement => {
         />
         <OptionsSlider
           label="Tail render interval (ms)"
-          initialValue={tailrenderInterval}
+          initialValue={tailRenderInterval}
           callback={handleTailIntervalChange}
-          step={200}
-          min={50}
-          max={5 * 1000}
+          step={100}
+          min={100}
+          max={5000}
           tooltip={
             <>
               The minimum number of milliseconds between tail rerenders. Setting this too low can result in poor

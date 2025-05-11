@@ -22,6 +22,6 @@ An object representing the current study task
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [classType](./bitburner.studytask.classtype.md) |  | string |  |
-|  [location](./bitburner.studytask.location.md) |  | [LocationName](./bitburner.locationname.md) \| \`${[LocationName](./bitburner.locationname.md)<!-- -->}\` |  |
+|  [location](./bitburner.studytask.location.md) |  | [LocationName](./bitburner.locationname.md) |  |
 |  [type](./bitburner.studytask.type.md) |  | "CLASS" |  |
 

@@ -9,7 +9,7 @@ Set smart supply.
 **Signature:**
 
 ```typescript
-setSmartSupply(divisionName: string, city: CityName | `${CityName}`, enabled: boolean): void;
+setSmartSupply(divisionName: string, city: CityName, enabled: boolean): void;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ setSmartSupply(divisionName: string, city: CityName | `${CityName}`, enabled: bo
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
+|  city | [CityName](./bitburner.cityname.md) | Name of the city |
 |  enabled | boolean | Use true to enable, false otherwise. |
 
 **Returns:**

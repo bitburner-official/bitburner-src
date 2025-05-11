@@ -9,7 +9,7 @@ Get data about an office.
 **Signature:**
 
 ```typescript
-getOffice(divisionName: string, city: CityName | `${CityName}`): Office;
+getOffice(divisionName: string, city: CityName): Office;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ getOffice(divisionName: string, city: CityName | `${CityName}`): Office;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
+|  city | [CityName](./bitburner.cityname.md) | Name of the city |
 
 **Returns:**
 

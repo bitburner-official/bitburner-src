@@ -103,7 +103,7 @@ export function getMaxNumberLevelUpgrades(nodeObj: HacknetNode | HacknetServer, 
   let min = 1;
   let max = maxLevel - 1;
   const levelsToMax = maxLevel - nodeObj.level;
-  if (Player.money > nodeObj.calculateLevelUpgradeCost(levelsToMax, Player.mults.hacknet_node_level_cost)) {
+  if (Player.money >= nodeObj.calculateLevelUpgradeCost(levelsToMax, Player.mults.hacknet_node_level_cost)) {
     return levelsToMax;
   }
 
@@ -142,13 +142,13 @@ export function getMaxNumberRamUpgrades(nodeObj: HacknetNode | HacknetServer, ma
   } else {
     levelsToMax = Math.round(Math.log2(maxLevel / nodeObj.ram));
   }
-  if (Player.money > nodeObj.calculateRamUpgradeCost(levelsToMax, Player.mults.hacknet_node_ram_cost)) {
+  if (Player.money >= nodeObj.calculateRamUpgradeCost(levelsToMax, Player.mults.hacknet_node_ram_cost)) {
     return levelsToMax;
   }
 
   //We'll just loop until we find the max
   for (let i = levelsToMax - 1; i >= 0; --i) {
-    if (Player.money > nodeObj.calculateRamUpgradeCost(i, Player.mults.hacknet_node_ram_cost)) {
+    if (Player.money >= nodeObj.calculateRamUpgradeCost(i, Player.mults.hacknet_node_ram_cost)) {
       return i;
     }
   }
@@ -168,7 +168,7 @@ export function getMaxNumberCoreUpgrades(nodeObj: HacknetNode | HacknetServer, m
   let min = 1;
   let max = maxLevel - 1;
   const levelsToMax = maxLevel - nodeObj.cores;
-  if (Player.money > nodeObj.calculateCoreUpgradeCost(levelsToMax, Player.mults.hacknet_node_core_cost)) {
+  if (Player.money >= nodeObj.calculateCoreUpgradeCost(levelsToMax, Player.mults.hacknet_node_core_cost)) {
     return levelsToMax;
   }
 

@@ -9,18 +9,15 @@ Get whether an action is set to autolevel.
 **Signature:**
 
 ```typescript
-getActionAutolevel(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-  ): boolean;
+getActionAutolevel(type: BladeburnerActionType, name: BladeburnerActionName): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) \| \`${[BladeburnerActionType](./bitburner.bladeburneractiontype.md)<!-- -->}\` | Type of action. |
-|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) \| \`${[BladeburnerActionName](./bitburner.bladeburneractionname.md)<!-- -->}\` | Name of action. Must be an exact match. |
+|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) | Type of action. |
+|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) | Name of action. Must be an exact match. |
 
 **Returns:**
 

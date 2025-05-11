@@ -1,6 +1,6 @@
 /* eslint-disable no-process-exit */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, dialog, BrowserWindow, ipcMain, protocol } = require("electron");
+const { app, dialog, BrowserWindow, ipcMain, protocol, net } = require("electron");
 
 const log = require("electron-log");
 log.catchErrors();
@@ -21,14 +21,13 @@ app.on("window-all-closed", () => {
 
 require("./steamworksUtils");
 const gameWindow = require("./gameWindow");
-const achievements = require("./achievements");
 const utils = require("./utils");
 const storage = require("./storage");
 const debounce = require("lodash/debounce");
 const Store = require("electron-store");
 const store = new Store();
 const path = require("path");
-const { realpathSync } = require("fs");
+const { realpathSync, readFileSync } = require("fs");
 const { fileURLToPath } = require("url");
 
 log.transports.file.level = store.get("file-log-level", "info");
@@ -42,9 +41,6 @@ function setStopProcessHandler(window) {
   const closingWindowHandler = async (e) => {
     // We need to prevent the default closing event to add custom logic
     e.preventDefault();
-
-    // First we clear the achievement timer
-    achievements.disableAchievementsInterval(window);
 
     // Trigger debounced saves right now before closing
     try {
@@ -182,14 +178,14 @@ global.app_handlers = {
 
 app.on("ready", async () => {
   // Intercept file protocol requests and only let valid requests through
-  protocol.interceptFileProtocol("file", ({ url, method }, callback) => {
+  protocol.handle("file", ({ url, method }) => {
     let filePath;
     let realPath;
     let relativePath;
     /**
      * "realpathSync" will throw an error if "filePath" points to a non-existent file. If an error is thrown here, the
-     * electron app will crash immediately. We can use fs.existsSync to check "filePath" before using it, but it's best
-     * to try-catch the entire code block and avoid unexpected issues.
+     * Electron app will not write any error logs, and the request will fail silently. We can use fs.existsSync to check
+     * "filePath" before using it, but it's best to try-catch the entire code block.
      */
     try {
       filePath = fileURLToPath(url);
@@ -197,8 +193,7 @@ app.on("ready", async () => {
       relativePath = path.relative(__dirname, realPath);
       // Only allow access to files in "dist" folder or html files in the same directory
       if (method === "GET" && (relativePath.startsWith("dist") || relativePath.match(/^[a-zA-Z-_]*\.html/))) {
-        callback(realPath);
-        return;
+        return new Response(readFileSync(realPath));
       }
     } catch (error) {
       log.error(error);
@@ -207,7 +202,7 @@ app.on("ready", async () => {
       `Tried to access a page outside the sandbox. Url: ${url}. FilePath: ${filePath}. RealPath: ${realPath}.` +
         ` __dirname: ${__dirname}. RelativePath: ${relativePath}. Method: ${method}.`,
     );
-    callback({ statusCode: 403 });
+    return new Response(null, { status: 403 });
   });
 
   log.info("Application is ready!");

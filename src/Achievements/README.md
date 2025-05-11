@@ -1,11 +1,27 @@
-# Adding Achievements
+# Design new icons
 
-- Add a .svg in `./assets/Steam/achievements/real`
-- Run `node ./tools/fetch-steam-achievements-data DEVKEYHERE`
-  - Get your key here: https://steamcommunity.com/dev/apikey
-- Add an entry in `./src/Achievements/AchievementData.json` -> achievements
-  - It should match the information for the Steam achievement, if applicable
-  - Order the new achievement entry thematically
-- Add an entry in `./src/Achievements/Achievements.ts` -> achievements
-  - Match the order of achievements in `AchievementData.json`
-- Commit `./dist/icons/achievements`
+Recommended tool: https://inkscape.org
+
+Note: You should **NOT** use the option "Save and restore window geometry for each document" (Edit -> Preferences -> Interface -> Windows).
+
+Steps:
+
+- Clone `$PROJECT_DIR/assets/Steam/achievements/template.svg`.
+- Edit the text.
+- Object -> Align and Distribute ...
+  - Relative to: Chose "Page".
+  - Press the icon having the tooltip: "Center on vertical axis".
+  - Press the icon having the tooltip: "Center on horizontal axis".
+
+# Add achievements
+
+- Add the new icon (.svg file) in `$PROJECT_DIR/assets/Steam/achievements/icons`.
+- Add an entry in `$PROJECT_DIR/src/Achievements/AchievementData.json`.
+  - It should match the information for the Steam achievement, if applicable.
+  - Order the new achievement entry thematically.
+- Add an entry in `$PROJECT_DIR/src/Achievements/Achievements.ts`.
+  - Match the order of achievements in `AchievementData.json`.
+  - `Icon` must be the name of the .svg file.
+  - `NotInSteam` must be true.
+- Run `pack-for-web.sh`.
+- When committing, remember to commit the changes in `$PROJECT_DIR/dist/icons/achievements`.

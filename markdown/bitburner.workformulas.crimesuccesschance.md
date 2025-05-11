@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-crimeSuccessChance(person: Person, crimeType: CrimeType | `${CrimeType}`): number;
+crimeSuccessChance(person: Person, crimeType: CrimeType): number;
 ```
 
 ## Parameters
@@ -15,7 +15,7 @@ crimeSuccessChance(person: Person, crimeType: CrimeType | `${CrimeType}`): numbe
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  person | [Person](./bitburner.person.md) |  |
-|  crimeType | [CrimeType](./bitburner.crimetype.md) \| \`${[CrimeType](./bitburner.crimetype.md)<!-- -->}\` |  |
+|  crimeType | [CrimeType](./bitburner.crimetype.md) |  |
 
 **Returns:**
 

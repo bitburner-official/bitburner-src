@@ -54,6 +54,17 @@ export const MiscPage = (): React.ReactElement => {
           </>
         }
       />
+      <OptionSwitch
+        checked={Settings.SyncSteamAchievements}
+        onChange={(newValue) => (Settings.SyncSteamAchievements = newValue)}
+        text="Sync Steam achievements"
+        tooltip={
+          <>
+            This setting is only used in the Steam app. If this setting is enabled, the game will automatically sync
+            your unlocked Steam achievements to Steam Cloud.
+          </>
+        }
+      />
     </GameOptionsPage>
   );
 };
