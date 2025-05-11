@@ -9,7 +9,7 @@ Throw a party for your employees.
 **Signature:**
 
 ```typescript
-throwParty(divisionName: string, city: CityName | `${CityName}`, costPerEmployee: number): number;
+throwParty(divisionName: string, city: CityName, costPerEmployee: number): number;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ throwParty(divisionName: string, city: CityName | `${CityName}`, costPerEmployee
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
+|  city | [CityName](./bitburner.cityname.md) | Name of the city |
 |  costPerEmployee | number | Amount to spend per employee. |
 
 **Returns:**

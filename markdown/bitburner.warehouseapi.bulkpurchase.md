@@ -9,7 +9,7 @@ Set material to bulk-buy.
 **Signature:**
 
 ```typescript
-bulkPurchase(divisionName: string, city: CityName | `${CityName}`, materialName: string, amt: number): void;
+bulkPurchase(divisionName: string, city: CityName, materialName: string, amt: number): void;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ bulkPurchase(divisionName: string, city: CityName | `${CityName}`, materialName:
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
+|  city | [CityName](./bitburner.cityname.md) | Name of the city |
 |  materialName | string | Name of the material |
 |  amt | number | Amount of material to buy |
 

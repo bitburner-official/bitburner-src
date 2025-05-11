@@ -59,7 +59,7 @@ async function createWindow(killall) {
 
   window.webContents.backgroundThrottling = false;
 
-  achievements.enableAchievementsInterval(window);
+  achievements.enableSyncingAchievements();
   utils.attachUnresponsiveAppHandler(window);
 
   menu.refreshMenu(window);

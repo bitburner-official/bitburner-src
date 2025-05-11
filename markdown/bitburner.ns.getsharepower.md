@@ -4,7 +4,7 @@
 
 ## NS.getSharePower() method
 
-Share Power has a multiplicative effect on rep/second while doing work for a faction. Share Power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
+Share power has a multiplicative effect on rep/second while doing work for a faction. Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
 
 **Signature:**
 

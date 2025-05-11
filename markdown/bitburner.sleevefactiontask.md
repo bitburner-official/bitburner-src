@@ -10,8 +10,8 @@
 ```typescript
 type SleeveFactionTask = {
   type: "FACTION";
-  factionWorkType: FactionWorkType | `${FactionWorkType}`;
-  factionName: FactionName;
+  factionWorkType: FactionWorkType;
+  factionName: string;
 };
 ```
 **References:** [FactionWorkType](./bitburner.factionworktype.md)<!-- -->, [FactionName](./bitburner.factionname.md)

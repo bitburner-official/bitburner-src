@@ -10,7 +10,7 @@ import { OfficeSpace } from "./OfficeSpace";
 import { Material } from "./Material";
 import { Product } from "./Product";
 import { Warehouse } from "./Warehouse";
-import { CreatingCorporationCheckResult, FactionName, IndustryType } from "@enums";
+import { CreatingCorporationCheckResultEnum, FactionName, IndustryType } from "@enums";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
 import { CityName } from "@enums";
@@ -33,13 +33,13 @@ import { formatMoney, formatNumber } from "../ui/formatNumber";
 export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): Result {
   const checkResult = canCreateCorporation(selfFund, restart);
   switch (checkResult) {
-    case CreatingCorporationCheckResult.Success:
+    case CreatingCorporationCheckResultEnum.Success:
       break;
-    case CreatingCorporationCheckResult.NoSf3OrDisabled:
-    case CreatingCorporationCheckResult.CorporationExists:
+    case CreatingCorporationCheckResultEnum.NoSf3OrDisabled:
+    case CreatingCorporationCheckResultEnum.CorporationExists:
       return { success: false, message: convertCreatingCorporationCheckResultToMessage(checkResult) };
-    case CreatingCorporationCheckResult.UseSeedMoneyOutsideBN3:
-    case CreatingCorporationCheckResult.DisabledBySoftCap:
+    case CreatingCorporationCheckResultEnum.UseSeedMoneyOutsideBN3:
+    case CreatingCorporationCheckResultEnum.DisabledBySoftCap:
       // In order to maintain backward compatibility, we have to throw an error in these cases.
       throw new Error(convertCreatingCorporationCheckResultToMessage(checkResult));
     default:

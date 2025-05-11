@@ -15,16 +15,21 @@ import {
 } from "@mui/material";
 import ReplyAllIcon from "@mui/icons-material/ReplyAll";
 import ReplyIcon from "@mui/icons-material/Reply";
-import { AugmentationName } from "@enums";
+import { AugmentationName, FactionName } from "@enums";
+import { Factions } from "../../Faction/Factions";
+import { FactionChooser } from "./FactionChooser";
+import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
 
 export function AugmentationsDev(): React.ReactElement {
   const [augmentation, setAugmentation] = React.useState<AugmentationName | null>(null);
+  const [selectedFaction, setSelectedFaction] = React.useState(Factions[FactionName.Illuminati]);
 
   function queueAug(): void {
     if (!augmentation) {
       return;
     }
-    if (Player.hasAugmentation(augmentation)) {
+    // NFG can be queued again to increase its level.
+    if (Player.hasAugmentation(augmentation) && augmentation !== AugmentationName.NeuroFluxGovernor) {
       return;
     }
     Player.queueAugmentation(augmentation);
@@ -41,6 +46,21 @@ export function AugmentationsDev(): React.ReactElement {
     setAugmentation(null);
   }
 
+  function queueAllAugsOfFaction(): void {
+    for (const augName of getFactionAugmentationsFiltered(selectedFaction)) {
+      /**
+       * Skip NFG. This tool is usually used when testing the situation in which the player installs all augmentations
+       * from a specific faction. If we use this tool n times, we also get n levels of NFG, which may not be what we
+       * want to test.
+       */
+      if (Player.hasAugmentation(augName) || augName === AugmentationName.NeuroFluxGovernor) {
+        continue;
+      }
+      Player.queueAugmentation(augName);
+    }
+    setAugmentation(null);
+  }
+
   function clearAugs(): void {
     Player.augmentations = [];
   }
@@ -50,7 +70,9 @@ export function AugmentationsDev(): React.ReactElement {
   }
 
   const options = Object.values(AugmentationName).filter(
-    (augmentationName) => !Player.hasAugmentation(augmentationName),
+    (augmentationName) =>
+      // NFG is always eligible.
+      !Player.hasAugmentation(augmentationName) || augmentationName === AugmentationName.NeuroFluxGovernor,
   );
 
   return (
@@ -86,6 +108,14 @@ export function AugmentationsDev(): React.ReactElement {
           </Tooltip>
         </Box>
         <Button onClick={clearQueuedAugs}>Clear queued augmentations</Button>
+        <Box display="flex" marginTop="8px">
+          <Tooltip title="Queue all augmentations offered by faction, except NFG">
+            <Button onClick={queueAllAugsOfFaction}>
+              <ReplyAllIcon />
+            </Button>
+          </Tooltip>
+          <FactionChooser faction={selectedFaction} onChange={setSelectedFaction} style={{ marginLeft: "16px" }} />
+        </Box>
       </AccordionDetails>
     </Accordion>
   );

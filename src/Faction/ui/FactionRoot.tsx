@@ -22,7 +22,6 @@ import { GangButton } from "./GangButton";
 import { FactionWork } from "../../Work/FactionWork";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { repNeededToDonate } from "../formulas/donation";
-import { ShareOption } from "./ShareOption";
 
 type FactionRootProps = {
   faction: Faction;
@@ -132,7 +131,6 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
       {!isPlayersGang && factionInfo.offersWork() && (
         <DonateOption faction={faction} rerender={rerender} favorToDonate={favorToDonate} disabled={!canDonate} />
       )}
-      {!isPlayersGang && factionInfo.offersWork() && <ShareOption rerender={rerender} />}
       <Option buttonText={"Purchase Augmentations"} infoText={augmentationsInfo} onClick={onAugmentations} />
       {canPurchaseSleeves && (
         <>
