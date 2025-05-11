@@ -64,15 +64,15 @@
      id="layer1">
     <text
        xml:space="preserve"
-       style="font-weight:bold;font-size:13.3201px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.178394;stroke-opacity:1"
-       x="8.801322"
-       y="39.833897"
+       style="font-weight:bold;font-size:14.1111px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.178394;stroke-opacity:1"
+       x="32.432976"
+       y="40.039101"
        id="text2505"
        transform="scale(1.0332295,0.96783918)"><tspan
          sodipodi:role="line"
          id="tspan2503"
-         style="fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.178394;stroke-opacity:1"
-         x="8.801322"
-         y="39.833897">NiteSec</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14.1111px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.178394;stroke-opacity:1"
+         x="32.432976"
+         y="40.039101">NiteSec</tspan></text>
   </g>
 </svg>

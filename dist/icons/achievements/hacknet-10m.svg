@@ -64,19 +64,19 @@
      id="layer1">
     <text
        xml:space="preserve"
-       style="font-weight:bold;font-size:9.95835px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.13337"
-       x="33.438457"
-       y="30.958828"
+       style="font-weight:bold;font-size:11.2889px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.13337"
+       x="33.569012"
+       y="30.30394"
        id="text8876"><tspan
          sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.13337"
-         x="33.438457"
-         y="30.958828"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.2889px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.13337"
+         x="33.569012"
+         y="30.30394"
          id="tspan10677">HACKNET</tspan><tspan
          sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.13337"
-         x="33.438457"
-         y="43.406765"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.2889px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.13337"
+         x="33.569012"
+         y="44.518028"
          id="tspan11099">$10m</tspan></text>
   </g>
 </svg>

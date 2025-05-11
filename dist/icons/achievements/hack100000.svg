@@ -64,19 +64,19 @@
      id="layer1">
     <text
        xml:space="preserve"
-       style="font-weight:bold;font-size:14.662px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.196363"
-       x="33.573429"
-       y="30.201166"
+       style="font-weight:bold;font-size:15.875px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.196363"
+       x="33.630245"
+       y="29.457327"
        id="text8876"><tspan
          sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.196363"
-         x="33.573429"
-         y="30.201166"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.875px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.196363"
+         x="33.630245"
+         y="29.457327"
          id="tspan2003">Hack</tspan><tspan
          sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.196363"
-         x="33.573429"
-         y="48.528667"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.875px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.196363"
+         x="33.630245"
+         y="49.445869"
          id="tspan2495">100000</tspan></text>
   </g>
 </svg>

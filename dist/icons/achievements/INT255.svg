@@ -64,19 +64,19 @@
      id="layer1">
     <text
        xml:space="preserve"
-       style="font-weight:bold;font-size:14.9918px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.200782"
-       x="33.817944"
-       y="29.773905"
+       style="font-weight:bold;font-size:24.6944px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.200782"
+       x="33.932983"
+       y="27.007704"
        id="text8876"><tspan
          sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.200782"
-         x="33.817944"
-         y="29.773905"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.6944px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.200782"
+         x="33.932983"
+         y="27.007704"
          id="tspan15347">INT</tspan><tspan
          sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.200782"
-         x="33.817944"
-         y="48.513657"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.6944px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.200782"
+         x="33.932983"
+         y="58.100937"
          id="tspan16415">255</tspan></text>
   </g>
 </svg>

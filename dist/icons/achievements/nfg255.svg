@@ -64,14 +64,19 @@
      id="layer1">
     <text
        xml:space="preserve"
-       style="font-weight:bold;font-size:14.662px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.196363"
-       x="33.573429"
-       y="39.101002"
+       style="font-weight:bold;font-size:24.6944px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.196363"
+       x="33.697857"
+       y="27.158426"
        id="text8876"><tspan
          sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.196363"
-         x="33.573429"
-         y="39.101002"
-         id="tspan3127">NFG 255</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.6944px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.196363"
+         x="33.697857"
+         y="27.158426"
+         id="tspan3127">NFG</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.6944px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.196363"
+         x="33.697857"
+         y="58.251659"
+         id="tspan1">255</tspan></text>
   </g>
 </svg>
