@@ -19,7 +19,7 @@ import {
   simpleBoardFromBoard,
   simpleBoardFromBoardString,
 } from "../boardAnalysis/boardAnalysis";
-import { endGoGame, getOpponentStats, getScore, resetWinstreak } from "../boardAnalysis/scoring";
+import { forceEndGoGame, getOpponentStats, getScore, resetWinstreak } from "../boardAnalysis/scoring";
 import { WHRNG } from "../../Casino/RNG";
 import { getRecordKeys } from "../../Types/Record";
 import { CalculateEffect, getEffectTypeForFaction } from "./effect";
@@ -505,7 +505,7 @@ export function determineCheatSuccess(
   // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly losing
   else if (priorCheatCount && (ejectRngOverride ?? rng.random()) < 0.1 && state.ai !== GoOpponent.none) {
     logger(`Cheat failed! You have been ejected from the subnet.`);
-    endGoGame(state);
+    forceEndGoGame(state);
     return handleNextTurn(state, true);
   } else {
     // If the cheat fails, your turn is skipped
