@@ -329,7 +329,7 @@ export const ns: InternalAPI<NSFull> = {
     (_host, _multiplier, _cores = 1) => {
       const host = helpers.string(ctx, "hostname", _host);
       const mult = helpers.number(ctx, "multiplier", _multiplier);
-      const cores = helpers.number(ctx, "cores", _cores);
+      const cores = helpers.positiveInteger(ctx, "cores", _cores);
 
       // Check argument validity
       const server = helpers.getServer(ctx, host);
@@ -338,12 +338,8 @@ export const ns: InternalAPI<NSFull> = {
         helpers.log(ctx, () => `${host} is not a hackable server. Returning 0.`);
         return 0;
       }
-      if (mult < 1 || !isFinite(mult)) {
+      if (!Number.isFinite(mult) || mult < 1) {
         throw helpers.errorMessage(ctx, `Invalid argument: multiplier must be finite and >= 1, is ${mult}.`);
-      }
-      // TODO 2.3: Add assertion function for positive integer, there are a lot of places everywhere that can use this
-      if (!Number.isInteger(cores) || cores < 1) {
-        throw helpers.errorMessage(ctx, `Cores should be a positive integer. Cores provided: ${cores}`);
       }
 
       return numCycleForGrowth(server, mult, cores);
@@ -985,14 +981,10 @@ export const ns: InternalAPI<NSFull> = {
       if (!canAccessBitNodeFeature(5)) {
         throw helpers.errorMessage(ctx, "Requires Source-File 5 to run.");
       }
-      // TODO v3.0: check n and lvl with helpers.number() and Number.isInteger().
-      const n = Math.round(helpers.number(ctx, "n", _n));
-      const lvl = Math.round(helpers.number(ctx, "lvl", _lvl));
+      const n = helpers.positiveInteger(ctx, "n", _n);
+      const lvl = helpers.positiveInteger(ctx, "lvl", _lvl);
       if (!validBitNodes.includes(n)) {
         throw new Error(`Invalid BitNode: ${n}.`);
-      }
-      if (lvl < 1) {
-        throw new Error("SF level must be greater than or equal to 1.");
       }
 
       return Object.assign({}, getBitNodeMultipliers(n, lvl));

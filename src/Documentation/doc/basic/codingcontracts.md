@@ -29,9 +29,12 @@ For example, some contracts have long solutions while others have even longer so
 You might want to use the [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) to automate the process of submitting your solution rather than copy and paste a long solution into an answer box.
 
 However, using the [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) comes at a cost.
-Like most functions in other APIs, each function in the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) has a RAM cost.
+Like most functions in other APIs, almost all of the functions in the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) have a RAM cost.
+
 Depending on which function you use, the initial [RAM](ram.md) on your home server might not be enough to allow you to use various [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) functions.
 Plan on upgrading the [RAM](ram.md) on your home server if you want to use the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md).
+
+The [`getContractTypes`](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.getcontracttypes.md) function is free, and returns a list of all of the contract types currently in the game.
 
 ## Submitting Solutions
 

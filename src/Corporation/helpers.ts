@@ -1,24 +1,25 @@
 import { Player } from "@player";
+import { CreatingCorporationCheckResult } from "@nsdefs";
 import { PositiveInteger, isPositiveInteger } from "../types";
 import { formatShares } from "../ui/formatNumber";
 import { Corporation } from "./Corporation";
 import { CorpUpgrade } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
-import { CreatingCorporationCheckResult } from "@enums";
+import { CreatingCorporationCheckResultEnum } from "@enums";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 
 export function convertCreatingCorporationCheckResultToMessage(checkResult: CreatingCorporationCheckResult): string {
   switch (checkResult) {
-    case CreatingCorporationCheckResult.Success:
+    case CreatingCorporationCheckResultEnum.Success:
       return "Success";
-    case CreatingCorporationCheckResult.NoSf3OrDisabled:
+    case CreatingCorporationCheckResultEnum.NoSf3OrDisabled:
       return "You don't have SF3 or Corporation is disabled by an advanced option";
-    case CreatingCorporationCheckResult.CorporationExists:
+    case CreatingCorporationCheckResultEnum.CorporationExists:
       return "Corporation exists";
-    case CreatingCorporationCheckResult.UseSeedMoneyOutsideBN3:
+    case CreatingCorporationCheckResultEnum.UseSeedMoneyOutsideBN3:
       return "You cannot use seed money outside BitNode 3";
-    case CreatingCorporationCheckResult.DisabledBySoftCap:
+    case CreatingCorporationCheckResultEnum.DisabledBySoftCap:
       return "You cannot create a corporation in this BitNode";
     default:
       throwIfReachable(checkResult);
@@ -28,18 +29,18 @@ export function convertCreatingCorporationCheckResultToMessage(checkResult: Crea
 
 export function canCreateCorporation(selfFund: boolean, restart: boolean): CreatingCorporationCheckResult {
   if (!Player.canAccessCorporation()) {
-    return CreatingCorporationCheckResult.NoSf3OrDisabled;
+    return CreatingCorporationCheckResultEnum.NoSf3OrDisabled;
   }
   if (Player.corporation && !restart) {
-    return CreatingCorporationCheckResult.CorporationExists;
+    return CreatingCorporationCheckResultEnum.CorporationExists;
   }
   if (Player.bitNodeN !== 3 && !selfFund) {
-    return CreatingCorporationCheckResult.UseSeedMoneyOutsideBN3;
+    return CreatingCorporationCheckResultEnum.UseSeedMoneyOutsideBN3;
   }
   if (currentNodeMults.CorporationSoftcap < 0.15) {
-    return CreatingCorporationCheckResult.DisabledBySoftCap;
+    return CreatingCorporationCheckResultEnum.DisabledBySoftCap;
   }
-  return CreatingCorporationCheckResult.Success;
+  return CreatingCorporationCheckResultEnum.Success;
 }
 
 export function costOfCreatingCorporation(restart: boolean): number {

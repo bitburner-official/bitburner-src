@@ -9,7 +9,7 @@ Set Market-TA1 for a material.
 **Signature:**
 
 ```typescript
-setMaterialMarketTA1(divisionName: string, city: CityName | `${CityName}`, materialName: string, on: boolean): void;
+setMaterialMarketTA1(divisionName: string, city: CityName, materialName: string, on: boolean): void;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ setMaterialMarketTA1(divisionName: string, city: CityName | `${CityName}`, mater
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
+|  city | [CityName](./bitburner.cityname.md) | Name of the city |
 |  materialName | string | Name of the material |
 |  on | boolean | Use true to enable, false otherwise. |
 

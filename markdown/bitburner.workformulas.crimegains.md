@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
+crimeGains(person: Person, crimeType: CrimeType): WorkStats;
 ```
 
 ## Parameters
@@ -15,7 +15,7 @@ crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  person | [Person](./bitburner.person.md) |  |
-|  crimeType | [CrimeType](./bitburner.crimetype.md) \| \`${[CrimeType](./bitburner.crimetype.md)<!-- -->}\` |  |
+|  crimeType | [CrimeType](./bitburner.crimetype.md) |  |
 
 **Returns:**
 

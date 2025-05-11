@@ -639,6 +639,7 @@ export const RamCosts: RamCostTree<NSFull> = {
       calculateRepToFavor: 0,
       repFromDonation: 0,
       donationForRep: 0,
+      sharePower: 0,
     },
     skills: {
       calculateSkill: 0,
