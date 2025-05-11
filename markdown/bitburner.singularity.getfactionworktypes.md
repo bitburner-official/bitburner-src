@@ -9,14 +9,14 @@ Get the work types of a faction.
 **Signature:**
 
 ```typescript
-getFactionWorkTypes(faction: string): FactionWorkType[];
+getFactionWorkTypes(faction: FactionName): FactionWorkType[];
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  faction | string | Name of the faction. |
+|  faction | [FactionName](./bitburner.factionname.md) | Name of the faction. |
 
 **Returns:**
 

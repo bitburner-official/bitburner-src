@@ -9,14 +9,14 @@ Donate to a faction.
 **Signature:**
 
 ```typescript
-donateToFaction(faction: string, amount: number): boolean;
+donateToFaction(faction: FactionName, amount: number): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  faction | string | Name of faction to donate to. |
+|  faction | [FactionName](./bitburner.factionname.md) | Name of faction to donate to. |
 |  amount | number | Amount of money to donate. |
 
 **Returns:**
