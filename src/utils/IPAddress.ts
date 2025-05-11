@@ -11,8 +11,6 @@ export const createRandomIp = (): IPAddress => {
   // uses regex to match every 2 characters. [0.][c8][f0][a0][7f][1d][47][e8]
   // we only want #1 through #4
   const sliced = ip.match(/../g).slice(1, 5);
-  //convert each to a decimal number
-  const asDecimals = sliced.map((x) => parseInt(x, 16));
-  // and join them together to make a human readable IP address.
-  return asDecimals.join(".") as IPAddress;
+  //convert each to a decimal number and join them together to make a human readable IP address.
+  return sliced.map((x) => parseInt(x, 16)).join(".") as IPAddress;
 };
