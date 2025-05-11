@@ -6,7 +6,7 @@ import { getErrorMessageWithStackAndCause } from "./ErrorHelper";
 
 /** Generate an error dialog when workerscript is known */
 export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, initialText = "") {
-  if (e instanceof ScriptDeath) {
+  if (e instanceof ScriptDeath || e?.name === "ScriptDeath") {
     // No dialog for ScriptDeath
     return;
   }
