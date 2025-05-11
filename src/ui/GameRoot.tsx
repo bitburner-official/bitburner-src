@@ -385,7 +385,7 @@ export function GameRoot(): React.ReactElement {
       mainPage = <GoRoot />;
       break;
     }
-    case Page.DarkWeb: {
+    case Page.DarkNet: {
       mainPage = <DWRoot />;
       break;
     }

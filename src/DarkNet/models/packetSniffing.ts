@@ -13,7 +13,7 @@ import { getDarknetServers, getServerSafely } from "../controllers/DarknetNetwor
 import { getExactCorrectChars, getMastermindResponse } from "./authentication";
 import { getServerState } from "./DarknetState";
 
-const MAX_LOG_LINES = 50;
+const MAX_LOG_LINES = 32;
 
 export const capturePackets = (server: BaseServer) => {
   if (!server.darknetData) {
@@ -173,10 +173,9 @@ export const populateServerLogsWithNoise = (server: BaseServer) => {
   }
 };
 
-// TODO: better noise
 const getLogNoise = (server: BaseServer, logDate: Date) => {
   if (!server.darknetData) {
-    return "!!NOISE!!";
+    return "";
   }
 
   if (Math.random() < 0.2) {

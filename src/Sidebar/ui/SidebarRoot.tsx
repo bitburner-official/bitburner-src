@@ -69,6 +69,7 @@ import {
   CurrentKeyBindings,
 } from "../../utils/KeyBindingUtils";
 import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
+import { hasDarknetAccess } from "../../DarkNet/models/effects";
 
 const RotatedDoubleArrowIcon = React.forwardRef(function RotatedDoubleArrowIcon(
   props: { color: "primary" | "secondary" | "error" },
@@ -173,6 +174,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   const canBladeburner = !!Player.bladeburner;
   const canStaneksGift = Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1);
   const canIPvGO = playerHasDiscoveredGo();
+  const canDarkNet = hasDarknetAccess();
 
   const clickPage = useCallback(
     (page: Page) => {
@@ -231,6 +233,8 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
           return canGang;
         case SimplePage.Go:
           return canIPvGO;
+        case SimplePage.DarkNet:
+          return canDarkNet;
         case ScriptEditorAction.Save:
         case ScriptEditorAction.GoToTerminal:
         case ScriptEditorAction.Run:
@@ -252,6 +256,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
       canCorporation,
       canGang,
       canIPvGO,
+      canDarkNet,
     ],
   );
 
@@ -394,7 +399,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canCorporation && { key_: Page.Corporation, icon: BusinessIcon },
             canGang && { key_: Page.Gang, icon: SportsMmaIcon },
             canIPvGO && { key_: Page.Go, icon: BorderInnerSharpIcon },
-            { key_: Page.DarkWeb, icon: ShareIcon },
+            canDarkNet && { key_: Page.DarkNet, icon: ShareIcon },
           ]}
         />
         <Divider />

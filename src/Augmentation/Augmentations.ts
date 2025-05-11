@@ -19,6 +19,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "triggers feelings of admiration and approval in other people.",
       company_rep: 1.1,
       faction_rep: 1.1,
+      charisma: 1.1,
       factions: [
         FactionName.TianDiHui,
         FactionName.TheSyndicate,
@@ -36,6 +37,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "triggers feelings of admiration, approval, and respect in others.",
       company_rep: 1.2,
       faction_rep: 1.2,
+      charisma: 1.2,
       factions: [
         FactionName.Silhouette,
         FactionName.FourSigma,
@@ -76,6 +78,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Pheromone extruder injected in the thoracodorsal nerve. Emits pleasing scent guaranteed to " +
         "make conversational partners more agreeable.",
       stats: "This augmentation makes the Bribe minigame easier by indicating the incorrect paths.",
+      charisma: 1.1,
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -514,6 +517,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "millions of nanobots capable of projecting high-density muon beams, " +
         "creating an energy barrier around the user.",
       defense: 1.4,
+      charisma: 1.1,
       factions: [FactionName.Volhaven],
     },
     // === E === //
@@ -907,6 +911,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       defense: 1.08,
       agility: 1.08,
       dexterity: 1.08,
+      charisma: 1.08,
       factions: [FactionName.Tetrads, FactionName.TheDarkArmy, FactionName.TheSyndicate],
     },
     [AugmentationName.HiveMind]: {
@@ -940,6 +945,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Even though it contains no weapons, the advanced tungsten titanium " +
         "alloy increases the user's strength to unbelievable levels.",
       strength: 2.8,
+      charisma: 1.4,
       factions: [FactionName.NWO],
     },
     [AugmentationName.HyperionV1]: {
@@ -979,6 +985,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       dexterity: 1.4,
       hacking_speed: 1.03,
       hacking_money: 1.1,
+      charisma: 1.05,
       factions: [FactionName.BladeIndustries, FactionName.KuaiGongInternational],
     },
     // === I === //
@@ -1026,6 +1033,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "cells, when powered, have a negative refractive index. As a result, they bend light " +
         "around the skin, making the user much harder to see with the naked eye.",
       agility: 1.05,
+      charisma: 1.05,
       crime_money: 1.1,
       factions: [FactionName.SlumSnakes, FactionName.Tetrads],
     },
@@ -1040,6 +1048,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       prereqs: [AugmentationName.LuminCloaking1],
       agility: 1.1,
       defense: 1.1,
+      charisma: 1.1,
       crime_money: 1.25,
       factions: [FactionName.SlumSnakes, FactionName.Tetrads],
     },
@@ -1072,6 +1081,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "which improves its regenerative and extracellular homeostasis abilities.",
       strength: 1.2,
       defense: 1.2,
+      charisma: 1.2,
       factions: [
         FactionName.TheDarkArmy,
         FactionName.TheSyndicate,
@@ -1092,6 +1102,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "and restructure themselves.",
       strength: 1.55,
       defense: 1.55,
+      charisma: 1.55,
       factions: [FactionName.BladeIndustries],
     },
     [AugmentationName.NeuralAccelerator]: {
@@ -1123,6 +1134,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       hacking_speed: 1.02,
       hacking_chance: 1.1,
       hacking_exp: 1.12,
+      charisma: 1.05,
       factions: [
         FactionName.TheBlackHand,
         FactionName.Chongqing,
@@ -1282,6 +1294,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "the bloodstream to improve memory, increase focus, and provide other " +
         "cognitive enhancements.",
       company_rep: 1.2,
+      charisma: 1.1,
       factions: [
         FactionName.TianDiHui,
         FactionName.Volhaven,
@@ -1419,6 +1432,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       strength: 1.4,
       defense: 1.4,
       agility: 1.4,
+      charisma: 1.4,
       factions: [FactionName.KuaiGongInternational],
     },
     [AugmentationName.PowerRecirculator]: {
@@ -1448,7 +1462,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "A cutting-edge knowledgebase entirely built off of nanotech rod-logic, training the user on social engineering. " +
         "Thought to be stolen technology, its existance has been a secret until recently.",
-      charisma: 1.1,
+      charisma: 1.2,
       charisma_exp: 1.4,
       factions: [FactionName.TheDarkArmy, FactionName.TheSyndicate],
     },
@@ -1474,6 +1488,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "A cranial implant that affects the user's personality, making them better " +
         "at negotiation in social situations.",
+      charisma: 1.15,
       work_money: 1.1,
       company_rep: 1.15,
       faction_rep: 1.15,
@@ -1513,6 +1528,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "criminal organizations and allows the user to project and control holographic " +
         "simulacrums within a large radius. These simulacrums are commonly used for " +
         "espionage and surveillance work.",
+      charisma: 1.15,
       company_rep: 1.15,
       faction_rep: 1.15,
       factions: [FactionName.TheSyndicate, FactionName.TheDarkArmy, FactionName.SpeakersForTheDead],
@@ -1727,6 +1743,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Scientists have named these artificially enhanced units 'synfibrils'.",
       strength: 1.3,
       defense: 1.3,
+      charisma: 1.15,
       factions: [
         FactionName.KuaiGongInternational,
         FactionName.FulcrumSecretTechnologies,
@@ -1746,6 +1763,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "more efficiently than an organic heart.",
       agility: 1.5,
       strength: 1.5,
+      charisma: 1.5,
       factions: [
         FactionName.KuaiGongInternational,
         FactionName.FulcrumSecretTechnologies,
@@ -1843,7 +1861,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Awarded to those who discover the secrets of the labrynth.",
       stats:
         "This augmentation increases the stasis link limit by one, and raises charisma by 7% and charisma xp by 10%.",
-      charisma: 1.07,
+      charisma: 1.15,
       agility: 1.1,
       isSpecial: true,
       factions: [],
@@ -1857,8 +1875,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Awarded to those who discover the secrets of the labrynth.",
       stats:
         "This augmentation increases the speed of authentication and heartbleed by 20%, and raises charisma and dexterity by 10%.",
-      charisma: 1.1,
-      dexterity: 1.1,
+      charisma: 1.25,
+      dexterity: 1.2,
       isSpecial: true,
       prereqs: [AugmentationName.TheBrokenWings],
       factions: [],
@@ -1872,8 +1890,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Awarded to those who discover the secrets of the labrynth.",
       stats:
         "This augmentation increases the stasis link limit by one, and raises charisma by 12% and strength by 10%.",
-      charisma: 1.12,
-      strength: 1.1,
+      charisma: 1.35,
+      strength: 1.25,
       isSpecial: true,
       prereqs: [AugmentationName.TheBoots],
       factions: [],
@@ -1887,7 +1905,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "making them exceptionally persuasive and confident in negotiations and social interactions. " +
         "Awarded to those who discover the secrets of the labrynth.",
       stats: "This augmentation raises charisma by 15%, hacking by 10%, and company rep by 5%.",
-      charisma: 1.15,
+      charisma: 1.4,
       hacking: 1.1,
       company_rep: 1.05,
       isSpecial: true,
@@ -1904,7 +1922,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "more powerful version of Occam's razor. " +
         "The final augment awarded to those who discover the secrets of the labrynth.",
       stats: "This augmentation raises charisma by 20%, hacking by 16%, and company rep by 10%.",
-      charisma: 1.2,
+      charisma: 1.5,
       hacking: 1.16,
       company_rep: 1.1,
       isSpecial: true,
@@ -1937,6 +1955,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "A synthetic symbiotic virus that is injected into human brain tissue. The Vangelis virus " +
         "heightens the senses and focus of its host while also enhancing their intuition.",
       dexterity_exp: 1.1,
+      charisma_exp: 1.1,
       bladeburner_analysis: 1.1,
       bladeburner_success_chance: 1.04,
       isSpecial: true,
@@ -1953,6 +1972,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       prereqs: [AugmentationName.VangelisVirus],
       defense_exp: 1.1,
       dexterity_exp: 1.1,
+      charisma_exp: 1.1,
       bladeburner_analysis: 1.15,
       bladeburner_success_chance: 1.05,
       isSpecial: true,

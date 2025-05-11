@@ -291,7 +291,7 @@ const labData: Record<string, labDetails> = {
   },
   [SpecialServers.MercilessLab]: {
     name: SpecialServers.MercilessLab,
-    depth: 18,
+    depth: 19,
     cha: 1500,
     augReward: AugmentationName.TheHammer,
     mazeWidth: 40,
@@ -300,8 +300,8 @@ const labData: Record<string, labDetails> = {
   },
   [SpecialServers.UberLab]: {
     name: SpecialServers.UberLab,
-    depth: 21,
-    cha: 2500,
+    depth: 23,
+    cha: 2000,
     augReward: AugmentationName.TheRedPill,
     mazeWidth: 60,
     mazeHeight: 40,
@@ -309,8 +309,8 @@ const labData: Record<string, labDetails> = {
   },
   [SpecialServers.EternalLab]: {
     name: SpecialServers.EternalLab,
-    depth: 25,
-    cha: 3000,
+    depth: 29,
+    cha: 2500,
     augReward: AugmentationName.TheLaw,
     mazeWidth: 60,
     mazeHeight: 40,

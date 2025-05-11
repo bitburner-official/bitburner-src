@@ -13,7 +13,7 @@ The speed of capture scales with the number of threads used. See  for more infor
 **Signature:**
 
 ```typescript
-heartbleed(hostname: string, options?: HeartbleedOptions): Promise<Result & {logs: string[]}>;
+heartbleed(hostname: string, options?: HeartbleedOptions): Promise<Result & { logs: string[] }>;
 ```
 
 ## Parameters
@@ -25,7 +25,7 @@ heartbleed(hostname: string, options?: HeartbleedOptions): Promise<Result & {log
 
 **Returns:**
 
-Promise&lt;[Result](./bitburner.result.md) &amp; {logs: string\[\]}&gt;
+Promise&lt;[Result](./bitburner.result.md) &amp; { logs: string\[\] }&gt;
 
 ## Remarks
 

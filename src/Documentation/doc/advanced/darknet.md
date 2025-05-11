@@ -120,6 +120,15 @@ Design document and workspace
 
 ## patches:
 
+## Balance Patch 1
+added `DarkscapeNavigator.exe` purchasable via tor router which (when later enabled) unlocks access to the dark net UI and API
+added source-file 15 bonuses
+added .lit hint for stasis linking servers
+added .lit hint for lab (& that you should stasis link nearby)
+added cha bonus to a number of existing augs (mainly ones that improve your influence/persuasion, skin, or eyes)
+Increased lab augment cha bonuses
+reduced higher lab's cha requirements, and rebalanced server difficulty scaling accordingly
+
 ## Fixes and polish patch
 
 - added `getStasisLinkedServers` which returns a list of server hostnames (or IPs) that currently have stasis links. (replaced hasStasisLink)
@@ -269,13 +278,17 @@ Coming soon:
 
 ## TODO:
 
+pass classes to child components of server
+
+capcha puzzle?
+
+
 - prevent "NS instance has already been killed" error ?
 - lab placement is wrong?
 
 - BN 15 stuff?
-- hint note for TRP in lab
+- hint note for TRP in lab (in starter guide?)
 - BN description
-- Source files
 - BN Mults for BN15
 - new BN mults for darknet
 
@@ -322,10 +335,6 @@ Very good rewards.
 Require resilient scripts. Running scripts can be terminated randomly.
 Don't rely on foothold. Even foothold can be wiped!
 Git gud.
-
-- a macguffin you have to get to be able to access the darkweb ('darkscape navigator'?)
-
-have a clear immediate reward from tier 1 that isn't just cha XP
 
 - start with crash course?
 

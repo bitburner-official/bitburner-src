@@ -48,6 +48,7 @@ export const checkPassword = (
     return getFailureResponse(attemptedPassword, darknetData.staticPasswordHint, hintData);
   } else if (darknetData.minigameType === Minigames.Yesn_t) {
     const response = attemptedPassword
+      .slice(0, 36)
       .split("")
       .map((char, i) => (char === darknetData.password[i] ? "yes" : "yesn't"))
       .join(",");

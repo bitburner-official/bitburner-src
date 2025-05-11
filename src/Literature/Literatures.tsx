@@ -734,4 +734,23 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.FactoryDefaultHint,
     text: <Typography>The factory default is usually one of {defaultSettingsDictionary.join(", ")}.</Typography>,
   }),
+  [LiteratureName.StasisLinkHint]: new Literature({
+    title: "Try the best new thing in web surfing: the Stasis Link!",
+    filename: LiteratureName.StasisLinkHint,
+    text: <Typography>Tired of the server you are on restarting or moving? You need to try our latest networking too,
+      the Stasis Link! <br />
+      With the click of a `ns.dnet.setStasisLink()`, you, too, can sleep soundly knowing that that server is not gonna
+      go anywhere. <br /><br />
+      Limited time only! While `ns.dnet.getStasisLinkLimit()` lasts!
+    </Typography>,
+  }),
+  [LiteratureName.LabHint]: new Literature({
+    title: "There's something out there",
+    filename: LiteratureName.LabHint,
+    text: <Typography>
+      If you go deep enough into the dark net, they say there's a lost server out there with special files on it.
+      I wonder how you can get there? It may even be deeper than the airgaps around this IP block...<br/><br/>
+      If I ever find it, I'll set down a stasis link next to it and charge tickets for admission!
+    </Typography>,
+  }),
 };

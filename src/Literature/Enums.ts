@@ -29,4 +29,6 @@ export enum LiteratureName {
   BinaryServerHint = "raw_data.lit",
   DogNameHint = "dog-name-ideas.lit",
   FactoryDefaultHint = "factory-default.lit",
+  StasisLinkHint = "stasis-link.lit",
+  LabHint = "secrets_in_the_depths.lit",
 }

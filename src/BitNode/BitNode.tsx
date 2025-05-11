@@ -551,9 +551,9 @@ export function initBitNodes() {
       <>
         This Source-File grants the following benefits:
         <ul>
-          <li>Level 1: </li>
-          <li>Level 2: </li>
-          <li>Level 3: </li>
+          <li>Level 1: Permanently start with the TOR router and DarkscapeNavigator.exe</li>
+          <li>Level 2: Your charisma level increases job salary and rep gain. Also increases authentication speed by 20%</li>
+          <li>Level 3: Your charisma level increases faction work rep gain. Also increases the xp and money gained from .cache files by 50%.</li>
         </ul>
       </>
     ),

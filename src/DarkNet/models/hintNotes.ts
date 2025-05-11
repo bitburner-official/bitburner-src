@@ -9,4 +9,6 @@ export const hintLiterature: LiteratureName[] = [
   LiteratureName.BinaryServerHint,
   LiteratureName.DogNameHint,
   LiteratureName.FactoryDefaultHint,
+  LiteratureName.StasisLinkHint,
+  LiteratureName.LabHint,
 ];

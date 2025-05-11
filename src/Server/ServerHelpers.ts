@@ -12,6 +12,7 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 import { serverMetadata } from "./data/servers";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { hasDarknetAccess } from "../DarkNet/models/effects";
 
 /**
  * Constructs a new server, while also ensuring that the new server
@@ -201,6 +202,7 @@ export function processSingleServerGrowth(server: Server, threads: number, cores
 
 export function prestigeHomeComputer(homeComp: Server): void {
   const hasBitflume = homeComp.programs.includes(CompletedProgramName.bitFlume);
+  const hasDarknet = hasDarknetAccess();
 
   homeComp.programs.length = 0; //Remove programs
   homeComp.serversOnNetwork = [];
@@ -209,6 +211,9 @@ export function prestigeHomeComputer(homeComp: Server): void {
   homeComp.pushProgram(CompletedProgramName.nuke);
   if (hasBitflume) {
     homeComp.pushProgram(CompletedProgramName.bitFlume);
+  }
+  if (hasDarknet) {
+    homeComp.pushProgram(CompletedProgramName.darkscape);
   }
 
   homeComp.messages.length = 0; //Remove .lit and .msg files

@@ -39,7 +39,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         }, 1);
         setNetDisplayDepth(deepestServer + visibilityMargin);
 
-        //rerender();
+        rerender();
         drawOnCanvas(canvas.current);
       }
     });

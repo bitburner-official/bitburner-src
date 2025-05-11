@@ -30,7 +30,6 @@ import { initStockMarket } from "../../StockMarket/StockMarket";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { getSharedChars } from "./authentication";
 import { getLabyrinthDetails, isLabyrinthServer } from "./labyrinth";
-import { Server } from "../../Server/Server";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;
@@ -83,15 +82,16 @@ export const calculateAuthenticationTime = (
   const diffFactor = 5;
   const baseTime = 500;
 
-  const threadsFactor = 1 + 0.2 * (threads - 1);
+  const threadsFactor = 1 / (1 + 0.2 * (threads - 1));
   const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 100);
   const noobFactor = Math.min(0.5 + difficulty / 4, 1);
   const backdoorFactor = getBackdoorAuthTimeDebuff();
   const underleveledFactor = person.skills.charisma >= chaRequired ? 1 : 1.5 + chaRequired / person.skills.charisma;
   const hasBootsFactor = Player.hasAugmentation(AugmentationName.TheBoots) ? 0.8 : 1;
+  const hasSf15_2Factor = Player.sourceFileLvl(15) > 2 ? 0.8 : 1;
 
   const time =
-    (baseTime * skillFactor * noobFactor * backdoorFactor * underleveledFactor * hasBootsFactor) / threadsFactor;
+    baseTime * skillFactor * noobFactor * backdoorFactor * underleveledFactor * hasBootsFactor * hasSf15_2Factor * threadsFactor;
 
   // Add extra time for timing attack server, per correct character
   const sharedChars =
@@ -126,7 +126,7 @@ export const addCacheToServer = (server: BaseServer, filename?: string) => {
 
 export const getRewardFromCache = (server: BaseServer, suppressToast = false): string => {
   const difficulty = server.darknetData?.difficulty ?? 1;
-  Player.karma -= 5 + difficulty * 2; // TODO: adjust karma balance
+  Player.karma -= (difficulty + 1) * 2; // TODO: adjust karma balance
   if (isLabyrinthServer(server.hostname)) {
     return getLabReward(server, suppressToast);
   }
@@ -142,13 +142,15 @@ export const getCCTReward = () => {
 };
 
 export const getMoneyReward = (difficulty: number) => {
-  const reward = 1.2 ** difficulty * 1e7 * ((200 + Player.skills.charisma) / 200) * Player.mults.crime_money; // TODO: adjust balance
+  const sf15_3Factor = Player.sourceFileLvl(15) > 3 ? 1.5 : 1;
+  const reward = 1.2 ** difficulty * 1e7 * ((200 + Player.skills.charisma) / 200) * sf15_3Factor * Player.mults.crime_money; // TODO: adjust balance
   Player.gainMoney(reward, "darknet");
   return `You have discovered a cache with ${formatMoney(reward)}.`;
 };
 
 export const getXpReward = (difficulty: number) => {
-  const reward = 1.2 ** difficulty * 500 * Player.mults.charisma_exp; // TODO: adjust balance
+  const sf15_3Factor = Player.sourceFileLvl(15) > 3 ? 1.5 : 1;
+  const reward = 1.2 ** difficulty * 500 * sf15_3Factor * Player.mults.charisma_exp; // TODO: adjust balance
   Player.gainCharismaExp(reward);
   return `You have discovered a cache with ${formatNumber(reward, 0)} cha XP.`;
 };
@@ -333,8 +335,9 @@ export const hasDarknetAccess = () => {
 
   const hasSF15 = !!Player.sourceFiles.get(15);
   const isInBN15 = Player.bitNodeN == 15;
+  const hasDarkscapeNavigator = Player.hasProgram(CompletedProgramName.darkscape);
 
-  return hasSF15 || isInBN15;
+  return hasSF15 || isInBN15 || hasDarkscapeNavigator;
 };
 
 export const getTwoCharsInPassword = (password: string) => {

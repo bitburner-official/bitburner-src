@@ -71,13 +71,12 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
     logTrafficInterval: 1 + 30 * 0.9 ** options.difficulty,
   };
 
-  const labDifficulty = getLabyrinthDetails().cha;
+  const labDetails = getLabyrinthDetails();
+  const labDifficulty = labDetails.cha;
   const depth = darknetData.difficulty;
-  const scalar = 1 + depth * 3;
-  const levelVariance = Math.floor((Math.random() * 3 - 1) * scalar);
-  const depthScaling = (labDifficulty / 35) * depth;
-  const minLevel = Math.floor(darknetData.difficulty / 8) ** 2.2 * 100;
-  const requiredLevel = Math.max(Math.ceil(scalar ** 1.4 + levelVariance + depthScaling + minLevel), 1);
+  const depthScaling =  (depth / labDetails.depth) * labDifficulty * 0.85;
+  const levelVariance = (Math.random() * 3 - 1) * depth;
+  const requiredLevel = Math.max(Math.floor(depthScaling + levelVariance), 1);
 
   const params: IConstructorParams = {
     hostname: name,
