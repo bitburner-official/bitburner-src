@@ -10,7 +10,8 @@ import { Terminal } from "../../Terminal";
 import { pluralize } from "../I18nUtils";
 
 // Temporary until fixing alerts manager to store alerts outside of react scope
-const dialogBoxCreate = (text: string) => setTimeout(() => dialogBoxCreateOriginal(text), 2000);
+const dialogBoxCreate = (text: string) =>
+  setTimeout(() => dialogBoxCreateOriginal(text, { html: false, canBeDismissedEasily: false }), 2000);
 
 /** For a single server, map of script filepath to an array of line numbers where impacted functions were detected */
 type ScriptImpactMap = Map<ScriptFilePath, number[]>;
@@ -20,44 +21,74 @@ type ImpactMap = Map<string, ScriptImpactMap>;
 
 export interface APIBreakInfo {
   /** The API functions impacted by the API break */
-  brokenFunctions: string[];
+  brokenAPIs: {
+    name: string;
+    migration?: {
+      /** We may need to use a custom search value instead of name */
+      searchValue: string | RegExp;
+      replaceValue: string;
+    };
+  }[];
   /** Info that should be shown to the player, alongside the list of impacted scripts */
   info: string;
+  /** If broken APIs can be safely migrated, we can skip displaying the notification popup */
+  showPopUp: boolean;
 }
 
-function getImpactedLines(script: Script, brokenFunctions: string[]): number[] | null {
+function detectImpactAndMigrateLines(script: Script, brokenFunctions: APIBreakInfo["brokenAPIs"]): number[] | null {
   const impactedLines: number[] = [];
-  script.content.split("\n").forEach((line, i) => {
+  const lines = script.content.split("\n");
+  for (let i = 0; i < lines.length; ++i) {
     for (const brokenFunction of brokenFunctions) {
-      if (line.includes(brokenFunction)) return impactedLines.push(i + 1);
+      if (!lines[i].includes(brokenFunction.name)) {
+        continue;
+      }
+      impactedLines.push(i + 1);
+      if (brokenFunction.migration) {
+        lines[i] = lines[i].replaceAll(brokenFunction.migration.searchValue, brokenFunction.migration.replaceValue);
+      }
     }
-  });
+  }
+  script.content = lines.join("\n");
   return impactedLines.length ? impactedLines : null;
 }
 
-/** Returns a map keyed by all ser */
-function getImpactMap(brokenFunctions: string[]): ImpactMap | null {
+/** Returns a map keyed by hostname */
+function detectImpactAndMigrate(brokenFunctions: APIBreakInfo["brokenAPIs"]): ImpactMap | null {
   const returnMap = new Map<string, ScriptImpactMap>();
   for (const server of GetAllServers()) {
     const impactedScripts = new Map<ScriptFilePath, number[]>();
     for (const [filename, script] of server.scripts) {
-      const impactedLines = getImpactedLines(script, brokenFunctions);
-      if (impactedLines) impactedScripts.set(filename, impactedLines);
+      const impactedLines = detectImpactAndMigrateLines(script, brokenFunctions);
+      if (impactedLines) {
+        impactedScripts.set(filename, impactedLines);
+      }
     }
-    if (impactedScripts.size) returnMap.set(server.hostname, impactedScripts);
+    if (impactedScripts.size) {
+      returnMap.set(server.hostname, impactedScripts);
+    }
   }
   return returnMap.size ? returnMap : null;
 }
 
 /** Show the player a dialog for their API breaks, and save an info file for the player to review later */
 export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
-  const details = [];
+  const details: {
+    text: string;
+    showPopUp: boolean;
+  }[] = [];
+  let numberOfPopUps = 0;
   for (const breakInfo of breakInfos) {
-    const impactMap = getImpactMap(breakInfo.brokenFunctions);
-    if (!impactMap) continue;
-    details.push(
-      breakInfo.info +
-        `\n\nUsage of the following functions may have been affected:\n${breakInfo.brokenFunctions.join("\n")}\n\n` +
+    const impactMap = detectImpactAndMigrate(breakInfo.brokenAPIs);
+    if (!impactMap) {
+      continue;
+    }
+    details.push({
+      text:
+        breakInfo.info +
+        `\n\nUsage of the following functions may have been affected:\n${breakInfo.brokenAPIs
+          .map((func) => func.name)
+          .join("\n")}\n\n` +
         [...impactMap]
           .map(
             ([hostname, scriptImpactMap]) =>
@@ -72,14 +103,22 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
                 .join("\n"),
           )
           .join("\n\n"),
-    );
+      showPopUp: breakInfo.showPopUp,
+    });
+    if (breakInfo.showPopUp) {
+      ++numberOfPopUps;
+    }
   }
-  if (!details.length) return;
+  if (!details.length) {
+    return;
+  }
   const textFileName = resolveTextFilePath(`APIBreakInfo-${version}.txt`);
-  if (!textFileName) throw new Error("Version string created an invalid API break file name");
+  if (!textFileName) {
+    throw new Error("Version string created an invalid API break file name");
+  }
   Player.getHomeComputer().writeToTextFile(
     textFileName,
-    `API BREAK INFO FOR ${version}\n\n${details.join("\n\n\n\n")}`,
+    `API BREAK INFO FOR ${version}\n\n${details.map((detail) => detail.text).join("\n\n\n\n")}`,
   );
   Terminal.warn(`AN API BREAK FROM VERSION ${version} MAY HAVE AFFECTED SOME OF YOUR SCRIPTS.`);
   Terminal.warn(`INFORMATION ABOUT THIS POTENTIAL IMPACT HAS BEEN LOGGED IN ${textFileName} ON YOUR HOME COMPUTER.`);
@@ -88,7 +127,12 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
       "The following dialog boxes will provide details of the potential impact to your scripts.\n" +
       `A file with these details has also been saved on your home computer under filename ${textFileName}.`,
   );
-  details.forEach((detail, i) => {
-    dialogBoxCreate(`API BREAK VERSION ${version} DETAILS ${i + 1} of ${details.length}\n\n${detail}`);
-  });
+  let popUpIndex = 0;
+  for (const detail of details) {
+    if (!detail.showPopUp) {
+      continue;
+    }
+    dialogBoxCreate(`API BREAK VERSION ${version} DETAILS ${popUpIndex + 1} of ${numberOfPopUps}\n\n${detail.text}`);
+    ++popUpIndex;
+  }
 }

@@ -126,6 +126,11 @@
       "Name": "The Recursion",
       "Description": "Acquire SF12.1"
     },
+    "SF13.1": {
+      "ID": "SF13.1",
+      "Name": "They're lunatics",
+      "Description": "Acquire SF13.1"
+    },
     "MONEY_1Q": {
       "ID": "MONEY_1Q",
       "Name": "Here comes the money!",
@@ -380,6 +385,11 @@
       "ID": "FAST_BN",
       "Name": "Speed demon.",
       "Description": "Destroy a bitnode in under 2 days."
+    },
+    "BN_DESTROYER": {
+      "ID": "BN_DESTROYER",
+      "Name": "More BitNodes, please!",
+      "Description": "Reach SF x.3 in each BitNode."
     },
     "CHALLENGE_BN1": {
       "ID": "CHALLENGE_BN1",

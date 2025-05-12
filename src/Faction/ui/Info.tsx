@@ -46,7 +46,7 @@ function DefaultAssignment(): React.ReactElement {
       Perform work/carry out assignments for your faction to help further its cause! By doing so, you will earn
       reputation for your faction. You will also gain reputation passively over time, although at a very slow
       rate.&nbsp;
-      {knowAboutBitverse() && <>Note that the passive reputation gain is disabled in BitNode 2. </>}
+      {knowAboutBitverse() && <>Note that the passive reputation gain is disabled in some BitNodes. </>}
       Earning reputation will allow you to purchase augmentations through this faction, which are powerful upgrades that
       enhance your abilities.
     </Typography>

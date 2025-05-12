@@ -10,8 +10,8 @@
 ```typescript
 type SleeveClassTask = {
   type: "CLASS";
-  classType: UniversityClassType | GymType | `${UniversityClassType}` | `${GymType}`;
-  location: LocationName | `${LocationName}`;
+  classType: UniversityClassType | GymType;
+  location: LocationName;
 };
 ```
 **References:** [UniversityClassType](./bitburner.universityclasstype.md)<!-- -->, [GymType](./bitburner.gymtype.md)<!-- -->, [LocationName](./bitburner.locationname.md)

@@ -190,6 +190,8 @@ export const Settings = {
    * src\utils\KeyBindingUtils.ts.
    */
   KeyBindings: {} as PlayerDefinedKeyBindingsType,
+  /** Whether to sync Steam achievements */
+  SyncSteamAchievements: true,
 
   load(saveString: string) {
     const save: unknown = JSON.parse(saveString);

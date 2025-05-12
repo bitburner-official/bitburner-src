@@ -2,30 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [BladeburnerSkillName](./bitburner.bladeburnerskillname.md)
 
-## BladeburnerSkillName enum
+## BladeburnerSkillName type
 
-Skill names type of Bladeburner
 
 **Signature:**
 
 ```typescript
-declare enum BladeburnerSkillName 
+type BladeburnerSkillName = _ValueOf<BladeburnerSkillNameEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  BladesIntuition | <code>&quot;Blade's Intuition&quot;</code> |  |
-|  Cloak | <code>&quot;Cloak&quot;</code> |  |
-|  CybersEdge | <code>&quot;Cyber's Edge&quot;</code> |  |
-|  Datamancer | <code>&quot;Datamancer&quot;</code> |  |
-|  DigitalObserver | <code>&quot;Digital Observer&quot;</code> |  |
-|  EvasiveSystem | <code>&quot;Evasive System&quot;</code> |  |
-|  HandsOfMidas | <code>&quot;Hands of Midas&quot;</code> |  |
-|  Hyperdrive | <code>&quot;Hyperdrive&quot;</code> |  |
-|  Overclock | <code>&quot;Overclock&quot;</code> |  |
-|  Reaper | <code>&quot;Reaper&quot;</code> |  |
-|  ShortCircuit | <code>&quot;Short-Circuit&quot;</code> |  |
-|  Tracer | <code>&quot;Tracer&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [BladeburnerSkillNameEnumType](./bitburner.bladeburnerskillnameenumtype.md)
 

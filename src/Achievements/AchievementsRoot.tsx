@@ -16,7 +16,7 @@ const useStyles = makeStyles()({
 export function AchievementsRoot(): JSX.Element {
   const { classes } = useStyles();
   return (
-    <div className={classes.root} style={{ width: "90%" }}>
+    <div className={classes.root} style={{ width: "100%" }}>
       <Typography variant="h4">Achievements</Typography>
       <Box mx={2}>
         <Typography>

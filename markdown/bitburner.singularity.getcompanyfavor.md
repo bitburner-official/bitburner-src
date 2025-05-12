@@ -9,14 +9,14 @@ Get company favor.
 **Signature:**
 
 ```typescript
-getCompanyFavor(companyName: CompanyName | `${CompanyName}`): number;
+getCompanyFavor(companyName: CompanyName): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  companyName | [CompanyName](./bitburner.companyname.md) \| \`${[CompanyName](./bitburner.companyname.md)<!-- -->}\` | Name of the company. |
+|  companyName | [CompanyName](./bitburner.companyname.md) | Name of the company. |
 
 **Returns:**
 

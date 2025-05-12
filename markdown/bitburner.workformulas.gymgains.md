@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-gymGains(person: Person, gymType: GymType | `${GymType}`, locationName: LocationName | `${LocationName}`): WorkStats;
+gymGains(person: Person, gymType: GymType, locationName: LocationName): WorkStats;
 ```
 
 ## Parameters
@@ -15,8 +15,8 @@ gymGains(person: Person, gymType: GymType | `${GymType}`, locationName: Location
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  person | [Person](./bitburner.person.md) |  |
-|  gymType | [GymType](./bitburner.gymtype.md) \| \`${[GymType](./bitburner.gymtype.md)<!-- -->}\` |  |
-|  locationName | [LocationName](./bitburner.locationname.md) \| \`${[LocationName](./bitburner.locationname.md)<!-- -->}\` |  |
+|  gymType | [GymType](./bitburner.gymtype.md) |  |
+|  locationName | [LocationName](./bitburner.locationname.md) |  |
 
 **Returns:**
 

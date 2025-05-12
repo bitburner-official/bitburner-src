@@ -594,7 +594,7 @@ export function CharacterStats(): React.ReactElement {
       {canAccessBitNodeFeature(5) && (
         <Paper sx={{ p: 1, mb: 1 }}>
           <Typography variant="h5">BitNode Multipliers</Typography>
-          <BitNodeMultipliersDisplay n={Player.bitNodeN} />
+          <BitNodeMultipliersDisplay n={Player.bitNodeN} hideMultsIfCannotAccessFeature={true} />
         </Paper>
       )}
 

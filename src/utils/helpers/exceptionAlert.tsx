@@ -4,6 +4,29 @@ import Typography from "@mui/material/Typography";
 import { parseUnknownError } from "../ErrorHelper";
 import { cyrb53 } from "../HashUtils";
 import { commitHash } from "./commitHash";
+import { Player } from "@player";
+import type { TextFilePath } from "../../Paths/TextFilePath";
+
+const crashReports = new Set<string>();
+
+export function writeCrashReportToHome(errorData: unknown): void {
+  // Put all code in try-catch to make sure that this function never crashes.
+  try {
+    const crashReport = typeof errorData === "object" ? JSON.stringify(errorData) : String(errorData);
+    /**
+     * Crash reports are written to the home server, and they increase the size of save data. Therefore, it's best to
+     * ensure that we don't write duplicate reports. It may happen if a bug triggers exceptionAlert, and we forgot
+     * passing showOnlyOnce = true.
+     */
+    if (crashReports.has(crashReport)) {
+      return;
+    }
+    Player.getHomeComputer().writeToTextFile(`CRASH_REPORT_${Date.now()}.txt` as TextFilePath, crashReport);
+    crashReports.add(crashReport);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 const errorSet = new Set<string>();
 
@@ -28,6 +51,13 @@ export function exceptionAlert(error: unknown, showOnlyOnce = false): void {
     }
     errorSet.add(errorId);
   }
+
+  const commitId = commitHash();
+  writeCrashReportToHome({
+    errorData,
+    commitId,
+    userAgent: navigator.userAgent,
+  });
 
   dialogBoxCreate(
     <>
@@ -54,7 +84,7 @@ export function exceptionAlert(error: unknown, showOnlyOnce = false): void {
         </>
       )}
       <br />
-      Commit: {commitHash()}
+      Commit: {commitId}
       <br />
       UserAgent: {navigator.userAgent}
       <br />

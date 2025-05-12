@@ -7,7 +7,7 @@ import { BitNodes } from "../BitNode";
 import { Modal } from "../../ui/React/Modal";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { BitnodeMultiplierDescription } from "./BitnodeMultipliersDescription";
+import { BitNodeMultiplierDescription } from "./BitnodeMultipliersDescription";
 import { BitNodeAdvancedOptions } from "./BitNodeAdvancedOptions";
 import { JSONMap } from "../../Types/Jsonable";
 
@@ -105,7 +105,7 @@ export function PortalModal(props: IProps): React.ReactElement {
       <br />
       <br />
       <Typography component="div">{bitNode.info}</Typography>
-      <BitnodeMultiplierDescription n={props.n} level={newLevel} />
+      <BitNodeMultiplierDescription n={props.n} level={newLevel} hideMultsIfCannotAccessFeature={false} />
       <BitNodeAdvancedOptions
         targetBitNode={props.n}
         currentSourceFiles={currentSourceFiles}

@@ -9,14 +9,14 @@ Get skill level.
 **Signature:**
 
 ```typescript
-getSkillLevel(skillName: BladeburnerSkillName | `${BladeburnerSkillName}`): number;
+getSkillLevel(skillName: BladeburnerSkillName): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  skillName | [BladeburnerSkillName](./bitburner.bladeburnerskillname.md) \| \`${[BladeburnerSkillName](./bitburner.bladeburnerskillname.md)<!-- -->}\` | Name of skill. Case-sensitive and must be an exact match. |
+|  skillName | [BladeburnerSkillName](./bitburner.bladeburnerskillname.md) | Name of skill. Case-sensitive and must be an exact match. |
 
 **Returns:**
 

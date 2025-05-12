@@ -602,9 +602,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   formatNumber: 0,
   formatRam: 0,
   formatPercent: 0,
-  nFormat: 0,
   tFormat: 0,
-  getTimeSinceLastAug: RamCostConstants.GetHackTime,
   prompt: 0,
   wget: 0,
   getFavorToDonate: RamCostConstants.GetFavorToDonate,
@@ -641,6 +639,7 @@ export const RamCosts: RamCostTree<NSFull> = {
       calculateRepToFavor: 0,
       repFromDonation: 0,
       donationForRep: 0,
+      sharePower: 0,
     },
     skills: {
       calculateSkill: 0,

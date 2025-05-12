@@ -29,8 +29,10 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 
 import { getRecordValues } from "../Types/Record";
 import { ServerConstants } from "../Server/data/Constants";
-import { canAccessBitNodeFeature, isBitNodeFinished, knowAboutBitverse } from "../BitNode/BitNodeUtils";
+import { canAccessBitNodeFeature, isBitNodeFinished, knowAboutBitverse, validBitNodes } from "../BitNode/BitNodeUtils";
 import { isLegacyScript } from "../Paths/ScriptFilePath";
+import { Settings } from "../Settings/Settings";
+import { activateSteamAchievements } from "../Electron";
 
 // Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
 const achievementData = (<AchievementDataJson>(<unknown>data)).achievements;
@@ -63,17 +65,18 @@ export interface AchievementData {
 }
 
 function sfAchievements(): Record<string, Achievement> {
-  const achs: Record<string, Achievement> = {};
-  for (let i = 1; i <= 12; i++) {
+  const achievements: Record<string, Achievement> = {};
+  for (let i = 1; i <= 13; i++) {
     const ID = `SF${i}.1`;
-    achs[ID] = {
+    achievements[ID] = {
       ...achievementData[ID],
       Icon: ID,
       Visible: knowAboutBitverse,
       Condition: () => Player.sourceFileLvl(i) >= 1,
+      NotInSteam: i >= 13,
     };
   }
-  return achs;
+  return achievements;
 }
 
 export const achievements: Record<string, Achievement> = {
@@ -186,7 +189,7 @@ export const achievements: Record<string, Achievement> = {
   },
   NEUROFLUX_255: {
     ...achievementData.NEUROFLUX_255,
-    Icon: "nf255",
+    Icon: "nfg255",
     Condition: () => Player.augmentations.some((a) => a.name === AugmentationName.NeuroFluxGovernor && a.level >= 255),
   },
   NS2: {
@@ -196,7 +199,7 @@ export const achievements: Record<string, Achievement> = {
   },
   FROZE: {
     ...achievementData.FROZE,
-    Icon: "forze",
+    Icon: "frozen",
     Condition: () => location.href.includes("noScripts"),
   },
   RUNNING_SCRIPTS_1000: {
@@ -512,6 +515,13 @@ export const achievements: Record<string, Achievement> = {
     Visible: knowAboutBitverse,
     Condition: () => isBitNodeFinished() && Player.playtimeSinceLastBitnode < 1000 * 60 * 60 * 24 * 2,
   },
+  BN_DESTROYER: {
+    ...achievementData.BN_DESTROYER,
+    Icon: "bn-destroyer",
+    Visible: knowAboutBitverse,
+    Condition: () => validBitNodes.every((bn) => Player.sourceFileLvl(bn) >= 3),
+    NotInSteam: true,
+  },
   CHALLENGE_BN1: {
     ...achievementData.CHALLENGE_BN1,
     Icon: "BN1+",
@@ -718,8 +728,16 @@ export function calculateAchievements(): void {
     Player.giveAchievement(id);
   }
 
-  // Write all player's achievements to document for Steam/Electron
-  // This could be replaced by "availableAchievements"
-  // if we don't want to grant the save game achievements to steam but only currently available
-  document.achievements = [...Player.achievements.map((a) => a.ID)];
+  if (Settings.SyncSteamAchievements) {
+    activateSteamAchievements(
+      Player.achievements
+        .map((a) => a.ID)
+        .filter((name) => {
+          if (!achievements[name]) {
+            return false;
+          }
+          return !achievements[name].NotInSteam;
+        }),
+    );
+  }
 }

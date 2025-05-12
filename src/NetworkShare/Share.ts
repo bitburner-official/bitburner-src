@@ -3,7 +3,7 @@ import { calculateIntelligenceBonus } from "../PersonObjects/formulas/intelligen
 import { getCoreBonus } from "../Server/ServerHelpers";
 import { clampNumber } from "../utils/helpers/clampNumber";
 
-let sharePower = 1;
+let shareThreads = 1;
 
 export const ShareBonusTime = 10000;
 
@@ -26,22 +26,22 @@ export function calculateEffectiveSharedThreads(threads: number, cpuCores: numbe
 
 export function startSharing(threads: number, cpuCores: number): () => void {
   const effectiveThreads = calculateEffectiveSharedThreads(threads, cpuCores);
-  sharePower += effectiveThreads;
+  shareThreads += effectiveThreads;
   return () => {
     /**
-     * Due to floating point inaccuracy, sharePower may be slightly higher or lower than 1 after many times the player
+     * Due to floating point inaccuracy, shareThreads may be slightly higher or lower than 1 after many times the player
      * shares their RAM. We need to make sure that it's not smaller than 1.
      */
-    sharePower = clampNumber(sharePower - effectiveThreads, 1);
-    // sharePower may be slightly higher than 1. Reset sharePower if it's smaller than a threshold.
-    if (sharePower < 1.00001) {
-      sharePower = 1;
+    shareThreads = clampNumber(shareThreads - effectiveThreads, 1);
+    // shareThreads may be slightly higher than 1. Reset shareThreads if it's smaller than a threshold.
+    if (shareThreads < 1.00001) {
+      shareThreads = 1;
     }
   };
 }
 
-function calculateShareBonus(sharePower: number): number {
-  const bonus = 1 + Math.log(sharePower) / 25;
+export function calculateShareBonus(shareThreads: number): number {
+  const bonus = 1 + Math.log(shareThreads) / 25;
   if (!Number.isFinite(bonus)) {
     return 1;
   }
@@ -49,9 +49,9 @@ function calculateShareBonus(sharePower: number): number {
 }
 
 export function calculateShareBonusWithAdditionalThreads(threads: number, cpuCores: number): number {
-  return calculateShareBonus(sharePower + calculateEffectiveSharedThreads(threads, cpuCores));
+  return calculateShareBonus(shareThreads + calculateEffectiveSharedThreads(threads, cpuCores));
 }
 
 export function calculateCurrentShareBonus(): number {
-  return calculateShareBonus(sharePower);
+  return calculateShareBonus(shareThreads);
 }

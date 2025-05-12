@@ -9,7 +9,7 @@ Buy tea for your employees.
 **Signature:**
 
 ```typescript
-buyTea(divisionName: string, city: CityName | `${CityName}`): boolean;
+buyTea(divisionName: string, city: CityName): boolean;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ buyTea(divisionName: string, city: CityName | `${CityName}`): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
+|  city | [CityName](./bitburner.cityname.md) | Name of the city |
 
 **Returns:**
 
