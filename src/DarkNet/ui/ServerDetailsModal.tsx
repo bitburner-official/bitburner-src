@@ -16,12 +16,14 @@ export type DWPasswordPromptModalProps = {
   open: boolean;
   onClose: () => void;
   server: BaseServer;
+  classes: {
+    [key: string]: string;
+  };
 };
 
-export const ServerDetailsModal = ({ open, onClose, server }: DWPasswordPromptModalProps): React.ReactElement => {
+export const ServerDetailsModal = ({ open, onClose, server, classes }: DWPasswordPromptModalProps): React.ReactElement => {
   const rerender = useRerender();
   const icon = getIcon(server.darknetData?.icon ?? Icon.Terminal);
-  const { classes } = dnetStyles({});
 
   useEffect(() => {
     DarknetEvents.subscribe(() => rerender());
@@ -85,7 +87,7 @@ export const ServerDetailsModal = ({ open, onClose, server }: DWPasswordPromptMo
               <Typography color="secondary">model:{server.darknetData?.minigameType}</Typography>
               <br />
               <div style={{ maxWidth: "300px" }}>
-                <ServerSummary server={server} enableAuth={true} showDetails={true} />
+                <ServerSummary server={server} enableAuth={true} showDetails={true} classes={classes} />
               </div>{" "}
               <br />
               <br />

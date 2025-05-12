@@ -278,13 +278,7 @@ Coming soon:
 
 ## TODO:
 
-pass classes to child components of server
-
 capcha puzzle?
-
-
-- prevent "NS instance has already been killed" error ?
-- lab placement is wrong?
 
 - BN 15 stuff?
 - hint note for TRP in lab (in starter guide?)

@@ -28,6 +28,7 @@ import { handleStormSeed } from "../DarkNet/controllers/webstorm";
 import { getPasswordType, Minigames } from "../DarkNet/controllers/DarknetServerGenerator";
 import { checkPassword, getAuthResult, isAuthenticated } from "../DarkNet/models/authentication";
 import { getLabMaze, getSurroundingsVisualized, isLabyrinthServer } from "../DarkNet/models/labyrinth";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 
 export type DarknetResult = { success: boolean; message: string };
 
@@ -756,7 +757,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         } else if (Math.random() < moneyRewardChance) {
           const randomFactor = Math.random() * 0.3 + 0.9;
           const moneyReward =
-            2e4 * Player.mults.crime_money * threads * ((50 + Player.skills.charisma) / 50) * randomFactor;
+            2e4 * Player.mults.crime_money * threads * ((50 + Player.skills.charisma) / 50) * randomFactor * currentNodeMults.DarknetMoneyMultiplier;
           Player.gainMoney(moneyReward, "darknet");
           const result = `Phishing attack succeeded! $${formatNumber(moneyReward, 2)} retrieved. (Gained ${formatNumber(
             xpGained,

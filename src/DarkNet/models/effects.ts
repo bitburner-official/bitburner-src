@@ -30,6 +30,7 @@ import { initStockMarket } from "../../StockMarket/StockMarket";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { getSharedChars } from "./authentication";
 import { getLabyrinthDetails, isLabyrinthServer } from "./labyrinth";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;
@@ -143,7 +144,7 @@ export const getCCTReward = () => {
 
 export const getMoneyReward = (difficulty: number) => {
   const sf15_3Factor = Player.sourceFileLvl(15) > 3 ? 1.5 : 1;
-  const reward = 1.2 ** difficulty * 1e7 * ((200 + Player.skills.charisma) / 200) * sf15_3Factor * Player.mults.crime_money; // TODO: adjust balance
+  const reward = 1.2 ** difficulty * 1e7 * ((200 + Player.skills.charisma) / 200) * sf15_3Factor * Player.mults.crime_money * currentNodeMults.DarknetMoneyMultiplier; // TODO: adjust balance
   Player.gainMoney(reward, "darknet");
   return `You have discovered a cache with ${formatMoney(reward)}.`;
 };

@@ -12,10 +12,12 @@ export type ServerSummaryProps = {
   server: BaseServer;
   enableAuth: boolean;
   showDetails?: boolean;
+  classes: {
+    [key: string]: string;
+  };
 };
 
-export function ServerSummary({ server, enableAuth, showDetails = false }: ServerSummaryProps): React.ReactElement {
-  const { classes } = dnetStyles({});
+export function ServerSummary({ server, enableAuth, classes, showDetails = false }: ServerSummaryProps): React.ReactElement {
 
   if (!server.hasAdminRights && enableAuth) {
     return <Typography>[ auth required ]</Typography>;

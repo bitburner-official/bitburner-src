@@ -45,7 +45,7 @@ export function DNServerComponent({ server, enableAuth, classes }: DWServerProps
 
   return (
     <>
-      {open ? <ServerDetailsModal open={open} onClose={handleClose} server={server} /> : ""}
+      {open ? <ServerDetailsModal open={open} onClose={handleClose} server={server} classes={classes} /> : ""}
       <Button
         sx={getServerPositionStyles(server)}
         className={`${color} ${classes.DWServer}`}
@@ -63,7 +63,7 @@ export function DNServerComponent({ server, enableAuth, classes }: DWServerProps
             {ip} cha:{server.requiredHackingSkill}
           </Typography>
           <br />
-          <ServerSummary server={server} enableAuth={enableAuth} />
+          <ServerSummary server={server} enableAuth={enableAuth} classes={classes} />
         </Container>
       </Button>
     </>
