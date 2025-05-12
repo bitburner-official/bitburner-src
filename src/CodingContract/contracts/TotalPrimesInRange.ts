@@ -7,6 +7,7 @@ export const totalPrimesInRange: Pick<CodingContractTypes, CodingContractName.To
     desc: (data: number[]): string => {
       return [
         `You are given two random non-negative integers: ${data}.\n`,
+        `The first will be up to 5000000, and the second will be at most 1000000 greater.\n`,
         `Determine the amount of prime numbers between them (including the numbers given).\n\n`,
         "Example:\n",
         `The range of [0,20] contains the primes [2,3,5,7,11,13,17,19], resulting in an answer of 8.`,
