@@ -10,7 +10,12 @@ export const createRandomIp = (): IPAddress => {
   const ip = Math.random().toString(16);
   // uses regex to match every 2 characters. [0.][c8][f0][a0][7f][1d][47][e8]
   // we only want #1 through #4
-  const sliced = ip.match(/../g).slice(1, 5);
+  const matchResult = ip.match(/../g);
+  if (!matchResult) {
+    // This case should never happen.
+    throw new Error(`Unexpected regex matching bug in createRandomIp. ip: ${ip}`);
+  }
+  const sliced = matchResult.slice(1, 5);
   //convert each to a decimal number and join them together to make a human readable IP address.
   return sliced.map((x) => parseInt(x, 16)).join(".") as IPAddress;
 };
