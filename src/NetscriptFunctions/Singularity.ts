@@ -30,7 +30,7 @@ import { calculateHackingTime } from "../Hacking";
 import { Server } from "../Server/Server";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { FactionInfos } from "../Faction/FactionInfo";
-import { donate, repNeededToDonate } from "../Faction/formulas/donation";
+import { donate, favorNeededToDonate } from "../Faction/formulas/donation";
 import { InternalAPI, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { enterBitNode } from "../RedPill";
 import { ClassWork } from "../Work/ClassWork";
@@ -952,13 +952,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         return false;
       }
 
-      if (faction.favor < repNeededToDonate()) {
+      if (faction.favor < favorNeededToDonate()) {
         helpers.log(
           ctx,
           () =>
             `You do not have enough favor to donate to this faction. Have ${
               faction.favor
-            }, need ${repNeededToDonate()}`,
+            }, need ${favorNeededToDonate()}`,
         );
         return false;
       }
