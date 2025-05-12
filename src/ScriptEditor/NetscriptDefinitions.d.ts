@@ -4363,12 +4363,19 @@ type GoOpponent =
 
 /** @public */
 type SimpleOpponentStats = {
+  /** Number of wins since last reset */
   wins: number;
+  /** Number of losses since last reset*/
   losses: number;
+  /** Current winstreak */
   winStreak: number;
+  /** Highest winstreak since last reset*/
   highestWinStreak: number;
-  favor: number;
+  /** Favor gain from winstreaks, calculated as converted rep */
+  rep: number;
+  /** Stat boost*/
   bonusPercent: number;
+  /** Description of stat boost */
   bonusDescription: string;
 };
 

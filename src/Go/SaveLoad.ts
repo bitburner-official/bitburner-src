@@ -152,10 +152,10 @@ function loadStats(stats: unknown): PartialRecord<GoOpponent, OpponentStats> | s
     if (!getEnumHelper("GoOpponent").isMember(opponent)) return `Invalid opponent in Go.stats: ${opponent}`;
     if (!opponentStats || typeof opponentStats !== "object") return "Non-object encountered for an opponent's stats";
     assertLoadingType<OpponentStats>(opponentStats as object);
-    const { favor, highestWinStreak, losses, nodes, wins, oldWinStreak, winStreak, nodePower } =
+    const { rep, highestWinStreak, losses, nodes, wins, oldWinStreak, winStreak, nodePower } =
       opponentStats as OpponentStats;
     // Integers >= 0. Todo: make a better helper for this.
-    if (!isInteger(favor) || favor < 0) return "A favor entry in Go.stats was invalid";
+    if (!isInteger(rep) || rep < 0) return "A rep entry in Go.stats was invalid";
     if (!isInteger(highestWinStreak) || highestWinStreak < 0) return "A highestWinStreak entry in Go.stats was invalid";
     if (!isInteger(losses) || losses < 0) return "A losses entry in Go.stats was invalid";
     if (!isInteger(nodes) || nodes < 0) return "A nodes entry in Go.stats was invalid";
@@ -167,7 +167,7 @@ function loadStats(stats: unknown): PartialRecord<GoOpponent, OpponentStats> | s
 
     // Numbers >= 0
     if (!isNumber(nodePower) || nodePower < 0) return "A nodePower entry in Go.stats was invalid";
-    finalStats[opponent] = { favor, highestWinStreak, losses, nodes, wins, oldWinStreak, winStreak, nodePower };
+    finalStats[opponent] = { rep, highestWinStreak, losses, nodes, wins, oldWinStreak, winStreak, nodePower };
   }
   return finalStats;
 }

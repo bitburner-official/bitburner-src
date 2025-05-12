@@ -81,7 +81,7 @@ export function newOpponentStats(): OpponentStats {
     winStreak: 0,
     oldWinStreak: 0,
     highestWinStreak: 0,
-    favor: 0,
+    rep: 0,
   };
 }
 

@@ -16,7 +16,7 @@ import { Money } from "./React/Money";
 import { StatsRow } from "./React/StatsRow";
 import { StatsTable } from "./React/StatsTable";
 import { useCycleRerender } from "./React/hooks";
-import { getMaxFavor } from "../Go/effects/effect";
+import { getMaxRep } from "../Go/effects/effect";
 import { canAccessBitNodeFeature, knowAboutBitverse } from "../BitNode/BitNodeUtils";
 
 interface EmployersModalProps {
@@ -566,7 +566,7 @@ export function CharacterStats(): React.ReactElement {
                   },
                   {
                     mult: "IPvGO Max Favor",
-                    value: getMaxFavor(),
+                    value: getMaxRep(),
                     isNumber: true,
                   },
                 ]}
