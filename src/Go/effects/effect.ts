@@ -31,13 +31,13 @@ export function getMaxRep() {
   const sourceFileLevel = Player.activeSourceFileLvl(14);
 
   if (sourceFileLevel === 1) {
-    return 100_000;
+    return 120_000;
   }
   if (sourceFileLevel === 2) {
-    return 140_000;
+    return 160_000;
   }
   if (sourceFileLevel >= 3) {
-    return 180_000;
+    return 200_000;
   }
 
   return 80_000;
