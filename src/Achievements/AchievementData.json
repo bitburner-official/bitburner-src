@@ -386,6 +386,11 @@
       "Name": "Speed demon.",
       "Description": "Destroy a bitnode in under 2 days."
     },
+    "BN_DESTROYER": {
+      "ID": "BN_DESTROYER",
+      "Name": "More BitNodes, please!",
+      "Description": "Reach SF x.3 in each BitNode."
+    },
     "CHALLENGE_BN1": {
       "ID": "CHALLENGE_BN1",
       "Name": "BN1: Challenge",

@@ -91,6 +91,20 @@ export function endGoGame(boardState: BoardState) {
 }
 
 /**
+ * Forcefully ends the game, resetting the winstreak (if any) and ending the game without applying node power bonuses.
+ * Used for critically failing a cheat attempt.
+ * @param boardState - the boardstate to reset
+ */
+export function forceEndGoGame(boardState: BoardState) {
+  resetWinstreak(boardState.ai, false);
+  boardState.previousPlayer = null;
+  Go.currentGame = boardState;
+  Go.previousGame = boardState;
+  resetAI(true);
+  GoEvents.emit();
+}
+
+/**
  * Sets the winstreak to zero for the given opponent, and adds a loss
  */
 export function resetWinstreak(opponent: GoOpponent, gameComplete: boolean) {

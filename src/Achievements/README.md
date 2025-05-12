@@ -9,17 +9,17 @@ Steps:
 - Clone `$PROJECT_DIR/assets/Steam/achievements/template.svg`.
 - Edit the text.
 - Object -> Align and Distribute ...
-  - Relative to: Chose "Page".
+  - Relative to: Choose "Page".
   - Press the icon having the tooltip: "Center on vertical axis".
   - Press the icon having the tooltip: "Center on horizontal axis".
 
 # Add achievements
 
-- Add the new icon (.svg file) in `$PROJECT_DIR/assets/Steam/achievements/icons`.
-- Add an entry in `$PROJECT_DIR/src/Achievements/AchievementData.json`.
-  - It should match the information for the Steam achievement, if applicable.
+- Add the new icon (.svg file) to `$PROJECT_DIR/assets/Steam/achievements/icons`.
+- Add an entry to `$PROJECT_DIR/src/Achievements/AchievementData.json`.
+  - It should match the information of the Steam achievement, if applicable.
   - Order the new achievement entry thematically.
-- Add an entry in `$PROJECT_DIR/src/Achievements/Achievements.ts`.
+- Add an entry to `$PROJECT_DIR/src/Achievements/Achievements.ts`.
   - Match the order of achievements in `AchievementData.json`.
   - `Icon` must be the name of the .svg file.
   - `NotInSteam` must be true.

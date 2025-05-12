@@ -9,14 +9,14 @@ Purchase an augmentation
 **Signature:**
 
 ```typescript
-purchaseAugmentation(faction: string, augmentation: string): boolean;
+purchaseAugmentation(faction: FactionName, augmentation: string): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  faction | string | Name of faction to purchase Augmentation from. |
+|  faction | [FactionName](./bitburner.factionname.md) | Name of faction to purchase Augmentation from. |
 |  augmentation | string | Name of Augmentation to purchase. |
 
 **Returns:**

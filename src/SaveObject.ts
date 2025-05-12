@@ -318,6 +318,12 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
       throw new Error("Invalid save data");
     }
 
+    if (typeof saveData === "string" && saveData.startsWith(`{"ctor"`)) {
+      throw new Error(
+        "The save data is invalid. You must import the original save file. If it's a .gz file, don't decompress it.",
+      );
+    }
+
     let decodedSaveData;
     try {
       decodedSaveData = await decodeSaveData(saveData);
