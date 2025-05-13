@@ -101,8 +101,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
                     key="repLabel"
                     title={
                       <>
-                        You will have{" "}
-                        <Favor favor={addRepToFavor(company.favor, company.playerReputation)} /> company
+                        You will have <Favor favor={addRepToFavor(company.favor, company.playerReputation)} /> company
                         favor upon resetting after installing Augmentations
                       </>
                     }
