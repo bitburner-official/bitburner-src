@@ -527,9 +527,9 @@ export function initBitNodes() {
         </ul>
         This Source-File also increases the maximum favor from winstreaks you can gain for each faction to:
         <ul>
-          <li>Level 1: 120k rep equivalent</li>
-          <li>Level 2: 160k rep equivalent</li>
-          <li>Level 3: 200k rep equivalent</li>
+          <li>Level 1: 160k rep equivalent</li>
+          <li>Level 2: 240k rep equivalent</li>
+          <li>Level 3: 320k rep equivalent</li>
         </ul>
       </>
     ),
