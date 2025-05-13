@@ -102,9 +102,7 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: Props) => {
               Two wins in a row against an opponent will give you 1000 rep converted to favor with that faction (up to a
               max of {getMaxRep()} favor), if you are a member of that faction.
               <br />
-              <br />
-              (This is done as favor converted to rep to avoid making the favor worth much less rep early in an install
-              compared to later, because of how the rep {"->"} favor formula works.)
+              The rep is immediately applied as favor, meaning it will increase reputation gain right away without needing an install.
             </>
           }
         >

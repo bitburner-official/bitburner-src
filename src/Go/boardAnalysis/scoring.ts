@@ -10,7 +10,7 @@ import { isNotNullish } from "../boardState/boardState";
 import { Factions } from "../../Faction/Factions";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { Go, GoEvents } from "../Go";
-import { calculateFavorAfterResetting } from "../../Faction/formulas/favor";
+import { addRepToFavor } from "../../Faction/formulas/favor";
 
 /**
  * Returns the score of the current board.
@@ -72,8 +72,8 @@ export function endGoGame(boardState: BoardState) {
       statusToUpdate.rep < getMaxRep()
     ) {
       const currentFavor = Factions[factionName].favor;
-      const newFavor = calculateFavorAfterResetting(currentFavor, 1000);
-      Factions[factionName].setFavor(currentFavor + newFavor);
+      const newFavor = addRepToFavor(currentFavor, 1000);
+      Factions[factionName].setFavor(newFavor);
       statusToUpdate.rep += 1000;
     }
   }

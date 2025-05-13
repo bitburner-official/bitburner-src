@@ -49,7 +49,7 @@ import { JobTracks } from "../Company/data/JobTracks";
 import { ServerConstants } from "../Server/data/Constants";
 import { blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
-import { calculateFavorAfterResetting } from "../Faction/formulas/favor";
+import { addRepToFavor } from "../Faction/formulas/favor";
 import { validBitNodes } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { cat } from "../Terminal/commands/cat";
@@ -754,7 +754,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       const company = Companies[companyName];
-      return calculateFavorAfterResetting(company.favor, company.playerReputation) - company.favor;
+      return addRepToFavor(company.favor, company.playerReputation) - company.favor;
     },
     getFactionInviteRequirements: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
@@ -924,7 +924,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const faction = Factions[facName];
-      return calculateFavorAfterResetting(faction.favor, faction.playerReputation) - faction.favor;
+      return addRepToFavor(faction.favor, faction.playerReputation) - faction.favor;
     },
     donateToFaction: (ctx) => (_facName, _amt) => {
       helpers.checkSingularityAccess(ctx);
