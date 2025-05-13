@@ -2772,7 +2772,7 @@ export interface Singularity {
    * ```js
    * const programName = "BruteSSH.exe";
    * const cost = ns.singularity.getDarkwebProgramCost(programName);
-   * if (cost > 0) ns.tprint(`${programName} costs $${ns.formatNumber(cost)}`);
+   * if (cost > 0) ns.tprint(`${programName} costs $${ns.format.number(cost)}`);
    * ```
    * @param programName - Name of program to check the price of
    * @returns Price of the specified darkweb program
@@ -3866,8 +3866,8 @@ export interface Bladeburner {
    * ```js
    * while (true) {
    *   const duration = await ns.bladeburner.nextUpdate();
-   *   ns.print(`Bladeburner Division completed ${ns.tFormat(duration)} of actions.`);
-   *   ns.print(`Bonus time remaining: ${ns.tFormat(ns.bladeburner.getBonusTime())}`);
+   *   ns.print(`Bladeburner Division completed ${ns.format.time(duration)} of actions.`);
+   *   ns.print(`Bonus time remaining: ${ns.format.time(ns.bladeburner.getBonusTime())}`);
    *   // Manage the Bladeburner division
    * }
    * ```
@@ -4409,8 +4409,8 @@ export interface Gang {
    * ```js
    * while (true) {
    *   const duration = await ns.gang.nextUpdate();
-   *   ns.print(`Gang completed ${ns.tFormat(duration)} of activity.`);
-   *   ns.print(`Bonus time remaining: ${ns.tFormat(ns.gang.getBonusTime())}`);
+   *   ns.print(`Gang completed ${ns.format.time(duration)} of activity.`);
+   *   ns.print(`Bonus time remaining: ${ns.format.time(ns.gang.getBonusTime())}`);
    *   // Manage the Gang
    * }
    * ```
@@ -7602,7 +7602,7 @@ export interface NS {
    * ```js
    * const ram = 2 ** 20;
    * const cost = ns.getPurchasedServerCost(ram);
-   * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs $${ns.formatNumber(cost)}`);
+   * ns.tprint(`A purchased server with ${ns.format.ram(ram)} costs $${ns.format.number(cost)}`);
    * ```
    * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
    * @returns The cost to purchase a server with the specified amount of ram, or returns Infinity if ram is not a valid amount.
