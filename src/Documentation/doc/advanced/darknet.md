@@ -278,6 +278,17 @@ Coming soon:
 
 ## TODO:
 
+Improve error UI and handle multiple thrown errors
+
+improve error handling for run and exec to not throw for offline servers (list of recently killed servers?)
+
+packetCapture should not throw on non-connected servers and instead have a Result
+induceServerMigration should scale with cha
+
+improve session vs agacency phrasing
+
+Parent server should not die if server goes offline after child script launches
+
 capcha puzzle?
 
 - BN 15 stuff?

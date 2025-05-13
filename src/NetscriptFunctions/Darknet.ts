@@ -163,6 +163,9 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         if (additionalMsec < 0) {
           return error(ctx)(`Invalid arguments: "additionalMsec" is not a positive integer`);
         }
+        if (token.length > 100) {
+          error(ctx)(`Invalid arguments: "password" is too long. Attempted length: ${token.length}. Attempted password starts with ${token.slice(0, 100)} `);
+        }
         expectDarknetAccess(ctx);
 
         const currentServer = ctx.workerScript.getServer();

@@ -370,7 +370,7 @@ export const getLabyrinthDetails = (): {
   // if (!Player.sourceFileLvl(15) && Player.bitNodeN !== 15) {
   //   return {
   //     augReward: null,
-  //     cha: 0,
+  //     cha: 300,
   //     mazeHeight: 10,
   //     mazeWidth: 10,
   //     name: "",
@@ -390,7 +390,7 @@ export const getLabyrinthDetails = (): {
       mazeWidth: 10,
       mazeHeight: 10,
       augReward: null,
-      cha: 0,
+      cha: 3200,
       name: "",
     };
   }
