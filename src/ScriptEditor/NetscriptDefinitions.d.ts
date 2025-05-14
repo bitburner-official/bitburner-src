@@ -4028,6 +4028,17 @@ export interface Format {
    * Display settings (all options on the "Numeric Display" options page)
    * To format ram or percentages, see {@link Format.ram | format.ram} and {@link Format.percent | format.percent}
    *
+   * This function has some quirky undocumented behaviors. This is a non-exhaustive list of those behaviors:
+   *
+   * - "Infinity" and "-Infinity" are returned as "∞" and "-∞", respectively.
+   *
+   * - If you disable the suffix form in the settings page or the absolute value is greater than or equal to 1e33, this
+   * function will use the exponential form. This means that, if Math.abs(n) >= 1e33, the returned value is always in
+   * the exponential form, regardless of the setting.
+   *
+   * Note that the behaviors listed above are "undocumented", in the sense that we don't make any guarantee about
+   * backward compatibility. You must not rely on those behaviors.
+   *
    * @param n - Number to format.
    * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 3.
    * @param suffixStart - How high a number must be before a suffix will be added. Optional, defaults to 1000.
@@ -4845,12 +4856,12 @@ export interface Go {
    *
    * For example, a 5x5 board might look like this:
    *
-   [<br/>  
-      "XX.O.",<br/>  
-      "X..OO",<br/>  
-      ".XO..",<br/>  
-      "XXO.#",<br/>  
-      ".XO.#",<br/>  
+   [<br/>
+      "XX.O.",<br/>
+      "X..OO",<br/>
+      ".XO..",<br/>
+      "XXO.#",<br/>
+      ".XO.#",<br/>
    ]
    *
    * Each string represents a vertical column on the board, and each character in the string represents a point.
@@ -4871,12 +4882,12 @@ export interface Go {
    *
    * For example, a single 5x5 prior move board might look like this:
    *
-   [<br/>  
-      "XX.O.",<br/>  
-      "X..OO",<br/>  
-      ".XO..",<br/>  
-      "XXO.#",<br/>  
-      ".XO.#",<br/>  
+   [<br/>
+      "XX.O.",<br/>
+      "X..OO",<br/>
+      ".XO..",<br/>
+      "XXO.#",<br/>
+      ".XO.#",<br/>
    ]
    */
   getMoveHistory(): string[][];

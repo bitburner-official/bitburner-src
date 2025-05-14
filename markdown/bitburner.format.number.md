@@ -33,3 +33,11 @@ RAM cost: 0 GB
 
 Converts a number into a numeric string with the specified format options. This is the same function that the game itself uses to display numbers. The format also depends on the Numeric Display settings (all options on the "Numeric Display" options page) To format ram or percentages, see [format.ram](./bitburner.format.ram.md) and [format.percent](./bitburner.format.percent.md)
 
+This function has some quirky undocumented behaviors. This is a non-exhaustive list of those behaviors:
+
+- "Infinity" and "-Infinity" are returned as "∞" and "-∞", respectively.
+
+- If you disable the suffix form in the settings page or the absolute value is greater than or equal to 1e33, this function will use the exponential form. This means that, if Math.abs(n) &gt;<!-- -->= 1e33, the returned value is always in the exponential form, regardless of the setting.
+
+Note that the behaviors listed above are "undocumented", in the sense that we don't make any guarantee about backward compatibility. You must not rely on those behaviors.
+
