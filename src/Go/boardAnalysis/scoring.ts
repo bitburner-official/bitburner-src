@@ -75,7 +75,7 @@ export function endGoGame(boardState: BoardState) {
       const repToAdd = getMaxRep() / 200;
       const newFavor = addRepToFavor(currentFavor, repToAdd);
       Factions[factionName].setFavor(newFavor);
-      statusToUpdate.rep += newFavor;
+      statusToUpdate.rep += repToAdd;
     }
   }
 
