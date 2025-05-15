@@ -872,6 +872,10 @@ export const ns: InternalAPI<NSFull> = {
   ls: (ctx) => (_host, _substring) => {
     const host = helpers.string(ctx, "host", _host);
     const substring = helpers.string(ctx, "substring", _substring ?? "");
+    if (DarknetState.offlineServers.includes(host)) {
+      helpers.log(ctx, () => `ls failed, because ${host} is offline.`);
+      return [];
+    }
     const server = helpers.getServer(ctx, host);
 
     const allFilenames = [
