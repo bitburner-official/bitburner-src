@@ -37,6 +37,7 @@ import { getPasswordType, Minigames } from "../DarkNet/controllers/DarknetServer
 import { checkPassword, getAuthResult, isAuthenticated } from "../DarkNet/models/authentication";
 import { getLabMaze, getSurroundingsVisualized, isLabyrinthServer } from "../DarkNet/models/labyrinth";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
+import { DarknetServer } from "../Server/DarknetServer";
 
 export type DarknetResult = { success: boolean; message: string };
 
@@ -518,7 +519,8 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       },
     getServer: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-      const server = getDarknetServerSafely(hostname);
+      const server = getServerSafely(hostname);
+      const darknetData = server instanceof DarknetServer ? server.darknetData : undefined;
       if (!server) {
         throw helpers.errorMessage(ctx, `Server ${hostname} not found. It may have gone offline.`);
       }
@@ -529,13 +531,13 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         isConnectedTo: server.isConnectedTo,
         ramUsed: server.ramUsed,
         maxRam: server.maxRam,
-        ownerAllocatedRam: server?.darknetData?.ramBlock ?? 0,
+        ownerAllocatedRam: darknetData?.ramBlock ?? 0,
         backdoorInstalled: server.backdoorInstalled ?? false,
         moneyAvailable: 0,
         moneyMax: 0,
         charismaLevel: server.requiredHackingSkill ?? 0,
-        depth: server?.darknetData?.x ?? -1,
-        modelId: server?.darknetData?.minigameType ?? "",
+        depth: darknetData?.x ?? -1,
+        modelId: darknetData?.minigameType ?? "",
       };
     },
     getServerAuthDetails: (ctx) => (_hostname) => {
