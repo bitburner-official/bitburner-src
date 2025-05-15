@@ -26,6 +26,8 @@ setStasisLink(shouldLink: boolean): Promise<Result>;
 
 Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;
 
+A promise that resolves to a [Result](./bitburner.result.md) object.
+
 ## Remarks
 
 RAM cost: 12 GB

@@ -1,8 +1,6 @@
 import { getRandomIcon, Minigames } from "../controllers/DarknetServerGenerator";
 import { Icon, labIcon } from "../controllers/ServerIcon";
-import { IConstructorParams, Server } from "../../Server/Server";
 import { AddToAllServers, createUniqueRandomIp, GetServer } from "../../Server/AllServers";
-import { BaseServer } from "../../Server/BaseServer";
 import {
   commonPasswordDictionary,
   connectors,
@@ -13,6 +11,7 @@ import {
   ServerNameSuffixes,
 } from "./dictionaryData";
 import { getLabyrinthDetails } from "./labyrinth";
+import { DarknetServer } from "../../Server/DarknetServer";
 
 export const ResponseStatus = {
   SUCCESS: "200 Success",
@@ -50,11 +49,7 @@ export type DnetServer = DnetServerData & {
   logTrafficInterval: number;
 };
 
-export const isDarknetServer = (server: BaseServer): boolean => {
-  return server.darknetData !== undefined;
-};
-
-export const DnetServerBuilder = (options: DnetServerData, name: string = getName()): Server => {
+export const DnetServerBuilder = (options: DnetServerData, name: string = getName()): DarknetServer => {
   const maxRam = 16 * 2 ** Math.floor(options.difficulty / 4);
   const ramBlock = getRamBlock(maxRam);
   const darknetData: DnetServer = {
@@ -74,11 +69,11 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
   const labDetails = getLabyrinthDetails();
   const labDifficulty = labDetails.cha;
   const depth = darknetData.difficulty;
-  const depthScaling =  (depth / labDetails.depth) * labDifficulty * 0.85;
+  const depthScaling = depth < 2 ? (depth / labDetails.depth) * labDifficulty * 0.85 : depth * 5;
   const levelVariance = (Math.random() * 3 - 1) * depth;
   const requiredLevel = Math.max(Math.floor(depthScaling + levelVariance), 1);
 
-  const params: IConstructorParams = {
+  const server = new DarknetServer({
     hostname: name,
     ip: createUniqueRandomIp(),
     organizationName: "darkweb",
@@ -89,8 +84,7 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
     numOpenPortsRequired: 69,
     adminRights: false,
     darknetData: darknetData,
-  };
-  const server = new Server(params);
+  });
   server.updateRamUsed(ramBlock);
   AddToAllServers(server);
 

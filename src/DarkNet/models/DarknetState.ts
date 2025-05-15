@@ -1,8 +1,9 @@
 import { EventEmitter } from "../../utils/EventEmitter";
-import { Server } from "../../Server/Server";
 import { BaseServer } from "../../Server/BaseServer";
 import { mutateDarknet } from "../controllers/DarknetNetworkMovement";
 import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
+import { DarknetServer } from "../../Server/DarknetServer";
+import { isDarknetServer } from "./effects";
 
 export const NET_WIDTH = 8;
 export const MAX_NET_DEPTH = 40;
@@ -14,7 +15,7 @@ export const DarknetEvents = new EventEmitter();
 export type DarknetState = {
   isMutating: boolean;
   openServer: BaseServer | null;
-  Network: (BaseServer | null)[][];
+  Network: (DarknetServer | null)[][];
   labyrinth: string[] | null;
   labLocations: Record<number, [number, number]>;
   lastPhishingCacheTime: Date;
@@ -23,6 +24,7 @@ export type DarknetState = {
   migrationInductionServers: Record<string, number>;
   webstormTokens: number;
   serverState: Record<string, serverState>;
+  offlineServers: string[];
 };
 
 export type serverState = {
@@ -35,7 +37,7 @@ export const DarknetState: DarknetState = {
   isMutating: true,
   openServer: null,
 
-  Network: new Array(MAX_NET_DEPTH).fill(null).map(() => new Array(NET_WIDTH).fill(null) as (Server | null)[]),
+  Network: new Array(MAX_NET_DEPTH).fill(null).map(() => new Array(NET_WIDTH).fill(null) as (DarknetServer | null)[]),
 
   labyrinth: null,
   labLocations: { "-1": [1, 1] },
@@ -45,6 +47,7 @@ export const DarknetState: DarknetState = {
   migrationInductionServers: {},
   webstormTokens: 0,
   serverState: {},
+  offlineServers: [],
 };
 
 export const startDarknetMovement = () => setInterval(() => mutateDarknet(), 4000);
@@ -61,7 +64,7 @@ export const getServerState = (hostname: string): serverState => {
 };
 
 export const addSessionToServer = (server: BaseServer, pid: number) => {
-  if (!server?.darknetData) return;
+  if (!isDarknetServer(server)) return;
   const serverState = getServerState(server.hostname);
   removeExpiredSessions(server);
   if (serverState.authenticatedPIDs.includes(pid)) return;
@@ -69,7 +72,7 @@ export const addSessionToServer = (server: BaseServer, pid: number) => {
 };
 
 const removeExpiredSessions = (server: BaseServer) => {
-  if (!server?.darknetData) return;
+  if (!isDarknetServer(server)) return;
   const serverState = getServerState(server.hostname);
   serverState.authenticatedPIDs = serverState.authenticatedPIDs.filter((pid) => findRunningScriptByPid(pid));
 };

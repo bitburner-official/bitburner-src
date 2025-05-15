@@ -1,7 +1,7 @@
 import { BaseServer } from "../../Server/BaseServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { handleLabyrinthPassword, isLabyrinthServer } from "./labyrinth";
-import { handleFailedAuth, handleSuccessfulAuth } from "./effects";
+import { handleFailedAuth, handleSuccessfulAuth, isDarknetServer } from "./effects";
 import { Minigames } from "../controllers/DarknetServerGenerator";
 import { Result } from "@nsdefs";
 import { PasswordResponse, ResponseStatus } from "./DnetServerData";
@@ -18,7 +18,7 @@ export const checkPassword = (
   if (server.hostname === SpecialServers.DarkWeb) {
     return handleDarkwebSpecialServerAuth(attemptedPassword, server, threads);
   }
-  if (!server.darknetData) {
+  if (!isDarknetServer(server)) {
     return {
       status: ResponseStatus.AUTH_FAILURE,
       message: "This server is not a darknet server",
@@ -129,7 +129,7 @@ export const getAuthResult = (
 };
 
 export const isAuthenticated = (server: BaseServer, pid: number): boolean => {
-  if (!server.darknetData) {
+  if (!isDarknetServer(server)) {
     return true;
   }
   const serverState = getServerState(server.hostname);

@@ -327,8 +327,12 @@ export const Programs: Record<CompletedProgramName, Program> = {
     create: null,
     run: (): void => {
       Terminal.print("This program gives access to the dark net.");
-      Terminal.print("The dark net is an unstable, constantly shifting network of servers that are only connected to the normal network through the darkweb server.");
-      Terminal.print("This network can be accessed using the `ns.dnet` api functions, or the DarkNet UI on the left-hand panel.");
+      Terminal.print(
+        "The dark net is an unstable, constantly shifting network of servers that are only connected to the normal network through the darkweb server.",
+      );
+      Terminal.print(
+        "This network can be accessed using the `ns.dnet` api functions, or the DarkNet UI on the left-hand panel.",
+      );
     },
   }),
   [CompletedProgramName.stormSeed]: new Program({

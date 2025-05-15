@@ -33,6 +33,9 @@ export class Server extends BaseServer {
   // (i.e. security level when the server was created)
   baseDifficulty = 1;
 
+  // Holds properties only used for darkweb servers
+  darknetData: DnetServer | undefined;
+
   // Server Security Level
   hackDifficulty = 1;
 

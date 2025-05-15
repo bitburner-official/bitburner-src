@@ -67,6 +67,7 @@ import { Settings } from "../Settings/Settings";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContentFilePath } from "../Paths/ContentFile";
 import { LiteratureName } from "@enums";
+import { isDarknetServer } from "../DarkNet/models/effects";
 
 export const helpers = {
   string,
@@ -487,7 +488,10 @@ function scriptIdentifier(
  */
 export function getServer(ctx: NetscriptContext, hostname: string) {
   const server = GetServer(hostname);
-  if (server == null || (server.serversOnNetwork.length == 0 && server.hostname != "home" && !server.darknetData)) {
+  if (
+    server == null ||
+    (server.serversOnNetwork.length == 0 && server.hostname != "home" && !isDarknetServer(server))
+  ) {
     const str = hostname === "" ? "'' (empty string)" : "'" + hostname + "'";
     throw errorMessage(ctx, `Invalid hostname: ${str}`);
   }

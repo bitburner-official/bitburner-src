@@ -15,8 +15,7 @@ import { IPAddress, isIPAddress } from "../Types/strings";
 import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
 import { populateDarknet } from "../DarkNet/controllers/DarknetNetworkGenerator";
-import { isDarknetServer } from "../DarkNet/models/DnetServerData";
-import { applyRamBlocks, hasDarknetAccess } from "../DarkNet/models/effects";
+import { applyRamBlocks, hasDarknetAccess, isDarknetServer } from "../DarkNet/models/effects";
 import { getTorRouter } from "../Locations/ui/TorButton";
 
 /**
@@ -130,7 +129,7 @@ export function AddToAllServers(server: Server | HacknetServer): void {
   if (GetServer(server.hostname)) {
     console.warn(`Hostname of the server thats being added: ${server.hostname}`);
     console.warn(`The server that already has this IP is: ${AllServers[server.hostname].hostname}`);
-    throw new Error("Error: Trying to add a server with an existing IP");
+    //throw new Error("Error: Trying to add a server with an existing IP"); // TODO: re-add?
   }
 
   AllServers[server.hostname] = server;

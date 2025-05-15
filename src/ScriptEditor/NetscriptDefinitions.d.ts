@@ -4047,7 +4047,7 @@ export type Result = { success: boolean; message: string };
  * Darknet server information.
  * @public
  */
-type DarknetServer = {
+export type DarknetServer = {
   /** The hostname of the server. */
   hostname: string;
   /** The IP address of the server. */
@@ -4080,11 +4080,13 @@ type DarknetServer = {
  * Details about a server's authentication schema
  * @public
  */
-type ServerAuthDetails = {
+export type ServerAuthDetails = {
   /** True if the server is still online. */
   isOnline: boolean;
   /** True if the server is directly connected to the current server */
-  isConnected: boolean;
+  isConnectedToCurrentServer: boolean;
+  /** True if the current script has authenticated to this server with the right password using authenticate() or connectToSesssion() */
+  hasSession: boolean;
   /** The model ID of the server. Similar models share vulnerabilities. */
   modelId: string;
   /** Static password reminder text set for this server. */
@@ -4103,7 +4105,7 @@ type ServerAuthDetails = {
  * Response from attempting to scrape logs from a server
  * @public
  */
-type HeartbleedOptions = {
+export type HeartbleedOptions = {
   /**
    * If true, looks at the most recent log line but does not extract it. (Overrides logsToCapture.)
    */
@@ -4181,16 +4183,18 @@ export interface Darknet {
    *
    * Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
    *
-   * The speed of capture scales with the number of threads used. See {@link ns.formulas.dnet.getHeartbleedEstimatedTime} for more information.
+   * The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedEstimatedTime for more information.
    *
    * @remarks
    * RAM cost: 0.6 GB
    *
    * @param hostname - the server to target. Must be directly connected to the current server.
-   * @param options - options to modify how the exploit works.
+   * @param options - optional {@link HeartbleedOptions} to modify how the exploit works.
    *    peek: if true, looks at the most recent log line but does not extract it. Overrides logsToCapture.
    *    logsToCapture: the number of log lines to remove from the server, up to a max of 8. Default is 1.
    *    additionalMsec: the number of additional milliseconds to add to the run time of the heartbleed request. Default is 0.
+   *  @returns a promise that resolves to a {@link Result} object, plus the scraped logs.
+   *
    */
   heartbleed(hostname: string, options?: HeartbleedOptions): Promise<Result & { logs: string[] }>;
 
@@ -4230,6 +4234,7 @@ export interface Darknet {
    * RAM cost: 12 GB
    *
    * @param shouldLink - true to apply a stasis link, false to remove it.
+   * @returns A promise that resolves to a {@link Result} object.
    */
   setStasisLink(shouldLink: boolean): Promise<Result>;
 
@@ -4290,9 +4295,9 @@ export interface Darknet {
    * RAM cost: 6 GB
    *
    * @param host - the hostname of the server to listen to.
-   * @returns A string containing the network traffic captured.
+   * @returns A promise that resolves to a {@link Result} object, plus the captured data.
    */
-  packetCapture(host: string): Promise<string>;
+  packetCapture(host: string): Promise<Result & { data: string }>;
 
   /**
    * Increases the chance that connected servers will move to other parts of the darknet, by overloading the connections between them and the current server.
@@ -4303,8 +4308,10 @@ export interface Darknet {
    * @remarks
    * RAM cost: 0.5 GB
    *
+   * @param hostname - Optional. Hostname of the connected server to migrate. Defaults to the current server.
+   * @returns A promise that resolves to a {@link Result} object.
    */
-  induceServerMigration(): Promise<Result>;
+  induceServerMigration(hostname?: string): Promise<Result>;
 
   /**
    * There are rumors of a mysterious executable sometimes found deep in the dark net...

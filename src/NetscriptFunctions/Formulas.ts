@@ -53,8 +53,13 @@ import { CompanyPositions } from "../Company/CompanyPositions";
 import { findCrime } from "../Crime/CrimeHelpers";
 import { Skills } from "../Bladeburner/data/Skills";
 import type { PositiveNumber } from "../types";
-import { calculateAuthenticationTime, getBackdoorAuthTimeDebuff, getRamBlockRemoved } from "../DarkNet/models/effects";
-import { getConnectedServer, getTimeoutChance } from "./Darknet";
+import {
+  calculateAuthenticationTime,
+  getBackdoorAuthTimeDebuff,
+  getRamBlockRemoved,
+  isDarknetServer,
+} from "../DarkNet/models/effects";
+import { getTimeoutChance } from "./Darknet";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
@@ -472,7 +477,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
           const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
           const threads = helpers.number(ctx, "threads", _threads ?? 1);
           const person = helpers.person(ctx, _player ?? Player);
-          const server = getConnectedServer(ctx, hostname);
+          const server = helpers.getServer(ctx, hostname);
           return calculateAuthenticationTime(server, person, threads);
         },
       getHeartbleedEstimatedTime:
@@ -481,7 +486,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
           const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
           const threads = helpers.number(ctx, "threads", _threads ?? 1);
           const person = helpers.person(ctx, _player ?? Player);
-          const server = getConnectedServer(ctx, hostname);
+          const server = helpers.getServer(ctx, hostname);
           return calculateAuthenticationTime(server, person, threads) * 1.5;
         },
       getExpectedRamBlockRemoved:
@@ -490,8 +495,8 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
           const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
           const threads = helpers.number(ctx, "threads", _threads ?? 1);
           const person = helpers.person(ctx, _person ?? Player);
-          const server = getConnectedServer(ctx, hostname);
-          if (!server.darknetData) {
+          const server = helpers.getServer(ctx, hostname);
+          if (!isDarknetServer(server)) {
             return 0;
           }
           return getRamBlockRemoved(server, threads, person);

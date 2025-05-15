@@ -11,11 +11,20 @@ Effect scales with threads.
 **Signature:**
 
 ```typescript
-induceServerMigration(): Promise<Result>;
+induceServerMigration(hostname?: string): Promise<Result>;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  hostname | string | _(Optional)_ Optional. Hostname of the connected server to migrate. Defaults to the current server. |
+
 **Returns:**
 
 Promise&lt;[Result](./bitburner.result.md)<!-- -->&gt;
+
+A promise that resolves to a [Result](./bitburner.result.md) object.
 
 ## Remarks
 

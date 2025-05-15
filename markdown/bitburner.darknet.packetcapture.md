@@ -11,7 +11,7 @@ Using multiple threads speeds up the capture process.
 **Signature:**
 
 ```typescript
-packetCapture(host: string): Promise<string>;
+packetCapture(host: string): Promise<Result & { data: string }>;
 ```
 
 ## Parameters
@@ -22,9 +22,9 @@ packetCapture(host: string): Promise<string>;
 
 **Returns:**
 
-Promise&lt;string&gt;
+Promise&lt;[Result](./bitburner.result.md) &amp; { data: string }&gt;
 
-A string containing the network traffic captured.
+A promise that resolves to a [Result](./bitburner.result.md) object, plus the captured data.
 
 ## Remarks
 

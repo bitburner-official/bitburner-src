@@ -79,14 +79,19 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
   noPadding: {
     padding: 0,
   },
+  paddingRight: {
+    paddingRight: "3px",
+  },
+  serverStatusIcon: {
+    paddingRight: "3px",
+    position: "relative",
+    bottom: "-4px",
+  },
   gold: {
     color: theme.colors.money,
   },
   red: {
     color: theme.colors.hp,
-  },
-  paddingRight: {
-    paddingRight: "3px",
   },
   white: {
     color: theme.colors.white,

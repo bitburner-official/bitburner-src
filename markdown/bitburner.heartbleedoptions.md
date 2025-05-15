@@ -9,7 +9,7 @@ Response from attempting to scrape logs from a server
 **Signature:**
 
 ```typescript
-type HeartbleedOptions = {
+export type HeartbleedOptions = {
   peek?: boolean;
   logsToCapture?: number;
   additionalMsec?: number;

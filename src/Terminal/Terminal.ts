@@ -86,7 +86,7 @@ import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
-import { getRewardFromCache } from "../DarkNet/models/effects";
+import { getRewardFromCache, isDarknetServer } from "../DarkNet/models/effects";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -385,7 +385,7 @@ export class Terminal {
       const canRunScripts = hasAdminRights && currServ.maxRam > 0;
       this.print("Can run scripts on this host: " + (canRunScripts ? "YES" : "NO"));
       this.print("RAM: " + formatRam(currServ.maxRam));
-      if (currServ.darknetData?.ramBlock) {
+      if (isDarknetServer(currServ) && currServ.darknetData?.ramBlock) {
         this.print("RAM blocked by owner: " + formatRam(currServ.darknetData.ramBlock));
       }
       if (currServ instanceof Server) {
@@ -558,7 +558,7 @@ export class Terminal {
       (!all && s.purchasedByPlayer && s.hostname != "home") ||
       d > depth ||
       (!all && s instanceof HacknetServer) ||
-      !!s.darknetData;
+      isDarknetServer(s);
 
     const makeNode = (parent: string, s: BaseServer, d = 1): Node => ({
       hostname: s.hostname,

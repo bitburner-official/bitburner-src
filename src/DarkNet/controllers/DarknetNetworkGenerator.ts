@@ -1,24 +1,18 @@
 import { DarknetState, MAX_NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarknetState";
-import {
-  AddToAllServers,
-  connectServers,
-  createUniqueRandomIp,
-  GetAllServers,
-  GetServer,
-} from "../../Server/AllServers";
+import { AddToAllServers, connectServers, createUniqueRandomIp, GetServer } from "../../Server/AllServers";
 import {
   addGuaranteedConnection,
   addRandomServers,
   balanceServers,
   deleteServer,
   disconnectServer,
+  getDarknetServers,
   getNeighborsOnRow,
   getServersOnRowAbove,
   getServersOnRowBelow,
 } from "./DarknetNetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { IConstructorParams, Server } from "../../Server/Server";
 import { DnetServer } from "../models/DnetServerData";
 import { Minigames } from "./DarknetServerGenerator";
 import { labIcon } from "./ServerIcon";
@@ -31,6 +25,8 @@ import {
   getNetDepth,
   isLabyrinthServer,
 } from "../models/labyrinth";
+import { DarknetServer } from "../../Server/DarknetServer";
+import { getDarknetData, isDarknetServer } from "../models/effects";
 
 export const HORIZONTAL_CONNECTION_CHANCE = 0.5;
 export const VERTICAL_CONNECTION_CHANCE = 0.3;
@@ -43,8 +39,7 @@ export const populateDarknet = () => {
     darkWebRoot.maxRam = 16; // TODO: make this more graceful?
   }
 
-  const existingDarknetServer = GetAllServers(true).find((s) => s.darknetData);
-  if (existingDarknetServer) {
+  if (getDarknetServers().length) {
     loadDarknet();
     return;
   }
@@ -59,7 +54,7 @@ export const populateDarknet = () => {
   addRandomServers(4 - DarknetState.Network[3].length);
   balanceServers();
 
-  const updatedServers = GetAllServers(true).filter((s) => s.darknetData);
+  const updatedServers = getDarknetServers();
   for (let i = 0; i < getNetDepth(); i++) {
     const server = updatedServers[Math.floor(Math.random() * updatedServers.length)];
     addGuaranteedConnection(server);
@@ -90,14 +85,14 @@ export const clearDarknet = (force = false) => {
 
 export const movePlayerIfNeeded = (server?: BaseServer) => {
   const connectedServer = Player.getCurrentServer();
-  if ((!server && connectedServer.darknetData) || server?.hostname === connectedServer.hostname) {
+  if ((!server && isDarknetServer(connectedServer)) || server?.hostname === connectedServer.hostname) {
     Terminal.print(`Something seems to have happened to '${connectedServer.hostname}'...`);
     Terminal.connectToServer(SpecialServers.Home);
   }
 };
 
 export const loadDarknet = () => {
-  const darkWebServers = GetAllServers(true).filter((s) => s.darknetData);
+  const darkWebServers = getDarknetServers();
   for (const server of darkWebServers) {
     if (server.darknetData && !isLabyrinthServer(server.hostname)) {
       disconnectServer(server, true);
@@ -106,7 +101,7 @@ export const loadDarknet = () => {
   }
   balanceServers();
 
-  const updatedServers = GetAllServers(true).filter((s) => s.darknetData);
+  const updatedServers = getDarknetServers();
   for (let i = 0; i < getNetDepth(); i++) {
     const server = updatedServers[Math.floor(Math.random() * updatedServers.length)];
     addGuaranteedConnection(server);
@@ -114,7 +109,7 @@ export const loadDarknet = () => {
 };
 
 export const addRandomConnections = (server: BaseServer) => {
-  const darknetData = server.darknetData;
+  const darknetData = getDarknetData(server);
   if (!darknetData || isLabyrinthServer(server.hostname)) {
     return;
   }
@@ -146,7 +141,7 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number, add
     console.error("Server already exists at this location");
     return;
   }
-  if (!server.darknetData) {
+  if (!isDarknetServer(server)) {
     console.error("Server missing dark web data");
     return;
   }
@@ -190,7 +185,7 @@ export const addLabyrinth = () => {
     logTrafficInterval: Number.MAX_SAFE_INTEGER,
   };
 
-  const params: Partial<IConstructorParams> = {
+  const params = {
     ip: createUniqueRandomIp(),
     organizationName: "darkweb",
     maxRam: 128,
@@ -203,12 +198,11 @@ export const addLabyrinth = () => {
 
   for (const hostname of getLabyrinthServerNames()) {
     const cha = getLabyrinthChaiRequirement(hostname);
-    const fullParams: IConstructorParams = {
+    const server = new DarknetServer({
       ...params,
       requiredHackingSkill: cha,
       hostname: hostname,
-    };
-    const server = new Server(fullParams);
+    });
     AddToAllServers(server);
   }
 };

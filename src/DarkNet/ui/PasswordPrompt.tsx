@@ -3,21 +3,24 @@ import { Button, Container, Card, TextField, Typography } from "@mui/material";
 import { getPasswordType, Minigames } from "../controllers/DarknetServerGenerator";
 import { dnetStyles } from "./dnetStyles";
 import { Result } from "@nsdefs";
-import { BaseServer } from "../../Server/BaseServer";
 import { PasswordResponse } from "../models/DnetServerData";
 import { getAuthResult, getSharedChars } from "../models/authentication";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 import { DarknetEvents } from "../models/DarknetState";
 import { LabyrinthSummary } from "./LabyrinthSummary";
 import { getLabyrinthDetails, isLabyrinthServer } from "../models/labyrinth";
+import { BaseServer } from "../../Server/BaseServer";
+import { getDarknetData, isDarknetServer } from "../models/effects";
 
 export type PasswordPromptProps = {
   server: BaseServer;
   onClose: () => void;
+  onSuccess: () => void;
 };
 
-export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.ReactElement => {
-  const [inputPassword, setInputPassword] = useState(server.hasAdminRights ? server.darknetData?.password ?? "" : "");
+export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptProps): React.ReactElement => {
+  const darknetData = getDarknetData(server);
+  const [inputPassword, setInputPassword] = useState(server.hasAdminRights ? darknetData?.password ?? "" : "");
   const [enableSubmit, setEnableSubmit] = useState(true);
   const [response, setResponse] = useState("(no response yet)");
   const [rawResponse, setRawResponse] = useState<{ result: Result; response: PasswordResponse } | null>(null);
@@ -33,7 +36,6 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
     setEnableSubmit(false);
     setResponse("Checking password...");
 
-    const darknetData = server.darknetData;
     const sharedChars =
       darknetData?.minigameType === Minigames.TimingAttack
         ? getSharedChars(darknetData?.password ?? "", passwordAttempted)
@@ -47,6 +49,7 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
 
     if (response.result.success) {
       DarknetEvents.emit("server-unlocked", server);
+      onSuccess();
       await sleep(50);
       focusTarget.current?.focus();
     } else {
@@ -113,23 +116,23 @@ export const PasswordPrompt = ({ server, onClose }: PasswordPromptProps): React.
           <Container disableGutters>
             <div style={{ color: "white" }}>
               <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
-                <span className={classes.serverDetailsText}>hint:</span> {server.darknetData?.staticPasswordHint}
+                <span className={classes.serverDetailsText}>hint:</span> {darknetData?.staticPasswordHint}
                 <br />
-                {server.darknetData?.passwordHintData ? (
+                {darknetData?.passwordHintData ? (
                   <>
                     <span className={classes.serverDetailsText}>data:</span>
-                    {server.darknetData?.passwordHintData}
+                    {darknetData?.passwordHintData}
                     <br />
                   </>
                 ) : (
                   ""
                 )}
-                <span className={classes.serverDetailsText}>length:</span> {server.darknetData?.password?.length}
+                <span className={classes.serverDetailsText}>length:</span> {darknetData?.password?.length}
                 <br />
                 <span className={classes.serverDetailsText}>format:</span>{" "}
-                {getPasswordType(server.darknetData?.password ?? "")}
+                {getPasswordType(darknetData?.password ?? "")}
                 <br />
-                <span className={classes.serverDetailsText}>model:</span> {server.darknetData?.minigameType ?? ""}
+                <span className={classes.serverDetailsText}>model:</span> {darknetData?.minigameType ?? ""}
                 <br />
               </pre>
             </div>

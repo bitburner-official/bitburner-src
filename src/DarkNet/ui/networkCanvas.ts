@@ -1,6 +1,5 @@
 import { DarknetState, NET_WIDTH } from "../models/DarknetState";
 import { GetServer } from "../../Server/AllServers";
-import { BaseServer } from "../../Server/BaseServer";
 import {
   DW_SERVER_GAP_LEFT,
   DW_SERVER_GAP_TOP,
@@ -10,6 +9,9 @@ import {
 } from "./dnetStyles";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getNetDepth, isLabyrinthServer } from "../models/labyrinth";
+import { BaseServer } from "../../Server/BaseServer";
+import { getServerSafely } from "../controllers/DarknetNetworkMovement";
+import { getDarknetData, isDarknetServer } from "../models/effects";
 
 export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   const ctx = canvas?.getContext("2d");
@@ -26,7 +28,7 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
 
     // draw a line between each server and its connected servers
     for (const connectedServerName of server.serversOnNetwork) {
-      const connectedServer = GetServer(connectedServerName);
+      const connectedServer = getServerSafely(connectedServerName);
       if (
         !connectedServer ||
         (!connectedServer.hasAdminRights && !connectedServer.serversOnNetwork.find((s) => GetServer(s)?.hasAdminRights))
@@ -79,7 +81,7 @@ export const getPixelPosition = (server: BaseServer, centered = false) => {
 };
 
 const getCoordinates = (server: BaseServer) => {
-  const darknetData = server.darknetData;
+  const darknetData = getDarknetData(server);
   if (!darknetData) {
     throw new Error("Server missing dark web data");
   }

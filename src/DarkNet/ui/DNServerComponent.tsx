@@ -6,6 +6,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { DarknetState } from "../models/DarknetState";
 import { getPixelPosition } from "./networkCanvas";
 import { ServerSummary } from "./ServerSummary";
+import { getDarknetData, isDarknetServer } from "../models/effects";
 
 export type DWServerProps = {
   server: BaseServer;
@@ -17,12 +18,9 @@ export type DWServerProps = {
 
 export function DNServerComponent({ server, enableAuth, classes }: DWServerProps): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const color = server.darknetData?.hasStasisLink
-    ? classes.goldBorder
-    : server.hasAdminRights
-    ? classes.green
-    : classes.grey;
-  const icon = getIcon(server.darknetData?.icon ?? Icon.Terminal);
+  const darknetData = getDarknetData(server);
+  const color = darknetData?.hasStasisLink ? classes.goldBorder : server.hasAdminRights ? classes.green : classes.grey;
+  const icon = getIcon(darknetData?.icon ?? Icon.Terminal);
   const ip = server.hasAdminRights ? server.ip ?? "" : "??.?.?.?";
 
   const authButtonHandler = () => {

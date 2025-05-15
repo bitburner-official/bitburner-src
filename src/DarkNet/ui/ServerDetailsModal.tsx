@@ -1,16 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Modal } from "../../ui/React/Modal";
 import { Container, Card, SvgIcon, Typography, Tooltip } from "@mui/material";
 import { getIcon, Icon } from "../controllers/ServerIcon";
 import { DarknetEvents, getServerState } from "../models/DarknetState";
 import { BaseServer } from "../../Server/BaseServer";
 import { ServerSummary } from "./ServerSummary";
-import { dnetStyles } from "./dnetStyles";
 import { populateServerLogsWithNoise } from "../models/packetSniffing";
 import { getLabyrinthDetails, isLabyrinthServer } from "../models/labyrinth";
 import { PasswordPrompt } from "./PasswordPrompt";
 import { copyToClipboard, decolorJsonProperties, formatToMaxDigits } from "./uiUtilities";
 import { useRerender } from "../../ui/React/hooks";
+import { getDarknetData } from "../models/effects";
+import { sleep } from "../../Go/boardAnalysis/goAI";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -21,9 +22,16 @@ export type DWPasswordPromptModalProps = {
   };
 };
 
-export const ServerDetailsModal = ({ open, onClose, server, classes }: DWPasswordPromptModalProps): React.ReactElement => {
+export const ServerDetailsModal = ({
+  open,
+  onClose,
+  server,
+  classes,
+}: DWPasswordPromptModalProps): React.ReactElement => {
   const rerender = useRerender();
-  const icon = getIcon(server.darknetData?.icon ?? Icon.Terminal);
+  const darknetData = getDarknetData(server);
+  const icon = getIcon(darknetData?.icon ?? Icon.Terminal);
+  const focusTarget = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     DarknetEvents.subscribe(() => rerender());
@@ -34,7 +42,7 @@ export const ServerDetailsModal = ({ open, onClose, server, classes }: DWPasswor
   const isLabServer = isLabyrinthServer(server.hostname);
   const canEnterLabManually = getLabyrinthDetails().manual;
   const recentLogs = serverState.serverLogs?.slice(0, 5) ?? [];
-  const ramBlock = server.darknetData?.ramBlock ?? 0;
+  const ramBlock = darknetData?.ramBlock ?? 0;
   const blockedRamString = ramBlock ? formatToMaxDigits(ramBlock, 1) + "+" : "";
   const usedRamString = formatToMaxDigits(server.ramUsed - ramBlock, 1);
   const serverRamString = `ram in use: ${blockedRamString}${usedRamString}/${server.maxRam} GB`;
@@ -49,11 +57,16 @@ export const ServerDetailsModal = ({ open, onClose, server, classes }: DWPasswor
     </pre>
   ));
 
+  const onSuccess = async () => {
+    await sleep(50);
+    focusTarget.current?.focus();
+  };
   const copyHostname = () => copyToClipboard(server.hostname);
 
   return (
     <Modal open={open} onClose={onClose} removeFocus={false}>
       <>
+        <input ref={focusTarget} className={classes.hiddenInput}></input>
         <Container sx={{ width: "calc(min(700px, 80vw))", minHeight: "500px" }}>
           <div className={classes.inlineFlexBox}>
             <Typography variant="h5" color={server.hasAdminRights ? "primary" : "secondary"} onClick={copyHostname}>
@@ -64,7 +77,7 @@ export const ServerDetailsModal = ({ open, onClose, server, classes }: DWPasswor
           <br />
           {server.hasAdminRights ? (
             <>
-              <Typography>Password: "{server.darknetData?.password ?? ""}"</Typography>
+              <Typography>Password: "{darknetData?.password ?? ""}"</Typography>
               <br />
               {isLabServer ? (
                 <>
@@ -84,7 +97,7 @@ export const ServerDetailsModal = ({ open, onClose, server, classes }: DWPasswor
               >
                 <Typography color="secondary">{serverRamString}</Typography>
               </Tooltip>
-              <Typography color="secondary">model:{server.darknetData?.minigameType}</Typography>
+              <Typography color="secondary">model:{darknetData?.minigameType}</Typography>
               <br />
               <div style={{ maxWidth: "300px" }}>
                 <ServerSummary server={server} enableAuth={true} showDetails={true} classes={classes} />
@@ -93,7 +106,7 @@ export const ServerDetailsModal = ({ open, onClose, server, classes }: DWPasswor
               <br />
             </>
           ) : (
-            <PasswordPrompt server={server} onClose={onClose} />
+            <PasswordPrompt server={server} onClose={onClose} onSuccess={onSuccess} />
           )}
           {isLabServer && canEnterLabManually ? (
             ""

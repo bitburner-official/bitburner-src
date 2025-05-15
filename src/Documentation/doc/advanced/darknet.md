@@ -120,7 +120,24 @@ Design document and workspace
 
 ## patches:
 
+## Error Reduction Patch
+- keep track of offline servers (since last game restart)
+- exec returns 0 if the target server is recently offline, with details in logging; does not throw error
+- scp returns false if either the source or destination server is recently offline, with details in logging; does not throw error
+- packetCapture now returns a `Result`, no longer errors if server is offline or not connected
+- memoryReallocation gracefully returns a `Result` if target server is offline or not direct connected
+- unified all result-returning API methods to have consistent logging and return messages
+- getServerAuthDetails improved with `isConnectedToCurrentServer` and `hasSession` booleans to disambiguate the old `isConnected`
+- induceServerMigration rework:
+  - now targets a specific server
+  - shows percent progress in its result & logging
+  - guarantees the server moves deeper into the net once fully charged
+  - Charge percent per call scales with cha & threads, and is now faster than before
+
+- Fairly large refactor: make DarknetServer a new type that extends Server, and change up a bunch of things around detecting that
+
 ## Balance Patch 1
+
 added `DarkscapeNavigator.exe` purchasable via tor router which (when later enabled) unlocks access to the dark net UI and API
 added source-file 15 bonuses
 added .lit hint for stasis linking servers
@@ -278,16 +295,22 @@ Coming soon:
 
 ## TODO:
 
+move server: find all available spaces first
+
 Improve error UI and handle multiple thrown errors
+https://discord.com/channels/415207508303544321/415207508303544323/1372228866621571163
 
-improve error handling for run and exec to not throw for offline servers (list of recently killed servers?)
+"password-protected servers" mentions in documentation (exec and scp)
 
-packetCapture should not throw on non-connected servers and instead have a Result
-induceServerMigration should scale with cha
+move phishing calcs to effects.js
 
-improve session vs agacency phrasing
+unsubscribe from all subscriptions on unmount
 
-Parent server should not die if server goes offline after child script launches
+increase priority of locked ram indicator
+keep some icons statically placed on mini-indicators (script count?)
+more color on icons
+
+improve session vs adjacency phrasing
 
 capcha puzzle?
 
@@ -306,7 +329,6 @@ labels for icons in detail view on password modal?
 - lab api
 
 - webstorm visual indicator
-- screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
 
 - Go over guide looking for misleading info or other out-of-date or missing things
 - starter script
@@ -317,6 +339,60 @@ Usually "data" in the form of enums or constants we typically store in a data fo
 
 scp: add session details to docs
 exec: add session details to docs
+
+- start with crash course?
+
+- more hint notes
+
+## TODO later:
+
+- change mutations to be on game cycle loop
+
+- remove darknet servers from hashnet dropdown
+
+- bonus time?
+
+- Darkweb server cha difficulty balance?
+
+- Bitnode multipliers
+
+## Post MVP:
+
+- stanek fragments for darkweb
+
+- achievements
+
+- ui methods for setting server description, colors, icons etc?
+
+- Make network wider at deeper parts?
+
+- Attempt to make connection?
+  - chance to put current server offline?
+  - chance to move the target server
+  - only nearby servers are valid
+
+webstorm screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
+
+- ub3r_l4byr1nth server
+
+  - treasure chests in maze?
+  - traps or monsters in maze?
+
+- server that returns yes/no in its failure response
+
+  - yes, the password has X as one of its factors
+
+- server that returns a string in response to the attempt?
+
+  - result: (encoded attempt) expectation: (encoded password)
+
+  - backdoored servers more likely to restart and/or loose auth, removing backdoor, balancing risk level
+  - low number (1 backdoor per X depth explored, or less than low const): no effect
+  - lv 1 instability: small debuff to auth() time
+  - lv 2: sometimes auth fails with timeout
+  - lv 3: more server restarts on the darknet
+  - lv 4: It's hard to sustain this many backdoors without a lot of upkeep due to them going offline or resetting. More connection severing on the darknet. player starts taking damage sometimes. creepypasta appears on player terminal, signed by the darknet.
+  - lv 5: ports and file writes and other ns methods sometimes fail silently, or return garbage data. hard mode that is effectively opt-in
 
 Catlover writeup: https://discord.com/channels/415207508303544321/1358930422607642845/1360131828756775033
 My suggestion: Create many layers and cliques. We are still consistent in the behavior of APIs, but each layer (or clique) has a unique purpose. A very rough guideline:
@@ -340,60 +416,6 @@ Very good rewards.
 Require resilient scripts. Running scripts can be terminated randomly.
 Don't rely on foothold. Even foothold can be wiped!
 Git gud.
-
-- start with crash course?
-
-- more hint notes
-
-- ub3r_l4byr1nth server
-
-  - treasure chests in maze?
-  - traps or monsters in maze?
-
-- make darkwebserver extend baseServer
-
-- server that returns yes/no in its failure response
-
-  - yes, the password has X as one of its factors
-
-- server that returns a string in response to the attempt?
-
-  - result: (encoded attempt) expectation: (encoded password)
-
-  - backdoored servers more likely to restart and/or loose auth, removing backdoor, balancing risk level
-  - low number (1 backdoor per X depth explored, or less than low const): no effect
-  - lv 1 instability: small debuff to auth() time
-  - lv 2: sometimes auth fails with timeout
-  - lv 3: more server restarts on the darknet
-  - lv 4: It's hard to sustain this many backdoors without a lot of upkeep due to them going offline or resetting. More connection severing on the darknet. player starts taking damage sometimes. creepypasta appears on player terminal, signed by the darknet.
-  - lv 5: ports and file writes and other ns methods sometimes fail silently, or return garbage data. hard mode that is effectively opt-in
-
-## TODO later:
-
-- change mutations to be on game cycle loop
-
-- remove darknet servers from hashnet dropdown
-
-- stanek fragments for darkweb
-
-- achievements
-
-- bonus time?
-
-- Darkweb server cha difficulty balance?
-
-- Bitnode multipliers
-
-## Post MVP:
-
-- ui methods for setting server description, colors, icons etc?
-
-- Make network wider at deeper parts?
-
-- Attempt to make connection?
-  - chance to put current server offline?
-  - chance to move the target server
-  - only nearby servers are valid
 
 ## Community feedback:
 

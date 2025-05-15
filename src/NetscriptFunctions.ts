@@ -111,10 +111,12 @@ import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
-import { expectAuthenticated, expectExecConnection, NetscriptDarknet } from "./NetscriptFunctions/Darknet";
+import { expectAuthenticated, hasExecConnection, NetscriptDarknet } from "./NetscriptFunctions/Darknet";
 import { isIPAddress } from "./Types/strings";
 import { compile } from "./NetscriptJSEvaluator";
 import { Script } from "./Script/Script";
+import { DarknetState } from "./DarkNet/models/DarknetState";
+import { isDarknetServer } from "./DarkNet/models/effects";
 
 export const enums: NSEnums = {
   CityName,
@@ -171,7 +173,7 @@ export const ns: InternalAPI<NSFull> = {
     const out: string[] = [];
     for (let i = 0; i < server.serversOnNetwork.length; i++) {
       const s = getServerOnNetwork(server, i);
-      if (s === null || s.darknetData) continue;
+      if (s === null || isDarknetServer(s)) continue;
       const entry = helpers.returnServerID(s, returnOpts);
       if (entry === null) continue;
       out.push(entry);
@@ -722,8 +724,19 @@ export const ns: InternalAPI<NSFull> = {
       const host = helpers.string(ctx, "host", _host);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
+      if (DarknetState.offlineServers.includes(host)) {
+        helpers.log(ctx, () => `Script execution failed, because ${host} is offline.`);
+        return 0;
+      }
       const server = helpers.getServer(ctx, host);
-      expectExecConnection(ctx, server);
+      if (!hasExecConnection(ctx, server)) {
+        helpers.log(
+          ctx,
+          () =>
+            `exec to a password-protected server requires a direct connection, a stasis link, or a backdoor. Use exec() from an adjacent server, or set a stasis link on the target server.`,
+        );
+        return 0;
+      }
       return runScriptFromScript("exec", server, path, args, ctx.workerScript, runOpts);
     },
   spawn:
@@ -842,6 +855,14 @@ export const ns: InternalAPI<NSFull> = {
   scp: (ctx) => (_files, _destination, _source) => {
     const destination = helpers.string(ctx, "destination", _destination);
     const source = helpers.string(ctx, "source", _source ?? ctx.workerScript.hostname);
+    if (DarknetState.offlineServers.includes(destination)) {
+      helpers.log(ctx, () => `scp failed, because ${destination} is offline.`);
+      return false;
+    }
+    if (DarknetState.offlineServers.includes(source)) {
+      helpers.log(ctx, () => `scp failed, because ${source} is offline.`);
+      return false;
+    }
     const destServer = helpers.getServer(ctx, destination);
     const sourceServer = helpers.getServer(ctx, source);
     const files = Array.isArray(_files) ? _files : [_files];
@@ -940,7 +961,7 @@ export const ns: InternalAPI<NSFull> = {
   getServer: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host ?? ctx.workerScript.hostname);
     const server = helpers.getServer(ctx, host);
-    const isDarkweb = server?.darknetData;
+    const isDarkweb = isDarknetServer(server);
     return {
       hostname: server.hostname,
       ip: isDarkweb ? "??.?.?.?" : server.ip,
@@ -1098,7 +1119,7 @@ export const ns: InternalAPI<NSFull> = {
     const host = helpers.string(ctx, "host", _host);
     const server = GetServer(host);
     return (
-      server !== null && (server.serversOnNetwork.length > 0 || server.hostname === "home" || !!server.darknetData)
+      server !== null && (server.serversOnNetwork.length > 0 || server.hostname === "home" || isDarknetServer(server))
     );
   },
   fileExists: (ctx) => (_filename, _host) => {

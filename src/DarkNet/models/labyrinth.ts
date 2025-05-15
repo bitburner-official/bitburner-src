@@ -3,9 +3,10 @@ import { PasswordResponse, ResponseStatus } from "./DnetServerData";
 import { addSessionToServer, DarknetState } from "./DarknetState";
 import { addCacheToServer, calculatePasswordAttemptChaGain } from "./effects";
 import { Player } from "@player";
-import { GetServer } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { AugmentationName } from "@enums";
+import { DarknetServer } from "../../Server/DarknetServer";
+import { getDarknetServerSafely } from "../controllers/DarknetNetworkMovement";
 
 const NORTH = [0, -1];
 const EAST = [1, 0];
@@ -355,7 +356,7 @@ export const isLabyrinthServer = (hostName: string) => {
 };
 
 export const getLabyrinthDetails = (): {
-  lab: BaseServer | null;
+  lab: DarknetServer | null;
   augReward: AugmentationName | null;
   depth: number;
   manual: boolean;
@@ -384,7 +385,7 @@ export const getLabyrinthDetails = (): {
   if (Player.hasAugmentation(AugmentationName.TheSword)) {
     const data = labData[SpecialServers.FinalLab];
     return {
-      lab: GetServer(SpecialServers.FinalLab),
+      lab: getDarknetServerSafely(SpecialServers.FinalLab) ?? null,
       depth: data.depth,
       manual: false,
       mazeWidth: 10,
@@ -426,7 +427,7 @@ export const getLabyrinthDetails = (): {
   const labDetails = labData[labName];
 
   return {
-    lab: GetServer(labName),
+    lab: getDarknetServerSafely(labName) ?? null,
     augReward: labDetails.augReward,
     depth: labDetails.depth,
     manual: labDetails.manual,

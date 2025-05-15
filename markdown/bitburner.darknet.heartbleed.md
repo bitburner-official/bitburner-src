@@ -8,7 +8,7 @@ Uses an exploit to extract log data from a server by sending a malformed heartbe
 
 Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
 
-The speed of capture scales with the number of threads used. See  for more information.
+The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedEstimatedTime for more information.
 
 **Signature:**
 
@@ -21,11 +21,13 @@ heartbleed(hostname: string, options?: HeartbleedOptions): Promise<Result & { lo
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  hostname | string | the server to target. Must be directly connected to the current server. |
-|  options | [HeartbleedOptions](./bitburner.heartbleedoptions.md) | _(Optional)_ options to modify how the exploit works. peek: if true, looks at the most recent log line but does not extract it. Overrides logsToCapture. logsToCapture: the number of log lines to remove from the server, up to a max of 8. Default is 1. additionalMsec: the number of additional milliseconds to add to the run time of the heartbleed request. Default is 0. |
+|  options | [HeartbleedOptions](./bitburner.heartbleedoptions.md) | _(Optional)_ optional [HeartbleedOptions](./bitburner.heartbleedoptions.md) to modify how the exploit works. peek: if true, looks at the most recent log line but does not extract it. Overrides logsToCapture. logsToCapture: the number of log lines to remove from the server, up to a max of 8. Default is 1. additionalMsec: the number of additional milliseconds to add to the run time of the heartbleed request. Default is 0. |
 
 **Returns:**
 
 Promise&lt;[Result](./bitburner.result.md) &amp; { logs: string\[\] }&gt;
+
+a promise that resolves to a [Result](./bitburner.result.md) object, plus the scraped logs.
 
 ## Remarks
 

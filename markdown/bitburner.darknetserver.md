@@ -9,7 +9,7 @@ Darknet server information.
 **Signature:**
 
 ```typescript
-type DarknetServer = {
+export type DarknetServer = {
   hostname: string;
   ip: string;
   hasAdminRights: boolean;

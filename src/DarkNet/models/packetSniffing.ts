@@ -8,7 +8,7 @@ import {
 } from "../controllers/DarknetServerGenerator";
 import { getName, PasswordResponse } from "./DnetServerData";
 import { LocationName } from "@enums";
-import { getTwoCharsInPassword } from "./effects";
+import { getDarknetData, getTwoCharsInPassword, isDarknetServer } from "./effects";
 import { getDarknetServers, getServerSafely } from "../controllers/DarknetNetworkMovement";
 import { getExactCorrectChars, getMastermindResponse } from "./authentication";
 import { getServerState } from "./DarknetState";
@@ -16,26 +16,27 @@ import { getServerState } from "./DarknetState";
 const MAX_LOG_LINES = 32;
 
 export const capturePackets = (server: BaseServer) => {
-  if (!server.darknetData) {
+  if (!isDarknetServer(server)) {
     return "A great silence stretches across the network. No unsecured packets are here to capture.";
   }
   const BASE_PASSWORD_INCLUSION_RATE = 0.18;
   const DIFFICULTY_MODIFIER = 0.88;
-  const difficulty = server.darknetData.difficulty * 1.3;
-  const vulnerability = server.darknetData.minigameType === Minigames.packetSniffer ? 8 : 1;
+  const darknetData = server.darknetData;
+  const difficulty = darknetData.difficulty * 1.3;
+  const vulnerability = darknetData.minigameType === Minigames.packetSniffer ? 8 : 1;
   const passwordInclusionChance = BASE_PASSWORD_INCLUSION_RATE * vulnerability * DIFFICULTY_MODIFIER ** difficulty;
 
   if (Math.random() < passwordInclusionChance) {
     const intro = Math.floor(Math.random() * 124);
-    return `${getRandomData(intro, server)}${server.darknetData.password}${getRandomData(
-      124 - intro - server.darknetData.password.length,
+    return `${getRandomData(intro, server)}${darknetData.password}${getRandomData(
+      124 - intro - darknetData.password.length,
       server,
     )}`;
   }
   if (Math.random() < passwordInclusionChance) {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
     const connectedServer = getServerSafely(connectedServerName);
-    if (connectedServer && connectedServer.darknetData) {
+    if (connectedServer && isDarknetServer(connectedServer)) {
       const intro = Math.floor(Math.random() * 124);
       return `${getRandomData(intro, server)} ${connectedServerName}:${
         connectedServer.darknetData.password
@@ -50,7 +51,7 @@ export const capturePackets = (server: BaseServer) => {
 };
 
 const getRandomData = (length: number, server: BaseServer) => {
-  if (!server.darknetData) {
+  if (!isDarknetServer(server)) {
     return packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)];
   }
   const password = server.darknetData.password;
@@ -114,16 +115,16 @@ const getExactCharactersHint = (lastPassword: string, realPassword: string) => {
 };
 
 export const logPasswordAttempt = (server: BaseServer, passwordResponse: PasswordResponse) => {
-  if (!server.darknetData) {
+  if (!isDarknetServer(server)) {
     return;
   }
 
-  const darknetData = server.darknetData;
+  const darknetData = getDarknetData(server);
   const serverState = getServerState(server.hostname);
   const serverLogs = serverState.serverLogs;
   populateServerLogsWithNoise(server);
 
-  if (passwordResponse.message === server.darknetData.staticPasswordHint) {
+  if (passwordResponse.message === darknetData?.staticPasswordHint) {
     if (Math.random() < 0.1) {
       passwordResponse.message = getExactCharactersHint(passwordResponse.passwordAttempted, darknetData.password);
       passwordResponse.data = "";
@@ -146,7 +147,7 @@ export const logPasswordAttempt = (server: BaseServer, passwordResponse: Passwor
 };
 
 export const populateServerLogsWithNoise = (server: BaseServer) => {
-  if (!server.darknetData) {
+  if (!isDarknetServer(server)) {
     return;
   }
   const serverState = getServerState(server.hostname);
@@ -174,7 +175,7 @@ export const populateServerLogsWithNoise = (server: BaseServer) => {
 };
 
 const getLogNoise = (server: BaseServer, logDate: Date) => {
-  if (!server.darknetData) {
+  if (!isDarknetServer(server)) {
     return "";
   }
 
@@ -184,7 +185,7 @@ const getLogNoise = (server: BaseServer, logDate: Date) => {
   if (Math.random() < 0.05 * (1 / (server.darknetData.difficulty + 1))) {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
     const connectedServer = getServerSafely(connectedServerName);
-    if (connectedServer && connectedServer.darknetData) {
+    if (connectedServer && isDarknetServer(connectedServer)) {
       return `Connecting to ${connectedServerName}:${connectedServer.darknetData.password} ...`;
     }
   }
@@ -216,7 +217,7 @@ const getLogNoise = (server: BaseServer, logDate: Date) => {
 };
 
 export const getServerLogs = (server: BaseServer, logLines: number, peek = false, requireAuthLog = false) => {
-  if (!server.darknetData) {
+  if (!isDarknetServer(server)) {
     return [];
   }
   const serverState = getServerState(server.hostname);
