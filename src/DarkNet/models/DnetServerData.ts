@@ -69,7 +69,7 @@ export const DnetServerBuilder = (options: DnetServerData, name: string = getNam
   const labDetails = getLabyrinthDetails();
   const labDifficulty = labDetails.cha;
   const depth = darknetData.difficulty;
-  const depthScaling = depth < 2 ? (depth / labDetails.depth) * labDifficulty * 0.85 : depth * 5;
+  const depthScaling = depth < 2 ? depth * 10 : ((depth / labDetails.depth) ** 1.5) * labDifficulty * 0.85;
   const levelVariance = (Math.random() * 3 - 1) * depth;
   const requiredLevel = Math.max(Math.floor(depthScaling + levelVariance), 1);
 

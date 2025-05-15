@@ -355,6 +355,9 @@ export const isLabyrinthServer = (hostName: string) => {
   return labHostnames.includes(hostName);
 };
 
+const hasAugment = (aug: AugmentationName) => !!Player.augmentations.find((a => a.name === aug));
+
+
 export const getLabyrinthDetails = (): {
   lab: DarknetServer | null;
   augReward: AugmentationName | null;
@@ -382,7 +385,7 @@ export const getLabyrinthDetails = (): {
   // }
 
   // All augs already retrieved
-  if (Player.hasAugmentation(AugmentationName.TheSword)) {
+  if (hasAugment(AugmentationName.TheSword)) {
     const data = labData[SpecialServers.FinalLab];
     return {
       lab: getDarknetServerSafely(SpecialServers.FinalLab) ?? null,
@@ -400,27 +403,27 @@ export const getLabyrinthDetails = (): {
   let labName: string = SpecialServers.NormalLab;
 
   // All augs except TheSword already retrieved
-  if (Player.hasAugmentation(AugmentationName.TheLaw)) {
+  if (hasAugment(AugmentationName.TheLaw)) {
     labName = SpecialServers.FinalLab;
   }
 
   // Next aug after TRP is TheLaw
-  else if (Player.hasAugmentation(AugmentationName.TheRedPill)) {
+  else if (hasAugment(AugmentationName.TheRedPill)) {
     labName = SpecialServers.EternalLab;
   }
 
   // Next aug after TheHammer is TheRedPill
-  else if (Player.hasAugmentation(AugmentationName.TheHammer)) {
+  else if (hasAugment(AugmentationName.TheHammer)) {
     labName = SpecialServers.UberLab;
   }
 
   // Next aug after TheBoots is TheHammer
-  else if (Player.hasAugmentation(AugmentationName.TheBoots)) {
+  else if (hasAugment(AugmentationName.TheBoots)) {
     labName = SpecialServers.MercilessLab;
   }
 
   // Next aug after TheWings is TheBoots
-  else if (Player.hasAugmentation(AugmentationName.TheBrokenWings)) {
+  else if (hasAugment(AugmentationName.TheBrokenWings)) {
     labName = SpecialServers.CruelLab;
   }
 

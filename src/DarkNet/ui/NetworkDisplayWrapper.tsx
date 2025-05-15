@@ -73,7 +73,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     if (target.id === "draggableBackgroundTarget") {
       draggableBackground.current?.releasePointerCapture(pointerEvent.pointerId);
     }
-    rerender();
+    DarknetEvents.emit();
   };
 
   const handleDrag: PointerEventHandler<HTMLDivElement> = (pointerEvent) => {
@@ -110,12 +110,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
 
   const zoomOut = () => {
     setZoomIndex(Math.max(Math.min(zoomIndex + 1, zoomOptions.length - 1), 0));
-    rerender();
   };
 
   const zoomIn = () => {
     setZoomIndex(Math.max(Math.min(zoomIndex - 1, zoomOptions.length - 1), 0));
-    rerender();
   };
 
   const isWithinScreen = (server: DarknetServer) => {

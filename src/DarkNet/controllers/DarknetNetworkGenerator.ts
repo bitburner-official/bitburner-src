@@ -50,8 +50,6 @@ export const populateDarknet = () => {
   addRandomServers(getNetDepth() * NET_WIDTH * SERVER_DENSITY - 10);
   addRandomServers(5 - DarknetState.Network[0].length);
   addRandomServers(5 - DarknetState.Network[1].length);
-  addRandomServers(4 - DarknetState.Network[2].length);
-  addRandomServers(4 - DarknetState.Network[3].length);
   balanceServers();
 
   const updatedServers = getDarknetServers();
@@ -96,7 +94,7 @@ export const loadDarknet = () => {
   for (const server of darkWebServers) {
     if (server.darknetData && !isLabyrinthServer(server.hostname)) {
       disconnectServer(server, true);
-      addServerToNetwork(server, server.darknetData.x, server.darknetData.y, true);
+      addServerToNetwork(server, server.darknetData.x, server.darknetData.y);
     }
   }
   balanceServers();
@@ -132,7 +130,7 @@ export const addRandomConnections = (server: BaseServer) => {
   });
 };
 
-export const addServerToNetwork = (server: BaseServer, x: number, y: number, addConnections = true) => {
+export const addServerToNetwork = (server: BaseServer, x: number, y: number) => {
   if (DarknetState.Network[x]?.[y] === undefined) {
     console.error("Invalid coordinates");
     return;
@@ -150,9 +148,6 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number, add
   server.darknetData.x = x;
   server.darknetData.y = y;
 
-  if (!addConnections) {
-    return;
-  }
   addRandomConnections(server);
   addGuaranteedConnection(server);
 
@@ -162,7 +157,8 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number, add
       connectServers(server, darkWebRoot);
     }
   }
-  if (server.darknetData.x === getNetDepth() - 1) {
+  const maxDepth = getNetDepth();
+  if (server.darknetData.x === maxDepth - 1) {
     const labyrinth = getLabyrinthDetails().lab;
     if (labyrinth) {
       connectServers(server, labyrinth);

@@ -121,7 +121,7 @@ export const deleteRandomServers = (count = 1) => {
 };
 
 export const deleteServer = (server: BaseServer, force = false) => {
-  if (isImmutable(server) && !force) {
+  if (!server || (isImmutable(server) && !force)) {
     return false;
   }
   movePlayerIfNeeded(server);
@@ -161,13 +161,13 @@ export const balanceServers = () => {
 
 export const moveServer = (server: BaseServer, maxDepthDecrease = 3, maxDepthIncrease = 3) => {
   const darknetData = getDarknetData(server);
-  if (server || !darknetData || isImmutable(server)) {
+  if (!server || !darknetData || isImmutable(server)) {
     // Do not try to move the server that is open in the UI or the terminal
     return false;
   }
 
   for (let i = 0; i < 30; i++) {
-    // Limit depth movement to +-3 spaces
+    // Limit depth movement to specified amount
     let newX = Math.min(
       Math.max(Math.floor(Math.random() * (2 * maxDepthIncrease) + darknetData.difficulty - maxDepthDecrease), 0),
       getNetDepth() - 1,
@@ -187,17 +187,18 @@ export const moveServer = (server: BaseServer, maxDepthDecrease = 3, maxDepthInc
     if (DarknetState.Network[darknetData.x]?.[darknetData.y]) {
       DarknetState.Network[darknetData.x][darknetData.y] = null;
     }
-    addServerToNetwork(server, newX, newY, true);
+    addServerToNetwork(server, newX, newY);
     return true;
   }
   return false;
 };
 
 export const killScripts = (server: BaseServer) => {
-  if (!server.runningScriptMap) {
+  if (!server) {
     return;
   }
-  for (const byPid of server.runningScriptMap.values()) {
+  const scripts = server.runningScriptMap.values();
+  for (const byPid of scripts) {
     for (const runningScript of byPid.values()) {
       killWorkerScriptWithMessage(runningScript.pid, "Server shut down.");
     }
@@ -284,7 +285,7 @@ export const getServersOnRowAbove = (x: number, close = false): DarknetServer[] 
 };
 
 export const getDarknetServers = (): DarknetServer[] => {
-  return GetAllServers(true).filter((s) => s && isDarknetServer(s));
+  return GetAllServers(true).filter(isDarknetServer).filter((s) => !isLabyrinthServer(s.hostname));
 };
 
 export const getAllAdjacentNeighbors = (x: number, y: number): BaseServer[] => {

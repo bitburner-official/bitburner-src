@@ -7,7 +7,7 @@ import { isDarknetServer } from "./effects";
 
 export const NET_WIDTH = 8;
 export const MAX_NET_DEPTH = 40;
-export const SERVER_DENSITY = 0.65;
+export const SERVER_DENSITY = 0.7;
 
 /** Event emitter to allow the UI to subscribe to Go gameplay updates in order to trigger rerenders properly */
 export const DarknetEvents = new EventEmitter();
