@@ -302,7 +302,7 @@ const labData: Record<string, labDetails> = {
   [SpecialServers.UberLab]: {
     name: SpecialServers.UberLab,
     depth: 23,
-    cha: 2000,
+    cha: 2500,
     augReward: AugmentationName.TheRedPill,
     mazeWidth: 60,
     mazeHeight: 40,
@@ -311,7 +311,7 @@ const labData: Record<string, labDetails> = {
   [SpecialServers.EternalLab]: {
     name: SpecialServers.EternalLab,
     depth: 29,
-    cha: 2500,
+    cha: 2800,
     augReward: AugmentationName.TheLaw,
     mazeWidth: 60,
     mazeHeight: 40,
