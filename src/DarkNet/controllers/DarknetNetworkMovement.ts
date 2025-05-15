@@ -47,10 +47,6 @@ export const mutateDarknet = () => {
     return;
   }
 
-  if (Math.random() < 0.15) {
-    induceServerMigration();
-  }
-
   if (Math.random() < 0.1) {
     const backdooredServers = getBackdooredDarkwebServers();
     const server = backdooredServers[Math.floor(Math.random() * backdooredServers.length)];
@@ -269,20 +265,6 @@ export const getNeighborsOnRow = (x: number, y: number): BaseServer[] => {
     neighbors.push(rightNeighbor);
   }
   return neighbors;
-};
-
-const induceServerMigration = () => {
-  for (const hostname of Object.keys(DarknetState.migrationInductionServers)) {
-    const charge = DarknetState.migrationInductionServers[hostname] ?? 0;
-    if (charge >= 1) {
-      DarknetState.migrationInductionServers[hostname] = 0;
-      const server = getServerSafely(hostname);
-      if (!server) {
-        return;
-      }
-      moveServer(server, -1, 4);
-    }
-  }
 };
 
 export const getServersOnRowBelow = (x: number, close = false): DarknetServer[] => {

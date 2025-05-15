@@ -15,7 +15,7 @@ import {
   handleRamBlockClearedRewards,
   hasCacheFileExtension,
   hasDarknetAccess,
-  isDarknetServer,
+  isDarknetServer, getDarknetData,
 } from "../DarkNet/models/effects";
 import { Player } from "@player";
 import type { FilePath } from "../Paths/FilePath";
@@ -643,6 +643,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
             }));
           }
           const server = helpers.getServer(ctx, hostname);
+          const currentDepth = getDarknetData(server).x;
           const result = chargeServerMigration(server, ctx.workerScript.scriptRef.threads);
 
           const message = `Induced ${formatNumber(
@@ -651,6 +652,9 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
             result.xpGained,
           )} cha xp)`;
           logger(ctx)(message);
+          if (result.newCharge >= 1 && currentDepth < getDarknetData(server).x) {
+            logger(ctx)(`${server.hostname} has been migrated!`);
+          }
           return {
             success: true,
             message: message,

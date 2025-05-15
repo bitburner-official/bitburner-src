@@ -20,7 +20,7 @@ import {
   getAllAdjacentNeighbors,
   getBackdooredDarkwebServers,
   getDarknetServers,
-  getDarknetServerSafely,
+  getDarknetServerSafely, moveServer,
 } from "../controllers/DarknetNetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { Minigames } from "../controllers/DarknetServerGenerator";
@@ -420,11 +420,16 @@ export const chargeServerMigration = (server: BaseServer, threads = 1) => {
   Player.gainCharismaExp(xpGained);
   DarknetState.migrationInductionServers[server.hostname] =
     (DarknetState.migrationInductionServers[server.hostname] ?? 0) + chargeIncrease;
-  return {
+  const result = {
     chargeIncrease,
-    newCharge: Math.min(DarknetState.migrationInductionServers[server.hostname], 0.999),
+    newCharge: Math.min(DarknetState.migrationInductionServers[server.hostname], 1),
     xpGained: xpGained,
-  };
+  }
+  if (DarknetState.migrationInductionServers[server.hostname] >= 1) {
+    moveServer(server, -1, 5);
+    DarknetState.migrationInductionServers[server.hostname] = 0;
+  }
+  return result;
 };
 
 export const isDarknetServer = (server: BaseServer): server is DarknetServer => {
