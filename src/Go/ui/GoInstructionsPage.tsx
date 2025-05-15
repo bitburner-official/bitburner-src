@@ -149,8 +149,8 @@ export const GoInstructionsPage = (): React.ReactElement => {
               will increase the amount gained, but is not required.
               <br />
               <br />
-              Two wins in a row against an opponent will give you 1000 rep converted to favor with that faction (up to a
-              max of {getMaxRep()} favor), if you are a member of that faction.
+              Two wins in a row against an opponent will give you {getMaxRep() / 200} rep converted to favor with that
+              faction (up to a max of {getMaxRep()} favor), if you are a member of that faction.
               <br />
               The rep is immediately applied as favor, meaning it will increase reputation gain right away without
               needing an install.
