@@ -10,12 +10,12 @@ describe("Labyrinth Tests", () => {
     const height = 20;
     const maze = generateMaze(width, height);
 
-    console.log(maze.map((row) => row.map((x) => `${x}${x}`).join("")).join("\n"));
+    console.log(maze.map((row) => row.split("").map((x) => `${x}${x}`).join("")).join("\n"));
 
     console.log(getSurroundingsVisualized(maze, 1, 1));
 
     expect(maze).toHaveLength(height + 1);
-    expect(maze[0]).toHaveLength(width + 1);
+    expect(maze[0]).toHaveLength(width - 1);
   });
 
   it("should be able to pick random empty coordinates", () => {
