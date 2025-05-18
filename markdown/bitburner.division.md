@@ -18,7 +18,6 @@ interface Division
 |  --- | --- | --- | --- |
 |  [awareness](./bitburner.division.awareness.md) |  | number | Awareness of the division |
 |  [cities](./bitburner.division.cities.md) |  | [CityName](./bitburner.cityname.md)<!-- -->\[\] | Cities in which this division has expanded |
-|  [industry](./bitburner.division.industry.md) |  | [CorpIndustryName](./bitburner.corpindustryname.md) | Type of division, like Agriculture |
 |  [lastCycleExpenses](./bitburner.division.lastcycleexpenses.md) |  | number | Expenses last cycle |
 |  [lastCycleRevenue](./bitburner.division.lastcyclerevenue.md) |  | number | Revenue last cycle |
 |  [makesProducts](./bitburner.division.makesproducts.md) |  | boolean | Whether the industry of this division is capable of developing and producing products |
@@ -31,4 +30,5 @@ interface Division
 |  [researchPoints](./bitburner.division.researchpoints.md) |  | number | Amount of research in that division |
 |  [thisCycleExpenses](./bitburner.division.thiscycleexpenses.md) |  | number | Expenses this cycle |
 |  [thisCycleRevenue](./bitburner.division.thiscyclerevenue.md) |  | number | Revenue this cycle |
+|  [type](./bitburner.division.type.md) |  | [CorpIndustryName](./bitburner.corpindustryname.md) | Type of division, like Agriculture |
 

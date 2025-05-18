@@ -137,7 +137,7 @@ interface IProps {
 
 // Create the Research Tree UI for this Industry
 export function ResearchModal(props: IProps): React.ReactElement {
-  const researchTree = IndustryResearchTrees[props.industry.industry];
+  const researchTree = IndustryResearchTrees[props.industry.type];
   if (researchTree === undefined) return <></>;
 
   return (

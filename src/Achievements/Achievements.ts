@@ -399,7 +399,7 @@ export const achievements: Record<string, Achievement> = {
     Condition: () => {
       if (!Player.corporation) return false;
       for (const division of Player.corporation.divisions.values()) {
-        if (division.industry === IndustryType.RealEstate) return true;
+        if (division.type === IndustryType.RealEstate) return true;
       }
       return false;
     },

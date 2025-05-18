@@ -22,12 +22,12 @@ import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 interface DivisionParams {
   name: string;
   corp: Corporation;
-  industry: IndustryType;
+  type: IndustryType;
 }
 
 export class Division {
   name = "DefaultDivisionName";
-  industry = IndustryType.Agriculture;
+  type = IndustryType.Agriculture;
   researchPoints = 0;
   researched = new JSONSet<CorpResearchName>();
   requiredMaterials: PartialRecord<CorpMaterialName, number> = {};
@@ -86,7 +86,7 @@ export class Division {
   constructor(params: DivisionParams | null = null) {
     if (!params) return;
     // Must be initialized inside the constructor because it references the industry
-    this.industry = params.industry;
+    this.type = params.type;
     this.name = params.name;
     // Add default starting
     this.warehouses[CityName.Sector12] = new Warehouse({
@@ -100,7 +100,7 @@ export class Division {
     });
 
     // Loading data based on this division's industry type
-    const data = IndustriesData[this.industry];
+    const data = IndustriesData[this.type];
     this.startingCost = data.startingCost;
     this.makesProducts = data.makesProducts;
     this.realEstateFactor = data.realEstateFactor ?? 0;
@@ -261,9 +261,9 @@ export class Division {
       if (change === 0) continue;
 
       if (
-        this.industry === IndustryType.Pharmaceutical ||
-        this.industry === IndustryType.Software ||
-        this.industry === IndustryType.Robotics
+        this.type === IndustryType.Pharmaceutical ||
+        this.type === IndustryType.Software ||
+        this.type === IndustryType.Robotics
       ) {
         change *= 3;
       }
@@ -1063,7 +1063,7 @@ export class Division {
 
   updateResearchTree(): void {
     if (this.treeInitialized) return;
-    const researchTree = IndustryResearchTrees[this.industry];
+    const researchTree = IndustryResearchTrees[this.type];
     // Need to populate the tree in case we are loading a game.
     for (const research of this.researched) researchTree.research(research);
     // Also need to load researches from the tree in case we are making a new division.
@@ -1073,61 +1073,61 @@ export class Division {
 
   // Get multipliers from Research
   getAdvertisingMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.industry];
+    const researchTree = IndustryResearchTrees[this.type];
     this.updateResearchTree();
     return researchTree.getAdvertisingMultiplier();
   }
 
   getEmployeeChaMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.industry];
+    const researchTree = IndustryResearchTrees[this.type];
     this.updateResearchTree();
     return researchTree.getEmployeeChaMultiplier();
   }
 
   getEmployeeCreMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.industry];
+    const researchTree = IndustryResearchTrees[this.type];
     this.updateResearchTree();
     return researchTree.getEmployeeCreMultiplier();
   }
 
   getEmployeeEffMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.industry];
+    const researchTree = IndustryResearchTrees[this.type];
     this.updateResearchTree();
     return researchTree.getEmployeeEffMultiplier();
   }
 
   getEmployeeIntMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.industry];
+    const researchTree = IndustryResearchTrees[this.type];
     this.updateResearchTree();
     return researchTree.getEmployeeIntMultiplier();
   }
 
   getProductionMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.industry];
+    const researchTree = IndustryResearchTrees[this.type];
     this.updateResearchTree();
     return researchTree.getProductionMultiplier();
   }
 
   getProductProductionMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.industry];
+    const researchTree = IndustryResearchTrees[this.type];
     this.updateResearchTree();
     return researchTree.getProductProductionMultiplier();
   }
 
   getSalesMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.industry];
+    const researchTree = IndustryResearchTrees[this.type];
     this.updateResearchTree();
     return researchTree.getSalesMultiplier();
   }
 
   getScientificResearchMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.industry];
+    const researchTree = IndustryResearchTrees[this.type];
     this.updateResearchTree();
     return researchTree.getScientificResearchMultiplier();
   }
 
   getStorageMultiplier(): number {
-    const researchTree = IndustryResearchTrees[this.industry];
+    const researchTree = IndustryResearchTrees[this.type];
     this.updateResearchTree();
     return researchTree.getStorageMultiplier();
   }
