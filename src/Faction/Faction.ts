@@ -1,6 +1,6 @@
 import { AugmentationName, FactionName, FactionDiscovery } from "@enums";
 import { FactionInfo, FactionInfos } from "./FactionInfo";
-import { MaxFavor, calculateFavorAfterResetting } from "./formulas/favor";
+import { MaxFavor, addRepToFavor } from "./formulas/favor";
 import { clampNumber } from "../utils/helpers/clampNumber";
 
 export class Faction {
@@ -76,7 +76,7 @@ export class Faction {
 
   prestigeAugmentation(): void {
     // Gain favor
-    this.setFavor(calculateFavorAfterResetting(this.favor, this.playerReputation));
+    this.setFavor(addRepToFavor(this.favor, this.playerReputation));
     // Reset reputation and flags
     this.playerReputation = 0;
     this.alreadyInvited = false;

@@ -17,6 +17,7 @@ import { shortestPathInAGrid } from "./contracts/ShortestPathInAGrid";
 import { spiralizeMatrix } from "./contracts/SpiralizeMatrix";
 import { squareRoot } from "./contracts/SquareRoot";
 import { subarrayWithMaximumSum } from "./contracts/SubarrayWithMaximumSum";
+import { totalPrimesInRange } from "./contracts/TotalPrimesInRange";
 import { totalWaysToSum } from "./contracts/TotalWaysToSum";
 import { uniquePathsInAGrid } from "./contracts/UniquePathsInAGrid";
 
@@ -117,6 +118,7 @@ export const CodingContractDefinitions: CodingContractTypes = {
   ...mergeOverlappingIntervals,
   ...minimumPathSumInATriangle,
   ...proper2ColoringOfAGraph,
+  ...totalPrimesInRange,
   ...sanitizeParenthesesInExpression,
   ...shortestPathInAGrid,
   ...spiralizeMatrix,

@@ -9,18 +9,15 @@ Get Requirements for Company Position.
 **Signature:**
 
 ```typescript
-getCompanyPositionInfo(
-    companyName: CompanyName | `${CompanyName}`,
-    positionName: JobName | `${JobName}`,
-  ): CompanyPositionInfo;
+getCompanyPositionInfo(companyName: CompanyName, positionName: JobName): CompanyPositionInfo;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  companyName | [CompanyName](./bitburner.companyname.md) \| \`${[CompanyName](./bitburner.companyname.md)<!-- -->}\` | Name of company to get the requirements for. Must be an exact match. |
-|  positionName | [JobName](./bitburner.jobname.md) \| \`${[JobName](./bitburner.jobname.md)<!-- -->}\` | Name of position to get the requirements for. Must be an exact match. |
+|  companyName | [CompanyName](./bitburner.companyname.md) | Name of company to get the requirements for. Must be an exact match. |
+|  positionName | [JobName](./bitburner.jobname.md) | Name of position to get the requirements for. Must be an exact match. |
 
 **Returns:**
 

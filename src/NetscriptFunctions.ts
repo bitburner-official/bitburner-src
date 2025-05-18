@@ -62,7 +62,6 @@ import {
   formatRam,
   formatSecurity,
   formatThreads,
-  formatNumber,
 } from "./ui/formatNumber";
 import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions";
 import { roundToTwo } from "./utils/helpers/roundToTwo";
@@ -97,7 +96,6 @@ import { ScriptDeath } from "./Netscript/ScriptDeath";
 import { getBitNodeMultipliers } from "./BitNode/BitNode";
 import { assert, assertArray, assertString, assertObject } from "./utils/TypeAssertion";
 import { escapeRegExp } from "lodash";
-import numeral from "numeral";
 import { clearPort, peekPort, portHandle, readPort, tryWritePort, writePort, nextPortWrite } from "./NetscriptPort";
 import { resolveFilePath } from "./Paths/FilePath";
 import { hasScriptExtension } from "./Paths/ScriptFilePath";
@@ -105,7 +103,7 @@ import { hasTextExtension } from "./Paths/TextFilePath";
 import { hasContractExtension } from "./Paths/ContractFilePath";
 import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
-import { setDeprecatedProperties, deprecationWarning } from "./utils/DeprecationHelper";
+import { deprecationWarning } from "./utils/DeprecationHelper";
 import { ServerConstants } from "./Server/data/Constants";
 import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
@@ -115,6 +113,7 @@ import { NetscriptDarknet } from "./NetscriptFunctions/Darknet";
 import { isIPAddress } from "./Types/strings";
 import { compile } from "./NetscriptJSEvaluator";
 import { Script } from "./Script/Script";
+import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { DarknetState } from "./DarkNet/models/DarknetState";
 import { isDarknetServer } from "./DarkNet/effects/effects";
 import { expectAuthenticated, hasExecConnection } from "./DarkNet/effects/offlineServerHandling";
@@ -140,6 +139,7 @@ export type NSFull = Readonly<Omit<NS & INetscriptExtra, "pid" | "args" | "enums
 
 export const ns: InternalAPI<NSFull> = {
   singularity: NetscriptSingularity(),
+  format: NetscriptFormat(),
   gang: NetscriptGang(),
   go: NetscriptGo(),
   dnet: NetscriptDarknet(),
@@ -1590,53 +1590,6 @@ export const ns: InternalAPI<NSFull> = {
       }
       return runningScript.onlineExpGained / runningScript.onlineRunningTime;
     },
-  formatNumber:
-    (ctx) =>
-    (_n, _fractionalDigits = 3, _suffixStart = 1000, isInteger) => {
-      const n = helpers.number(ctx, "n", _n);
-      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      const suffixStart = helpers.number(ctx, "suffixStart", _suffixStart);
-      return formatNumber(n, fractionalDigits, suffixStart, !!isInteger);
-    },
-  formatRam:
-    (ctx) =>
-    (_n, _fractionalDigits = 2) => {
-      const n = helpers.number(ctx, "n", _n);
-      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      return formatRam(n, fractionalDigits);
-    },
-  formatPercent:
-    (ctx) =>
-    (_n, _fractionalDigits = 2, _multStart = 1e6) => {
-      const n = helpers.number(ctx, "n", _n);
-      const fractionalDigits = helpers.number(ctx, "fractionalDigits", _fractionalDigits);
-      const multStart = helpers.number(ctx, "multStart", _multStart);
-      return formatPercent(n, fractionalDigits, multStart);
-    },
-  // Todo: Remove function for real though in 2.4. Until then it just directly wraps numeral.
-  nFormat: (ctx) => (_n, _format) => {
-    deprecationWarning(
-      "ns.nFormat",
-      "Use ns.formatNumber, ns.formatRam, ns.formatPercent, or JS built-in objects/functions (e.g., Intl namespace) instead. " +
-        "Check the NS API documentation for details.",
-    );
-    const n = helpers.number(ctx, "n", _n);
-    const format = helpers.string(ctx, "format", _format);
-    return numeral(n).format(format);
-  },
-  tFormat: (ctx) => (_milliseconds, _milliPrecision) => {
-    const milliseconds = helpers.number(ctx, "milliseconds", _milliseconds);
-    const milliPrecision = !!_milliPrecision;
-    return convertTimeMsToTimeElapsedString(milliseconds, milliPrecision);
-  },
-  getTimeSinceLastAug: () => () => {
-    deprecationWarning(
-      "ns.getTimeSinceLastAug()",
-      "Use `Date.now() - ns.getResetInfo().lastAugReset` instead. Please note that ns.getResetInfo().lastAugReset does NOT return the " +
-        "same value as ns.getTimeSinceLastAug(). Check the NS API documentation for details.",
-    );
-    return Player.playtimeSinceLastAug;
-  },
   alert: (ctx) => (_message) => {
     const message = helpers.string(ctx, "message", _message);
     dialogBoxCreate(message, { html: true, canBeDismissedEasily: true });
@@ -1745,23 +1698,6 @@ export const ns: InternalAPI<NSFull> = {
       entropy: Player.entropy,
       karma: Player.karma,
     };
-    setDeprecatedProperties(data, {
-      playtimeSinceLastAug: {
-        identifier: "ns.getPlayer().playtimeSinceLastAug",
-        message: "Use ns.getResetInfo().lastAugReset instead. This is a static timestamp instead of an elapsed time.",
-        value: Player.playtimeSinceLastAug,
-      },
-      playtimeSinceLastBitnode: {
-        identifier: "ns.getPlayer().playtimeSinceLastBitnode",
-        message: "Use ns.getResetInfo().lastNodeReset instead. This is a static timestamp instead of an elapsed time.",
-        value: Player.playtimeSinceLastBitnode,
-      },
-      bitNodeN: {
-        identifier: "ns.getPlayer().bitNodeN",
-        message: "Use ns.getResetInfo().currentNode instead",
-        value: Player.bitNodeN,
-      },
-    });
     return data;
   },
   getMoneySources: () => () => ({
@@ -1846,6 +1782,14 @@ export const ns: InternalAPI<NSFull> = {
 // Removed functions
 setRemovedFunctions(ns, {
   getServerRam: { version: "2.2.0", replacement: "getServerMaxRam and getServerUsedRam" },
+  nFormat: {
+    version: "3.0.0",
+    replacement: "ns.formatNumber, ns.formatRam, ns.formatPercent, or JS built-in objects/functions",
+  },
+  getTimeSinceLastAug: {
+    version: "3.0.0",
+    replacement: "Date.now() - ns.getResetInfo().lastAugReset",
+  },
 });
 
 export function NetscriptFunctions(ws: WorkerScript): NSFull {

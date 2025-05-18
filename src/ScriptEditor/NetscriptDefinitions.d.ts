@@ -1,3 +1,8 @@
+/**
+ * @public
+ */
+type _ValueOf<T> = T[keyof T];
+
 /** All netscript definitions */
 
 /** @public */
@@ -406,18 +411,24 @@ interface AugmentPair {
 }
 
 /** @public */
-declare enum PositionType {
-  Long = "L",
-  Short = "S",
-}
+type PositionEnumType = {
+  Long: "L";
+  Short: "S";
+};
 
 /** @public */
-declare enum OrderType {
-  LimitBuy = "Limit Buy Order",
-  LimitSell = "Limit Sell Order",
-  StopBuy = "Stop Buy Order",
-  StopSell = "Stop Sell Order",
-}
+type PositionType = _ValueOf<PositionEnumType>;
+
+/** @public */
+type OrderEnumType = {
+  LimitBuy: "Limit Buy Order";
+  LimitSell: "Limit Sell Order";
+  StopBuy: "Stop Buy Order";
+  StopSell: "Stop Sell Order";
+};
+
+/** @public */
+type OrderType = _ValueOf<OrderEnumType>;
 
 /**
  * Value in map of {@link StockOrder}
@@ -734,7 +745,7 @@ interface BitNodeMultipliers {
   InfiltrationRep: number;
   /**
    * Influences how much money the player actually gains when they hack a server via the terminal. This is different
-   * from ScriptHackMoney. When the player hack a server via the terminal, the amount of money in that server is
+   * from ScriptHackMoney. When the player hacks a server via the terminal, the amount of money in that server is
    * reduced, but they do not gain that same amount.
    */
   ManualHackMoney: number;
@@ -1084,8 +1095,8 @@ type SleeveBladeburnerTask = {
 /** @public */
 type SleeveClassTask = {
   type: "CLASS";
-  classType: UniversityClassType | GymType | `${UniversityClassType}` | `${GymType}`;
-  location: LocationName | `${LocationName}`;
+  classType: UniversityClassType | GymType;
+  location: LocationName;
 };
 
 /** @public */
@@ -1094,7 +1105,7 @@ type SleeveCompanyTask = { type: "COMPANY"; companyName: CompanyName };
 /** @public */
 type SleeveCrimeTask = {
   type: "CRIME";
-  crimeType: CrimeType | `${CrimeType}`;
+  crimeType: CrimeType;
   cyclesWorked: number;
   cyclesNeeded: number;
   tasksCompleted: number;
@@ -1103,8 +1114,8 @@ type SleeveCrimeTask = {
 /** @public */
 type SleeveFactionTask = {
   type: "FACTION";
-  factionWorkType: FactionWorkType | `${FactionWorkType}`;
-  factionName: string;
+  factionWorkType: FactionWorkType;
+  factionName: FactionName;
 };
 
 /** @public */
@@ -1698,7 +1709,7 @@ export interface BaseTask {
 export interface StudyTask extends BaseTask {
   type: "CLASS";
   classType: string;
-  location: LocationName | `${LocationName}`;
+  location: LocationName;
 }
 
 /**
@@ -1751,7 +1762,7 @@ export interface CrimeTask extends BaseTask {
 export interface FactionWorkTask extends BaseTask {
   type: "FACTION";
   factionWorkType: FactionWorkType;
-  factionName: string;
+  factionName: FactionName;
 }
 
 /**
@@ -1873,11 +1884,7 @@ export interface Singularity {
    * @param focus - Acquire player focus on this class. Optional. Defaults to true.
    * @returns True if action is successfully started, false otherwise.
    */
-  universityCourse(
-    universityName: UniversityLocationName | `${UniversityLocationName}`,
-    courseName: UniversityClassType | `${UniversityClassType}`,
-    focus?: boolean,
-  ): boolean;
+  universityCourse(universityName: UniversityLocationName, courseName: UniversityClassType, focus?: boolean): boolean;
 
   /**
    * Workout at the gym.
@@ -1899,7 +1906,7 @@ export interface Singularity {
    * @param focus - Acquire player focus on this gym workout. Optional. Defaults to true.
    * @returns True if action is successfully started, false otherwise.
    */
-  gymWorkout(gymName: GymLocationName | `${GymLocationName}`, stat: GymType | `${GymType}`, focus?: boolean): boolean;
+  gymWorkout(gymName: GymLocationName, stat: GymType, focus?: boolean): boolean;
 
   /**
    * Travel to another city.
@@ -1913,7 +1920,7 @@ export interface Singularity {
    * @param city - City to travel to.
    * @returns True if action is successful, false otherwise.
    */
-  travelToCity(city: CityName | `${CityName}`): boolean;
+  travelToCity(city: CityName): boolean;
 
   /**
    * Purchase the TOR router.
@@ -2086,10 +2093,7 @@ export interface Singularity {
    * @param positionName - Name of position to get the requirements for. Must be an exact match.
    * @returns CompanyPositionInfo object.
    */
-  getCompanyPositionInfo(
-    companyName: CompanyName | `${CompanyName}`,
-    positionName: JobName | `${JobName}`,
-  ): CompanyPositionInfo;
+  getCompanyPositionInfo(companyName: CompanyName, positionName: JobName): CompanyPositionInfo;
 
   /**
    * Get List of Company Positions.
@@ -2109,7 +2113,7 @@ export interface Singularity {
    * @param companyName - Name of company to get the position list for. Must be an exact match.
    * @returns The position list if the company name is valid.
    */
-  getCompanyPositions(companyName: CompanyName | `${CompanyName}`): JobName[];
+  getCompanyPositions(companyName: CompanyName): JobName[];
 
   /**
    * Work for a company.
@@ -2148,7 +2152,7 @@ export interface Singularity {
    *
    * @param companyName - Name of the company.
    */
-  quitJob(companyName: CompanyName | `${CompanyName}`): void;
+  quitJob(companyName: CompanyName): void;
 
   /**
    * Apply for a job at a company.
@@ -2169,7 +2173,7 @@ export interface Singularity {
    * @param field - Field to which you want to apply.
    * @returns Job name if the player successfully get a job/promotion, and null otherwise.
    */
-  applyToCompany(companyName: CompanyName | `${CompanyName}`, field: JobField | `${JobField}`): JobName | null;
+  applyToCompany(companyName: CompanyName, field: JobField): JobName | null;
 
   /**
    * Get company reputation.
@@ -2183,7 +2187,7 @@ export interface Singularity {
    * @param companyName - Name of the company.
    * @returns Amount of reputation you have at the specified company.
    */
-  getCompanyRep(companyName: CompanyName | `${CompanyName}`): number;
+  getCompanyRep(companyName: CompanyName): number;
 
   /**
    * Get company favor.
@@ -2197,7 +2201,7 @@ export interface Singularity {
    * @param companyName - Name of the company.
    * @returns Amount of favor you have at the specified company.
    */
-  getCompanyFavor(companyName: CompanyName | `${CompanyName}`): number;
+  getCompanyFavor(companyName: CompanyName): number;
 
   /**
    * Get company favor gain.
@@ -2211,7 +2215,7 @@ export interface Singularity {
    * @param companyName - Name of the company.
    * @returns Amount of favor you gain at the specified company when you reset by installing Augmentations.
    */
-  getCompanyFavorGain(companyName: CompanyName | `${CompanyName}`): number;
+  getCompanyFavorGain(companyName: CompanyName): number;
 
   /**
    * List conditions for being invited to a faction.
@@ -2249,7 +2253,7 @@ export interface Singularity {
    * ]
    * ```
    */
-  getFactionInviteRequirements(faction: string): PlayerRequirement[];
+  getFactionInviteRequirements(faction: FactionName): PlayerRequirement[];
 
   /**
    * Get a list of enemies of a faction.
@@ -2263,7 +2267,7 @@ export interface Singularity {
    * @param faction - Name of faction.
    * @returns Array containing the names of all enemies of the faction.
    */
-  getFactionEnemies(faction: string): string[];
+  getFactionEnemies(faction: FactionName): string[];
 
   /**
    * List all current faction invitations.
@@ -2276,7 +2280,7 @@ export interface Singularity {
    *
    * @returns Array with the name of all Factions you currently have outstanding invitations from.
    */
-  checkFactionInvitations(): string[];
+  checkFactionInvitations(): FactionName[];
 
   /**
    * Join a faction.
@@ -2289,7 +2293,7 @@ export interface Singularity {
    * @param faction - Name of faction to join.
    * @returns True if player joined the faction, and false otherwise.
    */
-  joinFaction(faction: string): boolean;
+  joinFaction(faction: FactionName): boolean;
 
   /**
    * Work for a faction.
@@ -2317,7 +2321,7 @@ export interface Singularity {
    * @param focus - Acquire player focus on this work operation. Optional. Defaults to true.
    * @returns True if the player starts working, and false otherwise.
    */
-  workForFaction(faction: string, workType: FactionWorkType | `${FactionWorkType}`, focus?: boolean): boolean;
+  workForFaction(faction: FactionName, workType: FactionWorkType, focus?: boolean): boolean;
 
   /**
    * Get the work types of a faction.
@@ -2329,7 +2333,7 @@ export interface Singularity {
    * @param faction - Name of the faction.
    * @returns The work types of the faction.
    */
-  getFactionWorkTypes(faction: string): FactionWorkType[];
+  getFactionWorkTypes(faction: FactionName): FactionWorkType[];
 
   /**
    * Get faction reputation.
@@ -2342,7 +2346,7 @@ export interface Singularity {
    * @param faction - Name of faction to work for.
    * @returns Amount of reputation you have for the specified faction.
    */
-  getFactionRep(faction: string): number;
+  getFactionRep(faction: FactionName): number;
 
   /**
    * Get faction favor.
@@ -2355,7 +2359,7 @@ export interface Singularity {
    * @param faction - Name of faction.
    * @returns Amount of favor you have for the specified faction.
    */
-  getFactionFavor(faction: string): number;
+  getFactionFavor(faction: FactionName): number;
 
   /**
    * Get faction favor gain.
@@ -2369,7 +2373,7 @@ export interface Singularity {
    * @param faction - Name of faction.
    * @returns Amount of favor you will gain for the specified faction when you reset by installing Augmentations.
    */
-  getFactionFavorGain(faction: string): number;
+  getFactionFavorGain(faction: FactionName): number;
 
   /**
    * Donate to a faction.
@@ -2388,7 +2392,7 @@ export interface Singularity {
    * @param amount - Amount of money to donate.
    * @returns True if the money was donated, and false otherwise.
    */
-  donateToFaction(faction: string, amount: number): boolean;
+  donateToFaction(faction: FactionName, amount: number): boolean;
 
   /**
    * Create a program.
@@ -2448,7 +2452,7 @@ export interface Singularity {
    * @param focus - Acquire player focus on this crime. Optional. Defaults to true.
    * @returns The number of milliseconds it takes to attempt the specified crime.
    */
-  commitCrime(crime: CrimeType | `${CrimeType}`, focus?: boolean): number;
+  commitCrime(crime: CrimeType, focus?: boolean): number;
 
   /**
    * Get chance to successfully commit a crime.
@@ -2461,7 +2465,7 @@ export interface Singularity {
    * @param crime - Name of crime.
    * @returns Chance of success at committing the specified crime.
    */
-  getCrimeChance(crime: CrimeType | `${CrimeType}`): number;
+  getCrimeChance(crime: CrimeType): number;
 
   /**
    * Get stats related to a crime.
@@ -2474,7 +2478,7 @@ export interface Singularity {
    * @param crime - Name of crime.
    * @returns The stats of the crime.
    */
-  getCrimeStats(crime: CrimeType | `${CrimeType}`): CrimeStats;
+  getCrimeStats(crime: CrimeType): CrimeStats;
 
   /**
    * Get a list of owned augmentation.
@@ -2521,7 +2525,7 @@ export interface Singularity {
    * @param augName - Name of Augmentation.
    * @returns Array containing the names of all factions.
    */
-  getAugmentationFactions(augName: string): string[];
+  getAugmentationFactions(augName: string): FactionName[];
 
   /**
    * Get a list of augmentation available from a faction.
@@ -2535,7 +2539,7 @@ export interface Singularity {
    * @param faction - Name of faction.
    * @returns Array containing the names of all Augmentations.
    */
-  getAugmentationsFromFaction(faction: string): string[];
+  getAugmentationsFromFaction(faction: FactionName): string[];
 
   /**
    * Get the pre-requisite of an augmentation.
@@ -2598,7 +2602,7 @@ export interface Singularity {
    * @param augmentation - Name of Augmentation to purchase.
    * @returns True if the Augmentation is successfully purchased, and false otherwise.
    */
-  purchaseAugmentation(faction: string, augmentation: string): boolean;
+  purchaseAugmentation(faction: FactionName, augmentation: string): boolean;
 
   /**
    * Get the stats of an augmentation.
@@ -2655,7 +2659,7 @@ export interface Singularity {
    * @param locationName - Name of the location.
    * @returns True if the player was moved there, false otherwise.
    */
-  goToLocation(locationName: LocationName | `${LocationName}`): boolean;
+  goToLocation(locationName: LocationName): boolean;
 
   /**
    * Get the current server.
@@ -2769,7 +2773,7 @@ export interface Singularity {
    * ```js
    * const programName = "BruteSSH.exe";
    * const cost = ns.singularity.getDarkwebProgramCost(programName);
-   * if (cost > 0) ns.tprint(`${programName} costs $${ns.formatNumber(cost)}`);
+   * if (cost > 0) ns.tprint(`${programName} costs $${ns.format.number(cost)}`);
    * ```
    * @param programName - Name of program to check the price of
    * @returns Price of the specified darkweb program
@@ -3172,100 +3176,118 @@ export interface Hacknet {
  *
  * @public
  */
-declare enum BladeburnerActionType {
-  General = "General",
-  Contract = "Contracts",
-  Operation = "Operations",
-  BlackOp = "Black Operations",
-}
+type BladeburnerActionEnumType = {
+  General: "General";
+  Contract: "Contracts";
+  Operation: "Operations";
+  BlackOp: "Black Operations";
+};
+
+/** @public */
+type BladeburnerActionType = _ValueOf<BladeburnerActionEnumType>;
 
 /**
  * General action names of Bladeburner
  *
  * @public
  */
-declare enum BladeburnerGeneralActionName {
-  Training = "Training",
-  FieldAnalysis = "Field Analysis",
-  Recruitment = "Recruitment",
-  Diplomacy = "Diplomacy",
-  HyperbolicRegen = "Hyperbolic Regeneration Chamber",
-  InciteViolence = "Incite Violence",
-}
+type BladeburnerGeneralActionNameEnumType = {
+  Training: "Training";
+  FieldAnalysis: "Field Analysis";
+  Recruitment: "Recruitment";
+  Diplomacy: "Diplomacy";
+  HyperbolicRegen: "Hyperbolic Regeneration Chamber";
+  InciteViolence: "Incite Violence";
+};
+
+/** @public */
+type BladeburnerGeneralActionName = _ValueOf<BladeburnerGeneralActionNameEnumType>;
 
 /**
  * Contract names of Bladeburner
  *
  * @public
  */
-declare enum BladeburnerContractName {
-  Tracking = "Tracking",
-  BountyHunter = "Bounty Hunter",
-  Retirement = "Retirement",
-}
+type BladeburnerContractNameEnumType = {
+  Tracking: "Tracking";
+  BountyHunter: "Bounty Hunter";
+  Retirement: "Retirement";
+};
+
+/** @public */
+type BladeburnerContractName = _ValueOf<BladeburnerContractNameEnumType>;
 
 /**
  * Operation names of Bladeburner
  *
  * @public
  */
-declare enum BladeburnerOperationName {
-  Investigation = "Investigation",
-  Undercover = "Undercover Operation",
-  Sting = "Sting Operation",
-  Raid = "Raid",
-  StealthRetirement = "Stealth Retirement Operation",
-  Assassination = "Assassination",
-}
+type BladeburnerOperationNameEnumType = {
+  Investigation: "Investigation";
+  Undercover: "Undercover Operation";
+  Sting: "Sting Operation";
+  Raid: "Raid";
+  StealthRetirement: "Stealth Retirement Operation";
+  Assassination: "Assassination";
+};
+
+/** @public */
+type BladeburnerOperationName = _ValueOf<BladeburnerOperationNameEnumType>;
 
 /**
  * Black Operation names of Bladeburner
  *
  * @public
  */
-declare enum BladeburnerBlackOpName {
-  OperationTyphoon = "Operation Typhoon",
-  OperationZero = "Operation Zero",
-  OperationX = "Operation X",
-  OperationTitan = "Operation Titan",
-  OperationAres = "Operation Ares",
-  OperationArchangel = "Operation Archangel",
-  OperationJuggernaut = "Operation Juggernaut",
-  OperationRedDragon = "Operation Red Dragon",
-  OperationK = "Operation K",
-  OperationDeckard = "Operation Deckard",
-  OperationTyrell = "Operation Tyrell",
-  OperationWallace = "Operation Wallace",
-  OperationShoulderOfOrion = "Operation Shoulder of Orion",
-  OperationHyron = "Operation Hyron",
-  OperationMorpheus = "Operation Morpheus",
-  OperationIonStorm = "Operation Ion Storm",
-  OperationAnnihilus = "Operation Annihilus",
-  OperationUltron = "Operation Ultron",
-  OperationCenturion = "Operation Centurion",
-  OperationVindictus = "Operation Vindictus",
-  OperationDaedalus = "Operation Daedalus",
-}
+type BladeburnerBlackOpNameEnumType = {
+  OperationTyphoon: "Operation Typhoon";
+  OperationZero: "Operation Zero";
+  OperationX: "Operation X";
+  OperationTitan: "Operation Titan";
+  OperationAres: "Operation Ares";
+  OperationArchangel: "Operation Archangel";
+  OperationJuggernaut: "Operation Juggernaut";
+  OperationRedDragon: "Operation Red Dragon";
+  OperationK: "Operation K";
+  OperationDeckard: "Operation Deckard";
+  OperationTyrell: "Operation Tyrell";
+  OperationWallace: "Operation Wallace";
+  OperationShoulderOfOrion: "Operation Shoulder of Orion";
+  OperationHyron: "Operation Hyron";
+  OperationMorpheus: "Operation Morpheus";
+  OperationIonStorm: "Operation Ion Storm";
+  OperationAnnihilus: "Operation Annihilus";
+  OperationUltron: "Operation Ultron";
+  OperationCenturion: "Operation Centurion";
+  OperationVindictus: "Operation Vindictus";
+  OperationDaedalus: "Operation Daedalus";
+};
+
+/** @public */
+type BladeburnerBlackOpName = _ValueOf<BladeburnerBlackOpNameEnumType>;
 
 /**
  * Skill names type of Bladeburner
  *
  * @public
  */
-declare enum BladeburnerSkillName {
-  BladesIntuition = "Blade's Intuition",
-  Cloak = "Cloak",
-  ShortCircuit = "Short-Circuit",
-  DigitalObserver = "Digital Observer",
-  Tracer = "Tracer",
-  Overclock = "Overclock",
-  Reaper = "Reaper",
-  EvasiveSystem = "Evasive System",
-  Datamancer = "Datamancer",
-  CybersEdge = "Cyber's Edge",
-  HandsOfMidas = "Hands of Midas",
-  Hyperdrive = "Hyperdrive",
-}
+type BladeburnerSkillNameEnumType = {
+  BladesIntuition: "Blade's Intuition";
+  Cloak: "Cloak";
+  ShortCircuit: "Short-Circuit";
+  DigitalObserver: "Digital Observer";
+  Tracer: "Tracer";
+  Overclock: "Overclock";
+  Reaper: "Reaper";
+  EvasiveSystem: "Evasive System";
+  Datamancer: "Datamancer";
+  CybersEdge: "Cyber's Edge";
+  HandsOfMidas: "Hands of Midas";
+  Hyperdrive: "Hyperdrive";
+};
+
+/** @public */
+type BladeburnerSkillName = _ValueOf<BladeburnerSkillNameEnumType>;
 
 /**
  * @public
@@ -3281,17 +3303,20 @@ export type BladeburnerActionName =
  *
  * @public
  */
-declare enum SpecialBladeburnerActionTypeForSleeve {
-  InfiltrateSynthoids = "Infiltrate Synthoids",
-  SupportMainSleeve = "Support main sleeve",
-  TakeOnContracts = "Take on contracts",
-}
+type SpecialBladeburnerActionEnumTypeForSleeve = {
+  InfiltrateSynthoids: "Infiltrate Synthoids";
+  SupportMainSleeve: "Support main sleeve";
+  TakeOnContracts: "Take on contracts";
+};
+
+/** @public */
+type SpecialBladeburnerActionTypeForSleeve = _ValueOf<SpecialBladeburnerActionEnumTypeForSleeve>;
 
 /**
  * @public
  */
 export type BladeburnerActionTypeForSleeve =
-  | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionName.InciteViolence>
+  | Exclude<BladeburnerGeneralActionName, BladeburnerGeneralActionNameEnumType["InciteViolence"]>
   | SpecialBladeburnerActionTypeForSleeve;
 
 /**
@@ -3387,10 +3412,7 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match
    * @returns True if the action was started successfully, and false otherwise.
    */
-  startAction(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-  ): boolean;
+  startAction(type: BladeburnerActionType, name: BladeburnerActionName): boolean;
 
   /**
    * Stop current action.
@@ -3422,10 +3444,7 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns Number of milliseconds it takes to complete the specified action.
    */
-  getActionTime(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-  ): number;
+  getActionTime(type: BladeburnerActionType, name: BladeburnerActionName): number;
 
   /**
    * Get the time elapsed on current action.
@@ -3454,8 +3473,8 @@ export interface Bladeburner {
    * @returns Estimated success chance for the specified action.
    */
   getActionEstimatedSuccessChance(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
+    type: BladeburnerActionType,
+    name: BladeburnerActionName,
     sleeveNumber?: number,
   ): [number, number];
 
@@ -3473,11 +3492,7 @@ export interface Bladeburner {
    * @param level - Optional number. Action level at which to calculate the gain. Will be the action's current level if not given.
    * @returns Average Bladeburner reputation gain for successfully completing the specified action.
    */
-  getActionRepGain(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-    level?: number,
-  ): number;
+  getActionRepGain(type: BladeburnerActionType, name: BladeburnerActionName, level?: number): number;
 
   /**
    * Get action count remaining.
@@ -3499,10 +3514,7 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns Remaining count of the specified action.
    */
-  getActionCountRemaining(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-  ): number;
+  getActionCountRemaining(type: BladeburnerActionType, name: BladeburnerActionName): number;
 
   /**
    * Get the maximum level of an action.
@@ -3517,10 +3529,7 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns Maximum level of the specified action.
    */
-  getActionMaxLevel(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-  ): number;
+  getActionMaxLevel(type: BladeburnerActionType, name: BladeburnerActionName): number;
 
   /**
    * Get the current level of an action.
@@ -3535,10 +3544,7 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns Current level of the specified action.
    */
-  getActionCurrentLevel(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-  ): number;
+  getActionCurrentLevel(type: BladeburnerActionType, name: BladeburnerActionName): number;
 
   /**
    * Get whether an action is set to autolevel.
@@ -3553,10 +3559,7 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns True if the action is set to autolevel, and false otherwise.
    */
-  getActionAutolevel(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-  ): boolean;
+  getActionAutolevel(type: BladeburnerActionType, name: BladeburnerActionName): boolean;
 
   /**
    * Get action successes.
@@ -3569,10 +3572,7 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns a number with how many successes you have with action.
    */
-  getActionSuccesses(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-  ): number;
+  getActionSuccesses(type: BladeburnerActionType, name: BladeburnerActionName): number;
 
   /**
    * Set an action autolevel.
@@ -3585,11 +3585,7 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @param autoLevel - Whether or not to autolevel this action
    */
-  setActionAutolevel(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-    autoLevel: boolean,
-  ): void;
+  setActionAutolevel(type: BladeburnerActionType, name: BladeburnerActionName, autoLevel: boolean): void;
 
   /**
    * Set the level of an action.
@@ -3602,11 +3598,7 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @param level - Level to set this action to.
    */
-  setActionLevel(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-    level: number,
-  ): void;
+  setActionLevel(type: BladeburnerActionType, name: BladeburnerActionName, level: number): void;
 
   /**
    * Get player bladeburner rank.
@@ -3656,7 +3648,7 @@ export interface Bladeburner {
    * @param skillName - Name of skill. Case-sensitive and must be an exact match.
    * @returns Level in the specified skill.
    */
-  getSkillLevel(skillName: BladeburnerSkillName | `${BladeburnerSkillName}`): number;
+  getSkillLevel(skillName: BladeburnerSkillName): number;
 
   /**
    * Get cost to upgrade skill.
@@ -3679,7 +3671,7 @@ export interface Bladeburner {
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
    * @returns Number of skill points needed to upgrade the specified skill.
    */
-  getSkillUpgradeCost(skillName: BladeburnerSkillName | `${BladeburnerSkillName}`, count?: number): number;
+  getSkillUpgradeCost(skillName: BladeburnerSkillName, count?: number): number;
 
   /**
    * Upgrade skill.
@@ -3694,7 +3686,7 @@ export interface Bladeburner {
    * @param count - Number of times to upgrade the skill. Defaults to 1 if not specified.
    * @returns true if the skill is successfully upgraded, and false otherwise.
    */
-  upgradeSkill(skillName: BladeburnerSkillName | `${BladeburnerSkillName}`, count?: number): boolean;
+  upgradeSkill(skillName: BladeburnerSkillName, count?: number): boolean;
 
   /**
    * Get team size.
@@ -3711,10 +3703,7 @@ export interface Bladeburner {
    * @param name - Name of action. Must be an exact match.
    * @returns Number of Bladeburner team members that were assigned to the specified action.
    */
-  getTeamSize(
-    type?: BladeburnerActionType | `${BladeburnerActionType}`,
-    name?: BladeburnerActionName | `${BladeburnerActionName}`,
-  ): number;
+  getTeamSize(type?: BladeburnerActionType, name?: BladeburnerActionName): number;
 
   /**
    * Set team size.
@@ -3730,11 +3719,7 @@ export interface Bladeburner {
    * @param size - Number of team members to set. Must be a non-negative integer.
    * @returns Number of Bladeburner team members you assigned to the specified action.
    */
-  setTeamSize(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-    size: number,
-  ): number;
+  setTeamSize(type: BladeburnerActionType, name: BladeburnerActionName, size: number): number;
 
   /**
    * Get estimated population in city.
@@ -3747,7 +3732,7 @@ export interface Bladeburner {
    * @param city - Name of city. Case-sensitive
    * @returns Estimated number of Synthoids in the specified city.
    */
-  getCityEstimatedPopulation(city: CityName | `${CityName}`): number;
+  getCityEstimatedPopulation(city: CityName): number;
 
   /**
    * Get number of communities in a city.
@@ -3760,7 +3745,7 @@ export interface Bladeburner {
    * @param city - Name of city. Case-sensitive
    * @returns Number of Synthoids communities in the specified city.
    */
-  getCityCommunities(city: CityName | `${CityName}`): number;
+  getCityCommunities(city: CityName): number;
 
   /**
    * Get chaos of a city.
@@ -3773,7 +3758,7 @@ export interface Bladeburner {
    * @param city - Name of city. Case-sensitive
    * @returns Chaos in the specified city.
    */
-  getCityChaos(city: CityName | `${CityName}`): number;
+  getCityChaos(city: CityName): number;
 
   /**
    * Get current city.
@@ -3797,7 +3782,7 @@ export interface Bladeburner {
    * @param city - Name of city. Case-sensitive
    * @returns true if successful, and false otherwise
    */
-  switchCity(city: CityName | `${CityName}`): boolean;
+  switchCity(city: CityName): boolean;
 
   /**
    * Get Bladeburner stamina.
@@ -3882,8 +3867,8 @@ export interface Bladeburner {
    * ```js
    * while (true) {
    *   const duration = await ns.bladeburner.nextUpdate();
-   *   ns.print(`Bladeburner Division completed ${ns.tFormat(duration)} of actions.`);
-   *   ns.print(`Bonus time remaining: ${ns.tFormat(ns.bladeburner.getBonusTime())}`);
+   *   ns.print(`Bladeburner Division completed ${ns.format.time(duration)} of actions.`);
+   *   ns.print(`Bonus time remaining: ${ns.format.time(ns.bladeburner.getBonusTime())}`);
    *   // Manage the Bladeburner division
    * }
    * ```
@@ -3942,7 +3927,7 @@ export interface CodingContract {
    * @param host - Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided.
    * @returns Name describing the type of problem posed by the Coding Contract.
    */
-  getContractType(filename: string, host?: string): `${CodingContractName}`;
+  getContractType(filename: string, host?: string): CodingContractName;
 
   /**
    * Get the description.
@@ -4026,7 +4011,86 @@ export interface CodingContract {
    * @remarks
    * RAM cost: 0 GB
    */
-  getContractTypes(): `${CodingContractName}`[];
+  getContractTypes(): CodingContractName[];
+}
+
+/**
+ * Format API
+ * @public
+ */
+export interface Format {
+  /**
+   * Format a number.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a numeric string with the specified format options.
+   * This is the same function that the game itself uses to display numbers. The format also depends on the Numeric
+   * Display settings (all options on the "Numeric Display" options page)
+   * To format ram or percentages, see {@link Format.ram | format.ram} and {@link Format.percent | format.percent}
+   *
+   * This function has some quirky undocumented behaviors. This is a non-exhaustive list of those behaviors:
+   *
+   * - "Infinity" and "-Infinity" are returned as "∞" and "-∞", respectively.
+   *
+   * - If you disable the suffix form in the settings page or the absolute value is greater than or equal to 1e33, this
+   * function will use the exponential form. This means that, if Math.abs(n) >= 1e33, the returned value is always in
+   * the exponential form, regardless of the setting.
+   *
+   * Note that the behaviors listed above are "undocumented", in the sense that we don't make any guarantee about
+   * backward compatibility. You must not rely on those behaviors.
+   *
+   * @param n - Number to format.
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 3.
+   * @param suffixStart - How high a number must be before a suffix will be added. Optional, defaults to 1000.
+   * @param isInteger - Whether the number represents an integer. Integers do not display fractional digits until a suffix is present. Optional, defaults to false.
+   * @returns Formatted number.
+   */
+  number(n: number, fractionalDigits?: number, suffixStart?: number, isInteger?: boolean): string;
+
+  /**
+   * Format a number as an amount of ram.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a ram string with the specified number of fractional digits.
+   * This is the same function that the game itself uses to display ram. The format also depends on the Numeric Display
+   * settings (all options on the "Numeric Display" options page)
+   * To format plain numbers or percentages, see {@link Format.number | format.number} and {@link Format.percent | format.percent}
+   *
+   * @param n - Number to format as an amount of ram, in base units of GB (or GiB if that Numeric Display option is set).
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
+   * @returns Formatted ram amount.
+   */
+  ram(n: number, fractionalDigits?: number): string;
+
+  /**
+   * Format a number as a percentage.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a percentage string with the specified number of fractional digits.
+   * This is the same function that the game itself uses to display percentages. The format also depends on the Numeric
+   * Display settings (all options on the "Numeric Display" options page)
+   * To format plain numbers or ram, see {@link Format.number | format.number} and {@link Format.ram | format.ram}
+   *
+   * @param n - Number to format as a percentage.
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
+   * @param suffixStart - When to switch the percentage to a multiplier. Default is 1e6 or x1.00m.
+   * @returns Formatted percentage.
+   */
+  percent(n: number, fractionalDigits?: number, suffixStart?: number): string;
+
+  /**
+   * Format time to a readable string.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param milliseconds - Number of millisecond to format.
+   * @param milliPrecision - Format time with subsecond precision. Defaults to false.
+   * @returns The formatted time.
+   */
+  time(milliseconds: number, milliPrecision?: boolean): string;
 }
 
 /**
@@ -4404,7 +4468,7 @@ export interface Gang {
    * @param faction - Name of the faction that you want to create a gang with. This faction must allow this action, and you must be its member.
    * @returns True if the gang was created, false otherwise.
    */
-  createGang(faction: string): boolean;
+  createGang(faction: FactionName): boolean;
 
   /**
    * Check if you're in a gang.
@@ -4713,8 +4777,8 @@ export interface Gang {
    * ```js
    * while (true) {
    *   const duration = await ns.gang.nextUpdate();
-   *   ns.print(`Gang completed ${ns.tFormat(duration)} of activity.`);
-   *   ns.print(`Bonus time remaining: ${ns.tFormat(ns.gang.getBonusTime())}`);
+   *   ns.print(`Gang completed ${ns.format.time(duration)} of activity.`);
+   *   ns.print(`Bonus time remaining: ${ns.format.time(ns.gang.getBonusTime())}`);
    *   // Manage the Gang
    * }
    * ```
@@ -4735,12 +4799,19 @@ type GoOpponent =
 
 /** @public */
 type SimpleOpponentStats = {
+  /** Number of wins since last reset */
   wins: number;
+  /** Number of losses since last reset*/
   losses: number;
+  /** Current winstreak */
   winStreak: number;
+  /** Highest winstreak since last reset*/
   highestWinStreak: number;
-  favor: number;
+  /** Favor gain from winstreaks, calculated as converted rep */
+  rep: number;
+  /** Stat boost*/
   bonusPercent: number;
+  /** Description of stat boost */
   bonusDescription: string;
 };
 
@@ -5335,7 +5406,7 @@ export interface Sleeve {
    * @param crimeType - Name of the crime.
    * @returns True if this action was set successfully, false otherwise.
    */
-  setToCommitCrime(sleeveNumber: number, crimeType: CrimeType | `${CrimeType}`): boolean;
+  setToCommitCrime(sleeveNumber: number, crimeType: CrimeType): boolean;
 
   /**
    * Set a sleeve to work for a faction.
@@ -5351,8 +5422,8 @@ export interface Sleeve {
    */
   setToFactionWork(
     sleeveNumber: number,
-    factionName: string,
-    factionWorkType: FactionWorkType | `${FactionWorkType}`,
+    factionName: FactionName,
+    factionWorkType: FactionWorkType,
   ): boolean | undefined;
 
   /**
@@ -5366,7 +5437,7 @@ export interface Sleeve {
    * @param companyName - Name of the company to work for.
    * @returns True if the sleeve started working for this company, false otherwise.
    */
-  setToCompanyWork(sleeveNumber: number, companyName: CompanyName | `${CompanyName}`): boolean;
+  setToCompanyWork(sleeveNumber: number, companyName: CompanyName): boolean;
 
   /**
    * Set a sleeve to take a class at a university.
@@ -5382,8 +5453,8 @@ export interface Sleeve {
    */
   setToUniversityCourse(
     sleeveNumber: number,
-    universityName: UniversityLocationName | `${UniversityLocationName}`,
-    courseName: UniversityClassType | `${UniversityClassType}`,
+    universityName: UniversityLocationName,
+    courseName: UniversityClassType,
   ): boolean;
 
   /**
@@ -5398,11 +5469,7 @@ export interface Sleeve {
    * @param stat - Name of the stat to train.
    * @returns True if the sleeve started working out, false otherwise.
    */
-  setToGymWorkout(
-    sleeveNumber: number,
-    gymName: GymLocationName | `${GymLocationName}`,
-    stat: GymType | `${GymType}`,
-  ): boolean;
+  setToGymWorkout(sleeveNumber: number, gymName: GymLocationName, stat: GymType): boolean;
 
   /**
    * Make a sleeve travel to another city. The cost for using this function is the same as for a player.
@@ -5415,7 +5482,7 @@ export interface Sleeve {
    * @param city - Name of the destination city.
    * @returns True if the sleeve reached destination, false otherwise.
    */
-  travel(sleeveNumber: number, city: CityName | `${CityName}`): boolean;
+  travel(sleeveNumber: number, city: CityName): boolean;
 
   /**
    * Get augmentations installed on a sleeve.
@@ -5490,7 +5557,7 @@ export interface Sleeve {
    */
   setToBladeburnerAction(
     sleeveNumber: number,
-    action: BladeburnerActionTypeForSleeve | `${BladeburnerActionTypeForSleeve}`,
+    action: BladeburnerActionTypeForSleeve,
     contract?: BladeburnerContractName,
   ): boolean;
 }
@@ -5612,26 +5679,17 @@ interface WorkStats {
  * @public
  */
 interface WorkFormulas {
-  crimeSuccessChance(person: Person, crimeType: CrimeType | `${CrimeType}`): number;
+  crimeSuccessChance(person: Person, crimeType: CrimeType): number;
   /** @returns The WorkStats gained when completing one instance of the specified crime. */
-  crimeGains(person: Person, crimeType: CrimeType | `${CrimeType}`): WorkStats;
+  crimeGains(person: Person, crimeType: CrimeType): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by taking the specified gym class. */
-  gymGains(person: Person, gymType: GymType | `${GymType}`, locationName: LocationName | `${LocationName}`): WorkStats;
+  gymGains(person: Person, gymType: GymType, locationName: LocationName): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by taking the specified university class. */
-  universityGains(
-    person: Person,
-    classType: UniversityClassType | `${UniversityClassType}`,
-    locationName: LocationName | `${LocationName}`,
-  ): WorkStats;
+  universityGains(person: Person, classType: UniversityClassType, locationName: LocationName): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified faction work. */
-  factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
+  factionGains(person: Person, workType: FactionWorkType, favor: number): WorkStats;
   /** @returns The WorkStats applied every game cycle (200ms) by performing the specified company work. */
-  companyGains(
-    person: Person,
-    companyName: CompanyName | `${CompanyName}`,
-    workType: JobName | `${JobName}`,
-    favor: number,
-  ): WorkStats;
+  companyGains(person: Person, companyName: CompanyName, workType: JobName, favor: number): WorkStats;
 }
 
 /**
@@ -5666,6 +5724,15 @@ interface ReputationFormulas {
    * @param player - Player info, typically from {@link NS.getPlayer | getPlayer}
    */
   donationForRep(reputation: number, player: Person): number;
+
+  /**
+   * Calculate the share power if you call {@link NS.share | ns.share} with the specified number of threads on a server
+   * having the specified number of CPU cores.
+   * @param threads - Number of threads. Must be a positive integer.
+   * @param cpuCores - Number of CPU cores. Must be a positive integer. The default value is 1.
+   * @returns The calculated share power.
+   */
+  sharePower(threads: number, cpuCores?: number): number;
 }
 
 /**
@@ -5958,11 +6025,7 @@ interface BladeburnerFormulas {
    * @param skillPoints - Number of skill points to upgrade the skill. It must be a non-negative number.
    * @returns Number of times that you can upgrade the skill.
    */
-  skillMaxUpgradeCount(
-    name: BladeburnerSkillName | `${BladeburnerSkillName}`,
-    level: number,
-    skillPoints: number,
-  ): number;
+  skillMaxUpgradeCount(name: BladeburnerSkillName, level: number, skillPoints: number): number;
 }
 
 /**
@@ -6212,7 +6275,7 @@ interface Infiltration {
    *
    * @returns Infiltration data for given location.
    */
-  getInfiltration(location: LocationName | `${LocationName}`): InfiltrationLocation;
+  getInfiltration(location: LocationName): InfiltrationLocation;
 }
 
 /**
@@ -6474,6 +6537,12 @@ export interface NS {
    * @remarks RAM cost: 0 GB
    */
   readonly dnet: Darknet;
+
+  /**
+   * Namespace for formatting functions.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly format: Format;
 
   /**
    * Namespace for gang functions. Contains spoilers.
@@ -7956,7 +8025,7 @@ export interface NS {
    * ```js
    * const ram = 2 ** 20;
    * const cost = ns.getPurchasedServerCost(ram);
-   * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs $${ns.formatNumber(cost)}`);
+   * ns.tprint(`A purchased server with ${ns.format.ram(ram)} costs $${ns.format.number(cost)}`);
    * ```
    * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
    * @returns The cost to purchase a server with the specified amount of ram, or returns Infinity if ram is not a valid amount.
@@ -8395,14 +8464,6 @@ export interface NS {
   getScriptExpGain(script: string, host: string, ...args: ScriptArg[]): number;
 
   /**
-   * Returns the amount of time in milliseconds that have passed since you last installed Augmentations.
-   *
-   * @remarks RAM cost: 0.05 GB
-   * @returns Time in milliseconds that have passed since you last installed Augmentations.
-   */
-  getTimeSinceLastAug(): number;
-
-  /**
    * Format a string.
    *
    * @remarks
@@ -8426,102 +8487,6 @@ export interface NS {
    * @returns Formatted text.
    */
   vsprintf(format: string, args: any[]): string;
-
-  /**
-   * Format a number.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Converts a number into a numeric string with the specified format options.
-   * This is the same function that the game itself uses to display numbers. The format also depends on the Numeric
-   * Display settings (all options on the "Numeric Display" options page)
-   * To format ram or percentages, see {@link NS.formatRam | formatRam} and {@link NS.formatPercent | formatPercent}.
-   *
-   * This function has some quirky undocumented behaviors. This is a non-exhaustive list of those behaviors:
-   *
-   * - "Infinity" and "-Infinity" are returned as "∞" and "-∞", respectively.
-   *
-   * - If you disable the suffix form in the settings page or the absolute value is greater than or equal to 1e33, this
-   * function will use the exponential form. This means that, if Math.abs(n) >= 1e33, the returned value is always in
-   * the exponential form, regardless of the setting.
-   *
-   * Note that the behaviors listed above are "undocumented", in the sense that we don't make any guarantee about
-   * backward compatibility. You must not rely on those behaviors.
-   *
-   * @param n - Number to format.
-   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 3.
-   * @param suffixStart - How high a number must be before a suffix will be added. Optional, defaults to 1000. Must be greater than or equal to 1000 if specified.
-   * @param isInteger - Whether the number represents an integer. Integers do not display fractional digits until a suffix is present. Optional, defaults to false.
-   * @returns Formatted number.
-   */
-  formatNumber(n: number, fractionalDigits?: number, suffixStart?: number, isInteger?: boolean): string;
-
-  /**
-   * Format a number as an amount of ram.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Converts a number into a ram string with the specified number of fractional digits.
-   * This is the same function that the game itself uses to display ram. The format also depends on the Numeric Display
-   * settings (all options on the "Numeric Display" options page)
-   * To format plain numbers or percentages, see {@link NS.formatNumber | formatNumber} and {@link NS.formatPercent | formatPercent}
-   *
-   * @param n - Number to format as an amount of ram, in base units of GB (or GiB if that Numeric Display option is set).
-   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
-   * @returns Formatted ram amount.
-   */
-  formatRam(n: number, fractionalDigits?: number): string;
-
-  /**
-   * Format a number as a percentage.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Converts a number into a percentage string with the specified number of fractional digits.
-   * This is the same function that the game itself uses to display percentages. The format also depends on the Numeric
-   * Display settings (all options on the "Numeric Display" options page)
-   * To format plain numbers or ram, see {@link NS.formatNumber | formatNumber} and {@link NS.formatRam | formatRam}
-   *
-   * @param n - Number to format as a percentage.
-   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
-   * @param suffixStart - When to switch the percentage to a multiplier. Default is 1e6 or x1.00m.
-   * @returns Formatted percentage.
-   */
-  formatPercent(n: number, fractionalDigits?: number, suffixStart?: number): string;
-
-  /**
-   * Format a number using the numeral library. This function is deprecated and will be removed in a later version.
-   *
-   * @deprecated
-   *
-   * Use alternatives:
-   *
-   * - NS APIs: ns.formatNumber, ns.formatRam, ns.formatPercent
-   *
-   * - JS built-in objects/functions: Intl.NumberFormat, Intl.PluralRules, Intl.Locale, etc.
-   *
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Converts a number into a string with the specified format options.
-   * See http://numeraljs.com/#format for documentation on format strings supported.
-   *
-   * @param n - Number to format.
-   * @param format - Formatting options. See http://numeraljs.com/#format for valid formats.
-   * @returns Formatted number.
-   */
-  nFormat(n: number, format: string): string;
-
-  /**
-   * Format time to a readable string.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * @param milliseconds - Number of millisecond to format.
-   * @param milliPrecision - Format time with subsecond precision. Defaults to false.
-   * @returns The formatted time.
-   */
-  tFormat(milliseconds: number, milliPrecision?: boolean): string;
 
   /**
    * Prompt the player with an input modal.
@@ -8603,7 +8568,7 @@ export interface NS {
    * @param variant - Type of toast. Must be one of success, info, warning, error. Defaults to success.
    * @param duration - Duration of toast in ms. Can also be `null` to create a persistent toast. Defaults to 2000.
    */
-  toast(msg: string, variant?: ToastVariant | `${ToastVariant}`, duration?: number | null): void;
+  toast(msg: string, variant?: ToastVariant, duration?: number | null): void;
 
   /**
    * Download a file from the internet.
@@ -8796,7 +8761,8 @@ export interface NS {
   flags(schema: [string, string | number | boolean | string[]][]): { [key: string]: ScriptArg | string[] };
 
   /**
-   * Share the server's ram with your factions.
+   * Share the server's ram with your factions to increase the reputation gain rate of faction work. This boost is
+   * applied to all faction work of all factions.
    * @remarks
    * RAM cost: 2.4 GB
    *
@@ -8806,8 +8772,8 @@ export interface NS {
   share(): Promise<void>;
 
   /**
-   * Share Power has a multiplicative effect on rep/second while doing work for a faction.
-   * Share Power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
+   * Share power has a multiplicative effect on rep/second while doing work for a faction.
+   * Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate.
    * @remarks
    * RAM cost: 0.2 GB
    */
@@ -8846,110 +8812,131 @@ export interface NS {
 
 // BASE ENUMS
 /** @public */
-declare enum ToastVariant {
-  SUCCESS = "success",
-  WARNING = "warning",
-  ERROR = "error",
-  INFO = "info",
-}
+type ToastVariantEnumType = {
+  SUCCESS: "success";
+  WARNING: "warning";
+  ERROR: "error";
+  INFO: "info";
+};
 
 /** @public */
-declare enum CrimeType {
-  shoplift = "Shoplift",
-  robStore = "Rob Store",
-  mug = "Mug",
-  larceny = "Larceny",
-  dealDrugs = "Deal Drugs",
-  bondForgery = "Bond Forgery",
-  traffickArms = "Traffick Arms",
-  homicide = "Homicide",
-  grandTheftAuto = "Grand Theft Auto",
-  kidnap = "Kidnap",
-  assassination = "Assassination",
-  heist = "Heist",
-}
+type ToastVariant = _ValueOf<ToastVariantEnumType>;
 
 /** @public */
-declare enum FactionWorkType {
-  hacking = "hacking",
-  field = "field",
-  security = "security",
-}
+type CrimeEnumType = {
+  shoplift: "Shoplift";
+  robStore: "Rob Store";
+  mug: "Mug";
+  larceny: "Larceny";
+  dealDrugs: "Deal Drugs";
+  bondForgery: "Bond Forgery";
+  traffickArms: "Traffick Arms";
+  homicide: "Homicide";
+  grandTheftAuto: "Grand Theft Auto";
+  kidnap: "Kidnap";
+  assassination: "Assassination";
+  heist: "Heist";
+};
 
 /** @public */
-declare enum UniversityClassType {
-  computerScience = "Computer Science",
-  dataStructures = "Data Structures",
-  networks = "Networks",
-  algorithms = "Algorithms",
-  management = "Management",
-  leadership = "Leadership",
-}
+type CrimeType = _ValueOf<CrimeEnumType>;
 
 /** @public */
-declare enum GymType {
-  strength = "str",
-  defense = "def",
-  dexterity = "dex",
-  agility = "agi",
-}
+type FactionWorkEnumType = {
+  hacking: "hacking";
+  field: "field";
+  security: "security";
+};
 
 /** @public */
-declare enum JobName {
-  software0 = "Software Engineering Intern",
-  software1 = "Junior Software Engineer",
-  software2 = "Senior Software Engineer",
-  software3 = "Lead Software Developer",
-  software4 = "Head of Software",
-  software5 = "Head of Engineering",
-  software6 = "Vice President of Technology",
-  software7 = "Chief Technology Officer",
-  IT0 = "IT Intern",
-  IT1 = "IT Analyst",
-  IT2 = "IT Manager",
-  IT3 = "Systems Administrator",
-  securityEng = "Security Engineer",
-  networkEng0 = "Network Engineer",
-  networkEng1 = "Network Administrator",
-  business0 = "Business Intern",
-  business1 = "Business Analyst",
-  business2 = "Business Manager",
-  business3 = "Operations Manager",
-  business4 = "Chief Financial Officer",
-  business5 = "Chief Executive Officer",
-  security0 = "Security Guard",
-  security1 = "Security Officer",
-  security2 = "Security Supervisor",
-  security3 = "Head of Security",
-  agent0 = "Field Agent",
-  agent1 = "Secret Agent",
-  agent2 = "Special Operative",
-  waiter = "Waiter",
-  employee = "Employee",
-  softwareConsult0 = "Software Consultant",
-  softwareConsult1 = "Senior Software Consultant",
-  businessConsult0 = "Business Consultant",
-  businessConsult1 = "Senior Business Consultant",
-  waiterPT = "Part-time Waiter",
-  employeePT = "Part-time Employee",
-}
+type FactionWorkType = _ValueOf<FactionWorkEnumType>;
 
 /** @public */
-declare enum JobField {
-  software = "Software",
-  softwareConsultant = "Software Consultant",
-  it = "IT",
-  securityEngineer = "Security Engineer",
-  networkEngineer = "Network Engineer",
-  business = "Business",
-  businessConsultant = "Business Consultant",
-  security = "Security",
-  agent = "Agent",
-  employee = "Employee",
-  partTimeEmployee = "Part-time Employee",
-  waiter = "Waiter",
-  partTimeWaiter = "Part-time Waiter",
-}
+type UniversityClassEnumType = {
+  computerScience: "Computer Science";
+  dataStructures: "Data Structures";
+  networks: "Networks";
+  algorithms: "Algorithms";
+  management: "Management";
+  leadership: "Leadership";
+};
+
+/** @public */
+type UniversityClassType = _ValueOf<UniversityClassEnumType>;
+
+/** @public */
+type GymEnumType = {
+  strength: "str";
+  defense: "def";
+  dexterity: "dex";
+  agility: "agi";
+};
+
+/** @public */
+type GymType = _ValueOf<GymEnumType>;
+
+/** @public */
+type JobNameEnumType = {
+  software0: "Software Engineering Intern";
+  software1: "Junior Software Engineer";
+  software2: "Senior Software Engineer";
+  software3: "Lead Software Developer";
+  software4: "Head of Software";
+  software5: "Head of Engineering";
+  software6: "Vice President of Technology";
+  software7: "Chief Technology Officer";
+  IT0: "IT Intern";
+  IT1: "IT Analyst";
+  IT2: "IT Manager";
+  IT3: "Systems Administrator";
+  securityEng: "Security Engineer";
+  networkEng0: "Network Engineer";
+  networkEng1: "Network Administrator";
+  business0: "Business Intern";
+  business1: "Business Analyst";
+  business2: "Business Manager";
+  business3: "Operations Manager";
+  business4: "Chief Financial Officer";
+  business5: "Chief Executive Officer";
+  security0: "Security Guard";
+  security1: "Security Officer";
+  security2: "Security Supervisor";
+  security3: "Head of Security";
+  agent0: "Field Agent";
+  agent1: "Secret Agent";
+  agent2: "Special Operative";
+  waiter: "Waiter";
+  employee: "Employee";
+  softwareConsult0: "Software Consultant";
+  softwareConsult1: "Senior Software Consultant";
+  businessConsult0: "Business Consultant";
+  businessConsult1: "Senior Business Consultant";
+  waiterPT: "Part-time Waiter";
+  employeePT: "Part-time Employee";
+};
+
+/** @public */
+type JobName = _ValueOf<JobNameEnumType>;
+
+/** @public */
+type JobFieldEnumType = {
+  software: "Software";
+  softwareConsultant: "Software Consultant";
+  it: "IT";
+  securityEngineer: "Security Engineer";
+  networkEngineer: "Network Engineer";
+  business: "Business";
+  businessConsultant: "Business Consultant";
+  security: "Security";
+  agent: "Agent";
+  employee: "Employee";
+  partTimeEmployee: "Part-time Employee";
+  waiter: "Waiter";
+  partTimeWaiter: "Part-time Waiter";
+};
+
+/** @public */
+type JobField = _ValueOf<JobFieldEnumType>;
 
 // CORP ENUMS - Changed to types
 /** @public */
@@ -8983,151 +8970,169 @@ type CorpIndustryName =
 /** @public */
 type CorpSmartSupplyOption = "leftovers" | "imports" | "none";
 
-/** Names of all cities
- * @public */
-declare enum CityName {
-  Aevum = "Aevum",
-  Chongqing = "Chongqing",
-  Sector12 = "Sector-12",
-  NewTokyo = "New Tokyo",
-  Ishima = "Ishima",
-  Volhaven = "Volhaven",
-}
+/**
+ * Names of all cities
+ *
+ * @public
+ */
+type CityNameEnumType = {
+  Aevum: "Aevum";
+  Chongqing: "Chongqing";
+  Sector12: "Sector-12";
+  NewTokyo: "New Tokyo";
+  Ishima: "Ishima";
+  Volhaven: "Volhaven";
+};
+
+/** @public */
+type CityName = _ValueOf<CityNameEnumType>;
 
 /** Names of all locations
  * @public */
-declare enum LocationName {
-  AevumAeroCorp = "AeroCorp",
-  AevumBachmanAndAssociates = "Bachman & Associates",
-  AevumClarkeIncorporated = "Clarke Incorporated",
-  AevumCrushFitnessGym = "Crush Fitness Gym",
-  AevumECorp = "ECorp",
-  AevumFulcrumTechnologies = "Fulcrum Technologies",
-  AevumGalacticCybersystems = "Galactic Cybersystems",
-  AevumNetLinkTechnologies = "NetLink Technologies",
-  AevumPolice = "Aevum Police Headquarters",
-  AevumRhoConstruction = "Rho Construction",
-  AevumSnapFitnessGym = "Snap Fitness Gym",
-  AevumSummitUniversity = "Summit University",
-  AevumWatchdogSecurity = "Watchdog Security",
-  AevumCasino = "Iker Molina Casino",
+type LocationNameEnumType = {
+  AevumAeroCorp: "AeroCorp";
+  AevumBachmanAndAssociates: "Bachman & Associates";
+  AevumClarkeIncorporated: "Clarke Incorporated";
+  AevumCrushFitnessGym: "Crush Fitness Gym";
+  AevumECorp: "ECorp";
+  AevumFulcrumTechnologies: "Fulcrum Technologies";
+  AevumGalacticCybersystems: "Galactic Cybersystems";
+  AevumNetLinkTechnologies: "NetLink Technologies";
+  AevumPolice: "Aevum Police Headquarters";
+  AevumRhoConstruction: "Rho Construction";
+  AevumSnapFitnessGym: "Snap Fitness Gym";
+  AevumSummitUniversity: "Summit University";
+  AevumWatchdogSecurity: "Watchdog Security";
+  AevumCasino: "Iker Molina Casino";
 
-  ChongqingKuaiGongInternational = "KuaiGong International",
-  ChongqingSolarisSpaceSystems = "Solaris Space Systems",
-  ChongqingChurchOfTheMachineGod = "Church of the Machine God",
+  ChongqingKuaiGongInternational: "KuaiGong International";
+  ChongqingSolarisSpaceSystems: "Solaris Space Systems";
+  ChongqingChurchOfTheMachineGod: "Church of the Machine God";
 
-  Sector12AlphaEnterprises = "Alpha Enterprises",
-  Sector12BladeIndustries = "Blade Industries",
-  Sector12CIA = "Central Intelligence Agency",
-  Sector12CarmichaelSecurity = "Carmichael Security",
-  Sector12CityHall = "Sector-12 City Hall",
-  Sector12DeltaOne = "DeltaOne",
-  Sector12FoodNStuff = "FoodNStuff",
-  Sector12FourSigma = "Four Sigma",
-  Sector12IcarusMicrosystems = "Icarus Microsystems",
-  Sector12IronGym = "Iron Gym",
-  Sector12JoesGuns = "Joe's Guns",
-  Sector12MegaCorp = "MegaCorp",
-  Sector12NSA = "National Security Agency",
-  Sector12PowerhouseGym = "Powerhouse Gym",
-  Sector12RothmanUniversity = "Rothman University",
-  Sector12UniversalEnergy = "Universal Energy",
+  Sector12AlphaEnterprises: "Alpha Enterprises";
+  Sector12BladeIndustries: "Blade Industries";
+  Sector12CIA: "Central Intelligence Agency";
+  Sector12CarmichaelSecurity: "Carmichael Security";
+  Sector12CityHall: "Sector-12 City Hall";
+  Sector12DeltaOne: "DeltaOne";
+  Sector12FoodNStuff: "FoodNStuff";
+  Sector12FourSigma: "Four Sigma";
+  Sector12IcarusMicrosystems: "Icarus Microsystems";
+  Sector12IronGym: "Iron Gym";
+  Sector12JoesGuns: "Joe's Guns";
+  Sector12MegaCorp: "MegaCorp";
+  Sector12NSA: "National Security Agency";
+  Sector12PowerhouseGym: "Powerhouse Gym";
+  Sector12RothmanUniversity: "Rothman University";
+  Sector12UniversalEnergy: "Universal Energy";
 
-  NewTokyoDefComm = "DefComm",
-  NewTokyoGlobalPharmaceuticals = "Global Pharmaceuticals",
-  NewTokyoNoodleBar = "Noodle Bar",
-  NewTokyoVitaLife = "VitaLife",
-  NewTokyoArcade = "Arcade",
+  NewTokyoDefComm: "DefComm";
+  NewTokyoGlobalPharmaceuticals: "Global Pharmaceuticals";
+  NewTokyoNoodleBar: "Noodle Bar";
+  NewTokyoVitaLife: "VitaLife";
+  NewTokyoArcade: "Arcade";
 
-  IshimaNovaMedical = "Nova Medical",
-  IshimaOmegaSoftware = "Omega Software",
-  IshimaStormTechnologies = "Storm Technologies",
-  IshimaGlitch = "0x6C1",
+  IshimaNovaMedical: "Nova Medical";
+  IshimaOmegaSoftware: "Omega Software";
+  IshimaStormTechnologies: "Storm Technologies";
+  IshimaGlitch: "0x6C1";
 
-  VolhavenCompuTek = "CompuTek",
-  VolhavenHeliosLabs = "Helios Labs",
-  VolhavenLexoCorp = "LexoCorp",
-  VolhavenMilleniumFitnessGym = "Millenium Fitness Gym",
-  VolhavenNWO = "NWO",
-  VolhavenOmniTekIncorporated = "OmniTek Incorporated",
-  VolhavenOmniaCybersystems = "Omnia Cybersystems",
-  VolhavenSysCoreSecurities = "SysCore Securities",
-  VolhavenZBInstituteOfTechnology = "ZB Institute of Technology",
+  VolhavenCompuTek: "CompuTek";
+  VolhavenHeliosLabs: "Helios Labs";
+  VolhavenLexoCorp: "LexoCorp";
+  VolhavenMilleniumFitnessGym: "Millenium Fitness Gym";
+  VolhavenNWO: "NWO";
+  VolhavenOmniTekIncorporated: "OmniTek Incorporated";
+  VolhavenOmniaCybersystems: "Omnia Cybersystems";
+  VolhavenSysCoreSecurities: "SysCore Securities";
+  VolhavenZBInstituteOfTechnology: "ZB Institute of Technology";
 
-  Hospital = "Hospital",
-  Slums = "The Slums",
-  TravelAgency = "Travel Agency",
-  WorldStockExchange = "World Stock Exchange",
+  Hospital: "Hospital";
+  Slums: "The Slums";
+  TravelAgency: "Travel Agency";
+  WorldStockExchange: "World Stock Exchange";
 
-  Void = "The Void",
-}
+  Void: "The Void";
+};
+
+/** @public */
+type LocationName = _ValueOf<LocationNameEnumType>;
 
 /**
  * Locations of university
  *
  * @public
  */
-declare enum UniversityLocationName {
-  AevumSummitUniversity = LocationName.AevumSummitUniversity,
-  Sector12RothmanUniversity = LocationName.Sector12RothmanUniversity,
-  VolhavenZBInstituteOfTechnology = LocationName.VolhavenZBInstituteOfTechnology,
-}
+type UniversityLocationNameEnumType = {
+  AevumSummitUniversity: LocationNameEnumType["AevumSummitUniversity"];
+  Sector12RothmanUniversity: LocationNameEnumType["Sector12RothmanUniversity"];
+  VolhavenZBInstituteOfTechnology: LocationNameEnumType["VolhavenZBInstituteOfTechnology"];
+};
+
+/** @public */
+type UniversityLocationName = _ValueOf<UniversityLocationNameEnumType>;
 
 /**
  * Locations of gym
  *
  * @public
  */
-declare enum GymLocationName {
-  AevumCrushFitnessGym = LocationName.AevumCrushFitnessGym,
-  AevumSnapFitnessGym = LocationName.AevumSnapFitnessGym,
-  Sector12IronGym = LocationName.Sector12IronGym,
-  Sector12PowerhouseGym = LocationName.Sector12PowerhouseGym,
-  VolhavenMilleniumFitnessGym = LocationName.VolhavenMilleniumFitnessGym,
-}
+type GymLocationNameEnumType = {
+  AevumCrushFitnessGym: LocationNameEnumType["AevumCrushFitnessGym"];
+  AevumSnapFitnessGym: LocationNameEnumType["AevumSnapFitnessGym"];
+  Sector12IronGym: LocationNameEnumType["Sector12IronGym"];
+  Sector12PowerhouseGym: LocationNameEnumType["Sector12PowerhouseGym"];
+  VolhavenMilleniumFitnessGym: LocationNameEnumType["VolhavenMilleniumFitnessGym"];
+};
+
+/** @public */
+type GymLocationName = _ValueOf<GymLocationNameEnumType>;
 
 /** Names of all companies
  * @public */
-declare enum CompanyName {
-  ECorp = "ECorp",
-  MegaCorp = "MegaCorp",
-  BachmanAndAssociates = "Bachman & Associates",
-  BladeIndustries = "Blade Industries",
-  NWO = "NWO",
-  ClarkeIncorporated = "Clarke Incorporated",
-  OmniTekIncorporated = "OmniTek Incorporated",
-  FourSigma = "Four Sigma",
-  KuaiGongInternational = "KuaiGong International",
-  FulcrumTechnologies = "Fulcrum Technologies",
-  StormTechnologies = "Storm Technologies",
-  DefComm = "DefComm",
-  HeliosLabs = "Helios Labs",
-  VitaLife = "VitaLife",
-  IcarusMicrosystems = "Icarus Microsystems",
-  UniversalEnergy = "Universal Energy",
-  GalacticCybersystems = "Galactic Cybersystems",
-  AeroCorp = "AeroCorp",
-  OmniaCybersystems = "Omnia Cybersystems",
-  SolarisSpaceSystems = "Solaris Space Systems",
-  DeltaOne = "DeltaOne",
-  GlobalPharmaceuticals = "Global Pharmaceuticals",
-  NovaMedical = "Nova Medical",
-  CIA = "Central Intelligence Agency",
-  NSA = "National Security Agency",
-  WatchdogSecurity = "Watchdog Security",
-  LexoCorp = "LexoCorp",
-  RhoConstruction = "Rho Construction",
-  AlphaEnterprises = "Alpha Enterprises",
-  Police = "Aevum Police Headquarters",
-  SysCoreSecurities = "SysCore Securities",
-  CompuTek = "CompuTek",
-  NetLinkTechnologies = "NetLink Technologies",
-  CarmichaelSecurity = "Carmichael Security",
-  FoodNStuff = "FoodNStuff",
-  JoesGuns = "Joe's Guns",
-  OmegaSoftware = "Omega Software",
-  NoodleBar = "Noodle Bar",
-}
+type CompanyNameEnumType = {
+  ECorp: "ECorp";
+  MegaCorp: "MegaCorp";
+  BachmanAndAssociates: "Bachman & Associates";
+  BladeIndustries: "Blade Industries";
+  NWO: "NWO";
+  ClarkeIncorporated: "Clarke Incorporated";
+  OmniTekIncorporated: "OmniTek Incorporated";
+  FourSigma: "Four Sigma";
+  KuaiGongInternational: "KuaiGong International";
+  FulcrumTechnologies: "Fulcrum Technologies";
+  StormTechnologies: "Storm Technologies";
+  DefComm: "DefComm";
+  HeliosLabs: "Helios Labs";
+  VitaLife: "VitaLife";
+  IcarusMicrosystems: "Icarus Microsystems";
+  UniversalEnergy: "Universal Energy";
+  GalacticCybersystems: "Galactic Cybersystems";
+  AeroCorp: "AeroCorp";
+  OmniaCybersystems: "Omnia Cybersystems";
+  SolarisSpaceSystems: "Solaris Space Systems";
+  DeltaOne: "DeltaOne";
+  GlobalPharmaceuticals: "Global Pharmaceuticals";
+  NovaMedical: "Nova Medical";
+  CIA: "Central Intelligence Agency";
+  NSA: "National Security Agency";
+  WatchdogSecurity: "Watchdog Security";
+  LexoCorp: "LexoCorp";
+  RhoConstruction: "Rho Construction";
+  AlphaEnterprises: "Alpha Enterprises";
+  Police: "Aevum Police Headquarters";
+  SysCoreSecurities: "SysCore Securities";
+  CompuTek: "CompuTek";
+  NetLinkTechnologies: "NetLink Technologies";
+  CarmichaelSecurity: "Carmichael Security";
+  FoodNStuff: "FoodNStuff";
+  JoesGuns: "Joe's Guns";
+  OmegaSoftware: "Omega Software";
+  NoodleBar: "Noodle Bar";
+};
+
+/** @public */
+type CompanyName = _ValueOf<CompanyNameEnumType>;
 
 /**
  * Names of all factions.
@@ -9136,103 +9141,111 @@ declare enum CompanyName {
  * factions are, you should not check this enum. Some factions are only accessible in the endgame.
  *
  * @public */
-declare enum FactionName {
-  Illuminati = "Illuminati",
-  Daedalus = "Daedalus",
-  TheCovenant = "The Covenant",
-  ECorp = "ECorp",
-  MegaCorp = "MegaCorp",
-  BachmanAssociates = "Bachman & Associates",
-  BladeIndustries = "Blade Industries",
-  NWO = "NWO",
-  ClarkeIncorporated = "Clarke Incorporated",
-  OmniTekIncorporated = "OmniTek Incorporated",
-  FourSigma = "Four Sigma",
-  KuaiGongInternational = "KuaiGong International",
-  FulcrumSecretTechnologies = "Fulcrum Secret Technologies",
-  BitRunners = "BitRunners",
-  TheBlackHand = "The Black Hand",
-  NiteSec = "NiteSec",
-  Aevum = "Aevum",
-  Chongqing = "Chongqing",
-  Ishima = "Ishima",
-  NewTokyo = "New Tokyo",
-  Sector12 = "Sector-12",
-  Volhaven = "Volhaven",
-  SpeakersForTheDead = "Speakers for the Dead",
-  TheDarkArmy = "The Dark Army",
-  TheSyndicate = "The Syndicate",
-  Silhouette = "Silhouette",
-  Tetrads = "Tetrads",
-  SlumSnakes = "Slum Snakes",
-  Netburners = "Netburners",
-  TianDiHui = "Tian Di Hui",
-  CyberSec = "CyberSec",
-  Bladeburners = "Bladeburners",
-  ChurchOfTheMachineGod = "Church of the Machine God",
-  ShadowsOfAnarchy = "Shadows of Anarchy",
-}
+type FactionNameEnumType = {
+  Illuminati: "Illuminati";
+  Daedalus: "Daedalus";
+  TheCovenant: "The Covenant";
+  ECorp: "ECorp";
+  MegaCorp: "MegaCorp";
+  BachmanAssociates: "Bachman & Associates";
+  BladeIndustries: "Blade Industries";
+  NWO: "NWO";
+  ClarkeIncorporated: "Clarke Incorporated";
+  OmniTekIncorporated: "OmniTek Incorporated";
+  FourSigma: "Four Sigma";
+  KuaiGongInternational: "KuaiGong International";
+  FulcrumSecretTechnologies: "Fulcrum Secret Technologies";
+  BitRunners: "BitRunners";
+  TheBlackHand: "The Black Hand";
+  NiteSec: "NiteSec";
+  Aevum: "Aevum";
+  Chongqing: "Chongqing";
+  Ishima: "Ishima";
+  NewTokyo: "New Tokyo";
+  Sector12: "Sector-12";
+  Volhaven: "Volhaven";
+  SpeakersForTheDead: "Speakers for the Dead";
+  TheDarkArmy: "The Dark Army";
+  TheSyndicate: "The Syndicate";
+  Silhouette: "Silhouette";
+  Tetrads: "Tetrads";
+  SlumSnakes: "Slum Snakes";
+  Netburners: "Netburners";
+  TianDiHui: "Tian Di Hui";
+  CyberSec: "CyberSec";
+  Bladeburners: "Bladeburners";
+  ChurchOfTheMachineGod: "Church of the Machine God";
+  ShadowsOfAnarchy: "Shadows of Anarchy";
+};
 
-declare enum CodingContractName {
-  FindLargestPrimeFactor = "Find Largest Prime Factor",
-  SubarrayWithMaximumSum = "Subarray with Maximum Sum",
-  TotalWaysToSum = "Total Ways to Sum",
-  TotalWaysToSumII = "Total Ways to Sum II",
-  SpiralizeMatrix = "Spiralize Matrix",
-  ArrayJumpingGame = "Array Jumping Game",
-  ArrayJumpingGameII = "Array Jumping Game II",
-  MergeOverlappingIntervals = "Merge Overlapping Intervals",
-  GenerateIPAddresses = "Generate IP Addresses",
-  AlgorithmicStockTraderI = "Algorithmic Stock Trader I",
-  AlgorithmicStockTraderII = "Algorithmic Stock Trader II",
-  AlgorithmicStockTraderIII = "Algorithmic Stock Trader III",
-  AlgorithmicStockTraderIV = "Algorithmic Stock Trader IV",
-  MinimumPathSumInATriangle = "Minimum Path Sum in a Triangle",
-  UniquePathsInAGridI = "Unique Paths in a Grid I",
-  UniquePathsInAGridII = "Unique Paths in a Grid II",
-  ShortestPathInAGrid = "Shortest Path in a Grid",
-  SanitizeParenthesesInExpression = "Sanitize Parentheses in Expression",
-  FindAllValidMathExpressions = "Find All Valid Math Expressions",
-  HammingCodesIntegerToEncodedBinary = "HammingCodes: Integer to Encoded Binary",
-  HammingCodesEncodedBinaryToInteger = "HammingCodes: Encoded Binary to Integer",
-  Proper2ColoringOfAGraph = "Proper 2-Coloring of a Graph",
-  CompressionIRLECompression = "Compression I: RLE Compression",
-  CompressionIILZDecompression = "Compression II: LZ Decompression",
-  CompressionIIILZCompression = "Compression III: LZ Compression",
-  EncryptionICaesarCipher = "Encryption I: Caesar Cipher",
-  EncryptionIIVigenereCipher = "Encryption II: Vigenère Cipher",
-  SquareRoot = "Square Root",
-}
+/** @public */
+type FactionName = _ValueOf<FactionNameEnumType>;
+
+type CodingContractNameEnumType = {
+  FindLargestPrimeFactor: "Find Largest Prime Factor";
+  SubarrayWithMaximumSum: "Subarray with Maximum Sum";
+  TotalWaysToSum: "Total Ways to Sum";
+  TotalWaysToSumII: "Total Ways to Sum II";
+  SpiralizeMatrix: "Spiralize Matrix";
+  ArrayJumpingGame: "Array Jumping Game";
+  ArrayJumpingGameII: "Array Jumping Game II";
+  MergeOverlappingIntervals: "Merge Overlapping Intervals";
+  GenerateIPAddresses: "Generate IP Addresses";
+  AlgorithmicStockTraderI: "Algorithmic Stock Trader I";
+  AlgorithmicStockTraderII: "Algorithmic Stock Trader II";
+  AlgorithmicStockTraderIII: "Algorithmic Stock Trader III";
+  AlgorithmicStockTraderIV: "Algorithmic Stock Trader IV";
+  MinimumPathSumInATriangle: "Minimum Path Sum in a Triangle";
+  UniquePathsInAGridI: "Unique Paths in a Grid I";
+  UniquePathsInAGridII: "Unique Paths in a Grid II";
+  ShortestPathInAGrid: "Shortest Path in a Grid";
+  SanitizeParenthesesInExpression: "Sanitize Parentheses in Expression";
+  FindAllValidMathExpressions: "Find All Valid Math Expressions";
+  HammingCodesIntegerToEncodedBinary: "HammingCodes: Integer to Encoded Binary";
+  HammingCodesEncodedBinaryToInteger: "HammingCodes: Encoded Binary to Integer";
+  Proper2ColoringOfAGraph: "Proper 2-Coloring of a Graph";
+  CompressionIRLECompression: "Compression I: RLE Compression";
+  CompressionIILZDecompression: "Compression II: LZ Decompression";
+  CompressionIIILZCompression: "Compression III: LZ Compression";
+  EncryptionICaesarCipher: "Encryption I: Caesar Cipher";
+  EncryptionIIVigenereCipher: "Encryption II: Vigenère Cipher";
+  SquareRoot: "Square Root";
+  TotalPrimesInRange: "Total Number of Primes";
+};
+
+/** @public */
+type CodingContractName = _ValueOf<CodingContractNameEnumType>;
 
 export type CodingContractSignatures = {
-  [CodingContractName.FindLargestPrimeFactor]: [number, number];
-  [CodingContractName.SubarrayWithMaximumSum]: [number[], number];
-  [CodingContractName.TotalWaysToSum]: [number, number];
-  [CodingContractName.TotalWaysToSumII]: [[number, number[]], number];
-  [CodingContractName.SpiralizeMatrix]: [number[][], number[]];
-  [CodingContractName.ArrayJumpingGame]: [number[], 1 | 0];
-  [CodingContractName.ArrayJumpingGameII]: [number[], number];
-  [CodingContractName.MergeOverlappingIntervals]: [[number, number][], [number, number][]];
-  [CodingContractName.GenerateIPAddresses]: [string, string[]];
-  [CodingContractName.AlgorithmicStockTraderI]: [number[], number];
-  [CodingContractName.AlgorithmicStockTraderII]: [number[], number];
-  [CodingContractName.AlgorithmicStockTraderIII]: [number[], number];
-  [CodingContractName.AlgorithmicStockTraderIV]: [[number, number[]], number];
-  [CodingContractName.MinimumPathSumInATriangle]: [number[][], number];
-  [CodingContractName.UniquePathsInAGridI]: [[number, number], number];
-  [CodingContractName.UniquePathsInAGridII]: [(1 | 0)[][], number];
-  [CodingContractName.ShortestPathInAGrid]: [(1 | 0)[][], string];
-  [CodingContractName.SanitizeParenthesesInExpression]: [string, string[]];
-  [CodingContractName.FindAllValidMathExpressions]: [[string, number], string[]];
-  [CodingContractName.HammingCodesIntegerToEncodedBinary]: [number, string];
-  [CodingContractName.HammingCodesEncodedBinaryToInteger]: [string, number];
-  [CodingContractName.Proper2ColoringOfAGraph]: [[number, [number, number][]], (1 | 0)[]];
-  [CodingContractName.CompressionIRLECompression]: [string, string];
-  [CodingContractName.CompressionIILZDecompression]: [string, string];
-  [CodingContractName.CompressionIIILZCompression]: [string, string];
-  [CodingContractName.EncryptionICaesarCipher]: [[string, number], string];
-  [CodingContractName.EncryptionIIVigenereCipher]: [[string, string], string];
-  [CodingContractName.SquareRoot]: [bigint, bigint, [string, string]];
+  "Find Largest Prime Factor": [number, number];
+  "Subarray with Maximum Sum": [number[], number];
+  "Total Ways to Sum": [number, number];
+  "Total Ways to Sum II": [[number, number[]], number];
+  "Spiralize Matrix": [number[][], number[]];
+  "Array Jumping Game": [number[], 1 | 0];
+  "Array Jumping Game II": [number[], number];
+  "Merge Overlapping Intervals": [[number, number][], [number, number][]];
+  "Generate IP Addresses": [string, string[]];
+  "Algorithmic Stock Trader I": [number[], number];
+  "Algorithmic Stock Trader II": [number[], number];
+  "Algorithmic Stock Trader III": [number[], number];
+  "Algorithmic Stock Trader IV": [[number, number[]], number];
+  "Minimum Path Sum in a Triangle": [number[][], number];
+  "Unique Paths in a Grid I": [[number, number], number];
+  "Unique Paths in a Grid II": [(1 | 0)[][], number];
+  "Shortest Path in a Grid": [(1 | 0)[][], string];
+  "Sanitize Parentheses in Expression": [string, string[]];
+  "Find All Valid Math Expressions": [[string, number], string[]];
+  "HammingCodes: Integer to Encoded Binary": [number, string];
+  "HammingCodes: Encoded Binary to Integer": [string, number];
+  "Proper 2-Coloring of a Graph": [[number, [number, number][]], (1 | 0)[]];
+  "Compression I: RLE Compression": [string, string];
+  "Compression II: LZ Decompression": [string, string];
+  "Compression III: LZ Compression": [string, string];
+  "Encryption I: Caesar Cipher": [[string, number], string];
+  "Encryption II: Vigenère Cipher": [[string, string], string];
+  "Square Root": [bigint, bigint, [string, string]];
+  "Total Number of Primes": [number[], number];
 };
 
 export type CodingContractObject = {
@@ -9246,19 +9259,19 @@ export type CodingContractObject = {
 }[keyof CodingContractSignatures];
 
 /** @public */
-export type NSEnums = {
-  CityName: typeof CityName;
-  CrimeType: typeof CrimeType;
-  FactionWorkType: typeof FactionWorkType;
-  GymType: typeof GymType;
-  JobName: typeof JobName;
-  JobField: typeof JobField;
-  LocationName: typeof LocationName;
-  ToastVariant: typeof ToastVariant;
-  UniversityClassType: typeof UniversityClassType;
-  CompanyName: typeof CompanyName;
-  FactionName: typeof FactionName;
-  CodingContractName: typeof CodingContractName;
+type NSEnums = {
+  CityName: CityNameEnumType;
+  CrimeType: CrimeEnumType;
+  FactionWorkType: FactionWorkEnumType;
+  GymType: GymEnumType;
+  JobName: JobNameEnumType;
+  JobField: JobFieldEnumType;
+  LocationName: LocationNameEnumType;
+  ToastVariant: ToastVariantEnumType;
+  UniversityClassType: UniversityClassEnumType;
+  CompanyName: CompanyNameEnumType;
+  FactionName: FactionNameEnumType;
+  CodingContractName: CodingContractNameEnumType;
 };
 
 /**
@@ -9281,7 +9294,7 @@ export interface OfficeAPI {
    * @param employeePosition - Position to place into. Defaults to "Unassigned".
    * @returns True if an employee was hired, false otherwise
    */
-  hireEmployee(divisionName: string, city: CityName | `${CityName}`, employeePosition?: CorpEmployeePosition): boolean;
+  hireEmployee(divisionName: string, city: CityName, employeePosition?: CorpEmployeePosition): boolean;
 
   /**
    * Upgrade office size.
@@ -9293,7 +9306,7 @@ export interface OfficeAPI {
    * @param city - Name of the city
    * @param size - Amount of positions to open
    */
-  upgradeOfficeSize(divisionName: string, city: CityName | `${CityName}`, size: number): void;
+  upgradeOfficeSize(divisionName: string, city: CityName, size: number): void;
 
   /**
    * Throw a party for your employees.
@@ -9306,7 +9319,7 @@ export interface OfficeAPI {
    * @param costPerEmployee - Amount to spend per employee.
    * @returns Multiplier for morale, or zero on failure
    */
-  throwParty(divisionName: string, city: CityName | `${CityName}`, costPerEmployee: number): number;
+  throwParty(divisionName: string, city: CityName, costPerEmployee: number): number;
 
   /**
    * Buy tea for your employees.
@@ -9318,7 +9331,7 @@ export interface OfficeAPI {
    * @param city - Name of the city
    * @returns true if buying tea was successful, false otherwise
    */
-  buyTea(divisionName: string, city: CityName | `${CityName}`): boolean;
+  buyTea(divisionName: string, city: CityName): boolean;
 
   /**
    * Hire AdVert.
@@ -9351,7 +9364,7 @@ export interface OfficeAPI {
    * @param city - Name of the city
    * @returns Office data
    */
-  getOffice(divisionName: string, city: CityName | `${CityName}`): Office;
+  getOffice(divisionName: string, city: CityName): Office;
 
   /**
    * Get the cost to hire AdVert.
@@ -9411,7 +9424,7 @@ export interface OfficeAPI {
    * @param amount - Number of employees to assign to that job
    * @returns true if the employee count reached the target amount, false if not
    */
-  setAutoJobAssignment(divisionName: string, city: CityName | `${CityName}`, job: string, amount: number): boolean;
+  setAutoJobAssignment(divisionName: string, city: CityName, job: string, amount: number): boolean;
 
   /**
    * Get the cost to upgrade an office.
@@ -9424,7 +9437,7 @@ export interface OfficeAPI {
    * @param size - Amount of positions to open
    * @returns Cost of upgrading the office
    */
-  getOfficeSizeUpgradeCost(divisionName: string, city: CityName | `${CityName}`, size: number): number;
+  getOfficeSizeUpgradeCost(divisionName: string, city: CityName, size: number): number;
 }
 
 /**
@@ -9448,13 +9461,7 @@ export interface WarehouseAPI {
    * @param amt - Amount to sell, can be "MAX"
    * @param price - Price to sell, can be "MP"
    */
-  sellMaterial(
-    divisionName: string,
-    city: CityName | `${CityName}`,
-    materialName: string,
-    amt: string,
-    price: string,
-  ): void;
+  sellMaterial(divisionName: string, city: CityName, materialName: string, amt: string, price: string): void;
 
   /**
    * Set product sell data.
@@ -9471,7 +9478,7 @@ export interface WarehouseAPI {
    */
   sellProduct(
     divisionName: string,
-    city: CityName | `${CityName}`,
+    city: CityName,
     productName: string,
     amt: string,
     price: string,
@@ -9499,7 +9506,7 @@ export interface WarehouseAPI {
    * @param city - Name of the city
    * @param enabled - Use true to enable, false otherwise.
    */
-  setSmartSupply(divisionName: string, city: CityName | `${CityName}`, enabled: boolean): void;
+  setSmartSupply(divisionName: string, city: CityName, enabled: boolean): void;
 
   /**
    * Set whether smart supply uses leftovers before buying.
@@ -9512,12 +9519,7 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material
    * @param option - Smart supply option. Set "leftovers" to use leftovers, "imports" to use only imported materials, and "none" to not use stored materials.
    */
-  setSmartSupplyOption(
-    divisionName: string,
-    city: CityName | `${CityName}`,
-    materialName: string,
-    option: CorpSmartSupplyOption,
-  ): void;
+  setSmartSupplyOption(divisionName: string, city: CityName, materialName: string, option: CorpSmartSupplyOption): void;
 
   /**
    * Set material buy data.
@@ -9530,7 +9532,7 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material
    * @param amt - Amount of material to buy
    */
-  buyMaterial(divisionName: string, city: CityName | `${CityName}`, materialName: string, amt: number): void;
+  buyMaterial(divisionName: string, city: CityName, materialName: string, amt: number): void;
 
   /**
    * Set material to bulk-buy.
@@ -9543,7 +9545,7 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material
    * @param amt - Amount of material to buy
    */
-  bulkPurchase(divisionName: string, city: CityName | `${CityName}`, materialName: string, amt: number): void;
+  bulkPurchase(divisionName: string, city: CityName, materialName: string, amt: number): void;
 
   /**
    * Get warehouse data.
@@ -9555,7 +9557,7 @@ export interface WarehouseAPI {
    * @param city - Name of the city
    * @returns Warehouse data
    */
-  getWarehouse(divisionName: string, city: CityName | `${CityName}`): Warehouse;
+  getWarehouse(divisionName: string, city: CityName): Warehouse;
 
   /**
    * Get product data.
@@ -9568,7 +9570,7 @@ export interface WarehouseAPI {
    * @param productName - Name of the product
    * @returns Product data
    */
-  getProduct(divisionName: string, cityName: CityName | `${CityName}`, productName: string): Product;
+  getProduct(divisionName: string, cityName: CityName, productName: string): Product;
 
   /**
    * Get material data.
@@ -9581,7 +9583,7 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material
    * @returns Material data
    */
-  getMaterial(divisionName: string, city: CityName | `${CityName}`, materialName: string): Material;
+  getMaterial(divisionName: string, city: CityName, materialName: string): Material;
 
   /**
    * Set Market-TA1 for a material.
@@ -9594,7 +9596,7 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material
    * @param on - Use true to enable, false otherwise.
    */
-  setMaterialMarketTA1(divisionName: string, city: CityName | `${CityName}`, materialName: string, on: boolean): void;
+  setMaterialMarketTA1(divisionName: string, city: CityName, materialName: string, on: boolean): void;
 
   /**
    * Set Market-TA2 for a material.
@@ -9607,7 +9609,7 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material
    * @param on - Use true to enable, false otherwise.
    */
-  setMaterialMarketTA2(divisionName: string, city: CityName | `${CityName}`, materialName: string, on: boolean): void;
+  setMaterialMarketTA2(divisionName: string, city: CityName, materialName: string, on: boolean): void;
 
   /**
    * Set Market-TA1 for a product.
@@ -9648,9 +9650,9 @@ export interface WarehouseAPI {
    */
   exportMaterial(
     sourceDivision: string,
-    sourceCity: CityName | `${CityName}`,
+    sourceCity: CityName,
     targetDivision: string,
-    targetCity: CityName | `${CityName}`,
+    targetCity: CityName,
     materialName: string,
     amt: number | string,
   ): void;
@@ -9669,9 +9671,9 @@ export interface WarehouseAPI {
    */
   cancelExportMaterial(
     sourceDivision: string,
-    sourceCity: CityName | `${CityName}`,
+    sourceCity: CityName,
     targetDivision: string,
-    targetCity: CityName | `${CityName}`,
+    targetCity: CityName,
     materialName: string,
   ): void;
 
@@ -9684,7 +9686,7 @@ export interface WarehouseAPI {
    * @param divisionName - Name of the division
    * @param city - Name of the city
    */
-  purchaseWarehouse(divisionName: string, city: CityName | `${CityName}`): void;
+  purchaseWarehouse(divisionName: string, city: CityName): void;
 
   /**
    * Upgrade warehouse.
@@ -9696,7 +9698,7 @@ export interface WarehouseAPI {
    * @param city - Name of the city
    * @param amt - Amount of upgrades. Defaults to 1.
    */
-  upgradeWarehouse(divisionName: string, city: CityName | `${CityName}`, amt?: number): void;
+  upgradeWarehouse(divisionName: string, city: CityName, amt?: number): void;
 
   /**
    * Create a new product.
@@ -9712,7 +9714,7 @@ export interface WarehouseAPI {
    */
   makeProduct(
     divisionName: string,
-    city: CityName | `${CityName}`,
+    city: CityName,
     productName: string,
     designInvest: number,
     marketingInvest: number,
@@ -9729,12 +9731,7 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material.
    * @param qty - Amount to limit to. Pass a negative value to remove the limit instead.
    */
-  limitMaterialProduction(
-    divisionName: string,
-    city: CityName | `${CityName}`,
-    materialName: string,
-    qty: number,
-  ): void;
+  limitMaterialProduction(divisionName: string, city: CityName, materialName: string, qty: number): void;
 
   /**
    * Limit product production.
@@ -9747,7 +9744,7 @@ export interface WarehouseAPI {
    * @param productName - Name of the product.
    * @param qty - Amount to limit to. Pass a negative value to remove the limit instead.
    */
-  limitProductProduction(divisionName: string, city: CityName | `${CityName}`, productName: string, qty: number): void;
+  limitProductProduction(divisionName: string, city: CityName, productName: string, qty: number): void;
 
   /**
    * Get the cost to upgrade a warehouse to the next level.
@@ -9760,7 +9757,7 @@ export interface WarehouseAPI {
    * @param amt - Amount of upgrades. Optional. Defaults to 1.
    * @returns Cost to upgrade
    */
-  getUpgradeWarehouseCost(divisionName: string, city: CityName | `${CityName}`, amt?: number): number;
+  getUpgradeWarehouseCost(divisionName: string, city: CityName, amt?: number): number;
 
   /**
    * Check if you have a warehouse in city.
@@ -9770,19 +9767,22 @@ export interface WarehouseAPI {
    *
    * @returns true if warehouse is present, false if not.
    */
-  hasWarehouse(divisionName: string, city: CityName | `${CityName}`): boolean;
+  hasWarehouse(divisionName: string, city: CityName): boolean;
 }
 
 /**
  * @public
  */
-declare enum CreatingCorporationCheckResult {
-  Success = "Success",
-  NoSf3OrDisabled = "NoSf3OrDisabled",
-  CorporationExists = "CorporationExists",
-  UseSeedMoneyOutsideBN3 = "UseSeedMoneyOutsideBN3",
-  DisabledBySoftCap = "DisabledBySoftCap",
-}
+type CreatingCorporationCheckResultEnumType = {
+  Success: "Success";
+  NoSf3OrDisabled: "NoSf3OrDisabled";
+  CorporationExists: "CorporationExists";
+  UseSeedMoneyOutsideBN3: "UseSeedMoneyOutsideBN3";
+  DisabledBySoftCap: "DisabledBySoftCap";
+};
+
+/** @public */
+type CreatingCorporationCheckResult = _ValueOf<CreatingCorporationCheckResultEnumType>;
 
 /**
  * Corporation API
@@ -9953,7 +9953,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @param amountCash - Amount of money to bribe
    * @returns true if successful, false if not
    */
-  bribe(factionName: string, amountCash: number): boolean;
+  bribe(factionName: FactionName, amountCash: number): boolean;
 
   /**
    * Get corporation data.
@@ -9996,7 +9996,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @param divisionName - Name of the division
    * @param city - Name of the city
    */
-  expandCity(divisionName: string, city: CityName | `${CityName}`): void;
+  expandCity(divisionName: string, city: CityName): void;
 
   /**
    * Unlock an upgrade.

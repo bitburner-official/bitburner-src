@@ -35,6 +35,19 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     console.error(error, errorInfo);
   }
 
+  /**
+   * When an error is thrown, this function is called twice and renders RecoveryRoot with two different errorData, even
+   * when there is only one error. The flow is roughly like this:
+   * - The error is thrown.
+   * - getDerivedStateFromError() -> Set hasError and error
+   * - render() -> Render RecoveryRoot with errorData1, which does not contain errorInfo and page
+   * - componentDidCatch() -> Set errorInfo and page
+   * - render() -> Render RecoveryRoot with errorData2, which contains errorInfo and page
+   *
+   * This means that if we use useEffect(()=>{}, [errorData]) in RecoveryRoot, that hook will be called twice with 2
+   * different errorData. The second errorData, which contains errorInfo and page, is the "final" value that is shown on
+   * the recovery screen.
+   */
   render(): React.ReactNode {
     if (this.state.hasError) {
       let errorData: IErrorData | undefined;

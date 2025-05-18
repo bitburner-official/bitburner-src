@@ -7,7 +7,7 @@ import { boardStateFromSimpleBoard } from "../boardAnalysis/boardAnalysis";
 import { GoTutorialChallenge } from "./GoTutorialChallenge";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { getMaxFavor } from "../effects/effect";
+import { getMaxRep } from "../effects/effect";
 
 const captureChallenge = (
   <GoTutorialChallenge
@@ -149,8 +149,11 @@ export const GoInstructionsPage = (): React.ReactElement => {
               will increase the amount gained, but is not required.
               <br />
               <br />
-              Two wins in a row against a faction will give you +1 favor to that faction (up to a max of
-              {getMaxFavor()} favor), if you are a member of that faction.
+              Two wins in a row against an opponent will give you {getMaxRep() / 200} rep converted to favor with that
+              faction (up to a max of {getMaxRep()} favor), if you are a member of that faction.
+              <br />
+              The rep is immediately applied as favor, meaning it will increase reputation gain right away without
+              needing an install.
               <br />
               <br />
               For experienced Go players: IPvGO uses the old traditional Go score rules, area scoring, rather than the

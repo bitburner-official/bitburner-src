@@ -132,16 +132,27 @@ export function purchaseAugmentation(faction: Faction, augmentation: Augmentatio
 }
 
 export function processPassiveFactionRepGain(numCycles: number): void {
-  if (Player.bitNodeN === 2) return;
+  // Passive gain is disabled in some BitNodes (e.g., BN2).
+  if (currentNodeMults.FactionPassiveRepGain === 0) {
+    return;
+  }
   for (const name of getRecordKeys(Factions)) {
-    if (isFactionWork(Player.currentWork) && name === Player.currentWork.factionName) continue;
+    if (isFactionWork(Player.currentWork) && name === Player.currentWork.factionName) {
+      continue;
+    }
     const faction = Factions[name];
-    if (!faction.isMember) continue;
-    // No passive rep for special factions
+    if (!faction.isMember) {
+      continue;
+    }
+    // No passive rep for special factions.
     const info = faction.getInfo();
-    if (!info.offersWork()) continue;
+    if (info.special) {
+      continue;
+    }
     // No passive rep for gangs.
-    if (Player.getGangName() === name) continue;
+    if (Player.getGangName() === name) {
+      continue;
+    }
     // 0 favor = 1%/s
     // 50 favor = 6%/s
     // 100 favor = 11%/s
@@ -152,7 +163,11 @@ export function processPassiveFactionRepGain(numCycles: number): void {
     const fRep = getFactionFieldWorkRepGain(Player, faction.favor);
     const rate = Math.max(hRep * favorMult, sRep * favorMult, fRep * favorMult, 1 / 120);
 
-    faction.playerReputation += rate * numCycles * Player.mults.faction_rep * currentNodeMults.FactionPassiveRepGain;
+    /**
+     * Do not apply Player.mults.faction_rep here. That multiplier was applied in getHackingWorkRepGain and similar
+     * functions.
+     */
+    faction.playerReputation += rate * numCycles * currentNodeMults.FactionPassiveRepGain;
   }
 }
 

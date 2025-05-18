@@ -39,6 +39,7 @@ import { useBoolean } from "../hooks";
 import { ComparisonIcon } from "./ComparisonIcon";
 import { SaveData } from "../../../types";
 import { handleGetSaveDataInfoError } from "../../../utils/ErrorHandler";
+import { OptionSwitch } from "../OptionSwitch";
 
 const useStyles = makeStyles()((theme: Theme) => ({
   root: {
@@ -99,17 +100,24 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
   const [isImportModalOpen, { on: openImportModal, off: closeImportModal }] = useBoolean(false);
   const [isSkillsExpanded, { toggle: toggleSkillsExpand }] = useBoolean(true);
   const [isOthersExpanded, { toggle: toggleOthersExpand }] = useBoolean(true);
-  const [headback, setHeadback] = useState(false);
+  const [headBack, setHeadBack] = useState(false);
+  const [syncSteamAchievements, setSyncSteamAchievements] = useState(true);
 
   const handleGoBack = (): void => {
     Settings.AutosaveInterval = initialAutosave;
     pushImportResult(false);
     Router.allowRouting(true);
-    setHeadback(true);
+    setHeadBack(true);
   };
 
   const handleImport = async (): Promise<void> => {
-    await saveObject.importGame(props.saveData, true);
+    let overrideSettings = undefined;
+    if (syncSteamAchievements !== importData?.playerData?.syncSteamAchievements) {
+      overrideSettings = {
+        SyncSteamAchievements: syncSteamAchievements,
+      };
+    }
+    await saveObject.importGame(props.saveData, overrideSettings);
   };
 
   useEffect(() => {
@@ -120,8 +128,10 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
   }, []);
 
   useEffect(() => {
-    if (headback) Router.toPage(Page.Terminal);
-  }, [headback]);
+    if (headBack) {
+      Router.toPage(Page.Terminal);
+    }
+  }, [headBack]);
 
   useEffect(() => {
     async function fetchData(): Promise<void> {
@@ -130,8 +140,7 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
 
       setImportData(dataBeingImported);
       setCurrentData(dataCurrentlyInGame);
-
-      return Promise.resolve();
+      setSyncSteamAchievements(dataBeingImported.playerData?.syncSteamAchievements ?? true);
     }
     if (props.saveData) {
       fetchData().catch((error) => {
@@ -385,6 +394,19 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
           </TableBody>
         </Table>
       </TableContainer>
+
+      <br />
+      <OptionSwitch
+        checked={syncSteamAchievements}
+        onChange={(newValue) => setSyncSteamAchievements(newValue)}
+        text="Sync Steam achievements"
+        tooltip={
+          <>
+            This setting is only used in the Steam app. If this setting is enabled, the game will automatically sync
+            your unlocked Steam achievements to Steam Cloud.
+          </>
+        }
+      />
 
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <ButtonGroup>

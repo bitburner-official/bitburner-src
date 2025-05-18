@@ -10,8 +10,6 @@ import { getFileType, getFileTypeFeature } from "../../../utils/ScriptTransforme
 import { hasContractExtension } from "../../../Paths/ContractFilePath";
 import { hasCacheFileExtension } from "../../../DarkNet/effects/effects";
 
-// 2.3: Globbing implementation was removed from this file. Globbing will be reintroduced as broader functionality and integrated here.
-
 interface EditorParameters {
   args: (string | number | boolean)[];
   server: BaseServer;

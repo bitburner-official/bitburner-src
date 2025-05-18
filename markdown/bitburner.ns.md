@@ -37,6 +37,7 @@ export async function main(ns) {
 |  [corporation](./bitburner.ns.corporation.md) | <code>readonly</code> | [Corporation](./bitburner.corporation.md) | Namespace for corporation functions. Contains spoilers. |
 |  [dnet](./bitburner.ns.dnet.md) | <code>readonly</code> | [Darknet](./bitburner.darknet.md) | Namespace for darknet functions. Contains spoilers. |
 |  [enums](./bitburner.ns.enums.md) |  | [NSEnums](./bitburner.nsenums.md) |  |
+|  [format](./bitburner.ns.format.md) | <code>readonly</code> | [Format](./bitburner.format.md) | Namespace for formatting functions. |
 |  [formulas](./bitburner.ns.formulas.md) | <code>readonly</code> | [Formulas](./bitburner.formulas.md) | Namespace for formulas functions. |
 |  [gang](./bitburner.ns.gang.md) | <code>readonly</code> | [Gang](./bitburner.gang.md) | Namespace for gang functions. Contains spoilers. |
 |  [go](./bitburner.ns.go.md) | <code>readonly</code> | [Go](./bitburner.go.md) | Namespace for Go functions. |
@@ -72,9 +73,6 @@ export async function main(ns) {
 |  [exit()](./bitburner.ns.exit.md) | Terminates the current script immediately. |
 |  [fileExists(filename, host)](./bitburner.ns.fileexists.md) | Check if a file exists. |
 |  [flags(schema)](./bitburner.ns.flags.md) | Parse command line flags. |
-|  [formatNumber(n, fractionalDigits, suffixStart, isInteger)](./bitburner.ns.formatnumber.md) | Format a number. |
-|  [formatPercent(n, fractionalDigits, suffixStart)](./bitburner.ns.formatpercent.md) | Format a number as a percentage. |
-|  [formatRam(n, fractionalDigits)](./bitburner.ns.formatram.md) | Format a number as an amount of ram. |
 |  [ftpcrack(host)](./bitburner.ns.ftpcrack.md) | Runs FTPCrack.exe on a server. |
 |  [getBitNodeMultipliers(n, lvl)](./bitburner.ns.getbitnodemultipliers.md) | Get the current BitNode multipliers. |
 |  [getFavorToDonate()](./bitburner.ns.getfavortodonate.md) | Returns the amount of Faction favor required to be able to donate to a faction. |
@@ -113,8 +111,7 @@ export async function main(ns) {
 |  [getServerRequiredHackingLevel(host)](./bitburner.ns.getserverrequiredhackinglevel.md) | Returns the required hacking level of the target server. |
 |  [getServerSecurityLevel(host)](./bitburner.ns.getserversecuritylevel.md) | Get server security level. |
 |  [getServerUsedRam(host)](./bitburner.ns.getserverusedram.md) | Get the used RAM on a server. |
-|  [getSharePower()](./bitburner.ns.getsharepower.md) | Share Power has a multiplicative effect on rep/second while doing work for a faction. Share Power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate. |
-|  [getTimeSinceLastAug()](./bitburner.ns.gettimesincelastaug.md) | Returns the amount of time in milliseconds that have passed since you last installed Augmentations. |
+|  [getSharePower()](./bitburner.ns.getsharepower.md) | Share power has a multiplicative effect on rep/second while doing work for a faction. Share power increases incrementally for every thread of share running on your server network, but at a sharply decreasing rate. |
 |  [getTotalScriptExpGain()](./bitburner.ns.gettotalscriptexpgain.md) | Get the exp gain of all scripts. |
 |  [getTotalScriptIncome()](./bitburner.ns.gettotalscriptincome.md) | Get the income of all scripts. |
 |  [getWeakenTime(host)](./bitburner.ns.getweakentime.md) | Get the execution time of a weaken() call. |
@@ -138,7 +135,6 @@ export async function main(ns) {
 |  [moveTail(x, y, pid)](./bitburner.ns.movetail.md) | Move a tail window. This function is deprecated and will be removed in a later version. |
 |  [mv(host, source, destination)](./bitburner.ns.mv.md) | Move a file on the target server. |
 |  [nextPortWrite(port)](./bitburner.ns.nextportwrite.md) | Listen for a port write. |
-|  [nFormat(n, format)](./bitburner.ns.nformat.md) | Format a number using the numeral library. This function is deprecated and will be removed in a later version. |
 |  [nuke(host)](./bitburner.ns.nuke.md) | Runs NUKE.exe on a server. |
 |  [peek(portNumber)](./bitburner.ns.peek.md) | Get a copy of the data from a port without popping it. |
 |  [print(args)](./bitburner.ns.print.md) | Prints one or more values or variables to the script’s logs. |
@@ -162,13 +158,12 @@ export async function main(ns) {
 |  [self()](./bitburner.ns.self.md) | Returns the currently running script. |
 |  [serverExists(host)](./bitburner.ns.serverexists.md) | Returns a boolean denoting whether or not the specified server exists. |
 |  [setTitle(title, pid)](./bitburner.ns.settitle.md) | Set the title of the tail window of a script. This function is deprecated and will be removed in a later version. |
-|  [share()](./bitburner.ns.share.md) | Share the server's ram with your factions. |
+|  [share()](./bitburner.ns.share.md) | Share the server's ram with your factions to increase the reputation gain rate of faction work. This boost is applied to all faction work of all factions. |
 |  [sleep(millis)](./bitburner.ns.sleep.md) | Suspends the script for n milliseconds. |
 |  [spawn(script, threadOrOptions, args)](./bitburner.ns.spawn.md) | Terminate current script and start another in a defined number of milliseconds. |
 |  [sprintf(format, args)](./bitburner.ns.sprintf.md) | Format a string. |
 |  [sqlinject(host)](./bitburner.ns.sqlinject.md) | Runs SQLInject.exe on a server. |
 |  [tail(fn, host, args)](./bitburner.ns.tail.md) | Open the tail window of a script. This function is deprecated and will be removed in a later version. |
-|  [tFormat(milliseconds, milliPrecision)](./bitburner.ns.tformat.md) | Format time to a readable string. |
 |  [toast(msg, variant, duration)](./bitburner.ns.toast.md) | Queue a toast (bottom-right notification). |
 |  [tprint(args)](./bitburner.ns.tprint.md) | Prints one or more values or variables to the Terminal. |
 |  [tprintf(format, values)](./bitburner.ns.tprintf.md) | Prints a raw value or a variable to the Terminal. |

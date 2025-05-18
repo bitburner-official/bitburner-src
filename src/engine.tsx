@@ -48,9 +48,7 @@ import { Go } from "./Go/Go";
 import { EventEmitter } from "./utils/EventEmitter";
 import { Companies } from "./Company/Companies";
 import { resetGoPromises } from "./Go/boardAnalysis/goAI";
-import { hasDarknetAccess } from "./DarkNet/effects/effects";
-import { addDarknetBonusTime, storeDarknetCycles } from "./DarkNet/models/DarknetState";
-import { processDarknet } from "./DarkNet/controllers/NetworkMovement";
+import { getRecordEntries } from "./Types/Record";
 
 declare global {
   // This property is only available in the dev build
@@ -70,30 +68,8 @@ declare global {
 export const GameCycleEvents = new EventEmitter<[]>();
 
 /** Game engine. Handles the main game loop. */
-const Engine: {
-  _lastUpdate: number;
-  updateGame: (numCycles?: number) => void;
-  Counters: {
-    [key: string]: number | undefined;
-    autoSaveCounter: number;
-    updateSkillLevelsCounter: number;
-    updateDisplays: number;
-    updateDisplaysLong: number;
-    updateActiveScriptsDisplay: number;
-    createProgramNotifications: number;
-    augmentationsNotifications: number;
-    checkFactionInvitations: number;
-    passiveFactionGrowth: number;
-    messages: number;
-    mechanicProcess: number;
-    contractGeneration: number;
-    achievementsCounter: number;
-  };
-  decrementAllCounters: (numCycles?: number) => void;
-  checkCounters: () => void;
-  load: (saveData: SaveData) => Promise<void>;
-  start: () => void;
-} = {
+const Engine = {
+  isRunning: false,
   // Time variables (milliseconds unix epoch time)
   _lastUpdate: new Date().getTime(),
   updateGame: function (numCycles = 1) {
@@ -179,7 +155,7 @@ const Engine: {
   },
 
   decrementAllCounters: function (numCycles = 1) {
-    for (const [counterName, counter] of Object.entries(Engine.Counters)) {
+    for (const [counterName, counter] of getRecordEntries(Engine.Counters)) {
       if (counter === undefined) {
         exceptionAlert(new Error(`counter value is undefined. counterName: ${counterName}.`), true);
         continue;
@@ -255,7 +231,7 @@ const Engine: {
     }
   },
 
-  load: async function (saveData) {
+  load: async function (saveData: SaveData) {
     startExploits();
     setupUncaughtPromiseHandler();
     // Source files must be initialized early because save-game translation in
@@ -434,6 +410,7 @@ const Engine: {
   },
 
   start: function () {
+    this.isRunning = true;
     // Get time difference
     const _thisUpdate = new Date().getTime();
     let diff = _thisUpdate - Engine._lastUpdate;

@@ -4,7 +4,7 @@ import { purchaseHashUpgrade } from "../HacknetHelpers";
 import { HashManager } from "../HashManager";
 import { HashUpgrade } from "../HashUpgrade";
 
-import { ServerDropdown, ServerType } from "../../ui/React/ServerDropdown";
+import { ServerDropdown } from "../../ui/React/ServerDropdown";
 import { CompanyDropdown } from "../../ui/React/CompanyDropdown";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
@@ -18,6 +18,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { CompanyName, FactionName } from "@enums";
 import { PartialRecord } from "../../Types/Record";
 import { isMember } from "../../utils/EnumHelper";
+import { ServerOwnershipType } from "../../Server/ServerHelpers";
 
 interface IProps {
   hashManager: HashManager;
@@ -88,7 +89,7 @@ export function HacknetUpgradeElem(props: IProps): React.ReactElement {
           purchase={purchase}
           canPurchase={canPurchase}
           value={selectedServer}
-          serverType={ServerType.Foreign}
+          serverType={ServerOwnershipType.Foreign}
           onChange={changeTargetServer}
         />
       )}

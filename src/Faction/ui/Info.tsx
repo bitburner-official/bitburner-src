@@ -17,7 +17,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import InfoIcon from "@mui/icons-material/Info";
 import { useCycleRerender } from "../../ui/React/hooks";
-import { calculateFavorAfterResetting } from "../formulas/favor";
+import { addRepToFavor } from "../formulas/favor";
 import { knowAboutBitverse } from "../../BitNode/BitNodeUtils";
 
 interface IProps {
@@ -46,7 +46,7 @@ function DefaultAssignment(): React.ReactElement {
       Perform work/carry out assignments for your faction to help further its cause! By doing so, you will earn
       reputation for your faction. You will also gain reputation passively over time, although at a very slow
       rate.&nbsp;
-      {knowAboutBitverse() && <>Note that the passive reputation gain is disabled in BitNode 2. </>}
+      {knowAboutBitverse() && <>Note that the passive reputation gain is disabled in some BitNodes. </>}
       Earning reputation will allow you to purchase augmentations through this faction, which are powerful upgrades that
       enhance your abilities.
     </Typography>
@@ -74,8 +74,7 @@ export function Info(props: IProps): React.ReactElement {
           title={
             <>
               <Typography>
-                You will have{" "}
-                <Favor favor={calculateFavorAfterResetting(props.faction.favor, props.faction.playerReputation)} />{" "}
+                You will have <Favor favor={addRepToFavor(props.faction.favor, props.faction.playerReputation)} />{" "}
                 faction favor after installing an Augmentation.
               </Typography>
               <MathJax>{"\\(\\huge{r = \\text{total faction reputation}}\\)"}</MathJax>

@@ -1,4 +1,4 @@
-import { SaveData } from "./types";
+import type { SaveData } from "./types";
 
 function getDB(): Promise<IDBObjectStore> {
   return new Promise((resolve, reject) => {

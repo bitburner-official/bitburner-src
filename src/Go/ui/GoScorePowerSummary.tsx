@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableRow, Typography, Tooltip } from "@mui
 import { Player } from "@player";
 import { GoOpponent, GoColor } from "@enums";
 import { Go } from "../Go";
-import { getBonusText, getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "../effects/effect";
+import { getBonusText, getDifficultyMultiplier, getMaxRep, getWinstreakMultiplier } from "../effects/effect";
 import { boardStyles } from "../boardState/goStyles";
 import { formatNumber } from "../../ui/formatNumber";
 import { getOpponentStats } from "../boardAnalysis/scoring";
@@ -99,14 +99,19 @@ export const GoScorePowerSummary = ({ finalScore, opponent }: Props) => {
         <Tooltip
           title={
             <>
-              Two wins in a row against a faction will give you +1 favor to that faction <br />
-              (up to a max of {getMaxFavor()} favor), if you are a member of that faction
+              Two wins in a row against an opponent will give you {getMaxRep() / 200} rep converted to favor with that
+              faction (up to a max of {getMaxRep()} favor), if you are a member of that faction.
+              <br />
+              The rep is immediately applied as favor, meaning it will increase reputation gain right away without
+              needing an install.
             </>
           }
         >
           <Typography className={`${classes.inlineFlexBox} ${classes.keyText}`}>
             <span>Winstreak Bonus: </span>
-            <span>+1 favor to {opponent}</span>
+            <span>
+              {getMaxRep() / 200} reputation converted to favor with {opponent}
+            </span>
           </Typography>
         </Tooltip>
       ) : (

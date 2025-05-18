@@ -16,6 +16,7 @@ import { Requirement } from "../../ui/Components/Requirement";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
 import { Factions } from "../Factions";
+import { ShareOption } from "./ShareOption";
 
 export const InvitationsSeen = new Set<FactionName>();
 
@@ -290,6 +291,12 @@ export function FactionsRoot(): React.ReactElement {
           </Box>
         </span>
       </Box>
+      <div style={{ margin: "15px 0" }}>
+        <Typography variant="h5" color="primary">
+          Share RAM
+        </Typography>
+        <ShareOption rerender={rerender} />
+      </div>
       <span className="factions-rumors">
         {rumoredFactions.length > 0 && (
           <>

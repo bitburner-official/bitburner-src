@@ -224,6 +224,7 @@ const singularity = {
   getCurrentWork: SF4Cost(0.5),
 } as const;
 
+// Darknet API
 const dnet = {
   authenticate: 0.4,
   connectToSession: 0.05,
@@ -243,6 +244,13 @@ const dnet = {
   getOwnerAllocatedRam: 0,
   promoteStock: 2,
   phishingAttack: 2,
+} as const;
+
+const format = {
+  number: 0,
+  ram: 0,
+  percent: 0,
+  time: 0,
 } as const;
 
 // Gang API
@@ -511,6 +519,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   hacknet,
   stock,
   singularity,
+  format,
   gang,
   go,
   dnet,
@@ -621,12 +630,6 @@ export const RamCosts: RamCostTree<NSFull> = {
   getScriptExpGain: RamCostConstants.GetScript,
   getRunningScript: RamCostConstants.GetRunningScript,
   ramOverride: 0,
-  formatNumber: 0,
-  formatRam: 0,
-  formatPercent: 0,
-  nFormat: 0,
-  tFormat: 0,
-  getTimeSinceLastAug: RamCostConstants.GetHackTime,
   prompt: 0,
   wget: 0,
   getFavorToDonate: RamCostConstants.GetFavorToDonate,
@@ -663,6 +666,7 @@ export const RamCosts: RamCostTree<NSFull> = {
       calculateRepToFavor: 0,
       repFromDonation: 0,
       donationForRep: 0,
+      sharePower: 0,
     },
     skills: {
       calculateSkill: 0,

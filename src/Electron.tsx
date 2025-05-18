@@ -207,3 +207,11 @@ export function pushDisableRestore(): void {
 
   bridge.send("push-disable-restore", { duration: 1000 * 60 });
 }
+
+export function activateSteamAchievements(achievements: string[]): void {
+  const bridge = window.electronBridge;
+  if (!bridge) {
+    return;
+  }
+  bridge.send("activate-achievements", { achievements });
+}
