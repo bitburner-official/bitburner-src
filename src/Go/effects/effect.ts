@@ -23,22 +23,24 @@ export function CalculateEffect(nodes: number, faction: GoOpponent): number {
 
 /**
  * Get maximum favor that you can gain from IPvGO win streaks
- * for factions you are a member of
+ * for factions you are a member of.
+ *
+ * This is added as converted rep to avoid making the equivalent value of the favor in rep very different as you approach 150 favor
  */
-export function getMaxFavor() {
+export function getMaxRep() {
   const sourceFileLevel = Player.activeSourceFileLvl(14);
 
   if (sourceFileLevel === 1) {
-    return 80;
+    return 200_000;
   }
   if (sourceFileLevel === 2) {
-    return 100;
+    return 300_000;
   }
   if (sourceFileLevel >= 3) {
-    return 120;
+    return 400_000;
   }
 
-  return 40;
+  return 100_000;
 }
 
 /**

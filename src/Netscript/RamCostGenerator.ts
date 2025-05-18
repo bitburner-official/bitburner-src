@@ -224,6 +224,13 @@ const singularity = {
   getCurrentWork: SF4Cost(0.5),
 } as const;
 
+const format = {
+  number: 0,
+  ram: 0,
+  percent: 0,
+  time: 0,
+} as const;
+
 // Gang API
 const gang = {
   createGang: RamCostConstants.GangApiBase / 4,
@@ -490,6 +497,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   hacknet,
   stock,
   singularity,
+  format,
   gang,
   go,
   bladeburner,
@@ -599,10 +607,6 @@ export const RamCosts: RamCostTree<NSFull> = {
   getScriptExpGain: RamCostConstants.GetScript,
   getRunningScript: RamCostConstants.GetRunningScript,
   ramOverride: 0,
-  formatNumber: 0,
-  formatRam: 0,
-  formatPercent: 0,
-  tFormat: 0,
   prompt: 0,
   wget: 0,
   getFavorToDonate: RamCostConstants.GetFavorToDonate,

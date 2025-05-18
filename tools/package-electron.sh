@@ -17,4 +17,13 @@ cp -r electron/* .package
 
 BUILD_PLATFORM="${1:-"all"}"
 # And finally build the app.
-npm run electron:packager-$BUILD_PLATFORM
+case $BUILD_PLATFORM in
+  "win")
+    electron-packager .package bitburner --platform win32 --arch x64,arm64 --out .build --overwrite --icon .package/icon.ico --app-copyright "Copyright (C) 2024 Bitburner";;
+  "linux")
+    electron-packager .package bitburner --platform linux --arch x64,arm64 --out .build --overwrite --app-copyright "Copyright (C) 2024 Bitburner";;
+  "mac")
+    electron-packager .package bitburner --platform darwin --arch x64,arm64 --out .build --overwrite --icon .package/icon.icns --app-copyright "Copyright (C) 2024 Bitburner";;
+  *)
+    electron-packager .package bitburner --platform win32,linux,darwin --arch x64,arm64 --out .build --overwrite --icon .package/icon --app-copyright "Copyright (C) 2024 Bitburner";;
+esac

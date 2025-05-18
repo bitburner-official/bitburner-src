@@ -5,11 +5,12 @@ import { GoOpponent, GoColor } from "@enums";
 import { newOpponentStats } from "../Constants";
 import { getAllChains, getPlayerNeighbors } from "./boardAnalysis";
 import { getKomi, resetAI } from "./goAI";
-import { getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "../effects/effect";
+import { getDifficultyMultiplier, getMaxRep, getWinstreakMultiplier } from "../effects/effect";
 import { isNotNullish } from "../boardState/boardState";
 import { Factions } from "../../Faction/Factions";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { Go, GoEvents } from "../Go";
+import { addRepToFavor } from "../../Faction/formulas/favor";
 
 /**
  * Returns the score of the current board.
@@ -49,7 +50,7 @@ export function endGoGame(boardState: BoardState) {
 
   boardState.previousPlayer = null;
   const statusToUpdate = getOpponentStats(boardState.ai);
-  statusToUpdate.favor = statusToUpdate.favor ?? 0;
+  statusToUpdate.rep = statusToUpdate.rep ?? 0;
   const score = getScore(boardState);
 
   if (score[GoColor.black].sum < score[GoColor.white].sum) {
@@ -68,10 +69,13 @@ export function endGoGame(boardState: BoardState) {
       factionName &&
       statusToUpdate.winStreak % 2 === 0 &&
       Player.factions.includes(factionName) &&
-      statusToUpdate.favor < getMaxFavor()
+      statusToUpdate.rep < getMaxRep()
     ) {
-      Factions[factionName].setFavor(Factions[factionName].favor + 1);
-      statusToUpdate.favor++;
+      const currentFavor = Factions[factionName].favor;
+      const repToAdd = getMaxRep() / 200;
+      const newFavor = addRepToFavor(currentFavor, repToAdd);
+      Factions[factionName].setFavor(newFavor);
+      statusToUpdate.rep += repToAdd;
     }
   }
 

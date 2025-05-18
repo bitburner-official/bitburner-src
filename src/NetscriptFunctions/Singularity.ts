@@ -29,7 +29,7 @@ import { calculateHackingTime } from "../Hacking";
 import { Server } from "../Server/Server";
 import { netscriptCanHack } from "../Hacking/netscriptCanHack";
 import { FactionInfos } from "../Faction/FactionInfo";
-import { donate, repNeededToDonate } from "../Faction/formulas/donation";
+import { donate, favorNeededToDonate } from "../Faction/formulas/donation";
 import { InternalAPI, setRemovedFunctions } from "../Netscript/APIWrapper";
 import { enterBitNode } from "../RedPill";
 import { ClassWork } from "../Work/ClassWork";
@@ -47,7 +47,7 @@ import { JobTracks } from "../Company/data/JobTracks";
 import { ServerConstants } from "../Server/data/Constants";
 import { blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
-import { calculateFavorAfterResetting } from "../Faction/formulas/favor";
+import { addRepToFavor } from "../Faction/formulas/favor";
 import { validBitNodes } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { cat } from "../Terminal/commands/cat";
@@ -745,7 +745,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const companyName = getEnumHelper("CompanyName").nsGetMember(ctx, _companyName);
       const company = Companies[companyName];
-      return calculateFavorAfterResetting(company.favor, company.playerReputation) - company.favor;
+      return addRepToFavor(company.favor, company.playerReputation) - company.favor;
     },
     getFactionInviteRequirements: (ctx) => (_facName) => {
       helpers.checkSingularityAccess(ctx);
@@ -909,7 +909,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const facName = getEnumHelper("FactionName").nsGetMember(ctx, _facName);
       const faction = Factions[facName];
-      return calculateFavorAfterResetting(faction.favor, faction.playerReputation) - faction.favor;
+      return addRepToFavor(faction.favor, faction.playerReputation) - faction.favor;
     },
     donateToFaction: (ctx) => (_facName, _amt) => {
       helpers.checkSingularityAccess(ctx);
@@ -937,13 +937,13 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         return false;
       }
 
-      if (faction.favor < repNeededToDonate()) {
+      if (faction.favor < favorNeededToDonate()) {
         helpers.log(
           ctx,
           () =>
             `You do not have enough favor to donate to this faction. Have ${
               faction.favor
-            }, need ${repNeededToDonate()}`,
+            }, need ${favorNeededToDonate()}`,
         );
         return false;
       }

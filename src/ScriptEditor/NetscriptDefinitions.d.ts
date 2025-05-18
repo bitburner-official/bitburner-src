@@ -2762,7 +2762,7 @@ export interface Singularity {
    * ```js
    * const programName = "BruteSSH.exe";
    * const cost = ns.singularity.getDarkwebProgramCost(programName);
-   * if (cost > 0) ns.tprint(`${programName} costs $${ns.formatNumber(cost)}`);
+   * if (cost > 0) ns.tprint(`${programName} costs $${ns.format.number(cost)}`);
    * ```
    * @param programName - Name of program to check the price of
    * @returns Price of the specified darkweb program
@@ -3856,8 +3856,8 @@ export interface Bladeburner {
    * ```js
    * while (true) {
    *   const duration = await ns.bladeburner.nextUpdate();
-   *   ns.print(`Bladeburner Division completed ${ns.tFormat(duration)} of actions.`);
-   *   ns.print(`Bonus time remaining: ${ns.tFormat(ns.bladeburner.getBonusTime())}`);
+   *   ns.print(`Bladeburner Division completed ${ns.format.time(duration)} of actions.`);
+   *   ns.print(`Bonus time remaining: ${ns.format.time(ns.bladeburner.getBonusTime())}`);
    *   // Manage the Bladeburner division
    * }
    * ```
@@ -4001,6 +4001,85 @@ export interface CodingContract {
    * RAM cost: 0 GB
    */
   getContractTypes(): CodingContractName[];
+}
+
+/**
+ * Format API
+ * @public
+ */
+export interface Format {
+  /**
+   * Format a number.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a numeric string with the specified format options.
+   * This is the same function that the game itself uses to display numbers. The format also depends on the Numeric
+   * Display settings (all options on the "Numeric Display" options page)
+   * To format ram or percentages, see {@link Format.ram | format.ram} and {@link Format.percent | format.percent}
+   *
+   * This function has some quirky undocumented behaviors. This is a non-exhaustive list of those behaviors:
+   *
+   * - "Infinity" and "-Infinity" are returned as "∞" and "-∞", respectively.
+   *
+   * - If you disable the suffix form in the settings page or the absolute value is greater than or equal to 1e33, this
+   * function will use the exponential form. This means that, if Math.abs(n) >= 1e33, the returned value is always in
+   * the exponential form, regardless of the setting.
+   *
+   * Note that the behaviors listed above are "undocumented", in the sense that we don't make any guarantee about
+   * backward compatibility. You must not rely on those behaviors.
+   *
+   * @param n - Number to format.
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 3.
+   * @param suffixStart - How high a number must be before a suffix will be added. Optional, defaults to 1000.
+   * @param isInteger - Whether the number represents an integer. Integers do not display fractional digits until a suffix is present. Optional, defaults to false.
+   * @returns Formatted number.
+   */
+  number(n: number, fractionalDigits?: number, suffixStart?: number, isInteger?: boolean): string;
+
+  /**
+   * Format a number as an amount of ram.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a ram string with the specified number of fractional digits.
+   * This is the same function that the game itself uses to display ram. The format also depends on the Numeric Display
+   * settings (all options on the "Numeric Display" options page)
+   * To format plain numbers or percentages, see {@link Format.number | format.number} and {@link Format.percent | format.percent}
+   *
+   * @param n - Number to format as an amount of ram, in base units of GB (or GiB if that Numeric Display option is set).
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
+   * @returns Formatted ram amount.
+   */
+  ram(n: number, fractionalDigits?: number): string;
+
+  /**
+   * Format a number as a percentage.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * Converts a number into a percentage string with the specified number of fractional digits.
+   * This is the same function that the game itself uses to display percentages. The format also depends on the Numeric
+   * Display settings (all options on the "Numeric Display" options page)
+   * To format plain numbers or ram, see {@link Format.number | format.number} and {@link Format.ram | format.ram}
+   *
+   * @param n - Number to format as a percentage.
+   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
+   * @param suffixStart - When to switch the percentage to a multiplier. Default is 1e6 or x1.00m.
+   * @returns Formatted percentage.
+   */
+  percent(n: number, fractionalDigits?: number, suffixStart?: number): string;
+
+  /**
+   * Format time to a readable string.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param milliseconds - Number of millisecond to format.
+   * @param milliPrecision - Format time with subsecond precision. Defaults to false.
+   * @returns The formatted time.
+   */
+  time(milliseconds: number, milliPrecision?: boolean): string;
 }
 
 /**
@@ -4331,8 +4410,8 @@ export interface Gang {
    * ```js
    * while (true) {
    *   const duration = await ns.gang.nextUpdate();
-   *   ns.print(`Gang completed ${ns.tFormat(duration)} of activity.`);
-   *   ns.print(`Bonus time remaining: ${ns.tFormat(ns.gang.getBonusTime())}`);
+   *   ns.print(`Gang completed ${ns.format.time(duration)} of activity.`);
+   *   ns.print(`Bonus time remaining: ${ns.format.time(ns.gang.getBonusTime())}`);
    *   // Manage the Gang
    * }
    * ```
@@ -4353,12 +4432,19 @@ type GoOpponent =
 
 /** @public */
 type SimpleOpponentStats = {
+  /** Number of wins since last reset */
   wins: number;
+  /** Number of losses since last reset*/
   losses: number;
+  /** Current winstreak */
   winStreak: number;
+  /** Highest winstreak since last reset*/
   highestWinStreak: number;
-  favor: number;
+  /** Favor gain from winstreaks, calculated as converted rep */
+  rep: number;
+  /** Stat boost*/
   bonusPercent: number;
+  /** Description of stat boost */
   bonusDescription: string;
 };
 
@@ -6038,6 +6124,12 @@ export interface NS {
   readonly codingcontract: CodingContract;
 
   /**
+   * Namespace for formatting functions.
+   * @remarks RAM cost: 0 GB
+   */
+  readonly format: Format;
+
+  /**
    * Namespace for gang functions. Contains spoilers.
    * @remarks RAM cost: 0 GB
    */
@@ -7518,7 +7610,7 @@ export interface NS {
    * ```js
    * const ram = 2 ** 20;
    * const cost = ns.getPurchasedServerCost(ram);
-   * ns.tprint(`A purchased server with ${ns.formatRam(ram)} costs $${ns.formatNumber(cost)}`);
+   * ns.tprint(`A purchased server with ${ns.format.ram(ram)} costs $${ns.format.number(cost)}`);
    * ```
    * @param ram - Amount of RAM of a potential purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
    * @returns The cost to purchase a server with the specified amount of ram, or returns Infinity if ram is not a valid amount.
@@ -7980,79 +8072,6 @@ export interface NS {
    * @returns Formatted text.
    */
   vsprintf(format: string, args: any[]): string;
-
-  /**
-   * Format a number.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Converts a number into a numeric string with the specified format options.
-   * This is the same function that the game itself uses to display numbers. The format also depends on the Numeric
-   * Display settings (all options on the "Numeric Display" options page)
-   * To format ram or percentages, see {@link NS.formatRam | formatRam} and {@link NS.formatPercent | formatPercent}.
-   *
-   * This function has some quirky undocumented behaviors. This is a non-exhaustive list of those behaviors:
-   *
-   * - "Infinity" and "-Infinity" are returned as "∞" and "-∞", respectively.
-   *
-   * - If you disable the suffix form in the settings page or the absolute value is greater than or equal to 1e33, this
-   * function will use the exponential form. This means that, if Math.abs(n) >= 1e33, the returned value is always in
-   * the exponential form, regardless of the setting.
-   *
-   * Note that the behaviors listed above are "undocumented", in the sense that we don't make any guarantee about
-   * backward compatibility. You must not rely on those behaviors.
-   *
-   * @param n - Number to format.
-   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 3.
-   * @param suffixStart - How high a number must be before a suffix will be added. Optional, defaults to 1000. Must be greater than or equal to 1000 if specified.
-   * @param isInteger - Whether the number represents an integer. Integers do not display fractional digits until a suffix is present. Optional, defaults to false.
-   * @returns Formatted number.
-   */
-  formatNumber(n: number, fractionalDigits?: number, suffixStart?: number, isInteger?: boolean): string;
-
-  /**
-   * Format a number as an amount of ram.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Converts a number into a ram string with the specified number of fractional digits.
-   * This is the same function that the game itself uses to display ram. The format also depends on the Numeric Display
-   * settings (all options on the "Numeric Display" options page)
-   * To format plain numbers or percentages, see {@link NS.formatNumber | formatNumber} and {@link NS.formatPercent | formatPercent}
-   *
-   * @param n - Number to format as an amount of ram, in base units of GB (or GiB if that Numeric Display option is set).
-   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
-   * @returns Formatted ram amount.
-   */
-  formatRam(n: number, fractionalDigits?: number): string;
-
-  /**
-   * Format a number as a percentage.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * Converts a number into a percentage string with the specified number of fractional digits.
-   * This is the same function that the game itself uses to display percentages. The format also depends on the Numeric
-   * Display settings (all options on the "Numeric Display" options page)
-   * To format plain numbers or ram, see {@link NS.formatNumber | formatNumber} and {@link NS.formatRam | formatRam}
-   *
-   * @param n - Number to format as a percentage.
-   * @param fractionalDigits - Number of digits to show in the fractional part of the decimal number. Optional, defaults to 2.
-   * @param suffixStart - When to switch the percentage to a multiplier. Default is 1e6 or x1.00m.
-   * @returns Formatted percentage.
-   */
-  formatPercent(n: number, fractionalDigits?: number, suffixStart?: number): string;
-
-  /**
-   * Format time to a readable string.
-   * @remarks
-   * RAM cost: 0 GB
-   *
-   * @param milliseconds - Number of millisecond to format.
-   * @param milliPrecision - Format time with subsecond precision. Defaults to false.
-   * @returns The formatted time.
-   */
-  tFormat(milliseconds: number, milliPrecision?: boolean): string;
 
   /**
    * Prompt the player with an input modal.

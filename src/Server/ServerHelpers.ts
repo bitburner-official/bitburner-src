@@ -5,13 +5,23 @@ import { calculateGrowMoney, calculateServerGrowthLog } from "./formulas/grow";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { ServerConstants } from "./data/Constants";
 import { Player } from "@player";
-import { CompletedProgramName, LiteratureName } from "@enums";
+import { AugmentationName, CompletedProgramName, LiteratureName } from "@enums";
 import { Person as IPerson } from "@nsdefs";
 import { Server as IServer } from "@nsdefs";
 import { workerScripts } from "../Netscript/WorkerScripts";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 import { serverMetadata } from "./data/servers";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { HacknetServer } from "../Hacknet/HacknetServer";
+import { SpecialServers } from "./data/SpecialServers";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+
+export enum ServerOwnershipType {
+  All = 0,
+  Foreign = 1, // Non-owned servers
+  Owned = 2, // Home Computer, Purchased Servers, and Hacknet Servers
+  Purchased = 3, // Everything from Owned except home computer
+}
 
 /**
  * Constructs a new server, while also ensuring that the new server
@@ -270,4 +280,33 @@ export function getCoreBonus(cores = 1): number {
 export function getWeakenEffect(threads: number, cores: number): number {
   const coreBonus = getCoreBonus(cores);
   return ServerConstants.ServerWeakenAmount * threads * coreBonus * currentNodeMults.ServerWeakenRate;
+}
+
+export function checkServerOwnership(baseServer: BaseServer, serverType: ServerOwnershipType): boolean {
+  /**
+   * isOwnedServer is true if baseServer is home, private servers, or hacknet servers. Note that, with home computer,
+   * baseServer.purchasedByPlayer is true.
+   */
+  const isOwnedServer =
+    (baseServer instanceof Server && baseServer.purchasedByPlayer) || baseServer instanceof HacknetServer;
+  switch (serverType) {
+    case ServerOwnershipType.All:
+      return true;
+    case ServerOwnershipType.Foreign:
+      // Exclude home, private servers, hacknet servers.
+      if (isOwnedServer) {
+        return false;
+      }
+      // If the player has not installed TRP, exclude WD server.
+      return (
+        Player.hasAugmentation(AugmentationName.TheRedPill, true) || baseServer.hostname !== SpecialServers.WorldDaemon
+      );
+    case ServerOwnershipType.Owned:
+      return isOwnedServer;
+    case ServerOwnershipType.Purchased:
+      return isOwnedServer && baseServer.hostname !== SpecialServers.Home;
+    default:
+      throwIfReachable(serverType);
+  }
+  return false;
 }

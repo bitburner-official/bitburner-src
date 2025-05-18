@@ -273,7 +273,13 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       //fail silently if the script fails to compile (e.g. syntax error)
       return;
     }
-    if (!loadedModule || !loadedModule.autocomplete) return; // Doesn't have an autocomplete function.
+    if (!loadedModule) {
+      return;
+    }
+    // Return "--tail" if the player does not define the autocomplete function.
+    if (!loadedModule.autocomplete) {
+      return ["--tail"];
+    }
 
     const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
     let flags = {

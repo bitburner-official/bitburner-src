@@ -21,7 +21,7 @@ import { FactionName, FactionWorkType } from "@enums";
 import { GangButton } from "./GangButton";
 import { FactionWork } from "../../Work/FactionWork";
 import { useCycleRerender } from "../../ui/React/hooks";
-import { repNeededToDonate } from "../formulas/donation";
+import { favorNeededToDonate } from "../formulas/donation";
 
 type FactionRootProps = {
   faction: Faction;
@@ -103,7 +103,7 @@ function MainPage({ faction, rerender, onAugmentations }: IMainProps): React.Rea
 
   // Flags for whether special options (gang, sleeve purchases, donate, etc.)
   // should be shown
-  const favorToDonate = repNeededToDonate();
+  const favorToDonate = favorNeededToDonate();
   const canDonate = faction.favor >= favorToDonate;
   const canPurchaseSleeves = faction.name === FactionName.TheCovenant && Player.bitNodeN === 10;
 

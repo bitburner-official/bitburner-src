@@ -7,7 +7,7 @@ import { getOpponentStats, getScore } from "../boardAnalysis/scoring";
 import { GoGameboard } from "./GoGameboard";
 import { boardStyles } from "../boardState/goStyles";
 import { useRerender } from "../../ui/React/hooks";
-import { getBonusText, getMaxFavor } from "../effects/effect";
+import { getBonusText, getMaxRep } from "../effects/effect";
 import { formatNumber } from "../../ui/formatNumber";
 import { GoScoreSummaryTable } from "./GoScoreSummaryTable";
 import { getNewBoardState } from "../boardState/boardState";
@@ -115,15 +115,18 @@ export const GoHistoryPage = (): React.ReactElement => {
                   <Tooltip
                     title={
                       <>
-                        Two wins in a row against a faction will give you +1 favor to that faction <br />
-                        (up to a max of {getMaxFavor()} favor), if you are a member of that faction <br />
+                        Two wins in a row against an opponent will give you {getMaxRep() / 200} rep converted to favor
+                        with that faction (up to a max of {getMaxRep()} favor), if you are a member of that faction.
+                        <br />
+                        The rep is immediately applied as favor, meaning it will increase reputation gain right away
+                        without needing an install.
                       </>
                     }
                   >
                     <TableRow>
                       <TableCell className={classes.cellNone}>Favor from winstreaks:</TableCell>
                       <TableCell className={classes.cellNone}>
-                        {data.favor ?? 0} {data.favor === getMaxFavor() ? "(max)" : ""}
+                        {data.rep ?? 0} {data.rep === getMaxRep() ? "(max)" : ""}
                       </TableCell>
                     </TableRow>
                   </Tooltip>

@@ -378,7 +378,7 @@ export function getStats() {
       losses: details.losses,
       winStreak: details.winStreak,
       highestWinStreak: details.highestWinStreak,
-      favor: details.favor,
+      rep: details.rep,
       bonusPercent: effectPercent,
       bonusDescription: effectDescription,
     };
