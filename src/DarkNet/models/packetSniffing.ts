@@ -5,11 +5,11 @@ import {
   getPassword,
   Minigames,
   romanNumeralEncoder,
-} from "../controllers/DarknetServerGenerator";
-import { getName, PasswordResponse } from "./DnetServerData";
+} from "../controllers/ServerGenerator";
+import { getName, PasswordResponse } from "./DarknetServerData";
 import { LocationName } from "@enums";
 import { getDarknetData, getTwoCharsInPassword, isDarknetServer } from "../effects/effects";
-import { getDarknetServers, getServerSafely } from "../controllers/DarknetNetworkMovement";
+import { getDarknetServers, getServerSafely } from "../controllers/NetworkMovement";
 import { getExactCorrectChars, getMastermindResponse } from "../effects/authentication";
 import { getServerState } from "./DarknetState";
 

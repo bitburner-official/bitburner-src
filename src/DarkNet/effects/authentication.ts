@@ -2,9 +2,9 @@ import { BaseServer } from "../../Server/BaseServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { handleLabyrinthPassword, isLabyrinthServer } from "./labyrinth";
 import { handleFailedAuth, handleSuccessfulAuth, isDarknetServer } from "./effects";
-import { Minigames } from "../controllers/DarknetServerGenerator";
+import { Minigames } from "../controllers/ServerGenerator";
 import { Result } from "@nsdefs";
-import { PasswordResponse, ResponseStatus } from "../models/DnetServerData";
+import { PasswordResponse, ResponseStatus } from "../models/DarknetServerData";
 import { logPasswordAttempt } from "../models/packetSniffing";
 import { getServerState } from "../models/DarknetState";
 

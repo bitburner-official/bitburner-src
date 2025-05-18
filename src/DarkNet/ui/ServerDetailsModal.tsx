@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Modal } from "../../ui/React/Modal";
 import { Container, Card, SvgIcon, Typography, Tooltip } from "@mui/material";
-import { getIcon, Icon } from "../controllers/ServerIcon";
+import { getIcon, Icon } from "./ServerIcon";
 import { DarknetEvents, getServerState } from "../models/DarknetState";
 import { BaseServer } from "../../Server/BaseServer";
 import { ServerSummary } from "./ServerSummary";
@@ -106,7 +106,7 @@ export const ServerDetailsModal = ({
               <br />
             </>
           ) : (
-            <PasswordPrompt server={server} onClose={onClose} onSuccess={onSuccess} />
+            <PasswordPrompt server={server} onClose={onClose} onSuccess={() => void onSuccess()} />
           )}
           {isLabServer && canEnterLabManually ? (
             ""

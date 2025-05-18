@@ -1,5 +1,5 @@
-import { getRandomIcon, Minigames } from "../controllers/DarknetServerGenerator";
-import { Icon, labIcon } from "../controllers/ServerIcon";
+import { getRandomIcon, Minigames } from "../controllers/ServerGenerator";
+import { Icon, labIcon } from "../ui/ServerIcon";
 import { AddToAllServers, createUniqueRandomIp, GetServer } from "../../Server/AllServers";
 import {
   commonPasswordDictionary,
@@ -32,7 +32,7 @@ export type PasswordResponse = {
   responseTime?: number;
 };
 
-export type DnetServerData = {
+export type DarknetServerData = {
   icon: Icon | typeof labIcon;
   password: string;
   minigameType: Minigames;
@@ -43,13 +43,13 @@ export type DnetServerData = {
   y: number;
 };
 
-export type DnetServer = DnetServerData & {
+export type DnetServer = DarknetServerData & {
   hasStasisLink: boolean;
   ramBlock: number;
   logTrafficInterval: number;
 };
 
-export const DnetServerBuilder = (options: DnetServerData, name: string = getName()): DarknetServer => {
+export const DnetServerBuilder = (options: DarknetServerData, name: string = getName()): DarknetServer => {
   const maxRam = 16 * 2 ** Math.floor(options.difficulty / 4);
   const ramBlock = getRamBlock(maxRam);
   const darknetData: DnetServer = {

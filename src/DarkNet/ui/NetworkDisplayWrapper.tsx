@@ -1,18 +1,18 @@
 import React, { PointerEventHandler, useEffect, useRef, useState, WheelEventHandler } from "react";
 import { Container, Typography, Button, Box, Link } from "@mui/material";
 import { ZoomIn, ZoomOut } from "@mui/icons-material";
-import { DNServerComponent } from "./DNServerComponent";
+import { ServerStatusBox } from "./ServerStatusBox";
 import { useRerender } from "../../ui/React/hooks";
 import { DarknetEvents, DarknetState } from "../models/DarknetState";
 import { GetServer } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
 import { drawOnCanvas, getPixelPosition } from "./networkCanvas";
-import { clearDarknet, populateDarknet } from "../controllers/DarknetNetworkGenerator";
+import { clearDarknet, populateDarknet } from "../controllers/NetworkGenerator";
 import { dnetStyles } from "./dnetStyles";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { WEBSTORM } from "../controllers/webstorm";
+import { WEBSTORM } from "../effects/webstorm";
 import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 
@@ -169,11 +169,11 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             height={DW_NET_HEIGHT}
             style={{ position: "absolute", zIndex: -1 }}
           ></canvas>
-          {darkWebRoot ? <DNServerComponent server={darkWebRoot} enableAuth={true} classes={classes} /> : ""}
+          {darkWebRoot ? <ServerStatusBox server={darkWebRoot} enableAuth={true} classes={classes} /> : ""}
           {DarknetState.Network.slice(0, netDisplayDepth).map((row, i) =>
             row.map((server, j) =>
               server && isWithinScreen(server) ? (
-                <DNServerComponent server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} classes={classes} />
+                <ServerStatusBox server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} classes={classes} />
               ) : (
                 ""
               ),
@@ -181,7 +181,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
           )}
 
           {labyrinth && netDisplayDepth > depth ? (
-            <DNServerComponent server={labyrinth} enableAuth={allowAuth(labyrinth)} classes={classes} />
+            <ServerStatusBox server={labyrinth} enableAuth={allowAuth(labyrinth)} classes={classes} />
           ) : (
             ""
           )}

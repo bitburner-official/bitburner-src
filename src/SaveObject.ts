@@ -29,7 +29,7 @@ import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { isObject, assertObject } from "./utils/TypeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
 import { Reviver } from "./utils/GenericReviver";
-import { populateDarknet } from "./DarkNet/controllers/DarknetNetworkGenerator";
+import { populateDarknet } from "./DarkNet/controllers/NetworkGenerator";
 import { hasDarknetAccess } from "./DarkNet/effects/effects";
 import { getDarkNetSave, loadDarkNet } from "./DarkNet/effects/SaveLoad";
 

@@ -8,7 +8,6 @@ import { helpers } from "../../Netscript/NetscriptHelpers";
 
 export const getPhishingAttackSpeed = () => Math.max(10000 * (400 / (400 + Player.skills.charisma)), 200);
 
-
 export const handlePhishingAttack = (ctx: NetscriptContext) => {
   const threads = ctx.workerScript.scriptRef.threads;
   const xpGained = Player.mults.charisma_exp * threads * 50 * ((200 + Player.skills.charisma) / 200);
@@ -41,16 +40,16 @@ export const handlePhishingAttack = (ctx: NetscriptContext) => {
       xpGained,
       1,
     )} cha xp)`;
-    helpers.log(ctx, () =>result);
+    helpers.log(ctx, () => result);
     return {
       success: true,
       message: result,
     };
   }
   const result = `There were no takers on that phishing attempt. (Gained ${formatNumber(xpGained, 1)} cha xp)`;
-  helpers.log(ctx, () =>result);
+  helpers.log(ctx, () => result);
   return {
     success: false,
     message: result,
   };
-}
+};

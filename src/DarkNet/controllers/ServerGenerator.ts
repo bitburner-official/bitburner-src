@@ -1,5 +1,5 @@
-import { DnetServerBuilder } from "../models/DnetServerData";
-import { Icon } from "./ServerIcon";
+import { DnetServerBuilder } from "../models/DarknetServerData";
+import { Icon } from "../ui/ServerIcon";
 import {
   commonPasswordDictionary,
   defaultSettingsDictionary,

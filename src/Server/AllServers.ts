@@ -14,7 +14,7 @@ import { IPAddress, isIPAddress } from "../Types/strings";
 
 import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
-import { populateDarknet } from "../DarkNet/controllers/DarknetNetworkGenerator";
+import { populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
 import { applyRamBlocks, hasDarknetAccess, isDarknetServer } from "../DarkNet/effects/effects";
 import { getTorRouter } from "../Locations/ui/TorButton";
 

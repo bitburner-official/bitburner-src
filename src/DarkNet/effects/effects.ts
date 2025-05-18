@@ -22,9 +22,9 @@ import {
   getDarknetServers,
   getDarknetServerSafely,
   moveServer,
-} from "../controllers/DarknetNetworkMovement";
+} from "../controllers/NetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
-import { Minigames } from "../controllers/DarknetServerGenerator";
+import { Minigames } from "../controllers/ServerGenerator";
 import { addSessionToServer, DarknetState, NET_WIDTH } from "../models/DarknetState";
 import { initStockMarket } from "../../StockMarket/StockMarket";
 import { clampNumber } from "../../utils/helpers/clampNumber";
@@ -33,7 +33,7 @@ import { getLabyrinthDetails, isLabyrinthServer } from "./labyrinth";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { Server } from "../../Server/Server";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { DnetServer } from "../models/DnetServerData";
+import { DnetServer } from "../models/DarknetServerData";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {

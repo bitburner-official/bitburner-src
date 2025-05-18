@@ -50,7 +50,7 @@ import { Companies } from "./Company/Companies";
 import { resetGoPromises } from "./Go/boardAnalysis/goAI";
 import { hasDarknetAccess } from "./DarkNet/effects/effects";
 import { addDarknetBonusTime, storeDarknetCycles } from "./DarkNet/models/DarknetState";
-import { processDarknet } from "./DarkNet/controllers/DarknetNetworkMovement";
+import { processDarknet } from "./DarkNet/controllers/NetworkMovement";
 
 declare global {
   // This property is only available in the dev build

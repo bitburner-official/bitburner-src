@@ -10,12 +10,12 @@ import {
   getNeighborsOnRow,
   getServersOnRowAbove,
   getServersOnRowBelow,
-} from "./DarknetNetworkMovement";
+} from "./NetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { DnetServer } from "../models/DnetServerData";
-import { Minigames } from "./DarknetServerGenerator";
-import { labIcon } from "./ServerIcon";
+import { DnetServer } from "../models/DarknetServerData";
+import { Minigames } from "./ServerGenerator";
+import { labIcon } from "../ui/ServerIcon";
 import { Player } from "@player";
 import { Terminal } from "../../Terminal";
 import {

@@ -9,8 +9,8 @@ import {
   getConvertToBase10Server,
   parseSimpleArithmeticExpression,
   generateSimpleArithmeticExpression,
-} from "../../../src/DarkNet/controllers/DarknetServerGenerator";
-import { checkPassword, ResponseStatus } from "../../../src/DarkNet/models/DnetServerData";
+} from "../../../src/DarkNet/controllers/ServerGenerator";
+import { checkPassword, ResponseStatus } from "../../../src/DarkNet/models/DarknetServerData";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
 import { BaseServer } from "../../../src/Server/BaseServer";
 

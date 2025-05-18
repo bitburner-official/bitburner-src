@@ -7,7 +7,7 @@ import { createRandomString } from "../utils/helpers/createRandomString";
 import { createRandomIp } from "../utils/IPAddress";
 import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { IPAddress } from "../Types/strings";
-import { DnetServer } from "../DarkNet/models/DnetServerData";
+import { DnetServer } from "../DarkNet/models/DarknetServerData";
 
 export interface IConstructorParams {
   adminRights?: boolean;

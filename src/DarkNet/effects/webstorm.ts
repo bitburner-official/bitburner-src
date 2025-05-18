@@ -9,9 +9,9 @@ import {
   moveRandomServers,
   restartAllServers,
   deleteRandomServers,
-} from "./DarknetNetworkMovement";
+} from "../controllers/NetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
-import { getNetDepth } from "../effects/labyrinth";
+import { getNetDepth } from "./labyrinth";
 
 export const WEBSTORM = async (suppressToast = false) => {
   DarknetState.isMutating = false;

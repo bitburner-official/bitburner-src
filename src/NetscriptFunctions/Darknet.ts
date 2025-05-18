@@ -1,7 +1,7 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import type { Darknet as NSDnet, ServerAuthDetails } from "@nsdefs";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { ResponseStatus } from "../DarkNet/models/DnetServerData";
+import { ResponseStatus } from "../DarkNet/models/DarknetServerData";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import {
   calculateAuthenticationTime,
@@ -20,12 +20,12 @@ import { formatNumber } from "../ui/formatNumber";
 import { GetAllServers } from "../Server/AllServers";
 import { BaseServer } from "../Server/BaseServer";
 import { capturePackets } from "../DarkNet/models/packetSniffing";
-import { getDarknetServerSafely, getServerSafely } from "../DarkNet/controllers/DarknetNetworkMovement";
+import { getDarknetServerSafely, getServerSafely } from "../DarkNet/controllers/NetworkMovement";
 import { addSessionToServer, DarknetState, getServerState } from "../DarkNet/models/DarknetState";
 import { getStockFromSymbol } from "./StockMarket";
 import { CompletedProgramName } from "@enums";
-import { handleStormSeed } from "../DarkNet/controllers/webstorm";
-import { getPasswordType, Minigames } from "../DarkNet/controllers/DarknetServerGenerator";
+import { handleStormSeed } from "../DarkNet/effects/webstorm";
+import { getPasswordType, Minigames } from "../DarkNet/controllers/ServerGenerator";
 import { checkPassword, getAuthResult } from "../DarkNet/effects/authentication";
 import { getLabMaze, getSurroundingsVisualized, isLabyrinthServer } from "../DarkNet/effects/labyrinth";
 import { DarknetServer } from "../Server/DarknetServer";

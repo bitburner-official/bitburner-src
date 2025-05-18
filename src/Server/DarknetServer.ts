@@ -1,5 +1,5 @@
 import { IConstructorParams, Server } from "./Server";
-import { DnetServer } from "../DarkNet/models/DnetServerData";
+import { DnetServer } from "../DarkNet/models/DarknetServerData";
 
 export class DarknetServer extends Server {
   override darknetData: DnetServer;

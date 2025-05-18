@@ -1,12 +1,12 @@
 import { BaseServer } from "../../Server/BaseServer";
-import { PasswordResponse, ResponseStatus } from "../models/DnetServerData";
+import { PasswordResponse, ResponseStatus } from "../models/DarknetServerData";
 import { addSessionToServer, DarknetState } from "../models/DarknetState";
 import { addCacheToServer, calculatePasswordAttemptChaGain } from "./effects";
 import { Player } from "@player";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { AugmentationName } from "@enums";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { getDarknetServerSafely } from "../controllers/DarknetNetworkMovement";
+import { getDarknetServerSafely } from "../controllers/NetworkMovement";
 
 const NORTH = [0, -1];
 const EAST = [1, 0];

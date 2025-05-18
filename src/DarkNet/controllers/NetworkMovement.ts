@@ -7,10 +7,10 @@ import {
   NET_WIDTH,
   SERVER_DENSITY,
 } from "../models/DarknetState";
-import { getDarknetServer } from "./DarknetServerGenerator";
+import { getDarknetServer } from "./ServerGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
-import { addServerToNetwork, AIR_GAP_DEPTH, movePlayerIfNeeded } from "./DarknetNetworkGenerator";
+import { addServerToNetwork, AIR_GAP_DEPTH, movePlayerIfNeeded } from "./NetworkGenerator";
 import { stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { SpecialServers } from "../../Server/data/SpecialServers";

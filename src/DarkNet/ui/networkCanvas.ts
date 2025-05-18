@@ -10,8 +10,8 @@ import {
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { BaseServer } from "../../Server/BaseServer";
-import { getServerSafely } from "../controllers/DarknetNetworkMovement";
-import { getDarknetData, isDarknetServer } from "../effects/effects";
+import { getServerSafely } from "../controllers/NetworkMovement";
+import { getDarknetData } from "../effects/effects";
 
 export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   const ctx = canvas?.getContext("2d");

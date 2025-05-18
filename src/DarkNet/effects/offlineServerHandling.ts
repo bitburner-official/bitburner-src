@@ -1,6 +1,6 @@
 import type { NetscriptContext } from "../../Netscript/APIWrapper";
-import { getBackdooredDarkwebServers, getServerSafely } from "../controllers/DarknetNetworkMovement";
-import { ResponseStatus } from "../models/DnetServerData";
+import { getBackdooredDarkwebServers, getServerSafely } from "../controllers/NetworkMovement";
+import { ResponseStatus } from "../models/DarknetServerData";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { hasDarknetAccess, isDarknetServer } from "./effects";
 import { isAuthenticated } from "./authentication";
@@ -18,9 +18,9 @@ type failureResultOptions = {
 export const logger = (ctx: NetscriptContext) => (message: string) => helpers.log(ctx, () => message);
 export const error =
   (ctx: NetscriptContext) =>
-    (message: string): never => {
-      throw errorMessage(ctx, message);
-    };
+  (message: string): never => {
+    throw errorMessage(ctx, message);
+  };
 
 export function expectDarknetAccess(ctx: NetscriptContext) {
   if (!hasDarknetAccess()) {
