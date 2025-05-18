@@ -7,6 +7,7 @@ import type { Skills as PersonSkills } from "../PersonObjects/Skills";
 import {
   AugmentationName,
   BladeburnerActionType,
+  type BladeburnerBlackOpName,
   BladeburnerContractName,
   BladeburnerGeneralActionName,
   BladeburnerMultName,
@@ -1406,28 +1407,20 @@ export class Bladeburner implements OperationTeam {
     }
   }
 
-  getActionFromTypeAndName(type: BladeburnerActionType, name: string): Action | null {
+  getActionFromTypeAndName(type: BladeburnerActionType, name: string): Action | undefined {
+    /**
+     * Typecasting "name" instead of checking it with getEnumHelper().isMember() is intentional. The callers will handle
+     * the undefined value if "name" is invalid.
+     */
     switch (type) {
       case BladeburnerActionType.General:
-        if (!getEnumHelper("BladeburnerGeneralActionName").isMember(name)) {
-          return null;
-        }
-        return GeneralActions[name];
+        return GeneralActions[name as BladeburnerGeneralActionName];
       case BladeburnerActionType.Contract:
-        if (!getEnumHelper("BladeburnerContractName").isMember(name)) {
-          return null;
-        }
-        return this.contracts[name];
+        return this.contracts[name as BladeburnerContractName];
       case BladeburnerActionType.Operation:
-        if (!getEnumHelper("BladeburnerOperationName").isMember(name)) {
-          return null;
-        }
-        return this.operations[name];
+        return this.operations[name as BladeburnerOperationName];
       case BladeburnerActionType.BlackOp:
-        if (!getEnumHelper("BladeburnerBlackOpName").isMember(name)) {
-          return null;
-        }
-        return BlackOperations[name];
+        return BlackOperations[name as BladeburnerBlackOpName];
     }
   }
 
