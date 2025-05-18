@@ -1,7 +1,7 @@
 import type { Board, BoardState, PointState } from "../Types";
 
 import { Player } from "@player";
-import { GoOpponent, GoColor } from "@enums";
+import { GoOpponent, GoColor, FactionName } from "@enums";
 import { newOpponentStats } from "../Constants";
 import { getAllChains, getPlayerNeighbors } from "./boardAnalysis";
 import { getKomi, resetAI } from "./goAI";
@@ -76,6 +76,10 @@ export function endGoGame(boardState: BoardState) {
       const newFavor = addRepToFavor(currentFavor, repToAdd);
       Factions[factionName].setFavor(newFavor);
       statusToUpdate.rep += repToAdd;
+    }
+
+    if (factionName === FactionName.Illuminati && statusToUpdate.winStreak >= 10) {
+      Player.giveAchievement("IPVGO_WINNING_STREAK");
     }
   }
 

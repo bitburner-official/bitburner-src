@@ -16,6 +16,8 @@ export class GoObject {
   currentGame: BoardState = getNewBoardState(7);
   stats: PartialRecord<GoOpponent, OpponentStats> = {};
   storedCycles: number = 0;
+  // This flag is used when checking the achievement CHALLENGE_BN14.
+  moveOrCheatViaApi = false;
 
   prestigeAugmentation() {
     for (const opponent of getRecordKeys(Go.stats)) {
@@ -36,6 +38,7 @@ export class GoObject {
     this.previousGame = null;
     this.currentGame = getNewBoardState(7);
     this.stats = {};
+    this.moveOrCheatViaApi = false;
     resetGoPromises();
   }
 

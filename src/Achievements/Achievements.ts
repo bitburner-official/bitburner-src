@@ -33,12 +33,14 @@ import { canAccessBitNodeFeature, isBitNodeFinished, knowAboutBitverse, validBit
 import { isLegacyScript } from "../Paths/ScriptFilePath";
 import { Settings } from "../Settings/Settings";
 import { activateSteamAchievements } from "../Electron";
+import { Go } from "../Go/Go";
+import { type AchievementId, type SFAchievementId, SFAchievementIds } from "./Types";
 
 // Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
 const achievementData = (<AchievementDataJson>(<unknown>data)).achievements;
 
 export interface Achievement {
-  ID: string;
+  ID: AchievementId;
   Icon?: string;
   Name?: string;
   Description?: string;
@@ -46,48 +48,55 @@ export interface Achievement {
   NotInSteam?: boolean;
   Condition: () => boolean;
   Visible?: () => boolean;
-  AdditionalUnlock?: string[]; // IDs of achievements that should be awarded when awarding this one
+  AdditionalUnlock?: AchievementId[]; // IDs of achievements that should be awarded when awarding this one
 }
 
 export interface PlayerAchievement {
-  ID: string;
+  ID: AchievementId;
   unlockedOn?: number;
 }
 
 export interface AchievementDataJson {
-  achievements: Record<string, AchievementData>;
+  achievements: Record<AchievementId, AchievementData>;
 }
 
 export interface AchievementData {
-  ID: string;
+  ID: AchievementId;
   Name: string;
   Description: string;
 }
 
-function sfAchievements(): Record<string, Achievement> {
-  const achievements: Record<string, Achievement> = {};
-  for (let i = 1; i <= 13; i++) {
-    const ID = `SF${i}.1`;
-    achievements[ID] = {
-      ...achievementData[ID],
-      Icon: ID,
+function sfAchievements(): Record<SFAchievementId, Achievement> {
+  const achievements = {} as Record<SFAchievementId, Achievement>;
+  for (const id of SFAchievementIds) {
+    const matchResult = id.match(/SF(\d{1,2})\.1/);
+    if (!matchResult) {
+      throw new Error(`Unexpected SFAchievementId: ${id}`);
+    }
+    const bn = Number.parseInt(matchResult[1]);
+    if (!validBitNodes.includes(bn)) {
+      throw new Error(`Unexpected BN value in SFAchievementId: ${id}`);
+    }
+    achievements[id] = {
+      ...achievementData[id],
+      Icon: id,
       Visible: knowAboutBitverse,
-      Condition: () => Player.sourceFileLvl(i) >= 1,
-      NotInSteam: i >= 13,
+      Condition: () => Player.sourceFileLvl(bn) >= 1,
+      NotInSteam: bn >= 13,
     };
   }
   return achievements;
 }
 
-export const achievements: Record<string, Achievement> = {
-  [FactionName.CyberSec.toUpperCase()]: {
-    ...achievementData[FactionName.CyberSec.toUpperCase()],
+export const achievements: Record<AchievementId, Achievement> = {
+  CYBERSEC: {
+    ...achievementData.CYBERSEC,
     Icon: "CSEC",
     Condition: () => Player.factions.includes(FactionName.CyberSec),
   },
-  [FactionName.NiteSec.toUpperCase()]: {
-    ...achievementData[FactionName.NiteSec.toUpperCase()],
-    Icon: FactionName.NiteSec,
+  NITESEC: {
+    ...achievementData.NITESEC,
+    Icon: "NiteSec",
     Condition: () => Player.factions.includes(FactionName.NiteSec),
   },
   THE_BLACK_HAND: {
@@ -95,24 +104,24 @@ export const achievements: Record<string, Achievement> = {
     Icon: "TBH",
     Condition: () => Player.factions.includes(FactionName.TheBlackHand),
   },
-  [FactionName.BitRunners.toUpperCase()]: {
-    ...achievementData[FactionName.BitRunners.toUpperCase()],
-    Icon: FactionName.BitRunners.toLowerCase(),
+  BITRUNNERS: {
+    ...achievementData.BITRUNNERS,
+    Icon: "bitrunners",
     Condition: () => Player.factions.includes(FactionName.BitRunners),
   },
-  [FactionName.Daedalus.toUpperCase()]: {
-    ...achievementData[FactionName.Daedalus.toUpperCase()],
-    Icon: FactionName.Daedalus.toLowerCase(),
+  DAEDALUS: {
+    ...achievementData.DAEDALUS,
+    Icon: "daedalus",
     Condition: () => Player.factions.includes(FactionName.Daedalus),
   },
   THE_COVENANT: {
     ...achievementData.THE_COVENANT,
-    Icon: FactionName.TheCovenant.toLowerCase().replace(/ /g, ""),
+    Icon: "thecovenant",
     Condition: () => Player.factions.includes(FactionName.TheCovenant),
   },
-  [FactionName.Illuminati.toUpperCase()]: {
-    ...achievementData[FactionName.Illuminati.toUpperCase()],
-    Icon: FactionName.Illuminati.toLowerCase(),
+  ILLUMINATI: {
+    ...achievementData.ILLUMINATI,
+    Icon: "illuminati",
     Condition: () => Player.factions.includes(FactionName.Illuminati),
   },
   "BRUTESSH.EXE": {
@@ -522,6 +531,20 @@ export const achievements: Record<string, Achievement> = {
     Condition: () => validBitNodes.every((bn) => Player.sourceFileLvl(bn) >= 3),
     NotInSteam: true,
   },
+  IPVGO_ANTICHEAT: {
+    ...achievementData.IPVGO_ANTICHEAT,
+    Icon: "ipvgo-anticheat",
+    Visible: knowAboutBitverse,
+    Condition: () => false,
+    NotInSteam: true,
+  },
+  IPVGO_WINNING_STREAK: {
+    ...achievementData.IPVGO_WINNING_STREAK,
+    Icon: "ipvgo-winning-streak",
+    Visible: knowAboutBitverse,
+    Condition: () => false,
+    NotInSteam: true,
+  },
   CHALLENGE_BN1: {
     ...achievementData.CHALLENGE_BN1,
     Icon: "BN1+",
@@ -596,6 +619,22 @@ export const achievements: Record<string, Achievement> = {
     Visible: () => canAccessBitNodeFeature(12),
     Condition: () => Player.sourceFileLvl(12) >= 50,
   },
+  CHALLENGE_BN13: {
+    ...achievementData.CHALLENGE_BN13,
+    Icon: "BN13+",
+    Visible: () => canAccessBitNodeFeature(13),
+    Condition: () =>
+      Player.bitNodeN === 13 &&
+      isBitNodeFinished() &&
+      !Player.augmentations.some((a) => a.name === AugmentationName.StaneksGift1),
+  },
+  CHALLENGE_BN14: {
+    ...achievementData.CHALLENGE_BN14,
+    Icon: "BN14+",
+    Visible: knowAboutBitverse,
+    Condition: () => Player.bitNodeN === 14 && isBitNodeFinished() && !Go.moveOrCheatViaApi,
+    NotInSteam: true,
+  },
   BYPASS: {
     ...achievementData.BYPASS,
     Icon: "SF-1",
@@ -650,15 +689,6 @@ export const achievements: Record<string, Achievement> = {
     Secret: true,
     // Hey Players! Yes, you're supposed to modify this to get the achievement!
     Condition: () => false,
-  },
-  CHALLENGE_BN13: {
-    ...achievementData.CHALLENGE_BN13,
-    Icon: "BN13+",
-    Visible: () => canAccessBitNodeFeature(13),
-    Condition: () =>
-      Player.bitNodeN === 13 &&
-      isBitNodeFinished() &&
-      !Player.augmentations.some((a) => a.name === AugmentationName.StaneksGift1),
   },
   DEVMENU: {
     ...achievementData.DEVMENU,

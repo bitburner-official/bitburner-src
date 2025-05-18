@@ -23,5 +23,7 @@ Steps:
   - Match the order of achievements in `AchievementData.json`.
   - `Icon` must be the name of the .svg file.
   - `NotInSteam` must be true.
-- Run `pack-for-web.sh`.
+- Run `pack-for-web.sh` in `$PROJECT_DIR/assets/Steam/achievements`.
+- Run `node generate-achievement-types.js` in `$PROJECT_DIR/tools`.
+- Run `npm run format` to format `$PROJECT_DIR/src/Achievements/Types.ts`.
 - When committing, remember to commit the changes in `$PROJECT_DIR/dist/icons/achievements`.
