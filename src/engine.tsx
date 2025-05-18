@@ -49,6 +49,9 @@ import { EventEmitter } from "./utils/EventEmitter";
 import { Companies } from "./Company/Companies";
 import { resetGoPromises } from "./Go/boardAnalysis/goAI";
 import { getRecordEntries } from "./Types/Record";
+import { addDarknetBonusTime, storeDarknetCycles } from "./DarkNet/models/DarknetState";
+import { processDarknet } from "./DarkNet/controllers/NetworkMovement";
+import { hasDarknetAccess } from "./DarkNet/effects/effects";
 
 declare global {
   // This property is only available in the dev build
