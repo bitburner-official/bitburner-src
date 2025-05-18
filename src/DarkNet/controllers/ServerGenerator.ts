@@ -294,7 +294,7 @@ export const getYesn_tServer = (difficulty: number, x: number, y: number): Darkn
     icon: getRandomIcon(),
     minigameType: Minigames.Yesn_t,
     password,
-    staticPasswordHint: "",
+    staticPasswordHint: "you are one who's'nt authorized",
     difficulty,
     x,
     y,

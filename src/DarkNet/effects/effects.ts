@@ -74,7 +74,7 @@ export const handleFailedAuth = (server: BaseServer, threads: number) => {
  */
 export const calculateAuthenticationTime = (
   server: BaseServer,
-  person: IPerson,
+  person: IPerson = Player,
   threads: number = 1,
   attemptedPassword: string = "",
 ) => {

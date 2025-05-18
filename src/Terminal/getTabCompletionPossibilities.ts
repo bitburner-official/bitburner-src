@@ -117,8 +117,11 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
     // At all times, programs can be accessed without pathing
     addGeneric({ iterable: programs });
 
-    const localPrograms = Player.getCurrentServer().programs.filter((name) => name.endsWith(".exe"));
-    addGeneric({ iterable: localPrograms, usePathing: true });
+    const currentServer = Player.getCurrentServer();
+    if (currentServer !== homeComputer) {
+      const localPrograms = currentServer.programs.filter((name) => name.endsWith(".exe"));
+      addGeneric({ iterable: localPrograms, usePathing: true });
+    }
 
     // If we're on home and a path is being used, also include pathing results
     if (homeComputer.isConnectedTo && relativeDir) addGeneric({ iterable: programs, usePathing: true });
