@@ -1,5 +1,12 @@
 import { connectServers, DeleteServer, disconnectServers, GetAllServers, GetServer } from "../../Server/AllServers";
-import { DarknetEvents, DarknetState, getServerState, NET_WIDTH, SERVER_DENSITY } from "../models/DarknetState";
+import {
+  DarknetEvents,
+  DarknetState,
+  getServerState,
+  MS_PER_MUTATION_PER_ROW,
+  NET_WIDTH,
+  SERVER_DENSITY,
+} from "../models/DarknetState";
 import { getDarknetServer } from "./DarknetServerGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
@@ -7,9 +14,24 @@ import { addServerToNetwork, AIR_GAP_DEPTH, movePlayerIfNeeded } from "./Darknet
 import { stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { getNetDepth, isLabyrinthServer } from "../models/labyrinth";
+import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { getDarknetData, isDarknetServer } from "../models/effects";
+import { getDarknetData, isDarknetServer } from "../effects/effects";
+import { CONSTANTS } from "../../Constants";
+
+export const processDarknet = () => {
+  if (DarknetState.storedCycles < 0) {
+    DarknetState.storedCycles = 0;
+  }
+  const depth = getNetDepth();
+  const cycleRate = MS_PER_MUTATION_PER_ROW / CONSTANTS.MilliPerCycle;
+  const cyclesPerUpdate = cycleRate / depth;
+  if (DarknetState.storedCycles > cyclesPerUpdate) {
+    DarknetState.storedCycles -= cyclesPerUpdate;
+    DarknetState.bonusCycles = Math.max(DarknetState.bonusCycles - cyclesPerUpdate, 0);
+    mutateDarknet();
+  }
+};
 
 export const mutateDarknet = () => {
   if (!DarknetState.isMutating) {
@@ -166,31 +188,42 @@ export const moveServer = (server: BaseServer, maxDepthDecrease = 3, maxDepthInc
     return false;
   }
 
-  for (let i = 0; i < 30; i++) {
-    // Limit depth movement to specified amount
-    let newX = Math.min(
-      Math.max(Math.floor(Math.random() * (2 * maxDepthIncrease) + darknetData.difficulty - maxDepthDecrease), 0),
-      getNetDepth() - 1,
-    );
-    // simple "air gaps" in the network
-    if (isOnAirGap(newX)) {
-      newX += Math.random() < 0.5 ? -1 : 1;
-    }
-
-    const newY = Math.floor(Math.random() * NET_WIDTH);
-    if (DarknetState.Network[newX]?.[newY] !== null) {
-      continue;
-    }
-
-    disconnectServer(server, true);
-
-    if (DarknetState.Network[darknetData.x]?.[darknetData.y]) {
-      DarknetState.Network[darknetData.x][darknetData.y] = null;
-    }
-    addServerToNetwork(server, newX, newY);
-    return true;
+  const positionOptions = getAllOpenPositions(
+    darknetData.difficulty - maxDepthDecrease,
+    darknetData.difficulty + maxDepthIncrease,
+  );
+  if (positionOptions.length === 0) {
+    return false;
   }
-  return false;
+
+  const [newX, newY] = positionOptions[Math.floor(Math.random() * positionOptions.length)];
+  disconnectServer(server, true);
+
+  if (DarknetState.Network[darknetData.x]?.[darknetData.y]) {
+    DarknetState.Network[darknetData.x][darknetData.y] = null;
+  }
+  addServerToNetwork(server, newX, newY);
+  return true;
+};
+
+const getAllOpenPositions = (minDepth: number, maxDepth: number): [number, number][] => {
+  const min = Math.max(0, minDepth);
+  const max = Math.min(maxDepth, getNetDepth() - 1);
+  const positions: [number, number][] = [];
+  for (let x = min; x <= max; x++) {
+    for (let y = 0; y < NET_WIDTH; y++) {
+      if (DarknetState.Network[x] && !DarknetState.Network[x][y] && !isOnAirGap(x)) {
+        positions.push([x, y]);
+      }
+    }
+  }
+  if (min === 0 && max === getNetDepth() - 1) {
+    return positions;
+  }
+  if (positions.length === 0) {
+    return getAllOpenPositions(min - 1, max + 1);
+  }
+  return positions;
 };
 
 export const killScripts = (server: BaseServer) => {
@@ -285,7 +318,9 @@ export const getServersOnRowAbove = (x: number, close = false): DarknetServer[] 
 };
 
 export const getDarknetServers = (): DarknetServer[] => {
-  return GetAllServers(true).filter(isDarknetServer).filter((s) => !isLabyrinthServer(s.hostname));
+  return GetAllServers(true)
+    .filter(isDarknetServer)
+    .filter((s) => !isLabyrinthServer(s.hostname));
 };
 
 export const getAllAdjacentNeighbors = (x: number, y: number): BaseServer[] => {
@@ -336,11 +371,11 @@ const isOnAirGap = (x: number): boolean => !!x && !(x % AIR_GAP_DEPTH);
 const notNull = <T>(value: T | null): value is T => value !== null;
 
 const isImmutable = (server?: BaseServer | null) =>
-  server &&
-  (!isDarknetServer(server) ||
-    server === DarknetState.openServer ||
-    server.isConnectedTo ||
-    server.darknetData?.hasStasisLink);
+  !server ||
+  !isDarknetServer(server) ||
+  server === DarknetState.openServer ||
+  server.isConnectedTo ||
+  server.darknetData?.hasStasisLink;
 
 const getIslands = () => GetAllServers(true).filter((s) => s && isDarknetServer(s) && !s.serversOnNetwork.length);
 

@@ -1859,8 +1859,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Created by a mysterious figure known only as 'The Sculptor', this augmentation appears as a set of silvery " +
         "metallic patterns on the user's upper back and shoulders. " +
         "Awarded to those who discover the secrets of the labrynth.",
-      stats:
-        "This augmentation increases the stasis link limit by one, and raises charisma by 15% and agility by 10%.",
+      stats: "This augmentation increases the stasis link limit by one, and raises charisma by 15% and agility by 10%.",
       charisma: 1.15,
       agility: 1.1,
       isSpecial: true,

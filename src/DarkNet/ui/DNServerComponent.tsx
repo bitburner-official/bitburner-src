@@ -6,7 +6,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { DarknetState } from "../models/DarknetState";
 import { getPixelPosition } from "./networkCanvas";
 import { ServerSummary } from "./ServerSummary";
-import { getDarknetData, isDarknetServer } from "../models/effects";
+import { getDarknetData, isDarknetServer } from "../effects/effects";
 
 export type DWServerProps = {
   server: BaseServer;

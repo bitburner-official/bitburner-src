@@ -8,9 +8,9 @@ import {
 } from "../controllers/DarknetServerGenerator";
 import { getName, PasswordResponse } from "./DnetServerData";
 import { LocationName } from "@enums";
-import { getDarknetData, getTwoCharsInPassword, isDarknetServer } from "./effects";
+import { getDarknetData, getTwoCharsInPassword, isDarknetServer } from "../effects/effects";
 import { getDarknetServers, getServerSafely } from "../controllers/DarknetNetworkMovement";
-import { getExactCorrectChars, getMastermindResponse } from "./authentication";
+import { getExactCorrectChars, getMastermindResponse } from "../effects/authentication";
 import { getServerState } from "./DarknetState";
 
 const MAX_LOG_LINES = 32;

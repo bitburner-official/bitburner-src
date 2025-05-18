@@ -19,7 +19,7 @@ import { serverMetadata } from "../Server/data/servers";
 import { Company } from "../Company/Company";
 import { CompanyPosition } from "../Company/CompanyPosition";
 import { isMember } from "../utils/EnumHelper";
-import { getMultiplierFromCharisma } from "../DarkNet/models/effects";
+import { getMultiplierFromCharisma } from "../DarkNet/effects/effects";
 
 function processWorkStats(person: IPerson, workStats: WorkStats): WorkStats {
   // "person" can be a normal object that the player passes to NS APIs, so we cannot use `person instanceof Sleeve`.

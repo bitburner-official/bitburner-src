@@ -6,11 +6,11 @@ import { DarknetEvents, getServerState } from "../models/DarknetState";
 import { BaseServer } from "../../Server/BaseServer";
 import { ServerSummary } from "./ServerSummary";
 import { populateServerLogsWithNoise } from "../models/packetSniffing";
-import { getLabyrinthDetails, isLabyrinthServer } from "../models/labyrinth";
+import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
 import { PasswordPrompt } from "./PasswordPrompt";
 import { copyToClipboard, decolorJsonProperties, formatToMaxDigits } from "./uiUtilities";
 import { useRerender } from "../../ui/React/hooks";
-import { getDarknetData } from "../models/effects";
+import { getDarknetData } from "../effects/effects";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 
 export type DWPasswordPromptModalProps = {

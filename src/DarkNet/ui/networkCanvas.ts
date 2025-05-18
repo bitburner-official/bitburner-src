@@ -8,10 +8,10 @@ import {
   MAP_BORDER_WIDTH,
 } from "./dnetStyles";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { getNetDepth, isLabyrinthServer } from "../models/labyrinth";
+import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { BaseServer } from "../../Server/BaseServer";
 import { getServerSafely } from "../controllers/DarknetNetworkMovement";
-import { getDarknetData, isDarknetServer } from "../models/effects";
+import { getDarknetData, isDarknetServer } from "../effects/effects";
 
 export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   const ctx = canvas?.getContext("2d");

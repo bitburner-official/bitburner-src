@@ -90,6 +90,9 @@ export function prestigeAugmentation(): void {
   if (canAccessBitNodeFeature(5)) {
     homeComp.pushProgram(CompletedProgramName.formulas);
   }
+  if (canAccessBitNodeFeature(15)) {
+    homeComp.pushProgram(CompletedProgramName.darkscape);
+  }
 
   // Re-create foreign servers
   initForeignServers(Player.getHomeComputer());

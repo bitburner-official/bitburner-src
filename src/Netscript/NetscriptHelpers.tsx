@@ -67,7 +67,7 @@ import { Settings } from "../Settings/Settings";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContentFilePath } from "../Paths/ContentFile";
 import { LiteratureName } from "@enums";
-import { isDarknetServer } from "../DarkNet/models/effects";
+import { isDarknetServer } from "../DarkNet/effects/effects";
 
 export const helpers = {
   string,

@@ -21,7 +21,7 @@ import { StockOrder, TIX } from "@nsdefs";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { StockMarketConstants } from "../StockMarket/data/Constants";
-import { getDarknetVolatilityMult } from "../DarkNet/models/effects";
+import { getDarknetVolatilityMult } from "../DarkNet/effects/effects";
 
 export function NetscriptStockMarket(): InternalAPI<TIX> {
   /** Checks if the player has TIX API access. Throws an error if the player does not */

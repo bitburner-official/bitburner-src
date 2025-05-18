@@ -177,7 +177,7 @@ export const getMastermindHintServer = (difficulty: number, x: number, y: number
   return DnetServerBuilder({
     icon: getRandomIcon(),
     minigameType: Minigames.MastermindHint,
-    password: getPassword(2 + difficulty / 4),
+    password: getPassword(Math.min(2 + difficulty / 4, 9)),
     staticPasswordHint: "Only a true master may pass",
     difficulty,
     x,

@@ -58,8 +58,9 @@ import {
   getBackdoorAuthTimeDebuff,
   getRamBlockRemoved,
   isDarknetServer,
-} from "../DarkNet/models/effects";
-import { getTimeoutChance } from "./Darknet";
+} from "../DarkNet/effects/effects";
+
+import { getTimeoutChance } from "../DarkNet/effects/offlineServerHandling";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {

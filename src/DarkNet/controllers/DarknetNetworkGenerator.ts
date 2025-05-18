@@ -24,9 +24,9 @@ import {
   getLabyrinthServerNames,
   getNetDepth,
   isLabyrinthServer,
-} from "../models/labyrinth";
+} from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { getDarknetData, isDarknetServer } from "../models/effects";
+import { getDarknetData, isDarknetServer } from "../effects/effects";
 
 export const HORIZONTAL_CONNECTION_CHANCE = 0.5;
 export const VERTICAL_CONNECTION_CHANCE = 0.3;

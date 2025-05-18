@@ -111,12 +111,13 @@ import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
 import { Page } from "./ui/Router";
 import { canAccessBitNodeFeature, validBitNodes } from "./BitNode/BitNodeUtils";
-import { expectAuthenticated, hasExecConnection, NetscriptDarknet } from "./NetscriptFunctions/Darknet";
+import { NetscriptDarknet } from "./NetscriptFunctions/Darknet";
 import { isIPAddress } from "./Types/strings";
 import { compile } from "./NetscriptJSEvaluator";
 import { Script } from "./Script/Script";
 import { DarknetState } from "./DarkNet/models/DarknetState";
-import { isDarknetServer } from "./DarkNet/models/effects";
+import { isDarknetServer } from "./DarkNet/effects/effects";
+import { expectAuthenticated, hasExecConnection } from "./DarkNet/effects/offlineServerHandling";
 
 export const enums: NSEnums = {
   CityName,

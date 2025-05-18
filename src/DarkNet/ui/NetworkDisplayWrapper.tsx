@@ -13,7 +13,7 @@ import { dnetStyles } from "./dnetStyles";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { WEBSTORM } from "../controllers/webstorm";
-import { getLabyrinthDetails } from "../models/labyrinth";
+import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 
 export const DW_NET_WIDTH = 6000;

@@ -48,6 +48,9 @@ import { Go } from "./Go/Go";
 import { EventEmitter } from "./utils/EventEmitter";
 import { Companies } from "./Company/Companies";
 import { resetGoPromises } from "./Go/boardAnalysis/goAI";
+import { hasDarknetAccess } from "./DarkNet/effects/effects";
+import { addDarknetBonusTime, storeDarknetCycles } from "./DarkNet/models/DarknetState";
+import { processDarknet } from "./DarkNet/controllers/DarknetNetworkMovement";
 
 declare global {
   // This property is only available in the dev build
@@ -134,6 +137,12 @@ const Engine: {
 
     // Sleeves
     Player.sleeves.forEach((sleeve) => sleeve.process(numCycles));
+
+    // Darknet
+    if (hasDarknetAccess()) {
+      storeDarknetCycles(numCycles);
+      processDarknet();
+    }
 
     // Update the running time of all active scripts
     updateOnlineScriptTimes(numCycles);
@@ -342,6 +351,8 @@ const Engine: {
       if (Player.bladeburner) Player.bladeburner.storeCycles(numCyclesOffline);
 
       Go.storeCycles(numCyclesOffline);
+
+      addDarknetBonusTime(numCyclesOffline);
 
       staneksGift.process(numCyclesOffline);
 

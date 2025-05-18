@@ -1,7 +1,7 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import { DarknetState } from "../models/DarknetState";
-import { getLabMaze, getSurroundingsVisualized } from "../models/labyrinth";
+import { getLabMaze, getSurroundingsVisualized } from "../effects/labyrinth";
 import { dnetStyles } from "./dnetStyles";
 import { Result } from "@nsdefs";
 

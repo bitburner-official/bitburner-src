@@ -13,18 +13,19 @@ import {
   notebookFileNames,
   packetSniffPhrases,
   passwordFileNames,
-} from "./dictionaryData";
-import { hintLiterature } from "./hintNotes";
+} from "../models/dictionaryData";
+import { hintLiterature } from "../models/hintNotes";
 import { TextFilePath } from "../../Paths/TextFilePath";
 import {
   getAllAdjacentNeighbors,
   getBackdooredDarkwebServers,
   getDarknetServers,
-  getDarknetServerSafely, moveServer,
+  getDarknetServerSafely,
+  moveServer,
 } from "../controllers/DarknetNetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { Minigames } from "../controllers/DarknetServerGenerator";
-import { addSessionToServer, DarknetState, NET_WIDTH } from "./DarknetState";
+import { addSessionToServer, DarknetState, NET_WIDTH } from "../models/DarknetState";
 import { initStockMarket } from "../../StockMarket/StockMarket";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { getSharedChars } from "./authentication";
@@ -32,7 +33,8 @@ import { getLabyrinthDetails, isLabyrinthServer } from "./labyrinth";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { Server } from "../../Server/Server";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { DnetServer } from "./DnetServerData";
+import { DnetServer } from "../models/DnetServerData";
+import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;
@@ -90,9 +92,11 @@ export const calculateAuthenticationTime = (
   const skillFactor = (diffFactor * chaRequired + baseDiff) / (person.skills.charisma + 100);
   const noobFactor = Math.min(0.5 + difficulty / 4, 1);
   const backdoorFactor = getBackdoorAuthTimeDebuff();
-  const underleveledFactor = person.skills.charisma >= chaRequired ? 1 : 1.5 + (chaRequired + 50) / (person.skills.charisma + 50);
+  const underleveledFactor =
+    person.skills.charisma >= chaRequired ? 1 : 1.5 + (chaRequired + 50) / (person.skills.charisma + 50);
   const hasBootsFactor = Player.hasAugmentation(AugmentationName.TheBoots) ? 0.8 : 1;
   const hasSf15_2Factor = Player.sourceFileLvl(15) > 2 ? 0.8 : 1;
+  const bonusTimeFactor = DarknetState.bonusCycles > 0 ? 0.6 : 1;
 
   const time =
     baseTime *
@@ -102,6 +106,7 @@ export const calculateAuthenticationTime = (
     underleveledFactor *
     hasBootsFactor *
     hasSf15_2Factor *
+    bonusTimeFactor *
     threadsFactor;
 
   // Add extra time for timing attack server, per correct character
@@ -351,11 +356,7 @@ const getRandomNearbyServer = (server: BaseServer, disconnected = false) => {
 export const hasDarknetAccess = () => {
   return true; //TODO: enable this later
 
-  const hasSF15 = !!Player.sourceFiles.get(15);
-  const isInBN15 = Player.bitNodeN == 15;
-  const hasDarkscapeNavigator = Player.hasProgram(CompletedProgramName.darkscape);
-
-  return hasSF15 || isInBN15 || hasDarkscapeNavigator;
+  return canAccessBitNodeFeature(15) || Player.hasProgram(CompletedProgramName.darkscape);
 };
 
 export const getTwoCharsInPassword = (password: string) => {
@@ -424,7 +425,7 @@ export const chargeServerMigration = (server: BaseServer, threads = 1) => {
     chargeIncrease,
     newCharge: Math.min(DarknetState.migrationInductionServers[server.hostname], 1),
     xpGained: xpGained,
-  }
+  };
   if (DarknetState.migrationInductionServers[server.hostname] >= 1) {
     moveServer(server, -1, 5);
     DarknetState.migrationInductionServers[server.hostname] = 0;

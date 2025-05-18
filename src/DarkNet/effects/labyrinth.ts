@@ -1,6 +1,6 @@
 import { BaseServer } from "../../Server/BaseServer";
-import { PasswordResponse, ResponseStatus } from "./DnetServerData";
-import { addSessionToServer, DarknetState } from "./DarknetState";
+import { PasswordResponse, ResponseStatus } from "../models/DnetServerData";
+import { addSessionToServer, DarknetState } from "../models/DarknetState";
 import { addCacheToServer, calculatePasswordAttemptChaGain } from "./effects";
 import { Player } from "@player";
 import { SpecialServers } from "../../Server/data/SpecialServers";
@@ -355,8 +355,7 @@ export const isLabyrinthServer = (hostName: string) => {
   return labHostnames.includes(hostName);
 };
 
-const hasAugment = (aug: AugmentationName) => !!Player.augmentations.find((a => a.name === aug));
-
+const hasAugment = (aug: AugmentationName) => !!Player.augmentations.find((a) => a.name === aug);
 
 export const getLabyrinthDetails = (): {
   lab: DarknetServer | null;

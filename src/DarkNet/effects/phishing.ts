@@ -1,0 +1,56 @@
+import { Player } from "@player";
+import { DarknetState } from "../models/DarknetState";
+import { addCacheToServer } from "./effects";
+import { formatNumber } from "../../ui/formatNumber";
+import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
+import { NetscriptContext } from "../../Netscript/APIWrapper";
+import { helpers } from "../../Netscript/NetscriptHelpers";
+
+export const getPhishingAttackSpeed = () => Math.max(10000 * (400 / (400 + Player.skills.charisma)), 200);
+
+
+export const handlePhishingAttack = (ctx: NetscriptContext) => {
+  const threads = ctx.workerScript.scriptRef.threads;
+  const xpGained = Player.mults.charisma_exp * threads * 50 * ((200 + Player.skills.charisma) / 200);
+  Player.gainCharismaExp(xpGained);
+
+  const timeSinceLastRewardCache = new Date().getTime() - DarknetState.lastPhishingCacheTime.getTime();
+  const rewardCacheChance = 0.01 * Player.mults.crime_success * threads * ((400 + Player.skills.charisma) / 400);
+  const moneyRewardChance = 0.05 * Player.mults.crime_success * ((100 + Player.skills.charisma) / 100);
+
+  if (timeSinceLastRewardCache < 1000 * 60 * 3 && Math.random() < rewardCacheChance) {
+    addCacheToServer(ctx.workerScript.getServer());
+    DarknetState.lastPhishingCacheTime = new Date();
+    const result = `Phishing attack succeeded! Found a cache file. (Gained ${formatNumber(xpGained, 1)} cha xp)`;
+    helpers.log(ctx, () => result);
+    return {
+      success: true,
+      message: result,
+    };
+  } else if (Math.random() < moneyRewardChance) {
+    const randomFactor = Math.random() * 0.3 + 0.9;
+    const moneyReward =
+      1e4 *
+      Player.mults.crime_money *
+      threads *
+      ((50 + Player.skills.charisma) / 50) *
+      randomFactor *
+      currentNodeMults.DarknetMoneyMultiplier;
+    Player.gainMoney(moneyReward, "darknet");
+    const result = `Phishing attack succeeded! $${formatNumber(moneyReward, 2)} retrieved. (Gained ${formatNumber(
+      xpGained,
+      1,
+    )} cha xp)`;
+    helpers.log(ctx, () =>result);
+    return {
+      success: true,
+      message: result,
+    };
+  }
+  const result = `There were no takers on that phishing attempt. (Gained ${formatNumber(xpGained, 1)} cha xp)`;
+  helpers.log(ctx, () =>result);
+  return {
+    success: false,
+    message: result,
+  };
+}

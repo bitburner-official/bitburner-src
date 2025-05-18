@@ -4,9 +4,9 @@ import { handleLabyrinthPassword, isLabyrinthServer } from "./labyrinth";
 import { handleFailedAuth, handleSuccessfulAuth, isDarknetServer } from "./effects";
 import { Minigames } from "../controllers/DarknetServerGenerator";
 import { Result } from "@nsdefs";
-import { PasswordResponse, ResponseStatus } from "./DnetServerData";
-import { logPasswordAttempt } from "./packetSniffing";
-import { getServerState } from "./DarknetState";
+import { PasswordResponse, ResponseStatus } from "../models/DnetServerData";
+import { logPasswordAttempt } from "../models/packetSniffing";
+import { getServerState } from "../models/DarknetState";
 
 export const checkPassword = (
   attemptedPassword: string,

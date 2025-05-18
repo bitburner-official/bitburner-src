@@ -5,7 +5,7 @@ import { runProgram } from "./runProgram";
 import { hasScriptExtension } from "../../Paths/ScriptFilePath";
 import { hasContractExtension } from "../../Paths/ContractFilePath";
 import { hasProgramExtension } from "../../Paths/ProgramFilePath";
-import { hasCacheFileExtension } from "../../DarkNet/models/effects";
+import { hasCacheFileExtension } from "../../DarkNet/effects/effects";
 
 export function run(args: (string | number | boolean)[], server: BaseServer): void {
   // Run a program or a script

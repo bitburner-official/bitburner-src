@@ -18,7 +18,7 @@ import { helpers } from "../Netscript/NetscriptHelpers";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { JsonSchemaValidator } from "../JsonSchema/JsonSchemaValidator";
 import { Player } from "../Player";
-import { scaleDarknetVolatilityIncreases, getDarknetVolatilityMult } from "../DarkNet/models/effects";
+import { scaleDarknetVolatilityIncreases, getDarknetVolatilityMult } from "../DarkNet/effects/effects";
 
 export function getDefaultEmptyStockMarket(): IStockMarket {
   return {

@@ -121,6 +121,7 @@ Design document and workspace
 ## patches:
 
 ## Error Reduction Patch
+
 - keep track of offline servers (since last game restart)
 - exec returns 0 if the target server is recently offline, with details in logging; does not throw error
 - scp returns false if either the source or destination server is recently offline, with details in logging; does not throw error
@@ -129,6 +130,7 @@ Design document and workspace
 - unified all result-returning API methods to have consistent logging and return messages
 - getServerAuthDetails improved with `isConnectedToCurrentServer` and `hasSession` booleans to disambiguate the old `isConnected`
 - induceServerMigration rework:
+
   - now targets a specific server
   - shows percent progress in its result & logging
   - guarantees the server moves deeper into the net once fully charged
@@ -295,18 +297,45 @@ Coming soon:
 
 ## TODO:
 
-eternal lab off by 1?
+<changes>
 
-move server: find all available spaces first
+## Tech debt patch
+- Implemented bonus time, and saving/loading bonus time
+- cleaned up api utility methods, refactored a number of files
+- Start with darkscape navigator if you have SF-15 or are in BN-15
+- Moving servers improved: it looks for available spaces, and expands search until it finds an open slot, to prevent failed moves in crowded rows
+- Changed mutations to use game cycle loop instead of its own setTimeout on the side
+- 
+</changes>
 
-Improve error UI and handle multiple thrown errors
-https://discord.com/channels/415207508303544321/415207508303544323/1372228866621571163
+- start with crash course?
+
+```
+const homeComp = Player.getHomeComputer();
+const handbook = LiteratureName.CorporationManagementHandbook;
+if (!homeComp.messages.includes(handbook)) homeComp.messages.push(handbook);
+showLiterature(handbook);
+```
 
 "password-protected servers" mentions in documentation (exec and scp)
+scp: add session details to docs
+exec: add session details to docs
 
 move phishing calcs to effects.js
 
 unsubscribe from all subscriptions on unmount
+
+```
+  useEffect(() => {
+    const clear = () => setKey((key) => key + 1);
+    const debounced = _.debounce(() => clear(), 25, { maxWait: 50 });
+    const unsubscribe = TerminalClearEvents.subscribe(debounced);
+    return () => {
+      debounced.cancel();
+      unsubscribe();
+    };
+  }, []);
+```
 
 increase priority of locked ram indicator
 keep some icons statically placed on mini-indicators (script count?)
@@ -333,32 +362,20 @@ labels for icons in detail view on password modal?
 - webstorm visual indicator
 
 - Go over guide looking for misleading info or other out-of-date or missing things
-- starter script
+- starter script?
 - preventDuplicates on the run options is very powerful here
 
 ns.dnet.enums.XXX for status codes etc
 Usually "data" in the form of enums or constants we typically store in a data folder so it's easier to find.
 
-scp: add session details to docs
-exec: add session details to docs
-
-- start with crash course?
-
 - more hint notes
 
-## TODO later:
-
-- change mutations to be on game cycle loop
-
-- remove darknet servers from hashnet dropdown
-
-- bonus time?
-
-- Darkweb server cha difficulty balance?
-
-- Bitnode multipliers
-
 ## Post MVP:
+
+more Bitnode multipliers?
+
+Improve error UI and handle multiple thrown errors
+https://discord.com/channels/415207508303544321/415207508303544323/1372228866621571163
 
 - stanek fragments for darkweb
 

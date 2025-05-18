@@ -4,13 +4,13 @@ import { getPasswordType, Minigames } from "../controllers/DarknetServerGenerato
 import { dnetStyles } from "./dnetStyles";
 import { Result } from "@nsdefs";
 import { PasswordResponse } from "../models/DnetServerData";
-import { getAuthResult, getSharedChars } from "../models/authentication";
+import { getAuthResult, getSharedChars } from "../effects/authentication";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 import { DarknetEvents } from "../models/DarknetState";
 import { LabyrinthSummary } from "./LabyrinthSummary";
-import { getLabyrinthDetails, isLabyrinthServer } from "../models/labyrinth";
+import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
 import { BaseServer } from "../../Server/BaseServer";
-import { getDarknetData, isDarknetServer } from "../models/effects";
+import { getDarknetData, isDarknetServer } from "../effects/effects";
 
 export type PasswordPromptProps = {
   server: BaseServer;

@@ -12,7 +12,7 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 import { serverMetadata } from "./data/servers";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
-import { hasDarknetAccess } from "../DarkNet/models/effects";
+import { hasDarknetAccess } from "../DarkNet/effects/effects";
 
 /**
  * Constructs a new server, while also ensuring that the new server
