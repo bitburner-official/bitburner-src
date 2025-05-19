@@ -81,3 +81,16 @@ export function setBitNodeOptions(bitNodeOptions: BitNodeOptions): void {
 
   Object.assign(Player.bitNodeOptions, bitNodeOptions);
 }
+
+/**
+ * This function only sets the backdoorInstalled flag of the WD server. The caller must call Router.toPage() to route
+ * the UI to the BitVerse page. Importing Router from src\ui\GameRoot.tsx brings too many unnecessary dependencies to
+ * this utility file.
+ */
+export function finishBitNode() {
+  const wd = GetServer(SpecialServers.WorldDaemon);
+  if (!(wd instanceof Server)) {
+    throw new Error("WorldDaemon is not a normal server. This is a bug. Please contact developers.");
+  }
+  wd.backdoorInstalled = true;
+}
