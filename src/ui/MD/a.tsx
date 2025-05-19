@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "@mui/material";
 import { useNavigator } from "../React/Documentation";
-import { CorruptableText } from "../React/CorruptableText";
+import { CorruptibleText } from "../React/CorruptibleText";
 import { Player } from "@player";
 import { getNsApiDocumentationUrl } from "../../utils/StringHelperFunctions";
 import { Settings } from "../../Settings/Settings";
@@ -46,7 +46,7 @@ export const A = (props: React.PropsWithChildren<{ href?: string }>): React.Reac
           cursor: "pointer",
         }}
       >
-        <CorruptableText content={String(props.children)} spoiler={true} />
+        <CorruptibleText content={String(props.children)} spoiler={true} />
       </span>
     );
   return (

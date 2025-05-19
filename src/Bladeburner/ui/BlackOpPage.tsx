@@ -6,7 +6,7 @@ import { FactionName } from "@enums";
 import { BlackOpElem } from "./BlackOpElem";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { blackOpsArray } from "../data/BlackOperations";
 import { GetServer } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
@@ -47,7 +47,7 @@ export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactEleme
       </Typography>
       {bladeburner.numBlackOpsComplete >= blackOpsArray.length ? (
         <Button sx={{ my: 1, p: 1 }} onClick={finishBitNode}>
-          <CorruptableText content="Destroy w0r1d_d43m0n" spoiler={false}></CorruptableText>
+          <CorruptibleText content="Destroy w0r1d_d43m0n" spoiler={false}></CorruptibleText>
         </Button>
       ) : (
         <>

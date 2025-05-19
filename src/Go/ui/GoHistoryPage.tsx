@@ -11,7 +11,7 @@ import { getBonusText, getMaxRep } from "../effects/effect";
 import { formatNumber } from "../../ui/formatNumber";
 import { GoScoreSummaryTable } from "./GoScoreSummaryTable";
 import { getNewBoardState } from "../boardState/boardState";
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { getRecordKeys } from "../../Types/Record";
 
 export const GoHistoryPage = (): React.ReactElement => {
@@ -54,7 +54,7 @@ export const GoHistoryPage = (): React.ReactElement => {
                 {" "}
                 <strong className={classes.keyText}>
                   {faction === GoOpponent.w0r1d_d43m0n ? (
-                    <CorruptableText content="????????????" spoiler={false} />
+                    <CorruptibleText content="????????????" spoiler={false} />
                   ) : (
                     faction
                   )}
