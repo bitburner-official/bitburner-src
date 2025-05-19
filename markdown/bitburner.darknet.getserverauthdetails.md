@@ -26,5 +26,5 @@ An object containing the server's authentication protocol details. isOnline: Tru
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.05 GB
 

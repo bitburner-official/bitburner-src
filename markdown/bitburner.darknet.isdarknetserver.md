@@ -28,5 +28,5 @@ true if the server is a darknet server, false otherwise.
 
 ## Remarks
 
-RAM cost: 0 GB
+RAM cost: 0.05 GB
 

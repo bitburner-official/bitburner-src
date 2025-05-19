@@ -4336,7 +4336,7 @@ export interface Darknet {
    * Returns the server's authentication protocol details.
    *
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.05 GB
    *
    * @param host - Hostname of the server to analyze. Defaults to the running script's server if not specified.
    * @returns An object containing the server's authentication protocol details.
@@ -4392,7 +4392,7 @@ export interface Darknet {
    * Returns false if the server does not exist or has gone offline.
    *
    * @remarks
-   * RAM cost: 0 GB
+   * RAM cost: 0.05 GB
    *
    * @param host - Optional. Hostname for the requested server object.
    * @returns true if the server is a darknet server, false otherwise.
