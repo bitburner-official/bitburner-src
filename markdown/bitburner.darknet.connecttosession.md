@@ -10,7 +10,7 @@ If successful, grants the script a session, allowing it to exec() to that server
 
 If not, more detail bay be able to be gleaned by using heartbleed() to look at the resulting logs on the server.
 
-Response messages: - "200 Success" - Authentication was successful. - "401 Unauthorized" - Authentication failed. The password is incorrect. - "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid. - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability. - "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server. - "418 I'm a teapot" - The server is a teapot and cannot brew coffee.
+Response messages:<br/> - "200 Success" - Authentication was successful.<br/> - "401 Unauthorized" - Authentication failed. The password is incorrect.<br/> - "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/> - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/> - "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server.<br/> - "418 I'm a teapot" - The server is a teapot and cannot brew coffee.<br/>
 
 **Signature:**
 
