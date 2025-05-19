@@ -4,8 +4,7 @@ import { GetServer } from "../Server/AllServers";
 import { Server } from "../Server/Server";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { JSONMap } from "../Types/Jsonable";
-
-export const validBitNodes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+import { validBitNodes } from "./Constants";
 
 export function isBitNodeFinished(): boolean {
   const wd = GetServer(SpecialServers.WorldDaemon);

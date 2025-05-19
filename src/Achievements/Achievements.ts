@@ -29,7 +29,8 @@ import { workerScripts } from "../Netscript/WorkerScripts";
 
 import { getRecordValues } from "../Types/Record";
 import { ServerConstants } from "../Server/data/Constants";
-import { canAccessBitNodeFeature, isBitNodeFinished, knowAboutBitverse, validBitNodes } from "../BitNode/BitNodeUtils";
+import { canAccessBitNodeFeature, isBitNodeFinished, knowAboutBitverse } from "../BitNode/BitNodeUtils";
+import { validBitNodes } from "../BitNode/Constants";
 import { isLegacyScript } from "../Paths/ScriptFilePath";
 import { Settings } from "../Settings/Settings";
 import { activateSteamAchievements } from "../Electron";

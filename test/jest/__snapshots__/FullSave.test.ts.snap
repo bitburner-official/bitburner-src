@@ -45,6 +45,7 @@ exports[`Check Save File Continuity GoSave continuity 1`] = `
     "previousBoard": "",
     "previousPlayer": "White",
   },
+  "moveOrCheatViaApi": false,
   "previousGame": null,
   "stats": {},
   "storedCycles": 0,
