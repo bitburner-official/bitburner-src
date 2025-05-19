@@ -18,7 +18,7 @@ export interface TIX
 |  --- | --- |
 |  [buyShort(sym, shares)](./bitburner.tix.buyshort.md) | Short stocks. |
 |  [buyStock(sym, shares)](./bitburner.tix.buystock.md) | Buy stocks. |
-|  [cancelOrder(sym, shares, price, type, pos)](./bitburner.tix.cancelorder.md) | Cancel order for stocks. |
+|  [cancelOrder(sym, shares, price, orderType, positionType)](./bitburner.tix.cancelorder.md) | Cancel order for stocks. |
 |  [getAskPrice(sym)](./bitburner.tix.getaskprice.md) | Returns the ask price of that stock. |
 |  [getBidPrice(sym)](./bitburner.tix.getbidprice.md) | Returns the bid price of that stock. |
 |  [getBonusTime()](./bitburner.tix.getbonustime.md) | Get Stock Market bonus time. |
@@ -29,8 +29,8 @@ export interface TIX
 |  [getOrganization(sym)](./bitburner.tix.getorganization.md) | Returns the organization associated with a stock symbol. |
 |  [getPosition(sym)](./bitburner.tix.getposition.md) | Returns the player’s position in a stock. |
 |  [getPrice(sym)](./bitburner.tix.getprice.md) | Returns the price of a stock. |
-|  [getPurchaseCost(sym, shares, posType)](./bitburner.tix.getpurchasecost.md) | Calculates cost of buying stocks. |
-|  [getSaleGain(sym, shares, posType)](./bitburner.tix.getsalegain.md) | Calculate profit of selling stocks. |
+|  [getPurchaseCost(sym, shares, positionType)](./bitburner.tix.getpurchasecost.md) | Calculates cost of buying stocks. |
+|  [getSaleGain(sym, shares, positionType)](./bitburner.tix.getsalegain.md) | Calculate profit of selling stocks. |
 |  [getSymbols()](./bitburner.tix.getsymbols.md) | Returns an array of the symbols of the tradable stocks |
 |  [getVolatility(sym)](./bitburner.tix.getvolatility.md) | Returns the volatility of the specified stock. |
 |  [has4SData()](./bitburner.tix.has4sdata.md) | Returns true if the player has access to the 4S Data |
@@ -38,7 +38,7 @@ export interface TIX
 |  [hasTIXAPIAccess()](./bitburner.tix.hastixapiaccess.md) | Returns true if the player has access to the TIX API |
 |  [hasWSEAccount()](./bitburner.tix.haswseaccount.md) | Returns true if the player has access to a WSE Account |
 |  [nextUpdate()](./bitburner.tix.nextupdate.md) | Sleep until the next Stock Market price update has happened. |
-|  [placeOrder(sym, shares, price, type, pos)](./bitburner.tix.placeorder.md) | Place order for stocks. |
+|  [placeOrder(sym, shares, price, orderType, positionType)](./bitburner.tix.placeorder.md) | Place order for stocks. |
 |  [purchase4SMarketData()](./bitburner.tix.purchase4smarketdata.md) | Purchase 4S Market Data Access. |
 |  [purchase4SMarketDataTixApi()](./bitburner.tix.purchase4smarketdatatixapi.md) | Purchase 4S Market Data TIX API Access. |
 |  [purchaseTixApi()](./bitburner.tix.purchasetixapi.md) | Purchase TIX API Access |

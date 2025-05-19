@@ -9,7 +9,7 @@ Calculate profit of selling stocks.
 **Signature:**
 
 ```typescript
-getSaleGain(sym: string, shares: number, posType: string): number;
+getSaleGain(sym: string, shares: number, positionType: PositionType): number;
 ```
 
 ## Parameters
@@ -18,7 +18,7 @@ getSaleGain(sym: string, shares: number, posType: string): number;
 |  --- | --- | --- |
 |  sym | string | Stock symbol. |
 |  shares | number | Number of shares to sell. |
-|  posType | string | Specifies whether the order is a “Long” or “Short” position. |
+|  positionType | [PositionType](./bitburner.positiontype.md) | Specifies whether the order is a Long ("L") or Short ("S") position. |
 
 **Returns:**
 

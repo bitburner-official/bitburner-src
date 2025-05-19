@@ -431,10 +431,9 @@ type OrderEnumType = {
 type OrderType = _ValueOf<OrderEnumType>;
 
 /**
- * Value in map of {@link StockOrder}
  * @public
  */
-interface StockOrderObject {
+interface StockOrder {
   /** Number of shares */
   shares: number;
   /** Price per share */
@@ -443,16 +442,6 @@ interface StockOrderObject {
   type: OrderType;
   /** Order position */
   position: PositionType;
-}
-
-/**
- * Return value of {@link TIX.getOrders | getOrders}
- *
- * Keys are stock symbols, properties are arrays of {@link StockOrderObject}
- * @public
- */
-interface StockOrder {
-  [key: string]: StockOrderObject[];
 }
 
 /** Constants used for the stock market game mechanic.
@@ -1382,10 +1371,10 @@ export interface TIX {
    *
    * @param sym - Stock symbol.
    * @param shares - Number of shares to purchase.
-   * @param posType - Specifies whether the order is a “Long” or “Short” position.
+   * @param positionType - Specifies whether the order is a Long ("L") or Short ("S") position.
    * @returns Cost to buy a given number of shares of a stock.
    */
-  getPurchaseCost(sym: string, shares: number, posType: string): number;
+  getPurchaseCost(sym: string, shares: number, positionType: PositionType): number;
 
   /**
    * Calculate profit of selling stocks.
@@ -1396,10 +1385,10 @@ export interface TIX {
    *
    * @param sym - Stock symbol.
    * @param shares - Number of shares to sell.
-   * @param posType - Specifies whether the order is a “Long” or “Short” position.
+   * @param positionType - Specifies whether the order is a Long ("L") or Short ("S") position.
    * @returns Gain from selling a given number of shares of a stock.
    */
-  getSaleGain(sym: string, shares: number, posType: string): number;
+  getSaleGain(sym: string, shares: number, positionType: PositionType): number;
 
   /**
    * Buy stocks.
@@ -1502,11 +1491,11 @@ export interface TIX {
    * @param sym - Stock symbol.
    * @param shares - Number of shares for order. Must be positive. Will be rounded to the nearest integer.
    * @param price - Execution price for the order.
-   * @param type - Type of order.
-   * @param pos - Specifies whether the order is a “Long” or “Short” position.
+   * @param orderType - Type of order.
+   * @param positionType - Specifies whether the order is a Long ("L") or Short ("S") position.
    * @returns True if the order is successfully placed, and false otherwise.
    */
-  placeOrder(sym: string, shares: number, price: number, type: string, pos: string): boolean;
+  placeOrder(sym: string, shares: number, price: number, orderType: OrderType, positionType: PositionType): boolean;
 
   /**
    * Cancel order for stocks.
@@ -1520,10 +1509,10 @@ export interface TIX {
    * @param sym - Stock symbol.
    * @param shares - Number of shares for order. Must be positive. Will be rounded to the nearest integer.
    * @param price - Execution price for the order.
-   * @param type - Type of order.
-   * @param pos - Specifies whether the order is a “Long” or “Short” position.
+   * @param orderType - Type of order.
+   * @param positionType - Specifies whether the order is a Long ("L") or Short ("S") position.
    */
-  cancelOrder(sym: string, shares: number, price: number, type: string, pos: string): void;
+  cancelOrder(sym: string, shares: number, price: number, orderType: OrderType, positionType: PositionType): void;
 
   /**
    * Returns your order book for the stock market.
@@ -1531,7 +1520,7 @@ export interface TIX {
    * RAM cost: 2.5 GB
    * This is an object containing information for all the Limit and Stop Orders you have in the stock market.
    * For each symbol you have a position in, the returned object will have a key with that symbol's name.
-   * The object's properties are each an array of {@link StockOrderObject}
+   * The object's properties are each an array of {@link StockOrder}
    * The object has the following structure:
    *
    * ```js
@@ -1586,9 +1575,10 @@ export interface TIX {
    *  ],
    * }
    * ```
-   * @returns Object containing information for all the Limit and Stop Orders you have in the stock market.
+   * @returns Object containing information for all the Limit and Stop Orders you have in the stock market. Keys are
+   * stock symbols, and properties are arrays of {@link StockOrder}
    */
-  getOrders(): StockOrder;
+  getOrders(): Record<string, StockOrder[]>;
 
   /**
    * Returns the volatility of the specified stock.
@@ -4991,18 +4981,18 @@ export interface GoAnalysis {
 
   /**
    * Adds a colored circle indicator to the specified point. These indicators are removed once a move is played.
-   * @param x the x coordinate to highlight
-   * @param y the y coordinate to highlight
-   * @param color optional: the color to use for the circle. Can be given an RGB string like "#FFF000", or "none" to clear it, or one of
+   * @param x - the x coordinate to highlight
+   * @param y - the y coordinate to highlight
+   * @param color - optional: the color to use for the circle. Can be given an RGB string like "#FFF000", or "none" to clear it, or one of
    *    these color names from the selected theme: "hack" (green), "hp" (red), "money" (yellow), "int" (blue), "cha" (purple)
-   * @param text optional: text to add to the node (replaces the default A.1 or B5 seen on hover). Should be kept short to fit well.
+   * @param text - optional: text to add to the node (replaces the default A.1 or B5 seen on hover). Should be kept short to fit well.
    */
   highlightPoint(x, y, color, text): void;
 
   /**
    * Removes the highlight color and text from the specified node.
-   * @param x the x coordinate to remove highlight from
-   * @param y the y coordinate to remove highlight from
+   * @param x - the x coordinate to remove highlight from
+   * @param y - the y coordinate to remove highlight from
    */
   clearPointHighlight(x, y): void;
 

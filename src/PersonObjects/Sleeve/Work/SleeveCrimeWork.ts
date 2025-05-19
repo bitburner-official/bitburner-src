@@ -8,7 +8,6 @@ import { Crime } from "../../../Crime/Crime";
 import { scaleWorkStats, WorkStats } from "../../../Work/WorkStats";
 import { CONSTANTS } from "../../../Constants";
 import { calculateCrimeWorkStats } from "../../../Work/Formulas";
-import { findCrime } from "../../../Crime/CrimeHelpers";
 
 export const isSleeveCrimeWork = (w: SleeveWorkClass | null): w is SleeveCrimeWork =>
   w !== null && w.type === SleeveWorkType.CRIME;
@@ -68,10 +67,12 @@ export class SleeveCrimeWork extends SleeveWorkClass {
     return Generic_toJSON("SleeveCrimeWork", this);
   }
 
-  /** Initializes a RecoveryWork object from a JSON save state. */
+  /** Initializes an object from a JSON save state. */
   static fromJSON(value: IReviverValue): SleeveCrimeWork {
     const crimeWork = Generic_fromJSON(SleeveCrimeWork, value.data);
-    crimeWork.crimeType = findCrime(crimeWork.crimeType)?.type ?? CrimeType.shoplift;
+    if (!(crimeWork.crimeType in Crimes)) {
+      crimeWork.crimeType = CrimeType.shoplift;
+    }
     return crimeWork;
   }
 }

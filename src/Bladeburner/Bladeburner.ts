@@ -7,6 +7,7 @@ import type { Skills as PersonSkills } from "../PersonObjects/Skills";
 import {
   AugmentationName,
   BladeburnerActionType,
+  type BladeburnerBlackOpName,
   BladeburnerContractName,
   BladeburnerGeneralActionName,
   BladeburnerMultName,
@@ -246,7 +247,7 @@ export class Bladeburner implements OperationTeam {
     }
     const type = args[1];
     const name = args[2];
-    const action = this.getActionFromTypeAndName(type, name);
+    const action = this.guessActionFromTypeAndName(type, name);
     if (!action) {
       this.postToConsole(`Invalid action type / name specified: type: ${type}, name: ${name}`);
       return;
@@ -1406,8 +1407,25 @@ export class Bladeburner implements OperationTeam {
     }
   }
 
-  /** Fuzzy matching for action identifiers. Should be removed in 3.0 */
-  getActionFromTypeAndName(type: string, name: string): Action | null {
+  getActionFromTypeAndName(type: BladeburnerActionType, name: string): Action | undefined {
+    /**
+     * Typecasting "name" instead of checking it with getEnumHelper().isMember() is intentional. The callers will handle
+     * the undefined value if "name" is invalid.
+     */
+    switch (type) {
+      case BladeburnerActionType.General:
+        return GeneralActions[name as BladeburnerGeneralActionName];
+      case BladeburnerActionType.Contract:
+        return this.contracts[name as BladeburnerContractName];
+      case BladeburnerActionType.Operation:
+        return this.operations[name as BladeburnerOperationName];
+      case BladeburnerActionType.BlackOp:
+        return BlackOperations[name as BladeburnerBlackOpName];
+    }
+  }
+
+  /** Fuzzy matching for action identifiers. Do not use this function for anything except BB console. */
+  guessActionFromTypeAndName(type: string, name: string): Action | null {
     if (!type || !name) return null;
     const id = autoCompleteTypeShorthand(type, name);
     return id ? this.getActionObject(id) : null;
