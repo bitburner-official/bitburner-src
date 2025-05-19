@@ -62,7 +62,6 @@ export async function main(ns) {
 |  [clear(handle)](./bitburner.ns.clear.md) | Clear data from a file. |
 |  [clearLog()](./bitburner.ns.clearlog.md) | Clears the script’s logs. |
 |  [clearPort(portNumber)](./bitburner.ns.clearport.md) | Clear data from a port. |
-|  [closeTail(pid)](./bitburner.ns.closetail.md) | Close the tail window of a script. This function is deprecated and will be removed in a later version. |
 |  [deleteServer(host)](./bitburner.ns.deleteserver.md) | Delete a purchased server. |
 |  [disableLog(fn)](./bitburner.ns.disablelog.md) | Disables logging for the given NS function. |
 |  [dnsLookup(host)](./bitburner.ns.dnslookup.md) | Given a hostname, returns its IP address; or given an IP address, returns its hostname. |
@@ -131,7 +130,6 @@ export async function main(ns) {
 |  [kill(filename, host, args)](./bitburner.ns.kill_1.md) | Terminate the script(s) with the provided filename, host, and script arguments. |
 |  [killall(host, safetyGuard)](./bitburner.ns.killall.md) | Terminate all scripts on a server. |
 |  [ls(host, substring)](./bitburner.ns.ls.md) | List files on a server. |
-|  [moveTail(x, y, pid)](./bitburner.ns.movetail.md) | Move a tail window. This function is deprecated and will be removed in a later version. |
 |  [mv(host, source, destination)](./bitburner.ns.mv.md) | Move a file on the target server. |
 |  [nextPortWrite(port)](./bitburner.ns.nextportwrite.md) | Listen for a port write. |
 |  [nuke(host)](./bitburner.ns.nuke.md) | Runs NUKE.exe on a server. |
@@ -147,7 +145,6 @@ export async function main(ns) {
 |  [readPort(portNumber)](./bitburner.ns.readport.md) | Read data from a port. |
 |  [relaysmtp(host)](./bitburner.ns.relaysmtp.md) | Runs relaySMTP.exe on a server. |
 |  [renamePurchasedServer(hostname, newName)](./bitburner.ns.renamepurchasedserver.md) | Rename a purchased server. |
-|  [resizeTail(width, height, pid)](./bitburner.ns.resizetail.md) | Resize a tail window. This function is deprecated and will be removed in a later version. |
 |  [rm(name, host)](./bitburner.ns.rm.md) | Delete a file. |
 |  [run(script, threadOrOptions, args)](./bitburner.ns.run.md) | Start another script on the current server. |
 |  [scan(host, returnOpts)](./bitburner.ns.scan.md) | Get the list of hostnames or IP addresses connected to a server. |
@@ -156,13 +153,11 @@ export async function main(ns) {
 |  [scriptRunning(script, host)](./bitburner.ns.scriptrunning.md) | Check if any script with a filename is running. |
 |  [self()](./bitburner.ns.self.md) | Returns the currently running script. |
 |  [serverExists(host)](./bitburner.ns.serverexists.md) | Returns a boolean denoting whether or not the specified server exists. |
-|  [setTitle(title, pid)](./bitburner.ns.settitle.md) | Set the title of the tail window of a script. This function is deprecated and will be removed in a later version. |
 |  [share()](./bitburner.ns.share.md) | Share the server's ram with your factions to increase the reputation gain rate of faction work. This boost is applied to all faction work of all factions. |
 |  [sleep(millis)](./bitburner.ns.sleep.md) | Suspends the script for n milliseconds. |
 |  [spawn(script, threadOrOptions, args)](./bitburner.ns.spawn.md) | Terminate current script and start another in a defined number of milliseconds. |
 |  [sprintf(format, args)](./bitburner.ns.sprintf.md) | Format a string. |
 |  [sqlinject(host)](./bitburner.ns.sqlinject.md) | Runs SQLInject.exe on a server. |
-|  [tail(fn, host, args)](./bitburner.ns.tail.md) | Open the tail window of a script. This function is deprecated and will be removed in a later version. |
 |  [toast(msg, variant, duration)](./bitburner.ns.toast.md) | Queue a toast (bottom-right notification). |
 |  [tprint(args)](./bitburner.ns.tprint.md) | Prints one or more values or variables to the Terminal. |
 |  [tprintf(format, values)](./bitburner.ns.tprintf.md) | Prints a raw value or a variable to the Terminal. |
