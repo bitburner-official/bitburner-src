@@ -722,8 +722,8 @@ export const RamCosts: RamCostTree<NSFull> = {
     },
     dnet: {
       getCurrentDarknetInstability: 0,
-      getAuthenticateEstimatedTime: 0,
-      getHeartbleedEstimatedTime: 0,
+      getAuthenticateTime: 0,
+      getHeartbleedTime: 0,
       getExpectedRamBlockRemoved: 0,
     },
   },

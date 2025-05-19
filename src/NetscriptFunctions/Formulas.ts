@@ -56,12 +56,9 @@ import type { PositiveNumber } from "../types";
 import { calculateEffectiveSharedThreads, calculateShareBonus } from "../NetworkShare/Share";
 import {
   calculateAuthenticationTime,
-  getBackdoorAuthTimeDebuff,
   getRamBlockRemoved,
   isDarknetServer,
 } from "../DarkNet/effects/effects";
-
-import { getTimeoutChance } from "../DarkNet/effects/offlineServerHandling";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {
@@ -475,37 +472,28 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       },
     },
     dnet: {
-      getCurrentDarknetInstability: () => () => {
-        return {
-          authenticateDurationIncrease: getBackdoorAuthTimeDebuff(),
-          authenticateTimeoutChance: getTimeoutChance(),
-        };
-      },
-      getAuthenticateEstimatedTime:
+      getAuthenticateTime:
         (ctx) =>
-        (_hostname, _threads, _player): number => {
-          const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+        (_server, _threads, _player): number => {
+          const server = helpers.server(ctx, _server ?? ctx.workerScript.getServer());
           const threads = helpers.number(ctx, "threads", _threads ?? 1);
           const person = helpers.person(ctx, _player ?? Player);
-          const server = helpers.getServer(ctx, hostname);
           return calculateAuthenticationTime(server, person, threads);
         },
-      getHeartbleedEstimatedTime:
+      getHeartbleedTime:
         (ctx) =>
-        (_hostname, _threads, _player): number => {
-          const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+        (_server, _threads, _player): number => {
+          const server = helpers.server(ctx, _server ?? ctx.workerScript.getServer());
           const threads = helpers.number(ctx, "threads", _threads ?? 1);
           const person = helpers.person(ctx, _player ?? Player);
-          const server = helpers.getServer(ctx, hostname);
           return calculateAuthenticationTime(server, person, threads) * 1.5;
         },
       getExpectedRamBlockRemoved:
         (ctx) =>
-        (_hostname, _threads, _person): number => {
-          const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+        (_server, _threads, _person): number => {
+          const server = helpers.server(ctx, _server ?? ctx.workerScript.getServer());
           const threads = helpers.number(ctx, "threads", _threads ?? 1);
           const person = helpers.person(ctx, _person ?? Player);
-          const server = helpers.getServer(ctx, hostname);
           if (!isDarknetServer(server)) {
             return 0;
           }

@@ -7,6 +7,7 @@ import {
   calculateAuthenticationTime,
   calculatePasswordAttemptChaGain,
   chargeServerMigration,
+  getBackdoorAuthTimeDebuff,
   getDarknetData,
   getRewardFromCache,
   getStasisLinkLimit,
@@ -37,6 +38,7 @@ import {
   expectDarknetServer,
   expectPassword,
   getFailureResult,
+  getTimeoutChance,
   isDirectConnected,
   logger,
 } from "../DarkNet/effects/offlineServerHandling";
@@ -643,6 +645,12 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       return helpers.netscriptDelay(ctx, waitTime).then(() => {
         return handlePhishingAttack(ctx);
       });
+    },
+    getCurrentDarknetInstability: () => () => {
+      return {
+        authenticateDurationIncrease: getBackdoorAuthTimeDebuff(),
+        authenticateTimeoutChance: getTimeoutChance(),
+      };
     },
   };
 }

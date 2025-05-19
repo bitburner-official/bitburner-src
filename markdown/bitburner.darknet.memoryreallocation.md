@@ -4,7 +4,7 @@
 
 ## Darknet.memoryReallocation() method
 
-Spends some time freeing some of the RAM currently blocked by the server owner. Must target a directly connected server. The amount of ram so absconded scaled with charisma and the number of threads used.
+Spends some time freeing some of the RAM currently blocked by the server owner. Must target a directly connected server. The amount of ram recovered scales with charisma and the number of threads used.
 
 **Signature:**
 

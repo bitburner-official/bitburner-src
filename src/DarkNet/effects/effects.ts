@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { Person as IPerson } from "@nsdefs";
+import { Person as IPerson, Server as IServer } from "@nsdefs";
 import { AugmentationName, CompletedProgramName, LiteratureName, ToastVariant } from "@enums";
 import { CreateProgramWork } from "../../Work/CreateProgramWork";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
@@ -73,7 +73,7 @@ export const handleFailedAuth = (server: BaseServer, threads: number) => {
  * @param threads - the number of threads used for the password attempt (which speeds up the process)
  */
 export const calculateAuthenticationTime = (
-  server: BaseServer,
+  server: IServer,
   person: IPerson = Player,
   threads: number = 1,
   attemptedPassword: string = "",
@@ -433,7 +433,7 @@ export const chargeServerMigration = (server: BaseServer, threads = 1) => {
   return result;
 };
 
-export const isDarknetServer = (server: BaseServer): server is DarknetServer => {
+export const isDarknetServer = (server: IServer): server is DarknetServer => {
   return server instanceof DarknetServer || (server instanceof Server && !!server.darknetData);
 };
 

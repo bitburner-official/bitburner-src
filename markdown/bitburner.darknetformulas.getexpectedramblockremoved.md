@@ -9,14 +9,14 @@ Gets the expected amount off ram that will be freed by a call to dnet.memoryReal
 **Signature:**
 
 ```typescript
-getExpectedRamBlockRemoved(hostname?: string, threads?: number, player?: Person): number;
+getExpectedRamBlockRemoved(server?: Server, threads?: number, player?: Person): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  hostname | string | _(Optional)_ The hostname of the server to free ram on. Optional, defaults to the current server |
+|  server | [Server](./bitburner.server.md) | _(Optional)_ The server to free ram on. Optional, defaults to the current server |
 |  threads | number | _(Optional)_ The number of threads used in the memoryReallocation call. Optional, defaults to 1 |
 |  player | [Person](./bitburner.person.md) | _(Optional)_ The player object. Optional, defaults to the current player status |
 

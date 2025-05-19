@@ -4224,12 +4224,12 @@ export interface Darknet {
    * If not, more detail bay be able to be gleaned by using heartbleed() to look at the resulting logs on the server.
    *
    * Response messages:
-   * "200 Success" - Authentication was successful.
-   * "401 Unauthorized" - Authentication failed. The password is incorrect, or the target server has never had a successful authenticate() by any script.
-   * "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid.
-   * "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
-   * "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server.
-   * "418 I'm a teapot" - The server is a teapot and cannot brew coffee.
+   * - "200 Success" - Authentication was successful.
+   * - "401 Unauthorized" - Authentication failed. The password is incorrect.
+   * - "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid.
+   * - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
+   * - "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server.
+   * - "418 I'm a teapot" - The server is a teapot and cannot brew coffee.
    *
    * @remarks
    * RAM cost: 0.05 GB
@@ -4247,7 +4247,7 @@ export interface Darknet {
    *
    * Servers will periodically produce logs themselves, as well, which sometimes are useful, but most times are not.
    *
-   * The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedEstimatedTime for more information.
+   * The speed of capture scales with the number of threads used. See formulas.dnet.getHeartbleedTime for more information.
    *
    * @remarks
    * RAM cost: 0.6 GB
@@ -4401,7 +4401,7 @@ export interface Darknet {
 
   /**
    * Spends some time freeing some of the RAM currently blocked by the server owner. Must target a directly connected server.
-   * The amount of ram so absconded scaled with charisma and the number of threads used.
+   * The amount of ram recovered scales with charisma and the number of threads used.
    *
    * @remarks
    * RAM cost: 1 GB
@@ -4447,6 +4447,17 @@ export interface Darknet {
    * RAM cost: 2 GB
    */
   phishingAttack(): Promise<Result>;
+
+  /**
+   * Gets the current instability of the darknet caused by excessive backdoor-ing of servers.
+   * @remarks
+   * Ram cost: 0 GB
+   *
+   * @returns An object containing the current instability values.
+   *    authenticateDurationIncrease: the increase in time that authentication takes, as a decimal
+   *    authenticateTimeoutChance: the chance that authentication will time out instead of resolving, as a decimal
+   */
+  getCurrentDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
 }
 
 /**
@@ -6034,38 +6045,27 @@ interface BladeburnerFormulas {
  */
 interface DarknetFormulas {
   /**
-   * Gets the current instability of the darknet caused by excessive backdoor-ing of servers.
-   * @remarks
-   * Ram cost: 0 GB
-   *
-   * @returns An object containing the current instability values.
-   *    authenticateDurationIncrease: the increase in time that authentication takes, as a decimal
-   *    authenticateTimeoutChance: the chance that authentication will timeout instead of resolving, as a decimal
-   */
-  getCurrentDarknetInstability(): { authenticateDurationIncrease: number; authenticateTimeoutChance: number };
-
-  /**
-   * Gets the estimated time it will take to authenticate a server.
-   * @param hostname - The hostname of the server to authenticate. Optional, defaults to the current server
+   * Gets the time it will take to authenticate a server.
+   * @param server - The server to authenticate with. Optional, defaults to the current server
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getAuthenticateEstimatedTime(hostname?: string, threads?: number, player?: Person): number;
+  getAuthenticateTime(server?: Server, threads?: number, player?: Person): number;
   /**
-   * Gets the estimated time it will take to scrape logs from a server.
-   * @param hostname - The hostname of the server to scrape logs from. Optional, defaults to the current server
+   * Gets the time it will take to scrape logs from a server.
+   * @param server - The server to scrape logs from. Optional, defaults to the current server
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getHeartbleedEstimatedTime(hostname?: string, threads?: number, player?: Person): number;
+  getHeartbleedTime(server?: Server, threads?: number, player?: Person): number;
 
   /**
    * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
-   * @param hostname - The hostname of the server to free ram on. Optional, defaults to the current server
+   * @param server - The server to free ram on. Optional, defaults to the current server
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getExpectedRamBlockRemoved(hostname?: string, threads?: number, player?: Person): number;
+  getExpectedRamBlockRemoved(server?: Server, threads?: number, player?: Person): number;
 }
 
 /**

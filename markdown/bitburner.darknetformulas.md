@@ -16,8 +16,7 @@ interface DarknetFormulas
 
 |  Method | Description |
 |  --- | --- |
-|  [getAuthenticateEstimatedTime(hostname, threads, player)](./bitburner.darknetformulas.getauthenticateestimatedtime.md) | Gets the estimated time it will take to authenticate a server. |
-|  [getCurrentDarknetInstability()](./bitburner.darknetformulas.getcurrentdarknetinstability.md) | Gets the current instability of the darknet caused by excessive backdoor-ing of servers. |
-|  [getExpectedRamBlockRemoved(hostname, threads, player)](./bitburner.darknetformulas.getexpectedramblockremoved.md) | Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation |
-|  [getHeartbleedEstimatedTime(hostname, threads, player)](./bitburner.darknetformulas.getheartbleedestimatedtime.md) | Gets the estimated time it will take to scrape logs from a server. |
+|  [getAuthenticateTime(server, threads, player)](./bitburner.darknetformulas.getauthenticatetime.md) | Gets the time it will take to authenticate a server. |
+|  [getExpectedRamBlockRemoved(server, threads, player)](./bitburner.darknetformulas.getexpectedramblockremoved.md) | Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation |
+|  [getHeartbleedTime(server, threads, player)](./bitburner.darknetformulas.getheartbleedtime.md) | Gets the time it will take to scrape logs from a server. |
 
