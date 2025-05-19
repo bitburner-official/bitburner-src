@@ -244,6 +244,7 @@ const dnet = {
   getOwnerAllocatedRam: 0,
   promoteStock: 2,
   phishingAttack: 2,
+  getCurrentDarknetInstability: 0,
 } as const;
 
 const format = {
@@ -721,7 +722,6 @@ export const RamCosts: RamCostTree<NSFull> = {
       skillMaxUpgradeCount: 0,
     },
     dnet: {
-      getCurrentDarknetInstability: 0,
       getAuthenticateTime: 0,
       getHeartbleedTime: 0,
       getExpectedRamBlockRemoved: 0,
