@@ -48,7 +48,7 @@ import { ServerConstants } from "../Server/data/Constants";
 import { blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { calculateEffectiveRequiredReputation } from "../Company/utils";
 import { addRepToFavor } from "../Faction/formulas/favor";
-import { validBitNodes } from "../BitNode/BitNodeUtils";
+import { validBitNodes } from "../BitNode/Constants";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { cat } from "../Terminal/commands/cat";
 import { Crimes } from "../Crime/Crimes";

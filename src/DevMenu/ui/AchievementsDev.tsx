@@ -14,11 +14,12 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { Player } from "@player";
 import { achievements } from "../../Achievements/Achievements";
 import { Engine } from "../../engine";
+import type { AchievementId } from "../../Achievements/Types";
 
 export function AchievementsDev(): React.ReactElement {
   const [playerAchievement, setPlayerAchievements] = useState(Player.achievements.map((m) => m.ID));
 
-  function grantAchievement(id: string): void {
+  function grantAchievement(id: AchievementId): void {
     Player.giveAchievement(id);
     setPlayerAchievements(Player.achievements.map((m) => m.ID));
   }
@@ -28,7 +29,7 @@ export function AchievementsDev(): React.ReactElement {
     setPlayerAchievements(Player.achievements.map((m) => m.ID));
   }
 
-  function removeAchievement(id: string): void {
+  function removeAchievement(id: AchievementId): void {
     Player.achievements = Player.achievements.filter((a) => a.ID !== id);
     setPlayerAchievements(Player.achievements.map((m) => m.ID));
   }

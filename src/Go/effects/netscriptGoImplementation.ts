@@ -29,6 +29,7 @@ import { newOpponentStats } from "../Constants";
  * Check the move based on the current settings
  */
 export function validateMove(error: (s: string) => never, x: number, y: number, methodName = "", settings = {}): void {
+  Go.moveOrCheatViaApi = true;
   const check = {
     emptyNode: true,
     requireNonEmptyNode: false,
@@ -502,10 +503,11 @@ export function determineCheatSuccess(
   if ((successRngOverride ?? rng.random()) <= cheatSuccessChance(state.cheatCount, playAsWhite)) {
     callback();
   }
-  // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly losing
+  // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly ending the game
   else if (priorCheatCount && (ejectRngOverride ?? rng.random()) < 0.1 && state.ai !== GoOpponent.none) {
     logger(`Cheat failed! You have been ejected from the subnet.`);
     forceEndGoGame(state);
+    Player.giveAchievement("IPVGO_ANTICHEAT");
     return handleNextTurn(state, true);
   } else {
     // If the cheat fails, your turn is skipped

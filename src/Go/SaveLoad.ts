@@ -24,6 +24,7 @@ type SaveFormat = {
   currentGame: CurrentGameSaveData;
   stats: PartialRecord<GoOpponent, OpponentStats>;
   storedCycles: number;
+  moveOrCheatViaApi: boolean;
 };
 
 export function getGoSave(): SaveFormat {
@@ -46,6 +47,7 @@ export function getGoSave(): SaveFormat {
     },
     stats: Go.stats,
     storedCycles: Go.storedCycles,
+    moveOrCheatViaApi: Go.moveOrCheatViaApi,
   };
 }
 
@@ -85,6 +87,9 @@ export function loadGo(data: unknown): boolean {
   Go.previousGame = previousGame;
   Go.stats = stats;
   Go.storeCycles(loadStoredCycles(parsedData.storedCycles));
+  if (typeof parsedData.moveOrCheatViaApi === "boolean") {
+    Go.moveOrCheatViaApi = parsedData.moveOrCheatViaApi;
+  }
 
   resetAI();
   handleNextTurn(currentGame).catch((error) => {

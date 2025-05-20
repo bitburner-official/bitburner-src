@@ -131,6 +131,11 @@
       "Name": "They're lunatics",
       "Description": "Acquire SF13.1"
     },
+    "SF14.1": {
+      "ID": "SF14.1",
+      "Name": "IPvGO Subnet Takeover",
+      "Description": "Acquire SF14.1"
+    },
     "MONEY_1Q": {
       "ID": "MONEY_1Q",
       "Name": "Here comes the money!",
@@ -391,6 +396,16 @@
       "Name": "More BitNodes, please!",
       "Description": "Reach SF x.3 in each BitNode."
     },
+    "IPVGO_ANTICHEAT": {
+      "ID": "IPVGO_ANTICHEAT",
+      "Name": "IPvGO anticheat",
+      "Description": "Fail to cheat an IPvGO game and be ejected from the subnet."
+    },
+    "IPVGO_WINNING_STREAK": {
+      "ID": "IPVGO_WINNING_STREAK",
+      "Name": "Ten Steps Ahead",
+      "Description": "Get a winning streak of 10 against Illuminati."
+    },
     "CHALLENGE_BN1": {
       "ID": "CHALLENGE_BN1",
       "Name": "BN1: Challenge",
@@ -436,6 +451,16 @@
       "Name": "BN12: Challenge",
       "Description": "Destroy BN12 50 times."
     },
+    "CHALLENGE_BN13": {
+      "ID": "CHALLENGE_BN13",
+      "Name": "BN13: Challenge",
+      "Description": "Complete BN13 without Stanek's Gift."
+    },
+    "CHALLENGE_BN14": {
+      "ID": "CHALLENGE_BN14",
+      "Name": "BN14: Challenge",
+      "Description": "Destroy BN14 without making a move or cheating via IPvGO APIs."
+    },
     "BYPASS": {
       "ID": "BYPASS",
       "Name": "Exploit: bypass",
@@ -480,11 +505,6 @@
       "ID": "UNACHIEVABLE",
       "Name": "UNACHIEVABLE",
       "Description": "This achievement cannot be unlocked."
-    },
-    "CHALLENGE_BN13": {
-      "ID": "CHALLENGE_BN13",
-      "Name": "BN13: Challenge",
-      "Description": "Complete BN13 without Stanek's Gift."
     },
     "DEVMENU": {
       "ID": "DEVMENU",

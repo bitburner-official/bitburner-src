@@ -5,7 +5,7 @@ function replace(str: string, i: number, char: string): string {
   return str.substring(0, i) + char + str.substring(i + 1);
 }
 
-interface CorruptableTextProps {
+interface CorruptibleTextProps {
   content: string;
   spoiler: boolean;
 }
@@ -26,7 +26,7 @@ function randomize(char: string, obfuscate: boolean): string {
   return randFrom(other);
 }
 
-export function CorruptableText(props: CorruptableTextProps): JSX.Element {
+export function CorruptibleText(props: CorruptibleTextProps): JSX.Element {
   const [content, setContent] = useState(props.content);
 
   useEffect(() => {

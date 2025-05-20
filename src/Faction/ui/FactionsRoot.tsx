@@ -10,7 +10,7 @@ import { formatFavor, formatReputation } from "../../ui/formatNumber";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { useCycleRerender } from "../../ui/React/hooks";
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { Requirement } from "../../ui/Components/Requirement";
 
 import { Faction } from "../Faction";
@@ -137,7 +137,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
             ) : (
               <Tooltip title={"Rumored Faction"}>
                 <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
-                  <CorruptableText content={props.faction.name} spoiler={false} />
+                  <CorruptibleText content={props.faction.name} spoiler={false} />
                 </span>
               </Tooltip>
             )}
