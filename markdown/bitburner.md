@@ -182,6 +182,7 @@
 |  [GymLocationName](./bitburner.gymlocationname.md) |  |
 |  [GymLocationNameEnumType](./bitburner.gymlocationnameenumtype.md) | Locations of gym |
 |  [GymType](./bitburner.gymtype.md) |  |
+|  [HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md) |  |
 |  [JobField](./bitburner.jobfield.md) |  |
 |  [JobFieldEnumType](./bitburner.jobfieldenumtype.md) |  |
 |  [JobName](./bitburner.jobname.md) |  |

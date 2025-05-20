@@ -2821,6 +2821,19 @@ export interface CompanyPositionInfo {
   requiredSkills: Skills;
 }
 
+type HacknetServerHashUpgrade =
+  | "Sell for Money"
+  | "Sell for Corporation Funds"
+  | "Reduce Minimum Security"
+  | "Increase Maximum Money"
+  | "Improve Studying"
+  | "Improve Gym Training"
+  | "Exchange for Corporation Research"
+  | "Exchange for Bladeburner Rank"
+  | "Exchange for Bladeburner SP"
+  | "Generate Coding Contract"
+  | "Company Favor";
+
 /**
  * Hacknet API
  * @remarks
@@ -3075,11 +3088,11 @@ export interface Hacknet {
    *   ns.hacknet.spendHashes(upgradeName);
    * }
    * ```
-   * @param upgName - Name of the upgrade of Hacknet Node.
+   * @param upgName - Name of the upgrade using hash of Hacknet Server.
    * @param count - Number of upgrades to buy at once. Defaults to 1 if not specified.
    * @returns Number of hashes required for the specified upgrade.
    */
-  hashCost(upgName: string, count?: number): number;
+  hashCost(upgName: HacknetServerHashUpgrade, count?: number): number;
 
   /**
    * Purchase a hash upgrade.
@@ -3102,13 +3115,13 @@ export interface Hacknet {
    * // For upgrades requiring a target
    * ns.hacknet.spendHashes("Increase Maximum Money", "foodnstuff");
    * ```
-   * @param upgName - Name of the upgrade of Hacknet Node.
+   * @param upgName - Name of the upgrade using hash of Hacknet Server.
    * @param upgTarget - Object to which upgrade applies. Required for certain upgrades.
    * @param count - Number of upgrades to buy at once. Must be a non-negative integer. Defaults to 1 if not specified.
    * For compatibility reasons, upgTarget must be specified, even if it is not used, in order to specify count.
    * @returns True if the upgrade is successfully purchased, and false otherwise.
    */
-  spendHashes(upgName: string, upgTarget?: string, count?: number): boolean;
+  spendHashes(upgName: HacknetServerHashUpgrade, upgTarget?: string, count?: number): boolean;
 
   /**
    * Get the list of hash upgrades
@@ -3124,7 +3137,7 @@ export interface Hacknet {
    * ```
    * @returns An array containing the available upgrades
    */
-  getHashUpgrades(): string[];
+  getHashUpgrades(): HacknetServerHashUpgrade[];
 
   /**
    * Get the level of a hash upgrade.
@@ -3135,7 +3148,7 @@ export interface Hacknet {
    *
    * @returns Level of the upgrade.
    */
-  getHashUpgradeLevel(upgName: string): number;
+  getHashUpgradeLevel(upgName: HacknetServerHashUpgrade): number;
 
   /**
    * Get the multiplier to study.
@@ -5579,7 +5592,7 @@ interface HacknetServersFormulas {
    * @param level - level of the upgrade
    * @returns The calculated hash cost.
    */
-  hashUpgradeCost(upgName: string, level: number): number;
+  hashUpgradeCost(upgName: HacknetServerHashUpgrade, level: number): number;
   /**
    * Calculate the cost of a hacknet server.
    * @param n - number of the hacknet server
