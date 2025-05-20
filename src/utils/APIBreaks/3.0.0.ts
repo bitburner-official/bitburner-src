@@ -73,4 +73,25 @@ export const breakInfos300: APIBreakInfo[] = [
       "Additionally, the naming of ns.tFormat has been changed to ns.format.time.",
     showPopUp: false,
   },
+  {
+    brokenAPIs: [
+      { name: "ns.tail", migration: { searchValue: "ns.tail", replaceValue: "ns.ui.openTail" } },
+      { name: "ns.moveTail", migration: { searchValue: "ns.moveTail", replaceValue: "ns.ui.moveTail" } },
+      { name: "ns.resizeTail", migration: { searchValue: "ns.resizeTail", replaceValue: "ns.ui.resizeTail" } },
+      { name: "ns.closeTail", migration: { searchValue: "ns.closeTail", replaceValue: "ns.ui.closeTail" } },
+      { name: "ns.setTitle", migration: { searchValue: "ns.setTitle", replaceValue: "ns.ui.setTailTitle" } },
+    ],
+    info:
+      "ns.tail() was removed.\n" +
+      'It has been automatically replaced with "ns.ui.openTail()".\n\n' +
+      "ns.moveTail() was removed.\n" +
+      'It has been automatically replaced with "ns.ui.moveTail()".\n\n' +
+      "ns.resizeTail() was removed.\n" +
+      'It has been automatically replaced with "ns.ui.resizeTail()".\n\n' +
+      "ns.closeTail() was removed.\n" +
+      'It has been automatically replaced with "ns.ui.closeTail()".\n\n' +
+      "ns.setTitle() was removed.\n" +
+      'It has been automatically replaced with "ns.ui.setTailTitle()".\n\n',
+    showPopUp: false,
+  },
 ];

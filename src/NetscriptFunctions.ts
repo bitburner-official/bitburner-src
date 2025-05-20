@@ -104,7 +104,6 @@ import { ContentFilePath } from "./Paths/ContentFile";
 import { hasContractExtension } from "./Paths/ContractFilePath";
 import { getRamCost } from "./Netscript/RamCostGenerator";
 import { getEnumHelper } from "./utils/EnumHelper";
-import { deprecationWarning } from "./utils/DeprecationHelper";
 import { ServerConstants } from "./Server/data/Constants";
 import { assertFunctionWithNSContext } from "./Netscript/TypeAssertion";
 import { Router } from "./ui/GameRoot";
@@ -560,36 +559,6 @@ export const ns: InternalAPI<NSFull> = {
       }
 
       return runningScriptObj.logs.map((x) => String(x));
-    },
-  tail:
-    (ctx) =>
-    (scriptID, hostname, ...scriptArgs) => {
-      deprecationWarning("ns.tail", "Use ns.ui.openTail instead.");
-      ns.ui.openTail(ctx)(scriptID, hostname, ...scriptArgs);
-    },
-  moveTail:
-    (ctx) =>
-    (_x, _y, _pid = ctx.workerScript.scriptRef.pid) => {
-      deprecationWarning("ns.moveTail", "Use ns.ui.moveTail instead.");
-      ns.ui.moveTail(ctx)(_x, _y, _pid);
-    },
-  resizeTail:
-    (ctx) =>
-    (_w, _h, _pid = ctx.workerScript.scriptRef.pid) => {
-      deprecationWarning("ns.resizeTail", "Use ns.ui.resizeTail instead.");
-      ns.ui.resizeTail(ctx)(_w, _h, _pid);
-    },
-  closeTail:
-    (ctx) =>
-    (_pid = ctx.workerScript.scriptRef.pid) => {
-      deprecationWarning("ns.closeTail", "Use ns.ui.closeTail instead.");
-      ns.ui.closeTail(ctx)(_pid);
-    },
-  setTitle:
-    (ctx) =>
-    (title, _pid = ctx.workerScript.scriptRef.pid) => {
-      deprecationWarning("ns.setTitle", "Use ns.ui.setTailTitle instead.");
-      ns.ui.setTailTitle(ctx)(title, _pid);
     },
   nuke: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
@@ -1813,6 +1782,42 @@ setRemovedFunctions(ns, {
   getTimeSinceLastAug: {
     version: "3.0.0",
     replacement: "Date.now() - ns.getResetInfo().lastAugReset",
+  },
+  formatNumber: {
+    version: "3.0.0",
+    replacement: "ns.format.number()",
+  },
+  formatRam: {
+    version: "3.0.0",
+    replacement: "ns.format.ram()",
+  },
+  formatPercent: {
+    version: "3.0.0",
+    replacement: "ns.format.percent()",
+  },
+  tFormat: {
+    version: "3.0.0",
+    replacement: "ns.format.time()",
+  },
+  tail: {
+    version: "3.0.0",
+    replacement: "ns.ui.openTail()",
+  },
+  moveTail: {
+    version: "3.0.0",
+    replacement: "ns.ui.moveTail()",
+  },
+  resizeTail: {
+    version: "3.0.0",
+    replacement: "ns.ui.resizeTail()",
+  },
+  closeTail: {
+    version: "3.0.0",
+    replacement: "ns.ui.closeTail()",
+  },
+  setTitle: {
+    version: "3.0.0",
+    replacement: "ns.ui.setTailTitle()",
   },
 });
 

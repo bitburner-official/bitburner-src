@@ -6,7 +6,7 @@ import { FactionName } from "@enums";
 import { BlackOpElem } from "./BlackOpElem";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { blackOpsArray } from "../data/BlackOperations";
 import { finishBitNode } from "../../BitNode/BitNodeUtils";
 
@@ -42,7 +42,7 @@ export function BlackOpPage({ bladeburner }: BlackOpPageProps): React.ReactEleme
             Router.toPage(Page.BitVerse, { flume: false, quick: false });
           }}
         >
-          <CorruptableText content="Destroy w0r1d_d43m0n" spoiler={false}></CorruptableText>
+          <CorruptibleText content="Destroy w0r1d_d43m0n" spoiler={false}></CorruptibleText>
         </Button>
       ) : (
         <>

@@ -7,7 +7,7 @@ import { AchievementEntry } from "./AchievementEntry";
 import { Achievement, PlayerAchievement } from "./Achievements";
 import { Settings } from "../Settings/Settings";
 import { getFiltersFromHex } from "../ThirdParty/colorUtils";
-import { CorruptableText } from "../ui/React/CorruptableText";
+import { CorruptibleText } from "../ui/React/CorruptibleText";
 import { pluralize } from "../utils/I18nUtils";
 
 interface IProps {
@@ -83,7 +83,7 @@ export function AchievementList({ achievements, playerAchievements }: IProps): J
           <Typography color="secondary" sx={{ mt: 1 }}>
             {secret.map((item) => (
               <span key={`secret_${item.achievement.ID}`}>
-                <CorruptableText content={item.achievement.ID} spoiler={true}></CorruptableText>
+                <CorruptibleText content={item.achievement.ID} spoiler={true}></CorruptibleText>
                 <br />
               </span>
             ))}
