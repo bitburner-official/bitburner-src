@@ -37,8 +37,40 @@ import { activateSteamAchievements } from "../Electron";
 import { Go } from "../Go/Go";
 import { type AchievementId, type SFAchievementId, SFAchievementIds } from "./Types";
 
-// Unable to correctly cast the JSON data into AchievementDataJson type otherwise...
-const achievementData = (<AchievementDataJson>(<unknown>data)).achievements;
+function assertAchievements(
+  achievements: typeof data.achievements,
+): asserts achievements is AchievementDataJson["achievements"] {
+  for (const [key, value] of Object.entries(achievements)) {
+    if (key !== value.ID) {
+      throw new Error(`Invalid achievement ID. Key: ${key}. Value: ${value.ID}`);
+    }
+  }
+}
+
+/**
+ * The type of data.achievements is:
+  {
+    CYBERSEC: {
+        ID: string;
+        Name: string;
+        Description: string;
+    };
+    NITESEC: {
+        ID: string;
+        Name: string;
+        Description: string;
+    };
+    ...
+  }
+ * However, we want:
+ * - Typechecking at compile time: ID must be AchievementId, not string.
+ * - Runtime check: The value of ID must be the same as the key of the achievement. For example, with "CYBERSEC"
+ * achievement, the key is "CYBERSEC", so its ID must also be "CYBERSEC".
+ * 
+ * We use assertAchievements to do the runtime check and assert the type.
+ */
+const achievementData = data.achievements;
+assertAchievements(achievementData);
 
 export interface Achievement {
   ID: AchievementId;
@@ -79,7 +111,11 @@ function sfAchievements(): Record<SFAchievementId, Achievement> {
       throw new Error(`Unexpected BN value in SFAchievementId: ${id}`);
     }
     achievements[id] = {
-      ...achievementData[id],
+      /**
+       * The type of achievementData is still the original type (CYBERSEC: { ID: string; Name: string; Description: string; }).
+       * We have to typecast it here.
+       */
+      ...(achievementData as AchievementDataJson["achievements"])[id],
       Icon: id,
       Visible: knowAboutBitverse,
       Condition: () => Player.sourceFileLvl(bn) >= 1,
