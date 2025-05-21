@@ -484,7 +484,7 @@ const corporation = {
   getHireAdVertCount: RamCostConstants.CorporationInfo,
   getResearchCost: RamCostConstants.CorporationInfo,
   hasResearched: RamCostConstants.CorporationInfo,
-  setAutoJobAssignment: RamCostConstants.CorporationAction,
+  setJobAssignment: RamCostConstants.CorporationAction,
   getOfficeSizeUpgradeCost: RamCostConstants.CorporationInfo,
 } as const;
 

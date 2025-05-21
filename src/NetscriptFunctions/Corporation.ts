@@ -487,29 +487,37 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const office = getOffice(divisionName, cityName);
       return calculateOfficeSizeUpgradeCost(office.size, increase);
     },
-    setAutoJobAssignment: (ctx) => (_divisionName, _cityName, _job, _amount) => {
+    setJobAssignment: (ctx) => (_divisionName, _cityName, _job, _amount) => {
       checkAccess(ctx, CorpUnlockName.OfficeAPI);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       const amount = helpers.number(ctx, "amount", _amount);
       const job = getEnumHelper("CorpEmployeeJob").nsGetMember(ctx, _job, "job");
 
-      if (job === CorpEmployeeJob.Unassigned) return false;
-      if (amount < 0 || !Number.isInteger(amount))
+      if (job === CorpEmployeeJob.Unassigned) {
+        helpers.log(
+          ctx,
+          () => `This API will not do anything and just return false if you pass "Unassigned" to the "job" parameter.`,
+        );
+        return false;
+      }
+      if (amount < 0 || !Number.isInteger(amount)) {
         throw helpers.errorMessage(
           ctx,
           `Invalid value for amount! Must be an integer and greater than or be 0". Amount:'${amount}'`,
         );
+      }
 
       const office = getOffice(divisionName, cityName);
 
       const totalNewEmployees = amount - office.employeeNextJobs[job];
 
-      if (office.employeeNextJobs[CorpEmployeeJob.Unassigned] < totalNewEmployees)
+      if (office.employeeNextJobs[CorpEmployeeJob.Unassigned] < totalNewEmployees) {
         throw helpers.errorMessage(
           ctx,
           `Unable to bring '${job} employees to ${amount}. Requires ${totalNewEmployees} unassigned employees`,
         );
+      }
       return office.autoAssignJob(job, amount);
     },
     hireEmployee: (ctx) => (_divisionName, _cityName, _position) => {
@@ -797,7 +805,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   setRemovedFunctions(corpFunctions, {
     assignJob: {
       version: "2.2.0",
-      replacement: "Removed due to employees no longer being objects. Use ns.corporation.setAutoJobAssignment instead.",
+      replacement: "Removed due to employees no longer being objects. Use ns.corporation.setJobAssignment instead.",
       replaceMsg: true,
     },
     getEmployee: {
@@ -813,6 +821,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     getResearchNames: { version: "2.2.0", replacement: "corporation.getConstants().researchNames" },
     getUnlockables: { version: "2.2.0", replacement: "corporation.getConstants().unlockNames" },
     getUpgradeNames: { version: "2.2.0", replacement: "corporation.getConstants().upgradeNames" },
+    setAutoJobAssignment: { version: "3.0.0", replacement: "corporation.setJobAssignment()" },
   });
   return corpFunctions;
 }

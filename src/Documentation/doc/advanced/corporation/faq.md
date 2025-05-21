@@ -127,7 +127,7 @@ Check the optimizer in this [section](./boost-material.md).
 
 API (`upgradeOfficeSize`) gives you granular control over office size. You cannot do that through UI.
 
-#### Why does setAutoJobAssignment not take effect immediately?
+#### Why does `setJobAssignment` not take effect immediately?
 
 It only takes effect in the next cycle's START state.
 

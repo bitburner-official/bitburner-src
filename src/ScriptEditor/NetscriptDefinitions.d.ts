@@ -8906,11 +8906,16 @@ export interface OfficeAPI {
    *
    * @param divisionName - Name of the division
    * @param city - Name of the city
-   * @param job - Name of the job
+   * @param job - Name of the job. Do NOT use "Unassigned"; otherwise, this API does not do anything and just return false.
    * @param amount - Number of employees to assign to that job
    * @returns true if the employee count reached the target amount, false if not
    */
-  setAutoJobAssignment(divisionName: string, city: CityName, job: string, amount: number): boolean;
+  setJobAssignment(
+    divisionName: string,
+    city: CityName,
+    job: Exclude<CorpEmployeePosition, "Unassigned">,
+    amount: number,
+  ): boolean;
 
   /**
    * Get the cost to upgrade an office.
