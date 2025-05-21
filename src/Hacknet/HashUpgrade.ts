@@ -44,7 +44,7 @@ export class HashUpgrade {
   hasTargetCompany = false;
 
   /** Name of upgrade */
-  name = "" as HashUpgradeEnum;
+  name: HashUpgradeEnum;
 
   // Generic value used to indicate the potency/amount of this upgrade's effect
   // The meaning varies between different upgrades
