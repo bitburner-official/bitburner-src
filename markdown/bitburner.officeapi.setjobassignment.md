@@ -23,7 +23,7 @@ setJobAssignment(
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
 |  city | [CityName](./bitburner.cityname.md) | Name of the city |
-|  job | Exclude&lt;[CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->, "Unassigned"&gt; | Name of the job. Do NOT use "Unassigned"; otherwise, this API does not do anything and just return false. |
+|  job | Exclude&lt;[CorpEmployeePosition](./bitburner.corpemployeeposition.md)<!-- -->, "Unassigned"&gt; | Name of the job. Passing "Unassigned" will cause this API to not do anything and just return false. |
 |  amount | number | Number of employees to assign to that job |
 
 **Returns:**

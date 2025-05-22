@@ -99,8 +99,8 @@ export const breakInfos300: APIBreakInfo[] = [
       {
         name: "ns.corporation.setAutoJobAssignment",
         migration: {
-          searchValue: "ns.corporation.setAutoJobAssignment",
-          replaceValue: "ns.corporation.setJobAssignment",
+          searchValue: "setAutoJobAssignment",
+          replaceValue: "setJobAssignment",
         },
       },
     ],

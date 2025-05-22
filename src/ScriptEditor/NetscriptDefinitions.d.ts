@@ -8906,7 +8906,7 @@ export interface OfficeAPI {
    *
    * @param divisionName - Name of the division
    * @param city - Name of the city
-   * @param job - Name of the job. Do NOT use "Unassigned"; otherwise, this API does not do anything and just return false.
+   * @param job - Name of the job. Passing "Unassigned" will cause this API to not do anything and just return false.
    * @param amount - Number of employees to assign to that job
    * @returns true if the employee count reached the target amount, false if not
    */
