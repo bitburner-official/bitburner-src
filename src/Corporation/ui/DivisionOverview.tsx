@@ -41,7 +41,7 @@ function MakeProductButton(): React.ReactElement {
   }
 
   let createProductButtonText = "";
-  switch (division.type) {
+  switch (division.industry) {
     case IndustryType.Restaurant:
       createProductButtonText = "Build Restaurant";
       break;
@@ -122,7 +122,7 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
   return (
     <Paper>
       <Typography>
-        Industry: {division.type} (Corp Funds: <Money money={corp.funds} />)
+        Industry: {division.industry} (Corp Funds: <Money money={corp.funds} />)
       </Typography>
       <br />
       <StatsTable
@@ -137,7 +137,7 @@ export function DivisionOverview(props: DivisionOverviewProps): React.ReactEleme
             <>
               <Typography>Multiplier for this industry's sales due to its awareness and popularity.</Typography>
               <br />
-              <MathJax>{`\\(\\text{${division.type} Industry: }\\alpha = ${division.advertisingFactor}\\)`}</MathJax>
+              <MathJax>{`\\(\\text{${division.industry} Industry: }\\alpha = ${division.advertisingFactor}\\)`}</MathJax>
               <MathJax>{`\\(\\text{multiplier} = \\left((\\text{awareness}+1)^{\\alpha} \\times (\\text{popularity}+1)^{\\alpha} \\times \\frac{\\text{popularity}+0.001}{\\text{awareness}}\\right)^{0.85}\\)`}</MathJax>
               <br />
               <StatsTable
