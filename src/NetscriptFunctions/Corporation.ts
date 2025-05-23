@@ -158,7 +158,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   function getSafeDivision(division: Division): NSDivision {
     const cities = getRecordKeys(division.offices);
 
-    const data =  {
+    const data = {
       name: division.name,
       industry: division.industry,
       awareness: division.awareness,
