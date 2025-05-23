@@ -7768,8 +7768,6 @@ export interface NS {
    *
    * Get a handle to a Netscript Port.
    *
-   * WARNING: Port Handles only work in NetscriptJS (Netscript 2.0). They will not work in Netscript 1.0.
-   *
    * @param portNumber - Port number. Must be a positive integer.
    */
   getPortHandle(portNumber: number): NetscriptPort;
@@ -8066,17 +8064,6 @@ export interface NS {
    * If the file already exists, it will be overwritten by this command.
    * Note that it will not be possible to download data from many websites because they
    * do not allow cross-origin resource sharing (CORS).
-   *
-   * IMPORTANT: This is an asynchronous function that returns a Promise.
-   * The Promise’s resolved value will be a boolean indicating whether or not the data was
-   * successfully retrieved from the URL. Because the function is async and returns a Promise,
-   * it is recommended you use wget in NetscriptJS (Netscript 2.0).
-   *
-   * In NetscriptJS, you must preface any call to wget with the await keyword (like you would {@link NS.hack | hack} or {@link NS.sleep | sleep}).
-   * wget will still work in Netscript 1.0, but the function's execution will not be synchronous
-   * (i.e. it may not execute when you expect/want it to).
-   * Furthermore, since Promises are not supported in ES5,
-   * you will not be able to process the returned value of wget in Netscript 1.0.
    *
    * @example
    * ```js
