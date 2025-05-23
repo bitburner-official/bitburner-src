@@ -23,11 +23,11 @@ export const processDarknet = () => {
   if (DarknetState.storedCycles < 0) {
     DarknetState.storedCycles = 0;
   }
-  const depth = getNetDepth();
+  const depth = getNetDepth() || 10;
   const cycleRate = MS_PER_MUTATION_PER_ROW / CONSTANTS.MilliPerCycle;
   const cyclesPerUpdate = cycleRate / depth;
   if (DarknetState.storedCycles > cyclesPerUpdate) {
-    DarknetState.storedCycles -= cyclesPerUpdate;
+    DarknetState.storedCycles = 0;
     DarknetState.bonusCycles = Math.max(DarknetState.bonusCycles - cyclesPerUpdate, 0);
     mutateDarknet();
   }
