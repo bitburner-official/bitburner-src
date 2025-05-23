@@ -78,6 +78,7 @@ import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { SpecialServers } from "../Server/data/SpecialServers";
+import { ErrorModal } from "../ErrorHandling/ErrorModal";
 
 const htmlLocation = location;
 
@@ -440,6 +441,7 @@ export function GameRoot(): React.ReactElement {
               <Unclickable />
               <LogBoxManager hidden={hidePopups} />
               <AlertManager hidden={hidePopups} />
+              <ErrorModal />
               <PromptManager hidden={hidePopups} />
               <FactionInvitationManager hidden={hidePopups} />
               <Snackbar hidden={hidePopups} />

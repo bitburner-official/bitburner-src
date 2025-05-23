@@ -1,8 +1,8 @@
-import { basicErrorMessage } from "../Netscript/ErrorMessages";
 import { ScriptDeath } from "../Netscript/ScriptDeath";
 import type { WorkerScript } from "../Netscript/WorkerScript";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { getErrorMessageWithStackAndCause } from "./ErrorHelper";
+import { getErrorMessageWithStackAndCause, parseUnknownError } from "./ErrorHelper";
+import { DisplayError } from "../ErrorHandling/ErrorState";
 
 /** Generate an error dialog when workerscript is known */
 export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, initialText = "") {
@@ -10,12 +10,12 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
     // No dialog for ScriptDeath
     return;
   }
+  const errorDetails = parseUnknownError(e);
   if (ws && typeof e === "string") {
-    const headerText = basicErrorMessage(ws, "", "");
-    if (!e.includes(headerText)) e = basicErrorMessage(ws, e);
+    DisplayError(initialText + e, "RUNTIME", ws.scriptRef.filename, ws.hostname, ws.pid);
   } else if (e instanceof SyntaxError) {
     const msg = `${e.message} (sorry we can't be more helpful)`;
-    e = ws ? basicErrorMessage(ws, msg, "SYNTAX") : `SYNTAX ERROR:\n\n${msg}`;
+    DisplayError(initialText + msg + (errorDetails.stack ?? ""), "SYNTAX", ws?.scriptRef?.filename, ws?.hostname, ws?.pid);
   } else if (e instanceof Error) {
     // Ignore any cancellation errors from Monaco that get here
     if (e.name === "Canceled" && e.message === "Canceled") {
@@ -32,15 +32,13 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
      */
     console.error(e);
     const msg = getErrorMessageWithStackAndCause(e);
-    e = ws ? basicErrorMessage(ws, msg) : `RUNTIME ERROR:\n\n${msg}`;
-  }
-  if (typeof e !== "string") {
+    DisplayError(initialText + msg, "RUNTIME", ws?.scriptRef?.filename, ws?.hostname, ws?.pid);
+  } else if (typeof e !== "string") {
     console.error("Unexpected error:", e);
     const msg = `Unexpected type of error thrown. This error was likely thrown manually within a script.
         Error has been logged to the console.\n\nType of error: ${typeof e}\nValue of error: ${e}`;
-    e = ws ? basicErrorMessage(ws, msg, "UNKNOWN") : msg;
+    DisplayError(msg, "UNKNOWN", ws?.scriptRef?.filename, ws?.hostname ?? "", ws?.pid ?? -1);
   }
-  dialogBoxCreate(initialText + String(e));
 }
 
 /** Use this handler to handle the error when we call getSaveData function or getSaveInfo function */

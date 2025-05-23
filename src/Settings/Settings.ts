@@ -119,6 +119,8 @@ export const Settings = {
   SaveGameOnFileSave: true,
   /** Whether to hide the confirmation dialog for augmentation purchases. */
   SuppressBuyAugmentationConfirmation: false,
+  /** Whether to hide the info dialog for script errors. */
+  SuppressErrorModals: false,
   /** Whether to hide the dialog showing new faction invites. */
   SuppressFactionInvites: false,
   /** Whether to hide the dialog when the player receives a new message file. */
