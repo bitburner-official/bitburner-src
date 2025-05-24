@@ -4,6 +4,8 @@
 
 ## Singularity.getUnlockedAchievements() method
 
+Get a list of all unlocked achievements.
+
 **Signature:**
 
 ```typescript
@@ -12,4 +14,10 @@ getUnlockedAchievements(): string[];
 **Returns:**
 
 string\[\]
+
+- A list containing all of the IDs of achievements that the player has unlocked.
+
+## Remarks
+
+Ram cost: 5 GB \* 16/4/1
 
