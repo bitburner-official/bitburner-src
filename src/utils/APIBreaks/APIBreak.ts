@@ -39,10 +39,18 @@ export interface APIBreakInfo {
   /** If broken APIs can be safely migrated, we can skip displaying the notification popup */
   showPopUp: boolean;
   /**
-   * With some breaking changes, we cannot detect the affected code reliably via "brokenAPIs". In this case, we always
-   * show a popup that notifies the player about this change.
+   * With a new version with breaking changes, the "showAPIBreaks" function checks all breaking changes and does 2
+   * things with changes that affect the player's scripts:
+   * - Write info of changes to a log file.
+   * - Show popups per change.
+   * Note that we skip changes that do not affect the player's scripts. This is problematic with some breaking changes.
+   *
+   * With each breaking change in "brokenAPIs", we try to detect the affected code by using "name" or
+   * "migration.searchValue". However, with some breaking changes, we cannot detect the affected code reliably via
+   * "brokenAPIs". In this case, instead of skipping them, we always "process" that change (i.e., write info to the log
+   * file and optionally show a popup that notifies the player about this change).
    */
-  forceShowPopUp?: boolean;
+  doNotSkip?: boolean;
 }
 
 function detectImpactAndMigrateLines(script: Script, brokenFunctions: APIBreakInfo["brokenAPIs"]): number[] | null {
@@ -90,7 +98,8 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
   let numberOfPopUps = 0;
   for (const breakInfo of apiBreakingChanges) {
     const impactMap = detectImpactAndMigrate(breakInfo.brokenAPIs);
-    if (impactMap.size === 0 && !breakInfo.forceShowPopUp) {
+    // Skip processing if we don't find any affected code and the breaking change does not enable the "doNotSkip" flag.
+    if (impactMap.size === 0 && !breakInfo.doNotSkip) {
       continue;
     }
     let detailText = breakInfo.info;

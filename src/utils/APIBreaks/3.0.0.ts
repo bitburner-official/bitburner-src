@@ -114,8 +114,8 @@ export const breakingChanges300: VersionBreakingChange = {
     {
       brokenAPIs: [],
       info:
-        `With some APIs, when you pass values to their params, you can pass a value that is not an exact match. ` +
-        `For example, with "ns.singularity.commitCrime", you can pass "Rob Store", "rob store", "RobStore", "robstore", "robStore", etc. ` +
+        `With some APIs, when you passed values to their params, you could pass a value that was not an exact match. ` +
+        `For example, with "ns.singularity.commitCrime", you could pass "Rob Store", "rob store", "RobStore", "robstore", "robStore", etc. ` +
         `This is called "fuzzy matching". Now, you must pass an exact value (i.e., Rob Store). This change affects:\n` +
         `- Bladeburner action and type: BladeburnerActionType, BladeburnerGeneralActionName, BladeburnerContractName, BladeburnerOperationName, BladeburnerBlackOpName, SpecialBladeburnerActionTypeForSleeve, BladeburnerActionTypeForSleeve.\n` +
         `- Crime: CrimeType\n` +
@@ -126,7 +126,7 @@ export const breakingChanges300: VersionBreakingChange = {
         `- Stock position: PositionType\n` +
         `- Stock order: OrderType`,
       showPopUp: true,
-      forceShowPopUp: true,
+      doNotSkip: true,
     },
   ],
 };
