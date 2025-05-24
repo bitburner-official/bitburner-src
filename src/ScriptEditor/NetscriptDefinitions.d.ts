@@ -2810,7 +2810,7 @@ export interface Singularity {
    * Get a list of all unlocked achievements.
    * @remarks
    * Ram cost: 5 GB * 16/4/1
-   * 
+   *
    * @returns - A list containing all of the IDs of achievements that the player has unlocked.
    */
   getUnlockedAchievements(): string[];
