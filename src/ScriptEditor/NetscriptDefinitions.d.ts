@@ -2806,7 +2806,7 @@ export interface Singularity {
    */
   getCurrentWork(): Task | null;
 
-  getUnlockedAchievements(): string[]
+  getUnlockedAchievements(): string[];
 }
 
 /**
