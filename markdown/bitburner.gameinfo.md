@@ -19,4 +19,5 @@ interface GameInfo
 |  [commit](./bitburner.gameinfo.commit.md) |  | string |  |
 |  [platform](./bitburner.gameinfo.platform.md) |  | string |  |
 |  [version](./bitburner.gameinfo.version.md) |  | string |  |
+|  [versionNumber](./bitburner.gameinfo.versionnumber.md) |  | number |  |
 

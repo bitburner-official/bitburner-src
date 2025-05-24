@@ -10096,6 +10096,7 @@ interface IStyleSettings {
  */
 interface GameInfo {
   version: string;
+  versionNumber: number;
   commit: string;
   platform: string;
 }
