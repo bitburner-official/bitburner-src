@@ -574,10 +574,12 @@ export const ns: InternalAPI<NSFull> = {
       return true;
     }
     if (!Player.hasProgram(CompletedProgramName.nuke)) {
-      throw helpers.errorMessage(ctx, "You do not have the NUKE.exe virus!");
+      helpers.log(ctx, () => "You do not have the NUKE.exe virus!");
+      return false;
     }
     if (server.openPortCount < server.numOpenPortsRequired) {
-      throw helpers.errorMessage(ctx, "Not enough ports opened to use NUKE.exe virus.");
+      helpers.log(ctx, () => "Not enough ports opened to use NUKE.exe virus.");
+      return false;
     }
     server.hasAdminRights = true;
     helpers.log(ctx, () => `Executed NUKE.exe virus on '${server.hostname}' to gain root access.`);
@@ -591,7 +593,8 @@ export const ns: InternalAPI<NSFull> = {
       return false;
     }
     if (!Player.hasProgram(CompletedProgramName.bruteSsh)) {
-      throw helpers.errorMessage(ctx, "You do not have the BruteSSH.exe program!");
+      helpers.log(ctx, () => "You do not have the BruteSSH.exe program!");
+      return false;
     }
     if (!server.sshPortOpen) {
       helpers.log(ctx, () => `Executed BruteSSH.exe on '${server.hostname}' to open SSH port (22).`);
@@ -610,7 +613,8 @@ export const ns: InternalAPI<NSFull> = {
       return false;
     }
     if (!Player.hasProgram(CompletedProgramName.ftpCrack)) {
-      throw helpers.errorMessage(ctx, "You do not have the FTPCrack.exe program!");
+      helpers.log(ctx, () => "You do not have the FTPCrack.exe program!");
+      return false;
     }
     if (!server.ftpPortOpen) {
       helpers.log(ctx, () => `Executed FTPCrack.exe on '${server.hostname}' to open FTP port (21).`);
@@ -629,7 +633,8 @@ export const ns: InternalAPI<NSFull> = {
       return false;
     }
     if (!Player.hasProgram(CompletedProgramName.relaySmtp)) {
-      throw helpers.errorMessage(ctx, "You do not have the relaySMTP.exe program!");
+      helpers.log(ctx, () => "You do not have the relaySMTP.exe program!");
+      return false;
     }
     if (!server.smtpPortOpen) {
       helpers.log(ctx, () => `Executed relaySMTP.exe on '${server.hostname}' to open SMTP port (25).`);
@@ -648,7 +653,8 @@ export const ns: InternalAPI<NSFull> = {
       return false;
     }
     if (!Player.hasProgram(CompletedProgramName.httpWorm)) {
-      throw helpers.errorMessage(ctx, "You do not have the HTTPWorm.exe program!");
+      helpers.log(ctx, () => "You do not have the HTTPWorm.exe program!");
+      return false;
     }
     if (!server.httpPortOpen) {
       helpers.log(ctx, () => `Executed HTTPWorm.exe on '${server.hostname}' to open HTTP port (80).`);
@@ -667,7 +673,8 @@ export const ns: InternalAPI<NSFull> = {
       return false;
     }
     if (!Player.hasProgram(CompletedProgramName.sqlInject)) {
-      throw helpers.errorMessage(ctx, "You do not have the SQLInject.exe program!");
+      helpers.log(ctx, () => "You do not have the SQLInject.exe program!");
+      return false;
     }
     if (!server.sqlPortOpen) {
       helpers.log(ctx, () => `Executed SQLInject.exe on '${server.hostname}' to open SQL port (1433).`);
