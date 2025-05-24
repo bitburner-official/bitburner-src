@@ -2805,6 +2805,8 @@ export interface Singularity {
    * @returns - An object representing the current work. Fields depend on the kind of work.
    */
   getCurrentWork(): Task | null;
+
+  getUnlockedAchievements(): string[]
 }
 
 /**
