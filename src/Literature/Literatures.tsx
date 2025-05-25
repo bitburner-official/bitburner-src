@@ -411,8 +411,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         sustained increase in crime rates, or whether the year was just an unfortunate outlier. He states that many
         intelligence and law enforcement agents have noticed an increase in organized crime activities, and believes
         that these figures may be the result of an uprising from criminal organizations such as{" "}
-        {FactionName.TheSyndicate} or the
-        {FactionName.SlumSnakes}.
+        {FactionName.TheSyndicate} or the {FactionName.SlumSnakes}.
       </Typography>
     ),
   }),
