@@ -4,7 +4,7 @@
 
 ## NS.format property
 
-Namespace for formatting functions.
+Namespace for [formatting](./bitburner.format.md) functions.
 
 **Signature:**
 

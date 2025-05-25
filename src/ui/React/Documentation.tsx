@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
-import { FilePath, asFilePath } from "../../Paths/FilePath";
+import { type FilePath, asFilePath } from "../../Paths/FilePath";
+import { CONSTANTS } from "../../Constants";
 
 interface Navigator {
   navigate: (s: string, external: boolean) => void;
@@ -20,6 +21,7 @@ interface History {
 }
 
 const defaultPage = asFilePath("index.md");
+export const defaultNsApiPage = asFilePath("nsDoc/bitburner.ns.md");
 
 const HistoryContext = React.createContext<History>({
   page: defaultPage,
@@ -81,3 +83,11 @@ export const HistoryProvider = (props: React.PropsWithChildren<object>): React.R
   });
   return <Provider value={history}>{props.children}</Provider>;
 };
+
+export function openDocExternally(path: string) {
+  const ver = CONSTANTS.isDevBranch ? "dev" : "stable";
+  const url = path.startsWith("nsDoc/")
+    ? `https://github.com/bitburner-official/bitburner-src/blob/${ver}/markdown/${path.replace("nsDoc/", "")}`
+    : `https://github.com/bitburner-official/bitburner-src/blob/${ver}/src/Documentation/doc/${path}`;
+  window.open(url, "_newtab");
+}

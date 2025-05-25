@@ -78,6 +78,7 @@ import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { SpecialServers } from "../Server/data/SpecialServers";
+import { DocumentationPopUp } from "../Documentation/ui/DocumentationPopUp";
 
 const htmlLocation = location;
 
@@ -443,6 +444,7 @@ export function GameRoot(): React.ReactElement {
               <PromptManager hidden={hidePopups} />
               <FactionInvitationManager hidden={hidePopups} />
               <Snackbar hidden={hidePopups} />
+              <DocumentationPopUp hidden={hidePopups} />
               <Apr1 />
             </SnackbarProvider>
           </HistoryProvider>
