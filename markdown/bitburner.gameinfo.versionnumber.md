@@ -4,6 +4,8 @@
 
 ## GameInfo.versionNumber property
 
+Internal version number that increments during releases. E.g.: 43
+
 **Signature:**
 
 ```typescript

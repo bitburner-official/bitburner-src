@@ -10095,10 +10095,18 @@ interface IStyleSettings {
  * @public
  */
 interface GameInfo {
+  /**
+   * Version as shown in release notes and in the UI. E.g.: "2.8.1"
+   *
+   * Note that this property does not have the prefix "v". For example, with v2.8.1, this property is "2.8.1".
+   */
   version: string;
+  /** Internal version number that increments during releases. E.g.: 43 */
   versionNumber: number;
+  /** Git commit hash that the release was built from. E.g.: "d0d776700" */
   commit: string;
-  platform: string;
+  /** Platform that the game is running on */
+  platform: "Browser" | "Steam";
 }
 
 /**
