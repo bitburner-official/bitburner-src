@@ -48,6 +48,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
 
   interface LSFlags {
     ["-l"]: boolean;
+    ["-h"]: boolean;
     ["--grep"]: string;
   }
   let flags: LSFlags;
@@ -56,6 +57,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     flags = libarg(
       {
         "-l": Boolean,
+        "-h": Boolean,
         "--grep": String,
         "-g": "--grep",
       },
@@ -70,10 +72,10 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
 
   const numArgs = args.length;
   function incorrectUsage(): void {
-    Terminal.error("Incorrect usage of ls command. Usage: ls [dir] [-l] [-g, --grep pattern]");
+    Terminal.error("Incorrect usage of ls command. Usage: ls [dir] [-l] [-h] [-g, --grep pattern]");
   }
 
-  if (numArgs > 4) {
+  if (numArgs > 5) {
     return incorrectUsage();
   }
 
@@ -151,6 +153,16 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     }
   }
 
+  // Helper function to format bytes into human-readable strings
+  function formatBytes(bytes: number, decimals = 1): string {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+  }
+
   function getItemDisplayData(
     relativePath: string,
     fileType: FileType,
@@ -182,15 +194,21 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
         : combinePath(baseDirectory, relativePath as FilePath);
 
     // Determine file size
-    if (fileType === FileType.TextFile) {
-      const file = server.textFiles.get(fullPath as TextFilePath);
-      // encode files to get actual size in bytes
-      const contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
-      sizeDisplay = `${contentBytes}`;
-    } else if (fileType === FileType.Script) {
-      const file = server.scripts.get(fullPath as ScriptFilePath);
-      const contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
-      sizeDisplay = `${contentBytes}`;
+    if (fileType === FileType.TextFile || fileType === FileType.Script) {
+      let contentBytes = 0;
+      if (fileType === FileType.TextFile) {
+        const file = server.textFiles.get(fullPath as TextFilePath);
+        contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
+      } else { // Script
+        const file = server.scripts.get(fullPath as ScriptFilePath);
+        contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
+      }
+
+      if (flags["-l"] && flags["-h"]) {
+        sizeDisplay = formatBytes(contentBytes);
+      } else {
+        sizeDisplay = `${contentBytes}`;
+      }
     }
 
     // Determine RAM usage
