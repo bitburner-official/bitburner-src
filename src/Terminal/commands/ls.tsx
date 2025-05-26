@@ -199,7 +199,8 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
       if (fileType === FileType.TextFile) {
         const file = server.textFiles.get(fullPath as TextFilePath);
         contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
-      } else { // Script
+      } else {
+        // Script
         const file = server.scripts.get(fullPath as ScriptFilePath);
         contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
       }
