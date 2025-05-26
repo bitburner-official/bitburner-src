@@ -27,7 +27,7 @@ export const TerminalHelpText: string[] = [
   "    ipaddr                           Displays the IP address of the machine",
   "    kill [script/pid] [args...]      Stops the specified script on the current server ",
   "    killall                          Stops all running scripts on the current machine",
-  "    ls [dir] [--grep pattern]        Displays all files on the machine",
+  "    ls [dir] [-l] [-h] [-g pattern]  Displays all files on the machine",
   "    lscpu                            Displays the number of CPU cores on the machine",
   "    mem [script] [-t n]              Displays the amount of RAM required to run the script",
   "    mv [src] [dest]                  Move/rename a text or script file",
