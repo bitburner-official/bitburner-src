@@ -97,7 +97,7 @@ export const ServerDetailsModal = ({
               >
                 <Typography color="secondary">{serverRamString}</Typography>
               </Tooltip>
-              <Typography color="secondary">model:{darknetData?.minigameType}</Typography>
+              <Typography color="secondary">model:{darknetData?.modelId}</Typography>
               <br />
               <div style={{ maxWidth: "300px" }}>
                 <ServerSummary server={server} enableAuth={true} showDetails={true} classes={classes} />

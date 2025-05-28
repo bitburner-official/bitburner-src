@@ -174,7 +174,6 @@
 |  [CreatingCorporationCheckResultEnumType](./bitburner.creatingcorporationcheckresultenumtype.md) |  |
 |  [CrimeEnumType](./bitburner.crimeenumtype.md) |  |
 |  [CrimeType](./bitburner.crimetype.md) |  |
-|  [DarknetServer](./bitburner.darknetserver.md) | Darknet server information. |
 |  [FactionName](./bitburner.factionname.md) |  |
 |  [FactionNameEnumType](./bitburner.factionnameenumtype.md) | <p>Names of all factions.</p><p>Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you do not want to know what all the factions are, you should not check this enum. Some factions are only accessible in the endgame.</p> |
 |  [FactionWorkEnumType](./bitburner.factionworkenumtype.md) |  |
@@ -186,6 +185,7 @@
 |  [GymLocationNameEnumType](./bitburner.gymlocationnameenumtype.md) | Locations of gym |
 |  [GymType](./bitburner.gymtype.md) |  |
 |  [HeartbleedOptions](./bitburner.heartbleedoptions.md) | Response from attempting to scrape logs from a server |
+|  [IDarknetServer](./bitburner.idarknetserver.md) | Darknet server information. |
 |  [JobField](./bitburner.jobfield.md) |  |
 |  [JobFieldEnumType](./bitburner.jobfieldenumtype.md) |  |
 |  [JobName](./bitburner.jobname.md) |  |

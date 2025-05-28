@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { Person as IPerson, Server as IServer } from "@nsdefs";
+import { Person as IPerson } from "@nsdefs";
 import { AugmentationName, CompletedProgramName, LiteratureName, ToastVariant } from "@enums";
 import { CreateProgramWork } from "../../Work/CreateProgramWork";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
@@ -25,14 +25,13 @@ import {
 } from "../controllers/NetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { Minigames } from "../controllers/ServerGenerator";
-import { addSessionToServer, DarknetState, NET_WIDTH } from "../models/DarknetState";
+import { addSessionToServer, DarknetState, hasDarknetBonusTime, NET_WIDTH } from "../models/DarknetState";
 import { initStockMarket } from "../../StockMarket/StockMarket";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { getSharedChars } from "./authentication";
 import { getLabyrinthDetails, isLabyrinthServer } from "./labyrinth";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-import { Server } from "../../Server/Server";
-import { DarknetServer } from "../../Server/DarknetServer";
+import { DarknetServer, IDarknetServer } from "../../Server/DarknetServer";
 import { DnetServer } from "../models/DarknetServerData";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 
@@ -73,7 +72,7 @@ export const handleFailedAuth = (server: BaseServer, threads: number) => {
  * @param threads - the number of threads used for the password attempt (which speeds up the process)
  */
 export const calculateAuthenticationTime = (
-  server: IServer,
+  server: IDarknetServer,
   person: IPerson = Player,
   threads: number = 1,
   attemptedPassword: string = "",
@@ -96,7 +95,7 @@ export const calculateAuthenticationTime = (
     person.skills.charisma >= chaRequired ? 1 : 1.5 + (chaRequired + 50) / (person.skills.charisma + 50);
   const hasBootsFactor = Player.hasAugmentation(AugmentationName.TheBoots) ? 0.8 : 1;
   const hasSf15_2Factor = Player.sourceFileLvl(15) > 2 ? 0.8 : 1;
-  const bonusTimeFactor = DarknetState.bonusCycles > 0 ? 0.6 : 1;
+  const bonusTimeFactor = hasDarknetBonusTime() ? 0.75 : 1;
 
   const time =
     baseTime *
@@ -111,7 +110,7 @@ export const calculateAuthenticationTime = (
 
   // Add extra time for timing attack server, per correct character
   const sharedChars =
-    darknetData?.minigameType === Minigames.TimingAttack
+    darknetData?.modelId === Minigames.TimingAttack
       ? getSharedChars(darknetData?.password ?? "", attemptedPassword)
       : 0;
   const sharedCharsExtraTime = sharedChars * 150;
@@ -267,10 +266,11 @@ export const calculatePasswordAttemptChaGain = (server: BaseServer, threads: num
   if (!isDarknetServer(server) || !threads) return 0;
   const baseXpGain = 3;
   const difficultyBase = 1.12;
-  const xpGain = baseXpGain + difficultyBase ** server.darknetData.difficulty;
+  const xpGain = baseXpGain + difficultyBase ** server.difficulty;
   const alreadyHackedMult = server.hasAdminRights ? 0.2 : 1;
   const successMult = success && !server.hasAdminRights ? 10 : 1;
-  return xpGain * alreadyHackedMult * successMult * threads * Player.mults.charisma_exp;
+  const bonusTimeMult = hasDarknetBonusTime() ? 1.5 : 1;
+  return xpGain * alreadyHackedMult * successMult * bonusTimeMult * threads * Player.mults.charisma_exp;
 };
 
 // TODO: balance password clue spawn rate
@@ -278,7 +278,7 @@ const addClue = (server: BaseServer) => {
   if (!isDarknetServer(server)) return;
 
   // Basic mechanics hints
-  if ((Math.random() < 0.7 && server.darknetData.difficulty <= 3) || Math.random() < 0.1) {
+  if ((Math.random() < 0.7 && server.difficulty <= 3) || Math.random() < 0.1) {
     const hint: LiteratureName = hintLiterature[Math.floor(Math.random() * hintLiterature.length)];
     if (hint) {
       server.messages.push(hint);
@@ -299,14 +299,11 @@ const addClue = (server: BaseServer) => {
     const passwordHintName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
     const neighboringServerName = server.serversOnNetwork.find((s) => {
       const server = getDarknetServerSafely(s);
-      return server && !server?.hasAdminRights && server.darknetData.password;
+      return server && !server?.hasAdminRights && server.password;
     });
     const neighboringServer = neighboringServerName ? getDarknetServerSafely(neighboringServerName) : null;
     if (neighboringServer) {
-      server.writeToTextFile(
-        passwordHintName as TextFilePath,
-        `Remember this password: ${neighboringServer.darknetData?.password}`,
-      );
+      server.writeToTextFile(passwordHintName as TextFilePath, `Remember this password: ${neighboringServer.password}`);
       return;
     }
   }
@@ -316,7 +313,7 @@ const addClue = (server: BaseServer) => {
     const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
     const targetServer = getRandomNearbyServer(server, true);
     if (targetServer && isDarknetServer(targetServer)) {
-      const contents = `Server: ${targetServer?.hostname} Password: "${targetServer?.darknetData?.password}"`;
+      const contents = `Server: ${targetServer?.hostname} Password: "${targetServer?.password}"`;
       server.writeToTextFile(hintFileName as TextFilePath, contents);
       return;
     }
@@ -332,8 +329,8 @@ const addClue = (server: BaseServer) => {
   if (Math.random() < 0.7) {
     const hintFileName = passwordFileNames[Math.floor(Math.random() * passwordFileNames.length)] + ".txt";
     const targetServer = getRandomNearbyServer(server);
-    if (targetServer && isDarknetServer(targetServer) && targetServer.darknetData.password) {
-      const [containedChar1, containedChar2] = getTwoCharsInPassword(targetServer.darknetData.password);
+    if (targetServer && isDarknetServer(targetServer) && targetServer.password) {
+      const [containedChar1, containedChar2] = getTwoCharsInPassword(targetServer.password);
       const hint = `The password for ${targetServer.hostname} contains ${containedChar1} and ${containedChar2}`;
       server.writeToTextFile(hintFileName as TextFilePath, hint);
       return;
@@ -343,12 +340,12 @@ const addClue = (server: BaseServer) => {
 
 const getRandomNearbyServer = (server: BaseServer, disconnected = false) => {
   if (!isDarknetServer(server)) return null;
-  return getAllAdjacentNeighbors(server.darknetData.x, server.darknetData.y).find(
+  return getAllAdjacentNeighbors(server.x, server.y).find(
     (neighbor) =>
       neighbor &&
       isDarknetServer(neighbor) &&
       !neighbor?.hasAdminRights &&
-      neighbor.darknetData.password &&
+      neighbor.password &&
       (!disconnected || !server.serversOnNetwork.includes(neighbor.hostname)),
   );
 };
@@ -400,12 +397,12 @@ export const getStasisLinkLimit = (): number => {
   return 1 + +hasTheBrokenWings + +hasTheHammer;
 };
 
-export const getStasisLinkServers = () => getDarknetServers().filter((s) => s.darknetData.hasStasisLink);
+export const getStasisLinkServers = () => getDarknetServers().filter((s) => s.hasStasisLink);
 
 export const applyRamBlocks = () => {
   const servers = getDarknetServers();
   for (const server of servers) {
-    server.updateRamUsed(server.darknetData?.ramBlock ?? 0);
+    server.updateRamUsed(server.ramBlock ?? 0);
   }
 };
 
@@ -416,7 +413,7 @@ export const chargeServerMigration = (server: BaseServer, threads = 1) => {
       newCharge: 0,
       xpGained: 0,
     };
-  const chargeIncrease = ((Player.skills.charisma + 50) / (server.darknetData?.difficulty * 4 + 100)) * 0.01 * threads;
+  const chargeIncrease = ((Player.skills.charisma + 50) / (server.difficulty * 4 + 100)) * 0.01 * threads;
   const xpGained = Player.mults.charisma_exp * 50 * ((200 + Player.skills.charisma) / 200) * threads;
   Player.gainCharismaExp(xpGained);
   DarknetState.migrationInductionServers[server.hostname] =
@@ -433,13 +430,16 @@ export const chargeServerMigration = (server: BaseServer, threads = 1) => {
   return result;
 };
 
-export const isDarknetServer = (server: IServer): server is DarknetServer => {
-  return server instanceof DarknetServer || (server instanceof Server && !!server.darknetData);
+export const isDarknetServer = (server: unknown): server is DarknetServer => {
+  return (
+    server instanceof DarknetServer ||
+    (!!server && typeof server == "object" && "modelId" in server && Object.keys(server).includes("modelId"))
+  );
 };
 
 export const getDarknetData = (server: BaseServer): DnetServer | null => {
   if (isDarknetServer(server)) {
-    return server.darknetData;
+    return server;
   }
   return null;
 };

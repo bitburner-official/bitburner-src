@@ -19,7 +19,7 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, hostname: string) =
     throw helpers.errorMessage(ctx, `Server ${hostname} not found. It may have gone offline.`);
   }
 
-  if (server.darknetData.ramBlock <= 0) {
+  if (server.ramBlock <= 0) {
     const result = `Server ${server.hostname} has no host-owned ram left to reallocate.`;
     logger(ctx)(result);
     return {
@@ -29,16 +29,16 @@ export const handleRamBlockRemoved = (ctx: NetscriptContext, hostname: string) =
   }
 
   const threads = ctx.workerScript.scriptRef.threads;
-  const difficulty = server.darknetData.difficulty + 1;
+  const difficulty = server.difficulty + 1;
   const xpGained =
     Player.mults.charisma_exp * threads * 10 * 1.1 ** difficulty * ((200 + Player.skills.charisma) / 200);
   Player.gainCharismaExp(xpGained);
 
   const ramBlockRemoved = getRamBlockRemoved(server, threads);
-  server.darknetData.ramBlock -= ramBlockRemoved;
+  server.ramBlock -= ramBlockRemoved;
   server.updateRamUsed(server.ramUsed - ramBlockRemoved);
 
-  if (server.darknetData.ramBlock <= 0) {
+  if (server.ramBlock <= 0) {
     handleRamBlockClearedRewards(server);
   }
 

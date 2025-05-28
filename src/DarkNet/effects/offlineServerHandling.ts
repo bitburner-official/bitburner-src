@@ -131,7 +131,7 @@ export function expectPassword(ctx: NetscriptContext, hostname: string, _passwor
     return "";
   }
 
-  return server.darknetData.password;
+  return server.password;
 }
 
 export function getTimeoutChance() {

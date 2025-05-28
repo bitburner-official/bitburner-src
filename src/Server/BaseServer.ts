@@ -27,7 +27,7 @@ import type { ScriptKey } from "../utils/helpers/scriptKey";
 import { assertObject } from "../utils/TypeAssertion";
 import { clampNumber } from "../utils/helpers/clampNumber";
 
-interface IConstructorParams {
+export interface IConstructorParams {
   adminRights?: boolean;
   hostname: string;
   ip?: IPAddress;

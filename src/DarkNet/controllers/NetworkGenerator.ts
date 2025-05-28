@@ -92,9 +92,9 @@ export const movePlayerIfNeeded = (server?: BaseServer) => {
 export const loadDarknet = () => {
   const darkWebServers = getDarknetServers();
   for (const server of darkWebServers) {
-    if (server.darknetData && !isLabyrinthServer(server.hostname)) {
+    if (isDarknetServer(server) && !isLabyrinthServer(server.hostname)) {
       disconnectServer(server, true);
-      addServerToNetwork(server, server.darknetData.x, server.darknetData.y);
+      addServerToNetwork(server, server.x, server.y);
     }
   }
   balanceServers();
@@ -123,7 +123,7 @@ export const addRandomConnections = (server: BaseServer) => {
   const serversAbove = getServersOnRowAbove(x);
   const serversBelow = getServersOnRowBelow(x);
   [...serversAbove, ...serversBelow].forEach((neighbor) => {
-    const distance = Math.abs(neighbor.darknetData?.x ?? x - x) + 1;
+    const distance = Math.abs(neighbor.x ?? x - x) + 1;
     if (Math.random() < VERTICAL_CONNECTION_CHANCE / distance) {
       connectServers(server, neighbor);
     }
@@ -145,20 +145,20 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number) => 
   }
 
   DarknetState.Network[x][y] = server;
-  server.darknetData.x = x;
-  server.darknetData.y = y;
+  server.x = x;
+  server.y = y;
 
   addRandomConnections(server);
   addGuaranteedConnection(server);
 
-  if (server.darknetData.x === 0) {
+  if (server.x === 0) {
     const darkWebRoot = GetServer(SpecialServers.DarkWeb);
     if (darkWebRoot) {
       connectServers(server, darkWebRoot);
     }
   }
   const maxDepth = getNetDepth();
-  if (server.darknetData.x === maxDepth - 1) {
+  if (server.x === maxDepth - 1) {
     const labyrinth = getLabyrinthDetails().lab;
     if (labyrinth) {
       connectServers(server, labyrinth);
@@ -172,13 +172,14 @@ export const addLabyrinth = () => {
     icon: labIcon,
     password: "!!the:masterwork:of:daedalus!!",
     staticPasswordHint: "You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.",
-    minigameType: Minigames.labyrinth,
+    modelId: Minigames.labyrinth,
     difficulty: 10,
     x: -1,
     y: -1,
     hasStasisLink: false,
     ramBlock: 0,
     logTrafficInterval: Number.MAX_SAFE_INTEGER,
+    requiredCharismaSkill: 0,
   };
 
   const params = {
@@ -189,14 +190,14 @@ export const addLabyrinth = () => {
     moneyAvailable: 0,
     numOpenPortsRequired: 69,
     adminRights: false,
-    darknetData,
+    ...darknetData,
   };
 
   for (const hostname of getLabyrinthServerNames()) {
     const cha = getLabyrinthChaiRequirement(hostname);
     const server = new DarknetServer({
       ...params,
-      requiredHackingSkill: cha,
+      requiredCharismaSkill: cha,
       hostname: hostname,
     });
     AddToAllServers(server);

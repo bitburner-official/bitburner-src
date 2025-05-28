@@ -162,8 +162,8 @@ export const handleLabyrinthPassword = (
   const newLocation: [number, number] = [initialX + dx * 2, initialY + dy * 2];
 
   const labServer = labDetails.lab;
-  if (!labServer?.darknetData) {
-    throw new Error("Labyrinth server is missing dark web data");
+  if (!labServer) {
+    throw new Error("Labyrinth server is missing!");
   }
 
   if (labServer.hasAdminRights) {
@@ -172,11 +172,11 @@ export const handleLabyrinthPassword = (
       passwordAttempted: attemptedPassword,
       status: ResponseStatus.SUCCESS,
       message: "You have discovered the end the labyrinth.",
-      data: labServer.darknetData.password,
+      data: labServer.password,
     };
   }
 
-  if (!labServer.hasAdminRights && attemptedPassword === labServer.darknetData.password) {
+  if (!labServer.hasAdminRights && attemptedPassword === labServer.password) {
     return {
       passwordAttempted: attemptedPassword,
       status: ResponseStatus.AUTH_FAILURE,
@@ -347,7 +347,7 @@ export const getLabyrinthChaiRequirement = (name: string) => {
 
 export const getNetDepth = () => {
   const labDetails = getLabyrinthDetails();
-  return labDetails.depth;
+  return labDetails.depth ?? 10;
 };
 
 export const isLabyrinthServer = (hostName: string) => {

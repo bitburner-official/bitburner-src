@@ -1,3 +1,5 @@
+import { Minigames } from "../DarkNet/controllers/ServerGenerator";
+
 /**
  * @public
  */
@@ -4101,33 +4103,41 @@ export type Result = { success: boolean; message: string };
  * Darknet server information.
  * @public
  */
-export type DarknetServer = {
-  /** The hostname of the server. */
+export type IDarknetServer = {
+  /** Hostname. Must be unique */
   hostname: string;
-  /** The IP address of the server. */
+  /** IP Address. Must be unique */
   ip: string;
-  /** Whether the player has admin rights on the server. */
+  /** Flag indicating whether player has admin/root access to this server */
   hasAdminRights: boolean;
-  /** Whether the player terminal is currently connected to the server. */
+  /** Flag indicating whether player is currently connected to this server */
   isConnectedTo: boolean;
-  /** The amount of RAM in use (or blocked) on the server. */
+  /** RAM (GB) used. i.e. unavailable RAM */
   ramUsed: number;
-  /** The total amount of RAM on the server. */
+  /** RAM (GB) available on this server */
   maxRam: number;
-  /** The amount of RAM allocated to the owner of the server. */
-  ownerAllocatedRam: number;
-  /** Whether the server has a backdoor installed. */
-  backdoorInstalled: boolean;
-  /** The amount of money available on the server. */
-  moneyAvailable: number;
-  /** The maximum amount of money on the server. */
-  moneyMax: number;
-  /** The cha level required to use heartBleed() on the server. */
-  charismaLevel: number;
-  /** The depth into the darknet of the server. */
-  depth: number;
-  /** The model ID of the server. Similar models have similar vulnerabilities */
-  modelId: string;
+  /** Name of company/faction/etc. that this server belongs to, not applicable to all Servers */
+  organizationName: string;
+  /** Flag indicating whether this is a purchased server */
+  purchasedByPlayer: boolean;
+  /** Flag indicating whether this server has a backdoor installed by a player */
+  backdoorInstalled?: boolean;
+  /** If the server has a stasis link applied */
+  hasStasisLink: boolean;
+  /** The amount of ram blocked by the server owner */
+  ramBlock: number;
+  /** The model of the server. Similar models have similar vulnerabilites. */
+  modelId: Minigames;
+  /** The generic password prompt for the server */
+  staticPasswordHint: string;
+  /** Data associated with the password hint */
+  passwordHintData?: string;
+  /** The difficulty rating of the server, associated with its original depth in the net */
+  difficulty: number;
+  /** The depth of the server in the net */
+  x: number;
+  /** The charisma skill required to heartbleed the server */
+  requiredCharismaSkill: number;
 };
 
 /**
@@ -4318,9 +4328,9 @@ export interface Darknet {
    * RAM cost: 2 GB
    *
    * @param host - Optional. Hostname for the requested server object.
-   * @returns The requested server object.
+   * @returns The requested server object, or null if the server is not found.
    */
-  getServer(host?: string): DarknetServer;
+  getServer(host?: string): IDarknetServer | null;
 
   /**
    * Returns the server's authentication protocol details.
@@ -6036,26 +6046,26 @@ interface BladeburnerFormulas {
 interface DarknetFormulas {
   /**
    * Gets the time it will take to authenticate a server.
-   * @param server - The server to authenticate with. Optional, defaults to the current server
+   * @param server - The server to check authentication time on.
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getAuthenticateTime(server?: Server, threads?: number, player?: Person): number;
+  getAuthenticateTime(server: IDarknetServer, threads?: number, player?: Person): number;
   /**
    * Gets the time it will take to scrape logs from a server.
-   * @param server - The server to scrape logs from. Optional, defaults to the current server
+   * @param server - The server to check heartbleed log scraping time on.
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getHeartbleedTime(server?: Server, threads?: number, player?: Person): number;
+  getHeartbleedTime(server: IDarknetServer, threads?: number, player?: Person): number;
 
   /**
    * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
-   * @param server - The server to free ram on. Optional, defaults to the current server
+   * @param server - The server to check ram freed on.
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getExpectedRamBlockRemoved(server?: Server, threads?: number, player?: Person): number;
+  getExpectedRamBlockRemoved(server: IDarknetServer, threads?: number, player?: Person): number;
 }
 
 /**

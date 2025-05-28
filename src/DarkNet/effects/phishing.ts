@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { DarknetState } from "../models/DarknetState";
+import { DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
 import { addCacheToServer } from "./effects";
 import { formatNumber } from "../../ui/formatNumber";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
@@ -28,11 +28,13 @@ export const handlePhishingAttack = (ctx: NetscriptContext) => {
     };
   } else if (Math.random() < moneyRewardChance) {
     const randomFactor = Math.random() * 0.3 + 0.9;
+    const bonusTimeFactor = hasDarknetBonusTime() ? 1.3 : 1;
     const moneyReward =
       1e4 *
       Player.mults.crime_money *
       threads *
       ((50 + Player.skills.charisma) / 50) *
+      bonusTimeFactor *
       randomFactor *
       currentNodeMults.DarknetMoneyMultiplier;
     Player.gainMoney(moneyReward, "darknet");

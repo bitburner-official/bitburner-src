@@ -26,75 +26,71 @@ export const checkPassword = (
     };
   }
 
-  const darknetData = server.darknetData;
   if (isLabyrinthServer(server.hostname)) {
     return handleLabyrinthPassword(attemptedPassword, server, threads, pid);
   }
 
-  if (darknetData.password === attemptedPassword) {
+  if (server.password === attemptedPassword) {
     handleSuccessfulAuth(server, threads, pid);
     return getGenericSuccess(attemptedPassword);
   }
   handleFailedAuth(server, threads);
 
-  if (darknetData.minigameType === Minigames.MastermindHint) {
-    const { exactCharacters, misplacedCharacters } = getMastermindResponse(darknetData.password, attemptedPassword);
+  if (server.modelId === Minigames.MastermindHint) {
+    const { exactCharacters, misplacedCharacters } = getMastermindResponse(server.password, attemptedPassword);
     const message = `Hint: ${exactCharacters} symbols match, ${misplacedCharacters} ${
       misplacedCharacters == 1 ? "is" : "are"
     } close.`;
     return getFailureResponse(attemptedPassword, message, `${exactCharacters},${misplacedCharacters}`);
-  } else if (darknetData.minigameType === Minigames.GuessNumber) {
-    const hintData = +attemptedPassword > +darknetData.password ? "Lower" : "Higher";
-    return getFailureResponse(attemptedPassword, darknetData.staticPasswordHint, hintData);
-  } else if (darknetData.minigameType === Minigames.Yesn_t) {
+  } else if (server.modelId === Minigames.GuessNumber) {
+    const hintData = +attemptedPassword > +server.password ? "Lower" : "Higher";
+    return getFailureResponse(attemptedPassword, server.staticPasswordHint, hintData);
+  } else if (server.modelId === Minigames.Yesn_t) {
     const response = attemptedPassword
       .slice(0, 36)
       .split("")
-      .map((char, i) => (char === darknetData.password[i] ? "yes" : "yesn't"))
+      .map((char, i) => (char === server.password[i] ? "yes" : "yesn't"))
       .join(",");
     return getFailureResponse(attemptedPassword, "that wasn't right", response);
-  } else if (darknetData.minigameType === Minigames.Synchronize) {
-    const exactChars = getExactCorrectCharsCount(darknetData.password, attemptedPassword);
-    const closeChars = getMisplacedCorrectCharsCount(darknetData.password, attemptedPassword);
-    const syncDecimal = ((exactChars + closeChars * 0.5) / darknetData.password.length) * 100;
+  } else if (server.modelId === Minigames.Synchronize) {
+    const exactChars = getExactCorrectCharsCount(server.password, attemptedPassword);
+    const closeChars = getMisplacedCorrectCharsCount(server.password, attemptedPassword);
+    const syncDecimal = ((exactChars + closeChars * 0.5) / server.password.length) * 100;
     const responseData = `${Math.round(syncDecimal * 10) / 10}`;
     return getFailureResponse(attemptedPassword, `Synchronization status: ${responseData}%`, responseData);
-  } else if (darknetData.minigameType === Minigames.SpiceLevel) {
-    const exactChars = getExactCorrectChars(darknetData.password, attemptedPassword);
+  } else if (server.modelId === Minigames.SpiceLevel) {
+    const exactChars = getExactCorrectChars(server.password, attemptedPassword);
     const pepperRepresentation = exactChars.map((val) => (val ? "🌶️" : "")).join("") || "0";
     return getFailureResponse(
       attemptedPassword,
       "Not spicy enough",
-      `${pepperRepresentation}/${darknetData.password.length}`,
+      `${pepperRepresentation}/${server.password.length}`,
     );
-  } else if (darknetData.minigameType === Minigames.divisibilityTest) {
-    const password = +darknetData.password;
+  } else if (server.modelId === Minigames.divisibilityTest) {
+    const password = +server.password;
     const attemptedDivisor = +attemptedPassword;
     if (isNaN(attemptedDivisor) || password % attemptedDivisor || attemptedPassword === "") {
       return getFailureResponse(attemptedPassword, `Password is not divisible by '${attemptedPassword}'`, "false");
     }
     return getFailureResponse(attemptedPassword, `Password IS divisible by '${attemptedPassword}'`, "true");
-  } else if (
-    darknetData.minigameType === Minigames.ConvertToBase10 ||
-    darknetData.minigameType === Minigames.parsedExpression
-  ) {
+  } else if (server.modelId === Minigames.ConvertToBase10 || server.modelId === Minigames.parsedExpression) {
     const parsedAttemptedPassword = parseFloat(attemptedPassword);
     if (
       !isNaN(parsedAttemptedPassword) &&
-      Math.abs((parsedAttemptedPassword - +darknetData.password) / +darknetData.password) < 0.001
+      Math.abs((parsedAttemptedPassword - +server.password) / +server.password) < 0.001
     ) {
       // ignore small rounding errors during floating point operations
       handleSuccessfulAuth(server, threads);
       return getGenericSuccess(attemptedPassword);
     }
-    return getFailureResponse(attemptedPassword, darknetData.staticPasswordHint, darknetData.passwordHintData ?? "");
-  } else if (darknetData.minigameType === Minigames.TimingAttack) {
+    return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData ?? "");
+  } else if (server.modelId === Minigames.TimingAttack) {
     return {
       responseTime,
-      ...getFailureResponse(attemptedPassword, darknetData.staticPasswordHint, darknetData.passwordHintData ?? ""),
+      ...getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData ?? ""),
     };
   } else {
-    return getFailureResponse(attemptedPassword, darknetData.staticPasswordHint, darknetData.passwordHintData ?? "");
+    return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData ?? "");
   }
 };
 

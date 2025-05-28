@@ -68,6 +68,7 @@ import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContentFilePath } from "../Paths/ContentFile";
 import { LiteratureName } from "@enums";
 import { isDarknetServer } from "../DarkNet/effects/effects";
+import { IDarknetServer } from "../Server/DarknetServer";
 
 export const helpers = {
   string,
@@ -96,6 +97,7 @@ export const helpers = {
   portNumber,
   person,
   server,
+  darknetServer,
   scp,
   gang,
   gangMember,
@@ -648,6 +650,31 @@ function server(ctx: NetscriptContext, s: unknown): IServer {
   const error = missingKey(fakeServer, s);
   if (error) throw errorMessage(ctx, `server should be a Server.\n${error}`, "TYPE");
   return s as IServer;
+}
+
+function darknetServer(ctx: NetscriptContext, s: unknown): IDarknetServer {
+  const fakeServer: IDarknetServer = {
+    backdoorInstalled: false,
+    difficulty: 0,
+    hasStasisLink: false,
+    modelId: "",
+    passwordHintData: "",
+    ramBlock: 0,
+    requiredCharismaSkill: 0,
+    staticPasswordHint: "",
+    x: 0,
+    hostname: "",
+    ip: "",
+    hasAdminRights: false,
+    isConnectedTo: false,
+    ramUsed: 0,
+    maxRam: 0,
+    organizationName: "",
+    purchasedByPlayer: false,
+  };
+  const error = missingKey(fakeServer, s);
+  if (error) throw errorMessage(ctx, `server should be a Darknet Server.\n${error}`, "TYPE");
+  return s as IDarknetServer;
 }
 
 function missingKey(expect: object, actual: unknown): string | false {

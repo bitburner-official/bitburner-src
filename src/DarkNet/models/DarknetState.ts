@@ -26,7 +26,7 @@ export type DarknetState = {
   serverState: Record<string, serverState>;
   offlineServers: string[];
   storedCycles: number;
-  bonusCycles: number;
+  cyclesSinceLastMutation: number;
 };
 
 export type serverState = {
@@ -51,7 +51,7 @@ export const DarknetState: DarknetState = {
   serverState: {},
   offlineServers: [],
   storedCycles: 0,
-  bonusCycles: 0,
+  cyclesSinceLastMutation: 0,
 };
 
 export const getServerState = (hostname: string): serverState => {
@@ -80,9 +80,15 @@ const removeExpiredSessions = (server: BaseServer) => {
 };
 
 export const storeDarknetCycles = (cycles: number) => {
+  if (DarknetState.storedCycles < 0) {
+    DarknetState.storedCycles = 0;
+  }
+  if (DarknetState.cyclesSinceLastMutation < 0) {
+    DarknetState.cyclesSinceLastMutation = 0;
+  }
+
   DarknetState.storedCycles += cycles;
+  DarknetState.cyclesSinceLastMutation += cycles;
 };
 
-export const addDarknetBonusTime = (cycles: number) => {
-  DarknetState.bonusCycles += cycles;
-};
+export const hasDarknetBonusTime = () => DarknetState.storedCycles > 10;

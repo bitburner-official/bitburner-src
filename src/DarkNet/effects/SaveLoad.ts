@@ -1,12 +1,12 @@
 import { DarknetState } from "../models/DarknetState";
 
 export type DarknetSaveFormat = {
-  bonusCycles: number;
+  storedCycles: number;
 };
 
 export function getDarkNetSave(): DarknetSaveFormat {
   return {
-    bonusCycles: Math.floor(DarknetState.bonusCycles),
+    storedCycles: Math.floor(DarknetState.storedCycles),
   };
 }
 
@@ -29,9 +29,9 @@ export function loadDarkNet(data: unknown) {
     return showError(`Cannot JSON.parse the savedata: ${data}`);
   }
   if (!parsedData || typeof parsedData !== "object") return showError("Parsed savedata was not an object");
-  if (!Object.keys(parsedData).includes("bonusCycles")) return showError("Parsed savedata was missing bonusCycles");
-  const bonusTime: number = +(parsedData as DarknetSaveFormat).bonusCycles;
-  if (isNaN(bonusTime)) return showError("Parsed savedata bonusCycles was not a number");
+  if (!Object.keys(parsedData).includes("storedCycles")) return showError("Parsed savedata was missing storedCycles");
+  const storedCycles: number = +(parsedData as DarknetSaveFormat).storedCycles;
+  if (isNaN(storedCycles)) return showError("Parsed savedata storedCycles was not a number");
 
-  DarknetState.bonusCycles = bonusTime < 0 ? 0 : bonusTime;
+  DarknetState.storedCycles = storedCycles < 0 ? 0 : storedCycles;
 }

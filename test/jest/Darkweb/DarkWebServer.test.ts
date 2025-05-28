@@ -22,10 +22,10 @@ describe("DarkWebServer Tests", () => {
     expect(server).toBeDefined();
     const failedAttemptResponse = checkPassword("wrongPassword", server);
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
-    expect(failedAttemptResponse.message.includes(server.darknetData.password)).toBe(true);
+    expect(failedAttemptResponse.message.includes(server.password)).toBe(true);
     expect(server.hasAdminRights).toBe(false);
 
-    expect(checkPassword(server.darknetData.password, server).status).toBe(ResponseStatus.SUCCESS);
+    expect(checkPassword(server.password, server).status).toBe(ResponseStatus.SUCCESS);
     expect(server.hasAdminRights).toBe(true);
   });
 
@@ -36,7 +36,7 @@ describe("DarkWebServer Tests", () => {
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
     expect(server.hasAdminRights).toBe(false);
 
-    expect(checkPassword(server.darknetData.password, server).status).toBe(ResponseStatus.SUCCESS);
+    expect(checkPassword(server.password, server).status).toBe(ResponseStatus.SUCCESS);
     expect(server.hasAdminRights).toBe(true);
   });
 
@@ -48,16 +48,16 @@ describe("DarkWebServer Tests", () => {
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
     expect(server.hasAdminRights).toBe(false);
 
-    expect(defaultSettingsDictionary.includes(server.darknetData.password)).toBe(true);
+    expect(defaultSettingsDictionary.includes(server.password)).toBe(true);
 
-    expect(checkPassword(server.darknetData.password, server).status).toBe(ResponseStatus.SUCCESS);
+    expect(checkPassword(server.password, server).status).toBe(ResponseStatus.SUCCESS);
     expect(server.hasAdminRights).toBe(true);
   });
 
   test("getMastermindHintServer creates a server with mastermind hint", () => {
     const password = "11223334";
     const server = getMastermindHintServer(difficulty, 0, 0);
-    server.darknetData.password = password;
+    server.password = password;
     expect(server).toBeDefined();
 
     const getData = () => {
@@ -100,7 +100,7 @@ describe("DarkWebServer Tests", () => {
     expect(correctCount5).toBe("2");
     expect(closeCount5).toBe("6");
 
-    server.darknetData.password = "2435";
+    server.password = "2435";
     const failedAttemptResponse6 = getAuthResult("3423", server);
     expect(failedAttemptResponse6.response.status).toBe(ResponseStatus.AUTH_FAILURE);
     expect(server.hasAdminRights).toBe(false);
@@ -108,7 +108,7 @@ describe("DarkWebServer Tests", () => {
     expect(correctCount6).toBe("1");
     expect(closeCount6).toBe("2");
 
-    expect(checkPassword(server.darknetData.password, server).status).toBe(ResponseStatus.SUCCESS);
+    expect(checkPassword(server.password, server).status).toBe(ResponseStatus.SUCCESS);
     expect(server.hasAdminRights).toBe(true);
   });
 
@@ -119,7 +119,7 @@ describe("DarkWebServer Tests", () => {
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
     const [base, numberString] = failedAttemptResponse.data.split(",");
 
-    expect(numberString).toBe(encodeNumberInBaseN(+server.darknetData?.password, base));
+    expect(numberString).toBe(encodeNumberInBaseN(+server.password, base));
 
     const attemptedPassword = parseBaseNNumberString(numberString, base);
 

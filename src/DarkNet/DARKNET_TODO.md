@@ -1,5 +1,9 @@
 ## TODO:
 
+- make darkweb a darknet server
+
+- capcha server
+
 - start with crash course?
 
 ```

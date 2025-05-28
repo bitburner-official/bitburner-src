@@ -15,6 +15,7 @@ import { Page } from "../../ui/Router";
 import { WEBSTORM } from "../effects/webstorm";
 import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
+import { isDarknetServer } from "../effects/effects";
 
 export const DW_NET_WIDTH = 6000;
 export const DW_NET_HEIGHT = 12000;
@@ -33,8 +34,8 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     DarknetEvents.subscribe(() => {
       if (canvas.current) {
         const deepestServer: number = DarknetState.Network.flat().reduce((deepest, server) => {
-          if (server?.hasAdminRights && server?.darknetData && (server?.darknetData?.x ?? 0 > deepest)) {
-            return server.darknetData.x;
+          if (server?.hasAdminRights && isDarknetServer(server) && (server.x ?? 0 > deepest)) {
+            return server.x;
           }
           return deepest;
         }, 1);

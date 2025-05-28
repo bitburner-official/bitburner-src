@@ -9,14 +9,14 @@ Gets the time it will take to scrape logs from a server.
 **Signature:**
 
 ```typescript
-getHeartbleedTime(server?: Server, threads?: number, player?: Person): number;
+getHeartbleedTime(server: IDarknetServer, threads?: number, player?: Person): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  server | [Server](./bitburner.server.md) | _(Optional)_ The server to scrape logs from. Optional, defaults to the current server |
+|  server | [IDarknetServer](./bitburner.idarknetserver.md) | The server to check heartbleed log scraping time on. |
 |  threads | number | _(Optional)_ The number of threads to use for the authentication. Optional, defaults to 1 |
 |  player | [Person](./bitburner.person.md) | _(Optional)_ The player object. Optional, defaults to the current player status |
 

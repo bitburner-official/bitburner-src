@@ -49,7 +49,7 @@ import { EventEmitter } from "./utils/EventEmitter";
 import { Companies } from "./Company/Companies";
 import { resetGoPromises } from "./Go/boardAnalysis/goAI";
 import { getRecordEntries } from "./Types/Record";
-import { addDarknetBonusTime, storeDarknetCycles } from "./DarkNet/models/DarknetState";
+import { storeDarknetCycles } from "./DarkNet/models/DarknetState";
 import { processDarknet } from "./DarkNet/controllers/NetworkMovement";
 import { hasDarknetAccess } from "./DarkNet/effects/effects";
 
@@ -119,8 +119,7 @@ const Engine = {
 
     // Darknet
     if (hasDarknetAccess()) {
-      storeDarknetCycles(numCycles);
-      processDarknet();
+      processDarknet(numCycles);
     }
 
     // Update the running time of all active scripts
@@ -331,7 +330,7 @@ const Engine = {
 
       Go.storeCycles(numCyclesOffline);
 
-      addDarknetBonusTime(numCyclesOffline);
+      storeDarknetCycles(numCyclesOffline);
 
       staneksGift.process(numCyclesOffline);
 

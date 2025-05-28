@@ -471,7 +471,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       getAuthenticateTime:
         (ctx) =>
         (_server, _threads, _player): number => {
-          const server = helpers.server(ctx, _server ?? ctx.workerScript.getServer());
+          const server = helpers.darknetServer(ctx, _server);
           const threads = helpers.number(ctx, "threads", _threads ?? 1);
           const person = helpers.person(ctx, _player ?? Player);
           return calculateAuthenticationTime(server, person, threads);
@@ -479,7 +479,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       getHeartbleedTime:
         (ctx) =>
         (_server, _threads, _player): number => {
-          const server = helpers.server(ctx, _server ?? ctx.workerScript.getServer());
+          const server = helpers.darknetServer(ctx, _server);
           const threads = helpers.number(ctx, "threads", _threads ?? 1);
           const person = helpers.person(ctx, _player ?? Player);
           return calculateAuthenticationTime(server, person, threads) * 1.5;
@@ -487,7 +487,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
       getExpectedRamBlockRemoved:
         (ctx) =>
         (_server, _threads, _person): number => {
-          const server = helpers.server(ctx, _server ?? ctx.workerScript.getServer());
+          const server = helpers.darknetServer(ctx, _server);
           const threads = helpers.number(ctx, "threads", _threads ?? 1);
           const person = helpers.person(ctx, _person ?? Player);
           if (!isDarknetServer(server)) {

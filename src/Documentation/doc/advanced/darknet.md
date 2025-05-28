@@ -120,6 +120,23 @@ Design document and workspace
 
 ## patches:
 
+## Darknet server type overhaul
+
+- Changed the signature of darknet servers to be more standardized
+  - Now extends BaseServer
+  - now has flat properties instead of inside a darknetData object
+  - now implements IDarknetServer
+  - now is json serializable
+- dnet.getServer returns an IDarknetServer
+- formulas.dnet methods now expect an IDarknetServer (and do not provide a default server)
+
+- All stored cycles (from offline time or sleeping time etc) are treated the same
+- Darknet mutation has a minimum cycle requirement to prevent rave mode
+- Bonus time is detected by looking for a large pool of stored cycles
+- bonus time now provides less auth speedup, but more auth xp and phishing reward money
+
+Todo next: make `darknet` an actual IDarknetServer
+
 ## Tech debt patch
 
 - Implemented bonus time, and saving/loading bonus time

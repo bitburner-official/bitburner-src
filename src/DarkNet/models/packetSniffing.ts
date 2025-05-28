@@ -6,7 +6,7 @@ import {
   Minigames,
   romanNumeralEncoder,
 } from "../controllers/ServerGenerator";
-import { getName, PasswordResponse } from "./DarknetServerData";
+import { getDarknetServerName, PasswordResponse } from "./DarknetServerData";
 import { LocationName } from "@enums";
 import { getDarknetData, getTwoCharsInPassword, isDarknetServer } from "../effects/effects";
 import { getDarknetServers, getServerSafely } from "../controllers/NetworkMovement";
@@ -21,15 +21,14 @@ export const capturePackets = (server: BaseServer) => {
   }
   const BASE_PASSWORD_INCLUSION_RATE = 0.18;
   const DIFFICULTY_MODIFIER = 0.88;
-  const darknetData = server.darknetData;
-  const difficulty = darknetData.difficulty * 1.3;
-  const vulnerability = darknetData.minigameType === Minigames.packetSniffer ? 8 : 1;
+  const difficulty = server.difficulty * 1.3;
+  const vulnerability = server.modelId === Minigames.packetSniffer ? 8 : 1;
   const passwordInclusionChance = BASE_PASSWORD_INCLUSION_RATE * vulnerability * DIFFICULTY_MODIFIER ** difficulty;
 
   if (Math.random() < passwordInclusionChance) {
     const intro = Math.floor(Math.random() * 124);
-    return `${getRandomData(intro, server)}${darknetData.password}${getRandomData(
-      124 - intro - darknetData.password.length,
+    return `${getRandomData(intro, server)}${server.password}${getRandomData(
+      124 - intro - server.password.length,
       server,
     )}`;
   }
@@ -38,10 +37,8 @@ export const capturePackets = (server: BaseServer) => {
     const connectedServer = getServerSafely(connectedServerName);
     if (connectedServer && isDarknetServer(connectedServer)) {
       const intro = Math.floor(Math.random() * 124);
-      return `${getRandomData(intro, server)} ${connectedServerName}:${
-        connectedServer.darknetData.password
-      } ${getRandomData(
-        124 - intro - connectedServer.darknetData.password.length - connectedServerName.length,
+      return `${getRandomData(intro, server)} ${connectedServerName}:${connectedServer.password} ${getRandomData(
+        124 - intro - connectedServer.password.length - connectedServerName.length,
         server,
       )}`;
     }
@@ -54,7 +51,7 @@ const getRandomData = (length: number, server: BaseServer) => {
   if (!isDarknetServer(server)) {
     return packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)];
   }
-  const password = server.darknetData.password;
+  const password = server.password;
   let result = "";
   while (result.length < length) {
     if (Math.random() < 0.1) {
@@ -70,13 +67,13 @@ const getRandomData = (length: number, server: BaseServer) => {
     } else if (Math.random() < 0.33) {
       result += " " + getExactCharactersHint(getServerLogs(server, 1, true, true)[0] || "", password);
     } else if (Math.random() < 0.6) {
-      result += " " + getName() + " ";
+      result += " " + getDarknetServerName() + " ";
     } else if (Math.random() < 0.15) {
       result += "/" + Object.keys(LocationName)[Math.floor(Math.random() * Object.keys(LocationName).length)] + "/";
     } else if (Math.random() < 0.05) {
       const servers = getDarknetServers();
       const randomServer = servers[Math.floor(Math.random() * servers.length)];
-      return `--${randomServer.darknetData?.password ?? ""}--`;
+      return `--${randomServer.password ?? ""}--`;
     } else {
       result += romanNumeralEncoder(Math.floor(Math.random() * 5000));
     }
@@ -151,7 +148,7 @@ export const populateServerLogsWithNoise = (server: BaseServer) => {
     return;
   }
   const serverState = getServerState(server.hostname);
-  const interval = server.darknetData.logTrafficInterval;
+  const interval = server.logTrafficInterval;
   if (!serverState.lastLogTime) {
     serverState.serverLogs = [
       getLogNoise(server, new Date(new Date().getTime() - interval * 1000)),
@@ -182,11 +179,11 @@ const getLogNoise = (server: BaseServer, logDate: Date) => {
   if (Math.random() < 0.2) {
     return packetSniffPhrases[Math.floor(Math.random() * packetSniffPhrases.length)];
   }
-  if (Math.random() < 0.05 * (1 / (server.darknetData.difficulty + 1))) {
+  if (Math.random() < 0.05 * (1 / (server.difficulty + 1))) {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
     const connectedServer = getServerSafely(connectedServerName);
     if (connectedServer && isDarknetServer(connectedServer)) {
-      return `Connecting to ${connectedServerName}:${connectedServer.darknetData.password} ...`;
+      return `Connecting to ${connectedServerName}:${connectedServer.password} ...`;
     }
   }
   if (Math.random() < 0.05) {
@@ -204,13 +201,13 @@ const getLogNoise = (server: BaseServer, logDate: Date) => {
   }
 
   if (Math.random() < 0.1) {
-    return getRandomCharsInPassword(server.darknetData.password);
+    return getRandomCharsInPassword(server.password);
   }
 
   if (Math.random() < 0.05) {
     const servers = getDarknetServers();
     const randomServer = servers[Math.floor(Math.random() * servers.length)];
-    return `--${randomServer.darknetData?.password ?? ""}--`;
+    return `--${randomServer.password ?? ""}--`;
   }
 
   return `${logDate.toLocaleTimeString()}: ${server.hostname} - heartbeat check (alive)`;

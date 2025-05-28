@@ -35,7 +35,7 @@ export type PasswordResponse = {
 export type DarknetServerData = {
   icon: Icon | typeof labIcon;
   password: string;
-  minigameType: Minigames;
+  modelId: Minigames;
   staticPasswordHint: string;
   passwordHintData?: string;
   difficulty: number;
@@ -47,16 +47,25 @@ export type DnetServer = DarknetServerData & {
   hasStasisLink: boolean;
   ramBlock: number;
   logTrafficInterval: number;
+  requiredCharismaSkill: number;
 };
 
-export const DnetServerBuilder = (options: DarknetServerData, name: string = getName()): DarknetServer => {
+export const DnetServerBuilder = (options: DarknetServerData, name: string = getDarknetServerName()): DarknetServer => {
   const maxRam = 16 * 2 ** Math.floor(options.difficulty / 4);
   const ramBlock = getRamBlock(maxRam);
+
+  const labDetails = getLabyrinthDetails();
+  const labDifficulty = labDetails.cha;
+  const depth = options.difficulty;
+  const depthScaling = depth < 2 ? depth * 10 : (depth / labDetails.depth) ** 1.5 * labDifficulty * 0.85;
+  const levelVariance = (Math.random() * 3 - 1) * depth;
+  const requiredLevel = Math.max(Math.floor(depthScaling + levelVariance), 1);
+
   const darknetData: DnetServer = {
     ramBlock,
     icon: options.icon ?? getRandomIcon(),
     password: options.password,
-    minigameType: options.minigameType,
+    modelId: options.modelId,
     staticPasswordHint: options.staticPasswordHint,
     passwordHintData: options.passwordHintData ?? "",
     difficulty: options.difficulty ?? 1,
@@ -64,26 +73,16 @@ export const DnetServerBuilder = (options: DarknetServerData, name: string = get
     y: options.y ?? -1,
     hasStasisLink: false,
     logTrafficInterval: 1 + 30 * 0.9 ** options.difficulty,
+    requiredCharismaSkill: requiredLevel,
   };
-
-  const labDetails = getLabyrinthDetails();
-  const labDifficulty = labDetails.cha;
-  const depth = darknetData.difficulty;
-  const depthScaling = depth < 2 ? depth * 10 : (depth / labDetails.depth) ** 1.5 * labDifficulty * 0.85;
-  const levelVariance = (Math.random() * 3 - 1) * depth;
-  const requiredLevel = Math.max(Math.floor(depthScaling + levelVariance), 1);
 
   const server = new DarknetServer({
     hostname: name,
     ip: createUniqueRandomIp(),
     organizationName: "darkweb",
     maxRam,
-    requiredHackingSkill: requiredLevel,
-    hackDifficulty: 5 + darknetData.difficulty,
-    moneyAvailable: 0,
-    numOpenPortsRequired: 69,
     adminRights: false,
-    darknetData: darknetData,
+    ...darknetData,
   });
   server.updateRamUsed(ramBlock);
   AddToAllServers(server);
@@ -91,7 +90,7 @@ export const DnetServerBuilder = (options: DarknetServerData, name: string = get
   return server;
 };
 
-export const getName = (): string => {
+export const getDarknetServerName = (): string => {
   return decorateName(getBaseName());
 };
 

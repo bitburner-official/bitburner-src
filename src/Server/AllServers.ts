@@ -17,13 +17,14 @@ import { assertObject } from "../utils/TypeAssertion";
 import { populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
 import { applyRamBlocks, hasDarknetAccess, isDarknetServer } from "../DarkNet/effects/effects";
 import { getTorRouter } from "../Locations/ui/TorButton";
+import { DarknetServer } from "./DarknetServer";
 
 /**
  * Map of all Servers that exist in the game
  *  Key (string) = IP
  *  Value = Server object
  */
-let AllServers: Record<string, Server | HacknetServer> = {};
+let AllServers: Record<string, Server | HacknetServer | DarknetServer> = {};
 
 function GetServerByIP(ip: string): BaseServer | undefined {
   for (const server of Object.values(AllServers)) {
@@ -125,7 +126,7 @@ export function createUniqueRandomIp(): IPAddress {
 }
 
 // Safely add a Server to the AllServers map
-export function AddToAllServers(server: Server | HacknetServer): void {
+export function AddToAllServers(server: Server | HacknetServer | DarknetServer): void {
   if (GetServer(server.hostname)) {
     console.warn(`Hostname of the server thats being added: ${server.hostname}`);
     console.warn(`The server that already has this IP is: ${AllServers[server.hostname].hostname}`);
@@ -240,7 +241,7 @@ export function loadAllServers(saveString: string): void {
     throw new Error("Server list is empty.");
   }
   for (const [serverName, server] of Object.entries(allServersData)) {
-    if (!(server instanceof Server) && !(server instanceof HacknetServer)) {
+    if (!(server instanceof Server) && !(server instanceof HacknetServer) && !isDarknetServer(server as BaseServer)) {
       throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer.`);
     }
   }

@@ -37,7 +37,7 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
     setResponse("Checking password...");
 
     const sharedChars =
-      darknetData?.minigameType === Minigames.TimingAttack
+      darknetData?.modelId === Minigames.TimingAttack
         ? getSharedChars(darknetData?.password ?? "", passwordAttempted)
         : 0;
     const responseTime = 500 + sharedChars * 150;
@@ -132,7 +132,7 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
                 <span className={classes.serverDetailsText}>format:</span>{" "}
                 {getPasswordType(darknetData?.password ?? "")}
                 <br />
-                <span className={classes.serverDetailsText}>model:</span> {darknetData?.minigameType ?? ""}
+                <span className={classes.serverDetailsText}>model:</span> {darknetData?.modelId ?? ""}
                 <br />
               </pre>
             </div>

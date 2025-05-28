@@ -90,9 +90,6 @@ export class Server extends BaseServer {
 
     //Port information, required for porthacking servers to get admin rights
     this.numOpenPortsRequired = params.numOpenPortsRequired != null ? params.numOpenPortsRequired : 5;
-
-    // Darkweb data
-    this.darknetData = params.darknetData;
   }
 
   /** Ensures that the server's difficulty (server security) doesn't get too high */
