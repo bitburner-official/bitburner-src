@@ -16,7 +16,8 @@ interface GameInfo
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [commit](./bitburner.gameinfo.commit.md) |  | string |  |
-|  [platform](./bitburner.gameinfo.platform.md) |  | string |  |
-|  [version](./bitburner.gameinfo.version.md) |  | string |  |
+|  [commit](./bitburner.gameinfo.commit.md) |  | string | Git commit hash that the release was built from. E.g.: "d0d776700" |
+|  [platform](./bitburner.gameinfo.platform.md) |  | "Browser" \| "Steam" | Platform that the game is running on |
+|  [version](./bitburner.gameinfo.version.md) |  | string | <p>Version as shown in release notes and in the UI. E.g.: "2.8.1"</p><p>Note that this property does not have the prefix "v". For example, with v2.8.1, this property is "2.8.1".</p> |
+|  [versionNumber](./bitburner.gameinfo.versionnumber.md) |  | number | Internal version number that increments during releases. E.g.: 43 |
 
