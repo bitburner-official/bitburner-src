@@ -15,7 +15,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { SelectChangeEvent } from "@mui/material/Select";
-import { CompanyName, FactionName } from "@enums";
+import { CompanyName, FactionName, HashUpgradeEnum } from "@enums";
 import { PartialRecord } from "../../Types/Record";
 import { isMember } from "../../utils/EnumHelper";
 import { ServerOwnershipType } from "../../Server/ServerHelpers";
@@ -46,19 +46,17 @@ export function HacknetUpgradeElem(props: IProps): React.ReactElement {
   }
   function purchase(): void {
     const canPurchase = props.hashManager.hashes >= props.hashManager.getUpgradeCost(props.upg.name);
-    if (canPurchase) {
-      const res = purchaseHashUpgrade(
-        props.upg.name,
-        props.upg.name === "Company Favor" ? selectedCompany : selectedServer,
-      );
-      if (!res) {
-        dialogBoxCreate(
-          "Failed to purchase upgrade. This may be because you do not have enough hashes, " +
-            "or because you do not have access to the feature upgrade affects.",
-        );
-      }
-      props.rerender();
+    if (!canPurchase) {
+      return;
     }
+    const result = purchaseHashUpgrade(
+      props.upg.name,
+      props.upg.name === HashUpgradeEnum.CompanyFavor ? selectedCompany : selectedServer,
+    );
+    if (!result.success) {
+      dialogBoxCreate(`Failed to purchase upgrade. Reason: ${result.message} `);
+    }
+    props.rerender();
   }
 
   const hashManager = props.hashManager;

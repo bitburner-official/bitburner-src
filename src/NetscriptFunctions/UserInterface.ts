@@ -159,17 +159,12 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
     },
 
     getGameInfo: () => () => {
-      const version = CONSTANTS.VersionString;
-      const commit = commitHash();
-      const platform = navigator.userAgent.toLowerCase().includes(" electron/") ? "Steam" : "Browser";
-
-      const gameInfo = {
-        version,
-        commit,
-        platform,
+      return {
+        version: CONSTANTS.VersionString,
+        versionNumber: CONSTANTS.VersionNumber,
+        commit: commitHash(),
+        platform: navigator.userAgent.toLowerCase().includes(" electron/") ? "Steam" : "Browser",
       };
-
-      return gameInfo;
     },
 
     clearTerminal: (ctx) => () => {

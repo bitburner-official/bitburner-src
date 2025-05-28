@@ -2808,6 +2808,15 @@ export interface Singularity {
    * @returns - An object representing the current work. Fields depend on the kind of work.
    */
   getCurrentWork(): Task | null;
+
+  /**
+   * Get a list of all unlocked achievements.
+   * @remarks
+   * Ram cost: 5 GB * 16/4/1
+   *
+   * @returns - A list containing all of the IDs of achievements that the player has unlocked.
+   */
+  getUnlockedAchievements(): string[];
 }
 
 /**
@@ -2823,6 +2832,19 @@ export interface CompanyPositionInfo {
   requiredReputation: number;
   requiredSkills: Skills;
 }
+
+type HacknetServerHashUpgrade =
+  | "Sell for Money"
+  | "Sell for Corporation Funds"
+  | "Reduce Minimum Security"
+  | "Increase Maximum Money"
+  | "Improve Studying"
+  | "Improve Gym Training"
+  | "Exchange for Corporation Research"
+  | "Exchange for Bladeburner Rank"
+  | "Exchange for Bladeburner SP"
+  | "Generate Coding Contract"
+  | "Company Favor";
 
 /**
  * Hacknet API
@@ -3078,11 +3100,11 @@ export interface Hacknet {
    *   ns.hacknet.spendHashes(upgradeName);
    * }
    * ```
-   * @param upgName - Name of the upgrade of Hacknet Node.
+   * @param upgName - Name of the upgrade using hash of Hacknet Server.
    * @param count - Number of upgrades to buy at once. Defaults to 1 if not specified.
    * @returns Number of hashes required for the specified upgrade.
    */
-  hashCost(upgName: string, count?: number): number;
+  hashCost(upgName: HacknetServerHashUpgrade, count?: number): number;
 
   /**
    * Purchase a hash upgrade.
@@ -3105,13 +3127,13 @@ export interface Hacknet {
    * // For upgrades requiring a target
    * ns.hacknet.spendHashes("Increase Maximum Money", "foodnstuff");
    * ```
-   * @param upgName - Name of the upgrade of Hacknet Node.
+   * @param upgName - Name of the upgrade using hash of Hacknet Server.
    * @param upgTarget - Object to which upgrade applies. Required for certain upgrades.
    * @param count - Number of upgrades to buy at once. Must be a non-negative integer. Defaults to 1 if not specified.
    * For compatibility reasons, upgTarget must be specified, even if it is not used, in order to specify count.
    * @returns True if the upgrade is successfully purchased, and false otherwise.
    */
-  spendHashes(upgName: string, upgTarget?: string, count?: number): boolean;
+  spendHashes(upgName: HacknetServerHashUpgrade, upgTarget?: string, count?: number): boolean;
 
   /**
    * Get the list of hash upgrades
@@ -3127,7 +3149,7 @@ export interface Hacknet {
    * ```
    * @returns An array containing the available upgrades
    */
-  getHashUpgrades(): string[];
+  getHashUpgrades(): HacknetServerHashUpgrade[];
 
   /**
    * Get the level of a hash upgrade.
@@ -3138,7 +3160,7 @@ export interface Hacknet {
    *
    * @returns Level of the upgrade.
    */
-  getHashUpgradeLevel(upgName: string): number;
+  getHashUpgradeLevel(upgName: HacknetServerHashUpgrade): number;
 
   /**
    * Get the multiplier to study.
@@ -5276,7 +5298,7 @@ export interface Go {
   /**
    * Gets the status of the current game.
    * Shows the current player, current score, and the previous move coordinates.
-   * Previous move coordinates will be [-1, -1] for a pass, or if there are no prior moves.
+   * Previous move will be null for a pass, or if there are no prior moves.
    */
   getGameState(): {
     currentPlayer: "White" | "Black" | "None";
@@ -5957,7 +5979,7 @@ interface HacknetServersFormulas {
    * @param level - level of the upgrade
    * @returns The calculated hash cost.
    */
-  hashUpgradeCost(upgName: string, level: number): number;
+  hashUpgradeCost(upgName: HacknetServerHashUpgrade, level: number): number;
   /**
    * Calculate the cost of a hacknet server.
    * @param n - number of the hacknet server
@@ -8170,8 +8192,6 @@ export interface NS {
    *
    * Get a handle to a Netscript Port.
    *
-   * WARNING: Port Handles only work in NetscriptJS (Netscript 2.0). They will not work in Netscript 1.0.
-   *
    * @param portNumber - Port number. Must be a positive integer.
    */
   getPortHandle(portNumber: number): NetscriptPort;
@@ -8468,17 +8488,6 @@ export interface NS {
    * If the file already exists, it will be overwritten by this command.
    * Note that it will not be possible to download data from many websites because they
    * do not allow cross-origin resource sharing (CORS).
-   *
-   * IMPORTANT: This is an asynchronous function that returns a Promise.
-   * The Promise’s resolved value will be a boolean indicating whether or not the data was
-   * successfully retrieved from the URL. Because the function is async and returns a Promise,
-   * it is recommended you use wget in NetscriptJS (Netscript 2.0).
-   *
-   * In NetscriptJS, you must preface any call to wget with the await keyword (like you would {@link NS.hack | hack} or {@link NS.sleep | sleep}).
-   * wget will still work in Netscript 1.0, but the function's execution will not be synchronous
-   * (i.e. it may not execute when you expect/want it to).
-   * Furthermore, since Promises are not supported in ES5,
-   * you will not be able to process the returned value of wget in Netscript 1.0.
    *
    * @example
    * ```js
@@ -9308,11 +9317,16 @@ export interface OfficeAPI {
    *
    * @param divisionName - Name of the division
    * @param city - Name of the city
-   * @param job - Name of the job
+   * @param job - Name of the job. Passing "Unassigned" will cause this API to not do anything and just return false.
    * @param amount - Number of employees to assign to that job
    * @returns true if the employee count reached the target amount, false if not
    */
-  setAutoJobAssignment(divisionName: string, city: CityName, job: string, amount: number): boolean;
+  setJobAssignment(
+    divisionName: string,
+    city: CityName,
+    job: Exclude<CorpEmployeePosition, "Unassigned">,
+    amount: number,
+  ): boolean;
 
   /**
    * Get the cost to upgrade an office.
@@ -10401,8 +10415,8 @@ export interface Office {
 interface Division {
   /** Name of the division */
   name: string;
-  /** Type of division, like Agriculture */
-  type: CorpIndustryName;
+  /** Industry of division, like Agriculture */
+  industry: CorpIndustryName;
   /** Awareness of the division */
   awareness: number;
   /** Popularity of the division */
@@ -10505,9 +10519,18 @@ interface IStyleSettings {
  * @public
  */
 interface GameInfo {
+  /**
+   * Version as shown in release notes and in the UI. E.g.: "2.8.1"
+   *
+   * Note that this property does not have the prefix "v". For example, with v2.8.1, this property is "2.8.1".
+   */
   version: string;
+  /** Internal version number that increments during releases. E.g.: 43 */
+  versionNumber: number;
+  /** Git commit hash that the release was built from. E.g.: "d0d776700" */
   commit: string;
-  platform: string;
+  /** Platform that the game is running on */
+  platform: "Browser" | "Steam";
 }
 
 /**

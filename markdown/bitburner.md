@@ -184,6 +184,7 @@
 |  [GymLocationName](./bitburner.gymlocationname.md) |  |
 |  [GymLocationNameEnumType](./bitburner.gymlocationnameenumtype.md) | Locations of gym |
 |  [GymType](./bitburner.gymtype.md) |  |
+|  [HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md) |  |
 |  [HeartbleedOptions](./bitburner.heartbleedoptions.md) | Response from attempting to scrape logs from a server |
 |  [IDarknetServer](./bitburner.idarknetserver.md) | Darknet server information. |
 |  [JobField](./bitburner.jobfield.md) |  |
