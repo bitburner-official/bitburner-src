@@ -143,50 +143,39 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     allContracts.forEach((p) => allDisplayableItems.push({ path: p, type: FileType.Contract }));
 
     for (const item of allDisplayableItems) {
-      const { ramDisplay, sizeDisplay } = getItemDisplayData(item.path, item.type);
-      if (sizeDisplay.length > maxSizeStrLength) {
-        maxSizeStrLength = sizeDisplay.length;
-      }
-      if (ramDisplay.length > maxRamStrLength) {
-        maxRamStrLength = ramDisplay.length;
-      }
+      const { ramDisplay, sizeDisplay } = getItemNumericData(item.path, item.type);
+      if (sizeDisplay.length > maxSizeStrLength) maxSizeStrLength = sizeDisplay.length;
+      if (ramDisplay.length > maxRamStrLength) maxRamStrLength = ramDisplay.length;
     }
   }
 
   // Helper function to format bytes into human-readable strings
   function formatBytes(bytes: number, decimals = 1): string {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
+    if (bytes === 0) return "0 B";
+    const k = 1000;
     const dm = decimals < 0 ? 0 : decimals;
     const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   }
 
-  function getItemDisplayData(
-    relativePath: string,
-    fileType: FileType,
-  ): { ramDisplay: string; sizeDisplay: string; nameElement: React.ReactElement } {
-    // Get name element of file
-    let nameElement: React.ReactElement;
+  function getItemNameElement(relativePath: string, fileType: FileType): React.ReactElement {
     switch (fileType) {
       case FileType.Folder:
-        nameElement = <span style={{ color: "cyan" }}>{relativePath}</span>;
-        break;
+        return <span style={{ color: "cyan" }}>{relativePath}</span>;
       case FileType.Message:
-        nameElement = <ClickableMessageLink path={relativePath as FilePath} />;
-        break;
+        return <ClickableMessageLink path={relativePath as FilePath} />;
       case FileType.TextFile:
       case FileType.Script:
-        nameElement = <ClickableContentFileLink path={relativePath as ScriptFilePath | TextFilePath} />;
-        break;
+        return <ClickableContentFileLink path={relativePath as ScriptFilePath | TextFilePath} />;
       case FileType.Program:
       case FileType.Contract:
       default:
-        nameElement = <span>{relativePath}</span>;
-        break;
+        return <span>{relativePath}</span>;
     }
+  }
 
+  function getItemNumericData(relativePath: string, fileType: FileType): { ramDisplay: string; sizeDisplay: string } {
     let sizeDisplay = "-";
     const fullPath =
       fileType === FileType.Message || relativePath.startsWith("/")
@@ -194,22 +183,19 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
         : combinePath(baseDirectory, relativePath as FilePath);
 
     // Determine file size
-    if (fileType === FileType.TextFile || fileType === FileType.Script) {
-      let contentBytes = 0;
-      if (fileType === FileType.TextFile) {
-        const file = server.textFiles.get(fullPath as TextFilePath);
-        contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
-      } else {
-        // Script
-        const file = server.scripts.get(fullPath as ScriptFilePath);
-        contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
-      }
-
-      if (flags["-l"] && flags["-h"]) {
-        sizeDisplay = formatBytes(contentBytes);
-      } else {
-        sizeDisplay = `${contentBytes}`;
-      }
+    let contentBytes = 0;
+    if (fileType === FileType.TextFile) {
+      const file = server.textFiles.get(fullPath as TextFilePath);
+      contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
+    } else {
+      // Script
+      const file = server.scripts.get(fullPath as ScriptFilePath);
+      contentBytes = file?.content ? new TextEncoder().encode(file.content).length : 0;
+    }
+    if (flags["-l"] && flags["-h"]) {
+      sizeDisplay = formatBytes(contentBytes);
+    } else {
+      sizeDisplay = `${contentBytes}`;
     }
 
     // Determine RAM usage
@@ -219,8 +205,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
       const ramUsage = file?.getRamUsage(server.scripts);
       ramDisplay = ramUsage ? `${ramUsage} GB` : "NaN";
     }
-
-    return { ramDisplay, sizeDisplay, nameElement };
+    return { ramDisplay, sizeDisplay };
   }
 
   function SegmentGrid(props: { colSize: string; children: React.ReactChild[] }): React.ReactElement {
@@ -329,8 +314,9 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
 
     // print file based on mode
     if (flags["-l"]) {
-      segments.forEach((segmentPath) => {
-        const { ramDisplay, sizeDisplay, nameElement } = getItemDisplayData(segmentPath, type);
+      for (const segmentPath of segments) {
+        const { ramDisplay, sizeDisplay } = getItemNumericData(segmentPath, type);
+        const nameElement = getItemNameElement(segmentPath, type);
         Terminal.printRaw(
           <LongListItem
             key={segmentPath.toString()}
@@ -342,10 +328,10 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
             {nameElement}
           </LongListItem>,
         );
-      });
+      }
     } else {
       const segmentElements = segments.map((segmentPath) => {
-        const { nameElement } = getItemDisplayData(segmentPath, type);
+        const nameElement = getItemNameElement(segmentPath, type);
         return React.cloneElement(nameElement, { key: segmentPath.toString() });
       });
       const colSize = Math.ceil(Math.max(...segments.map((segment) => segment.length)) * 0.7) + "em";
