@@ -406,6 +406,7 @@ import nsDoc_bitburner_crimetask_type_md from "../../markdown/bitburner.crimetas
 import nsDoc_bitburner_crimetype_md from "../../markdown/bitburner.crimetype.md?raw";
 import nsDoc_bitburner_division_awareness_md from "../../markdown/bitburner.division.awareness.md?raw";
 import nsDoc_bitburner_division_cities_md from "../../markdown/bitburner.division.cities.md?raw";
+import nsDoc_bitburner_division_industry_md from "../../markdown/bitburner.division.industry.md?raw";
 import nsDoc_bitburner_division_lastcycleexpenses_md from "../../markdown/bitburner.division.lastcycleexpenses.md?raw";
 import nsDoc_bitburner_division_lastcyclerevenue_md from "../../markdown/bitburner.division.lastcyclerevenue.md?raw";
 import nsDoc_bitburner_division_makesproducts_md from "../../markdown/bitburner.division.makesproducts.md?raw";
@@ -419,7 +420,6 @@ import nsDoc_bitburner_division_products_md from "../../markdown/bitburner.divis
 import nsDoc_bitburner_division_researchpoints_md from "../../markdown/bitburner.division.researchpoints.md?raw";
 import nsDoc_bitburner_division_thiscycleexpenses_md from "../../markdown/bitburner.division.thiscycleexpenses.md?raw";
 import nsDoc_bitburner_division_thiscyclerevenue_md from "../../markdown/bitburner.division.thiscyclerevenue.md?raw";
-import nsDoc_bitburner_division_type_md from "../../markdown/bitburner.division.type.md?raw";
 import nsDoc_bitburner_employedbyrequirement_company_md from "../../markdown/bitburner.employedbyrequirement.company.md?raw";
 import nsDoc_bitburner_employedbyrequirement_md from "../../markdown/bitburner.employedbyrequirement.md?raw";
 import nsDoc_bitburner_employedbyrequirement_type_md from "../../markdown/bitburner.employedbyrequirement.type.md?raw";
@@ -477,6 +477,7 @@ import nsDoc_bitburner_gameinfo_commit_md from "../../markdown/bitburner.gameinf
 import nsDoc_bitburner_gameinfo_md from "../../markdown/bitburner.gameinfo.md?raw";
 import nsDoc_bitburner_gameinfo_platform_md from "../../markdown/bitburner.gameinfo.platform.md?raw";
 import nsDoc_bitburner_gameinfo_version_md from "../../markdown/bitburner.gameinfo.version.md?raw";
+import nsDoc_bitburner_gameinfo_versionnumber_md from "../../markdown/bitburner.gameinfo.versionnumber.md?raw";
 import nsDoc_bitburner_gang_ascendmember_md from "../../markdown/bitburner.gang.ascendmember.md?raw";
 import nsDoc_bitburner_gang_canrecruitmember_md from "../../markdown/bitburner.gang.canrecruitmember.md?raw";
 import nsDoc_bitburner_gang_creategang_md from "../../markdown/bitburner.gang.creategang.md?raw";
@@ -1224,6 +1225,7 @@ import nsDoc_bitburner_singularity_getfactionworktypes_md from "../../markdown/b
 import nsDoc_bitburner_singularity_getownedaugmentations_md from "../../markdown/bitburner.singularity.getownedaugmentations.md?raw";
 import nsDoc_bitburner_singularity_getownedsourcefiles_md from "../../markdown/bitburner.singularity.getownedsourcefiles.md?raw";
 import nsDoc_bitburner_singularity_getsavedata_md from "../../markdown/bitburner.singularity.getsavedata.md?raw";
+import nsDoc_bitburner_singularity_getunlockedachievements_md from "../../markdown/bitburner.singularity.getunlockedachievements.md?raw";
 import nsDoc_bitburner_singularity_getupgradehomecorescost_md from "../../markdown/bitburner.singularity.getupgradehomecorescost.md?raw";
 import nsDoc_bitburner_singularity_getupgradehomeramcost_md from "../../markdown/bitburner.singularity.getupgradehomeramcost.md?raw";
 import nsDoc_bitburner_singularity_gotolocation_md from "../../markdown/bitburner.singularity.gotolocation.md?raw";
@@ -1993,6 +1995,7 @@ AllPages["nsDoc/bitburner.crimetask.type.md"] = nsDoc_bitburner_crimetask_type_m
 AllPages["nsDoc/bitburner.crimetype.md"] = nsDoc_bitburner_crimetype_md;
 AllPages["nsDoc/bitburner.division.awareness.md"] = nsDoc_bitburner_division_awareness_md;
 AllPages["nsDoc/bitburner.division.cities.md"] = nsDoc_bitburner_division_cities_md;
+AllPages["nsDoc/bitburner.division.industry.md"] = nsDoc_bitburner_division_industry_md;
 AllPages["nsDoc/bitburner.division.lastcycleexpenses.md"] = nsDoc_bitburner_division_lastcycleexpenses_md;
 AllPages["nsDoc/bitburner.division.lastcyclerevenue.md"] = nsDoc_bitburner_division_lastcyclerevenue_md;
 AllPages["nsDoc/bitburner.division.makesproducts.md"] = nsDoc_bitburner_division_makesproducts_md;
@@ -2006,7 +2009,6 @@ AllPages["nsDoc/bitburner.division.products.md"] = nsDoc_bitburner_division_prod
 AllPages["nsDoc/bitburner.division.researchpoints.md"] = nsDoc_bitburner_division_researchpoints_md;
 AllPages["nsDoc/bitburner.division.thiscycleexpenses.md"] = nsDoc_bitburner_division_thiscycleexpenses_md;
 AllPages["nsDoc/bitburner.division.thiscyclerevenue.md"] = nsDoc_bitburner_division_thiscyclerevenue_md;
-AllPages["nsDoc/bitburner.division.type.md"] = nsDoc_bitburner_division_type_md;
 AllPages["nsDoc/bitburner.employedbyrequirement.company.md"] = nsDoc_bitburner_employedbyrequirement_company_md;
 AllPages["nsDoc/bitburner.employedbyrequirement.md"] = nsDoc_bitburner_employedbyrequirement_md;
 AllPages["nsDoc/bitburner.employedbyrequirement.type.md"] = nsDoc_bitburner_employedbyrequirement_type_md;
@@ -2064,6 +2066,7 @@ AllPages["nsDoc/bitburner.gameinfo.commit.md"] = nsDoc_bitburner_gameinfo_commit
 AllPages["nsDoc/bitburner.gameinfo.md"] = nsDoc_bitburner_gameinfo_md;
 AllPages["nsDoc/bitburner.gameinfo.platform.md"] = nsDoc_bitburner_gameinfo_platform_md;
 AllPages["nsDoc/bitburner.gameinfo.version.md"] = nsDoc_bitburner_gameinfo_version_md;
+AllPages["nsDoc/bitburner.gameinfo.versionnumber.md"] = nsDoc_bitburner_gameinfo_versionnumber_md;
 AllPages["nsDoc/bitburner.gang.ascendmember.md"] = nsDoc_bitburner_gang_ascendmember_md;
 AllPages["nsDoc/bitburner.gang.canrecruitmember.md"] = nsDoc_bitburner_gang_canrecruitmember_md;
 AllPages["nsDoc/bitburner.gang.creategang.md"] = nsDoc_bitburner_gang_creategang_md;
@@ -2866,6 +2869,8 @@ AllPages["nsDoc/bitburner.singularity.getfactionworktypes.md"] = nsDoc_bitburner
 AllPages["nsDoc/bitburner.singularity.getownedaugmentations.md"] = nsDoc_bitburner_singularity_getownedaugmentations_md;
 AllPages["nsDoc/bitburner.singularity.getownedsourcefiles.md"] = nsDoc_bitburner_singularity_getownedsourcefiles_md;
 AllPages["nsDoc/bitburner.singularity.getsavedata.md"] = nsDoc_bitburner_singularity_getsavedata_md;
+AllPages["nsDoc/bitburner.singularity.getunlockedachievements.md"] =
+  nsDoc_bitburner_singularity_getunlockedachievements_md;
 AllPages["nsDoc/bitburner.singularity.getupgradehomecorescost.md"] =
   nsDoc_bitburner_singularity_getupgradehomecorescost_md;
 AllPages["nsDoc/bitburner.singularity.getupgradehomeramcost.md"] = nsDoc_bitburner_singularity_getupgradehomeramcost_md;
