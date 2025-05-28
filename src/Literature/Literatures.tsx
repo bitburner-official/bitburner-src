@@ -193,7 +193,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         round up and shut down the remaining rogue MK-VI Synthoids, ending the Synthoid Uprising.
         <br />
         <br />
-        In the aftermath of the bloodshed, the Synthoid Accords were drawn up. These Accords banned
+        In the aftermath of the bloodshed, the Synthoid Accords were drawn up. These Accords banned{" "}
         {FactionName.OmniTekIncorporated} from manufacturing any Synthoids beyond the MK-III series. They also banned
         any other corporation from constructing androids with advanced, near-sentient AI. MK-VI Synthoids that did not
         have the rogue Ascendis Totalis AI were allowed to continue their existence, but they were stripped of all
@@ -204,9 +204,8 @@ export const Literatures: Record<LiteratureName, Literature> = {
         <br />
         Unfortunately, many believe that not all of the rogue MK-VI Synthoids from the Uprising were found and
         destroyed, and that many of them are blending in as normal humans in society today. In response, many nations
-        have created
-        {FactionName.Bladeburners} divisions, special military branches that are tasked with investigating and dealing
-        with any Synthoid threats.
+        have created {FactionName.Bladeburners} divisions, special military branches that are tasked with investigating
+        and dealing with any Synthoid threats.
         <br />
         <br />
         To this day, tensions still exist between the remaining Synthoids and humans as a result of the Uprising.
@@ -330,12 +329,11 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.KuaiGongInternational, FactionName.OmniTekIncorporated],
     text: (
       <Typography>
-        When people think about the corporations that dominate the East, they typically think of
+        When people think about the corporations that dominate the East, they typically think of{" "}
         {CompanyName.KuaiGongInternational}, which holds a complete monopoly for manufacturing and commerce in Asia, or{" "}
-        {CompanyName.GlobalPharmaceuticals}, the world's largest drug company, or
-        {CompanyName.OmniTekIncorporated}, the global leader in intelligent and autonomous robots. But there's one
-        company that has seen a rapid rise in the last year and is poised to dominate not only the East, but the entire
-        world: TaiYang Digital.
+        {CompanyName.GlobalPharmaceuticals}, the world's largest drug company, or {CompanyName.OmniTekIncorporated}, the
+        global leader in intelligent and autonomous robots. But there's one company that has seen a rapid rise in the
+        last year and is poised to dominate not only the East, but the entire world: TaiYang Digital.
         <br />
         <br />
         TaiYang Digital is a Chinese internet-technology corporation that provides services such as online advertising,
@@ -352,7 +350,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         TaiYang Digital's meteoric rise is extremely surprising in modern society. This sort of growth is something
         you'd commonly see in the first half of the century, especially for tech companies. However in the last two
         decades the number of corporations has significantly declined as the largest entities quickly took over the
-        economy. Corporations such as {CompanyName.ECorp}, {CompanyName.MegaCorp}, and
+        economy. Corporations such as {CompanyName.ECorp}, {CompanyName.MegaCorp}, and{" "}
         {CompanyName.KuaiGongInternational} have established such strong monopolies in their market sectors that they
         have effectively killed off all of the smaller and new corporations that have tried to start up over the years.
         This is what makes the rise of TaiYang Digital so impressive. And if TaiYang continues down this path, then they
@@ -401,7 +399,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
     factionRumors: [FactionName.TheSyndicate, FactionName.SlumSnakes],
     text: (
       <Typography>
-        A recent study by analytics company Wilson Inc. shows a significant rise in criminal activity in
+        A recent study by analytics company Wilson Inc. shows a significant rise in criminal activity in{" "}
         {CityName.Sector12}. Perhaps the most alarming part of the statistic is that most of the rise is in violent
         crime such as homicide and assault. According to the study, the city saw a total of 21,406 reported homicides in
         2076, which is over a 20% increase compared to 2075.
@@ -459,7 +457,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         Commonly called "hacker groups", Internet-based secret societies have become well-known in today's world. Some
         of these, such as {FactionName.TheBlackHand}, are black hat groups that claim they are trying to help the
         oppressed by attacking the elite and powerful. Others, such as {FactionName.NiteSec}, are hacktivist groups that
-        try to push political and social agendas. Perhaps the most intriguing hacker group is the mysterious
+        try to push political and social agendas. Perhaps the most intriguing hacker group is the mysterious{" "}
         {FactionName.BitRunners}, whose purpose still remains unknown.
       </Typography>
     ),
@@ -501,7 +499,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         to re-create human intelligence.
         <br />
         <br />
-        We've certainly come close to artificial intelligence that is similar to humans. For example
+        We've certainly come close to artificial intelligence that is similar to humans. For example,{" "}
         {CompanyName.OmniTekIncorporated}'s CompanionBot, a robot meant to act as a comforting friend for lonely and
         grieving people, is eerily human-like in its appearance, speech, mannerisms, and even movement. However its
         artificial intelligence isn't the same as that of humans. Not yet. It doesn't have sentience or self-awareness
@@ -543,7 +541,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         After rumors came out that {CompanyName.OmniTekIncorporated} had begun developing advanced robotic
         supersoldiers, geopolitical tensions quickly flared between the USA, Russia, and several Asian superpowers. In a
         rare show of cooperation between corporations, {CompanyName.MegaCorp} and {CompanyName.ECorp} have reportedly
-        launched hundreds of new surveillance and espionage satellites. Defense contractors such as
+        launched hundreds of new surveillance and espionage satellites. Defense contractors such as{" "}
         {CompanyName.DeltaOne} and {CompanyName.AeroCorp} have been working with the CIA and NSA to prepare for
         conflict. Meanwhile, the rest of the world sits in earnest hoping that it never reaches full-scale war. With
         today's technology and firepower, a World War would assuredly mean the end of human civilization.
@@ -651,8 +649,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         The Triads were an ancient transnational crime syndicate based in China, Hong Kong, and other Asian territories.
         They were often considered one of the first and biggest criminal secret societies. While most of the branches of
         the Triads have been destroyed over the past few decades, the crime faction has spawned and inspired a number of
-        other Asian crime organizations over the past few years. The most notable of these is the
-        {FactionName.Tetrads}.
+        other Asian crime organizations over the past few years. The most notable of these is the {FactionName.Tetrads}.
         <br />
         <br />
         It is widely believed that the {FactionName.Tetrads} are a rogue group that splintered off from the Triads
@@ -664,7 +661,7 @@ export const Literatures: Record<LiteratureName, Literature> = {
         <br />
         <br />
         Not much else is known about the {FactionName.Tetrads}, or about the efforts the Asian governments and
-        corporations are making to take down this large new crime organization. Many believe that the
+        corporations are making to take down this large new crime organization. Many believe that the{" "}
         {FactionName.Tetrads} have infiltrated the governments and powerful corporations in Asia, which has helped
         facilitate their recent rapid rise.
       </Typography>
