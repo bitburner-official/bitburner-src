@@ -330,7 +330,7 @@ export function NetscriptFormulas(): InternalAPI<IFormulas> {
           return HScalculateCacheUpgradeCost(startingCache, extraCache);
         },
       hashUpgradeCost: (ctx) => (_upgName, _level) => {
-        const upgName = helpers.string(ctx, "upgName", _upgName);
+        const upgName = getEnumHelper("HashUpgradeEnum").nsGetMember(ctx, _upgName);
         const level = helpers.number(ctx, "level", _level);
         checkFormulasAccess(ctx);
         const upg = Player.hashManager.getUpgrade(upgName);

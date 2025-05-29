@@ -88,7 +88,7 @@ export function createDivision(corporation: Corporation, industry: IndustryType,
       new Division({
         corp: corporation,
         name: name,
-        type: industry,
+        industry: industry,
       }),
     );
     corporation.numberOfOfficesAndWarehouses += 2;
@@ -319,7 +319,7 @@ export function setSmartSupplyOption(warehouse: Warehouse, material: Material, u
 
 export function buyMaterial(division: Division, material: Material, amt: number): void {
   if (!isRelevantMaterial(material.name, division)) {
-    throw new Error(`${material.name} is not a relevant material for industry ${division.type}`);
+    throw new Error(`${material.name} is not a relevant material for industry ${division.industry}`);
   }
   if (!Number.isFinite(amt) || amt < 0) {
     throw new Error(
@@ -337,7 +337,7 @@ export function bulkPurchase(
   amt: number,
 ): void {
   if (!isRelevantMaterial(material.name, division)) {
-    throw new Error(`${material.name} is not a relevant material for industry ${division.type}`);
+    throw new Error(`${material.name} is not a relevant material for industry ${division.industry}`);
   }
   const matSize = MaterialInfo[material.name].size;
   const maxAmount = (warehouse.size - warehouse.sizeUsed) / matSize;
@@ -501,8 +501,8 @@ export function makeProduct(
 export function research(researchingDivision: Division, researchName: CorpResearchName): void {
   const corp = Player.corporation;
   if (!corp) return;
-  const researchTree = IndustryResearchTrees[researchingDivision.type];
-  if (researchTree === undefined) throw new Error(`No research tree for industry '${researchingDivision.type}'`);
+  const researchTree = IndustryResearchTrees[researchingDivision.industry];
+  if (researchTree === undefined) throw new Error(`No research tree for industry '${researchingDivision.industry}'`);
   const research = ResearchMap[researchName];
   const researchNode = researchTree.findNode(researchName);
   const researchPreReq = researchNode?.parent?.researchName;
@@ -524,7 +524,7 @@ export function research(researchingDivision: Division, researchName: CorpResear
   researchTree.research(researchName);
   // All divisions of the same type as the researching division get the new research.
   for (const division of corp.divisions.values()) {
-    if (division.type !== researchingDivision.type) continue;
+    if (division.industry !== researchingDivision.industry) continue;
     division.researched.add(researchName);
     // Handle researches that need to have their effects manually applied here.
     // Warehouse size needs to be updated here because it is not recalculated during normal processing.

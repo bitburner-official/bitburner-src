@@ -9,14 +9,14 @@ Purchase a hash upgrade.
 **Signature:**
 
 ```typescript
-spendHashes(upgName: string, upgTarget?: string, count?: number): boolean;
+spendHashes(upgName: HacknetServerHashUpgrade, upgTarget?: string, count?: number): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  upgName | string | Name of the upgrade of Hacknet Node. |
+|  upgName | [HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md) | Name of the upgrade using hash of Hacknet Server. |
 |  upgTarget | string | _(Optional)_ Object to which upgrade applies. Required for certain upgrades. |
 |  count | number | _(Optional)_ Number of upgrades to buy at once. Must be a non-negative integer. Defaults to 1 if not specified. For compatibility reasons, upgTarget must be specified, even if it is not used, in order to specify count. |
 

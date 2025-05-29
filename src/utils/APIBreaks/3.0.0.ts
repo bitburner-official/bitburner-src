@@ -94,4 +94,19 @@ export const breakInfos300: APIBreakInfo[] = [
       'It has been automatically replaced with "ns.ui.setTailTitle()".\n\n',
     showPopUp: false,
   },
+  {
+    brokenAPIs: [
+      {
+        name: "ns.corporation.setAutoJobAssignment",
+        migration: {
+          searchValue: "setAutoJobAssignment",
+          replaceValue: "setJobAssignment",
+        },
+      },
+    ],
+    info:
+      "ns.corporation.setAutoJobAssignment() was removed.\n" +
+      'It has been automatically replaced with "ns.corporation.setJobAssignment()".\n\n',
+    showPopUp: false,
+  },
 ];

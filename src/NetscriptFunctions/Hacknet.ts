@@ -21,6 +21,7 @@ import { GetServer } from "../Server/AllServers";
 import { Hacknet as IHacknet, NodeStats } from "@nsdefs";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
+import { getEnumHelper } from "../utils/EnumHelper";
 
 export function NetscriptHacknet(): InternalAPI<IHacknet> {
   // Utility function to get Hacknet Node object
@@ -188,7 +189,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
     hashCost:
       (ctx) =>
       (_upgName, _count = 1) => {
-        const upgName = helpers.string(ctx, "upgName", _upgName);
+        const upgName = getEnumHelper("HashUpgradeEnum").nsGetMember(ctx, _upgName);
         const count = helpers.number(ctx, "count", _count);
         if (!hasHacknetServers()) {
           return Infinity;
@@ -199,7 +200,7 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
     spendHashes:
       (ctx) =>
       (_upgName, _upgTarget = "", _count = 1) => {
-        const upgName = helpers.string(ctx, "upgName", _upgName);
+        const upgName = getEnumHelper("HashUpgradeEnum").nsGetMember(ctx, _upgName);
         const upgTarget = helpers.string(ctx, "upgTarget", _upgTarget);
         const count = helpers.integer(ctx, "count", _count);
         if (count < 0) {
@@ -208,7 +209,11 @@ export function NetscriptHacknet(): InternalAPI<IHacknet> {
         if (!hasHacknetServers()) {
           return false;
         }
-        return purchaseHashUpgrade(upgName, upgTarget, count);
+        const result = purchaseHashUpgrade(upgName, upgTarget, count);
+        if (!result.success) {
+          helpers.log(ctx, () => result.message);
+        }
+        return result.success;
       },
     getHashUpgrades: () => () => {
       if (!hasHacknetServers()) {

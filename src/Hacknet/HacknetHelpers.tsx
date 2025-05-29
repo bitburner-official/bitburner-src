@@ -25,6 +25,9 @@ import { Companies } from "../Company/Companies";
 import { isMember } from "../utils/EnumHelper";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
 import { checkServerOwnership, ServerOwnershipType } from "../Server/ServerHelpers";
+import { Result } from "../types";
+import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { HashUpgradeEnum } from "./Enums";
 
 // Returns a boolean indicating whether the player has Hacknet Servers
 // (the upgraded form of Hacknet Nodes)
@@ -415,7 +418,7 @@ function processAllHacknetServerEarnings(numCycles: number): number {
 
   const wastedHashes = Player.hashManager.storeHashes(hashes);
   if (wastedHashes > 0) {
-    const upgrade = HashUpgrades["Sell for Money"];
+    const upgrade = HashUpgrades[HashUpgradeEnum.SellForMoney];
     if (upgrade === null) throw new Error("Could not get the hash upgrade");
     if (!upgrade.cost) throw new Error("Upgrade is not properly configured");
 
@@ -460,139 +463,137 @@ export function updateHashManagerCapacity(): void {
   Player.hashManager.updateCapacity(total);
 }
 
-export function purchaseHashUpgrade(upgName: string, upgTarget: string, count = 1): boolean {
-  if (!(Player.hashManager instanceof HashManager)) {
-    console.error(`Player does not have a HashManager`);
-    return false;
-  }
+function applyEffectOfHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, count = 1): Result {
+  const upg = HashUpgrades[upgName];
 
-  // HashManager handles the transaction. This just needs to actually implement
-  // the effects of the upgrade
-  if (Player.hashManager.upgrade(upgName, count)) {
-    const upg = HashUpgrades[upgName];
-
-    switch (upgName) {
-      case "Sell for Money": {
-        Player.gainMoney(upg.value * count, "hacknet");
-        break;
-      }
-      case "Sell for Corporation Funds": {
-        const corp = Player.corporation;
-        if (corp === null) {
-          Player.hashManager.refundUpgrade(upgName, count);
-          return false;
-        }
-        corp.gainFunds(upg.value * count, "hacknet");
-        break;
-      }
-      case "Reduce Minimum Security": {
-        try {
-          const target = GetServer(upgTarget);
-          if (target == null) {
-            console.error(`Invalid target specified in purchaseHashUpgrade(): ${upgTarget}`);
-            throw new Error(`'${upgTarget}' is not a server.`);
-          }
-          if (!(target instanceof Server)) {
-            throw new Error(`'${upgTarget}' is not a normal server.`);
-          }
-          if (!checkServerOwnership(target, ServerOwnershipType.Foreign)) {
-            throw new Error(
-              `'${upgTarget}' is not a valid target. You can only perform this action on servers that you do not own.`,
-            );
-          }
-
-          target.changeMinimumSecurity(upg.value ** count, true);
-        } catch (e) {
-          Player.hashManager.refundUpgrade(upgName, count);
-          return false;
-        }
-        break;
-      }
-      case "Increase Maximum Money": {
-        try {
-          const target = GetServer(upgTarget);
-          if (target == null) {
-            console.error(`Invalid target specified in purchaseHashUpgrade(): ${upgTarget}`);
-            throw new Error(`'${upgTarget}' is not a server.`);
-          }
-          if (!(target instanceof Server)) {
-            throw new Error(`'${upgTarget}' is not a normal server.`);
-          }
-          if (!checkServerOwnership(target, ServerOwnershipType.Foreign)) {
-            throw new Error(
-              `'${upgTarget}' is not a valid target. You can only perform this action on servers that you do not own.`,
-            );
-          }
-
-          //Manually loop the change so as to properly handle the softcap
-          for (let i = 0; i < count; i++) {
-            target.changeMaximumMoney(upg.value);
-          }
-        } catch (e) {
-          Player.hashManager.refundUpgrade(upgName, count);
-          return false;
-        }
-        break;
-      }
-      case "Improve Studying": {
-        // Multiplier is handled by HashManager
-        break;
-      }
-      case "Improve Gym Training": {
-        // Multiplier is handled by HashManager
-        break;
-      }
-      case "Exchange for Corporation Research": {
-        const corp = Player.corporation;
-        if (corp === null) {
-          Player.hashManager.refundUpgrade(upgName, count);
-          return false;
-        }
-        for (const division of corp.divisions.values()) {
-          division.researchPoints += upg.value * count;
-        }
-        break;
-      }
-      case "Exchange for Bladeburner Rank": {
-        const bladeburner = Player.bladeburner;
-        if (bladeburner === null) {
-          Player.hashManager.refundUpgrade(upgName, count);
-          return false;
-        }
-        bladeburner.changeRank(Player, upg.value * count);
-        break;
-      }
-      case "Exchange for Bladeburner SP": {
-        const bladeburner = Player.bladeburner;
-        if (bladeburner === null) {
-          Player.hashManager.refundUpgrade(upgName, count);
-          return false;
-        }
-
-        bladeburner.skillPoints += upg.value * count;
-        break;
-      }
-      case "Generate Coding Contract": {
-        for (let i = 0; i < count; i++) {
-          generateRandomContract();
-        }
-        break;
-      }
-      case "Company Favor": {
-        if (!isMember("CompanyName", upgTarget)) {
-          console.error(`Invalid target specified in purchaseHashUpgrade(): ${upgTarget}`);
-          throw new Error(`'${upgTarget}' is not a company.`);
-        }
-        Companies[upgTarget].setFavor(Companies[upgTarget].favor + 5 * count);
-        break;
-      }
-      default:
-        console.warn(`Unrecognized upgrade name ${upgName}. Upgrade has no effect`);
-        return false;
+  switch (upgName) {
+    case HashUpgradeEnum.SellForMoney: {
+      Player.gainMoney(upg.value * count, "hacknet");
+      break;
     }
+    case HashUpgradeEnum.SellForCorporationFunds: {
+      const corp = Player.corporation;
+      if (corp === null) {
+        return { success: false, message: "You have not created a corporation." };
+      }
+      corp.gainFunds(upg.value * count, "hacknet");
+      break;
+    }
+    case HashUpgradeEnum.ReduceMinimumSecurity: {
+      const target = GetServer(upgTarget);
+      if (target == null) {
+        return { success: false, message: `'${upgTarget}' is not a server.` };
+      }
+      if (!(target instanceof Server)) {
+        return { success: false, message: `'${upgTarget}' is not a normal server.` };
+      }
+      if (!checkServerOwnership(target, ServerOwnershipType.Foreign)) {
+        return {
+          success: false,
+          message: `'${upgTarget}' is not a valid target. You can only perform this action on servers that you do not own.`,
+        };
+      }
 
-    return true;
+      target.changeMinimumSecurity(upg.value ** count, true);
+      break;
+    }
+    case HashUpgradeEnum.IncreaseMaximumMoney: {
+      const target = GetServer(upgTarget);
+      if (target == null) {
+        return { success: false, message: `'${upgTarget}' is not a server.` };
+      }
+      if (!(target instanceof Server)) {
+        return { success: false, message: `'${upgTarget}' is not a normal server.` };
+      }
+      if (!checkServerOwnership(target, ServerOwnershipType.Foreign)) {
+        return {
+          success: false,
+          message: `'${upgTarget}' is not a valid target. You can only perform this action on servers that you do not own.`,
+        };
+      }
+
+      //Manually loop the change so as to properly handle the softcap
+      for (let i = 0; i < count; i++) {
+        target.changeMaximumMoney(upg.value);
+      }
+      break;
+    }
+    case HashUpgradeEnum.ImproveStudying: {
+      // Multiplier is handled by HashManager
+      break;
+    }
+    case HashUpgradeEnum.ImproveGymTraining: {
+      // Multiplier is handled by HashManager
+      break;
+    }
+    case HashUpgradeEnum.ExchangeForCorporationResearch: {
+      const corp = Player.corporation;
+      if (corp === null) {
+        return { success: false, message: "You have not created a corporation." };
+      }
+      for (const division of corp.divisions.values()) {
+        division.researchPoints += upg.value * count;
+      }
+      break;
+    }
+    case HashUpgradeEnum.ExchangeForBladeburnerRank: {
+      const bladeburner = Player.bladeburner;
+      if (bladeburner === null) {
+        return { success: false, message: "You have not joined Bladeburner." };
+      }
+      bladeburner.changeRank(Player, upg.value * count);
+      break;
+    }
+    case HashUpgradeEnum.ExchangeForBladeburnerSP: {
+      const bladeburner = Player.bladeburner;
+      if (bladeburner === null) {
+        return { success: false, message: "You have not joined Bladeburner." };
+      }
+
+      bladeburner.skillPoints += upg.value * count;
+      break;
+    }
+    case HashUpgradeEnum.GenerateCodingContract: {
+      for (let i = 0; i < count; i++) {
+        generateRandomContract();
+      }
+      break;
+    }
+    case HashUpgradeEnum.CompanyFavor: {
+      if (!isMember("CompanyName", upgTarget)) {
+        return { success: false, message: `'${upgTarget}' is not a company.` };
+      }
+      Companies[upgTarget].setFavor(Companies[upgTarget].favor + 5 * count);
+      break;
+    }
+    default: {
+      // Verify that the switch statement is exhaustive.
+      const __a: never = upgName;
+    }
   }
 
-  return false;
+  return { success: true };
+}
+
+export function purchaseHashUpgrade(upgName: HashUpgradeEnum, upgTarget: string, count = 1): Result {
+  if (!(Player.hashManager instanceof HashManager)) {
+    exceptionAlert(new Error("Player does not have a HashManager"));
+    return { success: false, message: "Player does not have a HashManager" };
+  }
+
+  /**
+   * Spend hashes to buy the upgrade. The hashManager validates and handles the transaction (e.g., checks the upgrade
+   * name, deducts the hash amount, increases the count of the upgrade).
+   */
+  const upgradeResult = Player.hashManager.upgrade(upgName, count);
+  if (!upgradeResult.success) {
+    return upgradeResult;
+  }
+
+  // Apply the effect. If we cannot apply it, the hashManager will roll back the transaction.
+  const result = applyEffectOfHashUpgrade(upgName, upgTarget, count);
+  if (!result.success) {
+    Player.hashManager.refundUpgrade(upgName, count);
+  }
+  return result;
 }
