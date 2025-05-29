@@ -8754,6 +8754,10 @@ type NSEnums = {
   CompanyName: CompanyNameEnumType;
   FactionName: FactionNameEnumType;
   CodingContractName: CodingContractNameEnumType;
+  PositionType: PositionEnumType;
+  OrderType: OrderEnumType;
+  BladeburnerActionType: BladeburnerActionEnumType;
+  SpecialBladeburnerActionTypeForSleeve: SpecialBladeburnerActionEnumTypeForSleeve;
 };
 
 /**
