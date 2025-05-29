@@ -1,7 +1,7 @@
 import type { VersionBreakingChange } from "./APIBreak";
 
 export const breakingChanges300: VersionBreakingChange = {
-  additionalText: `For more information, please check https://github.com/bitburner-official/bitburner-src/issues/2148.`,
+  additionalText: "For more information, please check https://github.com/bitburner-official/bitburner-src/issues/2148.",
   apiBreakingChanges: [
     {
       brokenAPIs: [{ name: "ns.nFormat" }],
@@ -114,17 +114,18 @@ export const breakingChanges300: VersionBreakingChange = {
     {
       brokenAPIs: [],
       info:
-        `With some APIs, when you passed values to their params, you could pass a value that was not an exact match. ` +
-        `For example, with "ns.singularity.commitCrime", you could pass "Rob Store", "rob store", "RobStore", "robstore", "robStore", etc. ` +
-        `This is called "fuzzy matching". Now, you must pass an exact value (i.e., Rob Store). This change affects:\n` +
-        `- Bladeburner action and type: BladeburnerActionType, BladeburnerGeneralActionName, BladeburnerContractName, BladeburnerOperationName, BladeburnerBlackOpName, SpecialBladeburnerActionTypeForSleeve, BladeburnerActionTypeForSleeve.\n` +
-        `- Crime: CrimeType\n` +
-        `- Faction work: FactionWorkType\n` +
-        `- University class: UniversityClassType\n` +
-        `- Gym stat: GymType\n` +
-        `- Job field: JobField\n` +
-        `- Stock position: PositionType\n` +
-        `- Stock order: OrderType`,
+        "With some APIs, when you passed values to their params, you could pass a value that was not an exact match. " +
+        'For example, with "ns.singularity.commitCrime", you could pass "Rob Store", "rob store", "RobStore", "robstore", "robStore", etc. ' +
+        'This is called "fuzzy matching". Now, you must pass an exact value (i.e., Rob Store). This change affects:\n' +
+        "- Bladeburner action and type: BladeburnerActionType, BladeburnerGeneralActionName, BladeburnerContractName, BladeburnerOperationName, BladeburnerBlackOpName, SpecialBladeburnerActionTypeForSleeve, BladeburnerActionTypeForSleeve.\n" +
+        "- Crime: CrimeType\n" +
+        "- Faction work: FactionWorkType\n" +
+        "- University class: UniversityClassType\n" +
+        "- Gym stat: GymType\n" +
+        "- Job field: JobField\n" +
+        "- Stock position: PositionType\n" +
+        "- Stock order: OrderType\n" +
+        "You can access these values via ns.enums and Bladeburner APIs.",
       showPopUp: true,
       doNotSkip: true,
     },
