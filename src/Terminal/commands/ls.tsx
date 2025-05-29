@@ -25,6 +25,7 @@ import {
 } from "../../Paths/Directory";
 import { isMember } from "../../utils/EnumHelper";
 import { Settings } from "../../Settings/Settings";
+import { formatBytes, formatRam } from "../../ui/formatNumber";
 
 export function ls(args: (string | number | boolean)[], server: BaseServer): void {
   enum FileType {
@@ -149,16 +150,6 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     }
   }
 
-  // Helper function to format bytes into human-readable strings
-  function formatBytes(bytes: number, decimals = 1): string {
-    if (bytes === 0) return "0 B";
-    const k = 1000;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-  }
-
   function getItemNameElement(relativePath: string, fileType: FileType): React.ReactElement {
     switch (fileType) {
       case FileType.Folder:
@@ -203,7 +194,7 @@ export function ls(args: (string | number | boolean)[], server: BaseServer): voi
     if (fileType === FileType.Script) {
       const file = server.scripts.get(fullPath as ScriptFilePath);
       const ramUsage = file?.getRamUsage(server.scripts);
-      ramDisplay = ramUsage ? `${ramUsage} GB` : "NaN";
+      ramDisplay = ramUsage ? formatRam(ramUsage) : "NaN";
     }
     return { ramDisplay, sizeDisplay };
   }
