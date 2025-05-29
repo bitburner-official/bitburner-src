@@ -56,7 +56,12 @@ export const GameplayPage = (): React.ReactElement => {
         checked={Settings.SuppressErrorModals}
         onChange={(newValue) => (Settings.SuppressErrorModals = newValue)}
         text="Suppress error modals"
-        tooltip={<>If this is set, script errors will never create any popups. The errors can still be seen on the "Recent Errors" tab in the Active Scripts page</>}
+        tooltip={
+          <>
+            If this is set, script errors will never create any popups. The errors can still be seen on the "Recent
+            Errors" tab in the Active Scripts page
+          </>
+        }
       />
       {Player.bladeburner && (
         <OptionSwitch

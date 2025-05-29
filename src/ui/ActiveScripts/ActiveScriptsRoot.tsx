@@ -2,7 +2,7 @@
  * Root React Component for the "Active Scripts" UI page. This page displays
  * and provides information about all of the player's scripts that are currently running
  */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 

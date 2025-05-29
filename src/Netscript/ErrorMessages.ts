@@ -24,7 +24,7 @@ export function basicErrorMessage(ws: WorkerScript | ScriptDeath, msg: string, t
  * but we don't have an error instance with a stack trace. In order to get that stack trace, we create a new error
  * instance, then remove "unrelated" traces (code in our codebase) and leave only traces of the player's code.
  */
-export function errorMessage(ctx: NetscriptContext, msg: string, type = "RUNTIME"): string {
+export function errorMessage(ctx: NetscriptContext, msg: string): string {
   const errstack = new Error().stack;
   if (errstack === undefined) throw new Error("how did we not throw an error?");
   const stack = errstack.split("\n").slice(1);
@@ -60,7 +60,7 @@ export function errorMessage(ctx: NetscriptContext, msg: string, type = "RUNTIME
   log(ctx, () => msg);
   let rejectMsg = `${caller}: ${msg}`;
   if (userstack.length !== 0) rejectMsg += `\n\nStack:\n${userstack.join("\n")}`;
-  return basicErrorMessage(ws, rejectMsg, type);
+  return rejectMsg;
 
   interface ILine {
     line: string;

@@ -15,7 +15,13 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
     DisplayError(initialText + e, "RUNTIME", ws.scriptRef.filename, ws.hostname, ws.pid);
   } else if (e instanceof SyntaxError) {
     const msg = `${e.message} (sorry we can't be more helpful)`;
-    DisplayError(initialText + msg + (errorDetails.stack ?? ""), "SYNTAX", ws?.scriptRef?.filename, ws?.hostname, ws?.pid);
+    DisplayError(
+      initialText + msg + (errorDetails.stack ?? ""),
+      "SYNTAX",
+      ws?.scriptRef?.filename,
+      ws?.hostname,
+      ws?.pid,
+    );
   } else if (e instanceof Error) {
     // Ignore any cancellation errors from Monaco that get here
     if (e.name === "Canceled" && e.message === "Canceled") {

@@ -1,5 +1,7 @@
 import { EventEmitter } from "../utils/EventEmitter";
 import { Settings } from "../Settings/Settings";
+import { GetAllServers } from "../Server/AllServers";
+import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 
 export type ErrorState = {
   ErrorUpdate: EventEmitter<[ErrorRecord]>;
@@ -8,30 +10,36 @@ export type ErrorState = {
   ErrorPageOpen: boolean;
   UnreadErrors: number;
   PreventModals: boolean;
-}
+};
 
 export type ErrorRecord = {
-  server: string,
-  errorType: string,
+  server: string;
+  errorType: string;
   message: string;
   scriptName: string;
   pid: number;
   occurrences: number;
   time: Date;
   unread: boolean;
-}
+  force?: boolean;
+};
 
 export const ErrorState: ErrorState = {
-  ErrorUpdate:  new EventEmitter<[ErrorRecord]>(),
+  ErrorUpdate: new EventEmitter<[ErrorRecord]>(),
   ActiveError: null as ErrorRecord | null,
   Errors: [],
   ErrorPageOpen: false,
   UnreadErrors: 0,
   PreventModals: Settings.SuppressErrorModals,
-}
+};
 
-
-export const DisplayError = (message: string, errorType: string, scriptName = "", hostname: string = "", pid: number = -1) => {
+export const DisplayError = (
+  message: string,
+  errorType: string,
+  scriptName = "",
+  hostname: string = "",
+  pid: number = -1,
+) => {
   const prior = ErrorState.Errors.find((e) => e.message === message);
   if (!ErrorState.ErrorPageOpen) {
     ErrorState.UnreadErrors++;
@@ -59,4 +67,14 @@ export const DisplayError = (message: string, errorType: string, scriptName = ""
     ErrorState.ActiveError = ErrorState.Errors[0]; // TODO
   }
   ErrorState.ErrorUpdate.emit(ErrorState.ActiveError);
-}
+};
+
+export const killAllScripts = () => {
+  GetAllServers().forEach((server) => {
+    for (const byPid of server.runningScriptMap.values()) {
+      for (const pid of byPid.keys()) {
+        killWorkerScriptByPid(pid);
+      }
+    }
+  });
+};

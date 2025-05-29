@@ -85,7 +85,7 @@ export function getErrorMessageWithStackAndCause(error: unknown, prefix = ""): s
   const errorData = parseUnknownError(error);
   let errorMessage = `${prefix}${errorData.errorAsString}`;
   if (errorData.stack) {
-    errorMessage += `\nStack: ${errorData.stack}`;
+    errorMessage += `\n\nStack: ${errorData.stack}`;
   }
   if (errorData.causeAsString) {
     errorMessage += `\nError cause: ${errorData.causeAsString}`;
