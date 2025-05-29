@@ -1,6 +1,13 @@
 ## TODO:
 
-- make darkweb a darknet server
+- remove getServerSafely and use GetServer
+- only give TRP based on bitnode mults
+- do not give s4 data in bn8
+
+---
+
+- make darkweb a darknet server???
+- make new server for root of darknet??
 
 - capcha server
 

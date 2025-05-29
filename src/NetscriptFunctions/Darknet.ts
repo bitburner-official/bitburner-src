@@ -18,10 +18,10 @@ import {
 import { Player } from "@player";
 import type { FilePath } from "../Paths/FilePath";
 import { formatNumber } from "../ui/formatNumber";
-import { GetAllServers } from "../Server/AllServers";
+import { GetAllServers, GetServer } from "../Server/AllServers";
 import { BaseServer } from "../Server/BaseServer";
 import { capturePackets } from "../DarkNet/models/packetSniffing";
-import { getDarknetServerSafely, getServerSafely } from "../DarkNet/controllers/NetworkMovement";
+import { getDarknetServerSafely } from "../DarkNet/controllers/NetworkMovement";
 import { addSessionToServer, DarknetState, getServerState } from "../DarkNet/models/DarknetState";
 import { getStockFromSymbol } from "./StockMarket";
 import { CompletedProgramName } from "@enums";
@@ -317,11 +317,8 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const server: BaseServer = ctx.workerScript.getServer();
         const out: string[] = [];
         for (const neighbor of server.serversOnNetwork) {
-          const neighborServer = getServerSafely(neighbor);
-          if (
-            !neighborServer ||
-            (!isDarknetServer(neighborServer) && neighborServer.hostname !== SpecialServers.DarkWeb)
-          ) {
+          const neighborServer = getDarknetServerSafely(neighbor);
+          if (!neighborServer || neighborServer.hostname !== SpecialServers.DarkWeb) {
             continue;
           }
           const entry = helpers.returnServerID(neighborServer, { returnByIP });
@@ -399,7 +396,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       },
     getServer: (ctx) => (_hostname) => {
       const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-      const server = getServerSafely(hostname);
+      const server = GetServer(hostname);
       if (!server && DarknetState.offlineServers.includes(hostname)) {
         logger(ctx)(`Server ${hostname} is offline. Cannot retrieve server data.`);
         return null;

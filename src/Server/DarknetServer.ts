@@ -82,3 +82,23 @@ export class DarknetServer extends BaseServer implements IDarknetServer, DnetSer
 
 const includedKeys = BaseServer.getIncludedKeys(DarknetServer);
 constructorsForReviver.DarknetServer = DarknetServer;
+
+export const exampleDarknetServer: IDarknetServer = {
+  backdoorInstalled: false,
+  difficulty: 0,
+  hasStasisLink: false,
+  modelId: "",
+  passwordHintData: "",
+  ramBlock: 0,
+  requiredCharismaSkill: 0,
+  staticPasswordHint: "",
+  x: 0,
+  hostname: "",
+  ip: "",
+  hasAdminRights: false,
+  isConnectedTo: false,
+  ramUsed: 0,
+  maxRam: 0,
+  organizationName: "",
+  purchasedByPlayer: false,
+};

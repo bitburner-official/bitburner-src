@@ -10,7 +10,6 @@ import {
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { BaseServer } from "../../Server/BaseServer";
-import { getServerSafely } from "../controllers/NetworkMovement";
 import { getDarknetData } from "../effects/effects";
 
 export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
@@ -28,7 +27,7 @@ export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
 
     // draw a line between each server and its connected servers
     for (const connectedServerName of server.serversOnNetwork) {
-      const connectedServer = getServerSafely(connectedServerName);
+      const connectedServer = GetServer(connectedServerName);
       if (
         !connectedServer ||
         (!connectedServer.hasAdminRights && !connectedServer.serversOnNetwork.find((s) => GetServer(s)?.hasAdminRights))

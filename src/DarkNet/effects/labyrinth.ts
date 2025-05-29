@@ -7,6 +7,7 @@ import { SpecialServers } from "../../Server/data/SpecialServers";
 import { AugmentationName } from "@enums";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { getDarknetServerSafely } from "../controllers/NetworkMovement";
+import { getBitNodeMultipliers } from "../../BitNode/BitNode";
 
 const NORTH = [0, -1];
 const EAST = [1, 0];
@@ -398,6 +399,8 @@ export const getLabyrinthDetails = (): {
     };
   }
 
+  const allowTRP = getBitNodeMultipliers(Player.bitNodeN, 1).DarknetLabyrinthRewardsTheRedPill;
+
   // First aug is TheBrokenWings
   let labName: string = SpecialServers.NormalLab;
 
@@ -407,7 +410,7 @@ export const getLabyrinthDetails = (): {
   }
 
   // Next aug after TRP is TheLaw
-  else if (hasAugment(AugmentationName.TheRedPill)) {
+  else if (hasAugment(AugmentationName.TheRedPill) || (!allowTRP && hasAugment(AugmentationName.TheHammer))) {
     labName = SpecialServers.EternalLab;
   }
 

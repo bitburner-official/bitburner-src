@@ -31,7 +31,7 @@ import { clampNumber } from "../../utils/helpers/clampNumber";
 import { getSharedChars } from "./authentication";
 import { getLabyrinthDetails, isLabyrinthServer } from "./labyrinth";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-import { DarknetServer, IDarknetServer } from "../../Server/DarknetServer";
+import { DarknetServer, exampleDarknetServer, IDarknetServer } from "../../Server/DarknetServer";
 import { DnetServer } from "../models/DarknetServerData";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 
@@ -80,7 +80,7 @@ export const calculateAuthenticationTime = (
   if (!isDarknetServer(server)) return 0;
   const darknetData = getDarknetData(server);
 
-  const chaRequired = server.requiredHackingSkill ?? 1;
+  const chaRequired = server.requiredCharismaSkill ?? 1;
   const difficulty = darknetData?.difficulty ?? 1;
 
   const baseDiff = (difficulty + 1) * 100;
@@ -239,7 +239,7 @@ export const getNextPortOpener = (difficulty: number, suppressToast = false) => 
     !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
     return result;
   }
-  if (!Player.has4SData) {
+  if (!Player.has4SData && Player.bitNodeN !== 8) {
     Player.has4SData = true;
     const result = `You have discovered a cache of stolen 4S Data!`;
     !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
@@ -431,10 +431,15 @@ export const chargeServerMigration = (server: BaseServer, threads = 1) => {
 };
 
 export const isDarknetServer = (server: unknown): server is DarknetServer => {
-  return (
-    server instanceof DarknetServer ||
-    (!!server && typeof server == "object" && "modelId" in server && Object.keys(server).includes("modelId"))
-  );
+  if (typeof server !== "object" || server === null) {
+    return false;
+  }
+  for (const key in exampleDarknetServer) {
+    if (!(key in server)) {
+      return false;
+    }
+  }
+  return true;
 };
 
 export const getDarknetData = (server: BaseServer): DnetServer | null => {

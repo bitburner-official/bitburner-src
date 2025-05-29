@@ -379,11 +379,8 @@ const isImmutable = (server?: BaseServer | null) =>
 
 const getIslands = () => GetAllServers(true).filter((s) => s && isDarknetServer(s) && !s.serversOnNetwork.length);
 
-export const getServerSafely = (hostname: string): BaseServer | undefined =>
-  GetAllServers(true).find((s) => s.hostname === hostname);
-
-export const getDarknetServerSafely = (hostname: string): DarknetServer | undefined => {
-  const server = getServerSafely(hostname);
+export const getDarknetServerSafely = (hostnameOrIp: string): DarknetServer | undefined => {
+  const server = GetServer(hostnameOrIp);
   if (!server || !isDarknetServer(server)) {
     return undefined;
   }

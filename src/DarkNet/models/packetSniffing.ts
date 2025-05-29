@@ -9,9 +9,10 @@ import {
 import { getDarknetServerName, PasswordResponse } from "./DarknetServerData";
 import { LocationName } from "@enums";
 import { getDarknetData, getTwoCharsInPassword, isDarknetServer } from "../effects/effects";
-import { getDarknetServers, getServerSafely } from "../controllers/NetworkMovement";
+import { getDarknetServers, getDarknetServerSafely } from "../controllers/NetworkMovement";
 import { getExactCorrectChars, getMastermindResponse } from "../effects/authentication";
 import { getServerState } from "./DarknetState";
+import { GetServer } from "../../Server/AllServers";
 
 const MAX_LOG_LINES = 32;
 
@@ -34,7 +35,7 @@ export const capturePackets = (server: BaseServer) => {
   }
   if (Math.random() < passwordInclusionChance) {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
-    const connectedServer = getServerSafely(connectedServerName);
+    const connectedServer = GetServer(connectedServerName);
     if (connectedServer && isDarknetServer(connectedServer)) {
       const intro = Math.floor(Math.random() * 124);
       return `${getRandomData(intro, server)} ${connectedServerName}:${connectedServer.password} ${getRandomData(
@@ -181,8 +182,8 @@ const getLogNoise = (server: BaseServer, logDate: Date) => {
   }
   if (Math.random() < 0.05 * (1 / (server.difficulty + 1))) {
     const connectedServerName = server.serversOnNetwork[Math.floor(Math.random() * server.serversOnNetwork.length)];
-    const connectedServer = getServerSafely(connectedServerName);
-    if (connectedServer && isDarknetServer(connectedServer)) {
+    const connectedServer = getDarknetServerSafely(connectedServerName);
+    if (connectedServer) {
       return `Connecting to ${connectedServerName}:${connectedServer.password} ...`;
     }
   }

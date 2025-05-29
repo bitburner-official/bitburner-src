@@ -1,5 +1,5 @@
 import type { NetscriptContext } from "../../Netscript/APIWrapper";
-import { getBackdooredDarkwebServers, getServerSafely } from "../controllers/NetworkMovement";
+import { getBackdooredDarkwebServers } from "../controllers/NetworkMovement";
 import { ResponseStatus } from "../models/DarknetServerData";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { hasDarknetAccess, isDarknetServer } from "./effects";
@@ -7,6 +7,8 @@ import { isAuthenticated } from "./authentication";
 import { getServer, helpers } from "../../Netscript/NetscriptHelpers";
 import { errorMessage } from "../../Netscript/ErrorMessages";
 import { BaseServer } from "../../Server/BaseServer";
+import { GetServer } from "../../Server/AllServers";
+import { DarknetState } from "../models/DarknetState";
 
 type failureResultOptions = {
   requireDarknet?: boolean;
@@ -33,7 +35,15 @@ export function expectDarknetAccess(ctx: NetscriptContext) {
 export function getFailureResult(ctx: NetscriptContext, hostname: string, options: failureResultOptions = {}) {
   expectDarknetAccess(ctx);
   const currentServer = ctx.workerScript.getServer();
-  const targetServer = getServerSafely(hostname);
+  const targetServer = GetServer(hostname);
+  if (!targetServer && DarknetState.offlineServers.includes(hostname)) {
+    const result = `Target server ${hostname} is offline.`;
+    logger(ctx)(result);
+    return {
+      success: false,
+      message: ResponseStatus.NOT_FOUND,
+    };
+  }
   if (!targetServer) {
     const result = `Target server ${hostname} does not exist. It may have gone offline.`;
     logger(ctx)(result);
@@ -126,7 +136,7 @@ export function expectPassword(ctx: NetscriptContext, hostname: string, _passwor
   if (ctx.workerScript.hostname !== hostname) {
     return helpers.string(ctx, "password", _password);
   }
-  const server = getServerSafely(hostname);
+  const server = GetServer(hostname);
   if (!server || !isDarknetServer(server)) {
     return "";
   }

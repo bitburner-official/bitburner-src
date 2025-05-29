@@ -790,6 +790,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         BladeburnerRank: 0,
 
+        DarknetLabyrinthRewardsTheRedPill: 0,
         DarknetMoneyMultiplier: 0,
 
         GangSoftcap: 0,
