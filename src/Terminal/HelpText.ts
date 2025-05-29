@@ -343,7 +343,7 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "The 'dir' optional parameter can be used to display files/directories in another directory.",
     " ",
-    "The '-l' optional parameter allows you to force each item onto a single line, displaying two new columns for the script's RAM usage and filesize.",
+    "The '-l' optional parameter allows you to force each item onto a single line, displaying two columns for the script's RAM usage and filesize.",
     " ",
     "The '-h' optional parameter allows you to display the filesize from '-l' in human readable format (e.g. KB, MB, GB) instead of bytes.",
     " ",
