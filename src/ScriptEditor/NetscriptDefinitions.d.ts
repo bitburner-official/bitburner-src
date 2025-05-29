@@ -2805,6 +2805,15 @@ export interface Singularity {
    * @returns - An object representing the current work. Fields depend on the kind of work.
    */
   getCurrentWork(): Task | null;
+
+  /**
+   * Get a list of all unlocked achievements.
+   * @remarks
+   * Ram cost: 5 GB * 16/4/1
+   *
+   * @returns - A list containing all of the IDs of achievements that the player has unlocked.
+   */
+  getUnlockedAchievements(): string[];
 }
 
 /**
@@ -4911,7 +4920,7 @@ export interface Go {
   /**
    * Gets the status of the current game.
    * Shows the current player, current score, and the previous move coordinates.
-   * Previous move coordinates will be [-1, -1] for a pass, or if there are no prior moves.
+   * Previous move will be null for a pass, or if there are no prior moves.
    */
   getGameState(): {
     currentPlayer: "White" | "Black" | "None";
@@ -7768,8 +7777,6 @@ export interface NS {
    *
    * Get a handle to a Netscript Port.
    *
-   * WARNING: Port Handles only work in NetscriptJS (Netscript 2.0). They will not work in Netscript 1.0.
-   *
    * @param portNumber - Port number. Must be a positive integer.
    */
   getPortHandle(portNumber: number): NetscriptPort;
@@ -8066,17 +8073,6 @@ export interface NS {
    * If the file already exists, it will be overwritten by this command.
    * Note that it will not be possible to download data from many websites because they
    * do not allow cross-origin resource sharing (CORS).
-   *
-   * IMPORTANT: This is an asynchronous function that returns a Promise.
-   * The Promise’s resolved value will be a boolean indicating whether or not the data was
-   * successfully retrieved from the URL. Because the function is async and returns a Promise,
-   * it is recommended you use wget in NetscriptJS (Netscript 2.0).
-   *
-   * In NetscriptJS, you must preface any call to wget with the await keyword (like you would {@link NS.hack | hack} or {@link NS.sleep | sleep}).
-   * wget will still work in Netscript 1.0, but the function's execution will not be synchronous
-   * (i.e. it may not execute when you expect/want it to).
-   * Furthermore, since Promises are not supported in ES5,
-   * you will not be able to process the returned value of wget in Netscript 1.0.
    *
    * @example
    * ```js
@@ -10004,8 +10000,8 @@ export interface Office {
 interface Division {
   /** Name of the division */
   name: string;
-  /** Type of division, like Agriculture */
-  type: CorpIndustryName;
+  /** Industry of division, like Agriculture */
+  industry: CorpIndustryName;
   /** Awareness of the division */
   awareness: number;
   /** Popularity of the division */
@@ -10108,9 +10104,18 @@ interface IStyleSettings {
  * @public
  */
 interface GameInfo {
+  /**
+   * Version as shown in release notes and in the UI. E.g.: "2.8.1"
+   *
+   * Note that this property does not have the prefix "v". For example, with v2.8.1, this property is "2.8.1".
+   */
   version: string;
+  /** Internal version number that increments during releases. E.g.: 43 */
+  versionNumber: number;
+  /** Git commit hash that the release was built from. E.g.: "d0d776700" */
   commit: string;
-  platform: string;
+  /** Platform that the game is running on */
+  platform: "Browser" | "Steam";
 }
 
 /**
