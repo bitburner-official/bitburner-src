@@ -6,6 +6,7 @@ import {
   FormatsNeedToChange,
   formatNumber,
   formatRam,
+  formatBytes,
 } from "../../../src/ui/formatNumber";
 
 describe("Suffix rounding test", () => {
@@ -187,6 +188,7 @@ describe("Ram formatting", () => {
     Settings.hideTrailingDecimalZeros = false;
     FormatsNeedToChange.emit();
     // Base unit for ram is GB.
+    expect(formatRam(0)).toEqual("0.00GB");
     expect(formatRam(1)).toEqual("1.00GB");
     expect(formatRam(1e3)).toEqual("1.00TB");
     expect(formatRam(1024)).toEqual("1.02TB");
@@ -201,6 +203,7 @@ describe("Ram formatting", () => {
     Settings.hideTrailingDecimalZeros = false;
     FormatsNeedToChange.emit();
     // Base unit for ram is now GiB.
+    expect(formatRam(0)).toEqual("0.00GiB");
     expect(formatRam(1)).toEqual("1.00GiB");
     expect(formatRam(1e3)).toEqual("1,000.00GiB");
     expect(formatRam(1024)).toEqual("1.00TiB");
@@ -208,5 +211,37 @@ describe("Ram formatting", () => {
     expect(formatRam(1048576)).toEqual("1.00PiB");
     expect(formatRam(1e9)).toEqual("953.67PiB");
     expect(formatRam(1073741824)).toEqual("1.00EiB");
+  });
+});
+describe("Filesize formatting", () => {
+  test("With default GB mode", () => {
+    // Initial settings
+    Settings.UseIEC60027_2 = false;
+    Settings.hideTrailingDecimalZeros = false;
+    FormatsNeedToChange.emit();
+    // Base unit for ram is GB.
+    expect(formatBytes(0)).toEqual("0.0B");
+    expect(formatBytes(1)).toEqual("1.0B");
+    expect(formatBytes(1e3)).toEqual("1.0KB");
+    expect(formatBytes(1024)).toEqual("1.0KB");
+    expect(formatBytes(1e6)).toEqual("1.0MB");
+    expect(formatBytes(1048576)).toEqual("1.0MB");
+    expect(formatBytes(1e9)).toEqual("1.0GB");
+    expect(formatBytes(1073741824)).toEqual("1.1GB");
+  });
+  test("With GiB mode", () => {
+    // Initial settings
+    Settings.UseIEC60027_2 = true;
+    Settings.hideTrailingDecimalZeros = false;
+    FormatsNeedToChange.emit();
+    // Base unit for ram is now GiB.
+    expect(formatBytes(0)).toEqual("0.0B");
+    expect(formatBytes(1)).toEqual("1.0B");
+    expect(formatBytes(1e3)).toEqual("1,000.0B");
+    expect(formatBytes(1024)).toEqual("1.0KiB");
+    expect(formatBytes(1e6)).toEqual("976.6KiB");
+    expect(formatBytes(1048576)).toEqual("1.0MiB");
+    expect(formatBytes(1e9)).toEqual("953.7MiB");
+    expect(formatBytes(1073741824)).toEqual("1.0GiB");
   });
 });
