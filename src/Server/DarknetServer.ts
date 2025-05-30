@@ -55,11 +55,12 @@ export class DarknetServer extends BaseServer implements IDarknetServer, DnetSer
   logTrafficInterval: number;
   requiredCharismaSkill: number;
 
-  constructor(props?: IConstructorParams & DnetServer) {
-    super(props);
-    this.icon = props?.icon || labIcon;
-    this.password = props?.password || "";
-    this.modelId = props?.modelId || "ZeroLogon";
+  constructor(params: IConstructorParams & DnetServer = {}) {
+    super(params);
+    this.icon = params.icon ?? labIcon;
+    this.password = params.password ?? "";
+    this.modelId = params.modelId ?? "ZeroLogon";
+...
     this.staticPasswordHint = props?.staticPasswordHint || "";
     this.passwordHintData = props?.passwordHintData;
     this.difficulty = props?.difficulty || 0;
