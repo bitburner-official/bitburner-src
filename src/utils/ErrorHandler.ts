@@ -12,6 +12,13 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
   }
   const errorDetails = parseUnknownError(e);
   if (ws && typeof e === "string") {
+    // Attempt to strip out the error type, if present
+    const errorType = e.match(/^(\w+) ERROR/)?.[1];
+    if (errorType) {
+      const errorText = e.split(/\n/).slice(3).join("\n");
+      DisplayError(initialText + errorText, errorType, ws.scriptRef.filename, ws.hostname, ws.pid);
+      return;
+    }
     DisplayError(initialText + e, "RUNTIME", ws.scriptRef.filename, ws.hostname, ws.pid);
   } else if (e instanceof SyntaxError) {
     const msg = `${e.message} (sorry we can't be more helpful)`;

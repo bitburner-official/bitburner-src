@@ -58,9 +58,9 @@ export function errorMessage(ctx: NetscriptContext, msg: string, type = "RUNTIME
   }
 
   log(ctx, () => msg);
-  let rejectMsg = `${type} ${caller}: ${msg}`;
+  let rejectMsg = `${caller}: ${msg}`;
   if (userstack.length !== 0) rejectMsg += `\n\nStack:\n${userstack.join("\n")}`;
-  return rejectMsg;
+  return basicErrorMessage(ws, rejectMsg, type);
 
   interface ILine {
     line: string;

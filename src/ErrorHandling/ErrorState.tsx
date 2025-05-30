@@ -50,7 +50,7 @@ export const DisplayError = (
     pid != -1 && (prior.pid = pid);
     prior.unread = !ErrorState.ErrorPageOpen;
 
-    ErrorState.ActiveError = prior; // TODO
+    updateActiveError(prior);
   } else {
     ErrorState.Errors.push({
       server: hostname,
@@ -64,10 +64,16 @@ export const DisplayError = (
     });
     ErrorState.Errors = ErrorState.Errors.slice(0, Settings.MaxRecentScriptsCapacity);
 
-    ErrorState.ActiveError = ErrorState.Errors[0]; // TODO
+    updateActiveError(ErrorState.Errors[ErrorState.Errors.length - 1]);
   }
-  ErrorState.ErrorUpdate.emit(ErrorState.ActiveError);
 };
+
+function updateActiveError(error: ErrorRecord): void {
+  if (!ErrorState.ActiveError) {
+    ErrorState.ActiveError = error;
+    ErrorState.ErrorUpdate.emit(ErrorState.ActiveError);
+  }
+}
 
 export const killAllScripts = () => {
   GetAllServers().forEach((server) => {

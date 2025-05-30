@@ -13,12 +13,12 @@ import { recentScripts } from "../Netscript/RecentScripts";
 export function ErrorModal(): React.ReactElement {
   const { classes } = useStyles();
   const rerender = useRerender();
-  const [error, setError] = useState<ErrorRecord | null>(null);
+  const [error, setError] = useState<ErrorRecord | null>(ErrorState.ActiveError);
 
   useEffect(() => {
-    const listener = (error: ErrorRecord) => {
-      if (error.force || (Router.page() !== SimplePage.ActiveScripts && !ErrorState.PreventModals)) {
-        setError(error);
+    const listener = (newError: ErrorRecord) => {
+      if (newError.force || (Router.page() !== SimplePage.ActiveScripts && !ErrorState.PreventModals)) {
+        setError(newError);
         rerender();
       }
     };
