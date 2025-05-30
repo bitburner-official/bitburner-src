@@ -19,6 +19,11 @@ type ScriptImpactMap = Map<ScriptFilePath, number[]>;
 /** For an overall API break, map of server hostnames to an array of impacted scripts */
 type ImpactMap = Map<string, ScriptImpactMap>;
 
+export interface VersionBreakingChange {
+  additionalText?: string;
+  apiBreakingChanges: APIBreakInfo[];
+}
+
 export interface APIBreakInfo {
   /** The API functions impacted by the API break */
   brokenAPIs: {
@@ -33,6 +38,19 @@ export interface APIBreakInfo {
   info: string;
   /** If broken APIs can be safely migrated, we can skip displaying the notification popup */
   showPopUp: boolean;
+  /**
+   * With a new version with breaking changes, the "showAPIBreaks" function checks all breaking changes and does 2
+   * things with changes that affect the player's scripts:
+   * - Write info of changes to a log file.
+   * - Show popups per change.
+   * Note that we skip changes that do not affect the player's scripts. This is problematic with some breaking changes.
+   *
+   * With each breaking change in "brokenAPIs", we try to detect the affected code by using "name" or
+   * "migration.searchValue". However, with some breaking changes, we cannot detect the affected code reliably via
+   * "brokenAPIs". In this case, instead of skipping them, we always "process" that change (i.e., write info to the log
+   * file and optionally show a popup that notifies the player about this change).
+   */
+  doNotSkip?: boolean;
 }
 
 function detectImpactAndMigrateLines(script: Script, brokenFunctions: APIBreakInfo["brokenAPIs"]): number[] | null {
@@ -54,7 +72,7 @@ function detectImpactAndMigrateLines(script: Script, brokenFunctions: APIBreakIn
 }
 
 /** Returns a map keyed by hostname */
-function detectImpactAndMigrate(brokenFunctions: APIBreakInfo["brokenAPIs"]): ImpactMap | null {
+function detectImpactAndMigrate(brokenFunctions: APIBreakInfo["brokenAPIs"]): ImpactMap {
   const returnMap = new Map<string, ScriptImpactMap>();
   for (const server of GetAllServers()) {
     const impactedScripts = new Map<ScriptFilePath, number[]>();
@@ -68,24 +86,25 @@ function detectImpactAndMigrate(brokenFunctions: APIBreakInfo["brokenAPIs"]): Im
       returnMap.set(server.hostname, impactedScripts);
     }
   }
-  return returnMap.size ? returnMap : null;
+  return returnMap;
 }
 
 /** Show the player a dialog for their API breaks, and save an info file for the player to review later */
-export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
+export function showAPIBreaks(version: string, { additionalText, apiBreakingChanges }: VersionBreakingChange) {
   const details: {
     text: string;
     showPopUp: boolean;
   }[] = [];
   let numberOfPopUps = 0;
-  for (const breakInfo of breakInfos) {
+  for (const breakInfo of apiBreakingChanges) {
     const impactMap = detectImpactAndMigrate(breakInfo.brokenAPIs);
-    if (!impactMap) {
+    // Skip processing if we don't find any affected code and the breaking change does not enable the "doNotSkip" flag.
+    if (impactMap.size === 0 && !breakInfo.doNotSkip) {
       continue;
     }
-    details.push({
-      text:
-        breakInfo.info +
+    let detailText = breakInfo.info;
+    if (impactMap.size > 0) {
+      detailText +=
         `\n\nUsage of the following functions may have been affected:\n${breakInfo.brokenAPIs
           .map((func) => func.name)
           .join("\n")}\n\n` +
@@ -102,7 +121,10 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
                 )
                 .join("\n"),
           )
-          .join("\n\n"),
+          .join("\n\n");
+    }
+    details.push({
+      text: detailText,
       showPopUp: breakInfo.showPopUp,
     });
     if (breakInfo.showPopUp) {
@@ -125,7 +147,8 @@ export function showAPIBreaks(version: string, ...breakInfos: APIBreakInfo[]) {
   dialogBoxCreate(
     `SOME OF YOUR SCRIPTS HAVE POTENTIALLY BEEN IMPACTED BY AN API BREAK, DUE TO CHANGES IN VERSION ${version}\n\n` +
       "The following dialog boxes will provide details of the potential impact to your scripts.\n" +
-      `A file with these details has also been saved on your home computer under filename ${textFileName}.`,
+      `A file with these details has also been saved on your home computer under filename ${textFileName}.` +
+      (additionalText ? `\n\n${additionalText}` : ""),
   );
   let popUpIndex = 0;
   for (const detail of details) {

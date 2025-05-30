@@ -1186,6 +1186,10 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       return canGetBonus();
     },
+    getUnlockedAchievements: (ctx) => () => {
+      helpers.checkSingularityAccess(ctx);
+      return Object.values(Player.achievements).map((a) => a.ID);
+    },
   };
 
   // Removed functions

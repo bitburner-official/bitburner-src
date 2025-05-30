@@ -28,6 +28,10 @@ import {
   CompanyName,
   FactionName,
   type MessageFilename,
+  PositionType,
+  OrderType,
+  BladeburnerActionType,
+  SpecialBladeburnerActionTypeForSleeve,
 } from "@enums";
 import { PromptEvent } from "./ui/React/PromptManager";
 import { GetServer, DeleteServer, AddToAllServers, createUniqueRandomIp } from "./Server/AllServers";
@@ -128,6 +132,10 @@ export const enums: NSEnums = {
   CompanyName,
   FactionName,
   CodingContractName,
+  PositionType,
+  OrderType,
+  BladeburnerActionType,
+  SpecialBladeburnerActionTypeForSleeve,
 };
 for (const val of Object.values(enums)) Object.freeze(val);
 Object.freeze(enums);

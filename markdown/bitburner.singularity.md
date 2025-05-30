@@ -58,6 +58,7 @@ This API requires Source-File 4 to use. The RAM cost of all these functions is m
 |  [getOwnedAugmentations(purchased)](./bitburner.singularity.getownedaugmentations.md) | Get a list of owned augmentation. |
 |  [getOwnedSourceFiles()](./bitburner.singularity.getownedsourcefiles.md) | Get a list of acquired Source-Files. |
 |  [getSaveData()](./bitburner.singularity.getsavedata.md) | This function returns the save data. |
+|  [getUnlockedAchievements()](./bitburner.singularity.getunlockedachievements.md) | Get a list of all unlocked achievements. |
 |  [getUpgradeHomeCoresCost()](./bitburner.singularity.getupgradehomecorescost.md) | Get the price of upgrading home cores. |
 |  [getUpgradeHomeRamCost()](./bitburner.singularity.getupgradehomeramcost.md) | Get the price of upgrading home RAM. |
 |  [goToLocation(locationName)](./bitburner.singularity.gotolocation.md) | Go to a location. |
