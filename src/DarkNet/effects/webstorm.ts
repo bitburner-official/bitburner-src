@@ -1,4 +1,4 @@
-import { DarknetState, NET_WIDTH } from "../models/DarknetState";
+import { DarknetState } from "../models/DarknetState";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { sleep } from "../../Go/boardAnalysis/goAI";
@@ -12,6 +12,7 @@ import {
 } from "../controllers/NetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
 import { getNetDepth } from "./labyrinth";
+import { NET_WIDTH } from "../enums";
 
 export const WEBSTORM = async (suppressToast = false) => {
   DarknetState.isMutating = false;

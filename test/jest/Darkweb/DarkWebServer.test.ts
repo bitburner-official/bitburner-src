@@ -9,10 +9,11 @@ import {
   parseSimpleArithmeticExpression,
   generateSimpleArithmeticExpression,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
-import { PasswordResponse, ResponseStatus } from "../../../src/DarkNet/models/DarknetServerData";
+import { PasswordResponse } from "../../../src/DarkNet/models/DarknetServerOptions";
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
 import { checkPassword, getAuthResult } from "../../../src/DarkNet/effects/authentication";
 import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
+import { ResponseStatus } from "../../../src/DarkNet/enums";
 
 describe("DarkWebServer Tests", () => {
   const difficulty = 1;

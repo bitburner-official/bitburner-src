@@ -7,7 +7,6 @@ import { createRandomString } from "../utils/helpers/createRandomString";
 import { createRandomIp } from "../utils/IPAddress";
 import { IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { IPAddress } from "../Types/strings";
-import { DnetServer } from "../DarkNet/models/DarknetServerData";
 
 export interface IConstructorParams {
   adminRights?: boolean;
@@ -22,7 +21,6 @@ export interface IConstructorParams {
   purchasedByPlayer?: boolean;
   requiredHackingSkill?: number;
   serverGrowth?: number;
-  darknetData?: DnetServer;
 }
 
 export class Server extends BaseServer {
@@ -32,9 +30,6 @@ export class Server extends BaseServer {
   // Initial server security level
   // (i.e. security level when the server was created)
   baseDifficulty = 1;
-
-  // Holds properties only used for darkweb servers
-  darknetData: DnetServer | undefined;
 
   // Server Security Level
   hackDifficulty = 1;

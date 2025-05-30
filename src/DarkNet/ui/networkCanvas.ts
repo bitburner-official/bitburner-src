@@ -1,4 +1,4 @@
-import { DarknetState, NET_WIDTH } from "../models/DarknetState";
+import { DarknetState } from "../models/DarknetState";
 import { GetServer } from "../../Server/AllServers";
 import {
   DW_SERVER_GAP_LEFT,
@@ -11,6 +11,7 @@ import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { BaseServer } from "../../Server/BaseServer";
 import { getDarknetData } from "../effects/effects";
+import { NET_WIDTH } from "../enums";
 
 export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   const ctx = canvas?.getContext("2d");
@@ -85,7 +86,7 @@ const getCoordinates = (server: BaseServer) => {
     throw new Error("Server missing dark web data");
   }
   return {
-    x: darknetData.x,
-    y: darknetData.y,
+    x: darknetData.depth,
+    y: darknetData.leftOffset,
   };
 };

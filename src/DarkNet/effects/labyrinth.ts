@@ -1,5 +1,5 @@
 import { BaseServer } from "../../Server/BaseServer";
-import { PasswordResponse, ResponseStatus } from "../models/DarknetServerData";
+import { PasswordResponse } from "../models/DarknetServerOptions";
 import { addSessionToServer, DarknetState } from "../models/DarknetState";
 import { addCacheToServer, calculatePasswordAttemptChaGain } from "./effects";
 import { Player } from "@player";
@@ -8,6 +8,7 @@ import { AugmentationName } from "@enums";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { getDarknetServerSafely } from "../controllers/NetworkMovement";
 import { getBitNodeMultipliers } from "../../BitNode/BitNode";
+import { labData, ResponseStatus } from "../enums";
 
 const NORTH = [0, -1];
 const EAST = [1, 0];
@@ -261,73 +262,6 @@ const getDirectionFromInput = (input: string) => {
 
   return [0, 0];
 };
-
-type labDetails = {
-  name: string;
-  depth: number;
-  cha: number;
-  augReward: AugmentationName;
-  mazeWidth: number;
-  mazeHeight: number;
-  manual: boolean;
-};
-
-const labData: Record<string, labDetails> = {
-  [SpecialServers.NormalLab]: {
-    name: SpecialServers.NormalLab,
-    depth: 7,
-    cha: 300,
-    augReward: AugmentationName.TheBrokenWings,
-    mazeWidth: 20,
-    mazeHeight: 14,
-    manual: true,
-  },
-  [SpecialServers.CruelLab]: {
-    name: SpecialServers.CruelLab,
-    depth: 12,
-    cha: 600,
-    augReward: AugmentationName.TheBoots,
-    mazeWidth: 30,
-    mazeHeight: 20,
-    manual: true,
-  },
-  [SpecialServers.MercilessLab]: {
-    name: SpecialServers.MercilessLab,
-    depth: 19,
-    cha: 1500,
-    augReward: AugmentationName.TheHammer,
-    mazeWidth: 40,
-    mazeHeight: 26,
-    manual: false,
-  },
-  [SpecialServers.UberLab]: {
-    name: SpecialServers.UberLab,
-    depth: 23,
-    cha: 2500,
-    augReward: AugmentationName.TheRedPill,
-    mazeWidth: 60,
-    mazeHeight: 40,
-    manual: false,
-  },
-  [SpecialServers.EternalLab]: {
-    name: SpecialServers.EternalLab,
-    depth: 29,
-    cha: 2800,
-    augReward: AugmentationName.TheLaw,
-    mazeWidth: 60,
-    mazeHeight: 40,
-    manual: false,
-  },
-  [SpecialServers.FinalLab]: {
-    name: SpecialServers.FinalLab,
-    depth: 31,
-    cha: 3200,
-    augReward: AugmentationName.TheSword,
-    mazeWidth: 60,
-    mazeHeight: 40,
-    manual: false,
-  },
-} as const;
 
 export const getLabMaze = (): string[] => {
   if (!DarknetState.labyrinth) {

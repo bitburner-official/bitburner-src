@@ -68,7 +68,8 @@ import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContentFilePath } from "../Paths/ContentFile";
 import { LiteratureName } from "@enums";
 import { isDarknetServer } from "../DarkNet/effects/effects";
-import { exampleDarknetServer, IDarknetServer } from "../Server/DarknetServer";
+import { exampleDarknetServer } from "../Server/DarknetServer";
+import { DarknetServer as IDarknetServer } from "@nsdefs";
 
 export const helpers = {
   string,

@@ -1,4 +1,4 @@
-import { Minigames } from "../DarkNet/controllers/ServerGenerator";
+import { Minigames } from "../DarkNet/enums";
 
 /**
  * @public
@@ -4111,7 +4111,7 @@ export interface Format {
  * Response statuses used for authenticate and connectToSession methods
  * @public
  */
-type ResponseStatus =
+export type ResponseStatus =
   | "200 Success"
   | "401 Unauthorized"
   | "404 Not Found"
@@ -4125,7 +4125,7 @@ export type Result = { success: boolean; message: string };
  * Darknet server information.
  * @public
  */
-export type IDarknetServer = {
+export interface DarknetServer {
   /** Hostname. Must be unique */
   hostname: string;
   /** IP Address. Must be unique */
@@ -4157,10 +4157,12 @@ export type IDarknetServer = {
   /** The difficulty rating of the server, associated with its original depth in the net */
   difficulty: number;
   /** The depth of the server in the net */
-  x: number;
+  depth: number;
   /** The charisma skill required to heartbleed the server */
   requiredCharismaSkill: number;
-};
+  /** The interval at which the server periodically adds to its logs, in seconds. */
+  logTrafficInterval: number;
+}
 
 /**
  * Details about a server's authentication schema
@@ -4352,7 +4354,7 @@ export interface Darknet {
    * @param host - Optional. Hostname for the requested server object.
    * @returns The requested server object, or null if the server is not found.
    */
-  getServer(host?: string): IDarknetServer | null;
+  getServer(host?: string): DarknetServer | null;
 
   /**
    * Returns the server's authentication protocol details.
@@ -6072,14 +6074,14 @@ interface DarknetFormulas {
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getAuthenticateTime(server: IDarknetServer, threads?: number, player?: Person): number;
+  getAuthenticateTime(server: DarknetServer, threads?: number, player?: Person): number;
   /**
    * Gets the time it will take to scrape logs from a server.
    * @param server - The server to check heartbleed log scraping time on.
    * @param threads - The number of threads to use for the authentication. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getHeartbleedTime(server: IDarknetServer, threads?: number, player?: Person): number;
+  getHeartbleedTime(server: DarknetServer, threads?: number, player?: Person): number;
 
   /**
    * Gets the expected amount off ram that will be freed by a call to dnet.memoryReallocation
@@ -6087,7 +6089,7 @@ interface DarknetFormulas {
    * @param threads - The number of threads used in the memoryReallocation call. Optional, defaults to 1
    * @param player - The player object. Optional, defaults to the current player status
    */
-  getExpectedRamBlockRemoved(server: IDarknetServer, threads?: number, player?: Person): number;
+  getExpectedRamBlockRemoved(server: DarknetServer, threads?: number, player?: Person): number;
 }
 
 /**

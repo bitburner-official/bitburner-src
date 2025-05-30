@@ -94,6 +94,13 @@ export enum AugmentationName {
   HydroflameLeftArm = "Hydroflame Left Arm",
   BigDsBigBrain = "BigD's Big ... Brain",
   ZOE = "Z.O.Ë.",
+  Eloquence = "Eloquence Module",
+  GoldenTongue = "Golden Tongue Module",
+  Glib = "Glibness Enhancement",
+  Magnetism = "Magnetism Amplifier",
+  Primer = "The Illustrated Primer",
+  SocialDynamo = "Social Dynamics Processor",
+  Wit = "Neural Wit Amplifier",
   // UnnamedAug2 = "UnnamedAug2",
 
   // Bladeburner augs
@@ -120,16 +127,7 @@ export enum AugmentationName {
   StaneksGift2 = "Stanek's Gift - Awakening",
   StaneksGift3 = "Stanek's Gift - Serenity",
 
-  // Charisma augs (needs alphabetization)
-  GoldenTongue = "Golden Tongue Module",
-  Eloquence = "Eloquence Module",
-  Glib = "Glibness Enhancement",
-  Primer = "The Illustrated Primer",
-  Magnetism = "Magnetism Amplifier",
-  SocialDynamo = "Social Dynamics Processor",
-  Wit = "Neural Wit Amplifier",
-
-  // Darknet lab augs
+  // Darknet lab augs (in order of acquisition)
   TheBrokenWings = "The W1ngs of Icarus",
   TheBoots = "The B00ts of Perseus",
   TheHammer = "The H4mmer of Daedalus",

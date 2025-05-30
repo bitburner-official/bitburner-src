@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import { Button, Container, Card, TextField, Typography } from "@mui/material";
-import { getPasswordType, Minigames } from "../controllers/ServerGenerator";
+import { getPasswordType } from "../controllers/ServerGenerator";
 import { dnetStyles } from "./dnetStyles";
 import { Result } from "@nsdefs";
-import { PasswordResponse } from "../models/DarknetServerData";
+import { PasswordResponse } from "../models/DarknetServerOptions";
 import { getAuthResult, getSharedChars } from "../effects/authentication";
 import { sleep } from "../../Go/boardAnalysis/goAI";
 import { DarknetEvents } from "../models/DarknetState";
@@ -11,6 +11,7 @@ import { LabyrinthSummary } from "./LabyrinthSummary";
 import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
 import { BaseServer } from "../../Server/BaseServer";
 import { getDarknetData } from "../effects/effects";
+import { Minigames } from "../enums";
 
 export type PasswordPromptProps = {
   server: BaseServer;

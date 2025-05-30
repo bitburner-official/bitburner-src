@@ -1,33 +1,16 @@
-import { DnetServer } from "../DarkNet/models/DarknetServerData";
 import { Icon, labIcon } from "../DarkNet/ui/ServerIcon";
-import { Minigames } from "../DarkNet/controllers/ServerGenerator";
 import { BaseServer, IConstructorParams } from "./BaseServer";
 import { constructorsForReviver, IReviverValue } from "../utils/JSONReviver";
+import { DarknetServer as IDarknetServer } from "@nsdefs";
+import { DarknetServerData } from "../DarkNet/models/DarknetServerOptions";
+import { Minigames } from "../DarkNet/enums";
 
-export type IDarknetServer = {
-  /** Hostname. Must be unique */
-  hostname: string;
-  /** IP Address. Must be unique */
-  ip: string;
-  /** Flag indicating whether player has admin/root access to this server */
-  hasAdminRights: boolean;
-  /** Flag indicating whether player is currently connected to this server */
-  isConnectedTo: boolean;
-  /** RAM (GB) used. i.e. unavailable RAM */
-  ramUsed: number;
-  /** RAM (GB) available on this server */
-  maxRam: number;
-  /** Name of company/faction/etc. that this server belongs to, not applicable to all Servers */
-  organizationName: string;
-  /** Flag indicating whether this is a purchased server */
-  purchasedByPlayer: boolean;
-  /** Flag indicating whether this server has a backdoor installed by a player */
-  backdoorInstalled?: boolean;
-  /** If the server has a stasis link applied */
-  hasStasisLink: boolean;
-  /** The amount of ram blocked by the server owner */
-  ramBlock: number;
-  /** The model of the server. Similar models have similar vulnerabilites. */
+export class DarknetServer extends BaseServer implements IDarknetServer, DarknetServerData {
+  /** The icon of the server, used for display */
+  icon: Icon | typeof labIcon;
+  /** The password for the server, used for authentication */
+  password: string;
+  /** The model of the server. Similar models have similar vulnerabilities. */
   modelId: Minigames;
   /** The generic password prompt for the server */
   staticPasswordHint: string;
@@ -36,26 +19,19 @@ export type IDarknetServer = {
   /** The difficulty rating of the server, associated with its original depth in the net */
   difficulty: number;
   /** The depth of the server in the net */
-  x: number;
+  depth: number;
+  /** The left offset of the server in the net */
+  leftOffset: number;
+  /** If the server has a stasis link applied */
+  hasStasisLink: boolean;
+  /** The amount of ram blocked by the server owner */
+  ramBlock: number;
+  /** The interval at which the server logs traffic */
+  logTrafficInterval: number;
   /** The charisma skill required to heartbleed the server */
   requiredCharismaSkill: number;
-};
 
-export class DarknetServer extends BaseServer implements IDarknetServer, DnetServer {
-  icon: Icon | typeof labIcon;
-  password: string;
-  modelId: Minigames;
-  staticPasswordHint: string;
-  passwordHintData?: string;
-  difficulty: number;
-  x: number;
-  y: number;
-  hasStasisLink: boolean;
-  ramBlock: number;
-  logTrafficInterval: number;
-  requiredCharismaSkill: number;
-
-  constructor(props?: IConstructorParams & DnetServer) {
+  constructor(props?: IConstructorParams & DarknetServerData) {
     super(props);
     this.icon = props?.icon || labIcon;
     this.password = props?.password || "";
@@ -63,8 +39,8 @@ export class DarknetServer extends BaseServer implements IDarknetServer, DnetSer
     this.staticPasswordHint = props?.staticPasswordHint || "";
     this.passwordHintData = props?.passwordHintData;
     this.difficulty = props?.difficulty || 0;
-    this.x = props?.x || 0;
-    this.y = props?.y || 0;
+    this.depth = props?.depth || 0;
+    this.leftOffset = props?.leftOffset || 0;
     this.hasStasisLink = props?.hasStasisLink || false;
     this.ramBlock = props?.ramBlock || 0;
     this.logTrafficInterval = props?.logTrafficInterval || 0;
@@ -84,21 +60,21 @@ const includedKeys = BaseServer.getIncludedKeys(DarknetServer);
 constructorsForReviver.DarknetServer = DarknetServer;
 
 export const exampleDarknetServer: IDarknetServer = {
-  backdoorInstalled: false,
   difficulty: 0,
-  hasStasisLink: false,
-  modelId: "",
-  passwordHintData: "",
-  ramBlock: 0,
-  requiredCharismaSkill: 0,
-  staticPasswordHint: "",
-  x: 0,
-  hostname: "",
-  ip: "",
   hasAdminRights: false,
+  hasStasisLink: false,
+  hostname: "darkweb",
+  ip: "",
   isConnectedTo: false,
-  ramUsed: 0,
-  maxRam: 0,
+  maxRam: 16,
   organizationName: "",
   purchasedByPlayer: false,
+  ramBlock: 0,
+  ramUsed: 0,
+  requiredCharismaSkill: 0,
+  staticPasswordHint: "The passkey is 'leekspin'",
+  passwordHintData: "leekspin",
+  depth: -1,
+  modelId: "DeskMemo_3.1",
+  logTrafficInterval: -1,
 };

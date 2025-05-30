@@ -1,4 +1,4 @@
-import { DarknetState, MAX_NET_DEPTH, NET_WIDTH, SERVER_DENSITY } from "../models/DarknetState";
+import { DarknetState } from "../models/DarknetState";
 import { AddToAllServers, connectServers, createUniqueRandomIp, GetServer } from "../../Server/AllServers";
 import {
   addGuaranteedConnection,
@@ -13,8 +13,6 @@ import {
 } from "./NetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { DnetServer } from "../models/DarknetServerData";
-import { Minigames } from "./ServerGenerator";
 import { labIcon } from "../ui/ServerIcon";
 import { Player } from "@player";
 import { Terminal } from "../../Terminal";
@@ -27,10 +25,14 @@ import {
 } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { getDarknetData, isDarknetServer } from "../effects/effects";
-
-export const HORIZONTAL_CONNECTION_CHANCE = 0.5;
-export const VERTICAL_CONNECTION_CHANCE = 0.3;
-export const AIR_GAP_DEPTH = 8;
+import {
+  HORIZONTAL_CONNECTION_CHANCE,
+  MAX_NET_DEPTH,
+  Minigames,
+  NET_WIDTH,
+  SERVER_DENSITY,
+  VERTICAL_CONNECTION_CHANCE,
+} from "../enums";
 
 export const populateDarknet = () => {
   const darkWebRoot = GetServer(SpecialServers.DarkWeb);
@@ -94,7 +96,7 @@ export const loadDarknet = () => {
   for (const server of darkWebServers) {
     if (isDarknetServer(server) && !isLabyrinthServer(server.hostname)) {
       disconnectServer(server, true);
-      addServerToNetwork(server, server.x, server.y);
+      addServerToNetwork(server, server.depth, server.leftOffset);
     }
   }
   balanceServers();
@@ -111,8 +113,8 @@ export const addRandomConnections = (server: BaseServer) => {
   if (!darknetData || isLabyrinthServer(server.hostname)) {
     return;
   }
-  const x = darknetData.x;
-  const y = darknetData.y;
+  const x = darknetData.depth;
+  const y = darknetData.leftOffset;
   const horizontalNeighbors = getNeighborsOnRow(x, y);
   horizontalNeighbors.forEach((neighbor) => {
     if (Math.random() < HORIZONTAL_CONNECTION_CHANCE) {
@@ -123,7 +125,7 @@ export const addRandomConnections = (server: BaseServer) => {
   const serversAbove = getServersOnRowAbove(x);
   const serversBelow = getServersOnRowBelow(x);
   [...serversAbove, ...serversBelow].forEach((neighbor) => {
-    const distance = Math.abs(neighbor.x ?? x - x) + 1;
+    const distance = Math.abs(neighbor.depth ?? x - x) + 1;
     if (Math.random() < VERTICAL_CONNECTION_CHANCE / distance) {
       connectServers(server, neighbor);
     }
@@ -145,20 +147,20 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number) => 
   }
 
   DarknetState.Network[x][y] = server;
-  server.x = x;
-  server.y = y;
+  server.depth = x;
+  server.leftOffset = y;
 
   addRandomConnections(server);
   addGuaranteedConnection(server);
 
-  if (server.x === 0) {
+  if (server.depth === 0) {
     const darkWebRoot = GetServer(SpecialServers.DarkWeb);
     if (darkWebRoot) {
       connectServers(server, darkWebRoot);
     }
   }
   const maxDepth = getNetDepth();
-  if (server.x === maxDepth - 1) {
+  if (server.depth === maxDepth - 1) {
     const labyrinth = getLabyrinthDetails().lab;
     if (labyrinth) {
       connectServers(server, labyrinth);
@@ -168,14 +170,14 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number) => 
 
 // Creates all the special servers for use at the bottom of the dark net
 export const addLabyrinth = () => {
-  const darknetData: DnetServer = {
+  const darknetData = {
     icon: labIcon,
     password: "!!the:masterwork:of:daedalus!!",
     staticPasswordHint: "You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.",
     modelId: Minigames.labyrinth,
     difficulty: 10,
-    x: -1,
-    y: -1,
+    depth: -1,
+    leftOffset: -1,
     hasStasisLink: false,
     ramBlock: 0,
     logTrafficInterval: Number.MAX_SAFE_INTEGER,
@@ -199,6 +201,10 @@ export const addLabyrinth = () => {
       ...params,
       requiredCharismaSkill: cha,
       hostname: hostname,
+      hasAdminRights: false,
+      isConnectedTo: false,
+      purchasedByPlayer: false,
+      ramUsed: 0,
     });
     AddToAllServers(server);
   }

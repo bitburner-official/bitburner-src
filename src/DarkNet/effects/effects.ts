@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { Person as IPerson } from "@nsdefs";
+import { DarknetServer as IDarknetServer, Person as IPerson } from "@nsdefs";
 import { AugmentationName, CompletedProgramName, LiteratureName, ToastVariant } from "@enums";
 import { CreateProgramWork } from "../../Work/CreateProgramWork";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
@@ -24,16 +24,18 @@ import {
   moveServer,
 } from "../controllers/NetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
-import { Minigames } from "../controllers/ServerGenerator";
-import { addSessionToServer, DarknetState, hasDarknetBonusTime, NET_WIDTH } from "../models/DarknetState";
+import { addSessionToServer, DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
 import { initStockMarket } from "../../StockMarket/StockMarket";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 import { getSharedChars } from "./authentication";
 import { getLabyrinthDetails, isLabyrinthServer } from "./labyrinth";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-import { DarknetServer, exampleDarknetServer, IDarknetServer } from "../../Server/DarknetServer";
-import { DnetServer } from "../models/DarknetServerData";
+import { DarknetServer, exampleDarknetServer } from "../../Server/DarknetServer";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
+import { DarknetServerData } from "../models/DarknetServerOptions";
+import { SpecialServers } from "../../Server/data/SpecialServers";
+import { Icon } from "../ui/ServerIcon";
+import { Minigames, NET_WIDTH } from "../enums";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;
@@ -340,7 +342,7 @@ const addClue = (server: BaseServer) => {
 
 const getRandomNearbyServer = (server: BaseServer, disconnected = false) => {
   if (!isDarknetServer(server)) return null;
-  return getAllAdjacentNeighbors(server.x, server.y).find(
+  return getAllAdjacentNeighbors(server.depth, server.leftOffset).find(
     (neighbor) =>
       neighbor &&
       isDarknetServer(neighbor) &&
@@ -442,7 +444,16 @@ export const isDarknetServer = (server: unknown): server is DarknetServer => {
   return true;
 };
 
-export const getDarknetData = (server: BaseServer): DnetServer | null => {
+export const getDarknetData = (server: BaseServer | null): DarknetServerData | null => {
+  if (server?.hostname === SpecialServers.DarkWeb) {
+    return {
+      ...exampleDarknetServer,
+      leftOffset: -1,
+      password: "leekspin",
+      icon: Icon.Terminal,
+      ...server,
+    };
+  }
   if (isDarknetServer(server)) {
     return server;
   }

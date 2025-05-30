@@ -3,11 +3,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { isDarknetServer } from "../effects/effects";
-
-export const NET_WIDTH = 8;
-export const MAX_NET_DEPTH = 40;
-export const SERVER_DENSITY = 0.7;
-export const MS_PER_MUTATION_PER_ROW = 30_000; // 30 seconds
+import { MAX_NET_DEPTH, NET_WIDTH } from "../enums";
 
 /** Event emitter to allow the UI to subscribe to Go gameplay updates in order to trigger rerenders properly */
 export const DarknetEvents = new EventEmitter();

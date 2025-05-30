@@ -1,18 +1,14 @@
 import { BaseServer } from "../../Server/BaseServer";
 import { commonPasswordDictionary, letters, packetSniffPhrases } from "./dictionaryData";
-import {
-  generateSimpleArithmeticExpression,
-  getPassword,
-  Minigames,
-  romanNumeralEncoder,
-} from "../controllers/ServerGenerator";
-import { getDarknetServerName, PasswordResponse } from "./DarknetServerData";
+import { generateSimpleArithmeticExpression, getPassword, romanNumeralEncoder } from "../controllers/ServerGenerator";
+import { getDarknetServerName, PasswordResponse } from "./DarknetServerOptions";
 import { LocationName } from "@enums";
 import { getDarknetData, getTwoCharsInPassword, isDarknetServer } from "../effects/effects";
 import { getDarknetServers, getDarknetServerSafely } from "../controllers/NetworkMovement";
 import { getExactCorrectChars, getMastermindResponse } from "../effects/authentication";
 import { getServerState } from "./DarknetState";
 import { GetServer } from "../../Server/AllServers";
+import { Minigames } from "../enums";
 
 const MAX_LOG_LINES = 32;
 

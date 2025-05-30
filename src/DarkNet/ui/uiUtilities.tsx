@@ -1,7 +1,7 @@
 import React from "react";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
-import { PasswordResponse } from "../models/DarknetServerData";
+import { PasswordResponse } from "../models/DarknetServerOptions";
 
 export const formatToMaxDigits = (value: number, maxDigits: number): string => {
   if (value === 0) return "0";

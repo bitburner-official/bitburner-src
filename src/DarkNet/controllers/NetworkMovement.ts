@@ -1,17 +1,9 @@
 import { connectServers, DeleteServer, disconnectServers, GetAllServers, GetServer } from "../../Server/AllServers";
-import {
-  DarknetEvents,
-  DarknetState,
-  getServerState,
-  MS_PER_MUTATION_PER_ROW,
-  NET_WIDTH,
-  SERVER_DENSITY,
-  storeDarknetCycles,
-} from "../models/DarknetState";
+import { DarknetEvents, DarknetState, getServerState, storeDarknetCycles } from "../models/DarknetState";
 import { getDarknetServer } from "./ServerGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
-import { addServerToNetwork, AIR_GAP_DEPTH, movePlayerIfNeeded } from "./NetworkGenerator";
+import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
 import { stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
 import { workerScripts } from "../../Netscript/WorkerScripts";
 import { SpecialServers } from "../../Server/data/SpecialServers";
@@ -19,6 +11,7 @@ import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { getDarknetData, isDarknetServer } from "../effects/effects";
 import { CONSTANTS } from "../../Constants";
+import { AIR_GAP_DEPTH, MS_PER_MUTATION_PER_ROW, NET_WIDTH, SERVER_DENSITY } from "../enums";
 
 export const processDarknet = (cycles: number) => {
   storeDarknetCycles(cycles);
@@ -149,8 +142,8 @@ export const deleteServer = (server: BaseServer, force = false) => {
   movePlayerIfNeeded(server);
   killScripts(server);
   disconnectServer(server, true);
-  if (isDarknetServer(server) && DarknetState.Network[server.x]?.[server.y]) {
-    DarknetState.Network[server.x][server.y] = null;
+  if (isDarknetServer(server) && DarknetState.Network[server.depth]?.[server.leftOffset]) {
+    DarknetState.Network[server.depth][server.leftOffset] = null;
   }
   DarknetState.offlineServers.push(server.hostname);
   DeleteServer(server.hostname);
@@ -199,8 +192,8 @@ export const moveServer = (server: BaseServer, maxDepthDecrease = 3, maxDepthInc
   const [newX, newY] = positionOptions[Math.floor(Math.random() * positionOptions.length)];
   disconnectServer(server, true);
 
-  if (DarknetState.Network[darknetData.x]?.[darknetData.y]) {
-    DarknetState.Network[darknetData.x][darknetData.y] = null;
+  if (DarknetState.Network[darknetData.depth]?.[darknetData.leftOffset]) {
+    DarknetState.Network[darknetData.depth][darknetData.leftOffset] = null;
   }
   addServerToNetwork(server, newX, newY);
   return true;
@@ -280,7 +273,7 @@ export const addGuaranteedConnection = (server: BaseServer) => {
     return;
   }
 
-  const neighbors = getAllAdjacentNeighbors(darknetData.x ?? 0, darknetData.y ?? 0);
+  const neighbors = getAllAdjacentNeighbors(darknetData.depth ?? 0, darknetData.leftOffset ?? 0);
   if (neighbors.length === 0) {
     return;
   }
@@ -304,7 +297,7 @@ export const getNeighborsOnRow = (x: number, y: number): BaseServer[] => {
 export const getServersOnRowBelow = (x: number, close = false): DarknetServer[] => {
   const rowBelow = DarknetState.Network[x - 1]?.filter(notNull<DarknetServer>) ?? [];
   if (close) {
-    return rowBelow.filter((server) => Math.abs(server.y ?? 0 - x) <= 1);
+    return rowBelow.filter((server) => Math.abs(server.leftOffset ?? 0 - x) <= 1);
   }
   return rowBelow;
 };
@@ -312,7 +305,7 @@ export const getServersOnRowBelow = (x: number, close = false): DarknetServer[] 
 export const getServersOnRowAbove = (x: number, close = false): DarknetServer[] => {
   const rowAbove = DarknetState.Network[x + 1]?.filter(notNull<DarknetServer>) ?? [];
   if (close) {
-    return rowAbove.filter((server) => Math.abs(server.y ?? 0 - x) <= 1);
+    return rowAbove.filter((server) => Math.abs(server.leftOffset ?? 0 - x) <= 1);
   }
   return rowAbove;
 };
@@ -338,8 +331,8 @@ export const sanitizeDarkwebNetwork = () => {
   const servers = [...getDarknetServers(), darkweb];
   for (const server of servers) {
     const darknetData = getDarknetData(server);
-    if (!GetServer(server.hostname) && DarknetState.Network[darknetData?.x ?? -1]) {
-      DarknetState.Network[darknetData?.x ?? 0][darknetData?.y ?? 0] = null;
+    if (!GetServer(server.hostname) && DarknetState.Network[darknetData?.depth ?? -1]) {
+      DarknetState.Network[darknetData?.depth ?? 0][darknetData?.leftOffset ?? 0] = null;
       disconnectServer(server, true);
       deleteServer(server);
       continue;
@@ -356,7 +349,7 @@ export const sanitizeDarkwebNetwork = () => {
       }
     }
 
-    if (darknetData?.x === 0 && darkweb) {
+    if (darknetData?.depth === 0 && darkweb) {
       connectServers(server, darkweb);
     }
   }

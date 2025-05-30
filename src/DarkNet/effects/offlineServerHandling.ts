@@ -1,6 +1,5 @@
 import type { NetscriptContext } from "../../Netscript/APIWrapper";
 import { getBackdooredDarkwebServers } from "../controllers/NetworkMovement";
-import { ResponseStatus } from "../models/DarknetServerData";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { hasDarknetAccess, isDarknetServer } from "./effects";
 import { isAuthenticated } from "./authentication";
@@ -9,6 +8,7 @@ import { errorMessage } from "../../Netscript/ErrorMessages";
 import { BaseServer } from "../../Server/BaseServer";
 import { GetServer } from "../../Server/AllServers";
 import { DarknetState } from "../models/DarknetState";
+import { ResponseStatus } from "../enums";
 
 type failureResultOptions = {
   requireDarknet?: boolean;

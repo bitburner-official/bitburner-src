@@ -1,4 +1,4 @@
-import { getRandomIcon, Minigames } from "../controllers/ServerGenerator";
+import { getRandomIcon } from "../controllers/ServerGenerator";
 import { Icon, labIcon } from "../ui/ServerIcon";
 import { AddToAllServers, createUniqueRandomIp, GetServer } from "../../Server/AllServers";
 import {
@@ -12,17 +12,8 @@ import {
 } from "./dictionaryData";
 import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
-
-export const ResponseStatus = {
-  SUCCESS: "200 Success",
-  AUTH_FAILURE: "401 Unauthorized",
-  NOT_FOUND: "404 Not Found",
-  TIMEOUT: "408 Request Timeout",
-  MOVED_PERMANENTLY: "301 Moved Permanently",
-  I_AM_A_TEAPOT: "418 I'm a teapot",
-} as const;
-
-export type ResponseStatus = (typeof ResponseStatus)[keyof typeof ResponseStatus];
+import { DarknetServer as IDarknetServer } from "@nsdefs";
+import { Minigames, ResponseStatus } from "../enums";
 
 export type PasswordResponse = {
   status: ResponseStatus;
@@ -32,25 +23,31 @@ export type PasswordResponse = {
   responseTime?: number;
 };
 
-export type DarknetServerData = {
+export type DarknetServerOptions = {
   icon: Icon | typeof labIcon;
   password: string;
   modelId: Minigames;
   staticPasswordHint: string;
   passwordHintData?: string;
   difficulty: number;
-  x: number;
-  y: number;
+  depth: number;
+  leftOffset: number;
 };
 
-export type DnetServer = DarknetServerData & {
-  hasStasisLink: boolean;
-  ramBlock: number;
-  logTrafficInterval: number;
-  requiredCharismaSkill: number;
-};
+/** Represents a server on the darknet. Includes fields not revealed to players. */
+export interface DarknetServerData extends IDarknetServer {
+  /** The icon of the server, used for display */
+  icon: Icon | typeof labIcon;
+  /** The location of the server in its row on the darknet */
+  leftOffset: number;
+  /** The password for the server, used for authentication */
+  password: string;
+}
 
-export const DnetServerBuilder = (options: DarknetServerData, name: string = getDarknetServerName()): DarknetServer => {
+export const DnetServerBuilder = (
+  options: DarknetServerOptions,
+  name: string = getDarknetServerName(),
+): DarknetServer => {
   const maxRam = 16 * 2 ** Math.floor(options.difficulty / 4);
   const ramBlock = getRamBlock(maxRam);
 
@@ -61,7 +58,7 @@ export const DnetServerBuilder = (options: DarknetServerData, name: string = get
   const levelVariance = (Math.random() * 3 - 1) * depth;
   const requiredLevel = Math.max(Math.floor(depthScaling + levelVariance), 1);
 
-  const darknetData: DnetServer = {
+  const darknetData = {
     ramBlock,
     icon: options.icon ?? getRandomIcon(),
     password: options.password,
@@ -69,8 +66,8 @@ export const DnetServerBuilder = (options: DarknetServerData, name: string = get
     staticPasswordHint: options.staticPasswordHint,
     passwordHintData: options.passwordHintData ?? "",
     difficulty: options.difficulty ?? 1,
-    x: options.x ?? -1,
-    y: options.y ?? -1,
+    depth: options.depth ?? -1,
+    leftOffset: options.leftOffset ?? -1,
     hasStasisLink: false,
     logTrafficInterval: 1 + 30 * 0.9 ** options.difficulty,
     requiredCharismaSkill: requiredLevel,
@@ -81,7 +78,10 @@ export const DnetServerBuilder = (options: DarknetServerData, name: string = get
     ip: createUniqueRandomIp(),
     organizationName: "darkweb",
     maxRam,
-    adminRights: false,
+    hasAdminRights: false,
+    isConnectedTo: false,
+    ramUsed: 0,
+    purchasedByPlayer: false,
     ...darknetData,
   });
   server.updateRamUsed(ramBlock);
