@@ -115,7 +115,7 @@ export const breakingChanges300: VersionBreakingChange = {
       brokenAPIs: [],
       info:
         "With some APIs, when you passed values to their params, you could pass a value that was not an exact match. " +
-        'For example, with "ns.singularity.commitCrime", you could pass "Rob Store", "rob store", "RobStore", "robstore", "robStore", etc. ' +
+        'For example, with ns.singularity.commitCrime, you could pass "Rob Store", "rob store", "RobStore", "robstore", "robStore", etc. ' +
         'This is called "fuzzy matching". Now, you must pass an exact value (i.e., Rob Store). This change affects:\n' +
         "- Bladeburner action and type: BladeburnerActionType, BladeburnerGeneralActionName, BladeburnerContractName, BladeburnerOperationName, BladeburnerBlackOpName, SpecialBladeburnerActionTypeForSleeve, BladeburnerActionTypeForSleeve.\n" +
         "- Crime: CrimeType\n" +
@@ -128,6 +128,20 @@ export const breakingChanges300: VersionBreakingChange = {
         "You can access these values via ns.enums and Bladeburner APIs.",
       showPopUp: true,
       doNotSkip: true,
+    },
+    {
+      brokenAPIs: [
+        { name: "ns.nuke" },
+        { name: "ns.brutessh" },
+        { name: "ns.ftpcrack" },
+        { name: "ns.relaysmtp" },
+        { name: "ns.httpworm" },
+        { name: "ns.sqlinject" },
+      ],
+      info:
+        `ns.nuke, ns.brutessh, ns.ftpcrack, ns.relaysmtp, ns.httpworm, and ns.sqlinject now do not throw an error when you do not have the required .exe file or enough opened ports.\n` +
+        "This should not be a problem with most scripts. However, if you were catching errors and branching on the result of success/failure, you will need to use the return value instead.",
+      showPopUp: true,
     },
   ],
 };

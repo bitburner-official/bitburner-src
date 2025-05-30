@@ -72,13 +72,18 @@ function detectImpactAndMigrateLines(script: Script, brokenFunctions: APIBreakIn
 }
 
 /** Returns a map keyed by hostname */
-function detectImpactAndMigrate(brokenFunctions: APIBreakInfo["brokenAPIs"]): ImpactMap {
+function detectImpactAndMigrate(brokenFunctions: APIBreakInfo["brokenAPIs"]): {
+  impactMap: ImpactMap;
+  totalDetectedLines: number;
+} {
   const returnMap = new Map<string, ScriptImpactMap>();
+  let totalDetectedLines = 0;
   for (const server of GetAllServers()) {
     const impactedScripts = new Map<ScriptFilePath, number[]>();
     for (const [filename, script] of server.scripts) {
       const impactedLines = detectImpactAndMigrateLines(script, brokenFunctions);
       if (impactedLines) {
+        totalDetectedLines += impactedLines.length;
         impactedScripts.set(filename, impactedLines);
       }
     }
@@ -86,18 +91,21 @@ function detectImpactAndMigrate(brokenFunctions: APIBreakInfo["brokenAPIs"]): Im
       returnMap.set(server.hostname, impactedScripts);
     }
   }
-  return returnMap;
+  return { impactMap: returnMap, totalDetectedLines };
 }
 
 /** Show the player a dialog for their API breaks, and save an info file for the player to review later */
 export function showAPIBreaks(version: string, { additionalText, apiBreakingChanges }: VersionBreakingChange) {
   const details: {
+    apiBreakInfo: APIBreakInfo;
     text: string;
+    totalDetectedLines: number;
     showPopUp: boolean;
   }[] = [];
   let numberOfPopUps = 0;
   for (const breakInfo of apiBreakingChanges) {
-    const impactMap = detectImpactAndMigrate(breakInfo.brokenAPIs);
+    const scanResult = detectImpactAndMigrate(breakInfo.brokenAPIs);
+    const impactMap = scanResult.impactMap;
     // Skip processing if we don't find any affected code and the breaking change does not enable the "doNotSkip" flag.
     if (impactMap.size === 0 && !breakInfo.doNotSkip) {
       continue;
@@ -124,7 +132,9 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
           .join("\n\n");
     }
     details.push({
+      apiBreakInfo: breakInfo,
       text: detailText,
+      totalDetectedLines: scanResult.totalDetectedLines,
       showPopUp: breakInfo.showPopUp,
     });
     if (breakInfo.showPopUp) {
@@ -155,7 +165,18 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
     if (!detail.showPopUp) {
       continue;
     }
-    dialogBoxCreate(`API BREAK VERSION ${version} DETAILS ${popUpIndex + 1} of ${numberOfPopUps}\n\n${detail.text}`);
+    dialogBoxCreate(
+      `API BREAK VERSION ${version} DETAILS ${popUpIndex + 1} of ${numberOfPopUps}\n\n${detail.apiBreakInfo.info}` +
+        /**
+         * If we can detect the affected lines via apiBreakInfo.brokenAPIs, we will show the number of affected lines.
+         * However, some breaking changes cannot be reliably detected, so we intentionally leave apiBreakInfo.brokenAPIs
+         * empty. With these changes, the number of affected lines is always 0, but saying that there are no affected
+         * lines is misleading, so we won't say anything about the number of affected lines.
+         */
+        (detail.apiBreakInfo.brokenAPIs.length > 0
+          ? `\n\nWe found ${pluralize(detail.totalDetectedLines, "affected line")}.`
+          : ""),
+    );
     ++popUpIndex;
   }
 }
