@@ -1,16 +1,5 @@
 import { EventEmitter } from "../utils/EventEmitter";
 import { Settings } from "../Settings/Settings";
-import { GetAllServers } from "../Server/AllServers";
-import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
-
-export type ErrorState = {
-  ErrorUpdate: EventEmitter<[ErrorRecord]>;
-  ActiveError: ErrorRecord | null;
-  Errors: ErrorRecord[];
-  ErrorPageOpen: boolean;
-  UnreadErrors: number;
-  PreventModals: boolean;
-};
 
 export type ErrorRecord = {
   server: string;
@@ -24,10 +13,10 @@ export type ErrorRecord = {
   force?: boolean;
 };
 
-export const ErrorState: ErrorState = {
+export const ErrorState = {
   ErrorUpdate: new EventEmitter<[ErrorRecord]>(),
   ActiveError: null as ErrorRecord | null,
-  Errors: [],
+  Errors: [] as ErrorRecord[],
   ErrorPageOpen: false,
   UnreadErrors: 0,
   PreventModals: Settings.SuppressErrorModals,
@@ -47,12 +36,14 @@ export const DisplayError = (
   if (prior) {
     prior.occurrences++;
     prior.time = new Date();
-    pid != -1 && (prior.pid = pid);
+    if (pid !== -1) {
+      prior.pid = pid;
+    }
     prior.unread = !ErrorState.ErrorPageOpen;
 
     updateActiveError(prior);
   } else {
-    ErrorState.Errors.push({
+    ErrorState.Errors.unshift({
       server: hostname,
       errorType,
       scriptName,
@@ -62,25 +53,17 @@ export const DisplayError = (
       time: new Date(),
       unread: !ErrorState.ErrorPageOpen,
     });
-    ErrorState.Errors = ErrorState.Errors.slice(0, Settings.MaxRecentScriptsCapacity);
-
-    updateActiveError(ErrorState.Errors[ErrorState.Errors.length - 1]);
+    while (ErrorState.Errors.length > Settings.MaxRecentScriptsCapacity) {
+      ErrorState.Errors.pop();
+    }
+    updateActiveError(ErrorState.Errors[0]);
   }
 };
 
 function updateActiveError(error: ErrorRecord): void {
+  // TODO: Fix this bug
   if (!ErrorState.ActiveError) {
     ErrorState.ActiveError = error;
     ErrorState.ErrorUpdate.emit(ErrorState.ActiveError);
   }
 }
-
-export const killAllScripts = () => {
-  GetAllServers().forEach((server) => {
-    for (const byPid of server.runningScriptMap.values()) {
-      for (const pid of byPid.keys()) {
-        killWorkerScriptByPid(pid);
-      }
-    }
-  });
-};

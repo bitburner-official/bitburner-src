@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "tss-react/mui";
 import { Modal } from "../ui/React/Modal";
 import { Box, Button, Typography } from "@mui/material/";
-import { ErrorRecord, ErrorState } from "./ErrorState";
+import { type ErrorRecord, ErrorState } from "./ErrorState";
 import { Router } from "../ui/GameRoot";
-import { SimplePage } from "@enums";
+import { SimplePage, ToastVariant } from "@enums";
 import { useRerender } from "../ui/React/hooks";
 import { OptionSwitch } from "../ui/React/OptionSwitch";
 import { LogBoxEvents } from "../ui/React/LogBoxManager";
 import { recentScripts } from "../Netscript/RecentScripts";
+import { SnackbarEvents } from "../ui/React/Snackbar";
 
 export function ErrorModal(): React.ReactElement {
   const { classes } = useStyles();
@@ -22,7 +23,7 @@ export function ErrorModal(): React.ReactElement {
         rerender();
       }
     };
-    ErrorState.ErrorUpdate.subscribe(listener);
+    return ErrorState.ErrorUpdate.subscribe(listener);
   }, [rerender]);
 
   const onClose = (): void => {
@@ -31,12 +32,15 @@ export function ErrorModal(): React.ReactElement {
   };
 
   const viewLogs = (): void => {
-    onClose();
-    const recentScript = recentScripts.find((script) => script.runningScript.pid === error?.pid);
-    if (!recentScript) {
-      console.warn(`No recent script found with pid ${error?.pid}`);
+    if (error === null) {
       return;
     }
+    const recentScript = recentScripts.find((script) => script.runningScript.pid === error.pid);
+    if (!recentScript) {
+      SnackbarEvents.emit(`No recent script found with pid ${error.pid}`, ToastVariant.INFO, 2000);
+      return;
+    }
+    onClose();
     LogBoxEvents.emit(recentScript.runningScript);
   };
 
@@ -49,10 +53,14 @@ export function ErrorModal(): React.ReactElement {
   return (
     <Modal open={!!error} onClose={onClose}>
       {error ? (
-        <Typography>
+        <Typography component="div">
           <h2>{error.errorType} ERROR</h2>
-          <p style={{ whiteSpace: "pre-wrap" }}>{error.message.replaceAll("/", "/​")}</p>
-          <p>Script: {error.scriptName}</p>
+          <p style={{ whiteSpace: "pre-wrap" }}>{error.message.replaceAll("/", "/\u200B")}</p>
+          <p>
+            Script: {error.scriptName}
+            <br />
+            PID: {error.pid}
+          </p>
           <div>
             <OptionSwitch
               checked={ErrorState.PreventModals}
@@ -64,7 +72,9 @@ export function ErrorModal(): React.ReactElement {
           <Box className={classes.inlineFlexBox}>
             <Button onClick={onClose}>Close</Button>
             <div>
-              <Button onClick={viewLogs}>View Script Logs</Button>
+              <Button disabled={error.pid === -1} onClick={viewLogs}>
+                View Script Logs
+              </Button>
               <Button onClick={goToErrorPage}>Errors Page</Button>
             </div>
           </Box>

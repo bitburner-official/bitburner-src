@@ -12,7 +12,18 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
   }
   const errorDetails = parseUnknownError(e);
   if (ws && typeof e === "string") {
-    // Attempt to strip out the error type, if present
+    /**
+     * - Attempt to strip out the error type, if present.
+     * - Extract error text by skipping:
+     *   - Error type
+     *   - Script name and PID
+     *
+     * Error example:
+     * "RUNTIME ERROR\ntest.js@home (PID - 1)\n\ngetServer: Invalid hostname: 'invalid'\n\nStack:\ntest.js:L5@main"
+     *
+     * - errorType: "RUNTIME"
+     * - errorText: "getServer: Invalid hostname: 'invalid'\n\nStack:\ntest.js:L5@main"
+     */
     const errorType = e.match(/^(\w+) ERROR/)?.[1];
     if (errorType) {
       const errorText = e.split(/\n/).slice(3).join("\n");
@@ -50,7 +61,7 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
     console.error("Unexpected error:", e);
     const msg = `Unexpected type of error thrown. This error was likely thrown manually within a script.
         Error has been logged to the console.\n\nType of error: ${typeof e}\nValue of error: ${e}`;
-    DisplayError(msg, "UNKNOWN", ws?.scriptRef?.filename, ws?.hostname ?? "", ws?.pid ?? -1);
+    DisplayError(msg, "UNKNOWN", ws?.scriptRef?.filename, ws?.hostname, ws?.pid);
   }
 }
 

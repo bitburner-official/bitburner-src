@@ -1,20 +1,20 @@
 import React from "react";
 import { makeStyles } from "tss-react/mui";
-import { ErrorRecord, ErrorState, killAllScripts } from "./ErrorState";
+import { type ErrorRecord, ErrorState } from "./ErrorState";
 import { useRerender } from "../ui/React/hooks";
-import { Typography, Button } from "@mui/material";
+import { Typography, Tooltip } from "@mui/material";
 import { Theme } from "@mui/material/styles";
-import { OptionSwitch } from "../ui/React/OptionSwitch";
 
 export function RecentErrorsPage(): React.ReactElement {
   const rerender = useRerender();
   React.useEffect(() => {
-    const listener = () => {
-      rerender();
-    };
-    ErrorState.ErrorUpdate.subscribe(listener);
+    const clearSubscription = ErrorState.ErrorUpdate.subscribe(rerender);
     ErrorState.ErrorPageOpen = true;
     ErrorState.UnreadErrors = 0;
+    return () => {
+      clearSubscription();
+      ErrorState.ErrorPageOpen = false;
+    };
   }, [rerender]);
   const { classes } = useStyles();
 
@@ -22,52 +22,25 @@ export function RecentErrorsPage(): React.ReactElement {
     ErrorState.ErrorUpdate.emit({ ...error, force: true });
   };
 
-  const nthIndexOf = (string: string, pattern: string, n: number) => {
-    let i = -1;
-
-    while (n-- && i++ < string.length) {
-      i = string.indexOf(pattern, i);
-      if (i < 0) break;
-    }
-    return i;
-  };
-
   const formatMessage = (message: string): string => {
-    // Add zero-width space after each slash to allow clean wrapping
-    const cleanedMessage = message.replaceAll("/", "/​");
-    const fifthLineBreak = nthIndexOf(message, "\n", 5);
-    if (fifthLineBreak !== -1) {
-      // If the message has more than 4 line breaks, truncate it to the first 5 lines
-      return cleanedMessage.slice(0, fifthLineBreak + 1) + " ...";
-    }
-    return cleanedMessage;
+    /**
+     * - Add a zero-width space after each slash to allow clean wrapping.
+     * - Replace 2+ newline characters with only 1 newline character to reduce the number of empty lines.
+     */
+    return message.replaceAll("/", "/\u200B").replaceAll(/\n{2,}/g, "\n");
   };
 
   return (
     <div>
-      <Typography>
-        <h2>Recent Errors</h2>
-      </Typography>
-      <div className={classes.inlineFlexBox}>
-        <OptionSwitch
-          checked={ErrorState.PreventModals}
-          onChange={(newValue) => (ErrorState.PreventModals = newValue)}
-          text="Prevent error modals"
-          tooltip={<>If this is set, no error modals will be shown until the game is reloaded.</>}
-        />
-        <Button color="error" onClick={killAllScripts}>
-          Kill All Scripts
-        </Button>
-      </div>
-      <Typography>
+      <Typography component="div" sx={{ height: "100vh", overflowY: "auto", scrollbarWidth: "thin" }}>
         <table className={classes.errorTable}>
           <thead>
             <tr>
-              <th>Count</th>
-              <th>Type</th>
-              <th style={{ textAlign: "start" }}>Message</th>
-              <th>Script</th>
-              <th>Time</th>
+              <th className={classes.cellText}>Count</th>
+              <th className={classes.cellText}>Type</th>
+              <th className={classes.cellText}>Message</th>
+              <th className={classes.cellText}>Script</th>
+              <th className={classes.cellText}>Time</th>
             </tr>
           </thead>
           <tbody>
@@ -85,7 +58,11 @@ export function RecentErrorsPage(): React.ReactElement {
                   </div>
                 </td>
                 <td className={classes.cellText}>
-                  <div className={classes.small}>{formatMessage(e.scriptName)}</div>
+                  <div className={classes.small}>
+                    <Tooltip title={<>{formatMessage(e.scriptName)}</>}>
+                      <div style={{ textOverflow: "ellipsis", overflow: "auto" }}>{formatMessage(e.scriptName)}</div>
+                    </Tooltip>
+                  </div>
                 </td>
                 <td className={classes.cellText}>
                   <div className={classes.xsmall}>{e.time.toLocaleString()}</div>
@@ -113,26 +90,23 @@ const useStyles = makeStyles()((theme: Theme) => ({
   },
   cellText: {
     verticalAlign: "top",
-    padding: "8px",
+    padding: "4px",
+    textAlign: "left",
   },
   errorText: {
-    margin: "8px",
+    margin: "4px",
     color: "white",
-    maxWidth: "50vw",
     textOverflow: "ellipsis",
     whiteSpace: "pre-wrap",
+    lineClamp: "6",
+    lineHeight: 1.1,
   },
   xsmall: {
     maxWidth: "100px",
+    fontSize: "14px",
+    lineHeight: 1.2,
   },
   small: {
     maxWidth: "200px",
-  },
-  inlineFlexBox: {
-    display: "inline-flex",
-    flexDirection: "row",
-    width: "100%",
-    justifyContent: "space-between",
-    marginBottom: "12px",
   },
 }));
