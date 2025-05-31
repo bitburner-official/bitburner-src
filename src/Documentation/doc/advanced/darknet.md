@@ -120,6 +120,13 @@ Design document and workspace
 
 ## patches:
 
+## PR feedback
+- remove getServerSafely and use GetServer
+- only give TRP based on bitnode mults
+- do not give s4 data in bn8
+- Make all dnet APIs gracefully handle `darkweb`
+
+
 ## Darknet server type overhaul
 
 - Changed the signature of darknet servers to be more standardized
