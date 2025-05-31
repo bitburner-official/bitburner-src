@@ -4,6 +4,7 @@ import { constructorsForReviver, IReviverValue } from "../utils/JSONReviver";
 import { DarknetServer as IDarknetServer } from "@nsdefs";
 import { DarknetServerData } from "../DarkNet/models/DarknetServerOptions";
 import { Minigames } from "../DarkNet/enums";
+import { createRandomIp } from "../utils/IPAddress";
 
 export class DarknetServer extends BaseServer implements IDarknetServer, DarknetServerData {
   /** The icon of the server, used for display */
@@ -31,21 +32,20 @@ export class DarknetServer extends BaseServer implements IDarknetServer, Darknet
   /** The charisma skill required to heartbleed the server */
   requiredCharismaSkill: number;
 
-  constructor(params: IConstructorParams & DnetServer = {}) {
+  constructor(params: IConstructorParams & DarknetServerData = {...exampleDarknetServer, ip: createRandomIp(), icon: Icon.Terminal, leftOffset: 0, password: ""}) {
     super(params);
-    this.icon = params.icon ?? labIcon;
-    this.password = params.password ?? "";
-    this.modelId = params.modelId ?? "ZeroLogon";
-...
-    this.staticPasswordHint = props?.staticPasswordHint || "";
-    this.passwordHintData = props?.passwordHintData;
-    this.difficulty = props?.difficulty || 0;
-    this.depth = props?.depth || 0;
-    this.leftOffset = props?.leftOffset || 0;
-    this.hasStasisLink = props?.hasStasisLink || false;
-    this.ramBlock = props?.ramBlock || 0;
-    this.logTrafficInterval = props?.logTrafficInterval || 0;
-    this.requiredCharismaSkill = props?.requiredCharismaSkill || 0;
+    this.icon = params.icon;
+    this.password = params.password;
+    this.modelId = params.modelId;
+    this.staticPasswordHint = params.staticPasswordHint;
+    this.passwordHintData = params.passwordHintData;
+    this.difficulty = params.difficulty;
+    this.depth = params.depth;
+    this.leftOffset = params.leftOffset;
+    this.hasStasisLink = params.hasStasisLink;
+    this.ramBlock = params.ramBlock;
+    this.logTrafficInterval = params.logTrafficInterval;
+    this.requiredCharismaSkill = params.requiredCharismaSkill;
   }
 
   toJSON(): IReviverValue {
