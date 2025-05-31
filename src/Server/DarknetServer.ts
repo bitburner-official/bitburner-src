@@ -3,7 +3,7 @@ import { BaseServer, IConstructorParams } from "./BaseServer";
 import { constructorsForReviver, IReviverValue } from "../utils/JSONReviver";
 import { DarknetServer as IDarknetServer } from "@nsdefs";
 import { DarknetServerData } from "../DarkNet/models/DarknetServerOptions";
-import { Minigames } from "../DarkNet/enums";
+import { exampleDarknetServer, Minigames } from "../DarkNet/enums";
 import { createRandomIp } from "../utils/IPAddress";
 
 export class DarknetServer extends BaseServer implements IDarknetServer, DarknetServerData {
@@ -32,7 +32,15 @@ export class DarknetServer extends BaseServer implements IDarknetServer, Darknet
   /** The charisma skill required to heartbleed the server */
   requiredCharismaSkill: number;
 
-  constructor(params: IConstructorParams & DarknetServerData = {...exampleDarknetServer, ip: createRandomIp(), icon: Icon.Terminal, leftOffset: 0, password: ""}) {
+  constructor(
+    params: IConstructorParams & DarknetServerData = {
+      ...exampleDarknetServer,
+      ip: createRandomIp(),
+      icon: Icon.Terminal,
+      leftOffset: 0,
+      password: "",
+    },
+  ) {
     super(params);
     this.icon = params.icon;
     this.password = params.password;
@@ -59,23 +67,3 @@ export class DarknetServer extends BaseServer implements IDarknetServer, Darknet
 
 const includedKeys = BaseServer.getIncludedKeys(DarknetServer);
 constructorsForReviver.DarknetServer = DarknetServer;
-
-export const exampleDarknetServer: IDarknetServer = {
-  difficulty: 0,
-  hasAdminRights: false,
-  hasStasisLink: false,
-  hostname: "darkweb",
-  ip: "",
-  isConnectedTo: false,
-  maxRam: 16,
-  organizationName: "",
-  purchasedByPlayer: false,
-  ramBlock: 0,
-  ramUsed: 0,
-  requiredCharismaSkill: 0,
-  staticPasswordHint: "The passkey is 'leekspin'",
-  passwordHintData: "leekspin",
-  depth: -1,
-  modelId: "DeskMemo_3.1",
-  logTrafficInterval: -1,
-};

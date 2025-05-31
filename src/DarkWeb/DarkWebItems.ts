@@ -11,6 +11,6 @@ export const DarkWebItems = {
   DeepscanV1: new DarkWebItem(CompletedProgramName.deepScan1, 500000, "Enables 'scan-analyze' with a depth up to 5."),
   DeepscanV2: new DarkWebItem(CompletedProgramName.deepScan2, 25e6, "Enables 'scan-analyze' with a depth up to 10."),
   AutolinkProgram: new DarkWebItem(CompletedProgramName.autoLink, 1e6, "Enables direct connect via 'scan-analyze'."),
-  DarkScapeProgram: new DarkWebItem(CompletedProgramName.darkscape, 5e8, "Unlock access to the dark net..."),
+  DarkScapeProgram: new DarkWebItem(CompletedProgramName.darkscape, 5e7, "Unlock access to the dark net..."),
   FormulasProgram: new DarkWebItem(CompletedProgramName.formulas, 5e9, "Unlock access to the formulas API."),
 };

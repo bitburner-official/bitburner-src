@@ -30,12 +30,12 @@ import { clampNumber } from "../../utils/helpers/clampNumber";
 import { getSharedChars } from "./authentication";
 import { getLabyrinthDetails, isLabyrinthServer } from "./labyrinth";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
-import { DarknetServer, exampleDarknetServer } from "../../Server/DarknetServer";
+import { DarknetServer } from "../../Server/DarknetServer";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 import { DarknetServerData } from "../models/DarknetServerOptions";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Icon } from "../ui/ServerIcon";
-import { Minigames, NET_WIDTH } from "../enums";
+import { exampleDarknetServer, Minigames, NET_WIDTH } from "../enums";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;

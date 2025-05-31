@@ -1,6 +1,7 @@
 // each minigame needs to have a name that sounds like a device or browser or language model and version
 import { AugmentationName } from "@enums";
 import { SpecialServers } from "../Server/data/SpecialServers";
+import { DarknetServer as IDarknetServer } from "@nsdefs";
 
 export const HORIZONTAL_CONNECTION_CHANCE = 0.5;
 export const VERTICAL_CONNECTION_CHANCE = 0.3;
@@ -113,3 +114,23 @@ export const labData: Record<string, labDetails> = {
     manual: false,
   },
 } as const;
+
+export const exampleDarknetServer: IDarknetServer = {
+  difficulty: 0,
+  hasAdminRights: false,
+  hasStasisLink: false,
+  hostname: "darkweb",
+  ip: "",
+  isConnectedTo: false,
+  maxRam: 16,
+  organizationName: "",
+  purchasedByPlayer: false,
+  ramBlock: 0,
+  ramUsed: 0,
+  requiredCharismaSkill: 0,
+  staticPasswordHint: "The passkey is 'leekspin'",
+  passwordHintData: "leekspin",
+  depth: -1,
+  modelId: "DeskMemo_3.1",
+  logTrafficInterval: -1,
+};
