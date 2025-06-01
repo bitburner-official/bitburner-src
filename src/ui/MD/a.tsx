@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "@mui/material";
-import { defaultNsApiPage, useNavigator } from "../React/Documentation";
+import { defaultNsApiPage, externalUrlOfNsApiPage, useNavigator } from "../React/Documentation";
 import { CorruptibleText } from "../React/CorruptibleText";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
@@ -14,7 +14,7 @@ export const A = (props: React.PropsWithChildren<{ href?: string }>): React.Reac
   const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     navigator.navigate(ref, event.ctrlKey);
   };
-  if (ref === "https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md") {
+  if (ref === externalUrlOfNsApiPage) {
     return (
       <Link
         onClick={(event) => {
