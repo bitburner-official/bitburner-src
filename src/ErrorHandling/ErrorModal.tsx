@@ -31,12 +31,15 @@ export function ErrorModal(): React.ReactElement {
   };
 
   const viewLogs = (): void => {
-    onClose();
-    const recentScript = recentScripts.find((script) => script.runningScript.pid === error?.pid);
-    if (!recentScript) {
-      console.warn(`No recent script found with pid ${error?.pid}`);
+    if (error === null) {
       return;
     }
+    const recentScript = recentScripts.find((script) => script.runningScript.pid === error.pid);
+    if (!recentScript) {
+      SnackbarEvents.emit(`No recent script found with pid ${error.pid}`, ToastVariant.INFO, 2000);
+      return;
+    }
+    onClose();
     LogBoxEvents.emit(recentScript.runningScript);
   };
 
