@@ -111,7 +111,7 @@ export class CodingContract {
       } catch (error) {
         return {
           success: false,
-          message: `Answer is not in the right format for contract '${this.type}'. Reason: ${
+          message: `The answer is not in the right format for contract '${this.type}'. Reason: ${
             error instanceof Error ? error.message : String(error)
           }`,
         };
@@ -121,7 +121,7 @@ export class CodingContract {
     if (!result) {
       return {
         success: false,
-        message: `Answer is not in the right format for contract '${this.type}'. Got: ${answer}`,
+        message: `The answer is not in the right format for contract '${this.type}'. Got: ${answer}`,
       };
     }
     return { success: true, answer };

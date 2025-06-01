@@ -44,7 +44,12 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
        * contract.isValid() above.
        */
       case CodingContractResult.InvalidFormat: {
-        exceptionAlert(new Error("contract.isSolution() "), true);
+        exceptionAlert(
+          new Error(
+            `contract.isSolution() returns unexpected InvalidFormat result. Type: ${contract.type}. Answer: ${answer}`,
+          ),
+          true,
+        );
         return "";
       }
       case CodingContractResult.Failure: {

@@ -529,7 +529,7 @@ export class Terminal {
       case CodingContractResult.InvalidFormat:
         this.error(
           `Contract FAILED - ${
-            promptResult.message ?? `Answer is not in the right format for contract '${contract.type}'`
+            promptResult.message ?? `The answer is not in the right format for contract '${contract.type}'`
           }`,
         );
         break;
