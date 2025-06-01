@@ -196,6 +196,9 @@ describe("Ram formatting", () => {
     expect(formatRam(1048576)).toEqual("1.05PB");
     expect(formatRam(1e9)).toEqual("1.00EB");
     expect(formatRam(1073741824)).toEqual("1.07EB");
+    expect(formatRam(NaN)).toEqual("NaNGB");
+    expect(formatRam(Infinity)).toEqual("∞EB");
+    expect(formatRam(-Infinity)).toEqual("-∞EB");
   });
   test("With GiB mode", () => {
     // Initial settings
@@ -211,6 +214,9 @@ describe("Ram formatting", () => {
     expect(formatRam(1048576)).toEqual("1.00PiB");
     expect(formatRam(1e9)).toEqual("953.67PiB");
     expect(formatRam(1073741824)).toEqual("1.00EiB");
+    expect(formatRam(NaN)).toEqual("NaNGiB");
+    expect(formatRam(Infinity)).toEqual("∞EiB");
+    expect(formatRam(-Infinity)).toEqual("-∞EiB");
   });
 });
 describe("Filesize formatting", () => {
@@ -228,6 +234,9 @@ describe("Filesize formatting", () => {
     expect(formatBytes(1048576)).toEqual("1.0MB");
     expect(formatBytes(1e9)).toEqual("1.0GB");
     expect(formatBytes(1073741824)).toEqual("1.1GB");
+    expect(formatBytes(NaN)).toEqual("NaNB");
+    expect(formatBytes(Infinity)).toEqual("∞EB");
+    expect(formatBytes(-Infinity)).toEqual("-∞EB");
   });
   test("With GiB mode", () => {
     // Initial settings
@@ -243,5 +252,8 @@ describe("Filesize formatting", () => {
     expect(formatBytes(1048576)).toEqual("1.0MiB");
     expect(formatBytes(1e9)).toEqual("953.7MiB");
     expect(formatBytes(1073741824)).toEqual("1.0GiB");
+    expect(formatBytes(NaN)).toEqual("NaNB");
+    expect(formatBytes(Infinity)).toEqual("∞EiB");
+    expect(formatBytes(-Infinity)).toEqual("-∞EiB");
   });
 });
