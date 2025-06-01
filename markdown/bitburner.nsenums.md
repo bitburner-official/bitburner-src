@@ -21,7 +21,11 @@ type NSEnums = {
   CompanyName: CompanyNameEnumType;
   FactionName: FactionNameEnumType;
   CodingContractName: CodingContractNameEnumType;
+  PositionType: PositionEnumType;
+  OrderType: OrderEnumType;
+  BladeburnerActionType: BladeburnerActionEnumType;
+  SpecialBladeburnerActionTypeForSleeve: SpecialBladeburnerActionEnumTypeForSleeve;
 };
 ```
-**References:** [CityNameEnumType](./bitburner.citynameenumtype.md)<!-- -->, [CrimeEnumType](./bitburner.crimeenumtype.md)<!-- -->, [FactionWorkEnumType](./bitburner.factionworkenumtype.md)<!-- -->, [GymEnumType](./bitburner.gymenumtype.md)<!-- -->, [JobNameEnumType](./bitburner.jobnameenumtype.md)<!-- -->, [JobFieldEnumType](./bitburner.jobfieldenumtype.md)<!-- -->, [LocationNameEnumType](./bitburner.locationnameenumtype.md)<!-- -->, [ToastVariantEnumType](./bitburner.toastvariantenumtype.md)<!-- -->, [UniversityClassEnumType](./bitburner.universityclassenumtype.md)<!-- -->, [CompanyNameEnumType](./bitburner.companynameenumtype.md)<!-- -->, [FactionNameEnumType](./bitburner.factionnameenumtype.md)<!-- -->, [CodingContractNameEnumType](./bitburner.codingcontractnameenumtype.md)
+**References:** [CityNameEnumType](./bitburner.citynameenumtype.md)<!-- -->, [CrimeEnumType](./bitburner.crimeenumtype.md)<!-- -->, [FactionWorkEnumType](./bitburner.factionworkenumtype.md)<!-- -->, [GymEnumType](./bitburner.gymenumtype.md)<!-- -->, [JobNameEnumType](./bitburner.jobnameenumtype.md)<!-- -->, [JobFieldEnumType](./bitburner.jobfieldenumtype.md)<!-- -->, [LocationNameEnumType](./bitburner.locationnameenumtype.md)<!-- -->, [ToastVariantEnumType](./bitburner.toastvariantenumtype.md)<!-- -->, [UniversityClassEnumType](./bitburner.universityclassenumtype.md)<!-- -->, [CompanyNameEnumType](./bitburner.companynameenumtype.md)<!-- -->, [FactionNameEnumType](./bitburner.factionnameenumtype.md)<!-- -->, [CodingContractNameEnumType](./bitburner.codingcontractnameenumtype.md)<!-- -->, [PositionEnumType](./bitburner.positionenumtype.md)<!-- -->, [OrderEnumType](./bitburner.orderenumtype.md)<!-- -->, [BladeburnerActionEnumType](./bitburner.bladeburneractionenumtype.md)<!-- -->, [SpecialBladeburnerActionEnumTypeForSleeve](./bitburner.specialbladeburneractionenumtypeforsleeve.md)
 
