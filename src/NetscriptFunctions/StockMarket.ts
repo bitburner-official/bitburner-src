@@ -16,9 +16,9 @@ import {
   getStockMarketWseCost,
   getStockMarketTixApiCost,
 } from "../StockMarket/StockMarketCosts";
-import { Stock } from "../StockMarket/Stock";
-import { StockOrder, TIX } from "@nsdefs";
-import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
+import type { Stock } from "../StockMarket/Stock";
+import type { StockOrder, TIX } from "@nsdefs";
+import { setRemovedFunctions, type InternalAPI, type NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { StockMarketConstants } from "../StockMarket/data/Constants";
 import { getEnumHelper } from "../utils/EnumHelper";
@@ -43,7 +43,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     return stock;
   };
 
-  return {
+  const stockFunctions: InternalAPI<TIX> = {
     getConstants: () => () => structuredClone(StockMarketConstants),
     hasWseAccount: () => () => Player.hasWseAccount,
     hasTixApiAccess: () => () => Player.hasTixApiAccess,
@@ -333,4 +333,12 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       return StockMarketPromise.promise;
     },
   };
+
+  setRemovedFunctions(stockFunctions, {
+    hasWSEAccount: { version: "3.0.0", replacement: "stock.hasWseAccount()" },
+    hasTIXAPIAccess: { version: "3.0.0", replacement: "stock.hasTixApiAccess()" },
+    has4SDataTIXAPI: { version: "3.0.0", replacement: "stock.has4SDataTixApi()" },
+  });
+
+  return stockFunctions;
 }
