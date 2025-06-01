@@ -58,7 +58,10 @@ function detectImpactAndMigrateLines(script: Script, brokenFunctions: APIBreakIn
   const lines = script.content.split("\n");
   for (let i = 0; i < lines.length; ++i) {
     for (const brokenFunction of brokenFunctions) {
-      if (!lines[i].includes(brokenFunction.name)) {
+      if (
+        !lines[i].includes(brokenFunction.name) &&
+        (!brokenFunction.migration || !lines[i].match(brokenFunction.migration.searchValue))
+      ) {
         continue;
       }
       impactedLines.push(i + 1);
