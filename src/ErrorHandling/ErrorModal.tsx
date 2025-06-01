@@ -22,7 +22,7 @@ export function ErrorModal(): React.ReactElement {
         rerender();
       }
     };
-    ErrorState.ErrorUpdate.subscribe(listener);
+    return ErrorState.ErrorUpdate.subscribe(listener);
   }, [rerender]);
 
   const onClose = (): void => {
