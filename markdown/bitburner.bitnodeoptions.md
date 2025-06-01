@@ -4,7 +4,13 @@
 
 ## BitNodeOptions interface
 
-Default value: - sourceFileOverrides: an empty Map - intelligenceOverride: undefined - All boolean options: false
+Default value:
+
+- sourceFileOverrides: an empty Map
+
+- intelligenceOverride: undefined
+
+- All boolean options: false
 
 If you specify intelligenceOverride, it must be a non-negative integer.
 

@@ -7,6 +7,7 @@ import { code, Pre } from "./code";
 import { A } from "./a";
 import remarkMath from "remark-math";
 import rehypeMathjax from "rehype-mathjax/svg";
+import rehypeRaw from "rehype-raw";
 import { FilePath } from "../../Paths/FilePath";
 import { getPage } from "../../Documentation/root";
 
@@ -44,7 +45,8 @@ export function MD(props: { pageFilePath: FilePath; top: number }): React.ReactE
         a: A,
       }}
       remarkPlugins={[remarkGfm, remarkMath]}
-      rehypePlugins={[rehypeMathjax]}
+      // Use rehypeRaw to support HTML content in NS API docs.
+      rehypePlugins={[rehypeMathjax, rehypeRaw]}
     >
       {pageContent}
     </ReactMarkdown>
