@@ -61,7 +61,7 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
     console.error("Unexpected error:", e);
     const msg = `Unexpected type of error thrown. This error was likely thrown manually within a script.
         Error has been logged to the console.\n\nType of error: ${typeof e}\nValue of error: ${e}`;
-    DisplayError(msg, "UNKNOWN", ws?.scriptRef?.filename, ws?.hostname ?? "", ws?.pid ?? -1);
+    DisplayError(msg, "UNKNOWN", ws?.scriptRef?.filename, ws?.hostname, ws?.pid);
   }
 }
 
