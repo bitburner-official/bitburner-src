@@ -6,7 +6,7 @@ export function setupUncaughtPromiseHandler(): void {
     handleUnknownError(
       e.reason,
       null,
-      "UNCAUGHT PROMISE ERROR\nYou forgot to await a promise\nmaybe hack / grow / weaken ?\n\n",
+      "UNCAUGHT PROMISE ERROR\nYou forgot to handle a promise's error (e.g., ns.hack, ns.grow, ns.weaken).\n\n",
     );
   });
 }
