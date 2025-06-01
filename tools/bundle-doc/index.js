@@ -5,6 +5,10 @@ const docFiles = [];
 const nsDocFiles = [];
 const docRoot = path.resolve(__dirname, "../../src/Documentation/doc");
 const markdownRoot = path.resolve(__dirname, "../../markdown");
+const addFileToListOfDocPages = (files, root, filePath) => {
+  // Windows path uses "\", so we need to replace it with "/".
+  files.push(path.relative(root, filePath).replace(/\\/g, "/"));
+};
 const processDir = (dir) => {
   console.log(dir);
   for (const file of fs.readdirSync(dir)) {
@@ -14,11 +18,9 @@ const processDir = (dir) => {
       continue;
     }
     if (filePath.startsWith(docRoot)) {
-      // Windows path uses "\", so we need to replace it with "/".
-      docFiles.push(path.relative(docRoot, filePath).replace(/\\/g, "/"));
+      addFileToListOfDocPages(docFiles, docRoot, filePath);
     } else {
-      // Windows path uses "\", so we need to replace it with "/".
-      nsDocFiles.push(path.relative(markdownRoot, filePath).replace(/\\/g, "/"));
+      addFileToListOfDocPages(nsDocFiles, markdownRoot, filePath);
     }
   }
 };

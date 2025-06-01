@@ -12,7 +12,7 @@ const regex = /^bitburner\.|\.md$/g;
 
 const suggestions = nsApiPages.filter((v) => {
   // index.md in the "markdown" folder is useless.
-  return !["index.md"].includes(v);
+  return v !== "index.md";
 });
 
 type DocumentationAutocompleteProps = {
@@ -31,7 +31,7 @@ export function DocumentationAutocomplete({ sx, onChange }: DocumentationAutocom
       freeSolo
       disableClearable
       /**
-       * onChange of Autocomplete (not this TextField) is only called when the current value has not been changed. This
+       * onChange of Autocomplete (not this TextField) is only called when the current value has been changed. This
        * means that onChange will not be called if the player chooses an option again. For example:
        * - Type "ns" -> Choose "bitburner.ns.md": Triggered.
        * - Type "ns" -> Choose "bitburner.ns.md" -> Close popup -> Choose "bitburner.ns.md" again: Not triggered.
