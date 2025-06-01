@@ -56,7 +56,11 @@ export function ErrorModal(): React.ReactElement {
           <h2>{error.errorType} ERROR</h2>
           {/* Add a zero-width space after each slash to allow clean wrapping. */}
           <p style={{ whiteSpace: "pre-wrap" }}>{error.message.replaceAll("/", "/\u200B")}</p>
-          <p>Script: {error.scriptName}</p>
+          <p>
+            Script: {error.scriptName}
+            <br />
+            PID: {error.pid}
+          </p>
           <div>
             <OptionSwitch
               checked={ErrorState.PreventModals}
