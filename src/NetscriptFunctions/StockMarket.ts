@@ -45,10 +45,10 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
 
   return {
     getConstants: () => () => structuredClone(StockMarketConstants),
-    hasWSEAccount: () => () => Player.hasWseAccount,
-    hasTIXAPIAccess: () => () => Player.hasTixApiAccess,
+    hasWseAccount: () => () => Player.hasWseAccount,
+    hasTixApiAccess: () => () => Player.hasTixApiAccess,
     has4SData: () => () => Player.has4SData,
-    has4SDataTIXAPI: () => () => Player.has4SDataTixApi,
+    has4SDataTixApi: () => () => Player.has4SDataTixApi,
     getSymbols: (ctx) => () => {
       checkTixApiAccess(ctx);
       return Object.values(StockSymbol);

@@ -93,7 +93,7 @@ export const breakingChanges300: VersionBreakingChange = {
         "ns.closeTail() was removed.\n" +
         'It has been automatically replaced with "ns.ui.closeTail()".\n\n' +
         "ns.setTitle() was removed.\n" +
-        'It has been automatically replaced with "ns.ui.setTailTitle()".\n\n',
+        'It has been automatically replaced with "ns.ui.setTailTitle()".',
       showPopUp: false,
     },
     {
@@ -108,7 +108,7 @@ export const breakingChanges300: VersionBreakingChange = {
       ],
       info:
         "ns.corporation.setAutoJobAssignment() was removed.\n" +
-        'It has been automatically replaced with "ns.corporation.setJobAssignment()".\n\n',
+        'It has been automatically replaced with "ns.corporation.setJobAssignment()".',
       showPopUp: false,
     },
     {
@@ -142,6 +142,42 @@ export const breakingChanges300: VersionBreakingChange = {
         `ns.nuke, ns.brutessh, ns.ftpcrack, ns.relaysmtp, ns.httpworm, and ns.sqlinject now do not throw an error when you do not have the required .exe file or enough opened ports.\n` +
         "This should not be a problem with most scripts. However, if you were catching errors and branching on the result of success/failure, you will need to use the return value instead.",
       showPopUp: true,
+    },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.stock.getConstants().WSEAccountCost",
+          migration: { searchValue: "WSEAccountCost", replaceValue: "WseAccountCost" },
+        },
+        {
+          name: "ns.stock.getConstants().TIXAPICost",
+          migration: { searchValue: "TIXAPICost", replaceValue: "TixApiCost" },
+        },
+        {
+          name: "ns.stock.hasWSEAccount",
+          migration: { searchValue: "hasWSEAccount", replaceValue: "hasWseAccount" },
+        },
+        {
+          name: "ns.stock.hasTIXAPIAccess",
+          migration: { searchValue: "hasTIXAPIAccess", replaceValue: "hasTixApiAccess" },
+        },
+        {
+          name: "ns.stock.has4SDataTIXAPI",
+          migration: { searchValue: "has4SDataTIXAPI", replaceValue: "has4SDataTixApi" },
+        },
+      ],
+      info:
+        "ns.stock.getConstants().WSEAccountCost was removed.\n" +
+        'It has been automatically replaced with "ns.stock.getConstants().WseAccountCost".\n\n' +
+        "ns.stock.getConstants().TIXAPICost was removed.\n" +
+        'It has been automatically replaced with "ns.stock.getConstants().TixApiCost".\n\n' +
+        "ns.stock.hasWSEAccount() was removed.\n" +
+        'It has been automatically replaced with "ns.stock.hasWseAccount()".\n\n' +
+        "ns.stock.hasTIXAPIAccess() was removed.\n" +
+        'It has been automatically replaced with "ns.stock.hasTixApiAccess()".\n\n' +
+        "ns.stock.has4SDataTIXAPI() was removed.\n" +
+        'It has been automatically replaced with "ns.stock.has4SDataTixApi()".',
+      showPopUp: false,
     },
   ],
 };
