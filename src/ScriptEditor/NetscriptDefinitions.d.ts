@@ -4642,20 +4642,30 @@ export interface GoAnalysis {
 
   /**
    * Adds a colored circle indicator to the specified point. These indicators are removed once a move is played.
-   * @param x the x coordinate to highlight
-   * @param y the y coordinate to highlight
-   * @param color optional: the color to use for the circle. Can be given an RGB string like "#FFF000", or "none" to clear it, or one of
-   *    these color names from the selected theme: "hack" (green), "hp" (red), "money" (yellow), "int" (blue), "cha" (purple)
-   * @param text optional: text to add to the node (replaces the default A.1 or B5 seen on hover). Should be kept short to fit well.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param x - The x coordinate to highlight
+   * @param y -  The y coordinate to highlight
+   * @param color -  The color to use for the circle. It can be any value accepted by
+   * {@link https://developer.mozilla.org/en-US/docs/Web/CSS/outline-color | outline-color CSS property} (e.g., an RGB
+   * string like "#FFF000"). You can also use "none" to clear it or one of 5 special values: "hack", "hp", "money",
+   * "int", "cha". The corresponding colors of 5 special values depend on your theme.
+   * @param text - Text to add to the node (replaces the default A.1 or B5 seen on hover). Should be kept short to fit well.
    */
-  highlightPoint(x, y, color, text): void;
+  highlightPoint(x: number, y: number, color?: string, text?: string): void;
 
   /**
    * Removes the highlight color and text from the specified node.
-   * @param x the x coordinate to remove highlight from
-   * @param y the y coordinate to remove highlight from
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param x - the x coordinate to remove highlight from
+   * @param y - the y coordinate to remove highlight from
    */
-  clearPointHighlight(x, y): void;
+  clearPointHighlight(x: number, y: number): void;
 
   /** Removes all highlights from the board. */
   clearAllPointHighlights(): void;
