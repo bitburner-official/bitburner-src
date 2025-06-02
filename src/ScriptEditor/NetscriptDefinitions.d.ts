@@ -2130,8 +2130,7 @@ export interface Singularity {
    * const success = ns.singularity.workForCompany(companyName);
    * if (!success) ns.tprint(`ERROR: Failed to start work at ${companyName}.`);
    * ```
-   * @param companyName - Name of company to work for. Must be an exact match. Optional. If not specified, this
-   *   argument defaults to the last job that you worked.
+   * @param companyName - Name of company to work for. Must be an exact match.
    * @param focus - Acquire player focus on this work operation. Optional. Defaults to true.
    * @returns True if the player starts working, and false otherwise.
    */
@@ -9324,7 +9323,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @param selfFund - If you want to self-fund. Defaults to true, false will only work in BitNode 3.
    * @returns true if created and false if not
    */
-  createCorporation(corporationName: string, selfFund: boolean): boolean;
+  createCorporation(corporationName: string, selfFund?: boolean): boolean;
 
   /**
    * Check if you have a one-time unlockable upgrade.
