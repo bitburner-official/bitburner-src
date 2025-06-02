@@ -746,7 +746,7 @@ interface BitNodeMultipliers {
   /** Influences the maximum allowed RAM for a purchased server */
   PurchasedServerMaxRam: number;
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
-  RepToDonateToFaction: number;
+  FavorToDonateToFaction: number;
   /** Influences how much money is stolen from a server when the player performs a hack against it. */
   ScriptHackMoney: number;
   /**

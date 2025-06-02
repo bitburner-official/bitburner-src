@@ -347,7 +347,7 @@ export const achievements: Record<AchievementId, Achievement> = {
     Icon: "donation",
     Condition: () =>
       Object.values(Factions).some(
-        (f) => f.favor >= Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.RepToDonateToFaction),
+        (f) => f.favor >= Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.FavorToDonateToFaction),
       ),
   },
   TRAVEL: {

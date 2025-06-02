@@ -179,5 +179,17 @@ export const breakingChanges300: VersionBreakingChange = {
         'It has been automatically replaced with "ns.stock.has4SDataTixApi()".',
       showPopUp: false,
     },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.getBitNodeMultipliers().RepToDonateToFaction",
+          migration: { searchValue: "RepToDonateToFaction", replaceValue: "FavorToDonateToFaction" },
+        },
+      ],
+      info:
+        "ns.getBitNodeMultipliers().RepToDonateToFaction was removed.\n" +
+        'It has been automatically replaced with "ns.getBitNodeMultipliers().FavorToDonateToFaction".',
+      showPopUp: false,
+    },
   ],
 };
