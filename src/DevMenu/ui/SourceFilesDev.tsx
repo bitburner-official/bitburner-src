@@ -8,9 +8,10 @@ import { Player } from "@player";
 import { Sleeve } from "../../PersonObjects/Sleeve/Sleeve";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { MaxSleevesFromCovenant } from "../../PersonObjects/Sleeve/SleeveCovenantPurchases";
+import { validBitNodes } from "../../BitNode/Constants";
+import { DeleteServer, GetAllServers } from "../../Server/AllServers";
+import { HacknetServer } from "../../Hacknet/HacknetServer";
 
-// Update as additional BitNodes get implemented
-const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 const useStyles = makeStyles()({
   group: {
     display: "inline-flex",
@@ -29,6 +30,12 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
     (sfN: number, sfLvl: number) => () => {
       if (sfN === 9) {
         Player.hacknetNodes = [];
+        for (const server of GetAllServers()) {
+          if (!(server instanceof HacknetServer)) {
+            continue;
+          }
+          DeleteServer(server.hostname);
+        }
       }
       if (sfLvl === 0) {
         Player.sourceFiles.delete(sfN);
@@ -49,7 +56,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
     [parentRerender],
   );
 
-  const setAllSF = useCallback((sfLvl: number) => () => validSFN.forEach((sfN) => setSF(sfN, sfLvl)()), [setSF]);
+  const setAllSF = useCallback((sfLvl: number) => () => validBitNodes.forEach((sfN) => setSF(sfN, sfLvl)()), [setSF]);
   const clearExploits = () => (Player.exploits = []);
 
   const addSleeve = useCallback(() => {
@@ -131,7 +138,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
                 <Button onClick={clearExploits}>Clear</Button>
               </td>
             </tr>
-            {[undefined, ...validSFN].map((sfN) => buttonRow(sfN))}
+            {[undefined, ...validBitNodes].map((sfN) => buttonRow(sfN))}
           </tbody>
         </table>
       </AccordionDetails>
