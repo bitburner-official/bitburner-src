@@ -112,18 +112,18 @@ export abstract class BaseServer implements IServer {
   // Flag indicating whether this is a purchased server
   purchasedByPlayer = false;
 
-  // Optional, listed just so they can be accessed on a BaseServer. These will be undefined for HacknetServers.
-  backdoorInstalled?: boolean;
-  baseDifficulty?: number;
-  hackDifficulty?: number;
-  minDifficulty?: number;
-  moneyAvailable?: number;
-  moneyMax?: number;
-  numOpenPortsRequired?: number;
-  openPortCount?: number;
-  requiredHackingSkill?: number;
-  serverGrowth?: number;
-  isHacknetServer?: boolean;
+  // Inherited classes (Server and HacknetServer) should override these values and give them sensible values if needed.
+  backdoorInstalled = false;
+  baseDifficulty = 1;
+  hackDifficulty = 1;
+  minDifficulty = 1;
+  moneyAvailable = 0;
+  moneyMax = 0;
+  numOpenPortsRequired = 5;
+  openPortCount = 0;
+  requiredHackingSkill = 1;
+  serverGrowth = 1;
+  isHacknetServer = false;
 
   constructor(params: IConstructorParams = { hostname: "", ip: createRandomIp() }) {
     this.ip = params.ip ? params.ip : createRandomIp();

@@ -9,5 +9,5 @@ Growth effectiveness statistic. Higher values produce more growth with ns.grow()
 **Signature:**
 
 ```typescript
-serverGrowth?: number;
+serverGrowth: number;
 ```

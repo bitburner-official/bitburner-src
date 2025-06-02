@@ -9,5 +9,5 @@ Server's initial server security level at creation.
 **Signature:**
 
 ```typescript
-baseDifficulty?: number;
+baseDifficulty: number;
 ```
