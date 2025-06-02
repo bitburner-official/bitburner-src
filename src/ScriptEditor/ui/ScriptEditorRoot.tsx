@@ -186,7 +186,7 @@ function Root(props: IProps): React.ReactElement {
       return;
     }
     // this is duplicate code with saving later.
-    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalTypeScript) {
+    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalEditScript) {
       //Make sure filename + code properly follow tutorial
       if (currentScript.path !== "n00dles.js") {
         dialogBoxCreate("Don't change the script name for now.");

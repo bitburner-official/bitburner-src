@@ -23,6 +23,9 @@ import { OptionsModal, OptionsModalProps } from "./OptionsModal";
 import { useScriptEditorContext } from "./ScriptEditorContext";
 import { NsApiDocumentationLink } from "../../ui/React/NsApiDocumentationLink";
 import { CurrentKeyBindings, parseKeyCombinationsToString, ScriptEditorAction } from "../../utils/KeyBindingUtils";
+import { DocumentationAutocomplete } from "../../Documentation/ui/DocumentationAutocomplete";
+import { openDocumentationPopUp } from "../../Documentation/root";
+import { openDocExternally } from "../../ui/React/Documentation";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
@@ -82,6 +85,16 @@ export function Toolbar({ editor, onSave, onRun }: IProps) {
             Run
           </Button>
         </Tooltip>
+        <DocumentationAutocomplete
+          sx={{ marginRight: "10px" }}
+          onChange={(path, external) => {
+            if (external) {
+              openDocExternally(path);
+              return;
+            }
+            openDocumentationPopUp(path);
+          }}
+        />
         <Typography>
           <NsApiDocumentationLink />
         </Typography>

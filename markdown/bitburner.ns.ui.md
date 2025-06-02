@@ -4,7 +4,7 @@
 
 ## NS.ui property
 
-Namespace for user interface functions.
+Namespace for [user interface](./bitburner.userinterface.md) functions.
 
 **Signature:**
 

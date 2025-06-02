@@ -5,7 +5,7 @@ import { LiProps, TableDataCellProps, TableHeaderCellProps } from "react-markdow
 import { makeStyles } from "tss-react/mui";
 const useStyles = makeStyles()((theme: Theme) => ({
   th: { whiteSpace: "pre", fontWeight: "bold" },
-  td: { whiteSpace: "pre" },
+  td: { button: { textAlign: "left" } },
   blockquote: {
     borderLeftColor: theme.palette.background.paper,
     borderLeftStyle: "solid",
@@ -45,16 +45,34 @@ export const h6 = (props: React.PropsWithChildren<object>): React.ReactElement =
   <Typography variant="h6">{props.children}</Typography>
 );
 
-export const p = (props: React.PropsWithChildren<object>): React.ReactElement => (
-  <Typography sx={{ mb: 1 }}>{props.children}</Typography>
-);
+export const p = (props: React.PropsWithChildren<object>): React.ReactElement => {
+  /**
+   * The "header" of all NS API pages (except index.md) looks like this:
+   * - bitburner.md: Home > bitburner
+   * - Other pages: Home > bitburner > something
+   *
+   * The "Home" button (index.md) is useless. It's also confusing because we have a custom "Home" button linking to
+   * src\Documentation\doc\index.md. If we want to customize this "header", we have to customize api-documenter, which
+   * is a complicated task. In order to remove the useless "Home" link, it's easier to check the content of
+   * props.children like this. It's not ideal, but it does the job well.
+   */
+  if (
+    Array.isArray(props.children) &&
+    props.children.length >= 3 &&
+    (props.children[0] as { props?: { href: unknown } }).props?.href === "./index.md" &&
+    props.children[1] === " > "
+  ) {
+    props.children.splice(0, 2);
+  }
+  return <Typography sx={{ mb: 1 }}>{props.children}</Typography>;
+};
 
 export const li = (props: React.PropsWithChildren<LiProps>): React.ReactElement => {
-  const prefix = props.ordered ? `${props.index + 1}. ` : "· ";
   return (
     <ListItemText>
-      {prefix}
-      {props.children}
+      <Typography component="div" sx={{ display: "list-item" }}>
+        {props.children}
+      </Typography>
     </ListItemText>
   );
 };
@@ -82,7 +100,7 @@ export const Td = (props: React.PropsWithChildren<TableDataCellProps>): React.Re
   });
   return (
     <TableCell align={align}>
-      <Typography align={align} classes={{ root: classes.td }}>
+      <Typography component="div" align={align} classes={{ root: classes.td }}>
         {content}
       </Typography>
     </TableCell>

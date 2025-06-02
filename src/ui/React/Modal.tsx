@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { type CSSProperties, useEffect, useState } from "react";
 import { Theme } from "@mui/material";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -43,6 +43,7 @@ interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
   sx?: SxProps<Theme>;
+  wrapperStyles?: CSSProperties;
   removeFocus?: boolean;
   // If it's true, the player can dismiss the modal by pressing the Esc button or clicking on the backdrop.
   canBeDismissedEasily?: boolean;
@@ -53,6 +54,7 @@ export const Modal = ({
   onClose,
   children,
   sx,
+  wrapperStyles,
   removeFocus = true,
   canBeDismissedEasily = true,
 }: ModalProps): React.ReactElement => {
@@ -83,6 +85,7 @@ export const Modal = ({
       <Fade in={open}>
         <div
           className={classes.paper}
+          style={wrapperStyles}
           //@ts-expect-error inert is not supported by react types yet, this is a workaround until then. https://github.com/facebook/react/pull/24730
           inert={open ? null : ""}
         >

@@ -334,14 +334,14 @@ export function InteractiveTutorialRoot(): React.ReactElement {
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalTypeScript as number]: {
+    [iTutorialSteps.TerminalEditScript as number]: {
       content: (
         <>
           <Typography>
             This is the script editor. You can use it to program your scripts. Click this text to copy it and paste it
-            into the text editor: <br />
+            into the text editor:
           </Typography>
-
+          <br />
           <Typography component="div" classes={{ root: classes.code }}>
             {
               <CopyableText
@@ -354,9 +354,13 @@ export async function main(ns) {
               />
             }
           </Typography>
+          <br />
           <Typography>
             For anyone with basic programming experience, this code should be straightforward. This script will
             continuously hack the n00dles server.
+            <br />
+            <br />
+            Use the search tool at the bottom to find and have a quick glance at documentation of any NS APIs.
             <br />
             <br />
             To access <NsApiDocumentationLink />, press the link at the bottom.
@@ -540,6 +544,10 @@ export async function main(ns) {
           This page contains a lot of different documentation about the game's contents and mechanics. I know it's a
           lot, but I highly suggest you read (or at least skim) through this before you start playing. Some pages are
           inaccessible at the start and will be unlocked later.
+          <br />
+          <br />
+          If you click a link in these pages while holding Ctrl key (Control key on Mac keyboard), it will be opened in
+          a new tab. If you play the Steam version, that link will be opened in your default browser.
           <br />
           <br />
           You should at least check these pages:
