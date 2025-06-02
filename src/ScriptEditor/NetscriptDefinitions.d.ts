@@ -1,5 +1,3 @@
-import { Minigames } from "../DarkNet/enums";
-
 /**
  * @public
  */
@@ -1786,8 +1784,11 @@ export type Task = StudyTask | CompanyWorkTask | CreateProgramWorkTask | CrimeTa
 
 /**
  * Default value:
+ *
  * - sourceFileOverrides: an empty Map
+ *
  * - intelligenceOverride: undefined
+ *
  * - All boolean options: false
  *
  * If you specify intelligenceOverride, it must be a non-negative integer.
@@ -1800,10 +1801,12 @@ export interface BitNodeOptions extends BitNodeBooleanOptions {
 }
 
 /**
- * restrictHomePCUpgrade: The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max
+ * Note:
+ *
+ * - restrictHomePCUpgrade: The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max
  * core: 1.
  *
- * disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy
+ * - disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy
  * augmentations for them.
  *
  * @public
@@ -4149,7 +4152,7 @@ export interface DarknetServer {
   /** The amount of ram blocked by the server owner */
   ramBlock: number;
   /** The model of the server. Similar models have similar vulnerabilites. */
-  modelId: Minigames;
+  modelId: string;
   /** The generic password prompt for the server */
   staticPasswordHint: string;
   /** Data associated with the password hint */
@@ -6539,19 +6542,19 @@ interface UserInterface {
  */
 export interface NS {
   /**
-   * Namespace for hacknet functions. Some of this API contains spoilers.
+   * Namespace for {@link Hacknet | hacknet} functions. Some of this API contains spoilers.
    * @remarks RAM cost: 4 GB.
    */
   readonly hacknet: Hacknet;
 
   /**
-   * Namespace for bladeburner functions. Contains spoilers.
+   * Namespace for {@link Bladeburner | Bladeburner} functions. Contains spoilers.
    * @remarks RAM cost: 0 GB
    */
   readonly bladeburner: Bladeburner;
 
   /**
-   * Namespace for codingcontract functions.
+   * Namespace for {@link CodingContract | coding contract} functions.
    * @remarks RAM cost: 0 GB
    */
   readonly codingcontract: CodingContract;
@@ -6563,73 +6566,73 @@ export interface NS {
   readonly dnet: Darknet;
 
   /**
-   * Namespace for formatting functions.
+   * Namespace for {@link Format | formatting} functions.
    * @remarks RAM cost: 0 GB
    */
   readonly format: Format;
 
   /**
-   * Namespace for gang functions. Contains spoilers.
+   * Namespace for {@link Gang | gang} functions. Contains spoilers.
    * @remarks RAM cost: 0 GB
    */
   readonly gang: Gang;
 
   /**
-   * Namespace for Go functions.
+   * Namespace for {@link Go | Go} functions.
    * @remarks RAM cost: 0 GB
    */
   readonly go: Go;
 
   /**
-   * Namespace for sleeve functions. Contains spoilers.
+   * Namespace for {@link Sleeve | sleeve} functions. Contains spoilers.
    * @remarks RAM cost: 0 GB
    */
   readonly sleeve: Sleeve;
 
   /**
-   * Namespace for stock functions.
+   * Namespace for {@link TIX | stock} functions.
    * @remarks RAM cost: 0 GB
    */
   readonly stock: TIX;
 
   /**
-   * Namespace for formulas functions.
+   * Namespace for {@link Formulas | formulas} functions.
    * @remarks RAM cost: 0 GB
    */
   readonly formulas: Formulas;
 
   /**
-   * Namespace for stanek functions. Contains spoilers.
+   * Namespace for {@link Stanek | Stanek} functions. Contains spoilers.
    * @remarks RAM cost: 0 GB
    */
   readonly stanek: Stanek;
 
   /**
-   * Namespace for infiltration functions.
+   * Namespace for {@link Infiltration | infiltration} functions.
    * @remarks RAM cost: 0 GB
    */
   readonly infiltration: Infiltration;
 
   /**
-   * Namespace for corporation functions. Contains spoilers.
+   * Namespace for {@link Corporation | corporation} functions. Contains spoilers.
    * @remarks RAM cost: 0 GB
    */
   readonly corporation: Corporation;
 
   /**
-   * Namespace for user interface functions.
+   * Namespace for {@link UserInterface | user interface} functions.
    * @remarks RAM cost: 0 GB
    */
   readonly ui: UserInterface;
 
   /**
-   * Namespace for singularity functions. Contains spoilers.
+   * Namespace for {@link Singularity | singularity} functions. Contains spoilers.
    * @remarks RAM cost: 0 GB
    */
   readonly singularity: Singularity;
 
   /**
-   * Namespace for grafting functions. Contains spoilers.
+   * Namespace for {@link Grafting | grafting} functions. Contains spoilers.
    * @remarks RAM cost: 0 GB
    */
   readonly grafting: Grafting;
@@ -9171,6 +9174,10 @@ type NSEnums = {
   CompanyName: CompanyNameEnumType;
   FactionName: FactionNameEnumType;
   CodingContractName: CodingContractNameEnumType;
+  PositionType: PositionEnumType;
+  OrderType: OrderEnumType;
+  BladeburnerActionType: BladeburnerActionEnumType;
+  SpecialBladeburnerActionTypeForSleeve: SpecialBladeburnerActionEnumTypeForSleeve;
 };
 
 /**

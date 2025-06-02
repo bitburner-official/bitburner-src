@@ -9,14 +9,14 @@ Gets the expected amount off ram that will be freed by a call to dnet.memoryReal
 **Signature:**
 
 ```typescript
-getExpectedRamBlockRemoved(server: IDarknetServer, threads?: number, player?: Person): number;
+getExpectedRamBlockRemoved(server: DarknetServer, threads?: number, player?: Person): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  server | [IDarknetServer](./bitburner.idarknetserver.md) | The server to check ram freed on. |
+|  server | [DarknetServer](./bitburner.darknetserver.md) | The server to check ram freed on. |
 |  threads | number | _(Optional)_ The number of threads used in the memoryReallocation call. Optional, defaults to 1 |
 |  player | [Person](./bitburner.person.md) | _(Optional)_ The player object. Optional, defaults to the current player status |
 

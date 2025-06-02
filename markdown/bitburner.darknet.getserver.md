@@ -9,7 +9,7 @@ Returns a server object for the given server. Defaults to the running script's s
 **Signature:**
 
 ```typescript
-getServer(host?: string): IDarknetServer | null;
+getServer(host?: string): DarknetServer | null;
 ```
 
 ## Parameters
@@ -20,7 +20,7 @@ getServer(host?: string): IDarknetServer | null;
 
 **Returns:**
 
-[IDarknetServer](./bitburner.idarknetserver.md) \| null
+[DarknetServer](./bitburner.darknetserver.md) \| null
 
 The requested server object, or null if the server is not found.
 

@@ -14,9 +14,9 @@
 |  [BackdoorRequirement](./bitburner.backdoorrequirement.md) | Player must have installed a backdoor on this server. |
 |  [BaseTask](./bitburner.basetask.md) | Base interface of all tasks. |
 |  [BasicHGWOptions](./bitburner.basichgwoptions.md) | Options to affect the behavior of [hack](./bitburner.ns.hack.md)<!-- -->, [grow](./bitburner.ns.grow.md)<!-- -->, and [weaken](./bitburner.ns.weaken.md)<!-- -->. |
-|  [BitNodeBooleanOptions](./bitburner.bitnodebooleanoptions.md) | <p>restrictHomePCUpgrade: The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max core: 1.</p><p>disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy augmentations for them.</p> |
+|  [BitNodeBooleanOptions](./bitburner.bitnodebooleanoptions.md) | <p>Note:</p><p>- restrictHomePCUpgrade: The home computer's maximum RAM and number of cores are lower than normal. Max RAM: 128GB. Max core: 1.</p><p>- disableSleeveExpAndAugmentation: Your Sleeves do not gain experience when they perform action. You also cannot buy augmentations for them.</p> |
 |  [BitNodeMultipliers](./bitburner.bitnodemultipliers.md) | All multipliers affecting the difficulty of the current challenge. |
-|  [BitNodeOptions](./bitburner.bitnodeoptions.md) | <p>Default value: - sourceFileOverrides: an empty Map - intelligenceOverride: undefined - All boolean options: false</p><p>If you specify intelligenceOverride, it must be a non-negative integer.</p> |
+|  [BitNodeOptions](./bitburner.bitnodeoptions.md) | <p>Default value:</p><p>- sourceFileOverrides: an empty Map</p><p>- intelligenceOverride: undefined</p><p>- All boolean options: false</p><p>If you specify intelligenceOverride, it must be a non-negative integer.</p> |
 |  [BitNodeRequirement](./bitburner.bitnoderequirement.md) | Player must be located in this BitNode. |
 |  [Bladeburner](./bitburner.bladeburner.md) | Bladeburner API |
 |  [BladeburnerCurAction](./bitburner.bladeburnercuraction.md) | Bladeburner current action. |
@@ -38,6 +38,7 @@
 |  [CrimeTask](./bitburner.crimetask.md) | Crime |
 |  [Darknet](./bitburner.darknet.md) | Darknet API |
 |  [DarknetFormulas](./bitburner.darknetformulas.md) | Darknet formulas |
+|  [DarknetServer](./bitburner.darknetserver.md) | Darknet server information. |
 |  [Division](./bitburner.division.md) | Corporation division |
 |  [EmployedByRequirement](./bitburner.employedbyrequirement.md) | Player must be working for this company. |
 |  [EquipmentStats](./bitburner.equipmentstats.md) | Object representing data representing a gang member equipment. |
@@ -186,7 +187,6 @@
 |  [GymType](./bitburner.gymtype.md) |  |
 |  [HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md) |  |
 |  [HeartbleedOptions](./bitburner.heartbleedoptions.md) | Response from attempting to scrape logs from a server |
-|  [IDarknetServer](./bitburner.idarknetserver.md) | Darknet server information. |
 |  [JobField](./bitburner.jobfield.md) |  |
 |  [JobFieldEnumType](./bitburner.jobfieldenumtype.md) |  |
 |  [JobName](./bitburner.jobname.md) |  |

@@ -9,14 +9,14 @@ Gets the time it will take to authenticate a server.
 **Signature:**
 
 ```typescript
-getAuthenticateTime(server: IDarknetServer, threads?: number, player?: Person): number;
+getAuthenticateTime(server: DarknetServer, threads?: number, player?: Person): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  server | [IDarknetServer](./bitburner.idarknetserver.md) | The server to check authentication time on. |
+|  server | [DarknetServer](./bitburner.darknetserver.md) | The server to check authentication time on. |
 |  threads | number | _(Optional)_ The number of threads to use for the authentication. Optional, defaults to 1 |
 |  player | [Person](./bitburner.person.md) | _(Optional)_ The player object. Optional, defaults to the current player status |
 

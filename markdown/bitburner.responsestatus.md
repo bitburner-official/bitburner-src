@@ -9,7 +9,7 @@ Response statuses used for authenticate and connectToSession methods
 **Signature:**
 
 ```typescript
-type ResponseStatus =
+export type ResponseStatus =
   | "200 Success"
   | "401 Unauthorized"
   | "404 Not Found"

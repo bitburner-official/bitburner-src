@@ -3,7 +3,7 @@ import { BaseServer, IConstructorParams } from "./BaseServer";
 import { constructorsForReviver, IReviverValue } from "../utils/JSONReviver";
 import { DarknetServer as IDarknetServer } from "@nsdefs";
 import { DarknetServerData } from "../DarkNet/models/DarknetServerOptions";
-import { exampleDarknetServer, Minigames } from "../DarkNet/enums";
+import { exampleDarknetServer } from "../DarkNet/enums";
 import { createRandomIp } from "../utils/IPAddress";
 
 export class DarknetServer extends BaseServer implements IDarknetServer, DarknetServerData {
@@ -12,7 +12,7 @@ export class DarknetServer extends BaseServer implements IDarknetServer, Darknet
   /** The password for the server, used for authentication */
   password: string;
   /** The model of the server. Similar models have similar vulnerabilities. */
-  modelId: Minigames;
+  modelId: string;
   /** The generic password prompt for the server */
   staticPasswordHint: string;
   /** Data associated with the password hint */

@@ -1,5 +1,4 @@
 import { Settings } from "../Settings/Settings";
-import { CONSTANTS } from "../Constants";
 import { pluralize } from "./I18nUtils";
 
 /*
@@ -99,12 +98,6 @@ export function capitalizeEachWord(s: string): string {
     .split(" ")
     .map((word) => capitalizeFirstLetter(word))
     .join(" ");
-}
-
-export function getNsApiDocumentationUrl(isDevBranch: boolean = CONSTANTS.isDevBranch): string {
-  return `https://github.com/bitburner-official/bitburner-src/blob/${
-    isDevBranch ? "dev" : "stable"
-  }/markdown/bitburner.ns.md`;
 }
 
 export function getKeyFromReactElements(a: string | React.JSX.Element, b: string | React.JSX.Element): string {
