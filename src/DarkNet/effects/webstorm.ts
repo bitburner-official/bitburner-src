@@ -12,7 +12,7 @@ import {
 } from "../controllers/NetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
 import { getNetDepth } from "./labyrinth";
-import { NET_WIDTH } from "../enums";
+import { NET_WIDTH } from "../Enums";
 
 export const WEBSTORM = async (suppressToast = false) => {
   DarknetState.isMutating = false;

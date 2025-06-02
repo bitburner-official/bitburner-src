@@ -8,7 +8,7 @@ import { errorMessage } from "../../Netscript/ErrorMessages";
 import { BaseServer } from "../../Server/BaseServer";
 import { GetServer } from "../../Server/AllServers";
 import { DarknetState } from "../models/DarknetState";
-import { ResponseStatus } from "../enums";
+import { ResponseStatus } from "../Enums";
 
 type failureResultOptions = {
   requireDarknet?: boolean;

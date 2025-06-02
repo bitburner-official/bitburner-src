@@ -3,7 +3,7 @@ import { BaseServer, IConstructorParams } from "./BaseServer";
 import { constructorsForReviver, IReviverValue } from "../utils/JSONReviver";
 import { DarknetServer as IDarknetServer } from "@nsdefs";
 import { DarknetServerData } from "../DarkNet/models/DarknetServerOptions";
-import { exampleDarknetServer } from "../DarkNet/enums";
+import { exampleDarknetServer } from "../DarkNet/Enums";
 import { createRandomIp } from "../utils/IPAddress";
 
 export class DarknetServer extends BaseServer implements IDarknetServer, DarknetServerData {

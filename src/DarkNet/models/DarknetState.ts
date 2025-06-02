@@ -3,7 +3,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { isDarknetServer } from "../effects/effects";
-import { MAX_NET_DEPTH, NET_WIDTH } from "../enums";
+import { MAX_NET_DEPTH, NET_WIDTH } from "../Enums";
 
 /** Event emitter to allow the UI to subscribe to Go gameplay updates in order to trigger rerenders properly */
 export const DarknetEvents = new EventEmitter();

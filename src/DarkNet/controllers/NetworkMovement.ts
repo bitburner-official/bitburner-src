@@ -11,7 +11,7 @@ import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { getDarknetData, isDarknetServer } from "../effects/effects";
 import { CONSTANTS } from "../../Constants";
-import { AIR_GAP_DEPTH, MS_PER_MUTATION_PER_ROW, NET_WIDTH, SERVER_DENSITY } from "../enums";
+import { AIR_GAP_DEPTH, MS_PER_MUTATION_PER_ROW, NET_WIDTH, SERVER_DENSITY } from "../Enums";
 
 export const processDarknet = (cycles: number) => {
   storeDarknetCycles(cycles);

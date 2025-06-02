@@ -1,7 +1,7 @@
 /**
  * @public
  */
-type _ValueOf<T> = T[keyof T];
+export type _ValueOf<T> = T[keyof T];
 
 /** All netscript definitions */
 
@@ -4114,13 +4114,16 @@ export interface Format {
  * Response statuses used for authenticate and connectToSession methods
  * @public
  */
-export type ResponseStatus =
-  | "200 Success"
-  | "401 Unauthorized"
-  | "404 Not Found"
-  | "408 Request Timeout"
-  | "301 Moved Permanently"
-  | "418 I'm a teapot";
+type ResponseStatus = {
+  SUCCESS: "200 Success";
+  AUTH_FAILURE: "401 Unauthorized";
+  NOT_FOUND: "404 Not Found";
+  TIMEOUT: "408 Request Timeout";
+  MOVED_PERMANENTLY: "301 Moved Permanently";
+  I_AM_A_TEAPOT: "418 I'm a teapot";
+};
+
+type ResponseStatusType = _ValueOf<ResponseStatus>;
 
 export type Result = { success: boolean; message: string };
 

@@ -4,6 +4,7 @@ export const numbers = "0123456789";
 export const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 export const special = "!@#$%^&*()_+-=[]{}|;:,.<>?";
 export const unicode = "¼░╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿";
+export const filler = "/[]╬╸.-()*~:;><#\\";
 
 export const defaultSettingsDictionary = ["admin", "password", "0000", "12345"];
 

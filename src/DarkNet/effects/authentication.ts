@@ -6,7 +6,7 @@ import { Result } from "@nsdefs";
 import { PasswordResponse } from "../models/DarknetServerOptions";
 import { logPasswordAttempt } from "../models/packetSniffing";
 import { getServerState } from "../models/DarknetState";
-import { Minigames, ResponseStatus } from "../enums";
+import { Minigames, ResponseStatus } from "../Enums";
 
 export const checkPassword = (
   attemptedPassword: string,

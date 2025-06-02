@@ -8,7 +8,7 @@ import { getDarknetServers, getDarknetServerSafely } from "../controllers/Networ
 import { getExactCorrectChars, getMastermindResponse } from "../effects/authentication";
 import { getServerState } from "./DarknetState";
 import { GetServer } from "../../Server/AllServers";
-import { Minigames } from "../enums";
+import { Minigames } from "../Enums";
 
 const MAX_LOG_LINES = 32;
 

@@ -5,53 +5,80 @@ import {
   defaultSettingsDictionary,
   dogNameDictionary,
   EUCountries,
+  filler,
   letters,
   numbers,
   special,
   unicode,
 } from "../models/dictionaryData";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { Minigames } from "../enums";
+import { Minigames, MinigamesType } from "../Enums";
 
-export const getDarknetServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
-  const easyServers = [getEchoVulnServer, getSortedEchoVulnServer, getDefaultPasswordServer];
+const getRandomServerConfigBuilder = (difficulty: number) => {
+  const easyServers = [getEchoVulnConfig, getSortedEchoVulnConfig, getDefaultPasswordConfig, getCaptchaConfig];
   const mediumServers = [
-    getMastermindHintServer,
-    getDefaultPasswordServer,
-    getDogNameServer,
-    getRomanNumeralServer,
-    getGuessNumberServer,
-    getYesn_tServer,
-    getSpiceLevelServer,
-    getConvertToBase10Server,
-    getDivisibilityTestServer,
-    getPacketSnifferServer,
+    getMastermindHintConfig,
+    getDefaultPasswordConfig,
+    getDogNameConfig,
+    getRomanNumeralConfig,
+    getGuessNumberConfig,
+    getYesn_tConfig,
+    getSpiceLevelConfig,
+    getConvertToBase10Config,
+    getDivisibilityTestConfig,
+    getPacketSnifferConfig,
   ];
   const hardServers = [
-    getLargestPrimeFactorServer,
-    getLargeDictionaryServer,
-    getEuCountryDictionaryServer,
-    getTimingAttackServer,
-    getBinaryEncodedFeedbackServer,
-    getParseArithmeticExpressionServer,
+    getLargestPrimeFactorConfig,
+    getLargeDictionaryConfig,
+    getEuCountryDictionaryConfig,
+    getTimingAttackConfig,
+    getBinaryEncodedConfig,
+    getParseArithmeticExpressionConfig,
   ];
+
   if (difficulty <= 2) {
-    const serverBuilders = [getNoPasswordServer, ...easyServers];
-    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, depth, leftOffset);
+    const serverBuilders = [getNoPasswordConfig, ...easyServers];
+    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)];
   }
   if (difficulty <= 4) {
-    const serverBuilders = [getNoPasswordServer, ...easyServers, ...easyServers, ...mediumServers];
-    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, depth, leftOffset);
+    const serverBuilders = [getNoPasswordConfig, ...easyServers, ...easyServers, ...mediumServers];
+    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)];
   }
   if (difficulty <= 8) {
     const serverBuilders = [...easyServers, ...mediumServers];
-    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, depth, leftOffset);
+    return serverBuilders[Math.floor(Math.random() * serverBuilders.length)];
   }
-  const serverBuilders = [getSortedEchoVulnServer, ...mediumServers, ...hardServers];
-  return serverBuilders[Math.floor(Math.random() * serverBuilders.length)](difficulty, depth, leftOffset);
+  const serverBuilders = [getSortedEchoVulnConfig, ...mediumServers, ...hardServers];
+  return serverBuilders[Math.floor(Math.random() * serverBuilders.length)];
 };
 
-export const getEchoVulnServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const getDarknetServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+  return serverFactory(getRandomServerConfigBuilder(difficulty), difficulty, depth, leftOffset);
+};
+
+type ServerConfig = {
+  modelId: MinigamesType;
+  password: string;
+  staticPasswordHint: string;
+  passwordHintData?: string;
+};
+
+const serverFactory = (
+  serverConfigBuilder: (n: number) => ServerConfig,
+  difficulty: number,
+  depth: number,
+  leftOffset: number,
+): DarknetServer => {
+  return DnetServerBuilder({
+    ...serverConfigBuilder(difficulty),
+    difficulty,
+    depth: depth,
+    leftOffset: leftOffset,
+  });
+};
+
+export const getEchoVulnConfig = (__difficulty: number): ServerConfig => {
   const hintTemplates = [
     "The password is",
     "The PIN is",
@@ -62,18 +89,14 @@ export const getEchoVulnServer = (difficulty: number, depth: number, leftOffset:
   ];
   const password = getPassword(3);
   const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${password}`;
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+  return {
     modelId: Minigames.EchoVuln,
     password,
     staticPasswordHint: hint,
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
-export const getSortedEchoVulnServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const getSortedEchoVulnConfig = (difficulty: number): ServerConfig => {
   const hintTemplates = [
     "The password is shuffled",
     "The key is made from",
@@ -83,38 +106,28 @@ export const getSortedEchoVulnServer = (difficulty: number, depth: number, leftO
   const password = getPassword(2 + difficulty / 6);
   const sortedPassword = password.split("").sort().join("");
   const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${sortedPassword}`;
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+  return {
     modelId: Minigames.SortedEchoVuln,
     password: password,
     staticPasswordHint: hint,
     passwordHintData: sortedPassword,
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
-export const getDictionaryAttackServer = (
+export const getDictionaryAttackConfig = (
   difficulty: number,
-  depth: number,
-  leftOffset: number,
   dictionary: string[],
   hintTemplates: string[],
-  minigameType: Minigames,
-): DarknetServer => {
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+  minigameType: MinigamesType,
+): ServerConfig => {
+  return {
     modelId: minigameType,
     password: dictionary[Math.floor(Math.random() * dictionary.length)],
     staticPasswordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
-export const getNoPasswordServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const getNoPasswordConfig = (difficulty: number): ServerConfig => {
   const hintTemplates = [
     "The password is not set",
     "There is no password",
@@ -122,10 +135,10 @@ export const getNoPasswordServer = (difficulty: number, depth: number, leftOffse
     "Did I set a code?",
     "I didn't set a password",
   ];
-  return getDictionaryAttackServer(difficulty, depth, leftOffset, [""], hintTemplates, Minigames.NoPassword);
+  return getDictionaryAttackConfig(difficulty, [""], hintTemplates, Minigames.NoPassword);
 };
 
-export const getDefaultPasswordServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const getDefaultPasswordConfig = (difficulty: number): ServerConfig => {
   const hintTemplates = [
     "The password is the default password",
     "It's still the default",
@@ -133,34 +146,52 @@ export const getDefaultPasswordServer = (difficulty: number, depth: number, left
     "I never changed the password",
     "It's still the factory settings",
   ];
-  return getDictionaryAttackServer(
-    difficulty,
-    depth,
-    leftOffset,
-    defaultSettingsDictionary,
-    hintTemplates,
-    Minigames.DefaultPassword,
-  );
+  return getDictionaryAttackConfig(difficulty, defaultSettingsDictionary, hintTemplates, Minigames.DefaultPassword);
 };
 
-export const getDogNameServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const getCaptchaConfig = (difficulty: number): ServerConfig => {
+  const password = getPassword(Math.min(difficulty / 2 + 3, 7), true, true, true, true);
+  const filledPassword = password
+    .split("")
+    .map((char, i) => {
+      if (i >= password.length - 1) {
+        return char;
+      }
+      return char + getFillerChars();
+    })
+    .join("");
+
+  return {
+    modelId: Minigames.Captcha,
+    password: password,
+    staticPasswordHint: "Type the numbers to prove you are human",
+    passwordHintData: filledPassword,
+  };
+};
+
+const getFillerChars = () => {
+  let result = "";
+  const num = Math.ceil(Math.random() * 3);
+  for (let i = 0; i < num; i++) {
+    result += filler[Math.floor(Math.random() * filler.length)];
+  }
+  return result;
+};
+
+export const getDogNameConfig = (difficulty: number): ServerConfig => {
   const hintTemplates = ["It's my dog's name", "It's the dog's name", "my first dog's name"];
-  return getDictionaryAttackServer(difficulty, depth, leftOffset, dogNameDictionary, hintTemplates, Minigames.DogNames);
+  return getDictionaryAttackConfig(difficulty, dogNameDictionary, hintTemplates, Minigames.DogNames);
 };
 
-export const getMastermindHintServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+export const getMastermindHintConfig = (difficulty: number): ServerConfig => {
+  return {
     modelId: Minigames.MastermindHint,
     password: getPassword(Math.min(2 + difficulty / 4, 9)),
     staticPasswordHint: "Only a true master may pass",
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
-export const getTimingAttackServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const getTimingAttackConfig = (difficulty: number): ServerConfig => {
   const hintTemplates = [
     "I thought about it for some time, but that is not the password.",
     "I spent a while on it, but that's not right",
@@ -168,31 +199,23 @@ export const getTimingAttackServer = (difficulty: number, depth: number, leftOff
     "I spent some time on it, but that's not the password",
   ];
   const length = 3 + difficulty / 3;
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+  return {
     modelId: Minigames.TimingAttack,
     password: getPassword(length, true, false),
     staticPasswordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
-export const getRomanNumeralServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const getRomanNumeralConfig = (difficulty: number): ServerConfig => {
   const password = Math.floor(Math.random() * 10 * (10 * (difficulty + 1)));
   if (difficulty < 8) {
     const encodedPassword = romanNumeralEncoder(password);
-    return DnetServerBuilder({
-      icon: getRandomIcon(),
+    return {
       modelId: Minigames.RomanNumeral,
       password: `${password}`,
       staticPasswordHint: `The password is the value of the number ${encodedPassword}`,
       passwordHintData: encodedPassword,
-      difficulty,
-      depth: depth,
-      leftOffset: leftOffset,
-    });
+    };
   } else {
     const passwordRangeMin = password - Math.floor(Math.random() * difficulty * 10 + 10);
     const passwordRangeMax = password + Math.floor(Math.random() * difficulty * 10 + 10);
@@ -200,117 +223,80 @@ export const getRomanNumeralServer = (difficulty: number, depth: number, leftOff
     const encodedMax = romanNumeralEncoder(passwordRangeMax);
     const hint = `The password is between ${encodedMin} and ${encodedMax}`;
     const hintData = `${encodedMin},${encodedMax}`;
-    return DnetServerBuilder({
-      icon: getRandomIcon(),
+    return {
       modelId: Minigames.RomanNumeral,
       password: `${password}`,
       staticPasswordHint: hint,
       passwordHintData: hintData,
-      difficulty,
-      depth: depth,
-      leftOffset: leftOffset,
-    });
+    };
   }
 };
 
-export const getLargestPrimeFactorServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const getLargestPrimeFactorConfig = (difficulty: number): ServerConfig => {
   const largestPrimePasswordDetails = getLargestPrimeFactorPassword(difficulty);
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+  return {
     modelId: Minigames.LargestPrimeFactor,
     password: `${largestPrimePasswordDetails.largestPrime}`,
     staticPasswordHint: `The password is the largest prime factor of ${largestPrimePasswordDetails.password}`,
     passwordHintData: `${largestPrimePasswordDetails.password}`,
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
-export const getGuessNumberServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const getGuessNumberConfig = (difficulty: number): ServerConfig => {
   const password = `${Math.floor((Math.random() * 10 * (difficulty + 3)) / 3)}`;
   const maxNumber = 10 ** password.length;
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+  return {
     modelId: Minigames.GuessNumber,
     password: password,
     staticPasswordHint: `The password is a number between 0 and ${maxNumber}`,
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
-export const getLargeDictionaryServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
-  return getDictionaryAttackServer(
+export const getLargeDictionaryConfig = (difficulty: number): ServerConfig => {
+  return getDictionaryAttackConfig(
     difficulty,
-    depth,
-    leftOffset,
     commonPasswordDictionary,
     ["It's a common password"],
     Minigames.CommonPasswordDictionary,
   );
 };
 
-export const getEuCountryDictionaryServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
-  return getDictionaryAttackServer(
-    difficulty,
-    depth,
-    leftOffset,
-    EUCountries,
-    ["My favorite EU country"],
-    Minigames.EUCountryDictionary,
-  );
+export const getEuCountryDictionaryConfig = (difficulty: number): ServerConfig => {
+  return getDictionaryAttackConfig(difficulty, EUCountries, ["My favorite EU country"], Minigames.EUCountryDictionary);
 };
 
-export const getYesn_tServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const getYesn_tConfig = (difficulty: number): ServerConfig => {
   const password = getPassword(3 + difficulty / 2, true, difficulty > 8, false, false);
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+  return {
     modelId: Minigames.Yesn_t,
     password,
     staticPasswordHint: "you are one who's'nt authorized",
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
-export const getBinaryEncodedFeedbackServer = (
-  difficulty: number,
-  depth: number,
-  leftOffset: number,
-): DarknetServer => {
+export const getBinaryEncodedConfig = (difficulty: number): ServerConfig => {
   const password = getPassword(2 + difficulty / 5, true, difficulty > 8, false, false);
   const binaryEncodedPassword = password
     .split("")
     .map((char) => char.charCodeAt(0).toString(2).padStart(8, "0"))
     .join(" ");
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+  return {
     modelId: Minigames.BinaryEncodedFeedback,
     password,
     staticPasswordHint: binaryEncodedPassword,
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
-export const getSpiceLevelServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const getSpiceLevelConfig = (difficulty: number): ServerConfig => {
   const password = getPassword(3 + difficulty / 3, true, difficulty > 8, false, false);
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+  return {
     modelId: Minigames.SpiceLevel,
     password,
     staticPasswordHint: "!!🌶️!!",
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
-export const getConvertToBase10Server = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const getConvertToBase10Config = (difficulty: number): ServerConfig => {
   const password = Math.floor(Math.random() * 10 * (10 * (difficulty + 1)));
   const bases = [2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16];
   let base = bases[Math.floor(Math.random() * bases.length)];
@@ -318,38 +304,26 @@ export const getConvertToBase10Server = (difficulty: number, depth: number, left
     base += bases[Math.floor(Math.random() * bases.length)] / 10;
   }
   const encodedPassword = encodeNumberInBaseN(password, base);
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+  return {
     modelId: Minigames.ConvertToBase10,
     password: `${password}`,
     staticPasswordHint: `the password is the base ${base} number ${encodedPassword} in base 10`,
     passwordHintData: `${base},${encodedPassword}`,
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
-export const getParseArithmeticExpressionServer = (
-  difficulty: number,
-  depth: number,
-  leftOffset: number,
-): DarknetServer => {
+export const getParseArithmeticExpressionConfig = (difficulty: number): ServerConfig => {
   const expression = generateSimpleArithmeticExpression(difficulty);
   const result = parseSimpleArithmeticExpression(expression);
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+  return {
     modelId: Minigames.parsedExpression,
     password: `${result}`,
     staticPasswordHint: `The password is the evaluation of this expression`,
     passwordHintData: expression,
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
-export const getDivisibilityTestServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
   let password = Math.floor(Math.random() * 8 * (difficulty + 1));
   for (let i = 0; i < difficulty; i++) {
     if (Math.random() < 0.5) {
@@ -360,27 +334,19 @@ export const getDivisibilityTestServer = (difficulty: number, depth: number, lef
       password *= largePrimes[Math.floor(Math.random() * largePrimes.length)];
     }
   }
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+  return {
     modelId: Minigames.divisibilityTest,
     password: `${password}`,
     staticPasswordHint: `The password is divisible by 1`,
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
-export const getPacketSnifferServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
-  return DnetServerBuilder({
-    icon: getRandomIcon(),
+export const getPacketSnifferConfig = (difficulty: number): ServerConfig => {
+  return {
     modelId: Minigames.packetSniffer,
     password: getPassword(3 + difficulty / 3, true, difficulty > 8, false, false),
     staticPasswordHint: "(I'm busy browsing social media at the cafe)",
-    difficulty,
-    depth: depth,
-    leftOffset: leftOffset,
-  });
+  };
 };
 
 // TODO: most common item in array server

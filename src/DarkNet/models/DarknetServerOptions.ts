@@ -12,11 +12,11 @@ import {
 } from "./dictionaryData";
 import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { DarknetServer as IDarknetServer } from "@nsdefs";
-import { Minigames, ResponseStatus } from "../enums";
+import { DarknetServer as IDarknetServer, ResponseStatusType } from "@nsdefs";
+import { MinigamesType } from "../Enums";
 
 export type PasswordResponse = {
-  status: ResponseStatus;
+  status: ResponseStatusType;
   passwordAttempted: string;
   message: string;
   data?: string;
@@ -24,9 +24,9 @@ export type PasswordResponse = {
 };
 
 export type DarknetServerOptions = {
-  icon: Icon | typeof labIcon;
+  icon?: Icon | typeof labIcon;
   password: string;
-  modelId: Minigames;
+  modelId: MinigamesType;
   staticPasswordHint: string;
   passwordHintData?: string;
   difficulty: number;

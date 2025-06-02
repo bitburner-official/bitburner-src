@@ -1,11 +1,11 @@
 import {
   getEchoVulnServer,
-  getNoPasswordServer,
-  getDefaultPasswordServer,
-  getMastermindHintServer,
+  getNoPasswordConfig,
+  getDefaultPasswordConfig,
+  getMastermindHintConfig,
   encodeNumberInBaseN,
   parseBaseNNumberString,
-  getConvertToBase10Server,
+  getConvertToBase10Config,
   parseSimpleArithmeticExpression,
   generateSimpleArithmeticExpression,
 } from "../../../src/DarkNet/controllers/ServerGenerator";
@@ -13,7 +13,8 @@ import { PasswordResponse } from "../../../src/DarkNet/models/DarknetServerOptio
 import { defaultSettingsDictionary } from "../../../src/DarkNet/models/dictionaryData";
 import { checkPassword, getAuthResult } from "../../../src/DarkNet/effects/authentication";
 import { DarknetState } from "../../../src/DarkNet/models/DarknetState";
-import { ResponseStatus } from "../../../src/DarkNet/enums";
+
+import { ResponseStatus } from "@nsdefs";
 
 describe("DarkWebServer Tests", () => {
   const difficulty = 1;
@@ -31,7 +32,7 @@ describe("DarkWebServer Tests", () => {
   });
 
   test("getNoPasswordServer creates a server with no password", () => {
-    const server = getNoPasswordServer(difficulty, 0, 0);
+    const server = getNoPasswordConfig(difficulty, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = checkPassword("wrongPassword", server);
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
@@ -42,7 +43,7 @@ describe("DarkWebServer Tests", () => {
   });
 
   test("getDefaultPasswordServer creates a server with default password", () => {
-    const server = getDefaultPasswordServer(difficulty, 0, 0);
+    const server = getDefaultPasswordConfig(difficulty, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = checkPassword("wrongPassword", server);
 
@@ -57,7 +58,7 @@ describe("DarkWebServer Tests", () => {
 
   test("getMastermindHintServer creates a server with mastermind hint", () => {
     const password = "11223334";
-    const server = getMastermindHintServer(difficulty, 0, 0);
+    const server = getMastermindHintConfig(difficulty, 0, 0);
     server.password = password;
     expect(server).toBeDefined();
 
@@ -114,7 +115,7 @@ describe("DarkWebServer Tests", () => {
   });
 
   test(" getConvertToBase10Server creates a server with a correct password hint", () => {
-    const server = getConvertToBase10Server(20, 0, 0);
+    const server = getConvertToBase10Config(20, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = checkPassword("wrongPassword", server);
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);

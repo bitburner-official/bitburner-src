@@ -11,7 +11,7 @@ import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { BaseServer } from "../../Server/BaseServer";
 import { getDarknetData } from "../effects/effects";
-import { NET_WIDTH } from "../enums";
+import { NET_WIDTH } from "../Enums";
 
 export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   const ctx = canvas?.getContext("2d");

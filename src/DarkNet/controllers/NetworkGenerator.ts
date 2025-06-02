@@ -32,7 +32,7 @@ import {
   NET_WIDTH,
   SERVER_DENSITY,
   VERTICAL_CONNECTION_CHANCE,
-} from "../enums";
+} from "../Enums";
 
 export const populateDarknet = () => {
   const darkWebRoot = GetServer(SpecialServers.DarkWeb);

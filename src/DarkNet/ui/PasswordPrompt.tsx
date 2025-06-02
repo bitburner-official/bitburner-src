@@ -11,7 +11,7 @@ import { LabyrinthSummary } from "./LabyrinthSummary";
 import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
 import { BaseServer } from "../../Server/BaseServer";
 import { getDarknetData } from "../effects/effects";
-import { Minigames } from "../enums";
+import { Minigames } from "../Enums";
 
 export type PasswordPromptProps = {
   server: BaseServer;

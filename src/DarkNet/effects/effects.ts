@@ -35,7 +35,7 @@ import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 import { DarknetServerData } from "../models/DarknetServerOptions";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Icon } from "../ui/ServerIcon";
-import { exampleDarknetServer, Minigames, NET_WIDTH } from "../enums";
+import { exampleDarknetServer, Minigames, NET_WIDTH } from "../Enums";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;

@@ -2,8 +2,6 @@
 
 ---
 
-- capcha server
-
 - start with crash course?
 
 ```
@@ -39,8 +37,6 @@ more color on icons
 
 improve session vs adjacency phrasing
 
-capcha puzzle?
-
 - BN 15 stuff?
 - hint note for TRP in lab (in starter guide?)
 - BN description
@@ -65,6 +61,8 @@ ns.dnet.enums.XXX for status codes etc
 Usually "data" in the form of enums or constants we typically store in a data folder so it's easier to find.
 
 - more hint notes
+
+- add a location to discover darknet navigator?
 
 ## Post MVP:
 

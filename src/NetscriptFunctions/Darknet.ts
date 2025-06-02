@@ -41,7 +41,7 @@ import {
   logger,
 } from "../DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "../Server/DarknetServer";
-import { ResponseStatus } from "../DarkNet/enums";
+import { ResponseStatus } from "../DarkNet/Enums";
 
 export type DarknetResult = { success: boolean; message: string };
 
