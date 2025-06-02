@@ -380,10 +380,8 @@ function checkEnvFlags(ctx: NetscriptContext): void {
     log(ctx, () => "Failed to run due to failed concurrency check.");
     const err = errorMessage(
       ctx,
-      `Concurrent calls to Netscript functions are not allowed!
-      Did you forget to await hack(), grow(), or some other
-      promise-returning function?
-      Currently running: ${ws.env.runningFn} tried to run: ${ctx.function}`,
+      "Concurrent calls to Netscript functions are not allowed! Did you forget to await hack(), grow(), or some other " +
+        `promise-returning function?\nCurrently running: ${ws.env.runningFn} tried to run: ${ctx.function}`,
       "CONCURRENCY",
     );
     killWorkerScript(ws);
