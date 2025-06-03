@@ -4,19 +4,20 @@
 
 ## NS.scan() method
 
-Get the list of servers connected to a server.
+Get the list of hostnames or IP addresses connected to a server.
 
 **Signature:**
 
 ```typescript
-scan(host?: string): string[];
+scan(host?: string | null, returnOpts?: HostReturnOptions): string[];
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | _(Optional)_ Optional. Hostname of the server to scan, default to current server. |
+|  host | string \| null | _(Optional)_ Optional. Hostname/IP of the server to scan, default to current server. |
+|  returnOpts | [HostReturnOptions](./bitburner.hostreturnoptions.md) | _(Optional)_ Optional. Controls whether the function returns IPs. |
 
 **Returns:**
 
@@ -28,7 +29,7 @@ Returns an array of hostnames.
 
 RAM cost: 0.2 GB
 
-Returns an array containing the hostnames of all servers that are one node way from the specified target server. The hostnames in the returned array are strings.
+Returns an array containing the hostnames or IP addresses of all servers that are one node way from the specified target server. The hostnames/IPs in the returned array are strings. Returns hostnames by default.
 
 The server network is a tree graph with the home server at the root. The parent node is always the first item of the returned array.
 
@@ -60,6 +61,12 @@ If you run the "scan-analyze" command at home, it won't show all servers due to 
 // All servers that are one hop from the current server.
 ns.tprint("Neighbors of current server.");
 let neighbor = ns.scan();
+for (let i = 0; i < neighbor.length; i++) {
+    ns.tprint(neighbor[i]);
+}
+// All servers that are one hop from the current server, but by IP address.
+ns.tprint("IPs of current server's neighbors.");
+let neighbor = ns.scan(null, { returnByIP: true });
 for (let i = 0; i < neighbor.length; i++) {
     ns.tprint(neighbor[i]);
 }

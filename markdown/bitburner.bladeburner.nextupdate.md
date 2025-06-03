@@ -29,8 +29,8 @@ The amount of real time spent asleep between updates can vary due to "bonus time
 ```js
 while (true) {
   const duration = await ns.bladeburner.nextUpdate();
-  ns.print(`Bladeburner Division completed ${ns.tFormat(duration)} of actions.`);
-  ns.print(`Bonus time remaining: ${ns.tFormat(ns.bladeburner.getBonusTime())}`);
+  ns.print(`Bladeburner Division completed ${ns.format.time(duration)} of actions.`);
+  ns.print(`Bonus time remaining: ${ns.format.time(ns.bladeburner.getBonusTime())}`);
   // Manage the Bladeburner division
 }
 ```

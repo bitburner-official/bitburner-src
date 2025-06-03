@@ -3,6 +3,7 @@ import { GoColor, GoOpponent } from "@enums";
 import { boardFromSimpleBoard, simpleBoardFromBoard } from "../../../src/Go/boardAnalysis/boardAnalysis";
 import { resetCoordinates, rotate90Degrees } from "../../../src/Go/boardState/offlineNodes";
 import { bitverseBoardShape } from "../../../src/Go/Constants";
+import { getEmptyHighlightedPoints } from "../../../src/Go/Go";
 
 describe("Board analysis utility tests", () => {
   it("Correctly applies the board size and handicap for 5x5 board", () => {
@@ -21,6 +22,7 @@ describe("Board analysis utility tests", () => {
       cheatCount: 0,
       cheatCountForWhite: 0,
       komiOverride: null,
+      highlightedPoints: getEmptyHighlightedPoints(5),
     });
     expect(result.board?.length).toEqual(5);
   });

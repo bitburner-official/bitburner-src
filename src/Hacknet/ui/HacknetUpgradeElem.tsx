@@ -4,7 +4,7 @@ import { purchaseHashUpgrade } from "../HacknetHelpers";
 import { HashManager } from "../HashManager";
 import { HashUpgrade } from "../HashUpgrade";
 
-import { ServerDropdown, ServerType } from "../../ui/React/ServerDropdown";
+import { ServerDropdown } from "../../ui/React/ServerDropdown";
 import { CompanyDropdown } from "../../ui/React/CompanyDropdown";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
@@ -15,9 +15,10 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { SelectChangeEvent } from "@mui/material/Select";
-import { CompanyName, FactionName } from "@enums";
+import { CompanyName, FactionName, HashUpgradeEnum } from "@enums";
 import { PartialRecord } from "../../Types/Record";
 import { isMember } from "../../utils/EnumHelper";
+import { ServerOwnershipType } from "../../Server/ServerHelpers";
 
 interface IProps {
   hashManager: HashManager;
@@ -45,19 +46,17 @@ export function HacknetUpgradeElem(props: IProps): React.ReactElement {
   }
   function purchase(): void {
     const canPurchase = props.hashManager.hashes >= props.hashManager.getUpgradeCost(props.upg.name);
-    if (canPurchase) {
-      const res = purchaseHashUpgrade(
-        props.upg.name,
-        props.upg.name === "Company Favor" ? selectedCompany : selectedServer,
-      );
-      if (!res) {
-        dialogBoxCreate(
-          "Failed to purchase upgrade. This may be because you do not have enough hashes, " +
-            "or because you do not have access to the feature upgrade affects.",
-        );
-      }
-      props.rerender();
+    if (!canPurchase) {
+      return;
     }
+    const result = purchaseHashUpgrade(
+      props.upg.name,
+      props.upg.name === HashUpgradeEnum.CompanyFavor ? selectedCompany : selectedServer,
+    );
+    if (!result.success) {
+      dialogBoxCreate(`Failed to purchase upgrade. Reason: ${result.message} `);
+    }
+    props.rerender();
   }
 
   const hashManager = props.hashManager;
@@ -88,7 +87,7 @@ export function HacknetUpgradeElem(props: IProps): React.ReactElement {
           purchase={purchase}
           canPurchase={canPurchase}
           value={selectedServer}
-          serverType={ServerType.Foreign}
+          serverType={ServerOwnershipType.Foreign}
           onChange={changeTargetServer}
         />
       )}

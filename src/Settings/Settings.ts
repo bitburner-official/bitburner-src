@@ -83,8 +83,6 @@ export const Settings = {
   AutoexecScript: "",
   /** How often the game should autosave the player's progress, in seconds. */
   AutosaveInterval: 60,
-  /** How many milliseconds between execution points for Netscript 1 statements. */
-  CodeInstructionRunTime: 25,
   /** Whether to render city as list of buttons. */
   DisableASCIIArt: false,
   /** Whether global keyboard shortcuts should be disabled throughout the game. */
@@ -192,6 +190,8 @@ export const Settings = {
    * src\utils\KeyBindingUtils.ts.
    */
   KeyBindings: {} as PlayerDefinedKeyBindingsType,
+  /** Whether to sync Steam achievements */
+  SyncSteamAchievements: true,
 
   load(saveString: string) {
     const save: unknown = JSON.parse(saveString);

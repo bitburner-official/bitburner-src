@@ -24,7 +24,7 @@ import { companyNameAsLocationName } from "../../Company/utils";
 import { JobSummary } from "../../Company/ui/JobSummary";
 import { StatsTable } from "../../ui/React/StatsTable";
 import { JobListings } from "../../Company/ui/JobListings";
-import { calculateFavorAfterResetting } from "../../Faction/formulas/favor";
+import { addRepToFavor } from "../../Faction/formulas/favor";
 
 interface IProps {
   companyName: CompanyName;
@@ -101,8 +101,7 @@ export function CompanyLocation(props: IProps): React.ReactElement {
                     key="repLabel"
                     title={
                       <>
-                        You will have{" "}
-                        <Favor favor={calculateFavorAfterResetting(company.favor, company.playerReputation)} /> company
+                        You will have <Favor favor={addRepToFavor(company.favor, company.playerReputation)} /> company
                         favor upon resetting after installing Augmentations
                       </>
                     }

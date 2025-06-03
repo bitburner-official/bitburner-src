@@ -12,6 +12,7 @@ import { Player } from "@player";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { isPowerOfTwo } from "../utils/helpers/isPowerOfTwo";
 import { workerScripts } from "../Netscript/WorkerScripts";
+import { isIPAddress } from "../Types/strings";
 
 // Returns the cost of purchasing a server with the given RAM
 // Returns Infinity for invalid 'ram' arguments
@@ -43,7 +44,8 @@ export function getPurchaseServerCost(ram: number): number {
 export const getPurchasedServerUpgradeCost = (hostname: string, ram: number): number => {
   const server = GetServer(hostname);
   if (!server) throw new Error(`Server '${hostname}' not found.`);
-  if (!Player.purchasedServers.includes(hostname)) throw new Error(`Server '${hostname}' not a purchased server.`);
+  if (!Player.purchasedServers.includes(server.hostname))
+    throw new Error(`Server '${hostname}' not a purchased server.`);
   if (isNaN(ram) || !isPowerOfTwo(ram) || !(Math.sign(ram) === 1))
     throw new Error(`${ram} is not a positive power of 2`);
   if (server.maxRam >= ram)
@@ -61,8 +63,10 @@ export const upgradePurchasedServer = (hostname: string, ram: number): void => {
 };
 
 export const renamePurchasedServer = (hostname: string, newName: string): void => {
+  if (isIPAddress(hostname)) throw new Error(`${hostname} is an IP address, not a hostname.`);
   const server = GetServer(hostname);
   if (!server) throw new Error(`Server '${hostname}' doesn't exists.`);
+  if (newName == "" || isIPAddress(newName)) throw new Error(`${newName} is an invalid hostname.`);
   if (GetServer(newName)) throw new Error(`Server '${newName}' already exists.`);
   if (!Player.purchasedServers.includes(hostname)) throw new Error(`Server '${hostname}' is not a player server.`);
   if (newName.startsWith("hacknet-node-") || newName.startsWith("hacknet-server-")) {

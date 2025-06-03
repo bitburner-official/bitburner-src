@@ -39,8 +39,8 @@ Common infinite loop when translating the server purchasing script in starting g
     while (i < ns.getPurchasedServerLimit()) {
         if (ns.getServerMoneyAvailable("home") > ns.getPurchasedServerCost(ram)) {
             var hostname = ns.purchaseServer("pserv-" + i, ram);
-            ns.scp("early-hack-template.script", hostname);
-            ns.exec("early-hack-template.script", hostname, 3);
+            ns.scp("early-hack-template.js", hostname);
+            ns.exec("early-hack-template.js", hostname, 3);
             ++i;
         }
     }

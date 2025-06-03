@@ -82,16 +82,16 @@ function PurchaseWseAccountButton(props: IProps): React.ReactElement {
     if (Player.hasWseAccount) {
       return;
     }
-    if (!Player.canAfford(StockMarketConstants.WSEAccountCost)) {
+    if (!Player.canAfford(StockMarketConstants.WseAccountCost)) {
       return;
     }
     Player.hasWseAccount = true;
     initStockMarket();
-    Player.loseMoney(StockMarketConstants.WSEAccountCost, "stock");
+    Player.loseMoney(StockMarketConstants.WseAccountCost, "stock");
     props.rerender();
   }
 
-  const cost = StockMarketConstants.WSEAccountCost;
+  const cost = StockMarketConstants.WseAccountCost;
   return (
     <>
       <Typography>To begin trading, you must first purchase an account:</Typography>
@@ -111,11 +111,11 @@ function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
     if (Player.hasTixApiAccess) {
       return;
     }
-    if (!Player.canAfford(StockMarketConstants.TIXAPICost)) {
+    if (!Player.canAfford(StockMarketConstants.TixApiCost)) {
       return;
     }
     Player.hasTixApiAccess = true;
-    Player.loseMoney(StockMarketConstants.TIXAPICost, "stock");
+    Player.loseMoney(StockMarketConstants.TixApiCost, "stock");
     props.rerender();
   }
 
@@ -126,7 +126,7 @@ function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
       </Typography>
     );
   } else {
-    const cost = StockMarketConstants.TIXAPICost;
+    const cost = StockMarketConstants.TixApiCost;
     return (
       <Button disabled={!Player.canAfford(cost) || !Player.hasWseAccount} onClick={purchaseTixApiAccess}>
         Buy Trade Information eXchange (TIX) API Access -&nbsp;

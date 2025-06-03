@@ -1,7 +1,7 @@
 import type { Board, BoardState, Neighbor, Play, PointState, SimpleBoard } from "../Types";
 
 import { GoValidity, GoOpponent, GoColor, GoPlayType } from "@enums";
-import { Go } from "../Go";
+import { getEmptyHighlightedPoints, Go, GoEvents } from "../Go";
 import {
   findAdjacentPointsInChain,
   findNeighbors,
@@ -729,4 +729,19 @@ export function getPreviousMoveDetails(): Play {
     x: null,
     y: null,
   };
+}
+
+export function addPointHighlight(board: BoardState, x: number, y: number, color: string, text: string) {
+  board.highlightedPoints[x][y] = { color, text };
+  GoEvents.emit();
+}
+
+export function clearPointHighlight(board: BoardState, x: number, y: number) {
+  board.highlightedPoints[x][y] = null;
+  GoEvents.emit();
+}
+
+export function clearAllPointHighlights(board: BoardState) {
+  board.highlightedPoints = getEmptyHighlightedPoints(Go.currentGame.board.length);
+  GoEvents.emit();
 }

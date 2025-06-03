@@ -9,14 +9,14 @@ Get faction favor.
 **Signature:**
 
 ```typescript
-getFactionFavor(faction: string): number;
+getFactionFavor(faction: FactionName): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  faction | string | Name of faction. |
+|  faction | [FactionName](./bitburner.factionname.md) | Name of faction. |
 
 **Returns:**
 

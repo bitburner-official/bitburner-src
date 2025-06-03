@@ -52,6 +52,7 @@ export function GoGameboard({ boardState, traditional, clickHandler, hover }: Go
                     hover={hover}
                     valid={pointIsValid(xIndex, yIndex)}
                     emptyPointOwner={ownedEmptyNodes[xIndex]?.[yIndex]}
+                    pointHighlight={boardState.highlightedPoints[xIndex][yIndex]}
                   />
                 </Grid>
               );

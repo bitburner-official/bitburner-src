@@ -54,6 +54,7 @@ import { AlertEvents } from "../../ui/React/AlertManager";
 import { Augmentations } from "../../Augmentation/Augmentations";
 import { PlayerEventType, PlayerEvents } from "./PlayerEvents";
 import { Result } from "../../types";
+import type { AchievementId } from "../../Achievements/Types";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -561,9 +562,11 @@ export function giveExploit(this: PlayerObject, exploit: Exploit): void {
   }
 }
 
-export function giveAchievement(this: PlayerObject, achievementId: string): void {
+export function giveAchievement(this: PlayerObject, achievementId: AchievementId): void {
   const achievement = achievements[achievementId];
-  if (!achievement) return;
+  if (!achievement) {
+    return;
+  }
   if (!this.achievements.map((a) => a.ID).includes(achievementId)) {
     this.achievements.push({ ID: achievementId, unlockedOn: new Date().getTime() });
     SnackbarEvents.emit(`Unlocked Achievement: "${achievement.Name}"`, ToastVariant.SUCCESS, 2000);

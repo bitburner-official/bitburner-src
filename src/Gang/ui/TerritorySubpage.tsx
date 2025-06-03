@@ -50,12 +50,26 @@ export function TerritorySubpage(): React.ReactElement {
                   }
                 }
                 /**
+                 * tooLowGangPower is a special check. Before the first tick of territory clash, the power of all gangs
+                 * is 1, so the win chance of the player's gang against all gangs is 50%. If the player tries to enable
+                 * the clash in this short time frame, canWinAtLeastOneGang is true, but their gang will still be
+                 * crushed after the first clash tick.
+                 */
+                const tooLowGangPower = gang.getPower() < 2;
+                const needToBeWarned = !canWinAtLeastOneGang || tooLowGangPower;
+                /**
                  * Show a confirmation popup if the player tries to enable the territory clash when their gang is too
                  * weak and cannot win any other gangs.
                  */
-                if (event.target.checked && !canWinAtLeastOneGang) {
+                if (event.target.checked && needToBeWarned) {
+                  let message = "Your gang is too weak.";
+                  if (!canWinAtLeastOneGang) {
+                    message += " Its win chances against all other gangs are below 50%.";
+                  }
                   PromptEvent.emit({
-                    txt: "Your gang is too weak. Its win chances against all other gangs are below 50%.\nOn average, you will always lose territory when being engaged in clashes.\n\nDo you really want to engage in territory clashes?",
+                    txt:
+                      message +
+                      "\nOn average, you will always lose territory when being engaged in clashes.\n\nDo you really want to engage in territory clashes?",
                     resolve: (value: string | boolean) => {
                       if (value === true) {
                         gang.territoryWarfareEngaged = true;

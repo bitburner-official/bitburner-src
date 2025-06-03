@@ -110,15 +110,19 @@ export function NetscriptStanek(): InternalAPI<IStanek> {
     acceptGift: (ctx) => () => {
       const cotmgFaction = Factions[FactionName.ChurchOfTheMachineGod];
       // Check if the player is eligible to join the church
-      if (canAcceptStaneksGift()) {
+      const checkResult = canAcceptStaneksGift();
+      if (checkResult.success) {
         // Join the CotMG factionn
         joinFaction(cotmgFaction);
         // Install the first Stanek aug
         applyAugmentation({ name: AugmentationName.StaneksGift1, level: 1 });
         helpers.log(
           ctx,
-          () => `'${FactionName.ChurchOfTheMachineGod}' joined and '${AugmentationName.StaneksGift1}' installed.`,
+          () =>
+            `You joined '${FactionName.ChurchOfTheMachineGod}' and have '${AugmentationName.StaneksGift1}' installed.`,
         );
+      } else {
+        helpers.log(ctx, () => checkResult.message);
       }
       // Return true if the player is in CotMG and has the first Stanek aug installed
       return cotmgFaction.isMember && Player.hasAugmentation(AugmentationName.StaneksGift1, true);

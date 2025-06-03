@@ -7,18 +7,18 @@ const numberSuffixList = ["", "k", "m", "b", "t", "q", "Q", "s", "S", "o", "n"];
 const numberExpList = numberSuffixList.map((_, i) => parseFloat(`1e${i * 3}`));
 
 // Ram suffixes
-const ramLog1000Suffixes = ["GB", "TB", "PB", "EB"];
-const ramLog1024Suffixes = ["GiB", "TiB", "PiB", "EiB"];
+const decByteSuffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB"];
+const binByteSuffixes = ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB"];
 
 // Items that get initialized in the initializer function.
 let digitFormats = {} as Record<number, Intl.NumberFormat | undefined>,
   percentFormats = {} as Record<number, Intl.NumberFormat | undefined>,
   basicFormatter: Intl.NumberFormat,
   exponentialFormatter: Intl.NumberFormat,
-  ramSuffixList: string[],
-  ramExpList: number[],
-  ramLogFn: (n: number) => number,
-  ramLogDivisor: number;
+  unitSuffixes: string[],
+  unitExpList: number[],
+  unitLogFn: (n: number) => number,
+  unitLogDivisor: number;
 
 /** Event to be emitted when changing number display settings. */
 export const FormatsNeedToChange = new EventEmitter();
@@ -33,12 +33,12 @@ FormatsNeedToChange.subscribe(() => {
   percentFormats = {};
   exponentialFormatter = makeFormatter(3, { notation: Settings.useEngineeringNotation ? "engineering" : "scientific" });
   basicFormatter = new Intl.NumberFormat([Settings.Locale, "en"], { useGrouping: !Settings.hideThousandsSeparator });
-  [ramSuffixList, ramLogFn, ramLogDivisor] = Settings.UseIEC60027_2
+  [unitSuffixes, unitLogFn, unitLogDivisor] = Settings.UseIEC60027_2
     ? // log2 of 1024 is 10 as divisor for log base 1024
-      [ramLog1024Suffixes, Math.log2, 10]
+      [binByteSuffixes, Math.log2, 10]
     : // log10 of 1000 is 3 as divisor for log base 1000
-      [ramLog1000Suffixes, Math.log10, 3];
-  ramExpList = ramSuffixList.map((_, i) => (Settings.UseIEC60027_2 ? 1024 : 1000) ** i);
+      [decByteSuffixes, Math.log10, 3];
+  unitExpList = unitSuffixes.map((_, i) => (Settings.UseIEC60027_2 ? 1024 : 1000) ** i);
 
   // Emit a FormatsHaveChanged event so any static content that uses formats can be regenerated.
   FormatsHaveChanged.emit();
@@ -67,26 +67,37 @@ function getFormatter(
   return (formatList[fractionalDigits] = makeFormatter(fractionalDigits, options));
 }
 
+/** Display standard byte formatting. */
+export function formatBytes(n: number, fractionalDigits = 1): string {
+  return formatSize(n, fractionalDigits, 0);
+}
+
 /** Display standard ram formatting. */
-export function formatRam(n: number, fractionalDigits = 2) {
-  // NaN does not get formatted
-  if (Number.isNaN(n)) return `NaN${ramSuffixList[0]}`;
+export function formatRam(n: number, fractionalDigits = 2): string {
+  return formatSize(n, fractionalDigits, 3);
+}
+
+function formatSize(n: number, fractionalDigits = 2, unitOffset = 3) {
+  const base = Settings.UseIEC60027_2 ? 1024 : 1000;
   const nAbs = Math.abs(n);
 
-  // Special handling for Infinities
-  if (nAbs === Infinity) return `${n < 0 ? "-∞" : ""}∞${ramSuffixList.at(-1)}`;
+  // Special handling for NaN, Infinities and zero
+  if (Number.isNaN(n)) return `NaN${unitSuffixes[0 + unitOffset]}`;
+  if (nAbs === Infinity) return `${n < 0 ? "-∞" : "∞"}${unitSuffixes.at(-1)}`;
 
   // Early return if using first suffix.
-  if (nAbs < 1000) return getFormatter(fractionalDigits).format(n) + ramSuffixList[0];
+  if (nAbs < base) return getFormatter(fractionalDigits).format(n) + unitSuffixes[unitOffset];
 
-  // Ram always uses a suffix and never goes to exponential
-  const suffixIndex = Math.min(Math.floor(ramLogFn(nAbs) / ramLogDivisor), ramSuffixList.length - 1);
-  n /= ramExpList[suffixIndex];
+  // convert input units to bytes
+  let nBytes = n * base ** unitOffset;
+
+  const suffixIndex = Math.min(Math.floor(unitLogFn(nBytes) / unitLogDivisor), unitSuffixes.length - 1);
+  nBytes /= unitExpList[suffixIndex];
   /* Not really concerned with 1000-rounding or 1024-rounding for ram due to the actual values ram gets displayed at.
   If display of e.g. 1,000.00GB instead of 1.00TB for 999.995GB, or 1,024.00GiB instead of 1.00TiB for 1,023.995GiB
   becomes an actual issue we can add smart rounding, but ram values like that really don't happen ingame so it's
   probably not worth the performance overhead to check and correct these. */
-  return getFormatter(fractionalDigits).format(n) + ramSuffixList[suffixIndex];
+  return getFormatter(fractionalDigits).format(nBytes) + unitSuffixes[suffixIndex];
 }
 
 function formatExponential(n: number) {

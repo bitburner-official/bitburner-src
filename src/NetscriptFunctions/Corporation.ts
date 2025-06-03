@@ -7,7 +7,6 @@ import { Warehouse } from "../Corporation/Warehouse";
 import { Division } from "../Corporation/Division";
 import { Corporation, CorporationPromise } from "../Corporation/Corporation";
 import { omit } from "lodash";
-import { setDeprecatedProperties } from "../utils/DeprecationHelper";
 import {
   Corporation as NSCorporation,
   Division as NSDivision,
@@ -56,7 +55,7 @@ import {
 } from "../Corporation/Actions";
 import { CorpUnlocks } from "../Corporation/data/CorporationUnlocks";
 import { CorpUpgrades } from "../Corporation/data/CorporationUpgrades";
-import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, CityName, CreatingCorporationCheckResult } from "@enums";
+import { CorpUnlockName, CorpUpgradeName, CorpEmployeeJob, CityName, CreatingCorporationCheckResultEnum } from "@enums";
 import { IndustriesData, IndustryResearchTrees } from "../Corporation/data/IndustryData";
 import * as corpConstants from "../Corporation/data/Constants";
 import { ResearchMap } from "../Corporation/ResearchMap";
@@ -72,6 +71,7 @@ import {
 } from "../Corporation/helpers";
 import { PositiveInteger } from "../types";
 import { getRecordKeys } from "../Types/Record";
+import { setDeprecatedProperties } from "../utils/DeprecationHelper";
 
 export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   function hasUnlock(unlockName: CorpUnlockName): boolean {
@@ -95,8 +95,8 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   }
 
   function getResearchCost(division: Division, researchName: CorpResearchName): number {
-    const researchTree = IndustryResearchTrees[division.type];
-    if (researchTree === undefined) throw new Error(`No research tree for industry '${division.type}'`);
+    const researchTree = IndustryResearchTrees[division.industry];
+    if (researchTree === undefined) throw new Error(`No research tree for industry '${division.industry}'`);
     const allResearch = researchTree.getAllNodes();
     if (!allResearch.includes(researchName)) throw new Error(`No research named '${researchName}'`);
     const research = ResearchMap[researchName];
@@ -158,9 +158,9 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   function getSafeDivision(division: Division): NSDivision {
     const cities = getRecordKeys(division.offices);
 
-    return {
+    const data = {
       name: division.name,
-      type: division.type,
+      industry: division.industry,
       awareness: division.awareness,
       popularity: division.popularity,
       productionMult: division.productionMult,
@@ -175,6 +175,14 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       makesProducts: division.makesProducts,
       maxProducts: division.maxProducts,
     };
+    setDeprecatedProperties(data, {
+      type: {
+        identifier: "ns.corporation.getDivision().type",
+        message: "Use ns.corporation.getDivision().industry instead.",
+        value: data.industry,
+      },
+    });
+    return data;
   }
 
   const warehouseAPI: InternalAPI<WarehouseAPI> = {
@@ -488,29 +496,37 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
       const office = getOffice(divisionName, cityName);
       return calculateOfficeSizeUpgradeCost(office.size, increase);
     },
-    setAutoJobAssignment: (ctx) => (_divisionName, _cityName, _job, _amount) => {
+    setJobAssignment: (ctx) => (_divisionName, _cityName, _job, _amount) => {
       checkAccess(ctx, CorpUnlockName.OfficeAPI);
       const divisionName = helpers.string(ctx, "divisionName", _divisionName);
       const cityName = getEnumHelper("CityName").nsGetMember(ctx, _cityName);
       const amount = helpers.number(ctx, "amount", _amount);
       const job = getEnumHelper("CorpEmployeeJob").nsGetMember(ctx, _job, "job");
 
-      if (job === CorpEmployeeJob.Unassigned) return false;
-      if (amount < 0 || !Number.isInteger(amount))
+      if (job === CorpEmployeeJob.Unassigned) {
+        helpers.log(
+          ctx,
+          () => `This API will not do anything and just return false if you pass "Unassigned" to the "job" parameter.`,
+        );
+        return false;
+      }
+      if (amount < 0 || !Number.isInteger(amount)) {
         throw helpers.errorMessage(
           ctx,
           `Invalid value for amount! Must be an integer and greater than or be 0". Amount:'${amount}'`,
         );
+      }
 
       const office = getOffice(divisionName, cityName);
 
       const totalNewEmployees = amount - office.employeeNextJobs[job];
 
-      if (office.employeeNextJobs[CorpEmployeeJob.Unassigned] < totalNewEmployees)
+      if (office.employeeNextJobs[CorpEmployeeJob.Unassigned] < totalNewEmployees) {
         throw helpers.errorMessage(
           ctx,
           `Unable to bring '${job} employees to ${amount}. Requires ${totalNewEmployees} unassigned employees`,
         );
+      }
       return office.autoAssignJob(job, amount);
     },
     hireEmployee: (ctx) => (_divisionName, _cityName, _position) => {
@@ -596,7 +612,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     canCreateCorporation: (ctx) => (_selfFund) => {
       const selfFund = !!_selfFund;
       const checkResult = canCreateCorporation(selfFund, false);
-      if (checkResult !== CreatingCorporationCheckResult.Success) {
+      if (checkResult !== CreatingCorporationCheckResultEnum.Success) {
         helpers.log(ctx, () => convertCreatingCorporationCheckResultToMessage(checkResult));
       }
       return checkResult;
@@ -711,13 +727,6 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         divisions: [...corporation.divisions.keys()],
         valuation: corporation.valuation,
       };
-      setDeprecatedProperties(data, {
-        state: {
-          identifier: "ns.corporation.getCorporation().state",
-          message: "Use ns.corporation.getCorporation().nextState instead.",
-          value: corporation.state.nextName,
-        },
-      });
       return data;
     },
     hasUnlock: (ctx) => (_unlockName) => {
@@ -805,7 +814,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
   setRemovedFunctions(corpFunctions, {
     assignJob: {
       version: "2.2.0",
-      replacement: "Removed due to employees no longer being objects. Use ns.corporation.setAutoJobAssignment instead.",
+      replacement: "Removed due to employees no longer being objects. Use ns.corporation.setJobAssignment instead.",
       replaceMsg: true,
     },
     getEmployee: {
@@ -821,6 +830,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
     getResearchNames: { version: "2.2.0", replacement: "corporation.getConstants().researchNames" },
     getUnlockables: { version: "2.2.0", replacement: "corporation.getConstants().unlockNames" },
     getUpgradeNames: { version: "2.2.0", replacement: "corporation.getConstants().upgradeNames" },
+    setAutoJobAssignment: { version: "3.0.0", replacement: "corporation.setJobAssignment()" },
   });
   return corpFunctions;
 }

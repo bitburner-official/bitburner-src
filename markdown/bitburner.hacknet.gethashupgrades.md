@@ -9,11 +9,11 @@ Get the list of hash upgrades
 **Signature:**
 
 ```typescript
-getHashUpgrades(): string[];
+getHashUpgrades(): HacknetServerHashUpgrade[];
 ```
 **Returns:**
 
-string\[\]
+[HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md)<!-- -->\[\]
 
 An array containing the available upgrades
 

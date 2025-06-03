@@ -128,10 +128,10 @@ const hacknet = {
 // Stock API
 const stock = {
   getConstants: 0,
-  hasWSEAccount: 0.05,
-  hasTIXAPIAccess: 0.05,
+  hasWseAccount: 0.05,
+  hasTixApiAccess: 0.05,
   has4SData: 0.05,
-  has4SDataTIXAPI: 0.05,
+  has4SDataTixApi: 0.05,
   getBonusTime: 0,
   nextUpdate: RamCostConstants.CycleTiming,
   getSymbols: RamCostConstants.GetStock,
@@ -222,6 +222,14 @@ const singularity = {
   b1tflum3: SF4Cost(16),
   destroyW0r1dD43m0n: SF4Cost(32),
   getCurrentWork: SF4Cost(0.5),
+  getUnlockedAchievements: SF4Cost(RamCostConstants.SingularityFn3),
+} as const;
+
+const format = {
+  number: 0,
+  ram: 0,
+  percent: 0,
+  time: 0,
 } as const;
 
 // Gang API
@@ -273,6 +281,9 @@ const go = {
     getStats: 0,
     resetStats: 0,
     setTestingBoardState: 4,
+    highlightPoint: 0,
+    clearPointHighlight: 0,
+    clearAllPointHighlights: 0,
   },
   cheat: {
     getCheatSuccessChance: 1,
@@ -474,7 +485,7 @@ const corporation = {
   getHireAdVertCount: RamCostConstants.CorporationInfo,
   getResearchCost: RamCostConstants.CorporationInfo,
   hasResearched: RamCostConstants.CorporationInfo,
-  setAutoJobAssignment: RamCostConstants.CorporationAction,
+  setJobAssignment: RamCostConstants.CorporationAction,
   getOfficeSizeUpgradeCost: RamCostConstants.CorporationInfo,
 } as const;
 
@@ -487,6 +498,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   hacknet,
   stock,
   singularity,
+  format,
   gang,
   go,
   bladeburner,
@@ -544,6 +556,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   getRecentScripts: RamCostConstants.RecentScripts,
   hasRootAccess: RamCostConstants.HasRootAccess,
   getHostname: RamCostConstants.GetHostname,
+  getIP: RamCostConstants.GetHostname,
   getHackingLevel: RamCostConstants.GetHackingLevel,
   getHackingMultipliers: 0.25,
   getHacknetMultipliers: 0.25,
@@ -559,6 +572,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   getServerNumPortsRequired: RamCostConstants.GetServer,
   getServerMaxRam: RamCostConstants.GetServerMaxRam,
   getServerUsedRam: RamCostConstants.GetServerUsedRam,
+  dnsLookup: 0.05,
   serverExists: RamCostConstants.GetServer,
   fileExists: RamCostConstants.FileExists,
   isRunning: RamCostConstants.IsRunning,
@@ -594,12 +608,6 @@ export const RamCosts: RamCostTree<NSFull> = {
   getScriptExpGain: RamCostConstants.GetScript,
   getRunningScript: RamCostConstants.GetRunningScript,
   ramOverride: 0,
-  formatNumber: 0,
-  formatRam: 0,
-  formatPercent: 0,
-  nFormat: 0,
-  tFormat: 0,
-  getTimeSinceLastAug: RamCostConstants.GetHackTime,
   prompt: 0,
   wget: 0,
   getFavorToDonate: RamCostConstants.GetFavorToDonate,
@@ -608,12 +616,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   mv: 0,
   getResetInfo: 1,
   getFunctionRamCost: 0,
-  tail: 0,
   toast: 0,
-  moveTail: 0,
-  resizeTail: 0,
-  closeTail: 0,
-  setTitle: 0,
   clearPort: 0,
   openDevMenu: 0,
   alert: 0,
@@ -625,6 +628,7 @@ export const RamCosts: RamCostTree<NSFull> = {
   heart: { break: 0 },
   tprintRaw: 0,
   printRaw: 0,
+  dynamicImport: 0,
 
   formulas: {
     mockServer: 0,
@@ -635,6 +639,7 @@ export const RamCosts: RamCostTree<NSFull> = {
       calculateRepToFavor: 0,
       repFromDonation: 0,
       donationForRep: 0,
+      sharePower: 0,
     },
     skills: {
       calculateSkill: 0,

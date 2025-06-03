@@ -11,8 +11,8 @@ Set a sleeve to work for a faction.
 ```typescript
 setToFactionWork(
     sleeveNumber: number,
-    factionName: string,
-    factionWorkType: FactionWorkType | `${FactionWorkType}`,
+    factionName: FactionName,
+    factionWorkType: FactionWorkType,
   ): boolean | undefined;
 ```
 
@@ -21,8 +21,8 @@ setToFactionWork(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  sleeveNumber | number | Index of the sleeve to work for the faction. |
-|  factionName | string | Name of the faction to work for. |
-|  factionWorkType | [FactionWorkType](./bitburner.factionworktype.md) \| \`${[FactionWorkType](./bitburner.factionworktype.md)<!-- -->}\` | Name of the action to perform for this faction. |
+|  factionName | [FactionName](./bitburner.factionname.md) | Name of the faction to work for. |
+|  factionWorkType | [FactionWorkType](./bitburner.factionworktype.md) | Name of the action to perform for this faction. |
 
 **Returns:**
 

@@ -4,7 +4,7 @@
 
 ## NS.stock property
 
-Namespace for stock functions.
+Namespace for [stock](./bitburner.tix.md) functions.
 
 **Signature:**
 

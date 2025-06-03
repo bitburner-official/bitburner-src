@@ -10,9 +10,9 @@ export function getStockMarket4STixApiCost(): number {
 }
 
 export function getStockMarketWseCost(): number {
-  return StockMarketConstants.WSEAccountCost;
+  return StockMarketConstants.WseAccountCost;
 }
 
 export function getStockMarketTixApiCost(): number {
-  return StockMarketConstants.TIXAPICost;
+  return StockMarketConstants.TixApiCost;
 }

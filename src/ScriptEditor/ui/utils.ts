@@ -7,7 +7,9 @@ import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 function getServerCode(scripts: OpenScript[], index: number): string | null {
   const openScript = scripts[index];
   const server = GetServer(openScript.hostname);
-  if (server === null) throw new Error(`Server '${openScript.hostname}' should not be null, but it is.`);
+  if (server === null) {
+    return null;
+  }
   const data = server.getContentFile(openScript.path)?.content ?? null;
   return data;
 }

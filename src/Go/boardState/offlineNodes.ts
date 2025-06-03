@@ -33,6 +33,8 @@ export function addObstacles(boardState: BoardState) {
 
   boardState.board = addDeadNodesToEdge(boardState.board, random, edgeDeadCount);
 
+  boardState.board = ensureOfflineNodes(boardState.board);
+
   boardState.board = resetCoordinates(boardState.board);
 }
 
@@ -110,6 +112,14 @@ function addCenterBreak(board: Board, random: rand) {
   board[xIndex] = board[xIndex].map((point, index) => (index < length ? null : point));
 
   return randomizeRotation(board, random);
+}
+
+function ensureOfflineNodes(board: Board) {
+  if (board.flat().some((point) => !point)) {
+    return board;
+  }
+  board[0][0] = null;
+  return board;
 }
 
 function randomizeRotation(board: Board, random: rand) {

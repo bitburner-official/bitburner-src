@@ -4,7 +4,7 @@
 
 ## NS.codingcontract property
 
-Namespace for codingcontract functions.
+Namespace for [coding contract](./bitburner.codingcontract.md) functions.
 
 **Signature:**
 

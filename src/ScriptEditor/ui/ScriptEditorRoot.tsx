@@ -180,30 +180,21 @@ function Root(props: IProps): React.ReactElement {
 
   let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
 
-  // Prevent Crash if script is open on deleted server
-  for (let i = openScripts.length - 1; i >= 0; i--) {
-    GetServer(openScripts[i].hostname) === null && openScripts.splice(i, 1);
-  }
-  if (currentScript && GetServer(currentScript.hostname) === null) {
-    currentScript = openScripts[0] ?? null;
-  }
-
   const save = useCallback(() => {
     if (currentScript === null) {
       console.error("currentScript is null when it shouldn't be. Unable to save script");
       return;
     }
     // this is duplicate code with saving later.
-    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalTypeScript) {
+    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalEditScript) {
       //Make sure filename + code properly follow tutorial
-      if (currentScript.path !== "n00dles.script" && currentScript.path !== "n00dles.js") {
+      if (currentScript.path !== "n00dles.js") {
         dialogBoxCreate("Don't change the script name for now.");
         return;
       }
       const cleanCode = currentScript.code.replace(/\s/g, "");
-      const ns1 = "while(true){hack('n00dles');}";
-      const ns2 = `/**@param{NS}ns*/exportasyncfunctionmain(ns){while(true){awaitns.hack("n00dles");}}`;
-      if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
+      const expectedCleanCode = `/**@param{NS}ns*/exportasyncfunctionmain(ns){while(true){awaitns.hack("n00dles");}}`;
+      if (!cleanCode.includes(expectedCleanCode)) {
         dialogBoxCreate("Please copy and paste the code from the tutorial!");
         return;
       }
@@ -304,8 +295,15 @@ function Root(props: IProps): React.ReactElement {
 
   const debouncedCodeParsing = debounce((newCode: string) => {
     let server;
-    if (!currentScript || !hasScriptExtension(currentScript.path) || !(server = GetServer(currentScript.hostname))) {
+    if (!currentScript || !hasScriptExtension(currentScript.path)) {
       showRAMError();
+      return;
+    }
+    if (!(server = GetServer(currentScript.hostname))) {
+      showRAMError({
+        errorCode: RamCalculationErrorCode.InvalidServer,
+        errorMessage: `Server ${currentScript.hostname} does not exist`,
+      });
       return;
     }
     let ast;
@@ -398,7 +396,8 @@ function Root(props: IProps): React.ReactElement {
   function saveScript(scriptToSave: OpenScript): void {
     const server = GetServer(scriptToSave.hostname);
     if (!server) {
-      throw new Error("Server should not be null but it is.");
+      dialogBoxCreate(`Server ${scriptToSave.hostname} does not exist.`);
+      return;
     }
     // Show a warning message if the file is on a non-home server.
     if (scriptToSave.hostname !== SpecialServers.Home) {
@@ -478,7 +477,7 @@ function Root(props: IProps): React.ReactElement {
       const indexOffset = openScripts.length === index ? -1 : 0;
       currentScript = openScripts[index + indexOffset];
       if (editorRef.current !== null) {
-        if (currentScript.model.isDisposed() || !currentScript.model) {
+        if (!currentScript.model || currentScript.model.isDisposed()) {
           currentScript.regenerateModel();
         }
         editorRef.current.setModel(currentScript.model);

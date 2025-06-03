@@ -9,17 +9,17 @@ Returns your order book for the stock market.
 **Signature:**
 
 ```typescript
-getOrders(): StockOrder;
+getOrders(): Record<string, StockOrder[]>;
 ```
 **Returns:**
 
-[StockOrder](./bitburner.stockorder.md)
+Record&lt;string, [StockOrder](./bitburner.stockorder.md)<!-- -->\[\]&gt;
 
-Object containing information for all the Limit and Stop Orders you have in the stock market.
+Object containing information for all the Limit and Stop Orders you have in the stock market. Keys are stock symbols, and properties are arrays of [StockOrder](./bitburner.stockorder.md)
 
 ## Remarks
 
-RAM cost: 2.5 GB This is an object containing information for all the Limit and Stop Orders you have in the stock market. For each symbol you have a position in, the returned object will have a key with that symbol's name. The object's properties are each an array of [StockOrderObject](./bitburner.stockorderobject.md) The object has the following structure:
+RAM cost: 2.5 GB This is an object containing information for all the Limit and Stop Orders you have in the stock market. For each symbol you have a position in, the returned object will have a key with that symbol's name. The object's properties are each an array of [StockOrder](./bitburner.stockorder.md) The object has the following structure:
 
 ```js
 {

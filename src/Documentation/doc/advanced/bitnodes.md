@@ -240,8 +240,14 @@ Destroying this BitNode will give you Source-File 14, or if you already have thi
 - Level 2: Permanently unlocks the go.cheat API
 - Level 3: 25% additive increased success rate for the go.cheat API
 
-This Source-File also increases the maximum favor you can gain for each faction from IPvGO to:
+This Source-File also increases the maximum favor from winstreaks you can gain for each faction to:
 
-- Level 1: 80
-- Level 2: 100
-- Level 3: 120
+- Level 1: 200k rep equivalent
+- Level 2: 300k rep equivalent
+- Level 3: 400k rep equivalent
+
+and increases the reputation converted to favor for winning two games in a row to:
+
+- Level 1: 1000 rep to favor
+- Level 2: 1500 rep to favor
+- Level 3: 2000 rep to favor

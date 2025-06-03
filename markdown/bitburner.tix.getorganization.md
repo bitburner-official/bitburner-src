@@ -30,9 +30,9 @@ RAM cost: 2 GB
 
 The organization associated with the corresponding stock symbol. This function requires that you have the following:
 
-1. WSE Account
+- WSE Account
 
-1. TIX API Access
+- TIX API Access
 
 ## Example
 
