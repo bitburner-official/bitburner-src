@@ -49,6 +49,16 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
     setDeepLink(undefined);
   }, [deepLink, history]);
 
+  useEffect(() => {
+    /**
+     * Using setTimeout is a workaround. window.scrollTo does not work when we switch from Documentation tab to another
+     * tab, then switch back.
+     */
+    setTimeout(() => {
+      window.scrollTo({ top: windowTopPositionOfPages.get(history.page) ?? 0, behavior: "instant" });
+    }, 0);
+  });
+
   return (
     <>
       <Box
@@ -72,10 +82,7 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
       </Box>
       <Box paddingTop="50px">
         <Navigator.Provider value={navigator}>
-          <MD
-            pageFilePath={deepLink ? asFilePath(deepLink) : history.page}
-            top={windowTopPositionOfPages.get(history.page) ?? 0}
-          />
+          <MD pageFilePath={deepLink ? asFilePath(deepLink) : history.page} />
         </Navigator.Provider>
       </Box>
     </>

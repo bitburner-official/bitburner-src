@@ -8,6 +8,7 @@ import { DocumentationPopUpEvents } from "../root";
 export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
   const [path, setPath] = useState<FilePath | undefined>(undefined);
   const modalWrapperRef = useRef<HTMLDivElement>(null);
+
   useEffect(
     () =>
       DocumentationPopUpEvents.subscribe((path?: string) => {
@@ -15,6 +16,14 @@ export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
       }),
     [],
   );
+
+  useEffect(() => {
+    if (!modalWrapperRef || !modalWrapperRef.current) {
+      return;
+    }
+    modalWrapperRef.current.scrollTo({ top: 0, behavior: "instant" });
+  });
+
   const navigator = {
     navigate(relativePath: string, external: boolean) {
       /**
@@ -48,7 +57,7 @@ export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
       removeFocus={false}
     >
       <Navigator.Provider value={navigator}>
-        <MD pageFilePath={path} top={0} modalWrapperRef={modalWrapperRef} />
+        <MD pageFilePath={path} />
       </Navigator.Provider>
     </Modal>
   );
