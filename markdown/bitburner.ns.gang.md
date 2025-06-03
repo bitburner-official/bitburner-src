@@ -4,7 +4,7 @@
 
 ## NS.gang property
 
-Namespace for gang functions. Contains spoilers.
+Namespace for [gang](./bitburner.gang.md) functions. Contains spoilers.
 
 **Signature:**
 

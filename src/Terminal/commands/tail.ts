@@ -23,7 +23,10 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
       }
       // Just use the first one (if there are multiple with the same
       // arguments, they can't be distinguished except by pid).
-      LogBoxEvents.emit(candidates.values().next().value);
+      const next = candidates.values().next();
+      if (!next.done) {
+        LogBoxEvents.emit(next.value);
+      }
     } else if (typeof commandArray[0] === "number") {
       const runningScript = findRunningScriptByPid(commandArray[0]);
       if (runningScript == null) {
@@ -32,7 +35,8 @@ export function tail(commandArray: (string | number | boolean)[], server: BaseSe
       }
       LogBoxEvents.emit(runningScript);
     }
-  } catch (e) {
-    Terminal.error(e + "");
+  } catch (error) {
+    console.error(error);
+    Terminal.error(String(error));
   }
 }

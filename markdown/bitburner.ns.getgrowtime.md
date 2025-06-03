@@ -16,7 +16,7 @@ getGrowTime(host: string): number;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | Hostname of target server. |
+|  host | string | Hostname/IP of target server. |
 
 **Returns:**
 

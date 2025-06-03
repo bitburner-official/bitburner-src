@@ -16,7 +16,7 @@ serverExists(host: string): boolean;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | Hostname of target server. |
+|  host | string | Hostname/IP of target server. |
 
 **Returns:**
 

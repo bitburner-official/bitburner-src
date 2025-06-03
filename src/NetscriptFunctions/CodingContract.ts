@@ -1,10 +1,13 @@
 import { Player } from "@player";
-import { CodingContract } from "../CodingContracts";
-import { CodingContract as ICodingContract } from "@nsdefs";
+import { CodingContract, CodingContractResult } from "../CodingContract/Contract";
+import { CodingContractObject, CodingContract as ICodingContract } from "@nsdefs";
 import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
-import { codingContractTypesMetadata } from "../data/codingcontracttypes";
-import { generateDummyContract } from "../CodingContractGenerator";
+import { CodingContractName } from "@enums";
+import { generateDummyContract } from "../CodingContract/ContractGenerator";
+import { isCodingContractName } from "../CodingContract/ContractTypes";
+import { type BaseServer } from "../Server/BaseServer";
+import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 
 export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
   const getCodingContract = function (ctx: NetscriptContext, hostname: string, filename: string): CodingContract {
@@ -17,72 +20,119 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
     return contract;
   };
 
-  return {
-    attempt: (ctx) => (answer, _filename, _hostname?) => {
-      const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, hostname, filename);
+  function attemptContract(
+    ctx: NetscriptContext,
+    server: BaseServer,
+    contract: CodingContract,
+    answer: unknown,
+  ): string {
+    const validationResult = contract.isValid(answer);
+    if (!validationResult.success) {
+      throw helpers.errorMessage(ctx, validationResult.message);
+    }
 
-      if (typeof answer !== "number" && typeof answer !== "string" && !Array.isArray(answer))
-        throw new Error("The answer provided was not a number, string, or array");
-
-      // Convert answer to string.
-      // Todo: better typing for contracts, don't do this weird string conversion of the player answer
-      const answerStr = typeof answer === "string" ? answer : JSON.stringify(answer);
-      const creward = contract.reward;
-
-      const serv = helpers.getServer(ctx, hostname);
-      if (contract.isSolution(answerStr)) {
-        const reward = Player.gainCodingContractReward(creward, contract.getDifficulty());
-        helpers.log(ctx, () => `Successfully completed Coding Contract '${filename}'. Reward: ${reward}`);
-        serv.removeContract(filename);
+    const resultOfCheckingSolution = contract.isSolution(answer);
+    switch (resultOfCheckingSolution.result) {
+      case CodingContractResult.Success: {
+        const reward = Player.gainCodingContractReward(contract.reward, contract.getDifficulty());
+        helpers.log(ctx, () => `Successfully completed Coding Contract '${contract.fn}'. Reward: ${reward}`);
+        server.removeContract(contract.fn);
         return reward;
-      } else {
-        ++contract.tries;
-        if (contract.tries >= contract.getMaxNumTries()) {
-          helpers.log(ctx, () => `Coding Contract attempt '${filename}' failed. Contract is now self-destructing`);
-          serv.removeContract(filename);
+      }
+      /**
+       * This should never happen. If the answer format is invalid, it should already be handled by the call to
+       * contract.isValid() above.
+       */
+      case CodingContractResult.InvalidFormat: {
+        exceptionAlert(
+          new Error(
+            `contract.isSolution() returns unexpected InvalidFormat result. Type: ${contract.type}. Answer: ${answer}`,
+          ),
+          true,
+        );
+        return "";
+      }
+      case CodingContractResult.Failure: {
+        if (++contract.tries >= contract.getMaxNumTries()) {
+          helpers.log(ctx, () => `Coding Contract attempt '${contract.fn}' failed. Contract is now self-destructing`);
+          server.removeContract(contract.fn);
         } else {
           helpers.log(
             ctx,
             () =>
-              `Coding Contract attempt '${filename}' failed. ${
+              `Coding Contract attempt '${contract.fn}' failed. ${
                 contract.getMaxNumTries() - contract.tries
-              } attempts remaining.`,
+              } attempt(s) remaining.`,
           );
         }
-
         return "";
       }
-    },
-    getContractType: (ctx) => (_filename, _hostname?) => {
+      default: {
+        const __: never = resultOfCheckingSolution.result;
+      }
+    }
+    return "";
+  }
+
+  return {
+    attempt: (ctx) => (answer, _filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, hostname, filename);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const contract = getCodingContract(ctx, host, filename);
+      const server = helpers.getServer(ctx, host);
+      return attemptContract(ctx, server, contract, answer);
+    },
+    getContractType: (ctx) => (_filename, _host?) => {
+      const filename = helpers.string(ctx, "filename", _filename);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const contract = getCodingContract(ctx, host, filename);
       return contract.getType();
     },
-    getData: (ctx) => (_filename, _hostname?) => {
+    getData: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, hostname, filename);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const contract = getCodingContract(ctx, host, filename);
+
       return structuredClone(contract.getData());
     },
-    getDescription: (ctx) => (_filename, _hostname?) => {
+    getContract: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, hostname, filename);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const server = helpers.getServer(ctx, host);
+      const contract = getCodingContract(ctx, host, filename);
+      // asserting type here is required, since it is not feasible to properly type getData
+      return {
+        type: contract.type,
+        data: structuredClone(contract.getData()),
+        submit: (answer: unknown) => {
+          helpers.checkEnvFlags(ctx);
+          return attemptContract(ctx, server, contract, answer);
+        },
+        description: contract.getDescription(),
+        numTriesRemaining: () => {
+          helpers.checkEnvFlags(ctx);
+          return contract.getMaxNumTries() - contract.tries;
+        },
+      } as CodingContractObject;
+    },
+    getDescription: (ctx) => (_filename, _host?) => {
+      const filename = helpers.string(ctx, "filename", _filename);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const contract = getCodingContract(ctx, host, filename);
       return contract.getDescription();
     },
-    getNumTriesRemaining: (ctx) => (_filename, _hostname?) => {
+    getNumTriesRemaining: (ctx) => (_filename, _host?) => {
       const filename = helpers.string(ctx, "filename", _filename);
-      const hostname = _hostname ? helpers.string(ctx, "hostname", _hostname) : ctx.workerScript.hostname;
-      const contract = getCodingContract(ctx, hostname, filename);
+      const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
+      const contract = getCodingContract(ctx, host, filename);
       return contract.getMaxNumTries() - contract.tries;
     },
     createDummyContract: (ctx) => (_type) => {
       const type = helpers.string(ctx, "type", _type);
+      if (!isCodingContractName(type))
+        return helpers.errorMessage(ctx, `The given type is not a valid contract type. Got '${type}'`);
       return generateDummyContract(type);
     },
-    getContractTypes: () => () => codingContractTypesMetadata.map((c) => c.name),
+    getContractTypes: () => () => Object.values(CodingContractName),
   };
 }

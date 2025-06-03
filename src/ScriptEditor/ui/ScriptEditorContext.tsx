@@ -45,6 +45,9 @@ export function ScriptEditorContextProvider({ children }: { children: React.Reac
       case RamCalculationErrorCode.ImportError:
         errorType = "Import Error";
         break;
+      case RamCalculationErrorCode.InvalidServer:
+        errorType = "Invalid server";
+        break;
       default:
         errorType = "Unknown Error";
         break;

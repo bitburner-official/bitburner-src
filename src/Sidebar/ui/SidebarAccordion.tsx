@@ -8,8 +8,9 @@ import Typography from "@mui/material/Typography";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import { SidebarItem, ICreateProps as IItemProps } from "./SidebarItem";
+import { SidebarItem, ICreateProps as IItemProps, type SidebarItemProps } from "./SidebarItem";
 import type { Page } from "../../ui/Router";
+import type { PartialRecord } from "../../Types/Record";
 
 type SidebarAccordionProps = {
   key_: string;
@@ -19,8 +20,11 @@ type SidebarAccordionProps = {
   items: (IItemProps | boolean)[];
   icon: React.ReactElement["type"];
   sidebarOpen: boolean;
-  classes: any;
+  classes: Record<"listitem" | "active", string>;
 };
+
+type ClickFnCacheKeyType = (page: Page) => void;
+type ClickFnCacheValueType = PartialRecord<Page, SidebarItemProps["clickFn"]>;
 
 // We can't useCallback for this, because in the items map it would be
 // called a changing number of times, and hooks can't be called in loops. So
@@ -30,7 +34,7 @@ type SidebarAccordionProps = {
 // WeakMap prevents memory leaks. We won't drop slices of the cache too soon,
 // because the fn keys are themselves memoized elsewhere, which keeps them
 // alive and thus keeps the WeakMap entries alive.
-const clickFnCache = new WeakMap();
+const clickFnCache = new WeakMap<ClickFnCacheKeyType, ClickFnCacheValueType>();
 function getClickFn(toWrap: (page: Page) => void, page: Page) {
   let first = clickFnCache.get(toWrap);
   if (first === undefined) {

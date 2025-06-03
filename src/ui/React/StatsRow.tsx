@@ -12,7 +12,7 @@ interface ITableRowData {
 }
 
 interface IProps {
-  name: string;
+  name: string | React.ReactElement;
   color: string;
   data?: ITableRowData;
   children?: React.ReactElement;

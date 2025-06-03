@@ -10,13 +10,14 @@ interface Props {
 }
 
 export const GoScoreExplanation = ({ open, onClose }: Props): React.ReactElement => {
-  const { classes } = boardStyles();
+  const { classes } = boardStyles({});
 
   return (
     <Modal open={open} onClose={onClose}>
       <>
         <div className={classes.scoreExplanationModal}>
           <Typography>
+            <h2>IPvGO Scoring Explanation</h2>
             IPvGO uses one of the oldest scoring systems in Go, "area scoring", rather than "territory scoring" later
             popularized by Japan. All stones are alive unless captured, chains that could be dead are not automatically
             captured after the game, and prisoners are not calculated. The displayed score is always the ending score if

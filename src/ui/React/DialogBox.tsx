@@ -3,7 +3,10 @@ import { AlertEvents } from "./AlertManager";
 import React from "react";
 import { Typography } from "@mui/material";
 
-export function dialogBoxCreate(txt: string | JSX.Element, html = false): void {
+export function dialogBoxCreate(
+  txt: string | JSX.Element,
+  { html, canBeDismissedEasily } = { html: false, canBeDismissedEasily: true },
+): void {
   AlertEvents.emit(
     typeof txt !== "string" ? (
       txt
@@ -14,5 +17,6 @@ export function dialogBoxCreate(txt: string | JSX.Element, html = false): void {
         {txt}
       </Typography>
     ),
+    canBeDismissedEasily,
   );
 }

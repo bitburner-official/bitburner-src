@@ -31,7 +31,7 @@ import {
   getSellTransactionGain,
   processTransactionForecastMovement,
 } from "../../src/StockMarket/StockMarketHelpers";
-import { CompanyName, OrderType, PositionType } from "../../src/Enums";
+import { CompanyName, LocationName, OrderType, PositionType } from "../../src/Enums";
 
 // jest.mock("../src/ui/React/createPopup.tsx", () => ({
 //   createPopup: jest.fn(),
@@ -464,6 +464,7 @@ describe("Stock Market Tests", function () {
         StockMarket.lastUpdate = new Date().getTime() - 5e3;
         processStockPrices(1e9);
 
+        let testOmegaSoftwareStock = false;
         // Both price and 'otlkMag' should be different
         for (const stockName in StockMarket) {
           const stock = StockMarket[stockName];
@@ -473,11 +474,40 @@ describe("Stock Market Tests", function () {
           const initValue = initialValues[stock.symbol];
           expect(initValue.price).not.toEqual(stock.price);
           if (initValue.otlkMag === stock.otlkMag && initValue.b === stock.b) {
+            // In edge cases, the forecast of OMGA is not changed. We will rerun tests for this stock later.
+            if (stock.name === LocationName.IshimaOmegaSoftware && stock.otlkMag === 0.5) {
+              testOmegaSoftwareStock = true;
+              continue;
+            }
             throw new Error(
               "expected either price or otlkMag to be different: " +
                 `stock: ${stockName} otlkMag: ${stock.otlkMag} b: ${stock.b}`,
             );
           }
+        }
+
+        if (!testOmegaSoftwareStock) {
+          return;
+        }
+        deleteStockMarket();
+        initStockMarket();
+        initSymbolToStockMap();
+        const currentOtlkMag = StockMarket[LocationName.IshimaOmegaSoftware].otlkMag;
+        let isForeCastChanged = false;
+        /**
+         * Update the stock market and check the forecast 10000 times. It's improbable that the forecast is still not
+         * changed.
+         */
+        for (let i = 0; i < 10000; i++) {
+          StockMarket.lastUpdate = new Date().getTime() - 5e3;
+          processStockPrices(1e9);
+          if (currentOtlkMag !== StockMarket[LocationName.IshimaOmegaSoftware].otlkMag) {
+            isForeCastChanged = true;
+            break;
+          }
+        }
+        if (!isForeCastChanged) {
+          throw new Error(`Forecast of OMGA is not changed: ${StockMarket[LocationName.IshimaOmegaSoftware].otlkMag}`);
         }
       });
     });

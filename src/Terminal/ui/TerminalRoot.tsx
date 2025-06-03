@@ -41,7 +41,7 @@ export function TerminalRoot(): React.ReactElement {
   const [key, setKey] = useState(0);
 
   useEffect(() => {
-    const debounced = _.debounce(async () => rerender(), 25, { maxWait: 50 });
+    const debounced = _.debounce(() => rerender(), 25, { maxWait: 50 });
     const unsubscribe = TerminalEvents.subscribe(debounced);
     return () => {
       debounced.cancel();
@@ -51,7 +51,7 @@ export function TerminalRoot(): React.ReactElement {
 
   useEffect(() => {
     const clear = () => setKey((key) => key + 1);
-    const debounced = _.debounce(async () => clear(), 25, { maxWait: 50 });
+    const debounced = _.debounce(() => clear(), 25, { maxWait: 50 });
     const unsubscribe = TerminalClearEvents.subscribe(debounced);
     return () => {
       debounced.cancel();
@@ -87,12 +87,12 @@ export function TerminalRoot(): React.ReactElement {
           <li key={i}>
             {item instanceof Output && <ANSIITypography text={item.text} color={item.color} />}
             {item instanceof RawOutput && (
-              <Typography classes={{ root: classes.preformatted }} paragraph={false}>
+              <Typography component="div" classes={{ root: classes.preformatted }} paragraph={false}>
                 {item.raw}
               </Typography>
             )}
             {item instanceof Link && (
-              <Typography classes={{ root: classes.preformatted }}>
+              <Typography component="div" classes={{ root: classes.preformatted }}>
                 {item.dashes}
                 <MuiLink onClick={() => Terminal.connectToServer(item.hostname)}>{item.hostname}</MuiLink>
               </Typography>

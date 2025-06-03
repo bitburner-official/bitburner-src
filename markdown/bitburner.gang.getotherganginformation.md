@@ -9,11 +9,11 @@ Get information about the other gangs.
 **Signature:**
 
 ```typescript
-getOtherGangInformation(): GangOtherInfo;
+getOtherGangInformation(): Record<string, GangOtherInfoObject>;
 ```
 **Returns:**
 
-[GangOtherInfo](./bitburner.gangotherinfo.md)
+Record&lt;string, [GangOtherInfoObject](./bitburner.gangotherinfoobject.md)<!-- -->&gt;
 
 Object containing territory and power information about all gangs.
 

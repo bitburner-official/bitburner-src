@@ -27,6 +27,6 @@ $$MaxLevel = (log_{1.07}\left(MaxCost\ast\frac{0.07}{BasePrice} + {1.07}^{Curren
 Warehouse size:
 
 - Upgrade multiplier: multiplier from Smart Storage.
-- Research multiplier: multiplier from researches.
+- Research multiplier: multiplier from research.
 
 $$WarehouseSize = WarehouseLevel\ast 100\ast UpgradeMultiplier\ast ResearchMultiplier$$

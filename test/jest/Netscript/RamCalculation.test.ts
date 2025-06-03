@@ -26,6 +26,7 @@ function grabCost<API>(ramEntry: RamCostTree<API>[keyof API]) {
 
 describe("Netscript RAM Calculation/Generation Tests", function () {
   jest.spyOn(console, "warn").mockImplementation(() => {});
+  jest.spyOn(console, "error").mockImplementation(() => {});
   Player.sourceFiles.set(4, 3);
   // For simulating costs of singularity functions.
   const baseCost = RamCostConstants.Base;

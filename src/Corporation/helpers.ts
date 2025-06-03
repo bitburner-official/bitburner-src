@@ -1,9 +1,47 @@
 import { Player } from "@player";
+import { CreatingCorporationCheckResult } from "@nsdefs";
 import { PositiveInteger, isPositiveInteger } from "../types";
 import { formatShares } from "../ui/formatNumber";
 import { Corporation } from "./Corporation";
 import { CorpUpgrade } from "./data/CorporationUpgrades";
 import * as corpConstants from "./data/Constants";
+import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
+import { CreatingCorporationCheckResultEnum } from "@enums";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+
+export function convertCreatingCorporationCheckResultToMessage(checkResult: CreatingCorporationCheckResult): string {
+  switch (checkResult) {
+    case CreatingCorporationCheckResultEnum.Success:
+      return "Success";
+    case CreatingCorporationCheckResultEnum.NoSf3OrDisabled:
+      return "You don't have SF3 or Corporation is disabled by an advanced option";
+    case CreatingCorporationCheckResultEnum.CorporationExists:
+      return "Corporation exists";
+    case CreatingCorporationCheckResultEnum.UseSeedMoneyOutsideBN3:
+      return "You cannot use seed money outside BitNode 3";
+    case CreatingCorporationCheckResultEnum.DisabledBySoftCap:
+      return "You cannot create a corporation in this BitNode";
+    default:
+      throwIfReachable(checkResult);
+  }
+  return String(checkResult);
+}
+
+export function canCreateCorporation(selfFund: boolean, restart: boolean): CreatingCorporationCheckResult {
+  if (!Player.canAccessCorporation()) {
+    return CreatingCorporationCheckResultEnum.NoSf3OrDisabled;
+  }
+  if (Player.corporation && !restart) {
+    return CreatingCorporationCheckResultEnum.CorporationExists;
+  }
+  if (Player.bitNodeN !== 3 && !selfFund) {
+    return CreatingCorporationCheckResultEnum.UseSeedMoneyOutsideBN3;
+  }
+  if (currentNodeMults.CorporationSoftcap < 0.15) {
+    return CreatingCorporationCheckResultEnum.DisabledBySoftCap;
+  }
+  return CreatingCorporationCheckResultEnum.Success;
+}
 
 export function costOfCreatingCorporation(restart: boolean): number {
   if (restart && !Player.corporation?.seedFunded) {

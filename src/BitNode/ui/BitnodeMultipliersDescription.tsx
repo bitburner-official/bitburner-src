@@ -1,6 +1,15 @@
 import React from "react";
-import { uniqueId } from "lodash";
-import { Box, Collapse, ListItemButton, ListItemText, Paper, Table, TableBody, Typography } from "@mui/material";
+import {
+  Box,
+  Collapse,
+  ListItemButton,
+  ListItemText,
+  Paper,
+  Table,
+  TableBody,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
@@ -16,11 +25,14 @@ import { canAccessBitNodeFeature } from "../BitNodeUtils";
 interface IProps {
   n: number;
   level?: number;
+  hideMultsIfCannotAccessFeature: boolean;
 }
 
-export function BitnodeMultiplierDescription({ n, level }: IProps): React.ReactElement {
+export function BitNodeMultiplierDescription({ n, level, hideMultsIfCannotAccessFeature }: IProps): React.ReactElement {
   const [open, setOpen] = React.useState(false);
-  if (n === 1) return <></>;
+  if (n === 1) {
+    return <></>;
+  }
 
   return (
     <Box component={Paper} sx={{ mt: 1, p: 1 }}>
@@ -29,13 +41,17 @@ export function BitnodeMultiplierDescription({ n, level }: IProps): React.ReactE
         {open ? <ExpandLess color="primary" /> : <ExpandMore color="primary" />}
       </ListItemButton>
       <Collapse in={open}>
-        <BitNodeMultipliersDisplay n={n} level={level} />
+        <BitNodeMultipliersDisplay
+          n={n}
+          level={level}
+          hideMultsIfCannotAccessFeature={hideMultsIfCannotAccessFeature}
+        />
       </Collapse>
     </Box>
   );
 }
 
-export const BitNodeMultipliersDisplay = ({ n, level }: IProps): React.ReactElement => {
+export const BitNodeMultipliersDisplay = ({ n, level, hideMultsIfCannotAccessFeature }: IProps): React.ReactElement => {
   // If a level argument has been provided, use that as the multiplier level
   // If not, then we have to assume that we want the next level up from the
   // current node's source file, so we get the min of that, the SF's max level,
@@ -55,10 +71,10 @@ export const BitNodeMultipliersDisplay = ({ n, level }: IProps): React.ReactElem
       <CrimeMults n={n} mults={mults} />
       <InfiltrationMults n={n} mults={mults} />
       <CompanyMults n={n} mults={mults} />
-      <GangMults n={n} mults={mults} />
-      <CorporationMults n={n} mults={mults} />
-      <BladeburnerMults n={n} mults={mults} />
-      <StanekMults n={n} mults={mults} />
+      <GangMults n={n} mults={mults} hideMultsIfCannotAccessFeature={hideMultsIfCannotAccessFeature} />
+      <CorporationMults n={n} mults={mults} hideMultsIfCannotAccessFeature={hideMultsIfCannotAccessFeature} />
+      <BladeburnerMults n={n} mults={mults} hideMultsIfCannotAccessFeature={hideMultsIfCannotAccessFeature} />
+      <StanekMults n={n} mults={mults} hideMultsIfCannotAccessFeature={hideMultsIfCannotAccessFeature} />
       <GoMults n={n} mults={mults} />
     </Box>
   );
@@ -70,6 +86,7 @@ type IBNMultRows = PartialRecord<
     name: string;
     content?: string;
     color?: string;
+    tooltipText?: string;
   }
 >;
 
@@ -82,14 +99,26 @@ interface IBNMultTableProps {
 const BNMultTable = (props: IBNMultTableProps): React.ReactElement => {
   const rowsArray = getRecordEntries(props.rowData)
     .filter(([key]) => props.mults[key] !== defaultMultipliers[key])
-    .map(([key, value]) => (
-      <StatsRow
-        key={uniqueId()}
-        name={value.name}
-        data={{ content: value.content ?? `${(props.mults[key] * 100).toFixed(3)}%` }}
-        color={value.color ?? Settings.theme.primary}
-      />
-    ));
+    .map(([key, value]) => {
+      const name = value.tooltipText ? (
+        <Tooltip title={<span>{value.tooltipText}</span>}>
+          <span>
+            {value.name}
+            <sup>(*)</sup>
+          </span>
+        </Tooltip>
+      ) : (
+        value.name
+      );
+      return (
+        <StatsRow
+          key={`${props.sectionName}-${value.name}`}
+          name={name}
+          data={{ content: value.content ?? `${(props.mults[key] * 100).toFixed(3)}%` }}
+          color={value.color ?? Settings.theme.primary}
+        />
+      );
+    });
 
   return rowsArray.length > 0 ? (
     <span style={{ display: "inline-block", width: "100%", marginBottom: "16px" }}>
@@ -106,6 +135,10 @@ const BNMultTable = (props: IBNMultTableProps): React.ReactElement => {
 interface IMultsProps {
   n: number;
   mults: BitNodeMultipliers;
+}
+
+interface IEndGameMultsProps extends IMultsProps {
+  hideMultsIfCannotAccessFeature: boolean;
 }
 
 function GeneralMults({ mults }: IMultsProps): React.ReactElement {
@@ -162,7 +195,7 @@ function StockMults({ mults }: IMultsProps): React.ReactElement {
 
 function FactionMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
-    RepToDonateToFaction: { name: "Favor to Donate" },
+    FavorToDonateToFaction: { name: "Favor to Donate" },
     FactionWorkRepGain: {
       name: "Work Reputation",
       color: Settings.theme.rep,
@@ -241,16 +274,19 @@ function HackingMults({ mults }: IMultsProps): React.ReactElement {
     ServerStartingSecurity: { name: "Server Starting Security" },
     ServerWeakenRate: { name: "Server Weaken Rate" },
     ManualHackMoney: {
-      name: "Manual Hack Money",
+      name: "Money Gained From Manual Hack",
       color: Settings.theme.money,
+      tooltipText: `Influences how much money the player actually gains when they hack a server via the terminal. This is different from "Stolen Money From Hack". When the player hacks a server via the terminal, the amount of money in that server is reduced, but they do not gain that same amount.`,
     },
     ScriptHackMoney: {
-      name: "Script Hack Money",
+      name: "Stolen Money From Hack",
       color: Settings.theme.money,
+      tooltipText: "Influences how much money is stolen from a server when the player performs a hack against it.",
     },
     ScriptHackMoneyGain: {
-      name: "Money Gained From Hack",
+      name: "Money Gained From Script Hack",
       color: Settings.theme.money,
+      tooltipText: `Influences how much money the player actually gains when a script hacks a server. This is different from "Stolen Money From Hack". When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount.`,
     },
   };
 
@@ -290,8 +326,10 @@ function InfiltrationMults({ mults }: IMultsProps): React.ReactElement {
   return <BNMultTable sectionName="Infiltration" rowData={rows} mults={mults} />;
 }
 
-function BladeburnerMults({ mults }: IMultsProps): React.ReactElement {
-  if (!Player.canAccessBladeburner()) return <></>;
+function BladeburnerMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps): React.ReactElement {
+  if (!Player.canAccessBladeburner() && hideMultsIfCannotAccessFeature) {
+    return <></>;
+  }
 
   if (mults.BladeburnerRank === 0) {
     const rows: IBNMultRows = {
@@ -309,10 +347,12 @@ function BladeburnerMults({ mults }: IMultsProps): React.ReactElement {
   return <BNMultTable sectionName="Bladeburner" rowData={rows} mults={mults} />;
 }
 
-function StanekMults({ mults }: IMultsProps): React.ReactElement {
-  if (!Player.canAccessCotMG()) return <></>;
+function StanekMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps): React.ReactElement {
+  if (!Player.canAccessCotMG() && hideMultsIfCannotAccessFeature) {
+    return <></>;
+  }
 
-  const extraSize = mults.StaneksGiftExtraSize.toFixed(3);
+  const extraSize = mults.StaneksGiftExtraSize.toFixed(5);
   const rows: IBNMultRows = {
     StaneksGiftPowerMultiplier: { name: "Gift Power" },
     StaneksGiftExtraSize: {
@@ -324,8 +364,10 @@ function StanekMults({ mults }: IMultsProps): React.ReactElement {
   return <BNMultTable sectionName="Stanek's Gift" rowData={rows} mults={mults} />;
 }
 
-function GangMults({ mults }: IMultsProps): React.ReactElement {
-  if (!canAccessBitNodeFeature(2)) return <></>;
+function GangMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps): React.ReactElement {
+  if (!canAccessBitNodeFeature(2) && hideMultsIfCannotAccessFeature) {
+    return <></>;
+  }
 
   const rows: IBNMultRows = {
     GangSoftcap: {
@@ -338,8 +380,10 @@ function GangMults({ mults }: IMultsProps): React.ReactElement {
   return <BNMultTable sectionName="Gang" rowData={rows} mults={mults} />;
 }
 
-function CorporationMults({ mults }: IMultsProps): React.ReactElement {
-  if (!Player.canAccessCorporation()) return <></>;
+function CorporationMults({ mults, hideMultsIfCannotAccessFeature }: IEndGameMultsProps): React.ReactElement {
+  if (!Player.canAccessCorporation() && hideMultsIfCannotAccessFeature) {
+    return <></>;
+  }
 
   if (mults.CorporationSoftcap < 0.15) {
     const rows: IBNMultRows = {

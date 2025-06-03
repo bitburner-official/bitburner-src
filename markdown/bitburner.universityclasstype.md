@@ -2,23 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [UniversityClassType](./bitburner.universityclasstype.md)
 
-## UniversityClassType enum
+## UniversityClassType type
 
 
 **Signature:**
 
 ```typescript
-declare enum UniversityClassType 
+type UniversityClassType = _ValueOf<UniversityClassEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  algorithms | <code>&quot;Algorithms&quot;</code> |  |
-|  computerScience | <code>&quot;Computer Science&quot;</code> |  |
-|  dataStructures | <code>&quot;Data Structures&quot;</code> |  |
-|  leadership | <code>&quot;Leadership&quot;</code> |  |
-|  management | <code>&quot;Management&quot;</code> |  |
-|  networks | <code>&quot;Networks&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [UniversityClassEnumType](./bitburner.universityclassenumtype.md)
 

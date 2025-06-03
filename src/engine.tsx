@@ -2,7 +2,7 @@ import { convertTimeMsToTimeElapsedString } from "./utils/StringHelperFunctions"
 import { AugmentationName, ToastVariant } from "@enums";
 import { initBitNodeMultipliers } from "./BitNode/BitNode";
 import { initSourceFiles } from "./SourceFile/SourceFiles";
-import { tryGeneratingRandomContract } from "./CodingContractGenerator";
+import { tryGeneratingRandomContract } from "./CodingContract/ContractGenerator";
 import { CONSTANTS } from "./Constants";
 import { Factions } from "./Faction/Factions";
 import { staneksGift } from "./CotMG/Helper";
@@ -47,6 +47,8 @@ import { SaveData } from "./types";
 import { Go } from "./Go/Go";
 import { EventEmitter } from "./utils/EventEmitter";
 import { Companies } from "./Company/Companies";
+import { resetGoPromises } from "./Go/boardAnalysis/goAI";
+import { getRecordEntries } from "./Types/Record";
 
 declare global {
   // This property is only available in the dev build
@@ -63,42 +65,11 @@ declare global {
   };
 }
 
-// Only show warning if the time diff is greater than this value.
-const thresholdOfTimeDiffForShowingWarningAboutSystemClock = CONSTANTS.MillisecondsPerFiveMinutes;
-
-function showWarningAboutSystemClock(timeDiff: number) {
-  AlertEvents.emit(
-    `Warning: The system clock moved backward: ${convertTimeMsToTimeElapsedString(Math.abs(timeDiff))}.`,
-  );
-}
-
 export const GameCycleEvents = new EventEmitter<[]>();
 
 /** Game engine. Handles the main game loop. */
-const Engine: {
-  _lastUpdate: number;
-  updateGame: (numCycles?: number) => void;
-  Counters: {
-    [key: string]: number | undefined;
-    autoSaveCounter: number;
-    updateSkillLevelsCounter: number;
-    updateDisplays: number;
-    updateDisplaysLong: number;
-    updateActiveScriptsDisplay: number;
-    createProgramNotifications: number;
-    augmentationsNotifications: number;
-    checkFactionInvitations: number;
-    passiveFactionGrowth: number;
-    messages: number;
-    mechanicProcess: number;
-    contractGeneration: number;
-    achievementsCounter: number;
-  };
-  decrementAllCounters: (numCycles?: number) => void;
-  checkCounters: () => void;
-  load: (saveData: SaveData) => Promise<void>;
-  start: () => void;
-} = {
+const Engine = {
+  isRunning: false,
   // Time variables (milliseconds unix epoch time)
   _lastUpdate: new Date().getTime(),
   updateGame: function (numCycles = 1) {
@@ -169,7 +140,7 @@ const Engine: {
     updateActiveScriptsDisplay: 5,
     createProgramNotifications: 10,
     augmentationsNotifications: 10,
-    checkFactionInvitations: 100,
+    checkFactionInvitations: 10,
     passiveFactionGrowth: 5,
     messages: 150,
     mechanicProcess: 5, // Process Bladeburner
@@ -178,8 +149,11 @@ const Engine: {
   },
 
   decrementAllCounters: function (numCycles = 1) {
-    for (const [counterName, counter] of Object.entries(Engine.Counters)) {
-      if (counter === undefined) throw new Error("counter should not be undefined");
+    for (const [counterName, counter] of getRecordEntries(Engine.Counters)) {
+      if (counter === undefined) {
+        exceptionAlert(new Error(`counter value is undefined. counterName: ${counterName}.`), true);
+        continue;
+      }
       Engine.Counters[counterName] = counter - numCycles;
     }
   },
@@ -194,7 +168,7 @@ const Engine: {
       for (const invitedFaction of invitedFactions) {
         inviteToFaction(invitedFaction);
       }
-      Engine.Counters.checkFactionInvitations = 100;
+      Engine.Counters.checkFactionInvitations = 10;
     }
 
     if (Engine.Counters.passiveFactionGrowth <= 0) {
@@ -216,7 +190,7 @@ const Engine: {
         try {
           Player.bladeburner.process();
         } catch (e) {
-          exceptionAlert("Exception caught in Bladeburner.process(): " + e);
+          exceptionAlert(e, true);
         }
       }
       Engine.Counters.mechanicProcess = 5;
@@ -246,12 +220,12 @@ const Engine: {
         Engine.Counters.autoSaveCounter = 60 * 5; // Let's check back in a bit
       } else {
         Engine.Counters.autoSaveCounter = Settings.AutosaveInterval * 5;
-        saveObject.saveGame(!Settings.SuppressSavedGameToast);
+        saveObject.saveGame(!Settings.SuppressSavedGameToast).catch((error) => console.error(error));
       }
     }
   },
 
-  load: async function (saveData) {
+  load: async function (saveData: SaveData) {
     startExploits();
     setupUncaughtPromiseHandler();
     // Source files must be initialized early because save-game translation in
@@ -274,12 +248,6 @@ const Engine: {
       const lastUpdate = Player.lastUpdate;
       let timeOffline = Engine._lastUpdate - lastUpdate;
       if (timeOffline < 0) {
-        if (Math.abs(timeOffline) > thresholdOfTimeDiffForShowingWarningAboutSystemClock) {
-          const timeDiff = timeOffline;
-          setTimeout(() => {
-            showWarningAboutSystemClock(timeDiff);
-          }, 250);
-        }
         timeOffline = 0;
       }
       const numCyclesOffline = Math.floor(timeOffline / CONSTANTS.MilliPerCycle);
@@ -288,8 +256,11 @@ const Engine: {
       tryGeneratingRandomContract(timeOffline / CONSTANTS.MillisecondsPerTenMinutes);
 
       let offlineReputation = 0;
-      const offlineHackingIncome =
+      let offlineHackingIncome =
         (Player.moneySourceA.hacking / Player.playtimeSinceLastAug) * timeOffline * CONSTANTS.OfflineHackingIncome;
+      if (!Number.isFinite(offlineHackingIncome)) {
+        offlineHackingIncome = 0;
+      }
       Player.gainMoney(offlineHackingIncome, "hacking");
       // Process offline progress
 
@@ -397,13 +368,15 @@ const Engine: {
       // No save found, start new game
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
-      Engine.start(); // Run main game loop and Scripts loop
       Player.init();
       initForeignServers(Player.getHomeComputer());
       Player.reapplyAllAugmentations();
+      resetGoPromises();
 
       // Start interactive tutorial
       iTutorialStart();
+
+      Engine.start(); // Run main game loop and Scripts loop
     }
 
     // Expose internal objects/functions in the dev build
@@ -426,13 +399,11 @@ const Engine: {
   },
 
   start: function () {
+    this.isRunning = true;
     // Get time difference
     const _thisUpdate = new Date().getTime();
     let diff = _thisUpdate - Engine._lastUpdate;
     if (diff < 0) {
-      if (Math.abs(diff) > thresholdOfTimeDiffForShowingWarningAboutSystemClock) {
-        showWarningAboutSystemClock(diff);
-      }
       diff = 0;
       Engine._lastUpdate = _thisUpdate;
       Player.lastUpdate = _thisUpdate;

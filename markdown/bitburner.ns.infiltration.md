@@ -4,7 +4,7 @@
 
 ## NS.infiltration property
 
-Namespace for infiltration functions.
+Namespace for [infiltration](./bitburner.infiltration.md) functions.
 
 **Signature:**
 

@@ -38,7 +38,8 @@ import { useBoolean } from "../hooks";
 
 import { ComparisonIcon } from "./ComparisonIcon";
 import { SaveData } from "../../../types";
-import { handleGetSaveDataError } from "../../../Netscript/ErrorMessages";
+import { handleGetSaveDataInfoError } from "../../../utils/ErrorHandler";
+import { OptionSwitch } from "../OptionSwitch";
 
 const useStyles = makeStyles()((theme: Theme) => ({
   root: {
@@ -99,18 +100,24 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
   const [isImportModalOpen, { on: openImportModal, off: closeImportModal }] = useBoolean(false);
   const [isSkillsExpanded, { toggle: toggleSkillsExpand }] = useBoolean(true);
   const [isOthersExpanded, { toggle: toggleOthersExpand }] = useBoolean(true);
-  const [headback, setHeadback] = useState(false);
+  const [headBack, setHeadBack] = useState(false);
+  const [syncSteamAchievements, setSyncSteamAchievements] = useState(true);
 
   const handleGoBack = (): void => {
     Settings.AutosaveInterval = initialAutosave;
     pushImportResult(false);
     Router.allowRouting(true);
-    setHeadback(true);
+    setHeadBack(true);
   };
 
   const handleImport = async (): Promise<void> => {
-    await saveObject.importGame(props.saveData, true);
-    pushImportResult(true);
+    let overrideSettings = undefined;
+    if (syncSteamAchievements !== importData?.playerData?.syncSteamAchievements) {
+      overrideSettings = {
+        SyncSteamAchievements: syncSteamAchievements,
+      };
+    }
+    await saveObject.importGame(props.saveData, overrideSettings);
   };
 
   useEffect(() => {
@@ -121,8 +128,10 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
   }, []);
 
   useEffect(() => {
-    if (headback) Router.toPage(Page.Terminal);
-  }, [headback]);
+    if (headBack) {
+      Router.toPage(Page.Terminal);
+    }
+  }, [headBack]);
 
   useEffect(() => {
     async function fetchData(): Promise<void> {
@@ -131,8 +140,7 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
 
       setImportData(dataBeingImported);
       setCurrentData(dataCurrentlyInGame);
-
-      return Promise.resolve();
+      setSyncSteamAchievements(dataBeingImported.playerData?.syncSteamAchievements ?? true);
     }
     if (props.saveData) {
       fetchData().catch((error) => {
@@ -140,7 +148,7 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
         // We cannot show dialog box in this screen (due to "withPopups = false"), so we will try showing it with a
         // delay. 1 second is usually enough to go back to other normal screens that allow showing popups.
         setTimeout(() => {
-          handleGetSaveDataError(error);
+          handleGetSaveDataInfoError(error);
         }, 1000);
       });
     }
@@ -387,19 +395,40 @@ export const ImportSave = (props: { saveData: SaveData; automatic: boolean }): J
         </Table>
       </TableContainer>
 
+      <br />
+      <OptionSwitch
+        checked={syncSteamAchievements}
+        onChange={(newValue) => setSyncSteamAchievements(newValue)}
+        text="Sync Steam achievements"
+        tooltip={
+          <>
+            This setting is only used in the Steam app. If this setting is enabled, the game will automatically sync
+            your unlocked Steam achievements to Steam Cloud.
+          </>
+        }
+      />
+
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <ButtonGroup>
-          <Button onClick={handleGoBack} sx={{ my: 2 }} startIcon={<ArrowBackIcon />} color="secondary">
-            Take me back!
-          </Button>
-          <Button onClick={openImportModal} sx={{ my: 2 }} startIcon={<DirectionsRunIcon />} color="warning">
-            Proceed with import
-          </Button>
+          <Tooltip title="Continue with current save">
+            <Button onClick={handleGoBack} sx={{ my: 2 }} startIcon={<ArrowBackIcon />} color="secondary">
+              Take me back!
+            </Button>
+          </Tooltip>
+          <Tooltip title="Import newer save and reload">
+            <Button onClick={openImportModal} sx={{ my: 2 }} startIcon={<DirectionsRunIcon />} color="warning">
+              Proceed with import
+            </Button>
+          </Tooltip>
         </ButtonGroup>
         <ConfirmationModal
           open={isImportModalOpen}
           onClose={closeImportModal}
-          onConfirm={handleImport}
+          onConfirm={() => {
+            handleImport().catch((error) => {
+              console.error(error);
+            });
+          }}
           confirmationText={
             <>
               Importing new save game data will <strong>completely wipe</strong> the current game data!

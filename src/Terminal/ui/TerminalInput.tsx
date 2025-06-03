@@ -3,12 +3,13 @@ import { Theme } from "@mui/material/styles";
 import { makeStyles } from "tss-react/mui";
 import { Paper, Popper, TextField, Typography } from "@mui/material";
 
-import { KEY, KEYCODE } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 import { Terminal } from "../../Terminal";
 import { Player } from "@player";
 import { getTabCompletionPossibilities } from "../getTabCompletionPossibilities";
 import { Settings } from "../../Settings/Settings";
 import { longestCommonStart } from "../../utils/StringHelperFunctions";
+import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
 const useStyles = makeStyles()((theme: Theme) => ({
   input: {
@@ -62,6 +63,23 @@ export function TerminalInput(): React.ReactElement {
   }, [postUpdateValue]);
 
   function saveValue(newValue: string, postUpdate?: () => void): void {
+    /**
+     * There are reports of a crash caused by "value" (the React state) being undefined. It means that a caller of this
+     * function passes undefined to the first parameter. Currently, we don't know which caller does that, so we put this
+     * safety check here to mitigate the crash and gather more debug information.
+     */
+    if (newValue == null) {
+      exceptionAlert(
+        new Error(
+          `saveValue was called with invalid value.\n` +
+            `command: ${command}\nterminalInput.current.value: ${terminalInput.current?.value}\nvalue: ${value}\n` +
+            `possibilities: ${possibilities}\nsearchResults: ${searchResults}\nsearchResultsIndex: ${searchResultsIndex}\n` +
+            `Terminal.commandHistory: ${Terminal.commandHistory}\nTerminal.commandHistoryIndex: ${Terminal.commandHistoryIndex}`,
+        ),
+        true,
+      );
+      return;
+    }
     command = newValue;
     setValue(newValue);
 
@@ -86,7 +104,7 @@ export function TerminalInput(): React.ReactElement {
   function getSearchSuggestionPrespace() {
     const currentPrefix = `[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> `;
     const prefixLength = `${currentPrefix}${value}`.length;
-    return Array(prefixLength).fill(" ");
+    return Array<string>(prefixLength).fill(" ");
   }
 
   function modifyInput(mod: Modification): void {
@@ -206,7 +224,7 @@ export function TerminalInput(): React.ReactElement {
     return () => document.removeEventListener("keydown", keyDown);
   });
 
-  async function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): Promise<void> {
+  async function onKeyDown(event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> {
     const ref = terminalInput.current;
 
     // Run command or insert newline
@@ -338,63 +356,63 @@ export function TerminalInput(): React.ReactElement {
 
     // Extra Bash Emulation Hotkeys, must be enabled through options
     if (Settings.EnableBashHotkeys) {
-      if (event.code === KEYCODE.C && event.ctrlKey && ref && ref.selectionStart === ref.selectionEnd) {
+      if (event.key === KEY.C && event.ctrlKey && ref && ref.selectionStart === ref.selectionEnd) {
         event.preventDefault();
         Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${value}`);
         modifyInput("clearall");
       }
 
-      if (event.code === KEYCODE.A && event.ctrlKey) {
+      if (event.key === KEY.A && event.ctrlKey) {
         event.preventDefault();
         moveTextCursor("home");
       }
 
-      if (event.code === KEYCODE.E && event.ctrlKey) {
+      if (event.key === KEY.E && event.ctrlKey) {
         event.preventDefault();
         moveTextCursor("end");
       }
 
-      if (event.code === KEYCODE.B && event.ctrlKey) {
+      if (event.key === KEY.B && event.ctrlKey) {
         event.preventDefault();
         moveTextCursor("prevchar");
       }
 
-      if (event.code === KEYCODE.B && event.altKey) {
+      if (event.key === KEY.B && event.altKey) {
         event.preventDefault();
         moveTextCursor("prevword");
       }
 
-      if (event.code === KEYCODE.F && event.ctrlKey) {
+      if (event.key === KEY.F && event.ctrlKey) {
         event.preventDefault();
         moveTextCursor("nextchar");
       }
 
-      if (event.code === KEYCODE.F && event.altKey) {
+      if (event.key === KEY.F && event.altKey) {
         event.preventDefault();
         moveTextCursor("nextword");
       }
 
-      if ((event.code === KEYCODE.H || event.code === KEYCODE.D) && event.ctrlKey) {
+      if ((event.key === KEY.H || event.key === KEY.D) && event.ctrlKey) {
         modifyInput("backspace");
         event.preventDefault();
       }
 
-      if (event.code === KEYCODE.W && event.ctrlKey) {
+      if (event.key === KEY.W && event.ctrlKey) {
         event.preventDefault();
         modifyInput("deletewordbefore");
       }
 
-      if (event.code === KEYCODE.D && event.altKey) {
+      if (event.key === KEY.D && event.altKey) {
         event.preventDefault();
         modifyInput("deletewordafter");
       }
 
-      if (event.code === KEYCODE.U && event.ctrlKey) {
+      if (event.key === KEY.U && event.ctrlKey) {
         event.preventDefault();
         modifyInput("clearbefore");
       }
 
-      if (event.code === KEYCODE.K && event.ctrlKey) {
+      if (event.key === KEY.K && event.ctrlKey) {
         event.preventDefault();
         modifyInput("clearafter");
       }
@@ -427,7 +445,11 @@ export function TerminalInput(): React.ReactElement {
             setPossibilities([]);
             resetSearch();
           },
-          onKeyDown: onKeyDown,
+          onKeyDown: (event) => {
+            onKeyDown(event).catch((error) => {
+              console.error(error);
+            });
+          },
         }}
       ></TextField>
       <Popper

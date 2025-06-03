@@ -7,6 +7,7 @@ import type { Skills as PersonSkills } from "../PersonObjects/Skills";
 import {
   AugmentationName,
   BladeburnerActionType,
+  type BladeburnerBlackOpName,
   BladeburnerContractName,
   BladeburnerGeneralActionName,
   BladeburnerMultName,
@@ -51,6 +52,10 @@ import { Sleeve } from "../PersonObjects/Sleeve/Sleeve";
 import { autoCompleteTypeShorthand } from "./utils/terminalShorthands";
 import { resolveTeamCasualties, type OperationTeam } from "./Actions/TeamCasualties";
 import { shuffleArray } from "../Infiltration/ui/BribeGame";
+import { assertObject } from "../utils/TypeAssertion";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+import { loadActionIdentifier } from "./utils/loadActionIdentifier";
+import { pluralize } from "../utils/I18nUtils";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -64,7 +69,9 @@ export class Bladeburner implements OperationTeam {
   totalSkillPoints = 0;
 
   teamSize = 0;
-  sleeveSize = 0;
+  get sleeveSize() {
+    return Player.sleevesSupportingBladeburner().length;
+  }
   teamLost = 0;
 
   storedCycles = 0;
@@ -131,9 +138,10 @@ export class Bladeburner implements OperationTeam {
       this.resetAction();
       return { success: true, message: "Stopped current Bladeburner action" };
     }
-    if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) Player.finishWork(true);
+    if (!Player.hasAugmentation(AugmentationName.BladesSimulacrum, true)) {
+      Player.finishWork(true);
+    }
     const action = this.getActionObject(actionId);
-    // This switch statement is just for handling error cases, it does not have to be exhaustive
     const availability = action.getAvailability(this);
     if (!availability.available) {
       return { message: `Could not start action ${action.name}: ${availability.error}` };
@@ -153,21 +161,15 @@ export class Bladeburner implements OperationTeam {
   /** Attempts to perform a skill upgrade, gives a message on both success and failure */
   upgradeSkill(skillName: BladeburnerSkillName, count = 1): Attempt<{ message: string }> {
     const currentSkillLevel = this.skills[skillName] ?? 0;
-    const actualCount = currentSkillLevel + count - currentSkillLevel;
-    if (actualCount === 0) {
-      return {
-        message: `Cannot upgrade ${skillName}: Due to floating-point inaccuracy and the small value of specified "count", your skill cannot be upgraded.`,
-      };
-    }
-    const availability = Skills[skillName].canUpgrade(this, actualCount);
+    const availability = Skills[skillName].canUpgrade(this, count);
     if (!availability.available) {
       return { message: `Cannot upgrade ${skillName}: ${availability.error}` };
     }
     this.skillPoints -= availability.cost;
-    this.setSkillLevel(skillName, currentSkillLevel + actualCount);
+    this.setSkillLevel(skillName, currentSkillLevel + availability.actualCount);
     return {
       success: true,
-      message: `Upgraded skill ${skillName} by ${actualCount} level${actualCount > 1 ? "s" : ""}`,
+      message: `Upgraded skill ${skillName} by ${pluralize(availability.actualCount, "level")}`,
     };
   }
 
@@ -245,7 +247,7 @@ export class Bladeburner implements OperationTeam {
     }
     const type = args[1];
     const name = args[2];
-    const action = this.getActionFromTypeAndName(type, name);
+    const action = this.guessActionFromTypeAndName(type, name);
     if (!action) {
       this.postToConsole(`Invalid action type / name specified: type: ${type}, name: ${name}`);
       return;
@@ -705,16 +707,10 @@ export class Bladeburner implements OperationTeam {
     return charismaEff;
   }
 
-  getRecruitmentSuccessChance(person: Person): number {
-    return Math.pow(person.skills.charisma, 0.45) / (this.teamSize - this.sleeveSize + 1);
-  }
-
   sleeveSupport(joining: boolean): void {
     if (joining) {
-      this.sleeveSize += 1;
       this.teamSize += 1;
     } else {
-      this.sleeveSize -= 1;
       this.teamSize -= 1;
     }
   }
@@ -829,29 +825,30 @@ export class Bladeburner implements OperationTeam {
         city.changeChaosByPercentage(getRandomIntInclusive(-5, 5));
         break;
       default:
-        throw new Error("Invalid Action name in completeOperation: " + this.action.name);
+        throwIfReachable(action.name);
     }
   }
 
   completeContract(success: boolean, action: Contract): void {
+    if (!success) {
+      return;
+    }
     const city = this.getCurrentCity();
-    if (success) {
-      switch (action.name) {
-        case BladeburnerContractName.Tracking:
-          // Increase estimate accuracy by a relatively small amount
-          city.improvePopulationEstimateByCount(
-            getRandomIntInclusive(100, 1e3) * this.getSkillMult(BladeburnerMultName.SuccessChanceEstimate),
-          );
-          break;
-        case BladeburnerContractName.BountyHunter:
-          city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
-          city.changeChaosByCount(0.02);
-          break;
-        case BladeburnerContractName.Retirement:
-          city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
-          city.changeChaosByCount(0.04);
-          break;
-      }
+    switch (action.name) {
+      case BladeburnerContractName.Tracking:
+        // Increase estimate accuracy by a relatively small amount
+        city.improvePopulationEstimateByCount(
+          getRandomIntInclusive(100, 1e3) * this.getSkillMult(BladeburnerMultName.SuccessChanceEstimate),
+        );
+        break;
+      case BladeburnerContractName.BountyHunter:
+        city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
+        city.changeChaosByCount(0.02);
+        break;
+      case BladeburnerContractName.Retirement:
+        city.changePopulationByCount(-1, { estChange: -1, estOffset: 0 });
+        city.changeChaosByCount(0.04);
+        break;
     }
   }
 
@@ -929,6 +926,14 @@ export class Bladeburner implements OperationTeam {
               }
             }
             isOperation ? this.completeOperation(true) : this.completeContract(true, action);
+            /**
+             * If the player successfully completes a contract/operation involving killing, we deduct their karma by 1.
+             * The amount of reduction must be a small, flat value because the action time of contract/operation can be
+             * reduced to 1 second.
+             */
+            if (action.isKill) {
+              Player.karma -= 1;
+            }
           } else {
             retValue = this.getActionStats(action, person, false);
             ++action.failures;
@@ -999,6 +1004,15 @@ export class Bladeburner implements OperationTeam {
             this.log(
               `${person.whoAmI()}: ${action.name} successful! Gained ${formatNumberNoSuffix(rankGain, 1)} rank.`,
             );
+          }
+          /**
+           * If the player successfully completes a BlackOp involving killing, we deduct their karma by 15. The amount
+           * of reduction is higher than contract/operation because the number of BlackOps is small. It won't affect the
+           * balance. -15 karma is the same amount of karma for "heist" crime, which is the crime giving the highest
+           * "negative karma".
+           */
+          if (action.isKill) {
+            Player.karma -= 15;
           }
         } else {
           retValue = this.getActionStats(action, person, false);
@@ -1393,8 +1407,25 @@ export class Bladeburner implements OperationTeam {
     }
   }
 
-  /** Fuzzy matching for action identifiers. Should be removed in 3.0 */
-  getActionFromTypeAndName(type: string, name: string): Action | null {
+  getActionFromTypeAndName(type: BladeburnerActionType, name: string): Action | undefined {
+    /**
+     * Typecasting "name" instead of checking it with getEnumHelper().isMember() is intentional. The callers will handle
+     * the undefined value if "name" is invalid.
+     */
+    switch (type) {
+      case BladeburnerActionType.General:
+        return GeneralActions[name as BladeburnerGeneralActionName];
+      case BladeburnerActionType.Contract:
+        return this.contracts[name as BladeburnerContractName];
+      case BladeburnerActionType.Operation:
+        return this.operations[name as BladeburnerOperationName];
+      case BladeburnerActionType.BlackOp:
+        return BlackOperations[name as BladeburnerBlackOpName];
+    }
+  }
+
+  /** Fuzzy matching for action identifiers. Do not use this function for anything except BB console. */
+  guessActionFromTypeAndName(type: string, name: string): Action | null {
     if (!type || !name) return null;
     const id = autoCompleteTypeShorthand(type, name);
     return id ? this.getActionObject(id) : null;
@@ -1411,10 +1442,30 @@ export class Bladeburner implements OperationTeam {
 
   /** Initializes a Bladeburner object from a JSON save state. */
   static fromJSON(value: IReviverValue): Bladeburner {
+    assertObject(value.data);
     // operations and contracts are not loaded directly from the save, we load them in using a different method
-    const contractsData = value.data?.contracts;
-    const operationsData = value.data?.operations;
+    const contractsData = value.data.contracts;
+    const operationsData = value.data.operations;
     const bladeburner = Generic_fromJSON(Bladeburner, value.data, Bladeburner.keysToLoad);
+
+    /**
+     * Handle migration from pre-v2.6.1 versions:
+     * - pre-v2.6.1:
+     *   - action is an instance of the ActionIdentifier class. It cannot be null.
+     *   - action.type is a number.
+     * - 2.6.1:
+     *   - action is a nullable plain object. ActionIdentifier is a "type".
+     *   - action.type is a string.
+     */
+    if (bladeburner.action && typeof bladeburner.action.type === "number") {
+      bladeburner.action = loadActionIdentifier(bladeburner.action);
+      if (bladeburner.automateActionHigh) {
+        bladeburner.automateActionHigh = loadActionIdentifier(bladeburner.automateActionHigh);
+      }
+      if (bladeburner.automateActionLow) {
+        bladeburner.automateActionLow = loadActionIdentifier(bladeburner.automateActionLow);
+      }
+    }
     // Loading this way allows better typesafety and also allows faithfully reconstructing contracts/operations
     // even from save data that is missing a lot of static info about the objects.
     loadContractsData(contractsData, bladeburner.contracts);

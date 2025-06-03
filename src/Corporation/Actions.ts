@@ -10,7 +10,7 @@ import { OfficeSpace } from "./OfficeSpace";
 import { Material } from "./Material";
 import { Product } from "./Product";
 import { Warehouse } from "./Warehouse";
-import { FactionName, IndustryType } from "@enums";
+import { CreatingCorporationCheckResultEnum, FactionName, IndustryType } from "@enums";
 import { ResearchMap } from "./ResearchMap";
 import { isRelevantMaterial } from "./ui/Helpers";
 import { CityName } from "@enums";
@@ -22,39 +22,48 @@ import {
   buybackSharesFailureReason,
   issueNewSharesFailureReason,
   costOfCreatingCorporation,
+  canCreateCorporation,
+  convertCreatingCorporationCheckResultToMessage,
 } from "./helpers";
-import { PositiveInteger } from "../types";
-import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
+import { PositiveInteger, Result } from "../types";
 import { Factions } from "../Faction/Factions";
+import { throwIfReachable } from "../utils/helpers/throwIfReachable";
+import { formatMoney, formatNumber } from "../ui/formatNumber";
 
-export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): boolean {
-  if (!Player.canAccessCorporation()) {
-    return false;
+export function createCorporation(corporationName: string, selfFund: boolean, restart: boolean): Result {
+  const checkResult = canCreateCorporation(selfFund, restart);
+  switch (checkResult) {
+    case CreatingCorporationCheckResultEnum.Success:
+      break;
+    case CreatingCorporationCheckResultEnum.NoSf3OrDisabled:
+    case CreatingCorporationCheckResultEnum.CorporationExists:
+      return { success: false, message: convertCreatingCorporationCheckResultToMessage(checkResult) };
+    case CreatingCorporationCheckResultEnum.UseSeedMoneyOutsideBN3:
+    case CreatingCorporationCheckResultEnum.DisabledBySoftCap:
+      // In order to maintain backward compatibility, we have to throw an error in these cases.
+      throw new Error(convertCreatingCorporationCheckResultToMessage(checkResult));
+    default:
+      throwIfReachable(checkResult);
   }
-  if (Player.corporation && !restart) {
-    return false;
-  }
+
   if (!corporationName) {
-    return false;
-  }
-  if (Player.bitNodeN !== 3 && !selfFund) {
-    throw new Error("Cannot use seed funds outside of BitNode 3");
-  }
-  if (currentNodeMults.CorporationSoftcap < 0.15) {
-    throw new Error(`You cannot create a corporation in BitNode ${Player.bitNodeN}`);
+    return { success: false, message: "Corporation name cannot be an empty string." };
   }
 
   if (selfFund) {
     const cost = costOfCreatingCorporation(restart);
     if (!Player.canAfford(cost)) {
-      return false;
+      return {
+        success: false,
+        message: `You don't have enough money to create a corporation. It costs ${formatMoney(cost)}.`,
+      };
     }
     Player.startCorporation(corporationName, false);
     Player.loseMoney(cost, "corporation");
   } else {
     Player.startCorporation(corporationName, true);
   }
-  return true;
+  return { success: true };
 }
 
 export function createDivision(corporation: Corporation, industry: IndustryType, name: string): void {
@@ -79,7 +88,7 @@ export function createDivision(corporation: Corporation, industry: IndustryType,
       new Division({
         corp: corporation,
         name: name,
-        type: industry,
+        industry: industry,
       }),
     );
     corporation.numberOfOfficesAndWarehouses += 2;
@@ -198,125 +207,105 @@ export function acceptInvestmentOffer(corporation: Corporation): void {
   corporation.investorShares += investShares;
 }
 
-export function sellMaterial(material: Material, amount: string, price: string): void {
-  if (price === "") price = "0";
-  if (amount === "") amount = "0";
-  let cost = price.replace(/\s+/g, "");
-  cost = cost.replace(/[^-()\d/*+.MPe]/g, ""); //Sanitize cost
-  let temp = cost.replace(/MP/, "1.234e5");
-  try {
-    if (temp.includes("MP")) throw "Only one reference to MP is allowed in sell price.";
-    temp = eval?.(temp);
-  } catch (e) {
-    throw new Error("Invalid value or expression for sell price field: " + e);
+export function convertPriceString(price: string): string {
+  /**
+   * This is a common error. We should check it to get a "user-friendly" error message. If we pass an empty string to
+   * eval(), it will return undefined, and the "is-it-a-valid-number" following check will throw an unhelpful error
+   * message.
+   */
+  if (price === "") {
+    throw new Error("Price cannot be an empty string.");
   }
+  /**
+   * Replace invalid characters. Only accepts:
+   * - Digit characters
+   * - 4 most basic algebraic operations (+ - * /)
+   * - Parentheses
+   * - Dot character
+   * - Any characters in this list: [e, E, M, P]
+   */
+  const sanitizedPrice = price.replace(/[^\d+\-*/().eEMP]/g, "");
 
-  if (temp == null || isNaN(parseFloat(temp))) {
-    throw new Error("Invalid value or expression for sell price field");
-  }
-
-  if (cost.includes("MP")) {
-    material.desiredSellPrice = cost; //Dynamically evaluated
-  } else {
-    material.desiredSellPrice = temp;
-  }
-
-  //Parse quantity
-  amount = amount.toUpperCase();
-  if (amount.includes("MAX") || amount.includes("PROD") || amount.includes("INV")) {
-    let q = amount.replace(/\s+/g, "");
-    q = q.replace(/[^-()\d/*+.MAXPRODINV]/g, "");
-    let tempQty = q.replace(/MAX/g, material.maxSellPerCycle.toString());
-    tempQty = tempQty.replace(/PROD/g, material.productionAmount.toString());
-    tempQty = tempQty.replace(/INV/g, material.productionAmount.toString());
+  // Replace MP with test numbers.
+  for (const testNumber of [-1.2e123, -123456, 123456, 1.2e123]) {
+    const temp = sanitizedPrice.replace(/MP/g, testNumber.toString());
+    let evaluatedTemp: unknown;
     try {
-      tempQty = eval?.(tempQty);
-    } catch (e) {
-      throw new Error("Invalid value or expression for sell quantity field: " + e);
+      evaluatedTemp = eval?.(temp);
+      if (typeof evaluatedTemp !== "number" || !Number.isFinite(evaluatedTemp)) {
+        throw new Error(
+          `Evaluated value is not a valid number: ${evaluatedTemp}. Price: ${price}. sanitizedPrice: ${sanitizedPrice}. testNumber: ${testNumber}.`,
+        );
+      }
+    } catch (error) {
+      throw new Error(`Invalid value or expression for sell price field: ${error}`, { cause: error });
     }
-
-    if (tempQty == null || isNaN(parseFloat(tempQty))) {
-      throw new Error("Invalid value or expression for sell quantity field");
-    }
-    material.desiredSellAmount = q; //Use sanitized input
-  } else if (isNaN(parseFloat(amount)) || parseFloat(amount) < 0) {
-    throw new Error("Invalid value for sell quantity field! Must be numeric or 'PROD' or 'MAX'");
-  } else {
-    let q = parseFloat(amount);
-    if (isNaN(q)) {
-      q = 0;
-    }
-    material.desiredSellAmount = q;
   }
+
+  // Use sanitized price.
+  return sanitizedPrice;
+}
+
+export function convertAmountString(amount: string): string {
+  /**
+   * This is a common error. We should check it to get a "user-friendly" error message. If we pass an empty string to
+   * eval(), it will return undefined, and the "is-it-a-valid-number" following check will throw an unhelpful error
+   * message.
+   */
+  if (amount === "") {
+    throw new Error("Amount cannot be an empty string.");
+  }
+  /**
+   * Replace invalid characters. Only accepts:
+   * - Digit characters
+   * - 4 most basic algebraic operations (+ - * /)
+   * - Parentheses
+   * - Dot character
+   * - Any characters in this list: [e, E, M, A, X, P, R, O, D, I, N, V]
+   */
+  const sanitizedAmount = amount.replace(/[^\d+\-*/().eEMAXPRODINV]/g, "");
+
+  for (const testNumber of [-1.2e123, -123456, 123456, 1.2e123]) {
+    let temp = sanitizedAmount.replace(/MAX/g, testNumber.toString());
+    temp = temp.replace(/PROD/g, testNumber.toString());
+    temp = temp.replace(/INV/g, testNumber.toString());
+    let evaluatedTemp: unknown;
+    try {
+      evaluatedTemp = eval?.(temp);
+      if (typeof evaluatedTemp !== "number" || !Number.isFinite(evaluatedTemp)) {
+        throw new Error(
+          `Evaluated value is not a valid number: ${evaluatedTemp}. Amount: ${amount}. sanitizedAmount: ${sanitizedAmount}. testNumber: ${testNumber}.`,
+        );
+      }
+    } catch (error) {
+      throw new Error(`Invalid value or expression for sell quantity field: ${error}`, { cause: error });
+    }
+  }
+
+  // Use sanitized amount.
+  return sanitizedAmount;
+}
+
+export function sellMaterial(material: Material, amount: string, price: string): void {
+  const convertedPrice = convertPriceString(price.toUpperCase());
+  const convertedAmount = convertAmountString(amount.toUpperCase());
+
+  material.desiredSellPrice = convertedPrice;
+  material.desiredSellAmount = convertedAmount;
 }
 
 export function sellProduct(product: Product, city: CityName, amt: string, price: string, all: boolean): void {
-  //Parse price
-  // initliaze newPrice with oldPrice as default
-  let newPrice = product.cityData[city].desiredSellPrice;
-  if (price.includes("MP")) {
-    //Dynamically evaluated quantity. First test to make sure its valid
-    //Sanitize input, then replace dynamic variables with arbitrary numbers
-    price = price.replace(/\s+/g, "");
-    price = price.replace(/[^-()\d/*+.MPe]/g, "");
-    let temp = price.replace(/MP/, "1.234e5");
-    try {
-      if (temp.includes("MP")) throw "Only one reference to MP is allowed in sell price.";
-      temp = eval?.(temp);
-    } catch (e) {
-      throw new Error("Invalid value or expression for sell price field: " + e);
-    }
-    if (temp == null || isNaN(parseFloat(temp))) {
-      throw new Error("Invalid value or expression for sell price field.");
-    }
-    newPrice = price; //Use sanitized price
-  } else {
-    const cost = parseFloat(price);
-    if (isNaN(cost)) {
-      throw new Error("Invalid value for sell price field");
-    }
-    newPrice = cost;
-  }
+  const convertedPrice = convertPriceString(price.toUpperCase());
+  const convertedAmount = convertAmountString(amt.toUpperCase());
 
-  // Parse quantity
-  amt = amt.toUpperCase();
-  //initialize newAmount with old as default
-  let newAmount = product.cityData[city].desiredSellAmount;
-  if (amt.includes("MAX") || amt.includes("PROD") || amt.includes("INV")) {
-    //Dynamically evaluated quantity. First test to make sure its valid
-    let qty = amt.replace(/\s+/g, "");
-    qty = qty.replace(/[^-()\d/*+.MAXPRODINV]/g, "");
-    let temp = qty.replace(/MAX/g, product.maxSellAmount.toString());
-    temp = temp.replace(/PROD/g, product.cityData[city].productionAmount.toString());
-    temp = temp.replace(/INV/g, product.cityData[city].stored.toString());
-    try {
-      temp = eval?.(temp);
-    } catch (e) {
-      throw new Error("Invalid value or expression for sell quantity field: " + e);
-    }
-
-    if (temp == null || isNaN(parseFloat(temp))) {
-      throw new Error("Invalid value or expression for sell quantity field");
-    }
-    newAmount = qty; //Use sanitized input
-  } else if (isNaN(parseFloat(amt)) || parseFloat(amt) < 0) {
-    throw new Error("Invalid value for sell quantity field! Must be numeric or 'PROD' or 'MAX'");
-  } else {
-    let qty = parseFloat(amt);
-    if (isNaN(qty)) {
-      qty = 0;
-    }
-    newAmount = qty;
-  }
-  //apply new price and amount to all or just current
   if (all) {
     for (const cityName of Object.values(CityName)) {
-      product.cityData[cityName].desiredSellAmount = newAmount;
-      product.cityData[cityName].desiredSellPrice = newPrice;
+      product.cityData[cityName].desiredSellAmount = convertedAmount;
+      product.cityData[cityName].desiredSellPrice = convertedPrice;
     }
   } else {
-    product.cityData[city].desiredSellAmount = newAmount;
-    product.cityData[city].desiredSellPrice = newPrice;
+    product.cityData[city].desiredSellAmount = convertedAmount;
+    product.cityData[city].desiredSellPrice = convertedPrice;
   }
 }
 
@@ -330,7 +319,7 @@ export function setSmartSupplyOption(warehouse: Warehouse, material: Material, u
 
 export function buyMaterial(division: Division, material: Material, amt: number): void {
   if (!isRelevantMaterial(material.name, division)) {
-    throw new Error(`${material.name} is not a relevant material for industry ${division.type}`);
+    throw new Error(`${material.name} is not a relevant material for industry ${division.industry}`);
   }
   if (!Number.isFinite(amt) || amt < 0) {
     throw new Error(
@@ -348,7 +337,7 @@ export function bulkPurchase(
   amt: number,
 ): void {
   if (!isRelevantMaterial(material.name, division)) {
-    throw new Error(`${material.name} is not a relevant material for industry ${division.type}`);
+    throw new Error(`${material.name} is not a relevant material for industry ${division.industry}`);
   }
   const matSize = MaterialInfo[material.name].size;
   const maxAmount = (warehouse.size - warehouse.sizeUsed) / matSize;
@@ -512,8 +501,8 @@ export function makeProduct(
 export function research(researchingDivision: Division, researchName: CorpResearchName): void {
   const corp = Player.corporation;
   if (!corp) return;
-  const researchTree = IndustryResearchTrees[researchingDivision.type];
-  if (researchTree === undefined) throw new Error(`No research tree for industry '${researchingDivision.type}'`);
+  const researchTree = IndustryResearchTrees[researchingDivision.industry];
+  if (researchTree === undefined) throw new Error(`No research tree for industry '${researchingDivision.industry}'`);
   const research = ResearchMap[researchName];
   const researchNode = researchTree.findNode(researchName);
   const researchPreReq = researchNode?.parent?.researchName;
@@ -535,7 +524,7 @@ export function research(researchingDivision: Division, researchName: CorpResear
   researchTree.research(researchName);
   // All divisions of the same type as the researching division get the new research.
   for (const division of corp.divisions.values()) {
-    if (division.type !== researchingDivision.type) continue;
+    if (division.industry !== researchingDivision.industry) continue;
     division.researched.add(researchName);
     // Handle researches that need to have their effects manually applied here.
     // Warehouse size needs to be updated here because it is not recalculated during normal processing.
@@ -577,21 +566,22 @@ Attempted export amount: ${amount}`);
   sanitizedAmt = sanitizedAmt.replace(/[^-()\d/*+.MAXEPRODINV]/g, "");
   for (const testReplacement of ["(1.23)", "(-1.23)"]) {
     const replaced = sanitizedAmt.replace(/(MAX|IPROD|EPROD|IINV|EINV)/g, testReplacement);
-    let evaluated, error;
+    let evaluated: unknown;
     try {
       evaluated = eval?.(replaced);
-    } catch (e) {
-      error = e;
-    }
-    if (!error && isNaN(evaluated)) error = "evaluated value is NaN";
-    if (error) {
-      throw new Error(`Error while trying to set the exported amount of ${material.name}.
+      if (typeof evaluated !== "number" || !Number.isFinite(evaluated)) {
+        throw new Error(`Evaluated value is not a valid number: ${evaluated}`);
+      }
+    } catch (error) {
+      throw new Error(
+        `Error while trying to set the exported amount of ${material.name}.
 Error occurred while testing keyword replacement with ${testReplacement}.
 Your input: ${amount}
 Sanitized input: ${sanitizedAmt}
 Input after replacement: ${replaced}
 Evaluated value: ${evaluated}
-Error encountered: ${error}`);
+Error encountered: ${error}`,
+      );
     }
   }
 
@@ -637,22 +627,46 @@ export function setProductMarketTA2(product: Product, on: boolean): void {
   product.marketTa2 = on;
 }
 
-export function bribe(corporation: Corporation, fundsForBribing: number, factionName: FactionName): number {
-  if (corporation.valuation < corpConstants.bribeThreshold) {
-    return 0;
+export function bribe(
+  corporation: Corporation,
+  fundsForBribing: number,
+  factionName: FactionName,
+): Result<{ reputationGain: number }> {
+  if (!Number.isFinite(fundsForBribing) || fundsForBribing <= 0 || corporation.funds < fundsForBribing) {
+    return {
+      success: false,
+      message: "Invalid amount of cash for bribing.",
+    };
   }
-  if (fundsForBribing <= 0 || corporation.funds < fundsForBribing) {
-    return 0;
+  if (corporation.valuation < corpConstants.bribeThreshold) {
+    return {
+      success: false,
+      message: `The corporation valuation is below the threshold. Threshold: ${formatNumber(
+        corpConstants.bribeThreshold,
+      )}.`,
+    };
+  }
+  if (!Player.factions.includes(factionName)) {
+    return {
+      success: false,
+      message: `You are not a member of ${factionName}.`,
+    };
   }
   const faction = Factions[factionName];
   const factionInfo = faction.getInfo();
   if (!factionInfo.offersWork()) {
-    return 0;
+    return {
+      success: false,
+      message: `${factionName} cannot be bribed. It does not offer any types of work.`,
+    };
   }
 
   const reputationGain = fundsForBribing / corpConstants.bribeAmountPerReputation;
   faction.playerReputation += reputationGain;
   corporation.loseFunds(fundsForBribing, "bribery");
 
-  return reputationGain;
+  return {
+    success: true,
+    reputationGain,
+  };
 }

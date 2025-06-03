@@ -1,4 +1,4 @@
-// choose random character for generating plaintexts to compress
+// choose random characters for generating plaintext to compress
 export function comprGenChar(): string {
   const r = Math.random();
   if (r < 0.4) {
@@ -34,13 +34,13 @@ export function comprLZGenerate(): string {
   return plain.substring(0, length);
 }
 
-// compress plaintest string
+// compress plaintext string
 export function comprLZEncode(plain: string): string {
   // for state[i][j]:
   //      if i is 0, we're adding a literal of length j
   //      else, we're adding a backreference of offset i and length j
-  let cur_state: (string | null)[][] = Array.from(Array(10), () => Array(10).fill(null));
-  let new_state: (string | null)[][] = Array.from(Array(10), () => Array(10));
+  let cur_state: (string | null)[][] = Array.from(Array(10), () => Array<string | null>(10).fill(null));
+  let new_state: (string | null)[][] = Array.from(Array(10), () => Array<string | null>(10));
 
   function set(state: (string | null)[][], i: number, j: number, str: string): void {
     const current = state[i][j];

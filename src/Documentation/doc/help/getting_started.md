@@ -30,7 +30,7 @@ Instead, go to the `Hacknet Nodes` page (Alt + h) and purchase a [Hacknet Node](
 
 ## Creating our First Script
 
-Now, we'll create a generic [hacking](../basic/hacking.md) [Script](../basic/scripts.md) that can be used early on in the game (or throughout the entire game, if you want).
+Now, we'll create a generic [hacking](../basic/hacking.md) [Script](../basic/scripts.md) that can be used early on in the game (or throughout the entire game, if you want). This script is usually called "early hack template" or EHT.
 
 Before we write the [Script](../basic/scripts.md), here are some things you'll want to familiarize yourself with:
 
@@ -117,7 +117,7 @@ The `getServerMaxMoney()` function is used to find this value
     const securityThresh = ns.getServerMinSecurityLevel(target);
 
 This third command defines a numerical value representing the minimum security level the target [Server](../basic/servers.md) can have.
-If the target [Server](../basic/servers.md)'s security level is higher than this value, then our [Script](../basic/scripts.md) will `weaken()` the [Script](../basic/scripts.md) before doing anything else.
+If the target [Server](../basic/servers.md)'s security level is higher than this value, then our [Script](../basic/scripts.md) will `weaken()` the server before doing anything else.
 
     if (ns.fileExists("BruteSSH.exe", "home")) {
         ns.brutessh(target);
@@ -771,4 +771,4 @@ Feel free to adjust it to your liking.
   The `getServerMaxMoney()` function will tell you this maximum value.
 - At this stage in the game, your combat stats (strength, defense, etc.) are not nearly as useful as your hacking stat.
   Do not invest too much time or money into gaining combat stat exp.
-- As a rule of thumb, your hacking target should be the [Server](../basic/servers.md) with highest max money that's required hacking level is under 1/2 of your hacking level.
+- As a rule of thumb, your hacking target should be the [Server](../basic/servers.md) that has the highest ratio of `MaxMoney / MinimumSecurityLevel` and its `RequiredHackingLevel` is under half of your hacking level.

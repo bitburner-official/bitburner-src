@@ -9,18 +9,20 @@ Runs SQLInject.exe on a server.
 **Signature:**
 
 ```typescript
-sqlinject(host: string): void;
+sqlinject(host: string): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | Hostname of the target server. |
+|  host | string | Hostname/IP of the target server. |
 
 **Returns:**
 
-void
+boolean
+
+True if the player runs the program successfully, and false otherwise.
 
 ## Remarks
 

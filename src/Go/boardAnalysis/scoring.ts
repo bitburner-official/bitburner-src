@@ -1,15 +1,16 @@
 import type { Board, BoardState, PointState } from "../Types";
 
 import { Player } from "@player";
-import { GoOpponent, GoColor, GoPlayType } from "@enums";
+import { GoOpponent, GoColor, FactionName } from "@enums";
 import { newOpponentStats } from "../Constants";
 import { getAllChains, getPlayerNeighbors } from "./boardAnalysis";
-import { getKomi } from "./goAI";
-import { getDifficultyMultiplier, getMaxFavor, getWinstreakMultiplier } from "../effects/effect";
+import { getKomi, resetAI } from "./goAI";
+import { getDifficultyMultiplier, getMaxRep, getWinstreakMultiplier } from "../effects/effect";
 import { isNotNullish } from "../boardState/boardState";
 import { Factions } from "../../Faction/Factions";
 import { getEnumHelper } from "../../utils/EnumHelper";
-import { Go } from "../Go";
+import { Go, GoEvents } from "../Go";
+import { addRepToFavor } from "../../Faction/formulas/favor";
 
 /**
  * Returns the score of the current board.
@@ -17,7 +18,7 @@ import { Go } from "../Go";
  *  fully surrounded by their pieces
  */
 export function getScore(boardState: BoardState) {
-  const komi = getKomi(boardState.ai) ?? 6.5;
+  const komi = getKomi(boardState) ?? 6.5;
   const whitePieces = getColoredPieceCount(boardState, GoColor.white);
   const blackPieces = getColoredPieceCount(boardState, GoColor.black);
   const territoryScores = getTerritoryScores(boardState.board);
@@ -46,20 +47,14 @@ export function endGoGame(boardState: BoardState) {
   if (boardState.previousPlayer === null) {
     return;
   }
-  Go.nextTurn = Promise.resolve({
-    type: GoPlayType.gameOver,
-    x: null,
-    y: null,
-  });
 
   boardState.previousPlayer = null;
   const statusToUpdate = getOpponentStats(boardState.ai);
-  statusToUpdate.favor = statusToUpdate.favor ?? 0;
+  statusToUpdate.rep = statusToUpdate.rep ?? 0;
   const score = getScore(boardState);
 
   if (score[GoColor.black].sum < score[GoColor.white].sum) {
     resetWinstreak(boardState.ai, true);
-    statusToUpdate.nodePower += Math.floor(score[GoColor.black].sum * 0.25);
   } else {
     statusToUpdate.wins++;
     statusToUpdate.oldWinStreak = statusToUpdate.winStreak;
@@ -74,10 +69,17 @@ export function endGoGame(boardState: BoardState) {
       factionName &&
       statusToUpdate.winStreak % 2 === 0 &&
       Player.factions.includes(factionName) &&
-      statusToUpdate.favor < getMaxFavor()
+      statusToUpdate.rep < getMaxRep()
     ) {
-      Factions[factionName].setFavor(Factions[factionName].favor + 1);
-      statusToUpdate.favor++;
+      const currentFavor = Factions[factionName].favor;
+      const repToAdd = getMaxRep() / 200;
+      const newFavor = addRepToFavor(currentFavor, repToAdd);
+      Factions[factionName].setFavor(newFavor);
+      statusToUpdate.rep += repToAdd;
+    }
+
+    if (factionName === FactionName.Illuminati && statusToUpdate.winStreak >= 10) {
+      Player.giveAchievement("IPVGO_WINNING_STREAK");
     }
   }
 
@@ -89,9 +91,25 @@ export function endGoGame(boardState: BoardState) {
   statusToUpdate.nodes += score[GoColor.black].sum;
   Go.currentGame = boardState;
   Go.previousGame = boardState;
+  resetAI(true);
+  GoEvents.emit();
 
   // Update multipliers with new bonuses, once at the end of the game
   Player.applyEntropy(Player.entropy);
+}
+
+/**
+ * Forcefully ends the game, resetting the winstreak (if any) and ending the game without applying node power bonuses.
+ * Used for critically failing a cheat attempt.
+ * @param boardState - the boardstate to reset
+ */
+export function forceEndGoGame(boardState: BoardState) {
+  resetWinstreak(boardState.ai, false);
+  boardState.previousPlayer = null;
+  Go.currentGame = boardState;
+  Go.previousGame = boardState;
+  resetAI(true);
+  GoEvents.emit();
 }
 
 /**
@@ -123,7 +141,9 @@ function getColoredPieceCount(boardState: BoardState, color: GoColor) {
  * Finds all empty spaces fully surrounded by a single player's stones
  */
 function getTerritoryScores(board: Board) {
-  const emptyTerritoryChains = getAllChains(board).filter((chain) => chain?.[0]?.color === GoColor.empty);
+  const emptyTerritoryChains = getAllChains(board).filter(
+    (chain) => chain?.[0]?.color === GoColor.empty && chain.length <= board.length * 2,
+  );
 
   return emptyTerritoryChains.reduce(
     (scores, currentChain) => {

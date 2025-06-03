@@ -3,7 +3,6 @@ import * as monaco from "monaco-editor";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
@@ -13,7 +12,7 @@ import Typography from "@mui/material/Typography";
 
 import SettingsIcon from "@mui/icons-material/Settings";
 
-import { makeTheme, sanitizeTheme } from "./themes";
+import { makeTheme } from "./themes";
 
 import { Modal } from "../../ui/React/Modal";
 import { Page } from "../../ui/Router";
@@ -22,21 +21,29 @@ import { useBoolean } from "../../ui/React/hooks";
 import { Settings } from "../../Settings/Settings";
 import { OptionsModal, OptionsModalProps } from "./OptionsModal";
 import { useScriptEditorContext } from "./ScriptEditorContext";
-import { getNsApiDocumentationUrl } from "../../utils/StringHelperFunctions";
+import { NsApiDocumentationLink } from "../../ui/React/NsApiDocumentationLink";
+import { CurrentKeyBindings, parseKeyCombinationsToString, ScriptEditorAction } from "../../utils/KeyBindingUtils";
+import { DocumentationAutocomplete } from "../../Documentation/ui/DocumentationAutocomplete";
+import { openDocumentationPopUp } from "../../Documentation/root";
+import { openDocExternally } from "../../ui/React/Documentation";
 
 type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
 interface IProps {
   editor: IStandaloneCodeEditor | null;
   onSave: () => void;
+  onRun: () => void;
 }
 
-export function Toolbar({ editor, onSave }: IProps) {
+export function Toolbar({ editor, onSave, onRun }: IProps) {
   const [ramInfoOpen, { on: openRAMInfo, off: closeRAMInfo }] = useBoolean(false);
   const [optionsOpen, { on: openOptions, off: closeOptions }] = useBoolean(false);
 
   function beautify(): void {
-    editor?.getAction("editor.action.formatDocument")?.run();
+    editor
+      ?.getAction("editor.action.formatDocument")
+      ?.run()
+      .catch((error) => console.error(error));
   }
 
   const { ram, ramEntries, isUpdatingRAM, options, saveOptions } = useScriptEditorContext();
@@ -52,7 +59,6 @@ export function Toolbar({ editor, onSave }: IProps) {
   };
 
   const onThemeChange = () => {
-    sanitizeTheme(Settings.EditorTheme);
     monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
   };
 
@@ -66,14 +72,31 @@ export function Toolbar({ editor, onSave }: IProps) {
         <Button color={isUpdatingRAM ? "secondary" : "primary"} sx={{ mx: 1 }} onClick={openRAMInfo}>
           {ram}
         </Button>
-        <Button onClick={onSave}>Save (Ctrl/Cmd + s)</Button>
-        <Button sx={{ mx: 1 }} onClick={() => Router.toPage(Page.Terminal)}>
-          Terminal (Ctrl/Cmd + b)
-        </Button>
+        <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.Save])}>
+          <Button onClick={onSave}>Save</Button>
+        </Tooltip>
+        <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.GoToTerminal])}>
+          <Button sx={{ mx: 1 }} onClick={() => Router.toPage(Page.Terminal)}>
+            Terminal
+          </Button>
+        </Tooltip>
+        <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.Run])}>
+          <Button sx={{ mr: 1 }} onClick={onRun}>
+            Run
+          </Button>
+        </Tooltip>
+        <DocumentationAutocomplete
+          sx={{ marginRight: "10px" }}
+          onChange={(path, external) => {
+            if (external) {
+              openDocExternally(path);
+              return;
+            }
+            openDocumentationPopUp(path);
+          }}
+        />
         <Typography>
-          <Link target="_blank" href={getNsApiDocumentationUrl()} fontSize="1.2rem">
-            NS API documentation
-          </Link>
+          <NsApiDocumentationLink />
         </Typography>
       </Box>
       <OptionsModal

@@ -7,18 +7,18 @@ import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { saveObject } from "../SaveObject";
 import { onExport } from "../ExportBonus";
-import { LocationName } from "@enums";
+import { CompletedProgramName, LocationName } from "@enums";
 import { ITutorial, iTutorialStart } from "../InteractiveTutorial";
 import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutorialRoot";
 import { ITutorialEvents } from "./InteractiveTutorial/ITutorialEvents";
 
-import { prestigeAugmentation } from "../Prestige";
 import { prestigeWorkerScripts } from "../NetscriptWorker";
 import { dialogBoxCreate } from "./React/DialogBox";
 import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 
-import type { PageWithContext, IRouter, ComplexPage, PageContext } from "./Router";
+import type { ComplexPage } from "./Enums";
+import type { PageWithContext, IRouter, PageContext } from "./Router";
 import { Page } from "./Router";
 import { Overview } from "./React/Overview";
 import { SidebarRoot } from "../Sidebar/ui/SidebarRoot";
@@ -34,11 +34,13 @@ import { GameOptionsRoot } from "../GameOptions/ui/GameOptionsRoot";
 import { SleeveRoot } from "../PersonObjects/Sleeve/ui/SleeveRoot";
 import { HacknetRoot } from "../Hacknet/ui/HacknetRoot";
 import { GenericLocation } from "../Locations/ui/GenericLocation";
+import { JobRoot } from "../Locations/ui/JobRoot";
 import { LocationCity } from "../Locations/ui/City";
 import { ProgramsRoot } from "../Programs/ui/ProgramsRoot";
 import { ScriptEditorRoot } from "../ScriptEditor/ui/ScriptEditorRoot";
 import { MilestonesRoot } from "../Milestones/ui/MilestonesRoot";
 import { TerminalRoot } from "../Terminal/ui/TerminalRoot";
+import { Terminal } from "../Terminal";
 import { DocumentationRoot } from "../Documentation/ui/DocumentationRoot";
 import { ActiveScriptsRoot } from "./ActiveScripts/ActiveScriptsRoot";
 import { FactionsRoot } from "../Faction/ui/FactionsRoot";
@@ -59,8 +61,7 @@ import { AlertManager } from "./React/AlertManager";
 import { PromptManager } from "./React/PromptManager";
 import { FactionInvitationManager } from "../Faction/ui/FactionInvitationManager";
 import { calculateAchievements } from "../Achievements/Achievements";
-
-import { RecoveryMode, RecoveryRoot } from "./React/RecoveryRoot";
+import { ActivateRecoveryMode, RecoveryMode, RecoveryRoot } from "./React/RecoveryRoot";
 import { AchievementsRoot } from "../Achievements/AchievementsRoot";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { ThemeBrowser } from "../Themes/ui/ThemeBrowser";
@@ -75,6 +76,9 @@ import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
 import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
+import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { SpecialServers } from "../Server/data/SpecialServers";
+import { DocumentationPopUp } from "../Documentation/ui/DocumentationPopUp";
 
 const htmlLocation = location;
 
@@ -113,9 +117,18 @@ function determineStartPage(): PageWithContext {
   if (RecoveryMode) {
     return { page: Page.Recovery };
   }
-  if (isBitNodeFinished()) {
-    // Go to BitVerse UI without animation.
-    return { page: Page.BitVerse, flume: false, quick: true };
+  /**
+   * If the save data contains the server list, but WD data is invalid, isBitNodeFinished() will throw an error, and the
+   * main UI will show a black screen instead of the recovery screen.
+   */
+  try {
+    if (isBitNodeFinished()) {
+      // Go to BitVerse UI without animation.
+      return { page: Page.BitVerse, flume: false, quick: true };
+    }
+  } catch (error) {
+    ActivateRecoveryMode(error);
+    return { page: Page.Recovery };
   }
   if (Player.currentWork !== null) {
     return { page: Page.Work };
@@ -154,8 +167,14 @@ export function GameRoot(): React.ReactElement {
     for (const server of GetAllServers()) {
       server.runningScriptMap.clear();
     }
-    saveObject.saveGame();
-    setTimeout(() => htmlLocation.reload(), 2000);
+    saveObject
+      .saveGame()
+      .then(() => {
+        setTimeout(() => htmlLocation.reload(), 2000);
+      })
+      .catch((error) => {
+        exceptionAlert(error);
+      });
   }
 
   function attemptedForbiddenRouting(name: string) {
@@ -326,23 +345,29 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.Job:
+      mainPage = <JobRoot />;
+      break;
     case Page.Location: {
-      mainPage = <GenericLocation loc={pageWithContext.location} />;
+      mainPage = <GenericLocation location={pageWithContext.location} showBackButton={true} />;
       break;
     }
     case Page.Options: {
       mainPage = (
         <GameOptionsRoot
-          save={() => saveObject.saveGame()}
+          save={() => {
+            saveObject.saveGame().catch((error) => exceptionAlert(error));
+          }}
           export={() => {
             // Apply the export bonus before saving the game
             onExport();
-            saveObject.exportGame();
+            saveObject.exportGame().catch((error) => exceptionAlert(error));
           }}
           forceKill={killAllScripts}
           softReset={softReset}
           reactivateTutorial={() => {
-            prestigeAugmentation();
+            prestigeWorkerScripts();
+            Player.getHomeComputer().pushProgram(CompletedProgramName.nuke);
+            Terminal.connectToServer(SpecialServers.Home);
             Router.toPage(Page.Terminal);
             iTutorialStart();
           }}
@@ -356,7 +381,7 @@ export function GameRoot(): React.ReactElement {
           exportGameFn={() => {
             // Apply the export bonus before saving the game
             onExport();
-            saveObject.exportGame();
+            saveObject.exportGame().catch((error) => exceptionAlert(error));
           }}
           installAugmentationsFn={() => {
             installAugmentations();
@@ -395,7 +420,9 @@ export function GameRoot(): React.ReactElement {
                   !ITutorial.isRunning ? (
                     <CharacterOverview
                       parentOpen={parentOpen}
-                      save={() => saveObject.saveGame()}
+                      save={() => {
+                        saveObject.saveGame().catch((error) => exceptionAlert(error));
+                      }}
                       killScripts={killAllScripts}
                     />
                   ) : (
@@ -417,6 +444,7 @@ export function GameRoot(): React.ReactElement {
               <PromptManager hidden={hidePopups} />
               <FactionInvitationManager hidden={hidePopups} />
               <Snackbar hidden={hidePopups} />
+              <DocumentationPopUp hidden={hidePopups} />
               <Apr1 />
             </SnackbarProvider>
           </HistoryProvider>

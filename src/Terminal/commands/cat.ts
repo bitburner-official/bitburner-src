@@ -21,7 +21,7 @@ export function cat(args: (string | number | boolean)[], server: BaseServer): vo
   }
   if (!path.endsWith(".msg") && !path.endsWith(".lit")) {
     return Terminal.error(
-      "Invalid file extension. Filename must end with .msg, .lit, a script extension (.js, .jsx, .ts, .tsx, .script) or a text extension (.txt, .json)",
+      "Invalid file extension. Filename must end with .msg, .lit, a script extension (.js, .jsx, .ts, .tsx) or a text extension (.txt, .json)",
     );
   }
 

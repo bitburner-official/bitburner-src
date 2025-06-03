@@ -151,6 +151,12 @@ upstream/master
   - Keep code-changes on a branch as small as possible. This makes it easier for code review. Each branch should be its own independent feature.
   - Regularly rebase your branch against `dev` to make sure you have the latest updates pulled.
 
+### Special Exceptions
+
+- In `src/ScriptEditor/NetscriptDefinitions.d.ts`, there are two specially-formatted go boards with two trailing whitespaces.
+  Make sure your editor does not automatically format those examples.
+  You can look for changes to that part using `git diff` to make sure the whitespaces are still present.
+
 ## Running locally
 
 Install
@@ -169,7 +175,7 @@ Saving a file will reload the game automatically.
 
 ### How to build the electron app
 
-Tested on Node v16.13.1 (LTS) on Windows.
+Tested on Node v20.11.1 (LTS) on Windows.
 These steps only work in a Bash-like environment, like MinGW for Windows.
 
 ```sh
@@ -179,10 +185,6 @@ $ npm run build:dev
 
 # Use electron-packager to build the app to the .build/ folder.
 $ npm run electron
-
-# When launching the .exe directly, you'll need the steam_appid.txt file in the root.
-# If not using Windows, change this line accordingly.
-$ cp .build/bitburner-win32-x64/resources/app/steam_appid.txt .build/bitburner-win32-x64/steam_appid.txt
 
 # And run the game...
 $ .build/bitburner-win32-x64/bitburner.exe

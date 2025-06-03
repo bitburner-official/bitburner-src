@@ -11,6 +11,8 @@ import { Modal } from "../../ui/React/Modal";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 
 import { defaultMonacoTheme } from "./themes";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { assertAndSanitizeEditorTheme } from "../../JsonSchema/JSONSchemaAssertion";
 
 type ColorEditorProps = {
   label: string;
@@ -73,14 +75,18 @@ export function ThemeEditorModal(props: ThemeEditorProps): React.ReactElement {
   }
 
   function onThemeChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    let themeData: unknown;
     try {
-      const importedTheme = JSON.parse(event.target.value);
-      if (typeof importedTheme !== "object") return;
-      Settings.EditorTheme = importedTheme;
-      props.onChange();
-    } catch (err) {
-      // ignore
+      themeData = JSON.parse(event.target.value);
+      assertAndSanitizeEditorTheme(themeData);
+    } catch (error) {
+      console.error(error);
+      console.error("Theme data is invalid. Data:", event.target.value);
+      dialogBoxCreate(`Invalid theme. Errors: ${error}.`);
+      return;
     }
+    Object.assign(Settings.EditorTheme, themeData);
+    props.onChange();
   }
 
   const onResetToDefault = () => {

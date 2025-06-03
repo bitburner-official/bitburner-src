@@ -8,15 +8,13 @@ import { getGlobbedFileMap } from "../../../Paths/GlobbedFiles";
 import { sendDeprecationNotice } from "./deprecation";
 import { getFileType, getFileTypeFeature } from "../../../utils/ScriptTransformer";
 
-// 2.3: Globbing implementation was removed from this file. Globbing will be reintroduced as broader functionality and integrated here.
-
 interface EditorParameters {
   args: (string | number | boolean)[];
   server: BaseServer;
 }
 
 function getScriptTemplate(path: string): string {
-  if (isLegacyScript(path)) {
+  if (hasTextExtension(path) || isLegacyScript(path)) {
     return "";
   }
   const fileTypeFeature = getFileTypeFeature(getFileType(path));

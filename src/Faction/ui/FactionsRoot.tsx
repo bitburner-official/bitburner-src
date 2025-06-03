@@ -10,12 +10,13 @@ import { formatFavor, formatReputation } from "../../ui/formatNumber";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { useCycleRerender } from "../../ui/React/hooks";
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { Requirement } from "../../ui/Components/Requirement";
 
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, joinFaction } from "../FactionHelpers";
 import { Factions } from "../Factions";
+import { ShareOption } from "./ShareOption";
 
 export const InvitationsSeen = new Set<FactionName>();
 
@@ -136,7 +137,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
             ) : (
               <Tooltip title={"Rumored Faction"}>
                 <span style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
-                  <CorruptableText content={props.faction.name} spoiler={false} />
+                  <CorruptibleText content={props.faction.name} spoiler={false} />
                 </span>
               </Tooltip>
             )}
@@ -154,7 +155,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                 </Tooltip>
               )}
 
-              {!props.faction.isMember && facInfo.enemies.length > 0 && (
+              {facInfo.enemies.length > 0 && (
                 <Tooltip
                   title={
                     <Typography component="div">
@@ -164,7 +165,7 @@ const FactionElement = (props: FactionElementProps): React.ReactElement => {
                           <li key={enemy}>{enemy}</li>
                         ))}
                       </ul>
-                      Joining this Faction will prevent you from joining its enemies
+                      {!props.faction.isMember && <>Joining this Faction will prevent you from joining its enemies</>}
                     </Typography>
                   }
                 >
@@ -290,6 +291,12 @@ export function FactionsRoot(): React.ReactElement {
           </Box>
         </span>
       </Box>
+      <div style={{ margin: "15px 0" }}>
+        <Typography variant="h5" color="primary">
+          Share RAM
+        </Typography>
+        <ShareOption rerender={rerender} />
+      </div>
       <span className="factions-rumors">
         {rumoredFactions.length > 0 && (
           <>

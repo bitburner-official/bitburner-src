@@ -9,14 +9,14 @@ Connect to a server.
 **Signature:**
 
 ```typescript
-connect(hostname: string): boolean;
+connect(host: string): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  hostname | string |  |
+|  host | string |  |
 
 **Returns:**
 
@@ -28,5 +28,5 @@ True if the connect command was successful, false otherwise.
 
 RAM cost: 2 GB \* 16/4/1
 
-Run the connect HOSTNAME command in the terminal. Can only connect to neighbors.
+Run the connect HOSTNAME/IP command in the terminal. Can only connect to neighbors.
 

@@ -1,7 +1,7 @@
 import type { Board, BoardState, Neighbor, Play, PointState, SimpleBoard } from "../Types";
 
 import { GoValidity, GoOpponent, GoColor, GoPlayType } from "@enums";
-import { Go } from "../Go";
+import { getEmptyHighlightedPoints, Go, GoEvents } from "../Go";
 import {
   findAdjacentPointsInChain,
   findNeighbors,
@@ -645,6 +645,16 @@ export function boardFromSimpleBoard(simpleBoard: SimpleBoard): Board {
   );
 }
 
+/**
+ * Creates a Board object from the given simpleBoard string array
+ * Also updates the board object with the analytics (liberties/chains) from the simple board
+ */
+export const updatedBoardFromSimpleBoard = (simpleBoard: SimpleBoard): Board => {
+  const board = boardFromSimpleBoard(simpleBoard);
+  updateChains(board);
+  return board;
+};
+
 export function boardStateFromSimpleBoard(
   simpleBoard: SimpleBoard,
   ai = GoOpponent.Daedalus,
@@ -681,21 +691,19 @@ export function getColorOnBoardString(boardString: string, x: number, y: number)
 
 /** Find a move made by the previous player, if present. */
 export function getPreviousMove(): [number, number] | null {
-  const priorBoard = Go.currentGame?.previousBoards[0];
+  const priorBoard = Go.currentGame.previousBoards[0];
   if (Go.currentGame.passCount || !priorBoard) {
     return null;
   }
 
-  for (const rowIndexString in Go.currentGame.board) {
-    const row = Go.currentGame.board[+rowIndexString] ?? [];
-    for (const pointIndexString in row) {
-      const point = row[+pointIndexString];
-      const priorColor = point && priorBoard && getColorOnBoardString(priorBoard, point.x, point.y);
+  for (const [rowIndex, row] of Go.currentGame.board.entries()) {
+    for (const [pointIndex, point] of row.entries()) {
+      const priorColor = point && getColorOnBoardString(priorBoard, point.x, point.y);
       const currentColor = point?.color;
       const isPreviousPlayer = currentColor === Go.currentGame.previousPlayer;
       const isChanged = priorColor !== currentColor;
       if (priorColor && currentColor && isPreviousPlayer && isChanged) {
-        return [+rowIndexString, +pointIndexString];
+        return [rowIndex, pointIndex];
       }
     }
   }
@@ -717,8 +725,23 @@ export function getPreviousMoveDetails(): Play {
   }
 
   return {
-    type: !priorMove && Go.currentGame?.passCount ? GoPlayType.pass : GoPlayType.gameOver,
+    type: Go.currentGame.previousPlayer ? GoPlayType.pass : GoPlayType.gameOver,
     x: null,
     y: null,
   };
+}
+
+export function addPointHighlight(board: BoardState, x: number, y: number, color: string, text: string) {
+  board.highlightedPoints[x][y] = { color, text };
+  GoEvents.emit();
+}
+
+export function clearPointHighlight(board: BoardState, x: number, y: number) {
+  board.highlightedPoints[x][y] = null;
+  GoEvents.emit();
+}
+
+export function clearAllPointHighlights(board: BoardState) {
+  board.highlightedPoints = getEmptyHighlightedPoints(Go.currentGame.board.length);
+  GoEvents.emit();
 }

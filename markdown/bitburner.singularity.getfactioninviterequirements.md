@@ -9,14 +9,14 @@ List conditions for being invited to a faction.
 **Signature:**
 
 ```typescript
-getFactionInviteRequirements(faction: string): PlayerRequirement[];
+getFactionInviteRequirements(faction: FactionName): PlayerRequirement[];
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  faction | string | Name of the faction |
+|  faction | [FactionName](./bitburner.factionname.md) | Name of the faction |
 
 **Returns:**
 

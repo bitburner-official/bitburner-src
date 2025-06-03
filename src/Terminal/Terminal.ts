@@ -6,7 +6,7 @@ import { HacknetServer } from "../Hacknet/HacknetServer";
 import { BaseServer } from "../Server/BaseServer";
 import { Server } from "../Server/Server";
 import { CompletedProgramName } from "@enums";
-import { CodingContractResult } from "../CodingContracts";
+import { CodingContractResult } from "../CodingContract/Contract";
 import { TerminalEvents, TerminalClearEvents } from "./TerminalEvents";
 
 import { TextFile } from "../TextFile";
@@ -53,6 +53,7 @@ import { help } from "./commands/help";
 import { history } from "./commands/history";
 import { home } from "./commands/home";
 import { hostname } from "./commands/hostname";
+import { ipaddr } from "./commands/ipaddr";
 import { kill } from "./commands/kill";
 import { killall } from "./commands/killall";
 import { ls } from "./commands/ls";
@@ -73,7 +74,7 @@ import { unalias } from "./commands/unalias";
 import { vim } from "./commands/vim";
 import { weaken } from "./commands/weaken";
 import { wget } from "./commands/wget";
-import { hash } from "../hash/hash";
+import { commitHash } from "../utils/helpers/commitHash";
 import { apr1 } from "./commands/apr1";
 import { changelog } from "./commands/changelog";
 import { clear } from "./commands/clear";
@@ -84,6 +85,7 @@ import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
+import { isIPAddress } from "../Types/strings";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -109,6 +111,7 @@ export const TerminalCommands: Record<string, (args: (string | number | boolean)
   history: history,
   home: home,
   hostname: hostname,
+  ipaddr: ipaddr,
   kill: kill,
   killall: killall,
   ls: ls,
@@ -139,7 +142,7 @@ export class Terminal {
   commandHistoryIndex = 0;
 
   outputHistory: (Output | Link | RawOutput)[] = [
-    new Output(`Bitburner v${CONSTANTS.VersionString} (${hash()})`, "primary"),
+    new Output(`Bitburner v${CONSTANTS.VersionString} (${commitHash()})`, "primary"),
   ];
 
   // True if a Coding Contract prompt is opened
@@ -263,14 +266,18 @@ export class Terminal {
       Engine.Counters.checkFactionInvitations = 0;
       Engine.checkCounters();
 
-      let moneyGained = calculatePercentMoneyHacked(server, Player) * currentNodeMults.ManualHackMoney;
-      moneyGained = Math.floor(server.moneyAvailable * moneyGained);
+      let moneyDrained = Math.floor(server.moneyAvailable * calculatePercentMoneyHacked(server, Player));
 
-      if (moneyGained <= 0) {
-        moneyGained = 0;
+      if (moneyDrained <= 0) {
+        moneyDrained = 0;
       } // Safety check
 
-      server.moneyAvailable -= moneyGained;
+      server.moneyAvailable -= moneyDrained;
+      if (server.moneyAvailable < 0) {
+        server.moneyAvailable = 0;
+      }
+
+      const moneyGained = moneyDrained * currentNodeMults.ManualHackMoney;
       Player.gainMoney(moneyGained, "hacking");
       Player.gainHackingExp(expGainedOnSuccess);
       if (expGainedOnSuccess > 1) {
@@ -306,12 +313,12 @@ export class Terminal {
     if (!(server instanceof Server)) throw new Error("server should be normal server");
     const expGain = calculateHackingExpGain(server, Player);
     const oldSec = server.hackDifficulty;
-    const growth = processSingleServerGrowth(server, 25, server.cpuCores) - 1;
+    const growth = processSingleServerGrowth(server, 25, server.cpuCores);
     const newSec = server.hackDifficulty;
 
     Player.gainHackingExp(expGain);
     this.print(
-      `Available money on '${server.hostname}' grown by ${formatPercent(growth, 6)}. Gained ${formatExp(
+      `Available money on '${server.hostname}' grown by ${formatPercent(growth - 1, 6)}. Gained ${formatExp(
         expGain,
       )} hacking exp.`,
     );
@@ -496,40 +503,51 @@ export class Terminal {
       return this.error("There's already a Coding Contract in Progress");
     }
 
-    const serv = Player.getCurrentServer();
-    const contract = serv.getContract(contractPath);
-    if (!contract) return this.error("No such contract");
+    const server = Player.getCurrentServer();
+    const contract = server.getContract(contractPath);
+    if (!contract) {
+      return this.error("No such contract");
+    }
 
     this.contractOpen = true;
-    const res = await contract.prompt();
+    const promptResult = await contract.prompt();
 
     //Check if the contract still exists by the time the promise is fulfilled
-    if (serv.getContract(contractPath) == null) {
+    if (server.getContract(contractPath) == null) {
       this.contractOpen = false;
       return this.error("Contract no longer exists (Was it solved by a script?)");
     }
 
-    switch (res) {
+    switch (promptResult.result) {
       case CodingContractResult.Success:
         if (contract.reward !== null) {
           const reward = Player.gainCodingContractReward(contract.reward, contract.getDifficulty());
           this.print(`Contract SUCCESS - ${reward}`);
         }
-        serv.removeContract(contract);
+        server.removeContract(contract);
+        break;
+      case CodingContractResult.InvalidFormat:
+        this.error(
+          `Contract FAILED - ${
+            promptResult.message ?? `The answer is not in the right format for contract '${contract.type}'`
+          }`,
+        );
         break;
       case CodingContractResult.Failure:
         ++contract.tries;
         if (contract.tries >= contract.getMaxNumTries()) {
           this.error("Contract FAILED - Contract is now self-destructing");
-          serv.removeContract(contract);
+          server.removeContract(contract);
         } else {
           this.error(`Contract FAILED - ${contract.getMaxNumTries() - contract.tries} tries remaining`);
         }
         break;
       case CodingContractResult.Cancelled:
-      default:
         this.print("Contract cancelled");
         break;
+      default: {
+        const __: never = promptResult.result;
+      }
     }
     this.contractOpen = false;
   }
@@ -582,19 +600,21 @@ export class Terminal {
     printOutput(root);
   }
 
-  connectToServer(server: string): void {
-    const serv = GetServer(server);
-    if (serv == null) {
+  connectToServer(hostname: string, singularity = false): void {
+    const server = GetServer(hostname);
+    if (server === null) {
       this.error("Invalid server. Connection failed.");
       return;
     }
     Player.getCurrentServer().isConnectedTo = false;
-    Player.currentServer = serv.hostname;
-    Player.getCurrentServer().isConnectedTo = true;
-    this.print("Connected to " + serv.hostname);
+    Player.currentServer = server.hostname;
+    server.isConnectedTo = true;
     this.setcwd(root);
-    if (Player.getCurrentServer().hostname == "darkweb") {
-      checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
+    if (!singularity) {
+      this.print("Connected to " + `${isIPAddress(hostname) ? server.ip : server.hostname}`);
+      if (Player.getCurrentServer().hostname === "darkweb") {
+        checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
+      }
     }
   }
 
@@ -613,7 +633,7 @@ export class Terminal {
   }
 
   clear(): void {
-    this.outputHistory = [new Output(`Bitburner v${CONSTANTS.VersionString} (${hash()})`, "primary")];
+    this.outputHistory = [new Output(`Bitburner v${CONSTANTS.VersionString} (${commitHash()})`, "primary")];
     TerminalEvents.emit();
     TerminalClearEvents.emit();
   }
@@ -636,52 +656,57 @@ export class Terminal {
       if (n00dlesServ == null) {
         throw new Error("Could not get n00dles server");
       }
+      const errorMessageForBadCommand =
+        "Bad command. Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it.";
       switch (ITutorial.currStep) {
         case iTutorialSteps.TerminalHelp:
-          if (commandArray.length === 1 && commandArray[0] == "help") {
+          if (commandArray.length === 1 && commandArray[0] === "help") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalLs:
-          if (commandArray.length === 1 && commandArray[0] == "ls") {
+          if (commandArray.length === 1 && commandArray[0] === "ls") {
             iTutorialNextStep();
+          } else if (commandArray[0] === "1s") {
+            this.error("Command '1s' not found. Did you mean 'ls' with a lowercase L?");
+            return;
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalScan:
-          if (commandArray.length === 1 && commandArray[0] == "scan") {
+          if (commandArray.length === 1 && commandArray[0] === "scan") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalScanAnalyze1:
-          if (commandArray.length == 1 && commandArray[0] == "scan-analyze") {
+          if (commandArray.length === 1 && commandArray[0] === "scan-analyze") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalScanAnalyze2:
-          if (commandArray.length == 2 && commandArray[0] == "scan-analyze" && commandArray[1] === 2) {
+          if (commandArray.length === 2 && commandArray[0] === "scan-analyze" && commandArray[1] === 2) {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalConnect:
-          if (commandArray.length == 2) {
+          if (commandArray.length === 2) {
             if (
-              commandArray[0] == "connect" &&
-              (commandArray[1] == "n00dles" || commandArray[1] == n00dlesServ.hostname)
+              commandArray[0] === "connect" &&
+              (commandArray[1] === "n00dles" || commandArray[1] === n00dlesServ.hostname)
             ) {
               iTutorialNextStep();
             } else {
@@ -689,7 +714,7 @@ export class Terminal {
               return;
             }
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
@@ -697,86 +722,74 @@ export class Terminal {
           if (commandArray.length === 1 && commandArray[0] === "analyze") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalNuke:
-          if (commandArray.length == 2 && commandArray[0] == "run" && commandArray[1] == "NUKE.exe") {
+          if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "NUKE.exe") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalManualHack:
-          if (commandArray.length == 1 && commandArray[0] == "hack") {
+          if (commandArray.length === 1 && commandArray[0] === "hack") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalHackingMechanics:
           if (commandArray.length !== 1 || !["grow", "weaken", "hack"].includes(commandArray[0] + "")) {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalGoHome:
-          if (commandArray.length == 1 && commandArray[0] == "home") {
+          if (commandArray.length === 1 && commandArray[0] === "home") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalCreateScript:
-          if (
-            commandArray.length == 2 &&
-            commandArray[0] == "nano" &&
-            (commandArray[1] == "n00dles.script" || commandArray[1] == "n00dles.js")
-          ) {
+          if (commandArray.length === 2 && commandArray[0] === "nano" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalFree:
-          if (commandArray.length == 1 && commandArray[0] == "free") {
+          if (commandArray.length === 1 && commandArray[0] === "free") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalRunScript:
-          if (
-            commandArray.length == 2 &&
-            commandArray[0] == "run" &&
-            (commandArray[1] == "n00dles.script" || commandArray[1] == "n00dles.js")
-          ) {
+          if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.ActiveScriptsToTerminal:
-          if (
-            commandArray.length == 2 &&
-            commandArray[0] == "tail" &&
-            (commandArray[1] == "n00dles.script" || commandArray[1] == "n00dles.js")
-          ) {
+          if (commandArray.length === 2 && commandArray[0] === "tail" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
-            this.error("Bad command. Please follow the tutorial");
+            this.error(errorMessageForBadCommand);
             return;
           }
           break;
         default:
-          this.error("Please follow the tutorial, or click 'EXIT' if you'd like to skip it");
+          this.error("Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it");
           return;
       }
     }
@@ -792,7 +805,11 @@ export class Terminal {
     commandArray.shift();
 
     const f = TerminalCommands[commandName.toLowerCase()];
-    if (!f) return this.error(`Command ${commandName} not found`);
+    if (!f) {
+      const similarCommands = findSimilarCommands(commandName);
+      const didYouMeanString = similarCommands.length ? ` Did you mean: ${similarCommands.join(" or ")}?` : "";
+      return this.error(`Command ${commandName} not found.${didYouMeanString}`);
+    }
 
     f(commandArray, currentServer);
   }
@@ -804,4 +821,18 @@ export class Terminal {
       totalTicks: 50,
     });
   }
+}
+
+function findSimilarCommands(command: string): string[] {
+  const commands = Object.keys(TerminalCommands);
+  const offByOneLetter = commands.filter((c) => {
+    if (c.length !== command.length) return false;
+    let diff = 0;
+    for (let i = 0; i < c.length; i++) {
+      if (c[i] !== command[i]) diff++;
+    }
+    return diff === 1;
+  });
+  const subset = commands.filter((c) => c.includes(command)).sort((a, b) => a.length - b.length);
+  return Array.from(new Set([...offByOneLetter, ...subset])).slice(0, 3);
 }

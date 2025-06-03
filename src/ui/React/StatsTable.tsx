@@ -31,7 +31,9 @@ export function StatsTable({ rows, title, wide, textAlign, paddingLeft }: StatsT
             <TableRow key={rowIndex}>
               {row.map((cell, cellIndex) => (
                 <TableCell key={cellIndex} className={cellIndex === 0 ? classes.firstCell : classes.nonFirstCell}>
-                  <Typography noWrap>{cell}</Typography>
+                  <Typography component="div" noWrap>
+                    {cell}
+                  </Typography>
                 </TableCell>
               ))}
             </TableRow>

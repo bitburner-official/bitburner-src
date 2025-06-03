@@ -1,12 +1,12 @@
 # "Netscript 2" Migration Guide
 
-The game allows two script formats:
+In previous versions, the game supported two script formats:
 
-- `.script` (also sometimes called "Netscript 1" or "NS1") files are ran through an interpreter that is based on a version of Javascript from 2009 (ES5). These files are no longer actively supported and should be converted to the newer `.js` format.
+- `.script` (also sometimes called "Netscript 1" or "NS1") files are ran through an interpreter that is based on a version of Javascript from 2009 (ES5).
 
 - `.js` (also sometimes called "Netscript 2" or "NS2") files are native javascript that is ran directly by the web browser. Modern features of javascript that are supported by your web browser are supported in `.js` files, because they are run as native js.
 
-Support for `.script` files will be completely removed in future version 3.0. Some basic autoconversion will be attempted at that time, but it is highly recommended to convert your remaining `.script` files to the `.js` format before that, to ensure correctness and, if needed, to familiarize yourself with the `.js` format requirements.
+Support for running `.script` files was removed in version 3.0.
 
 ## Why do I have to change anything?
 
@@ -75,4 +75,4 @@ export async function main(ns) {
 
 ## Additional problems or edge cases
 
-To get additional help with the migration join the [official Discord server](https://discord.gg/TFc3hKD).
+To get additional help with the migration, please join the [official Discord server](https://discord.gg/TFc3hKD).

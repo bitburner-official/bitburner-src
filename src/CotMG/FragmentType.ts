@@ -74,7 +74,7 @@ export function Effect(tpe: FragmentType): string {
       return "+x% crime money and success chance";
     }
     case FragmentType.Bladeburner: {
-      return "+x% all bladeburner stats";
+      return "+x% bladeburner stats (max stamina, stamina gain, Field Analysis effectiveness, action success chance)";
     }
     case FragmentType.Booster: {
       return "1.1x adjacent fragment power";

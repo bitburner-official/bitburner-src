@@ -5,14 +5,11 @@ import { Terminal } from "./Terminal";
 import { SnackbarEvents } from "./ui/React/Snackbar";
 import { ToastVariant } from "@enums";
 import { IReturnStatus, SaveData } from "./types";
-import { GetServer } from "./Server/AllServers";
 import { ImportPlayerData, ElectronGameData, saveObject } from "./SaveObject";
 import { exportScripts } from "./Terminal/commands/download";
 import { CONSTANTS } from "./Constants";
-import { hash } from "./hash/hash";
-import { resolveFilePath } from "./Paths/FilePath";
-import { hasScriptExtension } from "./Paths/ScriptFilePath";
-import { handleGetSaveDataError } from "./Netscript/ErrorMessages";
+import { commitHash } from "./utils/helpers/commitHash";
+import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 
 interface IReturnWebStatus extends IReturnStatus {
   data?: Record<string, unknown>;
@@ -49,53 +46,10 @@ export function initElectron(): void {
   if (userAgent.includes(" electron/")) {
     // Electron-specific code
     document.achievements = [];
-    initWebserver();
     initAppNotifier();
     initSaveFunctions();
     initElectronBridge();
   }
-}
-
-function initWebserver(): void {
-  document.getFiles = function (): IReturnWebStatus {
-    const home = GetServer("home");
-    if (home === null) return { res: false, msg: "Home server does not exist." };
-    return {
-      res: true,
-      data: {
-        files: [...home.scripts.values()].map((script) => ({
-          filename: script.filename,
-          code: script.code,
-          ramUsage: script.ramUsage,
-        })),
-      },
-    };
-  };
-
-  document.deleteFile = function (filename: string): IReturnWebStatus {
-    const path = resolveFilePath(filename);
-    if (!path) return { res: false, msg: "Invalid file path." };
-    const home = GetServer("home");
-    if (!home) return { res: false, msg: "Home server does not exist." };
-    return home.removeFile(path);
-  };
-
-  document.saveFile = function (filename: string, code: string): IReturnWebStatus {
-    const path = resolveFilePath(filename);
-    if (!path) return { res: false, msg: "Invalid file path." };
-    if (!hasScriptExtension(path)) return { res: false, msg: "Invalid file extension: must be a script" };
-
-    code = decodeURIComponent(escape(atob(code)));
-    const home = GetServer("home");
-    if (!home) return { res: false, msg: "Home server does not exist." };
-
-    const { overwritten } = home.writeToScriptFile(path, code);
-    const script = home.scripts.get(path);
-    if (!script) return { res: false, msg: "Somehow failed to get script after writing it. This is a bug." };
-
-    const ramUsage = script.getRamUsage(home.scripts);
-    return { res: true, data: { overwritten, ramUsage } };
-  };
 }
 
 // Expose certain alert functions to allow the wrapper to sends message to the game
@@ -103,14 +57,14 @@ function initAppNotifier(): void {
   const funcs = {
     terminal: (message: string, type?: string) => {
       const typesFn: Record<string, (s: string) => void> = {
-        info: Terminal.info,
-        warn: Terminal.warn,
-        error: Terminal.error,
-        success: Terminal.success,
+        info: (s) => Terminal.info(s),
+        warn: (s) => Terminal.warn(s),
+        error: (s) => Terminal.error(s),
+        success: (s) => Terminal.success(s),
       };
       let fn;
       if (type) fn = typesFn[type];
-      if (!fn) fn = Terminal.print;
+      if (!fn) fn = (s: string) => Terminal.print(s);
       fn.bind(Terminal)(message);
     },
     toast: (message: string, type: ToastVariant, duration = 2000) => SnackbarEvents.emit(message, type, duration),
@@ -124,12 +78,10 @@ function initSaveFunctions(): void {
   const funcs = {
     triggerSave: (): Promise<void> => saveObject.saveGame(true),
     triggerGameExport: (): void => {
-      try {
-        saveObject.exportGame();
-      } catch (error) {
+      saveObject.exportGame().catch((error) => {
         console.error(error);
         SnackbarEvents.emit("Could not export game.", ToastVariant.ERROR, 2000);
-      }
+      });
     },
     triggerScriptsExport: (): void => exportScripts("*", Player.getHomeComputer()),
     getSaveData: async (): Promise<{ save: SaveData; fileName: string }> => {
@@ -159,30 +111,36 @@ function initElectronBridge(): void {
   const bridge = window.electronBridge;
   if (!bridge) return;
 
-  bridge.receive("get-save-data-request", async () => {
-    let saveData;
-    try {
-      saveData = await window.appSaveFns.getSaveData();
-    } catch (error) {
-      handleGetSaveDataError(error);
-      return;
-    }
-    bridge.send("get-save-data-response", saveData);
+  bridge.receive("get-save-data-request", () => {
+    window.appSaveFns
+      .getSaveData()
+      .then((saveData) => {
+        bridge.send("get-save-data-response", saveData);
+      })
+      .catch((error) => {
+        handleGetSaveDataInfoError(error);
+      });
   });
-  bridge.receive("get-save-info-request", async (saveData: unknown) => {
+  bridge.receive("get-save-info-request", (saveData: unknown) => {
     if (typeof saveData !== "string" && !(saveData instanceof Uint8Array)) {
       throw new Error("Error while trying to get save info");
     }
-    const saveInfo = await window.appSaveFns.getSaveInfo(saveData);
-    bridge.send("get-save-info-response", saveInfo);
+    window.appSaveFns
+      .getSaveInfo(saveData)
+      .then((saveInfo) => {
+        bridge.send("get-save-info-response", saveInfo);
+      })
+      .catch((error) => {
+        handleGetSaveDataInfoError(error, true);
+      });
   });
   bridge.receive("push-save-request", (params: unknown) => {
     if (typeof params !== "object") throw new Error("Error trying to push save request");
-    const { save, automatic = false } = params as { save: string; automatic: boolean };
+    const { save, automatic = false } = params as { save: SaveData; automatic: boolean };
     window.appSaveFns.pushSaveData(save, automatic);
   });
   bridge.receive("trigger-save", () => {
-    return window.appSaveFns
+    window.appSaveFns
       .triggerSave()
       .then(() => {
         bridge.send("save-completed");
@@ -230,7 +188,7 @@ export function pushGameReady(): void {
     },
     game: {
       version: CONSTANTS.VersionString,
-      hash: hash(),
+      hash: commitHash(),
     },
   });
 }
@@ -248,4 +206,12 @@ export function pushDisableRestore(): void {
   if (!bridge) return;
 
   bridge.send("push-disable-restore", { duration: 1000 * 60 });
+}
+
+export function activateSteamAchievements(achievements: string[]): void {
+  const bridge = window.electronBridge;
+  if (!bridge) {
+    return;
+  }
+  bridge.send("activate-achievements", { achievements });
 }

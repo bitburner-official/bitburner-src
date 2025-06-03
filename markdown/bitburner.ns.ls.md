@@ -16,7 +16,7 @@ ls(host: string, substring?: string): string[];
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | Hostname of the target server. |
+|  host | string | Hostname/IP of the target server. |
 |  substring | string | _(Optional)_ A substring to search for in the filename. |
 
 **Returns:**

@@ -14,11 +14,12 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { Player } from "@player";
 import { achievements } from "../../Achievements/Achievements";
 import { Engine } from "../../engine";
+import type { AchievementId } from "../../Achievements/Types";
 
 export function AchievementsDev(): React.ReactElement {
   const [playerAchievement, setPlayerAchievements] = useState(Player.achievements.map((m) => m.ID));
 
-  function grantAchievement(id: string): void {
+  function grantAchievement(id: AchievementId): void {
     Player.giveAchievement(id);
     setPlayerAchievements(Player.achievements.map((m) => m.ID));
   }
@@ -28,7 +29,7 @@ export function AchievementsDev(): React.ReactElement {
     setPlayerAchievements(Player.achievements.map((m) => m.ID));
   }
 
-  function removeAchievement(id: string): void {
+  function removeAchievement(id: AchievementId): void {
     Player.achievements = Player.achievements.filter((a) => a.ID !== id);
     setPlayerAchievements(Player.achievements.map((m) => m.ID));
   }
@@ -38,11 +39,11 @@ export function AchievementsDev(): React.ReactElement {
     setPlayerAchievements(Player.achievements.map((m) => m.ID));
   }
 
-  function disableEngine(): void {
+  function disableEngineCheck(): void {
     Engine.Counters.achievementsCounter = Number.MAX_VALUE;
   }
 
-  function enableEngine(): void {
+  function enableEngineCheck(): void {
     Engine.Counters.achievementsCounter = 0;
   }
 
@@ -63,8 +64,8 @@ export function AchievementsDev(): React.ReactElement {
                 <ButtonGroup>
                   <Button onClick={grantAllAchievements}>Grant All</Button>
                   <Button onClick={clearAchievements}>Clear</Button>
-                  <Button onClick={disableEngine}>Disable Engine</Button>
-                  <Button onClick={enableEngine}>Enable Engine</Button>
+                  <Button onClick={disableEngineCheck}>Disable Engine Check</Button>
+                  <Button onClick={enableEngineCheck}>Enable Engine Check</Button>
                 </ButtonGroup>
               </td>
             </tr>

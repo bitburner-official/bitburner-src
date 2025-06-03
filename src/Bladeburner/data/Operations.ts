@@ -9,9 +9,10 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
     [BladeburnerOperationName.Investigation]: new Operation({
       name: BladeburnerOperationName.Investigation,
       desc:
-        "As a field agent, investigate and identify Synthoid populations, movements, and operations.\n\n" +
-        "Successful Investigation ops will increase the accuracy of your synthoid data.\n\n" +
+        "As a field agent, investigate and identify Synthoid populations, movements, and operations.\n" +
+        "Successful Investigation ops will increase the accuracy of your synthoid data.\n" +
         "You will NOT lose HP from failed Investigation ops.",
+      successScaling: "Significantly affected by Hacking skill and Charisma. Minor bonus from combat stats.",
       baseDifficulty: 400,
       difficultyFac: 1.03,
       rewardFac: 1.07,
@@ -42,8 +43,10 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
     [BladeburnerOperationName.Undercover]: new Operation({
       name: BladeburnerOperationName.Undercover,
       desc:
-        "Conduct undercover operations to identify hidden and underground Synthoid communities and organizations.\n\n" +
+        "Conduct undercover operations to identify hidden and underground Synthoid communities and organizations.\n" +
         "Successful Undercover ops will increase the accuracy of your synthoid data.",
+      successScaling:
+        "Affected by Hacking skill, Dexterity, Agility and Charisma. Minor bonus from Defense and Strength.",
       baseDifficulty: 500,
       difficultyFac: 1.04,
       rewardFac: 1.09,
@@ -74,7 +77,12 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
     }),
     [BladeburnerOperationName.Sting]: new Operation({
       name: BladeburnerOperationName.Sting,
-      desc: "Conduct a sting operation to bait and capture particularly notorious Synthoid criminals.",
+      desc:
+        "Conduct a sting operation to bait and capture particularly notorious Synthoid criminals.\n" +
+        "Completing this operation will increase the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
+      warning: "This action decreases population by percentage.",
+      successScaling:
+        "Significantly affected by Hacking skill and Dexterity. Major bonus from Charisma. Minor bonus from combat stats.",
       baseDifficulty: 650,
       difficultyFac: 1.04,
       rewardFac: 1.095,
@@ -106,7 +114,10 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       name: BladeburnerOperationName.Raid,
       desc:
         "Lead an assault on a known Synthoid community. Note that there must be an existing Synthoid community in your " +
-        "current city in order for this Operation to be successful.",
+        "current city in order for this Operation to be successful.\n" +
+        "Completing this operation will decrease the Synthoid population of your current city and increase its chaos level.",
+      warning: "This action decreases population and increases chaos by percentage.",
+      successScaling: "Affected by combat stats. Minor bonus from Hacking skill. Unaffected by Charisma.",
       baseDifficulty: 800,
       difficultyFac: 1.045,
       rewardFac: 1.1,
@@ -142,7 +153,11 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       name: BladeburnerOperationName.StealthRetirement,
       desc:
         "Lead a covert operation to retire Synthoids. The objective is to complete the task without drawing any " +
-        "attention. Stealth and discretion are key.",
+        "attention. Stealth and discretion are key.\n" +
+        "Completing this operation will DECREASE the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
+      warning: "This action decreases population by percentage.",
+      successScaling:
+        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill. Unaffected by Charisma.",
       baseDifficulty: 1000,
       difficultyFac: 1.05,
       rewardFac: 1.11,
@@ -175,7 +190,12 @@ export function createOperations(): Record<BladeburnerOperationName, Operation> 
       name: BladeburnerOperationName.Assassination,
       desc:
         "Assassinate Synthoids that have been identified as important, high-profile social and political leaders in the " +
-        "Synthoid communities.",
+        "Synthoid communities.\n" +
+        "Completing this operation may increase the chaos level of your current city. If you complete it successfully, it will decrease the Synthoid population of your current city.",
+      warning: "This action may increase chaos by percentage.",
+      successScaling:
+        "Significantly affected by Dexterity and Agility. Minor bonus from combat stats and Hacking skill.\n" +
+        "Unaffected by Charisma.",
       baseDifficulty: 1500,
       difficultyFac: 1.06,
       rewardFac: 1.14,

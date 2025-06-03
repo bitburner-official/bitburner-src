@@ -11,9 +11,9 @@ Cancel material export.
 ```typescript
 cancelExportMaterial(
     sourceDivision: string,
-    sourceCity: CityName | `${CityName}`,
+    sourceCity: CityName,
     targetDivision: string,
-    targetCity: CityName | `${CityName}`,
+    targetCity: CityName,
     materialName: string,
   ): void;
 ```
@@ -23,9 +23,9 @@ cancelExportMaterial(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  sourceDivision | string | Source division |
-|  sourceCity | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Source city |
+|  sourceCity | [CityName](./bitburner.cityname.md) | Source city |
 |  targetDivision | string | Target division |
-|  targetCity | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Target city |
+|  targetCity | [CityName](./bitburner.cityname.md) | Target city |
 |  materialName | string | Name of the material |
 
 **Returns:**

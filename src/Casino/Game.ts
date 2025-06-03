@@ -4,6 +4,9 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 const gainLimit = 10e9;
 
 export function win(n: number): void {
+  if (reachedLimit()) {
+    return;
+  }
   Player.gainMoney(n, "casino");
 }
 

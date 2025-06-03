@@ -16,7 +16,7 @@ import { Money } from "./React/Money";
 import { StatsRow } from "./React/StatsRow";
 import { StatsTable } from "./React/StatsTable";
 import { useCycleRerender } from "./React/hooks";
-import { getMaxFavor } from "../Go/effects/effect";
+import { getMaxRep } from "../Go/effects/effect";
 import { canAccessBitNodeFeature, knowAboutBitverse } from "../BitNode/BitNodeUtils";
 
 interface EmployersModalProps {
@@ -109,7 +109,9 @@ function CurrentBitNode(): React.ReactElement {
         <Typography variant="h5">
           BitNode {Player.bitNodeN}: {BitNodes[index].name} (Level {lvl})
         </Typography>
-        <Typography sx={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}>{BitNodes[index].info}</Typography>
+        <Typography component="div" sx={{ whiteSpace: "pre-wrap", overflowWrap: "break-word" }}>
+          {BitNodes[index].info}
+        </Typography>
       </Paper>
     );
   }
@@ -564,7 +566,7 @@ export function CharacterStats(): React.ReactElement {
                   },
                   {
                     mult: "IPvGO Max Favor",
-                    value: getMaxFavor(),
+                    value: getMaxRep(),
                     isNumber: true,
                   },
                 ]}
@@ -592,7 +594,7 @@ export function CharacterStats(): React.ReactElement {
       {canAccessBitNodeFeature(5) && (
         <Paper sx={{ p: 1, mb: 1 }}>
           <Typography variant="h5">BitNode Multipliers</Typography>
-          <BitNodeMultipliersDisplay n={Player.bitNodeN} />
+          <BitNodeMultipliersDisplay n={Player.bitNodeN} hideMultsIfCannotAccessFeature={true} />
         </Paper>
       )}
 

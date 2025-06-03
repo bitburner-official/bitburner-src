@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { KEY } from "../../../utils/helpers/keyCodes";
+import { KEY } from "../../../utils/KeyboardEventKey";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import { CityName } from "@enums";
 import { getRecordKeys } from "../../../Types/Record";
@@ -40,15 +40,15 @@ export function MakeProductModal(props: IProps): React.ReactElement {
   const [name, setName] = useState("");
   const [design, setDesign] = useState<number>(NaN);
   const [marketing, setMarketing] = useState<number>(NaN);
-  const data = IndustriesData[division.type];
+  const data = IndustriesData[division.industry];
   if (division.hasMaximumNumberProducts() || !data.product) return <></>;
 
   function makeProduct(): void {
     if (isNaN(design) || isNaN(marketing)) return;
     try {
       actions.makeProduct(corp, division, city, name, design, marketing);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
     }
     props.onClose();
   }
@@ -87,7 +87,7 @@ export function MakeProductModal(props: IProps): React.ReactElement {
           </MenuItem>
         ))}
       </Select>
-      <TextField onChange={onProductNameChange} placeholder={productPlaceholder(division.type)} />
+      <TextField onChange={onProductNameChange} placeholder={productPlaceholder(division.industry)} />
       <br />
       <NumberInput onChange={setDesign} autoFocus={true} placeholder={"Design investment"} />
       <NumberInput onChange={setMarketing} onKeyDown={onKeyDown} placeholder={"Marketing investment"} />

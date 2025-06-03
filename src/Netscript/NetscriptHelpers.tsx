@@ -56,13 +56,14 @@ import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
 import { basicErrorMessage, errorMessage, log } from "./ErrorMessages";
-import { assertString, debugType } from "./TypeAssertion";
+import { assertStringWithNSContext, debugType } from "./TypeAssertion";
 import {
   canAccessBitNodeFeature,
   getDefaultBitNodeOptions,
   validateSourceFileOverrides,
 } from "../BitNode/BitNodeUtils";
 import { JSONMap } from "../Types/Jsonable";
+import { Settings } from "../Settings/Settings";
 
 export const helpers = {
   string,
@@ -72,8 +73,11 @@ export const helpers = {
   positiveSafeInteger,
   positiveNumber,
   scriptArgs,
+  boolean,
   runOptions,
   spawnOptions,
+  hostReturnOptions,
+  returnServerID,
   argsToString,
   basicErrorMessage,
   errorMessage,
@@ -119,11 +123,15 @@ export interface CompleteHGWOptions {
   stock: boolean;
   additionalMsec: number;
 }
+/** HostReturnOptions with non-optional, type-validated members, for passing between internal functions */
+export interface CompleteHostReturnOptions {
+  returnByIP: boolean;
+}
 
 /** Convert a provided value v for argument argName to string. If it wasn't originally a string or number, throw. */
 function string(ctx: NetscriptContext, argName: string, v: unknown): string {
   if (typeof v === "number") v = v + ""; // cast to string;
-  assertString(ctx, argName, v);
+  assertStringWithNSContext(ctx, argName, v);
   return v;
 }
 
@@ -180,6 +188,14 @@ function scriptArgs(ctx: NetscriptContext, args: unknown) {
   return args;
 }
 
+/** Converts the provided value for v to a boolean, throwing if it is not  */
+function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
+  if (typeof v !== "boolean") {
+    throw errorMessage(ctx, `${argName} must be a boolean, was ${v}`, "TYPE");
+  }
+  return v;
+}
+
 function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRunOptions {
   const result: CompleteRunOptions = {
     threads: 1 as PositiveInteger,
@@ -229,10 +245,37 @@ function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteS
   return result;
 }
 
+function hostReturnOptions(returnOpts: unknown): CompleteHostReturnOptions {
+  const result: CompleteHostReturnOptions = { returnByIP: false };
+  if (typeof returnOpts !== "object" || !returnOpts) return result;
+  // Safe assertion since returnOpts type has been narrowed to a non-null object
+  const { returnByIP } = returnOpts as Unknownify<CompleteHostReturnOptions>;
+  result.returnByIP = !!returnByIP;
+  return result;
+}
+
+/** Returns a server's hostname or IP based on the `returnByIP` field of HostReturnOptions */
+function returnServerID(server: BaseServer, returnOpts: CompleteHostReturnOptions): string {
+  return returnOpts.returnByIP ? server.ip : server.hostname;
+}
+
+function mapToString(map: Map<unknown, unknown>): string {
+  const formattedMap = [...map]
+    .map((m) => {
+      return `${String(m[0])} => ${String(m[1])}`;
+    })
+    .join("; ");
+  return `< Map: ${formattedMap} >`;
+}
+
+function setToString(set: Set<unknown>): string {
+  return `< Set: ${[...set].join("; ")} >`;
+}
+
 /** Convert multiple arguments for tprint or print into a single string. */
 function argsToString(args: unknown[]): string {
   // Reduce array of args into a single output string
-  return args.reduce((out, arg) => {
+  return args.reduce((out: string, arg) => {
     if (arg === null) {
       return (out += "null");
     }
@@ -243,24 +286,35 @@ function argsToString(args: unknown[]): string {
 
     // Handle Map formatting, since it does not JSON stringify or toString in a helpful way
     // output is  "< Map: key1 => value1; key2 => value2 >"
-    if (nativeArg instanceof Map && [...nativeArg].length) {
-      const formattedMap = [...nativeArg]
-        .map((m) => {
-          return `${m[0]} => ${m[1]}`;
-        })
-        .join("; ");
-      return (out += `< Map: ${formattedMap} >`);
+    if (nativeArg instanceof Map) {
+      return (out += mapToString(nativeArg));
     }
     // Handle Set formatting, since it does not JSON stringify or toString in a helpful way
     if (nativeArg instanceof Set) {
-      return (out += `< Set: ${[...nativeArg].join("; ")} >`);
+      return (out += setToString(nativeArg));
     }
     if (typeof nativeArg === "object") {
-      return (out += JSON.stringify(nativeArg));
+      return (out += JSON.stringify(nativeArg, (_, value: unknown) => {
+        /**
+         * If the property is a promise, we will return a string that clearly states that it's a promise object, not a
+         * normal object. If we don't do that, all promises will be serialized into "{}".
+         */
+        if (value instanceof Promise) {
+          // eslint-disable-next-line @typescript-eslint/no-base-to-string -- "[object Promise]" is exactly the string that we want.
+          return value.toString();
+        }
+        if (value instanceof Map) {
+          return mapToString(value);
+        }
+        if (value instanceof Set) {
+          return setToString(value);
+        }
+        return value;
+      }));
     }
 
-    return (out += `${nativeArg}`);
-  }, "") as string;
+    return (out += String(nativeArg));
+  }, "");
 }
 
 function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOptions {
@@ -273,6 +327,7 @@ function validateHGWOptions(ctx: NetscriptContext, opts: unknown): CompleteHGWOp
     return result;
   }
   if (typeof opts !== "object") {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     throw errorMessage(ctx, `BasicHGWOptions must be an object if specified, was ${opts}`);
   }
   // Safe assertion since threadOrOption type has been narrowed to a non-null object
@@ -616,7 +671,7 @@ function gangTask(ctx: NetscriptContext, t: unknown): GangMemberTask {
 }
 
 export function filePath(ctx: NetscriptContext, argName: string, filename: unknown): FilePath {
-  assertString(ctx, argName, filename);
+  assertStringWithNSContext(ctx, argName, filename);
   const path = resolveFilePath(filename, ctx.workerScript.name);
   if (path) return path;
   throw errorMessage(ctx, `Invalid ${argName}, was not a valid path: ${filename}`);
@@ -667,8 +722,11 @@ function getRunningScript(ctx: NetscriptContext, ident: ScriptIdentifier): Runni
     return findRunningScriptByPid(ident);
   } else {
     const scripts = getRunningScriptsByArgs(ctx, ident.scriptname, ident.hostname, ident.args);
-    if (scripts === null) return null;
-    return scripts.values().next().value ?? null;
+    if (scripts === null) {
+      return null;
+    }
+    const next = scripts.values().next();
+    return !next.done ? next.value : null;
   }
 }
 
@@ -700,7 +758,7 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
     args: runningScript.args.slice(),
     dynamicRamUsage: workerScript && roundToTwo(workerScript.dynamicRamUsage),
     filename: runningScript.filename,
-    logs: runningScript.logs.map((x) => "" + x),
+    logs: runningScript.logs.map((x) => String(x)),
     offlineExpGained: runningScript.offlineExpGained,
     offlineMoneyMade: runningScript.offlineMoneyMade,
     offlineRunningTime: runningScript.offlineRunningTime,
@@ -719,6 +777,7 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
             y: logProps.y,
             width: logProps.width,
             height: logProps.height,
+            fontSize: logProps.fontSize ?? Settings.styles.tailFontSize,
           },
     title: runningScript.title,
     threads: runningScript.threads,
@@ -759,13 +818,21 @@ function validateBitNodeOptions(ctx: NetscriptContext, bitNodeOptions: unknown):
     return result;
   }
   if (typeof bitNodeOptions !== "object") {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     throw errorMessage(ctx, `bitNodeOptions must be an object if it's specified. It was ${bitNodeOptions}.`);
   }
   const options = bitNodeOptions as Unknownify<BitNodeOptions>;
   if (!(options.sourceFileOverrides instanceof Map)) {
     throw errorMessage(ctx, `sourceFileOverrides must be a Map.`);
   }
-  const validationResultForSourceFileOverrides = validateSourceFileOverrides(options.sourceFileOverrides, true);
+  const validationResultForSourceFileOverrides = validateSourceFileOverrides(
+    /**
+     * Cast the type from Map<any, any> to Map<number, number> to satisfy the lint rule. The validation logic in
+     * validateSourceFileOverrides will check the data.
+     */
+    options.sourceFileOverrides as Map<number, number>,
+    true,
+  );
   if (!validationResultForSourceFileOverrides.valid) {
     throw errorMessage(
       ctx,

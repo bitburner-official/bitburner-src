@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 import { downArrowSymbol, upArrowSymbol } from "../utils";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";

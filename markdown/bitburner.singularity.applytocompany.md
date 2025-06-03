@@ -9,15 +9,15 @@ Apply for a job at a company.
 **Signature:**
 
 ```typescript
-applyToCompany(companyName: CompanyName | `${CompanyName}`, field: JobField | `${JobField}`): JobName | null;
+applyToCompany(companyName: CompanyName, field: JobField): JobName | null;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  companyName | [CompanyName](./bitburner.companyname.md) \| \`${[CompanyName](./bitburner.companyname.md)<!-- -->}\` | Name of company to apply to. |
-|  field | [JobField](./bitburner.jobfield.md) \| \`${[JobField](./bitburner.jobfield.md)<!-- -->}\` | Field to which you want to apply. |
+|  companyName | [CompanyName](./bitburner.companyname.md) | Name of company to apply to. |
+|  field | [JobField](./bitburner.jobfield.md) | Field to which you want to apply. |
 
 **Returns:**
 

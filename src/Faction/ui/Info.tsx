@@ -15,8 +15,10 @@ import { makeStyles } from "tss-react/mui";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
+import InfoIcon from "@mui/icons-material/Info";
 import { useCycleRerender } from "../../ui/React/hooks";
-import { calculateFavorAfterResetting } from "../formulas/favor";
+import { addRepToFavor } from "../formulas/favor";
+import { knowAboutBitverse } from "../../BitNode/BitNodeUtils";
 
 interface IProps {
   faction: Faction;
@@ -26,16 +28,26 @@ interface IProps {
 const useStyles = makeStyles()({
   noformat: {
     whiteSpace: "pre-wrap",
-    lineHeight: "1em",
+  },
+  repFavorRow: {
+    display: "flex",
+    alignItems: "center",
+    whiteSpace: "pre-wrap",
+  },
+  infoIcon: {
+    fontSize: "1.1em",
+    marginLeft: "10px",
   },
 });
 
 function DefaultAssignment(): React.ReactElement {
   return (
     <Typography>
-      Perform work/carry out assignments for your faction to help further its cause! By doing so you will earn
-      reputation for your faction. You will also gain reputation passively over time, although at a very slow rate.
-      Earning reputation will allow you to purchase Augmentations through this faction, which are powerful upgrades that
+      Perform work/carry out assignments for your faction to help further its cause! By doing so, you will earn
+      reputation for your faction. You will also gain reputation passively over time, although at a very slow
+      rate.&nbsp;
+      {knowAboutBitverse() && <>Note that the passive reputation gain is disabled in some BitNodes. </>}
+      Earning reputation will allow you to purchase augmentations through this faction, which are powerful upgrades that
       enhance your abilities.
     </Typography>
   );
@@ -50,14 +62,19 @@ export function Info(props: IProps): React.ReactElement {
   return (
     <>
       <Typography classes={{ root: classes.noformat }}>{props.factionInfo.infoText}</Typography>
+      {props.factionInfo.enemies.length > 0 && (
+        <Typography component="div">
+          <br />
+          This faction is enemies with: {props.factionInfo.enemies.join(", ")}.
+        </Typography>
+      )}
       <Typography>-------------------------</Typography>
       <Box display="flex">
         <Tooltip
           title={
             <>
               <Typography>
-                You will have{" "}
-                <Favor favor={calculateFavorAfterResetting(props.faction.favor, props.faction.playerReputation)} />{" "}
+                You will have <Favor favor={addRepToFavor(props.faction.favor, props.faction.playerReputation)} />{" "}
                 faction favor after installing an Augmentation.
               </Typography>
               <MathJax>{"\\(\\huge{r = \\text{total faction reputation}}\\)"}</MathJax>
@@ -65,8 +82,9 @@ export function Info(props: IProps): React.ReactElement {
             </>
           }
         >
-          <Typography>
+          <Typography className={classes.repFavorRow}>
             Reputation: <Reputation reputation={props.faction.playerReputation} />
+            <InfoIcon className={classes.infoIcon} />
           </Typography>
         </Tooltip>
       </Box>
@@ -88,8 +106,9 @@ export function Info(props: IProps): React.ReactElement {
             </>
           }
         >
-          <Typography>
+          <Typography className={classes.repFavorRow}>
             Faction Favor: <Favor favor={props.faction.favor} />
+            <InfoIcon className={classes.infoIcon} />
           </Typography>
         </Tooltip>
       </Box>

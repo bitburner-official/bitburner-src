@@ -34,4 +34,5 @@ interface CorporationInfo
 |  [sharePrice](./bitburner.corporationinfo.shareprice.md) |  | number | Price of the shares |
 |  [shareSaleCooldown](./bitburner.corporationinfo.sharesalecooldown.md) |  | number | Cooldown until shares can be sold again |
 |  [totalShares](./bitburner.corporationinfo.totalshares.md) |  | number | Total number of shares issued by this corporation. |
+|  [valuation](./bitburner.corporationinfo.valuation.md) |  | number | Corporation valuation |
 

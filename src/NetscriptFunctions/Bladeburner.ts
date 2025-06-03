@@ -15,7 +15,7 @@ import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { Skills } from "../Bladeburner/data/Skills";
-import { assertString } from "../Netscript/TypeAssertion";
+import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
 import { BlackOperations, blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { checkSleeveAPIAccess, checkSleeveNumber } from "../NetscriptFunctions/Sleeve";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
@@ -26,7 +26,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
     return;
   };
   const getBladeburner = function (ctx: NetscriptContext): Bladeburner {
-    const apiAccess = canAccessBitNodeFeature(7);
+    const apiAccess = canAccessBitNodeFeature(7) || canAccessBitNodeFeature(6);
     if (!apiAccess) {
       throw helpers.errorMessage(ctx, "You have not unlocked the Bladeburner API.", "API ACCESS");
     }
@@ -35,13 +35,17 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       throw helpers.errorMessage(ctx, "You must be a member of the Bladeburner division to use this API.");
     return bladeburner;
   };
-  function getAction(ctx: NetscriptContext, type: unknown, name: unknown): Action {
+  function getAction(ctx: NetscriptContext, _type: unknown, name: unknown): Action {
     const bladeburner = Player.bladeburner;
-    assertString(ctx, "type", type);
-    assertString(ctx, "name", name);
-    if (bladeburner === null) throw new Error("Must have joined bladeburner");
+    const type = getEnumHelper("BladeburnerActionType").nsGetMember(ctx, _type);
+    assertStringWithNSContext(ctx, "name", name);
+    if (bladeburner === null) {
+      throw new Error("Must have joined bladeburner");
+    }
     const action = bladeburner.getActionFromTypeAndName(type, name);
-    if (!action) throw helpers.errorMessage(ctx, `Invalid action type='${type}', name='${name}'`);
+    if (!action) {
+      throw helpers.errorMessage(ctx, `Invalid action type='${_type}', name='${name}'`);
+    }
     return action;
   }
 
@@ -307,14 +311,21 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       return !!attempt.success;
     },
     joinBladeburnerDivision: (ctx) => () => {
-      if (!canAccessBitNodeFeature(7) || Player.bitNodeOptions.disableBladeburner) {
+      if (!canAccessBitNodeFeature(7) && !canAccessBitNodeFeature(6)) {
+        helpers.log(ctx, () => "You do not have Source-File 6 or Source-File 7.");
+        return false;
+      }
+      if (Player.bitNodeOptions.disableBladeburner) {
+        helpers.log(ctx, () => "Bladeburner is disabled by advanced options.");
         return false;
       }
       if (currentNodeMults.BladeburnerRank === 0) {
-        return false; // Disabled in this bitnode
+        helpers.log(ctx, () => "Bladeburner is disabled in this BitNode.");
+        return false;
       }
+      // Already member
       if (Player.bladeburner) {
-        return true; // Already member
+        return true;
       }
       if (
         Player.skills.strength < 100 ||
@@ -322,17 +333,21 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         Player.skills.dexterity < 100 ||
         Player.skills.agility < 100
       ) {
-        helpers.log(ctx, () => "You do not meet the requirements for joining the Bladeburner division");
+        helpers.log(
+          ctx,
+          () =>
+            "You do not meet the requirements for joining the Bladeburner division. All combat stats must be at least level 100.",
+        );
         return false;
       }
       Player.startBladeburner();
-      helpers.log(ctx, () => "You have been accepted into the Bladeburner division");
+      helpers.log(ctx, () => "You have been accepted into the Bladeburner division.");
 
       return true;
     },
     getBonusTime: (ctx) => () => {
       const bladeburner = getBladeburner(ctx);
-      return Math.round(bladeburner.storedCycles / 5) * 1000;
+      return bladeburner.storedCycles * 200;
     },
     nextUpdate: (ctx) => () => {
       checkBladeburnerAccess(ctx);

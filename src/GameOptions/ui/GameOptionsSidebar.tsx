@@ -25,6 +25,8 @@ import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { convertTimeMsToTimeElapsedString } from "../../utils/StringHelperFunctions";
 import { OptionsTabName } from "./GameOptionsRoot";
+import { Player } from "@player";
+import { OptionSwitch } from "../../ui/React/OptionSwitch";
 
 interface IProps {
   tab: OptionsTabName;
@@ -58,6 +60,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
   const [diagnosticOpen, setDiagnosticOpen] = useState(false);
   const [importSaveOpen, setImportSaveOpen] = useState(false);
   const [importData, setImportData] = useState<ImportData | null>(null);
+  const [syncSteamAchievements, setSyncSteamAchievements] = useState(true);
 
   const [confirmResetOpen, setConfirmResetOpen] = useState(false);
   const [creditsOpen, setCreditsOpen] = useState(false);
@@ -75,6 +78,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
       const data = await saveObject.getImportDataFromSaveData(saveData);
       setImportData(data);
       setImportSaveOpen(true);
+      setSyncSteamAchievements(data.playerData?.syncSteamAchievements ?? true);
     } catch (e: unknown) {
       console.error(e);
       SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);
@@ -88,8 +92,15 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
     if (!importData) return;
 
     try {
-      await saveObject.importGame(importData.saveData);
+      let overrideSettings = undefined;
+      if (syncSteamAchievements !== importData.playerData?.syncSteamAchievements) {
+        overrideSettings = {
+          SyncSteamAchievements: syncSteamAchievements,
+        };
+      }
+      await saveObject.importGame(importData.saveData, overrideSettings);
     } catch (e: unknown) {
+      console.error(e);
       SnackbarEvents.emit(String(e), ToastVariant.ERROR, 5000);
     }
 
@@ -114,6 +125,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           <SideBarTab sideBarProps={props} tabName="Numeric Display" />
           <SideBarTab sideBarProps={props} tabName="Misc" />
           <SideBarTab sideBarProps={props} tabName="Remote API" />
+          <SideBarTab sideBarProps={props} tabName="Key Binding" />
         </List>
       </Paper>
       <Box
@@ -154,13 +166,27 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
         >
           <Button onClick={startImport} startIcon={<Upload />} sx={{ gridArea: "import" }}>
             Import Game
-            <input ref={importInput} id="import-game-file-selector" type="file" hidden onChange={onImport} />
+            <input
+              ref={importInput}
+              id="import-game-file-selector"
+              type="file"
+              hidden
+              onChange={(event) => {
+                onImport(event).catch((error) => {
+                  console.error(error);
+                });
+              }}
+            />
           </Button>
         </Tooltip>
         <ConfirmationModal
           open={importSaveOpen}
           onClose={() => setImportSaveOpen(false)}
-          onConfirm={() => confirmedImportGame()}
+          onConfirm={() => {
+            confirmedImportGame().catch((error) => {
+              console.error(error);
+            });
+          }}
           additionalButton={<Button onClick={compareSaveGame}>Compare Save</Button>}
           confirmationText={
             <>
@@ -187,6 +213,18 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
                 </>
               )}
               <br />
+              <br />
+              <OptionSwitch
+                checked={syncSteamAchievements}
+                onChange={(newValue) => setSyncSteamAchievements(newValue)}
+                text="Sync Steam achievements"
+                tooltip={
+                  <>
+                    This setting is only used in the Steam app. If this setting is enabled, the game will automatically
+                    sync your unlocked Steam achievements to Steam Cloud.
+                  </>
+                }
+              />
               <br />
             </>
           }
@@ -240,8 +278,7 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
             gridTemplateAreas: `"credits credits"
             "bug bug"
         "discord reddit"
-        "tut tut"
-        "plaza plaza"`,
+        "tut tut"`,
             gridTemplateColumns: "1fr 1fr",
             my: 1,
           }}
@@ -276,13 +313,14 @@ export const GameOptionsSidebar = (props: IProps): React.ReactElement => {
           </Button>
         </Box>
       </Box>
+      <Typography>Save ID: {Player.identifier}</Typography>
       <FileDiagnosticModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
 
       <ConfirmationModal
         open={confirmResetOpen}
         onClose={() => setConfirmResetOpen(false)}
         onConfirm={props.reactivateTutorial}
-        confirmationText={"Reset your stats and money to start the tutorial? Home scripts will not be reset."}
+        confirmationText={"Restart the tutorial? Running scripts will be killed."}
         additionalButton={<Button onClick={() => setConfirmResetOpen(false)}>Cancel</Button>}
       />
     </Box>

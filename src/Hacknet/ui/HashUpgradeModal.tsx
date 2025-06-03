@@ -8,6 +8,7 @@ import { Modal } from "../../ui/React/Modal";
 import { Player } from "@player";
 import Typography from "@mui/material/Typography";
 import { useCycleRerender } from "../../ui/React/hooks";
+import { getRecordKeys } from "../../Types/Record";
 
 interface IProps {
   open: boolean;
@@ -24,13 +25,13 @@ export function HashUpgradeModal(props: IProps): React.ReactElement {
   }
 
   return (
-    <Modal open={props.open} onClose={props.onClose}>
+    <Modal open={props.open} onClose={props.onClose} removeFocus={false}>
       <>
         <Typography>Spend your hashes on a variety of different upgrades</Typography>
         <Typography>
           Hashes: <Hashes hashes={Player.hashManager.hashes} />
         </Typography>
-        {Object.keys(HashUpgrades).map((upgName) => {
+        {getRecordKeys(HashUpgrades).map((upgName) => {
           const upg = HashUpgrades[upgName];
           return <HacknetUpgradeElem upg={upg} hashManager={hashManager} key={upg.name} rerender={rerender} />;
         })}

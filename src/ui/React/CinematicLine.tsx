@@ -26,9 +26,11 @@ export function CinematicLine(props: IProps): React.ReactElement {
       return;
     }
     let cancel = false;
-    (async () => {
-      await sleep(10).then(() => !cancel && advance());
-    })();
+    sleep(10)
+      .then(() => !cancel && advance())
+      .catch((error) => {
+        console.error(error);
+      });
     return () => {
       cancel = true;
     };

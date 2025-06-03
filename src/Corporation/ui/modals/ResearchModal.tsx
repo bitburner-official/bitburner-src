@@ -39,8 +39,8 @@ function Upgrade({ n, division }: INodeProps): React.ReactElement {
     if (n === null || disabled) return;
     try {
       actions.research(division, n.researchName);
-    } catch (err) {
-      dialogBoxCreate(err + "");
+    } catch (error) {
+      dialogBoxCreate(String(error));
       return;
     }
 
@@ -137,13 +137,13 @@ interface IProps {
 
 // Create the Research Tree UI for this Industry
 export function ResearchModal(props: IProps): React.ReactElement {
-  const researchTree = IndustryResearchTrees[props.industry.type];
+  const researchTree = IndustryResearchTrees[props.industry.industry];
   if (researchTree === undefined) return <></>;
 
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Upgrade division={props.industry} n={researchTree.root} />
-      <Typography sx={{ mt: 1 }}>
+      <Typography component="div" sx={{ mt: 1 }}>
         Research points: {props.industry.researchPoints.toFixed(3)}
         <br />
         Multipliers from research:
@@ -155,6 +155,7 @@ export function ResearchModal(props: IProps): React.ReactElement {
             ["Employee Efficiency Multiplier:", formatCorpMultiplier(researchTree.getEmployeeEffMultiplier())],
             ["Employee Intelligence Multiplier:", formatCorpMultiplier(researchTree.getEmployeeIntMultiplier())],
             ["Production Multiplier:", formatCorpMultiplier(researchTree.getProductionMultiplier())],
+            ["Product Production Multiplier:", formatCorpMultiplier(researchTree.getProductProductionMultiplier())],
             ["Sales Multiplier:", formatCorpMultiplier(researchTree.getSalesMultiplier())],
             ["Scientific Research Multiplier:", formatCorpMultiplier(researchTree.getScientificResearchMultiplier())],
             ["Storage Multiplier:", formatCorpMultiplier(researchTree.getStorageMultiplier())],

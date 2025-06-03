@@ -22,6 +22,6 @@ interface StockMarketConstants
 |  [msPerStockUpdateMin](./bitburner.stockmarketconstants.msperstockupdatemin.md) |  | number | Minimum time in ms between stock market updates if there is stored offline/bonus time |
 |  [StockMarketCommission](./bitburner.stockmarketconstants.stockmarketcommission.md) |  | number | Commission fee for transactions |
 |  [TicksPerCycle](./bitburner.stockmarketconstants.tickspercycle.md) |  | number | An internal constant used while determining when to flip a stock's forecast |
-|  [TIXAPICost](./bitburner.stockmarketconstants.tixapicost.md) |  | number | Cost of the TIX API |
-|  [WSEAccountCost](./bitburner.stockmarketconstants.wseaccountcost.md) |  | number | Cost of the WSE account |
+|  [TixApiCost](./bitburner.stockmarketconstants.tixapicost.md) |  | number | Cost of the TIX API |
+|  [WseAccountCost](./bitburner.stockmarketconstants.wseaccountcost.md) |  | number | Cost of the WSE account |
 
