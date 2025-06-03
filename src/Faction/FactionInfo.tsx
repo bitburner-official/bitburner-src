@@ -216,7 +216,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     keepOnInstall: true,
   }),
 
-  [FactionName.BachmanAssociates]: new FactionInfo({
+  [FactionName.BachmanAndAssociates]: new FactionInfo({
     infoText: (
       <>
         Where Law and Business meet - that's where we are.

@@ -191,5 +191,17 @@ export const breakingChanges300: VersionBreakingChange = {
         'It has been automatically replaced with "ns.getBitNodeMultipliers().FavorToDonateToFaction".',
       showPopUp: false,
     },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.enums.FactionName.BachmanAssociates",
+          migration: { searchValue: "BachmanAssociates", replaceValue: "BachmanAndAssociates" },
+        },
+      ],
+      info:
+        'The key of "Bachman & Associates" faction in the FactionName enum was renamed.\n' +
+        '"ns.enums.FactionName.BachmanAssociates" has been automatically replaced with "ns.enums.FactionName.BachmanAndAssociates".',
+      showPopUp: false,
+    },
   ],
 };
