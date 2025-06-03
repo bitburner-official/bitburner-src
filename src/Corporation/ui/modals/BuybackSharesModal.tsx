@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import { buyBackShares } from "../../Actions";
-import { KEY } from "../../../utils/helpers/keyCodes";
+import { KEY } from "../../../utils/KeyboardEventKey";
 import { buybackSharesFailureReason } from "../../helpers";
 
 interface IProps {

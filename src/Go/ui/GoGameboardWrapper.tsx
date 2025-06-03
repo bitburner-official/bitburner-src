@@ -9,7 +9,12 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { getNewBoardState, getStateCopy, makeMove, passTurn, updateCaptures } from "../boardState/boardState";
 import { bitverseArt, weiArt } from "../boardState/asciiArt";
 import { getScore, resetWinstreak } from "../boardAnalysis/scoring";
-import { boardFromBoardString, evaluateIfMoveIsValid, getAllValidMoves } from "../boardAnalysis/boardAnalysis";
+import {
+  boardFromBoardString,
+  clearAllPointHighlights,
+  evaluateIfMoveIsValid,
+  getAllValidMoves,
+} from "../boardAnalysis/boardAnalysis";
 import { useRerender } from "../../ui/React/hooks";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { boardStyles } from "../boardState/goStyles";
@@ -17,8 +22,8 @@ import { Settings } from "../../Settings/Settings";
 import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
-import { CorruptableText } from "../../ui/React/CorruptableText";
-import { makeAIMove, resetAI, resolveCurrentTurn } from "../boardAnalysis/goAI";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
+import { handleNextTurn, resetGoPromises } from "../boardAnalysis/goAI";
 import { GoScoreExplanation } from "./GoScoreExplanation";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 
@@ -94,48 +99,29 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
     const didUpdateBoard = makeMove(boardState, x, y, currentPlayer);
     if (didUpdateBoard) {
-      rerender();
       takeAiTurn(boardState).catch((error) => exceptionAlert(error));
     }
   }
 
   function passPlayerTurn() {
-    if (boardState.previousPlayer === GoColor.white) {
-      passTurn(boardState, GoColor.black);
-      rerender();
-    }
-    if (boardState.previousPlayer === GoColor.black && boardState.ai === GoOpponent.none) {
-      passTurn(boardState, GoColor.white);
-      rerender();
-    }
     if (boardState.previousPlayer === null) {
       setScoreOpen(true);
       return;
     }
-
-    setTimeout(() => {
-      takeAiTurn(boardState).catch((error) => exceptionAlert(error));
-    }, 100);
+    passTurn(boardState, boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black);
+    takeAiTurn(boardState).catch((error) => exceptionAlert(error));
   }
 
   async function takeAiTurn(boardState: BoardState) {
-    // If white is being played manually, halt and notify any scripts playing as black if present, instead of making an AI move
-    if (Go.currentGame.ai === GoOpponent.none) {
-      Go.currentGame.previousPlayer && resolveCurrentTurn();
-      return;
-    }
-
-    const move = await makeAIMove(boardState, false);
+    const move = await handleNextTurn(boardState, false);
 
     if (move.type === GoPlayType.pass) {
       SnackbarEvents.emit(`The opponent passes their turn; It is now your turn to move.`, ToastVariant.WARNING, 4000);
-      rerender();
       return;
     }
 
-    if (move.type === GoPlayType.gameOver || move.x === null || move.y === null) {
+    if (boardState.previousPlayer === null) {
       setScoreOpen(true);
-      return;
     }
   }
 
@@ -153,9 +139,8 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
     }
 
     Go.currentGame = getNewBoardState(newBoardSize, newOpponent, true);
-    resetAI(false);
-    rerender();
-    resolveCurrentTurn();
+    resetGoPromises();
+    clearAllPointHighlights(Go.currentGame);
   }
 
   function getPriorMove() {
@@ -230,7 +215,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
           <Typography variant={"h6"} className={classes.opponentLabel}>
             {Go.currentGame.ai !== GoOpponent.none ? "Subnet owner: " : ""}{" "}
             {Go.currentGame.ai === GoOpponent.w0r1d_d43m0n ? (
-              <CorruptableText content={Go.currentGame.ai} spoiler={false} />
+              <CorruptibleText content={Go.currentGame.ai} spoiler={false} />
             ) : (
               Go.currentGame.ai
             )}

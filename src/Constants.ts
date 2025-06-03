@@ -4,9 +4,9 @@
  * Constants for specific mechanics or features will NOT be here.
  */
 export const CONSTANTS = {
-  VersionString: "2.7.1dev",
+  VersionString: "3.0.0dev",
   isDevBranch: true,
-  VersionNumber: 41,
+  VersionNumber: 43,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience
    * and the skill level formula in Player.js. Note that all this means it that when experience hits MAX_INT, then
@@ -102,23 +102,31 @@ export const CONSTANTS = {
   EntropyEffect: 0.98,
 
   // Number of blood, plasma, or platelet donations the developer has verified. Boosts NFG.
-  Donations: 179,
+  Donations: 200,
 
   // Only use this if a backdoor is installed in the company's server
   CompanyRequiredReputationMultiplier: 0.75,
 
   // Also update Documentation/doc/changelog.md when appropriate (when doing a release)
   LatestUpdate: `
-## v2.7.1 dev branch: Last updated 8 December 2024
+## v3.0.0 developement version: last updated 4 April 2025
 
-### MAJOR ADDITIONS
+### MAJOR CHANGES
+
+No changes since 2.8.1 release version
+
 ### UI
-### DOCUMENTATION
+
 ### MISC
-### SPOILER CHANGES
+
+### DOCUMENTATION
+
+### SPOILER CHANGES - UI
+
+### SPOILER CHANGES - MISC
+
+### SPOILER CHANGES - DOCUMENTATION
+
 ### CODEBASE/REFACTOR
-
-- No changes since 2.7.0 release.
-
 `,
 } as const;

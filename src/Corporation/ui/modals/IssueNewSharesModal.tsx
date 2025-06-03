@@ -7,7 +7,7 @@ import { useCorporation } from "../Context";
 import Typography from "@mui/material/Typography";
 import { NumberInput } from "../../../ui/React/NumberInput";
 import { ButtonWithTooltip } from "../../../ui/Components/ButtonWithTooltip";
-import { KEY } from "../../../utils/helpers/keyCodes";
+import { KEY } from "../../../utils/KeyboardEventKey";
 import * as actions from "../../Actions";
 import * as corpConstants from "../../data/Constants";
 import { issueNewSharesFailureReason } from "../../helpers";

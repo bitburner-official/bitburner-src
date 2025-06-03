@@ -2,24 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [CityName](./bitburner.cityname.md)
 
-## CityName enum
+## CityName type
 
-Names of all cities
 
 **Signature:**
 
 ```typescript
-declare enum CityName 
+type CityName = _ValueOf<CityNameEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  Aevum | <code>&quot;Aevum&quot;</code> |  |
-|  Chongqing | <code>&quot;Chongqing&quot;</code> |  |
-|  Ishima | <code>&quot;Ishima&quot;</code> |  |
-|  NewTokyo | <code>&quot;New Tokyo&quot;</code> |  |
-|  Sector12 | <code>&quot;Sector-12&quot;</code> |  |
-|  Volhaven | <code>&quot;Volhaven&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [CityNameEnumType](./bitburner.citynameenumtype.md)
 

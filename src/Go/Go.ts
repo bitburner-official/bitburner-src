@@ -1,29 +1,45 @@
-import type { BoardState, OpponentStats, Play } from "./Types";
+import type { BoardState, OpponentStats } from "./Types";
 
-import { GoPlayType, type GoOpponent } from "@enums";
-import { getRecordValues, PartialRecord } from "../Types/Record";
+import type { GoOpponent } from "@enums";
+import { getRecordKeys, PartialRecord } from "../Types/Record";
+import { resetGoPromises } from "./boardAnalysis/goAI";
 import { getNewBoardState } from "./boardState/boardState";
 import { EventEmitter } from "../utils/EventEmitter";
+
+export const getEmptyHighlightedPoints = (size: number = 7) => {
+  return Array.from({ length: size }, () => Array.from({ length: size }, () => null));
+};
 
 export class GoObject {
   // Todo: Make previous game a slimmer interface
   previousGame: BoardState | null = null;
   currentGame: BoardState = getNewBoardState(7);
   stats: PartialRecord<GoOpponent, OpponentStats> = {};
-  nextTurn: Promise<Play> = Promise.resolve({ type: GoPlayType.gameOver, x: null, y: null });
   storedCycles: number = 0;
+  // This flag is used when checking the achievement CHALLENGE_BN14.
+  moveOrCheatViaApi = false;
 
   prestigeAugmentation() {
-    for (const stats of getRecordValues(this.stats)) {
-      stats.nodePower = 0;
+    for (const opponent of getRecordKeys(Go.stats)) {
+      const stats = Go.stats[opponent];
+      if (!stats) {
+        continue;
+      }
+      stats.wins = 0;
+      stats.losses = 0;
       stats.nodes = 0;
+      stats.nodePower = 0;
       stats.winStreak = 0;
+      stats.oldWinStreak = 0;
+      stats.highestWinStreak = 0;
     }
   }
   prestigeSourceFile() {
     this.previousGame = null;
     this.currentGame = getNewBoardState(7);
     this.stats = {};
+    this.moveOrCheatViaApi = false;
+    resetGoPromises();
   }
 
   /**

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { dialog, shell } = require("electron");
+const { dialog } = require("electron");
 const log = require("electron-log");
 
 const Store = require("electron-store");

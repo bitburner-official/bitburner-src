@@ -1,7 +1,7 @@
 /* Generic Reviver, toJSON, and fromJSON functions used for saving and loading objects */
 import { ObjectValidator } from "./Validator";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
-import { objectAssert } from "./helpers/typeAssertion";
+import { assertObject } from "./TypeAssertion";
 
 type JsonableClass = (new () => { toJSON: () => IReviverValue }) & {
   fromJSON: (value: IReviverValue) => unknown;
@@ -58,7 +58,7 @@ export function Generic_fromJSON<T extends Record<string, any>>(
   data: unknown,
   keys?: readonly (keyof T)[],
 ): T {
-  objectAssert(data);
+  assertObject(data);
   const obj = new ctor();
   // If keys were provided, just load the provided keys (if they are in the data)
   if (keys) {

@@ -162,7 +162,7 @@ function generateStatsDescription(mults: Multipliers, programs?: string[], start
     desc += `\n+${f(mults.bladeburner_analysis - 1)} Bladeburner Field Analysis effectiveness`;
   }
   if (mults.bladeburner_success_chance !== 1) {
-    desc += `\n+${f(mults.bladeburner_success_chance - 1)} Bladeburner Contracts and Operations success chance`;
+    desc += `\n+${f(mults.bladeburner_success_chance - 1)} Bladeburner action success chance`;
   }
   if (startingMoney) desc += `\nStart with ${startingMoney} after installing Augmentations.`;
   if (programs) desc += `\nStart with ${programs.join(" and ")} after installing Augmentations.`;

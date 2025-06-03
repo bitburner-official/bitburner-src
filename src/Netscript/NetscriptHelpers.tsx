@@ -56,7 +56,7 @@ import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
 import { basicErrorMessage, errorMessage, log } from "./ErrorMessages";
-import { assertString, debugType } from "./TypeAssertion";
+import { assertStringWithNSContext, debugType } from "./TypeAssertion";
 import {
   canAccessBitNodeFeature,
   getDefaultBitNodeOptions,
@@ -73,8 +73,11 @@ export const helpers = {
   positiveSafeInteger,
   positiveNumber,
   scriptArgs,
+  boolean,
   runOptions,
   spawnOptions,
+  hostReturnOptions,
+  returnServerID,
   argsToString,
   basicErrorMessage,
   errorMessage,
@@ -120,11 +123,15 @@ export interface CompleteHGWOptions {
   stock: boolean;
   additionalMsec: number;
 }
+/** HostReturnOptions with non-optional, type-validated members, for passing between internal functions */
+export interface CompleteHostReturnOptions {
+  returnByIP: boolean;
+}
 
 /** Convert a provided value v for argument argName to string. If it wasn't originally a string or number, throw. */
 function string(ctx: NetscriptContext, argName: string, v: unknown): string {
   if (typeof v === "number") v = v + ""; // cast to string;
-  assertString(ctx, argName, v);
+  assertStringWithNSContext(ctx, argName, v);
   return v;
 }
 
@@ -181,6 +188,14 @@ function scriptArgs(ctx: NetscriptContext, args: unknown) {
   return args;
 }
 
+/** Converts the provided value for v to a boolean, throwing if it is not  */
+function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
+  if (typeof v !== "boolean") {
+    throw errorMessage(ctx, `${argName} must be a boolean, was ${v}`, "TYPE");
+  }
+  return v;
+}
+
 function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRunOptions {
   const result: CompleteRunOptions = {
     threads: 1 as PositiveInteger,
@@ -228,6 +243,20 @@ function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteS
     }
   }
   return result;
+}
+
+function hostReturnOptions(returnOpts: unknown): CompleteHostReturnOptions {
+  const result: CompleteHostReturnOptions = { returnByIP: false };
+  if (typeof returnOpts !== "object" || !returnOpts) return result;
+  // Safe assertion since returnOpts type has been narrowed to a non-null object
+  const { returnByIP } = returnOpts as Unknownify<CompleteHostReturnOptions>;
+  result.returnByIP = !!returnByIP;
+  return result;
+}
+
+/** Returns a server's hostname or IP based on the `returnByIP` field of HostReturnOptions */
+function returnServerID(server: BaseServer, returnOpts: CompleteHostReturnOptions): string {
+  return returnOpts.returnByIP ? server.ip : server.hostname;
 }
 
 function mapToString(map: Map<unknown, unknown>): string {
@@ -642,7 +671,7 @@ function gangTask(ctx: NetscriptContext, t: unknown): GangMemberTask {
 }
 
 export function filePath(ctx: NetscriptContext, argName: string, filename: unknown): FilePath {
-  assertString(ctx, argName, filename);
+  assertStringWithNSContext(ctx, argName, filename);
   const path = resolveFilePath(filename, ctx.workerScript.name);
   if (path) return path;
   throw errorMessage(ctx, `Invalid ${argName}, was not a valid path: ${filename}`);

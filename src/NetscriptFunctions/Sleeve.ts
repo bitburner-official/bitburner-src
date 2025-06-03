@@ -3,12 +3,10 @@ import type { Sleeve as NetscriptSleeve } from "@nsdefs";
 import type { ActionIdentifier } from "../Bladeburner/Types";
 
 import { Player } from "@player";
-import { BladeburnerActionType, type BladeburnerContractName } from "@enums";
+import { BladeburnerActionType, SpecialBladeburnerActionTypeForSleeve, type BladeburnerContractName } from "@enums";
 import { Augmentations } from "../Augmentation/Augmentations";
-import { findCrime } from "../Crime/CrimeHelpers";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { InternalAPI, NetscriptContext, setRemovedFunctions } from "../Netscript/APIWrapper";
-import { SleeveBladeburnerWork } from "../PersonObjects/Sleeve/Work/SleeveBladeburnerWork";
 import { isSleeveFactionWork } from "../PersonObjects/Sleeve/Work/SleeveFactionWork";
 import { isSleeveCompanyWork } from "../PersonObjects/Sleeve/Work/SleeveCompanyWork";
 import { helpers } from "../Netscript/NetscriptHelpers";
@@ -16,9 +14,14 @@ import { getAugCost } from "../Augmentation/AugmentationHelpers";
 import { Factions } from "../Faction/Factions";
 import { SleeveWorkType } from "../PersonObjects/Sleeve/Work/Work";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
+import { Crimes } from "../Crime/Crimes";
 
 export const checkSleeveAPIAccess = function (ctx: NetscriptContext) {
-  if (Player.bitNodeN !== 10 && !Player.sourceFileLvl(10)) {
+  /**
+   * Don't change sourceFileLvl to activeSourceFileLvl. The ability to control Sleeves (via both UI and APIs) is a
+   * permanent benefit.
+   */
+  if (Player.bitNodeN !== 10 && Player.sourceFileLvl(10) <= 0) {
     throw helpers.errorMessage(
       ctx,
       "You do not currently have access to the Sleeve API. This is either because you are not in BitNode-10 or because you do not have Source-File 10",
@@ -76,17 +79,17 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
     },
     setToCommitCrime: (ctx) => (_sleeveNumber, _crimeType) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
-      const crimeType = helpers.string(ctx, "crimeType", _crimeType);
+      const crimeType = getEnumHelper("CrimeType").nsGetMember(ctx, _crimeType);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
-      const crime = findCrime(crimeType);
+      const crime = Crimes[crimeType];
       if (crime == null) return false;
       return Player.sleeves[sleeveNumber].commitCrime(crime.type);
     },
     setToUniversityCourse: (ctx) => (_sleeveNumber, _universityName, _className) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
       const universityName = helpers.string(ctx, "universityName", _universityName);
-      const className = helpers.string(ctx, "className", _className);
+      const className = getEnumHelper("UniversityClassType").nsGetMember(ctx, _className);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
       return Player.sleeves[sleeveNumber].takeUniversityCourse(universityName, className);
@@ -127,7 +130,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
     setToFactionWork: (ctx) => (_sleeveNumber, _factionName, _workType) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
       const factionName = getEnumHelper("FactionName").nsGetMember(ctx, _factionName);
-      const workType = helpers.string(ctx, "workType", _workType);
+      const workType = getEnumHelper("FactionWorkType").nsGetMember(ctx, _workType);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
 
@@ -161,7 +164,7 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
     setToGymWorkout: (ctx) => (_sleeveNumber, _gymName, _stat) => {
       const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
       const gymName = helpers.string(ctx, "gymName", _gymName);
-      const stat = helpers.string(ctx, "stat", _stat);
+      const stat = getEnumHelper("GymType").nsGetMember(ctx, _stat);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
 
@@ -259,11 +262,17 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
       const action = helpers.string(ctx, "action", _action);
       checkSleeveAPIAccess(ctx);
       checkSleeveNumber(ctx, sleeveNumber);
+      if (!Player.bladeburner) {
+        helpers.log(ctx, () => "You must be a member of the Bladeburner division to use this API.");
+        return false;
+      }
       let contract: BladeburnerContractName | undefined = undefined;
-      if (action === "Take on contracts") {
+      if (action === SpecialBladeburnerActionTypeForSleeve.TakeOnContracts) {
         contract = getEnumHelper("BladeburnerContractName").nsGetMember(ctx, _contract);
         for (let i = 0; i < Player.sleeves.length; ++i) {
-          if (i === sleeveNumber) continue;
+          if (i === sleeveNumber) {
+            continue;
+          }
           const otherWork = Player.sleeves[i].currentWork;
           if (otherWork?.type === SleeveWorkType.BLADEBURNER && otherWork.actionId.name === contract) {
             throw helpers.errorMessage(
@@ -273,7 +282,11 @@ export function NetscriptSleeve(): InternalAPI<NetscriptSleeve> {
           }
         }
         const actionId: ActionIdentifier = { type: BladeburnerActionType.Contract, name: contract };
-        Player.sleeves[sleeveNumber].startWork(new SleeveBladeburnerWork({ actionId }));
+        const availability = Player.bladeburner.getActionObject(actionId).getAvailability(Player.bladeburner);
+        if (!availability.available) {
+          helpers.log(ctx, () => `Could not start action ${contract}: ${availability.error}`);
+          return false;
+        }
       }
       return Player.sleeves[sleeveNumber].bladeburner(action, contract);
     },

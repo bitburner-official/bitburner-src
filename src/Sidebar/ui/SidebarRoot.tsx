@@ -1,5 +1,4 @@
-import React, { useMemo, useCallback, useState, useEffect } from "react";
-import { KEYCODE } from "../../utils/helpers/keyCodes";
+import React, { useMemo, useCallback, useState, useEffect, useRef } from "react";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
 import { makeStyles } from "tss-react/mui";
 import MuiDrawer from "@mui/material/Drawer";
@@ -13,7 +12,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
-import ComputerIcon from "@mui/icons-material/Computer";
+import ComputerIcon from "@mui/icons-material/Computer"; // Hacking
 import LastPageIcon from "@mui/icons-material/LastPage"; // Terminal
 import CreateIcon from "@mui/icons-material/Create"; // Create Script
 import StorageIcon from "@mui/icons-material/Storage"; // Active Scripts
@@ -33,14 +32,16 @@ import SportsMmaIcon from "@mui/icons-material/SportsMma"; // Gang
 import CheckIcon from "@mui/icons-material/Check"; // Milestones
 import HelpIcon from "@mui/icons-material/Help"; // Tutorial
 import SettingsIcon from "@mui/icons-material/Settings"; // options
-import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard"; // Dev
+import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard"; // Stanek + Dev
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"; // Achievements
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import PublicIcon from "@mui/icons-material/Public";
-import LiveHelpIcon from "@mui/icons-material/LiveHelp";
-import BorderInnerSharp from "@mui/icons-material/BorderInnerSharp";
+import AccountBoxIcon from "@mui/icons-material/AccountBox"; // Character
+import PublicIcon from "@mui/icons-material/Public"; // World
+import LiveHelpIcon from "@mui/icons-material/LiveHelp"; // Help
+import BorderInnerSharpIcon from "@mui/icons-material/BorderInnerSharp"; // IPvGO
+import BiotechIcon from "@mui/icons-material/Biotech"; // Grafting
 
 import { Router } from "../../ui/GameRoot";
+import { ComplexPage, SimplePage } from "../../ui/Enums";
 import { Page, isSimplePage } from "../../ui/Router";
 import { SidebarAccordion } from "./SidebarAccordion";
 import { Player } from "@player";
@@ -48,15 +49,25 @@ import { CONSTANTS } from "../../Constants";
 import { iTutorialSteps, iTutorialNextStep, ITutorial } from "../../InteractiveTutorial";
 import { getAvailableCreatePrograms } from "../../Programs/ProgramHelpers";
 import { Settings } from "../../Settings/Settings";
-import { AugmentationName } from "@enums";
+import { AugmentationName, CityName } from "@enums";
 
 import { ProgramsSeen } from "../../Programs/ui/ProgramsRoot";
 import { InvitationsSeen } from "../../Faction/ui/FactionsRoot";
 import { commitHash } from "../../utils/helpers/commitHash";
-import { Locations } from "../../Locations/Locations";
 import { useCycleRerender } from "../../ui/React/hooks";
 import { playerHasDiscoveredGo } from "../../Go/effects/effect";
 import { knowAboutBitverse } from "../../BitNode/BitNodeUtils";
+import {
+  convertKeyboardEventToKeyCombination,
+  determineKeyBindingTypes,
+  type GoToPageKeyBindingType,
+  KeyBindingEvents,
+  KeyBindingEventType,
+  ScriptEditorAction,
+  type KeyBindingType,
+  CurrentKeyBindings,
+} from "../../utils/KeyBindingUtils";
+import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 
 const RotatedDoubleArrowIcon = React.forwardRef(function RotatedDoubleArrowIcon(
   props: { color: "primary" | "secondary" | "error" },
@@ -108,6 +119,7 @@ const useStyles = makeStyles()((theme: Theme) => ({
 }));
 
 export function SidebarRoot(props: { page: Page }): React.ReactElement {
+  const isSettingUpKeyBindings = useRef(false);
   useCycleRerender();
 
   let flash: Page | null = null;
@@ -151,6 +163,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     Player.exploits.length > 0;
 
   const canOpenSleeves = Player.sleeves.length > 0;
+  const canOpenGrafting = Player.canAccessGrafting() && Player.city === CityName.NewTokyo;
 
   const canCorporation = !!Player.corporation;
   const canGang = !!Player.gang;
@@ -162,9 +175,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
 
   const clickPage = useCallback(
     (page: Page) => {
-      if (page === Page.Job) {
-        Router.toPage(page, { location: Locations[Object.keys(Player.jobs)[0]] });
-      } else if (page == Page.ScriptEditor || page == Page.Documentation) {
+      if (page == Page.ScriptEditor || page == Page.Documentation) {
         Router.toPage(page, {});
       } else if (isSimplePage(page)) {
         Router.toPage(page);
@@ -178,81 +189,110 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
     [flash],
   );
 
+  /**
+   * We use "keyBindingType is GoToPageKeyBindingType" to narrow down the type of keyBindingType.
+   */
+  const canGoToPage = useCallback(
+    (keyBindingType: KeyBindingType): keyBindingType is GoToPageKeyBindingType => {
+      switch (keyBindingType) {
+        case SimplePage.Terminal:
+        case ComplexPage.ScriptEditor:
+        case SimplePage.ActiveScripts:
+        case SimplePage.CreateProgram:
+        case SimplePage.Stats:
+        case SimplePage.Hacknet:
+        case SimplePage.City:
+        case SimplePage.Travel:
+        case SimplePage.Milestones:
+        case ComplexPage.Documentation:
+        case SimplePage.Achievements:
+        case SimplePage.Options:
+          return true;
+        case SimplePage.StaneksGift:
+          return canStaneksGift;
+        case SimplePage.Factions:
+          return canOpenFactions;
+        case SimplePage.Augmentations:
+          return canOpenAugmentations;
+        case SimplePage.Sleeves:
+          return canOpenSleeves;
+        case SimplePage.Grafting:
+          return canOpenGrafting;
+        case SimplePage.Job:
+          return canJob;
+        case SimplePage.StockMarket:
+          return canStockMarket;
+        case SimplePage.Bladeburner:
+          return canBladeburner;
+        case SimplePage.Corporation:
+          return canCorporation;
+        case SimplePage.Gang:
+          return canGang;
+        case SimplePage.Go:
+          return canIPvGO;
+        case ScriptEditorAction.Save:
+        case ScriptEditorAction.GoToTerminal:
+        case ScriptEditorAction.Run:
+          return false;
+        default:
+          throwIfReachable(keyBindingType);
+      }
+      return false;
+    },
+    [
+      canStaneksGift,
+      canOpenFactions,
+      canOpenAugmentations,
+      canOpenSleeves,
+      canOpenGrafting,
+      canJob,
+      canStockMarket,
+      canBladeburner,
+      canCorporation,
+      canGang,
+      canIPvGO,
+    ],
+  );
+
   useEffect(() => {
-    // Shortcuts to navigate through the game
-    //  Alt-t - Terminal
-    //  Alt-c - Character
-    //  Alt-e - Script editor
-    //  Alt-s - Active scripts
-    //  Alt-h - Hacknet Nodes
-    //  Alt-w - City
-    //  Alt-j - Job
-    //  Alt-r - Travel Agency of current city
-    //  Alt-p - Create program
-    //  Alt-f - Factions
-    //  Alt-a - Augmentations
-    //  Alt-u - Tutorial
-    //  Alt-o - Options
-    //  Alt-b - Bladeburner
-    //  Alt-g - Gang
+    const clearSubscription = KeyBindingEvents.subscribe((eventType) => {
+      if (eventType === KeyBindingEventType.StartSettingUp) {
+        isSettingUpKeyBindings.current = true;
+      }
+      if (eventType === KeyBindingEventType.StopSettingUp) {
+        isSettingUpKeyBindings.current = false;
+      }
+    });
+    return clearSubscription;
+  }, []);
+
+  useEffect(() => {
     function handleShortcuts(this: Document, event: KeyboardEvent): void {
-      if (Settings.DisableHotkeys) return;
-      if ((Player.currentWork && Player.focus) || Router.page() === Page.BitVerse) return;
-      if (event.code === KEYCODE.T && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Terminal);
-      } else if (event.code === KEYCODE.C && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Stats);
-      } else if (event.code === KEYCODE.E && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.ScriptEditor);
-      } else if (event.code === KEYCODE.S && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.ActiveScripts);
-      } else if (event.code === KEYCODE.H && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Hacknet);
-      } else if (event.code === KEYCODE.W && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.City);
-      } else if (event.code === KEYCODE.J && event.altKey && !event.ctrlKey && !event.metaKey && canJob) {
-        // ctrl/cmd + alt + j is shortcut to open Chrome dev tools
-        event.preventDefault();
-        clickPage(Page.Job);
-      } else if (event.code === KEYCODE.R && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Travel);
-      } else if (event.code === KEYCODE.P && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.CreateProgram);
-      } else if (event.code === KEYCODE.F && event.altKey) {
-        if (props.page == Page.Terminal && Settings.EnableBashHotkeys) {
-          return;
+      if (Settings.DisableHotkeys) {
+        return;
+      }
+      if (event.getModifierState(event.key)) {
+        return;
+      }
+      if (isSettingUpKeyBindings.current) {
+        return;
+      }
+      if ((Player.currentWork && Player.focus) || Router.page() === Page.BitVerse) {
+        return;
+      }
+      const keyBindingTypes = determineKeyBindingTypes(CurrentKeyBindings, convertKeyboardEventToKeyCombination(event));
+      for (const keyBindingType of keyBindingTypes) {
+        if (!canGoToPage(keyBindingType)) {
+          continue;
         }
         event.preventDefault();
-        clickPage(Page.Factions);
-      } else if (event.code === KEYCODE.A && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Augmentations);
-      } else if (event.code === KEYCODE.U && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Documentation);
-      } else if (event.code === KEYCODE.O && event.altKey) {
-        event.preventDefault();
-        clickPage(Page.Options);
-      } else if (event.code === KEYCODE.B && event.altKey && Player.bladeburner) {
-        event.preventDefault();
-        clickPage(Page.Bladeburner);
-      } else if (event.code === KEYCODE.G && event.altKey && Player.gang) {
-        event.preventDefault();
-        clickPage(Page.Gang);
+        clickPage(keyBindingType);
       }
     }
 
     document.addEventListener("keydown", handleShortcuts);
     return () => document.removeEventListener("keydown", handleShortcuts);
-  }, [canJob, clickPage, props.page]);
+  }, [canGoToPage, clickPage, props.page]);
 
   const { classes } = useStyles();
   const [open, setOpen] = useState(Settings.IsSidebarOpened);
@@ -318,7 +358,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canOpenFactions && {
               key_: Page.Factions,
               icon: ContactsIcon,
-              active: [Page.Factions as Page, Page.Faction].includes(props.page),
+              active: [Page.Factions, Page.Faction].includes(props.page),
               count: invitationsCount,
             },
             canOpenAugmentations && {
@@ -328,6 +368,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             },
             { key_: Page.Hacknet, icon: AccountTreeIcon },
             canOpenSleeves && { key_: Page.Sleeves, icon: PeopleAltIcon },
+            canOpenGrafting && { key_: Page.Grafting, icon: BiotechIcon },
           ]}
         />
         <Divider />
@@ -343,7 +384,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             {
               key_: Page.City,
               icon: LocationCityIcon,
-              active: [Page.City as Page, Page.Grafting, Page.Location].includes(props.page),
+              active: [Page.City, Page.Location].includes(props.page),
             },
             { key_: Page.Travel, icon: AirplanemodeActiveIcon },
             canJob && { key_: Page.Job, icon: WorkIcon },
@@ -351,7 +392,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
             canBladeburner && { key_: Page.Bladeburner, icon: FormatBoldIcon },
             canCorporation && { key_: Page.Corporation, icon: BusinessIcon },
             canGang && { key_: Page.Gang, icon: SportsMmaIcon },
-            canIPvGO && { key_: Page.Go, icon: BorderInnerSharp },
+            canIPvGO && { key_: Page.Go, icon: BorderInnerSharpIcon },
           ]}
         />
         <Divider />

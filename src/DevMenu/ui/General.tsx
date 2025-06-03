@@ -25,6 +25,7 @@ import { checkForMessagesToSend } from "../../Message/MessageHelpers";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { formatRam } from "../../ui/formatNumber";
 import { resetGangs } from "../../Gang/AllGangs";
+import { finishBitNode } from "../../BitNode/BitNodeUtils";
 
 export function General({ parentRerender }: { parentRerender: () => void }): React.ReactElement {
   const rerender = useRerender(400);
@@ -57,8 +58,14 @@ export function General({ parentRerender }: { parentRerender: () => void }): Rea
   // Node-clearing functions
   const quickB1tFlum3 = () => Router.toPage(Page.BitVerse, { flume: true, quick: true });
   const b1tflum3 = () => Router.toPage(Page.BitVerse, { flume: true, quick: false });
-  const quickHackW0r1dD43m0n = () => Router.toPage(Page.BitVerse, { flume: false, quick: true });
-  const hackW0r1dD43m0n = () => Router.toPage(Page.BitVerse, { flume: false, quick: false });
+  const quickHackW0r1dD43m0n = () => {
+    finishBitNode();
+    Router.toPage(Page.BitVerse, { flume: false, quick: true });
+  };
+  const hackW0r1dD43m0n = () => {
+    finishBitNode();
+    Router.toPage(Page.BitVerse, { flume: false, quick: false });
+  };
 
   // Corp functions
   const createCorporation = () => {

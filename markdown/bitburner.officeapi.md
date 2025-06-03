@@ -30,7 +30,7 @@ Requires the Office API upgrade from your corporation.
 |  [hireAdVert(divisionName)](./bitburner.officeapi.hireadvert.md) | Hire AdVert. |
 |  [hireEmployee(divisionName, city, employeePosition)](./bitburner.officeapi.hireemployee.md) | Hire an employee. |
 |  [research(divisionName, researchName)](./bitburner.officeapi.research.md) | Purchase a research. |
-|  [setAutoJobAssignment(divisionName, city, job, amount)](./bitburner.officeapi.setautojobassignment.md) | Set the job assignment for a job. |
+|  [setJobAssignment(divisionName, city, job, amount)](./bitburner.officeapi.setjobassignment.md) | Set the job assignment for a job. |
 |  [throwParty(divisionName, city, costPerEmployee)](./bitburner.officeapi.throwparty.md) | Throw a party for your employees. |
 |  [upgradeOfficeSize(divisionName, city, size)](./bitburner.officeapi.upgradeofficesize.md) | Upgrade office size. |
 

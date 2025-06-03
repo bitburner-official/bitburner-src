@@ -2,7 +2,7 @@ import type { ContentFilePath } from "../Paths/ContentFile";
 
 import { EventEmitter } from "../utils/EventEmitter";
 import * as monaco from "monaco-editor";
-import { loadThemes, makeTheme, sanitizeTheme } from "./ui/themes";
+import { loadThemes, makeTheme } from "./ui/themes";
 import { Settings } from "../Settings/Settings";
 import { NetscriptExtra } from "../NetscriptFunctions/Extra";
 import * as enums from "../Enums";
@@ -132,7 +132,6 @@ export class ScriptEditor {
     });
     // Load themes
     loadThemes(monaco.editor.defineTheme);
-    sanitizeTheme(Settings.EditorTheme);
     monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
   }
 }

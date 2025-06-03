@@ -7,16 +7,20 @@ import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 function getServerCode(scripts: OpenScript[], index: number): string | null {
   const openScript = scripts[index];
   const server = GetServer(openScript.hostname);
-  if (server === null) throw new Error(`Server '${openScript.hostname}' should not be null, but it is.`);
+  if (server === null) {
+    return null;
+  }
   const data = server.getContentFile(openScript.path)?.content ?? null;
   return data;
 }
 
-function dirty(scripts: OpenScript[], index: number): string {
+function isUnsavedFile(scripts: OpenScript[], index: number): boolean {
   const openScript = scripts[index];
   const serverData = getServerCode(scripts, index);
-  if (serverData === null) return " *";
-  return serverData !== openScript.code ? " *" : "";
+  if (serverData === null) {
+    return true;
+  }
+  return serverData !== openScript.code;
 }
 
 function reorder(list: unknown[], startIndex: number, endIndex: number): void {
@@ -60,4 +64,4 @@ function makeModel(hostname: string, filename: string, code: string): editor.ITe
   return editor.createModel(code, language, uri);
 }
 
-export { getServerCode, dirty, reorder, makeModel };
+export { getServerCode, isUnsavedFile, reorder, makeModel };

@@ -5,7 +5,7 @@ import { Page } from "../../ui/Router";
 import { Player } from "@player";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 import { FactionName } from "@enums";
 
 interface IProps {

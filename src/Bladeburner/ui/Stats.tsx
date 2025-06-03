@@ -220,7 +220,7 @@ export function Stats({ bladeburner }: StatsProps): React.ReactElement {
           <br />
           Aug. Stamina Gain mult: {formatNumberNoSuffix(Player.mults.bladeburner_stamina_gain * 100, 1)}%
           <br />
-          Aug. Field Analysis mult: {formatNumberNoSuffix(Player.mults.bladeburner_analysis * 100, 1)}%
+          Aug. Field Analysis effectiveness mult: {formatNumberNoSuffix(Player.mults.bladeburner_analysis * 100, 1)}%
         </Typography>
       </Box>
     </Paper>

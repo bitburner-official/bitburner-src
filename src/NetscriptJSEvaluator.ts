@@ -5,6 +5,7 @@
 import * as walk from "acorn-walk";
 import { parse } from "acorn";
 import type * as acorn from "acorn";
+import { fromObject } from "convert-source-map";
 
 import { LoadedModule, type ScriptURL, type ScriptModule } from "./Script/LoadedModule";
 import type { Script } from "./Script/Script";
@@ -85,6 +86,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     throw new Error(`Script content is an empty string. Filename: ${script.filename}, server: ${script.server}.`);
   }
   let scriptCode;
+  let sourceMap;
   const fileType = getFileType(script.filename);
   switch (fileType) {
     case FileType.JS:
@@ -93,7 +95,7 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     case FileType.JSX:
     case FileType.TS:
     case FileType.TSX:
-      scriptCode = transformScript(script.code, fileType);
+      ({ scriptCode, sourceMap } = transformScript(script.code, fileType));
       break;
     default:
       throw new Error(`Invalid file type: ${fileType}. Filename: ${script.filename}, server: ${script.server}.`);
@@ -179,7 +181,19 @@ function generateLoadedModule(script: Script, scripts: Map<ScriptFilePath, Scrip
     // servers; it will be listed under the first server it was compiled for.
     // We don't include this in the cache key, so that other instances of the
     // script dedupe properly.
-    const adjustedCode = newCode + `\n//# sourceURL=${script.server}/${script.filename}`;
+    const sourceURL = `${script.server}/${script.filename}`;
+    let adjustedCode = newCode + `\n//# sourceURL=${sourceURL}`;
+    if (sourceMap) {
+      let inlineSourceMap;
+      try {
+        inlineSourceMap = fromObject({ ...JSON.parse(sourceMap), sources: [sourceURL], sourceRoot: "/" }).toComment();
+      } catch (error) {
+        console.warn(`Cannot generate inline source map for ${script.filename} in ${script.server}`, error);
+      }
+      if (inlineSourceMap) {
+        adjustedCode += `\n${inlineSourceMap}`;
+      }
+    }
     // At this point we have the full code and can construct a new blob / assign the URL.
 
     const url = URL.createObjectURL(makeScriptBlob(adjustedCode)) as ScriptURL;

@@ -7,6 +7,7 @@ import { MiscPage } from "./MiscPage";
 import { NumericDisplayPage } from "./NumericDisplayOptions";
 import { RemoteAPIPage } from "./RemoteAPIPage";
 import { SystemPage } from "./SystemPage";
+import { KeyBindingPage } from "./KeyBindingPage";
 
 interface IProps {
   save: () => void;
@@ -15,7 +16,16 @@ interface IProps {
   softReset: () => void;
   reactivateTutorial: () => void;
 }
-export type OptionsTabName = "System" | "Interface" | "Numeric Display" | "Gameplay" | "Misc" | "Remote API";
+
+export type OptionsTabName =
+  | "System"
+  | "Interface"
+  | "Numeric Display"
+  | "Gameplay"
+  | "Misc"
+  | "Remote API"
+  | "Key Binding";
+
 const tabs: Record<OptionsTabName, React.ReactNode> = {
   System: <SystemPage />,
   Interface: <InterfacePage />,
@@ -23,6 +33,7 @@ const tabs: Record<OptionsTabName, React.ReactNode> = {
   Gameplay: <GameplayPage />,
   Misc: <MiscPage />,
   "Remote API": <RemoteAPIPage />,
+  "Key Binding": <KeyBindingPage />,
 };
 
 export function GameOptionsRoot(props: IProps): React.ReactElement {

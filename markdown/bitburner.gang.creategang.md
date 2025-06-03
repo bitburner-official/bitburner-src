@@ -9,14 +9,14 @@ Create a gang.
 **Signature:**
 
 ```typescript
-createGang(faction: string): boolean;
+createGang(faction: FactionName): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  faction | string |  |
+|  faction | [FactionName](./bitburner.factionname.md) | Name of the faction that you want to create a gang with. This faction must allow this action, and you must be its member. |
 
 **Returns:**
 
@@ -29,4 +29,6 @@ True if the gang was created, false otherwise.
 RAM cost: 1GB
 
 Create a gang with the specified faction.
+
+Outside BitNode 2, your karma must be less than or equal to 54000.
 

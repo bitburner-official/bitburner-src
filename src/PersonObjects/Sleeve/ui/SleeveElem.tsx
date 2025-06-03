@@ -1,6 +1,6 @@
 import { Box, Button, Paper, Tooltip, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { CrimeType, FactionWorkType } from "@enums";
+import React, { useEffect, useState } from "react";
+import { BladeburnerActionType, FactionWorkType, GymType, SpecialBladeburnerActionTypeForSleeve } from "@enums";
 import { CONSTANTS } from "../../../Constants";
 import { Player } from "@player";
 import { formatPercent, formatInt } from "../../../ui/formatNumber";
@@ -11,9 +11,22 @@ import { SleeveAugmentationsModal } from "./SleeveAugmentationsModal";
 import { EarningsElement, StatsElement } from "./StatsElement";
 import { TaskSelector } from "./TaskSelector";
 import { TravelModal } from "./TravelModal";
-import { findCrime } from "../../../Crime/CrimeHelpers";
-import { SleeveWorkType } from "../Work/Work";
+import { type SleeveWork, SleeveWorkType } from "../Work/Work";
 import { getEnumHelper } from "../../../utils/EnumHelper";
+import { getRecordEntries } from "../../../Types/Record";
+
+const factionWorkTypeDescriptions = {
+  [FactionWorkType.field]: "Field Work",
+  [FactionWorkType.hacking]: "Hacking Contracts",
+  [FactionWorkType.security]: "Security Work",
+};
+
+const gymTypeDescriptions: Record<GymType, string> = {
+  [GymType.strength]: "Train Strength",
+  [GymType.defense]: "Train Defense",
+  [GymType.dexterity]: "Train Dexterity",
+  [GymType.agility]: "Train Agility",
+};
 
 function getWorkDescription(sleeve: Sleeve, progress: number): string {
   const work = sleeve.currentWork;
@@ -57,20 +70,53 @@ function getWorkDescription(sleeve: Sleeve, progress: number): string {
       );
     }
     case SleeveWorkType.FACTION: {
-      // This isn't the way this should be handled...
-      const workNames = {
-        [FactionWorkType.field]: "Field Work",
-        [FactionWorkType.hacking]: "Hacking Contracts",
-        [FactionWorkType.security]: "Security Work",
-      };
-      const doing = workNames[work.factionWorkType] ?? "nothing";
-      return `This sleeve is currently doing ${doing} for ${work.factionName}.`;
+      return `This sleeve is currently doing ${factionWorkTypeDescriptions[work.factionWorkType]} for ${
+        work.factionName
+      }.`;
     }
     case SleeveWorkType.INFILTRATE:
       return (
         "This sleeve is currently attempting to infiltrate synthoid communities to generate additional contracts and operations.\nThis activity is less efficient the more sleeves are assigned to it.\n\n" +
         `Progress: ${formatPercent(progress)}`
       );
+  }
+}
+
+function calculateABC(work: SleeveWork | null): [string, string, string] {
+  if (work === null) {
+    return ["Idle", "------", "------"];
+  }
+  switch (work.type) {
+    case SleeveWorkType.COMPANY:
+      return ["Work for Company", work.companyName, "------"];
+    case SleeveWorkType.FACTION: {
+      return ["Work for Faction", work.factionName, factionWorkTypeDescriptions[work.factionWorkType]];
+    }
+    case SleeveWorkType.BLADEBURNER:
+      if (work.actionId.type === BladeburnerActionType.Contract) {
+        return [
+          "Perform Bladeburner Actions",
+          SpecialBladeburnerActionTypeForSleeve.TakeOnContracts,
+          work.actionId.name,
+        ];
+      }
+      return ["Perform Bladeburner Actions", work.actionId.name, "------"];
+    case SleeveWorkType.CLASS: {
+      if (!work.isGym()) {
+        return ["Take University Course", work.classType, work.location];
+      }
+      return ["Workout at Gym", gymTypeDescriptions[work.classType as GymType], work.location];
+    }
+    case SleeveWorkType.CRIME:
+      return ["Commit Crime", getEnumHelper("CrimeType").getMember(work.crimeType, { alwaysMatch: true }), "------"];
+    case SleeveWorkType.SUPPORT:
+      return ["Perform Bladeburner Actions", SpecialBladeburnerActionTypeForSleeve.SupportMainSleeve, "------"];
+    case SleeveWorkType.INFILTRATE:
+      return ["Perform Bladeburner Actions", SpecialBladeburnerActionTypeForSleeve.InfiltrateSynthoids, "------"];
+    case SleeveWorkType.RECOVERY:
+      return ["Shock Recovery", "------", "------"];
+    case SleeveWorkType.SYNCHRO:
+      return ["Synchronize", "------", "------"];
   }
 }
 
@@ -83,7 +129,19 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
   const [travelOpen, setTravelOpen] = useState(false);
   const [augmentationsOpen, setAugmentationsOpen] = useState(false);
 
-  const [abc, setABC] = useState(["Idle", "------", "------"]);
+  /**
+   * "abc" contains values of 3 dropdown inputs. It will be set when:
+   * - The player selects a task and its options.
+   * - The sleeve's current task is set by non-UI things (e.g., NS API).
+   */
+  const [abc, setABC] = useState(calculateABC(props.sleeve.currentWork));
+
+  /**
+   * Update abc if the sleeve's current task is set by non-UI things.
+   */
+  useEffect(() => {
+    setABC(calculateABC(props.sleeve.currentWork));
+  }, [props.sleeve.currentWork]);
 
   function setTask(): void {
     switch (abc[0]) {
@@ -91,21 +149,41 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
         props.sleeve.stopWork();
         break;
       case "Work for Company":
-        if (getEnumHelper("CompanyName").isMember(abc[1])) props.sleeve.workForCompany(abc[1]);
-        else console.error(`Invalid company name in setSleeveTask: ${abc[1]}`);
+        if (getEnumHelper("CompanyName").isMember(abc[1])) {
+          props.sleeve.workForCompany(abc[1]);
+        } else {
+          console.error(`Invalid company name in setSleeveTask: ${abc[1]}`);
+        }
         break;
       case "Work for Faction":
-        if (getEnumHelper("FactionName").isMember(abc[1])) props.sleeve.workForFaction(abc[1], abc[2]);
-        else console.error(`Invalid faction name in setSleeveTask: ${abc[1]}`);
+        if (getEnumHelper("FactionName").isMember(abc[1])) {
+          for (const [factionWorkType, description] of getRecordEntries(factionWorkTypeDescriptions)) {
+            if (description === abc[2]) {
+              props.sleeve.workForFaction(abc[1], factionWorkType);
+              break;
+            }
+          }
+        } else {
+          console.error(`Invalid faction name in setSleeveTask: ${abc[1]}`);
+        }
         break;
       case "Commit Crime":
-        props.sleeve.commitCrime(findCrime(abc[1])?.type ?? CrimeType.shoplift);
+        if (getEnumHelper("CrimeType").isMember(abc[1])) {
+          props.sleeve.commitCrime(abc[1]);
+        }
         break;
       case "Take University Course":
-        props.sleeve.takeUniversityCourse(abc[2], abc[1]);
+        if (getEnumHelper("UniversityClassType").isMember(abc[1])) {
+          props.sleeve.takeUniversityCourse(abc[2], abc[1]);
+        }
         break;
       case "Workout at Gym":
-        props.sleeve.workoutAtGym(abc[2], abc[1]);
+        for (const [gymType, description] of getRecordEntries(gymTypeDescriptions)) {
+          if (description === abc[1]) {
+            props.sleeve.workoutAtGym(abc[2], gymType);
+            break;
+          }
+        }
         break;
       case "Perform Bladeburner Actions":
         props.sleeve.bladeburner(abc[1], abc[2]);
@@ -169,7 +247,7 @@ export function SleeveElem(props: SleeveElemProps): React.ReactElement {
         </span>
         <span>
           <EarningsElement sleeve={props.sleeve} />
-          <TaskSelector sleeve={props.sleeve} setABC={setABC} />
+          <TaskSelector sleeve={props.sleeve} abc={abc} setABC={setABC} />
           <Button onClick={setTask} sx={{ width: "100%" }}>
             Set Task
           </Button>

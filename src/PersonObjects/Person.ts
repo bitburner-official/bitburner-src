@@ -147,6 +147,10 @@ export abstract class Person implements IPerson {
       console.error("ERROR: NaN passed into Player.gainIntelligenceExp()");
       return;
     }
+    /**
+     * Don't change sourceFileLvl to activeSourceFileLvl. When the player has int level, the ability to gain more int is
+     * a permanent benefit.
+     */
     if (Player.sourceFileLvl(5) > 0 || this.skills.intelligence > 0 || Player.bitNodeN === 5) {
       this.exp.intelligence += exp;
       this.skills.intelligence = Math.floor(this.calculateSkill(this.exp.intelligence, 1));
@@ -175,36 +179,19 @@ export abstract class Person implements IPerson {
   }
 
   updateSkillLevels(this: Person): void {
-    this.skills.hacking = Math.max(
-      1,
-      Math.floor(this.calculateSkill(this.exp.hacking, this.mults.hacking * currentNodeMults.HackingLevelMultiplier)),
-    );
-    this.skills.strength = Math.max(
-      1,
-      Math.floor(
-        this.calculateSkill(this.exp.strength, this.mults.strength * currentNodeMults.StrengthLevelMultiplier),
-      ),
-    );
-    this.skills.defense = Math.max(
-      1,
-      Math.floor(this.calculateSkill(this.exp.defense, this.mults.defense * currentNodeMults.DefenseLevelMultiplier)),
-    );
-    this.skills.dexterity = Math.max(
-      1,
-      Math.floor(
-        this.calculateSkill(this.exp.dexterity, this.mults.dexterity * currentNodeMults.DexterityLevelMultiplier),
-      ),
-    );
-    this.skills.agility = Math.max(
-      1,
-      Math.floor(this.calculateSkill(this.exp.agility, this.mults.agility * currentNodeMults.AgilityLevelMultiplier)),
-    );
-    this.skills.charisma = Math.max(
-      1,
-      Math.floor(
-        this.calculateSkill(this.exp.charisma, this.mults.charisma * currentNodeMults.CharismaLevelMultiplier),
-      ),
-    );
+    for (const [skill, bnMult] of [
+      ["hacking", "HackingLevelMultiplier"],
+      ["strength", "StrengthLevelMultiplier"],
+      ["defense", "DefenseLevelMultiplier"],
+      ["dexterity", "DexterityLevelMultiplier"],
+      ["agility", "AgilityLevelMultiplier"],
+      ["charisma", "CharismaLevelMultiplier"],
+    ] as const) {
+      this.skills[skill] = Math.max(
+        1,
+        Math.floor(this.calculateSkill(this.exp[skill], this.mults[skill] * currentNodeMults[bnMult])),
+      );
+    }
 
     const ratio: number = Math.min(this.hp.current / this.hp.max, 1);
     this.hp.max = Math.floor(10 + this.skills.defense / 10);

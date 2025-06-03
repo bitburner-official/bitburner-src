@@ -1,8 +1,11 @@
+import { Player } from "@player";
+import { AugmentationName } from "@enums";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Reviver } from "../utils/GenericReviver";
 import { BaseGift } from "./BaseGift";
 
 import { StaneksGift } from "./StaneksGift";
+import { Result } from "../types";
 
 export let staneksGift = new StaneksGift();
 
@@ -48,4 +51,21 @@ export function calculateGrid(gift: BaseGift): number[][] {
   }
 
   return newGrid;
+}
+
+export function canAcceptStaneksGift(): Result {
+  if (!Player.canAccessCotMG()) {
+    return { success: false, message: "You do not have Source-File 13." };
+  }
+  if (
+    [...Player.augmentations, ...Player.queuedAugmentations].filter(
+      (a) => a.name !== AugmentationName.NeuroFluxGovernor,
+    ).length !== 0
+  ) {
+    return {
+      success: false,
+      message: `You already purchased or installed augmentations that are not ${AugmentationName.NeuroFluxGovernor}.`,
+    };
+  }
+  return { success: true };
 }

@@ -4,7 +4,7 @@
 
 ## NS.go property
 
-Namespace for Go functions.
+Namespace for [Go](./bitburner.go.md) functions.
 
 **Signature:**
 

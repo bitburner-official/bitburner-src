@@ -8,19 +8,21 @@ Bribe a faction. You must satisfy these conditions:
 
 - The corporation valuation must be greater than or equal to a threshold. You can use [getCorporation](./bitburner.corporation.getcorporation.md) and [getConstants](./bitburner.corporation.getconstants.md) to get this information.
 
+- You must be a member of the specified faction.
+
 - The specified faction must offer at least 1 type of work. You can use [getFactionWorkTypes](./bitburner.singularity.getfactionworktypes.md) to get the list of work types of a faction.
 
 **Signature:**
 
 ```typescript
-bribe(factionName: string, amountCash: number): boolean;
+bribe(factionName: FactionName, amountCash: number): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  factionName | string | Faction name |
+|  factionName | [FactionName](./bitburner.factionname.md) | Faction name |
 |  amountCash | number | Amount of money to bribe |
 
 **Returns:**

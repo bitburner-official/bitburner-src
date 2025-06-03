@@ -4,37 +4,42 @@ import { GameOptionsPage } from "./GameOptionsPage";
 import { isValidConnectionHostname, isValidConnectionPort, Settings } from "../../Settings/Settings";
 import { ConnectionBauble } from "./ConnectionBauble";
 import { isRemoteFileApiConnectionLive, newRemoteFileApiConnection } from "../../RemoteFileAPI/RemoteFileAPI";
+import { OptionSwitch } from "../../ui/React/OptionSwitch";
 
 export const RemoteAPIPage = (): React.ReactElement => {
   const [remoteFileApiHostname, setRemoteFileApiHostname] = useState(Settings.RemoteFileApiAddress);
-  const [remoteFileApiPort, setRemoteFileApiPort] = useState(Settings.RemoteFileApiPort);
+  const [hostnameError, setHostnameError] = useState(
+    isValidConnectionHostname(Settings.RemoteFileApiAddress).message ?? "",
+  );
+  const [remoteFileApiPort, setRemoteFileApiPort] = useState(Settings.RemoteFileApiPort.toString());
+  const [portError, setPortError] = useState(isValidConnectionPort(Settings.RemoteFileApiPort).message ?? "");
+
+  const isValidHostname = hostnameError === "";
+  const isValidPort = portError === "";
 
   function handleRemoteFileApiHostnameChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    let newValue = event.target.value.trim();
-    // Empty string will be automatically changed to "localhost".
-    if (newValue === "") {
-      newValue = "localhost";
-    }
-    if (!isValidConnectionHostname(newValue)) {
+    const newValue = event.target.value.trim();
+    setRemoteFileApiHostname(newValue);
+    const result = isValidConnectionHostname(newValue);
+    if (!result.success) {
+      setHostnameError(result.message);
       return;
     }
-    setRemoteFileApiHostname(newValue);
     Settings.RemoteFileApiAddress = newValue;
+    setHostnameError("");
   }
 
   function handleRemoteFileApiPortChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    let newValue = event.target.value.trim();
-    // Empty string will be automatically changed to "0".
-    if (newValue === "") {
-      newValue = "0";
-    }
+    const newValue = event.target.value.trim();
+    setRemoteFileApiPort(newValue);
     const port = Number.parseInt(newValue);
-    // Disallow invalid ports but still allow the player to set port to 0. Setting it to 0 means that RFA is disabled.
-    if (port !== 0 && !isValidConnectionPort(port)) {
+    const result = isValidConnectionPort(port);
+    if (!result.success) {
+      setPortError(result.message);
       return;
     }
-    setRemoteFileApiPort(port);
     Settings.RemoteFileApiPort = port;
+    setPortError("");
   }
 
   return (
@@ -56,45 +61,61 @@ export const RemoteAPIPage = (): React.ReactElement => {
         title={
           <Typography>
             This hostname is used to connect to a Remote API, please ensure that it matches with your Remote API
-            hostname. Default: localhost.
+            hostname.
+            <br />
+            If you use IPv6, you need to wrap it in square brackets. For example: [::1]
+            <br />
+            Default: localhost.
           </Typography>
         }
       >
-        <TextField
-          InputProps={{
-            startAdornment: <Typography>Hostname:&nbsp;</Typography>,
-          }}
-          value={remoteFileApiHostname}
-          onChange={handleRemoteFileApiHostnameChange}
-          placeholder="localhost"
-          size={"medium"}
-        />
+        <div>
+          <TextField
+            error={!isValidHostname}
+            InputProps={{
+              startAdornment: <Typography>Hostname:&nbsp;</Typography>,
+            }}
+            value={remoteFileApiHostname}
+            onChange={handleRemoteFileApiHostnameChange}
+            placeholder="localhost"
+            size={"medium"}
+          />
+          {hostnameError && <Typography color={Settings.theme.error}>{hostnameError}</Typography>}
+        </div>
       </Tooltip>
-      <br />
       <Tooltip
         title={
           <Typography>
-            This port number is used to connect to a Remote API, please ensure that it matches with your Remote API
-            server port. Set to 0 to disable the feature.
+            This port number is used to connect to the Remote API. Please ensure that it matches with your Remote API
+            server port.
+            <br />
+            The value must be in the range of [0, 65535]. Set it to 0 to disable the feature.
           </Typography>
         }
       >
-        <TextField
-          InputProps={{
-            startAdornment: (
-              <Typography color={isValidConnectionPort(remoteFileApiPort) ? "success" : "error"}>
-                Port:&nbsp;
-              </Typography>
-            ),
-          }}
-          value={remoteFileApiPort}
-          onChange={handleRemoteFileApiPortChange}
-          placeholder="12525"
-          size={"medium"}
-        />
+        <div>
+          <TextField
+            error={!isValidPort}
+            InputProps={{
+              startAdornment: <Typography color={isValidPort ? "success" : "error"}>Port:&nbsp;</Typography>,
+            }}
+            value={remoteFileApiPort}
+            onChange={handleRemoteFileApiPortChange}
+            placeholder="12525"
+            size={"medium"}
+          />
+          {portError && <Typography color={Settings.theme.error}>{portError}</Typography>}
+        </div>
       </Tooltip>
-      <br />
-      <Button onClick={newRemoteFileApiConnection}>Connect</Button>
+      <OptionSwitch
+        checked={Settings.UseWssForRemoteFileApi}
+        onChange={(newValue) => (Settings.UseWssForRemoteFileApi = newValue)}
+        text="Use wss"
+        tooltip={<>Use wss instead of ws when connecting to RFA clients.</>}
+      />
+      <Button disabled={!isValidHostname || !isValidPort} onClick={newRemoteFileApiConnection}>
+        Connect
+      </Button>
     </GameOptionsPage>
   );
 };

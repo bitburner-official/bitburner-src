@@ -9,14 +9,14 @@ Get estimated population in city.
 **Signature:**
 
 ```typescript
-getCityEstimatedPopulation(city: CityName | `${CityName}`): number;
+getCityEstimatedPopulation(city: CityName): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of city. Case-sensitive |
+|  city | [CityName](./bitburner.cityname.md) | Name of city. Case-sensitive |
 
 **Returns:**
 

@@ -9,7 +9,7 @@ Get the type of a coding contract.
 **Signature:**
 
 ```typescript
-getContractType(filename: string, host?: string): string;
+getContractType(filename: string, host?: string): CodingContractName;
 ```
 
 ## Parameters
@@ -17,11 +17,11 @@ getContractType(filename: string, host?: string): string;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  filename | string | Filename of the contract. |
-|  host | string | _(Optional)_ Hostname of the server containing the contract. Optional. Defaults to current server if not provided. |
+|  host | string | _(Optional)_ Hostname/IP of the server containing the contract. Optional. Defaults to current server if not provided. |
 
 **Returns:**
 
-string
+[CodingContractName](./bitburner.codingcontractname.md)
 
 Name describing the type of problem posed by the Coding Contract.
 

@@ -6,6 +6,7 @@ import { getExpansionMoveArray } from "../boardAnalysis/goAI";
 import {
   boardFromSimpleBoard,
   boardStringFromBoard,
+  clearAllPointHighlights,
   evaluateIfMoveIsValid,
   findAllCapturedChains,
   findLibertiesForChain,
@@ -34,6 +35,9 @@ export function getNewBoardState(
     ai: ai,
     passCount: 0,
     cheatCount: 0,
+    cheatCountForWhite: 0,
+    komiOverride: null,
+    highlightedPoints: Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null)),
     board: Array.from({ length: boardSize }, (_, x) =>
       Array.from({ length: boardSize }, (_, y) =>
         !boardToCopy || boardToCopy?.[x]?.[y]
@@ -121,6 +125,7 @@ export function makeMove(boardState: BoardState, x: number, y: number, player: G
 
   // Add move to board history
   boardState.previousBoards.unshift(boardStringFromBoard(boardState.board));
+  clearAllPointHighlights(boardState);
 
   point.color = player;
   boardState.previousPlayer = player;
@@ -138,6 +143,8 @@ export function passTurn(boardState: BoardState, player: GoColor, allowEndGame =
   if (boardState.previousPlayer === null || boardState.previousPlayer === player) {
     return;
   }
+  clearAllPointHighlights(boardState);
+
   boardState.previousPlayer = boardState.previousPlayer === GoColor.black ? GoColor.white : GoColor.black;
   boardState.passCount++;
 
@@ -151,7 +158,18 @@ export function passTurn(boardState: BoardState, player: GoColor, allowEndGame =
  * Modifies the board in place.
  */
 export function applyHandicap(board: Board, handicap: number): void {
-  const availableMoves = getEmptySpaces(board);
+  const availableMoves = [];
+  for (const column of board) {
+    for (const point of column) {
+      if (point) {
+        if (point.color !== GoColor.empty) {
+          // Game is in progress, don't apply handicap
+          return;
+        }
+        availableMoves.push(point);
+      }
+    }
+  }
   const handicapMoveOptions = getExpansionMoveArray(board, availableMoves);
   const handicapMoves: Move[] = [];
 
