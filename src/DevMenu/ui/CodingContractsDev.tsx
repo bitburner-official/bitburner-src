@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -16,6 +15,7 @@ import {
 } from "../../CodingContract/ContractGenerator";
 import { isCodingContractName } from "../../CodingContract/ContractTypes";
 import { CodingContractName } from "@enums";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 export function CodingContractsDev(): React.ReactElement {
   const [codingcontract, setCodingcontract] = useState(CodingContractName.FindLargestPrimeFactor);
@@ -33,7 +33,7 @@ export function CodingContractsDev(): React.ReactElement {
   }
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_CodingContractsDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Coding Contracts</Typography>
       </AccordionSummary>
@@ -61,6 +61,6 @@ export function CodingContractsDev(): React.ReactElement {
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }
