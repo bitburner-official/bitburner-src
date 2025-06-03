@@ -5,13 +5,13 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Player } from "@player";
-import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { Money } from "../ui/React/Money";
 import { BetInput } from "./BetInput";
 import { Deck } from "./CardDeck/Deck";
 import { Hand } from "./CardDeck/Hand";
 import { ReactCard } from "./CardDeck/ReactCard";
 import { reachedLimit, win } from "./Game";
+import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 
 const initialBet = 1e6;
 const maxBet = 100e6;
@@ -230,7 +230,7 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
          * Don't throw an error. Callers of this function are event handlers (onClick) of buttons. If we throw an error,
          * it won't be shown to the player.
          */
-        dialogBoxCreate(`Unexpected Blackjack result: ${result}. This is a bug. Please contact the developer.`);
+        exceptionAlert(new Error(`Unexpected Blackjack result: ${result}.`));
         gains = 0;
         break;
     }
