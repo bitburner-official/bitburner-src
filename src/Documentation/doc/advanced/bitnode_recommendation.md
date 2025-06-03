@@ -146,7 +146,7 @@ You should keep these things in mind:
 - Sleeves are expensive. The last Sleeve costs 100e15 (100q). You will need a [batcher](../programming/hackingalgorithms.md) or a corporation.
 - Due to the debuff, grafting is sometimes underestimated and underutilized. When grafting, you need to choose the augmentations carefully. If you choose appropriate ones, grafting is a very strong mechanic.
 
-This BitNode's multipliers are fairly harsh. You will need a source of high income for the last Sleeve anyway, so harsh multipliers should not be a big problem.
+This BitNode's multipliers are fairly harsh. You will need a source of high income for the last Sleeve anyway, so harsh multipliers should not be a big problem. Utilizing the grafting mechanic properly lessens the harsh multipliers.
 
 ## BitNode 11
 
@@ -180,7 +180,7 @@ Stanek's Gift decreases many multipliers by 10%. "Church of the Machine God" fac
 
 You must accept Stanek's Gift before purchasing any augmentations. NFG is the only exception. Due to the effect of Source-File 7.3, you must accept Stanek's Gift before joining the Bladeburner division if you have that Source-File.
 
-This BitNode's multipliers are extremely harsh. You should prepare carefully before entering it.
+This BitNode's multipliers are extremely harsh. You should prepare carefully before entering it. Utilizing the Gift's bonuses is crucial to lessen the harsh multipliers.
 
 ## BitNode 14
 
