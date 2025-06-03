@@ -61,6 +61,7 @@ export function BetInput({
       sx={{
         marginTop: "20px",
         marginBottom: "20px",
+        width: "200px",
         "& .MuiInputLabel-root.Mui-disabled": {
           WebkitTextFillColor: Settings.theme.disabled,
         },
@@ -75,8 +76,9 @@ export function BetInput({
       error={helperText !== ""}
       helperText={helperText}
       type="number"
-      style={{
-        width: "200px",
+      InputProps={{
+        // Without startAdornment, label and placeholder are only shown when TextField is focused
+        startAdornment: <></>,
       }}
     />
   );
