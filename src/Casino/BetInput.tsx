@@ -57,29 +57,27 @@ export function BetInput({
     }
   };
   return (
-    <>
-      <TextField
-        sx={{
-          marginTop: "20px",
-          marginBottom: "20px",
-          "& .MuiInputLabel-root.Mui-disabled": {
-            WebkitTextFillColor: Settings.theme.disabled,
-          },
-          "& .MuiInputBase-input.Mui-disabled": {
-            WebkitTextFillColor: Settings.theme.disabled,
-          },
-        }}
-        value={betValue}
-        label={<>Wager (Max: {formatMoney(maxBet)})</>}
-        disabled={gameInProgress}
-        onChange={onChange}
-        error={helperText !== ""}
-        helperText={helperText}
-        type="number"
-        style={{
-          width: "200px",
-        }}
-      />
-    </>
+    <TextField
+      sx={{
+        marginTop: "20px",
+        marginBottom: "20px",
+        "& .MuiInputLabel-root.Mui-disabled": {
+          WebkitTextFillColor: Settings.theme.disabled,
+        },
+        "& .MuiInputBase-input.Mui-disabled": {
+          WebkitTextFillColor: Settings.theme.disabled,
+        },
+      }}
+      value={betValue}
+      label={<>Wager (Max: {formatMoney(maxBet)})</>}
+      disabled={gameInProgress}
+      onChange={onChange}
+      error={helperText !== ""}
+      helperText={helperText}
+      type="number"
+      style={{
+        width: "200px",
+      }}
+    />
   );
 }
