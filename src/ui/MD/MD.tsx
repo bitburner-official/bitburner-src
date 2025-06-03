@@ -11,14 +11,40 @@ import rehypeRaw from "rehype-raw";
 import { FilePath } from "../../Paths/FilePath";
 import { getPage } from "../../Documentation/root";
 
-export function MD(props: { pageFilePath: FilePath; top: number }): React.ReactElement {
-  const pageContent = getPage(props.pageFilePath);
+export function MD({
+  pageFilePath,
+  top,
+  modalWrapperRef,
+}: {
+  pageFilePath: FilePath;
+  top: number;
+  /**
+   * If this component is used for rendering the documentation popup, this parameter is the ref of the wrapper div in
+   * the modal.
+   */
+  modalWrapperRef?: React.RefObject<HTMLDivElement>;
+}): React.ReactElement {
+  const pageContent = getPage(pageFilePath);
 
+  /**
+   * After rendering the doc page, we need to scroll it. This component is used in 2 places:
+   * - src\Documentation\ui\DocumentationRoot.tsx: The documentation tab.
+   * - src\Documentation\ui\DocumentationPopUp.tsx: The documentation popup opened by using the
+   * DocumentationAutocomplete component.
+   */
   useEffect(() => {
-    // This is a workaround. window.scrollTo does not work when we switch from Documentation tab to another tab, then
-    // switch back.
+    // With the documentation popup: Scroll by using the wrapper div in the modal.
+    if (modalWrapperRef && modalWrapperRef.current) {
+      modalWrapperRef.current.scrollTo({ top, behavior: "instant" });
+      return;
+    }
+    /**
+     * With the documentation tab: Scroll by using the window object.
+     * Using setTimeout is a workaround. window.scrollTo does not work when we switch from Documentation tab to another
+     * tab, then switch back.
+     */
     setTimeout(() => {
-      window.scrollTo({ top: props.top, behavior: "instant" });
+      window.scrollTo({ top, behavior: "instant" });
     }, 0);
   });
 

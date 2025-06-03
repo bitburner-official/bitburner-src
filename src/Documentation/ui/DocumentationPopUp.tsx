@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Modal } from "../../ui/React/Modal";
 import { defaultNsApiPage, Navigator, openDocExternally } from "../../ui/React/Documentation";
 import { MD } from "../../ui/MD/MD";
@@ -7,6 +7,7 @@ import { DocumentationPopUpEvents } from "../root";
 
 export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
   const [path, setPath] = useState<FilePath | undefined>(undefined);
+  const modalWrapperRef = useRef<HTMLDivElement>(null);
   useEffect(
     () =>
       DocumentationPopUpEvents.subscribe((path?: string) => {
@@ -42,11 +43,12 @@ export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
       onClose={() => {
         setPath(undefined);
       }}
+      wrapperRef={modalWrapperRef}
       wrapperStyles={{ minWidth: "90%", minHeight: "90%", scrollbarWidth: "thin" }}
       removeFocus={false}
     >
       <Navigator.Provider value={navigator}>
-        <MD pageFilePath={path} top={0} />
+        <MD pageFilePath={path} top={0} modalWrapperRef={modalWrapperRef} />
       </Navigator.Provider>
     </Modal>
   );
