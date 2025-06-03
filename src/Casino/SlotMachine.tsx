@@ -249,56 +249,48 @@ export function SlotMachine(): React.ReactElement {
   }
 
   const t = getTable(index, symbols);
+  // prettier-ignore
   return (
-    <>
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>+———————————————————————+</Typography>
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>
-        | | {t[0][0]} | {t[0][1]} | {t[0][2]} | {t[0][3]} | {t[0][4]} | |
-      </Typography>
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>| | | | | | | |</Typography>
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>
-        | | {symbols[index[0]]} | {symbols[index[1]]} | {symbols[index[2]]} | {symbols[index[3]]} | {symbols[index[4]]}{" "}
-        | |
-      </Typography>
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>| | | | | | | |</Typography>
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>
-        | | {symbols[(index[0] + 1) % symbols.length]} | {symbols[(index[1] + 1) % symbols.length]} |{" "}
-        {symbols[(index[2] + 1) % symbols.length]} | {symbols[(index[3] + 1) % symbols.length]} |{" "}
-        {symbols[(index[4] + 1) % symbols.length]} | |
-      </Typography>
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>+———————————————————————+</Typography>
-      <BetInput
-        initialBet={initialBet}
-        maxBet={maxBet}
-        gameInProgress={!canPlay}
-        setBet={(bet) => {
-          setInvestment(bet);
-        }}
-      />
-      <div>
-        <Button onClick={trusted(play)} disabled={!canPlay}>
-          Spin!
-        </Button>
-      </div>
+      <>
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>+———————————————————————+</Typography>
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>| | {t[0][0]} | {t[0][1]} | {t[0][2]} | {t[0][3]} | {t[0][4]} | |</Typography>
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>| |   |   |   |   |   | |</Typography>
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>| | {symbols[index[0]]} | {symbols[index[1]]} | {symbols[index[2]]} | {symbols[index[3]]} | {symbols[index[4]]} | |</Typography>
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>| |   |   |   |   |   | |</Typography>
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>| | {symbols[(index[0]+1)%symbols.length]} | {symbols[(index[1]+1)%symbols.length]} | {symbols[(index[2]+1)%symbols.length]} | {symbols[(index[3]+1)%symbols.length]} | {symbols[(index[4]+1)%symbols.length]} | |</Typography>
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>+———————————————————————+</Typography>
+        <BetInput
+          initialBet={initialBet}
+          maxBet={maxBet}
+          gameInProgress={!canPlay}
+          setBet={(bet) => {
+            setInvestment(bet);
+          }}
+        />
+        <div>
+          <Button onClick={trusted(play)} disabled={!canPlay}>
+            Spin!
+          </Button>
+        </div>
 
-      <Typography variant="h4">{status}</Typography>
-      <Typography>Pay lines</Typography>
+        <Typography variant="h4">{status}</Typography>
+        <Typography>Pay lines</Typography>
 
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>----- ····· ·····</Typography>
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>····· ----- ·····</Typography>
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>····· ····· -----</Typography>
-      <br />
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>-----   ·····   ·····</Typography>
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>·····   -----   ·····</Typography>
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>·····   ·····   -----</Typography>
+<br />
 
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>··^·· \···/ \···/</Typography>
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>·/·\· ·\·/· ·---·</Typography>
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>/···\ ··v·· ·····</Typography>
-      <br />
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>··^··   \···/   \···/</Typography>
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>·/·\·   ·\·/·   ·---·</Typography>
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>/···\   ··v··   ·····</Typography>
+<br />
 
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>····· ·---· ·····</Typography>
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>·---· /···\ \···/</Typography>
-      <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>/···\ ····· ·---·</Typography>
-    </>
-  );
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>·····   ·---·   ·····</Typography>
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>·---·   /···\   \···/</Typography>
+<Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>/···\   ·····   ·---·</Typography>
+        </>
+    );
 }
 
 // https://felgo.com/doc/how-to-make-a-slot-game-tutorial/
