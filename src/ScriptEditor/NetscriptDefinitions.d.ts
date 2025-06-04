@@ -76,7 +76,7 @@ interface ResetInfo {
    * BitNode options into account.
    *
    * For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 1. In this
-   * case, this map contains this entry: Key: 1 => Value: 1.
+   * case, this map contains this entry: Key: 1 =\> Value: 1.
    *
    * If the active level of a source file is 0, that source file won't be included in the result.
    */
@@ -2500,7 +2500,7 @@ export interface Singularity {
    * Returns an array of source files. This function takes BitNode options into account.
    *
    * For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 1. In this
-   * case, this function returns {"n":1,"lvl":1}.
+   * case, this function returns \{"n":1,"lvl":1\}.
    *
    * If the active level of a source file is 0, that source file won't be included in the result.
    *
@@ -2837,6 +2837,7 @@ export interface CompanyPositionInfo {
   requiredSkills: Skills;
 }
 
+/** @public */
 type HacknetServerHashUpgrade =
   | "Sell for Money"
   | "Sell for Corporation Funds"
@@ -4052,7 +4053,7 @@ export interface Format {
    * - "Infinity" and "-Infinity" are returned as "∞" and "-∞", respectively.
    *
    * - If you disable the suffix form in the settings page or the absolute value is greater than or equal to 1e33, this
-   * function will use the exponential form. This means that, if Math.abs(n) >= 1e33, the returned value is always in
+   * function will use the exponential form. This means that, if Math.abs(n) \>= 1e33, the returned value is always in
    * the exponential form, regardless of the setting.
    *
    * Note that the behaviors listed above are "undocumented", in the sense that we don't make any guarantee about
@@ -4605,8 +4606,8 @@ export interface GoAnalysis {
    * The details are keyed by opponent name, in this structure:
    *
    * <pre lang="javascript">
-   * {
-   *   <OpponentName>: {
+   * \{
+   *   <OpponentName>: \{
    *     wins: number,
    *     losses: number,
    *     winStreak: number,
@@ -4614,8 +4615,8 @@ export interface GoAnalysis {
    *     favor: number,
    *     bonusPercent: number,
    *     bonusDescription: string,
-   *   }
-   * }
+   *   \}
+   * \}
    * </pre>
    *
    * @returns A dictionary of opponent stats keyed by opponent name.
@@ -8670,6 +8671,7 @@ type FactionNameEnumType = {
 /** @public */
 type FactionName = _ValueOf<FactionNameEnumType>;
 
+/** @public */
 type CodingContractNameEnumType = {
   FindLargestPrimeFactor: "Find Largest Prime Factor";
   SubarrayWithMaximumSum: "Subarray with Maximum Sum";
@@ -8705,6 +8707,7 @@ type CodingContractNameEnumType = {
 /** @public */
 type CodingContractName = _ValueOf<CodingContractNameEnumType>;
 
+/** @public */
 export type CodingContractSignatures = {
   "Find Largest Prime Factor": [number, number];
   "Subarray with Maximum Sum": [number[], number];
@@ -8737,6 +8740,7 @@ export type CodingContractSignatures = {
   "Total Number of Primes": [number[], number];
 };
 
+/** @public */
 export type CodingContractObject = {
   [T in keyof CodingContractSignatures]: {
     type: T;
