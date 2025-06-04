@@ -21,7 +21,7 @@ export function CodingContractsDev(): React.ReactElement {
   const [codingcontract, setCodingcontract] = useState(CodingContractName.FindLargestPrimeFactor);
   function setCodingcontractDropdown(event: SelectChangeEvent): void {
     const value = event.target.value;
-    if (!getEnumHelper("CodingContractName").isMember(value)){
+    if (!getEnumHelper("CodingContractName").isMember(value)) {
       return;
     }
     setCodingcontract(value);
