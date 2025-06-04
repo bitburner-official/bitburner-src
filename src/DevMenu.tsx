@@ -27,6 +27,7 @@ import { EntropyDev } from "./DevMenu/ui/EntropyDev";
 
 import { Exploit } from "./Exploits/Exploit";
 import { useRerender } from "./ui/React/hooks";
+import { DarknetDev } from "./DevMenu/ui/DarknetDev";
 
 export function DevMenuRoot(): React.ReactElement {
   useEffect(() => {
@@ -63,6 +64,7 @@ export function DevMenuRoot(): React.ReactElement {
       <TimeSkip />
       <AchievementsDev />
       <EntropyDev />
+      <DarknetDev />
     </>
   );
 }

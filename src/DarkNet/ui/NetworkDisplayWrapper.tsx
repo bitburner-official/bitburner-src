@@ -1,5 +1,5 @@
 import React, { PointerEventHandler, useEffect, useRef, useState, WheelEventHandler } from "react";
-import { Container, Typography, Button, Box, Link } from "@mui/material";
+import { Container, Typography, Button, Box } from "@mui/material";
 import { ZoomIn, ZoomOut } from "@mui/icons-material";
 import { ServerStatusBox } from "./ServerStatusBox";
 import { useRerender } from "../../ui/React/hooks";
@@ -8,11 +8,9 @@ import { GetServer } from "../../Server/AllServers";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { BaseServer } from "../../Server/BaseServer";
 import { drawOnCanvas, getPixelPosition } from "./networkCanvas";
-import { clearDarknet, populateDarknet } from "../controllers/NetworkGenerator";
 import { dnetStyles } from "./dnetStyles";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
-import { WEBSTORM } from "../effects/webstorm";
 import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { isDarknetServer } from "../effects/effects";
@@ -26,7 +24,6 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [zoomIndex, setZoomIndex] = useState(7);
   const [netDisplayDepth, setNetDisplayDepth] = useState<number>(1);
-  const [visibilityMargin, setVisibilityMargin] = useState<number>(3);
   const zoomOptions = [0.12, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.5];
   const { classes } = dnetStyles({});
 
@@ -39,6 +36,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
           }
           return deepest;
         }, 1);
+        const visibilityMargin = DarknetState.showFullNetwork ? 99 : 3;
         setNetDisplayDepth(deepestServer + visibilityMargin);
 
         rerender();
@@ -47,7 +45,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     });
     canvas.current && drawOnCanvas(canvas.current);
     draggableBackground?.current?.addEventListener("wheel", (e) => e.preventDefault());
-  }, [rerender, visibilityMargin]);
+  }, [rerender]);
 
   useEffect(() => {
     DarknetEvents.emit();
@@ -197,33 +195,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         </Button>
       </div>
       <Box className={`${classes.inlineFlexBox}`}>
-        <Link
-          style={{ cursor: "pointer" }}
+        <Button
           onClick={() => Router.toPage(Page.Documentation, { docPage: "advanced/darknet.md" })}
         >
           Darknet Documentation
-        </Link>
-        <Button
-          onClick={() => {
-            clearDarknet(true);
-            populateDarknet();
-          }}
-          variant={"contained"}
-          className={classes.button}
-        >
-          Generate New Web (for testing)
-        </Button>
-        <Button
-          onClick={() => {
-            setVisibilityMargin(visibilityMargin === 3 ? 99 : 3);
-            DarknetEvents.emit();
-          }}
-          className={classes.button}
-        >
-          Toggle Show Full Network
-        </Button>
-        <Button onClick={() => void WEBSTORM()} variant={"contained"} className={classes.button}>
-          START WEBSTORM (for testing)
         </Button>
       </Box>
     </Container>

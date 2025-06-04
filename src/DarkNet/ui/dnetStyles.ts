@@ -33,7 +33,7 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
   },
   NetWrapper: {
     width: "100%",
-    height: "90vh",
+    height: "calc(100vh - 80px)",
     overflow: "scroll",
     position: "relative",
     border: "solid 1px slategray",

@@ -23,6 +23,7 @@ export type DarknetState = {
   offlineServers: string[];
   storedCycles: number;
   cyclesSinceLastMutation: number;
+  showFullNetwork: boolean;
 };
 
 export type serverState = {
@@ -48,6 +49,7 @@ export const DarknetState: DarknetState = {
   offlineServers: [],
   storedCycles: 0,
   cyclesSinceLastMutation: 0,
+  showFullNetwork: false,
 };
 
 export const getServerState = (hostname: string): serverState => {
