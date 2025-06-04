@@ -128,10 +128,10 @@ const hacknet = {
 // Stock API
 const stock = {
   getConstants: 0,
-  hasWSEAccount: 0.05,
-  hasTIXAPIAccess: 0.05,
+  hasWseAccount: 0.05,
+  hasTixApiAccess: 0.05,
   has4SData: 0.05,
-  has4SDataTIXAPI: 0.05,
+  has4SDataTixApi: 0.05,
   getBonusTime: 0,
   nextUpdate: RamCostConstants.CycleTiming,
   getSymbols: RamCostConstants.GetStock,

@@ -73,7 +73,7 @@ const serverFactory = (
   return DnetServerBuilder({
     ...serverConfigBuilder(difficulty),
     difficulty,
-    depth: depth,
+    depth,
     leftOffset: leftOffset,
   });
 };
@@ -108,7 +108,7 @@ export const getSortedEchoVulnConfig = (difficulty: number): ServerConfig => {
   const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${sortedPassword}`;
   return {
     modelId: Minigames.SortedEchoVuln,
-    password: password,
+    password,
     staticPasswordHint: hint,
     passwordHintData: sortedPassword,
   };
@@ -163,7 +163,7 @@ export const getCaptchaConfig = (difficulty: number): ServerConfig => {
 
   return {
     modelId: Minigames.Captcha,
-    password: password,
+    password,
     staticPasswordHint: "Type the numbers to prove you are human",
     passwordHintData: filledPassword,
   };
@@ -247,7 +247,7 @@ export const getGuessNumberConfig = (difficulty: number): ServerConfig => {
   const maxNumber = 10 ** password.length;
   return {
     modelId: Minigames.GuessNumber,
-    password: password,
+    password,
     staticPasswordHint: `The password is a number between 0 and ${maxNumber}`,
   };
 };

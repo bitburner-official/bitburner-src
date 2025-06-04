@@ -454,9 +454,9 @@ interface StockMarketConstants {
   /** An internal constant used while determining when to flip a stock's forecast */
   TicksPerCycle: number;
   /** Cost of the WSE account */
-  WSEAccountCost: number;
+  WseAccountCost: number;
   /** Cost of the TIX API */
-  TIXAPICost: number;
+  TixApiCost: number;
   /** Cost of the 4S Market Data */
   MarketData4SCost: number;
   /** Cost of the 4S Market Data TIX API integration */
@@ -747,7 +747,7 @@ interface BitNodeMultipliers {
   /** Influences the maximum allowed RAM for a purchased server */
   PurchasedServerMaxRam: number;
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
-  RepToDonateToFaction: number;
+  FavorToDonateToFaction: number;
   /** Influences how much money is stolen from a server when the player performs a hack against it. */
   ScriptHackMoney: number;
   /**
@@ -1220,19 +1220,22 @@ export interface NetscriptPort {
  * @public
  */
 export interface TIX {
-  /** Get game constants for the stock market mechanic.
-   *  @remarks RAM cost: 0 GB */
+  /**
+   * Get game constants for the stock market mechanic.
+   *
+   * @remarks RAM cost: 0 GB
+   */
   getConstants(): StockMarketConstants;
   /**
    * Returns true if the player has access to a WSE Account
    * @remarks RAM cost: 0.05 GB
    */
-  hasWSEAccount(): boolean;
+  hasWseAccount(): boolean;
   /**
    * Returns true if the player has access to the TIX API
    * @remarks RAM cost: 0.05 GB
    */
-  hasTIXAPIAccess(): boolean;
+  hasTixApiAccess(): boolean;
   /**
    * Returns true if the player has access to the 4S Data
    * @remarks RAM cost: 0.05 GB
@@ -1242,7 +1245,7 @@ export interface TIX {
    * Returns true if the player has access to the 4SData TIX API
    * @remarks RAM cost: 0.05 GB
    */
-  has4SDataTIXAPI(): boolean;
+  has4SDataTixApi(): boolean;
   /**
    * Returns an array of the symbols of the tradable stocks
    *
@@ -1260,9 +1263,9 @@ export interface TIX {
    * The stock’s price is the average of its bid and ask prices. This function requires
    * that you have the following:
    *
-   * 1. WSE Account
+   * - WSE Account
    *
-   * 1. TIX API Access
+   * - TIX API Access
    *
    * @example
    * ```js
@@ -1288,9 +1291,9 @@ export interface TIX {
    * The organization associated with the corresponding stock symbol. This function
    * requires that you have the following:
    *
-   * 1. WSE Account
+   * - WSE Account
    *
-   * 1. TIX API Access
+   * - TIX API Access
    *
    * @example
    * ```js
@@ -2128,8 +2131,7 @@ export interface Singularity {
    * const success = ns.singularity.workForCompany(companyName);
    * if (!success) ns.tprint(`ERROR: Failed to start work at ${companyName}.`);
    * ```
-   * @param companyName - Name of company to work for. Must be an exact match. Optional. If not specified, this
-   *   argument defaults to the last job that you worked.
+   * @param companyName - Name of company to work for. Must be an exact match.
    * @param focus - Acquire player focus on this work operation. Optional. Defaults to true.
    * @returns True if the player starts working, and false otherwise.
    */
@@ -9739,7 +9741,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @param selfFund - If you want to self-fund. Defaults to true, false will only work in BitNode 3.
    * @returns true if created and false if not
    */
-  createCorporation(corporationName: string, selfFund: boolean): boolean;
+  createCorporation(corporationName: string, selfFund?: boolean): boolean;
 
   /**
    * Check if you have a one-time unlockable upgrade.

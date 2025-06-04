@@ -16,7 +16,7 @@ workForCompany(companyName: CompanyName, focus?: boolean): boolean;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  companyName | [CompanyName](./bitburner.companyname.md) | Name of company to work for. Must be an exact match. Optional. If not specified, this argument defaults to the last job that you worked. |
+|  companyName | [CompanyName](./bitburner.companyname.md) | Name of company to work for. Must be an exact match. |
 |  focus | boolean | _(Optional)_ Acquire player focus on this work operation. Optional. Defaults to true. |
 
 **Returns:**
