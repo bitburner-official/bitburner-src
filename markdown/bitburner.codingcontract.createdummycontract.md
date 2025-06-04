@@ -9,14 +9,14 @@ Generate a dummy contract.
 **Signature:**
 
 ```typescript
-createDummyContract(type: string): string;
+createDummyContract(type: CodingContractName): string;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  type | string | Type of contract to generate |
+|  type | [CodingContractName](./bitburner.codingcontractname.md) | Type of contract to generate |
 
 **Returns:**
 
