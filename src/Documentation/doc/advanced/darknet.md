@@ -1,9 +1,8 @@
 # The Darkweb Network
 
-Easy wealth... secret augments... The siren call of the so-called "dark net" has echoed in rumors for years. Delving into the uncharted and secretive parts of the internet comes with the promise of freedom from oppressive authority and surveillance. 
+Easy wealth... secret augments... The siren call of the so-called "dark net" has echoed in rumors for years. Delving into the uncharted and secretive parts of the internet comes with the promise of freedom from oppressive authority and surveillance.
 
 Leaving the internet behind and turning to the dark web, however, comes with its risks... and potential rewards. A person with the right know-how (and enough charm to survive on their wits alone) can find their way into less-than-secure computers connected to that unregulated network. A person like you, perhaps.
-
 
 ### Network structure
 
@@ -13,17 +12,16 @@ In addition, servers on the darknet are not freely accessible from anywhere. Gen
 
 In some cases, the only way to get to deeper parts of the net is to hitch a ride on a server when it moves to another location!
 
-
 ### TL;DR: Executive summary of the darknet API
-* `ns.dnet.probe()` lets you find darknet servers directly connected to your current server. Use this to find targets to crack and copy your script onto.
-* `await ns.dnet.authenticate(hostname, password)` lets you guess and check passwords for servers directly connected to your script's server. If you guess right, you get admin access and can use `exec` and `scp` to move scripts onto that server.
-* Some servers require interactive feedback to guess their password. Use `await ns.dnet.heartbleed(hostname)` to check that server's logs and get clues after you attempt a password.
-* `ns.dnet.connectToSession(hostName, password)` lets you use a password you already know to log in to a darknet server at a distance. This is required to scp files there.
-* `await ns.dnet.packetCapture(hostName)` allows you to sometimes find passwords amongst the (mostly) noise coming out of a server.
-* Some servers will have part of their max ram blocked off. Use `ns.dnet.influence.memoryReallocation()` to free it.
-* Some servers have valuable .cache files you can open with `ns.dnet.openCache(fileName)`
-* Darknet servers allow you to run `ns.dnet.phishingAttack()` to get money or .cache files based off of your charisma and crime success stat.
 
+- `ns.dnet.probe()` lets you find darknet servers directly connected to your current server. Use this to find targets to crack and copy your script onto.
+- `await ns.dnet.authenticate(hostname, password)` lets you guess and check passwords for servers directly connected to your script's server. If you guess right, you get admin access and can use `exec` and `scp` to move scripts onto that server.
+- Some servers require interactive feedback to guess their password. Use `await ns.dnet.heartbleed(hostname)` to check that server's logs and get clues after you attempt a password.
+- `ns.dnet.connectToSession(hostName, password)` lets you use a password you already know to log in to a darknet server at a distance. This is required to scp files there.
+- `await ns.dnet.packetCapture(hostName)` allows you to sometimes find passwords amongst the (mostly) noise coming out of a server.
+- Some servers will have part of their max ram blocked off. Use `ns.dnet.influence.memoryReallocation()` to free it.
+- Some servers have valuable .cache files you can open with `ns.dnet.openCache(fileName)`
+- Darknet servers allow you to run `ns.dnet.phishingAttack()` to get money or .cache files based off of your charisma and crime success stat.
 
 ### Finding nearby servers with `dnet.probe`
 
@@ -39,15 +37,13 @@ In some cases, the only way to get to deeper parts of the net is to hitch a ride
 
 ### Password stealing with `dnet.packetCapture`
 
-------------------
+---
 
 (work-in-progress documentation)
 
 The internet is the largest datastream in the world, and thus the most heavily surveiled. Not everyone wants their actions followed, though.
 
 Leaving the internet behind and turning to the dark web, however, comes with its risks... and potential rewards. A person with the right know-how (and enough charm to survive on their wits alone) can find their way into less-than-secure computers connected to that unregulated network. A person like you, perhaps.
-
-
 
 ### Gaining server access
 
