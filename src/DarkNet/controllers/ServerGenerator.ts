@@ -12,7 +12,7 @@ import {
   unicode,
 } from "../models/dictionaryData";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { Minigames, MinigamesType } from "../Enums";
+import { ModelIds, MinigamesType } from "../Enums";
 
 const getRandomServerConfigBuilder = (difficulty: number) => {
   const easyServers = [getEchoVulnConfig, getSortedEchoVulnConfig, getDefaultPasswordConfig, getCaptchaConfig];
@@ -64,7 +64,7 @@ type ServerConfig = {
   passwordHintData?: string;
 };
 
-const serverFactory = (
+export const serverFactory = (
   serverConfigBuilder: (n: number) => ServerConfig,
   difficulty: number,
   depth: number,
@@ -90,7 +90,7 @@ export const getEchoVulnConfig = (__difficulty: number): ServerConfig => {
   const password = getPassword(3);
   const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${password}`;
   return {
-    modelId: Minigames.EchoVuln,
+    modelId: ModelIds.EchoVuln,
     password,
     staticPasswordHint: hint,
   };
@@ -107,7 +107,7 @@ export const getSortedEchoVulnConfig = (difficulty: number): ServerConfig => {
   const sortedPassword = password.split("").sort().join("");
   const hint = `${hintTemplates[Math.floor(Math.random() * hintTemplates.length)]} ${sortedPassword}`;
   return {
-    modelId: Minigames.SortedEchoVuln,
+    modelId: ModelIds.SortedEchoVuln,
     password,
     staticPasswordHint: hint,
     passwordHintData: sortedPassword,
@@ -135,7 +135,7 @@ export const getNoPasswordConfig = (difficulty: number): ServerConfig => {
     "Did I set a code?",
     "I didn't set a password",
   ];
-  return getDictionaryAttackConfig(difficulty, [""], hintTemplates, Minigames.NoPassword);
+  return getDictionaryAttackConfig(difficulty, [""], hintTemplates, ModelIds.NoPassword);
 };
 
 export const getDefaultPasswordConfig = (difficulty: number): ServerConfig => {
@@ -146,7 +146,7 @@ export const getDefaultPasswordConfig = (difficulty: number): ServerConfig => {
     "I never changed the password",
     "It's still the factory settings",
   ];
-  return getDictionaryAttackConfig(difficulty, defaultSettingsDictionary, hintTemplates, Minigames.DefaultPassword);
+  return getDictionaryAttackConfig(difficulty, defaultSettingsDictionary, hintTemplates, ModelIds.DefaultPassword);
 };
 
 export const getCaptchaConfig = (difficulty: number): ServerConfig => {
@@ -162,7 +162,7 @@ export const getCaptchaConfig = (difficulty: number): ServerConfig => {
     .join("");
 
   return {
-    modelId: Minigames.Captcha,
+    modelId: ModelIds.Captcha,
     password,
     staticPasswordHint: "Type the numbers to prove you are human",
     passwordHintData: filledPassword,
@@ -180,12 +180,12 @@ const getFillerChars = () => {
 
 export const getDogNameConfig = (difficulty: number): ServerConfig => {
   const hintTemplates = ["It's my dog's name", "It's the dog's name", "my first dog's name"];
-  return getDictionaryAttackConfig(difficulty, dogNameDictionary, hintTemplates, Minigames.DogNames);
+  return getDictionaryAttackConfig(difficulty, dogNameDictionary, hintTemplates, ModelIds.DogNames);
 };
 
 export const getMastermindHintConfig = (difficulty: number): ServerConfig => {
   return {
-    modelId: Minigames.MastermindHint,
+    modelId: ModelIds.MastermindHint,
     password: getPassword(Math.min(2 + difficulty / 4, 9)),
     staticPasswordHint: "Only a true master may pass",
   };
@@ -200,7 +200,7 @@ export const getTimingAttackConfig = (difficulty: number): ServerConfig => {
   ];
   const length = 3 + difficulty / 3;
   return {
-    modelId: Minigames.TimingAttack,
+    modelId: ModelIds.TimingAttack,
     password: getPassword(length, true, false),
     staticPasswordHint: hintTemplates[Math.floor(Math.random() * hintTemplates.length)],
   };
@@ -211,7 +211,7 @@ export const getRomanNumeralConfig = (difficulty: number): ServerConfig => {
   if (difficulty < 8) {
     const encodedPassword = romanNumeralEncoder(password);
     return {
-      modelId: Minigames.RomanNumeral,
+      modelId: ModelIds.RomanNumeral,
       password: `${password}`,
       staticPasswordHint: `The password is the value of the number ${encodedPassword}`,
       passwordHintData: encodedPassword,
@@ -224,7 +224,7 @@ export const getRomanNumeralConfig = (difficulty: number): ServerConfig => {
     const hint = `The password is between ${encodedMin} and ${encodedMax}`;
     const hintData = `${encodedMin},${encodedMax}`;
     return {
-      modelId: Minigames.RomanNumeral,
+      modelId: ModelIds.RomanNumeral,
       password: `${password}`,
       staticPasswordHint: hint,
       passwordHintData: hintData,
@@ -235,7 +235,7 @@ export const getRomanNumeralConfig = (difficulty: number): ServerConfig => {
 export const getLargestPrimeFactorConfig = (difficulty: number): ServerConfig => {
   const largestPrimePasswordDetails = getLargestPrimeFactorPassword(difficulty);
   return {
-    modelId: Minigames.LargestPrimeFactor,
+    modelId: ModelIds.LargestPrimeFactor,
     password: `${largestPrimePasswordDetails.largestPrime}`,
     staticPasswordHint: `The password is the largest prime factor of ${largestPrimePasswordDetails.password}`,
     passwordHintData: `${largestPrimePasswordDetails.password}`,
@@ -246,7 +246,7 @@ export const getGuessNumberConfig = (difficulty: number): ServerConfig => {
   const password = `${Math.floor((Math.random() * 10 * (difficulty + 3)) / 3)}`;
   const maxNumber = 10 ** password.length;
   return {
-    modelId: Minigames.GuessNumber,
+    modelId: ModelIds.GuessNumber,
     password,
     staticPasswordHint: `The password is a number between 0 and ${maxNumber}`,
   };
@@ -257,18 +257,18 @@ export const getLargeDictionaryConfig = (difficulty: number): ServerConfig => {
     difficulty,
     commonPasswordDictionary,
     ["It's a common password"],
-    Minigames.CommonPasswordDictionary,
+    ModelIds.CommonPasswordDictionary,
   );
 };
 
 export const getEuCountryDictionaryConfig = (difficulty: number): ServerConfig => {
-  return getDictionaryAttackConfig(difficulty, EUCountries, ["My favorite EU country"], Minigames.EUCountryDictionary);
+  return getDictionaryAttackConfig(difficulty, EUCountries, ["My favorite EU country"], ModelIds.EUCountryDictionary);
 };
 
 export const getYesn_tConfig = (difficulty: number): ServerConfig => {
   const password = getPassword(3 + difficulty / 2, true, difficulty > 8, false, false);
   return {
-    modelId: Minigames.Yesn_t,
+    modelId: ModelIds.Yesn_t,
     password,
     staticPasswordHint: "you are one who's'nt authorized",
   };
@@ -281,7 +281,7 @@ export const getBinaryEncodedConfig = (difficulty: number): ServerConfig => {
     .map((char) => char.charCodeAt(0).toString(2).padStart(8, "0"))
     .join(" ");
   return {
-    modelId: Minigames.BinaryEncodedFeedback,
+    modelId: ModelIds.BinaryEncodedFeedback,
     password,
     staticPasswordHint: binaryEncodedPassword,
   };
@@ -290,7 +290,7 @@ export const getBinaryEncodedConfig = (difficulty: number): ServerConfig => {
 export const getSpiceLevelConfig = (difficulty: number): ServerConfig => {
   const password = getPassword(3 + difficulty / 3, true, difficulty > 8, false, false);
   return {
-    modelId: Minigames.SpiceLevel,
+    modelId: ModelIds.SpiceLevel,
     password,
     staticPasswordHint: "!!🌶️!!",
   };
@@ -305,7 +305,7 @@ export const getConvertToBase10Config = (difficulty: number): ServerConfig => {
   }
   const encodedPassword = encodeNumberInBaseN(password, base);
   return {
-    modelId: Minigames.ConvertToBase10,
+    modelId: ModelIds.ConvertToBase10,
     password: `${password}`,
     staticPasswordHint: `the password is the base ${base} number ${encodedPassword} in base 10`,
     passwordHintData: `${base},${encodedPassword}`,
@@ -316,7 +316,7 @@ export const getParseArithmeticExpressionConfig = (difficulty: number): ServerCo
   const expression = generateSimpleArithmeticExpression(difficulty);
   const result = parseSimpleArithmeticExpression(expression);
   return {
-    modelId: Minigames.parsedExpression,
+    modelId: ModelIds.parsedExpression,
     password: `${result}`,
     staticPasswordHint: `The password is the evaluation of this expression`,
     passwordHintData: expression,
@@ -335,7 +335,7 @@ export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
     }
   }
   return {
-    modelId: Minigames.divisibilityTest,
+    modelId: ModelIds.divisibilityTest,
     password: `${password}`,
     staticPasswordHint: `The password is divisible by 1`,
   };
@@ -343,7 +343,7 @@ export const getDivisibilityTestConfig = (difficulty: number): ServerConfig => {
 
 export const getPacketSnifferConfig = (difficulty: number): ServerConfig => {
   return {
-    modelId: Minigames.packetSniffer,
+    modelId: ModelIds.packetSniffer,
     password: getPassword(3 + difficulty / 3, true, difficulty > 8, false, false),
     staticPasswordHint: "(I'm busy browsing social media at the cafe)",
   };

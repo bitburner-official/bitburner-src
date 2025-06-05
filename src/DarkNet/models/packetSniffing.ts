@@ -8,7 +8,7 @@ import { getDarknetServers, getDarknetServerSafely } from "../controllers/Networ
 import { getExactCorrectChars, getMastermindResponse } from "../effects/authentication";
 import { getServerState } from "./DarknetState";
 import { GetServer } from "../../Server/AllServers";
-import { Minigames } from "../Enums";
+import { ModelIds } from "../Enums";
 
 const MAX_LOG_LINES = 32;
 
@@ -19,7 +19,7 @@ export const capturePackets = (server: BaseServer) => {
   const BASE_PASSWORD_INCLUSION_RATE = 0.18;
   const DIFFICULTY_MODIFIER = 0.88;
   const difficulty = server.difficulty * 1.3;
-  const vulnerability = server.modelId === Minigames.packetSniffer ? 8 : 1;
+  const vulnerability = server.modelId === ModelIds.packetSniffer ? 8 : 1;
   const passwordInclusionChance = BASE_PASSWORD_INCLUSION_RATE * vulnerability * DIFFICULTY_MODIFIER ** difficulty;
 
   if (Math.random() < passwordInclusionChance) {

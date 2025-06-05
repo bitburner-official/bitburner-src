@@ -10,7 +10,7 @@ export const MS_PER_MUTATION_PER_ROW = 30_000; // 30 seconds
 
 // each minigame needs to have a name that sounds like a device or browser or language model and version
 // (This list is not exposed to the player; they find them through discovery)
-export const Minigames = {
+export const ModelIds = {
   EchoVuln: "DeskMemo_3.1",
   SortedEchoVuln: "PHP 5.4",
   NoPassword: "ZeroLogon",
@@ -35,7 +35,7 @@ export const Minigames = {
   labyrinth: "_lab_",
 } as const;
 
-export type MinigamesType = _ValueOf<typeof Minigames>;
+export type MinigamesType = _ValueOf<typeof ModelIds>;
 
 export const ResponseStatus = {
   SUCCESS: "200 Success",

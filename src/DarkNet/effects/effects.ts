@@ -35,7 +35,7 @@ import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 import { DarknetServerData } from "../models/DarknetServerOptions";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { Icon } from "../ui/ServerIcon";
-import { exampleDarknetServer, Minigames, NET_WIDTH } from "../Enums";
+import { exampleDarknetServer, ModelIds, NET_WIDTH } from "../Enums";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;
@@ -112,9 +112,7 @@ export const calculateAuthenticationTime = (
 
   // Add extra time for timing attack server, per correct character
   const sharedChars =
-    darknetData?.modelId === Minigames.TimingAttack
-      ? getSharedChars(darknetData?.password ?? "", attemptedPassword)
-      : 0;
+    darknetData?.modelId === ModelIds.TimingAttack ? getSharedChars(darknetData?.password ?? "", attemptedPassword) : 0;
   const sharedCharsExtraTime = sharedChars * 150;
 
   return time * calculateIntelligenceBonus(person.skills.intelligence, 0.25) + sharedCharsExtraTime;

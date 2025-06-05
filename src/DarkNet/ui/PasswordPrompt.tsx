@@ -11,7 +11,7 @@ import { LabyrinthSummary } from "./LabyrinthSummary";
 import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
 import { BaseServer } from "../../Server/BaseServer";
 import { getDarknetData } from "../effects/effects";
-import { Minigames } from "../Enums";
+import { ModelIds } from "../Enums";
 
 export type PasswordPromptProps = {
   server: BaseServer;
@@ -38,7 +38,7 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
     setResponse("Checking password...");
 
     const sharedChars =
-      darknetData?.modelId === Minigames.TimingAttack
+      darknetData?.modelId === ModelIds.TimingAttack
         ? getSharedChars(darknetData?.password ?? "", passwordAttempted)
         : 0;
     const responseTime = 500 + sharedChars * 150;

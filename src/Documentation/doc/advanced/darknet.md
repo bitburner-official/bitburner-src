@@ -1,24 +1,59 @@
 # The Darkweb Network
 
+Easy wealth... secret augments... The siren call of the so-called "dark net" has echoed in rumors for years. Delving into the uncharted and secretive parts of the internet comes with the promise of freedom from oppressive authority and surveillance. 
+
+Leaving the internet behind and turning to the dark web, however, comes with its risks... and potential rewards. A person with the right know-how (and enough charm to survive on their wits alone) can find their way into less-than-secure computers connected to that unregulated network. A person like you, perhaps.
+
+
+### Network structure
+
+Unlike the traditional BitBurner network, the darknet is constantly changing. Servers may sometimes restart, change its connections to other servers, or even go offline indefinitely. The network is also not a simple tree. It contains loops of connections, lost servers, and disconnected islands to explore.
+
+In addition, servers on the darknet are not freely accessible from anywhere. Generally, they can only be interacted with or modified if you (or your script) is running on a directly connected nearby server. This means you will need to find a way to make deployers or probes that can roam the network and duplicate themselves.
+
+In some cases, the only way to get to deeper parts of the net is to hitch a ride on a server when it moves to another location!
+
+
+### TL;DR: Executive summary of the darknet API
+* `ns.dnet.probe()` lets you find darknet servers directly connected to your current server. Use this to find targets to crack and copy your script onto.
+* `await ns.dnet.authenticate(hostname, password)` lets you guess and check passwords for servers directly connected to your script's server. If you guess right, you get admin access and can use `exec` and `scp` to move scripts onto that server.
+* Some servers require interactive feedback to guess their password. Use `await ns.dnet.heartbleed(hostname)` to check that server's logs and get clues after you attempt a password.
+* `ns.dnet.connectToSession(hostName, password)` lets you use a password you already know to log in to a darknet server at a distance. This is required to scp files there.
+* `await ns.dnet.packetCapture(hostName)` allows you to sometimes find passwords amongst the (mostly) noise coming out of a server.
+* Some servers will have part of their max ram blocked off. Use `ns.dnet.influence.memoryReallocation()` to free it.
+* Some servers have valuable .cache files you can open with `ns.dnet.openCache(fileName)`
+* Darknet servers allow you to run `ns.dnet.phishingAttack()` to get money or .cache files based off of your charisma and crime success stat.
+
+
+### Finding nearby servers with `dnet.probe`
+
+### Cracking servers with `dnet.authenticate`
+
+(and dnet.connectToSession)
+
+### Modifying servers with `exec` and `scp`
+
+### Looting servers with `dnet.openCache` and `dnet.phishingAttack`
+
+### Server log scraping with `dnet.heartbleed`
+
+### Password stealing with `dnet.packetCapture`
+
+------------------
+
 (work-in-progress documentation)
 
 The internet is the largest datastream in the world, and thus the most heavily surveiled. Not everyone wants their actions followed, though.
 
 Leaving the internet behind and turning to the dark web, however, comes with its risks... and potential rewards. A person with the right know-how (and enough charm to survive on their wits alone) can find their way into less-than-secure computers connected to that unregulated network. A person like you, perhaps.
 
-### Network structure
 
-Unlike the traditional BitBurner network, the darknet is constantly changing. Servers may sometimes restart, change its connections to other servers, or even go offline indefinitely. The network is also not a simple tree. It contains loops of connections, lost servers, and disconnected islands to explore.
-
-In addition, servers on the darknet are not freely accessible from anywhere. Generally, they can only be interacted with or modified if you (or your script) is running on a directly connected nearby server. This means you will need to find a way to make deployers that can roam the network, or duplicate themselves.
-
-In some cases, the only way to get to some places is to hitch a ride on a server when it moves to another part of the network.
 
 ### Gaining server access
 
 The servers cannot be broken into with a few scripts you can buy off-of-the-shelf. You must find a way to crack the password of each one to run scripts on it and pass through it. Fortunately, each server's logs give some hints and feedback as you attempt to guess the password, and you will find that similar models of computer have similar vulnerabilities. You will need those passwords later, so make sure to store them somewhere you won't lose if a server goes offline! If you aren't sure how to guess a server's auth codes, look around for notes on darkweb servers you have already unlocked; they may have hints for how to solve some of the puzzles (and sometimes other helpful data, too.)
 
-Darknet servers require a password to interact with. You can use `await ns.dnet.authenticate(hostname, password)` to see if a password is correct. (Remember to await it, network requests take time!) The higher your charisma, the faster you can smooth-talk your way through these vulnerable servers' passwords. Using more threads also speeds up this process. However, it may be faster to divide up the work across multiple scripts, if you can coordinate them.
+Darknet servers require a password to interact with. You can use `await ns.dnet.authenticate(hostname, password)` to check if a guessed password is correct. (Remember to await it, network requests take time!) The higher your charisma, the faster you can smooth-talk your way through these vulnerable servers' security. Using more threads also speeds up this process. (However, it may be faster to divide up the work across multiple scripts, if you can coordinate them).
 
 When you are trying to find the password, you can extract the server's logs using the exploit `await ns.dnet.heartbleed(hostname)`. This will extract the most recent logs from the target server, which in some cases lets you see extra hints or clues to why the password you last tried was not correct. In addition to your authentication attempts, the server's own traffic will register some logs as well. They're often useless, but sometimes have interesting hints or even other server's passwords! (these are the same logs you can see in the Darknet UI when you click on a server.)
 

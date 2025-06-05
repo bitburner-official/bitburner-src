@@ -2,6 +2,8 @@
 
 ---
 
+fix darknet and darkweb upon getting navigator?
+
 - start with crash course?
 
 ```

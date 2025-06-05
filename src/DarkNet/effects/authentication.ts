@@ -6,7 +6,7 @@ import { Result } from "@nsdefs";
 import { PasswordResponse } from "../models/DarknetServerOptions";
 import { logPasswordAttempt } from "../models/packetSniffing";
 import { getServerState } from "../models/DarknetState";
-import { Minigames, ResponseStatus } from "../Enums";
+import { ModelIds, ResponseStatus } from "../Enums";
 
 export const checkPassword = (
   attemptedPassword: string,
@@ -36,29 +36,29 @@ export const checkPassword = (
   }
   handleFailedAuth(server, threads);
 
-  if (server.modelId === Minigames.MastermindHint) {
+  if (server.modelId === ModelIds.MastermindHint) {
     const { exactCharacters, misplacedCharacters } = getMastermindResponse(server.password, attemptedPassword);
     const message = `Hint: ${exactCharacters} symbols match, ${misplacedCharacters} ${
       misplacedCharacters == 1 ? "is" : "are"
     } close.`;
     return getFailureResponse(attemptedPassword, message, `${exactCharacters},${misplacedCharacters}`);
-  } else if (server.modelId === Minigames.GuessNumber) {
+  } else if (server.modelId === ModelIds.GuessNumber) {
     const hintData = +attemptedPassword > +server.password ? "Lower" : "Higher";
     return getFailureResponse(attemptedPassword, server.staticPasswordHint, hintData);
-  } else if (server.modelId === Minigames.Yesn_t) {
+  } else if (server.modelId === ModelIds.Yesn_t) {
     const response = attemptedPassword
       .slice(0, 36)
       .split("")
       .map((char, i) => (char === server.password[i] ? "yes" : "yesn't"))
       .join(",");
     return getFailureResponse(attemptedPassword, "that wasn't right", response);
-  } else if (server.modelId === Minigames.Synchronize) {
+  } else if (server.modelId === ModelIds.Synchronize) {
     const exactChars = getExactCorrectCharsCount(server.password, attemptedPassword);
     const closeChars = getMisplacedCorrectCharsCount(server.password, attemptedPassword);
     const syncDecimal = ((exactChars + closeChars * 0.5) / server.password.length) * 100;
     const responseData = `${Math.round(syncDecimal * 10) / 10}`;
     return getFailureResponse(attemptedPassword, `Synchronization status: ${responseData}%`, responseData);
-  } else if (server.modelId === Minigames.SpiceLevel) {
+  } else if (server.modelId === ModelIds.SpiceLevel) {
     const exactChars = getExactCorrectChars(server.password, attemptedPassword);
     const pepperRepresentation = exactChars.map((val) => (val ? "🌶️" : "")).join("") || "0";
     return getFailureResponse(
@@ -66,14 +66,14 @@ export const checkPassword = (
       "Not spicy enough",
       `${pepperRepresentation}/${server.password.length}`,
     );
-  } else if (server.modelId === Minigames.divisibilityTest) {
+  } else if (server.modelId === ModelIds.divisibilityTest) {
     const password = +server.password;
     const attemptedDivisor = +attemptedPassword;
     if (isNaN(attemptedDivisor) || password % attemptedDivisor || attemptedPassword === "") {
       return getFailureResponse(attemptedPassword, `Password is not divisible by '${attemptedPassword}'`, "false");
     }
     return getFailureResponse(attemptedPassword, `Password IS divisible by '${attemptedPassword}'`, "true");
-  } else if (server.modelId === Minigames.ConvertToBase10 || server.modelId === Minigames.parsedExpression) {
+  } else if (server.modelId === ModelIds.ConvertToBase10 || server.modelId === ModelIds.parsedExpression) {
     const parsedAttemptedPassword = parseFloat(attemptedPassword);
     if (
       !isNaN(parsedAttemptedPassword) &&
@@ -84,7 +84,7 @@ export const checkPassword = (
       return getGenericSuccess(attemptedPassword);
     }
     return getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData ?? "");
-  } else if (server.modelId === Minigames.TimingAttack) {
+  } else if (server.modelId === ModelIds.TimingAttack) {
     return {
       responseTime,
       ...getFailureResponse(attemptedPassword, server.staticPasswordHint, server.passwordHintData ?? ""),

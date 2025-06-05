@@ -28,7 +28,7 @@ import { getDarknetData, isDarknetServer } from "../effects/effects";
 import {
   HORIZONTAL_CONNECTION_CHANCE,
   MAX_NET_DEPTH,
-  Minigames,
+  ModelIds,
   NET_WIDTH,
   SERVER_DENSITY,
   VERTICAL_CONNECTION_CHANCE,
@@ -174,7 +174,7 @@ export const addLabyrinth = () => {
     icon: labIcon,
     password: "!!the:masterwork:of:daedalus!!",
     staticPasswordHint: "You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.",
-    modelId: Minigames.labyrinth,
+    modelId: ModelIds.labyrinth,
     difficulty: 10,
     depth: -1,
     leftOffset: -1,
