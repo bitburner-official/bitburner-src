@@ -115,7 +115,7 @@ describe("DarkWebServer Tests", () => {
   });
 
   test(" getConvertToBase10Server creates a server with a correct password hint", () => {
-    const server = serverFactory(getConvertToBase10Config, 20, 0, 0);
+    const server = serverFactory(getConvertToBase10Config, 5, 0, 0);
     expect(server).toBeDefined();
     const failedAttemptResponse = checkPassword("wrongPassword", server);
     expect(failedAttemptResponse.status).toBe(ResponseStatus.AUTH_FAILURE);
