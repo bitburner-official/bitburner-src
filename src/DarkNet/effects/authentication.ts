@@ -77,7 +77,7 @@ export const checkPassword = (
     const parsedAttemptedPassword = parseFloat(attemptedPassword);
     if (
       !isNaN(parsedAttemptedPassword) &&
-      Math.abs((parsedAttemptedPassword - +server.password) / +server.password) < 0.001
+      Math.abs((parsedAttemptedPassword - +server.password) / +server.password) < 0.005
     ) {
       // ignore small rounding errors during floating point operations
       handleSuccessfulAuth(server, threads);
