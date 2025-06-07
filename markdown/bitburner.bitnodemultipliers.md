@@ -39,6 +39,7 @@ interface BitNodeMultipliers
 |  [FactionPassiveRepGain](./bitburner.bitnodemultipliers.factionpassiverepgain.md) |  | number | Influences how much rep the player gains in each faction simply by being a member. |
 |  [FactionWorkExpGain](./bitburner.bitnodemultipliers.factionworkexpgain.md) |  | number | Influences the experience gained for each ability when the player completes work for a Faction. |
 |  [FactionWorkRepGain](./bitburner.bitnodemultipliers.factionworkrepgain.md) |  | number | Influences how much rep the player gains when performing work for a faction or donating to it. |
+|  [FavorToDonateToFaction](./bitburner.bitnodemultipliers.favortodonatetofaction.md) |  | number | Influences the minimum favor the player must have with a faction before they can donate to gain rep. |
 |  [FourSigmaMarketDataApiCost](./bitburner.bitnodemultipliers.foursigmamarketdataapicost.md) |  | number | Influences how much it costs to unlock the stock market's 4S Market Data API |
 |  [FourSigmaMarketDataCost](./bitburner.bitnodemultipliers.foursigmamarketdatacost.md) |  | number | Influences how much it costs to unlock the stock market's 4S Market Data (NOT API) |
 |  [GangSoftcap](./bitburner.bitnodemultipliers.gangsoftcap.md) |  | number | Influences the respect gain and money gain of your gang. |
@@ -56,7 +57,6 @@ interface BitNodeMultipliers
 |  [PurchasedServerLimit](./bitburner.bitnodemultipliers.purchasedserverlimit.md) |  | number | Influences the maximum number of purchased servers you can have |
 |  [PurchasedServerMaxRam](./bitburner.bitnodemultipliers.purchasedservermaxram.md) |  | number | Influences the maximum allowed RAM for a purchased server |
 |  [PurchasedServerSoftcap](./bitburner.bitnodemultipliers.purchasedserversoftcap.md) |  | number | Influence how much it costs to purchase a server |
-|  [RepToDonateToFaction](./bitburner.bitnodemultipliers.reptodonatetofaction.md) |  | number | Influences the minimum favor the player must have with a faction before they can donate to gain rep. |
 |  [ScriptHackMoney](./bitburner.bitnodemultipliers.scripthackmoney.md) |  | number | Influences how much money is stolen from a server when the player performs a hack against it. |
 |  [ScriptHackMoneyGain](./bitburner.bitnodemultipliers.scripthackmoneygain.md) |  | number | Influences how much money the player actually gains when a script hacks a server. This is different from ScriptHackMoney. When a script hacks a server, the amount of money in that server is reduced, but the player does not gain that same amount. |
 |  [ServerGrowthRate](./bitburner.bitnodemultipliers.servergrowthrate.md) |  | number | Influences the growth percentage per cycle against a server. |

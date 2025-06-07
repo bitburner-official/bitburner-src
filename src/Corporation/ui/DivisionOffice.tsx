@@ -21,6 +21,7 @@ import Paper from "@mui/material/Paper";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -37,7 +38,7 @@ interface OfficeProps {
 interface IAutoAssignProps {
   office: OfficeSpace;
   job: CorpEmployeeJob;
-  desc: string;
+  desc: React.ReactElement;
   rerender: () => void;
 }
 
@@ -72,7 +73,10 @@ function AutoAssignJob(props: IAutoAssignProps): React.ReactElement {
     <TableRow>
       <TableCell>
         <Tooltip title={props.desc}>
-          <Typography>{props.job}</Typography>
+          <Typography sx={{ display: "flex", alignItems: "center" }}>
+            {props.job}
+            {props.job === CorpEmployeeJob.Intern && <InfoIcon sx={{ fontSize: "1.1em", marginLeft: "10px" }} />}
+          </Typography>
         </Tooltip>
       </TableCell>
       <TableCell>
@@ -274,7 +278,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           rerender={props.rerender}
           office={props.office}
           job={CorpEmployeeJob.Operations}
-          desc={"Manages supply chain operations. Improves the amount of Materials and Products you produce."}
+          desc={<>Manages supply chain operations. Improves the amount of Materials and Products you produce.</>}
         />
 
         <AutoAssignJob
@@ -282,7 +286,10 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           office={props.office}
           job={CorpEmployeeJob.Engineer}
           desc={
-            "Develops and maintains products and production systems. Increases the quality of everything you produce. Also increases the amount you produce (not as much as Operations, however)."
+            <>
+              Develops and maintains products and production systems. Increases the quality of everything you produce.
+              Also increases the amount you produce (not as much as Operations, however).
+            </>
           }
         />
 
@@ -290,7 +297,7 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           rerender={props.rerender}
           office={props.office}
           job={CorpEmployeeJob.Business}
-          desc={"Handles sales and finances. Improves the amount of Materials and Products you can sell."}
+          desc={<>Handles sales and finances. Improves the amount of Materials and Products you can sell.</>}
         />
 
         <AutoAssignJob
@@ -298,7 +305,10 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           office={props.office}
           job={CorpEmployeeJob.Management}
           desc={
-            "Leads and oversees employees and office operations. Improves the effectiveness of Engineer and Operations employees."
+            <>
+              Leads and oversees employees and office operations. Improves the effectiveness of Engineer and Operations
+              employees.
+            </>
           }
         />
 
@@ -307,7 +317,10 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           office={props.office}
           job={CorpEmployeeJob.RandD}
           desc={
-            "Research new innovative ways to improve the company. Generates Scientific Research. Also increases the quality of everything you produce (not as much as Engineer, however)."
+            <>
+              Research new innovative ways to improve the company. Generates Scientific Research. Also increases the
+              quality of everything you produce (not as much as Engineer, however).
+            </>
           }
         />
 
@@ -316,7 +329,15 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
           office={props.office}
           job={CorpEmployeeJob.Intern}
           desc={
-            "Set employee to intern, which will increase some of their stats. Employees in intern do not affect any company operations, but gain increased exp and improve morale and energy."
+            <>
+              Set employee to intern, which will increase some of their stats. Employees in intern do not affect any
+              company operations, but gain increased exp and improve morale and energy.
+              <br />
+              <br />
+              Using interns is useful for maintaining morale and energy without scripting and expensive research, but
+              writing a script to buy tea and throw parties is easy. You should do that and stop wasting your employees
+              on this job.
+            </>
           }
         />
       </TableBody>

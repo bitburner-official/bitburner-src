@@ -134,7 +134,7 @@ export class BitNodeMultipliers {
   PurchasedServerMaxRam = 1;
 
   /** Influences the minimum favor the player must have with a faction before they can donate to gain rep. */
-  RepToDonateToFaction = 1;
+  FavorToDonateToFaction = 1;
 
   /** Influences how much money is stolen from a server when the player performs a hack against it. */
   ScriptHackMoney = 1;

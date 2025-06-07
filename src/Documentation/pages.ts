@@ -122,6 +122,7 @@ import nsDoc_bitburner_bitnodemultipliers_dexteritylevelmultiplier_md from "../.
 import nsDoc_bitburner_bitnodemultipliers_factionpassiverepgain_md from "../../markdown/bitburner.bitnodemultipliers.factionpassiverepgain.md?raw";
 import nsDoc_bitburner_bitnodemultipliers_factionworkexpgain_md from "../../markdown/bitburner.bitnodemultipliers.factionworkexpgain.md?raw";
 import nsDoc_bitburner_bitnodemultipliers_factionworkrepgain_md from "../../markdown/bitburner.bitnodemultipliers.factionworkrepgain.md?raw";
+import nsDoc_bitburner_bitnodemultipliers_favortodonatetofaction_md from "../../markdown/bitburner.bitnodemultipliers.favortodonatetofaction.md?raw";
 import nsDoc_bitburner_bitnodemultipliers_foursigmamarketdataapicost_md from "../../markdown/bitburner.bitnodemultipliers.foursigmamarketdataapicost.md?raw";
 import nsDoc_bitburner_bitnodemultipliers_foursigmamarketdatacost_md from "../../markdown/bitburner.bitnodemultipliers.foursigmamarketdatacost.md?raw";
 import nsDoc_bitburner_bitnodemultipliers_gangsoftcap_md from "../../markdown/bitburner.bitnodemultipliers.gangsoftcap.md?raw";
@@ -140,7 +141,6 @@ import nsDoc_bitburner_bitnodemultipliers_purchasedservercost_md from "../../mar
 import nsDoc_bitburner_bitnodemultipliers_purchasedserverlimit_md from "../../markdown/bitburner.bitnodemultipliers.purchasedserverlimit.md?raw";
 import nsDoc_bitburner_bitnodemultipliers_purchasedservermaxram_md from "../../markdown/bitburner.bitnodemultipliers.purchasedservermaxram.md?raw";
 import nsDoc_bitburner_bitnodemultipliers_purchasedserversoftcap_md from "../../markdown/bitburner.bitnodemultipliers.purchasedserversoftcap.md?raw";
-import nsDoc_bitburner_bitnodemultipliers_reptodonatetofaction_md from "../../markdown/bitburner.bitnodemultipliers.reptodonatetofaction.md?raw";
 import nsDoc_bitburner_bitnodemultipliers_scripthackmoney_md from "../../markdown/bitburner.bitnodemultipliers.scripthackmoney.md?raw";
 import nsDoc_bitburner_bitnodemultipliers_scripthackmoneygain_md from "../../markdown/bitburner.bitnodemultipliers.scripthackmoneygain.md?raw";
 import nsDoc_bitburner_bitnodemultipliers_servergrowthrate_md from "../../markdown/bitburner.bitnodemultipliers.servergrowthrate.md?raw";
@@ -1642,6 +1642,8 @@ AllPages["nsDoc/bitburner.bitnodemultipliers.factionworkexpgain.md"] =
   nsDoc_bitburner_bitnodemultipliers_factionworkexpgain_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.factionworkrepgain.md"] =
   nsDoc_bitburner_bitnodemultipliers_factionworkrepgain_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.favortodonatetofaction.md"] =
+  nsDoc_bitburner_bitnodemultipliers_favortodonatetofaction_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.foursigmamarketdataapicost.md"] =
   nsDoc_bitburner_bitnodemultipliers_foursigmamarketdataapicost_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.foursigmamarketdatacost.md"] =
@@ -1673,8 +1675,6 @@ AllPages["nsDoc/bitburner.bitnodemultipliers.purchasedservermaxram.md"] =
   nsDoc_bitburner_bitnodemultipliers_purchasedservermaxram_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.purchasedserversoftcap.md"] =
   nsDoc_bitburner_bitnodemultipliers_purchasedserversoftcap_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.reptodonatetofaction.md"] =
-  nsDoc_bitburner_bitnodemultipliers_reptodonatetofaction_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.scripthackmoney.md"] =
   nsDoc_bitburner_bitnodemultipliers_scripthackmoney_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.scripthackmoneygain.md"] =

@@ -195,7 +195,7 @@ function StockMults({ mults }: IMultsProps): React.ReactElement {
 
 function FactionMults({ mults }: IMultsProps): React.ReactElement {
   const rows: IBNMultRows = {
-    RepToDonateToFaction: { name: "Favor to Donate" },
+    FavorToDonateToFaction: { name: "Favor to Donate" },
     FactionWorkRepGain: {
       name: "Work Reputation",
       color: Settings.theme.rep,

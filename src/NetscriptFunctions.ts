@@ -1687,7 +1687,7 @@ export const ns: InternalAPI<NSFull> = {
     return true;
   },
   getFavorToDonate: () => () => {
-    return Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.RepToDonateToFaction);
+    return Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.FavorToDonateToFaction);
   },
   getPlayer: () => () => {
     const data = {

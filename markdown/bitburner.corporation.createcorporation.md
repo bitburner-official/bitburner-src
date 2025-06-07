@@ -13,7 +13,7 @@ Create a Corporation. You should use [canCreateCorporation](./bitburner.corporat
 **Signature:**
 
 ```typescript
-createCorporation(corporationName: string, selfFund: boolean): boolean;
+createCorporation(corporationName: string, selfFund?: boolean): boolean;
 ```
 
 ## Parameters
@@ -21,7 +21,7 @@ createCorporation(corporationName: string, selfFund: boolean): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  corporationName | string | Name of the corporation. It must be a non-empty string. |
-|  selfFund | boolean | If you want to self-fund. Defaults to true, false will only work in BitNode 3. |
+|  selfFund | boolean | _(Optional)_ If you want to self-fund. Defaults to true, false will only work in BitNode 3. |
 
 **Returns:**
 

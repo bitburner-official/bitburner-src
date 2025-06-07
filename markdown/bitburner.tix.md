@@ -34,9 +34,9 @@ export interface TIX
 |  [getSymbols()](./bitburner.tix.getsymbols.md) | Returns an array of the symbols of the tradable stocks |
 |  [getVolatility(sym)](./bitburner.tix.getvolatility.md) | Returns the volatility of the specified stock. |
 |  [has4SData()](./bitburner.tix.has4sdata.md) | Returns true if the player has access to the 4S Data |
-|  [has4SDataTIXAPI()](./bitburner.tix.has4sdatatixapi.md) | Returns true if the player has access to the 4SData TIX API |
-|  [hasTIXAPIAccess()](./bitburner.tix.hastixapiaccess.md) | Returns true if the player has access to the TIX API |
-|  [hasWSEAccount()](./bitburner.tix.haswseaccount.md) | Returns true if the player has access to a WSE Account |
+|  [has4SDataTixApi()](./bitburner.tix.has4sdatatixapi.md) | Returns true if the player has access to the 4SData TIX API |
+|  [hasTixApiAccess()](./bitburner.tix.hastixapiaccess.md) | Returns true if the player has access to the TIX API |
+|  [hasWseAccount()](./bitburner.tix.haswseaccount.md) | Returns true if the player has access to a WSE Account |
 |  [nextUpdate()](./bitburner.tix.nextupdate.md) | Sleep until the next Stock Market price update has happened. |
 |  [placeOrder(sym, shares, price, orderType, positionType)](./bitburner.tix.placeorder.md) | Place order for stocks. |
 |  [purchase4SMarketData()](./bitburner.tix.purchase4smarketdata.md) | Purchase 4S Market Data Access. |

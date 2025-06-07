@@ -503,40 +503,51 @@ export class Terminal {
       return this.error("There's already a Coding Contract in Progress");
     }
 
-    const serv = Player.getCurrentServer();
-    const contract = serv.getContract(contractPath);
-    if (!contract) return this.error("No such contract");
+    const server = Player.getCurrentServer();
+    const contract = server.getContract(contractPath);
+    if (!contract) {
+      return this.error("No such contract");
+    }
 
     this.contractOpen = true;
-    const res = await contract.prompt();
+    const promptResult = await contract.prompt();
 
     //Check if the contract still exists by the time the promise is fulfilled
-    if (serv.getContract(contractPath) == null) {
+    if (server.getContract(contractPath) == null) {
       this.contractOpen = false;
       return this.error("Contract no longer exists (Was it solved by a script?)");
     }
 
-    switch (res) {
+    switch (promptResult.result) {
       case CodingContractResult.Success:
         if (contract.reward !== null) {
           const reward = Player.gainCodingContractReward(contract.reward, contract.getDifficulty());
           this.print(`Contract SUCCESS - ${reward}`);
         }
-        serv.removeContract(contract);
+        server.removeContract(contract);
+        break;
+      case CodingContractResult.InvalidFormat:
+        this.error(
+          `Contract FAILED - ${
+            promptResult.message ?? `The answer is not in the right format for contract '${contract.type}'`
+          }`,
+        );
         break;
       case CodingContractResult.Failure:
         ++contract.tries;
         if (contract.tries >= contract.getMaxNumTries()) {
           this.error("Contract FAILED - Contract is now self-destructing");
-          serv.removeContract(contract);
+          server.removeContract(contract);
         } else {
           this.error(`Contract FAILED - ${contract.getMaxNumTries() - contract.tries} tries remaining`);
         }
         break;
       case CodingContractResult.Cancelled:
-      default:
         this.print("Contract cancelled");
         break;
+      default: {
+        const __: never = promptResult.result;
+      }
     }
     this.contractOpen = false;
   }
