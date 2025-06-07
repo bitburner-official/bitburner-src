@@ -2,12 +2,13 @@ import { EventEmitter } from "../utils/EventEmitter";
 import { Settings } from "../Settings/Settings";
 import { GetAllServers } from "../Server/AllServers";
 import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
+import { Router } from "../ui/GameRoot";
+import { SimplePage } from "@enums";
 
 export type ErrorState = {
   ErrorUpdate: EventEmitter<[ErrorRecord]>;
   ActiveError: ErrorRecord | null;
   Errors: ErrorRecord[];
-  ErrorPageOpen: boolean;
   UnreadErrors: number;
   PreventModalsUntil: Date | null;
 };
@@ -28,7 +29,6 @@ export const ErrorState: ErrorState = {
   ErrorUpdate: new EventEmitter<[ErrorRecord]>(),
   ActiveError: null as ErrorRecord | null,
   Errors: [],
-  ErrorPageOpen: false,
   UnreadErrors: 0,
   PreventModalsUntil: null,
 };
@@ -46,7 +46,8 @@ export const DisplayError = (
   hostname: string = "",
   pid: number = -1,
 ) => {
-  if (!ErrorState.ErrorPageOpen) {
+  const errorPageOpen = Router.page() === SimplePage.ActiveScripts;
+  if (!errorPageOpen) {
     ErrorState.UnreadErrors++;
   }
   const prior = findExistingErrorCopy(message, hostname);
@@ -54,7 +55,7 @@ export const DisplayError = (
     prior.occurrences++;
     prior.time = new Date();
     pid != -1 && (prior.pid = pid);
-    prior.unread = !ErrorState.ErrorPageOpen;
+    prior.unread = !errorPageOpen;
     prior.server = hostname;
     prior.message = message;
 
@@ -68,7 +69,7 @@ export const DisplayError = (
       pid,
       occurrences: 1,
       time: new Date(),
-      unread: !ErrorState.ErrorPageOpen,
+      unread: !errorPageOpen,
     });
     ErrorState.Errors = ErrorState.Errors.slice(0, Settings.MaxRecentScriptsCapacity);
 

@@ -12,7 +12,6 @@ export function RecentErrorsPage(): React.ReactElement {
       rerender();
     };
     ErrorState.ErrorUpdate.subscribe(listener);
-    ErrorState.ErrorPageOpen = true;
     ErrorState.UnreadErrors = 0;
   }, [rerender]);
   const { classes } = useStyles();

@@ -24,7 +24,10 @@ export function ActiveScriptsRoot(): React.ReactElement {
         <Tabs variant="fullWidth" value={tab} onChange={handleChange} sx={{ minWidth: "fit-content", maxWidth: "25%" }}>
           <Tab label={"Active"} value={"active"} />
           <Tab label={"Recently Killed"} value={"recent"} />
-          <Tab label={`Recent Errors (${ErrorState.UnreadErrors})`} value={"errors"} />
+          <Tab
+            label={`Recent Errors${ErrorState.UnreadErrors ? ` (${ErrorState.UnreadErrors})` : ""}`}
+            value={"errors"}
+          />
         </Tabs>
         <Button color="error" onClick={killAllScripts} style={{ marginLeft: "200px", border: "1px solid" }}>
           Kill All Scripts

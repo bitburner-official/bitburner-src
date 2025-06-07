@@ -60,40 +60,41 @@ export function ErrorModal(): React.ReactElement {
 
   return (
     <Modal open={!!error} onClose={onClose}>
-      {error ? (<>
-        <Typography>
-          <h2>{error.errorType} ERROR</h2>
-          {/* Add a zero-width space after each slash to allow clean wrapping. */}
-          <p style={{ whiteSpace: "pre-wrap" }}>{error.message.replaceAll("/", "/\u200B")}</p>
-          <p>
-            Script: {error.scriptName}
-            <br />
-            PID: {error.pid}
-          </p>
-          <span>
-            <OptionSwitch
-              checked={errorModalsAreSuppressed()}
-              onChange={(newValue) => handleSuppressModalToggle(newValue)}
-              text="Suppress error modals"
-              tooltip={
-                <>
-                  If this is set, no error modals will be shown for the next five minutes.
-                  <br />
-                  The "Suppress error modals" toggle in the game options will always suppress modals, and only log
-                  errors to the Recent Errors page.{" "}
-                </>
-              }
-            />
-          </span>
-        </Typography>
-        <Box className={classes.inlineFlexBox}>
-          <Button onClick={onClose}>Close</Button>
-          <div>
-            <Button onClick={viewLogs}>View Script Logs</Button>
-            <Button onClick={goToErrorPage}>Errors Page</Button>
-          </div>
-        </Box>
-      </>
+      {error ? (
+        <>
+          <Typography>
+            <h2>{error.errorType} ERROR</h2>
+            {/* Add a zero-width space after each slash to allow clean wrapping. */}
+            <p style={{ whiteSpace: "pre-wrap" }}>{error.message.replaceAll("/", "/\u200B")}</p>
+            <p>
+              Script: {error.scriptName}
+              <br />
+              PID: {error.pid}
+            </p>
+            <span>
+              <OptionSwitch
+                checked={errorModalsAreSuppressed()}
+                onChange={(newValue) => handleSuppressModalToggle(newValue)}
+                text="Suppress error modals"
+                tooltip={
+                  <>
+                    If this is set, no error modals will be shown for the next five minutes.
+                    <br />
+                    The "Suppress error modals" toggle in the game options will always suppress modals, and only log
+                    errors to the Recent Errors page.{" "}
+                  </>
+                }
+              />
+            </span>
+          </Typography>
+          <Box className={classes.inlineFlexBox}>
+            <Button onClick={onClose}>Close</Button>
+            <div>
+              <Button onClick={viewLogs}>View Script Logs</Button>
+              <Button onClick={goToErrorPage}>Errors Page</Button>
+            </div>
+          </Box>
+        </>
       ) : (
         ""
       )}
