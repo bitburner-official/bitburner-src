@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "tss-react/mui";
 import { Modal } from "../ui/React/Modal";
 import { Box, Button, Typography } from "@mui/material/";
-import { ErrorRecord, ErrorState } from "./ErrorState";
+import { errorModalsAreSuppressed, ErrorRecord, ErrorState } from "./ErrorState";
 import { Router } from "../ui/GameRoot";
-import { SimplePage } from "@enums";
+import { SimplePage, ToastVariant } from "@enums";
 import { useRerender } from "../ui/React/hooks";
 import { OptionSwitch } from "../ui/React/OptionSwitch";
 import { LogBoxEvents } from "../ui/React/LogBoxManager";
 import { recentScripts } from "../Netscript/RecentScripts";
+import { SnackbarEvents } from "../ui/React/Snackbar";
 
 export function ErrorModal(): React.ReactElement {
   const { classes } = useStyles();
@@ -17,7 +18,7 @@ export function ErrorModal(): React.ReactElement {
 
   useEffect(() => {
     const listener = (newError: ErrorRecord) => {
-      if (newError.force || (Router.page() !== SimplePage.ActiveScripts && !ErrorState.PreventModals)) {
+      if (newError.force || (Router.page() !== SimplePage.ActiveScripts && !errorModalsAreSuppressed())) {
         setError(newError);
         rerender();
       }
@@ -49,9 +50,17 @@ export function ErrorModal(): React.ReactElement {
     Router.toPage(SimplePage.ActiveScripts);
   };
 
+  const handleSuppressModalToggle = (newValue: boolean): void => {
+    if (newValue) {
+      ErrorState.PreventModalsUntil = new Date(Date.now() + 1000 * 60 * 5); // Suppress for 5 minutes
+    } else {
+      ErrorState.PreventModalsUntil = null;
+    }
+  };
+
   return (
     <Modal open={!!error} onClose={onClose}>
-      {error ? (
+      {error ? (<>
         <Typography>
           <h2>{error.errorType} ERROR</h2>
           {/* Add a zero-width space after each slash to allow clean wrapping. */}
@@ -61,22 +70,30 @@ export function ErrorModal(): React.ReactElement {
             <br />
             PID: {error.pid}
           </p>
-          <div>
+          <span>
             <OptionSwitch
-              checked={ErrorState.PreventModals}
-              onChange={(newValue) => (ErrorState.PreventModals = newValue)}
-              text="Prevent more error modals"
-              tooltip={<>If this is set, no error modals will be shown until the game is reloaded.</>}
+              checked={errorModalsAreSuppressed()}
+              onChange={(newValue) => handleSuppressModalToggle(newValue)}
+              text="Suppress error modals"
+              tooltip={
+                <>
+                  If this is set, no error modals will be shown for the next five minutes.
+                  <br />
+                  The "Suppress error modals" toggle in the game options will always suppress modals, and only log
+                  errors to the Recent Errors page.{" "}
+                </>
+              }
             />
-          </div>
-          <Box className={classes.inlineFlexBox}>
-            <Button onClick={onClose}>Close</Button>
-            <div>
-              <Button onClick={viewLogs}>View Script Logs</Button>
-              <Button onClick={goToErrorPage}>Errors Page</Button>
-            </div>
-          </Box>
+          </span>
         </Typography>
+        <Box className={classes.inlineFlexBox}>
+          <Button onClick={onClose}>Close</Button>
+          <div>
+            <Button onClick={viewLogs}>View Script Logs</Button>
+            <Button onClick={goToErrorPage}>Errors Page</Button>
+          </div>
+        </Box>
+      </>
       ) : (
         ""
       )}

@@ -1,10 +1,9 @@
 import React from "react";
 import { makeStyles } from "tss-react/mui";
-import { ErrorRecord, ErrorState, killAllScripts } from "./ErrorState";
+import { ErrorRecord, ErrorState } from "./ErrorState";
 import { useRerender } from "../ui/React/hooks";
-import { Typography, Button } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
-import { OptionSwitch } from "../ui/React/OptionSwitch";
 
 export function RecentErrorsPage(): React.ReactElement {
   const rerender = useRerender();
@@ -22,43 +21,13 @@ export function RecentErrorsPage(): React.ReactElement {
     ErrorState.ErrorUpdate.emit({ ...error, force: true });
   };
 
-  const nthIndexOf = (string: string, pattern: string, n: number) => {
-    let i = -1;
-
-    while (n-- && i++ < string.length) {
-      i = string.indexOf(pattern, i);
-      if (i < 0) break;
-    }
-    return i;
-  };
-
   const formatMessage = (message: string): string => {
     // Add zero-width space after each slash to allow clean wrapping
-    const cleanedMessage = message.replaceAll("/", "/​");
-    const fifthLineBreak = nthIndexOf(message, "\n", 5);
-    if (fifthLineBreak !== -1) {
-      // If the message has more than 4 line breaks, truncate it to the first 5 lines
-      return cleanedMessage.slice(0, fifthLineBreak + 1) + " ...";
-    }
-    return cleanedMessage;
+    return message.replaceAll("/", "/\u200B");
   };
 
   return (
     <div>
-      <Typography>
-        <h2>Recent Errors</h2>
-      </Typography>
-      <div className={classes.inlineFlexBox}>
-        <OptionSwitch
-          checked={ErrorState.PreventModals}
-          onChange={(newValue) => (ErrorState.PreventModals = newValue)}
-          text="Prevent error modals"
-          tooltip={<>If this is set, no error modals will be shown until the game is reloaded.</>}
-        />
-        <Button color="error" onClick={killAllScripts}>
-          Kill All Scripts
-        </Button>
-      </div>
       <Typography>
         <table className={classes.errorTable}>
           <thead>
@@ -119,20 +88,14 @@ const useStyles = makeStyles()((theme: Theme) => ({
     margin: "8px",
     color: "white",
     maxWidth: "50vw",
-    textOverflow: "ellipsis",
     whiteSpace: "pre-wrap",
+    "overflow-x": "auto",
+    maxHeight: "200px",
   },
   xsmall: {
-    maxWidth: "100px",
+    maxWidth: "110px",
   },
   small: {
     maxWidth: "200px",
-  },
-  inlineFlexBox: {
-    display: "inline-flex",
-    flexDirection: "row",
-    width: "100%",
-    justifyContent: "space-between",
-    marginBottom: "12px",
   },
 }));

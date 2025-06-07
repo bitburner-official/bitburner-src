@@ -9,7 +9,7 @@ export type ErrorState = {
   Errors: ErrorRecord[];
   ErrorPageOpen: boolean;
   UnreadErrors: number;
-  PreventModals: boolean;
+  PreventModalsUntil: Date | null;
 };
 
 export type ErrorRecord = {
@@ -30,8 +30,14 @@ export const ErrorState: ErrorState = {
   Errors: [],
   ErrorPageOpen: false,
   UnreadErrors: 0,
-  PreventModals: Settings.SuppressErrorModals,
+  PreventModalsUntil: null,
 };
+
+export function errorModalsAreSuppressed(): boolean {
+  return (
+    Settings.SuppressErrorModals || (!!ErrorState.PreventModalsUntil && ErrorState.PreventModalsUntil > new Date())
+  );
+}
 
 export const DisplayError = (
   message: string,
@@ -40,19 +46,21 @@ export const DisplayError = (
   hostname: string = "",
   pid: number = -1,
 ) => {
-  const prior = ErrorState.Errors.find((e) => e.message === message);
   if (!ErrorState.ErrorPageOpen) {
     ErrorState.UnreadErrors++;
   }
+  const prior = findExistingErrorCopy(message, hostname);
   if (prior) {
     prior.occurrences++;
     prior.time = new Date();
     pid != -1 && (prior.pid = pid);
     prior.unread = !ErrorState.ErrorPageOpen;
+    prior.server = hostname;
+    prior.message = message;
 
     updateActiveError(prior);
   } else {
-    ErrorState.Errors.push({
+    ErrorState.Errors.unshift({
       server: hostname,
       errorType,
       scriptName,
@@ -64,9 +72,18 @@ export const DisplayError = (
     });
     ErrorState.Errors = ErrorState.Errors.slice(0, Settings.MaxRecentScriptsCapacity);
 
-    updateActiveError(ErrorState.Errors[ErrorState.Errors.length - 1]);
+    updateActiveError(ErrorState.Errors[0]);
   }
 };
+
+function findExistingErrorCopy(message: string, hostname: string): ErrorRecord | null {
+  const serverAgnosticMessage = message.replaceAll(hostname, "<server>");
+  return (
+    ErrorState.Errors.find(
+      (e) => e.message.replaceAll(e.server, "<server>") === serverAgnosticMessage || e.message === message,
+    ) ?? null
+  );
+}
 
 function updateActiveError(error: ErrorRecord): void {
   if (!ErrorState.ActiveError) {

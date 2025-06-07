@@ -24,7 +24,7 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
      * - errorType: "RUNTIME"
      * - errorText: "getServer: Invalid hostname: 'invalid'\n\nStack:\ntest.js:L5@main"
      */
-    const errorType = e.match(/^(\w+) ERROR/)?.[1];
+    const errorType = getErrorType(e);
     if (errorType) {
       const errorText = e.split(/\n/).slice(3).join("\n");
       DisplayError(initialText + errorText, errorType, ws.scriptRef.filename, ws.hostname, ws.pid);
@@ -56,7 +56,7 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
      */
     console.error(e);
     const msg = getErrorMessageWithStackAndCause(e);
-    DisplayError(initialText + msg, "RUNTIME", ws?.scriptRef?.filename, ws?.hostname, ws?.pid);
+    DisplayError(initialText + msg, getErrorType(e.stack) ?? "RUNTIME", ws?.scriptRef?.filename, ws?.hostname, ws?.pid);
   } else if (typeof e !== "string") {
     console.error("Unexpected error:", e);
     const msg = `Unexpected type of error thrown. This error was likely thrown manually within a script.
@@ -76,4 +76,23 @@ export function handleGetSaveDataInfoError(error: unknown, fromGetSaveInfo = fal
     errorMessage += `\nStack:\n${error.stack}`;
   }
   dialogBoxCreate(errorMessage);
+}
+
+function getErrorType(e = ""): string | undefined {
+  if (e.toLowerCase().includes("typeerror")) {
+    return "TYPE";
+  }
+  if (e.toLowerCase().includes("syntaxerror")) {
+    return "SYNTAX";
+  }
+  if (e.toLowerCase().includes("referenceerror")) {
+    return "REFERENCE";
+  }
+  if (e.toLowerCase().includes("rangeerror")) {
+    return "RANGE";
+  }
+
+  // Check if the first line contains an error type
+  const match = e.match(/^\s*([A-Z]+)\s+ERROR/);
+  return match?.[1];
 }
