@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "tss-react/mui";
 import { ErrorRecord, ErrorState } from "./ErrorState";
 import { useRerender } from "../ui/React/hooks";
@@ -7,13 +7,20 @@ import { Theme } from "@mui/material/styles";
 
 export function RecentErrorsPage(): React.ReactElement {
   const rerender = useRerender();
-  React.useEffect(() => {
+  useEffect(() => {
     const listener = () => {
       rerender();
     };
     ErrorState.ErrorUpdate.subscribe(listener);
     ErrorState.UnreadErrors = 0;
   }, [rerender]);
+
+  useEffect(() => {
+    ErrorState.Errors.forEach((error) => {
+      error.unread = false; // Mark all errors as read when the page is loaded
+    });
+  }, []);
+
   const { classes } = useStyles();
 
   const showError = (error: ErrorRecord): void => {

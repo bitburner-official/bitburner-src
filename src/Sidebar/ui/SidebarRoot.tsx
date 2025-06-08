@@ -341,7 +341,12 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
           items={[
             { key_: Page.Terminal, icon: LastPageIcon },
             { key_: Page.ScriptEditor, icon: CreateIcon },
-            { key_: Page.ActiveScripts, icon: StorageIcon, count: errorCount },
+            {
+              key_: Page.ActiveScripts,
+              icon: StorageIcon,
+              count: errorCount,
+              alternateKeys: [Page.RecentErrors, Page.RecentlyKilledScripts],
+            },
             { key_: Page.CreateProgram, icon: BugReportIcon, count: programCount },
             canStaneksGift && { key_: Page.StaneksGift, icon: DeveloperBoardIcon },
           ]}

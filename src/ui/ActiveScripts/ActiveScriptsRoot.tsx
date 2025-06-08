@@ -10,33 +10,55 @@ import { RecentScriptsPage } from "./RecentScriptsPage";
 import { RecentErrorsPage } from "../../ErrorHandling/RecentErrorsPage";
 import { useRerender } from "../React/hooks";
 import { ErrorState, killAllScripts } from "../../ErrorHandling/ErrorState";
+import { SimplePage } from "@enums";
+import { Router } from "../GameRoot";
 
-export function ActiveScriptsRoot(): React.ReactElement {
-  const [tab, setTab] = useState<"active" | "recent" | "errors">(ErrorState.UnreadErrors > 0 ? "errors" : "active");
+type ActiveScriptsTab = SimplePage.ActiveScripts | SimplePage.RecentlyKilledScripts | SimplePage.RecentErrors;
+
+export type ComponentProps = {
+  page: ActiveScriptsTab;
+};
+
+export function ActiveScriptsRoot({ page }: ComponentProps): React.ReactElement {
+  const [tab, setTab] = useState<ActiveScriptsTab>(ErrorState.UnreadErrors > 0 ? SimplePage.RecentErrors : page);
   useRerender(400);
 
-  function handleChange(event: React.SyntheticEvent, tab: "active" | "recent" | "errors"): void {
+  function handleChange(
+    event: React.SyntheticEvent,
+    tab: SimplePage.ActiveScripts | SimplePage.RecentlyKilledScripts | SimplePage.RecentErrors,
+  ): void {
     setTab(tab);
+    Router.toPage(tab);
   }
+
+  function errorTabText(): string {
+    if (!ErrorState.UnreadErrors || tab === SimplePage.RecentErrors) {
+      return "Recent Errors";
+    }
+    return `Recent Errors (${ErrorState.UnreadErrors})`;
+  }
+
   return (
     <>
       <div style={{ display: "inline-flex" }}>
-        <Tabs variant="fullWidth" value={tab} onChange={handleChange} sx={{ minWidth: "fit-content", maxWidth: "25%" }}>
-          <Tab label={"Active"} value={"active"} />
-          <Tab label={"Recently Killed"} value={"recent"} />
-          <Tab
-            label={`Recent Errors${ErrorState.UnreadErrors ? ` (${ErrorState.UnreadErrors})` : ""}`}
-            value={"errors"}
-          />
+        <Tabs
+          variant="fullWidth"
+          value={page}
+          onChange={handleChange}
+          sx={{ minWidth: "fit-content", maxWidth: "25%" }}
+        >
+          <Tab label={"Active"} value={SimplePage.ActiveScripts} />
+          <Tab label={"Recently Killed"} value={SimplePage.RecentlyKilledScripts} />
+          <Tab label={errorTabText()} value={SimplePage.RecentErrors} />
         </Tabs>
         <Button color="error" onClick={killAllScripts} style={{ marginLeft: "200px", border: "1px solid" }}>
           Kill All Scripts
         </Button>
       </div>
 
-      {tab === "active" && <ActiveScriptsPage />}
-      {tab === "recent" && <RecentScriptsPage />}
-      {tab === "errors" && <RecentErrorsPage />}
+      {tab === SimplePage.ActiveScripts && <ActiveScriptsPage />}
+      {tab === SimplePage.RecentlyKilledScripts && <RecentScriptsPage />}
+      {tab === SimplePage.RecentErrors && <RecentErrorsPage />}
     </>
   );
 }

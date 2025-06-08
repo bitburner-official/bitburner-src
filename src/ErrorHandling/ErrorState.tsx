@@ -5,6 +5,8 @@ import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 import { Router } from "../ui/GameRoot";
 import { SimplePage } from "@enums";
 
+let currentId = 0;
+
 export type ErrorState = {
   ErrorUpdate: EventEmitter<[ErrorRecord]>;
   ActiveError: ErrorRecord | null;
@@ -14,6 +16,7 @@ export type ErrorState = {
 };
 
 export type ErrorRecord = {
+  id: number;
   server: string;
   errorType: string;
   message: string;
@@ -46,7 +49,7 @@ export const DisplayError = (
   hostname: string = "",
   pid: number = -1,
 ) => {
-  const errorPageOpen = Router.page() === SimplePage.ActiveScripts;
+  const errorPageOpen = Router.page() === SimplePage.RecentErrors;
   if (!errorPageOpen) {
     ErrorState.UnreadErrors++;
   }
@@ -55,13 +58,13 @@ export const DisplayError = (
     prior.occurrences++;
     prior.time = new Date();
     pid != -1 && (prior.pid = pid);
-    prior.unread = !errorPageOpen;
     prior.server = hostname;
     prior.message = message;
 
     updateActiveError(prior);
   } else {
     ErrorState.Errors.unshift({
+      id: currentId++,
       server: hostname,
       errorType,
       scriptName,
