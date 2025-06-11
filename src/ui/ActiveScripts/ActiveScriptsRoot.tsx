@@ -62,7 +62,7 @@ export function ActiveScriptsRoot({ page }: ComponentProps): React.ReactElement 
         </Tabs>
         <OptionSwitch
           checked={errorModalsAreSuppressed()}
-          onChange={toggleSuppressErrorModals}
+          onChange={(newValue) => toggleSuppressErrorModals(newValue)}
           text="Prevent error modals"
           tooltip={<>If this is set, no error modals will be shown until the game is reloaded.</>}
           wrapperStyles={{ marginLeft: "20px" }}

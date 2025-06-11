@@ -3,9 +3,13 @@ import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { Settings } from "../../Settings/Settings";
 import { GameOptionsPage } from "./GameOptionsPage";
 import { Player } from "@player";
-import { toggleSuppressErrorModalsSetting } from "../../ErrorHandling/ErrorState";
+import { toggleSuppressErrorModals } from "../../ErrorHandling/ErrorState";
 
 export const GameplayPage = (): React.ReactElement => {
+  const toggleSuppressErrorModalsSetting = (newValue: boolean): void => {
+    Settings.SuppressErrorModals = newValue;
+    toggleSuppressErrorModals(newValue, true);
+  };
   return (
     <GameOptionsPage title="Gameplay">
       <OptionSwitch

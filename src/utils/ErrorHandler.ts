@@ -2,7 +2,8 @@ import { ScriptDeath } from "../Netscript/ScriptDeath";
 import type { WorkerScript } from "../Netscript/WorkerScript";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { getErrorMessageWithStackAndCause, parseUnknownError } from "./ErrorHelper";
-import { DisplayError } from "../ErrorHandling/ErrorState";
+
+import { DisplayError } from "../ErrorHandling/DisplayError";
 
 /** Generate an error dialog when workerscript is known */
 export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, initialText = "") {
