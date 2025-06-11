@@ -1,19 +1,9 @@
 import { EventEmitter } from "../utils/EventEmitter";
 import { Settings } from "../Settings/Settings";
-import { GetAllServers } from "../Server/AllServers";
-import { killWorkerScriptByPid } from "../Netscript/killWorkerScript";
 import { Router } from "../ui/GameRoot";
 import { SimplePage } from "@enums";
 
 let currentId = 0;
-
-export type ErrorState = {
-  ErrorUpdate: EventEmitter<[ErrorRecord]>;
-  ActiveError: ErrorRecord | null;
-  Errors: ErrorRecord[];
-  UnreadErrors: number;
-  PreventModalsUntil: Date | null;
-};
 
 export type ErrorRecord = {
   id: number;
@@ -28,18 +18,33 @@ export type ErrorRecord = {
   force?: boolean;
 };
 
-export const ErrorState: ErrorState = {
+export const ErrorState = {
   ErrorUpdate: new EventEmitter<[ErrorRecord]>(),
   ActiveError: null as ErrorRecord | null,
-  Errors: [],
+  Errors: [] as ErrorRecord[],
   UnreadErrors: 0,
-  PreventModalsUntil: null,
+  PreventModalsUntil: Settings.SuppressErrorModals ? new Date("3000-01-01") : new Date(),
 };
 
 export function errorModalsAreSuppressed(): boolean {
-  return (
-    Settings.SuppressErrorModals || (!!ErrorState.PreventModalsUntil && ErrorState.PreventModalsUntil > new Date())
-  );
+  return Settings.SuppressErrorModals || ErrorState.PreventModalsUntil > new Date();
+}
+
+export function toggleSuppressErrorModals(newValue: boolean): void {
+  if (newValue) {
+    ErrorState.PreventModalsUntil = new Date(Date.now() + 1000 * 60 * 5); // Suppress for 5 minutes
+  } else {
+    ErrorState.PreventModalsUntil = new Date();
+  }
+}
+
+export function toggleSuppressErrorModalsSetting(newValue: boolean): void {
+  Settings.SuppressErrorModals = newValue;
+  if (newValue) {
+    ErrorState.PreventModalsUntil = new Date("3000-01-01");
+  } else {
+    ErrorState.PreventModalsUntil = new Date();
+  }
 }
 
 export const DisplayError = (
@@ -57,7 +62,9 @@ export const DisplayError = (
   if (prior) {
     prior.occurrences++;
     prior.time = new Date();
-    pid != -1 && (prior.pid = pid);
+    if (pid !== -1) {
+      prior.pid = pid;
+    }
     prior.server = hostname;
     prior.message = message;
 
@@ -74,8 +81,9 @@ export const DisplayError = (
       time: new Date(),
       unread: !errorPageOpen,
     });
-    ErrorState.Errors = ErrorState.Errors.slice(0, Settings.MaxRecentScriptsCapacity);
-
+    while (ErrorState.Errors.length > Settings.MaxRecentScriptsCapacity) {
+      ErrorState.Errors.pop();
+    }
     updateActiveError(ErrorState.Errors[0]);
   }
 };
@@ -90,18 +98,9 @@ function findExistingErrorCopy(message: string, hostname: string): ErrorRecord |
 }
 
 function updateActiveError(error: ErrorRecord): void {
+  // TODO: Fix this bug
   if (!ErrorState.ActiveError) {
     ErrorState.ActiveError = error;
     ErrorState.ErrorUpdate.emit(ErrorState.ActiveError);
   }
 }
-
-export const killAllScripts = () => {
-  GetAllServers().forEach((server) => {
-    for (const byPid of server.runningScriptMap.values()) {
-      for (const pid of byPid.keys()) {
-        killWorkerScriptByPid(pid);
-      }
-    }
-  });
-};

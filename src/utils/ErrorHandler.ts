@@ -24,7 +24,7 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
      * - errorType: "RUNTIME"
      * - errorText: "getServer: Invalid hostname: 'invalid'\n\nStack:\ntest.js:L5@main"
      */
-    const errorType = getErrorType(e);
+    const errorType = e.match(/^(\w+) ERROR/)?.[1];
     if (errorType) {
       const errorText = e.split(/\n/).slice(3).join("\n");
       DisplayError(initialText + errorText, errorType, ws.scriptRef.filename, ws.hostname, ws.pid);

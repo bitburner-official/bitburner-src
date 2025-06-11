@@ -3,6 +3,7 @@ import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { Settings } from "../../Settings/Settings";
 import { GameOptionsPage } from "./GameOptionsPage";
 import { Player } from "@player";
+import { toggleSuppressErrorModalsSetting } from "../../ErrorHandling/ErrorState";
 
 export const GameplayPage = (): React.ReactElement => {
   return (
@@ -54,7 +55,7 @@ export const GameplayPage = (): React.ReactElement => {
       />
       <OptionSwitch
         checked={Settings.SuppressErrorModals}
-        onChange={(newValue) => (Settings.SuppressErrorModals = newValue)}
+        onChange={toggleSuppressErrorModalsSetting}
         text="Suppress error modals"
         tooltip={
           <>

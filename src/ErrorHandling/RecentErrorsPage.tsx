@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "tss-react/mui";
-import { ErrorRecord, ErrorState } from "./ErrorState";
+import { type ErrorRecord, ErrorState } from "./ErrorState";
 import { useRerender } from "../ui/React/hooks";
-import { Typography } from "@mui/material";
+import { Typography, Tooltip } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 
 export function RecentErrorsPage(): React.ReactElement {
   const rerender = useRerender();
-  useEffect(() => {
-    const listener = () => {
-      rerender();
-    };
-    ErrorState.ErrorUpdate.subscribe(listener);
+  React.useEffect(() => {
+    const clearSubscription = ErrorState.ErrorUpdate.subscribe(rerender);
     ErrorState.UnreadErrors = 0;
+    return () => {
+      clearSubscription();
+    };
   }, [rerender]);
 
   useEffect(() => {
@@ -28,21 +28,24 @@ export function RecentErrorsPage(): React.ReactElement {
   };
 
   const formatMessage = (message: string): string => {
-    // Add zero-width space after each slash to allow clean wrapping
-    return message.replaceAll("/", "/\u200B");
+    /**
+     * - Add a zero-width space after each slash to allow clean wrapping.
+     * - Replace 2+ newline characters with only 1 newline character to reduce the number of empty lines.
+     */
+    return message.replaceAll("/", "/\u200B").replaceAll(/\n{2,}/g, "\n");
   };
 
   return (
     <div>
-      <Typography>
+      <Typography component="div" sx={{ height: "100vh", overflowY: "auto", scrollbarWidth: "thin" }}>
         <table className={classes.errorTable}>
           <thead>
             <tr>
-              <th>Count</th>
-              <th>Type</th>
-              <th style={{ textAlign: "start" }}>Message</th>
-              <th>Script</th>
-              <th>Time</th>
+              <th className={classes.cellText}>Count</th>
+              <th className={classes.cellText}>Type</th>
+              <th className={classes.cellText}>Message</th>
+              <th className={classes.cellText}>Script</th>
+              <th className={classes.cellText}>Time</th>
             </tr>
           </thead>
           <tbody>
@@ -60,7 +63,11 @@ export function RecentErrorsPage(): React.ReactElement {
                   </div>
                 </td>
                 <td className={classes.cellText}>
-                  <div className={classes.small}>{formatMessage(e.scriptName)}</div>
+                  <div className={classes.small}>
+                    <Tooltip title={<>{formatMessage(e.scriptName)}</>}>
+                      <div style={{ textOverflow: "ellipsis", overflow: "auto" }}>{formatMessage(e.scriptName)}</div>
+                    </Tooltip>
+                  </div>
                 </td>
                 <td className={classes.cellText}>
                   <div className={classes.xsmall}>{e.time.toLocaleString()}</div>
@@ -88,18 +95,24 @@ const useStyles = makeStyles()((theme: Theme) => ({
   },
   cellText: {
     verticalAlign: "top",
-    padding: "8px",
+    padding: "4px",
+    textAlign: "left",
   },
   errorText: {
-    margin: "8px",
+    margin: "4px",
     color: "white",
+    textOverflow: "ellipsis",
     maxWidth: "50vw",
     whiteSpace: "pre-wrap",
+    lineClamp: "6",
+    lineHeight: 1.1,
     "overflow-x": "auto",
     maxHeight: "200px",
   },
   xsmall: {
     maxWidth: "110px",
+    fontSize: "14px",
+    lineHeight: 1.2,
   },
   small: {
     maxWidth: "200px",

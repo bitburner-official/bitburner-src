@@ -9,7 +9,9 @@ import { ActiveScriptsPage } from "./ActiveScriptsPage";
 import { RecentScriptsPage } from "./RecentScriptsPage";
 import { RecentErrorsPage } from "../../ErrorHandling/RecentErrorsPage";
 import { useRerender } from "../React/hooks";
-import { ErrorState, killAllScripts } from "../../ErrorHandling/ErrorState";
+import { errorModalsAreSuppressed, ErrorState, toggleSuppressErrorModals } from "../../ErrorHandling/ErrorState";
+import { OptionSwitch } from "../React/OptionSwitch";
+import { killAllScripts } from "../../Netscript/killWorkerScript";
 import { SimplePage } from "@enums";
 import { Router } from "../GameRoot";
 
@@ -24,7 +26,7 @@ export function ActiveScriptsRoot({ page }: ComponentProps): React.ReactElement 
   useRerender(400);
 
   function handleChange(
-    event: React.SyntheticEvent,
+    __event: React.SyntheticEvent,
     tab: SimplePage.ActiveScripts | SimplePage.RecentlyKilledScripts | SimplePage.RecentErrors,
   ): void {
     setTab(tab);
@@ -40,18 +42,32 @@ export function ActiveScriptsRoot({ page }: ComponentProps): React.ReactElement 
 
   return (
     <>
-      <div style={{ display: "inline-flex" }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <Tabs
-          variant="fullWidth"
-          value={page}
+          value={tab}
           onChange={handleChange}
-          sx={{ minWidth: "fit-content", maxWidth: "25%" }}
+          sx={{
+            minHeight: "fit-content",
+            "& .MuiButtonBase-root.MuiTab-root": {
+              margin: 0,
+              padding: "10px",
+              whiteSpace: "pre",
+              minHeight: "40px",
+            },
+          }}
         >
           <Tab label={"Active"} value={SimplePage.ActiveScripts} />
           <Tab label={"Recently Killed"} value={SimplePage.RecentlyKilledScripts} />
           <Tab label={errorTabText()} value={SimplePage.RecentErrors} />
         </Tabs>
-        <Button color="error" onClick={killAllScripts} style={{ marginLeft: "200px", border: "1px solid" }}>
+        <OptionSwitch
+          checked={errorModalsAreSuppressed()}
+          onChange={toggleSuppressErrorModals}
+          text="Prevent error modals"
+          tooltip={<>If this is set, no error modals will be shown until the game is reloaded.</>}
+          wrapperStyles={{ marginLeft: "20px" }}
+        />
+        <Button color="error" onClick={killAllScripts} sx={{ margin: 0 }}>
           Kill All Scripts
         </Button>
       </div>
