@@ -201,6 +201,7 @@
 |  [PositionType](./bitburner.positiontype.md) |  |
 |  [ReactNode](./bitburner.reactnode.md) | <p>A stand-in for the real React.ReactNode. A [ReactElement](./bitburner.reactelement.md) is rendered dynamically with React. number and string are displayed directly. boolean, null, and undefined are ignored and not rendered. An array of ReactNodes will display all members of that array sequentially.</p><p>Use React.createElement to make the ReactElement type, see [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation.</p> |
 |  [ResponseStatus](./bitburner.responsestatus.md) | Response statuses used for authenticate and connectToSession methods |
+|  [ResponseStatusType](./bitburner.responsestatustype.md) |  |
 |  [Result](./bitburner.result.md) |  |
 |  [ScriptArg](./bitburner.scriptarg.md) |  |
 |  [ServerAuthDetails](./bitburner.serverauthdetails.md) | Details about a server's authentication schema |

@@ -45,6 +45,7 @@ export class DarknetServer extends BaseServer implements IDarknetServer, Darknet
     this.icon = params.icon;
     this.password = params.password;
     this.modelId = params.modelId;
+    this.maxRam = params.maxRam;
     this.staticPasswordHint = params.staticPasswordHint;
     this.passwordHintData = params.passwordHintData;
     this.difficulty = params.difficulty;

@@ -1,10 +1,10 @@
 import { Player } from "@player";
 import { DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
-import { addCacheToServer } from "./effects";
 import { formatNumber } from "../../ui/formatNumber";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { NetscriptContext } from "../../Netscript/APIWrapper";
 import { helpers } from "../../Netscript/NetscriptHelpers";
+import { addCacheToServer } from "./cacheFiles";
 
 export const getPhishingAttackSpeed = () => Math.max(10000 * (400 / (400 + Player.skills.charisma)), 200);
 

@@ -136,7 +136,7 @@ const decorateName = (name: string): string => {
       updatedName = `${randomPrefix}${connector}${updatedName}`;
     }
 
-    if (Math.random() < 0.05) {
+    if (Math.random() < 0.05 && updatedName) {
       updatedName = `${updatedName}:${Math.floor(Math.random() * 10000)}`;
     }
   } while (GetServer(updatedName) !== null);

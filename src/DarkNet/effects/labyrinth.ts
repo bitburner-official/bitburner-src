@@ -1,7 +1,7 @@
 import { BaseServer } from "../../Server/BaseServer";
 import { PasswordResponse } from "../models/DarknetServerOptions";
 import { addSessionToServer, DarknetState } from "../models/DarknetState";
-import { addCacheToServer, calculatePasswordAttemptChaGain } from "./effects";
+import { calculatePasswordAttemptChaGain } from "./effects";
 import { Player } from "@player";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { AugmentationName } from "@enums";
@@ -9,6 +9,7 @@ import { DarknetServer } from "../../Server/DarknetServer";
 import { getDarknetServerSafely } from "../controllers/NetworkMovement";
 import { getBitNodeMultipliers } from "../../BitNode/BitNode";
 import { ResponseStatus } from "../Enums";
+import { addCacheToServer } from "./cacheFiles";
 
 const NORTH = [0, -1];
 const EAST = [1, 0];
@@ -369,21 +370,19 @@ export const getLabyrinthDetails = (): {
   cha: number;
   name: string;
 } => {
-  // TODO: re-enable this check when BN 15 is implemented
-
   // Lab not unlocked yet
-  // if (!Player.sourceFileLvl(15) && Player.bitNodeN !== 15) {
-  //   return {
-  //     augReward: null,
-  //     cha: 300,
-  //     mazeHeight: 10,
-  //     mazeWidth: 10,
-  //     name: "",
-  //     lab: null,
-  //     depth: 4,
-  //     manual: false
-  //   }
-  // }
+  if (!Player.sourceFileLvl(15) && Player.bitNodeN !== 15) {
+    return {
+      augReward: null,
+      cha: 300,
+      mazeHeight: 10,
+      mazeWidth: 10,
+      name: "",
+      lab: null,
+      depth: 5,
+      manual: false,
+    };
+  }
 
   // All augs already retrieved
   if (hasAugment(AugmentationName.TheSword)) {

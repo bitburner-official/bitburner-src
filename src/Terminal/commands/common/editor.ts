@@ -8,7 +8,8 @@ import { getGlobbedFileMap } from "../../../Paths/GlobbedFiles";
 import { sendDeprecationNotice } from "./deprecation";
 import { getFileType, getFileTypeFeature } from "../../../utils/ScriptTransformer";
 import { hasContractExtension } from "../../../Paths/ContractFilePath";
-import { hasCacheFileExtension } from "../../../DarkNet/effects/effects";
+
+import { hasCacheFileExtension } from "../../../DarkNet/effects/cacheFiles";
 
 interface EditorParameters {
   args: (string | number | boolean)[];

@@ -150,7 +150,7 @@ export const getDefaultPasswordConfig = (difficulty: number): ServerConfig => {
 };
 
 export const getCaptchaConfig = (difficulty: number): ServerConfig => {
-  const password = getPassword(Math.min(difficulty / 2 + 3, 7), true, true, true, true);
+  const password = getPassword(Math.min(difficulty / 2 + 3, 7));
   const filledPassword = password
     .split("")
     .map((char, i) => {
@@ -348,15 +348,6 @@ export const getPacketSnifferConfig = (difficulty: number): ServerConfig => {
     staticPasswordHint: "(I'm busy browsing social media at the cafe)",
   };
 };
-
-// TODO: most common item in array server
-// TODO: more leetcode array manipulation servers
-
-// TODO: more guess and check servers
-
-// TODO: verbal description of simple math problem (nth root of depth)
-
-// TODO: basic cypher server?
 
 export const encodeNumberInBaseN = (decimalNumber: number, base: number) => {
   const characters = [...numbers.split(""), "A", "B", "C", "D", "E", "F"];

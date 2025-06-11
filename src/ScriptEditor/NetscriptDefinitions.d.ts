@@ -7463,6 +7463,8 @@ export interface NS {
    *
    * Running this function with 0 or fewer threads will cause a runtime error.
    *
+   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function.
+   *
    * @example
    * ```js
    * //The following example will execute the script ‘foo.js’ with 10 threads, in 500 milliseconds and the arguments ‘foodnstuff’ and 90:
@@ -7572,6 +7574,9 @@ export interface NS {
    * const files = ["hack.js", "weaken.js", "grow.js"];
    * ns.scp(files, server, "home");
    * ```
+   *
+   * For password-protected servers (such as darknet servers), a session must be established with the destination server before using this function.
+   *
    * @param files - Filename or an array of filenames of script/literature files to copy. Note that if a file is located in a subdirectory, the filename must include the leading `/`.
    * @param destination - Hostname/IP of the destination server, which is the server to which the file will be copied.
    * @param source - Hostname/IP of the source server, which is the server from which the file will be copied. This argument is optional and if it’s omitted the source will be the current server.

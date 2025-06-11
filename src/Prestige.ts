@@ -30,6 +30,7 @@ import { calculateExp } from "./PersonObjects/formulas/skill";
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { pendingUIShareJobIds } from "./NetworkShare/Share";
+import { getDarkscapeNavigator } from "./DarkNet/effects/effects";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string, canBeDismissedEasily = true) {
@@ -91,7 +92,7 @@ export function prestigeAugmentation(): void {
     homeComp.pushProgram(CompletedProgramName.formulas);
   }
   if (canAccessBitNodeFeature(15)) {
-    homeComp.pushProgram(CompletedProgramName.darkscape);
+    getDarkscapeNavigator();
   }
 
   // Re-create foreign servers

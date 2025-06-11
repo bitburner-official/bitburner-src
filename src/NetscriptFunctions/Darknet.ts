@@ -8,10 +8,8 @@ import {
   chargeServerMigration,
   getBackdoorAuthTimeDebuff,
   getDarknetData,
-  getRewardFromCache,
   getStasisLinkLimit,
   getStasisLinkServers,
-  hasCacheFileExtension,
   isDarknetServer,
 } from "../DarkNet/effects/effects";
 import { Player } from "@player";
@@ -42,6 +40,7 @@ import {
 } from "../DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "../Server/DarknetServer";
 import { ResponseStatus } from "../DarkNet/Enums";
+import { getRewardFromCache, hasCacheFileExtension } from "../DarkNet/effects/cacheFiles";
 
 export type DarknetResult = { success: boolean; message: string };
 
@@ -321,8 +320,9 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const server: BaseServer = ctx.workerScript.getServer();
         const out: string[] = [];
         for (const neighbor of server.serversOnNetwork) {
-          const neighborServer = getDarknetServerSafely(neighbor);
-          if (!neighborServer || neighborServer.hostname !== SpecialServers.DarkWeb) {
+          const neighborServer = GetServer(neighbor);
+          const darknetData = getDarknetData(neighborServer);
+          if (!neighborServer || !darknetData) {
             continue;
           }
           const entry = helpers.returnServerID(neighborServer, { returnByIP });

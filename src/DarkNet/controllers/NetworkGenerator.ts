@@ -38,7 +38,6 @@ export const populateDarknet = () => {
   const darkWebRoot = GetServer(SpecialServers.DarkWeb);
   if (darkWebRoot) {
     darkWebRoot.hasAdminRights = true;
-    darkWebRoot.maxRam = 16; // TODO: make this more graceful?
   }
 
   if (getDarknetServers().length) {
@@ -48,7 +47,6 @@ export const populateDarknet = () => {
 
   clearDarknet(true);
   addLabyrinth();
-  // TODO: improve early net generation
   addRandomServers(getNetDepth() * NET_WIDTH * SERVER_DENSITY - 10);
   addRandomServers(5 - DarknetState.Network[0].length);
   addRandomServers(5 - DarknetState.Network[1].length);
