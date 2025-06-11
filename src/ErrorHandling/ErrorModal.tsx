@@ -55,7 +55,7 @@ export function ErrorModal(): React.ReactElement {
 
   const goToErrorPage = () => {
     onClose(true);
-    ErrorState.UnreadErrors ||= 1;
+    ErrorState.UnreadErrors ||= 0;
     Router.toPage(SimplePage.RecentErrors);
   };
 
