@@ -2,8 +2,6 @@
 
 ---
 
-fix darknet and darkweb upon getting navigator?
-
 Add a location to get DarkscapeNavigator.exe
 
 ```
@@ -13,12 +11,6 @@ const handbook = LiteratureName.CorporationManagementHandbook;
 if (!homeComp.messages.includes(handbook)) homeComp.messages.push(handbook);
 showLiterature(handbook);
 ```
-
-"password-protected servers" mentions in documentation (exec and scp)
-scp: add session details to docs
-exec: add session details to docs
-
-move phishing calcs to effects.js
 
 unsubscribe from all subscriptions on unmount
 
