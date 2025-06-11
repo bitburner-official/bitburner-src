@@ -43,7 +43,9 @@ You can use `await ns.dnet.authenticate` to check if a guessed password is corre
 
 When you are trying to find the password, you can extract the server's logs using the exploit `await ns.dnet.heartbleed`. This will extract the most recent logs from the target server, which in some cases lets you see extra hints or clues to why the last password attempt was not correct. In addition to your authentication attempts, the server's own traffic will register some logs as well. They're often useless, but sometimes have interesting hints or even other server's passwords! (these are the same logs you can see in the Darknet UI when you click on a server.)
 
-Once you figure out the password, you will want it later (so other scripts can connect, or in case the server restarts & you need to start your scripts again.) Make sure to save the password somewhere durable, so it isn't lost if your script gets stopped later on.
+Once you successfully run `dnet.authenticate` with the correct password, you gain admin rights to the server (similar to what NUKE.EXE does). It also gives your scripts a session with that server, so you can edit that server with `scp` and `exec`.
+
+Once you figure out the right password, you will want it later (so other scripts can connect, or in case the server restarts & you need to start your scripts again.) Make sure to save the password somewhere durable, so it isn't lost if your script gets stopped later on.
 
 ### Modifying servers with `exec` and `scp`
 
