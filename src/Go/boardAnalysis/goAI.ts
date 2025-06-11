@@ -62,6 +62,7 @@ export function handleNextTurn(boardState: BoardState = Go.currentGame, useOffli
     // The game is over. We shouldn't get here in most circumstances,
     // because when the game ends resetAI() will be called to resolve promises.
     // Return an already-resolved promise until a new game is started.
+    resetAI(true);
     return Promise.resolve(gameOver);
   }
   const currentColor = previousColor === GoColor.black ? GoColor.white : GoColor.black;
@@ -137,6 +138,8 @@ export function resetAI(endOfGame = false): void {
     if (playerPromise.resolver) {
       playerPromise.resolver(gameOver);
       playerPromise.resolver = null;
+    } else {
+      playerPromise.nextTurn = Promise.resolve(gameOver);
     }
     if (!endOfGame && !playerPromise.resolver) {
       createPromise(playerPromise);
