@@ -27,7 +27,7 @@ export const ErrorState = {
 };
 
 export function errorModalsAreSuppressed(): boolean {
-  return Settings.SuppressErrorModals || ErrorState.PreventModalsUntil > new Date();
+  return ErrorState.PreventModalsUntil > new Date();
 }
 
 export function toggleSuppressErrorModals(newValue: boolean): void {
