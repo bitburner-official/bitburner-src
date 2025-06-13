@@ -6056,7 +6056,6 @@ interface UserInterface {
    * @remarks
    * RAM cost: 0 GB
    * @example
-   * Usage example (NS2)
    * ```js
    * const theme = ns.ui.getTheme();
    * theme.primary = '#ff5500';
@@ -6086,7 +6085,6 @@ interface UserInterface {
    * @remarks
    * RAM cost: 0 GB
    * @example
-   * Usage example (NS2)
    * ```js
    * const styles = ns.ui.getStyles();
    * styles.fontFamily = 'Comic Sans Ms';
@@ -8151,8 +8149,6 @@ export interface NS {
    * Add a callback to be executed when the script dies.
    * @remarks
    * RAM cost: 0 GB
-   *
-   * NS2 exclusive
    *
    * Each script can only register one callback per callback ID.
    * If another callback is registered with the same callback ID
