@@ -445,6 +445,10 @@ import nsDoc_bitburner_factionworktask_factionworktype_md from "../../markdown/b
 import nsDoc_bitburner_factionworktask_md from "../../markdown/bitburner.factionworktask.md?raw";
 import nsDoc_bitburner_factionworktask_type_md from "../../markdown/bitburner.factionworktask.type.md?raw";
 import nsDoc_bitburner_factionworktype_md from "../../markdown/bitburner.factionworktype.md?raw";
+import nsDoc_bitburner_filemetadata_atime_md from "../../markdown/bitburner.filemetadata.atime.md?raw";
+import nsDoc_bitburner_filemetadata_btime_md from "../../markdown/bitburner.filemetadata.btime.md?raw";
+import nsDoc_bitburner_filemetadata_md from "../../markdown/bitburner.filemetadata.md?raw";
+import nsDoc_bitburner_filemetadata_mtime_md from "../../markdown/bitburner.filemetadata.mtime.md?raw";
 import nsDoc_bitburner_filenameorpid_md from "../../markdown/bitburner.filenameorpid.md?raw";
 import nsDoc_bitburner_filerequirement_file_md from "../../markdown/bitburner.filerequirement.file.md?raw";
 import nsDoc_bitburner_filerequirement_md from "../../markdown/bitburner.filerequirement.md?raw";
@@ -930,6 +934,7 @@ import nsDoc_bitburner_ns_ftpcrack_md from "../../markdown/bitburner.ns.ftpcrack
 import nsDoc_bitburner_ns_gang_md from "../../markdown/bitburner.ns.gang.md?raw";
 import nsDoc_bitburner_ns_getbitnodemultipliers_md from "../../markdown/bitburner.ns.getbitnodemultipliers.md?raw";
 import nsDoc_bitburner_ns_getfavortodonate_md from "../../markdown/bitburner.ns.getfavortodonate.md?raw";
+import nsDoc_bitburner_ns_getfilemetadata_md from "../../markdown/bitburner.ns.getfilemetadata.md?raw";
 import nsDoc_bitburner_ns_getfunctionramcost_md from "../../markdown/bitburner.ns.getfunctionramcost.md?raw";
 import nsDoc_bitburner_ns_getgrowtime_md from "../../markdown/bitburner.ns.getgrowtime.md?raw";
 import nsDoc_bitburner_ns_gethackinglevel_md from "../../markdown/bitburner.ns.gethackinglevel.md?raw";
@@ -2034,6 +2039,10 @@ AllPages["nsDoc/bitburner.factionworktask.factionworktype.md"] = nsDoc_bitburner
 AllPages["nsDoc/bitburner.factionworktask.md"] = nsDoc_bitburner_factionworktask_md;
 AllPages["nsDoc/bitburner.factionworktask.type.md"] = nsDoc_bitburner_factionworktask_type_md;
 AllPages["nsDoc/bitburner.factionworktype.md"] = nsDoc_bitburner_factionworktype_md;
+AllPages["nsDoc/bitburner.filemetadata.atime.md"] = nsDoc_bitburner_filemetadata_atime_md;
+AllPages["nsDoc/bitburner.filemetadata.btime.md"] = nsDoc_bitburner_filemetadata_btime_md;
+AllPages["nsDoc/bitburner.filemetadata.md"] = nsDoc_bitburner_filemetadata_md;
+AllPages["nsDoc/bitburner.filemetadata.mtime.md"] = nsDoc_bitburner_filemetadata_mtime_md;
 AllPages["nsDoc/bitburner.filenameorpid.md"] = nsDoc_bitburner_filenameorpid_md;
 AllPages["nsDoc/bitburner.filerequirement.file.md"] = nsDoc_bitburner_filerequirement_file_md;
 AllPages["nsDoc/bitburner.filerequirement.md"] = nsDoc_bitburner_filerequirement_md;
@@ -2561,6 +2570,7 @@ AllPages["nsDoc/bitburner.ns.ftpcrack.md"] = nsDoc_bitburner_ns_ftpcrack_md;
 AllPages["nsDoc/bitburner.ns.gang.md"] = nsDoc_bitburner_ns_gang_md;
 AllPages["nsDoc/bitburner.ns.getbitnodemultipliers.md"] = nsDoc_bitburner_ns_getbitnodemultipliers_md;
 AllPages["nsDoc/bitburner.ns.getfavortodonate.md"] = nsDoc_bitburner_ns_getfavortodonate_md;
+AllPages["nsDoc/bitburner.ns.getfilemetadata.md"] = nsDoc_bitburner_ns_getfilemetadata_md;
 AllPages["nsDoc/bitburner.ns.getfunctionramcost.md"] = nsDoc_bitburner_ns_getfunctionramcost_md;
 AllPages["nsDoc/bitburner.ns.getgrowtime.md"] = nsDoc_bitburner_ns_getgrowtime_md;
 AllPages["nsDoc/bitburner.ns.gethackinglevel.md"] = nsDoc_bitburner_ns_gethackinglevel_md;

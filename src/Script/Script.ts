@@ -1,23 +1,18 @@
 import type { BaseServer } from "../Server/BaseServer";
-import { calculateRamUsage, RamUsageEntry } from "./RamCalculations";
-import { LoadedModule, ScriptURL } from "./LoadedModule";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { calculateRamUsage, type RamUsageEntry } from "./RamCalculations";
+import type { LoadedModule, ScriptURL } from "./LoadedModule";
+import { Generic_fromJSON, Generic_toJSON, type IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../Netscript/RamCostGenerator";
-import { ScriptFilePath } from "../Paths/ScriptFilePath";
+import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { ContentFile } from "../Paths/ContentFile";
-import { FileMetadata } from "../Paths/FileMetadata";
 
 /** A script file as a file on a server.
  * For the execution of a script, see RunningScript and WorkerScript */
-export class Script implements ContentFile {
+export class Script extends ContentFile {
   code: string;
   filename: ScriptFilePath;
   server: string;
-
-  // Used for the Remote File API,
-  // to resolve conflicts when synchronizing files outside the game
-  metadata: FileMetadata;
 
   // Ram calculation, only exists after first poll of ram cost after updating
   ramUsage: number | null = null;
@@ -47,10 +42,10 @@ export class Script implements ContentFile {
   }
 
   constructor(filename = "default.js" as ScriptFilePath, code = "", server = "") {
+    super();
     this.filename = filename;
     this.code = code;
     this.server = server; // hostname of server this script is on
-    this.metadata = new FileMetadata();
   }
 
   /** Invalidates the current script module and related data, e.g. when modifying the file. */

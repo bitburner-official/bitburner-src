@@ -1404,9 +1404,15 @@ export const ns: InternalAPI<NSFull> = {
   },
   getFileMetadata: (ctx) => (_filename) => {
     const path = helpers.filePath(ctx, "filename", _filename);
-    if (!hasScriptExtension(path) && !hasTextExtension(path)) return undefined;
+    if (!hasScriptExtension(path) && !hasTextExtension(path)) {
+      throw new Error(`Invalid path: ${_filename}. It must be a text file or a script.`);
+    }
     const server = ctx.workerScript.getServer();
-    return server.getContentFile(path)?.metadata.plain() ?? undefined;
+    const contentFile = server.getContentFile(path);
+    if (!contentFile) {
+      throw new Error(`Invalid path: ${_filename}. The file does not exist on ${server.hostname}.`);
+    }
+    return contentFile.metadata.plain();
   },
   peek: (ctx) => (_portNumber) => {
     const portNumber = helpers.portNumber(ctx, _portNumber);

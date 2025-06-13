@@ -4,13 +4,13 @@ import { hasScriptExtension } from "../Paths/ScriptFilePath";
 import { GetServer, GetAllServers } from "../Server/AllServers";
 import {
   RFAMessage,
-  FileData,
-  FileContent,
+  type FileData,
+  type FileContent,
   isFileServer,
   isFileLocation,
-  FileLocation,
+  type FileLocation,
   isFileData,
-  FileMetadata,
+  type FileMetadata,
 } from "./MessageDefinitions";
 
 import libSource from "../ScriptEditor/NetscriptDefinitions.d.ts?raw";

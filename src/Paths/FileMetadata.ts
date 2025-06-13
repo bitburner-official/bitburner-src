@@ -1,4 +1,4 @@
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
+import { Generic_fromJSON, Generic_toJSON, type IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
 
 export class FileMetadata {
   /** Time of Access */
@@ -16,12 +16,12 @@ export class FileMetadata {
     this.btime = now;
   }
 
-  /** Change metadate to reflect a read just happened */
+  /** Change metadata to reflect a read just happened */
   read() {
     this.atime = Date.now();
   }
 
-  /** Change metadate to reflect a write just happened */
+  /** Change metadata to reflect a write just happened */
   edit() {
     this.mtime = Date.now();
   }
@@ -35,12 +35,10 @@ export class FileMetadata {
     };
   }
 
-  // Serialize the current object to a JSON save state
   toJSON(): IReviverValue {
     return Generic_toJSON("FileMetadata", this);
   }
 
-  // Initializes a Script Object from a JSON save state
   static fromJSON(value: IReviverValue): FileMetadata {
     return Generic_fromJSON(FileMetadata, value.data);
   }

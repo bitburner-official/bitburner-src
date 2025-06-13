@@ -1,20 +1,15 @@
-import { BaseServer } from "./Server/BaseServer";
-import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
-import { TextFilePath } from "./Paths/TextFilePath";
+import type { BaseServer } from "./Server/BaseServer";
+import { Generic_fromJSON, Generic_toJSON, type IReviverValue, constructorsForReviver } from "./utils/JSONReviver";
+import type { TextFilePath } from "./Paths/TextFilePath";
 import { ContentFile } from "./Paths/ContentFile";
-import { FileMetadata } from "./Paths/FileMetadata";
 
 /** Represents a plain text file that is typically stored on a server. */
-export class TextFile implements ContentFile {
+export class TextFile extends ContentFile {
   /** The full file name. */
   filename: TextFilePath;
 
   /** The content of the file. */
   text: string;
-
-  // Used for the Remote File API,
-  // to resolve conflicts when synchronizing files outside the game
-  metadata: FileMetadata;
 
   // Shared interface on Script and TextFile for accessing content
   get content() {
@@ -27,9 +22,9 @@ export class TextFile implements ContentFile {
   }
 
   constructor(filename = "default.txt" as TextFilePath, txt = "") {
+    super();
     this.filename = filename;
     this.text = txt;
-    this.metadata = new FileMetadata();
   }
 
   /** Serialize the current file to a JSON save state. */

@@ -9,26 +9,24 @@ Get the metadata of a file.
 **Signature:**
 
 ```typescript
-getFileMetadata(filename: string): FileMetadata | undefined;
+getFileMetadata(filename: string): FileMetadata;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  filename | string | Name of the file to read the metadata from. |
+|  filename | string | Name of the file to read the metadata from. It must be a text file (.txt, .json) or a script (.js, .jsx, .ts, .tsx). |
 
 **Returns:**
 
-[FileMetadata](./bitburner.filemetadata.md) \| undefined
+[FileMetadata](./bitburner.filemetadata.md)
 
-The FileMetadata of the file.
+The metadata of the file.
 
 ## Remarks
 
 RAM cost: 0 GB
 
-This function is used to read the metadata from a text file (.txt) or script (.js or .script).
-
-This function will return the metadata associated with the specified file. If the file does not exist, this function returns `undefined`<!-- -->.
+This function returns the metadata associated with the specified file.
 

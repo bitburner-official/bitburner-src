@@ -4,7 +4,7 @@
 
 ## FileMetadata interface
 
-Metadata of a {<!-- -->File<!-- -->}
+Metadata of a file
 
 **Signature:**
 

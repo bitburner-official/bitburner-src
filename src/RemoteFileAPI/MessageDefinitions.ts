@@ -1,4 +1,4 @@
-import { SaveData } from "../types";
+import type { SaveData } from "../types";
 import type { BaseServer } from "../Server/BaseServer";
 
 export class RFAMessage {
