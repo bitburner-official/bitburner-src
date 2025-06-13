@@ -511,8 +511,8 @@ function createNewUpdateText() {
     () =>
       dialogBoxCreate(
         "New update!\n" +
-          "Please report any bugs/issues through the GitHub repository " +
-          "or the Bitburner subreddit (reddit.com/r/bitburner).\n\n" +
+          "Please report any bugs/issues through the GitHub repository (https://github.com/bitburner-official/bitburner-src/issues) " +
+          "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
           CONSTANTS.LatestUpdate,
       ),
     1000,
@@ -526,7 +526,7 @@ function createBetaUpdateText() {
         "You are playing on the beta environment! This branch of the game " +
           "features the latest developments in the game. This version may be unstable.\n" +
           "Please report any bugs/issues through the github repository (https://github.com/bitburner-official/bitburner-src/issues) " +
-          "or the Bitburner subreddit (reddit.com/r/bitburner).\n\n" +
+          "or the #bug-report channel on Discord (https://discord.com/channels/415207508303544321/415213413745164318).\n\n" +
           CONSTANTS.LatestUpdate,
       ),
     1000,

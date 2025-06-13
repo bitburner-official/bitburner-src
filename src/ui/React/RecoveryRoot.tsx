@@ -111,13 +111,13 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
           </Link>
         </Typography>
         <Typography>
-          <Link href="https://www.reddit.com/r/Bitburner/" target="_blank">
-            Make a reddit post
+          <Link href="https://discord.gg/TFc3hKD" target="_blank">
+            Post in the #bug-report channel on Discord.
           </Link>
         </Typography>
         <Typography>
-          <Link href="https://discord.gg/TFc3hKD" target="_blank">
-            Post in the #bug-report channel on Discord.
+          <Link href="https://www.reddit.com/r/Bitburner/" target="_blank">
+            Make a reddit post
           </Link>
         </Typography>
         <Typography>Please include your save file and the crash report.</Typography>
