@@ -1392,7 +1392,7 @@ API
 - More ports (previously max 20, now practically unlimited) (by @Hoekstraa)
 - Corp functions now return copy of constant arrays instead of the original (by @Mughur)
 - All the player sub-objects need to be copied for `getPlayer`. (by @MageKing17)
-- add corp get<constant> functions, UI (by @Mughur)
+- add corp get constant functions, UI (by @Mughur)
 - destroyW0r1dD43m0n now properly gives achievements
 - favor now properly syncs across pages and the Donate achievement is now given correctly (by @Aerophia)
 - getCrimeStats use bitnode multipliers in the output of crime stats (by @phyzical)
