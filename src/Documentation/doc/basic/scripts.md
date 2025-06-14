@@ -47,7 +47,7 @@ For details on references in terminal commands, see [Terminal](terminal.md).
 
 ## Script Arguments
 
-When running a script, you can use [flags](https://github.com/bitburner-official/bitburner-src/blob/bec737a25307be29c7efef147fc31effca65eedc/markdown/bitburner.ns.flags.md) and [arguments](https://github.com/bitburner-official/bitburner-src/blob/bec737a25307be29c7efef147fc31effca65eedc/markdown/bitburner.ns.args.md), which the script's logic can access and act on, allowing flexibility in your script designs. For example allowing you to get different results or attack different targets without re-writing your code:
+When running a script, you can use [flags](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.flags.md) and [arguments](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.args.md), which the script's logic can access and act on, allowing flexibility in your script designs. For example allowing you to get different results or attack different targets without re-writing your code:
 
     $ run hack.js "harakiri-sushi"
     $ run hack.js "silver-helix"
@@ -60,7 +60,7 @@ For example, if a script run with 1 thread is able to hack \$10,000, then runnin
 
 [Note -- Scripts will not actually become multithreaded in the real-world sense - Javascript is a "single-threaded" coding language.]
 
-When "multithreading" a script, the total [RAM](ram.md) cost can be calculated by simply multiplying the [RAM](ram.md) cost of a single instance of your script by the number of threads you will use. [See [`ns.getScriptRam()`](https://github.com/bitburner-official/bitburner-src/blob/bec737a25307be29c7efef147fc31effca65eedc/markdown/bitburner.ns.getscriptram.md) or the `mem` terminal command detailed below]
+When "multithreading" a script, the total [RAM](ram.md) cost can be calculated by simply multiplying the [RAM](ram.md) cost of a single instance of your script by the number of threads you will use. [See [`ns.getScriptRam()`](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.getscriptram.md) or the `mem` terminal command detailed below]
 
 ## Never-ending scripts
 
