@@ -4,6 +4,15 @@ export const breakingChanges300: VersionBreakingChange = {
   additionalText: "For more information, please check https://github.com/bitburner-official/bitburner-src/issues/2148.",
   apiBreakingChanges: [
     {
+      brokenAPIs: [],
+      info:
+        "You cannot use the deprecated VSCode extension to connect to the Steam app via API server now. You have to " +
+        "use Remote API to connect your external editors to Bitburner.\nFor more information, please check the pinned " +
+        "message in #external-editors on Discord (https://discord.gg/TFc3hKD).",
+      showPopUp: true,
+      doNotSkip: true,
+    },
+    {
       brokenAPIs: [{ name: "ns.nFormat" }],
       info:
         "ns.nFormat() was removed.\n" +
