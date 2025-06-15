@@ -65,7 +65,7 @@ export function ErrorModal(): React.ReactElement {
 
   return (
     <Modal open={!!error} onClose={() => onClose()}>
-      {error ? (
+      {error && (
         <>
           <Typography component="div">
             <h2>{error.errorType} ERROR</h2>
@@ -76,25 +76,21 @@ export function ErrorModal(): React.ReactElement {
               <br />
               PID: {error.pid}
             </p>
-            <span>
-              {Settings.SuppressErrorModals ? (
-                ""
-              ) : (
-                <OptionSwitch
-                  checked={errorModalsAreSuppressed()}
-                  onChange={(newValue) => toggleSuppressErrorModals(newValue)}
-                  text="Suppress error modals for 5 minutes"
-                  tooltip={
-                    <>
-                      If this is set, no error modals will be shown for the next five minutes.
-                      <br />
-                      The "Suppress error modals" toggle in the game options will always suppress modals, and only log
-                      errors to the Recent Errors page.{" "}
-                    </>
-                  }
-                />
-              )}
-            </span>
+            {!Settings.SuppressErrorModals && (
+              <OptionSwitch
+                checked={errorModalsAreSuppressed()}
+                onChange={(newValue) => toggleSuppressErrorModals(newValue)}
+                text="Suppress error modals for 5 minutes"
+                tooltip={
+                  <>
+                    If this is set, no error modals will be shown for the next five minutes.
+                    <br />
+                    The "Suppress error modals" toggle in the game options will always suppress modals, and only log
+                    errors to the Recent Errors page.
+                  </>
+                }
+              />
+            )}
           </Typography>
           <Box className={classes.inlineFlexBox}>
             <Button onClick={() => onClose()}>Close</Button>
@@ -106,8 +102,6 @@ export function ErrorModal(): React.ReactElement {
             </div>
           </Box>
         </>
-      ) : (
-        ""
       )}
     </Modal>
   );
