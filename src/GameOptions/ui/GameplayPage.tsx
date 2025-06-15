@@ -64,7 +64,7 @@ export const GameplayPage = (): React.ReactElement => {
         tooltip={
           <>
             If this is set, script errors will never create any popups. The errors can still be seen on the "Recent
-            Errors" tab in the Active Scripts page
+            Errors" tab in the Active Scripts page.
           </>
         }
       />
