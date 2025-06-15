@@ -59,7 +59,6 @@ export function ErrorModal(): React.ReactElement {
 
   const goToErrorPage = () => {
     onClose(true);
-    ErrorState.UnreadErrors ||= 0;
     Router.toPage(SimplePage.RecentErrors);
   };
 
@@ -80,13 +79,14 @@ export function ErrorModal(): React.ReactElement {
               <OptionSwitch
                 checked={errorModalsAreSuppressed()}
                 onChange={(newValue) => toggleSuppressErrorModals(newValue)}
-                text="Suppress error modals for 5 minutes"
+                text="Suppress error modals"
                 tooltip={
                   <>
-                    If this is set, no error modals will be shown for the next five minutes.
+                    If this is set, no error modals will be shown for the next five minutes, and only log errors to the
+                    Recent Errors page.
                     <br />
-                    The "Suppress error modals" toggle in the game options will always suppress modals, and only log
-                    errors to the Recent Errors page.
+                    The "Suppress error modals" setting in the game options will set this toggle to always be on by
+                    default.
                   </>
                 }
               />

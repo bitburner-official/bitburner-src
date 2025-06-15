@@ -2,7 +2,7 @@
  * Root React Component for the "Active Scripts" UI page. This page displays
  * and provides information about all of the player's scripts that are currently running
  */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Tabs, Tab } from "@mui/material";
 
 import { ActiveScriptsPage } from "./ActiveScriptsPage";
@@ -22,11 +22,17 @@ export type ComponentProps = {
 };
 
 export function ActiveScriptsRoot({ page }: ComponentProps): React.ReactElement {
-  const [tab, setTab] = useState<ActiveScriptsTab>(ErrorState.UnreadErrors > 0 ? SimplePage.RecentErrors : page);
+  const [tab, setTab] = useState<ActiveScriptsTab>(page);
   useRerender(400);
 
+  useEffect(() => {
+    if (ErrorState.UnreadErrors > 0) {
+      handleChange(null, SimplePage.RecentErrors);
+    }
+  }, []);
+
   function handleChange(
-    __event: React.SyntheticEvent,
+    __event: React.SyntheticEvent | null,
     tab: SimplePage.ActiveScripts | SimplePage.RecentlyKilledScripts | SimplePage.RecentErrors,
   ): void {
     setTab(tab);
@@ -66,10 +72,10 @@ export function ActiveScriptsRoot({ page }: ComponentProps): React.ReactElement 
           text="Suppress error modals (5 minutes)"
           tooltip={
             <>
-              If this is set, no error modals will be shown for the next five minutes.
+              If this is set, no error modals will be shown for the next five minutes, and only log errors to the Recent
+              Errors page.
               <br />
-              The "Suppress error modals" toggle in the game options will always suppress modals, and only log errors to
-              the Recent Errors page.
+              The "Suppress error modals" setting in the game options will set this toggle to always be on by default.
             </>
           }
           wrapperStyles={{ marginLeft: "20px" }}
