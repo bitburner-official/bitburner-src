@@ -70,9 +70,7 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
 
     const result: FileMetadata = {
       filename: file.filename,
-      atime: file.metadata.atime,
-      mtime: file.metadata.mtime,
-      btime: file.metadata.btime,
+      ...file.metadata.plain(),
     };
     return new RFAMessage({ result: result, id: msg.id });
   },
@@ -124,9 +122,7 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
 
     const fileList: FileMetadata[] = [...server.scripts, ...server.textFiles].map(([filename, file]) => ({
       filename: filename,
-      atime: file.metadata.atime,
-      mtime: file.metadata.mtime,
-      btime: file.metadata.btime,
+      ...file.metadata.plain(),
     }));
     return new RFAMessage({ result: fileList, id: msg.id });
   },
