@@ -22,6 +22,9 @@ export function ErrorModal(): React.ReactElement {
       if (newError.force || (Router.page() !== SimplePage.RecentErrors && !errorModalsAreSuppressed())) {
         setError(newError);
         rerender();
+      } else {
+        ErrorState.ActiveError = null;
+        setError(null);
       }
     };
     return ErrorState.ErrorUpdate.subscribe(listener);
