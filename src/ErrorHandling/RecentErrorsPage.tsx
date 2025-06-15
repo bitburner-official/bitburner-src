@@ -102,11 +102,10 @@ const useStyles = makeStyles()((theme: Theme) => ({
     margin: "4px",
     color: "white",
     textOverflow: "ellipsis",
-    maxWidth: "50vw",
     whiteSpace: "pre-wrap",
     lineClamp: "6",
     lineHeight: 1.1,
-    "overflow-x": "auto",
+    overflowX: "auto",
     maxHeight: "200px",
   },
   xsmall: {
