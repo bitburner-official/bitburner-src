@@ -63,8 +63,15 @@ export function ActiveScriptsRoot({ page }: ComponentProps): React.ReactElement 
         <OptionSwitch
           checked={errorModalsAreSuppressed()}
           onChange={(newValue) => toggleSuppressErrorModals(newValue)}
-          text="Prevent error modals"
-          tooltip={<>If this is set, no error modals will be shown until the game is reloaded.</>}
+          text="Suppress error modals (5 minutes)"
+          tooltip={
+            <>
+              If this is set, no error modals will be shown for the next five minutes.
+              <br />
+              The "Suppress error modals" toggle in the game options will always suppress modals, and only log errors to
+              the Recent Errors page.
+            </>
+          }
           wrapperStyles={{ marginLeft: "20px" }}
         />
         <Button color="error" onClick={killAllScripts} sx={{ margin: 0 }}>
