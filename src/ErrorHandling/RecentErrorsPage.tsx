@@ -12,6 +12,7 @@ export function RecentErrorsPage(): React.ReactElement {
     ErrorState.UnreadErrors = 0;
     return () => {
       clearSubscription();
+      ErrorState.UnreadErrors = 0;
     };
   }, [rerender]);
 
