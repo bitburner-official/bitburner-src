@@ -41,6 +41,7 @@ export function ErrorModal(): React.ReactElement {
       ErrorState.ActiveError = nextError;
       setError(nextError);
     }
+    ErrorState.UnreadErrors = ErrorState.Errors.filter((e) => e.unread).length;
   };
 
   const viewLogs = (): void => {
