@@ -14,6 +14,7 @@ import { OptionSwitch } from "../React/OptionSwitch";
 import { killAllScripts } from "../../Netscript/killWorkerScript";
 import { SimplePage } from "@enums";
 import { Router } from "../GameRoot";
+import { Settings } from "../../Settings/Settings";
 
 type ActiveScriptsTab = SimplePage.ActiveScripts | SimplePage.RecentlyKilledScripts | SimplePage.RecentErrors;
 
@@ -66,20 +67,24 @@ export function ActiveScriptsRoot({ page }: ComponentProps): React.ReactElement 
           <Tab label={"Recently Killed"} value={SimplePage.RecentlyKilledScripts} />
           <Tab label={errorTabText()} value={SimplePage.RecentErrors} />
         </Tabs>
-        <OptionSwitch
-          checked={errorModalsAreSuppressed()}
-          onChange={(newValue) => toggleSuppressErrorModals(newValue)}
-          text="Suppress error modals (5 minutes)"
-          tooltip={
-            <>
-              If this is set, no error modals will be shown for the next five minutes, and only log errors to the Recent
-              Errors page.
-              <br />
-              The "Suppress error modals" setting in the game options will set this toggle to always be on by default.
-            </>
-          }
-          wrapperStyles={{ marginLeft: "20px" }}
-        />
+        {Settings.SuppressErrorModals ? (
+          <div style={{ width: "15%" }}></div>
+        ) : (
+          <OptionSwitch
+            checked={errorModalsAreSuppressed()}
+            onChange={(newValue) => toggleSuppressErrorModals(newValue)}
+            text="Suppress error modals (5 min)"
+            tooltip={
+              <>
+                If this is set, no error modals will be shown for the next five minutes, and only log errors to the
+                Recent Errors page.
+                <br />
+                The "Suppress error modals" setting in the game options will set this toggle to always be on by default.
+              </>
+            }
+            wrapperStyles={{ marginLeft: "20px" }}
+          />
+        )}
         <Button color="error" onClick={killAllScripts} sx={{ margin: 0 }}>
           Kill All Scripts
         </Button>
