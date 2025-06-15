@@ -22,8 +22,8 @@ heard:
 
 ## Reporting Bugs
 
-The recommended method for reporting a bug is by opening a
-[Github Issue](https://github.com/bitburner-official/bitburner-src/issues).
+The recommended method for reporting a bug is by opening a [Github Issue](https://github.com/bitburner-official/bitburner-src/issues)
+or contacting us on the [#bug-report channel](https://discord.com/channels/415207508303544321/415213413745164318).
 
 Alternatively, you can post a bug by creating a post on the
 [game's subreddit](https://www.reddit.com/r/Bitburner/).
