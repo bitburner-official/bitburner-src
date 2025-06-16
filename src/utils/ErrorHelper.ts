@@ -29,25 +29,22 @@ interface BrowserFeatures {
   indexedDb: boolean;
 }
 
-interface IErrorMetadata {
+interface CrashReportMetadata {
   error: Record<string, unknown>;
-  errorInfo?: React.ErrorInfo;
+  reactErrorInfo?: React.ErrorInfo;
   page?: Page;
 
   environment: GameEnv;
   platform: Platform;
   version: GameVersion;
-  features: BrowserFeatures;
+  browserFeatures: BrowserFeatures;
 }
 
-export interface IErrorData {
-  metadata: IErrorMetadata;
+export interface CrashReport {
+  metadata: CrashReportMetadata;
 
   title: string;
   body: string;
-
-  features: string;
-  fileName?: string;
 
   issueUrl: string;
 }
@@ -96,15 +93,19 @@ export function getErrorMessageWithStackAndCause(error: unknown, prefix = ""): s
   return errorMessage;
 }
 
-export function getErrorMetadata(error: unknown, errorInfo?: React.ErrorInfo, page?: Page): IErrorMetadata {
+export function getCrashReportMetadata(
+  error: unknown,
+  reactErrorInfo?: React.ErrorInfo,
+  page?: Page,
+): CrashReportMetadata {
   const isElectron = navigator.userAgent.toLowerCase().includes(" electron/");
   const env = process.env.NODE_ENV === "development" ? GameEnv.Development : GameEnv.Production;
-  const version: GameVersion = {
+  const version = {
     version: CONSTANTS.VersionString,
     commitHash: commitHash(),
     toDisplay: () => `v${CONSTANTS.VersionString} (${commitHash()})`,
   };
-  const features: BrowserFeatures = {
+  const browserFeatures = {
     userAgent: navigator.userAgent,
 
     language: navigator.language,
@@ -113,25 +114,26 @@ export function getErrorMetadata(error: unknown, errorInfo?: React.ErrorInfo, pa
     indexedDb: !!window.indexedDB,
   };
   const errorObj = typeof error === "object" && error !== null ? (error as Record<string, unknown>) : {};
-  const metadata: IErrorMetadata = {
+  return {
     platform: isElectron ? Platform.Steam : Platform.Browser,
     environment: env,
     version,
-    features,
+    browserFeatures,
     error: errorObj,
-    errorInfo,
+    reactErrorInfo,
     page,
   };
-  return metadata;
 }
 
-export function getErrorForDisplay(error: unknown, errorInfo?: React.ErrorInfo, page?: Page): IErrorData {
-  const metadata = getErrorMetadata(error, errorInfo, page);
+export function getCrashReport(error: unknown, reactErrorInfo?: React.ErrorInfo, page?: Page): CrashReport {
+  const metadata = getCrashReportMetadata(error, reactErrorInfo, page);
   const errorData = parseUnknownError(error);
   const fileName = String(metadata.error.fileName);
   const features =
-    `lang=${metadata.features.language} cookiesEnabled=${metadata.features.cookiesEnabled.toString()}` +
-    ` doNotTrack=${metadata.features.doNotTrack ?? "null"} indexedDb=${metadata.features.indexedDb.toString()}`;
+    `lang=${metadata.browserFeatures.language} cookiesEnabled=${metadata.browserFeatures.cookiesEnabled.toString()}` +
+    ` doNotTrack=${
+      metadata.browserFeatures.doNotTrack ?? "null"
+    } indexedDb=${metadata.browserFeatures.indexedDb.toString()}`;
 
   const title = `${metadata.error.name}: ${metadata.error.message} (at "${metadata.page}")`;
   let causeAndCauseStack = errorData.causeAsString
@@ -175,7 +177,7 @@ ${errorData.stack}
 ${causeAndCauseStack}
 ### React Component Stack
 \`\`\`
-${metadata.errorInfo?.componentStack}
+${metadata.reactErrorInfo?.componentStack}
 \`\`\`
 
 ### Save
@@ -186,13 +188,10 @@ Copy your save here if possible
 
   const issueUrl = `${newIssueUrl}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
 
-  const data: IErrorData = {
+  return {
     metadata,
-    fileName,
-    features,
     title,
     body,
     issueUrl,
   };
-  return data;
 }

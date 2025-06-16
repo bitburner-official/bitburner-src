@@ -5,7 +5,7 @@ import { Settings } from "../../Settings/Settings";
 import { load } from "../../db";
 import { Router } from "../GameRoot";
 import { Page } from "../Router";
-import { IErrorData, newIssueUrl, getErrorForDisplay } from "../../utils/ErrorHelper";
+import { type CrashReport, newIssueUrl, getCrashReport } from "../../utils/ErrorHelper";
 import { DeleteGameButton } from "./DeleteGameButton";
 import { SoftResetButton } from "./SoftResetButton";
 
@@ -27,7 +27,7 @@ export function ActivateRecoveryMode(error: unknown): void {
 
 interface IProps {
   softReset: () => void;
-  errorData?: IErrorData;
+  crashReport?: CrashReport;
   resetError?: () => void;
 }
 
@@ -43,12 +43,13 @@ function exportSaveFile(): void {
     });
 }
 
+function exportCrashReport(crashReportBody: string): void {
+  downloadContentAsFile(crashReportBody, `CRASH_REPORT_BITBURNER_${Date.now()}.txt`);
+}
+
 const debouncedExportSaveFile = debounce(exportSaveFile, 1000);
 
-const debouncedExportCrashReport = debounce((crashReport: unknown) => {
-  const content = typeof crashReport === "object" ? JSON.stringify(crashReport) : String(crashReport);
-  downloadContentAsFile(content, `CRASH_REPORT_BITBURNER_${Date.now()}.txt`);
-}, 2000);
+const debouncedExportCrashReport = debounce(exportCrashReport, 2000);
 
 /**
  * The recovery screen can be activated in 2 ways:
@@ -58,11 +59,11 @@ const debouncedExportCrashReport = debounce((crashReport: unknown) => {
  *   - isBitNodeFinished() throws an error in src\ui\GameRoot.tsx.
  * - ErrorBoundary [2]: After loading the save data and GameRoot is rendered, an error is thrown anywhere else.
  *
- * [1]: errorData is undefined and sourceError, which is the error thrown in LoadingScreen.tsx, is set via ActivateRecoveryMode().
- * [2]: RecoveryRoot is rendered twice with 2 different errorData. For more information, please check the comment in
+ * [1]: crashReport is undefined and sourceError, which is the error thrown in LoadingScreen.tsx, is set via ActivateRecoveryMode().
+ * [2]: RecoveryRoot is rendered twice with 2 different crashReport. For more information, please check the comment in
  * src\ui\ErrorBoundary.tsx.
  */
-export function RecoveryRoot({ softReset, errorData, resetError }: IProps): React.ReactElement {
+export function RecoveryRoot({ softReset, crashReport, resetError }: IProps): React.ReactElement {
   function recover(): void {
     if (resetError) resetError();
     RecoveryMode = false;
@@ -71,9 +72,9 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
   }
   Settings.AutosaveInterval = 0;
 
-  // This happens in [1] mentioned above. errorData is undefined, so we need to parse sourceError to get errorData.
-  if (errorData == null && sourceError) {
-    errorData = getErrorForDisplay(sourceError, undefined, Page.LoadingScreen);
+  // This happens in [1] mentioned above. crashReport is undefined, so we need to parse sourceError to get crashReport.
+  if (crashReport == null && sourceError) {
+    crashReport = getCrashReport(sourceError, undefined, Page.LoadingScreen);
   }
 
   useEffect(() => {
@@ -81,32 +82,38 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
     debouncedExportSaveFile();
 
     /**
-     * This hook can be called with 3 types of errorData:
-     * - In [1]: errorData.metadata.page is Page.LoadingScreen
+     * This hook can be called with 3 types of crashReport:
+     * - In [1]: crashReport.metadata.page is Page.LoadingScreen
      * - In [2]:
-     *   - First render: errorData.metadata.errorInfo is undefined
-     *   - Second render: errorData.metadata.errorInfo contains componentStack
+     *   - First render: crashReport.metadata.reactErrorInfo is undefined
+     *   - Second render: crashReport.metadata.reactErrorInfo contains componentStack
      *
      * The following check makes sure that we do not write the crash report in the "first render" of [2].
      */
-    if (errorData && (errorData.metadata.errorInfo || errorData.metadata.page === Page.LoadingScreen)) {
-      debouncedExportCrashReport(errorData.body);
+    if (crashReport && (crashReport.metadata.reactErrorInfo || crashReport.metadata.page === Page.LoadingScreen)) {
+      debouncedExportCrashReport(crashReport.body);
     }
-  }, [errorData]);
+  }, [crashReport]);
 
   let instructions;
   if (sourceError instanceof UnsupportedSaveData) {
-    instructions = <Typography variant="h6">Please update your browser.</Typography>;
+    instructions = (
+      <Typography variant="h4" color={Settings.theme.warning}>
+        Please update your browser.
+      </Typography>
+    );
   } else if (sourceError instanceof InvalidSaveData) {
     instructions = (
-      <Typography variant="h6">Your save data is invalid. Please import a valid backup save file.</Typography>
+      <Typography variant="h4" color={Settings.theme.warning}>
+        Your save data is invalid. Please import a valid backup save file.
+      </Typography>
     );
   } else {
     instructions = (
       <Box>
         <Typography>It is recommended to alert a developer.</Typography>
         <Typography>
-          <Link href={errorData?.issueUrl ?? newIssueUrl} target="_blank">
+          <Link href={crashReport?.issueUrl ?? newIssueUrl} target="_blank">
             File an issue on github
           </Link>
         </Typography>
@@ -120,7 +127,9 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
             Make a reddit post
           </Link>
         </Typography>
-        <Typography>Please include your save file and the crash report.</Typography>
+        <Typography variant="h4" color={Settings.theme.warning}>
+          Please include your save file and the crash report.
+        </Typography>
       </Box>
     );
   }
@@ -133,7 +142,7 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
   const canDisableRecoveryMode = Engine.isRunning;
 
   return (
-    <Box sx={{ padding: "8px 16px", minHeight: "100vh", maxWidth: "1200px", boxSizing: "border-box" }}>
+    <Box sx={{ padding: "8px 16px", minHeight: "100vh", boxSizing: "border-box" }}>
       <Typography variant="h3">RECOVERY MODE ACTIVATED</Typography>
       <Typography>
         There was an error with your save file and the game went into recovery mode. In this mode, saving is disabled
@@ -149,9 +158,14 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
         </Box>
       )}
       {instructions}
-      <br />
-      <Button onClick={exportSaveFile}>Export save file</Button>
-      <br />
+      <div>
+        <Button onClick={exportSaveFile}>Export save file</Button>
+        {crashReport && (
+          <Button onClick={() => exportCrashReport(crashReport.body)} style={{ marginLeft: "20px" }}>
+            Export crash report
+          </Button>
+        )}
+      </div>
       <br />
       {canDisableRecoveryMode && (
         <Typography>
@@ -170,35 +184,49 @@ export function RecoveryRoot({ softReset, errorData, resetError }: IProps): Reac
         <DeleteGameButton color="error" />
       </ButtonGroup>
 
-      {errorData && (
-        <Paper sx={{ px: 2, pt: 1, pb: 2, mt: 2 }}>
-          <Typography variant="h5">{errorData.title}</Typography>
-          <Box sx={{ my: 2 }}>
-            <TextField
-              label="Bug Report Text"
-              value={errorData.body}
-              variant="outlined"
-              color="secondary"
-              multiline
-              fullWidth
-              rows={12}
-              spellCheck={false}
-              sx={{ "& .MuiOutlinedInput-root": { color: Settings.theme.secondary } }}
-            />
-          </Box>
-          <Tooltip title="Submitting an issue to GitHub really helps us improve the game!">
-            <Button
-              component={Link}
-              startIcon={<GitHubIcon />}
-              color="info"
-              sx={{ px: 2 }}
-              href={errorData.issueUrl ?? newIssueUrl}
-              target={"_blank"}
-            >
-              Submit Issue to GitHub
-            </Button>
-          </Tooltip>
-        </Paper>
+      {crashReport && (
+        <>
+          {crashReport.metadata.error.stack && (
+            <Paper>
+              <TextField
+                label="Stack Trace"
+                value={crashReport.metadata.error.stack}
+                variant="outlined"
+                multiline
+                fullWidth
+                spellCheck={false}
+              />
+            </Paper>
+          )}
+          <Paper sx={{ px: 2, pt: 1, pb: 2, mt: 2 }}>
+            <Typography variant="h5">{crashReport.title}</Typography>
+            <Box sx={{ my: 2 }}>
+              <TextField
+                label="Bug Report Text"
+                value={crashReport.body}
+                variant="outlined"
+                color="secondary"
+                multiline
+                fullWidth
+                rows={40}
+                spellCheck={false}
+                sx={{ "& .MuiOutlinedInput-root": { color: Settings.theme.secondary } }}
+              />
+            </Box>
+            <Tooltip title="Submitting an issue to GitHub really helps us improve the game!">
+              <Button
+                component={Link}
+                startIcon={<GitHubIcon />}
+                color="info"
+                sx={{ px: 2 }}
+                href={crashReport.issueUrl ?? newIssueUrl}
+                target={"_blank"}
+              >
+                Submit Issue to GitHub
+              </Button>
+            </Tooltip>
+          </Paper>
+        </>
       )}
     </Box>
   );
