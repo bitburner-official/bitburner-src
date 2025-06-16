@@ -84,9 +84,6 @@ export function ErrorModal(): React.ReactElement {
                   <>
                     If this is set, no error modals will be shown for the next five minutes, and only log errors to the
                     Recent Errors page.
-                    <br />
-                    The "Suppress error modals" setting in the game options will set this toggle to always be on by
-                    default.
                   </>
                 }
               />
