@@ -79,7 +79,7 @@ export function ErrorModal(): React.ReactElement {
               <OptionSwitch
                 checked={errorModalsAreSuppressed()}
                 onChange={(newValue) => toggleSuppressErrorModals(newValue)}
-                text="Suppress error modals"
+                text="Suppress error modals (5 min)"
                 tooltip={
                   <>
                     If this is set, no error modals will be shown for the next five minutes, and only log errors to the
