@@ -1,11 +1,5 @@
 # Documentation
 
-![test.png](../images/test.png)
-
-![test.jpg](../images/test.jpg)
-
-![test.svg](../images/test.svg)
-
 ## Guides
 
 - [Beginner's guide](help/getting_started.md)

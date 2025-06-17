@@ -1495,9 +1495,6 @@ import nsDoc_bitburner_workstats_reputation_md from "../../markdown/bitburner.wo
 import nsDoc_bitburner_workstats_strexp_md from "../../markdown/bitburner.workstats.strexp.md?raw";
 import nsDoc_bitburner__valueof_md from "../../markdown/bitburner._valueof.md?raw";
 import nsDoc_index_md from "../../markdown/index.md?raw";
-import docImages_test_jpg from "./images/test.jpg";
-import docImages_test_png from "./images/test.png";
-import docImages_test_svg from "./images/test.svg";
 
 export const AllPages: Record<string, string> = {};
 AllPages["advanced/bitnodes.md"] = file0;
@@ -3170,7 +3167,3 @@ export const nsApiPages = Object.keys(AllPages)
   .map((page) => page.replace("nsDoc/", ""));
 
 export const DocImages: Record<string, string> = {};
-
-DocImages["test.jpg"] = docImages_test_jpg;
-DocImages["test.png"] = docImages_test_png;
-DocImages["test.svg"] = docImages_test_svg;
