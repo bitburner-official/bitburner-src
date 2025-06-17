@@ -3165,3 +3165,5 @@ AllPages["nsDoc/index.md"] = nsDoc_index_md;
 export const nsApiPages = Object.keys(AllPages)
   .filter((page) => page.startsWith("nsDoc"))
   .map((page) => page.replace("nsDoc/", ""));
+
+export const DocImages: Record<string, string> = {};
