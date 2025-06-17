@@ -133,7 +133,7 @@ export const serverSolver = async (ns, hostname) => {
       return authenticateWithNoPassword(ns, hostname);
 
     // TODO: handle other models of darknet servers here
-      
+
     // TODO: get recent server logs with `await ns.dnet.heartbleed(hostname)` for more detailed logging on failed auth attempts
 
     default:

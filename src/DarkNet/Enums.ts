@@ -32,7 +32,7 @@ export const ModelIds = {
   parsedExpression: "MathML",
   divisibilityTest: "ModuloTerm",
   packetSniffer: "OpenWebAccessPoint",
-  labyrinth: "_lab_",
+  labyrinth: "(The Labyrinth)",
 } as const;
 
 export type MinigamesType = _ValueOf<typeof ModelIds>;

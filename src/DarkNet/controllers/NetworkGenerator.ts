@@ -172,6 +172,7 @@ export const addLabyrinth = () => {
     icon: labIcon,
     password: "!!the:masterwork:of:daedalus!!",
     staticPasswordHint: "You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.",
+    passwordHintData: "",
     modelId: ModelIds.labyrinth,
     difficulty: 10,
     depth: -1,

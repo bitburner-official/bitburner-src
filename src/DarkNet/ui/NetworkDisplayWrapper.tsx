@@ -28,7 +28,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
   const { classes } = dnetStyles({});
 
   useEffect(() => {
-    DarknetEvents.subscribe(() => {
+    const clearSubscription = DarknetEvents.subscribe(() => {
       if (canvas.current) {
         const deepestServer: number = DarknetState.Network.flat().reduce((deepest, server) => {
           if (server?.hasAdminRights && isDarknetServer(server) && (server.depth ?? 0 > deepest)) {
@@ -45,6 +45,10 @@ export function NetworkDisplayWrapper(): React.ReactElement {
     });
     canvas.current && drawOnCanvas(canvas.current);
     draggableBackground?.current?.addEventListener("wheel", (e) => e.preventDefault());
+
+    return () => {
+      clearSubscription();
+    };
   }, [rerender]);
 
   useEffect(() => {

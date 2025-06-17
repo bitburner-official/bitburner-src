@@ -3,6 +3,7 @@
 ---
 
 Add a location to get DarkscapeNavigator.exe
+Add DarkscapeNavigator to dev menu
 
 ```
 // - start with crash course?

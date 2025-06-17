@@ -1,9 +1,10 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import { DarknetState } from "../models/DarknetState";
-import { getLabMaze, getSurroundingsVisualized } from "../effects/labyrinth";
+import { getLabMaze, getLabyrinthDetails, getSurroundingsVisualized } from "../effects/labyrinth";
 import { dnetStyles } from "./dnetStyles";
 import { Result } from "@nsdefs";
+import { Player } from "@player";
 
 export type LabyrinthSummaryProps = {
   result: Result | undefined;
@@ -17,6 +18,7 @@ export const LabyrinthSummary = ({
   loadingText,
 }: LabyrinthSummaryProps): React.ReactElement => {
   const { classes } = dnetStyles({});
+  const lab = getLabyrinthDetails();
 
   // victory message
   if (result?.success) {
@@ -37,12 +39,18 @@ export const LabyrinthSummary = ({
 
   return (
     <>
-      <Typography>{loadingText?.includes("{") ? lastMovementFeedback ?? "" : "Travelling..."}</Typography>
-      <Typography>Current Surroundings:</Typography>
-      <pre className={classes.maze}>{surroundings}</pre>
-      <Typography>
-        Current Coordinates: {x},{y}
-      </Typography>
+      {lab.cha > Player.skills.charisma ? (
+        <Typography color="error">You dont yet have the wits needed to attempt the labyrinth.</Typography>
+      ) : (
+        <>
+          <Typography>{loadingText?.includes("{") ? lastMovementFeedback ?? "" : "Travelling..."}</Typography>
+          <Typography>Current Surroundings:</Typography>
+          <pre className={classes.maze}>{surroundings}</pre>
+          <Typography>
+            Current Coordinates: {x},{y}
+          </Typography>
+        </>
+      )}
     </>
   );
 };

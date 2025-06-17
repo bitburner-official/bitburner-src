@@ -119,22 +119,30 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
               <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
                 <span className={classes.serverDetailsText}>hint:</span> {darknetData?.staticPasswordHint}
                 <br />
-                {darknetData?.passwordHintData ? (
+                {darknetData?.passwordHintData && (
                   <>
                     <span className={classes.serverDetailsText}>data:</span>
                     {darknetData?.passwordHintData}
                     <br />
                   </>
-                ) : (
-                  ""
                 )}
-                <span className={classes.serverDetailsText}>length:</span> {darknetData?.password?.length}
-                <br />
-                <span className={classes.serverDetailsText}>format:</span>{" "}
-                {getPasswordType(darknetData?.password ?? "")}
-                <br />
+                {!isLabServer && (
+                  <>
+                    <span className={classes.serverDetailsText}>length:</span> {darknetData?.password?.length}
+                    <br />
+                    <span className={classes.serverDetailsText}>format:</span>{" "}
+                    {getPasswordType(darknetData?.password ?? "")}
+                    <br />
+                  </>
+                )}
                 <span className={classes.serverDetailsText}>model:</span> {darknetData?.modelId ?? ""}
                 <br />
+                {isLabServer && (
+                  <>
+                    <span className={classes.serverDetailsText}>cha:</span> {darknetData?.requiredCharismaSkill ?? ""}
+                    <br />
+                  </>
+                )}
               </pre>
             </div>
           </Container>

@@ -34,7 +34,10 @@ export const ServerDetailsModal = ({
   const focusTarget = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    DarknetEvents.subscribe(() => rerender());
+    const clearSubscription = DarknetEvents.subscribe(() => rerender());
+    return () => {
+      clearSubscription();
+    };
   }, [rerender]);
 
   populateServerLogsWithNoise(server);
@@ -108,9 +111,7 @@ export const ServerDetailsModal = ({
           ) : (
             <PasswordPrompt server={server} onClose={onClose} onSuccess={() => void onSuccess()} />
           )}
-          {isLabServer && canEnterLabManually ? (
-            ""
-          ) : (
+          {isLabServer && canEnterLabManually && (
             <>
               <Card style={{ height: "250px", overflowY: "scroll" }}>
                 <div style={{ color: "white", paddingLeft: "10px" }}>{logContent}</div>
