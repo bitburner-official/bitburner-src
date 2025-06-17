@@ -1,3 +1,9 @@
+![test.png](../../images/test.png)
+
+![test.jpg](../../images/test.jpg)
+
+![test.svg](../../images/test.svg)
+
 Below are some of the stats that will increase with play and reset during augmentation installs as you progress through the game.
 Your stats can be found in the Overview panel, the Stats subpage of the side menu, or with API methods like `ns.getPlayer()`.
 
