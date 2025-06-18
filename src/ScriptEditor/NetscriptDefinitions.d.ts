@@ -5,6 +5,19 @@ export type _ValueOf<T> = T[keyof T];
 
 /** All netscript definitions */
 
+/**
+ * Metadata of a file
+ * @public
+ */
+interface FileMetadata {
+  /** Time of Access */
+  atime: number;
+  /** Time of Modification */
+  mtime: number;
+  /** Time of Birth (creation) */
+  btime: number;
+}
+
 /** @public */
 interface HP {
   current: number;
@@ -6468,7 +6481,6 @@ interface UserInterface {
    * @remarks
    * RAM cost: 0 GB
    * @example
-   * Usage example (NS2)
    * ```js
    * const theme = ns.ui.getTheme();
    * theme.primary = '#ff5500';
@@ -6498,7 +6510,6 @@ interface UserInterface {
    * @remarks
    * RAM cost: 0 GB
    * @example
-   * Usage example (NS2)
    * ```js
    * const styles = ns.ui.getStyles();
    * styles.fontFamily = 'Comic Sans Ms';
@@ -8134,6 +8145,19 @@ export interface NS {
   read(filename: string): string;
 
   /**
+   * Get the metadata of a file.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This function returns the metadata associated with the specified file.
+   *
+   * @param filename - Name of the file to read the metadata from. It must be a text file (.txt, .json) or a script
+   * (.js, .jsx, .ts, .tsx).
+   * @Returns The metadata of the file.
+   */
+  getFileMetadata(filename: string): FileMetadata;
+
+  /**
    * Get a copy of the data from a port without popping it.
    * @remarks
    * RAM cost: 0 GB
@@ -8574,8 +8598,6 @@ export interface NS {
    * Add a callback to be executed when the script dies.
    * @remarks
    * RAM cost: 0 GB
-   *
-   * NS2 exclusive
    *
    * Each script can only register one callback per callback ID.
    * If another callback is registered with the same callback ID
