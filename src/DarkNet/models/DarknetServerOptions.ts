@@ -14,6 +14,7 @@ import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { DarknetServer as IDarknetServer, ResponseStatusType } from "@nsdefs";
 import { MinigamesType } from "../Enums";
+import { DarknetState } from "./DarknetState";
 
 export type PasswordResponse = {
   status: ResponseStatusType;
@@ -85,13 +86,21 @@ export const DnetServerBuilder = (
     ...darknetData,
   });
   server.updateRamUsed(ramBlock);
+  removeFromOfflineServers(name);
   AddToAllServers(server);
 
   return server;
 };
 
 export const getDarknetServerName = (): string => {
+  if (Math.random() < 0.03 && DarknetState.offlineServers.length > 0) {
+    return DarknetState.offlineServers[Math.floor(Math.random() * DarknetState.offlineServers.length)];
+  }
   return decorateName(getBaseName());
+};
+
+export const removeFromOfflineServers = (hostname: string): void => {
+  DarknetState.offlineServers = DarknetState.offlineServers.filter((server) => server !== hostname);
 };
 
 const getBaseName = (): string => {

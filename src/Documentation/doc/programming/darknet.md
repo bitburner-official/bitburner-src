@@ -12,6 +12,8 @@ Due to the instability of the darknet, long-distance communication is often diff
 
 In some cases, the only way to get to deeper parts of the net is to hitch a ride on a server when it moves to another location!
 
+**In order to access the darknet, you will need to purchase `DarkscapeNavigator.exe`**. This can be done with the `buy` command in the terminal after purchasing a Tor router. There is also a location in Chongqing where you can purchase access, as well.
+
 ### TL;DR: Executive summary of the darknet API
 
 **There is an example starter script at the bottom of this document, to see some of these API methods in action.**

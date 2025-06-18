@@ -12,6 +12,7 @@ import { ResponseStatus } from "../Enums";
 
 type failureResultOptions = {
   requireDarknet?: boolean;
+  requireAdminRights?: boolean;
   requireSession?: boolean;
   requireDirectConnection?: boolean;
   preventDarkweb?: boolean;
@@ -76,7 +77,7 @@ export function getFailureResult(ctx: NetscriptContext, hostname: string, option
       message: ResponseStatus.MOVED_PERMANENTLY,
     };
   }
-  if (options.requireSession && !targetServer.hasAdminRights) {
+  if ((options.requireSession || options.requireAdminRights) && !targetServer.hasAdminRights) {
     const result = `${targetServer.hostname} requires root access. Use ns.dnet.authenticate() to gain access.`;
     logger(ctx)(result);
     return {
@@ -115,11 +116,13 @@ export function expectAuthenticated(ctx: NetscriptContext, server: BaseServer) {
     return;
   }
   if (!server.hasAdminRights) {
-    throw new Error(`Server ${server.hostname} is password-protected. use ns.dnet.authenticate() to gain access.`);
+    throw new Error(
+      `[${ctx.function}] Server ${server.hostname} is password-protected. Use ns.dnet.authenticate() to gain access before running ${ctx.function}.`,
+    );
   }
   if (!isAuthenticated(server, ctx.workerScript.pid)) {
     throw new Error(
-      `${ctx.function}: Server ${server.hostname} requires a session to do that. Use ns.dnet.connectToSession() first to authenticate with that server.`,
+      `[${ctx.function}] Server ${server.hostname} requires a session to be targeted with ${ctx.function}. Use ns.dnet.connectToSession() first to authenticate with that server.`,
     );
   }
 }

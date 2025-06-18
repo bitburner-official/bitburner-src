@@ -2,7 +2,12 @@
 
 ---
 
-Add a location to get DarkscapeNavigator.exe
+- BN 15 stuff?
+- hint note for TRP in lab (in starter guide?)
+- BN description
+- BN Mults for BN15
+- new BN mults for darknet
+
 Add DarkscapeNavigator to dev menu
 
 ```
@@ -13,40 +18,13 @@ if (!homeComp.messages.includes(handbook)) homeComp.messages.push(handbook);
 showLiterature(handbook);
 ```
 
-unsubscribe from all subscriptions on unmount
-
-```
-  useEffect(() => {
-    const clear = () => setKey((key) => key + 1);
-    const debounced = _.debounce(() => clear(), 25, { maxWait: 50 });
-    const unsubscribe = TerminalClearEvents.subscribe(debounced);
-    return () => {
-      debounced.cancel();
-      unsubscribe();
-    };
-  }, []);
-```
-
-most common item in array server
-more leetcode array manipulation servers
-more guess and check servers
-verbal description of simple math problem (nth root of depth)
-basic cypher server?
-
 increase priority of locked ram indicator
 keep some icons statically placed on mini-indicators (script count?)
 more color on icons
 
 improve session vs adjacency phrasing
 
-- BN 15 stuff?
-- hint note for TRP in lab (in starter guide?)
-- BN description
-- BN Mults for BN15
-- new BN mults for darknet
-
 - improve phishing documentation
-- improve phishing somehow else?
 
 labels for icons in detail view on password modal?
 
@@ -55,16 +33,13 @@ labels for icons in detail view on password modal?
 
 - webstorm visual indicator
 
-- Go over guide looking for misleading info or other out-of-date or missing things
-- starter script?
-- preventDuplicates on the run options is very powerful here
-
-ns.dnet.enums.XXX for status codes etc
-Usually "data" in the form of enums or constants we typically store in a data folder so it's easier to find.
-
 - more hint notes
 
-- add a location to discover darknet navigator?
+  most common item in array server
+  more leetcode array manipulation servers
+  more guess and check servers
+  verbal description of simple math problem (nth root of depth)
+  basic cypher server?
 
 ## Post MVP:
 

@@ -176,7 +176,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
             }. Attempted password starts with ${token.slice(0, 100)} `,
           );
         }
-        const onlineConnectionCheck = getFailureResult(ctx, targetHostname);
+        const onlineConnectionCheck = getFailureResult(ctx, targetHostname, { requireAdminRights: true });
         if (!onlineConnectionCheck.success) {
           return {
             success: false,
@@ -595,7 +595,6 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           requireDirectConnection: true,
           requireDarknet: true,
           requireSession: true,
-          preventDarkweb: true,
         });
         if (!onlineConnectionCheck.success) {
           return helpers.netscriptDelay(ctx, 100).then(() => ({
@@ -603,12 +602,13 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
             message: onlineConnectionCheck.message,
           }));
         }
-        const server = getDarknetServerSafely(hostname);
-        if (!server) {
+        const server = helpers.getServer(ctx, hostname);
+        const darknetData = getDarknetData(server);
+        if (!darknetData) {
           throw helpers.errorMessage(ctx, `Server ${hostname} not found. It may have gone offline.`);
         }
 
-        if (server.ramBlock <= 0) {
+        if (darknetData.ramBlock <= 0) {
           const result = `Failed. Server ${server.hostname} has no host-owned ram left to reallocate.`;
           logger(ctx)(result);
           return helpers.netscriptDelay(ctx, 100).then(() => ({
