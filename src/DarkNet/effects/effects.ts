@@ -30,6 +30,7 @@ import { Icon } from "../ui/ServerIcon";
 import { exampleDarknetServer, ModelIds, NET_WIDTH } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { populateDarknet } from "../controllers/NetworkGenerator";
+import { getTorRouter } from "../../Locations/ui/TorButton";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;
@@ -237,8 +238,6 @@ const getRandomNearbyServer = (server: BaseServer, disconnected = false) => {
 };
 
 export const hasDarknetAccess = () => {
-  return true; //TODO: enable this later
-
   return canAccessBitNodeFeature(15) || Player.hasProgram(CompletedProgramName.darkscape);
 };
 
@@ -345,6 +344,9 @@ export const getDarknetData = (server: BaseServer | null): DarknetServerData | n
 };
 
 export const getDarkscapeNavigator = () => {
+  if (!Player.hasTorRouter()) {
+    getTorRouter();
+  }
   const existingPrograms = Player.getHomeComputer().programs;
   if (!existingPrograms.includes(CompletedProgramName.darkscape)) {
     Player.getHomeComputer().pushProgram(CompletedProgramName.darkscape);

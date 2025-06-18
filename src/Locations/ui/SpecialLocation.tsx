@@ -39,6 +39,7 @@ import { canAccessBitNodeFeature, knowAboutBitverse } from "../../BitNode/BitNod
 import { useRerender } from "../../ui/React/hooks";
 import { PromptEvent } from "../../ui/React/PromptManager";
 import { canAcceptStaneksGift } from "../../CotMG/Helper";
+import { getDarkscapeNavigator, hasDarknetAccess } from "../../DarkNet/effects/effects";
 
 interface SpecialLocationProps {
   loc: Location;
@@ -335,6 +336,49 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     );
   }
 
+  function renderShadowedWalkway(): React.ReactElement {
+    function handleDarknetNavigator(): void {
+      if (Player.money < 30e6) {
+        dialogBoxCreate("You don't have enough money to buy DarkscapeNavigator.exe");
+        return;
+      }
+      Player.loseMoney(30e6, "other");
+      getDarkscapeNavigator();
+      dialogBoxCreate("You bought DarkscapeNavigator.exe for $30 million.");
+      rerender();
+    }
+    const canBuyDarknetNavigator = Player.money >= 30e6 && !hasDarknetAccess();
+    return (
+      <>
+        <Typography>
+          <br />
+          <br />
+          The city is dark and quiet. It stretches out below this decrepit walkway, a seemingly endless expanse of
+          decaying concrete and rusted metal.
+          <br />
+          <br />
+          Nearby, an ancient automat sits askew, its screen flickering with static, still covered with ads for the
+          compact disks it sells for credits.
+          <br />
+          <br />
+          On it, a faded sign reads:
+          <br />
+          <br />
+          <i>
+            Resistance, change, & freedom: powered by privacy. Darkscape Navigator is the only way to escape the
+            oppression of the Great Firewall.
+          </i>
+          <br />
+          <br />
+          <br />
+          <Button onClick={handleDarknetNavigator} disabled={!canBuyDarknetNavigator}>
+            Buy DarkscapeNavigator.exe {hasDarknetAccess() ? " - Purchased" : "($30m)"}
+          </Button>
+        </Typography>
+      </>
+    );
+  }
+
   switch (props.loc.name) {
     case LocationName.NewTokyoVitaLife: {
       return renderGrafting();
@@ -367,6 +411,9 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
           <Button onClick={() => Router.toPage(Page.Go)}>IPvGO Subnet Takeover</Button>
         </>
       );
+    }
+    case LocationName.ChongqingShadowedWalkway: {
+      return renderShadowedWalkway();
     }
     default:
       console.error(`Location ${props.loc.name} doesn't have any special properties`);
