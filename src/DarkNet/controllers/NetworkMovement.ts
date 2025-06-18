@@ -357,7 +357,7 @@ export const sanitizeDarkwebNetwork = () => {
 };
 
 export const getBackdooredDarkwebServers = (): BaseServer[] =>
-  GetAllServers(true).filter((s) => s && isDarknetServer(s) && !s.hasStasisLink && s.backdoorInstalled);
+  getDarknetServers().filter((s) => !s.hasStasisLink && s.backdoorInstalled);
 
 const isOnAirGap = (x: number): boolean => !!x && !(x % AIR_GAP_DEPTH);
 
@@ -370,7 +370,7 @@ const isImmutable = (server?: BaseServer | null) =>
   server.isConnectedTo ||
   server.hasStasisLink;
 
-const getIslands = () => GetAllServers(true).filter((s) => s && isDarknetServer(s) && !s.serversOnNetwork.length);
+const getIslands = () => getDarknetServers().filter((s) => !s.serversOnNetwork.length);
 
 export const getDarknetServerSafely = (hostnameOrIp: string): DarknetServer | undefined => {
   const server = GetServer(hostnameOrIp);

@@ -172,21 +172,19 @@ export function NetworkDisplayWrapper(): React.ReactElement {
             height={DW_NET_HEIGHT}
             style={{ position: "absolute", zIndex: -1 }}
           ></canvas>
-          {darkWebRoot ? <ServerStatusBox server={darkWebRoot} enableAuth={true} classes={classes} /> : ""}
+          {darkWebRoot && <ServerStatusBox server={darkWebRoot} enableAuth={true} classes={classes} />}
           {DarknetState.Network.slice(0, netDisplayDepth).map((row, i) =>
-            row.map((server, j) =>
-              server && isWithinScreen(server) ? (
-                <ServerStatusBox server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} classes={classes} />
-              ) : (
-                ""
-              ),
+            row.map(
+              (server, j) =>
+                server &&
+                isWithinScreen(server) && (
+                  <ServerStatusBox server={server} key={`${i},${j}`} enableAuth={allowAuth(server)} classes={classes} />
+                ),
             ),
           )}
 
-          {labyrinth && netDisplayDepth > depth ? (
+          {labyrinth && netDisplayDepth > depth && (
             <ServerStatusBox server={labyrinth} enableAuth={allowAuth(labyrinth)} classes={classes} />
-          ) : (
-            ""
           )}
         </div>
       </div>
