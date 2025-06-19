@@ -24,6 +24,7 @@ export interface DarknetServer
 |  [hostname](./bitburner.darknetserver.hostname.md) |  | string | Hostname. Must be unique |
 |  [ip](./bitburner.darknetserver.ip.md) |  | string | IP Address. Must be unique |
 |  [isConnectedTo](./bitburner.darknetserver.isconnectedto.md) |  | boolean | Flag indicating whether player is currently connected to this server |
+|  [isOnline](./bitburner.darknetserver.isonline.md) |  | boolean | Flag indicating whether this server is currently online |
 |  [logTrafficInterval](./bitburner.darknetserver.logtrafficinterval.md) |  | number | The interval at which the server periodically adds to its logs, in seconds. |
 |  [maxRam](./bitburner.darknetserver.maxram.md) |  | number | RAM (GB) available on this server |
 |  [modelId](./bitburner.darknetserver.modelid.md) |  | string | The model of the server. Similar models have similar vulnerabilites. |

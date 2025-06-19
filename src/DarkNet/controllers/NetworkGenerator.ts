@@ -198,6 +198,7 @@ export const addLabyrinth = () => {
     const cha = getLabyrinthChaiRequirement(hostname);
     const server = new DarknetServer({
       ...params,
+      isOnline: true,
       requiredCharismaSkill: cha,
       hostname: hostname,
       hasAdminRights: false,

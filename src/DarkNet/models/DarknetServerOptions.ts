@@ -78,6 +78,7 @@ export const DnetServerBuilder = (
     hostname: name,
     ip: createUniqueRandomIp(),
     organizationName: "darkweb",
+    isOnline: true,
     maxRam,
     hasAdminRights: false,
     isConnectedTo: false,

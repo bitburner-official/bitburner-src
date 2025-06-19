@@ -332,6 +332,9 @@ export const getDarknetData = (server: BaseServer | null): DarknetServerData | n
     return {
       ...exampleDarknetServer,
       leftOffset: -1,
+      staticPasswordHint: "The passkey is 'leekspin'",
+      passwordHintData: "leekspin",
+      modelId: ModelIds.EchoVuln,
       password: "leekspin",
       icon: Icon.Terminal,
       ...server,

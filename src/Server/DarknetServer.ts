@@ -9,6 +9,8 @@ import { createRandomIp } from "../utils/IPAddress";
 export class DarknetServer extends BaseServer implements IDarknetServer, DarknetServerData {
   /** The icon of the server, used for display */
   icon: Icon | typeof labIcon;
+  /** Indicates if the server is online */
+  isOnline: boolean;
   /** The password for the server, used for authentication */
   password: string;
   /** The model of the server. Similar models have similar vulnerabilities. */
@@ -43,6 +45,7 @@ export class DarknetServer extends BaseServer implements IDarknetServer, Darknet
   ) {
     super(params);
     this.icon = params.icon;
+    this.isOnline = params.isOnline;
     this.password = params.password;
     this.modelId = params.modelId;
     this.maxRam = params.maxRam;

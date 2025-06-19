@@ -48,9 +48,10 @@ export const ResponseStatus = {
 
 export const exampleDarknetServer: IDarknetServer = {
   difficulty: 0,
+  isOnline: true,
   hasAdminRights: false,
   hasStasisLink: false,
-  hostname: "darkweb",
+  hostname: "",
   ip: "",
   isConnectedTo: false,
   maxRam: 16,
@@ -59,9 +60,9 @@ export const exampleDarknetServer: IDarknetServer = {
   ramBlock: 0,
   ramUsed: 0,
   requiredCharismaSkill: 0,
-  staticPasswordHint: "The passkey is 'leekspin'",
-  passwordHintData: "leekspin",
+  staticPasswordHint: "",
+  passwordHintData: "",
   depth: -1,
-  modelId: "DeskMemo_3.1",
+  modelId: "",
   logTrafficInterval: -1,
 };

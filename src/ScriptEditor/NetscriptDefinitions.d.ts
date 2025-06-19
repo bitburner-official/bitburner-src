@@ -4149,6 +4149,8 @@ export type Result = { success: boolean; message: string };
 export interface DarknetServer {
   /** Hostname. Must be unique */
   hostname: string;
+  /** Flag indicating whether this server is currently online */
+  isOnline: boolean;
   /** IP Address. Must be unique */
   ip: string;
   /** Flag indicating whether player has admin/root access to this server */
@@ -4369,13 +4371,15 @@ export interface Darknet {
   /**
    * Returns a server object for the given server. Defaults to the running script's server if host is not specified.
    *
+   * If the server has recently gone offline, it will return a blank server object with `isOnline: false`.
+   *
    * @remarks
    * RAM cost: 2 GB
    *
    * @param host - Optional. Hostname for the requested server object.
    * @returns The requested server object, or null if the server is not found.
    */
-  getServer(host?: string): DarknetServer | null;
+  getServer(host?: string): DarknetServer;
 
   /**
    * Returns the server's authentication protocol details.
@@ -4465,6 +4469,20 @@ export interface Darknet {
    * @returns The amount of RAM blocked by the server owner's processes.
    */
   getOwnerAllocatedRam(hostname?: string): number;
+
+  /**
+   * Gets the current depth of the specified server into the darknet. Servers immediately below Darkweb are depth 0, and
+   * each visual row in the UI below that increases the depth of the server.
+   *
+   * Returns -1 if the server is offline, not found, or not a darkweb server.
+   *
+   * @remarks
+   * RAM cost: 0.05 GB
+   *
+   * @param hostname - Optional. Hostname of the server to check. Defaults to the scripts current server.
+   * @return The current depth of the server into the darknet.
+   */
+  getCurrentDepth(hostname?: string): number;
 
   /**
    * Spends some time spreading propaganda about a stock to increase its volatility. This does not actually change the stock's forecasts, but

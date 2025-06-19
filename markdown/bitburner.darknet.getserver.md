@@ -6,10 +6,12 @@
 
 Returns a server object for the given server. Defaults to the running script's server if host is not specified.
 
+If the server has recently gone offline, it will return a blank server object with `isOnline: false`<!-- -->.
+
 **Signature:**
 
 ```typescript
-getServer(host?: string): DarknetServer | null;
+getServer(host?: string): DarknetServer;
 ```
 
 ## Parameters
@@ -20,7 +22,7 @@ getServer(host?: string): DarknetServer | null;
 
 **Returns:**
 
-[DarknetServer](./bitburner.darknetserver.md) \| null
+[DarknetServer](./bitburner.darknetserver.md)
 
 The requested server object, or null if the server is not found.
 

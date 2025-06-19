@@ -18,7 +18,6 @@ import { formatNumber } from "../ui/formatNumber";
 import { GetServer } from "../Server/AllServers";
 import { BaseServer } from "../Server/BaseServer";
 import { capturePackets } from "../DarkNet/models/packetSniffing";
-import { getDarknetServerSafely } from "../DarkNet/controllers/NetworkMovement";
 import { addSessionToServer, DarknetState, getServerState } from "../DarkNet/models/DarknetState";
 import { getStockFromSymbol } from "./StockMarket";
 import { CompletedProgramName } from "@enums";
@@ -39,7 +38,7 @@ import {
   logger,
 } from "../DarkNet/effects/offlineServerHandling";
 import { DarknetServer } from "../Server/DarknetServer";
-import { ResponseStatus } from "../DarkNet/Enums";
+import { exampleDarknetServer, ResponseStatus } from "../DarkNet/Enums";
 import { getRewardFromCache, hasCacheFileExtension } from "../DarkNet/effects/cacheFiles";
 
 export type DarknetResult = { success: boolean; message: string };
@@ -410,19 +409,20 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       const server = GetServer(hostname);
       if (!server && DarknetState.offlineServers.includes(hostname)) {
         logger(ctx)(`Server ${hostname} is offline. Cannot retrieve server data.`);
-        return null;
+        return {
+          ...exampleDarknetServer,
+          hostname: hostname,
+          isOnline: false,
+        };
       }
-      if (!server) {
-        logger(ctx)(`Server ${hostname} not found.`);
-        return null;
-      }
-      const darknetData = getDarknetData(server);
+      const validatedServer = helpers.getServer(ctx, hostname);
+      const darknetData = getDarknetData(validatedServer);
       if (!darknetData) {
-        logger(ctx)(`${hostname} is not a darknet server.`);
-        return null;
+        throw new Error(`Target server ${hostname} is not a darknet server.`);
       }
       return {
         hostname: darknetData.hostname,
+        isOnline: true,
         ip: darknetData.ip,
         hasAdminRights: darknetData.hasAdminRights,
         isConnectedTo: darknetData.isConnectedTo,
@@ -628,11 +628,15 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (ctx) =>
       (_hostname): number => {
         const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
-        const server = getDarknetServerSafely(hostname);
-        if (!server) {
-          return 0;
-        }
-        return server.ramBlock;
+        const server = GetServer(hostname);
+        return getDarknetData(server)?.ramBlock ?? 0;
+      },
+    getCurrentDepth:
+      (ctx) =>
+      (_hostname): number => {
+        const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+        const server = GetServer(hostname);
+        return getDarknetData(server)?.depth ?? -1;
       },
     promoteStock:
       (ctx: NetscriptContext) =>
