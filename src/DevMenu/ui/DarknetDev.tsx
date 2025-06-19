@@ -13,6 +13,9 @@ import { WEBSTORM } from "../../DarkNet/effects/webstorm";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { Router } from "../../ui/GameRoot";
 import { SimplePage } from "@enums";
+import { getDarkscapeNavigator, handleSuccessfulAuth } from "../../DarkNet/effects/effects";
+import { getDarknetServers } from "../../DarkNet/controllers/NetworkMovement";
+import { isLabyrinthServer } from "../../DarkNet/effects/labyrinth";
 
 export function DarknetDev(): React.ReactElement {
   const toggleShowFullNetwork = (newValue: boolean): void => {
@@ -25,6 +28,15 @@ export function DarknetDev(): React.ReactElement {
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Darknet</Typography>
       </AccordionSummary>
+      <Tooltip title={<Typography>Gain access to the darkweb network.</Typography>}>
+        <Button
+          onClick={() => {
+            getDarkscapeNavigator();
+          }}
+        >
+          Get DarkscapeNavigator.exe
+        </Button>
+      </Tooltip>
       <AccordionDetails>
         <OptionSwitch
           checked={DarknetState.showFullNetwork}
@@ -59,6 +71,32 @@ export function DarknetDev(): React.ReactElement {
             }}
           >
             START WEBSTORM
+          </Button>
+        </Tooltip>
+        <Tooltip title={<Typography>Root all standard darknet servers.</Typography>}>
+          <Button
+            onClick={() => {
+              getDarknetServers().forEach((server) => {
+                if (!isLabyrinthServer(server.hostname)) {
+                  handleSuccessfulAuth(server, 1);
+                }
+              });
+            }}
+          >
+            Gain admin access to all darknet servers
+          </Button>
+        </Tooltip>
+        <Tooltip title={<Typography>Root all darknet labyrinth servers.</Typography>}>
+          <Button
+            onClick={() => {
+              getDarknetServers().forEach((server) => {
+                if (isLabyrinthServer(server.hostname)) {
+                  server.hasAdminRights = true;
+                }
+              });
+            }}
+          >
+            Gain admin access to labyrinth server
           </Button>
         </Tooltip>
       </AccordionDetails>

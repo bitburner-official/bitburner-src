@@ -548,6 +548,21 @@ export function initBitNodes() {
     (
       <>
         <br />
+        Delving into the uncharted and secretive parts of the internet comes with the promise of freedom from oppressive
+        authority and surveillance. Leaving stability behind and turning to the dark web comes with risks... but also
+        rewards.
+        <br />
+        <br />
+        Unlike the traditional network of servers, the "dark" net is a constantly shifting, complex, unreliable place
+        where servers can move or disappear at any moment. Long-distance communication is often impossible, requiring
+        scripts to be self-sufficient and durable, and spread themselves to stay alive. If you can take advantage of the
+        darknet servers' weak passwords and leaky logs, you will be able to gain access to the deepest parts of the
+        darknet and its secrets.
+        <br />
+        <br />
+        In this Bitnode, the Daedalus faction has not yet found and monopolized the fabled Red Pill augmentation.
+        Legends say it can be found somewhere, out there in the dark...
+        <br />
         <br />
         Destroying this BitNode will give you Source-File 15, or if you already have this Source-File, it will upgrade
         its level up to a maximum of 3.
@@ -1082,7 +1097,38 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
     }
 
     case 15: {
-      return new BitNodeMultipliers({}); // TODO
+      return new BitNodeMultipliers({
+        HackingLevelMultiplier: 0.6,
+        HackingSpeedMultiplier: 0.6,
+
+        StrengthLevelMultiplier: 0.7,
+        DefenseLevelMultiplier: 0.7,
+        DexterityLevelMultiplier: 0.7,
+        AgilityLevelMultiplier: 0.7,
+        CharismaLevelMultiplier: 1.25,
+
+        ServerMaxMoney: 0.8,
+        ServerStartingMoney: 0.5,
+        ServerStartingSecurity: 1.5,
+
+        AugmentationMoneyCost: 3,
+
+        CorporationValuation: 0.2,
+        CorporationSoftcap: 0.4,
+        CorporationDivisions: 0.4,
+
+        DaedalusAugsRequirement: 20,
+
+        BladeburnerRank: 0.2,
+        BladeburnerSkillCost: 3,
+
+        GangUniqueAugs: 0.35,
+
+        StaneksGiftPowerMultiplier: 0.7,
+        StaneksGiftExtraSize: -2,
+
+        WorldDaemonDifficulty: 2,
+      });
     }
     default: {
       throw new Error("Invalid BitNodeN");

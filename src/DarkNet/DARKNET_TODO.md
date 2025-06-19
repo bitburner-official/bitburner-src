@@ -4,11 +4,6 @@
 
 - BN 15 stuff?
 - hint note for TRP in lab (in starter guide?)
-- BN description
-- BN Mults for BN15
-- new BN mults for darknet
-
-Add DarkscapeNavigator to dev menu
 
 ```
 // - start with crash course?
