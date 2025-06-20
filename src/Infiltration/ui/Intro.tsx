@@ -3,7 +3,7 @@ import { Box, Button, Container, Paper, Tooltip, Typography } from "@mui/materia
 import React from "react";
 import { Location } from "../../Locations/Location";
 import { Settings } from "../../Settings/Settings";
-import { formatHp, formatMoney, formatNumberNoSuffix, formatReputation } from "../../ui/formatNumber";
+import { formatHp, formatMoney, formatNumberNoSuffix, formatPercent, formatReputation } from "../../ui/formatNumber";
 import { Player } from "@player";
 import { calculateDamageAfterFailingInfiltration } from "../utils";
 import {
@@ -13,6 +13,8 @@ import {
 } from "../formulas/victory";
 import { Factions } from "../../Faction/Factions";
 import { FactionName } from "../../Faction/Enums";
+import { calculateMarketRateMultiplier, MaxDif } from "../formulas/game";
+import { useCycleRerender } from "../../ui/React/hooks";
 
 interface IProps {
   Location: Location;
@@ -42,25 +44,28 @@ function arrowPart(color: string, length: number): JSX.Element {
 }
 
 function coloredArrow(difficulty: number): JSX.Element {
-  if (difficulty === 0) {
+  const cappedDifficulty = Math.min(difficulty, MaxDif);
+  if (cappedDifficulty === 0) {
     return (
       <span style={{ color: "white" }}>
         {">"}
-        {" ".repeat(38)}
+        {" ".repeat(51)}
       </span>
     );
   } else {
     return (
       <>
-        {arrowPart(Settings.theme.primary, difficulty * 13)}
-        {arrowPart(Settings.theme.warning, (difficulty - 1) * 13)}
-        {arrowPart(Settings.theme.error, (difficulty - 2) * 13)}
+        {arrowPart(Settings.theme.primary, cappedDifficulty * 13)}
+        {arrowPart(Settings.theme.warning, (cappedDifficulty - 1) * 13)}
+        {arrowPart(Settings.theme.warning, (cappedDifficulty - 2) * 13)}
+        {arrowPart(Settings.theme.error, (cappedDifficulty - 3) * 6.5)}
       </>
     );
   }
 }
 
 export function Intro(props: IProps): React.ReactElement {
+  useCycleRerender();
   const repGain = calculateTradeInformationRepReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
   const moneyGain = calculateSellInformationCashReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
   const soaRepGain = calculateInfiltratorsRepReward(Factions[FactionName.ShadowsOfAnarchy], props.StartingDifficulty);
@@ -95,6 +100,7 @@ export function Intro(props: IProps): React.ReactElement {
             {Player.factions.includes(FactionName.ShadowsOfAnarchy) && (
               <li>SoA reputation: {formatReputation(soaRepGain)}</li>
             )}
+            <li>Market Demand: {formatPercent(calculateMarketRateMultiplier())}</li>
           </ul>
         </Typography>
 
@@ -126,14 +132,22 @@ export function Intro(props: IProps): React.ReactElement {
             </Tooltip>
           )}
         </Typography>
-
         <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>[{coloredArrow(props.Difficulty)}]</Typography>
         <Typography
           sx={{ lineHeight: "1em", whiteSpace: "pre" }}
-        >{`▲            ▲            ▲           ▲`}</Typography>
+        >{`▲            ▲            ▲           ▲           ▲`}</Typography>
         <Typography
           sx={{ lineHeight: "1em", whiteSpace: "pre" }}
-        >{` Trivial       Normal        Hard     Impossible`}</Typography>
+        >{` Trivial       Normal       Hard     Impossible    Suicide`}</Typography>
+
+        {props.Difficulty >= MaxDif && (
+          <>
+            <br />
+            <Typography color="error">
+              This location is too secure for your current abilities. Attempting to infiltrate would be suicide.
+            </Typography>
+          </>
+        )}
       </Paper>
 
       <Paper sx={{ p: 1, display: "grid", justifyItems: "center" }}>
@@ -163,7 +177,9 @@ export function Intro(props: IProps): React.ReactElement {
         </ul>
 
         <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", width: "100%" }}>
-          <Button onClick={props.start}>Start</Button>
+          <Button onClick={props.start} color={props.Difficulty > MaxDif ? "error" : "primary"}>
+            {props.Difficulty > MaxDif ? "Attempt Anyway" : "Start"}
+          </Button>
           <Button onClick={props.cancel}>Cancel</Button>
         </Box>
       </Paper>

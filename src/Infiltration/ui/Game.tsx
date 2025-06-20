@@ -18,6 +18,7 @@ import { calculateDamageAfterFailingInfiltration } from "../utils";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { PlayerEventType, PlayerEvents } from "../../PersonObjects/Player/PlayerEvents";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { MaxDif } from "../formulas/game";
 
 type GameProps = {
   StartingDifficulty: number;
@@ -90,7 +91,7 @@ export function Game(props: GameProps): React.ReactElement {
   }, [level, props.MaxLevel, setupNextGame]);
 
   const onFailure = useCallback(
-    (options?: { automated: boolean }) => {
+    (options?: { automated?: boolean; suicide?: boolean }) => {
       setStage(Stage.Countdown);
       pushResult(false);
       Player.receiveRumor(FactionName.ShadowsOfAnarchy);
@@ -102,6 +103,16 @@ export function Game(props: GameProps): React.ReactElement {
           SnackbarEvents.emit(
             "You were hospitalized. Do not try to automate infiltration!",
             ToastVariant.WARNING,
+            5000,
+          );
+        }, 500);
+      }
+      if (options?.suicide) {
+        damage = Player.hp.current;
+        setTimeout(() => {
+          SnackbarEvents.emit(
+            "You were discovered immediately. That location is far too secure for your current skill level.",
+            ToastVariant.ERROR,
             5000,
           );
         }, 500);
@@ -161,8 +172,14 @@ export function Game(props: GameProps): React.ReactElement {
       cancel();
       dialogBoxCreate("Infiltration was cancelled because you were hospitalized");
     });
+
+    // Immediately fail if the difficulty is suicide+
+    if (props.Difficulty >= MaxDif) {
+      onFailure({ suicide: true });
+    }
+
     return clearSubscription;
-  }, []);
+  }, [onFailure, props.Difficulty]);
 
   return (
     <Container>

@@ -18,6 +18,7 @@ import {
 } from "../formulas/victory";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { isFactionWork } from "../../Work/FactionWork";
+import { InfiltrationState } from "../formulas/game";
 
 interface IProps {
   StartingDifficulty: number;
@@ -54,6 +55,7 @@ export function Victory(props: IProps): React.ReactElement {
 
   function sell(): void {
     Player.gainMoney(moneyGain, "infiltration");
+    InfiltrationState.successfulInfiltrationTimestamps.push(new Date());
     quitInfiltration();
   }
 
@@ -63,6 +65,7 @@ export function Victory(props: IProps): React.ReactElement {
     }
     Factions[factionName].playerReputation += repGain;
     defaultFactionChoice = factionName;
+    InfiltrationState.successfulInfiltrationTimestamps.push(new Date());
     quitInfiltration();
   }
 
