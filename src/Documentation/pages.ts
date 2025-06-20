@@ -1549,6 +1549,7 @@ import nsDoc_bitburner_workstats_strexp_md from "../../markdown/bitburner.workst
 import nsDoc_bitburner__valueof_md from "../../markdown/bitburner._valueof.md?raw";
 import nsDoc_index_md from "../../markdown/index.md?raw";
 
+
 export const AllPages: Record<string, string> = {};
 AllPages["advanced/bitnodes.md"] = file0;
 AllPages["advanced/bladeburners.md"] = file1;
@@ -1643,133 +1644,78 @@ AllPages["nsDoc/bitburner.basichgwoptions.additionalmsec.md"] = nsDoc_bitburner_
 AllPages["nsDoc/bitburner.basichgwoptions.md"] = nsDoc_bitburner_basichgwoptions_md;
 AllPages["nsDoc/bitburner.basichgwoptions.stock.md"] = nsDoc_bitburner_basichgwoptions_stock_md;
 AllPages["nsDoc/bitburner.basichgwoptions.threads.md"] = nsDoc_bitburner_basichgwoptions_threads_md;
-AllPages["nsDoc/bitburner.bitnodebooleanoptions.disable4sdata.md"] =
-  nsDoc_bitburner_bitnodebooleanoptions_disable4sdata_md;
-AllPages["nsDoc/bitburner.bitnodebooleanoptions.disablebladeburner.md"] =
-  nsDoc_bitburner_bitnodebooleanoptions_disablebladeburner_md;
-AllPages["nsDoc/bitburner.bitnodebooleanoptions.disablecorporation.md"] =
-  nsDoc_bitburner_bitnodebooleanoptions_disablecorporation_md;
+AllPages["nsDoc/bitburner.bitnodebooleanoptions.disable4sdata.md"] = nsDoc_bitburner_bitnodebooleanoptions_disable4sdata_md;
+AllPages["nsDoc/bitburner.bitnodebooleanoptions.disablebladeburner.md"] = nsDoc_bitburner_bitnodebooleanoptions_disablebladeburner_md;
+AllPages["nsDoc/bitburner.bitnodebooleanoptions.disablecorporation.md"] = nsDoc_bitburner_bitnodebooleanoptions_disablecorporation_md;
 AllPages["nsDoc/bitburner.bitnodebooleanoptions.disablegang.md"] = nsDoc_bitburner_bitnodebooleanoptions_disablegang_md;
-AllPages["nsDoc/bitburner.bitnodebooleanoptions.disablehacknetserver.md"] =
-  nsDoc_bitburner_bitnodebooleanoptions_disablehacknetserver_md;
-AllPages["nsDoc/bitburner.bitnodebooleanoptions.disablesleeveexpandaugmentation.md"] =
-  nsDoc_bitburner_bitnodebooleanoptions_disablesleeveexpandaugmentation_md;
+AllPages["nsDoc/bitburner.bitnodebooleanoptions.disablehacknetserver.md"] = nsDoc_bitburner_bitnodebooleanoptions_disablehacknetserver_md;
+AllPages["nsDoc/bitburner.bitnodebooleanoptions.disablesleeveexpandaugmentation.md"] = nsDoc_bitburner_bitnodebooleanoptions_disablesleeveexpandaugmentation_md;
 AllPages["nsDoc/bitburner.bitnodebooleanoptions.md"] = nsDoc_bitburner_bitnodebooleanoptions_md;
-AllPages["nsDoc/bitburner.bitnodebooleanoptions.restricthomepcupgrade.md"] =
-  nsDoc_bitburner_bitnodebooleanoptions_restricthomepcupgrade_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.agilitylevelmultiplier.md"] =
-  nsDoc_bitburner_bitnodemultipliers_agilitylevelmultiplier_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.augmentationmoneycost.md"] =
-  nsDoc_bitburner_bitnodemultipliers_augmentationmoneycost_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.augmentationrepcost.md"] =
-  nsDoc_bitburner_bitnodemultipliers_augmentationrepcost_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.bladeburnerrank.md"] =
-  nsDoc_bitburner_bitnodemultipliers_bladeburnerrank_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.bladeburnerskillcost.md"] =
-  nsDoc_bitburner_bitnodemultipliers_bladeburnerskillcost_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.charismalevelmultiplier.md"] =
-  nsDoc_bitburner_bitnodemultipliers_charismalevelmultiplier_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.classgymexpgain.md"] =
-  nsDoc_bitburner_bitnodemultipliers_classgymexpgain_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.codingcontractmoney.md"] =
-  nsDoc_bitburner_bitnodemultipliers_codingcontractmoney_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.companyworkexpgain.md"] =
-  nsDoc_bitburner_bitnodemultipliers_companyworkexpgain_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.companyworkmoney.md"] =
-  nsDoc_bitburner_bitnodemultipliers_companyworkmoney_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.companyworkrepgain.md"] =
-  nsDoc_bitburner_bitnodemultipliers_companyworkrepgain_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.corporationdivisions.md"] =
-  nsDoc_bitburner_bitnodemultipliers_corporationdivisions_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.corporationsoftcap.md"] =
-  nsDoc_bitburner_bitnodemultipliers_corporationsoftcap_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.corporationvaluation.md"] =
-  nsDoc_bitburner_bitnodemultipliers_corporationvaluation_md;
+AllPages["nsDoc/bitburner.bitnodebooleanoptions.restricthomepcupgrade.md"] = nsDoc_bitburner_bitnodebooleanoptions_restricthomepcupgrade_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.agilitylevelmultiplier.md"] = nsDoc_bitburner_bitnodemultipliers_agilitylevelmultiplier_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.augmentationmoneycost.md"] = nsDoc_bitburner_bitnodemultipliers_augmentationmoneycost_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.augmentationrepcost.md"] = nsDoc_bitburner_bitnodemultipliers_augmentationrepcost_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.bladeburnerrank.md"] = nsDoc_bitburner_bitnodemultipliers_bladeburnerrank_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.bladeburnerskillcost.md"] = nsDoc_bitburner_bitnodemultipliers_bladeburnerskillcost_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.charismalevelmultiplier.md"] = nsDoc_bitburner_bitnodemultipliers_charismalevelmultiplier_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.classgymexpgain.md"] = nsDoc_bitburner_bitnodemultipliers_classgymexpgain_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.codingcontractmoney.md"] = nsDoc_bitburner_bitnodemultipliers_codingcontractmoney_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.companyworkexpgain.md"] = nsDoc_bitburner_bitnodemultipliers_companyworkexpgain_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.companyworkmoney.md"] = nsDoc_bitburner_bitnodemultipliers_companyworkmoney_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.companyworkrepgain.md"] = nsDoc_bitburner_bitnodemultipliers_companyworkrepgain_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.corporationdivisions.md"] = nsDoc_bitburner_bitnodemultipliers_corporationdivisions_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.corporationsoftcap.md"] = nsDoc_bitburner_bitnodemultipliers_corporationsoftcap_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.corporationvaluation.md"] = nsDoc_bitburner_bitnodemultipliers_corporationvaluation_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.crimeexpgain.md"] = nsDoc_bitburner_bitnodemultipliers_crimeexpgain_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.crimemoney.md"] = nsDoc_bitburner_bitnodemultipliers_crimemoney_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.crimesuccessrate.md"] =
-  nsDoc_bitburner_bitnodemultipliers_crimesuccessrate_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.daedalusaugsrequirement.md"] =
-  nsDoc_bitburner_bitnodemultipliers_daedalusaugsrequirement_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.defenselevelmultiplier.md"] =
-  nsDoc_bitburner_bitnodemultipliers_defenselevelmultiplier_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.dexteritylevelmultiplier.md"] =
-  nsDoc_bitburner_bitnodemultipliers_dexteritylevelmultiplier_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.factionpassiverepgain.md"] =
-  nsDoc_bitburner_bitnodemultipliers_factionpassiverepgain_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.factionworkexpgain.md"] =
-  nsDoc_bitburner_bitnodemultipliers_factionworkexpgain_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.factionworkrepgain.md"] =
-  nsDoc_bitburner_bitnodemultipliers_factionworkrepgain_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.favortodonatetofaction.md"] =
-  nsDoc_bitburner_bitnodemultipliers_favortodonatetofaction_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.foursigmamarketdataapicost.md"] =
-  nsDoc_bitburner_bitnodemultipliers_foursigmamarketdataapicost_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.foursigmamarketdatacost.md"] =
-  nsDoc_bitburner_bitnodemultipliers_foursigmamarketdatacost_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.crimesuccessrate.md"] = nsDoc_bitburner_bitnodemultipliers_crimesuccessrate_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.daedalusaugsrequirement.md"] = nsDoc_bitburner_bitnodemultipliers_daedalusaugsrequirement_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.defenselevelmultiplier.md"] = nsDoc_bitburner_bitnodemultipliers_defenselevelmultiplier_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.dexteritylevelmultiplier.md"] = nsDoc_bitburner_bitnodemultipliers_dexteritylevelmultiplier_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.factionpassiverepgain.md"] = nsDoc_bitburner_bitnodemultipliers_factionpassiverepgain_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.factionworkexpgain.md"] = nsDoc_bitburner_bitnodemultipliers_factionworkexpgain_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.factionworkrepgain.md"] = nsDoc_bitburner_bitnodemultipliers_factionworkrepgain_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.favortodonatetofaction.md"] = nsDoc_bitburner_bitnodemultipliers_favortodonatetofaction_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.foursigmamarketdataapicost.md"] = nsDoc_bitburner_bitnodemultipliers_foursigmamarketdataapicost_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.foursigmamarketdatacost.md"] = nsDoc_bitburner_bitnodemultipliers_foursigmamarketdatacost_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.gangsoftcap.md"] = nsDoc_bitburner_bitnodemultipliers_gangsoftcap_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.ganguniqueaugs.md"] = nsDoc_bitburner_bitnodemultipliers_ganguniqueaugs_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.gopower.md"] = nsDoc_bitburner_bitnodemultipliers_gopower_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.hackexpgain.md"] = nsDoc_bitburner_bitnodemultipliers_hackexpgain_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.hackinglevelmultiplier.md"] =
-  nsDoc_bitburner_bitnodemultipliers_hackinglevelmultiplier_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.hackingspeedmultiplier.md"] =
-  nsDoc_bitburner_bitnodemultipliers_hackingspeedmultiplier_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.hacknetnodemoney.md"] =
-  nsDoc_bitburner_bitnodemultipliers_hacknetnodemoney_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.homecomputerramcost.md"] =
-  nsDoc_bitburner_bitnodemultipliers_homecomputerramcost_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.infiltrationmoney.md"] =
-  nsDoc_bitburner_bitnodemultipliers_infiltrationmoney_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.infiltrationrep.md"] =
-  nsDoc_bitburner_bitnodemultipliers_infiltrationrep_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.manualhackmoney.md"] =
-  nsDoc_bitburner_bitnodemultipliers_manualhackmoney_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.hackinglevelmultiplier.md"] = nsDoc_bitburner_bitnodemultipliers_hackinglevelmultiplier_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.hackingspeedmultiplier.md"] = nsDoc_bitburner_bitnodemultipliers_hackingspeedmultiplier_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.hacknetnodemoney.md"] = nsDoc_bitburner_bitnodemultipliers_hacknetnodemoney_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.homecomputerramcost.md"] = nsDoc_bitburner_bitnodemultipliers_homecomputerramcost_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.infiltrationmoney.md"] = nsDoc_bitburner_bitnodemultipliers_infiltrationmoney_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.infiltrationrep.md"] = nsDoc_bitburner_bitnodemultipliers_infiltrationrep_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.manualhackmoney.md"] = nsDoc_bitburner_bitnodemultipliers_manualhackmoney_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.md"] = nsDoc_bitburner_bitnodemultipliers_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.purchasedservercost.md"] =
-  nsDoc_bitburner_bitnodemultipliers_purchasedservercost_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.purchasedserverlimit.md"] =
-  nsDoc_bitburner_bitnodemultipliers_purchasedserverlimit_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.purchasedservermaxram.md"] =
-  nsDoc_bitburner_bitnodemultipliers_purchasedservermaxram_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.purchasedserversoftcap.md"] =
-  nsDoc_bitburner_bitnodemultipliers_purchasedserversoftcap_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.scripthackmoney.md"] =
-  nsDoc_bitburner_bitnodemultipliers_scripthackmoney_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.scripthackmoneygain.md"] =
-  nsDoc_bitburner_bitnodemultipliers_scripthackmoneygain_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.servergrowthrate.md"] =
-  nsDoc_bitburner_bitnodemultipliers_servergrowthrate_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.purchasedservercost.md"] = nsDoc_bitburner_bitnodemultipliers_purchasedservercost_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.purchasedserverlimit.md"] = nsDoc_bitburner_bitnodemultipliers_purchasedserverlimit_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.purchasedservermaxram.md"] = nsDoc_bitburner_bitnodemultipliers_purchasedservermaxram_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.purchasedserversoftcap.md"] = nsDoc_bitburner_bitnodemultipliers_purchasedserversoftcap_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.scripthackmoney.md"] = nsDoc_bitburner_bitnodemultipliers_scripthackmoney_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.scripthackmoneygain.md"] = nsDoc_bitburner_bitnodemultipliers_scripthackmoneygain_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.servergrowthrate.md"] = nsDoc_bitburner_bitnodemultipliers_servergrowthrate_md;
 AllPages["nsDoc/bitburner.bitnodemultipliers.servermaxmoney.md"] = nsDoc_bitburner_bitnodemultipliers_servermaxmoney_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.serverstartingmoney.md"] =
-  nsDoc_bitburner_bitnodemultipliers_serverstartingmoney_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.serverstartingsecurity.md"] =
-  nsDoc_bitburner_bitnodemultipliers_serverstartingsecurity_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.serverweakenrate.md"] =
-  nsDoc_bitburner_bitnodemultipliers_serverweakenrate_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.staneksgiftextrasize.md"] =
-  nsDoc_bitburner_bitnodemultipliers_staneksgiftextrasize_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.staneksgiftpowermultiplier.md"] =
-  nsDoc_bitburner_bitnodemultipliers_staneksgiftpowermultiplier_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.strengthlevelmultiplier.md"] =
-  nsDoc_bitburner_bitnodemultipliers_strengthlevelmultiplier_md;
-AllPages["nsDoc/bitburner.bitnodemultipliers.worlddaemondifficulty.md"] =
-  nsDoc_bitburner_bitnodemultipliers_worlddaemondifficulty_md;
-AllPages["nsDoc/bitburner.bitnodeoptions.intelligenceoverride.md"] =
-  nsDoc_bitburner_bitnodeoptions_intelligenceoverride_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.serverstartingmoney.md"] = nsDoc_bitburner_bitnodemultipliers_serverstartingmoney_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.serverstartingsecurity.md"] = nsDoc_bitburner_bitnodemultipliers_serverstartingsecurity_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.serverweakenrate.md"] = nsDoc_bitburner_bitnodemultipliers_serverweakenrate_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.staneksgiftextrasize.md"] = nsDoc_bitburner_bitnodemultipliers_staneksgiftextrasize_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.staneksgiftpowermultiplier.md"] = nsDoc_bitburner_bitnodemultipliers_staneksgiftpowermultiplier_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.strengthlevelmultiplier.md"] = nsDoc_bitburner_bitnodemultipliers_strengthlevelmultiplier_md;
+AllPages["nsDoc/bitburner.bitnodemultipliers.worlddaemondifficulty.md"] = nsDoc_bitburner_bitnodemultipliers_worlddaemondifficulty_md;
+AllPages["nsDoc/bitburner.bitnodeoptions.intelligenceoverride.md"] = nsDoc_bitburner_bitnodeoptions_intelligenceoverride_md;
 AllPages["nsDoc/bitburner.bitnodeoptions.md"] = nsDoc_bitburner_bitnodeoptions_md;
-AllPages["nsDoc/bitburner.bitnodeoptions.sourcefileoverrides.md"] =
-  nsDoc_bitburner_bitnodeoptions_sourcefileoverrides_md;
+AllPages["nsDoc/bitburner.bitnodeoptions.sourcefileoverrides.md"] = nsDoc_bitburner_bitnodeoptions_sourcefileoverrides_md;
 AllPages["nsDoc/bitburner.bitnoderequirement.bitnoden.md"] = nsDoc_bitburner_bitnoderequirement_bitnoden_md;
 AllPages["nsDoc/bitburner.bitnoderequirement.md"] = nsDoc_bitburner_bitnoderequirement_md;
 AllPages["nsDoc/bitburner.bitnoderequirement.type.md"] = nsDoc_bitburner_bitnoderequirement_type_md;
 AllPages["nsDoc/bitburner.bladeburner.getactionautolevel.md"] = nsDoc_bitburner_bladeburner_getactionautolevel_md;
-AllPages["nsDoc/bitburner.bladeburner.getactioncountremaining.md"] =
-  nsDoc_bitburner_bladeburner_getactioncountremaining_md;
+AllPages["nsDoc/bitburner.bladeburner.getactioncountremaining.md"] = nsDoc_bitburner_bladeburner_getactioncountremaining_md;
 AllPages["nsDoc/bitburner.bladeburner.getactioncurrentlevel.md"] = nsDoc_bitburner_bladeburner_getactioncurrentlevel_md;
 AllPages["nsDoc/bitburner.bladeburner.getactioncurrenttime.md"] = nsDoc_bitburner_bladeburner_getactioncurrenttime_md;
-AllPages["nsDoc/bitburner.bladeburner.getactionestimatedsuccesschance.md"] =
-  nsDoc_bitburner_bladeburner_getactionestimatedsuccesschance_md;
+AllPages["nsDoc/bitburner.bladeburner.getactionestimatedsuccesschance.md"] = nsDoc_bitburner_bladeburner_getactionestimatedsuccesschance_md;
 AllPages["nsDoc/bitburner.bladeburner.getactionmaxlevel.md"] = nsDoc_bitburner_bladeburner_getactionmaxlevel_md;
 AllPages["nsDoc/bitburner.bladeburner.getactionrepgain.md"] = nsDoc_bitburner_bladeburner_getactionrepgain_md;
 AllPages["nsDoc/bitburner.bladeburner.getactionsuccesses.md"] = nsDoc_bitburner_bladeburner_getactionsuccesses_md;
@@ -1780,8 +1726,7 @@ AllPages["nsDoc/bitburner.bladeburner.getbonustime.md"] = nsDoc_bitburner_bladeb
 AllPages["nsDoc/bitburner.bladeburner.getcity.md"] = nsDoc_bitburner_bladeburner_getcity_md;
 AllPages["nsDoc/bitburner.bladeburner.getcitychaos.md"] = nsDoc_bitburner_bladeburner_getcitychaos_md;
 AllPages["nsDoc/bitburner.bladeburner.getcitycommunities.md"] = nsDoc_bitburner_bladeburner_getcitycommunities_md;
-AllPages["nsDoc/bitburner.bladeburner.getcityestimatedpopulation.md"] =
-  nsDoc_bitburner_bladeburner_getcityestimatedpopulation_md;
+AllPages["nsDoc/bitburner.bladeburner.getcityestimatedpopulation.md"] = nsDoc_bitburner_bladeburner_getcityestimatedpopulation_md;
 AllPages["nsDoc/bitburner.bladeburner.getcontractnames.md"] = nsDoc_bitburner_bladeburner_getcontractnames_md;
 AllPages["nsDoc/bitburner.bladeburner.getcurrentaction.md"] = nsDoc_bitburner_bladeburner_getcurrentaction_md;
 AllPages["nsDoc/bitburner.bladeburner.getgeneralactionnames.md"] = nsDoc_bitburner_bladeburner_getgeneralactionnames_md;
@@ -1795,10 +1740,8 @@ AllPages["nsDoc/bitburner.bladeburner.getskillupgradecost.md"] = nsDoc_bitburner
 AllPages["nsDoc/bitburner.bladeburner.getstamina.md"] = nsDoc_bitburner_bladeburner_getstamina_md;
 AllPages["nsDoc/bitburner.bladeburner.getteamsize.md"] = nsDoc_bitburner_bladeburner_getteamsize_md;
 AllPages["nsDoc/bitburner.bladeburner.inbladeburner.md"] = nsDoc_bitburner_bladeburner_inbladeburner_md;
-AllPages["nsDoc/bitburner.bladeburner.joinbladeburnerdivision.md"] =
-  nsDoc_bitburner_bladeburner_joinbladeburnerdivision_md;
-AllPages["nsDoc/bitburner.bladeburner.joinbladeburnerfaction.md"] =
-  nsDoc_bitburner_bladeburner_joinbladeburnerfaction_md;
+AllPages["nsDoc/bitburner.bladeburner.joinbladeburnerdivision.md"] = nsDoc_bitburner_bladeburner_joinbladeburnerdivision_md;
+AllPages["nsDoc/bitburner.bladeburner.joinbladeburnerfaction.md"] = nsDoc_bitburner_bladeburner_joinbladeburnerfaction_md;
 AllPages["nsDoc/bitburner.bladeburner.md"] = nsDoc_bitburner_bladeburner_md;
 AllPages["nsDoc/bitburner.bladeburner.nextupdate.md"] = nsDoc_bitburner_bladeburner_nextupdate_md;
 AllPages["nsDoc/bitburner.bladeburner.setactionautolevel.md"] = nsDoc_bitburner_bladeburner_setactionautolevel_md;
@@ -1820,15 +1763,12 @@ AllPages["nsDoc/bitburner.bladeburnercuraction.md"] = nsDoc_bitburner_bladeburne
 AllPages["nsDoc/bitburner.bladeburnercuraction.name.md"] = nsDoc_bitburner_bladeburnercuraction_name_md;
 AllPages["nsDoc/bitburner.bladeburnercuraction.type.md"] = nsDoc_bitburner_bladeburnercuraction_type_md;
 AllPages["nsDoc/bitburner.bladeburnerformulas.md"] = nsDoc_bitburner_bladeburnerformulas_md;
-AllPages["nsDoc/bitburner.bladeburnerformulas.skillmaxupgradecount.md"] =
-  nsDoc_bitburner_bladeburnerformulas_skillmaxupgradecount_md;
+AllPages["nsDoc/bitburner.bladeburnerformulas.skillmaxupgradecount.md"] = nsDoc_bitburner_bladeburnerformulas_skillmaxupgradecount_md;
 AllPages["nsDoc/bitburner.bladeburnergeneralactionname.md"] = nsDoc_bitburner_bladeburnergeneralactionname_md;
-AllPages["nsDoc/bitburner.bladeburnergeneralactionnameenumtype.md"] =
-  nsDoc_bitburner_bladeburnergeneralactionnameenumtype_md;
+AllPages["nsDoc/bitburner.bladeburnergeneralactionnameenumtype.md"] = nsDoc_bitburner_bladeburnergeneralactionnameenumtype_md;
 AllPages["nsDoc/bitburner.bladeburneroperationname.md"] = nsDoc_bitburner_bladeburneroperationname_md;
 AllPages["nsDoc/bitburner.bladeburneroperationnameenumtype.md"] = nsDoc_bitburner_bladeburneroperationnameenumtype_md;
-AllPages["nsDoc/bitburner.bladeburnerrankrequirement.bladeburnerrank.md"] =
-  nsDoc_bitburner_bladeburnerrankrequirement_bladeburnerrank_md;
+AllPages["nsDoc/bitburner.bladeburnerrankrequirement.bladeburnerrank.md"] = nsDoc_bitburner_bladeburnerrankrequirement_bladeburnerrank_md;
 AllPages["nsDoc/bitburner.bladeburnerrankrequirement.md"] = nsDoc_bitburner_bladeburnerrankrequirement_md;
 AllPages["nsDoc/bitburner.bladeburnerrankrequirement.type.md"] = nsDoc_bitburner_bladeburnerrankrequirement_type_md;
 AllPages["nsDoc/bitburner.bladeburnerskillname.md"] = nsDoc_bitburner_bladeburnerskillname_md;
@@ -1839,15 +1779,13 @@ AllPages["nsDoc/bitburner.cityrequirement.city.md"] = nsDoc_bitburner_cityrequir
 AllPages["nsDoc/bitburner.cityrequirement.md"] = nsDoc_bitburner_cityrequirement_md;
 AllPages["nsDoc/bitburner.cityrequirement.type.md"] = nsDoc_bitburner_cityrequirement_type_md;
 AllPages["nsDoc/bitburner.codingcontract.attempt.md"] = nsDoc_bitburner_codingcontract_attempt_md;
-AllPages["nsDoc/bitburner.codingcontract.createdummycontract.md"] =
-  nsDoc_bitburner_codingcontract_createdummycontract_md;
+AllPages["nsDoc/bitburner.codingcontract.createdummycontract.md"] = nsDoc_bitburner_codingcontract_createdummycontract_md;
 AllPages["nsDoc/bitburner.codingcontract.getcontract.md"] = nsDoc_bitburner_codingcontract_getcontract_md;
 AllPages["nsDoc/bitburner.codingcontract.getcontracttype.md"] = nsDoc_bitburner_codingcontract_getcontracttype_md;
 AllPages["nsDoc/bitburner.codingcontract.getcontracttypes.md"] = nsDoc_bitburner_codingcontract_getcontracttypes_md;
 AllPages["nsDoc/bitburner.codingcontract.getdata.md"] = nsDoc_bitburner_codingcontract_getdata_md;
 AllPages["nsDoc/bitburner.codingcontract.getdescription.md"] = nsDoc_bitburner_codingcontract_getdescription_md;
-AllPages["nsDoc/bitburner.codingcontract.getnumtriesremaining.md"] =
-  nsDoc_bitburner_codingcontract_getnumtriesremaining_md;
+AllPages["nsDoc/bitburner.codingcontract.getnumtriesremaining.md"] = nsDoc_bitburner_codingcontract_getnumtriesremaining_md;
 AllPages["nsDoc/bitburner.codingcontract.md"] = nsDoc_bitburner_codingcontract_md;
 AllPages["nsDoc/bitburner.codingcontractname.md"] = nsDoc_bitburner_codingcontractname_md;
 AllPages["nsDoc/bitburner.codingcontractnameenumtype.md"] = nsDoc_bitburner_codingcontractnameenumtype_md;
@@ -1859,102 +1797,74 @@ AllPages["nsDoc/bitburner.companypositioninfo.field.md"] = nsDoc_bitburner_compa
 AllPages["nsDoc/bitburner.companypositioninfo.md"] = nsDoc_bitburner_companypositioninfo_md;
 AllPages["nsDoc/bitburner.companypositioninfo.name.md"] = nsDoc_bitburner_companypositioninfo_name_md;
 AllPages["nsDoc/bitburner.companypositioninfo.nextposition.md"] = nsDoc_bitburner_companypositioninfo_nextposition_md;
-AllPages["nsDoc/bitburner.companypositioninfo.requiredreputation.md"] =
-  nsDoc_bitburner_companypositioninfo_requiredreputation_md;
-AllPages["nsDoc/bitburner.companypositioninfo.requiredskills.md"] =
-  nsDoc_bitburner_companypositioninfo_requiredskills_md;
+AllPages["nsDoc/bitburner.companypositioninfo.requiredreputation.md"] = nsDoc_bitburner_companypositioninfo_requiredreputation_md;
+AllPages["nsDoc/bitburner.companypositioninfo.requiredskills.md"] = nsDoc_bitburner_companypositioninfo_requiredskills_md;
 AllPages["nsDoc/bitburner.companypositioninfo.salary.md"] = nsDoc_bitburner_companypositioninfo_salary_md;
-AllPages["nsDoc/bitburner.companyreputationrequirement.company.md"] =
-  nsDoc_bitburner_companyreputationrequirement_company_md;
+AllPages["nsDoc/bitburner.companyreputationrequirement.company.md"] = nsDoc_bitburner_companyreputationrequirement_company_md;
 AllPages["nsDoc/bitburner.companyreputationrequirement.md"] = nsDoc_bitburner_companyreputationrequirement_md;
-AllPages["nsDoc/bitburner.companyreputationrequirement.reputation.md"] =
-  nsDoc_bitburner_companyreputationrequirement_reputation_md;
+AllPages["nsDoc/bitburner.companyreputationrequirement.reputation.md"] = nsDoc_bitburner_companyreputationrequirement_reputation_md;
 AllPages["nsDoc/bitburner.companyreputationrequirement.type.md"] = nsDoc_bitburner_companyreputationrequirement_type_md;
 AllPages["nsDoc/bitburner.companyworktask.companyname.md"] = nsDoc_bitburner_companyworktask_companyname_md;
 AllPages["nsDoc/bitburner.companyworktask.md"] = nsDoc_bitburner_companyworktask_md;
 AllPages["nsDoc/bitburner.companyworktask.type.md"] = nsDoc_bitburner_companyworktask_type_md;
-AllPages["nsDoc/bitburner.corpconstants.baseproductprofitmult.md"] =
-  nsDoc_bitburner_corpconstants_baseproductprofitmult_md;
-AllPages["nsDoc/bitburner.corpconstants.bribeamountperreputation.md"] =
-  nsDoc_bitburner_corpconstants_bribeamountperreputation_md;
+AllPages["nsDoc/bitburner.corpconstants.baseproductprofitmult.md"] = nsDoc_bitburner_corpconstants_baseproductprofitmult_md;
+AllPages["nsDoc/bitburner.corpconstants.bribeamountperreputation.md"] = nsDoc_bitburner_corpconstants_bribeamountperreputation_md;
 AllPages["nsDoc/bitburner.corpconstants.bribethreshold.md"] = nsDoc_bitburner_corpconstants_bribethreshold_md;
 AllPages["nsDoc/bitburner.corpconstants.dividendmaxrate.md"] = nsDoc_bitburner_corpconstants_dividendmaxrate_md;
 AllPages["nsDoc/bitburner.corpconstants.employeepositions.md"] = nsDoc_bitburner_corpconstants_employeepositions_md;
 AllPages["nsDoc/bitburner.corpconstants.employeeraiseamount.md"] = nsDoc_bitburner_corpconstants_employeeraiseamount_md;
-AllPages["nsDoc/bitburner.corpconstants.employeesalarymultiplier.md"] =
-  nsDoc_bitburner_corpconstants_employeesalarymultiplier_md;
-AllPages["nsDoc/bitburner.corpconstants.gamecyclespercorpstatecycle.md"] =
-  nsDoc_bitburner_corpconstants_gamecyclespercorpstatecycle_md;
-AllPages["nsDoc/bitburner.corpconstants.gamecyclespermarketcycle.md"] =
-  nsDoc_bitburner_corpconstants_gamecyclespermarketcycle_md;
+AllPages["nsDoc/bitburner.corpconstants.employeesalarymultiplier.md"] = nsDoc_bitburner_corpconstants_employeesalarymultiplier_md;
+AllPages["nsDoc/bitburner.corpconstants.gamecyclespercorpstatecycle.md"] = nsDoc_bitburner_corpconstants_gamecyclespercorpstatecycle_md;
+AllPages["nsDoc/bitburner.corpconstants.gamecyclespermarketcycle.md"] = nsDoc_bitburner_corpconstants_gamecyclespermarketcycle_md;
 AllPages["nsDoc/bitburner.corpconstants.industrynames.md"] = nsDoc_bitburner_corpconstants_industrynames_md;
 AllPages["nsDoc/bitburner.corpconstants.initialshares.md"] = nsDoc_bitburner_corpconstants_initialshares_md;
-AllPages["nsDoc/bitburner.corpconstants.issuenewsharescooldown.md"] =
-  nsDoc_bitburner_corpconstants_issuenewsharescooldown_md;
-AllPages["nsDoc/bitburner.corpconstants.marketcyclesperemployeeraise.md"] =
-  nsDoc_bitburner_corpconstants_marketcyclesperemployeeraise_md;
+AllPages["nsDoc/bitburner.corpconstants.issuenewsharescooldown.md"] = nsDoc_bitburner_corpconstants_issuenewsharescooldown_md;
+AllPages["nsDoc/bitburner.corpconstants.marketcyclesperemployeeraise.md"] = nsDoc_bitburner_corpconstants_marketcyclesperemployeeraise_md;
 AllPages["nsDoc/bitburner.corpconstants.materialnames.md"] = nsDoc_bitburner_corpconstants_materialnames_md;
 AllPages["nsDoc/bitburner.corpconstants.maxproductsbase.md"] = nsDoc_bitburner_corpconstants_maxproductsbase_md;
 AllPages["nsDoc/bitburner.corpconstants.md"] = nsDoc_bitburner_corpconstants_md;
 AllPages["nsDoc/bitburner.corpconstants.minemployeedecay.md"] = nsDoc_bitburner_corpconstants_minemployeedecay_md;
 AllPages["nsDoc/bitburner.corpconstants.officeinitialcost.md"] = nsDoc_bitburner_corpconstants_officeinitialcost_md;
 AllPages["nsDoc/bitburner.corpconstants.officeinitialsize.md"] = nsDoc_bitburner_corpconstants_officeinitialsize_md;
-AllPages["nsDoc/bitburner.corpconstants.officesizeupgradecostbase.md"] =
-  nsDoc_bitburner_corpconstants_officesizeupgradecostbase_md;
+AllPages["nsDoc/bitburner.corpconstants.officesizeupgradecostbase.md"] = nsDoc_bitburner_corpconstants_officesizeupgradecostbase_md;
 AllPages["nsDoc/bitburner.corpconstants.researchnames.md"] = nsDoc_bitburner_corpconstants_researchnames_md;
 AllPages["nsDoc/bitburner.corpconstants.researchnamesbase.md"] = nsDoc_bitburner_corpconstants_researchnamesbase_md;
-AllPages["nsDoc/bitburner.corpconstants.researchnamesproductonly.md"] =
-  nsDoc_bitburner_corpconstants_researchnamesproductonly_md;
-AllPages["nsDoc/bitburner.corpconstants.secondspermarketcycle.md"] =
-  nsDoc_bitburner_corpconstants_secondspermarketcycle_md;
+AllPages["nsDoc/bitburner.corpconstants.researchnamesproductonly.md"] = nsDoc_bitburner_corpconstants_researchnamesproductonly_md;
+AllPages["nsDoc/bitburner.corpconstants.secondspermarketcycle.md"] = nsDoc_bitburner_corpconstants_secondspermarketcycle_md;
 AllPages["nsDoc/bitburner.corpconstants.sellsharescooldown.md"] = nsDoc_bitburner_corpconstants_sellsharescooldown_md;
-AllPages["nsDoc/bitburner.corpconstants.sharesperpriceupdate.md"] =
-  nsDoc_bitburner_corpconstants_sharesperpriceupdate_md;
+AllPages["nsDoc/bitburner.corpconstants.sharesperpriceupdate.md"] = nsDoc_bitburner_corpconstants_sharesperpriceupdate_md;
 AllPages["nsDoc/bitburner.corpconstants.smartsupplyoptions.md"] = nsDoc_bitburner_corpconstants_smartsupplyoptions_md;
 AllPages["nsDoc/bitburner.corpconstants.statenames.md"] = nsDoc_bitburner_corpconstants_statenames_md;
 AllPages["nsDoc/bitburner.corpconstants.teacostperemployee.md"] = nsDoc_bitburner_corpconstants_teacostperemployee_md;
 AllPages["nsDoc/bitburner.corpconstants.unlocknames.md"] = nsDoc_bitburner_corpconstants_unlocknames_md;
 AllPages["nsDoc/bitburner.corpconstants.upgradenames.md"] = nsDoc_bitburner_corpconstants_upgradenames_md;
-AllPages["nsDoc/bitburner.corpconstants.warehouseinitialcost.md"] =
-  nsDoc_bitburner_corpconstants_warehouseinitialcost_md;
-AllPages["nsDoc/bitburner.corpconstants.warehouseinitialsize.md"] =
-  nsDoc_bitburner_corpconstants_warehouseinitialsize_md;
-AllPages["nsDoc/bitburner.corpconstants.warehousesizeupgradecostbase.md"] =
-  nsDoc_bitburner_corpconstants_warehousesizeupgradecostbase_md;
+AllPages["nsDoc/bitburner.corpconstants.warehouseinitialcost.md"] = nsDoc_bitburner_corpconstants_warehouseinitialcost_md;
+AllPages["nsDoc/bitburner.corpconstants.warehouseinitialsize.md"] = nsDoc_bitburner_corpconstants_warehouseinitialsize_md;
+AllPages["nsDoc/bitburner.corpconstants.warehousesizeupgradecostbase.md"] = nsDoc_bitburner_corpconstants_warehousesizeupgradecostbase_md;
 AllPages["nsDoc/bitburner.corpemployeeposition.md"] = nsDoc_bitburner_corpemployeeposition_md;
-AllPages["nsDoc/bitburner.corpindustrydata.advertisingfactor.md"] =
-  nsDoc_bitburner_corpindustrydata_advertisingfactor_md;
+AllPages["nsDoc/bitburner.corpindustrydata.advertisingfactor.md"] = nsDoc_bitburner_corpindustrydata_advertisingfactor_md;
 AllPages["nsDoc/bitburner.corpindustrydata.aicorefactor.md"] = nsDoc_bitburner_corpindustrydata_aicorefactor_md;
 AllPages["nsDoc/bitburner.corpindustrydata.description.md"] = nsDoc_bitburner_corpindustrydata_description_md;
 AllPages["nsDoc/bitburner.corpindustrydata.hardwarefactor.md"] = nsDoc_bitburner_corpindustrydata_hardwarefactor_md;
 AllPages["nsDoc/bitburner.corpindustrydata.makesmaterials.md"] = nsDoc_bitburner_corpindustrydata_makesmaterials_md;
 AllPages["nsDoc/bitburner.corpindustrydata.makesproducts.md"] = nsDoc_bitburner_corpindustrydata_makesproducts_md;
 AllPages["nsDoc/bitburner.corpindustrydata.md"] = nsDoc_bitburner_corpindustrydata_md;
-AllPages["nsDoc/bitburner.corpindustrydata.producedmaterials.md"] =
-  nsDoc_bitburner_corpindustrydata_producedmaterials_md;
+AllPages["nsDoc/bitburner.corpindustrydata.producedmaterials.md"] = nsDoc_bitburner_corpindustrydata_producedmaterials_md;
 AllPages["nsDoc/bitburner.corpindustrydata.product.md"] = nsDoc_bitburner_corpindustrydata_product_md;
 AllPages["nsDoc/bitburner.corpindustrydata.realestatefactor.md"] = nsDoc_bitburner_corpindustrydata_realestatefactor_md;
-AllPages["nsDoc/bitburner.corpindustrydata.recommendstarting.md"] =
-  nsDoc_bitburner_corpindustrydata_recommendstarting_md;
-AllPages["nsDoc/bitburner.corpindustrydata.requiredmaterials.md"] =
-  nsDoc_bitburner_corpindustrydata_requiredmaterials_md;
+AllPages["nsDoc/bitburner.corpindustrydata.recommendstarting.md"] = nsDoc_bitburner_corpindustrydata_recommendstarting_md;
+AllPages["nsDoc/bitburner.corpindustrydata.requiredmaterials.md"] = nsDoc_bitburner_corpindustrydata_requiredmaterials_md;
 AllPages["nsDoc/bitburner.corpindustrydata.robotfactor.md"] = nsDoc_bitburner_corpindustrydata_robotfactor_md;
 AllPages["nsDoc/bitburner.corpindustrydata.sciencefactor.md"] = nsDoc_bitburner_corpindustrydata_sciencefactor_md;
 AllPages["nsDoc/bitburner.corpindustrydata.startingcost.md"] = nsDoc_bitburner_corpindustrydata_startingcost_md;
 AllPages["nsDoc/bitburner.corpindustryname.md"] = nsDoc_bitburner_corpindustryname_md;
 AllPages["nsDoc/bitburner.corpmaterialconstantdata.basecost.md"] = nsDoc_bitburner_corpmaterialconstantdata_basecost_md;
-AllPages["nsDoc/bitburner.corpmaterialconstantdata.basemarkup.md"] =
-  nsDoc_bitburner_corpmaterialconstantdata_basemarkup_md;
-AllPages["nsDoc/bitburner.corpmaterialconstantdata.competitionbase.md"] =
-  nsDoc_bitburner_corpmaterialconstantdata_competitionbase_md;
-AllPages["nsDoc/bitburner.corpmaterialconstantdata.competitionrange.md"] =
-  nsDoc_bitburner_corpmaterialconstantdata_competitionrange_md;
-AllPages["nsDoc/bitburner.corpmaterialconstantdata.demandbase.md"] =
-  nsDoc_bitburner_corpmaterialconstantdata_demandbase_md;
-AllPages["nsDoc/bitburner.corpmaterialconstantdata.demandrange.md"] =
-  nsDoc_bitburner_corpmaterialconstantdata_demandrange_md;
-AllPages["nsDoc/bitburner.corpmaterialconstantdata.maxvolatility.md"] =
-  nsDoc_bitburner_corpmaterialconstantdata_maxvolatility_md;
+AllPages["nsDoc/bitburner.corpmaterialconstantdata.basemarkup.md"] = nsDoc_bitburner_corpmaterialconstantdata_basemarkup_md;
+AllPages["nsDoc/bitburner.corpmaterialconstantdata.competitionbase.md"] = nsDoc_bitburner_corpmaterialconstantdata_competitionbase_md;
+AllPages["nsDoc/bitburner.corpmaterialconstantdata.competitionrange.md"] = nsDoc_bitburner_corpmaterialconstantdata_competitionrange_md;
+AllPages["nsDoc/bitburner.corpmaterialconstantdata.demandbase.md"] = nsDoc_bitburner_corpmaterialconstantdata_demandbase_md;
+AllPages["nsDoc/bitburner.corpmaterialconstantdata.demandrange.md"] = nsDoc_bitburner_corpmaterialconstantdata_demandrange_md;
+AllPages["nsDoc/bitburner.corpmaterialconstantdata.maxvolatility.md"] = nsDoc_bitburner_corpmaterialconstantdata_maxvolatility_md;
 AllPages["nsDoc/bitburner.corpmaterialconstantdata.md"] = nsDoc_bitburner_corpmaterialconstantdata_md;
 AllPages["nsDoc/bitburner.corpmaterialconstantdata.name.md"] = nsDoc_bitburner_corpmaterialconstantdata_name_md;
 AllPages["nsDoc/bitburner.corpmaterialconstantdata.size.md"] = nsDoc_bitburner_corpmaterialconstantdata_size_md;
@@ -1995,8 +1905,7 @@ AllPages["nsDoc/bitburner.corporationinfo.expenses.md"] = nsDoc_bitburner_corpor
 AllPages["nsDoc/bitburner.corporationinfo.funds.md"] = nsDoc_bitburner_corporationinfo_funds_md;
 AllPages["nsDoc/bitburner.corporationinfo.investorshares.md"] = nsDoc_bitburner_corporationinfo_investorshares_md;
 AllPages["nsDoc/bitburner.corporationinfo.issuedshares.md"] = nsDoc_bitburner_corporationinfo_issuedshares_md;
-AllPages["nsDoc/bitburner.corporationinfo.issuenewsharescooldown.md"] =
-  nsDoc_bitburner_corporationinfo_issuenewsharescooldown_md;
+AllPages["nsDoc/bitburner.corporationinfo.issuenewsharescooldown.md"] = nsDoc_bitburner_corporationinfo_issuenewsharescooldown_md;
 AllPages["nsDoc/bitburner.corporationinfo.md"] = nsDoc_bitburner_corporationinfo_md;
 AllPages["nsDoc/bitburner.corporationinfo.name.md"] = nsDoc_bitburner_corporationinfo_name_md;
 AllPages["nsDoc/bitburner.corporationinfo.nextstate.md"] = nsDoc_bitburner_corporationinfo_nextstate_md;
@@ -2022,19 +1931,16 @@ AllPages["nsDoc/bitburner.createprogramworktask.md"] = nsDoc_bitburner_createpro
 AllPages["nsDoc/bitburner.createprogramworktask.programname.md"] = nsDoc_bitburner_createprogramworktask_programname_md;
 AllPages["nsDoc/bitburner.createprogramworktask.type.md"] = nsDoc_bitburner_createprogramworktask_type_md;
 AllPages["nsDoc/bitburner.creatingcorporationcheckresult.md"] = nsDoc_bitburner_creatingcorporationcheckresult_md;
-AllPages["nsDoc/bitburner.creatingcorporationcheckresultenumtype.md"] =
-  nsDoc_bitburner_creatingcorporationcheckresultenumtype_md;
+AllPages["nsDoc/bitburner.creatingcorporationcheckresultenumtype.md"] = nsDoc_bitburner_creatingcorporationcheckresultenumtype_md;
 AllPages["nsDoc/bitburner.crimeenumtype.md"] = nsDoc_bitburner_crimeenumtype_md;
 AllPages["nsDoc/bitburner.crimestats.agility_exp.md"] = nsDoc_bitburner_crimestats_agility_exp_md;
 AllPages["nsDoc/bitburner.crimestats.agility_success_weight.md"] = nsDoc_bitburner_crimestats_agility_success_weight_md;
 AllPages["nsDoc/bitburner.crimestats.charisma_exp.md"] = nsDoc_bitburner_crimestats_charisma_exp_md;
-AllPages["nsDoc/bitburner.crimestats.charisma_success_weight.md"] =
-  nsDoc_bitburner_crimestats_charisma_success_weight_md;
+AllPages["nsDoc/bitburner.crimestats.charisma_success_weight.md"] = nsDoc_bitburner_crimestats_charisma_success_weight_md;
 AllPages["nsDoc/bitburner.crimestats.defense_exp.md"] = nsDoc_bitburner_crimestats_defense_exp_md;
 AllPages["nsDoc/bitburner.crimestats.defense_success_weight.md"] = nsDoc_bitburner_crimestats_defense_success_weight_md;
 AllPages["nsDoc/bitburner.crimestats.dexterity_exp.md"] = nsDoc_bitburner_crimestats_dexterity_exp_md;
-AllPages["nsDoc/bitburner.crimestats.dexterity_success_weight.md"] =
-  nsDoc_bitburner_crimestats_dexterity_success_weight_md;
+AllPages["nsDoc/bitburner.crimestats.dexterity_success_weight.md"] = nsDoc_bitburner_crimestats_dexterity_success_weight_md;
 AllPages["nsDoc/bitburner.crimestats.difficulty.md"] = nsDoc_bitburner_crimestats_difficulty_md;
 AllPages["nsDoc/bitburner.crimestats.hacking_exp.md"] = nsDoc_bitburner_crimestats_hacking_exp_md;
 AllPages["nsDoc/bitburner.crimestats.hacking_success_weight.md"] = nsDoc_bitburner_crimestats_hacking_success_weight_md;
@@ -2044,8 +1950,7 @@ AllPages["nsDoc/bitburner.crimestats.kills.md"] = nsDoc_bitburner_crimestats_kil
 AllPages["nsDoc/bitburner.crimestats.md"] = nsDoc_bitburner_crimestats_md;
 AllPages["nsDoc/bitburner.crimestats.money.md"] = nsDoc_bitburner_crimestats_money_md;
 AllPages["nsDoc/bitburner.crimestats.strength_exp.md"] = nsDoc_bitburner_crimestats_strength_exp_md;
-AllPages["nsDoc/bitburner.crimestats.strength_success_weight.md"] =
-  nsDoc_bitburner_crimestats_strength_success_weight_md;
+AllPages["nsDoc/bitburner.crimestats.strength_success_weight.md"] = nsDoc_bitburner_crimestats_strength_success_weight_md;
 AllPages["nsDoc/bitburner.crimestats.time.md"] = nsDoc_bitburner_crimestats_time_md;
 AllPages["nsDoc/bitburner.crimestats.type.md"] = nsDoc_bitburner_crimestats_type_md;
 AllPages["nsDoc/bitburner.crimetask.crimetype.md"] = nsDoc_bitburner_crimetask_crimetype_md;
@@ -2054,8 +1959,7 @@ AllPages["nsDoc/bitburner.crimetask.type.md"] = nsDoc_bitburner_crimetask_type_m
 AllPages["nsDoc/bitburner.crimetype.md"] = nsDoc_bitburner_crimetype_md;
 AllPages["nsDoc/bitburner.darknet.authenticate.md"] = nsDoc_bitburner_darknet_authenticate_md;
 AllPages["nsDoc/bitburner.darknet.connecttosession.md"] = nsDoc_bitburner_darknet_connecttosession_md;
-AllPages["nsDoc/bitburner.darknet.getcurrentdarknetinstability.md"] =
-  nsDoc_bitburner_darknet_getcurrentdarknetinstability_md;
+AllPages["nsDoc/bitburner.darknet.getcurrentdarknetinstability.md"] = nsDoc_bitburner_darknet_getcurrentdarknetinstability_md;
 AllPages["nsDoc/bitburner.darknet.getcurrentdepth.md"] = nsDoc_bitburner_darknet_getcurrentdepth_md;
 AllPages["nsDoc/bitburner.darknet.getownerallocatedram.md"] = nsDoc_bitburner_darknet_getownerallocatedram_md;
 AllPages["nsDoc/bitburner.darknet.getserver.md"] = nsDoc_bitburner_darknet_getserver_md;
@@ -2074,10 +1978,8 @@ AllPages["nsDoc/bitburner.darknet.probe.md"] = nsDoc_bitburner_darknet_probe_md;
 AllPages["nsDoc/bitburner.darknet.promotestock.md"] = nsDoc_bitburner_darknet_promotestock_md;
 AllPages["nsDoc/bitburner.darknet.setstasislink.md"] = nsDoc_bitburner_darknet_setstasislink_md;
 AllPages["nsDoc/bitburner.darknet.unleashstormseed.md"] = nsDoc_bitburner_darknet_unleashstormseed_md;
-AllPages["nsDoc/bitburner.darknetformulas.getauthenticatetime.md"] =
-  nsDoc_bitburner_darknetformulas_getauthenticatetime_md;
-AllPages["nsDoc/bitburner.darknetformulas.getexpectedramblockremoved.md"] =
-  nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md;
+AllPages["nsDoc/bitburner.darknetformulas.getauthenticatetime.md"] = nsDoc_bitburner_darknetformulas_getauthenticatetime_md;
+AllPages["nsDoc/bitburner.darknetformulas.getexpectedramblockremoved.md"] = nsDoc_bitburner_darknetformulas_getexpectedramblockremoved_md;
 AllPages["nsDoc/bitburner.darknetformulas.getheartbleedtime.md"] = nsDoc_bitburner_darknetformulas_getheartbleedtime_md;
 AllPages["nsDoc/bitburner.darknetformulas.md"] = nsDoc_bitburner_darknetformulas_md;
 AllPages["nsDoc/bitburner.darknetserver.backdoorinstalled.md"] = nsDoc_bitburner_darknetserver_backdoorinstalled_md;
@@ -2098,8 +2000,7 @@ AllPages["nsDoc/bitburner.darknetserver.passwordhintdata.md"] = nsDoc_bitburner_
 AllPages["nsDoc/bitburner.darknetserver.purchasedbyplayer.md"] = nsDoc_bitburner_darknetserver_purchasedbyplayer_md;
 AllPages["nsDoc/bitburner.darknetserver.ramblock.md"] = nsDoc_bitburner_darknetserver_ramblock_md;
 AllPages["nsDoc/bitburner.darknetserver.ramused.md"] = nsDoc_bitburner_darknetserver_ramused_md;
-AllPages["nsDoc/bitburner.darknetserver.requiredcharismaskill.md"] =
-  nsDoc_bitburner_darknetserver_requiredcharismaskill_md;
+AllPages["nsDoc/bitburner.darknetserver.requiredcharismaskill.md"] = nsDoc_bitburner_darknetserver_requiredcharismaskill_md;
 AllPages["nsDoc/bitburner.darknetserver.staticpasswordhint.md"] = nsDoc_bitburner_darknetserver_staticpasswordhint_md;
 AllPages["nsDoc/bitburner.division.awareness.md"] = nsDoc_bitburner_division_awareness_md;
 AllPages["nsDoc/bitburner.division.cities.md"] = nsDoc_bitburner_division_cities_md;
@@ -2224,8 +2125,7 @@ AllPages["nsDoc/bitburner.ganggeninfo.respectfornextrecruit.md"] = nsDoc_bitburn
 AllPages["nsDoc/bitburner.ganggeninfo.respectgainrate.md"] = nsDoc_bitburner_ganggeninfo_respectgainrate_md;
 AllPages["nsDoc/bitburner.ganggeninfo.territory.md"] = nsDoc_bitburner_ganggeninfo_territory_md;
 AllPages["nsDoc/bitburner.ganggeninfo.territoryclashchance.md"] = nsDoc_bitburner_ganggeninfo_territoryclashchance_md;
-AllPages["nsDoc/bitburner.ganggeninfo.territorywarfareengaged.md"] =
-  nsDoc_bitburner_ganggeninfo_territorywarfareengaged_md;
+AllPages["nsDoc/bitburner.ganggeninfo.territorywarfareengaged.md"] = nsDoc_bitburner_ganggeninfo_territorywarfareengaged_md;
 AllPages["nsDoc/bitburner.ganggeninfo.wantedlevel.md"] = nsDoc_bitburner_ganggeninfo_wantedlevel_md;
 AllPages["nsDoc/bitburner.ganggeninfo.wantedlevelgainrate.md"] = nsDoc_bitburner_ganggeninfo_wantedlevelgainrate_md;
 AllPages["nsDoc/bitburner.ganggeninfo.wantedpenalty.md"] = nsDoc_bitburner_ganggeninfo_wantedpenalty_md;
@@ -2326,12 +2226,10 @@ AllPages["nsDoc/bitburner.go.md"] = nsDoc_bitburner_go_md;
 AllPages["nsDoc/bitburner.go.opponentnextturn.md"] = nsDoc_bitburner_go_opponentnextturn_md;
 AllPages["nsDoc/bitburner.go.passturn.md"] = nsDoc_bitburner_go_passturn_md;
 AllPages["nsDoc/bitburner.go.resetboardstate.md"] = nsDoc_bitburner_go_resetboardstate_md;
-AllPages["nsDoc/bitburner.goanalysis.clearallpointhighlights.md"] =
-  nsDoc_bitburner_goanalysis_clearallpointhighlights_md;
+AllPages["nsDoc/bitburner.goanalysis.clearallpointhighlights.md"] = nsDoc_bitburner_goanalysis_clearallpointhighlights_md;
 AllPages["nsDoc/bitburner.goanalysis.clearpointhighlight.md"] = nsDoc_bitburner_goanalysis_clearpointhighlight_md;
 AllPages["nsDoc/bitburner.goanalysis.getchains.md"] = nsDoc_bitburner_goanalysis_getchains_md;
-AllPages["nsDoc/bitburner.goanalysis.getcontrolledemptynodes.md"] =
-  nsDoc_bitburner_goanalysis_getcontrolledemptynodes_md;
+AllPages["nsDoc/bitburner.goanalysis.getcontrolledemptynodes.md"] = nsDoc_bitburner_goanalysis_getcontrolledemptynodes_md;
 AllPages["nsDoc/bitburner.goanalysis.getliberties.md"] = nsDoc_bitburner_goanalysis_getliberties_md;
 AllPages["nsDoc/bitburner.goanalysis.getstats.md"] = nsDoc_bitburner_goanalysis_getstats_md;
 AllPages["nsDoc/bitburner.goanalysis.getvalidmoves.md"] = nsDoc_bitburner_goanalysis_getvalidmoves_md;
@@ -2347,11 +2245,9 @@ AllPages["nsDoc/bitburner.gocheat.playtwomoves.md"] = nsDoc_bitburner_gocheat_pl
 AllPages["nsDoc/bitburner.gocheat.removerouter.md"] = nsDoc_bitburner_gocheat_removerouter_md;
 AllPages["nsDoc/bitburner.gocheat.repairofflinenode.md"] = nsDoc_bitburner_gocheat_repairofflinenode_md;
 AllPages["nsDoc/bitburner.goopponent.md"] = nsDoc_bitburner_goopponent_md;
-AllPages["nsDoc/bitburner.grafting.getaugmentationgraftprice.md"] =
-  nsDoc_bitburner_grafting_getaugmentationgraftprice_md;
+AllPages["nsDoc/bitburner.grafting.getaugmentationgraftprice.md"] = nsDoc_bitburner_grafting_getaugmentationgraftprice_md;
 AllPages["nsDoc/bitburner.grafting.getaugmentationgrafttime.md"] = nsDoc_bitburner_grafting_getaugmentationgrafttime_md;
-AllPages["nsDoc/bitburner.grafting.getgraftableaugmentations.md"] =
-  nsDoc_bitburner_grafting_getgraftableaugmentations_md;
+AllPages["nsDoc/bitburner.grafting.getgraftableaugmentations.md"] = nsDoc_bitburner_grafting_getgraftableaugmentations_md;
 AllPages["nsDoc/bitburner.grafting.graftaugmentation.md"] = nsDoc_bitburner_grafting_graftaugmentation_md;
 AllPages["nsDoc/bitburner.grafting.md"] = nsDoc_bitburner_grafting_md;
 AllPages["nsDoc/bitburner.grafting.waitforongoinggrafting.md"] = nsDoc_bitburner_grafting_waitforongoinggrafting_md;
@@ -2400,12 +2296,10 @@ AllPages["nsDoc/bitburner.hacknet.upgradecache.md"] = nsDoc_bitburner_hacknet_up
 AllPages["nsDoc/bitburner.hacknet.upgradecore.md"] = nsDoc_bitburner_hacknet_upgradecore_md;
 AllPages["nsDoc/bitburner.hacknet.upgradelevel.md"] = nsDoc_bitburner_hacknet_upgradelevel_md;
 AllPages["nsDoc/bitburner.hacknet.upgraderam.md"] = nsDoc_bitburner_hacknet_upgraderam_md;
-AllPages["nsDoc/bitburner.hacknetcoresrequirement.hacknetcores.md"] =
-  nsDoc_bitburner_hacknetcoresrequirement_hacknetcores_md;
+AllPages["nsDoc/bitburner.hacknetcoresrequirement.hacknetcores.md"] = nsDoc_bitburner_hacknetcoresrequirement_hacknetcores_md;
 AllPages["nsDoc/bitburner.hacknetcoresrequirement.md"] = nsDoc_bitburner_hacknetcoresrequirement_md;
 AllPages["nsDoc/bitburner.hacknetcoresrequirement.type.md"] = nsDoc_bitburner_hacknetcoresrequirement_type_md;
-AllPages["nsDoc/bitburner.hacknetlevelsrequirement.hacknetlevels.md"] =
-  nsDoc_bitburner_hacknetlevelsrequirement_hacknetlevels_md;
+AllPages["nsDoc/bitburner.hacknetlevelsrequirement.hacknetlevels.md"] = nsDoc_bitburner_hacknetlevelsrequirement_hacknetlevels_md;
 AllPages["nsDoc/bitburner.hacknetlevelsrequirement.md"] = nsDoc_bitburner_hacknetlevelsrequirement_md;
 AllPages["nsDoc/bitburner.hacknetlevelsrequirement.type.md"] = nsDoc_bitburner_hacknetlevelsrequirement_type_md;
 AllPages["nsDoc/bitburner.hacknetmultipliers.corecost.md"] = nsDoc_bitburner_hacknetmultipliers_corecost_md;
@@ -2416,80 +2310,53 @@ AllPages["nsDoc/bitburner.hacknetmultipliers.purchasecost.md"] = nsDoc_bitburner
 AllPages["nsDoc/bitburner.hacknetmultipliers.ramcost.md"] = nsDoc_bitburner_hacknetmultipliers_ramcost_md;
 AllPages["nsDoc/bitburner.hacknetnodeconstants.basecost.md"] = nsDoc_bitburner_hacknetnodeconstants_basecost_md;
 AllPages["nsDoc/bitburner.hacknetnodeconstants.corebasecost.md"] = nsDoc_bitburner_hacknetnodeconstants_corebasecost_md;
-AllPages["nsDoc/bitburner.hacknetnodeconstants.levelbasecost.md"] =
-  nsDoc_bitburner_hacknetnodeconstants_levelbasecost_md;
+AllPages["nsDoc/bitburner.hacknetnodeconstants.levelbasecost.md"] = nsDoc_bitburner_hacknetnodeconstants_levelbasecost_md;
 AllPages["nsDoc/bitburner.hacknetnodeconstants.maxcores.md"] = nsDoc_bitburner_hacknetnodeconstants_maxcores_md;
 AllPages["nsDoc/bitburner.hacknetnodeconstants.maxlevel.md"] = nsDoc_bitburner_hacknetnodeconstants_maxlevel_md;
 AllPages["nsDoc/bitburner.hacknetnodeconstants.maxram.md"] = nsDoc_bitburner_hacknetnodeconstants_maxram_md;
 AllPages["nsDoc/bitburner.hacknetnodeconstants.md"] = nsDoc_bitburner_hacknetnodeconstants_md;
-AllPages["nsDoc/bitburner.hacknetnodeconstants.moneygainperlevel.md"] =
-  nsDoc_bitburner_hacknetnodeconstants_moneygainperlevel_md;
-AllPages["nsDoc/bitburner.hacknetnodeconstants.purchasenextmult.md"] =
-  nsDoc_bitburner_hacknetnodeconstants_purchasenextmult_md;
+AllPages["nsDoc/bitburner.hacknetnodeconstants.moneygainperlevel.md"] = nsDoc_bitburner_hacknetnodeconstants_moneygainperlevel_md;
+AllPages["nsDoc/bitburner.hacknetnodeconstants.purchasenextmult.md"] = nsDoc_bitburner_hacknetnodeconstants_purchasenextmult_md;
 AllPages["nsDoc/bitburner.hacknetnodeconstants.rambasecost.md"] = nsDoc_bitburner_hacknetnodeconstants_rambasecost_md;
-AllPages["nsDoc/bitburner.hacknetnodeconstants.upgradecoremult.md"] =
-  nsDoc_bitburner_hacknetnodeconstants_upgradecoremult_md;
-AllPages["nsDoc/bitburner.hacknetnodeconstants.upgradelevelmult.md"] =
-  nsDoc_bitburner_hacknetnodeconstants_upgradelevelmult_md;
-AllPages["nsDoc/bitburner.hacknetnodeconstants.upgraderammult.md"] =
-  nsDoc_bitburner_hacknetnodeconstants_upgraderammult_md;
+AllPages["nsDoc/bitburner.hacknetnodeconstants.upgradecoremult.md"] = nsDoc_bitburner_hacknetnodeconstants_upgradecoremult_md;
+AllPages["nsDoc/bitburner.hacknetnodeconstants.upgradelevelmult.md"] = nsDoc_bitburner_hacknetnodeconstants_upgradelevelmult_md;
+AllPages["nsDoc/bitburner.hacknetnodeconstants.upgraderammult.md"] = nsDoc_bitburner_hacknetnodeconstants_upgraderammult_md;
 AllPages["nsDoc/bitburner.hacknetnodesformulas.constants.md"] = nsDoc_bitburner_hacknetnodesformulas_constants_md;
-AllPages["nsDoc/bitburner.hacknetnodesformulas.coreupgradecost.md"] =
-  nsDoc_bitburner_hacknetnodesformulas_coreupgradecost_md;
-AllPages["nsDoc/bitburner.hacknetnodesformulas.hacknetnodecost.md"] =
-  nsDoc_bitburner_hacknetnodesformulas_hacknetnodecost_md;
-AllPages["nsDoc/bitburner.hacknetnodesformulas.levelupgradecost.md"] =
-  nsDoc_bitburner_hacknetnodesformulas_levelupgradecost_md;
+AllPages["nsDoc/bitburner.hacknetnodesformulas.coreupgradecost.md"] = nsDoc_bitburner_hacknetnodesformulas_coreupgradecost_md;
+AllPages["nsDoc/bitburner.hacknetnodesformulas.hacknetnodecost.md"] = nsDoc_bitburner_hacknetnodesformulas_hacknetnodecost_md;
+AllPages["nsDoc/bitburner.hacknetnodesformulas.levelupgradecost.md"] = nsDoc_bitburner_hacknetnodesformulas_levelupgradecost_md;
 AllPages["nsDoc/bitburner.hacknetnodesformulas.md"] = nsDoc_bitburner_hacknetnodesformulas_md;
-AllPages["nsDoc/bitburner.hacknetnodesformulas.moneygainrate.md"] =
-  nsDoc_bitburner_hacknetnodesformulas_moneygainrate_md;
-AllPages["nsDoc/bitburner.hacknetnodesformulas.ramupgradecost.md"] =
-  nsDoc_bitburner_hacknetnodesformulas_ramupgradecost_md;
+AllPages["nsDoc/bitburner.hacknetnodesformulas.moneygainrate.md"] = nsDoc_bitburner_hacknetnodesformulas_moneygainrate_md;
+AllPages["nsDoc/bitburner.hacknetnodesformulas.ramupgradecost.md"] = nsDoc_bitburner_hacknetnodesformulas_ramupgradecost_md;
 AllPages["nsDoc/bitburner.hacknetramrequirement.hacknetram.md"] = nsDoc_bitburner_hacknetramrequirement_hacknetram_md;
 AllPages["nsDoc/bitburner.hacknetramrequirement.md"] = nsDoc_bitburner_hacknetramrequirement_md;
 AllPages["nsDoc/bitburner.hacknetramrequirement.type.md"] = nsDoc_bitburner_hacknetramrequirement_type_md;
 AllPages["nsDoc/bitburner.hacknetserverconstants.basecost.md"] = nsDoc_bitburner_hacknetserverconstants_basecost_md;
-AllPages["nsDoc/bitburner.hacknetserverconstants.cachebasecost.md"] =
-  nsDoc_bitburner_hacknetserverconstants_cachebasecost_md;
-AllPages["nsDoc/bitburner.hacknetserverconstants.corebasecost.md"] =
-  nsDoc_bitburner_hacknetserverconstants_corebasecost_md;
-AllPages["nsDoc/bitburner.hacknetserverconstants.hashesperlevel.md"] =
-  nsDoc_bitburner_hacknetserverconstants_hashesperlevel_md;
+AllPages["nsDoc/bitburner.hacknetserverconstants.cachebasecost.md"] = nsDoc_bitburner_hacknetserverconstants_cachebasecost_md;
+AllPages["nsDoc/bitburner.hacknetserverconstants.corebasecost.md"] = nsDoc_bitburner_hacknetserverconstants_corebasecost_md;
+AllPages["nsDoc/bitburner.hacknetserverconstants.hashesperlevel.md"] = nsDoc_bitburner_hacknetserverconstants_hashesperlevel_md;
 AllPages["nsDoc/bitburner.hacknetserverconstants.maxcache.md"] = nsDoc_bitburner_hacknetserverconstants_maxcache_md;
 AllPages["nsDoc/bitburner.hacknetserverconstants.maxcores.md"] = nsDoc_bitburner_hacknetserverconstants_maxcores_md;
 AllPages["nsDoc/bitburner.hacknetserverconstants.maxlevel.md"] = nsDoc_bitburner_hacknetserverconstants_maxlevel_md;
 AllPages["nsDoc/bitburner.hacknetserverconstants.maxram.md"] = nsDoc_bitburner_hacknetserverconstants_maxram_md;
 AllPages["nsDoc/bitburner.hacknetserverconstants.maxservers.md"] = nsDoc_bitburner_hacknetserverconstants_maxservers_md;
 AllPages["nsDoc/bitburner.hacknetserverconstants.md"] = nsDoc_bitburner_hacknetserverconstants_md;
-AllPages["nsDoc/bitburner.hacknetserverconstants.purchasemult.md"] =
-  nsDoc_bitburner_hacknetserverconstants_purchasemult_md;
-AllPages["nsDoc/bitburner.hacknetserverconstants.rambasecost.md"] =
-  nsDoc_bitburner_hacknetserverconstants_rambasecost_md;
-AllPages["nsDoc/bitburner.hacknetserverconstants.upgradecachemult.md"] =
-  nsDoc_bitburner_hacknetserverconstants_upgradecachemult_md;
-AllPages["nsDoc/bitburner.hacknetserverconstants.upgradecoremult.md"] =
-  nsDoc_bitburner_hacknetserverconstants_upgradecoremult_md;
-AllPages["nsDoc/bitburner.hacknetserverconstants.upgradelevelmult.md"] =
-  nsDoc_bitburner_hacknetserverconstants_upgradelevelmult_md;
-AllPages["nsDoc/bitburner.hacknetserverconstants.upgraderammult.md"] =
-  nsDoc_bitburner_hacknetserverconstants_upgraderammult_md;
+AllPages["nsDoc/bitburner.hacknetserverconstants.purchasemult.md"] = nsDoc_bitburner_hacknetserverconstants_purchasemult_md;
+AllPages["nsDoc/bitburner.hacknetserverconstants.rambasecost.md"] = nsDoc_bitburner_hacknetserverconstants_rambasecost_md;
+AllPages["nsDoc/bitburner.hacknetserverconstants.upgradecachemult.md"] = nsDoc_bitburner_hacknetserverconstants_upgradecachemult_md;
+AllPages["nsDoc/bitburner.hacknetserverconstants.upgradecoremult.md"] = nsDoc_bitburner_hacknetserverconstants_upgradecoremult_md;
+AllPages["nsDoc/bitburner.hacknetserverconstants.upgradelevelmult.md"] = nsDoc_bitburner_hacknetserverconstants_upgradelevelmult_md;
+AllPages["nsDoc/bitburner.hacknetserverconstants.upgraderammult.md"] = nsDoc_bitburner_hacknetserverconstants_upgraderammult_md;
 AllPages["nsDoc/bitburner.hacknetserverhashupgrade.md"] = nsDoc_bitburner_hacknetserverhashupgrade_md;
-AllPages["nsDoc/bitburner.hacknetserversformulas.cacheupgradecost.md"] =
-  nsDoc_bitburner_hacknetserversformulas_cacheupgradecost_md;
+AllPages["nsDoc/bitburner.hacknetserversformulas.cacheupgradecost.md"] = nsDoc_bitburner_hacknetserversformulas_cacheupgradecost_md;
 AllPages["nsDoc/bitburner.hacknetserversformulas.constants.md"] = nsDoc_bitburner_hacknetserversformulas_constants_md;
-AllPages["nsDoc/bitburner.hacknetserversformulas.coreupgradecost.md"] =
-  nsDoc_bitburner_hacknetserversformulas_coreupgradecost_md;
-AllPages["nsDoc/bitburner.hacknetserversformulas.hacknetservercost.md"] =
-  nsDoc_bitburner_hacknetserversformulas_hacknetservercost_md;
-AllPages["nsDoc/bitburner.hacknetserversformulas.hashgainrate.md"] =
-  nsDoc_bitburner_hacknetserversformulas_hashgainrate_md;
-AllPages["nsDoc/bitburner.hacknetserversformulas.hashupgradecost.md"] =
-  nsDoc_bitburner_hacknetserversformulas_hashupgradecost_md;
-AllPages["nsDoc/bitburner.hacknetserversformulas.levelupgradecost.md"] =
-  nsDoc_bitburner_hacknetserversformulas_levelupgradecost_md;
+AllPages["nsDoc/bitburner.hacknetserversformulas.coreupgradecost.md"] = nsDoc_bitburner_hacknetserversformulas_coreupgradecost_md;
+AllPages["nsDoc/bitburner.hacknetserversformulas.hacknetservercost.md"] = nsDoc_bitburner_hacknetserversformulas_hacknetservercost_md;
+AllPages["nsDoc/bitburner.hacknetserversformulas.hashgainrate.md"] = nsDoc_bitburner_hacknetserversformulas_hashgainrate_md;
+AllPages["nsDoc/bitburner.hacknetserversformulas.hashupgradecost.md"] = nsDoc_bitburner_hacknetserversformulas_hashupgradecost_md;
+AllPages["nsDoc/bitburner.hacknetserversformulas.levelupgradecost.md"] = nsDoc_bitburner_hacknetserversformulas_levelupgradecost_md;
 AllPages["nsDoc/bitburner.hacknetserversformulas.md"] = nsDoc_bitburner_hacknetserversformulas_md;
-AllPages["nsDoc/bitburner.hacknetserversformulas.ramupgradecost.md"] =
-  nsDoc_bitburner_hacknetserversformulas_ramupgradecost_md;
+AllPages["nsDoc/bitburner.hacknetserversformulas.ramupgradecost.md"] = nsDoc_bitburner_hacknetserversformulas_ramupgradecost_md;
 AllPages["nsDoc/bitburner.heartbleedoptions.md"] = nsDoc_bitburner_heartbleedoptions_md;
 AllPages["nsDoc/bitburner.hostreturnoptions.md"] = nsDoc_bitburner_hostreturnoptions_md;
 AllPages["nsDoc/bitburner.hostreturnoptions.returnbyip.md"] = nsDoc_bitburner_hostreturnoptions_returnbyip_md;
@@ -2512,12 +2379,10 @@ AllPages["nsDoc/bitburner.infiltration.getpossiblelocations.md"] = nsDoc_bitburn
 AllPages["nsDoc/bitburner.infiltration.md"] = nsDoc_bitburner_infiltration_md;
 AllPages["nsDoc/bitburner.infiltrationlocation.difficulty.md"] = nsDoc_bitburner_infiltrationlocation_difficulty_md;
 AllPages["nsDoc/bitburner.infiltrationlocation.location.md"] = nsDoc_bitburner_infiltrationlocation_location_md;
-AllPages["nsDoc/bitburner.infiltrationlocation.maxclearancelevel.md"] =
-  nsDoc_bitburner_infiltrationlocation_maxclearancelevel_md;
+AllPages["nsDoc/bitburner.infiltrationlocation.maxclearancelevel.md"] = nsDoc_bitburner_infiltrationlocation_maxclearancelevel_md;
 AllPages["nsDoc/bitburner.infiltrationlocation.md"] = nsDoc_bitburner_infiltrationlocation_md;
 AllPages["nsDoc/bitburner.infiltrationlocation.reward.md"] = nsDoc_bitburner_infiltrationlocation_reward_md;
-AllPages["nsDoc/bitburner.infiltrationlocation.startingsecuritylevel.md"] =
-  nsDoc_bitburner_infiltrationlocation_startingsecuritylevel_md;
+AllPages["nsDoc/bitburner.infiltrationlocation.startingsecuritylevel.md"] = nsDoc_bitburner_infiltrationlocation_startingsecuritylevel_md;
 AllPages["nsDoc/bitburner.infiltrationreward.md"] = nsDoc_bitburner_infiltrationreward_md;
 AllPages["nsDoc/bitburner.infiltrationreward.sellcash.md"] = nsDoc_bitburner_infiltrationreward_sellcash_md;
 AllPages["nsDoc/bitburner.infiltrationreward.soarep.md"] = nsDoc_bitburner_infiltrationreward_soarep_md;
@@ -2591,12 +2456,9 @@ AllPages["nsDoc/bitburner.moneysources.sincestart.md"] = nsDoc_bitburner_moneyso
 AllPages["nsDoc/bitburner.multipliers.agility.md"] = nsDoc_bitburner_multipliers_agility_md;
 AllPages["nsDoc/bitburner.multipliers.agility_exp.md"] = nsDoc_bitburner_multipliers_agility_exp_md;
 AllPages["nsDoc/bitburner.multipliers.bladeburner_analysis.md"] = nsDoc_bitburner_multipliers_bladeburner_analysis_md;
-AllPages["nsDoc/bitburner.multipliers.bladeburner_max_stamina.md"] =
-  nsDoc_bitburner_multipliers_bladeburner_max_stamina_md;
-AllPages["nsDoc/bitburner.multipliers.bladeburner_stamina_gain.md"] =
-  nsDoc_bitburner_multipliers_bladeburner_stamina_gain_md;
-AllPages["nsDoc/bitburner.multipliers.bladeburner_success_chance.md"] =
-  nsDoc_bitburner_multipliers_bladeburner_success_chance_md;
+AllPages["nsDoc/bitburner.multipliers.bladeburner_max_stamina.md"] = nsDoc_bitburner_multipliers_bladeburner_max_stamina_md;
+AllPages["nsDoc/bitburner.multipliers.bladeburner_stamina_gain.md"] = nsDoc_bitburner_multipliers_bladeburner_stamina_gain_md;
+AllPages["nsDoc/bitburner.multipliers.bladeburner_success_chance.md"] = nsDoc_bitburner_multipliers_bladeburner_success_chance_md;
 AllPages["nsDoc/bitburner.multipliers.charisma.md"] = nsDoc_bitburner_multipliers_charisma_md;
 AllPages["nsDoc/bitburner.multipliers.charisma_exp.md"] = nsDoc_bitburner_multipliers_charisma_exp_md;
 AllPages["nsDoc/bitburner.multipliers.company_rep.md"] = nsDoc_bitburner_multipliers_company_rep_md;
@@ -2613,13 +2475,10 @@ AllPages["nsDoc/bitburner.multipliers.hacking_exp.md"] = nsDoc_bitburner_multipl
 AllPages["nsDoc/bitburner.multipliers.hacking_grow.md"] = nsDoc_bitburner_multipliers_hacking_grow_md;
 AllPages["nsDoc/bitburner.multipliers.hacking_money.md"] = nsDoc_bitburner_multipliers_hacking_money_md;
 AllPages["nsDoc/bitburner.multipliers.hacking_speed.md"] = nsDoc_bitburner_multipliers_hacking_speed_md;
-AllPages["nsDoc/bitburner.multipliers.hacknet_node_core_cost.md"] =
-  nsDoc_bitburner_multipliers_hacknet_node_core_cost_md;
-AllPages["nsDoc/bitburner.multipliers.hacknet_node_level_cost.md"] =
-  nsDoc_bitburner_multipliers_hacknet_node_level_cost_md;
+AllPages["nsDoc/bitburner.multipliers.hacknet_node_core_cost.md"] = nsDoc_bitburner_multipliers_hacknet_node_core_cost_md;
+AllPages["nsDoc/bitburner.multipliers.hacknet_node_level_cost.md"] = nsDoc_bitburner_multipliers_hacknet_node_level_cost_md;
 AllPages["nsDoc/bitburner.multipliers.hacknet_node_money.md"] = nsDoc_bitburner_multipliers_hacknet_node_money_md;
-AllPages["nsDoc/bitburner.multipliers.hacknet_node_purchase_cost.md"] =
-  nsDoc_bitburner_multipliers_hacknet_node_purchase_cost_md;
+AllPages["nsDoc/bitburner.multipliers.hacknet_node_purchase_cost.md"] = nsDoc_bitburner_multipliers_hacknet_node_purchase_cost_md;
 AllPages["nsDoc/bitburner.multipliers.hacknet_node_ram_cost.md"] = nsDoc_bitburner_multipliers_hacknet_node_ram_cost_md;
 AllPages["nsDoc/bitburner.multipliers.md"] = nsDoc_bitburner_multipliers_md;
 AllPages["nsDoc/bitburner.multipliers.strength.md"] = nsDoc_bitburner_multipliers_strength_md;
@@ -2787,12 +2646,10 @@ AllPages["nsDoc/bitburner.ns.write.md"] = nsDoc_bitburner_ns_write_md;
 AllPages["nsDoc/bitburner.ns.writeport.md"] = nsDoc_bitburner_ns_writeport_md;
 AllPages["nsDoc/bitburner.nsenums.md"] = nsDoc_bitburner_nsenums_md;
 AllPages["nsDoc/bitburner.numaugmentationsrequirement.md"] = nsDoc_bitburner_numaugmentationsrequirement_md;
-AllPages["nsDoc/bitburner.numaugmentationsrequirement.numaugmentations.md"] =
-  nsDoc_bitburner_numaugmentationsrequirement_numaugmentations_md;
+AllPages["nsDoc/bitburner.numaugmentationsrequirement.numaugmentations.md"] = nsDoc_bitburner_numaugmentationsrequirement_numaugmentations_md;
 AllPages["nsDoc/bitburner.numaugmentationsrequirement.type.md"] = nsDoc_bitburner_numaugmentationsrequirement_type_md;
 AllPages["nsDoc/bitburner.numinfiltrationsrequirement.md"] = nsDoc_bitburner_numinfiltrationsrequirement_md;
-AllPages["nsDoc/bitburner.numinfiltrationsrequirement.numinfiltrations.md"] =
-  nsDoc_bitburner_numinfiltrationsrequirement_numinfiltrations_md;
+AllPages["nsDoc/bitburner.numinfiltrationsrequirement.numinfiltrations.md"] = nsDoc_bitburner_numinfiltrationsrequirement_numinfiltrations_md;
 AllPages["nsDoc/bitburner.numinfiltrationsrequirement.type.md"] = nsDoc_bitburner_numinfiltrationsrequirement_type_md;
 AllPages["nsDoc/bitburner.office.avgenergy.md"] = nsDoc_bitburner_office_avgenergy_md;
 AllPages["nsDoc/bitburner.office.avgmorale.md"] = nsDoc_bitburner_office_avgmorale_md;
@@ -2809,8 +2666,7 @@ AllPages["nsDoc/bitburner.officeapi.buytea.md"] = nsDoc_bitburner_officeapi_buyt
 AllPages["nsDoc/bitburner.officeapi.gethireadvertcost.md"] = nsDoc_bitburner_officeapi_gethireadvertcost_md;
 AllPages["nsDoc/bitburner.officeapi.gethireadvertcount.md"] = nsDoc_bitburner_officeapi_gethireadvertcount_md;
 AllPages["nsDoc/bitburner.officeapi.getoffice.md"] = nsDoc_bitburner_officeapi_getoffice_md;
-AllPages["nsDoc/bitburner.officeapi.getofficesizeupgradecost.md"] =
-  nsDoc_bitburner_officeapi_getofficesizeupgradecost_md;
+AllPages["nsDoc/bitburner.officeapi.getofficesizeupgradecost.md"] = nsDoc_bitburner_officeapi_getofficesizeupgradecost_md;
 AllPages["nsDoc/bitburner.officeapi.getresearchcost.md"] = nsDoc_bitburner_officeapi_getresearchcost_md;
 AllPages["nsDoc/bitburner.officeapi.hasresearched.md"] = nsDoc_bitburner_officeapi_hasresearched_md;
 AllPages["nsDoc/bitburner.officeapi.hireadvert.md"] = nsDoc_bitburner_officeapi_hireadvert_md;
@@ -2823,8 +2679,7 @@ AllPages["nsDoc/bitburner.officeapi.upgradeofficesize.md"] = nsDoc_bitburner_off
 AllPages["nsDoc/bitburner.orderenumtype.md"] = nsDoc_bitburner_orderenumtype_md;
 AllPages["nsDoc/bitburner.ordertype.md"] = nsDoc_bitburner_ordertype_md;
 AllPages["nsDoc/bitburner.peoplekilledrequirement.md"] = nsDoc_bitburner_peoplekilledrequirement_md;
-AllPages["nsDoc/bitburner.peoplekilledrequirement.numpeoplekilled.md"] =
-  nsDoc_bitburner_peoplekilledrequirement_numpeoplekilled_md;
+AllPages["nsDoc/bitburner.peoplekilledrequirement.numpeoplekilled.md"] = nsDoc_bitburner_peoplekilledrequirement_numpeoplekilled_md;
 AllPages["nsDoc/bitburner.peoplekilledrequirement.type.md"] = nsDoc_bitburner_peoplekilledrequirement_type_md;
 AllPages["nsDoc/bitburner.person.city.md"] = nsDoc_bitburner_person_city_md;
 AllPages["nsDoc/bitburner.person.exp.md"] = nsDoc_bitburner_person_exp_md;
@@ -2874,14 +2729,11 @@ AllPages["nsDoc/bitburner.reactelement.type.md"] = nsDoc_bitburner_reactelement_
 AllPages["nsDoc/bitburner.reactnode.md"] = nsDoc_bitburner_reactnode_md;
 AllPages["nsDoc/bitburner.recentscript.md"] = nsDoc_bitburner_recentscript_md;
 AllPages["nsDoc/bitburner.recentscript.timeofdeath.md"] = nsDoc_bitburner_recentscript_timeofdeath_md;
-AllPages["nsDoc/bitburner.reputationformulas.calculatefavortorep.md"] =
-  nsDoc_bitburner_reputationformulas_calculatefavortorep_md;
-AllPages["nsDoc/bitburner.reputationformulas.calculatereptofavor.md"] =
-  nsDoc_bitburner_reputationformulas_calculatereptofavor_md;
+AllPages["nsDoc/bitburner.reputationformulas.calculatefavortorep.md"] = nsDoc_bitburner_reputationformulas_calculatefavortorep_md;
+AllPages["nsDoc/bitburner.reputationformulas.calculatereptofavor.md"] = nsDoc_bitburner_reputationformulas_calculatereptofavor_md;
 AllPages["nsDoc/bitburner.reputationformulas.donationforrep.md"] = nsDoc_bitburner_reputationformulas_donationforrep_md;
 AllPages["nsDoc/bitburner.reputationformulas.md"] = nsDoc_bitburner_reputationformulas_md;
-AllPages["nsDoc/bitburner.reputationformulas.repfromdonation.md"] =
-  nsDoc_bitburner_reputationformulas_repfromdonation_md;
+AllPages["nsDoc/bitburner.reputationformulas.repfromdonation.md"] = nsDoc_bitburner_reputationformulas_repfromdonation_md;
 AllPages["nsDoc/bitburner.reputationformulas.sharepower.md"] = nsDoc_bitburner_reputationformulas_sharepower_md;
 AllPages["nsDoc/bitburner.resetinfo.bitnodeoptions.md"] = nsDoc_bitburner_resetinfo_bitnodeoptions_md;
 AllPages["nsDoc/bitburner.resetinfo.currentnode.md"] = nsDoc_bitburner_resetinfo_currentnode_md;
@@ -2948,8 +2800,7 @@ AllPages["nsDoc/bitburner.simpleopponentstats.md"] = nsDoc_bitburner_simpleoppon
 AllPages["nsDoc/bitburner.singularity.applytocompany.md"] = nsDoc_bitburner_singularity_applytocompany_md;
 AllPages["nsDoc/bitburner.singularity.b1tflum3.md"] = nsDoc_bitburner_singularity_b1tflum3_md;
 AllPages["nsDoc/bitburner.singularity.cat.md"] = nsDoc_bitburner_singularity_cat_md;
-AllPages["nsDoc/bitburner.singularity.checkfactioninvitations.md"] =
-  nsDoc_bitburner_singularity_checkfactioninvitations_md;
+AllPages["nsDoc/bitburner.singularity.checkfactioninvitations.md"] = nsDoc_bitburner_singularity_checkfactioninvitations_md;
 AllPages["nsDoc/bitburner.singularity.commitcrime.md"] = nsDoc_bitburner_singularity_commitcrime_md;
 AllPages["nsDoc/bitburner.singularity.connect.md"] = nsDoc_bitburner_singularity_connect_md;
 AllPages["nsDoc/bitburner.singularity.createprogram.md"] = nsDoc_bitburner_singularity_createprogram_md;
@@ -2957,20 +2808,16 @@ AllPages["nsDoc/bitburner.singularity.destroyw0r1dd43m0n.md"] = nsDoc_bitburner_
 AllPages["nsDoc/bitburner.singularity.donatetofaction.md"] = nsDoc_bitburner_singularity_donatetofaction_md;
 AllPages["nsDoc/bitburner.singularity.exportgame.md"] = nsDoc_bitburner_singularity_exportgame_md;
 AllPages["nsDoc/bitburner.singularity.exportgamebonus.md"] = nsDoc_bitburner_singularity_exportgamebonus_md;
-AllPages["nsDoc/bitburner.singularity.getaugmentationbaseprice.md"] =
-  nsDoc_bitburner_singularity_getaugmentationbaseprice_md;
-AllPages["nsDoc/bitburner.singularity.getaugmentationfactions.md"] =
-  nsDoc_bitburner_singularity_getaugmentationfactions_md;
+AllPages["nsDoc/bitburner.singularity.getaugmentationbaseprice.md"] = nsDoc_bitburner_singularity_getaugmentationbaseprice_md;
+AllPages["nsDoc/bitburner.singularity.getaugmentationfactions.md"] = nsDoc_bitburner_singularity_getaugmentationfactions_md;
 AllPages["nsDoc/bitburner.singularity.getaugmentationprereq.md"] = nsDoc_bitburner_singularity_getaugmentationprereq_md;
 AllPages["nsDoc/bitburner.singularity.getaugmentationprice.md"] = nsDoc_bitburner_singularity_getaugmentationprice_md;
 AllPages["nsDoc/bitburner.singularity.getaugmentationrepreq.md"] = nsDoc_bitburner_singularity_getaugmentationrepreq_md;
-AllPages["nsDoc/bitburner.singularity.getaugmentationsfromfaction.md"] =
-  nsDoc_bitburner_singularity_getaugmentationsfromfaction_md;
+AllPages["nsDoc/bitburner.singularity.getaugmentationsfromfaction.md"] = nsDoc_bitburner_singularity_getaugmentationsfromfaction_md;
 AllPages["nsDoc/bitburner.singularity.getaugmentationstats.md"] = nsDoc_bitburner_singularity_getaugmentationstats_md;
 AllPages["nsDoc/bitburner.singularity.getcompanyfavor.md"] = nsDoc_bitburner_singularity_getcompanyfavor_md;
 AllPages["nsDoc/bitburner.singularity.getcompanyfavorgain.md"] = nsDoc_bitburner_singularity_getcompanyfavorgain_md;
-AllPages["nsDoc/bitburner.singularity.getcompanypositioninfo.md"] =
-  nsDoc_bitburner_singularity_getcompanypositioninfo_md;
+AllPages["nsDoc/bitburner.singularity.getcompanypositioninfo.md"] = nsDoc_bitburner_singularity_getcompanypositioninfo_md;
 AllPages["nsDoc/bitburner.singularity.getcompanypositions.md"] = nsDoc_bitburner_singularity_getcompanypositions_md;
 AllPages["nsDoc/bitburner.singularity.getcompanyrep.md"] = nsDoc_bitburner_singularity_getcompanyrep_md;
 AllPages["nsDoc/bitburner.singularity.getcrimechance.md"] = nsDoc_bitburner_singularity_getcrimechance_md;
@@ -2982,17 +2829,14 @@ AllPages["nsDoc/bitburner.singularity.getdarkwebprograms.md"] = nsDoc_bitburner_
 AllPages["nsDoc/bitburner.singularity.getfactionenemies.md"] = nsDoc_bitburner_singularity_getfactionenemies_md;
 AllPages["nsDoc/bitburner.singularity.getfactionfavor.md"] = nsDoc_bitburner_singularity_getfactionfavor_md;
 AllPages["nsDoc/bitburner.singularity.getfactionfavorgain.md"] = nsDoc_bitburner_singularity_getfactionfavorgain_md;
-AllPages["nsDoc/bitburner.singularity.getfactioninviterequirements.md"] =
-  nsDoc_bitburner_singularity_getfactioninviterequirements_md;
+AllPages["nsDoc/bitburner.singularity.getfactioninviterequirements.md"] = nsDoc_bitburner_singularity_getfactioninviterequirements_md;
 AllPages["nsDoc/bitburner.singularity.getfactionrep.md"] = nsDoc_bitburner_singularity_getfactionrep_md;
 AllPages["nsDoc/bitburner.singularity.getfactionworktypes.md"] = nsDoc_bitburner_singularity_getfactionworktypes_md;
 AllPages["nsDoc/bitburner.singularity.getownedaugmentations.md"] = nsDoc_bitburner_singularity_getownedaugmentations_md;
 AllPages["nsDoc/bitburner.singularity.getownedsourcefiles.md"] = nsDoc_bitburner_singularity_getownedsourcefiles_md;
 AllPages["nsDoc/bitburner.singularity.getsavedata.md"] = nsDoc_bitburner_singularity_getsavedata_md;
-AllPages["nsDoc/bitburner.singularity.getunlockedachievements.md"] =
-  nsDoc_bitburner_singularity_getunlockedachievements_md;
-AllPages["nsDoc/bitburner.singularity.getupgradehomecorescost.md"] =
-  nsDoc_bitburner_singularity_getupgradehomecorescost_md;
+AllPages["nsDoc/bitburner.singularity.getunlockedachievements.md"] = nsDoc_bitburner_singularity_getunlockedachievements_md;
+AllPages["nsDoc/bitburner.singularity.getupgradehomecorescost.md"] = nsDoc_bitburner_singularity_getupgradehomecorescost_md;
 AllPages["nsDoc/bitburner.singularity.getupgradehomeramcost.md"] = nsDoc_bitburner_singularity_getupgradehomeramcost_md;
 AllPages["nsDoc/bitburner.singularity.gotolocation.md"] = nsDoc_bitburner_singularity_gotolocation_md;
 AllPages["nsDoc/bitburner.singularity.gymworkout.md"] = nsDoc_bitburner_singularity_gymworkout_md;
@@ -3034,8 +2878,7 @@ AllPages["nsDoc/bitburner.skillsformulas.md"] = nsDoc_bitburner_skillsformulas_m
 AllPages["nsDoc/bitburner.sleeve.getnumsleeves.md"] = nsDoc_bitburner_sleeve_getnumsleeves_md;
 AllPages["nsDoc/bitburner.sleeve.getsleeve.md"] = nsDoc_bitburner_sleeve_getsleeve_md;
 AllPages["nsDoc/bitburner.sleeve.getsleeveaugmentationprice.md"] = nsDoc_bitburner_sleeve_getsleeveaugmentationprice_md;
-AllPages["nsDoc/bitburner.sleeve.getsleeveaugmentationrepreq.md"] =
-  nsDoc_bitburner_sleeve_getsleeveaugmentationrepreq_md;
+AllPages["nsDoc/bitburner.sleeve.getsleeveaugmentationrepreq.md"] = nsDoc_bitburner_sleeve_getsleeveaugmentationrepreq_md;
 AllPages["nsDoc/bitburner.sleeve.getsleeveaugmentations.md"] = nsDoc_bitburner_sleeve_getsleeveaugmentations_md;
 AllPages["nsDoc/bitburner.sleeve.getsleevepurchasableaugs.md"] = nsDoc_bitburner_sleeve_getsleevepurchasableaugs_md;
 AllPages["nsDoc/bitburner.sleeve.gettask.md"] = nsDoc_bitburner_sleeve_gettask_md;
@@ -3077,10 +2920,8 @@ AllPages["nsDoc/bitburner.sourcefilerequirement.sourcefile.md"] = nsDoc_bitburne
 AllPages["nsDoc/bitburner.sourcefilerequirement.type.md"] = nsDoc_bitburner_sourcefilerequirement_type_md;
 AllPages["nsDoc/bitburner.spawnoptions.md"] = nsDoc_bitburner_spawnoptions_md;
 AllPages["nsDoc/bitburner.spawnoptions.spawndelay.md"] = nsDoc_bitburner_spawnoptions_spawndelay_md;
-AllPages["nsDoc/bitburner.specialbladeburneractionenumtypeforsleeve.md"] =
-  nsDoc_bitburner_specialbladeburneractionenumtypeforsleeve_md;
-AllPages["nsDoc/bitburner.specialbladeburneractiontypeforsleeve.md"] =
-  nsDoc_bitburner_specialbladeburneractiontypeforsleeve_md;
+AllPages["nsDoc/bitburner.specialbladeburneractionenumtypeforsleeve.md"] = nsDoc_bitburner_specialbladeburneractionenumtypeforsleeve_md;
+AllPages["nsDoc/bitburner.specialbladeburneractiontypeforsleeve.md"] = nsDoc_bitburner_specialbladeburneractiontypeforsleeve_md;
 AllPages["nsDoc/bitburner.stanek.acceptgift.md"] = nsDoc_bitburner_stanek_acceptgift_md;
 AllPages["nsDoc/bitburner.stanek.activefragments.md"] = nsDoc_bitburner_stanek_activefragments_md;
 AllPages["nsDoc/bitburner.stanek.canplacefragment.md"] = nsDoc_bitburner_stanek_canplacefragment_md;
@@ -3093,22 +2934,15 @@ AllPages["nsDoc/bitburner.stanek.giftwidth.md"] = nsDoc_bitburner_stanek_giftwid
 AllPages["nsDoc/bitburner.stanek.md"] = nsDoc_bitburner_stanek_md;
 AllPages["nsDoc/bitburner.stanek.placefragment.md"] = nsDoc_bitburner_stanek_placefragment_md;
 AllPages["nsDoc/bitburner.stanek.removefragment.md"] = nsDoc_bitburner_stanek_removefragment_md;
-AllPages["nsDoc/bitburner.stockmarketconstants.marketdata4scost.md"] =
-  nsDoc_bitburner_stockmarketconstants_marketdata4scost_md;
-AllPages["nsDoc/bitburner.stockmarketconstants.marketdatatixapi4scost.md"] =
-  nsDoc_bitburner_stockmarketconstants_marketdatatixapi4scost_md;
+AllPages["nsDoc/bitburner.stockmarketconstants.marketdata4scost.md"] = nsDoc_bitburner_stockmarketconstants_marketdata4scost_md;
+AllPages["nsDoc/bitburner.stockmarketconstants.marketdatatixapi4scost.md"] = nsDoc_bitburner_stockmarketconstants_marketdatatixapi4scost_md;
 AllPages["nsDoc/bitburner.stockmarketconstants.md"] = nsDoc_bitburner_stockmarketconstants_md;
-AllPages["nsDoc/bitburner.stockmarketconstants.msperstockupdate.md"] =
-  nsDoc_bitburner_stockmarketconstants_msperstockupdate_md;
-AllPages["nsDoc/bitburner.stockmarketconstants.msperstockupdatemin.md"] =
-  nsDoc_bitburner_stockmarketconstants_msperstockupdatemin_md;
-AllPages["nsDoc/bitburner.stockmarketconstants.stockmarketcommission.md"] =
-  nsDoc_bitburner_stockmarketconstants_stockmarketcommission_md;
-AllPages["nsDoc/bitburner.stockmarketconstants.tickspercycle.md"] =
-  nsDoc_bitburner_stockmarketconstants_tickspercycle_md;
+AllPages["nsDoc/bitburner.stockmarketconstants.msperstockupdate.md"] = nsDoc_bitburner_stockmarketconstants_msperstockupdate_md;
+AllPages["nsDoc/bitburner.stockmarketconstants.msperstockupdatemin.md"] = nsDoc_bitburner_stockmarketconstants_msperstockupdatemin_md;
+AllPages["nsDoc/bitburner.stockmarketconstants.stockmarketcommission.md"] = nsDoc_bitburner_stockmarketconstants_stockmarketcommission_md;
+AllPages["nsDoc/bitburner.stockmarketconstants.tickspercycle.md"] = nsDoc_bitburner_stockmarketconstants_tickspercycle_md;
 AllPages["nsDoc/bitburner.stockmarketconstants.tixapicost.md"] = nsDoc_bitburner_stockmarketconstants_tixapicost_md;
-AllPages["nsDoc/bitburner.stockmarketconstants.wseaccountcost.md"] =
-  nsDoc_bitburner_stockmarketconstants_wseaccountcost_md;
+AllPages["nsDoc/bitburner.stockmarketconstants.wseaccountcost.md"] = nsDoc_bitburner_stockmarketconstants_wseaccountcost_md;
 AllPages["nsDoc/bitburner.stockorder.md"] = nsDoc_bitburner_stockorder_md;
 AllPages["nsDoc/bitburner.stockorder.position.md"] = nsDoc_bitburner_stockorder_position_md;
 AllPages["nsDoc/bitburner.stockorder.price.md"] = nsDoc_bitburner_stockorder_price_md;
@@ -3178,10 +3012,8 @@ AllPages["nsDoc/bitburner.userinterface.settailfontsize.md"] = nsDoc_bitburner_u
 AllPages["nsDoc/bitburner.userinterface.settailtitle.md"] = nsDoc_bitburner_userinterface_settailtitle_md;
 AllPages["nsDoc/bitburner.userinterface.settheme.md"] = nsDoc_bitburner_userinterface_settheme_md;
 AllPages["nsDoc/bitburner.userinterface.windowsize.md"] = nsDoc_bitburner_userinterface_windowsize_md;
-AllPages["nsDoc/bitburner.userinterfacetheme.backgroundprimary.md"] =
-  nsDoc_bitburner_userinterfacetheme_backgroundprimary_md;
-AllPages["nsDoc/bitburner.userinterfacetheme.backgroundsecondary.md"] =
-  nsDoc_bitburner_userinterfacetheme_backgroundsecondary_md;
+AllPages["nsDoc/bitburner.userinterfacetheme.backgroundprimary.md"] = nsDoc_bitburner_userinterfacetheme_backgroundprimary_md;
+AllPages["nsDoc/bitburner.userinterfacetheme.backgroundsecondary.md"] = nsDoc_bitburner_userinterfacetheme_backgroundsecondary_md;
 AllPages["nsDoc/bitburner.userinterfacetheme.black.md"] = nsDoc_bitburner_userinterfacetheme_black_md;
 AllPages["nsDoc/bitburner.userinterfacetheme.bnlvl0.md"] = nsDoc_bitburner_userinterfacetheme_bnlvl0_md;
 AllPages["nsDoc/bitburner.userinterfacetheme.bnlvl1.md"] = nsDoc_bitburner_userinterfacetheme_bnlvl1_md;
@@ -3232,14 +3064,11 @@ AllPages["nsDoc/bitburner.warehouseapi.discontinueproduct.md"] = nsDoc_bitburner
 AllPages["nsDoc/bitburner.warehouseapi.exportmaterial.md"] = nsDoc_bitburner_warehouseapi_exportmaterial_md;
 AllPages["nsDoc/bitburner.warehouseapi.getmaterial.md"] = nsDoc_bitburner_warehouseapi_getmaterial_md;
 AllPages["nsDoc/bitburner.warehouseapi.getproduct.md"] = nsDoc_bitburner_warehouseapi_getproduct_md;
-AllPages["nsDoc/bitburner.warehouseapi.getupgradewarehousecost.md"] =
-  nsDoc_bitburner_warehouseapi_getupgradewarehousecost_md;
+AllPages["nsDoc/bitburner.warehouseapi.getupgradewarehousecost.md"] = nsDoc_bitburner_warehouseapi_getupgradewarehousecost_md;
 AllPages["nsDoc/bitburner.warehouseapi.getwarehouse.md"] = nsDoc_bitburner_warehouseapi_getwarehouse_md;
 AllPages["nsDoc/bitburner.warehouseapi.haswarehouse.md"] = nsDoc_bitburner_warehouseapi_haswarehouse_md;
-AllPages["nsDoc/bitburner.warehouseapi.limitmaterialproduction.md"] =
-  nsDoc_bitburner_warehouseapi_limitmaterialproduction_md;
-AllPages["nsDoc/bitburner.warehouseapi.limitproductproduction.md"] =
-  nsDoc_bitburner_warehouseapi_limitproductproduction_md;
+AllPages["nsDoc/bitburner.warehouseapi.limitmaterialproduction.md"] = nsDoc_bitburner_warehouseapi_limitmaterialproduction_md;
+AllPages["nsDoc/bitburner.warehouseapi.limitproductproduction.md"] = nsDoc_bitburner_warehouseapi_limitproductproduction_md;
 AllPages["nsDoc/bitburner.warehouseapi.makeproduct.md"] = nsDoc_bitburner_warehouseapi_makeproduct_md;
 AllPages["nsDoc/bitburner.warehouseapi.md"] = nsDoc_bitburner_warehouseapi_md;
 AllPages["nsDoc/bitburner.warehouseapi.purchasewarehouse.md"] = nsDoc_bitburner_warehouseapi_purchasewarehouse_md;
@@ -3275,3 +3104,5 @@ AllPages["nsDoc/index.md"] = nsDoc_index_md;
 export const nsApiPages = Object.keys(AllPages)
   .filter((page) => page.startsWith("nsDoc"))
   .map((page) => page.replace("nsDoc/", ""));
+
+export const DocImages: Record<string, string> = {};
