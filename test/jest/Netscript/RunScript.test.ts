@@ -16,6 +16,7 @@ import { SpecialServers } from "../../../src/Server/data/SpecialServers";
 import { WorkerScript } from "../../../src/Netscript/WorkerScript";
 import { NetscriptFunctions } from "../../../src/NetscriptFunctions";
 import type { PositiveInteger } from "../../../src/types";
+import { ErrorState } from "../../../src/ErrorHandling/ErrorState";
 
 declare const importActual: (typeof EvaluatorConfig)["doImport"];
 
@@ -118,7 +119,7 @@ const runOptions = {
 async function expectErrorWhenRunningScript(
   scripts: { filePath: ScriptFilePath; code: string }[],
   testScriptPath: ScriptFilePath,
-  alerted: Promise<unknown>,
+  errorShown: Promise<unknown>,
   errorMessage: string,
 ) {
   /**
@@ -135,7 +136,7 @@ async function expectErrorWhenRunningScript(
     throw new Error(`Invalid worker script`);
   }
   const result = await Promise.race([
-    alerted,
+    errorShown,
     new Promise<void>((resolve) => (workerScript.atExit = new Map([["default", resolve]]))),
   ]);
   expect(result).toBeDefined();
@@ -145,6 +146,7 @@ async function expectErrorWhenRunningScript(
 describe("runScript and runScriptFromScript", () => {
   let alertDelete: () => void;
   let alerted: Promise<unknown>;
+  let errorShown: Promise<unknown>;
 
   beforeEach(() => {
     setupBasicTestingEnvironment();
@@ -153,6 +155,9 @@ describe("runScript and runScriptFromScript", () => {
 
     alerted = new Promise((resolve) => {
       alertDelete = AlertEvents.subscribe((x) => resolve(x));
+    });
+    errorShown = new Promise((resolve) => {
+      ErrorState.ErrorUpdate.subscribe((x) => resolve(x));
     });
   });
   afterEach(() => {
@@ -235,7 +240,7 @@ describe("runScript and runScriptFromScript", () => {
             },
           ],
           testScriptPath,
-          alerted,
+          errorShown,
           errorMessage,
         );
       });
@@ -250,7 +255,7 @@ describe("runScript and runScriptFromScript", () => {
             },
           ],
           testScriptPath,
-          alerted,
+          errorShown,
           "Circular dependencies detected",
         );
       });
@@ -271,7 +276,7 @@ describe("runScript and runScriptFromScript", () => {
             },
           ],
           testScriptPath,
-          alerted,
+          errorShown,
           "Circular dependencies detected",
         );
       });

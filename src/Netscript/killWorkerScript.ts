@@ -6,7 +6,7 @@ import { ScriptDeath } from "./ScriptDeath";
 import { WorkerScript } from "./WorkerScript";
 import { workerScripts } from "./WorkerScripts";
 
-import { GetServer } from "../Server/AllServers";
+import { GetAllServers, GetServer } from "../Server/AllServers";
 import { AddRecentScript } from "./RecentScripts";
 import { ITutorial } from "../InteractiveTutorial";
 import { AlertEvents } from "../ui/React/AlertManager";
@@ -33,6 +33,16 @@ export function killWorkerScriptByPid(pid: number, killer?: WorkerScript): boole
 
   return false;
 }
+
+export const killAllScripts = () => {
+  for (const server of GetAllServers()) {
+    for (const byPid of server.runningScriptMap.values()) {
+      for (const pid of byPid.keys()) {
+        killWorkerScriptByPid(pid);
+      }
+    }
+  }
+};
 
 function stopAndCleanUpWorkerScript(ws: WorkerScript): void {
   // Only clean up once.
