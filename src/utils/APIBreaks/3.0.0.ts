@@ -195,7 +195,7 @@ export const breakingChanges300: VersionBreakingChange = {
       brokenAPIs: [{ name: "getActionRepGain" }],
       info:
         "ns.bladeburner.getActionRepGain returned the average rank gain instead of the average reputation gain.\n" +
-        'This bug was fixed. Please check your code to see if it still works as you expect.',
+        "This bug was fixed. Please check your code to see if it still works as you expect.",
       showPopUp: false,
     },
   ],
