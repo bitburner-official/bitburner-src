@@ -74,6 +74,7 @@ export async function main(ns) {
 |  [ftpcrack(host)](./bitburner.ns.ftpcrack.md) | Runs FTPCrack.exe on a server. |
 |  [getBitNodeMultipliers(n, lvl)](./bitburner.ns.getbitnodemultipliers.md) | Get the current BitNode multipliers. |
 |  [getFavorToDonate()](./bitburner.ns.getfavortodonate.md) | Returns the amount of Faction favor required to be able to donate to a faction. |
+|  [getFileMetadata(filename)](./bitburner.ns.getfilemetadata.md) | Get the metadata of a file. |
 |  [getFunctionRamCost(name)](./bitburner.ns.getfunctionramcost.md) | Get the ram cost of a netscript function. |
 |  [getGrowTime(host)](./bitburner.ns.getgrowtime.md) | Get the execution time of a grow() call. |
 |  [getHackingLevel()](./bitburner.ns.gethackinglevel.md) | Returns the player’s current hacking level. |

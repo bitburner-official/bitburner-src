@@ -4,6 +4,7 @@
 
 ## CodingContractNameEnumType type
 
+
 **Signature:**
 
 ```typescript

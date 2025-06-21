@@ -70,8 +70,6 @@ In that case you would want to write your script in a never-ending loop, like `w
 However, if you are not careful, this can crash your game.
 If the code inside the loop doesn't `await` for some time, it will never give other scripts and the game itself time to process.
 
-<br />
-
 To help you find this potential bug, any `while (true)` loop without any `await` statement inside it will be marked.
 A red decoration will appear on the left side of the script editor, telling you about the issue.
 

@@ -28,7 +28,6 @@ RAM cost: 0 GB
 
 ## Example
 
-Usage example (NS2)
 
 ```js
 const styles = ns.ui.getStyles();

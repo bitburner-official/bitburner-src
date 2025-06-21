@@ -4,12 +4,13 @@ import { hasScriptExtension } from "../Paths/ScriptFilePath";
 import { GetServer, GetAllServers } from "../Server/AllServers";
 import {
   RFAMessage,
-  FileData,
-  FileContent,
+  type FileData,
+  type FileContent,
   isFileServer,
   isFileLocation,
-  FileLocation,
+  type FileLocation,
   isFileData,
+  type FileMetadata,
 } from "./MessageDefinitions";
 
 import libSource from "../ScriptEditor/NetscriptDefinitions.d.ts?raw";
@@ -37,7 +38,6 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
     }
     return error("Invalid file extension", msg);
   },
-
   getFile: function (msg: RFAMessage): RFAMessage {
     if (!isFileLocation(msg.params)) return error("Message misses parameters", msg);
 
@@ -52,6 +52,27 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
     const file = server.getContentFile(filePath);
     if (!file) return error("File doesn't exist", msg);
     return new RFAMessage({ result: file.content, id: msg.id });
+  },
+
+  getFileMetadata: function (msg: RFAMessage): RFAMessage {
+    if (!isFileLocation(msg.params)) return error("Message misses parameters", msg);
+
+    const fileData: FileLocation = msg.params;
+    const filePath = resolveFilePath(fileData.filename);
+    if (!filePath) return error("Invalid file path", msg);
+
+    const server = GetServer(fileData.server);
+    if (!server) return error("Server hostname invalid", msg);
+
+    if (!hasTextExtension(filePath) && !hasScriptExtension(filePath)) return error("Invalid file extension", msg);
+    const file = server.getContentFile(filePath);
+    if (!file) return error("File doesn't exist", msg);
+
+    const result: FileMetadata = {
+      filename: file.filename,
+      ...file.metadata.plain(),
+    };
+    return new RFAMessage({ result: result, id: msg.id });
   },
 
   deleteFile: function (msg: RFAMessage): RFAMessage {
@@ -89,6 +110,19 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
     const fileList: FileContent[] = [...server.scripts, ...server.textFiles].map(([filename, file]) => ({
       filename,
       content: file.content,
+    }));
+    return new RFAMessage({ result: fileList, id: msg.id });
+  },
+
+  getAllFileMetadata: function (msg: RFAMessage): RFAMessage {
+    if (!isFileServer(msg.params)) return error("Message misses parameters", msg);
+
+    const server = GetServer(msg.params.server);
+    if (!server) return error("Server hostname invalid", msg);
+
+    const fileList: FileMetadata[] = [...server.scripts, ...server.textFiles].map(([filename, file]) => ({
+      filename: filename,
+      ...file.metadata.plain(),
     }));
     return new RFAMessage({ result: fileList, id: msg.id });
   },

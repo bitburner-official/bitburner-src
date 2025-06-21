@@ -4,6 +4,7 @@
 
 ## CodingContractObject type
 
+
 **Signature:**
 
 ```typescript

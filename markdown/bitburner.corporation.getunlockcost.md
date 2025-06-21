@@ -9,14 +9,14 @@ Get the cost to unlock a one-time unlockable upgrade.
 **Signature:**
 
 ```typescript
-getUnlockCost(upgradeName: string): number;
+getUnlockCost(upgradeName: CorpUnlockName): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  upgradeName | string | Name of the upgrade |
+|  upgradeName | [CorpUnlockName](./bitburner.corpunlockname.md) | Name of the upgrade |
 
 **Returns:**
 

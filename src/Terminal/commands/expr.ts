@@ -8,7 +8,7 @@ export function expr(args: (string | number | boolean)[]): void {
   const expr = args.join("");
 
   // Sanitize the math expression
-  const sanitizedExpr = expr.replace(/[^-()\d/*+.%]/g, "");
+  const sanitizedExpr = expr.replace(/[^-()\deE/*+.%]/g, "");
   let result: string;
   try {
     result = String(eval?.(sanitizedExpr));
