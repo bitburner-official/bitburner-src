@@ -21,7 +21,7 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
   const history = useHistory();
   const [deepLink, setDeepLink] = useState(docPage);
   const navigator = {
-    navigate(href: string, external: boolean) {
+    navigate(href: string, openExternally: boolean) {
       let path;
       /**
        * Href can be:
@@ -45,7 +45,7 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
           path = asFilePath(`nsDoc/${href.replace(prefixOfHttpUrlOfNsDocs, "")}`);
         } else {
           // HTTP URL pointing to other places.
-          external = true;
+          openExternally = true;
           path = href;
         }
       } else {
@@ -56,7 +56,7 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
         console.error(`Bad path ${href} from ${history.page} while navigating docs.`);
         return;
       }
-      if (external) {
+      if (openExternally) {
         openDocExternally(path);
         return;
       }

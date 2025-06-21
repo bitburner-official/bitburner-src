@@ -15,7 +15,7 @@ export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
     [],
   );
   const navigator = {
-    navigate(href: string, external: boolean) {
+    navigate(href: string, openExternally: boolean) {
       /**
        * This function is used for navigating inside the documentation popup.
        *
@@ -26,7 +26,7 @@ export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
        */
       let path;
       if (href.startsWith("https://") || href.startsWith("http://")) {
-        external = true;
+        openExternally = true;
         path = href;
       } else {
         path = resolveFilePath(href, defaultNsApiPage);
@@ -35,7 +35,7 @@ export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
         console.error(`Bad path ${href} while navigating docs.`);
         return;
       }
-      if (external) {
+      if (openExternally) {
         openDocExternally(path);
         return;
       }
