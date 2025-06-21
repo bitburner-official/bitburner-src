@@ -9,7 +9,7 @@ Get the cost to unlock a research.
 **Signature:**
 
 ```typescript
-getResearchCost(divisionName: string, researchName: string): number;
+getResearchCost(divisionName: string, researchName: CorpResearchName): number;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ getResearchCost(divisionName: string, researchName: string): number;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  researchName | string | Name of the research |
+|  researchName | [CorpResearchName](./bitburner.corpresearchname.md) | Name of the research |
 
 **Returns:**
 

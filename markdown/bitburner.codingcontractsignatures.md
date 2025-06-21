@@ -4,6 +4,7 @@
 
 ## CodingContractSignatures type
 
+
 **Signature:**
 
 ```typescript

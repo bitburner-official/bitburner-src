@@ -4,6 +4,7 @@
 
 ## HacknetServerHashUpgrade type
 
+
 **Signature:**
 
 ```typescript

@@ -14,7 +14,7 @@ cancelExportMaterial(
     sourceCity: CityName,
     targetDivision: string,
     targetCity: CityName,
-    materialName: string,
+    materialName: CorpMaterialName,
   ): void;
 ```
 
@@ -26,7 +26,7 @@ cancelExportMaterial(
 |  sourceCity | [CityName](./bitburner.cityname.md) | Source city |
 |  targetDivision | string | Target division |
 |  targetCity | [CityName](./bitburner.cityname.md) | Target city |
-|  materialName | string | Name of the material |
+|  materialName | [CorpMaterialName](./bitburner.corpmaterialname.md) | Name of the material |
 
 **Returns:**
 
