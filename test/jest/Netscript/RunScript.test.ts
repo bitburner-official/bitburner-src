@@ -121,7 +121,7 @@ async function expectErrorWhenRunningScript(
   testScriptPath: ScriptFilePath,
   errorShown: Promise<unknown>,
   errorMessage: string,
-) {
+): Promise<void> {
   /**
    * Suppress console.error(). When there is a thrown error in the player's script, we print it to the console. In
    * this test, we intentionally throw an error, so we can ignore it.
@@ -144,8 +144,9 @@ async function expectErrorWhenRunningScript(
 }
 
 describe("runScript and runScriptFromScript", () => {
-  let alertDelete: () => void;
+  let alertEventCleanUpFunction: () => void;
   let alerted: Promise<unknown>;
+  let errorPopUpEventCleanUpFunction: () => void;
   let errorShown: Promise<unknown>;
 
   beforeEach(() => {
@@ -154,14 +155,18 @@ describe("runScript and runScriptFromScript", () => {
     resetPidCounter();
 
     alerted = new Promise((resolve) => {
-      alertDelete = AlertEvents.subscribe((x) => resolve(x));
+      alertEventCleanUpFunction = AlertEvents.subscribe((x) => resolve(x));
     });
     errorShown = new Promise((resolve) => {
-      ErrorState.ErrorUpdate.subscribe((x) => resolve(x));
+      errorPopUpEventCleanUpFunction = ErrorState.ErrorUpdate.subscribe((x) => resolve(x));
     });
   });
   afterEach(() => {
-    alertDelete();
+    alertEventCleanUpFunction();
+    errorPopUpEventCleanUpFunction();
+    ErrorState.ActiveError = null;
+    ErrorState.Errors.length = 0;
+    ErrorState.UnreadErrors = 0;
   });
 
   describe("runScript", () => {
