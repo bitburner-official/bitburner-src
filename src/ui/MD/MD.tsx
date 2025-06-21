@@ -10,6 +10,7 @@ import rehypeMathjax from "rehype-mathjax/svg";
 import rehypeRaw from "rehype-raw";
 import { FilePath } from "../../Paths/FilePath";
 import { getPage } from "../../Documentation/root";
+import { DocImages } from "../../Documentation/pages";
 
 export function MD(props: { pageFilePath: FilePath; top: number }): React.ReactElement {
   const pageContent = getPage(props.pageFilePath);
@@ -47,6 +48,9 @@ export function MD(props: { pageFilePath: FilePath; top: number }): React.ReactE
       remarkPlugins={[remarkGfm, remarkMath]}
       // Use rehypeRaw to support HTML content in NS API docs.
       rehypePlugins={[rehypeMathjax, rehypeRaw]}
+      transformImageUri={(__src, alt) => {
+        return DocImages[alt];
+      }}
     >
       {pageContent}
     </ReactMarkdown>
