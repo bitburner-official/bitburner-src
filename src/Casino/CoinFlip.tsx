@@ -47,7 +47,7 @@ export function CoinFlip(): React.ReactElement {
         ,
       </div>,
     );
-    setStatus(correct ? " Win" : "Lose");
+    setStatus(correct ? " win!" : "lose!");
     setPlayLock(true);
 
     setTimeout(() => setPlayLock(false), 250);
