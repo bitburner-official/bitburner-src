@@ -363,8 +363,7 @@ function checkSingularityAccess(ctx: NetscriptContext): void {
   if (!canAccessBitNodeFeature(4)) {
     throw errorMessage(
       ctx,
-      `This singularity function requires Source-File 4 to run. A power up you obtain later in the game.
-      It will be very obvious when and how you can obtain it.`,
+      `This singularity function requires Source-File 4 to run. A power up you obtain later in the game. It will be very obvious when and how you can obtain it.`,
       "API ACCESS",
     );
   }
@@ -381,10 +380,8 @@ function checkEnvFlags(ctx: NetscriptContext): void {
     log(ctx, () => "Failed to run due to failed concurrency check.");
     const err = errorMessage(
       ctx,
-      `Concurrent calls to Netscript functions are not allowed!
-      Did you forget to await hack(), grow(), or some other
-      promise-returning function?
-      Currently running: ${ws.env.runningFn} tried to run: ${ctx.function}`,
+      "Concurrent calls to Netscript functions are not allowed! Did you forget to await hack(), grow(), or some other " +
+        `promise-returning function?\nCurrently running: ${ws.env.runningFn}\nTried to run: ${ctx.function}`,
       "CONCURRENCY",
     );
     killWorkerScript(ws);

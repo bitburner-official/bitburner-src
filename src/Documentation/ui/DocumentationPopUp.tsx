@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "../../ui/React/Modal";
 import { defaultNsApiPage, Navigator, openDocExternally } from "../../ui/React/Documentation";
 import { MD } from "../../ui/MD/MD";
-import { asFilePath, type FilePath, resolveFilePath } from "../../Paths/FilePath";
+import { asFilePath, type FilePath, isFilePath, resolveFilePath } from "../../Paths/FilePath";
 import { DocumentationPopUpEvents } from "../root";
 
 export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
@@ -15,22 +15,33 @@ export function DocumentationPopUp({ hidden }: { hidden: boolean }) {
     [],
   );
   const navigator = {
-    navigate(relativePath: string, external: boolean) {
+    navigate(href: string, openExternally: boolean) {
       /**
        * This function is used for navigating inside the documentation popup.
        *
-       * The "markdown" folder does not have any subfolders. All files are at the top-level. "relativePath" is always
-       * "./<filename>". E.g., "./bitburner.ns.md".
+       * Href can be:
+       * - Internal NS docs. The "markdown" folder does not have any subfolders. All files are at the top-level. "Href"
+       * is always "./<filename>". E.g., "./bitburner.ns.md".
+       * - HTTP URL (e.g., ns.printf has a link to https://github.com/alexei/sprintf.js).
        */
-      const nsApiDocPath = resolveFilePath(relativePath, defaultNsApiPage);
-      if (!nsApiDocPath) {
+      let path;
+      if (href.startsWith("https://") || href.startsWith("http://")) {
+        openExternally = true;
+        path = href;
+      } else {
+        path = resolveFilePath(href, defaultNsApiPage);
+      }
+      if (!path) {
+        console.error(`Bad path ${href} while navigating docs.`);
         return;
       }
-      if (external) {
-        openDocExternally(nsApiDocPath);
+      if (openExternally) {
+        openDocExternally(path);
         return;
       }
-      setPath(nsApiDocPath);
+      if (isFilePath(path)) {
+        setPath(path);
+      }
     },
   };
   if (!path) {

@@ -4,6 +4,20 @@
 type _ValueOf<T> = T[keyof T];
 
 /** All netscript definitions */
+
+/**
+ * Metadata of a file
+ * @public
+ */
+interface FileMetadata {
+  /** Time of Access */
+  atime: number;
+  /** Time of Modification */
+  mtime: number;
+  /** Time of Birth (creation) */
+  btime: number;
+}
+
 /** @public */
 interface HP {
   current: number;
@@ -76,7 +90,7 @@ interface ResetInfo {
    * BitNode options into account.
    *
    * For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 1. In this
-   * case, this map contains this entry: Key: 1 => Value: 1.
+   * case, this map contains this entry: Key: 1 =\> Value: 1.
    *
    * If the active level of a source file is 0, that source file won't be included in the result.
    */
@@ -2500,7 +2514,7 @@ export interface Singularity {
    * Returns an array of source files. This function takes BitNode options into account.
    *
    * For example, let's say you have SF 1.3, but you overrode the active level of SF1 and set it to level 1. In this
-   * case, this function returns {"n":1,"lvl":1}.
+   * case, this function returns \{"n":1,"lvl":1\}.
    *
    * If the active level of a source file is 0, that source file won't be included in the result.
    *
@@ -2837,6 +2851,7 @@ export interface CompanyPositionInfo {
   requiredSkills: Skills;
 }
 
+/** @public */
 type HacknetServerHashUpgrade =
   | "Sell for Money"
   | "Sell for Corporation Funds"
@@ -4022,7 +4037,7 @@ export interface CodingContract {
    * @param type - Type of contract to generate
    * @returns Filename of the contract.
    */
-  createDummyContract(type: string): string;
+  createDummyContract(type: CodingContractName): string;
 
   /**
    * List all contract types.
@@ -4052,7 +4067,7 @@ export interface Format {
    * - "Infinity" and "-Infinity" are returned as "∞" and "-∞", respectively.
    *
    * - If you disable the suffix form in the settings page or the absolute value is greater than or equal to 1e33, this
-   * function will use the exponential form. This means that, if Math.abs(n) >= 1e33, the returned value is always in
+   * function will use the exponential form. This means that, if Math.abs(n) \>= 1e33, the returned value is always in
    * the exponential form, regardless of the setting.
    *
    * Note that the behaviors listed above are "undocumented", in the sense that we don't make any guarantee about
@@ -4605,8 +4620,8 @@ export interface GoAnalysis {
    * The details are keyed by opponent name, in this structure:
    *
    * <pre lang="javascript">
-   * {
-   *   <OpponentName>: {
+   * \{
+   *   <OpponentName>: \{
    *     wins: number,
    *     losses: number,
    *     winStreak: number,
@@ -4614,8 +4629,8 @@ export interface GoAnalysis {
    *     favor: number,
    *     bonusPercent: number,
    *     bonusDescription: string,
-   *   }
-   * }
+   *   \}
+   * \}
    * </pre>
    *
    * @returns A dictionary of opponent stats keyed by opponent name.
@@ -4642,20 +4657,30 @@ export interface GoAnalysis {
 
   /**
    * Adds a colored circle indicator to the specified point. These indicators are removed once a move is played.
-   * @param x the x coordinate to highlight
-   * @param y the y coordinate to highlight
-   * @param color optional: the color to use for the circle. Can be given an RGB string like "#FFF000", or "none" to clear it, or one of
-   *    these color names from the selected theme: "hack" (green), "hp" (red), "money" (yellow), "int" (blue), "cha" (purple)
-   * @param text optional: text to add to the node (replaces the default A.1 or B5 seen on hover). Should be kept short to fit well.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param x - The x coordinate to highlight
+   * @param y -  The y coordinate to highlight
+   * @param color -  The color to use for the circle. It can be any value accepted by
+   * {@link https://developer.mozilla.org/en-US/docs/Web/CSS/outline-color | outline-color CSS property} (e.g., an RGB
+   * string like "#FFF000"). You can also use "none" to clear it or one of 5 special values: "hack", "hp", "money",
+   * "int", "cha". The corresponding colors of 5 special values depend on your theme.
+   * @param text - Text to add to the node (replaces the default A.1 or B5 seen on hover). Should be kept short to fit well.
    */
-  highlightPoint(x, y, color, text): void;
+  highlightPoint(x: number, y: number, color?: string, text?: string): void;
 
   /**
    * Removes the highlight color and text from the specified node.
-   * @param x the x coordinate to remove highlight from
-   * @param y the y coordinate to remove highlight from
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * @param x - the x coordinate to remove highlight from
+   * @param y - the y coordinate to remove highlight from
    */
-  clearPointHighlight(x, y): void;
+  clearPointHighlight(x: number, y: number): void;
 
   /** Removes all highlights from the board. */
   clearAllPointHighlights(): void;
@@ -6056,7 +6081,6 @@ interface UserInterface {
    * @remarks
    * RAM cost: 0 GB
    * @example
-   * Usage example (NS2)
    * ```js
    * const theme = ns.ui.getTheme();
    * theme.primary = '#ff5500';
@@ -6086,7 +6110,6 @@ interface UserInterface {
    * @remarks
    * RAM cost: 0 GB
    * @example
-   * Usage example (NS2)
    * ```js
    * const styles = ns.ui.getStyles();
    * styles.fontFamily = 'Comic Sans Ms';
@@ -7711,6 +7734,19 @@ export interface NS {
   read(filename: string): string;
 
   /**
+   * Get the metadata of a file.
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This function returns the metadata associated with the specified file.
+   *
+   * @param filename - Name of the file to read the metadata from. It must be a text file (.txt, .json) or a script
+   * (.js, .jsx, .ts, .tsx).
+   * @Returns The metadata of the file.
+   */
+  getFileMetadata(filename: string): FileMetadata;
+
+  /**
    * Get a copy of the data from a port without popping it.
    * @remarks
    * RAM cost: 0 GB
@@ -8151,8 +8187,6 @@ export interface NS {
    * Add a callback to be executed when the script dies.
    * @remarks
    * RAM cost: 0 GB
-   *
-   * NS2 exclusive
    *
    * Each script can only register one callback per callback ID.
    * If another callback is registered with the same callback ID
@@ -8670,6 +8704,7 @@ type FactionNameEnumType = {
 /** @public */
 type FactionName = _ValueOf<FactionNameEnumType>;
 
+/** @public */
 type CodingContractNameEnumType = {
   FindLargestPrimeFactor: "Find Largest Prime Factor";
   SubarrayWithMaximumSum: "Subarray with Maximum Sum";
@@ -8705,6 +8740,7 @@ type CodingContractNameEnumType = {
 /** @public */
 type CodingContractName = _ValueOf<CodingContractNameEnumType>;
 
+/** @public */
 export type CodingContractSignatures = {
   "Find Largest Prime Factor": [number, number];
   "Subarray with Maximum Sum": [number[], number];
@@ -8737,6 +8773,7 @@ export type CodingContractSignatures = {
   "Total Number of Primes": [number[], number];
 };
 
+/** @public */
 export type CodingContractObject = {
   [T in keyof CodingContractSignatures]: {
     type: T;
@@ -8845,7 +8882,7 @@ export interface OfficeAPI {
    * @param divisionName - Name of the division
    * @param researchName - Name of the research
    */
-  research(divisionName: string, researchName: string): void;
+  research(divisionName: string, researchName: CorpResearchName): void;
 
   /**
    * Get data about an office.
@@ -8891,7 +8928,7 @@ export interface OfficeAPI {
    * @param researchName - Name of the research
    * @returns Cost
    */
-  getResearchCost(divisionName: string, researchName: string): number;
+  getResearchCost(divisionName: string, researchName: CorpResearchName): number;
 
   /**
    * Check if you unlocked a research.
@@ -8903,7 +8940,7 @@ export interface OfficeAPI {
    * @param researchName - Name of the research
    * @returns true is unlocked, false if not
    */
-  hasResearched(divisionName: string, researchName: string): boolean;
+  hasResearched(divisionName: string, researchName: CorpResearchName): boolean;
 
   /**
    * Set the job assignment for a job.
@@ -8959,7 +8996,7 @@ export interface WarehouseAPI {
    * @param amt - Amount to sell, can be "MAX"
    * @param price - Price to sell, can be "MP"
    */
-  sellMaterial(divisionName: string, city: CityName, materialName: string, amt: string, price: string): void;
+  sellMaterial(divisionName: string, city: CityName, materialName: CorpMaterialName, amt: string, price: string): void;
 
   /**
    * Set product sell data.
@@ -9017,7 +9054,12 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material
    * @param option - Smart supply option. Set "leftovers" to use leftovers, "imports" to use only imported materials, and "none" to not use stored materials.
    */
-  setSmartSupplyOption(divisionName: string, city: CityName, materialName: string, option: CorpSmartSupplyOption): void;
+  setSmartSupplyOption(
+    divisionName: string,
+    city: CityName,
+    materialName: CorpMaterialName,
+    option: CorpSmartSupplyOption,
+  ): void;
 
   /**
    * Set material buy data.
@@ -9030,7 +9072,7 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material
    * @param amt - Amount of material to buy
    */
-  buyMaterial(divisionName: string, city: CityName, materialName: string, amt: number): void;
+  buyMaterial(divisionName: string, city: CityName, materialName: CorpMaterialName, amt: number): void;
 
   /**
    * Set material to bulk-buy.
@@ -9043,7 +9085,7 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material
    * @param amt - Amount of material to buy
    */
-  bulkPurchase(divisionName: string, city: CityName, materialName: string, amt: number): void;
+  bulkPurchase(divisionName: string, city: CityName, materialName: CorpMaterialName, amt: number): void;
 
   /**
    * Get warehouse data.
@@ -9081,7 +9123,7 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material
    * @returns Material data
    */
-  getMaterial(divisionName: string, city: CityName, materialName: string): Material;
+  getMaterial(divisionName: string, city: CityName, materialName: CorpMaterialName): Material;
 
   /**
    * Set Market-TA1 for a material.
@@ -9094,7 +9136,7 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material
    * @param on - Use true to enable, false otherwise.
    */
-  setMaterialMarketTA1(divisionName: string, city: CityName, materialName: string, on: boolean): void;
+  setMaterialMarketTA1(divisionName: string, city: CityName, materialName: CorpMaterialName, on: boolean): void;
 
   /**
    * Set Market-TA2 for a material.
@@ -9107,7 +9149,7 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material
    * @param on - Use true to enable, false otherwise.
    */
-  setMaterialMarketTA2(divisionName: string, city: CityName, materialName: string, on: boolean): void;
+  setMaterialMarketTA2(divisionName: string, city: CityName, materialName: CorpMaterialName, on: boolean): void;
 
   /**
    * Set Market-TA1 for a product.
@@ -9151,7 +9193,7 @@ export interface WarehouseAPI {
     sourceCity: CityName,
     targetDivision: string,
     targetCity: CityName,
-    materialName: string,
+    materialName: CorpMaterialName,
     amt: number | string,
   ): void;
 
@@ -9172,7 +9214,7 @@ export interface WarehouseAPI {
     sourceCity: CityName,
     targetDivision: string,
     targetCity: CityName,
-    materialName: string,
+    materialName: CorpMaterialName,
   ): void;
 
   /**
@@ -9229,7 +9271,7 @@ export interface WarehouseAPI {
    * @param materialName - Name of the material.
    * @param qty - Amount to limit to. Pass a negative value to remove the limit instead.
    */
-  limitMaterialProduction(divisionName: string, city: CityName, materialName: string, qty: number): void;
+  limitMaterialProduction(divisionName: string, city: CityName, materialName: CorpMaterialName, qty: number): void;
 
   /**
    * Limit product production.
@@ -9334,7 +9376,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @param upgradeName - Name of the upgrade
    * @returns true if unlocked and false if not
    */
-  hasUnlock(upgradeName: string): boolean;
+  hasUnlock(upgradeName: CorpUnlockName): boolean;
 
   /**
    * Get the cost to unlock a one-time unlockable upgrade.
@@ -9345,7 +9387,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @param upgradeName - Name of the upgrade
    * @returns Cost of the upgrade
    */
-  getUnlockCost(upgradeName: string): number;
+  getUnlockCost(upgradeName: CorpUnlockName): number;
 
   /**
    * Get the level of a levelable upgrade.
@@ -9356,7 +9398,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @param upgradeName - Name of the upgrade
    * @returns The level of the upgrade
    */
-  getUpgradeLevel(upgradeName: string): number;
+  getUpgradeLevel(upgradeName: CorpUpgradeName): number;
 
   /**
    * Get the cost to unlock the next level of a levelable upgrade.
@@ -9367,7 +9409,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    * @param upgradeName - Name of the upgrade
    * @returns Cost of the upgrade
    */
-  getUpgradeLevelCost(upgradeName: string): number;
+  getUpgradeLevelCost(upgradeName: CorpUpgradeName): number;
 
   /**
    * Get an offer for investment based on current corporation valuation.
@@ -9504,7 +9546,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    *
    * @param upgradeName - Name of the upgrade
    */
-  purchaseUnlock(upgradeName: string): void;
+  purchaseUnlock(upgradeName: CorpUnlockName): void;
 
   /**
    * Level up an upgrade.
@@ -9514,7 +9556,7 @@ export interface Corporation extends WarehouseAPI, OfficeAPI {
    *
    * @param upgradeName - Name of the upgrade
    */
-  levelUpgrade(upgradeName: string): void;
+  levelUpgrade(upgradeName: CorpUpgradeName): void;
 
   /**
    * Issue dividends.
@@ -9825,8 +9867,7 @@ type CorpResearchName =
   | "uPgrade: Capacity.I"
   | "uPgrade: Capacity.II"
   | "uPgrade: Dashboard"
-  | "uPgrade: Fulcrum"
-  | "sudo.Assist";
+  | "uPgrade: Fulcrum";
 
 /**
  * Corporation material information

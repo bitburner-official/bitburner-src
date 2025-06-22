@@ -28,6 +28,5 @@ type CorpResearchName =
   | "uPgrade: Capacity.I"
   | "uPgrade: Capacity.II"
   | "uPgrade: Dashboard"
-  | "uPgrade: Fulcrum"
-  | "sudo.Assist";
+  | "uPgrade: Fulcrum";
 ```

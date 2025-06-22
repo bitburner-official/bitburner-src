@@ -9,7 +9,12 @@ Set whether smart supply uses leftovers before buying.
 **Signature:**
 
 ```typescript
-setSmartSupplyOption(divisionName: string, city: CityName, materialName: string, option: CorpSmartSupplyOption): void;
+setSmartSupplyOption(
+    divisionName: string,
+    city: CityName,
+    materialName: CorpMaterialName,
+    option: CorpSmartSupplyOption,
+  ): void;
 ```
 
 ## Parameters
@@ -18,7 +23,7 @@ setSmartSupplyOption(divisionName: string, city: CityName, materialName: string,
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
 |  city | [CityName](./bitburner.cityname.md) | Name of the city |
-|  materialName | string | Name of the material |
+|  materialName | [CorpMaterialName](./bitburner.corpmaterialname.md) | Name of the material |
 |  option | [CorpSmartSupplyOption](./bitburner.corpsmartsupplyoption.md) | Smart supply option. Set "leftovers" to use leftovers, "imports" to use only imported materials, and "none" to not use stored materials. |
 
 **Returns:**

@@ -68,6 +68,7 @@ import {
   CurrentKeyBindings,
 } from "../../utils/KeyBindingUtils";
 import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
+import { ErrorState } from "../../ErrorHandling/ErrorState";
 
 const RotatedDoubleArrowIcon = React.forwardRef(function RotatedDoubleArrowIcon(
   props: { color: "primary" | "secondary" | "error" },
@@ -148,6 +149,7 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
   const augmentationCount = Player.queuedAugmentations.length;
   const invitationsCount = Player.factionInvitations.filter((f) => !InvitationsSeen.has(f)).length;
   const programCount = getAvailableCreatePrograms().length - ProgramsSeen.size;
+  const errorCount = ErrorState.UnreadErrors;
 
   const canOpenFactions =
     Player.factionInvitations.length > 0 ||
@@ -339,7 +341,12 @@ export function SidebarRoot(props: { page: Page }): React.ReactElement {
           items={[
             { key_: Page.Terminal, icon: LastPageIcon },
             { key_: Page.ScriptEditor, icon: CreateIcon },
-            { key_: Page.ActiveScripts, icon: StorageIcon },
+            {
+              key_: Page.ActiveScripts,
+              icon: StorageIcon,
+              count: errorCount,
+              alternateKeys: [Page.RecentErrors, Page.RecentlyKilledScripts],
+            },
             { key_: Page.CreateProgram, icon: BugReportIcon, count: programCount },
             canStaneksGift && { key_: Page.StaneksGift, icon: DeveloperBoardIcon },
           ]}
