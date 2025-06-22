@@ -9,14 +9,14 @@ Get the cost to unlock the next level of a levelable upgrade.
 **Signature:**
 
 ```typescript
-getUpgradeLevelCost(upgradeName: string): number;
+getUpgradeLevelCost(upgradeName: CorpUpgradeName): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  upgradeName | string | Name of the upgrade |
+|  upgradeName | [CorpUpgradeName](./bitburner.corpupgradename.md) | Name of the upgrade |
 
 **Returns:**
 

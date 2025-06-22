@@ -4,8 +4,14 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
 import { MD } from "../../ui/MD/MD";
-import { Navigator, windowTopPositionOfPages, useHistory, openDocExternally } from "../../ui/React/Documentation";
-import { asFilePath, resolveFilePath } from "../../Paths/FilePath";
+import {
+  Navigator,
+  windowTopPositionOfPages,
+  useHistory,
+  openDocExternally,
+  prefixOfHttpUrlOfNsDocs,
+} from "../../ui/React/Documentation";
+import { asFilePath, isFilePath, resolveFilePath } from "../../Paths/FilePath";
 import { Settings } from "../../Settings/Settings";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
@@ -15,19 +21,48 @@ export function DocumentationRoot({ docPage }: { docPage?: string }): React.Reac
   const history = useHistory();
   const [deepLink, setDeepLink] = useState(docPage);
   const navigator = {
-    navigate(relativePath: string, external: boolean) {
-      const path = relativePath.startsWith("nsDoc/")
-        ? asFilePath(relativePath)
-        : resolveFilePath("./" + relativePath, history.page);
+    navigate(href: string, openExternally: boolean) {
+      let path;
+      /**
+       * Href can be:
+       * - Internal NS docs: nsDoc/bitburner.ns.md
+       * - Internal non-NS docs: help/getting_started.md
+       * - HTTP URL:
+       *   - Point to NS docs. Some non-NS docs pages include links to NS docs. For example: basic/scripts.md has a
+       * link to https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.flags.md. In
+       * these cases, the link always points to a file at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/
+       *   - Point to other places.
+       */
+      if (href.startsWith("nsDoc/")) {
+        // Internal NS docs
+        path = asFilePath(href);
+      } else if (href.startsWith("https://") || href.startsWith("http://")) {
+        /**
+         * HTTP URL pointing to NS docs.
+         * Convert https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/page.md to nsDoc/page.md
+         */
+        if (href.startsWith(prefixOfHttpUrlOfNsDocs)) {
+          path = asFilePath(`nsDoc/${href.replace(prefixOfHttpUrlOfNsDocs, "")}`);
+        } else {
+          // HTTP URL pointing to other places.
+          openExternally = true;
+          path = href;
+        }
+      } else {
+        // Internal non-NS docs
+        path = resolveFilePath("./" + href, history.page);
+      }
       if (!path) {
-        console.error(`Bad path ${relativePath} from ${history.page} while navigating docs.`);
+        console.error(`Bad path ${href} from ${history.page} while navigating docs.`);
         return;
       }
-      if (external) {
+      if (openExternally) {
         openDocExternally(path);
         return;
       }
-      history.push(path);
+      if (isFilePath(path)) {
+        history.push(path);
+      }
     },
   };
 

@@ -13,6 +13,7 @@ export interface ICreateProps {
   icon: React.ReactElement["type"];
   count?: number;
   active?: boolean;
+  alternateKeys?: Page[];
 }
 
 export interface SidebarItemProps extends ICreateProps {
