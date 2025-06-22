@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { reachedLimit, win } from "./Game";
+import { hasEnoughMoney, reachedLimit, win } from "./Game";
 import { BadRNG } from "./RNG";
 import { trusted } from "./utils";
 
@@ -24,7 +24,9 @@ export function CoinFlip(): React.ReactElement {
   const [playLock, setPlayLock] = useState(false);
 
   function play(guess: CoinFlipResult): void {
-    if (reachedLimit()) return;
+    if (reachedLimit() || !hasEnoughMoney(investment)) {
+      return;
+    }
     const v = BadRNG.random();
     let letter: CoinFlipResult;
     if (v < 0.5) {

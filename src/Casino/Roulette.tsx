@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Money } from "../ui/React/Money";
 import { BetInput } from "./BetInput";
-import { reachedLimit, win } from "./Game";
+import { hasEnoughMoney, reachedLimit, win } from "./Game";
 import { WHRNG } from "./RNG";
 import { trusted } from "./utils";
 
@@ -132,7 +132,9 @@ export function Roulette(): React.ReactElement {
   }
 
   function play(strategy: Strategy): void {
-    if (reachedLimit()) return;
+    if (reachedLimit() || !hasEnoughMoney(investment)) {
+      return;
+    }
 
     setCanPlay(false);
     setLock(false);
@@ -171,8 +173,6 @@ export function Roulette(): React.ReactElement {
       setLock(true);
       setStatus(status);
       setN(n);
-
-      reachedLimit();
     }, 1600);
   }
 

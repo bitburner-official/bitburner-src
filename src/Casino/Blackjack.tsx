@@ -4,13 +4,12 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { Player } from "@player";
 import { Money } from "../ui/React/Money";
 import { BetInput } from "./BetInput";
 import { Deck } from "./CardDeck/Deck";
 import { Hand } from "./CardDeck/Hand";
 import { ReactCard } from "./CardDeck/ReactCard";
-import { reachedLimit, win } from "./Game";
+import { hasEnoughMoney, reachedLimit, win } from "./Game";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 
 const initialBet = 1e6;
@@ -59,14 +58,8 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
     };
   }
 
-  canStartGame = (): boolean => {
-    const { bet } = this.state;
-
-    return Player.canAfford(bet);
-  };
-
   startGame = (): void => {
-    if (!this.canStartGame() || reachedLimit()) {
+    if (reachedLimit() || !hasEnoughMoney(this.state.bet)) {
       return;
     }
 
@@ -294,7 +287,7 @@ export class Blackjack extends React.Component<Record<string, never>, State> {
 
         {/* Buttons */}
         {!gameInProgress ? (
-          <Button onClick={this.startOnClick} disabled={wagerInvalid || !this.canStartGame()}>
+          <Button onClick={this.startOnClick} disabled={wagerInvalid}>
             Start
           </Button>
         ) : (

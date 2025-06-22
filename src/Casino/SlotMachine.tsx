@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import { Player } from "@player";
 import { Money } from "../ui/React/Money";
 import { BetInput } from "./BetInput";
-import { reachedLimit, win } from "./Game";
+import { hasEnoughMoney, reachedLimit, win } from "./Game";
 import { WHRNG } from "./RNG";
 import { trusted } from "./utils";
 
@@ -187,7 +187,9 @@ export function SlotMachine(): React.ReactElement {
   }
 
   function play(): void {
-    if (reachedLimit()) return;
+    if (reachedLimit() || !hasEnoughMoney(investment)) {
+      return;
+    }
     setStatus("playing");
     win(-investment);
     if (!canPlay) return;
@@ -240,7 +242,6 @@ export function SlotMachine(): React.ReactElement {
       </>,
     );
     setCanPlay(true);
-    if (reachedLimit()) return;
   }
 
   function unlock(): void {
