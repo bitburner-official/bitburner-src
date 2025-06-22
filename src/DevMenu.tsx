@@ -34,19 +34,9 @@ export function DevMenuRoot(): React.ReactElement {
     data: getAutoExpandData(),
     set: (key: string, expanded: boolean) => {
       autoExpandContextValue.current.data[key] = expanded;
+      setAutoExpandData(autoExpandContextValue.current.data);
     },
   });
-
-  useEffect(() => {
-    const onUnmountComponentOrUnloadWindow = () => {
-      setAutoExpandData(autoExpandContextValue.current.data);
-    };
-    window.addEventListener("beforeunload", onUnmountComponentOrUnloadWindow);
-    return () => {
-      onUnmountComponentOrUnloadWindow();
-      window.removeEventListener("beforeunload", onUnmountComponentOrUnloadWindow);
-    };
-  }, []);
 
   useEffect(() => {
     Player.giveExploit(Exploit.YoureNotMeantToAccessThis);
