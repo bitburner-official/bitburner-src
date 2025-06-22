@@ -2,6 +2,12 @@ name: "Deploy new pages build"
 
 on:
   workflow_dispatch:
+    inputs:
+      enable_dev_mode:
+        description: Enable dev mode (enable dev menu, disable minification, etc.)
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
@@ -24,7 +30,14 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
-      - run: npm run build
+      - env:
+          ENABLE_DEV_MODE: ${{ github.event.inputs.enable_dev_mode }}
+        run: |
+          if [[ "$ENABLE_DEV_MODE" == 'true' ]]; then
+            npm run build:dev
+          else
+            npm run build
+          fi
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ".app"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import { makeStyles } from "tss-react/mui";
@@ -7,7 +7,7 @@ import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { saveObject } from "../SaveObject";
 import { onExport } from "../ExportBonus";
-import { CompletedProgramName, LocationName } from "@enums";
+import { CompletedProgramName, LocationName, SimplePage } from "@enums";
 import { ITutorial, iTutorialStart } from "../InteractiveTutorial";
 import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutorialRoot";
 import { ITutorialEvents } from "./InteractiveTutorial/ITutorialEvents";
@@ -18,7 +18,7 @@ import { GetAllServers } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 
 import type { ComplexPage } from "./Enums";
-import type { PageWithContext, IRouter, PageContext } from "./Router";
+import type { IRouter, PageContext, PageWithContext } from "./Router";
 import { Page } from "./Router";
 import { Overview } from "./React/Overview";
 import { SidebarRoot } from "../Sidebar/ui/SidebarRoot";
@@ -78,6 +78,7 @@ import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { SpecialServers } from "../Server/data/SpecialServers";
+import { ErrorModal } from "../ErrorHandling/ErrorModal";
 import { DocumentationPopUp } from "../Documentation/ui/DocumentationPopUp";
 
 const htmlLocation = location;
@@ -281,7 +282,15 @@ export function GameRoot(): React.ReactElement {
       break;
     }
     case Page.ActiveScripts: {
-      mainPage = <ActiveScriptsRoot />;
+      mainPage = <ActiveScriptsRoot page={SimplePage.ActiveScripts} />;
+      break;
+    }
+    case Page.RecentlyKilledScripts: {
+      mainPage = <ActiveScriptsRoot page={SimplePage.RecentlyKilledScripts} />;
+      break;
+    }
+    case Page.RecentErrors: {
+      mainPage = <ActiveScriptsRoot page={SimplePage.RecentErrors} />;
       break;
     }
     case Page.Hacknet: {
@@ -441,6 +450,7 @@ export function GameRoot(): React.ReactElement {
               <Unclickable />
               <LogBoxManager hidden={hidePopups} />
               <AlertManager hidden={hidePopups} />
+              <ErrorModal />
               <PromptManager hidden={hidePopups} />
               <FactionInvitationManager hidden={hidePopups} />
               <Snackbar hidden={hidePopups} />

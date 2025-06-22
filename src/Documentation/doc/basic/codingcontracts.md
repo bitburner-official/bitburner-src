@@ -34,7 +34,7 @@ Like most functions in other APIs, almost all of the functions in the [Coding Co
 Depending on which function you use, the initial [RAM](ram.md) on your home server might not be enough to allow you to use various [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) functions.
 Plan on upgrading the [RAM](ram.md) on your home server if you want to use the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md).
 
-The [`getContractTypes`](https://github.com/bitburner-official/bitburner-src/blob/dev/markdown/bitburner.codingcontract.getcontracttypes.md) function is free, and returns a list of all of the contract types currently in the game.
+The [`getContractTypes`](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.getcontracttypes.md) function is free, and returns a list of all of the contract types currently in the game.
 
 ## Submitting Solutions
 

@@ -13,15 +13,17 @@ import {
   generateRandomContract,
   generateRandomContractOnHome,
 } from "../../CodingContract/ContractGenerator";
-import { isCodingContractName } from "../../CodingContract/ContractTypes";
 import { CodingContractName } from "@enums";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
+import { getEnumHelper } from "../../utils/EnumHelper";
 
 export function CodingContractsDev(): React.ReactElement {
   const [codingcontract, setCodingcontract] = useState(CodingContractName.FindLargestPrimeFactor);
   function setCodingcontractDropdown(event: SelectChangeEvent): void {
     const value = event.target.value;
-    if (!isCodingContractName(value)) return;
+    if (!getEnumHelper("CodingContractName").isMember(value)) {
+      return;
+    }
     setCodingcontract(value);
   }
 
