@@ -1,5 +1,4 @@
 import TextField from "@mui/material/TextField";
-import { Player } from "@player";
 import React, { useState } from "react";
 import { Settings } from "../Settings/Settings";
 import { formatMoney } from "../ui/formatNumber";
@@ -28,6 +27,10 @@ export function BetInput({
     setBetValue(betInput);
     const bet = Math.round(parseFloat(betInput));
     let isValid = false;
+    /**
+     * We intentionally do not check if the player has enough money. The player's money can change between these checks
+     * and when the bet is actually used.
+     */
     if (isNaN(bet)) {
       setBet(0);
       setHelperText("Not a valid number");
@@ -35,11 +38,9 @@ export function BetInput({
       setBet(0);
       setHelperText("Must bet a positive amount");
     } else if (bet > maxBet) {
-      setBet(0);
-      setHelperText("Exceed max bet");
-    } else if (!Player.canAfford(bet)) {
-      setBet(0);
-      setHelperText("Not enough money");
+      // This is for the player's convenience. They can type a bunch of 9s, and we will set the max bet for them.
+      setBetValue(String(maxBet));
+      setBet(maxBet);
     } else {
       // Valid wager
       isValid = true;
