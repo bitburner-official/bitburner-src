@@ -58,4 +58,4 @@ To prevent this from happening make sure to multithread the scripts as much as p
 ## Bug
 
 Otherwise, the game is probably frozen/stuck due to a bug.
-To report a bug, follow the guidelines [here](https://github.com/bitburner-official/bitburner-src/blob/stable/doc/CONTRIBUTING.md#reporting-bugs).
+To report a bug, follow the guidelines [here](https://github.com/bitburner-official/bitburner-src/blob/stable/CONTRIBUTING.md#reporting-bugs).
