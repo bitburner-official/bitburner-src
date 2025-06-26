@@ -226,7 +226,7 @@ the following rules:
 To contribute to and view your changes to the BitBurner documentation in-game, you will
 need to edit the files in [this folder](https://github.com/bitburner-official/bitburner-src/tree/dev/src/Documentation/doc)
 
-To make change to the [in-game documentation](../markdown/bitburner.md), you will need to modify the [TypeScript definitions](../src/ScriptEditor/NetscriptDefinitions.d.ts), not the Markdown files.
+To make change to the [in-game documentation](./markdown/bitburner.md), you will need to modify the [TypeScript definitions](../src/ScriptEditor/NetscriptDefinitions.d.ts), not the Markdown files.
 
 We are using [API Extractor](https://api-extractor.com/pages/tsdoc/doc_comment_syntax/) (tsdoc hints) to generate the Markdown doc. Make your changes to the TypeScript definitions and then run `npm run doc`.
 
