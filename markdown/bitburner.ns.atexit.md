@@ -27,7 +27,5 @@ void
 
 RAM cost: 0 GB
 
-NS2 exclusive
-
 Each script can only register one callback per callback ID. If another callback is registered with the same callback ID the previous callback with that ID is forgotten and will not be executed when the script dies.
 

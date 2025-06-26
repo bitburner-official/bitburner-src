@@ -149,11 +149,6 @@ export const ResearchMap: Record<CorpResearchName, Research> = {
       "control confidence and enthusiasm. This research increases the maximum " +
       "morale of all employees by 10.",
   }),
-  "sudo.Assist": new Research({
-    name: "sudo.Assist",
-    cost: 15e3,
-    desc: "Develop a virtual assistant AI to handle and manage administrative issues for your corporation.",
-  }),
   "uPgrade: Capacity.I": new Research({
     name: "uPgrade: Capacity.I",
     cost: 20e3,

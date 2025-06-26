@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Accordion,
   AccordionSummary,
   AccordionDetails,
   Button,
@@ -27,6 +26,7 @@ import { getEnumHelper } from "../../utils/EnumHelper";
 import { useRerender } from "../../ui/React/hooks";
 import { MaxFavor } from "../../Faction/formulas/favor";
 import { FactionChooser } from "./FactionChooser";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 const largeAmountOfReputation = 1e12;
 
@@ -119,7 +119,7 @@ export function FactionsDev(): React.ReactElement {
   }
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_FactionsDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Factions</Typography>
       </AccordionSummary>
@@ -237,6 +237,6 @@ export function FactionsDev(): React.ReactElement {
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }
