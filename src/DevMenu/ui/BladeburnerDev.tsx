@@ -6,7 +6,6 @@ import {
   InputLabel,
   MenuItem,
   FormControl,
-  Accordion,
   AccordionSummary,
   AccordionDetails,
 } from "@mui/material";
@@ -19,6 +18,7 @@ import { BladeburnerSkillName, CityName } from "@enums";
 import { Skills as AllSkills } from "../../Bladeburner/data/Skills";
 import { Bladeburner } from "../../Bladeburner/Bladeburner";
 import { getEnumHelper } from "../../utils/EnumHelper";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 const bigNumber = 1e27;
 
@@ -152,7 +152,7 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
   const resetOperationSuccesses = () => (bladeburner.operations[AllOperations[operationTarget].name].successes = 0);
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_BladeburnerDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Bladeburner</Typography>
       </AccordionSummary>
@@ -395,6 +395,6 @@ export function BladeburnerDev({ bladeburner }: { bladeburner: Bladeburner }): R
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

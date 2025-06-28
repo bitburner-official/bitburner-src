@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -15,6 +14,7 @@ import { Player } from "@player";
 import { achievements } from "../../Achievements/Achievements";
 import { Engine } from "../../engine";
 import type { AchievementId } from "../../Achievements/Types";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 export function AchievementsDev(): React.ReactElement {
   const [playerAchievement, setPlayerAchievements] = useState(Player.achievements.map((m) => m.ID));
@@ -48,7 +48,7 @@ export function AchievementsDev(): React.ReactElement {
   }
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_AchievementsDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Achievements</Typography>
       </AccordionSummary>
@@ -109,6 +109,6 @@ export function AchievementsDev(): React.ReactElement {
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

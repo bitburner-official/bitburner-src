@@ -2,7 +2,6 @@ import { Player } from "@player";
 import React from "react";
 import { Clear, ExpandMore } from "@mui/icons-material";
 import {
-  Accordion,
   AccordionDetails,
   AccordionSummary,
   Autocomplete,
@@ -19,6 +18,7 @@ import { AugmentationName, FactionName } from "@enums";
 import { Factions } from "../../Faction/Factions";
 import { FactionChooser } from "./FactionChooser";
 import { getFactionAugmentationsFiltered } from "../../Faction/FactionHelpers";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 export function AugmentationsDev(): React.ReactElement {
   const [augmentation, setAugmentation] = React.useState<AugmentationName | null>(null);
@@ -76,7 +76,7 @@ export function AugmentationsDev(): React.ReactElement {
   );
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_AugmentationsDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMore />}>
         <Typography>Augmentations</Typography>
       </AccordionSummary>
@@ -117,6 +117,6 @@ export function AugmentationsDev(): React.ReactElement {
           <FactionChooser faction={selectedFaction} onChange={setSelectedFaction} style={{ marginLeft: "16px" }} />
         </Box>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

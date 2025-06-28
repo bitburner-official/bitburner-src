@@ -28,16 +28,16 @@ export function DarknetDev(): React.ReactElement {
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Darknet</Typography>
       </AccordionSummary>
-      <Tooltip title={<Typography>Gain access to the darkweb network.</Typography>}>
-        <Button
-          onClick={() => {
-            getDarkscapeNavigator();
-          }}
-        >
-          Get DarkscapeNavigator.exe
-        </Button>
-      </Tooltip>
       <AccordionDetails>
+        <Tooltip title={<Typography>Gain access to the darkweb network.</Typography>}>
+          <Button
+            onClick={() => {
+              getDarkscapeNavigator();
+            }}
+          >
+            Get DarkscapeNavigator.exe
+          </Button>
+        </Tooltip>
         <OptionSwitch
           checked={DarknetState.showFullNetwork}
           onChange={(newValue) => toggleShowFullNetwork(newValue)}

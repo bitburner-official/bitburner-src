@@ -750,7 +750,7 @@ export const achievements: Record<AchievementId, Achievement> = {
 // Steam has a limit of 100 achievement. So these were planned but commented for now.
 // { ID: FactionNames.ECorp.toUpperCase(), Condition: () => Player.factions.includes(FactionNames.ECorp) },
 // { ID: FactionNames.MegaCorp.toUpperCase(), Condition: () => Player.factions.includes(FactionNames.MegaCorp) },
-// { ID: "BACHMAN_&_ASSOCIATES", Condition: () => Player.factions.includes(FactionNames.BachmanAssociates) },
+// { ID: "BACHMAN_&_ASSOCIATES", Condition: () => Player.factions.includes(FactionNames.BachmanAndAssociates) },
 // { ID: "BLADE_INDUSTRIES", Condition: () => Player.factions.includes(FactionNames.BladeIndustries) },
 // { ID: FactionNames.NWO.toUpperCase(), Condition: () => Player.factions.includes(FactionNames.NWO) },
 // { ID: "CLARKE_INCORPORATED", Condition: () => Player.factions.includes(FactionNames.ClarkeIncorporated) },

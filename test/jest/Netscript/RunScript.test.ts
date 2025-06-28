@@ -116,9 +116,37 @@ const runOptions = {
   preventDuplicates: false,
 };
 
+async function expectErrorWhenRunningScript(
+  scripts: { filePath: ScriptFilePath; code: string }[],
+  testScriptPath: ScriptFilePath,
+  errorShown: Promise<unknown>,
+  errorMessage: string,
+): Promise<void> {
+  /**
+   * Suppress console.error(). When there is a thrown error in the player's script, we print it to the console. In
+   * this test, we intentionally throw an error, so we can ignore it.
+   */
+  jest.spyOn(console, "error").mockImplementation(jest.fn());
+  for (const script of scripts) {
+    Player.getHomeComputer().writeToScriptFile(script.filePath, script.code);
+  }
+  runScript(testScriptPath, [], Player.getHomeComputer());
+  const workerScript = workerScripts.get(1);
+  if (!workerScript) {
+    throw new Error(`Invalid worker script`);
+  }
+  const result = await Promise.race([
+    errorShown,
+    new Promise<void>((resolve) => (workerScript.atExit = new Map([["default", resolve]]))),
+  ]);
+  expect(result).toBeDefined();
+  expect(workerScript.scriptRef.logs[0]).toContain(errorMessage);
+}
+
 describe("runScript and runScriptFromScript", () => {
-  let alertDelete: () => void;
+  let alertEventCleanUpFunction: () => void;
   let alerted: Promise<unknown>;
+  let errorPopUpEventCleanUpFunction: () => void;
   let errorShown: Promise<unknown>;
 
   beforeEach(() => {
@@ -127,14 +155,18 @@ describe("runScript and runScriptFromScript", () => {
     resetPidCounter();
 
     alerted = new Promise((resolve) => {
-      alertDelete = AlertEvents.subscribe((x) => resolve(x));
+      alertEventCleanUpFunction = AlertEvents.subscribe((x) => resolve(x));
     });
     errorShown = new Promise((resolve) => {
-      ErrorState.ErrorUpdate.subscribe((x) => resolve(x));
+      errorPopUpEventCleanUpFunction = ErrorState.ErrorUpdate.subscribe((x) => resolve(x));
     });
   });
   afterEach(() => {
-    alertDelete();
+    alertEventCleanUpFunction();
+    errorPopUpEventCleanUpFunction();
+    ErrorState.ActiveError = null;
+    ErrorState.Errors.length = 0;
+    ErrorState.UnreadErrors = 0;
   });
 
   describe("runScript", () => {
@@ -202,29 +234,56 @@ describe("runScript and runScriptFromScript", () => {
         expect((Terminal.outputHistory[1] as { text: string }).text).toContain("This script requires 1.02TB of RAM");
       });
       test("Thrown error in main function", async () => {
-        /**
-         * Suppress console.error(). When there is a thrown error in the player's script, we print it to the console. In
-         * this test, we intentionally throw an error, so we can ignore it.
-         */
-        jest.spyOn(console, "error").mockImplementation(jest.fn());
         const errorMessage = `Test error ${Date.now()}`;
-        Player.getHomeComputer().writeToScriptFile(
+        await expectErrorWhenRunningScript(
+          [
+            {
+              filePath: testScriptPath,
+              code: `export async function main(ns) {
+                      throw new Error("${errorMessage}");
+                    }`,
+            },
+          ],
           testScriptPath,
-          `export async function main(ns) {
-             throw new Error("${errorMessage}");
-           }`,
-        );
-        runScript(testScriptPath, [], Player.getHomeComputer());
-        const workerScript = workerScripts.get(1);
-        if (!workerScript) {
-          throw new Error(`Invalid worker script`);
-        }
-        const result = await Promise.race([
           errorShown,
-          new Promise<void>((resolve) => (workerScript.atExit = new Map([["default", resolve]]))),
-        ]);
-        expect(result).toBeDefined();
-        expect(workerScript.scriptRef.logs[0]).toContain(errorMessage);
+          errorMessage,
+        );
+      });
+      test("Circular dependencies: Import itself", async () => {
+        await expectErrorWhenRunningScript(
+          [
+            {
+              filePath: testScriptPath,
+              code: `import * as test from "./test";
+                    export async function main(ns) {
+                    }`,
+            },
+          ],
+          testScriptPath,
+          errorShown,
+          "Circular dependencies detected",
+        );
+      });
+      test("Circular dependencies: Circular import", async () => {
+        await expectErrorWhenRunningScript(
+          [
+            {
+              filePath: testScriptPath,
+              code: `import { libValue } from "./lib";
+                    export const testValue = 1;
+                    export async function main(ns) {
+                    }`,
+            },
+            {
+              filePath: "lib.js" as ScriptFilePath,
+              code: `import { testValue } from "./test";
+                    export const libValue = testValue;`,
+            },
+          ],
+          testScriptPath,
+          errorShown,
+          "Circular dependencies detected",
+        );
       });
     });
   });

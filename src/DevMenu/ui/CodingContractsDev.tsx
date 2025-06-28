@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -15,6 +14,7 @@ import {
   generateRandomContractOnHome,
 } from "../../CodingContract/ContractGenerator";
 import { CodingContractName } from "@enums";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 import { getEnumHelper } from "../../utils/EnumHelper";
 
 export function CodingContractsDev(): React.ReactElement {
@@ -35,7 +35,7 @@ export function CodingContractsDev(): React.ReactElement {
   }
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_CodingContractsDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Coding Contracts</Typography>
       </AccordionSummary>
@@ -63,6 +63,6 @@ export function CodingContractsDev(): React.ReactElement {
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

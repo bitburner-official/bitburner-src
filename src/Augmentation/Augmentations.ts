@@ -41,7 +41,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       factions: [
         FactionName.Silhouette,
         FactionName.FourSigma,
-        FactionName.BachmanAssociates,
+        FactionName.BachmanAndAssociates,
         FactionName.ClarkeIncorporated,
       ],
     },
@@ -701,7 +701,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       charisma: 1.6,
       charisma_exp: 1.6,
       factions: [
-        FactionName.BachmanAssociates,
+        FactionName.BachmanAndAssociates,
         FactionName.NWO,
         FactionName.ClarkeIncorporated,
         FactionName.OmniTekIncorporated,
@@ -747,7 +747,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       company_rep: 1.1,
       work_money: 1.2,
       factions: [
-        FactionName.BachmanAssociates,
+        FactionName.BachmanAndAssociates,
         FactionName.ClarkeIncorporated,
         FactionName.FourSigma,
         FactionName.KuaiGongInternational,
@@ -1143,7 +1143,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         FactionName.Aevum,
         FactionName.Ishima,
         FactionName.Volhaven,
-        FactionName.BachmanAssociates,
+        FactionName.BachmanAndAssociates,
         FactionName.ClarkeIncorporated,
         FactionName.FourSigma,
       ],
@@ -1302,7 +1302,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         FactionName.Chongqing,
         FactionName.ClarkeIncorporated,
         FactionName.FourSigma,
-        FactionName.BachmanAssociates,
+        FactionName.BachmanAndAssociates,
       ],
     },
     [AugmentationName.NutriGen]: {
@@ -1544,7 +1544,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       charisma_exp: 1.5,
       company_rep: 1.25,
       faction_rep: 1.25,
-      factions: [FactionName.BachmanAssociates],
+      factions: [FactionName.BachmanAndAssociates],
     },
     [AugmentationName.SmartSonar]: {
       repCost: 2.25e4,
@@ -1570,7 +1570,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         FactionName.FourSigma,
         FactionName.KuaiGongInternational,
         FactionName.ClarkeIncorporated,
-        FactionName.BachmanAssociates,
+        FactionName.BachmanAndAssociates,
       ],
     },
     [AugmentationName.SpeechProcessor]: {
