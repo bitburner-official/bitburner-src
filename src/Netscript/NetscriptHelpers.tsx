@@ -70,6 +70,8 @@ import { LiteratureName } from "@enums";
 import { isDarknetServer } from "../DarkNet/effects/effects";
 import { DarknetServer as IDarknetServer } from "@nsdefs";
 import { exampleDarknetServer } from "../DarkNet/Enums";
+import { Programs } from "../Programs/Programs";
+import { getRecordKeys } from "../Types/Record";
 
 export const helpers = {
   string,
@@ -694,10 +696,19 @@ export function filePath(ctx: NetscriptContext, argName: string, filename: unkno
   throw errorMessage(ctx, `Invalid ${argName}, was not a valid path: ${filename}`);
 }
 
-export function scriptPath(ctx: NetscriptContext, argName: string, filename: unknown): ScriptFilePath {
+export function scriptPath(
+  ctx: NetscriptContext,
+  argName: string,
+  filename: unknown,
+  showExeErrorHint = false,
+): ScriptFilePath {
   const path = filePath(ctx, argName, filename);
   if (hasScriptExtension(path)) return path;
-  throw errorMessage(ctx, `Invalid ${argName}, must be a script: ${filename}`);
+
+  const programName = getRecordKeys(Programs).find((name) => name.toLowerCase() === programLowered);
+  const nsMethod = programName ? Programs[programName].nsMethod : "";
+  const hint = nsMethod && showExeErrorHint ? `Did you mean to use ns.${nsMethod}?` : "";
+  throw errorMessage(ctx, `Invalid ${argName}, must be a script (js, jsx, ts, tsx): ${filename} ${hint}`);
 }
 
 /**

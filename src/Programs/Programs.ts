@@ -31,6 +31,7 @@ function bitFlumeRequirements() {
 export const Programs: Record<CompletedProgramName, Program> = {
   [CompletedProgramName.nuke]: new Program({
     name: CompletedProgramName.nuke,
+    nsMethod: "nuke",
     create: {
       level: 1,
       tooltip: "This virus is used to gain root access to a machine if enough ports are opened.",
@@ -59,6 +60,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.bruteSsh]: new Program({
     name: CompletedProgramName.bruteSsh,
+    nsMethod: "brutessh",
     create: {
       level: 50,
       tooltip: "This program executes a brute force attack that opens SSH ports",
@@ -82,6 +84,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.ftpCrack]: new Program({
     name: CompletedProgramName.ftpCrack,
+    nsMethod: "ftpcrack",
     create: {
       level: 100,
       tooltip: "This program cracks open FTP ports",
@@ -105,6 +108,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.relaySmtp]: new Program({
     name: CompletedProgramName.relaySmtp,
+    nsMethod: "relaysmtp",
     create: {
       level: 250,
       tooltip: "This program opens SMTP ports by redirecting data",
@@ -128,6 +132,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.httpWorm]: new Program({
     name: CompletedProgramName.httpWorm,
+    nsMethod: "httpworm",
     create: {
       level: 500,
       tooltip: "This virus opens up HTTP ports",
@@ -151,6 +156,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.sqlInject]: new Program({
     name: CompletedProgramName.sqlInject,
+    nsMethod: "sqlinject",
     create: {
       level: 750,
       tooltip: "This virus opens SQL ports",
@@ -200,6 +206,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.serverProfiler]: new Program({
     name: CompletedProgramName.serverProfiler,
+    nsMethod: "getServer",
     create: {
       level: 75,
       tooltip: "This program is used to display hacking and Netscript-related information about servers",
@@ -337,6 +344,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
   }),
   [CompletedProgramName.stormSeed]: new Program({
     name: CompletedProgramName.stormSeed,
+    nsMethod: "dnet.unleashStormSeed",
     create: null,
     run: (): void => {
       Terminal.print("You can feel a storm approaching...");

@@ -696,7 +696,7 @@ export const ns: InternalAPI<NSFull> = {
   run:
     (ctx) =>
     (_scriptname, _thread_or_opt = 1, ..._args) => {
-      const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
+      const path = helpers.scriptPath(ctx, "scriptname", _scriptname, true);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const scriptServer = ctx.workerScript.getServer();
@@ -706,7 +706,7 @@ export const ns: InternalAPI<NSFull> = {
   exec:
     (ctx) =>
     (_scriptname, _host, _thread_or_opt = 1, ..._args) => {
-      const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
+      const path = helpers.scriptPath(ctx, "scriptname", _scriptname, true);
       const host = helpers.string(ctx, "host", _host);
       const runOpts = helpers.runOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
@@ -728,7 +728,7 @@ export const ns: InternalAPI<NSFull> = {
   spawn:
     (ctx) =>
     (_scriptname, _thread_or_opt = 1, ..._args) => {
-      const path = helpers.scriptPath(ctx, "scriptname", _scriptname);
+      const path = helpers.scriptPath(ctx, "scriptname", _scriptname, true);
       const runOpts = helpers.spawnOptions(ctx, _thread_or_opt);
       const args = helpers.scriptArgs(ctx, _args);
       const spawnCb = () => {
