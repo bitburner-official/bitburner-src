@@ -9,19 +9,23 @@ Adds a colored circle indicator to the specified point. These indicators are rem
 **Signature:**
 
 ```typescript
-highlightPoint(x, y, color, text): void;
+highlightPoint(x: number, y: number, color?: string, text?: string): void;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  x | (not declared) | the x coordinate to highlight |
-|  y | (not declared) | the y coordinate to highlight |
-|  color | (not declared) | optional: the color to use for the circle. Can be given an RGB string like "\#FFF000", or "none" to clear it, or one of these color names from the selected theme: "hack" (green), "hp" (red), "money" (yellow), "int" (blue), "cha" (purple) |
-|  text | (not declared) | optional: text to add to the node (replaces the default A.1 or B5 seen on hover). Should be kept short to fit well. |
+|  x | number | The x coordinate to highlight |
+|  y | number | The y coordinate to highlight |
+|  color | string | _(Optional)_ The color to use for the circle. It can be any value accepted by [outline-color CSS property](https://developer.mozilla.org/en-US/docs/Web/CSS/outline-color) (e.g., an RGB string like "\#FFF000"). You can also use "none" to clear it or one of 5 special values: "hack", "hp", "money", "int", "cha". The corresponding colors of 5 special values depend on your theme. |
+|  text | string | _(Optional)_ Text to add to the node (replaces the default A.1 or B5 seen on hover). Should be kept short to fit well. |
 
 **Returns:**
 
 void
+
+## Remarks
+
+RAM cost: 0 GB
 

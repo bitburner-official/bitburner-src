@@ -9,7 +9,7 @@ Get material data.
 **Signature:**
 
 ```typescript
-getMaterial(divisionName: string, city: CityName, materialName: string): Material;
+getMaterial(divisionName: string, city: CityName, materialName: CorpMaterialName): Material;
 ```
 
 ## Parameters
@@ -18,7 +18,7 @@ getMaterial(divisionName: string, city: CityName, materialName: string): Materia
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
 |  city | [CityName](./bitburner.cityname.md) | Name of the city |
-|  materialName | string | Name of the material |
+|  materialName | [CorpMaterialName](./bitburner.corpmaterialname.md) | Name of the material |
 
 **Returns:**
 

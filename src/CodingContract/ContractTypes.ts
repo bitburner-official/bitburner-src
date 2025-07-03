@@ -103,9 +103,6 @@ export function convert2DArrayToString(arr: number[][]): string {
   return components.join(",").replace(/\s/g, "");
 }
 
-export const isCodingContractName = (v: unknown): v is CodingContractName =>
-  Object.values(CodingContractName).some((a) => a === v);
-
 export const CodingContractDefinitions: CodingContractTypes = {
   ...algorithmicStockTrader,
   ...arrayJumpingGame,

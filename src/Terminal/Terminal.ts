@@ -81,7 +81,7 @@ import { clear } from "./commands/clear";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Engine } from "../engine";
 import { Directory, resolveDirectory, root } from "../Paths/Directory";
-import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
+import { FilePath, isBasicFilePath, resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
@@ -799,7 +799,7 @@ export class Terminal {
     const commandName = commandArray[0];
     if (typeof commandName !== "string") return this.error(`${commandName} is not a valid command.`);
     // run by path command
-    if (isFilePath(commandName)) return run(commandArray, currentServer);
+    if (isBasicFilePath(commandName)) return run(commandArray, currentServer);
 
     // Aside from the run-by-path command, we don't need the first entry once we've stored it in commandName.
     commandArray.shift();
