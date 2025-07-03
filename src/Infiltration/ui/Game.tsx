@@ -18,13 +18,12 @@ import { calculateDamageAfterFailingInfiltration } from "../utils";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { PlayerEventType, PlayerEvents } from "../../PersonObjects/Player/PlayerEvents";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { MaxDif } from "../formulas/game";
+import { calculateReward, MaxDifficultyForInfiltration } from "../formulas/game";
 
 type GameProps = {
-  StartingDifficulty: number;
-  Difficulty: number;
-  Reward: number;
-  MaxLevel: number;
+  startingSecurityLevel: number;
+  difficulty: number;
+  maxLevel: number;
 };
 
 enum Stage {
@@ -45,7 +44,7 @@ const minigames = [
   WireCuttingGame,
 ];
 
-export function Game(props: GameProps): React.ReactElement {
+export function Game({ startingSecurityLevel, difficulty, maxLevel }: GameProps): React.ReactElement {
   const [level, setLevel] = useState(1);
   const [stage, setStage] = useState(Stage.Countdown);
   const [results, setResults] = useState("");
@@ -53,6 +52,7 @@ export function Game(props: GameProps): React.ReactElement {
     lastGames: [-1, -1],
     id: Math.floor(Math.random() * minigames.length),
   });
+  const reward = calculateReward(startingSecurityLevel);
 
   const setupNextGame = useCallback(() => {
     const nextGameId = () => {
@@ -81,21 +81,21 @@ export function Game(props: GameProps): React.ReactElement {
 
   const onSuccess = useCallback(() => {
     pushResult(true);
-    if (level === props.MaxLevel) {
+    if (level === maxLevel) {
       setStage(Stage.Sell);
     } else {
       setStage(Stage.Countdown);
       setLevel(level + 1);
     }
     setupNextGame();
-  }, [level, props.MaxLevel, setupNextGame]);
+  }, [level, maxLevel, setupNextGame]);
 
   const onFailure = useCallback(
-    (options?: { automated?: boolean; suicide?: boolean }) => {
+    (options?: { automated?: boolean; impossible?: boolean }) => {
       setStage(Stage.Countdown);
       pushResult(false);
       Player.receiveRumor(FactionName.ShadowsOfAnarchy);
-      let damage = calculateDamageAfterFailingInfiltration(props.StartingDifficulty);
+      let damage = calculateDamageAfterFailingInfiltration(startingSecurityLevel);
       // Kill the player immediately if they use automation, so it's clear they're not meant to
       if (options?.automated) {
         damage = Player.hp.current;
@@ -107,7 +107,7 @@ export function Game(props: GameProps): React.ReactElement {
           );
         }, 500);
       }
-      if (options?.suicide) {
+      if (options?.impossible) {
         damage = Player.hp.current;
         setTimeout(() => {
           SnackbarEvents.emit(
@@ -123,7 +123,7 @@ export function Game(props: GameProps): React.ReactElement {
       }
       setupNextGame();
     },
-    [props.StartingDifficulty, setupNextGame],
+    [startingSecurityLevel, setupNextGame],
   );
 
   function cancel(): void {
@@ -138,18 +138,16 @@ export function Game(props: GameProps): React.ReactElement {
       break;
     case Stage.Minigame: {
       const MiniGame = minigames[gameIds.id];
-      stageComponent = (
-        <MiniGame onSuccess={onSuccess} onFailure={onFailure} difficulty={props.Difficulty + level / 50} />
-      );
+      stageComponent = <MiniGame onSuccess={onSuccess} onFailure={onFailure} difficulty={difficulty + level / 50} />;
       break;
     }
     case Stage.Sell:
       stageComponent = (
         <Victory
-          StartingDifficulty={props.StartingDifficulty}
-          Difficulty={props.Difficulty}
-          Reward={props.Reward}
-          MaxLevel={props.MaxLevel}
+          startingSecurityLevel={startingSecurityLevel}
+          difficulty={difficulty}
+          reward={reward}
+          maxLevel={maxLevel}
         />
       );
       break;
@@ -173,13 +171,15 @@ export function Game(props: GameProps): React.ReactElement {
       dialogBoxCreate("Infiltration was cancelled because you were hospitalized");
     });
 
-    // Immediately fail if the difficulty is suicide+
-    if (props.Difficulty >= MaxDif) {
-      onFailure({ suicide: true });
-    }
-
     return clearSubscription;
-  }, [onFailure, props.Difficulty]);
+  }, []);
+
+  useEffect(() => {
+    // Immediately fail if the difficulty is higher than the max value.
+    if (difficulty >= MaxDifficultyForInfiltration) {
+      onFailure({ impossible: true });
+    }
+  });
 
   return (
     <Container>
@@ -190,7 +190,7 @@ export function Game(props: GameProps): React.ReactElement {
           </Button>
         )}
         <Typography variant="h5">
-          Level {level} / {props.MaxLevel}
+          Level {level} / {maxLevel}
         </Typography>
         <Progress />
       </Paper>

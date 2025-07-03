@@ -21,10 +21,10 @@ import { isFactionWork } from "../../Work/FactionWork";
 import { InfiltrationState } from "../formulas/game";
 
 interface IProps {
-  StartingDifficulty: number;
-  Difficulty: number;
-  Reward: number;
-  MaxLevel: number;
+  startingSecurityLevel: number;
+  difficulty: number;
+  reward: number;
+  maxLevel: number;
 }
 
 // Use a module-scope variable to save the faction choice.
@@ -43,19 +43,19 @@ export function Victory(props: IProps): React.ReactElement {
 
   function quitInfiltration(): void {
     handleInfiltrators();
+    InfiltrationState.successfulInfiltrationTimestamps.push(Date.now());
     Router.toPage(Page.City);
   }
 
   const soa = Factions[FactionName.ShadowsOfAnarchy];
-  const repGain = calculateTradeInformationRepReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
-  const moneyGain = calculateSellInformationCashReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
-  const infiltrationRepGain = calculateInfiltratorsRepReward(soa, props.StartingDifficulty);
+  const repGain = calculateTradeInformationRepReward(props.reward, props.maxLevel, props.startingSecurityLevel);
+  const moneyGain = calculateSellInformationCashReward(props.reward, props.maxLevel, props.startingSecurityLevel);
+  const infiltrationRepGain = calculateInfiltratorsRepReward(soa, props.startingSecurityLevel);
 
   const isMemberOfInfiltrators = Player.factions.includes(FactionName.ShadowsOfAnarchy);
 
   function sell(): void {
     Player.gainMoney(moneyGain, "infiltration");
-    InfiltrationState.successfulInfiltrationTimestamps.push(new Date());
     quitInfiltration();
   }
 
@@ -65,7 +65,6 @@ export function Victory(props: IProps): React.ReactElement {
     }
     Factions[factionName].playerReputation += repGain;
     defaultFactionChoice = factionName;
-    InfiltrationState.successfulInfiltrationTimestamps.push(new Date());
     quitInfiltration();
   }
 

@@ -29,7 +29,7 @@ import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { isObject, assertObject } from "./utils/TypeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
 import { Reviver } from "./utils/GenericReviver";
-import { getRecentInfiltrationsCount, loadRecentInfiltrations } from "./Infiltration/SaveLoadInfiltration";
+import { getRecentInfiltrations, loadRecentInfiltrations } from "./Infiltration/SaveLoadInfiltration";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -83,7 +83,7 @@ export type BitburnerSaveObjectType = {
   LastExportBonus?: string;
   StaneksGiftSave: string;
   GoSave: unknown; // "loadGo" function can process unknown data
-  RecentInfiltrationsSave: string;
+  RecentInfiltrationsSave: unknown;
 };
 
 type ParsedSaveData = {
@@ -193,7 +193,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
     this.LastExportBonus = JSON.stringify(ExportBonus.LastExportBonus);
     this.StaneksGiftSave = JSON.stringify(staneksGift);
     this.GoSave = JSON.stringify(getGoSave());
-    this.RecentInfiltrationsSave = JSON.stringify(getRecentInfiltrationsCount());
+    this.RecentInfiltrationsSave = JSON.stringify(getRecentInfiltrations());
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
 

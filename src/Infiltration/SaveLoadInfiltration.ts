@@ -1,23 +1,24 @@
-import { cleanRecentInfiltrations, InfiltrationState, maxEffectTime } from "./formulas/game";
-import { Player } from "@player";
+import { assertNumberArray } from "../utils/TypeAssertion";
+import { cleanRecentInfiltrations, InfiltrationState } from "./formulas/game";
 
-export function getRecentInfiltrationsCount(): number {
+export function getRecentInfiltrations(): number[] {
   cleanRecentInfiltrations();
-  return InfiltrationState.successfulInfiltrationTimestamps.length;
+  return InfiltrationState.successfulInfiltrationTimestamps;
 }
 
-export function loadRecentInfiltrations(countString: string): void {
-  const count = countString ? +countString || 0 : 0;
-  const offlineMS = Date.now() - Player.lastUpdate;
-
-  const percentOfMaxOffline = Math.max(maxEffectTime - offlineMS, 0) / maxEffectTime;
-
-  // Remove a fraction of saved recent infiltrations based on how long it has been since the player was offline.
-  const remainingInfils = Math.ceil(percentOfMaxOffline * count);
-  InfiltrationState.successfulInfiltrationTimestamps = [];
-
-  // Evenly spread out the remaining recent infiltrations over the last maxEffectTime.
-  for (let i = 0; i < remainingInfils; i++) {
-    InfiltrationState.successfulInfiltrationTimestamps.push(new Date(Date.now() - ((maxEffectTime * 0.8) / count) * i));
+export function loadRecentInfiltrations(saveString: unknown): void {
+  if (saveString == null || typeof saveString !== "string" || saveString === "") {
+    InfiltrationState.successfulInfiltrationTimestamps = [];
+    return;
+  }
+  try {
+    const parsedData: unknown = JSON.parse(saveString);
+    assertNumberArray(parsedData, true);
+    InfiltrationState.successfulInfiltrationTimestamps = parsedData;
+    cleanRecentInfiltrations();
+  } catch (error) {
+    console.error(error);
+    console.error("Invalid recent infiltrations:", saveString);
+    InfiltrationState.successfulInfiltrationTimestamps = [];
   }
 }

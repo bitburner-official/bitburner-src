@@ -26,14 +26,31 @@ export function calculateTradeInformationRepReward(
   maxLevel: number,
   startingSecurityLevel: number,
 ): number {
-  const levelBonus = maxLevel * Math.pow(1.01, maxLevel);
+  const levelBonus = maxLevel * Math.pow(1.005, maxLevel);
+  let balanceMultiplier;
+  if (startingSecurityLevel < 4) {
+    balanceMultiplier = 0.45;
+  } else if (startingSecurityLevel < 5) {
+    balanceMultiplier = 0.4;
+  } else if (startingSecurityLevel < 7) {
+    balanceMultiplier = 0.35;
+  } else if (startingSecurityLevel < 12) {
+    balanceMultiplier = 0.3;
+  } else if (startingSecurityLevel < 14) {
+    balanceMultiplier = 0.26;
+  } else if (startingSecurityLevel < 15) {
+    balanceMultiplier = 0.25;
+  } else {
+    balanceMultiplier = 0.2;
+  }
 
   return (
     Math.pow(reward + 1, 1.1) *
-    Math.pow(startingSecurityLevel, 1.2) *
+    Math.pow(startingSecurityLevel, 1.1) *
+    balanceMultiplier *
     30 *
     levelBonus *
-    (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 1.5 : 1) *
+    (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 1.2 : 1) *
     currentNodeMults.InfiltrationRep
   );
 }

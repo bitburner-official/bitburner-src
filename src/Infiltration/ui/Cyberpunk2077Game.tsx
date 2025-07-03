@@ -28,12 +28,12 @@ const difficulties: {
   Trivial: Difficulty;
   Normal: Difficulty;
   Hard: Difficulty;
-  Impossible: Difficulty;
+  Brutal: Difficulty;
 } = {
   Trivial: { timer: 12500, width: 3, height: 3, symbols: 6 },
   Normal: { timer: 15000, width: 4, height: 4, symbols: 7 },
   Hard: { timer: 12500, width: 5, height: 5, symbols: 8 },
-  Impossible: { timer: 10000, width: 6, height: 6, symbols: 9 },
+  Brutal: { timer: 10000, width: 6, height: 6, symbols: 9 },
 };
 
 export function Cyberpunk2077Game(props: IMinigameProps): React.ReactElement {

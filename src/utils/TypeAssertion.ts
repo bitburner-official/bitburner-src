@@ -72,3 +72,20 @@ export function assertArray(v: unknown): asserts v is unknown[] {
     throw new TypeAssertionError(`The value is not an array. Its type is ${type}.`, type);
   }
 }
+
+export function assertNumberArray(unknownData: unknown, assertFinite = false): asserts unknownData is number[] {
+  assertArray(unknownData);
+  for (const value of unknownData) {
+    if (assertFinite) {
+      if (!Number.isFinite(value)) {
+        console.error("The array contains a value that is not a finite number. Array:", unknownData);
+        throw new Error(`${value} is not a number.`);
+      }
+    } else {
+      if (typeof value !== "number") {
+        console.error("The array contains a value that is not a number. Array:", unknownData);
+        throw new Error(`${value} is not a number.`);
+      }
+    }
+  }
+}

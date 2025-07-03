@@ -23,12 +23,12 @@ const difficulties: {
   Trivial: Difficulty;
   Normal: Difficulty;
   Hard: Difficulty;
-  Impossible: Difficulty;
+  Brutal: Difficulty;
 } = {
   Trivial: { timer: 9000, wiresmin: 4, wiresmax: 4, rules: 2 },
   Normal: { timer: 7000, wiresmin: 6, wiresmax: 6, rules: 2 },
   Hard: { timer: 5000, wiresmin: 8, wiresmax: 8, rules: 3 },
-  Impossible: { timer: 4000, wiresmin: 9, wiresmax: 9, rules: 4 },
+  Brutal: { timer: 4000, wiresmin: 9, wiresmax: 9, rules: 4 },
 };
 
 const colors = ["red", "#FFC107", "blue", "white"];
