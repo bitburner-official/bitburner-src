@@ -10206,6 +10206,40 @@ interface AutocompleteData {
 }
 
 /**
+ * Argument interface for the HelpData interface, which is used to autogenerate the help text for a script.
+ * @public
+ */
+interface HelpDataArgs {
+  /** The name of the argument */
+  name: string;
+  /** The type of the argument */
+  argType: "string" | "number" | "boolean" | "ScriptArg...";
+  /** The description of the argument */
+  description?: string;
+  /** Whether the argument is optional */
+  optional?: boolean;
+}
+/**
+ * Used to autogenerate the help text for a script.
+ * @public
+ */
+interface HelpData {
+  /** A short description of the script. */
+  description: string;
+  /** The arguments of the script */
+  args?: HelpDataArgs[];
+  /** 
+   * A string featuring an overview of the entire script. More detailed than description above.
+   * 
+   * Pass in a string to print out a sole paragraph. A string array might be passed in to print out paragraphs of text.
+   */
+  overview?: string | string[];
+  
+  /** A string or strings that name other scripts that might be related to this one. */
+  seeAlso?: string| string[];
+}
+
+/**
  * Player must have at least this much money.
  * @public
  */

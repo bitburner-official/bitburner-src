@@ -1,8 +1,21 @@
-import { ScriptFilePath } from "src/Paths/ScriptFilePath";
-import { Terminal } from "../../Terminal";
-import { TerminalHelpText, HelpTexts } from "../HelpText";
 import { Player } from "@player";
+import type { AutocompleteData, HelpData } from "@nsdefs";
+import { TerminalHelpText, HelpTexts } from "../HelpText";
+import { Terminal } from "../../Terminal";
 import { compile } from "../../NetscriptJSEvaluator";
+import { wrapUserNode } from "../../Netscript/NetscriptHelpers";
+import { enums } from "../../NetscriptFunctions";
+import { GetAllServers } from "../../Server/AllServers";
+import { hasScriptExtension, resolveScriptFilePath, ScriptFilePath } from "../../Paths/ScriptFilePath";
+import { Script } from "../../Script/Script";
+import { formatRam } from "../../ui/formatNumber";
+import { Flags } from "../../NetscriptFunctions/Flags";
+import { BaseServer } from "../../Server/BaseServer";
+import { hasTextExtension } from "../../Paths/TextFilePath";
+
+function isHelpData(obj: any): obj is HelpData {
+  return obj && typeof obj.description === "string";
+}
 
 export function help(args: (string | number | boolean)[]): void {
   if (args.length !== 0 && args.length !== 1) {
@@ -18,34 +31,30 @@ export function help(args: (string | number | boolean)[]): void {
     if (txt == null) {
       // Here is where flow lands if we have a player-implemented command
 
-      // Sanitize the input from dots or leading slashes.
-      // man pages' synopses do not start with a relative path. 
-      // It's good that dirs aren't really a thing in Bitburner, because
-      // helpers/launch.ts and launch.ts don't conflict with each other.
+      // Input sanitization
       const cmdCopy = String(cmd).replace(/^[/.]+/, "") as ScriptFilePath;
+      const filePath = resolveScriptFilePath(cmdCopy);
+
 
       // Get a list of commands to check against the help arg.
-      const currServer = Player.getCurrentServer();
-      
-      const isLocalScript = Array.from(currServer.scripts.keys())
-        .map((p) => p == cmdCopy)
-        .reduce((prev, val) => val || prev, false);
+      const localServer = Player.getCurrentServer();
 
-      if (!isLocalScript) {
-        // There probably is a better way;
-        // I'll stick with the regex for now
-        if (!/(\.ts)|(\.tsx)|(\.js)|(.jsx)$/.test(cmd)) {
+      if (filePath == null) {
+        if (hasScriptExtension(cmdCopy)) {
+          Terminal.error("Could not find script '" + cmdCopy + "'");
+          Terminal.error("Make sure this file exists in this server.");
+        } else if (hasTextExtension(cmdCopy)) {
           Terminal.error("'" + cmdCopy + "' needs to be either a *.js, *.ts, *.jsx or *.tsx file to have detailed help information.");
-          return;
+        } else {
+          Terminal.error("No help entry for '" + cmdCopy + "'.");
         }
-        Terminal.error("Could not find script '" + cmdCopy + "'");
         return;
       }
 
       // Check above guarantees that the map contains the script.
-      const script = currServer.scripts.get(cmdCopy);
+      const script = localServer.scripts.get(filePath);
 
-      // I don't argue with type safety!
+      // Are there cases when file path keys have no defined values?
       if (script == null) {
         throw new Error("Script pathname has no valid script object");
       }
@@ -58,26 +67,142 @@ export function help(args: (string | number | boolean)[]): void {
         // I have to wrap this in a try-catch block to print an error
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        compile(script, currServer.scripts)
-      .then((compiledModule) => {
-        if (compiledModule.help == null) {
-          Terminal.error("No help text for '" + cmdCopy + "'. Implement it by exporting a help() function.");
-          return;
-        }
-        
-        const helpText = compiledModule.help();
-        Terminal.print(`Usage for ${cmdCopy}:`)
-        if (typeof helpText === "string") {
-          Terminal.print(helpText);
-        } else {
-          helpText.forEach((line) => Terminal.print(line));
-        }
-      });
-    } catch (err) {
-      Terminal.error("Failed to get information for '" + cmdCopy + "'. Check if the script has any syntax errors.");
-    }
+        compile(script, localServer.scripts)
+          .then((compiledModule) => {
+            if (compiledModule.help == null) {
+              Terminal.error("No help text for '" + cmdCopy + "'. Implement it by exporting a help() function.");
+              return;
+            }
+
+            const autocompleteData: AutocompleteData = {
+              hostname: localServer.hostname,
+              servers: GetAllServers()
+                .filter((server) => server.backdoorInstalled || 
+                  localServer.serversOnNetwork.includes(server.hostname))
+                .map((server) => server.hostname),
+              scripts: [...localServer.scripts.keys()],
+              txts: [...localServer.textFiles.keys()],
+              enums: enums,
+              // Pass no flags as the help command does not use flags.
+              flags: Flags([""]),
+              filename: script.filename,
+              processes: Array.from(localServer.runningScriptMap.values(), (m) =>
+                Array.from(m.values(), (r) => ({
+                  pid: r.pid,
+                  filename: r.filename,
+                  threads: r.threads,
+                  args: r.args.slice(),
+                  temporary: r.temporary,
+                })),
+              ).flat(),
+              command: `help ${cmdCopy}`,
+            };
+
+            const helpObj = compiledModule.help(autocompleteData);
+            Terminal.print(`Usage for ${cmdCopy}:`)
+            if (typeof helpObj === "string") {
+              Terminal.print(helpObj);
+            } else if (Array.isArray(helpObj)) {
+              // I really do not like ReactNode containing ReactNode[].
+              helpObj.forEach((line) => {
+                if (typeof line !== "string") { 
+                  Terminal.printRaw(wrapUserNode(helpObj));
+                  return;
+                }
+                Terminal.print(line)
+              });
+            } else if (typeof helpObj === "object") {
+              if (isHelpData(helpObj)) {
+                  const autogeneratedHelp: string[] = generateHelpText(helpObj, script, localServer);
+                  autogeneratedHelp.forEach((line) => Terminal.print(line));
+                  return;
+                }
+                Terminal.printRaw(wrapUserNode(helpObj));
+              }
+            });
+      } catch (err) {
+        Terminal.error("Failed to get information for '" + cmdCopy + "'. Check if the script has any syntax errors.");
+      }
       return;
     }
     txt.forEach((t) => Terminal.print(t));
   }
 }
+
+function generateHelpText(helpObj: HelpData, script: Script, server: BaseServer): string[] {
+  const lines: string[] = [];
+  const args = helpObj.args || [];
+
+  lines.push("\x1b[1mNAME\x1b[22m");
+  lines.push(`\t${script.filename} - ${helpObj.description} (${formatRam(script.getRamUsage(server.scripts) || 0.0)})`);
+  lines.push("\n");
+  
+  if (helpObj.args && helpObj.args.length > 0) {
+    
+    lines.push("\x1b[1mSYNOPSIS\n");
+    let str = `\t${script.filename} \x1b[22m`;
+    for (const arg of args) {
+      // Variadic arguments are denoted by "ScriptArg..." type.
+      // They are hard-coded to be the last argument in the list.
+      let variadic = false;
+      let argStr = " ";
+      if (arg.optional) {
+        argStr += `[${arg.name}: ${arg.argType}]`;    
+        if (arg.argType == "ScriptArg...") variadic = true;
+      } else {
+        argStr += `<${arg.name}: ${arg.argType}>`;
+        if (arg.argType == "ScriptArg...") variadic = true;
+      }
+      
+      str += argStr;
+      if (variadic) break;
+    }
+    lines.push(str);
+    lines.push("\n");
+  }
+  
+  if (helpObj.overview) {
+    lines.push("\x1b[1mOVERVIEW\x1b[22m\n");
+    if (Array.isArray(helpObj.overview)) {
+      for (const paragraph of helpObj.overview) {
+        lines.push(`\t${paragraph}\n\n`);
+      }
+    } else {
+      lines.push(`\t${helpObj.overview}`);
+    }
+  }
+  if (args.length > 0) {
+    lines.push("\x1b[1mARGUMENTS\x1b[22m");
+    for (const arg of args) {
+      let variadic = false;
+      let argStr = `\x1b[1m\t${arg.name}\x1b[22m: ${arg.argType}`;
+      if (arg.argType == "ScriptArg...") variadic = true;
+
+      if (arg.optional) {
+        argStr += " (optional)";
+      }
+
+      if (arg.description) {
+        argStr += `\n\t\t -- ${arg.description}`;
+      } else {
+        argStr += "\n\t\t -- No description provided.";
+      }
+      lines.push(argStr);
+      lines.push("\n");
+      if (variadic) break;
+    }
+  }
+  
+  if (helpObj.seeAlso) {
+    lines.push("\x1b[1mSEE ALSO\x1b[22m\n");
+    if (Array.isArray(helpObj.seeAlso)) {
+      for (const related of helpObj.seeAlso) {
+        lines.push(`\t\x1b[1m${related.toString()}\x1b[22m`);
+      }
+    } else {
+      lines.push(`\t\x1b[1m${helpObj.seeAlso}\x1b[22m`);
+    }
+  }
+  return lines;
+}
+
