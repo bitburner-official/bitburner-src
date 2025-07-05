@@ -137,7 +137,7 @@ export function Intro({
           }}
         >
           <b>Difficulty:&nbsp;</b>
-          {formatNumberNoSuffix(difficulty * 28.57)} / 100
+          {formatNumberNoSuffix(difficulty * (100 / MaxDifficultyForInfiltration))} / 100
         </Typography>
         <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>[{coloredArrow(difficulty)}]</Typography>
         <Typography
