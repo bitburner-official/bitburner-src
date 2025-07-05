@@ -1,12 +1,10 @@
 # Introduction
 
-After a player destroys their first [BitNode](./bitnodes.md) and sees the BitVerse, they are usually overwhelmed by the large number of BitNodes and do not know which BitNode they should do next. Some BitNodes even have peculiarities that tend to catch newbies off guard and ruin their run.
+After a player destroys their first [BitNode](./bitnodes.md), they are usually overwhelmed and do not know which BitNode they should do next. Some BitNodes even have peculiarities that tend to catch newbies off guard and ruin their run.
 
-This page focuses on analyzing BitNodes, giving good advice to new players, helping them to make a good choice for their next BitNode, and avoiding common mistakes.
+At first, we need to make this clear: There is no "perfect" BitNode order. Everybody has their own preferred play style, so a good order for this player may be a bad order for other players. This is why this guide does not show a single specific order.
 
-At first, we need to make this clear: There is no "perfect" BitNode order. Everybody has their own preferred play style, so a good order for this player may be a bad order for other players. This is why this guide does not show any specific orders. The player needs to read this guide carefully and figure out the best order for them.
-
-Doing BitNodes in chronological order (BN1->BN2->BN3->BN4->BN5->etc.) is a classic newbie mistake. Don't do that.
+Doing BitNodes in chronological order (BN1->BN2->BN3->BN4->BN5->etc.) is a classic mistake. Don't do that.
 
 # BitNode characteristic
 
@@ -26,7 +24,7 @@ Some BitNodes unlock new mechanics, while others improve or change original mech
   - Bladeburner (BitNode 6, BitNode7): Relatively simple, slow, and not be nerfed too much in most BitNodes.
 - Utility mechanics:
   - Singularity (BitNode 4): Automation APIs.
-  - Intelligence (BitNode 5): Permanent stat that buffs many things.
+  - Intelligence (BitNode 5): Permanent stat that buffs many things and permanent access to `Formulas.exe`.
   - HackNet server (BitNode 9): Replace HackNet Node with HackNet Server. Buff many mechanics.
   - Sleeves + Grafting (BitNode 10): Help other mechanics.
   - Stanek's Gift (BitNode 13): Buff many mechanics.
@@ -46,7 +44,7 @@ All BitNodes have a unique set of multipliers that affect the difficulty of that
 
 ## BitNode 1
 
-This is the easiest BitNode, and its Source-File gives a very strong buff to most multipliers.
+This is the easiest BitNode, and its Source-File gives a very strong buff to most multipliers. You should repeat this BitNode to get its powerful buff.
 
 ## BitNode 2
 
@@ -219,7 +217,7 @@ Both BitNode 6 and BitNode 7 unlock Bladeburner. It's slow, but it's a good choi
 
 BitNode 10 unlocks 2 strong mechanics at the same time. Sleeves synergize well with many mechanics, especially Gang and Bladeburner. Grafting is useful in all BitNodes. Most people complete this BitNode in one go to get 8 Sleeves, but if you are in a rush, you can complete it once and get only Source-File 10.1. If you buy all 5 Sleeves from "The Covenant" faction, you will have 6 Sleeves and access to Grafting. That's not ideal, but still good enough.
 
-BitNode 14 enhances IPvGO. If you have not touched that mechanic, you should do it now. IPvGO is tuned so that it still gives adequate benefits even if your script is only a slightly improved version of the tutorial script. Source-File 14 improves IPvGO's benefits and unlocks cheat APIs, which you can use to improve your win rate.
+BitNode 14 enhances IPvGO. IPvGO is _not_ locked behind this BitNode. It's available at the start of the game. You can play it by going to CIA (Sector-12) or using APIs in `ns.go`. If you have not touched that mechanic, you should do it now. IPvGO is tuned so that it still gives adequate benefits even if your script is only a slightly improved version of the tutorial script. Source-File 14 improves IPvGO's benefits and unlocks cheat APIs, which you can use to improve your win rate.
 
 BitNode 9 and BitNode 13 unlock HackNet server and Stanek's Gift, respectively. They are powerful mechanics that buff other mechanics, but these BitNodes are extremely hard. You should prepare carefully before entering them.
 
