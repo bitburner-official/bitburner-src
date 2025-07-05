@@ -267,7 +267,7 @@ export function GameRoot(): React.ReactElement {
       }
       /**
        * If something calls Router.back() when the "pages" array has only 1 item, that array will be empty when the UI
-       * is rerendered, and pageWithContext will be undefined. To void this problem, we return immediately in that case.
+       * is rerendered, and pageWithContext will be undefined. To avoid this problem, we return immediately in that case.
        */
       if (pages.length === 1) {
         return;
