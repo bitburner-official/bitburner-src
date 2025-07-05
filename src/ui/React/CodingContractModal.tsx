@@ -65,11 +65,7 @@ export function CodingContractModal(): React.ReactElement {
   const contractType = CodingContractTypes[contract.c.type];
   const description = [];
   for (const [i, value] of contractType.desc(contract.c.getData()).split("\n").entries()) {
-    description.push(
-      <span key={i}>
-        {value} <br />
-      </span>,
-    );
+    description.push(<span key={i} dangerouslySetInnerHTML={{ __html: value + "<br />" }}></span>);
   }
   return (
     <Modal open={contract !== null} onClose={close}>
