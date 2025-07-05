@@ -193,6 +193,7 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       if (onFirstCommandArg) {
         addGeneric({ iterable: Object.keys(HelpTexts), usePathing: false });
       }
+      addScripts();
       return possibilities;
 
     case "nano":
