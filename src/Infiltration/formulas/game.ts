@@ -3,13 +3,14 @@ import { clampNumber } from "../../utils/helpers/clampNumber";
 
 export const MaxDifficultyForInfiltration = 3.5;
 const MaxEffectTime = 30 * 60 * 1000; // 30 minutes in milliseconds
+const date = globalThis?.Date;
 
 export const InfiltrationState = {
   successfulInfiltrationTimestamps: [] as number[],
 };
 
 export const cleanRecentInfiltrations = (): void => {
-  const now = Date.now();
+  const now = date.now();
   // Keep only timestamps within the max effect time
   InfiltrationState.successfulInfiltrationTimestamps = InfiltrationState.successfulInfiltrationTimestamps.filter(
     (ts) => ts > now - MaxEffectTime && ts <= now,
@@ -24,9 +25,8 @@ export function calculateMarketDemandMultiplier(): number {
 
   const marketDemandMultiplier = InfiltrationState.successfulInfiltrationTimestamps.reduce((mult, timestamp) => {
     // Effect on the market decreases to none as the infiltration event gets older
-    const recencyFactor = 1 - (Date.now() - timestamp) / MaxEffectTime;
-    const multiplier = Math.max(0.1, 1 - recencyFactor * 0.15);
-    return mult * multiplier;
+    const recencyFactor = 1 - (date.now() - timestamp) / MaxEffectTime;
+    return mult * (1 - recencyFactor * 0.15);
   }, 1);
   return clampNumber(marketDemandMultiplier, 0, 1);
 }
