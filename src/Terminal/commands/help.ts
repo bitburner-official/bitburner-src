@@ -18,8 +18,6 @@ export function help(args: (string | number | boolean)[]): void {
     if (txt == null) {
       // Here is where flow lands if we have a player-implemented command
 
-      // Check if the file is 
-
       // Sanitize the input from dots or leading slashes.
       // man pages' synopses do not start with a relative path. 
       // It's good that dirs aren't really a thing in Bitburner, because
@@ -68,6 +66,7 @@ export function help(args: (string | number | boolean)[]): void {
         }
         
         const helpText = compiledModule.help();
+        Terminal.print(`Usage for ${cmdCopy}:`)
         if (typeof helpText === "string") {
           Terminal.print(helpText);
         } else {
