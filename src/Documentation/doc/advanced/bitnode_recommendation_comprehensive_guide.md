@@ -40,7 +40,7 @@ Some mechanics synergize well with other mechanics. For example, in order to cre
 
 Some mechanics have peculiarities that you should know beforehand. For example, enabling territory clashes too soon will make the player lose all territory and ruin their gang.
 
-All BitNodes have a uniques set of multipliers that affect the difficulty of that BitNode. You can see these multipliers when choosing a BitNode in the BitVerse. [Source-File](./sourcefiles.md) 5 gives you access to these multipliers when you are already in a BitNode. Some BitNodes are much harder than others. It's recommended to unlock other Source-Files before trying to beat these hard BitNodes. Note that the "Difficulty" value of a BitNode in the BitVerse may be a bit misleading in some cases. Understanding the difficulty of a BitNode is much harder than just choosing between "easy", "normal" and "hard".
+All BitNodes have a unique set of multipliers that affect the difficulty of that BitNode. You can see these multipliers when choosing a BitNode in the BitVerse. [Source-File](./sourcefiles.md) 5 gives you access to these multipliers when you are already in a BitNode. Some BitNodes are much harder than others. It's recommended to unlock other Source-Files before trying to beat these hard BitNodes. Note that the "Difficulty" value of a BitNode in the BitVerse may be a bit misleading in some cases. Understanding the difficulty of a BitNode is much harder than just choosing between "easy", "normal" and "hard".
 
 # BitNode analysis
 
@@ -108,9 +108,9 @@ You must be careful with chaos and Synthoid population. The UI shows you many hi
 
 This BitNode unlocks 2 new features for the stock market: short stock and limit/stop order.
 
-This is a very challenging BitNode. It disables most normal ways to earn money so that you have to use the Stock Market as your source of income. Before having access to 4S Market Data, finding good stocks to invest in is pretty hard. You need to have a good pre-4S stock market script; otherwise, it's a slow run. You should take a look at stock manipulation. Hacking does not give you money, but hacking and growing a server that has a corresponding stock still influence that stock's price.
+This is a very challenging BitNode. It disables most normal ways to earn money so that you have to use the stock market as your source of income. Before having access to 4S Market Data, finding good stocks to invest in is pretty hard. You need to have a good pre-4S stock market script; otherwise, it's a slow run. You should take a look at stock manipulation. Hacking does not give you money, but hacking and growing a server that has a corresponding stock still influence that stock's price.
 
-Grafting is very useful in this BitNode. Losing capital after each resetting sets you back a lot. Grafting allows you to continuously install augmentations without resetting.
+Grafting is very useful in this BitNode. Losing capital after each reset sets you back a lot. Grafting allows you to continuously install augmentations without resetting.
 
 ## BitNode 9
 
@@ -190,7 +190,7 @@ This BitNode's Source-File buffs IPvGO's benefits and unlocks the ability to use
 - Unlock `ns.go.cheat` APIs.
 - Higher maximum favor that you can gain for each faction from IPvGO.
 
-The last reward is pretty interesting. If you can consistently win several games in a row and get higher favor bonus, you will cut down the time to reach 150 favor points with IPvGO factions and have access to their augmentations much sooner.
+The last reward is pretty interesting. If you can consistently win several games in a row and get a higher favor bonus, you will cut down the time to reach 150 favor points with IPvGO factions and have access to their augmentations much sooner.
 
 This BitNode's multipliers are fairly harsh, but IPvGO's multipliers are buffed significantly. If you use IPvGO, even a slightly improved version of the tutorial script will help you complete this BitNode without much trouble.
 
@@ -207,7 +207,7 @@ You should repeat it at least once to get Source-File 1.2. Most people complete 
 
 ## Early BitNodes
 
-If you want to try a different gameplay, BitNode 2 is a good choice. Gang is simple and useful in most BitNodes.
+If you want to try different gameplay, BitNode 2 is a good choice. Gang is simple and useful in most BitNodes.
 
 BitNode 5 is another good choice. Intelligence boosts many things, and it's permanent. Free access to Formulas APIs is very nice. A buff to hacking-related multipliers is useful in all BitNodes.
 
