@@ -3,8 +3,13 @@ import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { Settings } from "../../Settings/Settings";
 import { GameOptionsPage } from "./GameOptionsPage";
 import { Player } from "@player";
+import { toggleSuppressErrorModals } from "../../ErrorHandling/ErrorState";
 
 export const GameplayPage = (): React.ReactElement => {
+  const toggleSuppressErrorModalsSetting = (newValue: boolean): void => {
+    Settings.SuppressErrorModals = newValue;
+    toggleSuppressErrorModals(newValue, true);
+  };
   return (
     <GameOptionsPage title="Gameplay">
       <OptionSwitch
@@ -51,6 +56,17 @@ export const GameplayPage = (): React.ReactElement => {
         onChange={(newValue) => (Settings.SuppressTIXPopup = newValue)}
         text="Suppress TIX messages"
         tooltip={<>If this is set, the stock market will never create any popup.</>}
+      />
+      <OptionSwitch
+        checked={Settings.SuppressErrorModals}
+        onChange={toggleSuppressErrorModalsSetting}
+        text="Suppress error modals"
+        tooltip={
+          <>
+            If this is set, script errors will never create any popups. The errors can still be seen on the "Recent
+            Errors" tab in the Active Scripts page.
+          </>
+        }
       />
       {Player.bladeburner && (
         <OptionSwitch

@@ -19,6 +19,7 @@ import { assertStringWithNSContext } from "../Netscript/TypeAssertion";
 import { BlackOperations, blackOpsArray } from "../Bladeburner/data/BlackOperations";
 import { checkSleeveAPIAccess, checkSleeveNumber } from "../NetscriptFunctions/Sleeve";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
+import { calculateActionRankGain, calculateActionReputationGain } from "../Bladeburner/Formulas";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const checkBladeburnerAccess = function (ctx: NetscriptContext): void {
@@ -151,8 +152,8 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
       checkBladeburnerAccess(ctx);
       const action = getAction(ctx, type, name);
       const level = isLevelableAction(action) ? helpers.number(ctx, "level", _level ?? action.level) : 1;
-      const rewardMultiplier = isLevelableAction(action) ? Math.pow(action.rewardFac, level - 1) : 1;
-      return action.rankGain * rewardMultiplier * currentNodeMults.BladeburnerRank;
+      const rankGain = calculateActionRankGain(action, level);
+      return calculateActionReputationGain(Player, rankGain);
     },
     getActionCountRemaining: (ctx) => (type, name) => {
       const bladeburner = getBladeburner(ctx);

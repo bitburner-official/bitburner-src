@@ -1,6 +1,5 @@
 import React from "react";
 
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -9,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Adjuster } from "./Adjuster";
 import { Player } from "@player";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 const bigNumber = 1e27;
 
@@ -76,7 +76,7 @@ export function CorporationDev(): React.ReactElement {
   }
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_CorporationDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Corporation</Typography>
       </AccordionSummary>
@@ -131,6 +131,6 @@ export function CorporationDev(): React.ReactElement {
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

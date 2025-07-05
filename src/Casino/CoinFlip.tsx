@@ -1,54 +1,53 @@
 import React, { useState } from "react";
 
+import { hasEnoughMoney, reachedLimit, win } from "./Game";
 import { BadRNG } from "./RNG";
-import { win, reachedLimit } from "./Game";
 import { trusted } from "./utils";
 
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { BetInput } from "./BetInput";
 
-const minPlay = 0;
-const maxPlay = 10e3;
+const initialBet = 1000;
+const maxBet = 10e3;
+
+enum CoinFlipResult {
+  Head = "Head",
+  Tail = "Tail",
+}
 
 export function CoinFlip(): React.ReactElement {
-  const [investment, setInvestment] = useState(1000);
-  const [result, setResult] = useState(<span> </span>);
+  const [investment, setInvestment] = useState(initialBet);
+  const [result, setResult] = useState(<span></span>);
   const [status, setStatus] = useState("");
   const [playLock, setPlayLock] = useState(false);
 
-  function updateInvestment(e: React.ChangeEvent<HTMLInputElement>): void {
-    let investment: number = parseInt(e.currentTarget.value);
-    if (isNaN(investment)) {
-      investment = minPlay;
+  function play(guess: CoinFlipResult): void {
+    if (reachedLimit() || !hasEnoughMoney(investment)) {
+      return;
     }
-    if (investment > maxPlay) {
-      investment = maxPlay;
-    }
-    if (investment < minPlay) {
-      investment = minPlay;
-    }
-    setInvestment(investment);
-  }
-
-  function play(guess: string): void {
-    if (reachedLimit()) return;
     const v = BadRNG.random();
-    let letter: string;
+    let letter: CoinFlipResult;
     if (v < 0.5) {
-      letter = "H";
+      letter = CoinFlipResult.Head;
     } else {
-      letter = "T";
+      letter = CoinFlipResult.Tail;
     }
-    const correct: boolean = guess === letter;
+    const correct = guess === letter;
 
     setResult(
-      <Box display="flex">
-        <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }} color={correct ? "primary" : "error"}>
+      <div>
+        <Typography component="span">Result:</Typography>
+        <Typography
+          component="span"
+          sx={{ lineHeight: "1em", whiteSpace: "pre" }}
+          color={correct ? "primary" : "error"}
+        >
           {letter}
         </Typography>
-      </Box>,
+        ,
+      </div>,
     );
     setStatus(correct ? " win!" : "lose!");
     setPlayLock(true);
@@ -59,31 +58,30 @@ export function CoinFlip(): React.ReactElement {
     } else {
       win(-investment);
     }
-    if (reachedLimit()) return;
   }
 
   return (
     <>
-      <Typography>Result:</Typography> {result}
-      <Box display="flex" alignItems="center">
-        <TextField
-          type="number"
-          onChange={updateInvestment}
-          InputProps={{
-            endAdornment: (
-              <>
-                <Button onClick={trusted(() => play("H"))} disabled={playLock}>
-                  Head!
-                </Button>
-                <Button onClick={trusted(() => play("T"))} disabled={playLock}>
-                  Tail!
-                </Button>
-              </>
-            ),
+      <Box>
+        <BetInput
+          initialBet={initialBet}
+          maxBet={maxBet}
+          gameInProgress={playLock}
+          setBet={(bet) => {
+            setInvestment(bet);
           }}
         />
+        <Box>
+          <Button onClick={trusted(() => play(CoinFlipResult.Head))} disabled={playLock}>
+            Head!
+          </Button>
+          <Button onClick={trusted(() => play(CoinFlipResult.Tail))} disabled={playLock}>
+            Tail!
+          </Button>
+        </Box>
       </Box>
-      <Typography variant="h3">{status}</Typography>
+      {result}
+      <Typography variant="h4">{status}</Typography>
     </>
   );
 }

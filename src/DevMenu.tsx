@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import Typography from "@mui/material/Typography";
 
 import { Player } from "@player";
 import { AugmentationName } from "@enums";
 
-import { General } from "./DevMenu/ui/General";
-import { TimeSkip } from "./DevMenu/ui/TimeSkip";
+import { GeneralDev } from "./DevMenu/ui/GeneralDev";
+import { TimeSkipDev } from "./DevMenu/ui/TimeSkipDev";
 
 import { StatsDev } from "./DevMenu/ui/StatsDev";
 import { FactionsDev } from "./DevMenu/ui/FactionsDev";
@@ -27,18 +27,28 @@ import { EntropyDev } from "./DevMenu/ui/EntropyDev";
 
 import { Exploit } from "./Exploits/Exploit";
 import { useRerender } from "./ui/React/hooks";
+import { AutoExpandContext, getAutoExpandData, setAutoExpandData } from "./ui/AutoExpand/AutoExpandContext";
 
 export function DevMenuRoot(): React.ReactElement {
+  const autoExpandContextValue = useRef({
+    data: getAutoExpandData(),
+    set: (key: string, expanded: boolean) => {
+      autoExpandContextValue.current.data[key] = expanded;
+      setAutoExpandData(autoExpandContextValue.current.data);
+    },
+  });
+
   useEffect(() => {
     Player.giveExploit(Exploit.YoureNotMeantToAccessThis);
   }, []);
+
   // Pass rerender to certain subpages in case certain tabs are now valid/invalid due to changes made on those pages
   // Rerender periodically in case game state changes (e.g. player starts gang or buys wse account through a script)
   const rerender = useRerender(400);
   return (
-    <>
+    <AutoExpandContext.Provider value={autoExpandContextValue.current}>
       <Typography>Development Menu - Only meant to be used for testing/debugging</Typography>
-      <General parentRerender={rerender} />
+      <GeneralDev parentRerender={rerender} />
       <StatsDev />
       <FactionsDev />
       <AugmentationsDev />
@@ -60,9 +70,9 @@ export function DevMenuRoot(): React.ReactElement {
       {Player.sleeves.length > 0 && <SleevesDev />}
       {Player.augmentations.some((aug) => aug.name === AugmentationName.StaneksGift1) && <StanekDev />}
 
-      <TimeSkip />
+      <TimeSkipDev />
       <AchievementsDev />
       <EntropyDev />
-    </>
+    </AutoExpandContext.Provider>
   );
 }

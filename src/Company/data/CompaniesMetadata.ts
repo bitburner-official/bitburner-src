@@ -41,7 +41,7 @@ export function getCompaniesMetadata(): Record<CompanyName, CompanyCtorParams> {
       expMultiplier: 2.6,
       salaryMultiplier: 2.6,
       jobStatReqOffset: 224,
-      relatedFaction: FactionName.BachmanAssociates,
+      relatedFaction: FactionName.BachmanAndAssociates,
     },
     [CompanyName.BladeIndustries]: {
       name: CompanyName.BladeIndustries,

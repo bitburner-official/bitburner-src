@@ -3,13 +3,13 @@ import React from "react";
 import { staneksGift } from "../../CotMG/Helper";
 import { Player } from "@player";
 
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import Typography from "@mui/material/Typography";
 import { Adjuster } from "./Adjuster";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 export function StanekDev(): React.ReactElement {
   function addCycles(): void {
@@ -49,7 +49,7 @@ export function StanekDev(): React.ReactElement {
   }
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_StanekDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Stanek's Gift</Typography>
       </AccordionSummary>
@@ -83,6 +83,6 @@ export function StanekDev(): React.ReactElement {
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

@@ -1,6 +1,5 @@
 import React from "react";
 
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -10,10 +9,9 @@ import Button from "@mui/material/Button";
 import { Player } from "@player";
 import { Engine } from "../../engine";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
-// Update as additional BitNodes get implemented
-
-export function TimeSkip(): React.ReactElement {
+export function TimeSkipDev(): React.ReactElement {
   function timeskip(time: number) {
     return () => {
       Player.lastUpdate -= time;
@@ -23,7 +21,7 @@ export function TimeSkip(): React.ReactElement {
   }
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_TimeSkipDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Time skip</Typography>
       </AccordionSummary>
@@ -32,6 +30,6 @@ export function TimeSkip(): React.ReactElement {
         <Button onClick={timeskip(60 * 60 * 1000)}>1 hour</Button>
         <Button onClick={timeskip(24 * 60 * 60 * 1000)}>1 day</Button>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

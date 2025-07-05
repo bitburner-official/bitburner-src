@@ -31,7 +31,15 @@ exports[`load/saveAllServers 1`] = `
               "data": {
                 "code": "/** @param {NS} ns */\\\\nexport async function main(ns) {\\\\n  return ns.asleep(1000000);\\\\n}",
                 "filename": "script.js",
-                "server": "home"
+                "server": "home",
+                "metadata": {
+                  "ctor": "FileMetadata",
+                  "data": {
+                    "atime": 123456789000,
+                    "mtime": 123456789000,
+                    "btime": 123456789000
+                  }
+                }
               }
             }
           ]
@@ -159,7 +167,15 @@ exports[`load/saveAllServers pruning RunningScripts 1`] = `
               "data": {
                 "code": "/** @param {NS} ns */\\\\nexport async function main(ns) {\\\\n  return ns.asleep(1000000);\\\\n}",
                 "filename": "script.js",
-                "server": "home"
+                "server": "home",
+                "metadata": {
+                  "ctor": "FileMetadata",
+                  "data": {
+                    "atime": 123456789000,
+                    "mtime": 123456789000,
+                    "btime": 123456789000
+                  }
+                }
               }
             }
           ]
