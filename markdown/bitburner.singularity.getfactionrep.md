@@ -9,14 +9,14 @@ Get faction reputation.
 **Signature:**
 
 ```typescript
-getFactionRep(faction: string): number;
+getFactionRep(faction: FactionName): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  faction | string | Name of faction to work for. |
+|  faction | [FactionName](./bitburner.factionname.md) | Name of faction to work for. |
 
 **Returns:**
 

@@ -24,22 +24,26 @@ export function CodingContractModal(): React.ReactElement {
   const [answer, setAnswer] = useState("");
 
   useEffect(() => {
-    CodingContractEvent.subscribe((props) => setContract(props));
-  });
+    return CodingContractEvent.subscribe((props) => setContract(props));
+  }, []);
   useEffect(() => {
     return () => {
       contract?.onClose();
     };
   }, [contract]);
 
-  if (contract === null) return <></>;
+  if (contract === null) {
+    return <></>;
+  }
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setAnswer(event.target.value);
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
-    if (contract === null) return;
+    if (contract === null) {
+      return;
+    }
     const value = event.currentTarget.value;
 
     if (event.key === KEY.ENTER && value !== "") {
@@ -51,15 +55,22 @@ export function CodingContractModal(): React.ReactElement {
   }
 
   function close(): void {
-    if (contract === null) return;
+    if (contract === null) {
+      return;
+    }
     contract.onClose();
     setContract(null);
   }
 
   const contractType = CodingContractTypes[contract.c.type];
   const description = [];
-  for (const [i, value] of contractType.desc(contract.c.getData()).split("\n").entries())
-    description.push(<span key={i} dangerouslySetInnerHTML={{ __html: value + "<br />" }}></span>);
+  for (const [i, value] of contractType.desc(contract.c.getData()).split("\n").entries()) {
+    description.push(
+      <span key={i}>
+        {value} <br />
+      </span>,
+    );
+  }
   return (
     <Modal open={contract !== null} onClose={close}>
       <CopyableText variant="h4" value={contract.c.type} />

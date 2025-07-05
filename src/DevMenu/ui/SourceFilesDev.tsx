@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { Accordion, AccordionSummary, AccordionDetails, Button, ButtonGroup, Typography } from "@mui/material";
+import { AccordionSummary, AccordionDetails, Button, ButtonGroup, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { makeStyles } from "tss-react/mui";
 
@@ -8,6 +8,7 @@ import { Player } from "@player";
 import { Sleeve } from "../../PersonObjects/Sleeve/Sleeve";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { MaxSleevesFromCovenant } from "../../PersonObjects/Sleeve/SleeveCovenantPurchases";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 // Update as additional BitNodes get implemented
 const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
@@ -114,7 +115,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
   };
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_SourceFilesDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Source-Files</Typography>
       </AccordionSummary>
@@ -135,6 +136,6 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

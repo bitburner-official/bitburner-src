@@ -78,6 +78,9 @@ export function generateRandomContract(): void {
 
   // Choose random server
   const randServer = getRandomServer();
+  if (randServer === null) {
+    return;
+  }
 
   const contractFn = getRandomFilename(randServer, reward);
   const contract = new CodingContract(contractFn, problemType, reward);
@@ -140,6 +143,9 @@ export function generateContract(params: IGenerateContractParams): void {
     }
   } else {
     server = getRandomServer();
+  }
+  if (server === null) {
+    return;
   }
 
   const filename = params.fn ? params.fn : getRandomFilename(server, reward);
@@ -218,8 +224,11 @@ function getRandomReward(): ICodingContractReward {
   }
 }
 
-function getRandomServer(): BaseServer {
+function getRandomServer(): BaseServer | null {
   const servers = GetAllServers().filter((server: BaseServer) => server.serversOnNetwork.length !== 0);
+  if (servers.length === 0) {
+    return null;
+  }
   let randIndex = getRandomIntInclusive(0, servers.length - 1);
   let randServer = servers[randIndex];
 

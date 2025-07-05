@@ -30,9 +30,9 @@ RAM cost: 2 GB
 
 The stock’s price is the average of its bid and ask prices. This function requires that you have the following:
 
-1. WSE Account
+- WSE Account
 
-1. TIX API Access
+- TIX API Access
 
 ## Example
 

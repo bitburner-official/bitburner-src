@@ -39,8 +39,8 @@ Common infinite loop when translating the server purchasing script in starting g
     while (i < ns.getPurchasedServerLimit()) {
         if (ns.getServerMoneyAvailable("home") > ns.getPurchasedServerCost(ram)) {
             var hostname = ns.purchaseServer("pserv-" + i, ram);
-            ns.scp("early-hack-template.script", hostname);
-            ns.exec("early-hack-template.script", hostname, 3);
+            ns.scp("early-hack-template.js", hostname);
+            ns.exec("early-hack-template.js", hostname, 3);
             ++i;
         }
     }
@@ -58,4 +58,4 @@ To prevent this from happening make sure to multithread the scripts as much as p
 ## Bug
 
 Otherwise, the game is probably frozen/stuck due to a bug.
-To report a bug, follow the guidelines [here](https://github.com/bitburner-official/bitburner-src/blob/master/doc/CONTRIBUTING.md#reporting-bugs).
+To report a bug, follow the guidelines [here](https://github.com/bitburner-official/bitburner-src/blob/stable/CONTRIBUTING.md#reporting-bugs).

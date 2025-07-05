@@ -17,7 +17,7 @@ fileExists(filename: string, host?: string): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  filename | string | Filename of file to check. |
-|  host | string | _(Optional)_ Host of target server. Optional, defaults to the server the script is running on. |
+|  host | string | _(Optional)_ Hostname/IP of target server. Optional, defaults to the server the script is running on. |
 
 **Returns:**
 

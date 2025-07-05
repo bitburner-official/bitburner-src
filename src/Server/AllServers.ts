@@ -219,6 +219,9 @@ export function prestigeAllServers(): void {
 export function loadAllServers(saveString: string): void {
   const allServersData: unknown = JSON.parse(saveString, Reviver);
   assertObject(allServersData);
+  if (Object.keys(allServersData).length === 0) {
+    throw new Error("Server list is empty.");
+  }
   for (const [serverName, server] of Object.entries(allServersData)) {
     if (!(server instanceof Server) && !(server instanceof HacknetServer)) {
       throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer.`);

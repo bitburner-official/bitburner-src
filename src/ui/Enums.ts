@@ -13,6 +13,8 @@ export enum ToastVariant {
  */
 export enum SimplePage {
   ActiveScripts = "Active Scripts",
+  RecentlyKilledScripts = "Recently Killed Scripts",
+  RecentErrors = "Recent Errors",
   Augmentations = "Augmentations",
   Bladeburner = "Bladeburner",
   City = "City",

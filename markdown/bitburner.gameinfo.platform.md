@@ -4,8 +4,10 @@
 
 ## GameInfo.platform property
 
+Platform that the game is running on
+
 **Signature:**
 
 ```typescript
-platform: string;
+platform: "Browser" | "Steam";
 ```

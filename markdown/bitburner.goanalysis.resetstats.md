@@ -9,14 +9,14 @@ Reset all win/loss and winstreak records for the No AI opponent.
 **Signature:**
 
 ```typescript
-resetStats(resetAll = false): void;
+resetStats(resetAll?: boolean): void;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  resetAll | (not declared) | _(Optional)_ if true, reset win/loss records for all opponents. Leaves node power and bonuses unchanged. |
+|  resetAll | boolean | _(Optional)_ Optional. if true, reset win/loss records for all opponents. Leaves node power and bonuses unchanged. Defaults to false. |
 
 **Returns:**
 

@@ -16,7 +16,7 @@ mv(host: string, source: string, destination: string): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | Hostname of target server. |
+|  host | string | Hostname/IP of target server. |
 |  source | string | Filename of the source file. |
 |  destination | string | Filename of the destination file. |
 

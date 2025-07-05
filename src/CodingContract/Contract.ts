@@ -5,6 +5,7 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { CodingContractEvent } from "../ui/React/CodingContractModal";
 import { ContractFilePath, resolveContractFilePath } from "../Paths/ContractFilePath";
 import { assertObject } from "../utils/TypeAssertion";
+import { Result } from "../types";
 
 // Numeric enum
 /** Enum representing the different types of rewards a Coding Contract can give */
@@ -21,6 +22,7 @@ export enum CodingContractResult {
   Success,
   Failure,
   Cancelled,
+  InvalidFormat,
 }
 
 /** A class that represents the type of reward a contract gives */
@@ -67,7 +69,9 @@ export class CodingContract {
     reward: ICodingContractReward | null = null,
   ) {
     const path = resolveContractFilePath(fn);
-    if (!path) throw new Error(`Bad file path while creating a coding contract: ${fn}`);
+    if (!path) {
+      throw new Error(`Bad file path while creating a coding contract: ${fn}`);
+    }
     if (!CodingContractTypes[type]) {
       throw new Error(`Error: invalid contract type: ${type} please contact developer`);
     }
@@ -100,33 +104,59 @@ export class CodingContract {
   }
 
   /** Checks if the answer is in the correct format. */
-  isValid(answer: unknown): boolean {
-    if (typeof answer === "string") answer = CodingContractTypes[this.type].convertAnswer(answer);
-    return CodingContractTypes[this.type].validateAnswer(answer);
+  isValid(answer: unknown): Result<{ answer: unknown }> {
+    if (typeof answer === "string") {
+      try {
+        answer = CodingContractTypes[this.type].convertAnswer(answer);
+      } catch (error) {
+        return {
+          success: false,
+          message: `The answer is not in the right format for contract '${this.type}'. Reason: ${
+            error instanceof Error ? error.message : String(error)
+          }`,
+        };
+      }
+    }
+    const result = CodingContractTypes[this.type].validateAnswer(answer);
+    if (!result) {
+      return {
+        success: false,
+        message: `The answer is not in the right format for contract '${this.type}'. Got: ${answer}`,
+      };
+    }
+    return { success: true, answer };
   }
 
-  isSolution(solution: unknown): boolean {
-    const type = CodingContractTypes[this.type];
-    if (typeof solution === "string") solution = type.convertAnswer(solution);
-    if (!this.isValid(solution)) return false;
-
-    return type.solver(this.state, solution);
+  isSolution(solution: unknown): {
+    result: Exclude<CodingContractResult, CodingContractResult.Cancelled>;
+    message?: string;
+  } {
+    const validationResult = this.isValid(solution);
+    if (!validationResult.success) {
+      return { result: CodingContractResult.InvalidFormat, message: validationResult.message };
+    }
+    /**
+     * We sometimes need to convert the given solution by calling CodingContractType.convertAnswer() (e.g., Square Root
+     * contract) before using it. The conversion is done in CodingContract.isValid().
+     */
+    solution = validationResult.answer;
+    return {
+      result: CodingContractTypes[this.type].solver(this.state, solution)
+        ? CodingContractResult.Success
+        : CodingContractResult.Failure,
+    };
   }
 
   /** Creates a popup to prompt the player to solve the problem */
-  async prompt(): Promise<CodingContractResult> {
-    return new Promise<CodingContractResult>((resolve) => {
+  async prompt(): Promise<{ result: CodingContractResult; message?: string }> {
+    return new Promise((resolve) => {
       CodingContractEvent.emit({
         c: this,
         onClose: () => {
-          resolve(CodingContractResult.Cancelled);
+          resolve({ result: CodingContractResult.Cancelled });
         },
         onAttempt: (val: string) => {
-          if (this.isSolution(val)) {
-            resolve(CodingContractResult.Success);
-          } else {
-            resolve(CodingContractResult.Failure);
-          }
+          resolve(this.isSolution(val));
         },
       });
     });

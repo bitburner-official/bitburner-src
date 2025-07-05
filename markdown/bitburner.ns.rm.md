@@ -17,7 +17,7 @@ rm(name: string, host?: string): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  name | string | Filename of file to remove. Must include the extension. |
-|  host | string | _(Optional)_ Hostname of the server on which to delete the file. Optional. Defaults to current server. |
+|  host | string | _(Optional)_ Hostname/IP of the server on which to delete the file. Optional. Defaults to current server. |
 
 **Returns:**
 

@@ -7,6 +7,14 @@ declare module "*.png" {
   const value: string;
   export default value;
 }
+declare module "*.jpg" {
+  const value: string;
+  export default value;
+}
+declare module "*.svg" {
+  const value: string;
+  export default value;
+}
 
 // Achievements communicated back to Electron shell for Steam.
 declare interface Document {
@@ -59,4 +67,8 @@ module "monaco-vim" {
       defineAction: (...args: unknown[]) => void;
     };
   };
+}
+
+declare module "fast-dice-coefficient" {
+  export default function dice(a: string, b: string): number;
 }

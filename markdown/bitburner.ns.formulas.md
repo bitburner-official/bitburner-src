@@ -4,7 +4,7 @@
 
 ## NS.formulas property
 
-Namespace for formulas functions.
+Namespace for [formulas](./bitburner.formulas.md) functions.
 
 **Signature:**
 

@@ -9,19 +9,15 @@ Set team size.
 **Signature:**
 
 ```typescript
-setTeamSize(
-    type: BladeburnerActionType | `${BladeburnerActionType}`,
-    name: BladeburnerActionName | `${BladeburnerActionName}`,
-    size: number,
-  ): number;
+setTeamSize(type: BladeburnerActionType, name: BladeburnerActionName, size: number): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) \| \`${[BladeburnerActionType](./bitburner.bladeburneractiontype.md)<!-- -->}\` | Type of action. |
-|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) \| \`${[BladeburnerActionName](./bitburner.bladeburneractionname.md)<!-- -->}\` | Name of action. Must be an exact match. |
+|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) | Type of action. |
+|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) | Name of action. Must be an exact match. |
 |  size | number | Number of team members to set. Must be a non-negative integer. |
 
 **Returns:**

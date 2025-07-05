@@ -10,7 +10,7 @@ Scripts you write in Bitburner are real, working JavaScript and can be used to a
 
 Running any script requires in-game [RAM](ram.md), with a minimum cost of 1.6 GB per script.
 More complex scripts and API functions generally require more [RAM](ram.md), which you will gain in many ways.
-Scripts can be run on any [server](server.md) you have root access to, but not all servers you find will have useable RAM.
+Scripts can be run on any [server](servers.md) you have root access to, but not all servers you find will have useable RAM.
 
 ## How Scripts work offline
 
@@ -47,7 +47,7 @@ For details on references in terminal commands, see [Terminal](terminal.md).
 
 ## Script Arguments
 
-When running a script, you can use [flags](https://github.com/bitburner-official/bitburner-src/blob/bec737a25307be29c7efef147fc31effca65eedc/markdown/bitburner.ns.flags.md) and [arguments](https://github.com/bitburner-official/bitburner-src/blob/bec737a25307be29c7efef147fc31effca65eedc/markdown/bitburner.ns.args.md), which the script's logic can access and act on, allowing flexibility in your script designs. For example allowing you to get different results or attack different targets without re-writing your code:
+When running a script, you can use [flags](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.flags.md) and [arguments](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.args.md), which the script's logic can access and act on, allowing flexibility in your script designs. For example allowing you to get different results or attack different targets without re-writing your code:
 
     $ run hack.js "harakiri-sushi"
     $ run hack.js "silver-helix"
@@ -60,7 +60,7 @@ For example, if a script run with 1 thread is able to hack \$10,000, then runnin
 
 [Note -- Scripts will not actually become multithreaded in the real-world sense - Javascript is a "single-threaded" coding language.]
 
-When "multithreading" a script, the total [RAM](ram.md) cost can be calculated by simply multiplying the [RAM](ram.md) cost of a single instance of your script by the number of threads you will use. [See [`ns.getScriptRam()`](https://github.com/bitburner-official/bitburner-src/blob/bec737a25307be29c7efef147fc31effca65eedc/markdown/bitburner.ns.getscriptram.md) or the `mem` terminal command detailed below]
+When "multithreading" a script, the total [RAM](ram.md) cost can be calculated by simply multiplying the [RAM](ram.md) cost of a single instance of your script by the number of threads you will use. [See [`ns.getScriptRam()`](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.getscriptram.md) or the `mem` terminal command detailed below]
 
 ## Never-ending scripts
 
@@ -69,8 +69,6 @@ In that case you would want to write your script in a never-ending loop, like `w
 
 However, if you are not careful, this can crash your game.
 If the code inside the loop doesn't `await` for some time, it will never give other scripts and the game itself time to process.
-
-<br />
 
 To help you find this potential bug, any `while (true)` loop without any `await` statement inside it will be marked.
 A red decoration will appear on the left side of the script editor, telling you about the issue.
@@ -114,7 +112,7 @@ Check how much [RAM](ram.md) a script requires to run with "n" threads
 **nano [script]**
 
 Create/Edit a script.
-The name of a script must end with a script extension (.js, .jsx, .ts, .tsx, .script). You can also create a text file with a text extension (.txt, .json).
+The name of a script must end with a script extension (.js, .jsx, .ts, .tsx). You can also create a text file with a text extension (.txt, .json).
 
 **ps**
 

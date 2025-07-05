@@ -3,7 +3,6 @@ import { FactionName } from "@enums";
 import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { CinematicText } from "../../ui/React/CinematicText";
-import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 export function BladeburnerCinematic(): React.ReactElement {
   return (
@@ -33,10 +32,6 @@ export function BladeburnerCinematic(): React.ReactElement {
       ]}
       onDone={() => {
         Router.toPage(Page.Terminal);
-        dialogBoxCreate(
-          `Visit the National Security Agency (NSA) to apply for their ${FactionName.Bladeburners} ` +
-            "division! You will need 100 of each combat stat before doing this.",
-        );
       }}
     />
   );

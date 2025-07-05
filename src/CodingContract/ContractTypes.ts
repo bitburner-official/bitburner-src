@@ -17,6 +17,7 @@ import { shortestPathInAGrid } from "./contracts/ShortestPathInAGrid";
 import { spiralizeMatrix } from "./contracts/SpiralizeMatrix";
 import { squareRoot } from "./contracts/SquareRoot";
 import { subarrayWithMaximumSum } from "./contracts/SubarrayWithMaximumSum";
+import { totalPrimesInRange } from "./contracts/TotalPrimesInRange";
 import { totalWaysToSum } from "./contracts/TotalWaysToSum";
 import { uniquePathsInAGrid } from "./contracts/UniquePathsInAGrid";
 
@@ -102,9 +103,6 @@ export function convert2DArrayToString(arr: number[][]): string {
   return components.join(",").replace(/\s/g, "");
 }
 
-export const isCodingContractName = (v: unknown): v is CodingContractName =>
-  Object.values(CodingContractName).some((a) => a === v);
-
 export const CodingContractDefinitions: CodingContractTypes = {
   ...algorithmicStockTrader,
   ...arrayJumpingGame,
@@ -117,6 +115,7 @@ export const CodingContractDefinitions: CodingContractTypes = {
   ...mergeOverlappingIntervals,
   ...minimumPathSumInATriangle,
   ...proper2ColoringOfAGraph,
+  ...totalPrimesInRange,
   ...sanitizeParenthesesInExpression,
   ...shortestPathInAGrid,
   ...spiralizeMatrix,

@@ -2,24 +2,13 @@
 
 [Home](./index.md) &gt; [bitburner](./bitburner.md) &gt; [BladeburnerGeneralActionName](./bitburner.bladeburnergeneralactionname.md)
 
-## BladeburnerGeneralActionName enum
+## BladeburnerGeneralActionName type
 
-General action names of Bladeburner
 
 **Signature:**
 
 ```typescript
-declare enum BladeburnerGeneralActionName 
+type BladeburnerGeneralActionName = _ValueOf<BladeburnerGeneralActionNameEnumType>;
 ```
-
-## Enumeration Members
-
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  Diplomacy | <code>&quot;Diplomacy&quot;</code> |  |
-|  FieldAnalysis | <code>&quot;Field Analysis&quot;</code> |  |
-|  HyperbolicRegen | <code>&quot;Hyperbolic Regeneration Chamber&quot;</code> |  |
-|  InciteViolence | <code>&quot;Incite Violence&quot;</code> |  |
-|  Recruitment | <code>&quot;Recruitment&quot;</code> |  |
-|  Training | <code>&quot;Training&quot;</code> |  |
+**References:** [\_ValueOf](./bitburner._valueof.md)<!-- -->, [BladeburnerGeneralActionNameEnumType](./bitburner.bladeburnergeneralactionnameenumtype.md)
 

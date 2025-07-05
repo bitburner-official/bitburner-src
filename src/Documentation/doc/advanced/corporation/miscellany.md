@@ -98,18 +98,6 @@ Player.corporation.gainFunds(Player.corporation.revenue * 0.000001, "glitch in r
 
 In previous versions, the revenue is multiplied by 0.01. If you do it fast enough, it'll raise the investment offer by a considerable amount. Nowadays, this trick is useless.
 
-## "sudo.Assist" research
-
-This research exists in ResearchMap.ts, but it's unused in BaseResearchTree.ts. If you use it in NS API, it will throw error.
-
-```typescript
-"sudo.Assist": new Research({
-  name: "sudo.Assist",
-  cost: 15e3,
-  desc: "Develop a virtual assistant AI to handle and manage administrative issues for your corporation.",
-})
-```
-
 ## Dummy division
 
 Dummy division is the division that you create only to increase the [valuation](./financial-statement.md) and the [investment offer](./financial-statement.md).

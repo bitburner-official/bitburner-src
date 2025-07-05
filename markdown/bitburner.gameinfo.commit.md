@@ -4,6 +4,8 @@
 
 ## GameInfo.commit property
 
+Git commit hash that the release was built from. E.g.: "d0d776700"
+
 **Signature:**
 
 ```typescript

@@ -9,7 +9,12 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { getNewBoardState, getStateCopy, makeMove, passTurn, updateCaptures } from "../boardState/boardState";
 import { bitverseArt, weiArt } from "../boardState/asciiArt";
 import { getScore, resetWinstreak } from "../boardAnalysis/scoring";
-import { boardFromBoardString, evaluateIfMoveIsValid, getAllValidMoves } from "../boardAnalysis/boardAnalysis";
+import {
+  boardFromBoardString,
+  clearAllPointHighlights,
+  evaluateIfMoveIsValid,
+  getAllValidMoves,
+} from "../boardAnalysis/boardAnalysis";
 import { useRerender } from "../../ui/React/hooks";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { boardStyles } from "../boardState/goStyles";
@@ -17,7 +22,7 @@ import { Settings } from "../../Settings/Settings";
 import { GoScoreModal } from "./GoScoreModal";
 import { GoGameboard } from "./GoGameboard";
 import { GoSubnetSearch } from "./GoSubnetSearch";
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { handleNextTurn, resetGoPromises } from "../boardAnalysis/goAI";
 import { GoScoreExplanation } from "./GoScoreExplanation";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
@@ -135,6 +140,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
 
     Go.currentGame = getNewBoardState(newBoardSize, newOpponent, true);
     resetGoPromises();
+    clearAllPointHighlights(Go.currentGame);
   }
 
   function getPriorMove() {
@@ -209,7 +215,7 @@ export function GoGameboardWrapper({ showInstructions }: GoGameboardWrapperProps
           <Typography variant={"h6"} className={classes.opponentLabel}>
             {Go.currentGame.ai !== GoOpponent.none ? "Subnet owner: " : ""}{" "}
             {Go.currentGame.ai === GoOpponent.w0r1d_d43m0n ? (
-              <CorruptableText content={Go.currentGame.ai} spoiler={false} />
+              <CorruptibleText content={Go.currentGame.ai} spoiler={false} />
             ) : (
               Go.currentGame.ai
             )}

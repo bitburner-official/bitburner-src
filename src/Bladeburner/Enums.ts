@@ -14,6 +14,12 @@ export enum BladeburnerGeneralActionName {
   InciteViolence = "Incite Violence",
 }
 
+export enum SpecialBladeburnerActionTypeForSleeve {
+  InfiltrateSynthoids = "Infiltrate Synthoids",
+  SupportMainSleeve = "Support main sleeve",
+  TakeOnContracts = "Take on contracts",
+}
+
 export enum BladeburnerContractName {
   Tracking = "Tracking",
   BountyHunter = "Bounty Hunter",

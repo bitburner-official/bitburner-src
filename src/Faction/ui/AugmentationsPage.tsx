@@ -80,7 +80,7 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
       const repCost = augCosts.repCost;
       const hasReq = faction.playerReputation >= repCost;
       const hasRep = hasAugmentationPrereqs(aug);
-      const hasCost = augCosts.moneyCost !== 0 && Player.money > augCosts.moneyCost;
+      const hasCost = augCosts.moneyCost !== 0 && Player.money >= augCosts.moneyCost;
       return hasCost && hasReq && hasRep;
     }
     const buy = augs.filter(canBuy).sort((augName1, augName2) => {
@@ -243,7 +243,7 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
           return (
             hasAugmentationPrereqs(aug) &&
             faction.playerReputation >= costs.repCost &&
-            (costs.moneyCost === 0 || Player.money > costs.moneyCost)
+            (costs.moneyCost === 0 || Player.money >= costs.moneyCost)
           );
         }}
         purchaseAugmentation={(aug, showModal) => {

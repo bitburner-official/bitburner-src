@@ -1,18 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { app, ipcMain } = require("electron");
-const zlib = require("zlib");
 const path = require("path");
 const fs = require("fs/promises");
-const { promisify } = require("util");
-const gzip = promisify(zlib.gzip);
-const gunzip = promisify(zlib.gunzip);
 
-const greenworks = require("./greenworks");
 const log = require("electron-log");
 const flatten = require("lodash/flatten");
 const Store = require("electron-store");
 const { isBinaryFormat } = require("./saveDataBinaryFormat");
 const store = new Store();
+const { steamworksClient } = require("./steamworksUtils");
 
 // https://stackoverflow.com/a/69418940
 const dirSize = async (directory) => {
@@ -37,7 +33,7 @@ const getNewestFile = async (directory) => {
 };
 
 const getAllSaves = async (window) => {
-  const rootDirectory = await getSaveFolder(window, true);
+  const rootDirectory = getSaveFolder(window, true);
   const data = await fs.readdir(rootDirectory, { withFileTypes: true });
   const savesPromises = data
     .filter((e) => e.isDirectory())
@@ -49,8 +45,8 @@ const getAllSaves = async (window) => {
 };
 
 async function prepareSaveFolders(window) {
-  const rootFolder = await getSaveFolder(window, true);
-  const currentFolder = await getSaveFolder(window);
+  const rootFolder = getSaveFolder(window, true);
+  const currentFolder = getSaveFolder(window);
   const backupsFolder = path.join(rootFolder, "/_backups");
   await prepareFolders(rootFolder, currentFolder, backupsFolder);
 }
@@ -91,69 +87,67 @@ function setCloudEnabledConfig(value) {
   store.set("cloud-enabled", value);
 }
 
-async function getSaveFolder(window, root = false) {
-  if (root) return path.join(app.getPath("userData"), "/saves");
+function getSaveFolder(window, root = false) {
+  if (root) {
+    return path.join(app.getPath("userData"), "/saves");
+  }
   const identifier = window.gameInfo?.player?.identifier ?? "";
   return path.join(app.getPath("userData"), "/saves", `/${identifier}`);
 }
 
 function isCloudEnabled() {
   // If the Steam API could not be initialized on game start, we'll abort this.
-  if (global.greenworksError) return false;
+  if (!steamworksClient) {
+    return false;
+  }
 
   // If the user disables it in Steam there's nothing we can do
-  if (!greenworks.isCloudEnabledForUser()) return false;
+  if (!steamworksClient.cloud.isEnabledForAccount()) {
+    return false;
+  }
 
-  // Let's check the config file to see if it's been overriden
-  const enabledInConf = store.get("cloud-enabled", true);
-  if (!enabledInConf) return false;
+  // Let's check the config file to see if it's been overridden
+  if (!store.get("cloud-enabled", true)) {
+    return false;
+  }
 
-  const isAppEnabled = greenworks.isCloudEnabled();
-  if (!isAppEnabled) greenworks.enableCloud(true);
+  if (!steamworksClient.cloud.isEnabledForApp()) {
+    steamworksClient.cloud.setEnabledForApp(true);
+  }
 
   return true;
 }
 
 function saveCloudFile(name, content) {
-  return new Promise((resolve, reject) => {
-    greenworks.saveTextToFile(name, content, resolve, reject);
-  });
+  steamworksClient.cloud.writeFile(name, content);
 }
 
-function getFirstCloudFile() {
-  const nbFiles = greenworks.getFileCount();
-  if (nbFiles === 0) throw new Error("No files in cloud");
-  const file = greenworks.getFileNameAndSize(0);
-  log.silly(`Found ${nbFiles} files.`);
+function getFilenameOfFirstCloudFile() {
+  const files = steamworksClient.cloud.listFiles();
+  if (files.length === 0) {
+    throw new Error("No files in cloud");
+  }
+  const file = files[0];
+  log.silly(`Found ${files.length} files.`);
   log.silly(`First File: ${file.name} (${file.size} bytes)`);
   return file.name;
 }
 
 function getCloudFile() {
-  const file = getFirstCloudFile();
-  return new Promise((resolve, reject) => {
-    greenworks.readTextFromFile(file, resolve, reject);
-  });
+  return steamworksClient.cloud.readFile(getFilenameOfFirstCloudFile());
 }
 
 function deleteCloudFile() {
-  const file = getFirstCloudFile();
-  return new Promise((resolve, reject) => {
-    greenworks.deleteFile(file, resolve, reject);
-  });
-}
-
-async function getSteamCloudQuota() {
-  return new Promise((resolve, reject) => {
-    greenworks.getCloudQuota(resolve, reject);
-  });
+  return steamworksClient.cloud.deleteFile(getFilenameOfFirstCloudFile());
 }
 
 async function backupSteamDataToDisk(currentPlayerId) {
-  const nbFiles = greenworks.getFileCount();
-  if (nbFiles === 0) return;
+  const files = steamworksClient.cloud.listFiles();
+  if (files.length === 0) {
+    return;
+  }
 
-  const file = greenworks.getFileNameAndSize(0);
+  const file = files[0];
   const previousPlayerId = file.name.replace(".json.gz", "");
   if (previousPlayerId !== currentPlayerId) {
     const backupSaveData = await getSteamCloudSaveData();
@@ -174,7 +168,7 @@ async function pushSaveDataToSteamCloud(saveData, currentPlayerId) {
   }
 
   try {
-    backupSteamDataToDisk(currentPlayerId);
+    await backupSteamDataToDisk(currentPlayerId);
   } catch (error) {
     log.error(error);
   }
@@ -182,8 +176,8 @@ async function pushSaveDataToSteamCloud(saveData, currentPlayerId) {
   const steamSaveName = `${currentPlayerId}.json.gz`;
 
   /**
-   * When we push save file to Steam Cloud, we use greenworks.saveTextToFile. It seems that this method expects a string
-   * as the file content. That is why saveData is encoded in base64 and pushed to Steam Cloud as a text file.
+   * When we push save file to Steam Cloud, we use steamworksClient.cloud.writeFile. This function requires a string as
+   * the file content. That is why saveData is encoded in base64 and pushed to Steam Cloud as a text file.
    *
    * Encoding saveData in UTF-8 (with buffer.toString("utf8")) is not the proper way to convert binary data to string.
    * Quote from buffer's documentation: "If encoding is 'utf8' and a byte sequence in the input is not valid UTF-8, then
@@ -198,7 +192,7 @@ async function pushSaveDataToSteamCloud(saveData, currentPlayerId) {
   log.debug(`Saving to Steam Cloud as ${steamSaveName}`);
 
   try {
-    await saveCloudFile(steamSaveName, content);
+    saveCloudFile(steamSaveName, content);
   } catch (error) {
     log.error(error);
   }
@@ -212,7 +206,7 @@ async function getSteamCloudSaveData() {
     return Promise.reject("Steam Cloud is not Enabled");
   }
   log.debug(`Fetching Save in Steam Cloud`);
-  const cloudString = await getCloudFile();
+  const cloudString = getCloudFile();
   // Decode cloudString to get save data back.
   const saveData = Buffer.from(cloudString, "base64");
   log.debug(`SaveData: ${saveData.length} bytes`);
@@ -220,7 +214,7 @@ async function getSteamCloudSaveData() {
 }
 
 async function saveGameToDisk(window, electronGameData) {
-  const currentFolder = await getSaveFolder(window);
+  const currentFolder = getSaveFolder(window);
   let saveFolderSizeBytes = await getFolderSizeInBytes(currentFolder);
   const maxFolderSizeBytes = store.get("autosave-quota", 1e8); // 100Mb per playerIndentifier
   const remainingSpaceBytes = maxFolderSizeBytes - saveFolderSizeBytes;
@@ -268,7 +262,7 @@ async function saveGameToDisk(window, electronGameData) {
 }
 
 async function loadLastFromDisk(window) {
-  const folder = await getSaveFolder(window);
+  const folder = getSaveFolder(window);
   const last = await getNewestFile(folder);
   log.debug(`Last modified file: "${last.file}" (${last.stat.mtime.toLocaleString()})`);
   return loadFileFromDisk(last.file);
@@ -290,7 +284,7 @@ async function loadFileFromDisk(path) {
 
 function getSaveInformation(window, save) {
   return new Promise((resolve) => {
-    ipcMain.once("get-save-info-response", async (event, data) => {
+    ipcMain.once("get-save-info-response", (event, data) => {
       resolve(data);
     });
     window.webContents.send("get-save-info-request", save);
@@ -307,7 +301,7 @@ function getCurrentSave(window) {
 }
 
 function pushSaveGameForImport(window, save, automatic) {
-  ipcMain.once("push-import-result", async (event, arg) => {
+  ipcMain.once("push-import-result", (event, arg) => {
     log.debug(`Was save imported? ${arg.wasImported ? "Yes" : "No"}`);
   });
   window.webContents.send("push-save-request", { save, automatic });
@@ -383,7 +377,6 @@ module.exports = {
   pushSaveGameForImport,
   pushSaveDataToSteamCloud,
   getSteamCloudSaveData,
-  getSteamCloudQuota,
   deleteCloudFile,
   saveGameToDisk,
   loadLastFromDisk,

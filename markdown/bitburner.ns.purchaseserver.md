@@ -31,7 +31,7 @@ RAM cost: 2.25 GB
 
 Purchase a server with the specified hostname and amount of RAM.
 
-The hostname argument can be any data type, but it will be converted to a string and have whitespace removed. Anything that resolves to an empty string will cause the function to fail. If there is already a server with the specified hostname, then the function will automatically append a number at the end of the hostname argument value until it finds a unique hostname. For example, if the script calls `purchaseServer(“foo”, 4)` but a server named “foo” already exists, then it will automatically change the hostname to `foo-0`<!-- -->. If there is already a server with the hostname `foo-0`<!-- -->, then it will change the hostname to `foo-1`<!-- -->, and so on.
+The hostname argument can be any data type, but it will be converted to a string and have whitespace removed. Anything that resolves to an empty string or IP address will cause the function to fail. If there is already a server with the specified hostname, then the function will automatically append a number at the end of the hostname argument value until it finds a unique hostname. For example, if the script calls `purchaseServer(“foo”, 4)` but a server named “foo” already exists, then it will automatically change the hostname to `foo-0`<!-- -->. If there is already a server with the hostname `foo-0`<!-- -->, then it will change the hostname to `foo-1`<!-- -->, and so on.
 
 Note that there is a maximum limit to the amount of servers you can purchase.
 

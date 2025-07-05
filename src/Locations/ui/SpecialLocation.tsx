@@ -29,7 +29,7 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { N00dles } from "../../utils/helpers/N00dles";
 import { Exploit } from "../../Exploits/Exploit";
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { HacknetNode } from "../../Hacknet/HacknetNode";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { GetServer } from "../../Server/AllServers";
@@ -72,7 +72,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     }
     if (
       Player.activeSourceFileLvl(7) >= 3 &&
-      canAcceptStaneksGift() &&
+      canAcceptStaneksGift().success &&
       !Player.hasAugmentation(AugmentationName.StaneksGift1)
     ) {
       PromptEvent.emit({
@@ -329,7 +329,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     return (
       <>
         <Typography>
-          <CorruptableText content={"An eerie aura surrounds this area. You feel you should leave."} spoiler={false} />
+          <CorruptibleText content={"An eerie aura surrounds this area. You feel you should leave."} spoiler={false} />
         </Typography>
       </>
     );

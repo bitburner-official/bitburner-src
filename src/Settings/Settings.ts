@@ -12,6 +12,7 @@ import {
   assertAndSanitizeStyles,
 } from "../JsonSchema/JSONSchemaAssertion";
 import { mergePlayerDefinedKeyBindings, type PlayerDefinedKeyBindingsType } from "../utils/KeyBindingUtils";
+import { toggleSuppressErrorModals } from "../ErrorHandling/ErrorState";
 
 /**
  * This function won't be able to catch **all** invalid hostnames. In order to validate a hostname properly, we need to
@@ -83,8 +84,6 @@ export const Settings = {
   AutoexecScript: "",
   /** How often the game should autosave the player's progress, in seconds. */
   AutosaveInterval: 60,
-  /** How many milliseconds between execution points for Netscript 1 statements. */
-  CodeInstructionRunTime: 25,
   /** Whether to render city as list of buttons. */
   DisableASCIIArt: false,
   /** Whether global keyboard shortcuts should be disabled throughout the game. */
@@ -121,6 +120,8 @@ export const Settings = {
   SaveGameOnFileSave: true,
   /** Whether to hide the confirmation dialog for augmentation purchases. */
   SuppressBuyAugmentationConfirmation: false,
+  /** Whether to hide the info dialog for script errors. */
+  SuppressErrorModals: false,
   /** Whether to hide the dialog showing new faction invites. */
   SuppressFactionInvites: false,
   /** Whether to hide the dialog when the player receives a new message file. */
@@ -192,6 +193,8 @@ export const Settings = {
    * src\utils\KeyBindingUtils.ts.
    */
   KeyBindings: {} as PlayerDefinedKeyBindingsType,
+  /** Whether to sync Steam achievements */
+  SyncSteamAchievements: true,
 
   load(saveString: string) {
     const save: unknown = JSON.parse(saveString);
@@ -253,5 +256,8 @@ export const Settings = {
 
     // Merge Settings.KeyBindings with DefaultKeyBindings.
     mergePlayerDefinedKeyBindings(Settings.KeyBindings);
+
+    // Set up initial state for error modal suppression
+    toggleSuppressErrorModals(Settings.SuppressErrorModals, true);
   },
 };

@@ -16,7 +16,7 @@ deleteServer(host: string): boolean;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  host | string | Hostname of the server to delete. |
+|  host | string | Hostname/IP of the server to delete. |
 
 **Returns:**
 
@@ -28,7 +28,7 @@ True if successful, and false otherwise.
 
 2.25 GB
 
-Deletes one of your purchased servers, which is specified by its hostname.
+Deletes one of your purchased servers, which is specified by its hostname/ip.
 
-The hostname argument can be any data type, but it will be converted to a string. Whitespace is automatically removed from the string. This function will not delete a server that still has scripts running on it.
+The host argument can be any data type, but it will be converted to a string. Whitespace is automatically removed from the string. This function will not delete a server that still has scripts running on it.
 

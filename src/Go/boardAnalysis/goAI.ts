@@ -860,8 +860,11 @@ function getMoveOptions(boardState: BoardState, player: GoColor, rng: number, sm
 /**
  * Gets the starting score for white.
  */
-export function getKomi(opponent: GoOpponent) {
-  return opponentDetails[opponent].komi;
+export function getKomi(state: BoardState): number {
+  if (state.komiOverride !== null) {
+    return state.komiOverride;
+  }
+  return opponentDetails[state.ai].komi;
 }
 
 /**

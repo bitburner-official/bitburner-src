@@ -4,7 +4,7 @@
 
 ## NS.grafting property
 
-Namespace for grafting functions. Contains spoilers.
+Namespace for [grafting](./bitburner.grafting.md) functions. Contains spoilers.
 
 **Signature:**
 

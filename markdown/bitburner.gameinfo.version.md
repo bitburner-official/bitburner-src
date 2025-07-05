@@ -4,6 +4,10 @@
 
 ## GameInfo.version property
 
+Version as shown in release notes and in the UI. E.g.: "2.8.1"
+
+Note that this property does not have the prefix "v". For example, with v2.8.1, this property is "2.8.1".
+
 **Signature:**
 
 ```typescript

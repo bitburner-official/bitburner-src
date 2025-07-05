@@ -73,8 +73,11 @@ export const helpers = {
   positiveSafeInteger,
   positiveNumber,
   scriptArgs,
+  boolean,
   runOptions,
   spawnOptions,
+  hostReturnOptions,
+  returnServerID,
   argsToString,
   basicErrorMessage,
   errorMessage,
@@ -119,6 +122,10 @@ export interface CompleteHGWOptions {
   threads: PositiveNumber;
   stock: boolean;
   additionalMsec: number;
+}
+/** HostReturnOptions with non-optional, type-validated members, for passing between internal functions */
+export interface CompleteHostReturnOptions {
+  returnByIP: boolean;
 }
 
 /** Convert a provided value v for argument argName to string. If it wasn't originally a string or number, throw. */
@@ -181,6 +188,14 @@ function scriptArgs(ctx: NetscriptContext, args: unknown) {
   return args;
 }
 
+/** Converts the provided value for v to a boolean, throwing if it is not  */
+function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
+  if (typeof v !== "boolean") {
+    throw errorMessage(ctx, `${argName} must be a boolean, was ${v}`, "TYPE");
+  }
+  return v;
+}
+
 function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRunOptions {
   const result: CompleteRunOptions = {
     threads: 1 as PositiveInteger,
@@ -228,6 +243,20 @@ function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteS
     }
   }
   return result;
+}
+
+function hostReturnOptions(returnOpts: unknown): CompleteHostReturnOptions {
+  const result: CompleteHostReturnOptions = { returnByIP: false };
+  if (typeof returnOpts !== "object" || !returnOpts) return result;
+  // Safe assertion since returnOpts type has been narrowed to a non-null object
+  const { returnByIP } = returnOpts as Unknownify<CompleteHostReturnOptions>;
+  result.returnByIP = !!returnByIP;
+  return result;
+}
+
+/** Returns a server's hostname or IP based on the `returnByIP` field of HostReturnOptions */
+function returnServerID(server: BaseServer, returnOpts: CompleteHostReturnOptions): string {
+  return returnOpts.returnByIP ? server.ip : server.hostname;
 }
 
 function mapToString(map: Map<unknown, unknown>): string {
@@ -334,8 +363,7 @@ function checkSingularityAccess(ctx: NetscriptContext): void {
   if (!canAccessBitNodeFeature(4)) {
     throw errorMessage(
       ctx,
-      `This singularity function requires Source-File 4 to run. A power up you obtain later in the game.
-      It will be very obvious when and how you can obtain it.`,
+      `This singularity function requires Source-File 4 to run. A power up you obtain later in the game. It will be very obvious when and how you can obtain it.`,
       "API ACCESS",
     );
   }
@@ -352,10 +380,8 @@ function checkEnvFlags(ctx: NetscriptContext): void {
     log(ctx, () => "Failed to run due to failed concurrency check.");
     const err = errorMessage(
       ctx,
-      `Concurrent calls to Netscript functions are not allowed!
-      Did you forget to await hack(), grow(), or some other
-      promise-returning function?
-      Currently running: ${ws.env.runningFn} tried to run: ${ctx.function}`,
+      "Concurrent calls to Netscript functions are not allowed! Did you forget to await hack(), grow(), or some other " +
+        `promise-returning function?\nCurrently running: ${ws.env.runningFn}\nTried to run: ${ctx.function}`,
       "CONCURRENCY",
     );
     killWorkerScript(ws);
