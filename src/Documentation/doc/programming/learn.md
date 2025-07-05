@@ -8,7 +8,7 @@ In fact, this game could help you learn some basic programming concepts.
 
 Here are some good tutorials for learning programming/JavaScript as a beginner:
 
-- [Learn-JS](http://www.learn-js.org/en/Welcome)
+- [Learn-JS](https://www.learn-js.org/en/Welcome)
 - [programiz](https://www.programiz.com/javascript/get-started)
 - [Speaking JavaScript](https://exploringjs.com/es5/)
   This is a bit on the longer side.
@@ -29,7 +29,7 @@ However, this means that ES5 engines and interpreters will fail if they encounte
 You'll see why this is important further down.
 
 - [MDN Introduction to JS](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
-- [Eloquent JavaScript (ES6+)](http://eloquentjavascript.net/)
+- [Eloquent JavaScript (ES6+)](https://eloquentjavascript.net/)
   Recommended Chapters: Introduction, 1-6
 - [Modern JavaScript Tutorial (ES6+)](https://javascript.info/)
   Recommended Chapters: 2, 4-6

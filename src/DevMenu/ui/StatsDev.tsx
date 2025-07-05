@@ -1,6 +1,5 @@
 import React from "react";
 
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -14,6 +13,7 @@ import { Player } from "@player";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { calculateExp } from "../../PersonObjects/formulas/skill";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 const bigNumber = 1e27;
 
@@ -221,7 +221,7 @@ export function StatsDev(): React.ReactElement {
   const [levelOfNormalStats, setLevelOfNormalStats] = React.useState<number | string>("");
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_StatsDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Experience / Stats</Typography>
       </AccordionSummary>
@@ -297,6 +297,6 @@ export function StatsDev(): React.ReactElement {
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

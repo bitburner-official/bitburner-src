@@ -4,7 +4,7 @@ export enum FactionName {
   TheCovenant = "The Covenant",
   ECorp = "ECorp",
   MegaCorp = "MegaCorp",
-  BachmanAssociates = "Bachman & Associates",
+  BachmanAndAssociates = "Bachman & Associates",
   BladeIndustries = "Blade Industries",
   NWO = "NWO",
   ClarkeIncorporated = "Clarke Incorporated",

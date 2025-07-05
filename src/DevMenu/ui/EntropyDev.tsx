@@ -1,6 +1,5 @@
 import React from "react";
 
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -8,10 +7,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
 import { Player } from "@player";
 import { Adjuster } from "./Adjuster";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 export function EntropyDev(): React.ReactElement {
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_EntropyDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Entropy</Typography>
       </AccordionSummary>
@@ -37,6 +37,6 @@ export function EntropyDev(): React.ReactElement {
           }}
         />
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

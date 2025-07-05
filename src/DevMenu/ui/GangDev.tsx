@@ -1,13 +1,13 @@
 import React from "react";
 
 import Typography from "@mui/material/Typography";
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { Adjuster } from "./Adjuster";
 import { Player } from "@player";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 const bigNumber = 1e27;
 
@@ -33,7 +33,7 @@ export function GangDev(): React.ReactElement {
   }
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_GangDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Gang</Typography>
       </AccordionSummary>
@@ -58,6 +58,6 @@ export function GangDev(): React.ReactElement {
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

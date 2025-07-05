@@ -29,7 +29,6 @@ import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { BladeburnerConstants } from "./data/Constants";
 import { formatExp, formatMoney, formatPercent, formatBigNumber, formatStamina } from "../ui/formatNumber";
-import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { addOffset } from "../utils/helpers/addOffset";
 import { Factions } from "../Faction/Factions";
 import { calculateHospitalizationCost } from "../Hospital/Hospital";
@@ -56,6 +55,7 @@ import { assertObject } from "../utils/TypeAssertion";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { loadActionIdentifier } from "./utils/loadActionIdentifier";
 import { pluralize } from "../utils/I18nUtils";
+import { calculateActionRankGain, calculateActionReputationGain } from "./Formulas";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -912,7 +912,7 @@ export class Bladeburner implements OperationTeam {
               action.setMaxLevel(BladeburnerConstants.ContractSuccessesPerLevel);
             }
             if (action.rankGain) {
-              const gain = addOffset(action.rankGain * rewardMultiplier * currentNodeMults.BladeburnerRank, 10);
+              const gain = addOffset(calculateActionRankGain(action), 10);
               this.changeRank(person, gain);
               if (isOperation && this.logging.ops) {
                 this.log(
@@ -994,7 +994,7 @@ export class Bladeburner implements OperationTeam {
           this.numBlackOpsComplete++;
           let rankGain = 0;
           if (action.rankGain) {
-            rankGain = addOffset(action.rankGain * currentNodeMults.BladeburnerRank, 10);
+            rankGain = addOffset(calculateActionRankGain(action), 10);
             this.changeRank(person, rankGain);
           }
 
@@ -1097,7 +1097,7 @@ export class Bladeburner implements OperationTeam {
             }
             const hackingExpGain = 20 * person.mults.hacking_exp;
             const charismaExpGain = 20 * person.mults.charisma_exp;
-            const rankGain = 0.1 * currentNodeMults.BladeburnerRank;
+            const rankGain = calculateActionRankGain(action);
             retValue.hackExp = hackingExpGain;
             retValue.chaExp = charismaExpGain;
             retValue.intExp = BladeburnerConstants.BaseIntGain;
@@ -1232,12 +1232,9 @@ export class Bladeburner implements OperationTeam {
     }
     this.maxRank = Math.max(this.rank, this.maxRank);
 
-    const bladeburnersFactionName = FactionName.Bladeburners;
-    const bladeburnerFac = Factions[bladeburnersFactionName];
-    if (bladeburnerFac.isMember) {
-      const favorBonus = 1 + bladeburnerFac.favor / 100;
-      bladeburnerFac.playerReputation +=
-        BladeburnerConstants.RankToFactionRepFactor * change * person.mults.faction_rep * favorBonus;
+    const bladeburnerFaction = Factions[FactionName.Bladeburners];
+    if (bladeburnerFaction.isMember) {
+      bladeburnerFaction.playerReputation += calculateActionReputationGain(person, change);
     }
 
     // Gain skill points
