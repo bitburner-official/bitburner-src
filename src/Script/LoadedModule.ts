@@ -8,6 +8,7 @@ export type ScriptURL = string & { __type: "ScriptURL" };
 export interface ScriptModule {
   main?: (ns: NSFull, ...args: ScriptArg[]) => unknown;
   autocomplete?: (data: AutocompleteData, flags: string[]) => unknown;
+  help?: () => string | string[];
 }
 
 export class LoadedModule {
