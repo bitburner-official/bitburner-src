@@ -19,6 +19,20 @@ interface CodingContractProps {
 
 export const CodingContractEvent = new EventEmitter<[CodingContractProps]>();
 
+function convertStringWithNbsp(value: string): React.ReactElement {
+  const substrings = value.split("&nbsp;");
+  const out = [];
+  for (const [i, substring] of substrings.entries()) {
+    out.push(
+      <React.Fragment key={i}>
+        {substring}
+        {i < substrings.length - 1 && <>&nbsp;</>}
+      </React.Fragment>,
+    );
+  }
+  return <>{out}</>;
+}
+
 export function CodingContractModal(): React.ReactElement {
   const [contract, setContract] = useState<CodingContractProps | null>(null);
   const [answer, setAnswer] = useState("");
@@ -65,7 +79,11 @@ export function CodingContractModal(): React.ReactElement {
   const contractType = CodingContractTypes[contract.c.type];
   const description = [];
   for (const [i, value] of contractType.desc(contract.c.getData()).split("\n").entries()) {
-    description.push(<span key={i} dangerouslySetInnerHTML={{ __html: value + "<br />" }}></span>);
+    description.push(
+      <span key={i}>
+        {value.includes("&nbsp;") ? convertStringWithNbsp(value) : value} <br />
+      </span>,
+    );
   }
   return (
     <Modal open={contract !== null} onClose={close}>
