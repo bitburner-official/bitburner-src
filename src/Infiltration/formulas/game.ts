@@ -12,7 +12,7 @@ export const cleanRecentInfiltrations = (): void => {
   const now = Date.now();
   // Keep only timestamps within the max effect time
   InfiltrationState.successfulInfiltrationTimestamps = InfiltrationState.successfulInfiltrationTimestamps.filter(
-    (ts) => ts > now - MaxEffectTime && ts < now,
+    (ts) => ts > now - MaxEffectTime && ts <= now,
   );
 };
 
