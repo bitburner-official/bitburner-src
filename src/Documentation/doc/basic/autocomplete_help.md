@@ -31,7 +31,7 @@ export function main(ns) {
 }
 ```
 
-Running this script from the terminal like `run script.js` or `./script.js` and pressing tab, would offer `"argument0", "argument1" and "argument2" as autocomplete options.
+Running this script from the terminal like `run script.js` or `./script.js` and pressing tab, would offer "argument0", "argument1" and "argument2" as autocomplete options.
 
 ### AutocompleteData
 
