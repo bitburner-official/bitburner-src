@@ -8780,6 +8780,7 @@ export type CodingContractObject = {
     data: CodingContractSignatures[T][0];
     submit: (answer: CodingContractSignatures[T][1] | string) => string;
     description: string;
+    difficulty: number;
     numTriesRemaining: () => number;
   };
 }[keyof CodingContractSignatures];

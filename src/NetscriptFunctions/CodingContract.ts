@@ -92,7 +92,6 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       const filename = helpers.string(ctx, "filename", _filename);
       const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
       const contract = getCodingContract(ctx, host, filename);
-
       return structuredClone(contract.getData());
     },
     getContract: (ctx) => (_filename, _host?) => {
@@ -109,6 +108,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
           return attemptContract(ctx, server, contract, answer);
         },
         description: contract.getDescription(),
+        difficulty: contract.getDifficulty(),
         numTriesRemaining: () => {
           helpers.checkEnvFlags(ctx);
           return contract.getMaxNumTries() - contract.tries;
