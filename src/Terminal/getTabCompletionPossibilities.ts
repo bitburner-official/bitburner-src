@@ -105,7 +105,13 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
   const addReachableServerNames = () => {
     addGeneric({
       iterable: GetAllServers()
-        .filter((server) => server.backdoorInstalled || currServ.serversOnNetwork.includes(server.hostname))
+        .filter(
+          (server) =>
+            server !== currServ &&
+            (server.backdoorInstalled ||
+              server.purchasedByPlayer ||
+              currServ.serversOnNetwork.includes(server.hostname)),
+        )
         .map((server) => server.hostname),
     });
   };

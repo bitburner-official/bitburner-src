@@ -12,7 +12,7 @@ export const minimumPathSumInATriangle: Pick<CodingContractTypes, CodingContract
         }
         const numSpaces = numLevels - level + 1;
 
-        let str: string = ["&nbsp;".repeat(numSpaces), "[", data[level].toString(), "]"].join("");
+        let str: string = [" ".repeat(numSpaces), "[", data[level].toString(), "]"].join("");
         if (level < numLevels - 1) {
           str += ",";
         }
@@ -32,10 +32,10 @@ export const minimumPathSumInATriangle: Pick<CodingContractTypes, CodingContract
         "The triangle is represented as a 2D array of numbers:\n\n",
         `${triangle}\n\n`,
         "Example: If you are given the following triangle:\n\n[\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2],\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;[3,4],\n",
-        "&nbsp;&nbsp;&nbsp;[6,5,7],\n",
-        "&nbsp;&nbsp;[4,1,8,3]\n",
+        "     [2],\n",
+        "    [3,4],\n",
+        "   [6,5,7],\n",
+        "  [4,1,8,3]\n",
         "]\n\n",
         "The minimum path sum is 11 (2 -> 3 -> 5 -> 1).",
       ].join(" ");
