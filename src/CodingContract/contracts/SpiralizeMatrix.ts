@@ -12,30 +12,25 @@ export const spiralizeMatrix: Pick<CodingContractTypes, CodingContractName.Spira
       // for (const line of n) {
       //   d += `${line.toString()},\n`;
       // }
-      d += "\u00A0\u00A0\u00A0\u00A0[\n";
+      d += "    [\n";
       d += n
-        .map(
-          (line: number[]) =>
-            "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0[" +
-            line.map((x: number) => `${x}`.padStart(2, " ")).join(",") +
-            "]",
-        )
+        .map((line: number[]) => "        [" + line.map((x: number) => `${x}`.padStart(2, " ")).join(",") + "]")
         .join("\n");
-      d += "\n\u00A0\u00A0\u00A0\u00A0]\n";
+      d += "\n    ]\n";
       d += [
         "\nHere is an example of what spiral order should be:\n\n",
-        "\u00A0\u00A0\u00A0\u00A0[\n",
-        "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0[1, 2, 3]\n",
-        "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0[4, 5, 6]\n",
-        "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0[7, 8, 9]\n",
-        "\u00A0\u00A0\u00A0\u00A0]\n\n",
+        "    [\n",
+        "        [1, 2, 3]\n",
+        "        [4, 5, 6]\n",
+        "        [7, 8, 9]\n",
+        "    ]\n\n",
         "Answer: [1, 2, 3, 6, 9, 8 ,7, 4, 5]\n\n",
         "Note that the matrix will not always be square:\n\n",
-        "\u00A0\u00A0\u00A0\u00A0[\n",
-        "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0[1,\u00A0\u00A02,\u00A0\u00A03,\u00A0\u00A04]\n",
-        "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0[5,\u00A0\u00A06,\u00A0\u00A07,\u00A0\u00A08]\n",
-        "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0[9,\u00A010,\u00A011,\u00A012]\n",
-        "\u00A0\u00A0\u00A0\u00A0]\n\n",
+        "    [\n",
+        "        [1,  2,  3,  4]\n",
+        "        [5,  6,  7,  8]\n",
+        "        [9, 10, 11, 12]\n",
+        "    ]\n\n",
         "Answer: [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]",
       ].join(" ");
 

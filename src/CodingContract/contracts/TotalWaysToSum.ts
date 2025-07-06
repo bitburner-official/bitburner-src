@@ -10,10 +10,10 @@ export const totalWaysToSum: Pick<
     desc: (n: number): string => {
       return [
         "It is possible write four as a sum in exactly four different ways:\n\n",
-        "\u00A0\u00A0\u00A0\u00A03 + 1\n",
-        "\u00A0\u00A0\u00A0\u00A02 + 2\n",
-        "\u00A0\u00A0\u00A0\u00A02 + 1 + 1\n",
-        "\u00A0\u00A0\u00A0\u00A01 + 1 + 1 + 1\n\n",
+        "    3 + 1\n",
+        "    2 + 2\n",
+        "    2 + 1 + 1\n",
+        "    1 + 1 + 1 + 1\n\n",
         `How many different distinct ways can the number ${n} be written as a sum of at least`,
         "two positive integers?",
       ].join(" ");
