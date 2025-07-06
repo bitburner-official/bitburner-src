@@ -74,8 +74,6 @@
 |  [HacknetRAMRequirement](./bitburner.hacknetramrequirement.md) | Player's Hacknet devices must have at least this much total RAM. |
 |  [HacknetServerConstants](./bitburner.hacknetserverconstants.md) | Hacknet server related constants |
 |  [HacknetServersFormulas](./bitburner.hacknetserversformulas.md) | Hacknet Server formulas |
-|  [HelpData](./bitburner.helpdata.md) | Used to autogenerate the help text for a script. |
-|  [HelpDataArgs](./bitburner.helpdataargs.md) | Argument interface for the HelpData interface, which is used to autogenerate the help text for a script. |
 |  [HostReturnOptions](./bitburner.hostreturnoptions.md) | Options to control how a server identifier (hostname or IP address) is returned. Affects the behavior of [scan](./bitburner.ns.scan.md)<!-- -->, [getPurchasedServers](./bitburner.ns.getpurchasedservers.md)<!-- -->, and [getCurrentServer](./bitburner.singularity.getcurrentserver.md) |
 |  [HP](./bitburner.hp.md) |  |
 |  [ILocation](./bitburner.ilocation.md) |  |

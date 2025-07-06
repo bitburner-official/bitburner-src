@@ -100,17 +100,17 @@ In that example typing `run script.js` and pressing tab would initially suggest 
 
 The `help` terminal command offers detailed information about existing terminal commands. It can also display custom help messages defined inside a script file.
 
-This function's return type is very flexible; You can either return a string, an array of strings, a [ReactNode](../programming/react.md), or a custom HelpData object.
+This function's return type can be either a simple string, or if you prefer a little bit more customization, a [ReactNode](../programming/react.md).
 
-A basic example of its use;
+For example:
 
 ```javascript
 /**
  * @param {AutocompleteData} data - context about the game, may be useful to list argument documentation
- * @returns {string|string[]|ReactNode|HelpData}
+ * @returns {string|ReactNode} - Outputted to the Terminal
  */
 export function help(data) {
-  return ["This is a simple script.", " ", "This script will output foo."];
+  return ["This is a simple script.", " ", "This script will output foo."].join("\n");
 }
 
 /** @param {NS} ns */
@@ -121,7 +121,7 @@ export function main(ns) {
 
 Running `help` on the terminal as `help script.js` would display the provided strings line-by-line, as shown below:
 
-```
+```plaintext
 Usage for script.js:
 This is a simple script.
 
@@ -138,153 +138,61 @@ This function supports ANSI escape codes, in case you'd like a bit of customizat
 export function help() {
   return `${"\x1b[2m"}This is fancy bold text!`;
 }
-/*
-Usage for script.js:
-        This is fancy bold text!
-*/
 
 /** @param {NS} ns */
 export function main(ns) {
   // ...
 }
 ```
+Which would show "**This is fancy bold text!**" in the Terminal.
 
 ## Advanced Use
 
-For these uses of the help function, you might consider using _TypeScript_ files.
-
-The function can return a ReactNode element. For this, it's highly recommended to write a `*.tsx` script file.
-
-```tsx
-export function help(): ReactNode {
-  return <li>This is a React element!</li>;
-}
-```
-
-In case of very complex scripts, such as ones that operate advanced [hacking algorithms](../programming/hackingalgorithms.md), you may want to automatically generate documentation through the [HelpData](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.helpdata.md) object.
-
-### HelpData
-
-This is an object that documentates human-readable information about the script.
-
-```ts
-interface HelpData {
-  // A short description of the script.
-  description: string;
-
-  // The arguments of the script.
-  args?: HelpDataArgs[];
-
-  // Detailed information of the script. An array of strings indicates multiple paragraphs.
-  overview?: string | string[];
-
-  // Script(s) or command(s) that you might want to read about.
-  seeAlso?: string | string[];
-}
-```
-
-The `args` field must be populated with a list of objects of type `HelpDataArgs`:
-
-```ts
-interface HelpDataArgs {
-  // The name of the argument to the script.
-  name: string;
-
-  // The type of the argument.
-  // ScriptArg... represents a variable-amount of arguments.
-  // It is currently is limited to the last argument.
-  argType: "string" | "number" | "boolean" | "ScriptArg...";
-
-  // Brief description of the purpose of this argument.
-  description?: string;
-
-  // Displays the argument as either optional or not.
-  // By default, it is required;
-  optional?: boolean;
-}
-```
-
-An example of automatic documentation is seen below, in a `.ts` script:
-
-```ts
-export function help(): HelpData {
-  return {
-    description: "Help module example",
-    args: [
-      {
-        name: "n",
-        argType: "number",
-        description: "count of foo repetitions",
-        optional: true,
-      },
-    ],
-    overview: [
-      "This script file repeats the line 'foo' over a default of 10 times.",
-      "It may be overriden to output n times, through command-line arguments.",
-    ],
-    seeAlso: "help",
-  };
-}
-
-// ...
-```
-
-```
-[home /]> help script.ts
-Usage of script.ts:
-NAME
-	script.ts - Help module example (1.60GB)
-
-SYNOPSIS
-	script.ts  [n: number]
-
-OVERVIEW
-	This script file repeats the line 'foo' over a default of 10 times.
-
-	It may be overriden to output n times, through command-line arguments.
-
-ARGUMENTS
-	n: number (optional)
-		 -- count of foo repetitions
-
-SEE ALSO
-	help
-
-```
+For more advanced uses of this function, you might consider using _TypeScript_ files.
 
 ### Context clues through AutocompleteData
 
 AutocompleteData may be passed into the help function to give custom messages based on context. This may be helpful when you have a script that takes in game-specific arguments, which synergize with the autocomplete function:
 
-_Example: findContract.ts_
+A few notable differences with this and autocomplete is that the `.command` property contains the file path and name, the `.flags` property is empty.
+
+_Example: contracts.ts_
 
 ```ts
-export function help(data: AutocompleteData): HelpData {
-  return {
-    description: "find contracts in servers",
-    args: [
-      {
-        name: "hostnames",
-        argType: "ScriptArg...",
-        description: `hostnames to search. Possible values: ${data.servers.join(", ")}`,
-      },
-    ],
-  };
+export function help(data: AutocompleteData): string {
+  return [
+    "Finds and solves contracts in a server.",
+    "Possible arguments: ",
+    `  ${data.servers.join(", ")}`
+  ].join("\n");
 }
 
 // ...
 ```
 
+```plaintext
+Usage for contracts.ts:
+Finds and solves contracts in a server.
+Possible arguments: 
+  n00dles, foodnstuff, sigma-cosmetics, joesguns, hong-fang-tea, harakiri-sushi, iron-gym
 ```
-[home /]> help findContracts.ts
-Usage for findContracts.ts:
-NAME
-	findContracts.ts - find contracts in servers (6.80GB)
 
-SYNOPSIS
-	findContracts.ts  <hostnames: ScriptArg...>
 
-ARGUMENTS
-	hostnames: ScriptArg...
-		 -- hostnames to search. Possible values: n00dles, foodnstuff, sigma-cosmetics, joesguns, hong-fang-tea, harakiri-sushi, iron-gym
+The function can also return a React element. For this, it's highly recommended to write a `*.tsx` script file.
+The example above, written in `.tsx`:
+
+```tsx
+export function help(data: AutocompleteData): ReactNode {
+  return <li><ul>
+    <li> ./{data.command} {"<servers...>"} </li>
+    <li> Servers must be one of: {data.servers.join(", ")} </li>
+  </ul></li>;
+}
+```
+
+Outputs:
+```plaintext
+Usage for contracts.tsx:
+  - ./contracts.tsx <servers...> 
+  - Servers must be one of: n00dles, foodnstuff, sigma-cosmetics, joesguns, hong-fang-tea, harakiri-sushi, iron-gym 
 ```
