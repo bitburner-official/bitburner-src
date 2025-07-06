@@ -133,7 +133,7 @@ This function supports ANSI escape codes, in case you'd like a bit of customizat
 ```javascript
 /**
  * @param {AutocompleteData} data - context about the game, may be useful to list argument documentation
- * @returns {string|string[]|ReactNode|HelpData}
+ * @returns {string|ReactNode} - Outputted to the Terminal
  */
 export function help() {
   return `${"\x1b[2m"}This is fancy bold text!`;
