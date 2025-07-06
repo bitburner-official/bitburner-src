@@ -9,5 +9,5 @@ A string or strings that name other scripts that might be related to this one.
 **Signature:**
 
 ```typescript
-seeAlso?: string| string[];
+seeAlso?: string | string[];
 ```

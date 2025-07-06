@@ -19,5 +19,5 @@ interface HelpData
 |  [args?](./bitburner.helpdata.args.md) |  | [HelpDataArgs](./bitburner.helpdataargs.md)<!-- -->\[\] | _(Optional)_ The arguments of the script |
 |  [description](./bitburner.helpdata.description.md) |  | string | A short description of the script. |
 |  [overview?](./bitburner.helpdata.overview.md) |  | string \| string\[\] | <p>_(Optional)_ A string featuring an overview of the entire script. More detailed than description above.</p><p>Pass in a string to print out a sole paragraph. A string array might be passed in to print out paragraphs of text.</p> |
-|  [seeAlso?](./bitburner.helpdata.seealso.md) |  | string\| string\[\] | _(Optional)_ A string or strings that name other scripts that might be related to this one. |
+|  [seeAlso?](./bitburner.helpdata.seealso.md) |  | string \| string\[\] | _(Optional)_ A string or strings that name other scripts that might be related to this one. |
 
