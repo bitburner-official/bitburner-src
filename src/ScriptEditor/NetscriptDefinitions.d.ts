@@ -10228,15 +10228,15 @@ interface HelpData {
   description: string;
   /** The arguments of the script */
   args?: HelpDataArgs[];
-  /** 
+  /**
    * A string featuring an overview of the entire script. More detailed than description above.
-   * 
+   *
    * Pass in a string to print out a sole paragraph. A string array might be passed in to print out paragraphs of text.
    */
   overview?: string | string[];
-  
+
   /** A string or strings that name other scripts that might be related to this one. */
-  seeAlso?: string| string[];
+  seeAlso?: string | string[];
 }
 
 /**
