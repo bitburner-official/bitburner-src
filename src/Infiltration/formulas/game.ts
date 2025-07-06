@@ -3,7 +3,7 @@ import { clampNumber } from "../../utils/helpers/clampNumber";
 
 export const MaxDifficultyForInfiltration = 3.5;
 const MaxEffectTime = 30 * 60 * 1000; // 30 minutes in milliseconds
-const date = globalThis?.Date;
+const date = globalThis.Date;
 
 export const InfiltrationState = {
   successfulInfiltrationTimestamps: [] as number[],
