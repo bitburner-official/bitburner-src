@@ -3355,8 +3355,8 @@ export type BladeburnerActionTypeForSleeve =
 /**
  * Bladeburner API
  * @remarks
- * You have to be employed in the Bladeburner division and be in BitNode-7
- * or have Source-File 7 in order to use this API.
+ * You have to be employed in the Bladeburner division and be in BitNode 6/7 or have Source-File 6/7 in order to use
+ * this API.
  * @public
  */
 export interface Bladeburner {
