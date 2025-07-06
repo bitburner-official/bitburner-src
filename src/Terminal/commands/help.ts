@@ -13,8 +13,15 @@ import { Flags } from "../../NetscriptFunctions/Flags";
 import { BaseServer } from "../../Server/BaseServer";
 import { hasTextExtension } from "../../Paths/TextFilePath";
 
+
+// I don't think I know how to use TypeScript.
 function isHelpData(obj: any): obj is HelpData {
-  return obj && typeof obj.description === "string";
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "description" in obj &&
+    typeof (obj as {description: string}).description === "string"
+  );
 }
 
 export function help(args: (string | number | boolean)[]): void {
@@ -41,12 +48,12 @@ export function help(args: (string | number | boolean)[]): void {
 
       if (filePath == null) {
         if (hasScriptExtension(cmdCopy)) {
-          Terminal.error("Could not find script '" + cmdCopy + "'");
-          Terminal.error("Make sure this file exists in this server.");
+          Terminal.error(`Could not find script '${cmdCopy}'`);
+          Terminal.error(`Make sure this file exists in this server.`);
         } else if (hasTextExtension(cmdCopy)) {
-          Terminal.error("'" + cmdCopy + "' needs to be either a *.js, *.ts, *.jsx or *.tsx file to have detailed help information.");
+          Terminal.error(`'${cmdCopy}' needs to be either a *.js, *.ts, *.jsx or *.tsx file to have detailed help information.`);
         } else {
-          Terminal.error("No help entry for '" + cmdCopy + "'.");
+          Terminal.error(`No help entry for '${cmdCopy}'.`);
         }
         return;
       }
