@@ -18,7 +18,7 @@ export const totalWaysToSum: Pick<
         "two positive integers?",
       ].join(" ");
     },
-    difficulty: 1.5,
+    difficulty: 1,
     generate: (): number => {
       return getRandomIntInclusive(8, 100);
     },

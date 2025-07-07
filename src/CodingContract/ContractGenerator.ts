@@ -82,8 +82,8 @@ export function generateRandomContract(): void {
   // Difficulty is capped to not overwhelm a new player.
   const totalSFs = [...Player.sourceFiles].reduce<number>((total, [__bn, lvl]) => (total += lvl), 0);
   //server networkLayer also scales difficulty to make "further" servers generate more valuable rewards.
-  const maxDif = Math.min(randServer.networkLayer ?? 10, totalSFs + 1);
-  const minDif = Math.floor(Math.min(randServer.networkLayer ?? 0, totalSFs) / 3);
+  const maxDif = Math.min(randServer.networkLayer ?? 10, 2 * totalSFs + 1);
+  const minDif = Math.floor(Math.min(randServer.networkLayer ?? 0, totalSFs) / 2);
   const problemType = getRandomProblemType(maxDif, minDif);
 
   const contractFn = getRandomFilename(randServer, reward);
