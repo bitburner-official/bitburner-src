@@ -1,27 +1,28 @@
 import { Paper, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface IProps {
-  onFinish: () => void;
+  time: number;
 }
 
-export function Countdown({ onFinish }: IProps): React.ReactElement {
+export function Countdown({ time }: IProps): React.ReactElement {
   const [x, setX] = useState(3);
+  const intervalId = useRef(0);
 
   useEffect(() => {
     if (x === 0) {
-      onFinish();
+      clearInterval(intervalId.current);
     }
-  }, [x, onFinish]);
+  }, [x]);
 
   useEffect(() => {
-    const id = setInterval(() => {
+    intervalId.current = window.setInterval(() => {
       setX((previousValue) => previousValue - 1);
-    }, 300);
+    }, time / 3);
     return () => {
-      clearInterval(id);
+      clearInterval(intervalId.current);
     };
-  }, []);
+  }, [time]);
 
   return (
     <Paper sx={{ p: 1, textAlign: "center" }}>

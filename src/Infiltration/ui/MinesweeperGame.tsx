@@ -72,7 +72,15 @@ export function MinesweeperGame(props: IMinigameProps): React.ReactElement {
       }
       setAnswer((old) => {
         old[pos[1]][pos[0]] = true;
-        if (fieldEquals(minefield, old)) props.onSuccess();
+        if (fieldEquals(minefield, old)) {
+          /**
+           * Calling onSuccess() makes the parent component ("Game") rerender while this component is still rendering,
+           * so we need to put it in setTimeout().
+           */
+          setTimeout(() => {
+            props.onSuccess();
+          }, 0);
+        }
         return old;
       });
     }
