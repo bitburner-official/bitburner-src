@@ -2,33 +2,38 @@ import { Player } from "@player";
 import { clampNumber } from "../../utils/helpers/clampNumber";
 
 export const MaxDifficultyForInfiltration = 3.5;
-const MaxEffectTime = 30 * 60 * 1000; // 30 minutes in milliseconds
-const date = globalThis.Date;
+// This value is typically denoted "lambda," and is the instantaneous rate of decay.
+// I.e. infils decay towards 0 at 0.1%/sec. This is a half-life of ~11.5 minutes.
+const DecayRate = -1e-6;
 
-export const InfiltrationState = {
-  successfulInfiltrationTimestamps: [] as number[],
+export const InfiltrationStateDefault = {
+  lastChangeTimestamp: 0,
+  infils: 0,
 };
+// Tracks an exponential moving average of number of successful infiltrations performed,
+// which decays back to 0. This state is only updated after a successful infil.
+export const InfiltrationState = { ...InfiltrationStateDefault };
 
-export const cleanRecentInfiltrations = (): void => {
-  const now = date.now();
-  // Keep only timestamps within the max effect time
-  InfiltrationState.successfulInfiltrationTimestamps = InfiltrationState.successfulInfiltrationTimestamps.filter(
-    (ts) => ts > now - MaxEffectTime && ts <= now,
-  );
-};
+function calculateCurrentInfils(timestamp: number): number {
+  return InfiltrationState.infils * Math.exp(DecayRate * (timestamp - InfiltrationState.lastChangeTimestamp));
+}
 
 // Calculates the infiltration reward multiplier based on how many and how recent other infiltrations were completed.
 // Each infiltration completed reduces the demand for corporate espionage data for a little while, thus affecting the
 // market demand.
-export function calculateMarketDemandMultiplier(): number {
-  cleanRecentInfiltrations();
-
-  const marketDemandMultiplier = InfiltrationState.successfulInfiltrationTimestamps.reduce((mult, timestamp) => {
-    // Effect on the market decreases to none as the infiltration event gets older
-    const recencyFactor = 1 - (date.now() - timestamp) / MaxEffectTime;
-    return mult * (1 - recencyFactor * 0.15);
-  }, 1);
+export function calculateMarketDemandMultiplier(timestamp: number): number {
+  const infils = calculateCurrentInfils(timestamp);
+  // A parabola is chosen because it is easy to analyze and tune. The constant
+  // is a tuning factor, which primarily adjusts what the optimum rate of
+  // auto-infil is, and thus how good auto-infil is. The optimum
+  // marketDemandMultiplier will be 2/3 regardless of this constant.
+  const marketDemandMultiplier = 1 - 1.5e-5 * infils * infils;
   return clampNumber(marketDemandMultiplier, 0, 1);
+}
+
+export function decreaseMarketDemandMultiplier(timestamp: number) {
+  InfiltrationState.infils = calculateCurrentInfils(timestamp) + 1;
+  InfiltrationState.lastChangeTimestamp = timestamp;
 }
 
 function calculateRawDiff(stats: number, startingDifficulty: number): number {
@@ -45,6 +50,6 @@ export function calculateDifficulty(startingSecurityLevel: number): number {
   return calculateRawDiff(totalStats, startingSecurityLevel);
 }
 
-export function calculateReward(startingSecurityLevel: number): number {
-  return clampNumber(calculateRawDiff(465, startingSecurityLevel), 0, 3) * calculateMarketDemandMultiplier();
+export function calculateReward(startingSecurityLevel: number, timestamp: number): number {
+  return clampNumber(calculateRawDiff(465, startingSecurityLevel), 0, 3) * calculateMarketDemandMultiplier(timestamp);
 }

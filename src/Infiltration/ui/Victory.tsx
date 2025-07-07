@@ -18,12 +18,13 @@ import {
 } from "../formulas/victory";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { isFactionWork } from "../../Work/FactionWork";
-import { InfiltrationState } from "../formulas/game";
+import { decreaseMarketDemandMultiplier } from "../formulas/game";
 
 interface IProps {
   startingSecurityLevel: number;
   difficulty: number;
   reward: number;
+  timestamp: number;
   maxLevel: number;
 }
 
@@ -43,7 +44,7 @@ export function Victory(props: IProps): React.ReactElement {
 
   function quitInfiltration(): void {
     handleInfiltrators();
-    InfiltrationState.successfulInfiltrationTimestamps.push(Date.now());
+    decreaseMarketDemandMultiplier(props.timestamp);
     Router.toPage(Page.City);
   }
 

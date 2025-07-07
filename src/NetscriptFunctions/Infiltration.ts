@@ -40,7 +40,9 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
     }
     const startingSecurityLevel = location.infiltrationData.startingSecurityLevel;
     const difficulty = calculateDifficulty(startingSecurityLevel);
-    const reward = calculateReward(startingSecurityLevel);
+    // This is supposed to calculate the constant reward, without market demand.
+    // We simulate this by using a time far in the future.
+    const reward = calculateReward(startingSecurityLevel, Date.now() + 1e20);
     const maxLevel = location.infiltrationData.maxClearanceLevel;
     return {
       location: {

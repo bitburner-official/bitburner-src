@@ -19,6 +19,7 @@ interface IProps {
   location: Location;
   startingSecurityLevel: number;
   difficulty: number;
+  timestamp: number;
   maxLevel: number;
   start: () => void;
   cancel: () => void;
@@ -66,17 +67,18 @@ export function Intro({
   location,
   startingSecurityLevel,
   difficulty,
+  timestamp,
   maxLevel,
   start,
   cancel,
 }: IProps): React.ReactElement {
   useCycleRerender();
 
-  const reward = calculateReward(startingSecurityLevel);
+  const reward = calculateReward(startingSecurityLevel, timestamp);
   const repGain = calculateTradeInformationRepReward(reward, maxLevel, startingSecurityLevel);
   const moneyGain = calculateSellInformationCashReward(reward, maxLevel, startingSecurityLevel);
   const soaRepGain = calculateInfiltratorsRepReward(Factions[FactionName.ShadowsOfAnarchy], startingSecurityLevel);
-  const marketRateMultiplier = calculateMarketDemandMultiplier();
+  const marketRateMultiplier = calculateMarketDemandMultiplier(timestamp);
 
   let warningMessage;
   if (difficulty >= MaxDifficultyForInfiltration) {

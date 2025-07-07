@@ -13,6 +13,8 @@ interface IProps {
 
 export function InfiltrationRoot(props: IProps): React.ReactElement {
   const [start, setStart] = useState(false);
+  // Base for when rewards are calculated, which is the start of the game window
+  const [timestamp, __] = useState(Date.now());
 
   if (!props.location.infiltrationData) {
     /**
@@ -41,6 +43,7 @@ export function InfiltrationRoot(props: IProps): React.ReactElement {
         <Game
           startingSecurityLevel={startingSecurityLevel}
           difficulty={difficulty}
+          timestamp={timestamp}
           maxLevel={props.location.infiltrationData.maxClearanceLevel}
         />
       ) : (
@@ -48,6 +51,7 @@ export function InfiltrationRoot(props: IProps): React.ReactElement {
           location={props.location}
           startingSecurityLevel={startingSecurityLevel}
           difficulty={difficulty}
+          timestamp={timestamp}
           maxLevel={props.location.infiltrationData.maxClearanceLevel}
           start={() => setStart(true)}
           cancel={cancel}
