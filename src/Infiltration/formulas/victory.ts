@@ -3,17 +3,21 @@ import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { LocationsMetadata } from "../../Locations/data/LocationsMetadata";
 import { AugmentationName } from "@enums";
 import { Faction } from "../../Faction/Faction";
+import { calculateMarketDemandMultiplier } from "./game";
 
 export function calculateSellInformationCashReward(
   reward: number,
   maxLevel: number,
   startingSecurityLevel: number,
+  timeStamp: number,
 ): number {
   const levelBonus = maxLevel * Math.pow(1.01, maxLevel);
+  const marketRateMultiplier = calculateMarketDemandMultiplier(timeStamp);
 
   return (
     Math.pow(reward + 1, 2) *
     Math.pow(startingSecurityLevel, 3) *
+    marketRateMultiplier *
     3e3 *
     levelBonus *
     (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 1.5 : 1) *
@@ -25,8 +29,10 @@ export function calculateTradeInformationRepReward(
   reward: number,
   maxLevel: number,
   startingSecurityLevel: number,
+  timeStamp: number,
 ): number {
   const levelBonus = maxLevel * Math.pow(1.005, maxLevel);
+  const marketRateMultiplier = calculateMarketDemandMultiplier(timeStamp);
   let balanceMultiplier;
   if (startingSecurityLevel < 4) {
     balanceMultiplier = 0.45;
@@ -48,6 +54,7 @@ export function calculateTradeInformationRepReward(
     Math.pow(reward + 1, 1.1) *
     Math.pow(startingSecurityLevel, 1.1) *
     balanceMultiplier *
+    marketRateMultiplier *
     30 *
     levelBonus *
     (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 1.2 : 1) *

@@ -23,7 +23,6 @@ import { calculateReward, MaxDifficultyForInfiltration } from "../formulas/game"
 type GameProps = {
   startingSecurityLevel: number;
   difficulty: number;
-  timestamp: number;
   maxLevel: number;
 };
 
@@ -45,7 +44,7 @@ const minigames = [
   WireCuttingGame,
 ];
 
-export function Game({ startingSecurityLevel, difficulty, timestamp, maxLevel }: GameProps): React.ReactElement {
+export function Game({ startingSecurityLevel, difficulty, maxLevel }: GameProps): React.ReactElement {
   const [level, setLevel] = useState(1);
   const [stage, setStage] = useState(Stage.Countdown);
   const [results, setResults] = useState("");
@@ -53,7 +52,9 @@ export function Game({ startingSecurityLevel, difficulty, timestamp, maxLevel }:
     lastGames: [-1, -1],
     id: Math.floor(Math.random() * minigames.length),
   });
-  const reward = calculateReward(startingSecurityLevel, timestamp);
+  // Base for when rewards are calculated, which is the start of the game window
+  const [timestamp, __] = useState(Date.now());
+  const reward = calculateReward(startingSecurityLevel);
 
   const setupNextGame = useCallback(() => {
     const nextGameId = () => {
