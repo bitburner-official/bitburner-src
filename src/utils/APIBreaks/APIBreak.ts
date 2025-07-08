@@ -9,7 +9,6 @@ import { dialogBoxCreate as dialogBoxCreateOriginal } from "../../ui/React/Dialo
 import { Terminal } from "../../Terminal";
 import { pluralize } from "../I18nUtils";
 
-
 // Temporary until fixing alerts manager to store alerts outside of react scope
 const dialogBoxCreate = (text: string) =>
   setTimeout(() => dialogBoxCreateOriginal(text, { html: false, canBeDismissedEasily: false }), 2000);
@@ -195,4 +194,3 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
     }
   }
 }
-

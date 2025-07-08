@@ -222,7 +222,7 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
 
-      if (targetServer.hasAdminRights)  {
+      if (targetServer.hasAdminRights) {
         Terminal.success("Server has admin rights.");
         Terminal.success(targetServer.hostname + ":");
       } else {
@@ -231,9 +231,22 @@ export const Programs: Record<CompletedProgramName, Program> = {
       }
       Terminal.print("Server base security level: " + targetServer.baseDifficulty);
       if (targetServer.hackDifficulty > targetServer.baseDifficulty) {
-        Terminal.warn("Server security level: " + targetServer.hackDifficulty + " (+" + (targetServer.hackDifficulty - targetServer.baseDifficulty) + ")");
-      } if (targetServer.hackDifficulty < targetServer.baseDifficulty) {
-        Terminal.success("Server security level: " + targetServer.hackDifficulty + " (-" + (targetServer.baseDifficulty - targetServer.hackDifficulty) + ")");
+        Terminal.warn(
+          "Server security level: " +
+            targetServer.hackDifficulty +
+            " (+" +
+            (targetServer.hackDifficulty - targetServer.baseDifficulty) +
+            ")",
+        );
+      }
+      if (targetServer.hackDifficulty < targetServer.baseDifficulty) {
+        Terminal.success(
+          "Server security level: " +
+            targetServer.hackDifficulty +
+            " (-" +
+            (targetServer.baseDifficulty - targetServer.hackDifficulty) +
+            ")",
+        );
       } else if (targetServer.hackDifficulty === targetServer.baseDifficulty) {
         Terminal.print("Server security level: " + targetServer.hackDifficulty);
       }
