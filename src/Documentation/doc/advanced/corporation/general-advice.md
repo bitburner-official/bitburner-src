@@ -8,7 +8,9 @@ Use API (`upgradeOfficeSize`) to upgrade office size from 3 to 4. Set 4 employee
 
 Make sure that your employees' energy and morale are at maximum value. This is always mandatory, not just in round 1.
 
-Write a custom "Smart Supply" script. If you skip this step, buy "Smart Supply" feature. "Smart Supply" costs 25b, and 25b is huge in round 1.
+Buy the "Smart Supply" feature or write a custom "Smart Supply" script. The built-in "Smart Supply" costs 25b, and 25b is huge in round 1. If you have a custom "Smart Supply" script, you will have more funds to invest in other important upgrades. However, the custom "Smart Supply" script may be a bit hard to implement correctly, especially if you are a new player and do not have much corporation experience. It's fine to skip it and use the built-in "Smart Supply". Having a working, non-optimal division is still better than having a non-working division.
+
+If you buy the built-in feature, remember to check if it's enabled. If you want to implement a custom script, you can look for some hints at [Smart Supply](./smart-supply.md).
 
 There are not many things else to do in this round. The budget is too low, so you can skip all these things:
 
