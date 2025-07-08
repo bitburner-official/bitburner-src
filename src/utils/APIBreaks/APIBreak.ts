@@ -9,6 +9,7 @@ import { dialogBoxCreate as dialogBoxCreateOriginal } from "../../ui/React/Dialo
 import { Terminal } from "../../Terminal";
 import { pluralize } from "../I18nUtils";
 
+
 // Temporary until fixing alerts manager to store alerts outside of react scope
 const dialogBoxCreate = (text: string) =>
   setTimeout(() => dialogBoxCreateOriginal(text, { html: false, canBeDismissedEasily: false }), 2000);
@@ -155,8 +156,10 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
     textFileName,
     `API BREAK INFO FOR ${version}\n\n${details.map((detail) => detail.text).join("\n\n\n\n")}`,
   );
+
   Terminal.warn(`AN API BREAK FROM VERSION ${version} MAY HAVE AFFECTED SOME OF YOUR SCRIPTS.`);
   Terminal.warn(`INFORMATION ABOUT THIS POTENTIAL IMPACT HAS BEEN LOGGED IN ${textFileName} ON YOUR HOME COMPUTER.`);
+
   dialogBoxCreate(
     `SOME OF YOUR SCRIPTS HAVE POTENTIALLY BEEN IMPACTED BY AN API BREAK, DUE TO CHANGES IN VERSION ${version}\n\n` +
       "The following dialog boxes will provide details of the potential impact to your scripts.\n" +
@@ -180,6 +183,16 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
           ? `\n\nWe found ${pluralize(detail.totalDetectedLines, "affected line")}.`
           : ""),
     );
+
     ++popUpIndex;
   }
+  //Made terminal more verbose
+  for (const detail of details) {
+    if (detail.totalDetectedLines > 0) {
+      Terminal.warn("_____________");
+      Terminal.warn(`${detail.apiBreakInfo.info}`);
+      Terminal.error(`We found ${pluralize(detail.totalDetectedLines, "affected line")}.`);
+    }
+  }
 }
+
