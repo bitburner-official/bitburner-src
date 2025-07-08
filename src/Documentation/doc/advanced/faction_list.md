@@ -63,7 +63,7 @@ If you install a backdoor on a company's server, the required reputation of that
 | ------------ | ------------------------------------------------------------------------------------------------- |
 | The Covenant | \* 20 Augmentations<br />\* \$75b<br />\* Hacking Level of 850<br />\* All Combat Stats of 850    |
 | Illuminati   | \* 30 Augmentations<br />\* \$150b<br />\* Hacking Level of 1500<br />\* All Combat Stats of 1200 |
-| Daedalus     | \* 30+ Augmentations<br />\* \$100b<br />\* Hacking Level of 2500 OR All Combat Stats of 1500     |
+| Daedalus     | \* 30 Augmentations<br />\* \$100b<br />\* Hacking Level of 2500 OR All Combat Stats of 1500      |
 
 ### Endgame Factions
 
