@@ -81,10 +81,9 @@ export function generateRandomContract(): void {
   // Finally select a random problem type.
   // Difficulty is capped to not overwhelm a new player.
   const totalSFs = [...Player.sourceFiles].reduce<number>((total, [__bn, lvl]) => (total += lvl), 0);
-  //server networkLayer also scales difficulty to make "further" servers generate more valuable rewards.
-  const maxDif = Math.min(randServer.networkLayer ?? 10, 2 * totalSFs + 1);
-  const minDif = Math.floor(Math.min(randServer.networkLayer ?? 0, totalSFs) / 2);
-  const problemType = getRandomProblemType(maxDif, minDif);
+  const maxDif = 2 * totalSFs + 1;
+
+  const problemType = getRandomProblemType(maxDif);
 
   const contractFn = getRandomFilename(randServer, reward);
   const contract = new CodingContract(contractFn, problemType, reward);
@@ -183,10 +182,8 @@ function sanitizeRewardType(rewardType: CodingContractRewardType): CodingContrac
   return type;
 }
 
-function getRandomProblemType(maxDif = 10, minDif = 0): CodingContractName {
-  const problemTypes = Object.values(CodingContractName).filter(
-    (x) => CodingContractTypes[x].difficulty <= maxDif && CodingContractTypes[x].difficulty >= minDif,
-  );
+function getRandomProblemType(maxDif = 10): CodingContractName {
+  const problemTypes = Object.values(CodingContractName).filter((x) => CodingContractTypes[x].difficulty <= maxDif);
   const randIndex = getRandomIntInclusive(0, problemTypes.length - 1);
 
   return problemTypes[randIndex];

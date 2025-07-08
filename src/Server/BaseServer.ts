@@ -124,7 +124,6 @@ export abstract class BaseServer implements IServer {
   requiredHackingSkill?: number;
   serverGrowth?: number;
   isHacknetServer?: boolean;
-  networkLayer?: number;
 
   constructor(params: IConstructorParams = { hostname: "", ip: createRandomIp() }) {
     this.ip = params.ip ? params.ip : createRandomIp();
