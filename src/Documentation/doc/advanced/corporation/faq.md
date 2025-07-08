@@ -163,10 +163,6 @@ Check this [section](./quality.md).
 
 Check this [section](./wilson-analytics-advert.md).
 
-#### Should I buy Dream Sense?
-
-No. Check this [section](./wilson-analytics-advert.md) for the reason.
-
 #### Is Wilson retroactive?
 
 No.

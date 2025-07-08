@@ -8,8 +8,6 @@ Awareness and popularity are capped at `Number.MAX_VALUE` (~1.7976931348623157E+
 
 Raw values of those stats are crucial, but their ratio is also important. We want to have high ratio of popularity/awareness, check this [section](./optimal-selling-price-market-ta2.md) for formulas.
 
-DreamSense only increases popularity by 0.001/cycle/level and awareness by 0.004/cycle/level. Those benefits are minuscule. However, that's not its biggest problem, the biggest one is the ratio of popularity/awareness. We want that ratio to be as high as possible, but DreamSense constantly lowers it.
-
 Popularity decreases by 0.0001 per cycle.
 
 ## Wilson Analytics

@@ -34,7 +34,13 @@ describe("Corporation", () => {
           corporation.upgrades[upgrade.name].level = currentUpgradeLevel;
 
           for (let targetUpgradeLevel = currentUpgradeLevel + 1; targetUpgradeLevel < 6; targetUpgradeLevel++) {
-            expect(calculateUpgradeCost(corporation, upgrade, targetUpgradeLevel as PositiveInteger)).toMatchSnapshot(
+            const calculatedCost = calculateUpgradeCost(
+              upgrade.basePrice,
+              upgrade.priceMult,
+              currentUpgradeLevel,
+              targetUpgradeLevel as PositiveInteger,
+            );
+            expect(calculatedCost).toMatchSnapshot(
               `${upgrade.name}: from ${currentUpgradeLevel} to ${targetUpgradeLevel}`,
             );
           }
@@ -66,7 +72,12 @@ describe("Corporation", () => {
           corporation.upgrades[upgrade.name].level = currentUpgradeLevel;
 
           for (let targetUpgradeLevel = currentUpgradeLevel + 1; targetUpgradeLevel < 100; targetUpgradeLevel++) {
-            const calculatedCost = calculateUpgradeCost(corporation, upgrade, targetUpgradeLevel as PositiveInteger);
+            const calculatedCost = calculateUpgradeCost(
+              upgrade.basePrice,
+              upgrade.priceMult,
+              currentUpgradeLevel,
+              targetUpgradeLevel as PositiveInteger,
+            );
             corporation.funds = calculatedCost + 1; // +1 for floating point accuracy issues
             expect(calculateMaxAffordableUpgrade(corporation, upgrade)).toEqual(targetUpgradeLevel);
           }

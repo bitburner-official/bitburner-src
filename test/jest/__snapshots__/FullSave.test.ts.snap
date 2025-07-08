@@ -330,10 +330,6 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
             "level": 0,
             "value": 1,
           },
-          "DreamSense": {
-            "level": 0,
-            "value": 0,
-          },
           "FocusWires": {
             "level": 0,
             "value": 1,

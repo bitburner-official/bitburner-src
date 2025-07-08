@@ -57,11 +57,7 @@ export class Corporation {
   storedCycles = 0;
 
   unlocks = new JSONSet<CorpUnlockName>();
-  upgrades = createEnumKeyedRecord(CorpUpgradeName, (name) => ({
-    level: 0,
-    // For dreamsense, value is not a multiplier so it starts at 0
-    value: name === CorpUpgradeName.DreamSense ? 0 : 1,
-  }));
+  upgrades = createEnumKeyedRecord(CorpUpgradeName, () => ({ level: 0, value: 1 }));
 
   previousTotalAssets = 150e9;
   totalAssets = 150e9;
@@ -415,7 +411,12 @@ export class Corporation {
       };
     }
     const upgrade = CorpUpgrades[upgradeName];
-    const totalCost = calculateUpgradeCost(this, upgrade, amount);
+    const totalCost = calculateUpgradeCost(
+      upgrade.basePrice,
+      upgrade.priceMult,
+      this.upgrades[upgradeName].level,
+      amount,
+    );
     if (this.funds < totalCost) {
       return {
         success: false,
@@ -445,10 +446,6 @@ export class Corporation {
 
   getStorageMultiplier(): number {
     return this.upgrades[CorpUpgradeName.SmartStorage].value;
-  }
-
-  getDreamSenseGain(): number {
-    return this.upgrades[CorpUpgradeName.DreamSense].value;
   }
 
   getAdvertisingMultiplier(): number {

@@ -210,5 +210,10 @@ export const breakingChanges300: VersionBreakingChange = {
         '"ns.enums.FactionName.BachmanAssociates" has been automatically replaced with "ns.enums.FactionName.BachmanAndAssociates".',
       showPopUp: false,
     },
+    {
+      brokenAPIs: [{ name: "DreamSense" }],
+      info: 'The "DreamSense" upgrade was removed. The cost of that upgrade was refunded.',
+      showPopUp: false,
+    },
   ],
 };
