@@ -138,7 +138,7 @@ Destroying this BitNode will give you Source-File 7, or if you already have this
 
 - Level 1: 8%
 - Level 2: 12%
-- Level 3: Level 3: 14% and immediately receive "The Blade's Simulacrum" augmentation after joining the Bladeburner division
+- Level 3: 14% and immediately receive "The Blade's Simulacrum" augmentation after joining the Bladeburner division
 
 ### BitNode 8: Ghost of Wall Street
 

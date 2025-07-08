@@ -102,7 +102,7 @@ export const CONSTANTS = {
   EntropyEffect: 0.98,
 
   // Number of blood, plasma, or platelet donations the developer has verified. Boosts NFG.
-  Donations: 200,
+  Donations: 212,
 
   // Only use this if a backdoor is installed in the company's server
   CompanyRequiredReputationMultiplier: 0.75,
