@@ -43,17 +43,17 @@ export const Programs: Record<CompletedProgramName, Program> = {
       }
       if (server.hasAdminRights) {
         Terminal.print("You already have root access to this computer. There is no reason to run NUKE.exe");
-        Terminal.print("You can now run scripts on this server.");
+        Terminal.success("You can now run scripts on this server.");
         return;
       }
       if (server.openPortCount >= server.numOpenPortsRequired) {
         server.hasAdminRights = true;
-        Terminal.print("NUKE successful! Gained root access to " + server.hostname);
-        Terminal.print("You can now run scripts on this server.");
+        Terminal.success("NUKE successful! Gained root access to " + server.hostname);
+        Terminal.success("You can now run scripts on this server.");
         return;
       }
 
-      Terminal.print("NUKE unsuccessful. Not enough ports have been opened");
+      Terminal.error("NUKE unsuccessful. Not enough ports have been opened");
     },
   }),
   [CompletedProgramName.bruteSsh]: new Program({
@@ -70,12 +70,12 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.sshPortOpen) {
-        Terminal.print("SSH Port (22) is already open!");
+        Terminal.warn("SSH Port (22) is already open!");
         return;
       }
 
       server.sshPortOpen = true;
-      Terminal.print("Opened SSH Port(22)!");
+      Terminal.success("Opened SSH Port(22)!");
       server.openPortCount++;
     },
   }),
@@ -93,12 +93,12 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.ftpPortOpen) {
-        Terminal.print("FTP Port (21) is already open!");
+        Terminal.warn("FTP Port (21) is already open!");
         return;
       }
 
       server.ftpPortOpen = true;
-      Terminal.print("Opened FTP Port (21)!");
+      Terminal.success("Opened FTP Port (21)!");
       server.openPortCount++;
     },
   }),
