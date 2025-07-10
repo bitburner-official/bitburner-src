@@ -32,7 +32,7 @@ Go public and set a dividend.
 
 #### Why is my "earnings as a shareholder" lower than my calculation ("Dividends per share" \* "Owned Stock Shares")?
 
-You have to pay tax. ShadyAccounting and GovernmentPartnership reduce tax. Check this [section](./financial-statement.md) for details.
+Your dividend is negatively affected by a penalty modifier called "tribute modifier". `ShadyAccounting` and `GovernmentPartnership` reduce this penalty modifier. Check this [section](./financial-statement.md) for details.
 
 #### All corporation APIs require too much RAM. How do I deal with it?
 

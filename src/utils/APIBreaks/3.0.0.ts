@@ -215,5 +215,12 @@ export const breakingChanges300: VersionBreakingChange = {
       info: 'The "DreamSense" upgrade was removed. The cost of that upgrade was refunded.',
       showPopUp: false,
     },
+    {
+      brokenAPIs: [{ name: "dividendTax", migration: { searchValue: "dividendTax", replaceValue: "tributeModifier" } }],
+      info:
+        "ns.corporation.getCorporation().dividendTax was removed.\n" +
+        'It has been automatically replaced with "ns.corporation.getCorporation().tributeModifier".',
+      showPopUp: false,
+    },
   ],
 };

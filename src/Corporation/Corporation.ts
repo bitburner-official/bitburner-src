@@ -20,6 +20,7 @@ import { formatMoney } from "../ui/formatNumber";
 import { isPositiveInteger, type Result } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 import { getKeyList } from "../utils/helpers/getKeyList";
+import { assertObject } from "../utils/TypeAssertion";
 
 export const CorporationPromise: PromisePair<CorpStateName> = { promise: null, resolve: null };
 
@@ -50,7 +51,7 @@ export class Corporation {
   shareSaleCooldown = 0; // Game cycles until player can sell shares again
   issueNewSharesCooldown = 0; // Game cycles until player can issue shares again
   dividendRate = 0;
-  dividendTax = 1 - currentNodeMults.CorporationSoftcap + 0.15;
+  tributeModifier = 1 - currentNodeMults.CorporationSoftcap + 0.15;
   investorShares = 0;
   issuedShares = 0;
   sharePrice = 0;
@@ -191,7 +192,7 @@ export class Corporation {
     const totalDividends = this.dividendRate * cycleProfit;
     const dividendsPerShare = totalDividends / this.totalShares;
     const dividends = this.numShares * dividendsPerShare;
-    return Math.pow(dividends, 1 - this.dividendTax);
+    return Math.pow(dividends, 1 - this.tributeModifier);
   }
 
   determineCycleValuation(): number {
@@ -390,10 +391,10 @@ export class Corporation {
 
     // Apply effects for one-time unlocks
     if (unlockName === CorpUnlockName.ShadyAccounting) {
-      this.dividendTax -= 0.05;
+      this.tributeModifier -= 0.05;
     }
     if (unlockName === CorpUnlockName.GovernmentPartnership) {
-      this.dividendTax -= 0.1;
+      this.tributeModifier -= 0.1;
     }
     return {
       success: true,
@@ -503,6 +504,11 @@ export class Corporation {
     for (const division of corporation.divisions.values()) {
       corporation.numberOfOfficesAndWarehouses += getRecordValues(division.offices).length;
       corporation.numberOfOfficesAndWarehouses += getRecordValues(division.warehouses).length;
+    }
+    // tributeModifier is divisionTax in pre-v3.0.0.
+    assertObject(value.data);
+    if (typeof value.data.dividendTax === "number") {
+      corporation.tributeModifier = value.data.dividendTax;
     }
     return corporation;
   }

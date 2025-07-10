@@ -75,21 +75,21 @@ Analyses:
   - `AssetDelta` is multiplied by 315000, so it is the main source of offer.
 - Assuming that we can sell all produced units and not buy more boost materials, `AssetDelta` is the delta of funds, and the delta of funds is profit. This is why we try our best to improve profit.
 
-## Dividend
+## Dividend and Tribute modifier
 
-`DividendTax` depends on `CorporationSoftcap`. In BN3, `CorporationSoftcap` is 1.
+Your dividend is negatively affected by a penalty modifier called `TributeModifier`. `TributeModifier` depends on `CorporationSoftcap`. In BN3, `CorporationSoftcap` is 1.
 
-$$DividendTax = 1 - CorporationSoftcap + 0.15$$
+$$TributeModifier = 1.15 - CorporationSoftcap$$
 
-`ShadyAccounting` reduces `DividendTax` by 0.05.
+`ShadyAccounting` reduces `TributeModifier` by 0.05.
 
-`GovernmentPartnership` reduces `DividendTax` by 0.1.
+`GovernmentPartnership` reduces `TributeModifier` by 0.1.
 
 Formula:
 
 $$TotalDividends = DividendRate\ast(Revenue - Expenses)\ast 10$$
 
-$$Dividend = \left(OwnedShares\ast\frac{TotalDividends}{TotalShares}\right)^{1 - DividendTax}$$
+$$Dividend = \left(OwnedShares\ast\frac{TotalDividends}{TotalShares}\right)^{1 - TributeModifier}$$
 
 Retained earning:
 

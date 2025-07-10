@@ -348,7 +348,6 @@ import nsDoc_bitburner_corporation_selldivision_md from "../../markdown/bitburne
 import nsDoc_bitburner_corporation_sellshares_md from "../../markdown/bitburner.corporation.sellshares.md?raw";
 import nsDoc_bitburner_corporationinfo_dividendearnings_md from "../../markdown/bitburner.corporationinfo.dividendearnings.md?raw";
 import nsDoc_bitburner_corporationinfo_dividendrate_md from "../../markdown/bitburner.corporationinfo.dividendrate.md?raw";
-import nsDoc_bitburner_corporationinfo_dividendtax_md from "../../markdown/bitburner.corporationinfo.dividendtax.md?raw";
 import nsDoc_bitburner_corporationinfo_divisions_md from "../../markdown/bitburner.corporationinfo.divisions.md?raw";
 import nsDoc_bitburner_corporationinfo_expenses_md from "../../markdown/bitburner.corporationinfo.expenses.md?raw";
 import nsDoc_bitburner_corporationinfo_funds_md from "../../markdown/bitburner.corporationinfo.funds.md?raw";
@@ -365,6 +364,7 @@ import nsDoc_bitburner_corporationinfo_revenue_md from "../../markdown/bitburner
 import nsDoc_bitburner_corporationinfo_shareprice_md from "../../markdown/bitburner.corporationinfo.shareprice.md?raw";
 import nsDoc_bitburner_corporationinfo_sharesalecooldown_md from "../../markdown/bitburner.corporationinfo.sharesalecooldown.md?raw";
 import nsDoc_bitburner_corporationinfo_totalshares_md from "../../markdown/bitburner.corporationinfo.totalshares.md?raw";
+import nsDoc_bitburner_corporationinfo_tributemodifier_md from "../../markdown/bitburner.corporationinfo.tributemodifier.md?raw";
 import nsDoc_bitburner_corporationinfo_valuation_md from "../../markdown/bitburner.corporationinfo.valuation.md?raw";
 import nsDoc_bitburner_corpproductdata_desc_md from "../../markdown/bitburner.corpproductdata.desc.md?raw";
 import nsDoc_bitburner_corpproductdata_md from "../../markdown/bitburner.corpproductdata.md?raw";
@@ -1847,7 +1847,6 @@ AllPages["nsDoc/bitburner.corporation.selldivision.md"] = nsDoc_bitburner_corpor
 AllPages["nsDoc/bitburner.corporation.sellshares.md"] = nsDoc_bitburner_corporation_sellshares_md;
 AllPages["nsDoc/bitburner.corporationinfo.dividendearnings.md"] = nsDoc_bitburner_corporationinfo_dividendearnings_md;
 AllPages["nsDoc/bitburner.corporationinfo.dividendrate.md"] = nsDoc_bitburner_corporationinfo_dividendrate_md;
-AllPages["nsDoc/bitburner.corporationinfo.dividendtax.md"] = nsDoc_bitburner_corporationinfo_dividendtax_md;
 AllPages["nsDoc/bitburner.corporationinfo.divisions.md"] = nsDoc_bitburner_corporationinfo_divisions_md;
 AllPages["nsDoc/bitburner.corporationinfo.expenses.md"] = nsDoc_bitburner_corporationinfo_expenses_md;
 AllPages["nsDoc/bitburner.corporationinfo.funds.md"] = nsDoc_bitburner_corporationinfo_funds_md;
@@ -1864,6 +1863,7 @@ AllPages["nsDoc/bitburner.corporationinfo.revenue.md"] = nsDoc_bitburner_corpora
 AllPages["nsDoc/bitburner.corporationinfo.shareprice.md"] = nsDoc_bitburner_corporationinfo_shareprice_md;
 AllPages["nsDoc/bitburner.corporationinfo.sharesalecooldown.md"] = nsDoc_bitburner_corporationinfo_sharesalecooldown_md;
 AllPages["nsDoc/bitburner.corporationinfo.totalshares.md"] = nsDoc_bitburner_corporationinfo_totalshares_md;
+AllPages["nsDoc/bitburner.corporationinfo.tributemodifier.md"] = nsDoc_bitburner_corporationinfo_tributemodifier_md;
 AllPages["nsDoc/bitburner.corporationinfo.valuation.md"] = nsDoc_bitburner_corporationinfo_valuation_md;
 AllPages["nsDoc/bitburner.corpproductdata.desc.md"] = nsDoc_bitburner_corpproductdata_desc_md;
 AllPages["nsDoc/bitburner.corpproductdata.md"] = nsDoc_bitburner_corpproductdata_md;

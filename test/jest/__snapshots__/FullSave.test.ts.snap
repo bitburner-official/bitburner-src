@@ -291,7 +291,6 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
       "data": {
         "cycleValuation": 0,
         "dividendRate": 0,
-        "dividendTax": 0.15,
         "divisions": {
           "ctor": "JSONMap",
           "data": [],
@@ -321,6 +320,7 @@ exports[`Check Save File Continuity PlayerSave continuity 1`] = `
         "storedCycles": 0,
         "totalAssets": 150000000000,
         "totalShares": 1000000000,
+        "tributeModifier": 0.15,
         "unlocks": {
           "ctor": "JSONSet",
           "data": [],

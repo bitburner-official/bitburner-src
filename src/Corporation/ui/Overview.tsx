@@ -1,5 +1,6 @@
 // React Component for displaying Corporation Overview info
 import React, { useState } from "react";
+import { MathJax } from "better-react-mathjax";
 import { LevelableUpgrade } from "./LevelableUpgrade";
 import { Unlock } from "./Unlock";
 import { BribeFactionModal } from "./modals/BribeFactionModal";
@@ -33,6 +34,8 @@ import { getRecordKeys } from "../../Types/Record";
 import { PositiveInteger } from "../../types";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { CreateCorporationModal } from "./modals/CreateCorporationModal";
+import InfoIcon from "@mui/icons-material/Info";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 
 interface IProps {
   rerender: () => void;
@@ -362,7 +365,46 @@ function DividendsStats({ profit }: IDividendsStatsProps): React.ReactElement {
         ["Retained Profits (after dividends):", <MoneyRate key="profits" money={retainedEarnings} />],
         ["Dividend Percentage:", formatPercent(corp.dividendRate, 0)],
         ["Dividends per share:", <MoneyRate key="dividends" money={dividendsPerShare} />],
-        ["Your earnings as a shareholder:", <MoneyRate key="earnings" money={playerEarnings} />],
+        [
+          <>
+            <Tooltip
+              title={
+                <>
+                  Everything comes with a price.
+                  <br />
+                  <br />
+                  Although your corporation grants you unlimited wealth, nobody dares try to sabotage your corporation
+                  and take that wealth away from you. Why? All (alive) CEOs know this unspoken rule: If you pay a
+                  "small" tribute to "them", "they" will protect you. Just a small free, and you are safe. Guaranteed.
+                  <br />
+                  <br />
+                  Who are "they"? Nobody knows for certain. There is a rumour that they are{" "}
+                  <CorruptibleText content={"||| BUFFER OVERFLOW DETECTED |||"} spoiler={true} />.
+                  <br />
+                  <br />
+                  Due to this tribute, your dividend is negatively affected by a penalty modifier called
+                  "TributeModifier". Formulas:
+                  <br />
+                  <br />
+                  <MathJax>{`\\(TotalDividends = DividendRate\\ast(Revenue - Expenses)\\ast 10\\)`}</MathJax>
+                  <br />
+                  <MathJax>{`\\(Dividend = \\left(OwnedShares\\ast\\frac{TotalDividends}{TotalShares}\\right)^{1 - TributeModifier}\\)`}</MathJax>
+                </>
+              }
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                Your earnings as a shareholder:
+                <InfoIcon sx={{ fontSize: "1.1em", marginLeft: "10px" }} />
+              </div>
+            </Tooltip>
+          </>,
+          <MoneyRate key="earnings" money={playerEarnings} />,
+        ],
       ]}
     />
   );

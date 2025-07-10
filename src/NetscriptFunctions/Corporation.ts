@@ -726,7 +726,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         issueNewSharesCooldown: corporation.issueNewSharesCooldown,
         sharePrice: corporation.sharePrice,
         dividendRate: corporation.dividendRate,
-        dividendTax: corporation.dividendTax,
+        tributeModifier: corporation.tributeModifier,
         dividendEarnings: corporation.getCycleDividends() / corpConstants.secondsPerMarketCycle,
         nextState: corporation.state.nextName,
         prevState: corporation.state.prevName,
