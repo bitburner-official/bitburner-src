@@ -27,7 +27,7 @@ export function calculateMarketDemandMultiplier(timestamp: number): number {
   // is a tuning factor, which primarily adjusts what the optimum rate of
   // auto-infil is, and thus how good auto-infil is. The optimum
   // marketDemandMultiplier will be 2/3 regardless of this constant.
-  const marketDemandMultiplier = 1 - 1.5e-4 * infils * infils;
+  const marketDemandMultiplier = 1 - 6e-3 * infils * infils;
   return clampNumber(marketDemandMultiplier, 0, 1);
 }
 
