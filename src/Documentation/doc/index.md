@@ -23,7 +23,7 @@
 - [Stock market](basic/stockmarket.md)
 - [World](basic/world.md)
 - [Coding contracts](basic/codingcontracts.md)
-- [Autocomplete](basic/autocomplete.md)
+- [Autocomplete and Help](basic/autocomplete_help.md)
 
 ## Advanced Mechanics
 

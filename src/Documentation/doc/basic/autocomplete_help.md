@@ -1,8 +1,14 @@
-# Autocomplete
+# Autocomplete and Help
 
-The BitBurner terminal offers tab-completion, where pressing tab after typing a command offers suggestions for arguments to pass. You can customize this behavior for your scripts.
+Beyond the scope of executing your [scripts](scripts.md) in BitBurner, you have extra functionality that may be **exported** out of your files.
 
-This relies on an exported function named "autocomplete" that is placed _outside_ of main, in the base scope of the script.
+You have the capability of implementing _autocomplete_ for your scripts terminal interaction, and custom _help_ instructions that are shown when you use the `help` command.
+
+These rely on exported functions named `autocomplete()` and `help()`, that must be placed _outside_ of main, in the base scope of the script.
+
+## Autocomplete
+
+The BitBurner terminal offers tab-completion, where pressing `tab` after typing a command offers suggestions for arguments to pass. You can customize this behavior for your scripts.
 
 This function must return an array, the contents of which make up the autocomplete options.
 
@@ -27,7 +33,7 @@ export function main(ns) {
 
 Running this script from the terminal like `run script.js` or `./script.js` and pressing tab, would offer "argument0", "argument1" and "argument2" as autocomplete options.
 
-## AutocompleteData
+### AutocompleteData
 
 To make this feature more useful, an [AutocompleteData](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.autocompletedata.md) object is provided to the autocomplete function that holds information commonly passed as arguments to scripts, such as server names and filenames.
 
@@ -90,8 +96,103 @@ export function autocomplete(data, args) {
 
 In that example typing `run script.js` and pressing tab would initially suggest every server for autocomplete. Then if "n00dles" is added to the arguments and tab is pressed again, "n00dles" would no longer be suggested in subsequent autocomplete calls.
 
-# Notes
+# Help
 
-- The autocomplete function in the file is called each time the tab key is pressed following `run file.js` or `./file.js` in the terminal.
-- The autocomplete function is separate from `main`, and does not receive an `ns` context as a parameter. This means no `ns` game commands will work in autocomplete functions.
-- If a multi-element array is returned then multiple options are displayed. If a single-element array is returned then that element is auto-filled to the terminal. This is handy for the "--tail" run argument, for example.
+The `help` terminal command offers detailed information about existing terminal commands. It can also display custom help messages defined inside a script file.
+
+This function's return type can be either a simple string, or if you prefer a little bit more customization, a [ReactNode](../programming/react.md).
+
+For example:
+
+```javascript
+/**
+ * @param {AutocompleteData} data - context about the game, may be useful to list argument documentation
+ * @returns {string|ReactNode} - Outputted to the Terminal
+ */
+export function help(data) {
+  return ["This is a simple script.", " ", "This script will output foo."].join("\n");
+}
+
+/** @param {NS} ns */
+export function main(ns) {
+  ns.tprint("foo");
+}
+```
+
+Running `help` on the terminal as `help script.js` would display the provided strings line-by-line, as shown below:
+
+```plaintext
+Usage for script.js:
+This is a simple script.
+
+This script will output foo.
+```
+
+This function supports ANSI escape codes, in case you'd like a bit of customization in your text.
+
+```javascript
+/**
+ * @param {AutocompleteData} data - context about the game, may be useful to list argument documentation
+ * @returns {string|ReactNode} - Outputted to the Terminal
+ */
+export function help() {
+  return `${"\x1b[2m"}This is fancy bold text!`;
+}
+
+/** @param {NS} ns */
+export function main(ns) {
+  // ...
+}
+```
+Which would show "**This is fancy bold text!**" in the Terminal.
+
+## Advanced Use
+
+For more advanced uses of this function, you might consider using _TypeScript_ files.
+
+### Context clues through AutocompleteData
+
+AutocompleteData may be passed into the help function to give custom messages based on context. This may be helpful when you have a script that takes in game-specific arguments, which synergize with the autocomplete function:
+
+A few notable differences with this and autocomplete is that the `.command` property contains the file path and name, the `.flags` property is empty.
+
+_Example: contracts.ts_
+
+```ts
+export function help(data: AutocompleteData): string {
+  return [
+    "Finds and solves contracts in a server.",
+    "Possible arguments: ",
+    `  ${data.servers.join(", ")}`
+  ].join("\n");
+}
+
+// ...
+```
+
+```plaintext
+Usage for contracts.ts:
+Finds and solves contracts in a server.
+Possible arguments: 
+  n00dles, foodnstuff, sigma-cosmetics, joesguns, hong-fang-tea, harakiri-sushi, iron-gym
+```
+
+
+The function can also return a React element. For this, it's highly recommended to write a `*.tsx` script file.
+The example above, written in `.tsx`:
+
+```tsx
+export function help(data: AutocompleteData): ReactNode {
+  return <li><ul>
+    <li> ./{data.command} {"<servers...>"} </li>
+    <li> Servers must be one of: {data.servers.join(", ")} </li>
+  </ul></li>;
+}
+```
+
+Outputs:
+```plaintext
+Usage for contracts.tsx:
+  - ./contracts.tsx <servers...> 
+  - Servers must be one of: n00dles, foodnstuff, sigma-cosmetics, joesguns, hong-fang-tea, harakiri-sushi, iron-gym 
+```
