@@ -592,7 +592,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         HacknetNodeMoney: 0.25,
         ScriptHackMoney: 0.2,
 
-        RepToDonateToFaction: 0.5,
+        FavorToDonateToFaction: 0.5,
 
         AugmentationMoneyCost: 3,
         AugmentationRepCost: 3,
@@ -751,7 +751,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
         ScriptHackMoneyGain: 0,
         CodingContractMoney: 0,
 
-        RepToDonateToFaction: 0,
+        FavorToDonateToFaction: 0,
 
         InfiltrationMoney: 0,
 
@@ -930,7 +930,7 @@ export function getBitNodeMultipliers(n: number, lvl: number): BitNodeMultiplier
 
         FactionPassiveRepGain: dec,
         FactionWorkRepGain: dec,
-        RepToDonateToFaction: inc,
+        FavorToDonateToFaction: inc,
 
         AugmentationMoneyCost: inc,
         AugmentationRepCost: inc,

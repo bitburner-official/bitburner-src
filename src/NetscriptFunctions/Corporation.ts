@@ -90,7 +90,13 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
 
   function getUpgradeLevelCost(upgradeName: CorpUpgradeName): number {
     const corporation = getCorporation();
-    const cost = calculateUpgradeCost(corporation, CorpUpgrades[upgradeName], 1 as PositiveInteger);
+    const upgrade = CorpUpgrades[upgradeName];
+    const cost = calculateUpgradeCost(
+      upgrade.basePrice,
+      upgrade.priceMult,
+      corporation.upgrades[upgradeName].level,
+      1 as PositiveInteger,
+    );
     return cost;
   }
 

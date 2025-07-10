@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { Accordion, AccordionSummary, AccordionDetails, Button, ButtonGroup, Typography } from "@mui/material";
+import { AccordionSummary, AccordionDetails, Button, ButtonGroup, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { makeStyles } from "tss-react/mui";
 
@@ -11,6 +11,7 @@ import { MaxSleevesFromCovenant } from "../../PersonObjects/Sleeve/SleeveCovenan
 import { validBitNodes } from "../../BitNode/Constants";
 import { DeleteServer, GetAllServers } from "../../Server/AllServers";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 const useStyles = makeStyles()({
   group: {
@@ -121,7 +122,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
   };
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_SourceFilesDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Source-Files</Typography>
       </AccordionSummary>
@@ -142,6 +143,6 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
           </tbody>
         </table>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

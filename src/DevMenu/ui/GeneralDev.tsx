@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Accordion,
   AccordionSummary,
   AccordionDetails,
   Button,
@@ -26,8 +25,9 @@ import { getEnumHelper } from "../../utils/EnumHelper";
 import { formatRam } from "../../ui/formatNumber";
 import { resetGangs } from "../../Gang/AllGangs";
 import { finishBitNode } from "../../BitNode/BitNodeUtils";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
-export function General({ parentRerender }: { parentRerender: () => void }): React.ReactElement {
+export function GeneralDev({ parentRerender }: { parentRerender: () => void }): React.ReactElement {
   const rerender = useRerender(400);
   const [error, setError] = useState(false);
   const [corporationName, setCorporationName] = useState("");
@@ -114,7 +114,7 @@ export function General({ parentRerender }: { parentRerender: () => void }): Rea
   const ramValues = [8, 64, 1024, 1048576, 1073741824];
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_GeneralDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>General</Typography>
       </AccordionSummary>
@@ -210,6 +210,6 @@ export function General({ parentRerender }: { parentRerender: () => void }): Rea
         <Button onClick={() => setError(true)}>Throw Error</Button>
         <Button onClick={checkMessages}>Check Messages</Button>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

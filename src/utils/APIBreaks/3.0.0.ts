@@ -179,5 +179,41 @@ export const breakingChanges300: VersionBreakingChange = {
         'It has been automatically replaced with "ns.stock.has4SDataTixApi()".',
       showPopUp: false,
     },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.getBitNodeMultipliers().RepToDonateToFaction",
+          migration: { searchValue: "RepToDonateToFaction", replaceValue: "FavorToDonateToFaction" },
+        },
+      ],
+      info:
+        "ns.getBitNodeMultipliers().RepToDonateToFaction was removed.\n" +
+        'It has been automatically replaced with "ns.getBitNodeMultipliers().FavorToDonateToFaction".',
+      showPopUp: false,
+    },
+    {
+      brokenAPIs: [{ name: "getActionRepGain" }],
+      info:
+        "ns.bladeburner.getActionRepGain returned the average rank gain instead of the average reputation gain.\n" +
+        "This bug was fixed. Please check your code to see if it still works as you expect.",
+      showPopUp: false,
+    },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.enums.FactionName.BachmanAssociates",
+          migration: { searchValue: "BachmanAssociates", replaceValue: "BachmanAndAssociates" },
+        },
+      ],
+      info:
+        'The key of "Bachman & Associates" faction in the FactionName enum was renamed.\n' +
+        '"ns.enums.FactionName.BachmanAssociates" has been automatically replaced with "ns.enums.FactionName.BachmanAndAssociates".',
+      showPopUp: false,
+    },
+    {
+      brokenAPIs: [{ name: "DreamSense" }],
+      info: 'The "DreamSense" upgrade was removed. The cost of that upgrade was refunded.',
+      showPopUp: false,
+    },
   ],
 };

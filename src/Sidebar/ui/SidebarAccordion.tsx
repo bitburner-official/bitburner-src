@@ -88,7 +88,7 @@ export function SidebarAccordion({
               key_={key_}
               icon={icon}
               count={count}
-              active={active ?? page === key_}
+              active={active ?? (page === key_ || x.alternateKeys?.includes(page))}
               clickFn={getClickFn(clickPage, key_)}
               flash={flash === key_}
               classes={classes}

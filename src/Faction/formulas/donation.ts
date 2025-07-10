@@ -14,7 +14,7 @@ export function donationForRep(rep: number, person: IPerson): number {
 }
 
 export function favorNeededToDonate(): number {
-  return Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.RepToDonateToFaction);
+  return Math.floor(CONSTANTS.BaseFavorToDonate * currentNodeMults.FavorToDonateToFaction);
 }
 
 export function canDonate(amt: number): boolean {

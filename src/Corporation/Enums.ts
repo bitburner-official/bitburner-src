@@ -43,7 +43,6 @@ export enum CorpUnlockName {
 export enum CorpUpgradeName {
   SmartFactories = "Smart Factories",
   SmartStorage = "Smart Storage",
-  DreamSense = "DreamSense",
   WilsonAnalytics = "Wilson Analytics",
   NuoptimalNootropicInjectorImplants = "Nuoptimal Nootropic Injector Implants",
   SpeechProcessorImplants = "Speech Processor Implants",
