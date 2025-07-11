@@ -30,12 +30,18 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
   const setSF = useCallback(
     (sfN: number, sfLvl: number) => () => {
       if (sfN === 9) {
-        Player.hacknetNodes = [];
-        for (const server of GetAllServers()) {
-          if (!(server instanceof HacknetServer)) {
-            continue;
+        if (sfLvl === 0) {
+          // Make sure that Player.hacknetNodes contains only HackNode and there is no hacknet server in "AllServers".
+          Player.hacknetNodes = Player.hacknetNodes.filter((node) => typeof node !== "string");
+          for (const server of GetAllServers()) {
+            if (!(server instanceof HacknetServer)) {
+              continue;
+            }
+            DeleteServer(server.hostname);
           }
-          DeleteServer(server.hostname);
+        } else {
+          // Make sure that Player.hacknetNodes contains only the hostnames of hacknet servers.
+          Player.hacknetNodes = Player.hacknetNodes.filter((node) => typeof node === "string");
         }
       }
       if (sfLvl === 0) {

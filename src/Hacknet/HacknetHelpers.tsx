@@ -383,7 +383,7 @@ function processAllHacknetNodeEarnings(numCycles: number): number {
   let total = 0;
   for (let i = 0; i < Player.hacknetNodes.length; ++i) {
     const node = Player.hacknetNodes[i];
-    if (typeof node === "string") throw new Error("player node should not be ip string");
+    if (typeof node === "string") throw new Error("player node should not be hostname string");
     node.updateMoneyGainRate(Player.mults.hacknet_node_money);
     total += processSingleHacknetNodeEarnings(numCycles, node);
   }
@@ -405,12 +405,12 @@ function processAllHacknetServerEarnings(numCycles: number): number {
 
   let hashes = 0;
   for (let i = 0; i < Player.hacknetNodes.length; ++i) {
-    // hacknetNodes array only contains the IP addresses of the servers.
+    // hacknetNodes array only contains the hostnames of the servers.
     // Also, update the hash rate before processing
-    const ip = Player.hacknetNodes[i];
-    if (ip instanceof HacknetNode) throw new Error(`player nodes should not be HacknetNode`);
-    const hserver = GetServer(ip);
-    if (!(hserver instanceof HacknetServer)) throw new Error(`player nodes should not be Server`);
+    const hostname = Player.hacknetNodes[i];
+    if (hostname instanceof HacknetNode) throw new Error(`player nodes should not be HacknetNode`);
+    const hserver = GetServer(hostname);
+    if (!(hserver instanceof HacknetServer)) throw new Error(`player nodes must be HacknetServer`);
     hserver.updateHashRate(Player.mults.hacknet_node_money);
     const h = hserver.process(numCycles);
     hashes += h;
@@ -449,9 +449,9 @@ export function updateHashManagerCapacity(): void {
       Player.hashManager.updateCapacity(0);
       return;
     }
-    const ip = nodes[i];
-    if (ip instanceof HacknetNode) throw new Error(`player nodes should be string but isn't`);
-    const h = GetServer(ip);
+    const hostname = nodes[i];
+    if (hostname instanceof HacknetNode) throw new Error(`player nodes should not be HacknetNode`);
+    const h = GetServer(hostname);
     if (!(h instanceof HacknetServer)) {
       Player.hashManager.updateCapacity(0);
       return;
