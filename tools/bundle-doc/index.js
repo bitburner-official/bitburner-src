@@ -16,7 +16,7 @@ const processDir = (dir) => {
     return;
   }
   console.log(dir);
-  for (const file of fs.readdirSync(dir)) {
+  for (const file of fs.readdirSync(dir).sort((a, b) => a.localeCompare(b, "en-US"))) {
     const filePath = path.join(dir, file);
     if (fs.lstatSync(filePath).isDirectory()) {
       processDir(filePath);

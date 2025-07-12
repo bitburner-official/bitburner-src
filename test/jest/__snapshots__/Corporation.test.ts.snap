@@ -30,36 +30,6 @@ exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC
 
 exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: ABC SalesBots: from 4 to 5 1`] = `7538045748.859352`;
 
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 0 to 1 1`] = `4000000000`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 0 to 2 1`] = `8400000000`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 0 to 3 1`] = `13240000000.000006`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 0 to 4 1`] = `18564000000.000008`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 0 to 5 1`] = `24420400000.000004`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 1 to 2 1`] = `9240000000`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 1 to 3 1`] = `14564000000.000004`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 1 to 4 1`] = `20420400000.00001`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 1 to 5 1`] = `26862440000`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 2 to 3 1`] = `16020400000.00001`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 2 to 4 1`] = `22462440000.000015`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 2 to 5 1`] = `29548684000.000008`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 3 to 4 1`] = `24708684000.00002`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 3 to 5 1`] = `32503552400.000015`;
-
-exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: DreamSense: from 4 to 5 1`] = `35753907640.000015`;
-
 exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 0 to 1 1`] = `1000000000`;
 
 exports[`Corporation helpers.calculateUpgradeCost should have fixed formula: FocusWires: from 0 to 2 1`] = `2060000000.0000007`;

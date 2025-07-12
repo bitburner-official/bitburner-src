@@ -21,7 +21,7 @@ export const arrayJumpingGame: Pick<
         "Your answer should be submitted as 1 or 0, representing true and false respectively.",
       ].join(" ");
     },
-    difficulty: 2.5,
+    difficulty: 2,
     generate: (): number[] => {
       const len: number = getRandomIntInclusive(3, 25);
       const arr: number[] = [];

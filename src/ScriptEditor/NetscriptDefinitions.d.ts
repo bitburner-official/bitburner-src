@@ -9221,6 +9221,7 @@ export type CodingContractObject = {
     data: CodingContractSignatures[T][0];
     submit: (answer: CodingContractSignatures[T][1] | string) => string;
     description: string;
+    difficulty: number;
     numTriesRemaining: () => number;
   };
 }[keyof CodingContractSignatures];
@@ -10168,8 +10169,8 @@ interface CorporationInfo {
   sharePrice: number;
   /** Fraction of profits issued as dividends */
   dividendRate: number;
-  /** Tax applied on your earnings as a shareholder */
-  dividendTax: number;
+  /** Your income from dividend is negatively affected by this penalty modifier */
+  tributeModifier: number;
   /** Your earnings as a shareholder per second this cycle */
   dividendEarnings: number;
   /** The next state to be processed.
@@ -10278,7 +10279,6 @@ type CorpUnlockName =
 type CorpUpgradeName =
   | "Smart Factories"
   | "Smart Storage"
-  | "DreamSense"
   | "Wilson Analytics"
   | "Nuoptimal Nootropic Injector Implants"
   | "Speech Processor Implants"

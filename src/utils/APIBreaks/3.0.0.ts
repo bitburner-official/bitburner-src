@@ -210,5 +210,17 @@ export const breakingChanges300: VersionBreakingChange = {
         '"ns.enums.FactionName.BachmanAssociates" has been automatically replaced with "ns.enums.FactionName.BachmanAndAssociates".',
       showPopUp: false,
     },
+    {
+      brokenAPIs: [{ name: "DreamSense" }],
+      info: 'The "DreamSense" upgrade was removed. The cost of that upgrade was refunded.',
+      showPopUp: false,
+    },
+    {
+      brokenAPIs: [{ name: "dividendTax", migration: { searchValue: "dividendTax", replaceValue: "tributeModifier" } }],
+      info:
+        "ns.corporation.getCorporation().dividendTax was removed.\n" +
+        'It has been automatically replaced with "ns.corporation.getCorporation().tributeModifier".',
+      showPopUp: false,
+    },
   ],
 };
