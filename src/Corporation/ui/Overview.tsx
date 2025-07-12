@@ -375,7 +375,8 @@ function DividendsStats({ profit }: IDividendsStatsProps): React.ReactElement {
                   <br />
                   Although your corporation grants you unlimited wealth, nobody dares try to sabotage your corporation
                   and take that wealth away from you. Why? All (alive) CEOs know this unspoken rule: If you pay a
-                  "small" tribute to "them", "they" will protect you. Just a small free, and you are safe. Guaranteed.
+                  "small" tribute to "them", "they" will protect you. Just pay a small fee, and you are safe.
+                  Guaranteed.
                   <br />
                   <br />
                   Who are "they"? Nobody knows for certain. There is a rumour that they are{" "}
