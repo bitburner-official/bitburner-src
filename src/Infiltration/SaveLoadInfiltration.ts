@@ -16,7 +16,7 @@ export function loadInfiltrations(saveString: unknown): void {
     if (typeof lastChangeTimestamp !== "number") {
       throw new Error("Invalid parsedData.lastChangeTimestamp");
     }
-    InfiltrationState.infils = infils;
+    InfiltrationState.floors = infils;
     InfiltrationState.lastChangeTimestamp = lastChangeTimestamp;
   } catch (error) {
     console.error(error);

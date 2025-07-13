@@ -46,7 +46,7 @@ const minigames = [
 
 export function Game({ startingSecurityLevel, difficulty, maxLevel }: GameProps): React.ReactElement {
   const [level, setLevel] = useState(1);
-  const [stage, setStage] = useState(Stage.Countdown);
+  const [stage, setStage] = useState(Stage.Sell); // TODO: revert
   const [results, setResults] = useState("");
   const [gameIds, setGameIds] = useState({
     lastGames: [-1, -1],

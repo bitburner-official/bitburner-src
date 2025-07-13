@@ -44,7 +44,7 @@ export function Victory(props: IProps): React.ReactElement {
 
   function quitInfiltration(): void {
     handleInfiltrators();
-    decreaseMarketDemandMultiplier(props.timestamp);
+    decreaseMarketDemandMultiplier(props.timestamp, props.maxLevel);
     Router.toPage(Page.City);
   }
 
