@@ -1,6 +1,6 @@
 import { Player } from "@player";
 
-import { FactionName, GoOpponent } from "@enums";
+import { GoOpponent } from "@enums";
 import { Go } from "../Go";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { opponentDetails } from "../Constants";
@@ -8,10 +8,6 @@ import { defaultMultipliers, mergeMultipliers, Multipliers } from "../../PersonO
 import { formatPercent } from "../../ui/formatNumber";
 import { getOpponentStats } from "../boardAnalysis/scoring";
 import { getRecordEntries, getRecordValues } from "../../Types/Record";
-import { getEnumHelper } from "../../utils/EnumHelper";
-import { Factions } from "../../Faction/Factions";
-import { addRepToFavor } from "../../Faction/formulas/favor";
-import { OpponentStats } from "../Types";
 
 /**
  * Calculates the effect size of the given player boost, based on the node power (points based on number of subnet
