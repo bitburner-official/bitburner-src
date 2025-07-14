@@ -137,23 +137,3 @@ export function getDifficultyMultiplier(komi: number, boardSize: number) {
   const isTinyBoardVsIlluminati = boardSize === 5 && komi === opponentDetails[GoOpponent.Illuminati].komi;
   return isTinyBoardVsIlluminati ? 8 : (komi + 0.5) * 0.25;
 }
-
-export function gainFavor(opponent: GoOpponent, statusToUpdate: OpponentStats): void {
-  const factionName = getEnumHelper("FactionName").getMember(opponent);
-
-  if (statusToUpdate.winStreak % 2 !== 0 || statusToUpdate.rep >= getMaxRep()) {
-    return;
-  }
-
-  if (factionName && (Player.factions.includes(factionName) || Player.gang?.facName === factionName)) {
-    const currentFavor = Factions[factionName].favor;
-    const repToAdd = getMaxRep() / 200;
-    const newFavor = addRepToFavor(currentFavor, repToAdd);
-    Factions[factionName].setFavor(newFavor);
-    statusToUpdate.rep += repToAdd;
-  }
-
-  if (factionName === FactionName.Illuminati && statusToUpdate.winStreak >= 10) {
-    Player.giveAchievement("IPVGO_WINNING_STREAK");
-  }
-}
