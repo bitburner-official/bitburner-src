@@ -61,7 +61,12 @@ export function Victory(props: IProps): React.ReactElement {
     props.startingSecurityLevel,
     props.timestamp,
   );
-  const infiltrationRepGain = calculateInfiltratorsRepReward(soa, props.startingSecurityLevel);
+  const infiltrationRepGain = calculateInfiltratorsRepReward(
+    soa,
+    props.maxLevel,
+    props.startingSecurityLevel,
+    props.timestamp,
+  );
 
   const isMemberOfInfiltrators = Player.factions.includes(FactionName.ShadowsOfAnarchy);
 

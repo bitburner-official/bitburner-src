@@ -62,14 +62,25 @@ export function calculateTradeInformationRepReward(
   );
 }
 
-export function calculateInfiltratorsRepReward(faction: Faction, startingSecurityLevel: number): number {
+export function calculateInfiltratorsRepReward(
+  faction: Faction,
+  maxLevel: number,
+  startingSecurityLevel: number,
+  timeStamp: number,
+): number {
   const maxStartingSecurityLevel = LocationsMetadata.reduce((acc, data): number => {
     const startingSecurityLevel = data.infiltrationData?.startingSecurityLevel || 0;
     return acc > startingSecurityLevel ? acc : startingSecurityLevel;
   }, 0);
   const baseRepGain = (startingSecurityLevel / maxStartingSecurityLevel) * 5000;
+  const balanceMultiplier = 0.8 + 0.05 * (maxLevel - 5);
+  const marketRateMultiplier = calculateMarketDemandMultiplier(timeStamp);
 
   return (
-    baseRepGain * (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 2 : 1) * (1 + faction.favor / 100)
+    baseRepGain *
+    balanceMultiplier *
+    marketRateMultiplier *
+    (Player.hasAugmentation(AugmentationName.WKSharmonizer, true) ? 2 : 1) *
+    (1 + faction.favor / 100)
   );
 }

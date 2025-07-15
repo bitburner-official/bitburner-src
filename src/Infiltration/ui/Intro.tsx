@@ -77,7 +77,12 @@ export function Intro({
   const reward = calculateReward(startingSecurityLevel);
   const repGain = calculateTradeInformationRepReward(reward, maxLevel, startingSecurityLevel, timestampNow);
   const moneyGain = calculateSellInformationCashReward(reward, maxLevel, startingSecurityLevel, timestampNow);
-  const soaRepGain = calculateInfiltratorsRepReward(Factions[FactionName.ShadowsOfAnarchy], startingSecurityLevel);
+  const soaRepGain = calculateInfiltratorsRepReward(
+    Factions[FactionName.ShadowsOfAnarchy],
+    maxLevel,
+    startingSecurityLevel,
+    timestampNow,
+  );
   const marketRateMultiplier = calculateMarketDemandMultiplier(timestampNow);
 
   let warningMessage;
