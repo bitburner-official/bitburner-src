@@ -9,14 +9,14 @@ export function loadInfiltrations(saveString: unknown): void {
   try {
     const parsedData: unknown = JSON.parse(saveString);
     assertObject(parsedData);
-    const { infils, lastChangeTimestamp } = parsedData;
-    if (typeof infils !== "number") {
+    const { floors, lastChangeTimestamp } = parsedData;
+    if (typeof floors !== "number") {
       throw new Error("Invalid parsedData.infils");
     }
     if (typeof lastChangeTimestamp !== "number") {
       throw new Error("Invalid parsedData.lastChangeTimestamp");
     }
-    InfiltrationState.floors = infils;
+    InfiltrationState.floors = floors;
     InfiltrationState.lastChangeTimestamp = lastChangeTimestamp;
   } catch (error) {
     console.error(error);
