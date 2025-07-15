@@ -19,7 +19,7 @@ import { StockMarket } from "../StockMarket/StockMarket";
 
 import type { ComplexPage } from "./Enums";
 import type { IRouter, PageContext, PageWithContext } from "./Router";
-import { Page } from "./Router";
+import { isSimplePage, Page } from "./Router";
 import { Overview } from "./React/Overview";
 import { SidebarRoot } from "../Sidebar/ui/SidebarRoot";
 import { AugmentationsRoot } from "../Augmentation/ui/AugmentationsRoot";
@@ -76,6 +76,7 @@ import { HistoryProvider } from "./React/Documentation";
 import { GoRoot } from "../Go/ui/GoRoot";
 import { Settings } from "../Settings/Settings";
 import { isBitNodeFinished } from "../BitNode/BitNodeUtils";
+import { UIEventEmitter, UIEventType } from "./UIEventEmitter";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { ErrorModal } from "../ErrorHandling/ErrorModal";
@@ -98,19 +99,54 @@ const useStyles = makeStyles()((theme: Theme) => ({
 
 const MAX_PAGES_IN_HISTORY = 10;
 
+type RouterAction = (
+  | {
+      type: "toPage";
+      page: Page;
+      context?: PageContext<ComplexPage>;
+    }
+  | {
+      type: "back";
+    }
+) & { stackTrace: string | undefined };
+
+/**
+ * When the main UI is not loaded, all router actions ("toPage" and "back") are stored in this array. After that, we
+ * will run them and show a warning popup. This queue is empty in a normal situation. If it has items, there are bugs
+ * that try to route the main UI when it's not loaded.
+ */
+const pendingRouterActions: RouterAction[] = [];
+
 export let Router: IRouter = {
   page: () => {
     return Page.LoadingScreen;
   },
+  /**
+   * This function is only called in ImportSave.tsx. That component is only used when the main UI shows Page.ImportSave,
+   * so it's impossible for this function to run before the main UI is loaded. If it happens, it's a fatal error. In
+   * that case, throwing an error is the only option.
+   */
   allowRouting: () => {
-    throw new Error("Router called before initialization - allowRouting");
+    throw new Error("Router.allowRouting() was called before initialization.");
   },
   hidingMessages: () => true,
-  toPage: (page: Page) => {
-    throw new Error(`Router called before initialization - toPage(${page})`);
+  toPage: (page: Page, context?: PageContext<ComplexPage>) => {
+    const stackTrace = new Error().stack;
+    console.error("Router.toPage() was called before initialization.", page, context, stackTrace);
+    pendingRouterActions.push({
+      type: "toPage",
+      page,
+      context,
+      stackTrace,
+    });
   },
   back: () => {
-    throw new Error("Router called before initialization - back");
+    const stackTrace = new Error().stack;
+    console.error("Default Router.back() was called before initialization.", stackTrace);
+    pendingRouterActions.push({
+      type: "back",
+      stackTrace,
+    });
   },
 };
 
@@ -141,7 +177,25 @@ export function GameRoot(): React.ReactElement {
   const { classes } = useStyles();
 
   const [pages, setPages] = useState<PageWithContext[]>(() => [determineStartPage()]);
-  const pageWithContext = pages[0];
+  let pageWithContext = pages[0];
+
+  /**
+   * Theoretically, this case cannot happen because of the check in Router.back(). Nevertheless, we should still check
+   * it. In the future, if we call "setPages" and remove items in the "pages" array without checking it properly,
+   * this case can still happen.
+   */
+  if (pageWithContext === undefined) {
+    /**
+     * We have to delay showing the warning popup due to these reasons:
+     * - React will complain: "Warning: Cannot update a component (`AlertManager`) while rendering a different
+     * component (`GameRoot`)".
+     * - There is a potential problem in AlertManager.tsx. Please check the comment there for more information.
+     */
+    setTimeout(() => {
+      exceptionAlert(new Error(`pageWithContext is undefined`));
+    }, 1000);
+    pageWithContext = { page: Page.Terminal };
+  }
 
   const setNextPage = (pageWithContext: PageWithContext) =>
     setPages((prev) => {
@@ -208,7 +262,16 @@ export function GameRoot(): React.ReactElement {
       setNextPage({ page, ...context } as PageWithContext);
     },
     back: () => {
-      if (!allowRoutingCalls) return attemptedForbiddenRouting("back");
+      if (!allowRoutingCalls) {
+        return attemptedForbiddenRouting("back");
+      }
+      /**
+       * If something calls Router.back() when the "pages" array has only 1 item, that array will be empty when the UI
+       * is rerendered, and pageWithContext will be undefined. To avoid this problem, we return immediately in that case.
+       */
+      if (pages.length === 1) {
+        return;
+      }
       setPages((pages) => pages.slice(1));
     },
   };
@@ -415,8 +478,36 @@ export function GameRoot(): React.ReactElement {
       mainPage = <ImportSave saveData={pageWithContext.saveData} automatic={!!pageWithContext.automatic} />;
       withSidebar = false;
       bypassGame = true;
+      break;
     }
   }
+
+  useEffect(() => {
+    if (pendingRouterActions.length > 0) {
+      // Run all pending actions and show a warning popup.
+      for (const action of pendingRouterActions) {
+        if (action.type === "toPage") {
+          if (isSimplePage(action.page)) {
+            Router.toPage(action.page);
+          } else {
+            Router.toPage(action.page, action.context ?? {});
+          }
+        } else {
+          Router.back();
+        }
+      }
+      exceptionAlert(
+        new Error(
+          `Router was used before the main UI is loaded. pendingRouterActions: ${JSON.stringify(
+            pendingRouterActions,
+          )}.`,
+        ),
+      );
+      pendingRouterActions.length = 0;
+    }
+    // Emit an event to notify subscribers that the main UI is loaded.
+    UIEventEmitter.emit(UIEventType.MainUILoaded);
+  }, []);
 
   return (
     <MathJaxContext version={3} src={__webpack_public_path__ + "mathjax/tex-chtml.js"}>

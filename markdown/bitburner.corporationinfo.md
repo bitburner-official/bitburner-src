@@ -18,7 +18,6 @@ interface CorporationInfo
 |  --- | --- | --- | --- |
 |  [dividendEarnings](./bitburner.corporationinfo.dividendearnings.md) |  | number | Your earnings as a shareholder per second this cycle |
 |  [dividendRate](./bitburner.corporationinfo.dividendrate.md) |  | number | Fraction of profits issued as dividends |
-|  [dividendTax](./bitburner.corporationinfo.dividendtax.md) |  | number | Tax applied on your earnings as a shareholder |
 |  [divisions](./bitburner.corporationinfo.divisions.md) |  | string\[\] | Array of all division names |
 |  [expenses](./bitburner.corporationinfo.expenses.md) |  | number | Expenses per second this cycle |
 |  [funds](./bitburner.corporationinfo.funds.md) |  | number | Funds available |
@@ -34,5 +33,6 @@ interface CorporationInfo
 |  [sharePrice](./bitburner.corporationinfo.shareprice.md) |  | number | Price of the shares |
 |  [shareSaleCooldown](./bitburner.corporationinfo.sharesalecooldown.md) |  | number | Cooldown until shares can be sold again |
 |  [totalShares](./bitburner.corporationinfo.totalshares.md) |  | number | Total number of shares issued by this corporation. |
+|  [tributeModifier](./bitburner.corporationinfo.tributemodifier.md) |  | number | Your income from dividend is negatively affected by this penalty modifier |
 |  [valuation](./bitburner.corporationinfo.valuation.md) |  | number | Corporation valuation |
 

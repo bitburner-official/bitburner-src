@@ -96,7 +96,7 @@ export const algorithmicStockTrader: Pick<
         "If no profit can be made, then the answer should be 0.",
       ].join(" ");
     },
-    difficulty: 5,
+    difficulty: 4,
     generate: (): number[] => {
       const len: number = getRandomIntInclusive(3, 50);
       const arr: number[] = [];

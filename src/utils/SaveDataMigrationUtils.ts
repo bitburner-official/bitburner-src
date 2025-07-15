@@ -31,6 +31,8 @@ import { getGoSave, loadGo } from "../Go/SaveLoad";
 import { showAPIBreaks } from "./APIBreaks/APIBreak";
 import { breakInfos261 } from "./APIBreaks/2.6.1";
 import { breakingChanges300 } from "./APIBreaks/3.0.0";
+import { calculateUpgradeCost } from "../Corporation/helpers";
+import type { PositiveInteger } from "../types";
 
 /** Function for performing a series of defined replacements. See 0.58.0 for usage */
 function convert(code: string, changes: [RegExp, string][]): string {
@@ -547,6 +549,18 @@ Error: ${e}`,
     if (found) Terminal.error("Filenames with whitespace found and corrected, see console for details.");
   }
   if (ver < 44) {
+    if (Player.corporation) {
+      // Remove and refund DreamSense
+      for (const [name, upgrade] of Object.entries(Player.corporation.upgrades)) {
+        if (name !== "DreamSense") {
+          continue;
+        }
+        const cost = calculateUpgradeCost(4e9, 1.1, 0, upgrade.level as PositiveInteger);
+        Player.corporation.gainFunds(cost, "force majeure");
+      }
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete (Player.corporation.upgrades as Record<string, unknown>)["DreamSense"];
+    }
     showAPIBreaks("3.0.0", breakingChanges300);
   }
 }

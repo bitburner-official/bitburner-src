@@ -31,6 +31,8 @@
 - [List of factions and their requirements](advanced/faction_list.md)
 - [Offline scripts and bonus time](advanced/offlineandbonustime.md)
 - [BitNodes](advanced/bitnodes.md)
+- [BitNode recommendation - Short guide](advanced/bitnode_recommendation_short_guide.md)
+- [BitNode recommendation - Comprehensive guide](advanced/bitnode_recommendation_comprehensive_guide.md)
 - [Source-Files](advanced/sourcefiles.md)
 - [Gang](advanced/gang.md)
 - [Corporation](advanced/corporations.md)

@@ -8,7 +8,7 @@ export const hammingCode: Pick<
   CodingContractName.HammingCodesEncodedBinaryToInteger | CodingContractName.HammingCodesIntegerToEncodedBinary
 > = {
   [CodingContractName.HammingCodesIntegerToEncodedBinary]: {
-    difficulty: 5,
+    difficulty: 6,
     desc: (n: number): string => {
       return [
         "You are given the following decimal value: \n",
@@ -43,7 +43,7 @@ export const hammingCode: Pick<
     validateAnswer: (ans): ans is string => typeof ans === "string",
   },
   [CodingContractName.HammingCodesEncodedBinaryToInteger]: {
-    difficulty: 8,
+    difficulty: 9,
     desc: (n: string): string => {
       return [
         "You are given the following encoded binary string: \n",

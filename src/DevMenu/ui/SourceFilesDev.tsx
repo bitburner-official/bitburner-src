@@ -8,10 +8,11 @@ import { Player } from "@player";
 import { Sleeve } from "../../PersonObjects/Sleeve/Sleeve";
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
 import { MaxSleevesFromCovenant } from "../../PersonObjects/Sleeve/SleeveCovenantPurchases";
+import { validBitNodes } from "../../BitNode/Constants";
+import { DeleteServer, GetAllServers } from "../../Server/AllServers";
+import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
-// Update as additional BitNodes get implemented
-const validSFN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 const useStyles = makeStyles()({
   group: {
     display: "inline-flex",
@@ -29,7 +30,19 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
   const setSF = useCallback(
     (sfN: number, sfLvl: number) => () => {
       if (sfN === 9) {
-        Player.hacknetNodes = [];
+        if (sfLvl === 0) {
+          // Make sure that Player.hacknetNodes contains only HackNode and there is no hacknet server in "AllServers".
+          Player.hacknetNodes = Player.hacknetNodes.filter((node) => typeof node !== "string");
+          for (const server of GetAllServers()) {
+            if (!(server instanceof HacknetServer)) {
+              continue;
+            }
+            DeleteServer(server.hostname);
+          }
+        } else {
+          // Make sure that Player.hacknetNodes contains only the hostnames of hacknet servers.
+          Player.hacknetNodes = Player.hacknetNodes.filter((node) => typeof node === "string");
+        }
       }
       if (sfLvl === 0) {
         Player.sourceFiles.delete(sfN);
@@ -50,7 +63,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
     [parentRerender],
   );
 
-  const setAllSF = useCallback((sfLvl: number) => () => validSFN.forEach((sfN) => setSF(sfN, sfLvl)()), [setSF]);
+  const setAllSF = useCallback((sfLvl: number) => () => validBitNodes.forEach((sfN) => setSF(sfN, sfLvl)()), [setSF]);
   const clearExploits = () => (Player.exploits = []);
 
   const addSleeve = useCallback(() => {
@@ -132,7 +145,7 @@ export function SourceFilesDev({ parentRerender }: { parentRerender: () => void 
                 <Button onClick={clearExploits}>Clear</Button>
               </td>
             </tr>
-            {[undefined, ...validSFN].map((sfN) => buttonRow(sfN))}
+            {[undefined, ...validBitNodes].map((sfN) => buttonRow(sfN))}
           </tbody>
         </table>
       </AccordionDetails>

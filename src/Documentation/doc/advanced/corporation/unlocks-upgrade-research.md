@@ -60,9 +60,7 @@ $$UpgradeCost_{From\ a\ to\ b} = BasePrice\ast\left( \frac{{PriceMult}^{b} - {Pr
 
 $$MaxUpgradeLevel = \log_{PriceMult}\left( MaxCost\ast\frac{PriceMult - 1}{BasePrice} + (PriceMult)^{CurrentLevel} \right)$$
 
-- Benefit:
-  - All benefits are multipliers. `BaseBenefit` is 1.
-  - The only exception is DreamSense. Its benefit is raw value, its `BaseBenefit` is 0.
+- Benefit: All benefits are multipliers. `BaseBenefit` is 1.
 
 $$Benefit = BaseBenefit + Benefit\ast CurrentLevel$$
 
@@ -73,7 +71,6 @@ Normal upgrades:
 | ---------------------------------- | -------------- | -------------------- | ----------- | ----------------------- |
 | SmartFactories                     | 2e9            | 1.06                 | 0.03        | Production              |
 | SmartStorage                       | 2e9            | 1.06                 | 0.1         | Storage                 |
-| DreamSense                         | 4e9            | 1.1                  | 0.001       | Awareness/Popularity    |
 | WilsonAnalytics                    | 4e9            | 2                    | 0.005       | Advert's benefits       |
 | NuoptimalNootropicInjectorImplants | 1e9            | 1.06                 | 0.1         | Employee's creativity   |
 | SpeechProcessorImplants            | 1e9            | 1.06                 | 0.1         | Employee's charisma     |
@@ -94,7 +91,6 @@ Special upgrades:
 &nbsp;  
 Advice:
 
-- DreamSense is useless. Never buy it.
 - Round 1:
   - SmartStorage and Warehouse are the most important upgrades in this round.
   - Only buy 1 or 2 Advert level(s).

@@ -8,7 +8,7 @@ They can be accessed through the [Terminal](terminal.md) or through [Scripts](sc
 Each contract has a limited number of attempts.
 If you provide the wrong answer too many times and exceed the number of attempts, the contract will self destruct (delete itself).
 
-Currently, Coding Contracts are randomly generated and spawned over time.
+Coding Contracts are randomly generated and spawn over time. Initially, you'll only see a small range of the easier contracts, but as you progress further through the game more challenging ones will unlock.
 They can appear on any [server](servers.md) (including your home computer), except for your purchased [servers](servers.md).
 
 ## Running in Terminal
@@ -27,6 +27,7 @@ Interacting with Coding Contracts via the [Terminal](terminal.md) can be tedious
 Consider using the [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) to automate various aspects of your solution.
 For example, some contracts have long solutions while others have even longer solutions.
 You might want to use the [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) to automate the process of submitting your solution rather than copy and paste a long solution into an answer box.
+The [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) can also be used to find out useful information about a contract including the number of attempts you have left, the type of contract and its difficulty.
 
 However, using the [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) comes at a cost.
 Like most functions in other APIs, almost all of the functions in the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) have a RAM cost.
@@ -67,7 +68,6 @@ There are currently four possible rewards for solving a Coding Contract:
 - Money
 
 The `amount` of the reward varies based on the difficulty of the problem posed by the Coding Contract.
-There is no way to know what a Coding Contract's exact reward will be until it is solved.
 
 ## Notes
 
