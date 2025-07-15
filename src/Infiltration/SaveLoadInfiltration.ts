@@ -11,7 +11,7 @@ export function loadInfiltrations(saveString: unknown): void {
     assertObject(parsedData);
     const { floors, lastChangeTimestamp } = parsedData;
     if (typeof floors !== "number") {
-      throw new Error("Invalid parsedData.infils");
+      throw new Error("Invalid parsedData.floors");
     }
     if (typeof lastChangeTimestamp !== "number") {
       throw new Error("Invalid parsedData.lastChangeTimestamp");
