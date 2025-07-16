@@ -1862,7 +1862,7 @@ export interface Singularity {
    * This function will automatically open the backup save prompt and claim the free faction favour if available.
    *
    */
-  exportGame(): void;
+  exportGame(): Promise<void>;
 
   /**
    * Returns Backup save bonus availability.
@@ -6528,7 +6528,10 @@ export interface NS {
    * @remarks
    * RAM cost: 0 GB
    *
-   * @param millis - Number of milliseconds to sleep.
+   * Note that the actual delay may be longer than intended. For more information, please check
+   * https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout#delay.
+   *
+   * @param millis - Number of milliseconds to sleep. Default to 0.
    * @example
    * ```js
    * // This will count from 1 to 10 in your terminal, with one number every 5 seconds
@@ -6539,17 +6542,20 @@ export interface NS {
    * ```
    * @returns A promise that resolves to true when the sleep is completed.
    */
-  sleep(millis: number): Promise<true>;
+  sleep(millis?: number): Promise<true>;
 
   /**
    * Suspends the script for n milliseconds. Doesn't block with concurrent calls.
    * @remarks
    * RAM cost: 0 GB
    *
-   * @param millis - Number of milliseconds to sleep.
+   * Note that the actual delay may be longer than intended. For more information, please check
+   * https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout#delay.
+   *
+   * @param millis - Number of milliseconds to sleep. Default to 0.
    * @returns A promise that resolves to true when the sleep is completed.
    */
-  asleep(millis: number): Promise<true>;
+  asleep(millis?: number): Promise<true>;
 
   /**
    * Prints one or more values or variables to the script’s logs.
