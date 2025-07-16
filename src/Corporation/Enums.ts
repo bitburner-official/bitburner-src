@@ -2,7 +2,6 @@ import type { Member } from "../types";
 
 export enum IndustryType {
   Water = "Water Utilities",
-  Spring = "Spring Water",
   Agriculture = "Agriculture",
   Fishing = "Fishing",
   Mining = "Mining",

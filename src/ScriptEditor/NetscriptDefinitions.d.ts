@@ -8474,7 +8474,6 @@ type CorpEmployeePosition =
 
 /** @public */
 type CorpIndustryName =
-  | "Spring Water"
   | "Water Utilities"
   | "Agriculture"
   | "Fishing"

@@ -222,5 +222,10 @@ export const breakingChanges300: VersionBreakingChange = {
         'It has been automatically replaced with "ns.corporation.getCorporation().tributeModifier".',
       showPopUp: false,
     },
+    {
+      brokenAPIs: [{ name: "Spring Water" }],
+      info: 'The "Spring Water" industry was removed. The cost of all Spring Water divisions was refunded.',
+      showPopUp: false,
+    },
   ],
 };

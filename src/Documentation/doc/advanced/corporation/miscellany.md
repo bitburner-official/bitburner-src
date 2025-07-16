@@ -102,7 +102,7 @@ In previous versions, the revenue is multiplied by 0.01. If you do it fast enoug
 
 Dummy division is the division that you create only to increase the [valuation](./financial-statement.md) and the [investment offer](./financial-statement.md).
 
-Use Restaurant industry for dummy division. Its starting cost is only 10e9. Spring Water's starting cost is also 10e9, but it's a newbie trap, so it's best not to touch it.
+Use Restaurant industry for dummy division. Its starting cost is only 10e9.
 
 For dummy division, you only need to expand to 6 cities and buy 6 warehouses. Don't invest in other things (Warehouse/Office/Advert upgrades).
 

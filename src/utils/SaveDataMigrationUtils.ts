@@ -12,7 +12,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { Player } from "@player";
-import { AugmentationName, CodingContractName, LocationName } from "@enums";
+import { AugmentationName, CityName, CodingContractName, LocationName } from "@enums";
 import { AddToAllServers, createUniqueRandomIp, GetAllServers, GetServer, renameServer } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 import { AwardNFG, v1APIBreak } from "./v1APIBreak";
@@ -26,13 +26,14 @@ import { Terminal } from "../Terminal";
 import { getRecordValues } from "../Types/Record";
 import { ServerName } from "../Types/strings";
 import { ContentFilePath, ContentFile, ContentFileMap } from "../Paths/ContentFile";
-import { exportMaterial } from "../Corporation/Actions";
+import { exportMaterial, upgradeWarehouseCost } from "../Corporation/Actions";
 import { getGoSave, loadGo } from "../Go/SaveLoad";
 import { showAPIBreaks } from "./APIBreaks/APIBreak";
 import { breakInfos261 } from "./APIBreaks/2.6.1";
 import { breakingChanges300 } from "./APIBreaks/3.0.0";
-import { calculateUpgradeCost } from "../Corporation/helpers";
+import { calculateOfficeSizeUpgradeCost, calculateUpgradeCost } from "../Corporation/helpers";
 import type { PositiveInteger } from "../types";
+import { officeInitialCost, officeInitialSize, warehouseInitialCost } from "../Corporation/data/Constants";
 
 /** Function for performing a series of defined replacements. See 0.58.0 for usage */
 function convert(code: string, changes: [RegExp, string][]): string {
@@ -560,6 +561,59 @@ Error: ${e}`,
       }
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete (Player.corporation.upgrades as Record<string, unknown>)["DreamSense"];
+
+      // Remove and refund Spring Water divisions
+      for (const division of Player.corporation.divisions.values()) {
+        if ((division.industry as string) === "Spring Water") {
+          // Refund division
+          let refund = 0;
+          refund += 10e9;
+          for (const office of Object.values(division.offices)) {
+            // Refund office
+            if (office.city !== CityName.Sector12) {
+              refund += officeInitialCost;
+            }
+            if (office.size > officeInitialSize) {
+              refund += calculateOfficeSizeUpgradeCost(
+                officeInitialSize,
+                (office.size - officeInitialSize) as PositiveInteger,
+              );
+            }
+          }
+          for (const warehouse of Object.values(division.warehouses)) {
+            // Refund warehouse
+            if (warehouse.city !== CityName.Sector12) {
+              refund += warehouseInitialCost;
+            }
+            if (warehouse.level > 1) {
+              refund += upgradeWarehouseCost(1, warehouse.level - 1);
+            }
+            // Refund material
+            for (const material of Object.values(warehouse.materials)) {
+              if (material.stored <= 0) {
+                continue;
+              }
+              refund += material.stored * material.marketPrice;
+            }
+          }
+          Player.corporation.gainFunds(refund, "force majeure");
+          Player.corporation.divisions.delete(division.name);
+        } else {
+          // Remove export routes
+          for (const warehouse of Object.values(division.warehouses)) {
+            for (const material of Object.values(warehouse.materials)) {
+              for (let i = 0; i < material.exports.length; ++i) {
+                const exportRoute = material.exports[i];
+                const targetDivision = Player.corporation.divisions.get(exportRoute.division);
+                if (targetDivision && (targetDivision.industry as string) !== "Spring Water") {
+                  continue;
+                }
+                material.exports.splice(i, 1);
+              }
+            }
+          }
+        }
+      }
     }
     showAPIBreaks("3.0.0", breakingChanges300);
   }
