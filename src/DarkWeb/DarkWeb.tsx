@@ -60,7 +60,7 @@ export function buyDarkwebItem(itemName: string): void {
 
   // return if the player already has it.
   if (Player.hasProgram(item.program)) {
-    Terminal.print("You already have the " + item.program + " program");
+    Terminal.warn("You already have the " + item.program + " program");
     return;
   }
 
@@ -79,7 +79,7 @@ export function buyDarkwebItem(itemName: string): void {
     Player.finishWork(true);
   }
 
-  Terminal.print(
+  Terminal.success(
     "You have purchased the " + item.program + " program. The new program can be found on your home computer.",
   );
 }
@@ -101,12 +101,12 @@ export function buyAllDarkwebItems(): void {
   }
 
   if (itemsToBuy.length === 0) {
-    Terminal.print("All available programs have been purchased already.");
+    Terminal.warn("All available programs have been purchased already.");
     return;
   }
 
   if (itemsToBuy.length > 0) {
-    Terminal.print("All programs have been purchased.");
+    Terminal.success("All programs have been purchased.");
     return;
   }
 }

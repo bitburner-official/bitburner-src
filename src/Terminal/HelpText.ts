@@ -1,53 +1,109 @@
-export const TerminalHelpText: string[] = [
-  "Type 'help name' to learn more about the command ",
-  " ",
-  '    alias [-g] [name="value"]        Create or display Terminal aliases',
-  "    analyze                          Get information about the current machine ",
-  "    backdoor                         Install a backdoor on the current machine ",
-  "    buy [-l/-a/program]              Purchase a program through the Dark Web",
-  "    cat [file]                       Display a .msg, .lit, or .txt file",
-  "    cd [dir]                         Change to a new directory",
-  "    changelog                        Display changelog",
-  "    check [script] [args...]         Print a script's logs to Terminal",
-  "    clear                            Clear all text on the terminal ",
-  "    cls                              See 'clear' command ",
-  "    connect [hostname]               Connects to a remote server",
-  "    cp [src] [dest]                  Copy a file",
-  "    download [script/text file]      Downloads scripts or text files to your computer",
-  "    expr [math expression]           Evaluate a mathematical expression",
-  "    free                             Check the machine's memory (RAM) usage",
-  "    grep [opts]... pattern [file]... Search for PATTERN (string/regular expression) in each FILE and print results to terminal",
-  "         [-O] [target file]",
-  "    grow                             Spoof money in a servers bank account, increasing the amount available.",
-  "    hack                             Hack the current machine",
-  "    help [command]                   Display this help text, or the help text for a command",
-  "    history [-c]                     Display the terminal history",
-  "    home                             Connect to home computer",
-  "    hostname                         Displays the hostname of the machine",
-  "    ipaddr                           Displays the IP address of the machine",
-  "    kill [script/pid] [args...]      Stops the specified script on the current server ",
-  "    killall                          Stops all running scripts on the current machine",
-  "    ls [dir] [-l] [-h] [-g pattern]  Displays all files on the machine",
-  "    lscpu                            Displays the number of CPU cores on the machine",
-  "    mem [script] [-t n]              Displays the amount of RAM required to run the script",
-  "    mv [src] [dest]                  Move/rename a text or script file",
-  "    nano [files...]                  Text editor - Open up and edit one or more scripts or text files",
-  "    ps                               Display all scripts that are currently running",
-  "    rm [OPTIONS]... [FILE]...        Delete a file from the server",
-  "    run [script] [-t n] [--tail]     Execute a program or script",
-  "        [--ram-override n] [args...]",
-  "    scan                             Prints all immediately-available network connections",
-  "    scan-analyze [d] [-a]            Prints info for all servers up to d nodes away",
-  "    scp [files...] [server]          Copies a file to a destination server",
-  "    sudov                            Shows whether you have root access on this computer",
-  "    tail [script/pid] [args...]      Displays dynamic logs for the specified script",
-  "    top                              Displays all running scripts and their RAM usage",
-  "    unalias [alias name]             Deletes the specified alias",
-  "    vim [files...]                   Text editor - Open up and edit one or more scripts or text files in vim mode",
-  "    weaken                           Reduce the security of the current machine",
-  "    wget [url] [target file]         Retrieves code/text from a web server",
-  " ",
-];
+
+const colors = {
+  cmd: "\x1b[32m",
+  args: "\x1b[33m",
+  txt: "\x1b[0m",
+};
+
+/* const commands = {
+  alias:"alias",
+  analyze:"analyze",
+  backdoor:"backdoor",
+  buy:"buy",
+  cat:"cat",
+  cd:"cd",
+  changelog:"changelog",
+  check:"check",
+  clear:"clear",
+  cls:"cls",
+  connect:"connect",
+  cp:"cp",
+  download:"download",
+  expr:"expr",
+  free:"free",
+  grep:"grep",
+  grow:"grow",
+  hack:"hack",
+  help:"help",
+  history:"history",
+  home:"home",
+  hostname:"hostname",
+  ipaddr:"ipaddr",
+  kill:"kill",
+  killall:"killall",
+  ls:"ls",
+  lscpu:"lscpu",
+  mem:"mem",
+  mv:"mv",
+  open:"open",
+  ps:"ps",
+  pwd:"pwd",
+  read:"read",
+  reboot:"reboot",
+  rebootall:"rebootall",
+  reload:"reload",
+  rm:"rm",
+  scan:"scan",
+  scananalyze:"scananalyze",
+  scp:"scp",
+  sudov:"sudov",
+  tail:"tail",
+  top:"top",
+  unalias:"unalias",
+  vim:"vim",
+  weaken:"weaken",
+  wget:"wget",
+}; */
+
+// Rewritten as a single string
+export const TerminalHelpText: string = `Type 'help name' to learn more about the command
+
+${colors.cmd}    alias       ${colors.args}[-g] [name:"value"]            ${colors.txt}Create or display Terminal aliases
+${colors.cmd}    analyze     ${colors.args}[script]                       ${colors.txt}Get information about the current script
+${colors.cmd}    backdoor    ${colors.args}                               ${colors.txt}Install backdoor on the current machine
+${colors.cmd}    buy         ${colors.args}[-l/-a]                        ${colors.txt}Purchase programs through the Dark Web
+${colors.cmd}    cat         ${colors.args}[file]                         ${colors.txt}Display .msg, .lit or .txt files
+${colors.cmd}    cd          ${colors.args}[dir]                          ${colors.txt}Change to a new directory
+${colors.cmd}    changelog   ${colors.args}                               ${colors.txt}Display changelog
+${colors.cmd}    check       ${colors.args}[script] [args...]             ${colors.txt}Print a script's logs to Terminal
+${colors.cmd}    clear       ${colors.args}                               ${colors.txt}Clear all text on the terminal
+${colors.cmd}    cls         ${colors.args}                               ${colors.txt}See 'clear' command
+${colors.cmd}    connect     ${colors.args}[hostname]                     ${colors.txt}Connects to a remote server
+${colors.cmd}    cp          ${colors.args}[src] [dest]                   ${colors.txt}Copy a file
+${colors.cmd}    download    ${colors.args}[script/text file]             ${colors.txt}Downloads scripts or text files to your computer
+${colors.cmd}    expr        ${colors.args}[math expression]              ${colors.txt}Evaluate a mathematical expression
+${colors.cmd}    free        ${colors.args}                               ${colors.txt}Check the machine's memory (RAM) usage
+${colors.cmd}    grep        ${colors.args}[opts]... pattern [file]...    ${colors.txt}Search for PATTERN (string/regular expression) in each FILE and print results to terminal
+${colors.args}                [-O] [target file]
+${colors.cmd}    grow        ${colors.args}                               ${colors.txt}Spoof money in a servers bank account, increasing the amount available
+${colors.cmd}    hack        ${colors.args}                               ${colors.txt}Hack the current machine
+${colors.cmd}    help        ${colors.args}[command]                      ${colors.txt}Display this help text, or the help text for a command
+${colors.cmd}    history     ${colors.args}[-c]                           ${colors.txt}Display the terminal history
+${colors.cmd}    home        ${colors.args}                               ${colors.txt}Connect to home computer
+${colors.cmd}    hostname    ${colors.args}                               ${colors.txt}Displays the hostname of the machine
+${colors.cmd}    ipaddr      ${colors.args}                               ${colors.txt}Displays the IP address of the machine
+${colors.cmd}    kill        ${colors.args}[script/pid] [args...]         ${colors.txt}Stops the specified script on the current server
+${colors.cmd}    killall     ${colors.args}                               ${colors.txt}Stops all running scripts on the current machine
+${colors.cmd}    ls          ${colors.args}[dir] [-l] [-h] [-g pattern]   ${colors.txt}Displays all files on the machine
+${colors.cmd}    lscpu       ${colors.args}                               ${colors.txt}Displays the number of CPU cores on the machine
+${colors.cmd}    mem         ${colors.args}[script] [-t n]                ${colors.txt}Displays the amount of RAM required to run the script
+${colors.cmd}    mv          ${colors.args}[src] [dest]                   ${colors.txt}Move/rename a text or script file
+${colors.cmd}    nano        ${colors.args}[files...]                     ${colors.txt}Text editor - Open up and edit one or more scripts or text files
+${colors.cmd}    ps          ${colors.args}                               ${colors.txt}Display all scripts that are currently running
+${colors.cmd}    rm          ${colors.args}[OPTIONS]... [FILE]...         ${colors.txt}Delete a file from the server
+${colors.cmd}    run         ${colors.args}[script] [-t n] [--tail]       ${colors.txt}Execute a program or script
+${colors.args}                [--ram-override n] [args...]
+${colors.cmd}    scan        ${colors.args}                               ${colors.txt}Prints all immediately-available network connections
+${colors.cmd}    scan-analyze${colors.args}[d] [-a]                       ${colors.txt}Prints info for all servers up to d nodes away
+${colors.cmd}    scp         ${colors.args}[files...] [server]            ${colors.txt}Copies a file to a destination server
+${colors.cmd}    sudov       ${colors.args}                               ${colors.txt}Shows whether you have root access on this computer
+${colors.cmd}    tail        ${colors.args}[script/pid] [args...]         ${colors.txt}Displays dynamic logs for the specified script
+${colors.cmd}    top         ${colors.args}                               ${colors.txt}Displays all running scripts and their RAM usage
+${colors.cmd}    unalias     ${colors.args}[alias name]                   ${colors.txt}Deletes the specified alias
+${colors.cmd}    vim         ${colors.args}[files...]                     ${colors.txt}Text editor - Open up and edit one or more scripts or text files in vim mode
+${colors.cmd}    weaken      ${colors.args}                               ${colors.txt}Reduce the security of the current machine
+${colors.cmd}    wget        ${colors.args}[url] [target file]            ${colors.txt}Retrieves code/text from a web server
+`;
 
 const TemplatedHelpTexts: Record<string, (command: string) => string[]> = {
   scriptEditor: (command) => {

@@ -105,7 +105,7 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
     totalDetectedLines: number;
     showPopUp: boolean;
   }[] = [];
-  let numberOfPopUps = 0;
+  //let numberOfPopUps = 0;
   for (const breakInfo of apiBreakingChanges) {
     const scanResult = detectImpactAndMigrate(breakInfo.brokenAPIs);
     const impactMap = scanResult.impactMap;
@@ -140,9 +140,9 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
       totalDetectedLines: scanResult.totalDetectedLines,
       showPopUp: breakInfo.showPopUp,
     });
-    if (breakInfo.showPopUp) {
-      ++numberOfPopUps;
-    }
+    //if (breakInfo.showPopUp) {
+     // ++numberOfPopUps;
+    //}
   }
   if (!details.length) {
     return;
@@ -153,33 +153,45 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
   }
   Player.getHomeComputer().writeToTextFile(
     textFileName,
-    `API BREAK INFO FOR ${version}\n\n${details.map((detail) => detail.text).join("\n\n\n\n")}`,
+    `API BREAK INFO FOR ${version}\n\n${details.map((detail) => detail.text).join("\n\n\n\n")} \n\n${additionalText}`,
   );
+
   Terminal.warn(`AN API BREAK FROM VERSION ${version} MAY HAVE AFFECTED SOME OF YOUR SCRIPTS.`);
   Terminal.warn(`INFORMATION ABOUT THIS POTENTIAL IMPACT HAS BEEN LOGGED IN ${textFileName} ON YOUR HOME COMPUTER.`);
+
+  
+  // Show a dialog box with the API break info
+  
   dialogBoxCreate(
-    `SOME OF YOUR SCRIPTS HAVE POTENTIALLY BEEN IMPACTED BY AN API BREAK, DUE TO CHANGES IN VERSION ${version}\n\n` +
-      "The following dialog boxes will provide details of the potential impact to your scripts.\n" +
-      `A file with these details has also been saved on your home computer under filename ${textFileName}.` +
-      (additionalText ? `\n\n${additionalText}` : ""),
+    `SOME OF YOUR SCRIPTS HAVE POTENTIALLY BEEN IMPACTED BY AN API BREAK, DUE TO CHANGES IN VERSION ${version}` +
+      (additionalText ? `\n${additionalText}` : "") +
+      `\n\nPlease check the log file ${textFileName} on your home computer for more details.` +
+      `\n${details.map((detail) => detail.apiBreakInfo.info).join("\n\n\n\n")}`,
   );
-  let popUpIndex = 0;
+
+  /**let popUpIndex = 0;
   for (const detail of details) {
     if (!detail.showPopUp) {
       continue;
     }
-    dialogBoxCreate(
-      `API BREAK VERSION ${version} DETAILS ${popUpIndex + 1} of ${numberOfPopUps}\n\n${detail.apiBreakInfo.info}` +
-        /**
-         * If we can detect the affected lines via apiBreakInfo.brokenAPIs, we will show the number of affected lines.
-         * However, some breaking changes cannot be reliably detected, so we intentionally leave apiBreakInfo.brokenAPIs
-         * empty. With these changes, the number of affected lines is always 0, but saying that there are no affected
-         * lines is misleading, so we won't say anything about the number of affected lines.
-         */
-        (detail.apiBreakInfo.brokenAPIs.length > 0
-          ? `\n\nWe found ${pluralize(detail.totalDetectedLines, "affected line")}.`
-          : ""),
-    );
-    ++popUpIndex;
+    if (popUpIndex >= numberOfPopUps) {
+      break;
+    }
+  */
+
+  //Made terminal more verbose
+  for (const detail of details) { 
+    Terminal.print(`${details.length >= 1 ? `API Break #${details.indexOf(detail) + 1}:` : "API Break:"}--------------------------------------------`);
+    if (detail.totalDetectedLines === 0) {
+      Terminal.warn(`${detail.apiBreakInfo.info}`);
+      Terminal.print("--------------------------------------------\n"); 
+         
+    } else {
+      Terminal.warn(`${detail.apiBreakInfo.info}`);
+      Terminal.error(`We found ${pluralize(detail.totalDetectedLines, "affected line")}.`,
+      );
+      Terminal.print("--------------------------------------------\n"); 
+    }
   }
 }
+

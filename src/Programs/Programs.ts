@@ -42,18 +42,18 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.hasAdminRights) {
-        Terminal.print("You already have root access to this computer. There is no reason to run NUKE.exe");
-        Terminal.print("You can now run scripts on this server.");
+        Terminal.warn("You already have root access to this computer. There is no reason to run NUKE.exe");
+        Terminal.success("You can now run scripts on this server.");
         return;
       }
       if (server.openPortCount >= server.numOpenPortsRequired) {
         server.hasAdminRights = true;
-        Terminal.print("NUKE successful! Gained root access to " + server.hostname);
-        Terminal.print("You can now run scripts on this server.");
+        Terminal.success("NUKE successful! Gained root access to " + server.hostname);
+        Terminal.success("You can now run scripts on this server.");
         return;
       }
 
-      Terminal.print("NUKE unsuccessful. Not enough ports have been opened");
+      Terminal.error("NUKE unsuccessful. Not enough ports have been opened");
     },
   }),
   [CompletedProgramName.bruteSsh]: new Program({
@@ -70,12 +70,12 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.sshPortOpen) {
-        Terminal.print("SSH Port (22) is already open!");
+        Terminal.warn("SSH Port (22) is already open!");
         return;
       }
 
       server.sshPortOpen = true;
-      Terminal.print("Opened SSH Port(22)!");
+      Terminal.success("Opened SSH Port(22)!");
       server.openPortCount++;
     },
   }),
@@ -93,12 +93,12 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.ftpPortOpen) {
-        Terminal.print("FTP Port (21) is already open!");
+        Terminal.warn("FTP Port (21) is already open!");
         return;
       }
 
       server.ftpPortOpen = true;
-      Terminal.print("Opened FTP Port (21)!");
+      Terminal.success("Opened FTP Port (21)!");
       server.openPortCount++;
     },
   }),
@@ -116,12 +116,12 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.smtpPortOpen) {
-        Terminal.print("SMTP Port (25) is already open!");
+        Terminal.warn("SMTP Port (25) is already open!");
         return;
       }
 
       server.smtpPortOpen = true;
-      Terminal.print("Opened SMTP Port (25)!");
+      Terminal.success("Opened SMTP Port (25)!");
       server.openPortCount++;
     },
   }),
@@ -139,12 +139,12 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.httpPortOpen) {
-        Terminal.print("HTTP Port (80) is already open!");
+        Terminal.warn("HTTP Port (80) is already open!");
         return;
       }
 
       server.httpPortOpen = true;
-      Terminal.print("Opened HTTP Port (80)!");
+      Terminal.success("Opened HTTP Port (80)!");
       server.openPortCount++;
     },
   }),
@@ -162,12 +162,12 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
       if (server.sqlPortOpen) {
-        Terminal.print("SQL Port (1433) is already open!");
+        Terminal.warn("SQL Port (1433) is already open!");
         return;
       }
 
       server.sqlPortOpen = true;
-      Terminal.print("Opened SQL Port (1433)!");
+      Terminal.success("Opened SQL Port (1433)!");
       server.openPortCount++;
     },
   }),
@@ -180,8 +180,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPerQuarterHour,
     },
     run: (): void => {
-      Terminal.print("This executable cannot be run.");
-      Terminal.print("DeepscanV1.exe lets you run 'scan-analyze' with a depth up to 5.");
+      Terminal.error("This executable cannot be run.");
+      Terminal.warn("DeepscanV1.exe lets you run 'scan-analyze' with a depth up to 5.");
     },
   }),
   [CompletedProgramName.deepScan2]: new Program({
@@ -193,8 +193,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPer2Hours,
     },
     run: (): void => {
-      Terminal.print("This executable cannot be run.");
-      Terminal.print("DeepscanV2.exe lets you run 'scan-analyze' with a depth up to 10.");
+      Terminal.error("This executable cannot be run.");
+      Terminal.warn("DeepscanV2.exe lets you run 'scan-analyze' with a depth up to 10.");
     },
   }),
   [CompletedProgramName.serverProfiler]: new Program({
@@ -222,9 +222,34 @@ export const Programs: Record<CompletedProgramName, Program> = {
         return;
       }
 
-      Terminal.print(targetServer.hostname + ":");
+      if (targetServer.hasAdminRights) {
+        Terminal.success("Server has admin rights.");
+        Terminal.success(targetServer.hostname + ":");
+      } else {
+        Terminal.error("Server has no admin rights.");
+        Terminal.error(targetServer.hostname + ":");
+      }
       Terminal.print("Server base security level: " + targetServer.baseDifficulty);
-      Terminal.print("Server current security level: " + targetServer.hackDifficulty);
+      if (targetServer.hackDifficulty > targetServer.baseDifficulty) {
+        Terminal.warn(
+          "Server security level: " +
+            targetServer.hackDifficulty +
+            " (+" +
+            (targetServer.hackDifficulty - targetServer.baseDifficulty) +
+            ")",
+        );
+      }
+      if (targetServer.hackDifficulty < targetServer.baseDifficulty) {
+        Terminal.success(
+          "Server security level: " +
+            targetServer.hackDifficulty +
+            " (-" +
+            (targetServer.baseDifficulty - targetServer.hackDifficulty) +
+            ")",
+        );
+      } else if (targetServer.hackDifficulty === targetServer.baseDifficulty) {
+        Terminal.print("Server security level: " + targetServer.hackDifficulty);
+      }
       Terminal.print("Server growth rate: " + targetServer.serverGrowth);
       Terminal.print(
         `Netscript hack() execution time: ${convertTimeMsToTimeElapsedString(
@@ -255,9 +280,9 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPerQuarterHour,
     },
     run: (): void => {
-      Terminal.print("This executable cannot be run.");
-      Terminal.print("AutoLink.exe lets you automatically connect to other servers when using 'scan-analyze'.");
-      Terminal.print("When using scan-analyze, click on a server's hostname to connect to it.");
+      Terminal.error("This executable cannot be run.");
+      Terminal.warn("AutoLink.exe lets you automatically connect to other servers when using 'scan-analyze'.");
+      Terminal.warn("When using scan-analyze, click on a server's hostname to connect to it.");
     },
   }),
   [CompletedProgramName.formulas]: new Program({
@@ -269,8 +294,8 @@ export const Programs: Record<CompletedProgramName, Program> = {
       time: CONSTANTS.MillisecondsPer4Hours,
     },
     run: (): void => {
-      Terminal.print("This executable cannot be run.");
-      Terminal.print("Formulas.exe lets you use the formulas API.");
+      Terminal.error("This executable cannot be run.");
+      Terminal.warn("Formulas.exe lets you use the formulas API.");
     },
   }),
   [CompletedProgramName.bitFlume]: new Program({
@@ -300,19 +325,19 @@ export const Programs: Record<CompletedProgramName, Program> = {
         Player.augmentations.length >= numAugReq && Player.money >= 1e11 && Player.skills.hacking >= 2500;
       if (!fulfilled) {
         if (Player.augmentations.length >= numAugReq) {
-          Terminal.print(`[x] Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
+          Terminal.success(`[x] Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
         } else {
-          Terminal.print(`[ ] Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
+          Terminal.warn(`[ ] Augmentations: ${Player.augmentations.length} / ${numAugReq}`);
         }
         if (Player.money >= 1e11) {
-          Terminal.print(`[x] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`);
+          Terminal.success(`[x] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`);
         } else {
-          Terminal.print(`[ ] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`);
+          Terminal.warn(`[ ] Money: ${formatMoney(Player.money)} / ${formatMoney(1e11)}`);
         }
         if (Player.skills.hacking >= 2500) {
-          Terminal.print(`[x] Hacking skill: ${Player.skills.hacking} / 2500`);
+          Terminal.success(`[x] Hacking skill: ${Player.skills.hacking} / 2500`);
         } else {
-          Terminal.print(`[ ] Hacking skill: ${Player.skills.hacking} / 2500`);
+          Terminal.warn(`[ ] Hacking skill: ${Player.skills.hacking} / 2500`);
         }
         return;
       }
