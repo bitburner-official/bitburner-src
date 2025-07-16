@@ -29,6 +29,7 @@ import { handleGetSaveDataInfoError } from "./utils/ErrorHandler";
 import { isObject, assertObject } from "./utils/TypeAssertion";
 import { evaluateVersionCompatibility } from "./utils/SaveDataMigrationUtils";
 import { Reviver } from "./utils/GenericReviver";
+import { giveExportBonus } from "./ExportBonus";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -239,6 +240,8 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
   }
 
   async exportGame(): Promise<void> {
+    // Give the export bonus before exporting the save data
+    giveExportBonus();
     let saveData;
     try {
       saveData = await this.getSaveData();
