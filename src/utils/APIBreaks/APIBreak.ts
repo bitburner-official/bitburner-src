@@ -171,7 +171,9 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
       continue;
     }
     Terminal.warn(
-      `\nAPI BREAK VERSION ${version} DETAILS ${warningIndex + 1} of ${numberOfWarnings}\n\n${detail.apiBreakInfo.info}` +
+      `\nAPI BREAK VERSION ${version} DETAILS ${warningIndex + 1} of ${numberOfWarnings}\n\n${
+        detail.apiBreakInfo.info
+      }` +
         /**
          * If we can detect the affected lines via apiBreakInfo.brokenAPIs, we will show the number of affected lines.
          * However, some breaking changes cannot be reliably detected, so we intentionally leave apiBreakInfo.brokenAPIs
