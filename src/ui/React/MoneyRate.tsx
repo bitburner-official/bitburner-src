@@ -9,7 +9,13 @@ const useStyles = makeStyles()((theme: Theme) => ({
   },
 }));
 
-export function MoneyRate({ money }: { money: number }): JSX.Element {
+export function MoneyRate({
+  money,
+  useExponentialFormForSmallValue,
+}: {
+  money: number;
+  useExponentialFormForSmallValue?: boolean;
+}): JSX.Element {
   const { classes } = useStyles();
-  return <span className={classes.money}>{formatMoney(money)} / sec</span>;
+  return <span className={classes.money}>{formatMoney(money, useExponentialFormForSmallValue)} / sec</span>;
 }
