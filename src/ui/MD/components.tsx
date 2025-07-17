@@ -81,6 +81,7 @@ export const li = (props: React.PropsWithChildren<LiProps>): React.ReactElement 
 // I really hate the implementation but I don't know how to get typescript to cooperate.
 const fixAlign = (align: React.CSSProperties["textAlign"]): TableCellProps["align"] => {
   if (align === "-moz-initial") return "inherit";
+  if (align === "-webkit-match-parent") return "inherit";
   if (align === "initial") return "inherit";
   if (align === "revert") return "inherit";
   if (align === "revert-layer") return "inherit";
