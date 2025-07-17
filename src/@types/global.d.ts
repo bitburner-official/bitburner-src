@@ -23,6 +23,24 @@ declare interface Document {
 
 declare global {
   /**
+   * We use Babel Parser. It's one of many internal packages of babel-standalone, and those packages are not exposed in
+   * the declaration file.
+   * Ref: https://babeljs.io/docs/babel-standalone#internal-packages
+   */
+  declare module "@babel/standalone" {
+    export const packages: {
+      parser: {
+        parse: (
+          code: string,
+          option: any,
+        ) => {
+          program: import("../utils/ScriptTransformer").BabelASTProgram;
+        };
+      };
+    };
+  }
+
+  /**
    * "loader" is not exposed in the public API.
    */
   module "monaco-editor" {
