@@ -364,7 +364,10 @@ function DividendsStats({ profit }: IDividendsStatsProps): React.ReactElement {
       rows={[
         ["Retained Profits (after dividends):", <MoneyRate key="profits" money={retainedEarnings} />],
         ["Dividend Percentage:", formatPercent(corp.dividendRate, 0)],
-        ["Dividends per share:", <MoneyRate key="dividends" money={dividendsPerShare} />],
+        [
+          "Dividends per share:",
+          <MoneyRate key="dividends" money={dividendsPerShare} useExponentialFormForSmallValue={true} />,
+        ],
         [
           <>
             <Tooltip

@@ -9,8 +9,10 @@ export function canGetBonus(): boolean {
   return now - LastExportBonus > bonusTimer;
 }
 
-export function onExport(): void {
-  if (!canGetBonus()) return;
+export function giveExportBonus(): void {
+  if (!canGetBonus()) {
+    return;
+  }
   for (const facName of Player.factions) {
     Factions[facName].setFavor(Factions[facName].favor + 1);
   }

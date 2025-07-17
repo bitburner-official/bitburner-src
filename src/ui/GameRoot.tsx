@@ -6,7 +6,6 @@ import { makeStyles } from "tss-react/mui";
 import { Player } from "@player";
 import { installAugmentations } from "../Augmentation/AugmentationHelpers";
 import { saveObject } from "../SaveObject";
-import { onExport } from "../ExportBonus";
 import { CompletedProgramName, LocationName, SimplePage } from "@enums";
 import { ITutorial, iTutorialStart } from "../InteractiveTutorial";
 import { InteractiveTutorialRoot } from "./InteractiveTutorial/InteractiveTutorialRoot";
@@ -430,8 +429,6 @@ export function GameRoot(): React.ReactElement {
             saveObject.saveGame().catch((error) => exceptionAlert(error));
           }}
           export={() => {
-            // Apply the export bonus before saving the game
-            onExport();
             saveObject.exportGame().catch((error) => exceptionAlert(error));
           }}
           forceKill={killAllScripts}
@@ -451,8 +448,6 @@ export function GameRoot(): React.ReactElement {
       mainPage = (
         <AugmentationsRoot
           exportGameFn={() => {
-            // Apply the export bonus before saving the game
-            onExport();
             saveObject.exportGame().catch((error) => exceptionAlert(error));
           }}
           installAugmentationsFn={() => {

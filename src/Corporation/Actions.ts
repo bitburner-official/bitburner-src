@@ -434,15 +434,15 @@ export function purchaseWarehouse(corp: Corporation, division: Division, city: C
   ++corp.numberOfOfficesAndWarehouses;
 }
 
-export function upgradeWarehouseCost(warehouse: Warehouse, amt: number): number {
+export function upgradeWarehouseCost(level: number, amt: number): number {
   return Array.from(Array(amt).keys()).reduce(
-    (acc, index) => acc + corpConstants.warehouseSizeUpgradeCostBase * Math.pow(1.07, warehouse.level + 1 + index),
+    (acc, index) => acc + corpConstants.warehouseSizeUpgradeCostBase * Math.pow(1.07, level + 1 + index),
     0,
   );
 }
 
 export function upgradeWarehouse(corp: Corporation, division: Division, warehouse: Warehouse, amt = 1): void {
-  const sizeUpgradeCost = upgradeWarehouseCost(warehouse, amt);
+  const sizeUpgradeCost = upgradeWarehouseCost(warehouse.level, amt);
   if (corp.funds < sizeUpgradeCost) return;
   warehouse.level += amt;
   warehouse.updateSize(corp, division);

@@ -1,4 +1,4 @@
-import {
+import type {
   CorpEmployeePosition,
   CorpIndustryName,
   CorpMaterialName as APIMaterialName,
