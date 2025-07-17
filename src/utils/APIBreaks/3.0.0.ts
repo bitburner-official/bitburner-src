@@ -227,5 +227,10 @@ export const breakingChanges300: VersionBreakingChange = {
       info: 'The "Spring Water" industry was removed. The cost of all Spring Water divisions was refunded.',
       showWarning: false,
     },
+    {
+      brokenAPIs: [{ name: "VeChain" }],
+      info: 'The "VeChain" upgrade was removed. The cost of that upgrade was refunded.',
+      showWarning: false,
+    },
   ],
 };

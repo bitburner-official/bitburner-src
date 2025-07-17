@@ -614,6 +614,16 @@ Error: ${e}`,
           }
         }
       }
+
+      // Remove and refund VeChain
+      const unlocks: Set<string> = Player.corporation.unlocks;
+      for (const upgrade of unlocks) {
+        if (upgrade !== "VeChain") {
+          continue;
+        }
+        Player.corporation.gainFunds(10e9, "force majeure");
+      }
+      unlocks.delete("VeChain");
     }
     showAPIBreaks("3.0.0", breakingChanges300);
   }

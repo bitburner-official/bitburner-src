@@ -46,15 +46,6 @@ export const CorpUnlocks: Record<CorpUnlockName, CorpUnlock> = {
       "every material and product.",
   },
 
-  [CorpUnlockName.VeChain]: {
-    name: CorpUnlockName.VeChain,
-    price: 10e9,
-    desc:
-      "Use AI and blockchain technology to identify where you can improve your supply chain systems. " +
-      "This upgrade will allow you to view a wide array of useful statistics about your " +
-      "Corporation.",
-  },
-
   [CorpUnlockName.ShadyAccounting]: {
     name: CorpUnlockName.ShadyAccounting,
     price: 500e12,

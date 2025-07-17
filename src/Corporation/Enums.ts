@@ -32,7 +32,6 @@ export enum CorpUnlockName {
   SmartSupply = "Smart Supply",
   MarketResearchDemand = "Market Research - Demand",
   MarketDataCompetition = "Market Data - Competition",
-  VeChain = "VeChain",
   ShadyAccounting = "Shady Accounting",
   GovernmentPartnership = "Government Partnership",
   WarehouseAPI = "Warehouse API",
