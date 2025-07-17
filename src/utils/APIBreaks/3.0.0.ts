@@ -7,7 +7,7 @@ export const breakingChanges300: VersionBreakingChange = {
       brokenAPIs: [{ name: "ns.nFormat" }],
       info:
         "ns.nFormat() was removed.\n" +
-        "Use ns.formatNumber, ns.formatRam, ns.formatPercent, or JS built-in objects/functions (e.g., Intl.NumberFormat, " +
+        "Use ns.format.number, ns.format.ram, ns.format.percent, or JS built-in objects/functions (e.g., Intl.NumberFormat, " +
         "Intl.PluralRules, Intl.Locale) instead.",
       showWarning: true,
     },
