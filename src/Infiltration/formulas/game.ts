@@ -3,8 +3,7 @@ import { clampNumber } from "../../utils/helpers/clampNumber";
 
 export const MaxDifficultyForInfiltration = 3.5;
 // This value is typically denoted "lambda," and is the instantaneous rate of decay.
-// I.e. infils decay towards 0 at 0.1%/sec. This is a half-life of ~11.5 minutes.
-const DecayRate = -4e-6;
+const DecayRate = -1e-5;
 // This is the scalar for how much each floor completed affects the rewards for infiltration.
 const MarketDemandFactor = 1e-3;
 
