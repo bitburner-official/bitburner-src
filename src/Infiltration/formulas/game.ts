@@ -29,6 +29,13 @@ export function calculateMarketDemandMultiplier(timestamp: number): number {
   // auto-infil is, and thus how good auto-infil is. The optimum
   // marketDemandMultiplier will be 2/3 regardless of this constant.
   const marketDemandMultiplier = 1 - MarketDemandFactor * floors * floors;
+
+  // Asymptote to 0 at very low market demand, so the UI can always show the demand rising over time
+  // Without this, the demand can go far below 0%, and thus not visibly move for some time.
+  if (marketDemandMultiplier < 0.03) {
+    return clampNumber(0.94 ** floors, 0, 0.03);
+  }
+
   return clampNumber(marketDemandMultiplier, 0, 1);
 }
 
