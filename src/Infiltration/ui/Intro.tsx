@@ -83,7 +83,7 @@ export function Intro({
     startingSecurityLevel,
     timestampNow,
   );
-  const marketRateMultiplier = calculateMarketDemandMultiplier(timestampNow);
+  const marketRateMultiplier = calculateMarketDemandMultiplier(timestampNow, false);
 
   let warningMessage;
   if (difficulty >= MaxDifficultyForInfiltration) {

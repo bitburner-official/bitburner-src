@@ -22,7 +22,7 @@ function calculateCurrentInfilFloors(timestamp: number): number {
 // Calculates the infiltration reward multiplier based on how many and how recent other infiltrations were completed.
 // Each infiltration completed reduces the demand for corporate espionage data for a little while, thus affecting the
 // market demand.
-export function calculateMarketDemandMultiplier(timestamp: number): number {
+export function calculateMarketDemandMultiplier(timestamp: number, clamp = true): number {
   const floors = calculateCurrentInfilFloors(timestamp);
   // A parabola is chosen because it is easy to analyze and tune. The constant
   // is a tuning factor, which primarily adjusts what the optimum rate of
@@ -30,13 +30,7 @@ export function calculateMarketDemandMultiplier(timestamp: number): number {
   // marketDemandMultiplier will be 2/3 regardless of this constant.
   const marketDemandMultiplier = 1 - MarketDemandFactor * floors * floors;
 
-  // Asymptote to 0 at very low market demand, so the UI can always show the demand rising over time
-  // Without this, the demand can go far below 0%, and thus not visibly move for some time.
-  if (marketDemandMultiplier < 0.03) {
-    return clampNumber(0.94 ** floors, 0, 0.03);
-  }
-
-  return clampNumber(marketDemandMultiplier, 0, 1);
+  return clampNumber(marketDemandMultiplier, clamp ? 0 : marketDemandMultiplier, 1);
 }
 
 export function decreaseMarketDemandMultiplier(timestamp: number, floors: number) {
