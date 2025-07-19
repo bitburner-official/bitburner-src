@@ -130,7 +130,12 @@ export function Intro({
             {Player.factions.includes(FactionName.ShadowsOfAnarchy) && (
               <li>SoA reputation: {formatReputation(soaRepGain)}</li>
             )}
-            <li>Market demand: {formatPercent(marketRateMultiplier, marketRateMultiplier !== 100 ? 3 : 0)}</li>
+            <li>
+              Market demand:{" "}
+              {marketRateMultiplier >= 0
+                ? formatPercent(marketRateMultiplier, marketRateMultiplier !== 100 ? 3 : 0)
+                : `0% (${formatPercent(marketRateMultiplier)})`}
+            </li>
           </ul>
         </Typography>
 
