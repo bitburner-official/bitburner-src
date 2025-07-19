@@ -115,16 +115,17 @@ export const GoHistoryPage = (): React.ReactElement => {
                   <Tooltip
                     title={
                       <>
-                        Two wins in a row against an opponent will give you {getMaxRep() / 200} rep converted to favor
-                        with that faction (up to a max of {getMaxRep()} favor), if you are a member of that faction.
+                        Two wins in a row against an opponent will give you {getMaxRep() / 200} reputation converted to
+                        favor with that faction (up to a max of {getMaxRep()} reputation), if you are a member of that
+                        faction.
                         <br />
-                        The rep is immediately applied as favor, meaning it will increase reputation gain right away
-                        without needing an install.
+                        The reputation is immediately applied as favor, meaning it will increase reputation gain right
+                        away without needing an install.
                       </>
                     }
                   >
                     <TableRow>
-                      <TableCell className={classes.cellNone}>Favor from winstreaks:</TableCell>
+                      <TableCell className={classes.cellNone}>Reputation from winstreaks:</TableCell>
                       <TableCell className={classes.cellNone}>
                         {data.rep ?? 0} {data.rep === getMaxRep() ? "(max)" : ""}
                       </TableCell>
