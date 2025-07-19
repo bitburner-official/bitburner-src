@@ -13,7 +13,7 @@ import {
 import { Factions } from "../../Faction/Factions";
 import { FactionName } from "../../Faction/Enums";
 import { calculateMarketDemandMultiplier, calculateReward, MaxDifficultyForInfiltration } from "../formulas/game";
-import { useCycleRerender } from "../../ui/React/hooks";
+import { useRerender } from "../../ui/React/hooks";
 
 interface IProps {
   location: Location;
@@ -70,7 +70,7 @@ export function Intro({
   start,
   cancel,
 }: IProps): React.ReactElement {
-  useCycleRerender();
+  useRerender(1000);
 
   const timestampNow = Date.now();
 
