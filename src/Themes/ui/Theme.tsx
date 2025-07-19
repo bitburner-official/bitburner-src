@@ -259,6 +259,9 @@ export function refreshTheme(): void {
             border: "2px solid " + Settings.theme.white,
             maxWidth: "100vh",
           },
+          popper: {
+            zIndex: 25000,
+          },
         },
         defaultProps: {
           disableInteractive: true,
