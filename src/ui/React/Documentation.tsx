@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { type FilePath, asFilePath } from "../../Paths/FilePath";
 import { CONSTANTS } from "../../Constants";
+import { resolvePage } from "../../Documentation/root";
 
 interface Navigator {
   navigate: (s: string, external: boolean) => void;
@@ -96,10 +97,17 @@ export function openDocExternally(path: string) {
   let url;
   if (path.startsWith("http://") || path.startsWith("https://")) {
     url = path;
-  } else if (path.startsWith("nsDoc/")) {
-    url = `https://github.com/bitburner-official/bitburner-src/blob/${ver}/markdown/${path.replace("nsDoc/", "")}`;
   } else {
-    url = `https://github.com/bitburner-official/bitburner-src/blob/${ver}/src/Documentation/doc/${path}`;
+    const title = resolvePage(path).pageName;
+    if (title == null) {
+      return; // An error was already printed to console
+    }
+    url = `https://github.com/bitburner-official/bitburner-src/blob/${ver}/`;
+    if (title.startsWith("nsDoc/")) {
+      url += `markdown/${title.replace("nsDoc/", "")}`;
+    } else {
+      url += `src/Documentation/doc/${title}`;
+    }
   }
   window.open(url, "_newtab");
 }

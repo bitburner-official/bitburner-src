@@ -1,25 +1,33 @@
 import { AllPages } from "./pages";
 import { EventEmitter } from "../utils/EventEmitter";
 
-export const getPage = (title: string): string => {
+export const resolvePage = (title: string): { pageName: string | null; pageContent: string } => {
   const lang = new Intl.Locale(navigator.language).language;
   const fallbackLang = "en"; // For untranslated languages
   let pageContent = null;
+  let pageName = null;
   if (!title.startsWith("nsDoc")) {
-    pageContent = AllPages[lang + "/" + title];
+    pageName = lang + "/" + title;
+    pageContent = AllPages[pageName];
     if (pageContent == null) {
-      pageContent = AllPages[fallbackLang + "/" + title];
+      pageName = fallbackLang + "/" + title;
+      pageContent = AllPages[pageName];
     }
   }
   if (pageContent == null) {
+    pageName = title;
     pageContent = AllPages[title];
   }
   if (pageContent == null) {
     const errorMessage = `Cannot find ${title} page.`;
     console.error(errorMessage);
-    return errorMessage;
+    return { pageName: null, pageContent: errorMessage };
   }
-  return pageContent;
+  return { pageName, pageContent };
+};
+
+export const getPage = (title: string): string => {
+  return resolvePage(title).pageContent;
 };
 
 export const DocumentationPopUpEvents = new EventEmitter<[string | undefined]>();
