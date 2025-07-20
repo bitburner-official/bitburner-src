@@ -3,7 +3,7 @@ import { clampNumber } from "../../utils/helpers/clampNumber";
 
 export const MaxDifficultyForInfiltration = 3.5;
 // This value is typically denoted "lambda," and is the instantaneous rate of decay.
-const DecayRate = -1e-5;
+const DecayRate = -2e-5;
 // This is the scalar for how much each floor completed affects the rewards for infiltration.
 const MarketDemandFactor = 1e-3;
 
