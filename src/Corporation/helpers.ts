@@ -50,10 +50,13 @@ export function costOfCreatingCorporation(restart: boolean): number {
   return 150e9;
 }
 
-export function calculateUpgradeCost(corporation: Corporation, upgrade: CorpUpgrade, amount: PositiveInteger): number {
-  const priceMult = upgrade.priceMult;
-  const level = corporation.upgrades[upgrade.name].level;
-  const baseCost = upgrade.basePrice * Math.pow(priceMult, level);
+export function calculateUpgradeCost(
+  basePrice: number,
+  priceMult: number,
+  fromLevel: number,
+  amount: PositiveInteger,
+): number {
+  const baseCost = basePrice * Math.pow(priceMult, fromLevel);
   const cost = (baseCost * (1 - Math.pow(priceMult, amount))) / (1 - priceMult);
   return cost;
 }

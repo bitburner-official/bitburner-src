@@ -9,12 +9,12 @@ export const isSpoiler = (title: string): boolean => title.includes("advanced/")
 
 export const A = (props: React.PropsWithChildren<{ href?: string }>): React.ReactElement => {
   const navigator = useNavigator();
-  const ref = props.href ?? "";
+  const href = props.href ?? "";
 
   const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    navigator.navigate(ref, event.ctrlKey);
+    navigator.navigate(href, event.ctrlKey);
   };
-  if (ref === externalUrlOfNsApiPage) {
+  if (href === externalUrlOfNsApiPage) {
     return (
       <Link
         onClick={(event) => {
@@ -31,7 +31,7 @@ export const A = (props: React.PropsWithChildren<{ href?: string }>): React.Reac
     );
   }
 
-  if (isSpoiler(ref))
+  if (isSpoiler(href)) {
     return (
       <span
         style={{
@@ -42,6 +42,7 @@ export const A = (props: React.PropsWithChildren<{ href?: string }>): React.Reac
         <CorruptibleText content={String(props.children)} spoiler={true} />
       </span>
     );
+  }
   return (
     <Link onClick={onClick} component="button" variant="body1" fontSize="inherit">
       {props.children}

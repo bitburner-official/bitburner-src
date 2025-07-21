@@ -195,17 +195,6 @@ export class Division {
       this.popularity -= marketCycles * 0.0001;
       this.popularity = Math.max(0, this.popularity);
 
-      // Process Dreamsense gains
-      const popularityGain = corporation.getDreamSenseGain(),
-        awarenessGain = popularityGain * 4;
-      if (popularityGain > 0) {
-        const awareness = this.awareness + awarenessGain * marketCycles;
-        this.awareness = Math.min(awareness, Number.MAX_VALUE);
-
-        const popularity = this.popularity + popularityGain * marketCycles;
-        this.popularity = Math.min(popularity, Number.MAX_VALUE);
-      }
-
       return;
     }
 

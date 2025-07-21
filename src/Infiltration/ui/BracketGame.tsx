@@ -21,12 +21,12 @@ const difficulties: {
   Trivial: Difficulty;
   Normal: Difficulty;
   Hard: Difficulty;
-  Impossible: Difficulty;
+  Brutal: Difficulty;
 } = {
   Trivial: { timer: 8000, min: 2, max: 3 },
   Normal: { timer: 6000, min: 4, max: 5 },
   Hard: { timer: 4000, min: 4, max: 6 },
-  Impossible: { timer: 2500, min: 7, max: 7 },
+  Brutal: { timer: 2500, min: 7, max: 7 },
 };
 
 function generateLeftSide(difficulty: Difficulty): string {

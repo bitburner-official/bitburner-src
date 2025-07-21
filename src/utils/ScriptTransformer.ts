@@ -74,7 +74,7 @@ export function parseAST(scriptName: string, hostname: string, code: string, fil
     if (fileType === FileType.JS) {
       ast = acorn.parse(code, { sourceType: "module", ecmaVersion: "latest" });
     } else {
-      const plugins = [];
+      const plugins: ("jsx" | "typescript")[] = [];
       if (fileTypeFeature.isReact) {
         plugins.push("jsx");
       }
@@ -83,7 +83,6 @@ export function parseAST(scriptName: string, hostname: string, code: string, fil
       }
       ast = babel.packages.parser.parse(code, {
         sourceType: "module",
-        ecmaVersion: "latest",
         /**
          * The usage of the "estree" plugin is mandatory. We use acorn-walk to walk the AST. acorn-walk only supports the
          * ESTree AST format, but babel-parser uses the Babel AST format by default.

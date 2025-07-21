@@ -9,14 +9,14 @@ Check if you have a one-time unlockable upgrade.
 **Signature:**
 
 ```typescript
-hasUnlock(upgradeName: string): boolean;
+hasUnlock(upgradeName: CorpUnlockName): boolean;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  upgradeName | string | Name of the upgrade |
+|  upgradeName | [CorpUnlockName](./bitburner.corpunlockname.md) | Name of the upgrade |
 
 **Returns:**
 

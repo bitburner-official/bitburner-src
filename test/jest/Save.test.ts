@@ -5,6 +5,7 @@ import { loadAllRunningScripts } from "../../src/NetscriptWorker";
 import { Settings } from "../../src/Settings/Settings";
 import { Player, setPlayer } from "../../src/Player";
 import { PlayerObject } from "../../src/PersonObjects/Player/PlayerObject";
+import { UIEventEmitter, UIEventType } from "../../src/ui/UIEventEmitter";
 jest.useFakeTimers();
 
 // Direct tests of loading and saving.
@@ -146,6 +147,7 @@ function loadStandardServers() {
   }
 }`); // Fix confused highlighting `
   loadAllRunningScripts();
+  UIEventEmitter.emit(UIEventType.MainUILoaded);
 }
 
 test("load/saveAllServers", () => {

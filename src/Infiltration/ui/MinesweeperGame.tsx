@@ -24,12 +24,12 @@ const difficulties: {
   Trivial: Difficulty;
   Normal: Difficulty;
   Hard: Difficulty;
-  Impossible: Difficulty;
+  Brutal: Difficulty;
 } = {
   Trivial: { timer: 15000, width: 3, height: 3, mines: 4 },
   Normal: { timer: 15000, width: 4, height: 4, mines: 7 },
   Hard: { timer: 15000, width: 5, height: 5, mines: 11 },
-  Impossible: { timer: 15000, width: 6, height: 6, mines: 15 },
+  Brutal: { timer: 15000, width: 6, height: 6, mines: 15 },
 };
 
 export function MinesweeperGame(props: IMinigameProps): React.ReactElement {

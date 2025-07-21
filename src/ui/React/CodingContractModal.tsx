@@ -66,7 +66,7 @@ export function CodingContractModal(): React.ReactElement {
   const description = [];
   for (const [i, value] of contractType.desc(contract.c.getData()).split("\n").entries()) {
     description.push(
-      <span key={i}>
+      <span key={i} style={{ whiteSpace: "pre-wrap" }}>
         {value} <br />
       </span>,
     );

@@ -43,6 +43,7 @@ interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
   sx?: SxProps<Theme>;
+  wrapperRef?: React.RefObject<HTMLDivElement>;
   wrapperStyles?: CSSProperties;
   removeFocus?: boolean;
   // If it's true, the player can dismiss the modal by pressing the Esc button or clicking on the backdrop.
@@ -54,6 +55,7 @@ export const Modal = ({
   onClose,
   children,
   sx,
+  wrapperRef,
   wrapperStyles,
   removeFocus = true,
   canBeDismissedEasily = true,
@@ -80,10 +82,12 @@ export const Modal = ({
       }}
       closeAfterTransition
       className={classes.modal}
+      style={{ zIndex: 20000 }}
       sx={sx}
     >
       <Fade in={open}>
         <div
+          ref={wrapperRef}
           className={classes.paper}
           style={wrapperStyles}
           //@ts-expect-error inert is not supported by react types yet, this is a workaround until then. https://github.com/facebook/react/pull/24730

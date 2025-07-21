@@ -7,7 +7,7 @@ export const shortestPathInAGrid: Pick<CodingContractTypes, CodingContractName.S
     desc: (data: number[][]): string => {
       return [
         "You are located in the top-left corner of the following grid:\n\n",
-        `&nbsp;&nbsp;[${data.map((line) => `[${line}]`).join(",\n&nbsp;&nbsp;&nbsp;")}]\n\n`,
+        `  [${data.map((line) => `[${line}]`).join(",\n   ")}]\n\n`,
         "You are trying to find the shortest path to the bottom-right corner of the grid,",
         "but there are obstacles on the grid that you cannot move onto.",
         "These obstacles are denoted by '1', while empty spaces are denoted by 0.\n\n",
@@ -17,12 +17,12 @@ export const shortestPathInAGrid: Pick<CodingContractTypes, CodingContractName.S
         "If there is no path, the answer should be an empty string.\n",
         "NOTE: The data returned for this contract is an 2D array of numbers representing the grid.\n\n",
         "Examples:\n\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;[[0,1,0,0,0],\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[0,0,0,1,0]]\n",
+        "    [[0,1,0,0,0],\n",
+        "     [0,0,0,1,0]]\n",
         "\n",
         "Answer: 'DRRURRD'\n\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;[[0,1],\n",
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1,0]]\n",
+        "    [[0,1],\n",
+        "     [1,0]]\n",
         "\n",
         "Answer: ''",
       ].join(" ");

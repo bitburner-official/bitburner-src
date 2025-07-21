@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import { Player } from "@player";
 import { Money } from "../ui/React/Money";
+import { BetInput } from "./BetInput";
+import { hasEnoughMoney, reachedLimit, win } from "./Game";
 import { WHRNG } from "./RNG";
-import { win, reachedLimit } from "./Game";
 import { trusted } from "./utils";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 
 // statically shuffled array of symbols.
 const symbols = [
@@ -134,14 +134,14 @@ const payLines = [
   ],
 ];
 
-const minPlay = 0;
-const maxPlay = 1e6;
+const initialBet = 1000;
+const maxBet = 1e6;
 
 export function SlotMachine(): React.ReactElement {
   const [rng] = useState(new WHRNG(Player.totalPlaytime));
   const [index, setIndex] = useState<number[]>([0, 0, 0, 0, 0]);
   const [locks, setLocks] = useState<number[]>([0, 0, 0, 0, 0]);
-  const [investment, setInvestment] = useState(1000);
+  const [investment, setInvestment] = useState(initialBet);
   const [canPlay, setCanPlay] = useState(true);
   const [status, setStatus] = useState<string | JSX.Element>("waiting");
 
@@ -187,7 +187,9 @@ export function SlotMachine(): React.ReactElement {
   }
 
   function play(): void {
-    if (reachedLimit()) return;
+    if (reachedLimit() || !hasEnoughMoney(investment)) {
+      return;
+    }
     setStatus("playing");
     win(-investment);
     if (!canPlay) return;
@@ -240,26 +242,11 @@ export function SlotMachine(): React.ReactElement {
       </>,
     );
     setCanPlay(true);
-    if (reachedLimit()) return;
   }
 
   function unlock(): void {
     setLocks([-1, -1, -1, -1, -1]);
     setCanPlay(false);
-  }
-
-  function updateInvestment(e: React.ChangeEvent<HTMLInputElement>): void {
-    let investment: number = parseInt(e.currentTarget.value);
-    if (isNaN(investment)) {
-      investment = minPlay;
-    }
-    if (investment > maxPlay) {
-      investment = maxPlay;
-    }
-    if (investment < minPlay) {
-      investment = minPlay;
-    }
-    setInvestment(investment);
   }
 
   const t = getTable(index, symbols);
@@ -273,16 +260,19 @@ export function SlotMachine(): React.ReactElement {
 <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>| |   |   |   |   |   | |</Typography>
 <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>| | {symbols[(index[0]+1)%symbols.length]} | {symbols[(index[1]+1)%symbols.length]} | {symbols[(index[2]+1)%symbols.length]} | {symbols[(index[3]+1)%symbols.length]} | {symbols[(index[4]+1)%symbols.length]} | |</Typography>
 <Typography sx={{ lineHeight: "1em", whiteSpace: "pre" }}>+———————————————————————+</Typography>
-        <TextField
-          type="number"
-          onChange={updateInvestment}
-          placeholder={"Amount to play"}
-          disabled={!canPlay}
-          InputProps={{endAdornment:(<Button
-            onClick={trusted(play)}
-            disabled={!canPlay}
-          >Spin!</Button>)}}
+        <BetInput
+          initialBet={initialBet}
+          maxBet={maxBet}
+          gameInProgress={!canPlay}
+          setBet={(bet) => {
+            setInvestment(bet);
+          }}
         />
+        <div>
+          <Button onClick={trusted(play)} disabled={!canPlay}>
+            Spin!
+          </Button>
+        </div>
 
         <Typography variant="h4">{status}</Typography>
         <Typography>Pay lines</Typography>

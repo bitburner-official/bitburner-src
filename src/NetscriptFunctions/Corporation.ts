@@ -90,7 +90,13 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
 
   function getUpgradeLevelCost(upgradeName: CorpUpgradeName): number {
     const corporation = getCorporation();
-    const cost = calculateUpgradeCost(corporation, CorpUpgrades[upgradeName], 1 as PositiveInteger);
+    const upgrade = CorpUpgrades[upgradeName];
+    const cost = calculateUpgradeCost(
+      upgrade.basePrice,
+      upgrade.priceMult,
+      corporation.upgrades[upgradeName].level,
+      1 as PositiveInteger,
+    );
     return cost;
   }
 
@@ -197,7 +203,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
           throw helpers.errorMessage(ctx, "You must provide a positive number");
         }
         const warehouse = getWarehouse(divisionName, cityName);
-        return upgradeWarehouseCost(warehouse, amt);
+        return upgradeWarehouseCost(warehouse.level, amt);
       },
     hasWarehouse: (ctx) => (_divisionName, _cityName) => {
       checkAccess(ctx, CorpUnlockName.WarehouseAPI);
@@ -720,7 +726,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
         issueNewSharesCooldown: corporation.issueNewSharesCooldown,
         sharePrice: corporation.sharePrice,
         dividendRate: corporation.dividendRate,
-        dividendTax: corporation.dividendTax,
+        tributeModifier: corporation.tributeModifier,
         dividendEarnings: corporation.getCycleDividends() / corpConstants.secondsPerMarketCycle,
         nextState: corporation.state.nextName,
         prevState: corporation.state.prevName,

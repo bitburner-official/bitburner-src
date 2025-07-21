@@ -16,9 +16,9 @@ export const breakingChanges300: VersionBreakingChange = {
       brokenAPIs: [{ name: "ns.nFormat" }],
       info:
         "ns.nFormat() was removed.\n" +
-        "Use ns.formatNumber, ns.formatRam, ns.formatPercent, or JS built-in objects/functions (e.g., Intl.NumberFormat, " +
+        "Use ns.format.number, ns.format.ram, ns.format.percent, or JS built-in objects/functions (e.g., Intl.NumberFormat, " +
         "Intl.PluralRules, Intl.Locale) instead.",
-      showPopUp: true,
+      showWarning: true,
     },
     {
       brokenAPIs: [
@@ -69,7 +69,7 @@ export const breakingChanges300: VersionBreakingChange = {
         'It has been automatically replaced with "ns.getResetInfo().currentNode"\n\n' +
         "ns.corporation.getCorporation().state was removed.\n" +
         'It has been automatically replaced with "ns.corporation.getCorporation().nextState"',
-      showPopUp: false,
+      showWarning: false,
     },
     {
       brokenAPIs: [
@@ -82,7 +82,7 @@ export const breakingChanges300: VersionBreakingChange = {
         "The formatting functions have been moved to their own interface, ns.format.\n" +
         "Each function has been replaced with their corresponding interface variant.\n" +
         "Additionally, the naming of ns.tFormat has been changed to ns.format.time.",
-      showPopUp: false,
+      showWarning: false,
     },
     {
       brokenAPIs: [
@@ -103,7 +103,7 @@ export const breakingChanges300: VersionBreakingChange = {
         'It has been automatically replaced with "ns.ui.closeTail()".\n\n' +
         "ns.setTitle() was removed.\n" +
         'It has been automatically replaced with "ns.ui.setTailTitle()".',
-      showPopUp: false,
+      showWarning: false,
     },
     {
       brokenAPIs: [
@@ -118,7 +118,7 @@ export const breakingChanges300: VersionBreakingChange = {
       info:
         "ns.corporation.setAutoJobAssignment() was removed.\n" +
         'It has been automatically replaced with "ns.corporation.setJobAssignment()".',
-      showPopUp: false,
+      showWarning: false,
     },
     {
       brokenAPIs: [],
@@ -135,7 +135,7 @@ export const breakingChanges300: VersionBreakingChange = {
         "- Stock position: PositionType\n" +
         "- Stock order: OrderType\n" +
         "You can access these values via ns.enums and Bladeburner APIs.",
-      showPopUp: true,
+      showWarning: true,
       doNotSkip: true,
     },
     {
@@ -150,7 +150,7 @@ export const breakingChanges300: VersionBreakingChange = {
       info:
         `ns.nuke, ns.brutessh, ns.ftpcrack, ns.relaysmtp, ns.httpworm, and ns.sqlinject now do not throw an error when you do not have the required .exe file or enough opened ports.\n` +
         "This should not be a problem with most scripts. However, if you were catching errors and branching on the result of success/failure, you will need to use the return value instead.",
-      showPopUp: true,
+      showWarning: true,
     },
     {
       brokenAPIs: [
@@ -186,7 +186,7 @@ export const breakingChanges300: VersionBreakingChange = {
         'It has been automatically replaced with "ns.stock.hasTixApiAccess()".\n\n' +
         "ns.stock.has4SDataTIXAPI() was removed.\n" +
         'It has been automatically replaced with "ns.stock.has4SDataTixApi()".',
-      showPopUp: false,
+      showWarning: false,
     },
     {
       brokenAPIs: [
@@ -198,7 +198,48 @@ export const breakingChanges300: VersionBreakingChange = {
       info:
         "ns.getBitNodeMultipliers().RepToDonateToFaction was removed.\n" +
         'It has been automatically replaced with "ns.getBitNodeMultipliers().FavorToDonateToFaction".',
-      showPopUp: false,
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [{ name: "getActionRepGain" }],
+      info:
+        "ns.bladeburner.getActionRepGain returned the average rank gain instead of the average reputation gain.\n" +
+        "This bug was fixed. Please check your code to see if it still works as you expect.",
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [
+        {
+          name: "ns.enums.FactionName.BachmanAssociates",
+          migration: { searchValue: "BachmanAssociates", replaceValue: "BachmanAndAssociates" },
+        },
+      ],
+      info:
+        'The key of "Bachman & Associates" faction in the FactionName enum was renamed.\n' +
+        '"ns.enums.FactionName.BachmanAssociates" has been automatically replaced with "ns.enums.FactionName.BachmanAndAssociates".',
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [{ name: "DreamSense" }],
+      info: 'The "DreamSense" upgrade was removed. The cost of that upgrade was refunded.',
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [{ name: "dividendTax", migration: { searchValue: "dividendTax", replaceValue: "tributeModifier" } }],
+      info:
+        "ns.corporation.getCorporation().dividendTax was removed.\n" +
+        'It has been automatically replaced with "ns.corporation.getCorporation().tributeModifier".',
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [{ name: "Spring Water" }],
+      info: 'The "Spring Water" industry was removed. The cost of all Spring Water divisions was refunded.',
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [{ name: "VeChain" }],
+      info: 'The "VeChain" upgrade was removed. The cost of that upgrade was refunded.',
+      showWarning: false,
     },
   ],
 };

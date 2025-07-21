@@ -5,9 +5,9 @@ import { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { CodingContractName } from "@enums";
 import { generateDummyContract } from "../CodingContract/ContractGenerator";
-import { isCodingContractName } from "../CodingContract/ContractTypes";
 import { type BaseServer } from "../Server/BaseServer";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
+import { getEnumHelper } from "../utils/EnumHelper";
 
 export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
   const getCodingContract = function (ctx: NetscriptContext, hostname: string, filename: string): CodingContract {
@@ -92,7 +92,6 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       const filename = helpers.string(ctx, "filename", _filename);
       const host = _host ? helpers.string(ctx, "host", _host) : ctx.workerScript.hostname;
       const contract = getCodingContract(ctx, host, filename);
-
       return structuredClone(contract.getData());
     },
     getContract: (ctx) => (_filename, _host?) => {
@@ -109,6 +108,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
           return attemptContract(ctx, server, contract, answer);
         },
         description: contract.getDescription(),
+        difficulty: contract.getDifficulty(),
         numTriesRemaining: () => {
           helpers.checkEnvFlags(ctx);
           return contract.getMaxNumTries() - contract.tries;
@@ -128,9 +128,7 @@ export function NetscriptCodingContract(): InternalAPI<ICodingContract> {
       return contract.getMaxNumTries() - contract.tries;
     },
     createDummyContract: (ctx) => (_type) => {
-      const type = helpers.string(ctx, "type", _type);
-      if (!isCodingContractName(type))
-        return helpers.errorMessage(ctx, `The given type is not a valid contract type. Got '${type}'`);
+      const type = getEnumHelper("CodingContractName").nsGetMember(ctx, _type);
       return generateDummyContract(type);
     },
     getContractTypes: () => () => Object.values(CodingContractName),

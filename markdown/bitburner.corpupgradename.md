@@ -11,7 +11,6 @@
 type CorpUpgradeName =
   | "Smart Factories"
   | "Smart Storage"
-  | "DreamSense"
   | "Wilson Analytics"
   | "Nuoptimal Nootropic Injector Implants"
   | "Speech Processor Implants"
