@@ -1496,6 +1496,7 @@ import nsDoc_bitburner_workstats_money_md from "../../markdown/bitburner.worksta
 import nsDoc_bitburner_workstats_reputation_md from "../../markdown/bitburner.workstats.reputation.md?raw";
 import nsDoc_bitburner_workstats_strexp_md from "../../markdown/bitburner.workstats.strexp.md?raw";
 import nsDoc_index_md from "../../markdown/index.md?raw";
+import docImages_remote_file_api_sequence_diagram_svg from "./images/remote-file-api-sequence-diagram.svg";
 
 export const AllPages: Record<string, string> = {};
 AllPages["en/advanced/bitnode_recommendation_comprehensive_guide.md"] = file0;
@@ -3001,3 +3002,4 @@ export const nsApiPages = Object.keys(AllPages)
   .map((page) => page.replace("nsDoc/", ""));
 
 export const DocImages: Record<string, string> = {};
+DocImages["remote-file-api-sequence-diagram.svg"] = docImages_remote_file_api_sequence_diagram_svg;
