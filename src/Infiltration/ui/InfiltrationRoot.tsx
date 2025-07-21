@@ -9,10 +9,11 @@ import { dialogBoxCreate } from "../../ui/React/DialogBox";
 
 interface IProps {
   location: Location;
+  autoStart?: boolean;
 }
 
 export function InfiltrationRoot(props: IProps): React.ReactElement {
-  const [start, setStart] = useState(false);
+  const [start, setStart] = useState(Boolean(props.autoStart));
 
   if (!props.location.infiltrationData) {
     /**

@@ -10,6 +10,7 @@ import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
 import { isPositiveInteger } from "../../types";
 import { randomInRange } from "../../utils/helpers/randomInRange";
+import { setGetState } from "../State";
 
 interface Difficulty {
   [key: string]: number;
@@ -89,6 +90,10 @@ export function WireCuttingGame({ onSuccess, onFailure, difficulty }: IMinigameP
     setWiresToCut(gameWiresToCut);
     setHasAugment(Player.hasAugmentation(AugmentationName.KnowledgeOfApollo, true));
   }, [difficulty]);
+
+  setGetState(() => {
+    return {};
+  });
 
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();

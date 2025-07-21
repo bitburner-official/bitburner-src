@@ -13,7 +13,7 @@ export const Page = { ...SimplePage, ...ComplexPage };
 export type PageContext<T extends Page> = T extends ComplexPage.BitVerse
   ? { flume: boolean; quick: boolean }
   : T extends ComplexPage.Infiltration
-  ? { location: Location }
+  ? { location: Location; autoStart?: boolean }
   : T extends ComplexPage.Faction
   ? { faction: Faction }
   : T extends ComplexPage.FactionAugmentations

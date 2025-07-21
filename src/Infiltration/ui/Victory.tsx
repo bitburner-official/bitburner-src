@@ -19,6 +19,7 @@ import {
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { isFactionWork } from "../../Work/FactionWork";
 import { decreaseMarketDemandMultiplier } from "../formulas/game";
+import { setGetState } from "../State";
 
 interface IProps {
   startingSecurityLevel: number;
@@ -69,6 +70,15 @@ export function Victory(props: IProps): React.ReactElement {
   );
 
   const isMemberOfInfiltrators = Player.factions.includes(FactionName.ShadowsOfAnarchy);
+
+  setGetState(() => {
+    return {
+      stage: "victory",
+      possibleMoneyGain: moneyGain,
+      possibleRepGain: repGain,
+      SoARepGain: infiltrationRepGain,
+    };
+  });
 
   function sell(): void {
     Player.gainMoney(moneyGain, "infiltration");

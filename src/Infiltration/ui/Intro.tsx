@@ -14,6 +14,7 @@ import { Factions } from "../../Faction/Factions";
 import { FactionName } from "../../Faction/Enums";
 import { calculateMarketDemandMultiplier, calculateReward, MaxDifficultyForInfiltration } from "../formulas/game";
 import { useRerender } from "../../ui/React/hooks";
+import { setGetState } from "../State";
 
 interface IProps {
   location: Location;
@@ -99,6 +100,9 @@ export function Intro({
       </Typography>
     );
   }
+  setGetState(() => {
+    return { stage: "intro" };
+  });
 
   return (
     <Container sx={{ alignItems: "center" }}>

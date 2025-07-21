@@ -5,7 +5,7 @@ import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver
 import { CodingContractEvent } from "../ui/React/CodingContractModal";
 import { ContractFilePath, resolveContractFilePath } from "../Paths/ContractFilePath";
 import { assertObject } from "../utils/TypeAssertion";
-import { Result } from "../types";
+import { Result } from "@nsdefs";
 
 // Numeric enum
 /** Enum representing the different types of rewards a Coding Contract can give */

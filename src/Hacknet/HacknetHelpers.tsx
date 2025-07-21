@@ -25,7 +25,7 @@ import { Companies } from "../Company/Companies";
 import { isMember } from "../utils/EnumHelper";
 import { canAccessBitNodeFeature } from "../BitNode/BitNodeUtils";
 import { checkServerOwnership, ServerOwnershipType } from "../Server/ServerHelpers";
-import { Result } from "../types";
+import type { Result } from "@nsdefs";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { HashUpgradeEnum } from "./Enums";
 
