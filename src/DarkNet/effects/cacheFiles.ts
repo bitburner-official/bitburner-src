@@ -27,13 +27,14 @@ export const addCacheToServer = (server: BaseServer, filename?: string) => {
 export const getRewardFromCache = (server: BaseServer, suppressToast = false): string => {
   const darknetData = getDarknetData(server);
   const difficulty = darknetData?.difficulty ?? 1;
-  Player.karma -= (difficulty + 1) * 2; // TODO: adjust karma balance
+  const karmaLoss = (difficulty + 1) * 2; // TODO: adjust karma balance
+  Player.karma -= karmaLoss;
   if (isLabyrinthServer(server.hostname)) {
     return getLabReward(server, suppressToast);
   }
   const rewards = [getMoneyReward, getXpReward, getNextPortOpener, getCCTReward];
   const reward = rewards[Math.floor(Math.random() * rewards.length)];
-  return reward(difficulty, suppressToast);
+  return reward(difficulty, karmaLoss, suppressToast);
 };
 
 export const getCCTReward = () => {
@@ -42,7 +43,7 @@ export const getCCTReward = () => {
   return `New coding contracts are now available on the network!`;
 };
 
-export const getMoneyReward = (difficulty: number) => {
+export const getMoneyReward = (difficulty: number, karmaLoss: number) => {
   const sf15_3Factor = Player.sourceFileLvl(15) > 3 ? 1.5 : 1;
   const reward =
     1.2 ** difficulty *
@@ -52,17 +53,17 @@ export const getMoneyReward = (difficulty: number) => {
     Player.mults.crime_money *
     currentNodeMults.DarknetMoneyMultiplier; // TODO: adjust balance
   Player.gainMoney(reward, "darknet");
-  return `You have discovered a cache with ${formatMoney(reward)}.`;
+  return `You have discovered a cache with ${formatMoney(reward)}. Gained -${karmaLoss} karma.`;
 };
 
-export const getXpReward = (difficulty: number) => {
+export const getXpReward = (difficulty: number, karmaLoss: number) => {
   const sf15_3Factor = Player.sourceFileLvl(15) > 3 ? 1.5 : 1;
   const reward = 1.2 ** difficulty * 500 * sf15_3Factor * Player.mults.charisma_exp; // TODO: adjust balance
   Player.gainCharismaExp(reward);
-  return `You have discovered a cache with ${formatNumber(reward, 0)} cha XP.`;
+  return `You have discovered a cache with ${formatNumber(reward, 0)} cha XP. Gained -${karmaLoss} karma.`;
 };
 
-export const getNextPortOpener = (difficulty: number, suppressToast = false) => {
+export const getNextPortOpener = (difficulty: number, karmaLoss: number, suppressToast = false) => {
   const currentPlayerWork = (Player.currentWork as CreateProgramWork)?.programName;
   const programs = [
     CompletedProgramName.serverProfiler,
@@ -77,10 +78,12 @@ export const getNextPortOpener = (difficulty: number, suppressToast = false) => 
     CompletedProgramName.formulas,
   ];
 
+  const karmaLossMessage = ` Gained -${karmaLoss} karma.`;
+
   for (const program of programs) {
     if (!Player.hasProgram(program) && currentPlayerWork !== program) {
       Player.getHomeComputer().pushProgram(program);
-      const result = `You have discovered the program ${program}`;
+      const result = `You have discovered the program ${program}.${karmaLossMessage}`;
       !suppressToast && SnackbarEvents.emit(`You have discovered the program ${program}!`, ToastVariant.SUCCESS, 4000);
       return result;
     }
@@ -90,22 +93,22 @@ export const getNextPortOpener = (difficulty: number, suppressToast = false) => 
     initStockMarket();
     const result = `You have discovered a stolen WSE Account!`;
     !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
-    return result;
+    return result + karmaLossMessage;
   }
   if (!Player.hasTixApiAccess) {
     Player.hasTixApiAccess = true;
     const result = `You have discovered a stolen TIX API access point!`;
     !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
-    return result;
+    return result + karmaLossMessage;
   }
   if (!Player.has4SData && Player.bitNodeN !== 8) {
     Player.has4SData = true;
     const result = `You have discovered a cache of stolen 4S Data!`;
     !suppressToast && SnackbarEvents.emit(result, ToastVariant.SUCCESS, 4000);
-    return result;
+    return result + karmaLossMessage;
   }
 
-  return getXpReward(difficulty);
+  return getXpReward(difficulty, karmaLoss);
 };
 
 const getLabReward = (server: BaseServer, suppressToast = false) => {
