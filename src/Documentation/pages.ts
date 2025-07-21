@@ -63,6 +63,7 @@ import file60 from "./doc/en/programming/hackingalgorithms.md?raw";
 import file61 from "./doc/en/programming/learn.md?raw";
 import file62 from "./doc/en/programming/react.md?raw";
 import file63 from "./doc/en/programming/remote_api.md?raw";
+
 import nsDoc_bitburner__valueof_md from "../../markdown/bitburner._valueof.md?raw";
 import nsDoc_bitburner_activefragment_highestcharge_md from "../../markdown/bitburner.activefragment.highestcharge.md?raw";
 import nsDoc_bitburner_activefragment_id_md from "../../markdown/bitburner.activefragment.id.md?raw";
@@ -1496,6 +1497,7 @@ import nsDoc_bitburner_workstats_money_md from "../../markdown/bitburner.worksta
 import nsDoc_bitburner_workstats_reputation_md from "../../markdown/bitburner.workstats.reputation.md?raw";
 import nsDoc_bitburner_workstats_strexp_md from "../../markdown/bitburner.workstats.strexp.md?raw";
 import nsDoc_index_md from "../../markdown/index.md?raw";
+
 import docImages_remote_file_api_sequence_diagram_svg from "./images/remote-file-api-sequence-diagram.svg";
 
 export const AllPages: Record<string, string> = {};
@@ -1563,6 +1565,7 @@ AllPages["en/programming/hackingalgorithms.md"] = file60;
 AllPages["en/programming/learn.md"] = file61;
 AllPages["en/programming/react.md"] = file62;
 AllPages["en/programming/remote_api.md"] = file63;
+
 AllPages["nsDoc/bitburner._valueof.md"] = nsDoc_bitburner__valueof_md;
 AllPages["nsDoc/bitburner.activefragment.highestcharge.md"] = nsDoc_bitburner_activefragment_highestcharge_md;
 AllPages["nsDoc/bitburner.activefragment.id.md"] = nsDoc_bitburner_activefragment_id_md;
