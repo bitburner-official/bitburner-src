@@ -32,6 +32,9 @@ import { Reviver } from "./utils/GenericReviver";
 import { populateDarknet } from "./DarkNet/controllers/NetworkGenerator";
 import { hasDarknetAccess } from "./DarkNet/effects/effects";
 import { getDarkNetSave, loadDarkNet } from "./DarkNet/effects/SaveLoad";
+import { giveExportBonus } from "./ExportBonus";
+import { loadInfiltrations } from "./Infiltration/SaveLoadInfiltration";
+import { InfiltrationState } from "./Infiltration/formulas/game";
 
 /* SaveObject.js
  *  Defines the object used to save/load games
@@ -86,6 +89,7 @@ export type BitburnerSaveObjectType = {
   StaneksGiftSave: string;
   GoSave: unknown; // "loadGo" function can process unknown data
   DarknetSave: unknown;
+  InfiltrationsSave: unknown;
 };
 
 type ParsedSaveData = {
@@ -175,6 +179,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
   StaneksGiftSave = "";
   GoSave = "";
   DarknetSave = "";
+  InfiltrationsSave = "";
 
   async getSaveData(forceExcludeRunningScripts = false): Promise<SaveData> {
     this.PlayerSave = JSON.stringify(Player);
@@ -196,6 +201,7 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
     this.StaneksGiftSave = JSON.stringify(staneksGift);
     this.GoSave = JSON.stringify(getGoSave());
     this.DarknetSave = JSON.stringify(getDarkNetSave());
+    this.InfiltrationsSave = JSON.stringify(InfiltrationState);
 
     if (Player.gang) this.AllGangsSave = JSON.stringify(AllGangs);
 
@@ -245,6 +251,8 @@ class BitburnerSaveObject implements BitburnerSaveObjectType {
   }
 
   async exportGame(): Promise<void> {
+    // Give the export bonus before exporting the save data
+    giveExportBonus();
     let saveData;
     try {
       saveData = await this.getSaveData();
@@ -433,6 +441,7 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
   loadFactions(saveObj.FactionsSave, Player);
   loadGo(saveObj.GoSave);
   loadDarkNet(saveObj.DarknetSave);
+  loadInfiltrations(saveObj.InfiltrationsSave);
 
   try {
     loadAliases(saveObj.AliasesSave);

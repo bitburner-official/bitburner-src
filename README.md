@@ -19,7 +19,7 @@ There are 2 types of documentation:
 - NS API documentation: It's generated from the [TypeScript definitions](./src/ScriptEditor/NetscriptDefinitions.d.ts). You can read it at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.md.
 
 Anyone is welcome to contribute to the documentation by editing the [source
-files](/src/Documentation/doc) and then making a pull request with your contributions.
+files](/src/Documentation/doc/en) and then making a pull request with your contributions.
 For further guidance, please refer to the "As A Documenter" section of
 [CONTRIBUTING](./CONTRIBUTING.md#as-a-documenter).
 

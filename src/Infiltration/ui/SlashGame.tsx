@@ -17,12 +17,12 @@ const difficulties: {
   Trivial: Difficulty;
   Normal: Difficulty;
   Hard: Difficulty;
-  Impossible: Difficulty;
+  Brutal: Difficulty;
 } = {
   Trivial: { window: 800 },
   Normal: { window: 500 },
   Hard: { window: 350 },
-  Impossible: { window: 250 },
+  Brutal: { window: 250 },
 };
 
 export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps): React.ReactElement {

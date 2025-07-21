@@ -22,7 +22,7 @@ export const V2Modal = (): React.ReactElement => {
         You should also take a look at{" "}
         <a
           target="_"
-          href="https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/migrations/v2.md"
+          href="https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/en/migrations/v2.md"
         >
           {" "}
           the migration guide
@@ -30,7 +30,7 @@ export const V2Modal = (): React.ReactElement => {
         as well as{" "}
         <a
           target="_"
-          href="https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/changelog.md"
+          href="https://github.com/bitburner-official/bitburner-src/blob/stable/src/Documentation/doc/en/changelog.md"
         >
           the changelog
         </a>

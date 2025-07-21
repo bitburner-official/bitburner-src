@@ -224,7 +224,7 @@ the following rules:
 ## As a Documenter
 
 To contribute to and view your changes to the BitBurner documentation in-game, you will
-need to edit the files in [this folder](https://github.com/bitburner-official/bitburner-src/tree/dev/src/Documentation/doc)
+need to edit the files in [this folder](https://github.com/bitburner-official/bitburner-src/tree/dev/src/Documentation/doc/en)
 
 To make change to the [in-game documentation](./markdown/bitburner.md), you will need to modify the [TypeScript definitions](./src/ScriptEditor/NetscriptDefinitions.d.ts), not the Markdown files.
 

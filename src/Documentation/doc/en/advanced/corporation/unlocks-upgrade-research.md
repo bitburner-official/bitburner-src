@@ -8,7 +8,6 @@
 | Smart Supply              | 25e9      | Enable "Smart Supply" feature. Only buy it if you don't implement your custom [Smart Supply](./smart-supply.md) script.                                    |
 | Market Research - Demand  | 5e9       | Grant access to [Demand](./demand-competition.md) data. You need it to implement a custom [Market-TA2](./optimal-selling-price-market-ta2.md) script.      |
 | Market Data - Competition | 5e9       | Grant access to [Competition](./demand-competition.md) data. You need it to implement a custom [Market-TA2](./optimal-selling-price-market-ta2.md) script. |
-| VeChain                   | 10e9      | View more statistics about Corporation. Useless.                                                                                                           |
 | Shady Accounting          | 500e12    | Reduce [DividendTax](./financial-statement.md) by 0.05                                                                                                     |
 | Government Partnership    | 2e15      | Reduce [DividendTax](./financial-statement.md) by 0.1                                                                                                      |
 

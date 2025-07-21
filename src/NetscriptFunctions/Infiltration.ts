@@ -40,6 +40,9 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
     }
     const startingSecurityLevel = location.infiltrationData.startingSecurityLevel;
     const difficulty = calculateDifficulty(startingSecurityLevel);
+    // This is supposed to calculate the constant reward, without market demand.
+    // We simulate this by using a time far in the future.
+    const timestamp = Date.now() + 1e20;
     const reward = calculateReward(startingSecurityLevel);
     const maxLevel = location.infiltrationData.maxClearanceLevel;
     return {
@@ -48,9 +51,14 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
         name: location.name,
       },
       reward: {
-        tradeRep: calculateTradeInformationRepReward(reward, maxLevel, startingSecurityLevel),
-        sellCash: calculateSellInformationCashReward(reward, maxLevel, startingSecurityLevel),
-        SoARep: calculateInfiltratorsRepReward(Factions[FactionName.ShadowsOfAnarchy], startingSecurityLevel),
+        tradeRep: calculateTradeInformationRepReward(reward, maxLevel, startingSecurityLevel, timestamp),
+        sellCash: calculateSellInformationCashReward(reward, maxLevel, startingSecurityLevel, timestamp),
+        SoARep: calculateInfiltratorsRepReward(
+          Factions[FactionName.ShadowsOfAnarchy],
+          maxLevel,
+          startingSecurityLevel,
+          timestamp,
+        ),
       },
       difficulty: difficulty,
       maxClearanceLevel: location.infiltrationData.maxClearanceLevel,

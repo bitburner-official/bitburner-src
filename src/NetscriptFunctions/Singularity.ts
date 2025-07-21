@@ -36,7 +36,7 @@ import { ClassWork } from "../Work/ClassWork";
 import { CreateProgramWork, isCreateProgramWork } from "../Work/CreateProgramWork";
 import { FactionWork } from "../Work/FactionWork";
 import { CompanyWork } from "../Work/CompanyWork";
-import { canGetBonus, onExport } from "../ExportBonus";
+import { canGetBonus } from "../ExportBonus";
 import { saveObject } from "../SaveObject";
 import { calculateCrimeWorkStats } from "../Work/Formulas";
 import { Engine } from "../engine";
@@ -1179,7 +1179,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     },
     exportGame: (ctx) => () => {
       helpers.checkSingularityAccess(ctx);
-      onExport();
       return saveObject.exportGame();
     },
     exportGameBonus: (ctx) => () => {

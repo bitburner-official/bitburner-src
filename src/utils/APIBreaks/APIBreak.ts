@@ -11,7 +11,9 @@ import { pluralize } from "../I18nUtils";
 
 // Temporary until fixing alerts manager to store alerts outside of react scope
 const dialogBoxCreate = (text: string) =>
-  setTimeout(() => dialogBoxCreateOriginal(text, { html: false, canBeDismissedEasily: false }), 2000);
+  setTimeout(() => {
+    dialogBoxCreateOriginal(text, { html: false, canBeDismissedEasily: false });
+  }, 2000);
 
 /** For a single server, map of script filepath to an array of line numbers where impacted functions were detected */
 type ScriptImpactMap = Map<ScriptFilePath, number[]>;
@@ -36,19 +38,19 @@ export interface APIBreakInfo {
   }[];
   /** Info that should be shown to the player, alongside the list of impacted scripts */
   info: string;
-  /** If broken APIs can be safely migrated, we can skip displaying the notification popup */
-  showPopUp: boolean;
+  /** If broken APIs can be safely migrated, we can skip displaying the warning */
+  showWarning: boolean;
   /**
    * With a new version with breaking changes, the "showAPIBreaks" function checks all breaking changes and does 2
    * things with changes that affect the player's scripts:
    * - Write info of changes to a log file.
-   * - Show popups per change.
+   * - Show a warning per change.
    * Note that we skip changes that do not affect the player's scripts. This is problematic with some breaking changes.
    *
    * With each breaking change in "brokenAPIs", we try to detect the affected code by using "name" or
    * "migration.searchValue". However, with some breaking changes, we cannot detect the affected code reliably via
    * "brokenAPIs". In this case, instead of skipping them, we always "process" that change (i.e., write info to the log
-   * file and optionally show a popup that notifies the player about this change).
+   * file and optionally show a warning that notifies the player about this change).
    */
   doNotSkip?: boolean;
 }
@@ -103,9 +105,9 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
     apiBreakInfo: APIBreakInfo;
     text: string;
     totalDetectedLines: number;
-    showPopUp: boolean;
+    showWarning: boolean;
   }[] = [];
-  let numberOfPopUps = 0;
+  let numberOfWarnings = 0;
   for (const breakInfo of apiBreakingChanges) {
     const scanResult = detectImpactAndMigrate(breakInfo.brokenAPIs);
     const impactMap = scanResult.impactMap;
@@ -138,10 +140,10 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
       apiBreakInfo: breakInfo,
       text: detailText,
       totalDetectedLines: scanResult.totalDetectedLines,
-      showPopUp: breakInfo.showPopUp,
+      showWarning: breakInfo.showWarning,
     });
-    if (breakInfo.showPopUp) {
-      ++numberOfPopUps;
+    if (breakInfo.showWarning) {
+      ++numberOfWarnings;
     }
   }
   if (!details.length) {
@@ -163,13 +165,15 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
       `A file with these details has also been saved on your home computer under filename ${textFileName}.` +
       (additionalText ? `\n\n${additionalText}` : ""),
   );
-  let popUpIndex = 0;
+  let warningIndex = 0;
   for (const detail of details) {
-    if (!detail.showPopUp) {
+    if (!detail.showWarning) {
       continue;
     }
-    dialogBoxCreate(
-      `API BREAK VERSION ${version} DETAILS ${popUpIndex + 1} of ${numberOfPopUps}\n\n${detail.apiBreakInfo.info}` +
+    Terminal.warn(
+      `\nAPI BREAK VERSION ${version} DETAILS ${warningIndex + 1} of ${numberOfWarnings}\n\n${
+        detail.apiBreakInfo.info
+      }` +
         /**
          * If we can detect the affected lines via apiBreakInfo.brokenAPIs, we will show the number of affected lines.
          * However, some breaking changes cannot be reliably detected, so we intentionally leave apiBreakInfo.brokenAPIs
@@ -180,6 +184,6 @@ export function showAPIBreaks(version: string, { additionalText, apiBreakingChan
           ? `\n\nWe found ${pluralize(detail.totalDetectedLines, "affected line")}.`
           : ""),
     );
-    ++popUpIndex;
+    ++warningIndex;
   }
 }

@@ -203,7 +203,7 @@ export function NetscriptCorporation(): InternalAPI<NSCorporation> {
           throw helpers.errorMessage(ctx, "You must provide a positive number");
         }
         const warehouse = getWarehouse(divisionName, cityName);
-        return upgradeWarehouseCost(warehouse, amt);
+        return upgradeWarehouseCost(warehouse.level, amt);
       },
     hasWarehouse: (ctx) => (_divisionName, _cityName) => {
       checkAccess(ctx, CorpUnlockName.WarehouseAPI);

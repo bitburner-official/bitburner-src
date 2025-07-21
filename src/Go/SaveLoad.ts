@@ -5,11 +5,12 @@ import { Truthy } from "lodash";
 import { GoColor, GoOpponent } from "@enums";
 import { Go } from "./Go";
 import { boardStateFromSimpleBoard, simpleBoardFromBoard } from "./boardAnalysis/boardAnalysis";
-import { assertLoadingType } from "../utils/TypeAssertion";
+import { assertLoadingType, isObject } from "../utils/TypeAssertion";
 import { getEnumHelper } from "../utils/EnumHelper";
 import { boardSizes } from "./Constants";
 import { isInteger, isNumber } from "../types";
 import { handleNextTurn, resetAI } from "./boardAnalysis/goAI";
+import { getMaxRep } from "./effects/effect";
 
 type PreviousGameSaveData = { ai: GoOpponent; board: SimpleBoard; previousPlayer: GoColor | null } | null;
 type CurrentGameSaveData = PreviousGameSaveData & {
@@ -152,14 +153,27 @@ function loadStats(stats: unknown): PartialRecord<GoOpponent, OpponentStats> | s
   const finalStats: PartialRecord<GoOpponent, OpponentStats> = {};
   if (!stats) return "Savedata did not contain a stats object.";
   if (typeof stats !== "object") return "Non-object encountered for Go.stats";
-  const entries = Object.entries(stats);
+  const entries: [string, unknown][] = Object.entries(stats);
   for (const [opponent, opponentStats] of entries) {
     if (!getEnumHelper("GoOpponent").isMember(opponent)) return `Invalid opponent in Go.stats: ${opponent}`;
-    if (!opponentStats || typeof opponentStats !== "object") return "Non-object encountered for an opponent's stats";
-    assertLoadingType<OpponentStats>(opponentStats as object);
-    const { rep, highestWinStreak, losses, nodes, wins, oldWinStreak, winStreak, nodePower } =
-      opponentStats as OpponentStats;
+    if (!isObject(opponentStats)) return "Non-object encountered for an opponent's stats";
+    const { highestWinStreak, losses, nodes, wins, oldWinStreak, winStreak, nodePower } = opponentStats;
     // Integers >= 0. Todo: make a better helper for this.
+    let rep;
+    // We stored favor instead of rep in pre-v3.0.0.
+    if ("favor" in opponentStats) {
+      if (!isInteger(opponentStats.favor) || opponentStats.favor < 0) {
+        return `A favor entry in Go.stats was invalid. Opponent: ${opponent}. Favor: ${opponentStats.favor}`;
+      }
+      /**
+       * - Pre-v3.0.0: 1 favor each "winning two games in a row".
+       * - V3+: 500/1000/1500/2000 rep each "winning two games in a row". "getMaxRep() / 200" is how we calculate
+       * repToAdd in src\Go\boardAnalysis\scoring.ts.
+       */
+      rep = opponentStats.favor * (getMaxRep() / 200);
+    } else {
+      rep = opponentStats.rep;
+    }
     if (!isInteger(rep) || rep < 0) return "A rep entry in Go.stats was invalid";
     if (!isInteger(highestWinStreak) || highestWinStreak < 0) return "A highestWinStreak entry in Go.stats was invalid";
     if (!isInteger(losses) || losses < 0) return "A losses entry in Go.stats was invalid";

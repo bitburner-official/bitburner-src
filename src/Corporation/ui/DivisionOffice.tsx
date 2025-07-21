@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 import { OfficeSpace } from "../OfficeSpace";
-import { CorpUnlockName, CorpEmployeeJob, CorpUpgradeName, CorpProductResearchName } from "@enums";
+import { CorpEmployeeJob, CorpUpgradeName, CorpProductResearchName } from "@enums";
 import { buyTea } from "../Actions";
 
 import { MoneyCost } from "./MoneyCost";
@@ -202,78 +202,74 @@ function AutoManagement(props: OfficeProps): React.ReactElement {
             </Typography>
           </TableCell>
         </TableRow>
-        {corp.unlocks.has(CorpUnlockName.VeChain) && (
-          <>
-            <TableRow>
-              <TableCell>
-                <Tooltip
-                  title={
-                    <Typography component="div">
-                      The amount of material this office can produce.
-                      <br />
-                      This value is based off the productivity of your
-                      <br />
-                      Operations, Engineering, and Management employees.
-                    </Typography>
-                  }
-                >
-                  <Typography>Material Production:</Typography>
-                </Tooltip>
-              </TableCell>
-              <TableCell>
-                <Tooltip title={materialBreakdown}>
-                  <Typography align="right">{formatCorpStat(totalMaterialProduction)}</Typography>
-                </Tooltip>
-              </TableCell>
-            </TableRow>
-            {division.makesProducts ? (
-              <TableRow>
-                <TableCell>
-                  <Tooltip
-                    title={
-                      <Typography component="div">
-                        The amount of any given Product this office can produce.
-                        <br />
-                        This value is based off the productivity of your
-                        <br />
-                        Operations, Engineering, and Management employees.
-                      </Typography>
-                    }
-                  >
-                    <Typography>Product Production:</Typography>
-                  </Tooltip>
-                </TableCell>
-                <TableCell>
-                  <Tooltip title={productBreakdown}>
-                    <Typography align="right">{formatCorpStat(totalProductProduction)}</Typography>
-                  </Tooltip>
-                </TableCell>
-              </TableRow>
-            ) : null}
-            <TableRow>
-              <TableCell>
-                <Tooltip
-                  title={
-                    <Typography>
-                      This office's sales effectivity for all materials and products.
-                      <br />
-                      It is based on your Business employees and your advertising.
-                      <br />
-                      This will be further modified by demand and competition for each item.
-                    </Typography>
-                  }
-                >
-                  <Typography>Sales Multiplier:</Typography>
-                </Tooltip>
-              </TableCell>
-              <TableCell align="right">
-                <Tooltip title={salesBreakdown}>
-                  <Typography>{formatCorpMultiplier(totalSaleMultiplier)}</Typography>
-                </Tooltip>
-              </TableCell>
-            </TableRow>
-          </>
+        <TableRow>
+          <TableCell>
+            <Tooltip
+              title={
+                <Typography component="div">
+                  The amount of material this office can produce.
+                  <br />
+                  This value is based off the productivity of your
+                  <br />
+                  Operations, Engineering, and Management employees.
+                </Typography>
+              }
+            >
+              <Typography>Material Production:</Typography>
+            </Tooltip>
+          </TableCell>
+          <TableCell>
+            <Tooltip title={materialBreakdown}>
+              <Typography align="right">{formatCorpStat(totalMaterialProduction)}</Typography>
+            </Tooltip>
+          </TableCell>
+        </TableRow>
+        {division.makesProducts && (
+          <TableRow>
+            <TableCell>
+              <Tooltip
+                title={
+                  <Typography component="div">
+                    The amount of any given Product this office can produce.
+                    <br />
+                    This value is based off the productivity of your
+                    <br />
+                    Operations, Engineering, and Management employees.
+                  </Typography>
+                }
+              >
+                <Typography>Product Production:</Typography>
+              </Tooltip>
+            </TableCell>
+            <TableCell>
+              <Tooltip title={productBreakdown}>
+                <Typography align="right">{formatCorpStat(totalProductProduction)}</Typography>
+              </Tooltip>
+            </TableCell>
+          </TableRow>
         )}
+        <TableRow>
+          <TableCell>
+            <Tooltip
+              title={
+                <Typography>
+                  This office's sales effectivity for all materials and products.
+                  <br />
+                  It is based on your Business employees and your advertising.
+                  <br />
+                  This will be further modified by demand and competition for each item.
+                </Typography>
+              }
+            >
+              <Typography>Sales Multiplier:</Typography>
+            </Tooltip>
+          </TableCell>
+          <TableCell align="right">
+            <Tooltip title={salesBreakdown}>
+              <Typography>{formatCorpMultiplier(totalSaleMultiplier)}</Typography>
+            </Tooltip>
+          </TableCell>
+        </TableRow>
         <AutoAssignJob
           rerender={props.rerender}
           office={props.office}

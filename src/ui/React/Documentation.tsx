@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { type FilePath, asFilePath } from "../../Paths/FilePath";
 import { CONSTANTS } from "../../Constants";
+import { resolvePage } from "../../Documentation/root";
 
 interface Navigator {
   navigate: (s: string, external: boolean) => void;
@@ -24,7 +25,7 @@ const defaultPage = asFilePath("index.md");
 export const defaultNsApiPage = asFilePath("nsDoc/bitburner.ns.md");
 /**
  * If we move or rename "bitburner.ns.md", we must update this constant, "defaultNsApiPage", "openDocExternally", and
- * the URL in src\Documentation\doc\index.md.
+ * the URL in src/Documentation/doc/en/index.md.
  */
 export const externalUrlOfNsApiPage =
   "https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md";
@@ -96,10 +97,17 @@ export function openDocExternally(path: string) {
   let url;
   if (path.startsWith("http://") || path.startsWith("https://")) {
     url = path;
-  } else if (path.startsWith("nsDoc/")) {
-    url = `https://github.com/bitburner-official/bitburner-src/blob/${ver}/markdown/${path.replace("nsDoc/", "")}`;
   } else {
-    url = `https://github.com/bitburner-official/bitburner-src/blob/${ver}/src/Documentation/doc/${path}`;
+    const title = resolvePage(path).pageName;
+    if (title == null) {
+      return; // An error was already printed to console
+    }
+    url = `https://github.com/bitburner-official/bitburner-src/blob/${ver}/`;
+    if (title.startsWith("nsDoc/")) {
+      url += `markdown/${title.replace("nsDoc/", "")}`;
+    } else {
+      url += `src/Documentation/doc/${title}`;
+    }
   }
   window.open(url, "_newtab");
 }

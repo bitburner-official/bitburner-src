@@ -30,7 +30,7 @@ In order to choose good industries for our supply chain, we must consider many c
   - It's preferred to require material from the starting industry rather than to expand into another support industry.
   - High `ScienceFactor`. This is necessary for a high product's rating.
   - High `AdvertisingFactor`. This means our product's selling price can be boosted greatly by Wilson and Advert. This is the most important factor for the endgame. `AdvertisingFactor` scales tremendously well when you reach high advert bonuses (Awareness and Popularity). These bonuses are capped at ~1.7977e308.
-- Any worthy industry must have at least 1 input material. Spring Water is the only industry that does not need any input material. It may look convenient at first glance, but it's a trap for newbies. Having no input material means the quality/rating of the output material/product will always be capped at the square root of its maximum value.
+- Any worthy industry must have at least 1 input material. Having no input material may look convenient at first glance, but it's a trap for newbies. Without input materials, the quality/rating of the output material/product is always capped at the square root of its maximum value.
 
 ## Agriculture + Chemical + Tobacco
 
