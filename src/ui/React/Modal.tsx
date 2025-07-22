@@ -28,6 +28,9 @@ const useStyles = makeStyles()((theme: Theme) => ({
       display: "none",
     },
     scrollbarWidth: "none", // firefox
+    "&:focus-visible": {
+      outline: "none",
+    },
   },
   closeButton: {
     position: "absolute",
