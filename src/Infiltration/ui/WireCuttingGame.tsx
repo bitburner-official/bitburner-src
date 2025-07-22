@@ -89,14 +89,14 @@ export function WireCuttingGame({ onSuccess, onFailure, difficulty }: IMinigameP
     setQuestions(gameQuestions);
     setWiresToCut(gameWiresToCut);
     setHasAugment(Player.hasAugmentation(AugmentationName.KnowledgeOfApollo, true));
-    // Must be last, since the return is a clear function.
-    return stageState.set(() => ({
-      stage: "wireCutter",
-      goals: gameQuestions.map((x) => x.toString()),
-      wires: gameWires.map((x) => [...x.colors]),
-      cutWires: [...cutWires],
-    }));
   }, [difficulty]);
+
+  useEffect(() => stageState.set(() => ({
+      stage: "wireCutter",
+      goals: questions.map((x) => x.toString()),
+      wires: wires.map((x) => [...x.colors]),
+      cutWires: [...cutWires],
+  })), [questions, wires, cutWires]);
 
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();
@@ -175,7 +175,7 @@ function randomPositionQuestion(wires: Wire[]): Question {
   const index = Math.floor(Math.random() * wires.length);
   return {
     toString: (): string => {
-      return `Cut wires number ${index + 1}.`;
+      return `Cut wire number ${index + 1}.`;
     },
     shouldCut: (_wire: Wire, i: number): boolean => {
       return index === i;
