@@ -241,5 +241,61 @@ export const breakingChanges300: VersionBreakingChange = {
       info: 'The "VeChain" upgrade was removed. The cost of that upgrade was refunded.',
       showWarning: false,
     },
+    {
+      brokenAPIs: [
+        { name: "ns.hackAnalyzeThreads" },
+        { name: "ns.hackAnalyze" },
+        { name: "ns.hackAnalyzeSecurity" },
+        { name: "ns.hackAnalyzeChance" },
+        { name: "ns.growthAnalyze" },
+        { name: "ns.growthAnalyzeSecurity" },
+        { name: "ns.nuke" },
+        { name: "ns.brutessh" },
+        { name: "ns.ftpcrack" },
+        { name: "ns.relaysmtp" },
+        { name: "ns.httpworm" },
+        { name: "ns.sqlinject" },
+        { name: "ns.getServerMoneyAvailable" },
+        { name: "ns.getServerSecurityLevel" },
+        { name: "ns.getServerBaseSecurityLevel" },
+        { name: "ns.getServerMinSecurityLevel" },
+        { name: "ns.getServerRequiredHackingLevel" },
+        { name: "ns.getServerMaxMoney" },
+        { name: "ns.getServerGrowth" },
+        { name: "ns.getServerNumPortsRequired" },
+        { name: "ns.deleteServer" },
+        { name: "ns.getHackTime" },
+        { name: "ns.getGrowTime" },
+        { name: "ns.getWeakenTime" },
+      ],
+      info:
+        "Some APIs returned a default value when you passed the hostname of a non-hackable server (e.g., hacknet " +
+        "server) to them.\nThese APIs now throw an error. The affected APIs are:\n" +
+        "- ns.hackAnalyzeThreads\n" +
+        "- ns.hackAnalyze\n" +
+        "- ns.hackAnalyzeSecurity\n" +
+        "- ns.hackAnalyzeChance\n" +
+        "- ns.growthAnalyze\n" +
+        "- ns.growthAnalyzeSecurity\n" +
+        "- ns.nuke\n" +
+        "- ns.brutessh\n" +
+        "- ns.ftpcrack\n" +
+        "- ns.relaysmtp\n" +
+        "- ns.httpworm\n" +
+        "- ns.sqlinject\n" +
+        "- ns.getServerMoneyAvailable\n" +
+        "- ns.getServerSecurityLevel\n" +
+        "- ns.getServerBaseSecurityLevel\n" +
+        "- ns.getServerMinSecurityLevel\n" +
+        "- ns.getServerRequiredHackingLevel\n" +
+        "- ns.getServerMaxMoney\n" +
+        "- ns.getServerGrowth\n" +
+        "- ns.getServerNumPortsRequired\n" +
+        "- ns.deleteServer\n" +
+        "- ns.getHackTime\n" +
+        "- ns.getGrowTime\n" +
+        "- ns.getWeakenTime\n",
+      showWarning: false,
+    },
   ],
 };
