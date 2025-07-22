@@ -1,6 +1,6 @@
 # Remote API
 
-Bitburner can connect to a WebSocket server, and then that server can read and write Bitburner data via some APIs. The most common usage of this feature is to synchronize files between Bitburner and an external system. With a Remote API tool, you can write their scripts in any text editor and synchronize their scripts with Bitburner.
+Bitburner can connect to a WebSocket server, and then that server can read and write Bitburner data via some APIs. The most common usage of this feature is to synchronize files between Bitburner and an external system. With a Remote API tool, you can write your scripts in any text editor and synchronize your scripts with Bitburner.
 
 This is how this feature works:
 
@@ -13,9 +13,15 @@ You only need to do 2 things:
 
 ## Community tools
 
+All these tools support synchronizing scripts to Bitburner and transpiling TypeScript/JSX to JavaScript. Note that Bitburner has native support for TypeScript/JSX.
+
+Links:
+
 - https://github.com/bitburner-official/typescript-template
 - https://github.com/Tanimodori/viteburner
 - https://github.com/shyguy1412/bb-external-editor
+
+`typescript-template` has a small set of options and features. Its simplicity is by design. `viteburner` and `bb-external-editor` have more fancy features.
 
 ## Troubleshooting tips
 
