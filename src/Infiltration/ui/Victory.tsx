@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, MenuItem, Paper, Select, SelectChangeEvent, Typography } from "@mui/material";
 
 import { Player } from "@player";
@@ -19,7 +19,7 @@ import {
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { isFactionWork } from "../../Work/FactionWork";
 import { decreaseMarketDemandMultiplier } from "../formulas/game";
-import { setGetState } from "../State";
+import { victoryState, stageState } from "../State";
 
 interface IProps {
   startingSecurityLevel: number;
@@ -71,27 +71,22 @@ export function Victory(props: IProps): React.ReactElement {
 
   const isMemberOfInfiltrators = Player.factions.includes(FactionName.ShadowsOfAnarchy);
 
-  setGetState(() => {
-    return {
-      stage: "victory",
-      possibleMoneyGain: moneyGain,
-      possibleRepGain: repGain,
-      SoARepGain: infiltrationRepGain,
-    };
-  });
-
   function sell(): void {
     Player.gainMoney(moneyGain, "infiltration");
     quitInfiltration();
   }
 
-  function trade(): void {
+  function tradeToFaction(factionName: string): void {
     if (!getEnumHelper("FactionName").isMember(factionName)) {
       return;
     }
     Factions[factionName].playerReputation += repGain;
     defaultFactionChoice = factionName;
     quitInfiltration();
+  }
+
+  function trade(): void {
+    tradeToFaction(factionName);
   }
 
   function changeDropdown(event: SelectChangeEvent): void {
@@ -104,6 +99,18 @@ export function Victory(props: IProps): React.ReactElement {
       soa.playerReputation += infiltrationRepGain;
     }
   }
+
+  useEffect(() => victoryState.set({ sell, tradeToFaction }));
+  useEffect(
+    () =>
+      stageState.set(() => ({
+        stage: "victory",
+        possibleMoneyGain: moneyGain,
+        possibleRepGain: repGain,
+        SoARepGain: infiltrationRepGain,
+      })),
+    [moneyGain, repGain, infiltrationRepGain],
+  );
 
   return (
     <Paper sx={{ p: 1, textAlign: "center", display: "flex", alignItems: "center", flexDirection: "column" }}>

@@ -1,6 +1,6 @@
 import { Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { setGetState } from "../State";
+import { stageState } from "../State";
 
 interface IProps {
   onFinish: () => void;
@@ -24,9 +24,8 @@ export function Countdown({ onFinish }: IProps): React.ReactElement {
     };
   }, []);
 
-  setGetState(() => {
-    return { stage: "countdown", countdown: x };
-  });
+  useEffect(() => stageState.set(() => ({ stage: "countdown", countdown: x })), [x]);
+
   return (
     <Paper sx={{ p: 1, textAlign: "center" }}>
       <Typography variant="h4">Get Ready!</Typography>

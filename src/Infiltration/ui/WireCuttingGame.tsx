@@ -10,7 +10,7 @@ import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
 import { isPositiveInteger } from "../../types";
 import { randomInRange } from "../../utils/helpers/randomInRange";
-import { setGetState } from "../State";
+import { stageState } from "../State";
 
 interface Difficulty {
   [key: string]: number;
@@ -89,11 +89,14 @@ export function WireCuttingGame({ onSuccess, onFailure, difficulty }: IMinigameP
     setQuestions(gameQuestions);
     setWiresToCut(gameWiresToCut);
     setHasAugment(Player.hasAugmentation(AugmentationName.KnowledgeOfApollo, true));
+    // Must be last, since the return is a clear function.
+    return stageState.set(() => ({
+      stage: "wireCutter",
+      goals: gameQuestions.map((x) => x.toString()),
+      wires: gameWires.map((x) => [...x.colors]),
+      cutWires: [...cutWires],
+    }));
   }, [difficulty]);
-
-  setGetState(() => {
-    return {};
-  });
 
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();

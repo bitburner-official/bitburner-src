@@ -22,7 +22,8 @@ import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { Player } from "@player";
 import { Page } from "../ui/Router";
 import { Router } from "../ui/GameRoot";
-import { getState, InfiltrationKeyEvents } from "../Infiltration/State";
+import { getState, stageState, victoryState, InfiltrationKeyEvents } from "../Infiltration/State";
+import { formatMoney, formatReputation } from "../ui/formatNumber";
 
 function checkAccess(ctx: NetscriptContext, lvl = 1): void {
   if (Player.bitNodeN === 11 || Player.activeSourceFileLvl(11) >= lvl) {
@@ -46,6 +47,20 @@ function getInfilLocation(locationName: LocationName): Result<{ location: Requir
   }
   // Currently TypeScript is not smart enough to figure this out without a dumb hack.
   return { success: true, location: { ...location, infiltrationData: location.infiltrationData } };
+}
+
+// This doubles as a check to see if we're currently infiltrating
+function getPlayerLocation(ctx: NetscriptContext): Required<Location> | null {
+  if (Router.page() !== Page.Infiltration) {
+    helpers.log(ctx, () => `Must be at the infiltration screen, currently showing ${Router.page()}`);
+    return null;
+  }
+  const result = getInfilLocation(Player.location);
+  if (!result.success) {
+    helpers.log(ctx, () => result.message);
+    return null;
+  }
+  return result.location;
 }
 
 export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
@@ -118,37 +133,45 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
     },
     startInfiltration: (ctx) => () => {
       checkAccess(ctx, 3);
-      if (Router.page() !== Page.Location) {
-        return { success: false, message: `Must be at the location screen, currently showing ${Router.page()}` };
-      }
-      const result = getInfilLocation(Player.location);
+      const result: Result = (() => {
+        if (Router.page() !== Page.Location) {
+          return { success: false, message: `Must be at the location screen, currently showing ${Router.page()}` };
+        }
+        const result = getInfilLocation(Player.location);
+        if (!result.success) {
+          return { success: false, message: result.message };
+        }
+        const location = result.location;
+        // Technically we don't need this check, but it's nicer to have it up-front.
+        // It is a duplicate, so watch out for divergence with the same code in Intro.tsx.
+        const startingSecurityLevel = location.infiltrationData.startingSecurityLevel;
+        const difficulty = calculateDifficulty(startingSecurityLevel);
+        if (difficulty >= MaxDifficultyForInfiltration) {
+          return {
+            success: false,
+            message: "This location is too secure for your current abilities. You cannot infiltrate it.",
+          };
+        }
+        Router.toPage(Page.Infiltration, { location, autoStart: true });
+        return { success: true };
+      })();
       if (!result.success) {
-        return { success: false, message: result.message };
+        helpers.log(ctx, () => result.message);
       }
-      const location = result.location;
-      // Technically we don't need this check, but it's nicer to have it up-front.
-      // It is a duplicate, so watch out for divergence with the same code in Intro.tsx.
-      const startingSecurityLevel = location.infiltrationData.startingSecurityLevel;
-      const difficulty = calculateDifficulty(startingSecurityLevel);
-      if (difficulty >= MaxDifficultyForInfiltration) {
-        return {
-          success: false,
-          message: "This location is too secure for your current abilities. You cannot infiltrate it.",
-        };
-      }
-      Router.toPage(Page.Infiltration, { location, autoStart: true });
-      return { success: true };
+      return result;
     },
-    getState: (__) => () => {
-      if (Router.page() !== Page.Infiltration) {
+    getState: (ctx) => () => {
+      checkAccess(ctx);
+      if (!getPlayerLocation(ctx)) {
         return null;
       }
       return getState();
     },
     pressKey: (ctx) => (_key) => {
+      checkAccess(ctx);
       const key = helpers.string(ctx, "key", _key);
-      const result = getInfilLocation(Player.location);
-      if (Router.page() !== Page.Infiltration || !result.success) {
+      const location = getPlayerLocation(ctx);
+      if (!location) {
         // Perform a no-op if we're not infiltrating. The lack of delay should
         // help clue people in who are debugging.
         return Promise.resolve();
@@ -156,15 +179,53 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
       // Technically your stats can still change while you are infiltrating,
       // so this does not reflect the same difficulty as the actual infil.
       // Like the quirks with hack and grow, this is considered OK.
-      const difficulty = calculateDifficulty(result.location.infiltrationData.startingSecurityLevel);
+      const difficulty = calculateDifficulty(location.infiltrationData.startingSecurityLevel);
       const noise = difficulty < 1 ? 0 : 10 * difficulty;
       const delay = 60 + difficulty * 30 + Math.random() * noise;
       return helpers.netscriptDelay(ctx, delay).then(() => {
         InfiltrationKeyEvents.emit(key);
       });
     },
-    pressSpace: (__) => () => {
+    pressSpace: (ctx) => () => {
+      checkAccess(ctx);
+      if (!getPlayerLocation(ctx)) {
+        return;
+      }
       InfiltrationKeyEvents.emit(" ");
+    },
+    claimRewards: (ctx) => (_faction) => {
+      checkAccess(ctx, 2);
+      const faction = _faction == null ? null : getEnumHelper("FactionName").nsGetMember(ctx, _faction);
+      if (!getPlayerLocation(ctx)) {
+        return 0;
+      }
+      const victory = victoryState.value;
+      if (!victory) {
+        helpers.log(ctx, () => "The current infiltration is not finished yet.");
+        return 0;
+      }
+      const state = stageState.value?.() as { [k: string]: number } | undefined;
+      if (faction == null) {
+        const money = state?.possibleMoneyGain ?? 0;
+        helpers.log(ctx, () => `Sold rewards for ${money === 0 ? "ERROR_UNKNOWN" : formatMoney(money)}`);
+        victory.sell();
+        return money;
+      }
+      if (!Player.factions.includes(faction)) {
+        helpers.log(ctx, () => `You are not a member of ${faction}!`);
+        return 0;
+      }
+      if (!Factions[faction].getInfo().offersWork()) {
+        helpers.log(ctx, () => `You can't use infil to gain rep with ${faction}! (Probably a special faction.)`);
+        return 0;
+      }
+      const rep = state?.possibleRepGain ?? 0;
+      helpers.log(
+        ctx,
+        () => `Traded rewards for ${rep === 0 ? "ERROR_UNKNOWN" : formatReputation(rep)} with ${faction}`,
+      );
+      victory.tradeToFaction(faction);
+      return rep;
     },
   };
 }

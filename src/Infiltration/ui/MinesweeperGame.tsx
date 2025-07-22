@@ -11,6 +11,7 @@ import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
+import { stageState } from "../State";
 
 interface Difficulty {
   [key: string]: number;
@@ -83,24 +84,33 @@ export function MinesweeperGame(props: IMinigameProps): React.ReactElement {
     return () => clearInterval(id);
   }, []);
 
-  const flatGrid: { flagged?: boolean; current?: boolean; marked?: boolean }[] = [];
-
-  minefield.map((line, y) =>
-    line.map((cell, x) => {
-      if (memoryPhase) {
-        flatGrid.push({ flagged: Boolean(minefield[y][x]) });
-        return;
-      } else if (x === pos[0] && y === pos[1]) {
-        flatGrid.push({ current: true });
-      } else if (answer[y][x]) {
-        flatGrid.push({ marked: true });
-      } else if (hasAugment && minefield[y][x]) {
-        flatGrid.push({ flagged: true });
-      } else {
-        flatGrid.push({});
+  const makeMap = () => {
+    const flatGrid = [];
+    for (const [y, line] of minefield.entries()) {
+      for (const [x, cell] of line.entries()) {
+        if (memoryPhase) {
+          flatGrid.push({ flagged: Boolean(cell) });
+        } else if (x === pos[0] && y === pos[1]) {
+          flatGrid.push({ current: true });
+        } else if (answer[y][x]) {
+          flatGrid.push({ marked: true });
+        } else if (hasAugment && cell) {
+          flatGrid.push({ flagged: true });
+        } else {
+          flatGrid.push({});
+        }
       }
-    }),
-  );
+    }
+    return flatGrid;
+  };
+  const flatGrid = makeMap();
+
+  useEffect(() => {
+    return stageState.set(() => ({
+      stage: "minesweeper",
+      map: makeMap(),
+    }));
+  });
 
   return (
     <>

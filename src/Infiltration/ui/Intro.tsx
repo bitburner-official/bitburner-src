@@ -1,5 +1,5 @@
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import type { Location } from "../../Locations/Location";
 import { Settings } from "../../Settings/Settings";
 import { formatHp, formatMoney, formatNumberNoSuffix, formatPercent, formatReputation } from "../../ui/formatNumber";
@@ -14,7 +14,7 @@ import { Factions } from "../../Faction/Factions";
 import { FactionName } from "../../Faction/Enums";
 import { calculateMarketDemandMultiplier, calculateReward, MaxDifficultyForInfiltration } from "../formulas/game";
 import { useRerender } from "../../ui/React/hooks";
-import { setGetState } from "../State";
+import { stageState } from "../State";
 
 interface IProps {
   location: Location;
@@ -100,9 +100,8 @@ export function Intro({
       </Typography>
     );
   }
-  setGetState(() => {
-    return { stage: "intro" };
-  });
+
+  useEffect(() => stageState.set(() => ({ stage: "intro" })), []);
 
   return (
     <Container sx={{ alignItems: "center" }}>

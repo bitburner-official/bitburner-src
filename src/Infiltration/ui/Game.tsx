@@ -19,6 +19,7 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { PlayerEventType, PlayerEvents } from "../../PersonObjects/Player/PlayerEvents";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { calculateReward, MaxDifficultyForInfiltration } from "../formulas/game";
+import { progressState } from "../State";
 
 type GameProps = {
   startingSecurityLevel: number;
@@ -55,6 +56,16 @@ export function Game({ startingSecurityLevel, difficulty, maxLevel }: GameProps)
   // Base for when rewards are calculated, which is the start of the game window
   const [timestamp, __] = useState(Date.now());
   const reward = calculateReward(startingSecurityLevel);
+
+  useEffect(
+    () =>
+      progressState.set({
+        floors: maxLevel,
+        currentFloor: level,
+        progress: results,
+      }),
+    [level, maxLevel, results],
+  );
 
   const setupNextGame = useCallback(() => {
     const nextGameId = () => {

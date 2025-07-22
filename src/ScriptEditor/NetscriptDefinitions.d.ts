@@ -6042,6 +6042,24 @@ interface Infiltration {
    * RAM cost: 5 GB
    */
   pressSpace(): void;
+
+  /**
+   * Finish infiltration and claim rewards.
+   *
+   * If passed null, this sells the infiltration rewards for money. Otherwise,
+   * it trades it for rep with the given faction. The faction must be valid
+   * (one the player has joined, and can work for normally).
+   *
+   * This only works from the "victory" screen, and does nothing otherwise.
+   * Like usual, the player will be left on the City page after.
+   *
+   * Requires BN11 or SF11.2
+   * @remarks
+   * RAM cost: 15 GB
+   *
+   * @returns The amount of money or rep gained, or 0 on error
+   */
+  claimRewards(faction: FactionName | null): number;
 }
 
 /**

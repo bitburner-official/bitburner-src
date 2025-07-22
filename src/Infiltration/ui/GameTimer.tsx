@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { ProgressBar } from "../../ui/React/Progress";
-import { getState, setGetState } from "../State";
+import { timerState } from "../State";
 
 type GameTimerProps = {
   millis: number;
@@ -42,10 +42,7 @@ export function GameTimer({
     };
   }, [onExpire, tick, totalMillis]);
 
-  // If we're being evaluated, we're being called from a minigame. Wrap the
-  // getState that they already set.
-  const oldGetState = getState;
-  setGetState(() => ({ ...oldGetState(), timer: v }));
+  useEffect(() => timerState.set({ timer: v }), [v]);
 
   // https://stackoverflow.com/questions/55593367/disable-material-uis-linearprogress-animation
   // TODO(hydroflame): there's like a bug where it triggers the end before the
