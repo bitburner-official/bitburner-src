@@ -2,10 +2,6 @@
 
 Bitburner can connect to a WebSocket server, and then that server can read and write Bitburner data via some APIs. The most common usage of this feature is to synchronize files between Bitburner and an external system. With a Remote API tool, you can write your scripts in any text editor and synchronize your scripts with Bitburner.
 
-This is how this feature works:
-
-![remote-file-api-sequence-diagram.svg](../../../images/remote-file-api-sequence-diagram.svg)
-
 You only need to do 2 things:
 
 - Start the Remote API tool.
@@ -30,6 +26,10 @@ Links:
 - Some external programs or browser extensions may interfere with the connection. For example, some antivirus programs and ad-blocker extensions may block the WebSocket connection.
 - Some tools support a feature that is usually called "mirroring". You must read the instructions carefully before using it. This feature allows 2-way sync, but it may overwrite your scripts or other files _on your machine_ if you set it up wrong.
 - If you need further help, please ask us on the [external-editors](https://discord.com/channels/415207508303544321/923428435618058311) channel.
+
+## How it works
+
+![remote-file-api-sequence-diagram.svg](../../../images/remote-file-api-sequence-diagram.svg)
 
 ## API specification
 
