@@ -85,7 +85,11 @@ export function getFailureResult(ctx: NetscriptContext, hostname: string, option
       message: ResponseStatus.AUTH_FAILURE,
     };
   }
-  if (options.requireSession && !isAuthenticated(targetServer, ctx.workerScript.pid)) {
+  if (
+    options.requireSession &&
+    hostname !== targetServer.hostname &&
+    !isAuthenticated(targetServer, ctx.workerScript.pid)
+  ) {
     const result = `${targetServer.hostname} requires a session to do that. Use ns.dnet.connectToSession() first to authenticate with that server.`;
     logger(ctx)(result);
     return {

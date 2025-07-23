@@ -12,10 +12,11 @@ import { DarknetEvents, DarknetState } from "../../DarkNet/models/DarknetState";
 import { WEBSTORM } from "../../DarkNet/effects/webstorm";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { Router } from "../../ui/GameRoot";
-import { SimplePage } from "@enums";
+import { SimplePage, ToastVariant } from "@enums";
 import { getDarkscapeNavigator, handleSuccessfulAuth } from "../../DarkNet/effects/effects";
 import { getDarknetServers } from "../../DarkNet/controllers/NetworkMovement";
 import { isLabyrinthServer } from "../../DarkNet/effects/labyrinth";
+import { SnackbarEvents } from "../../ui/React/Snackbar";
 
 export function DarknetDev(): React.ReactElement {
   const toggleShowFullNetwork = (newValue: boolean): void => {
@@ -29,6 +30,12 @@ export function DarknetDev(): React.ReactElement {
         <Typography>Darknet</Typography>
       </AccordionSummary>
       <AccordionDetails>
+        <OptionSwitch
+          checked={DarknetState.showFullNetwork}
+          onChange={(newValue) => toggleShowFullNetwork(newValue)}
+          text="Show Full Network"
+          tooltip={<>If this is set, the full depth of the dark network will be displayed.</>}
+        />
         <Tooltip title={<Typography>Gain access to the darkweb network.</Typography>}>
           <Button
             onClick={() => {
@@ -38,21 +45,49 @@ export function DarknetDev(): React.ReactElement {
             Get DarkscapeNavigator.exe
           </Button>
         </Tooltip>
-        <OptionSwitch
-          checked={DarknetState.showFullNetwork}
-          onChange={(newValue) => toggleShowFullNetwork(newValue)}
-          text="Show Full Network"
-          tooltip={<>If this is set, the full depth of the dark network will be displayed.</>}
-        />
+        <br />
+        <br />
         <Tooltip title={<Typography>Create a new darkweb network.</Typography>}>
           <Button
             onClick={() => {
               clearDarknet(true);
               populateDarknet();
-              Router.toPage(SimplePage.DarkNet);
+              SnackbarEvents.emit("New dark network generated", ToastVariant.SUCCESS, 2000);
             }}
           >
             Generate New Dark Network
+          </Button>
+        </Tooltip>
+        <br />
+        <br />
+        <Tooltip title={<Typography>Root all standard darknet servers.</Typography>}>
+          <Button
+            onClick={() => {
+              getDarknetServers().forEach((server) => {
+                if (!isLabyrinthServer(server.hostname)) {
+                  handleSuccessfulAuth(server, 1);
+                }
+              });
+              SnackbarEvents.emit("Gained darknet server admin rights", ToastVariant.SUCCESS, 2000);
+            }}
+          >
+            Gain admin access to all darknet servers
+          </Button>
+        </Tooltip>
+        <br />
+        <br />
+        <Tooltip title={<Typography>Root all darknet labyrinth servers.</Typography>}>
+          <Button
+            onClick={() => {
+              getDarknetServers().forEach((server) => {
+                if (isLabyrinthServer(server.hostname)) {
+                  server.hasAdminRights = true;
+                }
+              });
+              SnackbarEvents.emit("Gained lab admin rights", ToastVariant.SUCCESS, 2000);
+            }}
+          >
+            Gain admin access to labyrinth server
           </Button>
         </Tooltip>
         <br />
@@ -71,32 +106,6 @@ export function DarknetDev(): React.ReactElement {
             }}
           >
             START WEBSTORM
-          </Button>
-        </Tooltip>
-        <Tooltip title={<Typography>Root all standard darknet servers.</Typography>}>
-          <Button
-            onClick={() => {
-              getDarknetServers().forEach((server) => {
-                if (!isLabyrinthServer(server.hostname)) {
-                  handleSuccessfulAuth(server, 1);
-                }
-              });
-            }}
-          >
-            Gain admin access to all darknet servers
-          </Button>
-        </Tooltip>
-        <Tooltip title={<Typography>Root all darknet labyrinth servers.</Typography>}>
-          <Button
-            onClick={() => {
-              getDarknetServers().forEach((server) => {
-                if (isLabyrinthServer(server.hostname)) {
-                  server.hasAdminRights = true;
-                }
-              });
-            }}
-          >
-            Gain admin access to labyrinth server
           </Button>
         </Tooltip>
       </AccordionDetails>

@@ -75,10 +75,14 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
   if (isLabServer && !canEnterLabManually) {
     return (
       <>
+        <br />
+        <br />
         <Typography>
           The weight of the deep net presses down on you. It seems this place will challenge you to make your own
           tools...
         </Typography>
+        <br />
+        <br />
       </>
     );
   }

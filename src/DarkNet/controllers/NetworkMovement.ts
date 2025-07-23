@@ -139,13 +139,14 @@ export const deleteServer = (server: BaseServer, force = false) => {
   if (!server || (isImmutable(server) && !force)) {
     return false;
   }
+  const isLabyrinth = isLabyrinthServer(server.hostname);
   movePlayerIfNeeded(server);
   killScripts(server);
   disconnectServer(server, true);
   if (isDarknetServer(server) && DarknetState.Network[server.depth]?.[server.leftOffset]) {
     DarknetState.Network[server.depth][server.leftOffset] = null;
   }
-  DarknetState.offlineServers.push(server.hostname);
+  !isLabyrinth && DarknetState.offlineServers.push(server.hostname);
   DeleteServer(server.hostname);
 };
 

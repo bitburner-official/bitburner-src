@@ -91,12 +91,13 @@ export function prestigeAugmentation(): void {
   if (canAccessBitNodeFeature(5)) {
     homeComp.pushProgram(CompletedProgramName.formulas);
   }
-  if (canAccessBitNodeFeature(15)) {
-    getDarkscapeNavigator();
-  }
 
   // Re-create foreign servers
   initForeignServers(Player.getHomeComputer());
+
+  if (canAccessBitNodeFeature(15)) {
+    getDarkscapeNavigator();
+  }
 
   // Gain favor for Companies and Factions
   for (const company of Object.values(Companies)) company.prestigeAugmentation();
