@@ -19,7 +19,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "triggers feelings of admiration and approval in other people.",
       company_rep: 1.1,
       faction_rep: 1.1,
-      charisma: 1.1,
+      charisma: 1.05,
       factions: [
         FactionName.TianDiHui,
         FactionName.TheSyndicate,
@@ -1081,7 +1081,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "which improves its regenerative and extracellular homeostasis abilities.",
       strength: 1.2,
       defense: 1.2,
-      charisma: 1.2,
+      charisma: 1.1,
       factions: [
         FactionName.TheDarkArmy,
         FactionName.TheSyndicate,
@@ -1294,7 +1294,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "the bloodstream to improve memory, increase focus, and provide other " +
         "cognitive enhancements.",
       company_rep: 1.2,
-      charisma: 1.1,
+      charisma: 1.05,
       factions: [
         FactionName.TianDiHui,
         FactionName.Volhaven,

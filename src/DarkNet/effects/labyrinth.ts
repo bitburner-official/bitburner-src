@@ -133,9 +133,6 @@ export const generateMaze = (width: number = 41, height: number = 29): string[] 
   const randomRightGap = (Math.floor((Math.random() * halfHeight) / 4) + 1) * 2;
   resultingMaze[subHeight][width - randomRightGap - 1] = PATH;
 
-  // TODO: remove
-  console.log(resultingMaze.map((row) => row.join("")).join("\n"));
-
   return resultingMaze.map((row) => row.join(""));
 };
 
