@@ -1728,7 +1728,7 @@ export const ns: InternalAPI<NSFull> = {
       helpers.log(
         ctx,
         () =>
-        `ERROR: Failed. Was unable to remove file ${sourcePath} from its original location. If ${sourcePath} is a script, make sure that it is NOT running before trying to use 'mv' on it.`,
+          `ERROR: Failed. Was unable to remove file ${sourcePath} from its original location. If ${sourcePath} is a script, make sure that it is NOT running before trying to use 'mv' on it.`,
       );
     }
     const { overwritten } = server.writeToContentFile(destinationPath, sourceContentFile.content);
