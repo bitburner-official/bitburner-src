@@ -51,7 +51,6 @@ import {
   renamePurchasedServer,
   upgradePurchasedServer,
 } from "./Server/ServerPurchases";
-import { Server } from "./Server/Server";
 import { influenceStockThroughServerGrow } from "./StockMarket/PlayerInfluencing";
 import { runScriptFromScript } from "./NetscriptWorker";
 import { killWorkerScript, killWorkerScriptByPid } from "./Netscript/killWorkerScript";
@@ -200,10 +199,7 @@ export const ns: InternalAPI<NSFull> = {
     const hackAmount = helpers.number(ctx, "hackAmount", _hackAmount);
 
     // Check argument validity
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     if (isNaN(hackAmount)) {
       throw helpers.errorMessage(
         ctx,
@@ -228,10 +224,7 @@ export const ns: InternalAPI<NSFull> = {
   hackAnalyze: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
 
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
 
     return calculatePercentMoneyHacked(server, Player);
   },
@@ -239,10 +232,7 @@ export const ns: InternalAPI<NSFull> = {
     let threads = helpers.number(ctx, "threads", _threads);
     if (_host) {
       const host = helpers.string(ctx, "host", _host);
-      const server = helpers.getServer(ctx, host);
-      if (!(server instanceof Server)) {
-        throw helpers.errorMessage(ctx, `Cannot be executed on ${host}.`);
-      }
+      const server = helpers.getNormalServer(ctx, host);
 
       const percentHacked = calculatePercentMoneyHacked(server, Player);
 
@@ -257,10 +247,7 @@ export const ns: InternalAPI<NSFull> = {
   hackAnalyzeChance: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
 
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
 
     return calculateHackingChance(server, Player);
   },
@@ -284,10 +271,7 @@ export const ns: InternalAPI<NSFull> = {
     const host = helpers.string(ctx, "host", _host);
     const { threads, stock, additionalMsec } = helpers.validateHGWOptions(ctx, opts);
 
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, "Cannot be executed on this server.");
-    }
+    const server = helpers.getNormalServer(ctx, host);
 
     // No root access or skill level too low
     const canHack = netscriptCanGrow(server);
@@ -337,10 +321,7 @@ export const ns: InternalAPI<NSFull> = {
       const cores = helpers.positiveInteger(ctx, "cores", _cores);
 
       // Check argument validity
-      const server = helpers.getServer(ctx, host);
-      if (!(server instanceof Server)) {
-        throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-      }
+      const server = helpers.getNormalServer(ctx, host);
       if (!Number.isFinite(mult) || mult < 1) {
         throw helpers.errorMessage(ctx, `Invalid argument: multiplier must be finite and >= 1, is ${mult}.`);
       }
@@ -354,11 +335,7 @@ export const ns: InternalAPI<NSFull> = {
       if (_host) {
         const cores = helpers.number(ctx, "cores", _cores);
         const host = helpers.string(ctx, "host", _host);
-        const server = helpers.getServer(ctx, host);
-
-        if (!(server instanceof Server)) {
-          throw helpers.errorMessage(ctx, `Cannot be executed on ${host}.`);
-        }
+        const server = helpers.getNormalServer(ctx, host);
 
         const maxThreadsNeeded = Math.ceil(
           numCycleForGrowthCorrected(server, server.moneyMax, server.moneyAvailable, cores),
@@ -373,10 +350,7 @@ export const ns: InternalAPI<NSFull> = {
     const host = helpers.string(ctx, "host", _host);
     const { threads, additionalMsec } = helpers.validateHGWOptions(ctx, opts);
 
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, "Cannot be executed on this server.");
-    }
+    const server = helpers.getNormalServer(ctx, host);
 
     // No root access or skill level too low
     const canHack = netscriptCanWeaken(server);
@@ -565,10 +539,7 @@ export const ns: InternalAPI<NSFull> = {
   nuke: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
 
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     if (server.hasAdminRights) {
       helpers.log(ctx, () => `Already have root access to '${server.hostname}'.`);
       return true;
@@ -587,10 +558,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   brutessh: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     if (!Player.hasProgram(CompletedProgramName.bruteSsh)) {
       helpers.log(ctx, () => "You do not have the BruteSSH.exe program!");
       return false;
@@ -606,10 +574,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   ftpcrack: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     if (!Player.hasProgram(CompletedProgramName.ftpCrack)) {
       helpers.log(ctx, () => "You do not have the FTPCrack.exe program!");
       return false;
@@ -625,10 +590,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   relaysmtp: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     if (!Player.hasProgram(CompletedProgramName.relaySmtp)) {
       helpers.log(ctx, () => "You do not have the relaySMTP.exe program!");
       return false;
@@ -644,10 +606,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   httpworm: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     if (!Player.hasProgram(CompletedProgramName.httpWorm)) {
       helpers.log(ctx, () => "You do not have the HTTPWorm.exe program!");
       return false;
@@ -663,10 +622,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   sqlinject: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     if (!Player.hasProgram(CompletedProgramName.sqlInject)) {
       helpers.log(ctx, () => "You do not have the SQLInject.exe program!");
       return false;
@@ -994,10 +950,7 @@ export const ns: InternalAPI<NSFull> = {
   },
   getServerMoneyAvailable: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     if (server.hostname == "home") {
       // Return player's money
       helpers.log(ctx, () => `returned player's money: ${formatMoney(Player.money)}`);
@@ -1008,64 +961,43 @@ export const ns: InternalAPI<NSFull> = {
   },
   getServerSecurityLevel: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     helpers.log(ctx, () => `returned ${formatSecurity(server.hackDifficulty)} for '${server.hostname}'`);
     return server.hackDifficulty;
   },
   getServerBaseSecurityLevel: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     helpers.log(ctx, () => `returned ${formatSecurity(server.baseDifficulty)} for '${server.hostname}'`);
     return server.baseDifficulty;
   },
   getServerMinSecurityLevel: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     helpers.log(ctx, () => `returned ${formatSecurity(server.minDifficulty)} for ${server.hostname}`);
     return server.minDifficulty;
   },
   getServerRequiredHackingLevel: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     helpers.log(ctx, () => `returned ${formatNumberNoSuffix(server.requiredHackingSkill, 0)} for '${server.hostname}'`);
     return server.requiredHackingSkill;
   },
   getServerMaxMoney: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     helpers.log(ctx, () => `returned ${formatMoney(server.moneyMax)} for '${server.hostname}'`);
     return server.moneyMax;
   },
   getServerGrowth: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     helpers.log(ctx, () => `returned ${server.serverGrowth} for '${server.hostname}'`);
     return server.serverGrowth;
   },
   getServerNumPortsRequired: (ctx) => (_host) => {
     const host = helpers.string(ctx, "host", _host);
-    const server = helpers.getServer(ctx, host);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-    }
+    const server = helpers.getNormalServer(ctx, host);
     helpers.log(ctx, () => `returned ${server.numOpenPortsRequired} for '${server.hostname}'`);
     return server.numOpenPortsRequired;
   },
@@ -1229,10 +1161,7 @@ export const ns: InternalAPI<NSFull> = {
     const name = helpers.string(ctx, "name", _name);
     let hostnameStr = String(name);
     hostnameStr = hostnameStr.replace(/\s\s+/g, "");
-    const server = GetServer(hostnameStr);
-    if (!(server instanceof Server)) {
-      throw helpers.errorMessage(ctx, `Cannot be executed on ${_name}.`);
-    }
+    const server = helpers.getNormalServer(ctx, hostnameStr);
 
     if (!server.purchasedByPlayer || server.hostname === "home") {
       helpers.log(ctx, () => "Cannot delete non-purchased server.");
@@ -1482,10 +1411,7 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_host = ctx.workerScript.hostname) => {
       const host = helpers.string(ctx, "hostname", _host);
-      const server = helpers.getServer(ctx, host);
-      if (!(server instanceof Server)) {
-        throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-      }
+      const server = helpers.getNormalServer(ctx, host);
 
       return calculateHackingTime(server, Player) * 1000;
     },
@@ -1493,10 +1419,7 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_host = ctx.workerScript.hostname) => {
       const host = helpers.string(ctx, "host", _host);
-      const server = helpers.getServer(ctx, host);
-      if (!(server instanceof Server)) {
-        throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-      }
+      const server = helpers.getNormalServer(ctx, host);
 
       return calculateGrowTime(server, Player) * 1000;
     },
@@ -1504,10 +1427,7 @@ export const ns: InternalAPI<NSFull> = {
     (ctx) =>
     (_host = ctx.workerScript.hostname) => {
       const host = helpers.string(ctx, "hostname", _host);
-      const server = helpers.getServer(ctx, host);
-      if (!(server instanceof Server)) {
-        throw helpers.errorMessage(ctx, `Cannot be executed on ${_host}.`);
-      }
+      const server = helpers.getNormalServer(ctx, host);
 
       return calculateWeakenTime(server, Player) * 1000;
     },
