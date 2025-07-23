@@ -55,7 +55,7 @@ import { resolveFilePath, FilePath } from "../Paths/FilePath";
 import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
-import { basicErrorMessage, errorMessage, log } from "./ErrorMessages";
+import { errorMessage, log } from "./ErrorMessages";
 import { assertStringWithNSContext, debugType } from "./TypeAssertion";
 import {
   canAccessBitNodeFeature,
@@ -79,7 +79,6 @@ export const helpers = {
   hostReturnOptions,
   returnServerID,
   argsToString,
-  basicErrorMessage,
   errorMessage,
   validateHGWOptions,
   checkEnvFlags,

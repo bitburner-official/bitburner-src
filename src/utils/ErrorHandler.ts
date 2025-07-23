@@ -1,7 +1,7 @@
 import { ScriptDeath } from "../Netscript/ScriptDeath";
 import type { WorkerScript } from "../Netscript/WorkerScript";
 import { dialogBoxCreate } from "../ui/React/DialogBox";
-import { getErrorMessageWithStackAndCause, parseUnknownError } from "./ErrorHelper";
+import { getErrorMessageWithStackAndCause } from "./ErrorHelper";
 
 import { DisplayError } from "../ErrorHandling/DisplayError";
 
@@ -11,7 +11,6 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
     // No dialog for ScriptDeath
     return;
   }
-  const errorDetails = parseUnknownError(e);
   if (ws && typeof e === "string") {
     /**
      * - Attempt to strip out the error type, if present.
@@ -28,19 +27,12 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
     const errorType = e.match(/^(\w+) ERROR/)?.[1];
     if (errorType) {
       const errorText = e.split(/\n/).slice(3).join("\n");
-      DisplayError(initialText + errorText, errorType, ws.scriptRef.filename, ws.hostname, ws.pid);
+      DisplayError(initialText + errorText, errorType, ws);
       return;
     }
-    DisplayError(initialText + e, "RUNTIME", ws.scriptRef.filename, ws.hostname, ws.pid);
+    DisplayError(initialText + e, "RUNTIME", ws);
   } else if (e instanceof SyntaxError) {
-    const msg = `${e.message} (sorry we can't be more helpful)`;
-    DisplayError(
-      initialText + msg + (errorDetails.stack ?? ""),
-      "SYNTAX",
-      ws?.scriptRef?.filename,
-      ws?.hostname,
-      ws?.pid,
-    );
+    DisplayError(initialText + getErrorMessageWithStackAndCause(e), "SYNTAX", ws);
   } else if (e instanceof Error) {
     // Ignore any cancellation errors from Monaco that get here
     if (e.name === "Canceled" && e.message === "Canceled") {
@@ -56,13 +48,12 @@ export function handleUnknownError(e: unknown, ws: WorkerScript | null = null, i
      * tool of browsers will do that for us if we print the error to the console.
      */
     console.error(e);
-    const msg = getErrorMessageWithStackAndCause(e);
-    DisplayError(initialText + msg, getErrorType(e.stack) ?? "RUNTIME", ws?.scriptRef?.filename, ws?.hostname, ws?.pid);
+    DisplayError(initialText + getErrorMessageWithStackAndCause(e), getErrorType(e.stack) ?? "RUNTIME", ws);
   } else if (typeof e !== "string") {
     console.error("Unexpected error:", e);
     const msg = `Unexpected type of error thrown. This error was likely thrown manually within a script.
         Error has been logged to the console.\n\nType of error: ${typeof e}\nValue of error: ${e}`;
-    DisplayError(msg, "UNKNOWN", ws?.scriptRef?.filename, ws?.hostname, ws?.pid);
+    DisplayError(msg, "UNKNOWN", ws);
   }
 }
 
