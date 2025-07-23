@@ -241,5 +241,25 @@ export const breakingChanges300: VersionBreakingChange = {
       info: 'The "VeChain" upgrade was removed. The cost of that upgrade was refunded.',
       showWarning: false,
     },
+    {
+      brokenAPIs: [],
+      info:
+        "Some properties of the server object returned by ns.getServer() are not optional now. When you passed the " +
+        "hostname of a hacknet server, those properties were undefined. Now they have default values:\n" +
+        "- backdoorInstalled: false\n" +
+        "- baseDifficulty: 1\n" +
+        "- hackDifficulty: 1\n" +
+        "- minDifficulty: 1\n" +
+        "- moneyAvailable: 0\n" +
+        "- moneyMax: 0\n" +
+        "- numOpenPortsRequired: 5\n" +
+        "- openPortCount: 0\n" +
+        "- requiredHackingSkill: 1\n" +
+        "- serverGrowth: 1\n" +
+        "This should not be a problem with most scripts. However, if your scripts check if those properties are " +
+        "truthy/falsy, you should double-check the logic.",
+      showPopUp: true,
+      doNotSkip: true,
+    },
   ],
 };

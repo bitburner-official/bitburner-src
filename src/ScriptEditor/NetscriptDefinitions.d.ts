@@ -637,34 +637,34 @@ export interface Server {
   purchasedByPlayer: boolean;
 
   /** Flag indicating whether this server has a backdoor installed by a player */
-  backdoorInstalled?: boolean;
+  backdoorInstalled: boolean;
 
   /** Server's initial server security level at creation. */
-  baseDifficulty?: number;
+  baseDifficulty: number;
 
   /** Server Security Level */
-  hackDifficulty?: number;
+  hackDifficulty: number;
 
   /** Minimum server security level that this server can be weakened to */
-  minDifficulty?: number;
+  minDifficulty: number;
 
   /** How much money currently resides on the server and can be hacked */
-  moneyAvailable?: number;
+  moneyAvailable: number;
 
   /** Maximum amount of money that this server can hold */
-  moneyMax?: number;
+  moneyMax: number;
 
   /** Number of open ports required in order to gain admin/root access */
-  numOpenPortsRequired?: number;
+  numOpenPortsRequired: number;
 
   /** How many ports are currently opened on the server */
-  openPortCount?: number;
+  openPortCount: number;
 
   /** Hacking level required to hack this server */
-  requiredHackingSkill?: number;
+  requiredHackingSkill: number;
 
   /** Growth effectiveness statistic. Higher values produce more growth with ns.grow() */
-  serverGrowth?: number;
+  serverGrowth: number;
 }
 
 /**

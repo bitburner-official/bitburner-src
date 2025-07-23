@@ -343,8 +343,7 @@ export const ns: InternalAPI<NSFull> = {
       // Check argument validity
       const server = helpers.getServer(ctx, host);
       if (!(server instanceof Server)) {
-        // Todo 2.3: Make this throw instead of returning 0?
-        helpers.log(ctx, () => `${host} is not a hackable server. Returning 0.`);
+        helpers.log(ctx, () => "Cannot be executed on this server.");
         return 0;
       }
       if (!Number.isFinite(mult) || mult < 1) {
