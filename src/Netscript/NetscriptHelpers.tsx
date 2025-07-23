@@ -496,7 +496,7 @@ function getNormalServer(ctx: NetscriptContext, host: string): Server {
   if (!(server instanceof Server)) {
     let errorMessage = `Cannot be executed on ${host}.`;
     if (server instanceof HacknetServer) {
-      errorMessage += " It's a hacknet server.";
+      errorMessage += " The server must not be a hacknet server.";
     }
     throw helpers.errorMessage(ctx, errorMessage);
   }
