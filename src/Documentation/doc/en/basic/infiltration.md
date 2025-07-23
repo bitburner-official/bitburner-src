@@ -19,7 +19,7 @@ When infiltrating a [Company](companies.md), you will be presented with short ac
 
 Each location that can be infiltrated has 3 important values:
 
-- Difficulty: It affects how difficult the challenges are. This value depends on your "common" stats (combat stats and charisma). It's reduced when you improve your stats. It is not recommended to attempt infiltrations when the difficulty is above normal.
+- Difficulty: It affects how difficult the challenges are. This value depends on your "common" stats (combat stats and charisma). It's reduced when you improve your stats. It is not recommended to attempt infiltrations when the difficulty is above normal. You will not be able to infiltrate a location if the difficulty of that location is "Impossible" (100 in UI; 3.5 in NS API).
 - Max clearance level: It is the number of challenges you need to pass to receive the infiltration reward.
 - Starting security level: It affects the difficulty and rewards.
 
@@ -32,22 +32,19 @@ Infiltration rewards depend on:
 
 - Max clearance level. Higher max clearance level = Higher rewards.
 - Starting security level. Higher starting security level = Higher rewards.
-- Your stats' **multipliers** (**NOT** skill levels). **Lower** multipliers = Higher rewards.
 - "SoA - phyzical WKS harmonizer" augmentation.
-- An endgame stat [1]. You will know what it is when you reach the endgame.
-- An endgame multiplier [2]. You will know what it is when you reach the endgame.
+- Market demand. This is a multiplier.
+- An endgame stat. You will know what it is when you reach the endgame.
+- An endgame multiplier. You will know what it is when you reach the endgame.
 
-The most common misconception of infiltration rewards is that they depend on skill levels. This is wrong. The rewards do **NOT** depend on skill levels. They depend on stats' multipliers. When you install augmentations that improve stats' multipliers, the rewards are reduced.
+Every time you complete an infiltration, the market demand reduces, so you receive fewer rewards. The market demand naturally recovers over time. The effective value of this multiplier is always in the range of [0, 1]. The UI may show a negative value to indicate how low it currently is.
 
-In some special cases, you may observe this behavior: When you install augmentations or soft reset, your skill levels drop to 1 and infiltration rewards are increased. Some players mistakenly think that this is why infiltrations should be done with low stats to optimize the rewards. This is totally wrong. Again, infiltration rewards do **NOT** depend on skill levels. In these special cases, the rewards are increased because stats' **multipliers** are reduced due to losing bonuses from other mechanics (IPvGO and some endgame mechanics).
+The most common misconception of infiltration rewards is that they depend on your skill levels. This is wrong. The rewards do **NOT** depend on your skill levels.
 
-Raising raw values of stats (skill levels) is one of the proper ways to optimize the infiltration. Having higher stats does not increase the rewards, but it allows you to infiltrate harder locations (higher max clearance level, higher starting security level, easier to complete more infiltrations in the same time frame, etc.).
+Tips for increasing the infiltration rewards:
 
-Proper ways to optimize the infiltration (with the same [2] and the same stats' multipliers) are:
-
-- Raise stats. Do NOT purposely keep them low. Having higher stats does not increase the rewards, but it allows you to infiltrate harder locations. Training at gyms, committing crimes, and working for companies/factions are good and easy ways to raise stats without changing stats' multipliers.
-- Infiltrate harder locations after getting higher stats (higher max clearance level, higher starting security level, easier to complete more infiltrations in the same time frame, etc.).
-- Increase [1].
+- Improve stats. Having higher stats does not increase the rewards, but it allows you to infiltrate harder locations. Training at gyms, committing crimes, and working for companies/factions are good and easy ways to improve stats. After getting higher stats, you can infiltrate harder locations (higher max clearance level, higher starting security level) to get higher rewards.
+- Increase the endgame stat mentioned above.
 - Buy SoA augmentations (especially "SoA - phyzical WKS harmonizer").
 
 ## Challenge list

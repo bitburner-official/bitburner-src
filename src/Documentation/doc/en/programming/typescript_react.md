@@ -1,6 +1,8 @@
-# How to use React in game
+# How to use TypeScript and React in game
 
-Since v2.7.0, Bitburner supports React and TypeScript out of the box. You can use the jsx syntax inside `.jsx` and `.tsx` files.
+Bitburner supports TypeScript and React out of the box.
+
+You can write TypeScript scripts in `.ts` files and use the jsx syntax inside `.jsx` and `.tsx` files. You can run them with the `run` CLI as if they are normal JS files. For example, you can run the `timer.tsx` file in the next section by running `run timer.tsx` in the terminal tab.
 
 ## Example
 
@@ -22,7 +24,7 @@ function Timer() {
 }
 
 export async function main(ns: NS) {
-  ns.tail();
+  ns.ui.openTail();
   ns.printRaw(<Timer />);
   await ns.asleep(10000);
 }
