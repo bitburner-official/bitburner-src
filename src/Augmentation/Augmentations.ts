@@ -1858,7 +1858,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "An experimental augmentation that lets the user make incredible leaps of insight and flights of fancy. " +
         "Created by a mysterious figure known only as 'The Sculptor', this augmentation appears as a set of silvery " +
         "metallic patterns on the user's upper back and shoulders. " +
-        "Awarded to those who discover the secrets of the labrynth.",
+        "Awarded to those who discover the secrets of the labyrinth.",
       stats: "This augmentation increases the stasis link limit by one, and raises charisma by 15% and agility by 10%.",
       charisma: 1.15,
       agility: 1.1,
@@ -1871,7 +1871,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "Modeled after the winged boots of mythology, this implant somehow provides tireless social energy to the user. " +
         "Its creator, the enigmatic Sculptor, refuses to reveal the details of how it works, and only mutters about 'liveware APIs'. " +
-        "Awarded to those who discover the secrets of the labrynth.",
+        "Awarded to those who discover the secrets of the labyrinth.",
       stats:
         "This augmentation increases the speed of authentication and heartbleed by 20%, and raises charisma and dexterity by 20%.",
       charisma: 1.2,
@@ -1886,7 +1886,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "This unique augmentation allows the user to strike stright to the heart of the matter and sweep aside obstacles in the way of their goals. " +
         "Appearing as a simple insignia on the user's forarm, its true function is unknown. It is said to be one of the tools of The Sculptor. " +
-        "Awarded to those who discover the secrets of the labrynth.",
+        "Awarded to those who discover the secrets of the labyrinth.",
       stats:
         "This augmentation increases the stasis link limit by one, and raises charisma by 35% and strength by 25%.",
       charisma: 1.35,
@@ -1902,7 +1902,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "An advanced neural implant that integrates Bayesian inference algorithms into the brain's decision-making processes. " +
         "This augmentation enhances the user's ability to assess probabilities, predict outcomes, and adapt strategies in real-time, " +
         "making them exceptionally persuasive and confident in negotiations and social interactions. " +
-        "Awarded to those who discover the secrets of the labrynth.",
+        "Awarded to those who discover the secrets of the labyrinth.",
       stats: "This augmentation raises charisma by 40%, hacking by 10%, and company rep by 5%.",
       charisma: 1.4,
       hacking: 1.1,
@@ -1919,7 +1919,7 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "This augmentation enhances the user's ability to deduce optimal strategies and make compelling arguments, " +
         "turning every interaction into a calculated success. The technique is sometimes referred to as Solomonoff's Lightsaber, as it is a " +
         "more powerful version of Occam's razor. " +
-        "The final augment awarded to those who discover the secrets of the labrynth.",
+        "The final augment awarded to those who discover the secrets of the labyrinth.",
       stats: "This augmentation raises charisma by 50%, hacking by 16%, and company rep by 10%.",
       charisma: 1.5,
       hacking: 1.16,
