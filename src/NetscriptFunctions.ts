@@ -1619,11 +1619,13 @@ export const ns: InternalAPI<NSFull> = {
         () =>
           `ERROR: Failed. Was unable to remove file ${sourcePath} from its original location. If ${sourcePath} is a script, make sure that it is NOT running before trying to use 'mv' on it.`,
       );
+      return;
     }
     const { overwritten } = server.writeToContentFile(destinationPath, sourceContentFile.content);
-    if (overwritten) helpers.log(ctx, () => `WARNING: Overwriting file ${destinationPath} on ${host}`);
+    if (overwritten) {
+      helpers.log(ctx, () => `WARNING: Overwriting file ${destinationPath} on ${host}`);
+    }
     helpers.log(ctx, () => `Moved ${sourcePath} to ${destinationPath} on ${host}`);
-    return;
   },
   getResetInfo: () => () => ({
     lastAugReset: Player.lastAugReset,
