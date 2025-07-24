@@ -88,6 +88,7 @@ import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
 import { isDarknetServer } from "../DarkNet/effects/effects";
 import { getRewardFromCache } from "../DarkNet/effects/cacheFiles";
+import { DarknetServer } from "../Server/DarknetServer";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -228,7 +229,8 @@ export class Terminal {
       this.error("Cannot backdoor this kind of server");
       return;
     }
-    if (!(server instanceof Server)) throw new Error("server should be normal server");
+    if (!(server instanceof Server || server instanceof DarknetServer))
+      throw new Error("server should be normal server");
     this.startAction(calculateHackingTime(server, Player) / 4, "b", server);
   }
 
@@ -358,7 +360,8 @@ export class Terminal {
         this.error("Cannot hack this kind of server");
         return;
       }
-      if (!(server instanceof Server)) throw new Error("server should be normal server");
+      if (!(server instanceof Server || server instanceof DarknetServer))
+        throw new Error("server should be normal server");
       server.backdoorInstalled = true;
       if (SpecialServers.WorldDaemon === server.hostname) {
         if (Player.bitNodeN == null) {

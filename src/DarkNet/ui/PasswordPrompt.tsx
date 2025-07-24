@@ -44,7 +44,7 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
     const responseTime = 500 + sharedChars * 150;
     await sleep(responseTime);
 
-    const response = getAuthResult(passwordAttempted, server, 4, responseTime);
+    const response = getAuthResult(passwordAttempted, server, 2, responseTime);
     setRawResponse(response);
     setResponse(JSON.stringify(response.result, null, 2));
 
@@ -125,8 +125,7 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
                 <br />
                 {darknetData?.passwordHintData && (
                   <>
-                    <span className={classes.serverDetailsText}>data:</span>
-                    {darknetData?.passwordHintData}
+                    <span className={classes.serverDetailsText}>data: </span> {darknetData?.passwordHintData}
                     <br />
                   </>
                 )}

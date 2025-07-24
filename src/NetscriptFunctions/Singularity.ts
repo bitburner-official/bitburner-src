@@ -52,6 +52,7 @@ import { validBitNodes } from "../BitNode/Constants";
 import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { cat } from "../Terminal/commands/cat";
 import { Crimes } from "../Crime/Crimes";
+import { DarknetServer } from "../Server/DarknetServer";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -517,16 +518,18 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
     installBackdoor: (ctx) => async (): Promise<void> => {
       helpers.checkSingularityAccess(ctx);
       const baseserver = Player.getCurrentServer();
-      if (!(baseserver instanceof Server)) {
+      if (!(baseserver instanceof Server || baseserver instanceof DarknetServer)) {
         throw helpers.errorMessage(ctx, "Cannot backdoor this kind of server.");
       }
       const server = baseserver;
       const installTime = (calculateHackingTime(server, Player) / 4) * 1000;
 
-      // No root access or skill level too low
-      const canHack = netscriptCanHack(server, "backdoor");
-      if (!canHack.res) {
-        throw helpers.errorMessage(ctx, canHack.msg || "");
+      if (server instanceof Server) {
+        // No root access or skill level too low
+        const canHack = netscriptCanHack(server, "backdoor");
+        if (!canHack.res) {
+          throw helpers.errorMessage(ctx, canHack.msg || "");
+        }
       }
 
       helpers.log(

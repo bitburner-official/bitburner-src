@@ -2,6 +2,7 @@ import { Terminal } from "../../Terminal";
 import { Player } from "@player";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
+import { DarknetServer } from "../../Server/DarknetServer";
 
 export function backdoor(args: (string | number | boolean)[], server: BaseServer): void {
   if (args.length !== 0) {
@@ -9,7 +10,7 @@ export function backdoor(args: (string | number | boolean)[], server: BaseServer
     return;
   }
 
-  if (!(server instanceof Server)) {
+  if (!(server instanceof Server) && !(server instanceof DarknetServer)) {
     Terminal.error("Can only install a backdoor on normal servers");
     return;
   }
@@ -23,7 +24,7 @@ export function backdoor(args: (string | number | boolean)[], server: BaseServer
     Terminal.error("You do not have admin rights for this machine");
     return;
   }
-  if (server.requiredHackingSkill > Player.skills.hacking) {
+  if (server.requiredHackingSkill && server.requiredHackingSkill > Player.skills.hacking) {
     Terminal.error(
       "Your hacking skill is not high enough to install a backdoor on this machine. Try analyzing the machine to determine the required hacking skill.",
     );

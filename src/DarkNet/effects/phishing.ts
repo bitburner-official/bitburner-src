@@ -7,6 +7,7 @@ import { helpers } from "../../Netscript/NetscriptHelpers";
 import { addCacheToServer } from "./cacheFiles";
 
 export const getPhishingAttackSpeed = () => Math.max(10000 * (400 / (400 + Player.skills.charisma)), 200);
+const getPhishingCacheCooldownDuration = () => (hasDarknetBonusTime() ? 15_000 : 30_000);
 
 export const handlePhishingAttack = (ctx: NetscriptContext) => {
   const threads = ctx.workerScript.scriptRef.threads;
@@ -14,10 +15,11 @@ export const handlePhishingAttack = (ctx: NetscriptContext) => {
   Player.gainCharismaExp(xpGained);
 
   const timeSinceLastRewardCache = new Date().getTime() - DarknetState.lastPhishingCacheTime.getTime();
-  const rewardCacheChance = 0.01 * Player.mults.crime_success * threads * ((400 + Player.skills.charisma) / 400);
+  const rewardCacheChance = 0.005 * Player.mults.crime_success * threads * ((400 + Player.skills.charisma) / 400);
   const moneyRewardChance = 0.05 * Player.mults.crime_success * ((100 + Player.skills.charisma) / 100);
+  const cooldown = getPhishingCacheCooldownDuration();
 
-  if (timeSinceLastRewardCache < 1000 * 60 * 3 && Math.random() < rewardCacheChance) {
+  if (timeSinceLastRewardCache > cooldown && Math.random() < rewardCacheChance) {
     addCacheToServer(ctx.workerScript.getServer());
     DarknetState.lastPhishingCacheTime = new Date();
     const result = `Phishing attack succeeded! Found a cache file. (Gained ${formatNumber(xpGained, 1)} cha xp)`;

@@ -31,6 +31,9 @@ export const dnetStyles = makeStyles<unknown, dwColors>({ uniqId: "dnetStyles" }
     padding: 0,
     margin: 0,
   },
+  ip: {
+    fontSize: "0.9em",
+  },
   NetWrapper: {
     width: "100%",
     height: "calc(100vh - 80px)",

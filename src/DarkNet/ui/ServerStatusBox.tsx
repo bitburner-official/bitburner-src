@@ -57,7 +57,7 @@ export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps):
               {server.hostname}
             </Typography>
           </Box>
-          <Typography color="secondary">
+          <Typography color="secondary" className={classes.ip}>
             {ip} cha:{darknetData?.requiredCharismaSkill ?? 0}
           </Typography>
           <br />

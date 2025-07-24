@@ -12,6 +12,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
+import { DarknetServer } from "../../Server/DarknetServer";
 
 export function ServersDev(): React.ReactElement {
   const [server, setServer] = useState<string>("home");
@@ -52,7 +53,7 @@ export function ServersDev(): React.ReactElement {
 
   function backdoorAllServers(): void {
     for (const s of GetAllServers(true)) {
-      if (!(s instanceof Server) || s.hostname === SpecialServers.WorldDaemon) return;
+      if (!(s instanceof Server || s instanceof DarknetServer) || s.hostname === SpecialServers.WorldDaemon) continue;
       s.backdoorInstalled = true;
     }
   }
