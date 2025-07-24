@@ -7,7 +7,7 @@ import { helpers } from "../../Netscript/NetscriptHelpers";
 import { addCacheToServer } from "./cacheFiles";
 
 export const getPhishingAttackSpeed = () => Math.max(10000 * (400 / (400 + Player.skills.charisma)), 200);
-const getPhishingCacheCooldownDuration = () => (hasDarknetBonusTime() ? 15_000 : 30_000);
+const getPhishingCacheCooldownDuration = () => (hasDarknetBonusTime() ? 12_000 : 24_000);
 
 export const handlePhishingAttack = (ctx: NetscriptContext) => {
   const threads = ctx.workerScript.scriptRef.threads;
