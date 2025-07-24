@@ -8655,6 +8655,8 @@ export interface NS {
    *
    * This function can also be used to rename files.
    *
+   * This function is not able to remove running scripts from their original locations. Make sure to stop any scripts before using this function on them.
+   *
    * @param host - Hostname/IP of target server.
    * @param source - Filename of the source file.
    * @param destination - Filename of the destination file.

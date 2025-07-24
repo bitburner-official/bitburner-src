@@ -55,7 +55,7 @@ import { resolveFilePath, FilePath } from "../Paths/FilePath";
 import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
-import { basicErrorMessage, errorMessage, log } from "./ErrorMessages";
+import { errorMessage, log } from "./ErrorMessages";
 import { assertStringWithNSContext, debugType } from "./TypeAssertion";
 import {
   canAccessBitNodeFeature,
@@ -87,7 +87,6 @@ export const helpers = {
   hostReturnOptions,
   returnServerID,
   argsToString,
-  basicErrorMessage,
   errorMessage,
   validateHGWOptions,
   checkEnvFlags,
@@ -114,6 +113,7 @@ export const helpers = {
   createPublicRunningScript,
   failOnHacknetServer,
   validateBitNodeOptions,
+  getNormalServer,
 };
 
 /** RunOptions with non-optional, type-validated members, for passing between internal functions. */
@@ -488,7 +488,7 @@ function scriptIdentifier(
  * @param {string} hostname - Hostname of the server
  * @returns {BaseServer} The specified server as a BaseServer
  */
-export function getServer(ctx: NetscriptContext, hostname: string) {
+export function getServer(ctx: NetscriptContext, hostname: string): BaseServer {
   const server = GetServer(hostname);
   if (
     server == null ||
@@ -496,6 +496,21 @@ export function getServer(ctx: NetscriptContext, hostname: string) {
   ) {
     const str = hostname === "" ? "'' (empty string)" : "'" + hostname + "'";
     throw errorMessage(ctx, `Invalid hostname: ${str}`);
+  }
+  return server;
+}
+
+/**
+ * A "normal server" is an instance of the Server class in src/Server/Server.ts.
+ */
+function getNormalServer(ctx: NetscriptContext, host: string): Server {
+  const server = getServer(ctx, host);
+  if (!(server instanceof Server)) {
+    let errorMessage = `Cannot be executed on ${host}.`;
+    if (server instanceof HacknetServer) {
+      errorMessage += " The server must not be a hacknet server.";
+    }
+    throw helpers.errorMessage(ctx, errorMessage);
   }
   return server;
 }
@@ -508,10 +523,7 @@ function isScriptArgs(args: unknown): args is ScriptArg[] {
 function hack(ctx: NetscriptContext, hostname: string, manual: boolean, opts: unknown): Promise<number> {
   const ws = ctx.workerScript;
   const { threads, stock, additionalMsec } = validateHGWOptions(ctx, opts);
-  const server = getServer(ctx, hostname);
-  if (!(server instanceof Server)) {
-    throw errorMessage(ctx, "Cannot be executed on this server.");
-  }
+  const server = getNormalServer(ctx, hostname);
 
   // Calculate the hacking time
   // This is in seconds
@@ -813,8 +825,8 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
 /**
  * Used to fail a function if the function's target is a Hacknet Server.
  * This is used for functions that should run on normal Servers, but not Hacknet Servers
+ * @param {NetscriptContext} ctx - Netscript context
  * @param {Server} server - Target server
- * @param {string} callingFn - Name of calling function. For logging purposes
  * @returns {boolean} True if the server is a Hacknet Server, false otherwise
  */
 function failOnHacknetServer(ctx: NetscriptContext, server: BaseServer): boolean {

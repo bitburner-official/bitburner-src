@@ -34,3 +34,5 @@ This command only works for scripts and text files (.txt). It cannot, however, b
 
 This function can also be used to rename files.
 
+This function is not able to remove running scripts from their original locations. Make sure to stop any scripts before using this function on them.
+

@@ -27,7 +27,9 @@ export function mv(args: (string | number | boolean)[], server: BaseServer): voi
   if (!sourceContentFile) return Terminal.error(`Source file ${sourcePath} does not exist`);
 
   if (!sourceContentFile.deleteFromServer(server)) {
-    return Terminal.error(`Could not remove source file ${sourcePath} from existing location.`);
+    return Terminal.error(
+      `Could not remove source file ${sourcePath} from existing location. If ${sourcePath} is a script, make sure that it is NOT running before trying to use 'mv' on it.`,
+    );
   }
   Terminal.print(`Moved ${sourcePath} to ${destinationPath}`);
   const { overwritten } = server.writeToContentFile(destinationPath, sourceContentFile.content);
