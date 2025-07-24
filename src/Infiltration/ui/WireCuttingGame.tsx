@@ -91,12 +91,26 @@ export function WireCuttingGame({ onSuccess, onFailure, difficulty }: IMinigameP
     setHasAugment(Player.hasAugmentation(AugmentationName.KnowledgeOfApollo, true));
   }, [difficulty]);
 
-  useEffect(() => stageState.set(() => ({
-      stage: "wireCutter",
-      goals: questions.map((x) => x.toString()),
-      wires: wires.map((x) => [...x.colors]),
-      cutWires: [...cutWires],
-  })), [questions, wires, cutWires]);
+  useEffect(
+    () =>
+      stageState.set(() => {
+        const result: { [x: string]: unknown } = {
+          stage: "wireCutter",
+          goals: questions.map((x) => x.toString()),
+          wires: wires.map((x) => [...x.colors]),
+          cutWires: [...cutWires],
+        };
+        if (hasAugment) {
+          const has = [];
+          for (let i = 0; i < cutWires.length; ++i) {
+            has[i] = wiresToCut.has(i);
+          }
+          result.correctWires = has;
+        }
+        return result;
+      }),
+    [questions, wires, cutWires, hasAugment, wiresToCut],
+  );
 
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();

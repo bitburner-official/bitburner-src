@@ -7,6 +7,7 @@ import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
+import { stageState } from "../State";
 
 interface Difficulty {
   [key: string]: number;
@@ -74,6 +75,17 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
       }, data.guardingTime);
     }
   }, [phase, data, startPhase1]);
+
+  useEffect(
+    () =>
+      stageState.set(() => ({
+        state: "slash",
+        guardingTime: data.guardingTime,
+        distractedTime: data.distractedTime,
+        alertedTime: data.alertedTime,
+      })),
+    [data],
+  );
 
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();

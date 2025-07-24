@@ -75,7 +75,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       info:
         "Pheromone extruder injected in the thoracodorsal nerve. Emits pleasing scent guaranteed to " +
         "make conversational partners more agreeable.",
-      stats: "This augmentation makes the Bribe minigame easier by indicating the incorrect paths.",
+      stats:
+        "This augmentation makes the Bribe minigame easier by indicating the incorrect paths. " +
+        "API: Reveals positive adjectives.",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -326,7 +328,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info: "Opto-occipito implant to process visual signals before brain interpretation.",
-      stats: "This augmentation makes the Backwards minigame easier by flipping the words.",
+      stats:
+        "This augmentation makes the Backwards minigame easier by flipping the words. " +
+        "API: The minigame is always at 'Easy' difficulty.",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -979,7 +983,9 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
       repCost: 1e4,
       moneyCost: 1e6,
       info: "Neodynic retention fjengeln spoofer using -φ karmions, net positive effect on implantee's delta wave.",
-      stats: "This augmentation makes the Wire Cutting minigame easier by indicating the incorrect wires.",
+      stats:
+        "This augmentation makes the Wire Cutting minigame easier by indicating the incorrect wires. " +
+        "API: Indicates incorrect wires.",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -1017,7 +1023,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         "Extra-ocular neurons taken from old martial arts master. Injecting them gives the user the ability to " +
         "predict the enemy's movement.",
       stats:
-        "This augmentation makes the Slash minigame easier by showing you via an indicator when the sentinel is distracted.",
+        "This augmentation makes the Slash minigame easier by showing you via an indicator when the sentinel is distracted. " +
+        "API: The minigame is always on 'Easy' difficulty.",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },
@@ -1826,7 +1833,8 @@ export const Augmentations: Record<AugmentationName, Augmentation> = (() => {
         `A copy of the WKS harmonizer from the MIA leader of the ${FactionName.ShadowsOfAnarchy} ` +
         "injects *Γ-based cells that provide general enhancement to the body.",
       stats:
-        "This augmentation makes many aspects of infiltration easier and more productive via increased timer and rewards, reduced damage taken, etc.",
+        "This augmentation makes many aspects of infiltration easier and more productive via increased timer and rewards, reduced damage taken, etc. " +
+        "API: In addition, the pressKey delay is significantly reduced.",
       isSpecial: true,
       factions: [FactionName.ShadowsOfAnarchy],
     },

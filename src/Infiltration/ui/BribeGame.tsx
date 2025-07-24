@@ -9,6 +9,9 @@ import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
+import { stageState } from "../State";
+import { positiveAdjectives, negativeAdjectives } from "../data";
+import { shuffleArray } from "../../utils/helpers/shuffleArray";
 
 interface Difficulty {
   [key: string]: number;
@@ -39,8 +42,17 @@ export function BribeGame(props: IMinigameProps): React.ReactElement {
   const currentChoice = choices[index];
 
   useEffect(() => {
-    setCorrectIndex(choices.findIndex((choice) => positive.includes(choice)));
+    setCorrectIndex(choices.findIndex((choice) => positiveAdjectives.includes(choice)));
   }, [choices]);
+
+  useEffect(
+    () =>
+      stageState.set(() => ({
+        stage: "bribe",
+        adjective: choices[index],
+      })),
+    [choices, index],
+  );
 
   const defaultColor = Settings.theme.primary;
   const disabledColor = Settings.theme.disabled;
@@ -74,7 +86,7 @@ export function BribeGame(props: IMinigameProps): React.ReactElement {
 
     const k = event.key;
     if (k === KEY.SPACE) {
-      if (positive.includes(currentChoice)) props.onSuccess();
+      if (positiveAdjectives.includes(currentChoice)) props.onSuccess();
       else props.onFailure();
       return;
     }
@@ -107,20 +119,11 @@ export function BribeGame(props: IMinigameProps): React.ReactElement {
   );
 }
 
-export function shuffleArray(array: unknown[]): void {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
-  }
-}
-
 function makeChoices(difficulty: Difficulty): string[] {
   const choices = [];
-  choices.push(positive[Math.floor(Math.random() * positive.length)]);
+  choices.push(positiveAdjectives[Math.floor(Math.random() * positiveAdjectives.length)]);
   for (let i = 0; i < difficulty.size; i++) {
-    const option = negative[Math.floor(Math.random() * negative.length)];
+    const option = negativeAdjectives[Math.floor(Math.random() * negativeAdjectives.length)];
     if (choices.includes(option)) {
       i--;
       continue;
@@ -130,51 +133,3 @@ function makeChoices(difficulty: Difficulty): string[] {
   shuffleArray(choices);
   return choices;
 }
-
-const positive = [
-  "affectionate",
-  "agreeable",
-  "bright",
-  "charming",
-  "creative",
-  "determined",
-  "energetic",
-  "friendly",
-  "funny",
-  "generous",
-  "polite",
-  "likable",
-  "diplomatic",
-  "helpful",
-  "giving",
-  "kind",
-  "hardworking",
-  "patient",
-  "dynamic",
-  "loyal",
-  "straightforward",
-];
-
-const negative = [
-  "aggressive",
-  "aloof",
-  "arrogant",
-  "big-headed",
-  "boastful",
-  "boring",
-  "bossy",
-  "careless",
-  "clingy",
-  "couch potato",
-  "cruel",
-  "cynical",
-  "grumpy",
-  "hot air",
-  "know it all",
-  "obnoxious",
-  "pain in the neck",
-  "picky",
-  "tactless",
-  "thoughtless",
-  "cringe",
-];

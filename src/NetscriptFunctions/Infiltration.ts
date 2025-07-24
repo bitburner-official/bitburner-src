@@ -1,6 +1,6 @@
 import type { InternalAPI, NetscriptContext } from "../Netscript/APIWrapper";
 import type { Infiltration as NetscriptInfiltation, InfiltrationLocation, Result } from "@nsdefs";
-import { FactionName, LocationName } from "@enums";
+import { FactionName, LocationName, AugmentationName } from "@enums";
 import { Location } from "../Locations/Location";
 import { Locations } from "../Locations/Locations";
 import {
@@ -24,6 +24,8 @@ import { Page } from "../ui/Router";
 import { Router } from "../ui/GameRoot";
 import { getState, stageState, victoryState, InfiltrationKeyEvents } from "../Infiltration/State";
 import { formatMoney, formatReputation } from "../ui/formatNumber";
+import { words as dictionaryWords, positiveAdjectives, negativeAdjectives } from "../Infiltration/data";
+import { shuffleArray } from "../utils/helpers/shuffleArray";
 
 function checkAccess(ctx: NetscriptContext, lvl = 1): void {
   if (Player.bitNodeN === 11 || Player.activeSourceFileLvl(11) >= lvl) {
@@ -180,8 +182,9 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
       // so this does not reflect the same difficulty as the actual infil.
       // Like the quirks with hack and grow, this is considered OK.
       const difficulty = calculateDifficulty(location.infiltrationData.startingSecurityLevel);
+      const hasAugment = Player.hasAugmentation(AugmentationName.WKSharmonizer, true);
       const noise = difficulty < 1 ? 0 : 10 * difficulty;
-      const delay = 60 + difficulty * 30 + Math.random() * noise;
+      const delay = (hasAugment ? 0.5 : 1) * (60 + difficulty * 30 + Math.random() * noise);
       return helpers.netscriptDelay(ctx, delay).then(() => {
         InfiltrationKeyEvents.emit(key);
       });
@@ -226,6 +229,19 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
       );
       victory.tradeToFaction(faction);
       return rep;
+    },
+    dictionary: (ctx) => () => {
+      checkAccess(ctx);
+      const words = [...dictionaryWords];
+      shuffleArray(words);
+      return words;
+    },
+    adjectives: (ctx) => () => {
+      checkAccess(ctx);
+      const hasAugment = Player.hasAugmentation(AugmentationName.BeautyOfAphrodite, true);
+      const words = hasAugment ? [...negativeAdjectives] : positiveAdjectives.concat(negativeAdjectives);
+      shuffleArray(words);
+      return hasAugment ? positiveAdjectives.concat(words) : words;
     },
   };
 }

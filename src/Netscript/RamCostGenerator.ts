@@ -343,6 +343,8 @@ const infiltration = {
   pressKey: 5,
   pressSpace: 5,
   claimRewards: 15,
+  dictionary: 0,
+  adjectives: 0,
 } as const;
 
 // Coding Contract API

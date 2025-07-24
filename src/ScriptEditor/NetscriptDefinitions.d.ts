@@ -6060,6 +6060,30 @@ interface Infiltration {
    * @returns The amount of money or rep gained, or 0 on error
    */
   claimRewards(faction: FactionName | null): number;
+
+  /**
+   * Returns a list of words used in a particular minigame.
+   *
+   * The list is not in any particular order.
+   *
+   * Requires API access.
+   * @remarks
+   * RAM cost: 0 GB
+   */
+  dictionary(): string[];
+
+  /**
+   * Returns a list of adjectives used in a particular minigame.
+   *
+   * The list is randomized each time. If you have the augmentation Beauty of
+   * Aphrodite, then the positive adjectives will appear at the front of the
+   * list and only the negative adjectives will be randomized.
+   *
+   * Requires API access.
+   * @remarks
+   * RAM cost: 0 GB
+   */
+  adjectives(): string[];
 }
 
 /**

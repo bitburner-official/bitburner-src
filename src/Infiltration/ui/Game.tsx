@@ -19,7 +19,7 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { PlayerEventType, PlayerEvents } from "../../PersonObjects/Player/PlayerEvents";
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { calculateReward, MaxDifficultyForInfiltration } from "../formulas/game";
-import { progressState } from "../State";
+import { progressState, difficultyState } from "../State";
 
 type GameProps = {
   startingSecurityLevel: number;
@@ -66,6 +66,7 @@ export function Game({ startingSecurityLevel, difficulty, maxLevel }: GameProps)
       }),
     [level, maxLevel, results],
   );
+  useEffect(() => difficultyState.set(difficulty), [difficulty]);
 
   const setupNextGame = useCallback(() => {
     const nextGameId = () => {
