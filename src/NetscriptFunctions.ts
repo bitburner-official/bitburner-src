@@ -1740,7 +1740,10 @@ export const ns: InternalAPI<NSFull> = {
       (!hasTextExtension(sourcePath) && !hasScriptExtension(sourcePath)) ||
       (!hasTextExtension(destinationPath) && !hasScriptExtension(destinationPath))
     ) {
-      throw helpers.errorMessage(ctx, `'mv' can only be used on scripts and text files (.txt, .json)`);
+      throw helpers.errorMessage(
+        ctx,
+        `'mv' can only be used on scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json)`,
+      );
     }
     if (sourcePath === destinationPath) {
       helpers.log(ctx, () => "WARNING: Did nothing, source and destination paths were the same.");

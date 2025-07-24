@@ -385,7 +385,7 @@ export const HelpTexts: Record<string, string[]> = {
     "Usage: mv [src] [dest]",
     " ",
     "Move the source file to the specified destination. This can also be used to rename files. ",
-    "This command only works for scripts and text files (.txt, .json). This command CANNOT be used to ",
+    "This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json). This command CANNOT be used to ",
     "convert to different file types",
     " ",
     "Note that, unlike the Linux 'mv' command, the destination argument must be the ",
