@@ -6,6 +6,8 @@
 
 Get all locations that can be infiltrated.
 
+Does not require API access.
+
 **Signature:**
 
 ```typescript

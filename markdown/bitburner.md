@@ -78,7 +78,7 @@
 |  [HP](./bitburner.hp.md) |  |
 |  [ILocation](./bitburner.ilocation.md) |  |
 |  [IndustryData](./bitburner.industrydata.md) | Corporation industry information |
-|  [Infiltration](./bitburner.infiltration.md) | Infiltration API. |
+|  [Infiltration](./bitburner.infiltration.md) | <p>Infiltration API.</p><p>Most of these methods require "API access", granted by BN 11 or SF 11, and will throw if that is not present.</p> |
 |  [InfiltrationLocation](./bitburner.infiltrationlocation.md) |  |
 |  [InfiltrationReward](./bitburner.infiltrationreward.md) |  |
 |  [InvestmentOffer](./bitburner.investmentoffer.md) | Corporation investment offer |
@@ -177,6 +177,7 @@
 |  [FactionNameEnumType](./bitburner.factionnameenumtype.md) | <p>Names of all factions.</p><p>Warning: Spoiler ahead. This enum contains names of \*\*all\*\* factions. If you do not want to know what all the factions are, you should not check this enum. Some factions are only accessible in the endgame.</p> |
 |  [FactionWorkEnumType](./bitburner.factionworkenumtype.md) |  |
 |  [FactionWorkType](./bitburner.factionworktype.md) |  |
+|  [FailureResult](./bitburner.failureresult.md) |  |
 |  [FilenameOrPID](./bitburner.filenameorpid.md) |  |
 |  [GoOpponent](./bitburner.goopponent.md) |  |
 |  [GymEnumType](./bitburner.gymenumtype.md) |  |
@@ -197,6 +198,7 @@
 |  [PositionEnumType](./bitburner.positionenumtype.md) |  |
 |  [PositionType](./bitburner.positiontype.md) |  |
 |  [ReactNode](./bitburner.reactnode.md) | <p>A stand-in for the real React.ReactNode. A [ReactElement](./bitburner.reactelement.md) is rendered dynamically with React. number and string are displayed directly. boolean, null, and undefined are ignored and not rendered. An array of ReactNodes will display all members of that array sequentially.</p><p>Use React.createElement to make the ReactElement type, see [creating an element without jsx](https://react.dev/reference/react/createElement#creating-an-element-without-jsx) from the official React documentation.</p> |
+|  [Result](./bitburner.result.md) |  |
 |  [ScriptArg](./bitburner.scriptarg.md) |  |
 |  [SimpleOpponentStats](./bitburner.simpleopponentstats.md) |  |
 |  [SleeveBladeburnerTask](./bitburner.sleevebladeburnertask.md) |  |
@@ -211,6 +213,7 @@
 |  [SleeveTask](./bitburner.sleevetask.md) | Object representing a sleeve current task. |
 |  [SpecialBladeburnerActionEnumTypeForSleeve](./bitburner.specialbladeburneractionenumtypeforsleeve.md) | These special Bladeburner action types are only for Sleeve |
 |  [SpecialBladeburnerActionTypeForSleeve](./bitburner.specialbladeburneractiontypeforsleeve.md) |  |
+|  [SuccessResult](./bitburner.successresult.md) |  |
 |  [Task](./bitburner.task.md) | Task |
 |  [ToastVariant](./bitburner.toastvariant.md) |  |
 |  [ToastVariantEnumType](./bitburner.toastvariantenumtype.md) |  |
