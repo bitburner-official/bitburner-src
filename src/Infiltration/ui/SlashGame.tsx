@@ -78,13 +78,17 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
 
   useEffect(
     () =>
-      stageState.set(() => ({
-        state: "slash",
-        guardingTime: data.guardingTime,
-        distractedTime: data.distractedTime,
-        alertedTime: data.alertedTime,
-      })),
-    [data],
+      stageState.set(() => {
+        const noise = data.hasAugment || difficulty < 1 ? 0 : difficulty * 700;
+        const roll = () => (Math.random() - 0.5) * noise;
+        return {
+          state: "slash",
+          approxGuardingTime: data.guardingTime + roll(),
+          approxDistractedTime: data.distractedTime + roll(),
+          approxAlertedTime: data.alertedTime + roll(),
+        };
+      }),
+    [data, difficulty],
   );
 
   function press(this: Document, event: KeyboardEvent): void {

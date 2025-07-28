@@ -5957,8 +5957,11 @@ interface Infiltration {
    *
    * This brings up the infiltration minigame, exactly as if you started it
    * manually. The "intro screen" (which shows expected rewards) is skipped.
-   * You must be in the location screen of a company that can be infiltrated
-   * to use this; if not, it will fail with an appropriate message.
+   * You must be in the same city as the location you are attempting to
+   * infiltrate, and due to the UI-focused nature of infiltration it only
+   * works from a small set of screens. These include the Terminal, Script
+   * Editor, Active Scripts, City, Location, and Infiltration (Start) screens.
+   * For the latter two, the location must match the location you pass in.
    *
    * Requires BN11 or SF11.3
    * @remarks
@@ -5966,7 +5969,7 @@ interface Infiltration {
    *
    * @returns success or failure
    */
-  startInfiltration(): Result;
+  startInfiltration(location: LocationName): Result;
 
   /**
    * Get the state of the current infiltration.

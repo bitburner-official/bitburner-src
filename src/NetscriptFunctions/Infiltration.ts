@@ -133,17 +133,43 @@ export function NetscriptInfiltration(): InternalAPI<NetscriptInfiltation> {
       checkAccess(ctx);
       return calculateMarketDemandMultiplier(Date.now(), false);
     },
-    startInfiltration: (ctx) => () => {
+    startInfiltration: (ctx) => (_locationName) => {
       checkAccess(ctx, 3);
+      const locationName = getEnumHelper("LocationName").nsGetMember(ctx, _locationName);
+      const validPages = [
+        Page.Terminal,
+        Page.ScriptEditor,
+        Page.ActiveScripts,
+        Page.City,
+        Page.Location,
+        Page.Infiltration,
+      ];
+      const locationPages: Page[] = [Page.Location, Page.Infiltration];
       const result: Result = (() => {
-        if (Router.page() !== Page.Location) {
-          return { success: false, message: `Must be at the location screen, currently showing ${Router.page()}` };
+        if (!validPages.includes(Router.page())) {
+          const vpStr = validPages.map((x) => `"${x}"`).join(", ");
+          return {
+            success: false,
+            message: `Must be at one of these screens: [${vpStr}], currently showing ${Router.page()}`,
+          };
         }
-        const result = getInfilLocation(Player.location);
+        const result = getInfilLocation(locationName);
         if (!result.success) {
           return { success: false, message: result.message };
         }
+        if (locationPages.includes(Router.page()) && Player.location !== locationName) {
+          return {
+            success: false,
+            message: `Trying to infiltrate ${locationName}, but you are currently at ${Player.location}`,
+          };
+        }
         const location = result.location;
+        if (location.city !== Player.city) {
+          return {
+            success: false,
+            message: `${locationName} is in ${location.city}, but you are currently in ${Player.city}`,
+          };
+        }
         // Technically we don't need this check, but it's nicer to have it up-front.
         // It is a duplicate, so watch out for divergence with the same code in Intro.tsx.
         const startingSecurityLevel = location.infiltrationData.startingSecurityLevel;

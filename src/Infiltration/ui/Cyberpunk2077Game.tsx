@@ -1,5 +1,5 @@
 import { Paper, Typography, Box } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
@@ -9,6 +9,7 @@ import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
+import { stageState } from "../State";
 
 interface Difficulty {
   [key: string]: number;
@@ -44,6 +45,24 @@ export function Cyberpunk2077Game(props: IMinigameProps): React.ReactElement {
   const [answers] = useState(generateAnswers(grid, difficulty));
   const [currentAnswerIndex, setCurrentAnswerIndex] = useState(0);
   const [pos, setPos] = useState([0, 0]);
+
+  useEffect(
+    () =>
+      stageState.set(() => {
+        const result: { [x: string]: number[] } = {};
+        for (let i = currentAnswerIndex; i < answers.length; ++i) {
+          const arr = (result[answers[i]] ??= []);
+          arr.push(i);
+        }
+        Object.assign(result, {
+          stage: "hexGrid",
+          map: grid.map((line) => [...line]),
+          pos: [...pos],
+        });
+        return result;
+      }),
+    [grid, answers, pos, currentAnswerIndex],
+  );
 
   const hasAugment = Player.hasAugmentation(AugmentationName.FloodOfPoseidon, true);
   function press(this: Document, event: KeyboardEvent): void {

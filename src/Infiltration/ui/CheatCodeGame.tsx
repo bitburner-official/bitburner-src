@@ -1,5 +1,5 @@
 import { Paper, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Arrow, downArrowSymbol, getArrow, leftArrowSymbol, rightArrowSymbol, upArrowSymbol } from "../utils";
@@ -8,6 +8,7 @@ import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
 import { randomInRange } from "../../utils/helpers/randomInRange";
+import { stageState } from "../State";
 
 interface Difficulty {
   [key: string]: number;
@@ -35,6 +36,18 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
   const [code] = useState(generateCode(difficulty));
   const [index, setIndex] = useState(0);
   const hasAugment = Player.hasAugmentation(AugmentationName.TrickeryOfHermes, true);
+
+  useEffect(
+    () =>
+      stageState.set(() => {
+        const revealed = hasAugment ? code.length : index + 1;
+        return {
+          stage: "arrows",
+          arrows: code.join("").slice(0, revealed) + "?".repeat(code.length - revealed),
+        };
+      }),
+    [code, index, hasAugment],
+  );
 
   function press(this: Document, event: KeyboardEvent): void {
     event.preventDefault();
