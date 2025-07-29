@@ -58,6 +58,6 @@ const reset = "\u001b[0m";
 ns.print(`${red}Ugh! What a mess.${reset}`);
 ns.print(`${green}Well done!${reset}`);
 ns.print(`${cyan}ERROR Should this be in red?${reset}`);
-ns.tail();
+ns.ui.openTail();
 ```
 

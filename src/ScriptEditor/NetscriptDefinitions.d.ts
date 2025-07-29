@@ -5944,13 +5944,13 @@ interface UserInterface {
    * @example
    * ```js
    * //Open logs from foo.js on the current server that was run with no args
-   * ns.tail("foo.js");
+   * ns.ui.openTail("foo.js");
    *
    * //Get logs from foo.js on the foodnstuff server that was run with no args
-   * ns.tail("foo.js", "foodnstuff");
+   * ns.ui.openTail("foo.js", "foodnstuff");
    *
    * //Get logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
-   * ns.tail("foo.js", "foodnstuff", 1, "test");
+   * ns.ui.openTail("foo.js", "foodnstuff", 1, "test");
    * ```
    * @param fn - Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed.
    * @param host - Optional. Hostname/IP of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
@@ -6602,7 +6602,7 @@ export interface NS {
    * ns.print(`${red}Ugh! What a mess.${reset}`);
    * ns.print(`${green}Well done!${reset}`);
    * ns.print(`${cyan}ERROR Should this be in red?${reset}`);
-   * ns.tail();
+   * ns.ui.openTail();
    * ```
    *
    * @param args - Value(s) to be printed.
@@ -6637,7 +6637,7 @@ export interface NS {
    * ns.printf("My age in scientific notation is %e.", age);
    * ns.printf("In %d seconds, I'll be %s.", 6, "Byte");
    * ns.printf("Am I a nibble? %t", (4 === age));
-   * ns.tail();
+   * ns.ui.openTail();
    * ```
    *
    * @param format - Format of the message.
