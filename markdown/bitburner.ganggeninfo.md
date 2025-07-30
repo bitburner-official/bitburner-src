@@ -16,6 +16,7 @@ interface GangGenInfo
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
+|  [discount](./bitburner.ganggeninfo.discount.md) |  | number | Discount rate |
 |  [faction](./bitburner.ganggeninfo.faction.md) |  | string | Name of faction that the gang belongs to ("Slum Snakes", etc.) |
 |  [isHacking](./bitburner.ganggeninfo.ishacking.md) |  | boolean | Indicating whether or not it's a hacking gang |
 |  [moneyGainRate](./bitburner.ganggeninfo.moneygainrate.md) |  | number | Money earned per game cycle |

@@ -866,6 +866,8 @@ interface GangGenInfo {
   territoryWarfareEngaged: boolean;
   /** Number indicating the current wanted penalty */
   wantedPenalty: number;
+  /** Discount rate */
+  discount: number;
 }
 
 /** @public */
