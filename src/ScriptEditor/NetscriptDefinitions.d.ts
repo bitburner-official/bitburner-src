@@ -6110,13 +6110,13 @@ interface UserInterface {
    * @example
    * ```js
    * //Open logs from foo.js on the current server that was run with no args
-   * ns.tail("foo.js");
+   * ns.ui.openTail("foo.js");
    *
    * //Get logs from foo.js on the foodnstuff server that was run with no args
-   * ns.tail("foo.js", "foodnstuff");
+   * ns.ui.openTail("foo.js", "foodnstuff");
    *
    * //Get logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
-   * ns.tail("foo.js", "foodnstuff", 1, "test");
+   * ns.ui.openTail("foo.js", "foodnstuff", 1, "test");
    * ```
    * @param fn - Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed.
    * @param host - Optional. Hostname/IP of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
@@ -6768,7 +6768,7 @@ export interface NS {
    * ns.print(`${red}Ugh! What a mess.${reset}`);
    * ns.print(`${green}Well done!${reset}`);
    * ns.print(`${cyan}ERROR Should this be in red?${reset}`);
-   * ns.tail();
+   * ns.ui.openTail();
    * ```
    *
    * @param args - Value(s) to be printed.
@@ -6803,7 +6803,7 @@ export interface NS {
    * ns.printf("My age in scientific notation is %e.", age);
    * ns.printf("In %d seconds, I'll be %s.", 6, "Byte");
    * ns.printf("Am I a nibble? %t", (4 === age));
-   * ns.tail();
+   * ns.ui.openTail();
    * ```
    *
    * @param format - Format of the message.
@@ -8376,10 +8376,12 @@ export interface NS {
    *
    * Move the source file to the specified destination on the target server.
    *
-   * This command only works for scripts and text files (.txt). It cannot, however,  be used
-   * to convert from script to text file, or vice versa.
+   * This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json). It cannot, however, be
+   * used to convert from script to text file, or vice versa.
    *
    * This function can also be used to rename files.
+   *
+   * This function is not able to remove running scripts from their original locations. Make sure to stop any scripts before using this function on them.
    *
    * @param host - Hostname/IP of target server.
    * @param source - Filename of the source file.

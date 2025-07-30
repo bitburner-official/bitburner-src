@@ -219,7 +219,11 @@ app.on("ready", async () => {
       relativePath = path.relative(__dirname, realPath);
       // Only allow access to files in "dist" folder or html files in the same directory
       if (method === "GET" && (relativePath.startsWith("dist") || relativePath.match(/^[a-zA-Z-_]*\.html/))) {
-        return new Response(readFileSync(realPath));
+        const customHeaders = {};
+        if (relativePath.endsWith(".wasm")) {
+          customHeaders["Content-Type"] = "application/wasm";
+        }
+        return new Response(readFileSync(realPath), { headers: new Headers(customHeaders) });
       }
     } catch (error) {
       log.error(error);
