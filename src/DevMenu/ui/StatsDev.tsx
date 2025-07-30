@@ -55,28 +55,41 @@ function setStatLevel(stat: string, level: number): void {
     dialogBoxCreate(`Invalid level.`);
     return;
   }
+  const multForFixingFloatingPointImprecision = 1.0000000001;
   switch (stat) {
     case "Hacking":
-      Player.exp.hacking = calculateExp(level, Player.mults.hacking * currentNodeMults.HackingLevelMultiplier);
+      Player.exp.hacking =
+        calculateExp(level, Player.mults.hacking * currentNodeMults.HackingLevelMultiplier) *
+        multForFixingFloatingPointImprecision;
       break;
     case "Strength":
-      Player.exp.strength = calculateExp(level, Player.mults.strength * currentNodeMults.StrengthLevelMultiplier);
+      Player.exp.strength =
+        calculateExp(level, Player.mults.strength * currentNodeMults.StrengthLevelMultiplier) *
+        multForFixingFloatingPointImprecision;
       break;
     case "Defense":
-      Player.exp.defense = calculateExp(level, Player.mults.defense * currentNodeMults.DefenseLevelMultiplier);
+      Player.exp.defense =
+        calculateExp(level, Player.mults.defense * currentNodeMults.DefenseLevelMultiplier) *
+        multForFixingFloatingPointImprecision;
       break;
     case "Dexterity":
-      Player.exp.dexterity = calculateExp(level, Player.mults.dexterity * currentNodeMults.DexterityLevelMultiplier);
+      Player.exp.dexterity =
+        calculateExp(level, Player.mults.dexterity * currentNodeMults.DexterityLevelMultiplier) *
+        multForFixingFloatingPointImprecision;
       break;
     case "Agility":
-      Player.exp.agility = calculateExp(level, Player.mults.agility * currentNodeMults.AgilityLevelMultiplier);
+      Player.exp.agility =
+        calculateExp(level, Player.mults.agility * currentNodeMults.AgilityLevelMultiplier) *
+        multForFixingFloatingPointImprecision;
       break;
     case "Charisma":
-      Player.exp.charisma = calculateExp(level, Player.mults.charisma * currentNodeMults.CharismaLevelMultiplier);
+      Player.exp.charisma =
+        calculateExp(level, Player.mults.charisma * currentNodeMults.CharismaLevelMultiplier) *
+        multForFixingFloatingPointImprecision;
       break;
     case "Intelligence":
       Player.exp.intelligence = 0;
-      Player.gainIntelligenceExp(calculateExp(level, 1));
+      Player.gainIntelligenceExp(calculateExp(level, 1) * multForFixingFloatingPointImprecision);
       break;
   }
   Player.updateSkillLevels();
