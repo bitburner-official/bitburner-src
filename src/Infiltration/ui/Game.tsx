@@ -57,16 +57,12 @@ export function Game({ startingSecurityLevel, difficulty, maxLevel }: GameProps)
   const [timestamp, __] = useState(Date.now());
   const reward = calculateReward(startingSecurityLevel);
 
-  useEffect(
-    () =>
-      progressState.set({
-        floors: maxLevel,
-        currentFloor: level,
-        progress: results,
-      }),
-    [level, maxLevel, results],
-  );
-  useEffect(() => difficultyState.set(difficulty), [difficulty]);
+  progressState.value = {
+    floors: maxLevel,
+    currentFloor: level,
+    progress: results,
+  };
+  difficultyState.value = difficulty;
 
   const setupNextGame = useCallback(() => {
     const nextGameId = () => {

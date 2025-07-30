@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box, Button, MenuItem, Paper, Select, SelectChangeEvent, Typography } from "@mui/material";
 
 import { Player } from "@player";
@@ -19,7 +19,7 @@ import {
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { isFactionWork } from "../../Work/FactionWork";
 import { decreaseMarketDemandMultiplier } from "../formulas/game";
-import { victoryState, stageState } from "../State";
+import { victoryState, stageState, timerState } from "../State";
 
 interface IProps {
   startingSecurityLevel: number;
@@ -100,17 +100,14 @@ export function Victory(props: IProps): React.ReactElement {
     }
   }
 
-  useEffect(() => victoryState.set({ sell, tradeToFaction }));
-  useEffect(
-    () =>
-      stageState.set(() => ({
-        stage: "victory",
-        possibleMoneyGain: moneyGain,
-        possibleRepGain: repGain,
-        SoARepGain: infiltrationRepGain,
-      })),
-    [moneyGain, repGain, infiltrationRepGain],
-  );
+  victoryState.value = { sell, tradeToFaction };
+  stageState.value = () => ({
+    stage: "victory",
+    possibleMoneyGain: moneyGain,
+    possibleRepGain: repGain,
+    SoARepGain: infiltrationRepGain,
+  });
+  timerState.value = null;
 
   return (
     <Paper sx={{ p: 1, textAlign: "center", display: "flex", alignItems: "center", flexDirection: "column" }}>

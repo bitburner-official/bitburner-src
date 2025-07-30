@@ -1,14 +1,9 @@
 import { EventEmitter } from "../utils/EventEmitter";
 
 // This is extremely minimal so we can set this global state without dependency cycles.
+// We could do without the class, except you cannot assign to exports.
 class InfilState<T> {
   value: T | null = null;
-
-  // This is designed to be used from within useEffect.
-  set(x: T): () => void {
-    this.value = x;
-    return () => (this.value = null);
-  }
 }
 
 export const difficultyState = new InfilState<number>();
@@ -21,6 +16,14 @@ export function getState(): object | null {
   const result = {};
   Object.assign(result, timerState.value, progressState.value, stageState.value?.());
   return result;
+}
+
+export function clearState(): void {
+  difficultyState.value = null;
+  victoryState.value = null;
+  timerState.value = null;
+  progressState.value = null;
+  stageState.value = null;
 }
 
 export const InfiltrationKeyEvents = new EventEmitter<[string]>();

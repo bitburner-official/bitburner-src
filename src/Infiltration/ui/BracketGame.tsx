@@ -1,5 +1,5 @@
 import { Paper, Typography } from "@mui/material";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { KEY } from "../../utils/KeyboardEventKey";
@@ -95,17 +95,13 @@ export function BracketGame(props: IMinigameProps): React.ReactElement {
     };
   }, [props]);
 
-  useEffect(
-    () =>
-      stageState.set(() => ({
-        stage: "brackets",
-        brackets: data.apiBrackets,
-        typed: right,
-      })),
-    [data, right],
-  );
+  stageState.value = () => ({
+    stage: "brackets",
+    brackets: data.apiBrackets,
+    typed: right,
+  });
 
-  function press(this: Document, event: KeyboardEvent): void {
+  function press(event: KeyboardEvent): void {
     event.preventDefault();
     const char = getChar(event);
     if (!char) return;

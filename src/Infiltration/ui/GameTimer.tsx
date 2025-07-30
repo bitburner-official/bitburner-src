@@ -42,13 +42,11 @@ export function GameTimer({
     };
   }, [onExpire, tick, totalMillis]);
 
-  useEffect(() => {
-    if (!noPaper) {
-      // This is a hack. SlashGame uses GameTimer twice, and the one we want
-      // to ignore sets noPaper.
-      return timerState.set({ timer: v });
-    }
-  }, [v, noPaper]);
+  if (!noPaper) {
+    // This is a hack. SlashGame uses GameTimer twice, and the one we want
+    // to ignore sets noPaper.
+    timerState.value = { timer: v };
+  }
 
   // https://stackoverflow.com/questions/55593367/disable-material-uis-linearprogress-animation
   // TODO(hydroflame): there's like a bug where it triggers the end before the

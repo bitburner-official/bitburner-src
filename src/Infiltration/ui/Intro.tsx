@@ -1,5 +1,5 @@
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import type { Location } from "../../Locations/Location";
 import { Settings } from "../../Settings/Settings";
 import { formatHp, formatMoney, formatNumberNoSuffix, formatPercent, formatReputation } from "../../ui/formatNumber";
@@ -101,7 +101,7 @@ export function Intro({
     );
   }
 
-  useEffect(() => stageState.set(() => ({ stage: "intro" })), []);
+  stageState.value = () => ({ stage: "intro" });
 
   return (
     <Container sx={{ alignItems: "center" }}>

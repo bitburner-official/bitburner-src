@@ -1,5 +1,5 @@
 import { Paper, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState, useMemo } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
@@ -33,26 +33,26 @@ const difficulties: {
 };
 
 export function BribeGame(props: IMinigameProps): React.ReactElement {
-  const difficulty: Difficulty = { timer: 0, size: 0 };
-  interpolate(difficulties, props.difficulty, difficulty);
-  const timer = difficulty.timer;
-  const [choices] = useState(makeChoices(difficulty));
-  const [correctIndex, setCorrectIndex] = useState(0);
   const [index, setIndex] = useState(0);
+
+  const data = useMemo(() => {
+    const difficulty: Difficulty = { timer: 0, size: 0 };
+    interpolate(difficulties, props.difficulty, difficulty);
+    const choices = makeChoices(difficulty);
+    const correctIndex = choices.findIndex((choice) => positiveAdjectives.includes(choice));
+    return {
+      timer: difficulty.timer,
+      choices,
+      correctIndex,
+    };
+  }, [props.difficulty]);
+  const choices = data.choices;
   const currentChoice = choices[index];
 
-  useEffect(() => {
-    setCorrectIndex(choices.findIndex((choice) => positiveAdjectives.includes(choice)));
-  }, [choices]);
-
-  useEffect(
-    () =>
-      stageState.set(() => ({
-        stage: "bribe",
-        adjective: choices[index],
-      })),
-    [choices, index],
-  );
+  stageState.value = () => ({
+    stage: "bribe",
+    adjective: choices[index],
+  });
 
   const defaultColor = Settings.theme.primary;
   const disabledColor = Settings.theme.disabled;
@@ -63,25 +63,25 @@ export function BribeGame(props: IMinigameProps): React.ReactElement {
 
   if (hasAugment) {
     const upIndex = index + 1 >= choices.length ? 0 : index + 1;
-    let upDistance = correctIndex - upIndex;
-    if (upIndex > correctIndex) {
-      upDistance = choices.length - 1 - upIndex + correctIndex;
+    let upDistance = data.correctIndex - upIndex;
+    if (upIndex > data.correctIndex) {
+      upDistance = choices.length - 1 - upIndex + data.correctIndex;
     }
 
     const downIndex = index - 1 < 0 ? choices.length - 1 : index - 1;
-    let downDistance = downIndex - correctIndex;
-    if (downIndex < correctIndex) {
-      downDistance = downIndex + choices.length - 1 - correctIndex;
+    let downDistance = downIndex - data.correctIndex;
+    if (downIndex < data.correctIndex) {
+      downDistance = downIndex + choices.length - 1 - data.correctIndex;
     }
 
-    const onCorrectIndex = correctIndex == index;
+    const onCorrectIndex = data.correctIndex == index;
 
     upColor = upDistance <= downDistance && !onCorrectIndex ? upColor : disabledColor;
     downColor = upDistance >= downDistance && !onCorrectIndex ? downColor : disabledColor;
     choiceColor = onCorrectIndex ? defaultColor : disabledColor;
   }
 
-  function press(this: Document, event: KeyboardEvent): void {
+  function press(event: KeyboardEvent): void {
     event.preventDefault();
 
     const k = event.key;
@@ -101,7 +101,7 @@ export function BribeGame(props: IMinigameProps): React.ReactElement {
 
   return (
     <>
-      <GameTimer millis={timer} onExpire={props.onFailure} />
+      <GameTimer millis={data.timer} onExpire={props.onFailure} />
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
         <Typography variant="h4">Say something nice about the guard</Typography>
         <KeyHandler onKeyDown={press} onFailure={props.onFailure} />

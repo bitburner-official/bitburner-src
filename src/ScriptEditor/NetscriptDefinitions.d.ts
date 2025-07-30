@@ -5925,7 +5925,7 @@ interface Infiltration {
   getPossibleLocations(): ILocation[];
 
   /**
-   * Get all infiltrations with difficulty, location and rewards.
+   * Return infiltration information for the given location with difficulty, location and rewards.
    *
    * Does not require API access.
    * @remarks

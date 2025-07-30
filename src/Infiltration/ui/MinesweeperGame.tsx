@@ -42,7 +42,7 @@ export function MinesweeperGame(props: IMinigameProps): React.ReactElement {
   const [pos, setPos] = useState([0, 0]);
   const [memoryPhase, setMemoryPhase] = useState(true);
   const hasAugment = Player.hasAugmentation(AugmentationName.HuntOfArtemis, true);
-  function press(this: Document, event: KeyboardEvent): void {
+  function press(event: KeyboardEvent): void {
     event.preventDefault();
     if (memoryPhase) return;
     const move = [0, 0];
@@ -81,7 +81,7 @@ export function MinesweeperGame(props: IMinigameProps): React.ReactElement {
 
   useEffect(() => {
     const id = setTimeout(() => setMemoryPhase(false), 2000);
-    return () => clearInterval(id);
+    return () => clearTimeout(id);
   }, []);
 
   const makeMap = () => {
@@ -105,11 +105,9 @@ export function MinesweeperGame(props: IMinigameProps): React.ReactElement {
   };
   const flatGrid = makeMap();
 
-  useEffect(() => {
-    return stageState.set(() => ({
-      stage: "minesweeper",
-      map: makeMap(),
-    }));
+  stageState.value = () => ({
+    stage: "minesweeper",
+    map: makeMap(),
   });
 
   return (

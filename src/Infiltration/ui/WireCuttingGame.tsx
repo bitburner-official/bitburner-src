@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useMemo } from "react";
 
 import { Box, Paper, Typography } from "@mui/material";
 import { AugmentationName } from "@enums";
@@ -52,14 +52,7 @@ interface Question {
 }
 
 export function WireCuttingGame({ onSuccess, onFailure, difficulty }: IMinigameProps): React.ReactElement {
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [wires, setWires] = useState<Wire[]>([]);
-  const [timer, setTimer] = useState(0);
-  const [cutWires, setCutWires] = useState<boolean[]>([]);
-  const [wiresToCut, setWiresToCut] = useState(new Set<number>());
-  const [hasAugment, setHasAugment] = useState(false);
-
-  useEffect(() => {
+  const { timer, wires, questions, hasAugment } = useMemo(() => {
     // Determine game difficulty
     const gameDifficulty: Difficulty = {
       timer: 0,
@@ -70,49 +63,49 @@ export function WireCuttingGame({ onSuccess, onFailure, difficulty }: IMinigameP
     interpolate(difficulties, difficulty, gameDifficulty);
 
     // Calculate initial game data
-    const gameWires = generateWires(gameDifficulty);
-    const gameQuestions = generateQuestion(gameWires, gameDifficulty);
-    const gameWiresToCut = new Set<number>();
-    gameWires.forEach((wire, index) => {
-      for (const question of gameQuestions) {
-        if (question.shouldCut(wire, index)) {
-          gameWiresToCut.add(index);
-          return; // go to next wire
-        }
-      }
-    });
+    const wires = generateWires(gameDifficulty);
+    const questions = generateQuestion(wires, gameDifficulty);
 
-    // Initialize the game state
-    setTimer(gameDifficulty.timer);
-    setWires(gameWires);
-    setCutWires(gameWires.map((__) => false));
-    setQuestions(gameQuestions);
-    setWiresToCut(gameWiresToCut);
-    setHasAugment(Player.hasAugmentation(AugmentationName.KnowledgeOfApollo, true));
+    return {
+      timer: gameDifficulty.timer,
+      wires,
+      questions,
+      hasAugment: Player.hasAugmentation(AugmentationName.KnowledgeOfApollo, true),
+    };
   }, [difficulty]);
 
-  useEffect(
-    () =>
-      stageState.set(() => {
-        const result: { [x: string]: unknown } = {
-          stage: "wireCutter",
-          goals: questions.map((x) => x.toString()),
-          wires: wires.map((x) => [...x.colors]),
-          cutWires: [...cutWires],
-        };
-        if (hasAugment) {
-          const has = [];
-          for (let i = 0; i < cutWires.length; ++i) {
-            has[i] = wiresToCut.has(i);
-          }
-          result.correctWires = has;
+  const [cutWires, setCutWires] = useState(wires.map((__) => false));
+  const [wiresToCut, setWiresToCut] = useState(() => {
+    const toCut = new Set<number>();
+    for (const [index, wire] of wires.entries()) {
+      for (const question of questions) {
+        if (question.shouldCut(wire, index)) {
+          toCut.add(index);
+          break; // go to next wire
         }
-        return result;
-      }),
-    [questions, wires, cutWires, hasAugment, wiresToCut],
-  );
+      }
+    }
+    return toCut;
+  });
 
-  function press(this: Document, event: KeyboardEvent): void {
+  stageState.value = () => {
+    const result: { [x: string]: unknown } = {
+      stage: "wireCutter",
+      goals: questions.map((x) => x.toString()),
+      wires: wires.map((x) => [...x.colors]),
+      cutWires: [...cutWires],
+    };
+    if (hasAugment) {
+      const has = [];
+      for (let i = 0; i < cutWires.length; ++i) {
+        has[i] = wiresToCut.has(i);
+      }
+      result.correctWires = has;
+    }
+    return result;
+  };
+
+  function press(event: KeyboardEvent): void {
     event.preventDefault();
     const wireNum = parseInt(event.key);
     if (!isPositiveInteger(wireNum) || wireNum > wires.length) return;

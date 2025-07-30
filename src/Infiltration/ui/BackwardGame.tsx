@@ -1,5 +1,5 @@
 import { Paper, Typography } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { KEY } from "../../utils/KeyboardEventKey";
@@ -40,33 +40,29 @@ export function BackwardGame(props: IMinigameProps): React.ReactElement {
   const [guess, setGuess] = useState("");
   const hasAugment = Player.hasAugmentation(AugmentationName.ChaosOfDionysus, true);
 
-  useEffect(
-    () =>
-      stageState.set(() => {
-        const noise = props.difficulty < 1 || hasAugment ? 0 : (26 * props.difficulty) / MaxDifficultyForInfiltration;
-        const offset = 26 * 3 - 65 + Math.round((Math.random() - 0.5) * noise);
-        const charCodes = new Array<number>(answer.length);
-        for (let i = 0; i < answer.length; ++i) {
-          let c = answer.charCodeAt(i);
-          if (c >= 65 && c < 91) {
-            c = ((c + offset) % 26) + 65;
-          }
-          charCodes[i] = c;
-        }
-        return {
-          stage: "typing",
-          string: String.fromCharCode(...charCodes),
-          guess,
-        };
-      }),
-    [hasAugment, answer, guess, props],
-  );
+  stageState.value = () => {
+    const noise = props.difficulty < 1 || hasAugment ? 0 : (26 * props.difficulty) / MaxDifficultyForInfiltration;
+    const offset = 26 * 3 - 65 + Math.round((Math.random() - 0.5) * noise);
+    const charCodes = new Array<number>(answer.length);
+    for (let i = 0; i < answer.length; ++i) {
+      let c = answer.charCodeAt(i);
+      if (c >= 65 && c < 91) {
+        c = ((c + offset) % 26) + 65;
+      }
+      charCodes[i] = c;
+    }
+    return {
+      stage: "typing",
+      string: String.fromCharCode(...charCodes),
+      guess,
+    };
+  };
 
   function ignorableKeyboardEvent(event: KeyboardEvent): boolean {
     return event.key === KEY.BACKSPACE || (event.shiftKey && event.key === "Shift") || event.ctrlKey || event.altKey;
   }
 
-  function press(this: Document, event: KeyboardEvent): void {
+  function press(event: KeyboardEvent): void {
     event.preventDefault();
     if (ignorableKeyboardEvent(event)) return;
     const nextGuess = guess + event.key.toUpperCase();
