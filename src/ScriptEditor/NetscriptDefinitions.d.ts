@@ -2418,17 +2418,9 @@ export interface Singularity {
    *
    * This function returns true if you successfully start working on the specified program, and false otherwise.
    *
-   * Note that creating a program using this function has the same hacking level requirements as it normally would.
-   * These level requirements are:<br/>
-   * - BruteSSH.exe: 50<br/>
-   * - FTPCrack.exe: 100<br/>
-   * - relaySMTP.exe: 250<br/>
-   * - HTTPWorm.exe: 500<br/>
-   * - SQLInject.exe: 750<br/>
-   * - DeepscanV1.exe: 75<br/>
-   * - DeepscanV2.exe: 400<br/>
-   * - ServerProfiler.exe: 75<br/>
-   * - AutoLink.exe: 25
+   * Note that creating a program using this function has the same hacking level requirements as it normally would. You
+   * can call {@link Singularity.getHackingLevelRequirementOfProgram | getHackingLevelRequirementOfProgram} to get that
+   * value.
    *
    * @example
    * ```js
@@ -2441,6 +2433,19 @@ export interface Singularity {
    * @returns True if you successfully start working on the specified program, and false otherwise.
    */
   createProgram(program: string, focus?: boolean): boolean;
+
+  /**
+   * Get the hacking level requirement of a program.
+   * @remarks
+   * RAM cost: 5 GB * 16/4/1
+   *
+   * In order to create a program via UI or {@link Singularity.createProgram | createProgram}, your hacking level must
+   * meet the requirement of that program. This API returns that value.
+   *
+   * @param program - Name of program to create.
+   * @returns Hacking level requirement. Return Infinity if the specified program cannot be created.
+   */
+  getHackingLevelRequirementOfProgram(program: string): number;
 
   /**
    * Commit a crime.

@@ -199,6 +199,7 @@ const singularity = {
   getFactionFavorGain: SF4Cost(RamCostConstants.SingularityFn2 / 4),
   donateToFaction: SF4Cost(RamCostConstants.SingularityFn3),
   createProgram: SF4Cost(RamCostConstants.SingularityFn3),
+  getHackingLevelRequirementOfProgram: SF4Cost(RamCostConstants.SingularityFn3),
   commitCrime: SF4Cost(RamCostConstants.SingularityFn3),
   getCrimeChance: SF4Cost(RamCostConstants.SingularityFn3),
   getCrimeStats: SF4Cost(RamCostConstants.SingularityFn3),

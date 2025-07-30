@@ -14,11 +14,16 @@ import { CompletedProgramName, FactionName } from "@enums";
 import { Router } from "../ui/GameRoot";
 import { Page } from "../ui/Router";
 import { knowAboutBitverse } from "../BitNode/BitNodeUtils";
+import { clampNumber } from "../utils/helpers/clampNumber";
 
 function requireHackingLevel(lvl: number) {
   return function () {
-    return Player.skills.hacking + Player.skills.intelligence / 2 >= lvl;
+    return Player.skills.hacking >= getEffectiveHackingLevelRequirement(lvl);
   };
+}
+
+export function getEffectiveHackingLevelRequirement(level: number): number {
+  return clampNumber(level - Player.skills.intelligence / 2, 1);
 }
 
 function bitFlumeRequirements() {
