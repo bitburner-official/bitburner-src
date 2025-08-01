@@ -866,8 +866,8 @@ interface GangGenInfo {
   territoryWarfareEngaged: boolean;
   /** Number indicating the current wanted penalty */
   wantedPenalty: number;
-  /** Discount rate */
-  discount: number;
+  /** Gang gives a discount on all equipment. This multiplier is applied to the equipment cost. */
+  equipmentCostMult: number;
 }
 
 /** @public */
@@ -4325,6 +4325,8 @@ export interface Gang {
    *
    * Get the amount of money it takes to purchase a piece of Equipment or an Augmentation.
    * If an invalid Equipment/Augmentation is specified, this function will return Infinity.
+   *
+   * This function already takes equipmentCostMult from {@link GangGenInfo | GangGenInfo} into account.
    *
    * @param equipName - Name of equipment.
    * @returns Cost to purchase the specified Equipment/Augmentation (number). Infinity for invalid arguments

@@ -113,7 +113,7 @@ export function NetscriptGang(): InternalAPI<IGang> {
         wantedLevel: gang.wanted,
         wantedLevelGainRate: gang.wantedGainRate,
         wantedPenalty: gang.getWantedPenalty(),
-        discount: 1 - 1 / gang.getDiscount(),
+        equipmentCostMult: 1 / gang.getDiscount(),
       };
     },
     getOtherGangInformation: (ctx) => () => {
