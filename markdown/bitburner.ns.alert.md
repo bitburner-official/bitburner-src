@@ -9,14 +9,14 @@ Open up a message box.
 **Signature:**
 
 ```typescript
-alert(msg: string): void;
+alert(...args: any[]): void;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  msg | string | Message to alert. |
+|  args | any\[\] | Value(s) to be alerted. |
 
 **Returns:**
 

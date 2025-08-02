@@ -8109,9 +8109,9 @@ export interface NS {
 
   /**
    * Open up a message box.
-   * @param msg - Message to alert.
+   * @param args - Value(s) to be alerted.
    */
-  alert(msg: string): void;
+  alert(...args: any[]): void;
 
   /**
    * Queue a toast (bottom-right notification).

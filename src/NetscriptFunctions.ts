@@ -1473,10 +1473,15 @@ export const ns: InternalAPI<NSFull> = {
       }
       return runningScript.onlineExpGained / runningScript.onlineRunningTime;
     },
-  alert: (ctx) => (_message) => {
-    const message = helpers.string(ctx, "message", _message);
-    dialogBoxCreate(message, { html: true, canBeDismissedEasily: true });
-  },
+  alert:
+    (ctx) =>
+    (...args) => {
+      if (args.length === 0) {
+        throw helpers.errorMessage(ctx, "Takes at least 1 argument.");
+      }
+      const message = helpers.argsToString(args);
+      dialogBoxCreate(message, { html: true, canBeDismissedEasily: true });
+    },
   toast:
     (ctx) =>
     (_message, _variant = ToastVariant.SUCCESS, _duration = 2000) => {
