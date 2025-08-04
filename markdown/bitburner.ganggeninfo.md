@@ -16,6 +16,7 @@ interface GangGenInfo
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
+|  [equipmentCostMult](./bitburner.ganggeninfo.equipmentcostmult.md) |  | number | Gang gives a discount on all equipment. This multiplier is applied to the equipment cost. |
 |  [faction](./bitburner.ganggeninfo.faction.md) |  | string | Name of faction that the gang belongs to ("Slum Snakes", etc.) |
 |  [isHacking](./bitburner.ganggeninfo.ishacking.md) |  | boolean | Indicating whether or not it's a hacking gang |
 |  [moneyGainRate](./bitburner.ganggeninfo.moneygainrate.md) |  | number | Money earned per game cycle |

@@ -866,6 +866,8 @@ interface GangGenInfo {
   territoryWarfareEngaged: boolean;
   /** Number indicating the current wanted penalty */
   wantedPenalty: number;
+  /** Gang gives a discount on all equipment. This multiplier is applied to the equipment cost. */
+  equipmentCostMult: number;
 }
 
 /** @public */
@@ -2418,17 +2420,9 @@ export interface Singularity {
    *
    * This function returns true if you successfully start working on the specified program, and false otherwise.
    *
-   * Note that creating a program using this function has the same hacking level requirements as it normally would.
-   * These level requirements are:<br/>
-   * - BruteSSH.exe: 50<br/>
-   * - FTPCrack.exe: 100<br/>
-   * - relaySMTP.exe: 250<br/>
-   * - HTTPWorm.exe: 500<br/>
-   * - SQLInject.exe: 750<br/>
-   * - DeepscanV1.exe: 75<br/>
-   * - DeepscanV2.exe: 400<br/>
-   * - ServerProfiler.exe: 75<br/>
-   * - AutoLink.exe: 25
+   * Note that creating a program using this function has the same hacking level requirements as it normally would. You
+   * can call {@link Singularity.getHackingLevelRequirementOfProgram | getHackingLevelRequirementOfProgram} to get that
+   * value.
    *
    * @example
    * ```js
@@ -2441,6 +2435,19 @@ export interface Singularity {
    * @returns True if you successfully start working on the specified program, and false otherwise.
    */
   createProgram(program: string, focus?: boolean): boolean;
+
+  /**
+   * Get the hacking level requirement of a program.
+   * @remarks
+   * RAM cost: 5 GB * 16/4/1
+   *
+   * In order to create a program via UI or {@link Singularity.createProgram | createProgram}, your hacking level must
+   * meet the requirement of that program. This API returns that value.
+   *
+   * @param program - Name of program to create.
+   * @returns Hacking level requirement. Return Infinity if the specified program cannot be created.
+   */
+  getHackingLevelRequirementOfProgram(program: string): number;
 
   /**
    * Commit a crime.
@@ -4722,6 +4729,8 @@ export interface Gang {
    * Get the amount of money it takes to purchase a piece of Equipment or an Augmentation.
    * If an invalid Equipment/Augmentation is specified, this function will return Infinity.
    *
+   * This function already takes equipmentCostMult from {@link GangGenInfo | GangGenInfo} into account.
+   *
    * @param equipName - Name of equipment.
    * @returns Cost to purchase the specified Equipment/Augmentation (number). Infinity for invalid arguments
    */
@@ -6373,13 +6382,13 @@ interface UserInterface {
    * @example
    * ```js
    * //Open logs from foo.js on the current server that was run with no args
-   * ns.tail("foo.js");
+   * ns.ui.openTail("foo.js");
    *
    * //Get logs from foo.js on the foodnstuff server that was run with no args
-   * ns.tail("foo.js", "foodnstuff");
+   * ns.ui.openTail("foo.js", "foodnstuff");
    *
    * //Get logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
-   * ns.tail("foo.js", "foodnstuff", 1, "test");
+   * ns.ui.openTail("foo.js", "foodnstuff", 1, "test");
    * ```
    * @param fn - Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed.
    * @param host - Optional. Hostname/IP of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
@@ -7037,7 +7046,7 @@ export interface NS {
    * ns.print(`${red}Ugh! What a mess.${reset}`);
    * ns.print(`${green}Well done!${reset}`);
    * ns.print(`${cyan}ERROR Should this be in red?${reset}`);
-   * ns.tail();
+   * ns.ui.openTail();
    * ```
    *
    * @param args - Value(s) to be printed.
@@ -7072,7 +7081,7 @@ export interface NS {
    * ns.printf("My age in scientific notation is %e.", age);
    * ns.printf("In %d seconds, I'll be %s.", 6, "Byte");
    * ns.printf("Am I a nibble? %t", (4 === age));
-   * ns.tail();
+   * ns.ui.openTail();
    * ```
    *
    * @param format - Format of the message.
@@ -8650,8 +8659,8 @@ export interface NS {
    *
    * Move the source file to the specified destination on the target server.
    *
-   * This command only works for scripts and text files (.txt). It cannot, however,  be used
-   * to convert from script to text file, or vice versa.
+   * This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json). It cannot, however, be
+   * used to convert from script to text file, or vice versa.
    *
    * This function can also be used to rename files.
    *

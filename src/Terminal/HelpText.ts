@@ -141,7 +141,7 @@ export const HelpTexts: Record<string, string[]> = {
   cat: [
     "Usage: cat [file name]",
     " ",
-    "Display message (.msg), literature (.lit), or text (.txt) files. Examples:",
+    "Display message (.msg), literature (.lit), script (.js, .jsx, .ts, .tsx), or text (.txt, .json) files. Examples:",
     " ",
     "    cat j1.msg",
     " ",
@@ -385,7 +385,7 @@ export const HelpTexts: Record<string, string[]> = {
     "Usage: mv [src] [dest]",
     " ",
     "Move the source file to the specified destination. This can also be used to rename files. ",
-    "This command only works for scripts and text files (.txt). This command CANNOT be used to ",
+    "This command only works for scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json). This command CANNOT be used to ",
     "convert to different file types",
     " ",
     "Note that, unlike the Linux 'mv' command, the destination argument must be the ",

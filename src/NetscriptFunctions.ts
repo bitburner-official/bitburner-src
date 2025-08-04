@@ -1578,7 +1578,10 @@ export const ns: InternalAPI<NSFull> = {
       (!hasTextExtension(sourcePath) && !hasScriptExtension(sourcePath)) ||
       (!hasTextExtension(destinationPath) && !hasScriptExtension(destinationPath))
     ) {
-      throw helpers.errorMessage(ctx, `'mv' can only be used on scripts and text files (.txt)`);
+      throw helpers.errorMessage(
+        ctx,
+        `'mv' can only be used on scripts (.js, .jsx, .ts, .tsx) and text files (.txt, .json)`,
+      );
     }
     if (sourcePath === destinationPath) {
       helpers.log(ctx, () => "WARNING: Did nothing, source and destination paths were the same.");
@@ -1595,11 +1598,13 @@ export const ns: InternalAPI<NSFull> = {
         () =>
           `ERROR: Failed. Was unable to remove file ${sourcePath} from its original location. If ${sourcePath} is a script, make sure that it is NOT running before trying to use 'mv' on it.`,
       );
+      return;
     }
     const { overwritten } = server.writeToContentFile(destinationPath, sourceContentFile.content);
-    if (overwritten) helpers.log(ctx, () => `WARNING: Overwriting file ${destinationPath} on ${host}`);
+    if (overwritten) {
+      helpers.log(ctx, () => `WARNING: Overwriting file ${destinationPath} on ${host}`);
+    }
     helpers.log(ctx, () => `Moved ${sourcePath} to ${destinationPath} on ${host}`);
-    return;
   },
   getResetInfo: () => () => ({
     lastAugReset: Player.lastAugReset,
