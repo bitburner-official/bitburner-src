@@ -1,9 +1,9 @@
 import * as React from "react";
-import LinearProgress from "@mui/material/LinearProgress";
 import { TableCell, Tooltip, Typography } from "@mui/material";
 import { useStyles } from "./CharacterOverview";
 import { ISkillProgress } from "../../PersonObjects/formulas/skill";
 import { formatExp } from "../formatNumber";
+import { LinearForwardProgress } from "./LinearForwardProgress";
 
 interface IProgressProps {
   min: number;
@@ -39,16 +39,7 @@ export function StatsProgressBar({
 
   return (
     <Tooltip title={tooltip}>
-      <LinearProgress
-        variant="determinate"
-        value={progress}
-        sx={{
-          backgroundColor: "#111111",
-          "& .MuiLinearProgress-bar1Determinate": {
-            backgroundColor: color,
-          },
-        }}
-      />
+      <LinearForwardProgress value={progress} backgroundColor="#111111" barColor={color} />
     </Tooltip>
   );
 }
