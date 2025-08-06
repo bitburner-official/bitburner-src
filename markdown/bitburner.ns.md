@@ -55,7 +55,7 @@ export async function main(ns) {
 
 |  Method | Description |
 |  --- | --- |
-|  [alert(msg)](./bitburner.ns.alert.md) | Open up a message box. |
+|  [alert(args)](./bitburner.ns.alert.md) | Open up a message box. |
 |  [asleep(millis)](./bitburner.ns.asleep.md) | Suspends the script for n milliseconds. Doesn't block with concurrent calls. |
 |  [atExit(f, id)](./bitburner.ns.atexit.md) | Add a callback to be executed when the script dies. |
 |  [brutessh(host)](./bitburner.ns.brutessh.md) | Runs BruteSSH.exe on a server. |

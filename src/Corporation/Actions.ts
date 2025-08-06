@@ -505,7 +505,10 @@ export function research(researchingDivision: Division, researchName: CorpResear
   if (researchTree === undefined) throw new Error(`No research tree for industry '${researchingDivision.industry}'`);
   const research = ResearchMap[researchName];
   const researchNode = researchTree.findNode(researchName);
-  const researchPreReq = researchNode?.parent?.researchName;
+  if (!researchNode) {
+    return;
+  }
+  const researchPreReq = researchNode.parent?.researchName;
   //Check to see if the research request has any pre-reqs that need to be researched first.
   if (researchPreReq) {
     if (!researchingDivision.researched?.has(researchPreReq)) {
