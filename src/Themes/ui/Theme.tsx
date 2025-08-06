@@ -408,6 +408,13 @@ export function refreshTheme(): void {
           },
         },
       },
+      MuiModal: {
+        styleOverrides: {
+          root: {
+            zIndex: 20000,
+          },
+        },
+      },
     },
   });
 
