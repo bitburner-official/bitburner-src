@@ -27,4 +27,5 @@ export enum CodingContractName {
   EncryptionICaesarCipher = "Encryption I: Caesar Cipher",
   EncryptionIIVigenereCipher = "Encryption II: Vigenère Cipher",
   SquareRoot = "Square Root",
+  TotalPrimesInRange = "Total Number of Primes",
 }

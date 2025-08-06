@@ -70,14 +70,20 @@ export function tryGeneratingRandomContract(numberOfTries: number): void {
 }
 
 export function generateRandomContract(): void {
-  // First select a random problem type
-  const problemType = getRandomProblemType();
-
+  // Choose random server
+  const randServer = getRandomServer();
+  if (randServer === null) {
+    return;
+  }
   // Then select a random reward type. 'Money' will always be the last reward type
   const reward = getRandomReward();
 
-  // Choose random server
-  const randServer = getRandomServer();
+  // Finally select a random problem type.
+  // Difficulty is capped to not overwhelm a new player.
+  const totalSFs = [...Player.sourceFiles].reduce<number>((total, [__bn, lvl]) => (total += lvl), 0);
+  const maxDif = 2 * totalSFs + 1;
+
+  const problemType = getRandomProblemType(maxDif);
 
   const contractFn = getRandomFilename(randServer, reward);
   const contract = new CodingContract(contractFn, problemType, reward);
@@ -141,6 +147,9 @@ export function generateContract(params: IGenerateContractParams): void {
   } else {
     server = getRandomServer();
   }
+  if (server === null) {
+    return;
+  }
 
   const filename = params.fn ? params.fn : getRandomFilename(server, reward);
 
@@ -173,8 +182,8 @@ function sanitizeRewardType(rewardType: CodingContractRewardType): CodingContrac
   return type;
 }
 
-function getRandomProblemType(): CodingContractName {
-  const problemTypes = Object.values(CodingContractName);
+function getRandomProblemType(maxDif = 10): CodingContractName {
+  const problemTypes = Object.values(CodingContractName).filter((x) => CodingContractTypes[x].difficulty <= maxDif);
   const randIndex = getRandomIntInclusive(0, problemTypes.length - 1);
 
   return problemTypes[randIndex];
@@ -218,8 +227,11 @@ function getRandomReward(): ICodingContractReward {
   }
 }
 
-function getRandomServer(): BaseServer {
+function getRandomServer(): BaseServer | null {
   const servers = GetAllServers().filter((server: BaseServer) => server.serversOnNetwork.length !== 0);
+  if (servers.length === 0) {
+    return null;
+  }
   let randIndex = getRandomIntInclusive(0, servers.length - 1);
   let randServer = servers[randIndex];
 

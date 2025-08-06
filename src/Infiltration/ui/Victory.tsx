@@ -18,12 +18,14 @@ import {
 } from "../formulas/victory";
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { isFactionWork } from "../../Work/FactionWork";
+import { decreaseMarketDemandMultiplier } from "../formulas/game";
 
 interface IProps {
-  StartingDifficulty: number;
-  Difficulty: number;
-  Reward: number;
-  MaxLevel: number;
+  startingSecurityLevel: number;
+  difficulty: number;
+  reward: number;
+  timestamp: number;
+  maxLevel: number;
 }
 
 // Use a module-scope variable to save the faction choice.
@@ -42,13 +44,29 @@ export function Victory(props: IProps): React.ReactElement {
 
   function quitInfiltration(): void {
     handleInfiltrators();
+    decreaseMarketDemandMultiplier(props.timestamp, props.maxLevel);
     Router.toPage(Page.City);
   }
 
   const soa = Factions[FactionName.ShadowsOfAnarchy];
-  const repGain = calculateTradeInformationRepReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
-  const moneyGain = calculateSellInformationCashReward(props.Reward, props.MaxLevel, props.StartingDifficulty);
-  const infiltrationRepGain = calculateInfiltratorsRepReward(soa, props.StartingDifficulty);
+  const repGain = calculateTradeInformationRepReward(
+    props.reward,
+    props.maxLevel,
+    props.startingSecurityLevel,
+    props.timestamp,
+  );
+  const moneyGain = calculateSellInformationCashReward(
+    props.reward,
+    props.maxLevel,
+    props.startingSecurityLevel,
+    props.timestamp,
+  );
+  const infiltrationRepGain = calculateInfiltratorsRepReward(
+    soa,
+    props.maxLevel,
+    props.startingSecurityLevel,
+    props.timestamp,
+  );
 
   const isMemberOfInfiltrators = Player.factions.includes(FactionName.ShadowsOfAnarchy);
 

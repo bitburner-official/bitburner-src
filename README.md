@@ -19,15 +19,15 @@ There are 2 types of documentation:
 - NS API documentation: It's generated from the [TypeScript definitions](./src/ScriptEditor/NetscriptDefinitions.d.ts). You can read it at https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.md.
 
 Anyone is welcome to contribute to the documentation by editing the [source
-files](/src/Documentation/doc) and then making a pull request with your contributions.
+files](/src/Documentation/doc/en) and then making a pull request with your contributions.
 For further guidance, please refer to the "As A Documenter" section of
-[CONTRIBUTING](./doc/CONTRIBUTING.md#as-a-documenter).
+[CONTRIBUTING](./CONTRIBUTING.md#as-a-documenter).
 
 # Contribution
 
 There are many ways to contribute to the game. It can be as simple as fixing
 a typo, correcting a bug, or improving the UI. For guidance on doing so,
-please refer to the [CONTRIBUTING](./doc/CONTRIBUTING.md) document.
+please refer to the [CONTRIBUTING](./CONTRIBUTING.md) document.
 
 You will retain all ownership of the Copyright of any contributions you make,
 and will have the same rights to use or license your contributions. By

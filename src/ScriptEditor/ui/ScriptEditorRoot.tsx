@@ -38,9 +38,16 @@ import { RamCalculationErrorCode } from "../../Script/RamCalculationErrorCodes";
 import { hasScriptExtension, isLegacyScript, type ScriptFilePath } from "../../Paths/ScriptFilePath";
 import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import type { BaseServer } from "../../Server/BaseServer";
+import {
+  convertKeyboardEventToKeyCombination,
+  CurrentKeyBindings,
+  determineKeyBindingTypes,
+  ScriptEditorAction,
+} from "../../utils/KeyBindingUtils";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
+import { createRunningScriptInstance, startWorkerScript } from "../../NetscriptWorker";
 
 // Extend acorn-walk to support TypeScript nodes.
 extendAcornWalkForTypeScriptNodes(walk.base);
@@ -173,30 +180,21 @@ function Root(props: IProps): React.ReactElement {
 
   let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
 
-  // Prevent Crash if script is open on deleted server
-  for (let i = openScripts.length - 1; i >= 0; i--) {
-    GetServer(openScripts[i].hostname) === null && openScripts.splice(i, 1);
-  }
-  if (currentScript && GetServer(currentScript.hostname) === null) {
-    currentScript = openScripts[0] ?? null;
-  }
-
   const save = useCallback(() => {
     if (currentScript === null) {
       console.error("currentScript is null when it shouldn't be. Unable to save script");
       return;
     }
     // this is duplicate code with saving later.
-    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalTypeScript) {
+    if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalEditScript) {
       //Make sure filename + code properly follow tutorial
-      if (currentScript.path !== "n00dles.script" && currentScript.path !== "n00dles.js") {
+      if (currentScript.path !== "n00dles.js") {
         dialogBoxCreate("Don't change the script name for now.");
         return;
       }
       const cleanCode = currentScript.code.replace(/\s/g, "");
-      const ns1 = "while(true){hack('n00dles');}";
-      const ns2 = `/**@param{NS}ns*/exportasyncfunctionmain(ns){while(true){awaitns.hack("n00dles");}}`;
-      if (!cleanCode.includes(ns1) && !cleanCode.includes(ns2)) {
+      const expectedCleanCode = `/**@param{NS}ns*/exportasyncfunctionmain(ns){while(true){awaitns.hack("n00dles");}}`;
+      if (!cleanCode.includes(expectedCleanCode)) {
         dialogBoxCreate("Please copy and paste the code from the tutorial!");
         return;
       }
@@ -213,25 +211,55 @@ function Root(props: IProps): React.ReactElement {
     rerender();
   }, [rerender]);
 
+  const run = useCallback(() => {
+    if (currentScript === null) {
+      return;
+    }
+    // Check if "currentScript" is a script. It may be a text file.
+    if (!hasScriptExtension(currentScript.path)) {
+      dialogBoxCreate(`Cannot run ${currentScript.path}. It is not a script.`);
+      return;
+    }
+    // Check if the current script's server is valid.
+    const server = GetServer(currentScript.hostname);
+    if (server === null) {
+      return;
+    }
+
+    // Always save before doing anything else.
+    save();
+
+    const result = createRunningScriptInstance(server, currentScript.path, null, 1, []);
+    if (!result.success) {
+      dialogBoxCreate(result.message);
+      return;
+    }
+    startWorkerScript(result.runningScript, server);
+  }, [save]);
+
   useEffect(() => {
     function keydown(event: KeyboardEvent): void {
-      if (Settings.DisableHotkeys) return;
-      //Ctrl + b
-      if (event.code == "KeyB" && (event.ctrlKey || event.metaKey)) {
-        event.preventDefault();
-        Router.toPage(Page.Terminal);
+      if (Settings.DisableHotkeys) {
+        return;
       }
-
-      // CTRL/CMD + S
-      if (event.code == "KeyS" && (event.ctrlKey || event.metaKey)) {
+      const keyBindingTypes = determineKeyBindingTypes(CurrentKeyBindings, convertKeyboardEventToKeyCombination(event));
+      if (keyBindingTypes.has(ScriptEditorAction.Save)) {
         event.preventDefault();
         event.stopPropagation();
         save();
       }
+      if (keyBindingTypes.has(ScriptEditorAction.GoToTerminal)) {
+        event.preventDefault();
+        Router.toPage(Page.Terminal);
+      }
+      if (keyBindingTypes.has(ScriptEditorAction.Run)) {
+        event.preventDefault();
+        run();
+      }
     }
     document.addEventListener("keydown", keydown);
     return () => document.removeEventListener("keydown", keydown);
-  }, [save]);
+  }, [save, run]);
 
   function infLoop(ast: AST, code: string): void {
     if (editorRef.current === null || currentScript === null || isLegacyScript(currentScript.path)) {
@@ -267,8 +295,15 @@ function Root(props: IProps): React.ReactElement {
 
   const debouncedCodeParsing = debounce((newCode: string) => {
     let server;
-    if (!currentScript || !hasScriptExtension(currentScript.path) || !(server = GetServer(currentScript.hostname))) {
+    if (!currentScript || !hasScriptExtension(currentScript.path)) {
       showRAMError();
+      return;
+    }
+    if (!(server = GetServer(currentScript.hostname))) {
+      showRAMError({
+        errorCode: RamCalculationErrorCode.InvalidServer,
+        errorMessage: `Server ${currentScript.hostname} does not exist`,
+      });
       return;
     }
     let ast;
@@ -361,7 +396,8 @@ function Root(props: IProps): React.ReactElement {
   function saveScript(scriptToSave: OpenScript): void {
     const server = GetServer(scriptToSave.hostname);
     if (!server) {
-      throw new Error("Server should not be null but it is.");
+      dialogBoxCreate(`Server ${scriptToSave.hostname} does not exist.`);
+      return;
     }
     // Show a warning message if the file is on a non-home server.
     if (scriptToSave.hostname !== SpecialServers.Home) {
@@ -441,7 +477,7 @@ function Root(props: IProps): React.ReactElement {
       const indexOffset = openScripts.length === index ? -1 : 0;
       currentScript = openScripts[index + indexOffset];
       if (editorRef.current !== null) {
-        if (currentScript.model.isDisposed() || !currentScript.model) {
+        if (!currentScript.model || currentScript.model.isDisposed()) {
           currentScript.regenerateModel();
         }
         editorRef.current.setModel(currentScript.model);
@@ -562,7 +598,7 @@ function Root(props: IProps): React.ReactElement {
 
         {statusBarRef.current}
 
-        <Toolbar onSave={save} editor={editorRef.current} />
+        <Toolbar onSave={save} onRun={run} editor={editorRef.current} />
       </div>
       {!currentScript && <NoOpenScripts />}
     </>

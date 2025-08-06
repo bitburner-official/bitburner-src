@@ -146,6 +146,9 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           </Typography>
 
           <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
+          <Typography>
+            <br />( "ls" is short for "list" )
+          </Typography>
         </>
       ),
       canNext: false,
@@ -156,7 +159,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography classes={{ root: classes.textfield }}>{"[home /]> ls"}</Typography>
           <Typography>
             {" "}
-            is a basic command that shows files on the computer. Right now, it shows that you have a program called{" "}
+            is a basic command that lists the files on the computer. Right now, it shows that you have a program called{" "}
             NUKE.exe on your computer. We'll get to what this does later. <br />
             <br />
             Using your home computer's terminal, you can connect to other machines throughout the world. Let's do that
@@ -280,7 +283,7 @@ export function InteractiveTutorialRoot(): React.ReactElement {
     },
     [iTutorialSteps.TerminalHackingMechanics as number]: {
       content: (
-        <Typography>
+        <Typography component="div">
           You are now attempting to hack the server. Performing a hack takes time and only has a certain percentage
           chance of success. This time and success chance is determined by a variety of factors, including your hacking
           skill and the server's security level.
@@ -324,23 +327,22 @@ export function InteractiveTutorialRoot(): React.ReactElement {
           <Typography classes={{ root: classes.textfield }}>{"[home /]> nano"}</Typography>
 
           <Typography>
-            Scripts must end with a script extension (.js, .jsx, .ts, .tsx, .script). Let's make a script now by
-            entering
+            Scripts must end with a script extension (.js, .jsx, .ts, .tsx). Let's make a script now by entering
           </Typography>
           <Typography classes={{ root: classes.textfield }}>{`[home /]> nano ${tutorialScriptName}`}</Typography>
         </>
       ),
       canNext: false,
     },
-    [iTutorialSteps.TerminalTypeScript as number]: {
+    [iTutorialSteps.TerminalEditScript as number]: {
       content: (
         <>
           <Typography>
             This is the script editor. You can use it to program your scripts. Click this text to copy it and paste it
-            into the text editor: <br />
+            into the text editor:
           </Typography>
-
-          <Typography classes={{ root: classes.code }}>
+          <br />
+          <Typography component="div" classes={{ root: classes.code }}>
             {
               <CopyableText
                 value={`/** @param {NS} ns */
@@ -352,9 +354,13 @@ export async function main(ns) {
               />
             }
           </Typography>
+          <br />
           <Typography>
             For anyone with basic programming experience, this code should be straightforward. This script will
             continuously hack the n00dles server.
+            <br />
+            <br />
+            Use the search tool at the bottom to find and have a quick glance at documentation of any NS APIs.
             <br />
             <br />
             To access <NsApiDocumentationLink />, press the link at the bottom.
@@ -538,6 +544,10 @@ export async function main(ns) {
           This page contains a lot of different documentation about the game's contents and mechanics. I know it's a
           lot, but I highly suggest you read (or at least skim) through this before you start playing. Some pages are
           inaccessible at the start and will be unlocked later.
+          <br />
+          <br />
+          If you click a link in these pages while holding Ctrl key (Control key on Mac keyboard), it will be opened in
+          a new tab. If you play the Steam version, that link will be opened in your default browser.
           <br />
           <br />
           You should at least check these pages:

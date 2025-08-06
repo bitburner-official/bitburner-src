@@ -17,7 +17,7 @@ openTail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  fn | [FilenameOrPID](./bitburner.filenameorpid.md) | _(Optional)_ Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed. |
-|  host | string | _(Optional)_ Optional. Hostname of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional. |
+|  host | string | _(Optional)_ Optional. Hostname/IP of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional. |
 |  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments for the script being tailed. |
 
 **Returns:**
@@ -39,12 +39,12 @@ Otherwise, the PID or filename, hostname/ip, and args… arguments can be used t
 
 ```js
 //Open logs from foo.js on the current server that was run with no args
-ns.tail("foo.js");
+ns.ui.openTail("foo.js");
 
 //Get logs from foo.js on the foodnstuff server that was run with no args
-ns.tail("foo.js", "foodnstuff");
+ns.ui.openTail("foo.js", "foodnstuff");
 
 //Get logs from foo.js on the foodnstuff server that was run with the arguments [1, "test"]
-ns.tail("foo.js", "foodnstuff", 1, "test");
+ns.ui.openTail("foo.js", "foodnstuff", 1, "test");
 ```
 

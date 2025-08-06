@@ -4,7 +4,7 @@
 
 ## NS.sleeve property
 
-Namespace for sleeve functions. Contains spoilers.
+Namespace for [sleeve](./bitburner.sleeve.md) functions. Contains spoilers.
 
 **Signature:**
 

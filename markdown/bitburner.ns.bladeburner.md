@@ -4,7 +4,7 @@
 
 ## NS.bladeburner property
 
-Namespace for bladeburner functions. Contains spoilers.
+Namespace for [Bladeburner](./bitburner.bladeburner.md) functions. Contains spoilers.
 
 **Signature:**
 

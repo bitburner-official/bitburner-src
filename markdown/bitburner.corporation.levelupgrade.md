@@ -9,14 +9,14 @@ Level up an upgrade.
 **Signature:**
 
 ```typescript
-levelUpgrade(upgradeName: string): void;
+levelUpgrade(upgradeName: CorpUpgradeName): void;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  upgradeName | string | Name of the upgrade |
+|  upgradeName | [CorpUpgradeName](./bitburner.corpupgradename.md) | Name of the upgrade |
 
 **Returns:**
 

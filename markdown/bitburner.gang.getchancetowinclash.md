@@ -28,5 +28,5 @@ Chance you have to win a clash with the specified gang.
 
 RAM cost: 4 GB
 
-Returns the chance you have to win a clash with the specified gang. The chance is returned in decimal form, not percentage
+Returns the chance you have to win a clash with the specified gang. The chance is returned in the range 0-1.
 

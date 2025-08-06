@@ -10,7 +10,21 @@ export function calculateSkill(exp: number, mult = 1): number {
 }
 
 export function calculateExp(skill: number, mult = 1): number {
-  const value = Math.exp((skill / mult + 200) / 32) - 534.6;
+  const floorSkill = Math.floor(skill);
+  let value = Math.exp((skill / mult + 200) / 32) - 534.6;
+  if (skill === floorSkill && Number.isFinite(skill)) {
+    // Check for floating point rounding issues that would cause the inverse
+    // operation to return the wrong result.
+    let calcSkill = calculateSkill(value, mult);
+    let diff = Math.abs(value * Number.EPSILON);
+    let newValue = value;
+    while (calcSkill < skill) {
+      newValue = value + diff;
+      diff *= 2;
+      calcSkill = calculateSkill(newValue, mult);
+    }
+    value = newValue;
+  }
   return clampNumber(value, 0);
 }
 

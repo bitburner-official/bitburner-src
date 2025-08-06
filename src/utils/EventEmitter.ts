@@ -16,7 +16,7 @@ export class EventEmitter<T extends any[]> {
     }
   }
 
-  hasSubscibers(): boolean {
+  hasSubscribers(): boolean {
     return this.subscribers.size > 0;
   }
 }

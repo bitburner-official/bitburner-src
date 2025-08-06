@@ -9,14 +9,14 @@ Suspends the script for n milliseconds.
 **Signature:**
 
 ```typescript
-sleep(millis: number): Promise<true>;
+sleep(millis?: number): Promise<true>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  millis | number | Number of milliseconds to sleep. |
+|  millis | number | _(Optional)_ Number of milliseconds to sleep. Default to 0. |
 
 **Returns:**
 
@@ -27,6 +27,8 @@ A promise that resolves to true when the sleep is completed.
 ## Remarks
 
 RAM cost: 0 GB
+
+Note that the actual delay may be longer than intended. For more information, please check https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout\#delay.
 
 ## Example
 

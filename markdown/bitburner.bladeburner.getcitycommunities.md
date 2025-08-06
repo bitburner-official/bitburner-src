@@ -9,14 +9,14 @@ Get number of communities in a city.
 **Signature:**
 
 ```typescript
-getCityCommunities(city: CityName | `${CityName}`): number;
+getCityCommunities(city: CityName): number;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of city. Case-sensitive |
+|  city | [CityName](./bitburner.cityname.md) | Name of city. Case-sensitive |
 
 **Returns:**
 

@@ -7,11 +7,11 @@ import { getOpponentStats, getScore } from "../boardAnalysis/scoring";
 import { GoGameboard } from "./GoGameboard";
 import { boardStyles } from "../boardState/goStyles";
 import { useRerender } from "../../ui/React/hooks";
-import { getBonusText, getMaxFavor } from "../effects/effect";
+import { getBonusText, getMaxRep } from "../effects/effect";
 import { formatNumber } from "../../ui/formatNumber";
 import { GoScoreSummaryTable } from "./GoScoreSummaryTable";
 import { getNewBoardState } from "../boardState/boardState";
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { getRecordKeys } from "../../Types/Record";
 
 export const GoHistoryPage = (): React.ReactElement => {
@@ -54,7 +54,7 @@ export const GoHistoryPage = (): React.ReactElement => {
                 {" "}
                 <strong className={classes.keyText}>
                   {faction === GoOpponent.w0r1d_d43m0n ? (
-                    <CorruptableText content="????????????" spoiler={false} />
+                    <CorruptibleText content="????????????" spoiler={false} />
                   ) : (
                     faction
                   )}
@@ -115,16 +115,19 @@ export const GoHistoryPage = (): React.ReactElement => {
                   <Tooltip
                     title={
                       <>
-                        Win streaks against a faction will give you +1 favor to that faction <br />
-                        at certain numbers of wins (up to a max of {getMaxFavor()} favor), <br />
-                        if you are currently a member of that faction
+                        Two wins in a row against an opponent will give you {getMaxRep() / 200} reputation converted to
+                        favor with that faction (up to a max of {getMaxRep()} reputation), if you are a member of that
+                        faction.
+                        <br />
+                        The reputation is immediately applied as favor, meaning it will increase reputation gain right
+                        away without needing an install.
                       </>
                     }
                   >
                     <TableRow>
-                      <TableCell className={classes.cellNone}>Favor from winstreaks:</TableCell>
+                      <TableCell className={classes.cellNone}>Reputation from winstreaks:</TableCell>
                       <TableCell className={classes.cellNone}>
-                        {data.favor ?? 0} {data.favor === getMaxFavor() ? "(max)" : ""}
+                        {data.rep ?? 0} {data.rep === getMaxRep() ? "(max)" : ""}
                       </TableCell>
                     </TableRow>
                   </Tooltip>

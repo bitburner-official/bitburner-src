@@ -105,7 +105,13 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
   const addReachableServerNames = () => {
     addGeneric({
       iterable: GetAllServers()
-        .filter((server) => server.backdoorInstalled || currServ.serversOnNetwork.includes(server.hostname))
+        .filter(
+          (server) =>
+            server !== currServ &&
+            (server.backdoorInstalled ||
+              server.purchasedByPlayer ||
+              currServ.serversOnNetwork.includes(server.hostname)),
+        )
         .map((server) => server.hostname),
     });
   };
@@ -273,7 +279,13 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       //fail silently if the script fails to compile (e.g. syntax error)
       return;
     }
-    if (!loadedModule || !loadedModule.autocomplete) return; // Doesn't have an autocomplete function.
+    if (!loadedModule) {
+      return;
+    }
+    // Return "--tail" if the player does not define the autocomplete function.
+    if (!loadedModule.autocomplete) {
+      return ["--tail"];
+    }
 
     const runArgs = { "--tail": Boolean, "-t": Number, "--ram-override": Number };
     let flags = {

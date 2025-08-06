@@ -259,6 +259,9 @@ export function refreshTheme(): void {
             border: "2px solid " + Settings.theme.white,
             maxWidth: "100vh",
           },
+          popper: {
+            zIndex: 25000,
+          },
         },
         defaultProps: {
           disableInteractive: true,
@@ -402,6 +405,13 @@ export function refreshTheme(): void {
           },
           inputRoot: {
             height: "100%",
+          },
+        },
+      },
+      MuiModal: {
+        styleOverrides: {
+          root: {
+            zIndex: 20000,
           },
         },
       },

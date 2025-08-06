@@ -2,7 +2,7 @@ import { Board, BoardState, OpponentStats, Play, SimpleBoard, SimpleOpponentStat
 
 import { Player } from "@player";
 import { AugmentationName, GoColor, GoOpponent, GoPlayType, GoValidity } from "@enums";
-import { Go } from "../Go";
+import { Go, GoEvents } from "../Go";
 import {
   getNewBoardState,
   getNewBoardStateFromSimpleBoard,
@@ -10,25 +10,26 @@ import {
   passTurn,
   updateCaptures,
 } from "../boardState/boardState";
-import { getNextTurn, handleNextTurn, resetAI } from "../boardAnalysis/goAI";
+import { getNextTurn, handleNextTurn, resetGoPromises } from "../boardAnalysis/goAI";
 import {
+  clearAllPointHighlights,
   evaluateIfMoveIsValid,
   getControlledSpace,
   getPreviousMove,
   simpleBoardFromBoard,
   simpleBoardFromBoardString,
 } from "../boardAnalysis/boardAnalysis";
-import { endGoGame, getOpponentStats, getScore, resetWinstreak } from "../boardAnalysis/scoring";
+import { forceEndGoGame, getOpponentStats, getScore, resetWinstreak } from "../boardAnalysis/scoring";
 import { WHRNG } from "../../Casino/RNG";
 import { getRecordKeys } from "../../Types/Record";
 import { CalculateEffect, getEffectTypeForFaction } from "./effect";
-import { exceptionAlert } from "../../utils/helpers/exceptionAlert";
 import { newOpponentStats } from "../Constants";
 
 /**
  * Check the move based on the current settings
  */
 export function validateMove(error: (s: string) => never, x: number, y: number, methodName = "", settings = {}): void {
+  Go.moveOrCheatViaApi = true;
   const check = {
     emptyNode: true,
     requireNonEmptyNode: false,
@@ -264,6 +265,20 @@ export function getControlledEmptyNodes(_board?: Board) {
   );
 }
 
+export function setTestingBoardState(board: Board, komi?: number) {
+  resetBoardState(
+    () => {},
+    () => {},
+    GoOpponent.none,
+    board.length,
+  );
+  Go.currentGame.board = board;
+  if (komi != undefined) {
+    Go.currentGame.komiOverride = komi;
+  }
+  GoEvents.emit();
+}
+
 /**
  * Returns all previous board states as SimpleBoards
  */
@@ -274,7 +289,7 @@ export function getHistory(): string[][] {
 /**
  * Gets the status of the current game.
  * Shows the current player, current score, and the previous move coordinates.
- * Previous move coordinates will be [-1, -1] for a pass, or if there are no prior moves.
+ * Previous move will be null for a pass, or if there are no prior moves.
  *
  * Also provides the white player's komi (bonus starting score), and the amount of bonus cycles from offline time remaining
  */
@@ -342,9 +357,9 @@ export function resetBoardState(
     resetWinstreak(oldBoardState.ai, false);
   }
 
-  resetAI();
   Go.currentGame = getNewBoardState(boardSize, opponent, true);
-  handleNextTurn(Go.currentGame).catch((error) => exceptionAlert(error));
+  resetGoPromises();
+  clearAllPointHighlights(Go.currentGame);
   logger(`New game started: ${opponent}, ${boardSize}x${boardSize}`);
   return simpleBoardFromBoard(Go.currentGame.board);
 }
@@ -364,7 +379,7 @@ export function getStats() {
       losses: details.losses,
       winStreak: details.winStreak,
       highestWinStreak: details.highestWinStreak,
-      favor: details.favor,
+      rep: details.rep,
       bonusPercent: effectPercent,
       bonusDescription: effectDescription,
     };
@@ -488,10 +503,11 @@ export function determineCheatSuccess(
   if ((successRngOverride ?? rng.random()) <= cheatSuccessChance(state.cheatCount, playAsWhite)) {
     callback();
   }
-  // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly losing
+  // If there have been prior cheat attempts, and the cheat fails, there is a 10% chance of instantly ending the game
   else if (priorCheatCount && (ejectRngOverride ?? rng.random()) < 0.1 && state.ai !== GoOpponent.none) {
     logger(`Cheat failed! You have been ejected from the subnet.`);
-    endGoGame(state);
+    forceEndGoGame(state);
+    Player.giveAchievement("IPVGO_ANTICHEAT");
     return handleNextTurn(state, true);
   } else {
     // If the cheat fails, your turn is skipped

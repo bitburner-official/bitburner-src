@@ -111,9 +111,9 @@ export function createUniqueRandomIp(): IPAddress {
 // Safely add a Server to the AllServers map
 export function AddToAllServers(server: Server | HacknetServer): void {
   if (GetServer(server.hostname)) {
-    console.warn(`Hostname of the server thats being added: ${server.hostname}`);
-    console.warn(`The server that already has this IP is: ${AllServers[server.hostname].hostname}`);
-    throw new Error("Error: Trying to add a server with an existing IP");
+    console.warn(`The hostname of the server that's being added is: ${server.hostname}`);
+    console.warn(`The server that already has this hostname is: ${AllServers[server.hostname].hostname}`);
+    throw new Error(`Error: Trying to add a server with an existing hostname. Hostname: ${server.hostname}.`);
   }
 
   AllServers[server.hostname] = server;
@@ -219,6 +219,9 @@ export function prestigeAllServers(): void {
 export function loadAllServers(saveString: string): void {
   const allServersData: unknown = JSON.parse(saveString, Reviver);
   assertObject(allServersData);
+  if (Object.keys(allServersData).length === 0) {
+    throw new Error("Server list is empty.");
+  }
   for (const [serverName, server] of Object.entries(allServersData)) {
     if (!(server instanceof Server) && !(server instanceof HacknetServer)) {
       throw new Error(`Server ${serverName} is not an instance of Server or HacknetServer.`);

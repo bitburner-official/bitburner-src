@@ -47,6 +47,8 @@ import { SaveData } from "./types";
 import { Go } from "./Go/Go";
 import { EventEmitter } from "./utils/EventEmitter";
 import { Companies } from "./Company/Companies";
+import { resetGoPromises } from "./Go/boardAnalysis/goAI";
+import { getRecordEntries } from "./Types/Record";
 
 declare global {
   // This property is only available in the dev build
@@ -66,30 +68,8 @@ declare global {
 export const GameCycleEvents = new EventEmitter<[]>();
 
 /** Game engine. Handles the main game loop. */
-const Engine: {
-  _lastUpdate: number;
-  updateGame: (numCycles?: number) => void;
-  Counters: {
-    [key: string]: number | undefined;
-    autoSaveCounter: number;
-    updateSkillLevelsCounter: number;
-    updateDisplays: number;
-    updateDisplaysLong: number;
-    updateActiveScriptsDisplay: number;
-    createProgramNotifications: number;
-    augmentationsNotifications: number;
-    checkFactionInvitations: number;
-    passiveFactionGrowth: number;
-    messages: number;
-    mechanicProcess: number;
-    contractGeneration: number;
-    achievementsCounter: number;
-  };
-  decrementAllCounters: (numCycles?: number) => void;
-  checkCounters: () => void;
-  load: (saveData: SaveData) => Promise<void>;
-  start: () => void;
-} = {
+const Engine = {
+  isRunning: false,
   // Time variables (milliseconds unix epoch time)
   _lastUpdate: new Date().getTime(),
   updateGame: function (numCycles = 1) {
@@ -169,7 +149,7 @@ const Engine: {
   },
 
   decrementAllCounters: function (numCycles = 1) {
-    for (const [counterName, counter] of Object.entries(Engine.Counters)) {
+    for (const [counterName, counter] of getRecordEntries(Engine.Counters)) {
       if (counter === undefined) {
         exceptionAlert(new Error(`counter value is undefined. counterName: ${counterName}.`), true);
         continue;
@@ -245,7 +225,7 @@ const Engine: {
     }
   },
 
-  load: async function (saveData) {
+  load: async function (saveData: SaveData) {
     startExploits();
     setupUncaughtPromiseHandler();
     // Source files must be initialized early because save-game translation in
@@ -276,13 +256,16 @@ const Engine: {
       tryGeneratingRandomContract(timeOffline / CONSTANTS.MillisecondsPerTenMinutes);
 
       let offlineReputation = 0;
-      const offlineHackingIncome =
+      let offlineHackingIncome =
         (Player.moneySourceA.hacking / Player.playtimeSinceLastAug) * timeOffline * CONSTANTS.OfflineHackingIncome;
+      if (!Number.isFinite(offlineHackingIncome)) {
+        offlineHackingIncome = 0;
+      }
       Player.gainMoney(offlineHackingIncome, "hacking");
-      // Process offline progress
 
       loadAllRunningScripts(); // This also takes care of offline production for those scripts
 
+      // Process offline progress
       if (Player.currentWork !== null) {
         Player.focus = true;
         Player.processWork(numCyclesOffline);
@@ -385,13 +368,15 @@ const Engine: {
       // No save found, start new game
       FormatsNeedToChange.emit();
       initBitNodeMultipliers();
-      Engine.start(); // Run main game loop and Scripts loop
       Player.init();
       initForeignServers(Player.getHomeComputer());
       Player.reapplyAllAugmentations();
+      resetGoPromises();
 
       // Start interactive tutorial
       iTutorialStart();
+
+      Engine.start(); // Run main game loop and Scripts loop
     }
 
     // Expose internal objects/functions in the dev build
@@ -414,6 +399,7 @@ const Engine: {
   },
 
   start: function () {
+    this.isRunning = true;
     // Get time difference
     const _thisUpdate = new Date().getTime();
     let diff = _thisUpdate - Engine._lastUpdate;
@@ -432,7 +418,7 @@ const Engine: {
       Engine._lastUpdate = _thisUpdate - offset;
       Player.lastUpdate = _thisUpdate - offset;
       Engine.updateGame(diff);
-      if (GameCycleEvents.hasSubscibers()) {
+      if (GameCycleEvents.hasSubscribers()) {
         ReactDOM.unstable_batchedUpdates(() => {
           GameCycleEvents.emit();
         });

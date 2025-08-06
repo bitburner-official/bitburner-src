@@ -11,10 +11,14 @@ import { scriptKey } from "../utils/helpers/scriptKey";
 
 import type { ScriptFilePath } from "../Paths/ScriptFilePath";
 
-export function scriptCalculateOfflineProduction(runningScript: RunningScript): void {
+export function scriptCalculateOfflineProduction(
+  runningScript: RunningScript,
+  playerLastUpdate: number,
+  playerPlaytimeSinceLastAug: number,
+): void {
   //The Player object stores the last update time from when we were online
   const thisUpdate = new Date().getTime();
-  const lastUpdate = Player.lastUpdate;
+  const lastUpdate = playerLastUpdate;
   const timePassed = Math.max((thisUpdate - lastUpdate) / 1000, 0); //Seconds
 
   //Calculate the "confidence" rating of the script's true production. This is based
@@ -58,8 +62,11 @@ export function scriptCalculateOfflineProduction(runningScript: RunningScript): 
   const expGain = confidence * (runningScript.onlineExpGained / runningScript.onlineRunningTime) * timePassed;
   Player.gainHackingExp(expGain);
 
-  const moneyGain =
-    (runningScript.onlineMoneyMade / Player.playtimeSinceLastAug) * timePassed * CONSTANTS.OfflineHackingIncome;
+  let moneyGain =
+    (runningScript.onlineMoneyMade / playerPlaytimeSinceLastAug) * timePassed * CONSTANTS.OfflineHackingIncome;
+  if (!Number.isFinite(moneyGain)) {
+    moneyGain = 0;
+  }
   // money is given to player during engine load
   Player.scriptProdSinceLastAug += moneyGain;
 

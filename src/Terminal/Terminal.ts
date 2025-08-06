@@ -53,6 +53,7 @@ import { help } from "./commands/help";
 import { history } from "./commands/history";
 import { home } from "./commands/home";
 import { hostname } from "./commands/hostname";
+import { ipaddr } from "./commands/ipaddr";
 import { kill } from "./commands/kill";
 import { killall } from "./commands/killall";
 import { ls } from "./commands/ls";
@@ -80,10 +81,11 @@ import { clear } from "./commands/clear";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Engine } from "../engine";
 import { Directory, resolveDirectory, root } from "../Paths/Directory";
-import { FilePath, isFilePath, resolveFilePath } from "../Paths/FilePath";
+import { FilePath, isBasicFilePath, resolveFilePath } from "../Paths/FilePath";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
+import { isIPAddress } from "../Types/strings";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -109,6 +111,7 @@ export const TerminalCommands: Record<string, (args: (string | number | boolean)
   history: history,
   home: home,
   hostname: hostname,
+  ipaddr: ipaddr,
   kill: kill,
   killall: killall,
   ls: ls,
@@ -500,40 +503,54 @@ export class Terminal {
       return this.error("There's already a Coding Contract in Progress");
     }
 
-    const serv = Player.getCurrentServer();
-    const contract = serv.getContract(contractPath);
-    if (!contract) return this.error("No such contract");
+    const server = Player.getCurrentServer();
+    const contract = server.getContract(contractPath);
+    if (!contract) {
+      return this.error("No such contract");
+    }
 
     this.contractOpen = true;
-    const res = await contract.prompt();
+    const promptResult = await contract.prompt();
 
-    //Check if the contract still exists by the time the promise is fulfilled
-    if (serv.getContract(contractPath) == null) {
+    // Get a new copy of the server, in case it changed while the prompt was open
+    const postPromptServer = GetServer(server.hostname);
+
+    // Check if the contract still exists by the time the promise is fulfilled
+    if (postPromptServer?.getContract(contractPath) == null) {
       this.contractOpen = false;
       return this.error("Contract no longer exists (Was it solved by a script?)");
     }
 
-    switch (res) {
+    switch (promptResult.result) {
       case CodingContractResult.Success:
         if (contract.reward !== null) {
           const reward = Player.gainCodingContractReward(contract.reward, contract.getDifficulty());
           this.print(`Contract SUCCESS - ${reward}`);
         }
-        serv.removeContract(contract);
+        server.removeContract(contract);
+        break;
+      case CodingContractResult.InvalidFormat:
+        this.error(
+          `Contract FAILED - ${
+            promptResult.message ?? `The answer is not in the right format for contract '${contract.type}'`
+          }`,
+        );
         break;
       case CodingContractResult.Failure:
         ++contract.tries;
         if (contract.tries >= contract.getMaxNumTries()) {
           this.error("Contract FAILED - Contract is now self-destructing");
-          serv.removeContract(contract);
+          server.removeContract(contract);
         } else {
           this.error(`Contract FAILED - ${contract.getMaxNumTries() - contract.tries} tries remaining`);
         }
         break;
       case CodingContractResult.Cancelled:
-      default:
         this.print("Contract cancelled");
         break;
+      default: {
+        const __: never = promptResult.result;
+      }
     }
     this.contractOpen = false;
   }
@@ -593,12 +610,12 @@ export class Terminal {
       return;
     }
     Player.getCurrentServer().isConnectedTo = false;
-    Player.currentServer = hostname;
+    Player.currentServer = server.hostname;
     server.isConnectedTo = true;
     this.setcwd(root);
     if (!singularity) {
-      this.print("Connected to " + server.hostname);
-      if (Player.getCurrentServer().hostname == "darkweb") {
+      this.print("Connected to " + `${isIPAddress(hostname) ? server.ip : server.hostname}`);
+      if (Player.getCurrentServer().hostname === "darkweb") {
         checkIfConnectedToDarkweb(); // Posts a 'help' message if connecting to dark web
       }
     }
@@ -646,7 +663,7 @@ export class Terminal {
         "Bad command. Please follow the tutorial or click 'Exit Tutorial' if you'd like to skip it.";
       switch (ITutorial.currStep) {
         case iTutorialSteps.TerminalHelp:
-          if (commandArray.length === 1 && commandArray[0] == "help") {
+          if (commandArray.length === 1 && commandArray[0] === "help") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -654,15 +671,18 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalLs:
-          if (commandArray.length === 1 && commandArray[0] == "ls") {
+          if (commandArray.length === 1 && commandArray[0] === "ls") {
             iTutorialNextStep();
+          } else if (commandArray[0] === "1s") {
+            this.error("Command '1s' not found. Did you mean 'ls' with a lowercase L?");
+            return;
           } else {
             this.error(errorMessageForBadCommand);
             return;
           }
           break;
         case iTutorialSteps.TerminalScan:
-          if (commandArray.length === 1 && commandArray[0] == "scan") {
+          if (commandArray.length === 1 && commandArray[0] === "scan") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -670,7 +690,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalScanAnalyze1:
-          if (commandArray.length == 1 && commandArray[0] == "scan-analyze") {
+          if (commandArray.length === 1 && commandArray[0] === "scan-analyze") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -678,7 +698,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalScanAnalyze2:
-          if (commandArray.length == 2 && commandArray[0] == "scan-analyze" && commandArray[1] === 2) {
+          if (commandArray.length === 2 && commandArray[0] === "scan-analyze" && commandArray[1] === 2) {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -686,10 +706,10 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalConnect:
-          if (commandArray.length == 2) {
+          if (commandArray.length === 2) {
             if (
-              commandArray[0] == "connect" &&
-              (commandArray[1] == "n00dles" || commandArray[1] == n00dlesServ.hostname)
+              commandArray[0] === "connect" &&
+              (commandArray[1] === "n00dles" || commandArray[1] === n00dlesServ.hostname)
             ) {
               iTutorialNextStep();
             } else {
@@ -710,7 +730,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalNuke:
-          if (commandArray.length == 2 && commandArray[0] == "run" && commandArray[1] == "NUKE.exe") {
+          if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "NUKE.exe") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -718,7 +738,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalManualHack:
-          if (commandArray.length == 1 && commandArray[0] == "hack") {
+          if (commandArray.length === 1 && commandArray[0] === "hack") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -732,7 +752,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalGoHome:
-          if (commandArray.length == 1 && commandArray[0] == "home") {
+          if (commandArray.length === 1 && commandArray[0] === "home") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -740,11 +760,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalCreateScript:
-          if (
-            commandArray.length == 2 &&
-            commandArray[0] == "nano" &&
-            (commandArray[1] == "n00dles.script" || commandArray[1] == "n00dles.js")
-          ) {
+          if (commandArray.length === 2 && commandArray[0] === "nano" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -752,7 +768,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalFree:
-          if (commandArray.length == 1 && commandArray[0] == "free") {
+          if (commandArray.length === 1 && commandArray[0] === "free") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -760,11 +776,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.TerminalRunScript:
-          if (
-            commandArray.length == 2 &&
-            commandArray[0] == "run" &&
-            (commandArray[1] == "n00dles.script" || commandArray[1] == "n00dles.js")
-          ) {
+          if (commandArray.length === 2 && commandArray[0] === "run" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -772,11 +784,7 @@ export class Terminal {
           }
           break;
         case iTutorialSteps.ActiveScriptsToTerminal:
-          if (
-            commandArray.length == 2 &&
-            commandArray[0] == "tail" &&
-            (commandArray[1] == "n00dles.script" || commandArray[1] == "n00dles.js")
-          ) {
+          if (commandArray.length === 2 && commandArray[0] === "tail" && commandArray[1] === "n00dles.js") {
             iTutorialNextStep();
           } else {
             this.error(errorMessageForBadCommand);
@@ -794,13 +802,17 @@ export class Terminal {
     const commandName = commandArray[0];
     if (typeof commandName !== "string") return this.error(`${commandName} is not a valid command.`);
     // run by path command
-    if (isFilePath(commandName)) return run(commandArray, currentServer);
+    if (isBasicFilePath(commandName)) return run(commandArray, currentServer);
 
     // Aside from the run-by-path command, we don't need the first entry once we've stored it in commandName.
     commandArray.shift();
 
     const f = TerminalCommands[commandName.toLowerCase()];
-    if (!f) return this.error(`Command ${commandName} not found`);
+    if (!f) {
+      const similarCommands = findSimilarCommands(commandName);
+      const didYouMeanString = similarCommands.length ? ` Did you mean: ${similarCommands.join(" or ")}?` : "";
+      return this.error(`Command ${commandName} not found.${didYouMeanString}`);
+    }
 
     f(commandArray, currentServer);
   }
@@ -812,4 +824,18 @@ export class Terminal {
       totalTicks: 50,
     });
   }
+}
+
+function findSimilarCommands(command: string): string[] {
+  const commands = Object.keys(TerminalCommands);
+  const offByOneLetter = commands.filter((c) => {
+    if (c.length !== command.length) return false;
+    let diff = 0;
+    for (let i = 0; i < c.length; i++) {
+      if (c[i] !== command[i]) diff++;
+    }
+    return diff === 1;
+  });
+  const subset = commands.filter((c) => c.includes(command)).sort((a, b) => a.length - b.length);
+  return Array.from(new Set([...offByOneLetter, ...subset])).slice(0, 3);
 }

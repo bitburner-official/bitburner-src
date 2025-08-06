@@ -11,10 +11,10 @@ Cancel material export.
 ```typescript
 cancelExportMaterial(
     sourceDivision: string,
-    sourceCity: CityName | `${CityName}`,
+    sourceCity: CityName,
     targetDivision: string,
-    targetCity: CityName | `${CityName}`,
-    materialName: string,
+    targetCity: CityName,
+    materialName: CorpMaterialName,
   ): void;
 ```
 
@@ -23,10 +23,10 @@ cancelExportMaterial(
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  sourceDivision | string | Source division |
-|  sourceCity | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Source city |
+|  sourceCity | [CityName](./bitburner.cityname.md) | Source city |
 |  targetDivision | string | Target division |
-|  targetCity | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Target city |
-|  materialName | string | Name of the material |
+|  targetCity | [CityName](./bitburner.cityname.md) | Target city |
+|  materialName | [CorpMaterialName](./bitburner.corpmaterialname.md) | Name of the material |
 
 **Returns:**
 

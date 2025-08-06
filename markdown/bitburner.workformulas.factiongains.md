@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, favor: number): WorkStats;
+factionGains(person: Person, workType: FactionWorkType, favor: number): WorkStats;
 ```
 
 ## Parameters
@@ -15,7 +15,7 @@ factionGains(person: Person, workType: FactionWorkType | `${FactionWorkType}`, f
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  person | [Person](./bitburner.person.md) |  |
-|  workType | [FactionWorkType](./bitburner.factionworktype.md) \| \`${[FactionWorkType](./bitburner.factionworktype.md)<!-- -->}\` |  |
+|  workType | [FactionWorkType](./bitburner.factionworktype.md) |  |
 |  favor | number |  |
 
 **Returns:**

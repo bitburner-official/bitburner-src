@@ -55,7 +55,7 @@ import { resolveFilePath, FilePath } from "../Paths/FilePath";
 import { hasScriptExtension, ScriptFilePath } from "../Paths/ScriptFilePath";
 import { CustomBoundary } from "../ui/Components/CustomBoundary";
 import { ServerConstants } from "../Server/data/Constants";
-import { basicErrorMessage, errorMessage, log } from "./ErrorMessages";
+import { errorMessage, log } from "./ErrorMessages";
 import { assertStringWithNSContext, debugType } from "./TypeAssertion";
 import {
   canAccessBitNodeFeature,
@@ -73,10 +73,12 @@ export const helpers = {
   positiveSafeInteger,
   positiveNumber,
   scriptArgs,
+  boolean,
   runOptions,
   spawnOptions,
+  hostReturnOptions,
+  returnServerID,
   argsToString,
-  basicErrorMessage,
   errorMessage,
   validateHGWOptions,
   checkEnvFlags,
@@ -101,6 +103,7 @@ export const helpers = {
   createPublicRunningScript,
   failOnHacknetServer,
   validateBitNodeOptions,
+  getNormalServer,
 };
 
 /** RunOptions with non-optional, type-validated members, for passing between internal functions. */
@@ -119,6 +122,10 @@ export interface CompleteHGWOptions {
   threads: PositiveNumber;
   stock: boolean;
   additionalMsec: number;
+}
+/** HostReturnOptions with non-optional, type-validated members, for passing between internal functions */
+export interface CompleteHostReturnOptions {
+  returnByIP: boolean;
 }
 
 /** Convert a provided value v for argument argName to string. If it wasn't originally a string or number, throw. */
@@ -181,6 +188,14 @@ function scriptArgs(ctx: NetscriptContext, args: unknown) {
   return args;
 }
 
+/** Converts the provided value for v to a boolean, throwing if it is not  */
+function boolean(ctx: NetscriptContext, argName: string, v: unknown): boolean {
+  if (typeof v !== "boolean") {
+    throw errorMessage(ctx, `${argName} must be a boolean, was ${v}`, "TYPE");
+  }
+  return v;
+}
+
 function runOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteRunOptions {
   const result: CompleteRunOptions = {
     threads: 1 as PositiveInteger,
@@ -228,6 +243,20 @@ function spawnOptions(ctx: NetscriptContext, threadOrOption: unknown): CompleteS
     }
   }
   return result;
+}
+
+function hostReturnOptions(returnOpts: unknown): CompleteHostReturnOptions {
+  const result: CompleteHostReturnOptions = { returnByIP: false };
+  if (typeof returnOpts !== "object" || !returnOpts) return result;
+  // Safe assertion since returnOpts type has been narrowed to a non-null object
+  const { returnByIP } = returnOpts as Unknownify<CompleteHostReturnOptions>;
+  result.returnByIP = !!returnByIP;
+  return result;
+}
+
+/** Returns a server's hostname or IP based on the `returnByIP` field of HostReturnOptions */
+function returnServerID(server: BaseServer, returnOpts: CompleteHostReturnOptions): string {
+  return returnOpts.returnByIP ? server.ip : server.hostname;
 }
 
 function mapToString(map: Map<unknown, unknown>): string {
@@ -334,8 +363,7 @@ function checkSingularityAccess(ctx: NetscriptContext): void {
   if (!canAccessBitNodeFeature(4)) {
     throw errorMessage(
       ctx,
-      `This singularity function requires Source-File 4 to run. A power up you obtain later in the game.
-      It will be very obvious when and how you can obtain it.`,
+      `This singularity function requires Source-File 4 to run. A power up you obtain later in the game. It will be very obvious when and how you can obtain it.`,
       "API ACCESS",
     );
   }
@@ -352,10 +380,8 @@ function checkEnvFlags(ctx: NetscriptContext): void {
     log(ctx, () => "Failed to run due to failed concurrency check.");
     const err = errorMessage(
       ctx,
-      `Concurrent calls to Netscript functions are not allowed!
-      Did you forget to await hack(), grow(), or some other
-      promise-returning function?
-      Currently running: ${ws.env.runningFn} tried to run: ${ctx.function}`,
+      "Concurrent calls to Netscript functions are not allowed! Did you forget to await hack(), grow(), or some other " +
+        `promise-returning function?\nCurrently running: ${ws.env.runningFn}\nTried to run: ${ctx.function}`,
       "CONCURRENCY",
     );
     killWorkerScript(ws);
@@ -452,11 +478,26 @@ function scriptIdentifier(
  * @param {string} hostname - Hostname of the server
  * @returns {BaseServer} The specified server as a BaseServer
  */
-function getServer(ctx: NetscriptContext, hostname: string) {
+function getServer(ctx: NetscriptContext, hostname: string): BaseServer {
   const server = GetServer(hostname);
   if (server == null || (server.serversOnNetwork.length == 0 && server.hostname != "home")) {
     const str = hostname === "" ? "'' (empty string)" : "'" + hostname + "'";
     throw errorMessage(ctx, `Invalid hostname: ${str}`);
+  }
+  return server;
+}
+
+/**
+ * A "normal server" is an instance of the Server class in src/Server/Server.ts.
+ */
+function getNormalServer(ctx: NetscriptContext, host: string): Server {
+  const server = getServer(ctx, host);
+  if (!(server instanceof Server)) {
+    let errorMessage = `Cannot be executed on ${host}.`;
+    if (server instanceof HacknetServer) {
+      errorMessage += " The server must not be a hacknet server.";
+    }
+    throw helpers.errorMessage(ctx, errorMessage);
   }
   return server;
 }
@@ -469,10 +510,7 @@ function isScriptArgs(args: unknown): args is ScriptArg[] {
 function hack(ctx: NetscriptContext, hostname: string, manual: boolean, opts: unknown): Promise<number> {
   const ws = ctx.workerScript;
   const { threads, stock, additionalMsec } = validateHGWOptions(ctx, opts);
-  const server = getServer(ctx, hostname);
-  if (!(server instanceof Server)) {
-    throw errorMessage(ctx, "Cannot be executed on this server.");
-  }
+  const server = getNormalServer(ctx, hostname);
 
   // Calculate the hacking time
   // This is in seconds
@@ -759,8 +797,8 @@ function createPublicRunningScript(runningScript: RunningScript, workerScript?: 
 /**
  * Used to fail a function if the function's target is a Hacknet Server.
  * This is used for functions that should run on normal Servers, but not Hacknet Servers
+ * @param {NetscriptContext} ctx - Netscript context
  * @param {Server} server - Target server
- * @param {string} callingFn - Name of calling function. For logging purposes
  * @returns {boolean} True if the server is a Hacknet Server, false otherwise
  */
 function failOnHacknetServer(ctx: NetscriptContext, server: BaseServer): boolean {

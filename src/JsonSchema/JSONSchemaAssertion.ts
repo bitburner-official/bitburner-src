@@ -3,6 +3,7 @@ import type { IStyleSettings } from "../ScriptEditor/NetscriptDefinitions";
 import type { IScriptEditorTheme } from "../ScriptEditor/ui/themes";
 import type { ITheme } from "../Themes/Themes";
 import { JsonSchemaValidator } from "./JsonSchemaValidator";
+import { DefaultKeyBindings } from "../utils/KeyBindingUtils";
 
 function assertAndSanitize(data: unknown, validate: ValidateFunction<unknown>): void {
   if (!validate(data)) {
@@ -31,4 +32,11 @@ export function assertAndSanitizeEditorTheme(data: unknown): asserts data is ISc
  */
 export function assertAndSanitizeStyles(data: unknown): asserts data is IStyleSettings {
   assertAndSanitize(data, JsonSchemaValidator.Styles);
+}
+
+/**
+ * This function validates the unknown data and removes properties not defined in KeyBindingsSchema.
+ */
+export function assertAndSanitizeKeyBindings(data: unknown): asserts data is typeof DefaultKeyBindings {
+  assertAndSanitize(data, JsonSchemaValidator.KeyBindingsSchema);
 }

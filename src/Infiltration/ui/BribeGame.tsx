@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 import { downArrowSymbol, upArrowSymbol } from "../utils";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
@@ -21,12 +21,12 @@ const difficulties: {
   Trivial: Difficulty;
   Normal: Difficulty;
   Hard: Difficulty;
-  Impossible: Difficulty;
+  Brutal: Difficulty;
 } = {
   Trivial: { timer: 12000, size: 6 },
   Normal: { timer: 9000, size: 8 },
   Hard: { timer: 5000, size: 9 },
-  Impossible: { timer: 2500, size: 12 },
+  Brutal: { timer: 2500, size: 12 },
 };
 
 export function BribeGame(props: IMinigameProps): React.ReactElement {

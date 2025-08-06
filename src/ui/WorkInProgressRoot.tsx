@@ -194,7 +194,15 @@ export function WorkInProgressRoot(): React.ReactElement {
   };
 
   if (Player.currentWork === null) {
-    setTimeout(() => Router.toPage(Page.Terminal));
+    setTimeout(() => {
+      /**
+       * We must check again before routing to the Terminal page. The player might have started an action right before
+       * the callback of setTimeout is called.
+       */
+      if (Player.currentWork === null) {
+        Router.toPage(Page.Terminal);
+      }
+    });
     return <></>;
   }
 
@@ -428,11 +436,11 @@ export function WorkInProgressRoot(): React.ReactElement {
       buttons: {
         cancel: () => {
           Player.finishWork(true);
-          Router.toPage(Page.Job, { location: Locations[comp.name] });
+          Router.toPage(Page.Job);
         },
         unfocus: () => {
           Player.stopFocusing();
-          Router.toPage(Page.Job, { location: Locations[comp.name] });
+          Router.toPage(Page.Job);
         },
       },
       title: (

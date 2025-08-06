@@ -54,6 +54,8 @@ export type BoardState = {
   passCount: number;
   cheatCount: number;
   cheatCountForWhite: number;
+  komiOverride: number | null;
+  highlightedPoints: (PointHighlight | null)[][];
 };
 
 export type PointState = {
@@ -96,7 +98,7 @@ export type OpponentStats = {
   winStreak: number;
   oldWinStreak: number;
   highestWinStreak: number;
-  favor: number;
+  rep: number;
 };
 
 export type SimpleOpponentStats = {
@@ -104,7 +106,12 @@ export type SimpleOpponentStats = {
   losses: number;
   winStreak: number;
   highestWinStreak: number;
-  favor: number;
+  rep: number;
   bonusPercent: number;
   bonusDescription: string;
+};
+
+export type PointHighlight = {
+  color: string;
+  text: string;
 };

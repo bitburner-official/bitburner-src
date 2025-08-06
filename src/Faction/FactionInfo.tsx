@@ -162,7 +162,12 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
       </>
     ),
     inviteReqs: [haveAugmentations(20), haveMoney(75e9), haveSkill("hacking", 850), haveCombatSkills(850)],
-    rumorReqs: [haveSourceFile(10)],
+    rumorReqs: [
+      someCondition([
+        inBitNode(10),
+        everyCondition([haveAugmentations(10), haveMoney(35e9), haveSkill("hacking", 425), haveCombatSkills(425)]),
+      ]),
+    ],
     offerHackingWork: true,
     offerFieldWork: true,
   }),
@@ -211,7 +216,7 @@ export const FactionInfos: Record<FactionName, FactionInfo> = {
     keepOnInstall: true,
   }),
 
-  [FactionName.BachmanAssociates]: new FactionInfo({
+  [FactionName.BachmanAndAssociates]: new FactionInfo({
     infoText: (
       <>
         Where Law and Business meet - that's where we are.

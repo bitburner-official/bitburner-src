@@ -9,7 +9,7 @@ Check if you unlocked a research.
 **Signature:**
 
 ```typescript
-hasResearched(divisionName: string, researchName: string): boolean;
+hasResearched(divisionName: string, researchName: CorpResearchName): boolean;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ hasResearched(divisionName: string, researchName: string): boolean;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  researchName | string | Name of the research |
+|  researchName | [CorpResearchName](./bitburner.corpresearchname.md) | Name of the research |
 
 **Returns:**
 

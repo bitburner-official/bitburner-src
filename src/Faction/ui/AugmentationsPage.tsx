@@ -10,13 +10,13 @@ import { PurchaseAugmentationsOrderSetting } from "../../Settings/SettingEnums";
 import { Settings } from "../../Settings/Settings";
 import { Player } from "@player";
 import { formatBigNumber } from "../../ui/formatNumber";
-import { Favor } from "../../ui/React/Favor";
-import { Reputation } from "../../ui/React/Reputation";
 import { Router } from "../../ui/GameRoot";
 import { Faction } from "../Faction";
 import { getFactionAugmentationsFiltered, hasAugmentationPrereqs, purchaseAugmentation } from "../FactionHelpers";
 import { CONSTANTS } from "../../Constants";
 import { useRerender } from "../../ui/React/hooks";
+import { ReputationInfo } from "../../ui/React/ReputationInfo";
+import { FavorInfo } from "../../ui/React/FavorInfo";
 
 /** Root React Component for displaying a faction's "Purchase Augmentations" page */
 export function AugmentationsPage({ faction }: { faction: Faction }): React.ReactElement {
@@ -80,7 +80,7 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
       const repCost = augCosts.repCost;
       const hasReq = faction.playerReputation >= repCost;
       const hasRep = hasAugmentationPrereqs(aug);
-      const hasCost = augCosts.moneyCost !== 0 && Player.money > augCosts.moneyCost;
+      const hasCost = augCosts.moneyCost !== 0 && Player.money >= augCosts.moneyCost;
       return hasCost && hasReq && hasRep;
     }
     const buy = augs.filter(canBuy).sort((augName1, augName2) => {
@@ -202,12 +202,11 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
               my: 1,
             }}
           >
-            <>{multiplierComponent}</>
-            <Typography>
-              <b>Reputation:</b> <Reputation reputation={faction.playerReputation} />
-              <br />
-              <b>Favor:</b> <Favor favor={faction.favor} />
-            </Typography>
+            {multiplierComponent}
+            <Box>
+              <ReputationInfo favor={faction.favor} playerReputation={faction.playerReputation} boldLabel={true} />
+              <FavorInfo favor={faction.favor} boldLabel={true} />
+            </Box>
           </Box>
           <Box sx={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
             <Button onClick={() => switchSortOrder(PurchaseAugmentationsOrderSetting.Cost)}>Sort by Cost</Button>
@@ -243,7 +242,7 @@ export function AugmentationsPage({ faction }: { faction: Faction }): React.Reac
           return (
             hasAugmentationPrereqs(aug) &&
             faction.playerReputation >= costs.repCost &&
-            (costs.moneyCost === 0 || Player.money > costs.moneyCost)
+            (costs.moneyCost === 0 || Player.money >= costs.moneyCost)
           );
         }}
         purchaseAugmentation={(aug, showModal) => {

@@ -6,10 +6,12 @@
 
 Purchase a research.
 
+Some research is only available for product industries. This function does not do anything if you purchase that research for a material industry.
+
 **Signature:**
 
 ```typescript
-research(divisionName: string, researchName: string): void;
+research(divisionName: string, researchName: CorpResearchName): void;
 ```
 
 ## Parameters
@@ -17,7 +19,7 @@ research(divisionName: string, researchName: string): void;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  researchName | string | Name of the research |
+|  researchName | [CorpResearchName](./bitburner.corpresearchname.md) | Name of the research |
 
 **Returns:**
 

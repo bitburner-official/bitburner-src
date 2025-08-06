@@ -9,7 +9,7 @@ Get warehouse data.
 **Signature:**
 
 ```typescript
-getWarehouse(divisionName: string, city: CityName | `${CityName}`): Warehouse;
+getWarehouse(divisionName: string, city: CityName): Warehouse;
 ```
 
 ## Parameters
@@ -17,7 +17,7 @@ getWarehouse(divisionName: string, city: CityName | `${CityName}`): Warehouse;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) \| \`${[CityName](./bitburner.cityname.md)<!-- -->}\` | Name of the city |
+|  city | [CityName](./bitburner.cityname.md) | Name of the city |
 
 **Returns:**
 

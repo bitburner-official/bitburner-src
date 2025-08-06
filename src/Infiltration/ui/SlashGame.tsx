@@ -2,7 +2,7 @@ import { Box, Paper, Typography } from "@mui/material";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
@@ -17,12 +17,12 @@ const difficulties: {
   Trivial: Difficulty;
   Normal: Difficulty;
   Hard: Difficulty;
-  Impossible: Difficulty;
+  Brutal: Difficulty;
 } = {
   Trivial: { window: 800 },
   Normal: { window: 500 },
   Hard: { window: 350 },
-  Impossible: { window: 250 },
+  Brutal: { window: 250 },
 };
 
 export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps): React.ReactElement {

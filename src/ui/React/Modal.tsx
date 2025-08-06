@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { type CSSProperties, useEffect, useState } from "react";
 import { Theme } from "@mui/material";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -43,10 +43,23 @@ interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
   sx?: SxProps<Theme>;
+  wrapperRef?: React.RefObject<HTMLDivElement>;
+  wrapperStyles?: CSSProperties;
   removeFocus?: boolean;
+  // If it's true, the player can dismiss the modal by pressing the Esc button or clicking on the backdrop.
+  canBeDismissedEasily?: boolean;
 }
 
-export const Modal = ({ open, onClose, children, sx, removeFocus = true }: ModalProps): React.ReactElement => {
+export const Modal = ({
+  open,
+  onClose,
+  children,
+  sx,
+  wrapperRef,
+  wrapperStyles,
+  removeFocus = true,
+  canBeDismissedEasily = true,
+}: ModalProps): React.ReactElement => {
   const { classes } = useStyles();
   const [content, setContent] = useState(children);
   useEffect(() => {
@@ -61,14 +74,21 @@ export const Modal = ({ open, onClose, children, sx, removeFocus = true }: Modal
       disableEnforceFocus
       disableAutoFocus={removeFocus}
       open={open}
-      onClose={onClose}
+      onClose={() => {
+        if (!canBeDismissedEasily) {
+          return;
+        }
+        onClose();
+      }}
       closeAfterTransition
       className={classes.modal}
       sx={sx}
     >
       <Fade in={open}>
         <div
+          ref={wrapperRef}
           className={classes.paper}
+          style={wrapperStyles}
           //@ts-expect-error inert is not supported by react types yet, this is a workaround until then. https://github.com/facebook/react/pull/24730
           inert={open ? null : ""}
         >

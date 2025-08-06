@@ -10,7 +10,7 @@
  * This subcomponent creates all of the buttons for interacting with those special
  * properties
  */
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
@@ -29,45 +29,68 @@ import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { N00dles } from "../../utils/helpers/N00dles";
 import { Exploit } from "../../Exploits/Exploit";
 import { applyAugmentation } from "../../Augmentation/AugmentationHelpers";
-import { CorruptableText } from "../../ui/React/CorruptableText";
+import { CorruptibleText } from "../../ui/React/CorruptibleText";
 import { HacknetNode } from "../../Hacknet/HacknetNode";
 import { HacknetServer } from "../../Hacknet/HacknetServer";
 import { GetServer } from "../../Server/AllServers";
 import { ArcadeRoot } from "../../Arcade/ui/ArcadeRoot";
 import { currentNodeMults } from "../../BitNode/BitNodeMultipliers";
 import { canAccessBitNodeFeature, knowAboutBitverse } from "../../BitNode/BitNodeUtils";
+import { useRerender } from "../../ui/React/hooks";
+import { PromptEvent } from "../../ui/React/PromptManager";
+import { canAcceptStaneksGift } from "../../CotMG/Helper";
 
 interface SpecialLocationProps {
   loc: Location;
 }
 
 export function SpecialLocation(props: SpecialLocationProps): React.ReactElement {
-  const setRerender = useState(false)[1];
+  const rerender = useRerender();
+
+  // Apply for Bladeburner division
+  const joinBladeburnerDivision = useCallback(() => {
+    Player.startBladeburner();
+    dialogBoxCreate("You have been accepted into the Bladeburner division!");
+    rerender();
+  }, [rerender]);
 
   /** Click handler for Bladeburner button at Sector-12 NSA */
   function handleBladeburner(): void {
     if (Player.bladeburner) {
       // Enter Bladeburner division
       Router.toPage(Page.Bladeburner);
-    } else if (
-      Player.skills.strength >= 100 &&
-      Player.skills.defense >= 100 &&
-      Player.skills.dexterity >= 100 &&
-      Player.skills.agility >= 100
-    ) {
-      // Apply for Bladeburner division
-      Player.startBladeburner();
-      dialogBoxCreate("You have been accepted into the Bladeburner division!");
-      setRerender((old) => !old);
-
-      const worldHeader = document.getElementById("world-menu-header");
-      if (worldHeader instanceof HTMLElement) {
-        worldHeader.click();
-        worldHeader.click();
-      }
-    } else {
-      dialogBoxCreate("Rejected! Please apply again when you have 100 of each combat stat (str, def, dex, agi)");
+      return;
     }
+    if (
+      Player.skills.strength < 100 ||
+      Player.skills.defense < 100 ||
+      Player.skills.dexterity < 100 ||
+      Player.skills.agility < 100
+    ) {
+      dialogBoxCreate("Rejected! Please apply again when you have 100 of each combat stat (str, def, dex, agi)");
+      return;
+    }
+    if (
+      Player.activeSourceFileLvl(7) >= 3 &&
+      canAcceptStaneksGift().success &&
+      !Player.hasAugmentation(AugmentationName.StaneksGift1)
+    ) {
+      PromptEvent.emit({
+        txt:
+          `After joining the Bladeburner division, you will immediately receive "${AugmentationName.BladesSimulacrum}"\n` +
+          `augmentation and won't be able to accept Stanek's Gift. If you want to accept Stanek's Gift,\n` +
+          `you must do that before joining the Bladeburner division.\n\n` +
+          "Do you really want to join the Bladeburner division now?",
+        resolve: (value: string | boolean) => {
+          if (value !== true) {
+            return;
+          }
+          joinBladeburnerDivision();
+        },
+      });
+      return;
+    }
+    joinBladeburnerDivision();
   }
 
   /** Click handler for Secret lab button at New Tokyo VitaLife */
@@ -306,7 +329,7 @@ export function SpecialLocation(props: SpecialLocationProps): React.ReactElement
     return (
       <>
         <Typography>
-          <CorruptableText content={"An eerie aura surrounds this area. You feel you should leave."} spoiler={false} />
+          <CorruptibleText content={"An eerie aura surrounds this area. You feel you should leave."} spoiler={false} />
         </Typography>
       </>
     );

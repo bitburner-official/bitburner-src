@@ -9,14 +9,14 @@ Get a list of enemies of a faction.
 **Signature:**
 
 ```typescript
-getFactionEnemies(faction: string): string[];
+getFactionEnemies(faction: FactionName): string[];
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  faction | string | Name of faction. |
+|  faction | [FactionName](./bitburner.factionname.md) | Name of faction. |
 
 **Returns:**
 

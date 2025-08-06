@@ -7,6 +7,7 @@ import type { Skills as PersonSkills } from "../PersonObjects/Skills";
 import {
   AugmentationName,
   BladeburnerActionType,
+  type BladeburnerBlackOpName,
   BladeburnerContractName,
   BladeburnerGeneralActionName,
   BladeburnerMultName,
@@ -28,7 +29,6 @@ import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { getRandomIntInclusive } from "../utils/helpers/getRandomIntInclusive";
 import { BladeburnerConstants } from "./data/Constants";
 import { formatExp, formatMoney, formatPercent, formatBigNumber, formatStamina } from "../ui/formatNumber";
-import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { addOffset } from "../utils/helpers/addOffset";
 import { Factions } from "../Faction/Factions";
 import { calculateHospitalizationCost } from "../Hospital/Hospital";
@@ -55,6 +55,7 @@ import { assertObject } from "../utils/TypeAssertion";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { loadActionIdentifier } from "./utils/loadActionIdentifier";
 import { pluralize } from "../utils/I18nUtils";
+import { calculateActionRankGain, calculateActionReputationGain } from "./Formulas";
 
 export const BladeburnerPromise: PromisePair<number> = { promise: null, resolve: null };
 
@@ -246,7 +247,7 @@ export class Bladeburner implements OperationTeam {
     }
     const type = args[1];
     const name = args[2];
-    const action = this.getActionFromTypeAndName(type, name);
+    const action = this.guessActionFromTypeAndName(type, name);
     if (!action) {
       this.postToConsole(`Invalid action type / name specified: type: ${type}, name: ${name}`);
       return;
@@ -911,7 +912,7 @@ export class Bladeburner implements OperationTeam {
               action.setMaxLevel(BladeburnerConstants.ContractSuccessesPerLevel);
             }
             if (action.rankGain) {
-              const gain = addOffset(action.rankGain * rewardMultiplier * currentNodeMults.BladeburnerRank, 10);
+              const gain = addOffset(calculateActionRankGain(action), 10);
               this.changeRank(person, gain);
               if (isOperation && this.logging.ops) {
                 this.log(
@@ -993,7 +994,7 @@ export class Bladeburner implements OperationTeam {
           this.numBlackOpsComplete++;
           let rankGain = 0;
           if (action.rankGain) {
-            rankGain = addOffset(action.rankGain * currentNodeMults.BladeburnerRank, 10);
+            rankGain = addOffset(calculateActionRankGain(action), 10);
             this.changeRank(person, rankGain);
           }
 
@@ -1096,7 +1097,7 @@ export class Bladeburner implements OperationTeam {
             }
             const hackingExpGain = 20 * person.mults.hacking_exp;
             const charismaExpGain = 20 * person.mults.charisma_exp;
-            const rankGain = 0.1 * currentNodeMults.BladeburnerRank;
+            const rankGain = calculateActionRankGain(action);
             retValue.hackExp = hackingExpGain;
             retValue.chaExp = charismaExpGain;
             retValue.intExp = BladeburnerConstants.BaseIntGain;
@@ -1231,12 +1232,9 @@ export class Bladeburner implements OperationTeam {
     }
     this.maxRank = Math.max(this.rank, this.maxRank);
 
-    const bladeburnersFactionName = FactionName.Bladeburners;
-    const bladeburnerFac = Factions[bladeburnersFactionName];
-    if (bladeburnerFac.isMember) {
-      const favorBonus = 1 + bladeburnerFac.favor / 100;
-      bladeburnerFac.playerReputation +=
-        BladeburnerConstants.RankToFactionRepFactor * change * person.mults.faction_rep * favorBonus;
+    const bladeburnerFaction = Factions[FactionName.Bladeburners];
+    if (bladeburnerFaction.isMember) {
+      bladeburnerFaction.playerReputation += calculateActionReputationGain(person, change);
     }
 
     // Gain skill points
@@ -1406,8 +1404,25 @@ export class Bladeburner implements OperationTeam {
     }
   }
 
-  /** Fuzzy matching for action identifiers. Should be removed in 3.0 */
-  getActionFromTypeAndName(type: string, name: string): Action | null {
+  getActionFromTypeAndName(type: BladeburnerActionType, name: string): Action | undefined {
+    /**
+     * Typecasting "name" instead of checking it with getEnumHelper().isMember() is intentional. The callers will handle
+     * the undefined value if "name" is invalid.
+     */
+    switch (type) {
+      case BladeburnerActionType.General:
+        return GeneralActions[name as BladeburnerGeneralActionName];
+      case BladeburnerActionType.Contract:
+        return this.contracts[name as BladeburnerContractName];
+      case BladeburnerActionType.Operation:
+        return this.operations[name as BladeburnerOperationName];
+      case BladeburnerActionType.BlackOp:
+        return BlackOperations[name as BladeburnerBlackOpName];
+    }
+  }
+
+  /** Fuzzy matching for action identifiers. Do not use this function for anything except BB console. */
+  guessActionFromTypeAndName(type: string, name: string): Action | null {
     if (!type || !name) return null;
     const id = autoCompleteTypeShorthand(type, name);
     return id ? this.getActionObject(id) : null;

@@ -27,14 +27,22 @@ type PlayerPromise = {
   resolver: ((play?: Play) => void) | null;
 };
 
-const gameOver = { type: GoPlayType.gameOver, x: null, y: null } as const;
+const gameOver: Play = { type: GoPlayType.gameOver, x: null, y: null } as const;
 const playerPromises: Record<GoColor.black | GoColor.white, PlayerPromise> = {
   [GoColor.black]: { nextTurn: Promise.resolve(gameOver), resolver: null },
   [GoColor.white]: { nextTurn: Promise.resolve(gameOver), resolver: null },
 };
+// The promises aren't in a fully working state until we do this.
+// It is OK to reset the AI multiple times in a row.
+resetAI();
 
 export function getNextTurn(color: GoColor.black | GoColor.white): Promise<Play> {
   return playerPromises[color].nextTurn;
+}
+
+export function resetGoPromises(): void {
+  resetAI();
+  handleNextTurn().catch((error) => exceptionAlert(error, true));
 }
 
 /**
@@ -48,7 +56,7 @@ export function getNextTurn(color: GoColor.black | GoColor.white): Promise<Play>
  * handling and dispatches common events.
  * @returns the nextTurn promise for the player who just moved
  */
-export function handleNextTurn(boardState: BoardState, useOfflineCycles = true): Promise<Play> {
+export function handleNextTurn(boardState: BoardState = Go.currentGame, useOfflineCycles = true): Promise<Play> {
   const previousColor = boardState.previousPlayer;
   if (previousColor === null) {
     // The game is over. We shouldn't get here in most circumstances,
@@ -403,7 +411,9 @@ async function getIlluminatiPriorityMove(moves: MoveOptions, rng: number): Promi
     return moves.corner()?.point ?? null;
   }
 
-  const hasMoves = [moves.eyeMove(), moves.eyeBlock(), moves.growth(), moves.defend, surround].filter((m) => m).length;
+  const hasMoves = [moves.eyeMove(), moves.eyeBlock(), moves.growth(), moves.defend(), surround].filter(
+    (m) => m,
+  ).length;
   const usePattern = rng > 0.25 || !hasMoves;
 
   if ((await moves.pattern()) && usePattern) {
@@ -433,7 +443,7 @@ function getCornerMove(board: Board) {
   if (isCornerAvailableForMove(board, cornerMax, cornerMax, boardEdge, boardEdge)) {
     return board[cornerMax][cornerMax];
   }
-  if (isCornerAvailableForMove(board, 0, cornerMax, cornerMax, boardEdge)) {
+  if (isCornerAvailableForMove(board, 0, cornerMax, 2, boardEdge)) {
     return board[2][cornerMax];
   }
   if (isCornerAvailableForMove(board, 0, 0, 2, 2)) {
@@ -850,8 +860,11 @@ function getMoveOptions(boardState: BoardState, player: GoColor, rng: number, sm
 /**
  * Gets the starting score for white.
  */
-export function getKomi(opponent: GoOpponent) {
-  return opponentDetails[opponent].komi;
+export function getKomi(state: BoardState): number {
+  if (state.komiOverride !== null) {
+    return state.komiOverride;
+  }
+  return opponentDetails[state.ai].komi;
 }
 
 /**

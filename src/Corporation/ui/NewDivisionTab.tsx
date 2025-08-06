@@ -13,7 +13,7 @@ import { useCorporation } from "./Context";
 import { createDivision } from "../Actions";
 
 import { ButtonWithTooltip } from "../../ui/Components/ButtonWithTooltip";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 import { IndustryDescription } from "./IndustryDescription";
 interface IProps {
   setDivisionName: (name: string) => void;

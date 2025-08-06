@@ -2,7 +2,7 @@ import { Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
-import { KEY } from "../../utils/helpers/keyCodes";
+import { KEY } from "../../utils/KeyboardEventKey";
 import { BlinkingCursor } from "./BlinkingCursor";
 import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
@@ -21,12 +21,12 @@ const difficulties: {
   Trivial: Difficulty;
   Normal: Difficulty;
   Hard: Difficulty;
-  Impossible: Difficulty;
+  Brutal: Difficulty;
 } = {
   Trivial: { timer: 16000, min: 3, max: 4 },
   Normal: { timer: 12500, min: 2, max: 3 },
   Hard: { timer: 15000, min: 3, max: 4 },
-  Impossible: { timer: 8000, min: 4, max: 4 },
+  Brutal: { timer: 8000, min: 4, max: 4 },
 };
 
 export function BackwardGame(props: IMinigameProps): React.ReactElement {
