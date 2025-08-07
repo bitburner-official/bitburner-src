@@ -21,7 +21,7 @@ export function LinearForwardProgress({
   const [isAnimatingToFull, setIsAnimatingToFull] = useState(false);
 
   const previousProgressRef = useRef(value);
-  const animationTimeouts = useRef<(NodeJS.Timeout | null)[]>([]);
+  const animationTimeouts = useRef<number[]>([]);
 
   const clearAnimationTimeouts = useCallback(() => {
     animationTimeouts.current.forEach((timeout) => {
@@ -38,12 +38,12 @@ export function LinearForwardProgress({
     setDisplayProgress(100);
 
     // Phase 2: After reaching 100%, reset to 0% and animate to new value
-    const fullTransitionTimeout = setTimeout(() => {
+    const fullTransitionTimeout = window.setTimeout(() => {
       setIsAnimatingToFull(false);
       setDisplayProgress(0); // Instant reset with no transition
 
       // Phase 3: Brief delay, then animate to final value
-      const resetTimeout = setTimeout(() => {
+      const resetTimeout = window.setTimeout(() => {
         setDisplayProgress(value);
         setIsInDecreasingAnimation(false);
       }, ONE_FRAME_RESET_DELAY);
