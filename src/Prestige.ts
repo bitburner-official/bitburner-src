@@ -30,6 +30,7 @@ import { calculateExp } from "./PersonObjects/formulas/skill";
 import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { pendingUIShareJobIds } from "./NetworkShare/Share";
+import { CodingContractEventEmitter } from "./CodingContract/CodingContractEventEmitter";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string, canBeDismissedEasily = true) {
@@ -51,6 +52,9 @@ function setInitialExpForPlayer() {
 export function prestigeAugmentation(): void {
   // We must kill all scripts before doing anything else.
   prestigeWorkerScripts();
+
+  // Close coding contract modal
+  CodingContractEventEmitter.emit({ type: "close" });
 
   initBitNodeMultipliers();
 
@@ -194,6 +198,9 @@ export function prestigeAugmentation(): void {
 export function prestigeSourceFile(isFlume: boolean): void {
   // We must kill all scripts before doing anything else.
   prestigeWorkerScripts();
+
+  // Close coding contract modal
+  CodingContractEventEmitter.emit({ type: "close" });
 
   initBitNodeMultipliers();
 
