@@ -180,21 +180,12 @@ function Root(props: IProps): React.ReactElement {
 
   let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
 
-  const beautify = useCallback((): Promise<void> => {
-    return new Promise((resolve) => {
-      const beautifyPromise = editorRef.current
-        ?.getAction("editor.action.formatDocument")
-        ?.run()
-        .catch((error) => {
-          console.error(error);
-          resolve();
-        })
-        .finally(() => resolve());
-
-      if (beautifyPromise === undefined) {
-        resolve();
-      }
-    });
+  const beautify = useCallback(async (): Promise<void> => {
+    const action = editorRef.current?.getAction("editor.action.formatDocument");
+    if (action == null) {
+      return;
+    }
+    return action.run().catch((error) => console.error(error));
   }, []);
 
   const save = useCallback(() => {
