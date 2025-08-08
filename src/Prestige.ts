@@ -53,9 +53,6 @@ export function prestigeAugmentation(): void {
   // We must kill all scripts before doing anything else.
   prestigeWorkerScripts();
 
-  // Close coding contract modal
-  CodingContractEventEmitter.emit({ type: "close" });
-
   initBitNodeMultipliers();
 
   // Maintain invites to factions with the 'keepOnInstall' flag, and rumors about others
@@ -108,6 +105,9 @@ export function prestigeAugmentation(): void {
   }
   Terminal.clear();
   LogBoxClearEvents.emit();
+
+  // Close coding contract modal
+  CodingContractEventEmitter.emit({ type: "close" });
 
   // Recalculate the bonus for circadian modulator aug
   initCircadianModulator();
@@ -199,9 +199,6 @@ export function prestigeSourceFile(isFlume: boolean): void {
   // We must kill all scripts before doing anything else.
   prestigeWorkerScripts();
 
-  // Close coding contract modal
-  CodingContractEventEmitter.emit({ type: "close" });
-
   initBitNodeMultipliers();
 
   Player.prestigeSourceFile();
@@ -215,6 +212,9 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
   Terminal.clear();
   LogBoxClearEvents.emit();
+
+  // Close coding contract modal
+  CodingContractEventEmitter.emit({ type: "close" });
 
   // Delete all servers except home computer
   prestigeAllServers(); // Must be done before initForeignServers()
