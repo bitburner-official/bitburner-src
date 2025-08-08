@@ -16,4 +16,5 @@ export interface Options {
   wordWrap: WordWrapOptions;
   cursorStyle: CursorStyle;
   cursorBlinking: CursorBlinking;
+  beautifyOnSave: boolean;
 }

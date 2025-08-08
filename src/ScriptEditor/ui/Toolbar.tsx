@@ -33,18 +33,12 @@ interface IProps {
   editor: IStandaloneCodeEditor | null;
   onSave: () => void;
   onRun: () => void;
+  beautify: () => Promise<void>;
 }
 
-export function Toolbar({ editor, onSave, onRun }: IProps) {
+export function Toolbar({ editor, onSave, onRun, beautify }: IProps) {
   const [ramInfoOpen, { on: openRAMInfo, off: closeRAMInfo }] = useBoolean(false);
   const [optionsOpen, { on: openOptions, off: closeOptions }] = useBoolean(false);
-
-  function beautify(): void {
-    editor
-      ?.getAction("editor.action.formatDocument")
-      ?.run()
-      .catch((error) => console.error(error));
-  }
 
   const { ram, ramEntries, isUpdatingRAM, options, saveOptions } = useScriptEditorContext();
 
@@ -62,13 +56,17 @@ export function Toolbar({ editor, onSave, onRun }: IProps) {
     monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
   };
 
+  const beautifyOnClick = () => {
+    beautify().catch((error) => console.error(error));
+  };
+
   return (
     <>
       <Box display="flex" flexDirection="row" sx={{ m: 1 }} alignItems="center">
         <Button startIcon={<SettingsIcon />} onClick={openOptions} sx={{ mr: 1 }}>
           Options
         </Button>
-        <Button onClick={beautify}>Beautify</Button>
+        <Button onClick={beautifyOnClick}>Beautify</Button>
         <Button color={isUpdatingRAM ? "secondary" : "primary"} sx={{ mx: 1 }} onClick={openRAMInfo}>
           {ram}
         </Button>

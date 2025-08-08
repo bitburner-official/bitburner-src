@@ -176,6 +176,8 @@ export const Settings = {
   MonacoDefaultToVim: false,
   /** Word wrap setting for Script Editor. */
   MonacoWordWrap: "off" as WordWrapOptions,
+  /** Whether to run Beautify code formatter on save */
+  MonacoBeautifyOnSave: false,
   /** Control the cursor style*/
   MonacoCursorStyle: "line" as CursorStyle,
   /** Control the cursor animation style */

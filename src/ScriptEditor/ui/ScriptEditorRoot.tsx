@@ -176,15 +176,35 @@ function Root(props: IProps): React.ReactElement {
     reloadModelOfCurrentScript();
   }
 
-  const { showRAMError, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
+  const { options, showRAMError, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
 
   let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
+
+  const beautify = useCallback((): Promise<void> => {
+    return new Promise((resolve) => {
+      const beautifyPromise = editorRef.current
+        ?.getAction("editor.action.formatDocument")
+        ?.run()
+        .catch((error) => {
+          console.error(error);
+          resolve();
+        })
+        .finally(() => resolve());
+
+      if (beautifyPromise === undefined) {
+        resolve();
+      }
+    });
+  }, []);
 
   const save = useCallback(() => {
     if (currentScript === null) {
       console.error("currentScript is null when it shouldn't be. Unable to save script");
       return;
     }
+
+    const preSave = options.beautifyOnSave ? beautify : () => Promise.resolve();
+
     // this is duplicate code with saving later.
     if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalEditScript) {
       //Make sure filename + code properly follow tutorial
@@ -200,16 +220,23 @@ function Root(props: IProps): React.ReactElement {
       }
 
       //Save the script
-      saveScript(currentScript);
-      Router.toPage(Page.Terminal);
+      preSave()
+        .then(() => {
+          saveScript(currentScript as OpenScript);
+          Router.toPage(Page.Terminal);
 
-      iTutorialNextStep();
-
-      return;
+          iTutorialNextStep();
+        })
+        .catch((error) => console.error(error));
+    } else {
+      preSave()
+        .then(() => {
+          saveScript(currentScript as OpenScript);
+          rerender();
+        })
+        .catch((error) => console.error(error));
     }
-    saveScript(currentScript);
-    rerender();
-  }, [rerender]);
+  }, [rerender, options.beautifyOnSave, beautify]);
 
   const run = useCallback(() => {
     if (currentScript === null) {
@@ -598,7 +625,7 @@ function Root(props: IProps): React.ReactElement {
 
         {statusBarRef.current}
 
-        <Toolbar onSave={save} onRun={run} editor={editorRef.current} />
+        <Toolbar onSave={save} onRun={run} editor={editorRef.current} beautify={beautify} />
       </div>
       {!currentScript && <NoOpenScripts />}
     </>
