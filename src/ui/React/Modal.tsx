@@ -82,7 +82,6 @@ export const Modal = ({
       }}
       closeAfterTransition
       className={classes.modal}
-      style={{ zIndex: 20000 }}
       sx={sx}
     >
       <Fade in={open}>

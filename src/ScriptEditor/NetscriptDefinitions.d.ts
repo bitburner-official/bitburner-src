@@ -8549,9 +8549,9 @@ export interface NS {
 
   /**
    * Open up a message box.
-   * @param msg - Message to alert.
+   * @param args - Value(s) to be alerted.
    */
-  alert(msg: string): void;
+  alert(...args: any[]): void;
 
   /**
    * Queue a toast (bottom-right notification).
@@ -9333,6 +9333,9 @@ export interface OfficeAPI {
 
   /**
    * Purchase a research.
+   *
+   * Some research is only available for product industries. This function does not do anything if you purchase that
+   * research for a material industry.
    *
    * @remarks
    * RAM cost: 20 GB
