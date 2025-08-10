@@ -146,7 +146,7 @@ A shotgun batcher uses the available RAM in parallel to hit the target multiple 
     |=Batch=|
     |=Batch=|
 
-Launching potentially thousands of batches at the same time is intensive on real-life hardware. It's recommended to limit the number of parallel batches to around 100 000 to reduce the risk of the game crashing.
+Launching potentially thousands of batches at the same time is intensive on real-life hardware. It's recommended to limit the number of parallel batches to around 100 000 to reduce the risk of the game soft-crashing. (Also called a "black screen" because of how it appears when this happens.)
 
 ## Just-In-Time ("JIT") Batchers
 
