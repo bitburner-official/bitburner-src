@@ -614,7 +614,7 @@ function Root(props: IProps): React.ReactElement {
 
         {statusBarRef.current}
 
-        <Toolbar onSave={save} onRun={run} editor={editorRef.current} beautify={beautify} />
+        <Toolbar onSave={save} onRun={run} editor={editorRef.current} onBeautify={beautify} />
       </div>
       {!currentScript && <NoOpenScripts />}
     </>

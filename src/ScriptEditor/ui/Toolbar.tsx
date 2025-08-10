@@ -33,10 +33,10 @@ interface IProps {
   editor: IStandaloneCodeEditor | null;
   onSave: () => Promise<void>;
   onRun: () => Promise<void>;
-  beautify: () => Promise<void>;
+  onBeautify: () => Promise<void>;
 }
 
-export function Toolbar({ editor, onSave, onRun, beautify }: IProps) {
+export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
   const [ramInfoOpen, { on: openRAMInfo, off: closeRAMInfo }] = useBoolean(false);
   const [optionsOpen, { on: openOptions, off: closeOptions }] = useBoolean(false);
 
@@ -64,7 +64,7 @@ export function Toolbar({ editor, onSave, onRun, beautify }: IProps) {
         </Button>
         <Button
           onClick={() => {
-            beautify().catch((error) => console.error(error));
+            onBeautify().catch((error) => console.error(error));
           }}
         >
           Beautify
