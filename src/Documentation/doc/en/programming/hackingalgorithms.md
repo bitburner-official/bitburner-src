@@ -129,7 +129,7 @@ Cons:
 - Requires a dedicated controller script
 - Can be real-life hardware heavy
 
-A shotgun batcher implements uses a controller script to launch as many batches in parallel as possible.
+A shotgun batcher uses a controller script to launch as many batches in parallel as possible.
 Each function has a delay to make them all the same run time, meaning if they are launched in the correct order they will finish in the correct order.
 Very little - potentially 0 - time is needed between batches if they are launched correctly.
 
