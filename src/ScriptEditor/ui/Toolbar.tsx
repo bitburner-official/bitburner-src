@@ -56,17 +56,19 @@ export function Toolbar({ editor, onSave, onRun, beautify }: IProps) {
     monaco.editor.defineTheme("customTheme", makeTheme(Settings.EditorTheme));
   };
 
-  const beautifyOnClick = () => {
-    beautify().catch((error) => console.error(error));
-  };
-
   return (
     <>
       <Box display="flex" flexDirection="row" sx={{ m: 1 }} alignItems="center">
         <Button startIcon={<SettingsIcon />} onClick={openOptions} sx={{ mr: 1 }}>
           Options
         </Button>
-        <Button onClick={beautifyOnClick}>Beautify</Button>
+        <Button
+          onClick={() => {
+            beautify().catch((error) => console.error(error));
+          }}
+        >
+          Beautify
+        </Button>
         <Button color={isUpdatingRAM ? "secondary" : "primary"} sx={{ mx: 1 }} onClick={openRAMInfo}>
           {ram}
         </Button>
