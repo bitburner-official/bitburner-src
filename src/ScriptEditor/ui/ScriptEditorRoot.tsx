@@ -218,11 +218,10 @@ function Root(props: IProps): React.ReactElement {
       iTutorialNextStep();
 
       return;
-    } else {
-      await preSave();
-      saveScript(currentScript);
-      rerender();
     }
+    await preSave();
+    saveScript(currentScript);
+    rerender();
   }, [rerender, options.beautifyOnSave, beautify]);
 
   const run = useCallback(async () => {
