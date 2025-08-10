@@ -31,8 +31,8 @@ type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
 interface IProps {
   editor: IStandaloneCodeEditor | null;
-  onSave: () => void;
-  onRun: () => void;
+  onSave: () => Promise<void>;
+  onRun: () => Promise<void>;
   beautify: () => Promise<void>;
 }
 
@@ -71,7 +71,13 @@ export function Toolbar({ editor, onSave, onRun, beautify }: IProps) {
           {ram}
         </Button>
         <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.Save])}>
-          <Button onClick={onSave}>Save</Button>
+          <Button
+            onClick={() => {
+              onSave().catch((error) => console.error(error));
+            }}
+          >
+            Save
+          </Button>
         </Tooltip>
         <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.GoToTerminal])}>
           <Button sx={{ mx: 1 }} onClick={() => Router.toPage(Page.Terminal)}>
@@ -79,7 +85,12 @@ export function Toolbar({ editor, onSave, onRun, beautify }: IProps) {
           </Button>
         </Tooltip>
         <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.Run])}>
-          <Button sx={{ mr: 1 }} onClick={onRun}>
+          <Button
+            sx={{ mr: 1 }}
+            onClick={() => {
+              onRun().catch((error) => console.error(error));
+            }}
+          >
             Run
           </Button>
         </Tooltip>

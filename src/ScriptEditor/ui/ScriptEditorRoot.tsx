@@ -188,7 +188,7 @@ function Root(props: IProps): React.ReactElement {
     return action.run().catch((error) => console.error(error));
   }, []);
 
-  const save = useCallback(() => {
+  const save = useCallback(async () => {
     if (currentScript === null) {
       console.error("currentScript is null when it shouldn't be. Unable to save script");
       return;
@@ -211,25 +211,21 @@ function Root(props: IProps): React.ReactElement {
       }
 
       //Save the script
-      preSave()
-        .then(() => {
-          saveScript(currentScript as OpenScript);
-          Router.toPage(Page.Terminal);
+      await preSave();
+      saveScript(currentScript);
+      Router.toPage(Page.Terminal);
 
-          iTutorialNextStep();
-        })
-        .catch((error) => console.error(error));
+      iTutorialNextStep();
+
+      return;
     } else {
-      preSave()
-        .then(() => {
-          saveScript(currentScript as OpenScript);
-          rerender();
-        })
-        .catch((error) => console.error(error));
+      await preSave();
+      saveScript(currentScript);
+      rerender();
     }
   }, [rerender, options.beautifyOnSave, beautify]);
 
-  const run = useCallback(() => {
+  const run = useCallback(async () => {
     if (currentScript === null) {
       return;
     }
@@ -245,7 +241,7 @@ function Root(props: IProps): React.ReactElement {
     }
 
     // Always save before doing anything else.
-    save();
+    await save();
 
     const result = createRunningScriptInstance(server, currentScript.path, null, 1, []);
     if (!result.success) {
@@ -256,7 +252,7 @@ function Root(props: IProps): React.ReactElement {
   }, [save]);
 
   useEffect(() => {
-    function keydown(event: KeyboardEvent): void {
+    async function keydown(event: KeyboardEvent) {
       if (Settings.DisableHotkeys) {
         return;
       }
@@ -264,7 +260,7 @@ function Root(props: IProps): React.ReactElement {
       if (keyBindingTypes.has(ScriptEditorAction.Save)) {
         event.preventDefault();
         event.stopPropagation();
-        save();
+        await save();
       }
       if (keyBindingTypes.has(ScriptEditorAction.GoToTerminal)) {
         event.preventDefault();
@@ -272,11 +268,14 @@ function Root(props: IProps): React.ReactElement {
       }
       if (keyBindingTypes.has(ScriptEditorAction.Run)) {
         event.preventDefault();
-        run();
+        await run();
       }
     }
-    document.addEventListener("keydown", keydown);
-    return () => document.removeEventListener("keydown", keydown);
+    const listener = (event: KeyboardEvent) => {
+      keydown(event).catch((error) => console.error(error));
+    };
+    document.addEventListener("keydown", listener);
+    return () => document.removeEventListener("keydown", listener);
   }, [save, run]);
 
   function infLoop(ast: AST, code: string): void {
