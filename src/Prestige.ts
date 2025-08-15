@@ -31,6 +31,7 @@ import { currentNodeMults } from "./BitNode/BitNodeMultipliers";
 import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { pendingUIShareJobIds } from "./NetworkShare/Share";
 import { getDarkscapeNavigator } from "./DarkNet/effects/effects";
+import { CodingContractEventEmitter } from "./CodingContract/CodingContractEventEmitter";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string, canBeDismissedEasily = true) {
@@ -109,6 +110,9 @@ export function prestigeAugmentation(): void {
   }
   Terminal.clear();
   LogBoxClearEvents.emit();
+
+  // Close coding contract modal
+  CodingContractEventEmitter.emit({ type: "close" });
 
   // Recalculate the bonus for circadian modulator aug
   initCircadianModulator();
@@ -213,6 +217,9 @@ export function prestigeSourceFile(isFlume: boolean): void {
   }
   Terminal.clear();
   LogBoxClearEvents.emit();
+
+  // Close coding contract modal
+  CodingContractEventEmitter.emit({ type: "close" });
 
   // Delete all servers except home computer
   prestigeAllServers(); // Must be done before initForeignServers()

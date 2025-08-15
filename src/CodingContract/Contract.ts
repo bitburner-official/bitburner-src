@@ -2,10 +2,10 @@ import { FactionName, CodingContractName } from "@enums";
 import { CodingContractTypes } from "./ContractTypes";
 
 import { Generic_fromJSON, Generic_toJSON, IReviverValue, constructorsForReviver } from "../utils/JSONReviver";
-import { CodingContractEvent } from "../ui/React/CodingContractModal";
 import { ContractFilePath, resolveContractFilePath } from "../Paths/ContractFilePath";
 import { assertObject } from "../utils/TypeAssertion";
 import { Result } from "../types";
+import { CodingContractEventEmitter } from "./CodingContractEventEmitter";
 
 // Numeric enum
 /** Enum representing the different types of rewards a Coding Contract can give */
@@ -150,13 +150,16 @@ export class CodingContract {
   /** Creates a popup to prompt the player to solve the problem */
   async prompt(): Promise<{ result: CodingContractResult; message?: string }> {
     return new Promise((resolve) => {
-      CodingContractEvent.emit({
-        c: this,
-        onClose: () => {
-          resolve({ result: CodingContractResult.Cancelled });
-        },
-        onAttempt: (val: string) => {
-          resolve(this.isSolution(val));
+      CodingContractEventEmitter.emit({
+        type: "run",
+        data: {
+          codingContract: this,
+          onClose: () => {
+            resolve({ result: CodingContractResult.Cancelled });
+          },
+          onAttempt: (val: string) => {
+            resolve(this.isSolution(val));
+          },
         },
       });
     });
