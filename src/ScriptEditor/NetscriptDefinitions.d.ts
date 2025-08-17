@@ -4197,13 +4197,13 @@ export interface Gang {
   getGangInformation(): GangGenInfo;
 
   /**
-   * Get information about the other gangs.
+   * Get information about all gangs.
    * @remarks
    * RAM cost: 2 GB
    *
    * Get territory and power information about all gangs.
    *
-   * @returns Object containing territory and power information about all gangs.
+   * @returns Object containing territory and power information about all gangs, including the player's gang, if any.
    */
   getOtherGangInformation(): Record<string, GangOtherInfoObject>;
 

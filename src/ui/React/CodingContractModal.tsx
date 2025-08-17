@@ -1,38 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { KEY } from "../../utils/KeyboardEventKey";
 
-import { CodingContract } from "../../CodingContract/Contract";
 import { CodingContractTypes } from "../../CodingContract/ContractTypes";
 import { CopyableText } from "./CopyableText";
 import { Modal } from "./Modal";
-import { EventEmitter } from "../../utils/EventEmitter";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { pluralize } from "../../utils/I18nUtils";
-
-interface CodingContractProps {
-  c: CodingContract;
-  onClose: () => void;
-  onAttempt: (answer: string) => void;
-}
-
-export const CodingContractEvent = new EventEmitter<[CodingContractProps]>();
+import {
+  type CodingContractEventData,
+  CodingContractEventEmitter,
+} from "../../CodingContract/CodingContractEventEmitter";
 
 export function CodingContractModal(): React.ReactElement {
-  const [contract, setContract] = useState<CodingContractProps | null>(null);
+  const [eventData, setEventData] = useState<CodingContractEventData | null>(null);
   const [answer, setAnswer] = useState("");
 
-  useEffect(() => {
-    return CodingContractEvent.subscribe((props) => setContract(props));
+  const close = useCallback(() => {
+    setEventData((old) => {
+      old?.onClose();
+      return null;
+    });
   }, []);
+
+  useEffect(
+    () =>
+      CodingContractEventEmitter.subscribe((event) => {
+        switch (event.type) {
+          case "run":
+            setEventData(event.data);
+            break;
+          case "close":
+            close();
+            break;
+        }
+      }),
+    [close],
+  );
   useEffect(() => {
     return () => {
-      contract?.onClose();
+      eventData?.onClose();
     };
-  }, [contract]);
+  }, [eventData]);
 
-  if (contract === null) {
+  if (eventData === null) {
     return <></>;
   }
 
@@ -41,30 +53,22 @@ export function CodingContractModal(): React.ReactElement {
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
-    if (contract === null) {
+    if (eventData === null) {
       return;
     }
     const value = event.currentTarget.value;
 
     if (event.key === KEY.ENTER && value !== "") {
       event.preventDefault();
-      contract.onAttempt(answer);
+      eventData.onAttempt(answer);
       setAnswer("");
       close();
     }
   }
 
-  function close(): void {
-    if (contract === null) {
-      return;
-    }
-    contract.onClose();
-    setContract(null);
-  }
-
-  const contractType = CodingContractTypes[contract.c.type];
+  const contractType = CodingContractTypes[eventData.codingContract.type];
   const description = [];
-  for (const [i, value] of contractType.desc(contract.c.getData()).split("\n").entries()) {
+  for (const [i, value] of contractType.desc(eventData.codingContract.getData()).split("\n").entries()) {
     description.push(
       <span key={i} style={{ whiteSpace: "pre-wrap" }}>
         {value} <br />
@@ -72,12 +76,12 @@ export function CodingContractModal(): React.ReactElement {
     );
   }
   return (
-    <Modal open={contract !== null} onClose={close}>
-      <CopyableText variant="h4" value={contract.c.type} />
+    <Modal open={eventData !== null} onClose={close}>
+      <CopyableText variant="h4" value={eventData.codingContract.type} />
       <Typography>
         You are attempting to solve a Coding Contract. You have{" "}
-        {pluralize(contract.c.getMaxNumTries() - contract.c.tries, "try", "tries")} remaining, after which the contract
-        will self-destruct.
+        {pluralize(eventData.codingContract.getMaxNumTries() - eventData.codingContract.tries, "try", "tries")}{" "}
+        remaining, after which the contract will self-destruct.
       </Typography>
       <br />
       <Typography>{description}</Typography>
@@ -96,7 +100,7 @@ export function CodingContractModal(): React.ReactElement {
           endAdornment: (
             <Button
               onClick={() => {
-                contract.onAttempt(answer);
+                eventData.onAttempt(answer);
                 setAnswer("");
                 close();
               }}
