@@ -97,7 +97,7 @@ export function NetscriptGo(): InternalAPI<NSGo> {
           return getValidMoves(undefined, true);
         }
         const playAsWhite = helpers.boolean(ctx, "playAsWhite", _playAsWhite ?? false);
-        const State = validateBoardState(error(ctx), _boardState, _priorBoardState);
+        const State = validateBoardState(error(ctx), _boardState, _priorBoardState, playAsWhite);
         return getValidMoves(State, playAsWhite);
       },
       getChains: (ctx) => (_boardState) => {
