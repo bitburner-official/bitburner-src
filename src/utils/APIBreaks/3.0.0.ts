@@ -1,5 +1,32 @@
 import type { VersionBreakingChange } from "./APIBreak";
 
+export function convertV2GangEquipmentNames(name: string): string {
+  switch (name) {
+    case "Glock 18C":
+      return "Malorian-3516";
+    case "P90C":
+      return "Hansen-HA7";
+    case "Steyr AUG":
+      return "Arasaka-HJSH18";
+    case "AK-47":
+      return "Militech-M251s";
+    case "M15A10 Assault Rifle":
+      return "Nokota-D5";
+    case "AWM Sniper Rifle":
+      return "Techtronika-SPT32";
+    case "Ford Flex V20":
+      return "Herrera Outlaw GTS";
+    case "ATX1070 Superbike":
+      return "Yaiba ASM-R250 Muramasa";
+    case "Mercedes-Benz S9001":
+      return "Rayfield Caliburn";
+    case "White Ferrari":
+      return "Quadra Sport R-7";
+    default:
+      return name;
+  }
+}
+
 export const breakingChanges300: VersionBreakingChange = {
   additionalText: "For more information, please check https://github.com/bitburner-official/bitburner-src/issues/2148.",
   apiBreakingChanges: [
@@ -295,6 +322,66 @@ export const breakingChanges300: VersionBreakingChange = {
         "- ns.getHackTime\n" +
         "- ns.getGrowTime\n" +
         "- ns.getWeakenTime\n",
+      showWarning: false,
+    },
+    {
+      brokenAPIs: [
+        {
+          name: "Glock 18C",
+          migration: { searchValue: "Glock 18C", replaceValue: convertV2GangEquipmentNames("Glock 18C") },
+        },
+        { name: "P90C", migration: { searchValue: "P90C", replaceValue: convertV2GangEquipmentNames("P90C") } },
+        {
+          name: "Steyr AUG",
+          migration: { searchValue: "Steyr AUG", replaceValue: convertV2GangEquipmentNames("Steyr AUG") },
+        },
+        { name: "AK-47", migration: { searchValue: "AK-47", replaceValue: convertV2GangEquipmentNames("AK-47") } },
+        {
+          name: "M15A10 Assault Rifle",
+          migration: {
+            searchValue: "M15A10 Assault Rifle",
+            replaceValue: convertV2GangEquipmentNames("M15A10 Assault Rifle"),
+          },
+        },
+        {
+          name: "AWM Sniper Rifle",
+          migration: { searchValue: "AWM Sniper Rifle", replaceValue: convertV2GangEquipmentNames("AWM Sniper Rifle") },
+        },
+        {
+          name: "Ford Flex V20",
+          migration: { searchValue: "Ford Flex V20", replaceValue: convertV2GangEquipmentNames("Ford Flex V20") },
+        },
+        {
+          name: "ATX1070 Superbike",
+          migration: {
+            searchValue: "ATX1070 Superbike",
+            replaceValue: convertV2GangEquipmentNames("ATX1070 Superbike"),
+          },
+        },
+        {
+          name: "Mercedes-Benz S9001",
+          migration: {
+            searchValue: "Mercedes-Benz S9001",
+            replaceValue: convertV2GangEquipmentNames("Mercedes-Benz S9001"),
+          },
+        },
+        {
+          name: "White Ferrari",
+          migration: { searchValue: "White Ferrari", replaceValue: convertV2GangEquipmentNames("White Ferrari") },
+        },
+      ],
+      info:
+        "Some gang equipments were renamed.\n" +
+        `- "Glock 18C" was renamed to "${convertV2GangEquipmentNames("Glock 18C")}".\n` +
+        `- "P90C" was renamed to "${convertV2GangEquipmentNames("P90C")}".\n` +
+        `- "Steyr AUG" was renamed to "${convertV2GangEquipmentNames("Steyr AUG")}".\n` +
+        `- "AK-47" was renamed to "${convertV2GangEquipmentNames("AK-47")}".\n` +
+        `- "M15A10 Assault Rifle" was renamed to "${convertV2GangEquipmentNames("M15A10 Assault Rifle")}".\n` +
+        `- "AWM Sniper Rifle" was renamed to "${convertV2GangEquipmentNames("AWM Sniper Rifle")}".\n` +
+        `- "Ford Flex V20" was renamed to "${convertV2GangEquipmentNames("Ford Flex V20")}".\n` +
+        `- "ATX1070 Superbike" was renamed to "${convertV2GangEquipmentNames("ATX1070 Superbike")}".\n` +
+        `- "Mercedes-Benz S9001" was renamed to "${convertV2GangEquipmentNames("Mercedes-Benz S9001")}".\n` +
+        `- "White Ferrari" was renamed to "${convertV2GangEquipmentNames("White Ferrari")}".\n`,
       showWarning: false,
     },
   ],
