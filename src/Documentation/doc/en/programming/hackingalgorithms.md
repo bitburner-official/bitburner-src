@@ -118,6 +118,7 @@ This information can come from `formulas.exe` and use of the `getPlayer` and `ge
 
 Don't forget to explore the [NS API](github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.ns.md) for other functions that might be useful in these calculations!
 
+### Proto-batcher
 There are many ways to launch batches. The simplest way is to launch them sequentially like this:
 
     |=Batch=||=Batch=||=Batch=||=Batch=||=Batch=||=Batch=|
