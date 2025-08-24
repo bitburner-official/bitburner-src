@@ -27,12 +27,13 @@ type ResultType =
   | FileContent[]
   | RFAServerData[]
   | {
-      identifier: string;
-      binary: boolean;
-      save: SaveData;
-    }
+    identifier: string;
+    binary: boolean;
+    save: SaveData;
+  }
   | FileMetadata
-  | FileMetadata[];
+  | FileMetadata[]
+  | {};
 type FileDescription = FileData | FileContent | FileLocation | FileServer;
 
 export interface FileData {
