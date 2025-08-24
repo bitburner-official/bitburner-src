@@ -23,9 +23,14 @@ export const LinearForwardProgress = React.forwardRef<unknown, LinearForwardProg
       // Increment animation key to force new CSS animation
       animationKeyRef.current += 1;
 
+      // MUI LinearProgress uses translateX where:
+      // translateX(-100%) = 0% progress, translateX(0%) = 100% progress
       const startPos = previousValue - 100;
       const endPos = value - 100;
       const animationName = `forwardAnim${animationKeyRef.current}`;
+
+      // Calculate timing: proportional split between fill-to-100% and reset-to-final phases
+      const firstPhasePercent = ((100 - previousValue) / (100 - previousValue + value)).toFixed(2);
 
       return (
         <LinearProgress
@@ -39,8 +44,8 @@ export const LinearForwardProgress = React.forwardRef<unknown, LinearForwardProg
               backgroundColor: barColor,
               [`@keyframes ${animationName}`]: {
                 "0%": { transform: `translateX(${startPos}%)` },
-                "50%": { transform: "translateX(0%)" },
-                "50.01%": { transform: "translateX(-100%)" },
+                [`${firstPhasePercent}%`]: { transform: "translateX(0%)" },
+                [`${firstPhasePercent + 0.01}%`]: { transform: "translateX(-100%)" },
                 "100%": { transform: `translateX(${endPos}%)` },
               },
               animation: `${animationName} 0.4s ease-out`,
