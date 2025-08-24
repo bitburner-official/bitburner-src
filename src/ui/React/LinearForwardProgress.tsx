@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useRef } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 
 interface LinearForwardProgressProps {
@@ -10,92 +10,58 @@ interface LinearForwardProgressProps {
 
 export const LinearForwardProgress = React.forwardRef<unknown, LinearForwardProgressProps>(
   function LinearForwardProgress({ value, backgroundColor, barColor, ...otherProps }, ref): React.ReactElement {
-    const TRANSITION_TO_FULL_DURATION = 200;
-    const ONE_FRAME_RESET_DELAY = 16;
+    const previousValueRef = useRef(value);
+    const animationKeyRef = useRef(0);
 
-    const [displayProgress, setDisplayProgress] = useState(value);
-    const [isInDecreasingAnimation, setIsInDecreasingAnimation] = useState(false);
-    const [isAnimatingToFull, setIsAnimatingToFull] = useState(false);
+    const isDecreasing = value < previousValueRef.current;
+    const previousValue = previousValueRef.current;
 
-    const previousProgressRef = useRef(value);
-    const animationTimeouts = useRef<number[]>([]);
+    // Update ref for next render
+    previousValueRef.current = value;
 
-    const clearAnimationTimeouts = useCallback(() => {
-      animationTimeouts.current.forEach((timeout) => {
-        if (timeout) clearTimeout(timeout);
-      });
-      animationTimeouts.current = [];
-    }, []);
+    if (isDecreasing) {
+      // Increment animation key to force new CSS animation
+      animationKeyRef.current += 1;
 
-    const startDecreasingAnimation = useCallback(() => {
-      setIsInDecreasingAnimation(true);
-      setIsAnimatingToFull(true);
+      const startPos = previousValue - 100;
+      const endPos = value - 100;
+      const animationName = `forwardAnim${animationKeyRef.current}`;
 
-      // Phase 1: Animate to 100% with linear transition
-      setDisplayProgress(100);
+      return (
+        <LinearProgress
+          variant="determinate"
+          value={value}
+          ref={ref}
+          {...otherProps}
+          sx={{
+            backgroundColor,
+            "& .MuiLinearProgress-bar1Determinate": {
+              backgroundColor: barColor,
+              [`@keyframes ${animationName}`]: {
+                "0%": { transform: `translateX(${startPos}%)` },
+                "50%": { transform: "translateX(0%)" },
+                "50.01%": { transform: "translateX(-100%)" },
+                "100%": { transform: `translateX(${endPos}%)` },
+              },
+              animation: `${animationName} 0.4s ease-out`,
+            },
+          }}
+        />
+      );
+    }
 
-      // Phase 2: After reaching 100%, reset to 0% and animate to new value
-      const fullTransitionTimeout = window.setTimeout(() => {
-        setIsAnimatingToFull(false);
-        setDisplayProgress(0); // Instant reset with no transition
-
-        // Phase 3: Brief delay, then animate to final value
-        const resetTimeout = window.setTimeout(() => {
-          setDisplayProgress(value);
-          setIsInDecreasingAnimation(false);
-        }, ONE_FRAME_RESET_DELAY);
-
-        animationTimeouts.current[1] = resetTimeout;
-      }, TRANSITION_TO_FULL_DURATION);
-
-      animationTimeouts.current[0] = fullTransitionTimeout;
-    }, [value]);
-
-    useEffect(() => {
-      if (value === previousProgressRef.current || isInDecreasingAnimation) {
-        return;
-      }
-
-      clearAnimationTimeouts();
-
-      if (value > previousProgressRef.current) {
-        // Progress increased: use normal MUI transition
-        setDisplayProgress(value);
-      } else {
-        // Progress decreased: use two-phase forward-only animation
-        startDecreasingAnimation();
-      }
-
-      previousProgressRef.current = value;
-    }, [value, isInDecreasingAnimation, clearAnimationTimeouts, startDecreasingAnimation]);
-
-    // Cleanup timeouts on component unmount
-    useEffect(() => {
-      return clearAnimationTimeouts;
-    }, [clearAnimationTimeouts]);
-
-    const getTransitionStyle = () => {
-      if (isAnimatingToFull) {
-        return { transition: `transform ${TRANSITION_TO_FULL_DURATION}ms linear` };
-      }
-      if (isInDecreasingAnimation && displayProgress === 0) {
-        return { transition: "none" };
-      }
-      // Default MUI transition
-      return {};
-    };
-
+    // Normal increasing progress - use default MUI transition
     return (
       <LinearProgress
         variant="determinate"
-        value={displayProgress}
+        value={value}
         ref={ref}
         {...otherProps}
         sx={{
           backgroundColor,
           "& .MuiLinearProgress-bar1Determinate": {
             backgroundColor: barColor,
-            ...getTransitionStyle(),
+            transition: "transform 0.2s linear",
           },
         }}
       />
