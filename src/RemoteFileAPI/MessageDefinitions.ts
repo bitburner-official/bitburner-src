@@ -8,7 +8,6 @@ export class RFAMessage {
   public params?: FileDescription; // Optional parameters to method
   public error?: string; // Only defined on error
   public id?: number; // ID to keep track of request -> response interaction, undefined with notifications, defined with request/response
-
   constructor(
     obj: { method?: string; result?: ResultType; params?: FileDescription; error?: string; id?: number } = {},
   ) {
@@ -27,13 +26,13 @@ type ResultType =
   | FileContent[]
   | RFAServerData[]
   | {
-    identifier: string;
-    binary: boolean;
-    save: SaveData;
-  }
+      identifier: string;
+      binary: boolean;
+      save: SaveData;
+    }
   | FileMetadata
   | FileMetadata[]
-  | {};
+  | Record<string, never>;
 type FileDescription = FileData | FileContent | FileLocation | FileServer;
 
 export interface FileData {

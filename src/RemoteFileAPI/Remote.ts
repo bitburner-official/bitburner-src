@@ -47,7 +47,7 @@ export class Remote {
 
     // Sends a "ping" JSON-RPC command to remote server to keep a websocket alive over certain reverse proxies
     setInterval(() => {
-      this.connection?.send('{"jsonrpc": "2.0", "id": "' + this.msgcount.toString() + '", "method": "ping"}')
+      this.connection?.send('{"jsonrpc": "2.0", "id": "' + this.msgcount.toString() + '", "method": "ping"}');
       this.msgcount++;
     }, 10000);
   }
@@ -58,14 +58,12 @@ function handleMessageEvent(this: WebSocket, e: MessageEvent): void {
    * Validating e.data and the result of JSON.parse() is too troublesome, so we typecast them here. If the data is
    * invalid, it means the RFA "client" (the tool that the player is using) is buggy, but that's not our problem.
    */
-  const msgPre = JSON.parse(e.data as string)
+  const msg: RFAMessage = JSON.parse(e.data as string) as RFAMessage;
 
   // Empty result is JSON-RPC "pong"
-  if ("result" in msgPre && Object.keys(msgPre.result).length === 0) {
+  if (msg.result && Object.keys(msg.result).length === 0) {
     return;
   }
-
-  const msg = msgPre as RFAMessage;
 
   if (!msg.method || !RFARequestHandler[msg.method]) {
     const response = new RFAMessage({ error: "Unknown message received", id: msg.id });
