@@ -28,6 +28,7 @@ Consider using the [API](https://github.com/bitburner-official/bitburner-src/blo
 For example, some contracts have long solutions while others have even longer solutions.
 You might want to use the [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) to automate the process of submitting your solution rather than copy and paste a long solution into an answer box.
 The [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) can also be used to find out useful information about a contract including the number of attempts you have left, the type of contract and its difficulty.
+It can also be used to test your algorithm for a specific contract type by [spawning dummy contracts](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.createdummycontract.md).
 
 However, using the [API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) comes at a cost.
 Like most functions in other APIs, almost all of the functions in the [Coding Contract API](https://github.com/bitburner-official/bitburner-src/blob/stable/markdown/bitburner.codingcontract.md) have a RAM cost.
