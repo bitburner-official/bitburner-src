@@ -1,5 +1,5 @@
 import { Paper, Typography } from "@mui/material";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { Settings } from "../../Settings/Settings";
@@ -34,6 +34,7 @@ const difficulties: {
 
 export function BribeGame(props: IMinigameProps): React.ReactElement {
   const [index, setIndex] = useState(0);
+  const currentChoice = useRef("INVALID_CHOICE");
 
   const data = useMemo(() => {
     const difficulty: Difficulty = { timer: 0, size: 0 };
@@ -47,7 +48,7 @@ export function BribeGame(props: IMinigameProps): React.ReactElement {
     };
   }, [props.difficulty]);
   const choices = data.choices;
-  const currentChoice = choices[index];
+  currentChoice.current = choices[index];
 
   stageState.value = () => ({
     stage: "bribe",
@@ -86,8 +87,11 @@ export function BribeGame(props: IMinigameProps): React.ReactElement {
 
     const k = event.key;
     if (k === KEY.SPACE) {
-      if (positiveAdjectives.includes(currentChoice)) props.onSuccess();
-      else props.onFailure();
+      if (positiveAdjectives.includes(currentChoice.current)) {
+        props.onSuccess();
+      } else {
+        props.onFailure();
+      }
       return;
     }
 
@@ -109,7 +113,7 @@ export function BribeGame(props: IMinigameProps): React.ReactElement {
           {upArrowSymbol}
         </Typography>
         <Typography variant="h5" color={choiceColor}>
-          {currentChoice}
+          {currentChoice.current}
         </Typography>
         <Typography variant="h5" color={downColor}>
           {downArrowSymbol}
