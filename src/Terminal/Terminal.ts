@@ -512,8 +512,11 @@ export class Terminal {
     this.contractOpen = true;
     const promptResult = await contract.prompt();
 
-    //Check if the contract still exists by the time the promise is fulfilled
-    if (server.getContract(contractPath) == null) {
+    // Get a new copy of the server, in case it changed while the prompt was open
+    const postPromptServer = GetServer(server.hostname);
+
+    // Check if the contract still exists by the time the promise is fulfilled
+    if (postPromptServer?.getContract(contractPath) == null) {
       this.contractOpen = false;
       return this.error("Contract no longer exists (Was it solved by a script?)");
     }

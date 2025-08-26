@@ -64,8 +64,8 @@ export const arrayJumpingGame: Pick<
         "i to i+n.",
         "\n\nAssuming you are initially positioned",
         "at the start of the array, determine the minimum number of",
-        "jumps to reach the end of the array.\n\n",
-        "If it's impossible to reach the end, then the answer should be 0.",
+        "jumps to reach the last index.\n\n",
+        "If it's impossible to reach the last index, then the answer should be 0.",
       ].join(" ");
     },
     difficulty: 3,

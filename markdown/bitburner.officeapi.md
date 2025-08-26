@@ -29,7 +29,7 @@ Requires the Office API upgrade from your corporation.
 |  [hasResearched(divisionName, researchName)](./bitburner.officeapi.hasresearched.md) | Check if you unlocked a research. |
 |  [hireAdVert(divisionName)](./bitburner.officeapi.hireadvert.md) | Hire AdVert. |
 |  [hireEmployee(divisionName, city, employeePosition)](./bitburner.officeapi.hireemployee.md) | Hire an employee. |
-|  [research(divisionName, researchName)](./bitburner.officeapi.research.md) | Purchase a research. |
+|  [research(divisionName, researchName)](./bitburner.officeapi.research.md) | <p>Purchase a research.</p><p>Some research is only available for product industries. This function does not do anything if you purchase that research for a material industry.</p> |
 |  [setJobAssignment(divisionName, city, job, amount)](./bitburner.officeapi.setjobassignment.md) | Set the job assignment for a job. |
 |  [throwParty(divisionName, city, costPerEmployee)](./bitburner.officeapi.throwparty.md) | Throw a party for your employees. |
 |  [upgradeOfficeSize(divisionName, city, size)](./bitburner.officeapi.upgradeofficesize.md) | Upgrade office size. |

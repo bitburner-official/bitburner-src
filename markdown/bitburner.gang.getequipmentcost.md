@@ -30,3 +30,5 @@ RAM cost: 2 GB
 
 Get the amount of money it takes to purchase a piece of Equipment or an Augmentation. If an invalid Equipment/Augmentation is specified, this function will return Infinity.
 
+This function already takes equipmentCostMult from [GangGenInfo](./bitburner.ganggeninfo.md) into account.
+

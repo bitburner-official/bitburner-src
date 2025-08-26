@@ -871,6 +871,8 @@ interface GangGenInfo {
   territoryWarfareEngaged: boolean;
   /** Number indicating the current wanted penalty */
   wantedPenalty: number;
+  /** Gang gives a discount on all equipment. This multiplier is applied to the equipment cost. */
+  equipmentCostMult: number;
 }
 
 /** @public */
@@ -2423,17 +2425,9 @@ export interface Singularity {
    *
    * This function returns true if you successfully start working on the specified program, and false otherwise.
    *
-   * Note that creating a program using this function has the same hacking level requirements as it normally would.
-   * These level requirements are:<br/>
-   * - BruteSSH.exe: 50<br/>
-   * - FTPCrack.exe: 100<br/>
-   * - relaySMTP.exe: 250<br/>
-   * - HTTPWorm.exe: 500<br/>
-   * - SQLInject.exe: 750<br/>
-   * - DeepscanV1.exe: 75<br/>
-   * - DeepscanV2.exe: 400<br/>
-   * - ServerProfiler.exe: 75<br/>
-   * - AutoLink.exe: 25
+   * Note that creating a program using this function has the same hacking level requirements as it normally would. You
+   * can call {@link Singularity.getHackingLevelRequirementOfProgram | getHackingLevelRequirementOfProgram} to get that
+   * value.
    *
    * @example
    * ```js
@@ -2446,6 +2440,19 @@ export interface Singularity {
    * @returns True if you successfully start working on the specified program, and false otherwise.
    */
   createProgram(program: string, focus?: boolean): boolean;
+
+  /**
+   * Get the hacking level requirement of a program.
+   * @remarks
+   * RAM cost: 5 GB * 16/4/1
+   *
+   * In order to create a program via UI or {@link Singularity.createProgram | createProgram}, your hacking level must
+   * meet the requirement of that program. This API returns that value.
+   *
+   * @param program - Name of program to create.
+   * @returns Hacking level requirement. Return Infinity if the specified program cannot be created.
+   */
+  getHackingLevelRequirementOfProgram(program: string): number;
 
   /**
    * Commit a crime.
@@ -4195,13 +4202,13 @@ export interface Gang {
   getGangInformation(): GangGenInfo;
 
   /**
-   * Get information about the other gangs.
+   * Get information about all gangs.
    * @remarks
    * RAM cost: 2 GB
    *
    * Get territory and power information about all gangs.
    *
-   * @returns Object containing territory and power information about all gangs.
+   * @returns Object containing territory and power information about all gangs, including the player's gang, if any.
    */
   getOtherGangInformation(): Record<string, GangOtherInfoObject>;
 
@@ -4328,6 +4335,8 @@ export interface Gang {
    *
    * Get the amount of money it takes to purchase a piece of Equipment or an Augmentation.
    * If an invalid Equipment/Augmentation is specified, this function will return Infinity.
+   *
+   * This function already takes equipmentCostMult from {@link GangGenInfo | GangGenInfo} into account.
    *
    * @param equipName - Name of equipment.
    * @returns Cost to purchase the specified Equipment/Augmentation (number). Infinity for invalid arguments
@@ -8266,9 +8275,9 @@ export interface NS {
 
   /**
    * Open up a message box.
-   * @param msg - Message to alert.
+   * @param args - Value(s) to be alerted.
    */
-  alert(msg: string): void;
+  alert(...args: any[]): void;
 
   /**
    * Queue a toast (bottom-right notification).
@@ -9049,6 +9058,9 @@ export interface OfficeAPI {
 
   /**
    * Purchase a research.
+   *
+   * Some research is only available for product industries. This function does not do anything if you purchase that
+   * research for a material industry.
    *
    * @remarks
    * RAM cost: 20 GB

@@ -6,6 +6,8 @@
 
 Purchase a research.
 
+Some research is only available for product industries. This function does not do anything if you purchase that research for a material industry.
+
 **Signature:**
 
 ```typescript

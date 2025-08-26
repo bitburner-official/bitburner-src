@@ -519,6 +519,7 @@ import nsDoc_bitburner_gangformulas_moneygain_md from "../../markdown/bitburner.
 import nsDoc_bitburner_gangformulas_respectgain_md from "../../markdown/bitburner.gangformulas.respectgain.md?raw";
 import nsDoc_bitburner_gangformulas_wantedlevelgain_md from "../../markdown/bitburner.gangformulas.wantedlevelgain.md?raw";
 import nsDoc_bitburner_gangformulas_wantedpenalty_md from "../../markdown/bitburner.gangformulas.wantedpenalty.md?raw";
+import nsDoc_bitburner_ganggeninfo_equipmentcostmult_md from "../../markdown/bitburner.ganggeninfo.equipmentcostmult.md?raw";
 import nsDoc_bitburner_ganggeninfo_faction_md from "../../markdown/bitburner.ganggeninfo.faction.md?raw";
 import nsDoc_bitburner_ganggeninfo_ishacking_md from "../../markdown/bitburner.ganggeninfo.ishacking.md?raw";
 import nsDoc_bitburner_ganggeninfo_md from "../../markdown/bitburner.ganggeninfo.md?raw";
@@ -1230,6 +1231,7 @@ import nsDoc_bitburner_singularity_getfactionfavorgain_md from "../../markdown/b
 import nsDoc_bitburner_singularity_getfactioninviterequirements_md from "../../markdown/bitburner.singularity.getfactioninviterequirements.md?raw";
 import nsDoc_bitburner_singularity_getfactionrep_md from "../../markdown/bitburner.singularity.getfactionrep.md?raw";
 import nsDoc_bitburner_singularity_getfactionworktypes_md from "../../markdown/bitburner.singularity.getfactionworktypes.md?raw";
+import nsDoc_bitburner_singularity_gethackinglevelrequirementofprogram_md from "../../markdown/bitburner.singularity.gethackinglevelrequirementofprogram.md?raw";
 import nsDoc_bitburner_singularity_getownedaugmentations_md from "../../markdown/bitburner.singularity.getownedaugmentations.md?raw";
 import nsDoc_bitburner_singularity_getownedsourcefiles_md from "../../markdown/bitburner.singularity.getownedsourcefiles.md?raw";
 import nsDoc_bitburner_singularity_getsavedata_md from "../../markdown/bitburner.singularity.getsavedata.md?raw";
@@ -2021,6 +2023,7 @@ AllPages["nsDoc/bitburner.gangformulas.moneygain.md"] = nsDoc_bitburner_gangform
 AllPages["nsDoc/bitburner.gangformulas.respectgain.md"] = nsDoc_bitburner_gangformulas_respectgain_md;
 AllPages["nsDoc/bitburner.gangformulas.wantedlevelgain.md"] = nsDoc_bitburner_gangformulas_wantedlevelgain_md;
 AllPages["nsDoc/bitburner.gangformulas.wantedpenalty.md"] = nsDoc_bitburner_gangformulas_wantedpenalty_md;
+AllPages["nsDoc/bitburner.ganggeninfo.equipmentcostmult.md"] = nsDoc_bitburner_ganggeninfo_equipmentcostmult_md;
 AllPages["nsDoc/bitburner.ganggeninfo.faction.md"] = nsDoc_bitburner_ganggeninfo_faction_md;
 AllPages["nsDoc/bitburner.ganggeninfo.ishacking.md"] = nsDoc_bitburner_ganggeninfo_ishacking_md;
 AllPages["nsDoc/bitburner.ganggeninfo.md"] = nsDoc_bitburner_ganggeninfo_md;
@@ -2732,6 +2735,7 @@ AllPages["nsDoc/bitburner.singularity.getfactionfavorgain.md"] = nsDoc_bitburner
 AllPages["nsDoc/bitburner.singularity.getfactioninviterequirements.md"] = nsDoc_bitburner_singularity_getfactioninviterequirements_md;
 AllPages["nsDoc/bitburner.singularity.getfactionrep.md"] = nsDoc_bitburner_singularity_getfactionrep_md;
 AllPages["nsDoc/bitburner.singularity.getfactionworktypes.md"] = nsDoc_bitburner_singularity_getfactionworktypes_md;
+AllPages["nsDoc/bitburner.singularity.gethackinglevelrequirementofprogram.md"] = nsDoc_bitburner_singularity_gethackinglevelrequirementofprogram_md;
 AllPages["nsDoc/bitburner.singularity.getownedaugmentations.md"] = nsDoc_bitburner_singularity_getownedaugmentations_md;
 AllPages["nsDoc/bitburner.singularity.getownedsourcefiles.md"] = nsDoc_bitburner_singularity_getownedsourcefiles_md;
 AllPages["nsDoc/bitburner.singularity.getsavedata.md"] = nsDoc_bitburner_singularity_getsavedata_md;

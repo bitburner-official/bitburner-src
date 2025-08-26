@@ -1,7 +1,7 @@
 import type { Singularity as ISingularity } from "@nsdefs";
 
 import { Player } from "@player";
-import { CityName, FactionWorkType, LocationName } from "@enums";
+import { CityName, CompletedProgramName, FactionWorkType, LocationName } from "@enums";
 import { purchaseAugmentation, joinFaction, getFactionAugmentationsFiltered } from "../Faction/FactionHelpers";
 import { startWorkerScript } from "../NetscriptWorker";
 import { Augmentations } from "../Augmentation/Augmentations";
@@ -16,7 +16,7 @@ import { Page } from "../ui/Router";
 import { SpecialServers } from "../Server/data/SpecialServers";
 import { Locations } from "../Locations/Locations";
 import { GetServer } from "../Server/AllServers";
-import { Programs } from "../Programs/Programs";
+import { getEffectiveHackingLevelRequirement, Programs } from "../Programs/Programs";
 import { formatMoney, formatRam, formatReputation } from "../ui/formatNumber";
 import { currentNodeMults } from "../BitNode/BitNodeMultipliers";
 import { Companies } from "../Company/Companies";
@@ -963,7 +963,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         const p = Object.values(Programs).find((p) => p.name.toLowerCase() === programName);
 
         if (p == null) {
-          helpers.log(ctx, () => `The specified program does not exist: '${programName}`);
+          helpers.log(ctx, () => `The specified program does not exist: '${programName}'`);
           return false;
         }
 
@@ -1002,6 +1002,28 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         helpers.log(ctx, () => `Began creating program: '${programName}'`);
         return true;
       },
+    getHackingLevelRequirementOfProgram: (ctx) => (_programName) => {
+      helpers.checkSingularityAccess(ctx);
+      const programName = helpers.string(ctx, "programName", _programName).toLowerCase();
+
+      const program = Object.values(Programs).find((p) => p.name.toLowerCase() === programName);
+      if (program == null) {
+        throw helpers.errorMessage(ctx, `The specified program does not exist: '${programName}'`);
+      }
+
+      const create = program.create;
+      // Return Infinity if this program cannot be created.
+      if (create === null) {
+        return Infinity;
+      }
+
+      // The hacking level requirement of bitFlume is exactly 1. It does not depend on Intelligence.
+      if (program.name === CompletedProgramName.bitFlume) {
+        return 1;
+      }
+
+      return getEffectiveHackingLevelRequirement(create.level);
+    },
     commitCrime: (ctx) => (_crimeType, _focus) => {
       helpers.checkSingularityAccess(ctx);
       const crimeType = getEnumHelper("CrimeType").nsGetMember(ctx, _crimeType);
