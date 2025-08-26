@@ -8,6 +8,8 @@ function showErrorMessage(address: string, detail: string) {
   SnackbarEvents.emit(`Error with websocket ${address}, details: ${detail}`, ToastVariant.ERROR, 5000);
 }
 
+const eventCodeWhenIntentionallyStoppingConnection = 3000;
+
 export class Remote {
   connection?: WebSocket;
   ipaddr: string;
@@ -19,7 +21,7 @@ export class Remote {
   }
 
   public stopConnection(): void {
-    this.connection?.close();
+    this.connection?.close(eventCodeWhenIntentionallyStoppingConnection);
   }
 
   public startConnection(): void {
@@ -40,9 +42,23 @@ export class Remote {
         2000,
       ),
     );
-    this.connection.addEventListener("close", () =>
-      SnackbarEvents.emit("Remote API connection closed", ToastVariant.WARNING, 2000),
-    );
+    this.connection.addEventListener("close", (event) => {
+      /**
+       * On Bitburner side, we may intentionally close the connection. For example, we do that before starting a new
+       * connection. In this event handler, we do things that are only necessary when the connection is closed
+       * unexpectedly (e.g., show a warning, reconnect after a delay), so we need to check whether the close event is
+       * unexpected.
+       */
+      if (event.code === eventCodeWhenIntentionallyStoppingConnection) {
+        return;
+      }
+      SnackbarEvents.emit(`Remote API connection closed. Code: ${event.code}.`, ToastVariant.WARNING, 2000);
+      if (Settings.RemoteFileApiReconnectionDelay > 0) {
+        setTimeout(() => {
+          this.startConnection();
+        }, Settings.RemoteFileApiReconnectionDelay * 1000);
+      }
+    });
   }
 }
 
