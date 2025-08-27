@@ -37,7 +37,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
   function handleRemoteFileApiPortChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const newValue = event.target.value.trim();
     setRemoteFileApiPort(newValue);
-    const port = Number.parseInt(newValue);
+    const port = Number(newValue);
     const result = isValidConnectionPort(port);
     if (!result.success) {
       setPortError(result.message);
@@ -50,8 +50,8 @@ export const RemoteAPIPage = (): React.ReactElement => {
   function handleRemoteFileApiReconnectionDelayChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const newValue = event.target.value.trim();
     setRemoteFileApiReconnectionDelay(newValue);
-    const reconnectionDelay = Number.parseInt(newValue);
-    if (!Number.isFinite(reconnectionDelay)) {
+    const reconnectionDelay = Number(newValue);
+    if (!Number.isFinite(reconnectionDelay) || reconnectionDelay < 0) {
       setReconnectionDelayError("Invalid reconnection delay");
       return;
     }
