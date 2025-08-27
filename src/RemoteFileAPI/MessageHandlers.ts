@@ -260,4 +260,8 @@ export const RFARequestHandler: Record<string, (message: RFAMessage) => RFAMessa
 
     return new RFAMessage({ result: servers, id: msg.id });
   },
+
+  ping: function (msg: RFAMessage): RFAMessage {
+    return new RFAMessage({ result: {}, id: msg.id });
+  },
 };

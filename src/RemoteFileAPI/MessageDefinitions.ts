@@ -32,7 +32,8 @@ type ResultType =
       save: SaveData;
     }
   | FileMetadata
-  | FileMetadata[];
+  | FileMetadata[]
+  | Record<string, never>;
 type FileDescription = FileData | FileContent | FileLocation | FileServer;
 
 export interface FileData {
