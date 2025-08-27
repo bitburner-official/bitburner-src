@@ -323,3 +323,23 @@ Output:
                 "purchasedByPlayer": boolean
             }[]
         }
+
+### ping
+
+Return a pong.
+
+Input:
+
+        {
+            "jsonrpc": "2.0",
+            "id": number,
+            "method": "ping"
+        }
+
+Output:
+
+        {
+            "jsonrpc": "2.0",
+            "id": number,
+            "result": {}
+        }
