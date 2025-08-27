@@ -124,12 +124,14 @@ export const CONSTANTS = {
 - Make nuke and port cracking APIs return false instead of throwing error (#1023, #2153) (@Hydrogeniouss, @catloversg)
 - Standardize names of Stock APIs (#2173) (@catloversg)
 - Rename BN multiplier RepToDonateToFaction to FavorToDonateToFaction (#2178) (@catloversg)
+- Make ns.bladeburner.getActionRepGain return the expected reputation gain (#2186) (@catloversg)
 - Rename FactionName.BachmanAssociates to FactionName.BachmanAndAssociates (#2048, #2183) (@masarakki, @catloversg)
 - Remove DreamSense upgrade (#2232) (@catloversg)
 - Use different term for dividend modifier instead of tax (#2237) (@catloversg)
 - Remove Spring Water industry (#2240) (@catloversg)
 - Remove VeChain (#2245) (@catloversg)
 - Make some APIs throw error when server is invalid (#2261) (@catloversg)
+- Rename equipment that uses real brand names (#2293) (@catloversg)
 
 ### MAJOR CHANGES
 
@@ -160,6 +162,11 @@ export const CONSTANTS = {
 - Place tooltips and popups in front of log windows (#2253) (@catloversg)
 - Fix: Go history page shows favor bonus instead of reputation bonus (#2251) (@catloversg)
 - Fix: Error message shows blob URL instead of script name (#2265) (@catloversg)
+- Add tooltip for reputation/favor in page of faction's augmentation list (#2268) (@catloversg)
+- Fix: Dropdown list appears behind modal when it's used in modal (#2282) (@catloversg)
+- Close coding contract popup on prestige (#2285) (@catloversg)
+- Add "Run Beautify on Save" option for built-in editor (#2287) (@TheCleric)
+- Add configurable option for auto-reconnecting to RFA client (#2297) (@catloversg)
 
 ### MISC
 
@@ -204,6 +211,13 @@ export const CONSTANTS = {
 - Add removal of API server to list of breaking changes (#2205) (@catloversg)
 - Fix typo in KARMA_1000000 achievement (#2264) (@UncleCeiling)
 - Clarify the reason of failure when trying to move a running script (#2160) (@UncleCeiling)
+- Fix: ns.mv writes to destination file even if it cannot delete source file (#2267) (@catloversg)
+- Update messages related to text files (#2266) (@catloversg)
+- Fix calculateExp so that it won't return a too small result (#2274) (@d0sboots)
+- Change ns.alert to accept multiple args as other print functions (#2278) (@vamo89)
+- Fix: Coding contract can be solved manually via UI after it is removed on prestige (#2281) (@TheCleric)
+- Ensure ns.go.analysis.getValidMoves correctly handles playing as white (#2292) (@ficocelliguy)
+- Ensure that player's promises are changed to "gameOver" once the game is over (#2198) (@ficocelliguy)
 
 ### DOCUMENTATION
 
@@ -226,6 +240,10 @@ export const CONSTANTS = {
 - Update infiltration docs (#2259) (@catloversg)
 - Mention TypeScript support and update example in React docs (#2263) (@catloversg)
 - Update Remote API docs (#2258) (@catloversg)
+- Change ns.tail to ns.ui.openTail in example code (#2270) (@gmcew)
+- Clarify description of ArrayJumpingGame contract (#2277) (@acidduk)
+- Update 'Hacking Algorithms' page (#2288) (@gmcew)
+- Reword HammingCode contracts and mention dummy contract API (#2296) (@gmcew)
 
 ### SPOILER CHANGES - UI
 
@@ -242,8 +260,10 @@ export const CONSTANTS = {
 - Print logs when ns.hacknet.spendHashes fails and update param type of APIs using hash upgrade (#2145) (@catloversg)
 - Add ns.singularity.getUnlockedAchievements (#2156) (@UncleCeiling)
 - Remove mention of unusable research "sudo.Assist" (#2187) (@catloversg)
-- Fix: ns.bladeburner.getActionRepGain returns wrong value (#2186) (@catloversg)
 - Change message of Singularity error and uncaught promise error (#2174) (@catloversg)
+- Add ns.singularity.getHackingLevelRequirementOfProgram (#2271) (@catloversg)
+- Expose gang's discount rate (#2272) (@catloversg)
+- Prevent purchasing product-only research for material industries (#2283) (@catloversg)
 
 ### SPOILER CHANGES - DOCUMENTATION
 
@@ -256,6 +276,7 @@ export const CONSTANTS = {
 - Fix outdated description of Bladeburner interface (#2226) (@catloversg)
 - Clarify advice about Smart Supply in round 1 (#2233) (@catloversg)
 - Fix wrong param/return type and clarify ns.sleep, ns.asleep, ns.singularity.exportGame (#2242) (@catloversg)
+- Clarify ns.gang.getOtherGangInformation (#2289) (@acidduk)
 
 ### CODEBASE/REFACTOR
 
