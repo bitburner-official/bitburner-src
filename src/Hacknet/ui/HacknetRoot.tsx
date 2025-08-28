@@ -75,7 +75,7 @@ export function HacknetRoot(): React.ReactElement {
   ];
 
   // HacknetNode components
-  const nodes = Player.hacknetNodes.map((node: string | HacknetNode) => {
+  const nodes = Player.hacknetNodes.map((node: string | HacknetNode, index: number) => {
     if (hasHacknetServers()) {
       if (node instanceof HacknetNode) throw new Error("node was hacknet node"); // should never happen
       const hserver = GetServer(node);
@@ -83,7 +83,14 @@ export function HacknetRoot(): React.ReactElement {
         throw new Error(`Could not find Hacknet Server object in AllServers map for IP: ${node}`);
       }
       if (!(hserver instanceof HacknetServer)) throw new Error("node was not hacknet server"); // should never happen
-      return <HacknetServerElem key={hserver.hostname} node={hserver} purchaseMultiplier={purchaseMultiplier} />;
+      return (
+        <HacknetServerElem
+          key={hserver.hostname}
+          index={index}
+          node={hserver}
+          purchaseMultiplier={purchaseMultiplier}
+        />
+      );
     } else {
       if (typeof node === "string") throw new Error("node was ip string"); // should never happen
       return <HacknetNodeElem key={node.name} node={node} purchaseMultiplier={purchaseMultiplier} />;

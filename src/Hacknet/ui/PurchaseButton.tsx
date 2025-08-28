@@ -1,10 +1,8 @@
 import React from "react";
 
 import { hasHacknetServers, hasMaxNumberHacknetServers } from "../HacknetHelpers";
-import { Player } from "@player";
-import { Money } from "../../ui/React/Money";
-
-import Button from "@mui/material/Button";
+import { MoneyCost } from "./Components/MoneyCost";
+import { MoneyButton } from "./Components/MoneyButton";
 
 interface IProps {
   multiplier: number | string;
@@ -23,7 +21,7 @@ export function PurchaseButton(props: IProps): React.ReactElement {
       text = (
         <>
           Purchase Hacknet Server -&nbsp;
-          <Money money={cost} forPurchase={true} />
+          <MoneyCost cost={cost} />
         </>
       );
     }
@@ -31,14 +29,14 @@ export function PurchaseButton(props: IProps): React.ReactElement {
     text = (
       <>
         Purchase Hacknet Node -&nbsp;
-        <Money money={cost} forPurchase={true} />
+        <MoneyCost cost={cost} />
       </>
     );
   }
 
   return (
-    <Button disabled={!Player.canAfford(cost)} onClick={props.onClick}>
+    <MoneyButton cost={cost} onClick={props.onClick}>
       {text}
-    </Button>
+    </MoneyButton>
   );
 }

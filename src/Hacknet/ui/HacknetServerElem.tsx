@@ -6,11 +6,9 @@ import React from "react";
 
 import { HacknetServerConstants } from "../data/Constants";
 import {
-  getMaxNumberLevelUpgrades,
   getMaxNumberRamUpgrades,
   getMaxNumberCoreUpgrades,
   getMaxNumberCacheUpgrades,
-  purchaseLevelUpgrade,
   purchaseRamUpgrade,
   purchaseCoreUpgrade,
   purchaseCacheUpgrade,
@@ -34,8 +32,11 @@ import TableRow from "@mui/material/TableRow";
 import { formatRam } from "../../ui/formatNumber";
 import { calculateHashGainRate } from "../formulas/HacknetServers";
 import Tooltip from "@mui/material/Tooltip";
+import { HacknetServerLevel } from "./Components/HacknetServerLevel";
+import { UpgradeHacknetServerLevelButton } from "./Components/UpgradeHacknetServerLevelButton";
 
 interface IProps {
+  index: number;
   node: HacknetServer;
   purchaseMultiplier: number | string;
 }
@@ -43,53 +44,7 @@ interface IProps {
 export function HacknetServerElem(props: IProps): React.ReactElement {
   const node = props.node;
   const purchaseMult = props.purchaseMultiplier;
-
-  // Upgrade Level Button
-  let upgradeLevelButton;
-  if (node.level >= HacknetServerConstants.MaxLevel) {
-    upgradeLevelButton = <Button disabled>MAX LEVEL</Button>;
-  } else {
-    let multiplier = 0;
-    if (purchaseMult === "MAX") {
-      multiplier = getMaxNumberLevelUpgrades(node, HacknetServerConstants.MaxLevel);
-    } else {
-      const levelsToMax = HacknetServerConstants.MaxLevel - node.level;
-      multiplier = Math.min(levelsToMax, purchaseMult as number);
-    }
-
-    const base_increase =
-      calculateHashGainRate(node.level + multiplier, 0, node.maxRam, node.cores, Player.mults.hacknet_node_money) -
-      calculateHashGainRate(node.level, 0, node.maxRam, node.cores, Player.mults.hacknet_node_money);
-    const modded_increase = (base_increase * (node.maxRam - node.ramUsed)) / node.maxRam;
-
-    const upgradeLevelCost = node.calculateLevelUpgradeCost(multiplier, Player.mults.hacknet_node_level_cost);
-    upgradeLevelButton = (
-      <Tooltip
-        title={
-          <Typography>
-            +<HashRate hashes={modded_increase} /> (effective increase, taking current RAM usage into account)
-            <br />
-            <span style={{ opacity: 0.5 }}>
-              +<HashRate hashes={base_increase} />
-            </span>{" "}
-            (base increase, attained when no script is running)
-          </Typography>
-        }
-      >
-        <Button onClick={upgradeLevelOnClick}>
-          +{multiplier}&nbsp;-&nbsp;
-          <Money money={upgradeLevelCost} forPurchase={true} />
-        </Button>
-      </Tooltip>
-    );
-  }
-  function upgradeLevelOnClick(): void {
-    let numUpgrades = purchaseMult;
-    if (purchaseMult === "MAX") {
-      numUpgrades = getMaxNumberLevelUpgrades(node, HacknetServerConstants.MaxLevel);
-    }
-    purchaseLevelUpgrade(node, numUpgrades as number);
-  }
+  const index = props.index;
 
   function upgradeRamOnClick(): void {
     let numUpgrades = purchaseMult;
@@ -293,9 +248,13 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
               <Typography>Level:</Typography>
             </TableCell>
             <TableCell>
-              <Typography>{node.level}</Typography>
+              <Typography>
+                <HacknetServerLevel index={index} />
+              </Typography>
             </TableCell>
-            <TableCell>{upgradeLevelButton}</TableCell>
+            <TableCell>
+              <UpgradeHacknetServerLevelButton purchaseMult={purchaseMult} node={node} />
+            </TableCell>
           </TableRow>
           <TableRow>
             <TableCell>

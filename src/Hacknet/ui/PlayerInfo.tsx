@@ -7,32 +7,18 @@
 import React from "react";
 
 import { hasHacknetServers } from "../HacknetHelpers";
-import { Player } from "@player";
-import { Money } from "../../ui/React/Money";
 import { MoneyRate } from "../../ui/React/MoneyRate";
-import { HashRate } from "../../ui/React/HashRate";
-import { Hashes } from "../../ui/React/Hashes";
 import { Paper, Typography } from "@mui/material";
 import { StatsTable } from "../../ui/React/StatsTable";
 import { Tooltip } from "@mui/material";
-import { usePlayerSelector } from "../../utils/PlayerExternalStore";
-import { PlayerObject } from "src/PersonObjects/Player/PlayerObject";
+import { HashTotalProduction } from "./Components/HashTotalProduction";
+import { HacknetExpenses } from "./Components/HacknetExpenses";
+import { HacknetProduced } from "./Components/HacknetProduced";
+import { PlayerHashes } from "./Components/PlayerHashes";
+import { PlayerHashCapacity } from "./Components/PlayerHashCapacity";
 
 interface IProps {
   totalProduction: number;
-}
-
-const selectHacknetExpenses = (p: PlayerObject) => -p.moneySourceA.hacknet_expenses || 0;
-const selectHacknetMoney = (p: PlayerObject) => p.moneySourceA.hacknet;
-
-function HacknetExpenses(): React.ReactElement {
-  const spent = usePlayerSelector(selectHacknetExpenses);
-  return <Money key="money" money={spent} />;
-}
-
-function HacknetProduced(): React.ReactElement {
-  const produced = usePlayerSelector(selectHacknetMoney);
-  return <Money key="money" money={produced} />;
 }
 
 export function PlayerInfo(props: IProps): React.ReactElement {
@@ -45,7 +31,7 @@ export function PlayerInfo(props: IProps): React.ReactElement {
     rows.push([
       "Hashes:",
       <span key={"hashes"}>
-        <Hashes hashes={Player.hashManager.hashes} /> / <Hashes hashes={Player.hashManager.capacity} />
+        <PlayerHashes /> / <PlayerHashCapacity />
       </span>,
     ]);
     rows.push([
@@ -59,7 +45,7 @@ export function PlayerInfo(props: IProps): React.ReactElement {
         }
       >
         <span>
-          <HashRate key="hashRate" hashes={props.totalProduction} />
+          <HashTotalProduction />
         </span>
       </Tooltip>,
     ]);
