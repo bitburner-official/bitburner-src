@@ -25,16 +25,19 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
-import { useCycleRerender } from "../../ui/React/hooks";
+import { usePlayerSelector } from "../../utils/PlayerExternalStore";
+import { PlayerObject } from "src/PersonObjects/Player/PlayerObject";
+
+const selectHacknetNodecount = (p: PlayerObject) => p.hacknetNodes.length;
 
 /** Root React Component for the Hacknet Node UI */
 export function HacknetRoot(): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const rerender = useCycleRerender();
   const [purchaseMultiplier, setPurchaseMultiplier] = useState<number | "MAX">(PurchaseMultipliers.x1);
+  const hacknetNodeCount = usePlayerSelector(selectHacknetNodecount);
 
   let totalProduction = 0;
-  for (let i = 0; i < Player.hacknetNodes.length; ++i) {
+  for (let i = 0; i < hacknetNodeCount; ++i) {
     const node = Player.hacknetNodes[i];
     if (hasHacknetServers()) {
       if (node instanceof HacknetNode) throw new Error("node was hacknet node"); // should never happen
@@ -53,7 +56,6 @@ export function HacknetRoot(): React.ReactElement {
 
   function handlePurchaseButtonClick(): void {
     purchaseHacknet();
-    rerender();
   }
 
   // Cost to purchase a new Hacknet Node
@@ -81,19 +83,10 @@ export function HacknetRoot(): React.ReactElement {
         throw new Error(`Could not find Hacknet Server object in AllServers map for IP: ${node}`);
       }
       if (!(hserver instanceof HacknetServer)) throw new Error("node was not hacknet server"); // should never happen
-      return (
-        <HacknetServerElem
-          key={hserver.hostname}
-          node={hserver}
-          purchaseMultiplier={purchaseMultiplier}
-          rerender={rerender}
-        />
-      );
+      return <HacknetServerElem key={hserver.hostname} node={hserver} purchaseMultiplier={purchaseMultiplier} />;
     } else {
       if (typeof node === "string") throw new Error("node was ip string"); // should never happen
-      return (
-        <HacknetNodeElem key={node.name} node={node} purchaseMultiplier={purchaseMultiplier} rerender={rerender} />
-      );
+      return <HacknetNodeElem key={node.name} node={node} purchaseMultiplier={purchaseMultiplier} />;
     }
   });
 

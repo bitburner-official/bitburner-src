@@ -38,13 +38,11 @@ import Tooltip from "@mui/material/Tooltip";
 interface IProps {
   node: HacknetServer;
   purchaseMultiplier: number | string;
-  rerender: () => void;
 }
 
 export function HacknetServerElem(props: IProps): React.ReactElement {
   const node = props.node;
   const purchaseMult = props.purchaseMultiplier;
-  const rerender = props.rerender;
 
   // Upgrade Level Button
   let upgradeLevelButton;
@@ -91,7 +89,6 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
       numUpgrades = getMaxNumberLevelUpgrades(node, HacknetServerConstants.MaxLevel);
     }
     purchaseLevelUpgrade(node, numUpgrades as number);
-    rerender();
   }
 
   function upgradeRamOnClick(): void {
@@ -100,7 +97,6 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
       numUpgrades = getMaxNumberRamUpgrades(node, HacknetServerConstants.MaxRam);
     }
     purchaseRamUpgrade(node, numUpgrades as number);
-    rerender();
   }
   // Upgrade RAM Button
   let upgradeRamButton;
@@ -161,7 +157,6 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
       numUpgrades = getMaxNumberCoreUpgrades(node, HacknetServerConstants.MaxCores);
     }
     purchaseCoreUpgrade(node, numUpgrades as number);
-    rerender();
   }
   // Upgrade Cores Button
   let upgradeCoresButton;
@@ -239,7 +234,6 @@ export function HacknetServerElem(props: IProps): React.ReactElement {
       numUpgrades = getMaxNumberCacheUpgrades(node, HacknetServerConstants.MaxCache);
     }
     purchaseCacheUpgrade(node, numUpgrades as number);
-    rerender();
     updateHashManagerCapacity();
   }
 

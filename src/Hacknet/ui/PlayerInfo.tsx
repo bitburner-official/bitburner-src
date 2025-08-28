@@ -15,17 +15,32 @@ import { Hashes } from "../../ui/React/Hashes";
 import { Paper, Typography } from "@mui/material";
 import { StatsTable } from "../../ui/React/StatsTable";
 import { Tooltip } from "@mui/material";
+import { usePlayerSelector } from "../../utils/PlayerExternalStore";
+import { PlayerObject } from "src/PersonObjects/Player/PlayerObject";
 
 interface IProps {
   totalProduction: number;
+}
+
+const selectHacknetExpenses = (p: PlayerObject) => -p.moneySourceA.hacknet_expenses || 0;
+const selectHacknetMoney = (p: PlayerObject) => p.moneySourceA.hacknet;
+
+function HacknetExpenses(): React.ReactElement {
+  const spent = usePlayerSelector(selectHacknetExpenses);
+  return <Money key="money" money={spent} />;
+}
+
+function HacknetProduced(): React.ReactElement {
+  const produced = usePlayerSelector(selectHacknetMoney);
+  return <Money key="money" money={produced} />;
 }
 
 export function PlayerInfo(props: IProps): React.ReactElement {
   const hasServers = hasHacknetServers();
 
   const rows: React.ReactNode[][] = [];
-  rows.push(["Money Spent:", <Money key="money" money={-Player.moneySourceA.hacknet_expenses || 0} />]);
-  rows.push(["Money Produced:", <Money key="money" money={Player.moneySourceA.hacknet} />]);
+  rows.push(["Money Spent:", <HacknetExpenses key="expenses" />]);
+  rows.push(["Money Produced:", <HacknetProduced key="money" />]);
   if (hasServers) {
     rows.push([
       "Hashes:",

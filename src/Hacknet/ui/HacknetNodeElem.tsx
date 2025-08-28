@@ -35,13 +35,11 @@ import { calculateMoneyGainRate } from "../formulas/HacknetNodes";
 interface IProps {
   node: HacknetNode;
   purchaseMultiplier: number | "MAX";
-  rerender: () => void;
 }
 
 export function HacknetNodeElem(props: IProps): React.ReactElement {
   const node = props.node;
   const purchaseMult = props.purchaseMultiplier;
-  const rerender = props.rerender;
 
   // Upgrade Level Button
   let upgradeLevelButton;
@@ -79,7 +77,6 @@ export function HacknetNodeElem(props: IProps): React.ReactElement {
     const numUpgrades =
       purchaseMult === "MAX" ? getMaxNumberLevelUpgrades(node, HacknetNodeConstants.MaxLevel) : purchaseMult;
     purchaseLevelUpgrade(node, numUpgrades);
-    rerender();
   }
 
   let upgradeRAMButton;
@@ -121,14 +118,12 @@ export function HacknetNodeElem(props: IProps): React.ReactElement {
     const numUpgrades =
       purchaseMult === "MAX" ? getMaxNumberRamUpgrades(node, HacknetNodeConstants.MaxRam) : purchaseMult;
     purchaseRamUpgrade(node, numUpgrades);
-    rerender();
   }
 
   function upgradeCoresOnClick(): void {
     const numUpgrades =
       purchaseMult === "MAX" ? getMaxNumberCoreUpgrades(node, HacknetNodeConstants.MaxCores) : purchaseMult;
     purchaseCoreUpgrade(node, numUpgrades);
-    rerender();
   }
   let upgradeCoresButton;
   if (node.cores >= HacknetNodeConstants.MaxCores) {

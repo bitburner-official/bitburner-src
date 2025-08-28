@@ -49,6 +49,7 @@ import { EventEmitter } from "./utils/EventEmitter";
 import { Companies } from "./Company/Companies";
 import { resetGoPromises } from "./Go/boardAnalysis/goAI";
 import { getRecordEntries } from "./Types/Record";
+import { runSelectors } from "./utils/PlayerExternalStore";
 
 declare global {
   // This property is only available in the dev build
@@ -421,6 +422,7 @@ const Engine = {
       if (GameCycleEvents.hasSubscribers()) {
         ReactDOM.unstable_batchedUpdates(() => {
           GameCycleEvents.emit();
+          runSelectors();
         });
       }
     }
