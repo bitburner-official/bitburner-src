@@ -138,7 +138,9 @@ export function resetAI(endOfGame = false): void {
       playerPromise.resolver(gameOver);
       playerPromise.resolver = null;
     }
-    if (!endOfGame && !playerPromise.resolver) {
+    if (endOfGame) {
+      playerPromise.nextTurn = Promise.resolve(gameOver);
+    } else {
       createPromise(playerPromise);
     }
   }

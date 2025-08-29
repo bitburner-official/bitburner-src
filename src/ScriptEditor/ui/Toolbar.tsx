@@ -31,20 +31,14 @@ type IStandaloneCodeEditor = monaco.editor.IStandaloneCodeEditor;
 
 interface IProps {
   editor: IStandaloneCodeEditor | null;
-  onSave: () => void;
-  onRun: () => void;
+  onSave: () => Promise<void>;
+  onRun: () => Promise<void>;
+  onBeautify: () => Promise<void>;
 }
 
-export function Toolbar({ editor, onSave, onRun }: IProps) {
+export function Toolbar({ editor, onSave, onRun, onBeautify }: IProps) {
   const [ramInfoOpen, { on: openRAMInfo, off: closeRAMInfo }] = useBoolean(false);
   const [optionsOpen, { on: openOptions, off: closeOptions }] = useBoolean(false);
-
-  function beautify(): void {
-    editor
-      ?.getAction("editor.action.formatDocument")
-      ?.run()
-      .catch((error) => console.error(error));
-  }
 
   const { ram, ramEntries, isUpdatingRAM, options, saveOptions } = useScriptEditorContext();
 
@@ -68,12 +62,24 @@ export function Toolbar({ editor, onSave, onRun }: IProps) {
         <Button startIcon={<SettingsIcon />} onClick={openOptions} sx={{ mr: 1 }}>
           Options
         </Button>
-        <Button onClick={beautify}>Beautify</Button>
+        <Button
+          onClick={() => {
+            onBeautify().catch((error) => console.error(error));
+          }}
+        >
+          Beautify
+        </Button>
         <Button color={isUpdatingRAM ? "secondary" : "primary"} sx={{ mx: 1 }} onClick={openRAMInfo}>
           {ram}
         </Button>
         <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.Save])}>
-          <Button onClick={onSave}>Save</Button>
+          <Button
+            onClick={() => {
+              onSave().catch((error) => console.error(error));
+            }}
+          >
+            Save
+          </Button>
         </Tooltip>
         <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.GoToTerminal])}>
           <Button sx={{ mx: 1 }} onClick={() => Router.toPage(Page.Terminal)}>
@@ -81,7 +87,12 @@ export function Toolbar({ editor, onSave, onRun }: IProps) {
           </Button>
         </Tooltip>
         <Tooltip title={parseKeyCombinationsToString(CurrentKeyBindings[ScriptEditorAction.Run])}>
-          <Button sx={{ mr: 1 }} onClick={onRun}>
+          <Button
+            sx={{ mr: 1 }}
+            onClick={() => {
+              onRun().catch((error) => console.error(error));
+            }}
+          >
             Run
           </Button>
         </Tooltip>

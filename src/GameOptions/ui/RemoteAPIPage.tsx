@@ -13,9 +13,14 @@ export const RemoteAPIPage = (): React.ReactElement => {
   );
   const [remoteFileApiPort, setRemoteFileApiPort] = useState(Settings.RemoteFileApiPort.toString());
   const [portError, setPortError] = useState(isValidConnectionPort(Settings.RemoteFileApiPort).message ?? "");
+  const [remoteFileApiReconnectionDelay, setRemoteFileApiReconnectionDelay] = useState(
+    Settings.RemoteFileApiReconnectionDelay.toString(),
+  );
+  const [reconnectionDelayError, setReconnectionDelayError] = useState("");
 
   const isValidHostname = hostnameError === "";
   const isValidPort = portError === "";
+  const isValidReconnectionDelay = reconnectionDelayError === "";
 
   function handleRemoteFileApiHostnameChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const newValue = event.target.value.trim();
@@ -32,7 +37,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
   function handleRemoteFileApiPortChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const newValue = event.target.value.trim();
     setRemoteFileApiPort(newValue);
-    const port = Number.parseInt(newValue);
+    const port = Number(newValue);
     const result = isValidConnectionPort(port);
     if (!result.success) {
       setPortError(result.message);
@@ -40,6 +45,18 @@ export const RemoteAPIPage = (): React.ReactElement => {
     }
     Settings.RemoteFileApiPort = port;
     setPortError("");
+  }
+
+  function handleRemoteFileApiReconnectionDelayChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    const newValue = event.target.value.trim();
+    setRemoteFileApiReconnectionDelay(newValue);
+    const reconnectionDelay = Number(newValue);
+    if (!Number.isFinite(reconnectionDelay) || reconnectionDelay < 0) {
+      setReconnectionDelayError("Invalid reconnection delay");
+      return;
+    }
+    Settings.RemoteFileApiReconnectionDelay = reconnectionDelay;
+    setReconnectionDelayError("");
   }
 
   return (
@@ -73,7 +90,7 @@ export const RemoteAPIPage = (): React.ReactElement => {
           <TextField
             error={!isValidHostname}
             InputProps={{
-              startAdornment: <Typography>Hostname:&nbsp;</Typography>,
+              startAdornment: <Typography style={{ minWidth: "200px" }}>Hostname:&nbsp;</Typography>,
             }}
             value={remoteFileApiHostname}
             onChange={handleRemoteFileApiHostnameChange}
@@ -97,7 +114,11 @@ export const RemoteAPIPage = (): React.ReactElement => {
           <TextField
             error={!isValidPort}
             InputProps={{
-              startAdornment: <Typography color={isValidPort ? "success" : "error"}>Port:&nbsp;</Typography>,
+              startAdornment: (
+                <Typography color={isValidPort ? "success" : "error"} style={{ minWidth: "200px" }}>
+                  Port:&nbsp;
+                </Typography>
+              ),
             }}
             value={remoteFileApiPort}
             onChange={handleRemoteFileApiPortChange}
@@ -105,6 +126,33 @@ export const RemoteAPIPage = (): React.ReactElement => {
             size={"medium"}
           />
           {portError && <Typography color={Settings.theme.error}>{portError}</Typography>}
+        </div>
+      </Tooltip>
+      <Tooltip
+        title={
+          <Typography>
+            When the connection is closed, Bitburner will automatically reconnect after this delay.
+            <br />
+            The value must be in seconds. Set it to 0 to disable the feature.
+          </Typography>
+        }
+      >
+        <div>
+          <TextField
+            error={!isValidReconnectionDelay}
+            InputProps={{
+              startAdornment: (
+                <Typography color={isValidReconnectionDelay ? "success" : "error"} style={{ minWidth: "200px" }}>
+                  Reconnection delay:&nbsp;
+                </Typography>
+              ),
+            }}
+            value={remoteFileApiReconnectionDelay}
+            onChange={handleRemoteFileApiReconnectionDelayChange}
+            placeholder="0"
+            size={"medium"}
+          />
+          {reconnectionDelayError && <Typography color={Settings.theme.error}>{reconnectionDelayError}</Typography>}
         </div>
       </Tooltip>
       <OptionSwitch

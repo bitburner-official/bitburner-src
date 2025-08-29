@@ -114,6 +114,8 @@ export const Settings = {
   RemoteFileApiAddress: "localhost",
   /** Port the Remote File API client will try to connect to. 0 to disable. */
   RemoteFileApiPort: 0,
+  /** Automatically reconnect to the Remote File API client after this delay. Set it 0 to disable. */
+  RemoteFileApiReconnectionDelay: 0,
   /** Use wss instead of ws when connecting to RFA clients */
   UseWssForRemoteFileApi: false,
   /** Whether to save the game when the player saves any file. */
@@ -176,6 +178,8 @@ export const Settings = {
   MonacoDefaultToVim: false,
   /** Word wrap setting for Script Editor. */
   MonacoWordWrap: "off" as WordWrapOptions,
+  /** Whether to run Beautify code formatter on save */
+  MonacoBeautifyOnSave: false,
   /** Control the cursor style*/
   MonacoCursorStyle: "line" as CursorStyle,
   /** Control the cursor animation style */
