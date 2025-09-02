@@ -490,7 +490,7 @@ async function loadGame(saveData: SaveData): Promise<boolean> {
       if (typeof ver !== "string" && typeof ver !== "number") {
         throw new Error(`Invalid VersionSave: ${saveObj.VersionSave}`);
       }
-      evaluateVersionCompatibility(ver);
+      await evaluateVersionCompatibility(ver);
       if (CONSTANTS.isDevBranch) {
         // Beta branch, always show changes
         createBetaUpdateText();
