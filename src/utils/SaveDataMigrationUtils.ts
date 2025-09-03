@@ -558,7 +558,7 @@ Error: ${e}`,
        * getSaveData() returns data in v3 format, so the exported data will not be importable in pre-v3.
        */
       const saveData = await load();
-      downloadContentAsFile(saveData, `bitburnerSave_backup_${Math.round(Date.now() / 1000)}.json.gz`);
+      downloadContentAsFile(saveData, `bitburnerSave_backup_2.8.1_${Math.round(Player.lastUpdate / 1000)}.json.gz`);
     } catch (error) {
       console.error("Cannot export pre-v3 save data", error);
     }
