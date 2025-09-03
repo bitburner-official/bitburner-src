@@ -21,4 +21,17 @@ module.exports = {
     "/utils/Protections$": "<rootDir>/test/__mocks__/NullMock.js",
     "@swc/wasm-web": "@swc/core",
   },
+  /**
+   * By default, Jest only passes a limited number of global objects to the test environment. We need these global
+   * objects when testing code that loads save data.
+   */
+  globals: {
+    Uint8Array,
+    Blob,
+    CompressionStream,
+    DecompressionStream,
+    TextDecoderStream,
+    URL,
+    Response,
+  },
 };
