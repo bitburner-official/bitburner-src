@@ -55,13 +55,13 @@ jobs:
         run: npm run format:report
   test:
     name: Test
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: "npm"
       - name: Install npm dependencies
         run: npm ci
