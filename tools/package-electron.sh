@@ -23,7 +23,7 @@ case $BUILD_PLATFORM in
   "linux")
     electron-packager .package bitburner --platform linux --arch x64,arm64 --out .build --overwrite --app-copyright "Copyright (C) 2025 Bitburner";;
   "mac")
-    electron-packager .package bitburner --platform darwin --arch x64,arm64,universal --out .build --overwrite --icon .package/icon.icns --app-copyright "Copyright (C) 2025 Bitburner" --osx-universal.mergeASARs="true" --osx-universal.x64ArchFiles="Contents/Resources/app/node_modules/@catloversg/steamworks.js/dist/osx/*";;
+    electron-packager .package bitburner --platform darwin --arch x64,arm64,universal --out .build --overwrite --icon .package/icon.icns --app-copyright "Copyright (C) 2025 Bitburner" --osx-universal.x64ArchFiles="Contents/Resources/app/node_modules/@catloversg/steamworks.js/dist/osx/*";;
   *)
-    electron-packager .package bitburner --platform win32,linux,darwin --arch x64,arm64,universal --out .build --overwrite --icon .package/icon --app-copyright "Copyright (C) 2025 Bitburner" --osx-universal.mergeASARs="true" --osx-universal.x64ArchFiles="Contents/Resources/app/node_modules/@catloversg/steamworks.js/dist/osx/*";;
+    electron-packager .package bitburner --platform win32,linux,darwin --arch x64,arm64,universal --out .build --overwrite --icon .package/icon --app-copyright "Copyright (C) 2025 Bitburner" --osx-universal.x64ArchFiles="Contents/Resources/app/node_modules/@catloversg/steamworks.js/dist/osx/*";;
 esac
