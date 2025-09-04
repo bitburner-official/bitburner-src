@@ -19,11 +19,13 @@ BUILD_PLATFORM="${1:-"all"}"
 # And finally build the app.
 case $BUILD_PLATFORM in
   "win")
-    electron-packager .package bitburner --platform win32 --arch x64,arm64 --out .build --overwrite --icon .package/icon.ico --app-copyright "Copyright (C) 2024 Bitburner";;
+    electron-packager .package bitburner --platform win32 --arch x64,arm64 --out .build --overwrite --icon .package/icon.ico --app-copyright "Copyright (C) 2025 Bitburner";;
   "linux")
-    electron-packager .package bitburner --platform linux --arch x64,arm64 --out .build --overwrite --app-copyright "Copyright (C) 2024 Bitburner";;
+    electron-packager .package bitburner --platform linux --arch x64,arm64 --out .build --overwrite --app-copyright "Copyright (C) 2025 Bitburner";;
   "mac")
-    electron-packager .package bitburner --platform darwin --arch x64,arm64 --out .build --overwrite --icon .package/icon.icns --app-copyright "Copyright (C) 2024 Bitburner";;
+    electron-packager .package bitburner --platform darwin --arch universal --osx-universal.x64ArchFiles="Contents/Resources/app/node_modules/@catloversg/steamworks.js/dist/osx/*" --out .build --overwrite --icon .package/icon.icns --app-copyright "Copyright (C) 2025 Bitburner";;
   *)
-    electron-packager .package bitburner --platform win32,linux,darwin --arch x64,arm64 --out .build --overwrite --icon .package/icon --app-copyright "Copyright (C) 2024 Bitburner";;
+    electron-packager .package bitburner --platform win32 --arch x64,arm64 --out .build --overwrite --icon .package/icon.ico --app-copyright "Copyright (C) 2025 Bitburner";
+    electron-packager .package bitburner --platform linux --arch x64,arm64 --out .build --overwrite --app-copyright "Copyright (C) 2025 Bitburner";
+    electron-packager .package bitburner --platform darwin --arch universal --osx-universal.x64ArchFiles="Contents/Resources/app/node_modules/@catloversg/steamworks.js/dist/osx/*" --out .build --overwrite --icon .package/icon.icns --app-copyright "Copyright (C) 2025 Bitburner";;
 esac
