@@ -1,7 +1,7 @@
 import { getNewBoardState, makeMove, passTurn, updateCaptures } from "../../../src/Go/boardState/boardState";
 import { GoColor, GoOpponent } from "@enums";
 import { boardFromSimpleBoard, simpleBoardFromBoard } from "../../../src/Go/boardAnalysis/boardAnalysis";
-import { resetCoordinates, rotate90Degrees } from "../../../src/Go/boardState/offlineNodes";
+import { removeIslands, resetCoordinates, rotate90Degrees } from "../../../src/Go/boardState/offlineNodes";
 import { bitverseBoardShape } from "../../../src/Go/Constants";
 import { getEmptyHighlightedPoints } from "../../../src/Go/Go";
 
@@ -50,6 +50,12 @@ describe("Board analysis utility tests", () => {
       resetCoordinates(rotate90Degrees(boardFromSimpleBoard(bitverseBoardShape))),
     );
     expect(boardWithNoRouters).toEqual(specialBoardTemplate);
+  });
+
+  it("removes tiny empty point chains from initial board", () => {
+    const board = boardFromSimpleBoard([".#...", "##...", ".....", "...##", "..#.."]);
+    const cleanedBoard = removeIslands(board);
+    expect(simpleBoardFromBoard(cleanedBoard)).toEqual(["##...", "##...", ".....", "...##", "..###"]);
   });
 
   it("Correctly applies moves made", () => {
