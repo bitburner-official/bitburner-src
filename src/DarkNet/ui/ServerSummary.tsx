@@ -43,6 +43,15 @@ export function ServerSummary({
   const ramBlockedDetails = formatToMaxDigits(darknetData?.ramBlock ?? 0, 2) + "GB";
   const ramBlocked = showDetails ? ramBlockedDetails : formatNumber(darknetData?.ramBlock ?? 0, 0);
 
+  const runningScriptsComponent = (
+    <Tooltip key="runningScript" title={<>Running scripts on server: {runningScriptCount}</>}>
+      <Typography color={runningScriptCount ? "primary" : "secondary"}>
+        <SvgIcon component={Terminal} className={classes.serverStatusIcon} />
+        {runningScriptCount}
+      </Typography>
+    </Tooltip>
+  );
+
   const components = [];
   if (cacheCount) {
     components.push(
@@ -92,14 +101,6 @@ export function ServerSummary({
       </Tooltip>,
     );
   }
-  components.push(
-    <Tooltip key="runningScript" title={<>Running scripts on server: {runningScriptCount}</>}>
-      <Typography color={runningScriptCount ? "primary" : "secondary"}>
-        <SvgIcon component={Terminal} className={classes.serverStatusIcon} />
-        {runningScriptCount}
-      </Typography>
-    </Tooltip>,
-  );
   if (darknetData?.ramBlock) {
     components.push(
       <Tooltip
@@ -115,7 +116,8 @@ export function ServerSummary({
       </Tooltip>,
     );
   }
-  const componentsToShow = showDetails ? components : components.slice(0, 3);
+  const maxIcons = showDetails ? components.length : 2;
+  const componentsToShow = [...components.slice(0, maxIcons), runningScriptsComponent];
 
   return (
     <Container className={`${classes.inlineFlexBox} ${classes.noPadding}`} disableGutters>
