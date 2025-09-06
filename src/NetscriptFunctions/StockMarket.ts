@@ -247,7 +247,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     purchase4SMarketData: (ctx) => () => {
       if (Player.bitNodeOptions.disable4SData) {
-        helpers.log(ctx, () => "4S Market Data is disabled.");
+        helpers.log(ctx, () => "4S Market Data is disabled in advanced bitnode options.");
         return false;
       }
 
@@ -268,7 +268,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
     },
     purchase4SMarketDataTixApi: (ctx) => () => {
       if (Player.bitNodeOptions.disable4SData) {
-        helpers.log(ctx, () => "4S Market Data is disabled.");
+        helpers.log(ctx, () => "4S Market Data is disabled in advanced bitnode options.");
         return false;
       }
 
@@ -307,6 +307,10 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       return true;
     },
     purchaseTixApi: (ctx) => () => {
+            if (Player.bitNodeOptions.disable4SData) {
+        helpers.log(ctx, () => "TIX API access is disabled in advanced bitnode options.");
+        return false;
+      }
       if (Player.hasTixApiAccess) {
         helpers.log(ctx, () => "Already purchased TIX API");
         return true;

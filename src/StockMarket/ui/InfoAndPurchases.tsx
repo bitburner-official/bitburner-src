@@ -10,6 +10,7 @@ import { getStockMarket4SDataCost, getStockMarket4STixApiCost } from "../StockMa
 import { StockMarketConstants } from "../data/Constants";
 import { Player } from "@player";
 import { Money } from "../../ui/React/Money";
+import { dialogBoxCreate } from "../../ui/React/DialogBox";
 import { initStockMarket } from "../StockMarket";
 
 import Typography from "@mui/material/Typography";
@@ -106,6 +107,7 @@ function PurchaseWseAccountButton(props: IProps): React.ReactElement {
 function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
   function purchaseTixApiAccess(): void {
     if (Player.bitNodeOptions.disable4SData) {
+      dialogBoxCreate("TIX API Access has been disabled through Advanced Bitnode options.")
       return;
     }
     if (Player.hasTixApiAccess) {
@@ -139,6 +141,7 @@ function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
 function Purchase4SMarketDataButton(props: IProps): React.ReactElement {
   function purchase4SMarketData(): void {
     if (Player.bitNodeOptions.disable4SData) {
+      dialogBoxCreate("4S Market Data has been disabled through Advanced Bitnode options.")
       return;
     }
     if (Player.has4SData) {
