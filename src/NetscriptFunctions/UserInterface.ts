@@ -87,6 +87,26 @@ export function NetscriptUserInterface(): InternalAPI<IUserInterface> {
         runningScriptObj.tailProps?.rerender();
       },
 
+    setTailOpacity:
+      (ctx) =>
+      (_opacity, scriptID, host, ...scriptArgs) => {
+        const ident = helpers.scriptIdentifier(ctx, scriptID, host, scriptArgs);
+        const runningScriptObj = helpers.getRunningScript(ctx, ident);
+        if (runningScriptObj == null) {
+          helpers.log(ctx, () => helpers.getCannotFindRunningScriptErrorMessage(ident));
+          return;
+        }
+        if (_opacity === undefined) runningScriptObj.tailProps?.setOpacity(1.0);
+        else {
+          const opacity = helpers.number(ctx, "opacity", _opacity);
+          if (opacity < 0 || opacity > 1) {
+            helpers.log(ctx, () => `Invalid opacity: ${opacity}. Must be between 0.0 and 1.0`);
+            return;
+          }
+          runningScriptObj.tailProps?.setOpacity(opacity);
+        }
+      },
+
     setTailFontSize:
       (ctx) =>
       (_pixel, scriptID, host, ...scriptArgs) => {

@@ -29,6 +29,7 @@ interface UserInterface
 |  [resizeTail(width, height, pid)](./bitburner.userinterface.resizetail.md) | Resize a tail window. |
 |  [setStyles(newStyles)](./bitburner.userinterface.setstyles.md) | Sets the current styles |
 |  [setTailFontSize(pixel, fn, host, args)](./bitburner.userinterface.settailfontsize.md) | Set the font size of the tail window of a script. |
+|  [setTailOpacity(opacity, fn, host, args)](./bitburner.userinterface.settailopacity.md) | Set the opacity of the tail window of a script. Value must be between 0 and 1. |
 |  [setTailTitle(title, pid)](./bitburner.userinterface.settailtitle.md) | Set the title of the tail window of a script. |
 |  [setTheme(newTheme)](./bitburner.userinterface.settheme.md) | Sets the current theme |
 |  [windowSize()](./bitburner.userinterface.windowsize.md) | Get the current window size |

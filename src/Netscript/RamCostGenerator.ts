@@ -401,6 +401,7 @@ const ui = {
   resizeTail: 0,
   closeTail: 0,
   setTailTitle: 0,
+  setTailOpacity: 0,
   setTailFontSize: 0,
   getTheme: 0,
   setTheme: 0,

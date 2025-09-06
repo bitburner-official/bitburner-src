@@ -40,6 +40,7 @@ export class LogBoxProperties {
   width = 500;
   height = 500;
   fontSize: number | undefined = undefined;
+  opacity: number = 1.0;
 
   rerender: () => void;
   rootRef: React.RefObject<Draggable>;
@@ -76,6 +77,11 @@ export class LogBoxProperties {
 
   isVisible(): boolean {
     return this.rootRef.current !== null;
+  }
+
+  setOpacity(opacity: number): void {
+    this.opacity = opacity;
+    this.rerender();
   }
 }
 
@@ -341,6 +347,7 @@ function LogWindow({ hidden, script, onClose }: LogWindowProps): React.ReactElem
           flexFlow: "column",
           position: "fixed",
           zIndex: 1400,
+          opacity: propsRef.current.opacity,
           minWidth: `${minConstraints[0]}px`,
           minHeight: `${minConstraints[1]}px`,
           ...(minimized

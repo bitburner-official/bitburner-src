@@ -6048,6 +6048,26 @@ interface UserInterface {
   setTailTitle(title: string | ReactNode, pid?: number): void;
 
   /**
+   * Set the opacity of the tail window of a script. Value must be between 0 and 1.
+   *
+   * @remarks
+   * RAM cost: 0 GB
+   *
+   * This overwrites the tail opacity and forces an update of the tail window's contents.
+   *
+   * If ran without a filename or pid, this will affect the current script's tail window.
+   *
+   * Otherwise, the PID or filename, hostname/ip, and args… arguments can be used to target the tail window from another script.
+   * Remember that scripts are uniquely identified by both their names and arguments.
+   *
+   * @param opacity - Optional. The new opacity level. If omitted, the default tail opacity is used.
+   * @param fn - Optional. Filename or PID of the target script. If omitted, the current script is used.
+   * @param host - Optional. Hostname/IP of the target script. Defaults to the server this script is running on. If args are specified, this is not optional.
+   * @param args - Arguments for the target script.
+   */
+  setTailOpacity(opacity?: number, fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
+
+  /**
    * Set the font size of the tail window of a script.
    *
    * @remarks
