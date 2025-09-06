@@ -307,7 +307,7 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
       return true;
     },
     purchaseTixApi: (ctx) => () => {
-            if (Player.bitNodeOptions.disable4SData) {
+      if (Player.bitNodeOptions.disable4SData) {
         helpers.log(ctx, () => "TIX API access is disabled in advanced bitnode options.");
         return false;
       }

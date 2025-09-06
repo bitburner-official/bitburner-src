@@ -107,7 +107,7 @@ function PurchaseWseAccountButton(props: IProps): React.ReactElement {
 function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
   function purchaseTixApiAccess(): void {
     if (Player.bitNodeOptions.disable4SData) {
-      dialogBoxCreate("TIX API Access has been disabled through Advanced Bitnode options.")
+      dialogBoxCreate("TIX API Access has been disabled through Advanced Bitnode options.");
       return;
     }
     if (Player.hasTixApiAccess) {
@@ -141,7 +141,7 @@ function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
 function Purchase4SMarketDataButton(props: IProps): React.ReactElement {
   function purchase4SMarketData(): void {
     if (Player.bitNodeOptions.disable4SData) {
-      dialogBoxCreate("4S Market Data has been disabled through Advanced Bitnode options.")
+      dialogBoxCreate("4S Market Data has been disabled through Advanced Bitnode options.");
       return;
     }
     if (Player.has4SData) {
