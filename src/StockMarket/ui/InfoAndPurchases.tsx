@@ -27,10 +27,13 @@ interface IProps {
 
 function Purchase4SMarketDataTixApiAccessButton(props: IProps): React.ReactElement {
   function purchase4SMarketDataTixApiAccess(): void {
+    if (Player.has4SDataTixApi) {
+      return;
+    }
     if (Player.bitNodeOptions.disable4SData) {
       return;
     }
-    if (Player.has4SDataTixApi) {
+    if (!Player.hasTixApiAccess) {
       return;
     }
     if (!Player.canAfford(getStockMarket4STixApiCost())) {
@@ -118,6 +121,9 @@ function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
     if (Player.hasTixApiAccess) {
       return;
     }
+    if (!Player.hasWseAccount) {
+      return;
+    }
     if (!Player.canAfford(StockMarketConstants.TixApiCost)) {
       return;
     }
@@ -154,10 +160,13 @@ function PurchaseTixApiAccessButton(props: IProps): React.ReactElement {
 
 function Purchase4SMarketDataButton(props: IProps): React.ReactElement {
   function purchase4SMarketData(): void {
+    if (Player.has4SData) {
+      return;
+    }
     if (Player.bitNodeOptions.disable4SData) {
       return;
     }
-    if (Player.has4SData) {
+    if (!Player.hasWseAccount) {
       return;
     }
     if (!Player.canAfford(getStockMarket4SDataCost())) {
