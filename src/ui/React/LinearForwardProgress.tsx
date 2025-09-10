@@ -9,7 +9,7 @@ interface LinearForwardProgressProps {
 }
 
 // Round percentage to nearest 5% interval to limit keyframe definitions
-const roundToInterval = (value: number, interval = 5): number => {
+const roundToInterval = (value: number, interval = 10): number => {
   return Math.round(value / interval) * interval;
 };
 
