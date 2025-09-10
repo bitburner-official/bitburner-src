@@ -8,7 +8,7 @@ interface LinearForwardProgressProps {
   barColor?: React.CSSProperties["color"];
 }
 
-// Round percentage to nearest 5% interval to limit keyframe definitions
+// Round percentage to nearest interval to limit keyframe definitions
 const roundToInterval = (value: number, interval = 10): number => {
   return Math.round(value / interval) * interval;
 };
@@ -39,7 +39,7 @@ export const LinearForwardProgress = React.forwardRef<unknown, LinearForwardProg
     let animationStyles = {};
 
     if (isDecreasing) {
-      // Round values to 5% intervals to limit keyframe definitions
+      // Round values to limit keyframe definitions
       const roundedStartPercent = roundToInterval(previousValue);
       const roundedEndPercent = roundToInterval(value);
 
