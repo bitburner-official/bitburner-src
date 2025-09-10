@@ -8,10 +8,27 @@ interface LinearForwardProgressProps {
   barColor?: React.CSSProperties["color"];
 }
 
+// Round percentage to nearest 5% interval to limit keyframe definitions
+const roundToInterval = (value: number, interval = 5): number => {
+  return Math.round(value / interval) * interval;
+};
+
+// Generate predefined keyframes for forward animations
+const generateKeyframes = (startPercent: number, endPercent: number) => {
+  const startPos = startPercent - 100;
+  const endPos = endPercent - 100;
+
+  return {
+    "0%": { transform: `translateX(${startPos}%)` },
+    "50%": { transform: "translateX(0%)" },
+    "50.01%": { transform: "translateX(-100%)" },
+    "100%": { transform: `translateX(${endPos}%)` },
+  };
+};
+
 export const LinearForwardProgress = React.forwardRef<unknown, LinearForwardProgressProps>(
   function LinearForwardProgress({ value, backgroundColor, barColor, ...otherProps }, ref): React.ReactElement {
     const previousValueRef = useRef(value);
-    const animationKeyRef = useRef(0);
 
     const isDecreasing = value < previousValueRef.current;
     const previousValue = previousValueRef.current;
@@ -19,43 +36,24 @@ export const LinearForwardProgress = React.forwardRef<unknown, LinearForwardProg
     // Update ref for next render
     previousValueRef.current = value;
 
+    let animationStyles = {};
+
     if (isDecreasing) {
-      // Increment animation key to force new CSS animation
-      animationKeyRef.current += 1;
+      // Round values to 5% intervals to limit keyframe definitions
+      const roundedStartPercent = roundToInterval(previousValue);
+      const roundedEndPercent = roundToInterval(value);
 
-      // MUI LinearProgress uses translateX where:
-      // translateX(-100%) = 0% progress, translateX(0%) = 100% progress
-      const startPos = previousValue - 100;
-      const endPos = value - 100;
-      const animationName = `forwardAnim${animationKeyRef.current}`;
+      // Use rounded values for animation name to ensure reuse of keyframes
+      const animationName = `forwardAnim_${roundedStartPercent}_${roundedEndPercent}`;
 
-      // Calculate timing: proportional split between fill-to-100% and reset-to-final phases
-      const firstPhasePercent = ((100 - previousValue) / (100 - previousValue + value)).toFixed(2);
+      const keyframes = generateKeyframes(roundedStartPercent, roundedEndPercent);
 
-      return (
-        <LinearProgress
-          variant="determinate"
-          value={value}
-          ref={ref}
-          {...otherProps}
-          sx={{
-            backgroundColor,
-            "& .MuiLinearProgress-bar1Determinate": {
-              backgroundColor: barColor,
-              [`@keyframes ${animationName}`]: {
-                "0%": { transform: `translateX(${startPos}%)` },
-                [`${firstPhasePercent}%`]: { transform: "translateX(0%)" },
-                [`${firstPhasePercent + 0.01}%`]: { transform: "translateX(-100%)" },
-                "100%": { transform: `translateX(${endPos}%)` },
-              },
-              animation: `${animationName} 0.4s ease-out`,
-            },
-          }}
-        />
-      );
+      animationStyles = {
+        [`@keyframes ${animationName}`]: keyframes,
+        animation: `${animationName} 0.2s linear`,
+      };
     }
 
-    // Normal increasing progress - use default MUI transition
     return (
       <LinearProgress
         variant="determinate"
@@ -67,6 +65,7 @@ export const LinearForwardProgress = React.forwardRef<unknown, LinearForwardProg
           "& .MuiLinearProgress-bar1Determinate": {
             backgroundColor: barColor,
             transition: "transform 0.2s linear",
+            ...animationStyles,
           },
         }}
       />
