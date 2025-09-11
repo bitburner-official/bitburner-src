@@ -426,6 +426,7 @@ export function validateBoardState(
   error: (s: string) => never,
   _boardState?: unknown,
   _priorBoardState?: unknown,
+  playAsWhite = false,
 ): BoardState | undefined {
   const simpleBoard = getSimpleBoardFromUnknown(error, _boardState);
   const priorSimpleBoard = getSimpleBoardFromUnknown(error, _priorBoardState);
@@ -435,7 +436,12 @@ export function validateBoardState(
   }
 
   try {
-    return getNewBoardStateFromSimpleBoard(simpleBoard, priorSimpleBoard);
+    return getNewBoardStateFromSimpleBoard(
+      simpleBoard,
+      priorSimpleBoard,
+      undefined,
+      playAsWhite ? GoColor.black : GoColor.white,
+    );
   } catch (e) {
     error(boardValidity.failedToCreateBoard);
   }

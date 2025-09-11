@@ -1,0 +1,40 @@
+name: Build and upload artifacts
+
+on:
+  release:
+    types: [published]
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  build:
+    name: Build artifacts
+    uses: ./.github/workflows/build-artifacts.yml
+
+  upload:
+    name: Upload
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: .build
+          pattern: build-artifacts-*
+          merge-multiple: true
+      - name: List files
+        run: ls -la .build
+      - name: Upload to release
+        env:
+          GH_REF_NAME: ${{ github.ref_name }}
+        run: |
+          for i in .build/*.zip; do gh release upload "$GH_REF_NAME" "$i" --clobber; done;

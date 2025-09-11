@@ -34,6 +34,8 @@ import { breakingChanges300 } from "./APIBreaks/3.0.0";
 import { calculateOfficeSizeUpgradeCost, calculateUpgradeCost } from "../Corporation/helpers";
 import type { PositiveInteger } from "../types";
 import { officeInitialCost, officeInitialSize, warehouseInitialCost } from "../Corporation/data/Constants";
+import { load } from "../db";
+import { downloadContentAsFile } from "./FileUtils";
 
 /** Function for performing a series of defined replacements. See 0.58.0 for usage */
 function convert(code: string, changes: [RegExp, string][]): string {
@@ -64,7 +66,7 @@ function removeWhitespace(hostname: ServerName, file: ContentFile, files: Conten
 
 // Makes necessary changes to the loaded/imported data to ensure
 // the game stills works with new versions
-export function evaluateVersionCompatibility(ver: string | number): void {
+export async function evaluateVersionCompatibility(ver: string | number): Promise<void> {
   // We have to do this because ts won't let us otherwise
   const anyPlayer = Player as any;
   if (typeof ver === "string") {
@@ -550,6 +552,16 @@ Error: ${e}`,
     if (found) Terminal.error("Filenames with whitespace found and corrected, see console for details.");
   }
   if (ver < 44) {
+    try {
+      /**
+       * Backup pre-v3 save data. We must use the data in IndexedDB instead of calling saveObject.getSaveData().
+       * getSaveData() returns data in v3 format, so the exported data will not be importable in pre-v3.
+       */
+      const saveData = await load();
+      downloadContentAsFile(saveData, `bitburnerSave_backup_2.8.1_${Math.round(Player.lastUpdate / 1000)}.json.gz`);
+    } catch (error) {
+      console.error("Cannot export pre-v3 save data", error);
+    }
     if (Player.corporation) {
       // Remove and refund DreamSense
       for (const [name, upgrade] of Object.entries(Player.corporation.upgrades)) {
