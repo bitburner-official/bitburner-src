@@ -11,17 +11,23 @@ import { initStockMarket } from "../../StockMarket/StockMarket";
 import { cachePrefixes } from "../models/dictionaryData";
 import { FilePath, resolveFilePath } from "../../Paths/FilePath";
 import { getDarknetData } from "./effects";
+import type { Result } from "../../types";
 
 export const hasCacheFileExtension = (path: string) => {
   return path.endsWith(".cache");
 };
 
-export const addCacheToServer = (server: BaseServer, filename?: string) => {
+export const addCacheToServer: (server: BaseServer, filename?: string) => Result<{ cacheFilename: FilePath }> = (
+  server,
+  filename,
+) => {
   const prefix = filename ?? cachePrefixes[Math.floor(Math.random() * cachePrefixes.length)];
   const cacheFilename = resolveFilePath(`${prefix}_${Math.random().toString().substring(2, 5)}.cache` as FilePath);
-  if (cacheFilename) {
-    server.caches.push(cacheFilename);
+  if (!cacheFilename) {
+    return { success: false, message: `Cannot generate path. filename: ${filename}` };
   }
+  server.caches.push(cacheFilename);
+  return { success: true, cacheFilename };
 };
 
 export const getRewardFromCache = (server: BaseServer, suppressToast = false): string => {

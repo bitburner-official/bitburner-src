@@ -1,6 +1,5 @@
 import React from "react";
 
-import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Button from "@mui/material/Button";
@@ -17,6 +16,7 @@ import { getDarkscapeNavigator, handleSuccessfulAuth } from "../../DarkNet/effec
 import { getDarknetServers } from "../../DarkNet/controllers/NetworkMovement";
 import { isLabyrinthServer } from "../../DarkNet/effects/labyrinth";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
+import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
 
 export function DarknetDev(): React.ReactElement {
   const toggleShowFullNetwork = (newValue: boolean): void => {
@@ -25,7 +25,7 @@ export function DarknetDev(): React.ReactElement {
   };
 
   return (
-    <Accordion TransitionProps={{ unmountOnExit: true }}>
+    <AutoExpandAccordion cacheKey="DEVMENU_DarknetDev" unmountOnExit={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Darknet</Typography>
       </AccordionSummary>
@@ -109,6 +109,6 @@ export function DarknetDev(): React.ReactElement {
           </Button>
         </Tooltip>
       </AccordionDetails>
-    </Accordion>
+    </AutoExpandAccordion>
   );
 }

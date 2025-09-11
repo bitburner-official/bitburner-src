@@ -1,6 +1,12 @@
 import { connectServers, DeleteServer, disconnectServers, GetAllServers, GetServer } from "../../Server/AllServers";
-import { DarknetEvents, DarknetState, getServerState, storeDarknetCycles } from "../models/DarknetState";
-import { getDarknetServer } from "./ServerGenerator";
+import {
+  DarknetEvents,
+  DarknetState,
+  getServerState,
+  hasDarknetBonusTime,
+  storeDarknetCycles,
+} from "../models/DarknetState";
+import { createDarknetServer } from "./ServerGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { Server } from "../../Server/Server";
 import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
@@ -13,16 +19,43 @@ import { getDarknetData, isDarknetServer } from "../effects/effects";
 import { CONSTANTS } from "../../Constants";
 import { AIR_GAP_DEPTH, MS_PER_MUTATION_PER_ROW, NET_WIDTH, SERVER_DENSITY } from "../Enums";
 
+/**
+ * WIP-@fico: Fix 2 problems:
+ * - dnet bonus effect is applied in an interval.
+ * - storedCycles decreases too slow.
+ *
+ * I'll explain these problems in detail on Discord.
+ */
 export const processDarknet = (cycles: number) => {
   storeDarknetCycles(cycles);
 
   const depth = getNetDepth();
   const cycleRate = MS_PER_MUTATION_PER_ROW / CONSTANTS.MilliPerCycle;
   const cyclesPerUpdate = cycleRate / depth;
+  // WIP-@fico: I added this line for debugging. Please remove it after you fix the problems.
+  //@ts-expect-error
+  if (globalThis.log) {
+    console.log(
+      "processDarknet",
+      new Date().toISOString(),
+      DarknetState.storedCycles,
+      DarknetState.cyclesSinceLastMutation,
+      hasDarknetBonusTime(),
+      depth,
+      cycleRate,
+      cyclesPerUpdate,
+    );
+  }
+
   if (DarknetState.cyclesSinceLastMutation > cyclesPerUpdate) {
     DarknetState.storedCycles = Math.max(0, DarknetState.storedCycles - cyclesPerUpdate * 1.5);
     DarknetState.cyclesSinceLastMutation = 0;
     mutateDarknet();
+    // WIP-@fico: I added this line for debugging. Please remove it after you fix the problems.
+    //@ts-expect-error
+    if (globalThis.log) {
+      console.log("mutateDarknet");
+    }
   }
 };
 
@@ -111,6 +144,10 @@ export const mutateDarknet = () => {
   sanitizeDarkwebNetwork();
 };
 
+/**
+ * WIP-@fico: This kind of function should have "Darknet" in their name. For example, with "deleteServer" function, it
+ * does a lot of things instead of just deleting a server, and those actions are only relevant with darknet servers.
+ */
 export const restartAllServers = () => {
   const servers = getDarknetServers();
   for (const server of servers) {
@@ -153,7 +190,7 @@ export const deleteServer = (server: BaseServer, force = false) => {
 export const addRandomServers = (count = 1, difficulty?: number) => {
   for (let i = 0; i < count; i++) {
     const diff = difficulty ?? Math.floor(Math.random() * getNetDepth());
-    const newServer = getDarknetServer(diff, -1, -1);
+    const newServer = createDarknetServer(diff, -1, -1);
     const success = moveServer(newServer);
     if (!success) {
       deleteServer(newServer);
@@ -220,6 +257,7 @@ const getAllOpenPositions = (minDepth: number, maxDepth: number): [number, numbe
   return positions;
 };
 
+// WIP-@fico: This kind of function should be in src\Netscript\killWorkerScript.ts
 export const killScripts = (server: BaseServer) => {
   if (!server) {
     return;
@@ -232,6 +270,7 @@ export const killScripts = (server: BaseServer) => {
   }
 };
 
+// WIP-@fico: This kind of function should be in src\Netscript\killWorkerScript.ts
 export function killWorkerScriptWithMessage(pid: number, message: string): boolean {
   const ws = workerScripts.get(pid);
   if (ws) {
@@ -250,6 +289,7 @@ export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) 
     const connectedServer = GetServer(conn);
     const isOkToDisconnect = disconnectDarkweb || connectedServer?.hostname !== SpecialServers.DarkWeb;
     if (connectedServer && isOkToDisconnect) {
+      // WIP-@fico: Why do we need to typecast connectedServer?
       disconnectServers(server, connectedServer as Server);
     }
   });
@@ -311,6 +351,9 @@ export const getServersOnRowAbove = (x: number, close = false): DarknetServer[] 
   return rowAbove;
 };
 
+/**
+ * WIP-@fico: Why do we have to exclude labyrinth servers? This kind of behavior should be mentioned in TSDoc.
+ */
 export const getDarknetServers = (): DarknetServer[] => {
   return GetAllServers(true)
     .filter(isDarknetServer)
@@ -373,6 +416,15 @@ const isImmutable = (server?: BaseServer | null) =>
 
 const getIslands = () => getDarknetServers().filter((s) => !s.serversOnNetwork.length);
 
+/**
+ * WIP-@fico: Why is the return type not "DarknetServer | null"? We usually use null to denote "that entity does not
+ * exist". In labyrinth.ts, you also use "getDarknetServerSafely(labName) ?? null". I think we should use null here
+ * instead of undefined.
+ *
+ * By the way, both this TS file and effects.ts contain many utility functions. getDarknetServerSafely is here, but
+ * getDarknetData is in effects.ts. isDarknetServer is also in effects.ts. I also created GetDarknetServerOrThrow in
+ * AllServers.ts. It looks a bit promiscuous.
+ */
 export const getDarknetServerSafely = (hostnameOrIp: string): DarknetServer | undefined => {
   const server = GetServer(hostnameOrIp);
   if (!server || !isDarknetServer(server)) {

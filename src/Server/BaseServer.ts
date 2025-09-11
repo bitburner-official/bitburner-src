@@ -42,6 +42,7 @@ interface writeResult {
 
 /** Abstract Base Class for any Server object */
 export abstract class BaseServer implements IServer {
+  // WIP-@fico: After making darkweb become a real darknet server, move this property to src\Server\DarknetServer.ts
   // Random reward caches on this server
   caches: FilePath[] = [];
 

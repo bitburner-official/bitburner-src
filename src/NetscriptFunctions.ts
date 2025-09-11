@@ -897,6 +897,7 @@ export const ns: InternalAPI<NSFull> = {
     const isDarkweb = isDarknetServer(server);
     return {
       hostname: server.hostname,
+      // WIP-@fico: Why do you hide the ip of darknet servers?
       ip: isDarkweb ? "??.?.?.?" : server.ip,
       sshPortOpen: server.sshPortOpen,
       ftpPortOpen: server.ftpPortOpen,

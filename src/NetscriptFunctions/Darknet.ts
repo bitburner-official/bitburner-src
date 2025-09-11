@@ -40,6 +40,7 @@ import {
 import { DarknetServer } from "../Server/DarknetServer";
 import { exampleDarknetServer, ResponseStatus } from "../DarkNet/Enums";
 import { getRewardFromCache, hasCacheFileExtension } from "../DarkNet/effects/cacheFiles";
+import { CONSTANTS } from "../Constants";
 
 export type DarknetResult = { success: boolean; message: string };
 
@@ -225,7 +226,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           `Attempting to extract data from ${targetHostname}... (Est: ${formatNumber(networkDelay / 1000, 1)}s)`,
         );
 
-        if ((targetServer.requiredHackingSkill ?? 0) > Player.skills.charisma) {
+        if (Player.skills.charisma < targetServer.requiredCharismaSkill) {
           const result = `You need a higher charisma level to extract data from ${targetHostname}. (${targetServer.requiredHackingSkill} required)`;
           logger(ctx)(result);
           return helpers.netscriptDelay(ctx, 100).then(() => ({
@@ -338,6 +339,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const shouldLink = helpers.boolean(ctx, "shouldLink", _shouldLink);
         expectDarknetAccess(ctx);
         const server = ctx.workerScript.getServer();
+        // WIP-@fico: Why does this API not work with darkweb? Is that because of the weird isDarknetServer()?
         if (server.hostname === SpecialServers.DarkWeb) {
           helpers.log(ctx, () => `${server.hostname} cannot be stasis linked.`);
           return helpers.netscriptDelay(ctx, 100).then(() => ({
@@ -366,7 +368,8 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
           ctx,
           () => `Beginning stasis ${shouldLink ? "" : "removal "}procedure on ${server.hostname}... (Est: 30s)`,
         );
-        return helpers.netscriptDelay(ctx, 30000).then(() => {
+        // setStasisLink's delay is hardcoded at 30s. We should skip this delay in Jest tests.
+        return helpers.netscriptDelay(ctx, !CONSTANTS.isInTestEnvironment ? 30000 : 0).then(() => {
           const stasisLinkCount = getStasisLinkServers().length;
           const stasisLinkLimit = getStasisLinkLimit();
           if (shouldLink && stasisLinkCount >= stasisLinkLimit) {
@@ -379,15 +382,9 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
 
           server.hasStasisLink = shouldLink;
           server.backdoorInstalled = shouldLink;
-          helpers.log(
-            ctx,
-            () =>
-              `Stasis link applied to server ${server.hostname}. (${stasisLinkCount}/${stasisLinkLimit} links in use)`,
-          );
-          return {
-            success: true,
-            message: `Stasis link ${shouldLink ? "applied" : "removed"} to server ${server.hostname}.`,
-          };
+          const message = `Stasis link ${shouldLink ? "applied to" : "removed from"} server ${server.hostname}.`;
+          helpers.log(ctx, () => `${message}. (${stasisLinkCount}/${stasisLinkLimit} links in use)`);
+          return { success: true, message };
         });
       },
     getStasisLinkLimit: (ctx: NetscriptContext) => (): number => {
@@ -420,6 +417,10 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       if (!darknetData) {
         throw new Error(`Target server ${hostname} is not a darknet server.`);
       }
+      /**
+       * WIP-@fico: Why do you use the the nullish coalescing operator here? It looks like getDarknetData() already
+       * fakes all darknet data properties for darkweb.
+       */
       return {
         hostname: darknetData.hostname,
         isOnline: true,
@@ -531,7 +532,8 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const server = helpers.getServer(ctx, hostname);
         logger(ctx)(`Inducing server migration of ${server.hostname}... (Est: 6s)`);
 
-        return helpers.netscriptDelay(ctx, 6000).then(() => {
+        // induceServerMigration's delay is hardcoded at 6s. We should skip this delay in Jest tests.
+        return helpers.netscriptDelay(ctx, !CONSTANTS.isInTestEnvironment ? 6000 : 0).then(() => {
           const onlineConnectionCheck = getFailureResult(ctx, hostname, {
             requireDirectConnection: true,
             requireDarknet: true,
@@ -643,6 +645,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (_symbol): Promise<DarknetResult> => {
         const symbol = helpers.string(ctx, "symbol", _symbol);
         const stock = getStockFromSymbol(ctx, symbol);
+        // WIP: Discuss with d0sboots
         expectDarknetServer(ctx, ctx.workerScript.hostname);
         expectDarknetAccess(ctx);
 
@@ -669,6 +672,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       },
     phishingAttack: (ctx: NetscriptContext) => (): Promise<DarknetResult> => {
       const waitTime = getPhishingAttackSpeed();
+      // WIP: Discuss with d0sboots
       expectDarknetServer(ctx, ctx.workerScript.hostname);
       expectDarknetAccess(ctx);
 

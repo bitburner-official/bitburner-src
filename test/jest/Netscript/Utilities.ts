@@ -31,12 +31,12 @@ export function setupBasicTestingEnvironment(): void {
   initForeignServers(Player.getHomeComputer());
 }
 
-export function getNS(): NSFull {
-  const home = GetServerOrThrow(SpecialServers.Home);
-  home.maxRam = 1024;
+export function getNS(hostname: string = SpecialServers.Home): NSFull {
+  const server = GetServerOrThrow(hostname);
+  server.maxRam = 1024;
   const filePath = "test.js" as ScriptFilePath;
-  home.writeToScriptFile(filePath, "");
-  const script = home.scripts.get(filePath);
+  server.writeToScriptFile(filePath, "");
+  const script = server.scripts.get(filePath);
   if (!script) {
     throw new Error("Invalid script");
   }

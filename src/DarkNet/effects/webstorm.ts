@@ -1,7 +1,6 @@
 import { DarknetState } from "../models/DarknetState";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { ToastVariant } from "@enums";
-import { sleep } from "../../Go/boardAnalysis/goAI";
 import {
   addRandomServers,
   balanceServers,
@@ -13,7 +12,9 @@ import {
 import { BaseServer } from "../../Server/BaseServer";
 import { getNetDepth } from "./labyrinth";
 import { NET_WIDTH } from "../Enums";
+import { sleep } from "../../utils/Utility";
 
+// WIP-@fico: Rename this function (e.g., initWebStorm, initWebstorm)
 export const WEBSTORM = async (suppressToast = false) => {
   DarknetState.isMutating = false;
   if (!suppressToast) {
@@ -48,6 +49,7 @@ export const applyOfflineWebstorm = () => {
 };
 
 export const handleStormSeed = (server: BaseServer) => {
+  // WIP-@fico: Do you mean CompletedProgramName.stormSeed?
   server.programs = server.programs.filter((p) => p !== "webstorm");
   DarknetState.lastStormTime = new Date();
   void WEBSTORM();

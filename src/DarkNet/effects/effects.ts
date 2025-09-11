@@ -76,6 +76,10 @@ export const calculateAuthenticationTime = (
 ) => {
   if (!isDarknetServer(server)) return 0;
   const darknetData = getDarknetData(server);
+  /**
+   * WIP-@fico: Why do you not check if darknetData is null? getDarknetData returns non-null value for all darknet-like
+   * servers (i.e., "real" dnet servers and darkweb).
+   */
 
   const chaRequired = server.requiredCharismaSkill ?? 1;
   const difficulty = darknetData?.difficulty ?? 1;
@@ -291,13 +295,18 @@ export const applyRamBlocks = () => {
   }
 };
 
+/**
+ * WIP-@fico: After making darkweb become a real darknet server, all functions like this one should receive
+ * DarknetServer instead of BaseServer. After that, we can remove the (weird) "!isDarknetServer" check.
+ */
 export const chargeServerMigration = (server: BaseServer, threads = 1) => {
-  if (!isDarknetServer(server))
+  if (!isDarknetServer(server)) {
     return {
       chargeIncrease: 0,
       newCharge: 0,
       xpGained: 0,
     };
+  }
   const chargeIncrease = ((Player.skills.charisma + 50) / (server.difficulty * 4 + 100)) * 0.01 * threads;
   const xpGained = Player.mults.charisma_exp * 50 * ((200 + Player.skills.charisma) / 200) * threads;
   Player.gainCharismaExp(xpGained);
@@ -346,7 +355,21 @@ export const getDarknetData = (server: BaseServer | null): DarknetServerData | n
   return null;
 };
 
+export const getDarknetDataOrThrow = (server: BaseServer | null): DarknetServerData => {
+  const darknetData = getDarknetData(server);
+  if (!darknetData) {
+    throw new Error(
+      server != null ? `${server.hostname} does not have darknet data` : "null was passed to getDarknetDataOrThrow",
+    );
+  }
+  return darknetData;
+};
+
 export const getDarkscapeNavigator = () => {
+  /**
+   * WIP-@fico: IIUC, getting this exe (e.g., buying it in the new special location) also grants free TOR router. Is
+   * that right? It's okay. I just want to confirm.
+   */
   if (!Player.hasTorRouter()) {
     getTorRouter();
   }
@@ -354,5 +377,10 @@ export const getDarkscapeNavigator = () => {
   if (!existingPrograms.includes(CompletedProgramName.darkscape)) {
     Player.getHomeComputer().pushProgram(CompletedProgramName.darkscape);
   }
+  /**
+   * WIP-@fico: Calling populateDarknet in this function unconditionally means the player can intentionally trigger
+   * populateDarknet whenever they want (delete exe and buy it again). I'm not sure if this is exploitable right now,
+   * but we should keep this in mind.
+   */
   populateDarknet();
 };

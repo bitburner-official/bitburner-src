@@ -21,6 +21,7 @@ export function ServerStatusBox({ server, enableAuth, classes }: DWServerProps):
   const darknetData = getDarknetData(server);
   const color = darknetData?.hasStasisLink ? classes.goldBorder : server.hasAdminRights ? classes.green : classes.grey;
   const icon = getIcon(darknetData?.icon ?? Icon.Terminal);
+  // WIP-@fico: Same question about the ip (check my question in ns.getServer)
   const ip = server.hasAdminRights ? server.ip ?? "" : "??.?.?.?";
 
   const authButtonHandler = () => {

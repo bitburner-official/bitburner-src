@@ -67,6 +67,18 @@ export function GetServerOrThrow(serverId: string): BaseServer {
   return server;
 }
 
+export function GetDarknetServerOrThrow(serverId: string): DarknetServer {
+  const server = GetServer(serverId);
+  if (!server) {
+    throw new Error(`Server ${serverId} does not exist.`);
+  }
+  // WIP: check behavior after discussing darkweb
+  if (!isDarknetServer(server)) {
+    throw new Error(`Server ${serverId} is not a darknet server.`);
+  }
+  return server;
+}
+
 //Get server by IP or hostname. Returns null if invalid or unreachable.
 export function GetReachableServer(s: string): BaseServer | null {
   const server = GetServer(s);

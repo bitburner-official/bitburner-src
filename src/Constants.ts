@@ -6,6 +6,7 @@
 export const CONSTANTS = {
   VersionString: "3.0.0dev",
   isDevBranch: true,
+  isInTestEnvironment: globalThis.process?.env?.JEST_WORKER_ID !== undefined,
   VersionNumber: 44,
 
   /** Max level for any skill, assuming no multipliers. Determined by max numerical value in javascript for experience

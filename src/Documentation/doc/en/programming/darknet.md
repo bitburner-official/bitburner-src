@@ -35,7 +35,7 @@ Darknet servers, in an attempt to hide from official scrutiny, do not show up wh
 
 ### Gaining server access
 
-Darknet servers cannot simply be broken into with a few port openers you can buy off-of-the-shelf. Instead, you must find a way to crack the password of each one to run scripts on it and pass through it. Fortunately, each server's logs give some hints and feedback as you attempt to guess the password, and you will find that similar models of computer have similar vulnerabilities. If you aren't sure how to guess a server's auth codes, look around for notes on darknet servers you have already unlocked; they may have hints for how to solve some of the puzzles (and sometimes other helpful data files, too.)
+Darknet servers cannot simply be broken into with a few port openers you can buy off the shelf. Instead, you must find a way to crack the password of each one to run scripts on it and pass through it. Fortunately, each server's logs give some hints and feedback as you attempt to guess the password, and you will find that similar models of computer have similar vulnerabilities. If you aren't sure how to guess a server's auth codes, look around for notes on darknet servers you have already unlocked; they may have hints for how to solve some of the puzzles (and sometimes other helpful data files, too.)
 
 ### Cracking servers with `dnet.authenticate` and `dnet.heartbleed`
 

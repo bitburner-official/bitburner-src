@@ -11,7 +11,7 @@ import { PasswordPrompt } from "./PasswordPrompt";
 import { copyToClipboard, decolorJsonProperties, formatToMaxDigits } from "./uiUtilities";
 import { useRerender } from "../../ui/React/hooks";
 import { getDarknetData } from "../effects/effects";
-import { sleep } from "../../Go/boardAnalysis/goAI";
+import { sleep } from "../../utils/Utility";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -29,8 +29,6 @@ export const ServerDetailsModal = ({
   classes,
 }: DWPasswordPromptModalProps): React.ReactElement => {
   const rerender = useRerender();
-  const darknetData = getDarknetData(server);
-  const icon = getIcon(darknetData?.icon ?? Icon.Terminal);
   const focusTarget = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -40,6 +38,14 @@ export const ServerDetailsModal = ({
     };
   }, [rerender]);
 
+  /**
+   * WIP-@fico: This component and some other ones call getDarknetData and use ?/?? to safely access its properties. I
+   * think we should do it in a different way. darknetData should not be null even when the network is mutated, unless
+   * there are serious bugs in the callers. If darknetData is null, we should log a warning to the console (or call
+   * exceptionAlert) and return an empty component.
+   */
+  const darknetData = getDarknetData(server);
+  const icon = getIcon(darknetData?.icon ?? Icon.Terminal);
   populateServerLogsWithNoise(server);
   const serverState = getServerState(server.hostname);
   const isLabServer = isLabyrinthServer(server.hostname);
@@ -91,7 +97,7 @@ export const ServerDetailsModal = ({
                 ""
               )}
               <Typography color="secondary">
-                {server.ip} cha:{server.requiredHackingSkill}
+                {server.ip} cha:{darknetData?.requiredCharismaSkill}
               </Typography>
               <Tooltip
                 title={`Ram blocked by server owner: ${ramBlock} GB. Ram in use by scripts: ${

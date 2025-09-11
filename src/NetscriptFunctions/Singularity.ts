@@ -421,6 +421,15 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const programName = helpers.string(ctx, "programName", _programName).toLowerCase();
 
+      /**
+       * WIP-@fico: Currently, before purchasing a program, the player must buy the TOR router. This means that, in
+       * order to buy darkscape nav exe via this API, they have to buy the TOR router beforehand. This is inconsistent
+       * with the behavior of buying darkscape nav exe via UI. Please check my question in getDarkscapeNavigator.
+       *
+       * Another note is that buying darkscape nav exe via this API does NOT "bootstrap" the dnet because this function
+       * does not call populateDarknet. This means the player won't be able to access dnet even after buying the exe via
+       * this API.
+       */
       if (!Player.hasTorRouter()) {
         helpers.log(ctx, () => "You do not have the TOR router.");
         return false;

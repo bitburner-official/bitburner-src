@@ -34,6 +34,15 @@ import {
   VERTICAL_CONNECTION_CHANCE,
 } from "../Enums";
 
+/**
+ * WIP-@fico: After deleting nav exe and buy it again via UI, I see "Server already exists at this location" logged to
+ * the console. Because of that, I find out that this function is not "idempotent". If it's called when dnet is already
+ * "populated" (i.e., getDarknetServers().length > 0), it will call loadDarknet. I have not checked loadDarknet
+ * carefully, but at a quick glance, I think that function will misbehave if it's called more than once.
+ *
+ * Note that "Server already exists at this location" is logged by addServerToNetwork. I changed that function to log
+ * more information.
+ */
 export const populateDarknet = () => {
   const darkWebRoot = GetServer(SpecialServers.DarkWeb);
   if (darkWebRoot) {
@@ -132,15 +141,17 @@ export const addRandomConnections = (server: BaseServer) => {
 
 export const addServerToNetwork = (server: BaseServer, x: number, y: number) => {
   if (DarknetState.Network[x]?.[y] === undefined) {
-    console.error("Invalid coordinates");
+    console.error(`Invalid coordinate: ${x}-${y}`);
     return;
   }
   if (DarknetState.Network[x][y]?.hostname) {
-    console.error("Server already exists at this location");
+    console.error(
+      `Server already exists at this coordinate. Hostname: ${DarknetState.Network[x][y].hostname}. Coordinate: ${x}-${y}`,
+    );
     return;
   }
   if (!isDarknetServer(server)) {
-    console.error("Server missing dark web data");
+    console.error(`Server missing dark web data. Hostname: ${server.hostname}`);
     return;
   }
 

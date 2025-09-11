@@ -53,7 +53,7 @@ const getRandomServerConfigBuilder = (difficulty: number) => {
   return serverBuilders[Math.floor(Math.random() * serverBuilders.length)];
 };
 
-export const getDarknetServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
+export const createDarknetServer = (difficulty: number, depth: number, leftOffset: number): DarknetServer => {
   return serverFactory(getRandomServerConfigBuilder(difficulty), difficulty, depth, leftOffset);
 };
 
