@@ -15,6 +15,7 @@ import {
   calculateAscensionPointsGain,
 } from "./formulas/formulas";
 import { GangMemberExpGain } from "@nsdefs";
+import { convertV2GangEquipmentNames } from "../utils/APIBreaks/3.0.0";
 
 interface IMults {
   hack: number;
@@ -372,7 +373,11 @@ export class GangMember {
 
   /** Initializes a GangMember object from a JSON save state. */
   static fromJSON(value: IReviverValue): GangMember {
-    return Generic_fromJSON(GangMember, value.data);
+    const member = Generic_fromJSON(GangMember, value.data);
+    for (let i = 0; i < member.upgrades.length; ++i) {
+      member.upgrades[i] = convertV2GangEquipmentNames(member.upgrades[i]);
+    }
+    return member;
   }
 }
 

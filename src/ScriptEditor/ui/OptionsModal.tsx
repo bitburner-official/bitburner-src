@@ -142,6 +142,14 @@ export function OptionsModal(props: OptionsModalProps): ReactElement {
           ))}
         </Select>
       </div>
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Typography marginRight={"auto"}>Run Beautify on Save: </Typography>
+        <Switch
+          onChange={(e) => props.onOptionChange("beautifyOnSave", e.target.checked)}
+          checked={props.options.beautifyOnSave}
+        />
+      </div>
     </Modal>
   );
 }

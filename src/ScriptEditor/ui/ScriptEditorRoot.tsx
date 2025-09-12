@@ -176,15 +176,26 @@ function Root(props: IProps): React.ReactElement {
     reloadModelOfCurrentScript();
   }
 
-  const { showRAMError, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
+  const { options, showRAMError, updateRAM, startUpdatingRAM, finishUpdatingRAM } = useScriptEditorContext();
 
   let decorations: monaco.editor.IEditorDecorationsCollection | undefined;
 
-  const save = useCallback(() => {
+  const beautify = useCallback(async (): Promise<void> => {
+    const action = editorRef.current?.getAction("editor.action.formatDocument");
+    if (action == null) {
+      return;
+    }
+    return action.run().catch((error) => console.error(error));
+  }, []);
+
+  const save = useCallback(async () => {
     if (currentScript === null) {
       console.error("currentScript is null when it shouldn't be. Unable to save script");
       return;
     }
+
+    const preSave = options.beautifyOnSave ? beautify : () => Promise.resolve();
+
     // this is duplicate code with saving later.
     if (ITutorial.isRunning && ITutorial.currStep === iTutorialSteps.TerminalEditScript) {
       //Make sure filename + code properly follow tutorial
@@ -200,6 +211,7 @@ function Root(props: IProps): React.ReactElement {
       }
 
       //Save the script
+      await preSave();
       saveScript(currentScript);
       Router.toPage(Page.Terminal);
 
@@ -207,11 +219,12 @@ function Root(props: IProps): React.ReactElement {
 
       return;
     }
+    await preSave();
     saveScript(currentScript);
     rerender();
-  }, [rerender]);
+  }, [rerender, options.beautifyOnSave, beautify]);
 
-  const run = useCallback(() => {
+  const run = useCallback(async () => {
     if (currentScript === null) {
       return;
     }
@@ -227,7 +240,7 @@ function Root(props: IProps): React.ReactElement {
     }
 
     // Always save before doing anything else.
-    save();
+    await save();
 
     const result = createRunningScriptInstance(server, currentScript.path, null, 1, []);
     if (!result.success) {
@@ -238,7 +251,7 @@ function Root(props: IProps): React.ReactElement {
   }, [save]);
 
   useEffect(() => {
-    function keydown(event: KeyboardEvent): void {
+    async function keydown(event: KeyboardEvent) {
       if (Settings.DisableHotkeys) {
         return;
       }
@@ -246,7 +259,7 @@ function Root(props: IProps): React.ReactElement {
       if (keyBindingTypes.has(ScriptEditorAction.Save)) {
         event.preventDefault();
         event.stopPropagation();
-        save();
+        await save();
       }
       if (keyBindingTypes.has(ScriptEditorAction.GoToTerminal)) {
         event.preventDefault();
@@ -254,11 +267,14 @@ function Root(props: IProps): React.ReactElement {
       }
       if (keyBindingTypes.has(ScriptEditorAction.Run)) {
         event.preventDefault();
-        run();
+        await run();
       }
     }
-    document.addEventListener("keydown", keydown);
-    return () => document.removeEventListener("keydown", keydown);
+    const listener = (event: KeyboardEvent) => {
+      keydown(event).catch((error) => console.error(error));
+    };
+    document.addEventListener("keydown", listener);
+    return () => document.removeEventListener("keydown", listener);
   }, [save, run]);
 
   function infLoop(ast: AST, code: string): void {
@@ -598,7 +614,7 @@ function Root(props: IProps): React.ReactElement {
 
         {statusBarRef.current}
 
-        <Toolbar onSave={save} onRun={run} editor={editorRef.current} />
+        <Toolbar onSave={save} onRun={run} editor={editorRef.current} onBeautify={beautify} />
       </div>
       {!currentScript && <NoOpenScripts />}
     </>
