@@ -3,6 +3,11 @@
  */
 type _ValueOf<T> = T[keyof T];
 
+type SuccessResult<T extends object> = { success: true; message?: string } & T;
+type FailureResult = { success: false; message: string };
+/** @public */
+type Result<T extends object = object> = SuccessResult<T> | FailureResult;
+
 /** All netscript definitions */
 
 /**
@@ -5911,25 +5916,186 @@ interface InfiltrationLocation {
 
 /**
  * Infiltration API.
+ *
+ * Most of these methods require "API access", granted by BN 11 or SF 11, and
+ * will throw if that is not present.
  * @public
  */
 interface Infiltration {
   /**
    * Get all locations that can be infiltrated.
+   *
+   * Does not require API access.
    * @remarks
    * RAM cost: 0 GB
    *
    * @returns all locations that can be infiltrated.
    */
   getPossibleLocations(): ILocation[];
+
   /**
-   * Get all infiltrations with difficulty, location and rewards.
+   * Return infiltration information for the given location with difficulty, location and rewards.
+   *
+   * Does not require API access.
    * @remarks
    * RAM cost: 15 GB
    *
    * @returns Infiltration data for given location.
    */
   getInfiltration(location: LocationName): InfiltrationLocation;
+
+  /**
+   * Get the current market demand.
+   *
+   * Market demand is a global multiplier (shared across all locations) from 0
+   * to 1, which decreases if you do many infiltrations in a row quickly.
+   * Although the value used by the game is clamped to 0, the value returned
+   * here can be less than 0, so that you can estimate how long it will take
+   * to return to being positive.
+   *
+   * Requires API access.
+   * @remarks
+   * RAM cost: 5 GB
+   *
+   * @returns current market demand
+   */
+  getMarketDemand(): number;
+
+  /**
+   * Start an infiltration.
+   *
+   * This brings up the infiltration minigame, exactly as if you started it
+   * manually. The "intro screen" (which shows expected rewards) is skipped.
+   * You must be in the same city as the location you are attempting to
+   * infiltrate, and due to the UI-focused nature of infiltration it only
+   * works from a small set of screens. These include the Terminal, Script
+   * Editor, Active Scripts, City, Location, and Infiltration (Start) screens.
+   * For the latter two, the location must match the location you pass in.
+   *
+   * Requires BN11 or SF11.3
+   * @remarks
+   * RAM cost: 15 GB
+   *
+   * @returns success or failure
+   */
+  startInfiltration(location: LocationName): Result;
+
+  /**
+   * Get the state of the current infiltration.
+   *
+   * If not currently infiltrating, this will return null. Being in the
+   * infiltration UI in any way counts; the "intro screen" and "collect
+   * rewards" screens will have unique states.
+   *
+   * The return type is an object, which is intentionally not well-documented.
+   * The fields that are present in the object (and their values) will change
+   * drastically from minigame to minigame, and possibly from call to call!
+   * You are meant to experiment to discover the contents of this object, and
+   * how to use it to solve the various minigames.
+   *
+   * Here are the things that are guaranteed:
+   *
+   * - The returned object is fixed, i.e. it won't be modified after it is
+   *   returned. Call this function again if you want to see what is happening
+   *   at different times.
+   * - There will be a "stage" field which describes the current minigame, or
+   *   if infiltration is in some other state (intro, collect rewards,
+   *   in-between games, etc.)
+   * - In most cases there will be "floors" and "currentFloor" (1-indexed) to
+   *   indicate your overall progress through the game.
+   * - In most cases there will be "timer" to indicate the time remaining (in
+   *   miliseconds) for this stage.
+   *
+   * Requires API access.
+   * @remarks
+   * RAM cost: 5 GB
+   *
+   * @returns a state object, or null if not infiltrating
+   */
+  getState(): object | null;
+
+  /**
+   * Press a key.
+   *
+   * After a delay, this acts just like pressing a key on the keyboard. This
+   * only functions within infiltration minigames, everywhere else it will be
+   * ignored.
+   *
+   * Keys are generally the string value such as "x", "b", " ", etc.  There
+   * are also special keys such as "ArrowLeft", "ArrowRight", "ArrowUp", and
+   * "ArrowDown" (the arrow keys), which are pretty much the only special keys
+   * you will need. In general, unrecognized keys or keys not relevant to the
+   * current minigame will be ignored.
+   *
+   * The amount of delay depends on the difficulty of the infiltration; harder
+   * infils have more delay. There is also a small random noise that is part
+   * of the delay, which also increases as the difficulty increases.
+   * Difficulties < 1 (the "easy", green part of the bar) won't have a random
+   * component.
+   *
+   * This function should be awaited; like hack(), the script cannot
+   * do other NS calls concurrently until the promise resolves.
+   *
+   * Requires API access.
+   * @remarks
+   * RAM cost: 5 GB
+   */
+  pressKey(key: string): Promise<void>;
+
+  /**
+   * Press spacebar.
+   *
+   * This is like {@link Infiltration.pressKey | pressKey}, but it works
+   * synchronously. This is useful for timing-critical minigames, or just as a
+   * simple way to press space. You can still use `pressKey(" ")` if you want to.
+   *
+   * Requires API access.
+   * @remarks
+   * RAM cost: 5 GB
+   */
+  pressSpace(): void;
+
+  /**
+   * Finish infiltration and claim rewards.
+   *
+   * If passed null, this sells the infiltration rewards for money. Otherwise,
+   * it trades it for rep with the given faction. The faction must be valid
+   * (one the player has joined, and can work for normally).
+   *
+   * This only works from the "victory" screen, and does nothing otherwise.
+   * Like usual, the player will be left on the City page after.
+   *
+   * Requires BN11 or SF11.2
+   * @remarks
+   * RAM cost: 15 GB
+   *
+   * @returns The amount of money or rep gained, or 0 on error
+   */
+  claimRewards(faction: FactionName | null): number;
+
+  /**
+   * Returns a list of words used in a particular minigame.
+   *
+   * The list is not in any particular order.
+   *
+   * Requires API access.
+   * @remarks
+   * RAM cost: 0 GB
+   */
+  dictionary(): string[];
+
+  /**
+   * Returns a list of adjectives used in a particular minigame.
+   *
+   * The list is randomized each time. If you have the augmentation Beauty of
+   * Aphrodite, then the positive adjectives will appear at the front of the
+   * list and only the negative adjectives will be randomized.
+   *
+   * Requires API access.
+   * @remarks
+   * RAM cost: 0 GB
+   */
+  adjectives(): string[];
 }
 
 /**

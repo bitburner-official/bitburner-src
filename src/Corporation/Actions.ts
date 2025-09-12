@@ -1,5 +1,5 @@
 import { Player } from "@player";
-import { CorpResearchName, CorpSmartSupplyOption } from "@nsdefs";
+import type { CorpResearchName, CorpSmartSupplyOption, Result } from "@nsdefs";
 
 import { MaterialInfo } from "./MaterialInfo";
 import { Corporation } from "./Corporation";
@@ -25,7 +25,7 @@ import {
   canCreateCorporation,
   convertCreatingCorporationCheckResultToMessage,
 } from "./helpers";
-import { PositiveInteger, Result } from "../types";
+import type { PositiveInteger } from "../types";
 import { Factions } from "../Faction/Factions";
 import { throwIfReachable } from "../utils/helpers/throwIfReachable";
 import { formatMoney, formatNumber } from "../ui/formatNumber";

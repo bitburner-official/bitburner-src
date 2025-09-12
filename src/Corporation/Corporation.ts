@@ -1,6 +1,6 @@
 import type { PromisePair } from "../Types/Promises";
 import { Player } from "@player";
-import { CorpStateName, InvestmentOffer } from "@nsdefs";
+import type { CorpStateName, InvestmentOffer, Result } from "@nsdefs";
 import { CorpUnlockName, CorpUpgradeName, LiteratureName } from "@enums";
 import { CorporationState } from "./CorporationState";
 import { CorpUnlocks } from "./data/CorporationUnlocks";
@@ -17,7 +17,7 @@ import { dialogBoxCreate } from "../ui/React/DialogBox";
 import { constructorsForReviver, Generic_toJSON, Generic_fromJSON, IReviverValue } from "../utils/JSONReviver";
 import { JSONMap, JSONSet } from "../Types/Jsonable";
 import { formatMoney } from "../ui/formatNumber";
-import { isPositiveInteger, type Result } from "../types";
+import { isPositiveInteger } from "../types";
 import { createEnumKeyedRecord, getRecordValues } from "../Types/Record";
 import { getKeyList } from "../utils/helpers/getKeyList";
 import { assertObject } from "../utils/TypeAssertion";

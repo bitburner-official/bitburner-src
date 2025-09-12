@@ -11,6 +11,7 @@ import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
+import { stageState } from "../State";
 
 interface Difficulty {
   [key: string]: number;
@@ -41,7 +42,7 @@ export function MinesweeperGame(props: IMinigameProps): React.ReactElement {
   const [pos, setPos] = useState([0, 0]);
   const [memoryPhase, setMemoryPhase] = useState(true);
   const hasAugment = Player.hasAugmentation(AugmentationName.HuntOfArtemis, true);
-  function press(this: Document, event: KeyboardEvent): void {
+  function press(event: KeyboardEvent): void {
     event.preventDefault();
     if (memoryPhase) return;
     const move = [0, 0];
@@ -72,7 +73,15 @@ export function MinesweeperGame(props: IMinigameProps): React.ReactElement {
       }
       setAnswer((old) => {
         old[pos[1]][pos[0]] = true;
-        if (fieldEquals(minefield, old)) props.onSuccess();
+        if (fieldEquals(minefield, old)) {
+          /**
+           * Calling onSuccess() makes the parent component ("Game") rerender while this component is still rendering,
+           * so we need to put it in setTimeout().
+           */
+          setTimeout(() => {
+            props.onSuccess();
+          }, 0);
+        }
         return old;
       });
     }
@@ -80,27 +89,34 @@ export function MinesweeperGame(props: IMinigameProps): React.ReactElement {
 
   useEffect(() => {
     const id = setTimeout(() => setMemoryPhase(false), 2000);
-    return () => clearInterval(id);
+    return () => clearTimeout(id);
   }, []);
 
-  const flatGrid: { flagged?: boolean; current?: boolean; marked?: boolean }[] = [];
-
-  minefield.map((line, y) =>
-    line.map((cell, x) => {
-      if (memoryPhase) {
-        flatGrid.push({ flagged: Boolean(minefield[y][x]) });
-        return;
-      } else if (x === pos[0] && y === pos[1]) {
-        flatGrid.push({ current: true });
-      } else if (answer[y][x]) {
-        flatGrid.push({ marked: true });
-      } else if (hasAugment && minefield[y][x]) {
-        flatGrid.push({ flagged: true });
-      } else {
-        flatGrid.push({});
+  const makeMap = () => {
+    const flatGrid = [];
+    for (const [y, line] of minefield.entries()) {
+      for (const [x, cell] of line.entries()) {
+        if (memoryPhase) {
+          flatGrid.push({ flagged: Boolean(cell) });
+        } else if (x === pos[0] && y === pos[1]) {
+          flatGrid.push({ current: true });
+        } else if (answer[y][x]) {
+          flatGrid.push({ marked: true });
+        } else if (hasAugment && cell) {
+          flatGrid.push({ flagged: true });
+        } else {
+          flatGrid.push({});
+        }
       }
-    }),
-  );
+    }
+    return flatGrid;
+  };
+  const flatGrid = makeMap();
+
+  stageState.value = () => ({
+    stage: "minesweeper",
+    map: makeMap(),
+  });
 
   return (
     <>

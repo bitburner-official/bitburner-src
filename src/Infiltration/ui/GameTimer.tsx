@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { ProgressBar } from "../../ui/React/Progress";
+import { timerState } from "../State";
 
 type GameTimerProps = {
   millis: number;
@@ -40,6 +41,12 @@ export function GameTimer({
       clearInterval(intervalId);
     };
   }, [onExpire, tick, totalMillis]);
+
+  if (!noPaper) {
+    // This is a hack. SlashGame uses GameTimer twice, and the one we want
+    // to ignore sets noPaper.
+    timerState.value = { timer: v };
+  }
 
   // https://stackoverflow.com/questions/55593367/disable-material-uis-linearprogress-animation
   // TODO(hydroflame): there's like a bug where it triggers the end before the

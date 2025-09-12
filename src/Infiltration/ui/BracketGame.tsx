@@ -1,5 +1,5 @@
 import { Paper, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { AugmentationName } from "@enums";
 import { Player } from "@player";
 import { KEY } from "../../utils/KeyboardEventKey";
@@ -9,6 +9,7 @@ import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
 import { randomInRange } from "../../utils/helpers/randomInRange";
+import { stageState } from "../State";
 
 interface Difficulty {
   [key: string]: number;
@@ -43,6 +44,25 @@ function generateLeftSide(difficulty: Difficulty): string {
   return str;
 }
 
+// Make closing brackets more challenging by adding actual nested pairs of (),
+// [], {} and <> to the string. We will ensure that the nesting remains valid
+// (no instances of {[}],) as well as the proper closing sequence still
+// matching the original string.
+function generateApiBrackets(left: string, difficulty: number): string {
+  if (Player.hasAugmentation(AugmentationName.WisdomOfAthena, true)) {
+    difficulty = 0;
+  }
+  // There are many ways of randomly creating nesting brackets. This way gives
+  // greater liklihood to areas that already have brackets, similar to how a
+  // crystal grows.
+  const newPairs = difficulty < 1 ? 0 : (difficulty * 15) | 0;
+  for (let i = 0; i < newPairs; ++i) {
+    const pos = Math.floor(Math.random() * (left.length + 1));
+    left = left.slice(0, pos) + ["<>", "{}", "[]", "()"][Math.floor(Math.random() * 4)] + left.slice(pos);
+  }
+  return left;
+}
+
 function getChar(event: KeyboardEvent): string {
   if (event.key === KEY.CLOSE_PARENTHESIS) return KEY.CLOSE_PARENTHESIS;
   if (event.key === KEY.CLOSE_BRACKET) return KEY.CLOSE_BRACKET;
@@ -61,21 +81,35 @@ function match(left: string, right: string): boolean {
 }
 
 export function BracketGame(props: IMinigameProps): React.ReactElement {
-  const difficulty: Difficulty = { timer: 0, min: 0, max: 0 };
-  interpolate(difficulties, props.difficulty, difficulty);
-  const timer = difficulty.timer;
   const [right, setRight] = useState("");
-  const [left] = useState(generateLeftSide(difficulty));
 
-  function press(this: Document, event: KeyboardEvent): void {
+  const data = useMemo(() => {
+    const difficulty: Difficulty = { timer: 0, min: 0, max: 0 };
+    interpolate(difficulties, props.difficulty, difficulty);
+    const left = generateLeftSide(difficulty);
+    const apiBrackets = generateApiBrackets(left, props.difficulty);
+    return {
+      left,
+      apiBrackets,
+      timer: difficulty.timer,
+    };
+  }, [props]);
+
+  stageState.value = () => ({
+    stage: "brackets",
+    brackets: data.apiBrackets,
+    typed: right,
+  });
+
+  function press(event: KeyboardEvent): void {
     event.preventDefault();
     const char = getChar(event);
     if (!char) return;
-    if (!match(left[left.length - right.length - 1], char)) {
+    if (!match(data.left[data.left.length - right.length - 1], char)) {
       props.onFailure();
       return;
     }
-    if (left.length === right.length + 1) {
+    if (data.left.length === right.length + 1) {
       props.onSuccess();
       return;
     }
@@ -84,11 +118,11 @@ export function BracketGame(props: IMinigameProps): React.ReactElement {
 
   return (
     <>
-      <GameTimer millis={timer} onExpire={props.onFailure} />
+      <GameTimer millis={data.timer} onExpire={props.onFailure} />
       <Paper sx={{ display: "grid", justifyItems: "center" }}>
         <Typography variant="h4">Close the brackets</Typography>
         <Typography style={{ fontSize: "5em" }}>
-          {`${left}${right}`}
+          {`${data.left}${right}`}
           <BlinkingCursor />
         </Typography>
         <KeyHandler onKeyDown={press} onFailure={props.onFailure} />

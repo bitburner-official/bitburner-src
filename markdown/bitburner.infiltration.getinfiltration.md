@@ -6,6 +6,8 @@
 
 Get all infiltrations with difficulty, location and rewards.
 
+Does not require API access.
+
 **Signature:**
 
 ```typescript

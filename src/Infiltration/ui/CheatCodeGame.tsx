@@ -8,6 +8,7 @@ import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
 import { randomInRange } from "../../utils/helpers/randomInRange";
+import { stageState } from "../State";
 
 interface Difficulty {
   [key: string]: number;
@@ -36,7 +37,15 @@ export function CheatCodeGame(props: IMinigameProps): React.ReactElement {
   const [index, setIndex] = useState(0);
   const hasAugment = Player.hasAugmentation(AugmentationName.TrickeryOfHermes, true);
 
-  function press(this: Document, event: KeyboardEvent): void {
+  stageState.value = () => {
+    const revealed = hasAugment ? code.length : index + 1;
+    return {
+      stage: "arrows",
+      arrows: code.join("").slice(0, revealed) + "?".repeat(code.length - revealed),
+    };
+  };
+
+  function press(event: KeyboardEvent): void {
     event.preventDefault();
     if (code[index] !== getArrow(event)) {
       props.onFailure();

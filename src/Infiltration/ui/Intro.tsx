@@ -14,6 +14,7 @@ import { Factions } from "../../Faction/Factions";
 import { FactionName } from "../../Faction/Enums";
 import { calculateMarketDemandMultiplier, calculateReward, MaxDifficultyForInfiltration } from "../formulas/game";
 import { useRerender } from "../../ui/React/hooks";
+import { stageState } from "../State";
 
 interface IProps {
   location: Location;
@@ -99,6 +100,8 @@ export function Intro({
       </Typography>
     );
   }
+
+  stageState.value = () => ({ stage: "intro" });
 
   return (
     <Container sx={{ alignItems: "center" }}>

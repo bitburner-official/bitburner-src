@@ -77,10 +77,6 @@ export const RamCostConstants = {
   StanekDeleteAt: 0.15,
   StanekAcceptGift: 2,
 
-  InfiltrationCalculateDifficulty: 2.5,
-  InfiltrationCalculateRewards: 2.5,
-  InfiltrationGetInfiltrations: 15,
-
   CycleTiming: 1,
 } as const;
 
@@ -341,7 +337,15 @@ const bladeburner = {
 
 const infiltration = {
   getPossibleLocations: 0,
-  getInfiltration: RamCostConstants.InfiltrationGetInfiltrations,
+  getInfiltration: 15,
+  getMarketDemand: 5,
+  startInfiltration: 15,
+  getState: 5,
+  pressKey: 5,
+  pressSpace: 5,
+  claimRewards: 15,
+  dictionary: 0,
+  adjectives: 0,
 } as const;
 
 // Coding Contract API

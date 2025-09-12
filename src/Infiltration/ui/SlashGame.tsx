@@ -7,6 +7,7 @@ import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
+import { stageState } from "../State";
 
 interface Difficulty {
   [key: string]: number;
@@ -75,7 +76,18 @@ export function SlashGame({ difficulty, onSuccess, onFailure }: IMinigameProps):
     }
   }, [phase, data, startPhase1]);
 
-  function press(this: Document, event: KeyboardEvent): void {
+  stageState.value = () => {
+    const noise = data.hasAugment || difficulty < 1 ? 0 : difficulty * 700;
+    const roll = () => (Math.random() - 0.5) * noise;
+    return {
+      stage: "slash",
+      approxGuardingTime: data.guardingTime + roll(),
+      approxDistractedTime: data.distractedTime + roll(),
+      approxAlertedTime: data.alertedTime + roll(),
+    };
+  };
+
+  function press(event: KeyboardEvent): void {
     event.preventDefault();
     if (event.key !== KEY.SPACE) return;
     if (phase !== 1) {

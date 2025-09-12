@@ -9,6 +9,7 @@ import { interpolate } from "./Difficulty";
 import { GameTimer } from "./GameTimer";
 import { IMinigameProps } from "./IMinigameProps";
 import { KeyHandler } from "./KeyHandler";
+import { stageState } from "../State";
 
 interface Difficulty {
   [key: string]: number;
@@ -45,8 +46,22 @@ export function Cyberpunk2077Game(props: IMinigameProps): React.ReactElement {
   const [currentAnswerIndex, setCurrentAnswerIndex] = useState(0);
   const [pos, setPos] = useState([0, 0]);
 
+  stageState.value = () => {
+    const result: { [x: string]: number[] } = {};
+    for (let i = currentAnswerIndex; i < answers.length; ++i) {
+      const arr = (result[answers[i]] ??= []);
+      arr.push(i);
+    }
+    Object.assign(result, {
+      stage: "hexGrid",
+      map: grid.map((line) => [...line]),
+      pos: [...pos],
+    });
+    return result;
+  };
+
   const hasAugment = Player.hasAugmentation(AugmentationName.FloodOfPoseidon, true);
-  function press(this: Document, event: KeyboardEvent): void {
+  function press(event: KeyboardEvent): void {
     event.preventDefault();
     const move = [0, 0];
     const arrow = getArrow(event);

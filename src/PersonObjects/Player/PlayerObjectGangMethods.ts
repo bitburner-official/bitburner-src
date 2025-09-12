@@ -7,7 +7,7 @@ import { Gang } from "../../Gang/Gang";
 import { GangConstants } from "../../Gang/data/Constants";
 import { isFactionWork } from "../../Work/FactionWork";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
-import { Result } from "../../types";
+import type { Result } from "@nsdefs";
 
 export function canAccessGang(this: PlayerObject): Result {
   if (this.bitNodeOptions.disableGang) {

@@ -19,6 +19,7 @@ import {
 import { getEnumHelper } from "../../utils/EnumHelper";
 import { isFactionWork } from "../../Work/FactionWork";
 import { decreaseMarketDemandMultiplier } from "../formulas/game";
+import { victoryState, stageState, timerState } from "../State";
 
 interface IProps {
   startingSecurityLevel: number;
@@ -75,13 +76,17 @@ export function Victory(props: IProps): React.ReactElement {
     quitInfiltration();
   }
 
-  function trade(): void {
+  function tradeToFaction(factionName: string): void {
     if (!getEnumHelper("FactionName").isMember(factionName)) {
       return;
     }
     Factions[factionName].playerReputation += repGain;
     defaultFactionChoice = factionName;
     quitInfiltration();
+  }
+
+  function trade(): void {
+    tradeToFaction(factionName);
   }
 
   function changeDropdown(event: SelectChangeEvent): void {
@@ -94,6 +99,15 @@ export function Victory(props: IProps): React.ReactElement {
       soa.playerReputation += infiltrationRepGain;
     }
   }
+
+  victoryState.value = { sell, tradeToFaction };
+  stageState.value = () => ({
+    stage: "victory",
+    possibleMoneyGain: moneyGain,
+    possibleRepGain: repGain,
+    SoARepGain: infiltrationRepGain,
+  });
+  timerState.value = null;
 
   return (
     <Paper sx={{ p: 1, textAlign: "center", display: "flex", alignItems: "center", flexDirection: "column" }}>

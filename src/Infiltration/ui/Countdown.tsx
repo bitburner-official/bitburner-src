@@ -1,5 +1,6 @@
 import { Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { stageState, timerState } from "../State";
 
 interface IProps {
   onFinish: () => void;
@@ -22,6 +23,9 @@ export function Countdown({ onFinish }: IProps): React.ReactElement {
       clearInterval(id);
     };
   }, []);
+
+  stageState.value = () => ({ stage: "countdown", countdown: x });
+  timerState.value = null;
 
   return (
     <Paper sx={{ p: 1, textAlign: "center" }}>
