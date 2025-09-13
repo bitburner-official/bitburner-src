@@ -38,20 +38,19 @@ export const ServerDetailsModal = ({
     };
   }, [rerender]);
 
-  /**
-   * WIP-@fico: This component and some other ones call getDarknetData and use ?/?? to safely access its properties. I
-   * think we should do it in a different way. darknetData should not be null even when the network is mutated, unless
-   * there are serious bugs in the callers. If darknetData is null, we should log a warning to the console (or call
-   * exceptionAlert) and return an empty component.
-   */
   const darknetData = getDarknetData(server);
-  const icon = getIcon(darknetData?.icon ?? Icon.Terminal);
+  if (!darknetData) {
+    console.warn(`ServerDetailsModal: server ${server.hostname} missing darknet data`);
+    return <></>;
+  }
+
+  const icon = getIcon(darknetData.icon ?? Icon.Terminal);
   populateServerLogsWithNoise(server);
   const serverState = getServerState(server.hostname);
   const isLabServer = isLabyrinthServer(server.hostname);
   const canEnterLabManually = getLabyrinthDetails().manual;
-  const recentLogs = serverState.serverLogs?.slice(0, 5) ?? [];
-  const ramBlock = darknetData?.ramBlock ?? 0;
+  const recentLogs = serverState.serverLogs.slice(0, 5);
+  const ramBlock = darknetData.ramBlock;
   const blockedRamString = ramBlock ? formatToMaxDigits(ramBlock, 1) + "+" : "";
   const usedRamString = formatToMaxDigits(server.ramUsed - ramBlock, 1);
   const serverRamString = `ram in use: ${blockedRamString}${usedRamString}/${server.maxRam} GB`;

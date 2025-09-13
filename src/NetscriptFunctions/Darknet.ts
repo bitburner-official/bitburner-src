@@ -31,7 +31,6 @@ import {
   error,
   expectDarknetAccess,
   expectDarknetServer,
-  expectPassword,
   getFailureResult,
   getTimeoutChance,
   isDirectConnected,
@@ -99,7 +98,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (ctx: NetscriptContext) =>
       (_hostname, _password, _additionalMsec): Promise<DarknetResult> => {
         const targetHostname = helpers.string(ctx, "hostname", _hostname);
-        const password = expectPassword(ctx, targetHostname, _password);
+        const password = helpers.string(ctx, "password", _password);
         const additionalMsec = helpers.number(ctx, "additionalMsec", _additionalMsec ?? 0);
         if (additionalMsec < 0) {
           return error(ctx)(`Invalid arguments: "additionalMsec" is not a positive integer`);
@@ -417,10 +416,6 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       if (!darknetData) {
         throw new Error(`Target server ${hostname} is not a darknet server.`);
       }
-      /**
-       * WIP-@fico: Why do you use the the nullish coalescing operator here? It looks like getDarknetData() already
-       * fakes all darknet data properties for darkweb.
-       */
       return {
         hostname: darknetData.hostname,
         isOnline: true,
@@ -430,18 +425,18 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         ramUsed: darknetData.ramUsed,
         maxRam: darknetData.maxRam,
         ownerAllocatedRam: darknetData.ramBlock,
-        backdoorInstalled: darknetData.backdoorInstalled ?? false,
-        depth: darknetData.depth ?? -1,
-        modelId: darknetData.modelId ?? "",
+        backdoorInstalled: darknetData.backdoorInstalled,
+        depth: darknetData.depth,
+        modelId: darknetData.modelId,
         organizationName: darknetData.organizationName,
         purchasedByPlayer: darknetData.purchasedByPlayer,
-        hasStasisLink: darknetData.hasStasisLink ?? false,
-        ramBlock: darknetData.ramBlock ?? 0,
-        staticPasswordHint: darknetData.staticPasswordHint ?? "",
-        passwordHintData: darknetData.passwordHintData ?? "",
-        difficulty: darknetData.difficulty ?? 0,
-        requiredCharismaSkill: darknetData.requiredCharismaSkill ?? 0,
-        logTrafficInterval: darknetData.logTrafficInterval ?? 0,
+        hasStasisLink: darknetData.hasStasisLink,
+        ramBlock: darknetData.ramBlock,
+        staticPasswordHint: darknetData.staticPasswordHint,
+        passwordHintData: darknetData.passwordHintData,
+        difficulty: darknetData.difficulty,
+        requiredCharismaSkill: darknetData.requiredCharismaSkill,
+        logTrafficInterval: darknetData.logTrafficInterval,
       };
     },
     getServerAuthDetails: (ctx) => (_hostname) => {

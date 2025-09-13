@@ -53,6 +53,7 @@ import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { cat } from "../Terminal/commands/cat";
 import { Crimes } from "../Crime/Crimes";
 import { DarknetServer } from "../Server/DarknetServer";
+import { populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -421,15 +422,6 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       helpers.checkSingularityAccess(ctx);
       const programName = helpers.string(ctx, "programName", _programName).toLowerCase();
 
-      /**
-       * WIP-@fico: Currently, before purchasing a program, the player must buy the TOR router. This means that, in
-       * order to buy darkscape nav exe via this API, they have to buy the TOR router beforehand. This is inconsistent
-       * with the behavior of buying darkscape nav exe via UI. Please check my question in getDarkscapeNavigator.
-       *
-       * Another note is that buying darkscape nav exe via this API does NOT "bootstrap" the dnet because this function
-       * does not call populateDarknet. This means the player won't be able to access dnet even after buying the exe via
-       * this API.
-       */
       if (!Player.hasTorRouter()) {
         helpers.log(ctx, () => "You do not have the TOR router.");
         return false;
@@ -463,6 +455,11 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
         () => `You have purchased the '${item.program}' program. The new program can be found on your home computer.`,
       );
       Player.gainIntelligenceExp(CONSTANTS.IntelligenceSingFnBaseExpGain / 5000);
+
+      if (programName === CompletedProgramName.darkscape) {
+        populateDarknet();
+      }
+
       return true;
     },
     getCurrentServer: (ctx) => (_returnOpts) => {

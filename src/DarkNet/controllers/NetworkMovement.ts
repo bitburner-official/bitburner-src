@@ -8,10 +8,8 @@ import {
 } from "../models/DarknetState";
 import { createDarknetServer } from "./ServerGenerator";
 import { BaseServer } from "../../Server/BaseServer";
-import { Server } from "../../Server/Server";
 import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
-import { stopAndCleanUpWorkerScript } from "../../Netscript/killWorkerScript";
-import { workerScripts } from "../../Netscript/WorkerScripts";
+import { killScripts } from "../../Netscript/killWorkerScript";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
@@ -63,7 +61,7 @@ export const mutateDarknet = () => {
   if (!DarknetState.isMutating) {
     return;
   }
-  const servers = getDarknetServers();
+  const servers = getAllMobileDarknetServers();
   if (servers.length === 0) {
     return;
   }
@@ -78,19 +76,19 @@ export const mutateDarknet = () => {
   if (Math.random() < 0.3) {
     const islands = getIslands();
     const island = islands[Math.floor(Math.random() * islands.length)];
-    island && moveServer(island);
+    island && moveDarknetServer(island);
   }
 
   if (Math.random() < 0.1) {
     // remove some servers
-    deleteRandomServers(Math.random() * 3 + 1);
+    deleteRandomDarknetServers(Math.random() * 3 + 1);
   }
 
   if (Math.random() < 0.1) {
     // Add some servers
     const serversToAdd = Math.random() * 3 + 1;
     for (let i = 0; i < serversToAdd; i++) {
-      addRandomServers();
+      addRandomDarknetServers();
     }
     return;
   }
@@ -108,7 +106,7 @@ export const mutateDarknet = () => {
     const backdooredServers = getBackdooredDarkwebServers();
     const server = backdooredServers[Math.floor(Math.random() * backdooredServers.length)];
     if (server) {
-      deleteServer(server);
+      deleteDarknetServer(server);
       return;
     }
   }
@@ -120,7 +118,7 @@ export const mutateDarknet = () => {
   }
 
   if (Math.random() < 0.5) {
-    moveRandomServers(3);
+    moveRandomDarknetServers(3);
   }
 
   if (Math.random() < 0.5) {
@@ -139,40 +137,36 @@ export const mutateDarknet = () => {
 
   if (Math.random() < 0.1) {
     // balance network to stay at a certain density
-    balanceServers();
+    balanceDarknetServers();
   }
   sanitizeDarkwebNetwork();
 };
 
-/**
- * WIP-@fico: This kind of function should have "Darknet" in their name. For example, with "deleteServer" function, it
- * does a lot of things instead of just deleting a server, and those actions are only relevant with darknet servers.
- */
-export const restartAllServers = () => {
-  const servers = getDarknetServers();
+export const restartAllDarknetServers = () => {
+  const servers = getAllMobileDarknetServers();
   for (const server of servers) {
     restartServer(server);
   }
 };
 
-export const moveRandomServers = (count = 1) => {
-  const servers = getDarknetServers();
+export const moveRandomDarknetServers = (count = 1) => {
+  const servers = getAllMobileDarknetServers();
   for (let i = 0; i < count; i++) {
     const server = servers[Math.floor(Math.random() * servers.length)];
-    moveServer(server);
+    moveDarknetServer(server);
   }
 };
 
-export const deleteRandomServers = (count = 1) => {
+export const deleteRandomDarknetServers = (count = 1) => {
   for (let i = 0; i < count; i++) {
-    const servers = getDarknetServers().filter((server) => !isLabyrinthServer(server.hostname));
+    const servers = getAllMobileDarknetServers().filter((server) => !isLabyrinthServer(server.hostname));
     const serverToDelete = servers[Math.floor(Math.random() * servers.length)];
-    deleteServer(serverToDelete);
+    deleteDarknetServer(serverToDelete);
   }
   sanitizeDarkwebNetwork();
 };
 
-export const deleteServer = (server: BaseServer, force = false) => {
+export const deleteDarknetServer = (server: BaseServer, force = false) => {
   if (!server || (isImmutable(server) && !force)) {
     return false;
   }
@@ -187,13 +181,13 @@ export const deleteServer = (server: BaseServer, force = false) => {
   DeleteServer(server.hostname);
 };
 
-export const addRandomServers = (count = 1, difficulty?: number) => {
+export const addRandomDarknetServers = (count = 1, difficulty?: number) => {
   for (let i = 0; i < count; i++) {
     const diff = difficulty ?? Math.floor(Math.random() * getNetDepth());
     const newServer = createDarknetServer(diff, -1, -1);
-    const success = moveServer(newServer);
+    const success = moveDarknetServer(newServer);
     if (!success) {
-      deleteServer(newServer);
+      deleteDarknetServer(newServer);
     }
     if (DarknetState.offlineServers.includes(newServer.hostname)) {
       DarknetState.offlineServers = DarknetState.offlineServers.filter((s) => s !== newServer.hostname);
@@ -202,17 +196,17 @@ export const addRandomServers = (count = 1, difficulty?: number) => {
   sanitizeDarkwebNetwork();
 };
 
-export const balanceServers = () => {
-  if (getDarknetServers().length > getNetDepth() * NET_WIDTH * SERVER_DENSITY) {
-    const serversToRemove = getDarknetServers().length - getNetDepth() * NET_WIDTH * SERVER_DENSITY;
-    deleteRandomServers(serversToRemove);
+export const balanceDarknetServers = () => {
+  if (getAllMobileDarknetServers().length > getNetDepth() * NET_WIDTH * SERVER_DENSITY) {
+    const serversToRemove = getAllMobileDarknetServers().length - getNetDepth() * NET_WIDTH * SERVER_DENSITY;
+    deleteRandomDarknetServers(serversToRemove);
   } else {
-    const serversToAdd = getNetDepth() * NET_WIDTH * SERVER_DENSITY - getDarknetServers().length;
-    addRandomServers(serversToAdd);
+    const serversToAdd = getNetDepth() * NET_WIDTH * SERVER_DENSITY - getAllMobileDarknetServers().length;
+    addRandomDarknetServers(serversToAdd);
   }
 };
 
-export const moveServer = (server: BaseServer, maxDepthDecrease = 3, maxDepthIncrease = 3) => {
+export const moveDarknetServer = (server: BaseServer, maxDepthDecrease = 3, maxDepthIncrease = 3) => {
   const darknetData = getDarknetData(server);
   if (!server || !darknetData || isImmutable(server)) {
     // Do not try to move the server that is open in the UI or the terminal
@@ -257,30 +251,6 @@ const getAllOpenPositions = (minDepth: number, maxDepth: number): [number, numbe
   return positions;
 };
 
-// WIP-@fico: This kind of function should be in src\Netscript\killWorkerScript.ts
-export const killScripts = (server: BaseServer) => {
-  if (!server) {
-    return;
-  }
-  const scripts = server.runningScriptMap.values();
-  for (const byPid of scripts) {
-    for (const runningScript of byPid.values()) {
-      killWorkerScriptWithMessage(runningScript.pid, "Server shut down.");
-    }
-  }
-};
-
-// WIP-@fico: This kind of function should be in src\Netscript\killWorkerScript.ts
-export function killWorkerScriptWithMessage(pid: number, message: string): boolean {
-  const ws = workerScripts.get(pid);
-  if (ws) {
-    ws.log("", () => message ?? "Script killed.");
-    stopAndCleanUpWorkerScript(ws);
-    return true;
-  }
-  return false;
-}
-
 export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) => {
   if (isImmutable(server)) {
     return false;
@@ -289,8 +259,7 @@ export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) 
     const connectedServer = GetServer(conn);
     const isOkToDisconnect = disconnectDarkweb || connectedServer?.hostname !== SpecialServers.DarkWeb;
     if (connectedServer && isOkToDisconnect) {
-      // WIP-@fico: Why do we need to typecast connectedServer?
-      disconnectServers(server, connectedServer as Server);
+      disconnectServers(server, connectedServer);
     }
   });
 };
@@ -352,12 +321,11 @@ export const getServersOnRowAbove = (x: number, close = false): DarknetServer[] 
 };
 
 /**
- * WIP-@fico: Why do we have to exclude labyrinth servers? This kind of behavior should be mentioned in TSDoc.
  */
-export const getDarknetServers = (): DarknetServer[] => {
+export const getAllMobileDarknetServers = (): DarknetServer[] => {
   return GetAllServers(true)
     .filter(isDarknetServer)
-    .filter((s) => !isLabyrinthServer(s.hostname));
+    .filter((s) => s.isMobile);
 };
 
 export const getAllAdjacentNeighbors = (x: number, y: number): BaseServer[] => {
@@ -372,13 +340,13 @@ export const sanitizeDarkwebNetwork = () => {
   if (!darkweb) {
     return;
   }
-  const servers = [...getDarknetServers(), darkweb];
+  const servers = [...getAllMobileDarknetServers(), darkweb];
   for (const server of servers) {
     const darknetData = getDarknetData(server);
     if (!GetServer(server.hostname) && DarknetState.Network[darknetData?.depth ?? -1]) {
       DarknetState.Network[darknetData?.depth ?? 0][darknetData?.leftOffset ?? 0] = null;
       disconnectServer(server, true);
-      deleteServer(server);
+      deleteDarknetServer(server);
       continue;
     }
 
@@ -401,7 +369,7 @@ export const sanitizeDarkwebNetwork = () => {
 };
 
 export const getBackdooredDarkwebServers = (): BaseServer[] =>
-  getDarknetServers().filter((s) => !s.hasStasisLink && s.backdoorInstalled);
+  getAllMobileDarknetServers().filter((s) => !s.hasStasisLink && s.backdoorInstalled);
 
 const isOnAirGap = (x: number): boolean => !!x && !(x % AIR_GAP_DEPTH);
 
@@ -414,7 +382,7 @@ const isImmutable = (server?: BaseServer | null) =>
   server.isConnectedTo ||
   server.hasStasisLink;
 
-const getIslands = () => getDarknetServers().filter((s) => !s.serversOnNetwork.length);
+const getIslands = () => getAllMobileDarknetServers().filter((s) => !s.serversOnNetwork.length);
 
 /**
  * WIP-@fico: Why is the return type not "DarknetServer | null"? We usually use null to denote "that entity does not

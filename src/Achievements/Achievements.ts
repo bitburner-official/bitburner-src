@@ -36,7 +36,7 @@ import { Settings } from "../Settings/Settings";
 import { activateSteamAchievements } from "../Electron";
 import { Go } from "../Go/Go";
 import { type AchievementId, type SFAchievementId, SFAchievementIds } from "./Types";
-import { getDarknetServers } from "../DarkNet/controllers/NetworkMovement";
+import { getAllMobileDarknetServers } from "../DarkNet/controllers/NetworkMovement";
 
 function assertAchievements(
   achievements: typeof data.achievements,
@@ -587,7 +587,7 @@ export const achievements: Record<AchievementId, Achievement> = {
     ...achievementData.DARKNET_BACKDOOR,
     Icon: "locked",
     Visible: knowAboutBitverse,
-    Condition: () => getDarknetServers().filter((s) => s.backdoorInstalled).length >= 50,
+    Condition: () => getAllMobileDarknetServers().filter((s) => s.backdoorInstalled).length >= 50,
   },
   CHALLENGE_BN1: {
     ...achievementData.CHALLENGE_BN1,

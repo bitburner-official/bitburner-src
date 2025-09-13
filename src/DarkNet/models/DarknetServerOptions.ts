@@ -43,6 +43,8 @@ export interface DarknetServerData extends IDarknetServer {
   leftOffset: number;
   /** The password for the server, used for authentication */
   password: string;
+  /** If this darknet server can move. False for fixed/story servers. */
+  isMobile: boolean;
 }
 
 export const DnetServerBuilder = (
@@ -84,6 +86,7 @@ export const DnetServerBuilder = (
     isConnectedTo: false,
     ramUsed: 0,
     purchasedByPlayer: false,
+    isMobile: true,
     ...darknetData,
   });
   server.updateRamUsed(ramBlock);

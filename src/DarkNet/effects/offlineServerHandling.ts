@@ -139,33 +139,6 @@ export function hasExecConnection(ctx: NetscriptContext, targetServer: BaseServe
   return directConnected || backdoored;
 }
 
-/**
- * WIP-@fico: I don't understand the logic of this function. It's only called by dnet.authenticate to parse the
- * user-provided password (i.e., unknown _password to TS-string password). When the player tries to authenticate the
- * same server as the one that this script runs on (i.e., ctx.workerScript.hostname === hostname):
- * - Invalid hostname or non-dnet hostname: return an empty string.
- * - Otherwise, return the server's password.
- *
- * This makes no sense. If the target is invalid, the caller will return (or throw) an error via a separate check. Why
- * does this function behave as if the player gives an empty string? The final case (i.e., return server.password) is
- * also weird. Why does this function return the real password of the server?
- *
- * This looks like a bug to me. For example, if you run await ns.dnet.authenticate("darkweb", "leekspin") on darkweb,
- * this function will return an empty string, so dnet.authenticate behaves as if the player uses an empty string as the
- * password instead of the provided string.
- */
-export function expectPassword(ctx: NetscriptContext, hostname: string, _password: unknown) {
-  if (ctx.workerScript.hostname !== hostname) {
-    return helpers.string(ctx, "password", _password);
-  }
-  const server = GetServer(hostname);
-  if (!server || !isDarknetServer(server)) {
-    return "";
-  }
-
-  return server.password;
-}
-
 export function getTimeoutChance() {
   const backdooredDarknetServerCount = getBackdooredDarkwebServers().length - 2;
   return Math.max(Math.min(backdooredDarknetServerCount * 0.03, 0.5), 0);

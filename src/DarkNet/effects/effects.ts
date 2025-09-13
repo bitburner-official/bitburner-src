@@ -14,9 +14,9 @@ import { TextFilePath } from "../../Paths/TextFilePath";
 import {
   getAllAdjacentNeighbors,
   getBackdooredDarkwebServers,
-  getDarknetServers,
+  getAllMobileDarknetServers,
   getDarknetServerSafely,
-  moveServer,
+  moveDarknetServer,
 } from "../controllers/NetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { addSessionToServer, DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
@@ -76,13 +76,10 @@ export const calculateAuthenticationTime = (
 ) => {
   if (!isDarknetServer(server)) return 0;
   const darknetData = getDarknetData(server);
-  /**
-   * WIP-@fico: Why do you not check if darknetData is null? getDarknetData returns non-null value for all darknet-like
-   * servers (i.e., "real" dnet servers and darkweb).
-   */
+  if (!darknetData) return 0;
 
-  const chaRequired = server.requiredCharismaSkill ?? 1;
-  const difficulty = darknetData?.difficulty ?? 1;
+  const chaRequired = server.requiredCharismaSkill;
+  const difficulty = darknetData.difficulty;
 
   const baseDiff = (difficulty + 1) * 100;
   const diffFactor = 5;
@@ -111,7 +108,7 @@ export const calculateAuthenticationTime = (
 
   // Add extra time for timing attack server, per correct character
   const sharedChars =
-    darknetData?.modelId === ModelIds.TimingAttack ? getSharedChars(darknetData?.password ?? "", attemptedPassword) : 0;
+    darknetData.modelId === ModelIds.TimingAttack ? getSharedChars(darknetData.password, attemptedPassword) : 0;
   const sharedCharsExtraTime = sharedChars * 150;
 
   return time * calculateIntelligenceBonus(person.skills.intelligence, 0.25) + sharedCharsExtraTime;
@@ -119,7 +116,7 @@ export const calculateAuthenticationTime = (
 
 export const getBackdoorAuthTimeDebuff = () => {
   const backdooredServerCount = getBackdooredDarkwebServers().length;
-  const serverCount = getDarknetServers().filter((s) => s.hasAdminRights).length;
+  const serverCount = getAllMobileDarknetServers().filter((s) => s.hasAdminRights).length;
   const safeBackdoors = Math.max(serverCount / (NET_WIDTH * 3), 2);
   const backdoorSurplus = Math.max(0, backdooredServerCount - safeBackdoors);
 
@@ -134,7 +131,7 @@ export const handleRamBlockClearedRewards = (server: BaseServer) => {
 
   const stormSeedChance = 0.15;
   const timeSinceLastStorm = Date.now() - DarknetState.lastStormTime.getTime();
-  const stormFileExists = getDarknetServers().some((s) => s.programs.includes(CompletedProgramName.stormSeed));
+  const stormFileExists = getAllMobileDarknetServers().some((s) => s.programs.includes(CompletedProgramName.stormSeed));
   if (timeSinceLastStorm > 30 * 60 * 1000 && !stormFileExists && Math.random() < stormSeedChance) {
     server.programs.push(CompletedProgramName.stormSeed);
   }
@@ -286,10 +283,10 @@ export const getStasisLinkLimit = (): number => {
   return 1 + +hasTheBrokenWings + +hasTheHammer;
 };
 
-export const getStasisLinkServers = () => getDarknetServers().filter((s) => s.hasStasisLink);
+export const getStasisLinkServers = () => getAllMobileDarknetServers().filter((s) => s.hasStasisLink);
 
 export const applyRamBlocks = () => {
-  const servers = getDarknetServers();
+  const servers = getAllMobileDarknetServers();
   for (const server of servers) {
     server.updateRamUsed(server.ramBlock ?? 0);
   }
@@ -318,7 +315,7 @@ export const chargeServerMigration = (server: BaseServer, threads = 1) => {
     xpGained: xpGained,
   };
   if (DarknetState.migrationInductionServers[server.hostname] >= 1) {
-    moveServer(server, -1, 5);
+    moveDarknetServer(server, -1, 5);
     DarknetState.migrationInductionServers[server.hostname] = 0;
   }
   return result;
@@ -346,6 +343,7 @@ export const getDarknetData = (server: BaseServer | null): DarknetServerData | n
       modelId: ModelIds.EchoVuln,
       password: "leekspin",
       icon: Icon.Terminal,
+      isMobile: false,
       ...server,
     };
   }
@@ -366,10 +364,6 @@ export const getDarknetDataOrThrow = (server: BaseServer | null): DarknetServerD
 };
 
 export const getDarkscapeNavigator = () => {
-  /**
-   * WIP-@fico: IIUC, getting this exe (e.g., buying it in the new special location) also grants free TOR router. Is
-   * that right? It's okay. I just want to confirm.
-   */
   if (!Player.hasTorRouter()) {
     getTorRouter();
   }

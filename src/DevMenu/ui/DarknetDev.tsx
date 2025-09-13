@@ -8,12 +8,12 @@ import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import { clearDarknet, populateDarknet } from "../../DarkNet/controllers/NetworkGenerator";
 import { DarknetEvents, DarknetState } from "../../DarkNet/models/DarknetState";
-import { WEBSTORM } from "../../DarkNet/effects/webstorm";
+import { launchWebstorm } from "../../DarkNet/effects/webstorm";
 import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { Router } from "../../ui/GameRoot";
 import { SimplePage, ToastVariant } from "@enums";
 import { getDarkscapeNavigator, handleSuccessfulAuth } from "../../DarkNet/effects/effects";
-import { getDarknetServers } from "../../DarkNet/controllers/NetworkMovement";
+import { getAllMobileDarknetServers } from "../../DarkNet/controllers/NetworkMovement";
 import { isLabyrinthServer } from "../../DarkNet/effects/labyrinth";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
@@ -63,7 +63,7 @@ export function DarknetDev(): React.ReactElement {
         <Tooltip title={<Typography>Root all standard darknet servers.</Typography>}>
           <Button
             onClick={() => {
-              getDarknetServers().forEach((server) => {
+              getAllMobileDarknetServers().forEach((server) => {
                 if (!isLabyrinthServer(server.hostname)) {
                   handleSuccessfulAuth(server, 1);
                 }
@@ -79,7 +79,7 @@ export function DarknetDev(): React.ReactElement {
         <Tooltip title={<Typography>Root all darknet labyrinth servers.</Typography>}>
           <Button
             onClick={() => {
-              getDarknetServers().forEach((server) => {
+              getAllMobileDarknetServers().forEach((server) => {
                 if (isLabyrinthServer(server.hostname)) {
                   server.hasAdminRights = true;
                 }
@@ -101,7 +101,7 @@ export function DarknetDev(): React.ReactElement {
         >
           <Button
             onClick={() => {
-              void WEBSTORM();
+              void launchWebstorm();
               Router.toPage(SimplePage.DarkNet);
             }}
           >

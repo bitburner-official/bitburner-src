@@ -4,7 +4,7 @@ import { generateSimpleArithmeticExpression, getPassword, romanNumeralEncoder } 
 import { getDarknetServerName, PasswordResponse } from "./DarknetServerOptions";
 import { LocationName } from "@enums";
 import { getDarknetData, getTwoCharsInPassword, isDarknetServer } from "../effects/effects";
-import { getDarknetServers, getDarknetServerSafely } from "../controllers/NetworkMovement";
+import { getAllMobileDarknetServers, getDarknetServerSafely } from "../controllers/NetworkMovement";
 import { getExactCorrectChars, getMastermindResponse } from "../effects/authentication";
 import { getServerState } from "./DarknetState";
 import { GetServer } from "../../Server/AllServers";
@@ -68,7 +68,7 @@ const getRandomData = (length: number, server: BaseServer) => {
     } else if (Math.random() < 0.15) {
       result += "/" + Object.keys(LocationName)[Math.floor(Math.random() * Object.keys(LocationName).length)] + "/";
     } else if (Math.random() < 0.05) {
-      const servers = getDarknetServers();
+      const servers = getAllMobileDarknetServers();
       const randomServer = servers[Math.floor(Math.random() * servers.length)];
       return `--${randomServer.password ?? ""}--`;
     } else {
@@ -202,7 +202,7 @@ const getLogNoise = (server: BaseServer, logDate: Date) => {
   }
 
   if (Math.random() < 0.05) {
-    const servers = getDarknetServers();
+    const servers = getAllMobileDarknetServers();
     const randomServer = servers[Math.floor(Math.random() * servers.length)];
     return `--${randomServer.password ?? ""}--`;
   }

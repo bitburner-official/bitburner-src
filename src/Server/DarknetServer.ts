@@ -33,6 +33,8 @@ export class DarknetServer extends BaseServer implements IDarknetServer, Darknet
   logTrafficInterval: number;
   /** The charisma skill required to heartbleed the server */
   requiredCharismaSkill: number;
+  /** If this darknet server can move. False for fixed/story servers. */
+  isMobile: boolean;
 
   constructor(
     params: IConstructorParams & DarknetServerData = {
@@ -41,6 +43,7 @@ export class DarknetServer extends BaseServer implements IDarknetServer, Darknet
       icon: Icon.Terminal,
       leftOffset: 0,
       password: "",
+      isMobile: true,
     },
   ) {
     super(params);
@@ -58,6 +61,7 @@ export class DarknetServer extends BaseServer implements IDarknetServer, Darknet
     this.ramBlock = params.ramBlock;
     this.logTrafficInterval = params.logTrafficInterval;
     this.requiredCharismaSkill = params.requiredCharismaSkill;
+    this.isMobile = params.isMobile;
   }
 
   toJSON(): IReviverValue {

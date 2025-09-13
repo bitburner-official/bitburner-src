@@ -12,6 +12,7 @@ import { ITutorial } from "../InteractiveTutorial";
 import { AlertEvents } from "../ui/React/AlertManager";
 import { handleUnknownError } from "../utils/ErrorHandler";
 import { roundToTwo } from "../utils/helpers/roundToTwo";
+import { BaseServer } from "../Server/BaseServer";
 
 export function killWorkerScript(ws: WorkerScript): boolean {
   if (ITutorial.isRunning) {
@@ -111,4 +112,26 @@ function removeWorkerScript(workerScript: WorkerScript): void {
   if (rs.temporary === false) {
     AddRecentScript(workerScript);
   }
+}
+
+export const killScripts = (server: BaseServer) => {
+  if (!server) {
+    return;
+  }
+  const scripts = server.runningScriptMap.values();
+  for (const byPid of scripts) {
+    for (const runningScript of byPid.values()) {
+      killWorkerScriptWithMessage(runningScript.pid, "Server shut down.");
+    }
+  }
+};
+
+export function killWorkerScriptWithMessage(pid: number, message: string): boolean {
+  const ws = workerScripts.get(pid);
+  if (ws) {
+    ws.log("", () => message ?? "Script killed.");
+    stopAndCleanUpWorkerScript(ws);
+    return true;
+  }
+  return false;
 }

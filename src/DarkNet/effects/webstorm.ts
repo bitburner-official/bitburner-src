@@ -1,56 +1,54 @@
 import { DarknetState } from "../models/DarknetState";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
-import { ToastVariant } from "@enums";
+import { CompletedProgramName, ToastVariant } from "@enums";
 import {
-  addRandomServers,
-  balanceServers,
-  getDarknetServers,
-  moveRandomServers,
-  restartAllServers,
-  deleteRandomServers,
+  addRandomDarknetServers,
+  balanceDarknetServers,
+  deleteRandomDarknetServers,
+  getAllMobileDarknetServers,
+  moveRandomDarknetServers,
+  restartAllDarknetServers,
 } from "../controllers/NetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
 import { getNetDepth } from "./labyrinth";
 import { NET_WIDTH } from "../Enums";
 import { sleep } from "../../utils/Utility";
 
-// WIP-@fico: Rename this function (e.g., initWebStorm, initWebstorm)
-export const WEBSTORM = async (suppressToast = false) => {
+export const launchWebstorm = async (suppressToast = false) => {
   DarknetState.isMutating = false;
   if (!suppressToast) {
     SnackbarEvents.emit(`DARKNET WEBSTORM APPROACHING`, ToastVariant.ERROR, 5000);
   }
   await sleep(5000);
 
-  const serversToDelete = getDarknetServers().length * 0.6 + (Math.random() * getNetDepth() - 6);
-  deleteRandomServers(serversToDelete);
-  moveRandomServers((getDarknetServers().length - serversToDelete) * 0.6);
-  restartAllServers();
+  const serversToDelete = getAllMobileDarknetServers().length * 0.6 + (Math.random() * getNetDepth() - 6);
+  deleteRandomDarknetServers(serversToDelete);
+  moveRandomDarknetServers((getAllMobileDarknetServers().length - serversToDelete) * 0.6);
+  restartAllDarknetServers();
 
   await sleep(4000);
-  addRandomServers(NET_WIDTH);
+  addRandomDarknetServers(NET_WIDTH);
   await sleep(4000);
-  addRandomServers(NET_WIDTH * 2);
+  addRandomDarknetServers(NET_WIDTH * 2);
   await sleep(4000);
-  addRandomServers(NET_WIDTH * 2);
+  addRandomDarknetServers(NET_WIDTH * 2);
   await sleep(8000);
-  balanceServers();
+  balanceDarknetServers();
   await sleep(5000);
   DarknetState.isMutating = true;
 };
 
 // TODO: launch this if the player has been offline for long enough?
 export const applyOfflineWebstorm = () => {
-  const serversToDelete = getDarknetServers().length * 0.5 + (Math.random() * getNetDepth() - 4);
-  deleteRandomServers(serversToDelete);
-  restartAllServers();
+  const serversToDelete = getAllMobileDarknetServers().length * 0.5 + (Math.random() * getNetDepth() - 4);
+  deleteRandomDarknetServers(serversToDelete);
+  restartAllDarknetServers();
 
-  balanceServers();
+  balanceDarknetServers();
 };
 
 export const handleStormSeed = (server: BaseServer) => {
-  // WIP-@fico: Do you mean CompletedProgramName.stormSeed?
-  server.programs = server.programs.filter((p) => p !== "webstorm");
+  server.programs = server.programs.filter((p) => p !== CompletedProgramName.stormSeed);
   DarknetState.lastStormTime = new Date();
-  void WEBSTORM();
+  void launchWebstorm();
 };

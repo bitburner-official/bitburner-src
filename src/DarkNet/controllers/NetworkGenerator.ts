@@ -2,11 +2,11 @@ import { DarknetState } from "../models/DarknetState";
 import { AddToAllServers, connectServers, createUniqueRandomIp, GetServer } from "../../Server/AllServers";
 import {
   addGuaranteedConnection,
-  addRandomServers,
-  balanceServers,
-  deleteServer,
+  addRandomDarknetServers,
+  balanceDarknetServers,
+  deleteDarknetServer,
   disconnectServer,
-  getDarknetServers,
+  getAllMobileDarknetServers,
   getNeighborsOnRow,
   getServersOnRowAbove,
   getServersOnRowBelow,
@@ -34,34 +34,25 @@ import {
   VERTICAL_CONNECTION_CHANCE,
 } from "../Enums";
 
-/**
- * WIP-@fico: After deleting nav exe and buy it again via UI, I see "Server already exists at this location" logged to
- * the console. Because of that, I find out that this function is not "idempotent". If it's called when dnet is already
- * "populated" (i.e., getDarknetServers().length > 0), it will call loadDarknet. I have not checked loadDarknet
- * carefully, but at a quick glance, I think that function will misbehave if it's called more than once.
- *
- * Note that "Server already exists at this location" is logged by addServerToNetwork. I changed that function to log
- * more information.
- */
 export const populateDarknet = () => {
   const darkWebRoot = GetServer(SpecialServers.DarkWeb);
   if (darkWebRoot) {
     darkWebRoot.hasAdminRights = true;
   }
 
-  if (getDarknetServers().length) {
+  if (getAllMobileDarknetServers().length) {
     loadDarknet();
     return;
   }
 
   clearDarknet(true);
   addLabyrinth();
-  addRandomServers(getNetDepth() * NET_WIDTH * SERVER_DENSITY - 10);
-  addRandomServers(5 - DarknetState.Network[0].length);
-  addRandomServers(5 - DarknetState.Network[1].length);
-  balanceServers();
+  addRandomDarknetServers(getNetDepth() * NET_WIDTH * SERVER_DENSITY - 10);
+  addRandomDarknetServers(5 - DarknetState.Network[0].length);
+  addRandomDarknetServers(5 - DarknetState.Network[1].length);
+  balanceDarknetServers();
 
-  const updatedServers = getDarknetServers();
+  const updatedServers = getAllMobileDarknetServers();
   for (let i = 0; i < getNetDepth(); i++) {
     const server = updatedServers[Math.floor(Math.random() * updatedServers.length)];
     addGuaranteedConnection(server);
@@ -74,7 +65,7 @@ export const clearDarknet = (force = false) => {
     for (let j = 0; j < NET_WIDTH; j++) {
       const server = DarknetState.Network[i]?.[j];
       if (!server) continue;
-      deleteServer(server, force);
+      deleteDarknetServer(server, force);
       DarknetState.Network[i][j] = null;
     }
   }
@@ -86,7 +77,7 @@ export const clearDarknet = (force = false) => {
   for (const lab of getLabyrinthServerNames()) {
     const labyrinth = GetServer(lab);
     if (!labyrinth) continue;
-    deleteServer(labyrinth);
+    deleteDarknetServer(labyrinth);
   }
 };
 
@@ -98,17 +89,25 @@ export const movePlayerIfNeeded = (server?: BaseServer) => {
   }
 };
 
+/**
+ * Loads all the darknet servers into DarknetState.Network, if it is not already populated
+ */
 export const loadDarknet = () => {
-  const darkWebServers = getDarknetServers();
+  const currentServers = DarknetState.Network.flat().filter((s) => s !== null && s.isMobile);
+  if (currentServers.length) {
+    return;
+  }
+
+  const darkWebServers = getAllMobileDarknetServers();
   for (const server of darkWebServers) {
     if (isDarknetServer(server) && !isLabyrinthServer(server.hostname)) {
       disconnectServer(server, true);
       addServerToNetwork(server, server.depth, server.leftOffset);
     }
   }
-  balanceServers();
+  balanceDarknetServers();
 
-  const updatedServers = getDarknetServers();
+  const updatedServers = getAllMobileDarknetServers();
   for (let i = 0; i < getNetDepth(); i++) {
     const server = updatedServers[Math.floor(Math.random() * updatedServers.length)];
     addGuaranteedConnection(server);
@@ -216,6 +215,7 @@ export const addLabyrinth = () => {
       isConnectedTo: false,
       purchasedByPlayer: false,
       ramUsed: 0,
+      isMobile: false,
     });
     AddToAllServers(server);
   }
