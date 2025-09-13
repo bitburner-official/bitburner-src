@@ -70,6 +70,7 @@ export const GetOrCreateDarkwebServer = (): DarknetServer => {
   const darkweb = DnetServerBuilder(data, SpecialServers.DarkWeb);
   darkweb.isMobile = false;
   darkweb.hasAdminRights = true;
+  darkweb.ramBlock = 0;
 
   return darkweb;
 };
