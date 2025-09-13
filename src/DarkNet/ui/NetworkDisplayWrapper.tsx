@@ -197,7 +197,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
         </Button>
       </div>
       <Box className={`${classes.inlineFlexBox}`}>
-        <Button onClick={() => Router.toPage(Page.Documentation, { docPage: "advanced/darknet.md" })}>
+        <Button onClick={() => Router.toPage(Page.Documentation, { docPage: "programming/darknet.md" })}>
           Darknet Documentation
         </Button>
       </Box>
