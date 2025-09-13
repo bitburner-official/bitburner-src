@@ -338,19 +338,19 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const shouldLink = helpers.boolean(ctx, "shouldLink", _shouldLink);
         expectDarknetAccess(ctx);
         const server = ctx.workerScript.getServer();
-        // WIP-@fico: Why does this API not work with darkweb? Is that because of the weird isDarknetServer()?
-        if (server.hostname === SpecialServers.DarkWeb) {
-          helpers.log(ctx, () => `${server.hostname} cannot be stasis linked.`);
-          return helpers.netscriptDelay(ctx, 100).then(() => ({
-            success: false,
-            message: `${server?.hostname} cannot be stasis linked.`,
-          }));
-        }
+        const darknetData = getDarknetData(server);
         if (!isDarknetServer(server)) {
           helpers.log(ctx, () => `${server.hostname} was not stasis linked; it is not a darknet server`);
           return helpers.netscriptDelay(ctx, 100).then(() => ({
             success: false,
             message: `${server?.hostname} is not a darknet server.`,
+          }));
+        }
+        if (!darknetData?.isMobile) {
+          helpers.log(ctx, () => `${server.hostname} cannot be stasis linked: it is a stationary server.`);
+          return helpers.netscriptDelay(ctx, 100).then(() => ({
+            success: false,
+            message: `${server?.hostname} cannot be stasis linked.`,
           }));
         }
 

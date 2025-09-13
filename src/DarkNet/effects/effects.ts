@@ -371,10 +371,5 @@ export const getDarkscapeNavigator = () => {
   if (!existingPrograms.includes(CompletedProgramName.darkscape)) {
     Player.getHomeComputer().pushProgram(CompletedProgramName.darkscape);
   }
-  /**
-   * WIP-@fico: Calling populateDarknet in this function unconditionally means the player can intentionally trigger
-   * populateDarknet whenever they want (delete exe and buy it again). I'm not sure if this is exploitable right now,
-   * but we should keep this in mind.
-   */
   populateDarknet();
 };

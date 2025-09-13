@@ -4250,7 +4250,6 @@ export interface Darknet {
    * Sends a network request to try to authenticate on a darkweb server. The target server must be directly connected
    * to the server that the script is running on. The speed of authentication scales with the number of threads used.
    *
-   * WIP-@fico: Is this still correct? With scp, you are calling expectAuthenticated(ctx, destServer).
    * If successful, grants the script a session, allowing it to exec() scripts on that server, or scp() files from it. (scp() *to* the server is always allowed.)
    *
    * Response messages:<br/>

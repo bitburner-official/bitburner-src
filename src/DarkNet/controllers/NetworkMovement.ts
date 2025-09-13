@@ -385,18 +385,14 @@ const isImmutable = (server?: BaseServer | null) =>
 const getIslands = () => getAllMobileDarknetServers().filter((s) => !s.serversOnNetwork.length);
 
 /**
- * WIP-@fico: Why is the return type not "DarknetServer | null"? We usually use null to denote "that entity does not
- * exist". In labyrinth.ts, you also use "getDarknetServerSafely(labName) ?? null". I think we should use null here
- * instead of undefined.
- *
- * By the way, both this TS file and effects.ts contain many utility functions. getDarknetServerSafely is here, but
+ * WIP-@fico: both this TS file and effects.ts contain many utility functions. getDarknetServerSafely is here, but
  * getDarknetData is in effects.ts. isDarknetServer is also in effects.ts. I also created GetDarknetServerOrThrow in
  * AllServers.ts. It looks a bit promiscuous.
  */
-export const getDarknetServerSafely = (hostnameOrIp: string): DarknetServer | undefined => {
+export const getDarknetServerSafely = (hostnameOrIp: string): DarknetServer | null => {
   const server = GetServer(hostnameOrIp);
   if (!server || !isDarknetServer(server)) {
-    return undefined;
+    return null;
   }
   return server;
 };
