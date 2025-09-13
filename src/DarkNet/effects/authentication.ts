@@ -1,5 +1,4 @@
 import { BaseServer } from "../../Server/BaseServer";
-import { SpecialServers } from "../../Server/data/SpecialServers";
 import { handleLabyrinthPassword, isLabyrinthServer } from "./labyrinth";
 import { handleFailedAuth, handleSuccessfulAuth, isDarknetServer } from "./effects";
 import { Result } from "@nsdefs";
@@ -15,9 +14,6 @@ export const checkPassword = (
   pid?: number,
   responseTime = 0,
 ): PasswordResponse => {
-  if (server.hostname === SpecialServers.DarkWeb) {
-    return handleDarkwebSpecialServerAuth(attemptedPassword, server, threads);
-  }
   if (!isDarknetServer(server)) {
     return {
       status: ResponseStatus.AUTH_FAILURE,
@@ -130,20 +126,6 @@ export const isAuthenticated = (server: BaseServer, pid: number): boolean => {
   }
   const serverState = getServerState(server.hostname);
   return serverState.authenticatedPIDs.includes(pid);
-};
-
-const handleDarkwebSpecialServerAuth = (
-  attemptedPassword: string,
-  server: BaseServer,
-  threads: number = 1,
-): PasswordResponse => {
-  if (attemptedPassword === "leekspin") {
-    handleSuccessfulAuth(server, threads);
-    return getGenericSuccess(attemptedPassword);
-  } else {
-    handleFailedAuth(server, threads);
-    return getFailureResponse(attemptedPassword, "The passkey is 'leekspin'", "");
-  }
 };
 
 const getFailureResponse = (attemptedPassword: string, message: string, data: string) => ({

@@ -1,7 +1,7 @@
 import type { NetscriptContext } from "../../Netscript/APIWrapper";
 import { getBackdooredDarkwebServers } from "../controllers/NetworkMovement";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { hasDarknetAccess, isDarknetServer } from "./effects";
+import { getDarknetData, hasDarknetAccess, isDarknetServer } from "./effects";
 import { isAuthenticated } from "./authentication";
 import { getServer, helpers } from "../../Netscript/NetscriptHelpers";
 import { errorMessage } from "../../Netscript/ErrorMessages";
@@ -15,7 +15,7 @@ type failureResultOptions = {
   requireAdminRights?: boolean;
   requireSession?: boolean;
   requireDirectConnection?: boolean;
-  preventDarkweb?: boolean;
+  preventUseOnImmobileServers?: boolean;
 };
 
 export const logger = (ctx: NetscriptContext) => (message: string) => helpers.log(ctx, () => message);
@@ -53,15 +53,15 @@ export function getFailureResult(ctx: NetscriptContext, hostname: string, option
       message: ResponseStatus.NOT_FOUND,
     };
   }
-  if (options.preventDarkweb && targetServer.hostname === SpecialServers.DarkWeb) {
-    const result = `${targetServer.hostname} is not a valid target.`;
+  if (options.preventUseOnImmobileServers && getDarknetData(targetServer)?.isMobile == false) {
+    const result = `${targetServer.hostname} is not a valid target: it is a stationary server.`;
     logger(ctx)(result);
     return {
       success: false,
       message: ResponseStatus.I_AM_A_TEAPOT,
     };
   }
-  if (options.requireDarknet && !isDarknetServer(targetServer) && hostname !== SpecialServers.DarkWeb) {
+  if (options.requireDarknet && !isDarknetServer(targetServer)) {
     const result = `${targetServer.hostname} is not a darknet server.`;
     logger(ctx)(result);
     return {
@@ -109,14 +109,18 @@ export const isDirectConnected = (currentServer: BaseServer, targetServer: BaseS
 
 export function expectDarknetServer(ctx: NetscriptContext, hostname: string) {
   const targetServer = getServer(ctx, hostname);
-  if (!isDarknetServer(targetServer) && targetServer.hostname != SpecialServers.DarkWeb) {
+  if (!isDarknetServer(targetServer)) {
     throw new Error(`Target server ${hostname} is not a darknet server`);
   }
   return targetServer;
 }
 
 export function expectAuthenticated(ctx: NetscriptContext, server: BaseServer) {
-  if (!isDarknetServer(server) || ctx.workerScript.hostname === server.hostname) {
+  if (
+    !isDarknetServer(server) ||
+    ctx.workerScript.hostname === server.hostname ||
+    server.hostname === SpecialServers.DarkWeb
+  ) {
     return;
   }
   if (!server.hasAdminRights) {

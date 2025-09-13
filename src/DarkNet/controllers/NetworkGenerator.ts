@@ -1,5 +1,12 @@
 import { DarknetState } from "../models/DarknetState";
-import { AddToAllServers, connectServers, createUniqueRandomIp, GetServer } from "../../Server/AllServers";
+import {
+  AddToAllServers,
+  connectServers,
+  createUniqueRandomIp,
+  DeleteServer,
+  disconnectServers,
+  GetServer,
+} from "../../Server/AllServers";
 import {
   addGuaranteedConnection,
   addRandomDarknetServers,
@@ -13,7 +20,7 @@ import {
 } from "./NetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
-import { labIcon } from "../ui/ServerIcon";
+import { Icon, labIcon } from "../ui/ServerIcon";
 import { Player } from "@player";
 import { Terminal } from "../../Terminal";
 import {
@@ -33,12 +40,42 @@ import {
   SERVER_DENSITY,
   VERTICAL_CONNECTION_CHANCE,
 } from "../Enums";
+import { DarknetServerOptions, DnetServerBuilder } from "../models/DarknetServerOptions";
+
+/**
+ * Creates the dark web server if it does not already exist, or returns the existing one if it does.
+ * If the current darkweb server is a standard server, it will be deleted and replaced with a darknet server.
+ */
+export const GetOrCreateDarkwebServer = (): DarknetServer => {
+  const existingServer = GetServer(SpecialServers.DarkWeb);
+  if (isDarknetServer(existingServer)) {
+    return existingServer;
+  } else if (existingServer) {
+    // Remove legacy darkweb server, so it can be made into a darknet server
+    disconnectServers(existingServer, Player.getHomeComputer());
+    DeleteServer(existingServer.hostname);
+  }
+
+  const data: DarknetServerOptions = {
+    icon: Icon.Terminal,
+    password: "leekspin",
+    modelId: ModelIds.EchoVuln,
+    staticPasswordHint: "The passkey is 'leekspin'",
+    passwordHintData: "leekspin",
+    leftOffset: -1,
+    depth: -1,
+    difficulty: 0,
+  };
+
+  const darkweb = DnetServerBuilder(data, SpecialServers.DarkWeb);
+  darkweb.isMobile = false;
+  darkweb.hasAdminRights = true;
+
+  return darkweb;
+};
 
 export const populateDarknet = () => {
-  const darkWebRoot = GetServer(SpecialServers.DarkWeb);
-  if (darkWebRoot) {
-    darkWebRoot.hasAdminRights = true;
-  }
+  GetOrCreateDarkwebServer();
 
   if (getAllMobileDarknetServers().length) {
     loadDarknet();

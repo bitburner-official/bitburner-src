@@ -13,14 +13,12 @@
 
 import { Player } from "@player";
 import { AugmentationName, CityName, CodingContractName, LocationName } from "@enums";
-import { AddToAllServers, createUniqueRandomIp, GetAllServers, GetServer, renameServer } from "../Server/AllServers";
+import { GetAllServers, renameServer } from "../Server/AllServers";
 import { StockMarket } from "../StockMarket/StockMarket";
 import { AwardNFG, v1APIBreak } from "./v1APIBreak";
 import { Settings } from "../Settings/Settings";
 import { defaultMonacoTheme } from "../ScriptEditor/ui/themes";
 import { PlayerOwnedAugmentation } from "../Augmentation/PlayerOwnedAugmentation";
-import { SpecialServers } from "../Server/data/SpecialServers";
-import { safelyCreateUniqueServer } from "../Server/ServerHelpers";
 import { v2APIBreak } from "./v2APIBreak";
 import { Terminal } from "../Terminal";
 import { getRecordValues } from "../Types/Record";
@@ -240,22 +238,6 @@ export async function evaluateVersionCompatibility(ver: string | number): Promis
     Player.reapplyAllSourceFiles();
   }
 
-  if (ver < 20) {
-    // Create the darkweb for everyone but it won't be linked
-    const dw = GetServer(SpecialServers.DarkWeb);
-    if (!dw) {
-      const darkweb = safelyCreateUniqueServer({
-        ip: createUniqueRandomIp(),
-        hostname: SpecialServers.DarkWeb,
-        organizationName: "",
-        isConnectedTo: false,
-        adminRights: false,
-        purchasedByPlayer: false,
-        maxRam: 1,
-      });
-      AddToAllServers(darkweb);
-    }
-  }
   if (ver < 21) {
     // 2.0.0 work rework
     AwardNFG(10);

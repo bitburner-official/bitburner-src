@@ -2,13 +2,12 @@ import React from "react";
 import Button from "@mui/material/Button";
 
 import { dialogBoxCreate } from "../../ui/React/DialogBox";
-import { GetServer } from "../../Server/AllServers";
-import { SpecialServers } from "../../Server/data/SpecialServers";
 
 import { CONSTANTS } from "../../Constants";
 import { Player } from "@player";
 
 import { Money } from "../../ui/React/Money";
+import { GetOrCreateDarkwebServer } from "../../DarkNet/controllers/NetworkGenerator";
 
 /** Attempt to purchase a TOR router using the button. */
 export function purchaseTorRouter(): void {
@@ -31,10 +30,7 @@ export function purchaseTorRouter(): void {
 }
 
 export function getTorRouter(): void {
-  const darkweb = GetServer(SpecialServers.DarkWeb);
-  if (!darkweb) {
-    throw new Error("Dark web is not a server.");
-  }
+  const darkweb = GetOrCreateDarkwebServer();
 
   Player.getHomeComputer().serversOnNetwork.push(darkweb.hostname);
   darkweb.serversOnNetwork.push(Player.getHomeComputer().hostname);

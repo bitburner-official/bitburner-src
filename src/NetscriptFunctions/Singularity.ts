@@ -53,7 +53,7 @@ import { exceptionAlert } from "../utils/helpers/exceptionAlert";
 import { cat } from "../Terminal/commands/cat";
 import { Crimes } from "../Crime/Crimes";
 import { DarknetServer } from "../Server/DarknetServer";
-import { populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
+import { GetOrCreateDarkwebServer, populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
 
 export function NetscriptSingularity(): InternalAPI<ISingularity> {
   const runAfterReset = function (cbScript: ScriptFilePath) {
@@ -409,8 +409,7 @@ export function NetscriptSingularity(): InternalAPI<ISingularity> {
       }
       Player.loseMoney(CONSTANTS.TorRouterCost, "other");
 
-      const darkweb = GetServer(SpecialServers.DarkWeb);
-      if (!darkweb) throw helpers.errorMessage(ctx, "DarkWeb was not a server but should have been");
+      const darkweb = GetOrCreateDarkwebServer();
 
       Player.getHomeComputer().serversOnNetwork.push(darkweb.hostname);
       darkweb.serversOnNetwork.push(Player.getHomeComputer().hostname);

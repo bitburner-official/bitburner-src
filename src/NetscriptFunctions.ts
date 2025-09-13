@@ -659,10 +659,11 @@ export const ns: InternalAPI<NSFull> = {
       }
       const server = helpers.getServer(ctx, host);
       if (!hasExecConnection(ctx, server)) {
+        const currentHostname = ctx.workerScript.getServer().hostname;
         helpers.log(
           ctx,
           () =>
-            `exec to a password-protected server requires a direct connection, a stasis link, or a backdoor. Use exec() from an adjacent server, or set a stasis link on the target server.`,
+            `The current server ${currentHostname} is not connected to ${host}. exec() to a password-protected server requires a direct connection, a stasis link, or a backdoor. Use exec() from an adjacent server, or set a stasis link on the target server.`,
         );
         return 0;
       }

@@ -516,7 +516,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const onlineConnectionCheck = getFailureResult(ctx, hostname, {
           requireDirectConnection: true,
           requireDarknet: true,
-          preventDarkweb: true,
+          preventUseOnImmobileServers: true,
         });
         if (!onlineConnectionCheck.success) {
           return helpers.netscriptDelay(ctx, 100).then(() => ({
@@ -540,8 +540,9 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
             }));
           }
           const server = helpers.getServer(ctx, hostname);
-          const currentDepth = getDarknetData(server)?.depth ?? 0;
-          const result = chargeServerMigration(server, ctx.workerScript.scriptRef.threads);
+          const darknetServer = getDarknetServer(ctx, hostname);
+          const currentDepth = darknetServer.depth;
+          const result = chargeServerMigration(darknetServer, ctx.workerScript.scriptRef.threads);
 
           const message = `Induced ${formatNumber(
             result.chargeIncrease * 100,

@@ -25,8 +25,6 @@ import { getSharedChars } from "./authentication";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
 import { DarknetServerData } from "../models/DarknetServerOptions";
-import { SpecialServers } from "../../Server/data/SpecialServers";
-import { Icon } from "../ui/ServerIcon";
 import { exampleDarknetServer, ModelIds, NET_WIDTH } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { populateDarknet } from "../controllers/NetworkGenerator";
@@ -292,18 +290,7 @@ export const applyRamBlocks = () => {
   }
 };
 
-/**
- * WIP-@fico: After making darkweb become a real darknet server, all functions like this one should receive
- * DarknetServer instead of BaseServer. After that, we can remove the (weird) "!isDarknetServer" check.
- */
-export const chargeServerMigration = (server: BaseServer, threads = 1) => {
-  if (!isDarknetServer(server)) {
-    return {
-      chargeIncrease: 0,
-      newCharge: 0,
-      xpGained: 0,
-    };
-  }
+export const chargeServerMigration = (server: DarknetServer, threads = 1) => {
   const chargeIncrease = ((Player.skills.charisma + 50) / (server.difficulty * 4 + 100)) * 0.01 * threads;
   const xpGained = Player.mults.charisma_exp * 50 * ((200 + Player.skills.charisma) / 200) * threads;
   Player.gainCharismaExp(xpGained);
@@ -334,19 +321,6 @@ export const isDarknetServer = (server: unknown): server is DarknetServer => {
 };
 
 export const getDarknetData = (server: BaseServer | null): DarknetServerData | null => {
-  if (server?.hostname === SpecialServers.DarkWeb) {
-    return {
-      ...exampleDarknetServer,
-      leftOffset: -1,
-      staticPasswordHint: "The passkey is 'leekspin'",
-      passwordHintData: "leekspin",
-      modelId: ModelIds.EchoVuln,
-      password: "leekspin",
-      icon: Icon.Terminal,
-      isMobile: false,
-      ...server,
-    };
-  }
   if (isDarknetServer(server)) {
     return server;
   }
