@@ -120,6 +120,7 @@ import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { DarknetState } from "./DarkNet/models/DarknetState";
 import { isDarknetServer } from "./DarkNet/effects/effects";
 import { expectAuthenticated, hasExecConnection } from "./DarkNet/effects/offlineServerHandling";
+import { SpecialServers } from "./Server/data/SpecialServers";
 
 export const enums: NSEnums = {
   CityName,
@@ -181,7 +182,7 @@ export const ns: InternalAPI<NSFull> = {
     const out: string[] = [];
     for (let i = 0; i < server.serversOnNetwork.length; i++) {
       const s = getServerOnNetwork(server, i);
-      if (s === null || isDarknetServer(s)) continue;
+      if (s === null || (isDarknetServer(s) && s.hostname !== SpecialServers.DarkWeb)) continue;
       const entry = helpers.returnServerID(s, returnOpts);
       if (entry === null) continue;
       out.push(entry);
