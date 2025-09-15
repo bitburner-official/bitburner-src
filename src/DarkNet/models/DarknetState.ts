@@ -4,6 +4,7 @@ import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { isDarknetServer } from "../effects/effects";
 import { MAX_NET_DEPTH, NET_WIDTH } from "../Enums";
+import { getDarknetCyclesPerMutation } from "../controllers/NetworkMovement";
 
 /** Event emitter to allow the UI to subscribe to Darknet gameplay updates in order to trigger rerenders properly */
 export const DarknetEvents = new EventEmitter();
@@ -89,4 +90,4 @@ export const storeDarknetCycles = (cycles: number) => {
   DarknetState.cyclesSinceLastMutation += cycles;
 };
 
-export const hasDarknetBonusTime = () => DarknetState.storedCycles > 10;
+export const hasDarknetBonusTime = () => DarknetState.storedCycles > getDarknetCyclesPerMutation() * 2;

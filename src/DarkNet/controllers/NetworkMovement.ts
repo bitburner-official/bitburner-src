@@ -3,7 +3,6 @@ import {
   DarknetEvents,
   DarknetState,
   getServerState,
-  hasDarknetBonusTime,
   storeDarknetCycles,
 } from "../models/DarknetState";
 import { createDarknetServer } from "./ServerGenerator";
@@ -17,44 +16,21 @@ import { getDarknetData, isDarknetServer } from "../effects/effects";
 import { CONSTANTS } from "../../Constants";
 import { AIR_GAP_DEPTH, MS_PER_MUTATION_PER_ROW, NET_WIDTH, SERVER_DENSITY } from "../Enums";
 
-/**
- * WIP-@fico: Fix 2 problems:
- * - dnet bonus effect is applied in an interval.
- * - storedCycles decreases too slow.
- *
- * I'll explain these problems in detail on Discord.
- */
 export const processDarknet = (cycles: number) => {
   storeDarknetCycles(cycles);
-
-  const depth = getNetDepth();
-  const cycleRate = MS_PER_MUTATION_PER_ROW / CONSTANTS.MilliPerCycle;
-  const cyclesPerUpdate = cycleRate / depth;
-  // WIP-@fico: I added this line for debugging. Please remove it after you fix the problems.
-  //@ts-expect-error
-  if (globalThis.log) {
-    console.log(
-      "processDarknet",
-      new Date().toISOString(),
-      DarknetState.storedCycles,
-      DarknetState.cyclesSinceLastMutation,
-      hasDarknetBonusTime(),
-      depth,
-      cycleRate,
-      cyclesPerUpdate,
-    );
-  }
+  const cyclesPerUpdate = getDarknetCyclesPerMutation();
 
   if (DarknetState.cyclesSinceLastMutation > cyclesPerUpdate) {
-    DarknetState.storedCycles = Math.max(0, DarknetState.storedCycles - cyclesPerUpdate * 1.5);
+    DarknetState.storedCycles = Math.max(0, DarknetState.storedCycles - cyclesPerUpdate * 3);
     DarknetState.cyclesSinceLastMutation = 0;
     mutateDarknet();
-    // WIP-@fico: I added this line for debugging. Please remove it after you fix the problems.
-    //@ts-expect-error
-    if (globalThis.log) {
-      console.log("mutateDarknet");
-    }
   }
+};
+
+export const getDarknetCyclesPerMutation = () => {
+  const depth = getNetDepth();
+  const cycleRate = MS_PER_MUTATION_PER_ROW / CONSTANTS.MilliPerCycle;
+  return cycleRate / depth;
 };
 
 export const mutateDarknet = () => {
