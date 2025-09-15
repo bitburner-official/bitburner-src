@@ -2,9 +2,10 @@ import { EventEmitter } from "../../utils/EventEmitter";
 import { BaseServer } from "../../Server/BaseServer";
 import { findRunningScriptByPid } from "../../Script/ScriptHelpers";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { isDarknetServer } from "../effects/effects";
 import { MAX_NET_DEPTH, NET_WIDTH } from "../Enums";
-import { getDarknetCyclesPerMutation } from "../controllers/NetworkMovement";
+
+import { getDarknetCyclesPerMutation } from "../utils/darknetNetworkUtils";
+import { isDarknetServer } from "../utils/darknetServerUtils";
 
 /** Event emitter to allow the UI to subscribe to Darknet gameplay updates in order to trigger rerenders properly */
 export const DarknetEvents = new EventEmitter();

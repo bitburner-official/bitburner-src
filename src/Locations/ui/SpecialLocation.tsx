@@ -39,7 +39,8 @@ import { canAccessBitNodeFeature, knowAboutBitverse } from "../../BitNode/BitNod
 import { useRerender } from "../../ui/React/hooks";
 import { PromptEvent } from "../../ui/React/PromptManager";
 import { canAcceptStaneksGift } from "../../CotMG/Helper";
-import { getDarkscapeNavigator, hasDarknetAccess } from "../../DarkNet/effects/effects";
+import { getDarkscapeNavigator } from "../../DarkNet/effects/effects";
+import { hasDarknetAccess } from "../../DarkNet/utils/darknetAuthUtils";
 
 interface SpecialLocationProps {
   loc: Location;

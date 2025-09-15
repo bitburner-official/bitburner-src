@@ -51,7 +51,8 @@ import { resetGoPromises } from "./Go/boardAnalysis/goAI";
 import { getRecordEntries } from "./Types/Record";
 import { storeDarknetCycles } from "./DarkNet/models/DarknetState";
 import { processDarknet } from "./DarkNet/controllers/NetworkMovement";
-import { hasDarknetAccess } from "./DarkNet/effects/effects";
+
+import { hasDarknetAccess } from "./DarkNet/utils/darknetAuthUtils";
 
 declare global {
   // This property is only available in the dev build

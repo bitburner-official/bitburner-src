@@ -53,7 +53,8 @@ import { Skills } from "../Bladeburner/data/Skills";
 import type { PositiveNumber } from "../types";
 import { Crimes } from "../Crime/Crimes";
 import { calculateEffectiveSharedThreads, calculateShareBonus } from "../NetworkShare/Share";
-import { calculateAuthenticationTime, getRamBlockRemoved, isDarknetServer } from "../DarkNet/effects/effects";
+import { calculateAuthenticationTime, getRamBlockRemoved } from "../DarkNet/effects/effects";
+import { isDarknetServer } from "../DarkNet/utils/darknetServerUtils";
 
 export function NetscriptFormulas(): InternalAPI<IFormulas> {
   const checkFormulasAccess = function (ctx: NetscriptContext): void {

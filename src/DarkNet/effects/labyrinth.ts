@@ -6,10 +6,10 @@ import { Player } from "@player";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { AugmentationName } from "@enums";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { getDarknetServerSafely } from "../controllers/NetworkMovement";
 import { getBitNodeMultipliers } from "../../BitNode/BitNode";
 import { ResponseStatus } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
+import { getDarknetServerSafely } from "../utils/darknetServerUtils";
 
 const NORTH = [0, -1];
 const EAST = [1, 0];

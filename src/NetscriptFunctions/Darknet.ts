@@ -7,10 +7,7 @@ import {
   calculatePasswordAttemptChaGain,
   chargeServerMigration,
   getBackdoorAuthTimeDebuff,
-  getDarknetData,
   getStasisLinkLimit,
-  getStasisLinkServers,
-  isDarknetServer,
 } from "../DarkNet/effects/effects";
 import { Player } from "@player";
 import type { FilePath } from "../Paths/FilePath";
@@ -40,6 +37,8 @@ import { DarknetServer } from "../Server/DarknetServer";
 import { exampleDarknetServer, ResponseStatus } from "../DarkNet/Enums";
 import { getRewardFromCache, hasCacheFileExtension } from "../DarkNet/effects/cacheFiles";
 import { CONSTANTS } from "../Constants";
+import { getDarknetData, isDarknetServer } from "../DarkNet/utils/darknetServerUtils";
+import { getStasisLinkServers } from "../DarkNet/utils/darknetNetworkUtils";
 
 export type DarknetResult = { success: boolean; message: string };
 

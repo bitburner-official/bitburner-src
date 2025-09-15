@@ -118,9 +118,9 @@ import { compile } from "./NetscriptJSEvaluator";
 import { Script } from "./Script/Script";
 import { NetscriptFormat } from "./NetscriptFunctions/Format";
 import { DarknetState } from "./DarkNet/models/DarknetState";
-import { isDarknetServer } from "./DarkNet/effects/effects";
 import { expectAuthenticated, hasExecConnection } from "./DarkNet/effects/offlineServerHandling";
 import { SpecialServers } from "./Server/data/SpecialServers";
+import { isDarknetServer } from "./DarkNet/utils/darknetServerUtils";
 
 export const enums: NSEnums = {
   CityName,

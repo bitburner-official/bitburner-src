@@ -3,12 +3,13 @@ import { commonPasswordDictionary, letters, packetSniffPhrases } from "./diction
 import { generateSimpleArithmeticExpression, getPassword, romanNumeralEncoder } from "../controllers/ServerGenerator";
 import { getDarknetServerName, PasswordResponse } from "./DarknetServerOptions";
 import { LocationName } from "@enums";
-import { getDarknetData, getTwoCharsInPassword, isDarknetServer } from "../effects/effects";
-import { getAllMobileDarknetServers, getDarknetServerSafely } from "../controllers/NetworkMovement";
-import { getExactCorrectChars, getMastermindResponse } from "../effects/authentication";
+import { getMastermindResponse } from "../effects/authentication";
 import { getServerState } from "./DarknetState";
 import { GetServer } from "../../Server/AllServers";
 import { ModelIds } from "../Enums";
+import { getDarknetData, getDarknetServerSafely, isDarknetServer } from "../utils/darknetServerUtils";
+import { getAllMobileDarknetServers } from "../utils/darknetNetworkUtils";
+import { getExactCorrectChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
 
 const MAX_LOG_LINES = 32;
 

@@ -4,14 +4,15 @@ import { getPasswordType } from "../controllers/ServerGenerator";
 import { dnetStyles } from "./dnetStyles";
 import { Result } from "@nsdefs";
 import { PasswordResponse } from "../models/DarknetServerOptions";
-import { getAuthResult, getSharedChars } from "../effects/authentication";
+import { getAuthResult } from "../effects/authentication";
 import { DarknetEvents } from "../models/DarknetState";
 import { LabyrinthSummary } from "./LabyrinthSummary";
 import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
 import { BaseServer } from "../../Server/BaseServer";
-import { getDarknetData } from "../effects/effects";
 import { ModelIds } from "../Enums";
 import { sleep } from "../../utils/Utility";
+import { getDarknetData } from "../utils/darknetServerUtils";
+import { getSharedChars } from "../utils/darknetAuthUtils";
 
 export type PasswordPromptProps = {
   server: BaseServer;

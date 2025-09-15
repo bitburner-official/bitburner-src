@@ -10,8 +10,8 @@ import {
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
 import { BaseServer } from "../../Server/BaseServer";
-import { getDarknetData } from "../effects/effects";
 import { NET_WIDTH } from "../Enums";
+import { getDarknetDataOrThrow } from "../utils/darknetServerUtils";
 
 export const drawOnCanvas = (canvas: HTMLCanvasElement) => {
   const ctx = canvas?.getContext("2d");
@@ -81,10 +81,7 @@ export const getPixelPosition = (server: BaseServer, centered = false) => {
 };
 
 const getCoordinates = (server: BaseServer) => {
-  const darknetData = getDarknetData(server);
-  if (!darknetData) {
-    throw new Error("Server missing dark web data");
-  }
+  const darknetData = getDarknetDataOrThrow(server);
   return {
     x: darknetData.depth,
     y: darknetData.leftOffset,

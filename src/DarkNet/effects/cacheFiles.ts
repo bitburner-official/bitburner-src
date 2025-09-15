@@ -10,8 +10,8 @@ import { CreateProgramWork } from "../../Work/CreateProgramWork";
 import { initStockMarket } from "../../StockMarket/StockMarket";
 import { cachePrefixes } from "../models/dictionaryData";
 import { FilePath, resolveFilePath } from "../../Paths/FilePath";
-import { getDarknetData } from "./effects";
 import type { Result } from "../../types";
+import { getDarknetData } from "../utils/darknetServerUtils";
 
 export const hasCacheFileExtension = (path: string) => {
   return path.endsWith(".cache");

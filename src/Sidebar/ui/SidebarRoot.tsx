@@ -70,7 +70,8 @@ import {
 } from "../../utils/KeyBindingUtils";
 import { throwIfReachable } from "../../utils/helpers/throwIfReachable";
 import { ErrorState } from "../../ErrorHandling/ErrorState";
-import { hasDarknetAccess } from "../../DarkNet/effects/effects";
+
+import { hasDarknetAccess } from "../../DarkNet/utils/darknetAuthUtils";
 
 const RotatedDoubleArrowIcon = React.forwardRef(function RotatedDoubleArrowIcon(
   props: { color: "primary" | "secondary" | "error" },

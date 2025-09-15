@@ -1,20 +1,21 @@
-import { connectServers, DeleteServer, disconnectServers, GetAllServers, GetServer } from "../../Server/AllServers";
-import {
-  DarknetEvents,
-  DarknetState,
-  getServerState,
-  storeDarknetCycles,
-} from "../models/DarknetState";
+import { connectServers, DeleteServer, disconnectServers, GetServer } from "../../Server/AllServers";
+import { DarknetEvents, DarknetState, getServerState, storeDarknetCycles } from "../models/DarknetState";
 import { createDarknetServer } from "./ServerGenerator";
 import { BaseServer } from "../../Server/BaseServer";
 import { addServerToNetwork, movePlayerIfNeeded } from "./NetworkGenerator";
 import { killScripts } from "../../Netscript/killWorkerScript";
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { getNetDepth, isLabyrinthServer } from "../effects/labyrinth";
-import { DarknetServer } from "../../Server/DarknetServer";
-import { getDarknetData, isDarknetServer } from "../effects/effects";
-import { CONSTANTS } from "../../Constants";
-import { AIR_GAP_DEPTH, MS_PER_MUTATION_PER_ROW, NET_WIDTH, SERVER_DENSITY } from "../Enums";
+import { NET_WIDTH, SERVER_DENSITY } from "../Enums";
+import {
+  getAllAdjacentNeighbors,
+  getAllMobileDarknetServers,
+  getAllOpenPositions,
+  getBackdooredDarkwebServers,
+  getDarknetCyclesPerMutation,
+  getIslands,
+} from "../utils/darknetNetworkUtils";
+import { getDarknetData, isDarknetServer, isImmutable } from "../utils/darknetServerUtils";
 
 export const processDarknet = (cycles: number) => {
   storeDarknetCycles(cycles);
@@ -25,12 +26,6 @@ export const processDarknet = (cycles: number) => {
     DarknetState.cyclesSinceLastMutation = 0;
     mutateDarknet();
   }
-};
-
-export const getDarknetCyclesPerMutation = () => {
-  const depth = getNetDepth();
-  const cycleRate = MS_PER_MUTATION_PER_ROW / CONSTANTS.MilliPerCycle;
-  return cycleRate / depth;
 };
 
 export const mutateDarknet = () => {
@@ -207,26 +202,6 @@ export const moveDarknetServer = (server: BaseServer, maxDepthDecrease = 3, maxD
   return true;
 };
 
-const getAllOpenPositions = (minDepth: number, maxDepth: number): [number, number][] => {
-  const min = Math.max(0, minDepth);
-  const max = Math.min(maxDepth, getNetDepth() - 1);
-  const positions: [number, number][] = [];
-  for (let x = min; x <= max; x++) {
-    for (let y = 0; y < NET_WIDTH; y++) {
-      if (DarknetState.Network[x] && !DarknetState.Network[x][y] && !isOnAirGap(x)) {
-        positions.push([x, y]);
-      }
-    }
-  }
-  if (min === 0 && max === getNetDepth() - 1) {
-    return positions;
-  }
-  if (positions.length === 0) {
-    return getAllOpenPositions(min - 1, max + 1);
-  }
-  return positions;
-};
-
 export const disconnectServer = (server: BaseServer, disconnectDarkweb = false) => {
   if (isImmutable(server)) {
     return false;
@@ -267,50 +242,6 @@ export const addGuaranteedConnection = (server: BaseServer) => {
   connectServers(server, neighbor);
 };
 
-export const getNeighborsOnRow = (x: number, y: number): BaseServer[] => {
-  const neighbors: BaseServer[] = [];
-  const leftNeighbor = DarknetState.Network[x]?.[y - 1];
-  const rightNeighbor = DarknetState.Network[x]?.[y + 1];
-  if (leftNeighbor) {
-    neighbors.push(leftNeighbor);
-  }
-  if (rightNeighbor) {
-    neighbors.push(rightNeighbor);
-  }
-  return neighbors;
-};
-
-export const getServersOnRowBelow = (x: number, close = false): DarknetServer[] => {
-  const rowBelow = DarknetState.Network[x - 1]?.filter(notNull<DarknetServer>) ?? [];
-  if (close) {
-    return rowBelow.filter((server) => Math.abs(server.leftOffset ?? 0 - x) <= 1);
-  }
-  return rowBelow;
-};
-
-export const getServersOnRowAbove = (x: number, close = false): DarknetServer[] => {
-  const rowAbove = DarknetState.Network[x + 1]?.filter(notNull<DarknetServer>) ?? [];
-  if (close) {
-    return rowAbove.filter((server) => Math.abs(server.leftOffset ?? 0 - x) <= 1);
-  }
-  return rowAbove;
-};
-
-/**
- */
-export const getAllMobileDarknetServers = (): DarknetServer[] => {
-  return GetAllServers(true)
-    .filter(isDarknetServer)
-    .filter((s) => s.isMobile);
-};
-
-export const getAllAdjacentNeighbors = (x: number, y: number): BaseServer[] => {
-  const rowAbove = getServersOnRowAbove(x, true);
-  const rowBelow = getServersOnRowBelow(x, true);
-  const neighborsOnRow = getNeighborsOnRow(x, y);
-  return [...rowAbove, ...rowBelow, ...neighborsOnRow];
-};
-
 export const sanitizeDarkwebNetwork = () => {
   const darkweb = GetServer(SpecialServers.DarkWeb);
   if (!darkweb) {
@@ -342,33 +273,4 @@ export const sanitizeDarkwebNetwork = () => {
     }
   }
   DarknetEvents.emit();
-};
-
-export const getBackdooredDarkwebServers = (): BaseServer[] =>
-  getAllMobileDarknetServers().filter((s) => !s.hasStasisLink && s.backdoorInstalled);
-
-const isOnAirGap = (x: number): boolean => !!x && !(x % AIR_GAP_DEPTH);
-
-const notNull = <T>(value: T | null): value is T => value !== null;
-
-const isImmutable = (server?: BaseServer | null) =>
-  !server ||
-  !isDarknetServer(server) ||
-  server === DarknetState.openServer ||
-  server.isConnectedTo ||
-  server.hasStasisLink;
-
-const getIslands = () => getAllMobileDarknetServers().filter((s) => !s.serversOnNetwork.length);
-
-/**
- * WIP-@fico: both this TS file and effects.ts contain many utility functions. getDarknetServerSafely is here, but
- * getDarknetData is in effects.ts. isDarknetServer is also in effects.ts. I also created GetDarknetServerOrThrow in
- * AllServers.ts. It looks a bit promiscuous.
- */
-export const getDarknetServerSafely = (hostnameOrIp: string): DarknetServer | null => {
-  const server = GetServer(hostnameOrIp);
-  if (!server || !isDarknetServer(server)) {
-    return null;
-  }
-  return server;
 };

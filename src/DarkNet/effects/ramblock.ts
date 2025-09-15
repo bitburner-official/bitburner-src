@@ -1,10 +1,10 @@
 import { helpers } from "../../Netscript/NetscriptHelpers";
-import { getDarknetServerSafely } from "../controllers/NetworkMovement";
 import { Player } from "@player";
 import { getRamBlockRemoved, handleRamBlockClearedRewards } from "./effects";
 import { formatNumber } from "../../ui/formatNumber";
 import { getFailureResult, logger } from "./offlineServerHandling";
 import type { NetscriptContext } from "../../Netscript/APIWrapper";
+import { getDarknetServerSafely } from "../utils/darknetServerUtils";
 
 export const handleRamBlockRemoved = (ctx: NetscriptContext, hostname: string) => {
   const onlineConnectionCheck = getFailureResult(ctx, hostname, { requireDirectConnection: true });

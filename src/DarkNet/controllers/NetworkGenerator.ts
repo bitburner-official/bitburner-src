@@ -13,10 +13,6 @@ import {
   balanceDarknetServers,
   deleteDarknetServer,
   disconnectServer,
-  getAllMobileDarknetServers,
-  getNeighborsOnRow,
-  getServersOnRowAbove,
-  getServersOnRowBelow,
 } from "./NetworkMovement";
 import { BaseServer } from "../../Server/BaseServer";
 import { SpecialServers } from "../../Server/data/SpecialServers";
@@ -31,7 +27,6 @@ import {
   isLabyrinthServer,
 } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { getDarknetData, isDarknetServer } from "../effects/effects";
 import {
   HORIZONTAL_CONNECTION_CHANCE,
   MAX_NET_DEPTH,
@@ -41,6 +36,13 @@ import {
   VERTICAL_CONNECTION_CHANCE,
 } from "../Enums";
 import { DarknetServerOptions, DnetServerBuilder } from "../models/DarknetServerOptions";
+import {
+  getAllMobileDarknetServers,
+  getNeighborsOnRow,
+  getServersOnRowAbove,
+  getServersOnRowBelow,
+} from "../utils/darknetNetworkUtils";
+import { getDarknetData, isDarknetServer } from "../utils/darknetServerUtils";
 
 /**
  * Creates the dark web server if it does not already exist, or returns the existing one if it does.

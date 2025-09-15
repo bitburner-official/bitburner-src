@@ -11,24 +11,22 @@ import {
 } from "../models/dictionaryData";
 import { hintLiterature } from "../models/hintNotes";
 import { TextFilePath } from "../../Paths/TextFilePath";
-import {
-  getAllAdjacentNeighbors,
-  getBackdooredDarkwebServers,
-  getAllMobileDarknetServers,
-  getDarknetServerSafely,
-  moveDarknetServer,
-} from "../controllers/NetworkMovement";
+import { moveDarknetServer } from "../controllers/NetworkMovement";
 import { calculateIntelligenceBonus } from "../../PersonObjects/formulas/intelligence";
 import { addSessionToServer, DarknetState, hasDarknetBonusTime } from "../models/DarknetState";
 import { clampNumber } from "../../utils/helpers/clampNumber";
-import { getSharedChars } from "./authentication";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { canAccessBitNodeFeature } from "../../BitNode/BitNodeUtils";
-import { DarknetServerData } from "../models/DarknetServerOptions";
-import { exampleDarknetServer, ModelIds, NET_WIDTH } from "../Enums";
+import { ModelIds, NET_WIDTH } from "../Enums";
 import { addCacheToServer } from "./cacheFiles";
 import { populateDarknet } from "../controllers/NetworkGenerator";
 import { getTorRouter } from "../../Locations/ui/TorButton";
+import { getDarknetData, getDarknetServerSafely, isDarknetServer } from "../utils/darknetServerUtils";
+import {
+  getAllMobileDarknetServers,
+  getBackdooredDarkwebServers,
+  getRandomNearbyServer,
+} from "../utils/darknetNetworkUtils";
+import { getSharedChars, getTwoCharsInPassword } from "../utils/darknetAuthUtils";
 
 export const handleSuccessfulAuth = (server: BaseServer, threads: number, pid: number = -1) => {
   if (!threads) return;
@@ -224,33 +222,6 @@ const addClue = (server: BaseServer) => {
   }
 };
 
-const getRandomNearbyServer = (server: BaseServer, disconnected = false) => {
-  if (!isDarknetServer(server)) return null;
-  return getAllAdjacentNeighbors(server.depth, server.leftOffset).find(
-    (neighbor) =>
-      neighbor &&
-      isDarknetServer(neighbor) &&
-      !neighbor?.hasAdminRights &&
-      neighbor.password &&
-      (!disconnected || !server.serversOnNetwork.includes(neighbor.hostname)),
-  );
-};
-
-export const hasDarknetAccess = () => {
-  return canAccessBitNodeFeature(15) || Player.hasProgram(CompletedProgramName.darkscape);
-};
-
-export const getTwoCharsInPassword = (password: string) => {
-  const index1 = Math.floor(Math.random() * password.length);
-  const containedChar1 = password[index1];
-  let index2 = Math.floor(Math.random() * password.length);
-  if (index2 === index1) {
-    index2 = (index2 + 1) % password.length;
-  }
-  const containedChar2 = password[index2];
-  return [containedChar1, containedChar2];
-};
-
 export const getRamBlockRemoved = (server: BaseServer, threads: number = 1, player: IPerson = Player) => {
   const darknetData = getDarknetData(server);
   const difficulty = darknetData?.difficulty ?? 1;
@@ -281,8 +252,6 @@ export const getStasisLinkLimit = (): number => {
   return 1 + +hasTheBrokenWings + +hasTheHammer;
 };
 
-export const getStasisLinkServers = () => getAllMobileDarknetServers().filter((s) => s.hasStasisLink);
-
 export const applyRamBlocks = () => {
   const servers = getAllMobileDarknetServers();
   for (const server of servers) {
@@ -306,35 +275,6 @@ export const chargeServerMigration = (server: DarknetServer, threads = 1) => {
     DarknetState.migrationInductionServers[server.hostname] = 0;
   }
   return result;
-};
-
-export const isDarknetServer = (server: unknown): server is DarknetServer => {
-  if (typeof server !== "object" || server === null) {
-    return false;
-  }
-  for (const key in exampleDarknetServer) {
-    if (!(key in server)) {
-      return false;
-    }
-  }
-  return true;
-};
-
-export const getDarknetData = (server: BaseServer | null): DarknetServerData | null => {
-  if (isDarknetServer(server)) {
-    return server;
-  }
-  return null;
-};
-
-export const getDarknetDataOrThrow = (server: BaseServer | null): DarknetServerData => {
-  const darknetData = getDarknetData(server);
-  if (!darknetData) {
-    throw new Error(
-      server != null ? `${server.hostname} does not have darknet data` : "null was passed to getDarknetDataOrThrow",
-    );
-  }
-  return darknetData;
 };
 
 export const getDarkscapeNavigator = () => {

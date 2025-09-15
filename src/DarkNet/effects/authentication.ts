@@ -1,11 +1,19 @@
 import { BaseServer } from "../../Server/BaseServer";
 import { handleLabyrinthPassword, isLabyrinthServer } from "./labyrinth";
-import { handleFailedAuth, handleSuccessfulAuth, isDarknetServer } from "./effects";
+import { handleFailedAuth, handleSuccessfulAuth } from "./effects";
 import { Result } from "@nsdefs";
 import { PasswordResponse } from "../models/DarknetServerOptions";
 import { logPasswordAttempt } from "../models/packetSniffing";
 import { getServerState } from "../models/DarknetState";
 import { ModelIds, ResponseStatus } from "../Enums";
+import { isDarknetServer } from "../utils/darknetServerUtils";
+import {
+  getExactCorrectChars,
+  getExactCorrectCharsCount,
+  getFailureResponse,
+  getGenericSuccess,
+  getMisplacedCorrectCharsCount,
+} from "../utils/darknetAuthUtils";
 
 export const checkPassword = (
   attemptedPassword: string,
@@ -128,54 +136,9 @@ export const isAuthenticated = (server: BaseServer, pid: number): boolean => {
   return serverState.authenticatedPIDs.includes(pid);
 };
 
-const getFailureResponse = (attemptedPassword: string, message: string, data: string) => ({
-  status: ResponseStatus.AUTH_FAILURE,
-  message,
-  data,
-  passwordAttempted: attemptedPassword,
-});
-
 export const getMastermindResponse = (password: string, attemptedPassword: string) => {
   return {
     exactCharacters: getExactCorrectCharsCount(password, attemptedPassword),
     misplacedCharacters: getMisplacedCorrectCharsCount(password, attemptedPassword),
   };
-};
-
-export const getExactCorrectChars = (password: string, attemptedPassword: string) =>
-  password.split("").map((digit, i: number) => digit === attemptedPassword[i]);
-
-const getExactCorrectCharsCount = (password: string, attemptedPassword: string) =>
-  getExactCorrectChars(password, attemptedPassword).filter((isCorrect) => isCorrect).length;
-
-const getMisplacedCorrectCharsCount = (password: string, attemptedPassword: string) => {
-  // filter out exact correct chars from both the attempted and correct password, to simplify checking for duplicate counts
-  const remainingPasswordChars = password.split("").filter((digit, i) => digit !== attemptedPassword[i]);
-  const remainingAttemptedPasswordChars = attemptedPassword.split("").filter((digit, i) => digit !== password[i]);
-
-  const misplacedCorrectChars = remainingAttemptedPasswordChars.filter((digit, i) => {
-    const isPresentInPassword = remainingPasswordChars.includes(digit);
-    const countInAttemptedPasswordThusFar = remainingAttemptedPasswordChars
-      .slice(0, i)
-      .filter((prevDigit) => prevDigit === digit).length;
-    const countInPassword = remainingPasswordChars.filter((prevDigit) => prevDigit === digit).length;
-    return isPresentInPassword && countInAttemptedPasswordThusFar < countInPassword;
-  });
-
-  return misplacedCorrectChars.length;
-};
-
-const getGenericSuccess = (attemptedPassword: string) => ({
-  status: ResponseStatus.SUCCESS,
-  message: "Success! Access granted.",
-  passwordAttempted: attemptedPassword,
-});
-
-export const getSharedChars = (password: string, attemptedPassword: string): number => {
-  for (let i = 0; i < password.length; i++) {
-    if (password[i] !== attemptedPassword[i]) {
-      return i;
-    }
-  }
-  return password.length;
 };

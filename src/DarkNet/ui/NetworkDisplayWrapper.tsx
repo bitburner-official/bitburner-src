@@ -13,7 +13,8 @@ import { Router } from "../../ui/GameRoot";
 import { Page } from "../../ui/Router";
 import { getLabyrinthDetails } from "../effects/labyrinth";
 import { DarknetServer } from "../../Server/DarknetServer";
-import { isDarknetServer } from "../effects/effects";
+
+import { isDarknetServer } from "../utils/darknetServerUtils";
 
 const DW_NET_WIDTH = 6000;
 const DW_NET_HEIGHT = 12000;

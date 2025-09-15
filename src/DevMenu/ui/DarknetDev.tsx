@@ -13,10 +13,10 @@ import { OptionSwitch } from "../../ui/React/OptionSwitch";
 import { Router } from "../../ui/GameRoot";
 import { SimplePage, ToastVariant } from "@enums";
 import { getDarkscapeNavigator, handleSuccessfulAuth } from "../../DarkNet/effects/effects";
-import { getAllMobileDarknetServers } from "../../DarkNet/controllers/NetworkMovement";
 import { isLabyrinthServer } from "../../DarkNet/effects/labyrinth";
 import { SnackbarEvents } from "../../ui/React/Snackbar";
 import { AutoExpandAccordion } from "../../ui/AutoExpand/AutoExpandAccordion";
+import { getAllMobileDarknetServers } from "../../DarkNet/utils/darknetNetworkUtils";
 
 export function DarknetDev(): React.ReactElement {
   const toggleShowFullNetwork = (newValue: boolean): void => {

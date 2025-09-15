@@ -36,7 +36,8 @@ import { Settings } from "../Settings/Settings";
 import { activateSteamAchievements } from "../Electron";
 import { Go } from "../Go/Go";
 import { type AchievementId, type SFAchievementId, SFAchievementIds } from "./Types";
-import { getAllMobileDarknetServers } from "../DarkNet/controllers/NetworkMovement";
+
+import { getAllMobileDarknetServers } from "../DarkNet/utils/darknetNetworkUtils";
 
 function assertAchievements(
   achievements: typeof data.achievements,

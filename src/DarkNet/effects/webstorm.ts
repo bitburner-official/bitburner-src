@@ -5,7 +5,6 @@ import {
   addRandomDarknetServers,
   balanceDarknetServers,
   deleteRandomDarknetServers,
-  getAllMobileDarknetServers,
   moveRandomDarknetServers,
   restartAllDarknetServers,
 } from "../controllers/NetworkMovement";
@@ -13,6 +12,7 @@ import { BaseServer } from "../../Server/BaseServer";
 import { getNetDepth } from "./labyrinth";
 import { NET_WIDTH } from "../Enums";
 import { sleep } from "../../utils/Utility";
+import { getAllMobileDarknetServers } from "../utils/darknetNetworkUtils";
 
 export const launchWebstorm = async (suppressToast = false) => {
   DarknetState.isMutating = false;

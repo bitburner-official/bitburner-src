@@ -67,11 +67,11 @@ import { Settings } from "../Settings/Settings";
 import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContentFilePath } from "../Paths/ContentFile";
 import { LiteratureName } from "@enums";
-import { isDarknetServer } from "../DarkNet/effects/effects";
 import { DarknetServer as IDarknetServer } from "@nsdefs";
 import { exampleDarknetServer } from "../DarkNet/Enums";
 import { Programs } from "../Programs/Programs";
 import { getRecordKeys } from "../Types/Record";
+import { isDarknetServer } from "../DarkNet/utils/darknetServerUtils";
 
 export const helpers = {
   string,

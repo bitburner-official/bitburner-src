@@ -15,9 +15,11 @@ import { IPAddress, isIPAddress } from "../Types/strings";
 import "../Script/RunningScript"; // For reviver side-effect
 import { assertObject } from "../utils/TypeAssertion";
 import { populateDarknet } from "../DarkNet/controllers/NetworkGenerator";
-import { applyRamBlocks, hasDarknetAccess, isDarknetServer } from "../DarkNet/effects/effects";
+import { applyRamBlocks } from "../DarkNet/effects/effects";
 import { getTorRouter } from "../Locations/ui/TorButton";
 import { DarknetServer } from "./DarknetServer";
+import { isDarknetServer } from "../DarkNet/utils/darknetServerUtils";
+import { hasDarknetAccess } from "../DarkNet/utils/darknetAuthUtils";
 
 /**
  * Map of all Servers that exist in the game

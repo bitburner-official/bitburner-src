@@ -10,8 +10,8 @@ import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
 import { PasswordPrompt } from "./PasswordPrompt";
 import { copyToClipboard, decolorJsonProperties, formatToMaxDigits } from "./uiUtilities";
 import { useRerender } from "../../ui/React/hooks";
-import { getDarknetData } from "../effects/effects";
 import { sleep } from "../../utils/Utility";
+import { getDarknetDataOrThrow } from "../utils/darknetServerUtils";
 
 export type DWPasswordPromptModalProps = {
   open: boolean;
@@ -38,7 +38,7 @@ export const ServerDetailsModal = ({
     };
   }, [rerender]);
 
-  const darknetData = getDarknetData(server);
+  const darknetData = getDarknetDataOrThrow(server);
   if (!darknetData) {
     console.warn(`ServerDetailsModal: server ${server.hostname} missing darknet data`);
     return <></>;

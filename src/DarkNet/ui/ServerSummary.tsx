@@ -6,7 +6,8 @@ import { RunningScript } from "../../Script/RunningScript";
 import { formatNumber } from "../../ui/formatNumber";
 import { CompletedProgramName } from "@enums";
 import { formatToMaxDigits } from "./uiUtilities";
-import { getDarknetData } from "../effects/effects";
+
+import { getDarknetData } from "../utils/darknetServerUtils";
 
 export type ServerSummaryProps = {
   server: BaseServer;
