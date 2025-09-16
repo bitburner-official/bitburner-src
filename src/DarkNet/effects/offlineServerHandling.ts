@@ -56,19 +56,11 @@ export function getFailureResult(ctx: NetscriptContext, hostname: string, option
   }
   if (options.preventUseOnImmobileServers && getDarknetData(targetServer)?.isMobile == false) {
     const result = `${targetServer.hostname} is not a valid target: it is a stationary server.`;
-    logger(ctx)(result);
-    return {
-      success: false,
-      message: ResponseStatus.I_AM_A_TEAPOT,
-    };
+    error(ctx)(result);
   }
   if (options.requireDarknet && !isDarknetServer(targetServer)) {
     const result = `${targetServer.hostname} is not a darknet server.`;
-    logger(ctx)(result);
-    return {
-      success: false,
-      message: ResponseStatus.I_AM_A_TEAPOT,
-    };
+    error(ctx)(result);
   }
   if (options.requireDirectConnection && !isDirectConnected(currentServer, targetServer)) {
     const result = `${targetServer.hostname} is not connected to the current server ${currentServer.hostname}. It may have moved.`;
@@ -111,7 +103,7 @@ export const isDirectConnected = (currentServer: BaseServer, targetServer: BaseS
 export function expectDarknetServer(ctx: NetscriptContext, hostname: string) {
   const targetServer = getServer(ctx, hostname);
   if (!isDarknetServer(targetServer)) {
-    throw new Error(`Target server ${hostname} is not a darknet server`);
+    throw new Error(`${hostname} is not a darknet server`);
   }
   return targetServer;
 }

@@ -77,11 +77,9 @@ describe("home", () => {
       ns.dnet.connectToSession(SpecialServers.Home, "");
     }).toThrow("home is not a darknet server");
   });
-  // WIP-@fico: Inconsistent behavior. This API should throw.
-  test("heartbleed from darkweb", async () => {
+  test("heartbleed from darkweb", () => {
     const ns = getNsOnDarkWeb();
-    const result = await ns.dnet.heartbleed(SpecialServers.Home);
-    expect(result.success).toStrictEqual(false);
+    expect(() => ns.dnet.heartbleed(SpecialServers.Home)).toThrow("home is not a darknet server");
   });
   test("openCache", () => {
     // Intentionally empty. Caches cannot be spawned on non-darknet servers.
@@ -92,11 +90,9 @@ describe("home", () => {
     expect(result.length).toStrictEqual(1);
     expect(result[0]).toStrictEqual("darkweb");
   });
-  // WIP-@fico: Inconsistent behavior. This API should throw.
-  test("setStasisLink", async () => {
+  test("setStasisLink", () => {
     const ns = getNsOnHome();
-    const result = await ns.dnet.setStasisLink(true);
-    expect(result.success).toStrictEqual(false);
+    expect(() => ns.dnet.setStasisLink(true)).toThrow("Failed to stasis link: home is not a darknet server.");
   });
   test("getServer", () => {
     const ns = getNsOnHome();
@@ -104,46 +100,34 @@ describe("home", () => {
       ns.dnet.getServer();
     }).toThrow("home is not a darknet server");
   });
-  // WIP-@fico: Inconsistent behavior. This API should throw.
   test("getServerAuthDetails", () => {
     const ns = getNsOnHome();
-    const authDetails = ns.dnet.getServerAuthDetails();
-    expect(authDetails.modelId).toStrictEqual("");
+    expect(() => ns.dnet.getServerAuthDetails()).toThrow("home is not a darknet server");
   });
-  // WIP-@fico: Inconsistent behavior. This API should throw.
-  test("packetCapture", async () => {
+  test("packetCapture", () => {
     const ns = getNsOnHome();
-    const result = await ns.dnet.packetCapture(SpecialServers.Home);
-    expect(result.success).toStrictEqual(false);
+    expect(() => ns.dnet.packetCapture(SpecialServers.Home)).toThrow("home is not a darknet server");
   });
-  // WIP-@fico: Inconsistent behavior. This API should throw.
-  test("induceServerMigration", async () => {
+  test("induceServerMigration", () => {
     const ns = getNsOnHome();
-    const result = await ns.dnet.induceServerMigration();
-    expect(result.success).toStrictEqual(false);
+    expect(() => ns.dnet.induceServerMigration()).toThrow("home is not a darknet server");
   });
   test("isDarknetServer", () => {
     const ns = getNsOnHome();
     const result = ns.dnet.isDarknetServer();
     expect(result).toStrictEqual(false);
   });
-  // WIP-@fico: Inconsistent behavior. This API should throw.
-  test("memoryReallocation", async () => {
+  test("memoryReallocation", () => {
     const ns = getNsOnHome();
-    const result = await ns.dnet.memoryReallocation();
-    expect(result.success).toStrictEqual(false);
+    expect(() => ns.dnet.memoryReallocation()).toThrow("home is not a darknet server");
   });
-  // WIP-@fico: Inconsistent behavior. This API should throw.
   test("getOwnerAllocatedRam", () => {
     const ns = getNsOnHome();
-    const result = ns.dnet.getOwnerAllocatedRam();
-    expect(result).toStrictEqual(0);
+    expect(() => ns.dnet.getOwnerAllocatedRam()).toThrow("home is not a darknet server");
   });
-  // WIP-@fico: Inconsistent behavior. This API should throw.
   test("getCurrentDepth", () => {
     const ns = getNsOnHome();
-    const result = ns.dnet.getCurrentDepth();
-    expect(result).toStrictEqual(-1);
+    expect(() => ns.dnet.getCurrentDepth()).toThrow("home is not a darknet server");
   });
   test("promoteStock", async () => {
     const ns = getNsOnHome();
@@ -220,7 +204,6 @@ describe("darkweb", () => {
   });
   test("setStasisLink", async () => {
     const ns = getNsOnDarkWeb();
-    // WIP-@fico: Why does this API not work with darkweb?
     const result = await ns.dnet.setStasisLink(true);
     expect(result.success).toStrictEqual(false);
   });
@@ -241,7 +224,6 @@ describe("darkweb", () => {
     expect(result.success).toStrictEqual(true);
   });
   test("induceServerMigration", async () => {
-    // WIP-@fico: Should we explicitly mention in TSDoc that this API does not work with darkweb?
     const ns = getNsOnDarkWeb();
     const result = await ns.dnet.induceServerMigration();
     expect(result.success).toStrictEqual(false);

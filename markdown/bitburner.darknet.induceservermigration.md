@@ -4,7 +4,7 @@
 
 ## Darknet.induceServerMigration() method
 
-Increases the chance that connected servers will move to other parts of the darknet, by overloading the connections between them and the current server. (Does not affect the current server, only nearby ones)
+Increases the chance that connected servers will move to other parts of the darknet, by overloading the connections between them and the current server. It does not affect the current server, only nearby ones. Must be run from a darknet server.
 
 Effect scales with threads.
 

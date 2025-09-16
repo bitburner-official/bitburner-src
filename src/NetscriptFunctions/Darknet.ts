@@ -174,7 +174,10 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
             }. Attempted password starts with ${token.slice(0, 100)} `,
           );
         }
-        const onlineConnectionCheck = getFailureResult(ctx, targetHostname, { requireAdminRights: true });
+        const onlineConnectionCheck = getFailureResult(ctx, targetHostname, {
+          requireAdminRights: true,
+          requireDarknet: true,
+        });
         if (!onlineConnectionCheck.success) {
           return {
             success: false,
@@ -339,11 +342,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const server = ctx.workerScript.getServer();
         const darknetData = getDarknetData(server);
         if (!isDarknetServer(server)) {
-          helpers.log(ctx, () => `${server.hostname} was not stasis linked; it is not a darknet server`);
-          return helpers.netscriptDelay(ctx, 100).then(() => ({
-            success: false,
-            message: `${server?.hostname} is not a darknet server.`,
-          }));
+          return error(ctx)(`Failed to stasis link: ${server.hostname} is not a darknet server.`);
         }
         if (!darknetData?.isMobile) {
           helpers.log(ctx, () => `${server.hostname} cannot be stasis linked: it is a stationary server.`);
@@ -459,8 +458,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         return offlineResponse;
       }
       if (!darknetData) {
-        logger(ctx)(`${hostname} is not a darknet server.`);
-        return offlineResponse;
+        return error(ctx)(`${hostname} is not a darknet server.`);
       }
       const localServer = ctx.workerScript.getServer();
       const isConnected = isDirectConnected(localServer, server);
@@ -626,12 +624,14 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
       (_hostname): number => {
         const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
         const server = GetServer(hostname);
+        expectDarknetServer(ctx, ctx.workerScript.hostname);
         return getDarknetData(server)?.ramBlock ?? 0;
       },
     getCurrentDepth:
       (ctx) =>
       (_hostname): number => {
         const hostname = helpers.string(ctx, "hostname", _hostname ?? ctx.workerScript.hostname);
+        expectDarknetServer(ctx, ctx.workerScript.hostname);
         const server = GetServer(hostname);
         return getDarknetData(server)?.depth ?? -1;
       },

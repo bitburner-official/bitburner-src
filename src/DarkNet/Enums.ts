@@ -43,7 +43,6 @@ export const ResponseStatus = {
   NOT_FOUND: "401 Hostname Not Found",
   TIMEOUT: "408 Request Timeout",
   MOVED_PERMANENTLY: "301 Server Has Moved",
-  I_AM_A_TEAPOT: "418 I'm a teapot",
 } as const;
 
 export const exampleDarknetServer: IDarknetServer = {

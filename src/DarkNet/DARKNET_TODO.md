@@ -402,7 +402,7 @@ Coming soon:
   "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.
   "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
   "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.
-  "418 I'm a teapot" - ~~The server is a teapot and cannot brew coffee.~~ The target server is not a darknet server.
+  "400 Bad Request" - ~~The server is a teapot and cannot brew coffee.~~ The target server is not a darknet server.
 
 - A successful authenticate() gives the script a "session" (aka whitelists its PID.) This allows it to run exec() on the target server. (exec does not require a password anymore, but does require a session)
 

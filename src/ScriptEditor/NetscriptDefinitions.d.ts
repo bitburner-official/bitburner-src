@@ -4143,7 +4143,6 @@ type ResponseStatus = {
   NOT_FOUND: "401 Hostname Not Found";
   TIMEOUT: "408 Request Timeout";
   MOVED_PERMANENTLY: "301 Server Has Moved";
-  I_AM_A_TEAPOT: "418 I'm a teapot";
 };
 
 type ResponseStatusType = _ValueOf<ResponseStatus>;
@@ -4258,7 +4257,6 @@ export interface Darknet {
    * - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/>
    * - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/>
    * - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/>
-   * - "418 I'm a teapot" - The server is a teapot and cannot brew coffee.<br/>
    *
    * @remarks
    * RAM cost: 0.6 GB
@@ -4284,7 +4282,6 @@ export interface Darknet {
    * - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/>
    * - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/>
    * - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/>
-   * - "418 I'm a teapot" - The server is a teapot and cannot brew coffee.<br/>
    *
    * @remarks
    * RAM cost: 0.05 GB
@@ -4422,7 +4419,7 @@ export interface Darknet {
 
   /**
    * Increases the chance that connected servers will move to other parts of the darknet, by overloading the connections between them and the current server.
-   * (Does not affect the current server, only nearby ones)
+   * It does not affect the current server, only nearby ones. Must be run from a darknet server.
    *
    * Effect scales with threads.
    *
