@@ -398,10 +398,10 @@ Coming soon:
 - Fully removed errors from authenticate() (outside of passing a bool instead of a string type validations). It now returns status codes with text descriptions. The detail below is also included in the docs for authenticate.
   Response status types:
   "200 Success" - Authentication was successful.
-  "401 Unauthorized" - Authentication failed. The password is incorrect.
-  "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid.
+  "401 Not Authorized" - Authentication failed. The password is incorrect.
+  "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.
   "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.
-  "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server.
+  "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.
   "418 I'm a teapot" - ~~The server is a teapot and cannot brew coffee.~~ The target server is not a darknet server.
 
 - A successful authenticate() gives the script a "session" (aka whitelists its PID.) This allows it to run exec() on the target server. (exec does not require a password anymore, but does require a session)
@@ -438,7 +438,7 @@ Coming soon:
 
 - auth gives response codes based on what happened instead of throwing
 
-  - "200 Success" | "401 Unauthorized" | "404 Not Found" | "408 Request Timeout" | "301 Moved Permanently"
+  - "200 Success" | "401 Not Authorized" | "401 Hostname Not Found" | "408 Request Timeout" | "301 Server Has Moved"
 
 - some hints to the password, or extra info from the last password attempted, can sometimes appear in packet capture
 

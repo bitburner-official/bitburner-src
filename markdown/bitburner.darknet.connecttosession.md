@@ -10,7 +10,7 @@ If successful, grants the script a session, allowing it to exec() to that server
 
 If not, more detail may be able to be gathered by using heartbleed() to look at the resulting logs on the server.
 
-Response messages:<br/> - "200 Success" - Authentication was successful.<br/> - "401 Unauthorized" - Authentication failed. The password is incorrect.<br/> - "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/> - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/> - "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server.<br/> - "418 I'm a teapot" - The server is a teapot and cannot brew coffee.<br/>
+Response messages:<br/> - "200 Success" - Authentication was successful.<br/> - "401 Not Authorized" - Authentication failed. The password is incorrect.<br/> - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/> - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/> - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/> - "418 I'm a teapot" - The server is a teapot and cannot brew coffee.<br/>
 
 **Signature:**
 
@@ -29,7 +29,7 @@ connectToSession(hostname: string, password: string): Result;
 
 [Result](./bitburner.result.md)
 
-a promise that resolves to a [Result](./bitburner.result.md) object. The response will have a `status` of "200 Success" \| "401 Unauthorized" \| "404 Not Found" \| "408 Request Timeout" \| "301 Moved Permanently"
+a promise that resolves to a [Result](./bitburner.result.md) object. The response will have a `status` of "200 Success" \| "401 Not Authorized" \| "401 Hostname Not Found" \| "408 Request Timeout" \| "301 Server Has Moved"
 
 ## Remarks
 

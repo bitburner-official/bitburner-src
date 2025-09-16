@@ -11,10 +11,10 @@ Response statuses used for authenticate and connectToSession methods
 ```typescript
 type ResponseStatus = {
   SUCCESS: "200 Success";
-  AUTH_FAILURE: "401 Unauthorized";
-  NOT_FOUND: "404 Not Found";
+  AUTH_FAILURE: "401 Not Authorized";
+  NOT_FOUND: "401 Hostname Not Found";
   TIMEOUT: "408 Request Timeout";
-  MOVED_PERMANENTLY: "301 Moved Permanently";
+  MOVED_PERMANENTLY: "301 Server Has Moved";
   I_AM_A_TEAPOT: "418 I'm a teapot";
 };
 ```

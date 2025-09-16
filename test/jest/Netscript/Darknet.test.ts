@@ -71,19 +71,12 @@ describe("home", () => {
       await ns.dnet.authenticate(SpecialServers.Home, "");
     }).rejects.toContain("home is not a darknet server");
   });
-  // WIP-@fico: Inconsistent behavior. This API should throw. See my example in the commented out code.
-  test("connectToSession from darkweb", () => {
-    const ns = getNsOnDarkWeb();
-    const result = ns.dnet.connectToSession(SpecialServers.Home, "");
-    expect(result.success).toStrictEqual(false);
+  test("connectToSession", () => {
+    const ns = getNsOnHome();
+    expect(() => {
+      ns.dnet.connectToSession(SpecialServers.Home, "");
+    }).toThrow("home is not a darknet server");
   });
-  // Example of how connectToSession should behave
-  // test("connectToSession", () => {
-  //   const ns = getNsOnHome();
-  //   expect(() => {
-  //     ns.dnet.connectToSession(SpecialServers.Home, "");
-  //   }).toThrow("home is not a darknet server");
-  // });
   // WIP-@fico: Inconsistent behavior. This API should throw.
   test("heartbleed from darkweb", async () => {
     const ns = getNsOnDarkWeb();

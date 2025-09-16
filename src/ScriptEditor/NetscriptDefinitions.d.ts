@@ -4139,10 +4139,10 @@ export interface Format {
  */
 type ResponseStatus = {
   SUCCESS: "200 Success";
-  AUTH_FAILURE: "401 Unauthorized";
-  NOT_FOUND: "404 Not Found";
+  AUTH_FAILURE: "401 Not Authorized";
+  NOT_FOUND: "401 Hostname Not Found";
   TIMEOUT: "408 Request Timeout";
-  MOVED_PERMANENTLY: "301 Moved Permanently";
+  MOVED_PERMANENTLY: "301 Server Has Moved";
   I_AM_A_TEAPOT: "418 I'm a teapot";
 };
 
@@ -4254,10 +4254,10 @@ export interface Darknet {
    *
    * Response messages:<br/>
    * - "200 Success" - Authentication was successful.<br/>
-   * - "401 Unauthorized" - Authentication failed. The password is incorrect.<br/>
-   * - "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/>
+   * - "401 Not Authorized" - Authentication failed. The password is incorrect.<br/>
+   * - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/>
    * - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/>
-   * - "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server.<br/>
+   * - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/>
    * - "418 I'm a teapot" - The server is a teapot and cannot brew coffee.<br/>
    *
    * @remarks
@@ -4280,10 +4280,10 @@ export interface Darknet {
    *
    * Response messages:<br/>
    * - "200 Success" - Authentication was successful.<br/>
-   * - "401 Unauthorized" - Authentication failed. The password is incorrect.<br/>
-   * - "404 Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/>
+   * - "401 Not Authorized" - Authentication failed. The password is incorrect.<br/>
+   * - "401 Hostname Not Found" - The server was not found. The server may be offline or the hostname is invalid.<br/>
    * - "408 Request Timeout" - The request failed (though the password may or may not have been correct). Caused by network instability.<br/>
-   * - "301 Moved Permanently" - The server has moved to a different location and is no longer connected to the current server.<br/>
+   * - "301 Server Has Moved" - The server has moved to a different location and is no longer connected to the current server.<br/>
    * - "418 I'm a teapot" - The server is a teapot and cannot brew coffee.<br/>
    *
    * @remarks
@@ -4292,7 +4292,7 @@ export interface Darknet {
    *
    * @param hostname - name of the target server to connect to existing session
    * @param password - the server's password, to verify the session
-   * @returns a promise that resolves to a {@link Result} object. The response will have a `status` of "200 Success" | "401 Unauthorized" | "404 Not Found" | "408 Request Timeout" | "301 Moved Permanently"
+   * @returns a promise that resolves to a {@link Result} object. The response will have a `status` of "200 Success" | "401 Not Authorized" | "401 Hostname Not Found" | "408 Request Timeout" | "301 Server Has Moved"
    */
   connectToSession(hostname: string, password: string): Result;
 
