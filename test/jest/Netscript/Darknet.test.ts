@@ -225,8 +225,7 @@ describe("darkweb", () => {
   });
   test("induceServerMigration", () => {
     const ns = getNsOnDarkWeb();
-    expect(() => ns.dnet.induceServerMigration())
-      .toThrow("darkweb is not a valid target: it is a stationary server.");
+    expect(() => ns.dnet.induceServerMigration()).toThrow("darkweb is not a valid target: it is a stationary server.");
   });
   test("isDarknetServer", () => {
     const ns = getNsOnDarkWeb();
