@@ -223,10 +223,10 @@ describe("darkweb", () => {
     const result = await ns.dnet.packetCapture(SpecialServers.DarkWeb);
     expect(result.success).toStrictEqual(true);
   });
-  test("induceServerMigration", async () => {
+  test("induceServerMigration", () => {
     const ns = getNsOnDarkWeb();
-    const result = await ns.dnet.induceServerMigration();
-    expect(result.success).toStrictEqual(false);
+    expect(() => ns.dnet.induceServerMigration())
+      .toThrow("darkweb is not a valid target: it is a stationary server.");
   });
   test("isDarknetServer", () => {
     const ns = getNsOnDarkWeb();

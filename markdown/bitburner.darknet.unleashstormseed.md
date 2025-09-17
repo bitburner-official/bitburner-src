@@ -4,7 +4,7 @@
 
 ## Darknet.unleashStormSeed() method
 
-There are rumors of a mysterious executable sometimes found deep in the dark net... Run them at your own risk.
+Executes STORM\_SEED.exe, if it is present on the server the script is running on. Warning: webstorms can cause catastrophic damage to the darknet. Run at your own risk.
 
 **Signature:**
 

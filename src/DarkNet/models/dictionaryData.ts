@@ -299,7 +299,7 @@ export const packetSniffPhrases = [
   "how to hide your computer from the NSA",
   "how to be really good at cybersecurity",
   "Do you smell something burning?",
-  "418 I AM A TEAPOT: The server is a teapot and cannot brew coffee.",
+  "Error Code 418 I AM A TEAPOT: The server is a teapot and cannot brew coffee.",
   "My real name is not important. What matters is the message I bring.",
   "My right arm has been strangely numb ever since I got that chip grafted. I hope it takes soon.",
   "I just got a new implant. It's supposed to make me smarter, but I think it's just making me see things.",

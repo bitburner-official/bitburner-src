@@ -4432,8 +4432,8 @@ export interface Darknet {
   induceServerMigration(hostname?: string): Promise<Result>;
 
   /**
-   * There are rumors of a mysterious executable sometimes found deep in the dark net...
-   * Run them at your own risk.
+   * Executes STORM_SEED.exe, if it is present on the server the script is running on.
+   * Warning: webstorms can cause catastrophic damage to the darknet. Run at your own risk.
    *
    * @remarks
    * RAM cost: 0.1 GB
