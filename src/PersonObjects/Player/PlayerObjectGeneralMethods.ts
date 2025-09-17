@@ -33,6 +33,7 @@ import { SleeveWorkType } from "../Sleeve/Work/Work";
 import { calculateSkillProgress as calculateSkillProgressF, ISkillProgress } from "../formulas/skill";
 import { AddToAllServers, createUniqueRandomIp } from "../../Server/AllServers";
 import { safelyCreateUniqueServer } from "../../Server/ServerHelpers";
+import { Location } from "../../Locations/Location";
 
 import { SpecialServers } from "../../Server/data/SpecialServers";
 import { applySourceFile } from "../../SourceFile/applySourceFile";
@@ -55,6 +56,7 @@ import { Augmentations } from "../../Augmentation/Augmentations";
 import { PlayerEventType, PlayerEvents } from "./PlayerEvents";
 import { Result } from "../../types";
 import type { AchievementId } from "../../Achievements/Types";
+import { Infiltration } from "../../Infiltration/Infiltration";
 
 export function init(this: PlayerObject): void {
   /* Initialize Player's home computer */
@@ -598,4 +600,11 @@ export function focusPenalty(this: PlayerObject): number {
     focus = this.focus ? 1 : CONSTANTS.BaseFocusBonus;
   }
   return focus;
+}
+
+/** This doesn't change the current page; that is up to the caller. */
+export function startInfiltration(this: PlayerObject, location: Location): void {
+  if (!location.infiltrationData)
+    throw new Error(`trying to start infiltration at ${location.name} but the infiltrationData is null`);
+  this.infiltration = new Infiltration(location);
 }
