@@ -5,7 +5,7 @@ export const TerminalHelpText: string[] = [
   "    analyze                          Get information about the current machine ",
   "    backdoor                         Install a backdoor on the current machine ",
   "    buy [-l/-a/program]              Purchase a program through the Dark Web",
-  "    cat [file]                       Display a .msg, .lit, or .txt file",
+  "    cat [file]                       Display the contents of a text file",
   "    cd [dir]                         Change to a new directory",
   "    changelog                        Display changelog",
   "    check [script] [args...]         Print a script's logs to Terminal",
