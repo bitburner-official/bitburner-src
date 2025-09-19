@@ -165,13 +165,12 @@ describe("darkweb", () => {
     const result = await ns.dnet.authenticate(SpecialServers.DarkWeb, "leekspin");
     expect(result.success).toStrictEqual(true);
   });
-  // test("authenticate itself", async () => {
-  //   // WIP: bug in expectPassword. "authenticate" fails if running on darkweb
-  //   const ns = getNsOnDarkWeb();
-  //   const result = await ns.dnet.authenticate(SpecialServers.DarkWeb, "leekspin");
-  //   console.log(result);
-  //   expect(result.success).toStrictEqual(true);
-  // });
+  test("authenticate itself", async () => {
+    const ns = getNsOnDarkWeb();
+    const result = await ns.dnet.authenticate(SpecialServers.DarkWeb, "leekspin");
+    console.log(result);
+    expect(result.success).toStrictEqual(true);
+  });
   test("connectToSession from home", () => {
     const ns = getNsOnHome();
     /**
@@ -181,21 +180,20 @@ describe("darkweb", () => {
     const result = ns.dnet.connectToSession(SpecialServers.DarkWeb, "leekspin");
     expect(result.success).toStrictEqual(true);
   });
-  // test("heartbleed from home", async () => {
-  //   // WIP: bug in isDarknetServer
-  //   const ns = getNsOnHome();
-  //   const result = await ns.dnet.heartbleed(SpecialServers.DarkWeb);
-  //   console.log(result);
-  //   expect(result.success).toStrictEqual(true);
-  // });
+  test("heartbleed from home", async () => {
+    const ns = getNsOnHome();
+    const result = await ns.dnet.heartbleed(SpecialServers.DarkWeb);
+    console.log(result);
+    expect(result.success).toStrictEqual(true);
+  });
   test("openCache", () => {
     const ns = getNsOnDarkWeb();
-    // WIP: Change this test if needed after discussing the design of darkweb
-    const result = addCacheToServer(GetServerOrThrow(SpecialServers.DarkWeb), "test.cache");
-    if (!result.success) {
-      throw new Error(result.message);
-    }
+    const darkweb = GetServerOrThrow(SpecialServers.DarkWeb);
+    const result = addCacheToServer(darkweb, "test");
+    expect(darkweb.caches.length).toBe(1);
+    expect(darkweb.caches[0]).toMatch(/test_[0-9]+\.cache/);
     ns.dnet.openCache(result.cacheFilename);
+    expect(darkweb.caches.length).toBe(0);
   });
   test("probe", () => {
     const ns = getNsOnDarkWeb();
