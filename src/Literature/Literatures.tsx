@@ -673,6 +673,29 @@ export const Literatures: Record<LiteratureName, Literature> = {
     filename: LiteratureName.TheSecretWar,
     text: <Typography></Typography>,
   }),
+  [LiteratureName.DarknetHandbook]: new Literature({
+    title: LiteratureName.DarknetHandbook,
+    filename: LiteratureName.DarknetHandbook,
+    text: (
+      <Typography>
+        There is a legend of a powerful augment, known as the <span style={{ color: "red" }}>"Red Pill"</span>, that can
+        only be found deep within the darknet. The mysterious faction {FactionName.Daedalus} has been searching for it
+        for years, hoping to monopolize it one day.
+        <br />
+        <br />
+        However, the legendary augment is hidden in the depths of a labyrinth. You will need to delve far into the dark
+        in order to find these mysterious servers, and defeat their protections to gain their secret augments.
+        <br />
+        <br />
+        You now have permanent access to the Darknet Navigator, allowing exploration of the 'net manually via the UI.
+        But beware: the labyrinths further into the deep are said to only be accessible via script! Do you have the
+        charisma and the scripting skills needed to conquer the dark?
+        <br />
+        <br />
+        For more details on the darknet and its API, see the Darknet page under Documentation {">"} Advanced.
+      </Typography>
+    ),
+  }),
   [LiteratureName.CacheHint1]: new Literature({
     title: "eGeoCacheing?",
     filename: LiteratureName.CacheHint1,

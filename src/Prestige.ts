@@ -32,6 +32,7 @@ import { canAccessBitNodeFeature } from "./BitNode/BitNodeUtils";
 import { pendingUIShareJobIds } from "./NetworkShare/Share";
 import { getDarkscapeNavigator } from "./DarkNet/effects/effects";
 import { CodingContractEventEmitter } from "./CodingContract/CodingContractEventEmitter";
+import { showLiterature } from "./Literature/LiteratureHelpers";
 
 const BitNode8StartingMoney = 250e6;
 function delayedDialog(message: string, canBeDismissedEasily = true) {
@@ -345,6 +346,13 @@ export function prestigeSourceFile(isFlume: boolean): void {
     Player.money = CONSTANTS.TravelCost;
   }
   staneksGift.prestigeSourceFile();
+
+  if (Player.bitNodeN === 15 && !homeComp.messages.includes(LiteratureName.DarknetHandbook)) {
+    homeComp.messages.push(LiteratureName.DarknetHandbook);
+  }
+  if (Player.bitNodeN === 15 && Player.sourceFileLvl(15) === 0) {
+    showLiterature(LiteratureName.DarknetHandbook);
+  }
 
   // Gain int exp
   if (Player.activeSourceFileLvl(5) !== 0 && !isFlume) {

@@ -1,32 +1,11 @@
 ## TODO:
 
----
-
-- BN 15 stuff?
-- hint note for TRP in lab (in starter guide?)
-
-```
-// - start with crash course?
-const homeComp = Player.getHomeComputer();
-const handbook = LiteratureName.CorporationManagementHandbook;
-if (!homeComp.messages.includes(handbook)) homeComp.messages.push(handbook);
-showLiterature(handbook);
-```
-
 increase priority of locked ram indicator
-keep some icons statically placed on mini-indicators (script count?)
 more color on icons
-
-improve session vs adjacency phrasing
 
 - improve phishing documentation
 
 labels for icons in detail view on password modal?
-
-- lab cha requirement (in UI too)
-- lab api
-
-- webstorm visual indicator
 
 - more hint notes
 
@@ -65,42 +44,9 @@ webstorm screen glitch / text? https://codepen.io/Juxtopposed/pen/MWPmaww ?
 
 - server that returns yes/no in its failure response
 
-  - yes, the password has X as one of its factors
-
 - server that returns a string in response to the attempt?
 
   - result: (encoded attempt) expectation: (encoded password)
-
-  - backdoored servers more likely to restart and/or loose auth, removing backdoor, balancing risk level
-  - low number (1 backdoor per X depth explored, or less than low const): no effect
-  - lv 1 instability: small debuff to auth() time
-  - lv 2: sometimes auth fails with timeout
-  - lv 3: more server restarts on the darknet
-  - lv 4: It's hard to sustain this many backdoors without a lot of upkeep due to them going offline or resetting. More connection severing on the darknet. player starts taking damage sometimes. creepypasta appears on player terminal, signed by the darknet.
-  - lv 5: ports and file writes and other ns methods sometimes fail silently, or return garbage data. hard mode that is effectively opt-in
-
-Catlover writeup: https://discord.com/channels/415207508303544321/1358930422607642845/1360131828756775033
-My suggestion: Create many layers and cliques. We are still consistent in the behavior of APIs, but each layer (or clique) has a unique purpose. A very rough guideline:
-Low tier:
-Accessible from BN1.
-Low rewards.
-Easy to set up "foothold" (backdoor/stasis link).
-Suitable for testing scripts.
-Have many volatile servers.
-Clique:
-001: Darkweb and some servers with easy minigames.
-002: Some servers with easy minigames.
-Mid tier:
-Require SF.
-Better rewards.
-Harder to set up foothold.
-Have many cliques. Each clique may require a different strategy.
-Have fewer volatile servers, but some special cliques have volatile servers leading to high tier.
-High tier: AKA "The Wild West"
-Very good rewards.
-Require resilient scripts. Running scripts can be terminated randomly.
-Don't rely on foothold. Even foothold can be wiped!
-Git gud.
 
 ## Community feedback:
 
