@@ -84,6 +84,11 @@ export const PasswordPrompt = ({ server, onClose, onSuccess }: PasswordPromptPro
         </Typography>
         <br />
         <br />
+        <LabyrinthSummary
+          result={rawResponse?.result}
+          lastMovementFeedback={rawResponse?.response?.message}
+          loadingText={response}
+        />
       </>
     );
   }

@@ -4352,7 +4352,7 @@ export interface Darknet {
    * @param shouldLink - true to apply a stasis link, false to remove it.
    * @returns A promise that resolves to a {@link Result} object.
    */
-  setStasisLink(shouldLink: boolean): Promise<Result>;
+  setStasisLink(shouldLink?: boolean): Promise<Result>;
 
   /**
    * Returns the maximum number of stasis links that can be applied globally, based on the player's current status.
@@ -4501,15 +4501,12 @@ export interface Darknet {
   promoteStock(sym: string): Promise<Result>;
 
   /**
-   * Spends some time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa.
+   * Spends time sending out phishing emails, attempting to find some non-technical middle manager to fall for the scam. Builds charimsa.
+   * Often the attempt will fail, but success can be increased with crime success rate and charisma stats.
    *
-   * Most of the time the attempt fails due to spam filters, but success can be increased with crime success rate and charisma stats.
+   * The amount of money lifted scales with the number of threads used, if successful. Very occasionally you can retrieve a cache file from the attempt.
    *
-   * Very occasionally you can retrieve a cache file from the attempt.
-   *
-   * This can only be run from scripts on darknet servers.
-   *
-   * The amount of money lifted scales with the number of threads used, if successful.
+   * Phishing attacks can only be run from scripts on darknet servers.
    *
    * @remarks
    * RAM cost: 2 GB

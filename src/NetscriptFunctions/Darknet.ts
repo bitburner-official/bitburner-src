@@ -337,7 +337,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
     setStasisLink:
       (ctx: NetscriptContext) =>
       (_shouldLink): Promise<DarknetResult> => {
-        const shouldLink = helpers.boolean(ctx, "shouldLink", _shouldLink);
+        const shouldLink = helpers.boolean(ctx, "shouldLink", _shouldLink ?? true);
         expectDarknetAccess(ctx);
         const server = ctx.workerScript.getServer();
         const darknetData = getDarknetData(server);
@@ -513,6 +513,7 @@ export function NetscriptDarknet(): InternalAPI<NSDnet> {
         const onlineConnectionCheck = getFailureResult(ctx, hostname, {
           requireDirectConnection: true,
           requireDarknet: true,
+          preventUseOnImmobileServers: true,
         });
         if (!onlineConnectionCheck.success) {
           return helpers.netscriptDelay(ctx, 100).then(() => ({

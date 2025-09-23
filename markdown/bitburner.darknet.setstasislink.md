@@ -13,14 +13,14 @@ There is a maximum of stasis links that can be applied globally, which can be se
 **Signature:**
 
 ```typescript
-setStasisLink(shouldLink: boolean): Promise<Result>;
+setStasisLink(shouldLink?: boolean): Promise<Result>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  shouldLink | boolean | true to apply a stasis link, false to remove it. |
+|  shouldLink | boolean | _(Optional)_ true to apply a stasis link, false to remove it. |
 
 **Returns:**
 

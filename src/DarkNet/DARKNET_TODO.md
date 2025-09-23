@@ -1,11 +1,6 @@
 ## TODO:
 
-increase priority of locked ram indicator
-more color on icons
-
 - improve phishing documentation
-
-labels for icons in detail view on password modal?
 
 - more hint notes
 
@@ -17,18 +12,9 @@ labels for icons in detail view on password modal?
 
 ## Post MVP:
 
-more Bitnode multipliers?
-
-Improve error UI and handle multiple thrown errors
-https://discord.com/channels/415207508303544321/415207508303544323/1372228866621571163
-
 - stanek fragments for darkweb
 
-- achievements
-
 - ui methods for setting server description, colors, icons etc?
-
-- Make network wider at deeper parts?
 
 - Attempt to make connection?
   - chance to put current server offline?
