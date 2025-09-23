@@ -218,9 +218,10 @@ export const addServerToNetwork = (server: BaseServer, x: number, y: number) => 
 
 // Creates all the special servers for use at the bottom of the dark net
 export const addLabyrinth = () => {
+  const passwordSalt = Math.floor(Math.random() * 10000);
   const darknetData = {
     icon: labIcon,
-    password: "!!the:masterwork:of:daedalus!!",
+    password: `!!the:masterwork:of:daedalus<${passwordSalt}>!!`,
     staticPasswordHint: "You have discovered a dark, mysterious maze. Your footsteps echo eerily in the silence.",
     passwordHintData: "",
     modelId: ModelIds.labyrinth,

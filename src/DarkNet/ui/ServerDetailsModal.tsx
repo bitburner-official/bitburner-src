@@ -6,7 +6,7 @@ import { DarknetEvents, getServerState } from "../models/DarknetState";
 import { BaseServer } from "../../Server/BaseServer";
 import { ServerSummary } from "./ServerSummary";
 import { populateServerLogsWithNoise } from "../models/packetSniffing";
-import { getLabyrinthDetails, isLabyrinthServer } from "../effects/labyrinth";
+import { isLabyrinthServer } from "../effects/labyrinth";
 import { PasswordPrompt } from "./PasswordPrompt";
 import { copyToClipboard, decolorJsonProperties, formatToMaxDigits } from "./uiUtilities";
 import { useRerender } from "../../ui/React/hooks";
@@ -48,7 +48,6 @@ export const ServerDetailsModal = ({
   populateServerLogsWithNoise(server);
   const serverState = getServerState(server.hostname);
   const isLabServer = isLabyrinthServer(server.hostname);
-  const canEnterLabManually = getLabyrinthDetails().manual;
   const recentLogs = serverState.serverLogs.slice(0, 5);
   const ramBlock = darknetData.ramBlock;
   const blockedRamString = ramBlock ? formatToMaxDigits(ramBlock, 1) + "+" : "";
@@ -87,13 +86,11 @@ export const ServerDetailsModal = ({
             <>
               <Typography>Password: "{darknetData?.password ?? ""}"</Typography>
               <br />
-              {isLabServer ? (
+              {isLabServer && (
                 <>
                   <br />
                   <Typography>You have successfully navigated the labyrinth! Congratulations!</Typography>
                 </>
-              ) : (
-                ""
               )}
               <Typography color="secondary">
                 {server.ip} cha:{darknetData?.requiredCharismaSkill}
@@ -116,7 +113,7 @@ export const ServerDetailsModal = ({
           ) : (
             <PasswordPrompt server={server} onClose={onClose} onSuccess={() => void onSuccess()} />
           )}
-          {!(isLabServer && canEnterLabManually) && (
+          {!isLabServer && (
             <>
               <Card style={{ height: "250px", overflowY: "scroll" }}>
                 <div style={{ color: "white", paddingLeft: "10px" }}>{logContent}</div>

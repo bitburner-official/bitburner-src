@@ -39,7 +39,7 @@ export const labData: Record<string, labDetails> = {
     augReward: AugmentationName.TheBrokenWings,
     mazeWidth: 20,
     mazeHeight: 14,
-    manual: true,
+    manual: false,
   },
   [SpecialServers.CruelLab]: {
     name: SpecialServers.CruelLab,
