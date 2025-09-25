@@ -14,10 +14,55 @@ scan(host?: string | null, returnOpts?: HostReturnOptions): string[];
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string \| null | _(Optional)_ Optional. Hostname/IP of the server to scan, default to current server. |
-|  returnOpts | [HostReturnOptions](./bitburner.hostreturnoptions.md) | _(Optional)_ Optional. Controls whether the function returns IPs. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string \| null
+
+
+</td><td>
+
+_(Optional)_ Optional. Hostname/IP of the server to scan, default to current server.
+
+
+</td></tr>
+<tr><td>
+
+returnOpts
+
+
+</td><td>
+
+[HostReturnOptions](./bitburner.hostreturnoptions.md)
+
+
+</td><td>
+
+_(Optional)_ Optional. Controls whether the function returns IPs.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

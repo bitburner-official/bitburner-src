@@ -14,9 +14,39 @@ getHackingLevelRequirementOfProgram(program: string): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  program | string | Name of program to create. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+program
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of program to create.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

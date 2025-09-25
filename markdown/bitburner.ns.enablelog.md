@@ -14,9 +14,39 @@ enableLog(fn: string): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  fn | string | Name of the NS function for which to enable logging. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+fn
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the NS function for which to enable logging.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

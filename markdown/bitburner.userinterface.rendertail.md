@@ -14,9 +14,39 @@ renderTail(pid?: number): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  pid | number | _(Optional)_ Optional. PID of the script having its tail rendered. If omitted, the current script is used. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+pid
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Optional. PID of the script having its tail rendered. If omitted, the current script is used.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

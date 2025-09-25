@@ -14,9 +14,39 @@ peek(portNumber: number): any;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  portNumber | number | Port to peek. Must be a positive integer. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+portNumber
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Port to peek. Must be a positive integer.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

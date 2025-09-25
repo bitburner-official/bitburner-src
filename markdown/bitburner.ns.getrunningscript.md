@@ -14,11 +14,71 @@ getRunningScript(filename?: FilenameOrPID, host?: string, ...args: ScriptArg[]):
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  filename | [FilenameOrPID](./bitburner.filenameorpid.md) | _(Optional)_ Optional. Filename or PID of the script. |
-|  host | string | _(Optional)_ Hostname/IP of target server. Optional, defaults to the server the calling script is running on. |
-|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments to specify/identify the script. Optional, when looking for scripts run without arguments. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+filename
+
+
+</td><td>
+
+[FilenameOrPID](./bitburner.filenameorpid.md)
+
+
+</td><td>
+
+_(Optional)_ Optional. Filename or PID of the script.
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Hostname/IP of target server. Optional, defaults to the server the calling script is running on.
+
+
+</td></tr>
+<tr><td>
+
+args
+
+
+</td><td>
+
+[ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\]
+
+
+</td><td>
+
+Arguments to specify/identify the script. Optional, when looking for scripts run without arguments.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,9 +14,39 @@ sellShares(amount: number): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  amount | number | Amount of shares to sell, must be integer between 1 and 100t |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+amount
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of shares to sell, must be integer between 1 and 100t
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

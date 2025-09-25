@@ -17,10 +17,55 @@ prompt(
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  txt | string | Text to appear in the prompt dialog box. |
-|  options | { type?: "boolean" \| "text" \| "select"; choices?: string\[\] } | _(Optional)_ Options to modify the prompt the player is shown. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+txt
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Text to appear in the prompt dialog box.
+
+
+</td></tr>
+<tr><td>
+
+options
+
+
+</td><td>
+
+{ type?: "boolean" \| "text" \| "select"; choices?: string\[\] }
+
+
+</td><td>
+
+_(Optional)_ Options to modify the prompt the player is shown.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

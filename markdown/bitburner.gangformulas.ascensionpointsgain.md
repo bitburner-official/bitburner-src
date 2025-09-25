@@ -14,9 +14,39 @@ ascensionPointsGain(exp: number): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  exp | number | Experience point before ascension. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+exp
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Experience point before ascension.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -13,12 +13,128 @@ interface ActiveFragment
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [highestCharge](./bitburner.activefragment.highestcharge.md) |  | number |  |
-|  [id](./bitburner.activefragment.id.md) |  | number |  |
-|  [numCharge](./bitburner.activefragment.numcharge.md) |  | number |  |
-|  [rotation](./bitburner.activefragment.rotation.md) |  | number |  |
-|  [x](./bitburner.activefragment.x.md) |  | number |  |
-|  [y](./bitburner.activefragment.y.md) |  | number |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[highestCharge](./bitburner.activefragment.highestcharge.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[id](./bitburner.activefragment.id.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[numCharge](./bitburner.activefragment.numcharge.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[rotation](./bitburner.activefragment.rotation.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[x](./bitburner.activefragment.x.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[y](./bitburner.activefragment.y.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

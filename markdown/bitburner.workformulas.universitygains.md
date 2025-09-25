@@ -12,11 +12,65 @@ universityGains(person: Person, classType: UniversityClassType, locationName: Lo
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  person | [Person](./bitburner.person.md) |  |
-|  classType | [UniversityClassType](./bitburner.universityclasstype.md) |  |
-|  locationName | [LocationName](./bitburner.locationname.md) |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+person
+
+
+</td><td>
+
+[Person](./bitburner.person.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+classType
+
+
+</td><td>
+
+[UniversityClassType](./bitburner.universityclasstype.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+locationName
+
+
+</td><td>
+
+[LocationName](./bitburner.locationname.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -13,12 +13,140 @@ interface GangMemberInstall
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [agi](./bitburner.gangmemberinstall.agi.md) |  | number | Factor by which the agility ascension multiplier was decreased (newMult / oldMult) |
-|  [cha](./bitburner.gangmemberinstall.cha.md) |  | number | Factor by which the charisma ascension multiplier was decreased (newMult / oldMult) |
-|  [def](./bitburner.gangmemberinstall.def.md) |  | number | Factor by which the defense ascension multiplier was decreased (newMult / oldMult) |
-|  [dex](./bitburner.gangmemberinstall.dex.md) |  | number | Factor by which the dexterity ascension multiplier was decreased (newMult / oldMult) |
-|  [hack](./bitburner.gangmemberinstall.hack.md) |  | number | Factor by which the hacking ascension multiplier was decreased (newMult / oldMult) |
-|  [str](./bitburner.gangmemberinstall.str.md) |  | number | Factor by which the strength ascension multiplier was decreased (newMult / oldMult) |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[agi](./bitburner.gangmemberinstall.agi.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Factor by which the agility ascension multiplier was decreased (newMult / oldMult)
+
+
+</td></tr>
+<tr><td>
+
+[cha](./bitburner.gangmemberinstall.cha.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Factor by which the charisma ascension multiplier was decreased (newMult / oldMult)
+
+
+</td></tr>
+<tr><td>
+
+[def](./bitburner.gangmemberinstall.def.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Factor by which the defense ascension multiplier was decreased (newMult / oldMult)
+
+
+</td></tr>
+<tr><td>
+
+[dex](./bitburner.gangmemberinstall.dex.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Factor by which the dexterity ascension multiplier was decreased (newMult / oldMult)
+
+
+</td></tr>
+<tr><td>
+
+[hack](./bitburner.gangmemberinstall.hack.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Factor by which the hacking ascension multiplier was decreased (newMult / oldMult)
+
+
+</td></tr>
+<tr><td>
+
+[str](./bitburner.gangmemberinstall.str.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Factor by which the strength ascension multiplier was decreased (newMult / oldMult)
+
+
+</td></tr>
+</tbody></table>
 

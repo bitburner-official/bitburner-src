@@ -14,9 +14,39 @@ kill(pid: number): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  pid | number | The PID of the script to kill. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+pid
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The PID of the script to kill.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

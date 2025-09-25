@@ -14,9 +14,39 @@ getFileMetadata(filename: string): FileMetadata;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  filename | string | Name of the file to read the metadata from. It must be a text file (.txt, .json) or a script (.js, .jsx, .ts, .tsx). |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+filename
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the file to read the metadata from. It must be a text file (.txt, .json) or a script (.js, .jsx, .ts, .tsx).
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,9 +14,39 @@ getChanceToWinClash(gangName: string): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  gangName | string | Target gang |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+gangName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Target gang
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

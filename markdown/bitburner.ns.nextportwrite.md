@@ -14,9 +14,39 @@ nextPortWrite(port: number): Promise<void>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  port | number | Port to listen for a write on. Must be a positive integer. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+port
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Port to listen for a write on. Must be a positive integer.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

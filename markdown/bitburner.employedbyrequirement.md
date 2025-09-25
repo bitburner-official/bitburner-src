@@ -14,8 +14,60 @@ interface EmployedByRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [company](./bitburner.employedbyrequirement.company.md) |  | [CompanyName](./bitburner.companyname.md) |  |
-|  [type](./bitburner.employedbyrequirement.type.md) |  | "employedBy" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[company](./bitburner.employedbyrequirement.company.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CompanyName](./bitburner.companyname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.employedbyrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"employedBy"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

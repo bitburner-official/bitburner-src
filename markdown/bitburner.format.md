@@ -14,10 +14,60 @@ export interface Format
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [number(n, fractionalDigits, suffixStart, isInteger)](./bitburner.format.number.md) | Format a number. |
-|  [percent(n, fractionalDigits, suffixStart)](./bitburner.format.percent.md) | Format a number as a percentage. |
-|  [ram(n, fractionalDigits)](./bitburner.format.ram.md) | Format a number as an amount of ram. |
-|  [time(milliseconds, milliPrecision)](./bitburner.format.time.md) | Format time to a readable string. |
+<table><thead><tr><th>
+
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[number(n, fractionalDigits, suffixStart, isInteger)](./bitburner.format.number.md)
+
+
+</td><td>
+
+Format a number.
+
+
+</td></tr>
+<tr><td>
+
+[percent(n, fractionalDigits, suffixStart)](./bitburner.format.percent.md)
+
+
+</td><td>
+
+Format a number as a percentage.
+
+
+</td></tr>
+<tr><td>
+
+[ram(n, fractionalDigits)](./bitburner.format.ram.md)
+
+
+</td><td>
+
+Format a number as an amount of ram.
+
+
+</td></tr>
+<tr><td>
+
+[time(milliseconds, milliPrecision)](./bitburner.format.time.md)
+
+
+</td><td>
+
+Format time to a readable string.
+
+
+</td></tr>
+</tbody></table>
 

@@ -14,12 +14,87 @@ bulkPurchase(divisionName: string, city: CityName, materialName: CorpMaterialNam
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  divisionName | string | Name of the division |
-|  city | [CityName](./bitburner.cityname.md) | Name of the city |
-|  materialName | [CorpMaterialName](./bitburner.corpmaterialname.md) | Name of the material |
-|  amt | number | Amount of material to buy |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+divisionName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the division
+
+
+</td></tr>
+<tr><td>
+
+city
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+Name of the city
+
+
+</td></tr>
+<tr><td>
+
+materialName
+
+
+</td><td>
+
+[CorpMaterialName](./bitburner.corpmaterialname.md)
+
+
+</td><td>
+
+Name of the material
+
+
+</td></tr>
+<tr><td>
+
+amt
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of material to buy
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

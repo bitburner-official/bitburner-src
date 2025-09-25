@@ -12,11 +12,65 @@ gymGains(person: Person, gymType: GymType, locationName: LocationName): WorkStat
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  person | [Person](./bitburner.person.md) |  |
-|  gymType | [GymType](./bitburner.gymtype.md) |  |
-|  locationName | [LocationName](./bitburner.locationname.md) |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+person
+
+
+</td><td>
+
+[Person](./bitburner.person.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+gymType
+
+
+</td><td>
+
+[GymType](./bitburner.gymtype.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+locationName
+
+
+</td><td>
+
+[LocationName](./bitburner.locationname.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

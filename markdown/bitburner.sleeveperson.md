@@ -14,10 +14,102 @@ interface SleevePerson extends Person
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [memory](./bitburner.sleeveperson.memory.md) |  | number | Number 1-100 initial Value of sync on BN start |
-|  [shock](./bitburner.sleeveperson.shock.md) |  | number | Number 0-100 Experience earned and shared is multiplied with shock% before sync% |
-|  [storedCycles](./bitburner.sleeveperson.storedcycles.md) |  | number | Number of 200ms cycles which are stored as bonus time |
-|  [sync](./bitburner.sleeveperson.sync.md) |  | number | Number 1-100 Experience earned by this sleeve and shared with the player is multiplied with sync% after shock% |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[memory](./bitburner.sleeveperson.memory.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number 1-100 initial Value of sync on BN start
+
+
+</td></tr>
+<tr><td>
+
+[shock](./bitburner.sleeveperson.shock.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number 0-100 Experience earned and shared is multiplied with shock% before sync%
+
+
+</td></tr>
+<tr><td>
+
+[storedCycles](./bitburner.sleeveperson.storedcycles.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of 200ms cycles which are stored as bonus time
+
+
+</td></tr>
+<tr><td>
+
+[sync](./bitburner.sleeveperson.sync.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number 1-100 Experience earned by this sleeve and shared with the player is multiplied with sync% after shock%
+
+
+</td></tr>
+</tbody></table>
 

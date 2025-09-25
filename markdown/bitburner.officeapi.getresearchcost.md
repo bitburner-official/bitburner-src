@@ -14,10 +14,55 @@ getResearchCost(divisionName: string, researchName: CorpResearchName): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  divisionName | string | Name of the division |
-|  researchName | [CorpResearchName](./bitburner.corpresearchname.md) | Name of the research |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+divisionName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of the division
+
+
+</td></tr>
+<tr><td>
+
+researchName
+
+
+</td><td>
+
+[CorpResearchName](./bitburner.corpresearchname.md)
+
+
+</td><td>
+
+Name of the research
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

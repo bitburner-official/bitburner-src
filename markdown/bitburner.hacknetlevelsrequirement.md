@@ -14,8 +14,60 @@ interface HacknetLevelsRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [hacknetLevels](./bitburner.hacknetlevelsrequirement.hacknetlevels.md) |  | number |  |
-|  [type](./bitburner.hacknetlevelsrequirement.type.md) |  | "hacknetLevels" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[hacknetLevels](./bitburner.hacknetlevelsrequirement.hacknetlevels.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.hacknetlevelsrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"hacknetLevels"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

@@ -14,8 +14,60 @@ interface CityRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [city](./bitburner.cityrequirement.city.md) |  | [CityName](./bitburner.cityname.md) |  |
-|  [type](./bitburner.cityrequirement.type.md) |  | "city" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[city](./bitburner.cityrequirement.city.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CityName](./bitburner.cityname.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.cityrequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"city"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

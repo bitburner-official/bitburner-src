@@ -6,7 +6,25 @@
 
 ## Packages
 
-|  Package | Description |
-|  --- | --- |
-|  [bitburner](./bitburner.md) |  |
+<table><thead><tr><th>
+
+Package
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[bitburner](./bitburner.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

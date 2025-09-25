@@ -14,8 +14,60 @@ interface SourceFileRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [sourceFile](./bitburner.sourcefilerequirement.sourcefile.md) |  | number |  |
-|  [type](./bitburner.sourcefilerequirement.type.md) |  | "sourceFile" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[sourceFile](./bitburner.sourcefilerequirement.sourcefile.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.sourcefilerequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"sourceFile"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
