@@ -27,8 +27,7 @@ ReactDOM.render(
  * have to find a hacky way to work around this problem.
  */
 const styleElement = document.createElement("style");
-styleElement.textContent = `
-#color-popover {
+styleElement.textContent = `#color-popover {
   z-index: 20000 !important;
 }`;
 document.head.appendChild(styleElement);
