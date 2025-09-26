@@ -14,9 +14,39 @@ getNodeStats(index: number): NodeStats;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  index | number | Index/Identifier of Hacknet Node |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+index
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Index/Identifier of Hacknet Node
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

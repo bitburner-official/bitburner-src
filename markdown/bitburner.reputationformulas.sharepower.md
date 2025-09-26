@@ -14,10 +14,55 @@ sharePower(threads: number, cpuCores?: number): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  threads | number | Number of threads. Must be a positive integer. |
-|  cpuCores | number | _(Optional)_ Number of CPU cores. Must be a positive integer. The default value is 1. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+threads
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of threads. Must be a positive integer.
+
+
+</td></tr>
+<tr><td>
+
+cpuCores
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Number of CPU cores. Must be a positive integer. The default value is 1.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

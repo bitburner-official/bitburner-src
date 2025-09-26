@@ -14,10 +14,55 @@ sprintf(format: string, ...args: any[]): string;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  format | string | String to format. |
-|  args | any\[\] | Formatting arguments. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+format
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+String to format.
+
+
+</td></tr>
+<tr><td>
+
+args
+
+
+</td><td>
+
+any\[\]
+
+
+</td><td>
+
+Formatting arguments.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

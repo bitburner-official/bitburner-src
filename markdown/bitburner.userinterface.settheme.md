@@ -14,9 +14,37 @@ setTheme(newTheme: UserInterfaceTheme): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  newTheme | [UserInterfaceTheme](./bitburner.userinterfacetheme.md) |  |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+newTheme
+
+
+</td><td>
+
+[UserInterfaceTheme](./bitburner.userinterfacetheme.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

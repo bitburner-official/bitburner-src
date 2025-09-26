@@ -14,7 +14,45 @@ export interface BaseTask
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [cyclesWorked](./bitburner.basetask.cyclesworked.md) |  | number | The number of game engine cycles has passed since this task started. 1 engine cycle = 200ms. |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[cyclesWorked](./bitburner.basetask.cyclesworked.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+The number of game engine cycles has passed since this task started. 1 engine cycle = 200ms.
+
+
+</td></tr>
+</tbody></table>
 

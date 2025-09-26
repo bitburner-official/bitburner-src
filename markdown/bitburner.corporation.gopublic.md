@@ -14,9 +14,39 @@ goPublic(numShares: number): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  numShares | number | Number of shares you would like to issue for your IPO |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+numShares
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of shares you would like to issue for your IPO
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

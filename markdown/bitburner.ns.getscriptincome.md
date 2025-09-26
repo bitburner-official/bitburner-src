@@ -14,11 +14,71 @@ getScriptIncome(script: string, host: string, ...args: ScriptArg[]): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  script | string | Filename of script. |
-|  host | string | Hostname/IP of the server on which script is running. |
-|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments that the script is running with. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+script
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Filename of script.
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Hostname/IP of the server on which script is running.
+
+
+</td></tr>
+<tr><td>
+
+args
+
+
+</td><td>
+
+[ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\]
+
+
+</td><td>
+
+Arguments that the script is running with.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

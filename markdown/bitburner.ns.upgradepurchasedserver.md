@@ -14,10 +14,55 @@ upgradePurchasedServer(host: string, ram: number): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  host | string | Hostname/IP of the server to upgrade. |
-|  ram | number | Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20). |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Hostname/IP of the server to upgrade.
+
+
+</td></tr>
+<tr><td>
+
+ram
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of RAM of the purchased server, in GB. Must be a power of 2 (2, 4, 8, 16, etc.). Maximum value of 1048576 (2^20).
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

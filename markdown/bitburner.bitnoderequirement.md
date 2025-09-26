@@ -14,8 +14,60 @@ interface BitNodeRequirement
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [bitNodeN](./bitburner.bitnoderequirement.bitnoden.md) |  | number |  |
-|  [type](./bitburner.bitnoderequirement.type.md) |  | "bitNodeN" |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[bitNodeN](./bitburner.bitnoderequirement.bitnoden.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./bitburner.bitnoderequirement.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+"bitNodeN"
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

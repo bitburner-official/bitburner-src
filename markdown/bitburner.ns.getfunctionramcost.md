@@ -14,9 +14,39 @@ getFunctionRamCost(name: string): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  name | string | The fully-qualified function name, without the leading <code>ns</code>. Example inputs: <code>hack</code>, <code>tprint</code>, <code>stock.getPosition</code>. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+name
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+The fully-qualified function name, without the leading `ns`<!-- -->. Example inputs: `hack`<!-- -->, `tprint`<!-- -->, `stock.getPosition`<!-- -->.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

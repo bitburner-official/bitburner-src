@@ -14,9 +14,39 @@ getCompanyPositions(companyName: CompanyName): JobName[];
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  companyName | [CompanyName](./bitburner.companyname.md) | Name of company to get the position list for. Must be an exact match. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+companyName
+
+
+</td><td>
+
+[CompanyName](./bitburner.companyname.md)
+
+
+</td><td>
+
+Name of company to get the position list for. Must be an exact match.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

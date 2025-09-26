@@ -14,9 +14,83 @@ interface FileMetadata
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [atime](./bitburner.filemetadata.atime.md) |  | number | Time of Access |
-|  [btime](./bitburner.filemetadata.btime.md) |  | number | Time of Birth (creation) |
-|  [mtime](./bitburner.filemetadata.mtime.md) |  | number | Time of Modification |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[atime](./bitburner.filemetadata.atime.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Time of Access
+
+
+</td></tr>
+<tr><td>
+
+[btime](./bitburner.filemetadata.btime.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Time of Birth (creation)
+
+
+</td></tr>
+<tr><td>
+
+[mtime](./bitburner.filemetadata.mtime.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Time of Modification
+
+
+</td></tr>
+</tbody></table>
 

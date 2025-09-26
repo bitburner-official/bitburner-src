@@ -14,11 +14,71 @@ setActionLevel(type: BladeburnerActionType, name: BladeburnerActionName, level: 
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  type | [BladeburnerActionType](./bitburner.bladeburneractiontype.md) | Type of action. |
-|  name | [BladeburnerActionName](./bitburner.bladeburneractionname.md) | Name of action. Must be an exact match. |
-|  level | number | Level to set this action to. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+type
+
+
+</td><td>
+
+[BladeburnerActionType](./bitburner.bladeburneractiontype.md)
+
+
+</td><td>
+
+Type of action.
+
+
+</td></tr>
+<tr><td>
+
+name
+
+
+</td><td>
+
+[BladeburnerActionName](./bitburner.bladeburneractionname.md)
+
+
+</td><td>
+
+Name of action. Must be an exact match.
+
+
+</td></tr>
+<tr><td>
+
+level
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Level to set this action to.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

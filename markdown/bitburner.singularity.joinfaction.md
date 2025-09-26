@@ -14,9 +14,39 @@ joinFaction(faction: FactionName): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  faction | [FactionName](./bitburner.factionname.md) | Name of faction to join. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+faction
+
+
+</td><td>
+
+[FactionName](./bitburner.factionname.md)
+
+
+</td><td>
+
+Name of faction to join.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

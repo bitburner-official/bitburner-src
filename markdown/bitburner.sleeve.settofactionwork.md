@@ -18,11 +18,71 @@ setToFactionWork(
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  sleeveNumber | number | Index of the sleeve to work for the faction. |
-|  factionName | [FactionName](./bitburner.factionname.md) | Name of the faction to work for. |
-|  factionWorkType | [FactionWorkType](./bitburner.factionworktype.md) | Name of the action to perform for this faction. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+sleeveNumber
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Index of the sleeve to work for the faction.
+
+
+</td></tr>
+<tr><td>
+
+factionName
+
+
+</td><td>
+
+[FactionName](./bitburner.factionname.md)
+
+
+</td><td>
+
+Name of the faction to work for.
+
+
+</td></tr>
+<tr><td>
+
+factionWorkType
+
+
+</td><td>
+
+[FactionWorkType](./bitburner.factionworktype.md)
+
+
+</td><td>
+
+Name of the action to perform for this faction.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,9 +14,39 @@ isLogEnabled(fn: string): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  fn | string | Name of function to check. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+fn
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of function to check.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

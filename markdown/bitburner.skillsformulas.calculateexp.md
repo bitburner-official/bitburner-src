@@ -14,10 +14,55 @@ calculateExp(skill: number, skillMult?: number): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  skill | number | target skill level |
-|  skillMult | number | _(Optional)_ Multiplier for that skill, defaults to 1. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+skill
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+target skill level
+
+
+</td></tr>
+<tr><td>
+
+skillMult
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Multiplier for that skill, defaults to 1.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

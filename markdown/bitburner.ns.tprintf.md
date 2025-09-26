@@ -14,10 +14,55 @@ tprintf(format: string, ...values: any[]): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  format | string | Format of the message. |
-|  values | any\[\] | Value(s) to be printed. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+format
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Format of the message.
+
+
+</td></tr>
+<tr><td>
+
+values
+
+
+</td><td>
+
+any\[\]
+
+
+</td><td>
+
+Value(s) to be printed.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

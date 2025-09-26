@@ -14,9 +14,39 @@ purchaseProgram(programName: string): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  programName | string | Name of program to purchase. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+programName
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Name of program to purchase.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,21 +14,311 @@ interface GangTaskStats
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [agiWeight](./bitburner.gangtaskstats.agiweight.md) |  | number | Agility skill impact on task scaling |
-|  [baseMoney](./bitburner.gangtaskstats.basemoney.md) |  | number | Base money earned |
-|  [baseRespect](./bitburner.gangtaskstats.baserespect.md) |  | number | Base respect earned |
-|  [baseWanted](./bitburner.gangtaskstats.basewanted.md) |  | number | Base wanted earned |
-|  [chaWeight](./bitburner.gangtaskstats.chaweight.md) |  | number | Charisma skill impact on task scaling |
-|  [defWeight](./bitburner.gangtaskstats.defweight.md) |  | number | Defense skill impact on task scaling |
-|  [desc](./bitburner.gangtaskstats.desc.md) |  | string | Task Description |
-|  [dexWeight](./bitburner.gangtaskstats.dexweight.md) |  | number | Dexterity skill impact on task scaling |
-|  [difficulty](./bitburner.gangtaskstats.difficulty.md) |  | number | Number representing the difficulty of the task |
-|  [hackWeight](./bitburner.gangtaskstats.hackweight.md) |  | number | Hacking skill impact on task scaling |
-|  [isCombat](./bitburner.gangtaskstats.iscombat.md) |  | boolean | Is a task of a combat gang |
-|  [isHacking](./bitburner.gangtaskstats.ishacking.md) |  | boolean | Is a task of a hacking gang |
-|  [name](./bitburner.gangtaskstats.name.md) |  | string | Task name |
-|  [strWeight](./bitburner.gangtaskstats.strweight.md) |  | number | Strength skill impact on task scaling |
-|  [territory](./bitburner.gangtaskstats.territory.md) |  | [GangTerritory](./bitburner.gangterritory.md) | Territory impact on task scaling |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[agiWeight](./bitburner.gangtaskstats.agiweight.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Agility skill impact on task scaling
+
+
+</td></tr>
+<tr><td>
+
+[baseMoney](./bitburner.gangtaskstats.basemoney.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Base money earned
+
+
+</td></tr>
+<tr><td>
+
+[baseRespect](./bitburner.gangtaskstats.baserespect.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Base respect earned
+
+
+</td></tr>
+<tr><td>
+
+[baseWanted](./bitburner.gangtaskstats.basewanted.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Base wanted earned
+
+
+</td></tr>
+<tr><td>
+
+[chaWeight](./bitburner.gangtaskstats.chaweight.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Charisma skill impact on task scaling
+
+
+</td></tr>
+<tr><td>
+
+[defWeight](./bitburner.gangtaskstats.defweight.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Defense skill impact on task scaling
+
+
+</td></tr>
+<tr><td>
+
+[desc](./bitburner.gangtaskstats.desc.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Task Description
+
+
+</td></tr>
+<tr><td>
+
+[dexWeight](./bitburner.gangtaskstats.dexweight.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Dexterity skill impact on task scaling
+
+
+</td></tr>
+<tr><td>
+
+[difficulty](./bitburner.gangtaskstats.difficulty.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number representing the difficulty of the task
+
+
+</td></tr>
+<tr><td>
+
+[hackWeight](./bitburner.gangtaskstats.hackweight.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Hacking skill impact on task scaling
+
+
+</td></tr>
+<tr><td>
+
+[isCombat](./bitburner.gangtaskstats.iscombat.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Is a task of a combat gang
+
+
+</td></tr>
+<tr><td>
+
+[isHacking](./bitburner.gangtaskstats.ishacking.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+Is a task of a hacking gang
+
+
+</td></tr>
+<tr><td>
+
+[name](./bitburner.gangtaskstats.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Task name
+
+
+</td></tr>
+<tr><td>
+
+[strWeight](./bitburner.gangtaskstats.strweight.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Strength skill impact on task scaling
+
+
+</td></tr>
+<tr><td>
+
+[territory](./bitburner.gangtaskstats.territory.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[GangTerritory](./bitburner.gangterritory.md)
+
+
+</td><td>
+
+Territory impact on task scaling
+
+
+</td></tr>
+</tbody></table>
 

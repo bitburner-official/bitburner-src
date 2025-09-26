@@ -14,11 +14,71 @@ openTail(fn?: FilenameOrPID, host?: string, ...args: ScriptArg[]): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  fn | [FilenameOrPID](./bitburner.filenameorpid.md) | _(Optional)_ Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed. |
-|  host | string | _(Optional)_ Optional. Hostname/IP of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional. |
-|  args | [ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\] | Arguments for the script being tailed. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+fn
+
+
+</td><td>
+
+[FilenameOrPID](./bitburner.filenameorpid.md)
+
+
+</td><td>
+
+_(Optional)_ Optional. Filename or PID of the script being tailed. If omitted, the current script is tailed.
+
+
+</td></tr>
+<tr><td>
+
+host
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Optional. Hostname/IP of the script being tailed. Defaults to the server this script is running on. If args are specified, this is not optional.
+
+
+</td></tr>
+<tr><td>
+
+args
+
+
+</td><td>
+
+[ScriptArg](./bitburner.scriptarg.md)<!-- -->\[\]
+
+
+</td><td>
+
+Arguments for the script being tailed.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

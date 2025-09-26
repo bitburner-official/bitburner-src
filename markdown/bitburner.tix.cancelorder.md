@@ -14,13 +14,103 @@ cancelOrder(sym: string, shares: number, price: number, orderType: OrderType, po
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  sym | string | Stock symbol. |
-|  shares | number | Number of shares for order. Must be positive. Will be rounded to the nearest integer. |
-|  price | number | Execution price for the order. |
-|  orderType | [OrderType](./bitburner.ordertype.md) | Type of order. |
-|  positionType | [PositionType](./bitburner.positiontype.md) | Specifies whether the order is a Long ("L") or Short ("S") position. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+sym
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+Stock symbol.
+
+
+</td></tr>
+<tr><td>
+
+shares
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Number of shares for order. Must be positive. Will be rounded to the nearest integer.
+
+
+</td></tr>
+<tr><td>
+
+price
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Execution price for the order.
+
+
+</td></tr>
+<tr><td>
+
+orderType
+
+
+</td><td>
+
+[OrderType](./bitburner.ordertype.md)
+
+
+</td><td>
+
+Type of order.
+
+
+</td></tr>
+<tr><td>
+
+positionType
+
+
+</td><td>
+
+[PositionType](./bitburner.positiontype.md)
+
+
+</td><td>
+
+Specifies whether the order is a Long ("L") or Short ("S") position.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,10 +14,55 @@ hashUpgradeCost(upgName: HacknetServerHashUpgrade, level: number): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  upgName | [HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md) | name of the upgrade |
-|  level | number | level of the upgrade |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+upgName
+
+
+</td><td>
+
+[HacknetServerHashUpgrade](./bitburner.hacknetserverhashupgrade.md)
+
+
+</td><td>
+
+name of the upgrade
+
+
+</td></tr>
+<tr><td>
+
+level
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+level of the upgrade
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

@@ -14,10 +14,55 @@ donationForRep(reputation: number, player: Person): number;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  reputation | number | Amount of reputation |
-|  player | [Person](./bitburner.person.md) | Player info, typically from [getPlayer](./bitburner.ns.getplayer.md) |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+reputation
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Amount of reputation
+
+
+</td></tr>
+<tr><td>
+
+player
+
+
+</td><td>
+
+[Person](./bitburner.person.md)
+
+
+</td><td>
+
+Player info, typically from [getPlayer](./bitburner.ns.getplayer.md)
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

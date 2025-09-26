@@ -14,9 +14,39 @@ tryWrite(value: any): boolean;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  value | any | Data to write, it's cloned with structuredClone(). |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+value
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+Data to write, it's cloned with structuredClone().
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 

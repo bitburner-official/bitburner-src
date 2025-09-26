@@ -14,10 +14,55 @@ atExit(f: () => void, id?: string): void;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  f | () =&gt; void | A function to execute when the script dies. |
-|  id | string | _(Optional)_ Callback ID. Optional, defaults to <code>&quot;default&quot;</code>. |
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+f
+
+
+</td><td>
+
+() =&gt; void
+
+
+</td><td>
+
+A function to execute when the script dies.
+
+
+</td></tr>
+<tr><td>
+
+id
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_ Callback ID. Optional, defaults to `"default"`<!-- -->.
+
+
+</td></tr>
+</tbody></table>
 
 **Returns:**
 
