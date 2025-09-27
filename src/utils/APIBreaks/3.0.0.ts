@@ -384,5 +384,12 @@ export const breakingChanges300: VersionBreakingChange = {
         `- "White Ferrari" was renamed to "${convertV2GangEquipmentNames("White Ferrari")}".\n`,
       showWarning: false,
     },
+    {
+      brokenAPIs: [{ name: "purchaseTixApi" }, { name: "purchase4SMarketData" }],
+      info:
+        "In order to purchase TIX API access and 4S Market Data access, you need to have a WSE account.\n" +
+        "This requirement was only enforced in UI, not NS APIs. Now, it is enforced in both.",
+      showWarning: false,
+    },
   ],
 };

@@ -256,6 +256,10 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
         return true;
       }
 
+      if (!Player.hasWseAccount) {
+        helpers.log(ctx, () => "You need to have a WSE account");
+        return false;
+      }
       if (Player.money < getStockMarket4SDataCost()) {
         helpers.log(ctx, () => "Not enough money to purchase 4S Market Data.");
         return false;
@@ -312,6 +316,10 @@ export function NetscriptStockMarket(): InternalAPI<TIX> {
         return true;
       }
 
+      if (!Player.hasWseAccount) {
+        helpers.log(ctx, () => "You need to have a WSE account");
+        return false;
+      }
       if (Player.money < getStockMarketTixApiCost()) {
         helpers.log(ctx, () => "Not enough money to purchase TIX API Access");
         return false;
