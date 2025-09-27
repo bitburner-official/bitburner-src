@@ -1,0 +1,4 @@
+{
+  "*.{ts,tsx,js,jsx,md}": ["prettier --write"],
+  "{src/ScriptEditor/NetscriptDefinitions.d.ts,src/Documentation/doc/**,src/Documentation/images/**}": "npm run doc"
+}
