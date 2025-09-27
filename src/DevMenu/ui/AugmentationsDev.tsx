@@ -77,13 +77,6 @@ export function AugmentationsDev(): React.ReactElement {
       applyAugmentation(aug);
     }
     Player.queuedAugmentations = [];
-    // For some reason, applyAugmentation doesn't handle everything fully.
-    // That says some worrisome things about grafting, but I'm too lazy to
-    // track it down right now.
-    // You can reproduce this by adding all augmentations from a blank slate
-    // without these lines, and noting the stat difference after reloading the save.
-    Player.reapplyAllAugmentations();
-    Player.reapplyAllSourceFiles();
   }
 
   const options = Object.values(AugmentationName).filter(
