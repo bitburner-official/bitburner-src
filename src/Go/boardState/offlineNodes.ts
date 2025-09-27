@@ -3,6 +3,9 @@ import type { Board, BoardState, PointState } from "../Types";
 import { Player } from "@player";
 import { boardSizes } from "../Constants";
 import { WHRNG } from "../../Casino/RNG";
+import { getAllChains } from "../boardAnalysis/boardAnalysis";
+import { updateChains } from "./boardState";
+import { GoColor } from "@enums";
 
 type rand = (n1: number, n2: number) => number;
 
@@ -36,6 +39,8 @@ export function addObstacles(boardState: BoardState) {
   boardState.board = ensureOfflineNodes(boardState.board);
 
   boardState.board = resetCoordinates(boardState.board);
+
+  boardState.board = removeIslands(boardState.board);
 }
 
 export function resetCoordinates(board: Board) {
@@ -46,6 +51,24 @@ export function resetCoordinates(board: Board) {
       if (point) {
         point.x = x;
         point.y = y;
+      }
+    }
+  }
+  return board;
+}
+
+/**
+ * Removes all tiny islands of empty points (2 or fewer) from the board
+ * @param board
+ */
+export function removeIslands(board: Board) {
+  updateChains(board, true);
+  const chains = getAllChains(board);
+
+  for (const chain of chains) {
+    if (chain.length <= 2 && chain[0]?.color === GoColor.empty) {
+      for (const point of chain) {
+        board[point.x][point.y] = null;
       }
     }
   }
