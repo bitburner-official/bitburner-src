@@ -207,7 +207,7 @@ function getMenu(window) {
       label: "View",
       submenu: [
         { 
-          label: "Hide top menu", 
+          label: "Hide top menu (Requires restart)", 
           type: "checkbox", 
           checked: storage.isMenuHideEnabled(),
           click: (menuItem) => {
