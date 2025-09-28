@@ -18,6 +18,7 @@ import { ScriptFilePath } from "../Paths/ScriptFilePath";
 import { ScriptKey, scriptKey } from "../utils/helpers/scriptKey";
 
 import type { LogBoxProperties } from "../ui/React/LogBoxManager";
+import { PipedCommand } from "../Terminal/Terminal";
 
 export class RunningScript {
   // Script arguments
@@ -60,6 +61,8 @@ export class RunningScript {
 
   // Process ID of the parent process. 0 indicates no parent (such as run from terminal).
   parent = 0;
+
+  pipeConfig: PipedCommand | null = null;
 
   // How much RAM this script uses for ONE thread
   ramUsage: number = RamCostConstants.Base;

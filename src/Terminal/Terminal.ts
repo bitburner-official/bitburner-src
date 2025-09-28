@@ -86,6 +86,7 @@ import { hasTextExtension } from "../Paths/TextFilePath";
 import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
+import { findRunningScriptByPid } from "../Script/ScriptHelpers";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -145,6 +146,12 @@ export class Terminal {
     new Output(`Bitburner v${CONSTANTS.VersionString} (${commitHash()})`, "primary"),
   ];
 
+  outputToBeProcessed: (Output | Link | RawOutput)[] = [];
+
+  currentTerminalPipe: PipedCommand | null = null;
+
+  scriptPipes: Map<number, ScriptPipe> = new Map();
+
   // True if a Coding Contract prompt is opened
   contractOpen = false;
 
@@ -157,11 +164,27 @@ export class Terminal {
     if (this.action.timeLeft < 0.01) this.finishAction(false);
   }
 
-  append(item: Output | Link | RawOutput): void {
-    this.outputHistory.push(item);
-    if (this.outputHistory.length > Settings.MaxTerminalCapacity) {
-      this.outputHistory.splice(0, this.outputHistory.length - Settings.MaxTerminalCapacity);
+  append(item: Output | Link | RawOutput, pid: number = -1): void {
+    const script = findRunningScriptByPid(pid);
+    const scriptPipeConfig = script?.pipeConfig;
+    if (scriptPipeConfig) {
+      const scriptPipe = this.scriptPipes.get(pid) ?? { pipe: scriptPipeConfig, output: [] };
+      scriptPipe.output.push(item);
+      if (scriptPipe.output.length > Settings.MaxTerminalCapacity * 2) {
+        scriptPipe.output.splice(0, scriptPipe.output.length - Settings.MaxTerminalCapacity * 2);
+      }
+    } else if (this.currentTerminalPipe !== null) {
+      this.outputToBeProcessed.push(item);
+      if (this.outputToBeProcessed.length > Settings.MaxTerminalCapacity * 2) {
+        this.outputToBeProcessed.splice(0, this.outputToBeProcessed.length - Settings.MaxTerminalCapacity * 2);
+      }
+    } else {
+      this.outputHistory.push(item);
+      if (this.outputHistory.length > Settings.MaxTerminalCapacity) {
+        this.outputHistory.splice(0, this.outputHistory.length - Settings.MaxTerminalCapacity);
+      }
     }
+
     TerminalEvents.emit();
   }
 
@@ -839,3 +862,13 @@ function findSimilarCommands(command: string): string[] {
   const subset = commands.filter((c) => c.includes(command)).sort((a, b) => a.length - b.length);
   return Array.from(new Set([...offByOneLetter, ...subset])).slice(0, 3);
 }
+
+export type PipedCommand = {
+  commandString: string;
+  nextPipe: PipedCommand | null;
+};
+
+export type ScriptPipe = {
+  pipe: PipedCommand;
+  output: (Output | Link | RawOutput)[];
+};
