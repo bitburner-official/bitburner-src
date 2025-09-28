@@ -18,9 +18,7 @@ async function createWindow(killall) {
   }
 
   const tracker = windowTracker("main");
-  console.log("========");
-  console.log(tracker.state.autoHideMenuBar);
-  console.log("========");
+  
   const window = new BrowserWindow({
     icon,
     show: false,

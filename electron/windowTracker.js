@@ -9,14 +9,13 @@ const storage = require("./storage");
 // https://stackoverflow.com/a/68627253
 const windowTracker = (windowName) => {
   let window, windowState;
-  console.log("WINDOW TRACKER CALLED")
+
   const setBounds = () => {
     // Restore from appConfig
     if (store.has(`window.${windowName}`)) {
       windowState = store.get(`window.${windowName}`);
-      console.log("///////")
-      console.log(windowState.autoHideMenuBar);
-      console.log(windowState.x);
+      windowState.autoHideMenuBar = storage.isMenuHideEnabled();
+      
       return;
     }
 
@@ -47,10 +46,6 @@ const windowTracker = (windowName) => {
     log.silly(`Saving window.${windowName} to configs`);
     store.set(`window.${windowName}`, windowState);
     log.silly(windowState);
-
-    console.log("-----TESTING------");
-    windowState.autoHideMenuBar = storage.isMenuHideEnabled();
-    console.log(windowState.autoHideMenuBar);
   }, 1000);
 
   const track = (win) => {
@@ -61,12 +56,6 @@ const windowTracker = (windowName) => {
   };
 
   setBounds();
-  console.log("WINDOW TRACKER ABOUT TO RETURN, LOGGING AUTOHIDEMENUBAR VALUE");
-  console.log(windowState.autoHideMenuBar);
-  console.log("UPDATING VALUE");
-  windowState.autoHideMenuBar = storage.isMenuHideEnabled();
-  console.log("NEW VALUE");
-  console.log(windowState.autoHideMenuBar);
   
   return {
     state: {
