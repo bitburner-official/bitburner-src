@@ -418,8 +418,9 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
 
   const [files, notFiles] = options.isSearchAll ? getServerFiles(server) : getArgFiles(otherArgs.slice(1));
 
-  if (notFiles.length) return Terminal.error(ERR.badArgs(notFiles));
-  if (!options.isPipeIn && !options.isSearchAll && !files.length) return Terminal.error(ERR.noSearchArg);
+  if (notFiles.length > 1) return Terminal.error(ERR.badArgs(notFiles));
+  if (!options.isPipeIn && !options.isSearchAll && !files.length && notFiles.length !== 1)
+    return Terminal.error(ERR.noSearchArg);
 
   options.isMultiFile = files.length > 1;
   const outFilePath = checkOutFile(params.outfile, options, server);
@@ -427,10 +428,7 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
 
   try {
     const pattern = options.isRegExpr ? new RegExp(otherArgs[0], "g") : otherArgs[0];
-    const lineParser = parseLine.bind(null, pattern);
-    const termParser = lineParser.bind(null, options, "Terminal");
-    const fileParser = parseFile.bind(null, lineParser, options);
-    const contentToMatch = options.isPipeIn ? grabTerminal().map(termParser) : files.flatMap(fileParser);
+    const contentToMatch = getContentToMatch(pattern, options, files, notFiles);
     const results = new Results(contentToMatch, options, params);
     const [rawResult, prettyResult] = results.capMatches(nLimit).addContext(nContext).splitAndFilter();
 
@@ -441,4 +439,25 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
     console.error(error);
     Terminal.error(`grep processing error: ${error}`);
   }
+}
+
+function getContentToMatch(
+  pattern: RegExp | string,
+  options: Options,
+  files: ContentFile[],
+  notFiles: string[],
+): ParsedLine[] {
+  if (notFiles.length === 1) {
+    return [parseLine(pattern, options, "", notFiles[0], 0)];
+  }
+
+  const lineParser = parseLine.bind(null, pattern);
+  const termParser = lineParser.bind(null, options, "Terminal");
+  const fileParser = parseFile.bind(null, lineParser, options);
+
+  if (options.isPipeIn) {
+    return grabTerminal().map(termParser);
+  }
+
+  return files.flatMap(fileParser);
 }
