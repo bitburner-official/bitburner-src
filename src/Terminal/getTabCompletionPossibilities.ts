@@ -12,6 +12,8 @@ import { getAllDirectories, resolveDirectory, root } from "../Paths/Directory";
 import { isLegacyScript, resolveScriptFilePath } from "../Paths/ScriptFilePath";
 import { enums } from "../NetscriptFunctions";
 import { TerminalCommands } from "./Terminal";
+import { Terminal } from "../Terminal";
+import { parseUnknownError } from "../utils/ErrorHelper";
 
 /** Suggest all completion possibilities for the last argument in the last command being typed
  * @param terminalText The current full text entered in the terminal
@@ -276,7 +278,12 @@ export async function getTabCompletionPossibilities(terminalText: string, baseDi
       //Will return the already compiled module if recompilation not needed.
       loadedModule = await compile(script, currServ.scripts);
     } catch (e) {
-      //fail silently if the script fails to compile (e.g. syntax error)
+      const errorData = parseUnknownError(e);
+      Terminal.error(
+        `Cannot compile ${filepath}. Reason: ${errorData.errorAsString}.${
+          errorData.causeAsString ? ` Cause: ${errorData.causeAsString}` : ""
+        }`,
+      );
       return;
     }
     if (!loadedModule) {
