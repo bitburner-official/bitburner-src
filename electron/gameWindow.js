@@ -18,7 +18,7 @@ async function createWindow(killall) {
   }
 
   const tracker = windowTracker("main");
-  
+
   const window = new BrowserWindow({
     icon,
     show: false,

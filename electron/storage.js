@@ -397,5 +397,5 @@ module.exports = {
   isAutosaveEnabled,
   setAutosaveConfig,
   isMenuHideEnabled,
-  setMenuHideConfig
+  setMenuHideConfig,
 };

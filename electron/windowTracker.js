@@ -15,7 +15,7 @@ const windowTracker = (windowName) => {
     if (store.has(`window.${windowName}`)) {
       windowState = store.get(`window.${windowName}`);
       windowState.autoHideMenuBar = storage.isMenuHideEnabled();
-      
+
       return;
     }
 
@@ -31,7 +31,7 @@ const windowTracker = (windowName) => {
       autoHideMenuBar: false,
     };
   };
-  
+
   const saveState = debounce(() => {
     if (!window || window.isDestroyed()) {
       log.silly(`Saving window state failed because window is not available`);
@@ -56,7 +56,7 @@ const windowTracker = (windowName) => {
   };
 
   setBounds();
-  
+
   return {
     state: {
       x: windowState.x,

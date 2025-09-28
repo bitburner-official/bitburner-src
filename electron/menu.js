@@ -206,17 +206,22 @@ function getMenu(window) {
     {
       label: "View",
       submenu: [
-        { 
-          label: "Hide top menu (Requires restart)", 
-          type: "checkbox", 
+        {
+          label: "Hide top menu (Requires restart)",
+          type: "checkbox",
           checked: storage.isMenuHideEnabled(),
           click: (menuItem) => {
             storage.setMenuHideConfig(menuItem.checked);
-            utils.writeToast(window, `${menuItem.checked ? "Enabled" : "Disabled"} Auto hiding the top menu`, "info", 5000);
+            utils.writeToast(
+              window,
+              `${menuItem.checked ? "Enabled" : "Disabled"} Auto hiding the top menu`,
+              "info",
+              5000,
+            );
             refreshMenu(window);
           },
-        }
-      ]
+        },
+      ],
     },
     {
       label: "Reloads",
