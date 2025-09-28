@@ -74,6 +74,16 @@ export const InterfacePage = (): React.ReactElement => {
       <Typography>
         Example timestamp: {timestampFormat !== "" ? formatTime(timestampFormat) : "no timestamp"}
       </Typography>
+      <OptionSwitch
+        checked={Settings.hideMenuBar}
+        onChange={(newValue) => (Settings.hideMenuBar = newValue)}
+        text="Disable Menu Bar"
+        tooltip={
+          <>
+            If this is set, on the desktop version of the game the top bar will be hidden until the alt key is pressed
+          </>
+        }
+      />
       <br />
     </GameOptionsPage>
   );

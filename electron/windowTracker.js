@@ -25,6 +25,7 @@ const windowTracker = (windowName) => {
       width: size.width,
       height: size.height,
       isMaximized: true,
+      isMenuHidden: false,
     };
   };
 
@@ -42,6 +43,8 @@ const windowTracker = (windowName) => {
     log.silly(`Saving window.${windowName} to configs`);
     store.set(`window.${windowName}`, windowState);
     log.silly(windowState);
+
+    windowState.isMenuHidden = window.autoHideMenuBar;
   }, 1000);
 
   const track = (win) => {
@@ -60,6 +63,7 @@ const windowTracker = (windowName) => {
       width: windowState.width,
       height: windowState.height,
       isMaximized: windowState.isMaximized,
+      isMenuHidden: windowState.isMenuHidden,
     },
     track,
   };

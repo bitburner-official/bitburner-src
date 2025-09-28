@@ -24,6 +24,7 @@ async function createWindow(killall) {
     backgroundThrottling: false,
     backgroundColor: "#000000",
     title: "Bitburner",
+    autoHideMenuBar: tracker.state.isMenuHidden,
     x: tracker.state.x,
     y: tracker.state.y,
     width: tracker.state.width,
