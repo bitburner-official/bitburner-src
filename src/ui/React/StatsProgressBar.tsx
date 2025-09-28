@@ -58,7 +58,7 @@ function StatsProgressBarInner({ name, color }: InnerProps): React.ReactElement 
           return progress;
         }
         // This takes place in the state updater for progress.
-        const ele = domRef.current?.firstElementChild as HTMLElement;
+        const ele = domRef.current?.firstElementChild;
         if (!ele) return newProgress;
 
         const isWrapping =
