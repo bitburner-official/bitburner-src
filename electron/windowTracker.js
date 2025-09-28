@@ -4,15 +4,19 @@ const log = require("electron-log");
 const debounce = require("lodash/debounce");
 const Store = require("electron-store");
 const store = new Store();
+const storage = require("./storage");
 
 // https://stackoverflow.com/a/68627253
 const windowTracker = (windowName) => {
   let window, windowState;
-
+  console.log("WINDOW TRACKER CALLED")
   const setBounds = () => {
     // Restore from appConfig
     if (store.has(`window.${windowName}`)) {
       windowState = store.get(`window.${windowName}`);
+      console.log("///////")
+      console.log(windowState.autoHideMenuBar);
+      console.log(windowState.x);
       return;
     }
 
@@ -25,10 +29,10 @@ const windowTracker = (windowName) => {
       width: size.width,
       height: size.height,
       isMaximized: true,
-      isMenuHidden: false,
+      autoHideMenuBar: false,
     };
   };
-
+  
   const saveState = debounce(() => {
     if (!window || window.isDestroyed()) {
       log.silly(`Saving window state failed because window is not available`);
@@ -44,7 +48,9 @@ const windowTracker = (windowName) => {
     store.set(`window.${windowName}`, windowState);
     log.silly(windowState);
 
-    windowState.isMenuHidden = window.autoHideMenuBar;
+    console.log("-----TESTING------");
+    windowState.autoHideMenuBar = storage.isMenuHideEnabled();
+    console.log(windowState.autoHideMenuBar);
   }, 1000);
 
   const track = (win) => {
@@ -55,7 +61,13 @@ const windowTracker = (windowName) => {
   };
 
   setBounds();
-
+  console.log("WINDOW TRACKER ABOUT TO RETURN, LOGGING AUTOHIDEMENUBAR VALUE");
+  console.log(windowState.autoHideMenuBar);
+  console.log("UPDATING VALUE");
+  windowState.autoHideMenuBar = storage.isMenuHideEnabled();
+  console.log("NEW VALUE");
+  console.log(windowState.autoHideMenuBar);
+  
   return {
     state: {
       x: windowState.x,
@@ -63,7 +75,7 @@ const windowTracker = (windowName) => {
       width: windowState.width,
       height: windowState.height,
       isMaximized: windowState.isMaximized,
-      isMenuHidden: windowState.isMenuHidden,
+      autoHideMenuBar: windowState.autoHideMenuBar ?? true,
     },
     track,
   };

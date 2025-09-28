@@ -18,13 +18,16 @@ async function createWindow(killall) {
   }
 
   const tracker = windowTracker("main");
+  console.log("========");
+  console.log(tracker.state.autoHideMenuBar);
+  console.log("========");
   const window = new BrowserWindow({
     icon,
     show: false,
     backgroundThrottling: false,
     backgroundColor: "#000000",
     title: "Bitburner",
-    autoHideMenuBar: tracker.state.isMenuHidden,
+    autoHideMenuBar: tracker.state.autoHideMenuBar,
     x: tracker.state.x,
     y: tracker.state.y,
     width: tracker.state.width,
