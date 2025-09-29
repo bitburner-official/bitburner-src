@@ -44,6 +44,7 @@ import { check } from "./commands/check";
 import { connect } from "./commands/connect";
 import { cp } from "./commands/cp";
 import { download } from "./commands/download";
+import { echo } from "./commands/echo";
 import { expr } from "./commands/expr";
 import { free } from "./commands/free";
 import { grep } from "./commands/grep";
@@ -87,6 +88,7 @@ import { ContractFilePath } from "../Paths/ContractFilePath";
 import { ServerConstants } from "../Server/data/Constants";
 import { isIPAddress } from "../Types/strings";
 import { findRunningScriptByPid } from "../Script/ScriptHelpers";
+import { parsePipes } from "./Pipe";
 
 export const TerminalCommands: Record<string, (args: (string | number | boolean)[], server: BaseServer) => void> = {
   "scan-analyze": scananalyze,
@@ -103,6 +105,7 @@ export const TerminalCommands: Record<string, (args: (string | number | boolean)
   connect: connect,
   cp: cp,
   download: download,
+  echo: echo,
   expr: expr,
   free: free,
   grep: grep,
@@ -165,24 +168,37 @@ export class Terminal {
   }
 
   append(item: Output | Link | RawOutput, pid: number = -1): void {
+    // If logging comes from a script, put the output to be processed in that script's pipe buffer
     const script = findRunningScriptByPid(pid);
-    const scriptPipeConfig = script?.pipeConfig;
-    if (scriptPipeConfig) {
-      const scriptPipe = this.scriptPipes.get(pid) ?? { pipe: scriptPipeConfig, output: [] };
+    if (script?.pipeConfig) {
+      const scriptPipe = this.scriptPipes.get(pid) ?? { pipe: script?.pipeConfig, output: [] };
       scriptPipe.output.push(item);
       if (scriptPipe.output.length > Settings.MaxTerminalCapacity * 2) {
         scriptPipe.output.splice(0, scriptPipe.output.length - Settings.MaxTerminalCapacity * 2);
       }
-    } else if (this.currentTerminalPipe !== null) {
+    }
+    // If the terminal has pipes set up, queue the output for processing
+    else if (this.currentTerminalPipe !== null) {
       this.outputToBeProcessed.push(item);
       if (this.outputToBeProcessed.length > Settings.MaxTerminalCapacity * 2) {
         this.outputToBeProcessed.splice(0, this.outputToBeProcessed.length - Settings.MaxTerminalCapacity * 2);
       }
     } else {
+      // Otherwise, simply push the output to stdout
       this.outputHistory.push(item);
       if (this.outputHistory.length > Settings.MaxTerminalCapacity) {
         this.outputHistory.splice(0, this.outputHistory.length - Settings.MaxTerminalCapacity);
       }
+    }
+
+    TerminalEvents.emit();
+  }
+
+  logCommand(command: string): void {
+    const item = new Output(command, "primary");
+    this.outputHistory.push(item);
+    if (this.outputHistory.length > Settings.MaxTerminalCapacity) {
+      this.outputHistory.splice(0, this.outputHistory.length - Settings.MaxTerminalCapacity);
     }
 
     TerminalEvents.emit();
@@ -669,8 +685,12 @@ export class Terminal {
     this.clear();
   }
 
-  executeCommand(command: string): void {
-    if (this.action !== null) return this.error(`Cannot execute command (${command}) while an action is in progress`);
+  executeCommand(commandString: string): void {
+    if (this.action !== null) return this.error(`Cannot execute command (${commandString}) while an action is in progress`);
+
+    this.currentTerminalPipe = parsePipes(commandString);
+    const command = this.currentTerminalPipe?.commandString ?? commandString;
+
 
     const commandArray = parseCommand(command);
     if (!commandArray.length) return;

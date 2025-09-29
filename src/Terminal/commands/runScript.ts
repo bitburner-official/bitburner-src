@@ -10,12 +10,13 @@ import { sendDeprecationNotice } from "./common/deprecation";
 import { roundToTwo } from "../../utils/helpers/roundToTwo";
 import { RamCostConstants } from "../../Netscript/RamCostGenerator";
 import { pluralize } from "../../utils/I18nUtils";
+import { RunningScript } from "../../Script/RunningScript";
 
 export function runScript(
   scriptPath: ScriptFilePath,
   commandArgs: (string | number | boolean)[],
   server: BaseServer,
-): void {
+): RunningScript | undefined {
   if (isLegacyScript(scriptPath)) {
     sendDeprecationNotice();
     return;
@@ -41,7 +42,8 @@ export function runScript(
   const numThreads = parseFloat(flags["-t"] ?? 1);
   const ramOverride = flags["--ram-override"] != null ? roundToTwo(parseFloat(flags["--ram-override"])) : null;
   if (!isPositiveInteger(numThreads)) {
-    return Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
+    Terminal.error("Invalid number of threads specified. Number of threads must be an integer greater than 0");
+    return;
   }
   if (ramOverride != null && (isNaN(ramOverride) || ramOverride < RamCostConstants.Base)) {
     Terminal.error(
@@ -77,5 +79,5 @@ export function runScript(
   if (tailFlag) {
     LogBoxEvents.emit(runningScript);
   }
-  return;
+  return runningScript;
 }

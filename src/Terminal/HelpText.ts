@@ -14,6 +14,7 @@ export const TerminalHelpText: string[] = [
   "    connect [hostname]               Connects to a remote server",
   "    cp [src] [dest]                  Copy a file",
   "    download [script/text file]      Downloads scripts or text files to your computer",
+  "    echo [string]                    Print the specified string to the terminal",
   "    expr [math expression]           Evaluate a mathematical expression",
   "    free                             Check the machine's memory (RAM) usage",
   "    grep [opts]... pattern [file]... Search for PATTERN (string/regular expression) in each FILE and print results to terminal",
@@ -213,6 +214,15 @@ export const HelpTexts: Record<string, string[]> = {
     " ",
     "Download all text files: download *.txt",
     " ",
+  ],
+  echo: [
+    "Usage: echo [string]",
+    " ",
+    "Print the specified string to the terminal. This command is mostly useful for piping",
+    " ",
+    "Example: echo 'Text To Store In File' > newFile.txt", // TODO-Fico : implement pipe
+    " ",
+    "Example: echo 'Text To Search In' | grep 'To'",
   ],
   expr: [
     "Usage: expr [mathematical expression]",

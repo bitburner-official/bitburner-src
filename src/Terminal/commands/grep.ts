@@ -20,7 +20,7 @@ const WHITE: string = "\x1b[37m";
 const ERR = {
   noArgs: "grep argument error. Usage: grep [OPTION]... PATTERN [FILE]... [-O] [OUTPUT FILE] [-m -B/A/C] [NUM]",
   noSearchArg:
-    "grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server",
+    "grep argument error: At least one FILE argument must be passed, or pass -*/--search-all to search all files on server, or pass -p/--pipe-terminal to search terminal output, or pass a string to search in.",
   badArgs: (args: string[]) => "grep argument error: Invalid argument(s): " + args.join(", "),
   badParameter: (option: string, arg: string) =>
     `grep argument error: Incorrect ${option} argument "${arg}". Must be a number. OPTIONS with additional parameters (-O, -m, -B/A/C) must be separated from other options`,
@@ -30,6 +30,7 @@ const ERR = {
     `grep file output failed: Invalid output file "${path}". Output file path must be a valid .txt file.`,
   truncated: () =>
     `\n${YELLOW}Terminal output truncated to ${Settings.MaxTerminalCapacity} lines (Max terminal capacity)`,
+  multipleInputTypes: () => "grep argument error: multiple source types indicated. Use only one of: -p/--pipe-terminal to search terminal output, or provide a file name, or provide a string to search.",
 } as const;
 
 type ArgStrings = {
@@ -419,6 +420,7 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   const [files, notFiles] = options.isSearchAll ? getServerFiles(server) : getArgFiles(otherArgs.slice(1));
 
   if (notFiles.length > 1) return Terminal.error(ERR.badArgs(notFiles));
+  if (notFiles.length + files.length + +options.isSearchAll + +options.isPipeIn > 1) return Terminal.error(ERR.multipleInputTypes());
   if (!options.isPipeIn && !options.isSearchAll && !files.length && notFiles.length !== 1)
     return Terminal.error(ERR.noSearchArg);
 

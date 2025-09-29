@@ -17,7 +17,8 @@ export function run(args: (string | number | boolean)[], server: BaseServer): vo
   const path = Terminal.getFilepath(String(arg));
   if (!path) return Terminal.error(`${arg} is not a valid filepath.`);
   if (hasScriptExtension(path)) {
-    return runScript(path, args, server);
+    runScript(path, args, server);
+    return;
   } else if (hasContractExtension(path)) {
     Terminal.runContract(path).catch((error) => {
       console.error(error);

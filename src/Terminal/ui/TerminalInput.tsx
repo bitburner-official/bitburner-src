@@ -231,7 +231,7 @@ export function TerminalInput(): React.ReactElement {
     if (event.key === KEY.ENTER) {
       event.preventDefault();
       const command = searchResults.length ? searchResults[searchResultsIndex] : value;
-      Terminal.print(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${command}`);
+      Terminal.logCommand(`[${Player.getCurrentServer().hostname} /${Terminal.cwd()}]> ${command}`);
       if (command) {
         Terminal.executeCommands(command);
         saveValue("");
