@@ -9971,6 +9971,8 @@ interface Product {
   designInvestment: number;
   /** How much warehouse space is occupied per unit of this product */
   size: number;
+  /** A limit on the maximum amount to produce per second */
+  productionLimit: number | null;
 }
 
 /**
@@ -10004,6 +10006,8 @@ interface Material {
   desiredSellAmount: string | number;
   /** Export orders */
   exports: Export[];
+  /** A limit on the maximum amount to produce per second */
+  productionLimit: number | null;
 }
 
 /**
