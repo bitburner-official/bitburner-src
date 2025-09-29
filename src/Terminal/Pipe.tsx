@@ -1,4 +1,6 @@
+import React from "react";
 import { TerminalEvents } from "./TerminalEvents";
+import { renderToStaticMarkup } from "react-dom/server";
 import { Terminal } from "../Terminal";
 import { parseCommand } from "./Parser";
 import { hasTextExtension, TextFilePath } from "../Paths/TextFilePath";
@@ -9,14 +11,14 @@ import { runScript } from "./commands/runScript";
 import { Link, Output, RawOutput } from "./OutputTypes";
 import { PipedCommand } from "./Terminal";
 import { ANSI_ESCAPE } from "../ui/React/ANSIITypography";
+import { debounce } from "lodash";
 
-TerminalEvents.subscribe(handlePipe);
+const debouncedHandlePipe = debounce(() => handlePipe(), 50);
 
-function handlePipe() {
+TerminalEvents.subscribe(debouncedHandlePipe);
 
+function handlePipe(): void {
   // TODO: handle pipes from scripts
-
-
 
   if (Terminal.outputToBeProcessed.length === 0 || Terminal.action || !Terminal.currentTerminalPipe) {
     return;
@@ -25,10 +27,10 @@ function handlePipe() {
   const commandString = Terminal.currentTerminalPipe.commandString;
 
   const parsedCommand = parseCommand(commandString);
-  const command = parsedCommand[0].toString();
+  const command = parsedCommand[0]?.toString();
 
   // ECHO or empty command: Pipe to stout
-  if (!commandString || parsedCommand.length === 0 || command.toLowerCase() === 'echo') {
+  if (!commandString || parsedCommand.length === 0 || command.toLowerCase() === "echo") {
     return handleEcho();
   }
 
@@ -45,7 +47,10 @@ function handlePipe() {
   }
 
   // Pipe to the next terminal command
-  const output = Terminal.outputToBeProcessed.map(stringify).join(" ").replaceAll('"', '\\"');
+  const output = Terminal.outputToBeProcessed
+    .map((o) => stringify(o))
+    .join(" ")
+    .replaceAll('"', "'");
   advancePipe();
   Terminal.executeCommand(`${commandString} "${output}"`);
 }
@@ -62,27 +67,28 @@ function advancePipe() {
   TerminalEvents.emit();
 }
 
-export function parsePipes(commandString: string, fullCommandString = ""): PipedCommand | null {
-  if (Terminal.currentTerminalPipe) {
-    return Terminal.currentTerminalPipe;
-  }
-  const firstCommand =  commandString.split(/[|>]/)[0];
-  if (firstCommand === "") {
-    return {
-      commandString: "ECHO",
-      nextPipe: null,
-    }
+export function parsePipes(commandString: string) {
+  if (!commandString.includes("|") && !commandString.includes(">")) {
+    return null;
   }
 
-  if (firstCommand.trim() === (fullCommandString || commandString).trim()) {
+  const commands = commandString.split(/[|>]/).slice(1);
+
+  return {
+    pipeChain: buildPipeChain(commands),
+    firstCommand: commandString.split(/[|>]/)[0].trim(),
+  };
+}
+
+function buildPipeChain(commands: string[]): PipedCommand | null {
+  if (commands.length === 0) {
     return null;
   }
 
   return {
-    commandString: firstCommand.trim(),
-    nextPipe: parsePipes(commandString.slice(firstCommand.length + 1).trim(), fullCommandString || commandString),
-  }
-
+    commandString: commands[0].trim(),
+    nextPipe: buildPipeChain(commands.slice(1)),
+  };
 }
 
 function handleEcho(): void {
@@ -99,13 +105,15 @@ function handleEcho(): void {
 function handlePipeToFile(parsedCommand: (string | number | boolean)[], commandString: string): void {
   const command = parsedCommand[0].toString();
   if (parsedCommand.length > 1) {
-    handlePipeError(`Invalid pipe to file command: ${commandString} . Only a single file can be specified; no flags are supported.`);
+    handlePipeError(
+      `Invalid pipe to file command: ${commandString} . Only a single file can be specified; no flags are supported.`,
+    );
     Terminal.outputToBeProcessed.length = 0;
     return;
   }
 
   const file = Terminal.getTextFile(command);
-  const output = Terminal.outputToBeProcessed.map(stringify).join("\n");
+  const output = Terminal.outputToBeProcessed.map((o) => stringify(o, true)).join("\n");
   if (file) {
     file.text += `${file.text ? "\n" : ""}${output}`;
   } else {
@@ -124,9 +132,9 @@ function handlePipeToFile(parsedCommand: (string | number | boolean)[], commandS
 
 function handlePipeToScript(parsedCommand: (string | number | boolean)[]): void {
   const command = parsedCommand[0].toString();
-  const firstScriptArg = parsedCommand.find((arg) => hasScriptExtension(arg.toString()))
+  const firstScriptArg = parsedCommand.find((arg) => hasScriptExtension(arg.toString()));
   const fileName = command.toLowerCase() === "run" && firstScriptArg ? firstScriptArg.toString() : command;
-  const scriptArgs = [...parsedCommand.slice(1), ...Terminal.outputToBeProcessed.map(stringify)];
+  const scriptArgs = [...parsedCommand.slice(1), ...Terminal.outputToBeProcessed.map((o) => stringify(o, true))];
 
   const file = Terminal.getScript(fileName ?? "");
   if (!file) {
@@ -144,14 +152,15 @@ function handlePipeToScript(parsedCommand: (string | number | boolean)[]): void 
   advancePipe();
 }
 
-
-
-function stringify(s: Output | Link | RawOutput): string {
+function stringify(s: Output | Link | RawOutput, stripAnsiEscape = false): string {
   if (s instanceof Output) {
-    return s.text.replaceAll(ANSI_ESCAPE, "");
+    return stripAnsiEscape ? s.text.replaceAll(ANSI_ESCAPE, "") : s.text;
   } else if (s instanceof Link) {
     return `${s.dashes} ${s.hostname}`;
   } else {
-    return s.raw?.toString() ?? "";
+    const markup = renderToStaticMarkup(<>{s.raw}</>);
+    const div = document.createElement("div");
+    div.innerHTML = markup.replaceAll(">", "> ");
+    return div.textContent ?? div.innerText ?? "";
   }
 }

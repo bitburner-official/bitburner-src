@@ -30,7 +30,8 @@ const ERR = {
     `grep file output failed: Invalid output file "${path}". Output file path must be a valid .txt file.`,
   truncated: () =>
     `\n${YELLOW}Terminal output truncated to ${Settings.MaxTerminalCapacity} lines (Max terminal capacity)`,
-  multipleInputTypes: () => "grep argument error: multiple source types indicated. Use only one of: -p/--pipe-terminal to search terminal output, or provide a file name, or provide a string to search.",
+  multipleInputTypes: () =>
+    "grep argument error: multiple source types indicated. Use only one of: -p/--pipe-terminal to search terminal output, or provide a file name, or provide a string to search.",
 } as const;
 
 type ArgStrings = {
@@ -420,7 +421,8 @@ export function grep(args: (string | number | boolean)[], server: BaseServer): v
   const [files, notFiles] = options.isSearchAll ? getServerFiles(server) : getArgFiles(otherArgs.slice(1));
 
   if (notFiles.length > 1) return Terminal.error(ERR.badArgs(notFiles));
-  if (notFiles.length + files.length + +options.isSearchAll + +options.isPipeIn > 1) return Terminal.error(ERR.multipleInputTypes());
+  if (notFiles.length + files.length + +options.isSearchAll + +options.isPipeIn > 1)
+    return Terminal.error(ERR.multipleInputTypes());
   if (!options.isPipeIn && !options.isSearchAll && !files.length && notFiles.length !== 1)
     return Terminal.error(ERR.noSearchArg);
 

@@ -687,12 +687,14 @@ export class Terminal {
   }
 
   executeCommand(commandString: string): void {
-    if (this.action !== null) return this.error(`Cannot execute command (${commandString}) while an action is in progress`);
-    let command = commandString;
+    if (this.action !== null)
+      return this.error(`Cannot execute command (${commandString}) while an action is in progress`);
+    let command = commandString.trim();
 
     if (!this.currentTerminalPipe) {
-      this.currentTerminalPipe = parsePipes(commandString);
-      command = this.currentTerminalPipe?.commandString ?? commandString;
+      const result = parsePipes(commandString);
+      this.currentTerminalPipe = result?.pipeChain ?? null;
+      command = result?.firstCommand ?? commandString;
     }
 
     const commandArray = parseCommand(command);
