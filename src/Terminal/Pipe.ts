@@ -8,6 +8,7 @@ import { hasScriptExtension } from "../Paths/ScriptFilePath";
 import { runScript } from "./commands/runScript";
 import { Link, Output, RawOutput } from "./OutputTypes";
 import { PipedCommand } from "./Terminal";
+import { ANSI_ESCAPE } from "../ui/React/ANSIITypography";
 
 TerminalEvents.subscribe(handlePipe);
 
@@ -43,10 +44,10 @@ function handlePipe() {
     return TerminalEvents.emit();
   }
 
-
-  // TODO: handle grep
-
-  // TODO: handle downstream pipe(s)
+  // Pipe to the next terminal command
+  const output = Terminal.outputToBeProcessed.map(stringify).join(" ").replaceAll('"', '\\"');
+  advancePipe();
+  Terminal.executeCommand(`${commandString} "${output}"`);
 }
 
 function handlePipeError(error: string) {
@@ -62,8 +63,18 @@ function advancePipe() {
 }
 
 export function parsePipes(commandString: string, fullCommandString = ""): PipedCommand | null {
-  const firstCommand =  commandString.split(/[|>]/)[0]
-  if (!firstCommand || firstCommand.trim() === (fullCommandString || commandString).trim()) {
+  if (Terminal.currentTerminalPipe) {
+    return Terminal.currentTerminalPipe;
+  }
+  const firstCommand =  commandString.split(/[|>]/)[0];
+  if (firstCommand === "") {
+    return {
+      commandString: "ECHO",
+      nextPipe: null,
+    }
+  }
+
+  if (firstCommand.trim() === (fullCommandString || commandString).trim()) {
     return null;
   }
 
@@ -137,7 +148,7 @@ function handlePipeToScript(parsedCommand: (string | number | boolean)[]): void 
 
 function stringify(s: Output | Link | RawOutput): string {
   if (s instanceof Output) {
-    return s.text;
+    return s.text.replaceAll(ANSI_ESCAPE, "");
   } else if (s instanceof Link) {
     return `${s.dashes} ${s.hostname}`;
   } else {

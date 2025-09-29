@@ -185,22 +185,21 @@ export class Terminal {
       }
     } else {
       // Otherwise, simply push the output to stdout
-      this.outputHistory.push(item);
-      if (this.outputHistory.length > Settings.MaxTerminalCapacity) {
-        this.outputHistory.splice(0, this.outputHistory.length - Settings.MaxTerminalCapacity);
-      }
+      this.terminalOutput(item);
     }
 
     TerminalEvents.emit();
   }
 
   logCommand(command: string): void {
-    const item = new Output(command, "primary");
+    this.terminalOutput(new Output(command, "primary"));
+  }
+
+  terminalOutput(item: Output | Link | RawOutput): void {
     this.outputHistory.push(item);
     if (this.outputHistory.length > Settings.MaxTerminalCapacity) {
       this.outputHistory.splice(0, this.outputHistory.length - Settings.MaxTerminalCapacity);
     }
-
     TerminalEvents.emit();
   }
 
@@ -213,7 +212,9 @@ export class Terminal {
   }
 
   error(s: string): void {
-    this.append(new Output(s, "error"));
+    this.currentTerminalPipe = null;
+    this.outputToBeProcessed = [];
+    this.terminalOutput(new Output(s, "error"));
   }
 
   success(s: string): void {
@@ -687,10 +688,12 @@ export class Terminal {
 
   executeCommand(commandString: string): void {
     if (this.action !== null) return this.error(`Cannot execute command (${commandString}) while an action is in progress`);
+    let command = commandString;
 
-    this.currentTerminalPipe = parsePipes(commandString);
-    const command = this.currentTerminalPipe?.commandString ?? commandString;
-
+    if (!this.currentTerminalPipe) {
+      this.currentTerminalPipe = parsePipes(commandString);
+      command = this.currentTerminalPipe?.commandString ?? commandString;
+    }
 
     const commandArray = parseCommand(command);
     if (!commandArray.length) return;
