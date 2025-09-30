@@ -827,6 +827,7 @@ import nsDoc_bitburner_material_marketprice_md from "../../markdown/bitburner.ma
 import nsDoc_bitburner_material_md from "../../markdown/bitburner.material.md?raw";
 import nsDoc_bitburner_material_name_md from "../../markdown/bitburner.material.name.md?raw";
 import nsDoc_bitburner_material_productionamount_md from "../../markdown/bitburner.material.productionamount.md?raw";
+import nsDoc_bitburner_material_productionlimit_md from "../../markdown/bitburner.material.productionlimit.md?raw";
 import nsDoc_bitburner_material_quality_md from "../../markdown/bitburner.material.quality.md?raw";
 import nsDoc_bitburner_material_stored_md from "../../markdown/bitburner.material.stored.md?raw";
 import nsDoc_bitburner_md from "../../markdown/bitburner.md?raw";
@@ -1121,6 +1122,7 @@ import nsDoc_bitburner_product_md from "../../markdown/bitburner.product.md?raw"
 import nsDoc_bitburner_product_name_md from "../../markdown/bitburner.product.name.md?raw";
 import nsDoc_bitburner_product_productionamount_md from "../../markdown/bitburner.product.productionamount.md?raw";
 import nsDoc_bitburner_product_productioncost_md from "../../markdown/bitburner.product.productioncost.md?raw";
+import nsDoc_bitburner_product_productionlimit_md from "../../markdown/bitburner.product.productionlimit.md?raw";
 import nsDoc_bitburner_product_rating_md from "../../markdown/bitburner.product.rating.md?raw";
 import nsDoc_bitburner_product_size_md from "../../markdown/bitburner.product.size.md?raw";
 import nsDoc_bitburner_product_stats_md from "../../markdown/bitburner.product.stats.md?raw";
@@ -2331,6 +2333,7 @@ AllPages["nsDoc/bitburner.material.marketprice.md"] = nsDoc_bitburner_material_m
 AllPages["nsDoc/bitburner.material.md"] = nsDoc_bitburner_material_md;
 AllPages["nsDoc/bitburner.material.name.md"] = nsDoc_bitburner_material_name_md;
 AllPages["nsDoc/bitburner.material.productionamount.md"] = nsDoc_bitburner_material_productionamount_md;
+AllPages["nsDoc/bitburner.material.productionlimit.md"] = nsDoc_bitburner_material_productionlimit_md;
 AllPages["nsDoc/bitburner.material.quality.md"] = nsDoc_bitburner_material_quality_md;
 AllPages["nsDoc/bitburner.material.stored.md"] = nsDoc_bitburner_material_stored_md;
 AllPages["nsDoc/bitburner.md"] = nsDoc_bitburner_md;
@@ -2625,6 +2628,7 @@ AllPages["nsDoc/bitburner.product.md"] = nsDoc_bitburner_product_md;
 AllPages["nsDoc/bitburner.product.name.md"] = nsDoc_bitburner_product_name_md;
 AllPages["nsDoc/bitburner.product.productionamount.md"] = nsDoc_bitburner_product_productionamount_md;
 AllPages["nsDoc/bitburner.product.productioncost.md"] = nsDoc_bitburner_product_productioncost_md;
+AllPages["nsDoc/bitburner.product.productionlimit.md"] = nsDoc_bitburner_product_productionlimit_md;
 AllPages["nsDoc/bitburner.product.rating.md"] = nsDoc_bitburner_product_rating_md;
 AllPages["nsDoc/bitburner.product.size.md"] = nsDoc_bitburner_product_size_md;
 AllPages["nsDoc/bitburner.product.stats.md"] = nsDoc_bitburner_product_stats_md;
