@@ -29,7 +29,7 @@ export const processDarknet = (cycles: number) => {
 };
 
 export const mutateDarknet = () => {
-  if (!DarknetState.isMutating) {
+  if (!DarknetState.allowMutating) {
     return;
   }
   const servers = getAllMobileDarknetServers();

@@ -141,7 +141,7 @@ export function NetworkDisplayWrapper(): React.ReactElement {
 
   return (
     <Container maxWidth={false} disableGutters>
-      {DarknetState.isMutating ? (
+      {DarknetState.allowMutating ? (
         <Typography variant={"h6"}>Dark Web</Typography>
       ) : (
         <Typography variant={"h6"} className={classes.gold}>

@@ -10,45 +10,27 @@ import { isDarknetServer } from "../utils/darknetServerUtils";
 /** Event emitter to allow the UI to subscribe to Darknet gameplay updates in order to trigger rerenders properly */
 export const DarknetEvents = new EventEmitter();
 
-export type DarknetState = {
-  isMutating: boolean;
-  openServer: BaseServer | null;
-  Network: (DarknetServer | null)[][];
-  labyrinth: string[] | null;
-  labLocations: Record<number, [number, number]>;
-  lastPhishingCacheTime: Date;
-  lastStormTime: Date;
-  stockPromotions: Record<string, number>;
-  migrationInductionServers: Record<string, number>;
-  webstormTokens: number;
-  serverState: Record<string, serverState>;
-  offlineServers: string[];
-  storedCycles: number;
-  cyclesSinceLastMutation: number;
-  showFullNetwork: boolean;
-};
-
 export type serverState = {
   lastLogTime?: Date;
   serverLogs: string[];
   authenticatedPIDs: number[];
 };
 
-export const DarknetState: DarknetState = {
-  isMutating: true,
-  openServer: null,
+export const DarknetState = {
+  allowMutating: true,
+  openServer: null as BaseServer | null,
 
   Network: new Array(MAX_NET_DEPTH).fill(null).map(() => new Array(NET_WIDTH).fill(null) as (DarknetServer | null)[]),
 
-  labyrinth: null,
-  labLocations: { "-1": [1, 1] },
+  labyrinth: null as string[] | null,
+  labLocations: { "-1": [1, 1] } as Record<number, [number, number]>,
   lastPhishingCacheTime: new Date(),
   lastStormTime: new Date(),
-  stockPromotions: {},
-  migrationInductionServers: {},
+  stockPromotions: {} as Record<string, number>,
+  migrationInductionServers: {} as Record<string, number>,
   webstormTokens: 0,
-  serverState: {},
-  offlineServers: [],
+  serverState: {} as Record<string, serverState>,
+  offlineServers: [] as string[],
   storedCycles: 0,
   cyclesSinceLastMutation: 0,
   showFullNetwork: false,

@@ -15,7 +15,7 @@ import { sleep } from "../../utils/Utility";
 import { getAllMobileDarknetServers } from "../utils/darknetNetworkUtils";
 
 export const launchWebstorm = async (suppressToast = false) => {
-  DarknetState.isMutating = false;
+  DarknetState.allowMutating = false;
   if (!suppressToast) {
     SnackbarEvents.emit(`DARKNET WEBSTORM APPROACHING`, ToastVariant.ERROR, 5000);
   }
@@ -35,7 +35,7 @@ export const launchWebstorm = async (suppressToast = false) => {
   await sleep(8000);
   balanceDarknetServers();
   await sleep(5000);
-  DarknetState.isMutating = true;
+  DarknetState.allowMutating = true;
 };
 
 // TODO: launch this if the player has been offline for long enough?
