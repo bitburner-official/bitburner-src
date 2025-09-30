@@ -451,8 +451,11 @@ function getContentToMatch(
   files: ContentFile[],
   notFiles: string[],
 ): ParsedLine[] {
-  if (notFiles.length === 1) {
-    return [parseLine(pattern, options, "", notFiles[0], 0)];
+  if (notFiles.length) {
+    return notFiles
+      .join("\n")
+      .split("\n")
+      .map((c, i) => parseLine(pattern, options, "", c, i));
   }
 
   const lineParser = parseLine.bind(null, pattern);
