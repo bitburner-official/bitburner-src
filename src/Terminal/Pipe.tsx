@@ -49,7 +49,7 @@ function handlePipe(): void {
   // Pipe to the next terminal command
   const output = Terminal.outputToBeProcessed
     .map((o) => stringify(o))
-    .join(" ")
+    .join("\n")
     .replaceAll('"', "'");
   advancePipe();
   Terminal.executeCommand(`${commandString} "${output}"`);
