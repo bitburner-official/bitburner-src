@@ -8,11 +8,12 @@ import { GetServer } from "../../Server/AllServers";
 import { DarknetState } from "../models/DarknetState";
 import { ResponseStatus } from "../Enums";
 import { getBackdooredDarkwebServers } from "../utils/darknetNetworkUtils";
-import { getDarknetData, isDarknetServer } from "../utils/darknetServerUtils";
+import { isDarknetServer } from "../utils/darknetServerUtils";
 import { hasDarknetAccess } from "../utils/darknetAuthUtils";
+import { DarknetServer } from "../../Server/DarknetServer";
+import { Result } from "../../types";
 
-type failureResultOptions = {
-  requireDarknet?: boolean;
+type FailureResultOptions = {
   requireAdminRights?: boolean;
   requireSession?: boolean;
   requireDirectConnection?: boolean;
@@ -20,47 +21,47 @@ type failureResultOptions = {
 };
 
 export const logger = (ctx: NetscriptContext) => (message: string) => helpers.log(ctx, () => message);
-export const error =
-  (ctx: NetscriptContext) =>
-  (message: string): never => {
-    throw errorMessage(ctx, message);
-  };
 
 export function expectDarknetAccess(ctx: NetscriptContext) {
   if (!hasDarknetAccess()) {
-    error(ctx)(
+    throw errorMessage(
+      ctx,
       `You do not have access to the dnet api. Purchase "DarkscapeNavigator.exe" through your tor router to unlock it.`,
     );
   }
 }
 
-export function getFailureResult(ctx: NetscriptContext, hostname: string, options: failureResultOptions = {}) {
+export function getFailureResult(
+  ctx: NetscriptContext,
+  hostname: string,
+  options: FailureResultOptions = {},
+): Result<{ server: DarknetServer }> {
   expectDarknetAccess(ctx);
   const currentServer = ctx.workerScript.getServer();
   const targetServer = GetServer(hostname);
-  if (!targetServer && DarknetState.offlineServers.includes(hostname)) {
-    const result = `Target server ${hostname} is offline.`;
-    logger(ctx)(result);
-    return {
-      success: false,
-      message: ResponseStatus.NOT_FOUND,
-    };
-  }
+  // If the target server does not exist
   if (!targetServer) {
-    const result = `Target server ${hostname} does not exist. It may have gone offline.`;
-    logger(ctx)(result);
-    return {
-      success: false,
-      message: ResponseStatus.NOT_FOUND,
-    };
+    if (DarknetState.offlineServers.includes(hostname)) {
+      // If the server is offline, return error object .
+      const result = `Target server ${hostname} is offline.`;
+      logger(ctx)(result);
+      return {
+        success: false,
+        message: ResponseStatus.NOT_FOUND,
+      };
+    } else {
+      // Throw, otherwise.
+      const result = `Target server ${hostname} does not exist. It may have gone offline.`;
+      throw errorMessage(ctx, result);
+    }
   }
-  if (options.preventUseOnImmobileServers && getDarknetData(targetServer)?.isMobile == false) {
-    const result = `${targetServer.hostname} is not a valid target: it is a stationary server.`;
-    error(ctx)(result);
-  }
-  if (options.requireDarknet && !isDarknetServer(targetServer)) {
+  if (!isDarknetServer(targetServer)) {
     const result = `${targetServer.hostname} is not a darknet server.`;
-    error(ctx)(result);
+    throw errorMessage(ctx, result);
+  }
+  if (options.preventUseOnImmobileServers && targetServer.isMobile == false) {
+    const result = `${targetServer.hostname} is not a valid target: it is a stationary server.`;
+    throw errorMessage(ctx, result);
   }
   if (options.requireDirectConnection && !isDirectConnected(currentServer, targetServer)) {
     const result = `${targetServer.hostname} is not connected to the current server ${currentServer.hostname}. It may have moved.`;
@@ -93,7 +94,7 @@ export function getFailureResult(ctx: NetscriptContext, hostname: string, option
 
   return {
     success: true,
-    message: "",
+    server: targetServer,
   };
 }
 

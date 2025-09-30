@@ -86,13 +86,13 @@ describe("home", () => {
   });
   test("probe", () => {
     const ns = getNsOnHome();
-    const result = ns.dnet.probe();
-    expect(result.length).toStrictEqual(1);
-    expect(result[0]).toStrictEqual("darkweb");
+    expect(() => {
+      ns.dnet.probe();
+    }).toThrow("home is not a darknet server");
   });
   test("setStasisLink", () => {
     const ns = getNsOnHome();
-    expect(() => ns.dnet.setStasisLink(true)).toThrow("Failed to stasis link: home is not a darknet server.");
+    expect(() => ns.dnet.setStasisLink(true)).toThrow("home is not a darknet server.");
   });
   test("getServer", () => {
     const ns = getNsOnHome();
@@ -159,6 +159,10 @@ describe("Non-existent server", () => {
   // WIP: Add more tests
 });
 
+describe("darkweb targets home", () => {
+  // WIP: Add more tests
+});
+
 describe("darkweb", () => {
   test("authenticate from home", async () => {
     const ns = getNsOnHome();
@@ -168,7 +172,6 @@ describe("darkweb", () => {
   test("authenticate itself", async () => {
     const ns = getNsOnDarkWeb();
     const result = await ns.dnet.authenticate(SpecialServers.DarkWeb, "leekspin");
-    console.log(result);
     expect(result.success).toStrictEqual(true);
   });
   test("connectToSession from home", () => {
@@ -183,13 +186,15 @@ describe("darkweb", () => {
   test("heartbleed from home", async () => {
     const ns = getNsOnHome();
     const result = await ns.dnet.heartbleed(SpecialServers.DarkWeb);
-    console.log(result);
     expect(result.success).toStrictEqual(true);
   });
   test("openCache", () => {
     const ns = getNsOnDarkWeb();
     const darkweb = GetServerOrThrow(SpecialServers.DarkWeb);
     const result = addCacheToServer(darkweb, "test");
+    if (!result.success) {
+      throw new Error("Cannot add cache");
+    }
     expect(darkweb.caches.length).toBe(1);
     expect(darkweb.caches[0]).toMatch(/test_[0-9]+\.cache/);
     ns.dnet.openCache(result.cacheFilename);

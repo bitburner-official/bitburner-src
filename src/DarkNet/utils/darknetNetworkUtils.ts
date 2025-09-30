@@ -1,4 +1,3 @@
-import { BaseServer } from "../../Server/BaseServer";
 import { DarknetState } from "../models/DarknetState";
 import { DarknetServer } from "../../Server/DarknetServer";
 import { AIR_GAP_DEPTH, MS_PER_MUTATION_PER_ROW, NET_WIDTH } from "../Enums";
@@ -33,8 +32,8 @@ export const getAllOpenPositions = (minDepth: number, maxDepth: number): [number
   return positions;
 };
 
-export const getNeighborsOnRow = (x: number, y: number): BaseServer[] => {
-  const neighbors: BaseServer[] = [];
+export const getNeighborsOnRow = (x: number, y: number): DarknetServer[] => {
+  const neighbors: DarknetServer[] = [];
   const leftNeighbor = DarknetState.Network[x]?.[y - 1];
   const rightNeighbor = DarknetState.Network[x]?.[y + 1];
   if (leftNeighbor) {
@@ -68,7 +67,7 @@ export const getAllMobileDarknetServers = (): DarknetServer[] => {
     .filter((s) => s.isMobile);
 };
 
-export const getAllAdjacentNeighbors = (x: number, y: number): BaseServer[] => {
+export const getAllAdjacentNeighbors = (x: number, y: number): DarknetServer[] => {
   const rowAbove = getServersOnRowAbove(x, true);
   const rowBelow = getServersOnRowBelow(x, true);
   const neighborsOnRow = getNeighborsOnRow(x, y);
@@ -77,10 +76,10 @@ export const getAllAdjacentNeighbors = (x: number, y: number): BaseServer[] => {
 
 export const getIslands = () => getAllMobileDarknetServers().filter((s) => !s.serversOnNetwork.length);
 
-export const getBackdooredDarkwebServers = (): BaseServer[] =>
+export const getBackdooredDarkwebServers = (): DarknetServer[] =>
   getAllMobileDarknetServers().filter((s) => !s.hasStasisLink && s.backdoorInstalled);
 
-export const getRandomNearbyServer = (server: BaseServer, disconnected = false) => {
+export const getRandomNearbyServer = (server: DarknetServer, disconnected = false) => {
   if (!isDarknetServer(server)) return null;
   return getAllAdjacentNeighbors(server.depth, server.leftOffset).find(
     (neighbor) =>
