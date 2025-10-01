@@ -11,11 +11,14 @@ echo ""
 echo "Running cleanup tasks..."
 rm input/bitburner.api.json && rm -r input
 
-# This git add is needed due to documenter using wrong line endings. Console spam discarded.
-git add markdown/ 2> /dev/null && git add tsdoc-metadata.json 2> /dev/null
-echo ""
-echo "Documentation build completed."
-
 echo ""
 echo "Bundling ingame documentation..."
 node tools/bundle-doc/index.js
+
+echo ""
+echo "Add generated docs to git..."
+# This git add is needed due to documenter using wrong line endings. Console spam discarded.
+git add markdown/ 2> /dev/null && git add tsdoc-metadata.json 2> /dev/null
+
+echo ""
+echo "Documentation build completed."
